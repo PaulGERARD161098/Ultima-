@@ -1,0 +1,10 @@
+{
+  "name": "ultima",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Ultima — carte interactive du réseau commercial (P0 fondations).",
+  "dependencies": {
+    "@supabase/supabase-js": "^2"
+  }
+}
