@@ -1,16 +1,38 @@
 # CADRAGE-ULTIMA — audit → patch → améliorations, adapté au réel du projet
 
-## ÉTAT (2026-07-03)
+## ÉTAT (2026-07-03, soir)
 
-- ✅ **P0 Fondations** — livrée, vérifiée en navigateur, fusionnée dans `main`
-  via PR #1 (7 commits atomiques : cadrage, migration RLS, API, middleware,
-  front, docs). Migration `0001` déposée, **non appliquée** (pas de projet
-  Supabase encore).
-- 🔜 **Boucle suivante** : gate Supabase (création projet + application 0001 +
-  advisors, validation Paul) → **P1 Audit** (`AUDIT-<date>.md`, backlog S#/U#).
+- ✅ **P0 Fondations** — fusionnée dans `main` via PR #1.
+- ✅ **Projet Supabase « ultima » créé** — réf `leosfqyidgsaescjbfom`,
+  région eu-west-3 (Paris), **10 $/mois**, validé vocalement par Paul.
+- ✅ **Dispositif d'agents implanté** — `.claude/agents/` : `ultima-pilote`
+  (navigation complète) + 4 spécialistes (`securite-auditeur`,
+  `data-ingenieur`, `front-carto`, `verificateur`) ; routine de sécurité
+  maximale invocable : `/securite-max` (`.claude/skills/securite-max/`).
+- 🔜 **Boucle en cours** : application de la migration `0001` (gate Paul —
+  en attente d'un « applique la migration ») → advisors → brancher le front
+  (`js/config.js` + env Vercel) → **P1 Audit** (`AUDIT-<date>.md`, S#/U#).
 - ⏸ P2 Sécu / P3 UX : en attente de P1.
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
+
+## EXTENSION PRODUIT — Ultima, outil de traitement de données (cadré, non lancé)
+
+Décision Paul (2026-07-03) : Ultima évolue de « carte du réseau » vers
+**outil de traitement des données du réseau commercial**. La carte reste la
+surface de restitution ; le traitement devient le cœur :
+
+1. **Ingestion** — import CSV/exports (leads, artisans, chantiers), mapping
+   colonnes → contrat `network_nodes`, journal des imports (volumétrie,
+   rejets + raison), idempotence (rejouable sans doublons).
+2. **Qualité** — validation, dédoublonnage par clés métier, rejets consultables.
+3. **Enrichissement** — géocodage d'adresses (Nominatim + cache), scoring /
+   statuts calculés, détection de relations implicites.
+4. **Restitution** — carte (existant), vue liste synchronisée, exports.
+
+Discipline : cette extension ne démarre PAS avant la fermeture de la boucle
+en cours (migration → P1). Elle sera découpée en boucles dédiées, pilotées
+par `data-ingenieur`, chaque migration passant la gate Paul.
 
 > Adapté du prompt RénoBoost (2026-07-02). Source unique de vérité du pilotage.
 > Décisions produit actées avec Paul : **Ultima = carte interactive du réseau
