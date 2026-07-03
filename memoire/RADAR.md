@@ -31,3 +31,8 @@
   la vision produit sans la faire valider.
 - 2026-07-03 — Léo a annoté l'audit « corrigé+commit » avant d'avoir corrigé
   → repris avant commit ; leçon : un statut ✅ n'existe qu'avec commit + preuve.
+- 2026-07-03 (clôture) — Approbations MCP en panne toute la session pour
+  certaines écritures (Notion, création de routine) alors que Supabase a fini
+  par passer → leçon : toujours re-tenter en fin de session, et consigner
+  dans le repo AVANT de dépendre d'un outil externe. Synchro Notion à
+  rattraper à la prochaine session (rien de perdu : le repo fait foi).
