@@ -15,16 +15,26 @@ const WINDOW_MS = 60_000; // fenêtre de 60 s
 // quota global. Suffisant pour lisser les abus ; un vrai quota exigerait un store partagé.
 const hits = new Map();
 
-// Content-Security-Policy compatible avec le front prévu (Leaflet + supabase-js CDN).
+// Hôte Supabase du projet, dérivé de l'env : la CSP n'autorise que LUI en
+// connect-src [S4]. Repli wildcard si l'env est absente (local/preview non lié).
+const SUPABASE_ORIGIN = (() => {
+  try {
+    return new URL(process.env.SUPABASE_URL || '').origin;
+  } catch {
+    return '';
+  }
+})();
+
+// Content-Security-Policy compatible avec le front (Leaflet CDN, supabase-js auto-hébergé).
 const CSP = [
   "default-src 'self'",
-  // Leaflet depuis unpkg, supabase-js depuis jsdelivr (SRI côté front). Pas de 'unsafe-inline'.
-  "script-src 'self' https://unpkg.com https://cdn.jsdelivr.net",
+  // Leaflet depuis unpkg (SRI côté front) ; supabase-js servi en local [S1]. Pas de 'unsafe-inline'.
+  "script-src 'self' https://unpkg.com",
   // Leaflet applique des styles inline via JS (positionnement carte/marqueurs) → 'unsafe-inline' requis.
   "style-src 'self' https://unpkg.com 'unsafe-inline'",
   // Tuiles OSM, icônes marqueurs unpkg, images data:.
   "img-src 'self' data: https://*.tile.openstreetmap.org https://unpkg.com",
-  "connect-src 'self' https://*.supabase.co",
+  `connect-src 'self' ${SUPABASE_ORIGIN || 'https://*.supabase.co'}`,
   "font-src 'self'",
   "object-src 'none'",
   "base-uri 'self'",
@@ -41,10 +51,15 @@ function applySecurityHeaders(headers) {
   headers.set('Permissions-Policy', 'geolocation=(), camera=(), microphone=(), payment=()');
 }
 
+// Hypothèse assumée : déployé derrière Vercel, qui pose x-real-ip et
+// réécrit x-forwarded-for. Hors Vercel, ces en-têtes sont forgeables →
+// le rate-limit redevient best-effort [S5].
 function clientIp(request) {
+  const real = request.headers.get('x-real-ip');
+  if (real) return real.trim();
   const fwd = request.headers.get('x-forwarded-for');
   if (fwd) return fwd.split(',')[0].trim();
-  return request.headers.get('x-real-ip') || 'unknown';
+  return 'unknown';
 }
 
 // Renvoie true si la requête dépasse la limite.
