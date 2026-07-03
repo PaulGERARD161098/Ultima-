@@ -21,9 +21,14 @@
 
 ## Prochaines étapes (ordre indicatif, à indexer S# en P1)
 
-1. Créer le projet Supabase « ultima » (validation Paul — coût), appliquer la
-   migration 0001 après relecture, puis passer `get_advisors` (security + perf)
-   et intégrer les constats à l'audit.
+1. ✅ 2026-07-03 — Projet Supabase « ultima » créé (gate Paul), migration 0001
+   appliquée (gate Paul), advisors passés. Constats remontés, à indexer en P1 :
+   - WARN sécu `function_search_path_mutable` : `public.set_updated_at` sans
+     `search_path` épinglé → migration 0002 (gate Paul).
+   - WARN perf `auth_rls_initplan` ×8 : remplacer `auth.uid()` par
+     `(select auth.uid())` dans les 8 policies RLS → migration 0002.
+   - INFO non bloquants : `unused_index` (base vide — normal), stratégie de
+     connexions Auth en absolu (revoir si montée d'instance).
 2. Audit P1 complet du code P0 → `AUDIT-<date>.md` (S#/U#).
 3. Rate-limit durable (KV/Upstash ou équivalent) si trafic réel — l'in-memory
    ne protège pas en multi-instance.

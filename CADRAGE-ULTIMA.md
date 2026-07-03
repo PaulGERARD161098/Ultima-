@@ -9,9 +9,16 @@
   (navigation complète) + 4 spécialistes (`securite-auditeur`,
   `data-ingenieur`, `front-carto`, `verificateur`) ; routine de sécurité
   maximale invocable : `/securite-max` (`.claude/skills/securite-max/`).
-- 🔜 **Boucle en cours** : application de la migration `0001` (gate Paul —
-  en attente d'un « applique la migration ») → advisors → brancher le front
-  (`js/config.js` + env Vercel) → **P1 Audit** (`AUDIT-<date>.md`, S#/U#).
+- ✅ **Migration `0001` appliquée** (2026-07-03, gate levée vocalement par
+  Paul) — `network_nodes` + `network_edges` en prod, RLS activée, 0 ligne.
+- ✅ **Advisors passés** (à indexer S#/U# en P1) :
+  - Sécu WARN : `set_updated_at` sans `search_path` épinglé → migration 0002.
+  - Perf WARN ×8 : policies RLS `auth.uid()` → `(select auth.uid())` → 0002.
+  - INFO (non bloquants) : index inutilisés (base vide), stratégie connexions Auth.
+- 🔜 **Prochaine session — boucle suivante** : ① migration `0002`
+  (correctifs advisors, gate Paul) ② brancher le front (`js/config.js` :
+  URL + clé anon du projet `leosfqyidgsaescjbfom` ; env Vercel + déploiement)
+  ③ **P1 Audit** (`AUDIT-<date>.md`, backlog S#/U#).
 - ⏸ P2 Sécu / P3 UX : en attente de P1.
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
