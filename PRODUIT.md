@@ -6,20 +6,32 @@ Carte interactive du réseau commercial de Paul : visualiser en un coup d'œil
 **qui** (artisans, partenaires, leads, chantiers), **où** (carte France), et
 **comment ils sont reliés** (apport d'affaires, sous-traitance, chantier commun).
 
-## Objectifs finaux (actés avec Paul, 2026-07-03)
+## Objectifs finaux (actés avec Paul, 2026-07-03 — version précisée, fait foi)
 
-1. **Cartographier toutes les relations professionnelles de Paul**, quelles
-   qu'elles soient — la carte est la surface de restitution du réseau complet.
-2. **Pour chaque relation professionnelle** :
-   - **centraliser ses données** (coordonnées, contexte, historique) ;
-   - **tenir un journal du « où j'en suis »** avec elle (interactions, relances,
-     prochaine étape) ;
-   - **créer du lien pertinent et intéressant entre ces relations** (mises en
-     relation, apports d'affaires suggérés par proximité métier/géo).
+1. **Cartographier les contacts professionnels de Paul** — des **individus**,
+   pas des entreprises (« ce sont les individus qui font tout » ; la structure
+   n'est qu'un attribut de la personne). Visualiser son réseau pro complet.
+2. **Se servir de la carte pour créer des passerelles entre les business via
+   les individus** — selon sa méthode :
+   - rapprocher des personnes qui ont des points communs **professionnels ET
+     personnels** (valeurs, état d'esprit, manière de vivre — pour des
+     relations où l'on peut compter les uns sur les autres) ;
+   - **qualitatif d'abord** (intérêt entre profils et projets), **chiffré
+     ensuite** (un rapprochement coûte du temps et de l'énergie, deux
+     ressources qui ne reviennent jamais) ;
+   - **piloter chaque rapprochement** lancé : journal « où j'en suis »,
+     jusqu'au succès ou l'échec pour de bonnes raisons.
 
-Décision d'accès (2026-07-03) : **Ultima est mono-utilisateur** — seul Paul
-(`compte Gmail perso`) se connecte. Pas d'inscription ouverte [S3] ; le persona
-« collaborateur » reste hors périmètre tant que Paul n'en décide pas autrement.
+Cadre structurant :
+- **Autarcie complète** : Ultima est un projet à part des autres projets de
+  Paul — non pollué, non perméable, autosuffisant. Données saisies de zéro
+  par Paul ; aucune passerelle technique vers d'autres systèmes.
+- **Mobile d'abord** : interface pensée pour le téléphone (« pilotage rapide
+  au bout des pouces »), accessible ensuite par ordinateur.
+- **Mono-utilisateur** : seul Paul (compte Gmail perso) se connecte. Pas
+  d'inscription ouverte [S3] ; persona « collaborateur » hors périmètre.
+- **Léo en arrière-plan** : autonomie sur la sécurité et la tenue des données ;
+  Paul consulte via l'interface. Mémoire de travail : `memoire/`.
 
 ## Personas
 

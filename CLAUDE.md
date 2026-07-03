@@ -35,7 +35,8 @@ commercial (artisans, partenaires, leads, chantiers + leurs relations).
 
 ## 🟢 Protocole DÉBUT de session
 
-1. Lire CADRAGE-ULTIMA.md (section ÉTAT) + roadmaps — pas de re-scan du repo.
+1. Lire CADRAGE-ULTIMA.md (section ÉTAT) + roadmaps + `memoire/` (profil,
+   lexique, décisions, radar) — pas de re-scan du repo.
 2. Vérifier branche et PR en cours (`git log origin/main..HEAD`, état PR).
 3. Restituer en 3 phrases max : où on en est, la boucle en cours, la prochaine
    action. Si une gate est ouverte, attendre le go de Paul avant d'agir dessus.
@@ -46,7 +47,9 @@ commercial (artisans, partenaires, leads, chantiers + leurs relations).
    poussé est perdu).
 2. Annoter le tableau de bord (CADRAGE-ULTIMA.md / `AUDIT-<date>.md`) :
    ✅ fait+commit / ⏭ reporté+raison / ❌ non reproduit+preuve.
-3. Rafraîchir les roadmaps si le cap a bougé.
+3. Rafraîchir les roadmaps si le cap a bougé, et la `memoire/` (décisions
+   actées, lexique enrichi, radar : confirmé/démenti, rétrospective des
+   frictions → amélioration de la charte si besoin).
 4. Synchroniser la fiche Notion « 📦 Repo Ultima- — Fiche projet »
    (sauvegarde permanente du travail).
 5. Rapport final : fermé / restant / prochaine action + blocs
