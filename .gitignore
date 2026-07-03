@@ -1,0 +1,15 @@
+# Dépendances
+node_modules/
+
+# Variables d'environnement (secrets) — ne jamais committer
+.env
+.env.*
+!.env.example
+
+# Vercel
+.vercel/
+
+# Logs et divers
+*.log
+npm-debug.log*
+.DS_Store

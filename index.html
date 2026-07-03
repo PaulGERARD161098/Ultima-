@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ultima — Carte réseau</title>
+  <meta name="description" content="Carte interactive du réseau commercial : artisans, partenaires, leads et chantiers.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%231e6fb8'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23ffffff'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <header class="entete">
+    <h1 class="entete-titre">Ultima — Carte réseau</h1>
+    <p id="bandeau-demo" class="bandeau-demo" hidden>Mode démo — données d'exemple</p>
+    <div id="zone-auth" class="zone-auth" hidden>
+      <form id="form-connexion" class="form-connexion" hidden>
+        <label class="visuellement-cache" for="champ-email">Adresse e-mail</label>
+        <input id="champ-email" type="email" required autocomplete="email" placeholder="votre@email.fr">
+        <button type="submit" class="bouton bouton-secondaire">Recevoir le lien</button>
+      </form>
+      <button id="bouton-deconnexion" type="button" class="bouton bouton-secondaire" hidden>Se déconnecter</button>
+    </div>
+  </header>
+
+  <div class="barre-outils">
+    <button id="bouton-filtres" type="button" class="bouton bouton-secondaire bouton-filtres"
+            aria-expanded="false" aria-controls="filtres">Filtres</button>
+
+    <div id="filtres" class="filtres">
+      <fieldset class="groupe-filtres">
+        <legend>Type</legend>
+        <label class="case-filtre"><input type="checkbox" data-filtre="type" value="artisan" checked> Artisan</label>
+        <label class="case-filtre"><input type="checkbox" data-filtre="type" value="partenaire" checked> Partenaire</label>
+        <label class="case-filtre"><input type="checkbox" data-filtre="type" value="lead" checked> Lead</label>
+        <label class="case-filtre"><input type="checkbox" data-filtre="type" value="chantier" checked> Chantier</label>
+      </fieldset>
+      <fieldset class="groupe-filtres">
+        <legend>Statut</legend>
+        <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="actif" checked> Actif</label>
+        <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="prospect" checked> Prospect</label>
+        <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="en_cours" checked> En cours</label>
+        <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="termine" checked> Terminé</label>
+        <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="inactif" checked> Inactif</label>
+      </fieldset>
+    </div>
+
+    <button id="bouton-ajouter" type="button" class="bouton bouton-primaire">+ Ajouter</button>
+  </div>
+
+  <main class="contenu">
+    <div id="carte" class="carte" aria-label="Carte du réseau"></div>
+    <div class="legende" aria-label="Légende de la carte">
+      <p class="legende-titre">Nœuds</p>
+      <p class="legende-item"><span class="pastille pastille-artisan"></span> Artisan</p>
+      <p class="legende-item"><span class="pastille pastille-partenaire"></span> Partenaire</p>
+      <p class="legende-item"><span class="pastille pastille-lead"></span> Lead</p>
+      <p class="legende-item"><span class="pastille pastille-chantier"></span> Chantier</p>
+      <p class="legende-titre">Relations</p>
+      <p class="legende-item"><span class="trait trait-apport"></span> Apport d'affaires</p>
+      <p class="legende-item"><span class="trait trait-soustraitance"></span> Sous-traitance</p>
+      <p class="legende-item"><span class="trait trait-chantier"></span> Chantier commun</p>
+    </div>
+  </main>
+
+  <aside id="panneau" class="panneau" hidden aria-label="Panneau latéral">
+    <div class="panneau-entete">
+      <h2 id="panneau-titre" class="panneau-titre">Fiche</h2>
+      <button id="bouton-fermer-panneau" type="button" class="bouton-fermer" aria-label="Fermer le panneau">&times;</button>
+    </div>
+
+    <div id="vue-fiche" class="panneau-corps" hidden></div>
+
+    <form id="form-noeud" class="panneau-corps formulaire" hidden>
+      <div class="champ">
+        <label for="noeud-type">Type *</label>
+        <select id="noeud-type" required>
+          <option value="artisan">Artisan</option>
+          <option value="partenaire">Partenaire</option>
+          <option value="lead">Lead</option>
+          <option value="chantier">Chantier</option>
+        </select>
+      </div>
+      <div class="champ">
+        <label for="noeud-nom">Nom *</label>
+        <input id="noeud-nom" type="text" required maxlength="200">
+      </div>
+      <div class="champ">
+        <label for="noeud-statut">Statut *</label>
+        <select id="noeud-statut" required>
+          <option value="actif">Actif</option>
+          <option value="prospect">Prospect</option>
+          <option value="en_cours">En cours</option>
+          <option value="termine">Terminé</option>
+          <option value="inactif">Inactif</option>
+        </select>
+      </div>
+      <div class="champ">
+        <label for="noeud-ville">Ville</label>
+        <input id="noeud-ville" type="text" maxlength="120">
+      </div>
+      <div class="champ">
+        <label for="noeud-adresse">Adresse</label>
+        <input id="noeud-adresse" type="text" maxlength="250">
+      </div>
+      <div class="champ">
+        <label for="noeud-telephone">Téléphone</label>
+        <input id="noeud-telephone" type="tel" maxlength="30" autocomplete="tel">
+      </div>
+      <div class="champ">
+        <label for="noeud-email">E-mail</label>
+        <input id="noeud-email" type="email" maxlength="200" autocomplete="off">
+      </div>
+      <div class="champs-doubles">
+        <div class="champ">
+          <label for="noeud-lat">Latitude *</label>
+          <input id="noeud-lat" type="number" step="any" min="-90" max="90" required>
+        </div>
+        <div class="champ">
+          <label for="noeud-lng">Longitude *</label>
+          <input id="noeud-lng" type="number" step="any" min="-180" max="180" required>
+        </div>
+      </div>
+      <div class="champ">
+        <label for="noeud-notes">Notes</label>
+        <textarea id="noeud-notes" rows="3" maxlength="2000"></textarea>
+      </div>
+      <div class="actions-formulaire">
+        <button type="submit" class="bouton bouton-primaire">Enregistrer</button>
+        <button type="button" id="bouton-annuler-noeud" class="bouton bouton-secondaire">Annuler</button>
+      </div>
+    </form>
+
+    <form id="form-relation" class="panneau-corps formulaire" hidden>
+      <p id="relation-source" class="relation-source"></p>
+      <div class="champ">
+        <label for="relation-cible">Relier à *</label>
+        <select id="relation-cible" required></select>
+      </div>
+      <div class="champ">
+        <label for="relation-type">Type de relation *</label>
+        <select id="relation-type" required>
+          <option value="apport_affaires">Apport d'affaires</option>
+          <option value="sous_traitance">Sous-traitance</option>
+          <option value="chantier_commun">Chantier commun</option>
+        </select>
+      </div>
+      <div class="champ">
+        <label for="relation-notes">Note</label>
+        <textarea id="relation-notes" rows="3" maxlength="2000"></textarea>
+      </div>
+      <div class="actions-formulaire">
+        <button type="submit" class="bouton bouton-primaire">Créer la relation</button>
+        <button type="button" id="bouton-annuler-relation" class="bouton bouton-secondaire">Annuler</button>
+      </div>
+    </form>
+  </aside>
+
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" crossorigin="anonymous"></script>
+  <script src="js/config.js"></script>
+  <script src="js/carte.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
