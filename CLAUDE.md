@@ -1,0 +1,65 @@
+# CLAUDE.md — Ultima (protocoles permanents de travail avec Paul)
+
+## 🎯 Objectif final — à ne JAMAIS oublier
+
+Fermer la boucle complète **« construire sécurisé → auditer → patcher les
+failles → améliorer l'UX »** sur Ultima, la carte interactive du réseau
+commercial (artisans, partenaires, leads, chantiers + leurs relations).
+
+**Directive de discipline** (prioritaire sur tout le reste) :
+- **Une seule boucle à la fois** : ne jamais passer à autre chose sans avoir
+  bouclé la boucle de travail en cours (livrée, vérifiée, committée, annotée).
+- **Capitaliser sur l'existant** : CADRAGE-ULTIMA.md, PRODUIT.md, roadmaps et
+  `AUDIT-<date>.md` sont la source unique de vérité — ne jamais re-scanner ni
+  re-décider ce qui y est déjà consigné, ne jamais créer de doc parallèle.
+- **Pas dix lièvres à la fois** : discipline mentale comme dans le code, comme
+  dans tout ce que l'on implante. Patchs minimaux, style existant, pas de refonte.
+
+## 🟢 Protocole DÉBUT de session
+
+1. Lire CADRAGE-ULTIMA.md (section ÉTAT) + roadmaps — pas de re-scan du repo.
+2. Vérifier branche et PR en cours (`git log origin/main..HEAD`, état PR).
+3. Restituer en 3 phrases max : où on en est, la boucle en cours, la prochaine
+   action. Si une gate est ouverte, attendre le go de Paul avant d'agir dessus.
+
+## 🔴 Protocole FIN de session
+
+1. Zéro travail non committé/poussé (environnement éphémère : ce qui n'est pas
+   poussé est perdu).
+2. Annoter le tableau de bord (CADRAGE-ULTIMA.md / `AUDIT-<date>.md`) :
+   ✅ fait+commit / ⏭ reporté+raison / ❌ non reproduit+preuve.
+3. Rafraîchir les roadmaps si le cap a bougé.
+4. Synchroniser la fiche Notion « 📦 Repo Ultima- — Fiche projet »
+   (sauvegarde permanente du travail).
+5. Rapport final : fermé / restant / prochaine action + blocs
+   🔒 Retour sécurité et ⚡ Retour optimisation.
+
+## 🎤 Protocole dictée vocale (Paul dicte ses messages)
+
+- Les messages arrivent par reconnaissance vocale : mots déformés possibles
+  (« Fatima » = Ultima, « Montreuil » = mon travail, etc.).
+- À chaque paragraphe dicté : **reformuler en tête de réponse l'interprétation
+  retenue**, vérifier la cohérence du vocabulaire, de la syntaxe et des
+  instructions par rapport au projet, et signaler toute ambiguïté au lieu de
+  deviner — surtout avant une action irréversible.
+- Réponses lisibles à voix haute si demandé : phrases courtes, pas de tableaux.
+
+## 🚧 Gates — validation explicite de Paul requise
+
+- Création de projet Supabase ou toute action payante.
+- Application de toute migration SQL / modification RLS en prod
+  (le SQL vit dans `supabase/migrations/`, jamais appliqué seul).
+- Fusion d'une PR dans `main`.
+- Tout correctif touchant auth / middleware / données / RLS en phase de patch
+  (déclenche aussi l'escalade modèle ci-dessous).
+
+## ⚙️ Règles permanentes
+
+- Jamais de secret committé (env Vercel uniquement) ; jamais de PII en logs
+  (le réseau commercial EST de la PII — IDs uniquement).
+- Commits atomiques : `fix(sec): … [S#]`, `feat(ux): … [U#]`, 1 commit = 1 constat.
+- Tiering modèle : tiers par défaut économe ; escalade Opus 4.8 **signalée**
+  uniquement sur RLS / auth / middleware / décision d'archi.
+- Sous-agents parallèles sur les axes indépendants ; économe en tokens.
+- Production défensive : validation d'entrées, erreurs génériques client /
+  détaillées serveur, timeout sortant sur tout appel externe.

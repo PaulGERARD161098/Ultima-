@@ -1,5 +1,17 @@
 # CADRAGE-ULTIMA — audit → patch → améliorations, adapté au réel du projet
 
+## ÉTAT (2026-07-03)
+
+- ✅ **P0 Fondations** — livrée, vérifiée en navigateur, fusionnée dans `main`
+  via PR #1 (7 commits atomiques : cadrage, migration RLS, API, middleware,
+  front, docs). Migration `0001` déposée, **non appliquée** (pas de projet
+  Supabase encore).
+- 🔜 **Boucle suivante** : gate Supabase (création projet + application 0001 +
+  advisors, validation Paul) → **P1 Audit** (`AUDIT-<date>.md`, backlog S#/U#).
+- ⏸ P2 Sécu / P3 UX : en attente de P1.
+- Protocoles permanents de session : voir `CLAUDE.md`.
+- Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
+
 > Adapté du prompt RénoBoost (2026-07-02). Source unique de vérité du pilotage.
 > Décisions produit actées avec Paul : **Ultima = carte interactive du réseau
 > commercial** (artisans, partenaires, leads, chantiers) · **greenfield**.
