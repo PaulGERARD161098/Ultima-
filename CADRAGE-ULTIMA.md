@@ -18,10 +18,12 @@
   restent 2 actions dashboard : inviter son compte + fermer les signups).
   ⏳ S1 (SRI supabase-js), S4 (connect-src), S5 (IP rate-limit) — touchent
   index.html/middleware. ⏭ S6 (advisors Auth au dashboard).
-- ✅ **Équipe d'agents complète** (`.claude/agents/`) : reprise des 5 agents
-  de la PR #2 (pilote, sécurité, données, front-carto, vérificateur) +
-  `interface-ux` (meilleure interface, aide, navigation) + `graphisme`
-  (design visuel) — la PR #2 devient redondante côté agents.
+- ✅ **Équipe d'agents complète** (`.claude/agents/`), pilotée par **Léo** —
+  master agent et interlocuteur unique de Paul (charte `leo.md`, ancré dans
+  `CLAUDE.md` ; remplace `ultima-pilote`). Spécialistes : `securite-auditeur`,
+  `data-ingenieur`, `front-carto`, `interface-ux` (interface, aide,
+  navigation), `graphisme`, `verificateur` + skill `/securite-max`.
+  La PR #2 devient redondante côté agents.
 - 📌 Objectifs finaux du produit actés et consignés dans `PRODUIT.md` :
   cartographier toutes les relations pro ; par relation — centraliser les
   données, journal « où j'en suis », créer du lien pertinent entre elles.
