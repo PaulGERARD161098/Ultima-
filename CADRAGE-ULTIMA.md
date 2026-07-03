@@ -1,14 +1,20 @@
 # CADRAGE-ULTIMA — audit → patch → améliorations, adapté au réel du projet
 
-## ÉTAT (2026-07-03)
+## ÉTAT (2026-07-03 — soir)
 
 - ✅ **P0 Fondations** — livrée, vérifiée en navigateur, fusionnée dans `main`
   via PR #1 (7 commits atomiques : cadrage, migration RLS, API, middleware,
-  front, docs). Migration `0001` déposée, **non appliquée** (pas de projet
-  Supabase encore).
-- 🔜 **Boucle suivante** : gate Supabase (création projet + application 0001 +
-  advisors, validation Paul) → **P1 Audit** (`AUDIT-<date>.md`, backlog S#/U#).
-- ⏸ P2 Sécu / P3 UX : en attente de P1.
+  front, docs).
+- ✅ **Gate Supabase fermée** (go Paul 2026-07-03) : projet « ultima »
+  (`leosfqyidgsaescjbfom`, eu-west-3) actif, migration `0001` appliquée,
+  8 policies RLS vérifiées en base, tables vides. Advisors MCP bloqués
+  (approbation) → lints répliqués en SQL, reste S6 (paramètres Auth) ⏭.
+- ✅ **P1 Audit** — livrée : `AUDIT-2026-07-03.md` = backlog unique
+  (6 S / 1 P / 8 U, rien d'appliqué). Bloquants : S1 (CDN sans SRI),
+  S3 (inscription ouverte — décision Paul), U1 (création sans e-mail = 400).
+- 🔜 **Boucle suivante** : **P2 Exécution sécu** (S1 → S2 → S4 → S5 puis P1) —
+  S2/S4/S5/P1 touchent middleware/RLS → validation Paul avant application ;
+  S3 = décision produit Paul. Puis P3 (U1 en tête).
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 

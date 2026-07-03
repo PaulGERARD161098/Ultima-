@@ -1,7 +1,7 @@
 # ROADMAP-SITE — Ultima (carte réseau)
 
-> Mise à jour : 2026-07-02 (P0). Le backlog chiffré (U#) vivra dans
-> `AUDIT-<date>.md` généré en P1 — ce fichier ne liste que le cap.
+> Mise à jour : 2026-07-03 (P1). Le backlog chiffré vit dans
+> `AUDIT-2026-07-03.md` (U1-U8) — ce fichier ne liste que le cap.
 
 ## Livré en P0 (MVP)
 

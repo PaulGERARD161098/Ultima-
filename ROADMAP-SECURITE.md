@@ -1,7 +1,7 @@
 # ROADMAP-SECURITE — Ultima
 
-> Mise à jour : 2026-07-02 (P0). Le backlog chiffré (S#) vivra dans
-> `AUDIT-<date>.md` généré en P1 — ce fichier ne liste que le cap.
+> Mise à jour : 2026-07-03 (P1). Le backlog chiffré vit dans
+> `AUDIT-2026-07-03.md` (S1-S6, P1) — ce fichier ne liste que le cap.
 
 ## Couvert en P0 (by design)
 
@@ -21,10 +21,11 @@
 
 ## Prochaines étapes (ordre indicatif, à indexer S# en P1)
 
-1. Créer le projet Supabase « ultima » (validation Paul — coût), appliquer la
-   migration 0001 après relecture, puis passer `get_advisors` (security + perf)
-   et intégrer les constats à l'audit.
-2. Audit P1 complet du code P0 → `AUDIT-<date>.md` (S#/U#).
+1. ~~Créer le projet Supabase « ultima » + migration 0001~~ — fait le
+   2026-07-03 (projet `leosfqyidgsaescjbfom`, RLS vérifiée). Advisors Auth
+   restants → S6 de l'audit.
+2. ~~Audit P1~~ — fait : `AUDIT-2026-07-03.md`. Exécuter P2 : S1 → S2 →
+   S4 → S5 puis P1 (gates : middleware/RLS/auth = validation Paul).
 3. Rate-limit durable (KV/Upstash ou équivalent) si trafic réel — l'in-memory
    ne protège pas en multi-instance.
 4. Politique de rétention / suppression des données réseau (PII : noms,
