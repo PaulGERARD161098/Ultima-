@@ -19,3 +19,9 @@
   l'idée inverse était une erreur d'interprétation de Léo, supprimée) ;
   **mobile-first** (« pilotage au bout des pouces »), ordinateur ensuite ;
   autonomie de Léo en arrière-plan : sécurité + tenue des données.
+- **2026-07-03 (go pour tout)** — ① Pivot du modèle acté : personne = seul
+  nœud, rapprochement = objet pilotable (statuts + raison d'arrêt requise),
+  journal avec relances → migration `0003` déposée (application = gate).
+  ② Arrière-plan Léo = relances + hygiène + advisors (lecture seule,
+  quotidien). ③ PWA validée (pas d'app native). ④ P2 sécu S1/S4/S5
+  appliqués dans la foulée du go global.

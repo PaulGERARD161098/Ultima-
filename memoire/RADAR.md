@@ -6,9 +6,9 @@
 
 ## Besoins anticipés (à confirmer par l'usage)
 
-1. **Le rapprochement comme objet pilotable** — sa méthode (qualitatif →
-   chiffré → pilotage) appelle une entité « rapprochement » avec statuts et
-   journal, pas une simple relation dessinée. → question posée le 2026-07-03.
+1. ✅ CONFIRMÉ (go Paul 2026-07-03) — **le rapprochement objet pilotable** :
+   modèle conçu et déposé en migration `0003` (statuts, intérêt qualitatif,
+   efforts chiffrés, raison d'arrêt obligatoire, journal + relances).
 2. **Saisie au pouce en situation** — il ajoutera des contacts après un RDV,
    depuis le téléphone : formulaire ultra-court, le reste plus tard.
 3. **Relances** — « où j'en suis » implique des rappels (rapprochements sans

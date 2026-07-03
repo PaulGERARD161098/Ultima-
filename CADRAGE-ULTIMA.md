@@ -12,12 +12,21 @@
 - ✅ **P1 Audit** — livrée : `AUDIT-2026-07-03.md` = backlog unique
   (6 S / 1 P / 8 U, rien d'appliqué). Bloquants : S1 (CDN sans SRI),
   S3 (inscription ouverte — décision Paul), U1 (création sans e-mail = 400).
-- 🟡 **P2 Exécution sécu — en cours** (go Paul 2026-07-03 nuit) :
-  ✅ S2+P1 (migration `0002` appliquée, vérifiée en base) ; ✅ S3 décidé
-  (mono-utilisateur : seul Paul se connecte — `shouldCreateUser:false` ;
-  restent 2 actions dashboard : inviter son compte + fermer les signups).
-  ⏳ S1 (SRI supabase-js), S4 (connect-src), S5 (IP rate-limit) — touchent
-  index.html/middleware. ⏭ S6 (advisors Auth au dashboard).
+- ✅ **P2 Exécution sécu — fermée côté code** (« go pour tout » Paul) :
+  S1 (supabase-js v2.110.0 auto-hébergé, jsdelivr hors CSP), S2+P1
+  (migration `0002` appliquée), S3 (mono-utilisateur), S4 (connect-src
+  épinglé env), S5 (x-real-ip). ⏭ S6 + 2 actions dashboard Paul
+  (inviter son compte, fermer les signups).
+- 🟡 **Refondation v2 — en cours** (« go pour tout ») : migration `0003`
+  pivot personnes/rapprochements/journal **déposée, NON appliquée**
+  (gate : DROP des tables v1 — go Paul requis) ; spec UX v2
+  téléphone-d'abord consignée dans PRODUIT.md ; socle PWA posé
+  (manifeste, icône, theme-color). Reste : appliquer 0003 → refondre
+  l'API (validate/personnes/rapprochements/journal) → refondre le front
+  (hub carte + feuilles + barre de pouce) → vérification complète.
+- ⏭ **Routine d'arrière-plan quotidienne** (sécurité + données, 05:30 UTC,
+  session fraîche) : cadrée, mais création du déclencheur bloquée par les
+  approbations MCP de la session — à armer dès que l'outil répond.
 - ✅ **Équipe d'agents complète** (`.claude/agents/`), pilotée par **Léo** —
   master agent et interlocuteur unique de Paul (charte `leo.md`, ancré dans
   `CLAUDE.md` ; remplace `ultima-pilote`). Spécialistes : `securite-auditeur`,
