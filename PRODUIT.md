@@ -89,3 +89,76 @@ panneau fiche) + `js/app.js` (état, appels API, formulaires).
 
 Multi-utilisateurs avancé (rôles), import CSV, géocodage automatique d'adresses,
 mobile natif, temps réel. → ROADMAP-SITE.md.
+
+## Parcours v2 — spécification UX téléphone-d'abord (2026-07-03, fait foi pour la refonte)
+
+### Architecture de navigation
+- **Un seul écran hôte : la carte Leaflet plein écran (hub).** Tout le reste =
+  **feuilles montantes** (bottom sheets) par-dessus, jamais de page qui remplace
+  la carte. Chaque feuille : titre en tête, bouton « Fermer », fermeture par
+  Échap et geste retour système — jamais de piège.
+- **Barre d'action basse fixe** (zone de pouce, 3 boutons ≥ 44 px) :
+  `Pilotage` (badge chiffré des relances dues), `+ Personne`, `Rechercher`
+  (par nom → tap → fiche centrée sur la carte). Filtres carte : bouton
+  flottant discret au-dessus de la barre.
+- **Hiérarchie** : Carte → Fiche personne → (Journal | Rapprochements) →
+  Fiche rapprochement. Profondeur max 2 feuilles.
+- **États vides** — carte vide : « Votre carte est vide. Touchez + Personne
+  pour ajouter votre premier contact. » ; configuré mais déconnecté :
+  « Connectez-vous pour voir votre réseau. »
+
+### Flux 1 — Consulter/piloter (ouverture d'app)
+1. Ouverture → carte + badge sur `Pilotage` : ce qui demande attention est
+   visible **sans aucun geste**.
+2. Tap `Pilotage` → feuille « À suivre » : **« Relances dues »** (nom ou
+   rapprochement, prochaine étape, date échue en rouge) puis
+   **« Rapprochements en cours »** (statut + dernière note du journal).
+3. Par ligne : `Fait` (ouvre le journal rapide pré-rempli) et `Reporter`
+   (Demain / Dans 1 semaine / Choisir une date). Tap sur la ligne → fiche.
+- État vide : « Rien à relancer. Tout est à jour. »
+
+### Flux 2 — Saisie au pouce post-RDV (< 30 s)
+1. Tap `+ Personne` → feuille « Nouvelle personne », **3 champs seulement** :
+   `Nom` (focus + clavier ouverts), `Comment on se connaît` (placeholder :
+   « Ex. : présenté par Marc au salon BTP »), `Où` = `Placer sur la carte`
+   **ou** `Ville`.
+2. `Placer sur la carte` : la feuille se réduit en bandeau « Touchez la carte
+   pour placer {Nom} » ; le tap pose le point et rouvre la feuille.
+   **Aucun champ latitude/longitude n'existe dans l'interface.**
+3. `Enregistrer` → bouton désactivé + « Enregistrement… » ; succès → toast
+   « {Nom} ajouté » et ouverture de la fiche.
+- Le reste (métier, entreprise, tags valeurs/état d'esprit, téléphone,
+  e-mail) se complète **plus tard** (bouton `Compléter la fiche`).
+
+### Flux 3 — Journal rapide (< 20 s)
+1. Sur toute fiche, bouton primaire en tête : **« Noter où j'en suis »**
+   (1 tap depuis la fiche, 2 depuis la carte).
+2. Feuille « Où j'en suis avec {Nom} » : texte (focus auto, placeholder :
+   « Ex. : déjeuner fait, il attend mon devis ») + `Prochaine étape`
+   (optionnel) + `Me relancer` (Demain / 1 semaine / 1 mois / date —
+   optionnel).
+3. `Enregistrer` → entrée datée du jour en tête du journal ; la relance
+   alimente le badge `Pilotage`.
+
+### Flux 4 — Créer/piloter un rapprochement
+1. Fiche de A : **« Rapprocher de… »** → sélecteur de B (nom + métier +
+   ville). Aussi via `Pilotage` → `+ Rapprochement`.
+2. Feuille « Rapprochement {A} ↔ {B} » : champ requis unique **« Pourquoi
+   les rapprocher ? »** (= intérêt qualitatif) ; statut initial `Idée`.
+3. Fiche rapprochement : 2 personnes (tap → fiche), **frise de statut
+   tapable** `Idée → Contact pris → En cours → Fructueux / Arrêté`, journal
+   propre. **« Validation chiffrée »** n'apparaît qu'à partir de `En cours`
+   (méthode : qualitatif d'abord).
+4. `Arrêté` : champ requis **« Raison de l'arrêt »** ; si vide : « Indiquez
+   pourquoi vous arrêtez — un arrêt documenté est une bonne décision. »
+   Sur la carte, trait entre A et B, apparence selon statut (graphisme).
+
+### Critères d'acceptation (verificateur)
+1. ≥ 1 relance échue → badge visible sans geste ; fiche atteinte en 2 taps.
+2. Personne créée en 1 saisie texte + ≤ 5 taps, < 30 s ; zéro champ lat/lng.
+3. Journal en 1 tap depuis toute fiche ; relance → badge incrémenté.
+4. Double-tap `Enregistrer` → une seule entité créée.
+5. Toute feuille fermable (Fermer, Échap, retour) ; jamais d'impasse.
+6. `Arrêté` refusé sans raison, message exact ci-dessus.
+7. Les 4 flux jouables en mode démo ; tap targets ≥ 44 px ; feuilles
+   `role="dialog"` + focus géré.
