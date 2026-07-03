@@ -12,9 +12,22 @@
 - ✅ **P1 Audit** — livrée : `AUDIT-2026-07-03.md` = backlog unique
   (6 S / 1 P / 8 U, rien d'appliqué). Bloquants : S1 (CDN sans SRI),
   S3 (inscription ouverte — décision Paul), U1 (création sans e-mail = 400).
-- 🔜 **Boucle suivante** : **P2 Exécution sécu** (S1 → S2 → S4 → S5 puis P1) —
-  S2/S4/S5/P1 touchent middleware/RLS → validation Paul avant application ;
-  S3 = décision produit Paul. Puis P3 (U1 en tête).
+- 🟡 **P2 Exécution sécu — en cours** (go Paul 2026-07-03 nuit) :
+  ✅ S2+P1 (migration `0002` appliquée, vérifiée en base) ; ✅ S3 décidé
+  (mono-utilisateur : seul Paul se connecte — `shouldCreateUser:false` ;
+  restent 2 actions dashboard : inviter son compte + fermer les signups).
+  ⏳ S1 (SRI supabase-js), S4 (connect-src), S5 (IP rate-limit) — touchent
+  index.html/middleware. ⏭ S6 (advisors Auth au dashboard).
+- ✅ **Équipe d'agents complète** (`.claude/agents/`) : reprise des 5 agents
+  de la PR #2 (pilote, sécurité, données, front-carto, vérificateur) +
+  `interface-ux` (meilleure interface, aide, navigation) + `graphisme`
+  (design visuel) — la PR #2 devient redondante côté agents.
+- 📌 Objectifs finaux du produit actés et consignés dans `PRODUIT.md` :
+  cartographier toutes les relations pro ; par relation — centraliser les
+  données, journal « où j'en suis », créer du lien pertinent entre elles.
+- 🔜 Ensuite : fin de P2 (S1/S4/S5), branchement front (config + env Vercel),
+  puis P3 (U1 en tête) et le socle « journal + suggestions de lien » (P4 à
+  cadrer — objectif final n°2).
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 

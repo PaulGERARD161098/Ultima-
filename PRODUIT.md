@@ -6,6 +6,21 @@ Carte interactive du réseau commercial de Paul : visualiser en un coup d'œil
 **qui** (artisans, partenaires, leads, chantiers), **où** (carte France), et
 **comment ils sont reliés** (apport d'affaires, sous-traitance, chantier commun).
 
+## Objectifs finaux (actés avec Paul, 2026-07-03)
+
+1. **Cartographier toutes les relations professionnelles de Paul**, quelles
+   qu'elles soient — la carte est la surface de restitution du réseau complet.
+2. **Pour chaque relation professionnelle** :
+   - **centraliser ses données** (coordonnées, contexte, historique) ;
+   - **tenir un journal du « où j'en suis »** avec elle (interactions, relances,
+     prochaine étape) ;
+   - **créer du lien pertinent et intéressant entre ces relations** (mises en
+     relation, apports d'affaires suggérés par proximité métier/géo).
+
+Décision d'accès (2026-07-03) : **Ultima est mono-utilisateur** — seul Paul
+(`compte Gmail perso`) se connecte. Pas d'inscription ouverte [S3] ; le persona
+« collaborateur » reste hors périmètre tant que Paul n'en décide pas autrement.
+
 ## Personas
 
 - **Paul (admin/commercial)** : pilote le réseau, ajoute des contacts, trace les
