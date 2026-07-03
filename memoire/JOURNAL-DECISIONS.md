@@ -25,3 +25,6 @@
   ② Arrière-plan Léo = relances + hygiène + advisors (lecture seule,
   quotidien). ③ PWA validée (pas d'app native). ④ P2 sécu S1/S4/S5
   appliqués dans la foulée du go global.
+- **2026-07-03 (clôture)** — Go application `0003` : appliquée et vérifiée
+  (3 tables RLS/12 policies/index GIN, v1 supprimée). Fin de session dans la
+  foulée ; prochaine boucle = implémentation v2 (API puis front, spec UX).

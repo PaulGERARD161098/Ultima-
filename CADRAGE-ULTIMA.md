@@ -18,12 +18,13 @@
   épinglé env), S5 (x-real-ip). ⏭ S6 + 2 actions dashboard Paul
   (inviter son compte, fermer les signups).
 - 🟡 **Refondation v2 — en cours** (« go pour tout ») : migration `0003`
-  pivot personnes/rapprochements/journal **déposée, NON appliquée**
-  (gate : DROP des tables v1 — go Paul requis) ; spec UX v2
-  téléphone-d'abord consignée dans PRODUIT.md ; socle PWA posé
-  (manifeste, icône, theme-color). Reste : appliquer 0003 → refondre
-  l'API (validate/personnes/rapprochements/journal) → refondre le front
-  (hub carte + feuilles + barre de pouce) → vérification complète.
+  pivot personnes/rapprochements/journal **APPLIQUÉE et vérifiée en base**
+  (go Paul 2026-07-03 : 3 tables RLS, 12 policies, tags_valides épinglée,
+  4 index clés, tables v1 supprimées). Spec UX v2 téléphone-d'abord dans
+  PRODUIT.md ; socle PWA posé. **Prochaine boucle** : refondre l'API
+  (validate / personnes / rapprochements / journal, contrats v2 de
+  PRODUIT.md) → refondre le front (hub carte + feuilles + barre de pouce,
+  spec UX) → vérification navigateur complète (critères d'acceptation).
 - ⏭ **Routine d'arrière-plan quotidienne** (sécurité + données, 05:30 UTC,
   session fraîche) : cadrée, mais création du déclencheur bloquée par les
   approbations MCP de la session — à armer dès que l'outil répond.

@@ -14,11 +14,15 @@
 - Responsive mobile (filtres repliables, fiche plein écran), contrastes AA,
   tap targets ≥ 44 px, toasts sobres.
 
-## Prochaines étapes (impact × effort, à indexer U# en P1)
+## Prochaines étapes (cap v2 — refonte actée le 2026-07-03)
 
-1. Brancher Supabase réel (config + auth magic link) — dépend de la gate coût.
-2. Géocodage d'adresse à la saisie (éviter la saisie manuelle lat/lng) —
-   Nominatim/OSM d'abord (gratuit), en respectant leur politique d'usage.
+0. **Implémentation v2** (boucle en cours au prochain démarrage) : API sur le
+   modèle 0003 (personnes/rapprochements/journal) puis front téléphone-d'abord
+   (spec UX dans PRODUIT.md), PWA. Le clic-carte remplace toute saisie lat/lng.
+1. Brancher Supabase réel (config js/config.js + env Vercel + déploiement,
+   compte Paul invité).
+2. Géocodage d'adresse à la saisie (option, après v2) — Nominatim/OSM
+   (gratuit), politique d'usage respectée, décision Paul (appel externe).
 3. Recherche texte (nom/ville) + zoom sur résultat.
 4. Édition/suppression de relation depuis la fiche ; fiche relation.
 5. Regroupement de marqueurs (clustering) au-delà de ~100 nœuds.
