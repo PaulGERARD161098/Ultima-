@@ -51,26 +51,43 @@ Cadre structurant :
 5. Je relie deux nœuds (type de relation + note) et la relation s'affiche en
    trait sur la carte.
 
-## Modèle de données (contrat — Supabase, RLS dès la migration 0001)
+## Modèle de données v2 (contrat — migration `0003`, remplace le modèle v1)
 
-`network_nodes` : `id uuid pk`, `owner_id uuid not null` (→ `auth.users`),
-`type text` ∈ {artisan, partenaire, lead, chantier}, `nom text not null`,
-`ville`, `adresse`, `telephone`, `email`, `statut text` ∈ {actif, prospect,
-en_cours, termine, inactif}, `lat/lng double precision`, `notes`,
-`created_at/updated_at`.
+> v1 (`network_nodes`/`network_edges`) est supprimé par la `0003` — base
+> vide au pivot, rollback documenté dans la migration.
 
-`network_edges` : `id uuid pk`, `owner_id uuid not null`, `source_id/target_id`
-(→ `network_nodes`, cascade), `type text` ∈ {apport_affaires, sous_traitance,
-chantier_commun}, `notes`, `created_at`.
+`personnes` — le seul nœud de la carte : `prenom`, `nom` (requis),
+`structure`/`role` (l'entreprise n'est qu'un attribut), `categorie` ∈
+{artisan, partenaire, lead, autre} (couleur carte) + `metier` libre,
+coordonnées, `lat/lng`, `statut_relation` ∈ {a_contacter, en_relation,
+de_confiance, dormant, perdu}, **affinité structurée** : `valeurs text[]` et
+`etat_esprit text[]` (tags bornés par `tags_valides()`, index GIN → moteur
+des suggestions de passerelles), `notes`.
 
-RLS : activée sur les 2 tables ; select/insert/update/delete limités à
-`owner_id = auth.uid()` (insert `with check`).
+`rapprochements` — l'objet pilotable central : paire canonique
+`personne_a_id < personne_b_id` (un seul rapprochement ACTIF par paire,
+index unique partiel), `statut` ∈ {idee, contact_etabli, en_cours,
+fructueux, arrete}, `nature` ∈ {apport_affaires, sous_traitance,
+chantier_commun, autre}, `interet_qualitatif` (étape 1 — qualitatif
+d'abord), `effort_temps`/`effort_energie` 1..5 (étape 2 — chiffré ensuite),
+`raison_arret` **obligatoire en base** si statut = arrete.
+
+`journal` — « où j'en suis » : entrée datée rattachée à UNE personne OU UN
+rapprochement (contrainte `num_nonnulls = 1`), `note`, `prochaine_etape`,
+`relance_at` + `relance_faite` (alimente le badge Pilotage et le radar de
+Léo ; relance ⇒ prochaine étape décrite, contrainte en base).
+
+RLS : 4 policies par table, `owner_id = (select auth.uid())`, WITH CHECK
+sur insert/update. Toute fonction : `search_path` épinglé.
 
 ## Contrat API (serverless Vercel, `api/`)
 
-- `GET  /api/reseau` → `{ ok: true, data: { nodes, edges } }` (RLS via jeton).
-- `POST/PATCH/DELETE /api/reseau/nodes` — CRUD nœud, entrées validées.
-- `POST/DELETE /api/reseau/edges` — CRUD relation, entrées validées.
+- v1 (à refondre avec la 0003) : `GET /api/reseau` → `{ nodes, edges }` ;
+  CRUD `/api/reseau/nodes` et `/api/reseau/edges`.
+- v2 cible : `GET /api/reseau` → `{ personnes, rapprochements }` ; CRUD
+  paginés `/api/personnes`, `/api/rapprochements`, `/api/journal` ;
+  suggestions de passerelles par recouvrement de tags (`valeurs && …`),
+  tri de la paire a<b côté API, tags normalisés miroir de `tags_valides`.
 - Auth : `Authorization: Bearer <jeton Supabase>` passé au client supabase-js
   (clé anon + jeton utilisateur → la RLS s'applique, jamais de service role).
 - Erreurs : client générique (`{ ok:false, error:"…" }` + code HTTP), détail
