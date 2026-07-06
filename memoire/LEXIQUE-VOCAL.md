@@ -16,6 +16,7 @@
 | en otarchie | en autarcie |
 | Superbase | Supabase |
 | maître en relation | mettre en relation |
+| le projet « tantot » | le projet [créé] tantôt (= le projet Supabase existant) |
 
 Règle : en cas de doute sur un mot qui change le sens d'une instruction,
 reformuler et demander — jamais deviner avant une action irréversible.

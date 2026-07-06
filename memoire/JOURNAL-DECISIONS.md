@@ -28,3 +28,20 @@
 - **2026-07-03 (clôture)** — Go application `0003` : appliquée et vérifiée
   (3 tables RLS/12 policies/index GIN, v1 supprimée). Fin de session dans la
   foulée ; prochaine boucle = implémentation v2 (API puis front, spec UX).
+- **2026-07-06** — Protocole **GO SOLO** ancré dans `CLAUDE.md` (déclencheur
+  « solo ») : autonomie maximale, merge/push autorisés, registre « ⏳ Actions
+  humaines » ; restent bloquants : payant, suppression de données non
+  vérifiées vides, secrets, choix produit ambigu.
+- **2026-07-06** — ⚠️ **Conflit de cap détecté a posteriori** : la session du
+  03 (PR #3, jamais fusionnée ni synchronisée Notion) avait acté le pivot v2
+  et appliqué son schéma ; la session du 06, partant des docs de `main`
+  (v1 seule), a purgé les tables v2 (vérifiées vides — zéro donnée perdue),
+  réappliqué et durci le schéma v1 (migrations 0001-0004, advisors 0 lint),
+  branché le front réel et fusionné (PR #4). **Arbitrage Paul requis :
+  reprendre le pivot v2 (migration prête dans la branche de l'ex-PR #3) ou
+  continuer la v1 carte réseau.** Aucune des deux voies n'est perdue.
+- **2026-07-06** — Portés de l'ex-PR #3 (indépendants du cap, actés le 03) :
+  mono-utilisateur (`shouldCreateUser: false`), PWA (manifest + icône),
+  mémoire Léo (`memoire/`), équipe d'agents (`.claude/`), Léo ancré dans
+  `CLAUDE.md`. Non portés (dépendants du cap) : PRODUIT v2, AUDIT du 03,
+  migration pivot.
