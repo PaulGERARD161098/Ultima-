@@ -62,7 +62,7 @@ export default async function handler(req, res) {
         .update(value)
         .eq('id', id)
         .select()
-        .single();
+        .maybeSingle();
       if (dbError) return dbFail(res, dbError, 'nodes:patch');
       if (!data) return fail(res, 404, 'Nœud introuvable');
       return ok(res, data);
