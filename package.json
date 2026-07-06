@@ -5,6 +5,7 @@
   "type": "module",
   "description": "Ultima — carte interactive du réseau commercial (P0 fondations).",
   "dependencies": {
-    "@supabase/supabase-js": "^2"
+    "@supabase/supabase-js": "^2",
+    "playwright": "1.49"
   }
 }

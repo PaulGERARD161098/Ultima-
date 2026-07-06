@@ -48,8 +48,10 @@
   consignés), relances dues actionnables, pilotage, suggestions R1-R4,
   onglets. Vérifié 2 fois (43 verdicts front-carto + contre-passe Léo,
   non-régression incluse).
-- 🔜 **Boucle suivante (v3-②)** : onglet Contacts (liste, recherche, nom seul
-  requis, position optionnelle) ; puis v3-③ déploiement Vercel.
+- ✅ **Boucle v3-② Contacts (2026-07-06, solo)** : liste + recherche +
+  saisie progressive, 4 harnais verts (contre-passe Léo incluse).
+- 🔜 **Boucle v3-③** : déploiement Vercel (projet Hobby gratuit, repli env
+  publiables dans l'API).
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 

@@ -147,12 +147,12 @@
           </div>
           <div class="champs-doubles">
             <div class="champ">
-              <label for="noeud-lat">Latitude *</label>
-              <input id="noeud-lat" type="number" step="any" min="-90" max="90" required>
+              <label for="noeud-lat">Latitude</label>
+              <input id="noeud-lat" type="number" step="any" min="-90" max="90">
             </div>
             <div class="champ">
-              <label for="noeud-lng">Longitude *</label>
-              <input id="noeud-lng" type="number" step="any" min="-180" max="180" required>
+              <label for="noeud-lng">Longitude</label>
+              <input id="noeud-lng" type="number" step="any" min="-180" max="180">
             </div>
           </div>
           <div class="champ">
@@ -191,11 +191,22 @@
       </aside>
     </section>
 
-    <!-- ===== Espace Contacts (provisoire, boucle ultérieure) ===== -->
+    <!-- ===== Espace Contacts (registre sobre : liste + recherche) ===== -->
     <section id="espace-contacts" class="espace espace-contacts" hidden aria-labelledby="contacts-titre">
-      <h2 id="contacts-titre" class="contacts-titre">Contacts</h2>
-      <p class="contacts-message"><strong>L'annuaire des contacts arrive dans une prochaine version.</strong> En attendant, tous vos contacts sont visibles sur la carte.</p>
-      <button id="contacts-voir-carte" type="button" class="bouton bouton-secondaire">Voir la carte</button>
+      <div class="contacts-conteneur">
+        <header class="contacts-entete">
+          <div class="contacts-titres">
+            <h2 id="contacts-titre" class="contacts-titre">Contacts</h2>
+            <p id="contacts-compteur" class="contacts-compteur"></p>
+          </div>
+          <button id="contacts-ajouter" type="button" class="bouton bouton-primaire">+ Ajouter un contact</button>
+        </header>
+        <div id="contacts-outils" class="contacts-outils" hidden>
+          <input id="contacts-recherche" type="search" placeholder="Rechercher un nom ou une ville…"
+                 aria-label="Rechercher un contact par nom ou ville" autocomplete="off">
+        </div>
+        <div id="contacts-contenu" class="contacts-contenu"></div>
+      </div>
     </section>
 
   </main>
