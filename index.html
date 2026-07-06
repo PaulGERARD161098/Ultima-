@@ -27,138 +27,201 @@
     </div>
   </header>
 
-  <div class="barre-outils">
-    <button id="bouton-filtres" type="button" class="bouton bouton-secondaire bouton-filtres"
-            aria-expanded="false" aria-controls="filtres">Filtres</button>
+  <main class="espaces">
 
-    <div id="filtres" class="filtres">
-      <fieldset class="groupe-filtres">
-        <legend>Type</legend>
-        <label class="case-filtre"><input type="checkbox" data-filtre="type" value="artisan" checked> Artisan</label>
-        <label class="case-filtre"><input type="checkbox" data-filtre="type" value="partenaire" checked> Partenaire</label>
-        <label class="case-filtre"><input type="checkbox" data-filtre="type" value="lead" checked> Lead</label>
-        <label class="case-filtre"><input type="checkbox" data-filtre="type" value="chantier" checked> Chantier</label>
-      </fieldset>
-      <fieldset class="groupe-filtres">
-        <legend>Statut</legend>
-        <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="actif" checked> Actif</label>
-        <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="prospect" checked> Prospect</label>
-        <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="en_cours" checked> En cours</label>
-        <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="termine" checked> Terminé</label>
-        <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="inactif" checked> Inactif</label>
-      </fieldset>
-    </div>
+    <!-- ===== Espace Accueil (registre parchemin, scopé .vue-accueil) ===== -->
+    <section id="espace-accueil" class="espace vue-accueil" aria-labelledby="accueil-titre">
+      <!-- Filtre « encre irrégulière » partagé par les petits SVG décoratifs. -->
+      <svg width="0" height="0" aria-hidden="true" class="svg-defs"><defs>
+        <filter id="filtre-encre"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.5"/></filter>
+      </defs></svg>
 
-    <button id="bouton-ajouter" type="button" class="bouton bouton-primaire">+ Ajouter</button>
-  </div>
+      <div class="accueil-conteneur">
+        <header class="accueil-entete">
+          <svg class="rose-des-vents" viewBox="0 0 100 100" aria-hidden="true">
+            <g fill="none" stroke="#8c7a55" stroke-width="1.5" filter="url(#filtre-encre)">
+              <circle cx="50" cy="50" r="30"/>
+              <path d="M50 8 L56 44 L92 50 L56 56 L50 92 L44 56 L8 50 L44 44 Z" fill="#efe3c6"/>
+              <path d="M50 26 L54 46 L74 50 L54 54 L50 74 L46 54 L26 50 L46 46 Z" fill="#8c7a55" stroke="none" opacity="0.5"/>
+            </g>
+            <text x="50" y="6" text-anchor="middle" font-size="10" fill="#6a5636">N</text>
+          </svg>
+          <h2 id="accueil-titre" class="accueil-titre">Bienvenue, Paul</h2>
+          <p class="accueil-question">On fait quoi aujourd'hui ?</p>
+        </header>
+        <div id="accueil-contenu" class="accueil-contenu"></div>
+      </div>
+    </section>
 
-  <main class="contenu">
-    <div id="carte" class="carte" aria-label="Carte du réseau"></div>
-    <div class="legende" aria-label="Légende de la carte">
-      <p class="legende-titre">Nœuds</p>
-      <p class="legende-item"><span class="pastille pastille-artisan"></span> Artisan</p>
-      <p class="legende-item"><span class="pastille pastille-partenaire"></span> Partenaire</p>
-      <p class="legende-item"><span class="pastille pastille-lead"></span> Lead</p>
-      <p class="legende-item"><span class="pastille pastille-chantier"></span> Chantier</p>
-      <p class="legende-titre">Relations</p>
-      <p class="legende-item"><span class="trait trait-apport"></span> Apport d'affaires</p>
-      <p class="legende-item"><span class="trait trait-soustraitance"></span> Sous-traitance</p>
-      <p class="legende-item"><span class="trait trait-chantier"></span> Chantier commun</p>
-    </div>
+    <!-- ===== Espace Carte (existant : barre d'outils + carte + légende + panneau) ===== -->
+    <section id="espace-carte" class="espace espace-carte" hidden aria-labelledby="carte-titre">
+      <h2 id="carte-titre" class="visuellement-cache">Carte</h2>
+
+      <div class="barre-outils">
+        <button id="bouton-filtres" type="button" class="bouton bouton-secondaire bouton-filtres"
+                aria-expanded="false" aria-controls="filtres">Filtres</button>
+
+        <div id="filtres" class="filtres">
+          <fieldset class="groupe-filtres">
+            <legend>Type</legend>
+            <label class="case-filtre"><input type="checkbox" data-filtre="type" value="artisan" checked> Artisan</label>
+            <label class="case-filtre"><input type="checkbox" data-filtre="type" value="partenaire" checked> Partenaire</label>
+            <label class="case-filtre"><input type="checkbox" data-filtre="type" value="lead" checked> Lead</label>
+            <label class="case-filtre"><input type="checkbox" data-filtre="type" value="chantier" checked> Chantier</label>
+          </fieldset>
+          <fieldset class="groupe-filtres">
+            <legend>Statut</legend>
+            <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="actif" checked> Actif</label>
+            <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="prospect" checked> Prospect</label>
+            <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="en_cours" checked> En cours</label>
+            <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="termine" checked> Terminé</label>
+            <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="inactif" checked> Inactif</label>
+          </fieldset>
+        </div>
+
+        <button id="bouton-ajouter" type="button" class="bouton bouton-primaire">+ Ajouter</button>
+      </div>
+
+      <div class="contenu">
+        <div id="carte" class="carte" aria-label="Carte du réseau"></div>
+        <div class="legende" aria-label="Légende de la carte">
+          <p class="legende-titre">Nœuds</p>
+          <p class="legende-item"><span class="pastille pastille-artisan"></span> Artisan</p>
+          <p class="legende-item"><span class="pastille pastille-partenaire"></span> Partenaire</p>
+          <p class="legende-item"><span class="pastille pastille-lead"></span> Lead</p>
+          <p class="legende-item"><span class="pastille pastille-chantier"></span> Chantier</p>
+          <p class="legende-titre">Relations</p>
+          <p class="legende-item"><span class="trait trait-apport"></span> Apport d'affaires</p>
+          <p class="legende-item"><span class="trait trait-soustraitance"></span> Sous-traitance</p>
+          <p class="legende-item"><span class="trait trait-chantier"></span> Chantier commun</p>
+        </div>
+      </div>
+
+      <aside id="panneau" class="panneau" hidden aria-label="Panneau latéral">
+        <div class="panneau-entete">
+          <h2 id="panneau-titre" class="panneau-titre" tabindex="-1">Fiche</h2>
+          <button id="bouton-fermer-panneau" type="button" class="bouton-fermer" aria-label="Fermer le panneau">&times;</button>
+        </div>
+
+        <div id="vue-fiche" class="panneau-corps" hidden></div>
+
+        <form id="form-noeud" class="panneau-corps formulaire" hidden>
+          <div class="champ">
+            <label for="noeud-type">Type *</label>
+            <select id="noeud-type" required>
+              <option value="artisan">Artisan</option>
+              <option value="partenaire">Partenaire</option>
+              <option value="lead">Lead</option>
+              <option value="chantier">Chantier</option>
+            </select>
+          </div>
+          <div class="champ">
+            <label for="noeud-nom">Nom *</label>
+            <input id="noeud-nom" type="text" required maxlength="200">
+          </div>
+          <div class="champ">
+            <label for="noeud-statut">Statut *</label>
+            <select id="noeud-statut" required>
+              <option value="actif">Actif</option>
+              <option value="prospect">Prospect</option>
+              <option value="en_cours">En cours</option>
+              <option value="termine">Terminé</option>
+              <option value="inactif">Inactif</option>
+            </select>
+          </div>
+          <div class="champ">
+            <label for="noeud-ville">Ville</label>
+            <input id="noeud-ville" type="text" maxlength="120">
+          </div>
+          <div class="champ">
+            <label for="noeud-adresse">Adresse</label>
+            <input id="noeud-adresse" type="text" maxlength="250">
+          </div>
+          <div class="champ">
+            <label for="noeud-telephone">Téléphone</label>
+            <input id="noeud-telephone" type="tel" maxlength="30" autocomplete="tel">
+          </div>
+          <div class="champ">
+            <label for="noeud-email">E-mail</label>
+            <input id="noeud-email" type="email" maxlength="200" autocomplete="off">
+          </div>
+          <div class="champs-doubles">
+            <div class="champ">
+              <label for="noeud-lat">Latitude *</label>
+              <input id="noeud-lat" type="number" step="any" min="-90" max="90" required>
+            </div>
+            <div class="champ">
+              <label for="noeud-lng">Longitude *</label>
+              <input id="noeud-lng" type="number" step="any" min="-180" max="180" required>
+            </div>
+          </div>
+          <div class="champ">
+            <label for="noeud-notes">Notes</label>
+            <textarea id="noeud-notes" rows="3" maxlength="2000"></textarea>
+          </div>
+          <div class="actions-formulaire">
+            <button type="submit" class="bouton bouton-primaire">Enregistrer</button>
+            <button type="button" id="bouton-annuler-noeud" class="bouton bouton-secondaire">Annuler</button>
+          </div>
+        </form>
+
+        <form id="form-relation" class="panneau-corps formulaire" hidden>
+          <p id="relation-source" class="relation-source"></p>
+          <div class="champ">
+            <label for="relation-cible">Relier à *</label>
+            <select id="relation-cible" required></select>
+          </div>
+          <div class="champ">
+            <label for="relation-type">Type de relation *</label>
+            <select id="relation-type" required>
+              <option value="apport_affaires">Apport d'affaires</option>
+              <option value="sous_traitance">Sous-traitance</option>
+              <option value="chantier_commun">Chantier commun</option>
+            </select>
+          </div>
+          <div class="champ">
+            <label for="relation-notes">Note</label>
+            <textarea id="relation-notes" rows="3" maxlength="2000"></textarea>
+          </div>
+          <div class="actions-formulaire">
+            <button type="submit" class="bouton bouton-primaire">Créer la relation</button>
+            <button type="button" id="bouton-annuler-relation" class="bouton bouton-secondaire">Annuler</button>
+          </div>
+        </form>
+      </aside>
+    </section>
+
+    <!-- ===== Espace Contacts (provisoire, boucle ultérieure) ===== -->
+    <section id="espace-contacts" class="espace espace-contacts" hidden aria-labelledby="contacts-titre">
+      <h2 id="contacts-titre" class="contacts-titre">Contacts</h2>
+      <p class="contacts-message"><strong>L'annuaire des contacts arrive dans une prochaine version.</strong> En attendant, tous vos contacts sont visibles sur la carte.</p>
+      <button id="contacts-voir-carte" type="button" class="bouton bouton-secondaire">Voir la carte</button>
+    </section>
+
   </main>
 
-  <aside id="panneau" class="panneau" hidden aria-label="Panneau latéral">
-    <div class="panneau-entete">
-      <h2 id="panneau-titre" class="panneau-titre">Fiche</h2>
-      <button id="bouton-fermer-panneau" type="button" class="bouton-fermer" aria-label="Fermer le panneau">&times;</button>
-    </div>
-
-    <div id="vue-fiche" class="panneau-corps" hidden></div>
-
-    <form id="form-noeud" class="panneau-corps formulaire" hidden>
-      <div class="champ">
-        <label for="noeud-type">Type *</label>
-        <select id="noeud-type" required>
-          <option value="artisan">Artisan</option>
-          <option value="partenaire">Partenaire</option>
-          <option value="lead">Lead</option>
-          <option value="chantier">Chantier</option>
-        </select>
-      </div>
-      <div class="champ">
-        <label for="noeud-nom">Nom *</label>
-        <input id="noeud-nom" type="text" required maxlength="200">
-      </div>
-      <div class="champ">
-        <label for="noeud-statut">Statut *</label>
-        <select id="noeud-statut" required>
-          <option value="actif">Actif</option>
-          <option value="prospect">Prospect</option>
-          <option value="en_cours">En cours</option>
-          <option value="termine">Terminé</option>
-          <option value="inactif">Inactif</option>
-        </select>
-      </div>
-      <div class="champ">
-        <label for="noeud-ville">Ville</label>
-        <input id="noeud-ville" type="text" maxlength="120">
-      </div>
-      <div class="champ">
-        <label for="noeud-adresse">Adresse</label>
-        <input id="noeud-adresse" type="text" maxlength="250">
-      </div>
-      <div class="champ">
-        <label for="noeud-telephone">Téléphone</label>
-        <input id="noeud-telephone" type="tel" maxlength="30" autocomplete="tel">
-      </div>
-      <div class="champ">
-        <label for="noeud-email">E-mail</label>
-        <input id="noeud-email" type="email" maxlength="200" autocomplete="off">
-      </div>
-      <div class="champs-doubles">
-        <div class="champ">
-          <label for="noeud-lat">Latitude *</label>
-          <input id="noeud-lat" type="number" step="any" min="-90" max="90" required>
-        </div>
-        <div class="champ">
-          <label for="noeud-lng">Longitude *</label>
-          <input id="noeud-lng" type="number" step="any" min="-180" max="180" required>
-        </div>
-      </div>
-      <div class="champ">
-        <label for="noeud-notes">Notes</label>
-        <textarea id="noeud-notes" rows="3" maxlength="2000"></textarea>
-      </div>
-      <div class="actions-formulaire">
-        <button type="submit" class="bouton bouton-primaire">Enregistrer</button>
-        <button type="button" id="bouton-annuler-noeud" class="bouton bouton-secondaire">Annuler</button>
-      </div>
-    </form>
-
-    <form id="form-relation" class="panneau-corps formulaire" hidden>
-      <p id="relation-source" class="relation-source"></p>
-      <div class="champ">
-        <label for="relation-cible">Relier à *</label>
-        <select id="relation-cible" required></select>
-      </div>
-      <div class="champ">
-        <label for="relation-type">Type de relation *</label>
-        <select id="relation-type" required>
-          <option value="apport_affaires">Apport d'affaires</option>
-          <option value="sous_traitance">Sous-traitance</option>
-          <option value="chantier_commun">Chantier commun</option>
-        </select>
-      </div>
-      <div class="champ">
-        <label for="relation-notes">Note</label>
-        <textarea id="relation-notes" rows="3" maxlength="2000"></textarea>
-      </div>
-      <div class="actions-formulaire">
-        <button type="submit" class="bouton bouton-primaire">Créer la relation</button>
-        <button type="button" id="bouton-annuler-relation" class="bouton bouton-secondaire">Annuler</button>
-      </div>
-    </form>
-  </aside>
+  <nav class="barre-onglets" aria-label="Navigation principale">
+    <button type="button" class="onglet" data-onglet="accueil" aria-current="page">
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M3.5 11 L12 3.5 L20.5 11 V20.5 H14.5 V15 H9.5 V20.5 H3.5 Z"/>
+      </svg>
+      <span>Accueil</span>
+    </button>
+    <button type="button" class="onglet" data-onglet="carte">
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M9 4.5 L15 6.5 L20.5 4.5 V18.5 L15 20.5 L9 18.5 L3.5 20.5 V6.5 Z"/>
+        <path d="M9 4.5 V18.5 M15 6.5 V20.5"/>
+      </svg>
+      <span>Carte</span>
+    </button>
+    <button type="button" class="onglet" data-onglet="contacts">
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
+        <rect x="5" y="3.5" width="15" height="17" rx="2"/>
+        <path d="M8.5 3.5 V20.5 M12 9 H16.5 M12 12.5 H16.5"/>
+      </svg>
+      <span>Contacts</span>
+    </button>
+  </nav>
 
   <div id="toasts" class="toasts" aria-live="polite"></div>
 
