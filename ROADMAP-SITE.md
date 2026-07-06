@@ -22,7 +22,17 @@
 - Journal « où j'en suis » dans la fiche : entrées datées sur le nœud ou une
   relation, prochaine étape, date de relance, case « relance faite ».
 
-## Prochaines étapes (impact × effort, à indexer U# en P1)
+## Prochaines étapes — cap Interface v3 (cadrage dicté 2026-07-06, voir PRODUIT.md)
+
+1. **Accueil « Bienvenue, Paul »** : relances dues, pilotage par statut,
+   suggestions (règles locales), raccourcis + barre d'onglets Accueil/Carte/Contacts.
+2. **Onglet Contacts** : liste + recherche, saisie progressive (nom seul requis,
+   position optionnelle).
+3. **Déploiement Vercel** (projet Hobby gratuit à créer + env).
+4. **Saisie vocale** par champ (Web Speech API, sans clé).
+5. **Géocodage** d'adresse (Nominatim/OSM).
+
+## Vivier (impact × effort, après le cap v3)
 
 1. ✅ 2026-07-06 — Supabase réel branché côté front (config URL + clé
    publiable, sortie du mode démo) [U4] et écriture connectée réparée [U1-U3].

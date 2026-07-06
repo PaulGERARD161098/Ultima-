@@ -51,3 +51,11 @@
   justifié obligatoire, une active par paire/type — résout U5) ; journal
   « où j'en suis » avec relances sur nœud XOR relation. Migration 0005
   appliquée. Pivot intégral archivé en branche, non supprimé.
+- **2026-07-06 (interface v3)** — Cadrage dicté par Paul : app en 3 onglets —
+  **Accueil « Bienvenue, Paul »** piloté par Léo (« on fait quoi
+  aujourd'hui ? » : relances dues, pilotage, suggestions par règles locales),
+  **Carte** (existant), **Contacts** (saisie progressive, nom seul requis,
+  saisie vocale navigateur pour les champs longs ; structuration complexe =
+  dicter à Léo en session). Pas de Vercel existant pour Ultima → création
+  Hobby (gratuit) à la livraison de l'Accueil. IA conversationnelle DANS
+  l'app = clé API + coût → gate Paul, au registre.
