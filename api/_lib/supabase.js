@@ -26,9 +26,15 @@ export function getBearerToken(req) {
 //  { status: 'unconfigured' } → env manquantes (503)
 //  { status: 'unauthenticated' } → jeton absent (401)
 //  { status: 'ok', client } → client prêt, RLS active
+// Repli public : URL du projet + clé PUBLIABLE (sb_publishable_…, conçue pour
+// être exposée — déjà committée côté front dans js/config.js). Aucun secret :
+// la sécurité repose sur la RLS. Les env Vercel restent prioritaires si posées.
+const PUBLIC_SUPABASE_URL = 'https://leosfqyidgsaescjbfom.supabase.co';
+const PUBLIC_SUPABASE_ANON_KEY = 'sb_publishable_BdzDDS6h3OBFEqr6Hlyn5A_axOPNO42';
+
 export function createUserClient(req) {
-  const url = process.env.SUPABASE_URL;
-  const anonKey = process.env.SUPABASE_ANON_KEY;
+  const url = process.env.SUPABASE_URL || PUBLIC_SUPABASE_URL;
+  const anonKey = process.env.SUPABASE_ANON_KEY || PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !anonKey) return { status: 'unconfigured' };
 
   const token = getBearerToken(req);
