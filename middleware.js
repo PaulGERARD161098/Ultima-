@@ -18,8 +18,8 @@ const hits = new Map();
 // Content-Security-Policy compatible avec le front prévu (Leaflet + supabase-js CDN).
 const CSP = [
   "default-src 'self'",
-  // Leaflet depuis unpkg, supabase-js depuis jsdelivr (SRI côté front). Pas de 'unsafe-inline'.
-  "script-src 'self' https://unpkg.com https://cdn.jsdelivr.net",
+  // Leaflet depuis unpkg (SRI côté front) ; supabase-js vendorisé (self). Pas de 'unsafe-inline'.
+  "script-src 'self' https://unpkg.com",
   // Leaflet applique des styles inline via JS (positionnement carte/marqueurs) → 'unsafe-inline' requis.
   "style-src 'self' https://unpkg.com 'unsafe-inline'",
   // Tuiles OSM, icônes marqueurs unpkg, images data:.
