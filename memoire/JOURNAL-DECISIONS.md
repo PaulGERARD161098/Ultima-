@@ -59,3 +59,8 @@
   dicter à Léo en session). Pas de Vercel existant pour Ultima → création
   Hobby (gratuit) à la livraison de l'Accueil. IA conversationnelle DANS
   l'app = clé API + coût → gate Paul, au registre.
+- **2026-07-06 (style de l'Accueil)** — Image de référence envoyée par Paul :
+  carte de la Forêt des Rêves Bleus (Winnie l'Ourson, E.H. Shepard). L'Accueil
+  sera une **carte de livre d'enfance** : parchemin, encre, lettrage manuscrit,
+  contacts = lieux dessinés, relances = panneaux. Style inspiré, œuvre non
+  reproduite. Police manuscrite libre auto-hébergée (CSP).
