@@ -42,9 +42,12 @@ function applySecurityHeaders(headers) {
 }
 
 function clientIp(request) {
+  // x-real-ip est posé par Vercel (mono-valeur, non forgeable) : source prioritaire.
+  const real = request.headers.get('x-real-ip');
+  if (real) return real.trim();
   const fwd = request.headers.get('x-forwarded-for');
   if (fwd) return fwd.split(',')[0].trim();
-  return request.headers.get('x-real-ip') || 'unknown';
+  return 'unknown';
 }
 
 // Renvoie true si la requête dépasse la limite.
