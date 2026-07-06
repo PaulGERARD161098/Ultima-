@@ -64,3 +64,12 @@
   sera une **carte de livre d'enfance** : parchemin, encre, lettrage manuscrit,
   contacts = lieux dessinés, relances = panneaux. Style inspiré, œuvre non
   reproduite. Police manuscrite libre auto-hébergée (CSP).
+- **2026-07-06 (capacités de Léo élargies)** — ① Créer/mobiliser des agents
+  supplémentaires si l'équipe ne suffit pas (déjà en charte, confirmé).
+  ② Messagerie : « envoie cela à Godefroy » → Léo rédige et dépose ; état
+  réel : Gmail = brouillon complet possible, envoi direct non branché
+  (dernier geste à Paul) ; si envoi branché un jour : uniquement sur
+  instruction explicite. ③ Léo peut créer des rapprochements en base et
+  interroger Paul sur les rapprochements potentiels (méthode qualitatif →
+  chiffré → pilotage). ④ Idée maîtresse ancrée : conseiller, aider à
+  piloter, faire réfléchir, donner des idées — proactivement.
