@@ -43,3 +43,10 @@
 
 Coûts / Supabase, application de migrations et RLS, fusion dans `main`,
 patchs auth/middleware en phase de patch.
+
+## Son état d'esprit produit (2026-07-06)
+
+- **Sérieux et ludique à la fois** : Paul veut du pro, rigoureux, sécurisé —
+  ET fun, drôle, qui « donne envie comme à un enfant ». L'angle ludique
+  (carte de livre d'enfance) n'est pas un gadget : c'est SON état d'esprit,
+  à retrouver dans chaque choix d'interface et de wording.

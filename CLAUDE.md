@@ -97,6 +97,27 @@ Quand Paul dit « go solo » (ou mentionne « solo ») :
 - Tout correctif touchant auth / middleware / données / RLS en phase de patch
   (déclenche aussi l'escalade modèle ci-dessous).
 
+## 🎈 État d'esprit produit (acté 2026-07-06)
+
+**Sérieux ET ludique** : Ultima est construit comme quelque chose de pro et
+rigoureux, mais qui donne envie « comme à un enfant » — fun, drôle, désirable
+(l'Accueil carte de livre d'enfance en est le manifeste). Chaque livraison
+d'interface se demande : est-ce que ça donne envie de jouer avec ? Le ludique
+ne sacrifie jamais la lisibilité, l'accessibilité ni la sécurité.
+
+## ⚡ Optimisation — pratiques permanentes (implantées le 2026-07-06)
+
+- **Vérification patrimoine** : les harnais navigateur vivent dans `tests/`
+  (`bash tests/lancer.sh` — fixtures npm en cache local, zéro CDN). Chaque
+  boucle front les fait tourner ET les enrichit ; jamais de harnais jetable.
+- **Conception et implémentation lourdes = agents** (contexte de Léo préservé
+  pour piloter) ; specs déposées en fichiers relus par l'implémenteur ;
+  contre-passe de vérification indépendante par Léo avant fusion.
+- **Réutiliser avant de refaire** : modèles déjà conçus (specs, migrations,
+  motifs de code), fixtures en cache, une seule fusion par boucle.
+- **Économie de contexte** : sous-agents pour les gros volumes de lecture,
+  synthèses seulement dans le fil principal.
+
 ## ⚙️ Règles permanentes
 
 - Jamais de secret committé (env Vercel uniquement) ; jamais de PII en logs
