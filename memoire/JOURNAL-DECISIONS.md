@@ -73,3 +73,9 @@
   interroger Paul sur les rapprochements potentiels (méthode qualitatif →
   chiffré → pilotage). ④ Idée maîtresse ancrée : conseiller, aider à
   piloter, faire réfléchir, donner des idées — proactivement.
+- **2026-07-06 (état d'esprit + optimisation)** — ① Principe acté : Ultima =
+  sérieux ET ludique (« donne envie comme à un enfant ») — gravé dans
+  CLAUDE.md et le profil. ② Retours ⚡ implantés en règles permanentes :
+  harnais navigateur versionnés dans `tests/` (lancer.sh), conception/implé
+  par agents avec contre-passe Léo, réutilisation systématique, économie de
+  contexte.
