@@ -115,10 +115,16 @@
     if (carte) { carte.invalidateSize(); }
   }
 
+  // Recentre la carte sur un point (zoom inchangé) — ouverture depuis l'Accueil.
+  function centrer(lat, lng) {
+    if (carte && isFinite(lat) && isFinite(lng)) { carte.panTo([lat, lng]); }
+  }
+
   window.UltimaCarte = {
     init: init,
     rendre: rendre,
     invaliderTaille: invaliderTaille,
+    centrer: centrer,
     COULEURS_TYPE: COULEURS_TYPE
   };
 })();

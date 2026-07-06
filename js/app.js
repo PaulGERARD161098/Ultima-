@@ -45,11 +45,33 @@
     modeDemo: true,
     client: null,        // client supabase-js (mode connecté)
     session: null,
+    onglet: 'accueil',   // espace actif : accueil | carte | contacts
     noeudCourant: null,  // id du nœud affiché dans la fiche
     noeudEnEdition: null // id du nœud en cours d'édition dans le formulaire
   };
 
   function $(selecteur) { return document.querySelector(selecteur); }
+
+  // Date locale au format ISO 'YYYY-MM-DD', décalée de N jours (0 = aujourd'hui).
+  function dateLocaleIso(decalageJours) {
+    var d = new Date();
+    d.setDate(d.getDate() + (decalageJours || 0));
+    return d.getFullYear() + '-' +
+      String(d.getMonth() + 1).padStart(2, '0') + '-' +
+      String(d.getDate()).padStart(2, '0');
+  }
+
+  // Écart en jours entre une échéance ISO et aujourd'hui (positif = en retard).
+  function joursDeRetard(echeanceIso, aujourdHuiIso) {
+    var a = new Date(echeanceIso + 'T00:00:00');
+    var b = new Date(aujourdHuiIso + 'T00:00:00');
+    return Math.round((b - a) / 86400000);
+  }
+
+  function tronquer(texte, max) {
+    texte = texte || '';
+    return texte.length > max ? texte.slice(0, max) + '…' : texte;
+  }
 
   // ---------- Jeu de démo (config Supabase vide) ----------
 
@@ -73,9 +95,12 @@
       { id: 'demo-r5', source_id: 'demo-n2', target_id: 'demo-n8', type: 'chantier_commun', statut: 'en_cours', notes: 'Lot plomberie.' },
       { id: 'demo-r6', source_id: 'demo-n2', target_id: 'demo-n3', type: 'sous_traitance', statut: 'arrete', raison_arret: 'Plus de disponibilité cette saison.', notes: 'Sous-traite l’électricité sur les petits chantiers.' }
     ];
+    // Dates relatives à aujourd'hui (U9) : l'Accueil démontre une relance en
+    // retard, une relance du jour et une idée dormante (demo-r3 sans journal).
     var journal = [
-      { id: 'demo-j1', node_id: 'demo-n6', edge_id: null, date_entree: '2026-07-01', note: 'Devis toiture envoyé, attend le retour de la banque.', prochaine_etape: 'Relancer M. Lambert', relance_at: '2026-07-10', relance_faite: false },
-      { id: 'demo-j2', node_id: null, edge_id: 'demo-r1', date_entree: '2026-06-28', note: 'Deux dossiers transmis ce mois-ci, bonne dynamique.', prochaine_etape: null, relance_at: null, relance_faite: false }
+      { id: 'demo-j1', node_id: 'demo-n6', edge_id: null, date_entree: dateLocaleIso(-5), note: 'Devis toiture envoyé, attend le retour de la banque.', prochaine_etape: 'Relancer M. Lambert', relance_at: dateLocaleIso(-2), relance_faite: false },
+      { id: 'demo-j2', node_id: null, edge_id: 'demo-r1', date_entree: dateLocaleIso(-8), note: 'Deux dossiers transmis ce mois-ci, bonne dynamique.', prochaine_etape: null, relance_at: null, relance_faite: false },
+      { id: 'demo-j3', node_id: 'demo-n7', edge_id: null, date_entree: dateLocaleIso(-1), note: 'Plans reçus de l’architecte, chiffrage à préparer.', prochaine_etape: 'Envoyer le chiffrage à Mme Nguyen', relance_at: dateLocaleIso(0), relance_faite: false }
     ];
     return { noeuds: noeuds, relations: relations, journal: journal };
   }
@@ -150,6 +175,7 @@
 
   function rafraichir() {
     window.UltimaCarte.rendre(etat.noeuds, etat.relations, etat.filtres);
+    rendreAccueil();
     if (etat.noeudCourant && !$('#vue-fiche').hidden) {
       rendreFiche();
     }
@@ -290,6 +316,547 @@
 
   function trouverNoeud(id) {
     return etat.noeuds.find(function (n) { return n.id === id; }) || null;
+  }
+
+  function trouverRelation(id) {
+    return etat.relations.find(function (r) { return r.id === id; }) || null;
+  }
+
+  function nomNoeud(id) {
+    var noeud = trouverNoeud(id);
+    return (noeud && noeud.nom) || 'nœud supprimé';
+  }
+
+  // ---------- Navigation par onglets ----------
+
+  var SECTIONS_ONGLETS = {
+    accueil: '#espace-accueil',
+    carte: '#espace-carte',
+    contacts: '#espace-contacts'
+  };
+
+  function activerOnglet(nom) {
+    if (!SECTIONS_ONGLETS[nom]) { return; }
+    etat.onglet = nom;
+    Object.keys(SECTIONS_ONGLETS).forEach(function (cle) {
+      var section = $(SECTIONS_ONGLETS[cle]);
+      if (section) { section.hidden = cle !== nom; }
+    });
+    document.querySelectorAll('.barre-onglets .onglet').forEach(function (bouton) {
+      if (bouton.getAttribute('data-onglet') === nom) {
+        bouton.setAttribute('aria-current', 'page');
+      } else {
+        bouton.removeAttribute('aria-current');
+      }
+    });
+    if (nom === 'carte') {
+      // Leaflet initialisé dans une section cachée a une taille fausse.
+      window.UltimaCarte.invaliderTaille();
+    }
+    if (nom === 'accueil') { rendreAccueil(); }
+  }
+
+  // ---------- Accueil : ouverture d'une cible ----------
+
+  // Nœud à ouvrir pour une entrée de journal (nœud direct, sinon relation).
+  function noeudCibleEntree(entree) {
+    if (entree.node_id && trouverNoeud(entree.node_id)) { return entree.node_id; }
+    var relation = trouverRelation(entree.edge_id);
+    return relation ? noeudCibleRelation(relation) : null;
+  }
+
+  // Nœud à ouvrir pour une relation : source, repli cible si source supprimé.
+  function noeudCibleRelation(relation) {
+    if (trouverNoeud(relation.source_id)) { return relation.source_id; }
+    if (trouverNoeud(relation.target_id)) { return relation.target_id; }
+    return null;
+  }
+
+  // Libellé court de la cible d'une entrée de journal (pour l'Accueil).
+  function libelleCibleEntree(entree) {
+    if (entree.node_id) { return nomNoeud(entree.node_id); }
+    var relation = trouverRelation(entree.edge_id);
+    if (!relation) { return 'nœud supprimé'; }
+    return nomNoeud(relation.source_id) + ' ↔ ' + nomNoeud(relation.target_id);
+  }
+
+  function ouvrirCibleDepuisAccueil(nodeId) {
+    var noeud = nodeId ? trouverNoeud(nodeId) : null;
+    if (!noeud) {
+      toast("Ce contact n'existe plus.", 'erreur');
+      return; // on reste sur l'Accueil
+    }
+    activerOnglet('carte'); // invalide aussi la taille de la carte
+    if (typeof noeud.lat === 'number' && typeof noeud.lng === 'number') {
+      window.UltimaCarte.centrer(noeud.lat, noeud.lng);
+    }
+    ouvrirFiche(noeud.id);
+    $('#panneau-titre').focus();
+  }
+
+  function ouvrirFormDepuisAccueil(nodeId) {
+    activerOnglet('carte');
+    ouvrirFormNoeud(nodeId);
+    $('#panneau-titre').focus();
+  }
+
+  // ---------- Accueil : décor SVG (createElementNS, aria-hidden) ----------
+
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+
+  function svgElement(nom, attributs) {
+    var el = document.createElementNS(SVG_NS, nom);
+    Object.keys(attributs || {}).forEach(function (cle) {
+      el.setAttribute(cle, attributs[cle]);
+    });
+    return el;
+  }
+
+  // Chemin pointillé décoratif sous les titres de section.
+  function svgChemin() {
+    var svg = svgElement('svg', {
+      'class': 'chemin', viewBox: '0 0 320 40',
+      preserveAspectRatio: 'none', 'aria-hidden': 'true'
+    });
+    svg.appendChild(svgElement('path', {
+      d: 'M4 32 Q 90 6, 160 22 T 316 12', fill: 'none', stroke: '#8c7a55',
+      'stroke-width': '2.5', 'stroke-linecap': 'round', 'stroke-dasharray': '0.5 9'
+    }));
+    return svg;
+  }
+
+  // Puce « lieu » (maison) des rapprochements.
+  function svgLieu() {
+    var svg = svgElement('svg', {
+      'class': 'lieu', viewBox: '0 0 24 24', width: '26', height: '26', 'aria-hidden': 'true'
+    });
+    var g = svgElement('g', {
+      fill: '#efe3c6', stroke: '#3b2f1c', 'stroke-width': '1.4', 'stroke-linejoin': 'round'
+    });
+    g.appendChild(svgElement('path', { d: 'M4 11 L12 4 L20 11 V20 H4 Z' }));
+    g.appendChild(svgElement('path', { d: 'M10 20 V14 H14 V20', fill: 'none' }));
+    svg.appendChild(g);
+    return svg;
+  }
+
+  // Puce « arbre » des suggestions.
+  function svgArbre() {
+    var svg = svgElement('svg', {
+      'class': 'lieu', viewBox: '0 0 24 24', width: '26', height: '26', 'aria-hidden': 'true'
+    });
+    var g = svgElement('g', {
+      fill: '#efe3c6', stroke: '#3b2f1c', 'stroke-width': '1.4', 'stroke-linejoin': 'round'
+    });
+    g.appendChild(svgElement('circle', { cx: '12', cy: '9', r: '6' }));
+    g.appendChild(svgElement('path', { d: 'M12 15 V21 M9 21 H15', fill: 'none' }));
+    svg.appendChild(g);
+    return svg;
+  }
+
+  // ---------- Accueil : rendu ----------
+
+  function sectionAccueil(classe, titreTexte) {
+    var section = document.createElement('section');
+    section.className = 'accueil-section ' + classe;
+    var idTitre = 'titre-' + classe;
+    section.setAttribute('aria-labelledby', idTitre);
+    var titre = document.createElement('h3');
+    titre.id = idTitre;
+    titre.className = 'accueil-sous-titre';
+    titre.textContent = titreTexte;
+    section.appendChild(titre);
+    section.appendChild(svgChemin());
+    return section;
+  }
+
+  function paragrapheVide(texte) {
+    var p = document.createElement('p');
+    p.className = 'accueil-vide';
+    p.textContent = texte;
+    return p;
+  }
+
+  // Relances dues : échéance atteinte ou dépassée, non faites.
+  function relancesDues() {
+    var aujourdHui = dateLocaleIso(0);
+    return etat.journal.filter(function (j) {
+      return j.relance_at && j.relance_at <= aujourdHui && !j.relance_faite;
+    }).sort(function (a, b) {
+      if (a.relance_at !== b.relance_at) { return a.relance_at < b.relance_at ? -1 : 1; }
+      var da = a.date_entree || '';
+      var db = b.date_entree || '';
+      return da < db ? -1 : (da > db ? 1 : 0);
+    });
+  }
+
+  function texteEtape(entree) {
+    return entree.prochaine_etape || tronquer(entree.note || '', 80);
+  }
+
+  function itemRelance(entree, aujourdHui) {
+    var item = document.createElement('li');
+    item.className = 'item-relance';
+
+    var ligne = document.createElement('div');
+    ligne.className = 'item-relance-ligne';
+
+    var etape = texteEtape(entree);
+
+    var bouton = document.createElement('button');
+    bouton.type = 'button';
+    bouton.className = 'panneau-bois';
+    var principal = document.createElement('span');
+    principal.className = 'panneau-bois-texte';
+    principal.textContent = etape;
+    bouton.appendChild(principal);
+    var secondaire = document.createElement('span');
+    secondaire.className = 'panneau-bois-cible';
+    secondaire.textContent = libelleCibleEntree(entree);
+    bouton.appendChild(secondaire);
+    bouton.addEventListener('click', function () {
+      ouvrirCibleDepuisAccueil(noeudCibleEntree(entree));
+    });
+    ligne.appendChild(bouton);
+
+    var caseLabel = document.createElement('label');
+    caseLabel.className = 'case-fait';
+    var caseFait = document.createElement('input');
+    caseFait.type = 'checkbox';
+    caseFait.setAttribute('aria-label', 'Marquer la relance comme faite — ' + etape);
+    caseFait.addEventListener('change', function () {
+      if (!caseFait.checked) { return; }
+      caseFait.disabled = true; // anti double-tap pendant l'appel
+      majEntreeJournal(entree.id, { relance_faite: true }).then(function () {
+        toast('Relance cochée.');
+        rafraichir(); // l'item disparaît, on reste sur l'Accueil
+      }).catch(function () {
+        caseFait.checked = false;
+        caseFait.disabled = false;
+        toast('Mise à jour impossible.', 'erreur');
+      });
+    });
+    caseLabel.appendChild(caseFait);
+    caseLabel.appendChild(document.createTextNode('Fait'));
+    ligne.appendChild(caseLabel);
+    item.appendChild(ligne);
+
+    var retard = joursDeRetard(entree.relance_at, aujourdHui);
+    var badge = document.createElement('span');
+    badge.className = 'badge-echeance' + (retard > 0 ? ' badge-retard' : '');
+    badge.textContent = retard > 0 ? 'En retard de ' + retard + ' j' : "Aujourd'hui";
+    item.appendChild(badge);
+
+    return item;
+  }
+
+  function rendreSectionRelances(conteneur) {
+    var dues = relancesDues();
+    var titre = dues.length > 0 ? 'Relances à faire (' + dues.length + ')' : 'Relances à faire';
+    var section = sectionAccueil('zone-relances', titre);
+    if (dues.length === 0) {
+      section.appendChild(paragrapheVide('Aucune relance en attente. Tout est à jour.'));
+    } else {
+      var aujourdHui = dateLocaleIso(0);
+      var liste = document.createElement('ul');
+      liste.className = 'liste-accueil';
+      dues.forEach(function (entree) {
+        liste.appendChild(itemRelance(entree, aujourdHui));
+      });
+      section.appendChild(liste);
+    }
+    conteneur.appendChild(section);
+  }
+
+  // Groupes de pilotage, du plus chaud au plus froid.
+  var GROUPES_RAPPROCHEMENTS = [
+    { statut: 'en_cours', libelle: 'En cours' },
+    { statut: 'contact_etabli', libelle: 'Contact établi' },
+    { statut: 'idee', libelle: 'Idée' }
+  ];
+
+  function derniereEntreeRelation(relationId) {
+    var derniere = null;
+    etat.journal.forEach(function (j) {
+      if (j.edge_id !== relationId) { return; }
+      if (!derniere || (j.date_entree || '') > (derniere.date_entree || '')) { derniere = j; }
+    });
+    return derniere;
+  }
+
+  function itemRapprochement(relation, entree) {
+    var item = document.createElement('li');
+    var bouton = document.createElement('button');
+    bouton.type = 'button';
+    bouton.className = 'item-rapprochement';
+    bouton.appendChild(svgLieu());
+
+    var textes = document.createElement('span');
+    textes.className = 'item-rapprochement-textes';
+
+    var noms = document.createElement('span');
+    noms.className = 'item-rapprochement-nom';
+    noms.textContent = nomNoeud(relation.source_id) + ' ↔ ' + nomNoeud(relation.target_id);
+    textes.appendChild(noms);
+
+    var type = document.createElement('span');
+    type.className = 'item-rapprochement-type';
+    type.textContent = LIBELLES_RELATION[relation.type] || relation.type;
+    textes.appendChild(type);
+
+    var note = document.createElement('span');
+    note.className = 'item-rapprochement-note';
+    note.textContent = entree
+      ? 'Le ' + dateLisible(entree.date_entree) + ' : ' + tronquer(entree.note || '', 80)
+      : "Rien de noté pour l'instant.";
+    textes.appendChild(note);
+
+    bouton.appendChild(textes);
+    bouton.addEventListener('click', function () {
+      ouvrirCibleDepuisAccueil(noeudCibleRelation(relation));
+    });
+    item.appendChild(bouton);
+    return item;
+  }
+
+  function rendreSectionRapprochements(conteneur) {
+    var section = sectionAccueil('zone-rapprochements', 'Où en sont mes rapprochements');
+    var actives = etat.relations.filter(function (r) {
+      return r.statut === 'en_cours' || r.statut === 'contact_etabli' || r.statut === 'idee';
+    });
+
+    if (actives.length === 0) {
+      section.appendChild(paragrapheVide('Aucun rapprochement en cours. Ouvrez la fiche ' +
+        "d'un contact et touchez “Relier” pour lancer une idée."));
+      conteneur.appendChild(section);
+      return;
+    }
+
+    GROUPES_RAPPROCHEMENTS.forEach(function (groupe) {
+      var relations = actives.filter(function (r) { return r.statut === groupe.statut; });
+      if (relations.length === 0) { return; } // groupe vide : pas de titre
+
+      // Tri : dernière entrée de journal décroissante, sans entrée en dernier.
+      var lignes = relations.map(function (r) {
+        return { relation: r, entree: derniereEntreeRelation(r.id) };
+      }).sort(function (a, b) {
+        var da = a.entree ? (a.entree.date_entree || '') : '';
+        var db = b.entree ? (b.entree.date_entree || '') : '';
+        if (da === db) { return 0; }
+        if (!da) { return 1; }
+        if (!db) { return -1; }
+        return da > db ? -1 : 1;
+      });
+
+      var carteGroupe = document.createElement('div');
+      carteGroupe.className = 'carte-groupe cadre-dessine';
+      var enTete = document.createElement('p');
+      enTete.className = 'carte-groupe-titre';
+      enTete.appendChild(document.createTextNode(groupe.libelle + ' '));
+      var compteur = document.createElement('span');
+      compteur.className = 'badge-compteur';
+      compteur.textContent = '(' + relations.length + ')';
+      enTete.appendChild(compteur);
+      carteGroupe.appendChild(enTete);
+
+      var liste = document.createElement('ul');
+      liste.className = 'liste-accueil liste-rapprochements';
+      lignes.forEach(function (ligne) {
+        liste.appendChild(itemRapprochement(ligne.relation, ligne.entree));
+      });
+      carteGroupe.appendChild(liste);
+      section.appendChild(carteGroupe);
+    });
+
+    conteneur.appendChild(section);
+  }
+
+  // Règles locales R1–R4, au plus 1 suggestion par règle, arrêt à 3.
+  function calculerSuggestions() {
+    var suggestions = [];
+    var aujourdHui = dateLocaleIso(0);
+
+    // R1 — relances strictement en retard : 1 suggestion agrégée.
+    var enRetard = etat.journal.filter(function (j) {
+      return j.relance_at && j.relance_at < aujourdHui && !j.relance_faite;
+    }).sort(function (a, b) {
+      if (a.relance_at !== b.relance_at) { return a.relance_at < b.relance_at ? -1 : 1; }
+      var da = a.date_entree || '';
+      var db = b.date_entree || '';
+      return da < db ? -1 : (da > db ? 1 : 0);
+    });
+    if (enRetard.length > 0) {
+      var plusAncienne = enRetard[0];
+      var etape = texteEtape(plusAncienne);
+      var cible = libelleCibleEntree(plusAncienne);
+      var message = enRetard.length === 1
+        ? 'Vous avez 1 relance en retard : “' + etape + '” (' + cible + ').'
+        : 'Vous avez ' + enRetard.length + ' relances en retard. La plus ancienne : “' +
+          etape + '” (' + cible + ').';
+      suggestions.push({
+        message: message,
+        action: function () { ouvrirCibleDepuisAccueil(noeudCibleEntree(plusAncienne)); }
+      });
+    }
+
+    // R2 — idée dormante : aucune entrée depuis 14 jours.
+    if (suggestions.length < 3) {
+      var seuil = dateLocaleIso(-14);
+      var dormantes = etat.relations.filter(function (r) {
+        if (r.statut !== 'idee') { return false; }
+        return !etat.journal.some(function (j) {
+          return j.edge_id === r.id && j.date_entree >= seuil;
+        });
+      }).sort(function (a, b) {
+        return nomNoeud(a.source_id).localeCompare(nomNoeud(b.source_id), 'fr');
+      });
+      if (dormantes.length > 0) {
+        var dormante = dormantes[0];
+        suggestions.push({
+          message: "L'idée “" + nomNoeud(dormante.source_id) + ' ↔ ' +
+            nomNoeud(dormante.target_id) +
+            "” n'a pas bougé depuis plus de 14 jours. On s'en occupe ?",
+          action: function () { ouvrirCibleDepuisAccueil(noeudCibleRelation(dormante)); }
+        });
+      }
+    }
+
+    // R3 — contact injoignable : ni téléphone ni e-mail.
+    if (suggestions.length < 3) {
+      var injoignables = etat.noeuds.filter(function (n) {
+        return !n.telephone && !n.email;
+      }).sort(function (a, b) {
+        return (a.nom || '').localeCompare(b.nom || '', 'fr');
+      });
+      if (injoignables.length > 0) {
+        var injoignable = injoignables[0];
+        suggestions.push({
+          message: (injoignable.nom || '(sans nom)') +
+            " n'a ni téléphone ni e-mail. Complétez sa fiche ?",
+          action: function () { ouvrirFormDepuisAccueil(injoignable.id); }
+        });
+      }
+    }
+
+    // R4 — contact sans position (prépare l'onglet Contacts).
+    if (suggestions.length < 3) {
+      var sansPosition = etat.noeuds.filter(function (n) {
+        return typeof n.lat !== 'number' || typeof n.lng !== 'number';
+      }).sort(function (a, b) {
+        return (a.nom || '').localeCompare(b.nom || '', 'fr');
+      });
+      if (sansPosition.length > 0) {
+        var aPlacer = sansPosition[0];
+        suggestions.push({
+          message: (aPlacer.nom || '(sans nom)') +
+            " n'est pas encore placé sur la carte. On le place ?",
+          action: function () { ouvrirFormDepuisAccueil(aPlacer.id); }
+        });
+      }
+    }
+
+    return suggestions.slice(0, 3);
+  }
+
+  function rendreSectionSuggestions(conteneur) {
+    var section = sectionAccueil('zone-suggestions', 'Léo vous suggère');
+    var suggestions = calculerSuggestions();
+    if (suggestions.length === 0) {
+      section.appendChild(paragrapheVide("Rien d'urgent aujourd'hui — votre réseau est à jour."));
+    } else {
+      var liste = document.createElement('ul');
+      liste.className = 'liste-accueil';
+      suggestions.forEach(function (suggestion) {
+        var item = document.createElement('li');
+        var bouton = document.createElement('button');
+        bouton.type = 'button';
+        bouton.className = 'item-suggestion';
+        bouton.appendChild(svgArbre());
+        var texte = document.createElement('span');
+        texte.className = 'item-suggestion-texte';
+        texte.textContent = suggestion.message;
+        bouton.appendChild(texte);
+        bouton.addEventListener('click', suggestion.action);
+        item.appendChild(bouton);
+        liste.appendChild(item);
+      });
+      section.appendChild(liste);
+    }
+    conteneur.appendChild(section);
+  }
+
+  function boutonRaccourci(libelle, classe, action) {
+    var bouton = document.createElement('button');
+    bouton.type = 'button';
+    bouton.className = 'bouton ' + classe;
+    bouton.textContent = libelle;
+    bouton.addEventListener('click', action);
+    return bouton;
+  }
+
+  function rendreRaccourcis(conteneur) {
+    var bloc = document.createElement('div');
+    bloc.className = 'accueil-raccourcis';
+    bloc.appendChild(boutonRaccourci('+ Ajouter un contact', 'bouton-primaire', function () {
+      ouvrirFormDepuisAccueil(null);
+    }));
+    bloc.appendChild(boutonRaccourci("Noter où j'en suis", 'bouton-parchemin', function () {
+      activerOnglet('carte');
+      toast('Touchez un contact sur la carte pour ouvrir sa fiche et noter où vous en êtes.');
+    }));
+    bloc.appendChild(boutonRaccourci('Voir la carte', 'bouton-parchemin', function () {
+      activerOnglet('carte');
+    }));
+    conteneur.appendChild(bloc);
+  }
+
+  function rendreAccueil() {
+    var conteneur = $('#accueil-contenu');
+    if (!conteneur) { return; }
+    conteneur.textContent = '';
+
+    // Non connecté (config présente, pas de session) : bloc unique.
+    if (!etat.modeDemo && !etat.session) {
+      var blocConnexion = document.createElement('div');
+      blocConnexion.className = 'accueil-bloc-etat cadre-dessine';
+      var texteConnexion = document.createElement('p');
+      texteConnexion.className = 'accueil-etat-texte';
+      var fort = document.createElement('strong');
+      fort.textContent = 'Connectez-vous pour retrouver votre réseau.';
+      texteConnexion.appendChild(fort);
+      texteConnexion.appendChild(document.createTextNode(' Le lien de connexion arrive par e-mail.'));
+      blocConnexion.appendChild(texteConnexion);
+      blocConnexion.appendChild(boutonRaccourci('Se connecter', 'bouton-primaire', function () {
+        var champ = $('#champ-email');
+        if (champ) { champ.focus(); }
+      }));
+      conteneur.appendChild(blocConnexion);
+      return;
+    }
+
+    // Connecté (ou démo), aucune donnée : invitation au premier contact.
+    if (etat.noeuds.length === 0) {
+      var blocVide = document.createElement('div');
+      blocVide.className = 'accueil-bloc-etat cadre-dessine';
+      var texteVide = document.createElement('p');
+      texteVide.className = 'accueil-etat-texte';
+      var fortVide = document.createElement('strong');
+      fortVide.textContent = "Votre réseau est vide pour l'instant.";
+      texteVide.appendChild(fortVide);
+      texteVide.appendChild(document.createTextNode(
+        ' Commencez par ajouter votre premier contact : il apparaîtra sur la carte.'));
+      blocVide.appendChild(texteVide);
+      blocVide.appendChild(boutonRaccourci('+ Ajouter un contact', 'bouton-primaire', function () {
+        ouvrirFormDepuisAccueil(null);
+      }));
+      conteneur.appendChild(blocVide);
+      rendreRaccourcis(conteneur);
+      return;
+    }
+
+    rendreSectionRelances(conteneur);
+    rendreSectionRapprochements(conteneur);
+    rendreSectionSuggestions(conteneur);
+    rendreRaccourcis(conteneur);
   }
 
   // ---------- Panneau latéral ----------
@@ -865,6 +1432,16 @@
   // ---------- Branchement des événements ----------
 
   function brancherEvenements() {
+    document.querySelectorAll('.barre-onglets .onglet').forEach(function (bouton) {
+      bouton.addEventListener('click', function () {
+        activerOnglet(bouton.getAttribute('data-onglet'));
+      });
+    });
+
+    $('#contacts-voir-carte').addEventListener('click', function () {
+      activerOnglet('carte');
+    });
+
     $('#bouton-ajouter').addEventListener('click', function () {
       if (!etat.modeDemo && !etat.session) {
         toast('Connectez-vous pour ajouter un nœud.', 'erreur');
@@ -906,12 +1483,14 @@
 
   async function demarrer() {
     if (typeof window.L === 'undefined') {
-      // CDN Leaflet inaccessible : on signale sans planter.
+      // CDN Leaflet inaccessible : on signale sans planter ; l'Accueil et la
+      // navigation restent utilisables (UltimaCarte.rendre ignore l'appel).
       toast('Bibliothèque de carte indisponible. Rechargez la page.', 'erreur');
-      return;
+    } else {
+      window.UltimaCarte.init('carte', { surClicNoeud: ouvrirFiche });
     }
-    window.UltimaCarte.init('carte', { surClicNoeud: ouvrirFiche });
     brancherEvenements();
+    activerOnglet('accueil'); // l'app démarre toujours sur l'Accueil
     await initAuth();
     await chargerDonnees();
   }

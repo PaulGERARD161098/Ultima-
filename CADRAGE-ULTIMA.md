@@ -43,9 +43,13 @@
   « où j'en suis » avec relances (nœud XOR relation). Migration 0005 appliquée,
   API PATCH edges + endpoint journal, fiche enrichie, traits modulés par
   statut. Vérifié en navigateur (flux complets), advisors security = 0 lint.
-- 🔜 **Boucle suivante** : vue « Relances dues » (radar) + reprise ROADMAP-SITE
-  par impact×effort (géocodage, recherche…) ; déploiement Vercel dès les env
-  posées (action Paul).
+- ✅ **Boucle v3-① Accueil (2026-07-06)** : Accueil « Bienvenue, Paul » en
+  carte de livre d'enfance (specs graphisme + UX par agents, arbitrages
+  consignés), relances dues actionnables, pilotage, suggestions R1-R4,
+  onglets. Vérifié 2 fois (43 verdicts front-carto + contre-passe Léo,
+  non-régression incluse).
+- 🔜 **Boucle suivante (v3-②)** : onglet Contacts (liste, recherche, nom seul
+  requis, position optionnelle) ; puis v3-③ déploiement Vercel.
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 
