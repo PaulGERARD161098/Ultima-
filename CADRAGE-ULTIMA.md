@@ -1,13 +1,24 @@
 # CADRAGE-ULTIMA — audit → patch → améliorations, adapté au réel du projet
 
-## ÉTAT (2026-07-03)
+## ÉTAT (2026-07-06)
 
 - ✅ **P0 Fondations** — livrée, vérifiée en navigateur, fusionnée dans `main`
   via PR #1 (7 commits atomiques : cadrage, migration RLS, API, middleware,
-  front, docs). Migration `0001` déposée, **non appliquée** (pas de projet
-  Supabase encore).
-- 🔜 **Boucle suivante** : gate Supabase (création projet + application 0001 +
-  advisors, validation Paul) → **P1 Audit** (`AUDIT-<date>.md`, backlog S#/U#).
+  front, docs).
+- ✅ **Gate Supabase** — fermée le 2026-07-06 sur go Paul. Pas de création :
+  réutilisation du projet existant `ultima` (ref `leosfqyidgsaescjbfom`,
+  eu-west-3), ex-« tantot » ; ses 3 tables héritées (`personnes`,
+  `rapprochements`, `journal`), vérifiées vides (0 lignes), purgées par
+  migration `drop_legacy_tantot_tables`. Migration `0001` appliquée
+  (`init_network_schema_rls`). Advisors passés — entrées pour P1 :
+  - sécu WARN : `search_path` mutable sur `public.set_updated_at` (lint 0011) ;
+  - perf WARN ×8 : policies RLS — remplacer `auth.uid()` par
+    `(select auth.uid())` (lint 0003, initplan) ;
+  - perf INFO : index inutilisés (base neuve, non actionnable) + stratégie
+    connexions Auth en absolu (à revoir si montée en charge).
+- 🔜 **Boucle suivante** : **P1 Audit** — `AUDIT-<date>.md` sur le code P0,
+  backlog S#/U# intégrant les constats advisors ci-dessus. Rien n'est appliqué
+  en P1.
 - ⏸ P2 Sécu / P3 UX : en attente de P1.
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».

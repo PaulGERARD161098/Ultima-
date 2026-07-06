@@ -16,7 +16,9 @@
 
 ## Prochaines étapes (impact × effort, à indexer U# en P1)
 
-1. Brancher Supabase réel (config + auth magic link) — dépend de la gate coût.
+1. Brancher Supabase réel (config + auth magic link) — gate levée 2026-07-06
+   (projet `ultima` opérationnel, migration 0001 appliquée) : reste le câblage
+   front (URL + clé anon en config) et l'activation magic link.
 2. Géocodage d'adresse à la saisie (éviter la saisie manuelle lat/lng) —
    Nominatim/OSM d'abord (gratuit), en respectant leur politique d'usage.
 3. Recherche texte (nom/ville) + zoom sur résultat.

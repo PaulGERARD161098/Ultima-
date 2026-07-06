@@ -21,10 +21,11 @@
 
 ## Prochaines étapes (ordre indicatif, à indexer S# en P1)
 
-1. Créer le projet Supabase « ultima » (validation Paul — coût), appliquer la
-   migration 0001 après relecture, puis passer `get_advisors` (security + perf)
-   et intégrer les constats à l'audit.
-2. Audit P1 complet du code P0 → `AUDIT-<date>.md` (S#/U#).
+1. ✅ 2026-07-06 — projet Supabase `ultima` opérationnel (réutilisation de
+   l'existant ex-« tantot », tables héritées vides purgées), migration 0001
+   appliquée, `get_advisors` passés (constats consignés dans CADRAGE, à
+   indexer S#/U# en P1).
+2. Audit P1 complet du code P0 → `AUDIT-<date>.md` (S#/U#), advisors inclus.
 3. Rate-limit durable (KV/Upstash ou équivalent) si trafic réel — l'in-memory
    ne protège pas en multi-instance.
 4. Politique de rétention / suppression des données réseau (PII : noms,
