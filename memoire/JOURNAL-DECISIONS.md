@@ -79,3 +79,9 @@
   harnais navigateur versionnés dans `tests/` (lancer.sh), conception/implé
   par agents avec contre-passe Léo, réutilisation systématique, économie de
   contexte.
+- **2026-07-06 (solo, v3-②/③)** — v3-② Contacts livré (4 harnais verts,
+  double passe ; fusion réparée après incident de branche, cf. RADAR).
+  v3-③ : décision technique Léo — repli API sur URL + clé publiable (pas des
+  secrets, env prioritaires) → zéro env à saisir. Limite d'outillage : la
+  création du projet Vercel exige l'import Git dashboard (ou jeton CLI =
+  secret) → action Paul au registre (2 min, gratuit).

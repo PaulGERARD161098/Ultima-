@@ -32,7 +32,8 @@
 2. ✅ 2026-07-06 — **Onglet Contacts** livré : liste triée + recherche
    insensible casse/accents, saisie progressive (nom seul requis, position
    optionnelle, badge « À placer »), harnais smoke-contacts (20 verdicts).
-3. **Déploiement Vercel** (projet Hobby gratuit à créer + env).
+3. 🟡 **Déploiement Vercel** : repo prêt (repli publiable, zéro env) — reste
+   l'import du repo sur vercel.com/new (action Paul, 2 min, gratuit).
 4. **Saisie vocale** par champ (Web Speech API, sans clé).
 5. **Géocodage** d'adresse (Nominatim/OSM).
 
