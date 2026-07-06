@@ -4,6 +4,7 @@ import { createUserClient, isAuthError } from '../_lib/supabase.js';
 import {
   ok,
   fail,
+  bodyFail,
   methodNotAllowed,
   logError,
   readJsonBody,
@@ -30,7 +31,7 @@ export default async function handler(req, res) {
   try {
     if (req.method === 'POST') {
       const body = await readJsonBody(req);
-      if (body === null) return fail(res, 400, 'JSON invalide');
+      if (body === null || typeof body !== 'object') return bodyFail(res, body);
       const { value, error } = validateEdge(body);
       if (error) return fail(res, 400, error);
 
@@ -45,7 +46,7 @@ export default async function handler(req, res) {
 
     // DELETE
     const body = await readJsonBody(req).catch(() => ({}));
-    const id = resolveId(req, body || {});
+    const id = resolveId(req, body && typeof body === 'object' ? body : {});
     if (!isUuid(id)) return fail(res, 400, 'Identifiant invalide');
 
     const { data, error: dbError } = await client
