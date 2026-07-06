@@ -24,13 +24,23 @@
   navigateur vert) ; U5 ⏭ arbitrage Paul. Les évolutions produit (géocodage,
   recherche, clustering…) restent dans ROADMAP-SITE.
 - ⏳ **Actions humaines en attente** (mode solo — consignées, non bloquantes) :
-  1. Vercel : renseigner les env `SUPABASE_URL` / `SUPABASE_ANON_KEY`
+  1. **ARBITRAGE DE CAP (prioritaire)** : la session du 03/07 (ex-PR #3,
+     jamais fusionnée) avait acté le **pivot v2** « personnes &
+     rapprochements » et appliqué son schéma ; la session du 06/07, partant
+     de `main` (v1 seule documentée), a purgé ces tables (vides — zéro perte)
+     et reconstruit/durci la **v1 carte réseau**, aujourd'hui en prod.
+     → Paul tranche : reprendre le pivot v2 (migration prête dans la branche
+     `claude/session-protocol-start-opwcmp`) ou continuer la v1.
+     Détail : `memoire/JOURNAL-DECISIONS.md`.
+  2. Vercel : renseigner les env `SUPABASE_URL` / `SUPABASE_ANON_KEY`
      (clé publiable `sb_publishable_…`) pour activer l'API en prod.
-  2. Supabase Auth : configurer Site URL + Redirect URLs sur le domaine Vercel
-     (sinon le magic link redirige mal).
-  3. Arbitrage U5 : autoriser ou non plusieurs relations de même type entre
+  3. Supabase Auth (dashboard) : inviter le compte de Paul (0 utilisateur en
+     base), désactiver « Allow new signups » (complément serveur du
+     `shouldCreateUser: false`), configurer Site URL + Redirect URLs sur le
+     domaine Vercel.
+  4. Arbitrage U5 : autoriser ou non plusieurs relations de même type entre
      deux mêmes nœuds (contrainte d'unicité à trancher).
-  4. Advisor INFO : stratégie de connexions Auth en pourcentage (dashboard,
+  5. Advisor INFO : stratégie de connexions Auth en pourcentage (dashboard,
      utile seulement en montée d'instance).
 - 🔜 **Boucle suivante** : déploiement/preview Vercel une fois les env posées,
   puis reprise ROADMAP-SITE par impact×effort (géocodage, recherche…).
