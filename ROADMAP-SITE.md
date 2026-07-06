@@ -24,8 +24,11 @@
 
 ## Prochaines étapes — cap Interface v3 (cadrage dicté 2026-07-06, voir PRODUIT.md)
 
-1. **Accueil « Bienvenue, Paul »** : relances dues, pilotage par statut,
-   suggestions (règles locales), raccourcis + barre d'onglets Accueil/Carte/Contacts.
+1. ✅ 2026-07-06 — **Accueil « Bienvenue, Paul »** livré : carte de livre
+   d'enfance (parchemin/encre/Caveat auto-hébergée), relances dues en panneaux
+   de bois (cocher « Fait » sans quitter l'Accueil), pilotage par statut,
+   suggestions R1-R4, raccourcis, barre d'onglets Accueil/Carte/Contacts
+   (Contacts provisoire). 43 verdicts navigateur + non-régression, AA prouvé.
 2. **Onglet Contacts** : liste + recherche, saisie progressive (nom seul requis,
    position optionnelle).
 3. **Déploiement Vercel** (projet Hobby gratuit à créer + env).
