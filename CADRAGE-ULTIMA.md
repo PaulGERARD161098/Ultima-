@@ -28,8 +28,12 @@
      en liant les fonctionnalités au pivot v2 » → **hybride v1×v2** livré
      (migration 0005 : relations pilotables + journal/relances). La branche
      du pivot intégral reste archivée (`claude/session-protocol-start-opwcmp`).
-  2. Vercel : renseigner les env `SUPABASE_URL` / `SUPABASE_ANON_KEY`
-     (clé publiable `sb_publishable_…`) pour activer l'API en prod.
+  2. **Vercel — dernier geste pour mettre Ultima en ligne** : sur
+     vercel.com/new, importer le repo GitHub `Ultima-` (intégration Git) et
+     cliquer Deploy. Rien d'autre : pas de build, pas d'env à saisir (repli
+     publiable dans l'API depuis PR #13), chaque push sur `main` redéploiera
+     ensuite tout seul. (L'outil Vercel branché côté Léo ne crée pas de
+     projet ; la CLI exigerait un jeton = secret.)
   3. Supabase Auth (dashboard) : inviter le compte de Paul (0 utilisateur en
      base), désactiver « Allow new signups » (complément serveur du
      `shouldCreateUser: false`), configurer Site URL + Redirect URLs sur le
@@ -48,8 +52,16 @@
   consignés), relances dues actionnables, pilotage, suggestions R1-R4,
   onglets. Vérifié 2 fois (43 verdicts front-carto + contre-passe Léo,
   non-régression incluse).
-- 🔜 **Boucle suivante (v3-②)** : onglet Contacts (liste, recherche, nom seul
-  requis, position optionnelle) ; puis v3-③ déploiement Vercel.
+- ✅ **Boucle v3-② Contacts (2026-07-06, solo)** : liste + recherche +
+  saisie progressive, 4 harnais verts (contre-passe Léo incluse). Incident
+  consigné : première fusion vide (commit sur main local), détecté aux stats
+  de merge, récupéré au reflog — leçon au RADAR.
+- 🟡 **Boucle v3-③ déploiement** : repo prêt (repli publiable PR #13, zéro
+  build, zéro env) — reste UNE action Paul : importer le repo sur
+  vercel.com/new (registre n°2), puis dashboard Supabase Auth (registre n°3)
+  avec l'URL obtenue.
+- 🔜 **Boucle suivante (v3-④)** : saisie vocale par champ (Web Speech API),
+  puis v3-⑤ géocodage.
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 

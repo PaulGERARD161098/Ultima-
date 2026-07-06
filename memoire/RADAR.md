@@ -36,3 +36,15 @@
   par passer → leçon : toujours re-tenter en fin de session, et consigner
   dans le repo AVANT de dépendre d'un outil externe. Synchro Notion à
   rattraper à la prochaine session (rien de perdu : le repo fait foi).
+
+## Rétrospective 2026-07-06 (session solo)
+
+- **Confirmé** : la chaîne agents (spec → implé → contre-passe) tient la
+  qualité ET préserve le contexte de Léo ; les harnais patrimoine rendent la
+  contre-passe quasi gratuite.
+- **Friction corrigée → règle** : commit parti sur le main local (branche non
+  recréée en début de boucle) → PR fusionnée VIDE, travail récupéré au
+  reflog. Règles : ① toujours `git checkout -B <branche> origin/main` AVANT
+  toute boucle ; ② après chaque merge, vérifier les stats (un merge à
+  0 fichier = alerte rouge) ; ③ le stop-hook « unverified committer » est un
+  symptôme de branche/config — le traiter, pas l'ignorer.

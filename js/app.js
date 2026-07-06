@@ -176,6 +176,7 @@
   function rafraichir() {
     window.UltimaCarte.rendre(etat.noeuds, etat.relations, etat.filtres);
     rendreAccueil();
+    rendreContacts();
     if (etat.noeudCourant && !$('#vue-fiche').hidden) {
       rendreFiche();
     }
@@ -354,6 +355,7 @@
       window.UltimaCarte.invaliderTaille();
     }
     if (nom === 'accueil') { rendreAccueil(); }
+    if (nom === 'contacts') { rendreContacts(); }
   }
 
   // ---------- Accueil : ouverture d'une cible ----------
@@ -859,6 +861,157 @@
     rendreRaccourcis(conteneur);
   }
 
+  // ---------- Onglet Contacts (registre sobre : liste + recherche) ----------
+
+  // Normalisation de recherche : minuscules, sans accents (NFD + diacritiques).
+  function normaliserTexte(texte) {
+    return (texte || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  }
+
+  function contactAPosition(noeud) {
+    return typeof noeud.lat === 'number' && isFinite(noeud.lat) &&
+           typeof noeud.lng === 'number' && isFinite(noeud.lng);
+  }
+
+  // Puce « lieu » colorée par type : la maison de l'Accueil sur une pastille
+  // aux couleurs de la carte (le type est aussi écrit en toutes lettres).
+  function svgLieuContact(type) {
+    var couleurs = (window.UltimaCarte && window.UltimaCarte.COULEURS_TYPE) || {};
+    var svg = svgElement('svg', {
+      'class': 'lieu-contact', viewBox: '0 0 24 24', width: '28', height: '28', 'aria-hidden': 'true'
+    });
+    svg.appendChild(svgElement('circle', {
+      cx: '12', cy: '12', r: '11', fill: couleurs[type] || '#555555'
+    }));
+    var maison = svgElement('g', {
+      fill: 'none', stroke: '#ffffff', 'stroke-width': '1.6', 'stroke-linejoin': 'round'
+    });
+    maison.appendChild(svgElement('path', { d: 'M6.5 11.5 L12 6.5 L17.5 11.5 V17.5 H6.5 Z' }));
+    maison.appendChild(svgElement('path', { d: 'M10.5 17.5 V14 H13.5 V17.5' }));
+    svg.appendChild(maison);
+    return svg;
+  }
+
+  function itemContact(noeud) {
+    var item = document.createElement('li');
+    var bouton = document.createElement('button');
+    bouton.type = 'button';
+    bouton.className = 'item-contact';
+    bouton.appendChild(svgLieuContact(noeud.type));
+
+    var textes = document.createElement('span');
+    textes.className = 'item-contact-textes';
+    var nom = document.createElement('span');
+    nom.className = 'item-contact-nom';
+    nom.textContent = noeud.nom || '(sans nom)';
+    textes.appendChild(nom);
+    var detail = document.createElement('span');
+    detail.className = 'item-contact-detail';
+    detail.textContent = (LIBELLES_TYPE[noeud.type] || noeud.type) +
+      (noeud.ville ? ' · ' + noeud.ville : '');
+    textes.appendChild(detail);
+    bouton.appendChild(textes);
+
+    var badges = document.createElement('span');
+    badges.className = 'item-contact-badges';
+    var statut = document.createElement('span');
+    statut.className = 'badge';
+    statut.textContent = LIBELLES_STATUT[noeud.statut] || noeud.statut;
+    badges.appendChild(statut);
+    if (!contactAPosition(noeud)) {
+      var aPlacer = document.createElement('span');
+      aPlacer.className = 'badge-a-placer';
+      aPlacer.textContent = 'À placer';
+      badges.appendChild(aPlacer);
+    }
+    bouton.appendChild(badges);
+
+    // Même mécanique que l'Accueil : Carte + fiche + centrage + focus titre.
+    bouton.addEventListener('click', function () {
+      ouvrirCibleDepuisAccueil(noeud.id);
+    });
+    item.appendChild(bouton);
+    return item;
+  }
+
+  function blocEtatContacts(texteFort, texteSuite, libelleBouton, action) {
+    var bloc = document.createElement('div');
+    bloc.className = 'contacts-bloc-etat';
+    var texte = document.createElement('p');
+    texte.className = 'contacts-etat-texte';
+    var fort = document.createElement('strong');
+    fort.textContent = texteFort;
+    texte.appendChild(fort);
+    texte.appendChild(document.createTextNode(' ' + texteSuite));
+    bloc.appendChild(texte);
+    bloc.appendChild(boutonRaccourci(libelleBouton, 'bouton-primaire', action));
+    return bloc;
+  }
+
+  function rendreContacts() {
+    var conteneur = $('#contacts-contenu');
+    if (!conteneur) { return; }
+    conteneur.textContent = '';
+    var compteur = $('#contacts-compteur');
+    var outils = $('#contacts-outils');
+    var boutonAjouter = $('#contacts-ajouter');
+
+    // Non connecté (config présente, pas de session) : bloc unique.
+    if (!etat.modeDemo && !etat.session) {
+      compteur.textContent = '';
+      outils.hidden = true;
+      boutonAjouter.hidden = true;
+      conteneur.appendChild(blocEtatContacts(
+        'Connectez-vous pour retrouver votre réseau.',
+        'Le lien de connexion arrive par e-mail.',
+        'Se connecter',
+        function () {
+          var champ = $('#champ-email');
+          if (champ) { champ.focus(); }
+        }));
+      return;
+    }
+    boutonAjouter.hidden = false;
+
+    // Connecté (ou démo), aucune donnée : invitation au premier contact.
+    if (etat.noeuds.length === 0) {
+      compteur.textContent = '0 contact';
+      outils.hidden = true;
+      conteneur.appendChild(blocEtatContacts(
+        "Votre réseau est vide pour l'instant.",
+        'Commencez par ajouter votre premier contact : il apparaîtra sur la carte.',
+        '+ Ajouter un contact',
+        function () { ouvrirFormDepuisAccueil(null); }));
+      return;
+    }
+
+    outils.hidden = false;
+    compteur.textContent = etat.noeuds.length + (etat.noeuds.length > 1 ? ' contacts' : ' contact');
+
+    var brut = $('#contacts-recherche').value.trim();
+    var terme = normaliserTexte(brut);
+    var visibles = etat.noeuds.filter(function (n) {
+      if (!terme) { return true; }
+      return normaliserTexte(n.nom).indexOf(terme) !== -1 ||
+             normaliserTexte(n.ville).indexOf(terme) !== -1;
+    }).sort(function (a, b) {
+      return (a.nom || '').localeCompare(b.nom || '', 'fr');
+    });
+
+    if (visibles.length === 0) {
+      var aucun = document.createElement('p');
+      aucun.className = 'contacts-aucun';
+      aucun.textContent = 'Aucun contact ne correspond à “' + brut + '”.';
+      conteneur.appendChild(aucun);
+      return;
+    }
+
+    var liste = document.createElement('ul');
+    liste.className = 'liste-contacts';
+    visibles.forEach(function (n) { liste.appendChild(itemContact(n)); });
+    conteneur.appendChild(liste);
+  }
+
   // ---------- Panneau latéral ----------
 
   function ouvrirPanneau(vue, titre) {
@@ -1255,19 +1408,30 @@
 
   async function soumettreFormNoeud(evenement) {
     evenement.preventDefault();
-    var lat = parseFloat($('#noeud-lat').value);
-    var lng = parseFloat($('#noeud-lng').value);
-    if (!isFinite(lat) || !isFinite(lng)) {
-      toast('Latitude et longitude sont requises.', 'erreur');
-      return;
-    }
     var valeurs = {
       type: $('#noeud-type').value,
       nom: $('#noeud-nom').value.trim(),
-      statut: $('#noeud-statut').value,
-      lat: lat,
-      lng: lng
+      statut: $('#noeud-statut').value
     };
+    // Position optionnelle (saisie progressive) : les deux champs vont
+    // ensemble. Vides → création : champs omis ; édition : null (vidage).
+    var latBrut = $('#noeud-lat').value.trim();
+    var lngBrut = $('#noeud-lng').value.trim();
+    if (!latBrut && !lngBrut) {
+      if (etat.noeudEnEdition) {
+        valeurs.lat = null;
+        valeurs.lng = null;
+      }
+    } else {
+      var lat = parseFloat(latBrut);
+      var lng = parseFloat(lngBrut);
+      if (!isFinite(lat) || !isFinite(lng)) {
+        toast('Latitude et longitude vont ensemble : remplissez les deux, ou aucune.', 'erreur');
+        return;
+      }
+      valeurs.lat = lat;
+      valeurs.lng = lng;
+    }
     // Champs optionnels : jamais de chaîne vide vers l'API (rejetée pour
     // l'email). Création → champ omis ; édition → null (vidage effectif).
     ['ville', 'adresse', 'telephone', 'email', 'notes'].forEach(function (champ) {
@@ -1438,9 +1602,15 @@
       });
     });
 
-    $('#contacts-voir-carte').addEventListener('click', function () {
-      activerOnglet('carte');
+    $('#contacts-ajouter').addEventListener('click', function () {
+      if (!etat.modeDemo && !etat.session) {
+        toast('Connectez-vous pour ajouter un contact.', 'erreur');
+        return;
+      }
+      ouvrirFormDepuisAccueil(null);
     });
+
+    $('#contacts-recherche').addEventListener('input', rendreContacts);
 
     $('#bouton-ajouter').addEventListener('click', function () {
       if (!etat.modeDemo && !etat.session) {

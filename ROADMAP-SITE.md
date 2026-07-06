@@ -29,9 +29,11 @@
    de bois (cocher « Fait » sans quitter l'Accueil), pilotage par statut,
    suggestions R1-R4, raccourcis, barre d'onglets Accueil/Carte/Contacts
    (Contacts provisoire). 43 verdicts navigateur + non-régression, AA prouvé.
-2. **Onglet Contacts** : liste + recherche, saisie progressive (nom seul requis,
-   position optionnelle).
-3. **Déploiement Vercel** (projet Hobby gratuit à créer + env).
+2. ✅ 2026-07-06 — **Onglet Contacts** livré : liste triée + recherche
+   insensible casse/accents, saisie progressive (nom seul requis, position
+   optionnelle, badge « À placer »), harnais smoke-contacts (20 verdicts).
+3. 🟡 **Déploiement Vercel** : repo prêt (repli publiable, zéro env) — reste
+   l'import du repo sur vercel.com/new (action Paul, 2 min, gratuit).
 4. **Saisie vocale** par champ (Web Speech API, sans clé).
 5. **Géocodage** d'adresse (Nominatim/OSM).
 

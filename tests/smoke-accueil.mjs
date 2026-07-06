@@ -123,11 +123,12 @@ verdicts.r3OuvreFormulaire = await page.locator('#form-noeud').isVisible() &&
   ((await page.locator('#noeud-nom').inputValue()) === 'Maison Garonne');
 await page.keyboard.press('Escape');
 
-// 11. Onglet Contacts : message provisoire + « Voir la carte » fonctionnel.
+// 11. Onglet Contacts (v3-②) : le registre s'affiche, tap contact → carte.
 await page.locator('.barre-onglets .onglet[data-onglet="contacts"]').click();
-verdicts.contactsProvisoire = await page.locator('.contacts-message', { hasText: 'prochaine version' }).isVisible();
-await page.locator('#contacts-voir-carte').click();
+verdicts.contactsListe = (await page.locator('.item-contact').count()) === 9;
+await page.locator('.item-contact').first().click();
 verdicts.contactsVersCarte = await page.locator('#espace-carte').isVisible();
+await page.keyboard.press('Escape');
 
 // 12. Raccourcis : + Ajouter un contact → carte + formulaire d'ajout.
 await page.locator('.barre-onglets .onglet[data-onglet="accueil"]').click();
