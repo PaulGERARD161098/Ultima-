@@ -14,6 +14,14 @@
 - Responsive mobile (filtres repliables, fiche plein écran), contrastes AA,
   tap targets ≥ 44 px, toasts sobres.
 
+## Livré le 2026-07-06 (hybride v1×v2, arbitrage Paul)
+
+- Relations pilotables depuis la fiche : statut (idée → contact établi →
+  en cours → fructueux / arrêté), arrêt justifié obligatoire, une seule
+  relation active par paire/type, traits de la carte modulés par statut.
+- Journal « où j'en suis » dans la fiche : entrées datées sur le nœud ou une
+  relation, prochaine étape, date de relance, case « relance faite ».
+
 ## Prochaines étapes (impact × effort, à indexer U# en P1)
 
 1. ✅ 2026-07-06 — Supabase réel branché côté front (config URL + clé
@@ -23,7 +31,7 @@
 2. Géocodage d'adresse à la saisie (éviter la saisie manuelle lat/lng) —
    Nominatim/OSM d'abord (gratuit), en respectant leur politique d'usage.
 3. Recherche texte (nom/ville) + zoom sur résultat.
-4. Édition/suppression de relation depuis la fiche ; fiche relation.
+4. Fiche relation complète (intérêt qualitatif, efforts 1..5 — déjà en base/API).
 5. Regroupement de marqueurs (clustering) au-delà de ~100 nœuds.
 6. Import CSV de contacts existants (mapping colonnes → contrat).
 7. Filtrage par zone dessinée (préparation de tournée).

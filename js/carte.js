@@ -74,14 +74,23 @@
     });
 
     // Traits de relations : affichés seulement si les deux extrémités sont visibles.
+    // Le statut de pilotage module le rendu : idée = esquisse, arrêté = éteint.
     (relations || []).forEach(function (r) {
       var source = visibles.get(r.source_id);
       var cible = visibles.get(r.target_id);
       if (!source || !cible) { return; }
       var style = STYLES_RELATION[r.type] || STYLES_RELATION.apport_affaires;
+      var couleur = style.color;
+      var opacite = style.opacity;
+      if (r.statut === 'arrete') {
+        couleur = '#8a8f98';
+        opacite = 0.35;
+      } else if (r.statut === 'idee') {
+        opacite = 0.45;
+      }
       L.polyline(
         [[source.lat, source.lng], [cible.lat, cible.lng]],
-        { color: style.color, weight: style.weight, opacity: style.opacity, dashArray: style.dashArray }
+        { color: couleur, weight: style.weight, opacity: opacite, dashArray: style.dashArray }
       ).addTo(coucheRelations);
     });
 

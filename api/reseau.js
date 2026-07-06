@@ -13,19 +13,29 @@ export default async function handler(req, res) {
   const { client } = result;
 
   try {
-    const [nodesRes, edgesRes] = await Promise.all([
+    const [nodesRes, edgesRes, journalRes] = await Promise.all([
       client.from('network_nodes').select('*').order('created_at', { ascending: true }),
       client.from('network_edges').select('*').order('created_at', { ascending: true }),
+      // Journal : entrées les plus récentes d'abord (affichage fiche).
+      client
+        .from('journal')
+        .select('*')
+        .order('date_entree', { ascending: false })
+        .order('created_at', { ascending: false }),
     ]);
 
-    const error = nodesRes.error || edgesRes.error;
+    const error = nodesRes.error || edgesRes.error || journalRes.error;
     if (error) {
       if (isAuthError(error)) return fail(res, 401, 'Authentification requise');
       logError('reseau:get', error.code);
       return fail(res, 500, 'Erreur interne');
     }
 
-    return ok(res, { nodes: nodesRes.data || [], edges: edgesRes.data || [] });
+    return ok(res, {
+      nodes: nodesRes.data || [],
+      edges: edgesRes.data || [],
+      journal: journalRes.data || [],
+    });
   } catch (err) {
     logError('reseau:get:exception', err?.name);
     return fail(res, 500, 'Erreur interne');

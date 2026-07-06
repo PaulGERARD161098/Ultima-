@@ -45,3 +45,9 @@
   mémoire Léo (`memoire/`), équipe d'agents (`.claude/`), Léo ancré dans
   `CLAUDE.md`. Non portés (dépendants du cap) : PRODUIT v2, AUDIT du 03,
   migration pivot.
+- **2026-07-06 (arbitrage)** — « On continue la carte réseau tout en liant
+  les fonctionnalités au pivot v2 » → **hybride v1×v2** : la carte v1 reste le
+  socle ; relations = rapprochements pilotables (cycle de vie v2, arrêt
+  justifié obligatoire, une active par paire/type — résout U5) ; journal
+  « où j'en suis » avec relances sur nœud XOR relation. Migration 0005
+  appliquée. Pivot intégral archivé en branche, non supprimé.
