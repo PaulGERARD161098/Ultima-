@@ -394,14 +394,19 @@
       type: $('#noeud-type').value,
       nom: $('#noeud-nom').value.trim(),
       statut: $('#noeud-statut').value,
-      ville: $('#noeud-ville').value.trim(),
-      adresse: $('#noeud-adresse').value.trim(),
-      telephone: $('#noeud-telephone').value.trim(),
-      email: $('#noeud-email').value.trim(),
       lat: lat,
-      lng: lng,
-      notes: $('#noeud-notes').value.trim()
+      lng: lng
     };
+    // Champs optionnels : jamais de chaîne vide vers l'API (rejetée pour
+    // l'email). Création → champ omis ; édition → null (vidage effectif).
+    ['ville', 'adresse', 'telephone', 'email', 'notes'].forEach(function (champ) {
+      var brut = $('#noeud-' + champ).value.trim();
+      if (brut) {
+        valeurs[champ] = brut;
+      } else if (etat.noeudEnEdition) {
+        valeurs[champ] = null;
+      }
+    });
     if (!valeurs.nom || TYPES.indexOf(valeurs.type) === -1 || STATUTS.indexOf(valeurs.statut) === -1) {
       toast('Formulaire incomplet.', 'erreur');
       return;
