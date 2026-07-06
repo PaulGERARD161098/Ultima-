@@ -1,6 +1,6 @@
 # CADRAGE-ULTIMA — audit → patch → améliorations, adapté au réel du projet
 
-## ÉTAT (2026-07-06)
+## ÉTAT (2026-07-06, après arbitrage)
 
 - ✅ **P0 Fondations** — livrée, vérifiée en navigateur, fusionnée dans `main`
   via PR #1 (7 commits atomiques : cadrage, migration RLS, API, middleware,
@@ -24,26 +24,28 @@
   navigateur vert) ; U5 ⏭ arbitrage Paul. Les évolutions produit (géocodage,
   recherche, clustering…) restent dans ROADMAP-SITE.
 - ⏳ **Actions humaines en attente** (mode solo — consignées, non bloquantes) :
-  1. **ARBITRAGE DE CAP (prioritaire)** : la session du 03/07 (ex-PR #3,
-     jamais fusionnée) avait acté le **pivot v2** « personnes &
-     rapprochements » et appliqué son schéma ; la session du 06/07, partant
-     de `main` (v1 seule documentée), a purgé ces tables (vides — zéro perte)
-     et reconstruit/durci la **v1 carte réseau**, aujourd'hui en prod.
-     → Paul tranche : reprendre le pivot v2 (migration prête dans la branche
-     `claude/session-protocol-start-opwcmp`) ou continuer la v1.
-     Détail : `memoire/JOURNAL-DECISIONS.md`.
+  1. ✅ **ARBITRAGE RENDU (2026-07-06)** : « on continue la carte réseau tout
+     en liant les fonctionnalités au pivot v2 » → **hybride v1×v2** livré
+     (migration 0005 : relations pilotables + journal/relances). La branche
+     du pivot intégral reste archivée (`claude/session-protocol-start-opwcmp`).
   2. Vercel : renseigner les env `SUPABASE_URL` / `SUPABASE_ANON_KEY`
      (clé publiable `sb_publishable_…`) pour activer l'API en prod.
   3. Supabase Auth (dashboard) : inviter le compte de Paul (0 utilisateur en
      base), désactiver « Allow new signups » (complément serveur du
      `shouldCreateUser: false`), configurer Site URL + Redirect URLs sur le
      domaine Vercel.
-  4. Arbitrage U5 : autoriser ou non plusieurs relations de même type entre
-     deux mêmes nœuds (contrainte d'unicité à trancher).
+  4. ✅ U5 résolu par la règle v2 (0005) : une seule relation ACTIVE par paire
+     et par type ; les relations closes restent en historique.
   5. Advisor INFO : stratégie de connexions Auth en pourcentage (dashboard,
      utile seulement en montée d'instance).
-- 🔜 **Boucle suivante** : déploiement/preview Vercel une fois les env posées,
-  puis reprise ROADMAP-SITE par impact×effort (géocodage, recherche…).
+- ✅ **Hybride v1×v2 (2026-07-06, arbitrage Paul)** : relations = rapprochements
+  pilotables (cycle de vie, arrêt justifié, paire active unique) + journal
+  « où j'en suis » avec relances (nœud XOR relation). Migration 0005 appliquée,
+  API PATCH edges + endpoint journal, fiche enrichie, traits modulés par
+  statut. Vérifié en navigateur (flux complets), advisors security = 0 lint.
+- 🔜 **Boucle suivante** : vue « Relances dues » (radar) + reprise ROADMAP-SITE
+  par impact×effort (géocodage, recherche…) ; déploiement Vercel dès les env
+  posées (action Paul).
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 
