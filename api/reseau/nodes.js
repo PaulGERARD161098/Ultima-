@@ -5,6 +5,7 @@ import { createUserClient, isAuthError } from '../_lib/supabase.js';
 import {
   ok,
   fail,
+  bodyFail,
   methodNotAllowed,
   logError,
   readJsonBody,
@@ -32,7 +33,7 @@ export default async function handler(req, res) {
   try {
     if (req.method === 'POST') {
       const body = await readJsonBody(req);
-      if (body === null) return fail(res, 400, 'JSON invalide');
+      if (body === null || typeof body !== 'object') return bodyFail(res, body);
       const { value, error } = validateNode(body, 'create');
       if (error) return fail(res, 400, error);
 
@@ -47,7 +48,7 @@ export default async function handler(req, res) {
 
     if (req.method === 'PATCH') {
       const body = await readJsonBody(req);
-      if (body === null) return fail(res, 400, 'JSON invalide');
+      if (body === null || typeof body !== 'object') return bodyFail(res, body);
       const id = resolveId(req, body);
       if (!isUuid(id)) return fail(res, 400, 'Identifiant invalide');
 
@@ -61,7 +62,7 @@ export default async function handler(req, res) {
         .update(value)
         .eq('id', id)
         .select()
-        .single();
+        .maybeSingle();
       if (dbError) return dbFail(res, dbError, 'nodes:patch');
       if (!data) return fail(res, 404, 'Nœud introuvable');
       return ok(res, data);
@@ -69,7 +70,7 @@ export default async function handler(req, res) {
 
     // DELETE
     const body = await readJsonBody(req).catch(() => ({}));
-    const id = resolveId(req, body || {});
+    const id = resolveId(req, body && typeof body === 'object' ? body : {});
     if (!isUuid(id)) return fail(res, 400, 'Identifiant invalide');
 
     const { data, error: dbError } = await client

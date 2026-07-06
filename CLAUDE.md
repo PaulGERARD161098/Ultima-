@@ -44,7 +44,24 @@ commercial (artisans, partenaires, leads, chantiers + leurs relations).
   deviner — surtout avant une action irréversible.
 - Réponses lisibles à voix haute si demandé : phrases courtes, pas de tableaux.
 
-## 🚧 Gates — validation explicite de Paul requise
+## 🚀 Protocole GO SOLO (déclencheur : « go solo » ou mention du mot « solo »)
+
+Quand Paul dit « go solo » (ou mentionne « solo ») :
+- **Tourner au maximum en autonomie** : enchaîner les boucles (audit → patch →
+  vérif → commit → push → merge) sans redemander de go intermédiaire.
+- **Merger et pousser le nécessaire** : les PR du travail en cours peuvent être
+  fusionnées dans `main` sans validation au cas par cas ; les migrations
+  correctives non destructives (durcissement RLS/advisors) peuvent être
+  appliquées, en le signalant dans le rapport.
+- **Tenir un registre « ⏳ Actions humaines »** dans le rapport final (et dans
+  CADRAGE-ULTIMA.md si la session s'arrête) : tout ce qui exige un arbitrage ou
+  une action de Paul y est consigné au lieu de bloquer le flux.
+- **Restent bloquants même en solo** : toute action payante ou création de
+  ressource facturée ; toute suppression de données non vérifiées vides ;
+  tout secret/credential (saisie en env Vercel = action Paul) ; tout choix
+  produit ambigu → registre, jamais exécuté seul.
+
+## 🚧 Gates — validation explicite de Paul requise (hors mode solo, voir ci-dessus)
 
 - Création de projet Supabase ou toute action payante.
 - Application de toute migration SQL / modification RLS en prod

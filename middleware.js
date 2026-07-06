@@ -18,13 +18,14 @@ const hits = new Map();
 // Content-Security-Policy compatible avec le front prévu (Leaflet + supabase-js CDN).
 const CSP = [
   "default-src 'self'",
-  // Leaflet depuis unpkg, supabase-js depuis jsdelivr (SRI côté front). Pas de 'unsafe-inline'.
-  "script-src 'self' https://unpkg.com https://cdn.jsdelivr.net",
+  // Leaflet depuis unpkg (SRI côté front) ; supabase-js vendorisé (self). Pas de 'unsafe-inline'.
+  "script-src 'self' https://unpkg.com",
   // Leaflet applique des styles inline via JS (positionnement carte/marqueurs) → 'unsafe-inline' requis.
   "style-src 'self' https://unpkg.com 'unsafe-inline'",
   // Tuiles OSM, icônes marqueurs unpkg, images data:.
   "img-src 'self' data: https://*.tile.openstreetmap.org https://unpkg.com",
-  "connect-src 'self' https://*.supabase.co",
+  // Restreint au projet Supabase d'Ultima : pas d'exfiltration possible vers un projet tiers.
+  "connect-src 'self' https://leosfqyidgsaescjbfom.supabase.co",
   "font-src 'self'",
   "object-src 'none'",
   "base-uri 'self'",
@@ -42,9 +43,12 @@ function applySecurityHeaders(headers) {
 }
 
 function clientIp(request) {
+  // x-real-ip est posé par Vercel (mono-valeur, non forgeable) : source prioritaire.
+  const real = request.headers.get('x-real-ip');
+  if (real) return real.trim();
   const fwd = request.headers.get('x-forwarded-for');
   if (fwd) return fwd.split(',')[0].trim();
-  return request.headers.get('x-real-ip') || 'unknown';
+  return 'unknown';
 }
 
 // Renvoie true si la requête dépasse la limite.
