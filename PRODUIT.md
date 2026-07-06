@@ -54,6 +54,56 @@ exclusive `node_id` XOR `edge_id` (cascade), `date_entree`, `note not null`,
 RLS : activée sur les 3 tables ; select/insert/update/delete limités à
 `owner_id = (select auth.uid())` (insert/update `with check`).
 
+## Interface v3 — « tout embrasser d'un coup d'œil » (dicté par Paul, 2026-07-06)
+
+**Principe** : une app sobre, belle et simple, mobile-first (« pilotage au bout
+des pouces »), en trois espaces accessibles par une barre d'onglets :
+
+**1. Accueil — « Bienvenue, Paul »** (l'onglet d'ouverture, tenu par Léo)
+- Salutation + question directrice : **« On fait quoi aujourd'hui ? »**
+- **Relances dues** : les entrées de journal dont la date de relance est
+  aujourd'hui ou dépassée et non cochées « faite » — triées, cliquables vers
+  la fiche. C'est le radar : rien ne se perd.
+- **Pilotage des rapprochements** : les actifs par statut (idée / contact
+  établi / en cours), avec leur dernière entrée de journal, pour voir d'un
+  coup d'œil où tout en est.
+- **Suggestions de Léo (v1, sans IA embarquée)** : règles locales simples et
+  transparentes — relances en retard d'abord, puis rapprochements « idée »
+  dormants (sans entrée récente), puis contacts incomplets (sans coordonnées
+  ou sans position). Une **conversation Léo dans l'app** exigerait une clé
+  API et un coût par appel → gate Paul, consignée au registre.
+- Raccourcis : Ajouter un contact · Noter où j'en suis · Voir la carte.
+
+**2. Carte** — l'existant (filtres, fiche, pilotage des relations, journal).
+
+**3. Contacts** — le renseignement progressif des individus :
+- Liste des nœuds avec recherche (nom/ville) et tri par type/statut ;
+  fiche identique à celle de la carte ; saisie « au fur et à mesure » :
+  seul le nom est obligatoire, tout le reste se complète plus tard
+  (la position devient optionnelle : un contact sans lat/lng vit dans la
+  liste et rejoindra la carte une fois géocodé).
+- **Saisie vocale** : bouton micro sur les champs longs (notes, journal) via
+  l'API de reconnaissance vocale du navigateur (Web Speech API — gratuite,
+  sans clé, dispo Chrome/Safari mobile). Pour structurer des infos complexes
+  (« cale-moi ce contact »), le canal reste **Léo en session** : Paul dicte
+  ici, Léo remplit la base proprement via l'API.
+
+**Design** : fond clair, une couleur d'accent (#1e6fb8), grandes cartes
+tactiles ≥ 44 px, typographie lisible — spécification par l'agent `graphisme`
+avant implémentation, `interface-ux` juge les parcours.
+
+**Déploiement** : création du projet Vercel « ultima » (plan Hobby gratuit —
+aucun projet Vercel n'existe pour Ultima à ce jour) + env `SUPABASE_URL` /
+`SUPABASE_ANON_KEY`, à la livraison de l'Accueil.
+
+**Séquencement** (une boucle = un livrable vérifié) :
+1. Accueil piloté (relances dues + pilotage + suggestions + raccourcis) +
+   barre d'onglets.
+2. Onglet Contacts (liste, recherche, nom seul obligatoire).
+3. Déploiement Vercel + env (bascule du site en réel).
+4. Saisie vocale par champ (Web Speech API).
+5. Géocodage d'adresse (Nominatim/OSM) — fin de la saisie manuelle lat/lng.
+
 ## Contrat API (serverless Vercel, `api/`)
 
 - `GET  /api/reseau` → `{ ok: true, data: { nodes, edges, journal } }` (RLS via jeton).
