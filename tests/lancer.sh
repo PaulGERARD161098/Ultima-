@@ -10,10 +10,12 @@ mkdir -p "$CACHE"
 if [ ! -f "$CACHE/package/dist/leaflet.js" ]; then
   (cd "$CACHE" && npm pack leaflet@1.9.4 --silent && tar -xzf leaflet-1.9.4.tgz package/dist/leaflet.js package/dist/leaflet.css)
 fi
-if [ ! -d "$CACHE/node_modules/playwright" ]; then
-  (cd "$CACHE" && npm i --silent playwright@1.49)
+# Playwright à la racine du repo (résolution ESM par répertoires ancêtres).
+# --no-save --no-package-lock : n'écrit JAMAIS dans package.json ni le lock
+# (c'est une dépendance de test à la demande, pas une dépendance du produit).
+if [ ! -d ../node_modules/playwright ]; then
+  (cd .. && npm i --no-save --no-package-lock --silent playwright@1.49)
 fi
-export NODE_PATH="$PWD/$CACHE/node_modules"
 
 # 2. Serveur statique sur la racine du repo.
 (cd .. && python3 -m http.server 8123 >/dev/null 2>&1) &
