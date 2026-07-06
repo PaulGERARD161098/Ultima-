@@ -16,9 +16,10 @@
 
 ## Prochaines étapes (impact × effort, à indexer U# en P1)
 
-1. Brancher Supabase réel (config + auth magic link) — gate levée 2026-07-06
-   (projet `ultima` opérationnel, migration 0001 appliquée) : reste le câblage
-   front (URL + clé anon en config) et l'activation magic link.
+1. ✅ 2026-07-06 — Supabase réel branché côté front (config URL + clé
+   publiable, sortie du mode démo) [U4] et écriture connectée réparée [U1-U3].
+   Restent 2 actions Paul : env Vercel (API) + Site URL/Redirect auth
+   (voir CADRAGE, Actions humaines).
 2. Géocodage d'adresse à la saisie (éviter la saisie manuelle lat/lng) —
    Nominatim/OSM d'abord (gratuit), en respectant leur politique d'usage.
 3. Recherche texte (nom/ville) + zoom sur résultat.

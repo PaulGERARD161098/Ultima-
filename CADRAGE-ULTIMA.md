@@ -16,10 +16,24 @@
     `(select auth.uid())` (lint 0003, initplan) ;
   - perf INFO : index inutilisés (base neuve, non actionnable) + stratégie
     connexions Auth en absolu (à revoir si montée en charge).
-- 🔜 **Boucle suivante** : **P1 Audit** — `AUDIT-<date>.md` sur le code P0,
-  backlog S#/U# intégrant les constats advisors ci-dessus. Rien n'est appliqué
-  en P1.
-- ⏸ P2 Sécu / P3 UX : en attente de P1.
+- ✅ **P1 Audit** — `AUDIT-2026-07-06.md` généré (S1-S6 / U1-U5, advisors
+  intégrés). Voir son BILAN : tableau de bord unique.
+- ✅ **P2 Sécu** — S1-S6 tous fermés (commits atomiques, migrations 0002/0003
+  appliquées, advisors security = 0 lint).
+- ✅ **P3 UX (audit)** — U1-U4 fermés (migration 0004 appliquée, smoke
+  navigateur vert) ; U5 ⏭ arbitrage Paul. Les évolutions produit (géocodage,
+  recherche, clustering…) restent dans ROADMAP-SITE.
+- ⏳ **Actions humaines en attente** (mode solo — consignées, non bloquantes) :
+  1. Vercel : renseigner les env `SUPABASE_URL` / `SUPABASE_ANON_KEY`
+     (clé publiable `sb_publishable_…`) pour activer l'API en prod.
+  2. Supabase Auth : configurer Site URL + Redirect URLs sur le domaine Vercel
+     (sinon le magic link redirige mal).
+  3. Arbitrage U5 : autoriser ou non plusieurs relations de même type entre
+     deux mêmes nœuds (contrainte d'unicité à trancher).
+  4. Advisor INFO : stratégie de connexions Auth en pourcentage (dashboard,
+     utile seulement en montée d'instance).
+- 🔜 **Boucle suivante** : déploiement/preview Vercel une fois les env posées,
+  puis reprise ROADMAP-SITE par impact×effort (géocodage, recherche…).
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 

@@ -25,7 +25,10 @@
    l'existant ex-« tantot », tables héritées vides purgées), migration 0001
    appliquée, `get_advisors` passés (constats consignés dans CADRAGE, à
    indexer S#/U# en P1).
-2. Audit P1 complet du code P0 → `AUDIT-<date>.md` (S#/U#), advisors inclus.
+2. ✅ 2026-07-06 — audit P1 livré (`AUDIT-2026-07-06.md`) et P2 exécutée :
+   S1-S6 fermés (vendorisation supabase-js, search_path, x-real-ip, plafond
+   corps 100 Ko, RLS initplan, CSP connect-src projet). Advisors security :
+   0 lint.
 3. Rate-limit durable (KV/Upstash ou équivalent) si trafic réel — l'in-memory
    ne protège pas en multi-instance.
 4. Politique de rétention / suppression des données réseau (PII : noms,
