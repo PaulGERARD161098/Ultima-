@@ -526,3 +526,107 @@ textarea:focus-visible,
     padding: 0.45rem 0.6rem;
   }
 }
+
+/* ---------- Pilotage des relations + journal (hybride v1×v2) ---------- */
+
+.item-relation-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.select-statut-relation {
+  min-height: 44px;
+  padding: 6px 8px;
+  border: 1px solid #c9d1d9;
+  border-radius: 6px;
+  background: #ffffff;
+  font: inherit;
+  font-size: 0.85rem;
+}
+
+.liste-journal {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.entree-journal {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid #e3e8ee;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.entree-journal-entete {
+  font-size: 0.78rem;
+  color: #57606a;
+}
+
+.entree-journal-note {
+  font-size: 0.92rem;
+  color: #1f2328;
+}
+
+.entree-journal-etape {
+  font-size: 0.85rem;
+  color: #1e6fb8;
+}
+
+.entree-journal-pied {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.entree-journal-relance {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: #8a5a00;
+  min-height: 44px;
+}
+
+.entree-journal-relance.faite {
+  color: #57606a;
+  text-decoration: line-through;
+}
+
+.bouton-lien-danger {
+  border: none;
+  background: none;
+  color: #b42318;
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+  padding: 10px 4px;
+  min-height: 44px;
+}
+
+.form-journal {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.form-journal textarea,
+.form-journal input,
+.form-journal select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #c9d1d9;
+  border-radius: 6px;
+  font: inherit;
+  min-height: 44px;
+}

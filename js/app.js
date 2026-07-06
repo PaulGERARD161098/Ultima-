@@ -27,9 +27,20 @@
     chantier_commun: 'Chantier commun'
   };
 
+  // Cycle de vie d'un rapprochement (hybride v1×v2).
+  var STATUTS_RELATION = ['idee', 'contact_etabli', 'en_cours', 'fructueux', 'arrete'];
+  var LIBELLES_STATUT_RELATION = {
+    idee: 'Idée',
+    contact_etabli: 'Contact établi',
+    en_cours: 'En cours',
+    fructueux: 'Fructueux',
+    arrete: 'Arrêté'
+  };
+
   var etat = {
     noeuds: [],
     relations: [],
+    journal: [],
     filtres: { types: new Set(TYPES), statuts: new Set(STATUTS) },
     modeDemo: true,
     client: null,        // client supabase-js (mode connecté)
@@ -55,14 +66,18 @@
       { id: 'demo-n9', type: 'chantier', nom: 'Maison Garonne', ville: 'Toulouse', adresse: '30 allées Jean-Jaurès', telephone: '', email: '', statut: 'termine', lat: 43.6047, lng: 1.4442, notes: 'Chantier livré en mai, retour client excellent.' }
     ];
     var relations = [
-      { id: 'demo-r1', source_id: 'demo-n4', target_id: 'demo-n2', type: 'apport_affaires', notes: 'Dossiers copropriétés du 6e arrondissement.' },
-      { id: 'demo-r2', source_id: 'demo-n5', target_id: 'demo-n6', type: 'apport_affaires', notes: 'Lead transmis en juin.' },
-      { id: 'demo-r3', source_id: 'demo-n4', target_id: 'demo-n7', type: 'apport_affaires', notes: '' },
-      { id: 'demo-r4', source_id: 'demo-n1', target_id: 'demo-n8', type: 'chantier_commun', notes: 'Lot menuiseries extérieures.' },
-      { id: 'demo-r5', source_id: 'demo-n2', target_id: 'demo-n8', type: 'chantier_commun', notes: 'Lot plomberie.' },
-      { id: 'demo-r6', source_id: 'demo-n2', target_id: 'demo-n3', type: 'sous_traitance', notes: 'Sous-traite l’électricité sur les petits chantiers.' }
+      { id: 'demo-r1', source_id: 'demo-n4', target_id: 'demo-n2', type: 'apport_affaires', statut: 'en_cours', notes: 'Dossiers copropriétés du 6e arrondissement.' },
+      { id: 'demo-r2', source_id: 'demo-n5', target_id: 'demo-n6', type: 'apport_affaires', statut: 'contact_etabli', notes: 'Lead transmis en juin.' },
+      { id: 'demo-r3', source_id: 'demo-n4', target_id: 'demo-n7', type: 'apport_affaires', statut: 'idee', notes: '' },
+      { id: 'demo-r4', source_id: 'demo-n1', target_id: 'demo-n8', type: 'chantier_commun', statut: 'fructueux', notes: 'Lot menuiseries extérieures.' },
+      { id: 'demo-r5', source_id: 'demo-n2', target_id: 'demo-n8', type: 'chantier_commun', statut: 'en_cours', notes: 'Lot plomberie.' },
+      { id: 'demo-r6', source_id: 'demo-n2', target_id: 'demo-n3', type: 'sous_traitance', statut: 'arrete', raison_arret: 'Plus de disponibilité cette saison.', notes: 'Sous-traite l’électricité sur les petits chantiers.' }
     ];
-    return { noeuds: noeuds, relations: relations };
+    var journal = [
+      { id: 'demo-j1', node_id: 'demo-n6', edge_id: null, date_entree: '2026-07-01', note: 'Devis toiture envoyé, attend le retour de la banque.', prochaine_etape: 'Relancer M. Lambert', relance_at: '2026-07-10', relance_faite: false },
+      { id: 'demo-j2', node_id: null, edge_id: 'demo-r1', date_entree: '2026-06-28', note: 'Deux dossiers transmis ce mois-ci, bonne dynamique.', prochaine_etape: null, relance_at: null, relance_faite: false }
+    ];
+    return { noeuds: noeuds, relations: relations, journal: journal };
   }
 
   function idLocal() {
@@ -111,12 +126,14 @@
       var demo = donneesDemo();
       etat.noeuds = demo.noeuds;
       etat.relations = demo.relations;
+      etat.journal = demo.journal;
       rafraichir();
       return;
     }
     if (!etat.session) {
       etat.noeuds = [];
       etat.relations = [];
+      etat.journal = [];
       rafraichir();
       return;
     }
@@ -124,6 +141,7 @@
       var data = await appelApi('/api/reseau');
       etat.noeuds = (data && data.nodes) || [];
       etat.relations = (data && data.edges) || [];
+      etat.journal = (data && data.journal) || [];
       rafraichir();
     } catch (e) {
       toast('Chargement du réseau impossible.', 'erreur');
@@ -168,9 +186,16 @@
 
   async function supprimerNoeud(id) {
     if (etat.modeDemo) {
-      etat.noeuds = etat.noeuds.filter(function (n) { return n.id !== id; });
+      var relationsSupprimees = {};
       etat.relations = etat.relations.filter(function (r) {
-        return r.source_id !== id && r.target_id !== id;
+        var garde = r.source_id !== id && r.target_id !== id;
+        if (!garde) { relationsSupprimees[r.id] = true; }
+        return garde;
+      });
+      etat.noeuds = etat.noeuds.filter(function (n) { return n.id !== id; });
+      // Cascade locale identique aux FK on delete cascade.
+      etat.journal = etat.journal.filter(function (j) {
+        return j.node_id !== id && !relationsSupprimees[j.edge_id];
       });
       return;
     }
@@ -197,9 +222,66 @@
   async function supprimerRelation(id) {
     if (etat.modeDemo) {
       etat.relations = etat.relations.filter(function (r) { return r.id !== id; });
+      etat.journal = etat.journal.filter(function (j) { return j.edge_id !== id; });
       return;
     }
     await appelApi('/api/reseau/edges', {
+      method: 'DELETE',
+      body: JSON.stringify({ id: id })
+    });
+    await chargerDonnees();
+  }
+
+  // Pilotage d'une relation : statut / raison d'arrêt (hybride v1×v2).
+  async function majRelation(id, valeurs) {
+    if (etat.modeDemo) {
+      var relation = etat.relations.find(function (r) { return r.id === id; });
+      if (relation) { Object.assign(relation, valeurs); }
+      return;
+    }
+    await appelApi('/api/reseau/edges', {
+      method: 'PATCH',
+      body: JSON.stringify(Object.assign({ id: id }, valeurs))
+    });
+    await chargerDonnees();
+  }
+
+  // ---------- Journal « où j'en suis » ----------
+
+  async function creerEntreeJournal(valeurs) {
+    if (etat.modeDemo) {
+      valeurs.id = idLocal();
+      valeurs.date_entree = new Date().toISOString().slice(0, 10);
+      valeurs.relance_faite = false;
+      etat.journal.unshift(valeurs);
+      return;
+    }
+    await appelApi('/api/reseau/journal', {
+      method: 'POST',
+      body: JSON.stringify(valeurs)
+    });
+    await chargerDonnees();
+  }
+
+  async function majEntreeJournal(id, valeurs) {
+    if (etat.modeDemo) {
+      var entree = etat.journal.find(function (j) { return j.id === id; });
+      if (entree) { Object.assign(entree, valeurs); }
+      return;
+    }
+    await appelApi('/api/reseau/journal', {
+      method: 'PATCH',
+      body: JSON.stringify(Object.assign({ id: id }, valeurs))
+    });
+    await chargerDonnees();
+  }
+
+  async function supprimerEntreeJournal(id) {
+    if (etat.modeDemo) {
+      etat.journal = etat.journal.filter(function (j) { return j.id !== id; });
+      return;
+    }
+    await appelApi('/api/reseau/journal', {
       method: 'DELETE',
       body: JSON.stringify({ id: id })
     });
@@ -307,6 +389,44 @@
           note.textContent = relation.notes;
           texte.appendChild(note);
         }
+        if (relation.statut === 'arrete' && relation.raison_arret) {
+          var raison = document.createElement('span');
+          raison.className = 'item-relation-note';
+          raison.textContent = 'Arrêt : ' + relation.raison_arret;
+          texte.appendChild(raison);
+        }
+
+        // Pilotage : cycle de vie du rapprochement (un arrêt exige sa raison).
+        var pilotage = document.createElement('select');
+        pilotage.className = 'select-statut-relation';
+        pilotage.setAttribute('aria-label', 'Statut de la relation');
+        STATUTS_RELATION.forEach(function (s) {
+          var option = document.createElement('option');
+          option.value = s;
+          option.textContent = LIBELLES_STATUT_RELATION[s];
+          pilotage.appendChild(option);
+        });
+        pilotage.value = relation.statut || 'idee';
+        pilotage.addEventListener('change', function () {
+          var nouveau = pilotage.value;
+          var valeurs = { statut: nouveau };
+          if (nouveau === 'arrete') {
+            var motif = window.prompt("Raison de l'arrêt (obligatoire) :", relation.raison_arret || '');
+            if (motif === null || !motif.trim()) {
+              pilotage.value = relation.statut || 'idee';
+              toast('Un arrêt doit être justifié.', 'erreur');
+              return;
+            }
+            valeurs.raison_arret = motif.trim();
+          }
+          majRelation(relation.id, valeurs).then(function () {
+            toast('Relation mise à jour.');
+            rafraichir();
+          }).catch(function (e) {
+            pilotage.value = relation.statut || 'idee';
+            toast(e.message || 'Mise à jour impossible.', 'erreur');
+          });
+        });
 
         var suppr = document.createElement('button');
         suppr.type = 'button';
@@ -321,12 +441,19 @@
           });
         });
 
+        var actionsRelation = document.createElement('span');
+        actionsRelation.className = 'item-relation-actions';
+        actionsRelation.appendChild(pilotage);
+        actionsRelation.appendChild(suppr);
+
         item.appendChild(texte);
-        item.appendChild(suppr);
+        item.appendChild(actionsRelation);
         liste.appendChild(item);
       });
       conteneur.appendChild(liste);
     }
+
+    rendreJournal(conteneur, noeud, liees);
 
     var actions = document.createElement('div');
     actions.className = 'actions-fiche';
@@ -362,6 +489,183 @@
     actions.appendChild(modifier);
     actions.appendChild(supprimer);
     conteneur.appendChild(actions);
+  }
+
+  // ---------- Journal « où j'en suis » (section de la fiche) ----------
+
+  function dateLisible(iso) {
+    if (!iso) { return ''; }
+    var morceaux = iso.split('-');
+    return morceaux.length === 3 ? morceaux[2] + '/' + morceaux[1] + '/' + morceaux[0] : iso;
+  }
+
+  // Libellé court de la cible d'une entrée (vide si c'est le nœud courant).
+  function libelleCible(entree, noeud) {
+    if (entree.node_id === noeud.id) { return ''; }
+    var relation = etat.relations.find(function (r) { return r.id === entree.edge_id; });
+    if (!relation) { return 'relation supprimée'; }
+    var autreId = relation.source_id === noeud.id ? relation.target_id : relation.source_id;
+    var autre = trouverNoeud(autreId);
+    return 'avec ' + ((autre && autre.nom) || '(sans nom)');
+  }
+
+  function rendreJournal(conteneur, noeud, relationsLiees) {
+    var sousTitre = document.createElement('h3');
+    sousTitre.className = 'fiche-sous-titre';
+    sousTitre.textContent = "Journal — où j'en suis";
+    conteneur.appendChild(sousTitre);
+
+    var idsRelations = {};
+    relationsLiees.forEach(function (r) { idsRelations[r.id] = true; });
+    var entrees = etat.journal.filter(function (j) {
+      return j.node_id === noeud.id || idsRelations[j.edge_id];
+    });
+
+    if (entrees.length === 0) {
+      var vide = document.createElement('p');
+      vide.className = 'aucune-relation';
+      vide.textContent = 'Aucune entrée pour le moment.';
+      conteneur.appendChild(vide);
+    } else {
+      var liste = document.createElement('ul');
+      liste.className = 'liste-journal';
+      entrees.forEach(function (entree) {
+        var item = document.createElement('li');
+        item.className = 'entree-journal';
+
+        var entete = document.createElement('span');
+        entete.className = 'entree-journal-entete';
+        var cible = libelleCible(entree, noeud);
+        entete.textContent = dateLisible(entree.date_entree) + (cible ? ' · ' + cible : '');
+        item.appendChild(entete);
+
+        var note = document.createElement('span');
+        note.className = 'entree-journal-note';
+        note.textContent = entree.note;
+        item.appendChild(note);
+
+        if (entree.prochaine_etape) {
+          var etape = document.createElement('span');
+          etape.className = 'entree-journal-etape';
+          etape.textContent = '→ ' + entree.prochaine_etape;
+          item.appendChild(etape);
+        }
+
+        var pied = document.createElement('span');
+        pied.className = 'entree-journal-pied';
+
+        if (entree.relance_at) {
+          var relance = document.createElement('label');
+          relance.className = 'entree-journal-relance' + (entree.relance_faite ? ' faite' : '');
+          var caseFaite = document.createElement('input');
+          caseFaite.type = 'checkbox';
+          caseFaite.checked = Boolean(entree.relance_faite);
+          caseFaite.addEventListener('change', function () {
+            majEntreeJournal(entree.id, { relance_faite: caseFaite.checked }).then(function () {
+              rafraichir();
+            }).catch(function () {
+              caseFaite.checked = !caseFaite.checked;
+              toast('Mise à jour impossible.', 'erreur');
+            });
+          });
+          relance.appendChild(caseFaite);
+          relance.appendChild(document.createTextNode(' Relance le ' + dateLisible(entree.relance_at)));
+          pied.appendChild(relance);
+        }
+
+        var supprEntree = document.createElement('button');
+        supprEntree.type = 'button';
+        supprEntree.className = 'bouton-lien-danger';
+        supprEntree.textContent = 'Effacer';
+        supprEntree.addEventListener('click', function () {
+          supprimerEntreeJournal(entree.id).then(function () {
+            rafraichir();
+          }).catch(function () {
+            toast('Suppression impossible.', 'erreur');
+          });
+        });
+        pied.appendChild(supprEntree);
+        item.appendChild(pied);
+
+        liste.appendChild(item);
+      });
+      conteneur.appendChild(liste);
+    }
+
+    // Formulaire d'ajout : note obligatoire, cible = nœud ou une relation.
+    var form = document.createElement('form');
+    form.className = 'form-journal';
+
+    var champNote = document.createElement('textarea');
+    champNote.rows = 2;
+    champNote.maxLength = 2000;
+    champNote.required = true;
+    champNote.placeholder = "Où j'en suis…";
+    champNote.setAttribute('aria-label', 'Nouvelle entrée de journal');
+    form.appendChild(champNote);
+
+    var selectCible = document.createElement('select');
+    selectCible.setAttribute('aria-label', "Cible de l'entrée");
+    var optionNoeud = document.createElement('option');
+    optionNoeud.value = 'noeud';
+    optionNoeud.textContent = 'Ce nœud';
+    selectCible.appendChild(optionNoeud);
+    relationsLiees.forEach(function (r) {
+      var autreId = r.source_id === noeud.id ? r.target_id : r.source_id;
+      var autre = trouverNoeud(autreId);
+      var option = document.createElement('option');
+      option.value = r.id;
+      option.textContent = 'Relation avec ' + ((autre && autre.nom) || '(sans nom)');
+      selectCible.appendChild(option);
+    });
+    form.appendChild(selectCible);
+
+    var champEtape = document.createElement('input');
+    champEtape.type = 'text';
+    champEtape.maxLength = 500;
+    champEtape.placeholder = 'Prochaine étape (si relance)';
+    champEtape.setAttribute('aria-label', 'Prochaine étape');
+    form.appendChild(champEtape);
+
+    var champRelance = document.createElement('input');
+    champRelance.type = 'date';
+    champRelance.setAttribute('aria-label', 'Date de relance');
+    form.appendChild(champRelance);
+
+    var boutonAjout = document.createElement('button');
+    boutonAjout.type = 'submit';
+    boutonAjout.className = 'bouton bouton-secondaire';
+    boutonAjout.textContent = 'Noter';
+    form.appendChild(boutonAjout);
+
+    form.addEventListener('submit', function (evenement) {
+      evenement.preventDefault();
+      var note = champNote.value.trim();
+      if (!note) { return; }
+      var valeurs = { note: note };
+      if (selectCible.value === 'noeud') {
+        valeurs.node_id = noeud.id;
+      } else {
+        valeurs.edge_id = selectCible.value;
+      }
+      var etape = champEtape.value.trim();
+      if (etape) { valeurs.prochaine_etape = etape; }
+      if (champRelance.value) {
+        if (!etape) {
+          toast('Une relance nécessite une prochaine étape.', 'erreur');
+          return;
+        }
+        valeurs.relance_at = champRelance.value;
+      }
+      creerEntreeJournal(valeurs).then(function () {
+        toast('Entrée notée.');
+        rafraichir();
+      }).catch(function (e) {
+        toast(e.message || 'Enregistrement impossible.', 'erreur');
+      });
+    });
+
+    conteneur.appendChild(form);
   }
 
   // ---------- Formulaire nœud (ajout / édition) ----------
