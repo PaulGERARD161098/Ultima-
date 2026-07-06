@@ -88,9 +88,20 @@ des pouces »), en trois espaces accessibles par une barre d'onglets :
   (« cale-moi ce contact »), le canal reste **Léo en session** : Paul dicte
   ici, Léo remplit la base proprement via l'API.
 
-**Design** : fond clair, une couleur d'accent (#1e6fb8), grandes cartes
-tactiles ≥ 44 px, typographie lisible — spécification par l'agent `graphisme`
-avant implémentation, `interface-ux` juge les parcours.
+**Design — direction actée (Paul, 2026-07-06, image de référence : carte de
+la Forêt des Rêves Bleus dessinée par E.H. Shepard)** : l'Accueil est une
+**carte de livre d'enfance dessinée à la main** — papier parchemin, traits
+d'encre, lettrage manuscrit, rose des vents, chemins en pointillés. Le réseau
+de Paul y vit comme un royaume : les contacts sont des lieux dessinés
+(« la maison de… »), les relances dues des panneaux sur les chemins, la
+question « On fait quoi aujourd'hui ? » écrite à la main en tête. On
+**s'inspire du style, sans reproduire l'œuvre** (pas de personnages ni de
+copie du dessin). Réalisation vanilla : parchemin + encre en SVG/CSS
+(filtres « rough ink »), police manuscrite libre (OFL) auto-hébergée — la
+CSP interdit les fonts externes. Les onglets Carte (Leaflet) et Contacts
+restent sobres et lisibles (fond clair, accent #1e6fb8, tactile ≥ 44 px) ;
+l'agent `graphisme` spécifie la carte-accueil avant implémentation,
+`interface-ux` juge les parcours.
 
 **Déploiement** : création du projet Vercel « ultima » (plan Hobby gratuit —
 aucun projet Vercel n'existe pour Ultima à ce jour) + env `SUPABASE_URL` /
