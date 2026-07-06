@@ -537,7 +537,9 @@
     try {
       var resultat = await etat.client.auth.signInWithOtp({
         email: email,
-        options: { emailRedirectTo: window.location.origin }
+        // Ultima est mono-utilisateur (décision 2026-07-03) : jamais de
+        // création de compte via le lien magique.
+        options: { emailRedirectTo: window.location.origin, shouldCreateUser: false }
       });
       if (resultat.error) { throw resultat.error; }
       toast('Lien de connexion envoyé. Vérifiez votre boîte mail.');
