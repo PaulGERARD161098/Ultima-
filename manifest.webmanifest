@@ -1,0 +1,13 @@
+{
+  "name": "Ultima — Réseau professionnel",
+  "short_name": "Ultima",
+  "lang": "fr",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e6fb8",
+  "description": "Cartographier mon réseau professionnel et piloter les rapprochements.",
+  "icons": [
+    { "src": "icons/ultima.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
