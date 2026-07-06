@@ -24,7 +24,8 @@ const CSP = [
   "style-src 'self' https://unpkg.com 'unsafe-inline'",
   // Tuiles OSM, icônes marqueurs unpkg, images data:.
   "img-src 'self' data: https://*.tile.openstreetmap.org https://unpkg.com",
-  "connect-src 'self' https://*.supabase.co",
+  // Restreint au projet Supabase d'Ultima : pas d'exfiltration possible vers un projet tiers.
+  "connect-src 'self' https://leosfqyidgsaescjbfom.supabase.co",
   "font-src 'self'",
   "object-src 'none'",
   "base-uri 'self'",
