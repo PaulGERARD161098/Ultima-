@@ -35,6 +35,13 @@
   --type-lead: #1f8a4c;
   --type-chantier: #7a3fb5;
 
+  /* Habillage antique de la carte (R1) — cf. design/spec-r1-graphisme.md */
+  --cerne-carte: #5a4118;      /* cerne encre des marqueurs + cadre */
+  --or-antique: #a9884a;       /* liserés or (cadre, cartouche, bannières) */
+  --mer-profonde: #0e3a52;     /* bandeau entête, lavis mer du voile */
+  --mer-claire: #17506b;
+  --parchemin-tuile: #e6e2c0;  /* terre OSM filtrée (fond de chargement) */
+
   /* Registre parchemin — scopé à la vue Accueil (.vue-accueil) */
   --parchemin: #f6eed9;
   --parchemin-carte: #efe3c6;
@@ -84,21 +91,67 @@ body {
 
 /* ---------- En-tête ---------- */
 
+/* Bandeau « mer profonde » (R1) : vaguelettes en tuile data-URI (reprise de
+   design/preview-accueil-mythologie.html) sur dégradé de mer. */
 .entete {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
-  padding: 0.6rem 1rem;
-  background: var(--blanc);
-  border-bottom: 1px solid var(--bordure);
+  padding: 0.45rem 1rem;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='60'%3E%3Cpath d='M0,30 q17,-10 35,0 t35,0 t35,0 t35,0' fill='none' stroke='%238fc2d4' stroke-opacity='0.16' stroke-width='1.2'/%3E%3Cpath d='M0,52 q17,-8 35,0 t35,0 t35,0 t35,0' fill='none' stroke='%238fc2d4' stroke-opacity='0.10' stroke-width='1'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, var(--mer-claire), var(--mer-profonde));
+  border-bottom: 1px solid var(--or-antique);
 }
 
-.entete-titre {
+/* Cartouche « ULTIMA » : H1 réel (accessibilité), registre de la preview en
+   tailles de bandeau d'outil — hauteur entête ≤ 72 px desktop, ≤ 60 px mobile. */
+.cartouche-ultima {
+  position: relative;
+  padding: 0.3rem 1.9rem 0.35rem;
+  background: linear-gradient(#f4e6bd, #e3cd93);
+  border: 2px solid #6e5320;
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 3px #f4e6bd, inset 0 0 0 4px var(--or-antique),
+              0 2px 6px rgba(0, 10, 20, 0.4);
+  text-align: center;
+}
+
+.cartouche-ultima::before,
+.cartouche-ultima::after {
+  content: "❦";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-52%);
+  color: #6e5320;
+  font-size: 0.9rem;
+}
+
+.cartouche-ultima::before { left: 0.5rem; }
+.cartouche-ultima::after { right: 0.5rem; }
+
+.cartouche-titre {
   margin: 0;
-  font-size: 1.15rem;
-  font-weight: 650;
-  letter-spacing: 0.01em;
+  font-family: Georgia, "Times New Roman", serif; /* pile système, zéro CDN */
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.22em;
+  text-indent: 0.22em;
+  color: #4a3512;
+  text-shadow: 0 1px 0 #fff6dd;
+}
+
+.cartouche-sous {
+  margin: 0;
+  font-size: 0.72rem;
+  font-variant: small-caps;
+  line-height: 1.2;
+  letter-spacing: 0.28em;
+  text-indent: 0.28em;
+  color: #6e5320;
 }
 
 .bandeau-demo {
@@ -466,6 +519,65 @@ textarea:focus-visible,
   inset: 0;
 }
 
+/* ---------- Habillage antique de la carte (R1) ---------- */
+/* Source contraignante : design/spec-r1-graphisme.md. Interdits fermes :
+   aucun feTurbulence ni filtre SVG sur les couches carte (RA3), aucune
+   transition sur filter, décor 100 % pointer-events: none (RA4). */
+
+/* Filtre sépia sur le tile-pane SEUL (z 200) : les panes vecteurs/marqueurs
+   (400/600) restent en couleurs vraies (RA1). Deux régimes pilotés par la
+   classe de palier posée sur #carte par js/carte.js — saut sec assumé. */
+.carte .leaflet-tile-pane {
+  filter: sepia(0.9) saturate(1.4) hue-rotate(-8deg) brightness(0.94) contrast(0.92);
+}
+
+/* Régime rue (zoom ≥ 12) : on relâche pour garder rues et étiquettes nettes. */
+.carte.zoom-rue .leaflet-tile-pane {
+  filter: sepia(0.75) saturate(1.2) hue-rotate(-8deg) brightness(0.97);
+}
+
+/* Fond visible pendant le chargement des tuiles : parchemin, jamais le gris Leaflet. */
+.leaflet-container { background: var(--parchemin-tuile); }
+
+/* Cadre parchemin : cerne encre + liseré or + vignettage, coins en data-URI.
+   z 640 : au-dessus des marqueurs, sous légende (900) et contrôles (1000). */
+.cadre-carte {
+  position: absolute;
+  inset: 0;
+  z-index: 640;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 3px var(--cerne-carte),
+    inset 0 0 0 5px var(--or-antique),
+    inset 0 0 42px 10px rgba(58, 42, 16, 0.26); /* vignettage léger */
+}
+
+.cadre-carte .coin {
+  position: absolute;
+  width: 72px;
+  height: 72px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72'%3E%3Cg fill='none'%3E%3Cpath d='M4 68 V16 Q4 4 16 4 H68' stroke='%235a4118' stroke-width='2.5'/%3E%3Cpath d='M10 68 V20 Q10 10 20 10 H68' stroke='%23a9884a' stroke-width='1.2'/%3E%3Cpath d='M16 16 q9 -3 12 5 q-9 3 -12 -5Z' fill='%23a9884a' opacity='.85'/%3E%3C/g%3E%3C/svg%3E") no-repeat;
+}
+
+.cadre-carte .coin-no { top: 0; left: 0; }
+.cadre-carte .coin-ne { top: 0; right: 0; transform: rotate(90deg); }
+.cadre-carte .coin-se { bottom: 0; right: 0; transform: rotate(180deg); }
+.cadre-carte .coin-so { bottom: 0; left: 0; transform: rotate(270deg); }
+
+/* Voile Ptolémée : opacité par palier de zoom, fondu composité (opacity
+   seule), coupé en reduced-motion. À zoom ≥ 7 : absent. */
+.pane-voile {
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.carte.zoom-pays .pane-voile { opacity: 1; }
+.carte.zoom-large .pane-voile { opacity: 0.65; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pane-voile { transition: none; }
+}
+
 .legende {
   position: absolute;
   left: 0.75rem;
@@ -497,12 +609,13 @@ textarea:focus-visible,
   margin: 0.15rem 0;
 }
 
+/* Cerne encre (R1) : la légende montre exactement ce que montre la carte
+   (plus de box-shadow de rattrapage). */
 .pastille {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  border: 2px solid var(--blanc);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+  border: 2px solid var(--cerne-carte);
 }
 
 .pastille-artisan { background: var(--type-artisan); }
@@ -753,7 +866,27 @@ textarea:focus-visible,
 /* ---------- Mobile ---------- */
 
 @media (max-width: 720px) {
-  .entete { padding: 0.5rem 0.75rem; }
+  /* Budget hauteur entête ≤ 60 px : cartouche compact, sous-titre masqué,
+     pastille démo resserrée pour tenir sur une seule ligne à 375 px. */
+  .entete { padding: 0.5rem 0.75rem; gap: 0.5rem; flex-wrap: nowrap; }
+
+  .cartouche-ultima { padding: 0.2rem 1.2rem 0.25rem; flex-shrink: 0; }
+  .cartouche-titre { font-size: 1.15rem; }
+  .cartouche-sous { display: none; }
+
+  /* La pastille démo rétrécit (ellipse) plutôt que de passer à la ligne :
+     l'entête tient sur une seule rangée quelle que soit la largeur. */
+  .bandeau-demo {
+    font-size: 0.72rem;
+    padding: 0.25rem 0.6rem;
+    min-width: 0;
+    flex-shrink: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .cadre-carte .coin { width: 48px; height: 48px; background-size: 48px 48px; }
 
   .barre-outils {
     flex-wrap: wrap;

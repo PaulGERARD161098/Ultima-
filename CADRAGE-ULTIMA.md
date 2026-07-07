@@ -87,15 +87,23 @@
 - ✅ **Boucle v3-⑥ recherche & zoom (2026-07-07)** : fusionnée dans `main`
   (PR #18, go Paul). U14-U17 fermés, U18 au vivier (→ R2). 8/8 harnais +
   contre-passe GO. **Le cap v3 ①-⑥ est terminé.**
-- 🔜 **Boucle R1 — habillage antique (spec PRÊTE, 2026-07-07)** : la spec
-  graphisme complète est committée → `design/spec-r1-graphisme.md` (filtre
-  sépia par paliers de zoom, voile Ptolémée géo-ancré L.svgOverlay sans
-  feTurbulence, cadre z-index 640, cartouche ULTIMA, cernes encre #5a4118
-  sur marqueurs, 10 constats pour smoke-antique.mjs). **Reprise = dérouler
-  directement : front-carto (implé depuis la spec) → contre-passe → commits
-  → PR → fusion.** **Go anticipé de Paul consigné (2026-07-07)** : « une
-  fois que tu as fini, on y va » — fusion de R1 pré-autorisée dès
-  contre-passe GO, sans re-validation.
+- ✅ **Boucle R1 — habillage antique (2026-07-07)** : fusionnée dans `main`
+  (PR #20, go anticipé de Paul consigné le 2026-07-07). Implémentation
+  intégrale de `design/spec-r1-graphisme.md` : sépia 2 régimes par paliers
+  de zoom (classes exclusives sur `#carte`), voile Ptolémée `L.svgOverlay`
+  (pane 300, 100 % inline), cadre parchemin muet (z 640), cartouche ULTIMA,
+  cernes encre #5a4118 + fillOpacity 1, arrivée au boot sur la Carte
+  (Accueil v3-① par onglet). Harnais patrimoine `smoke-antique.mjs`
+  (22 verdicts, contraste mesuré sur capture : 14,68:1 z6, 4,05:1 z13) ;
+  9/9 harnais verts (161 verdicts) ; contre-passe GO (adversariale :
+  rafales de zoom, angle sous coin, tuile factice couleurs OSM → « Lyon »
+  8,25:1 z9 / 6,51:1 z6 sous voile). Vivier → R4 : table z-index du §2 de
+  la spec fausse (transform du map-pane : tooltips/popups passeraient sous
+  le vignettage en bord — sans impact actuel, aucun popup dans l'app),
+  trait sous-traitance 2,06:1 à recaler, rose des vents, anneau crème
+  décoratif. À prouver après déploiement : RA1/RA2 sur vraies tuiles OSM
+  (proxy de l'env bloque tile.openstreetmap.org). **Prochaine boucle : R2
+  — volet « Aujourd'hui »** (REFONTE-ACCUEIL.md §4, U18 au vivier).
 - ✅ **Refonte Accueil — cadrage acté (2026-07-07)** : vision dictée par
   Paul (carte de France antique = entrée d'Ultima). Direction visuelle B
   « Age of Mythology » choisie sur previews ; **auth invisible** actée

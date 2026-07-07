@@ -38,7 +38,13 @@ const verdicts = {};
 await page.goto('http://127.0.0.1:8123/', { waitUntil: 'load', timeout: 20000 });
 await page.waitForTimeout(900);
 
-// 1. Démarrage sur l'Accueil, salutation, barre d'onglets, aria-current.
+// 1. Démarrage sur la Carte (R1 : la carte est le hub) ; l'Accueil reste
+// accessible par son onglet — salutation, barre d'onglets, aria-current.
+verdicts.carteVisibleAuDemarrage = await page.locator('#espace-carte').isVisible();
+verdicts.ongletActifCarteAuDemarrage = await page
+  .locator('.barre-onglets .onglet[data-onglet="carte"][aria-current="page"]').count() === 1;
+await page.locator('.barre-onglets .onglet[data-onglet="accueil"]').click();
+await page.waitForTimeout(300);
 verdicts.accueilVisible = await page.locator('#espace-accueil').isVisible();
 verdicts.carteCachee = await page.locator('#espace-carte').isHidden();
 verdicts.titreBienvenue = (await page.locator('#accueil-titre').textContent()) === 'Bienvenue, Paul';
