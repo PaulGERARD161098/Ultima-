@@ -80,9 +80,12 @@
      (`auth.getUser()`) — recommandation spec data v3-⑤.
   8. Après mise en ligne : confirmer l'usage réel Nominatim (l'amont n'a été
      exercé qu'en stub ; URL/User-Agent conformes à la politique OSM).
-- 🟡 **Boucle v3-⑥ recherche & zoom (2026-07-07)** : livrée (commit
-  `abc53b6`, 8/8 harnais dont smoke-recherche 20 verdicts), contre-passe en
-  cours — fusion au go de Paul avec les annotations.
+- 🟡 **Boucle v3-⑥ recherche & zoom (2026-07-07)** : livrée et vérifiée —
+  recherche instantanée sur la Carte (U14-U17 fermés), zoom + halo, dictée
+  en mode remplacement sur ce champ. 8/8 harnais (smoke-recherche 20
+  verdicts) + contre-passe GO (18 indépendants, non-régression géocodage au
+  pixel près). **PR en attente du go de fusion de Paul** (contient aussi le
+  cadrage refonte committé). U18 au vivier (→ boucle R2).
 - ✅ **Refonte Accueil — cadrage acté (2026-07-07)** : vision dictée par
   Paul (carte de France antique = entrée d'Ultima). Direction visuelle B
   « Age of Mythology » choisie sur previews ; **auth invisible** actée

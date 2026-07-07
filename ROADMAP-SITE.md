@@ -71,7 +71,10 @@ jamais supprimée). Boucles ordonnées :
    (voir CADRAGE, Actions humaines).
 2. Géocodage d'adresse à la saisie (éviter la saisie manuelle lat/lng) —
    Nominatim/OSM d'abord (gratuit), en respectant leur politique d'usage.
-3. Recherche texte (nom/ville) + zoom sur résultat.
+3. ✅ 2026-07-07 — Recherche texte (nom/ville) + zoom sur résultat [v3-⑥,
+   U14-U17] : instantanée dès 2 caractères, halo d'encre, « + Ajouter »
+   pré-rempli à 0 résultat, hors filtres avec annonce, dictée en
+   remplacement. PR en attente de fusion (go Paul). U18 au vivier (→ R2).
 4. Fiche relation complète (intérêt qualitatif, efforts 1..5 — déjà en base/API).
 5. Regroupement de marqueurs (clustering) au-delà de ~100 nœuds.
 6. Import CSV de contacts existants (mapping colonnes → contrat).
