@@ -87,14 +87,15 @@
 - ✅ **Boucle v3-⑥ recherche & zoom (2026-07-07)** : fusionnée dans `main`
   (PR #18, go Paul). U14-U17 fermés, U18 au vivier (→ R2). 8/8 harnais +
   contre-passe GO. **Le cap v3 ①-⑥ est terminé.**
-- 🔜 **Boucle R1 — habillage antique (EN COURS à la clôture 2026-07-07)** :
-  lancée, spec graphisme en cours de rédaction NON déposée à la fermeture
-  de session (scratchpad éphémère) → **à relancer depuis REFONTE-ACCUEIL.md
-  §2 + design/preview-accueil-mythologie.html** (coût quasi nul, tout le
-  cadrage est committé). **Go anticipé de Paul consigné (2026-07-07)** :
-  « une fois que tu as fini, on y va » — la fusion de R1 est pré-autorisée
-  dès contre-passe GO, sans re-validation. Circuit : spec graphisme →
-  front-carto → contre-passe → commits → PR → fusion.
+- 🔜 **Boucle R1 — habillage antique (spec PRÊTE, 2026-07-07)** : la spec
+  graphisme complète est committée → `design/spec-r1-graphisme.md` (filtre
+  sépia par paliers de zoom, voile Ptolémée géo-ancré L.svgOverlay sans
+  feTurbulence, cadre z-index 640, cartouche ULTIMA, cernes encre #5a4118
+  sur marqueurs, 10 constats pour smoke-antique.mjs). **Reprise = dérouler
+  directement : front-carto (implé depuis la spec) → contre-passe → commits
+  → PR → fusion.** **Go anticipé de Paul consigné (2026-07-07)** : « une
+  fois que tu as fini, on y va » — fusion de R1 pré-autorisée dès
+  contre-passe GO, sans re-validation.
 - ✅ **Refonte Accueil — cadrage acté (2026-07-07)** : vision dictée par
   Paul (carte de France antique = entrée d'Ultima). Direction visuelle B
   « Age of Mythology » choisie sur previews ; **auth invisible** actée
