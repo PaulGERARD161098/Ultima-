@@ -39,7 +39,9 @@ function applySecurityHeaders(headers) {
   headers.set('X-Content-Type-Options', 'nosniff');
   headers.set('X-Frame-Options', 'DENY');
   headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-  headers.set('Permissions-Policy', 'geolocation=(), camera=(), microphone=(), payment=()');
+  // microphone=(self) : requis par la dictée vocale (Web Speech API, v3-④/U6) —
+  // le document lui-même seulement, jamais d'iframe tierce ; le reste fermé.
+  headers.set('Permissions-Policy', 'geolocation=(), camera=(), microphone=(self), payment=()');
 }
 
 function clientIp(request) {
