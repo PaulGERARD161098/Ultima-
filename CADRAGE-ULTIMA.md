@@ -60,8 +60,15 @@
   build, zéro env) — reste UNE action Paul : importer le repo sur
   vercel.com/new (registre n°2), puis dashboard Supabase Auth (registre n°3)
   avec l'URL obtenue.
-- 🔜 **Boucle suivante (v3-④)** : saisie vocale par champ (Web Speech API),
-  puis v3-⑤ géocodage.
+- 🟡 **Boucle v3-④ dictée vocale (2026-07-07)** : livrée et vérifiée — micro
+  sur les 4 champs de texte libre (notes nœud/relation, journal), fr-FR,
+  ajout sans remplacement, clavier prioritaire, progressive enhancement,
+  aria + 44px. Harnais smoke-dictee (17 verdicts) ; contre-passe GO
+  (28 verdicts indépendants). Inclut U6 (`microphone=(self)` au middleware —
+  surface gated). **PR draft #16 en attente du go de fusion de Paul.**
+  Backlog consigné : U7 (`window.prompt` raison d'arrêt), U8 (annonce live
+  à la bascule) — voir AUDIT-2026-07-06.md.
+- 🔜 **Boucle suivante (v3-⑤)** : géocodage d'adresse (Nominatim/OSM).
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 

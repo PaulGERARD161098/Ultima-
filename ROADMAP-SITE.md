@@ -34,7 +34,11 @@
    optionnelle, badge « À placer »), harnais smoke-contacts (20 verdicts).
 3. 🟡 **Déploiement Vercel** : repo prêt (repli publiable, zéro env) — reste
    l'import du repo sur vercel.com/new (action Paul, 2 min, gratuit).
-4. **Saisie vocale** par champ (Web Speech API, sans clé).
+4. ✅ 2026-07-07 — **Saisie vocale** par champ (Web Speech API, sans clé) :
+   micro sur les 4 champs de texte libre, fr-FR, ajout sans remplacement,
+   clavier prioritaire, progressive enhancement (Firefox : aucun bouton),
+   harnais smoke-dictee 17 verdicts + contre-passe 28 verdicts. PR #16
+   (fusion = go Paul, contient U6 middleware).
 5. **Géocodage** d'adresse (Nominatim/OSM).
 
 ## Vivier (impact × effort, après le cap v3)

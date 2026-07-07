@@ -42,6 +42,12 @@
 - **Confirmé** : la chaîne agents (spec → implé → contre-passe) tient la
   qualité ET préserve le contexte de Léo ; les harnais patrimoine rendent la
   contre-passe quasi gratuite.
+- 2026-07-07 (v3-④) : la chaîne spec (ux ∥ graphisme) → implé → contre-passe
+  reconfirmée ; la spec UX a découvert un bloquant hors périmètre (U6
+  Permissions-Policy) AVANT le code — valeur des specs par agents. Ordre
+  commit-puis-contre-passe imposé par le stop-hook (environnement éphémère) :
+  acceptable si le vérificateur confirme que le contenu committé est
+  byte-identique à ce qu'il a testé (fait ici) ; la fusion reste le vrai gate.
 - **Friction corrigée → règle** : commit parti sur le main local (branche non
   recréée en début de boucle) → PR fusionnée VIDE, travail récupéré au
   reflog. Règles : ① toujours `git checkout -B <branche> origin/main` AVANT
