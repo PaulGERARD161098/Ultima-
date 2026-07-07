@@ -58,6 +58,29 @@
       <h2 id="carte-titre" class="visuellement-cache">Carte</h2>
 
       <div class="barre-outils">
+        <!-- Recherche sur la carte (v3-⑥) : nom ou ville, résultats en direct. -->
+        <div class="champ-recherche-carte">
+          <label class="visuellement-cache" for="recherche-carte">Rechercher un contact par nom ou ville</label>
+          <svg class="icone-loupe" viewBox="0 0 24 24" width="20" height="20"
+               aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="6.5"/>
+            <path d="m16 16 4.5 4.5"/>
+          </svg>
+          <input id="recherche-carte" type="search" placeholder="Rechercher un nom ou une ville…"
+                 autocomplete="off" role="combobox" aria-expanded="false"
+                 aria-controls="recherche-resultats" aria-autocomplete="list">
+          <button type="button" id="recherche-effacer" class="bouton-effacer"
+                  aria-label="Effacer la recherche" hidden>
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"
+                 fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+          <ul id="recherche-resultats" class="liste-resultats" role="group"
+              aria-label="Contacts trouvés" hidden></ul>
+          <p id="recherche-message" class="recherche-message" role="status"></p>
+        </div>
+
         <button id="bouton-filtres" type="button" class="bouton bouton-secondaire bouton-filtres"
                 aria-expanded="false" aria-controls="filtres">Filtres</button>
 
@@ -146,7 +169,7 @@
               </svg>
               <span id="geo-bouton-libelle">Trouver sur la carte</span>
             </button>
-            <ul id="geo-suggestions" class="liste-adresses" role="group" aria-label="Adresses trouvées" hidden></ul>
+            <ul id="geo-suggestions" class="liste-resultats" role="group" aria-label="Adresses trouvées" hidden></ul>
             <p id="geo-message" class="geo-message" role="status"></p>
             <div id="geo-confirmation" class="geo-confirmation-ligne" tabindex="-1" hidden>
               <span class="geo-confirmation">

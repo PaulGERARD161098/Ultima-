@@ -46,6 +46,23 @@
    PR en attente de fusion (go Paul). Vivier : U12 clic-carte, U13 dictée
    adresse.
 
+## Cap Refonte Accueil (dicté 2026-07-07 — cadrage : REFONTE-ACCUEIL.md)
+
+Vision : la carte de France antique (direction B « Age of Mythology » actée
+sur previews) devient l'écran d'arrivée ; fusion Accueil × Carte ; les
+contenus v3-① revivent dans un volet « Aujourd'hui » ; auth invisible (actée,
+jamais supprimée). Boucles ordonnées :
+
+1. **R1 — Habillage antique** de la carte existante (sépia tuiles + décor
+   parchemin en surcouches + voile Ptolémée au zoom pays + cartouche
+   « Ultima ») : effet visible immédiat, zéro changement de navigation.
+2. **R2 — Fusion Accueil × Carte** : volet « Aujourd'hui » (bottom-sheet),
+   barre réduite à Carte · Contacts, badge chiffré des relances.
+3. **R3 — Ergonomie pouce + auth invisible** : « + » flottant, fiche en
+   bottom-sheet, session persistante (une connexion par appareil).
+4. **R4 — Finitions** : monstres marins, rose des vents, garde-fous perf
+   (risques RA1-RA5 du cadrage).
+
 ## Vivier (impact × effort, après le cap v3)
 
 1. ✅ 2026-07-06 — Supabase réel branché côté front (config URL + clé
@@ -54,7 +71,10 @@
    (voir CADRAGE, Actions humaines).
 2. Géocodage d'adresse à la saisie (éviter la saisie manuelle lat/lng) —
    Nominatim/OSM d'abord (gratuit), en respectant leur politique d'usage.
-3. Recherche texte (nom/ville) + zoom sur résultat.
+3. ✅ 2026-07-07 — Recherche texte (nom/ville) + zoom sur résultat [v3-⑥,
+   U14-U17] : instantanée dès 2 caractères, halo d'encre, « + Ajouter »
+   pré-rempli à 0 résultat, hors filtres avec annonce, dictée en
+   remplacement. PR en attente de fusion (go Paul). U18 au vivier (→ R2).
 4. Fiche relation complète (intérêt qualitatif, efforts 1..5 — déjà en base/API).
 5. Regroupement de marqueurs (clustering) au-delà de ~100 nœuds.
 6. Import CSV de contacts existants (mapping colonnes → contrat).

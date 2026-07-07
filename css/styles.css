@@ -1393,8 +1393,9 @@ textarea:focus-visible,
 
 .bouton-geo-trouver[disabled]:hover { background: var(--blanc); }
 
-/* Liste de suggestions : panneau blanc flottant, registre des listes existantes. */
-.liste-adresses {
+/* Liste flottante de résultats — composant générique (géocodage v3-⑤,
+   recherche carte v3-⑥) : panneau blanc, registre des listes existantes. */
+.liste-resultats {
   position: absolute;
   left: 0;
   right: 0;
@@ -1413,15 +1414,15 @@ textarea:focus-visible,
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .liste-adresses { animation: apparition-adresses 120ms ease-out; }
-  @keyframes apparition-adresses {
+  .liste-resultats { animation: apparition-resultats 120ms ease-out; }
+  @keyframes apparition-resultats {
     from { opacity: 0; transform: translateY(-4px); }
     to   { opacity: 1; transform: none; }
   }
 }
 
-/* Intitulé « Choisissez la bonne adresse : » en tête de liste. */
-.liste-adresses-titre {
+/* Intitulé en tête de liste (« Choisissez la bonne adresse : »…). */
+.liste-resultats-titre {
   display: block;
   padding: 0.55rem 0.75rem 0.2rem;
   font-size: 0.82rem;
@@ -1430,7 +1431,7 @@ textarea:focus-visible,
 }
 
 /* Item : mêmes cotes que .item-contact, vrai bouton pleine largeur. */
-.item-adresse {
+.item-resultat {
   display: flex;
   align-items: flex-start;
   gap: 0.6rem;
@@ -1447,32 +1448,32 @@ textarea:focus-visible,
   cursor: pointer;
 }
 
-.liste-adresses li:last-child .item-adresse { border-bottom: none; }
+.liste-resultats li:last-child .item-resultat { border-bottom: none; }
 
-.item-adresse:hover { background: #f2f6fa; }
+.item-resultat:hover { background: #f2f6fa; }
 
-.item-adresse:focus-visible {
+.item-resultat:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: -2px;            /* l'anneau reste dans la liste */
 }
 
-/* Petite épingle de repérage en tête d'item (écho du déclencheur). */
-.item-adresse-lieu {
+/* Repère en tête d'item (épingle du géocodage, pastille de la recherche). */
+.item-resultat-avant {
   flex-shrink: 0;
   margin-top: 2px;
   color: var(--encre-douce);       /* décor lisible, jamais porteur seul */
 }
 
-.item-adresse-textes { flex: 1; min-width: 0; }
+.item-resultat-textes { flex: 1; min-width: 0; }
 
-.item-adresse-principale {         /* voie + numéro : ce que Paul a tapé */
+.item-resultat-principale {        /* la ligne forte : adresse ou nom */
   display: block;
   font-weight: 600;
   color: var(--encre);
   overflow-wrap: anywhere;
 }
 
-.item-adresse-detail {             /* ville, code postal, contexte */
+.item-resultat-detail {            /* le contexte : ville, « Type · Ville »… */
   display: block;
   font-size: 0.82rem;
   color: var(--encre-douce);
@@ -1555,3 +1556,124 @@ textarea:focus-visible,
 }
 
 .geo-details .champs-doubles { margin-top: 0.25rem; }
+
+/* ---------- Recherche sur la carte (v3-⑥) ---------- */
+
+/* La barre d'outils devient le plan des surcouches de recherche : au-dessus
+   des panes et contrôles Leaflet (~1000) et de la légende (900), sous le
+   panneau (1100). Elle replie proprement quand champ + filtres + bouton ne
+   tiennent pas sur une ligne (le champ garde alors sa ligne, jamais écrasé
+   et jamais de chevauchement de la carte). */
+.barre-outils {
+  position: relative;
+  z-index: 1050;
+  flex-wrap: wrap;
+}
+
+.champ-recherche-carte {
+  position: relative;            /* ancre de la liste flottante */
+  flex: 1 1 14rem;
+  min-width: 0;
+  max-width: 340px;              /* desktop large : un champ, pas une barre Google */
+}
+
+/* Tant que champ + filtres + « + Ajouter » ne tiennent pas sur une seule
+   ligne (filtres ≈ 1030px), le champ prend toute la première ligne — motif
+   mobile de la spec UX étendu, jamais de barre d'outils qui déborde. */
+@media (max-width: 1560px) {
+  .champ-recherche-carte {
+    flex-basis: 100%;
+    max-width: none;
+  }
+}
+
+.champ-recherche-carte input {
+  width: 100%;
+  min-height: 44px;              /* cote des champs existants */
+  padding: 0.5rem 48px 0.5rem 38px; /* 38 = loupe 20px à 12px du bord + 6px d'air ;
+                                       48 = réserve croix (motif .champ-vocal) */
+  border: 1px solid var(--bordure);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background: var(--blanc);
+  color: var(--encre);
+}
+/* focus-visible : déjà couvert par la règle globale input:focus-visible. */
+
+/* Une seule croix : la nôtre (la native du type=search ferait doublon). */
+.champ-recherche-carte input::-webkit-search-cancel-button { display: none; }
+
+/* Micro de dictée présent (motif .champ-vocal) : croix décalée, réserve élargie. */
+.champ-recherche-carte .champ-vocal > input { padding-right: 92px; }
+.champ-recherche-carte .champ-vocal ~ .bouton-effacer { right: 44px; }
+
+.icone-loupe {
+  position: absolute;
+  left: 12px;
+  top: 12px;                     /* (44 - 20) / 2 : centrée sur le champ, même
+                                    si la ligne d'état vocale s'affiche dessous */
+  color: var(--encre-douce);     /* décor : le placeholder porte le sens */
+  pointer-events: none;
+}
+
+/* Croix d'effacement : même patron que .bouton-micro (44×44 dans le champ). */
+.bouton-effacer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--encre-douce);
+  cursor: pointer;
+}
+
+.bouton-effacer:hover { background: #eef1f4; color: var(--encre); }
+
+.bouton-effacer:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;          /* l'anneau reste dans le champ */
+}
+
+/* La liste de la recherche carte respire au-dessus de la carte. */
+.champ-recherche-carte .liste-resultats { z-index: 20; }
+
+/* Pastille de type en tête d'item : la légende entre dans la liste. */
+.item-resultat-avant .pastille { display: block; margin-top: 3px; }
+
+/* Lignes non cliquables du panneau (0 résultat, « et N autres »). */
+.liste-resultats-vide {
+  display: block;
+  padding: 0.7rem 0.75rem;
+  font-size: 0.92rem;
+  font-style: italic;             /* registre .contacts-aucun existant */
+  color: var(--encre-douce);
+  overflow-wrap: anywhere;
+}
+
+/* Zone de message inline (role=status) : miroir du motif .geo-message. */
+.recherche-message {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+  color: var(--encre-douce);
+}
+
+.recherche-message:empty { display: none; }
+
+/* Anneau « compas » sur le résultat : 3 pulsations, puis il reste posé. */
+@media (prefers-reduced-motion: no-preference) {
+  .halo-resultat { animation: pulsation-resultat 1.6s ease-out 3; }
+}
+
+@keyframes pulsation-resultat {
+  0%   { stroke-width: 3;  stroke-opacity: 0.9; }
+  60%  { stroke-width: 12; stroke-opacity: 0.25; }
+  100% { stroke-width: 3;  stroke-opacity: 0.9; }
+}

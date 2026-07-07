@@ -19,7 +19,9 @@
   var coucheRelations = null;
   var coucheNoeuds = null;
   var coucheApercu = null;
+  var coucheSurbrillance = null;
   var positionApercu = null;
+  var positionSurbrillance = null;
   var surClicNoeud = null;
 
   // Jeton de génération : incrémenté à chaque rendu ; les callbacks
@@ -41,6 +43,8 @@
     coucheRelations = L.layerGroup().addTo(carte);
     coucheNoeuds = L.layerGroup().addTo(carte);
     coucheApercu = L.layerGroup().addTo(carte);
+    // Surbrillance de recherche (v3-⑥) : au-dessus des nœuds, hors filtres.
+    coucheSurbrillance = L.layerGroup().addTo(carte);
   }
 
   function positionValide(noeud) {
@@ -152,6 +156,60 @@
     return positionApercu;
   }
 
+  // ---------- Recherche sur la carte (v3-⑥) : zoom + halo « compas » ----------
+
+  function reduireAnimations() {
+    return Boolean(window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+
+  // Zoom « ville » (13) sans jamais dézoomer ; vol doux, coupé si l'utilisateur
+  // préfère réduire les animations.
+  function zoomerSur(lat, lng) {
+    if (!carte || !isFinite(lat) || !isFinite(lng)) { return; }
+    var zoom = Math.max(carte.getZoom(), 13);
+    if (reduireAnimations()) {
+      carte.setView([lat, lng], zoom, { animate: false });
+    } else {
+      carte.flyTo([lat, lng], zoom, { duration: 0.8 });
+    }
+  }
+
+  // Anneau « compas » détaché autour du résultat trouvé : encre neutre, jamais
+  // en concurrence avec les couleurs de type ; un seul à la fois, dans une
+  // couche indépendante des filtres (motif apercu/effacerApercu).
+  function surligner(lat, lng) {
+    if (!carte || !isFinite(lat) || !isFinite(lng)) { return; }
+    coucheSurbrillance.clearLayers();
+    L.circleMarker([lat, lng], {
+      radius: 16,            // marqueur r9 + anneau blanc 2 → anneau détaché
+      color: '#1f2937',      // var(--encre)
+      weight: 3,
+      fill: false,
+      opacity: 0.9,
+      interactive: false,    // ne vole ni clic ni tooltip au marqueur
+      className: 'halo-resultat'
+    }).addTo(coucheSurbrillance);
+    positionSurbrillance = { lat: lat, lng: lng };
+  }
+
+  function effacerSurbrillance() {
+    positionSurbrillance = null;
+    if (coucheSurbrillance) { coucheSurbrillance.clearLayers(); }
+  }
+
+  // Position de la surbrillance courante ({lat,lng} ou null) — observable.
+  function surbrillancePosition() {
+    return positionSurbrillance;
+  }
+
+  // Vue courante ({lat,lng,zoom} ou null) — observable (harnais).
+  function vue() {
+    if (!carte) { return null; }
+    var centre = carte.getCenter();
+    return { lat: centre.lat, lng: centre.lng, zoom: carte.getZoom() };
+  }
+
   window.UltimaCarte = {
     init: init,
     rendre: rendre,
@@ -160,6 +218,11 @@
     apercu: apercu,
     effacerApercu: effacerApercu,
     apercuPosition: apercuPosition,
+    zoomerSur: zoomerSur,
+    surligner: surligner,
+    effacerSurbrillance: effacerSurbrillance,
+    surbrillancePosition: surbrillancePosition,
+    vue: vue,
     COULEURS_TYPE: COULEURS_TYPE
   };
 })();

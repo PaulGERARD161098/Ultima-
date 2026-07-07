@@ -28,12 +28,16 @@
      en liant les fonctionnalités au pivot v2 » → **hybride v1×v2** livré
      (migration 0005 : relations pilotables + journal/relances). La branche
      du pivot intégral reste archivée (`claude/session-protocol-start-opwcmp`).
-  2. **Vercel — dernier geste pour mettre Ultima en ligne** : sur
-     vercel.com/new, importer le repo GitHub `Ultima-` (intégration Git) et
-     cliquer Deploy. Rien d'autre : pas de build, pas d'env à saisir (repli
-     publiable dans l'API depuis PR #13), chaque push sur `main` redéploiera
-     ensuite tout seul. (L'outil Vercel branché côté Léo ne crée pas de
-     projet ; la CLI exigerait un jeton = secret.)
+  2. ✅ **FAIT (2026-07-07)** — Vercel : projet `ultima` créé par import Git
+     (équipe paggerard-boops-projects), déploiements actifs — le bot Vercel
+     commente les PR avec des previews « Ready ». Les previews de branche
+     sont protégées par l'authentification Vercel (bien). Restent à
+     vérifier depuis un navigateur de Paul : l'URL de production, et le
+     header `Permissions-Policy: … microphone=(self) …` (U6) — l'accès
+     sortant vers vercel.app est bloqué par la politique réseau de
+     l'environnement de Léo. Nota : le connecteur Vercel de Léo ne voit pas
+     encore le projet `ultima` (périmètre d'autorisation à rafraîchir si on
+     veut que Léo lise logs/déploiements).
   3. Supabase Auth (dashboard) : inviter le compte de Paul (0 utilisateur en
      base), désactiver « Allow new signups » (complément serveur du
      `shouldCreateUser: false`), configurer Site URL + Redirect URLs sur le
@@ -80,8 +84,19 @@
      (`auth.getUser()`) — recommandation spec data v3-⑤.
   8. Après mise en ligne : confirmer l'usage réel Nominatim (l'amont n'a été
      exercé qu'en stub ; URL/User-Agent conformes à la politique OSM).
-- 🔜 **Boucle suivante** : vivier ROADMAP-SITE (recherche texte + zoom,
-  fiche relation complète, clustering…) — cap v3 ①-⑤ épuisé.
+- 🟡 **Boucle v3-⑥ recherche & zoom (2026-07-07)** : livrée et vérifiée —
+  recherche instantanée sur la Carte (U14-U17 fermés), zoom + halo, dictée
+  en mode remplacement sur ce champ. 8/8 harnais (smoke-recherche 20
+  verdicts) + contre-passe GO (18 indépendants, non-régression géocodage au
+  pixel près). **PR en attente du go de fusion de Paul** (contient aussi le
+  cadrage refonte committé). U18 au vivier (→ boucle R2).
+- ✅ **Refonte Accueil — cadrage acté (2026-07-07)** : vision dictée par
+  Paul (carte de France antique = entrée d'Ultima). Direction visuelle B
+  « Age of Mythology » choisie sur previews ; **auth invisible** actée
+  (session persistante — la suppression de connexion est refusée, sécurité).
+  Cadrage complet : `REFONTE-ACCUEIL.md` (4 boucles R1-R4, risques RA1-RA5) ;
+  référence visuelle : `design/preview-accueil-mythologie.html`. Prochaine
+  boucle après v3-⑥ : **R1 habillage antique**.
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 
