@@ -28,12 +28,16 @@
      en liant les fonctionnalités au pivot v2 » → **hybride v1×v2** livré
      (migration 0005 : relations pilotables + journal/relances). La branche
      du pivot intégral reste archivée (`claude/session-protocol-start-opwcmp`).
-  2. **Vercel — dernier geste pour mettre Ultima en ligne** : sur
-     vercel.com/new, importer le repo GitHub `Ultima-` (intégration Git) et
-     cliquer Deploy. Rien d'autre : pas de build, pas d'env à saisir (repli
-     publiable dans l'API depuis PR #13), chaque push sur `main` redéploiera
-     ensuite tout seul. (L'outil Vercel branché côté Léo ne crée pas de
-     projet ; la CLI exigerait un jeton = secret.)
+  2. ✅ **FAIT (2026-07-07)** — Vercel : projet `ultima` créé par import Git
+     (équipe paggerard-boops-projects), déploiements actifs — le bot Vercel
+     commente les PR avec des previews « Ready ». Les previews de branche
+     sont protégées par l'authentification Vercel (bien). Restent à
+     vérifier depuis un navigateur de Paul : l'URL de production, et le
+     header `Permissions-Policy: … microphone=(self) …` (U6) — l'accès
+     sortant vers vercel.app est bloqué par la politique réseau de
+     l'environnement de Léo. Nota : le connecteur Vercel de Léo ne voit pas
+     encore le projet `ultima` (périmètre d'autorisation à rafraîchir si on
+     veut que Léo lise logs/déploiements).
   3. Supabase Auth (dashboard) : inviter le compte de Paul (0 utilisateur en
      base), désactiver « Allow new signups » (complément serveur du
      `shouldCreateUser: false`), configurer Site URL + Redirect URLs sur le
