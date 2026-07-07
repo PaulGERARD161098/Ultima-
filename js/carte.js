@@ -9,11 +9,20 @@
     chantier: '#7a3fb5'
   };
 
+  // Opacité 0.85 (R1) : traits affirmés sur parchemin ; les statuts de
+  // pilotage idée (0.45) / arrêté (0.35 gris) restent inchangés dans rendre().
   var STYLES_RELATION = {
-    apport_affaires: { color: '#1e6fb8', weight: 3, opacity: 0.75, dashArray: null },
-    sous_traitance: { color: '#e8781e', weight: 3, opacity: 0.75, dashArray: '10 7' },
-    chantier_commun: { color: '#7a3fb5', weight: 3, opacity: 0.75, dashArray: '2 7' }
+    apport_affaires: { color: '#1e6fb8', weight: 3, opacity: 0.85, dashArray: null },
+    sous_traitance: { color: '#e8781e', weight: 3, opacity: 0.85, dashArray: '10 7' },
+    chantier_commun: { color: '#7a3fb5', weight: 3, opacity: 0.85, dashArray: '2 7' }
   };
+
+  // Habillage antique (R1) — cf. design/spec-r1-graphisme.md.
+  // Bounds du voile Ptolémée : constante unique, géo-ancrage en bloc.
+  var BOUNDS_VOILE = [[40.0, -7.8], [52.6, 11.2]];
+  // Classes de palier de zoom posées sur #carte (une seule à la fois) :
+  // elles pilotent en CSS le régime du filtre sépia et l'opacité du voile.
+  var CLASSES_ZOOM = ['zoom-pays', 'zoom-large', 'zoom-region', 'zoom-rue'];
 
   var carte = null;
   var coucheRelations = null;
@@ -45,6 +54,42 @@
     coucheApercu = L.layerGroup().addTo(carte);
     // Surbrillance de recherche (v3-⑥) : au-dessus des nœuds, hors filtres.
     coucheSurbrillance = L.layerGroup().addTo(carte);
+
+    // Voile Ptolémée (R1) : pane décoratif entre tuiles (200) et vecteurs
+    // (400), muet (pointer-events none). Le SVG vit dans index.html
+    // (<template id="voile-ptolemee">, 100 % local) et pan/zoome AVEC la
+    // carte : jamais de désaccord visuel entre contour et points.
+    var paneVoile = carte.createPane('voile');
+    paneVoile.style.zIndex = 300;
+    paneVoile.style.pointerEvents = 'none';
+    paneVoile.classList.add('pane-voile');
+    var gabaritVoile = document.getElementById('voile-ptolemee');
+    if (gabaritVoile && gabaritVoile.content && gabaritVoile.content.firstElementChild) {
+      L.svgOverlay(gabaritVoile.content.firstElementChild, BOUNDS_VOILE,
+        { pane: 'voile', interactive: false }).addTo(carte);
+    }
+
+    // Classe de palier posée à l'init et à chaque zoomend.
+    carte.on('zoomend', appliquerClasseZoom);
+    appliquerClasseZoom();
+  }
+
+  // Palier d'habillage selon le zoom Leaflet : ≤ 5 voile plein, = 6 voile à
+  // 65 %, 7-11 tuiles sépia seules, ≥ 12 sépia allégé (lisibilité des rues).
+  function classeZoom(zoom) {
+    if (zoom <= 5) { return 'zoom-pays'; }
+    if (zoom === 6) { return 'zoom-large'; }
+    if (zoom <= 11) { return 'zoom-region'; }
+    return 'zoom-rue';
+  }
+
+  function appliquerClasseZoom() {
+    if (!carte) { return; }
+    var conteneur = carte.getContainer();
+    var classe = classeZoom(carte.getZoom());
+    CLASSES_ZOOM.forEach(function (c) {
+      conteneur.classList.toggle(c, c === classe);
+    });
   }
 
   function positionValide(noeud) {
@@ -104,10 +149,10 @@
     visibles.forEach(function (n) {
       var marqueur = L.circleMarker([n.lat, n.lng], {
         radius: 9,
-        color: '#ffffff',
+        color: '#5a4118',      // cerne encre (--cerne-carte, R1)
         weight: 2,
         fillColor: COULEURS_TYPE[n.type] || '#555555',
-        fillOpacity: 0.95
+        fillOpacity: 1         // plein (était 0.95) : fini la transparence boueuse sur parchemin
       });
       marqueur.bindTooltip(etiquette(n), { direction: 'top', offset: [0, -8] });
       marqueur.on('click', function () {

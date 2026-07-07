@@ -2484,7 +2484,9 @@
     initDictee(); // micros des champs statiques (sans API : ne fait rien)
     initGeocodage(); // « Trouver sur la carte » du formulaire nœud
     initRecherche(); // recherche nom/ville de l'onglet Carte (v3-⑥)
-    activerOnglet('accueil'); // l'app démarre toujours sur l'Accueil
+    // R1 : l'arrivée se fait sur la carte (la carte est le hub) ;
+    // l'Accueil v3-① reste accessible par son onglet.
+    activerOnglet('carte');
     await initAuth();
     await chargerDonnees();
   }
