@@ -1035,6 +1035,7 @@
     var noeud = trouverNoeud(id);
     ouvrirPanneau('fiche', (noeud && noeud.nom) || 'Fiche');
     rendreFiche();
+    signalerDecouverteDictee();
   }
 
   function ligneDetail(dl, libelle, valeur) {
@@ -1323,6 +1324,7 @@
     champNote.placeholder = "Où j'en suis…";
     champNote.setAttribute('aria-label', 'Nouvelle entrée de journal');
     form.appendChild(champNote);
+    attacherDictee(champNote); // le formulaire est recréé à chaque rendu
 
     var selectCible = document.createElement('select');
     selectCible.setAttribute('aria-label', "Cible de l'entrée");
@@ -1346,6 +1348,7 @@
     champEtape.placeholder = 'Prochaine étape (si relance)';
     champEtape.setAttribute('aria-label', 'Prochaine étape');
     form.appendChild(champEtape);
+    attacherDictee(champEtape);
 
     var champRelance = document.createElement('input');
     champRelance.type = 'date';
@@ -1386,6 +1389,260 @@
     });
 
     conteneur.appendChild(form);
+  }
+
+  // ---------- Dictée vocale par champ (Web Speech API, v3-④) ----------
+  // Progressive enhancement : API absente (Firefox…) → aucun bouton, zéro bruit.
+  // Règles : la dictée AJOUTE (jamais ne remplace), le champ n'est jamais
+  // bloqué (le clavier a toujours le dernier mot), une seule écoute à la fois.
+  // Vie privée : aucune transcription ni valeur de champ en console/logs.
+
+  var Reco = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var dicteeCourante = null;     // une seule écoute globale, jamais de doublon
+  var DICTEE_TIMEOUT_MS = 30000; // filet : jamais d'écoute fantôme
+
+  function annoncerDictee(message) {
+    var region = $('#statut-dictee');
+    if (region) { region.textContent = message; }
+  }
+
+  // Icône micro (spec graphisme) : capsule + arc de captation + pied.
+  function svgMicro() {
+    var svg = svgElement('svg', {
+      viewBox: '0 0 24 24', width: '22', height: '22', 'aria-hidden': 'true',
+      fill: 'none', stroke: 'currentColor', 'stroke-width': '1.8',
+      'stroke-linecap': 'round', 'stroke-linejoin': 'round'
+    });
+    svg.appendChild(svgElement('rect', { x: '9', y: '3.5', width: '6', height: '11', rx: '3' }));
+    svg.appendChild(svgElement('path', { d: 'M5.5 11.5 a6.5 6.5 0 0 0 13 0' }));
+    svg.appendChild(svgElement('path', { d: 'M12 18 v2.5 M9 20.5 h6' }));
+    return svg;
+  }
+
+  // Composant unique : enveloppe un champ texte et lui adjoint le bouton micro.
+  function attacherDictee(champ, libelle) {
+    if (!Reco || !champ || champ.dataset.dicteeAttachee === 'oui') { return; }
+    champ.dataset.dicteeAttachee = 'oui';
+    if (!libelle) {
+      libelle = champ.getAttribute('aria-label') || '';
+      if (!libelle && champ.id) {
+        var etiquette = document.querySelector('label[for="' + champ.id + '"]');
+        libelle = etiquette ? etiquette.textContent.replace(/\s*\*\s*$/, '').trim() : '';
+      }
+    }
+
+    var enveloppe = document.createElement('div');
+    enveloppe.className = 'champ-vocal';
+    champ.parentNode.insertBefore(enveloppe, champ);
+    enveloppe.appendChild(champ);
+
+    var bouton = document.createElement('button');
+    bouton.type = 'button';
+    bouton.className = 'bouton-micro';
+    bouton.title = 'Dicter';
+    bouton.setAttribute('aria-label', 'Dicter — ' + libelle);
+    bouton.setAttribute('aria-pressed', 'false');
+    bouton.appendChild(svgMicro());
+    enveloppe.appendChild(bouton);
+
+    // Ligne d'état visible : double codage couleur + texte pendant l'écoute.
+    var etatLigne = document.createElement('p');
+    etatLigne.className = 'etat-vocal';
+    etatLigne.hidden = true;
+    enveloppe.insertAdjacentElement('afterend', etatLigne);
+
+    bouton.addEventListener('click', function () {
+      basculerDictee(champ, bouton, etatLigne);
+    });
+
+    // Le clavier a toujours le dernier mot : frappe pendant l'écoute → arrêt,
+    // interim retiré, texte finalisé et frappe conservés (isTrusted écarte
+    // l'évènement input que le composant émet lui-même à la fin).
+    champ.addEventListener('keydown', function (evenement) {
+      if (evenement.isTrusted && dicteeCourante && dicteeCourante.champ === champ) {
+        dicteeCourante.annuler(false);
+      }
+    });
+    champ.addEventListener('input', function (evenement) {
+      // Collage, autocomplétion… : la valeur posée par Paul reste telle quelle.
+      if (evenement.isTrusted && dicteeCourante && dicteeCourante.champ === champ) {
+        dicteeCourante.annuler(true);
+      }
+    });
+  }
+
+  function basculerDictee(champ, bouton, etatLigne) {
+    if (dicteeCourante) {
+      // Phase de démarrage (entre start() et onstart) : taps ignorés.
+      if (!dicteeCourante.demarree) { return; }
+      if (dicteeCourante.bouton === bouton) {
+        // Re-tap : arrêt, le résultat déjà prononcé est conservé et inséré.
+        dicteeCourante.arreter();
+        return;
+      }
+      // Autre champ : l'écoute en cours s'arrête proprement, puis celle-ci démarre.
+      dicteeCourante.arreter();
+    }
+    demarrerDictee(champ, bouton, etatLigne);
+  }
+
+  function demarrerDictee(champ, bouton, etatLigne) {
+    var reco = new Reco();
+    reco.lang = 'fr-FR';
+    reco.continuous = false;      // arrêt auto sur silence : le chemin nominal
+    reco.interimResults = true;   // les mots apparaissent pendant que Paul parle
+    reco.maxAlternatives = 1;
+
+    var base = champ.value;
+    var separateur = base && !/\s$/.test(base) ? ' ' : '';
+
+    var session = {
+      champ: champ,
+      bouton: bouton,
+      demarree: false,
+      terminee: false,
+      finalise: '',
+      interim: '',
+      plafondSignale: false,
+      minuteur: null
+    };
+
+    // Tronque au maxlength du champ (l'affectation programmatique l'ignore).
+    function plafonner(valeur) {
+      var max = champ.maxLength;
+      if (max > 0 && valeur.length > max) {
+        valeur = valeur.slice(0, max);
+        if (!session.plafondSignale) {
+          session.plafondSignale = true;
+          toast('Limite de texte atteinte.', 'erreur');
+        }
+      }
+      return valeur;
+    }
+
+    // Valeur affichée = base + séparateur + finalisé + interim : ajout, jamais
+    // remplacement.
+    function afficher() {
+      var texte = session.finalise + session.interim;
+      champ.value = texte ? plafonner(base + separateur + texte) : base;
+    }
+
+    function curseurEnFin() {
+      var fin = champ.value.length;
+      try { champ.setSelectionRange(fin, fin); } catch (e) { /* champ non sélectionnable */ }
+    }
+
+    function reposUi() {
+      bouton.setAttribute('aria-pressed', 'false');
+      bouton.classList.remove('ecoute');
+      etatLigne.hidden = true;
+      etatLigne.textContent = '';
+      if (dicteeCourante === session) { dicteeCourante = null; }
+    }
+
+    function clore() {
+      if (session.minuteur) { clearTimeout(session.minuteur); session.minuteur = null; }
+      session.terminee = true;
+      reposUi();
+    }
+
+    // Fin nominale : texte posé, curseur en fin, écouteurs du champ prévenus.
+    function finaliser() {
+      if (session.terminee) { return; }
+      clore();
+      afficher(); // un interim sans final est conservé (mieux qu'une perte)
+      curseurEnFin();
+      annoncerDictee('Dictée terminée.');
+      champ.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+
+    session.arreter = function () {
+      if (session.terminee) { return; }
+      reposUi(); // repos immédiat : jamais deux écoutes affichées à la fois
+      try { reco.stop(); } catch (e) { finaliser(); }
+    };
+
+    session.annuler = function (garderValeur) {
+      if (session.terminee) { return; }
+      clore();
+      try { reco.abort(); } catch (e) { /* déjà arrêté */ }
+      if (!garderValeur) {
+        session.interim = ''; // l'interim est retiré, le finalisé est conservé
+        afficher();
+        curseurEnFin();
+      }
+      annoncerDictee('Dictée terminée.');
+    };
+
+    reco.onstart = function () { session.demarree = true; };
+
+    reco.onresult = function (evenement) {
+      if (session.terminee) { return; }
+      var interim = '';
+      for (var i = evenement.resultIndex; i < evenement.results.length; i++) {
+        var resultat = evenement.results[i];
+        var transcription = (resultat[0] && resultat[0].transcript) || '';
+        if (resultat.isFinal) { session.finalise += transcription; } else { interim += transcription; }
+      }
+      session.interim = interim;
+      afficher();
+    };
+
+    reco.onerror = function (evenement) {
+      var code = (evenement && evenement.error) || '';
+      if (session.terminee || code === 'aborted') { return; }
+      clore();
+      session.interim = ''; // jamais d'interim fantôme
+      afficher();
+      curseurEnFin();
+      bouton.classList.add('erreur');
+      setTimeout(function () { bouton.classList.remove('erreur'); }, 1200);
+      if (code === 'no-speech') {
+        toast("Je n'ai rien entendu. Touchez le micro et réessayez.", 'erreur');
+      } else if (code === 'not-allowed' || code === 'service-not-allowed') {
+        toast('Micro refusé. Autorisez le micro dans les réglages du navigateur, ou tapez votre texte.', 'erreur');
+      } else {
+        toast("La dictée n'a pas abouti. Réessayez, ou tapez votre texte.", 'erreur');
+      }
+    };
+
+    reco.onend = function () { finaliser(); };
+
+    dicteeCourante = session;
+    bouton.setAttribute('aria-pressed', 'true');
+    bouton.classList.add('ecoute');
+    etatLigne.textContent = 'Je vous écoute…';
+    etatLigne.hidden = false;
+    annoncerDictee('Je vous écoute…');
+    session.minuteur = setTimeout(function () { session.arreter(); }, DICTEE_TIMEOUT_MS);
+    try {
+      reco.start(); // la demande d'autorisation micro n'arrive qu'ici, jamais au chargement
+    } catch (e) {
+      clore();
+      toast("La dictée n'a pas abouti. Réessayez, ou tapez votre texte.", 'erreur');
+    }
+  }
+
+  // Région d'annonce partagée + micros des champs statiques du panneau.
+  function initDictee() {
+    if (!Reco) { return; } // API absente : l'interface d'avant, complète, sans bruit
+    var region = document.createElement('div');
+    region.id = 'statut-dictee';
+    region.className = 'visuellement-cache';
+    region.setAttribute('aria-live', 'polite');
+    document.body.appendChild(region);
+    attacherDictee($('#noeud-notes'), 'Notes');
+    attacherDictee($('#relation-notes'), 'Note de la relation');
+  }
+
+  // Aide contextuelle : un seul toast de découverte, à la première fiche.
+  function signalerDecouverteDictee() {
+    if (!Reco) { return; }
+    try {
+      if (window.localStorage.getItem('ultima-dictee-vue')) { return; }
+      window.localStorage.setItem('ultima-dictee-vue', '1');
+    } catch (e) { return; } // stockage indisponible : pas d'aide, pas d'erreur
+    toast("Nouveau : touchez le micro d'un champ pour dicter.");
   }
 
   // ---------- Formulaire nœud (ajout / édition) ----------
@@ -1660,6 +1917,7 @@
       window.UltimaCarte.init('carte', { surClicNoeud: ouvrirFiche });
     }
     brancherEvenements();
+    initDictee(); // micros des champs statiques (sans API : ne fait rien)
     activerOnglet('accueil'); // l'app démarre toujours sur l'Accueil
     await initAuth();
     await chargerDonnees();

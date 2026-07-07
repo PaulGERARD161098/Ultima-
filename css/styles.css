@@ -27,6 +27,7 @@
   --accent-fonce: #17578f;
   --danger: #b3261e;
   --succes: #1f7a3f;
+  --accent-voile: rgba(30, 111, 184, 0.4); /* halo/anneau d'écoute — décor uniquement */
 
   /* Couleurs par type de nœud (alignées avec js/carte.js) */
   --type-artisan: #e8781e;
@@ -1284,4 +1285,88 @@ textarea:focus-visible,
   .accueil-raccourcis { grid-area: raccourcis; }
 
   .accueil-bloc-etat { grid-column: 1 / -1; }
+}
+
+/* ---------- Dictée vocale : bouton micro par champ (v3-④) ---------- */
+
+.champ-vocal {
+  position: relative;
+}
+
+.champ-vocal > input,
+.champ-vocal > textarea {
+  width: 100%;
+  padding-right: 48px; /* réserve du micro : 44px de bouton + 4px d'air */
+}
+
+.bouton-micro {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 44px;  /* cible tactile ≥ 44px, desktop ET mobile */
+  height: 44px; /* = min-height des inputs existants */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: 8px; /* rayon des champs existants */
+  background: transparent;
+  color: var(--encre-douce);
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease,
+              transform 120ms ease;
+}
+
+.bouton-micro:hover {
+  background: #eef1f4; /* hover neutre existant (boutons secondaires) */
+  color: var(--encre);
+}
+
+.bouton-micro:active {
+  transform: scale(0.9); /* l'enfoncement « jouet » */
+}
+
+.bouton-micro:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px; /* l'anneau reste DANS le champ */
+}
+
+.bouton-micro.ecoute {
+  background: var(--accent);
+  color: var(--blanc);
+  animation: pulsation-vocale 1.6s ease-out infinite;
+}
+
+@keyframes pulsation-vocale {
+  0%   { box-shadow: 0 0 0 0 var(--accent-voile); }
+  70%  { box-shadow: 0 0 0 10px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+/* Flash bref (1,2 s) après un échec ; le message d'erreur passe par les toasts. */
+.bouton-micro.erreur {
+  background: #fbeceb; /* fond hover danger existant (.bouton-danger:hover) */
+  color: var(--danger);
+}
+
+/* Ligne d'état sous le champ (« Je vous écoute… ») : couleur + texte. */
+.etat-vocal {
+  margin: 0.25rem 0 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent-fonce);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bouton-micro.ecoute {
+    animation: none;
+    box-shadow: 0 0 0 3px var(--accent-voile); /* anneau statique */
+  }
+  .bouton-micro {
+    transition: none;
+  }
+  .bouton-micro:active {
+    transform: none;
+  }
 }
