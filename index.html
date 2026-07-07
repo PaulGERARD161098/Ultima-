@@ -137,6 +137,38 @@
             <label for="noeud-adresse">Adresse</label>
             <input id="noeud-adresse" type="text" maxlength="250">
           </div>
+          <!-- Géocodage (v3-⑤) : une intention = une requête, jamais à la frappe. -->
+          <div id="geo-zone" class="champ champ-geo">
+            <button type="button" id="geo-bouton" class="bouton bouton-secondaire bouton-geo-trouver">
+              <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 21c-4.2-3.7-6.5-7-6.5-10.3a6.5 6.5 0 0 1 13 0C18.5 14 16.2 17.3 12 21Z"/>
+                <circle cx="12" cy="10.5" r="2.5"/>
+              </svg>
+              <span id="geo-bouton-libelle">Trouver sur la carte</span>
+            </button>
+            <ul id="geo-suggestions" class="liste-adresses" role="group" aria-label="Adresses trouvées" hidden></ul>
+            <p id="geo-message" class="geo-message" role="status"></p>
+            <div id="geo-confirmation" class="geo-confirmation-ligne" tabindex="-1" hidden>
+              <span class="geo-confirmation">
+                <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg>
+                <span id="geo-confirmation-texte" class="geo-confirmation-texte"></span><span id="geo-confirmation-adresse" class="geo-confirmation-adresse"></span>
+              </span>
+              <button type="button" id="geo-changer" class="bouton bouton-secondaire">Changer</button>
+            </div>
+          </div>
+          <details id="geo-details" class="geo-details">
+            <summary>Coordonnées précises (avancé)</summary>
+            <div class="champs-doubles">
+              <div class="champ">
+                <label for="noeud-lat">Latitude</label>
+                <input id="noeud-lat" type="number" step="any" min="-90" max="90">
+              </div>
+              <div class="champ">
+                <label for="noeud-lng">Longitude</label>
+                <input id="noeud-lng" type="number" step="any" min="-180" max="180">
+              </div>
+            </div>
+          </details>
           <div class="champ">
             <label for="noeud-telephone">Téléphone</label>
             <input id="noeud-telephone" type="tel" maxlength="30" autocomplete="tel">
@@ -144,16 +176,6 @@
           <div class="champ">
             <label for="noeud-email">E-mail</label>
             <input id="noeud-email" type="email" maxlength="200" autocomplete="off">
-          </div>
-          <div class="champs-doubles">
-            <div class="champ">
-              <label for="noeud-lat">Latitude</label>
-              <input id="noeud-lat" type="number" step="any" min="-90" max="90">
-            </div>
-            <div class="champ">
-              <label for="noeud-lng">Longitude</label>
-              <input id="noeud-lng" type="number" step="any" min="-180" max="180">
-            </div>
           </div>
           <div class="champ">
             <label for="noeud-notes">Notes</label>

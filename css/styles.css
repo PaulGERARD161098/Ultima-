@@ -1370,3 +1370,188 @@ textarea:focus-visible,
     transform: none;
   }
 }
+
+/* ---------- Géocodage d'adresse : « Trouver sur la carte » (v3-⑤) ---------- */
+
+/* Ancre de la liste flottante : le bloc du composant est le référent. */
+.champ-geo { position: relative; }
+
+/* Déclencheur : bouton secondaire existant + épingle en trait currentColor. */
+.bouton-geo-trouver {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  align-self: flex-start;
+}
+
+/* Recherche en cours / repos anti-rafale : état inactif (exception WCAG 1.4.3). */
+.bouton-geo-trouver[disabled] {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.bouton-geo-trouver[disabled]:hover { background: var(--blanc); }
+
+/* Liste de suggestions : panneau blanc flottant, registre des listes existantes. */
+.liste-adresses {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 4px);           /* 4px d'air sous le composant */
+  z-index: 10;                     /* au-dessus des champs suivants du panneau */
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--blanc);
+  border: 1px solid var(--bordure);
+  border-radius: 10px;             /* rayon des listes existantes (.liste-contacts) */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  max-height: 268px;               /* ~5 items : une liste, pas un mur */
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .liste-adresses { animation: apparition-adresses 120ms ease-out; }
+  @keyframes apparition-adresses {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: none; }
+  }
+}
+
+/* Intitulé « Choisissez la bonne adresse : » en tête de liste. */
+.liste-adresses-titre {
+  display: block;
+  padding: 0.55rem 0.75rem 0.2rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--encre-douce);
+}
+
+/* Item : mêmes cotes que .item-contact, vrai bouton pleine largeur. */
+.item-adresse {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  width: 100%;
+  min-height: 44px;                /* cible tactile, desktop ET mobile */
+  padding: 0.55rem 0.75rem;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #edf0f3;
+  text-align: left;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--encre);
+  cursor: pointer;
+}
+
+.liste-adresses li:last-child .item-adresse { border-bottom: none; }
+
+.item-adresse:hover { background: #f2f6fa; }
+
+.item-adresse:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;            /* l'anneau reste dans la liste */
+}
+
+/* Petite épingle de repérage en tête d'item (écho du déclencheur). */
+.item-adresse-lieu {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--encre-douce);       /* décor lisible, jamais porteur seul */
+}
+
+.item-adresse-textes { flex: 1; min-width: 0; }
+
+.item-adresse-principale {         /* voie + numéro : ce que Paul a tapé */
+  display: block;
+  font-weight: 600;
+  color: var(--encre);
+  overflow-wrap: anywhere;
+}
+
+.item-adresse-detail {             /* ville, code postal, contexte */
+  display: block;
+  font-size: 0.82rem;
+  color: var(--encre-douce);
+}
+
+/* Zone de message inline (role=status) : relisible en corrigeant la saisie. */
+.geo-message {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+  color: var(--encre-douce);
+}
+
+.geo-message:empty { display: none; }
+
+/* Ligne de confirmation : badge vert (registre badge-lead) + « Changer ». */
+.geo-confirmation-ligne {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+  min-width: 0;
+}
+
+.geo-confirmation-ligne .bouton { flex-shrink: 0; }
+
+.geo-confirmation {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  max-width: 100%;
+  min-width: 0;
+  padding: 0.25rem 0.65rem;        /* padding .badge */
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  background: #ddf2e4;             /* fond badge-lead */
+  color: #135430;                  /* encre badge-lead — 7,6:1 */
+  border: 1px solid #aeddc0;       /* bordure badge-lead */
+}
+
+.geo-confirmation svg { flex-shrink: 0; }
+
+.geo-confirmation-texte {          /* « Position : » ne se replie jamais */
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.geo-confirmation-adresse {        /* l'adresse retenue, tronquée proprement */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .geo-confirmation-ligne { animation: apparition-confirmation 120ms ease-out; }
+  @keyframes apparition-confirmation {
+    from { opacity: 0; transform: translateY(-2px); }
+    to   { opacity: 1; transform: none; }
+  }
+}
+
+/* Repli « Coordonnées précises (avancé) » : le jargon sort du chemin principal. */
+.geo-details { margin-bottom: 0.75rem; }
+
+.geo-details summary {
+  min-height: 44px;                /* cible tactile du dépliage */
+  padding: 0.6rem 0.2rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--encre-douce);
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.geo-details summary:hover { color: var(--encre); }
+
+.geo-details summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.geo-details .champs-doubles { margin-top: 0.25rem; }

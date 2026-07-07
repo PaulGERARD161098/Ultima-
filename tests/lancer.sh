@@ -17,14 +17,18 @@ if [ ! -d ../node_modules/playwright ]; then
   (cd .. && npm i --no-save --no-package-lock --silent playwright@1.49)
 fi
 
-# 2. Serveur statique sur la racine du repo.
+# 2. Unitaires Node purs (zéro réseau, zéro navigateur).
+echo "=== unit-geocode.mjs ==="
+node unit-geocode.mjs
+
+# 3. Serveur statique sur la racine du repo.
 (cd .. && python3 -m http.server 8123 >/dev/null 2>&1) &
 SERVEUR=$!
 trap 'kill $SERVEUR 2>/dev/null || true' EXIT
 sleep 1
 
-# 3. Les harnais (chacun sort en erreur si un verdict échoue).
-for h in smoke-flux-fiche.mjs smoke-accueil.mjs smoke-accueil-etats.mjs smoke-contacts.mjs smoke-dictee.mjs; do
+# 4. Les harnais navigateur (chacun sort en erreur si un verdict échoue).
+for h in smoke-flux-fiche.mjs smoke-accueil.mjs smoke-accueil-etats.mjs smoke-contacts.mjs smoke-dictee.mjs smoke-geocode.mjs; do
   echo "=== $h ==="
   node "$h"
 done
