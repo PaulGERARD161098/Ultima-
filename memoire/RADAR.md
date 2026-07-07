@@ -37,6 +37,24 @@
   dans le repo AVANT de dépendre d'un outil externe. Synchro Notion à
   rattraper à la prochaine session (rien de perdu : le repo fait foi).
 
+## Rétrospective 2026-07-07 (session « go reprise » — v3-④⑤⑥ + refonte cadrée)
+
+- **Confirmé ×3** : la chaîne specs parallèles → arbitrage Léo → implé →
+  contre-passe a livré 3 boucles fusionnées en une session (dictée,
+  géocodage, recherche) sans un seul NO-GO ; les previews AVANT code
+  (refonte accueil) ont permis à Paul de trancher en une question.
+- **Événement majeur** : Ultima est EN LIGNE (import Vercel fait par Paul,
+  bot actif sur les PR, previews protégées). Limites consignées : réseau de
+  l'environnement bloque vercel.app, connecteur Vercel sans accès au projet.
+- **Friction → leçon** : une session peut fermer pendant qu'une spec est en
+  vol → tout livrable d'agent qui conditionne la reprise doit être committé
+  dès réception ; à la clôture, consigner précisément quoi relancer (fait
+  pour R1). Les cadrages multi-sessions vont dans le repo (REFONTE-ACCUEIL.md),
+  jamais seulement en scratchpad.
+- **Sécurité tenue face à une demande orale** : « pas besoin de connexion »
+  → alternative « auth invisible » proposée et validée — refuser en
+  expliquant + offrir mieux fonctionne.
+
 ## Rétrospective 2026-07-06 (session solo)
 
 - **Confirmé** : la chaîne agents (spec → implé → contre-passe) tient la
