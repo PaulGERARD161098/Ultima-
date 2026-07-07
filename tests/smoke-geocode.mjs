@@ -84,7 +84,7 @@ await page.waitForTimeout(300);
 
 const bouton = page.locator('#geo-bouton');
 const libelle = page.locator('#geo-bouton-libelle');
-const listeItems = page.locator('#geo-suggestions .item-adresse');
+const listeItems = page.locator('#geo-suggestions .item-resultat');
 const confirmation = page.locator('#geo-confirmation');
 
 // 1. geocodeBoutonPresent — bouton entre Adresse et Téléphone, lat/lng repliés.
@@ -121,7 +121,7 @@ await page.waitForTimeout(150); // requête en vol (fixture retardée)
 const pendantRequete = (await bouton.isDisabled()) &&
   (await libelle.textContent()) === 'Recherche…' &&
   (await page.locator('#geo-zone').getAttribute('aria-busy')) === 'true';
-await page.locator('#geo-suggestions .item-adresse').first().waitFor({ timeout: 3000 });
+await page.locator('#geo-suggestions .item-resultat').first().waitFor({ timeout: 3000 });
 verdicts.geocodeRequeteUnique = pendantRequete && stub.compteur === 1;
 stub.delaiMs = 0;
 
@@ -132,10 +132,10 @@ verdicts.geocodeCadence = encoreDesactive && !(await bouton.isDisabled());
 
 // 5. geocodeListeTrois — 3 suggestions, intitulé, annonce, focus 1ʳᵉ suggestion.
 verdicts.geocodeListeTrois = (await listeItems.count()) === 3 &&
-  (await page.locator('.liste-adresses-titre').textContent()) === 'Choisissez la bonne adresse :' &&
+  (await page.locator('.liste-resultats-titre').textContent()) === 'Choisissez la bonne adresse :' &&
   (await messageStatut()) === '3 adresses trouvées.' &&
   (await page.evaluate(() => {
-    const items = document.querySelectorAll('#geo-suggestions .item-adresse');
+    const items = document.querySelectorAll('#geo-suggestions .item-resultat');
     return document.activeElement === items[0];
   }));
 bboxes.item = await listeItems.first().boundingBox();
@@ -144,7 +144,7 @@ bboxes.item = await listeItems.first().boundingBox();
 // panneau (focus rendu au bouton), Entrée sélectionne.
 await page.keyboard.press('Tab');
 const tabDeuxieme = await page.evaluate(() => {
-  const items = document.querySelectorAll('#geo-suggestions .item-adresse');
+  const items = document.querySelectorAll('#geo-suggestions .item-resultat');
   return document.activeElement === items[1];
 });
 await page.keyboard.press('Escape');

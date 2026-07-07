@@ -356,6 +356,11 @@
     }
     if (nom === 'accueil') { rendreAccueil(); }
     if (nom === 'contacts') { rendreContacts(); }
+    // Changement d'onglet : liste de recherche fermée, halo effacé, texte
+    // du champ conservé (règles d'état v3-⑥).
+    fermerListeRecherche();
+    messageRecherche('');
+    window.UltimaCarte.effacerSurbrillance();
   }
 
   // ---------- Accueil : ouverture d'une cible ----------
@@ -868,6 +873,13 @@
     return (texte || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   }
 
+  // Pr\u00e9dicat de recherche partag\u00e9 (Contacts + recherche carte) : nom et ville
+  // uniquement, correspondance par inclusion sur texte normalis\u00e9.
+  function correspondAuTerme(noeud, terme) {
+    return normaliserTexte(noeud.nom).indexOf(terme) !== -1 ||
+           normaliserTexte(noeud.ville).indexOf(terme) !== -1;
+  }
+
   function contactAPosition(noeud) {
     return typeof noeud.lat === 'number' && isFinite(noeud.lat) &&
            typeof noeud.lng === 'number' && isFinite(noeud.lng);
@@ -992,8 +1004,7 @@
     var terme = normaliserTexte(brut);
     var visibles = etat.noeuds.filter(function (n) {
       if (!terme) { return true; }
-      return normaliserTexte(n.nom).indexOf(terme) !== -1 ||
-             normaliserTexte(n.ville).indexOf(terme) !== -1;
+      return correspondAuTerme(n, terme);
     }).sort(function (a, b) {
       return (a.nom || '').localeCompare(b.nom || '', 'fr');
     });
@@ -1033,6 +1044,9 @@
 
   function ouvrirFiche(id) {
     etat.noeudCourant = id;
+    // Toute ouverture de fiche efface le halo de recherche ; la sélection d'un
+    // résultat le repose juste après (un seul halo, toujours à jour).
+    window.UltimaCarte.effacerSurbrillance();
     reinitialiserGeo(); // sortie du formulaire (enregistrement ou annulation)
     var noeud = trouverNoeud(id);
     ouvrirPanneau('fiche', (noeud && noeud.nom) || 'Fiche');
@@ -1422,9 +1436,13 @@
   }
 
   // Composant unique : enveloppe un champ texte et lui adjoint le bouton micro.
-  function attacherDictee(champ, libelle) {
+  // options.remplacer (v3-⑥, champ de recherche) : chaque dictée REMPLACE le
+  // contenu du champ — une recherche est UNE intention, pas un texte composé.
+  // Défaut (sans option) : ajout, comportement v3-④ inchangé.
+  function attacherDictee(champ, libelle, options) {
     if (!Reco || !champ || champ.dataset.dicteeAttachee === 'oui') { return; }
     champ.dataset.dicteeAttachee = 'oui';
+    if (options && options.remplacer) { champ.dataset.dicteeMode = 'remplacement'; }
     if (!libelle) {
       libelle = champ.getAttribute('aria-label') || '';
       if (!libelle && champ.id) {
@@ -1495,6 +1513,7 @@
     reco.interimResults = true;   // les mots apparaissent pendant que Paul parle
     reco.maxAlternatives = 1;
 
+    var remplacer = champ.dataset.dicteeMode === 'remplacement';
     var base = champ.value;
     var separateur = base && !/\s$/.test(base) ? ' ' : '';
 
@@ -1522,11 +1541,16 @@
       return valeur;
     }
 
-    // Valeur affichée = base + séparateur + finalisé + interim : ajout, jamais
-    // remplacement.
+    // Valeur affichée. Mode ajout (défaut) : base + séparateur + dicté.
+    // Mode remplacement : le texte dicté remplace tout — mais tant que rien
+    // n'est dicté (ou en cas d'erreur), la valeur d'origine reste intacte.
     function afficher() {
       var texte = session.finalise + session.interim;
-      champ.value = texte ? plafonner(base + separateur + texte) : base;
+      if (remplacer) {
+        champ.value = texte ? plafonner(texte) : base;
+      } else {
+        champ.value = texte ? plafonner(base + separateur + texte) : base;
+      }
     }
 
     function curseurEnFin() {
@@ -1635,6 +1659,9 @@
     document.body.appendChild(region);
     attacherDictee($('#noeud-notes'), 'Notes');
     attacherDictee($('#relation-notes'), 'Note de la relation');
+    // Recherche carte (v3-⑥) : dictée en mode remplacement — une transcription
+    // imparfaite ne corrompt rien, le résultat est visible et gratuit à corriger.
+    attacherDictee($('#recherche-carte'), null, { remplacer: true });
   }
 
   // Aide contextuelle : un seul toast de découverte, à la première fiche.
@@ -1778,21 +1805,21 @@
     var item = document.createElement('li');
     var bouton = document.createElement('button');
     bouton.type = 'button';
-    bouton.className = 'item-adresse';
+    bouton.className = 'item-resultat';
     var lieu = document.createElement('span');
-    lieu.className = 'item-adresse-lieu';
+    lieu.className = 'item-resultat-avant';
     lieu.appendChild(svgEpingle(16));
     bouton.appendChild(lieu);
     var textes = document.createElement('span');
-    textes.className = 'item-adresse-textes';
+    textes.className = 'item-resultat-textes';
     var virgule = resultat.libelle.indexOf(',');
     var principale = document.createElement('span');
-    principale.className = 'item-adresse-principale';
+    principale.className = 'item-resultat-principale';
     principale.textContent = virgule === -1 ? resultat.libelle : resultat.libelle.slice(0, virgule);
     textes.appendChild(principale);
     if (virgule !== -1) {
       var detail = document.createElement('span');
-      detail.className = 'item-adresse-detail';
+      detail.className = 'item-resultat-detail';
       detail.textContent = resultat.libelle.slice(virgule + 1).trim();
       textes.appendChild(detail);
     }
@@ -1806,12 +1833,12 @@
     var liste = $('#geo-suggestions');
     liste.textContent = '';
     var titre = document.createElement('li');
-    titre.className = 'liste-adresses-titre';
+    titre.className = 'liste-resultats-titre';
     titre.textContent = 'Choisissez la bonne adresse :';
     liste.appendChild(titre);
     resultats.forEach(function (r) { liste.appendChild(itemSuggestionGeo(r)); });
     liste.hidden = false;
-    var premier = liste.querySelector('.item-adresse');
+    var premier = liste.querySelector('.item-resultat');
     if (premier) { premier.focus(); } // l'action attendue est de choisir
   }
 
@@ -1919,6 +1946,265 @@
         evenement.stopPropagation();
         fermerListeGeo(true);
       }
+    });
+  }
+
+  // ---------- Recherche sur la carte (v3-⑥) : nom + ville, zoom + halo ----------
+  // Client-side sur les nœuds déjà chargés, filtres IGNORÉS (une question
+  // nominative gagne toujours sur une vue de tournée). Zéro endpoint.
+
+  var RECHERCHE_SEUIL = 2;   // en dessous : liste fermée, jamais d'état d'erreur
+  var RECHERCHE_PLAFOND = 5; // ~280 px : la liste tient sous le pouce sans scroll
+
+  function messageRecherche(texte) {
+    var zone = $('#recherche-message');
+    if (zone) { zone.textContent = texte || ''; }
+  }
+
+  function fermerListeRecherche() {
+    var liste = $('#recherche-resultats');
+    if (!liste) { return; }
+    liste.hidden = true;
+    liste.textContent = '';
+    $('#recherche-carte').setAttribute('aria-expanded', 'false');
+  }
+
+  function majCroixRecherche() {
+    $('#recherche-effacer').hidden = $('#recherche-carte').value === '';
+  }
+
+  // Vidage complet : champ, croix, liste, message, halo. La carte reste où
+  // elle est (Paul travaille peut-être sur la zone trouvée).
+  function viderRecherche() {
+    $('#recherche-carte').value = '';
+    majCroixRecherche();
+    fermerListeRecherche();
+    messageRecherche('');
+    window.UltimaCarte.effacerSurbrillance();
+  }
+
+  // Le nœud est-il actuellement visible avec les filtres métier ?
+  function noeudVisibleAvecFiltres(noeud) {
+    return etat.filtres.types.has(noeud.type) && etat.filtres.statuts.has(noeud.statut);
+  }
+
+  // Tri déterministe : nom commençant par le terme, puis nom contenant,
+  // puis ville correspondante ; à égalité, ordre alphabétique fr (Contacts).
+  function rangRecherche(noeud, terme) {
+    var nom = normaliserTexte(noeud.nom);
+    if (nom.indexOf(terme) === 0) { return 0; }
+    if (nom.indexOf(terme) !== -1) { return 1; }
+    return 2;
+  }
+
+  // Sélection d'un résultat : zoom + halo + fiche (l'ouverture de fiche
+  // efface le halo précédent, on le repose après). Nœud sans position :
+  // fiche seule, carte immobile, aucun halo.
+  function choisirResultatRecherche(noeud) {
+    fermerListeRecherche();
+    var masque = !noeudVisibleAvecFiltres(noeud);
+    if (contactAPosition(noeud)) {
+      window.UltimaCarte.zoomerSur(noeud.lat, noeud.lng);
+      ouvrirFiche(noeud.id);
+      window.UltimaCarte.surligner(noeud.lat, noeud.lng);
+      if (masque) {
+        // On ne modifie JAMAIS les filtres en douce : on explique.
+        messageRecherche('Ce contact est masqué par vos filtres — le repère montre son emplacement.');
+      }
+    } else {
+      ouvrirFiche(noeud.id);
+    }
+    $('#panneau-titre').focus();
+  }
+
+  // Échec de recherche → début de création : formulaire nœud, Nom pré-rempli
+  // (texte tel que saisi), curseur en fin de champ.
+  function ajouterDepuisRecherche(brut) {
+    if (!etat.modeDemo && !etat.session) {
+      toast('Connectez-vous pour ajouter un contact.', 'erreur');
+      return;
+    }
+    fermerListeRecherche();
+    messageRecherche('');
+    ouvrirFormDepuisAccueil(null);
+    var champNom = $('#noeud-nom');
+    champNom.value = brut;
+    champNom.focus();
+    try { champNom.setSelectionRange(brut.length, brut.length); } catch (e) { /* non sélectionnable */ }
+  }
+
+  function ligneInfoRecherche(texte) {
+    var item = document.createElement('li');
+    item.className = 'liste-resultats-vide';
+    item.textContent = texte;
+    return item;
+  }
+
+  function itemResultatRecherche(noeud) {
+    var item = document.createElement('li');
+    var bouton = document.createElement('button');
+    bouton.type = 'button';
+    bouton.className = 'item-resultat';
+    bouton.dataset.resultat = 'oui'; // vrai résultat (≠ bouton « + Ajouter »)
+
+    var avant = document.createElement('span');
+    avant.className = 'item-resultat-avant';
+    var pastille = document.createElement('span');
+    pastille.className = 'pastille pastille-' + noeud.type;
+    avant.appendChild(pastille);
+    bouton.appendChild(avant);
+
+    var textes = document.createElement('span');
+    textes.className = 'item-resultat-textes';
+    var principale = document.createElement('span');
+    principale.className = 'item-resultat-principale';
+    principale.textContent = noeud.nom || '(sans nom)';
+    textes.appendChild(principale);
+    var detail = document.createElement('span');
+    detail.className = 'item-resultat-detail';
+    detail.textContent = (LIBELLES_TYPE[noeud.type] || noeud.type) +
+      (noeud.ville ? ' · ' + noeud.ville : '');
+    textes.appendChild(detail);
+    bouton.appendChild(textes);
+
+    if (!contactAPosition(noeud)) {
+      var aPlacer = document.createElement('span');
+      aPlacer.className = 'badge-a-placer';
+      aPlacer.textContent = 'À placer';
+      bouton.appendChild(aPlacer);
+    }
+
+    bouton.addEventListener('click', function () { choisirResultatRecherche(noeud); });
+    item.appendChild(bouton);
+    return item;
+  }
+
+  // Rendu en direct à chaque frappe (la dictée EST une frappe : l'événement
+  // input synthétique passe par ici aussi).
+  function rendreRecherche() {
+    var champ = $('#recherche-carte');
+    var liste = $('#recherche-resultats');
+    majCroixRecherche();
+    window.UltimaCarte.effacerSurbrillance(); // nouvelle saisie : halo effacé
+
+    var brut = champ.value.trim();
+    var terme = normaliserTexte(brut);
+    if (terme.length < RECHERCHE_SEUIL) {
+      fermerListeRecherche();
+      messageRecherche('');
+      return;
+    }
+
+    var correspondants = etat.noeuds.filter(function (n) {
+      return correspondAuTerme(n, terme);
+    }).sort(function (a, b) {
+      var ecart = rangRecherche(a, terme) - rangRecherche(b, terme);
+      if (ecart !== 0) { return ecart; }
+      return (a.nom || '').localeCompare(b.nom || '', 'fr');
+    });
+
+    liste.textContent = '';
+    if (correspondants.length === 0) {
+      liste.appendChild(ligneInfoRecherche('Aucun contact ne correspond à “' + brut + '”.'));
+      var itemAjout = document.createElement('li');
+      var boutonAjout = document.createElement('button');
+      boutonAjout.type = 'button';
+      boutonAjout.className = 'item-resultat item-resultat-ajouter';
+      boutonAjout.textContent = '+ Ajouter “' + tronquer(brut, 40) + '” comme contact';
+      boutonAjout.addEventListener('click', function () { ajouterDepuisRecherche(brut); });
+      itemAjout.appendChild(boutonAjout);
+      liste.appendChild(itemAjout);
+      messageRecherche('Aucun contact trouvé.');
+    } else {
+      correspondants.slice(0, RECHERCHE_PLAFOND).forEach(function (n) {
+        liste.appendChild(itemResultatRecherche(n));
+      });
+      if (correspondants.length > RECHERCHE_PLAFOND) {
+        var reste = correspondants.length - RECHERCHE_PLAFOND;
+        liste.appendChild(ligneInfoRecherche(
+          'et ' + reste + (reste > 1 ? ' autres' : ' autre') + ' — précisez votre recherche'));
+      }
+      messageRecherche(correspondants.length +
+        (correspondants.length > 1 ? ' contacts trouvés.' : ' contact trouvé.'));
+    }
+    liste.hidden = false;
+    champ.setAttribute('aria-expanded', 'true');
+  }
+
+  function initRecherche() {
+    var champ = $('#recherche-carte');
+    if (!champ) { return; }
+    var liste = $('#recherche-resultats');
+    var conteneur = champ.closest('.champ-recherche-carte');
+
+    champ.addEventListener('input', rendreRecherche);
+
+    $('#recherche-effacer').addEventListener('click', function () {
+      viderRecherche();
+      champ.focus();
+    });
+
+    // Clavier dans le champ : ↓ ouvre la navigation, Entrée = 1er résultat,
+    // Échap en deux temps (liste → texte) sans jamais piéger (3e temps :
+    // propagation au gestionnaire global qui ferme le panneau).
+    champ.addEventListener('keydown', function (evenement) {
+      if (evenement.key === 'ArrowDown') {
+        var premierBouton = liste.querySelector('button');
+        if (!liste.hidden && premierBouton) {
+          evenement.preventDefault();
+          premierBouton.focus();
+        }
+      } else if (evenement.key === 'Enter') {
+        // Seul un vrai résultat se sélectionne à l'Entrée (jamais « + Ajouter »).
+        var premierResultat = liste.querySelector('.item-resultat[data-resultat]');
+        if (!liste.hidden && premierResultat) {
+          evenement.preventDefault();
+          premierResultat.click();
+        }
+      } else if (evenement.key === 'Escape') {
+        if (!liste.hidden) {
+          evenement.preventDefault(); // le type=search ne vide pas le texte
+          evenement.stopPropagation(); // le panneau ne se ferme pas
+          fermerListeRecherche();
+          messageRecherche('');
+        } else if (champ.value !== '') {
+          evenement.preventDefault();
+          evenement.stopPropagation();
+          viderRecherche();
+        }
+        // Champ vide et liste fermée : l'événement se propage (fermeture panneau).
+      }
+    });
+
+    // Clavier dans la liste : ↓/↑ circulent, ↑ sur le 1er rend le champ,
+    // Échap ferme la liste et rend le focus au champ.
+    liste.addEventListener('keydown', function (evenement) {
+      if (evenement.key === 'Escape') {
+        evenement.preventDefault();
+        evenement.stopPropagation();
+        champ.focus();
+        fermerListeRecherche();
+        messageRecherche('');
+        return;
+      }
+      if (evenement.key !== 'ArrowDown' && evenement.key !== 'ArrowUp') { return; }
+      var boutons = Array.prototype.slice.call(liste.querySelectorAll('button'));
+      var index = boutons.indexOf(document.activeElement);
+      if (index === -1) { return; }
+      evenement.preventDefault();
+      if (evenement.key === 'ArrowDown') {
+        if (index < boutons.length - 1) { boutons[index + 1].focus(); }
+      } else if (index === 0) {
+        champ.focus();
+      } else {
+        boutons[index - 1].focus();
+      }
+    });
+
+    // Sortie du composant (Tab, tap ailleurs) : la liste se referme.
+    conteneur.addEventListener('focusout', function (evenement) {
+      if (evenement.relatedTarget && conteneur.contains(evenement.relatedTarget)) { return; }
+      fermerListeRecherche();
     });
   }
 
@@ -2197,6 +2483,7 @@
     brancherEvenements();
     initDictee(); // micros des champs statiques (sans API : ne fait rien)
     initGeocodage(); // « Trouver sur la carte » du formulaire nœud
+    initRecherche(); // recherche nom/ville de l'onglet Carte (v3-⑥)
     activerOnglet('accueil'); // l'app démarre toujours sur l'Accueil
     await initAuth();
     await chargerDonnees();
