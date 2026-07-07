@@ -30,7 +30,13 @@
    corps 100 Ko, RLS initplan, CSP connect-src projet). Advisors security :
    0 lint.
 3. Rate-limit durable (KV/Upstash ou équivalent) si trafic réel — l'in-memory
-   ne protège pas en multi-instance.
+   ne protège pas en multi-instance. Idem pour la garde 1 req/s de
+   `/api/geocode` (v3-⑤) : per-instance, à durcir au même moment (le quota
+   Nominatim est partagé).
+3bis. Durcissement auth des endpoints (gated, registre CADRAGE n°7) :
+   vérification réelle du jeton (`auth.getUser()`) au lieu de la seule
+   présence du Bearer — recommandation spec data v3-⑤ ; à appliquer d'un
+   coup sur tous les endpoints (même motif).
 4. Politique de rétention / suppression des données réseau (PII : noms,
    adresses, téléphones) + mention RGPD si ouverture à des tiers.
 5. Contrôle d'accès multi-utilisateurs (rôles lecture/écriture) si le persona

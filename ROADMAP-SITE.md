@@ -39,7 +39,12 @@
    clavier prioritaire, progressive enhancement (Firefox : aucun bouton),
    harnais smoke-dictee 17 verdicts + contre-passe 28 verdicts. PR #16
    (fusion = go Paul, contient U6 middleware).
-5. **Géocodage** d'adresse (Nominatim/OSM).
+5. ✅ 2026-07-07 — **Géocodage** d'adresse (Nominatim/OSM) : « Trouver sur la
+   carte » sous le champ Adresse, endpoint interne `/api/geocode` (politique
+   Nominatim respectée : 1 req/s, User-Agent, cache front), suggestions,
+   aperçu carte, lat/lng repliés « Coordonnées précises (avancé) » [U10+U11].
+   PR en attente de fusion (go Paul). Vivier : U12 clic-carte, U13 dictée
+   adresse.
 
 ## Vivier (impact × effort, après le cap v3)
 
