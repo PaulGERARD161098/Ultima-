@@ -18,6 +18,8 @@
   var carte = null;
   var coucheRelations = null;
   var coucheNoeuds = null;
+  var coucheApercu = null;
+  var positionApercu = null;
   var surClicNoeud = null;
 
   // Jeton de génération : incrémenté à chaque rendu ; les callbacks
@@ -38,6 +40,7 @@
 
     coucheRelations = L.layerGroup().addTo(carte);
     coucheNoeuds = L.layerGroup().addTo(carte);
+    coucheApercu = L.layerGroup().addTo(carte);
   }
 
   function positionValide(noeud) {
@@ -120,11 +123,43 @@
     if (carte && isFinite(lat) && isFinite(lng)) { carte.panTo([lat, lng]); }
   }
 
+  // Aperçu de position (géocodage, v3-⑤) : marqueur provisoire distinctif
+  // « pas encore enregistré » (cercle en pointillés), un seul à la fois.
+  function apercu(lat, lng) {
+    if (!carte || !isFinite(lat) || !isFinite(lng)) { return; }
+    coucheApercu.clearLayers();
+    L.circleMarker([lat, lng], {
+      radius: 11,
+      color: '#1e6fb8',
+      weight: 2,
+      dashArray: '4 4',
+      fillColor: '#1e6fb8',
+      fillOpacity: 0.2
+    }).addTo(coucheApercu);
+    positionApercu = { lat: lat, lng: lng };
+    carte.panTo([lat, lng]);
+  }
+
+  // L'aperçu ne survit jamais au formulaire (enregistrement, annulation,
+  // fermeture du panneau, nouvelle recherche).
+  function effacerApercu() {
+    positionApercu = null;
+    if (coucheApercu) { coucheApercu.clearLayers(); }
+  }
+
+  // Position de l'aperçu courant ({lat,lng} ou null) — observable (harnais).
+  function apercuPosition() {
+    return positionApercu;
+  }
+
   window.UltimaCarte = {
     init: init,
     rendre: rendre,
     invaliderTaille: invaliderTaille,
     centrer: centrer,
+    apercu: apercu,
+    effacerApercu: effacerApercu,
+    apercuPosition: apercuPosition,
     COULEURS_TYPE: COULEURS_TYPE
   };
 })();

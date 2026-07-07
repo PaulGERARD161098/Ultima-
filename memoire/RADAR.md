@@ -48,6 +48,10 @@
   commit-puis-contre-passe imposé par le stop-hook (environnement éphémère) :
   acceptable si le vérificateur confirme que le contenu committé est
   byte-identique à ce qu'il a testé (fait ici) ; la fusion reste le vrai gate.
+- 2026-07-07 (v3-⑤) : conflit de specs (déclencheur géocodage : bouton
+  libellé UX vs épingle in-field graphisme) arbitré par Léo AVANT dispatch
+  d'implémentation — plus propre que « l'implémenteur choisit » ; à
+  reproduire : toute contradiction inter-specs remonte à Léo, pas au codeur.
 - **Friction corrigée → règle** : commit parti sur le main local (branche non
   recréée en début de boucle) → PR fusionnée VIDE, travail récupéré au
   reflog. Règles : ① toujours `git checkout -B <branche> origin/main` AVANT

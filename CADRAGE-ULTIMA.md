@@ -60,15 +60,28 @@
   build, zéro env) — reste UNE action Paul : importer le repo sur
   vercel.com/new (registre n°2), puis dashboard Supabase Auth (registre n°3)
   avec l'URL obtenue.
-- 🟡 **Boucle v3-④ dictée vocale (2026-07-07)** : livrée et vérifiée — micro
-  sur les 4 champs de texte libre (notes nœud/relation, journal), fr-FR,
-  ajout sans remplacement, clavier prioritaire, progressive enhancement,
-  aria + 44px. Harnais smoke-dictee (17 verdicts) ; contre-passe GO
-  (28 verdicts indépendants). Inclut U6 (`microphone=(self)` au middleware —
-  surface gated). **PR draft #16 en attente du go de fusion de Paul.**
-  Backlog consigné : U7 (`window.prompt` raison d'arrêt), U8 (annonce live
-  à la bascule) — voir AUDIT-2026-07-06.md.
-- 🔜 **Boucle suivante (v3-⑤)** : géocodage d'adresse (Nominatim/OSM).
+- ✅ **Boucle v3-④ dictée vocale (2026-07-07)** : fusionnée dans `main`
+  (PR #16, go Paul). Micro sur les 4 champs de texte libre, harnais
+  smoke-dictee 17 verdicts, contre-passe GO (28 indépendants). Inclut U6
+  (`microphone=(self)` au middleware). Backlog : U7, U8 (AUDIT).
+- 🟡 **Boucle v3-⑤ géocodage (2026-07-07)** : livrée et vérifiée — bouton
+  « Trouver sur la carte » (fiche nœud), endpoint `/api/geocode` (Nominatim
+  fr, garde 1 req/s, timeout 5 s, réponse projetée, q jamais loggé),
+  suggestions ≤3, aperçu carte, lat/lng repliés « avancé » [U10+U11].
+  Harnais unit-geocode (18) + smoke-geocode (16) ; contre-passe GO
+  (52 verdicts indépendants, injection HTML testée). Commits `b3eb9d2` +
+  `bfd5570`. **PR en attente du go de fusion de Paul.** Vivier : U12
+  (clic-carte), U13 (dictée adresse) — AUDIT.
+- ⏳ **Actions humaines ajoutées (v3-⑤)** :
+  6. Env Vercel `GEOCODE_USER_AGENT` (User-Agent Nominatim dédié ; le repli
+     committé, publiable, expose l'email de contact de Paul vers Nominatim).
+  7. Décision gated : durcir l'auth de `/api/geocode` (et des autres
+     endpoints, même motif) par vérification réelle du jeton
+     (`auth.getUser()`) — recommandation spec data v3-⑤.
+  8. Après mise en ligne : confirmer l'usage réel Nominatim (l'amont n'a été
+     exercé qu'en stub ; URL/User-Agent conformes à la politique OSM).
+- 🔜 **Boucle suivante** : vivier ROADMAP-SITE (recherche texte + zoom,
+  fiche relation complète, clustering…) — cap v3 ①-⑤ épuisé.
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 

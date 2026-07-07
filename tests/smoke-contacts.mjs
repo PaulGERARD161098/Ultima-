@@ -110,6 +110,8 @@ await page.screenshot({ path: `${SCRATCH}/contacts-a-placer-390.png` });
 await page.locator('#contacts-ajouter').click();
 await page.waitForTimeout(200);
 await page.locator('#noeud-nom').fill('Coordonnée Seule');
+// v3-⑤ : lat/lng vivent dans le details « Coordonnées précises (avancé) ».
+await page.locator('#geo-details summary').click();
 await page.locator('#noeud-lat').fill('48');
 await page.locator('#form-noeud button[type="submit"]').click();
 await page.waitForTimeout(300);

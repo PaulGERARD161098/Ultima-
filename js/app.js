@@ -1026,12 +1026,14 @@
     $('#panneau').hidden = true;
     etat.noeudCourant = null;
     etat.noeudEnEdition = null;
+    reinitialiserGeo(); // l'aperçu et l'état de recherche ne survivent pas
   }
 
   // ---------- Fiche ----------
 
   function ouvrirFiche(id) {
     etat.noeudCourant = id;
+    reinitialiserGeo(); // sortie du formulaire (enregistrement ou annulation)
     var noeud = trouverNoeud(id);
     ouvrirPanneau('fiche', (noeud && noeud.nom) || 'Fiche');
     rendreFiche();
@@ -1645,6 +1647,281 @@
     toast("Nouveau : touchez le micro d'un champ pour dicter.");
   }
 
+  // ---------- Géocodage d'adresse : « Trouver sur la carte » (v3-⑤) ----------
+  // Geste explicite, jamais de recherche à la frappe (politique Nominatim
+  // ≤ 1 req/s). Le géocodage est une aide, jamais un péage : « Enregistrer »
+  // fonctionne toujours, position ou pas. Aucune adresse en console/logs.
+
+  var GEO_LIMITE = 3;         // 3 résultats max : zéro scroll, lisible au pouce
+  var GEO_TIMEOUT_MS = 8000;  // filet front (le serveur coupe à 5 s)
+  var GEO_CADENCE_MS = 1000;  // anti-rafale : 1 s de repos après chaque réponse
+  var GEO_LIBELLE_BOUTON = 'Trouver sur la carte';
+  var GEO_MESSAGES = {
+    vide: "Indiquez d'abord une ville ou une adresse.",
+    introuvable: "Adresse introuvable. Essayez avec la ville seule, ou vérifiez l'orthographe.",
+    indisponible: "La recherche d'adresse ne répond pas. Réessayez dans un instant — " +
+      'ou enregistrez sans position : vous pourrez placer ce contact plus tard.',
+    cadence: 'Une recherche à la fois : patientez une seconde puis réessayez.'
+  };
+
+  var geoCache = {}; // q → résultats : jamais deux requêtes pour la même adresse
+  var geoJeton = 0;  // anti-course : une réponse obsolète s'abandonne
+
+  // Icône épingle (spec graphisme) : goutte + point, trait currentColor.
+  function svgEpingle(taille) {
+    var svg = svgElement('svg', {
+      viewBox: '0 0 24 24', width: String(taille), height: String(taille),
+      'aria-hidden': 'true', fill: 'none', stroke: 'currentColor',
+      'stroke-width': '1.8', 'stroke-linecap': 'round', 'stroke-linejoin': 'round'
+    });
+    svg.appendChild(svgElement('path', {
+      d: 'M12 21c-4.2-3.7-6.5-7-6.5-10.3a6.5 6.5 0 0 1 13 0C18.5 14 16.2 17.3 12 21Z'
+    }));
+    svg.appendChild(svgElement('circle', { cx: '12', cy: '10.5', r: '2.5' }));
+    return svg;
+  }
+
+  // Zone role="status" : messages ET annonces, relisibles (jamais en toast).
+  function messageGeo(texte) {
+    $('#geo-message').textContent = texte || '';
+  }
+
+  function fermerListeGeo(rendreFocus) {
+    var liste = $('#geo-suggestions');
+    liste.hidden = true;
+    liste.textContent = '';
+    if (rendreFocus) { $('#geo-bouton').focus(); }
+  }
+
+  function afficherConfirmationGeo(texte, adresse) {
+    $('#geo-confirmation-texte').textContent = texte;
+    $('#geo-confirmation-adresse').textContent = adresse || '';
+    $('#geo-confirmation').hidden = false;
+  }
+
+  function masquerConfirmationGeo() {
+    $('#geo-confirmation').hidden = true;
+  }
+
+  // Remise à zéro du composant (ouverture du formulaire, sortie vers la fiche,
+  // fermeture du panneau) : l'aperçu ne survit jamais au formulaire.
+  function reinitialiserGeo() {
+    var bouton = $('#geo-bouton');
+    if (!bouton) { return; }
+    geoJeton += 1; // toute réponse encore en vol devient obsolète
+    messageGeo('');
+    fermerListeGeo(false);
+    masquerConfirmationGeo();
+    bouton.disabled = false;
+    $('#geo-bouton-libelle').textContent = GEO_LIBELLE_BOUTON;
+    $('#geo-zone').removeAttribute('aria-busy');
+    window.UltimaCarte.effacerApercu();
+  }
+
+  // Libellé court : sans « France » final, ≤ 80 caractères (repli tronqué).
+  function libelleCourtGeo(label) {
+    var texte = String(label || '').replace(/,\s*France$/i, '');
+    return texte.length > 80 ? texte.slice(0, 79) + '…' : texte;
+  }
+
+  // Une requête vers /api/geocode (même origine). Erreurs typées par codeGeo.
+  async function appelerGeocode(q) {
+    if (Object.prototype.hasOwnProperty.call(geoCache, q)) { return geoCache[q]; }
+    var controleur = new AbortController();
+    var minuteur = setTimeout(function () { controleur.abort(); }, GEO_TIMEOUT_MS);
+    var entetes = { Accept: 'application/json' };
+    if (etat.session && etat.session.access_token) {
+      entetes.Authorization = 'Bearer ' + etat.session.access_token;
+    }
+    var reponse;
+    try {
+      reponse = await fetch('/api/geocode?q=' + encodeURIComponent(q) + '&limit=' + GEO_LIMITE, {
+        headers: entetes,
+        signal: controleur.signal
+      });
+    } finally {
+      clearTimeout(minuteur);
+    }
+    if (reponse.status === 429) {
+      var erreurCadence = new Error('cadence');
+      erreurCadence.codeGeo = 429;
+      throw erreurCadence;
+    }
+    var corps = null;
+    try { corps = await reponse.json(); } catch (e) { corps = null; }
+    if (!reponse.ok || !corps || corps.ok !== true || !corps.data ||
+        !Array.isArray(corps.data.results)) {
+      throw new Error('géocodage indisponible');
+    }
+    var resultats = [];
+    corps.data.results.forEach(function (r) {
+      var lat = Number(r && r.lat);
+      var lng = Number(r && r.lon);
+      if (!isFinite(lat) || !isFinite(lng)) { return; }
+      resultats.push({ lat: lat, lng: lng, libelle: libelleCourtGeo(r.label) });
+    });
+    geoCache[q] = resultats; // la politique Nominatim exige la mise en cache
+    return resultats;
+  }
+
+  // Sélection (tap ou auto) : champs remplis, confirmation, aperçu carte.
+  function choisirResultatGeo(resultat) {
+    $('#noeud-lat').value = String(resultat.lat);
+    $('#noeud-lng').value = String(resultat.lng);
+    fermerListeGeo(false);
+    afficherConfirmationGeo('Position : ', resultat.libelle);
+    window.UltimaCarte.apercu(resultat.lat, resultat.lng);
+    $('#geo-confirmation').focus(); // l'écran dit où on en est
+  }
+
+  function itemSuggestionGeo(resultat) {
+    var item = document.createElement('li');
+    var bouton = document.createElement('button');
+    bouton.type = 'button';
+    bouton.className = 'item-adresse';
+    var lieu = document.createElement('span');
+    lieu.className = 'item-adresse-lieu';
+    lieu.appendChild(svgEpingle(16));
+    bouton.appendChild(lieu);
+    var textes = document.createElement('span');
+    textes.className = 'item-adresse-textes';
+    var virgule = resultat.libelle.indexOf(',');
+    var principale = document.createElement('span');
+    principale.className = 'item-adresse-principale';
+    principale.textContent = virgule === -1 ? resultat.libelle : resultat.libelle.slice(0, virgule);
+    textes.appendChild(principale);
+    if (virgule !== -1) {
+      var detail = document.createElement('span');
+      detail.className = 'item-adresse-detail';
+      detail.textContent = resultat.libelle.slice(virgule + 1).trim();
+      textes.appendChild(detail);
+    }
+    bouton.appendChild(textes);
+    bouton.addEventListener('click', function () { choisirResultatGeo(resultat); });
+    item.appendChild(bouton);
+    return item;
+  }
+
+  function afficherListeGeo(resultats) {
+    var liste = $('#geo-suggestions');
+    liste.textContent = '';
+    var titre = document.createElement('li');
+    titre.className = 'liste-adresses-titre';
+    titre.textContent = 'Choisissez la bonne adresse :';
+    liste.appendChild(titre);
+    resultats.forEach(function (r) { liste.appendChild(itemSuggestionGeo(r)); });
+    liste.hidden = false;
+    var premier = liste.querySelector('.item-adresse');
+    if (premier) { premier.focus(); } // l'action attendue est de choisir
+  }
+
+  async function rechercherAdresseGeo() {
+    var bouton = $('#geo-bouton');
+    if (bouton.disabled) { return; }
+    messageGeo(''); // un nouveau cycle vide la zone
+    fermerListeGeo(false);
+
+    var adresse = $('#noeud-adresse').value.trim();
+    var ville = $('#noeud-ville').value.trim();
+    var morceaux = [];
+    if (adresse) { morceaux.push(adresse); }
+    if (ville) { morceaux.push(ville); }
+    var q = morceaux.join(', ');
+    if (q.length < 3) {
+      // Champs vides (ou trop courts pour le serveur) : aucune requête, le
+      // bouton reste actif — le message dit quoi faire.
+      messageGeo(GEO_MESSAGES.vide);
+      return;
+    }
+
+    window.UltimaCarte.effacerApercu(); // nouvelle recherche : aperçu effacé
+    var jeton = ++geoJeton;
+    bouton.disabled = true;
+    $('#geo-bouton-libelle').textContent = 'Recherche…';
+    $('#geo-zone').setAttribute('aria-busy', 'true');
+
+    var resultats = null;
+    var erreur = null;
+    try {
+      resultats = await appelerGeocode(q);
+    } catch (e) {
+      erreur = e;
+    }
+    if (jeton !== geoJeton) { return; } // formulaire réinitialisé entre-temps
+
+    $('#geo-bouton-libelle').textContent = GEO_LIBELLE_BOUTON;
+    $('#geo-zone').removeAttribute('aria-busy');
+    // Anti-rafale (double protection avec la garde serveur) : 1 s de repos.
+    setTimeout(function () { bouton.disabled = false; }, GEO_CADENCE_MS);
+
+    if (erreur) {
+      messageGeo(erreur.codeGeo === 429 ? GEO_MESSAGES.cadence : GEO_MESSAGES.indisponible);
+      return;
+    }
+    if (resultats.length === 0) {
+      messageGeo(GEO_MESSAGES.introuvable);
+    } else if (resultats.length === 1) {
+      // Sélection automatique : la confirmation rend le choix visible et
+      // réversible, « Enregistrer » reste un acte distinct.
+      messageGeo('Adresse trouvée.');
+      choisirResultatGeo(resultats[0]);
+    } else {
+      messageGeo(resultats.length + ' adresses trouvées.');
+      afficherListeGeo(resultats);
+    }
+  }
+
+  // « Changer » : position vidée, retour au champ Adresse pour corriger.
+  function changerPositionGeo() {
+    $('#noeud-lat').value = '';
+    $('#noeud-lng').value = '';
+    masquerConfirmationGeo();
+    messageGeo('');
+    window.UltimaCarte.effacerApercu();
+    $('#noeud-adresse').focus();
+  }
+
+  // Saisie manuelle dans le details : la ligne dit d'où vient la position.
+  function surSaisieManuelleGeo(evenement) {
+    if (!evenement.isTrusted) { return; }
+    window.UltimaCarte.effacerApercu(); // l'aperçu ne reflète plus une sélection
+    var lat = $('#noeud-lat').value.trim();
+    var lng = $('#noeud-lng').value.trim();
+    if (!lat && !lng) {
+      masquerConfirmationGeo();
+    } else {
+      afficherConfirmationGeo('Position saisie à la main', '');
+    }
+  }
+
+  // État initial du composant à l'ouverture du formulaire nœud.
+  function preparerGeoPourNoeud(noeud) {
+    reinitialiserGeo();
+    var details = $('#geo-details');
+    if (details) { details.open = false; } // fermé par défaut, toujours
+    if (noeud && typeof noeud.lat === 'number' && typeof noeud.lng === 'number') {
+      // Position déjà connue : on ne re-géocode jamais pour l'afficher (1 req/s).
+      afficherConfirmationGeo('Position enregistrée sur la carte', '');
+    }
+  }
+
+  function initGeocodage() {
+    var bouton = $('#geo-bouton');
+    if (!bouton) { return; }
+    bouton.addEventListener('click', rechercherAdresseGeo);
+    $('#geo-changer').addEventListener('click', changerPositionGeo);
+    $('#noeud-lat').addEventListener('input', surSaisieManuelleGeo);
+    $('#noeud-lng').addEventListener('input', surSaisieManuelleGeo);
+    // Échap dans la liste : ferme la liste SANS fermer le panneau (le
+    // gestionnaire global d'Échap ne doit pas recevoir l'événement).
+    $('#geo-suggestions').addEventListener('keydown', function (evenement) {
+      if (evenement.key === 'Escape') {
+        evenement.stopPropagation();
+        fermerListeGeo(true);
+      }
+    });
+  }
+
   // ---------- Formulaire nœud (ajout / édition) ----------
 
   function ouvrirFormNoeud(idEdition) {
@@ -1660,6 +1937,7 @@
     $('#noeud-lat').value = noeud && typeof noeud.lat === 'number' ? String(noeud.lat) : '';
     $('#noeud-lng').value = noeud && typeof noeud.lng === 'number' ? String(noeud.lng) : '';
     $('#noeud-notes').value = noeud ? (noeud.notes || '') : '';
+    preparerGeoPourNoeud(noeud);
     ouvrirPanneau('noeud', idEdition ? 'Modifier le nœud' : 'Ajouter un nœud');
   }
 
@@ -1918,6 +2196,7 @@
     }
     brancherEvenements();
     initDictee(); // micros des champs statiques (sans API : ne fait rien)
+    initGeocodage(); // « Trouver sur la carte » du formulaire nœud
     activerOnglet('accueil'); // l'app démarre toujours sur l'Accueil
     await initAuth();
     await chargerDonnees();
