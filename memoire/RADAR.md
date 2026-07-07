@@ -37,6 +37,25 @@
   dans le repo AVANT de dépendre d'un outil externe. Synchro Notion à
   rattraper à la prochaine session (rien de perdu : le repo fait foi).
 
+## Rétrospective 2026-07-07 (session « reprise » — boucle R1 fermée)
+
+- **La consignation de reprise a fonctionné à 100 %** : PR de clôture #19
+  fusionnée à froid, spec R1 relue depuis le repo, boucle déroulée sans
+  re-décision (implé → contre-passe GO → fusion #20 sur le go anticipé
+  consigné). Le protocole « committer ce qui conditionne la reprise » est
+  validé par l'épreuve — à maintenir tel quel.
+- **Contre-passe > harnais** : le vérificateur a corrigé une erreur de la
+  SPEC (table z-index invalidée par le transform du map-pane) que
+  l'implémenteur avait détectée et divulguée honnêtement — la chaîne à
+  double regard attrape aussi les erreurs de conception, pas seulement de
+  code. Constat consigné au vivier R4 dans CADRAGE.
+- **Limite d'environnement confirmée** : proxy sortant bloque
+  tile.openstreetmap.org ET vercel.app → la preuve pixel sur vraies tuiles
+  (RA1/RA2) et la vérification de la prod restent des actions à faire
+  depuis un navigateur de Paul ou après ouverture réseau ; contournement
+  éprouvé : tuile factice aux couleurs OSM de référence (écart ≤ 1 niveau
+  RGB vs simulation).
+
 ## Rétrospective 2026-07-07 (session « go reprise » — v3-④⑤⑥ + refonte cadrée)
 
 - **Confirmé ×3** : la chaîne specs parallèles → arbitrage Léo → implé →
