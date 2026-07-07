@@ -80,8 +80,16 @@
      (`auth.getUser()`) — recommandation spec data v3-⑤.
   8. Après mise en ligne : confirmer l'usage réel Nominatim (l'amont n'a été
      exercé qu'en stub ; URL/User-Agent conformes à la politique OSM).
-- 🔜 **Boucle suivante** : vivier ROADMAP-SITE (recherche texte + zoom,
-  fiche relation complète, clustering…) — cap v3 ①-⑤ épuisé.
+- 🟡 **Boucle v3-⑥ recherche & zoom (2026-07-07)** : livrée (commit
+  `abc53b6`, 8/8 harnais dont smoke-recherche 20 verdicts), contre-passe en
+  cours — fusion au go de Paul avec les annotations.
+- ✅ **Refonte Accueil — cadrage acté (2026-07-07)** : vision dictée par
+  Paul (carte de France antique = entrée d'Ultima). Direction visuelle B
+  « Age of Mythology » choisie sur previews ; **auth invisible** actée
+  (session persistante — la suppression de connexion est refusée, sécurité).
+  Cadrage complet : `REFONTE-ACCUEIL.md` (4 boucles R1-R4, risques RA1-RA5) ;
+  référence visuelle : `design/preview-accueil-mythologie.html`. Prochaine
+  boucle après v3-⑥ : **R1 habillage antique**.
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 

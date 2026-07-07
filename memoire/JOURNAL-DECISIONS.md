@@ -85,3 +85,13 @@
   secrets, env prioritaires) → zéro env à saisir. Limite d'outillage : la
   création du projet Vercel exige l'import Git dashboard (ou jeton CLI =
   secret) → action Paul au registre (2 min, gratuit).
+- **2026-07-07 (refonte accueil)** — ① Vision dictée : la carte de France
+  antique devient l'entrée d'Ultima (Ptolémée / Age of Mythology), points =
+  contacts, « Ultima » stylisé en cartouche, ludique et imaginaire mais
+  géographie réelle. ② Direction visuelle **B « Age of Mythology »** actée
+  sur 3 previews (A Ptolémée / B mythologie / C hybride) — référence :
+  design/preview-accueil-mythologie.html. ③ **Auth invisible** actée :
+  session persistante, une connexion par appareil ; la suppression de la
+  connexion demandée à l'oral est refusée après explication sécurité (URL
+  jamais secrète, réseau = PII, RLS fondée sur le compte) — Paul a validé
+  l'alternative. ④ Cadrage en 4 boucles R1-R4 : REFONTE-ACCUEIL.md.

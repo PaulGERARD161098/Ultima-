@@ -46,6 +46,23 @@
    PR en attente de fusion (go Paul). Vivier : U12 clic-carte, U13 dictée
    adresse.
 
+## Cap Refonte Accueil (dicté 2026-07-07 — cadrage : REFONTE-ACCUEIL.md)
+
+Vision : la carte de France antique (direction B « Age of Mythology » actée
+sur previews) devient l'écran d'arrivée ; fusion Accueil × Carte ; les
+contenus v3-① revivent dans un volet « Aujourd'hui » ; auth invisible (actée,
+jamais supprimée). Boucles ordonnées :
+
+1. **R1 — Habillage antique** de la carte existante (sépia tuiles + décor
+   parchemin en surcouches + voile Ptolémée au zoom pays + cartouche
+   « Ultima ») : effet visible immédiat, zéro changement de navigation.
+2. **R2 — Fusion Accueil × Carte** : volet « Aujourd'hui » (bottom-sheet),
+   barre réduite à Carte · Contacts, badge chiffré des relances.
+3. **R3 — Ergonomie pouce + auth invisible** : « + » flottant, fiche en
+   bottom-sheet, session persistante (une connexion par appareil).
+4. **R4 — Finitions** : monstres marins, rose des vents, garde-fous perf
+   (risques RA1-RA5 du cadrage).
+
 ## Vivier (impact × effort, après le cap v3)
 
 1. ✅ 2026-07-06 — Supabase réel branché côté front (config URL + clé
