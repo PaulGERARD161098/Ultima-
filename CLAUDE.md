@@ -97,13 +97,15 @@ Quand Paul dit « go solo » (ou mentionne « solo ») :
 - Tout correctif touchant auth / middleware / données / RLS en phase de patch
   (déclenche aussi l'escalade modèle ci-dessous).
 
-## 🎈 État d'esprit produit (acté 2026-07-06)
+## 🏛️ État d'esprit produit (acté 2026-07-08, remplace le registre du 2026-07-06)
 
-**Sérieux ET ludique** : Ultima est construit comme quelque chose de pro et
-rigoureux, mais qui donne envie « comme à un enfant » — fun, drôle, désirable
-(l'Accueil carte de livre d'enfance en est le manifeste). Chaque livraison
-d'interface se demande : est-ce que ça donne envie de jouer avec ? Le ludique
-ne sacrifie jamais la lisibilité, l'accessibilité ni la sécurité.
+**Antique et sérieux** : Ultima est un outil pro et rigoureux dont l'univers
+visuel est celui de la carte savante — gravure à l'encre, parchemin noble,
+cartouches, typographie à l'ancienne. Le registre « livre d'enfance /
+enfantin » (2026-07-06) est retiré sur décision de Paul : plus d'annotations
+manuscrites ni de clins d'œil ludiques ; la désirabilité vient de la beauté
+du registre antique. Ce parti pris ne sacrifie jamais la lisibilité,
+l'accessibilité ni la sécurité.
 
 ## ⚡ Optimisation — pratiques permanentes (implantées le 2026-07-06)
 

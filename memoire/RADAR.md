@@ -37,6 +37,27 @@
   dans le repo AVANT de dépendre d'un outil externe. Synchro Notion à
   rattraper à la prochaine session (rien de perdu : le repo fait foi).
 
+## Rétrospective 2026-07-08 (session « pivot arbre » — cadrage fusionné)
+
+- **« Cadre bien avant tout » respecté à la lettre** : pivot produit majeur
+  (connexion habillée + arbre à la place de la carte) livré en cadrage pur
+  (REFONTE-ARBRE.md, D1-D5) + previews, ZÉRO code produit — les tensions
+  avec les décisions actées (auth invisible, carte-hub, droit d'auteur
+  Ulthuan) ont été mises en arbitrage au lieu d'être écrasées. À reproduire
+  pour tout pivot dicté.
+- **Le style est une décision de premier ordre** : la revue des previews a
+  fait tomber le principe « comme à un enfant » (2026-07-06) → « antique et
+  sérieux » (2026-07-08). Leçon : re-présenter le REGISTRE visuel à chaque
+  grande vue nouvelle, une préférence de style n'est pas éternelle ;
+  consigner le remplacement dans CLAUDE.md + journal le jour même (fait).
+- **Boucle interrompue par un go de fusion** : Paul a demandé merge + fin
+  de session pendant le retravail graphisme → ordre tenu : attendre le
+  livrable, contre-passe, commit, PUIS merge — jamais fusionner un état
+  que Paul a refusé (les previews enfantines) sous prétexte d'aller vite.
+- **D1-D5 restent OUVERTES à la clôture** : la reprise doit commencer par
+  les recueillir (pas de boucle A1 sans D4 confirmée sur les previews
+  retravaillées).
+
 ## Rétrospective 2026-07-07 (session « reprise » — boucle R1 fermée)
 
 - **La consignation de reprise a fonctionné à 100 %** : PR de clôture #19

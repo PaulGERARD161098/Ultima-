@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ultima — Preview · Connexion</title>
+<style>
+  /* Partis pris (2026-07-08, style antique et sérieux) : monde-anneau ORIGINAL
+     (continent circulaire, mer intérieure, montagnes, îles) — aucun toponyme,
+     aucune reprise d'Ulthuan. Registre carte savante de cabinet : encre, or,
+     parchemin, graticule fin, rose des vents ; typographie serif droite et
+     petites capitales uniquement (zéro manuscrit). Formulaire en cartouche. */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    background:
+      radial-gradient(ellipse at 50% 32%, rgba(120,190,210,0.16), rgba(0,0,0,0) 60%),
+      radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 55%, rgba(4,24,36,0.55) 100%),
+      linear-gradient(#17506b, #0e3a52 60%, #0a2d42);
+    color: #f2e8cd;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  /* Moirure de l'eau (tuile data-URI, identique au registre R1) */
+  body::before {
+    content: "";
+    position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='60'%3E%3Cpath d='M0,30 q17,-10 35,0 t35,0 t35,0 t35,0' fill='none' stroke='%238fc2d4' stroke-opacity='0.16' stroke-width='1.2'/%3E%3Cpath d='M0,52 q17,-8 35,0 t35,0 t35,0 t35,0' fill='none' stroke='%238fc2d4' stroke-opacity='0.10' stroke-width='1'/%3E%3C/svg%3E");
+  }
+
+  /* Carte-décor plein écran (meet : la mer du SVG se fond dans celle du body) */
+  .decor {
+    position: fixed; inset: 0; z-index: 0;
+    display: flex; align-items: center; justify-content: center;
+    padding: 4.2rem 0.4rem 0.4rem;
+  }
+  .decor svg {
+    width: 100%; height: 100%;
+    filter: drop-shadow(0 8px 22px rgba(0,10,20,0.45));
+  }
+
+  /* Cartouche ULTIMA (registre R1) */
+  .cartouche {
+    position: relative; z-index: 2;
+    flex: none;
+    margin: 0.75rem auto 0;
+    padding: 0.5rem 2.1rem 0.55rem;
+    background: linear-gradient(#f4e6bd, #e3cd93);
+    border: 2px solid #6e5320;
+    border-radius: 4px;
+    box-shadow:
+      inset 0 0 0 3px #f4e6bd, inset 0 0 0 4px #a9884a,
+      0 3px 10px rgba(0,10,20,0.5);
+    text-align: center;
+  }
+  .cartouche::before, .cartouche::after {
+    content: "❦";
+    position: absolute; top: 50%; transform: translateY(-52%);
+    color: #6e5320; font-size: 1rem;
+  }
+  .cartouche::before { left: 0.55rem; }
+  .cartouche::after  { right: 0.55rem; }
+  .cartouche h1 {
+    font-size: clamp(1.6rem, 6vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: 0.22em; text-indent: 0.22em;
+    color: #4a3512;
+    text-shadow: 0 1px 0 #fff6dd;
+  }
+  .cartouche .sous {
+    font-size: clamp(0.66rem, 2.2vw, 0.78rem);
+    font-variant: small-caps;
+    letter-spacing: 0.28em; text-indent: 0.28em;
+    color: #6e5320;
+  }
+
+  /* Formulaire flottant : bas d'écran en mobile, centré en desktop */
+  main {
+    position: relative; z-index: 3;
+    flex: 1; min-height: 0;
+    display: flex; justify-content: center; align-items: flex-end;
+    padding: 1rem 1rem calc(1.6rem + env(safe-area-inset-bottom));
+  }
+  @media (min-width: 900px) {
+    main { align-items: center; padding-bottom: 3rem; }
+  }
+  .parchemin {
+    width: min(100%, 360px);
+    padding: 1.15rem 1.25rem 1.25rem;
+    background: linear-gradient(#f6eed9, #efe3c6);
+    border: 2px solid #6e5320;
+    border-radius: 6px;
+    box-shadow:
+      inset 0 0 0 3px #f6eed9, inset 0 0 0 4px #a9884a,
+      0 8px 24px rgba(0,10,20,0.55);
+  }
+  .parchemin h2 {
+    font-size: 1.05rem;
+    font-variant: small-caps;
+    letter-spacing: 0.14em;
+    color: #3b2f1c;
+    text-align: center;
+    margin-bottom: 0.7rem;
+  }
+  .parchemin label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #3b2f1c;
+    margin-bottom: 0.3rem;
+  }
+  .parchemin input[type="email"] {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.5rem 0.75rem;
+    font: inherit; font-size: 1rem;
+    color: #3b2f1c;
+    background: #fffaf0;
+    border: 1.5px solid #a9884a;
+    border-radius: 6px;
+  }
+  .parchemin input[type="email"]::placeholder { color: #6a5636; opacity: 1; }
+  .parchemin input[type="email"]:focus-visible {
+    outline: 3px solid #17578f; outline-offset: 1px;
+  }
+  .bouton-lien {
+    display: block;
+    width: 100%;
+    min-height: 46px;
+    margin-top: 0.75rem;
+    font: inherit; font-size: 1.02rem; font-weight: 700;
+    font-variant: small-caps; letter-spacing: 0.09em;
+    color: #f2e8cd;
+    background: linear-gradient(#1a5a78, #0e3a52);
+    border: 1.5px solid #a9884a;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .bouton-lien:hover { background: linear-gradient(#1f6787, #114560); }
+  .bouton-lien:focus-visible { outline: 3px solid #4a3512; outline-offset: 2px; }
+  .aide {
+    margin-top: 0.65rem;
+    text-align: center;
+    font-size: 0.85rem;
+    font-style: normal;
+    line-height: 1.45;
+    color: #5f4b2c;
+  }
+</style>
+</head>
+<body>
+
+  <header class="cartouche">
+    <h1>ULTIMA</h1>
+    <div class="sous">atlas du réseau</div>
+  </header>
+
+  <!-- Monde-anneau original : continent circulaire, mer intérieure, anneau de
+       montagnes, forêts, îles périphériques. Aucun nom de lieu (voulu). -->
+  <div class="decor" aria-hidden="true">
+    <svg viewBox="0 0 700 940" preserveAspectRatio="xMidYMid meet" role="img"
+         aria-label="Carte décorative d'un monde-anneau imaginaire">
+      <defs>
+        <filter id="rough" x="-4%" y="-4%" width="108%" height="108%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="2" seed="11" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="5"/>
+        </filter>
+        <radialGradient id="terre" cx="45%" cy="35%" r="80%">
+          <stop offset="0%"  stop-color="#e8d49a"/>
+          <stop offset="55%" stop-color="#d9bf82"/>
+          <stop offset="100%" stop-color="#c4a468"/>
+        </radialGradient>
+        <radialGradient id="merInterieure" cx="50%" cy="42%" r="70%">
+          <stop offset="0%"  stop-color="#1d5c7c"/>
+          <stop offset="70%" stop-color="#145070"/>
+          <stop offset="100%" stop-color="#0e3a52"/>
+        </radialGradient>
+      </defs>
+
+      <!-- Graticule fin (registre carte savante) : hairlines sous les terres -->
+      <g stroke="#8fc2d4" stroke-width="0.7" opacity="0.15">
+        <path d="M140,0 V940 M280,0 V940 M420,0 V940 M560,0 V940"/>
+        <path d="M0,134 H700 M0,268 H700 M0,402 H700 M0,536 H700 M0,670 H700 M0,804 H700"/>
+      </g>
+
+      <!-- Lueur littorale extérieure -->
+      <g filter="url(#rough)">
+        <path d="M640,470 C635,540 600,570 579,602 C550,660 560,700 500,730
+                 C455,752 395,742 350,740 C290,738 240,745 202,725
+                 C150,700 140,640 125,600 C95,555 60,520 50,470
+                 C42,415 90,370 116,335 C145,295 170,255 205,219
+                 C245,180 295,168 350,165 C405,162 445,215 482,240
+                 C525,268 585,285 605,322 C630,365 645,415 640,470 Z"
+              fill="none" stroke="#8fd2e0" stroke-width="11" opacity="0.22"/>
+      </g>
+
+      <!-- Continent-anneau -->
+      <g filter="url(#rough)">
+        <path d="M640,470 C635,540 600,570 579,602 C550,660 560,700 500,730
+                 C455,752 395,742 350,740 C290,738 240,745 202,725
+                 C150,700 140,640 125,600 C95,555 60,520 50,470
+                 C42,415 90,370 116,335 C145,295 170,255 205,219
+                 C245,180 295,168 350,165 C405,162 445,215 482,240
+                 C525,268 585,285 605,322 C630,365 645,415 640,470 Z"
+              fill="url(#terre)" stroke="#5a4118" stroke-width="2.6"/>
+      </g>
+
+      <!-- Mer intérieure (lueur de rive puis eau) -->
+      <g filter="url(#rough)">
+        <path d="M490,470 C488,515 475,530 455,545 C425,572 390,600 350,600
+                 C305,600 270,578 245,555 C222,533 218,500 215,470
+                 C212,435 222,400 240,380 C268,350 310,345 350,345
+                 C395,345 435,368 460,395 C480,415 492,435 490,470 Z"
+              fill="none" stroke="#8fd2e0" stroke-width="10" opacity="0.20"/>
+        <path d="M490,470 C488,515 475,530 455,545 C425,572 390,600 350,600
+                 C305,600 270,578 245,555 C222,533 218,500 215,470
+                 C212,435 222,400 240,380 C268,350 310,345 350,345
+                 C395,345 435,368 460,395 C480,415 492,435 490,470 Z"
+              fill="url(#merInterieure)" stroke="#5a4118" stroke-width="2.2"/>
+      </g>
+      <!-- Vaguelettes de la mer intérieure -->
+      <g stroke="#8fc2d4" fill="none" stroke-width="1.1" opacity="0.35" stroke-linecap="round">
+        <path d="M290,430 q12,-8 24,0 M330,415 q12,-8 24,0 M380,440 q12,-8 24,0"/>
+        <path d="M300,520 q12,-8 24,0 M370,540 q12,-8 24,0 M420,500 q12,-8 24,0"/>
+      </g>
+      <!-- Îlot central de la mer intérieure -->
+      <g filter="url(#rough)">
+        <path d="M330,468 Q334,452 352,450 Q372,449 376,464 Q378,478 360,483 Q338,486 330,468 Z"
+              fill="url(#terre)" stroke="#5a4118" stroke-width="1.6"/>
+      </g>
+      <g stroke="#7a5a2c" stroke-width="1.6" fill="none" stroke-linecap="round">
+        <path d="M346,470 l6,-9 l6,9"/>
+      </g>
+
+      <!-- Verdure : plaines et forêts sur l'anneau -->
+      <g fill="#7d9a52" opacity="0.30" filter="url(#rough)">
+        <ellipse cx="495" cy="595" rx="58" ry="34"/>
+        <ellipse cx="205" cy="565" rx="50" ry="32"/>
+        <ellipse cx="455" cy="255" rx="52" ry="30"/>
+        <ellipse cx="243" cy="272" rx="46" ry="28"/>
+        <ellipse cx="565" cy="430" rx="34" ry="46"/>
+        <ellipse cx="135" cy="455" rx="30" ry="44"/>
+      </g>
+      <!-- Bosquets stylisés -->
+      <g stroke="#4f7038" stroke-width="1.4" fill="#6f8f4a" stroke-linecap="round">
+        <g transform="translate(492,588)">
+          <path d="M0,0 q5,-12 10,0 z"/><path d="M12,4 q5,-12 10,0 z"/><path d="M-12,5 q5,-12 10,0 z"/>
+        </g>
+        <g transform="translate(206,558)">
+          <path d="M0,0 q5,-12 10,0 z"/><path d="M13,5 q5,-12 10,0 z"/>
+        </g>
+        <g transform="translate(450,248)">
+          <path d="M0,0 q5,-12 10,0 z"/><path d="M-13,5 q5,-12 10,0 z"/><path d="M12,6 q5,-12 10,0 z"/>
+        </g>
+        <g transform="translate(240,266)">
+          <path d="M0,0 q5,-12 10,0 z"/><path d="M12,5 q5,-12 10,0 z"/>
+        </g>
+      </g>
+
+      <!-- Anneau de montagnes (relief encre, entre côte et mer intérieure) -->
+      <g stroke="#7a5a2c" stroke-width="1.9" fill="none" stroke-linecap="round" opacity="0.9">
+        <path d="M343,262 l7,-13 l7,13 M320,276 l6,-10 l6,10 M366,276 l6,-10 l6,10"/>
+        <path d="M275,284 l7,-12 l7,12 M411,284 l7,-12 l7,12"/>
+        <path d="M214,319 l7,-12 l7,12 M472,319 l7,-12 l7,12"/>
+        <path d="M516,364 l7,-12 l7,12 M170,364 l7,-12 l7,12"/>
+        <path d="M540,432 l7,-13 l7,13 M146,432 l7,-13 l7,13"/>
+        <path d="M540,502 l7,-12 l7,12 M146,502 l7,-12 l7,12"/>
+        <path d="M511,568 l7,-12 l7,12 M175,568 l7,-12 l7,12"/>
+        <path d="M411,652 l7,-12 l7,12 M275,652 l7,-12 l7,12 M343,664 l7,-13 l7,13"/>
+      </g>
+      <!-- Ombres portées du relief -->
+      <g fill="#5a4118" opacity="0.10">
+        <ellipse cx="350" cy="280" rx="90" ry="18"/>
+        <ellipse cx="350" cy="660" rx="80" ry="16"/>
+        <ellipse cx="152" cy="470" rx="16" ry="70"/>
+        <ellipse cx="548" cy="470" rx="16" ry="70"/>
+      </g>
+
+      <!-- Fleuves : des montagnes vers la mer intérieure -->
+      <g fill="none" stroke="#2e7d9a" stroke-width="1.6" opacity="0.7">
+        <path d="M350,285 Q345,315 350,343"/>
+        <path d="M162,470 Q190,474 214,468"/>
+        <path d="M350,648 Q356,624 350,602"/>
+        <path d="M528,440 Q510,452 492,458"/>
+      </g>
+
+      <!-- Îles périphériques -->
+      <g filter="url(#rough)">
+        <path d="M666,178 Q690,166 706,182 Q712,198 692,206 Q668,210 660,196 Q658,184 666,178 Z"
+              fill="url(#terre)" stroke="#5a4118" stroke-width="1.8"/>
+        <path d="M88,142 Q108,132 122,146 Q126,160 108,166 Q90,168 84,156 Q82,146 88,142 Z"
+              fill="url(#terre)" stroke="#5a4118" stroke-width="1.8"/>
+        <path d="M614,806 Q638,794 656,810 Q660,826 640,834 Q616,836 608,822 Q606,812 614,806 Z"
+              fill="url(#terre)" stroke="#5a4118" stroke-width="1.8"/>
+        <path d="M74,760 Q92,750 106,762 Q110,776 94,782 Q76,784 70,772 Q68,764 74,760 Z"
+              fill="url(#terre)" stroke="#5a4118" stroke-width="1.8"/>
+        <path d="M672,614 Q686,608 696,618 Q698,630 684,634 Q670,634 666,624 Q666,618 672,614 Z"
+              fill="url(#terre)" stroke="#5a4118" stroke-width="1.6"/>
+      </g>
+
+      <!-- Créatures et navires discrets -->
+      <g stroke="#9fd0dd" fill="none" stroke-width="2.2" opacity="0.5" stroke-linecap="round">
+        <path d="M92,858 q10,-14 22,0"/>
+        <path d="M124,858 q10,-14 22,0"/>
+        <path d="M156,860 q8,-10 16,-2 q6,6 2,10 l-8,-2"/>
+        <path d="M84,860 l-8,-8 M84,860 l-10,2"/>
+      </g>
+      <g stroke="#9fd0dd" fill="none" stroke-width="2" opacity="0.55" stroke-linecap="round">
+        <path d="M596,116 l30,0 q-4,10 -14,10 l-8,0 q-8,-2 -8,-10 Z M611,114 l0,-24 q16,10 0,24 M611,96 q-12,6 -12,16"/>
+      </g>
+      <g stroke="#9fd0dd" fill="none" stroke-width="1.8" opacity="0.45" stroke-linecap="round">
+        <path d="M120,86 q6,-8 12,0 M138,82 q6,-8 12,0 M158,88 q6,-8 12,0"/>
+      </g>
+
+      <!-- Rose des vents dorée -->
+      <g transform="translate(632,878)" opacity="0.95">
+        <circle r="26" fill="#0e3a52" stroke="#c9a659" stroke-width="1.6"/>
+        <circle r="20" fill="none" stroke="#c9a659" stroke-width="0.7"/>
+        <g fill="#e8cf8f" stroke="#c9a659" stroke-width="0.6">
+          <path d="M0,-24 L4,-5 L0,0 L-4,-5 Z"/>
+          <path d="M0,24 L4,5 L0,0 L-4,5 Z" fill="#0e3a52"/>
+          <path d="M-24,0 L-5,4 L0,0 L-5,-4 Z" fill="#0e3a52"/>
+          <path d="M24,0 L5,4 L0,0 L5,-4 Z" fill="#0e3a52"/>
+        </g>
+        <text y="-31" text-anchor="middle" font-size="11" fill="#e8cf8f" font-style="italic">N</text>
+      </g>
+    </svg>
+  </div>
+
+  <main>
+    <form class="parchemin" action="#" method="post">
+      <h2>Accès au réseau</h2>
+      <label for="email">Adresse e-mail</label>
+      <input type="email" id="email" name="email" autocomplete="email"
+             inputmode="email" placeholder="vous@exemple.fr" required>
+      <button type="submit" class="bouton-lien">Recevoir mon lien</button>
+      <p class="aide">Aucun mot de passe : un lien de connexion vous est adressé par e-mail.</p>
+    </form>
+  </main>
+
+</body>
+</html>
