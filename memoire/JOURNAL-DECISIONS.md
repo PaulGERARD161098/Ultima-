@@ -85,6 +85,18 @@
   secrets, env prioritaires) → zéro env à saisir. Limite d'outillage : la
   création du projet Vercel exige l'import Git dashboard (ou jeton CLI =
   secret) → action Paul au registre (2 min, gratuit).
+- **2026-07-08 (pivot entrée + arbre — dicté, arbitrages ouverts)** :
+  ① Vision dictée : page de connexion « Ultima » = carte de monde
+  fantastique type île-anneau (référence Ulthuan/Warhammer → œuvre non
+  reproduite, création originale, règle 2026-07-06 réappliquée), sans nom
+  de monde, bandeau « Ultima ». ② Connecté : **plus de carte, un arbre**
+  — branche commune = secteur d'activité, ramification = contact,
+  croissance à l'ajout. ③ Méthode exigée : « cadre bien avant tout » →
+  REFONTE-ARBRE.md livré AVANT tout code. ④ Non re-litigé : l'auth
+  invisible reste actée (la page de connexion sera belle mais vue une
+  fois par appareil) ; le sort de la carte existante reste à arbitrer
+  (D2) — suspension de REFONTE-ACCUEIL R2-R4 consignée, pas de
+  suppression.
 - **2026-07-07 (refonte accueil)** — ① Vision dictée : la carte de France
   antique devient l'entrée d'Ultima (Ptolémée / Age of Mythology), points =
   contacts, « Ultima » stylisé en cartouche, ludique et imaginaire mais

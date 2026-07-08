@@ -111,6 +111,16 @@
   Cadrage complet : `REFONTE-ACCUEIL.md` (4 boucles R1-R4, risques RA1-RA5) ;
   référence visuelle : `design/preview-accueil-mythologie.html`. Prochaine
   boucle après v3-⑥ : **R1 habillage antique**.
+- 🟡 **Pivot Entrée + Arbre — cadrage livré (2026-07-08)** : dictée Paul —
+  page de connexion « Ultima » (carte-anneau fantastique originale, sans
+  toponyme, bandeau ULTIMA) puis, connecté, **un arbre remplace la carte**
+  (branche commune = secteur d'activité, une ramification par contact,
+  croissance à l'ajout). Cadrage complet : `REFONTE-ARBRE.md` (boucles
+  A1-A4, risques RB1-RB6) + 2 previews `design/preview-connexion-ultima.html`
+  et `design/preview-arbre-contacts.html`. **Suspend REFONTE-ACCUEIL R2-R4**
+  (registre R1 réutilisé, rien de jeté). Décisions D1-D5 en attente de Paul
+  — aucune boucle de code lancée avant ses arbitrages (D2 sort de la carte,
+  D3 format secteur, D4 previews).
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 
