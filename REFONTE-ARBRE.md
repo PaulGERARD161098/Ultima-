@@ -157,10 +157,11 @@ donnée), A2 ensuite (débloque A3), A3 le cœur, A4 polit. Une seule boucle
   avec espacement minimal garanti, scroll vertical assumé (mobile-first),
   repli « branche repliable » par secteur dès la conception A3 ; budget
   perf mesuré au harnais (critère A3).
-- **RB2 — L'arbre décoratif qui cache l'outil** (fort × faible). Sérieux
-  ET ludique : l'information est TOUJOURS portée par des étiquettes texte
-  lisibles, jamais par le dessin seul ; contrastes AA prouvés sur capture
-  avant fusion (leçon RA1/RA2).
+- **RB2 — L'arbre décoratif qui cache l'outil** (fort × faible). Registre
+  antique et sérieux (acté 2026-07-08 : le style enfantin est retiré) :
+  l'information est TOUJOURS portée par des étiquettes texte lisibles,
+  jamais par le dessin seul ; contrastes AA prouvés sur capture avant
+  fusion (leçon RA1/RA2).
 - **RB3 — Perte des acquis carte** (fort × faible). Géocodage v3-⑤,
   recherche v3-⑥, habillage R1 : rien n'est supprimé sans décision
   explicite (D2) ; la recherche est rebranchée sur l'arbre en A3.

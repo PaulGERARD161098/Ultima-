@@ -85,6 +85,14 @@
   secrets, env prioritaires) → zéro env à saisir. Limite d'outillage : la
   création du projet Vercel exige l'import Git dashboard (ou jeton CLI =
   secret) → action Paul au registre (2 min, gratuit).
+- **2026-07-08 (style — antique et sérieux)** : sur revue des previews du
+  pivot, Paul retire le registre enfantin/ludique (« enlevons le style
+  enfantin pour un style sérieux, style antique et sérieux »). Remplace le
+  principe « sérieux ET ludique / comme à un enfant » du 2026-07-06 —
+  CLAUDE.md mis à jour. Conséquences : plus d'annotations manuscrites
+  (Caveat) ni de clins d'œil enjoués dans les interfaces ; registre carte
+  savante (gravure, parchemin, cartouches, petites capitales). Les acquis
+  R1 (sépia, cartouche, voile) sont déjà dans ce registre et restent.
 - **2026-07-08 (pivot entrée + arbre — dicté, arbitrages ouverts)** :
   ① Vision dictée : page de connexion « Ultima » = carte de monde
   fantastique type île-anneau (référence Ulthuan/Warhammer → œuvre non
