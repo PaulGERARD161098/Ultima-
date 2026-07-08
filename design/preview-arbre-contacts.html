@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ultima — Preview · Arbre des contacts</title>
+<style>
+  /* Partis pris : l'arbre remplace la carte — tronc = réseau de Paul, grosses
+     branches = secteurs d'activité (bannières dorées), ramifications = contacts
+     (étiquettes crème : nom + type en toutes lettres + pastille couleur à anneau).
+     Registre parchemin/encre R1 ; arbre vertical mobile-first (scroll accepté) ;
+     croissance suggérée par une jeune pousse annotée à la main (Caveat). */
+  @font-face {
+    font-family: "Caveat";
+    src: url("../fonts/caveat-latin-700-normal.woff2") format("woff2");
+    font-weight: 700; font-style: normal; font-display: swap;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    background:
+      radial-gradient(ellipse at 50% 20%, rgba(255,250,235,0.55), rgba(0,0,0,0) 55%),
+      linear-gradient(#f6eed9, #efe3c6 70%, #e3d3ab);
+    color: #3b2f1c;
+    display: flex; flex-direction: column;
+  }
+  /* Grain léger du parchemin */
+  body::before {
+    content: "";
+    position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='%238c7a55' fill-opacity='0.08'%3E%3Ccircle cx='17' cy='23' r='1'/%3E%3Ccircle cx='64' cy='9' r='0.8'/%3E%3Ccircle cx='102' cy='41' r='1'/%3E%3Ccircle cx='36' cy='74' r='0.8'/%3E%3Ccircle cx='83' cy='96' r='1'/%3E%3Ccircle cx='9' cy='108' r='0.8'/%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* Bandeau mer + cartouche (mêmes valeurs que l'entête R1 de l'app) */
+  .entete {
+    position: sticky; top: 0; z-index: 4;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0.45rem 1rem;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='60'%3E%3Cpath d='M0,30 q17,-10 35,0 t35,0 t35,0 t35,0' fill='none' stroke='%238fc2d4' stroke-opacity='0.16' stroke-width='1.2'/%3E%3Cpath d='M0,52 q17,-8 35,0 t35,0 t35,0 t35,0' fill='none' stroke='%238fc2d4' stroke-opacity='0.10' stroke-width='1'/%3E%3C/svg%3E"),
+      linear-gradient(180deg, #17506b, #0e3a52);
+    border-bottom: 1px solid #a9884a;
+  }
+  .cartouche {
+    position: relative;
+    padding: 0.3rem 1.9rem 0.35rem;
+    background: linear-gradient(#f4e6bd, #e3cd93);
+    border: 2px solid #6e5320;
+    border-radius: 4px;
+    box-shadow: inset 0 0 0 3px #f4e6bd, inset 0 0 0 4px #a9884a,
+                0 2px 6px rgba(0,10,20,0.4);
+    text-align: center;
+  }
+  .cartouche::before, .cartouche::after {
+    content: "❦";
+    position: absolute; top: 50%; transform: translateY(-52%);
+    color: #6e5320; font-size: 0.9rem;
+  }
+  .cartouche::before { left: 0.5rem; }
+  .cartouche::after  { right: 0.5rem; }
+  .cartouche h1 {
+    font-size: 1.5rem; font-weight: 700; line-height: 1.1;
+    letter-spacing: 0.22em; text-indent: 0.22em;
+    color: #4a3512; text-shadow: 0 1px 0 #fff6dd;
+  }
+  .cartouche .sous {
+    font-size: 0.7rem; font-variant: small-caps;
+    letter-spacing: 0.28em; text-indent: 0.28em;
+    color: #6e5320;
+  }
+
+  /* Scène : arbre vertical, scroll vertical accepté en mobile */
+  main {
+    position: relative; z-index: 1;
+    flex: 1;
+    overflow-y: auto; overflow-x: hidden;
+    display: flex; justify-content: center;
+    padding: 0.5rem 0.4rem 5.5rem;
+  }
+  svg.arbre {
+    width: min(100%, 640px);
+    height: auto;
+    flex: none;
+  }
+
+  /* Bouton flottant « + » : action primaire unique de l'écran */
+  .ajout {
+    position: fixed; right: 1rem; bottom: calc(1rem + env(safe-area-inset-bottom));
+    z-index: 5;
+    display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+  }
+  .ajout button {
+    width: 58px; height: 58px;
+    font: inherit; font-size: 2rem; font-weight: 700; line-height: 1;
+    color: #4a3512;
+    background: radial-gradient(circle at 35% 30%, #f4e6bd, #d9bf83);
+    border: 2px solid #6e5320;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 2px #f4e6bd, 0 3px 10px rgba(59,47,28,0.45);
+    cursor: pointer;
+  }
+  .ajout button:hover { background: radial-gradient(circle at 35% 30%, #f8ecca, #e3cd93); }
+  .ajout button:focus-visible { outline: 3px solid #17578f; outline-offset: 2px; }
+  .ajout .libelle {
+    font-size: 0.72rem; font-variant: small-caps; letter-spacing: 0.08em;
+    color: #f2e8cd;
+    background: rgba(14,58,82,0.92);
+    border: 1px solid #a9884a;
+    border-radius: 999px;
+    padding: 0.15rem 0.6rem;
+  }
+</style>
+</head>
+<body>
+
+  <header class="entete">
+    <div class="cartouche">
+      <h1>ULTIMA</h1>
+      <div class="sous">l'arbre du réseau</div>
+    </div>
+  </header>
+
+  <main>
+    <svg class="arbre" viewBox="0 0 620 1000" role="img"
+         aria-label="Arbre du réseau : chaque branche est un secteur d'activité, chaque étiquette un contact">
+      <defs>
+        <filter id="rough" x="-4%" y="-4%" width="108%" height="108%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="4" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="3.5"/>
+        </filter>
+        <radialGradient id="feuillage" cx="45%" cy="38%" r="75%">
+          <stop offset="0%"  stop-color="#93ac62"/>
+          <stop offset="100%" stop-color="#6f8f4a"/>
+        </radialGradient>
+      </defs>
+
+      <!-- Sol : butte herbeuse -->
+      <g filter="url(#rough)">
+        <ellipse cx="310" cy="946" rx="250" ry="34" fill="#cdbc85" opacity="0.7"/>
+        <ellipse cx="310" cy="940" rx="190" ry="24" fill="#a7b06b" opacity="0.5"/>
+      </g>
+      <g stroke="#6f8f4a" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.8">
+        <path d="M180,940 q2,-10 6,-14 M188,942 q0,-8 5,-13 M420,936 q2,-10 6,-14 M430,940 q0,-8 5,-13 M250,950 q2,-8 5,-12"/>
+      </g>
+
+      <!-- Feuillages doux derrière les branches -->
+      <g fill="url(#feuillage)" opacity="0.32" filter="url(#rough)">
+        <ellipse cx="300" cy="205" rx="130" ry="80"/>
+        <ellipse cx="470" cy="330" rx="95" ry="60"/>
+        <ellipse cx="140" cy="405" rx="100" ry="62"/>
+        <ellipse cx="480" cy="510" rx="95" ry="58"/>
+        <ellipse cx="140" cy="615" rx="100" ry="60"/>
+      </g>
+      <g fill="#557a3a" opacity="0.16" filter="url(#rough)">
+        <ellipse cx="330" cy="180" rx="80" ry="46"/>
+        <ellipse cx="120" cy="590" rx="60" ry="36"/>
+        <ellipse cx="500" cy="490" rx="55" ry="34"/>
+      </g>
+
+      <!-- Tronc (le réseau) : encre + bois -->
+      <g filter="url(#rough)">
+        <path d="M285,950 C282,860 300,790 295,720 C290,640 302,570 298,500
+                 C296,450 300,410 300,365 L322,362 C318,415 314,470 316,520
+                 C320,600 312,680 322,740 C330,810 332,880 337,950 Z"
+              fill="#6b4a2b" stroke="#5a4118" stroke-width="2.4"/>
+        <!-- Racines -->
+        <path d="M285,942 Q255,952 228,948 M337,944 Q365,956 392,950 M310,948 Q312,958 306,964"
+              fill="none" stroke="#5a4118" stroke-width="3" stroke-linecap="round"/>
+      </g>
+      <!-- Nervures d'écorce -->
+      <g stroke="#5a4118" stroke-width="1.1" fill="none" opacity="0.55" stroke-linecap="round">
+        <path d="M300,880 Q296,820 301,760 M316,900 Q320,830 314,770 M306,700 Q302,640 307,580"/>
+      </g>
+
+      <!-- Branches-secteurs (encre, épaisses) -->
+      <g fill="none" stroke="#6b4a2b" stroke-linecap="round" filter="url(#rough)">
+        <path d="M295,700 C240,690 190,660 140,620" stroke-width="11"/>
+        <path d="M318,620 C380,600 440,570 495,525" stroke-width="11"/>
+        <path d="M298,520 C240,500 185,465 145,415" stroke-width="10"/>
+        <path d="M312,440 C370,415 430,385 480,335" stroke-width="9"/>
+        <path d="M303,370 C300,320 290,270 265,225" stroke-width="8"/>
+        <path d="M307,370 C315,315 330,265 355,215" stroke-width="8"/>
+      </g>
+      <!-- Cerne encre des branches -->
+      <g fill="none" stroke="#5a4118" stroke-width="1.2" opacity="0.5" stroke-linecap="round" filter="url(#rough)">
+        <path d="M295,704 C240,694 190,664 140,624"/>
+        <path d="M318,624 C380,604 440,574 495,529"/>
+        <path d="M298,524 C240,504 185,469 145,419"/>
+      </g>
+
+      <!-- Ramifications terminales (fines) vers les étiquettes -->
+      <g fill="none" stroke="#6b4a2b" stroke-width="3.2" stroke-linecap="round">
+        <!-- Maçonnerie -->
+        <path d="M158,628 C130,615 105,600 84,592"/>
+        <path d="M182,644 C160,660 140,672 126,678"/>
+        <path d="M170,636 C150,680 140,720 136,742"/>
+        <!-- Plomberie -->
+        <path d="M478,536 C500,548 512,556 520,562"/>
+        <path d="M462,548 C470,510 476,492 480,486"/>
+        <path d="M420,576 C408,596 400,610 396,618"/>
+        <!-- Électricité -->
+        <path d="M158,424 C130,410 105,398 88,392"/>
+        <path d="M190,452 C160,462 135,470 118,474"/>
+        <path d="M205,463 C200,420 198,392 198,364"/>
+        <!-- Menuiserie -->
+        <path d="M462,348 C480,336 496,326 508,320"/>
+        <path d="M448,358 C464,384 476,400 484,410"/>
+        <!-- Courtage -->
+        <path d="M265,225 C250,210 238,200 228,194"/>
+        <path d="M355,215 C368,202 380,192 390,186"/>
+      </g>
+
+      <!-- Bannières de secteurs (branche commune nommée) -->
+      <g font-family="Georgia, serif" font-size="12.5" font-weight="700">
+        <g transform="rotate(9 218 668)">
+          <rect x="158" y="654" width="104" height="24" rx="4" fill="#f4e6bd" stroke="#a9884a" stroke-width="1.3"/>
+          <text x="210" y="670" text-anchor="middle" fill="#4a3512">MAÇONNERIE</text>
+        </g>
+        <g transform="rotate(-11 400 590)">
+          <rect x="348" y="578" width="98" height="24" rx="4" fill="#f4e6bd" stroke="#a9884a" stroke-width="1.3"/>
+          <text x="397" y="594" text-anchor="middle" fill="#4a3512">PLOMBERIE</text>
+        </g>
+        <g transform="rotate(10 222 480)">
+          <rect x="164" y="468" width="110" height="24" rx="4" fill="#f4e6bd" stroke="#a9884a" stroke-width="1.3"/>
+          <text x="219" y="484" text-anchor="middle" fill="#4a3512">ÉLECTRICITÉ</text>
+        </g>
+        <g transform="rotate(-12 400 402)">
+          <rect x="348" y="390" width="104" height="24" rx="4" fill="#f4e6bd" stroke="#a9884a" stroke-width="1.3"/>
+          <text x="400" y="406" text-anchor="middle" fill="#4a3512">MENUISERIE</text>
+        </g>
+        <g>
+          <rect x="268" y="243" width="86" height="24" rx="4" fill="#f4e6bd" stroke="#a9884a" stroke-width="1.3"/>
+          <text x="311" y="259" text-anchor="middle" fill="#4a3512">COURTAGE</text>
+        </g>
+      </g>
+
+      <!-- Contacts : étiquette crème = pastille type (anneau crème + cerne encre)
+           + nom + type en toutes lettres. 12 contacts sur 5 branches. -->
+      <g font-family="Georgia, serif">
+        <!-- ── Maçonnerie ── -->
+        <g>
+          <rect x="14" y="560" width="128" height="34" rx="5" fill="#fff3d6" stroke="#a9884a" stroke-width="1.3"/>
+          <circle cx="30" cy="577" r="6.5" fill="#e08a3c" stroke="#fff3d6" stroke-width="2.4"/>
+          <circle cx="30" cy="577" r="8.6" fill="none" stroke="#5a4118" stroke-width="1"/>
+          <text x="42" y="574" font-size="12.5" font-weight="700" fill="#3d2c10">Roche &amp; Fils</text>
+          <text x="42" y="588" font-size="9.5" font-style="italic" fill="#6e5320">artisan</text>
+          <path d="M84,592 L74,580" stroke="#a9884a" stroke-width="1.1" fill="none"/>
+        </g>
+        <g>
+          <rect x="52" y="682" width="100" height="34" rx="5" fill="#fff3d6" stroke="#a9884a" stroke-width="1.3"/>
+          <circle cx="68" cy="699" r="6.5" fill="#3d9663" stroke="#fff3d6" stroke-width="2.4"/>
+          <circle cx="68" cy="699" r="8.6" fill="none" stroke="#5a4118" stroke-width="1"/>
+          <text x="80" y="696" font-size="12.5" font-weight="700" fill="#3d2c10">Bâti Sud</text>
+          <text x="80" y="710" font-size="9.5" font-style="italic" fill="#6e5320">lead</text>
+        </g>
+        <!-- Chantier suspendu comme un fruit -->
+        <g>
+          <rect x="76" y="748" width="128" height="34" rx="5" fill="#fff3d6" stroke="#a9884a" stroke-width="1.3"/>
+          <circle cx="92" cy="765" r="6.5" fill="#8b5cbf" stroke="#fff3d6" stroke-width="2.4"/>
+          <circle cx="92" cy="765" r="8.6" fill="none" stroke="#5a4118" stroke-width="1"/>
+          <text x="104" y="762" font-size="12.5" font-weight="700" fill="#3d2c10">Villa Ombrelle</text>
+          <text x="104" y="776" font-size="9.5" font-style="italic" fill="#6e5320">chantier</text>
+        </g>
+        <!-- ── Plomberie ── -->
+        <g>
+          <rect x="474" y="566" width="132" height="34" rx="5" fill="#fff3d6" stroke="#a9884a" stroke-width="1.3"/>
+          <circle cx="490" cy="583" r="6.5" fill="#e08a3c" stroke="#fff3d6" stroke-width="2.4"/>
+          <circle cx="490" cy="583" r="8.6" fill="none" stroke="#5a4118" stroke-width="1"/>
+          <text x="502" y="580" font-size="12.5" font-weight="700" fill="#3d2c10">Plomberie Diaz</text>
+          <text x="502" y="594" font-size="9.5" font-style="italic" fill="#6e5320">artisan</text>
+        </g>
+        <g>
+          <rect x="452" y="448" width="98" height="34" rx="5" fill="#fff3d6" stroke="#a9884a" stroke-width="1.3"/>
+          <circle cx="468" cy="465" r="6.5" fill="#3d9663" stroke="#fff3d6" stroke-width="2.4"/>
+          <circle cx="468" cy="465" r="8.6" fill="none" stroke="#5a4118" stroke-width="1"/>
+          <text x="480" y="462" font-size="12.5" font-weight="700" fill="#3d2c10">AquaFlux</text>
+          <text x="480" y="476" font-size="9.5" font-style="italic" fill="#6e5320">lead</text>
+        </g>
+        <g>
+          <rect x="330" y="624" width="100" height="34" rx="5" fill="#fff3d6" stroke="#a9884a" stroke-width="1.3"/>
+          <circle cx="346" cy="641" r="6.5" fill="#e08a3c" stroke="#fff3d6" stroke-width="2.4"/>
+          <circle cx="346" cy="641" r="8.6" fill="none" stroke="#5a4118" stroke-width="1"/>
+          <text x="358" y="638" font-size="12.5" font-weight="700" fill="#3d2c10">Ets Morel</text>
+          <text x="358" y="652" font-size="9.5" font-style="italic" fill="#6e5320">artisan</text>
+        </g>
+        <!-- ── Électricité ── -->
+        <g>
+          <rect x="10" y="356" width="128" height="34" rx="5" fill="#fff3d6" stroke="#a9884a" stroke-width="1.3"/>
+          <circle cx="26" cy="373" r="6.5" fill="#e08a3c" stroke="#fff3d6" stroke-width="2.4"/>
+          <circle cx="26" cy="373" r="8.6" fill="none" stroke="#5a4118" stroke-width="1"/>
+          <text x="38" y="370" font-size="12.5" font-weight="700" fill="#3d2c10">Élec Brossard</text>
+          <text x="38" y="384" font-size="9.5" font-style="italic" fill="#6e5320">artisan</text>
+        </g>
+        <g>
+          <rect x="24" y="482" width="94" height="34" rx="5" fill="#fff3d6" stroke="#a9884a" stroke-width="1.3"/>
+          <circle cx="40" cy="499" r="6.5" fill="#4a86bd" stroke="#fff3d6" stroke-width="2.4"/>
+          <circle cx="40" cy="499" r="8.6" fill="none" stroke="#5a4118" stroke-width="1"/>
+          <text x="52" y="496" font-size="12.5" font-weight="700" fill="#3d2c10">Voltéo</text>
+          <text x="52" y="510" font-size="9.5" font-style="italic" fill="#6e5320">partenaire</text>
+        </g>
+        <g>
+          <rect x="142" y="322" width="118" height="34" rx="5" fill="#fff3d6" stroke="#a9884a" stroke-width="1.3"/>
+          <circle cx="158" cy="339" r="6.5" fill="#3d9663" stroke="#fff3d6" stroke-width="2.4"/>
+          <circle cx="158" cy="339" r="8.6" fill="none" stroke="#5a4118" stroke-width="1"/>
+          <text x="170" y="336" font-size="12.5" font-weight="700" fill="#3d2c10">Lumia Rénov</text>
+          <text x="170" y="350" font-size="9.5" font-style="italic" fill="#6e5320">lead</text>
+        </g>
+        <!-- ── Menuiserie ── -->
+        <g>
+          <rect x="452" y="286" width="156" height="34" rx="5" fill="#fff3d6" stroke="#a9884a" stroke-width="1.3"/>
+          <circle cx="468" cy="303" r="6.5" fill="#e08a3c" stroke="#fff3d6" stroke-width="2.4"/>
+          <circle cx="468" cy="303" r="8.6" fill="none" stroke="#5a4118" stroke-width="1"/>
+          <text x="480" y="300" font-size="12.5" font-weight="700" fill="#3d2c10">Menuiserie Aubrac</text>
+          <text x="480" y="314" font-size="9.5" font-style="italic" fill="#6e5320">artisan</text>
+        </g>
+        <g>
+          <rect x="470" y="414" width="118" height="34" rx="5" fill="#fff3d6" stroke="#a9884a" stroke-width="1.3"/>
+          <circle cx="486" cy="431" r="6.5" fill="#3d9663" stroke="#fff3d6" stroke-width="2.4"/>
+          <circle cx="486" cy="431" r="8.6" fill="none" stroke="#5a4118" stroke-width="1"/>
+          <text x="498" y="428" font-size="12.5" font-weight="700" fill="#3d2c10">Atelier Chêne</text>
+          <text x="498" y="442" font-size="9.5" font-style="italic" fill="#6e5320">lead</text>
+        </g>
+        <!-- ── Courtage ── -->
+        <g>
+          <rect x="96" y="160" width="134" height="34" rx="5" fill="#fff3d6" stroke="#a9884a" stroke-width="1.3"/>
+          <circle cx="112" cy="177" r="6.5" fill="#4a86bd" stroke="#fff3d6" stroke-width="2.4"/>
+          <circle cx="112" cy="177" r="8.6" fill="none" stroke="#5a4118" stroke-width="1"/>
+          <text x="124" y="174" font-size="12.5" font-weight="700" fill="#3d2c10">Cabinet Ferrand</text>
+          <text x="124" y="188" font-size="9.5" font-style="italic" fill="#6e5320">partenaire</text>
+          <path d="M228,194 L222,192" stroke="#a9884a" stroke-width="1.1" fill="none"/>
+        </g>
+        <g>
+          <rect x="392" y="152" width="140" height="34" rx="5" fill="#fff3d6" stroke="#a9884a" stroke-width="1.3"/>
+          <circle cx="408" cy="169" r="6.5" fill="#4a86bd" stroke="#fff3d6" stroke-width="2.4"/>
+          <circle cx="408" cy="169" r="8.6" fill="none" stroke="#5a4118" stroke-width="1"/>
+          <text x="420" y="166" font-size="12.5" font-weight="700" fill="#3d2c10">Crédit Ponthieu</text>
+          <text x="420" y="180" font-size="9.5" font-style="italic" fill="#6e5320">partenaire</text>
+        </g>
+      </g>
+
+      <!-- Petit oiseau (clin d'œil ludique, décor) -->
+      <g stroke="#5a4118" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.8">
+        <path d="M338,352 q5,-7 10,0 q5,-7 10,0"/>
+      </g>
+
+      <!-- Jeune pousse : la croissance du réseau -->
+      <g filter="url(#rough)">
+        <path d="M408,930 C407,912 406,898 410,884" fill="none" stroke="#557a3a" stroke-width="3.4" stroke-linecap="round"/>
+        <path d="M409,900 Q396,892 392,878 Q406,880 411,893 Z" fill="#6f8f4a" stroke="#4f7038" stroke-width="1.2"/>
+        <path d="M410,888 Q422,878 428,864 Q413,867 408,881 Z" fill="#6f8f4a" stroke="#4f7038" stroke-width="1.2"/>
+      </g>
+      <g font-family="'Caveat', 'Segoe Script', 'Bradley Hand', cursive" font-weight="700">
+        <text x="448" y="852" font-size="24" fill="#4a3512">nouveau contact !</text>
+        <path d="M472,862 Q448,884 424,894 M424,894 l10,-2 M424,894 l6,-9"
+              fill="none" stroke="#4a3512" stroke-width="1.6" stroke-linecap="round"/>
+      </g>
+    </svg>
+  </main>
+
+  <div class="ajout">
+    <button type="button" aria-label="Ajouter un contact">+</button>
+    <span class="libelle">Ajouter un contact</span>
+  </div>
+
+</body>
+</html>
