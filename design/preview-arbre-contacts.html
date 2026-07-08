@@ -5,16 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ultima — Preview · Arbre des contacts</title>
 <style>
-  /* Partis pris : l'arbre remplace la carte — tronc = réseau de Paul, grosses
-     branches = secteurs d'activité (bannières dorées), ramifications = contacts
-     (étiquettes crème : nom + type en toutes lettres + pastille couleur à anneau).
-     Registre parchemin/encre R1 ; arbre vertical mobile-first (scroll accepté) ;
-     croissance suggérée par une jeune pousse annotée à la main (Caveat). */
-  @font-face {
-    font-family: "Caveat";
-    src: url("../fonts/caveat-latin-700-normal.woff2") format("woff2");
-    font-weight: 700; font-style: normal; font-display: swap;
-  }
+  /* Partis pris (2026-07-08, style antique et sérieux) : arbre gravé à l'encre
+     sur parchemin — tronc = réseau, branches = secteurs (bannières petites
+     capitales), étiquettes crème = contacts (nom + type + pastille cernée).
+     Registre planche d'atlas : serif droit et petites capitales uniquement,
+     zéro manuscrit ; croissance = jeune pousse et renvoi « Nouvelle entrée ». */
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
   body {
@@ -84,32 +79,23 @@
     flex: none;
   }
 
-  /* Bouton flottant « + » : action primaire unique de l'écran */
+  /* Bouton d'ajout : action primaire unique de l'écran, cartouche sobre encre/or */
   .ajout {
     position: fixed; right: 1rem; bottom: calc(1rem + env(safe-area-inset-bottom));
     z-index: 5;
-    display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
-  }
-  .ajout button {
-    width: 58px; height: 58px;
-    font: inherit; font-size: 2rem; font-weight: 700; line-height: 1;
-    color: #4a3512;
-    background: radial-gradient(circle at 35% 30%, #f4e6bd, #d9bf83);
-    border: 2px solid #6e5320;
-    border-radius: 50%;
-    box-shadow: inset 0 0 0 2px #f4e6bd, 0 3px 10px rgba(59,47,28,0.45);
+    min-height: 46px;
+    padding: 0.55rem 1.15rem;
+    font: inherit; font-size: 0.95rem; font-weight: 700;
+    font-variant: small-caps; letter-spacing: 0.09em;
+    color: #f2e8cd;
+    background: linear-gradient(#1a5a78, #0e3a52);
+    border: 1.5px solid #a9884a;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,10,20,0.4);
     cursor: pointer;
   }
-  .ajout button:hover { background: radial-gradient(circle at 35% 30%, #f8ecca, #e3cd93); }
-  .ajout button:focus-visible { outline: 3px solid #17578f; outline-offset: 2px; }
-  .ajout .libelle {
-    font-size: 0.72rem; font-variant: small-caps; letter-spacing: 0.08em;
-    color: #f2e8cd;
-    background: rgba(14,58,82,0.92);
-    border: 1px solid #a9884a;
-    border-radius: 999px;
-    padding: 0.15rem 0.6rem;
-  }
+  .ajout:hover { background: linear-gradient(#1f6787, #114560); }
+  .ajout:focus-visible { outline: 3px solid #17578f; outline-offset: 2px; }
 </style>
 </head>
 <body>
@@ -339,29 +325,23 @@
         </g>
       </g>
 
-      <!-- Petit oiseau (clin d'œil ludique, décor) -->
-      <g stroke="#5a4118" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.8">
-        <path d="M338,352 q5,-7 10,0 q5,-7 10,0"/>
-      </g>
-
       <!-- Jeune pousse : la croissance du réseau -->
       <g filter="url(#rough)">
         <path d="M408,930 C407,912 406,898 410,884" fill="none" stroke="#557a3a" stroke-width="3.4" stroke-linecap="round"/>
         <path d="M409,900 Q396,892 392,878 Q406,880 411,893 Z" fill="#6f8f4a" stroke="#4f7038" stroke-width="1.2"/>
         <path d="M410,888 Q422,878 428,864 Q413,867 408,881 Z" fill="#6f8f4a" stroke="#4f7038" stroke-width="1.2"/>
       </g>
-      <g font-family="'Caveat', 'Segoe Script', 'Bradley Hand', cursive" font-weight="700">
-        <text x="448" y="852" font-size="24" fill="#4a3512">nouveau contact !</text>
-        <path d="M472,862 Q448,884 424,894 M424,894 l10,-2 M424,894 l6,-9"
-              fill="none" stroke="#4a3512" stroke-width="1.6" stroke-linecap="round"/>
+      <!-- Renvoi formel (registre atlas) : étiquette sobre + filet droit -->
+      <g font-family="Georgia, serif">
+        <path d="M434,887 L418,894" fill="none" stroke="#5a4118" stroke-width="1" opacity="0.6"/>
+        <rect x="434" y="874" width="134" height="26" rx="4" fill="#f4e6bd" stroke="#a9884a" stroke-width="1.2"/>
+        <text x="501" y="891" text-anchor="middle" font-size="10.5" font-weight="700"
+              letter-spacing="1.2" fill="#4a3512">NOUVELLE ENTRÉE</text>
       </g>
     </svg>
   </main>
 
-  <div class="ajout">
-    <button type="button" aria-label="Ajouter un contact">+</button>
-    <span class="libelle">Ajouter un contact</span>
-  </div>
+  <button type="button" class="ajout">Ajouter un contact</button>
 
 </body>
 </html>
