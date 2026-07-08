@@ -53,9 +53,11 @@ sur previews) devient l'écran d'arrivée ; fusion Accueil × Carte ; les
 contenus v3-① revivent dans un volet « Aujourd'hui » ; auth invisible (actée,
 jamais supprimée). Boucles ordonnées :
 
-1. **R1 — Habillage antique** de la carte existante (sépia tuiles + décor
-   parchemin en surcouches + voile Ptolémée au zoom pays + cartouche
-   « Ultima ») : effet visible immédiat, zéro changement de navigation.
+1. ✅ 2026-07-07 — **R1 — Habillage antique** fusionné (PR #20, contre-passe
+   GO) : sépia par paliers, voile Ptolémée, cadre parchemin, cartouche
+   ULTIMA, arrivée au boot sur la Carte (Accueil par onglet) ; harnais
+   smoke-antique au patrimoine. Vivier R4 consigné dans CADRAGE (z-index
+   spec, trait sous-traitance, rose des vents, preuve RA1/RA2 en prod).
 2. **R2 — Fusion Accueil × Carte** : volet « Aujourd'hui » (bottom-sheet),
    barre réduite à Carte · Contacts, badge chiffré des relances.
 3. **R3 — Ergonomie pouce + auth invisible** : « + » flottant, fiche en
