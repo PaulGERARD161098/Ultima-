@@ -28,7 +28,7 @@ trap 'kill $SERVEUR 2>/dev/null || true' EXIT
 sleep 1
 
 # 4. Les harnais navigateur (chacun sort en erreur si un verdict échoue).
-for h in smoke-flux-fiche.mjs smoke-accueil.mjs smoke-accueil-etats.mjs smoke-contacts.mjs smoke-dictee.mjs smoke-geocode.mjs smoke-recherche.mjs smoke-antique.mjs; do
+for h in smoke-flux-fiche.mjs smoke-accueil.mjs smoke-accueil-etats.mjs smoke-connexion.mjs smoke-contacts.mjs smoke-dictee.mjs smoke-geocode.mjs smoke-recherche.mjs smoke-antique.mjs; do
   echo "=== $h ==="
   node "$h"
 done

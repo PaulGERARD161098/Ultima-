@@ -2384,6 +2384,9 @@
     if (etat.modeDemo) { return; }
     $('#form-connexion').hidden = Boolean(etat.session);
     $('#bouton-deconnexion').hidden = !etat.session;
+    // A1 : écran de connexion plein écran tant qu'aucune session n'est ouverte
+    // (jamais en mode démo — majAuthUi ne s'exécute pas dans ce cas).
+    $('#ecran-connexion').hidden = Boolean(etat.session);
   }
 
   async function envoyerLienMagique(evenement) {
