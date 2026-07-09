@@ -133,7 +133,17 @@ await deco.locator('#champ-email').fill('paul@exemple.fr');
 await deco.locator('#form-connexion button[type="submit"]').click();
 await deco.waitForTimeout(300);
 verdicts.otpAppele = await deco.evaluate(() => window.__otpAppele === true);
-verdicts.toastLienEnvoye = await deco.locator('.toast', { hasText: 'Lien de connexion envoyé' }).count() >= 1;
+// Visible, pas seulement présent : le toast doit passer AU-DESSUS de l'overlay
+// de connexion (sinon la confirmation reste cachée derrière — constat A1).
+verdicts.toastLienEnvoye = await deco.locator('.toast', { hasText: 'Lien de connexion envoyé' }).first().isVisible();
+verdicts.toastAuDessusEcran = await deco.evaluate(() => {
+  var toast = document.querySelector('.toasts');
+  var ecran = document.getElementById('ecran-connexion');
+  if (!toast || !ecran) { return false; }
+  var zToast = parseInt(getComputedStyle(toast).zIndex, 10) || 0;
+  var zEcran = parseInt(getComputedStyle(ecran).zIndex, 10) || 0;
+  return zToast > zEcran;
+});
 
 // ---- 6. Zéro requête réseau externe nouvelle à l'affichage de l'écran. ----
 verdicts.zeroRequeteExterne = requetesDeco.every((h) => HOTES_OK.includes(h));

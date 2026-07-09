@@ -1029,7 +1029,10 @@ textarea:focus-visible,
   bottom: calc(var(--hauteur-onglets) + 1rem + env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1300;
+  /* Au-dessus de l'écran de connexion (#ecran-connexion, z 2000) : sinon la
+     confirmation « Lien de connexion envoyé » resterait cachée derrière
+     l'overlay après soumission en déconnecté (constat contre-passe A1). */
+  z-index: 2100;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
