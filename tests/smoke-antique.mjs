@@ -158,17 +158,17 @@ const contrasteAutour = async (cx, cy) => {
 await page.goto('http://127.0.0.1:8123/', { waitUntil: 'load', timeout: 20000 });
 await page.waitForTimeout(1100);
 
-// 1. Arrivée : l'espace Carte est visible sans geste ; l'Accueil v3-① reste
-// accessible par son onglet (aller-retour réel).
-const carteVisibleArrivee = (await page.locator('#espace-carte').isVisible()) &&
+// 1. Arrivée : l'espace Arbre est visible sans geste (A3, le pivot) ; l'Accueil
+// et la Carte restent accessibles par leur onglet (aller-retour réel).
+const arbreVisibleArrivee = (await page.locator('#espace-arbre').isVisible()) &&
   (await page.locator('#espace-accueil').isHidden()) &&
-  (await page.locator('.barre-onglets .onglet[data-onglet="carte"][aria-current="page"]').count()) === 1;
+  (await page.locator('.barre-onglets .onglet[data-onglet="arbre"][aria-current="page"]').count()) === 1;
 await page.locator('.barre-onglets .onglet[data-onglet="accueil"]').click();
 await page.waitForTimeout(300);
 const accueilAccessible = await page.locator('#espace-accueil').isVisible();
 await page.locator('.barre-onglets .onglet[data-onglet="carte"]').click();
 await page.waitForTimeout(300);
-verdicts.arriveeSurCarte = carteVisibleArrivee && accueilAccessible &&
+verdicts.arriveeSurArbre = arbreVisibleArrivee && accueilAccessible &&
   (await page.locator('#espace-carte').isVisible());
 
 // 6a. Cartouche : H1 « ULTIMA » dans l'entête, .entete-titre disparu,

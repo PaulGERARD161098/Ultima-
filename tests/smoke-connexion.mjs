@@ -153,14 +153,15 @@ await deco.close();
 // ---- 3. Connecté (session simulée) : écran masqué, app visible. ----
 const conn = await ouvrir({ width: 390, height: 844 }, 'connecte');
 verdicts.ecranMasqueConnecte = await conn.locator('#ecran-connexion').isHidden();
-verdicts.appVisibleConnecte = await conn.locator('#espace-carte').isVisible();
+// A3 : l'arrivée connectée est l'arbre (le pivot), plus la carte.
+verdicts.appVisibleConnecte = await conn.locator('#espace-arbre').isVisible();
 verdicts.deconnexionVisible = await conn.locator('#bouton-deconnexion').isVisible();
 await conn.close();
 
-// ---- 4. Mode démo : pas d'écran de connexion, carte visible. ----
+// ---- 4. Mode démo : pas d'écran de connexion, arbre visible (arrivée A3). ----
 const demo = await ouvrir({ width: 390, height: 844 }, 'aucun');
 verdicts.ecranMasqueDemo = await demo.locator('#ecran-connexion').isHidden();
-verdicts.carteVisibleDemo = await demo.locator('#espace-carte').isVisible();
+verdicts.arbreVisibleDemo = await demo.locator('#espace-arbre').isVisible();
 verdicts.bandeauDemo = await demo.locator('#bandeau-demo').isVisible();
 await demo.close();
 

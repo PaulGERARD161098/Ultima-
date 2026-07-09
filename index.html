@@ -246,6 +246,32 @@
       </div>
     </section>
 
+    <!-- ===== Espace Arbre (A3, le pivot : arbre gravé, secteurs = branches) ===== -->
+    <section id="espace-arbre" class="espace espace-arbre" hidden aria-labelledby="arbre-titre">
+      <header class="arbre-entete">
+        <div class="cartouche-arbre">
+          <h2 id="arbre-titre" class="cartouche-arbre-titre">ULTIMA</h2>
+          <p class="cartouche-arbre-sous">l'arbre du réseau</p>
+        </div>
+        <div id="arbre-outils" class="arbre-outils">
+          <div class="champ-recherche-arbre">
+            <label class="visuellement-cache" for="arbre-recherche">Rechercher un contact par nom ou ville</label>
+            <svg class="icone-loupe" viewBox="0 0 24 24" width="20" height="20"
+                 aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="6.5"/>
+              <path d="m16 16 4.5 4.5"/>
+            </svg>
+            <input id="arbre-recherche" type="search" class="arbre-recherche"
+                   placeholder="Rechercher un nom ou une ville…" autocomplete="off">
+          </div>
+          <p id="arbre-recherche-message" class="arbre-recherche-message" role="status"></p>
+        </div>
+      </header>
+      <div id="arbre-scene" class="arbre-scene"></div>
+      <button id="arbre-ajouter" type="button" class="arbre-ajouter">+ Ajouter un contact</button>
+    </section>
+
     <!-- ===== Espace Carte (existant : barre d'outils + carte + légende + panneau) ===== -->
     <section id="espace-carte" class="espace espace-carte" hidden aria-labelledby="carte-titre">
       <h2 id="carte-titre" class="visuellement-cache">Carte</h2>
@@ -442,7 +468,12 @@
         </div>
       </div>
 
-      <aside id="panneau" class="panneau" hidden aria-label="Panneau latéral">
+    </section>
+
+    <!-- Panneau fiche/formulaire : overlay global (position:fixed). Sorti de
+         espace-carte (A3) pour rester accessible depuis TOUS les onglets — un
+         tap sur une feuille de l'arbre ouvre la fiche sans quitter l'arbre. -->
+    <aside id="panneau" class="panneau" hidden aria-label="Panneau latéral">
         <div class="panneau-entete">
           <h2 id="panneau-titre" class="panneau-titre" tabindex="-1">Fiche</h2>
           <button id="bouton-fermer-panneau" type="button" class="bouton-fermer" aria-label="Fermer le panneau">&times;</button>
@@ -561,8 +592,7 @@
             <button type="button" id="bouton-annuler-relation" class="bouton bouton-secondaire">Annuler</button>
           </div>
         </form>
-      </aside>
-    </section>
+    </aside>
 
     <!-- ===== Espace Contacts (registre sobre : liste + recherche) ===== -->
     <section id="espace-contacts" class="espace espace-contacts" hidden aria-labelledby="contacts-titre">
@@ -591,6 +621,13 @@
       </svg>
       <span>Accueil</span>
     </button>
+    <button type="button" class="onglet" data-onglet="arbre">
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
+        <circle cx="12" cy="8.5" r="5.5"/>
+        <path d="M12 14 V20.5 M8.5 20.5 H15.5"/>
+      </svg>
+      <span>Arbre</span>
+    </button>
     <button type="button" class="onglet" data-onglet="carte">
       <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
         <path d="M9 4.5 L15 6.5 L20.5 4.5 V18.5 L15 20.5 L9 18.5 L3.5 20.5 V6.5 Z"/>
@@ -615,6 +652,7 @@
   <script src="js/vendor/supabase-js-2.110.0.min.js"></script>
   <script src="js/config.js"></script>
   <script src="js/carte.js"></script>
+  <script src="js/arbre.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

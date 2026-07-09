@@ -176,6 +176,7 @@
   function rafraichir() {
     window.UltimaCarte.rendre(etat.noeuds, etat.relations, etat.filtres);
     rendreAccueil();
+    rendreArbre();
     rendreContacts();
     if (etat.noeudCourant && !$('#vue-fiche').hidden) {
       rendreFiche();
@@ -332,6 +333,7 @@
 
   var SECTIONS_ONGLETS = {
     accueil: '#espace-accueil',
+    arbre: '#espace-arbre',
     carte: '#espace-carte',
     contacts: '#espace-contacts'
   };
@@ -339,6 +341,11 @@
   function activerOnglet(nom) {
     if (!SECTIONS_ONGLETS[nom]) { return; }
     etat.onglet = nom;
+    // Le panneau fiche/formulaire est un overlay global (A3) : il ne se masque
+    // plus tout seul avec l'espace Carte. On le ferme donc à chaque changement
+    // d'onglet (comportement d'origine). Les flux qui rouvrent une fiche/un
+    // formulaire appellent activerOnglet AVANT d'ouvrir : l'ordre est préservé.
+    if (!$('#panneau').hidden) { fermerPanneau(); }
     Object.keys(SECTIONS_ONGLETS).forEach(function (cle) {
       var section = $(SECTIONS_ONGLETS[cle]);
       if (section) { section.hidden = cle !== nom; }
@@ -355,6 +362,7 @@
       window.UltimaCarte.invaliderTaille();
     }
     if (nom === 'accueil') { rendreAccueil(); }
+    if (nom === 'arbre') { rendreArbre(); }
     if (nom === 'contacts') { rendreContacts(); }
     // Changement d'onglet : liste de recherche fermée, halo effacé, texte
     // du champ conservé (règles d'état v3-⑥).
@@ -1049,6 +1057,101 @@
     liste.className = 'liste-contacts';
     visibles.forEach(function (n) { liste.appendChild(itemContact(n)); });
     conteneur.appendChild(liste);
+  }
+
+  // ---------- Onglet Arbre (A3, le pivot : secteurs = branches) ----------
+
+  // Bloc d'état de l'arbre (non connecté / réseau vide), sur le parchemin.
+  function blocEtatArbre(texteFort, texteSuite, libelleBouton, action) {
+    var bloc = document.createElement('div');
+    bloc.className = 'arbre-bloc-etat cadre-dessine';
+    var texte = document.createElement('p');
+    texte.className = 'arbre-etat-texte';
+    var fort = document.createElement('strong');
+    fort.textContent = texteFort;
+    texte.appendChild(fort);
+    texte.appendChild(document.createTextNode(' ' + texteSuite));
+    bloc.appendChild(texte);
+    if (libelleBouton) {
+      bloc.appendChild(boutonRaccourci(libelleBouton, 'bouton-primaire', action));
+    }
+    return bloc;
+  }
+
+  // Ouverture de fiche depuis l'arbre : la fiche est un overlay global (A3),
+  // on l'ouvre SANS quitter l'arbre (contraste avec le flux Contacts qui, lui,
+  // bascule vers la carte). Réutilisation stricte de ouvrirFiche / rendreFiche.
+  function ouvrirFicheDepuisArbre(nodeId) {
+    var noeud = nodeId ? trouverNoeud(nodeId) : null;
+    if (!noeud) {
+      toast("Ce contact n'existe plus.", 'erreur');
+      return;
+    }
+    ouvrirFiche(noeud.id);
+    $('#panneau-titre').focus();
+  }
+
+  function rendreArbre() {
+    var scene = $('#arbre-scene');
+    if (!scene) { return; }
+    var outils = $('#arbre-outils');
+    var boutonAjouter = $('#arbre-ajouter');
+    var message = $('#arbre-recherche-message');
+    scene.textContent = '';
+    if (message) { message.textContent = ''; }
+
+    // Non connecté (config présente, pas de session) : invitation, pas d'arbre.
+    if (!etat.modeDemo && !etat.session) {
+      if (outils) { outils.hidden = true; }
+      if (boutonAjouter) { boutonAjouter.hidden = true; }
+      scene.appendChild(blocEtatArbre(
+        'Connectez-vous pour retrouver votre réseau.',
+        'Le lien de connexion arrive par e-mail.',
+        'Se connecter',
+        function () {
+          var champ = $('#champ-email');
+          if (champ) { champ.focus(); }
+        }));
+      return;
+    }
+
+    if (boutonAjouter) { boutonAjouter.hidden = false; }
+
+    // Connecté (ou démo), aucune donnée : invitation au premier contact.
+    if (etat.noeuds.length === 0) {
+      if (outils) { outils.hidden = true; }
+      scene.appendChild(blocEtatArbre(
+        "Votre réseau est vide pour l'instant.",
+        "Commencez par ajouter votre premier contact : il prendra racine dans l'arbre.",
+        '+ Ajouter un contact',
+        function () { ouvrirFormNoeud(null); }));
+      return;
+    }
+
+    if (outils) { outils.hidden = false; }
+
+    // Recherche v3-⑥ (variante arbre) : MISE EN ÉVIDENCE, pas réduction — les
+    // feuilles non correspondantes sont atténuées mais restent en place, pour
+    // ne pas casser l'orientation dans l'arbre. Réutilise correspondAuTerme.
+    var champ = $('#arbre-recherche');
+    var brut = champ ? champ.value.trim() : '';
+    var terme = normaliserTexte(brut);
+    var correspond = function (noeud) {
+      return !terme || correspondAuTerme(noeud, terme);
+    };
+
+    window.UltimaArbre.rendre(scene, etat.noeuds, {
+      surClicNoeud: ouvrirFicheDepuisArbre,
+      libellesType: LIBELLES_TYPE,
+      correspond: correspond
+    });
+
+    if (terme && message) {
+      var nb = etat.noeuds.filter(correspond).length;
+      message.textContent = nb === 0
+        ? 'Aucun contact ne correspond à “' + brut + '”.'
+        : (nb + (nb > 1 ? ' contacts mis en évidence.' : ' contact mis en évidence.'));
+    }
   }
 
   // ---------- Panneau latéral ----------
@@ -2467,6 +2570,15 @@
 
     $('#contacts-recherche').addEventListener('input', rendreContacts);
 
+    $('#arbre-ajouter').addEventListener('click', function () {
+      if (!etat.modeDemo && !etat.session) {
+        toast('Connectez-vous pour ajouter un contact.', 'erreur');
+        return;
+      }
+      ouvrirFormNoeud(null); // panneau overlay : on reste sur l'arbre
+    });
+    $('#arbre-recherche').addEventListener('input', rendreArbre);
+
     $('#bouton-ajouter').addEventListener('click', function () {
       if (!etat.modeDemo && !etat.session) {
         toast('Connectez-vous pour ajouter un nœud.', 'erreur');
@@ -2518,9 +2630,11 @@
     initDictee(); // micros des champs statiques (sans API : ne fait rien)
     initGeocodage(); // « Trouver sur la carte » du formulaire nœud
     initRecherche(); // recherche nom/ville de l'onglet Carte (v3-⑥)
-    // R1 : l'arrivée se fait sur la carte (la carte est le hub) ;
-    // l'Accueil v3-① reste accessible par son onglet.
-    activerOnglet('carte');
+    // A3 (D2a) : l'arbre est l'écran d'arrivée (le pivot), en démo comme en
+    // connecté. La carte reste pleinement accessible par son onglet ; l'Accueil
+    // v3-① aussi. Les données arrivent juste après (chargerDonnees → rafraichir
+    // → rendreArbre) : l'arbre se peuple sans changement d'onglet.
+    activerOnglet('arbre');
     await initAuth();
     await chargerDonnees();
   }
