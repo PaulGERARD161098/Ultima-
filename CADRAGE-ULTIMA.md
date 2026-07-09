@@ -123,13 +123,43 @@
   enfantin — CLAUDE.md et journal mis à jour). **Suspend REFONTE-ACCUEIL
   R2-R4** (registre R1 réutilisé, rien de jeté). PR #22 fusionnée sur go
   explicite de Paul (« merge and push »).
-  **⏳ Arbitrages restants avant toute boucle de code** (REFONTE-ARBRE §6) :
-  D1 confirmation d'interprétation + compromis auth invisible ; D2 sort de
-  la carte (recommandation : onglet secondaire) ; D3 secteur en texte
-  libre + suggestions (recommandé) vs liste fermée ; D4 verdict final sur
-  les previews retravaillées ; D5 go ordre A1→A4. **Prochaine action à la
-  reprise : recueillir D1-D5, puis lancer la boucle A1 (page de
-  connexion).**
+  **✅ Arbitrages D1-D5 rendus (2026-07-09, « je suis toutes tes recos »)** :
+  D1 session persistante + belle page vue 1×/appareil ; D2a carte en onglet
+  secondaire (rien de jeté) ; D3 secteur texte libre + suggestions ; D4 go
+  previews ; D5 go ordre A1→A4.
+- ✅ **Pivot Arbre A1→A4 livré (2026-07-09, solo)** — PR #24 (ready, fusion
+  = go Paul). Chaque boucle : agent implémente → contre-passe sécu +
+  verificateur indépendants → commit atomique.
+  - **A1** page de connexion « Ultima » : overlay plein écran (carte-anneau
+    SVG inline, cartouche ULTIMA), formulaire lien-magique rebranché à
+    l'identique — **zéro touche auth** (RB5 vérifié). Fix toast au-dessus de
+    l'overlay. Double-GO.
+  - **A2** secteur d'activité : champ texte libre + datalist (dédoublonnage
+    normalisé), validation 3 couches (HTML/API/CHECK, borne 120). Migration
+    `0006_secteur_activite.sql` **déposée, NON appliquée — GATE Paul**.
+    Double-GO.
+  - **A3** l'arbre des contacts (`js/arbre.js`) : rendu SVG déterministe
+    depuis `etat.noeuds`, branche « À classer », zéro chevauchement par
+    construction ; arrivée connecté = l'arbre, carte en onglet secondaire ;
+    tap/clavier → fiche existante, panneau sorti en overlay global ;
+    recherche v3-⑥ conservée. Fix sécu S1 (octet NUL → module diffable).
+    150 contacts ~5 ms. Double-GO.
+  - **A4** croissance & vie : pousse animée (`prefers-reduced-motion`), état
+    vide, finitions décor-only (déterminisme préservé), garde-fou `inert`
+    derrière l'overlay de connexion, fixtures démo avec secteur (6 branches).
+    Double-GO.
+  - Patrimoine : 15 harnais verts (2 unit + 13 smoke), 0 erreur console.
+  **⏳ Registre Actions humaines (solo — non bloquant) :** ① appliquer
+  migration `0006` (puis harnais + `get_advisors`) ; ② Vercel env
+  `GEOCODE_USER_AGENT` + URL prod + header `Permissions-Policy` (U6) ;
+  ③ Supabase Auth : inviter Paul, couper signups, Site/Redirect URLs ;
+  ④ gate `auth.getUser()` endpoints ; ⑤ preuves live après déploiement
+  (tuiles OSM réelles RA1/RA2, Nominatim réel, login). **Fusion PR #24 =
+  go Paul.**
+  **Vivier (passes ultérieures) :** fidélité visuelle « arbre-registre en
+  bandes » vs dessin peint (arbitrage esthétique Paul) ; assertions de
+  contraste dédiées (aide connexion + bannière secteur) ; relations v2 en
+  lianes/greffes entre branches (A3 vivier).
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 

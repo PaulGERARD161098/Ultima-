@@ -166,19 +166,207 @@ body {
 
 .zone-auth { margin-left: auto; }
 
-.form-connexion {
+/* ---------- Écran de connexion plein écran (A1) ----------
+   Habillage antique : mer de fond, monde-anneau décor, cartouche doré, le
+   formulaire lien-magique dans un cartouche parchemin. Piloté par [hidden]
+   depuis majAuthUi() — jamais affiché en mode démo. */
+
+.ecran-connexion {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
   display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  flex-wrap: wrap;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--creme);
+  background:
+    radial-gradient(ellipse at 50% 32%, rgba(120, 190, 210, 0.16), rgba(0, 0, 0, 0) 60%),
+    radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0) 55%, rgba(4, 24, 36, 0.55) 100%),
+    linear-gradient(#17506b, #0e3a52 60%, #0a2d42);
 }
 
-.form-connexion input {
+/* Moirure de l'eau (tuile data-URI, registre R1) */
+.ecran-connexion::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='60'%3E%3Cpath d='M0,30 q17,-10 35,0 t35,0 t35,0 t35,0' fill='none' stroke='%238fc2d4' stroke-opacity='0.16' stroke-width='1.2'/%3E%3Cpath d='M0,52 q17,-8 35,0 t35,0 t35,0 t35,0' fill='none' stroke='%238fc2d4' stroke-opacity='0.10' stroke-width='1'/%3E%3C/svg%3E");
+}
+
+/* Carte-décor plein écran : la mer du SVG se fond dans celle du fond. */
+.ecran-decor {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4.2rem 0.4rem 0.4rem;
+}
+
+.ecran-decor svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 8px 22px rgba(0, 10, 20, 0.45));
+}
+
+/* Cartouche « ULTIMA » (registre du cartouche d'entête, taille de splash) */
+.ecran-cartouche {
+  position: relative;
+  z-index: 2;
+  flex: none;
+  margin: 0.75rem auto 0;
+  padding: 0.5rem 2.1rem 0.55rem;
+  background: linear-gradient(#f4e6bd, #e3cd93);
+  border: 2px solid #6e5320;
+  border-radius: 4px;
+  box-shadow:
+    inset 0 0 0 3px #f4e6bd, inset 0 0 0 4px var(--or-antique),
+    0 3px 10px rgba(0, 10, 20, 0.5);
+  text-align: center;
+}
+
+.ecran-cartouche::before,
+.ecran-cartouche::after {
+  content: "❦";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-52%);
+  color: #6e5320;
+  font-size: 1rem;
+}
+
+.ecran-cartouche::before { left: 0.55rem; }
+.ecran-cartouche::after { right: 0.55rem; }
+
+.ecran-titre {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.6rem, 6vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.22em;
+  text-indent: 0.22em;
+  color: #4a3512;
+  text-shadow: 0 1px 0 #fff6dd;
+}
+
+.ecran-sous {
+  margin: 0;
+  font-size: clamp(0.66rem, 2.2vw, 0.78rem);
+  font-variant: small-caps;
+  letter-spacing: 0.28em;
+  text-indent: 0.28em;
+  color: #6e5320;
+}
+
+/* Formulaire flottant : bas d'écran en mobile, centré en desktop. */
+.ecran-corps {
+  position: relative;
+  z-index: 3;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 1rem 1rem calc(1.6rem + env(safe-area-inset-bottom));
+}
+
+@media (min-width: 900px) {
+  .ecran-corps {
+    align-items: center;
+    padding-bottom: 3rem;
+  }
+}
+
+/* Cartouche parchemin — le #form-connexion réutilisé, présenté en colonne. */
+.ecran-parchemin {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 360px);
+  padding: 1.15rem 1.25rem 1.25rem;
+  background-color: var(--parchemin);
+  background-image: linear-gradient(var(--parchemin), var(--parchemin-carte));
+  border: 2px solid #6e5320;
+  border-radius: 6px;
+  box-shadow:
+    inset 0 0 0 3px var(--parchemin), inset 0 0 0 4px var(--or-antique),
+    0 8px 24px rgba(0, 10, 20, 0.55);
+}
+
+.ecran-accroche {
+  margin: 0 0 0.7rem;
+  font-size: 1.05rem;
+  font-variant: small-caps;
+  letter-spacing: 0.14em;
+  color: var(--encre-sepia);
+  text-align: center;
+}
+
+.ecran-label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--encre-sepia);
+}
+
+.ecran-parchemin input[type="email"] {
+  width: 100%;
   min-height: 44px;
-  padding: 0.4rem 0.7rem;
-  border: 1px solid var(--bordure);
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  font-size: 1rem;
+  color: var(--encre-sepia);
+  background: #fffaf0;
+  border: 1.5px solid var(--or-antique);
+  border-radius: 6px;
+}
+
+.ecran-parchemin input[type="email"]::placeholder {
+  color: var(--encre-sepia-douce);
+  opacity: 1;
+}
+
+.ecran-parchemin input[type="email"]:focus-visible {
+  outline: 3px solid var(--accent-fonce);
+  outline-offset: 1px;
+}
+
+.bouton-lien-magique {
+  display: block;
+  width: 100%;
+  min-height: 46px;
+  margin-top: 0.75rem;
+  font: inherit;
+  font-size: 1.02rem;
+  font-weight: 700;
+  font-variant: small-caps;
+  letter-spacing: 0.09em;
+  color: var(--creme);
+  background-color: var(--mer-profonde);
+  background-image: linear-gradient(#1a5a78, #0e3a52);
+  border: 1.5px solid var(--or-antique);
   border-radius: 8px;
-  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.bouton-lien-magique:hover { background-image: linear-gradient(#1f6787, #114560); }
+
+.bouton-lien-magique:focus-visible {
+  outline: 3px solid #4a3512;
+  outline-offset: 2px;
+}
+
+.ecran-aide {
+  margin: 0.65rem 0 0;
+  text-align: center;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--encre-sepia-douce);
 }
 
 /* ---------- Boutons ---------- */
@@ -841,7 +1029,10 @@ textarea:focus-visible,
   bottom: calc(var(--hauteur-onglets) + 1rem + env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1300;
+  /* Au-dessus de l'écran de connexion (#ecran-connexion, z 2000) : sinon la
+     confirmation « Lien de connexion envoyé » resterait cachée derrière
+     l'overlay après soumission en déconnecté (constat contre-passe A1). */
+  z-index: 2100;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -1810,3 +2001,185 @@ textarea:focus-visible,
   60%  { stroke-width: 12; stroke-opacity: 0.25; }
   100% { stroke-width: 3;  stroke-opacity: 0.9; }
 }
+
+/* ============================================================================
+   Espace Arbre (A3, le pivot) — arbre gravé sur parchemin, secteurs = branches.
+   Cartouche « Ultima » + recherche (mise en évidence) + scène SVG scrollable +
+   bouton flottant « + ». Aucun style inline (CSP) : tout porté par des classes.
+   ========================================================================== */
+.espace-arbre {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background-color: var(--parchemin);
+  background-image:
+    radial-gradient(ellipse at 50% 12%, rgba(255, 250, 235, 0.55), rgba(0, 0, 0, 0) 55%),
+    linear-gradient(var(--parchemin), var(--parchemin-carte) 70%, var(--parchemin-ombre));
+}
+
+.arbre-entete {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem 0.6rem;
+  border-bottom: 1px solid var(--or-antique);
+}
+
+/* Cartouche « ULTIMA » de l'arbre (registre de la preview validée). */
+.cartouche-arbre {
+  position: relative;
+  padding: 0.25rem 1.6rem 0.3rem;
+  background: linear-gradient(#f4e6bd, #e3cd93);
+  border: 2px solid #6e5320;
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 3px #f4e6bd, inset 0 0 0 4px var(--or-antique),
+              0 2px 6px rgba(0, 10, 20, 0.3);
+  text-align: center;
+}
+.cartouche-arbre::before,
+.cartouche-arbre::after {
+  content: "❦";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-52%);
+  color: #6e5320;
+  font-size: 0.85rem;
+}
+.cartouche-arbre::before { left: 0.45rem; }
+.cartouche-arbre::after { right: 0.45rem; }
+.cartouche-arbre-titre {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.2em;
+  text-indent: 0.2em;
+  color: #4a3512;
+  text-shadow: 0 1px 0 #fff6dd;
+}
+.cartouche-arbre-sous {
+  margin: 0;
+  font-size: 0.62rem;
+  font-variant: small-caps;
+  letter-spacing: 0.24em;
+  text-indent: 0.24em;
+  color: #6e5320;
+}
+
+.arbre-outils {
+  width: 100%;
+  max-width: 420px;
+}
+.champ-recherche-arbre {
+  position: relative;
+}
+.champ-recherche-arbre input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.5rem 14px 0.5rem 38px;
+  border: 1px solid var(--or-antique);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background: rgba(255, 253, 246, 0.92);
+  color: var(--encre-sepia);
+}
+.champ-recherche-arbre input::-webkit-search-cancel-button { display: none; }
+.champ-recherche-arbre .icone-loupe { color: var(--encre-sepia-douce); }
+
+.arbre-recherche-message {
+  margin: 0.25rem 0 0;
+  min-height: 1.1em;
+  font-size: 0.82rem;
+  color: var(--encre-sepia-douce);
+  text-align: center;
+}
+
+/* Scène : scroll vertical interne, jamais de scroll horizontal de page. */
+.arbre-scene {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem 0.4rem 5.5rem;
+}
+.arbre-svg {
+  width: min(100%, 640px);
+  height: auto;
+  flex: none;
+}
+
+/* Feuille-contact : focusable, tap, survol, mise en évidence recherche. */
+.arbre-feuille { cursor: pointer; }
+.arbre-feuille:focus { outline: none; }
+.arbre-feuille:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 1px;
+}
+.arbre-feuille:focus-visible .arbre-feuille-cadre {
+  stroke: var(--accent);
+  stroke-width: 2.6;
+}
+.arbre-feuille:hover .arbre-feuille-cadre {
+  stroke: #6e5320;
+  stroke-width: 2;
+}
+.arbre-feuille--attenuee { opacity: 0.3; }
+
+/* Pousse à l'ajout (A4) : la feuille tout juste créée éclôt depuis sa base,
+   sobre et brève (registre antique, pas d'effet gratuit). L'animation vit sous
+   « no-preference » : sous prefers-reduced-motion: reduce, aucune règle ne
+   s'applique → la feuille apparaît immédiatement. */
+@media (prefers-reduced-motion: no-preference) {
+  .arbre-feuille--pousse {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: arbre-pousse 460ms cubic-bezier(0.22, 0.68, 0.32, 1) both;
+  }
+  @keyframes arbre-pousse {
+    from { opacity: 0; transform: translateY(6px) scale(0.62); }
+    55%  { opacity: 1; }
+    to   { opacity: 1; transform: none; }
+  }
+}
+
+/* Bloc d'état (non connecté / réseau vide) sur le parchemin. */
+.arbre-bloc-etat {
+  margin: 1.5rem auto;
+  max-width: 460px;
+  padding: 1.25rem;
+  text-align: center;
+  align-self: flex-start;
+}
+.arbre-etat-texte {
+  margin: 0 0 1rem;
+  color: var(--encre-sepia);
+  line-height: 1.5;
+}
+
+/* Bouton flottant « + » : action primaire de l'écran (plaque encre/or). */
+.arbre-ajouter {
+  position: fixed;
+  right: 1rem;
+  bottom: calc(var(--hauteur-onglets) + env(safe-area-inset-bottom) + 0.75rem);
+  z-index: 900;
+  min-height: 46px;
+  padding: 0.55rem 1.15rem;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #f2e8cd;
+  background: linear-gradient(#1a5a78, #0e3a52);
+  border: 1.5px solid var(--or-antique);
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(0, 10, 20, 0.4);
+  cursor: pointer;
+}
+.arbre-ajouter:hover { background: linear-gradient(#1f6787, #114560); }
+.arbre-ajouter:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }

@@ -84,6 +84,15 @@ jamais supprimée). Boucles ordonnées :
 8. Vue liste synchronisée à côté de la carte (survol croisé — motif
    systeme-commercial).
 
+## Cap actuel — Pivot Arbre (dicté 2026-07-08, livré 2026-07-09)
+
+L'entrée d'Ultima devient une **page de connexion « Ultima »** (carte-anneau
+originale) et, une fois connecté, **un arbre des contacts remplace la carte**
+comme écran principal (branches = secteurs d'activité, ramifications =
+contacts). La carte reste un onglet secondaire (D2a — géocodage/recherche y
+vivent). Boucles A1-A4 livrées (PR #24, `REFONTE-ARBRE.md`). Suspend
+REFONTE-ACCUEIL R2-R4 (registre R1 réutilisé, rien de jeté).
+
 ## Hors périmètre assumé (revoir plus tard)
 
 Temps réel multi-postes, rôles avancés, app mobile native, analytics.

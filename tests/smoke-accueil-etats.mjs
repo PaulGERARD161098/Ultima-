@@ -44,9 +44,12 @@ async function pageStub(viewport, demo) {
   await page.goto('http://127.0.0.1:8123/', { waitUntil: 'load', timeout: 20000 });
   await page.waitForTimeout(800);
   // R1 : l'arrivée se fait sur la Carte — ces vérifications portent sur
-  // l'Accueil, on y va par son onglet (parcours réel).
-  await page.locator('.barre-onglets .onglet[data-onglet="accueil"]').click();
-  await page.waitForTimeout(300);
+  // l'Accueil, on y va par son onglet (parcours réel). En non-démo sans
+  // session (A1), l'écran de connexion couvre l'app : on ne navigue pas.
+  if (demo) {
+    await page.locator('.barre-onglets .onglet[data-onglet="accueil"]').click();
+    await page.waitForTimeout(300);
+  }
   return page;
 }
 
@@ -80,12 +83,13 @@ verdicts.desktopDeuxColonnes = await desktop.evaluate(() => {
 await desktop.screenshot({ path: `${SCRATCH}/accueil-desktop-1280.png` });
 await desktop.close();
 
-// Non connecté (config présente, pas de session).
+// Non connecté (config présente, pas de session) → écran de connexion A1
+// plein écran (le pivot D1 remplace l'app en lecture par la page de connexion).
 const nc = await pageStub({ width: 390, height: 844 }, false);
-verdicts.blocConnexion = await nc.locator('.accueil-bloc-etat', { hasText: 'Connectez-vous pour retrouver votre réseau.' }).isVisible();
-verdicts.salutationRestante = await nc.locator('#accueil-titre').isVisible();
-verdicts.pasDeSections = (await nc.locator('.accueil-section').count()) === 0;
-await nc.locator('.accueil-bloc-etat .bouton-primaire', { hasText: 'Se connecter' }).click();
+verdicts.ecranConnexionVisible = await nc.locator('#ecran-connexion').isVisible();
+verdicts.cartoucheUltima = (await nc.locator('#ecran-connexion .ecran-titre').textContent())?.trim() === 'ULTIMA';
+verdicts.formConnexionVisible = await nc.locator('#ecran-connexion #form-connexion').isVisible();
+await nc.locator('#champ-email').focus();
 verdicts.focusEmail = await nc.evaluate(() => document.activeElement?.id === 'champ-email');
 await nc.screenshot({ path: `${SCRATCH}/accueil-non-connecte.png` });
 await nc.close();

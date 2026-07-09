@@ -14,6 +14,201 @@
 </head>
 <body>
 
+  <!-- ===== Écran de connexion plein écran (A1) =====================
+       Habillage de présentation : l'overlay est piloté par majAuthUi()
+       (js/app.js), visible uniquement si config présente ET pas de session.
+       Le formulaire lien-magique #form-connexion est RÉUTILISÉ tel quel
+       (mêmes id/handlers), simplement déplacé et restylé ici. Décor SVG
+       100 % inline (aucun toponyme, IDs préfixés « conn- » anti-collision),
+       aria-hidden : c'est une carte savante muette. -->
+  <div id="ecran-connexion" class="ecran-connexion" hidden>
+    <div class="ecran-decor" aria-hidden="true">
+      <svg viewBox="0 0 700 940" preserveAspectRatio="xMidYMid meet" role="img"
+           aria-label="Carte décorative d'un monde-anneau imaginaire" focusable="false">
+        <defs>
+          <filter id="conn-rough" x="-4%" y="-4%" width="108%" height="108%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="2" seed="11" result="n"/>
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="5"/>
+          </filter>
+          <radialGradient id="conn-terre" cx="45%" cy="35%" r="80%">
+            <stop offset="0%"  stop-color="#e8d49a"/>
+            <stop offset="55%" stop-color="#d9bf82"/>
+            <stop offset="100%" stop-color="#c4a468"/>
+          </radialGradient>
+          <radialGradient id="conn-mer" cx="50%" cy="42%" r="70%">
+            <stop offset="0%"  stop-color="#1d5c7c"/>
+            <stop offset="70%" stop-color="#145070"/>
+            <stop offset="100%" stop-color="#0e3a52"/>
+          </radialGradient>
+        </defs>
+
+        <!-- Graticule fin (registre carte savante) -->
+        <g stroke="#8fc2d4" stroke-width="0.7" opacity="0.15">
+          <path d="M140,0 V940 M280,0 V940 M420,0 V940 M560,0 V940"/>
+          <path d="M0,134 H700 M0,268 H700 M0,402 H700 M0,536 H700 M0,670 H700 M0,804 H700"/>
+        </g>
+
+        <!-- Lueur littorale extérieure -->
+        <g filter="url(#conn-rough)">
+          <path d="M640,470 C635,540 600,570 579,602 C550,660 560,700 500,730
+                   C455,752 395,742 350,740 C290,738 240,745 202,725
+                   C150,700 140,640 125,600 C95,555 60,520 50,470
+                   C42,415 90,370 116,335 C145,295 170,255 205,219
+                   C245,180 295,168 350,165 C405,162 445,215 482,240
+                   C525,268 585,285 605,322 C630,365 645,415 640,470 Z"
+                fill="none" stroke="#8fd2e0" stroke-width="11" opacity="0.22"/>
+        </g>
+
+        <!-- Continent-anneau -->
+        <g filter="url(#conn-rough)">
+          <path d="M640,470 C635,540 600,570 579,602 C550,660 560,700 500,730
+                   C455,752 395,742 350,740 C290,738 240,745 202,725
+                   C150,700 140,640 125,600 C95,555 60,520 50,470
+                   C42,415 90,370 116,335 C145,295 170,255 205,219
+                   C245,180 295,168 350,165 C405,162 445,215 482,240
+                   C525,268 585,285 605,322 C630,365 645,415 640,470 Z"
+                fill="url(#conn-terre)" stroke="#5a4118" stroke-width="2.6"/>
+        </g>
+
+        <!-- Mer intérieure -->
+        <g filter="url(#conn-rough)">
+          <path d="M490,470 C488,515 475,530 455,545 C425,572 390,600 350,600
+                   C305,600 270,578 245,555 C222,533 218,500 215,470
+                   C212,435 222,400 240,380 C268,350 310,345 350,345
+                   C395,345 435,368 460,395 C480,415 492,435 490,470 Z"
+                fill="none" stroke="#8fd2e0" stroke-width="10" opacity="0.20"/>
+          <path d="M490,470 C488,515 475,530 455,545 C425,572 390,600 350,600
+                   C305,600 270,578 245,555 C222,533 218,500 215,470
+                   C212,435 222,400 240,380 C268,350 310,345 350,345
+                   C395,345 435,368 460,395 C480,415 492,435 490,470 Z"
+                fill="url(#conn-mer)" stroke="#5a4118" stroke-width="2.2"/>
+        </g>
+        <!-- Vaguelettes de la mer intérieure -->
+        <g stroke="#8fc2d4" fill="none" stroke-width="1.1" opacity="0.35" stroke-linecap="round">
+          <path d="M290,430 q12,-8 24,0 M330,415 q12,-8 24,0 M380,440 q12,-8 24,0"/>
+          <path d="M300,520 q12,-8 24,0 M370,540 q12,-8 24,0 M420,500 q12,-8 24,0"/>
+        </g>
+        <!-- Îlot central -->
+        <g filter="url(#conn-rough)">
+          <path d="M330,468 Q334,452 352,450 Q372,449 376,464 Q378,478 360,483 Q338,486 330,468 Z"
+                fill="url(#conn-terre)" stroke="#5a4118" stroke-width="1.6"/>
+        </g>
+        <g stroke="#7a5a2c" stroke-width="1.6" fill="none" stroke-linecap="round">
+          <path d="M346,470 l6,-9 l6,9"/>
+        </g>
+
+        <!-- Verdure : plaines et forêts sur l'anneau -->
+        <g fill="#7d9a52" opacity="0.30" filter="url(#conn-rough)">
+          <ellipse cx="495" cy="595" rx="58" ry="34"/>
+          <ellipse cx="205" cy="565" rx="50" ry="32"/>
+          <ellipse cx="455" cy="255" rx="52" ry="30"/>
+          <ellipse cx="243" cy="272" rx="46" ry="28"/>
+          <ellipse cx="565" cy="430" rx="34" ry="46"/>
+          <ellipse cx="135" cy="455" rx="30" ry="44"/>
+        </g>
+        <!-- Bosquets stylisés -->
+        <g stroke="#4f7038" stroke-width="1.4" fill="#6f8f4a" stroke-linecap="round">
+          <g transform="translate(492,588)">
+            <path d="M0,0 q5,-12 10,0 z"/><path d="M12,4 q5,-12 10,0 z"/><path d="M-12,5 q5,-12 10,0 z"/>
+          </g>
+          <g transform="translate(206,558)">
+            <path d="M0,0 q5,-12 10,0 z"/><path d="M13,5 q5,-12 10,0 z"/>
+          </g>
+          <g transform="translate(450,248)">
+            <path d="M0,0 q5,-12 10,0 z"/><path d="M-13,5 q5,-12 10,0 z"/><path d="M12,6 q5,-12 10,0 z"/>
+          </g>
+          <g transform="translate(240,266)">
+            <path d="M0,0 q5,-12 10,0 z"/><path d="M12,5 q5,-12 10,0 z"/>
+          </g>
+        </g>
+
+        <!-- Anneau de montagnes -->
+        <g stroke="#7a5a2c" stroke-width="1.9" fill="none" stroke-linecap="round" opacity="0.9">
+          <path d="M343,262 l7,-13 l7,13 M320,276 l6,-10 l6,10 M366,276 l6,-10 l6,10"/>
+          <path d="M275,284 l7,-12 l7,12 M411,284 l7,-12 l7,12"/>
+          <path d="M214,319 l7,-12 l7,12 M472,319 l7,-12 l7,12"/>
+          <path d="M516,364 l7,-12 l7,12 M170,364 l7,-12 l7,12"/>
+          <path d="M540,432 l7,-13 l7,13 M146,432 l7,-13 l7,13"/>
+          <path d="M540,502 l7,-12 l7,12 M146,502 l7,-12 l7,12"/>
+          <path d="M511,568 l7,-12 l7,12 M175,568 l7,-12 l7,12"/>
+          <path d="M411,652 l7,-12 l7,12 M275,652 l7,-12 l7,12 M343,664 l7,-13 l7,13"/>
+        </g>
+        <!-- Ombres portées du relief -->
+        <g fill="#5a4118" opacity="0.10">
+          <ellipse cx="350" cy="280" rx="90" ry="18"/>
+          <ellipse cx="350" cy="660" rx="80" ry="16"/>
+          <ellipse cx="152" cy="470" rx="16" ry="70"/>
+          <ellipse cx="548" cy="470" rx="16" ry="70"/>
+        </g>
+
+        <!-- Fleuves -->
+        <g fill="none" stroke="#2e7d9a" stroke-width="1.6" opacity="0.7">
+          <path d="M350,285 Q345,315 350,343"/>
+          <path d="M162,470 Q190,474 214,468"/>
+          <path d="M350,648 Q356,624 350,602"/>
+          <path d="M528,440 Q510,452 492,458"/>
+        </g>
+
+        <!-- Îles périphériques -->
+        <g filter="url(#conn-rough)">
+          <path d="M666,178 Q690,166 706,182 Q712,198 692,206 Q668,210 660,196 Q658,184 666,178 Z"
+                fill="url(#conn-terre)" stroke="#5a4118" stroke-width="1.8"/>
+          <path d="M88,142 Q108,132 122,146 Q126,160 108,166 Q90,168 84,156 Q82,146 88,142 Z"
+                fill="url(#conn-terre)" stroke="#5a4118" stroke-width="1.8"/>
+          <path d="M614,806 Q638,794 656,810 Q660,826 640,834 Q616,836 608,822 Q606,812 614,806 Z"
+                fill="url(#conn-terre)" stroke="#5a4118" stroke-width="1.8"/>
+          <path d="M74,760 Q92,750 106,762 Q110,776 94,782 Q76,784 70,772 Q68,764 74,760 Z"
+                fill="url(#conn-terre)" stroke="#5a4118" stroke-width="1.8"/>
+          <path d="M672,614 Q686,608 696,618 Q698,630 684,634 Q670,634 666,624 Q666,618 672,614 Z"
+                fill="url(#conn-terre)" stroke="#5a4118" stroke-width="1.6"/>
+        </g>
+
+        <!-- Créatures et navires discrets -->
+        <g stroke="#9fd0dd" fill="none" stroke-width="2.2" opacity="0.5" stroke-linecap="round">
+          <path d="M92,858 q10,-14 22,0"/>
+          <path d="M124,858 q10,-14 22,0"/>
+          <path d="M156,860 q8,-10 16,-2 q6,6 2,10 l-8,-2"/>
+          <path d="M84,860 l-8,-8 M84,860 l-10,2"/>
+        </g>
+        <g stroke="#9fd0dd" fill="none" stroke-width="2" opacity="0.55" stroke-linecap="round">
+          <path d="M596,116 l30,0 q-4,10 -14,10 l-8,0 q-8,-2 -8,-10 Z M611,114 l0,-24 q16,10 0,24 M611,96 q-12,6 -12,16"/>
+        </g>
+        <g stroke="#9fd0dd" fill="none" stroke-width="1.8" opacity="0.45" stroke-linecap="round">
+          <path d="M120,86 q6,-8 12,0 M138,82 q6,-8 12,0 M158,88 q6,-8 12,0"/>
+        </g>
+
+        <!-- Rose des vents dorée -->
+        <g transform="translate(632,878)" opacity="0.95">
+          <circle r="26" fill="#0e3a52" stroke="#c9a659" stroke-width="1.6"/>
+          <circle r="20" fill="none" stroke="#c9a659" stroke-width="0.7"/>
+          <g fill="#e8cf8f" stroke="#c9a659" stroke-width="0.6">
+            <path d="M0,-24 L4,-5 L0,0 L-4,-5 Z"/>
+            <path d="M0,24 L4,5 L0,0 L-4,5 Z" fill="#0e3a52"/>
+            <path d="M-24,0 L-5,4 L0,0 L-5,-4 Z" fill="#0e3a52"/>
+            <path d="M24,0 L5,4 L0,0 L5,-4 Z" fill="#0e3a52"/>
+          </g>
+          <text y="-31" text-anchor="middle" font-size="11" fill="#e8cf8f" font-style="italic">N</text>
+        </g>
+      </svg>
+    </div>
+
+    <header class="ecran-cartouche">
+      <h1 class="ecran-titre">ULTIMA</h1>
+      <p class="ecran-sous">le royaume du réseau</p>
+    </header>
+
+    <main class="ecran-corps">
+      <form id="form-connexion" class="form-connexion ecran-parchemin" hidden>
+        <h2 class="ecran-accroche">Accès au réseau</h2>
+        <label class="ecran-label" for="champ-email">Adresse e-mail</label>
+        <input id="champ-email" type="email" required autocomplete="email" inputmode="email"
+               placeholder="votre@email.fr">
+        <button type="submit" class="bouton bouton-lien-magique">Recevoir le lien</button>
+        <p class="ecran-aide">Aucun mot de passe : un lien de connexion vous est adressé par e-mail.</p>
+      </form>
+    </main>
+  </div>
+
   <header class="entete">
     <div class="cartouche-ultima">
       <h1 class="cartouche-titre">ULTIMA</h1>
@@ -21,11 +216,6 @@
     </div>
     <p id="bandeau-demo" class="bandeau-demo" hidden>Mode démo — données d'exemple</p>
     <div id="zone-auth" class="zone-auth" hidden>
-      <form id="form-connexion" class="form-connexion" hidden>
-        <label class="visuellement-cache" for="champ-email">Adresse e-mail</label>
-        <input id="champ-email" type="email" required autocomplete="email" placeholder="votre@email.fr">
-        <button type="submit" class="bouton bouton-secondaire">Recevoir le lien</button>
-      </form>
       <button id="bouton-deconnexion" type="button" class="bouton bouton-secondaire" hidden>Se déconnecter</button>
     </div>
   </header>
@@ -54,6 +244,32 @@
         </header>
         <div id="accueil-contenu" class="accueil-contenu"></div>
       </div>
+    </section>
+
+    <!-- ===== Espace Arbre (A3, le pivot : arbre gravé, secteurs = branches) ===== -->
+    <section id="espace-arbre" class="espace espace-arbre" hidden aria-labelledby="arbre-titre">
+      <header class="arbre-entete">
+        <div class="cartouche-arbre">
+          <h2 id="arbre-titre" class="cartouche-arbre-titre">ULTIMA</h2>
+          <p class="cartouche-arbre-sous">l'arbre du réseau</p>
+        </div>
+        <div id="arbre-outils" class="arbre-outils">
+          <div class="champ-recherche-arbre">
+            <label class="visuellement-cache" for="arbre-recherche">Rechercher un contact par nom ou ville</label>
+            <svg class="icone-loupe" viewBox="0 0 24 24" width="20" height="20"
+                 aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="6.5"/>
+              <path d="m16 16 4.5 4.5"/>
+            </svg>
+            <input id="arbre-recherche" type="search" class="arbre-recherche"
+                   placeholder="Rechercher un nom ou une ville…" autocomplete="off">
+          </div>
+          <p id="arbre-recherche-message" class="arbre-recherche-message" role="status"></p>
+        </div>
+      </header>
+      <div id="arbre-scene" class="arbre-scene"></div>
+      <button id="arbre-ajouter" type="button" class="arbre-ajouter">+ Ajouter un contact</button>
     </section>
 
     <!-- ===== Espace Carte (existant : barre d'outils + carte + légende + panneau) ===== -->
@@ -252,7 +468,12 @@
         </div>
       </div>
 
-      <aside id="panneau" class="panneau" hidden aria-label="Panneau latéral">
+    </section>
+
+    <!-- Panneau fiche/formulaire : overlay global (position:fixed). Sorti de
+         espace-carte (A3) pour rester accessible depuis TOUS les onglets — un
+         tap sur une feuille de l'arbre ouvre la fiche sans quitter l'arbre. -->
+    <aside id="panneau" class="panneau" hidden aria-label="Panneau latéral">
         <div class="panneau-entete">
           <h2 id="panneau-titre" class="panneau-titre" tabindex="-1">Fiche</h2>
           <button id="bouton-fermer-panneau" type="button" class="bouton-fermer" aria-label="Fermer le panneau">&times;</button>
@@ -283,6 +504,12 @@
               <option value="termine">Terminé</option>
               <option value="inactif">Inactif</option>
             </select>
+          </div>
+          <div class="champ">
+            <label for="noeud-secteur_activite">Secteur d'activité</label>
+            <input id="noeud-secteur_activite" type="text" maxlength="120"
+                   list="liste-secteurs" autocomplete="off">
+            <datalist id="liste-secteurs"></datalist>
           </div>
           <div class="champ">
             <label for="noeud-ville">Ville</label>
@@ -365,8 +592,7 @@
             <button type="button" id="bouton-annuler-relation" class="bouton bouton-secondaire">Annuler</button>
           </div>
         </form>
-      </aside>
-    </section>
+    </aside>
 
     <!-- ===== Espace Contacts (registre sobre : liste + recherche) ===== -->
     <section id="espace-contacts" class="espace espace-contacts" hidden aria-labelledby="contacts-titre">
@@ -395,6 +621,13 @@
       </svg>
       <span>Accueil</span>
     </button>
+    <button type="button" class="onglet" data-onglet="arbre">
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
+        <circle cx="12" cy="8.5" r="5.5"/>
+        <path d="M12 14 V20.5 M8.5 20.5 H15.5"/>
+      </svg>
+      <span>Arbre</span>
+    </button>
     <button type="button" class="onglet" data-onglet="carte">
       <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
         <path d="M9 4.5 L15 6.5 L20.5 4.5 V18.5 L15 20.5 L9 18.5 L3.5 20.5 V6.5 Z"/>
@@ -419,6 +652,7 @@
   <script src="js/vendor/supabase-js-2.110.0.min.js"></script>
   <script src="js/config.js"></script>
   <script src="js/carte.js"></script>
+  <script src="js/arbre.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

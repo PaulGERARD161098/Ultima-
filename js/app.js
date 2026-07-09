@@ -47,7 +47,8 @@
     session: null,
     onglet: 'accueil',   // espace actif : accueil | carte | contacts
     noeudCourant: null,  // id du nœud affiché dans la fiche
-    noeudEnEdition: null // id du nœud en cours d'édition dans le formulaire
+    noeudEnEdition: null, // id du nœud en cours d'édition dans le formulaire
+    noeudNouveau: null   // id du contact tout juste ajouté (pousse animée, A4)
   };
 
   function $(selecteur) { return document.querySelector(selecteur); }
@@ -77,12 +78,12 @@
 
   function donneesDemo() {
     var noeuds = [
-      { id: 'demo-n1', type: 'artisan', nom: 'Menuiserie Delcourt', ville: 'Lille', adresse: '12 rue Nationale', telephone: '03 20 55 41 20', email: 'contact@menuiserie-delcourt.fr', statut: 'actif', lat: 50.6292, lng: 3.0573, notes: 'Menuiserie bois et alu. Très fiable sur les délais.' },
-      { id: 'demo-n2', type: 'artisan', nom: 'Plomberie Roux & Fils', ville: 'Lyon', adresse: '8 quai Saint-Vincent', telephone: '04 78 30 12 45', email: 'contact@plomberie-roux.fr', statut: 'actif', lat: 45.764, lng: 4.8357, notes: 'Chauffage et sanitaire. Disponible sous 48 h.' },
-      { id: 'demo-n3', type: 'artisan', nom: 'Élec Ferrand', ville: 'Nantes', adresse: '25 rue de Strasbourg', telephone: '02 40 47 89 12', email: 'ferrand.elec@orange.fr', statut: 'prospect', lat: 47.2184, lng: -1.5536, notes: 'Rencontré au salon Habitat. À rappeler.' },
-      { id: 'demo-n4', type: 'partenaire', nom: 'Agence Habitat Sud', ville: 'Marseille', adresse: '4 la Canebière', telephone: '04 91 54 22 10', email: 'contact@habitat-sud.fr', statut: 'actif', lat: 43.2965, lng: 5.3698, notes: 'Agence immobilière, apporte des dossiers de rénovation.' },
-      { id: 'demo-n5', type: 'partenaire', nom: 'Courtage Bâti Ouest', ville: 'Rennes', adresse: '2 place de Bretagne', telephone: '02 99 78 34 56', email: 'contact@bati-ouest.fr', statut: 'actif', lat: 48.1173, lng: -1.6778, notes: 'Courtier travaux, commission 5 %.' },
-      { id: 'demo-n6', type: 'lead', nom: 'M. Lambert — rénovation toiture', ville: 'Bordeaux', adresse: '18 cours de l’Intendance', telephone: '06 12 34 56 78', email: 'p.lambert@gmail.com', statut: 'prospect', lat: 44.8378, lng: -0.5792, notes: 'Devis envoyé le 15/06, relance prévue.' },
+      { id: 'demo-n1', type: 'artisan', nom: 'Menuiserie Delcourt', secteur_activite: 'Menuiserie', ville: 'Lille', adresse: '12 rue Nationale', telephone: '03 20 55 41 20', email: 'contact@menuiserie-delcourt.fr', statut: 'actif', lat: 50.6292, lng: 3.0573, notes: 'Menuiserie bois et alu. Très fiable sur les délais.' },
+      { id: 'demo-n2', type: 'artisan', nom: 'Plomberie Roux & Fils', secteur_activite: 'Plomberie', ville: 'Lyon', adresse: '8 quai Saint-Vincent', telephone: '04 78 30 12 45', email: 'contact@plomberie-roux.fr', statut: 'actif', lat: 45.764, lng: 4.8357, notes: 'Chauffage et sanitaire. Disponible sous 48 h.' },
+      { id: 'demo-n3', type: 'artisan', nom: 'Élec Ferrand', secteur_activite: 'Électricité', ville: 'Nantes', adresse: '25 rue de Strasbourg', telephone: '02 40 47 89 12', email: 'ferrand.elec@orange.fr', statut: 'prospect', lat: 47.2184, lng: -1.5536, notes: 'Rencontré au salon Habitat. À rappeler.' },
+      { id: 'demo-n4', type: 'partenaire', nom: 'Agence Habitat Sud', secteur_activite: 'Courtage', ville: 'Marseille', adresse: '4 la Canebière', telephone: '04 91 54 22 10', email: 'contact@habitat-sud.fr', statut: 'actif', lat: 43.2965, lng: 5.3698, notes: 'Agence immobilière, apporte des dossiers de rénovation.' },
+      { id: 'demo-n5', type: 'partenaire', nom: 'Courtage Bâti Ouest', secteur_activite: 'Courtage', ville: 'Rennes', adresse: '2 place de Bretagne', telephone: '02 99 78 34 56', email: 'contact@bati-ouest.fr', statut: 'actif', lat: 48.1173, lng: -1.6778, notes: 'Courtier travaux, commission 5 %.' },
+      { id: 'demo-n6', type: 'lead', nom: 'M. Lambert — rénovation toiture', secteur_activite: 'Toiture', ville: 'Bordeaux', adresse: '18 cours de l’Intendance', telephone: '06 12 34 56 78', email: 'p.lambert@gmail.com', statut: 'prospect', lat: 44.8378, lng: -0.5792, notes: 'Devis envoyé le 15/06, relance prévue.' },
       { id: 'demo-n7', type: 'lead', nom: 'Mme Nguyen — extension maison', ville: 'Strasbourg', adresse: '5 rue des Juifs', telephone: '06 98 76 54 32', email: 'nguyen.famille@free.fr', statut: 'prospect', lat: 48.5734, lng: 7.7521, notes: 'Projet 35 m², budget à confirmer.' },
       { id: 'demo-n8', type: 'chantier', nom: 'Réhabilitation immeuble Voltaire', ville: 'Paris', adresse: '112 boulevard Voltaire', telephone: '', email: '', statut: 'en_cours', lat: 48.858, lng: 2.38, notes: 'Lot menuiserie + plomberie. Livraison prévue en septembre.' },
       { id: 'demo-n9', type: 'chantier', nom: 'Maison Garonne', ville: 'Toulouse', adresse: '30 allées Jean-Jaurès', telephone: '', email: '', statut: 'termine', lat: 43.6047, lng: 1.4442, notes: 'Chantier livré en mai, retour client excellent.' }
@@ -176,6 +177,7 @@
   function rafraichir() {
     window.UltimaCarte.rendre(etat.noeuds, etat.relations, etat.filtres);
     rendreAccueil();
+    rendreArbre();
     rendreContacts();
     if (etat.noeudCourant && !$('#vue-fiche').hidden) {
       rendreFiche();
@@ -332,6 +334,7 @@
 
   var SECTIONS_ONGLETS = {
     accueil: '#espace-accueil',
+    arbre: '#espace-arbre',
     carte: '#espace-carte',
     contacts: '#espace-contacts'
   };
@@ -339,6 +342,11 @@
   function activerOnglet(nom) {
     if (!SECTIONS_ONGLETS[nom]) { return; }
     etat.onglet = nom;
+    // Le panneau fiche/formulaire est un overlay global (A3) : il ne se masque
+    // plus tout seul avec l'espace Carte. On le ferme donc à chaque changement
+    // d'onglet (comportement d'origine). Les flux qui rouvrent une fiche/un
+    // formulaire appellent activerOnglet AVANT d'ouvrir : l'ordre est préservé.
+    if (!$('#panneau').hidden) { fermerPanneau(); }
     Object.keys(SECTIONS_ONGLETS).forEach(function (cle) {
       var section = $(SECTIONS_ONGLETS[cle]);
       if (section) { section.hidden = cle !== nom; }
@@ -355,6 +363,7 @@
       window.UltimaCarte.invaliderTaille();
     }
     if (nom === 'accueil') { rendreAccueil(); }
+    if (nom === 'arbre') { rendreArbre(); }
     if (nom === 'contacts') { rendreContacts(); }
     // Changement d'onglet : liste de recherche fermée, halo effacé, texte
     // du champ conservé (règles d'état v3-⑥).
@@ -873,6 +882,34 @@
     return (texte || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   }
 
+  // Secteurs d\u00e9j\u00e0 saisis, d\u00e9doublonn\u00e9s par forme normalis\u00e9e (minuscules +
+  // accents retir\u00e9s), tri\u00e9s alpha fr. Premi\u00e8re graphie rencontr\u00e9e conserv\u00e9e
+  // pour l'affichage (comme on regroupera les contacts par secteur en A3).
+  function secteursConnus() {
+    var vus = Object.create(null);
+    etat.noeuds.forEach(function (n) {
+      var brut = (n.secteur_activite || '').trim();
+      if (!brut) { return; }
+      var cle = normaliserTexte(brut);
+      if (!vus[cle]) { vus[cle] = brut; }
+    });
+    return Object.keys(vus).map(function (cle) { return vus[cle]; })
+      .sort(function (a, b) { return a.localeCompare(b, 'fr'); });
+  }
+
+  // Alimente la datalist de suggestions du formulaire depuis l'\u00e9tat courant
+  // (aucun appel r\u00e9seau : les secteurs viennent des contacts d\u00e9j\u00e0 charg\u00e9s).
+  function majDatalistSecteurs() {
+    var dl = $('#liste-secteurs');
+    if (!dl) { return; }
+    dl.textContent = '';
+    secteursConnus().forEach(function (valeur) {
+      var opt = document.createElement('option');
+      opt.value = valeur;
+      dl.appendChild(opt);
+    });
+  }
+
   // Pr\u00e9dicat de recherche partag\u00e9 (Contacts + recherche carte) : nom et ville
   // uniquement, correspondance par inclusion sur texte normalis\u00e9.
   function correspondAuTerme(noeud, terme) {
@@ -1023,6 +1060,109 @@
     conteneur.appendChild(liste);
   }
 
+  // ---------- Onglet Arbre (A3, le pivot : secteurs = branches) ----------
+
+  // Bloc d'état de l'arbre (non connecté / réseau vide), sur le parchemin.
+  function blocEtatArbre(texteFort, texteSuite, libelleBouton, action) {
+    var bloc = document.createElement('div');
+    bloc.className = 'arbre-bloc-etat cadre-dessine';
+    var texte = document.createElement('p');
+    texte.className = 'arbre-etat-texte';
+    var fort = document.createElement('strong');
+    fort.textContent = texteFort;
+    texte.appendChild(fort);
+    texte.appendChild(document.createTextNode(' ' + texteSuite));
+    bloc.appendChild(texte);
+    if (libelleBouton) {
+      bloc.appendChild(boutonRaccourci(libelleBouton, 'bouton-primaire', action));
+    }
+    return bloc;
+  }
+
+  // Ouverture de fiche depuis l'arbre : la fiche est un overlay global (A3),
+  // on l'ouvre SANS quitter l'arbre (contraste avec le flux Contacts qui, lui,
+  // bascule vers la carte). Réutilisation stricte de ouvrirFiche / rendreFiche.
+  function ouvrirFicheDepuisArbre(nodeId) {
+    var noeud = nodeId ? trouverNoeud(nodeId) : null;
+    if (!noeud) {
+      toast("Ce contact n'existe plus.", 'erreur');
+      return;
+    }
+    ouvrirFiche(noeud.id);
+    $('#panneau-titre').focus();
+  }
+
+  function rendreArbre() {
+    var scene = $('#arbre-scene');
+    if (!scene) { return; }
+    var outils = $('#arbre-outils');
+    var boutonAjouter = $('#arbre-ajouter');
+    var message = $('#arbre-recherche-message');
+    scene.textContent = '';
+    if (message) { message.textContent = ''; }
+
+    // Non connecté (config présente, pas de session) : invitation, pas d'arbre.
+    if (!etat.modeDemo && !etat.session) {
+      if (outils) { outils.hidden = true; }
+      if (boutonAjouter) { boutonAjouter.hidden = true; }
+      scene.appendChild(blocEtatArbre(
+        'Connectez-vous pour retrouver votre réseau.',
+        'Le lien de connexion arrive par e-mail.',
+        'Se connecter',
+        function () {
+          var champ = $('#champ-email');
+          if (champ) { champ.focus(); }
+        }));
+      return;
+    }
+
+    if (boutonAjouter) { boutonAjouter.hidden = false; }
+
+    // Connecté (ou démo), aucune donnée : invitation au premier contact.
+    // Wording exact de la spec A4 (état vide de l'arbre).
+    if (etat.noeuds.length === 0) {
+      if (outils) { outils.hidden = true; }
+      scene.appendChild(blocEtatArbre(
+        'Votre arbre attend sa première pousse',
+        '— touchez +',
+        '+ Ajouter un contact',
+        function () { ouvrirFormNoeud(null); }));
+      return;
+    }
+
+    if (outils) { outils.hidden = false; }
+
+    // Recherche v3-⑥ (variante arbre) : MISE EN ÉVIDENCE, pas réduction — les
+    // feuilles non correspondantes sont atténuées mais restent en place, pour
+    // ne pas casser l'orientation dans l'arbre. Réutilise correspondAuTerme.
+    var champ = $('#arbre-recherche');
+    var brut = champ ? champ.value.trim() : '';
+    var terme = normaliserTexte(brut);
+    var correspond = function (noeud) {
+      return !terme || correspondAuTerme(noeud, terme);
+    };
+
+    // Pousse animée (A4) : le contact tout juste ajouté apparaît par une
+    // pousse discrète (CSS, coupée sous prefers-reduced-motion). Le marqueur
+    // est consommé après un seul rendu (les re-renders ultérieurs n'animent pas).
+    var nouveau = etat.noeudNouveau;
+    etat.noeudNouveau = null;
+
+    window.UltimaArbre.rendre(scene, etat.noeuds, {
+      surClicNoeud: ouvrirFicheDepuisArbre,
+      libellesType: LIBELLES_TYPE,
+      correspond: correspond,
+      noeudNouveau: nouveau
+    });
+
+    if (terme && message) {
+      var nb = etat.noeuds.filter(correspond).length;
+      message.textContent = nb === 0
+        ? 'Aucun contact ne correspond à “' + brut + '”.'
+        : (nb + (nb > 1 ? ' contacts mis en évidence.' : ' contact mis en évidence.'));
+    }
+  }
+
   // ---------- Panneau latéral ----------
 
   function ouvrirPanneau(vue, titre) {
@@ -1086,6 +1226,7 @@
 
     var dl = document.createElement('dl');
     dl.className = 'fiche-details';
+    ligneDetail(dl, "Secteur d'activité", noeud.secteur_activite);
     ligneDetail(dl, 'Ville', noeud.ville);
     ligneDetail(dl, 'Adresse', noeud.adresse);
     ligneDetail(dl, 'Téléphone', noeud.telephone);
@@ -2216,6 +2357,8 @@
     $('#noeud-type').value = noeud ? noeud.type : 'artisan';
     $('#noeud-nom').value = noeud ? (noeud.nom || '') : '';
     $('#noeud-statut').value = noeud ? noeud.statut : 'prospect';
+    $('#noeud-secteur_activite').value = noeud ? (noeud.secteur_activite || '') : '';
+    majDatalistSecteurs();
     $('#noeud-ville').value = noeud ? (noeud.ville || '') : '';
     $('#noeud-adresse').value = noeud ? (noeud.adresse || '') : '';
     $('#noeud-telephone').value = noeud ? (noeud.telephone || '') : '';
@@ -2255,7 +2398,7 @@
     }
     // Champs optionnels : jamais de chaîne vide vers l'API (rejetée pour
     // l'email). Création → champ omis ; édition → null (vidage effectif).
-    ['ville', 'adresse', 'telephone', 'email', 'notes'].forEach(function (champ) {
+    ['ville', 'adresse', 'secteur_activite', 'telephone', 'email', 'notes'].forEach(function (champ) {
       var brut = $('#noeud-' + champ).value.trim();
       if (brut) {
         valeurs[champ] = brut;
@@ -2268,9 +2411,12 @@
       return;
     }
     try {
+      var creation = !etat.noeudEnEdition;
       var id = await sauverNoeud(valeurs);
       toast(etat.noeudEnEdition ? 'Nœud mis à jour.' : 'Nœud ajouté.');
       etat.noeudEnEdition = null;
+      // A4 : à la création seulement, la nouvelle feuille pousse à l'écran.
+      etat.noeudNouveau = creation ? id : null;
       rafraichir();
       if (id && trouverNoeud(id)) { ouvrirFiche(id); } else { fermerPanneau(); }
     } catch (e) {
@@ -2380,10 +2526,30 @@
     majAuthUi();
   }
 
+  // A4 (garde-fou a11y) : tant que l'overlay de connexion couvre l'écran,
+  // l'application derrière ne doit être atteignable ni au clavier ni au
+  // lecteur d'écran. On passe `inert` sur chaque région de l'app (tout le
+  // <body> sauf l'overlay lui-même et les toasts, qui doivent rester
+  // annoncés au-dessus). `inert` est ignoré sans erreur là où il n'existe
+  // pas : jamais de casse. Non appelé en mode démo (pas d'overlay).
+  function majInertApp(overlayVisible) {
+    Array.prototype.forEach.call(document.body.children, function (el) {
+      if (el.id === 'ecran-connexion' || el.id === 'toasts' ||
+          el.tagName === 'SCRIPT') { return; }
+      if (overlayVisible) { el.setAttribute('inert', ''); }
+      else { el.removeAttribute('inert'); }
+    });
+  }
+
   function majAuthUi() {
     if (etat.modeDemo) { return; }
     $('#form-connexion').hidden = Boolean(etat.session);
     $('#bouton-deconnexion').hidden = !etat.session;
+    // A1 : écran de connexion plein écran tant qu'aucune session n'est ouverte
+    // (jamais en mode démo — majAuthUi ne s'exécute pas dans ce cas).
+    var overlayVisible = !etat.session;
+    $('#ecran-connexion').hidden = !overlayVisible;
+    majInertApp(overlayVisible);
   }
 
   async function envoyerLienMagique(evenement) {
@@ -2432,6 +2598,15 @@
     });
 
     $('#contacts-recherche').addEventListener('input', rendreContacts);
+
+    $('#arbre-ajouter').addEventListener('click', function () {
+      if (!etat.modeDemo && !etat.session) {
+        toast('Connectez-vous pour ajouter un contact.', 'erreur');
+        return;
+      }
+      ouvrirFormNoeud(null); // panneau overlay : on reste sur l'arbre
+    });
+    $('#arbre-recherche').addEventListener('input', rendreArbre);
 
     $('#bouton-ajouter').addEventListener('click', function () {
       if (!etat.modeDemo && !etat.session) {
@@ -2484,9 +2659,11 @@
     initDictee(); // micros des champs statiques (sans API : ne fait rien)
     initGeocodage(); // « Trouver sur la carte » du formulaire nœud
     initRecherche(); // recherche nom/ville de l'onglet Carte (v3-⑥)
-    // R1 : l'arrivée se fait sur la carte (la carte est le hub) ;
-    // l'Accueil v3-① reste accessible par son onglet.
-    activerOnglet('carte');
+    // A3 (D2a) : l'arbre est l'écran d'arrivée (le pivot), en démo comme en
+    // connecté. La carte reste pleinement accessible par son onglet ; l'Accueil
+    // v3-① aussi. Les données arrivent juste après (chargerDonnees → rafraichir
+    // → rendreArbre) : l'arbre se peuple sans changement d'onglet.
+    activerOnglet('arbre');
     await initAuth();
     await chargerDonnees();
   }
