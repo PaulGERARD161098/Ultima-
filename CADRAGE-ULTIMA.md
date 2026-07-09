@@ -149,13 +149,23 @@
     derrière l'overlay de connexion, fixtures démo avec secteur (6 branches).
     Double-GO.
   - Patrimoine : 15 harnais verts (2 unit + 13 smoke), 0 erreur console.
-  **⏳ Registre Actions humaines (solo — non bloquant) :** ① appliquer
-  migration `0006` (puis harnais + `get_advisors`) ; ② Vercel env
-  `GEOCODE_USER_AGENT` + URL prod + header `Permissions-Policy` (U6) ;
-  ③ Supabase Auth : inviter Paul, couper signups, Site/Redirect URLs ;
-  ④ gate `auth.getUser()` endpoints ; ⑤ preuves live après déploiement
-  (tuiles OSM réelles RA1/RA2, Nominatim réel, login). **Fusion PR #24 =
-  go Paul.**
+  **✅ PR #24 FUSIONNÉE dans `main` (2026-07-09, go Paul « go merge »),
+  merge commit `3fec18d`.**
+  **✅ Migration `0006` APPLIQUÉE (2026-07-09, go Paul « implante le
+  reste ») :** colonne `secteur_activite` (`text` nullable, CHECK ≤ 120)
+  + index partiel `network_nodes_owner_secteur_idx` présents ; advisors
+  sécurité = **0 lint** ; table 0 ligne, RLS active. Schéma = miroir exact
+  du contrat API/HTML (borne 120).
+  **⏳ Registre Actions humaines restant (dashboard — hors périmètre Léo) :**
+  ① Vercel : env `GEOCODE_USER_AGENT` + confirmer URL prod + vérifier header
+  `Permissions-Policy` (U6) — *le connecteur Vercel de Léo ne voit pas le
+  projet `ultima` (404), périmètre d'autorisation à rafraîchir* ;
+  ② Supabase Auth : inviter Paul, couper signups, Site/Redirect URLs ;
+  ③ **preuve de persistance secteur en vrai** (nécessite un utilisateur
+  connecté réel → après ② Auth) ; ④ preuves live (tuiles OSM RA1/RA2,
+  Nominatim réel, login).
+  **Décision ouverte (à cadrer, non slippée en solo) :** durcir l'auth des
+  endpoints par `auth.getUser()` (gate auth/middleware — boucle dédiée).
   **Vivier (passes ultérieures) :** fidélité visuelle « arbre-registre en
   bandes » vs dessin peint (arbitrage esthétique Paul) ; assertions de
   contraste dédiées (aide connexion + bannière secteur) ; relations v2 en
