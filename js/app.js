@@ -873,6 +873,34 @@
     return (texte || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   }
 
+  // Secteurs d\u00e9j\u00e0 saisis, d\u00e9doublonn\u00e9s par forme normalis\u00e9e (minuscules +
+  // accents retir\u00e9s), tri\u00e9s alpha fr. Premi\u00e8re graphie rencontr\u00e9e conserv\u00e9e
+  // pour l'affichage (comme on regroupera les contacts par secteur en A3).
+  function secteursConnus() {
+    var vus = Object.create(null);
+    etat.noeuds.forEach(function (n) {
+      var brut = (n.secteur_activite || '').trim();
+      if (!brut) { return; }
+      var cle = normaliserTexte(brut);
+      if (!vus[cle]) { vus[cle] = brut; }
+    });
+    return Object.keys(vus).map(function (cle) { return vus[cle]; })
+      .sort(function (a, b) { return a.localeCompare(b, 'fr'); });
+  }
+
+  // Alimente la datalist de suggestions du formulaire depuis l'\u00e9tat courant
+  // (aucun appel r\u00e9seau : les secteurs viennent des contacts d\u00e9j\u00e0 charg\u00e9s).
+  function majDatalistSecteurs() {
+    var dl = $('#liste-secteurs');
+    if (!dl) { return; }
+    dl.textContent = '';
+    secteursConnus().forEach(function (valeur) {
+      var opt = document.createElement('option');
+      opt.value = valeur;
+      dl.appendChild(opt);
+    });
+  }
+
   // Pr\u00e9dicat de recherche partag\u00e9 (Contacts + recherche carte) : nom et ville
   // uniquement, correspondance par inclusion sur texte normalis\u00e9.
   function correspondAuTerme(noeud, terme) {
@@ -1086,6 +1114,7 @@
 
     var dl = document.createElement('dl');
     dl.className = 'fiche-details';
+    ligneDetail(dl, "Secteur d'activité", noeud.secteur_activite);
     ligneDetail(dl, 'Ville', noeud.ville);
     ligneDetail(dl, 'Adresse', noeud.adresse);
     ligneDetail(dl, 'Téléphone', noeud.telephone);
@@ -2216,6 +2245,8 @@
     $('#noeud-type').value = noeud ? noeud.type : 'artisan';
     $('#noeud-nom').value = noeud ? (noeud.nom || '') : '';
     $('#noeud-statut').value = noeud ? noeud.statut : 'prospect';
+    $('#noeud-secteur_activite').value = noeud ? (noeud.secteur_activite || '') : '';
+    majDatalistSecteurs();
     $('#noeud-ville').value = noeud ? (noeud.ville || '') : '';
     $('#noeud-adresse').value = noeud ? (noeud.adresse || '') : '';
     $('#noeud-telephone').value = noeud ? (noeud.telephone || '') : '';
@@ -2255,7 +2286,7 @@
     }
     // Champs optionnels : jamais de chaîne vide vers l'API (rejetée pour
     // l'email). Création → champ omis ; édition → null (vidage effectif).
-    ['ville', 'adresse', 'telephone', 'email', 'notes'].forEach(function (champ) {
+    ['ville', 'adresse', 'secteur_activite', 'telephone', 'email', 'notes'].forEach(function (champ) {
       var brut = $('#noeud-' + champ).value.trim();
       if (brut) {
         valeurs[champ] = brut;

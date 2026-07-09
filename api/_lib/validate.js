@@ -15,6 +15,7 @@ const NODE_FIELDS = [
   'telephone',
   'email',
   'statut',
+  'secteur_activite',
   'lat',
   'lng',
   'notes',
@@ -103,6 +104,7 @@ export function validateNode(body, mode) {
   for (const [field, max] of [
     ['ville', 200],
     ['adresse', 500],
+    ['secteur_activite', 120],
     ['notes', 2000],
   ]) {
     const msg = checkOptionalText(body[field], field, max);
