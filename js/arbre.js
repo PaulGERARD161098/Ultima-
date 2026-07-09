@@ -172,15 +172,39 @@
     sol.appendChild(svg('ellipse', { cx: cx, cy: solY - 6, rx: 188, ry: 22, fill: '#a7b06b', opacity: '0.5' }));
     racine.appendChild(sol);
 
-    // Feuillage doux derrière chaque bande (canopée par étage).
+    // Touffes d'herbe au pied (registre planche : quelques brins gravés).
+    var herbe = svg('g', {
+      fill: 'none', stroke: '#6f8f4a', 'stroke-width': '1.6',
+      'stroke-linecap': 'round', opacity: '0.8'
+    });
+    herbe.appendChild(svg('path', {
+      d: 'M' + (cx - 130) + ',' + (solY - 6) + ' q2,-11 6,-15' +
+         ' M' + (cx - 122) + ',' + (solY - 4) + ' q0,-9 5,-14' +
+         ' M' + (cx + 110) + ',' + (solY - 8) + ' q2,-11 6,-15' +
+         ' M' + (cx + 120) + ',' + (solY - 5) + ' q0,-9 5,-14' +
+         ' M' + (cx - 60) + ',' + (solY + 4) + ' q2,-9 5,-13' +
+         ' M' + (cx + 64) + ',' + (solY + 3) + ' q-2,-9 -5,-13'
+    }));
+    racine.appendChild(herbe);
+
+    // Feuillage doux derrière chaque bande (canopée par étage), avec une seconde
+    // touche plus dense, décalée déterministiquement selon l'étage (variation
+    // naturelle du feuillage, sans jamais toucher aux positions des feuilles).
     var canopee = svg('g', { fill: 'url(#arbre-feuillage)', opacity: '0.22', filter: 'url(#arbre-rough)' });
-    layout.bandes.forEach(function (bande) {
+    var canopeeDense = svg('g', { fill: '#557a3a', opacity: '0.14', filter: 'url(#arbre-rough)' });
+    layout.bandes.forEach(function (bande, i) {
       var cyF = bande.gridTop + bande.hauteurGrille / 2;
+      var sens = (i % 2) ? 1 : -1; // alternance gauche/droite, déterministe
       canopee.appendChild(svg('ellipse', {
         cx: cx, cy: cyF, rx: bande.gridW / 2 + 34, ry: bande.hauteurGrille / 2 + 40
       }));
+      canopeeDense.appendChild(svg('ellipse', {
+        cx: cx + sens * 26, cy: cyF - 14,
+        rx: bande.gridW / 4 + 22, ry: bande.hauteurGrille / 3 + 24
+      }));
     });
     racine.appendChild(canopee);
+    racine.appendChild(canopeeDense);
 
     // Tronc central (encre + bois), du sol à la couronne, derrière les feuilles.
     var hautTronc = TOP_PAD + 6;
@@ -198,19 +222,58 @@
          ' M' + (cx + 12) + ',' + (solY - 2) + ' Q' + (cx + 42) + ',' + (solY + 8) + ' ' + (cx + 66) + ',' + (solY + 4),
       fill: 'none', stroke: '#5a4118', 'stroke-width': '3', 'stroke-linecap': 'round'
     }));
-    racine.appendChild(tronc);
-
-    // Branche fine du tronc vers chaque bannière (part du centre).
-    var branchages = svg('g', {
-      fill: 'none', stroke: '#6b4a2b', 'stroke-width': '3', 'stroke-linecap': 'round', filter: 'url(#arbre-rough)'
+    // Nervures d'écorce (registre gravure) : quelques filets suivant le tronc.
+    var nervures = svg('g', {
+      fill: 'none', stroke: '#5a4118', 'stroke-width': '1.1',
+      opacity: '0.5', 'stroke-linecap': 'round', filter: 'url(#arbre-rough)'
     });
-    layout.bandes.forEach(function (bande) {
+    var midTronc = (hautTronc + solY) / 2;
+    nervures.appendChild(svg('path', {
+      d: 'M' + (cx - 5) + ',' + (solY - 40) + ' Q' + (cx - 9) + ',' + midTronc + ' ' + (cx - 4) + ',' + (hautTronc + 40) +
+         ' M' + (cx + 6) + ',' + (solY - 30) + ' Q' + (cx + 10) + ',' + midTronc + ' ' + (cx + 4) + ',' + (hautTronc + 60)
+    }));
+    racine.appendChild(nervures);
+
+    // Branche du tronc vers chaque bannière : courbe organique (léger balancement
+    // latéral alterné par étage), plus vivante que le trait droit. Purement
+    // décoratif — les positions logiques (layout) restent inchangées.
+    var branchages = svg('g', {
+      fill: 'none', stroke: '#6b4a2b', 'stroke-width': '3.4', 'stroke-linecap': 'round', filter: 'url(#arbre-rough)'
+    });
+    var cerneBranches = svg('g', {
+      fill: 'none', stroke: '#5a4118', 'stroke-width': '1.1', opacity: '0.45',
+      'stroke-linecap': 'round', filter: 'url(#arbre-rough)'
+    });
+    var sprigs = svg('g', {
+      fill: '#6f8f4a', stroke: '#4f7038', 'stroke-width': '1', opacity: '0.85', filter: 'url(#arbre-rough)'
+    });
+    layout.bandes.forEach(function (bande, i) {
       var yB = bande.bannerY + BANNIERE_H;
-      branchages.appendChild(svg('path', {
-        d: 'M' + cx + ',' + (yB + 46) + ' C' + cx + ',' + (yB + 24) + ' ' + cx + ',' + (yB + 14) + ' ' + cx + ',' + yB
+      var sens = (i % 2) ? 1 : -1;
+      var sway = 11 * sens;
+      var d = 'M' + cx + ',' + (yB + 46) +
+        ' C' + (cx + sway) + ',' + (yB + 30) +
+        ' ' + (cx - sway) + ',' + (yB + 16) +
+        ' ' + cx + ',' + yB;
+      branchages.appendChild(svg('path', { d: d }));
+      cerneBranches.appendChild(svg('path', { d: d }));
+      // Deux brins de feuillage de part et d'autre de la bannière (dans l'espace
+      // libre latéral : aucune collision avec les étiquettes, sous la bannière).
+      var bx = cx + sens * 58;
+      var by = yB + 8;
+      sprigs.appendChild(svg('path', {
+        d: 'M' + bx + ',' + by + ' q' + (sens * 12) + ',-9 ' + (sens * 18) + ',-2' +
+           ' q' + (-sens * 4) + ',9 ' + (-sens * 18) + ',2 Z'
+      }));
+      sprigs.appendChild(svg('path', {
+        d: 'M' + (cx - sens * 46) + ',' + (by + 6) +
+           ' q' + (-sens * 10) + ',-8 ' + (-sens * 16) + ',-1' +
+           ' q' + (sens * 4) + ',8 ' + (sens * 16) + ',1 Z'
       }));
     });
     racine.appendChild(branchages);
+    racine.appendChild(cerneBranches);
+    racine.appendChild(sprigs);
   }
 
   // ---- Bannières de secteur ----
@@ -237,6 +300,7 @@
     var couleurs = options.couleurs || {};
     var libelles = options.libellesType || {};
     var correspond = options.correspond;
+    var idNouveau = options.noeudNouveau || null; // feuille à faire pousser (A4)
     var g = svg('g', { 'font-family': 'Georgia, "Times New Roman", serif' });
     var index = 0;
     layout.bandes.forEach(function (bande) {
@@ -246,9 +310,11 @@
         var libelleType = libelles[type] || type || '';
         var nomComplet = noeud.nom || '(sans nom)';
         var attenue = correspond && !correspond(noeud);
+        var pousse = idNouveau && noeud.id === idNouveau; // A4 : nouvelle entrée
 
         var feuille = svg('g', {
-          'class': 'arbre-feuille' + (attenue ? ' arbre-feuille--attenuee' : ''),
+          'class': 'arbre-feuille' + (attenue ? ' arbre-feuille--attenuee' : '') +
+            (pousse ? ' arbre-feuille--pousse' : ''),
           tabindex: '0',
           role: 'button',
           'data-noeud-id': noeud.id,
@@ -264,7 +330,10 @@
         var ly = item.y;
         feuille.appendChild(svg('rect', {
           'class': 'arbre-feuille-cadre',
-          x: lx, y: ly, width: FEUILLE_W, height: FEUILLE_H, rx: 5,
+          // Arrondi légèrement varié (déterministe par index) : étiquettes de
+          // planche gravées, jamais deux tout à fait identiques. Reste dans la
+          // boîte du layout — la garantie d'anti-chevauchement d'A3 est intacte.
+          x: lx, y: ly, width: FEUILLE_W, height: FEUILLE_H, rx: (index % 2 ? 6 : 4.5),
           fill: '#fff3d6', stroke: '#a9884a', 'stroke-width': '1.3'
         }));
         var pcx = lx + 17;

@@ -49,11 +49,15 @@ verdicts.ongletArbreCourant = (await page.locator('.barre-onglets .onglet[data-o
   .getAttribute('aria-current')) === 'page';
 verdicts.cartoucheUltima = (await page.locator('#arbre-titre').textContent()).trim() === 'ULTIMA';
 
-// ===== 1. N contacts démo (9) → N étiquettes ; toutes « À classer ». =====
+// ===== 1. N contacts démo (9) → N étiquettes ; branches réelles + « À classer ».
+// A4 : quelques fixtures démo portent un secteur (vraies branches) ; les leads/
+// chantiers sans secteur (demo-n7/8/9) restent sous « À classer ».
 verdicts.neufFeuilles = (await page.locator('.arbre-feuille').count()) === 9;
 const bannieres0 = await page.evaluate(() => Array.from(
   document.querySelectorAll('#arbre-scene .arbre-svg text')).map((t) => t.textContent));
-verdicts.brancheAClasser = bannieres0.includes('À classer'); // point 2 (démo sans secteur)
+verdicts.brancheAClasser = bannieres0.includes('À classer'); // point 2
+verdicts.branchesReellesDemo = ['Menuiserie', 'Plomberie', 'Électricité', 'Courtage', 'Toiture']
+  .every((s) => bannieres0.includes(s)); // A4 : l'arbre démo montre de vraies branches
 
 // Pas de scroll horizontal de page (viewBox adaptatif, svg borné).
 verdicts.pasDeScrollHorizontal = await page.evaluate(() =>
@@ -99,6 +103,7 @@ const mesure = await page.evaluate(() => {
   const cadre = feuille.querySelector('.arbre-feuille-cadre');
   const textes = feuille.querySelectorAll('text');
   const nomFill = textes[0].getAttribute('fill');
+  const typeFill = textes[1].getAttribute('fill');
   const typeTexte = textes[1].textContent;
   const bg = cadre.getAttribute('fill');
   const hex = (h) => {
@@ -112,12 +117,17 @@ const mesure = await page.evaluate(() => {
     });
     return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
   };
-  const l1 = lum(hex(nomFill));
-  const l2 = lum(hex(bg));
-  const ratio = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
-  return { ratio, typeTexte };
+  const ratioContre = (fill) => {
+    const l1 = lum(hex(fill));
+    const l2 = lum(hex(bg));
+    return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+  };
+  // ratio = nom foncé ; ratioType = type italique (le plus tendu, ~6,5:1 en A3 :
+  // A4 vérifie qu'aucune finition ne l'a fait retomber sous AA).
+  return { ratio: ratioContre(nomFill), ratioType: ratioContre(typeFill), typeTexte };
 });
 verdicts.contrasteAA = mesure.ratio >= 4.5;
+verdicts.contrasteTypeAA = mesure.ratioType >= 4.5; // A4 : type italique conforme
 verdicts.typeEnToutesLettres = mesure.typeTexte === 'Artisan'; // double codage (pas que couleur)
 
 // ===== 5. Clavier : feuilles focusables (tabindex/role) + activation Entrée.
@@ -211,6 +221,45 @@ verdicts.messageRecherche = (await page.locator('#arbre-recherche-message').text
 await page.locator('#arbre-recherche').fill('');
 await page.waitForTimeout(200);
 verdicts.rechercheReset = (await page.locator('.arbre-feuille--attenuee').count()) === 0;
+
+// ===== A4-1. Pousse animée à l'ajout, coupée sous prefers-reduced-motion. =====
+// Mouvement autorisé : la feuille créée porte la classe pousse et anime.
+await page.emulateMedia({ reducedMotion: 'no-preference' });
+await creerContact('Gamma Pousse', 'Plomberie', 'artisan');
+verdicts.uneSeulePousse = (await page.locator('.arbre-feuille--pousse').count()) === 1;
+verdicts.pousseAnimee = await page.evaluate(() => {
+  const f = document.querySelector('.arbre-feuille--pousse');
+  return !!f && getComputedStyle(f).animationName === 'arbre-pousse';
+});
+// Mouvement réduit : la MÊME feuille ne s'anime plus (apparition immédiate).
+await page.emulateMedia({ reducedMotion: 'reduce' });
+const reduit = await page.evaluate(() => {
+  const f = document.querySelector('.arbre-feuille--pousse');
+  const cs = getComputedStyle(f);
+  return { nom: cs.animationName, opacite: cs.opacity };
+});
+verdicts.pousseCoupeeReduce = reduit.nom === 'none';
+verdicts.feuilleVisibleReduce = reduit.opacite === '1';
+await page.emulateMedia({ reducedMotion: 'no-preference' });
+
+// ===== A4-2. État vide : vider le réseau → message exact + bouton d'ajout. =====
+page.on('dialog', (d) => d.accept()); // confirmations de suppression
+let garde = 0;
+while ((await page.locator('.arbre-feuille').count()) > 0 && garde < 80) {
+  await page.locator('.arbre-feuille').first().click();
+  await page.waitForTimeout(110);
+  await page.locator('.actions-fiche button', { hasText: 'Supprimer' }).first().click();
+  await page.waitForTimeout(140);
+  garde += 1;
+}
+verdicts.arbreVide = (await page.locator('.arbre-feuille').count()) === 0;
+const blocVide = page.locator('#arbre-scene .arbre-bloc-etat');
+verdicts.messageVideExact = (await blocVide.locator('.arbre-etat-texte').textContent())
+  .replace(/\s+/g, ' ').trim() === 'Votre arbre attend sa première pousse — touchez +';
+verdicts.boutonEtatVide = (await blocVide.locator('button').count()) === 1 &&
+  await blocVide.locator('button').isVisible();
+verdicts.boutonFlottantVisibleVide = await page.locator('#arbre-ajouter').isVisible();
+await page.screenshot({ path: `${SCRATCH}/arbre-vide-390.png` });
 
 console.log(JSON.stringify(verdicts, null, 2));
 console.log('mesure contraste ~', mesure.ratio.toFixed(2), ':1 | perf 150 ~', pur.ms.toFixed(1), 'ms');

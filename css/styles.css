@@ -2131,6 +2131,23 @@ textarea:focus-visible,
 }
 .arbre-feuille--attenuee { opacity: 0.3; }
 
+/* Pousse à l'ajout (A4) : la feuille tout juste créée éclôt depuis sa base,
+   sobre et brève (registre antique, pas d'effet gratuit). L'animation vit sous
+   « no-preference » : sous prefers-reduced-motion: reduce, aucune règle ne
+   s'applique → la feuille apparaît immédiatement. */
+@media (prefers-reduced-motion: no-preference) {
+  .arbre-feuille--pousse {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: arbre-pousse 460ms cubic-bezier(0.22, 0.68, 0.32, 1) both;
+  }
+  @keyframes arbre-pousse {
+    from { opacity: 0; transform: translateY(6px) scale(0.62); }
+    55%  { opacity: 1; }
+    to   { opacity: 1; transform: none; }
+  }
+}
+
 /* Bloc d'état (non connecté / réseau vide) sur le parchemin. */
 .arbre-bloc-etat {
   margin: 1.5rem auto;

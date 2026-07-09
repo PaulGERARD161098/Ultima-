@@ -71,8 +71,13 @@ verdicts.maxlength120 = (await secteur.getAttribute('maxlength')) === '120';
 verdicts.brancheDatalist = (await secteur.getAttribute('list')) === 'liste-secteurs';
 verdicts.labelSansEtoile = (await page.locator('label[for="noeud-secteur_activite"]').textContent())
   .trim() === "Secteur d'activité";
-// À l'ouverture, aucun secteur en base démo → datalist vide.
-verdicts.datalistVideAuDepart = (await page.locator('#liste-secteurs option').count()) === 0;
+// À l'ouverture, la datalist reflète les secteurs des fixtures démo (A4 :
+// quelques contacts démo portent un secteur pour montrer de vraies branches),
+// dédoublonnés par forme normalisée et triés alpha fr.
+const optionsDepart = await page.locator('#liste-secteurs option').evaluateAll(
+  (opts) => opts.map((o) => o.value));
+verdicts.datalistDemoAuDepart = JSON.stringify(optionsDepart) ===
+  JSON.stringify(['Courtage', 'Électricité', 'Menuiserie', 'Plomberie', 'Toiture']);
 // Ferme le formulaire sans créer (pt 6 optionnel prouvé plus bas autrement).
 await ongletContacts.click();
 await page.waitForTimeout(150);
@@ -98,8 +103,11 @@ await page.locator('#contacts-ajouter').click();
 await page.waitForTimeout(150);
 const optionsSecteur = await page.locator('#liste-secteurs option').evaluateAll(
   (opts) => opts.map((o) => o.value));
+// « Plomberie » et « Toiture » préexistent (fixtures démo) : les créations ne
+// les redoublent pas. La datalist = union dédoublonnée des secteurs démo et
+// saisis (« plomberie » minuscule fusionné sous la 1re graphie « Plomberie »).
 verdicts.datalistRefleteExistant = JSON.stringify(optionsSecteur) ===
-  JSON.stringify(['Plomberie', 'Toiture']);
+  JSON.stringify(['Courtage', 'Électricité', 'Menuiserie', 'Plomberie', 'Toiture']);
 verdicts.dedoublonnageNormalise = optionsSecteur.filter(
   (v) => v.toLowerCase() === 'plomberie').length === 1;
 await ongletContacts.click();

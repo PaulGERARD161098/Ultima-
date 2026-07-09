@@ -47,7 +47,8 @@
     session: null,
     onglet: 'accueil',   // espace actif : accueil | carte | contacts
     noeudCourant: null,  // id du nœud affiché dans la fiche
-    noeudEnEdition: null // id du nœud en cours d'édition dans le formulaire
+    noeudEnEdition: null, // id du nœud en cours d'édition dans le formulaire
+    noeudNouveau: null   // id du contact tout juste ajouté (pousse animée, A4)
   };
 
   function $(selecteur) { return document.querySelector(selecteur); }
@@ -77,12 +78,12 @@
 
   function donneesDemo() {
     var noeuds = [
-      { id: 'demo-n1', type: 'artisan', nom: 'Menuiserie Delcourt', ville: 'Lille', adresse: '12 rue Nationale', telephone: '03 20 55 41 20', email: 'contact@menuiserie-delcourt.fr', statut: 'actif', lat: 50.6292, lng: 3.0573, notes: 'Menuiserie bois et alu. Très fiable sur les délais.' },
-      { id: 'demo-n2', type: 'artisan', nom: 'Plomberie Roux & Fils', ville: 'Lyon', adresse: '8 quai Saint-Vincent', telephone: '04 78 30 12 45', email: 'contact@plomberie-roux.fr', statut: 'actif', lat: 45.764, lng: 4.8357, notes: 'Chauffage et sanitaire. Disponible sous 48 h.' },
-      { id: 'demo-n3', type: 'artisan', nom: 'Élec Ferrand', ville: 'Nantes', adresse: '25 rue de Strasbourg', telephone: '02 40 47 89 12', email: 'ferrand.elec@orange.fr', statut: 'prospect', lat: 47.2184, lng: -1.5536, notes: 'Rencontré au salon Habitat. À rappeler.' },
-      { id: 'demo-n4', type: 'partenaire', nom: 'Agence Habitat Sud', ville: 'Marseille', adresse: '4 la Canebière', telephone: '04 91 54 22 10', email: 'contact@habitat-sud.fr', statut: 'actif', lat: 43.2965, lng: 5.3698, notes: 'Agence immobilière, apporte des dossiers de rénovation.' },
-      { id: 'demo-n5', type: 'partenaire', nom: 'Courtage Bâti Ouest', ville: 'Rennes', adresse: '2 place de Bretagne', telephone: '02 99 78 34 56', email: 'contact@bati-ouest.fr', statut: 'actif', lat: 48.1173, lng: -1.6778, notes: 'Courtier travaux, commission 5 %.' },
-      { id: 'demo-n6', type: 'lead', nom: 'M. Lambert — rénovation toiture', ville: 'Bordeaux', adresse: '18 cours de l’Intendance', telephone: '06 12 34 56 78', email: 'p.lambert@gmail.com', statut: 'prospect', lat: 44.8378, lng: -0.5792, notes: 'Devis envoyé le 15/06, relance prévue.' },
+      { id: 'demo-n1', type: 'artisan', nom: 'Menuiserie Delcourt', secteur_activite: 'Menuiserie', ville: 'Lille', adresse: '12 rue Nationale', telephone: '03 20 55 41 20', email: 'contact@menuiserie-delcourt.fr', statut: 'actif', lat: 50.6292, lng: 3.0573, notes: 'Menuiserie bois et alu. Très fiable sur les délais.' },
+      { id: 'demo-n2', type: 'artisan', nom: 'Plomberie Roux & Fils', secteur_activite: 'Plomberie', ville: 'Lyon', adresse: '8 quai Saint-Vincent', telephone: '04 78 30 12 45', email: 'contact@plomberie-roux.fr', statut: 'actif', lat: 45.764, lng: 4.8357, notes: 'Chauffage et sanitaire. Disponible sous 48 h.' },
+      { id: 'demo-n3', type: 'artisan', nom: 'Élec Ferrand', secteur_activite: 'Électricité', ville: 'Nantes', adresse: '25 rue de Strasbourg', telephone: '02 40 47 89 12', email: 'ferrand.elec@orange.fr', statut: 'prospect', lat: 47.2184, lng: -1.5536, notes: 'Rencontré au salon Habitat. À rappeler.' },
+      { id: 'demo-n4', type: 'partenaire', nom: 'Agence Habitat Sud', secteur_activite: 'Courtage', ville: 'Marseille', adresse: '4 la Canebière', telephone: '04 91 54 22 10', email: 'contact@habitat-sud.fr', statut: 'actif', lat: 43.2965, lng: 5.3698, notes: 'Agence immobilière, apporte des dossiers de rénovation.' },
+      { id: 'demo-n5', type: 'partenaire', nom: 'Courtage Bâti Ouest', secteur_activite: 'Courtage', ville: 'Rennes', adresse: '2 place de Bretagne', telephone: '02 99 78 34 56', email: 'contact@bati-ouest.fr', statut: 'actif', lat: 48.1173, lng: -1.6778, notes: 'Courtier travaux, commission 5 %.' },
+      { id: 'demo-n6', type: 'lead', nom: 'M. Lambert — rénovation toiture', secteur_activite: 'Toiture', ville: 'Bordeaux', adresse: '18 cours de l’Intendance', telephone: '06 12 34 56 78', email: 'p.lambert@gmail.com', statut: 'prospect', lat: 44.8378, lng: -0.5792, notes: 'Devis envoyé le 15/06, relance prévue.' },
       { id: 'demo-n7', type: 'lead', nom: 'Mme Nguyen — extension maison', ville: 'Strasbourg', adresse: '5 rue des Juifs', telephone: '06 98 76 54 32', email: 'nguyen.famille@free.fr', statut: 'prospect', lat: 48.5734, lng: 7.7521, notes: 'Projet 35 m², budget à confirmer.' },
       { id: 'demo-n8', type: 'chantier', nom: 'Réhabilitation immeuble Voltaire', ville: 'Paris', adresse: '112 boulevard Voltaire', telephone: '', email: '', statut: 'en_cours', lat: 48.858, lng: 2.38, notes: 'Lot menuiserie + plomberie. Livraison prévue en septembre.' },
       { id: 'demo-n9', type: 'chantier', nom: 'Maison Garonne', ville: 'Toulouse', adresse: '30 allées Jean-Jaurès', telephone: '', email: '', statut: 'termine', lat: 43.6047, lng: 1.4442, notes: 'Chantier livré en mai, retour client excellent.' }
@@ -1118,11 +1119,12 @@
     if (boutonAjouter) { boutonAjouter.hidden = false; }
 
     // Connecté (ou démo), aucune donnée : invitation au premier contact.
+    // Wording exact de la spec A4 (état vide de l'arbre).
     if (etat.noeuds.length === 0) {
       if (outils) { outils.hidden = true; }
       scene.appendChild(blocEtatArbre(
-        "Votre réseau est vide pour l'instant.",
-        "Commencez par ajouter votre premier contact : il prendra racine dans l'arbre.",
+        'Votre arbre attend sa première pousse',
+        '— touchez +',
         '+ Ajouter un contact',
         function () { ouvrirFormNoeud(null); }));
       return;
@@ -1140,10 +1142,17 @@
       return !terme || correspondAuTerme(noeud, terme);
     };
 
+    // Pousse animée (A4) : le contact tout juste ajouté apparaît par une
+    // pousse discrète (CSS, coupée sous prefers-reduced-motion). Le marqueur
+    // est consommé après un seul rendu (les re-renders ultérieurs n'animent pas).
+    var nouveau = etat.noeudNouveau;
+    etat.noeudNouveau = null;
+
     window.UltimaArbre.rendre(scene, etat.noeuds, {
       surClicNoeud: ouvrirFicheDepuisArbre,
       libellesType: LIBELLES_TYPE,
-      correspond: correspond
+      correspond: correspond,
+      noeudNouveau: nouveau
     });
 
     if (terme && message) {
@@ -2402,9 +2411,12 @@
       return;
     }
     try {
+      var creation = !etat.noeudEnEdition;
       var id = await sauverNoeud(valeurs);
       toast(etat.noeudEnEdition ? 'Nœud mis à jour.' : 'Nœud ajouté.');
       etat.noeudEnEdition = null;
+      // A4 : à la création seulement, la nouvelle feuille pousse à l'écran.
+      etat.noeudNouveau = creation ? id : null;
       rafraichir();
       if (id && trouverNoeud(id)) { ouvrirFiche(id); } else { fermerPanneau(); }
     } catch (e) {
@@ -2514,13 +2526,30 @@
     majAuthUi();
   }
 
+  // A4 (garde-fou a11y) : tant que l'overlay de connexion couvre l'écran,
+  // l'application derrière ne doit être atteignable ni au clavier ni au
+  // lecteur d'écran. On passe `inert` sur chaque région de l'app (tout le
+  // <body> sauf l'overlay lui-même et les toasts, qui doivent rester
+  // annoncés au-dessus). `inert` est ignoré sans erreur là où il n'existe
+  // pas : jamais de casse. Non appelé en mode démo (pas d'overlay).
+  function majInertApp(overlayVisible) {
+    Array.prototype.forEach.call(document.body.children, function (el) {
+      if (el.id === 'ecran-connexion' || el.id === 'toasts' ||
+          el.tagName === 'SCRIPT') { return; }
+      if (overlayVisible) { el.setAttribute('inert', ''); }
+      else { el.removeAttribute('inert'); }
+    });
+  }
+
   function majAuthUi() {
     if (etat.modeDemo) { return; }
     $('#form-connexion').hidden = Boolean(etat.session);
     $('#bouton-deconnexion').hidden = !etat.session;
     // A1 : écran de connexion plein écran tant qu'aucune session n'est ouverte
     // (jamais en mode démo — majAuthUi ne s'exécute pas dans ce cas).
-    $('#ecran-connexion').hidden = Boolean(etat.session);
+    var overlayVisible = !etat.session;
+    $('#ecran-connexion').hidden = !overlayVisible;
+    majInertApp(overlayVisible);
   }
 
   async function envoyerLienMagique(evenement) {
