@@ -115,3 +115,14 @@
   connexion demandée à l'oral est refusée après explication sécurité (URL
   jamais secrète, réseau = PII, RLS fondée sur le compte) — Paul a validé
   l'alternative. ④ Cadrage en 4 boucles R1-R4 : REFONTE-ACCUEIL.md.
+- **2026-07-09 (arbitrages pivot + go solo)** — Paul : « je suis toutes tes
+  recos » → D1-D5 actés aux options recommandées : D1 session persistante +
+  belle page vue 1×/appareil ; **D2a la carte reste en onglet secondaire**
+  (l'arbre devient l'écran connecté, rien de jeté) ; D3 secteur = texte libre
+  + suggestions ; D4 go previews ; D5 go ordre A1→A4. Puis « cadre à fond
+  pour travailler tout seul » → **GO SOLO** : pivot Arbre A1→A4 déroulé en
+  autonomie (agent → contre-passe sécu + verificateur → commit), PR #24.
+  Migration `0006` (secteur) déposée mais **non appliquée** (gate maintenue
+  même en solo : migration de feature ≠ durcissement). Fusion PR = go Paul.
+  Arbitrage esthétique laissé ouvert (arbre-registre en bandes déterministe
+  vs dessin peint) — consigné, non tranché seul.
