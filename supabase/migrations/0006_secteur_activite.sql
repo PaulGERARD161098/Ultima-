@@ -1,4 +1,6 @@
 -- Ultima — migration 0006 : secteur d'activité sur les contacts (boucle A2).
+-- ✅ APPLIQUÉE le 2026-07-09 (version 20260709121710) — confirmé en base le
+--    2026-07-11 (colonne secteur_activite présente, advisors propres). Gate close.
 -- Ne JAMAIS appliquer sans validation Paul explicite (gate migrations).
 -- Socle du futur Arbre (A3) : les contacts d'un même secteur partageront une
 -- branche. Décision Paul D3 (REFONTE-ARBRE.md §2) : TEXTE LIBRE + suggestions
