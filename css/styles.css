@@ -1,22 +1,5 @@
 /* Ultima — styles (vanilla, aucun style inline dans le HTML) */
 
-/* Police manuscrite Caveat (OFL-1.1), auto-hébergée — registre Accueil. */
-@font-face {
-  font-family: "Caveat";
-  src: url("../fonts/caveat-latin-500-normal.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Caveat";
-  src: url("../fonts/caveat-latin-700-normal.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
   --encre: #1f2937;
   --encre-douce: #4b5563;
@@ -49,12 +32,10 @@
   --encre-sepia: #3b2f1c;
   --encre-sepia-douce: #6a5636;
   --encre-deco: #8c7a55;   /* décor uniquement, jamais du texte */
-  --bois: #6b4a2b;
-  --bois-fonce: #5d3f23;
   --creme: #f6eed9;
   --retard: #8a4a00;
   --danger-parchemin: #a02c1a;
-  --police-manuscrite: "Caveat", "Segoe Script", "Bradley Hand", cursive;
+  --police-ancienne: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
 
   /* Hauteur de la barre d'onglets fixe (dégagements bas d'écran) */
   --hauteur-onglets: 56px;
@@ -1239,7 +1220,7 @@ textarea:focus-visible,
 .accueil-titre {
   margin: 0;
   padding-right: 84px; /* marge d'exclusion : jamais sous la rose des vents */
-  font-family: var(--police-manuscrite);
+  font-family: var(--police-ancienne);
   font-size: 2.5rem;
   line-height: 1.1;
   font-weight: 700;
@@ -1248,7 +1229,7 @@ textarea:focus-visible,
 
 .accueil-question {
   margin: 0.15rem 0 0;
-  font-family: var(--police-manuscrite);
+  font-family: var(--police-ancienne);
   font-size: 1.75rem;
   line-height: 1.2;
   font-weight: 500;
@@ -1273,7 +1254,7 @@ textarea:focus-visible,
 
 .accueil-sous-titre {
   margin: 0;
-  font-family: var(--police-manuscrite);
+  font-family: var(--police-ancienne);
   font-size: 1.5rem;
   line-height: 1.15;
   font-weight: 700;
@@ -1311,7 +1292,9 @@ textarea:focus-visible,
   gap: 0.9rem;
 }
 
-/* Relances dues : panneaux de bois */
+/* Relances dues : plaques de parchemin gravées (registre antique).
+   Langage repris du cartouche R1 : fond parchemin, filet cerne, liseré or
+   inset, encre sépia. (Ancien : panneau de bois à poteau + clous — retiré.) */
 
 .item-relance-ligne {
   display: flex;
@@ -1319,6 +1302,8 @@ textarea:focus-visible,
   gap: 0.5rem;
 }
 
+/* .panneau-bois : nom de classe CONSERVÉ (patch minimal, JS inchangé).
+   C'est désormais une plaque de parchemin, plus un panneau de bois. */
 .panneau-bois {
   display: flex;
   flex-direction: column;
@@ -1327,40 +1312,25 @@ textarea:focus-visible,
   position: relative;
   overflow: hidden;
   min-height: 44px;
-  margin-left: 18px;
-  padding: 0.6rem 0.9rem 0.7rem;
-  background: var(--bois);
-  color: var(--creme);
-  border: 2px solid var(--bois-fonce);
-  border-radius: 12px 4px 10px 5px / 5px 10px 4px 12px;
-  box-shadow: 2px 3px 0 var(--parchemin-ombre);
+  margin-left: 0;                 /* était 18px : dégagement du poteau, supprimé */
+  padding: 0.55rem 0.9rem 0.6rem 1.15rem;
+  background: linear-gradient(180deg, var(--parchemin), var(--parchemin-carte));
+  color: var(--encre-sepia);
+  border: 1px solid var(--cerne-carte);
+  border-radius: 4px;
+  box-shadow:
+    inset 0 0 0 3px rgba(169, 136, 74, 0.45),   /* liseré or gravé = --or-antique @45 % */
+    0 1px 2px rgba(59, 47, 28, 0.18);            /* ombre portée sobre, sépia */
   text-align: left;
   font-family: inherit;
   cursor: pointer;
 }
 
-.panneau-bois::before { /* poteau */
-  content: "";
-  position: absolute;
-  left: 2px;
-  top: 20%;
-  width: 5px;
-  height: 70%;
-  background: var(--bois-fonce);
-  border-radius: 3px;
-}
+/* ::before (poteau) et ::after (clous) : SUPPRIMÉS, aucun remplaçant. */
 
-.panneau-bois::after { /* deux clous */
-  content: "";
-  position: absolute;
-  top: 7px;
-  left: 12px;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--creme);
-  box-shadow: 210px 0 0 0 var(--creme);
-  opacity: 0.7;
+.panneau-bois:hover {
+  border-color: var(--or-antique);
+  background: linear-gradient(180deg, #fbf5e6, var(--parchemin));
 }
 
 .panneau-bois:focus-visible {
@@ -1369,18 +1339,16 @@ textarea:focus-visible,
 }
 
 .panneau-bois-texte {
-  font-family: var(--police-manuscrite);
-  font-size: 1.4rem;
-  line-height: 1.15;
-  font-weight: 700;
-  color: var(--creme);
-  padding-left: 8px;
+  font-family: var(--police-ancienne);
+  font-size: 1.05rem;             /* était 1.4rem (le manuscrit lisait grand) */
+  line-height: 1.25;
+  font-weight: 600;
+  color: var(--encre-sepia);      /* était --creme sur bois */
 }
 
 .panneau-bois-cible {
   font-size: 0.82rem;
-  color: var(--creme);
-  padding-left: 8px;
+  color: var(--encre-sepia-douce);  /* était --creme sur bois */
 }
 
 .case-fait {

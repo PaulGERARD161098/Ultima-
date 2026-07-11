@@ -53,11 +53,19 @@ verdicts.ongletActifAccueil = await page
   .locator('.barre-onglets .onglet[data-onglet="accueil"][aria-current="page"]').count() === 1;
 verdicts.quatreOnglets = await page.locator('.barre-onglets .onglet').count() === 4;
 
-// 2. Police Caveat effective sur le titre.
+// 2. Police à l'ancienne (old-style système) sur le titre — registre antique :
+// la pile typo résolue est serif, plus aucune écriture manuscrite (« Caveat »
+// banni, plus aucune famille cursive, police Caveat plus chargée du tout).
 await page.evaluate(() => document.fonts.ready);
-verdicts.caveatChargee = await page.evaluate(() => document.fonts.check('700 2.5rem Caveat'));
-verdicts.caveatAppliquee = await page.evaluate(() =>
-  getComputedStyle(document.getElementById('accueil-titre')).fontFamily.includes('Caveat'));
+verdicts.policeAncienne = await page.evaluate(() => {
+  const ff = getComputedStyle(document.getElementById('accueil-titre')).fontFamily;
+  return /serif/i.test(ff) && !/caveat/i.test(ff) && !/cursive/i.test(ff);
+});
+verdicts.caveatMorte = await page.evaluate(() => {
+  let declaree = false;
+  document.fonts.forEach((f) => { if (/caveat/i.test(f.family)) declaree = true; });
+  return !declaree; // plus aucune @font-face « Caveat » enregistrée
+});
 
 // 3. Relances dues : 2 en démo (retard 2 j + aujourd'hui), badge de retard.
 verdicts.nbRelances = await page.locator('.item-relance').count();

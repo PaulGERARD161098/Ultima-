@@ -301,6 +301,55 @@ verdicts.contrasteZoom13 = ratio13 >= 3;
 verdicts.transitionVoile = await page.evaluate(() =>
   getComputedStyle(document.querySelector('.pane-voile')).transitionDuration === '0.4s');
 
+// ===== Registre antique sérieux : purge des résidus enfantins (Caveat +
+// panneaux de bois) sur l'Accueil. Trois preuves ciblées : (a) typo à
+// l'ancienne en runtime, (b) plaque de parchemin sans poteau ni clous, (c) la
+// non-régression de l'habillage R1 est portée par les verdicts ci-dessus. =====
+await page.locator('.barre-onglets .onglet[data-onglet="accueil"]').click();
+await page.waitForTimeout(350);
+await page.evaluate(() => document.fonts.ready);
+
+// (a) Aucune écriture manuscrite en runtime : la pile typo résolue des titres
+// d'Accueil est old-style (serif), jamais « Caveat » ni « cursive », et plus
+// aucune @font-face « Caveat » n'est enregistrée (blocs @font-face supprimés).
+verdicts.typoAncienneRuntime = await page.evaluate(() => {
+  const idsTitres = ['accueil-titre'];
+  const titresOk = idsTitres.every((id) => {
+    const el = document.getElementById(id);
+    if (!el) return false;
+    const ff = getComputedStyle(el).fontFamily;
+    return /serif/i.test(ff) && !/caveat/i.test(ff) && !/cursive/i.test(ff);
+  });
+  let caveatDeclaree = false;
+  document.fonts.forEach((f) => { if (/caveat/i.test(f.family)) caveatDeclaree = true; });
+  return titresOk && !caveatDeclaree;
+});
+
+// (b) Plaque de relance : plus de poteau (::before) ni de clous (::after) —
+// aucun pseudo-élément décoratif —, fond parchemin en dégradé (rgb --parchemin),
+// texte encre sépia (#3b2f1c), plus aucune couleur bois (#6b4a2b = rgb 107,74,43).
+verdicts.plaqueParcheminSansBois = await page.evaluate(() => {
+  const plaque = document.querySelector('.panneau-bois');
+  const texte = document.querySelector('.panneau-bois-texte');
+  if (!plaque || !texte) return false;
+  const avant = getComputedStyle(plaque, '::before').content;
+  const apres = getComputedStyle(plaque, '::after').content;
+  const st = getComputedStyle(plaque);
+  const ffTexte = getComputedStyle(texte).fontFamily;
+  const sansPseudo = (avant === 'none' || avant === 'normal') &&
+    (apres === 'none' || apres === 'normal');
+  return sansPseudo &&
+    st.backgroundImage.includes('linear-gradient') &&
+    st.backgroundImage.includes('rgb(246, 238, 217)') &&   // --parchemin, plus le bois
+    !st.backgroundImage.includes('rgb(107, 74, 43)') &&     // --bois disparu
+    !st.backgroundColor.includes('rgb(107, 74, 43)') &&
+    st.color === 'rgb(59, 47, 28)' &&                        // --encre-sepia
+    /serif/i.test(ffTexte) && !/cursive/i.test(ffTexte);
+});
+
+await page.locator('.barre-onglets .onglet[data-onglet="carte"]').click();
+await page.waitForTimeout(300);
+
 await page.screenshot({ path: `${SCRATCH}/antique-1280.png` });
 await page.close();
 
