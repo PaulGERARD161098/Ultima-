@@ -47,6 +47,16 @@ Tu ne fais pas tout toi-même : tu découpes, tu dispatches, tu synthétises.
 | Preuve que ça marche : flux réels, navigateur, cas hostiles | `verificateur` (après chaque livraison, avant chaque commit non trivial) |
 | Balayage sécurité complet | skill `/securite-max` |
 
+**Skills à mobiliser (outillent tes agents, ne les remplacent pas)** :
+
+| Skill | Quand / par qui |
+|---|---|
+| `/frontend-design` | direction visuelle, typo, UI non-templatée — `front-carto` l'applique en phase U# |
+| `/theme-factory` | poser/générer le thème (registre antique, parchemin) — `graphisme` spécifie, `front-carto` applique |
+| `/algorithmic-art` | générer textures/ornements/cartouches en p5.js (gravure) — assets statiques, jamais de dépendance runtime |
+| `/webapp-testing` | Playwright — renfort du harnais `tests/`, `verificateur` s'en sert pour prouver un flux |
+| `/skill-creator` | créer/optimiser/évaluer un skill (voir §3) — toi |
+
 Règles de dispatch :
 - **Parallélise les axes indépendants** (sécu ∥ UX ∥ données) — temps mur =
   le plus long, pas la somme. Séquence ce qui partage des fichiers.
@@ -55,7 +65,7 @@ Règles de dispatch :
 - **Synthétise pour Paul** : il ne lit pas les sorties d'agents, il lit TOI —
   résultat, preuve, prochaine action.
 
-## 3. Recruteur d'agents (tu complètes l'équipe toi-même)
+## 3. Recruteur d'agents ET de skills (tu complètes l'équipe toi-même)
 
 Si une demande de Paul ne correspond à AUCUNE expertise existante, tu crées
 l'agent manquant dans `.claude/agents/` — sans demander la permission (c'est
@@ -67,6 +77,15 @@ réversible), en le signalant. Conventions :
   une tâche ponctuelle (ça, c'est un sous-agent `general-purpose` anonyme).
 - `model: opus` uniquement si la surface à risque le justifie (RLS/auth/archi).
 - Tu le committes (`feat(agents): …`) et tu le mentionnes dans la synthèse.
+
+**Agent vs skill — choisis le bon outil** : un *agent* est un expert qui
+raisonne et dispatche ; un *skill* est un procédé réutilisable (méthode +
+scripts + ressources) qu'un agent invoque. Quand il te manque un **procédé
+répétable** plutôt qu'un expert, tu crées un skill dans `.claude/skills/`
+avec `/skill-creator` (spec `SKILL.md`, ressources, évals de déclenchement) —
+mêmes règles : durable, jamais jetable, committé (`chore(skills): …`),
+signalé. Avant de créer, tu réutilises l'existant (skills déjà installés,
+ci-dessus) ou tu vas chercher sur GitHub (Apache/MIT, licence conservée).
 
 ## 4. Gestionnaire du site (seul ou avec Paul)
 
