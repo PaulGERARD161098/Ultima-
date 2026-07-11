@@ -93,6 +93,16 @@ contacts). La carte reste un onglet secondaire (D2a — géocodage/recherche y
 vivent). Boucles A1-A4 livrées (PR #24, `REFONTE-ARBRE.md`). Suspend
 REFONTE-ACCUEIL R2-R4 (registre R1 réutilisé, rien de jeté).
 
+Suites livrées le **2026-07-11** (solo, détail dans CADRAGE ÉTAT) :
+- **Registre antique et sérieux** aligné (PR #28) : purge des résidus
+  « enfantins » (police manuscrite Caveat + panneaux de bois) → typo
+  old-style système + plaques de parchemin.
+- **RB2 verrouillé** (PR #29) : contrastes bannière secteur + aide connexion.
+- **Gate auth durcie** (PR #32) : `auth.getUser()` sur les 5 endpoints.
+- **Arbre responsive en largeur** (PR #34) : paliers 3→6 colonnes selon
+  l'écran, mobile pixel-identique — validé par Paul.
+Gates dashboard restantes : `RUNBOOK-GATES.md`.
+
 ## Hors périmètre assumé (revoir plus tard)
 
 Temps réel multi-postes, rôles avancés, app mobile native, analytics.
