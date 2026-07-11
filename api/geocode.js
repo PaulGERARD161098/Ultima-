@@ -3,7 +3,7 @@
 // 'self' + Supabase, le navigateur ne peut pas appeler Nominatim directement.
 // PII : q EST une adresse — jamais loggée (ni label, ni coordonnée).
 
-import { createUserClient } from './_lib/supabase.js';
+import { requireUser } from './_lib/supabase.js';
 import { ok, fail, methodNotAllowed, logError } from './_lib/http.js';
 import {
   validateGeocodeQuery,
@@ -43,13 +43,15 @@ function queryParams(req) {
 // middleware ne protège pas ce quota global.
 const gardeNominatim = creerGardeDebit(1000);
 
-// fetchImpl injectable par les tests (défaut : fetchWithTimeout).
-export default async function handler(req, res, fetchImpl) {
+// fetchImpl + authImpl injectables par les tests (défauts : fetchWithTimeout,
+// requireUser). authImpl valide RÉELLEMENT le jeton (auth.getUser) : cet
+// endpoint n'ouvrant aucune requête base, la RLS ne rattrapait pas un faux
+// jeton — un Bearer bidon suffisait à consommer le quota Nominatim.
+export default async function handler(req, res, fetchImpl, authImpl = requireUser) {
   if (req.method !== 'GET') return methodNotAllowed(res, ['GET']);
 
-  // Même motif d'auth que les autres endpoints api/ ; aucun accès base ici,
-  // le client RLS n'est pas utilisé — seule la présence du jeton est exigée.
-  const result = createUserClient(req);
+  // Auth durcie : jeton absent/invalide/expiré → 401 (défense en profondeur).
+  const result = await authImpl(req);
   if (result.status === 'unconfigured') return fail(res, 503, 'Service non configuré');
   if (result.status === 'unauthenticated') return fail(res, 401, 'Authentification requise');
 

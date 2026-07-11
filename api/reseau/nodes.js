@@ -1,7 +1,7 @@
 // /api/reseau/nodes — CRUD nœud. POST (création), PATCH (maj partielle), DELETE.
 // L'owner_id n'est jamais accepté du client : il est imposé par la RLS/insert.
 
-import { createUserClient, isAuthError } from '../_lib/supabase.js';
+import { requireUser, isAuthError } from '../_lib/supabase.js';
 import {
   ok,
   fail,
@@ -25,7 +25,7 @@ function resolveId(req, body) {
 export default async function handler(req, res) {
   if (!ALLOWED.includes(req.method)) return methodNotAllowed(res, ALLOWED);
 
-  const result = createUserClient(req);
+  const result = await requireUser(req);
   if (result.status === 'unconfigured') return fail(res, 503, 'Service non configuré');
   if (result.status === 'unauthenticated') return fail(res, 401, 'Authentification requise');
   const { client } = result;

@@ -1,12 +1,12 @@
 // GET /api/reseau → { ok:true, data:{ nodes, edges } } de l'utilisateur (RLS via jeton).
 
-import { createUserClient, isAuthError } from './_lib/supabase.js';
+import { requireUser, isAuthError } from './_lib/supabase.js';
 import { ok, fail, methodNotAllowed, logError } from './_lib/http.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') return methodNotAllowed(res, ['GET']);
 
-  const result = createUserClient(req);
+  const result = await requireUser(req);
   if (result.status === 'unconfigured') return fail(res, 503, 'Service non configuré');
   if (result.status === 'unauthenticated') return fail(res, 401, 'Authentification requise');
 
