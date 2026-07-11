@@ -126,3 +126,22 @@
   même en solo : migration de feature ≠ durcissement). Fusion PR = go Paul.
   Arbitrage esthétique laissé ouvert (arbre-registre en bandes déterministe
   vs dessin peint) — consigné, non tranché seul.
+- **2026-07-11 (skills, registre, gates, arbre — go solo)** — session dense :
+  ① Paul : « va chercher des skills utiles… tout ce qui concerne Ultima » puis
+  « récupère et installe ce qui sert à CONSTRUIRE Ultima » + « **pas de
+  landing** » → 5 skills installés (frontend-design, theme-factory,
+  algorithmic-art, webapp-testing, skill-creator ; anthropics/skills, Apache
+  2.0), marketing/landing écarté ; charte de Léo enrichie (dispatch skills +
+  recruteur de skills). ② « améliorer Léo » : agent vs skill acté (expert qui
+  raisonne vs procédé réutilisable). ③ « 1 puis 2 » → boucle **antique et
+  sérieux** (purge Caveat + panneaux de bois, exécution de la déc. 2026-07-08)
+  puis boucle **Arbre responsive**. ④ **GO SOLO** ré-armé (« go solo »). ⑤
+  « **prépare toutes les gates** » : découverte que la migration **0006 était
+  DÉJÀ appliquée** (registre périmé — leçon RADAR) ; gate ④ **durcissement
+  `auth.getUser()`** mergée sur go Paul avec 2 arbitrages tranchés :
+  `/api/geocode` rejette un Bearer invalide (401), et **panne Auth = 401
+  fail-closed** (pas 503). ⑥ « la carte grandit-elle avec les contacts ? » →
+  réponse : l'Arbre grandissait déjà en hauteur ; la largeur était bloquée →
+  **Arbre responsive en largeur** (paliers 3→6 col), **validé tel quel** par
+  Paul (« je valide ainsi »). Reste esthétique non tranché : sous-titre du
+  cartouche à 4,594:1 (AA mais marge fine) — micro-arbitrage laissé ouvert.
