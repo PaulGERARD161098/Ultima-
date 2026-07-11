@@ -1,7 +1,7 @@
 // /api/reseau/edges — CRUD relation. POST (création), PATCH (pilotage :
 // statut/efforts/raison d'arrêt), DELETE (id requis).
 
-import { createUserClient, isAuthError } from '../_lib/supabase.js';
+import { requireUser, isAuthError } from '../_lib/supabase.js';
 import {
   ok,
   fail,
@@ -24,7 +24,7 @@ function resolveId(req, body) {
 export default async function handler(req, res) {
   if (!ALLOWED.includes(req.method)) return methodNotAllowed(res, ALLOWED);
 
-  const result = createUserClient(req);
+  const result = await requireUser(req);
   if (result.status === 'unconfigured') return fail(res, 503, 'Service non configuré');
   if (result.status === 'unauthenticated') return fail(res, 401, 'Authentification requise');
   const { client } = result;

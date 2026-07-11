@@ -101,6 +101,10 @@ function fauxFetch(config) {
   return fn;
 }
 
+// authImpl injecté : jeton réputé valide (évite tout appel réseau à Supabase
+// Auth dans l'unitaire). Le rejet d'un jeton invalide est couvert par unit-auth.
+const authOk = async () => ({ status: 'ok', client: {}, user: { id: 'u-test' } });
+
 // 405 — méthode non GET (n'atteint ni l'auth ni la garde).
 {
   const res = fauxRes();
@@ -127,7 +131,7 @@ function fauxFetch(config) {
   for (const req of cas) {
     const res = fauxRes();
     const stub = fauxFetch({ status: 200, corps: [] });
-    await handler(req, res, stub);
+    await handler(req, res, stub, authOk);
     if (res.statusCode !== 400 || res.corps.error !== 'Requête invalide' || stub.appels.length) {
       tous400 = false;
     }
@@ -139,7 +143,7 @@ function fauxFetch(config) {
 {
   const res = fauxRes();
   const stub = fauxFetch({ status: 200, corps: REPONSE_NOMINATIM });
-  await handler(fauxReq(), res, stub);
+  await handler(fauxReq(), res, stub, authOk);
   const r = res.corps?.data?.results?.[0];
   verdicts.succes200 = res.statusCode === 200 && res.corps.ok === true &&
     Array.isArray(res.corps.data.results) && res.corps.data.results.length === 1 &&
@@ -156,7 +160,7 @@ function fauxFetch(config) {
 {
   const res = fauxRes();
   const stub = fauxFetch({ status: 200, corps: REPONSE_NOMINATIM });
-  await handler(fauxReq(), res, stub);
+  await handler(fauxReq(), res, stub, authOk);
   verdicts.gardeGlobale429 = res.statusCode === 429 && res.corps.error === 'Trop de requêtes' &&
     res.entetes['retry-after'] === '1' && stub.appels.length === 0;
 }
@@ -166,7 +170,7 @@ function fauxFetch(config) {
   await dodo(1050);
   const res = fauxRes();
   const stub = fauxFetch({ status: 429, corps: [], entetes: { 'retry-after': '7' } });
-  await handler(fauxReq(), res, stub);
+  await handler(fauxReq(), res, stub, authOk);
   verdicts.amont429 = res.statusCode === 503 &&
     res.corps.error === 'Service de géocodage indisponible' &&
     res.entetes['retry-after'] === '7' && stub.appels.length === 1;
@@ -176,7 +180,7 @@ function fauxFetch(config) {
 {
   await dodo(1050);
   const res = fauxRes();
-  await handler(fauxReq(), res, fauxFetch({ status: 500, corps: [] }));
+  await handler(fauxReq(), res, fauxFetch({ status: 500, corps: [] }), authOk);
   verdicts.amont500 = res.statusCode === 503;
 }
 
@@ -184,7 +188,7 @@ function fauxFetch(config) {
 {
   await dodo(1050);
   const res = fauxRes();
-  await handler(fauxReq(), res, fauxFetch({ rejette: true }));
+  await handler(fauxReq(), res, fauxFetch({ rejette: true }), authOk);
   verdicts.amontTimeout = res.statusCode === 503;
 }
 
@@ -192,7 +196,7 @@ function fauxFetch(config) {
 {
   await dodo(1050);
   const res = fauxRes();
-  await handler(fauxReq(), res, fauxFetch({ status: 200, corps: { pas: 'un tableau' } }));
+  await handler(fauxReq(), res, fauxFetch({ status: 200, corps: { pas: 'un tableau' } }), authOk);
   verdicts.amontIllisible = res.statusCode === 503;
 }
 
@@ -200,7 +204,7 @@ function fauxFetch(config) {
 {
   await dodo(1050);
   const res = fauxRes();
-  await handler(fauxReq(), res, fauxFetch({ status: 200, corps: [] }));
+  await handler(fauxReq(), res, fauxFetch({ status: 200, corps: [] }), authOk);
   verdicts.zeroResultat200 = res.statusCode === 200 && res.corps.ok === true &&
     res.corps.data.results.length === 0;
 }

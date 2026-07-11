@@ -51,6 +51,31 @@ export function createUserClient(req) {
   return { status: 'ok', client };
 }
 
+// Durcissement (défense en profondeur AU-DESSUS de la RLS) : valide réellement
+// le jeton auprès de Supabase Auth avant de servir l'endpoint. createUserClient
+// ne vérifie que la présence du Bearer ; un jeton invalide/expiré n'était sinon
+// rejeté qu'au premier accès base (RLS), et jamais sur /api/geocode (aucun accès
+// base). Le client Auth hérite du fetch à timeout (global.fetch), donc l'appel
+// getUser est borné à 5 s. `makeClient` est injectable pour les tests unitaires.
+export async function requireUser(req, makeClient = createUserClient) {
+  const base = makeClient(req);
+  if (base.status !== 'ok') return base; // unconfigured | unauthenticated
+
+  const { client } = base;
+  const token = getBearerToken(req); // non-null : createUserClient l'a déjà exigé
+
+  try {
+    const { data, error } = await client.auth.getUser(token);
+    // Fail-closed : jeton invalide/expiré/révoqué → 401, jamais le détail Auth.
+    if (error || !data?.user) return { status: 'unauthenticated' };
+    return { status: 'ok', client, user: data.user };
+  } catch {
+    // Timeout (AbortError) ou panne réseau vers Auth : on NE sert pas (401),
+    // sans divulguer l'état interne. Réserve R3 (spec) : posture fail-closed.
+    return { status: 'unauthenticated' };
+  }
+}
+
 // Détecte une erreur d'authentification Supabase pour renvoyer un 401 générique.
 export function isAuthError(error) {
   const code = error?.code || '';

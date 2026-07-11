@@ -22,6 +22,8 @@ echo "=== unit-geocode.mjs ==="
 node unit-geocode.mjs
 echo "=== unit-secteur.mjs ==="
 node unit-secteur.mjs
+echo "=== unit-auth.mjs ==="
+node unit-auth.mjs
 
 # 3. Serveur statique sur la racine du repo.
 (cd .. && python3 -m http.server 8123 >/dev/null 2>&1) &
