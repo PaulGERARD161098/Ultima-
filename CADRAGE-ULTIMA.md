@@ -179,6 +179,19 @@
   vidées du vivier ci-dessus. Verrouillage pur (aucune couleur changée).
   PR #29. ⏳ Consigné : sous-titre décoratif du cartouche (`.cartouche-sous`)
   à 4,594:1 (AA mais marge fine) → micro-arbitrage graphisme si Paul le veut.
+- ✅ **Gates préparées (2026-07-11, solo — « prépare toutes les gates »)** —
+  runbook actionnable dans `RUNBOOK-GATES.md`. **Correction du registre :**
+  la **migration `0006` est en réalité DÉJÀ APPLIQUÉE** (vérifié en base :
+  version `20260709121710`, colonne `secteur_activite` présente ; advisors
+  sécu = 0 lint bloquant, perf = INFO base vide) → gate ① close, le registre
+  antérieur qui la disait « à appliquer » est périmé. Restent, préparées :
+  ② Vercel env `GEOCODE_USER_AGENT` + URL prod + confirmation header U6 ;
+  ③ Supabase Auth (inviter Paul, couper signups, Site/Redirect URLs) ;
+  ④ durcir `auth.getUser()` — spec `design/spec-durcissement-auth.md`, livrée
+  en PR draft séparée (gate = merge Paul) ; ⑤ preuves live post-déploiement ;
+  ⑥ optionnels (protection mots de passe compromis WARN — sans objet en
+  lien-magique ; sous-titre cartouche ; connecteur Vercel de Léo qui ne voit
+  pas encore `ultima`).
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 
