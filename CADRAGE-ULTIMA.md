@@ -194,6 +194,19 @@
   ⑥ optionnels (protection mots de passe compromis WARN — sans objet en
   lien-magique ; sous-titre cartouche ; connecteur Vercel de Léo qui ne voit
   pas encore `ultima`).
+- ✅ **Boucle « Arbre responsive en largeur » (2026-07-11, solo)** — réponse à
+  la question de Paul (« la carte grandit-elle avec les contacts ? ») :
+  l'Arbre grandissait déjà en HAUTEUR avec les contacts, mais sa LARGEUR était
+  bloquée (~640 px, colonne étroite). Il s'élargit désormais par paliers de
+  colonnes selon la largeur d'écran : 3 col (vb 620, <820) → 4 (820) → 5
+  (1040) → 6 (1240) ; mobile pixel-identique. Layout rendu fonction pure
+  `calculerLayout(noeuds, largeurCible)` + `choisirPalier` en escalier ;
+  `data-palier` (attribut, CSP OK) ; resize débouncé 150 ms re-rendant au seul
+  changement de palier. 14 harnais verts, contre-passe verificateur GO
+  (déterminisme aux seuils, zéro scroll-X, mobile non régressé). PR #34.
+  ⏳ Réserves cosmétiques négligeables : 1 re-render idempotent au 1ᵉʳ resize ;
+  `data-palier` non nettoyé en état vide (sans effet). Spec :
+  `design/spec-arbre-responsive.md`.
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 
