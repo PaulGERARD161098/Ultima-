@@ -63,6 +63,16 @@ verdicts.branchesReellesDemo = ['Menuiserie', 'Plomberie', 'Électricité', 'Cou
 verdicts.pasDeScrollHorizontal = await page.evaluate(() =>
   document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1);
 
+// Mobile inchangé (A3 responsive) : à 390 px (clientWidth ~377 < 820), palier
+// base -> data-palier "3" et viewBox '0 0 620 …', rendu strictement identique à
+// avant. Le run desktop 1280 (plus bas) prouve l'élargissement symétrique.
+verdicts.mobileInchange = await page.evaluate(() => {
+  const scene = document.querySelector('#arbre-scene');
+  const svg = scene && scene.querySelector('.arbre-svg');
+  return !!svg && scene.getAttribute('data-palier') === '3' &&
+    svg.getAttribute('viewBox').startsWith('0 0 620 ');
+});
+
 await page.screenshot({ path: `${SCRATCH}/arbre-390.png` });
 
 // ===== 2 + 1 (DOM) : créer « Plomberie » et « plomberie » → UNE branche. =====
@@ -192,8 +202,22 @@ const pur = await page.evaluate(() => {
       pos: b.contacts.map((c) => [c.x, c.y])
     }))
   });
-  const l1 = window.UltimaArbre.calculerLayout(fixtures);
-  const l2 = window.UltimaArbre.calculerLayout(fixtures);
+  // Pin explicite du palier base (620) : le groupement, les totaux et le tri par
+  // nom sont invariants du nombre de colonnes -> attentes inchangées, mais
+  // désormais indépendantes de la largeur ambiante du body.
+  const l1 = window.UltimaArbre.calculerLayout(fixtures, 620);
+  const l2 = window.UltimaArbre.calculerLayout(fixtures, 620);
+  // Déterminisme desktop : même entrée (fixtures, 1240) -> même sortie (réutilise
+  // le projeter défini ci-dessus).
+  const d1 = window.UltimaArbre.calculerLayout(fixtures, 1240);
+  const d2 = window.UltimaArbre.calculerLayout(fixtures, 1240);
+  // Rangées selon palier : une branche de 6 contacts -> ceil(6/3)=2 rangées à la
+  // base (3 col), ceil(6/6)=1 rangée en P6 (6 col). LE verdict qui diffère par
+  // largeur (les fixtures démo, branches <= 3, ne l'exercent pas).
+  const six = Array.from({ length: 6 }, (_, i) => (
+    { id: 'r' + i, nom: 'R' + i, type: 'artisan', secteur_activite: 'Toiture' }));
+  const rangeesBase = window.UltimaArbre.calculerLayout(six, 620).bandes[0].rangees;
+  const rangeesP6 = window.UltimaArbre.calculerLayout(six, 1240).bandes[0].rangees;
   // 150 contacts : rendu réel dans un conteneur détaché, budget de temps.
   const gros = [];
   for (let i = 0; i < 150; i++) {
@@ -217,15 +241,19 @@ const pur = await page.evaluate(() => {
     ordre0: l1.bandes[0].contacts.map((c) => c.noeud.nom),
     dernier: l1.bandes[l1.bandes.length - 1].label,
     dernierId: l1.bandes[l1.bandes.length - 1].contacts[0].noeud.id,
-    ms, nbFeuilles, nb150: l150.nbContacts
+    ms, nbFeuilles, nb150: l150.nbContacts,
+    deterministeDesktop: projeter(d1) === projeter(d2),
+    rangeesBase, rangeesP6
   };
 });
 verdicts.determinisme = pur.deterministe;
+verdicts.determinismeDesktop = pur.deterministeDesktop;
 verdicts.groupeParSecteur = pur.nbBranches === 3 && pur.nbContacts === 5;
 verdicts.premiereGraphieTri = pur.branche0 === 'Plomberie' &&
   JSON.stringify(pur.ordre0) === JSON.stringify(['Alba', 'Omar', 'Zébulon']);
 verdicts.aClasserEnDernier = pur.dernier === 'À classer' && pur.dernierId === 'd';
 verdicts.perf150 = pur.nb150 === 150 && pur.nbFeuilles === 150 && pur.ms < 800;
+verdicts.rangeesSelonPalier = pur.rangeesBase === 2 && pur.rangeesP6 === 1;
 
 // ===== 8b. Non-régression carte : onglet accessible, recherche v3-⑥ vivante. =====
 await page.locator('.barre-onglets .onglet[data-onglet="carte"]').click();
@@ -291,6 +319,44 @@ verdicts.boutonEtatVide = (await blocVide.locator('button').count()) === 1 &&
   await blocVide.locator('button').isVisible();
 verdicts.boutonFlottantVisibleVide = await page.locator('#arbre-ajouter').isVisible();
 await page.screenshot({ path: `${SCRATCH}/arbre-vide-390.png` });
+
+// ===== A3 responsive — run desktop 1280×800 : prouve l'élargissement. =====
+// Page neuve (état démo restauré, 9 contacts) à 1280 : clientWidth ~1267 ≥ 1240
+// -> palier 6 (6 col, VB_W 1240). Les mêmes routes/CDN épinglés que le mobile.
+const pageD = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+pageD.on('pageerror', (e) => erreurs.push('pageerror(D): ' + e.message));
+pageD.on('console', (m) => { if (m.type() === 'error') erreurs.push('console(D): ' + m.text()); });
+await pageD.route('**://unpkg.com/**', (route) => {
+  const url = route.request().url();
+  if (url.endsWith('leaflet.js')) return route.fulfill({ body: leafletJs, contentType: 'application/javascript' });
+  if (url.endsWith('leaflet.css')) return route.fulfill({ body: leafletCss, contentType: 'text/css' });
+  return route.fulfill({ status: 404, body: '' });
+});
+await pageD.route('**://*.openstreetmap.org/**', (r) => r.fulfill({ body: PNG_1PX, contentType: 'image/png' }));
+await pageD.addInitScript(() => {
+  Object.defineProperty(window, 'ULTIMA_CONFIG', {
+    value: { SUPABASE_URL: '', SUPABASE_ANON_KEY: '' }, writable: false,
+  });
+});
+await pageD.goto('http://127.0.0.1:8123/', { waitUntil: 'load', timeout: 20000 });
+await pageD.waitForTimeout(1000);
+
+verdicts.elargissementDesktop = await pageD.evaluate(() => {
+  const scene = document.querySelector('#arbre-scene');
+  const svg = scene && scene.querySelector('.arbre-svg');
+  return !!svg && scene.getAttribute('data-palier') === '6' &&
+    svg.getAttribute('viewBox').startsWith('0 0 1240 ');
+});
+verdicts.pasDeScrollHorizontalDesktop = await pageD.evaluate(() =>
+  document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1);
+const bannieresD = await pageD.evaluate(() => Array.from(
+  document.querySelectorAll('#arbre-scene .arbre-svg text')).map((t) => t.textContent));
+verdicts.branchesDemoDesktop =
+  (await pageD.locator('.arbre-feuille').count()) === 9 &&
+  ['Menuiserie', 'Plomberie', 'Électricité', 'Courtage', 'Toiture', 'À classer']
+    .every((s) => bannieresD.includes(s));
+await pageD.screenshot({ path: `${SCRATCH}/arbre-1280.png` });
+await pageD.close();
 
 console.log(JSON.stringify(verdicts, null, 2));
 console.log('mesure contraste feuille ~', mesure.ratio.toFixed(2), ':1 | bannière secteur ~',
