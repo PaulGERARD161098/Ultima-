@@ -128,6 +128,40 @@ verdicts.contrasteLabel = cLabel >= 4.5;
 verdicts.contrasteInput = cInput >= 4.5;
 verdicts.contrasteBouton = cBouton >= 4.5;
 
+// ---- RB2. Aide de la page connexion (.ecran-aide) : texte sépia sur le
+// cartouche parchemin. Mesure DÉDIÉE au PIRE CAS de fond = le bas du dégradé
+// (--parchemin-carte), le stop le plus sombre du cartouche, là où l'aide est
+// posée. Distincte des contrastes label/input/bouton (fonds plus clairs). ----
+const cAide = await deco.evaluate(() => {
+  function lum(rgb) {
+    const c = rgb.map((v) => {
+      const s = v / 255;
+      return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+  }
+  function parse(couleur) {
+    const m = couleur.match(/rgba?\(([^)]+)\)/);
+    if (m) { const p = m[1].split(',').map((x) => parseFloat(x)); return [p[0], p[1], p[2]]; }
+    const h = couleur.trim().replace('#', '');
+    if (/^[0-9a-f]{6}$/i.test(h)) {
+      return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+    }
+    return null;
+  }
+  const el = document.querySelector('.ecran-aide');
+  if (!el) return 0;
+  const texte = parse(getComputedStyle(el).color);
+  // pire cas = bas du dégradé du cartouche parchemin (le stop le plus sombre).
+  const fond = parse(getComputedStyle(document.documentElement)
+    .getPropertyValue('--parchemin-carte'));
+  if (!texte || !fond) return 0;
+  const l1 = lum(texte), l2 = lum(fond);
+  return Math.round(((Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05)) * 100) / 100;
+});
+verdicts.contrasteAideMesuree = cAide > 0;
+verdicts.contrasteAide = cAide >= 4.5; // RB2 : aide lisible AA au pire cas de fond
+
 // ---- A4. Garde-fou a11y : app derrière l'overlay rendue inatteignable. ----
 // Déconnecté : une commande de l'app (onglet) a un ancêtre inert et ne peut
 // PAS recevoir le focus au clavier (inert bloque focus() dans Chromium).
@@ -195,6 +229,7 @@ await demo.close();
 
 console.log(JSON.stringify(verdicts, null, 2));
 console.log('contrastes (label / input / bouton):', cLabel, cInput, cBouton);
+console.log('contraste aide (.ecran-aide, pire cas fond):', cAide);
 console.log('erreurs page/console:', erreurs.length ? erreurs : 'aucune');
 const ok = Object.values(verdicts).every((v) => v === true) && erreurs.length === 0;
 await browser.close();
