@@ -187,8 +187,10 @@
   antérieur qui la disait « à appliquer » est périmé. Restent, préparées :
   ② Vercel env `GEOCODE_USER_AGENT` + URL prod + confirmation header U6 ;
   ③ Supabase Auth (inviter Paul, couper signups, Site/Redirect URLs) ;
-  ④ durcir `auth.getUser()` — spec `design/spec-durcissement-auth.md`, livrée
-  en PR draft séparée (gate = merge Paul) ; ⑤ preuves live post-déploiement ;
+  ④ ✅ **durcir `auth.getUser()` — CLOSE** (PR #32 mergée sur go Paul le
+  2026-07-11 : `requireUser` valide le jeton sur les 5 endpoints, fail-closed,
+  arbitrages geocode-401 + panne-Auth-401 validés ; securite-auditeur +
+  verificateur GO) ; ⑤ preuves live post-déploiement ;
   ⑥ optionnels (protection mots de passe compromis WARN — sans objet en
   lien-magique ; sous-titre cartouche ; connecteur Vercel de Léo qui ne voit
   pas encore `ultima`).
