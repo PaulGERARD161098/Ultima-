@@ -160,6 +160,25 @@
   bandes » vs dessin peint (arbitrage esthétique Paul) ; assertions de
   contraste dédiées (aide connexion + bannière secteur) ; relations v2 en
   lianes/greffes entre branches (A3 vivier).
+- ✅ **Outillage skills + Léo (2026-07-11, solo)** — recherche GitHub de skills
+  utiles à la construction d'Ultima, filtrés au stack vanilla + registre
+  antique (pas de landing → marketing écarté). Installés dans `.claude/skills/`
+  (anthropics/skills, Apache 2.0, licence conservée) : `frontend-design`,
+  `theme-factory`, `algorithmic-art`, `webapp-testing`, `skill-creator`.
+  Charte de Léo enrichie (dispatch des skills par agent + mandat recruteur
+  étendu aux skills, repère agent vs skill). PR #26, #27 fusionnées.
+- ✅ **Boucle « antique et sérieux » (2026-07-11, solo)** — exécution de la
+  décision style 2026-07-08 : purge des derniers résidus « enfantins » du
+  front. Police manuscrite Caveat → pile old-style 100 % système
+  (`--police-ancienne`, zéro asset) ; panneaux de bois (poteau/clous) →
+  plaques de parchemin gravées (classes conservées, `app.js` intact) ;
+  2 `@font-face` + 2 woff2 (~100 Ko) supprimés, tokens `--bois*` purgés.
+  11 harnais verts, AA reconfirmé, contre-passe verificateur GO. PR #28.
+- ✅ **Boucle RB2 — verrouillage contrastes (2026-07-11, solo)** — assertions
+  de contraste dédiées (bannière secteur 9,34:1 ; aide connexion 5,50:1),
+  vidées du vivier ci-dessus. Verrouillage pur (aucune couleur changée).
+  PR #29. ⏳ Consigné : sous-titre décoratif du cartouche (`.cartouche-sous`)
+  à 4,594:1 (AA mais marge fine) → micro-arbitrage graphisme si Paul le veut.
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 
