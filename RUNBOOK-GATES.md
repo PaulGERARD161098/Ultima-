@@ -57,13 +57,13 @@ Dashboard Supabase → projet **ultima** → **Authentication**.
 
 ---
 
-## ⏳ Gate ④ — Durcir l'auth des endpoints (`auth.getUser()`)
+## ✅ Gate ④ — Durcir l'auth des endpoints (`auth.getUser()`) — CLOSE
 
-**C'est du code, préparé en PR draft séparée** (touche l'auth → gate + escalade
-Opus signalée). Défense en profondeur : valider réellement le jeton côté serveur
-avant tout accès (aujourd'hui seule la RLS rejette un jeton invalide).
-→ Tu n'as qu'à **relire et merger la PR** quand elle est prête (lien ajouté au
-rapport). Spec : `design/spec-durcissement-auth.md`.
+Fusionnée le 2026-07-11 (PR #32, go Paul). `requireUser` valide réellement le
+jeton (`auth.getUser`) sur les 5 endpoints, fail-closed, zéro jeton en log ;
+securite-auditeur + verificateur GO, patrimoine vert. Arbitrages validés par
+Paul : `/api/geocode` rejette un Bearer invalide (401) ; panne Auth = 401
+fail-closed (pas 503). Spec : `design/spec-durcissement-auth.md`.
 
 ---
 
