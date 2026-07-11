@@ -130,6 +130,37 @@ verdicts.contrasteAA = mesure.ratio >= 4.5;
 verdicts.contrasteTypeAA = mesure.ratioType >= 4.5; // A4 : type italique conforme
 verdicts.typeEnToutesLettres = mesure.typeTexte === 'Artisan'; // double codage (pas que couleur)
 
+// ===== RB2. Bannière de secteur : le libellé (l'info portée par le texte, cf.
+// REFONTE-ARBRE §4 « l'arbre décoratif qui cache l'outil ») doit être AA sur son
+// propre fond. Mesure DÉDIÉE, distincte du contraste des feuilles : texte de la
+// bannière vs. fond effectif du rectangle-bannière (fond plat, pas un dégradé).
+const mesureBanniere = await page.evaluate(() => {
+  // La bannière « Menuiserie » (secteur démo) : rect + texte dans un même <g>,
+  // le rect est le frère précédent immédiat du texte (cf. dessinerBannieres).
+  const textes = Array.from(document.querySelectorAll('#arbre-scene .arbre-svg text'));
+  const label = textes.find((t) => t.textContent === 'Menuiserie');
+  if (!label) return null;
+  const rect = label.previousElementSibling; // le rectangle-bannière du secteur
+  const textFill = label.getAttribute('fill');
+  const rectFill = rect ? rect.getAttribute('fill') : null;
+  const hex = (h) => {
+    const n = (h || '').replace('#', '');
+    return [parseInt(n.slice(0, 2), 16), parseInt(n.slice(2, 4), 16), parseInt(n.slice(4, 6), 16)];
+  };
+  const lum = (rgb) => {
+    const c = rgb.map((v) => {
+      const s = v / 255;
+      return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+  };
+  if (!textFill || !rectFill) return { textFill, rectFill, ratio: 0 };
+  const l1 = lum(hex(textFill)), l2 = lum(hex(rectFill));
+  return { textFill, rectFill, ratio: (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05) };
+});
+verdicts.banniereMesuree = !!mesureBanniere && mesureBanniere.ratio > 0;
+verdicts.contrasteBanniereAA = !!mesureBanniere && mesureBanniere.ratio >= 4.5; // RB2 : ≥ AA
+
 // ===== 5. Clavier : feuilles focusables (tabindex/role) + activation Entrée.
 verdicts.feuilleFocusable = await page.evaluate(() => {
   const f = document.querySelector('.arbre-feuille');
@@ -262,7 +293,8 @@ verdicts.boutonFlottantVisibleVide = await page.locator('#arbre-ajouter').isVisi
 await page.screenshot({ path: `${SCRATCH}/arbre-vide-390.png` });
 
 console.log(JSON.stringify(verdicts, null, 2));
-console.log('mesure contraste ~', mesure.ratio.toFixed(2), ':1 | perf 150 ~', pur.ms.toFixed(1), 'ms');
+console.log('mesure contraste feuille ~', mesure.ratio.toFixed(2), ':1 | bannière secteur ~',
+  (mesureBanniere ? mesureBanniere.ratio.toFixed(2) : '?'), ':1 | perf 150 ~', pur.ms.toFixed(1), 'ms');
 console.log('erreurs:', erreurs.length ? erreurs : 'aucune');
 const ok = Object.values(verdicts).every((v) => v === true) && erreurs.length === 0;
 await browser.close();
