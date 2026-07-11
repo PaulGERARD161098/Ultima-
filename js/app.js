@@ -2608,6 +2608,25 @@
     });
     $('#arbre-recherche').addEventListener('input', rendreArbre);
 
+    // Arbre responsive en largeur (A3) : re-rendre à chaud UNIQUEMENT si le
+    // palier change (fonction en escalier de la largeur mesurée). Débounce
+    // 150 ms pour coalescer les rafales de resize ; court-circuit « palier
+    // inchangé » -> idempotent, aucun churn tant qu'on reste dans une bande.
+    // Aucune dépendance nouvelle (window.resize + setTimeout natifs).
+    var palierArbre = null;
+    var tResizeArbre = null;
+    window.addEventListener('resize', function () {
+      clearTimeout(tResizeArbre);
+      tResizeArbre = setTimeout(function () {
+        var scene = $('#arbre-scene');
+        if (!scene || etat.onglet !== 'arbre') { return; }
+        var cols = window.UltimaArbre.choisirPalier(scene.clientWidth).cols;
+        if (cols === palierArbre) { return; }
+        palierArbre = cols;
+        rendreArbre();
+      }, 150);
+    });
+
     $('#bouton-ajouter').addEventListener('click', function () {
       if (!etat.modeDemo && !etat.session) {
         toast('Connectez-vous pour ajouter un nœud.', 'erreur');

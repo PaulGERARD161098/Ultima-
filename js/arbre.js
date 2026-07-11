@@ -11,12 +11,34 @@
   var SVG_NS = 'http://www.w3.org/2000/svg';
 
   // ---- Géométrie du layout (toutes les mesures en unités viewBox) ----
-  var VB_W = 620;              // largeur fixe : svg = min(100%, 640px) côté CSS
-  var FEUILLE_W = 178;         // étiquette-contact
+  var FEUILLE_W = 178;         // étiquette-contact (échelle physique constante)
   var FEUILLE_H = 40;
   var GAP_X = 14;              // espacement horizontal entre feuilles
   var GAP_Y = 14;              // espacement vertical entre rangées
-  var MAX_COL = 3;             // 3*178 + 2*14 = 562 <= 620 : tient sans scroll X
+
+  // Paliers en escalier : plus l'écran est large, plus l'arbre gagne de colonnes
+  // (feuilles à échelle constante ~178 px), donc moins de rangées et un arbre
+  // plus court. minLargeur == vbW pour les paliers desktop : au seuil, le SVG
+  // s'affiche à l'échelle 1 sans débordement. La base (mobile) est le plancher.
+  // Grille interne = cols*178 + (cols-1)*14 <= vbW à chaque palier (no-scroll-X).
+  var PALIERS = [
+    { minLargeur: 1240, cols: 6, vbW: 1240 }, // desktop large (1138 <= 1240)
+    { minLargeur: 1040, cols: 5, vbW: 1040 }, // desktop        (946 <= 1040)
+    { minLargeur:  820, cols: 4, vbW:  820 }, // tablette large  (754 <= 820)
+    { minLargeur:    0, cols: 3, vbW:  620 }  // base / mobile   (562 <= 620)
+  ];
+
+  // PUR : même largeur -> même palier (fonction en escalier). Aucune lecture DOM,
+  // aucun état. Choisit le plus grand palier dont vbW <= largeurCible ; base en
+  // plancher (largeur absente / 0 / conteneur détaché -> palier base).
+  function choisirPalier(largeurPx) {
+    var l = (typeof largeurPx === 'number' && largeurPx > 0) ? largeurPx : 0;
+    for (var i = 0; i < PALIERS.length; i++) {
+      if (l >= PALIERS[i].minLargeur) { return PALIERS[i]; }
+    }
+    return PALIERS[PALIERS.length - 1];
+  }
+
   var BANNIERE_H = 26;
   var ESP_BANNIERE_GRILLE = 16; // bannière -> première rangée
   var ESP_BANDE = 42;          // entre deux secteurs (bandes)
@@ -62,8 +84,8 @@
   function largeurGrille(cols) {
     return cols * FEUILLE_W + (cols - 1) * GAP_X;
   }
-  function departX(cols) {
-    return Math.round((VB_W - largeurGrille(cols)) / 2);
+  function departX(cols, vbW) {
+    return Math.round((vbW - largeurGrille(cols)) / 2);
   }
 
   // ---- Regroupement déterministe par secteur normalisé ----
@@ -102,15 +124,17 @@
   // ---- Layout déterministe : positions calculées depuis les seules données ----
   // Retourne une structure pure (aucun DOM) : testable directement. Deux appels
   // sur le même jeu de données produisent une structure identique.
-  function calculerLayout(noeuds) {
+  function calculerLayout(noeuds, largeurCible) {
+    var palier = choisirPalier(largeurCible);
+    var vbW = palier.vbW;
     var branches = grouper(noeuds);
     var y = TOP_PAD;
     var nbContacts = 0;
     var bandes = branches.map(function (branche) {
       var n = branche.contacts.length;
-      var cols = Math.min(MAX_COL, n) || 1;
+      var cols = Math.min(palier.cols, n) || 1;
       var rangees = Math.ceil(n / cols);
-      var gx = departX(cols);
+      var gx = departX(cols, vbW);
       var gridTop = y + BANNIERE_H + ESP_BANNIERE_GRILLE;
       var contacts = branche.contacts.map(function (noeud, k) {
         var r = Math.floor(k / cols);
@@ -130,6 +154,7 @@
         gridTop: gridTop,
         gridW: largeurGrille(cols),
         hauteurGrille: hauteurGrille,
+        rangees: rangees,
         contacts: contacts
       };
       y = gridTop + hauteurGrille + ESP_BANDE;
@@ -139,9 +164,9 @@
       ? (y - ESP_BANDE + BOTTOM_PAD)
       : (TOP_PAD + BOTTOM_PAD);
     return {
-      largeur: VB_W,
+      largeur: vbW,
       hauteur: hauteur,
-      viewBox: '0 0 ' + VB_W + ' ' + hauteur,
+      viewBox: '0 0 ' + vbW + ' ' + hauteur,
       nbBranches: bandes.length,
       nbContacts: nbContacts,
       bandes: bandes
@@ -163,7 +188,7 @@
     defs.appendChild(grad);
     racine.appendChild(defs);
 
-    var cx = VB_W / 2;
+    var cx = layout.largeur / 2;
     var solY = layout.hauteur - BOTTOM_PAD + 34;
 
     // Sol : butte herbeuse.
@@ -279,9 +304,9 @@
   // ---- Bannières de secteur ----
   function dessinerBannieres(racine, layout) {
     var g = svg('g', { 'font-family': 'Georgia, "Times New Roman", serif', 'font-size': '12.5', 'font-weight': '700' });
-    var cx = VB_W / 2;
+    var cx = layout.largeur / 2;
     layout.bandes.forEach(function (bande) {
-      var largeur = Math.max(84, Math.min(VB_W - 40, bande.label.length * 8.4 + 26));
+      var largeur = Math.max(84, Math.min(layout.largeur - 40, bande.label.length * 8.4 + 26));
       var x = Math.round(cx - largeur / 2);
       g.appendChild(svg('rect', {
         x: x, y: bande.bannerY, width: Math.round(largeur), height: BANNIERE_H,
@@ -367,7 +392,14 @@
     if (!options.couleurs) {
       options.couleurs = (window.UltimaCarte && window.UltimaCarte.COULEURS_TYPE) || {};
     }
-    var layout = calculerLayout(noeuds);
+    // Largeur réelle du conteneur au rendu -> palier discret -> layout pur.
+    // Déterminisme : pour une largeur donnée, palier, viewBox et positions sont
+    // identiques à chaque appel. Marqueur data-palier (attribut, pas de style
+    // inline -> CSP OK) : la CSS élargit le SVG au VB_W du palier.
+    var largeurCible = conteneur.clientWidth;
+    var palier = choisirPalier(largeurCible);
+    conteneur.setAttribute('data-palier', String(palier.cols)); // "3" | "4" | "5" | "6"
+    var layout = calculerLayout(noeuds, largeurCible);
     conteneur.textContent = '';
 
     var racine = svg('svg', {
@@ -405,6 +437,7 @@
 
   window.UltimaArbre = {
     calculerLayout: calculerLayout,
+    choisirPalier: choisirPalier,
     rendre: rendre,
     CLE_A_CLASSER: CLE_A_CLASSER,
     LABEL_A_CLASSER: LABEL_A_CLASSER

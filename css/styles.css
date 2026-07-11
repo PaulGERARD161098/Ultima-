@@ -2077,10 +2077,18 @@ textarea:focus-visible,
   padding: 0.5rem 0.4rem 5.5rem;
 }
 .arbre-svg {
-  width: min(100%, 640px);
+  width: 100%;
+  max-width: 640px;   /* base / mobile : identique à min(100%, 640px) */
   height: auto;
   flex: none;
 }
+/* Arbre responsive en largeur (A3) : le SVG s'élargit jusqu'au VB_W du palier
+   marqué par data-palier sur #arbre-scene, centré (justify-content:center
+   conservé), sans jamais dépasser le conteneur (max-width = vbW <= clientWidth
+   au palier choisi ; overflow-x:hidden conservé). Aucun style inline -> CSP OK. */
+.arbre-scene[data-palier="4"] .arbre-svg { max-width: 820px; }
+.arbre-scene[data-palier="5"] .arbre-svg { max-width: 1040px; }
+.arbre-scene[data-palier="6"] .arbre-svg { max-width: 1240px; }
 
 /* Feuille-contact : focusable, tap, survol, mise en évidence recherche. */
 .arbre-feuille { cursor: pointer; }
