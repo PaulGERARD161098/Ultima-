@@ -126,6 +126,32 @@
   même en solo : migration de feature ≠ durcissement). Fusion PR = go Paul.
   Arbitrage esthétique laissé ouvert (arbre-registre en bandes déterministe
   vs dessin peint) — consigné, non tranché seul.
+- **2026-07-12 (PIVOT PLATEFORME — Ultima devient une console à 4 quadrants)** —
+  dicté par Paul, tournant majeur. Ultima cesse d'être un outil unique (carte/
+  arbre du réseau) pour devenir sa **plateforme personnelle en console** (même
+  structure que la console de Rennes Boost) : accueil = bandeau « Bienvenue sur
+  Ultima » + « sur quoi on travaille aujourd'hui ? » + **4 quadrants** cliquables.
+  Un seul pilote (Léo), un seul repo, **mémoire inter-segment**. Les 4 outils
+  (noms de code **confirmés par écrit** par Paul) :
+  ① **TRAVELLER** — le réseau (absorbe tout l'acquis : arbre, carte, contacts,
+  relations, journal, relances) + un agent de liaison de contacts productif ;
+  ② **BCP** — pilotage financier long terme (upload bulletins/factures, revenus
+  vs charges, mois par mois, prévision impôts, échéancier avec rappels) ;
+  ③ **ADRAMELECH** — bibliothèque d'idées (capture immédiate surtout vocale,
+  classement par thème, rapprochements, enrichissement → concret/exécutable, tri
+  pro/perso/business, cohérence avec le reste d'Ultima, dashboard hebdo/mensuel) ;
+  ④ **IMLADRIK** — développement personnel (objectifs de vie, journal, valeurs/
+  principes, prise de recul, rappels sans jugement, citations philo/chevaleresques,
+  quart d'heure quotidien culture/religions comparées, curation culturelle web).
+  Directive maîtresse rappelée par Paul = **directive EB** (boucler avant de
+  passer à autre chose + capitaliser sur l'existant). **Léo est féminine** (une
+  femme) — accords au féminin partout. Cadrage complet : `CADRAGE-CONSOLE.md`
+  (console, 4 quadrants, sécurité relevée, carte agents/skills, roadmap C0→C5,
+  risques RC1-RC5). Discipline tenue : livré en **cadrage pur** (zéro code
+  produit), quadrants construits ensuite un par un, chacun cadré avant.
+  **Arbitrages ouverts** : ordre des quadrants après la console (reco : le moins
+  dépendant d'un service externe d'abord — ADRAMELECH/IMLADRIK — BCP ensuite) ;
+  niveau de chiffrement au repos BCP/IMLADRIK ; périmètre v1 par quadrant.
 - **2026-07-11 (skills, registre, gates, arbre — go solo)** — session dense :
   ① Paul : « va chercher des skills utiles… tout ce qui concerne Ultima » puis
   « récupère et installe ce qui sert à CONSTRUIRE Ultima » + « **pas de

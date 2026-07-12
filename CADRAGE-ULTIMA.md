@@ -207,6 +207,19 @@
   ⏳ Réserves cosmétiques négligeables : 1 re-render idempotent au 1ᵉʳ resize ;
   `data-palier` non nettoyé en état vide (sans effet). Spec :
   `design/spec-arbre-responsive.md`.
+- ✅ **PIVOT PLATEFORME — cadrage acté (2026-07-12)** : dicté par Paul, tournant
+  majeur. Ultima devient sa **plateforme personnelle en console à 4 quadrants**
+  (TRAVELLER réseau · BCP finances · ADRAMELECH idées · IMLADRIK dév. perso),
+  pilotée par la seule Léo (désormais **féminine**), un repo, mémoire
+  inter-segment. Le réseau existant (v1→A4) devient le quadrant TRAVELLER — rien
+  de jeté. Livré en **cadrage pur** (zéro code produit) : `CADRAGE-CONSOLE.md`
+  (console, 4 quadrants, sécurité relevée §5, carte agents/skills §7, roadmap
+  C0→C5 §8, risques RC1-RC5, arbitrages §10). Mémoire implantée (journal, profil,
+  lexique, radar), charte Léo + CLAUDE.md étendus. **Prochaine boucle : C1 — la
+  console** (coque réutilisant l'existant) OU le mini-cadrage du quadrant que
+  Paul veut voir en premier. **Arbitrages ouverts (décisions Paul)** : ordre des
+  quadrants (reco : le moins dépendant d'un service externe d'abord) ; niveau de
+  chiffrement au repos BCP/IMLADRIK ; périmètre v1 par quadrant.
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 
