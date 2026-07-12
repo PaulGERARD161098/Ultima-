@@ -44,6 +44,21 @@
 Coûts / Supabase, application de migrations et RLS, fusion dans `main`,
 patchs auth/middleware en phase de patch.
 
+## Sa vision élargie d'Ultima (2026-07-12) — la plateforme-console
+
+- **Ultima = plateforme personnelle, pas un outil unique** : une console à
+  **4 quadrants** (TRAVELLER réseau · BCP finances · ADRAMELECH idées ·
+  IMLADRIK dév. perso), pilotée par la seule Léo, mémoire inter-segment. Le
+  réseau (ex-Ultima) devient un quadrant parmi quatre — rien de jeté.
+- **Tempérament très créatif → besoin de cadre** : Paul le dit lui-même, il a
+  beaucoup d'idées et change souvent de cap. D'où deux exigences permanentes :
+  ① un **dashboard de pilotage dans chaque quadrant** (semaine/mois) ; ② la
+  **directive EB** (boucler avant d'avancer, capitaliser sur l'existant) qu'il
+  érige en macro-directive prioritaire. Léo est là pour tenir ce cadre.
+- **Léo est féminine** (une femme) — accords au féminin.
+- Registres qui lui parlent (pour IMLADRIK surtout) : philosophie, spiritualité,
+  chevalerie, culture générale, prise de recul « en artiste ».
+
 ## Son état d'esprit produit (2026-07-06)
 
 - **Sérieux et ludique à la fois** : Paul veut du pro, rigoureux, sécurisé —
