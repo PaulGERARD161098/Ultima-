@@ -126,6 +126,18 @@
   même en solo : migration de feature ≠ durcissement). Fusion PR = go Paul.
   Arbitrage esthétique laissé ouvert (arbre-registre en bandes déterministe
   vs dessin peint) — consigné, non tranché seul.
+- **2026-07-12 (arbitrages plateforme + go C1)** — Paul tranche les arbitrages
+  ouverts du cadrage : ① **Ordre des quadrants validé** (« ordre ok ») = console
+  d'abord (C1), puis les quadrants les moins dépendants d'un service externe
+  (ADRAMELECH / IMLADRIK), **BCP en dernier** (OCR bulletins + fiscalité). ②
+  **Sécurité v1** : chiffrement applicatif au repos **non exigé en v1**, mais
+  « provisionner le meilleur modèle possible » = concevoir l'architecture pour
+  pouvoir durcir plus tard (pas de choix qui verrouille) ; **Supabase natif OK
+  pour l'instant** ; **« n'implante rien encore »** = aucune migration, aucune
+  table créée à ce stade (data gate maintenue). ③ **Go** : fusion de la PR #37
+  (cadrage C0) autorisée — faite (squash, `main`) — puis ouverture de **C1 — la
+  console** (« cadre bien et go »). « go » simple (pas « go solo ») → la fusion
+  de la PR de C1 reste une gate (go Paul).
 - **2026-07-12 (PIVOT PLATEFORME — Ultima devient une console à 4 quadrants)** —
   dicté par Paul, tournant majeur. Ultima cesse d'être un outil unique (carte/
   arbre du réseau) pour devenir sa **plateforme personnelle en console** (même
