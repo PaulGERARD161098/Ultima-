@@ -2159,3 +2159,208 @@ textarea:focus-visible,
 }
 .arbre-ajouter:hover { background: linear-gradient(#1f6787, #114560); }
 .arbre-ajouter:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* ==================================================================
+   Console d'accueil (C1) — coque plateforme à 4 quadrants.
+   Registre parchemin, tokens sépia/or existants réutilisés ; aucune
+   couleur nouvelle sans contraste AA vérifié. Aucune animation
+   bloquante (les seules transitions sont sous no-preference). ======= */
+
+.vue-console,
+.vue-quadrant {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1.6rem 1rem 2.6rem;
+  background-color: var(--parchemin);
+  /* Même grain que la vue Accueil (tuile de bruit SVG data-URI). */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.23 0 0 0 0 0.18 0 0 0 0 0.11 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  color: var(--encre-sepia);
+}
+
+.console-conteneur { max-width: 980px; margin: 0 auto; }
+
+.console-cartouche {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto 1rem;
+}
+
+.console-titre {
+  margin: 0;
+  font-family: var(--police-ancienne);
+  font-size: 1.7rem;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #4a3512;
+  text-shadow: 0 1px 0 #fff6dd;
+}
+
+.console-invite {
+  margin: 0 0 1.7rem;
+  text-align: center;
+  font-family: var(--police-ancienne);
+  font-size: 1.35rem;
+  line-height: 1.3;
+  color: var(--encre-sepia-douce);
+}
+
+.console-grille {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 720px) {
+  .console-grille { grid-template-columns: 1fr 1fr; }
+}
+
+/* Cartouche-quadrant : plaque de parchemin gravée (registre des panneaux). */
+.console-quadrant {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 0.9rem;
+  width: 100%;
+  min-height: 44px;
+  padding: 1rem 1.1rem;
+  text-align: left;
+  font-family: var(--police-ancienne);
+  color: var(--encre-sepia);
+  background-image: linear-gradient(var(--parchemin), var(--parchemin-carte));
+  border: 1.5px solid var(--or-antique);
+  border-radius: 8px;
+  box-shadow:
+    inset 0 0 0 3px var(--parchemin),
+    inset 0 0 0 4px var(--accent-voile),
+    0 2px 6px rgba(0, 10, 20, 0.14);
+  cursor: pointer;
+}
+
+.console-quadrant:hover {
+  box-shadow:
+    inset 0 0 0 3px var(--parchemin),
+    inset 0 0 0 4px var(--or-antique),
+    0 4px 12px rgba(0, 10, 20, 0.22);
+}
+
+.console-quadrant:focus-visible {
+  outline: 3px solid var(--accent-fonce);
+  outline-offset: 2px;
+}
+
+.console-quadrant-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  color: var(--encre-sepia);
+  background: var(--parchemin);
+  border: 1.5px solid var(--or-antique);
+  border-radius: 50%;
+}
+
+.console-quadrant-corps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.16rem;
+  min-width: 0;
+}
+
+.console-quadrant-nom {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--encre-sepia);
+}
+
+.console-quadrant-domaine {
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+  font-size: 0.9rem;
+  color: var(--encre-sepia-douce);
+}
+
+.console-quadrant-desc {
+  margin: 0.3rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--encre-sepia-douce);
+}
+
+/* Pastille d'état : double codage (texte + couleur), jamais couleur seule. */
+.console-etat {
+  align-self: start;
+  white-space: nowrap;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.72rem;
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  border-radius: 999px;
+  border: 1px solid var(--or-antique);
+  color: var(--encre-sepia);
+  background: var(--parchemin);
+}
+
+.console-etat-ouvert {
+  color: #2c4a1e;
+  background: #eef3e0;
+  border-color: #5f7a3a;
+}
+
+.console-etat-construction {
+  color: var(--encre-sepia);
+  background: var(--parchemin-ombre);
+}
+
+/* Placeholders des quadrants « en construction ». */
+.quadrant-conteneur { max-width: 640px; margin: 0 auto; text-align: center; }
+
+.quadrant-etat { margin: 1.1rem 0 0.7rem; }
+
+.quadrant-desc {
+  margin: 0 auto 1.7rem;
+  max-width: 52ch;
+  font-family: var(--police-ancienne);
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: var(--encre-sepia);
+}
+
+/* Retour « ← Ultima » discret dans l'entête TRAVELLER (à gauche du cartouche).
+   Dans le flux flex (margin-right:auto) : jamais de superposition au cartouche,
+   qui reste centré entre ce bouton et la zone d'auth (margin-left:auto). */
+.entete-retour {
+  margin-right: auto;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.3rem 0.6rem;
+  font-family: var(--police-ancienne);
+  font-size: 0.9rem;
+  color: #4a3512;
+  background: linear-gradient(#f4e6bd, #e3cd93);
+  border: 1.5px solid #6e5320;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.entete-retour:hover { background: linear-gradient(#f7ecca, #e8d59e); }
+.entete-retour:focus-visible { outline: 3px solid var(--accent-fonce); outline-offset: 2px; }
+
+@media (max-width: 720px) {
+  .console-titre { font-size: 1.4rem; }
+  .console-invite { font-size: 1.15rem; }
+  .console-quadrant-desc { font-size: 0.9rem; }
+}
+
+/* Un léger relief au survol/entrée uniquement si l'utilisateur l'accepte. */
+@media (prefers-reduced-motion: no-preference) {
+  .console-quadrant { transition: box-shadow 0.15s ease, transform 0.15s ease; }
+  .console-quadrant:hover { transform: translateY(-1px); }
+  .entete-retour { transition: background 0.15s ease; }
+}

@@ -40,7 +40,7 @@ await page.addInitScript(() => {
 });
 
 const verdicts = {};
-await page.goto('http://127.0.0.1:8123/', { waitUntil: 'load', timeout: 20000 });
+await page.goto('http://127.0.0.1:8123/#traveller', { waitUntil: 'load', timeout: 20000 });
 await page.waitForTimeout(1000);
 
 // ===== 8a. Arrivée : l'écran connecté/démo est l'arbre. =====
@@ -338,7 +338,7 @@ await pageD.addInitScript(() => {
     value: { SUPABASE_URL: '', SUPABASE_ANON_KEY: '' }, writable: false,
   });
 });
-await pageD.goto('http://127.0.0.1:8123/', { waitUntil: 'load', timeout: 20000 });
+await pageD.goto('http://127.0.0.1:8123/#traveller', { waitUntil: 'load', timeout: 20000 });
 await pageD.waitForTimeout(1000);
 
 verdicts.elargissementDesktop = await pageD.evaluate(() => {

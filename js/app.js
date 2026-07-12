@@ -45,6 +45,7 @@
     modeDemo: true,
     client: null,        // client supabase-js (mode connecté)
     session: null,
+    vue: 'console',      // vue plateforme : console | traveller | bcp | adramelech | imladrik
     onglet: 'accueil',   // espace actif : accueil | carte | contacts
     noeudCourant: null,  // id du nœud affiché dans la fiche
     noeudEnEdition: null, // id du nœud en cours d'édition dans le formulaire
@@ -370,6 +371,68 @@
     fermerListeRecherche();
     messageRecherche('');
     window.UltimaCarte.effacerSurbrillance();
+  }
+
+  // ---------- Navigation par vues (niveau plateforme, au-dessus des onglets) ----------
+  // La « vue » est le niveau console : TRAVELLER = la coque d'onglets existante
+  // (inchangée) ; les 3 autres = écrans « en construction ». activerOnglet reste
+  // la navigation INTERNE de TRAVELLER et n'est jamais modifiée ici.
+
+  var VUES = ['console', 'traveller', 'bcp', 'adramelech', 'imladrik'];
+
+  // Coque TRAVELLER = ces 3 éléments existants, togglés ensemble.
+  var COQUE_TRAVELLER = ['.entete', '.espaces', '.barre-onglets'];
+
+  // Sections propres à une vue (hors coque TRAVELLER).
+  var SECTIONS_VUES = {
+    console: '#espace-console',
+    bcp: '#espace-bcp',
+    adramelech: '#espace-adramelech',
+    imladrik: '#espace-imladrik'
+  };
+
+  // Titre focusable de chaque vue (a11y : focus déplacé à l'entrée par action).
+  var TITRES_VUES = {
+    console: '#console-titre',
+    traveller: '#cartouche-titre-traveller',
+    bcp: '#bcp-titre',
+    adramelech: '#adramelech-titre',
+    imladrik: '#imladrik-titre'
+  };
+
+  function activerVue(nom, options) {
+    if (VUES.indexOf(nom) === -1) { return; }
+    etat.vue = nom;
+    // Comme activerOnglet : le panneau fiche/formulaire (overlay global) se
+    // ferme à tout changement de vue.
+    if (!$('#panneau').hidden) { fermerPanneau(); }
+    var travellerVisible = nom === 'traveller';
+    COQUE_TRAVELLER.forEach(function (sel) {
+      var el = $(sel);
+      if (el) { el.hidden = !travellerVisible; }
+    });
+    Object.keys(SECTIONS_VUES).forEach(function (cle) {
+      var el = $(SECTIONS_VUES[cle]);
+      if (el) { el.hidden = cle !== nom; }
+    });
+    // La carte, initialisée dans une coque masquée, a une taille fausse : on la
+    // réinvalide en revenant sur TRAVELLER quand l'onglet actif est la carte.
+    if (travellerVisible && etat.onglet === 'carte') {
+      window.UltimaCarte.invaliderTaille();
+    }
+    // Focus sur le titre de la vue, seulement quand l'entrée est une action de
+    // l'utilisateur (jamais au démarrage : pas de vol de focus au chargement).
+    if (options && options.focus) {
+      var titre = $(TITRES_VUES[nom]);
+      if (titre) { titre.focus(); }
+    }
+  }
+
+  // Vue initiale : la console, sauf lien direct par fragment d'URL
+  // (#traveller, #bcp, …) — lu une seule fois au démarrage, déterministe.
+  function vueInitiale() {
+    var h = (window.location.hash || '').replace('#', '');
+    return VUES.indexOf(h) !== -1 ? h : 'console';
   }
 
   // ---------- Accueil : ouverture d'une cible ----------
@@ -2518,6 +2581,9 @@
       etat.session = session;
       if (evenement === 'SIGNED_IN' || evenement === 'SIGNED_OUT' || evenement === 'TOKEN_REFRESHED') {
         majAuthUi();
+        // Après connexion : retour à la console (jamais les onglets directement).
+        // TOKEN_REFRESHED n'a pas à ramener l'utilisateur en arrière.
+        if (evenement === 'SIGNED_IN') { activerVue('console'); }
         chargerDonnees();
       }
     });
@@ -2586,6 +2652,19 @@
     document.querySelectorAll('.barre-onglets .onglet').forEach(function (bouton) {
       bouton.addEventListener('click', function () {
         activerOnglet(bouton.getAttribute('data-onglet'));
+      });
+    });
+
+    // Console : cartouches de quadrant (vrais boutons -> clavier natif) et
+    // contrôles « ← Ultima » de retour à la console.
+    document.querySelectorAll('[data-quadrant]').forEach(function (bouton) {
+      bouton.addEventListener('click', function () {
+        activerVue(bouton.getAttribute('data-quadrant'), { focus: true });
+      });
+    });
+    document.querySelectorAll('[data-retour-console]').forEach(function (bouton) {
+      bouton.addEventListener('click', function () {
+        activerVue('console', { focus: true });
       });
     });
 
@@ -2683,6 +2762,10 @@
     // v3-① aussi. Les données arrivent juste après (chargerDonnees → rafraichir
     // → rendreArbre) : l'arbre se peuple sans changement d'onglet.
     activerOnglet('arbre');
+    // Niveau plateforme : la console est la vue d'accueil (jamais les onglets
+    // directement). Un fragment d'URL peut ouvrir un quadrant en lien direct.
+    // Sans focus au démarrage : on ne vole pas le focus au chargement.
+    activerVue(vueInitiale());
     await initAuth();
     await chargerDonnees();
   }

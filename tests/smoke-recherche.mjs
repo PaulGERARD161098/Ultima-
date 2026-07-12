@@ -86,7 +86,7 @@ const fermerPanneau = async () => {
   await page.waitForTimeout(150);
 };
 
-await page.goto('http://127.0.0.1:8123/', { waitUntil: 'load', timeout: 20000 });
+await page.goto('http://127.0.0.1:8123/#traveller', { waitUntil: 'load', timeout: 20000 });
 await page.waitForTimeout(1000);
 await page.locator('.barre-onglets button', { hasText: 'Carte' }).click();
 await page.waitForTimeout(300);
@@ -374,7 +374,7 @@ await page2.addInitScript(() => {
   window.SpeechRecognition = undefined;
   window.webkitSpeechRecognition = undefined;
 });
-await page2.goto('http://127.0.0.1:8123/', { waitUntil: 'load', timeout: 20000 });
+await page2.goto('http://127.0.0.1:8123/#traveller', { waitUntil: 'load', timeout: 20000 });
 await page2.waitForTimeout(1000);
 await page2.locator('.barre-onglets button', { hasText: 'Carte' }).click();
 await page2.waitForTimeout(300);

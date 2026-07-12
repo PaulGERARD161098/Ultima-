@@ -111,7 +111,7 @@ const emettreErreur = (code) => page.evaluate((c) => {
   i[i.length - 1].emettreErreur(c);
 }, code);
 
-await page.goto('http://127.0.0.1:8123/', { waitUntil: 'load', timeout: 20000 });
+await page.goto('http://127.0.0.1:8123/#traveller', { waitUntil: 'load', timeout: 20000 });
 await page.waitForTimeout(1000);
 
 // Ouvre une fiche via l'onglet Contacts (2 taps, comme Paul).
@@ -362,7 +362,7 @@ await page2.addInitScript(() => {
   window.SpeechRecognition = undefined;
   window.webkitSpeechRecognition = undefined;
 });
-await page2.goto('http://127.0.0.1:8123/', { waitUntil: 'load', timeout: 20000 });
+await page2.goto('http://127.0.0.1:8123/#traveller', { waitUntil: 'load', timeout: 20000 });
 await page2.waitForTimeout(1000);
 await page2.locator('.barre-onglets button', { hasText: 'Contacts' }).click();
 await page2.waitForTimeout(200);
