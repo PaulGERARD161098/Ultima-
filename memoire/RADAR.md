@@ -39,6 +39,32 @@
 - **Dashboards** : chaque quadrant en a un (exigence explicite de Paul, besoin
   de cadre) → motif de composant à mutualiser.
 
+## Rétrospective 2026-07-12 (pivot plateforme + boucle C1)
+
+- **Plus grand pivot du projet, géré en cadrage pur d'abord** : Ultima → console
+  à 4 quadrants (TRAVELLER/BCP/ADRAMELECH/IMLADRIK). C0 = cadrage + mémoire, zéro
+  code (PR #37 mergée), PUIS C1 = 1re construction. La discipline « une boucle à
+  la fois » a tenu même sur un chantier à 4 fronts : console d'abord (capitalise
+  l'existant en TRAVELLER), un quadrant à la fois ensuite. À reproduire.
+- **Léo actée féminine** (accords au féminin partout — charte + profil + CLAUDE.md).
+- **Chaîne spec → agent → contre-passe reconfirmée sur C1** : `front-carto`
+  implémente, régression RB2 (entête mobile 61px) attrapée par le patrimoine
+  `smoke-antique`, corrigée, puis `verificateur` GO indépendant. La valeur du
+  patrimoine versionné : la régression a été vue AVANT tout merge.
+- **Miscount de harnais** : la consigne disait « 16/16 », le réel est **15/15**
+  (le patrimoine compte 15 fichiers, tous verts, `smoke-console` inclus).
+  Leçon : compter le patrimoine réel (`ls tests/*.mjs`) avant d'annoncer un
+  total, ne pas déduire un nombre de tête.
+- **Écart spec vs réel réconcilié** : la spec C1 disait onglet TRAVELLER par
+  défaut = `accueil` ; le réel = `arbre` (imposé par D2a / non-régression).
+  `verificateur` l'a signalé, spec corrigée le jour même. Leçon : quand un agent
+  « assume » un écart pour tenir la non-régression, réconcilier le DOC tout de
+  suite, sinon la spec ment.
+- **Sécurité tenue sur un périmètre qui s'élargit** : C1 = zéro touche
+  données/auth malgré le nouveau niveau de navigation ; A4 (`inert`) étendu à
+  la console vérifié. Le vrai durcissement (BCP finance, IMLADRIK intime) viendra
+  quand ces quadrants ouvriront — provisionné dans `CADRAGE-CONSOLE.md` §5.
+
 ## Rétrospective (erreurs → corrections)
 
 - 2026-07-03 — Léo a inventé des « passerelles inter-projets » non demandées

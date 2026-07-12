@@ -18,9 +18,11 @@ Introduire une **vue de plateforme** `etat.vue` ∈
   directement les onglets. `majAuthUi()` révèle la console, pas l'app TRAVELLER.
 - `console` : affiche `#espace-console`, masque la coque TRAVELLER
   (`header.entete`, `main.espaces`, `nav.barre-onglets`) ET les 3 placeholders.
-- `traveller` : affiche la coque TRAVELLER existante **inchangée** (son onglet
-  interne par défaut = `accueil`, via `activerOnglet('accueil')` au premier
-  passage) ; masque console + placeholders.
+- `traveller` : affiche la coque TRAVELLER existante **inchangée** ; son onglet
+  interne par défaut reste celui de l'app (= **`arbre`**, l'écran connecté du
+  pivot A3/D2a — imposé par la non-régression `smoke-arbre`/`smoke-connexion`) ;
+  masque console + placeholders. [Réconcilié après contre-passe verificateur GO
+  2026-07-12 : la première version disait `accueil`, faux vs le réel D2a.]
 - `bcp` / `adramelech` / `imladrik` : affiche le placeholder correspondant ;
   masque le reste.
 
@@ -102,8 +104,10 @@ Ajouter un harnais **`smoke-console.mjs`** (modèle : les smoke existants,
 fixtures npm en cache, zéro CDN) qui prouve :
 1. Connecté → la **console** est visible en premier ; la coque TRAVELLER est
    masquée (`hidden`).
-2. Clic TRAVELLER → l'app existante s'affiche, onglet interne `accueil` actif ;
-   les onglets accueil/arbre/carte/contacts fonctionnent toujours (non-régression).
+2. Clic TRAVELLER → l'app existante s'affiche, onglet interne par défaut =
+   `arbre` (D2a) ; les onglets accueil/arbre/carte/contacts fonctionnent
+   toujours (non-régression). [Vivier : l'assertion `ongletInterneActif` du
+   smoke ne vérifie que « un seul actif », pas lequel — à durcir sur `arbre`.]
 3. « ← Ultima » depuis TRAVELLER → retour console.
 4. Clic BCP/ADRAMELECH/IMLADRIK → placeholder correspondant, mention « en
    construction », bouton retour fonctionnel.

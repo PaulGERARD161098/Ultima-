@@ -220,6 +220,30 @@
   Paul veut voir en premier. **Arbitrages ouverts (décisions Paul)** : ordre des
   quadrants (reco : le moins dépendant d'un service externe d'abord) ; niveau de
   chiffrement au repos BCP/IMLADRIK ; périmètre v1 par quadrant.
+- ✅ **Boucle C1 — la console livrée & vérifiée (2026-07-12)** — première
+  construction du pivot plateforme. Console d'accueil (`#espace-console` :
+  bandeau « Bienvenue sur Ultima » + invite + 4 cartouches) insérée AU-DESSUS
+  de l'app existante via un niveau de navigation « vue » (`activerVue` dans
+  `js/app.js`, au-dessus d'`activerOnglet` inchangé), routage par fragment
+  d'URL (`#traveller/#bcp/#adramelech/#imladrik`, défaut = console).
+  **TRAVELLER** = la coque existante inchangée (onglet interne par défaut =
+  `arbre`, D2a) ; **BCP/ADRAMELECH/IMLADRIK** = placeholders « en construction »
+  + retour « ← Ultima ». **Zéro touche Supabase/données/migration/secret**
+  (décision « n'implante rien encore »), CSP intacte, garde-fou A4 (`inert`)
+  étendu à la console, auth `majAuthUi`/lien-magique **inchangée**. Chaîne :
+  spec (`design/spec-c1-console.md`) → `front-carto` implémente → régression RB2
+  détectée (entête mobile 61px > plafond 60px) → corrigée (cible tactile 44px
+  déportée en `::after` hors-flux, entête 48,42px @375) → **contre-passe
+  `verificateur` indépendante = GO** (15/15 harnais verts dont le nouveau
+  `smoke-console` 39 verdicts, 0 erreur console, RB2 mesuré, A4 vérifié, cas
+  hostiles OK). Commits `e6ba462` (spec+arbitrages), `72dc46a` (coque),
+  `aec131e` (fix RB2). **PR #38 (draft) — fusion = go Paul.**
+  **Vivier de polissage (non bloquant) :** ① assertion `ongletInterneActif` du
+  `smoke-console` à durcir (vérifie « un seul actif », pas lequel = `arbre`) ;
+  ② cible tactile du bouton retour à la valeur plancher exacte (44px, sans
+  coussin) ; ③ preuve login OTP réel (hors périmètre v1, stub suffisant).
+  **Prochaine boucle : C2** — mini-cadrage du premier quadrant à construire
+  (ordre acté : ADRAMELECH ou IMLADRIK avant BCP).
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 
