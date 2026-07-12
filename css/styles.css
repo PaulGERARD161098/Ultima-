@@ -2332,21 +2332,35 @@ textarea:focus-visible,
 
 /* Retour « ← Ultima » discret dans l'entête TRAVELLER (à gauche du cartouche).
    Dans le flux flex (margin-right:auto) : jamais de superposition au cartouche,
-   qui reste centré entre ce bouton et la zone d'auth (margin-left:auto). */
+   qui reste centré entre ce bouton et la zone d'auth (margin-left:auto).
+   La boîte du bouton reste basse (RB2 : entête ≤ 60px à 375px) ; la cible
+   tactile est portée à ≥ 44px par un pseudo hors-flux qui déborde dans le
+   padding de l'entête sans peser sur sa hauteur. */
 .entete-retour {
+  position: relative;
   margin-right: auto;
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
-  padding: 0.3rem 0.6rem;
+  padding: 0.25rem 0.6rem;
   font-family: var(--police-ancienne);
   font-size: 0.9rem;
+  line-height: 1.2;
   color: #4a3512;
   background: linear-gradient(#f4e6bd, #e3cd93);
   border: 1.5px solid #6e5320;
   border-radius: 6px;
   cursor: pointer;
+}
+
+.entete-retour::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 44px;
 }
 
 .entete-retour:hover { background: linear-gradient(#f7ecca, #e8d59e); }
