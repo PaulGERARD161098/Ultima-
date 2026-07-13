@@ -1,0 +1,184 @@
+<!doctype html>
+<!--
+  Planche de comparaison — 3 dragons de PROFIL (héraldiques) pour ADRAMELECH.
+  Chaque dragon est défini une seule fois (<symbol>) puis rendu 3 fois :
+  détail ~220 px, carte ~100 px, et état « à venir » (100 px, opacité 0,55).
+  Tokens R1 uniquement : encre #5a4118, or #a9884a, encre-deco #8c7a55,
+  parchemin #efe3c6. SVG 100 % inline, zéro requête réseau. Décor aria-hidden.
+-->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ultima — Dragons candidats (ADRAMELECH)</title>
+<style>
+  :root {
+    --parchemin: #f6eed9;
+    --parchemin-carte: #efe3c6;
+    --encre-sepia: #3b2f1c;
+    --encre-sepia-douce: #6a5636;
+    --encre-deco: #8c7a55;
+    --cerne-carte: #5a4118;
+    --or-antique: #a9884a;
+    --police-ancienne: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--police-ancienne);
+    color: var(--encre-sepia);
+    background: linear-gradient(#f6eed9, #efe3c6 70%, #e3d3ab);
+    padding: 2rem 1rem 3rem;
+  }
+  h1 { text-align: center; font-size: 1.7rem; letter-spacing: 0.06em; color: #4a3512; }
+  .intro { text-align: center; max-width: 60ch; margin: 0.6rem auto 2rem; color: var(--encre-sepia-douce); font-style: italic; }
+  .planche {
+    display: grid; grid-template-columns: 1fr; gap: 1.8rem;
+    max-width: 1200px; margin: 0 auto;
+  }
+  @media (min-width: 780px) { .planche { grid-template-columns: 1fr 1fr 1fr; } }
+
+  .col {
+    background: linear-gradient(#f7efd9, #efe3c6);
+    border: 2px solid var(--or-antique); border-radius: 10px;
+    box-shadow: inset 0 0 0 3px #f7efd9, 0 4px 12px rgba(58,42,16,0.16);
+    padding: 1.2rem 1.1rem 1.4rem;
+    display: flex; flex-direction: column; align-items: center; gap: 0.9rem;
+  }
+  .detail {
+    width: 220px; height: 220px;
+    background: var(--parchemin-carte);
+    border: 1px solid var(--encre-deco); border-radius: 8px;
+  }
+  .petits { display: flex; gap: 1.2rem; align-items: flex-end; }
+  .petit { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; }
+  .petit .cadre {
+    width: 100px; height: 100px;
+    background: var(--parchemin-carte);
+    border: 1px solid var(--encre-deco); border-radius: 8px;
+  }
+  .petit.venir .cadre { border-style: dashed; }
+  .petit.venir svg { opacity: 0.55; }
+  .petit .leg { font-size: 0.72rem; font-variant: small-caps; letter-spacing: 0.1em; color: var(--encre-sepia-douce); }
+
+  .titre { font-size: 1.2rem; font-weight: 700; letter-spacing: 0.05em; color: #4a3512; margin-top: 0.2rem; }
+  .desc { font-size: 0.92rem; line-height: 1.4; text-align: center; color: var(--encre-sepia); max-width: 30ch; }
+
+  svg.d { display: block; width: 100%; height: 100%; }
+</style>
+</head>
+<body>
+  <h1>ADRAMELECH — trois dragons de profil</h1>
+  <p class="intro">Tous héraldiques, vus de côté (façon blason / marge de carte). Rendus en grand (détail),
+    puis à la taille réelle de la carte (100&nbsp;px), et en état « à venir » estompé.</p>
+
+  <!-- ============ DÉFINITIONS (symbols) ============ -->
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+
+    <!-- DRAGON 1 — rampant héraldique (dressé sur pattes arrière) -->
+    <symbol id="drg1" viewBox="0 0 64 64">
+      <!-- aile déployée levée (derrière) : membrane or + doigts encre -->
+      <path d="M31 25 L40 16 L50 12 L58 10 L53 21 L49 16 L44 25 L40 19 L35 27 Z"
+            fill="#a9884a" fill-opacity="0.9" stroke="#5a4118" stroke-width="1.1" stroke-linejoin="round"/>
+      <path d="M31 25 L50 12 L58 10 M50 12 L53 21 M50 12 L44 25 M50 12 L35 27" fill="none" stroke="#5a4118" stroke-width="0.8"/>
+      <!-- corps dressé + queue serpentine barbelée qui s'enroule -->
+      <path d="M24 16 C29 20 31 23 30 28 C29 34 28 40 29 44 C31 50 38 52 44 51 C51 50 54 44 51 38 C49 34 45 34 44 37"
+            fill="none" stroke="#5a4118" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- barbe de queue -->
+      <path d="M44 37 l-3.5 -1 l1.5 3 l-3 1.5 l4.5 1.5 Z" fill="#5a4118"/>
+      <!-- pattes arrière (station debout) + griffes -->
+      <path d="M27 44 C25 49 24 53 25 58 M31 45 C33 50 34 54 33 58" fill="none" stroke="#5a4118" stroke-width="4.2" stroke-linecap="round"/>
+      <path d="M25 58 l-3 2 M25 58 l0 3 M25 58 l3 2 M33 58 l-3 2 M33 58 l0 3 M33 58 l3 2" fill="none" stroke="#5a4118" stroke-width="1.3" stroke-linecap="round"/>
+      <!-- pattes avant levées griffues -->
+      <path d="M30 29 C25 29 21 29 17 28 M31 33 C27 34 23 35 20 35" fill="none" stroke="#5a4118" stroke-width="3.4" stroke-linecap="round"/>
+      <path d="M17 28 l-2.5 -2 M17 28 l-3 0.5 M17 28 l-1.5 2.5 M20 35 l-2.5 -1.5 M20 35 l-3 1 M20 35 l-1 2.5" fill="none" stroke="#5a4118" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- tête reptilienne cornue, gueule ouverte, langue + dent -->
+      <path d="M26 18 Q22 8 14 9 L7 11 L12 13 L7 15 L13 17 L8 19 L15 19 Q22 21 26 18 Z" fill="#5a4118" stroke="#5a4118" stroke-width="0.6" stroke-linejoin="round"/>
+      <path d="M7 15 L3 15" fill="none" stroke="#a9884a" stroke-width="1.3" stroke-linecap="round"/>
+      <path d="M11 13 l1 2" fill="none" stroke="#efe3c6" stroke-width="0.8"/>
+      <path d="M19 10 L25 4 L22 10.5 Z M21 11 L27 6 L24 11.5 Z" fill="#5a4118"/>
+      <circle cx="18" cy="12.5" r="1.2" fill="#a9884a"/>
+      <!-- écailles ventrales -->
+      <path d="M30 30 l3 1 M29.5 35 l3 1 M29 40 l3 1" fill="none" stroke="#8c7a55" stroke-width="0.9"/>
+    </symbol>
+
+    <!-- DRAGON 2 — passant / à quatre pattes (marchant) -->
+    <symbol id="drg2" viewBox="0 0 64 64">
+      <!-- aile mi-repliée sur le dos -->
+      <path d="M30 24 L38 14 L47 13 L43 21 L46 20 L41 26 Z"
+            fill="#a9884a" fill-opacity="0.9" stroke="#5a4118" stroke-width="1.1" stroke-linejoin="round"/>
+      <path d="M30 24 L47 13 M38 15 L43 21 M40 16 L41 26" fill="none" stroke="#5a4118" stroke-width="0.8"/>
+      <!-- corps horizontal + queue qui traîne et se recourbe -->
+      <path d="M15 30 C20 26 30 26 38 28 C45 30 49 32 52 38 C54 42 53 47 49 47 C46 47 45 43 47 41"
+            fill="none" stroke="#5a4118" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- barbe de queue -->
+      <path d="M47 41 l-3.5 -1 l1.5 3 l-3 1.5 l4.5 1.5 Z" fill="#5a4118"/>
+      <!-- quatre pattes griffues -->
+      <path d="M21 32 C20 38 20 44 21 49 M28 33 C28 39 28 45 28 50 M38 33 C39 39 40 45 41 50 M45 34 C47 40 48 45 48 50" fill="none" stroke="#5a4118" stroke-width="3.6" stroke-linecap="round"/>
+      <path d="M21 49 l-2.5 2 M21 49 l0.5 2.8 M21 49 l2.5 2 M28 50 l-2.5 2 M28 50 l0 2.8 M28 50 l2.5 2 M41 50 l-2.5 2 M41 50 l0 2.8 M41 50 l2.5 2 M48 50 l-2.5 2 M48 50 l0 2.8 M48 50 l2.5 2" fill="none" stroke="#5a4118" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- cou + tête reptilienne en avant, gueule ouverte, langue -->
+      <path d="M15 30 C11 28 8 26 8 22" fill="none" stroke="#5a4118" stroke-width="4.4" stroke-linecap="round"/>
+      <path d="M11 22 Q8 14 3 16 L2 18 L5 19 L1 20 L5 21 L2 23 L6 23 Q10 25 12 22 Z" fill="#5a4118" stroke="#5a4118" stroke-width="0.5" stroke-linejoin="round"/>
+      <path d="M2 20 L-1 20" fill="none" stroke="#a9884a" stroke-width="1.2" stroke-linecap="round"/>
+      <path d="M8 16 L11 11 L10 16.5 Z M10 16.5 L13.5 12 L11.5 17 Z" fill="#5a4118"/>
+      <circle cx="7" cy="18" r="1.1" fill="#a9884a"/>
+      <!-- écailles dorsales -->
+      <path d="M22 27 l1.5 -2.5 M28 27 l1.5 -2.5 M34 28 l1.5 -2.5" fill="none" stroke="#8c7a55" stroke-width="0.9"/>
+    </symbol>
+
+    <!-- DRAGON 3 — serpentin ailé (corps en S, graphique) -->
+    <symbol id="drg3" viewBox="0 0 64 64">
+      <!-- grande aile déployée (derrière) -->
+      <path d="M33 26 L44 13 L56 9 L52 20 L54 19 L48 27 L50 27 L43 32 Z"
+            fill="#a9884a" fill-opacity="0.9" stroke="#5a4118" stroke-width="1.1" stroke-linejoin="round"/>
+      <path d="M33 26 L56 9 M44 13 L52 20 M46 15 L48 27 M40 20 L43 32" fill="none" stroke="#5a4118" stroke-width="0.8"/>
+      <!-- corps serpentin en S + queue effilée -->
+      <path d="M26 12 C24 18 27 22 31 24 C37 27 40 32 38 39 C36 45 30 48 24 47 C19 46 16 42 18 38"
+            fill="none" stroke="#5a4118" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- queue effilée + pointe -->
+      <path d="M18 38 C16 35 13 35 12 38 C11 41 13 43 15 42" fill="none" stroke="#5a4118" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M15 42 l-3 0.5 l2 2 l-1 2.5 l3.5 -2.5 Z" fill="#5a4118"/>
+      <!-- petites pattes griffues -->
+      <path d="M33 26 C30 28 27 29 24 28 M35 33 C32 35 29 37 27 40" fill="none" stroke="#5a4118" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M24 28 l-2.5 -1.5 M24 28 l-2.5 1 M24 28 l-0.5 2.5 M27 40 l-2.5 -0.5 M27 40 l-1.5 2 M27 40 l0.5 2.5" fill="none" stroke="#5a4118" stroke-width="1" stroke-linecap="round"/>
+      <!-- tête relevée, gueule ouverte, langue + cornes -->
+      <path d="M27 12 Q24 4 17 6 L11 8 L16 10 L11 12 L17 13 L12 15 L18 15 Q24 16 27 12 Z" fill="#5a4118" stroke="#5a4118" stroke-width="0.5" stroke-linejoin="round"/>
+      <path d="M11 12 L7 12.5" fill="none" stroke="#a9884a" stroke-width="1.2" stroke-linecap="round"/>
+      <path d="M22 7 L27 2 L25 8 Z M24 8 L29 4 L27 9 Z" fill="#5a4118"/>
+      <circle cx="21" cy="9.5" r="1.1" fill="#a9884a"/>
+    </symbol>
+  </svg>
+
+  <!-- ============ PLANCHE ============ -->
+  <div class="planche">
+    <div class="col">
+      <svg class="d detail" aria-hidden="true" focusable="false"><use href="#drg1"/></svg>
+      <div class="petits">
+        <div class="petit"><span class="cadre"><svg class="d" aria-hidden="true" focusable="false"><use href="#drg1"/></svg></span><span class="leg">Carte 100&nbsp;px</span></div>
+        <div class="petit venir"><span class="cadre"><svg class="d" aria-hidden="true" focusable="false"><use href="#drg1"/></svg></span><span class="leg">À venir 0,55</span></div>
+      </div>
+      <div class="titre">Dragon 1 — rampant</div>
+      <div class="desc">Dressé sur les pattes arrière, aile levée, cou dressé tête à gauche gueule ouverte, pattes avant griffues, queue barbelée enroulée. Le blason classique.</div>
+    </div>
+
+    <div class="col">
+      <svg class="d detail" aria-hidden="true" focusable="false"><use href="#drg2"/></svg>
+      <div class="petits">
+        <div class="petit"><span class="cadre"><svg class="d" aria-hidden="true" focusable="false"><use href="#drg2"/></svg></span><span class="leg">Carte 100&nbsp;px</span></div>
+        <div class="petit venir"><span class="cadre"><svg class="d" aria-hidden="true" focusable="false"><use href="#drg2"/></svg></span><span class="leg">À venir 0,55</span></div>
+      </div>
+      <div class="titre">Dragon 2 — passant</div>
+      <div class="desc">À quatre pattes, marchant, aile mi-repliée, tête en avant gueule ouverte, queue qui traîne et se recourbe. Façon dragon de marge d'atlas.</div>
+    </div>
+
+    <div class="col">
+      <svg class="d detail" aria-hidden="true" focusable="false"><use href="#drg3"/></svg>
+      <div class="petits">
+        <div class="petit"><span class="cadre"><svg class="d" aria-hidden="true" focusable="false"><use href="#drg3"/></svg></span><span class="leg">Carte 100&nbsp;px</span></div>
+        <div class="petit venir"><span class="cadre"><svg class="d" aria-hidden="true" focusable="false"><use href="#drg3"/></svg></span><span class="leg">À venir 0,55</span></div>
+      </div>
+      <div class="titre">Dragon 3 — serpentin ailé</div>
+      <div class="desc">Corps en S élégant (dragon-serpent), grande aile déployée, tête relevée gueule ouverte, queue effilée. Plus fin et graphique.</div>
+    </div>
+  </div>
+</body>
+</html>
