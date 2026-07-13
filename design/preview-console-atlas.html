@@ -96,6 +96,7 @@
     padding: 1.5rem 1rem calc(2rem + env(safe-area-inset-bottom));
   }
   .grille {
+    list-style: none;
     display: grid; grid-template-columns: 1fr; gap: 1.1rem;
   }
   @media (min-width: 720px) {
@@ -128,9 +129,11 @@
     color: var(--encre-sepia-douce);
   }
   .quadrant .devise {
+    display: block;
     margin-top: 0.55rem; font-size: 0.98rem; line-height: 1.45;
     color: var(--encre-sepia);
   }
+  .quadrant .ouvrir, .quadrant .pastille-venir { display: inline-flex; }
 
   /* État ACTIF (TRAVELLER) : lien, double liseré or, chevron « Ouvrir » */
   a.quadrant.actif { transition: transform 140ms ease, box-shadow 140ms ease; }

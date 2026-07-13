@@ -1,0 +1,275 @@
+<!doctype html>
+<!--
+  Preview C1 — Direction C « Registre noble »
+  Intention : page de titre d'un ouvrage savant. Bandeau ULTIMA, invite, puis
+  les 4 quadrants en entrées de registre numérotées I–IV, filet or de
+  séparation, nom à gauche, description à droite, emblème réduit. Le repère de
+  sobriété du panel : le plus lisible, le moins décoratif.
+  Note responsive : le registre reste volontairement vertical (mono-colonne
+  centrée, max-width) à toute largeur — c'est l'identité de la direction C
+  (§4-C du brief : « sobre et vertical », entrées I–IV). Aucun scroll horizontal
+  de 320 à 1440 px.
+  Choix couleurs/contrastes (tokens R1 uniquement) : corps de texte en
+  --encre-sepia #3b2f1c sur --parchemin #f6eed9 ≈ 10,6:1 (> 7:1). Entrées « à
+  venir » : texte muté --encre-sepia-douce #6a5636 (5,8:1) + numéro estompé +
+  pastille « à venir » → état lisible par la forme et le libellé, pas la couleur.
+-->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0e3a52">
+<title>Ultima — Preview · Console (Registre)</title>
+<style>
+  :root {
+    --parchemin: #f6eed9;
+    --parchemin-carte: #efe3c6;
+    --parchemin-ombre: #e3d3ab;
+    --encre-sepia: #3b2f1c;
+    --encre-sepia-douce: #6a5636;
+    --encre-deco: #8c7a55;
+    --cerne-carte: #5a4118;
+    --or-antique: #a9884a;
+    --mer-profonde: #0e3a52;
+    --mer-claire: #17506b;
+    --accent-focus: #17578f;
+    --police-ancienne: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--police-ancienne);
+    color: var(--encre-sepia);
+    background:
+      radial-gradient(ellipse at 50% 14%, rgba(255,250,235,0.5), rgba(0,0,0,0) 60%),
+      linear-gradient(#f6eed9, #efe3c6 72%, #e3d3ab);
+    display: flex; flex-direction: column; min-height: 100%;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none;
+    z-index: 0; opacity: 0.28;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='%238c7a55' fill-opacity='0.08'%3E%3Ccircle cx='17' cy='23' r='1'/%3E%3Ccircle cx='64' cy='9' r='0.8'/%3E%3Ccircle cx='102' cy='41' r='1'/%3E%3Ccircle cx='36' cy='74' r='0.8'/%3E%3Ccircle cx='83' cy='96' r='1'/%3E%3Ccircle cx='9' cy='108' r='0.8'/%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* ---------- Bandeau ---------- */
+  .entete {
+    position: relative; z-index: 2;
+    display: flex; justify-content: center;
+    padding: 0.9rem 1rem;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='60'%3E%3Cpath d='M0,30 q17,-10 35,0 t35,0 t35,0 t35,0' fill='none' stroke='%238fc2d4' stroke-opacity='0.16' stroke-width='1.2'/%3E%3Cpath d='M0,52 q17,-8 35,0 t35,0 t35,0 t35,0' fill='none' stroke='%238fc2d4' stroke-opacity='0.10' stroke-width='1'/%3E%3C/svg%3E"),
+      linear-gradient(180deg, var(--mer-claire), var(--mer-profonde));
+    border-bottom: 2px solid var(--or-antique);
+    box-shadow: 0 3px 10px rgba(0,10,20,0.35);
+  }
+  .cartouche {
+    position: relative;
+    padding: 0.35rem 2rem 0.4rem;
+    background: linear-gradient(#f4e6bd, #e3cd93);
+    border: 2px solid #6e5320; border-radius: 4px;
+    box-shadow: inset 0 0 0 3px #f4e6bd, inset 0 0 0 4px var(--or-antique),
+                0 2px 6px rgba(0,10,20,0.4);
+  }
+  .cartouche::before, .cartouche::after {
+    content: "\2766"; position: absolute; top: 50%; transform: translateY(-52%);
+    color: #6e5320; font-size: 0.95rem;
+  }
+  .cartouche::before { left: 0.55rem; }
+  .cartouche::after { right: 0.55rem; }
+  .cartouche h1 {
+    font-size: clamp(1.25rem, 5vw, 1.8rem); font-weight: 700; line-height: 1.1;
+    letter-spacing: 0.12em; text-indent: 0.12em; color: #4a3512;
+    text-shadow: 0 1px 0 #fff6dd;
+  }
+
+  /* ---------- Page-titre du registre ---------- */
+  main {
+    position: relative; z-index: 1; flex: 1;
+    width: 100%; max-width: 680px; margin: 0 auto;
+    padding: 1.6rem 1.1rem calc(2.2rem + env(safe-area-inset-bottom));
+  }
+  .invite {
+    text-align: center; margin-bottom: 1.1rem;
+    font-size: clamp(1.05rem, 3.4vw, 1.3rem); font-style: italic;
+    line-height: 1.4; color: var(--encre-sepia);
+  }
+  .filet-orne {
+    display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+    margin: 0 auto 1.4rem; max-width: 320px; color: var(--or-antique);
+  }
+  .filet-orne::before, .filet-orne::after {
+    content: ""; flex: 1; height: 1px; background: currentColor; opacity: 0.7;
+  }
+  .filet-orne span { font-size: 0.9rem; }
+
+  .registre { list-style: none; }
+
+  /* Entrée de registre (base) */
+  .entree {
+    display: grid;
+    grid-template-columns: 2.6rem 46px 1fr auto;
+    align-items: center; gap: 0.5rem 0.85rem;
+    min-height: 72px;
+    padding: 1rem 0.6rem;
+    text-decoration: none; font-family: inherit; color: var(--encre-sepia);
+    border-top: 1px solid var(--or-antique);
+  }
+  .registre li:last-child .entree { border-bottom: 1px solid var(--or-antique); }
+  .num {
+    font-size: 1.3rem; font-weight: 700; text-align: center;
+    letter-spacing: 0.04em; color: var(--cerne-carte);
+  }
+  .embleme { width: 44px; height: 44px; }
+  .texte { min-width: 0; }
+  .code { font-size: 1.16rem; font-weight: 700; letter-spacing: 0.08em; color: #4a3512; }
+  .role {
+    display: block; font-size: 0.75rem; font-variant: small-caps;
+    letter-spacing: 0.13em; color: var(--encre-sepia-douce);
+  }
+  .devise { margin-top: 0.25rem; font-size: 0.95rem; line-height: 1.4; color: var(--encre-sepia); }
+  .etat { justify-self: end; }
+
+  /* ACTIF : entrée cliquable (lien), chevron « Ouvrir » */
+  a.entree { transition: background 140ms ease; }
+  a.entree:hover { background: rgba(169,136,74,0.12); }
+  a.entree:focus-visible { outline: 3px solid var(--accent-focus); outline-offset: -2px; border-radius: 4px; }
+  .chevron {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    font-size: 0.82rem; font-variant: small-caps; letter-spacing: 0.1em;
+    font-weight: 700; color: var(--cerne-carte);
+  }
+  .chevron svg { width: 0.9em; height: 0.9em; }
+
+  /* À VENIR : entrée non-interactive, numéro et emblème estompés, pastille */
+  button.entree {
+    width: 100%; text-align: left; cursor: not-allowed; background: none;
+    border-left: 0; border-right: 0;
+  }
+  button.entree .num { color: var(--encre-deco); }
+  button.entree .embleme { opacity: 0.55; }
+  button.entree .code { color: var(--encre-sepia-douce); }
+  .pastille-venir {
+    display: inline-block;
+    padding: 0.16rem 0.6rem; white-space: nowrap;
+    font-size: 0.72rem; font-variant: small-caps; letter-spacing: 0.16em;
+    font-weight: 700; color: #ffffff; background: var(--cerne-carte); border-radius: 999px;
+  }
+
+  @media (max-width: 460px) {
+    .entree { grid-template-columns: 2rem 40px 1fr; grid-auto-rows: auto; }
+    .embleme { width: 40px; height: 40px; }
+    .etat { grid-column: 1 / -1; justify-self: start; padding-left: 2.85rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    a.entree { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="entete">
+    <div class="cartouche"><h1>Bienvenue sur Ultima</h1></div>
+  </header>
+
+  <main>
+    <p class="invite">Sur quoi on travaille aujourd&rsquo;hui&nbsp;?</p>
+    <div class="filet-orne" aria-hidden="true"><span>&#10086;</span></div>
+
+    <ul class="registre">
+      <li>
+        <a class="entree" href="#traveller">
+          <span class="num" aria-hidden="true">I</span>
+          <span class="embleme" aria-hidden="true">
+            <svg viewBox="0 0 64 64" width="44" height="44">
+              <circle cx="32" cy="32" r="27" fill="none" stroke="#5a4118" stroke-width="1.6"/>
+              <circle cx="32" cy="32" r="21" fill="none" stroke="#a9884a" stroke-width="0.9"/>
+              <path d="M32 6 L36 30 L32 34 L28 30 Z" fill="#5a4118"/>
+              <path d="M32 58 L36 34 L32 30 L28 34 Z" fill="#8c7a55"/>
+              <path d="M6 32 L30 28 L34 32 L30 36 Z" fill="#8c7a55"/>
+              <path d="M58 32 L34 28 L30 32 L34 36 Z" fill="#8c7a55"/>
+              <circle cx="32" cy="32" r="3" fill="#a9884a" stroke="#5a4118" stroke-width="1"/>
+              <g fill="#5a4118"><circle cx="14" cy="15" r="2.2"/><circle cx="50" cy="17" r="2.2"/><circle cx="16" cy="50" r="2.2"/><circle cx="49" cy="49" r="2.2"/></g>
+              <g stroke="#8c7a55" stroke-width="1" stroke-dasharray="2 2" fill="none"><path d="M14 15 L32 32 L50 17 M16 50 L32 32 L49 49"/></g>
+            </svg>
+          </span>
+          <span class="texte">
+            <span class="code">TRAVELLER</span><span class="role">R&eacute;seau commercial</span>
+            <span class="devise">Artisans, partenaires, leads, chantiers et relations.</span>
+          </span>
+          <span class="etat">
+            <span class="chevron">Ouvrir
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4 L16 12 L8 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </span>
+        </a>
+      </li>
+
+      <li>
+        <button class="entree" type="button" disabled>
+          <span class="num" aria-hidden="true">II</span>
+          <span class="embleme" aria-hidden="true">
+            <svg viewBox="0 0 64 64" width="44" height="44">
+              <path d="M32 8 V50" stroke="#5a4118" stroke-width="2.2"/>
+              <path d="M14 18 H50" stroke="#5a4118" stroke-width="2.2"/>
+              <circle cx="32" cy="8" r="2.6" fill="#a9884a" stroke="#5a4118" stroke-width="1"/>
+              <path d="M14 18 L8 32 H20 Z" fill="none" stroke="#5a4118" stroke-width="1.6"/>
+              <path d="M50 18 L44 32 H56 Z" fill="none" stroke="#5a4118" stroke-width="1.6"/>
+              <path d="M22 50 H42 M18 54 H46" stroke="#5a4118" stroke-width="2.2" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="texte">
+            <span class="code">BCP</span><span class="role">Pilotage financier</span>
+            <span class="devise">Revenus, charges, pr&eacute;vision d&rsquo;imp&ocirc;ts et &eacute;ch&eacute;ancier.</span>
+          </span>
+          <span class="etat"><span class="pastille-venir">&Agrave; venir</span></span>
+        </button>
+      </li>
+
+      <li>
+        <button class="entree" type="button" disabled>
+          <span class="num" aria-hidden="true">III</span>
+          <span class="embleme" aria-hidden="true">
+            <svg viewBox="0 0 64 64" width="44" height="44">
+              <path d="M10 44 Q32 38 54 44 L54 50 Q32 44 10 50 Z" fill="none" stroke="#5a4118" stroke-width="1.6"/>
+              <path d="M32 42 V50" stroke="#8c7a55" stroke-width="1.2"/>
+              <path d="M20 30 Q20 24 30 24 L44 24 Q40 30 30 30 Q24 30 20 30 Z" fill="#a9884a" stroke="#5a4118" stroke-width="1.6"/>
+              <path d="M22 24 Q24 18 27 16" fill="none" stroke="#a9884a" stroke-width="2.6" stroke-linecap="round"/>
+              <path d="M27 16 q-3 -5 0 -8 q3 3 0 8 Z" fill="#8c7a55" stroke="#5a4118" stroke-width="1"/>
+              <path d="M24 30 L26 40 M32 30 L32 40 M40 28 L38 40" stroke="#8c7a55" stroke-width="1"/>
+            </svg>
+          </span>
+          <span class="texte">
+            <span class="code">ADRAMELECH</span><span class="role">Biblioth&egrave;que d&rsquo;id&eacute;es</span>
+            <span class="devise">Capturer, classer et rapprocher les id&eacute;es.</span>
+          </span>
+          <span class="etat"><span class="pastille-venir">&Agrave; venir</span></span>
+        </button>
+      </li>
+
+      <li>
+        <button class="entree" type="button" disabled>
+          <span class="num" aria-hidden="true">IV</span>
+          <span class="embleme" aria-hidden="true">
+            <svg viewBox="0 0 64 64" width="44" height="44">
+              <path d="M32 12 L35 26 L32 30 L29 26 Z" fill="#5a4118"/>
+              <path d="M32 44 L35 30 L32 26 L29 30 Z" fill="#8c7a55"/>
+              <path d="M14 28 L28 30 L32 27 L28 24 Z" fill="#8c7a55"/>
+              <path d="M50 28 L36 30 L32 27 L36 24 Z" fill="#8c7a55"/>
+              <circle cx="32" cy="28" r="2.4" fill="#a9884a" stroke="#5a4118" stroke-width="1"/>
+              <path d="M18 52 Q22 42 30 40" fill="none" stroke="#5a4118" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M46 52 Q42 42 34 40" fill="none" stroke="#5a4118" stroke-width="1.8" stroke-linecap="round"/>
+              <g fill="#7d9a52" stroke="#4f7038" stroke-width="0.8"><path d="M22 47 q3 -4 6 -1 q-3 4 -6 1 Z"/><path d="M42 47 q-3 -4 -6 -1 q3 4 6 1 Z"/></g>
+            </svg>
+          </span>
+          <span class="texte">
+            <span class="code">IMLADRIK</span><span class="role">D&eacute;veloppement personnel</span>
+            <span class="devise">Objectifs, journal, valeurs et culture.</span>
+          </span>
+          <span class="etat"><span class="pastille-venir">&Agrave; venir</span></span>
+        </button>
+      </li>
+    </ul>
+  </main>
+
+</body>
+</html>

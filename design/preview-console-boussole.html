@@ -1,0 +1,297 @@
+<!doctype html>
+<!--
+  Preview C1 — Direction B « Rose des vents / quadrants »
+  Intention : jouer le mot « quadrant » au sens propre. Un médaillon-boussole
+  central porte l'invite « sur quoi on travaille aujourd'hui ? » ; les 4
+  quadrants rayonnent autour (2×2). Sous ~720 px, le rayonnement se replie en
+  pile verticale (boussole en tête, puis les 4 cartes).
+  Choix couleurs/contrastes (tokens R1 uniquement) : corps de texte en
+  --encre-sepia #3b2f1c sur --parchemin-carte #efe3c6 ≈ 10,2:1 (> 7:1). Cartes
+  « à venir » : texte muté --encre-sepia-douce #6a5636 (5,5:1), cadre pointillé
+  + pastille « à venir » + emblème estompé → état lisible par la forme et le
+  libellé, jamais par la seule couleur.
+-->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0e3a52">
+<title>Ultima — Preview · Console (Boussole)</title>
+<style>
+  :root {
+    --parchemin: #f6eed9;
+    --parchemin-carte: #efe3c6;
+    --parchemin-ombre: #e3d3ab;
+    --encre-sepia: #3b2f1c;
+    --encre-sepia-douce: #6a5636;
+    --encre-deco: #8c7a55;
+    --cerne-carte: #5a4118;
+    --or-antique: #a9884a;
+    --mer-profonde: #0e3a52;
+    --mer-claire: #17506b;
+    --accent-focus: #17578f;
+    --police-ancienne: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--police-ancienne);
+    color: var(--encre-sepia);
+    background:
+      radial-gradient(ellipse at 50% 12%, rgba(255,250,235,0.5), rgba(0,0,0,0) 60%),
+      linear-gradient(#f6eed9, #efe3c6 70%, #e3d3ab);
+    display: flex; flex-direction: column; min-height: 100%;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none;
+    z-index: 0; opacity: 0.3;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='%238c7a55' fill-opacity='0.08'%3E%3Ccircle cx='17' cy='23' r='1'/%3E%3Ccircle cx='64' cy='9' r='0.8'/%3E%3Ccircle cx='102' cy='41' r='1'/%3E%3Ccircle cx='36' cy='74' r='0.8'/%3E%3Ccircle cx='83' cy='96' r='1'/%3E%3Ccircle cx='9' cy='108' r='0.8'/%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* ---------- Bandeau ---------- */
+  .entete {
+    position: relative; z-index: 2;
+    display: flex; justify-content: center;
+    padding: 0.9rem 1rem;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='60'%3E%3Cpath d='M0,30 q17,-10 35,0 t35,0 t35,0 t35,0' fill='none' stroke='%238fc2d4' stroke-opacity='0.16' stroke-width='1.2'/%3E%3Cpath d='M0,52 q17,-8 35,0 t35,0 t35,0 t35,0' fill='none' stroke='%238fc2d4' stroke-opacity='0.10' stroke-width='1'/%3E%3C/svg%3E"),
+      linear-gradient(180deg, var(--mer-claire), var(--mer-profonde));
+    border-bottom: 2px solid var(--or-antique);
+    box-shadow: 0 3px 10px rgba(0,10,20,0.35);
+  }
+  .cartouche {
+    position: relative;
+    padding: 0.35rem 2rem 0.4rem;
+    background: linear-gradient(#f4e6bd, #e3cd93);
+    border: 2px solid #6e5320; border-radius: 4px;
+    box-shadow: inset 0 0 0 3px #f4e6bd, inset 0 0 0 4px var(--or-antique),
+                0 2px 6px rgba(0,10,20,0.4);
+  }
+  .cartouche::before, .cartouche::after {
+    content: "\2766"; position: absolute; top: 50%; transform: translateY(-52%);
+    color: #6e5320; font-size: 0.95rem;
+  }
+  .cartouche::before { left: 0.55rem; }
+  .cartouche::after { right: 0.55rem; }
+  .cartouche h1 {
+    font-size: clamp(1.25rem, 5vw, 1.8rem); font-weight: 700; line-height: 1.1;
+    letter-spacing: 0.12em; text-indent: 0.12em; color: #4a3512;
+    text-shadow: 0 1px 0 #fff6dd;
+  }
+
+  /* ---------- Constellation ---------- */
+  main {
+    position: relative; z-index: 1; flex: 1;
+    width: 100%; max-width: 1040px; margin: 0 auto;
+    padding: 1.3rem 1rem calc(2rem + env(safe-area-inset-bottom));
+  }
+  .rose {
+    display: grid; gap: 1rem;
+    grid-template-columns: 1fr;
+    grid-template-areas: "boussole" "tr" "bc" "ad" "im";
+  }
+  @media (min-width: 720px) {
+    .rose {
+      grid-template-columns: 1fr minmax(210px, 260px) 1fr;
+      grid-template-rows: auto auto;
+      gap: 1.3rem 1.3rem;
+      align-items: stretch;
+      grid-template-areas:
+        "tr boussole bc"
+        "ad boussole im";
+    }
+  }
+
+  /* Médaillon boussole central */
+  .boussole {
+    grid-area: boussole;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; gap: 0.7rem;
+    padding: 1.3rem 1.1rem;
+    background: radial-gradient(circle at 50% 42%, #f7efd9, #e7d9b6);
+    border: 2px solid var(--or-antique); border-radius: 12px;
+    box-shadow: inset 0 0 0 3px #f7efd9, inset 0 0 22px rgba(90,65,24,0.14),
+                0 4px 14px rgba(58,42,16,0.18);
+  }
+  .boussole .rose-svg { width: min(58%, 132px); height: auto; }
+  .boussole .invite {
+    font-size: clamp(1rem, 3.4vw, 1.16rem);
+    font-style: italic; line-height: 1.4; color: var(--encre-sepia);
+    max-width: 22ch;
+  }
+
+  /* Carte-quadrant (base) */
+  .quadrant {
+    display: flex; flex-direction: column; gap: 0.5rem;
+    min-height: 128px; height: 100%;
+    padding: 1rem 1.05rem;
+    text-align: left; text-decoration: none; font-family: inherit;
+    color: var(--encre-sepia);
+    background: linear-gradient(#f7efd9, #efe3c6);
+    border: 2px solid var(--or-antique); border-radius: 10px;
+    box-shadow: inset 0 0 0 3px #f7efd9, 0 4px 12px rgba(58,42,16,0.16);
+  }
+  .quadrant .haut { display: flex; align-items: center; gap: 0.7rem; }
+  .quadrant .embleme { flex: none; width: 44px; height: 44px; }
+  .quadrant .code {
+    font-size: 1.16rem; font-weight: 700; letter-spacing: 0.08em; color: #4a3512;
+  }
+  .quadrant .role {
+    display: block; font-size: 0.76rem; font-variant: small-caps;
+    letter-spacing: 0.13em; color: var(--encre-sepia-douce);
+  }
+  .quadrant .devise { font-size: 0.94rem; line-height: 1.4; color: var(--encre-sepia); }
+
+  .tr { grid-area: tr; } .bc { grid-area: bc; }
+  .ad { grid-area: ad; } .im { grid-area: im; }
+
+  /* ACTIF */
+  a.quadrant.actif { transition: transform 140ms ease, box-shadow 140ms ease; }
+  a.quadrant.actif:hover {
+    transform: translateY(-2px);
+    box-shadow: inset 0 0 0 3px #f7efd9, 0 8px 18px rgba(58,42,16,0.24);
+  }
+  a.quadrant.actif:focus-visible { outline: 3px solid var(--accent-focus); outline-offset: 3px; }
+  .ouvrir {
+    display: inline-flex; align-items: center; gap: 0.35rem; margin-top: auto;
+    font-size: 0.82rem; font-variant: small-caps; letter-spacing: 0.1em;
+    font-weight: 700; color: var(--cerne-carte);
+  }
+  .ouvrir svg { width: 0.9em; height: 0.9em; }
+
+  /* À VENIR */
+  button.quadrant {
+    width: 100%; cursor: not-allowed;
+    background: linear-gradient(#f3ecda, #eaddc0);
+    border-style: dashed; border-color: var(--encre-deco); box-shadow: none;
+  }
+  button.quadrant .embleme { opacity: 0.55; }
+  button.quadrant .code { color: var(--encre-sepia-douce); }
+  .pastille-venir {
+    display: inline-block; margin-top: auto; align-self: flex-start;
+    padding: 0.16rem 0.6rem;
+    font-size: 0.72rem; font-variant: small-caps; letter-spacing: 0.16em;
+    font-weight: 700; color: #ffffff; background: var(--cerne-carte); border-radius: 999px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    a.quadrant.actif { transition: none; }
+    a.quadrant.actif:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="entete">
+    <div class="cartouche"><h1>Bienvenue sur Ultima</h1></div>
+  </header>
+
+  <main>
+    <div class="rose">
+
+      <div class="boussole">
+        <svg class="rose-svg" viewBox="0 0 120 120" aria-hidden="true">
+          <circle cx="60" cy="60" r="54" fill="#0e3a52" stroke="#a9884a" stroke-width="2"/>
+          <circle cx="60" cy="60" r="45" fill="none" stroke="#a9884a" stroke-width="0.8"/>
+          <g fill="#e8cf8f" stroke="#c9a659" stroke-width="0.8">
+            <path d="M60 8 L67 54 L60 60 L53 54 Z"/>
+            <path d="M60 112 L67 66 L60 60 L53 66 Z" fill="#123f57"/>
+            <path d="M8 60 L54 53 L60 60 L54 67 Z" fill="#123f57"/>
+            <path d="M112 60 L66 53 L60 60 L66 67 Z" fill="#123f57"/>
+          </g>
+          <g fill="#c9a659" opacity="0.9">
+            <path d="M60 24 L64 56 L60 60 L56 56 Z"/>
+            <path d="M60 96 L64 64 L60 60 L56 64 Z"/>
+            <path d="M24 60 L56 56 L60 60 L56 64 Z"/>
+            <path d="M96 60 L64 56 L60 60 L64 64 Z"/>
+          </g>
+          <circle cx="60" cy="60" r="4" fill="#e8cf8f" stroke="#c9a659" stroke-width="1"/>
+          <text x="60" y="21" text-anchor="middle" font-size="10" fill="#e8cf8f" font-style="italic" font-family="Georgia, serif">N</text>
+        </svg>
+        <p class="invite">Sur quoi on travaille aujourd&rsquo;hui&nbsp;?</p>
+      </div>
+
+      <a class="quadrant actif tr" href="#traveller">
+        <span class="haut">
+          <span class="embleme" aria-hidden="true">
+            <svg viewBox="0 0 64 64" width="44" height="44">
+              <circle cx="32" cy="32" r="27" fill="none" stroke="#5a4118" stroke-width="1.6"/>
+              <circle cx="32" cy="32" r="21" fill="none" stroke="#a9884a" stroke-width="0.9"/>
+              <path d="M32 6 L36 30 L32 34 L28 30 Z" fill="#5a4118"/>
+              <path d="M32 58 L36 34 L32 30 L28 34 Z" fill="#8c7a55"/>
+              <path d="M6 32 L30 28 L34 32 L30 36 Z" fill="#8c7a55"/>
+              <path d="M58 32 L34 28 L30 32 L34 36 Z" fill="#8c7a55"/>
+              <circle cx="32" cy="32" r="3" fill="#a9884a" stroke="#5a4118" stroke-width="1"/>
+              <g fill="#5a4118"><circle cx="14" cy="15" r="2.2"/><circle cx="50" cy="17" r="2.2"/><circle cx="16" cy="50" r="2.2"/><circle cx="49" cy="49" r="2.2"/></g>
+              <g stroke="#8c7a55" stroke-width="1" stroke-dasharray="2 2" fill="none"><path d="M14 15 L32 32 L50 17 M16 50 L32 32 L49 49"/></g>
+            </svg>
+          </span>
+          <span><span class="code">TRAVELLER</span><span class="role">R&eacute;seau commercial</span></span>
+        </span>
+        <span class="devise">Artisans, partenaires, leads, chantiers et relations.</span>
+        <span class="ouvrir">Ouvrir
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4 L16 12 L8 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+      <button class="quadrant bc" type="button" disabled>
+        <span class="haut">
+          <span class="embleme" aria-hidden="true">
+            <svg viewBox="0 0 64 64" width="44" height="44">
+              <path d="M32 8 V50" stroke="#5a4118" stroke-width="2.2"/>
+              <path d="M14 18 H50" stroke="#5a4118" stroke-width="2.2"/>
+              <circle cx="32" cy="8" r="2.6" fill="#a9884a" stroke="#5a4118" stroke-width="1"/>
+              <path d="M14 18 L8 32 H20 Z" fill="none" stroke="#5a4118" stroke-width="1.6"/>
+              <path d="M50 18 L44 32 H56 Z" fill="none" stroke="#5a4118" stroke-width="1.6"/>
+              <path d="M22 50 H42 M18 54 H46" stroke="#5a4118" stroke-width="2.2" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span><span class="code">BCP</span><span class="role">Pilotage financier</span></span>
+        </span>
+        <span class="devise">Revenus, charges, imp&ocirc;ts et &eacute;ch&eacute;ancier.</span>
+        <span class="pastille-venir">&Agrave; venir</span>
+      </button>
+
+      <button class="quadrant ad" type="button" disabled>
+        <span class="haut">
+          <span class="embleme" aria-hidden="true">
+            <svg viewBox="0 0 64 64" width="44" height="44">
+              <path d="M10 44 Q32 38 54 44 L54 50 Q32 44 10 50 Z" fill="none" stroke="#5a4118" stroke-width="1.6"/>
+              <path d="M32 42 V50" stroke="#8c7a55" stroke-width="1.2"/>
+              <path d="M20 30 Q20 24 30 24 L44 24 Q40 30 30 30 Q24 30 20 30 Z" fill="#a9884a" stroke="#5a4118" stroke-width="1.6"/>
+              <path d="M22 24 Q24 18 27 16" fill="none" stroke="#a9884a" stroke-width="2.6" stroke-linecap="round"/>
+              <path d="M27 16 q-3 -5 0 -8 q3 3 0 8 Z" fill="#8c7a55" stroke="#5a4118" stroke-width="1"/>
+              <path d="M24 30 L26 40 M32 30 L32 40 M40 28 L38 40" stroke="#8c7a55" stroke-width="1"/>
+            </svg>
+          </span>
+          <span><span class="code">ADRAMELECH</span><span class="role">Biblioth&egrave;que d&rsquo;id&eacute;es</span></span>
+        </span>
+        <span class="devise">Capturer, classer et rapprocher.</span>
+        <span class="pastille-venir">&Agrave; venir</span>
+      </button>
+
+      <button class="quadrant im" type="button" disabled>
+        <span class="haut">
+          <span class="embleme" aria-hidden="true">
+            <svg viewBox="0 0 64 64" width="44" height="44">
+              <path d="M32 12 L35 26 L32 30 L29 26 Z" fill="#5a4118"/>
+              <path d="M32 44 L35 30 L32 26 L29 30 Z" fill="#8c7a55"/>
+              <path d="M14 28 L28 30 L32 27 L28 24 Z" fill="#8c7a55"/>
+              <path d="M50 28 L36 30 L32 27 L36 24 Z" fill="#8c7a55"/>
+              <circle cx="32" cy="28" r="2.4" fill="#a9884a" stroke="#5a4118" stroke-width="1"/>
+              <path d="M18 52 Q22 42 30 40" fill="none" stroke="#5a4118" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M46 52 Q42 42 34 40" fill="none" stroke="#5a4118" stroke-width="1.8" stroke-linecap="round"/>
+              <g fill="#7d9a52" stroke="#4f7038" stroke-width="0.8"><path d="M22 47 q3 -4 6 -1 q-3 4 -6 1 Z"/><path d="M42 47 q-3 -4 -6 -1 q3 4 6 1 Z"/></g>
+            </svg>
+          </span>
+          <span><span class="code">IMLADRIK</span><span class="role">D&eacute;veloppement personnel</span></span>
+        </span>
+        <span class="devise">Objectifs, journal, valeurs et culture.</span>
+        <span class="pastille-venir">&Agrave; venir</span>
+      </button>
+
+    </div>
+  </main>
+
+</body>
+</html>
