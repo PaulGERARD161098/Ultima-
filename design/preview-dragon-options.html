@@ -35,7 +35,7 @@
     display: grid; grid-template-columns: 1fr; gap: 1.8rem;
     max-width: 1200px; margin: 0 auto;
   }
-  @media (min-width: 780px) { .planche { grid-template-columns: 1fr 1fr 1fr; } }
+  @media (min-width: 900px) { .planche { grid-template-columns: 1fr 1fr 1fr; } }
 
   .col {
     background: linear-gradient(#f7efd9, #efe3c6);
@@ -83,8 +83,8 @@
       <!-- corps dressé + queue serpentine barbelée qui s'enroule -->
       <path d="M24 16 C29 20 31 23 30 28 C29 34 28 40 29 44 C31 50 38 52 44 51 C51 50 54 44 51 38 C49 34 45 34 44 37"
             fill="none" stroke="#5a4118" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-      <!-- barbe de queue -->
-      <path d="M44 37 l-3.5 -1 l1.5 3 l-3 1.5 l4.5 1.5 Z" fill="#5a4118"/>
+      <!-- barbe de queue (fer barbelé) -->
+      <path d="M39 37 L45 34.3 L43 37 L45 39.7 Z" fill="#5a4118"/>
       <!-- pattes arrière (station debout) + griffes -->
       <path d="M27 44 C25 49 24 53 25 58 M31 45 C33 50 34 54 33 58" fill="none" stroke="#5a4118" stroke-width="4.2" stroke-linecap="round"/>
       <path d="M25 58 l-3 2 M25 58 l0 3 M25 58 l3 2 M33 58 l-3 2 M33 58 l0 3 M33 58 l3 2" fill="none" stroke="#5a4118" stroke-width="1.3" stroke-linecap="round"/>
@@ -112,17 +112,17 @@
             fill="none" stroke="#5a4118" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
       <!-- barbe de queue -->
       <path d="M47 41 l-3.5 -1 l1.5 3 l-3 1.5 l4.5 1.5 Z" fill="#5a4118"/>
-      <!-- quatre pattes griffues -->
-      <path d="M21 32 C20 38 20 44 21 49 M28 33 C28 39 28 45 28 50 M38 33 C39 39 40 45 41 50 M45 34 C47 40 48 45 48 50" fill="none" stroke="#5a4118" stroke-width="3.6" stroke-linecap="round"/>
-      <path d="M21 49 l-2.5 2 M21 49 l0.5 2.8 M21 49 l2.5 2 M28 50 l-2.5 2 M28 50 l0 2.8 M28 50 l2.5 2 M41 50 l-2.5 2 M41 50 l0 2.8 M41 50 l2.5 2 M48 50 l-2.5 2 M48 50 l0 2.8 M48 50 l2.5 2" fill="none" stroke="#5a4118" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- quatre pattes griffues, posture décalée (marche) -->
+      <path d="M20 31 C17 36 16 41 18 47 M26 33 C27 38 28 44 27 49 M38 33 C37 38 36 44 38 49 M45 34 C48 39 49 45 47 50" fill="none" stroke="#5a4118" stroke-width="3.6" stroke-linecap="round"/>
+      <path d="M18 47 l-2.5 2 M18 47 l0 2.8 M18 47 l2.5 2 M27 49 l-2.5 2 M27 49 l0 2.8 M27 49 l2.5 2 M38 49 l-2.5 2 M38 49 l0 2.8 M38 49 l2.5 2 M47 50 l-2.5 2 M47 50 l0 2.8 M47 50 l2.5 2" fill="none" stroke="#5a4118" stroke-width="1.2" stroke-linecap="round"/>
       <!-- cou + tête reptilienne en avant, gueule ouverte, langue -->
       <path d="M15 30 C11 28 8 26 8 22" fill="none" stroke="#5a4118" stroke-width="4.4" stroke-linecap="round"/>
       <path d="M11 22 Q8 14 3 16 L2 18 L5 19 L1 20 L5 21 L2 23 L6 23 Q10 25 12 22 Z" fill="#5a4118" stroke="#5a4118" stroke-width="0.5" stroke-linejoin="round"/>
       <path d="M2 20 L-1 20" fill="none" stroke="#a9884a" stroke-width="1.2" stroke-linecap="round"/>
       <path d="M8 16 L11 11 L10 16.5 Z M10 16.5 L13.5 12 L11.5 17 Z" fill="#5a4118"/>
       <circle cx="7" cy="18" r="1.1" fill="#a9884a"/>
-      <!-- écailles dorsales -->
-      <path d="M22 27 l1.5 -2.5 M28 27 l1.5 -2.5 M34 28 l1.5 -2.5" fill="none" stroke="#8c7a55" stroke-width="0.9"/>
+      <!-- crête dorsale (épines) -->
+      <path d="M22 26 l1.4 -3 l1.4 3 Z M28 26 l1.4 -3 l1.4 3 Z M34 27 l1.4 -3 l1.4 3 Z" fill="#5a4118"/>
     </symbol>
 
     <!-- DRAGON 3 — serpentin ailé (corps en S, graphique) -->
