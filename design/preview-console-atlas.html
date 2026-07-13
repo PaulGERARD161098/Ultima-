@@ -135,7 +135,7 @@
   }
   .quadrant .ouvrir, .quadrant .pastille-venir { display: inline-flex; }
 
-  /* État ACTIF (TRAVELLER) : lien, double liseré or, chevron « Ouvrir » */
+  /* État ACTIF (TRAVELER) : lien, double liseré or, chevron « Ouvrir » */
   a.quadrant.actif { transition: transform 140ms ease, box-shadow 140ms ease; }
   a.quadrant.actif:hover {
     transform: translateY(-2px);
@@ -186,9 +186,9 @@
   <main>
     <ul class="grille" role="list">
       <li>
-        <a class="quadrant actif" href="#traveller">
+        <a class="quadrant actif" href="#traveler">
           <span class="embleme" aria-hidden="true">
-            <!-- TRAVELLER : rose des vents + routes du réseau -->
+            <!-- TRAVELER : rose des vents + routes du réseau -->
             <svg viewBox="0 0 64 64" width="60" height="60" role="img" aria-label="">
               <circle cx="32" cy="32" r="27" fill="none" stroke="#5a4118" stroke-width="1.6"/>
               <circle cx="32" cy="32" r="21" fill="none" stroke="#a9884a" stroke-width="0.9"/>
@@ -207,7 +207,7 @@
             </svg>
           </span>
           <span class="corps">
-            <span class="code">TRAVELLER<span class="role">Réseau commercial</span></span>
+            <span class="code">TRAVELER<span class="role">Réseau commercial</span></span>
             <span class="devise">Artisans, partenaires, leads, chantiers et relations &mdash; la carte du royaume.</span>
             <span class="ouvrir">Ouvrir le quadrant
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4 L16 12 L8 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>

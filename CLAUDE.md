@@ -6,7 +6,7 @@ Fermer la boucle complète **« construire sécurisé → auditer → patcher le
 failles → améliorer l'UX »** sur **Ultima**, devenue depuis le 2026-07-12 la
 **plateforme personnelle de Paul en console à 4 quadrants** (cadrage complet :
 `CADRAGE-CONSOLE.md`), pilotée par la seule Léo :
-- **TRAVELLER** — le réseau commercial (artisans, partenaires, leads, chantiers
+- **TRAVELER** — le réseau commercial (artisans, partenaires, leads, chantiers
   + relations) : l'acquis historique d'Ultima, désormais un quadrant.
 - **BCP** — pilotage financier (revenus/charges, prévision d'impôts, échéancier).
 - **ADRAMELECH** — bibliothèque d'idées (capturer, classer, rapprocher, enrichir).

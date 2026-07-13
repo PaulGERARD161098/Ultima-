@@ -13,7 +13,7 @@ Ultima devient une **plateforme personnelle en console à 4 quadrants**
 - **Bandeau** « Bienvenue sur Ultima ».
 - **Invite** « sur quoi on travaille aujourd'hui ? ».
 - **4 quadrants** (noms de code figés, écrits par Paul) :
-  - **TRAVELLER** — le réseau commercial (artisans, partenaires, leads,
+  - **TRAVELER** — le réseau commercial (artisans, partenaires, leads,
     chantiers + relations). C'est **l'app actuelle** (onglets Accueil / Arbre /
     Carte / Contacts) rangée sous son quadrant → seul quadrant **ACTIF** en C1
     (le clic mène à l'app existante).
@@ -58,7 +58,7 @@ lisibilité, de l'accessibilité ni de la sécurité.
   décor en `aria-hidden`. Cible tactile ≥ 44 px.
 - **Responsive** : mobile d'abord (1 colonne empilée) → 2×2 dès ~720 px.
   Aucun scroll horizontal à aucune largeur.
-- **Distinction d'état claire** : TRAVELLER (actif) vs les 3 « à venir » doit se
+- **Distinction d'état claire** : TRAVELER (actif) vs les 3 « à venir » doit se
   lire au premier coup d'œil SANS dépendre de la seule couleur (forme, mention
   texte, opacité + libellé « à venir »).
 
@@ -71,7 +71,7 @@ selon une intention distincte, pour que le choix de Paul soit un vrai choix.
   ancien. Bandeau-cartouche « Bienvenue sur Ultima » gravé en tête, l'invite en
   sous-titre à l'encre, puis 4 grandes **cartouches-quadrants** en grille 2×2,
   chacune avec son nom, une courte devise/description et une **vignette-emblème
-  gravée** (SVG inline sobre : p.ex. TRAVELLER = rose des vents / réseau de
+  gravée** (SVG inline sobre : p.ex. TRAVELER = rose des vents / réseau de
   routes ; BCP = balance / colonnes de comptes ; ADRAMELECH = lampe-à-huile /
   livre ouvert ; IMLADRIK = étoile polaire / laurier). Riche, chaleureux.
 
@@ -102,6 +102,6 @@ selon une intention distincte, pour que le choix de Paul soit un vrai choix.
 - Ouverture réelle des 3 previews (harnais navigateur `tests/`), zéro requête
   réseau, zéro erreur console.
 - Contraste mesuré sur le corps de texte de chaque preview (≥ 4.5:1, viser 7:1).
-- État TRAVELLER-actif vs 3-à-venir lisible sans couleur seule.
+- État TRAVELER-actif vs 3-à-venir lisible sans couleur seule.
 - Cohérence stricte avec les tokens R1 (aucune couleur inventée hors palette).
 - Responsive : pas de scroll-X de 320 px à 1440 px ; 2×2 au-delà de ~720 px.

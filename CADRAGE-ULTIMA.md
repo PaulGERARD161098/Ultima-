@@ -209,9 +209,9 @@
   `design/spec-arbre-responsive.md`.
 - ✅ **PIVOT PLATEFORME — cadrage acté (2026-07-12)** : dicté par Paul, tournant
   majeur. Ultima devient sa **plateforme personnelle en console à 4 quadrants**
-  (TRAVELLER réseau · BCP finances · ADRAMELECH idées · IMLADRIK dév. perso),
+  (TRAVELER réseau · BCP finances · ADRAMELECH idées · IMLADRIK dév. perso),
   pilotée par la seule Léo (désormais **féminine**), un repo, mémoire
-  inter-segment. Le réseau existant (v1→A4) devient le quadrant TRAVELLER — rien
+  inter-segment. Le réseau existant (v1→A4) devient le quadrant TRAVELER — rien
   de jeté. Livré en **cadrage pur** (zéro code produit) : `CADRAGE-CONSOLE.md`
   (console, 4 quadrants, sécurité relevée §5, carte agents/skills §7, roadmap
   C0→C5 §8, risques RC1-RC5, arbitrages §10). Mémoire implantée (journal, profil,
@@ -228,7 +228,7 @@
   validés). Registre antique, tokens R1, 0 réseau, AA ~10:1, contre-passe Léo +
   captures. Référence définitive : `design/preview-console-atlas-v5.html`
   (4 emblèmes figés). **Build de production CADRÉ** dans `design/spec-c1-build.md`
-  (routage console↔TRAVELLER via `activerOnglet`, zéro régression, harnais
+  (routage console↔TRAVELER via `activerOnglet`, zéro régression, harnais
   `smoke-console.mjs`, chaîne ux→front-carto→contre-passe). ⏳ **Build NON lancé**
   — Ultima mis en pause par Paul après validation de l'Atlas. **Reprise :
   déclencheur « go build ».**

@@ -19,7 +19,7 @@
 | le projet « tantot » | le projet [créé] tantôt (= le projet Supabase existant) |
 | Adam Elesh, à Dramalèche, Adramalèche | ADRAMELECH (quadrant idées) |
 | Humladric, Imladric, Imladrik | IMLADRIK (quadrant dév. perso) |
-| Traveller, Traveler | TRAVELLER (quadrant réseau) |
+| Traveler, Traveler | TRAVELER (quadrant réseau) |
 | directive EB, macro-directive | discipline : boucler avant d'avancer + capitaliser sur l'existant |
 | mon Starlog / Claude Normal | son journal de dév. perso dans l'app Claude standard (modèle d'IMLADRIK) |
 

@@ -11,7 +11,7 @@
 
 Faire de la console d'accueil l'**entrée de l'app** (après authentification),
 en **réutilisant** la maquette Atlas v5, **sans aucune régression** sur l'app
-existante (qui devient le quadrant TRAVELLER).
+existante (qui devient le quadrant TRAVELER).
 
 ## 2. Source visuelle (à porter, ne pas redessiner)
 
@@ -19,10 +19,10 @@ existante (qui devient le quadrant TRAVELLER).
 - Bandeau « Bienvenue sur Ultima » + invite « Sur quoi on travaille aujourd'hui ? ».
 - 4 quadrants en grille 2×2 qui remplit l'écran ; nom → rôle (sous le nom) → devise.
 - Emblèmes SVG inline **définitifs** (tokens R1, encre + or) :
-  - TRAVELLER = rose des vents/compas · BCP = balance ·
+  - TRAVELER = rose des vents/compas · BCP = balance ·
     ADRAMELECH = dragon en vol (réf. Paul, `.embleme--dragon` scale 1.32) ·
     IMLADRIK = épée pointe-bas + soleil flamboyant.
-- États : **TRAVELLER actif** (lien) ; BCP/ADRAMELECH/IMLADRIK **« à venir »**
+- États : **TRAVELER actif** (lien) ; BCP/ADRAMELECH/IMLADRIK **« à venir »**
   (boutons désactivés, cadre pointillé + pastille + emblème estompé 0,55).
 - Contrastes AA (corps ~10:1), 0 requête réseau, responsive sans scroll-X.
 
@@ -39,10 +39,10 @@ barre d'onglets. Le build s'insère ainsi :
 - **Nouvel espace `#espace-console`** (l'Atlas), et une entrée console dans le
   routage. Après auth, la **vue par défaut = la console** (remplace l'arrivée
   actuelle sur l'Arbre).
-- **La barre d'onglets (Accueil/Arbre/Carte/Contacts) appartient à TRAVELLER** :
-  masquée quand la console est affichée, visible quand on est dans TRAVELLER.
-- **Quadrant TRAVELLER (clic/entrée)** → ouvre l'espace de travail TRAVELLER
-  (affiche la barre d'onglets + la vue TRAVELLER par défaut = l'Arbre, décision
+- **La barre d'onglets (Accueil/Arbre/Carte/Contacts) appartient à TRAVELER** :
+  masquée quand la console est affichée, visible quand on est dans TRAVELER.
+- **Quadrant TRAVELER (clic/entrée)** → ouvre l'espace de travail TRAVELER
+  (affiche la barre d'onglets + la vue TRAVELER par défaut = l'Arbre, décision
   A3 conservée). Les 3 autres quadrants sont inertes (« à venir »).
 - **Retour à la console** : une affordance persistante et accessible (ex. le
   cartouche/monogramme « Ultima » de l'entête, ou un contrôle « ◊ Console »),
@@ -67,12 +67,12 @@ barre d'onglets. Le build s'insère ainsi :
 ## 5. Patrimoine (obligatoire, charte)
 
 - **Nouveau harnais** `tests/smoke-console.mjs` : la console s'affiche connecté,
-  les 4 quadrants présents, TRAVELLER seul actif (focusable) vs 3 boutons
-  « à venir » désactivés, clic TRAVELLER → barre d'onglets + Arbre, retour
+  les 4 quadrants présents, TRAVELER seul actif (focusable) vs 3 boutons
+  « à venir » désactivés, clic TRAVELER → barre d'onglets + Arbre, retour
   console OK, 0 scroll-X (320→1440), 0 requête réseau, 0 erreur console,
   contraste bandeau/corps mesuré.
 - **Tous les harnais existants restent verts** (`bash tests/lancer.sh`) —
-  non-régression des flux TRAVELLER.
+  non-régression des flux TRAVELER.
 
 ## 6. Sécurité / accessibilité (rappels)
 
@@ -83,7 +83,7 @@ barre d'onglets. Le build s'insère ainsi :
 
 ## 7. Chaîne d'exécution (à la reprise, sur « go build »)
 
-1. `interface-ux` : spec fine du parcours console↔TRAVELLER (affordance de
+1. `interface-ux` : spec fine du parcours console↔TRAVELER (affordance de
    retour, wording, états, focus) — déposée en fichier.
 2. `front-carto` : implémentation (port Atlas v5 + routage), commit atomique.
 3. Contre-passe **indépendante** : `securite-auditeur` (RB5/auth/CSP/inert) +

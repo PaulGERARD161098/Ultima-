@@ -133,7 +133,7 @@
   Ultima » + « sur quoi on travaille aujourd'hui ? » + **4 quadrants** cliquables.
   Un seul pilote (Léo), un seul repo, **mémoire inter-segment**. Les 4 outils
   (noms de code **confirmés par écrit** par Paul) :
-  ① **TRAVELLER** — le réseau (absorbe tout l'acquis : arbre, carte, contacts,
+  ① **TRAVELER** — le réseau (absorbe tout l'acquis : arbre, carte, contacts,
   relations, journal, relances) + un agent de liaison de contacts productif ;
   ② **BCP** — pilotage financier long terme (upload bulletins/factures, revenus
   vs charges, mois par mois, prévision impôts, échéancier avec rappels) ;
