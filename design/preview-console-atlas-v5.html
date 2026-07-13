@@ -121,6 +121,9 @@
     flex: none; width: clamp(88px, 9vw, 116px); height: clamp(88px, 9vw, 116px);
   }
   .quadrant .embleme svg { width: 100%; height: 100%; display: block; }
+  /* Dragon ADRAMELECH agrandi (demande Paul) : tracé aérien → grossi via scale,
+     sans toucher au layout des autres cartes (transform ne change pas la boîte). */
+  .quadrant .embleme--dragon svg { transform: scale(1.32); transform-origin: 50% 50%; }
   .quadrant .corps { flex: 1; min-width: 0; }
   .quadrant .code {
     display: block;
@@ -256,7 +259,7 @@
 
       <li>
         <button class="quadrant" type="button" disabled>
-          <span class="embleme" aria-hidden="true">
+          <span class="embleme embleme--dragon" aria-hidden="true">
             <!-- ADRAMELECH : dragon stylisé vu de face (réf. Paul) — cornes balayées,
                  ailes festonnées, longue queue ondulante. Trait or + cerne encre pour tenir sur parchemin. -->
             <svg viewBox="0 0 64 64" width="60" height="60" aria-hidden="true" focusable="false">
