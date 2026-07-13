@@ -1,0 +1,305 @@
+<!doctype html>
+<!--
+  Preview C1 — Direction A « Atlas / frontispice »
+  Intention : la console est la page-titre d'un atlas ancien. Bandeau-cartouche
+  « Bienvenue sur Ultima » gravé en tête, invite à l'encre en sous-titre, puis
+  4 grandes cartouches-quadrants en grille 2×2, chacune avec emblème gravé,
+  nom et courte devise. Riche et chaleureux.
+  Choix couleurs/contrastes (tokens R1 uniquement) : corps de texte en
+  --encre-sepia #3b2f1c sur --parchemin-carte #efe3c6 ≈ 10,2:1 (bien au-delà de
+  7:1). Cartes « à venir » : texte muté --encre-sepia-douce #6a5636 (5,5:1),
+  emblème estompé + pastille « à venir » + cadre pointillé → distinction d'état
+  portée par la forme et le libellé, jamais par la seule couleur.
+-->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0e3a52">
+<title>Ultima — Preview · Console (Atlas)</title>
+<style>
+  :root {
+    --parchemin: #f6eed9;
+    --parchemin-carte: #efe3c6;
+    --parchemin-ombre: #e3d3ab;
+    --encre-sepia: #3b2f1c;
+    --encre-sepia-douce: #6a5636;
+    --encre-deco: #8c7a55;
+    --cerne-carte: #5a4118;
+    --or-antique: #a9884a;
+    --mer-profonde: #0e3a52;
+    --mer-claire: #17506b;
+    --accent-focus: #17578f;
+    --police-ancienne: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--police-ancienne);
+    color: var(--encre-sepia);
+    background:
+      radial-gradient(ellipse at 50% 16%, rgba(255,250,235,0.55), rgba(0,0,0,0) 58%),
+      linear-gradient(#f6eed9, #efe3c6 68%, #e3d3ab);
+    display: flex; flex-direction: column;
+    min-height: 100%;
+  }
+  /* Grain léger du parchemin (data-URI, réutilisé de l'arbre) */
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none;
+    z-index: 0; opacity: 0.32;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='%238c7a55' fill-opacity='0.08'%3E%3Ccircle cx='17' cy='23' r='1'/%3E%3Ccircle cx='64' cy='9' r='0.8'/%3E%3Ccircle cx='102' cy='41' r='1'/%3E%3Ccircle cx='36' cy='74' r='0.8'/%3E%3Ccircle cx='83' cy='96' r='1'/%3E%3Ccircle cx='9' cy='108' r='0.8'/%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* ---------- Bandeau mer + cartouche ---------- */
+  .entete {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column; align-items: center; gap: 0.55rem;
+    padding: 1.4rem 1rem 1.2rem;
+    text-align: center;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='60'%3E%3Cpath d='M0,30 q17,-10 35,0 t35,0 t35,0 t35,0' fill='none' stroke='%238fc2d4' stroke-opacity='0.16' stroke-width='1.2'/%3E%3Cpath d='M0,52 q17,-8 35,0 t35,0 t35,0 t35,0' fill='none' stroke='%238fc2d4' stroke-opacity='0.10' stroke-width='1'/%3E%3C/svg%3E"),
+      linear-gradient(180deg, var(--mer-claire), var(--mer-profonde));
+    border-bottom: 2px solid var(--or-antique);
+    box-shadow: 0 3px 10px rgba(0,10,20,0.35);
+  }
+  .cartouche {
+    position: relative;
+    padding: 0.55rem 2.4rem 0.6rem;
+    background: linear-gradient(#f4e6bd, #e3cd93);
+    border: 2px solid #6e5320; border-radius: 4px;
+    box-shadow: inset 0 0 0 3px #f4e6bd, inset 0 0 0 4px var(--or-antique),
+                0 2px 6px rgba(0,10,20,0.4);
+  }
+  .cartouche::before, .cartouche::after {
+    content: "\2766"; position: absolute; top: 50%; transform: translateY(-52%);
+    color: #6e5320; font-size: 1rem;
+  }
+  .cartouche::before { left: 0.6rem; }
+  .cartouche::after { right: 0.6rem; }
+  .cartouche h1 {
+    font-size: clamp(1.35rem, 5.5vw, 2rem); font-weight: 700; line-height: 1.1;
+    letter-spacing: 0.12em; text-indent: 0.12em; color: #4a3512;
+    text-shadow: 0 1px 0 #fff6dd;
+  }
+  .invite {
+    max-width: 34ch;
+    font-size: clamp(0.98rem, 3vw, 1.18rem);
+    font-style: italic; line-height: 1.4;
+    color: #f2e8cd;
+    text-shadow: 0 1px 2px rgba(0,10,20,0.55);
+  }
+
+  /* ---------- Grille des quadrants ---------- */
+  main {
+    position: relative; z-index: 1; flex: 1;
+    width: 100%; max-width: 940px; margin: 0 auto;
+    padding: 1.5rem 1rem calc(2rem + env(safe-area-inset-bottom));
+  }
+  .grille {
+    list-style: none;
+    display: grid; grid-template-columns: 1fr; gap: 1.1rem;
+  }
+  @media (min-width: 720px) {
+    .grille { grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+  }
+
+  /* Carte-quadrant (base commune) */
+  .quadrant {
+    display: flex; gap: 1rem; align-items: flex-start;
+    min-height: 132px;
+    padding: 1.15rem 1.2rem;
+    text-align: left; text-decoration: none;
+    font-family: inherit; color: var(--encre-sepia);
+    background: linear-gradient(#f7efd9, #efe3c6);
+    border: 2px solid var(--or-antique); border-radius: 8px;
+    box-shadow: inset 0 0 0 3px #f7efd9, 0 4px 12px rgba(58,42,16,0.16);
+  }
+  .quadrant .embleme {
+    flex: none; width: 60px; height: 60px;
+  }
+  .quadrant .corps { flex: 1; min-width: 0; }
+  .quadrant .code {
+    display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap;
+    font-size: 1.28rem; font-weight: 700;
+    letter-spacing: 0.09em; color: #4a3512;
+  }
+  .quadrant .role {
+    display: block; margin-top: 0.15rem;
+    font-size: 0.82rem; font-variant: small-caps; letter-spacing: 0.14em;
+    color: var(--encre-sepia-douce);
+  }
+  .quadrant .devise {
+    display: block;
+    margin-top: 0.55rem; font-size: 0.98rem; line-height: 1.45;
+    color: var(--encre-sepia);
+  }
+  .quadrant .ouvrir, .quadrant .pastille-venir { display: inline-flex; }
+
+  /* État ACTIF (TRAVELLER) : lien, double liseré or, chevron « Ouvrir » */
+  a.quadrant.actif { transition: transform 140ms ease, box-shadow 140ms ease; }
+  a.quadrant.actif:hover {
+    transform: translateY(-2px);
+    box-shadow: inset 0 0 0 3px #f7efd9, 0 8px 18px rgba(58,42,16,0.24);
+  }
+  a.quadrant.actif:focus-visible {
+    outline: 3px solid var(--accent-focus); outline-offset: 3px;
+  }
+  .ouvrir {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    margin-top: 0.7rem;
+    font-size: 0.86rem; font-variant: small-caps; letter-spacing: 0.1em;
+    font-weight: 700; color: var(--cerne-carte);
+  }
+  .ouvrir svg { width: 0.9em; height: 0.9em; }
+
+  /* État À VENIR : bouton désactivé, cadre pointillé, pastille, emblème estompé */
+  button.quadrant {
+    width: 100%; cursor: not-allowed;
+    background: linear-gradient(#f3ecda, #eaddc0);
+    border-style: dashed; border-color: var(--encre-deco);
+    box-shadow: none;
+  }
+  button.quadrant .embleme { opacity: 0.55; }
+  button.quadrant .code { color: var(--encre-sepia-douce); }
+  .pastille-venir {
+    display: inline-block; margin-top: 0.7rem;
+    padding: 0.16rem 0.6rem;
+    font-size: 0.74rem; font-variant: small-caps; letter-spacing: 0.16em;
+    font-weight: 700; color: #ffffff;
+    background: var(--cerne-carte);
+    border-radius: 999px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    a.quadrant.actif { transition: none; }
+    a.quadrant.actif:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="entete">
+    <div class="cartouche"><h1>Bienvenue sur Ultima</h1></div>
+    <p class="invite">Sur quoi on travaille aujourd&rsquo;hui&nbsp;?</p>
+  </header>
+
+  <main>
+    <ul class="grille" role="list">
+      <li>
+        <a class="quadrant actif" href="#traveller">
+          <span class="embleme" aria-hidden="true">
+            <!-- TRAVELLER : rose des vents + routes du réseau -->
+            <svg viewBox="0 0 64 64" width="60" height="60" role="img" aria-label="">
+              <circle cx="32" cy="32" r="27" fill="none" stroke="#5a4118" stroke-width="1.6"/>
+              <circle cx="32" cy="32" r="21" fill="none" stroke="#a9884a" stroke-width="0.9"/>
+              <path d="M32 6 L36 30 L32 34 L28 30 Z" fill="#5a4118"/>
+              <path d="M32 58 L36 34 L32 30 L28 34 Z" fill="#8c7a55"/>
+              <path d="M6 32 L30 28 L34 32 L30 36 Z" fill="#8c7a55"/>
+              <path d="M58 32 L34 28 L30 32 L34 36 Z" fill="#8c7a55"/>
+              <circle cx="32" cy="32" r="3" fill="#a9884a" stroke="#5a4118" stroke-width="1"/>
+              <g fill="#5a4118">
+                <circle cx="14" cy="15" r="2.2"/><circle cx="50" cy="17" r="2.2"/>
+                <circle cx="16" cy="50" r="2.2"/><circle cx="49" cy="49" r="2.2"/>
+              </g>
+              <g stroke="#8c7a55" stroke-width="1" stroke-dasharray="2 2" fill="none">
+                <path d="M14 15 L32 32 L50 17 M16 50 L32 32 L49 49"/>
+              </g>
+            </svg>
+          </span>
+          <span class="corps">
+            <span class="code">TRAVELLER<span class="role">Réseau commercial</span></span>
+            <span class="devise">Artisans, partenaires, leads, chantiers et relations &mdash; la carte du royaume.</span>
+            <span class="ouvrir">Ouvrir le quadrant
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4 L16 12 L8 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </span>
+        </a>
+      </li>
+
+      <li>
+        <button class="quadrant" type="button" disabled>
+          <span class="embleme" aria-hidden="true">
+            <!-- BCP : balance / colonnes de comptes -->
+            <svg viewBox="0 0 64 64" width="60" height="60" role="img" aria-label="">
+              <path d="M32 8 V50" stroke="#5a4118" stroke-width="2.2"/>
+              <path d="M14 18 H50" stroke="#5a4118" stroke-width="2.2"/>
+              <circle cx="32" cy="8" r="2.6" fill="#a9884a" stroke="#5a4118" stroke-width="1"/>
+              <path d="M14 18 L8 32 H20 Z" fill="none" stroke="#5a4118" stroke-width="1.6"/>
+              <path d="M50 18 L44 32 H56 Z" fill="none" stroke="#5a4118" stroke-width="1.6"/>
+              <path d="M14 18 V13 M50 18 V13" stroke="#8c7a55" stroke-width="1.2"/>
+              <path d="M22 50 H42 M18 54 H46" stroke="#5a4118" stroke-width="2.2" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="corps">
+            <span class="code">BCP<span class="role">Pilotage financier</span></span>
+            <span class="devise">Revenus, charges, prévision d&rsquo;imp&ocirc;ts et &eacute;ch&eacute;ancier.</span>
+            <span class="pastille-venir">&Agrave; venir</span>
+          </span>
+        </button>
+      </li>
+
+      <li>
+        <button class="quadrant" type="button" disabled>
+          <span class="embleme" aria-hidden="true">
+            <!-- ADRAMELECH : dragon héraldique enroulé (gardien des idées), gravé à l'encre -->
+            <svg viewBox="0 0 64 64" width="60" height="60" aria-hidden="true" focusable="false">
+              <!-- aile déployée : membrane or, nervures encre -->
+              <path d="M36 24 Q47 9 58 11 Q51 15 54 19 Q46 17 49 23 Q41 20 44 27 Q39 24 36 24 Z"
+                    fill="#a9884a" fill-opacity="0.9" stroke="#5a4118" stroke-width="1.3" stroke-linejoin="round"/>
+              <path d="M37 25 L52 13 M37 25 L48 20 M37 25 L44 25" fill="none" stroke="#5a4118" stroke-width="0.9"/>
+              <!-- corps enroulé : spirale gravée, gueule vers le haut -->
+              <path d="M30 19 C45 18 51 31 45 41 C40 51 26 52 21 44 C17 38 22 31 30 32 C36 33 37 39 34 40.5"
+                    fill="none" stroke="#5a4118" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- tête de profil, gueule ouverte -->
+              <path d="M31 21 Q27 12 18 13 L11 14 L16 17 L10 20 L17 20 Q24 23 31 21 Z"
+                    fill="#5a4118" stroke="#5a4118" stroke-width="0.8" stroke-linejoin="round"/>
+              <!-- cornes recourbées vers l'arrière (ancrées dans le crâne) -->
+              <path d="M24 16 L29 8.5 L26.5 16.5 Z M26.6 16.5 L31 10.5 L28.6 17 Z" fill="#5a4118"/>
+              <!-- oeil -->
+              <circle cx="22" cy="16" r="1.3" fill="#a9884a"/>
+              <!-- pointe de queue en fer de lance (au coeur de la spire) -->
+              <path d="M34 40.5 l-3.4 2.2 l3.2 1 l0.4 3.4 l2.6 -3.6 Z" fill="#5a4118" stroke="#5a4118" stroke-width="0.5" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="corps">
+            <span class="code">ADRAMELECH<span class="role">Biblioth&egrave;que d&rsquo;id&eacute;es</span></span>
+            <span class="devise">Capturer, classer et rapprocher les id&eacute;es.</span>
+            <span class="pastille-venir">&Agrave; venir</span>
+          </span>
+        </button>
+      </li>
+
+      <li>
+        <button class="quadrant" type="button" disabled>
+          <span class="embleme" aria-hidden="true">
+            <!-- IMLADRIK : épée de chevalier pointée vers le bas + soleil rayonnant (l'aspiration) -->
+            <svg viewBox="0 0 64 64" width="60" height="60" aria-hidden="true" focusable="false">
+              <!-- soleil rayonnant (derrière) : 6 rayons longs + 6 courts -->
+              <g stroke="#5a4118" stroke-width="1.3" stroke-linecap="round">
+                <path d="M39.5 22 L46.5 22 M35.75 15.5 L39.25 9.4 M28.25 15.5 L24.75 9.4 M24.5 22 L17.5 22 M28.25 28.5 L24.75 34.6 M35.75 28.5 L39.25 34.6"/>
+                <path d="M38.5 18.25 L41.96 16.25 M32 14.5 L32 10.5 M25.5 18.25 L22.04 16.25 M25.5 25.75 L22.04 27.75 M32 29.5 L32 33.5 M38.5 25.75 L41.96 27.75"/>
+              </g>
+              <circle cx="32" cy="22" r="7" fill="#a9884a" stroke="#5a4118" stroke-width="1.4"/>
+              <!-- épée : pommeau, fusée, quillons, lame vers le bas -->
+              <path d="M32 4 L34.2 6.6 L32 9.2 L29.8 6.6 Z" fill="#a9884a" stroke="#5a4118" stroke-width="1"/>
+              <path d="M30.5 9.2 H33.5 V17 H30.5 Z" fill="#5a4118"/>
+              <path d="M30.5 11.4 H33.5 M30.5 13.6 H33.5 M30.5 15.8 H33.5" stroke="#efe3c6" stroke-width="0.7"/>
+              <path d="M21 18 Q22 15 25 16 L39 16 Q42 15 43 18 Q42 19.6 39 18.9 L25 18.9 Q22 19.6 21 18 Z"
+                    fill="#5a4118" stroke="#5a4118" stroke-width="0.6" stroke-linejoin="round"/>
+              <circle cx="32" cy="17.4" r="1.7" fill="#a9884a" stroke="#5a4118" stroke-width="0.8"/>
+              <path d="M29.4 19 H34.6 L32.6 52 L32 57.5 L31.4 52 Z" fill="#5a4118" stroke="#5a4118" stroke-width="0.5" stroke-linejoin="round"/>
+              <path d="M32 20.5 L32 51" stroke="#8c7a55" stroke-width="0.9"/>
+            </svg>
+          </span>
+          <span class="corps">
+            <span class="code">IMLADRIK<span class="role">D&eacute;veloppement personnel</span></span>
+            <span class="devise">Objectifs, journal, valeurs et culture.</span>
+            <span class="pastille-venir">&Agrave; venir</span>
+          </span>
+        </button>
+      </li>
+    </ul>
+  </main>
+
+</body>
+</html>
