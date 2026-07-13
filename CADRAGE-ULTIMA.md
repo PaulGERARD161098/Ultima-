@@ -220,6 +220,25 @@
   Paul veut voir en premier. **Arbitrages ouverts (décisions Paul)** : ordre des
   quadrants (reco : le moins dépendant d'un service externe d'abord) ; niveau de
   chiffrement au repos BCP/IMLADRIK ; périmètre v1 par quadrant.
+- 🟡 **Boucle C1 — console d'accueil : previews VALIDÉES (2026-07-13)** — ouverte
+  en previews-d'abord. 3 directions livrées (Atlas / Boussole / Registre), Paul
+  choisit **Atlas**. Emblèmes itérés v1→v5 sur PR #39 (dragon retravaillé
+  plusieurs fois : lampe→spire→dressé→vol→libellule rejeté→**dragon en vol
+  d'après réf. image de Paul**, agrandi scale 1.32 ; épée + **soleil flamboyant**
+  validés). Registre antique, tokens R1, 0 réseau, AA ~10:1, contre-passe Léo +
+  captures. Référence définitive : `design/preview-console-atlas-v5.html`
+  (4 emblèmes figés). **Build de production CADRÉ** dans `design/spec-c1-build.md`
+  (routage console↔TRAVELLER via `activerOnglet`, zéro régression, harnais
+  `smoke-console.mjs`, chaîne ux→front-carto→contre-passe). ⏳ **Build NON lancé**
+  — Ultima mis en pause par Paul après validation de l'Atlas. **Reprise :
+  déclencheur « go build ».**
+- ✅ **Outillage « sobriété tokens » (2026-07-13)** — réponse à « on brûle trop
+  de tokens ». Constat honnête : aucune skill externe de réduction de tokens
+  n'existe au registre. Deux vrais leviers installés : `.claude/settings.json`
+  (allowlist de permissions **en lecture seule** → supprime les allers-retours de
+  permission) + skill maison `.claude/skills/sobriete-tokens/` (7 réflexes :
+  sous-agents pour gros volumes, lectures ciblées, jamais de re-scan, syntheses
+  seules). PR #39.
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 

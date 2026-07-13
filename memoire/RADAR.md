@@ -162,3 +162,28 @@
   étaler des choix. ⑤ Les 2 réserves cosmétiques de l'arbre responsive
   (re-render idempotent au 1ᵉʳ resize ; `data-palier` non nettoyé en état
   vide) sont un **vivier de polissage zéro-défaut** si une passe UX repasse.
+
+## Rétrospective 2026-07-13 (reprise — C1 previews + sobriété tokens)
+
+- **Emblème figuratif = demander une référence TÔT.** Le dragon a coûté 5
+  itérations (spire → dressé → vol → libellule → planche → réf. image) avant que
+  Paul fournisse une image « mets exactement ça » qui a tout débloqué. Leçon :
+  pour un symbole figuratif précis (créature, objet identifiable), proposer dès
+  le 2ᵉ aller-retour soit une **planche d'options**, soit **demander une image
+  de référence** — ne pas enchaîner les descriptions verbales. Corollaire
+  confirmé : une créature **vue de face symétrique se lit comme un insecte**
+  (« libellule ») ; le profil ou une longue queue ondulante lèvent le doute.
+- **Chaque relance d'agent graphisme coûtait ~100-210k tokens.** Sur la dernière
+  retouche (« dragon plus grand »), Léo a fait le **scale CSS elle-même** (edit
+  ciblé + 1 capture de contrôle) au lieu de relancer l'agent — application
+  directe de la skill `sobriete-tokens`. À reproduire : les micro-ajustements
+  géométriques/CSS ne justifient pas un agent.
+- **Vercel « Building/Ready » ×2 par push** reconfirmé bruit informatif (déjà au
+  radar) — ignoré en boucle sans réponse à Paul.
+- **Sobriété tokens outillée** (`.claude/settings.json` allowlist lecture seule +
+  skill `sobriete-tokens`) : la discipline est désormais un actif du repo, pas
+  seulement un principe de charte. Vérifier à l'usage qu'elle réduit vraiment les
+  prompts de permission (radar : à confirmer prochaine session).
+- **Confirmé** : Paul valide en bloc et par petits messages dictés courts
+  (« ok atlas », « go pour A », « sinon ok ») → la valeur de Léo = livrer un
+  rendu à regarder + un choix net, itérer vite, capturer avant d'envoyer.

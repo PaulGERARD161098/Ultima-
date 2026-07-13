@@ -171,3 +171,22 @@
   **Arbre responsive en largeur** (paliers 3→6 col), **validé tel quel** par
   Paul (« je valide ainsi »). Reste esthétique non tranché : sous-titre du
   cartouche à 4,594:1 (AA mais marge fine) — micro-arbitrage laissé ouvert.
+- **2026-07-13 (reprise — C1 previews console + sobriété tokens)** — ① Reprise
+  après le pivot plateforme (#37) : Paul ouvre **C1 — la console** en
+  previews-d'abord. 3 directions livrées (Atlas / Boussole / Registre) → Paul
+  choisit **Atlas** (« go pour A »). ② **Emblèmes** longuement itérés (v1→v5) :
+  Paul veut dragon pour ADRAMELECH, épée+soleil pour IMLADRIK ; le dragon passe
+  par spire → dressé → **vol vu de face rejeté (« fait libellule »)** → planche
+  de 3 profils → puis Paul fournit **une image de référence** (« mets exactement
+  ça ») = dragon en vol stylisé à longue queue ondulante → reproduit fidèlement,
+  puis **agrandi** (« le dragon plus grand », scale 1.32). Épée + **soleil
+  flamboyant** validés. Décision couleur : réf. tout-or → rendu **encre + or**
+  pour tenir sur parchemin et à l'état estompé (Paul : « encre+or lisible » via
+  choix implicite « sinon ok »). ③ **Atlas v5 validé** (« ok atlas ») — 4
+  emblèmes figés, `preview-console-atlas-v5.html`. ④ Paul : « **cadre bien tout
+  pour le lancement du build, on arrête là pour le moment** » → build **cadré**
+  (`design/spec-c1-build.md`) mais **NON lancé** ; reprise sur « go build ». ⑤
+  En parallèle, « **on brûle trop de tokens** » → outillage **sobriété tokens**
+  (allowlist lecture seule `.claude/settings.json` + skill maison
+  `sobriete-tokens`) ; constat honnête : pas de skill externe à importer. Tout
+  sur PR #39 (draft).
