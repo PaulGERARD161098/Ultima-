@@ -199,3 +199,12 @@
   dragon · BCP = balance · IMLADRIK = étoile · Console = sceau ULTIMA. Sens
   figé, exécution visuelle (emblèmes gravés) laissée au graphisme. PR #41
   fusionnée sur go Paul (« merge et push »).
+- **2026-07-16 (directive EB — on boucle Adramelech)** — Paul rappelle EB
+  (boucler avant d'avancer) et demande de boucler ADRAMELECH. Léo distingue :
+  la boucle capture+carto+charte est close (PR #40/#41 mergées) ; « boucler le
+  quadrant » est une nouvelle boucle de construction qui, par EB même, s'ouvre
+  par un mini-cadrage. Livré : `adramelech/CADRAGE-ADRAMELECH.md` (cadrage pur).
+  v1 recommandé sans base ni gate (AD-1 générateur de carto depuis le registre,
+  AD-2 agent-idees + bilan, AD-3 sécurité du quadrant ; AD-4 base = report/gate).
+  Point sécurité (idées servies sans auth) résolu au cadrage. Décisions Paul en
+  attente : périmètre v1, option sécurité, ordre vs console C1.
