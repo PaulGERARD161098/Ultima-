@@ -17,7 +17,10 @@
 | Superbase | Supabase |
 | maître en relation | mettre en relation |
 | le projet « tantot » | le projet [créé] tantôt (= le projet Supabase existant) |
-| Adam Elesh, à Dramalèche, Adramalèche | ADRAMELECH (quadrant idées) |
+| Adam Elesh, à Dramalèche, Adramalèche, Adram Elech, Adramelèche | ADRAMELECH (quadrant idées) |
+| Florilège Didet | florilège d'idées |
+| Laurent Merlin | Leroy Merlin (enseigne de bricolage) |
+| ils sont des dix | (déformation — contexte : « attribue-lui un nom ») |
 | Humladric, Imladric, Imladrik | IMLADRIK (quadrant dév. perso) |
 | Traveller, Traveler | TRAVELLER (quadrant réseau) |
 | directive EB, macro-directive | discipline : boucler avant d'avancer + capitaliser sur l'existant |

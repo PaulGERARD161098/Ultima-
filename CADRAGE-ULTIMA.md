@@ -220,6 +220,14 @@
   Paul veut voir en premier. **Arbitrages ouverts (décisions Paul)** : ordre des
   quadrants (reco : le moins dépendant d'un service externe d'abord) ; niveau de
   chiffrement au repos BCP/IMLADRIK ; périmètre v1 par quadrant.
+- ✅ **ADRAMELECH — premières captures (2026-07-16)** : registre de capture
+  `adramelech/IDEES.md` ouvert (format prêt pour l'import en base à la boucle
+  ADRAMELECH). Deux idées dictées par Paul, nommées et enrichies :
+  **ADR-001 GLANEUR** (récupération invendus/rebuts bâtiment — tournée Leroy
+  Merlin, mise à la benne facturée aux artisans, entrepôt achat-revente ;
+  avec Godefroy) et **ADR-002 PROTÉE** (entreprise flexible bâtiment/énergie —
+  clim/PAC/photovoltaïque selon saisons et modes, équipes polyvalentes,
+  subventions captées proprement ; avec Julien). Lexique vocal enrichi.
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 
