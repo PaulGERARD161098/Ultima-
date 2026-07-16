@@ -220,3 +220,11 @@
   quadrant ADRAMELECH « noir en prod » en v1 (carto = artifact privé). Leçon
   RADAR : « tout fichier commité = servi » — la doc interne et la mémoire NE
   doivent jamais être sur la surface web sans garde.
+- **2026-07-16 (ADRAMELECH v1 AD-1/AD-2 — livré)** — sur « attaque AD-1 » puis
+  « attaque la suite » : AD-1 carto générée depuis le registre (générateur
+  déterministe, archipels par thème, ponts, zéro-perte ; PR #43 mergée sur
+  « c'est good pour moi ») ; AD-2 sous-agent agent-idees recruté + bilan chiffré
+  (dashboard statique) dans la carto. Chaque brique vérifiée indépendamment par
+  Léo (harnais + navigateur) avant commit. Boucle ADRAMELECH v1 (AD-0→AD-2)
+  complète. Reste AD-4 (base, gate). Points de goût laissés à Paul (granularité
+  thème, épigraphes du registre, ancrages data-driven) : validés « c'est good ».
