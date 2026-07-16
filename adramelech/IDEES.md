@@ -58,7 +58,7 @@ bâtiment**, en trois étages qui se nourrissent l'un l'autre :
 
 ### Liens inter-segments
 
-- **TRAVELLER** : Godefroy (partenaire pressenti) ; le réseau d'artisans
+- **TRAVELER** : Godefroy (partenaire pressenti) ; le réseau d'artisans
   d'Ultima est le vivier naturel des premiers clients « mise à la benne ».
 - **BCP** : à terme, structure à part — pilotage financier séparé.
 
@@ -110,7 +110,7 @@ n'est pas un produit unique mais la **vitesse de réaction** :
 
 ### Liens inter-segments
 
-- **TRAVELLER** : Julien (partenaire pressenti) ; le réseau fournit
+- **TRAVELER** : Julien (partenaire pressenti) ; le réseau fournit
   sous-traitants et apporteurs d'affaires.
 - **BCP** : à terme, structure à part — pilotage financier séparé.
 
@@ -170,7 +170,7 @@ impossible : le manquant se voit **avant** le jour de pose, pas dessus.
 
 ### Liens inter-segments
 
-- **TRAVELLER** : les chantiers sont déjà des nœuds du réseau — l'INTENDANT
+- **TRAVELER** : les chantiers sont déjà des nœuds du réseau — l'INTENDANT
   pourrait s'adosser à une fiche chantier existante plutôt que créer un
   silo ; les fournisseurs sont des contacts.
 - **ADR-001 GLANEUR** : les surplus de chantier détectés par l'INTENDANT
@@ -230,7 +230,7 @@ pas une prouesse technique. **À ne pas oublier.**
 
 ### Liens inter-segments
 
-- **TRAVELLER** : le cœur du mécanisme existe déjà — relances au bon moment
+- **TRAVELER** : le cœur du mécanisme existe déjà — relances au bon moment
   (journal/relances v2), leads et relations d'apport d'affaires ; MYCÉLIUM
   est la doctrine commerciale qui exploite cet outillage. Le lien
   parrain → filleul est une relation typée du réseau.

@@ -133,7 +133,7 @@
   Ultima » + « sur quoi on travaille aujourd'hui ? » + **4 quadrants** cliquables.
   Un seul pilote (Léo), un seul repo, **mémoire inter-segment**. Les 4 outils
   (noms de code **confirmés par écrit** par Paul) :
-  ① **TRAVELLER** — le réseau (absorbe tout l'acquis : arbre, carte, contacts,
+  ① **TRAVELER** — le réseau (absorbe tout l'acquis : arbre, carte, contacts,
   relations, journal, relances) + un agent de liaison de contacts productif ;
   ② **BCP** — pilotage financier long terme (upload bulletins/factures, revenus
   vs charges, mois par mois, prévision impôts, échéancier avec rappels) ;
@@ -171,3 +171,9 @@
   **Arbre responsive en largeur** (paliers 3→6 col), **validé tel quel** par
   Paul (« je valide ainsi »). Reste esthétique non tranché : sous-titre du
   cartouche à 4,594:1 (AA mais marge fine) — micro-arbitrage laissé ouvert.
+- **2026-07-16 (orthographe TRAVELER)** — Paul : « c'est TRAVELER avec un seul
+  L, je te l'avais déjà dit ». Correction appliquée partout (CLAUDE.md, cadrages,
+  mémoire, charte Léo, registre ADRAMELECH) ; lexique vocal mis à jour. Leçon :
+  la graphie avait été figée à deux L au cadrage console (RC5) sans retrouver
+  la consigne antérieure — les noms propres dictés se vérifient dans la mémoire
+  avant d'être figés.
