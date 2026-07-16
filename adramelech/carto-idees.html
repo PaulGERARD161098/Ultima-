@@ -184,6 +184,71 @@
   }
   .releve dd { margin: 0; }
 
+  /* ——— Cartouche de bilan (dashboard statique gravé) ——— */
+  section.bilan {
+    border: 1px solid var(--encre-claire);
+    outline: 1px solid var(--filet);
+    outline-offset: 4px;
+    padding: 1.5rem 1.75rem 1.7rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.35rem;
+  }
+  .bilan > h2 {
+    font-variant: small-caps;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    font-size: 1.4rem;
+    margin: 0;
+    text-align: center;
+  }
+  .bilan-cle {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .bilan-cle .tuile {
+    flex: 1 1 9rem;
+    min-width: 8.5rem;
+    text-align: center;
+    border: 1px solid var(--filet);
+    box-shadow: inset 0 0 0 3px var(--parchemin);
+    background: var(--ile);
+    padding: 0.95rem 0.75rem 0.85rem;
+  }
+  .bilan-cle .nombre {
+    display: block;
+    font-size: 2.15rem;
+    line-height: 1;
+    letter-spacing: 0.03em;
+    color: var(--encre);
+  }
+  .bilan-cle .etiquette {
+    display: block;
+    margin-top: 0.45rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--encre-pale);
+  }
+  .bilan-planches {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+    gap: 1.4rem;
+  }
+  .bilan-planches h3 {
+    font-variant: small-caps;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    font-size: 1rem;
+    margin: 0 0 0.7rem;
+    color: var(--encre-claire);
+    border-bottom: 1px solid var(--filet);
+    padding-bottom: 0.35rem;
+  }
+  .bilan-planches svg { display: block; width: 100%; height: auto; }
+
   footer.colophon {
     text-align: center;
     font-size: 0.88rem;
@@ -337,6 +402,36 @@
     </svg>
     <figcaption>Les routes en pointillé de cire relient les idées qui se nourrissent l’une l’autre ; les traits fins descendent vers l’acquis du réseau. Carte générée depuis le registre <code>adramelech/IDEES.md</code> par <code>generer-carto.mjs</code> — 4 idées, 2 archipels, aucune perdue.</figcaption>
   </figure>
+
+  <section class="bilan" aria-label="Bilan chiffré de l’archipel">
+    <h2>Bilan de l’archipel</h2>
+    <div class="bilan-cle">
+      <div class="tuile"><span class="nombre">4</span><span class="etiquette">idées levées</span></div>
+      <div class="tuile"><span class="nombre">2</span><span class="etiquette">archipels</span></div>
+      <div class="tuile"><span class="nombre">4</span><span class="etiquette">ponts de synergie</span></div>
+    </div>
+    <div class="bilan-planches">
+      <section aria-label="Répartition des idées par statut">
+        <h3>Par statut</h3>
+      <svg viewBox="0 0 400 46" role="img" aria-label="Répartition des idées par statut">
+        <text x="0" y="27" font-size="12" fill="var(--encre)">à raffiner</text>
+        <rect x="150" y="15" width="216" height="16" fill="var(--encre-claire)" stroke="var(--encre)" stroke-width="0.8"/>
+        <text x="398" y="27" text-anchor="end" font-size="12.5" letter-spacing="1" fill="var(--encre)">4</text>
+      </svg>
+      </section>
+      <section aria-label="Répartition des idées par archipel thématique">
+        <h3>Par archipel (thème)</h3>
+      <svg viewBox="0 0 400 76" role="img" aria-label="Répartition des idées par archipel thématique">
+        <text x="0" y="27" font-size="12" fill="var(--encre)">Bâtiment</text>
+        <rect x="150" y="15" width="216" height="16" fill="var(--encre-claire)" stroke="var(--encre)" stroke-width="0.8"/>
+        <text x="398" y="27" text-anchor="end" font-size="12.5" letter-spacing="1" fill="var(--encre)">3</text>
+        <text x="0" y="57" font-size="12" fill="var(--encre)">Commercial</text>
+        <rect x="150" y="45" width="72" height="16" fill="var(--encre-claire)" stroke="var(--encre)" stroke-width="0.8"/>
+        <text x="398" y="57" text-anchor="end" font-size="12.5" letter-spacing="1" fill="var(--encre)">1</text>
+      </svg>
+      </section>
+    </div>
+  </section>
 
   <section class="releves" aria-label="Relevés de précision, une entrée par idée">
     <article class="releve">
