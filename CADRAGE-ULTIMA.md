@@ -209,9 +209,9 @@
   `design/spec-arbre-responsive.md`.
 - ✅ **PIVOT PLATEFORME — cadrage acté (2026-07-12)** : dicté par Paul, tournant
   majeur. Ultima devient sa **plateforme personnelle en console à 4 quadrants**
-  (TRAVELLER réseau · BCP finances · ADRAMELECH idées · IMLADRIK dév. perso),
+  (TRAVELER réseau · BCP finances · ADRAMELECH idées · IMLADRIK dév. perso),
   pilotée par la seule Léo (désormais **féminine**), un repo, mémoire
-  inter-segment. Le réseau existant (v1→A4) devient le quadrant TRAVELLER — rien
+  inter-segment. Le réseau existant (v1→A4) devient le quadrant TRAVELER — rien
   de jeté. Livré en **cadrage pur** (zéro code produit) : `CADRAGE-CONSOLE.md`
   (console, 4 quadrants, sécurité relevée §5, carte agents/skills §7, roadmap
   C0→C5 §8, risques RC1-RC5, arbitrages §10). Mémoire implantée (journal, profil,
@@ -220,6 +220,21 @@
   Paul veut voir en premier. **Arbitrages ouverts (décisions Paul)** : ordre des
   quadrants (reco : le moins dépendant d'un service externe d'abord) ; niveau de
   chiffrement au repos BCP/IMLADRIK ; périmètre v1 par quadrant.
+- ✅ **ADRAMELECH — premières captures (2026-07-16)** : registre de capture
+  `adramelech/IDEES.md` ouvert (format prêt pour l'import en base à la boucle
+  ADRAMELECH). Deux idées dictées par Paul, nommées et enrichies :
+  **ADR-001 GLANEUR** (récupération invendus/rebuts bâtiment — tournée Leroy
+  Merlin, mise à la benne facturée aux artisans, entrepôt achat-revente ;
+  avec Godefroy) et **ADR-002 PROTÉE** (entreprise flexible bâtiment/énergie —
+  clim/PAC/photovoltaïque selon saisons et modes, équipes polyvalentes,
+  subventions captées proprement ; avec Julien), puis **ADR-003 INTENDANT**
+  (pilotage d'approvisionnement de chantier — matching besoins client ⟷
+  commandes ⟷ stock propre, livraison J-1/J-2 contrôlée, manquants vus avant
+  la pose ; besoin propre de Paul, cas d'école : l'aile de recouvrement
+  manquante qui a foutu un chantier de fenêtres), puis **ADR-004 MYCÉLIUM**
+  (1 client → 2 clients : pilotage par la data client, relances au bon
+  moment, séquence post-chantier satisfaction → avis Google → recommandation
+  nominative ; maxime « frappez après une victoire »). Lexique vocal enrichi.
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 

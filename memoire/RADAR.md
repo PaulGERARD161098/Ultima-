@@ -34,7 +34,7 @@
 - **Stockage de fichiers** (BCP : bulletins, factures) : nouvelle brique
   Supabase Storage → cadrer la sécurité AVANT (uploads = surface d'attaque).
 - **Mémoire inter-segment** : prévoir dès la console comment Léo relie une idée
-  (ADRAMELECH) à un contact (TRAVELLER) ou un objectif (IMLADRIK) à une dépense
+  (ADRAMELECH) à un contact (TRAVELER) ou un objectif (IMLADRIK) à une dépense
   (BCP) — modèle de données transverse à penser tôt, sans sur-concevoir.
 - **Dashboards** : chaque quadrant en a un (exigence explicite de Paul, besoin
   de cadre) → motif de composant à mutualiser.

@@ -13,7 +13,7 @@ que la console de Rennes Boost. Un seul pilote : **Léo**. Un seul repo. Une
 **mémoire inter-segment** (Léo relie ce qui se répond d'un quadrant à l'autre).
 
 La carte/arbre du réseau déjà construite n'est **pas jetée** : elle **devient le
-premier quadrant** (TRAVELLER). Capitaliser sur l'existant, comme toujours.
+premier quadrant** (TRAVELER). Capitaliser sur l'existant, comme toujours.
 
 ## 2. La console d'accueil
 
@@ -28,7 +28,7 @@ Page d'accueil = **console de sélection** :
 
 ## 3. Les 4 quadrants (noms de code confirmés par Paul, 2026-07-12)
 
-### 3.1 TRAVELLER — le réseau (existant, absorbé)
+### 3.1 TRAVELER — le réseau (existant, absorbé)
 Outil de réseau commercial : **arbre des contacts**, **carte**, **contacts**,
 **relations** (rapprochements pilotables), **journal « où j'en suis »** +
 **relances**. C'est tout l'acquis v1→A4 renommé et rangé sous ce quadrant.
@@ -68,7 +68,7 @@ vocale. Dashboard de suivi comme les autres.
 
 - **Un seul pilote** : Léo, sur tous les quadrants. Paul ne parle qu'à Léo.
 - **Mémoire inter-segment** : une idée d'ADRAMELECH peut toucher un contact de
-  TRAVELLER, un objectif d'IMLADRIK peut cadrer une dépense de BCP — Léo fait
+  TRAVELER, un objectif d'IMLADRIK peut cadrer une dépense de BCP — Léo fait
   les liens. La mémoire `memoire/` s'étend aux 4 domaines.
 - **Un dashboard par quadrant** : Paul est très créatif et change souvent de cap
   → il a besoin de **cadre**. Chaque outil rend son pilotage lisible
@@ -107,7 +107,7 @@ Conséquences (à tenir à chaque boucle) :
 
 - **Léo est féminine** (une femme) — décision Paul 2026-07-12. Charte et profil
   mis à jour (accords au féminin).
-- **Mandat élargi aux 4 domaines** : Léo pilote TRAVELLER, BCP, ADRAMELECH et
+- **Mandat élargi aux 4 domaines** : Léo pilote TRAVELER, BCP, ADRAMELECH et
   IMLADRIK, avec la même discipline et les mêmes gates.
 - **Recrutement au fil des boucles** (charte §3) : Léo crée les agents/skills
   manquants **quand la boucle du quadrant s'ouvre**, pas tous d'un coup
@@ -124,7 +124,7 @@ L'équipe actuelle (`securite-auditeur`, `data-ingenieur`, `front-carto`,
 | Quadrant | Agents à prévoir | Skills à prévoir |
 |---|---|---|
 | Console | (équipe front existante) | `frontend-design`, `theme-factory` |
-| TRAVELLER | existant + **agent-liaison** (entremetteur outillé) | existants |
+| TRAVELER | existant + **agent-liaison** (entremetteur outillé) | existants |
 | BCP | **agent-finances** (compta perso, fiscalité FR, échéances) + data-ingenieur | parsing/OCR bulletins = **externe/coût → gate** |
 | ADRAMELECH | **agent-idees** (classement, rapprochements sémantiques) + data-ingenieur | (à évaluer) |
 | IMLADRIK | **agent-devperso** (coach fidèle aux valeurs de Paul, curation) | scraping culturel = **externe/coût → gate** |
@@ -134,7 +134,7 @@ L'équipe actuelle (`securite-auditeur`, `data-ingenieur`, `front-carto`,
 - **C0 — cadrage + mémoire** (cette session) : ce document + implantation
   mémoire + charte Léo + CLAUDE.md. ✅ en cours.
 - **C1 — la console** : coque d'accueil (bandeau, invite, 4 quadrants,
-  routing), en **réutilisant l'existant** — TRAVELLER = l'app actuelle rangée
+  routing), en **réutilisant l'existant** — TRAVELER = l'app actuelle rangée
   sous son quadrant, zéro régression. Reste antique et sérieux.
 - **C2…C5 — un quadrant à la fois** : chacun **cadré avant d'être construit**
   (mini-cadrage + previews si visuel), puis livré en boucles A#-style
@@ -155,7 +155,7 @@ L'équipe actuelle (`securite-auditeur`, `data-ingenieur`, `front-carto`,
   visait l'isolement d'Ultima **vis-à-vis des AUTRES systèmes de Paul** — elle
   tient. Ce qui change : **à l'intérieur** d'Ultima, on passe d'un domaine à
   quatre, avec mémoire inter-segment. Pas de contradiction, re-scope assumé.
-- **RC5 — nommage** : Traveller / BCP / Adramelech / Imladrik confirmés **par
+- **RC5 — nommage** : Traveler / BCP / Adramelech / Imladrik confirmés **par
   écrit** par Paul → figés (lexique vocal mis à jour pour les variantes
   entendues).
 
