@@ -199,3 +199,24 @@
   dragon · BCP = balance · IMLADRIK = étoile · Console = sceau ULTIMA. Sens
   figé, exécution visuelle (emblèmes gravés) laissée au graphisme. PR #41
   fusionnée sur go Paul (« merge et push »).
+- **2026-07-16 (directive EB — on boucle Adramelech)** — Paul rappelle EB
+  (boucler avant d'avancer) et demande de boucler ADRAMELECH. Léo distingue :
+  la boucle capture+carto+charte est close (PR #40/#41 mergées) ; « boucler le
+  quadrant » est une nouvelle boucle de construction qui, par EB même, s'ouvre
+  par un mini-cadrage. Livré : `adramelech/CADRAGE-ADRAMELECH.md` (cadrage pur).
+  v1 recommandé sans base ni gate (AD-1 générateur de carto depuis le registre,
+  AD-2 agent-idees + bilan, AD-3 sécurité du quadrant ; AD-4 base = report/gate).
+  Point sécurité (idées servies sans auth) résolu au cadrage. Décisions Paul en
+  attente : périmètre v1, option sécurité, ordre vs console C1.
+- **2026-07-16 (AD-0 sécuriser la data — bouclé, GO)** — sur go Paul « on
+  sécurise la data », diagnostic securite-auditeur : Vercel servait TOUT fichier
+  commité (cleanUrls ne retire que .html) → /adramelech/*.md ET /memoire/*.md
+  (PII de Paul) ET docs racine étaient PUBLICS. Correctif (fil principal, Opus) :
+  garde middleware `estCheminPrive` (404 sur /adramelech, /memoire, *.md) +
+  .vercelignore (défense en profondeur) + test de fermeture unit-adramelech-guard.
+  Contre-passe adversariale = GO (aucun contournement servable). 3 durcissements
+  (S1 octet parasite, S2 backslash, S3 fingerprint) non exploitables auj.
+  (backstoppés par .vercelignore) différés à AD-4. Conséquence produit actée :
+  quadrant ADRAMELECH « noir en prod » en v1 (carto = artifact privé). Leçon
+  RADAR : « tout fichier commité = servi » — la doc interne et la mémoire NE
+  doivent jamais être sur la surface web sans garde.

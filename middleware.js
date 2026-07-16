@@ -33,6 +33,37 @@ const CSP = [
   "form-action 'self'",
 ].join('; ');
 
+// Chemins qui ne doivent JAMAIS être servis en public : données personnelles de
+// Paul (idées ADRAMELECH, mémoire) et documentation interne (`*.md`). Vercel sert
+// tout fichier commité en statique et `cleanUrls` ne retire que `.html` → sans ce
+// garde, `/adramelech/IDEES.md`, `/memoire/PROFIL-PAUL.md`, etc. sont publics.
+// Le middleware edge NE PEUT PAS authentifier le front (session Supabase en
+// localStorage, jamais en cookie visible ici) : le seul contrôle fiable à ce
+// niveau est le refus. Correctif durable = servir ces données via une API
+// `requireUser` (gate — voir adramelech/CADRAGE-ADRAMELECH.md, AD-4).
+const PREFIXES_PRIVES = ['/adramelech', '/memoire'];
+
+export function estCheminPrive(pathname) {
+  // Normalisation défensive : décodage répété (variantes %2F / double-encodage)
+  // + minuscules + suppression du slash final. URL malformée → refus (fail-closed).
+  let p = pathname;
+  for (let i = 0; i < 3; i += 1) {
+    let decode;
+    try {
+      decode = decodeURIComponent(p);
+    } catch {
+      return true;
+    }
+    if (decode === p) break;
+    p = decode;
+  }
+  p = p.toLowerCase();
+  if (p.length > 1 && p.endsWith('/')) p = p.slice(0, -1);
+
+  if (p.endsWith('.md')) return true; // registres, cadrages, roadmaps, docs internes
+  return PREFIXES_PRIVES.some((prefixe) => p === prefixe || p.startsWith(`${prefixe}/`));
+}
+
 function applySecurityHeaders(headers) {
   headers.set('Content-Security-Policy', CSP);
   headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
@@ -75,6 +106,16 @@ function isRateLimited(ip) {
 
 export default function middleware(request) {
   const { pathname } = new URL(request.url);
+
+  // Garde PII : données perso + docs internes jamais servies en public. 404
+  // générique (ne confirme pas l'existence), en-têtes sécu posés. Doit précéder
+  // le rate-limit et le pass-through, et ne PAS poser `x-middleware-next`
+  // (sinon le fichier statique serait quand même servi).
+  if (estCheminPrive(pathname)) {
+    const headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
+    applySecurityHeaders(headers);
+    return new Response('Not Found', { status: 404, headers });
+  }
 
   if (pathname.startsWith('/api/') && isRateLimited(clientIp(request))) {
     const headers = new Headers({

@@ -243,6 +243,20 @@
   ⏳ Sécurité à trancher à la boucle ADRAMELECH : le contenu `adramelech/`
   (idées = données personnelles, §5 CADRAGE-CONSOLE) est servi statiquement
   par Vercel sans auth — à gater (middleware) ou sortir de la racine web.
+  **Fusionnée (PR #41, go Paul « merge et push »).**
+- ✅ **Verrou architecture agent + blasons (2026-07-16, PR #41)** : un seul
+  agent (Léo) pilote tout Ultima — seule en cross-plateforme, seule
+  interlocutrice, mémoire unique ; les autres `.claude/agents/` sont ses
+  sous-agents. Blasons de quadrant figés : TRAVELER = boussole · ADRAMELECH =
+  dragon · BCP = balance · IMLADRIK = étoile · Console = sceau ULTIMA.
+- 🟡 **Boucle ADRAMELECH — mini-cadrage (2026-07-16, directive EB « on boucle
+  Adramelech »)** : `adramelech/CADRAGE-ADRAMELECH.md` déposé (cadrage pur).
+  Périmètre v1 recommandé = « bibliothèque vivante sans base » (générateur de
+  carto depuis le registre AD-1, `agent-idees` + bilan AD-2, sécurité du
+  quadrant AD-3 ; passage en base AD-4 reporté derrière gate). Point sécurité
+  résolu au cadrage (idées derrière l'auth). **Décisions Paul en attente** :
+  périmètre v1, option sécurité, ordre vs console C1 (voir §6 du cadrage).
+  Prochaine sous-boucle constructible sans gate : **AD-1**.
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 
