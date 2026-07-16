@@ -326,12 +326,55 @@ parsing des BC fournisseurs (**gate** : coût, fragilité — différé jusqu'à
 de valeur par la saisie manuelle/vocale) ; généralisation SaaS multi-tenant à
 d'autres artisans (**après** un cycle chantier complet piloté en interne).
 
-### 9.3 Contrat de données — proposé par `data-ingenieur` (à intégrer)
+### 9.3 Contrat de données — ✅ proposé par `data-ingenieur` (draft `0008_intendant.sql`)
 
 Principe non négociable : **s'accrocher à la fiche chantier TRAVELER existante**
 (FK vers le chantier), **pas de silo**. RLS mono-owner en miroir de `0007`.
-*[Contrat détaillé — entités, champs, états, règle de calcul, RLS, ébauche de
-migration — inséré ici depuis la proposition `data-ingenieur`.]*
+SQL draft dans `supabase/migrations/0008_intendant.sql` (**jamais appliqué —
+gate β**).
+
+**Deux tables neuves, additives** (aucune brique ERP) :
+- **`intendant_chantiers`** — le chantier *piloté* + sa `date_pose`. Satellite
+  1-1 d'un `network_nodes` de type `chantier` (l'accroche à TRAVELER, aucun
+  chantier recréé). Unicité `(owner_id, node_id)` : un dossier par chantier.
+- **`intendant_besoins`** — une ligne = une pièce exigée (le cœur du matching).
+  `designation`, `quantite`, `mode ∈ {stock, commande, aucune}` (la couverture) ;
+  volet commande dénormalisé (`commande_ref` **saisie manuelle en v1** — parsing
+  BC = différé/gate, `fournisseur_node_id` opt., `livree_le`, `controle ∈
+  {en_attente, conforme, casse}`).
+
+**Les 3 états = colonne GÉNÉRÉE STORED** (jamais saisie, base = source unique) :
+```
+mode='stock'                          -> couvert
+mode='commande' AND controle=conforme -> couvert            (livré + contrôlé)
+mode='commande' AND controle=casse    -> manquant           (livré cassé = manquant)
+mode='commande' (sinon)               -> commande_en_attente
+mode='aucune'                         -> manquant
+```
+Conséquences gratuites (zéro trigger/batch) : **la casse repasse en `manquant`**
+en changeant un seul champ ; **le recalcul à l'ajout d'un besoin** est automatique
+(une ligne `aucune` naît `manquant`) ; « couvert » = livré **ET** contrôlé, fidèle
+au registre (le cas « aile de recouvrement »).
+
+**Alerte J-2 = une requête** (pas un état stocké) : les `manquant` dont le
+chantier a `date_pose ∈ [aujourd'hui, +2j]`. La métrique « manquants détectés à
+J-2 » (preuve de valeur) se lit sur la même requête.
+
+**Sécurité** : RLS activée à la création, une policy par opération,
+`owner_id = (select auth.uid())` ; CHECK d'énumération + cohérence
+(`controle` interdit sans `livree_le` ; champs commande null hors `mode=commande`)
+en miroir de la future validation API.
+
+**⏳ Décision d'archi à trancher (bloc OPTION du SQL)** : le **scellement croisé**
+`intendant_besoins(owner_id, chantier_id) → intendant_chantiers(owner_id, id)`
+(défense en profondeur AD-4 : impossible d'accrocher un besoin au chantier d'un
+autre owner même si RLS tombait) exige un **index unique additif `(owner_id, id)`
+sur `network_nodes`** — le seul geste touchant une table existante (additif,
+`id` déjà PK → zéro risque). Recommandé (cohérent AD-4, cheap), isolé en bloc
+OPTION retirable. **À valider par Paul avec la migration.**
+
+**Non exprimable en FK** : « `node_id` doit être de type `chantier` » se valide
+côté API (un trigger serait de la sur-ingénierie v1).
 
 ### 9.4 Saisie
 
