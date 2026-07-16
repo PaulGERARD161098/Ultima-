@@ -58,6 +58,16 @@ export function estCheminPrive(pathname) {
     p = decode;
   }
   p = p.toLowerCase();
+  // Durcissement S2 : backslash (même encodé %5c) ≡ séparateur (parité new URL).
+  // String.fromCharCode(92) = « \ », sans littéral d'échappement dans la source.
+  p = p.split(String.fromCharCode(92)).join('/');
+  // Durcissement S1 : retire les octets parasites de fin (espace, point, octets
+  // de contrôle : `.md%20`, `.md.`, `.md%00`) qui défairaient le test de suffixe.
+  while (p.length > 1) {
+    const c = p.charCodeAt(p.length - 1);
+    if (c <= 0x20 || c === 0x2e) p = p.slice(0, -1);
+    else break;
+  }
   if (p.length > 1 && p.endsWith('/')) p = p.slice(0, -1);
 
   if (p.endsWith('.md')) return true; // registres, cadrages, roadmaps, docs internes
