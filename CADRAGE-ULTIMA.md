@@ -235,6 +235,14 @@
   (1 client → 2 clients : pilotage par la data client, relances au bon
   moment, séquence post-chantier satisfaction → avis Google → recommandation
   nominative ; maxime « frappez après une victoire »). Lexique vocal enrichi.
+  **Fusionné dans `main`** (PR #40, go Paul « Allons-y », 2026-07-16 ; inclut
+  la correction globale TRAVELER à un seul L). **Carto des idées livrée** :
+  `adramelech/carto-idees.html` (archipel gravé — 4 îles, routes de synergie,
+  ancrages TRAVELER, cartouches de précision ; thèmes clair/sombre, zéro JS,
+  vérifiée en navigateur) + artifact Claude pour consultation immédiate.
+  ⏳ Sécurité à trancher à la boucle ADRAMELECH : le contenu `adramelech/`
+  (idées = données personnelles, §5 CADRAGE-CONSOLE) est servi statiquement
+  par Vercel sans auth — à gater (middleware) ou sortir de la racine web.
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 

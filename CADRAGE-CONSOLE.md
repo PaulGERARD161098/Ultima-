@@ -52,6 +52,27 @@ les deux, et cherche la **cohérence avec le reste d'Ultima** (de près ou de
 loin). **Dashboard hebdo/mensuel** : combien d'idées ce mois, X inexploitables /
 X à raffiner / X réutilisables. Cap : rien perdre, tout enrichir.
 
+**Cartographie & regroupements automatiques (vision Paul, 2026-07-16 — à
+provisionner pour la boucle ADRAMELECH).** La carte des idées
+(`adramelech/carto-idees.html`, livrée en statique) est le socle visuel ;
+elle grandira à chaque idée. À l'échelle, l'affichage brut ne suffit plus :
+c'est **l'agent (`agent-idees`) qui doit faire le tri**, pas l'interface qui
+déverse la donnée. Exigences actées :
+- **Regroupement thématique automatique** : l'agent rassemble les idées
+  communes en **archipels cohérents par thème** (un archipel = une famille
+  d'idées), au lieu d'une liste plate qui enfle.
+- **Tri pertinent, pas brut** : la valeur est dans la qualité du
+  rapprochement (pertinent, cohérent, intéressant), pas dans le volume
+  affiché. L'agent propose les regroupements ; Paul valide.
+- **Ponts entre idées** : l'interface matérialise les liens (comme les
+  routes de synergie déjà dessinées entre GLANEUR/INTENDANT/MYCÉLIUM/PROTÉE),
+  y compris inter-segments (une idée ↔ un contact TRAVELER, ↔ une dépense BCP).
+- **Zéro perte** : tout est cartographié, rien ne tombe hors carte — le tri
+  réorganise, il n'écarte jamais.
+Implémentation différée (pas de code produit tant que la boucle ADRAMELECH
+n'est pas ouverte) ; le champ **Thème** déjà présent dans `adramelech/IDEES.md`
+est l'axe de regroupement de départ.
+
 ### 3.4 IMLADRIK — développement personnel
 Outil intime de progression (héritier du Starlog de « Claude Normal ») :
 **objectifs de vie**, **journal**, **valeurs et principes**, **prise de recul**
@@ -109,6 +130,18 @@ Conséquences (à tenir à chaque boucle) :
   mis à jour (accords au féminin).
 - **Mandat élargi aux 4 domaines** : Léo pilote TRAVELER, BCP, ADRAMELECH et
   IMLADRIK, avec la même discipline et les mêmes gates.
+- **UN SEUL agent, verrouillé (Paul, 2026-07-16)** : Léo est le seul agent qui
+  agit en cross-plateforme et le seul interlocuteur de Paul — une seule mémoire
+  qui garde tout. Les autres `.claude/agents/` sont **ses sous-agents**
+  (mono-tâche, sorties synthétisées par Léo, jamais lues brutes par Paul), pas
+  des agents concurrents. Léo peut les appeler pour maximiser l'existant, mais
+  ne recrute que si aucune expertise ne couvre le besoin — « ne pas bosser pour
+  rien ». Détail dans la charte (`.claude/agents/leo.md`, principe verrouillé).
+- **Déclinaison par sigle de quadrant** : Léo reste le même agent et **reprend
+  le sigle du quadrant courant** — un seul agent, plusieurs blasons.
+  Correspondance **figée (Paul, 2026-07-16)** : TRAVELER = boussole ·
+  ADRAMELECH = dragon · BCP = balance · IMLADRIK = étoile · Console = sceau
+  ULTIMA. Le graphisme dessinera les emblèmes gravés ; le sens est figé.
 - **Recrutement au fil des boucles** (charte §3) : Léo crée les agents/skills
   manquants **quand la boucle du quadrant s'ouvre**, pas tous d'un coup
   (discipline « pas dix lièvres »).
@@ -116,12 +149,14 @@ Conséquences (à tenir à chaque boucle) :
 ## 7. Carte des agents & skills à prévoir (aplanissement)
 
 Ce dont on aura besoin par quadrant — **créé boucle par boucle**, pas maintenant.
-L'équipe actuelle (`securite-auditeur`, `data-ingenieur`, `front-carto`,
-`interface-ux`, `graphisme`, `verificateur`) et les skills installés
-(`frontend-design`, `theme-factory`, `algorithmic-art`, `webapp-testing`,
-`skill-creator`) servent les 4.
+**Ce sont tous des sous-agents de Léo** (voir §6, principe verrouillé) : Léo les
+appelle et garde tout, ils ne parlent jamais à Paul. L'équipe actuelle
+(`securite-auditeur`, `data-ingenieur`, `front-carto`, `interface-ux`,
+`graphisme`, `verificateur`) et les skills installés (`frontend-design`,
+`theme-factory`, `algorithmic-art`, `webapp-testing`, `skill-creator`)
+servent les 4.
 
-| Quadrant | Agents à prévoir | Skills à prévoir |
+| Quadrant | Sous-agents à prévoir (appelés par Léo) | Skills à prévoir |
 |---|---|---|
 | Console | (équipe front existante) | `frontend-design`, `theme-factory` |
 | TRAVELER | existant + **agent-liaison** (entremetteur outillé) | existants |
