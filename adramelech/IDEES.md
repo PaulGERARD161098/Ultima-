@@ -70,6 +70,107 @@ bâtiment**, en trois étages qui se nourrissent l'un l'autre :
   d'Ultima est le vivier naturel des premiers clients « mise à la benne ».
 - **BCP** : à terme, structure à part — pilotage financier séparé.
 
+### Analyse stratégique
+
+> Première fiche stratégique ADRAMELECH (boucle AD-5, volet 2). Grille éprouvée
+> sur l'idée pilote. Ligne de base du benchmark : le cœur rémunérateur d'Ultima
+> = **chantiers + installations à domicile**. Les valeurs chiffrées absentes du
+> registre sont marquées **[hyp.]** — à instruire, pas à tenir pour acquises.
+
+#### A. Positionnement — Océan Bleu/Rouge et 5 forces
+
+**Grille ERRC** (référentiel : ressourceries du bâtiment, plateformes de réemploi, bennes/déchetteries classiques)
+
+- **Exclure** — le tri en aval déporté sur le client final ; l'attente que l'artisan transporte lui-même ses déchets ; le modèle « plateforme passive » qui attend le dépôt.
+- **Atténuer** — la dépendance à une seule enseigne (Leroy Merlin comme unique source amont) ; le poids du stock dormant en entrepôt (matière qui ne tourne pas).
+- **Renforcer** — la revente à coût d'acquisition nul/négatif ; la couverture géographique par tournée fixe (fiabilité de passage).
+- **Créer** — le **service de débarras facturé sur chantier** couplé à la collecte (le double revenu), inexistant chez les acteurs de réemploi ; l'angle « on vous simplifie votre obligation REP » vendu à l'enseigne.
+
+**5 forces de Porter**
+
+- **Rivalité intra-secteur — moyenne.** Ressourceries et plateformes existent mais sont mal positionnées sur le service aux artisans *sur chantier* ; la concurrence frontale sur la revente de matériaux est réelle mais fragmentée.
+- **Nouveaux entrants — fort.** Barrière à l'entrée faible sur le principe (un camion, un local) ; c'est un métier facilement copiable une fois la preuve faite. Le contrat d'enseigne est le seul vrai fossé.
+- **Substituts — fort.** La benne classique et la déchetterie restent le réflexe par défaut, souvent moins chers à l'usage pour l'artisan pressé ; le don direct entre chantiers existe déjà gratuitement.
+- **Pouvoir des fournisseurs (enseignes + artisans amont) — fort.** Leroy Merlin peut internaliser, changer de prestataire, ou imposer ses conditions ; sans convention de reprise signée, le gisement amont n'est pas sécurisé.
+- **Pouvoir des clients (acheteurs de matière) — moyen.** Acheteurs opportunistes, sensibles au prix ; pas de fidélité forte, mais la matière à bas coût donne de la marge de manœuvre.
+
+**Conclusion.** Océan **bleu sur un segment étroit** — le *débarras chantier facturé couplé à la revalorisation* — mais **rouge sur ses deux extrémités** (la revente de matériaux d'occasion et la collecte amont d'enseigne, où d'autres sont déjà installés et où la barrière d'entrée est basse). Le bleu n'est défendable que si le contrat d'enseigne et la relation artisan tiennent lieu de fossé.
+
+#### B. Diagnostic — SWOT croisé (TOWS)
+
+**Forces (internes)** — coût d'acquisition matière nul/négatif ; double revenu ; réseau d'artisans TRAVELER déjà là (vivier de clients « mise à la benne ») ; adossement possible au socle chantiers (matière captive via PROTÉE/INTENDANT).
+**Faiblesses (internes)** — intensité capitalistique (camion + entrepôt) ; besoin de volume pour amortir les fixes ; compétence logistique/négociation d'enseigne non détenue aujourd'hui ; structure « à part » = dispersion du dirigeant.
+**Opportunités (externes)** — obligation REP bâtiment des enseignes depuis 2023 (angle d'entrée) ; pression réglementaire et image sur le réemploi ; hausse du coût de mise en décharge qui rend le service plus attractif.
+**Menaces (externes)** — cadre réglementaire déchet/réemploi contraignant (agréments, statut de « déchet ») ; internalisation par l'enseigne ; substituts moins chers ; entrants faciles.
+
+**Axes issus des croisements**
+- **FO (offensif)** — brancher le réseau d'artisans TRAVELER sur le service débarras, et vendre à Leroy Merlin le « on absorbe votre REP » : les deux forces adressent les deux meilleures opportunités. **C'est l'axe le plus fort.**
+- **WO (réorientation)** — la faiblesse capitalistique se compense en démarrant *sans entrepôt* : commencer par le service débarras chantier (revenu immédiat, actif léger), l'entrepôt/revente en phase 2 une fois le flux prouvé.
+- **WT (survie)** — sans convention d'enseigne signée et sans clarté réglementaire, ne pas engager le capital lourd : tester le débarras facturé seul avant tout achat de camion/bail.
+
+#### C. Business model — Lean Canvas chiffré
+
+**Segments clients** — (1) artisans du réseau (payeurs du débarras) ; (2) enseignes de bricolage (source amont, cible d'un contrat de reprise) ; (3) acheteurs de matière revalorisée (particuliers bricoleurs, petits artisans, autoconstructeurs).
+**Proposition de valeur** — « on vous débarrasse vos déchets de chantier moins cher et plus simple qu'une benne, et on revend la matière encore bonne à petit prix ».
+**Canaux** — réseau TRAVELER (bouche-à-oreille artisan), convention d'enseigne, entrepôt-vitrine + revente en ligne [hyp.].
+**Sources de revenus** — **double** : (a) facturation du débarras à l'artisan ; (b) revente de la matière (marge quasi totale, acquisition nulle/négative).
+**Structure de coûts** — camion (achat/loc + carburant + entretien), entrepôt (loyer + charges), main-d'œuvre (chauffeur-manutentionnaire), assurance/réglementaire, temps dirigeant.
+
+**Besoins réels chiffrés** — *toutes valeurs [hyp.], à instruire ; le registre ne porte aucun chiffre.*
+- **Camion** — VUL type fourgon/benne 3,5 t. Occasion à l'achat **15-30 k€** ; ou location **800-1 200 €/mois** [hyp.]. Recommandation de séquencement : **location d'abord** (préserve le cash, évite l'immobilisation avant preuve de flux).
+- **Entrepôt** — **300-800 m²**, à **5-15 €/m²/mois** selon zone → **2-8 k€/mois** [hyp.]. Reportable en phase 2 (cf. axe WO).
+- **Personnes / ETP** — démarrage à **1-2 ETP** [hyp.] : 1 chauffeur-manutentionnaire plein temps + dirigeant (Paul/Godefroy) à temps partiel. Le métier est physique et chronophage : la manutention est le vrai goulot.
+- **Cash pour tenir avant équilibre** — fixes mensuels estimés **4-11 k€/mois** [hyp.] (loc camion + entrepôt + 1 salaire chargé). Pour tenir **6-12 mois** : **25-130 k€** de trésorerie [hyp.]. La fourchette est large parce que le point mort dépend entièrement du volume amont, non connu.
+- **Extrapolation de revenu [hyp., illustrative]** :
+  - *Débarras* : 20 artisans actifs × panier 150 €/passage × 2 passages/mois = **6 000 €/mois**.
+  - *Revente* : 40 m³/mois collectés × 80 €/m³ valorisé = **3 200 €/mois**.
+  - Total ordre de grandeur **≈ 9 000 €/mois** de produit — à comparer aux **4-11 k€** de fixes : **le modèle n'est à l'équilibre qu'au-delà d'un seuil de volume qu'il faut prouver empiriquement**, pas garanti au démarrage.
+
+#### D. Risque — Prémortem (2-3 ans, GLANEUR a échoué)
+
+- **Réglementaire.** Le statut « déchet » impose agréments/traçabilité que la structure n'a pas ; la revente est bloquée ou alourdie. — *Signal avancé : premières collectes faites « au feeling » sans clarifier le statut juridique de la matière ; pas de conseil réglementaire sollicité avant le premier camion.*
+- **Volume / logistique.** Le gisement amont est trop faible ou trop dispersé ; les tournées coûtent plus qu'elles ne rapportent ; l'entrepôt se remplit de matière qui ne tourne pas. — *Signal avancé : taux de remplissage camion < 50 %, stock dormant qui gonfle, rotation entrepôt qui s'allonge.*
+- **Cash.** Les fixes (camion + bail + salaire) brûlent la trésorerie avant que le flux ne s'installe. — *Signal avancé : point mort repoussé mois après mois, marge par tournée sous les fixes au 3e mois.*
+- **Dépendance enseigne.** Tout repose sur Leroy Merlin ; l'enseigne internalise, change de prestataire, ou ne signe jamais. — *Signal avancé : engagement resté verbal, jamais de convention écrite ; source unique jamais diversifiée.*
+- **Concurrence / substituts.** Une ressourcerie voisine ou la benne classique restent moins chères ; l'entrant facile copie le service local. — *Signal avancé : artisans qui renégocient à la baisse dès le 2e passage, churn client précoce.*
+- **Dispersion du dirigeant.** Structure « à part » qui détourne Paul du socle rémunérateur sans atteindre sa masse critique. — *Signal avancé : heures dirigeant sur GLANEUR croissantes pendant que le chiffre du socle stagne.*
+
+#### E. Scoring /10
+
+- **Simple — 3/10.** Trois métiers en un (logistique de collecte, négociation d'enseigne, revente/stock) ; actif lourd ; réglementaire déchet. Loin d'un lancement léger.
+- **Efficace — 6/10.** L'angle service-débarras-sur-chantier résout un vrai point de douleur artisan de façon nette ; le mécanisme est clair, l'exécution est le risque.
+- **Rémunérateur — 6/10.** Double revenu et acquisition nulle = marge structurellement forte *par unité* ; mais l'équilibre est conditionné au volume et mange du capital avant de payer.
+- **Utile — 8/10.** Réemploi, réduction déchets, service concret aux artisans, adossement REP : utilité économique et environnementale élevée.
+- **Temps — 3/10.** Camion + entrepôt + convention d'enseigne + cadre réglementaire = mise en route longue ; le socle, lui, tourne déjà.
+
+**Pondération.** Par défaut égale → **(3+6+6+8+3)/5 = 5,2/10**.
+**Recommandation de pondération pour Paul** : privilégier **Temps** et **Rémunérateur** (contexte : « on ne retient que 3 idées, pas le temps pour plus » → la vitesse de retour compte double). Suggestion ×2 sur ces deux critères :
+(3×1 + 6×1 + 6×**2** + 8×1 + 3×**2**) / 7 = (3+6+12+8+6)/7 = **5,0/10**. La pondération orientée vitesse/rentabilité *baisse* le score — GLANEUR est justement faible là où Paul a le moins de marge.
+
+#### F. Benchmark obligatoire vs cœur rémunérateur
+
+Mise en concurrence mécanique avec le socle **chantiers + installations à domicile** :
+
+- **Rapporte-t-elle plus / mieux / plus vite ?** — **Non, pas en l'état.** Le socle génère du revenu *immédiat*, avec des compétences *déjà détenues* et un actif *déjà amorti*. GLANEUR exige capital neuf (camion, entrepôt), compétences neuves (logistique, négo d'enseigne) et une rampe de plusieurs mois avant équilibre incertain. Sur les axes qui comptent pour Paul (Temps, Rémunérateur nets de mise de fonds), **le socle bat GLANEUR**.
+- **Complète-t-elle ou disperse-t-elle ?** — **Elle complète, mais par le bas et par synergie, pas comme entreprise rivale.** Les artisans du réseau TRAVELER sont des clients « mise à la benne » naturels ; PROTÉE (déposes/surplus) et INTENDANT (lignes commandées non posées) *alimentent* la matière de GLANEUR. La synergie est réelle et déjà notée au registre. Mais montée en structure autonome « à part », elle **disperse** le dirigeant hors du socle.
+
+**Verdict tranché.** GLANEUR **ne mérite pas une place au top 3 comme entreprise autonome** : trop lourde, trop lente, équilibre conditionnel, elle perd le benchmark contre le socle sur les critères prioritaires. **Elle mérite d'être conservée comme *service satellite adossé au socle*** : démarrer par le seul débarras facturé sur les chantiers du réseau (actif léger, revenu immédiat, zéro entrepôt), en faire une ligne de service du cœur plutôt qu'une structure séparée. Le volet entrepôt/revente/convention d'enseigne reste une option de phase 2, à n'ouvrir que sur signaux de volume prouvés (cf. prémortem). Formulé autrement : **retenir le *service*, ajourner l'*entreprise*.**
+
+#### G. Provision d'exécution
+
+Si la version *service satellite* est retenue :
+- **`data-ingenieur`** — modèle de la matière collectée (catalogue de stock : matière, m³, provenance chantier, état, prix) et du flux débarras (passage → facturation) ; adossement à la fiche chantier TRAVELER existante plutôt qu'un silo neuf.
+- **`front-carto`** — vue tournée sur carte (points de collecte, optimisation d'itinéraire OSM déjà dans la stack) et fiche stock.
+- **`interface-ux`** — parcours artisan « demander un débarras » et parcours acheteur « voir le stock » ; wording sobre.
+- **`securite-auditeur` / `verificateur`** — dès qu'une donnée client/artisan ou une facturation est en base (surface à risque).
+- **Agent à créer éventuel** — un `agent-logistique` (optimisation de tournées + remplissage camion) si le volume justifie l'automatisation ; à ne créer qu'au passage à l'échelle, pas en v1.
+
+**Automatisations à plus forte valeur** (ordre de priorité) :
+1. **Facturation débarras** automatique (passage saisi → facture artisan) — c'est le revenu immédiat, à automatiser en premier.
+2. **Catalogue de stock** tenu à jour (entrée matière → fiche revente) — condition de la rotation.
+3. **Matching artisan ↔ matière** — un artisan du réseau cherche X, l'entrepôt l'a : notification. Fort effet réseau, mais utile seulement à volume suffisant.
+4. **Tournées optimisées** — gain logistique réel, mais pertinent seulement quand les points de collecte se multiplient. À différer.
+
 ---
 
 ## ADR-002 — PROTÉE
