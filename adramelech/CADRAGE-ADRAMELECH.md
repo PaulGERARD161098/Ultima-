@@ -154,12 +154,30 @@ Non gaté.
   responsive. Harnais +7 verdicts (16/16). Vérifié navigateur (0 erreur, AA).
 - Non gaté. **La boucle ADRAMELECH v1 (AD-0 → AD-2) est complète.**
 
-### AD-4 (reporté, gate) — passage en base
-Table `idees` (projet `ultima` existant), RLS mono-user, édition interactive,
-recherche plein-texte. **Gate Paul** (migration + sécurité relevée). Hors v1.
-**Prérequis à cette boucle** : intégrer les durcissements S1/S2/S3 d'AD-0 (le
-redéploiement de fichiers y ferait du middleware l'unique contrôle) + servir la
-carto client-side après auth (fin du « noir en prod »).
+### AD-4 — passage en base (go solo Paul 2026-07-16, « boucle AD-4 en base »)
+- **AD-4a ✅ APPLIQUÉE** : migration `0007_idees.sql` — tables `idees` +
+  `idees_liens`, RLS mono-owner (confirmée `rls_enabled=true` en base), CHECK
+  miroir du registre, unicité `(owner_id, adr_num)` + paire non orientée.
+  Contre-passe `securite-auditeur` GO (fuite inter-owner inexploitable, parité
+  `network_edges`). **Appliquée en solo** (additif, non destructif, tables
+  vides) — signalé au registre.
+- **AD-4b ✅** : API `/api/idees` (GET) + `/api/idees/items` (CRUD idée) +
+  `/api/idees/liens` (ponts), `requireUser`, validation stricte
+  `validateIdee`/`validateLien` (parité API↔base). Harnais unit (20 verdicts).
+- **AD-4c (durcissements) ✅** : S1 (octets parasites) + S2 (backslash) fermés
+  au garde middleware ; S3 (fingerprint 404, non exploitable) consigné.
+- **AD-4c (front) ⏳ GATÉ** : servir la carto **côté client après auth**
+  (fetch `/api/idees` → rendu) pour finir le « noir en prod ». **Non exécutable
+  seul** : (a) choix d'archi — page autonome vs intégration à la future console
+  C1 ; (b) **invérifiable sans compte auth de Paul** (0 user en base) → le flux
+  authentifié ne peut être prouvé de bout en bout. Registre.
+- **Seed ⏳ GATÉ** : `adramelech/importer-idees.mjs` (idempotent, prêt) peuplera
+  les 4 idées **quand le compte auth de Paul existera** (owner_id réel).
+
+**Durcissement transversal consigné** (hors 0007, décision d'archi) : FK
+composite `(owner_id, id)` sur `idees`/`network_edges`/`journal` pour sceller
+l'appartenance croisée (défense en profondeur du résidu inter-owner) — migration
+dédiée, escalade signalée.
 
 AD-0/AD-1/AD-2 avancent **sans la console C1** (registre + carto autonomes) ;
 l'ensemble se branchera sur la coque authentifiée quand C1 existera.

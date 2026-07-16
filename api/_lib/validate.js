@@ -284,3 +284,88 @@ export function validateJournal(body, mode) {
 
   return { value: out };
 }
+
+// --- ADRAMELECH (AD-4) : idées + ponts. Enums/bornes alignés sur 0007_idees.sql.
+
+// Statuts d'une idée (cycle : capturée → raffinée → exploitable → close).
+export const IDEE_STATUTS = ['brute', 'à raffiner', 'exploitable', 'close'];
+
+// Champs autorisés en écriture (owner_id/id/dates gérés serveur).
+const IDEE_FIELDS = ['adr_num', 'nom', 'type', 'theme', 'statut', 'partenaire', 'epigraphe', 'essence'];
+const LIEN_FIELDS = ['source_id', 'target_id'];
+
+// Valide une idée. mode 'create' impose adr_num + nom + type ; 'update' les rend
+// optionnels. owner_id n'est jamais accepté du client (imposé par la RLS/insert).
+export function validateIdee(body, mode) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, IDEE_FIELDS);
+  if (unknown) return { error: unknown };
+
+  const out = {};
+
+  if (mode === 'create' || body.adr_num !== undefined) {
+    if (!Number.isInteger(body.adr_num) || body.adr_num < 1) return { error: "Numéro d'idée invalide" };
+    out.adr_num = body.adr_num;
+  }
+
+  if (mode === 'create' || body.nom !== undefined) {
+    if (typeof body.nom !== 'string') return { error: 'Nom invalide' };
+    const nom = body.nom.trim();
+    if (nom.length < 1 || nom.length > 120) return { error: 'Nom invalide' };
+    out.nom = nom;
+  }
+
+  if (mode === 'create' || body.type !== undefined) {
+    if (typeof body.type !== 'string') return { error: 'Type invalide' };
+    const type = body.type.trim();
+    if (type.length < 1 || type.length > 60) return { error: 'Type invalide' };
+    out.type = type;
+  }
+
+  if (body.statut !== undefined) {
+    if (!IDEE_STATUTS.includes(body.statut)) return { error: 'Statut invalide' };
+    out.statut = body.statut;
+  }
+
+  // Champs texte optionnels : null efface, chaîne bornée sinon.
+  for (const [field, label, max] of [
+    ['theme', 'Thème', 200],
+    ['partenaire', 'Partenaire', 120],
+    ['epigraphe', 'Épigraphe', 300],
+    ['essence', 'Essence', 2000],
+  ]) {
+    if (body[field] === null) {
+      out[field] = null;
+      continue;
+    }
+    const msg = checkOptionalText(body[field], label, max);
+    if (msg) return { error: msg };
+    if (body[field] !== undefined) out[field] = body[field];
+  }
+
+  if (mode === 'update' && Object.keys(out).length === 0) {
+    return { error: 'Aucun champ à mettre à jour' };
+  }
+
+  return { value: out };
+}
+
+// Valide un pont (lien non orienté idée ↔ idée). Création uniquement (un pont se
+// crée ou se supprime, il ne se modifie pas). source/target = UUID distincts.
+export function validateLien(body) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, LIEN_FIELDS);
+  if (unknown) return { error: unknown };
+
+  if (!isUuid(body.source_id) || !isUuid(body.target_id)) {
+    return { error: "Identifiants d'idée invalides" };
+  }
+  if (body.source_id === body.target_id) {
+    return { error: 'Un pont doit relier deux idées distinctes' };
+  }
+  return { value: { source_id: body.source_id, target_id: body.target_id } };
+}

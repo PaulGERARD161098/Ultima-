@@ -23,7 +23,12 @@ const privesAttendus = [
   '/ROADMAP-SECURITE.md',
   '/adramelech%2fIDEES.md',         // %2F encodé
   '/adramelech%252fcarto-idees',    // double-encodage
+  '/adramelech%25252fIDEES.md',     // triple-encodage (borne des 3 décodages)
   '/Adramelech/IDEES.MD',           // casse mixte
+  '/CLAUDE.md%20',                  // S1 : espace parasite en fin
+  '/CLAUDE.md.',                    // S1 : point parasite en fin
+  '/adramelech%5ccarto-idees',      // S2 : backslash encodé comme séparateur
+  '/js/..%2fadramelech%2fIDEES.md', // traversal encodé → doc privée
 ];
 verdicts.privesRefuses = privesAttendus.every((p) => estCheminPrive(p) === true);
 

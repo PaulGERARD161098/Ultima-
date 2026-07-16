@@ -228,3 +228,15 @@
   Léo (harnais + navigateur) avant commit. Boucle ADRAMELECH v1 (AD-0→AD-2)
   complète. Reste AD-4 (base, gate). Points de goût laissés à Paul (granularité
   thème, épigraphes du registre, ancrages data-driven) : validés « c'est good ».
+- **2026-07-16 (GO SOLO — AD-4 idées en base)** — Paul « go solo, boucle AD-4
+  en base ». En solo : AD-4a migration 0007 (tables idees + idees_liens, RLS
+  mono-owner) rédigée par data-ingenieur, contre-passe securite-auditeur GO,
+  **APPLIQUÉE en base** (additif/non destructif, rls_enabled confirmé — signalé
+  au registre solo). AD-4b API idees (GET/CRUD/liens, requireUser, validation
+  stricte, 20 verdicts). AD-4c durcissements S1/S2/S3 du garde PII fermés.
+  RESTENT GATÉS (invérifiables sans compte auth Paul + choix archi) : front
+  carto client-side après auth (fin du « noir en prod »), et seed des 4 idées
+  (importer-idees.mjs prêt). Durcissement FK-composite inter-owner consigné
+  (migration transversale dédiée). Leçon : une couche data+API se livre et se
+  vérifie sans user (advisors/RLS/unit) ; le flux authentifié de bout en bout,
+  non — il attend le compte de Paul.

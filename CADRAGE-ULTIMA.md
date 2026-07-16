@@ -269,8 +269,14 @@
   - **AD-2 agent-idees + bilan** (PR en cours) : sous-agent `agent-idees` recruté
     + bilan chiffré (dashboard statique) dans la carto.
   Chaque brique : agent implémente → Léo vérifie indépendamment (harnais +
-  navigateur) → commit → gate/merge Paul. **Reste (gate) : AD-4** (idées en base
-  via API `requireUser`, fin du « noir en prod » + durcissements S1/S2/S3).
+  navigateur) → commit → gate/merge Paul.
+- 🟡 **AD-4 idées en base (2026-07-16, GO SOLO)** — AD-4a migration `0007`
+  (tables `idees`/`idees_liens`, RLS mono-owner) **appliquée en base** (contre-
+  passe securite-auditeur GO, `rls_enabled` confirmé) ; AD-4b API idees
+  (`requireUser`, validation stricte, 20 verdicts) ; AD-4c durcissements
+  S1/S2/S3 du garde PII fermés. **⏳ Gaté (invérifiable sans compte auth Paul)** :
+  front carto client-side après auth (fin du « noir en prod ») + seed des 4
+  idées (`importer-idees.mjs` prêt). Détail : `adramelech/CADRAGE-ADRAMELECH.md`.
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 

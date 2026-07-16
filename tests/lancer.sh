@@ -28,6 +28,8 @@ echo "=== unit-adramelech-guard.mjs ==="
 node unit-adramelech-guard.mjs
 echo "=== unit-carto-generee.mjs ==="
 node unit-carto-generee.mjs
+echo "=== unit-idees-validate.mjs ==="
+node unit-idees-validate.mjs
 
 # 3. Serveur statique sur la racine du repo.
 (cd .. && python3 -m http.server 8123 >/dev/null 2>&1) &
