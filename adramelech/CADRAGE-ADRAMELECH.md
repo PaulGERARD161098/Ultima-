@@ -145,12 +145,14 @@ Dispatch : `front-carto` (implémente) + `data-ingenieur` (parseur/contrat),
 Léo synthétise. Commit `feat: carto ADRAMELECH générée depuis le registre [AD-1]`.
 Non gaté.
 
-### AD-2 — `agent-idees` + bilan
-Créer le sous-agent (`.claude/agents/`, appelé par Léo, ne parle jamais à
-Paul) : regroupements thématiques, rapprochements pertinents (ponts), **bilan**
-(combien ce mois, X inexploitables / X à raffiner / X réutilisables). Léo
-synthétise ; Paul valide les rapprochements avant qu'ils entrent au registre.
-Dashboard statique (compteurs par statut/par thème, registre antique). Non gaté.
+### AD-2 — `agent-idees` + bilan ✅ LIVRÉ (2026-07-16)
+- Sous-agent `.claude/agents/agent-idees.md` créé (appelé par Léo, ne parle
+  jamais à Paul, propose sans décider, source unique `IDEES.md`, zéro perte).
+- **Bilan chiffré** (dashboard statique) ajouté au générateur : `calculerBilan`
+  (total, par statut, par thème, ponts, archipels) + cartouche « Bilan de
+  l'archipel » (3 tuiles clés + 2 planches de barres gravées), déterministe,
+  responsive. Harnais +7 verdicts (16/16). Vérifié navigateur (0 erreur, AA).
+- Non gaté. **La boucle ADRAMELECH v1 (AD-0 → AD-2) est complète.**
 
 ### AD-4 (reporté, gate) — passage en base
 Table `idees` (projet `ultima` existant), RLS mono-user, édition interactive,

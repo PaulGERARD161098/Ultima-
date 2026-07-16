@@ -257,6 +257,20 @@
   résolu au cadrage (idées derrière l'auth). **Décisions Paul en attente** :
   périmètre v1, option sécurité, ordre vs console C1 (voir §6 du cadrage).
   Prochaine sous-boucle constructible sans gate : **AD-1**.
+- ✅ **Boucle ADRAMELECH v1 livrée (2026-07-16, solo)** — les 3 sous-boucles
+  bouclées :
+  - **AD-0 sécuriser** (PR #42 mergée) : garde middleware `estCheminPrive` +
+    `.vercelignore` retirent `/adramelech/*`, `/memoire/*` (PII de Paul) et tout
+    `*.md` de la surface publique ; contre-passe adversariale GO ; durcissements
+    S1/S2/S3 différés à AD-4. Conséquence actée : quadrant « noir en prod » en v1.
+  - **AD-1 carto générée** (PR #43 mergée) : `adramelech/generer-carto.mjs`
+    déterministe (archipels par thème, ponts, ancrages TRAVELER data-driven),
+    parseur zéro-perte, harnais de fermeture.
+  - **AD-2 agent-idees + bilan** (PR en cours) : sous-agent `agent-idees` recruté
+    + bilan chiffré (dashboard statique) dans la carto.
+  Chaque brique : agent implémente → Léo vérifie indépendamment (harnais +
+  navigateur) → commit → gate/merge Paul. **Reste (gate) : AD-4** (idées en base
+  via API `requireUser`, fin du « noir en prod » + durcissements S1/S2/S3).
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 

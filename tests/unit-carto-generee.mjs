@@ -11,7 +11,7 @@
 //     perte silencieuse).
 import { readFileSync } from 'node:fs';
 import {
-  parseRegistre, grouperArchipels, detecterPonts, genererDocument,
+  parseRegistre, grouperArchipels, detecterPonts, calculerBilan, genererDocument,
 } from '../adramelech/generer-carto.mjs';
 
 const REGISTRE = new URL('../adramelech/IDEES.md', import.meta.url);
@@ -105,6 +105,30 @@ const cles = new Set(ponts.map((p) => `${p.a}|${p.b}`));
 verdicts.pontsDetectes = ponts.length === 4 &&
   cles.has('ADR-001|ADR-002') && cles.has('ADR-001|ADR-003') &&
   cles.has('ADR-002|ADR-004') && cles.has('ADR-003|ADR-004');
+
+// ---------- 7. Bilan chiffré (AD-2) : compteurs cohérents et zéro-perte ----------
+const bilan = calculerBilan(idees);
+const sommeStatut = Object.values(bilan.parStatut).reduce((s, n) => s + n, 0);
+const sommeTheme = Object.values(bilan.parTheme).reduce((s, n) => s + n, 0);
+verdicts.bilanTotal = bilan.total === idees.length && bilan.total === idsRegistre.length;
+// Zéro-perte : chaque idée comptée une fois, dans les DEUX répartitions.
+verdicts.bilanSommeStatut = sommeStatut === bilan.total;
+verdicts.bilanSommeTheme = sommeTheme === bilan.total;
+// Cohérence avec les fonctions de la carte (mêmes ponts, mêmes archipels).
+verdicts.bilanCoherencePonts = bilan.nombrePonts === detecterPonts(idees).length &&
+  bilan.nombrePonts === ponts.length;
+verdicts.bilanCoherenceArchipels = bilan.nombreArchipels === grouperArchipels(idees).length &&
+  bilan.nombreArchipels === archipels.length;
+// Le bilan est réellement RENDU dans la sortie (cartouche + les deux planches).
+verdicts.bilanRendu = doc1.includes('class="bilan"') &&
+  doc1.includes('Bilan de l’archipel') &&
+  doc1.includes('Répartition des idées par statut') &&
+  doc1.includes('Répartition des idées par archipel thématique');
+// Zéro-perte au repli : une idée « À classer » est comptée dans le bilan.
+const bilanFix = calculerBilan(ideesFix);
+verdicts.bilanClasseOrpheline = bilanFix.total === 1 &&
+  bilanFix.parTheme['À classer'] === 1 &&
+  Object.values(bilanFix.parStatut).reduce((s, n) => s + n, 0) === 1;
 
 // ---------- Bilan ----------
 console.log(JSON.stringify(verdicts, null, 2));

@@ -23,6 +23,7 @@
 //   parseRegistre(markdown)   -> [idee]        (throw si mal formé)
 //   grouperArchipels(idees)   -> [archipel]    (un par thème principal)
 //   detecterPonts(idees)      -> [{a,b}]       (synergies ADR↔ADR)
+//   calculerBilan(idees)      -> {total,…}      (compteurs statut/thème/ponts)
 //   genererDocument(markdown) -> string        (HTML complet, déterministe)
 
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -205,6 +206,28 @@ export function detecterPonts(idees) {
     }
   }
   return [...aretes].sort().map((s) => { const [a, b] = s.split('|'); return { a, b }; });
+}
+
+// Bilan chiffré (AD-2) : fonction PURE, aucun aléa ni horloge. Compte TOUTES
+// les idées — y compris « À classer » (zéro-perte préservé). Les compteurs par
+// statut / par thème principal somment donc toujours au total. nombrePonts et
+// nombreArchipels sont recalculés depuis les mêmes fonctions que la carte, donc
+// cohérents avec elle par construction.
+export function calculerBilan(idees) {
+  const total = idees.length;
+  const parStatut = {};
+  const parTheme = {};
+  for (const idee of idees) {
+    parStatut[idee.statut] = (parStatut[idee.statut] || 0) + 1;
+    parTheme[idee.themeLabel] = (parTheme[idee.themeLabel] || 0) + 1;
+  }
+  return {
+    total,
+    parStatut,
+    parTheme,
+    nombrePonts: detecterPonts(idees).length,
+    nombreArchipels: grouperArchipels(idees).length,
+  };
 }
 
 // ————————————————————————————————————————————————————————————————
@@ -506,6 +529,63 @@ function rendreReleve(idee, ponts, parId) {
     </article>`;
 }
 
+// Planche de barres gravées (déterministe : géométrie pure des compteurs). Les
+// largeurs sont proportionnelles au plus grand compteur pour la lisibilité ; le
+// chiffre exact est toujours écrit à droite (jamais lu « à la longueur »).
+function plancheBarres(entries, titre) {
+  const rowH = 30;
+  const pad = 8;
+  const W = 400;
+  const labelW = 150;
+  const barMax = W - labelW - 34;
+  const max = Math.max(1, ...entries.map((e) => e[1]));
+  const H = pad * 2 + entries.length * rowH;
+  const rows = entries.map((e, i) => {
+    const [label, count] = e;
+    const cy = pad + i * rowH + rowH / 2;
+    const w = f1(Math.max(2, (barMax * count) / max));
+    return `        <text x="0" y="${f1(cy + 4)}" font-size="12" fill="var(--encre)">${esc(label)}</text>
+        <rect x="${labelW}" y="${f1(cy - 8)}" width="${w}" height="16" fill="var(--encre-claire)" stroke="var(--encre)" stroke-width="0.8"/>
+        <text x="${W - 2}" y="${f1(cy + 4)}" text-anchor="end" font-size="12.5" letter-spacing="1" fill="var(--encre)">${esc(count)}</text>`;
+  }).join('\n');
+  return `      <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(titre)}">
+${rows}
+      </svg>`;
+}
+
+// Cartouche « Bilan » gravé (dashboard statique, AD-2). Registre antique réutilisé
+// (mêmes variables, mêmes filets que les cartouches de précision). L'ordre des
+// thèmes suit celui des archipels de la carte (cohérence visuelle) ; les statuts
+// sont ordonnés par effectif décroissant puis alphabétique (déterministe, sans
+// locale).
+function rendreBilan(bilan, archipels) {
+  const statutEntries = Object.entries(bilan.parStatut)
+    .sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));
+  const themeEntries = archipels.map((a) => [a.label, a.idees.length]);
+
+  const tuile = (n, mot) =>
+    `      <div class="tuile"><span class="nombre">${esc(n)}</span><span class="etiquette">${esc(mot)}</span></div>`;
+
+  return `  <section class="bilan" aria-label="Bilan chiffré de l’archipel">
+    <h2>Bilan de l’archipel</h2>
+    <div class="bilan-cle">
+${tuile(bilan.total, bilan.total > 1 ? 'idées levées' : 'idée levée')}
+${tuile(bilan.nombreArchipels, bilan.nombreArchipels > 1 ? 'archipels' : 'archipel')}
+${tuile(bilan.nombrePonts, bilan.nombrePonts > 1 ? 'ponts de synergie' : 'pont de synergie')}
+    </div>
+    <div class="bilan-planches">
+      <section aria-label="Répartition des idées par statut">
+        <h3>Par statut</h3>
+${plancheBarres(statutEntries, 'Répartition des idées par statut')}
+      </section>
+      <section aria-label="Répartition des idées par archipel thématique">
+        <h3>Par archipel (thème)</h3>
+${plancheBarres(themeEntries, 'Répartition des idées par archipel thématique')}
+      </section>
+    </div>
+  </section>`;
+}
+
 // STYLE réutilisé tel quel du fichier de référence (registre antique,
 // thèmes clair/sombre). On ne le refait pas — on branche la source.
 const STYLE = `<style>
@@ -685,6 +765,71 @@ const STYLE = `<style>
   }
   .releve dd { margin: 0; }
 
+  /* ——— Cartouche de bilan (dashboard statique gravé) ——— */
+  section.bilan {
+    border: 1px solid var(--encre-claire);
+    outline: 1px solid var(--filet);
+    outline-offset: 4px;
+    padding: 1.5rem 1.75rem 1.7rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.35rem;
+  }
+  .bilan > h2 {
+    font-variant: small-caps;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    font-size: 1.4rem;
+    margin: 0;
+    text-align: center;
+  }
+  .bilan-cle {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .bilan-cle .tuile {
+    flex: 1 1 9rem;
+    min-width: 8.5rem;
+    text-align: center;
+    border: 1px solid var(--filet);
+    box-shadow: inset 0 0 0 3px var(--parchemin);
+    background: var(--ile);
+    padding: 0.95rem 0.75rem 0.85rem;
+  }
+  .bilan-cle .nombre {
+    display: block;
+    font-size: 2.15rem;
+    line-height: 1;
+    letter-spacing: 0.03em;
+    color: var(--encre);
+  }
+  .bilan-cle .etiquette {
+    display: block;
+    margin-top: 0.45rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--encre-pale);
+  }
+  .bilan-planches {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+    gap: 1.4rem;
+  }
+  .bilan-planches h3 {
+    font-variant: small-caps;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    font-size: 1rem;
+    margin: 0 0 0.7rem;
+    color: var(--encre-claire);
+    border-bottom: 1px solid var(--filet);
+    padding-bottom: 0.35rem;
+  }
+  .bilan-planches svg { display: block; width: 100%; height: auto; }
+
   footer.colophon {
     text-align: center;
     font-size: 0.88rem;
@@ -711,6 +856,11 @@ export function genererDocument(markdown) {
 
   const svg = rendreSvg(idees, archipels, ponts);
   const releves = archipels.flatMap((a) => a.idees).map((i) => rendreReleve(i, ponts, parId)).join('\n\n');
+
+  const bilan = calculerBilan(idees);
+  const blocBilan = N === 0 ? '' : `
+${rendreBilan(bilan, archipels)}
+`;
 
   const blocReleves = N === 0 ? '' : `
   <section class="releves" aria-label="Relevés de précision, une entrée par idée">
@@ -740,7 +890,7 @@ ${STYLE}
 ${svg}
     <figcaption>Les routes en pointillé de cire relient les idées qui se nourrissent l’une l’autre ; les traits fins descendent vers l’acquis du réseau. Carte générée depuis le registre <code>adramelech/IDEES.md</code> par <code>generer-carto.mjs</code> — ${esc(N)} idée${N > 1 ? 's' : ''}, ${esc(archipels.length)} archipel${archipels.length > 1 ? 's' : ''}, aucune perdue.</figcaption>
   </figure>
-${blocReleves}
+${blocBilan}${blocReleves}
   <footer class="colophon">
     Cap du quadrant : ne jamais rater une idée — capturer, classer, rapprocher, enrichir.<br>
     Rendu déterministe du registre <code>adramelech/IDEES.md</code> ; cette carte se relève à chaque idée nouvelle.
