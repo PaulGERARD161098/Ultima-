@@ -386,9 +386,17 @@ côté API (un trigger serait de la sur-ingénierie v1).
 - **AD-5c-α — contrat de données + règle de matching** (ce cadrage + la proposition
   `data-ingenieur`) : SPEC figée, ébauche de migration `0008_intendant.sql`
   **draftée mais JAMAIS appliquée**. Non gaté (rédaction seule).
-- **AD-5c-β — migration base** : appliquer `0008_intendant.sql` → **GATE PAUL**
-  (toute migration en prod). Contre-passe `securite-auditeur` (RLS, isolation
-  inter-owner) avant application.
+- **AD-5c-β — migration base ✅ APPLIQUÉE (2026-07-16)** : `0008_intendant.sql`
+  appliquée sur le projet Ultima (gate Paul ouverte, « appliquer avec le
+  scellement » + « Go »). **Scellement `network_nodes` inclus** (bloc OPTION).
+  Post-application vérifiée : `intendant_chantiers` + `intendant_besoins` créées,
+  **RLS activée** (`rls_enabled=true`), prod par ailleurs intacte. La contre-passe
+  `securite-auditeur` a **confirmé la validité moteur** (FK-sur-index-unique,
+  colonne générée, CHECK) mais a été **interrompue par une limite de session**
+  avant les scénarios adversariaux d'isolation ; substituée par la revue Léo
+  (Opus 4.8) + la vérif RLS post-apply. ⏳ **Actions humaines** : (a) rejouer les
+  scénarios adversariaux d'isolation inter-owner ; (b) lancer les advisors
+  sécurité (serveur MCP indispo à l'application) — les deux à la reprise.
 - **AD-5c-γ — API `requireUser` + validation stricte** (parité API↔base, motif
   `validate*` de AD-4b) : CRUD besoins/commandes/stock + dérivation d'état +
   endpoint alerte J-2. Surface à risque → contre-passe.

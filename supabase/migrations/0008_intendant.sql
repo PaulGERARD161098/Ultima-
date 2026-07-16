@@ -1,9 +1,11 @@
 -- Ultima — migration 0008 : INTENDANT v1 « outil interne » (ADR-003, boucle AD-5c).
 --
--- ⚠️ DRAFT — NE JAMAIS APPLIQUER SANS VALIDATION PAUL EXPLICITE (gate migrations).
---    Le SQL vit ici ; Léo l'applique au fil principal après contre-passe sécu.
---    Ce fichier est une PROPOSITION de contrat de données, pas une migration
---    validée. Un point d'archi reste à trancher (section OPTION ci-dessous).
+-- ✅ APPLIQUÉE le 2026-07-16 sur le projet Ultima (leosfqyidgsaescjbfom), gate
+--    Paul ouverte (« appliquer avec le scellement » + « Go »). Post-application
+--    vérifiée : les 2 tables existent avec RLS activée (rls_enabled=true).
+--    ⏳ À finir : contre-passe adversariale d'isolation (interrompue par limite de
+--    session) + advisors sécurité (serveur MCP indispo au moment de l'application).
+--    Le bloc OPTION (scellement network_nodes) est INCLUS (choix Paul).
 --
 -- Périmètre v1 = check-list de rapprochement, PAS un ERP (risque n°1 du prémortem
 -- ADR-003 §D : sur-ingénierie). Deux tables neuves, additives et non destructives :
