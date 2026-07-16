@@ -27,7 +27,7 @@ donnée brute**, et des **ponts entre idées** — zéro perte (vision Paul
   qui grandira ; elle est aujourd'hui écrite à la main.
 - **Blason du quadrant** : le **dragon** (gardien du trésor d'idées).
 
-## 3. Périmètre v1 — RECOMMANDATION Léo (à valider par Paul)
+## 3. Périmètre v1 — ✅ VALIDÉ PAR PAUL (2026-07-16 : « je valide tout »)
 
 **v1 = « la bibliothèque vivante, sans base »** — maximiser l'existant, zéro
 gate, zéro coût, immédiatement constructible :
@@ -52,49 +52,93 @@ CRUD, recherche plein-texte, rapprochements sémantiques persistés). Passer en
 base = **gate Paul** (migration + sécurité relevée, §5) — pas nécessaire pour
 prouver la valeur du quadrant, donc reporté.
 
-## 4. Sécurité — résolution du point laissé ouvert (bloquant avant diffusion)
+## 4. Sécurité — ✅ VALIDÉE PAR PAUL, traitée EN PREMIER (« on sécurise la data »)
 
 Le contenu `adramelech/` (idées = **données personnelles**, §5 sécurité
 relevée) est aujourd'hui servi **en statique sans authentification** par
-Vercel. Avant toute diffusion de l'URL de production :
-- **Option retenue (reco)** : protéger le quadrant derrière l'auth existante
-  (session persistante déjà en place côté TRAVELER) — la page idées et son
-  registre ne sont servis qu'à une session authentifiée, comme le reste de la
-  console. Concrètement : ne pas exposer `adramelech/*.html` en route publique ;
-  le rendre via la coque authentifiée (console C1) ou le gater au middleware.
-- **En attendant** : la carto est `noindex`, l'URL prod n'est pas diffusée, et
-  aucune donnée sensible (au-delà de prénoms de partenaires déjà dans le
-  réseau) n'y figure. **À traiter dès l'ouverture de la construction**, avant
-  d'ajouter la moindre idée à caractère confidentiel.
-- Toute bascule en base relève de la **surface à risque** → escalade Opus +
-  contre-passe `securite-auditeur`.
+Vercel. **Décision Paul : on sécurise la data d'abord, avant de construire.**
+- **Principe retenu** : `/adramelech/*` n'est **jamais** servi à une requête
+  non authentifiée. En v1 sans base, la carto se consulte en **artifact privé**
+  (Claude, réservé à Paul) et en rendu local ; **rien de personnel n'est publié
+  sur le site public**. Elle recevra un rendu servi et gaté quand la console C1
+  (coque authentifiée) existera.
+- **Correctif exact** : établi par `securite-auditeur` (diagnostic en cours,
+  2026-07-16) — comment `adramelech/*` est réellement exposé (routes,
+  `.md` bruts, `cleanUrls`), suffisance ou non de l'auth Vercel de prod, et
+  garde minimal (piste : blocage `/adramelech/*` au middleware edge). Le patch
+  reste au fil principal (surface à risque → escalade Opus + contre-passe
+  `securite-auditeur` + `verificateur`).
+- **En attendant le patch** : carto `noindex`, URL prod non diffusée, aucune
+  idée confidentielle ajoutée. → devient la sous-boucle **AD-0** (ci-dessous),
+  faite AVANT AD-1.
 
 ## 5. Découpage en sous-boucles (une à la fois, chacune bouclée)
 
-- **AD-1 — générateur de carto depuis le registre** : remplacer la carte écrite
-  main par un rendu déterministe depuis `IDEES.md` (parse → archipels par
-  thème → SVG). Harnais patrimoine (`tests/`) : déterminisme, zéro idée perdue,
-  contraste, thèmes clair/sombre. Non gaté.
-- **AD-2 — `agent-idees` + bilan** : créer le sous-agent (charte dans
-  `.claude/agents/`), lui faire produire regroupements/ponts/bilan ; Léo
-  synthétise, Paul valide les rapprochements. Non gaté.
-- **AD-3 — sécurité du quadrant** : appliquer l'option §4 (auth devant les
-  idées). **Gate Paul** (touche middleware/exposition).
-- **AD-4 (report, gate) — passage en base** : table `idees`, RLS mono-user,
-  édition interactive. **Gate Paul** (migration + coût nul si réutilisation du
-  projet `ultima`, mais sécurité relevée).
+Ordre validé par Paul : **AD-0 (sécuriser) → AD-1 → AD-2**, puis AD-4 si go.
 
-Ordre : AD-1 → AD-2 → AD-3, puis AD-4 si Paul le veut. AD-1/AD-2 avancent sans
-la console C1 (le registre + la carto sont autonomes) ; l'ensemble se branchera
-sur la coque authentifiée quand C1 existera.
+### AD-0 — sécuriser l'exposition des idées (EN PREMIER, gate Paul déjà donnée)
+Empêcher tout accès public à `/adramelech/*`. Étapes :
+1. Intégrer le verdict `securite-auditeur` (exposition réelle + garde minimal).
+2. Appliquer le garde au fil principal (piste : blocage `/adramelech/*` au
+   middleware edge — 404/401 côté public), patch minimal, style existant.
+3. Contre-passe `securite-auditeur` (le garde tient, pas de contournement) +
+   `verificateur` (une requête publique sur `/adramelech/carto-idees` et
+   `/adramelech/IDEES.md` est bien refusée ; le reste du site non régressé).
+4. Harnais patrimoine : ajouter l'assertion « `/adramelech/*` non servi en
+   public » à `tests/`.
+Commit atomique `fix(sec): idées ADRAMELECH hors surface publique [AD-0]`.
 
-## 6. Décisions attendues de Paul
+### AD-1 — générateur de carto depuis le registre (le cœur constructible)
+Remplacer la carte écrite à la main par un **rendu déterministe** depuis
+`IDEES.md`, groupé par thème. Étapes cadrées :
+1. **Contrat de données** : figer le format d'une idée lue depuis `IDEES.md`
+   (ID, nom, thème(s), statut, partenaire, liens) — le **Thème** est la clé de
+   regroupement. Source unique : `IDEES.md` (aucune duplication de données).
+2. **Parseur déterministe** (Node pur, dans `tests/` ou petit script de build,
+   zéro dépendance runtime) : `IDEES.md` → structure de données. Tolérant aux
+   variations de rédaction, mais échoue bruyamment si une idée est mal formée
+   (jamais d'idée silencieusement perdue).
+3. **Générateur de carto** : structure → SVG/HTML au **registre antique
+   existant réutilisé** (on ne refait pas le style ; on branche la source).
+   Regroupement : **un archipel par thème**, les idées d'un même thème
+   voisines, ponts (routes de synergie) dessinés depuis le champ liens.
+   Rendu **déterministe** (même registre → même image ; pas de `Math.random`/
+   `Date.now`). Sortie = artifact privé + build local (pas de page publique,
+   cf. AD-0).
+4. **Harnais patrimoine** (`tests/`, enrichi jamais jetable) : déterminisme
+   (même entrée → sortie identique), **zéro idée perdue** (toute idée du
+   registre apparaît dans un archipel), **regroupement correct** (chaque idée
+   dans l'archipel de son thème), contraste AA mesuré, thèmes clair/sombre,
+   zéro erreur console.
+5. **Contre-passe `verificateur`** (rendu réel, cas : idée sans thème → archipel
+   « À classer » ; 0 idée → état vide ; N idées d'un même thème).
+Dispatch : `front-carto` (implémente) + `data-ingenieur` (parseur/contrat),
+Léo synthétise. Commit `feat: carto ADRAMELECH générée depuis le registre [AD-1]`.
+Non gaté.
 
-1. **Périmètre v1** : valider « bibliothèque vivante sans base » (AD-1→AD-3,
-   zéro gate) — ou vouloir directement la version en base (AD-4, gate migration).
-2. **Sécurité** : valider l'option « idées derrière l'auth » (§4).
-3. **Ordre vs console C1** : on avance ADRAMELECH AD-1/AD-2 maintenant (ils sont
-   autonomes), la console C1 restant à faire en parallèle — OK ?
+### AD-2 — `agent-idees` + bilan
+Créer le sous-agent (`.claude/agents/`, appelé par Léo, ne parle jamais à
+Paul) : regroupements thématiques, rapprochements pertinents (ponts), **bilan**
+(combien ce mois, X inexploitables / X à raffiner / X réutilisables). Léo
+synthétise ; Paul valide les rapprochements avant qu'ils entrent au registre.
+Dashboard statique (compteurs par statut/par thème, registre antique). Non gaté.
+
+### AD-4 (reporté, gate) — passage en base
+Table `idees` (projet `ultima` existant), RLS mono-user, édition interactive,
+recherche plein-texte. **Gate Paul** (migration + sécurité relevée). Hors v1.
+
+AD-0/AD-1/AD-2 avancent **sans la console C1** (registre + carto autonomes) ;
+l'ensemble se branchera sur la coque authentifiée quand C1 existera.
+
+## 6. Décisions Paul — ✅ TOUTES VALIDÉES (2026-07-16)
+
+1. **Périmètre v1** : ✅ « bibliothèque vivante sans base » (zéro gate).
+2. **Sécurité** : ✅ idées jamais servies en public (« on sécurise la data »)
+   — traitée en premier (AD-0).
+3. **Ordre vs console C1** : ✅ on avance ADRAMELECH maintenant, console en
+   parallèle.
+
+Exécution : **AD-0 (sécuriser) → AD-1 (carto générée) → AD-2 (agent + bilan)**.
 
 ## 7. Ce que cette boucle NE fait pas (garde-fous EB)
 
