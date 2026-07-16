@@ -231,7 +231,10 @@
   (pilotage d'approvisionnement de chantier — matching besoins client ⟷
   commandes ⟷ stock propre, livraison J-1/J-2 contrôlée, manquants vus avant
   la pose ; besoin propre de Paul, cas d'école : l'aile de recouvrement
-  manquante qui a foutu un chantier de fenêtres). Lexique vocal enrichi.
+  manquante qui a foutu un chantier de fenêtres), puis **ADR-004 MYCÉLIUM**
+  (1 client → 2 clients : pilotage par la data client, relances au bon
+  moment, séquence post-chantier satisfaction → avis Google → recommandation
+  nominative ; maxime « frappez après une victoire »). Lexique vocal enrichi.
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 

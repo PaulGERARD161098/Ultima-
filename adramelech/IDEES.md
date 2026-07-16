@@ -178,3 +178,63 @@ impossible : le manquant se voit **avant** le jour de pose, pas dessus.
   collecte et revalorise.
 - **BCP** : chaque commande est une charge — le rapprochement commande/facture
   a un pendant financier.
+
+---
+
+## ADR-004 — MYCÉLIUM
+
+*Nom : le mycélium est le réseau souterrain qui fait surgir les champignons
+de proche en proche — l'image même de la propagation par les clients
+(« comme des champignons, paf, paf, paf »).*
+
+- **Capturée le** : 2026-07-16 (dictée vocale de Paul)
+- **Type** : pro · business
+- **Thème** : commercial · data client · fidélisation · recommandation
+- **Partenaire envisagé** : — (levier propre de Paul)
+- **Statut** : à raffiner
+
+### L'idée
+
+**Chaque client doit générer deux autres clients.** L'idée maîtresse : c'est
+la **donnée** — le pilotage de la data client — qui est le plus important.
+Dans le **même outil** que le suivi de chantier, enchaîner systématiquement :
+
+1. **Bien piloter les chantiers existants** — la qualité d'exécution est le
+   socle : sans victoire, rien à exploiter.
+2. **La bonne relance client au bon moment** — piloté par la donnée, pas au
+   hasard.
+3. **Frapper au moment de la satisfaction** : la maxime dictée par Paul —
+   *« frappez après une victoire et vous obtiendrez une autre victoire »*.
+   La fin de chantier réussie est LE moment : demande de satisfaction,
+   demande de recommandation, avis **cinq étoiles Google** — tac, tac, tac,
+   et on enchaîne, à chaque fois, sans exception.
+
+Objectif chiffré et simple : **1 client → 2 clients**. Ce sont les clients
+qui génèrent le lien ; la propagation se fait de proche en proche, comme des
+champignons. « Ce n'est pas compliqué » — c'est une discipline systématique,
+pas une prouesse technique. **À ne pas oublier.**
+
+### Enrichissement (pistes pour rendre l'idée exécutable)
+
+- Le mécanisme v1 est une **séquence post-chantier automatisable** : chantier
+  livré → J+2 demande de satisfaction → si satisfait, demande d'avis Google
+  + demande de recommandation nominative (« à qui pensez-vous ? ») → chaque
+  nom donné devient un lead rattaché à son parrain. Le taux mesuré :
+  recommandations obtenues / chantier.
+- La métrique de pilotage est le **coefficient de propagation** (clients
+  générés par client) : l'objectif de 2 se lit sur un dashboard, chantier
+  par chantier — qui a donné, qui n'a pas encore été sollicité.
+- Point d'attention : sollicitation d'avis conforme (consentement, pas
+  d'achat d'avis) — la sincérité est cohérente avec la fiabilité revendiquée
+  dans ADR-002 PROTÉE.
+
+### Liens inter-segments
+
+- **TRAVELLER** : le cœur du mécanisme existe déjà — relances au bon moment
+  (journal/relances v2), leads et relations d'apport d'affaires ; MYCÉLIUM
+  est la doctrine commerciale qui exploite cet outillage. Le lien
+  parrain → filleul est une relation typée du réseau.
+- **ADR-003 INTENDANT** : un chantier bien approvisionné se termine bien —
+  l'INTENDANT fabrique les victoires, MYCÉLIUM les exploite.
+- **ADR-002 PROTÉE** : même doctrine applicable à ses chantiers (« on
+  applique ça partout »).
