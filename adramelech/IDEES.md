@@ -10,6 +10,14 @@
 > Chaque idée : ID `ADR-###`, nom attribué, reformulation fidèle à la dictée,
 > enrichissement (pistes pour la rendre concrète), liens inter-segments,
 > statut (`brute` / `à raffiner` / `exploitable` / `close`).
+>
+> **Direction pour la boucle ADRAMELECH** (vision Paul 2026-07-16, cadrée dans
+> `CADRAGE-CONSOLE.md` §3.3) : à l'échelle, l'agent `agent-idees` fera des
+> **regroupements automatiques par thème** (archipels cohérents), du **tri
+> pertinent plutôt que de la donnée brute**, et des **ponts entre idées** —
+> sans jamais en perdre aucune. Le champ **Thème** ci-dessous est l'axe de
+> regroupement de départ ; le renseigner avec soin à chaque capture prépare
+> ce tri. La carte `carto-idees.html` est le socle visuel qui grandira.
 
 ---
 

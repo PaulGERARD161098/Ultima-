@@ -177,3 +177,10 @@
   la graphie avait été figée à deux L au cadrage console (RC5) sans retrouver
   la consigne antérieure — les noms propres dictés se vérifient dans la mémoire
   avant d'être figés.
+- **2026-07-16 (vision carto ADRAMELECH)** — Paul : la carto actuelle est OK
+  « pour l'instant » ; à l'échelle, l'agent `agent-idees` devra faire des
+  **regroupements automatiques par thème** (archipels cohérents), du **tri
+  pertinent, pas de la donnée brute**, et des **ponts entre idées** — zéro
+  perte. Provisionné dans le cadrage (CADRAGE-CONSOLE §3.3) et l'en-tête du
+  registre ; implémentation différée à l'ouverture de la boucle ADRAMELECH.
+  Le champ Thème d'IDEES.md est l'axe de regroupement de départ.

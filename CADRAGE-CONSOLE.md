@@ -52,6 +52,27 @@ les deux, et cherche la **cohérence avec le reste d'Ultima** (de près ou de
 loin). **Dashboard hebdo/mensuel** : combien d'idées ce mois, X inexploitables /
 X à raffiner / X réutilisables. Cap : rien perdre, tout enrichir.
 
+**Cartographie & regroupements automatiques (vision Paul, 2026-07-16 — à
+provisionner pour la boucle ADRAMELECH).** La carte des idées
+(`adramelech/carto-idees.html`, livrée en statique) est le socle visuel ;
+elle grandira à chaque idée. À l'échelle, l'affichage brut ne suffit plus :
+c'est **l'agent (`agent-idees`) qui doit faire le tri**, pas l'interface qui
+déverse la donnée. Exigences actées :
+- **Regroupement thématique automatique** : l'agent rassemble les idées
+  communes en **archipels cohérents par thème** (un archipel = une famille
+  d'idées), au lieu d'une liste plate qui enfle.
+- **Tri pertinent, pas brut** : la valeur est dans la qualité du
+  rapprochement (pertinent, cohérent, intéressant), pas dans le volume
+  affiché. L'agent propose les regroupements ; Paul valide.
+- **Ponts entre idées** : l'interface matérialise les liens (comme les
+  routes de synergie déjà dessinées entre GLANEUR/INTENDANT/MYCÉLIUM/PROTÉE),
+  y compris inter-segments (une idée ↔ un contact TRAVELER, ↔ une dépense BCP).
+- **Zéro perte** : tout est cartographié, rien ne tombe hors carte — le tri
+  réorganise, il n'écarte jamais.
+Implémentation différée (pas de code produit tant que la boucle ADRAMELECH
+n'est pas ouverte) ; le champ **Thème** déjà présent dans `adramelech/IDEES.md`
+est l'axe de regroupement de départ.
+
 ### 3.4 IMLADRIK — développement personnel
 Outil intime de progression (héritier du Starlog de « Claude Normal ») :
 **objectifs de vie**, **journal**, **valeurs et principes**, **prise de recul**
