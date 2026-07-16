@@ -263,11 +263,17 @@ lisible par la carto et `agent-idees`. Pas de base pour ce volet (pas de gate).
   **éprouver la grille** avant de généraliser. Dispatch `agent-idees` (analyse
   lourde), Léo synthétise et intègre. Non gaté. Commit
   `feat(adramelech): grille d'analyse stratégique + fiche pilote GLANEUR [AD-5]`.
-- **AD-5b — généralisation** : appliquer la grille aux 3 autres idées (PROTÉE,
-  INTENDANT, MYCÉLIUM) une fois la grille validée sur le pilote.
-- **AD-5c — tri & top 3** : quand le volume approche 15-20 idées, classement
-  par score pondéré + benchmark → sélection des 3 retenues + leur provision
-  d'agents/automatisations.
+- **AD-5b — généralisation + classement ✅ LIVRÉ (2026-07-16)** : grille
+  appliquée aux 3 autres idées (PROTÉE, INTENDANT, MYCÉLIUM) ; pondération actée
+  (Temps ×2 + Rému ×2). Vu le volume (4 idées), le **classement top-3 a été
+  produit dans la foulée** (section « Classement stratégique » en tête d'`IDEES.md`) :
+  top 3 = **MYCÉLIUM 8,1 · INTENDANT 7,9 · PROTÉE 6,3**, lus **en système**
+  (moteur qui se renforce) ; **GLANEUR 5,0 = satellite, hors top 3**. Séquence de
+  démarrage validée par Paul : **INTENDANT → MYCÉLIUM → PROTÉE (bridée)**.
+- **AD-5c — premier build d'un retenu : INTENDANT v1** : cf. §9 (choix Paul
+  2026-07-16, « cadrer le build d'INTENDANT »).
+- **AD-5d — tri à l'échelle** (futur) : quand le volume approche 15-20 idées,
+  re-classement par score pondéré + benchmark pour re-trancher le top 3.
 
 ### 8.5 Ce que ce volet NE fait pas (garde-fous EB)
 
@@ -285,3 +291,84 @@ lisible par la carto et `agent-idees`. Pas de base pour ce volet (pas de gate).
 3. **Benchmark** : ✅ ligne de base = **Renoboost IA** (socle chantiers +
    installations à domicile), libellé confirmé par Paul (au lexique).
 4. **Pondération scoring** : ✅ **Temps ×2 + Rémunérateur ×2** (dénominateur 7).
+
+## 9. AD-5c — premier build d'un retenu : INTENDANT v1 (outil interne)
+
+> Première idée du top 3 qui passe de l'analyse à la construction (choix Paul
+> 2026-07-16, séquence INTENDANT → MYCÉLIUM → PROTÉE). **Cadrage pur** : on borne
+> le build, on ne code pas encore. Source : fiche stratégique ADR-003 dans
+> `IDEES.md` (bloc « Analyse stratégique »).
+
+### 9.1 Pourquoi INTENDANT en premier
+
+Le moins cher (**3-8 j-h [hyp.]**, zéro actif), il **dérisque le socle Renoboost
+IA tout de suite** (plus de chantier foiré faute d'une pièce) **et fabrique la
+matière première de MYCÉLIUM** (les fins de chantier réussies). C'est le rouage
+amont du moteur.
+
+### 9.2 Périmètre v1 — la check-list, PAS l'ERP
+
+Le risque n°1 du prémortem d'INTENDANT est la **sur-ingénierie**. La v1 est
+**exactement** le noyau décrit au registre, rien de plus :
+- **Matching à 3 sources au niveau de la pièce** : besoins client ⟷ commandes ⟷
+  stock propre.
+- **3 états par ligne** : `couvert` / `commande_en_attente` / `manquant`.
+- **Cycle de vie d'une ligne** : besoin → couvert (stock/commande) → livré →
+  **contrôlé en bon état** (la casse au contrôle = repasse en `manquant`).
+- **Alerte J-2** : tant qu'un `manquant` subsiste à 2 jours de la pose, alerte.
+- **Recalcul** : un besoin ajouté en cours de route recalcule les manquants.
+- **Instrumenter la preuve dès la v1** : compteur de **manquants détectés à J-2**
+  (contre le risque « valeur invisible » du prémortem — sans mesure, l'outil est
+  abandonné faute de ROI ressenti).
+
+**Hors v1, explicitement** : compta/paie/devis/RH (ce serait un ERP) ; import &
+parsing des BC fournisseurs (**gate** : coût, fragilité — différé jusqu'à preuve
+de valeur par la saisie manuelle/vocale) ; généralisation SaaS multi-tenant à
+d'autres artisans (**après** un cycle chantier complet piloté en interne).
+
+### 9.3 Contrat de données — proposé par `data-ingenieur` (à intégrer)
+
+Principe non négociable : **s'accrocher à la fiche chantier TRAVELER existante**
+(FK vers le chantier), **pas de silo**. RLS mono-owner en miroir de `0007`.
+*[Contrat détaillé — entités, champs, états, règle de calcul, RLS, ébauche de
+migration — inséré ici depuis la proposition `data-ingenieur`.]*
+
+### 9.4 Saisie
+
+- **Vocale prioritaire** (registre ADRAMELECH oblige) + saisie manuelle.
+- **Pas de parsing BC fournisseurs en v1** (gate).
+
+### 9.5 Découpage en sous-boucles (une à la fois, gates respectées)
+
+- **AD-5c-α — contrat de données + règle de matching** (ce cadrage + la proposition
+  `data-ingenieur`) : SPEC figée, ébauche de migration `0008_intendant.sql`
+  **draftée mais JAMAIS appliquée**. Non gaté (rédaction seule).
+- **AD-5c-β — migration base** : appliquer `0008_intendant.sql` → **GATE PAUL**
+  (toute migration en prod). Contre-passe `securite-auditeur` (RLS, isolation
+  inter-owner) avant application.
+- **AD-5c-γ — API `requireUser` + validation stricte** (parité API↔base, motif
+  `validate*` de AD-4b) : CRUD besoins/commandes/stock + dérivation d'état +
+  endpoint alerte J-2. Surface à risque → contre-passe.
+- **AD-5c-δ — front** : saisie (vocale d'abord), vue check-list par chantier,
+  **alertes J-2** lisibles, compteur de manquants détectés. Harnais patrimoine
+  (`tests/`) enrichi : déterminisme du calcul d'état, zéro ligne perdue, alerte
+  déclenchée au bon seuil. Contre-passe `verificateur`.
+
+### 9.6 Garde-fous EB
+
+- **La check-list, pas l'ERP** — si la v1 dépasse ~8-10 j-h sans avoir tourné sur
+  un vrai chantier, on a sur-ingénié : stop et recentrage.
+- **Boucler le besoin propre avant tout SaaS** — aucun multi-tenant tant qu'un
+  cycle chantier complet de Paul n'est pas piloté par l'outil.
+- **Pas de parsing fournisseurs avant preuve** de valeur par la saisie simple.
+- **Migration jamais appliquée seule** (gate) ; le SQL vit dans
+  `supabase/migrations/`.
+
+### 9.7 Note d'architecture — INTENDANT « sort » de la bibliothèque
+
+Une fois construit, l'INTENDANT est un **outil opérationnel du socle**
+(pilotage d'approvisionnement de chantier) : il vit dans l'orbite **TRAVELER /
+Renoboost IA**, pas dans la bibliothèque d'idées. ADRAMELECH a fait son travail
+(capter → analyser → trancher) ; le build est une **diplomation hors du quadrant
+idées**. Ce cadrage AD-5c reste ici par continuité, mais l'exécution et la
+mémoire opérationnelle de l'INTENDANT relèvent du socle.
