@@ -184,3 +184,13 @@
   perte. Provisionné dans le cadrage (CADRAGE-CONSOLE §3.3) et l'en-tête du
   registre ; implémentation différée à l'ouverture de la boucle ADRAMELECH.
   Le champ Thème d'IDEES.md est l'axe de regroupement de départ.
+- **2026-07-16 (architecture agent — VERROUILLÉE)** — Paul : « je veux un seul
+  agent qui pilote tout sur Ultima… un seul interlocuteur numérique qui a toute
+  la mémoire et qui garde tout ». Confirmé : c'était déjà le modèle (Léo =
+  interlocutrice unique, Paul ne lit jamais de sortie brute). Précisions
+  verrouillées : ① Léo est le SEUL agent cross-plateforme ; ② les autres
+  `.claude/agents/` sont ses SOUS-agents, pas des rivaux — elle peut les
+  appeler (maximiser l'existant, ne pas bosser pour rien) mais garde tout ;
+  ③ Léo se décline par quadrant en reprenant le sigle du projet (dragon,
+  boussole…), un seul agent plusieurs blasons — mapping sigle↔quadrant à figer
+  avec le graphisme. Gravé dans la charte (leo.md) et CADRAGE-CONSOLE §6/§7.

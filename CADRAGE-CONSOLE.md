@@ -130,6 +130,16 @@ Conséquences (à tenir à chaque boucle) :
   mis à jour (accords au féminin).
 - **Mandat élargi aux 4 domaines** : Léo pilote TRAVELER, BCP, ADRAMELECH et
   IMLADRIK, avec la même discipline et les mêmes gates.
+- **UN SEUL agent, verrouillé (Paul, 2026-07-16)** : Léo est le seul agent qui
+  agit en cross-plateforme et le seul interlocuteur de Paul — une seule mémoire
+  qui garde tout. Les autres `.claude/agents/` sont **ses sous-agents**
+  (mono-tâche, sorties synthétisées par Léo, jamais lues brutes par Paul), pas
+  des agents concurrents. Léo peut les appeler pour maximiser l'existant, mais
+  ne recrute que si aucune expertise ne couvre le besoin — « ne pas bosser pour
+  rien ». Détail dans la charte (`.claude/agents/leo.md`, principe verrouillé).
+- **Déclinaison par sigle de quadrant** : Léo reste le même agent et **reprend
+  le sigle du quadrant courant** (amorces Paul : dragon, boussole…) — un seul
+  agent, plusieurs blasons. Correspondance sigle ↔ quadrant à figer (graphisme).
 - **Recrutement au fil des boucles** (charte §3) : Léo crée les agents/skills
   manquants **quand la boucle du quadrant s'ouvre**, pas tous d'un coup
   (discipline « pas dix lièvres »).
@@ -137,12 +147,14 @@ Conséquences (à tenir à chaque boucle) :
 ## 7. Carte des agents & skills à prévoir (aplanissement)
 
 Ce dont on aura besoin par quadrant — **créé boucle par boucle**, pas maintenant.
-L'équipe actuelle (`securite-auditeur`, `data-ingenieur`, `front-carto`,
-`interface-ux`, `graphisme`, `verificateur`) et les skills installés
-(`frontend-design`, `theme-factory`, `algorithmic-art`, `webapp-testing`,
-`skill-creator`) servent les 4.
+**Ce sont tous des sous-agents de Léo** (voir §6, principe verrouillé) : Léo les
+appelle et garde tout, ils ne parlent jamais à Paul. L'équipe actuelle
+(`securite-auditeur`, `data-ingenieur`, `front-carto`, `interface-ux`,
+`graphisme`, `verificateur`) et les skills installés (`frontend-design`,
+`theme-factory`, `algorithmic-art`, `webapp-testing`, `skill-creator`)
+servent les 4.
 
-| Quadrant | Agents à prévoir | Skills à prévoir |
+| Quadrant | Sous-agents à prévoir (appelés par Léo) | Skills à prévoir |
 |---|---|---|
 | Console | (équipe front existante) | `frontend-design`, `theme-factory` |
 | TRAVELER | existant + **agent-liaison** (entremetteur outillé) | existants |
