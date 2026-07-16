@@ -227,7 +227,11 @@
   Merlin, mise à la benne facturée aux artisans, entrepôt achat-revente ;
   avec Godefroy) et **ADR-002 PROTÉE** (entreprise flexible bâtiment/énergie —
   clim/PAC/photovoltaïque selon saisons et modes, équipes polyvalentes,
-  subventions captées proprement ; avec Julien). Lexique vocal enrichi.
+  subventions captées proprement ; avec Julien), puis **ADR-003 INTENDANT**
+  (pilotage d'approvisionnement de chantier — matching besoins client ⟷
+  commandes ⟷ stock propre, livraison J-1/J-2 contrôlée, manquants vus avant
+  la pose ; besoin propre de Paul, cas d'école : l'aile de recouvrement
+  manquante qui a foutu un chantier de fenêtres). Lexique vocal enrichi.
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 

@@ -113,3 +113,68 @@ n'est pas un produit unique mais la **vitesse de réaction** :
 - **TRAVELLER** : Julien (partenaire pressenti) ; le réseau fournit
   sous-traitants et apporteurs d'affaires.
 - **BCP** : à terme, structure à part — pilotage financier séparé.
+
+---
+
+## ADR-003 — INTENDANT
+
+*Nom : l'intendant, c'est celui qui veille à ce que rien ne manque jamais —
+registre ancien et sérieux, fidèle au rôle exact de l'outil.*
+
+- **Capturée le** : 2026-07-16 (dictée vocale de Paul)
+- **Type** : pro · business (outil né d'un besoin propre, généralisable)
+- **Thème** : bâtiment · logistique de chantier · approvisionnement
+- **Partenaire envisagé** : — (besoin propre de Paul)
+- **Statut** : à raffiner
+
+### L'idée
+
+Un **outil de pilotage à 100 % opérationnel de l'approvisionnement de
+chantier**, né d'un constat répété : dès qu'une commande est un peu spéciale,
+ça se passe mal — il y a toujours des manquants, des produits cassés, des
+choses qui ne vont pas, et le chantier déraille.
+
+Le cœur de l'outil est un **matching à trois sources** :
+
+1. **Les besoins du client** — ce que le chantier exige, pièce par pièce.
+2. **Mes commandes** — ce qui est effectivement commandé et ce qui arrive.
+3. **Mon stock à moi** — ce que j'ai déjà et qui n'a pas besoin d'être
+   commandé.
+
+À partir de ce matching, l'outil répond aux questions du quotidien : est-ce
+que je dois passer commande ? De quoi exactement ? Et il **pilote le
+calendrier** : les produits arrivent **la veille ou l'avant-veille**, **en bon
+état**, et **le lendemain il y a la pose**. Si des besoins s'ajoutent en cours
+de route, je les saisis, l'outil recalcule les manquants et je repasse
+commande — rien ne passe entre les mailles.
+
+**Le cas d'école** (vécu) : un chantier de fenêtres entièrement compromis
+parce qu'il manquait **l'aile de recouvrement** — une seule pièce absente et
+tout le chantier est foutu. C'est exactement ce que le matching doit rendre
+impossible : le manquant se voit **avant** le jour de pose, pas dessus.
+
+### Enrichissement (pistes pour rendre l'idée exécutable)
+
+- Ce n'est « pas la mer à boire » (dixit Paul) : le noyau v1 est une
+  **check-list de rapprochement** — besoins ⟷ commandé ⟷ en stock — avec
+  trois états par ligne (couvert / commandé-en-attente / manquant) et une
+  alerte tant qu'il reste un manquant à J-2 de la pose.
+- Étapes de vie d'une ligne : besoin identifié → couvert (stock ou commande)
+  → livré → **contrôlé en bon état** (le contrôle réception fait partie du
+  pilotage : la casse découverte le jour de la pose = manquant).
+- Sources d'entrée à instruire : saisie vocale (registre ADRAMELECH oblige),
+  import des devis/bons de commande fournisseurs (parsing = à évaluer,
+  éventuel coût → gate).
+- Généralisable ensuite à d'autres artisans (produit à part entière), mais la
+  v1 se cale sur les chantiers de Paul — boucler petit d'abord.
+
+### Liens inter-segments
+
+- **TRAVELLER** : les chantiers sont déjà des nœuds du réseau — l'INTENDANT
+  pourrait s'adosser à une fiche chantier existante plutôt que créer un
+  silo ; les fournisseurs sont des contacts.
+- **ADR-001 GLANEUR** : les surplus de chantier détectés par l'INTENDANT
+  (lignes commandées non posées) sont exactement la matière que GLANEUR
+  collecte et revalorise.
+- **BCP** : chaque commande est une charge — le rapprochement commande/facture
+  a un pendant financier.

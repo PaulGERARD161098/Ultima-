@@ -21,6 +21,9 @@
 | Florilège Didet | florilège d'idées |
 | Laurent Merlin | Leroy Merlin (enseigne de bricolage) |
 | ils sont des dix | (déformation — contexte : « attribue-lui un nom ») |
+| la vanvaille | l'avant-veille |
+| la pause (contexte chantier) | la pose |
+| on stocke à moi | mon stock à moi |
 | Humladric, Imladric, Imladrik | IMLADRIK (quadrant dév. perso) |
 | Traveller, Traveler | TRAVELLER (quadrant réseau) |
 | directive EB, macro-directive | discipline : boucler avant d'avancer + capitaliser sur l'existant |
