@@ -235,13 +235,13 @@ TOWS · Lean Canvas · Prémortem** (chacun un horizon différent).
   causes probables + le signal avancé de chacune.
 - **E. Scoring /10** — 5 critères, chacun /10 + justification :
   **Simple · Efficace · Rémunérateur · Utile · Temps** (10 = très rapide à
-  lancer). Pondération explicite (défaut égale ; Léo recommande si un critère
-  doit peser plus) → score global pondéré /10.
+  lancer). **Pondération actée (Paul 2026-07-16) : Temps ×2 et Rémunérateur ×2**
+  (contexte « pas le temps, 3 idées max » → vitesse + rentabilité comptent
+  double) ; score global pondéré /10 sur dénominateur 7.
 - **F. Benchmark obligatoire** — mise en concurrence **mécanique** de l'idée
-  avec le **cœur rémunérateur** = **chantiers + installations à domicile** (la
-  « vache à lait »). Verdict tranché : top 3 ou satellite du socle. *Ligne de
-  base nommée « Renault Boost » par Paul — libellé à confirmer (candidat
-  lexique) ; le socle chantiers+installs est, lui, non ambigu.*
+  avec le **cœur rémunérateur** = **Renoboost IA** (chantiers + installations à
+  domicile, la « vache à lait » ; libellé confirmé par Paul 2026-07-16, au
+  lexique). Verdict tranché : top 3 ou satellite du socle.
 - **G. Provision d'exécution** — quels **agents** (existants ou à créer) et
   quelles **automatisations** fluidifieraient le projet s'il était retenu.
 
@@ -279,8 +279,9 @@ lisible par la carto et `agent-idees`. Pas de base pour ce volet (pas de gate).
 
 ### 8.6 Décisions Paul — ✅ validées (2026-07-16)
 
-1. **Périmètre AD-5a** : ✅ cadrer + fiche pilote GLANEUR.
+1. **Périmètre AD-5a** : ✅ cadrer + fiche pilote GLANEUR (grille validée par
+   Paul → généralisation AD-5b lancée).
 2. **Stockage** : ✅ dans `IDEES.md`, par idée.
-3. **Benchmark** : ligne de base = cœur rémunérateur (chantiers + installs) ;
-   ⏳ **à confirmer** : « Renault Boost » désigne-t-il ce socle ou un repère
-   précis distinct ?
+3. **Benchmark** : ✅ ligne de base = **Renoboost IA** (socle chantiers +
+   installations à domicile), libellé confirmé par Paul (au lexique).
+4. **Pondération scoring** : ✅ **Temps ×2 + Rémunérateur ×2** (dénominateur 7).
