@@ -198,11 +198,11 @@
   <header class="cartouche">
     <p class="surtitre">Ultima · Quadrant des idées</p>
     <h1>Archipel d’Adramelech</h1>
-    <p class="devise">Carte des idées de Paul — levée sur dictée le 16 juillet 2026 · quatre îles reconnues, aucune perdue</p>
+    <p class="devise">Carte des idées de Paul — 4 îles reconnues, aucune perdue · relevée le 2026-07-16</p>
   </header>
 
   <figure class="carte">
-    <svg viewBox="0 0 1000 640" role="img" aria-label="Carte de l’archipel d’ADRAMELECH : quatre îles d’idées reliées par des routes de synergie, au-dessus de la terre ferme de TRAVELER">
+    <svg viewBox="0 0 1000 640" role="img" aria-label="Carte de l’archipel d’ADRAMELECH : 4 îles d’idées regroupées en 2 archipels par thème, reliées par des routes de synergie, au-dessus de la terre ferme de TRAVELER">
       <defs>
         <filter id="grain" x="0" y="0" width="100%" height="100%">
           <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="n"/>
@@ -219,84 +219,71 @@
       <rect x="10" y="10" width="980" height="620" fill="none" stroke="var(--encre-claire)" stroke-width="2"/>
       <rect x="18" y="18" width="964" height="604" fill="none" stroke="var(--filet)" stroke-width="0.8"/>
 
-      <!-- lignes de rhumb discrètes -->
-      <g stroke="var(--filet)" stroke-width="0.5" opacity="0.5">
-        <line x1="497" y1="288" x2="60" y2="60"/>
-        <line x1="497" y1="288" x2="940" y2="60"/>
-        <line x1="497" y1="288" x2="60" y2="520"/>
-        <line x1="497" y1="288" x2="940" y2="520"/>
-        <line x1="497" y1="288" x2="497" y2="40"/>
-        <line x1="497" y1="288" x2="60" y2="288"/>
-        <line x1="497" y1="288" x2="940" y2="288"/>
+      <!-- lignes de rhumb depuis la rose des vents (haut) -->
+      <g stroke="var(--filet)" stroke-width="0.5" opacity="0.45">
+        <line x1="500" y1="70" x2="60" y2="520"/>
+        <line x1="500" y1="70" x2="940" y2="520"/>
+        <line x1="500" y1="70" x2="270" y2="540"/>
+        <line x1="500" y1="70" x2="730" y2="540"/>
+        <line x1="500" y1="70" x2="500" y2="540"/>
+        <line x1="500" y1="70" x2="60" y2="300"/>
+        <line x1="500" y1="70" x2="940" y2="300"/>
       </g>
 
       <!-- rose des vents -->
-      <g transform="translate(497 288)" stroke="var(--encre-claire)" fill="var(--encre-claire)">
-        <circle r="34" fill="none" stroke-width="1"/>
-        <circle r="26" fill="none" stroke="var(--filet)" stroke-width="0.6"/>
-        <path d="M0,-48 L6,-8 L0,0 L-6,-8 Z"/>
-        <path d="M0,48 L6,8 L0,0 L-6,8 Z" fill="none" stroke-width="1"/>
-        <path d="M-48,0 L-8,-6 L0,0 L-8,6 Z" fill="none" stroke-width="1"/>
-        <path d="M48,0 L8,-6 L0,0 L8,6 Z" fill="none" stroke-width="1"/>
-        <text y="-56" text-anchor="middle" font-size="14" stroke="none">N</text>
+      <g transform="translate(500 70)" stroke="var(--encre-claire)" fill="var(--encre-claire)">
+        <circle r="30" fill="none" stroke-width="1"/>
+        <circle r="23" fill="none" stroke="var(--filet)" stroke-width="0.6"/>
+        <path d="M0,-42 L5,-7 L0,0 L-5,-7 Z"/>
+        <path d="M0,42 L5,7 L0,0 L-5,7 Z" fill="none" stroke-width="1"/>
+        <path d="M-42,0 L-7,-5 L0,0 L-7,5 Z" fill="none" stroke-width="1"/>
+        <path d="M42,0 L7,-5 L0,0 L7,5 Z" fill="none" stroke-width="1"/>
+        <text y="-48" text-anchor="middle" font-size="13" stroke="none">N</text>
       </g>
 
-      <!-- ÎLE GLANEUR (nord-ouest) -->
       <g>
-        <path d="M140,185 C150,140 220,118 285,132 C340,143 360,185 340,222 C315,262 235,268 185,248 C148,233 132,212 140,185 Z"
-              fill="var(--ile)" stroke="var(--encre)" stroke-width="1.6"/>
-        <path d="M132,185 C142,133 218,108 290,124 C350,137 372,186 349,229 C321,272 232,279 178,257 C139,241 124,215 132,185 Z"
-              fill="none" stroke="var(--encre-claire)" stroke-width="0.6" opacity="0.7"/>
-        <text x="243" y="180" text-anchor="middle" font-size="24" letter-spacing="4" fill="var(--encre)" style="font-variant:small-caps">Glaneur</text>
-        <text x="243" y="202" text-anchor="middle" font-size="11" letter-spacing="2" fill="var(--encre-pale)">ADR-001 · avec Godefroy</text>
-        <text x="243" y="222" text-anchor="middle" font-size="12" font-style="italic" fill="var(--encre-claire)">invendus, rebuts, entrepôt</text>
+        <text x="285" y="145" text-anchor="middle" font-size="16" letter-spacing="5" fill="var(--encre)" style="font-variant:small-caps">Bâtiment</text>
+        <line x1="225" y1="152" x2="345" y2="152" stroke="var(--filet)" stroke-width="0.6"/>
       </g>
-
-      <!-- ÎLE PROTÉE (nord-est) -->
       <g>
-        <path d="M665,190 C670,140 740,115 810,130 C870,143 890,190 868,228 C840,270 745,272 700,250 C670,235 660,215 665,190 Z"
-              fill="var(--ile)" stroke="var(--encre)" stroke-width="1.6"/>
-        <path d="M657,190 C662,133 738,105 816,122 C880,136 902,192 877,235 C846,281 742,283 692,258 C661,242 651,217 657,190 Z"
-              fill="none" stroke="var(--encre-claire)" stroke-width="0.6" opacity="0.7"/>
-        <text x="770" y="182" text-anchor="middle" font-size="24" letter-spacing="4" fill="var(--encre)" style="font-variant:small-caps">Protée</text>
-        <text x="770" y="204" text-anchor="middle" font-size="11" letter-spacing="2" fill="var(--encre-pale)">ADR-002 · avec Julien</text>
-        <text x="770" y="224" text-anchor="middle" font-size="12" font-style="italic" fill="var(--encre-claire)">bâtiment &amp; énergie, à volonté</text>
+        <text x="715" y="145" text-anchor="middle" font-size="16" letter-spacing="5" fill="var(--encre)" style="font-variant:small-caps">Commercial</text>
+        <line x1="655" y1="152" x2="775" y2="152" stroke="var(--filet)" stroke-width="0.6"/>
       </g>
-
-      <!-- ÎLE INTENDANT (sud-ouest) -->
       <g>
-        <path d="M215,400 C222,355 290,332 355,347 C410,360 428,400 408,435 C383,472 300,478 255,458 C225,444 210,425 215,400 Z"
-              fill="var(--ile)" stroke="var(--encre)" stroke-width="1.6"/>
-        <path d="M207,400 C214,348 288,322 360,339 C420,353 440,401 417,442 C389,485 297,489 248,467 C216,452 199,427 207,400 Z"
-              fill="none" stroke="var(--encre-claire)" stroke-width="0.6" opacity="0.7"/>
-        <text x="315" y="395" text-anchor="middle" font-size="24" letter-spacing="4" fill="var(--encre)" style="font-variant:small-caps">Intendant</text>
-        <text x="315" y="417" text-anchor="middle" font-size="11" letter-spacing="2" fill="var(--encre-pale)">ADR-003 · besoin propre</text>
-        <text x="315" y="437" text-anchor="middle" font-size="12" font-style="italic" fill="var(--encre-claire)">rien ne manque au chantier</text>
+        <path d="M244.9,246.8 C243.8,257.1 247.6,268.9 241.2,276.4 C234.7,283.9 218.3,288 206,291.9 C193.6,295.8 180.6,299.9 167,299.8 C153.4,299.7 134.6,297.5 124.3,291.3 C114,285 109.9,272.4 105.4,262.1 C100.8,251.8 94.5,240 97.2,229.7 C99.9,219.3 110.3,207.4 121.7,200.1 C133.1,192.8 151.1,186.2 165.4,186 C179.8,185.7 194.2,193.9 207.8,198.6 C221.5,203.3 241.1,206.2 247.3,214.2 C253.5,222.3 245.9,236.4 244.9,246.8 Z" fill="none" stroke="var(--encre-claire)" stroke-width="0.6" opacity="0.7"/>
+        <path d="M238.1,246.8 C237.2,255.7 240.6,265.8 234.8,272.3 C229,278.8 214.2,282.3 203.1,285.7 C192,289.1 180.3,292.6 168,292.5 C155.8,292.4 138.9,290.5 129.6,285.1 C120.4,279.7 116.6,268.8 112.6,260 C108.5,251.1 102.8,240.9 105.2,232 C107.7,223.1 117.1,212.8 127.3,206.5 C137.5,200.2 153.7,194.6 166.6,194.3 C179.6,194.1 192.5,201.2 204.8,205.2 C217.1,209.3 234.8,211.8 240.3,218.7 C245.9,225.6 239,237.8 238.1,246.8 Z" fill="var(--ile)" stroke="var(--encre)" stroke-width="1.6"/>
+        <text x="177.5" y="240.8" text-anchor="middle" font-size="17" letter-spacing="2" fill="var(--encre)" style="font-variant:small-caps">Glaneur</text>
+        <text x="177.5" y="258.8" text-anchor="middle" font-size="10.5" letter-spacing="1.5" fill="var(--encre-pale)">ADR-001 · avec Godefroy</text>
+        <text x="177.5" y="274.8" text-anchor="middle" font-size="11" font-style="italic" fill="var(--encre-claire)">Bâtiment</text>
       </g>
-
-      <!-- ÎLE MYCÉLIUM (sud-est) -->
       <g>
-        <path d="M610,400 C617,355 685,332 750,347 C805,360 823,400 803,435 C778,472 695,478 650,458 C620,444 605,425 610,400 Z"
-              fill="var(--ile)" stroke="var(--encre)" stroke-width="1.6"/>
-        <path d="M602,400 C609,348 683,322 755,339 C815,353 835,401 812,442 C784,485 692,489 643,467 C611,452 594,427 602,400 Z"
-              fill="none" stroke="var(--encre-claire)" stroke-width="0.6" opacity="0.7"/>
-        <text x="710" y="395" text-anchor="middle" font-size="24" letter-spacing="4" fill="var(--encre)" style="font-variant:small-caps">Mycélium</text>
-        <text x="710" y="417" text-anchor="middle" font-size="11" letter-spacing="2" fill="var(--encre-pale)">ADR-004 · levier propre</text>
-        <text x="710" y="437" text-anchor="middle" font-size="12" font-style="italic" fill="var(--encre-claire)">un client en donne deux</text>
+        <path d="M472.8,246.8 C473.1,255.5 457.7,264.7 449.9,273.5 C442,282.3 437.3,294.1 425.8,299.6 C414.2,305.1 394.7,308.2 380.6,306.6 C366.6,304.9 351.9,296.8 341.4,289.5 C330.8,282.2 319.9,272.2 317.4,262.7 C314.8,253.3 322.8,243.1 326,232.6 C329.2,222.1 327.5,207.8 336.5,199.9 C345.5,192 366.1,184.8 380.3,185 C394.4,185.2 409.9,195.2 421.2,201.2 C432.5,207.2 439.3,213.4 447.9,221 C456.5,228.5 472.4,238 472.8,246.8 Z" fill="none" stroke="var(--encre-claire)" stroke-width="0.6" opacity="0.7"/>
+        <path d="M464.7,246.8 C465,254.3 451.2,262.2 444.1,269.8 C437.1,277.4 432.8,287.6 422.5,292.3 C412.1,297.1 394.5,299.8 381.8,298.3 C369.2,296.9 356,289.9 346.5,283.6 C337,277.3 327.2,268.7 324.9,260.5 C322.6,252.4 329.8,243.6 332.7,234.5 C335.5,225.5 334,213.2 342.1,206.4 C350.2,199.5 368.8,193.3 381.5,193.5 C394.2,193.7 408.2,202.3 418.3,207.5 C428.5,212.6 434.6,218 442.3,224.5 C450.1,231.1 464.4,239.2 464.7,246.8 Z" fill="var(--ile)" stroke="var(--encre)" stroke-width="1.6"/>
+        <text x="392.5" y="240.8" text-anchor="middle" font-size="17" letter-spacing="2" fill="var(--encre)" style="font-variant:small-caps">Protée</text>
+        <text x="392.5" y="258.8" text-anchor="middle" font-size="10.5" letter-spacing="1.5" fill="var(--encre-pale)">ADR-002 · avec Julien</text>
+        <text x="392.5" y="274.8" text-anchor="middle" font-size="11" font-style="italic" fill="var(--encre-claire)">Bâtiment</text>
+      </g>
+      <g>
+        <path d="M361,422.3 C360.8,433.4 364,447.8 356.1,455.4 C348.3,463 327.4,464.7 313.8,468 C300.2,471.2 288,475.2 274.6,474.8 C261.1,474.4 243.8,471.7 233.2,465.6 C222.6,459.5 213,447.5 210.9,438 C208.8,428.5 216.8,418.3 220.6,408.5 C224.4,398.7 224.6,385.6 233.6,379.3 C242.7,373 261.4,371.3 274.8,370.8 C288.2,370.2 300.6,372.8 314.2,375.8 C327.9,378.8 349.1,381 356.8,388.8 C364.6,396.5 361.1,411.1 361,422.3 Z" fill="none" stroke="var(--encre-claire)" stroke-width="0.6" opacity="0.7"/>
+        <path d="M353.4,422.3 C353.3,431.8 356.1,444.3 349,450.8 C341.9,457.4 323.2,458.9 310.9,461.7 C298.7,464.5 287.7,467.9 275.6,467.6 C263.5,467.2 247.9,464.9 238.4,459.6 C228.8,454.3 220.2,444.1 218.3,435.9 C216.4,427.7 223.6,418.9 227,410.4 C230.4,402 230.6,390.6 238.8,385.2 C246.9,379.8 263.7,378.4 275.8,377.9 C287.9,377.4 299,379.6 311.3,382.2 C323.6,384.8 342.6,386.7 349.7,393.4 C356.7,400.1 353.5,412.7 353.4,422.3 Z" fill="var(--ile)" stroke="var(--encre)" stroke-width="1.6"/>
+        <text x="285" y="416.3" text-anchor="middle" font-size="17" letter-spacing="2" fill="var(--encre)" style="font-variant:small-caps">Intendant</text>
+        <text x="285" y="434.3" text-anchor="middle" font-size="10.5" letter-spacing="1.5" fill="var(--encre-pale)">ADR-003 · à raffiner</text>
+        <text x="285" y="450.3" text-anchor="middle" font-size="11" font-style="italic" fill="var(--encre-claire)">Bâtiment</text>
+      </g>
+      <g>
+        <path d="M783.1,334.5 C784.3,344 785.6,355.8 779.9,364.7 C774.1,373.6 761.4,383 748.6,387.9 C735.9,392.7 717.1,395.8 703.2,393.8 C689.3,391.9 676.2,383.3 665.3,376.1 C654.4,369 641.3,360.4 637.9,350.9 C634.4,341.5 640.2,329.4 644.4,319.5 C648.7,309.5 653.4,297.6 663.4,291.3 C673.4,285.1 691.4,282.2 704.6,282.1 C717.8,282 731.3,286.4 742.6,290.7 C753.9,294.9 765.7,300.4 772.4,307.8 C779.2,315.1 781.8,325 783.1,334.5 Z" fill="none" stroke="var(--encre-claire)" stroke-width="0.6" opacity="0.7"/>
+        <path d="M776.3,334.5 C777.4,342.7 778.5,352.9 773.4,360.6 C768.2,368.2 756.8,376.3 745.3,380.5 C733.8,384.7 716.9,387.3 704.4,385.6 C691.9,384 680,376.5 670.2,370.4 C660.4,364.2 648.7,356.8 645.6,348.7 C642.4,340.5 647.7,330.1 651.5,321.5 C655.3,313 659.5,302.7 668.6,297.3 C677.6,291.9 693.8,289.4 705.6,289.3 C717.5,289.2 729.7,293 739.8,296.7 C750,300.4 760.6,305.1 766.7,311.4 C772.7,317.7 775.2,326.3 776.3,334.5 Z" fill="var(--ile)" stroke="var(--encre)" stroke-width="1.6"/>
+        <text x="715" y="328.5" text-anchor="middle" font-size="17" letter-spacing="2" fill="var(--encre)" style="font-variant:small-caps">Mycélium</text>
+        <text x="715" y="346.5" text-anchor="middle" font-size="10.5" letter-spacing="1.5" fill="var(--encre-pale)">ADR-004 · à raffiner</text>
+        <text x="715" y="362.5" text-anchor="middle" font-size="11" font-style="italic" fill="var(--encre-claire)">Commercial</text>
       </g>
 
-      <!-- routes de synergie (pointillés) -->
+      <!-- routes de synergie (pointillés de cire) -->
       <g fill="none" stroke="var(--cire)" stroke-width="1.4" stroke-dasharray="6 5">
-        <path d="M355,150 C440,105 555,105 655,155"/>
-        <path d="M300,345 C275,300 258,280 248,262"/>
-        <path d="M415,430 C480,455 545,455 605,430"/>
-        <path d="M790,262 C800,300 790,330 765,352"/>
-      </g>
-      <g font-size="11.5" font-style="italic" fill="var(--cire)">
-        <text x="505" y="112" text-anchor="middle">déposes &amp; matière première</text>
-        <text x="215" y="300" text-anchor="end">les surplus détectés</text>
-        <text x="510" y="472" text-anchor="middle">l’intendance fabrique les victoires</text>
-        <text x="815" y="315" text-anchor="start">la même doctrine</text>
+        <path d="M209.9,239.6 Q285,212.4 360.1,239.6"/>
+        <path d="M185.6,269.7 Q203.2,351.7 259.2,406.8"/>
+        <path d="M421,259.6 Q539.7,342.2 681,335.5"/>
+        <path d="M314.7,410.7 Q486,309.6 681.2,331.9"/>
       </g>
 
       <!-- terre ferme TRAVELER -->
@@ -309,22 +296,14 @@
       </g>
       <text x="500" y="626" text-anchor="middle" font-size="15" letter-spacing="6" fill="var(--encre)" style="font-variant:small-caps">Terre ferme de Traveler — le réseau</text>
 
-      <!-- ancrages au réseau -->
+      <!-- ancrages au réseau TRAVELER -->
       <g fill="none" stroke="var(--encre-pale)" stroke-width="0.9">
-        <path d="M200,255 C185,350 178,470 185,562"/>
-        <path d="M315,478 C312,505 310,530 310,565"/>
-        <path d="M700,470 C698,500 696,528 695,560"/>
-        <path d="M820,248 C845,340 852,470 848,556"/>
+        <path d="M177.5,296.8 C177.5,336.8 150,441.6 150,560"/>
+        <path d="M392.5,296.8 C392.5,336.8 850,441.6 850,560"/>
       </g>
-      <g fill="var(--encre)" font-size="10.5" letter-spacing="1.5">
-        <circle cx="185" cy="562" r="3"/>
-        <circle cx="310" cy="565" r="3"/>
-        <circle cx="695" cy="560" r="3"/>
-        <circle cx="848" cy="556" r="3"/>
-        <text x="172" y="580">GODEFROY</text>
-        <text x="292" y="583">CHANTIERS</text>
-        <text x="648" y="578">LEADS &amp; RELANCES</text>
-        <text x="836" y="574">JULIEN</text>
+      <g fill="var(--encre)">
+        <circle cx="150" cy="560" r="3"/><text x="150" y="578" text-anchor="middle" font-size="10.5" letter-spacing="1.5">GODEFROY</text>
+        <circle cx="850" cy="560" r="3"/><text x="850" y="578" text-anchor="middle" font-size="10.5" letter-spacing="1.5">JULIEN</text>
       </g>
 
       <!-- cartouche titre -->
@@ -332,7 +311,7 @@
         <rect x="34" y="32" width="330" height="62" fill="var(--parchemin)" stroke="var(--encre-claire)" stroke-width="1.2"/>
         <rect x="39" y="37" width="320" height="52" fill="none" stroke="var(--filet)" stroke-width="0.6"/>
         <text x="199" y="59" text-anchor="middle" font-size="16" letter-spacing="5" fill="var(--encre)" style="font-variant:small-caps">Archipel d’Adramelech</text>
-        <text x="199" y="79" text-anchor="middle" font-size="10.5" font-style="italic" fill="var(--encre-pale)">quatre idées levées d’une seule dictée · 2026-07-16</text>
+        <text x="199" y="79" text-anchor="middle" font-size="10.5" font-style="italic" fill="var(--encre-pale)">4 idées · 2 archipels · relevé 2026-07-16</text>
       </g>
 
       <!-- cartouche légende -->
@@ -348,7 +327,7 @@
       </g>
 
       <!-- échelle -->
-      <g transform="translate(40 505)">
+      <g transform="translate(40 520)">
         <line x1="0" y1="0" x2="120" y2="0" stroke="var(--encre)" stroke-width="1"/>
         <line x1="0" y1="-4" x2="0" y2="4" stroke="var(--encre)" stroke-width="1"/>
         <line x1="60" y1="-3" x2="60" y2="3" stroke="var(--encre)" stroke-width="1"/>
@@ -356,62 +335,62 @@
         <text x="60" y="16" text-anchor="middle" font-size="10" font-style="italic" fill="var(--encre-pale)">échelle : toutes en statut « à raffiner »</text>
       </g>
     </svg>
-    <figcaption>Les routes en pointillé de cire relient les idées qui se nourrissent l’une l’autre ; les traits fins descendent vers l’acquis du réseau. Source de vérité : le registre <code>adramelech/IDEES.md</code>.</figcaption>
+    <figcaption>Les routes en pointillé de cire relient les idées qui se nourrissent l’une l’autre ; les traits fins descendent vers l’acquis du réseau. Carte générée depuis le registre <code>adramelech/IDEES.md</code> par <code>generer-carto.mjs</code> — 4 idées, 2 archipels, aucune perdue.</figcaption>
   </figure>
 
   <section class="releves" aria-label="Relevés de précision, une entrée par idée">
     <article class="releve">
-      <div class="ligne-haute"><span>Business · économie circulaire</span><span class="sceau">à raffiner</span></div>
+      <div class="ligne-haute"><span>Business · Bâtiment</span><span class="sceau">à raffiner</span></div>
       <h2>Glaneur<span class="adr">ADR-001</span></h2>
-      <p class="epigraphe">Glaner : ramasser noblement ce que les autres laissent.</p>
-      <p class="essence">Un camion tourne chez Leroy Merlin et sur les chantiers pour récupérer invendus, rebuts et surplus — et la mise à la benne est facturée aux artisans, donc la marchandise ne coûte rien ou rapporte déjà. Un entrepôt stocke et expose le tout pour l’achat-revente et la mise à disposition de stock.</p>
+      <p class="epigraphe">glaner, c'est ramasser ce que les autres laissent</p>
+      <p class="essence">Monter un service de récupération des invendus et des matériaux jetés du bâtiment, en trois étages qui se nourrissent l'un l'autre :</p>
       <dl>
         <dt>Partenaire</dt><dd>Godefroy</dd>
-        <dt>Angle</dt><dd>double revenu : débarras facturé + revente ; obligations REP des enseignes comme porte d’entrée</dd>
-        <dt>Synergies</dt><dd>reçoit les surplus détectés par INTENDANT ; collecte les déposes des chantiers de PROTÉE</dd>
+        <dt>Thèmes</dt><dd>bâtiment · économie circulaire · logistique</dd>
+        <dt>Synergies</dt><dd>PROTÉE, INTENDANT</dd>
       </dl>
     </article>
 
     <article class="releve">
-      <div class="ligne-haute"><span>Business · bâtiment &amp; énergie</span><span class="sceau">à raffiner</span></div>
+      <div class="ligne-haute"><span>Business · Bâtiment</span><span class="sceau">à raffiner</span></div>
       <h2>Protée<span class="adr">ADR-002</span></h2>
-      <p class="epigraphe">Le dieu qui change de forme à volonté.</p>
-      <p class="essence">Une entreprise du bâtiment et de l’énergie dont la force est la vitesse d’adaptation : clim l’été, pompes à chaleur l’hiver, photovoltaïque et chaque vague qui émerge, portée par des équipes internes polyvalentes et formées. Elle capte toutes les subventions possibles, mais proprement — la fiabilité est son différenciant.</p>
+      <p class="epigraphe">Protée, le dieu grec qui change de forme à volonté</p>
+      <p class="essence">Monter une entreprise flexible du bâtiment et de l'énergie, dont la force n'est pas un produit unique mais la vitesse de réaction :</p>
       <dl>
         <dt>Partenaire</dt><dd>Julien</dd>
-        <dt>Angle</dt><dd>certifications RGE par domaine ; la veille réglementaire déclenche les pivots</dd>
-        <dt>Synergies</dt><dd>ses chantiers nourrissent GLANEUR ; applique la doctrine MYCÉLIUM partout</dd>
+        <dt>Thèmes</dt><dd>bâtiment · énergie · organisation</dd>
+        <dt>Synergies</dt><dd>GLANEUR, MYCÉLIUM</dd>
       </dl>
     </article>
 
     <article class="releve">
-      <div class="ligne-haute"><span>Pro · logistique de chantier</span><span class="sceau">à raffiner</span></div>
+      <div class="ligne-haute"><span>Pro · business (outil né d'un besoin propre, généralisable) · Bâtiment</span><span class="sceau">à raffiner</span></div>
       <h2>Intendant<span class="adr">ADR-003</span></h2>
-      <p class="epigraphe">Celui qui veille à ce que rien ne manque jamais.</p>
-      <p class="essence">Un outil de pilotage d’approvisionnement qui fait le matching entre besoins du client, commandes passées et stock propre, et dit quoi commander. Les produits arrivent la veille ou l’avant-veille, contrôlés en bon état — tout manquant se voit avant le jour de pose, plus jamais un chantier foutu pour une aile de recouvrement.</p>
+      <p class="epigraphe">l'intendant, c'est celui qui veille à ce que rien ne manque jamais</p>
+      <p class="essence">Un outil de pilotage à 100 % opérationnel de l'approvisionnement de chantier, né d'un constat répété : dès qu'une commande est un peu spéciale, ça se passe mal — il y a toujours des manquants, des produits cassés, des choses qui ne vont pas, et le chantier déraille.</p>
       <dl>
-        <dt>Partenaire</dt><dd>— (besoin propre, généralisable ensuite)</dd>
-        <dt>Angle</dt><dd>v1 = check-list de rapprochement à trois états, alerte à J-2 de la pose</dd>
-        <dt>Synergies</dt><dd>fabrique les victoires que MYCÉLIUM exploite ; ses surplus vont à GLANEUR</dd>
+        <dt>Partenaire</dt><dd>— (besoin propre de Paul)</dd>
+        <dt>Thèmes</dt><dd>bâtiment · logistique de chantier · approvisionnement</dd>
+        <dt>Synergies</dt><dd>GLANEUR, MYCÉLIUM</dd>
       </dl>
     </article>
 
     <article class="releve">
-      <div class="ligne-haute"><span>Pro · doctrine commerciale</span><span class="sceau">à raffiner</span></div>
+      <div class="ligne-haute"><span>Pro · business · Commercial</span><span class="sceau">à raffiner</span></div>
       <h2>Mycélium<span class="adr">ADR-004</span></h2>
-      <p class="epigraphe">Le réseau souterrain qui fait surgir les champignons de proche en proche.</p>
-      <p class="essence">Une doctrine pilotée par la data client : après chaque chantier réussi, on frappe — demande de satisfaction, avis cinq étoiles Google, recommandation nominative — car on frappe après une victoire pour en obtenir une autre. Objectif chiffré : chaque client en génère deux, propagation de proche en proche.</p>
+      <p class="epigraphe">le mycélium est le réseau souterrain qui fait surgir les champignons de proche en proche</p>
+      <p class="essence">Chaque client doit générer deux autres clients. L'idée maîtresse : c'est la donnée — le pilotage de la data client — qui est le plus important. Dans le même outil que le suivi de chantier, enchaîner systématiquement :</p>
       <dl>
-        <dt>Partenaire</dt><dd>— (levier propre)</dd>
-        <dt>Angle</dt><dd>séquence post-chantier automatisable ; métrique : coefficient de propagation</dd>
-        <dt>Synergies</dt><dd>s’appuie sur les relances et leads de TRAVELER ; récolte les victoires d’INTENDANT</dd>
+        <dt>Partenaire</dt><dd>— (levier propre de Paul)</dd>
+        <dt>Thèmes</dt><dd>commercial · data client · fidélisation · recommandation</dd>
+        <dt>Synergies</dt><dd>PROTÉE, INTENDANT</dd>
       </dl>
     </article>
   </section>
 
   <footer class="colophon">
     Cap du quadrant : ne jamais rater une idée — capturer, classer, rapprocher, enrichir.<br>
-    Registre fusionné dans <code>main</code> (PR #40, go Paul, 2026-07-16) · cette carte se relève à chaque idée nouvelle.
+    Rendu déterministe du registre <code>adramelech/IDEES.md</code> ; cette carte se relève à chaque idée nouvelle.
   </footer>
 </div>
 </body>
