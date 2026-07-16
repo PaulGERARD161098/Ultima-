@@ -98,8 +98,24 @@ Effet de bord assumé (stopgap) : `/adramelech/*` devient inaccessible **aussi �
 Paul** — il consulte la carto par l'artifact privé en v1. Correctif durable =
 servir les idées via une API `requireUser` + RLS (AD-4, gate).
 Commit `fix(sec): données perso + docs hors surface publique [AD-0]`.
-⏳ Action humaine consignée : confirmer par `curl` sur le domaine de prod que le
-404 est bien rendu (le middleware n'a été exercé qu'en unitaire).
+**Contre-passe adversariale `securite-auditeur` = GO** (2026-07-16) : le garde
+résiste à tous les contournements réellement servables (encodages %2f / double /
+triple, traversal `..`, `//`, `\`, casse, query — tous bloqués), zéro faux
+positif sur le site public. Trois durcissements relevés, **non exploitables
+aujourd'hui** (backstoppés par `.vercelignore`), **différés à AD-4** (avant que
+la base ne fasse du middleware l'unique contrôle) :
+- **S1** — docs `.md` racine ne reposent que sur `endsWith('.md')` : un octet
+  parasite encodé en fin (`/CLAUDE.md%20`, `.md.`, `.md%00`) le défait. Fix :
+  strip des octets de fin avant le test.
+- **S2** — backslash encodé `%5c` non traité comme séparateur. Fix : `\` ≡ `/`.
+- **S3** — le 404 du garde (corps `Not Found`, headers maison) est distinguable
+  du 404 natif Vercel → oracle de fingerprint du *namespace* (aucune PII/idée
+  ne fuit). Fix optionnel : aligner sur le 404 natif.
+⏳ **Actions humaines consignées** : (a) confirmer par `curl` sur le domaine de
+prod que le 404 est bien rendu (middleware exercé en unitaire seulement) ;
+(b) **conséquence produit à acter** : `.vercelignore` retire tout `adramelech/`
+du déploiement → le quadrant est **noir en prod** en v1 (carto consultée par
+l'artifact privé). Cohérent avec AD-4 (idées via API `requireUser`).
 
 ### AD-1 — générateur de carto depuis le registre (le cœur constructible)
 Remplacer la carte écrite à la main par un **rendu déterministe** depuis
@@ -139,6 +155,9 @@ Dashboard statique (compteurs par statut/par thème, registre antique). Non gat�
 ### AD-4 (reporté, gate) — passage en base
 Table `idees` (projet `ultima` existant), RLS mono-user, édition interactive,
 recherche plein-texte. **Gate Paul** (migration + sécurité relevée). Hors v1.
+**Prérequis à cette boucle** : intégrer les durcissements S1/S2/S3 d'AD-0 (le
+redéploiement de fichiers y ferait du middleware l'unique contrôle) + servir la
+carto client-side après auth (fin du « noir en prod »).
 
 AD-0/AD-1/AD-2 avancent **sans la console C1** (registre + carto autonomes) ;
 l'ensemble se branchera sur la coque authentifiée quand C1 existera.
