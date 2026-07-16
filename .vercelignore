@@ -1,0 +1,19 @@
+# Défense en profondeur : ces fichiers ne sont pas DÉPLOYÉS sur Vercel (ils
+# restent au repo). Complète le garde middleware `estCheminPrive` : même si le
+# garde tombait, ces données ne seraient pas sur le CDN public.
+# Données personnelles de Paul + documentation interne — jamais sur la surface
+# publique. Correctif durable (idées via API `requireUser`) : voir
+# adramelech/CADRAGE-ADRAMELECH.md (AD-4).
+
+# Documentation interne (registres, cadrages, roadmaps, audits, runbooks).
+*.md
+
+# Données personnelles / mémoire de Léo.
+memoire/
+
+# Bibliothèque d'idées ADRAMELECH (idées = données personnelles).
+adramelech/
+
+# Divers non nécessaires au runtime public.
+tests/
+.env.example
