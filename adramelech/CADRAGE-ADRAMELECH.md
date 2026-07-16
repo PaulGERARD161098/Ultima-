@@ -200,3 +200,87 @@ Exécution : **AD-0 (sécuriser) → AD-1 (carto générée) → AD-2 (agent + b
   sémantique arrive quand l'archipel « devient énorme » (mot de Paul).
 - Pas de refonte de la carto : on **réutilise** son rendu antique, on branche
   juste sa source sur le registre.
+
+## 8. AD-5 — VOLET 2 : analyse stratégique (vision Paul 2026-07-16)
+
+> Deuxième volet d'ADRAMELECH, **là où est la vraie plus-value**. Le volet 1
+> (carto, relations en jaune) reste intact — on n'y touche pas. Ce volet-ci
+> **décortique chaque idée** jusqu'au business model, la **score**, la met en
+> **concurrence mécanique** avec le cœur rémunérateur, et n'en retient que 3.
+
+### 8.1 Cap du volet (mot de Paul)
+
+Pousser la réflexion **le plus loin possible** sur chaque projet : points forts,
+points faibles, mises en relation entre projets, prémortems ; un **business
+model par idée** (besoins réels chiffrés : camion ? combien d'argent ? combien
+de personnes ? extrapolations) ; un **scoring /10** ; puis, sur les 15-20 idées
+à terme, **n'en retenir que 3 max** (« pas le temps pour tout faire »). Chaque
+idée est **mécaniquement mise en concurrence** avec le socle rémunérateur.
+
+### 8.2 La grille d'analyse — 7 blocs par idée (les « 5 modèles » = A→D+E)
+
+Une idée « décortiquée » passe les 7 blocs suivants. Les **5 modèles d'analyse
+moyen-long terme** demandés par Paul = **ERRC (Océan Bleu/Rouge) · Porter ·
+TOWS · Lean Canvas · Prémortem** (chacun un horizon différent).
+
+- **A. Positionnement** — Océan Bleu/Rouge via grille **ERRC** (Exclure /
+  Atténuer / Renforcer / Créer) + **5 forces de Porter**. Conclut : océan bleu
+  ou rouge, et où.
+- **B. Diagnostic** — **SWOT croisé (TOWS)** : forces × faiblesses ×
+  opportunités × menaces → 2-3 axes stratégiques. (= points forts/faibles.)
+- **C. Business model** — **Lean Canvas** + **besoins réels chiffrés** :
+  camion, entrepôt, ETP/personnes, **cash nécessaire** avant équilibre,
+  extrapolation de revenu. Toute hypothèse marquée comme telle.
+- **D. Risque** — **Prémortem** : projeter l'échec à 2-3 ans, remonter les
+  causes probables + le signal avancé de chacune.
+- **E. Scoring /10** — 5 critères, chacun /10 + justification :
+  **Simple · Efficace · Rémunérateur · Utile · Temps** (10 = très rapide à
+  lancer). Pondération explicite (défaut égale ; Léo recommande si un critère
+  doit peser plus) → score global pondéré /10.
+- **F. Benchmark obligatoire** — mise en concurrence **mécanique** de l'idée
+  avec le **cœur rémunérateur** = **chantiers + installations à domicile** (la
+  « vache à lait »). Verdict tranché : top 3 ou satellite du socle. *Ligne de
+  base nommée « Renault Boost » par Paul — libellé à confirmer (candidat
+  lexique) ; le socle chantiers+installs est, lui, non ambigu.*
+- **G. Provision d'exécution** — quels **agents** (existants ou à créer) et
+  quelles **automatisations** fluidifieraient le projet s'il était retenu.
+
+**Sortie du volet** : les idées passées à la grille, triées par score →
+**top 3 max** retenu. ADRAMELECH est une **bibliothèque adossée** aux projets
+rémunérateurs (chantiers + installs), pas un concurrent : une idée ne « passe »
+que si elle bat, complète ou renforce ce socle.
+
+### 8.3 Stockage — ✅ décidé (Paul 2026-07-16)
+
+L'analyse vit **dans `IDEES.md`, par idée** : un bloc `### Analyse stratégique`
+sous chaque idée. Source unique (pas de duplication, pas de nouvelle surface) ;
+lisible par la carto et `agent-idees`. Pas de base pour ce volet (pas de gate).
+
+### 8.4 Découpage en sous-boucles
+
+- **AD-5a — cadrer + fiche pilote** (✅ choix Paul 2026-07-16) : graver cette
+  grille (fait) + dérouler **une fiche complète sur GLANEUR (ADR-001)** pour
+  **éprouver la grille** avant de généraliser. Dispatch `agent-idees` (analyse
+  lourde), Léo synthétise et intègre. Non gaté. Commit
+  `feat(adramelech): grille d'analyse stratégique + fiche pilote GLANEUR [AD-5]`.
+- **AD-5b — généralisation** : appliquer la grille aux 3 autres idées (PROTÉE,
+  INTENDANT, MYCÉLIUM) une fois la grille validée sur le pilote.
+- **AD-5c — tri & top 3** : quand le volume approche 15-20 idées, classement
+  par score pondéré + benchmark → sélection des 3 retenues + leur provision
+  d'agents/automatisations.
+
+### 8.5 Ce que ce volet NE fait pas (garde-fous EB)
+
+- Pas de refonte du volet visuel (carto/relations en jaune) — intact.
+- Pas de base pour l'analyse (registre suffit ; gate évitée).
+- Pas de généralisation aux 4 idées tant que la grille n'est pas éprouvée sur
+  le pilote (une boucle à la fois).
+- Pas de score complaisant : la grille est un **filtre**, elle doit éliminer.
+
+### 8.6 Décisions Paul — ✅ validées (2026-07-16)
+
+1. **Périmètre AD-5a** : ✅ cadrer + fiche pilote GLANEUR.
+2. **Stockage** : ✅ dans `IDEES.md`, par idée.
+3. **Benchmark** : ligne de base = cœur rémunérateur (chantiers + installs) ;
+   ⏳ **à confirmer** : « Renault Boost » désigne-t-il ce socle ou un repère
+   précis distinct ?
