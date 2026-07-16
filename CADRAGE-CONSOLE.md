@@ -138,8 +138,10 @@ Conséquences (à tenir à chaque boucle) :
   ne recrute que si aucune expertise ne couvre le besoin — « ne pas bosser pour
   rien ». Détail dans la charte (`.claude/agents/leo.md`, principe verrouillé).
 - **Déclinaison par sigle de quadrant** : Léo reste le même agent et **reprend
-  le sigle du quadrant courant** (amorces Paul : dragon, boussole…) — un seul
-  agent, plusieurs blasons. Correspondance sigle ↔ quadrant à figer (graphisme).
+  le sigle du quadrant courant** — un seul agent, plusieurs blasons.
+  Correspondance **figée (Paul, 2026-07-16)** : TRAVELER = boussole ·
+  ADRAMELECH = dragon · BCP = balance · IMLADRIK = étoile · Console = sceau
+  ULTIMA. Le graphisme dessinera les emblèmes gravés ; le sens est figé.
 - **Recrutement au fil des boucles** (charte §3) : Léo crée les agents/skills
   manquants **quand la boucle du quadrant s'ouvre**, pas tous d'un coup
   (discipline « pas dix lièvres »).

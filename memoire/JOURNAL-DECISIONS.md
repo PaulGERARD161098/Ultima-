@@ -194,3 +194,8 @@
   ③ Léo se décline par quadrant en reprenant le sigle du projet (dragon,
   boussole…), un seul agent plusieurs blasons — mapping sigle↔quadrant à figer
   avec le graphisme. Gravé dans la charte (leo.md) et CADRAGE-CONSOLE §6/§7.
+- **2026-07-16 (blasons de quadrant — FIGÉS)** — Paul « go a et b ». Sigles
+  Léo↔quadrant figés (reco Léo suivie) : TRAVELER = boussole · ADRAMELECH =
+  dragon · BCP = balance · IMLADRIK = étoile · Console = sceau ULTIMA. Sens
+  figé, exécution visuelle (emblèmes gravés) laissée au graphisme. PR #41
+  fusionnée sur go Paul (« merge et push »).
