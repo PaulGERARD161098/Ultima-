@@ -182,3 +182,15 @@
   d'outils MCP (Supabase get_advisors, send_later) ont échoué par intermittence
   (« requires approval » / stream coupé) — non bloquant pour les lectures
   essentielles (list_tables a confirmé la RLS), mais à re-tenter à froid.
+- 2026-07-17 (session console C1 en ligne) — ① **Friction → règle** : Paul se
+  souvenait d'un travail « de l'autre jour » (emblème IMLADRIK = épée + soleil)
+  dont AUCUNE trace n'existe (repo, historique git toutes branches, Notion) —
+  travail vraisemblablement fait dans une session jamais poussée, donc perdu
+  (environnement éphémère). Leçon double : (a) le protocole FIN de session
+  (tout committer/pousser) n'est pas négociable, même sur du « petit » travail
+  de design ; (b) quand Paul affirme une décision passée introuvable, chercher
+  partout PUIS le croire — c'est lui la source de vérité des décisions, le
+  registre n'est que sa trace. ② Confirmé : la cause du « site daté » vécue par
+  Paul = console jamais construite + cache PWA — pas un bug de déploiement.
+  Vercel côté Léo reste sans permission sur le projet ultima (403, à faire
+  rafraîchir par Paul pour lire les déploiements de prod).

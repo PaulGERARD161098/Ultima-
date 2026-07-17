@@ -269,3 +269,15 @@
     Léo + RLS post-apply en substitut) ; (b) AD-5c-γ API requireUser + δ front ;
     (c) blocage récurrent : **flux front invérifiable sans compte auth de Paul**
     (0 user en base, identique AD-4). Tout sur PR #46 (brouillon, non mergée).
+- **2026-07-17 (C1 EN LIGNE + emblème IMLADRIK re-figé)** — Paul signalait une
+  prod « datée » : diagnostic = la console n'avait jamais été construite (+ cache
+  PWA). Sur son go (« merge and push je veux que ce soit en ligne ») : **coque C1
+  bâtie** (front-carto, index.html = accueil 4 quadrants, blasons gravés SVG,
+  zéro CDN, 23 verdicts smoke, TRAVELER déplacé sur traveler.html sans
+  régression) et **PR #46 fusionnée dans main** → console en prod. Page accueil
+  validée par Paul. Puis **emblème IMLADRIK re-figé : épée au soleil** (décision
+  antérieure de Paul, trace perdue — session non poussée ; recherche exhaustive
+  repo/git/Notion vaine, Paul re-confirme, on applique). Dragon ADRAMELECH
+  inchangé. ⏳ : 11 smokes app à repointer vers /traveler.html ; « agent Léo en
+  ligne » évoqué par Paul (zone de dialogue sur le site ?) = à clarifier, gate
+  coût si service IA.
