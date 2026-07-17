@@ -162,3 +162,23 @@
   étaler des choix. ⑤ Les 2 réserves cosmétiques de l'arbre responsive
   (re-render idempotent au 1ᵉʳ resize ; `data-palier` non nettoyé en état
   vide) sont un **vivier de polissage zéro-défaut** si une passe UX repasse.
+- 2026-07-16 (session AD-5 volet analyse stratégique) — ① **Confirmé** :
+  « Renault Boost » = **Renoboost IA**, le socle rémunérateur (chantiers +
+  installations à domicile), désormais au lexique et ligne de base du benchmark
+  ADRAMELECH. Il y a d'ailleurs **5 projets Supabase** dans l'orga (RenoboostIA,
+  RenoPredict, RenoAgenda, RenoLeads, Ultima) — l'écosystème « Reno » est réel,
+  pas une lubie. ② **Friction → règle** : un agent (securite-auditeur) a été
+  **coupé net par une limite de session** en pleine contre-passe, laissant un
+  verdict incomplet. Leçon : sur une gate sécu (RLS), séquencer la contre-passe
+  AVANT d'engager d'autres gros agents dans le même tour, et toujours prévoir un
+  substitut de vérif au fil principal (revue Léo + RLS post-apply) si l'agent
+  meurt. ③ **Confirmé (attendu)** : le mur « pas de compte auth en base » revient
+  à chaque couche data (AD-4 puis AD-5c) — le schéma + l'API se livrent sans user,
+  le flux front non. À anticiper : **créer le compte auth de Paul** est la clé qui
+  débloque tous les fronts gatés (seed idées, front INTENDANT, fin du « noir en
+  prod »). ④ **Confirmé** : Paul pilote au « Go » serré et délègue la conception
+  lourde — la valeur de Léo = une reco nette + la preuve, dispatch massif en
+  parallèle (3 fiches simultanées ont bien tenu). ⑤ **Bruit** : les approbations
+  d'outils MCP (Supabase get_advisors, send_later) ont échoué par intermittence
+  (« requires approval » / stream coupé) — non bloquant pour les lectures
+  essentielles (list_tables a confirmé la RLS), mais à re-tenter à froid.

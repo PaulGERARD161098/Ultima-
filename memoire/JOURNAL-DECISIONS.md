@@ -240,3 +240,32 @@
   (migration transversale dédiée). Leçon : une couche data+API se livre et se
   vérifie sans user (advisors/RLS/unit) ; le flux authentifié de bout en bout,
   non — il attend le compte de Paul.
+- **2026-07-16 (AD-5 — volet ANALYSE STRATÉGIQUE d'ADRAMELECH)** — Paul ouvre le
+  2ᵉ volet d'ADRAMELECH (le visuel/carto reste intact) : décortiquer chaque idée
+  jusqu'au business model, scorer /10, mettre en concurrence mécanique avec le
+  socle rémunérateur, ne retenir que 3 max. **Grille en 7 blocs** (les 5 modèles
+  moyen-long terme = ERRC/Océan · Porter · TOWS · Lean Canvas · Prémortem) +
+  scoring /10 + benchmark obligatoire + provision agents/autos. Décisions Paul
+  actées : stockage **dans IDEES.md par idée** ; benchmark = **Renoboost IA**
+  (socle chantiers + installations à domicile — « Renault Boost » était la
+  déformation vocale, au lexique) ; **pondération Temps ×2 + Rému ×2** (dén. 7).
+  - **AD-5a** ✅ grille gravée + fiche pilote GLANEUR (dispatch agent-idees) —
+    test concluant, la grille élimine (GLANEUR 5,0/10, satellite).
+  - **AD-5b** ✅ généralisation aux 3 autres (3 agents parallèles) + classement.
+    **Top 3 = MYCÉLIUM 8,1 · INTENDANT 7,9 · PROTÉE 6,3 ; GLANEUR 5,0 hors.**
+    Insight maître : ce n'est pas 4 paris mais **un moteur** (PROTÉE industrialise
+    le socle → INTENDANT fabrique les victoires → MYCÉLIUM les démultiplie →
+    surplus alimentent GLANEUR). Séquence de démarrage validée : **INTENDANT →
+    MYCÉLIUM → PROTÉE bridée**.
+  - **AD-5c** (build du 1ᵉʳ retenu, INTENDANT v1 outil interne) : cadrage §9 (la
+    check-list PAS l'ERP) ; **contrat de données** data-ingenieur (2 tables,
+    état en colonne GÉNÉRÉE déterministe, accroché à la fiche chantier TRAVELER,
+    RLS miroir 0007, scellement croisé) ; **migration 0008 APPLIQUÉE** en base
+    (gate Paul « appliquer avec le scellement » + Go ×2 ; RLS activée vérifiée
+    post-apply ; prod intacte). Note d'archi : une fois construit, l'INTENDANT
+    **sort de la bibliothèque** (outil du socle/TRAVELER, pas une idée).
+  - **⏳ RESTENT** : (a) contre-passe sécu d'isolation inter-owner + advisors sur
+    0008 (agent coupé par limite de session ; validité moteur confirmée, revue
+    Léo + RLS post-apply en substitut) ; (b) AD-5c-γ API requireUser + δ front ;
+    (c) blocage récurrent : **flux front invérifiable sans compte auth de Paul**
+    (0 user en base, identique AD-4). Tout sur PR #46 (brouillon, non mergée).

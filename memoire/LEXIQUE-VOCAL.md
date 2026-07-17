@@ -27,6 +27,7 @@
 | Humladric, Imladric, Imladrik | IMLADRIK (quadrant dév. perso) |
 | Traveller, Traveler | TRAVELER (quadrant réseau — un seul L, rappel Paul 2026-07-16) |
 | directive EB, macro-directive | discipline : boucler avant d'avancer + capitaliser sur l'existant |
+| Renault Boost, Renoboost | Renoboost IA (socle rémunérateur = chantiers + installations à domicile ; ligne de base du benchmark ADRAMELECH) |
 | mon Starlog / Claude Normal | son journal de dév. perso dans l'app Claude standard (modèle d'IMLADRIK) |
 
 Règle : en cas de doute sur un mot qui change le sens d'une instruction,

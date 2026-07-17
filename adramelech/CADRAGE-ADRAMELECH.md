@@ -200,3 +200,226 @@ Exécution : **AD-0 (sécuriser) → AD-1 (carto générée) → AD-2 (agent + b
   sémantique arrive quand l'archipel « devient énorme » (mot de Paul).
 - Pas de refonte de la carto : on **réutilise** son rendu antique, on branche
   juste sa source sur le registre.
+
+## 8. AD-5 — VOLET 2 : analyse stratégique (vision Paul 2026-07-16)
+
+> Deuxième volet d'ADRAMELECH, **là où est la vraie plus-value**. Le volet 1
+> (carto, relations en jaune) reste intact — on n'y touche pas. Ce volet-ci
+> **décortique chaque idée** jusqu'au business model, la **score**, la met en
+> **concurrence mécanique** avec le cœur rémunérateur, et n'en retient que 3.
+
+### 8.1 Cap du volet (mot de Paul)
+
+Pousser la réflexion **le plus loin possible** sur chaque projet : points forts,
+points faibles, mises en relation entre projets, prémortems ; un **business
+model par idée** (besoins réels chiffrés : camion ? combien d'argent ? combien
+de personnes ? extrapolations) ; un **scoring /10** ; puis, sur les 15-20 idées
+à terme, **n'en retenir que 3 max** (« pas le temps pour tout faire »). Chaque
+idée est **mécaniquement mise en concurrence** avec le socle rémunérateur.
+
+### 8.2 La grille d'analyse — 7 blocs par idée (les « 5 modèles » = A→D+E)
+
+Une idée « décortiquée » passe les 7 blocs suivants. Les **5 modèles d'analyse
+moyen-long terme** demandés par Paul = **ERRC (Océan Bleu/Rouge) · Porter ·
+TOWS · Lean Canvas · Prémortem** (chacun un horizon différent).
+
+- **A. Positionnement** — Océan Bleu/Rouge via grille **ERRC** (Exclure /
+  Atténuer / Renforcer / Créer) + **5 forces de Porter**. Conclut : océan bleu
+  ou rouge, et où.
+- **B. Diagnostic** — **SWOT croisé (TOWS)** : forces × faiblesses ×
+  opportunités × menaces → 2-3 axes stratégiques. (= points forts/faibles.)
+- **C. Business model** — **Lean Canvas** + **besoins réels chiffrés** :
+  camion, entrepôt, ETP/personnes, **cash nécessaire** avant équilibre,
+  extrapolation de revenu. Toute hypothèse marquée comme telle.
+- **D. Risque** — **Prémortem** : projeter l'échec à 2-3 ans, remonter les
+  causes probables + le signal avancé de chacune.
+- **E. Scoring /10** — 5 critères, chacun /10 + justification :
+  **Simple · Efficace · Rémunérateur · Utile · Temps** (10 = très rapide à
+  lancer). **Pondération actée (Paul 2026-07-16) : Temps ×2 et Rémunérateur ×2**
+  (contexte « pas le temps, 3 idées max » → vitesse + rentabilité comptent
+  double) ; score global pondéré /10 sur dénominateur 7.
+- **F. Benchmark obligatoire** — mise en concurrence **mécanique** de l'idée
+  avec le **cœur rémunérateur** = **Renoboost IA** (chantiers + installations à
+  domicile, la « vache à lait » ; libellé confirmé par Paul 2026-07-16, au
+  lexique). Verdict tranché : top 3 ou satellite du socle.
+- **G. Provision d'exécution** — quels **agents** (existants ou à créer) et
+  quelles **automatisations** fluidifieraient le projet s'il était retenu.
+
+**Sortie du volet** : les idées passées à la grille, triées par score →
+**top 3 max** retenu. ADRAMELECH est une **bibliothèque adossée** aux projets
+rémunérateurs (chantiers + installs), pas un concurrent : une idée ne « passe »
+que si elle bat, complète ou renforce ce socle.
+
+### 8.3 Stockage — ✅ décidé (Paul 2026-07-16)
+
+L'analyse vit **dans `IDEES.md`, par idée** : un bloc `### Analyse stratégique`
+sous chaque idée. Source unique (pas de duplication, pas de nouvelle surface) ;
+lisible par la carto et `agent-idees`. Pas de base pour ce volet (pas de gate).
+
+### 8.4 Découpage en sous-boucles
+
+- **AD-5a — cadrer + fiche pilote** (✅ choix Paul 2026-07-16) : graver cette
+  grille (fait) + dérouler **une fiche complète sur GLANEUR (ADR-001)** pour
+  **éprouver la grille** avant de généraliser. Dispatch `agent-idees` (analyse
+  lourde), Léo synthétise et intègre. Non gaté. Commit
+  `feat(adramelech): grille d'analyse stratégique + fiche pilote GLANEUR [AD-5]`.
+- **AD-5b — généralisation + classement ✅ LIVRÉ (2026-07-16)** : grille
+  appliquée aux 3 autres idées (PROTÉE, INTENDANT, MYCÉLIUM) ; pondération actée
+  (Temps ×2 + Rému ×2). Vu le volume (4 idées), le **classement top-3 a été
+  produit dans la foulée** (section « Classement stratégique » en tête d'`IDEES.md`) :
+  top 3 = **MYCÉLIUM 8,1 · INTENDANT 7,9 · PROTÉE 6,3**, lus **en système**
+  (moteur qui se renforce) ; **GLANEUR 5,0 = satellite, hors top 3**. Séquence de
+  démarrage validée par Paul : **INTENDANT → MYCÉLIUM → PROTÉE (bridée)**.
+- **AD-5c — premier build d'un retenu : INTENDANT v1** : cf. §9 (choix Paul
+  2026-07-16, « cadrer le build d'INTENDANT »).
+- **AD-5d — tri à l'échelle** (futur) : quand le volume approche 15-20 idées,
+  re-classement par score pondéré + benchmark pour re-trancher le top 3.
+
+### 8.5 Ce que ce volet NE fait pas (garde-fous EB)
+
+- Pas de refonte du volet visuel (carto/relations en jaune) — intact.
+- Pas de base pour l'analyse (registre suffit ; gate évitée).
+- Pas de généralisation aux 4 idées tant que la grille n'est pas éprouvée sur
+  le pilote (une boucle à la fois).
+- Pas de score complaisant : la grille est un **filtre**, elle doit éliminer.
+
+### 8.6 Décisions Paul — ✅ validées (2026-07-16)
+
+1. **Périmètre AD-5a** : ✅ cadrer + fiche pilote GLANEUR (grille validée par
+   Paul → généralisation AD-5b lancée).
+2. **Stockage** : ✅ dans `IDEES.md`, par idée.
+3. **Benchmark** : ✅ ligne de base = **Renoboost IA** (socle chantiers +
+   installations à domicile), libellé confirmé par Paul (au lexique).
+4. **Pondération scoring** : ✅ **Temps ×2 + Rémunérateur ×2** (dénominateur 7).
+
+## 9. AD-5c — premier build d'un retenu : INTENDANT v1 (outil interne)
+
+> Première idée du top 3 qui passe de l'analyse à la construction (choix Paul
+> 2026-07-16, séquence INTENDANT → MYCÉLIUM → PROTÉE). **Cadrage pur** : on borne
+> le build, on ne code pas encore. Source : fiche stratégique ADR-003 dans
+> `IDEES.md` (bloc « Analyse stratégique »).
+
+### 9.1 Pourquoi INTENDANT en premier
+
+Le moins cher (**3-8 j-h [hyp.]**, zéro actif), il **dérisque le socle Renoboost
+IA tout de suite** (plus de chantier foiré faute d'une pièce) **et fabrique la
+matière première de MYCÉLIUM** (les fins de chantier réussies). C'est le rouage
+amont du moteur.
+
+### 9.2 Périmètre v1 — la check-list, PAS l'ERP
+
+Le risque n°1 du prémortem d'INTENDANT est la **sur-ingénierie**. La v1 est
+**exactement** le noyau décrit au registre, rien de plus :
+- **Matching à 3 sources au niveau de la pièce** : besoins client ⟷ commandes ⟷
+  stock propre.
+- **3 états par ligne** : `couvert` / `commande_en_attente` / `manquant`.
+- **Cycle de vie d'une ligne** : besoin → couvert (stock/commande) → livré →
+  **contrôlé en bon état** (la casse au contrôle = repasse en `manquant`).
+- **Alerte J-2** : tant qu'un `manquant` subsiste à 2 jours de la pose, alerte.
+- **Recalcul** : un besoin ajouté en cours de route recalcule les manquants.
+- **Instrumenter la preuve dès la v1** : compteur de **manquants détectés à J-2**
+  (contre le risque « valeur invisible » du prémortem — sans mesure, l'outil est
+  abandonné faute de ROI ressenti).
+
+**Hors v1, explicitement** : compta/paie/devis/RH (ce serait un ERP) ; import &
+parsing des BC fournisseurs (**gate** : coût, fragilité — différé jusqu'à preuve
+de valeur par la saisie manuelle/vocale) ; généralisation SaaS multi-tenant à
+d'autres artisans (**après** un cycle chantier complet piloté en interne).
+
+### 9.3 Contrat de données — ✅ proposé par `data-ingenieur` (draft `0008_intendant.sql`)
+
+Principe non négociable : **s'accrocher à la fiche chantier TRAVELER existante**
+(FK vers le chantier), **pas de silo**. RLS mono-owner en miroir de `0007`.
+SQL draft dans `supabase/migrations/0008_intendant.sql` (**jamais appliqué —
+gate β**).
+
+**Deux tables neuves, additives** (aucune brique ERP) :
+- **`intendant_chantiers`** — le chantier *piloté* + sa `date_pose`. Satellite
+  1-1 d'un `network_nodes` de type `chantier` (l'accroche à TRAVELER, aucun
+  chantier recréé). Unicité `(owner_id, node_id)` : un dossier par chantier.
+- **`intendant_besoins`** — une ligne = une pièce exigée (le cœur du matching).
+  `designation`, `quantite`, `mode ∈ {stock, commande, aucune}` (la couverture) ;
+  volet commande dénormalisé (`commande_ref` **saisie manuelle en v1** — parsing
+  BC = différé/gate, `fournisseur_node_id` opt., `livree_le`, `controle ∈
+  {en_attente, conforme, casse}`).
+
+**Les 3 états = colonne GÉNÉRÉE STORED** (jamais saisie, base = source unique) :
+```
+mode='stock'                          -> couvert
+mode='commande' AND controle=conforme -> couvert            (livré + contrôlé)
+mode='commande' AND controle=casse    -> manquant           (livré cassé = manquant)
+mode='commande' (sinon)               -> commande_en_attente
+mode='aucune'                         -> manquant
+```
+Conséquences gratuites (zéro trigger/batch) : **la casse repasse en `manquant`**
+en changeant un seul champ ; **le recalcul à l'ajout d'un besoin** est automatique
+(une ligne `aucune` naît `manquant`) ; « couvert » = livré **ET** contrôlé, fidèle
+au registre (le cas « aile de recouvrement »).
+
+**Alerte J-2 = une requête** (pas un état stocké) : les `manquant` dont le
+chantier a `date_pose ∈ [aujourd'hui, +2j]`. La métrique « manquants détectés à
+J-2 » (preuve de valeur) se lit sur la même requête.
+
+**Sécurité** : RLS activée à la création, une policy par opération,
+`owner_id = (select auth.uid())` ; CHECK d'énumération + cohérence
+(`controle` interdit sans `livree_le` ; champs commande null hors `mode=commande`)
+en miroir de la future validation API.
+
+**⏳ Décision d'archi à trancher (bloc OPTION du SQL)** : le **scellement croisé**
+`intendant_besoins(owner_id, chantier_id) → intendant_chantiers(owner_id, id)`
+(défense en profondeur AD-4 : impossible d'accrocher un besoin au chantier d'un
+autre owner même si RLS tombait) exige un **index unique additif `(owner_id, id)`
+sur `network_nodes`** — le seul geste touchant une table existante (additif,
+`id` déjà PK → zéro risque). Recommandé (cohérent AD-4, cheap), isolé en bloc
+OPTION retirable. **À valider par Paul avec la migration.**
+
+**Non exprimable en FK** : « `node_id` doit être de type `chantier` » se valide
+côté API (un trigger serait de la sur-ingénierie v1).
+
+### 9.4 Saisie
+
+- **Vocale prioritaire** (registre ADRAMELECH oblige) + saisie manuelle.
+- **Pas de parsing BC fournisseurs en v1** (gate).
+
+### 9.5 Découpage en sous-boucles (une à la fois, gates respectées)
+
+- **AD-5c-α — contrat de données + règle de matching** (ce cadrage + la proposition
+  `data-ingenieur`) : SPEC figée, ébauche de migration `0008_intendant.sql`
+  **draftée mais JAMAIS appliquée**. Non gaté (rédaction seule).
+- **AD-5c-β — migration base ✅ APPLIQUÉE (2026-07-16)** : `0008_intendant.sql`
+  appliquée sur le projet Ultima (gate Paul ouverte, « appliquer avec le
+  scellement » + « Go »). **Scellement `network_nodes` inclus** (bloc OPTION).
+  Post-application vérifiée : `intendant_chantiers` + `intendant_besoins` créées,
+  **RLS activée** (`rls_enabled=true`), prod par ailleurs intacte. La contre-passe
+  `securite-auditeur` a **confirmé la validité moteur** (FK-sur-index-unique,
+  colonne générée, CHECK) mais a été **interrompue par une limite de session**
+  avant les scénarios adversariaux d'isolation ; substituée par la revue Léo
+  (Opus 4.8) + la vérif RLS post-apply. ⏳ **Actions humaines** : (a) rejouer les
+  scénarios adversariaux d'isolation inter-owner ; (b) lancer les advisors
+  sécurité (serveur MCP indispo à l'application) — les deux à la reprise.
+- **AD-5c-γ — API `requireUser` + validation stricte** (parité API↔base, motif
+  `validate*` de AD-4b) : CRUD besoins/commandes/stock + dérivation d'état +
+  endpoint alerte J-2. Surface à risque → contre-passe.
+- **AD-5c-δ — front** : saisie (vocale d'abord), vue check-list par chantier,
+  **alertes J-2** lisibles, compteur de manquants détectés. Harnais patrimoine
+  (`tests/`) enrichi : déterminisme du calcul d'état, zéro ligne perdue, alerte
+  déclenchée au bon seuil. Contre-passe `verificateur`.
+
+### 9.6 Garde-fous EB
+
+- **La check-list, pas l'ERP** — si la v1 dépasse ~8-10 j-h sans avoir tourné sur
+  un vrai chantier, on a sur-ingénié : stop et recentrage.
+- **Boucler le besoin propre avant tout SaaS** — aucun multi-tenant tant qu'un
+  cycle chantier complet de Paul n'est pas piloté par l'outil.
+- **Pas de parsing fournisseurs avant preuve** de valeur par la saisie simple.
+- **Migration jamais appliquée seule** (gate) ; le SQL vit dans
+  `supabase/migrations/`.
+
+### 9.7 Note d'architecture — INTENDANT « sort » de la bibliothèque
+
+Une fois construit, l'INTENDANT est un **outil opérationnel du socle**
+(pilotage d'approvisionnement de chantier) : il vit dans l'orbite **TRAVELER /
+Renoboost IA**, pas dans la bibliothèque d'idées. ADRAMELECH a fait son travail
+(capter → analyser → trancher) ; le build est une **diplomation hors du quadrant
+idées**. Ce cadrage AD-5c reste ici par continuité, mais l'exécution et la
+mémoire opérationnelle de l'INTENDANT relèvent du socle.
