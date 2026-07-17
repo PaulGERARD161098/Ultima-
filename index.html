@@ -3,656 +3,173 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ultima — Carte réseau</title>
-  <meta name="description" content="Carte interactive du réseau commercial : artisans, partenaires, leads et chantiers.">
+  <title>Ultima — Console</title>
+  <meta name="description" content="Console personnelle d'Ultima : quatre quadrants — le réseau, le pilotage financier, la bibliothèque d'idées et le développement personnel.">
   <meta name="theme-color" content="#0e3a52">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%231e6fb8'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23ffffff'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/console.css">
 </head>
-<body>
+<body class="console">
 
-  <!-- ===== Écran de connexion plein écran (A1) =====================
-       Habillage de présentation : l'overlay est piloté par majAuthUi()
-       (js/app.js), visible uniquement si config présente ET pas de session.
-       Le formulaire lien-magique #form-connexion est RÉUTILISÉ tel quel
-       (mêmes id/handlers), simplement déplacé et restylé ici. Décor SVG
-       100 % inline (aucun toponyme, IDs préfixés « conn- » anti-collision),
-       aria-hidden : c'est une carte savante muette. -->
-  <div id="ecran-connexion" class="ecran-connexion" hidden>
-    <div class="ecran-decor" aria-hidden="true">
-      <svg viewBox="0 0 700 940" preserveAspectRatio="xMidYMid meet" role="img"
-           aria-label="Carte décorative d'un monde-anneau imaginaire" focusable="false">
+  <!-- Rose des vents décorative (registre carte savante), muette. -->
+  <div class="console-decor" aria-hidden="true">
+    <svg viewBox="0 0 72 72" focusable="false">
+      <circle cx="36" cy="36" r="26" fill="none" stroke="#c9a659" stroke-width="1.4" opacity="0.85"/>
+      <path d="M36 4 L42 30 L68 36 L42 42 L36 68 L30 42 L4 36 L30 30 Z"
+            fill="#e8cf8f" stroke="#c9a659" stroke-width="1"/>
+      <path d="M36 18 L39 33 L54 36 L39 39 L36 54 L33 39 L18 36 L33 33 Z"
+            fill="#c9a659" stroke="none" opacity="0.55"/>
+      <text x="36" y="14" text-anchor="middle" font-size="9" fill="#e8cf8f" font-style="italic">N</text>
+    </svg>
+  </div>
+
+  <div class="console-conteneur">
+
+    <!-- ===== Bandeau : sceau ULTIMA + accueil + invite ===== -->
+    <header class="console-entete">
+      <!-- Sceau ULTIMA : médaillon d'or gravé (emblème « monde-anneau » + rayons).
+           Décor pur, aria-hidden ; l'accueil est porté par le H1 réel ci-dessous. -->
+      <svg class="sceau" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
         <defs>
-          <filter id="conn-rough" x="-4%" y="-4%" width="108%" height="108%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="2" seed="11" result="n"/>
-            <feDisplacementMap in="SourceGraphic" in2="n" scale="5"/>
-          </filter>
-          <radialGradient id="conn-terre" cx="45%" cy="35%" r="80%">
-            <stop offset="0%"  stop-color="#e8d49a"/>
-            <stop offset="55%" stop-color="#d9bf82"/>
-            <stop offset="100%" stop-color="#c4a468"/>
-          </radialGradient>
-          <radialGradient id="conn-mer" cx="50%" cy="42%" r="70%">
-            <stop offset="0%"  stop-color="#1d5c7c"/>
-            <stop offset="70%" stop-color="#145070"/>
-            <stop offset="100%" stop-color="#0e3a52"/>
+          <radialGradient id="sceau-or" cx="38%" cy="32%" r="78%">
+            <stop offset="0" stop-color="#f4e6bd"/>
+            <stop offset="55%" stop-color="#e3cd93"/>
+            <stop offset="100%" stop-color="#cbab63"/>
           </radialGradient>
         </defs>
-
-        <!-- Graticule fin (registre carte savante) -->
-        <g stroke="#8fc2d4" stroke-width="0.7" opacity="0.15">
-          <path d="M140,0 V940 M280,0 V940 M420,0 V940 M560,0 V940"/>
-          <path d="M0,134 H700 M0,268 H700 M0,402 H700 M0,536 H700 M0,670 H700 M0,804 H700"/>
+        <circle cx="60" cy="60" r="55" fill="url(#sceau-or)" stroke="#6e5320" stroke-width="2.6"/>
+        <circle cx="60" cy="60" r="49" fill="none" stroke="#6e5320" stroke-width="1" opacity="0.7"/>
+        <circle cx="60" cy="60" r="45" fill="none" stroke="#a9884a" stroke-width="0.8"/>
+        <!-- couronne de 8 clous gravés sur l'anneau -->
+        <g fill="#6e5320">
+          <circle cx="60" cy="8.5" r="1.7"/>
+          <circle cx="60" cy="111.5" r="1.7"/>
+          <circle cx="8.5" cy="60" r="1.7"/>
+          <circle cx="111.5" cy="60" r="1.7"/>
+          <circle cx="96.4" cy="23.6" r="1.5"/>
+          <circle cx="23.6" cy="23.6" r="1.5"/>
+          <circle cx="96.4" cy="96.4" r="1.5"/>
+          <circle cx="23.6" cy="96.4" r="1.5"/>
         </g>
-
-        <!-- Lueur littorale extérieure -->
-        <g filter="url(#conn-rough)">
-          <path d="M640,470 C635,540 600,570 579,602 C550,660 560,700 500,730
-                   C455,752 395,742 350,740 C290,738 240,745 202,725
-                   C150,700 140,640 125,600 C95,555 60,520 50,470
-                   C42,415 90,370 116,335 C145,295 170,255 205,219
-                   C245,180 295,168 350,165 C405,162 445,215 482,240
-                   C525,268 585,285 605,322 C630,365 645,415 640,470 Z"
-                fill="none" stroke="#8fd2e0" stroke-width="11" opacity="0.22"/>
+        <!-- emblème central : monde-anneau + rayons (encre sépia) -->
+        <g stroke="#4a3512" fill="none" stroke-linecap="round">
+          <circle cx="60" cy="60" r="17" stroke-width="2.4"/>
+          <circle cx="60" cy="60" r="8.5" stroke-width="1.6"/>
+          <path d="M60 40 L60 30 M60 80 L60 90 M80 60 L90 60 M40 60 L30 60
+                   M74.1 45.9 L81.2 38.8 M45.9 45.9 L38.8 38.8
+                   M74.1 74.1 L81.2 81.2 M45.9 74.1 L38.8 81.2" stroke-width="1.4"/>
         </g>
-
-        <!-- Continent-anneau -->
-        <g filter="url(#conn-rough)">
-          <path d="M640,470 C635,540 600,570 579,602 C550,660 560,700 500,730
-                   C455,752 395,742 350,740 C290,738 240,745 202,725
-                   C150,700 140,640 125,600 C95,555 60,520 50,470
-                   C42,415 90,370 116,335 C145,295 170,255 205,219
-                   C245,180 295,168 350,165 C405,162 445,215 482,240
-                   C525,268 585,285 605,322 C630,365 645,415 640,470 Z"
-                fill="url(#conn-terre)" stroke="#5a4118" stroke-width="2.6"/>
-        </g>
-
-        <!-- Mer intérieure -->
-        <g filter="url(#conn-rough)">
-          <path d="M490,470 C488,515 475,530 455,545 C425,572 390,600 350,600
-                   C305,600 270,578 245,555 C222,533 218,500 215,470
-                   C212,435 222,400 240,380 C268,350 310,345 350,345
-                   C395,345 435,368 460,395 C480,415 492,435 490,470 Z"
-                fill="none" stroke="#8fd2e0" stroke-width="10" opacity="0.20"/>
-          <path d="M490,470 C488,515 475,530 455,545 C425,572 390,600 350,600
-                   C305,600 270,578 245,555 C222,533 218,500 215,470
-                   C212,435 222,400 240,380 C268,350 310,345 350,345
-                   C395,345 435,368 460,395 C480,415 492,435 490,470 Z"
-                fill="url(#conn-mer)" stroke="#5a4118" stroke-width="2.2"/>
-        </g>
-        <!-- Vaguelettes de la mer intérieure -->
-        <g stroke="#8fc2d4" fill="none" stroke-width="1.1" opacity="0.35" stroke-linecap="round">
-          <path d="M290,430 q12,-8 24,0 M330,415 q12,-8 24,0 M380,440 q12,-8 24,0"/>
-          <path d="M300,520 q12,-8 24,0 M370,540 q12,-8 24,0 M420,500 q12,-8 24,0"/>
-        </g>
-        <!-- Îlot central -->
-        <g filter="url(#conn-rough)">
-          <path d="M330,468 Q334,452 352,450 Q372,449 376,464 Q378,478 360,483 Q338,486 330,468 Z"
-                fill="url(#conn-terre)" stroke="#5a4118" stroke-width="1.6"/>
-        </g>
-        <g stroke="#7a5a2c" stroke-width="1.6" fill="none" stroke-linecap="round">
-          <path d="M346,470 l6,-9 l6,9"/>
-        </g>
-
-        <!-- Verdure : plaines et forêts sur l'anneau -->
-        <g fill="#7d9a52" opacity="0.30" filter="url(#conn-rough)">
-          <ellipse cx="495" cy="595" rx="58" ry="34"/>
-          <ellipse cx="205" cy="565" rx="50" ry="32"/>
-          <ellipse cx="455" cy="255" rx="52" ry="30"/>
-          <ellipse cx="243" cy="272" rx="46" ry="28"/>
-          <ellipse cx="565" cy="430" rx="34" ry="46"/>
-          <ellipse cx="135" cy="455" rx="30" ry="44"/>
-        </g>
-        <!-- Bosquets stylisés -->
-        <g stroke="#4f7038" stroke-width="1.4" fill="#6f8f4a" stroke-linecap="round">
-          <g transform="translate(492,588)">
-            <path d="M0,0 q5,-12 10,0 z"/><path d="M12,4 q5,-12 10,0 z"/><path d="M-12,5 q5,-12 10,0 z"/>
-          </g>
-          <g transform="translate(206,558)">
-            <path d="M0,0 q5,-12 10,0 z"/><path d="M13,5 q5,-12 10,0 z"/>
-          </g>
-          <g transform="translate(450,248)">
-            <path d="M0,0 q5,-12 10,0 z"/><path d="M-13,5 q5,-12 10,0 z"/><path d="M12,6 q5,-12 10,0 z"/>
-          </g>
-          <g transform="translate(240,266)">
-            <path d="M0,0 q5,-12 10,0 z"/><path d="M12,5 q5,-12 10,0 z"/>
-          </g>
-        </g>
-
-        <!-- Anneau de montagnes -->
-        <g stroke="#7a5a2c" stroke-width="1.9" fill="none" stroke-linecap="round" opacity="0.9">
-          <path d="M343,262 l7,-13 l7,13 M320,276 l6,-10 l6,10 M366,276 l6,-10 l6,10"/>
-          <path d="M275,284 l7,-12 l7,12 M411,284 l7,-12 l7,12"/>
-          <path d="M214,319 l7,-12 l7,12 M472,319 l7,-12 l7,12"/>
-          <path d="M516,364 l7,-12 l7,12 M170,364 l7,-12 l7,12"/>
-          <path d="M540,432 l7,-13 l7,13 M146,432 l7,-13 l7,13"/>
-          <path d="M540,502 l7,-12 l7,12 M146,502 l7,-12 l7,12"/>
-          <path d="M511,568 l7,-12 l7,12 M175,568 l7,-12 l7,12"/>
-          <path d="M411,652 l7,-12 l7,12 M275,652 l7,-12 l7,12 M343,664 l7,-13 l7,13"/>
-        </g>
-        <!-- Ombres portées du relief -->
-        <g fill="#5a4118" opacity="0.10">
-          <ellipse cx="350" cy="280" rx="90" ry="18"/>
-          <ellipse cx="350" cy="660" rx="80" ry="16"/>
-          <ellipse cx="152" cy="470" rx="16" ry="70"/>
-          <ellipse cx="548" cy="470" rx="16" ry="70"/>
-        </g>
-
-        <!-- Fleuves -->
-        <g fill="none" stroke="#2e7d9a" stroke-width="1.6" opacity="0.7">
-          <path d="M350,285 Q345,315 350,343"/>
-          <path d="M162,470 Q190,474 214,468"/>
-          <path d="M350,648 Q356,624 350,602"/>
-          <path d="M528,440 Q510,452 492,458"/>
-        </g>
-
-        <!-- Îles périphériques -->
-        <g filter="url(#conn-rough)">
-          <path d="M666,178 Q690,166 706,182 Q712,198 692,206 Q668,210 660,196 Q658,184 666,178 Z"
-                fill="url(#conn-terre)" stroke="#5a4118" stroke-width="1.8"/>
-          <path d="M88,142 Q108,132 122,146 Q126,160 108,166 Q90,168 84,156 Q82,146 88,142 Z"
-                fill="url(#conn-terre)" stroke="#5a4118" stroke-width="1.8"/>
-          <path d="M614,806 Q638,794 656,810 Q660,826 640,834 Q616,836 608,822 Q606,812 614,806 Z"
-                fill="url(#conn-terre)" stroke="#5a4118" stroke-width="1.8"/>
-          <path d="M74,760 Q92,750 106,762 Q110,776 94,782 Q76,784 70,772 Q68,764 74,760 Z"
-                fill="url(#conn-terre)" stroke="#5a4118" stroke-width="1.8"/>
-          <path d="M672,614 Q686,608 696,618 Q698,630 684,634 Q670,634 666,624 Q666,618 672,614 Z"
-                fill="url(#conn-terre)" stroke="#5a4118" stroke-width="1.6"/>
-        </g>
-
-        <!-- Créatures et navires discrets -->
-        <g stroke="#9fd0dd" fill="none" stroke-width="2.2" opacity="0.5" stroke-linecap="round">
-          <path d="M92,858 q10,-14 22,0"/>
-          <path d="M124,858 q10,-14 22,0"/>
-          <path d="M156,860 q8,-10 16,-2 q6,6 2,10 l-8,-2"/>
-          <path d="M84,860 l-8,-8 M84,860 l-10,2"/>
-        </g>
-        <g stroke="#9fd0dd" fill="none" stroke-width="2" opacity="0.55" stroke-linecap="round">
-          <path d="M596,116 l30,0 q-4,10 -14,10 l-8,0 q-8,-2 -8,-10 Z M611,114 l0,-24 q16,10 0,24 M611,96 q-12,6 -12,16"/>
-        </g>
-        <g stroke="#9fd0dd" fill="none" stroke-width="1.8" opacity="0.45" stroke-linecap="round">
-          <path d="M120,86 q6,-8 12,0 M138,82 q6,-8 12,0 M158,88 q6,-8 12,0"/>
-        </g>
-
-        <!-- Rose des vents dorée -->
-        <g transform="translate(632,878)" opacity="0.95">
-          <circle r="26" fill="#0e3a52" stroke="#c9a659" stroke-width="1.6"/>
-          <circle r="20" fill="none" stroke="#c9a659" stroke-width="0.7"/>
-          <g fill="#e8cf8f" stroke="#c9a659" stroke-width="0.6">
-            <path d="M0,-24 L4,-5 L0,0 L-4,-5 Z"/>
-            <path d="M0,24 L4,5 L0,0 L-4,5 Z" fill="#0e3a52"/>
-            <path d="M-24,0 L-5,4 L0,0 L-5,-4 Z" fill="#0e3a52"/>
-            <path d="M24,0 L5,4 L0,0 L5,-4 Z" fill="#0e3a52"/>
-          </g>
-          <text y="-31" text-anchor="middle" font-size="11" fill="#e8cf8f" font-style="italic">N</text>
-        </g>
+        <circle cx="60" cy="60" r="2.1" fill="#4a3512"/>
       </svg>
-    </div>
 
-    <header class="ecran-cartouche">
-      <h1 class="ecran-titre">ULTIMA</h1>
-      <p class="ecran-sous">le royaume du réseau</p>
+      <h1 class="console-titre">Bienvenue sur Ultima</h1>
+      <p class="console-invite">Sur quoi est-ce qu'on travaille aujourd'hui&nbsp;?</p>
     </header>
 
-    <main class="ecran-corps">
-      <form id="form-connexion" class="form-connexion ecran-parchemin" hidden>
-        <h2 class="ecran-accroche">Accès au réseau</h2>
-        <label class="ecran-label" for="champ-email">Adresse e-mail</label>
-        <input id="champ-email" type="email" required autocomplete="email" inputmode="email"
-               placeholder="votre@email.fr">
-        <button type="submit" class="bouton bouton-lien-magique">Recevoir le lien</button>
-        <p class="ecran-aide">Aucun mot de passe : un lien de connexion vous est adressé par e-mail.</p>
-      </form>
+    <!-- ===== Grille 2×2 des quadrants ===== -->
+    <main class="console-grille" aria-label="Les quatre quadrants d'Ultima">
+
+      <!-- TRAVELER — boussole — ACTIF (cleanUrls : traveler.html / traveler). -->
+      <a class="quadrant quadrant-actif" href="traveler.html">
+        <span class="blason">
+          <svg class="blason-svg" viewBox="0 0 72 72" role="img"
+               aria-label="Blason gravé : une boussole" focusable="false">
+            <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
+            <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
+            <path d="M36 12 L40.5 31.5 L60 36 L40.5 40.5 L36 60 L31.5 40.5 L12 36 L31.5 31.5 Z"
+                  fill="#3b2f1c"/>
+            <g stroke="#5a4118" stroke-width="1.3" stroke-linecap="round">
+              <path d="M36 36 L50 22 M36 36 L50 50 M36 36 L22 50 M36 36 L22 22"/>
+            </g>
+            <circle cx="36" cy="36" r="2.4" fill="#f9f1dc" stroke="#5a4118" stroke-width="1"/>
+          </svg>
+        </span>
+        <span class="quadrant-corps">
+          <h2 class="quadrant-nom">TRAVELER</h2>
+          <p class="quadrant-desc">le réseau commercial</p>
+          <span class="quadrant-etat">
+            Accéder
+            <svg class="quadrant-fleche" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h13M13 6l6 6-6 6"/>
+            </svg>
+          </span>
+        </span>
+      </a>
+
+      <!-- BCP — balance — à venir. -->
+      <div class="quadrant quadrant-avenir" aria-disabled="true">
+        <span class="blason">
+          <svg class="blason-svg" viewBox="0 0 72 72" role="img"
+               aria-label="Blason gravé : une balance" focusable="false">
+            <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
+            <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
+            <g stroke="#5a4118" stroke-width="1.9" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M36 22 V49"/>
+              <path d="M20 27 H52"/>
+              <path d="M28 51 Q36 47.5 44 51"/>
+              <path d="M22 27 L17 37 M22 27 L27 37 M15 37 Q22 45 29 37"/>
+              <path d="M50 27 L45 37 M50 27 L55 37 M43 37 Q50 45 57 37"/>
+            </g>
+            <circle cx="36" cy="22" r="2.6" fill="#3b2f1c"/>
+          </svg>
+        </span>
+        <span class="quadrant-corps">
+          <h2 class="quadrant-nom">BCP</h2>
+          <p class="quadrant-desc">le pilotage financier</p>
+          <span class="quadrant-etat">À venir</span>
+        </span>
+      </div>
+
+      <!-- ADRAMELECH — dragon — à venir · privé (idées perso, hors surface publique, AD-0). -->
+      <div class="quadrant quadrant-avenir" aria-disabled="true">
+        <span class="blason">
+          <svg class="blason-svg" viewBox="0 0 72 72" role="img"
+               aria-label="Blason gravé : un dragon" focusable="false">
+            <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
+            <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
+            <g fill="none" stroke="#5a4118" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M24 52 C17 44 21 33 32 32 C43 31 47 40 41 45 C36 49 29 46 31 39"/>
+              <path d="M32 32 C31 26 35 22 41 23 C47 23 50 27 48 32 C47 35 43 36 40 34"/>
+              <path d="M48 32 L54 33 L48 36"/>
+              <path d="M43 23 L46 16 L48 24"/>
+              <path d="M33 31 L45 19 L43 29 L53 22 L48 32"/>
+              <path d="M54 33 q5 -1 9 2" opacity="0.85"/>
+            </g>
+            <circle cx="41" cy="29" r="1.5" fill="#5a4118"/>
+          </svg>
+        </span>
+        <span class="quadrant-corps">
+          <h2 class="quadrant-nom">ADRAMELECH</h2>
+          <p class="quadrant-desc">la bibliothèque d'idées</p>
+          <span class="quadrant-etat">À venir · privé</span>
+        </span>
+      </div>
+
+      <!-- IMLADRIK — étoile — à venir. -->
+      <div class="quadrant quadrant-avenir" aria-disabled="true">
+        <span class="blason">
+          <svg class="blason-svg" viewBox="0 0 72 72" role="img"
+               aria-label="Blason gravé : une étoile" focusable="false">
+            <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
+            <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
+            <path d="M36 12 L42.9 30.3 L62.5 31.4 L47.2 43.7 L52.3 62.7 L36 51.5 L19.7 62.7 L24.8 43.7 L9.5 31.4 L29.1 30.3 Z"
+                  fill="#3b2f1c"/>
+            <path d="M36 24 L38.6 33 L48 33.5 L40.5 39.5 L43 48.5 L36 43 L29 48.5 L31.5 39.5 L24 33.5 L33.4 33 Z"
+                  fill="none" stroke="#e0c48a" stroke-width="0.8" opacity="0.7"/>
+          </svg>
+        </span>
+        <span class="quadrant-corps">
+          <h2 class="quadrant-nom">IMLADRIK</h2>
+          <p class="quadrant-desc">le développement personnel</p>
+          <span class="quadrant-etat">À venir</span>
+        </span>
+      </div>
+
     </main>
   </div>
 
-  <header class="entete">
-    <div class="cartouche-ultima">
-      <h1 class="cartouche-titre">ULTIMA</h1>
-      <p class="cartouche-sous">le royaume du réseau</p>
-    </div>
-    <p id="bandeau-demo" class="bandeau-demo" hidden>Mode démo — données d'exemple</p>
-    <div id="zone-auth" class="zone-auth" hidden>
-      <button id="bouton-deconnexion" type="button" class="bouton bouton-secondaire" hidden>Se déconnecter</button>
-    </div>
-  </header>
-
-  <main class="espaces">
-
-    <!-- ===== Espace Accueil (registre parchemin, scopé .vue-accueil) ===== -->
-    <section id="espace-accueil" class="espace vue-accueil" aria-labelledby="accueil-titre">
-      <!-- Filtre « encre irrégulière » partagé par les petits SVG décoratifs. -->
-      <svg width="0" height="0" aria-hidden="true" class="svg-defs"><defs>
-        <filter id="filtre-encre"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.5"/></filter>
-      </defs></svg>
-
-      <div class="accueil-conteneur">
-        <header class="accueil-entete">
-          <svg class="rose-des-vents" viewBox="0 0 100 100" aria-hidden="true">
-            <g fill="none" stroke="#8c7a55" stroke-width="1.5" filter="url(#filtre-encre)">
-              <circle cx="50" cy="50" r="30"/>
-              <path d="M50 8 L56 44 L92 50 L56 56 L50 92 L44 56 L8 50 L44 44 Z" fill="#efe3c6"/>
-              <path d="M50 26 L54 46 L74 50 L54 54 L50 74 L46 54 L26 50 L46 46 Z" fill="#8c7a55" stroke="none" opacity="0.5"/>
-            </g>
-            <text x="50" y="6" text-anchor="middle" font-size="10" fill="#6a5636">N</text>
-          </svg>
-          <h2 id="accueil-titre" class="accueil-titre">Bienvenue, Paul</h2>
-          <p class="accueil-question">On fait quoi aujourd'hui ?</p>
-        </header>
-        <div id="accueil-contenu" class="accueil-contenu"></div>
-      </div>
-    </section>
-
-    <!-- ===== Espace Arbre (A3, le pivot : arbre gravé, secteurs = branches) ===== -->
-    <section id="espace-arbre" class="espace espace-arbre" hidden aria-labelledby="arbre-titre">
-      <header class="arbre-entete">
-        <div class="cartouche-arbre">
-          <h2 id="arbre-titre" class="cartouche-arbre-titre">ULTIMA</h2>
-          <p class="cartouche-arbre-sous">l'arbre du réseau</p>
-        </div>
-        <div id="arbre-outils" class="arbre-outils">
-          <div class="champ-recherche-arbre">
-            <label class="visuellement-cache" for="arbre-recherche">Rechercher un contact par nom ou ville</label>
-            <svg class="icone-loupe" viewBox="0 0 24 24" width="20" height="20"
-                 aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"
-                 stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="6.5"/>
-              <path d="m16 16 4.5 4.5"/>
-            </svg>
-            <input id="arbre-recherche" type="search" class="arbre-recherche"
-                   placeholder="Rechercher un nom ou une ville…" autocomplete="off">
-          </div>
-          <p id="arbre-recherche-message" class="arbre-recherche-message" role="status"></p>
-        </div>
-      </header>
-      <div id="arbre-scene" class="arbre-scene"></div>
-      <button id="arbre-ajouter" type="button" class="arbre-ajouter">+ Ajouter un contact</button>
-    </section>
-
-    <!-- ===== Espace Carte (existant : barre d'outils + carte + légende + panneau) ===== -->
-    <section id="espace-carte" class="espace espace-carte" hidden aria-labelledby="carte-titre">
-      <h2 id="carte-titre" class="visuellement-cache">Carte</h2>
-
-      <div class="barre-outils">
-        <!-- Recherche sur la carte (v3-⑥) : nom ou ville, résultats en direct. -->
-        <div class="champ-recherche-carte">
-          <label class="visuellement-cache" for="recherche-carte">Rechercher un contact par nom ou ville</label>
-          <svg class="icone-loupe" viewBox="0 0 24 24" width="20" height="20"
-               aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"
-               stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="6.5"/>
-            <path d="m16 16 4.5 4.5"/>
-          </svg>
-          <input id="recherche-carte" type="search" placeholder="Rechercher un nom ou une ville…"
-                 autocomplete="off" role="combobox" aria-expanded="false"
-                 aria-controls="recherche-resultats" aria-autocomplete="list">
-          <button type="button" id="recherche-effacer" class="bouton-effacer"
-                  aria-label="Effacer la recherche" hidden>
-            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"
-                 fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
-          </button>
-          <ul id="recherche-resultats" class="liste-resultats" role="group"
-              aria-label="Contacts trouvés" hidden></ul>
-          <p id="recherche-message" class="recherche-message" role="status"></p>
-        </div>
-
-        <button id="bouton-filtres" type="button" class="bouton bouton-secondaire bouton-filtres"
-                aria-expanded="false" aria-controls="filtres">Filtres</button>
-
-        <div id="filtres" class="filtres">
-          <fieldset class="groupe-filtres">
-            <legend>Type</legend>
-            <label class="case-filtre"><input type="checkbox" data-filtre="type" value="artisan" checked> Artisan</label>
-            <label class="case-filtre"><input type="checkbox" data-filtre="type" value="partenaire" checked> Partenaire</label>
-            <label class="case-filtre"><input type="checkbox" data-filtre="type" value="lead" checked> Lead</label>
-            <label class="case-filtre"><input type="checkbox" data-filtre="type" value="chantier" checked> Chantier</label>
-          </fieldset>
-          <fieldset class="groupe-filtres">
-            <legend>Statut</legend>
-            <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="actif" checked> Actif</label>
-            <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="prospect" checked> Prospect</label>
-            <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="en_cours" checked> En cours</label>
-            <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="termine" checked> Terminé</label>
-            <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="inactif" checked> Inactif</label>
-          </fieldset>
-        </div>
-
-        <button id="bouton-ajouter" type="button" class="bouton bouton-primaire">+ Ajouter</button>
-      </div>
-
-      <div class="contenu">
-        <div id="carte" class="carte" aria-label="Carte du réseau"></div>
-
-        <!-- Cadre parchemin (R1) : décor muet, jamais dans l'ordre de tabulation. -->
-        <div class="cadre-carte" aria-hidden="true">
-          <span class="coin coin-no"></span>
-          <span class="coin coin-ne"></span>
-          <span class="coin coin-se"></span>
-          <span class="coin coin-so"></span>
-        </div>
-
-        <!-- Voile Ptolémée (R1) : SVG repris de design/preview-accueil-mythologie.html
-             SANS le filtre de turbulence (RA3), posé en L.svgOverlay géo-ancré par
-             js/carte.js. 100 % local (CSP), pointer-events: none via le pane. -->
-        <template id="voile-ptolemee">
-          <svg viewBox="0 0 600 640" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-            <defs>
-              <linearGradient id="voile-fondu-haut" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#000000"/><stop offset="1" stop-color="#ffffff"/>
-              </linearGradient>
-              <linearGradient id="voile-fondu-bas" x1="0" y1="1" x2="0" y2="0">
-                <stop offset="0" stop-color="#000000"/><stop offset="1" stop-color="#ffffff"/>
-              </linearGradient>
-              <linearGradient id="voile-fondu-gauche" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stop-color="#000000"/><stop offset="1" stop-color="#ffffff"/>
-              </linearGradient>
-              <linearGradient id="voile-fondu-droite" x1="1" y1="0" x2="0" y2="0">
-                <stop offset="0" stop-color="#000000"/><stop offset="1" stop-color="#ffffff"/>
-              </linearGradient>
-              <!-- Fondu de 16 px vers transparent sur les 4 bords du lavis
-                   (dégradés/masques autorisés, turbulence non). -->
-              <mask id="voile-masque-lavis" maskUnits="userSpaceOnUse" x="0" y="0" width="600" height="640">
-                <rect width="600" height="640" fill="#ffffff"/>
-                <rect width="600" height="16" fill="url(#voile-fondu-haut)"/>
-                <rect y="624" width="600" height="16" fill="url(#voile-fondu-bas)"/>
-                <rect width="16" height="640" fill="url(#voile-fondu-gauche)"/>
-                <rect x="584" width="16" height="640" fill="url(#voile-fondu-droite)"/>
-              </mask>
-            </defs>
-
-            <!-- 1. Lavis mer, bords fondus -->
-            <rect width="600" height="640" fill="#17506b" opacity="0.45" mask="url(#voile-masque-lavis)"/>
-
-            <!-- 2. Lueur littorale -->
-            <path d="M295,27 L274,32 Q262,50 260,75 Q246,88 230,98 L204,116
-                     Q184,128 170,140 L158,136 Q148,120 136,104 L124,110 Q120,130 128,150 Q136,160 140,168
-                     Q120,170 100,168 Q70,162 50,164 Q25,170 10,180 L6,190 Q8,198 14,204
-                     Q30,212 50,220 Q64,228 78,232 Q96,242 112,249
-                     Q130,276 148,304 L154,310 Q160,330 154,342 L150,336 Q160,342 166,352 Q150,405 138,465
-                     Q156,486 180,499 Q220,514 262,522 L322,528
-                     Q316,508 322,492 Q338,474 356,466 Q372,462 384,469 Q400,477 414,478 Q426,487 438,486 Q452,486 464,480 Q478,467 488,454 L500,447
-                     Q492,432 481,422 Q473,396 476,370 Q479,348 475,331 Q462,318 447,308 Q458,286 471,268 Q490,247 504,230
-                     Q509,199 511,169 Q520,157 527,147 Q492,130 457,117 Q444,112 431,114 Q410,96 393,82 Q362,60 329,42 Q312,33 295,27 Z"
-                  fill="none" stroke="#8fd2e0" stroke-width="10" opacity="0.22"/>
-
-            <!-- 3. Terre : France + Corse, encrées -->
-            <g fill="#ecd9a4" fill-opacity="0.75" stroke="#5a4118">
-              <path d="M295,27 L274,32 Q262,50 260,75 Q246,88 230,98 L204,116
-                       Q184,128 170,140 L158,136 Q148,120 136,104 L124,110 Q120,130 128,150 Q136,160 140,168
-                       Q120,170 100,168 Q70,162 50,164 Q25,170 10,180 L6,190 Q8,198 14,204
-                       Q30,212 50,220 Q64,228 78,232 Q96,242 112,249
-                       Q130,276 148,304 L154,310 Q160,330 154,342 L150,336 Q160,342 166,352 Q150,405 138,465
-                       Q156,486 180,499 Q220,514 262,522 L322,528
-                       Q316,508 322,492 Q338,474 356,466 Q372,462 384,469 Q400,477 414,478 Q426,487 438,486 Q452,486 464,480 Q478,467 488,454 L500,447
-                       Q492,432 481,422 Q473,396 476,370 Q479,348 475,331 Q462,318 447,308 Q458,286 471,268 Q490,247 504,230
-                       Q509,199 511,169 Q520,157 527,147 Q492,130 457,117 Q444,112 431,114 Q410,96 393,82 Q362,60 329,42 Q312,33 295,27 Z"
-                    stroke-width="2.6"/>
-              <path d="M560,492 Q568,500 565,512 Q561,548 557,584 Q549,574 541,558 Q534,538 537,521 Q548,504 560,492 Z"
-                    stroke-width="2.2"/>
-            </g>
-
-            <!-- 4. Verdure : plaines vertes translucides -->
-            <g fill="#7d9a52" opacity="0.30">
-              <ellipse cx="285" cy="140" rx="90" ry="52"/>
-              <ellipse cx="200" cy="330" rx="60" ry="55"/>
-              <ellipse cx="140" cy="215" rx="55" ry="32"/>
-              <ellipse cx="390" cy="240" rx="45" ry="60"/>
-            </g>
-
-            <!-- Relief suggéré : Alpes, Pyrénées, Massif central -->
-            <g stroke="#7a5a2c" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.85">
-              <path d="M448,330 l7,-11 l7,11 M466,345 l7,-11 l7,11 M452,362 l7,-11 l7,11 M470,378 l7,-11 l7,11 M456,394 l7,-11 l7,11"/>
-              <path d="M188,486 l7,-11 l7,11 M212,494 l7,-11 l7,11 M238,500 l7,-11 l7,11 M264,506 l7,-11 l7,11 M290,510 l7,-11 l7,11"/>
-              <path d="M310,380 l6,-9 l6,9 M330,395 l6,-9 l6,9 M312,410 l6,-9 l6,9"/>
-            </g>
-            <!-- Ombres portées du relief -->
-            <g fill="#5a4118" opacity="0.12">
-              <ellipse cx="465" cy="365" rx="26" ry="52" transform="rotate(12 465 365)"/>
-              <ellipse cx="240" cy="502" rx="60" ry="14"/>
-              <ellipse cx="322" cy="396" rx="22" ry="26"/>
-            </g>
-
-            <!-- Fleuves -->
-            <g fill="none" stroke="#2e7d9a" stroke-width="1.6" opacity="0.7">
-              <path d="M204,118 Q250,140 294,153 Q330,160 352,178"/>
-              <path d="M112,249 Q190,262 250,258 Q310,250 352,262"/>
-              <path d="M154,342 Q200,360 240,392 Q256,420 258,458"/>
-              <path d="M414,478 Q404,430 394,333 Q390,300 402,270"/>
-            </g>
-
-            <!-- 5. Graticule léger (sous les textes, au-dessus du lavis) -->
-            <path d="M100 0V640M200 0V640M300 0V640M400 0V640M500 0V640M0 100H600M0 200H600M0 300H600M0 400H600M0 500H600M0 600H600"
-                  fill="none" stroke="#bfe0ea" stroke-width="0.8" opacity="0.18"/>
-
-            <!-- 6. Noms de mers -->
-            <g fill="#bfe0ea" font-size="15" letter-spacing="5" font-style="italic" opacity="0.9">
-              <text x="150" y="60">LA&#160;&#160;MANCHE</text>
-              <text x="52" y="330" transform="rotate(-78 52 330)">OC&#201;AN&#160;&#160;ATLANTIQVE</text>
-              <text x="335" y="600">MER&#160;&#160;M&#201;DITERRAN&#201;E</text>
-            </g>
-
-            <!-- 7. Monstres marins statiques (aucune animation en R1) -->
-            <!-- Serpent de l'Atlantique -->
-            <g stroke="#9fd0dd" fill="none" stroke-width="2.2" opacity="0.5" stroke-linecap="round">
-              <path d="M30,395 q10,-14 22,0"/>
-              <path d="M62,395 q10,-14 22,0"/>
-              <path d="M94,398 q8,-10 16,-2 q6,6 2,10 l-8,-2"/>
-              <path d="M22,398 l-8,-8 M22,398 l-10,2"/>
-            </g>
-            <!-- Créature de Méditerranée : queue plongeante -->
-            <g stroke="#9fd0dd" fill="none" stroke-width="2.2" opacity="0.5" stroke-linecap="round">
-              <path d="M470,570 q12,-16 26,-2"/>
-              <path d="M504,566 q8,-14 4,-22 l-8,6 M508,544 l8,4"/>
-            </g>
-            <!-- Souffle de la Manche -->
-            <g stroke="#9fd0dd" fill="none" stroke-width="2" opacity="0.45" stroke-linecap="round">
-              <path d="M92,66 q9,-12 19,0 M120,68 q7,-9 14,-1 M104,58 l0,-9 M110,52 l-4,4"/>
-            </g>
-          </svg>
-        </template>
-
-        <div class="legende" aria-label="Légende de la carte">
-          <p class="legende-titre">Nœuds</p>
-          <p class="legende-item"><span class="pastille pastille-artisan"></span> Artisan</p>
-          <p class="legende-item"><span class="pastille pastille-partenaire"></span> Partenaire</p>
-          <p class="legende-item"><span class="pastille pastille-lead"></span> Lead</p>
-          <p class="legende-item"><span class="pastille pastille-chantier"></span> Chantier</p>
-          <p class="legende-titre">Relations</p>
-          <p class="legende-item"><span class="trait trait-apport"></span> Apport d'affaires</p>
-          <p class="legende-item"><span class="trait trait-soustraitance"></span> Sous-traitance</p>
-          <p class="legende-item"><span class="trait trait-chantier"></span> Chantier commun</p>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- Panneau fiche/formulaire : overlay global (position:fixed). Sorti de
-         espace-carte (A3) pour rester accessible depuis TOUS les onglets — un
-         tap sur une feuille de l'arbre ouvre la fiche sans quitter l'arbre. -->
-    <aside id="panneau" class="panneau" hidden aria-label="Panneau latéral">
-        <div class="panneau-entete">
-          <h2 id="panneau-titre" class="panneau-titre" tabindex="-1">Fiche</h2>
-          <button id="bouton-fermer-panneau" type="button" class="bouton-fermer" aria-label="Fermer le panneau">&times;</button>
-        </div>
-
-        <div id="vue-fiche" class="panneau-corps" hidden></div>
-
-        <form id="form-noeud" class="panneau-corps formulaire" hidden>
-          <div class="champ">
-            <label for="noeud-type">Type *</label>
-            <select id="noeud-type" required>
-              <option value="artisan">Artisan</option>
-              <option value="partenaire">Partenaire</option>
-              <option value="lead">Lead</option>
-              <option value="chantier">Chantier</option>
-            </select>
-          </div>
-          <div class="champ">
-            <label for="noeud-nom">Nom *</label>
-            <input id="noeud-nom" type="text" required maxlength="200">
-          </div>
-          <div class="champ">
-            <label for="noeud-statut">Statut *</label>
-            <select id="noeud-statut" required>
-              <option value="actif">Actif</option>
-              <option value="prospect">Prospect</option>
-              <option value="en_cours">En cours</option>
-              <option value="termine">Terminé</option>
-              <option value="inactif">Inactif</option>
-            </select>
-          </div>
-          <div class="champ">
-            <label for="noeud-secteur_activite">Secteur d'activité</label>
-            <input id="noeud-secteur_activite" type="text" maxlength="120"
-                   list="liste-secteurs" autocomplete="off">
-            <datalist id="liste-secteurs"></datalist>
-          </div>
-          <div class="champ">
-            <label for="noeud-ville">Ville</label>
-            <input id="noeud-ville" type="text" maxlength="120">
-          </div>
-          <div class="champ">
-            <label for="noeud-adresse">Adresse</label>
-            <input id="noeud-adresse" type="text" maxlength="250">
-          </div>
-          <!-- Géocodage (v3-⑤) : une intention = une requête, jamais à la frappe. -->
-          <div id="geo-zone" class="champ champ-geo">
-            <button type="button" id="geo-bouton" class="bouton bouton-secondaire bouton-geo-trouver">
-              <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 21c-4.2-3.7-6.5-7-6.5-10.3a6.5 6.5 0 0 1 13 0C18.5 14 16.2 17.3 12 21Z"/>
-                <circle cx="12" cy="10.5" r="2.5"/>
-              </svg>
-              <span id="geo-bouton-libelle">Trouver sur la carte</span>
-            </button>
-            <ul id="geo-suggestions" class="liste-resultats" role="group" aria-label="Adresses trouvées" hidden></ul>
-            <p id="geo-message" class="geo-message" role="status"></p>
-            <div id="geo-confirmation" class="geo-confirmation-ligne" tabindex="-1" hidden>
-              <span class="geo-confirmation">
-                <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg>
-                <span id="geo-confirmation-texte" class="geo-confirmation-texte"></span><span id="geo-confirmation-adresse" class="geo-confirmation-adresse"></span>
-              </span>
-              <button type="button" id="geo-changer" class="bouton bouton-secondaire">Changer</button>
-            </div>
-          </div>
-          <details id="geo-details" class="geo-details">
-            <summary>Coordonnées précises (avancé)</summary>
-            <div class="champs-doubles">
-              <div class="champ">
-                <label for="noeud-lat">Latitude</label>
-                <input id="noeud-lat" type="number" step="any" min="-90" max="90">
-              </div>
-              <div class="champ">
-                <label for="noeud-lng">Longitude</label>
-                <input id="noeud-lng" type="number" step="any" min="-180" max="180">
-              </div>
-            </div>
-          </details>
-          <div class="champ">
-            <label for="noeud-telephone">Téléphone</label>
-            <input id="noeud-telephone" type="tel" maxlength="30" autocomplete="tel">
-          </div>
-          <div class="champ">
-            <label for="noeud-email">E-mail</label>
-            <input id="noeud-email" type="email" maxlength="200" autocomplete="off">
-          </div>
-          <div class="champ">
-            <label for="noeud-notes">Notes</label>
-            <textarea id="noeud-notes" rows="3" maxlength="2000"></textarea>
-          </div>
-          <div class="actions-formulaire">
-            <button type="submit" class="bouton bouton-primaire">Enregistrer</button>
-            <button type="button" id="bouton-annuler-noeud" class="bouton bouton-secondaire">Annuler</button>
-          </div>
-        </form>
-
-        <form id="form-relation" class="panneau-corps formulaire" hidden>
-          <p id="relation-source" class="relation-source"></p>
-          <div class="champ">
-            <label for="relation-cible">Relier à *</label>
-            <select id="relation-cible" required></select>
-          </div>
-          <div class="champ">
-            <label for="relation-type">Type de relation *</label>
-            <select id="relation-type" required>
-              <option value="apport_affaires">Apport d'affaires</option>
-              <option value="sous_traitance">Sous-traitance</option>
-              <option value="chantier_commun">Chantier commun</option>
-            </select>
-          </div>
-          <div class="champ">
-            <label for="relation-notes">Note</label>
-            <textarea id="relation-notes" rows="3" maxlength="2000"></textarea>
-          </div>
-          <div class="actions-formulaire">
-            <button type="submit" class="bouton bouton-primaire">Créer la relation</button>
-            <button type="button" id="bouton-annuler-relation" class="bouton bouton-secondaire">Annuler</button>
-          </div>
-        </form>
-    </aside>
-
-    <!-- ===== Espace Contacts (registre sobre : liste + recherche) ===== -->
-    <section id="espace-contacts" class="espace espace-contacts" hidden aria-labelledby="contacts-titre">
-      <div class="contacts-conteneur">
-        <header class="contacts-entete">
-          <div class="contacts-titres">
-            <h2 id="contacts-titre" class="contacts-titre">Contacts</h2>
-            <p id="contacts-compteur" class="contacts-compteur"></p>
-          </div>
-          <button id="contacts-ajouter" type="button" class="bouton bouton-primaire">+ Ajouter un contact</button>
-        </header>
-        <div id="contacts-outils" class="contacts-outils" hidden>
-          <input id="contacts-recherche" type="search" placeholder="Rechercher un nom ou une ville…"
-                 aria-label="Rechercher un contact par nom ou ville" autocomplete="off">
-        </div>
-        <div id="contacts-contenu" class="contacts-contenu"></div>
-      </div>
-    </section>
-
-  </main>
-
-  <nav class="barre-onglets" aria-label="Navigation principale">
-    <button type="button" class="onglet" data-onglet="accueil" aria-current="page">
-      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
-        <path d="M3.5 11 L12 3.5 L20.5 11 V20.5 H14.5 V15 H9.5 V20.5 H3.5 Z"/>
-      </svg>
-      <span>Accueil</span>
-    </button>
-    <button type="button" class="onglet" data-onglet="arbre">
-      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
-        <circle cx="12" cy="8.5" r="5.5"/>
-        <path d="M12 14 V20.5 M8.5 20.5 H15.5"/>
-      </svg>
-      <span>Arbre</span>
-    </button>
-    <button type="button" class="onglet" data-onglet="carte">
-      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
-        <path d="M9 4.5 L15 6.5 L20.5 4.5 V18.5 L15 20.5 L9 18.5 L3.5 20.5 V6.5 Z"/>
-        <path d="M9 4.5 V18.5 M15 6.5 V20.5"/>
-      </svg>
-      <span>Carte</span>
-    </button>
-    <button type="button" class="onglet" data-onglet="contacts">
-      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
-        <rect x="5" y="3.5" width="15" height="17" rx="2"/>
-        <path d="M8.5 3.5 V20.5 M12 9 H16.5 M12 12.5 H16.5"/>
-      </svg>
-      <span>Contacts</span>
-    </button>
-  </nav>
-
-  <div id="toasts" class="toasts" aria-live="polite"></div>
-
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <!-- Bundle UMD officiel npm 2.110.0, vendorisé (S1) : pas de CDN tiers pour le client Supabase. -->
-  <script src="js/vendor/supabase-js-2.110.0.min.js"></script>
-  <script src="js/config.js"></script>
-  <script src="js/carte.js"></script>
-  <script src="js/arbre.js"></script>
-  <script src="js/app.js"></script>
 </body>
 </html>
