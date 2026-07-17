@@ -139,9 +139,11 @@ Conséquences (à tenir à chaque boucle) :
   rien ». Détail dans la charte (`.claude/agents/leo.md`, principe verrouillé).
 - **Déclinaison par sigle de quadrant** : Léo reste le même agent et **reprend
   le sigle du quadrant courant** — un seul agent, plusieurs blasons.
-  Correspondance **figée (Paul, 2026-07-16)** : TRAVELER = boussole ·
-  ADRAMELECH = dragon · BCP = balance · IMLADRIK = étoile · Console = sceau
-  ULTIMA. Le graphisme dessinera les emblèmes gravés ; le sens est figé.
+  Correspondance **figée (Paul, 2026-07-16 ; IMLADRIK re-figé 2026-07-17)** :
+  TRAVELER = boussole · ADRAMELECH = dragon · BCP = balance · IMLADRIK =
+  **épée au soleil** (décision antérieure de Paul dont la trace écrite avait été
+  perdue — session non poussée ; re-confirmée oralement le 2026-07-17, remplace
+  l'étoile) · Console = sceau ULTIMA. Les emblèmes gravés sont en ligne (C1).
 - **Recrutement au fil des boucles** (charte §3) : Léo crée les agents/skills
   manquants **quand la boucle du quadrant s'ouvre**, pas tous d'un coup
   (discipline « pas dix lièvres »).
