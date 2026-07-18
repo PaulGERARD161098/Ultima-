@@ -8,8 +8,6 @@ const verdicts = {};
 
 // ---------- 1. estCheminPrive : chemins privés refusés ----------
 const privesAttendus = [
-  '/adramelech',
-  '/adramelech/',
   '/adramelech/carto-idees',        // cleanUrls retire .html
   '/adramelech/carto-idees.html',
   '/adramelech/IDEES.md',
@@ -51,6 +49,21 @@ verdicts.publicsAutorises = publicsAttendus.every((p) => estCheminPrive(p) === f
 verdicts.pasDeFauxPositif = estCheminPrive('/js/memoire-ui.js') === false &&
   estCheminPrive('/adramelech-public.html') === false;
 
+// ---------- 2bis. Antichambre publique (diffusion Léo) : le chemin EXACT
+// '/adramelech' (clean URL de la page racine adramelech.html, fail-closed
+// côté client) passe — mais UNIQUEMENT lui : tout ce qui vit SOUS
+// /adramelech/ reste bloqué, et /memoire reste entièrement fermé. ----------
+verdicts.antichambreServie = estCheminPrive('/adramelech') === false &&
+  estCheminPrive('/adramelech.html') === false &&
+  estCheminPrive('/adramelech/') === false &&        // normalisé → chemin exact
+  estCheminPrive('/Adramelech') === false;           // casse : même page publique
+verdicts.antichambreSansDebordement =
+  estCheminPrive('/adramelech/IDEES.md') === true &&
+  estCheminPrive('/adramelech/carto-idees') === true &&
+  estCheminPrive('/adramelech/importer-idees.mjs') === true &&
+  estCheminPrive('/adramelech%2fIDEES.md') === true &&
+  estCheminPrive('/memoire') === true;
+
 // ---------- 3. middleware() : 404 générique sur chemin privé, sans contenu ----------
 function req(path) {
   return { url: `https://ultima.example${path}`, headers: { get: () => null } };
@@ -78,6 +91,13 @@ function req(path) {
 {
   const r = middleware(req('/css/app.css'));
   verdicts.middlewarePassthroughAsset = r.headers.get('x-middleware-next') === '1';
+}
+{
+  // L'antichambre (clean URL de adramelech.html) est servie, headers sécu posés.
+  const r = middleware(req('/adramelech'));
+  verdicts.middlewarePassthroughAntichambre = r.status === 200 &&
+    r.headers.get('x-middleware-next') === '1' &&
+    r.headers.get('Content-Security-Policy') !== null;
 }
 
 // ---------- Bilan ----------

@@ -1,0 +1,234 @@
+/* Ultima — antichambres des quadrants (diffusion Léo).
+   Pages racine adramelech.html / bcp.html / imladrik.html : même coquille que
+   la console (css/console.css chargé avant : fond de mer, cartouches gravés),
+   déclinée en page de contenu. Réutilise STRICTEMENT les tokens de styles.css
+   (--parchemin*, --encre-sepia*, --or-antique, --cerne-carte, --creme…).
+   Zéro CDN, zéro asset externe, aucun style inline. */
+
+/* ---------- Colonne : page de contenu (pas de centrage vertical console) ---------- */
+body.page-quadrant .console-conteneur {
+  max-width: 880px;
+  justify-content: flex-start;
+  gap: clamp(1.1rem, 3vw, 1.8rem);
+}
+
+/* ---------- Bandeau du quadrant : blason + nom + mission + état ---------- */
+.quadrant-bandeau { gap: 0.45rem; }
+
+.quadrant-bandeau .blason-svg {
+  width: clamp(72px, 16vw, 96px);
+  filter: drop-shadow(0 3px 8px rgba(0, 10, 20, 0.5));
+}
+
+/* La mission, mot pour mot du cadrage : lisible sur la mer (creme, AA). */
+.quadrant-mission {
+  max-width: 60ch;
+  line-height: 1.5;
+}
+
+/* Badge d'état du bandeau : même recette que .quadrant-etat (console.css). */
+.quadrant-bandeau .quadrant-etat { align-self: center; }
+
+/* ---------- Cartouche de contenu (recette du cartouche gravé de la console) ---------- */
+.cartouche-page {
+  padding: 1.05rem 1.25rem 1.15rem;
+  color: var(--encre-sepia);
+  background: linear-gradient(180deg, var(--parchemin), var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte);
+  border-radius: 6px;
+  box-shadow:
+    inset 0 0 0 3px rgba(169, 136, 74, 0.45),   /* liseré or gravé */
+    0 3px 10px rgba(0, 10, 20, 0.35);
+}
+
+.cartouche-page + .cartouche-page { margin-top: clamp(0.85rem, 2.4vw, 1.35rem); }
+
+.cartouche-page h2 {
+  margin: 0 0 0.6rem;
+  padding-bottom: 0.25rem;
+  font-family: var(--police-ancienne);
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  color: var(--encre-sepia);
+  border-bottom: 1px solid var(--or-antique);
+}
+
+.cartouche-page p {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+.cartouche-page p + p { margin-top: 0.5rem; }
+
+/* États dessinés. Le chargement vit sur la mer (creme, AA) ; les vides
+   vivent dans les cartouches de parchemin (encre douce). */
+.adr-chargement {
+  margin: 0;
+  text-align: center;
+  font-family: var(--police-ancienne);
+  font-style: italic;
+  color: var(--creme);
+}
+
+.adr-vide {
+  margin: 0;
+  font-family: var(--police-ancienne);
+  font-style: italic;
+  color: var(--encre-sepia-douce);
+}
+
+/* ---------- ADRAMELECH : compteurs par statut ---------- */
+.adr-compteurs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: 0.6rem;
+}
+
+.adr-compteur {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  padding: 0.55rem 0.4rem;
+  background: var(--parchemin-ombre);
+  border: 1px solid var(--or-antique);
+  border-radius: 4px;
+}
+
+.adr-compteur-nombre {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--encre-sepia);
+}
+
+.adr-compteur-libelle {
+  font-family: var(--police-ancienne);
+  font-size: 0.82rem;
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  color: var(--encre-sepia);
+}
+
+/* ---------- ADRAMELECH : liste des idées ---------- */
+.adr-idee {
+  padding: 0.7rem 0.9rem;
+  background: linear-gradient(180deg, var(--parchemin), var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte);
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 2px rgba(169, 136, 74, 0.35);
+}
+
+.adr-idee + .adr-idee { margin-top: 0.6rem; }
+
+.adr-idee:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.adr-idee-entete {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.adr-idee-nom {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--encre-sepia);
+}
+
+.adr-idee-num {
+  font-family: var(--police-ancienne);
+  font-size: 0.82rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: var(--encre-sepia-douce);
+}
+
+.adr-idee-statut {
+  flex: none;
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--or-antique);
+  background: var(--parchemin-ombre);
+  font-family: var(--police-ancienne);
+  font-size: 0.8rem;
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  color: var(--encre-sepia);
+}
+
+.adr-idee-theme {
+  margin: 0.35rem 0 0;
+  font-size: 0.92rem;
+  color: var(--encre-sepia-douce);
+}
+
+.adr-idee-epigraphe {
+  margin: 0.35rem 0 0;
+  font-family: var(--police-ancienne);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--encre-sepia);
+}
+
+/* ---------- ADRAMELECH : ponts ---------- */
+.adr-ponts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.adr-pont {
+  position: relative;
+  padding-left: 1.35rem;
+  font-size: 0.95rem;
+  color: var(--encre-sepia);
+}
+
+/* Puce gravée sobre (décor pur, jamais porteuse de sens). */
+.adr-pont::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--encre-deco);
+}
+
+/* ---------- Retour à la console (tap target ≥ 44 px) ---------- */
+.retour { margin: 0; text-align: center; }
+
+.retour-console {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0.55rem 1.35rem;
+  font-family: var(--police-ancienne);
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  color: #f2e8cd;
+  background: linear-gradient(#1a5a78, #0e3a52);
+  border: 1.5px solid var(--or-antique);
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(0, 10, 20, 0.4);
+}
+
+.retour-console:hover { background: linear-gradient(#1f6787, #114560); }
+.retour-console:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }

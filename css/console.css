@@ -127,10 +127,8 @@ body.console {
   outline-offset: 3px;
 }
 
-/* Quadrant À VENIR : présent (le moteur est là) mais inerte, non focusable.
-   Le blason est atténué ; les textes restent pleine encre (contraste AA). */
-.quadrant-avenir { cursor: default; }
-.quadrant-avenir .blason-svg { opacity: 0.7; }
+/* (Diffusion Léo : plus de quadrant inerte — les 4 portes sont des liens
+   actifs ; l'état — accéder, en chantier, privé — vit dans le badge.) */
 
 .blason { flex: none; }
 .blason-svg { width: clamp(58px, 14vw, 74px); height: auto; display: block; }
@@ -177,6 +175,3 @@ body.console {
   height: 0.85em;
   display: block;
 }
-
-/* La flèche d'accès n'apparaît que sur le quadrant actif. */
-.quadrant-avenir .quadrant-fleche { display: none; }
