@@ -33,7 +33,7 @@ const stub = { reponse: FIXTURES.trois, delaiMs: 0, compteur: 0 };
 
 // ---------- Page ----------
 
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
+const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
 const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
 const erreurs = [];
 page.on('pageerror', (e) => erreurs.push('pageerror: ' + e.message));
@@ -60,6 +60,8 @@ await page.route('**/api/geocode*', async (route) => {
 });
 // Force le mode démo malgré la config réelle.
 await page.addInitScript(() => {
+  // Léo (L1) : cartouche d'accueil neutralisé ici — couvert par smoke-leo-accueil.mjs.
+  try { window.sessionStorage.setItem('ultima-leo-accueil-vu', '1'); } catch (e) {}
   Object.defineProperty(window, 'ULTIMA_CONFIG', {
     value: { SUPABASE_URL: '', SUPABASE_ANON_KEY: '' },
     writable: false,
@@ -72,7 +74,7 @@ const focusId = () => page.evaluate(() => document.activeElement && document.act
 const messageStatut = () => page.locator('#geo-message[role="status"]').textContent();
 const apercuPosition = () => page.evaluate(() => window.UltimaCarte.apercuPosition());
 
-await page.goto('http://127.0.0.1:8123/', { waitUntil: 'load', timeout: 20000 });
+await page.goto('http://127.0.0.1:8123/traveler.html', { waitUntil: 'load', timeout: 20000 });
 await page.waitForTimeout(1000);
 
 // Ouvre le formulaire nœud comme Paul : Contacts → + Ajouter un contact.

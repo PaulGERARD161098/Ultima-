@@ -27,6 +27,8 @@ async function preparerRoutes(page) {
   await page.route('**://*.openstreetmap.org/**', (r) => r.fulfill({ body: PNG_1PX, contentType: 'image/png' }));
   // Force le mode démo malgré la config réelle.
   await page.addInitScript(() => {
+  // Léo (L1) : cartouche d'accueil neutralisé ici — couvert par smoke-leo-accueil.mjs.
+  try { window.sessionStorage.setItem('ultima-leo-accueil-vu', '1'); } catch (e) {}
     Object.defineProperty(window, 'ULTIMA_CONFIG', {
       value: { SUPABASE_URL: '', SUPABASE_ANON_KEY: '' },
       writable: false,
@@ -61,7 +63,7 @@ function stubSpeechRecognition() {
   window.SpeechRecognition = FauxSpeechRecognition;
 }
 
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
+const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
 const verdicts = {};
 
 // ================= Run 1 : parcours principal (stub dictée présent) =========
@@ -86,7 +88,7 @@ const fermerPanneau = async () => {
   await page.waitForTimeout(150);
 };
 
-await page.goto('http://127.0.0.1:8123/', { waitUntil: 'load', timeout: 20000 });
+await page.goto('http://127.0.0.1:8123/traveler.html', { waitUntil: 'load', timeout: 20000 });
 await page.waitForTimeout(1000);
 await page.locator('.barre-onglets button', { hasText: 'Carte' }).click();
 await page.waitForTimeout(300);
@@ -371,10 +373,12 @@ page2.on('pageerror', (e) => erreurs2.push('pageerror: ' + e.message));
 page2.on('console', (m) => { if (m.type() === 'error') erreurs2.push('console: ' + m.text()); });
 await preparerRoutes(page2);
 await page2.addInitScript(() => {
+  // Léo (L1) : cartouche d'accueil neutralisé ici — couvert par smoke-leo-accueil.mjs.
+  try { window.sessionStorage.setItem('ultima-leo-accueil-vu', '1'); } catch (e) {}
   window.SpeechRecognition = undefined;
   window.webkitSpeechRecognition = undefined;
 });
-await page2.goto('http://127.0.0.1:8123/', { waitUntil: 'load', timeout: 20000 });
+await page2.goto('http://127.0.0.1:8123/traveler.html', { waitUntil: 'load', timeout: 20000 });
 await page2.waitForTimeout(1000);
 await page2.locator('.barre-onglets button', { hasText: 'Carte' }).click();
 await page2.waitForTimeout(300);

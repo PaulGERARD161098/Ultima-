@@ -154,6 +154,7 @@
       etat.relations = demo.relations;
       etat.journal = demo.journal;
       rafraichir();
+      saluerParLeo();
       return;
     }
     if (!etat.session) {
@@ -169,9 +170,22 @@
       etat.relations = (data && data.edges) || [];
       etat.journal = (data && data.journal) || [];
       rafraichir();
+      saluerParLeo();
     } catch (e) {
       toast('Chargement du réseau impossible.', 'erreur');
     }
+  }
+
+  // Léo (boucle L1) : cartouche d'accueil une fois les données bootées —
+  // démo comme connecté, jamais sur l'écran de connexion (la branche sans
+  // session ne signale pas). Le module js/leo-accueil.js gère « une fois
+  // par session de navigation » et le fail-closed (pas de données → rien).
+  function saluerParLeo() {
+    if (!window.UltimaLeo) { return; }
+    window.UltimaLeo.accueillir(
+      { noeuds: etat.noeuds, relations: etat.relations, journal: etat.journal },
+      { ouvrirCible: ouvrirCibleDepuisAccueil }
+    );
   }
 
   function rafraichir() {

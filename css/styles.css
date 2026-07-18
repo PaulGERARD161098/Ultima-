@@ -2159,3 +2159,192 @@ textarea:focus-visible,
 }
 .arbre-ajouter:hover { background: linear-gradient(#1f6787, #114560); }
 .arbre-ajouter:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- Cartouche d'accueil de Léo (boucle L1) ----------
+   Majordome déterministe à l'entrée du quadrant : voile de mer profonde +
+   cartouche de parchemin gravé, même langage que les médaillons de la
+   console (css/console.css .quadrant) et la plaque de relance (.panneau-bois).
+   Aucun asset externe : le blason boussole est un SVG inline (js/leo-accueil.js). */
+
+.leo-voile {
+  position: fixed;
+  inset: 0;
+  z-index: 2050;                    /* au-dessus de l'app, sous les toasts (2100) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(4, 24, 36, 0.6);
+}
+
+.leo-cartouche {
+  width: min(92vw, 560px);
+  max-height: min(86vh, 660px);
+  overflow-y: auto;
+  padding: 1.25rem 1.4rem 1.2rem;
+  color: var(--encre-sepia);
+  background: linear-gradient(180deg, var(--parchemin), var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte);
+  border-radius: 6px;
+  box-shadow:
+    inset 0 0 0 3px rgba(169, 136, 74, 0.45),   /* liseré or gravé = --or-antique @45 % */
+    0 8px 26px rgba(0, 10, 20, 0.5);
+}
+
+.leo-entete {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.leo-blason { width: 54px; height: 54px; flex: none; }
+
+.leo-titre {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;   /* pile du cartouche R1 */
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--encre-sepia);
+}
+
+.leo-salutation {
+  margin: 0.15rem 0 0;
+  font-family: var(--police-ancienne);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--encre-sepia-douce);
+}
+
+.leo-section { margin: 0 0 0.9rem; }
+
+.leo-sous-titre {
+  margin: 0 0 0.4rem;
+  padding-bottom: 0.2rem;
+  font-family: var(--police-ancienne);
+  font-size: 0.98rem;
+  font-weight: 700;
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  color: var(--encre-sepia);
+  border-bottom: 1px solid var(--or-antique);
+}
+
+.leo-journal {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--encre-sepia);
+}
+
+.leo-journal-date { font-weight: 650; }
+.leo-journal-cible { color: var(--encre-sepia-douce); }
+
+.leo-vide {
+  margin: 0;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--encre-sepia-douce);
+}
+
+.leo-travaux {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.leo-travail {
+  padding-left: 1.35rem;
+  position: relative;
+  font-size: 0.95rem;
+  color: var(--encre-sepia);
+}
+
+/* Puce gravée sobre (décor pur, jamais porteuse de sens). */
+.leo-travail::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--encre-deco);
+}
+
+.leo-propositions {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Proposition = plaque de parchemin gravée cliquable (langage .panneau-bois). */
+.leo-proposition {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.55rem 0.9rem;
+  font-family: var(--police-ancienne);
+  font-size: 0.98rem;
+  line-height: 1.3;
+  text-align: left;
+  color: var(--encre-sepia);
+  background: linear-gradient(180deg, var(--parchemin), var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte);
+  border-radius: 4px;
+  box-shadow:
+    inset 0 0 0 3px rgba(169, 136, 74, 0.45),
+    0 1px 2px rgba(59, 47, 28, 0.18);
+  cursor: pointer;
+}
+
+.leo-proposition:hover {
+  border-color: var(--or-antique);
+  background: linear-gradient(180deg, #fbf5e6, var(--parchemin));
+}
+
+.leo-proposition:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.leo-pied {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.35rem;
+}
+
+/* « C'est parti » : plaque encre/or, même registre que .arbre-ajouter. */
+.leo-partir {
+  min-height: 46px;
+  padding: 0.55rem 1.35rem;
+  font: inherit;
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #f2e8cd;
+  background: linear-gradient(#1a5a78, #0e3a52);
+  border: 1.5px solid var(--or-antique);
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(0, 10, 20, 0.4);
+  cursor: pointer;
+}
+
+.leo-partir:hover { background: linear-gradient(#1f6787, #114560); }
+.leo-partir:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* Mobile : plein écran doux (le cartouche occupe l'écran, coins droits). */
+@media (max-width: 640px) {
+  .leo-voile { padding: 0; align-items: stretch; }
+  .leo-cartouche {
+    width: 100%;
+    max-height: none;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    padding: 1.1rem 1rem calc(1.1rem + env(safe-area-inset-bottom));
+  }
+}

@@ -6,7 +6,7 @@ import { readFileSync } from 'node:fs';
 const SCRATCH = new URL('./.cache', import.meta.url).pathname;
 const leafletJs = readFileSync(`${SCRATCH}/package/dist/leaflet.js`);
 const leafletCss = readFileSync(`${SCRATCH}/package/dist/leaflet.css`);
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
+const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
 const verdicts = {};
 const erreurs = [];
 
@@ -26,6 +26,8 @@ async function pageStub(viewport, demo) {
   await page.route('**://*.openstreetmap.org/**', (r) => r.fulfill({ body: PNG_1PX, contentType: 'image/png' }));
   if (demo) {
     await page.addInitScript(() => {
+  // Léo (L1) : cartouche d'accueil neutralisé ici — couvert par smoke-leo-accueil.mjs.
+  try { window.sessionStorage.setItem('ultima-leo-accueil-vu', '1'); } catch (e) {}
       Object.defineProperty(window, 'ULTIMA_CONFIG', {
         value: { SUPABASE_URL: '', SUPABASE_ANON_KEY: '' }, writable: false });
     });
@@ -41,7 +43,7 @@ async function pageStub(viewport, demo) {
       }; } };`
     }));
   }
-  await page.goto('http://127.0.0.1:8123/', { waitUntil: 'load', timeout: 20000 });
+  await page.goto('http://127.0.0.1:8123/traveler.html', { waitUntil: 'load', timeout: 20000 });
   await page.waitForTimeout(800);
   // R1 : l'arrivée se fait sur la Carte — ces vérifications portent sur
   // l'Accueil, on y va par son onglet (parcours réel). En non-démo sans

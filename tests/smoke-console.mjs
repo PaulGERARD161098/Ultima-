@@ -48,6 +48,8 @@ async function preparerRoutes(page) {
   });
   await page.route('**://*.openstreetmap.org/**', (r) => r.fulfill({ body: PNG_1PX, contentType: 'image/png' }));
   await page.addInitScript(() => {
+    // Léo (L1) : cartouche d'accueil neutralisé ici — couvert par smoke-leo-accueil.mjs.
+    try { window.sessionStorage.setItem('ultima-leo-accueil-vu', '1'); } catch (e) {}
     Object.defineProperty(window, 'ULTIMA_CONFIG', {
       value: { SUPABASE_URL: '', SUPABASE_ANON_KEY: '' },
       writable: false,
