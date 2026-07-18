@@ -23,6 +23,11 @@
 - **État d'esprit : conversationnel, type Jarvis (Iron Man)** — un majordome
   d'ingénieur : précis, complice, jamais obséquieux, toujours au service du
   cap. **Et qui s'adapte et apprend au fur et à mesure.**
+- **Léo AGIT sur dictée (complément Paul, 2026-07-18)** : parler à Léo dans
+  Ultima **fait avancer le travail** — une idée dictée entre au registre, une
+  relance se planifie, un besoin de chantier s'ajoute, le journal s'écrit.
+  **Elle tourne sur Claude** (le moteur) : pas un simple chatbot, un agent
+  outillé. Le geste cible : *ouvrir Ultima → parler → c'est fait*.
 - **Différé (à cadrer plus tard, décision Paul)** : la présence visuelle de
   Léo (cartouche, signature, incarnation graphique) et le détail de son
   fonctionnement étendu.
@@ -44,9 +49,21 @@ Pour être étendue/puissante/pertinente, Léo-au-site a besoin de **quatre
    - ADRAMELECH : `/api/idees` (statuts, bilan de l'archipel, top 3 stratégique).
    - IMLADRIK : objectifs, journal, quart d'heure du jour (quand il existera).
 3. **La voix (le conversationnel)** — un **service IA côté serveur** :
-   route API Vercel → API Claude, **clé en env Vercel uniquement** (jamais
-   côté client), erreurs génériques client, timeout sortant, aucune PII en
-   logs. **Création de clé / facturation = action payante → GATE Paul.**
+   route API Vercel → **API Claude** (« elle tourne sur Claude », Paul),
+   **clé en env Vercel uniquement** (jamais côté client), erreurs génériques
+   client, timeout sortant, aucune PII en logs. **Création de clé /
+   facturation = action payante → GATE Paul.**
+   **3bis. Les mains (l'action sur dictée)** — le même appel Claude reçoit des
+   **outils** (tool use) qui sont les **API existantes du site** : créer/
+   enrichir une idée, ajouter un besoin INTENDANT, écrire au journal, planifier
+   une relance. Règles non négociables : (a) chaque outil exécute **avec la
+   session authentifiée de Paul** (son JWT → RLS ; jamais de clé service pour
+   agir) ; (b) **reformulation avant action** — Léo répète ce qu'elle a compris
+   de la dictée et l'action s'exécute sur confirmation (protocole vocal, comme
+   en session) ; les lectures et brouillons sont libres, **toute écriture est
+   confirmée, toute suppression est doublement confirmée** ; (c) Léo-au-site
+   agit sur les **données** des quadrants, pas sur le code d'Ultima (le dev
+   reste à Léo-en-session).
 4. **La mémoire (l'apprentissage)** — une **mémoire de Léo en base** (table
    `leo_memoire`, RLS mono-owner, migration → gate) : préférences apprises
    (ce que Paul valide/refuse/reformule), décisions actées, résumé du dernier
@@ -85,6 +102,10 @@ Le pop-up touche à terme PII réseau + finance + intime (§5 CADRAGE-CONSOLE) :
   produit (Jarvis « muet mais juste »). Harnais patrimoine + contre-passes.
 - **L2 — la voix (Jarvis conversationnel)** : route serveur → API Claude,
   conversation dans le pop-up, ton Jarvis. **GATE coût** (clé + facturation).
+- **L2b — les mains (agir sur dictée)** : tool use branché sur les API du
+  site (idées, INTENDANT, journal, relances), session de Paul uniquement,
+  reformulation + confirmation avant toute écriture. C'est la marche qui
+  transforme le majordome en **agent qui fait avancer le travail**.
 - **L3 — la mémoire apprenante** : table `leo_memoire` (gate migration),
   boucle d'apprentissage (valide/refuse → préférences), résumé par quadrant
   re-servi au retour. C'est L3 qui fait de L1+L2 un vrai Jarvis.
@@ -96,7 +117,9 @@ Le pop-up touche à terme PII réseau + finance + intime (§5 CADRAGE-CONSOLE) :
 **Actées (Paul, 2026-07-18)** : agent actif à l'initiative ; rien sur
 l'accueil ; pop-up récapitulatif à l'entrée de chaque quadrant ; opérationnel
 sur TRAVELER/BCP, réflexif sur ADRAMELECH/IMLADRIK ; cohérence quadrant ;
-ton Jarvis ; adaptation/apprentissage ; visuel + fonctionnement différés.
+ton Jarvis ; adaptation/apprentissage ; **Léo agit sur dictée** (« ouvrir
+Ultima, parler à Léo, ça fait avancer les choses ») et **tourne sur Claude** ;
+visuel + fonctionnement différés.
 
 **⏳ En attente (registre Actions humaines)** :
 1. **Compte auth de Paul** (L0) — action Paul, débloque tout.
