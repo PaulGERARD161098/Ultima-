@@ -305,3 +305,12 @@
   AD-4c front (fin du « noir en prod »), front INTENDANT (AD-5c-δ), et Léo L1
   (pop-up par quadrant). Prochaine boucle recommandée : **Léo L1 pilote
   TRAVELER** ou AD-4c front — arbitrage Paul.
+- **2026-07-18 (LÉO AGIT SUR DICTÉE — complément de vision)** — Paul précise :
+  Léo-au-site doit aussi **faire avancer le travail sur dictée** (« ouvrir
+  Ultima, parler à Léo, ça fait avancer les choses ») et **tourner sur
+  Claude**. Cadré en **L2b (les mains)** : tool use de l'API Claude branché
+  sur les API du site (idées, INTENDANT, journal, relances), exécution avec la
+  session authentifiée de Paul uniquement (JWT → RLS, jamais de clé service),
+  **reformulation + confirmation avant toute écriture** (protocole vocal),
+  suppression doublement confirmée ; Léo-au-site agit sur les DONNÉES, pas sur
+  le code (le dev reste à Léo-en-session).
