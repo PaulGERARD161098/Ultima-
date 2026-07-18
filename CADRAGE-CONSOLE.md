@@ -126,6 +126,11 @@ Conséquences (à tenir à chaque boucle) :
 
 ## 6. Léo étendue
 
+> **Léo dans le site** (agent actif, pop-up par quadrant, ton Jarvis,
+> apprentissage) : vision dictée par Paul le 2026-07-18, cadrée dans
+> **`CADRAGE-LEO-SITE.md`** — boucles L0→L3. Ce §6 décrit Léo-en-session
+> (le pilote) ; le produit Léo-au-site vit dans son cadrage dédié.
+
 - **Léo est féminine** (une femme) — décision Paul 2026-07-12. Charte et profil
   mis à jour (accords au féminin).
 - **Mandat élargi aux 4 domaines** : Léo pilote TRAVELER, BCP, ADRAMELECH et

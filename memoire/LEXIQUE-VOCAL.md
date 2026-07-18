@@ -24,7 +24,10 @@
 | la vanvaille | l'avant-veille |
 | la pause (contexte chantier) | la pose |
 | on stocke à moi | mon stock à moi |
-| Humladric, Imladric, Imladrik | IMLADRIK (quadrant dév. perso) |
+| Humladric, Imladric, Imladrik, Emadryx | IMLADRIK (quadrant dév. perso) |
+| Adram Erech, Adram Alège, un drame à neige, Adram Elech | ADRAMELECH (variantes supplémentaires) |
+| jaris de Ironman, Jaris | Jarvis (l'assistant d'Iron Man — modèle d'état d'esprit de Léo-au-site) |
+| l'agence (contexte agent) | l'agent (Léo) |
 | Traveller, Traveler | TRAVELER (quadrant réseau — un seul L, rappel Paul 2026-07-16) |
 | directive EB, macro-directive | discipline : boucler avant d'avancer + capitaliser sur l'existant |
 | Renault Boost, Renoboost | Renoboost IA (socle rémunérateur = chantiers + installations à domicile ; ligne de base du benchmark ADRAMELECH) |
