@@ -18,7 +18,7 @@ const SCRATCH = new URL('./.cache', import.meta.url).pathname;
 const leafletJs = readFileSync(`${SCRATCH}/package/dist/leaflet.js`);
 const leafletCss = readFileSync(`${SCRATCH}/package/dist/leaflet.css`);
 
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
+const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
 const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
 const erreurs = [];
 page.on('pageerror', (e) => erreurs.push('pageerror: ' + e.message));
@@ -35,6 +35,8 @@ const PNG_1PX = Buffer.from(
   'base64');
 await page.route('**://*.openstreetmap.org/**', (r) => r.fulfill({ body: PNG_1PX, contentType: 'image/png' }));
 await page.addInitScript(() => {
+  // Léo (L1) : cartouche d'accueil neutralisé ici — couvert par smoke-leo-accueil.mjs.
+  try { window.sessionStorage.setItem('ultima-leo-accueil-vu', '1'); } catch (e) {}
   Object.defineProperty(window, 'ULTIMA_CONFIG', {
     value: { SUPABASE_URL: '', SUPABASE_ANON_KEY: '' },
     writable: false,
@@ -42,7 +44,7 @@ await page.addInitScript(() => {
 });
 
 const verdicts = {};
-await page.goto('http://127.0.0.1:8123/', { waitUntil: 'load', timeout: 20000 });
+await page.goto('http://127.0.0.1:8123/traveler.html', { waitUntil: 'load', timeout: 20000 });
 await page.waitForTimeout(1000);
 
 const ongletContacts = page.locator('.barre-onglets button', { hasText: 'Contacts' });

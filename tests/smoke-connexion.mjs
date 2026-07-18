@@ -11,7 +11,7 @@ const PNG_1PX = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
   'base64');
 
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
+const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
 const verdicts = {};
 const erreurs = [];
 
@@ -41,6 +41,8 @@ async function ouvrir(viewport, client, requetes) {
 
   if (client === 'aucun') {
     await page.addInitScript(() => {
+  // Léo (L1) : cartouche d'accueil neutralisé ici — couvert par smoke-leo-accueil.mjs.
+  try { window.sessionStorage.setItem('ultima-leo-accueil-vu', '1'); } catch (e) {}
       Object.defineProperty(window, 'ULTIMA_CONFIG', {
         value: { SUPABASE_URL: '', SUPABASE_ANON_KEY: '' }, writable: false });
     });
@@ -62,7 +64,7 @@ async function ouvrir(viewport, client, requetes) {
       }; } };`
     }));
   }
-  await page.goto('http://127.0.0.1:8123/', { waitUntil: 'load', timeout: 20000 });
+  await page.goto('http://127.0.0.1:8123/traveler.html', { waitUntil: 'load', timeout: 20000 });
   await page.waitForTimeout(900);
   return page;
 }

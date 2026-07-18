@@ -15,7 +15,7 @@ const leafletCss = readFileSync(`${SCRATCH}/package/dist/leaflet.css`);
 
 const TOAST_DECOUVERTE = "Nouveau : touchez le micro d'un champ pour dicter.";
 
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
+const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
 const verdicts = {};
 const PNG_1PX = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
@@ -31,6 +31,8 @@ async function preparerRoutes(page) {
   await page.route('**://*.openstreetmap.org/**', (r) => r.fulfill({ body: PNG_1PX, contentType: 'image/png' }));
   // Force le mode démo malgré la config réelle.
   await page.addInitScript(() => {
+  // Léo (L1) : cartouche d'accueil neutralisé ici — couvert par smoke-leo-accueil.mjs.
+  try { window.sessionStorage.setItem('ultima-leo-accueil-vu', '1'); } catch (e) {}
     Object.defineProperty(window, 'ULTIMA_CONFIG', {
       value: { SUPABASE_URL: '', SUPABASE_ANON_KEY: '' },
       writable: false,
@@ -111,7 +113,7 @@ const emettreErreur = (code) => page.evaluate((c) => {
   i[i.length - 1].emettreErreur(c);
 }, code);
 
-await page.goto('http://127.0.0.1:8123/', { waitUntil: 'load', timeout: 20000 });
+await page.goto('http://127.0.0.1:8123/traveler.html', { waitUntil: 'load', timeout: 20000 });
 await page.waitForTimeout(1000);
 
 // Ouvre une fiche via l'onglet Contacts (2 taps, comme Paul).
@@ -359,10 +361,12 @@ page2.on('pageerror', (e) => erreurs2.push('pageerror: ' + e.message));
 page2.on('console', (m) => { if (m.type() === 'error') erreurs2.push('console: ' + m.text()); });
 await preparerRoutes(page2);
 await page2.addInitScript(() => {
+  // Léo (L1) : cartouche d'accueil neutralisé ici — couvert par smoke-leo-accueil.mjs.
+  try { window.sessionStorage.setItem('ultima-leo-accueil-vu', '1'); } catch (e) {}
   window.SpeechRecognition = undefined;
   window.webkitSpeechRecognition = undefined;
 });
-await page2.goto('http://127.0.0.1:8123/', { waitUntil: 'load', timeout: 20000 });
+await page2.goto('http://127.0.0.1:8123/traveler.html', { waitUntil: 'load', timeout: 20000 });
 await page2.waitForTimeout(1000);
 await page2.locator('.barre-onglets button', { hasText: 'Contacts' }).click();
 await page2.waitForTimeout(200);
