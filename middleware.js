@@ -43,6 +43,15 @@ const CSP = [
 // `requireUser` (gate — voir adramelech/CADRAGE-ADRAMELECH.md, AD-4).
 const PREFIXES_PRIVES = ['/adramelech', '/memoire'];
 
+// Antichambre publique du quadrant (diffusion Léo) : la page RACINE
+// adramelech.html est servie par `cleanUrls` sur le chemin EXACT '/adramelech'
+// (la visite de /adramelech.html y est 308-redirigée par Vercel). La page est
+// fail-closed côté client (aucune donnée sans session — js/adramelech.js,
+// les idées ne viennent QUE de /api/idees authentifiée) et ne contient aucune
+// idée en dur. Seul ce chemin exact passe : tout ce qui vit SOUS /adramelech/
+// (IDEES.md, cadrages, scripts d'import) reste bloqué, *.md compris.
+const CHEMINS_ANTICHAMBRE = ['/adramelech'];
+
 export function estCheminPrive(pathname) {
   // Normalisation défensive : décodage répété (variantes %2F / double-encodage)
   // + minuscules + suppression du slash final. URL malformée → refus (fail-closed).
@@ -71,6 +80,7 @@ export function estCheminPrive(pathname) {
   if (p.length > 1 && p.endsWith('/')) p = p.slice(0, -1);
 
   if (p.endsWith('.md')) return true; // registres, cadrages, roadmaps, docs internes
+  if (CHEMINS_ANTICHAMBRE.includes(p)) return false; // page racine publique (clean URL)
   return PREFIXES_PRIVES.some((prefixe) => p === prefixe || p.startsWith(`${prefixe}/`));
 }
 

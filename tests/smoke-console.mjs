@@ -93,20 +93,30 @@ for (const attendu of ['TRAVELER', 'BCP', 'ADRAMELECH', 'IMLADRIK']) {
   verifier(`Quadrant ${attendu} présent`, noms.map((n) => n.trim()).includes(attendu));
 }
 
-// TRAVELER = lien actif vers traveler.html.
-const traveler = page.locator('a.quadrant-actif');
-verifier('TRAVELER est un lien (une seule ancre active)', (await traveler.count()) === 1);
-const href = await traveler.getAttribute('href');
-verifier('TRAVELER pointe vers traveler.html', href === 'traveler.html', `href: ${href}`);
+// Diffusion Léo : les 4 quadrants sont des LIENS ACTIFS (plus d'inertes).
+const actifs = page.locator('a.quadrant-actif');
+verifier('4 quadrants actifs (ancres)', (await actifs.count()) === 4);
+const hrefs = await actifs.evaluateAll((els) => els.map((e) => e.getAttribute('href')));
+for (const attendu of ['traveler.html', 'bcp.html', 'adramelech.html', 'imladrik.html']) {
+  verifier(`Porte ouverte vers ${attendu}`, hrefs.includes(attendu), JSON.stringify(hrefs));
+}
+verifier('Plus aucun quadrant inerte (aria-disabled / à venir)',
+  (await page.locator('.quadrant[aria-disabled], .quadrant-avenir').count()) === 0);
 
-// Les 3 « à venir » : non-liens, aria-disabled.
-const avenir = page.locator('.quadrant-avenir');
-verifier('3 quadrants « à venir »', (await avenir.count()) === 3);
-const avenirSontDiv = await avenir.evaluateAll((els) =>
-  els.every((e) => e.tagName === 'DIV' && e.getAttribute('aria-disabled') === 'true'));
-verifier('« à venir » = <div> aria-disabled, jamais de lien', avenirSontDiv);
-const adraEtat = (await page.locator('.quadrant-avenir', { hasText: 'ADRAMELECH' }).locator('.quadrant-etat').textContent())?.trim();
-verifier('ADRAMELECH marqué privé', /priv/i.test(adraEtat || ''), `état: ${adraEtat}`);
+// Badges d'état conservés sur les portes.
+async function etatDe(nom) {
+  return (await page.locator('a.quadrant-actif', { hasText: nom }).locator('.quadrant-etat').textContent())?.trim();
+}
+const adraEtat = await etatDe('ADRAMELECH');
+verifier('ADRAMELECH marqué « privé — auth requise »',
+  /priv/i.test(adraEtat || '') && /auth/i.test(adraEtat || ''), `état: ${adraEtat}`);
+const bcpEtat = await etatDe('BCP');
+verifier('BCP marqué « en chantier »', /chantier/i.test(bcpEtat || ''), `état: ${bcpEtat}`);
+const imlaEtat = await etatDe('IMLADRIK');
+verifier('IMLADRIK marqué « en chantier »', /chantier/i.test(imlaEtat || ''), `état: ${imlaEtat}`);
+
+const traveler = page.locator('a.quadrant-actif[href="traveler.html"]');
+verifier('TRAVELER garde sa porte', (await traveler.count()) === 1);
 
 // Blasons étiquetés (aria-label).
 const blasons = await page.locator('.blason-svg').evaluateAll((els) =>
