@@ -281,3 +281,17 @@
   inchangé. ⏳ : 11 smokes app à repointer vers /traveler.html ; « agent Léo en
   ligne » évoqué par Paul (zone de dialogue sur le site ?) = à clarifier, gate
   coût si service IA.
+- **2026-07-18 (emblèmes clos + vision LÉO-AU-SITE cadrée)** — ① Emblème
+  ADRAMELECH : Paul écarte le dragon d'après image peinte puis le dragon
+  éployé ; sur planche de 3 ouroboros (design/preview-blason-ouroboros.html),
+  **choix B : l'ouroboros ailé** — fusionné en ligne (PR #48). **Les 5 emblèmes
+  sont définitifs** : boussole · ouroboros ailé · balance · épée au soleil ·
+  sceau. ② **Léo dans le site — vision dictée et cadrée** (`CADRAGE-LEO-SITE.md`) :
+  agent ACTIF à l'initiative ; rien sur l'accueil ; **pop-up d'accueil de Léo à
+  l'entrée de chaque quadrant** (récap état + travaux en cours) ; opérationnel
+  sur TRAVELER/BCP, réflexif sur ADRAMELECH/IMLADRIK ; initiative cohérente
+  avec les objectifs du quadrant ; ton **Jarvis (Iron Man)** ; s'adapte et
+  apprend. Visuel + fonctionnement étendu : différés. Architecture en 4 étages
+  (auth → contexte data → voix IA → mémoire apprenante), proactivité = règles
+  déterministes sur données réelles + IA qui formule. Boucles L0 (compte auth
+  Paul — LE bloquant) → L1 (pop-up sans IA) → L2 (IA, gate coût) → L3 (mémoire).

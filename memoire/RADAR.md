@@ -194,3 +194,16 @@
   Paul = console jamais construite + cache PWA — pas un bug de déploiement.
   Vercel côté Léo reste sans permission sur le projet ultima (403, à faire
   rafraîchir par Paul pour lire les déploiements de prod).
+- 2026-07-18 (session emblèmes + vision Léo-au-site) — ① **Confirmé** : sur le
+  visuel, Paul décide par ITÉRATION D'IMAGES, pas par description — lui montrer
+  des planches de choix (A/B/C) converge en un tour là où deux propositions
+  uniques ont été rejetées. Règle : pour toute décision de goût, produire une
+  planche comparative d'emblée. ② **Anticipé** : la vision Jarvis (agent actif,
+  pop-up par quadrant, apprentissage) fait du **compte auth de Paul (L0) le
+  verrou de TOUT le produit** — seed idées, front INTENDANT, Léo-au-site. À la
+  prochaine session, proposer L0 en premier geste (flux magic-link existe déjà
+  dans traveler.html ; il faut créer le user et prouver le flux). ③ Rappel
+  registre : « ce cas de figure précis » de Paul distingue bien Léo-en-session
+  (moi, ici) de Léo-au-site (le produit) — ne pas les confondre dans les
+  cadrages ; la charte .claude/agents/leo.md reste la mienne, CADRAGE-LEO-SITE
+  décrit le produit.
