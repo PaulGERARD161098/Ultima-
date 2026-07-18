@@ -15,6 +15,17 @@ que la console de Rennes Boost. Un seul pilote : **Léo**. Un seul repo. Une
 La carte/arbre du réseau déjà construite n'est **pas jetée** : elle **devient le
 premier quadrant** (TRAVELER). Capitaliser sur l'existant, comme toujours.
 
+**Directive JL (Paul, 2026-07-18 — l'horizon de cette vision).** À terme,
+Ultima est **l'unique interface de travail de Paul** (travail au sens large) :
+dès qu'il faut bosser sur quelque chose, il ouvre Ultima et Léo l'oriente sur
+**toute sa data**. Un outil unique, sécurisé, propre, qui absorbe toute la data
+(projets pro et perso, tout), la dispatche et navigue tout ; un seul
+interlocuteur (Léo) ; un outil souple, capable de tout faire ou d'apprendre et
+s'adapter. **Rien d'autre ne sera créé** : tout nouveau besoin devient une
+extension d'Ultima (un quadrant qui grandit, ou un nouveau segment cadré),
+jamais un outil à côté. Tous les travaux doivent être conformes à cette
+directive ; la directive EB (§4) reste la discipline pour y aller.
+
 ## 2. La console d'accueil
 
 Page d'accueil = **console de sélection** :

@@ -2,6 +2,18 @@
 
 ## 🎯 Objectif final — à ne JAMAIS oublier
 
+**Directive JL (Paul, 2026-07-18 — l'horizon ; tout travail doit y être
+conforme)** : à terme, **Ultima est l'unique interface de travail de Paul**,
+travail au sens large. Dès qu'il faut bosser sur quelque chose, Paul ouvre
+Ultima et Léo l'oriente sur toute sa data. Un outil **unique, sécurisé,
+propre**, qui **absorbe toute la data** (projets pro et perso, tout), la
+**dispatche** et permet de **tout naviguer**, avec **un seul interlocuteur**
+qui aide : Léo. Un outil **souple**, capable de tout faire ou d'**apprendre
+et s'adapter**. Corollaire : **rien d'autre ne sera créé** — tout nouveau
+besoin devient une extension d'Ultima, jamais un outil à côté. La directive
+EB (boucler + capitaliser) reste la discipline de route ; la directive JL est
+la destination.
+
 Fermer la boucle complète **« construire sécurisé → auditer → patcher les
 failles → améliorer l'UX »** sur **Ultima**, devenue depuis le 2026-07-12 la
 **plateforme personnelle de Paul en console à 4 quadrants** (cadrage complet :

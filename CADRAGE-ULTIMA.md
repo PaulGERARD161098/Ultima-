@@ -277,6 +277,13 @@
   S1/S2/S3 du garde PII fermés. **⏳ Gaté (invérifiable sans compte auth Paul)** :
   front carto client-side après auth (fin du « noir en prod ») + seed des 4
   idées (`importer-idees.mjs` prêt). Détail : `adramelech/CADRAGE-ADRAMELECH.md`.
+- ✅ **DIRECTIVE JL actée (2026-07-18)** : dictée et nommée par Paul — à terme,
+  **Ultima = son unique interface de travail** (au sens large), absorbant toute
+  sa data (pro et perso), Léo seule interlocutrice qui oriente, dispatche et
+  navigue tout ; outil souple qui apprend et s'adapte ; **rien d'autre ne sera
+  créé**. Tous les travaux doivent y être conformes. Gravée dans CLAUDE.md (🎯),
+  CADRAGE-CONSOLE §1, charte Léo, journal des décisions, lexique. EB = la
+  discipline de route, JL = la destination.
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 

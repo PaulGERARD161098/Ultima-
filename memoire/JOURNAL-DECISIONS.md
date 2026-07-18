@@ -314,3 +314,18 @@
   **reformulation + confirmation avant toute écriture** (protocole vocal),
   suppression doublement confirmée ; Léo-au-site agit sur les DONNÉES, pas sur
   le code (le dev reste à Léo-en-session).
+- **2026-07-18 (DIRECTIVE JL — Ultima, unique interface de travail)** — dictée
+  et nommée par Paul, directive fondatrice au-dessus de tout le backlog : à
+  terme, **Ultima est son unique interface de travail** (travail au sens
+  large) — dès qu'il faut bosser sur quelque chose, il ouvre Ultima et **Léo
+  l'oriente sur toute sa data**. L'outil visé : **unique, sécurisé, propre**,
+  qui **absorbe toute la data** (projets pro et perso, tout), la **dispatche**
+  et **navigue tout**, avec **un seul interlocuteur** (Léo), **souple**,
+  capable de tout faire ou d'**apprendre et s'adapter**. Corollaire explicite :
+  « je ne veux rien créer d'autre » — aucun outil parallèle, tout nouveau
+  besoin = extension d'Ultima. **Tous les travaux doivent y coller et y être
+  conformes.** Articulation : la directive EB reste la discipline de route
+  (boucler + capitaliser), la directive JL est la destination. Gravée dans
+  CLAUDE.md (🎯), CADRAGE-CONSOLE §1, charte Léo, lexique. Elle ne change pas
+  la boucle en cours ; elle cadre tous les choix d'architecture à venir
+  (absorption de data externe = nouvelles boucles cadrées, gates inchangées).
