@@ -171,8 +171,12 @@ Non gaté.
   seul** : (a) choix d'archi — page autonome vs intégration à la future console
   C1 ; (b) **invérifiable sans compte auth de Paul** (0 user en base) → le flux
   authentifié ne peut être prouvé de bout en bout. Registre.
-- **Seed ⏳ GATÉ** : `adramelech/importer-idees.mjs` (idempotent, prêt) peuplera
-  les 4 idées **quand le compte auth de Paul existera** (owner_id réel).
+- **Seed ✅ APPLIQUÉ (2026-07-18)** : la gate est tombée — le compte auth de
+  Paul **existait en réalité depuis le 2026-07-09** (dernière connexion
+  2026-07-17 ; le registre disait « 0 user », leçon radar : vérifier l'état
+  réel). SQL généré par `importer-idees.mjs` avec l'owner_id réel, audité
+  (upserts seuls, rien de destructif), appliqué : **4 idées + 4 ponts en base**,
+  vérifiés (GLANEUR · PROTÉE · INTENDANT · MYCÉLIUM).
 
 **Durcissement transversal consigné** (hors 0007, décision d'archi) : FK
 composite `(owner_id, id)` sur `idees`/`network_edges`/`journal` pour sceller

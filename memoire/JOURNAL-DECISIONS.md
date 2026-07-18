@@ -295,3 +295,13 @@
   (auth → contexte data → voix IA → mémoire apprenante), proactivité = règles
   déterministes sur données réelles + IA qui formule. Boucles L0 (compte auth
   Paul — LE bloquant) → L1 (pop-up sans IA) → L2 (IA, gate coût) → L3 (mémoire).
+- **2026-07-18 (L0 CONSTATÉ FAIT + SEED APPLIQUÉ)** — sur « go » de Paul :
+  cadrage Léo fusionné (PR #49), puis ouverture de L0 → découverte que le
+  compte auth de Paul **existait depuis le 2026-07-09** (dernière connexion
+  la veille ; le registre disait 0 user — 2ᵉ occurrence de la leçon « vérifier
+  l'état RÉEL en base, pas le registre »). Gate du seed tombée de fait → SQL
+  d'`importer-idees.mjs` généré avec l'owner_id réel, audité (upserts seuls),
+  **appliqué et vérifié : 4 idées + 4 ponts en base**. Débloqués d'un coup :
+  AD-4c front (fin du « noir en prod »), front INTENDANT (AD-5c-δ), et Léo L1
+  (pop-up par quadrant). Prochaine boucle recommandée : **Léo L1 pilote
+  TRAVELER** ou AD-4c front — arbitrage Paul.

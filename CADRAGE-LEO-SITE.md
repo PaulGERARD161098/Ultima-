@@ -73,8 +73,11 @@ Le pop-up touche à terme PII réseau + finance + intime (§5 CADRAGE-CONSOLE) :
 
 ## 4. Découpage en boucles (une à la fois, directive EB)
 
-- **L0 — le compte auth de Paul** (action Paul, débloque tout : seed idées,
-  front INTENDANT, et Léo-au-site). Rien de Léo n'est prouvable sans lui.
+- **L0 — le compte auth de Paul ✅ DÉJÀ FAIT (constaté 2026-07-18)** : le
+  compte `pag.gerard@gmail.com` existe depuis le 2026-07-09 (e-mail confirmé,
+  dernière connexion 2026-07-17) — le registre le croyait absent. Conséquence
+  immédiate : **seed des 4 idées appliqué** dans la foulée. La voie est libre
+  pour L1.
 - **L1 — le pop-up « majordome » SANS IA** : à l'entrée d'un quadrant
   authentifié, un cartouche Léo (registre antique) qui récapitule depuis les
   données réelles : état, travaux en cours, 1-3 suggestions **déterministes**
