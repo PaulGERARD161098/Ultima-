@@ -166,11 +166,15 @@ Non gaté.
   `validateIdee`/`validateLien` (parité API↔base). Harnais unit (20 verdicts).
 - **AD-4c (durcissements) ✅** : S1 (octets parasites) + S2 (backslash) fermés
   au garde middleware ; S3 (fingerprint 404, non exploitable) consigné.
-- **AD-4c (front) ⏳ GATÉ** : servir la carto **côté client après auth**
-  (fetch `/api/idees` → rendu) pour finir le « noir en prod ». **Non exécutable
-  seul** : (a) choix d'archi — page autonome vs intégration à la future console
-  C1 ; (b) **invérifiable sans compte auth de Paul** (0 user en base) → le flux
-  authentifié ne peut être prouvé de bout en bout. Registre.
+- **AD-4c (front) ✅ LIVRÉ (2026-07-19, « on termine AD »)** : la carto **côté
+  client après auth** — page `idees.html` servie sur `/idees` (motif traveler,
+  hors préfixe privé : middleware INTOUCHÉ), module `js/idees.js` (fetch
+  `/api/idees` Bearer, archipels par thème principal, ponts, états 401/vide/
+  erreur/démo, DOM createElement/textContent uniquement), quadrant console
+  activé. Spec : `design/spec-ad4c-front.md`. Harnais patrimoine
+  `unit-idees-carto` (20) + `smoke-idees` (45, API stubbée, contrastes AA
+  mesurés) ; suite complète verte ×2 (agent + contre-passe Léo). Fin du
+  « noir en prod ». Reste à prouver par Paul : flux authentifié réel en prod.
 - **Seed ✅ APPLIQUÉ (2026-07-18)** : la gate est tombée — le compte auth de
   Paul **existait en réalité depuis le 2026-07-09** (dernière connexion
   2026-07-17 ; le registre disait « 0 user », leçon radar : vérifier l'état

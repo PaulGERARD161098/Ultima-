@@ -277,6 +277,19 @@
   S1/S2/S3 du garde PII fermés. **⏳ Gaté (invérifiable sans compte auth Paul)** :
   front carto client-side après auth (fin du « noir en prod ») + seed des 4
   idées (`importer-idees.mjs` prêt). Détail : `adramelech/CADRAGE-ADRAMELECH.md`.
+- ✅ **Boucle AD-4c front — « on termine AD » (2026-07-19)** : la carto des
+  idées consultable en prod après auth — `idees.html` sur `/idees` (motif
+  traveler, middleware et garde AD-0 INTOUCHÉS), `js/idees.js` data-driven
+  depuis `GET /api/idees` (archipels par thème, ponts, badges statut, états
+  401/vide/erreur/démo), ouverte depuis l'antichambre du quadrant
+  (adramelech.html, diffusion Léo PR #55) — réconciliation des deux sessions :
+  l'antichambre est la porte, la carte est sa vue « archipels ».
+  Harnais `unit-idees-carto` (20) + `smoke-idees` (45) ; suite patrimoine
+  verte ×2 (front-carto + contre-passe Léo indépendante, captures vérifiées).
+  **Fin du « noir en prod » — le quadrant ADRAMELECH est bouclé** (AD-0→AD-4).
+  PR #54, fusion = go Paul. ⏳ Preuve du flux authentifié réel en prod = geste
+  Paul (se connecter, ouvrir /idees). Anti-télescopage : session parallèle L1
+  identifiée, zones interdites respectées (leo-accueil, traveler, middleware).
 - ✅ **DIRECTIVE JL actée (2026-07-18)** : dictée et nommée par Paul — à terme,
   **Ultima = son unique interface de travail** (au sens large), absorbant toute
   sa data (pro et perso), Léo seule interlocutrice qui oriente, dispatche et

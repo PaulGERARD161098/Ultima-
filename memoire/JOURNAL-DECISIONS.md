@@ -351,3 +351,19 @@
   (unit-adramelech-guard 12/12 : /adramelech.md bloqué avant allowlist ;
   trailing-collapse simple → page racine, double séparateur → fail-closed
   assumé). ③ Annotations cadrages (L1 diffusée ✅, AD-5c-β clos) + Notion.
+- **2026-07-19 (« on termine AD » — AD-4c front livré, quadrant bouclé)** —
+  Paul : reprendre et boucler la boucle d'hier, sans télescoper la session
+  parallèle. Livré : la CARTE des idées — `idees.html` sur `/idees` (motif
+  traveler, hors garde AD-0, zéro touche middleware par cette boucle) ;
+  `js/idees.js` (archipels par thème principal, ponts, badges, états, zéro
+  innerHTML, zéro PII en logs). Suite patrimoine verte ×2 (implémentation
+  front-carto + contre-passe Léo). Incident consigné : l'agent coupé en vol
+  par la limite de session, repris par SendMessage sans perte. **Réconciliation
+  des deux sessions (rebase PR #54 sur main)** : les deux boucles avaient
+  activé le quadrant chacune à sa façon — l'ANTICHAMBRE de la diffusion Léo
+  (adramelech.html, PR #55) reste la porte du quadrant depuis la console, et
+  la CARTE (idees.html) s'ouvre depuis l'antichambre (« Ouvrir la carte des
+  archipels ») — rien de jeté, les deux vues servent le même registre via la
+  même API. ADRAMELECH v1 est COMPLET (AD-0 garde → AD-1 carto → AD-2 agent →
+  AD-4 base+API+front antichambre+carte). Restent au registre : preuve du
+  flux authentifié en prod (geste Paul) ; AD-5c-δ (front INTENDANT).
