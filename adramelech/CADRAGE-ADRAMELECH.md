@@ -404,9 +404,15 @@ côté API (un trigger serait de la sur-ingénierie v1).
   opération), zéro fonction `search_path` mutable, zéro `security definer`,
   et les **FK de scellement croisé présentes en prod** (`…_node_scelle`,
   `…_chantier_scelle`, cible d'unicité). Dette sécurité 0008 fermée.
-- **AD-5c-γ — API `requireUser` + validation stricte** (parité API↔base, motif
-  `validate*` de AD-4b) : CRUD besoins/commandes/stock + dérivation d'état +
-  endpoint alerte J-2. Surface à risque → contre-passe.
+- **AD-5c-γ — API `requireUser` ✅ LIVRÉE (2026-07-19)** : GET agrégé
+  { chantiers, besoins, alertes_j2 } + CRUD chantiers (type 'chantier' vérifié
+  via client RLS-scopé) + CRUD besoins (geste contrôle réception), validateurs
+  miroir des CHECK 0008, 52 verdicts unitaires, harnais complet 21 scripts
+  verts (contre-passe Léo). **Contre-passe securite-auditeur GO** ; réserves
+  non bloquantes consignées : R1 `fournisseur_node_id` en FK simple (sceller
+  en composite si multi-tenant un jour), R2 borne haute `quantite` non mappée
+  (overflow base → 500 au lieu de 400, cosmétique), R3 dérive fuseau J-2
+  (UTC, documentée, négligeable pour une alerte à 2 jours).
 - **AD-5c-δ — front** : saisie (vocale d'abord), vue check-list par chantier,
   **alertes J-2** lisibles, compteur de manquants détectés. Harnais patrimoine
   (`tests/`) enrichi : déterminisme du calcul d'état, zéro ligne perdue, alerte

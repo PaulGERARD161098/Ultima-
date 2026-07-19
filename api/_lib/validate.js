@@ -369,3 +369,170 @@ export function validateLien(body) {
   }
   return { value: { source_id: body.source_id, target_id: body.target_id } };
 }
+
+// --- INTENDANT (AD-5c) : chantiers pilotés + besoins. Enums/bornes en MIROIR
+// EXACT des CHECK de supabase/migrations/0008_intendant.sql. Ce que l'API refuse,
+// la base le refuse aussi (et vice versa) ; la base reste le backstop ultime pour
+// les cohérences croisant l'état existant d'une ligne lors d'une mise à jour
+// partielle (l'API valide alors le sous-ensemble soumis, jamais plus laxiste).
+
+export const INTENDANT_MODES = ['stock', 'commande', 'aucune'];
+export const INTENDANT_CONTROLES = ['en_attente', 'conforme', 'casse'];
+
+// node_id figé à la création (l'accroche TRAVELER ne se déplace pas) ; seule la
+// date de pose se renseigne/décale ensuite. owner_id/id/etat jamais acceptés.
+const CHANTIER_CREATE_FIELDS = ['node_id', 'date_pose'];
+const CHANTIER_UPDATE_FIELDS = ['date_pose'];
+
+// chantier_id figé à la création. `etat` est une colonne GÉNÉRÉE : absente des
+// listes → rejetée d'office par rejectUnknown (jamais acceptée en entrée).
+const BESOIN_CREATE_FIELDS = [
+  'chantier_id', 'designation', 'quantite', 'unite', 'reference',
+  'mode', 'commande_ref', 'fournisseur_node_id', 'livree_le', 'controle',
+];
+const BESOIN_UPDATE_FIELDS = [
+  'designation', 'quantite', 'unite', 'reference',
+  'mode', 'commande_ref', 'fournisseur_node_id', 'livree_le', 'controle',
+];
+
+// Valide un dossier chantier de l'INTENDANT. mode 'create' impose node_id (UUID) ;
+// 'update' n'accepte que date_pose (null autorisé pour l'effacer). Le contrôle
+// « node de type chantier appartenant à l'owner » n'est pas exprimable ici (ni en
+// FK) : il est fait côté endpoint contre network_nodes (RLS-scopé à l'owner).
+export function validateChantierIntendant(body, mode) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, mode === 'update' ? CHANTIER_UPDATE_FIELDS : CHANTIER_CREATE_FIELDS);
+  if (unknown) return { error: unknown };
+
+  const out = {};
+
+  if (mode === 'create') {
+    if (!isUuid(body.node_id)) return { error: 'Identifiant de chantier invalide' };
+    out.node_id = body.node_id;
+  }
+
+  // date_pose : optionnelle, null efface (mirror colonne nullable).
+  if (body.date_pose === null) {
+    out.date_pose = null;
+  } else if (body.date_pose !== undefined) {
+    const msg = checkOptionalDate(body.date_pose, 'Date de pose');
+    if (msg) return { error: msg };
+    out.date_pose = body.date_pose;
+  }
+
+  if (mode === 'update' && Object.keys(out).length === 0) {
+    return { error: 'Aucun champ à mettre à jour' };
+  }
+  return { value: out };
+}
+
+// Valide une ligne de besoin. mode 'create' impose chantier_id (UUID) + designation.
+// Miroir des CHECK : designation 1..200, quantite > 0, unite ≤ 20, reference ≤ 120,
+// mode ∈ MODES, commande_ref ≤ 120, controle ∈ CONTROLES, cohérence commande
+// (hors mode 'commande', aucun attribut de commande) et contrôle-après-livraison
+// (controle ≠ en_attente exige livree_le).
+export function validateBesoinIntendant(body, mode) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, mode === 'update' ? BESOIN_UPDATE_FIELDS : BESOIN_CREATE_FIELDS);
+  if (unknown) return { error: unknown };
+
+  const out = {};
+
+  if (mode === 'create') {
+    if (!isUuid(body.chantier_id)) return { error: 'Identifiant de chantier invalide' };
+    out.chantier_id = body.chantier_id;
+  }
+
+  if (mode === 'create' || body.designation !== undefined) {
+    if (typeof body.designation !== 'string') return { error: 'Désignation invalide' };
+    const designation = body.designation.trim();
+    if (designation.length < 1 || designation.length > 200) return { error: 'Désignation invalide' };
+    out.designation = designation;
+  }
+
+  // quantite : numérique fini strictement positif (mirror CHECK quantite > 0).
+  if (body.quantite !== undefined) {
+    if (typeof body.quantite !== 'number' || !Number.isFinite(body.quantite) || body.quantite <= 0) {
+      return { error: 'Quantité invalide' };
+    }
+    out.quantite = body.quantite;
+  }
+
+  // Textes optionnels bornés : null efface, chaîne bornée sinon.
+  for (const [field, label, max] of [
+    ['unite', 'Unité', 20],
+    ['reference', 'Référence', 120],
+    ['commande_ref', 'Référence de commande', 120],
+  ]) {
+    if (body[field] === null) {
+      out[field] = null;
+      continue;
+    }
+    const msg = checkOptionalText(body[field], label, max);
+    if (msg) return { error: msg };
+    if (body[field] !== undefined) out[field] = body[field];
+  }
+
+  if (body.mode !== undefined) {
+    if (!INTENDANT_MODES.includes(body.mode)) return { error: 'Mode invalide' };
+    out.mode = body.mode;
+  }
+
+  // fournisseur_node_id : UUID optionnel, null efface (FK set null en base).
+  if (body.fournisseur_node_id === null) {
+    out.fournisseur_node_id = null;
+  } else if (body.fournisseur_node_id !== undefined) {
+    if (!isUuid(body.fournisseur_node_id)) return { error: 'Identifiant de fournisseur invalide' };
+    out.fournisseur_node_id = body.fournisseur_node_id;
+  }
+
+  // livree_le : date optionnelle, null efface.
+  if (body.livree_le === null) {
+    out.livree_le = null;
+  } else if (body.livree_le !== undefined) {
+    const msg = checkOptionalDate(body.livree_le, 'Date de livraison');
+    if (msg) return { error: msg };
+    out.livree_le = body.livree_le;
+  }
+
+  if (body.controle !== undefined) {
+    if (!INTENDANT_CONTROLES.includes(body.controle)) return { error: 'Contrôle invalide' };
+    out.controle = body.controle;
+  }
+
+  // Cohérence commande (mirror intendant_besoins_commande_coherence). En 'create'
+  // les défauts base sont connus (mode='aucune', controle='en_attente') ; en
+  // 'update' un mode non soumis reste inconnu → cohérence déférée à la base.
+  const modeEff = out.mode !== undefined ? out.mode : (mode === 'create' ? 'aucune' : undefined);
+  if (modeEff !== undefined && modeEff !== 'commande') {
+    if (
+      out.commande_ref != null ||
+      out.fournisseur_node_id != null ||
+      ('livree_le' in out && out.livree_le != null) ||
+      (out.controle !== undefined && out.controle !== 'en_attente')
+    ) {
+      return { error: 'Attributs de commande interdits hors mode commande' };
+    }
+  }
+
+  // Contrôle après livraison (mirror intendant_besoins_controle_apres_livraison).
+  // controle ≠ en_attente exige une livree_le. En 'update', une livree_le non
+  // soumise reste inconnue → autorisée (geste clé PATCH { controle:'conforme' } sur
+  // une ligne déjà livrée) ; seule une livree_le explicitement nulle est bloquée.
+  const controleEff = out.controle !== undefined ? out.controle : (mode === 'create' ? 'en_attente' : undefined);
+  if (controleEff !== undefined && controleEff !== 'en_attente') {
+    const livreePresente = ('livree_le' in out)
+      ? out.livree_le != null
+      : mode !== 'create';
+    if (!livreePresente) return { error: 'Un contrôle exige une livraison' };
+  }
+
+  if (mode === 'update' && Object.keys(out).length === 0) {
+    return { error: 'Aucun champ à mettre à jour' };
+  }
+  return { value: out };
+}
