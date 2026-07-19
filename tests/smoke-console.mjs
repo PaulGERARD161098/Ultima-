@@ -89,9 +89,11 @@ verifier('Invite présente', /Sur quoi est-ce qu'on travaille aujourd'hui/.test(
 
 const noms = await page.locator('.quadrant-nom').allTextContents();
 verifier('4 quadrants présents', noms.length === 4, `trouvés: ${noms.length}`);
-for (const attendu of ['TRAVELER', 'BCP', 'ADRAMELECH', 'IMLADRIK']) {
+for (const attendu of ['TRAVELER', 'BALTHAZAR GELD', 'ADRAMELECH', 'IMLADRIK']) {
   verifier(`Quadrant ${attendu} présent`, noms.map((n) => n.trim()).includes(attendu));
 }
+// Épure actée (Paul, 2026-07-19) : plus de sous-titres sous les noms.
+verifier('Zéro sous-titre de quadrant', (await page.locator('.quadrant-desc').count()) === 0);
 
 // Diffusion Léo : les 4 quadrants sont des LIENS ACTIFS (plus d'inertes).
 const actifs = page.locator('a.quadrant-actif');
@@ -110,8 +112,8 @@ async function etatDe(nom) {
 const adraEtat = await etatDe('ADRAMELECH');
 verifier('ADRAMELECH marqué « privé — auth requise »',
   /priv/i.test(adraEtat || '') && /auth/i.test(adraEtat || ''), `état: ${adraEtat}`);
-const bcpEtat = await etatDe('BCP');
-verifier('BCP marqué « en chantier »', /chantier/i.test(bcpEtat || ''), `état: ${bcpEtat}`);
+const bcpEtat = await etatDe('BALTHAZAR GELD');
+verifier('BALTHAZAR GELD marqué « en chantier »', /chantier/i.test(bcpEtat || ''), `état: ${bcpEtat}`);
 const imlaEtat = await etatDe('IMLADRIK');
 verifier('IMLADRIK marqué « en chantier »', /chantier/i.test(imlaEtat || ''), `état: ${imlaEtat}`);
 
@@ -133,18 +135,15 @@ verifier('Quadrant actif focusable au clavier', estFocalise);
 const styles = await page.evaluate(() => {
   const cs = getComputedStyle(document.documentElement);
   const nom = getComputedStyle(document.querySelector('.quadrant-nom'));
-  const desc = getComputedStyle(document.querySelector('.quadrant-desc'));
   const t = getComputedStyle(document.querySelector('.console-titre'));
   return {
     parcheminCarte: cs.getPropertyValue('--parchemin-carte').trim(),
     merProfonde: cs.getPropertyValue('--mer-profonde').trim(),
-    nom: nom.color, desc: desc.color, titre: t.color,
+    nom: nom.color, titre: t.color,
   };
 });
 const rNom = ratio(versHex(styles.nom), styles.parcheminCarte);
 verifier('Contraste nom de quadrant ≥ 4,5:1', rNom >= 4.5, `${rNom.toFixed(2)}:1`);
-const rDesc = ratio(versHex(styles.desc), styles.parcheminCarte);
-verifier('Contraste description ≥ 4,5:1', rDesc >= 4.5, `${rDesc.toFixed(2)}:1`);
 const rTitre = ratio(versHex(styles.titre), styles.merProfonde);
 verifier('Contraste titre sur fond mer ≥ 4,5:1', rTitre >= 4.5, `${rTitre.toFixed(2)}:1`);
 
