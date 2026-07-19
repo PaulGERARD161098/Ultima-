@@ -48,7 +48,11 @@
     onglet: 'accueil',   // espace actif : accueil | carte | contacts
     noeudCourant: null,  // id du nœud affiché dans la fiche
     noeudEnEdition: null, // id du nœud en cours d'édition dans le formulaire
-    noeudNouveau: null   // id du contact tout juste ajouté (pousse animée, A4)
+    noeudNouveau: null,  // id du contact tout juste ajouté (pousse animée, A4)
+    // INTENDANT (AD-5c-δ) : dossiers d'approvisionnement adossés aux chantiers.
+    // chantiers = dossiers ouverts, besoins = lignes (avec leur `etat`),
+    // alertes = alertes J-2 [{chantier_id, node_id, date_pose, manquants}].
+    intendant: { chantiers: [], besoins: [], alertes: [], indisponible: false }
   };
 
   function $(selecteur) { return document.querySelector(selecteur); }
@@ -106,6 +110,66 @@
     return { noeuds: noeuds, relations: relations, journal: journal };
   }
 
+  // INTENDANT — jeu de démo : un dossier ouvert sur le chantier Voltaire
+  // (pose à J+1, 1 manquant → alerte J-2 exercée par le harnais) ; le chantier
+  // Garonne reste SANS dossier (flux « Ouvrir l'intendance » exerçable).
+  function donneesDemoIntendant() {
+    return {
+      chantiers: [
+        { id: 'demo-ic1', node_id: 'demo-n8', date_pose: dateLocaleIso(1) }
+      ],
+      besoins: [
+        { id: 'demo-ib1', chantier_id: 'demo-ic1', designation: 'Fenêtre PVC 120×95', quantite: 2, unite: null, mode: 'stock', commande_ref: null, livree_le: null, controle: 'en_attente' },
+        { id: 'demo-ib2', chantier_id: 'demo-ic1', designation: 'Aile de recouvrement zinc', quantite: 1, unite: null, mode: 'aucune', commande_ref: null, livree_le: null, controle: 'en_attente' },
+        { id: 'demo-ib3', chantier_id: 'demo-ic1', designation: 'Charnières laiton', quantite: 6, unite: null, mode: 'commande', commande_ref: 'BC-2189', livree_le: null, controle: 'en_attente' }
+      ]
+    };
+  }
+
+  // Miroir front de la colonne générée `etat` (0008_intendant.sql) — utilisé
+  // en mode démo uniquement ; en connecté, l'état vient toujours de la base.
+  function etatBesoinLocal(besoin) {
+    if (besoin.mode === 'stock') { return 'couvert'; }
+    if (besoin.mode === 'commande') {
+      if (besoin.controle === 'conforme') { return 'couvert'; }
+      if (besoin.controle === 'casse') { return 'manquant'; }
+      return 'commande_en_attente';
+    }
+    return 'manquant';
+  }
+
+  // Miroir front de computeAlertesJ2 (api/_lib/intendant.js) : les chantiers
+  // dont la pose est dans [aujourd'hui, +2 j] avec au moins un manquant.
+  function calculerAlertesJ2Local(chantiers, besoins) {
+    var aujourdHui = dateLocaleIso(0);
+    var manquants = {};
+    besoins.forEach(function (b) {
+      if (b.etat === 'manquant') {
+        manquants[b.chantier_id] = (manquants[b.chantier_id] || 0) + 1;
+      }
+    });
+    var alertes = [];
+    chantiers.forEach(function (c) {
+      if (!c.date_pose) { return; }
+      var jours = -joursDeRetard(c.date_pose, aujourdHui); // futur → positif
+      if (jours < 0 || jours > 2) { return; }
+      var nb = manquants[c.id] || 0;
+      if (nb < 1) { return; }
+      alertes.push({ chantier_id: c.id, node_id: c.node_id, date_pose: c.date_pose, manquants: nb });
+    });
+    return alertes;
+  }
+
+  // Recalcul après chaque mutation : états (démo seulement — en connecté les
+  // lignes reviennent de l'API avec leur `etat` généré) puis alertes J-2.
+  function recalculerIntendant() {
+    var d = etat.intendant;
+    if (etat.modeDemo) {
+      d.besoins.forEach(function (b) { b.etat = etatBesoinLocal(b); });
+    }
+    d.alertes = calculerAlertesJ2Local(d.chantiers, d.besoins);
+  }
+
   function idLocal() {
     if (window.crypto && typeof window.crypto.randomUUID === 'function') {
       return window.crypto.randomUUID();
@@ -153,6 +217,11 @@
       etat.noeuds = demo.noeuds;
       etat.relations = demo.relations;
       etat.journal = demo.journal;
+      var demoIntendant = donneesDemoIntendant();
+      etat.intendant.chantiers = demoIntendant.chantiers;
+      etat.intendant.besoins = demoIntendant.besoins;
+      etat.intendant.indisponible = false;
+      recalculerIntendant();
       rafraichir();
       saluerParLeo();
       return;
@@ -161,19 +230,33 @@
       etat.noeuds = [];
       etat.relations = [];
       etat.journal = [];
+      etat.intendant = { chantiers: [], besoins: [], alertes: [], indisponible: false };
       rafraichir();
       return;
     }
+    // Un seul GET agrégé par domaine, lancés de front (jamais de N+1).
+    // L'intendance est fail-soft : son échec ne bloque jamais le réseau.
+    var promesseIntendant = appelApi('/api/intendant').catch(function () { return null; });
     try {
       var data = await appelApi('/api/reseau');
       etat.noeuds = (data && data.nodes) || [];
       etat.relations = (data && data.edges) || [];
       etat.journal = (data && data.journal) || [];
-      rafraichir();
-      saluerParLeo();
     } catch (e) {
       toast('Chargement du réseau impossible.', 'erreur');
+      return;
     }
+    var dataIntendant = await promesseIntendant;
+    if (dataIntendant) {
+      etat.intendant.chantiers = dataIntendant.chantiers || [];
+      etat.intendant.besoins = dataIntendant.besoins || [];
+      etat.intendant.alertes = dataIntendant.alertes_j2 || [];
+      etat.intendant.indisponible = false;
+    } else {
+      etat.intendant = { chantiers: [], besoins: [], alertes: [], indisponible: true };
+    }
+    rafraichir();
+    saluerParLeo();
   }
 
   // Léo (boucle L1) : cartouche d'accueil une fois les données bootées —
@@ -183,7 +266,13 @@
   function saluerParLeo() {
     if (!window.UltimaLeo) { return; }
     window.UltimaLeo.accueillir(
-      { noeuds: etat.noeuds, relations: etat.relations, journal: etat.journal },
+      {
+        noeuds: etat.noeuds,
+        relations: etat.relations,
+        journal: etat.journal,
+        // AD-5c-δ : les alertes J-2 de l'INTENDANT (fail-soft côté Léo).
+        intendant: { alertes_j2: etat.intendant.alertes }
+      },
       { ouvrirCible: ouvrirCibleDepuisAccueil }
     );
   }
@@ -329,6 +418,94 @@
       body: JSON.stringify({ id: id })
     });
     await chargerDonnees();
+  }
+
+  // ---------- INTENDANT (AD-5c-δ) : mutations du dossier d'approvisionnement ----------
+  // Démo : mutations en mémoire + recalcul local (miroir de la colonne générée).
+  // Connecté : l'API renvoie la ligne à jour (avec son `etat` dérivé en base) ;
+  // on l'applique à l'état puis on recalcule les alertes — zéro re-fetch.
+
+  function remplacerLigneIntendant(liste, ligne) {
+    var i = liste.findIndex(function (x) { return x.id === ligne.id; });
+    if (i !== -1) { liste[i] = ligne; }
+  }
+
+  async function ouvrirDossierIntendant(nodeId, datePose) {
+    if (etat.modeDemo) {
+      etat.intendant.chantiers.push({ id: idLocal(), node_id: nodeId, date_pose: datePose || null });
+      recalculerIntendant();
+      return;
+    }
+    var corps = { node_id: nodeId };
+    if (datePose) { corps.date_pose = datePose; }
+    var cree = await appelApi('/api/intendant/chantiers', {
+      method: 'POST',
+      body: JSON.stringify(corps)
+    });
+    if (cree) { etat.intendant.chantiers.push(cree); }
+    recalculerIntendant();
+  }
+
+  async function majDossierIntendant(id, valeurs) {
+    if (etat.modeDemo) {
+      var dossier = etat.intendant.chantiers.find(function (c) { return c.id === id; });
+      if (dossier) { Object.assign(dossier, valeurs); }
+      recalculerIntendant();
+      return;
+    }
+    var maj = await appelApi('/api/intendant/chantiers', {
+      method: 'PATCH',
+      body: JSON.stringify(Object.assign({ id: id }, valeurs))
+    });
+    if (maj) { remplacerLigneIntendant(etat.intendant.chantiers, maj); }
+    recalculerIntendant();
+  }
+
+  async function creerBesoinIntendant(valeurs) {
+    if (etat.modeDemo) {
+      etat.intendant.besoins.push(Object.assign({
+        id: idLocal(),
+        unite: null,
+        mode: 'aucune',
+        commande_ref: null,
+        livree_le: null,
+        controle: 'en_attente'
+      }, valeurs));
+      recalculerIntendant();
+      return;
+    }
+    var cree = await appelApi('/api/intendant/besoins', {
+      method: 'POST',
+      body: JSON.stringify(valeurs)
+    });
+    if (cree) { etat.intendant.besoins.push(cree); }
+    recalculerIntendant();
+  }
+
+  async function majBesoinIntendant(id, valeurs) {
+    if (etat.modeDemo) {
+      var besoin = etat.intendant.besoins.find(function (b) { return b.id === id; });
+      if (besoin) { Object.assign(besoin, valeurs); }
+      recalculerIntendant();
+      return;
+    }
+    var maj = await appelApi('/api/intendant/besoins', {
+      method: 'PATCH',
+      body: JSON.stringify(Object.assign({ id: id }, valeurs))
+    });
+    if (maj) { remplacerLigneIntendant(etat.intendant.besoins, maj); }
+    recalculerIntendant();
+  }
+
+  async function supprimerBesoinIntendant(id) {
+    if (!etat.modeDemo) {
+      await appelApi('/api/intendant/besoins', {
+        method: 'DELETE',
+        body: JSON.stringify({ id: id })
+      });
+    }
+    etat.intendant.besoins = etat.intendant.besoins.filter(function (b) { return b.id !== id; });
+    recalculerIntendant();
   }
 
   function trouverNoeud(id) {
@@ -1238,6 +1415,12 @@
     badges.appendChild(badgeStatut);
     conteneur.appendChild(badges);
 
+    // AD-5c-δ : bandeau d'alerte J-2 en tête de fiche (chantier seulement).
+    if (noeud.type === 'chantier') {
+      var alerteJ2 = alerteIntendantPourNoeud(noeud.id);
+      if (alerteJ2) { conteneur.appendChild(bandeauAlerteJ2(alerteJ2)); }
+    }
+
     var dl = document.createElement('dl');
     dl.className = 'fiche-details';
     ligneDetail(dl, "Secteur d'activité", noeud.secteur_activite);
@@ -1247,6 +1430,11 @@
     ligneDetail(dl, 'E-mail', noeud.email);
     ligneDetail(dl, 'Notes', noeud.notes);
     conteneur.appendChild(dl);
+
+    // AD-5c-δ : la check-list d'approvisionnement, adossée à la fiche chantier.
+    if (noeud.type === 'chantier') {
+      rendreIntendance(conteneur, noeud);
+    }
 
     var sousTitre = document.createElement('h3');
     sousTitre.className = 'fiche-sous-titre';
@@ -1560,6 +1748,386 @@
     });
 
     conteneur.appendChild(form);
+  }
+
+  // ---------- INTENDANT (AD-5c-δ) : section « Intendance » de la fiche chantier ----------
+  // La check-list, pas l'ERP : date de pose, lignes de besoins avec leur état
+  // généré (couvert / commande en attente / manquant), ajout, couverture,
+  // livraison, contrôle réception, suppression. Compteur « manquants détectés
+  // à J-2 » (métrique de preuve du cadrage §9.2). DOM : createElement/textContent.
+
+  var LIBELLES_ETAT_BESOIN = {
+    couvert: 'Couvert',
+    commande_en_attente: 'Commande en attente',
+    manquant: 'Manquant'
+  };
+  var MODES_BESOIN = ['aucune', 'stock', 'commande'];
+  var LIBELLES_MODE_BESOIN = {
+    aucune: 'À couvrir',
+    stock: 'Stock propre',
+    commande: 'Commande'
+  };
+
+  function alerteIntendantPourNoeud(nodeId) {
+    return etat.intendant.alertes.find(function (a) { return a.node_id === nodeId; }) || null;
+  }
+
+  // « aujourd'hui » / « dans N jour(s) » pour une date de pose à venir.
+  function libelleJoursPose(datePose) {
+    var jours = -joursDeRetard(datePose, dateLocaleIso(0));
+    if (jours <= 0) { return "aujourd'hui"; }
+    return 'dans ' + jours + (jours > 1 ? ' jours' : ' jour');
+  }
+
+  // Bandeau d'alerte J-2 en tête de fiche : sobre, encre rouge, relisible.
+  function bandeauAlerteJ2(alerte) {
+    var bandeau = document.createElement('p');
+    bandeau.className = 'bandeau-j2';
+    bandeau.setAttribute('role', 'status');
+    bandeau.textContent = 'Pose ' + libelleJoursPose(alerte.date_pose) + ' — ' +
+      alerte.manquants + (alerte.manquants > 1 ? ' manquants' : ' manquant') + '.';
+    return bandeau;
+  }
+
+  function paragrapheIntendance(texte) {
+    var p = document.createElement('p');
+    p.className = 'aucune-relation';
+    p.textContent = texte;
+    return p;
+  }
+
+  // Une mutation d'intendance : succès → toast + re-rendu ; échec → toast
+  // générique (jamais de détail technique) + rappel optionnel (revert UI).
+  function executerMutationIntendance(promesse, messageSucces, surEchec) {
+    promesse.then(function () {
+      if (messageSucces) { toast(messageSucces); }
+      rafraichir();
+    }).catch(function (e) {
+      if (typeof surEchec === 'function') { surEchec(); }
+      toast(e && e.message ? e.message : 'Mise à jour impossible.', 'erreur');
+    });
+  }
+
+  // Dossier absent : ouverture sobre (date de pose optionnelle).
+  function formOuvrirIntendance(noeud) {
+    var form = document.createElement('form');
+    form.className = 'form-intendance';
+
+    var intro = document.createElement('p');
+    intro.className = 'aucune-relation';
+    intro.textContent = "Aucun dossier d'approvisionnement pour ce chantier.";
+    form.appendChild(intro);
+
+    var labelDate = document.createElement('label');
+    labelDate.className = 'intendance-label';
+    labelDate.appendChild(document.createTextNode('Date de pose (optionnelle)'));
+    var champDate = document.createElement('input');
+    champDate.type = 'date';
+    labelDate.appendChild(champDate);
+    form.appendChild(labelDate);
+
+    var bouton = document.createElement('button');
+    bouton.type = 'submit';
+    bouton.className = 'bouton bouton-secondaire';
+    bouton.textContent = "Ouvrir l'intendance";
+    form.appendChild(bouton);
+
+    form.addEventListener('submit', function (evenement) {
+      evenement.preventDefault();
+      bouton.disabled = true; // anti double-tap (unicité un dossier/chantier)
+      executerMutationIntendance(
+        ouvrirDossierIntendant(noeud.id, champDate.value || null),
+        'Intendance ouverte.',
+        function () { bouton.disabled = false; }
+      );
+    });
+    return form;
+  }
+
+  // Ligne de besoin : désignation + état visible, puis gestes de pilotage.
+  function itemBesoinIntendance(besoin) {
+    var item = document.createElement('li');
+    item.className = 'item-besoin';
+
+    var entete = document.createElement('div');
+    entete.className = 'item-besoin-entete';
+    var titre = document.createElement('span');
+    titre.className = 'item-besoin-titre';
+    titre.textContent = besoin.designation + ' — ' + besoin.quantite +
+      (besoin.unite ? ' ' + besoin.unite : '');
+    entete.appendChild(titre);
+    var badgeEtat = document.createElement('span');
+    var classeEtat = besoin.etat === 'couvert' ? 'couvert'
+      : (besoin.etat === 'commande_en_attente' ? 'attente' : 'manquant');
+    badgeEtat.className = 'badge-etat badge-etat-' + classeEtat;
+    badgeEtat.textContent = LIBELLES_ETAT_BESOIN[besoin.etat] || besoin.etat;
+    entete.appendChild(badgeEtat);
+    item.appendChild(entete);
+
+    var actions = document.createElement('div');
+    actions.className = 'item-besoin-actions';
+
+    // Couverture : quitter le mode commande efface ses attributs (cohérence
+    // API/CHECK 0008 : aucun attribut de commande hors mode commande).
+    var selectMode = document.createElement('select');
+    selectMode.setAttribute('aria-label', 'Couverture — ' + besoin.designation);
+    MODES_BESOIN.forEach(function (m) {
+      var option = document.createElement('option');
+      option.value = m;
+      option.textContent = LIBELLES_MODE_BESOIN[m];
+      selectMode.appendChild(option);
+    });
+    selectMode.value = besoin.mode || 'aucune';
+    selectMode.addEventListener('change', function () {
+      var valeurs = { mode: selectMode.value };
+      if (selectMode.value !== 'commande') {
+        valeurs.commande_ref = null;
+        valeurs.fournisseur_node_id = null;
+        valeurs.livree_le = null;
+        valeurs.controle = 'en_attente';
+      }
+      executerMutationIntendance(
+        majBesoinIntendant(besoin.id, valeurs),
+        'Ligne mise à jour.',
+        function () { selectMode.value = besoin.mode || 'aucune'; }
+      );
+    });
+    actions.appendChild(selectMode);
+
+    if (besoin.mode === 'commande') {
+      var champRef = document.createElement('input');
+      champRef.type = 'text';
+      champRef.maxLength = 120;
+      champRef.placeholder = 'Réf. commande';
+      champRef.setAttribute('aria-label', 'Référence de commande — ' + besoin.designation);
+      champRef.value = besoin.commande_ref || '';
+      champRef.addEventListener('change', function () {
+        executerMutationIntendance(
+          majBesoinIntendant(besoin.id, { commande_ref: champRef.value.trim() || null }),
+          'Ligne mise à jour.',
+          function () { champRef.value = besoin.commande_ref || ''; }
+        );
+      });
+      actions.appendChild(champRef);
+
+      if (!besoin.livree_le) {
+        var boutonLivree = document.createElement('button');
+        boutonLivree.type = 'button';
+        boutonLivree.className = 'bouton bouton-secondaire';
+        boutonLivree.textContent = "Livrée aujourd'hui";
+        boutonLivree.addEventListener('click', function () {
+          executerMutationIntendance(
+            majBesoinIntendant(besoin.id, { livree_le: dateLocaleIso(0) }),
+            'Livraison notée — contrôlez la réception.'
+          );
+        });
+        actions.appendChild(boutonLivree);
+      } else if (besoin.controle === 'en_attente') {
+        // Contrôle réception : « couvert » = livré ET contrôlé conforme.
+        var mention = document.createElement('span');
+        mention.className = 'item-besoin-mention';
+        mention.textContent = 'Livrée le ' + dateLisible(besoin.livree_le) + ' — contrôle :';
+        actions.appendChild(mention);
+
+        var boutonConforme = document.createElement('button');
+        boutonConforme.type = 'button';
+        boutonConforme.className = 'bouton bouton-secondaire';
+        boutonConforme.textContent = 'Conforme';
+        boutonConforme.addEventListener('click', function () {
+          executerMutationIntendance(
+            majBesoinIntendant(besoin.id, { controle: 'conforme' }),
+            'Réception conforme — besoin couvert.'
+          );
+        });
+        actions.appendChild(boutonConforme);
+
+        var boutonCasse = document.createElement('button');
+        boutonCasse.type = 'button';
+        boutonCasse.className = 'bouton bouton-danger';
+        boutonCasse.textContent = 'Cassé';
+        boutonCasse.addEventListener('click', function () {
+          executerMutationIntendance(
+            majBesoinIntendant(besoin.id, { controle: 'casse' }),
+            'Casse signalée — le besoin repasse en manquant.'
+          );
+        });
+        actions.appendChild(boutonCasse);
+      } else if (besoin.controle === 'conforme') {
+        var conforme = document.createElement('span');
+        conforme.className = 'item-besoin-mention';
+        conforme.textContent = 'Livrée le ' + dateLisible(besoin.livree_le) + ' · conforme';
+        actions.appendChild(conforme);
+      } else {
+        var casse = document.createElement('span');
+        casse.className = 'item-besoin-mention item-besoin-casse';
+        casse.textContent = 'Livrée le ' + dateLisible(besoin.livree_le) + ' · cassée';
+        actions.appendChild(casse);
+
+        var relancer = document.createElement('button');
+        relancer.type = 'button';
+        relancer.className = 'bouton bouton-secondaire';
+        relancer.textContent = 'Relancer la commande';
+        relancer.addEventListener('click', function () {
+          executerMutationIntendance(
+            majBesoinIntendant(besoin.id, { livree_le: null, controle: 'en_attente' }),
+            'Commande relancée — en attente.'
+          );
+        });
+        actions.appendChild(relancer);
+      }
+    }
+
+    var retirer = document.createElement('button');
+    retirer.type = 'button';
+    retirer.className = 'bouton-lien-danger';
+    retirer.textContent = 'Retirer';
+    retirer.addEventListener('click', function () {
+      if (!window.confirm('Retirer cette ligne de la check-list ?')) { return; }
+      executerMutationIntendance(supprimerBesoinIntendant(besoin.id), 'Ligne retirée.');
+    });
+    actions.appendChild(retirer);
+
+    item.appendChild(actions);
+    return item;
+  }
+
+  // Formulaire d'ajout : désignation (dictée vocale, motif existant) +
+  // quantité + mode ; la référence de commande n'apparaît qu'en mode commande.
+  function formAjoutBesoin(dossier) {
+    var form = document.createElement('form');
+    form.className = 'form-besoin';
+
+    var champDesignation = document.createElement('input');
+    champDesignation.type = 'text';
+    champDesignation.maxLength = 200;
+    champDesignation.required = true;
+    champDesignation.placeholder = 'Désignation (ex. : fenêtre 120×95)';
+    champDesignation.setAttribute('aria-label', 'Désignation du besoin');
+    form.appendChild(champDesignation);
+    attacherDictee(champDesignation); // le formulaire est recréé à chaque rendu
+
+    var ligne = document.createElement('div');
+    ligne.className = 'form-besoin-ligne';
+    var champQuantite = document.createElement('input');
+    champQuantite.type = 'number';
+    champQuantite.min = '0';
+    champQuantite.step = 'any';
+    champQuantite.value = '1';
+    champQuantite.setAttribute('aria-label', 'Quantité');
+    ligne.appendChild(champQuantite);
+
+    var selectMode = document.createElement('select');
+    selectMode.setAttribute('aria-label', 'Mode de couverture');
+    MODES_BESOIN.forEach(function (m) {
+      var option = document.createElement('option');
+      option.value = m;
+      option.textContent = LIBELLES_MODE_BESOIN[m];
+      selectMode.appendChild(option);
+    });
+    ligne.appendChild(selectMode);
+    form.appendChild(ligne);
+
+    var champRef = document.createElement('input');
+    champRef.type = 'text';
+    champRef.maxLength = 120;
+    champRef.placeholder = 'Réf. commande';
+    champRef.setAttribute('aria-label', 'Référence de commande');
+    champRef.hidden = true;
+    form.appendChild(champRef);
+    selectMode.addEventListener('change', function () {
+      champRef.hidden = selectMode.value !== 'commande';
+    });
+
+    var bouton = document.createElement('button');
+    bouton.type = 'submit';
+    bouton.className = 'bouton bouton-secondaire';
+    bouton.textContent = 'Ajouter le besoin';
+    form.appendChild(bouton);
+
+    form.addEventListener('submit', function (evenement) {
+      evenement.preventDefault();
+      var designation = champDesignation.value.trim();
+      if (!designation) { return; }
+      var quantite = parseFloat(champQuantite.value);
+      if (!isFinite(quantite) || quantite <= 0) {
+        toast('Indiquez une quantité supérieure à zéro.', 'erreur');
+        return;
+      }
+      var valeurs = {
+        chantier_id: dossier.id,
+        designation: designation,
+        quantite: quantite,
+        mode: selectMode.value
+      };
+      var ref = champRef.value.trim();
+      if (selectMode.value === 'commande' && ref) { valeurs.commande_ref = ref; }
+      executerMutationIntendance(creerBesoinIntendant(valeurs), 'Besoin ajouté.');
+    });
+    return form;
+  }
+
+  function rendreIntendance(conteneur, noeud) {
+    var sousTitre = document.createElement('h3');
+    sousTitre.className = 'fiche-sous-titre';
+    sousTitre.textContent = 'Intendance';
+    conteneur.appendChild(sousTitre);
+
+    var section = document.createElement('section');
+    section.className = 'section-intendance';
+    section.setAttribute('aria-label', "Intendance — approvisionnement du chantier");
+    conteneur.appendChild(section);
+
+    if (etat.intendant.indisponible) {
+      section.appendChild(paragrapheIntendance('Intendance indisponible pour le moment.'));
+      return;
+    }
+
+    var dossier = etat.intendant.chantiers.find(function (c) {
+      return c.node_id === noeud.id;
+    }) || null;
+
+    if (!dossier) {
+      section.appendChild(formOuvrirIntendance(noeud));
+      return;
+    }
+
+    // Date de pose : modifiable en place (vider le champ efface la date).
+    var labelPose = document.createElement('label');
+    labelPose.className = 'intendance-label';
+    labelPose.appendChild(document.createTextNode('Date de pose'));
+    var champPose = document.createElement('input');
+    champPose.type = 'date';
+    champPose.value = dossier.date_pose || '';
+    champPose.addEventListener('change', function () {
+      executerMutationIntendance(
+        majDossierIntendant(dossier.id, { date_pose: champPose.value || null }),
+        'Date de pose mise à jour.',
+        function () { champPose.value = dossier.date_pose || ''; }
+      );
+    });
+    labelPose.appendChild(champPose);
+    section.appendChild(labelPose);
+
+    // Compteur de preuve (cadrage §9.2) : manquants détectés à J-2.
+    var alerte = alerteIntendantPourNoeud(noeud.id);
+    var compteur = document.createElement('p');
+    compteur.className = 'intendance-compteur';
+    compteur.textContent = 'Manquants détectés à J-2 : ' + (alerte ? alerte.manquants : 0);
+    section.appendChild(compteur);
+
+    var besoins = etat.intendant.besoins.filter(function (b) {
+      return b.chantier_id === dossier.id;
+    });
+    if (besoins.length === 0) {
+      section.appendChild(paragrapheIntendance('Aucun besoin noté pour le moment.'));
+    } else {
+      var liste = document.createElement('ul');
+      liste.className = 'liste-besoins';
+      besoins.forEach(function (b) { liste.appendChild(itemBesoinIntendance(b)); });
+      section.appendChild(liste);
+    }
+
+    section.appendChild(formAjoutBesoin(dossier));
   }
 
   // ---------- Dictée vocale par champ (Web Speech API, v3-④) ----------
