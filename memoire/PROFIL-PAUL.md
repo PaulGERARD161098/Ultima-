@@ -47,7 +47,7 @@ patchs auth/middleware en phase de patch.
 ## Sa vision élargie d'Ultima (2026-07-12) — la plateforme-console
 
 - **Ultima = plateforme personnelle, pas un outil unique** : une console à
-  **4 quadrants** (TRAVELER réseau · BCP finances · ADRAMELECH idées ·
+  **4 quadrants** (TRAVELER réseau · BALTHAZAR GELD finances · ADRAMELECH idées ·
   IMLADRIK dév. perso), pilotée par la seule Léo, mémoire inter-segment. Le
   réseau (ex-Ultima) devient un quadrant parmi quatre — rien de jeté.
 - **Tempérament très créatif → besoin de cadre** : Paul le dit lui-même, il a

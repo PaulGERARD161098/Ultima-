@@ -209,7 +209,7 @@
   `design/spec-arbre-responsive.md`.
 - ✅ **PIVOT PLATEFORME — cadrage acté (2026-07-12)** : dicté par Paul, tournant
   majeur. Ultima devient sa **plateforme personnelle en console à 4 quadrants**
-  (TRAVELER réseau · BCP finances · ADRAMELECH idées · IMLADRIK dév. perso),
+  (TRAVELER réseau · BALTHAZAR GELD finances · ADRAMELECH idées · IMLADRIK dév. perso),
   pilotée par la seule Léo (désormais **féminine**), un repo, mémoire
   inter-segment. Le réseau existant (v1→A4) devient le quadrant TRAVELER — rien
   de jeté. Livré en **cadrage pur** (zéro code produit) : `CADRAGE-CONSOLE.md`
@@ -219,7 +219,7 @@
   console** (coque réutilisant l'existant) OU le mini-cadrage du quadrant que
   Paul veut voir en premier. **Arbitrages ouverts (décisions Paul)** : ordre des
   quadrants (reco : le moins dépendant d'un service externe d'abord) ; niveau de
-  chiffrement au repos BCP/IMLADRIK ; périmètre v1 par quadrant.
+  chiffrement au repos BALTHAZAR GELD/IMLADRIK ; périmètre v1 par quadrant.
 - ✅ **ADRAMELECH — premières captures (2026-07-16)** : registre de capture
   `adramelech/IDEES.md` ouvert (format prêt pour l'import en base à la boucle
   ADRAMELECH). Deux idées dictées par Paul, nommées et enrichies :
@@ -248,7 +248,7 @@
   agent (Léo) pilote tout Ultima — seule en cross-plateforme, seule
   interlocutrice, mémoire unique ; les autres `.claude/agents/` sont ses
   sous-agents. Blasons de quadrant figés : TRAVELER = boussole · ADRAMELECH =
-  dragon · BCP = balance · IMLADRIK = étoile · Console = sceau ULTIMA.
+  dragon · BALTHAZAR GELD = balance · IMLADRIK = étoile · Console = sceau ULTIMA.
 - 🟡 **Boucle ADRAMELECH — mini-cadrage (2026-07-16, directive EB « on boucle
   Adramelech »)** : `adramelech/CADRAGE-ADRAMELECH.md` déposé (cadrage pur).
   Périmètre v1 recommandé = « bibliothèque vivante sans base » (générateur de
@@ -277,6 +277,19 @@
   S1/S2/S3 du garde PII fermés. **⏳ Gaté (invérifiable sans compte auth Paul)** :
   front carto client-side après auth (fin du « noir en prod ») + seed des 4
   idées (`importer-idees.mjs` prêt). Détail : `adramelech/CADRAGE-ADRAMELECH.md`.
+- ✅ **Boucle AD-4c front — « on termine AD » (2026-07-19)** : la carto des
+  idées consultable en prod après auth — `idees.html` sur `/idees` (motif
+  traveler, middleware et garde AD-0 INTOUCHÉS), `js/idees.js` data-driven
+  depuis `GET /api/idees` (archipels par thème, ponts, badges statut, états
+  401/vide/erreur/démo), ouverte depuis l'antichambre du quadrant
+  (adramelech.html, diffusion Léo PR #55) — réconciliation des deux sessions :
+  l'antichambre est la porte, la carte est sa vue « archipels ».
+  Harnais `unit-idees-carto` (20) + `smoke-idees` (45) ; suite patrimoine
+  verte ×2 (front-carto + contre-passe Léo indépendante, captures vérifiées).
+  **Fin du « noir en prod » — le quadrant ADRAMELECH est bouclé** (AD-0→AD-4).
+  PR #54, fusion = go Paul. ⏳ Preuve du flux authentifié réel en prod = geste
+  Paul (se connecter, ouvrir /idees). Anti-télescopage : session parallèle L1
+  identifiée, zones interdites respectées (leo-accueil, traveler, middleware).
 - ✅ **DIRECTIVE JL actée (2026-07-18)** : dictée et nommée par Paul — à terme,
   **Ultima = son unique interface de travail** (au sens large), absorbant toute
   sa data (pro et perso), Léo seule interlocutrice qui oriente, dispatche et

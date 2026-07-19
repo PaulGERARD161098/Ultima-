@@ -1,4 +1,4 @@
-// Ultima — antichambres des quadrants PAS ENCORE BÂTIS (BCP, IMLADRIK).
+// Ultima — antichambres des quadrants PAS ENCORE BÂTIS (BALTHAZAR GELD, IMLADRIK).
 // Un seul script pour les deux coquilles : il lit `data-quadrant` sur <body>
 // et ouvre le cartouche Léo « majordome de chantier » (js/leo-accueil.js,
 // accueillirQuadrant) — état statique et sincère, aucune donnée personnelle,

@@ -48,7 +48,7 @@ les rapprochements à valeur (« lui peut bosser avec lui »), méthode de Paul
 obligatoire (qualitatif → chiffré → pilotage). Rôle déjà amorcé chez Léo
 (entremetteur, charte §5) — à outiller ici.
 
-### 3.2 BCP — pilotage financier (long terme)
+### 3.2 BALTHAZAR GELD — pilotage financier (long terme)
 Outil « expert-comptable personnel » : centraliser **tous les revenus** (upload
 bulletins de salaire de l'année, autres entrées) **et toutes les charges**
 (factures payées, taxes). Fonctions visées : **pilotage mois par mois**,
@@ -77,7 +77,7 @@ déverse la donnée. Exigences actées :
   affiché. L'agent propose les regroupements ; Paul valide.
 - **Ponts entre idées** : l'interface matérialise les liens (comme les
   routes de synergie déjà dessinées entre GLANEUR/INTENDANT/MYCÉLIUM/PROTÉE),
-  y compris inter-segments (une idée ↔ un contact TRAVELER, ↔ une dépense BCP).
+  y compris inter-segments (une idée ↔ un contact TRAVELER, ↔ une dépense BALTHAZAR GELD).
 - **Zéro perte** : tout est cartographié, rien ne tombe hors carte — le tri
   réorganise, il n'écarte jamais.
 Implémentation différée (pas de code produit tant que la boucle ADRAMELECH
@@ -100,7 +100,7 @@ vocale. Dashboard de suivi comme les autres.
 
 - **Un seul pilote** : Léo, sur tous les quadrants. Paul ne parle qu'à Léo.
 - **Mémoire inter-segment** : une idée d'ADRAMELECH peut toucher un contact de
-  TRAVELER, un objectif d'IMLADRIK peut cadrer une dépense de BCP — Léo fait
+  TRAVELER, un objectif d'IMLADRIK peut cadrer une dépense de BALTHAZAR GELD — Léo fait
   les liens. La mémoire `memoire/` s'étend aux 4 domaines.
 - **Un dashboard par quadrant** : Paul est très créatif et change souvent de cap
   → il a besoin de **cadre**. Chaque outil rend son pilotage lisible
@@ -109,7 +109,7 @@ vocale. Dashboard de suivi comme les autres.
   ① **boucler** une chose avant de passer à la suivante ; ② **capitaliser sur
   l'existant** avant de créer du neuf. C'est le garde-fou n°1 d'une plateforme
   à 4 fronts.
-- **Rappels/échéanciers** : motif récurrent (BCP fiscal, ADRAMELECH bilan
+- **Rappels/échéanciers** : motif récurrent (BALTHAZAR GELD fiscal, ADRAMELECH bilan
   mensuel, IMLADRIK quart d'heure quotidien) → brique transverse à mutualiser.
 - **Registre antique et sérieux** partout, jamais au prix de la lisibilité,
   l'accessibilité ou la sécurité.
@@ -118,7 +118,7 @@ vocale. Dashboard de suivi comme les autres.
 
 Le périmètre de données devient **beaucoup plus sensible** que le seul réseau :
 
-- **BCP** = données financières (bulletins de salaire, factures, impôts) —
+- **BALTHAZAR GELD** = données financières (bulletins de salaire, factures, impôts) —
   ultra-sensibles.
 - **IMLADRIK** = journal intime, valeurs, prises de recul — intimes.
 
@@ -128,7 +128,7 @@ Conséquences (à tenir à chaque boucle) :
 - **Uploads de fichiers** (bulletins, factures) = nouvelle surface d'attaque :
   validation stricte type/taille, stockage privé, **aucune exécution**, pas de
   chemin devinal ; à cadrer avec `securite-auditeur` avant tout code.
-- **Chiffrement au repos** de BCP/IMLADRIK : à évaluer (Supabase au repos vs
+- **Chiffrement au repos** de BALTHAZAR GELD/IMLADRIK : à évaluer (Supabase au repos vs
   chiffrement applicatif) — arbitrage sécurité, gate Paul.
 - **Scraping externe** (IMLADRIK) : timeout sortant, validation, aucune fuite de
   données Paul vers l'amont, User-Agent dédié (motif geocode déjà éprouvé).
@@ -144,7 +144,7 @@ Conséquences (à tenir à chaque boucle) :
 
 - **Léo est féminine** (une femme) — décision Paul 2026-07-12. Charte et profil
   mis à jour (accords au féminin).
-- **Mandat élargi aux 4 domaines** : Léo pilote TRAVELER, BCP, ADRAMELECH et
+- **Mandat élargi aux 4 domaines** : Léo pilote TRAVELER, BALTHAZAR GELD, ADRAMELECH et
   IMLADRIK, avec la même discipline et les mêmes gates.
 - **UN SEUL agent, verrouillé (Paul, 2026-07-16)** : Léo est le seul agent qui
   agit en cross-plateforme et le seul interlocuteur de Paul — une seule mémoire
@@ -156,7 +156,7 @@ Conséquences (à tenir à chaque boucle) :
 - **Déclinaison par sigle de quadrant** : Léo reste le même agent et **reprend
   le sigle du quadrant courant** — un seul agent, plusieurs blasons.
   Correspondance **figée (Paul, 2026-07-16 ; IMLADRIK re-figé 2026-07-17)** :
-  TRAVELER = boussole · ADRAMELECH = dragon · BCP = balance · IMLADRIK =
+  TRAVELER = boussole · ADRAMELECH = dragon · BALTHAZAR GELD = balance · IMLADRIK =
   **épée au soleil** (décision antérieure de Paul dont la trace écrite avait été
   perdue — session non poussée ; re-confirmée oralement le 2026-07-17, remplace
   l'étoile) · Console = sceau ULTIMA. Les emblèmes gravés sont en ligne (C1).
@@ -178,7 +178,7 @@ servent les 4.
 |---|---|---|
 | Console | (équipe front existante) | `frontend-design`, `theme-factory` |
 | TRAVELER | existant + **agent-liaison** (entremetteur outillé) | existants |
-| BCP | **agent-finances** (compta perso, fiscalité FR, échéances) + data-ingenieur | parsing/OCR bulletins = **externe/coût → gate** |
+| BALTHAZAR GELD | **agent-finances** (compta perso, fiscalité FR, échéances) + data-ingenieur | parsing/OCR bulletins = **externe/coût → gate** |
 | ADRAMELECH | **agent-idees** (classement, rapprochements sémantiques) + data-ingenieur | (à évaluer) |
 | IMLADRIK | **agent-devperso** (coach fidèle aux valeurs de Paul, curation) | scraping culturel = **externe/coût → gate** |
 
@@ -201,14 +201,14 @@ servent les 4.
   chacun bouclé avant le suivant (directive EB).
 - **RC2 — données ultra-sensibles** (finance + intime) : sécurité de premier
   ordre (§5), gates, escalade Opus sur la surface à risque.
-- **RC3 — dépendances externes/coût** : OCR bulletins (BCP), scraping culturel
+- **RC3 — dépendances externes/coût** : OCR bulletins (BALTHAZAR GELD), scraping culturel
   (IMLADRIK), éventuelle IA conversationnelle intégrée → **gates Paul**, jamais
   engagées seules.
 - **RC4 — re-scope vs « autarcie »** : la décision 2026-07-03 (« autarcie »)
   visait l'isolement d'Ultima **vis-à-vis des AUTRES systèmes de Paul** — elle
   tient. Ce qui change : **à l'intérieur** d'Ultima, on passe d'un domaine à
   quatre, avec mémoire inter-segment. Pas de contradiction, re-scope assumé.
-- **RC5 — nommage** : Traveler / BCP / Adramelech / Imladrik confirmés **par
+- **RC5 — nommage** : Traveler / BALTHAZAR GELD / Adramelech / Imladrik confirmés **par
   écrit** par Paul → figés (lexique vocal mis à jour pour les variantes
   entendues).
 
@@ -217,8 +217,8 @@ servent les 4.
 1. **Ordre des quadrants** après la console (C2 en premier ?). Reco Léo :
    commencer par le quadrant le **moins dépendant d'un service externe/coût** —
    ADRAMELECH ou IMLADRIK (données pures, pas d'OCR ni de fiscalité) — pour
-   boucler vite et capitaliser, BCP (OCR bulletins + échéances fiscales) ensuite.
-2. **Niveau de stockage sécurisé** pour BCP/IMLADRIK : chiffrement au repos
+   boucler vite et capitaliser, BALTHAZAR GELD (OCR bulletins + échéances fiscales) ensuite.
+2. **Niveau de stockage sécurisé** pour BALTHAZAR GELD/IMLADRIK : chiffrement au repos
    applicatif exigé, ou RLS + repos Supabase suffisant en v1 ? (sécurité).
 3. **Périmètre v1 de chaque quadrant** : tranché au mini-cadrage de sa boucle,
    pas maintenant (pas de spéculation).

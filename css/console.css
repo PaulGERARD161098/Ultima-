@@ -144,13 +144,6 @@ body.console {
   color: var(--encre-sepia);
 }
 
-.quadrant-desc {
-  margin: 0;
-  font-family: var(--police-ancienne);
-  font-size: 0.98rem;
-  color: var(--encre-sepia-douce);
-}
-
 /* Badge d'état : même gabarit actif / à venir, texte pleine encre sépia (AA),
    différencié par le libellé, la flèche d'accès et l'interactivité de la carte. */
 .quadrant-etat {

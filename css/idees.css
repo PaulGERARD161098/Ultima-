@@ -1,0 +1,251 @@
+/* Ultima — Quadrant ADRAMELECH : carto des idées (boucle AD-4c).
+   Registre repris de adramelech/carto-idees.html (gravure à l'encre, parchemin
+   noble, cartouches) — externalisé ici car la CSP du middleware interdit tout
+   <style>/style inline hors Leaflet. Tout local, zéro CDN, thèmes clair/sombre,
+   aucune animation (prefers-reduced-motion respecté par construction). */
+
+:root {
+  --parchemin: #efe3c8;
+  --mer: #e6d5ae;
+  --ile: #ecdfbe;
+  --encre: #3b2b14;
+  --encre-claire: #5a4118;
+  --encre-pale: #8a7147;
+  --cire: #8a3324;
+  --filet: #a98e5f;
+  --accent-focus: #1e6fb8;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --parchemin: #201a10;
+    --mer: #181307;
+    --ile: #262013;
+    --encre: #e6d7b4;
+    --encre-claire: #c8b184;
+    --encre-pale: #9c8a63;
+    --cire: #d08060;
+    --filet: #6a5a3a;
+    --accent-focus: #8fc2d4;
+  }
+}
+:root[data-theme="dark"] {
+  --parchemin: #201a10;
+  --mer: #181307;
+  --ile: #262013;
+  --encre: #e6d7b4;
+  --encre-claire: #c8b184;
+  --encre-pale: #9c8a63;
+  --cire: #d08060;
+  --filet: #6a5a3a;
+  --accent-focus: #8fc2d4;
+}
+:root[data-theme="light"] {
+  --parchemin: #efe3c8;
+  --mer: #e6d5ae;
+  --ile: #ecdfbe;
+  --encre: #3b2b14;
+  --encre-claire: #5a4118;
+  --encre-pale: #8a7147;
+  --cire: #8a3324;
+  --filet: #a98e5f;
+  --accent-focus: #1e6fb8;
+}
+
+body.idees {
+  background: var(--parchemin);
+  color: var(--encre);
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino,
+    "Book Antiqua", Georgia, "Times New Roman", serif;
+  line-height: 1.55;
+  margin: 0;
+  padding: 1rem 1.25rem 3.5rem;
+}
+
+/* ——— Barre de retour + bandeau démo ——— */
+.barre-retour {
+  max-width: 1080px;
+  margin: 0 auto 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.retour-ultima {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 1rem;
+  color: var(--encre);
+  text-decoration: none;
+  font-variant: small-caps;
+  letter-spacing: 0.14em;
+  border: 1px solid var(--encre-claire);
+  outline: 1px solid var(--filet);
+  outline-offset: 3px;
+  background: var(--ile);
+}
+.retour-ultima:hover { border-color: var(--encre); background: var(--parchemin); }
+.retour-ultima:focus-visible {
+  outline: 3px solid var(--accent-focus);
+  outline-offset: 3px;
+}
+.bandeau-demo {
+  margin: 0;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--encre-claire);
+  border: 1px dashed var(--filet);
+  padding: 0.35rem 0.8rem;
+}
+
+/* ——— Feuille ——— */
+.feuille {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+}
+
+/* ——— En-tête en cartouche (avec l'emblème ouroboros du quadrant) ——— */
+header.cartouche {
+  border: 1px solid var(--encre-claire);
+  outline: 1px solid var(--filet);
+  outline-offset: 4px;
+  padding: 1.6rem 2rem 1.4rem;
+  text-align: center;
+}
+.entete-quadrant .blason { display: inline-block; }
+.entete-quadrant .blason-svg {
+  width: clamp(64px, 14vw, 84px);
+  height: auto;
+  display: block;
+  margin: 0 auto 0.7rem;
+}
+.surtitre {
+  font-size: 0.78rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--encre-pale);
+  margin: 0 0 0.55rem;
+}
+h1 {
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: clamp(1.9rem, 4.5vw, 2.7rem);
+  letter-spacing: 0.14em;
+  margin: 0;
+  text-wrap: balance;
+}
+.devise {
+  font-style: italic;
+  color: var(--encre-claire);
+  margin: 0.6rem 0 0;
+  font-size: 1.02rem;
+}
+
+/* ——— États dessinés (chargement / non connecté / vide / erreur) ——— */
+/* [hidden] doit gagner sur le display:flex du bloc (sinon l'état resterait
+   affiché sous la carte — constat harnais AD-4c). */
+.carto-etat[hidden],
+figure.carte[hidden] { display: none; }
+.carto-etat {
+  border: 1px solid var(--encre-claire);
+  outline: 1px solid var(--filet);
+  outline-offset: 4px;
+  background: var(--ile);
+  padding: 2.2rem 1.5rem 2.4rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+}
+.etat-titre {
+  font-variant: small-caps;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  font-size: 1.35rem;
+  margin: 0;
+}
+.etat-texte {
+  font-style: italic;
+  color: var(--encre-claire);
+  margin: 0;
+  max-width: 46ch;
+}
+.bouton-parchemin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  margin-top: 0.7rem;
+  padding: 0 1.4rem;
+  font: inherit;
+  font-variant: small-caps;
+  letter-spacing: 0.14em;
+  color: var(--parchemin);
+  background: var(--encre-claire);
+  border: 1px solid var(--encre);
+  cursor: pointer;
+  text-decoration: none;
+}
+.bouton-parchemin:hover { background: var(--encre); }
+.bouton-parchemin:focus-visible {
+  outline: 3px solid var(--accent-focus);
+  outline-offset: 3px;
+}
+
+/* ——— La carte ——— */
+figure.carte {
+  margin: 0;
+  border: 1px solid var(--encre-claire);
+  outline: 1px solid var(--filet);
+  outline-offset: 4px;
+  overflow-x: auto;
+  background: var(--mer);
+}
+figure.carte svg { display: block; width: 100%; height: auto; min-width: 640px; }
+figcaption {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--encre-pale);
+  padding: 0.55rem 1rem 0.65rem;
+  border-top: 1px solid var(--filet);
+  background: var(--parchemin);
+}
+
+/* ——— Gravure SVG (classes posées par js/idees.js — zéro style inline) ——— */
+.fond-mer { fill: var(--mer); }
+.filet-fort { fill: none; stroke: var(--encre-claire); stroke-width: 2; }
+.filet-fin { fill: none; stroke: var(--filet); stroke-width: 0.8; }
+
+.arch-nom {
+  fill: var(--encre);
+  font-size: 16px;
+  letter-spacing: 5px;
+  font-variant: small-caps;
+}
+.arch-filet { stroke: var(--filet); stroke-width: 0.6; }
+
+.pont {
+  fill: none;
+  stroke: var(--cire);
+  stroke-width: 1.4;
+  stroke-dasharray: 6 5;
+}
+
+.ile-halo { fill: none; stroke: var(--encre-claire); stroke-width: 0.6; opacity: 0.7; }
+.ile-terre { fill: var(--ile); stroke: var(--encre); stroke-width: 1.6; }
+.ile-nom {
+  fill: var(--encre);
+  font-size: 17px;
+  letter-spacing: 2px;
+  font-variant: small-caps;
+}
+.ile-num { fill: var(--encre-claire); font-size: 10.5px; letter-spacing: 1.5px; }
+.ile-type { fill: var(--encre-claire); font-size: 10.5px; font-style: italic; }
+
+.sceau-fond { fill: var(--parchemin); stroke: var(--cire); stroke-width: 1; }
+.sceau-texte { fill: var(--cire); font-size: 9.5px; letter-spacing: 1px; }

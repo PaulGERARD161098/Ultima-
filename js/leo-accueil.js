@@ -260,7 +260,7 @@
     return svg;
   }
 
-  // BCP : la balance.
+  // BALTHAZAR GELD (ex-BCP) : la balance.
   function svgBalance() {
     var svg = socleBlason();
     var traits = svgEl('g', {
