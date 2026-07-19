@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Ultima — Archipel d'Adramelech</title>
+  <meta name="description" content="ADRAMELECH — la bibliothèque d'idées : carte des archipels par thème et ponts de synergie.">
+  <meta name="theme-color" content="#0e3a52">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%231e6fb8'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23ffffff'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/idees.css">
+</head>
+<body class="idees">
+
+  <!-- Barre de retour vers la console (cleanUrls : « / » = index.html). -->
+  <nav class="barre-retour" aria-label="Retour à la console">
+    <a class="retour-ultima" href="/">← Ultima</a>
+    <p id="bandeau-demo" class="bandeau-demo" hidden>Mode démo — données d'exemple</p>
+  </nav>
+
+  <div class="feuille">
+
+    <!-- Cartouche du quadrant : emblème ouroboros (repris tel quel du blason
+         ADRAMELECH de index.html), surtitre, titre, devise data-driven. -->
+    <header class="cartouche entete-quadrant">
+      <span class="blason" aria-hidden="true">
+        <svg class="blason-svg" viewBox="0 0 72 72" focusable="false">
+          <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
+          <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
+          <!-- Aile membranée dressée. -->
+          <g fill="none" stroke="#3b2f1c" stroke-width="1.4" stroke-linejoin="round">
+            <path d="M30 24.5 C 26.5 17.5, 21 12.8, 13.5 12.3
+                     C 15.7 15.2, 15.1 17.8, 12.8 19.6
+                     C 16.3 20, 18.4 22.2, 17.6 25.3
+                     C 20.7 24.3, 23.6 25.7, 25 28.6
+                     C 26.5 26.5, 28.3 25.3, 30 25.5 Z"/>
+          </g>
+          <g fill="none" stroke="#3b2f1c" stroke-width="0.9" opacity="0.85">
+            <path d="M29.4 24.8 C 25 20.6, 19.8 16.2, 14.4 13.8"/>
+            <path d="M29.4 25.4 C 24.6 22.8, 19.4 20.8, 13.8 19.8"/>
+          </g>
+          <!-- Corps : anneau, la gueule refermée sur la queue. -->
+          <path d="M34.78 22.05 A14 14 0 1 0 37.22 22.05"
+                fill="none" stroke="#3b2f1c" stroke-width="3" stroke-linecap="round"/>
+          <path d="M37.2 20.9 L41.2 23 L37.6 23.7 Z" fill="#3b2f1c"/>
+          <path d="M31.4 21.8 C 32.4 19.5, 35.4 18.7, 38 19.9 L 40.6 21.3 L 38.8 22.1
+                   L 40.4 23.5 L 36.8 23.9 C 33.9 24.3, 31.9 23.4, 31.4 21.8 Z"
+                fill="#3b2f1c"/>
+          <!-- Petite corne. -->
+          <path d="M32.8 20.2 L 33.6 17.4 L 34.9 19.8 Z" fill="#3b2f1c"/>
+          <circle cx="34.3" cy="21.3" r="0.9" fill="#e0c48a"/>
+          <!-- Rehaut d'or sur la courbe basse du cycle. -->
+          <path d="M43 47.5 A14 14 0 0 0 49.8 39" fill="none" stroke="#e0c48a"
+                stroke-width="0.8" opacity="0.6"/>
+        </svg>
+      </span>
+      <p class="surtitre">Ultima · Quadrant des idées</p>
+      <h1>Archipel d'Adramelech</h1>
+      <p id="carto-devise" class="devise">La bibliothèque d'idées — capturer, classer, rapprocher, enrichir.</p>
+    </header>
+
+    <!-- États dessinés (chargement / non connecté / vide / erreur) — le contenu
+         est posé par js/idees.js via createElement/textContent uniquement. -->
+    <div id="carto-etat" class="carto-etat" role="status">
+      <p class="etat-titre">Relevé en cours…</p>
+      <p class="etat-texte">La carte des idées se dresse depuis la base.</p>
+    </div>
+
+    <!-- La carte gravée (SVG data-driven, construit par js/idees.js). -->
+    <figure id="carto-figure" class="carte" hidden>
+      <div id="carto-carte"></div>
+      <figcaption>Les routes en pointillé de cire relient les idées qui se
+        nourrissent l'une l'autre ; les archipels regroupent les îles par thème
+        principal. Relevé dressé depuis la base — aucune idée perdue.</figcaption>
+    </figure>
+
+  </div>
+
+  <!-- Même chaîne que traveler.html : vendor local (S1), config, module carto. -->
+  <script src="js/vendor/supabase-js-2.110.0.min.js"></script>
+  <script src="js/config.js"></script>
+  <script type="module" src="js/idees.js"></script>
+</body>
+</html>
