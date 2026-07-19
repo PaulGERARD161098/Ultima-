@@ -367,3 +367,12 @@
   même API. ADRAMELECH v1 est COMPLET (AD-0 garde → AD-1 carto → AD-2 agent →
   AD-4 base+API+front antichambre+carte). Restent au registre : preuve du
   flux authentifié en prod (geste Paul) ; AD-5c-δ (front INTENDANT).
+- **2026-07-19 (console épurée + BALTHAZAR GELD)** — dicté par Paul sur revue
+  de la console : ① les 4 cartouches de quadrant perdent leur sous-titre
+  descriptif (nom seul, épure) ; ② le quadrant financier est **renommé
+  BALTHAZAR GELD** (ex-BCP ; graphie « GELD » retenue telle qu'entendue, à
+  reconfirmer si autre orthographe voulue). Renommage appliqué partout dans
+  les documents vivants (CLAUDE.md, cadrages, chartes, profil, radar, registre
+  ADRAMELECH) — leçon TRAVELER appliquée d'office ; les entrées HISTORIQUES de
+  ce journal gardent « BCP » (fidélité du registre). Blason balance inchangé.
+  Livré sur la PR #54 (smoke-console adapté, suite verte).

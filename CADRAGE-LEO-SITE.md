@@ -13,7 +13,7 @@
 - **Rien sur la page d'accueil** : la console (4 quadrants) reste muette.
 - **Au moment où Paul entre dans un quadrant** : un **pop-up d'accueil de Léo**
   qui récapitule **où on en est** et **les travaux en cours** s'il y en a.
-  - **TRAVELER et BCP** : registre **opérationnel** — relances qui dorment,
+  - **TRAVELER et BALTHAZAR GELD** : registre **opérationnel** — relances qui dorment,
     leads chauds, échéances fiscales, chantiers en cours. C'est là que le
     récapitulatif a le plus de valeur immédiate.
   - **ADRAMELECH et IMLADRIK** : registre **réflexif** (quadrants personnels) —
@@ -44,7 +44,7 @@ Pour être étendue/puissante/pertinente, Léo-au-site a besoin de **quatre
 2. **Le contexte (les yeux de Léo)** — le pop-up est nourri par les **données
    réelles** du quadrant via les API `requireUser` existantes et à venir :
    - TRAVELER : journal « où j'en suis », relances dues, leads, relations.
-   - BCP : échéancier fiscal, charges/revenus du mois (quand le quadrant
+   - BALTHAZAR GELD : échéancier fiscal, charges/revenus du mois (quand le quadrant
      existera).
    - ADRAMELECH : `/api/idees` (statuts, bilan de l'archipel, top 3 stratégique).
    - IMLADRIK : objectifs, journal, quart d'heure du jour (quand il existera).
@@ -120,7 +120,7 @@ Le pop-up touche à terme PII réseau + finance + intime (§5 CADRAGE-CONSOLE) :
 
 **Actées (Paul, 2026-07-18)** : agent actif à l'initiative ; rien sur
 l'accueil ; pop-up récapitulatif à l'entrée de chaque quadrant ; opérationnel
-sur TRAVELER/BCP, réflexif sur ADRAMELECH/IMLADRIK ; cohérence quadrant ;
+sur TRAVELER/BALTHAZAR GELD, réflexif sur ADRAMELECH/IMLADRIK ; cohérence quadrant ;
 ton Jarvis ; adaptation/apprentissage ; **Léo agit sur dictée** (« ouvrir
 Ultima, parler à Léo, ça fait avancer les choses ») et **tourne sur Claude** ;
 visuel + fonctionnement différés.
