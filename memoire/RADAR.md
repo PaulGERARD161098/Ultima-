@@ -237,3 +237,17 @@
   session : proposer d'abord la preuve prod de Paul (/idees connecté),
   puis AD-5c-δ (front INTENDANT). Notion : la synchro a demandé une
   approbation d'outil en fin de session — entrée préparée, à rejouer.
+- 2026-07-19 (« Focus Léo » — L2 la voix) — ① **Friction MCP élargie** : après
+  `get_advisors`, c'est `send_later` (pointage de veille PR) et la fiche
+  Notion qui restent bloqués « requires approval » — règle inchangée : ne pas
+  s'acharner, consigner au registre ; la veille de PR reste assurée par les
+  webhooks de la souscription. ② **Leçon harnais (garde de débit)** : un
+  garde à horodatage piégé au froid-démarrage — « jamais vu » doit être
+  distingué de « vu à t=0 » (`Map.get() === undefined`, pas `|| 0`), sinon
+  tout premier appel sous l'intervalle est refusé ; et les graines de test à
+  t=0 se refusent elles-mêmes. Asserter le comportement réel, aux bornes.
+  ③ **Confirmé** : le motif « brique pure dans api/_lib + route mince +
+  unitaires Node purs + smoke à API stubée » a porté L2 sans friction — le
+  reproduire pour L2b (outils) et L3 (mémoire). ④ Angle mort consigné :
+  S-L2-2 (injection de prompt via l'historique) devient un VRAI vecteur dès
+  que la voix aura des outils — ré-audit obligatoire à l'ouverture de L2b.

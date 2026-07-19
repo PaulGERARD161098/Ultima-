@@ -297,6 +297,19 @@
   créé**. Tous les travaux doivent y être conformes. Gravée dans CLAUDE.md (🎯),
   CADRAGE-CONSOLE §1, charte Léo, journal des décisions, lexique. EB = la
   discipline de route, JL = la destination.
+- ✅ **Boucle L2 — la voix de Léo (2026-07-19, « Focus Léo »)** : sur ordre de
+  Paul (« les projets on verra plus tard, focus Léo » — MYCÉLIUM/PROTÉE
+  reportés au registre), la voix conversationnelle est construite :
+  `POST /api/leo` (requireUser fail-closed → API Claude, clé env Vercel
+  uniquement, timeout 30 s, bornes historique/réponse, garde de débit
+  1 appel/3 s/utilisateur [S-L2-1], prompt Jarvis par quadrant sans PII) +
+  zone « Parler à Léo » dans le cartouche (TRAVELER + ADRAMELECH, session
+  réelle exigée ; 503 sincère tant que la clé n'est pas posée). Contre-passe
+  securite-auditeur **GO** (S-L2-1 fermé même boucle ; S-L2-2 injection =
+  angle mort consigné pour L2b) ; harnais complet vert (24 verdicts unit +
+  smoke conversation stubée). **PR #60 (draft, porte aussi le front
+  INTENDANT AD-5c-δ), fusion = go Paul.** Détail : CADRAGE-LEO-SITE §4.
+  ⏳ Gate coût : clé API + plafond mensuel + env `ANTHROPIC_API_KEY` = Paul.
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 
