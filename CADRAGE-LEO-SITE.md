@@ -99,7 +99,7 @@ Le pop-up touche à terme PII réseau + finance + intime (§5 CADRAGE-CONSOLE) :
   pilote TRAVELER fusionné (PR #52) puis **diffusion aux 4 quadrants** sur
   ordre de Paul (PR #55) : module `js/leo-accueil.js` généralisé
   (`accueillirQuadrant`), antichambre ADRAMELECH derrière auth (registre
-  d'idées via /api/idees, cartouche réflexif, fail-closed prouvé), BCP/IMLADRIK
+  d'idées via /api/idees, cartouche réflexif, fail-closed prouvé), BALTHAZAR GELD/IMLADRIK
   en majordome de chantier, console à 4 portes actives. Middleware : allowlist
   du chemin exact `/adramelech` — **contre-passe securite-auditeur GO** (29
   attaques, zéro contournement) + réserves figées au harnais (2026-07-19).
