@@ -194,6 +194,20 @@
   Paul = console jamais construite + cache PWA — pas un bug de déploiement.
   Vercel côté Léo reste sans permission sur le projet ultima (403, à faire
   rafraîchir par Paul pour lire les déploiements de prod).
+- 2026-07-19 (bouclage) — ① **Friction → règle** : l'outil MCP `get_advisors`
+  est bloqué « requires approval » de façon persistante (3 sessions) là où
+  `execute_sql`/`list_tables` passent — ne plus s'y acharner : rejouer les
+  contrôles advisors en SQL catalogue (RLS, policies, search_path, secdef),
+  c'est équivalent et fiable. ② Nuance figée au harnais : la normalisation du
+  garde n'effondre qu'UN séparateur final — `/adramelech//` reste bloqué
+  (fail-closed sain, canonique servie) ; asserter le comportement réel, pas
+  l'intuition. ③ **Confirmé** : le rythme « une PR par boucle, go Paul,
+  squash » tient bien, MAIS toujours re-fetcher origin/main juste avant le
+  checkout -B (un fetch précoce a pris un main en retard d'une fusion —
+  conflit évité de justesse une fois, subi une fois). ④ Reste ouvert côté
+  produit : L2 voix (gate coût), L2b mains, L3 mémoire ; AD-5c-γ/δ INTENDANT ;
+  AD-5b généralisation à de nouvelles idées ; fiche Notion à re-synchroniser
+  si le connecteur retombe.
 - 2026-07-18 (session emblèmes + vision Léo-au-site) — ① **Confirmé** : sur le
   visuel, Paul décide par ITÉRATION D'IMAGES, pas par description — lui montrer
   des planches de choix (A/B/C) converge en un tour là où deux propositions

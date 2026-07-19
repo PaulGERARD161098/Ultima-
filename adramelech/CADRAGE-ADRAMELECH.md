@@ -398,9 +398,12 @@ côté API (un trigger serait de la sur-ingénierie v1).
   `securite-auditeur` a **confirmé la validité moteur** (FK-sur-index-unique,
   colonne générée, CHECK) mais a été **interrompue par une limite de session**
   avant les scénarios adversariaux d'isolation ; substituée par la revue Léo
-  (Opus 4.8) + la vérif RLS post-apply. ⏳ **Actions humaines** : (a) rejouer les
-  scénarios adversariaux d'isolation inter-owner ; (b) lancer les advisors
-  sécurité (serveur MCP indispo à l'application) — les deux à la reprise.
+  (Opus 4.8) + la vérif RLS post-apply. **✅ CLOS (2026-07-19)** : contrôles
+  advisors-équivalents rejoués en SQL sur la prod (l'outil advisors MCP reste
+  bloqué en approbation) — 7/7 tables RLS activée, 4 policies/table (une par
+  opération), zéro fonction `search_path` mutable, zéro `security definer`,
+  et les **FK de scellement croisé présentes en prod** (`…_node_scelle`,
+  `…_chantier_scelle`, cible d'unicité). Dette sécurité 0008 fermée.
 - **AD-5c-γ — API `requireUser` + validation stricte** (parité API↔base, motif
   `validate*` de AD-4b) : CRUD besoins/commandes/stock + dérivation d'état +
   endpoint alerte J-2. Surface à risque → contre-passe.
