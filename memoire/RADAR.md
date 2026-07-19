@@ -221,3 +221,19 @@
   (moi, ici) de Léo-au-site (le produit) — ne pas les confondre dans les
   cadrages ; la charte .claude/agents/leo.md reste la mienne, CADRAGE-LEO-SITE
   décrit le produit.
+- 2026-07-19 (session « on termine AD » — 2 sessions en parallèle) —
+  ① **Confirmé durement** : la leçon « re-fetcher origin/main juste avant la
+  fusion » — le merge de la PR #54 a échoué en 405 (conflits) parce que la
+  session parallèle avait fusionné 3 PR entre mon dernier fetch et le go de
+  Paul. Règle gravée : en travail parallèle, `git fetch origin main` +
+  rebase AVANT toute tentative de merge, systématiquement. ② **Nouveau
+  motif — réconciliation de doublon produit** : deux sessions peuvent
+  activer la même surface chacune à sa façon (antichambre vs carte) ; le
+  bon geste n'est ni d'écraser ni de dupliquer mais d'EMBOÎTER (la porte de
+  l'un ouvre la vue de l'autre), puis de consigner la réconciliation au
+  journal. ③ **Confirmé** : un agent coupé (limite de session) se reprend
+  par message sans re-dispatcher — zéro travail perdu ; vérifier l'arbre de
+  travail avant de relancer pour lui dire ce qui existe déjà. ④ Prochaine
+  session : proposer d'abord la preuve prod de Paul (/idees connecté),
+  puis AD-5c-δ (front INTENDANT). Notion : la synchro a demandé une
+  approbation d'outil en fin de session — entrée préparée, à rejouer.
