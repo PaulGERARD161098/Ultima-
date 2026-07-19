@@ -11,6 +11,7 @@ import {
   MAX_TOKENS_REPONSE,
   construireSysteme,
   validerConversation,
+  creerGardeVoix,
   extraireTexte
 } from '../api/_lib/leo.js';
 
@@ -84,6 +85,23 @@ verdicts.extraitVide = extraireTexte([]) === '' && extraireTexte(null) === '' &&
 // ---------- 6. Constantes de coût plafonnées (garde-fou budget) ----------
 verdicts.plafondsCout = MAX_TOKENS_REPONSE <= 2048 && MAX_TOTAL_CHARS <= 30000 &&
   typeof LEO_MODELE === 'string' && LEO_MODELE.length > 0;
+
+// ---------- 7. Garde de débit par utilisateur (fermeture S-L2-1) ----------
+{
+  const garde = creerGardeVoix(3000);
+  verdicts.gardePremierAppel = garde('u1', 1000) === true;
+  verdicts.gardeRafaleRefusee = garde('u1', 2500) === false; // < 3 s → 429
+  verdicts.gardeApresIntervalle = garde('u1', 4001) === true;
+  verdicts.gardeParUtilisateur = garde('u2', 2500) === true; // u2 indépendant
+}
+{
+  // Borne mémoire : au-delà du plafond d'entrées, la carte se vide (pas de fuite).
+  const garde = creerGardeVoix(1000, 3);
+  garde('a', 1000); garde('b', 1000); garde('c', 1000);
+  // 'd' déclenche la purge (plafond atteint) ; 'a' purgé redevient admissible
+  // une fois l'intervalle passé (repart de zéro, fail-safe côté coût).
+  verdicts.gardeBorneMemoire = garde('d', 1001) === true && garde('a', 3000) === true;
+}
 
 // ---------- Bilan ----------
 console.log(JSON.stringify(verdicts, null, 2));

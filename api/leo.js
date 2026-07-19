@@ -20,10 +20,16 @@ import {
   MAX_TOKENS_REPONSE,
   construireSysteme,
   validerConversation,
+  creerGardeVoix,
   extraireTexte
 } from './_lib/leo.js';
 
 const TIMEOUT_MS = 30_000; // appel IA sortant borné (au-dessus : 502 générique)
+
+// S-L2-1 : endpoint FACTURÉ → au plus un appel par utilisateur par 3 s
+// (par-dessus le rate-limit global 60/min/IP du middleware, qui ne borne
+// pas le coût). Best-effort par instance ; plafond dur = console Anthropic.
+const gardeVoix = creerGardeVoix(3000);
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return methodNotAllowed(res, ['POST']);
@@ -34,6 +40,8 @@ export default async function handler(req, res) {
 
   const cle = process.env.ANTHROPIC_API_KEY;
   if (!cle) return fail(res, 503, "La voix de Léo n'est pas encore branchée");
+
+  if (!gardeVoix(auth.user.id)) return fail(res, 429, 'Trop de requêtes');
 
   const corps = await readJsonBody(req);
   if (corps === null || corps === 'too_large') return bodyFail(res, corps);

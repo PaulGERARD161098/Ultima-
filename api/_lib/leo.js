@@ -112,6 +112,27 @@ export function validerConversation(brut) {
   return { ok: true, messages };
 }
 
+// Garde de débit de la voix (constat S-L2-1) : au plus UN appel IA par
+// utilisateur par intervalle — l'endpoint est facturé, contrairement au
+// reste de l'API. Best-effort par instance (comme le rate-limit du
+// middleware) ; le plafond de coût DUR reste le plafond de dépense posé par
+// Paul dans la console Anthropic. `maintenant` injectable pour les tests.
+export function creerGardeVoix(intervalleMs, maxEntrees = 1000) {
+  const derniers = new Map(); // utilisateurId → dernier appel (ms)
+  return function autoriser(utilisateurId, maintenant) {
+    const t = typeof maintenant === 'number' ? maintenant : Date.now();
+    const dernier = derniers.get(utilisateurId);
+    // Jamais vu → autorisé ; vu trop récemment → refusé.
+    if (dernier !== undefined && t - dernier < intervalleMs) return false;
+    // Borne mémoire : au-delà du plafond, on repart de zéro (jamais de fuite).
+    if (derniers.size >= maxEntrees && !derniers.has(utilisateurId)) {
+      derniers.clear();
+    }
+    derniers.set(utilisateurId, t);
+    return true;
+  };
+}
+
 // Concatène les blocs texte d'une réponse de l'API ('' si aucun).
 export function extraireTexte(contenu) {
   if (!Array.isArray(contenu)) return '';
