@@ -1193,6 +1193,141 @@ textarea:focus-visible,
   min-height: 44px;
 }
 
+/* ---------- Intendance (AD-5c-δ) : check-list d'approvisionnement ---------- */
+
+/* Bandeau d'alerte J-2 : encre rouge sobre, compatible registre antique. */
+.bandeau-j2 {
+  margin: 0 0 0.9rem;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid #c25b4a;
+  border-radius: 8px;
+  background: #f8e7e2;
+  color: #7a1f12;
+  font-size: 0.92rem;
+  font-weight: 650;
+}
+
+.section-intendance {
+  margin-bottom: 0.5rem;
+}
+
+.intendance-label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--encre-douce);
+  margin-bottom: 0.5rem;
+}
+
+.intendance-label input[type="date"] {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--bordure);
+  border-radius: 6px;
+  font: inherit;
+  min-height: 44px;
+  background: var(--blanc);
+  color: var(--encre);
+}
+
+.intendance-compteur {
+  margin: 0 0 0.6rem;
+  font-size: 0.82rem;
+  color: var(--encre-douce);
+}
+
+.liste-besoins {
+  margin: 0 0 0.9rem;
+  padding: 0;
+  list-style: none;
+}
+
+.item-besoin {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #edf0f3;
+  font-size: 0.9rem;
+}
+
+.item-besoin-entete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.item-besoin-titre { overflow-wrap: anywhere; }
+
+/* États d'une ligne : le manquant SE VOIT (encre rouge sobre). */
+.badge-etat {
+  flex: none;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+
+.badge-etat-couvert { background: #ddf2e4; color: #135430; border: 1px solid #aeddc0; }
+.badge-etat-attente { background: #faf0da; color: #7a4d00; border: 1px solid #e4cf9d; }
+.badge-etat-manquant { background: #f8e4e0; color: #8f1d12; border: 1px solid #d8a49a; }
+
+.item-besoin-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.item-besoin-actions select,
+.item-besoin-actions input {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--bordure);
+  border-radius: 6px;
+  font: inherit;
+  font-size: 0.88rem;
+  min-height: 44px;
+  background: var(--blanc);
+  color: var(--encre);
+}
+
+.item-besoin-actions input { max-width: 10rem; }
+
+.item-besoin-mention {
+  font-size: 0.82rem;
+  color: var(--encre-douce);
+}
+
+.item-besoin-casse { color: #8f1d12; }
+
+.item-besoin-actions .bouton-lien-danger { margin-left: auto; }
+
+.form-intendance,
+.form-besoin {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.form-besoin input,
+.form-besoin select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #c9d1d9;
+  border-radius: 6px;
+  font: inherit;
+  min-height: 44px;
+}
+
+.form-besoin-ligne {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
 /* ---------- Accueil « carte d'enfance » (registre parchemin, scopé) ---------- */
 
 .vue-accueil {

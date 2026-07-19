@@ -126,6 +126,30 @@
     // Propositions (1-3), priorisées et déterministes.
     var propositions = [];
 
+    // 0. INTENDANT (AD-5c-δ) : s'il existe des alertes J-2, le manquant le
+    //    plus urgent passe en tête, avant les relances. Fail-soft : pas de
+    //    données intendant → comportement historique inchangé.
+    var alertesJ2 = (donnees.intendant && Array.isArray(donnees.intendant.alertes_j2))
+      ? donnees.intendant.alertes_j2.slice() : [];
+    if (alertesJ2.length > 0) {
+      alertesJ2.sort(function (a, b) {
+        if (a.date_pose !== b.date_pose) { return a.date_pose < b.date_pose ? -1 : 1; }
+        if (a.manquants !== b.manquants) { return b.manquants - a.manquants; }
+        return nomNoeud(donnees, a.node_id).localeCompare(nomNoeud(donnees, b.node_id), 'fr');
+      });
+      var urgente = alertesJ2[0];
+      var joursPose = -joursDeRetard(urgente.date_pose, aujourdHui);
+      var quandPose = joursPose <= 0 ? "aujourd'hui"
+        : 'dans ' + joursPose + (joursPose > 1 ? ' jours' : ' jour');
+      propositions.push({
+        genre: 'intendance',
+        message: 'Chantier « ' + nomNoeud(donnees, urgente.node_id) + ' » — pose ' +
+          quandPose + ', ' + urgente.manquants +
+          (urgente.manquants > 1 ? ' manquants' : ' manquant') + ". Compléter l'intendance.",
+        nodeId: urgente.node_id
+      });
+    }
+
     // 1. La relance la plus en retard.
     if (enRetard.length > 0) {
       var pire = enRetard[0];

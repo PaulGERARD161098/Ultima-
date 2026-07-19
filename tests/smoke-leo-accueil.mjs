@@ -1,7 +1,8 @@
 // Cartouche d'accueil de Léo (boucle L1) — mode démo (fixture de test).
 // Prouve : le cartouche apparaît après le boot des données, porte les 3
 // sections (Où on en est / Travaux en cours / Propositions), la proposition
-// n°1 correspond à la relance EN RETARD du jeu de démo (M. Lambert, 2 jours),
+// n°1 correspond au manquant J-2 de l'INTENDANT (AD-5c-δ : chantier Voltaire,
+// pose à J+1, 1 manquant) devant la relance EN RETARD (M. Lambert, 2 jours),
 // fermeture par Échap et par « C'est parti », NON-réapparition dans la même
 // session (sessionStorage), focus initial + piège de focus, propositions
 // cliquables (fiche ouverte), fail-closed sans données, contraste AA calculé,
@@ -112,16 +113,22 @@ verifier('1 relance en retard comptée', travaux.some((t) => /^1 relance en reta
 verifier('1 relance du jour comptée', travaux.some((t) => /^1 relance aujourd'hui$/.test(t)));
 verifier('2 leads à suivre comptés', travaux.some((t) => /^2 leads à suivre$/.test(t)));
 
-// 3. Propositions : la n°1 EST la relance en retard du jeu de démo.
+// 3. Propositions : la n°1 EST le manquant J-2 de l'INTENDANT (AD-5c-δ),
+//    devant la relance en retard ; le plafond de 3 évince l'idée dormante.
 const propositions = (await page.locator('.leo-proposition').allTextContents()).map((t) => t.trim());
 verifier('1 à 3 propositions', propositions.length >= 1 && propositions.length <= 3, `${propositions.length}`);
-verifier('Proposition n°1 = relance la plus en retard (M. Lambert, 2 jours)',
-  /^Relancer/.test(propositions[0] || '') && /M\. Lambert/.test(propositions[0] || '') &&
-  /en retard de 2 jours/.test(propositions[0] || ''), `lue: ${propositions[0]}`);
+verifier('Proposition n°1 = manquant J-2 (chantier Voltaire, pose dans 1 jour, 1 manquant)',
+  /^Chantier « Réhabilitation immeuble Voltaire »/.test(propositions[0] || '') &&
+  /pose dans 1 jour/.test(propositions[0] || '') && /1 manquant/.test(propositions[0] || '') &&
+  /Compléter l'intendance\./.test(propositions[0] || ''), `lue: ${propositions[0]}`);
+verifier('La relance la plus en retard suit (M. Lambert, 2 jours)',
+  /^Relancer/.test(propositions[1] || '') && /M\. Lambert/.test(propositions[1] || '') &&
+  /en retard de 2 jours/.test(propositions[1] || ''), `lue: ${propositions[1]}`);
 verifier('La relance du jour est proposée (Mme Nguyen)',
   propositions.some((p) => /Aujourd'hui/.test(p) && /Mme Nguyen/.test(p)), JSON.stringify(propositions));
-verifier("L'idée dormante (U9) est proposée",
-  propositions.some((p) => /dort depuis plus de 14 jours/.test(p)));
+verifier("Plafond de 3 : l'idée dormante cède sa place au manquant J-2",
+  propositions.length === 3 && !propositions.some((p) => /dort depuis plus de 14 jours/.test(p)),
+  JSON.stringify(propositions));
 
 // 4. Accessibilité : focus initial sur « C'est parti », Tab piégé.
 verifier("Focus initial sur « C'est parti »", await page.evaluate(() =>
@@ -171,7 +178,10 @@ await page.locator('.leo-proposition').first().click();
 verifier('Le clic ferme le cartouche', await page.locator('#leo-cartouche').count() === 0);
 await page.waitForSelector('#panneau:not([hidden])', { timeout: 20000 });
 const titreFiche = (await page.locator('#panneau-titre').textContent())?.trim();
-verifier('La fiche de M. Lambert est ouverte', /M\. Lambert/.test(titreFiche || ''), `titre: ${titreFiche}`);
+verifier('La fiche du chantier Voltaire est ouverte (manquant J-2)',
+  /Voltaire/.test(titreFiche || ''), `titre: ${titreFiche}`);
+verifier("La section Intendance est visible dans la fiche",
+  await page.locator('.section-intendance').count() === 1);
 
 // 9. Fermeture par le bouton « C'est parti ».
 await page.evaluate(() => window.sessionStorage.removeItem('ultima-leo-accueil-vu'));
