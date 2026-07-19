@@ -207,6 +207,10 @@ const recapVide = await page.evaluate(() =>
 verifier('calculerRecap pure : état vide → récap vide', recapVide.dernierJournal === null &&
   recapVide.retard === 0 && recapVide.duJour === 0 && recapVide.propositions.length === 0);
 
+// 12. L2 fail-closed : en démo (pas de session), jamais de zone voix.
+verifier('Sans session : pas de zone « Parler à Léo »',
+  await page.locator('.leo-section-voix').count() === 0);
+
 verifier('Zéro requête réseau hors app (le cartouche ne fait aucun appel)',
   requetesExternes.length === 0, requetesExternes.slice(0, 3).join(', '));
 verifier('Zéro erreur console (desktop)', erreursConsole.length === 0, erreursConsole.slice(0, 3).join(' | '));
@@ -237,6 +241,102 @@ await pageM.locator('#leo-partir').click();
 verifier('Fermeture au doigt (mobile)', await pageM.locator('#leo-cartouche').count() === 0);
 verifier('Zéro erreur console (mobile)', erreursMobile.length === 0, erreursMobile.slice(0, 3).join(' | '));
 await pageM.close();
+
+// ===================== C. Voix de Léo (L2) : conversation, gate, panne =====================
+// L'API /api/leo est STUBÉE (zéro IA, zéro coût, zéro réseau sortant) : on
+// prouve le contrat front — Bearer + quadrant + historique envoyés, bulles
+// rendues, gate 503 qui retire la zone, panne qui restitue le texte dicté.
+console.log('— C. Voix de Léo (L2, /api/leo stubée) —');
+const pageV = await navigateur.newPage({ viewport: { width: 1280, height: 800 } });
+const erreursVoix = [];
+pageV.on('console', (msg) => {
+  if (msg.type() !== 'error') return;
+  // Les scénarios C2/C3 provoquent EXPRÈS un 503 et une panne sur /api/leo :
+  // le navigateur journalise ces échecs de ressource — attendus, pas des bugs.
+  if (/Failed to load resource/.test(msg.text()) &&
+      (msg.location()?.url || '').includes('/api/leo')) return;
+  erreursVoix.push(msg.text());
+});
+pageV.on('pageerror', (err) => erreursVoix.push(String(err)));
+await preparerPage(pageV);
+await pageV.goto(`${BASE}/traveler.html`, { waitUntil: 'load', timeout: 20000 });
+
+// Ouvre un cartouche AVEC voix (jeton de test — aucune vraie session requise).
+async function ouvrirCartoucheVoix(cle) {
+  await pageV.evaluate((cleQuadrant) => {
+    document.querySelectorAll('.leo-voile').forEach((v) => v.remove());
+    window.sessionStorage.clear();
+    window.UltimaLeo.accueillirQuadrant({
+      quadrant: cleQuadrant,
+      blason: 'boussole',
+      salutation: 'Scénario voix.',
+      sections: [{ titre: 'Où on en est', lignes: ['—'] }],
+      voix: { quadrant: 'traveler', jeton: 'jeton-de-test' }
+    });
+  }, cle);
+}
+
+// C1. Réponse OK : Bearer + corps conformes, bulles Paul puis Léo.
+const requetesLeo = [];
+await pageV.route('**/api/leo', (route) => {
+  requetesLeo.push({
+    autorisation: route.request().headers()['authorization'] || '',
+    corps: route.request().postDataJSON()
+  });
+  return route.fulfill({
+    status: 200, contentType: 'application/json',
+    body: JSON.stringify({ ok: true, data: { reponse: 'Bien reçu, Paul. Prochaine action : relancer M. Lambert.' } })
+  });
+});
+await ouvrirCartoucheVoix('voix-ok');
+verifier('Zone « Parler à Léo » présente avec session', await pageV.locator('.leo-section-voix').count() === 1);
+await pageV.locator('.leo-voix-champ').fill('Où en est le réseau ?');
+await pageV.locator('.leo-voix-envoyer').click();
+await pageV.waitForSelector('.leo-bulle-leo:not(.leo-bulle-attente)', { timeout: 5000 });
+verifier('Bulle de Paul rendue', (await pageV.locator('.leo-bulle-paul').textContent())?.includes('Où en est le réseau ?'));
+verifier('Bulle de Léo rendue', (await pageV.locator('.leo-bulle-leo:not(.leo-bulle-attente)').textContent() || '').includes('Prochaine action'));
+verifier('Bearer envoyé (jeton de session)', requetesLeo[0]?.autorisation === 'Bearer jeton-de-test');
+verifier('Corps : quadrant + historique user', requetesLeo[0]?.corps?.quadrant === 'traveler' &&
+  Array.isArray(requetesLeo[0]?.corps?.messages) && requetesLeo[0].corps.messages[0].role === 'user');
+
+// Second tour : l'historique repart EN ENTIER (l'API est sans état).
+await pageV.locator('.leo-voix-champ').fill('Détaille.');
+await pageV.locator('.leo-voix-envoyer').click();
+await pageV.waitForFunction(() => document.querySelectorAll('.leo-bulle-leo:not(.leo-bulle-attente)').length === 2, { timeout: 5000 });
+verifier('Historique cumulé au 2e tour (user, assistant, user)',
+  requetesLeo[1]?.corps?.messages?.length === 3 &&
+  requetesLeo[1].corps.messages.map((m) => m.role).join(',') === 'user,assistant,user');
+
+// C2. Gate coût (503) : la zone se retire proprement, note sincère affichée.
+await pageV.unroute('**/api/leo');
+await pageV.route('**/api/leo', (route) => route.fulfill({
+  status: 503, contentType: 'application/json',
+  body: JSON.stringify({ ok: false, error: "La voix de Léo n'est pas encore branchée" })
+}));
+await ouvrirCartoucheVoix('voix-gate');
+await pageV.locator('.leo-voix-champ').fill('Bonjour Léo.');
+await pageV.locator('.leo-voix-envoyer').click();
+await pageV.waitForFunction(() => document.querySelector('.leo-voix-formulaire') === null, { timeout: 5000 });
+verifier('503 : le formulaire se retire (gate coût non levée)',
+  await pageV.locator('.leo-voix-formulaire').count() === 0);
+verifier('503 : note sincère « pas encore branchée »',
+  ((await pageV.locator('.leo-section-voix .leo-vide').textContent()) || '').includes('pas encore branchée'));
+verifier('503 : le cartouche, lui, reste ouvert', await pageV.locator('#leo-cartouche').count() === 1);
+
+// C3. Panne réseau : bulle d'erreur générique, texte dicté restitué au champ.
+await pageV.unroute('**/api/leo');
+await pageV.route('**/api/leo', (route) => route.abort());
+await ouvrirCartoucheVoix('voix-panne');
+await pageV.locator('.leo-voix-champ').fill('Message qui échoue');
+await pageV.locator('.leo-voix-envoyer').click();
+await pageV.waitForSelector('.leo-bulle-erreur', { timeout: 5000 });
+verifier('Panne : bulle d’erreur générique', ((await pageV.locator('.leo-bulle-erreur').textContent()) || '').includes("n'a pas pu répondre"));
+verifier('Panne : le texte dicté est restitué dans le champ',
+  (await pageV.locator('.leo-voix-champ').inputValue()) === 'Message qui échoue');
+verifier('Panne : le champ est réarmé (saisissable)', await pageV.locator('.leo-voix-champ').isEnabled());
+
+verifier('Zéro erreur console (voix)', erreursVoix.length === 0, erreursVoix.slice(0, 3).join(' | '));
+await pageV.close();
 
 await navigateur.close();
 console.log(echecs === 0 ? '\n=== SMOKE LÉO ACCUEIL VERT ===' : `\n=== ${echecs} VERDICT(S) EN ÉCHEC ===`);

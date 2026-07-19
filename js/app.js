@@ -273,7 +273,11 @@
         // AD-5c-δ : les alertes J-2 de l'INTENDANT (fail-soft côté Léo).
         intendant: { alertes_j2: etat.intendant.alertes }
       },
-      { ouvrirCible: ouvrirCibleDepuisAccueil }
+      { ouvrirCible: ouvrirCibleDepuisAccueil },
+      // L2 : la voix, uniquement avec une session réelle (jamais en démo).
+      (etat.session && etat.session.access_token)
+        ? { quadrant: 'traveler', jeton: etat.session.access_token }
+        : null
     );
   }
 

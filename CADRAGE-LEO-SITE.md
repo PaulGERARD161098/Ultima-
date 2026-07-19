@@ -104,8 +104,19 @@ Le pop-up touche à terme PII réseau + finance + intime (§5 CADRAGE-CONSOLE) :
   du chemin exact `/adramelech` — **contre-passe securite-auditeur GO** (29
   attaques, zéro contournement) + réserves figées au harnais (2026-07-19).
   Harnais 20/20 verts.
-- **L2 — la voix (Jarvis conversationnel)** : route serveur → API Claude,
-  conversation dans le pop-up, ton Jarvis. **GATE coût** (clé + facturation).
+- **L2 — la voix (Jarvis conversationnel) 🔨 CONSTRUITE (2026-07-19), gate
+  clé restante** : route `POST /api/leo` (requireUser fail-closed → API
+  Claude, clé `ANTHROPIC_API_KEY` en env Vercel uniquement, timeout 30 s,
+  max_tokens 1024, historique borné 30×4000, prompt système Jarvis par
+  quadrant SANS donnée personnelle, modèle serveur seulement — `LEO_MODELE`
+  en env pour en changer) + zone « Parler à Léo » dans le cartouche
+  (TRAVELER et ADRAMELECH, session réelle uniquement ; 503 = « voix pas
+  encore branchée », la zone se retire proprement). Briques pures dans
+  `api/_lib/leo.js`, harnais `unit-leo-voix.mjs` + smoke section C (API
+  stubée : contrat Bearer/historique, gate, panne). **GATE coût** : la voix
+  ne parle qu'une fois la clé posée par Paul en env Vercel (+ plafond de
+  dépense côté console Anthropic). Antichambres BALTHAZAR GELD/IMLADRIK :
+  muettes tant qu'elles n'ont pas d'auth (fail-closed voulu).
 - **L2b — les mains (agir sur dictée)** : tool use branché sur les API du
   site (idées, INTENDANT, journal, relances), session de Paul uniquement,
   reformulation + confirmation avant toute écriture. C'est la marche qui
@@ -126,7 +137,11 @@ Ultima, parler à Léo, ça fait avancer les choses ») et **tourne sur Claude**
 visuel + fonctionnement différés.
 
 **⏳ En attente (registre Actions humaines)** :
-1. **Compte auth de Paul** (L0) — action Paul, débloque tout.
-2. **Gate coût IA** (L2) — clé API + plafond mensuel : go explicite de Paul.
-3. Périmètre exact du premier pop-up L1 (quel quadrant en pilote — reco Léo :
-   **TRAVELER**, le plus riche en données réelles aujourd'hui).
+1. ~~Compte auth de Paul (L0)~~ ✅ existait déjà (constaté 2026-07-18).
+2. **Gate coût IA** (L2) — la route est construite ; il reste à Paul :
+   créer une clé API Claude (console.anthropic.com), poser un **plafond de
+   dépense mensuel** dans la console, puis saisir la clé en env Vercel
+   `ANTHROPIC_API_KEY` (jamais dans le repo). Optionnel : `LEO_MODELE` pour
+   choisir le modèle (défaut serveur : Opus — qualité Jarvis ; un modèle
+   plus économe se règle sans toucher au code).
+3. ~~Périmètre du pilote L1~~ ✅ tranché (TRAVELER) puis diffusé aux 4.

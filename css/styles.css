@@ -2446,6 +2446,95 @@ textarea:focus-visible,
   outline-offset: 2px;
 }
 
+/* ---- Voix de Léo (boucle L2) : conversation dans le cartouche. ---- */
+
+.leo-dialogue {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-height: 200px;
+  overflow-y: auto;
+  margin: 0 0 0.5rem;
+}
+
+.leo-dialogue:empty { margin: 0; }
+
+.leo-bulle {
+  margin: 0;
+  padding: 0.45rem 0.7rem;
+  max-width: 92%;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  border-radius: 4px;
+  border: 1px solid var(--cerne-carte);
+}
+
+/* Paul : plaque de parchemin clair, alignée à droite. */
+.leo-bulle-paul {
+  align-self: flex-end;
+  color: var(--encre-sepia);
+  background: linear-gradient(180deg, #fbf5e6, var(--parchemin));
+}
+
+/* Léo : encre sur parchemin, alignée à gauche (même langage que le journal). */
+.leo-bulle-leo {
+  align-self: flex-start;
+  color: var(--encre-sepia);
+  background: linear-gradient(180deg, var(--parchemin), var(--parchemin-carte));
+  box-shadow: inset 0 0 0 2px rgba(169, 136, 74, 0.35);
+}
+
+.leo-bulle-attente { font-style: italic; color: var(--encre-sepia-douce); }
+
+.leo-bulle-erreur {
+  align-self: flex-start;
+  font-style: italic;
+  color: var(--encre-sepia-douce);
+  border-style: dashed;
+}
+
+.leo-voix-formulaire {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.leo-voix-champ {
+  flex: 1;
+  min-height: 44px;
+  padding: 0.45rem 0.7rem;
+  font: inherit;
+  font-size: 0.98rem;
+  color: var(--encre-sepia);
+  background: #fdf9ec;
+  border: 1px solid var(--cerne-carte);
+  border-radius: 4px;
+}
+
+.leo-voix-champ:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.leo-voix-champ::placeholder { color: var(--encre-sepia-douce); opacity: 1; }
+
+/* « Envoyer » : même plaque encre/or que « C'est parti », en plus discret. */
+.leo-voix-envoyer {
+  min-height: 44px;
+  padding: 0.45rem 1rem;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #f2e8cd;
+  background: linear-gradient(#1a5a78, #0e3a52);
+  border: 1.5px solid var(--or-antique);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.leo-voix-envoyer:hover { background: linear-gradient(#1f6787, #114560); }
+.leo-voix-envoyer:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.leo-voix-envoyer:disabled, .leo-voix-champ:disabled { opacity: 0.55; cursor: default; }
+
 .leo-pied {
   display: flex;
   justify-content: flex-end;
