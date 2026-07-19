@@ -95,11 +95,15 @@ Le pop-up touche à terme PII réseau + finance + intime (§5 CADRAGE-CONSOLE) :
   dernière connexion 2026-07-17) — le registre le croyait absent. Conséquence
   immédiate : **seed des 4 idées appliqué** dans la foulée. La voie est libre
   pour L1.
-- **L1 — le pop-up « majordome » SANS IA** : à l'entrée d'un quadrant
-  authentifié, un cartouche Léo (registre antique) qui récapitule depuis les
-  données réelles : état, travaux en cours, 1-3 suggestions **déterministes**
-  cohérentes avec le quadrant. Zéro coût, zéro gate IA — prouve le geste
-  produit (Jarvis « muet mais juste »). Harnais patrimoine + contre-passes.
+- **L1 — le pop-up « majordome » SANS IA ✅ LIVRÉ ET DIFFUSÉ (2026-07-18)** :
+  pilote TRAVELER fusionné (PR #52) puis **diffusion aux 4 quadrants** sur
+  ordre de Paul (PR #55) : module `js/leo-accueil.js` généralisé
+  (`accueillirQuadrant`), antichambre ADRAMELECH derrière auth (registre
+  d'idées via /api/idees, cartouche réflexif, fail-closed prouvé), BCP/IMLADRIK
+  en majordome de chantier, console à 4 portes actives. Middleware : allowlist
+  du chemin exact `/adramelech` — **contre-passe securite-auditeur GO** (29
+  attaques, zéro contournement) + réserves figées au harnais (2026-07-19).
+  Harnais 20/20 verts.
 - **L2 — la voix (Jarvis conversationnel)** : route serveur → API Claude,
   conversation dans le pop-up, ton Jarvis. **GATE coût** (clé + facturation).
 - **L2b — les mains (agir sur dictée)** : tool use branché sur les API du

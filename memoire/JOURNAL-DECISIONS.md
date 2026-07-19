@@ -329,3 +329,25 @@
   CLAUDE.md (🎯), CADRAGE-CONSOLE §1, charte Léo, lexique. Elle ne change pas
   la boucle en cours ; elle cadre tous les choix d'architecture à venir
   (absorption de data externe = nouvelles boucles cadrées, gates inchangées).
+- **2026-07-18 (LÉO L1 LIVRÉE PUIS DIFFUSÉE — 4 quadrants en ligne)** — sur
+  « go léo l1 » : cartouche majordome construit sur TRAVELER (front-carto,
+  js/leo-accueil.js, calcul pur testable, dialog accessible, 1×/session,
+  fail-closed ; 19/19 harnais ; 12 smokes historiques repointés
+  /traveler.html) — **fusionné PR #52 sur go Paul**. Puis « diffuse sur tout
+  Ultima, les 4 chantiers à la fois » : module généralisé par quadrant,
+  **antichambre ADRAMELECH derrière auth** (registre d'idées via /api/idees,
+  Léo réflexive, fail-closed), **BCP/IMLADRIK en majordome de chantier**,
+  **console à 4 portes actives** ; middleware allowlist du chemin exact
+  /adramelech (cleanUrls) → **contre-passe securite-auditeur GO** (29
+  attaques, zéro contournement) — **fusionné PR #55 sur go Paul**. 20/20
+  harnais. La frustration fondatrice (« je n'ai pas mes 4 projets ») est
+  réparée : la plateforme vit, Léo accueille partout.
+- **2026-07-19 (BOUCLAGE de la boucle d'hier — sur « on boucle la boucle »)** —
+  queues fermées : ① **dette sécurité 0008** : contrôles advisors-équivalents
+  en SQL prod (RLS 7/7, 4 policies/table, zéro search_path mutable, zéro
+  security definer, scellements croisés présents) — l'outil advisors MCP
+  reste bloqué en approbation (3 tentatives), contourné par le catalogue.
+  ② **Réserves de la contre-passe middleware figées au harnais**
+  (unit-adramelech-guard 12/12 : /adramelech.md bloqué avant allowlist ;
+  trailing-collapse simple → page racine, double séparateur → fail-closed
+  assumé). ③ Annotations cadrages (L1 diffusée ✅, AD-5c-β clos) + Notion.

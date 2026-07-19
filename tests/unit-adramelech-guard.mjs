@@ -63,6 +63,23 @@ verdicts.antichambreSansDebordement =
   estCheminPrive('/adramelech/importer-idees.mjs') === true &&
   estCheminPrive('/adramelech%2fIDEES.md') === true &&
   estCheminPrive('/memoire') === true;
+// Réserves de la contre-passe (2026-07-18), figées : (a) /adramelech.md est un
+// .md → bloqué AVANT l'allowlist (l'ordre des tests ne crée pas de trou) ;
+// (b) les variantes à séparateur final effondré par la normalisation ('/x/',
+// '/x%2f', '/x%5c', '/x.', '/x%20') matchent le chemin EXACT → servent la page
+// racine publique et RIEN d'autre (aucun nouveau segment possible).
+verdicts.antichambreMdBloque = estCheminPrive('/adramelech.md') === true &&
+  estCheminPrive('/adramelech.MD') === true &&
+  estCheminPrive('/adramelech.md%20') === true;
+verdicts.antichambreTrailingCollapse =
+  estCheminPrive('/adramelech%2f') === false &&   // 1 séparateur final effondré → page racine
+  estCheminPrive('/adramelech%5c') === false &&
+  estCheminPrive('/adramelech%20') === false &&
+  estCheminPrive('/adramelech.') === false &&
+  // Double séparateur final : un seul est effondré → '/adramelech/' restant
+  // matche le préfixe privé → BLOQUÉ. Fail-closed assumé (la page canonique
+  // /adramelech reste servie ; cette variante fait 404, jamais une fuite).
+  estCheminPrive('/adramelech%2f%2f') === true;
 
 // ---------- 3. middleware() : 404 générique sur chemin privé, sans contenu ----------
 function req(path) {
