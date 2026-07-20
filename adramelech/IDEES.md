@@ -721,6 +721,7 @@ fait l'outil : projeter le produit à venir dans la pièce du client.*
 - **Thème** : bâtiment · clim & CVC · vision par ordinateur · commercial
 - **Partenaire envisagé** : — (outil propre du socle)
 - **Statut** : à raffiner
+- **Cadrage** : `CADRAGE-ADRAMELECH.md` §10 (AD-6, 2026-07-20)
 
 ### L'idée
 
