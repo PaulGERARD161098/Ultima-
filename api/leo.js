@@ -35,11 +35,13 @@ import {
   estOutilEcriture,
   validerAction,
   resumerAction,
+  resoudreCible,
   executerLecture,
   executerEcriture
 } from './_lib/leo-outils.js';
 
-const TIMEOUT_MS = 30_000; // par appel IA sortant (au-dessus : 502 générique)
+// S-L2b-3 : 3 tours × 20 s restent sous la limite d'exécution Vercel (60 s).
+const TIMEOUT_MS = 20_000; // par appel IA sortant (au-dessus : 502 générique)
 const MAX_TOURS_OUTILS = 3; // appels IA max par requête (coût et durée bornés)
 
 // S-L2-1 : endpoint FACTURÉ → au plus un appel par utilisateur par 3 s
@@ -83,6 +85,8 @@ export default async function handler(req, res) {
     if (!validation.ok) return fail(res, 400, 'Action invalide');
     try {
       const resultat = await executerEcriture(outil, validation.valeurs, auth.client);
+      // Réponse NEUTRE (sans cible résolue) : ce texte entre dans l'historique
+      // de conversation et repartira vers l'IA — les noms du réseau, jamais.
       return ok(res, {
         reponse: 'C’est fait. ' + resumerAction(outil, validation.valeurs),
         action_executee: { outil, resultat }
@@ -133,14 +137,24 @@ export default async function handler(req, res) {
       const ecriture = appels.find((a) => estOutilEcriture(a.name));
       if (ecriture) {
         const validation = validerAction(ecriture.name, ecriture.input);
-        if (validation.ok) {
-          const resume = resumerAction(ecriture.name, validation.valeurs);
+        // S-L2b-1 : la cible est résolue SOUS RLS en libellé humain — la
+        // plaque montre à Paul SUR QUOI l'action s'applique (et prouve dès
+        // la proposition que la cible existe et lui appartient).
+        const resolution = validation.ok
+          ? await resoudreCible(ecriture.name, validation.valeurs, auth.client)
+          : null;
+        if (validation.ok && resolution.ok) {
+          const resume = resumerAction(ecriture.name, validation.valeurs, resolution.cibles);
           return ok(res, {
             reponse: texte || 'Je te propose ceci — à confirmer.',
             action: { outil: ecriture.name, arguments: validation.valeurs, resume }
           });
         }
-        // Arguments invalides : renvoyés à l'IA pour correction (un tour de plus).
+        // Arguments invalides ou cible introuvable : renvoyés à l'IA pour
+        // correction (un tour de plus, jamais d'action proposée à l'aveugle).
+        const motif = validation.ok
+          ? 'Cible introuvable : relis les données avec un outil de lecture'
+          : 'Arguments invalides : ' + validation.erreur;
         messagesIA.push({ role: 'assistant', content: reponse.content });
         messagesIA.push({
           role: 'user',
@@ -148,7 +162,7 @@ export default async function handler(req, res) {
             type: 'tool_result',
             tool_use_id: a.id,
             content: a.id === ecriture.id
-              ? 'Arguments invalides : ' + validation.erreur
+              ? motif
               : 'Appel non traité (une action à la fois)',
             is_error: true
           }))

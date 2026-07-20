@@ -141,41 +141,94 @@ export function validerAction(outil, args) {
 
 // ---------- Résumé humain d'une action (la plaque de confirmation) ----------
 
-export function resumerAction(outil, valeurs) {
+function tronque(texte, max) {
+  return texte.length > max ? texte.slice(0, max) + '…' : texte;
+}
+
+// La plaque doit montrer TOUT ce qui sera écrit, cible comprise (S-L2b-1) :
+// c'est le seul point de contrôle humain. `cibles` (optionnel) porte les
+// libellés résolus SOUS RLS par resoudreCible — affichés à Paul seulement,
+// jamais renvoyés vers l'IA (minimisation : les noms du réseau ne partent
+// pas chez Anthropic). Sans libellé, l'UUID brut est montré (jamais rien).
+export function resumerAction(outil, valeurs, cibles) {
+  cibles = cibles || {};
   if (outil === 'creer_idee') {
     return 'Capturer l\'idée « ' + valeurs.nom + ' » (' + valeurs.type +
-      (valeurs.theme ? ' · ' + valeurs.theme : '') + ') au registre ADRAMELECH.';
+      (valeurs.theme ? ' · ' + valeurs.theme : '') + ') au registre ADRAMELECH.' +
+      (valeurs.essence ? ' Contenu : « ' + tronque(valeurs.essence, 160) + ' ».' : '');
   }
   if (outil === 'ecrire_journal') {
-    return 'Écrire au journal : « ' +
-      (valeurs.note.length > 120 ? valeurs.note.slice(0, 120) + '…' : valeurs.note) + ' »' +
+    return 'Écrire au journal de « ' + (cibles.cible || valeurs.node_id) + ' » : « ' +
+      tronque(valeurs.note, 120) + ' »' +
+      (valeurs.prochaine_etape ? ' — étape : ' + tronque(valeurs.prochaine_etape, 80) : '') +
       (valeurs.relance_at ? ' — relance le ' + valeurs.relance_at + '.' : '.');
   }
   if (outil === 'ajouter_besoin') {
-    return 'Ajouter à l\'intendance : ' + valeurs.designation +
+    return 'Ajouter au chantier « ' + (cibles.cible || valeurs.chantier_id) + ' » : ' +
+      valeurs.designation +
       (valeurs.quantite ? ' × ' + valeurs.quantite + (valeurs.unite ? ' ' + valeurs.unite : '') : '') + '.';
   }
   return '';
 }
 
+// Résout la cible d'une écriture en libellé humain, SOUS le client RLS de
+// Paul (prouve au passage que la cible existe et lui appartient AVANT la
+// plaque). → { ok:true, cibles:{cible?} } | { ok:false } (cible introuvable).
+// creer_idee n'a pas de cible. Erreur réseau → fail-closed ({ ok:false }).
+export async function resoudreCible(outil, valeurs, client) {
+  try {
+    if (outil === 'ecrire_journal') {
+      const { data, error } = await client
+        .from('network_nodes').select('nom').eq('id', valeurs.node_id).maybeSingle();
+      if (error || !data) return { ok: false };
+      return { ok: true, cibles: { cible: data.nom } };
+    }
+    if (outil === 'ajouter_besoin') {
+      const { data, error } = await client
+        .from('intendant_chantiers').select('node_id').eq('id', valeurs.chantier_id).maybeSingle();
+      if (error || !data) return { ok: false };
+      const noeud = await client
+        .from('network_nodes').select('nom').eq('id', data.node_id).maybeSingle();
+      if (noeud.error || !noeud.data) return { ok: false };
+      return { ok: true, cibles: { cible: noeud.data.nom } };
+    }
+    return { ok: true, cibles: {} }; // creer_idee : pas de cible à résoudre
+  } catch (e) {
+    return { ok: false };
+  }
+}
+
 // ---------- Exécuteurs (client RLS de Paul fourni par la route) ----------
 
-// Lectures : résultats MINIMISÉS pour l'IA (champs utiles, jamais de dump).
+// Lectures : résultats MINIMISÉS pour l'IA (champs utiles, jamais de dump)
+// et PLAFONNÉS (S-L2b-2 : le tool_result repart à chaque tour de boucle —
+// bornes de lignes + essence tronquée = coût d'entrée borné).
+export const LECTURE_MAX_LIGNES = 200;
+export const LECTURE_ESSENCE_MAX = 300;
+
 export async function executerLecture(outil, client) {
   if (outil === 'lire_idees') {
     const [ideesRes, liensRes] = await Promise.all([
       client.from('idees').select('id, adr_num, nom, type, theme, statut, essence')
-        .order('adr_num', { ascending: true }),
-      client.from('idees_liens').select('source_id, target_id')
+        .order('adr_num', { ascending: true }).limit(LECTURE_MAX_LIGNES),
+      client.from('idees_liens').select('source_id, target_id').limit(LECTURE_MAX_LIGNES)
     ]);
     if (ideesRes.error || liensRes.error) throw ideesRes.error || liensRes.error;
-    return { idees: ideesRes.data || [], ponts: liensRes.data || [] };
+    const idees = (ideesRes.data || []).map((i) => ({
+      ...i,
+      essence: typeof i.essence === 'string' && i.essence.length > LECTURE_ESSENCE_MAX
+        ? i.essence.slice(0, LECTURE_ESSENCE_MAX) + '…'
+        : i.essence
+    }));
+    return { idees, ponts: liensRes.data || [] };
   }
   if (outil === 'lire_intendant') {
     const [chantiersRes, besoinsRes] = await Promise.all([
-      client.from('intendant_chantiers').select('id, node_id, date_pose'),
+      client.from('intendant_chantiers').select('id, node_id, date_pose')
+        .limit(LECTURE_MAX_LIGNES),
       client.from('intendant_besoins')
         .select('id, chantier_id, designation, quantite, unite, mode, etat')
+        .limit(LECTURE_MAX_LIGNES)
     ]);
     if (chantiersRes.error || besoinsRes.error) throw chantiersRes.error || besoinsRes.error;
     const chantiers = chantiersRes.data || [];

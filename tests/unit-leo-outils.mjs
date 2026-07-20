@@ -8,10 +8,13 @@ import {
   DEFINITIONS_OUTILS,
   OUTILS_LECTURE,
   OUTILS_ECRITURE,
+  LECTURE_MAX_LIGNES,
+  LECTURE_ESSENCE_MAX,
   estOutilLecture,
   estOutilEcriture,
   validerAction,
   resumerAction,
+  resoudreCible,
   executerLecture,
   executerEcriture
 } from '../api/_lib/leo-outils.js';
@@ -71,13 +74,26 @@ verdicts.outilInconnu = validerAction('supprimer_idee', {}).ok === false &&
   validerAction('lire_idees', {}).ok === false && // une lecture n'est pas une action
   validerAction('creer_idee', null).ok === false;
 
-// ---------- 3. Résumés fidèles (la plaque dit ce qui sera écrit) ----------
+// ---------- 3. Résumés fidèles (la plaque dit TOUT ce qui sera écrit) ----------
 verdicts.resumeIdee = /GLANEUR 2/.test(resumerAction('creer_idee',
   { nom: 'GLANEUR 2', type: 'business' }));
 verdicts.resumeJournal = /relance le 2026-08-01/.test(resumerAction('ecrire_journal',
-  { note: 'Appel fait.', relance_at: '2026-08-01' }));
+  { node_id: UUID, note: 'Appel fait.', relance_at: '2026-08-01' }));
 verdicts.resumeBesoin = /Sacs de plâtre × 12 sacs/.test(resumerAction('ajouter_besoin',
-  { designation: 'Sacs de plâtre', quantite: 12, unite: 'sacs' }));
+  { chantier_id: UUID, designation: 'Sacs de plâtre', quantite: 12, unite: 'sacs' }));
+// Fermeture S-L2b-1 : la CIBLE apparaît (libellé résolu, sinon UUID brut —
+// jamais rien), et l'essence cachée devient visible sur la plaque.
+verdicts.resumeJournalCible = resumerAction('ecrire_journal',
+  { node_id: UUID, note: 'x' }, { cible: 'M. Lambert' }).includes('M. Lambert') &&
+  resumerAction('ecrire_journal', { node_id: UUID, note: 'x' }).includes(UUID);
+verdicts.resumeBesoinChantier = resumerAction('ajouter_besoin',
+  { chantier_id: UUID, designation: 'x' }, { cible: 'Immeuble Voltaire' })
+    .includes('Immeuble Voltaire') &&
+  resumerAction('ajouter_besoin', { chantier_id: UUID, designation: 'x' }).includes(UUID);
+verdicts.resumeIdeeEssence = resumerAction('creer_idee',
+  { nom: 'X', type: 'b', essence: 'contenu dicté complet' }).includes('contenu dicté complet');
+verdicts.resumeEssenceTronquee = !resumerAction('creer_idee',
+  { nom: 'X', type: 'b', essence: 'a'.repeat(500) }).includes('a'.repeat(200));
 
 // ---------- 4. Exécuteurs : client factice, requêtes vérifiées ----------
 function clientFactice(reponses) {
@@ -85,11 +101,12 @@ function clientFactice(reponses) {
   function requete(table) {
     const q = {
       _table: table, _op: 'select',
-      select() { return q; }, order() { return q; }, limit() { return q; },
+      select() { return q; }, order() { return q; },
+      limit(n) { q._limit = n; return q; }, eq() { return q; },
       insert(valeurs) { q._op = 'insert'; q._valeurs = valeurs; return q; },
-      single() { return q; },
+      single() { return q; }, maybeSingle() { return q; },
       then(resolve) {
-        appels.push({ table, op: q._op, valeurs: q._valeurs });
+        appels.push({ table, op: q._op, valeurs: q._valeurs, limite: q._limit });
         resolve(reponses[table + ':' + q._op] || { data: [], error: null });
       }
     };
@@ -137,6 +154,32 @@ function clientFactice(reponses) {
   });
   const r = await executerLecture('lire_intendant', fake);
   verdicts.lectureIntendant = Array.isArray(r.chantiers) && Array.isArray(r.alertes_j2);
+}
+{
+  // Fermeture S-L2b-2 : lectures plafonnées (limit posé) + essence tronquée.
+  const fake = clientFactice({
+    'idees:select': { data: [{ id: UUID, adr_num: 1, nom: 'X', essence: 'e'.repeat(2000) }], error: null },
+    'idees_liens:select': { data: [], error: null }
+  });
+  const r = await executerLecture('lire_idees', fake);
+  verdicts.lecturePlafonnee = fake._appels.every((a) => a.limite === LECTURE_MAX_LIGNES) &&
+    r.idees[0].essence.length <= LECTURE_ESSENCE_MAX + 1;
+}
+{
+  // Fermeture S-L2b-1 : résolution de cible sous RLS — libellé rendu,
+  // cible inexistante → fail-closed (jamais de plaque aveugle).
+  const fake = clientFactice({
+    'network_nodes:select': { data: { nom: 'M. Lambert' }, error: null }
+  });
+  const r = await resoudreCible('ecrire_journal', { node_id: UUID }, fake);
+  verdicts.cibleResolue = r.ok === true && r.cibles.cible === 'M. Lambert';
+  const fakeVide = clientFactice({
+    'network_nodes:select': { data: null, error: null }
+  });
+  const rVide = await resoudreCible('ecrire_journal', { node_id: UUID }, fakeVide);
+  verdicts.cibleIntrouvableFailClosed = rVide.ok === false;
+  const rIdee = await resoudreCible('creer_idee', { nom: 'X' }, fakeVide);
+  verdicts.cibleSansObjet = rIdee.ok === true;
 }
 
 // ---------- Bilan ----------

@@ -1,4 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "cleanUrls": true
+  "cleanUrls": true,
+  "functions": {
+    "api/leo.js": {
+      "maxDuration": 60
+    }
+  }
 }
