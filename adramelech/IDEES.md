@@ -34,12 +34,16 @@
 |---|---|---|---|---|
 | 1 | **MYCÉLIUM** (ADR-004) | **8,1**/10 | multiplicateur | Top 3 — démultiplie le socle à capex ~0 |
 | 2 | **INTENDANT** (ADR-003) | **7,9**/10 | enabler | Top 3 — dérisque le socle, fabrique les victoires |
-| 3 | **PROTÉE** (ADR-002) | **6,3**/10 | montée en puissance | Top 3 — extension disciplinée du socle |
-| 4 | GLANEUR (ADR-001) | 5,0/10 | satellite | Hors top 3 — retenir le *service* (débarras chantier), ajourner l'*entreprise* |
+| 3 | **CHAMBRE CLAIRE** (ADR-005) | **6,9**/10 | enabler commercial | Grille passée le 2026-07-20 — dérisque et accélère la *vente* du socle ; build derrière la séquence validée |
+| 4 | PROTÉE (ADR-002) | 6,3/10 | montée en puissance | Extension disciplinée du socle |
+| 5 | GLANEUR (ADR-001) | 5,0/10 | satellite | Hors top — retenir le *service* (débarras chantier), ajourner l'*entreprise* |
 
-> Capturée après ce classement : **CHAMBRE CLAIRE** (ADR-005, 2026-07-20) —
-> pas encore passée à la grille des 7 blocs ; à instruire au prochain passage
-> (AD-5d ou à la demande de Paul).
+> Mise à jour 2026-07-20 : CHAMBRE CLAIRE scorée **6,9** s'intercale au rang 3.
+> Le moteur système s'enrichit : **CHAMBRE CLAIRE conclut la vente** →
+> INTENDANT approvisionne sans manquant → MYCÉLIUM exploite la victoire →
+> PROTÉE industrialise. ⏳ **Décision Paul** : la séquence d'exécution validée
+> (INTENDANT → MYCÉLIUM → PROTÉE bridée) est-elle amendée pour y insérer
+> CHAMBRE CLAIRE, ou CHAMBRE CLAIRE attend-elle son tour ?
 
 **Lecture système (l'essentiel).** Ce ne sont pas 4 paris indépendants mais **un
 moteur qui se renforce** : **PROTÉE** industrialise le socle → **INTENDANT**
@@ -720,7 +724,7 @@ fait l'outil : projeter le produit à venir dans la pièce du client.*
 - **Type** : pro · business (outil commercial du socle)
 - **Thème** : bâtiment · clim & CVC · vision par ordinateur · commercial
 - **Partenaire envisagé** : — (outil propre du socle)
-- **Statut** : à raffiner
+- **Statut** : exploitable
 - **Cadrage** : `CADRAGE-ADRAMELECH.md` §10 (AD-6, 2026-07-20)
 
 ### L'idée
@@ -802,3 +806,109 @@ délai de devis ; le verdict de faisabilité **évite les projets invendables**
 - **ADR-003 INTENDANT** : la recommandation + l'estimation produisent la liste
   des pièces nécessaires → alimente les besoins INTENDANT du chantier signé.
 - **BALTHAZAR GELD** : chaque estimation/devis a un pendant financier.
+
+### Analyse stratégique
+
+> Cinquième fiche stratégique (2026-07-20, format resserré sur demande de
+> Paul — même grille, chaque bloc à l'essentiel). Ligne de base du benchmark :
+> **Renoboost IA**. Nature : comme l'INTENDANT, un **enabler du socle** — ici
+> côté *vente* (l'INTENDANT dérisque l'exécution, CHAMBRE CLAIRE dérisque et
+> accélère la conclusion). Valeurs chiffrées absentes du registre : **[hyp.]**.
+
+#### A. Positionnement — ERRC et 5 forces
+
+**ERRC** (référentiel : devis classique à J+X, catalogues papier, configurateurs
+fabricants génériques) — **Exclure** : le devis différé après visite et le
+« je reviens vers vous » ; **Atténuer** : la dépendance au coup d'œil expert
+seul (l'outil trace le verdict) ; **Renforcer** : la démonstration chez le
+client et la confiance par la transparence (verdict motivé) ; **Créer** : le
+**verdict de faisabilité instantané croisé au catalogue IceStream** + la
+simulation dans la pièce — inexistant chez les petits poseurs.
+**Porter (lu comme levier interne)** — rivalité : faible (outil captif ;
+les configurateurs fabricants ne font ni faisabilité in situ ni multi-produits) ;
+entrants : moyen (copiable une fois la preuve faite, le fossé = catalogue
+structuré + intégration Ultima) ; substituts : fort (l'expérience de Paul fait
+déjà ce diagnostic de tête — l'outil doit battre le « pas besoin d'outil ») ;
+fournisseurs : faible (catalogue PDF détenu) ; clients : moyen (l'effet
+démonstration joue sur la décision, pas sur le prix).
+**Conclusion.** Océan **bleu en usage interne** (personne ne le fait à cette
+échelle artisanale) ; le vrai concurrent est le substitut gratuit — la tête de
+Paul. L'outil ne vaut que s'il est plus convaincant *pour le client* que le
+diagnostic oral.
+
+#### B. Diagnostic — TOWS (l'essentiel)
+
+**Forces** : stack Ultima existante (auth, API, fiche chantier) ; Claude déjà
+au cœur ; catalogue détenu ; besoin vécu à chaque rendez-vous. **Faiblesses** :
+fiabilité des mesures sur photos non prouvée ; P0 catalogue à structurer ;
+un seul utilisateur. **Opportunités** : effet démonstration rare chez les
+artisans ; décision client à chaud ; IA vision en progrès constant.
+**Menaces** : verdict erroné (faisable annoncé, pose impossible) = coût
+réputation inversé ; configurateurs fabricants qui s'améliorent.
+**Axe FO (le plus fort)** : brancher la vision Claude sur le catalogue
+structuré pour conclure en rendez-vous. **Axe WT (survie)** : les mesures clés
+sont **toujours confirmées par Paul** — l'IA propose, les règles tranchent,
+Paul valide ; jamais de verdict automatique non relu en v1.
+
+#### C. Business model — l'essentiel chiffré [hyp.]
+
+Enabler interne, pas de revenu propre. Coût : dev v1 **4-8 j-agents [hyp.]**
+(P0 catalogue compris), coût API vision marginal (canal existant), actif nul.
+Valeur : sur **N rendez-vous clim/an**, +5-15 points de taux de conclusion
+[hyp.] × marge 400-800 €/pose clim [hyp.] + déplacements évités sur projets
+infaisables + délai de devis écrasé → **quelques k€ à >10 k€/an de marge
+additionnelle [hyp.]** pour une mise quasi nulle. Ratio du même ordre que
+l'INTENDANT, assis sur la vente au lieu de l'exécution.
+
+#### D. Prémortem (2-3 ans, l'outil a échoué)
+
+- **Verdict non fiable** (mesures photos fausses → pose impossible vendue ou
+  affaire faisable refusée). *Signal : écarts verdict/terrain dès les premiers
+  chantiers non mesurés.*
+- **Catalogue mort** (PDF jamais structuré ou jamais tenu à jour → moteur à
+  vide). *Signal : P0 qui traîne, fiches produits obsolètes.*
+- **Outil de démo sans usage** (effet waouh en rendez-vous mais saisie trop
+  lourde → abandonné comme un gadget). *Signal : non utilisé au 3e rendez-vous.*
+- **Dérive AR prématurée** (v2 3D entamée avant preuve v1). *Signal : temps
+  passé sur l'incrustation avant un seul verdict validé terrain.*
+- **Concurrence du substitut** (Paul va plus vite de tête que l'outil).
+  *Signal : verdicts de l'outil systématiquement redondants avec l'avis
+  spontané de Paul, sans gain client mesuré.*
+
+#### E. Scoring /10
+
+- **Simple — 6.** v1 photos sur stack existante, mais P0 catalogue + moteur de
+  règles + fiabilité vision à prouver : plus lourd qu'INTENDANT, sans commune
+  mesure avec GLANEUR/PROTÉE.
+- **Efficace — 8.** Attaque un moment décisif unique (le rendez-vous) avec un
+  mécanisme net : voir, vérifier, chiffrer, conclure. Réserve : la précision
+  des mesures.
+- **Rémunérateur — 7.** Marge additionnelle réelle à mise quasi nulle, mais
+  indirecte (enabler) et plafonnée par le volume de rendez-vous.
+- **Utile — 8.** Sert la vente du socle, arme PROTÉE, alimente INTENDANT
+  (liste de pièces du chantier signé), améliore l'expérience client.
+- **Temps — 6.** v1 en 4-8 j-agents [hyp.] MAIS P0 catalogue d'abord et preuve
+  sur de vrais rendez-vous ; l'effet complet (AR) est en v2.
+
+**Pondération actée (Temps ×2, Rému ×2, dénominateur 7)** :
+`(6 + 8 + 7×2 + 8 + 6×2)/7 = 48/7 ≈` **6,9/10**.
+
+#### F. Benchmark obligatoire vs Renoboost IA
+
+Comme l'INTENDANT, **il ne rivalise pas : il démultiplie**. L'INTENDANT
+protège la marge en aval (chantier sans manquant) ; CHAMBRE CLAIRE la crée en
+amont (plus de chantiers signés, zéro projet invendable engagé). **Verdict
+tranché : candidate top 3 comme enabler commercial (rang 3, 6,9), devant
+PROTÉE au score** — mais la grille classe, la séquence décide : le build reste
+derrière INTENDANT → MYCÉLIUM (validée), insertion à arbitrer par Paul (⏳ en
+tête de registre). Synergie système : CHAMBRE CLAIRE signe → INTENDANT
+approvisionne → MYCÉLIUM transforme la victoire → PROTÉE industrialise.
+
+#### G. Provision d'exécution
+
+Cadrée en détail dans `CADRAGE-ADRAMELECH.md` §10 (sous-boucles CC-α → CC-δ) :
+`data-ingenieur` (catalogue + règles), `interface-ux`/`front-carto` (front
+rendez-vous mobile), `securite-auditeur`/`verificateur` (photos = PII éphémère,
+API `requireUser`). Automatisation n°1 : extraction PDF → table `produits`
+validée par Paul. Rien n'est lancé sans le go CC-α.
+
