@@ -251,3 +251,16 @@
   reproduire pour L2b (outils) et L3 (mémoire). ④ Angle mort consigné :
   S-L2-2 (injection de prompt via l'historique) devient un VRAI vecteur dès
   que la voix aura des outils — ré-audit obligatoire à l'ouverture de L2b.
+- 2026-07-20 (reprise + L2b les mains) — ① **Confirmé (2×)** : fetch+rebase
+  avant merge — la fusion de #60 a buté en 405 sur le RADAR annoté des deux
+  côtés ; réconciliation = garder les deux entrées, zéro perte. ② **Motif
+  validé** : « l'IA propose, le front exécute après confirmation via les API
+  déjà auditées » — zéro nouvelle surface d'écriture serveur ; à reproduire
+  pour tout futur outil de Léo (L3 mémoire incluse). ③ **Leçon de
+  contre-passe** : une carte de confirmation doit nommer la CIBLE RÉSOLUE,
+  pas la référence dictée (S-L2b-1 : « Marc » peut résoudre vers
+  « Jean-Marc Petit ») ; et une lecture indexée `obj[cle]` remonte le
+  prototype — toujours `hasOwnProperty` pour juger un champ (S-L2b-2).
+  ④ S-L2-2 : mitigation centrale fermée en L2b (proposition déterministe +
+  confirmation + cible affichée + RLS mono-owner) ; S-L2b-4 en vivier
+  (carte auto-vérifiante client si le serveur devenait hostile).

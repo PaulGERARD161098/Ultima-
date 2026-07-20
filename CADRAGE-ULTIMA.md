@@ -310,6 +310,22 @@
   smoke conversation stubée). **PR #60 (draft, porte aussi le front
   INTENDANT AD-5c-δ), fusion = go Paul.** Détail : CADRAGE-LEO-SITE §4.
   ⏳ Gate coût : clé API + plafond mensuel + env `ANTHROPIC_API_KEY` = Paul.
+- ✅ **Reprise 2026-07-20 (« clos les PR en rade, avance sur la suite de
+  Léo »)** : PR #59 (RADAR) fusionnée à froid ; PR en rade #25/#38/#39
+  closes (contenu livré autrement) ; **PR #60 L2 la voix FUSIONNÉE** (rebase
+  de réconciliation RADAR, squash `1fbd00f`) — muette tant que la clé n'est
+  pas posée ; fiche Notion resynchronisée (rattrapage du 19/07).
+- 🟡 **Boucle L2b — les mains de Léo (2026-07-20)** : agir sur dictée. Spec
+  `design/spec-l2b-mains.md` (§0 : l'IA PROPOSE, n'exécute jamais) ; tool use
+  sur /api/leo → proposition validée + reformulation déterministe serveur ;
+  carte de confirmation (cible RÉSOLUE nommée) ; Confirmer → le front exécute
+  via les API existantes (Bearer session, RLS) ; aucun outil de suppression.
+  Harnais unit-leo-mains (53) + unit-leo-voix (28) + smoke section C (33),
+  suite verte ×3. **Contre-passe securite-auditeur : GO** — S-L2b-1/2/3
+  fermés (`bb2ab3f`), S-L2b-4 (info, serveur de confiance) en vivier ;
+  ré-audit S-L2-2 : mitigation centrale fermée, résiduel clos par S-L2b-1.
+  **PR #61 draft — fusion = go Paul.** ⏳ Gate inchangée : `ANTHROPIC_API_KEY`
+  en env Vercel + plafond de dépense (débloque voix ET mains).
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 
