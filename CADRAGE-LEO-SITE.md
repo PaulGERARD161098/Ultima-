@@ -104,8 +104,9 @@ Le pop-up touche à terme PII réseau + finance + intime (§5 CADRAGE-CONSOLE) :
   du chemin exact `/adramelech` — **contre-passe securite-auditeur GO** (29
   attaques, zéro contournement) + réserves figées au harnais (2026-07-19).
   Harnais 20/20 verts.
-- **L2 — la voix (Jarvis conversationnel) 🔨 CONSTRUITE (2026-07-19), gate
-  clé restante** : route `POST /api/leo` (requireUser fail-closed → API
+- **L2 — la voix (Jarvis conversationnel) ✅ FUSIONNÉE (2026-07-20, PR #60,
+  rebase de réconciliation + squash `1fbd00f`), gate clé restante** :
+  route `POST /api/leo` (requireUser fail-closed → API
   Claude, clé `ANTHROPIC_API_KEY` en env Vercel uniquement, timeout 30 s,
   max_tokens 1024, historique borné 30×4000, prompt système Jarvis par
   quadrant SANS donnée personnelle, modèle serveur seulement — `LEO_MODELE`
@@ -117,8 +118,16 @@ Le pop-up touche à terme PII réseau + finance + intime (§5 CADRAGE-CONSOLE) :
   ne parle qu'une fois la clé posée par Paul en env Vercel (+ plafond de
   dépense côté console Anthropic). Antichambres BALTHAZAR GELD/IMLADRIK :
   muettes tant qu'elles n'ont pas d'auth (fail-closed voulu).
-- **L2b — les mains (agir sur dictée)** : tool use branché sur les API du
-  site (idées, INTENDANT, journal, relances), session de Paul uniquement,
+- **L2b — les mains (agir sur dictée) ✅ LIVRÉE ET FUSIONNÉE (2026-07-20,
+  PR #61, go Paul)** : tool use sur `/api/leo` → l'IA ne fait que PROPOSER
+  (proposition validée fail-closed + reformulation déterministe serveur) ;
+  carte de confirmation qui NOMME la cible résolue ; Confirmer → le front
+  exécute via les API existantes (Bearer session, RLS mono-owner) ; aucun
+  outil de suppression. Spec `design/spec-l2b-mains.md`. Contre-passe
+  securite-auditeur GO (S-L2b-1/2/3 fermés avec tests, S-L2b-4 info en
+  vivier) ; ré-audit S-L2-2 : résiduel clos. Cadrage d'origine : tool use
+  branché sur les API du site (idées, INTENDANT, journal, relances),
+  session de Paul uniquement,
   reformulation + confirmation avant toute écriture. C'est la marche qui
   transforme le majordome en **agent qui fait avancer le travail**.
 - **L3 — la mémoire apprenante** : table `leo_memoire` (gate migration),

@@ -391,3 +391,21 @@
   par session de navigation) — une présence persistante de Léo dans la page
   relève du volet « présence visuelle » différé. ⏳ Gate Paul : clé API +
   plafond de dépense + env Vercel `ANTHROPIC_API_KEY`.
+- **2026-07-20 (« Reprend » → « clos les PR en rade, avance sur la suite de
+  Léo » → « go fusion et puis on fait une pause »)** — Reprise : PR #59
+  (clôture RADAR) fusionnée à froid ; fiche Notion resynchronisée
+  (rattrapage 19/07). Sur dictée : PR en rade #25/#38/#39 closes (contenu
+  livré autrement) ; « avance sur la suite de Léo » interprété comme go du
+  chantier → **PR #60 L2 la voix FUSIONNÉE** (rebase de réconciliation,
+  conflit RADAR = garder les deux entrées) puis **boucle L2b les mains**
+  déroulée entière en session : spec Léo (`design/spec-l2b-mains.md`,
+  principe : l'IA PROPOSE, n'exécute jamais — exécution = front après
+  confirmation via les API existantes, Bearer session, RLS), implémentation
+  front-carto, contre-passe securite-auditeur GO après fermeture de
+  S-L2b-1 (cible résolue nommée sur la carte), S-L2b-2 (clés héritées du
+  prototype rejetées), S-L2b-3 (affiché = stocké) ; S-L2b-4 (info) en
+  vivier. Ré-audit S-L2-2 : résiduel clos. Suite verte ×3 (53+28+33
+  verdicts Léo). **PR #61 FUSIONNÉE sur « go fusion »** (`a953bc7`).
+  Léo-au-site : L0→L2b faits ; reste L3 mémoire (gate migration) — et la
+  GATE CLÉ (`ANTHROPIC_API_KEY` + plafond) qui allume voix et mains.
+  Pause actée par Paul en fin de session.
