@@ -262,18 +262,19 @@ await preparerPage(pageV);
 await pageV.goto(`${BASE}/traveler.html`, { waitUntil: 'load', timeout: 20000 });
 
 // Ouvre un cartouche AVEC voix (jeton de test — aucune vraie session requise).
-async function ouvrirCartoucheVoix(cle) {
-  await pageV.evaluate((cleQuadrant) => {
+// `candidats` optionnel (L2b) : résolution locale des cibles dictées.
+async function ouvrirCartoucheVoix(cle, candidats) {
+  await pageV.evaluate((params) => {
     document.querySelectorAll('.leo-voile').forEach((v) => v.remove());
     window.sessionStorage.clear();
     window.UltimaLeo.accueillirQuadrant({
-      quadrant: cleQuadrant,
+      quadrant: params.cle,
       blason: 'boussole',
       salutation: 'Scénario voix.',
       sections: [{ titre: 'Où on en est', lignes: ['—'] }],
-      voix: { quadrant: 'traveler', jeton: 'jeton-de-test' }
+      voix: { quadrant: 'traveler', jeton: 'jeton-de-test', candidats: params.candidats }
     });
-  }, cle);
+  }, { cle, candidats });
 }
 
 // C1. Réponse OK : Bearer + corps conformes, bulles Paul puis Léo.
@@ -334,6 +335,154 @@ verifier('Panne : bulle d’erreur générique', ((await pageV.locator('.leo-bul
 verifier('Panne : le texte dicté est restitué dans le champ',
   (await pageV.locator('.leo-voix-champ').inputValue()) === 'Message qui échoue');
 verifier('Panne : le champ est réarmé (saisissable)', await pageV.locator('.leo-voix-champ').isEnabled());
+
+// ===================== C4-C7. Les mains de Léo (L2b, API stubées) =====================
+// La carte de confirmation est un rendu DÉTERMINISTE de la reformulation
+// SERVEUR ; l'exécution ne part QUE sur « Confirmer », vers l'API d'écriture
+// existante (Bearer + corps exact du gabarit) ; « Annuler » n'appelle rien ;
+// ref ambiguë → confirmation impossible ; proposition malformée → pas de carte.
+const CANDIDATS_TEST = {
+  cibles: [
+    { id: 'aaaaaaaa-0000-0000-0000-000000000001', libelle: 'M. Lambert' },
+    { id: 'aaaaaaaa-0000-0000-0000-000000000002', libelle: 'M. Martin' }
+  ]
+};
+const REFORMULATION = 'Noter au journal de « M. Lambert » : « Appelé ce matin. »';
+
+function stubberLeoAvecProposition(proposition) {
+  return pageV.route('**/api/leo', (route) => route.fulfill({
+    status: 200, contentType: 'application/json',
+    body: JSON.stringify({ ok: true, data: { reponse: 'Je te propose ceci.', proposition } })
+  }));
+}
+
+// C4. Proposition valide → carte + Confirmer → POST exact + message d'issue.
+await pageV.unroute('**/api/leo');
+await stubberLeoAvecProposition({
+  outil: 'proposer_journal',
+  args: { cible_ref: 'Lambert', texte: 'Appelé ce matin.' },
+  reformulation: REFORMULATION
+});
+const requetesJournal = [];
+await pageV.route('**/api/reseau/journal', (route) => {
+  requetesJournal.push({
+    methode: route.request().method(),
+    autorisation: route.request().headers()['authorization'] || '',
+    corps: route.request().postDataJSON()
+  });
+  return route.fulfill({
+    status: 200, contentType: 'application/json',
+    body: JSON.stringify({ ok: true, data: { id: 'j-1' } })
+  });
+});
+await ouvrirCartoucheVoix('mains-ok', CANDIDATS_TEST);
+await pageV.locator('.leo-voix-champ').fill('Note que j’ai appelé Lambert ce matin.');
+await pageV.locator('.leo-voix-envoyer').click();
+await pageV.waitForSelector('.leo-carte-action', { timeout: 5000 });
+verifier('Carte de confirmation affichée', await pageV.locator('.leo-carte-action').count() === 1);
+verifier('La carte porte la reformulation SERVEUR (déterministe)',
+  ((await pageV.locator('.leo-carte-texte').textContent()) || '').trim() === REFORMULATION);
+verifier('Saisie coupée tant que la carte est ouverte',
+  await pageV.locator('.leo-voix-champ').isDisabled() && await pageV.locator('.leo-voix-envoyer').isDisabled());
+verifier('Boutons Confirmer + Annuler présents (≥ 44 px)', await pageV.evaluate(() => {
+  const c = document.querySelector('.leo-carte-confirmer');
+  const a = document.querySelector('.leo-carte-annuler');
+  return Boolean(c) && Boolean(a) &&
+    c.getBoundingClientRect().height >= 44 && a.getBoundingClientRect().height >= 44;
+}));
+verifier('Aucune exécution avant confirmation', requetesJournal.length === 0);
+await pageV.locator('.leo-carte-confirmer').click();
+await pageV.waitForSelector('.leo-bulle-issue', { timeout: 5000 });
+verifier('Confirmer → un POST vers /api/reseau/journal', requetesJournal.length === 1 &&
+  requetesJournal[0].methode === 'POST');
+verifier('Exécution avec le Bearer de session',
+  requetesJournal[0]?.autorisation === 'Bearer jeton-de-test');
+verifier('Corps EXACT du gabarit (id résolu localement + note dictée)',
+  JSON.stringify(requetesJournal[0]?.corps) === JSON.stringify({
+    node_id: 'aaaaaaaa-0000-0000-0000-000000000001', note: 'Appelé ce matin.'
+  }));
+verifier("Message d'issue « Action exécutée » (reformulation)",
+  ((await pageV.locator('.leo-bulle-issue').textContent()) || '') ===
+  '[Action exécutée : ' + REFORMULATION + ']');
+verifier('La carte se ferme et la saisie se réarme',
+  await pageV.locator('.leo-carte-action').count() === 0 &&
+  await pageV.locator('.leo-voix-champ').isEnabled());
+verifier("L'issue rejoint l'historique : elle repart au tour suivant", await (async () => {
+  const requetesSuite = [];
+  await pageV.unroute('**/api/leo');
+  await pageV.route('**/api/leo', (route) => {
+    requetesSuite.push(route.request().postDataJSON());
+    return route.fulfill({
+      status: 200, contentType: 'application/json',
+      body: JSON.stringify({ ok: true, data: { reponse: 'Bien noté.' } })
+    });
+  });
+  await pageV.locator('.leo-voix-champ').fill('Merci.');
+  await pageV.locator('.leo-voix-envoyer').click();
+  await pageV.waitForFunction(() =>
+    document.querySelectorAll('.leo-bulle-leo:not(.leo-bulle-attente)').length >= 2, { timeout: 5000 });
+  const messages = requetesSuite[0]?.messages || [];
+  return messages.some((m) => m.role === 'user' &&
+    m.content === '[Action exécutée : ' + REFORMULATION + ']');
+})());
+
+// C5. Annuler → AUCUN appel d'exécution + message d'annulation.
+await pageV.unroute('**/api/leo');
+await stubberLeoAvecProposition({
+  outil: 'proposer_journal',
+  args: { cible_ref: 'Lambert', texte: 'À annuler.' },
+  reformulation: 'Noter au journal de « M. Lambert » : « À annuler. »'
+});
+await ouvrirCartoucheVoix('mains-annulation', CANDIDATS_TEST);
+await pageV.locator('.leo-voix-champ').fill('Note un truc.');
+await pageV.locator('.leo-voix-envoyer').click();
+await pageV.waitForSelector('.leo-carte-action', { timeout: 5000 });
+const appelsAvantAnnulation = requetesJournal.length;
+await pageV.locator('.leo-carte-annuler').click();
+await pageV.waitForSelector('.leo-bulle-issue', { timeout: 5000 });
+verifier('Annuler → aucun POST d’exécution', requetesJournal.length === appelsAvantAnnulation);
+verifier("Message d'issue « Action annulée par Paul »",
+  ((await pageV.locator('.leo-bulle-issue').textContent()) || '') === '[Action annulée par Paul]');
+verifier('Annulation : carte fermée, saisie réarmée',
+  await pageV.locator('.leo-carte-action').count() === 0 &&
+  await pageV.locator('.leo-voix-champ').isEnabled());
+
+// C6. Référence ambiguë (« M. » touche Lambert ET Martin) → confirmation impossible.
+await pageV.unroute('**/api/leo');
+await stubberLeoAvecProposition({
+  outil: 'proposer_journal',
+  args: { cible_ref: 'M.', texte: 'Cible floue.' },
+  reformulation: 'Noter au journal de « M. » : « Cible floue. »'
+});
+await ouvrirCartoucheVoix('mains-ambigue', CANDIDATS_TEST);
+await pageV.locator('.leo-voix-champ').fill('Note pour M.');
+await pageV.locator('.leo-voix-envoyer').click();
+await pageV.waitForSelector('.leo-carte-action', { timeout: 5000 });
+verifier('Ref ambiguë : pas de bouton Confirmer (seul Annuler reste)',
+  await pageV.locator('.leo-carte-confirmer').count() === 0 &&
+  await pageV.locator('.leo-carte-annuler').count() === 1);
+verifier('Ref ambiguë : la carte le dit sobrement',
+  ((await pageV.locator('.leo-carte-blocage').textContent()) || '').includes('ambiguë'));
+await pageV.locator('.leo-carte-annuler').click();
+await pageV.waitForFunction(() => document.querySelector('.leo-carte-action') === null, { timeout: 5000 });
+
+// C7. Proposition malformée (args non-string) → IGNORÉE : bulle texte seule.
+await pageV.unroute('**/api/leo');
+await stubberLeoAvecProposition({
+  outil: 'proposer_journal',
+  args: { cible_ref: { $ne: null }, texte: 42 },
+  reformulation: 'Forme douteuse.'
+});
+await ouvrirCartoucheVoix('mains-malformee', CANDIDATS_TEST);
+await pageV.locator('.leo-voix-champ').fill('Message.');
+await pageV.locator('.leo-voix-envoyer').click();
+await pageV.waitForSelector('.leo-bulle-leo:not(.leo-bulle-attente)', { timeout: 5000 });
+verifier('Proposition malformée : aucune carte, seule la bulle texte',
+  await pageV.locator('.leo-carte-action').count() === 0 &&
+  ((await pageV.locator('.leo-bulle-leo:not(.leo-bulle-attente)').textContent()) || '')
+    .includes('Je te propose ceci.'));
+verifier('Proposition malformée : la saisie reste utilisable',
+  await pageV.locator('.leo-voix-champ').isEnabled());
 
 verifier('Zéro erreur console (voix)', erreursVoix.length === 0, erreursVoix.slice(0, 3).join(' | '));
 await pageV.close();

@@ -4,7 +4,13 @@
 // l'état déjà chargé par la page (jamais d'un second fetch de données).
 // Boucle L2 (la voix) : si l'appelant fournit une session réelle via
 // config.voix = { quadrant, jeton }, une zone « Parler à Léo » s'ajoute —
-// SEUL appel réseau du module, vers POST /api/leo (IA côté serveur).
+// appel réseau vers POST /api/leo (IA côté serveur).
+// Boucle L2b (les mains) : config.voix.candidats ({ cibles, chantiers,
+// idees, prochainAdrNum } — tableaux { id, libelle } minimaux, données déjà
+// chargées par le quadrant) permet d'exécuter, APRÈS confirmation explicite
+// de Paul sur une carte au rendu déterministe (reformulation serveur), la
+// proposition d'action de Léo via les API d'écriture EXISTANTES (Bearer de
+// session). L'IA ne fait que proposer ; aucun outil de suppression.
 // Fail-closed : pas de session → cartouche muet, comportement L1 inchangé.
 //
 // Deux entrées publiques :
@@ -210,6 +216,156 @@
       leadsActifs: leadsActifs,
       propositions: propositions.slice(0, 3)
     };
+  }
+
+  // ---------- Les mains de Léo (L2b) : résolution et gabarits (PURS) ----------
+
+  // Normalisation d'une référence dictée : accents ôtés, casse pliée,
+  // espaces réduits — comparaison tolérante mais DÉTERMINISTE.
+  function normaliserRef(texte) {
+    return String(texte || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  // Résolution déterministe d'une référence dictée vers un candidat local
+  // ({ id, libelle }) : égalité exacte d'abord, sinon inclusion UNIQUE.
+  // Plusieurs libellés d'un MÊME id (nom + numéro ADR-n) comptent pour un.
+  // 0 candidat → introuvable ; >1 → ambigu (jamais de choix hasardeux).
+  // → { ok:true, candidat } | { ok:false, raison:'introuvable'|'ambigu' }
+  function resoudreRef(ref, candidats) {
+    var cible = normaliserRef(ref);
+    if (!cible || !Array.isArray(candidats)) { return { ok: false, raison: 'introuvable' }; }
+    var valides = candidats.filter(function (c) {
+      return c && typeof c === 'object' &&
+        typeof c.id === 'string' && c.id.length > 0 &&
+        typeof c.libelle === 'string' && c.libelle.length > 0;
+    });
+    function departager(liste) {
+      var parId = {};
+      liste.forEach(function (c) { if (!parId[c.id]) { parId[c.id] = c; } });
+      var ids = Object.keys(parId);
+      if (ids.length === 1) { return { ok: true, candidat: parId[ids[0]] }; }
+      return { ok: false, raison: ids.length === 0 ? 'introuvable' : 'ambigu' };
+    }
+    var exacts = valides.filter(function (c) { return normaliserRef(c.libelle) === cible; });
+    if (exacts.length > 0) { return departager(exacts); }
+    var inclus = valides.filter(function (c) {
+      return normaliserRef(c.libelle).indexOf(cible) !== -1;
+    });
+    return departager(inclus);
+  }
+
+  // Garde-fou client : une proposition serveur doit porter outil (string),
+  // reformulation (string non vide) et args (objet de strings). Toute forme
+  // douteuse est IGNORÉE (fail-safe : jamais de carte douteuse).
+  function propositionRecevable(p) {
+    if (!p || typeof p !== 'object' || Array.isArray(p)) { return false; }
+    if (typeof p.outil !== 'string' || !p.outil) { return false; }
+    if (typeof p.reformulation !== 'string' || !p.reformulation.trim()) { return false; }
+    if (!p.args || typeof p.args !== 'object' || Array.isArray(p.args)) { return false; }
+    return Object.keys(p.args).every(function (cle) {
+      return typeof p.args[cle] === 'string';
+    });
+  }
+
+  // Gabarits d'exécution (L2b) : traduit une proposition confirmable en appel
+  // EXACT vers l'API d'écriture existante (contrats /api/idees/items,
+  // /api/intendant/besoins, /api/reseau/journal). PUR : aucun réseau ici.
+  // candidats = { cibles?, chantiers?, idees?, prochainAdrNum? } fournis par
+  // le quadrant appelant (données déjà chargées — jamais refetchées).
+  // → { ok:true, url, methode, corps } | { ok:false, raison } (raison
+  //   générique : 'introuvable' | 'ambigu' | 'invalide' — jamais de détail).
+  function construirePlanExecution(proposition, candidats) {
+    candidats = candidats || {};
+    var args = (proposition && proposition.args) || {};
+    var outil = proposition && proposition.outil;
+
+    if (outil === 'proposer_idee') {
+      // adr_num : imposé localement (prochain numéro du registre chargé).
+      var prochain = candidats.prochainAdrNum;
+      if (typeof prochain !== 'number' || !isFinite(prochain) ||
+          prochain < 1 || prochain !== Math.floor(prochain)) {
+        return { ok: false, raison: 'invalide' };
+      }
+      if (typeof args.titre !== 'string' || !args.titre) { return { ok: false, raison: 'invalide' }; }
+      // nom borné à 120 par l'API (le titre dicté peut aller à 160).
+      var corpsIdee = { adr_num: prochain, nom: tronquer(args.titre, 119), type: 'capture' };
+      if (args.theme) { corpsIdee.theme = args.theme; }
+      if (args.resume) { corpsIdee.essence = args.resume; }
+      return { ok: true, url: '/api/idees/items', methode: 'POST', corps: corpsIdee };
+    }
+
+    if (outil === 'proposer_enrichissement_idee') {
+      var idee = resoudreRef(args.idee_ref, candidats.idees);
+      if (!idee.ok) { return idee; }
+      if (typeof args.ajout !== 'string' || !args.ajout) { return { ok: false, raison: 'invalide' }; }
+      // ENRICHIR = ajouter à l'essence existante, jamais l'écraser (le
+      // catalogue L2b n'a aucun outil destructeur, l'écrasement en serait un).
+      var existante = typeof idee.candidat.essence === 'string' ? idee.candidat.essence.trim() : '';
+      var essence = existante ? existante + '\n\n' + args.ajout : args.ajout;
+      if (essence.length > 2000) { return { ok: false, raison: 'invalide' }; }
+      return {
+        ok: true, url: '/api/idees/items', methode: 'PATCH',
+        corps: { id: idee.candidat.id, essence: essence }
+      };
+    }
+
+    if (outil === 'proposer_besoin') {
+      var chantier = resoudreRef(args.chantier_ref, candidats.chantiers);
+      if (!chantier.ok) { return chantier; }
+      if (typeof args.libelle !== 'string' || !args.libelle) { return { ok: false, raison: 'invalide' }; }
+      var corpsBesoin = { chantier_id: chantier.candidat.id };
+      var designation = args.libelle;
+      // Quantité dictée : « 12 sacs » → quantité numérique + unité si
+      // lisibles ; sinon la mention rejoint la désignation (jamais perdue,
+      // jamais devinée). Règle déterministe, visible avant confirmation.
+      if (args.quantite) {
+        var morceaux = args.quantite.match(/^(\d+(?:[.,]\d+)?)\s*(.*)$/);
+        var nombre = morceaux ? Number(morceaux[1].replace(',', '.')) : NaN;
+        if (morceaux && isFinite(nombre) && nombre > 0 && morceaux[2].length <= 20) {
+          corpsBesoin.quantite = nombre;
+          if (morceaux[2]) { corpsBesoin.unite = morceaux[2]; }
+        } else {
+          designation += ' — ' + args.quantite;
+        }
+      }
+      // L'API des besoins n'a pas de champ d'échéance libre : la date dictée
+      // reste portée par la désignation (déterministe, lisible).
+      if (args.echeance) { designation += ' (pour le ' + dateLisible(args.echeance) + ')'; }
+      if (designation.length > 200) { return { ok: false, raison: 'invalide' }; }
+      corpsBesoin.designation = designation;
+      return { ok: true, url: '/api/intendant/besoins', methode: 'POST', corps: corpsBesoin };
+    }
+
+    if (outil === 'proposer_journal' || outil === 'proposer_relance') {
+      var cible = resoudreRef(args.cible_ref, candidats.cibles);
+      if (!cible.ok) { return cible; }
+      if (outil === 'proposer_journal') {
+        if (typeof args.texte !== 'string' || !args.texte) { return { ok: false, raison: 'invalide' }; }
+        return {
+          ok: true, url: '/api/reseau/journal', methode: 'POST',
+          corps: { node_id: cible.candidat.id, note: args.texte }
+        };
+      }
+      if (typeof args.echeance !== 'string' || !args.echeance) { return { ok: false, raison: 'invalide' }; }
+      // Contrat journal : une relance exige note + prochaine étape. La note
+      // dictée nourrit les deux ; à défaut, libellés déterministes sobres.
+      return {
+        ok: true, url: '/api/reseau/journal', methode: 'POST',
+        corps: {
+          node_id: cible.candidat.id,
+          note: args.note || ('Relance programmée pour le ' + dateLisible(args.echeance) + '.'),
+          prochaine_etape: args.note || 'Relancer',
+          relance_at: args.echeance
+        }
+      };
+    }
+
+    return { ok: false, raison: 'invalide' };
   }
 
   // ---------- Briques DOM (createElement/textContent uniquement) ----------
@@ -552,6 +708,95 @@
       }
     }
 
+    // L2b — carte de confirmation d'une action proposée. Rendu DÉTERMINISTE :
+    // la reformulation vient du serveur (gabarit, jamais la prose du modèle).
+    // Tant que la carte est ouverte, la saisie reste coupée (un seul fil,
+    // pas d'actions empilées). L'issue (exécutée / échouée / annulée) rejoint
+    // l'historique comme message utilisateur : le modèle l'apprend au tour
+    // suivant — jamais de tool_result dans la même requête.
+    function afficherCarte(proposition) {
+      var carte = el('div', 'leo-carte-action');
+      carte.setAttribute('role', 'group');
+      carte.setAttribute('aria-label', 'Action proposée par Léo — confirmation requise');
+      carte.appendChild(el('p', 'leo-carte-texte', proposition.reformulation));
+
+      // Résolution locale des cibles dictées + gabarit d'exécution (PUR).
+      var plan = construirePlanExecution(proposition, voix.candidats);
+      if (!plan.ok) {
+        carte.appendChild(el('p', 'leo-carte-blocage',
+          plan.raison === 'ambigu'
+            ? 'Cible ambiguë — précisez le nom, puis redictez l’action.'
+            : plan.raison === 'introuvable'
+              ? 'Cible introuvable — vérifiez le nom, puis redictez l’action.'
+              : 'Action impossible en l’état — reformulez-la.'));
+      }
+
+      var boutons = el('div', 'leo-carte-boutons');
+      var enTraitement = false;
+
+      // Ferme la carte et consigne l'issue (bulle sous aria-live + historique).
+      function clore(message) {
+        carte.remove();
+        historique.push({ role: 'user', content: message });
+        bulle('issue', message);
+        rearmer();
+      }
+
+      var annuler = el('button', 'leo-carte-annuler', 'Annuler');
+      annuler.type = 'button';
+      annuler.addEventListener('click', function () {
+        if (enTraitement) { return; }
+        clore('[Action annulée par Paul]');
+      });
+
+      // « Confirmer » n'existe que si le plan est exécutable : cible
+      // introuvable/ambiguë → seul « Annuler » reste actif (aucun choix
+      // hasardeux). L'exécution passe par l'API existante, Bearer de session.
+      if (plan.ok) {
+        var confirmer = el('button', 'leo-carte-confirmer', 'Confirmer');
+        confirmer.type = 'button';
+        confirmer.addEventListener('click', function () {
+          if (enTraitement) { return; }
+          enTraitement = true;
+          confirmer.disabled = true;
+          annuler.disabled = true;
+          fetch(plan.url, {
+            method: plan.methode,
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+              Authorization: 'Bearer ' + voix.jeton
+            },
+            body: JSON.stringify(plan.corps)
+          }).then(function (reponse) {
+            return reponse.json().then(function (corps) {
+              return { httpOk: reponse.ok, corps: corps };
+            }, function () {
+              return { httpOk: false, corps: null };
+            });
+          }).then(function (resultat) {
+            if (resultat.httpOk && resultat.corps && resultat.corps.ok === true) {
+              if (typeof voix.notifier === 'function') {
+                try { voix.notifier('Action de Léo exécutée.'); } catch (e) { /* fail-soft */ }
+              }
+              clore('[Action exécutée : ' + proposition.reformulation + ']');
+            } else {
+              // Erreur générique : jamais de détail technique dans le fil.
+              clore('[Action échouée, à reprendre]');
+            }
+          }, function () {
+            clore('[Action échouée, à reprendre]');
+          });
+        });
+        boutons.appendChild(confirmer);
+      }
+      boutons.appendChild(annuler);
+      carte.appendChild(boutons);
+      dialogue.appendChild(carte);
+      dialogue.scrollTop = dialogue.scrollHeight;
+      (plan.ok ? boutons.firstChild : annuler).focus();
+    }
+
     formulaire.addEventListener('submit', function (evenement) {
       evenement.preventDefault();
       var texte = champ.value.trim();
@@ -581,11 +826,22 @@
         });
       }).then(function (resultat) {
         attente.remove();
-        var texteLeo = resultat.corps && resultat.corps.ok === true &&
-          resultat.corps.data ? resultat.corps.data.reponse : null;
+        var data = resultat.corps && resultat.corps.ok === true ? resultat.corps.data : null;
+        var texteLeo = data && typeof data.reponse === 'string' ? data.reponse : null;
+        // L2b : proposition d'action — fail-safe : toute forme douteuse est
+        // ignorée (seule la bulle texte s'affiche, jamais de carte douteuse).
+        var proposition = data && propositionRecevable(data.proposition) ? data.proposition : null;
         if (typeof texteLeo === 'string' && texteLeo) {
           historique.push({ role: 'assistant', content: texteLeo });
           bulle('leo', texteLeo);
+        }
+        if (proposition) {
+          // La saisie reste coupée tant que la carte attend Paul (pas de rearmer).
+          afficherCarte(proposition);
+          return;
+        }
+        if (typeof texteLeo === 'string' && texteLeo) {
+          // Réponse texte simple : comportement L2 inchangé (bulle déjà rendue).
         } else if (resultat.statut === 503) {
           historique.pop();
           couperVoix("La voix de Léo n'est pas encore branchée (clé API en attente).");
@@ -675,6 +931,10 @@
   window.UltimaLeo = {
     calculerRecap: calculerRecap,
     accueillir: accueillir,
-    accueillirQuadrant: accueillirQuadrant
+    accueillirQuadrant: accueillirQuadrant,
+    // L2b (pures, testables) : résolution des références dictées + gabarits
+    // d'exécution vers les API existantes.
+    resoudreRef: resoudreRef,
+    construirePlanExecution: construirePlanExecution
   };
 })();

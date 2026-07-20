@@ -136,6 +136,30 @@
 
   // ---------- Cartouche Léo réflexif (registre ADRAMELECH) ----------
 
+  // L2b : candidats de résolution locale des idées dictées. Le nom ET le
+  // numéro (ADR-n, ADR-00n) pointent la même idée (un même id compte pour
+  // un seul candidat côté résolution) ; l'essence embarquée sert à ENRICHIR
+  // sans jamais écraser. Rien de tout cela ne part vers l'IA.
+  function candidatsIdees(idees) {
+    var liste = [];
+    var maxNum = 0;
+    (Array.isArray(idees) ? idees : []).forEach(function (idee) {
+      if (!idee || typeof idee.id !== 'string' || !idee.id) { return; }
+      var essence = typeof idee.essence === 'string' ? idee.essence : '';
+      if (idee.nom) { liste.push({ id: idee.id, libelle: idee.nom, essence: essence }); }
+      if (typeof idee.adr_num === 'number' && isFinite(idee.adr_num)) {
+        if (idee.adr_num > maxNum) { maxNum = idee.adr_num; }
+        liste.push({ id: idee.id, libelle: 'ADR-' + idee.adr_num, essence: essence });
+        liste.push({
+          id: idee.id,
+          libelle: 'ADR-' + String(idee.adr_num).padStart(3, '0'),
+          essence: essence
+        });
+      }
+    });
+    return { idees: liste, prochainAdrNum: maxNum + 1 };
+  }
+
   function saluerParLeo(idees, session) {
     if (!window.UltimaLeo || typeof window.UltimaLeo.accueillirQuadrant !== 'function') { return; }
     var bilan = calculerBilan(idees);
@@ -180,8 +204,13 @@
       propositions: propositions,
       propositionsVide: 'Rien à trancher aujourd’hui — l’archipel est en ordre.',
       // L2 : la voix (session déjà exigée par le flux — antichambre auth).
+      // L2b : candidats de résolution des idées dictées (locaux, minimaux).
       voix: (session && session.access_token)
-        ? { quadrant: 'adramelech', jeton: session.access_token }
+        ? {
+            quadrant: 'adramelech',
+            jeton: session.access_token,
+            candidats: candidatsIdees(idees)
+          }
         : null
     });
   }

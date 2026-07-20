@@ -2493,6 +2493,89 @@ textarea:focus-visible,
   border-style: dashed;
 }
 
+/* Issue d'une action (exécutée / échouée / annulée) : mention d'encre sobre. */
+.leo-bulle-issue {
+  align-self: center;
+  max-width: 100%;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--encre-sepia);
+  background: none;
+  border: none;
+  padding: 0.1rem 0.2rem;
+}
+
+/* ---- Les mains de Léo (L2b) : carte de confirmation d'action. ----
+   Cartouche de parchemin cerné d'or : la reformulation DÉTERMINISTE du
+   serveur, puis Confirmer / Annuler (≥ 44 px, accessibles clavier). */
+.leo-carte-action {
+  align-self: stretch;
+  margin: 0.2rem 0;
+  padding: 0.7rem 0.8rem;
+  background: linear-gradient(180deg, #fbf5e6, var(--parchemin));
+  border: 1px solid var(--or-antique);
+  border-radius: 4px;
+  box-shadow:
+    inset 0 0 0 3px rgba(169, 136, 74, 0.35),
+    0 1px 2px rgba(59, 47, 28, 0.18);
+}
+
+.leo-carte-texte {
+  margin: 0 0 0.55rem;
+  color: var(--encre-sepia);
+  font-size: 0.97rem;
+  line-height: 1.45;
+}
+
+/* Cible introuvable/ambiguë : l'action est bloquée, seul Annuler reste. */
+.leo-carte-blocage {
+  margin: 0 0 0.55rem;
+  font-style: italic;
+  font-size: 0.92rem;
+  color: var(--encre-sepia);
+}
+
+.leo-carte-boutons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+/* « Confirmer » : plaque encre/or (même registre que « Envoyer »). */
+.leo-carte-confirmer {
+  min-height: 44px;
+  padding: 0.45rem 1.1rem;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #f2e8cd;
+  background: linear-gradient(#1a5a78, #0e3a52);
+  border: 1.5px solid var(--or-antique);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.leo-carte-confirmer:hover { background: linear-gradient(#1f6787, #114560); }
+.leo-carte-confirmer:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* « Annuler » : plaque de parchemin sobre (action sans conséquence). */
+.leo-carte-annuler {
+  min-height: 44px;
+  padding: 0.45rem 1.1rem;
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--encre-sepia);
+  background: linear-gradient(180deg, var(--parchemin), var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.leo-carte-annuler:hover { border-color: var(--or-antique); }
+.leo-carte-annuler:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.leo-carte-confirmer:disabled, .leo-carte-annuler:disabled { opacity: 0.55; cursor: default; }
+
 .leo-voix-formulaire {
   display: flex;
   gap: 0.5rem;
