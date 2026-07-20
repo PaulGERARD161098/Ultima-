@@ -310,6 +310,23 @@
   smoke conversation stubée). **PR #60 (draft, porte aussi le front
   INTENDANT AD-5c-δ), fusion = go Paul.** Détail : CADRAGE-LEO-SITE §4.
   ⏳ Gate coût : clé API + plafond mensuel + env `ANTHROPIC_API_KEY` = Paul.
+- ✅ **Boucle L2b — les mains de Léo (2026-07-20)** : tool use sur /api/leo —
+  lectures (lire_idees, lire_intendant) exécutées sous RLS, minimisées et
+  plafonnées ; écritures (creer_idee, ecrire_journal, ajouter_besoin)
+  JAMAIS exécutées par l'IA : proposition → plaque de confirmation (cible
+  résolue SOUS RLS en libellé humain + contenu complet) → exécution sur
+  {confirme:true} seul, revalidée par les validateurs CRUD sous le JWT de
+  Paul. Aucune suppression v1. Ré-audit S-L2-2 : **GO**, ses 3 constats
+  (S-L2b-1 plaque incomplète [modéré], S-L2b-2 lectures non plafonnées,
+  S-L2b-3 durée) fermés même boucle. Harnais 27/27 verts. **PR #67
+  (draft), fusion = go Paul.**
+- ✅ **L3-① — cadrage mémoire + migration 0009 RÉDIGÉE (2026-07-20, go
+  Paul, escalade Opus signalée)** : cadrage v1 gravé (CADRAGE-LEO-SITE §4 —
+  table unique leo_memoire à 3 genres, écritures 100 % déterministes
+  serveur, l'IA sans aucun outil mémoire) ; SQL rédigé par data-ingenieur
+  (Opus), contre-passe de relecture Léo GO — **JAMAIS appliquée** :
+  application = gate Paul + contre-passe securite-auditeur (séquence ②),
+  puis branchement route (trace/résumé/bloc mémoire) et boucle preference.
 - Protocoles permanents de session : voir `CLAUDE.md`.
 - Sauvegarde permanente : fiche Notion « 📦 Repo Ultima- — Fiche projet ».
 

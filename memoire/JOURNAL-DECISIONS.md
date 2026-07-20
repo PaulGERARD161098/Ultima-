@@ -409,3 +409,17 @@
   Harnais : unit-leo-outils (parité CRUD, frontière lecture/écriture,
   client factice) + smoke C2b (proposition → plaque → confirmation ;
   annulation sans requête). Ré-audit S-L2-2 lancé (obligatoire, radar).
+- **2026-07-20 (fin de session — L2b fermée, L3-① rédigée)** — ① L2b :
+  ré-audit S-L2-2 GO ; constat central fermé même boucle (la plaque de
+  confirmation montre désormais TOUT : cible résolue sous RLS en libellé
+  humain, essence visible — le libellé reste côté plaque, l'historique IA
+  reste aux IDs). Lectures plafonnées (200 lignes, essence 300), durée
+  bornée (20 s × 3 tours, maxDuration 60 s posé dans vercel.json). PR #67.
+  ② PR #60 (L2 voix) fusionnée par Paul — L2 est en prod, muette tant que
+  la clé n'est pas posée (reportée : « on le fera plus tard »). ③ L3-① sur
+  go Paul (« go cadrage oui, utilise opus ») : cadrage mémoire v1 gravé +
+  migration 0009_leo_memoire.sql rédigée par data-ingenieur sur Opus
+  (escalade signalée), relecture Léo GO, JAMAIS appliquée. ④ Boucles
+  avançables sans gate : épuisées — tout le reste attend Paul (clé API,
+  fusion #67, application 0009). Notion : toujours bloquée en approbation
+  MCP (règle radar : consigné, pas d'acharnement).
