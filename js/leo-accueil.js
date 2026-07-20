@@ -291,9 +291,12 @@
           prochain < 1 || prochain !== Math.floor(prochain)) {
         return { ok: false, raison: 'invalide' };
       }
-      if (typeof args.titre !== 'string' || !args.titre) { return { ok: false, raison: 'invalide' }; }
-      // nom borné à 120 par l'API (le titre dicté peut aller à 160).
-      var corpsIdee = { adr_num: prochain, nom: tronquer(args.titre, 119), type: 'capture' };
+      // Borne alignée sur l'API (nom ≤ 120) : jamais de troncature silencieuse —
+      // ce que la carte affiche est exactement ce qui sera stocké [S-L2b-3].
+      if (typeof args.titre !== 'string' || !args.titre || args.titre.length > 119) {
+        return { ok: false, raison: 'invalide' };
+      }
+      var corpsIdee = { adr_num: prochain, nom: args.titre, type: 'capture' };
       if (args.theme) { corpsIdee.theme = args.theme; }
       if (args.resume) { corpsIdee.essence = args.resume; }
       return { ok: true, url: '/api/idees/items', methode: 'POST', corps: corpsIdee };
@@ -310,7 +313,8 @@
       if (essence.length > 2000) { return { ok: false, raison: 'invalide' }; }
       return {
         ok: true, url: '/api/idees/items', methode: 'PATCH',
-        corps: { id: idee.candidat.id, essence: essence }
+        corps: { id: idee.candidat.id, essence: essence },
+        cible: idee.candidat.libelle
       };
     }
 
@@ -338,7 +342,10 @@
       if (args.echeance) { designation += ' (pour le ' + dateLisible(args.echeance) + ')'; }
       if (designation.length > 200) { return { ok: false, raison: 'invalide' }; }
       corpsBesoin.designation = designation;
-      return { ok: true, url: '/api/intendant/besoins', methode: 'POST', corps: corpsBesoin };
+      return {
+        ok: true, url: '/api/intendant/besoins', methode: 'POST',
+        corps: corpsBesoin, cible: chantier.candidat.libelle
+      };
     }
 
     if (outil === 'proposer_journal' || outil === 'proposer_relance') {
@@ -348,7 +355,8 @@
         if (typeof args.texte !== 'string' || !args.texte) { return { ok: false, raison: 'invalide' }; }
         return {
           ok: true, url: '/api/reseau/journal', methode: 'POST',
-          corps: { node_id: cible.candidat.id, note: args.texte }
+          corps: { node_id: cible.candidat.id, note: args.texte },
+          cible: cible.candidat.libelle
         };
       }
       if (typeof args.echeance !== 'string' || !args.echeance) { return { ok: false, raison: 'invalide' }; }
@@ -361,7 +369,8 @@
           note: args.note || ('Relance programmée pour le ' + dateLisible(args.echeance) + '.'),
           prochaine_etape: args.note || 'Relancer',
           relance_at: args.echeance
-        }
+        },
+        cible: cible.candidat.libelle
       };
     }
 
@@ -722,6 +731,12 @@
 
       // Résolution locale des cibles dictées + gabarit d'exécution (PUR).
       var plan = construirePlanExecution(proposition, voix.candidats);
+      // S-L2b-1 : la référence dictée peut différer du libellé de
+      // l'enregistrement résolu (résolution par inclusion unique). La carte
+      // nomme TOUJOURS la cible réelle avant que « Confirmer » n'existe.
+      if (plan.ok && plan.cible) {
+        carte.appendChild(el('p', 'leo-carte-cible', '→ Cible : « ' + plan.cible + ' »'));
+      }
       if (!plan.ok) {
         carte.appendChild(el('p', 'leo-carte-blocage',
           plan.raison === 'ambigu'

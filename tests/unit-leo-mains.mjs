@@ -262,6 +262,51 @@ verdicts.planRefIntrouvable = (() => {
 verdicts.planOutilInconnu = construirePlanExecution(
   { outil: 'supprimer_noeud', args: {} }, CAND_TRAVELER).ok === false;
 
+// ---------- 8. Fermetures de la contre-passe sécurité (S-L2b-1/2/3) ----------
+// S-L2b-2 : une clé héritée d'Object.prototype est un surnuméraire comme un
+// autre — rejet total, jamais de lecture qui remonte le prototype.
+verdicts.surnumerairePrototype =
+  validerProposition('proposer_idee', { titre: 'X', constructor: 'y' }, 'adramelech').ok === false &&
+  validerProposition('proposer_idee', { titre: 'X', toString: 'y' }, 'adramelech').ok === false &&
+  validerProposition('proposer_idee', { titre: 'X', hasOwnProperty: 'y' }, 'adramelech').ok === false &&
+  validerProposition('proposer_idee',
+    JSON.parse('{"titre":"X","__proto__":{"pollue":"y"}}'), 'adramelech').ok === false;
+// S-L2b-3 : le titre confirmé est EXACTEMENT le titre stocké (borne API 120,
+// validation 119) — plus aucune troncature silencieuse dans le gabarit.
+verdicts.titreBorneApi =
+  validerProposition('proposer_idee', { titre: 'x'.repeat(119) }, 'adramelech').ok === true &&
+  validerProposition('proposer_idee', { titre: 'x'.repeat(120) }, 'adramelech').ok === false;
+verdicts.planIdeeSansTroncature = (() => {
+  const long = 'x'.repeat(119);
+  const p = construirePlanExecution(
+    { outil: 'proposer_idee', args: { titre: long } }, { prochainAdrNum: 1 });
+  const trop = construirePlanExecution(
+    { outil: 'proposer_idee', args: { titre: 'x'.repeat(130) } }, { prochainAdrNum: 1 });
+  return p.ok === true && p.corps.nom === long && trop.ok === false;
+})();
+// S-L2b-1 : le plan NOMME le candidat résolu — la référence dictée peut
+// différer du libellé réel (résolution par inclusion unique).
+verdicts.planPorteCible = (() => {
+  const p = construirePlanExecution(
+    { outil: 'proposer_journal', args: { cible_ref: 'Marc', texte: 'Note.' } },
+    { cibles: [{ id: 'n-9', libelle: 'Jean-Marc Petit' }] });
+  return p.ok === true && p.corps.node_id === 'n-9' && p.cible === 'Jean-Marc Petit';
+})();
+verdicts.planCiblePartout = (() => {
+  const r = construirePlanExecution(
+    { outil: 'proposer_relance', args: { cible_ref: 'Lambert', echeance: '2026-08-01' } },
+    CAND_TRAVELER);
+  const b = construirePlanExecution(
+    { outil: 'proposer_besoin', args: { chantier_ref: 'Voltaire', libelle: 'Sacs de chaux' } },
+    CAND_TRAVELER);
+  const e = construirePlanExecution(
+    { outil: 'proposer_enrichissement_idee', args: { idee_ref: 'ADR-3', ajout: 'X' } },
+    { idees: [{ id: 'i-3', libelle: 'ADR-3', essence: '' }] });
+  return r.ok === true && r.cible === 'M. Lambert' &&
+    b.ok === true && b.cible === 'Réhabilitation immeuble Voltaire' &&
+    e.ok === true && e.cible === 'ADR-3';
+})();
+
 // ---------- Bilan ----------
 console.log(JSON.stringify(verdicts, null, 2));
 const ok = Object.values(verdicts).every((v) => v === true);

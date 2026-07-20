@@ -65,7 +65,9 @@ const CATALOGUE = {
     description: "Proposer la capture d'une idée nouvelle dictée par Paul " +
       "dans l'archipel (bibliothèque d'idées). Rien n'est créé avant sa confirmation.",
     args: {
-      titre: { max: 160, requis: true, description: "Titre de l'idée, fidèle à la dictée." },
+      // 119 = borne `nom` de l'API idées (120) moins la marge de sûreté :
+      // le titre confirmé est EXACTEMENT le titre stocké, jamais tronqué [S-L2b-3].
+      titre: { max: 119, requis: true, description: "Titre de l'idée, fidèle à la dictée." },
       resume: { max: 2000, description: 'Résumé dicté, sans rien inventer.' },
       theme: { max: 80, description: 'Thème dicté (optionnel).' }
     }
@@ -168,7 +170,10 @@ export function validerProposition(nomOutil, args, quadrant) {
 
   const propres = {};
   for (const cle of Object.keys(args)) {
-    const attendu = outil.args[cle];
+    // Lecture par hasOwnProperty : une clé héritée d'Object.prototype
+    // (constructor, toString…) est un surnuméraire comme un autre [S-L2b-2].
+    const attendu = Object.prototype.hasOwnProperty.call(outil.args, cle)
+      ? outil.args[cle] : undefined;
     if (!attendu) return { ok: false }; // champ surnuméraire → rejet total
     const valeur = args[cle];
     if (typeof valeur !== 'string') return { ok: false };

@@ -2527,6 +2527,15 @@ textarea:focus-visible,
   line-height: 1.45;
 }
 
+/* La cible RÉSOLUE, nommée avant confirmation [S-L2b-1] : ce que Paul lit
+   est l'enregistrement qui sera réellement écrit. */
+.leo-carte-cible {
+  margin: 0 0 0.55rem;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--encre-sepia);
+}
+
 /* Cible introuvable/ambiguë : l'action est bloquée, seul Annuler reste. */
 .leo-carte-blocage {
   margin: 0 0 0.55rem;

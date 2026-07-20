@@ -382,6 +382,9 @@ await pageV.waitForSelector('.leo-carte-action', { timeout: 5000 });
 verifier('Carte de confirmation affichée', await pageV.locator('.leo-carte-action').count() === 1);
 verifier('La carte porte la reformulation SERVEUR (déterministe)',
   ((await pageV.locator('.leo-carte-texte').textContent()) || '').trim() === REFORMULATION);
+verifier('La carte nomme la cible RÉSOLUE avant tout POST [S-L2b-1]',
+  ((await pageV.locator('.leo-carte-cible').textContent()) || '').includes('M. Lambert') &&
+  requetesJournal.length === 0);
 verifier('Saisie coupée tant que la carte est ouverte',
   await pageV.locator('.leo-voix-champ').isDisabled() && await pageV.locator('.leo-voix-envoyer').isDisabled());
 verifier('Boutons Confirmer + Annuler présents (≥ 44 px)', await pageV.evaluate(() => {
@@ -461,6 +464,8 @@ await pageV.waitForSelector('.leo-carte-action', { timeout: 5000 });
 verifier('Ref ambiguë : pas de bouton Confirmer (seul Annuler reste)',
   await pageV.locator('.leo-carte-confirmer').count() === 0 &&
   await pageV.locator('.leo-carte-annuler').count() === 1);
+verifier('Ref ambiguë : aucune cible affichée [S-L2b-1]',
+  await pageV.locator('.leo-carte-cible').count() === 0);
 verifier('Ref ambiguë : la carte le dit sobrement',
   ((await pageV.locator('.leo-carte-blocage').textContent()) || '').includes('ambiguë'));
 await pageV.locator('.leo-carte-annuler').click();
