@@ -251,3 +251,17 @@
   reproduire pour L2b (outils) et L3 (mémoire). ④ Angle mort consigné :
   S-L2-2 (injection de prompt via l'historique) devient un VRAI vecteur dès
   que la voix aura des outils — ré-audit obligatoire à l'ouverture de L2b.
+- 2026-07-20 (L2b les mains — bouclée) — ① **Ré-audit S-L2-2 tenu** (la règle
+  du radar a fonctionné) : verdict GO, l'injection ne peut que PROPOSER,
+  jamais exécuter ; son constat central (S-L2b-1, plaque de confirmation
+  incomplète) fermé même boucle — leçon générale : **le point de contrôle
+  humain doit montrer TOUT ce qui sera écrit, cible comprise**, sinon la
+  confirmation ne protège rien. ② Motif consolidé : résolution de cible
+  SOUS RLS au moment de la proposition = triple gain (plaque lisible,
+  preuve de propriété précoce, jamais de plaque aveugle) ; les libellés
+  résolus restent côté client, l'historique IA reste aux IDs. ③ Angle mort
+  restant (auditeur) : re-prouver en conditions réelles, à la première
+  utilisation avec clé, que l'insert pose bien owner_id (défaut auth.uid()
+  des migrations) et le comportement du SDK sur tool_use multiples —
+  vérification prod à faire au branchement de la voix. ④ Prochaines
+  marches Léo : L3 mémoire (migration → gate), présence visuelle (différé).
