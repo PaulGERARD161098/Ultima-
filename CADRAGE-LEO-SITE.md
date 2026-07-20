@@ -121,6 +121,24 @@ Le pop-up touche à terme PII réseau + finance + intime (§5 CADRAGE-CONSOLE) :
   site (idées, INTENDANT, journal, relances), session de Paul uniquement,
   reformulation + confirmation avant toute écriture. C'est la marche qui
   transforme le majordome en **agent qui fait avancer le travail**.
+  **Contrat v1 (cadré 2026-07-20, « continue le travail »)** :
+  - **Outils LECTURE** (exécutés en direct dans la boucle serveur, client
+    RLS de Paul) : `lire_idees` (registre + ponts), `lire_intendant`
+    (chantiers, besoins, alertes J-2). Lectures libres, cadrage §2-3bis.
+  - **Outils ÉCRITURE** (jamais exécutés par l'IA) : `creer_idee`,
+    `ecrire_journal` (note + relance sur un contact), `ajouter_besoin`
+    (INTENDANT). Quand l'IA appelle un outil d'écriture, la boucle
+    S'ARRÊTE : la route renvoie `{ reponse, action: {outil, arguments,
+    resume} }` — la reformulation de Léo + une plaque de confirmation dans
+    le cartouche. **L'exécution n'a lieu que sur un second appel portant
+    l'action confirmée**, revalidée par les MÊMES validateurs que les
+    endpoints CRUD et exécutée sous le JWT de Paul (aucune escalade : même
+    autorité que les API directes). La confirmation est déterministe (pas
+    de second appel IA = pas de coût, pas de surface).
+  - **Aucune suppression en v1** (la double confirmation viendra avec).
+  - Boucle serveur bornée (3 appels IA max par tour), `adr_num` calculé
+    serveur, arguments d'outils strippés/validés, S-L2-2 ré-audité
+    (obligatoire, radar 2026-07-19 ④).
 - **L3 — la mémoire apprenante** : table `leo_memoire` (gate migration),
   boucle d'apprentissage (valide/refuse → préférences), résumé par quadrant
   re-servi au retour. C'est L3 qui fait de L1+L2 un vrai Jarvis.

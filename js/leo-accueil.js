@@ -505,6 +505,10 @@
   // chaque tour (l'API est sans état). Erreurs : 503 = voix pas encore
   // branchée (gate coût) → la zone se retire proprement ; autre échec →
   // message générique, le texte dicté est restitué dans le champ.
+  // L2b (les mains) : quand la réponse porte une `action` (proposition
+  // d'écriture), une plaque de confirmation s'affiche — RIEN ne s'écrit
+  // sans le clic « Confirmer » de Paul (l'annulation est consignée à
+  // l'historique pour que Léo le sache). Une action à la fois.
   function construireVoix(voix) {
     var section = el('section', 'leo-section leo-section-voix');
     section.appendChild(sousTitre('Parler à Léo'));
@@ -552,6 +556,68 @@
       }
     }
 
+    // Plaque de confirmation d'une action proposée par Léo (L2b). Le champ
+    // reste gelé tant que Paul n'a pas tranché (une action à la fois).
+    function proposerAction(action) {
+      var plaque = el('div', 'leo-action');
+      plaque.appendChild(el('p', 'leo-action-resume', action.resume || ''));
+      var boutons = el('div', 'leo-action-boutons');
+      var confirmer = el('button', 'leo-action-confirmer', 'Confirmer');
+      confirmer.type = 'button';
+      var annuler = el('button', 'leo-action-annuler', 'Annuler');
+      annuler.type = 'button';
+      boutons.appendChild(confirmer);
+      boutons.appendChild(annuler);
+      plaque.appendChild(boutons);
+      dialogue.appendChild(plaque);
+      dialogue.scrollTop = dialogue.scrollHeight;
+
+      function clore(noteHistorique, texteLeo) {
+        plaque.remove();
+        historique.push({ role: 'assistant', content: noteHistorique });
+        bulle('leo', texteLeo);
+        rearmer();
+      }
+
+      annuler.addEventListener('click', function () {
+        clore('[Action annulée par Paul : ' + (action.resume || action.outil) + ']',
+          'Bien reçu, on annule.');
+      });
+
+      confirmer.addEventListener('click', function () {
+        confirmer.disabled = true;
+        annuler.disabled = true;
+        fetch('/api/leo', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + voix.jeton
+          },
+          body: JSON.stringify({
+            quadrant: voix.quadrant,
+            action: { outil: action.outil, arguments: action.arguments },
+            confirme: true
+          })
+        }).then(function (reponse) {
+          return reponse.json().then(function (corps) { return corps; },
+            function () { return null; });
+        }).then(function (corps) {
+          var texteLeo = corps && corps.ok === true && corps.data
+            ? corps.data.reponse : null;
+          if (typeof texteLeo === 'string' && texteLeo) {
+            clore(texteLeo, texteLeo);
+          } else {
+            clore('[Action refusée par le serveur : ' + (action.resume || action.outil) + ']',
+              "L'action n'a pas pu s'appliquer — reformule ou réessaie.");
+          }
+        }, function () {
+          clore('[Action en échec réseau : ' + (action.resume || action.outil) + ']',
+            "L'action n'a pas pu s'appliquer — réessaie.");
+        });
+      });
+    }
+
     formulaire.addEventListener('submit', function (evenement) {
       evenement.preventDefault();
       var texte = champ.value.trim();
@@ -581,11 +647,18 @@
         });
       }).then(function (resultat) {
         attente.remove();
-        var texteLeo = resultat.corps && resultat.corps.ok === true &&
-          resultat.corps.data ? resultat.corps.data.reponse : null;
+        var donnees = resultat.corps && resultat.corps.ok === true &&
+          resultat.corps.data ? resultat.corps.data : null;
+        var texteLeo = donnees ? donnees.reponse : null;
         if (typeof texteLeo === 'string' && texteLeo) {
           historique.push({ role: 'assistant', content: texteLeo });
           bulle('leo', texteLeo);
+          // L2b : une proposition d'action gèle le champ jusqu'à décision.
+          if (donnees.action && typeof donnees.action.outil === 'string') {
+            enCours = true;
+            proposerAction(donnees.action);
+            return;
+          }
         } else if (resultat.statut === 503) {
           historique.pop();
           couperVoix("La voix de Léo n'est pas encore branchée (clé API en attente).");

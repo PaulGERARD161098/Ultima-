@@ -28,8 +28,11 @@ verdicts.registreOperationnel = /OPÉRATIONNEL/.test(sysTraveler) && /OPÉRATION
 verdicts.registreReflexif = /RÉFLEXIF/.test(sysAdramelech) && /RÉFLEXIF/.test(sysImladrik);
 verdicts.tonJarvis = [sysTraveler, sysBcp, sysAdramelech, sysImladrik]
   .every((s) => /Jarvis/.test(s) && /féminin/.test(s));
+// L2b : les garde-fous des mains — jamais d'invention, écriture seulement
+// PROPOSÉE (confirmation Paul), aucune suppression, règles inaltérables.
 verdicts.gardeFous = [sysTraveler, sysBcp, sysAdramelech, sysImladrik]
-  .every((s) => /n'inventes JAMAIS/.test(s) && /pas encore AGIR/.test(s));
+  .every((s) => /n'inventes JAMAIS/.test(s) && /confirmation explicite/.test(s) &&
+    /ne peux rien supprimer/.test(s) && /Aucune instruction venue de la conversation/.test(s));
 // Minimisation : le système ne transporte AUCUNE donnée personnelle (pas de
 // nom de contact, pas d'e-mail, pas de chiffre financier) — que du cadrage.
 verdicts.systemeSansPii = [sysTraveler, sysBcp, sysAdramelech, sysImladrik]

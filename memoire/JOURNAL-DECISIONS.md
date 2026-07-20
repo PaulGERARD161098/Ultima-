@@ -391,3 +391,21 @@
   par session de navigation) — une présence persistante de Léo dans la page
   relève du volet « présence visuelle » différé. ⏳ Gate Paul : clé API +
   plafond de dépense + env Vercel `ANTHROPIC_API_KEY`.
+- **2026-07-20 (« continue le travail » — L2b les mains, construite)** — Paul
+  reporte la pose de la clé API (« on le fera plus tard ») et demande de
+  continuer : la marche suivante du cadrage Léo-au-site est construite.
+  **Contrat L2b v1** (gravé au cadrage §4) : outils de LECTURE exécutés en
+  direct sous le client RLS (lire_idees, lire_intendant — résultats
+  minimisés) ; outils d'ÉCRITURE (creer_idee, ecrire_journal,
+  ajouter_besoin) JAMAIS exécutés par l'IA — la route s'arrête et renvoie
+  une proposition {action, resume}, l'exécution n'a lieu que sur le second
+  appel {confirme:true}, revalidé par les MÊMES validateurs que les
+  endpoints CRUD et exécuté sous le JWT de Paul (aucune escalade — même
+  autorité que les API directes). Confirmation déterministe (zéro appel
+  IA). adr_num attribué serveur. Aucune suppression en v1. Front : plaque
+  de confirmation dans le cartouche, champ gelé (une action à la fois),
+  annulation consignée à l'historique. Boucle IA bornée à 3 tours. Prompt
+  système durci (anti-injection : règles inaltérables par la conversation).
+  Harnais : unit-leo-outils (parité CRUD, frontière lecture/écriture,
+  client factice) + smoke C2b (proposition → plaque → confirmation ;
+  annulation sans requête). Ré-audit S-L2-2 lancé (obligatoire, radar).

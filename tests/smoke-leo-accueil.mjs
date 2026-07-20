@@ -323,6 +323,75 @@ verifier('503 : note sincère « pas encore branchée »',
   ((await pageV.locator('.leo-section-voix .leo-vide').textContent()) || '').includes('pas encore branchée'));
 verifier('503 : le cartouche, lui, reste ouvert', await pageV.locator('#leo-cartouche').count() === 1);
 
+// C2b. Les mains (L2b) : une proposition d'action ouvre la plaque de
+// confirmation — rien ne part tant que Paul n'a pas cliqué ; « Confirmer »
+// envoie {action, confirme:true} ; « Annuler » consigne à l'historique.
+await pageV.unroute('**/api/leo');
+const requetesAction = [];
+await pageV.route('**/api/leo', (route) => {
+  const corps = route.request().postDataJSON();
+  requetesAction.push(corps);
+  if (corps.action) {
+    return route.fulfill({
+      status: 200, contentType: 'application/json',
+      body: JSON.stringify({ ok: true, data: {
+        reponse: 'C’est fait. Capturer l\'idée « Serre mobile » (business) au registre ADRAMELECH.',
+        action_executee: { outil: 'creer_idee', resultat: { adr_num: 5 } }
+      } })
+    });
+  }
+  return route.fulfill({
+    status: 200, contentType: 'application/json',
+    body: JSON.stringify({ ok: true, data: {
+      reponse: 'Je capture « Serre mobile » (business) — je confirme ?',
+      action: {
+        outil: 'creer_idee',
+        arguments: { nom: 'Serre mobile', type: 'business' },
+        resume: 'Capturer l\'idée « Serre mobile » (business) au registre ADRAMELECH.'
+      }
+    } })
+  });
+});
+await ouvrirCartoucheVoix('voix-action');
+await pageV.locator('.leo-voix-champ').fill('Capture une idée : serre mobile');
+await pageV.locator('.leo-voix-envoyer').click();
+await pageV.waitForSelector('.leo-action', { timeout: 5000 });
+verifier('Proposition : plaque de confirmation affichée',
+  ((await pageV.locator('.leo-action-resume').textContent()) || '').includes('Serre mobile'));
+verifier('Proposition : le champ est gelé (une action à la fois)',
+  !(await pageV.locator('.leo-voix-champ').isEnabled()));
+verifier('Proposition : AUCUNE écriture envoyée sans clic',
+  requetesAction.length === 1 && requetesAction[0].action === undefined);
+await pageV.locator('.leo-action-confirmer').click();
+await pageV.waitForFunction(() => document.querySelector('.leo-action') === null, { timeout: 5000 });
+verifier('Confirmation : {action, confirme:true} envoyés',
+  requetesAction.length === 2 && requetesAction[1].confirme === true &&
+  requetesAction[1].action?.outil === 'creer_idee' &&
+  requetesAction[1].action?.arguments?.nom === 'Serre mobile' &&
+  requetesAction[1].messages === undefined);
+verifier('Confirmation : bulle « C’est fait »',
+  (await pageV.locator('.leo-bulle-leo:not(.leo-bulle-attente)').allTextContents())
+    .some((t) => t.includes('C’est fait')));
+verifier('Confirmation : le champ est réarmé', await pageV.locator('.leo-voix-champ').isEnabled());
+
+// Annulation : plaque retirée, rien envoyé de plus, historique consigné.
+await pageV.locator('.leo-voix-champ').fill('Encore une idée : four solaire');
+await pageV.locator('.leo-voix-envoyer').click();
+await pageV.waitForSelector('.leo-action', { timeout: 5000 });
+const envoisAvantAnnulation = requetesAction.length;
+await pageV.locator('.leo-action-annuler').click();
+verifier('Annulation : plaque retirée sans requête',
+  await pageV.locator('.leo-action').count() === 0 &&
+  requetesAction.length === envoisAvantAnnulation);
+await pageV.locator('.leo-voix-champ').fill('Où en est le registre ?');
+await pageV.locator('.leo-voix-envoyer').click();
+await pageV.waitForFunction((n) => {
+  return document.querySelectorAll('.leo-bulle-paul').length === n;
+}, 3, { timeout: 5000 });
+verifier("Annulation : consignée à l'historique du tour suivant",
+  JSON.stringify(requetesAction[requetesAction.length - 1].messages || [])
+    .includes('Action annulée par Paul'));
+
 // C3. Panne réseau : bulle d'erreur générique, texte dicté restitué au champ.
 await pageV.unroute('**/api/leo');
 await pageV.route('**/api/leo', (route) => route.abort());
