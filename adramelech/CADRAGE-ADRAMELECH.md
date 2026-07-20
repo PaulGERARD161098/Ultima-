@@ -440,3 +440,99 @@ Renoboost IA**, pas dans la bibliothèque d'idées. ADRAMELECH a fait son travai
 (capter → analyser → trancher) ; le build est une **diplomation hors du quadrant
 idées**. Ce cadrage AD-5c reste ici par continuité, mais l'exécution et la
 mémoire opérationnelle de l'INTENDANT relèvent du socle.
+
+## 10. AD-6 — cadrage CHAMBRE CLAIRE (ADR-005) : l'outil de vente en rendez-vous
+
+> Cadrage pur (directive EB : cadrer avant de coder — **rien n'est codé ici**,
+> décision Paul 2026-07-20 « on reste sur cadrage et renseignement dans
+> ADRAMELECH »). Source : fiche ADR-005 dans `IDEES.md`. **Escalade Opus 4.8
+> demandée par Paul et signalée** (décision d'archi). Comme l'INTENDANT (§9.7),
+> CHAMBRE CLAIRE est un outil du socle : ADRAMELECH capte et cadre, l'exécution
+> relèvera de l'orbite TRAVELER / Renoboost IA.
+
+### 10.1 Décisions déjà actées (Paul, 2026-07-20)
+
+1. **Claude au cœur, photos en v1** — l'API Claude n'ingère pas la vidéo ;
+   Gemini seulement si l'ingestion de vidéo brute devient nécessaire (brique
+   isolée, jamais socle). Le « temps réel » (incrustation à l'échelle) = AR du
+   téléphone (RoomPlan/ARCore), reporté en v2.
+2. **Extension d'Ultima** (directive JL) — pas d'application à côté ; l'outil
+   s'accroche à la fiche chantier/lead TRAVELER et Léo l'orchestre.
+3. **Faisabilité via le catalogue IceStream** — le verdict de pose fait partie
+   du produit dès la v1.
+
+### 10.2 Périmètre v1 — « l'œil du rendez-vous » (photos, pas d'AR)
+
+Depuis une fiche chantier/lead TRAVELER, en rendez-vous :
+1. **Photos de la pièce** (prises ou chargées au téléphone).
+2. **Analyse Claude (vision)** : lecture de la pièce — mur candidat,
+   contraintes visibles (hauteur, obstacles, passage des liaisons,
+   évacuation condensats, position possible de l'unité extérieure) ; les
+   mesures clés sont **confirmées par Paul** (l'IA propose, Paul valide).
+3. **Trois sorties, lisibles en rendez-vous** :
+   - **Recommandation produit** depuis le catalogue IceStream (dimensionnement
+     puissance selon volume estimé de la pièce, produits compatibles).
+   - **Verdict de faisabilité** : `faisable` / `faisable sous condition` /
+     `non faisable`, toujours **motivé**.
+   - **Estimation** en fourchette (matériel + pose) — une estimation, PAS un
+     devis contractuel.
+
+**Hors v1, explicitement** : AR / incrustation 3D (v2, gate produit) ; vidéo
+(Gemini, seulement sur preuve que les photos ne suffisent pas) ; devis signable
+(v3) ; tout stockage définitif des photos (cf. §10.4).
+
+### 10.3 Préalable P0 — le catalogue IceStream en données
+
+Le moteur de faisabilité n'existe que si le catalogue est **structuré** :
+par produit — référence, libellé, type (mono/multisplit…), dimensions unité
+intérieure/extérieure, puissances froid/chaud, contraintes de pose
+(dégagements, longueur et dénivelé max des liaisons, poids/support,
+alimentation), prix indicatifs. Modèle : table `produits` RLS mono-owner en
+miroir des motifs 0007/0008, SQL **drafté par `data-ingenieur`, jamais appliqué
+seul** (gate). ✅ **Acté (Paul, 2026-07-20) : le catalogue existe en PDF** →
+voie d'entrée = extraction depuis le PDF (Claude lit le PDF nativement) vers
+la table `produits`, chaque fiche extraite **validée par Paul avant insertion**
+(zéro donnée catalogue inventée).
+
+### 10.4 Sécurité (surface relevée)
+
+- **Photos de l'intérieur du domicile d'un client = PII sensible.** Jamais
+  servies en statique public. ✅ **Acté (Paul, 2026-07-20) : photos NON
+  stockées** — analyse à la volée uniquement, **suppression dès le verdict
+  rendu** (aucune persistance serveur, aucun bucket). Seul le résultat
+  (verdict + reco + estimation) est conservé, accroché à la fiche chantier.
+  Jamais de photo ni d'adresse en logs (IDs uniquement).
+- API `requireUser` comme AD-4/AD-5c-γ ; validation stricte des entrées.
+- Coût : appels vision Claude = coût API variable (canal `/api/leo` existant) —
+  signalé, pas de gate nouvelle tant qu'on reste sur la clé existante.
+
+### 10.5 Découpage en sous-boucles (une à la fois, gates respectées)
+
+- **CC-α — catalogue IceStream** : contrat de données + draft
+  `supabase/migrations/` (`data-ingenieur`) ; apply = gate Paul ; puis saisie
+  du catalogue réel.
+- **CC-β — moteur de faisabilité + reco + estimation** : règles
+  **déterministes** produit ⟷ contraintes relevées (auditables, testables en
+  harnais) ; Claude lit les photos et propose, **les règles tranchent** le
+  verdict. API `requireUser`.
+- **CC-γ — front rendez-vous** : mobile d'abord (outil de terrain), accroché à
+  la fiche chantier ; spec `interface-ux`, implémentation `front-carto`,
+  registre antique.
+- **CC-δ — v2 AR** (RoomPlan/ARCore + petit catalogue 3D) : hors cadrage v1,
+  gate produit dédiée.
+
+### 10.6 Garde-fous EB
+
+- **Le build n'est PAS lancé par ce cadrage.** ADR-005 n'est pas passée à la
+  grille AD-5 ; la séquence validée reste INTENDANT → MYCÉLIUM → PROTÉE.
+  Lancer CC-α = décision Paul explicite (arbitrage vs top 3).
+- Pas d'AR, pas de vidéo, pas de devis contractuel en v1.
+- Éprouver sur **un vrai rendez-vous** avant tout élargissement.
+- Estimation toujours affichée comme fourchette non contractuelle.
+
+### 10.7 Décisions Paul
+
+1. ✅ Catalogue IceStream : **en PDF** (2026-07-20) → extraction PDF → table
+   `produits`, validation Paul avant insertion.
+2. ✅ Photos : **non stockées** (2026-07-20) — supprimées dès le verdict rendu.
+3. ⏳ Go CC-α — et sa place vs la séquence INTENDANT → MYCÉLIUM → PROTÉE.
