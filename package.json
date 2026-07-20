@@ -5,6 +5,7 @@
   "type": "module",
   "description": "Ultima — carte interactive du réseau commercial (P0 fondations).",
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.112.3",
     "@supabase/supabase-js": "^2"
   }
 }

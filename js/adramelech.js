@@ -136,7 +136,7 @@
 
   // ---------- Cartouche Léo réflexif (registre ADRAMELECH) ----------
 
-  function saluerParLeo(idees) {
+  function saluerParLeo(idees, session) {
     if (!window.UltimaLeo || typeof window.UltimaLeo.accueillirQuadrant !== 'function') { return; }
     var bilan = calculerBilan(idees);
 
@@ -178,7 +178,11 @@
         }
       ],
       propositions: propositions,
-      propositionsVide: 'Rien à trancher aujourd’hui — l’archipel est en ordre.'
+      propositionsVide: 'Rien à trancher aujourd’hui — l’archipel est en ordre.',
+      // L2 : la voix (session déjà exigée par le flux — antichambre auth).
+      voix: (session && session.access_token)
+        ? { quadrant: 'adramelech', jeton: session.access_token }
+        : null
     });
   }
 
@@ -216,7 +220,7 @@
     rendreIdees(idees);
     rendrePonts(idees, liens);
     montrer('adr-registre');
-    saluerParLeo(idees);
+    saluerParLeo(idees, session);
   }
 
   async function demarrer() {

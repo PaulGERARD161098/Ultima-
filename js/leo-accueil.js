@@ -1,8 +1,11 @@
-// Ultima — Léo, cartouche d'accueil des quadrants (boucles L1 puis diffusion).
-// Le majordome « muet mais juste » : à l'entrée dans un quadrant, un cartouche
-// au registre antique récapitule l'état avec des règles déterministes. AUCUNE
-// IA, aucun appel réseau, aucun coût : le cartouche se nourrit de l'état déjà
-// chargé par la page, jamais d'un second fetch.
+// Ultima — Léo, cartouche d'accueil des quadrants (boucles L1/diffusion, L2).
+// Le majordome « juste » : à l'entrée dans un quadrant, un cartouche au
+// registre antique récapitule l'état avec des règles déterministes, nourri de
+// l'état déjà chargé par la page (jamais d'un second fetch de données).
+// Boucle L2 (la voix) : si l'appelant fournit une session réelle via
+// config.voix = { quadrant, jeton }, une zone « Parler à Léo » s'ajoute —
+// SEUL appel réseau du module, vers POST /api/leo (IA côté serveur).
+// Fail-closed : pas de session → cartouche muet, comportement L1 inchangé.
 //
 // Deux entrées publiques :
 //   - accueillir(donnees, actions)  — TRAVELER, comportement historique intact
@@ -400,7 +403,7 @@
         return;
       }
       if (evenement.key !== 'Tab') { return; }
-      var focusables = cartouche.querySelectorAll('button');
+      var focusables = cartouche.querySelectorAll('button, input');
       if (focusables.length === 0) { return; }
       var premier = focusables[0];
       var dernier = focusables[focusables.length - 1];
@@ -470,6 +473,12 @@
     }
     cartouche.appendChild(sectionPropositions);
 
+    // Voix de Léo (L2, opt-in) : uniquement avec une session réelle.
+    if (config.voix && typeof config.voix.quadrant === 'string' &&
+        typeof config.voix.jeton === 'string' && config.voix.jeton) {
+      cartouche.appendChild(construireVoix(config.voix));
+    }
+
     // Pied : fermeture (focus initial dessus).
     var pied = el('footer', 'leo-pied');
     var partir = el('button', 'leo-partir', "C'est parti");
@@ -489,12 +498,122 @@
     partir.focus();
   }
 
+  // ---------- Voix de Léo (boucle L2) ----------
+
+  // Zone de conversation branchée sur POST /api/leo (le seul appel réseau du
+  // module). L'historique reste local au cartouche et repart en entier à
+  // chaque tour (l'API est sans état). Erreurs : 503 = voix pas encore
+  // branchée (gate coût) → la zone se retire proprement ; autre échec →
+  // message générique, le texte dicté est restitué dans le champ.
+  function construireVoix(voix) {
+    var section = el('section', 'leo-section leo-section-voix');
+    section.appendChild(sousTitre('Parler à Léo'));
+
+    var dialogue = el('div', 'leo-dialogue');
+    dialogue.setAttribute('aria-live', 'polite');
+    section.appendChild(dialogue);
+
+    var formulaire = document.createElement('form');
+    formulaire.className = 'leo-voix-formulaire';
+    var champ = document.createElement('input');
+    champ.type = 'text';
+    champ.className = 'leo-voix-champ';
+    champ.maxLength = 4000;
+    champ.placeholder = 'Dictez ou écrivez à Léo…';
+    champ.setAttribute('aria-label', 'Votre message à Léo');
+    var envoyer = el('button', 'leo-voix-envoyer', 'Envoyer');
+    envoyer.type = 'submit';
+    formulaire.appendChild(champ);
+    formulaire.appendChild(envoyer);
+    section.appendChild(formulaire);
+
+    var historique = [];
+    var enCours = false;
+
+    function bulle(genre, texte) {
+      var p = el('p', 'leo-bulle leo-bulle-' + genre, texte);
+      dialogue.appendChild(p);
+      dialogue.scrollTop = dialogue.scrollHeight;
+      return p;
+    }
+
+    // La gate coût n'est pas levée : la zone se retire, sans casser le cartouche.
+    function couperVoix(message) {
+      formulaire.remove();
+      section.appendChild(el('p', 'leo-vide', message));
+    }
+
+    function rearmer() {
+      enCours = false;
+      if (document.contains(formulaire)) {
+        champ.disabled = false;
+        envoyer.disabled = false;
+        champ.focus();
+      }
+    }
+
+    formulaire.addEventListener('submit', function (evenement) {
+      evenement.preventDefault();
+      var texte = champ.value.trim();
+      if (!texte || enCours) { return; }
+      enCours = true;
+      champ.value = '';
+      champ.disabled = true;
+      envoyer.disabled = true;
+      historique.push({ role: 'user', content: texte });
+      bulle('paul', texte);
+      var attente = bulle('leo', 'Léo réfléchit…');
+      attente.className += ' leo-bulle-attente';
+
+      fetch('/api/leo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Authorization: 'Bearer ' + voix.jeton
+        },
+        body: JSON.stringify({ quadrant: voix.quadrant, messages: historique })
+      }).then(function (reponse) {
+        return reponse.json().then(function (corps) {
+          return { statut: reponse.status, corps: corps };
+        }, function () {
+          return { statut: reponse.status, corps: null };
+        });
+      }).then(function (resultat) {
+        attente.remove();
+        var texteLeo = resultat.corps && resultat.corps.ok === true &&
+          resultat.corps.data ? resultat.corps.data.reponse : null;
+        if (typeof texteLeo === 'string' && texteLeo) {
+          historique.push({ role: 'assistant', content: texteLeo });
+          bulle('leo', texteLeo);
+        } else if (resultat.statut === 503) {
+          historique.pop();
+          couperVoix("La voix de Léo n'est pas encore branchée (clé API en attente).");
+        } else {
+          historique.pop();
+          champ.value = texte;
+          bulle('erreur', "Léo n'a pas pu répondre — réessayez.");
+        }
+        rearmer();
+      }, function () {
+        attente.remove();
+        historique.pop();
+        champ.value = texte;
+        bulle('erreur', "Léo n'a pas pu répondre — réessayez.");
+        rearmer();
+      });
+    });
+
+    return section;
+  }
+
   // ---------- TRAVELER (comportement historique, inchangé) ----------
 
   // Ouvre le cartouche. `donnees` = { noeuds, relations, journal } (l'état
-  // déjà chargé par app.js) ; `actions.ouvrirCible(nodeId)` mène à la fiche.
+  // déjà chargé par app.js) ; `actions.ouvrirCible(nodeId)` mène à la fiche ;
+  // `voix` = { quadrant, jeton } optionnel (L2, session réelle uniquement).
   // Fail-closed : pas de données → pas de cartouche, en silence.
-  function accueillir(donnees, actions) {
+  function accueillir(donnees, actions, voix) {
     actions = actions || {};
     if (!donnees || !Array.isArray(donnees.noeuds) || donnees.noeuds.length === 0) { return; }
 
@@ -528,7 +647,8 @@
             : null
         };
       }),
-      propositionsVide: "Rien d'urgent aujourd'hui — votre réseau est à jour."
+      propositionsVide: "Rien d'urgent aujourd'hui — votre réseau est à jour.",
+      voix: voix
     });
   }
 
@@ -547,7 +667,8 @@
       salutation: options.salutation,
       sections: Array.isArray(options.sections) ? options.sections : [],
       propositions: options.propositions,
-      propositionsVide: options.propositionsVide
+      propositionsVide: options.propositionsVide,
+      voix: options.voix
     });
   }
 

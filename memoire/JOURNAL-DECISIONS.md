@@ -376,3 +376,18 @@
   ADRAMELECH) — leçon TRAVELER appliquée d'office ; les entrées HISTORIQUES de
   ce journal gardent « BCP » (fidélité du registre). Blason balance inchangé.
   Livré sur la PR #54 (smoke-console adapté, suite verte).
+- **2026-07-19 (« Focus Léo » — L2 la voix, construite)** — Paul : « les
+  projets on verra plus tard, focus Léo ». MYCÉLIUM/PROTÉE reportés au
+  registre ; la boucle L2 du cadrage Léo-au-site est construite : route
+  `POST /api/leo` (requireUser fail-closed → API Claude, clé env Vercel
+  uniquement, timeout 30 s, bornes d'historique et de réponse, prompt
+  système Jarvis par quadrant sans PII) + zone « Parler à Léo » dans le
+  cartouche (TRAVELER + ADRAMELECH, session réelle exigée ; antichambres
+  muettes tant que sans auth — fail-closed voulu). Décisions techniques :
+  modèle par défaut Opus côté serveur, surclassable par l'env `LEO_MODELE`
+  sans code ; l'historique du cartouche est la SEULE donnée envoyée à l'IA
+  (minimisation) ; 503 sincère « voix pas encore branchée » tant que la
+  gate coût n'est pas levée. La voix vit dans le pop-up d'accueil (une fois
+  par session de navigation) — une présence persistante de Léo dans la page
+  relève du volet « présence visuelle » différé. ⏳ Gate Paul : clé API +
+  plafond de dépense + env Vercel `ANTHROPIC_API_KEY`.
