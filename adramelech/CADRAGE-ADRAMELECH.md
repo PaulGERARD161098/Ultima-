@@ -489,16 +489,19 @@ intérieure/extérieure, puissances froid/chaud, contraintes de pose
 (dégagements, longueur et dénivelé max des liaisons, poids/support,
 alimentation), prix indicatifs. Modèle : table `produits` RLS mono-owner en
 miroir des motifs 0007/0008, SQL **drafté par `data-ingenieur`, jamais appliqué
-seul** (gate). ⏳ **À renseigner par Paul : sous quelle forme existe le
-catalogue IceStream aujourd'hui** (tableur, PDF, site fournisseur ?) — cela
-décide saisie manuelle vs import.
+seul** (gate). ✅ **Acté (Paul, 2026-07-20) : le catalogue existe en PDF** →
+voie d'entrée = extraction depuis le PDF (Claude lit le PDF nativement) vers
+la table `produits`, chaque fiche extraite **validée par Paul avant insertion**
+(zéro donnée catalogue inventée).
 
 ### 10.4 Sécurité (surface relevée)
 
 - **Photos de l'intérieur du domicile d'un client = PII sensible.** Jamais
-  servies en statique public ; en v1, **analyse à la volée sans stockage**
-  (recommandé) ou bucket Supabase privé sous RLS si Paul veut l'historique
-  (⏳ décision). Jamais de photo ni d'adresse en logs (IDs uniquement).
+  servies en statique public. ✅ **Acté (Paul, 2026-07-20) : photos NON
+  stockées** — analyse à la volée uniquement, **suppression dès le verdict
+  rendu** (aucune persistance serveur, aucun bucket). Seul le résultat
+  (verdict + reco + estimation) est conservé, accroché à la fiche chantier.
+  Jamais de photo ni d'adresse en logs (IDs uniquement).
 - API `requireUser` comme AD-4/AD-5c-γ ; validation stricte des entrées.
 - Coût : appels vision Claude = coût API variable (canal `/api/leo` existant) —
   signalé, pas de gate nouvelle tant qu'on reste sur la clé existante.
@@ -527,8 +530,9 @@ décide saisie manuelle vs import.
 - Éprouver sur **un vrai rendez-vous** avant tout élargissement.
 - Estimation toujours affichée comme fourchette non contractuelle.
 
-### 10.7 Décisions attendues de Paul
+### 10.7 Décisions Paul
 
-1. Forme actuelle du catalogue IceStream (tableur / PDF / site).
-2. v1 avec ou sans stockage des photos (recommandation Léo : sans).
-3. Go CC-α — et sa place vs la séquence INTENDANT → MYCÉLIUM → PROTÉE.
+1. ✅ Catalogue IceStream : **en PDF** (2026-07-20) → extraction PDF → table
+   `produits`, validation Paul avant insertion.
+2. ✅ Photos : **non stockées** (2026-07-20) — supprimées dès le verdict rendu.
+3. ⏳ Go CC-α — et sa place vs la séquence INTENDANT → MYCÉLIUM → PROTÉE.
