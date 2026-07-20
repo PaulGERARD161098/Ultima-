@@ -37,6 +37,10 @@
 | 3 | **PROTÉE** (ADR-002) | **6,3**/10 | montée en puissance | Top 3 — extension disciplinée du socle |
 | 4 | GLANEUR (ADR-001) | 5,0/10 | satellite | Hors top 3 — retenir le *service* (débarras chantier), ajourner l'*entreprise* |
 
+> Capturée après ce classement : **CHAMBRE CLAIRE** (ADR-005, 2026-07-20) —
+> pas encore passée à la grille des 7 blocs ; à instruire au prochain passage
+> (AD-5d ou à la demande de Paul).
+
 **Lecture système (l'essentiel).** Ce ne sont pas 4 paris indépendants mais **un
 moteur qui se renforce** : **PROTÉE** industrialise le socle → **INTENDANT**
 fabrique les victoires (chantiers sans manquant) → **MYCÉLIUM** transforme chaque
@@ -703,3 +707,97 @@ Mise en concurrence mécanique avec le socle **Renoboost IA** — mais la questi
 1. **Séquence post-chantier J+2** (chantier livré → demande de satisfaction → si satisfait, avis Google + reco nominative) — le cœur du mécanisme, à automatiser en premier.
 2. **Relance au bon moment pilotée par la donnée** (déclenchement au pic de satisfaction, pas au hasard) — s'appuie sur relances v2 existant.
 3. **Dashboard coefficient de propagation** — rend la discipline mesurable et donc tenable ; condition du pilotage.
+
+---
+
+## ADR-005 — CHAMBRE CLAIRE
+
+*Nom : la chambre claire (camera lucida), instrument d'optique des dessinateurs
+savants qui superpose l'image du sujet à la scène réelle — exactement ce que
+fait l'outil : projeter le produit à venir dans la pièce du client.*
+
+- **Capturée le** : 2026-07-20 (dictée vocale de Paul)
+- **Type** : pro · business (outil commercial du socle)
+- **Thème** : bâtiment · clim & CVC · vision par ordinateur · commercial
+- **Partenaire envisagé** : — (outil propre du socle)
+- **Statut** : à raffiner
+
+### L'idée
+
+Un **outil à coder** qui, en rendez-vous chez un **futur client** (pose de
+climatisation), permet de :
+
+1. **Scanner la pièce au téléphone** : Paul filme la pièce (vidéos), l'outil
+   la scanne et **comprend l'espace** (murs, dimensions, contraintes).
+2. **Simuler le produit en temps réel** : le produit souhaité par le client
+   (ex. une **unité intérieure**) apparaît incrusté dans la pièce, à sa place,
+   à l'échelle — le client voit chez lui ce que ça donnera.
+3. **Recommander et estimer en live** : l'outil fait des **recommandations**
+   (choix et placement du produit) et des **estimations** en direct, pendant
+   le rendez-vous.
+4. **Anticiper la faisabilité via le catalogue produits (IceStream)**
+   (ajout Paul, 2026-07-20) : croiser le scan de la pièce avec le catalogue
+   pour dire **si la pose est possible ou non** avec les produits disponibles,
+   et donc **si le projet peut être conclu** — verdict faisable / faisable
+   sous condition / non faisable, motivé, pendant le rendez-vous.
+
+Question posée par Paul à la capture : **est-ce mieux sur Claude ou sur
+Gemini ?** — instruite ci-dessous (enrichissement).
+
+### Enrichissement (pistes pour rendre l'idée exécutable)
+
+**Verdict Claude vs Gemini (instruit le 2026-07-20).**
+- **L'API Claude n'accepte pas la vidéo en entrée** (images et PDF seulement,
+  vision haute résolution). Pour lui donner une pièce filmée, il faut extraire
+  des images clés de la vidéo.
+- **Gemini accepte la vidéo nativement** (fichiers vidéo, et flux temps réel
+  via sa Live API) avec une bonne compréhension spatiale : pour « je filme et
+  l'IA comprend la pièce », **Gemini est aujourd'hui mieux placée**.
+- **Mais la « simulation en temps réel » n'est le métier d'aucun des deux** :
+  incruster un produit 3D à l'échelle dans la pièce, c'est de la **réalité
+  augmentée embarquée** — ARKit/RoomPlan sur iPhone (LiDAR : scan 3D de la
+  pièce en une minute, murs et dimensions réels) ou ARCore sur Android. C'est
+  le téléphone qui fait le temps réel, pas le modèle d'IA.
+- **Architecture recommandée (hybride)** : (1) **scan AR natif** du téléphone
+  pour la géométrie et l'incrustation 3D temps réel ; (2) **couche IA
+  par-dessus** pour les recommandations (dimensionnement puissance selon le
+  volume de la pièce, placement — mur, liaisons frigorifiques, évacuation des
+  condensats, position de l'unité extérieure) et l'**estimation live**. Cette
+  couche-là peut être **Claude**, cohérent avec Ultima (Léo pilote tout ;
+  directive JL : tout nouveau besoin est une extension d'Ultima, jamais un
+  outil à côté). Si l'ingestion de vidéo brute est retenue, **Gemini en brique
+  isolée** pour cette seule analyse.
+- **Verdict court** : analyse de vidéo brute → Gemini ; copilote
+  recommandations + estimations intégré à Ultima → Claude ; le cœur
+  « simulation temps réel » → AR du téléphone, ni l'un ni l'autre.
+
+**Séquencement proposé (boucler petit d'abord).**
+- **v1** : photos de la pièce + analyse IA → recommandations + estimation en
+  rendez-vous (déjà très vendeur, faisable vite dans Ultima, zéro AR).
+- **v2** : scan 3D (RoomPlan/ARCore) + incrustation du produit à l'échelle
+  (petit catalogue de modèles 3D d'unités intérieures).
+- **v3** : devis instantané généré sur place, prêt à signer.
+
+**Moteur de faisabilité (catalogue IceStream).** Le catalogue devient une
+**donnée structurée dans Ultima** (par produit : dimensions, puissance,
+contraintes de pose — dégagements, portée maximale des liaisons, poids/support,
+alimentation) ; le verdict = règles simples scan ⟷ fiche produit (la pièce
+permet-elle au moins un produit du catalogue ?). C'est la brique la plus
+« Claude » de l'outil (raisonnement sur données structurées, zéro vidéo) et
+elle est faisable dès la **v1 photos**. Orthographe « IceStream » confirmée
+par Paul (2026-07-20, au lexique).
+
+**Valeur commerciale.** Effet démonstration en rendez-vous (le client se
+projette chez lui → aide à conclure sur place) ; l'estimation live écrase le
+délai de devis ; le verdict de faisabilité **évite les projets invendables**
+(pose impossible détectée avant le devis, pas sur le chantier).
+
+### Liens inter-segments
+
+- **TRAVELER** : le rendez-vous client est un lead/chantier du réseau — la
+  simulation et l'estimation s'accrochent à la fiche chantier existante.
+- **ADR-002 PROTÉE** : arme commerciale directe des installations clim/PAC —
+  sert le pont frigoriste↔PAC dès la vente.
+- **ADR-003 INTENDANT** : la recommandation + l'estimation produisent la liste
+  des pièces nécessaires → alimente les besoins INTENDANT du chantier signé.
+- **BALTHAZAR GELD** : chaque estimation/devis a un pendant financier.

@@ -40,11 +40,12 @@ const chaqueIdeeBienPlacee = archipels.every((arc) =>
 const clesDistinctes = new Set(idees.map((i) => i.themeKey || ' à classer'));
 verdicts.regroupementCorrect = chaqueIdeeBienPlacee &&
   archipels.length === clesDistinctes.size;
-// Donnée de référence : GLANEUR+PROTÉE+INTENDANT sous « Bâtiment », MYCÉLIUM
-// seul sous « Commercial » (les 3 premiers ont « bâtiment » en tête de Thème).
+// Donnée de référence : GLANEUR+PROTÉE+INTENDANT+CHAMBRE CLAIRE sous
+// « Bâtiment », MYCÉLIUM seul sous « Commercial » (« bâtiment » en tête de
+// Thème pour les quatre premières).
 const parLabel = Object.fromEntries(archipels.map((a) => [a.label, a.idees.map((i) => i.id)]));
 verdicts.archipelsAttendus =
-  JSON.stringify(parLabel['Bâtiment']) === JSON.stringify(['ADR-001', 'ADR-002', 'ADR-003']) &&
+  JSON.stringify(parLabel['Bâtiment']) === JSON.stringify(['ADR-001', 'ADR-002', 'ADR-003', 'ADR-005']) &&
   JSON.stringify(parLabel['Commercial']) === JSON.stringify(['ADR-004']);
 
 // ---------- 4. Idée sans thème → archipel « À classer » (fixture en mémoire) ----------
@@ -102,9 +103,10 @@ verdicts.bienFormeeOk = !echoue(fixtureSansTheme) && parseRegistre(md).length ==
 // ---------- 6. Ponts : synergies ADR↔ADR détectées (non orientées, dédupliquées) ----------
 const ponts = detecterPonts(idees);
 const cles = new Set(ponts.map((p) => `${p.a}|${p.b}`));
-verdicts.pontsDetectes = ponts.length === 4 &&
+verdicts.pontsDetectes = ponts.length === 6 &&
   cles.has('ADR-001|ADR-002') && cles.has('ADR-001|ADR-003') &&
-  cles.has('ADR-002|ADR-004') && cles.has('ADR-003|ADR-004');
+  cles.has('ADR-002|ADR-004') && cles.has('ADR-003|ADR-004') &&
+  cles.has('ADR-002|ADR-005') && cles.has('ADR-003|ADR-005');
 
 // ---------- 7. Bilan chiffré (AD-2) : compteurs cohérents et zéro-perte ----------
 const bilan = calculerBilan(idees);
