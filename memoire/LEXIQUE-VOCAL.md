@@ -12,7 +12,7 @@
 | Marc Audi | (amorce déformée — contexte : « master agent ») |
 | Montreuil | mon travail |
 | mon mécontent professionnel | mes contacts professionnels |
-| Ice Stream, Aïce Stream | ICESTREAM (catalogue produits clim de Paul — orthographe à confirmer) |
+| Ice Stream, Aïce Stream | IceStream (catalogue produits clim de Paul — orthographe confirmée 2026-07-20) |
 | outil d'automne TED | outils dédiés |
 | en otarchie | en autarcie |
 | Superbase | Supabase |
