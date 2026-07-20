@@ -735,6 +735,11 @@ climatisation), permet de :
 3. **Recommander et estimer en live** : l'outil fait des **recommandations**
    (choix et placement du produit) et des **estimations** en direct, pendant
    le rendez-vous.
+4. **Anticiper la faisabilité via le catalogue produits (ICESTREAM)**
+   (ajout Paul, 2026-07-20) : croiser le scan de la pièce avec le catalogue
+   pour dire **si la pose est possible ou non** avec les produits disponibles,
+   et donc **si le projet peut être conclu** — verdict faisable / faisable
+   sous condition / non faisable, motivé, pendant le rendez-vous.
 
 Question posée par Paul à la capture : **est-ce mieux sur Claude ou sur
 Gemini ?** — instruite ci-dessous (enrichissement).
@@ -773,9 +778,19 @@ Gemini ?** — instruite ci-dessous (enrichissement).
   (petit catalogue de modèles 3D d'unités intérieures).
 - **v3** : devis instantané généré sur place, prêt à signer.
 
+**Moteur de faisabilité (catalogue ICESTREAM).** Le catalogue devient une
+**donnée structurée dans Ultima** (par produit : dimensions, puissance,
+contraintes de pose — dégagements, portée maximale des liaisons, poids/support,
+alimentation) ; le verdict = règles simples scan ⟷ fiche produit (la pièce
+permet-elle au moins un produit du catalogue ?). C'est la brique la plus
+« Claude » de l'outil (raisonnement sur données structurées, zéro vidéo) et
+elle est faisable dès la **v1 photos**. Orthographe « ICESTREAM » à confirmer
+par Paul (dictée vocale, premier signalement — noté au lexique).
+
 **Valeur commerciale.** Effet démonstration en rendez-vous (le client se
 projette chez lui → aide à conclure sur place) ; l'estimation live écrase le
-délai de devis.
+délai de devis ; le verdict de faisabilité **évite les projets invendables**
+(pose impossible détectée avant le devis, pas sur le chantier).
 
 ### Liens inter-segments
 
