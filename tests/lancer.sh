@@ -34,6 +34,8 @@ echo "=== unit-intendant-api.mjs ==="
 node unit-intendant-api.mjs
 echo "=== unit-leo-voix.mjs ==="
 node unit-leo-voix.mjs
+echo "=== unit-leo-mains.mjs ==="
+node unit-leo-mains.mjs
 echo "=== unit-idees-carto.mjs ==="
 node unit-idees-carto.mjs
 

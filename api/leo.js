@@ -21,7 +21,11 @@ import {
   construireSysteme,
   validerConversation,
   creerGardeVoix,
-  extraireTexte
+  extraireTexte,
+  outilsPour,
+  extraireProposition,
+  validerProposition,
+  reformulerProposition
 } from './_lib/leo.js';
 
 const TIMEOUT_MS = 30_000; // appel IA sortant borné (au-dessus : 502 générique)
@@ -46,7 +50,10 @@ export default async function handler(req, res) {
   const corps = await readJsonBody(req);
   if (corps === null || corps === 'too_large') return bodyFail(res, corps);
 
-  const systeme = construireSysteme(corps.quadrant);
+  // L2b : catalogue d'outils du quadrant (null si vide → appel L2 inchangé).
+  // Les outils ne font que PROPOSER : cette route n'écrit jamais rien.
+  const outils = outilsPour(corps.quadrant);
+  const systeme = construireSysteme(corps.quadrant, outils !== null);
   if (!systeme) return fail(res, 400, 'Quadrant inconnu');
 
   const conversation = validerConversation(corps.messages);
@@ -59,9 +66,32 @@ export default async function handler(req, res) {
       max_tokens: MAX_TOKENS_REPONSE,
       // Le système est stable par quadrant : cacheable (≈ -90 % sur le préfixe).
       system: [{ type: 'text', text: systeme, cache_control: { type: 'ephemeral' } }],
+      // Spread conditionnel : pas de champ tools quand le catalogue est vide.
+      ...(outils ? { tools: outils } : {}),
       messages: conversation.messages
     });
     const texte = extraireTexte(reponse.content);
+    // L2b : un tool_use devient une PROPOSITION validée + reformulée côté
+    // serveur (rendu déterministe de la carte de confirmation — jamais la
+    // prose du modèle). On ne renvoie JAMAIS de tool_result au modèle ici :
+    // la boucle se referme au tour suivant par le message d'issue du front.
+    const blocOutil = extraireProposition(reponse.content);
+    if (blocOutil) {
+      const verdict = validerProposition(blocOutil.name, blocOutil.input, corps.quadrant);
+      if (verdict.ok) {
+        return ok(res, {
+          reponse: texte,
+          proposition: {
+            outil: verdict.proposition.outil,
+            args: verdict.proposition.args,
+            reformulation: reformulerProposition(verdict.proposition)
+          }
+        });
+      }
+      // Proposition douteuse : jamais servie au client — repli sur le texte
+      // seul (nom d'outil en log, JAMAIS les arguments : zéro contenu dicté).
+      logError('leo.mains.invalide', typeof blocOutil.name === 'string' ? blocOutil.name : 'inconnu');
+    }
     if (!texte) {
       logError('leo.voix.vide', reponse.stop_reason || '');
       return fail(res, 502, "Léo n'a pas pu répondre");

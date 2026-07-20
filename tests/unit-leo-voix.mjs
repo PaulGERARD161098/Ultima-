@@ -39,6 +39,27 @@ verdicts.systemeSansPii = [sysTraveler, sysBcp, sysAdramelech, sysImladrik]
 verdicts.quadrantInconnu = construireSysteme('finance') === null &&
   construireSysteme('') === null && construireSysteme(undefined) === null;
 
+// ---------- 2bis. L2b : signature construireSysteme(quadrant, avecOutils) ----------
+// avecOutils=true (catalogue non vide) : la règle « pas encore AGIR » cède la
+// place aux règles de proposition (fidèle à la dictée, un seul outil, jamais
+// d'exécution sans confirmation de Paul).
+{
+  const sysMains = [construireSysteme('traveler', true), construireSysteme('adramelech', true)];
+  verdicts.mainsReglesOutils = sysMains.every((s) =>
+    /FIDÈLES à la dictée/.test(s) && /Un seul outil par tour/.test(s) &&
+    /confirmation/.test(s) && !/pas encore AGIR/.test(s));
+  // Le reste du prompt (ton, registre, minimisation) reste identique.
+  verdicts.mainsTonConserve = sysMains.every((s) =>
+    /Jarvis/.test(s) && /n'inventes JAMAIS/.test(s) && !/@/.test(s));
+}
+// avecOutils falsy (bcp/imladrik, ou appel L2 historique) : règle inchangée.
+verdicts.mainsSansOutils = [
+  construireSysteme('bcp', false), construireSysteme('imladrik', false),
+  construireSysteme('traveler'), construireSysteme('adramelech')
+].every((s) => /pas encore AGIR/.test(s) && !/Un seul outil par tour/.test(s));
+// Quadrant inconnu : null même avec le drapeau.
+verdicts.mainsQuadrantInconnu = construireSysteme('finance', true) === null;
+
 // ---------- 3. Conversation valide (nettoyée : role + content seulement) ----------
 {
   const r = validerConversation([

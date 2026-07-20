@@ -275,8 +275,22 @@
       },
       { ouvrirCible: ouvrirCibleDepuisAccueil },
       // L2 : la voix, uniquement avec une session réelle (jamais en démo).
+      // L2b : candidats de résolution locale des cibles dictées ({ id,
+      // libelle } minimaux — jamais envoyés à l'IA) + toast de succès.
       (etat.session && etat.session.access_token)
-        ? { quadrant: 'traveler', jeton: etat.session.access_token }
+        ? {
+            quadrant: 'traveler',
+            jeton: etat.session.access_token,
+            candidats: {
+              cibles: etat.noeuds.map(function (n) {
+                return { id: n.id, libelle: n.nom || '' };
+              }),
+              chantiers: etat.intendant.chantiers.map(function (c) {
+                return { id: c.id, libelle: nomNoeud(c.node_id) };
+              })
+            },
+            notifier: function (message) { toast(message, 'succes'); }
+          }
         : null
     );
   }
