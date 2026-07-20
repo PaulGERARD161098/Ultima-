@@ -142,6 +142,30 @@ Le pop-up touche à terme PII réseau + finance + intime (§5 CADRAGE-CONSOLE) :
 - **L3 — la mémoire apprenante** : table `leo_memoire` (gate migration),
   boucle d'apprentissage (valide/refuse → préférences), résumé par quadrant
   re-servi au retour. C'est L3 qui fait de L1+L2 un vrai Jarvis.
+  **Cadrage v1 (2026-07-20, go Paul — escalade Opus signalée : modèle de
+  données + RLS)** :
+  - **Une table unique `leo_memoire`**, mono-owner RLS (motif 0007/0008),
+    3 genres : `trace_action` (chaque action confirmée OU annulée par Paul
+    — c'est la matière brute de l'apprentissage), `resume_quadrant` (le
+    dernier « où on en est » par quadrant, une ligne par quadrant, upsert),
+    `preference` (règle apprise, clé + contenu, une ligne par clé).
+  - **Écritures 100 % DÉTERMINISTES côté serveur** en v1 : la route trace
+    l'action au moment de la confirmation/annulation (chemin déjà
+    déterministe), et met à jour le résumé du quadrant en fin d'échange.
+    **L'IA n'a AUCUN outil d'écriture mémoire** — pas d'autorité nouvelle,
+    pas de surface d'injection nouvelle. Les `preference` v1 sont des
+    agrégats calculés (ex. « annule souvent les relances proposées ») —
+    formulation IA différée.
+  - **Lecture** : le prompt système du quadrant s'enrichit d'un bloc
+    mémoire BORNÉ (résumé du quadrant + N dernières traces + préférences,
+    plafonds stricts de taille) — mêmes règles de minimisation : IDs, pas
+    de noms du réseau.
+  - **Bornes** : contenu ≤ 2000 chars, purge au-delà de M traces par
+    quadrant (rotation serveur), aucune suppression pilotable par l'IA.
+  - **Séquence** : ① SQL rédigé (`supabase/migrations/0009_leo_memoire.sql`,
+    JAMAIS appliqué seul — gate Paul) ; ② à l'application : contre-passe
+    securite-auditeur + branchement route (trace + résumé + injection du
+    bloc mémoire) ; ③ boucle preference. Cette boucle-ci = ① uniquement.
 - **Différé** : présence visuelle de Léo, fonctionnement étendu (voix parlée,
   commande vocale in-app, notifications) — cadrage ultérieur sur go Paul.
 
