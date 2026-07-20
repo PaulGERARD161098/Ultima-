@@ -41,9 +41,12 @@
 > Mise à jour 2026-07-20 : CHAMBRE CLAIRE scorée **6,9** s'intercale au rang 3.
 > Le moteur système s'enrichit : **CHAMBRE CLAIRE conclut la vente** →
 > INTENDANT approvisionne sans manquant → MYCÉLIUM exploite la victoire →
-> PROTÉE industrialise. ⏳ **Décision Paul** : la séquence d'exécution validée
-> (INTENDANT → MYCÉLIUM → PROTÉE bridée) est-elle amendée pour y insérer
-> CHAMBRE CLAIRE, ou CHAMBRE CLAIRE attend-elle son tour ?
+> PROTÉE industrialise. ✅ **Décision Paul (2026-07-20) : CHAMBRE CLAIRE reste
+> EN STOCK** — analysée et cadrée, mais **hors séquence de build active** ;
+> elle attend son tour. La séquence d'exécution demeure **INTENDANT → MYCÉLIUM
+> → PROTÉE bridée**, inchangée. CHAMBRE CLAIRE est prête à démarrer (fiche +
+> cadrage §10 complets) le jour où Paul l'appelle ; aucun travail de build
+> engagé d'ici là.
 
 **Lecture système (l'essentiel).** Ce ne sont pas 4 paris indépendants mais **un
 moteur qui se renforce** : **PROTÉE** industrialise le socle → **INTENDANT**
