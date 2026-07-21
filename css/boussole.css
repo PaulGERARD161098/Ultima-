@@ -109,6 +109,14 @@ body.boussole {
 .aiguille.is-actif .aiguille-trait { stroke: #f4e6bd; stroke-width: 1.1; opacity: 1; }
 .aiguille.is-actif .aiguille-pointe { fill: #f4e6bd; opacity: 1; }
 
+/* Passerelle : lien pointillé entre deux caps jumeaux (RESHIRAM ↔ ZEKROM). */
+.passerelle {
+  stroke: var(--or-antique);
+  stroke-width: 0.7;
+  stroke-dasharray: 1.6 2.2;
+  opacity: 0.7;
+}
+
 /* ---------- Cœur : rose des vents gravée ---------- */
 .boussole-coeur {
   position: absolute;

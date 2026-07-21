@@ -21,6 +21,11 @@
     **Renoboost IA**, cap ouvert vers sa console **https://www.renoboostia.fr**
     (domaine propre du projet Vercel `renoboost-ia`, nouvel onglet) ; « Ikom » →
     **YCOME** (reste « à venir » — plateforme externe, URL à fournir par Paul).
+  - ✅ **RESHIRAM & ZEKROM posés (2026-07-21)** : 2 caps autonomes ajoutés à la
+    boussole — RESHIRAM (« le travail de la réalité », blason ancre) et ZEKROM
+    (« la quête de l'idéal », blason flambeau), « à venir », reliés par une
+    **passerelle pointillée** (champ `lien` du registre). Boussole = 5 caps ;
+    harnais 40 verts. Cadre en `CADRAGE-CONSOLE.md §2bis`.
   - ⏭ **LV2-② Auth** (gate) — connexion « e-mail + mot de passe » évoquée par
     Paul ; l'existant est un lien magique Gmail (`signInWithOtp`). Boucle
     dédiée, arbitrage requis (garder le lien magique vs. ajouter un mot de passe).

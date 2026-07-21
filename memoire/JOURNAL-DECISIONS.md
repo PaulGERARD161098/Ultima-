@@ -3,6 +3,35 @@
 > Une décision consignée n'est jamais redemandée ni re-litigée.
 > Format : date — décision — conséquence.
 
+- **2026-07-21 (posés)** — **RESHIRAM & ZEKROM posés sur la boussole** (Paul :
+  « pose Z et R et ensuite merge ») : 2 caps autonomes « à venir » (ancre /
+  flambeau) + passerelle pointillée réel↔idéal. Boussole = 5 caps, harnais
+  40 verts. Puis merge du cadrage + pose (PR #70).
+- **2026-07-21 (précisions Paul)** — **RESHIRAM & ZEKROM = deux caps
+  AUTONOMES** de la boussole, liés par la passerelle data mais **jamais dans une
+  seule division** (ni sous-caps, ni sous IMLADRIK). Sous-titres figés :
+  RESHIRAM « le travail de la réalité », ZEKROM « la quête de l'idéal ». Lecture
+  « projets idéaux » confirmée. Passage brouillé de la dictée : à ignorer.
+- **2026-07-21** — **Caps RESHIRAM & ZEKROM cadrés** (dicté Paul) : doublet
+  **réel ↔ idéal** ajouté au registre boussole (§2bis). **RESHIRAM** = carto de
+  la **réalité concrète des talents/capacités** (faits, chiffres, data ; rien
+  d'idéalisé ; lien fort TRAVELER), sous-titre figé **« le travail de la
+  réalité »**. **ZEKROM** = sous-titre figé **« la quête de l'idéal »**
+  (volontés, idéaux, cap directionnel, « faire rêver »). Les deux en
+  **concurrence pas opposition**, **passerelle data bidirectionnelle** (« qu'est-ce
+  qui nourrit quoi »), support du **rétroplanning** idéal→réel + analyse de
+  besoin/coût long terme. Ouverts (§10) : sous-caps d'un même macro-projet
+  (reco Léo) vs caps séparés ; rattachement IMLADRIK vs autonome ; confirmer
+  « projets idéaux » (dictée « vidéo ») + passage brouillé. Cadrage seul.
+- **2026-07-21** — **Cadre LV2-cockpit consigné** (Paul : « consigne », posture
+  expert accompagnement auto-entrepreneur + pilotage data). Ajout de `§2bis` à
+  `CADRAGE-CONSOLE.md` : la boussole = **cockpit** (pas un menu) — signaux au
+  survol, cap du jour, état du jour transversal, capture-dispatch, résumés
+  vivants ; évolution de Léo (ingestion data réelle via connecteurs, briefing
+  quotidien, pilote fiscal/tréso = `agent-finances`, signaux faibles, rédaction
+  assistée). §3.2 (finance) et §5 (sécu) inchangés, restent valables. Arbitrages
+  LV2 reportés en §10 (périmètre cockpit, statut fiscal, data réelle vs saisie,
+  URL YCOME). **On reste en cadrage : rien codé.**
 - **2026-07-21** — **Ultima LV2 lancé** (cap dicté par Paul) : une boussole
   d'accueil (rose des vents, carte savante) où chaque cap est un macro-projet ;
   la console à 4 quadrants devient le macro-projet « Ultima ». Défauts tranchés
