@@ -19,7 +19,8 @@
 
 **But.** Cartographier et travailler la **réalité concrète** de ce que Paul
 sait/peut faire : talents, capacités, plus-values, réseau, réalisations — pour
-savoir précisément **ce qu'il peut réellement proposer**.
+savoir précisément **ce qu'il peut réellement proposer**. Registre :
+**le présent, le terrain, le concret** (pas le futur — ça, c'est ZEKROM).
 
 **Objets (modèle de données, à confirmer) :**
 - **Talents / savoir-faire** — réels, chacun **adossé à une preuve** (une
@@ -48,7 +49,8 @@ concret vérifiable**. Ce qui relève du rêve part dans ZEKROM.
 
 **But.** Capter et structurer les **idéaux, volontés et idées hautes** de Paul :
 le **cap directionnel** qui oriente la motivation, la pensée et la
-conceptualisation des projets. Console **inspirante**.
+conceptualisation des projets. Registre : **tourné vers le futur**, le point de
+départ du rétroplanning. Console **inspirante**.
 
 **Objets (modèle de données, à confirmer) :**
 - **Idéaux / visions** — les grandes aspirations (vers quoi Paul veut aller).
@@ -84,16 +86,19 @@ Mécanisme qui relie les deux consoles autonomes :
 - Traduction visuelle déjà posée sur la boussole : la **passerelle pointillée**
   entre les deux caps (LV2-①). Ici on cadre la passerelle **de données**.
 
-## 4. Articulation avec les quadrants (anti-duplication) — reco Léo
+## 4. Articulation avec les quadrants — tranché (Paul 2026-07-21)
 
-- **RESHIRAM ↔ TRAVELER** : le réseau réel **vit dans TRAVELER** ; RESHIRAM en
-  lit une vue, n'en copie rien.
-- **ZEKROM ↔ ADRAMELECH** : ADRAMELECH = **bibliothèque d'idées** (quoi faire,
-  souvent exécutable) ; ZEKROM = **idéaux/direction** (le pourquoi, vers où,
-  faire rêver). ZEKROM **se nourrit** d'ADRAMELECH sans le remplacer.
-- **ZEKROM ↔ IMLADRIK** : IMLADRIK = dév. perso **opérationnel** (journal,
-  objectifs datés, valeurs) ; ZEKROM = **aspirations directionnelles**. Frontière
-  à confirmer par Paul (risque de recouvrement le plus fort).
+Les plans sont **distincts par nature**, pas en concurrence :
+- **RESHIRAM = le présent concret** — le développement de terrain, ce qui est
+  réel ici et maintenant. **Lit TRAVELER** (réseau réel) sans le copier ✅.
+- **ZEKROM = le futur idéal** — tourné vers l'avenir ; c'est le point de départ
+  du **rétroplanning « comment on y arrive »**. Se nourrit d'ADRAMELECH (idées)
+  sans le remplacer.
+- **IMLADRIK ≠ RESHIRAM/ZEKROM** (Paul : « ça n'a rien à voir ») : IMLADRIK,
+  c'est **la personne** — le dév. perso, **bien plus large** (peut même toucher
+  des rêves pro). RESHIRAM/ZEKROM forment un **axe réel↔idéal de projet**, un
+  autre registre. **Pas de frontière à négocier** : plans différents, pas de
+  doublon.
 
 ## 5. Sécurité
 
@@ -104,12 +109,13 @@ n'exposent que des données **derrière auth**.
 
 ## 6. Arbitrages ouverts — décisions attendues de Paul
 
-1. **Frontières §4** : valider RESHIRAM↔TRAVELER (lien, pas copie) et surtout
-   **ZEKROM↔IMLADRIK↔ADRAMELECH** (où s'arrête chacun ?).
+1. ✅ **Frontières (tranché §4)** : RESHIRAM = présent/terrain, ZEKROM =
+   futur/idéal, **IMLADRIK = la personne** (rien à voir). RESHIRAM lit TRAVELER
+   sans copier.
 2. **Modèle de données** : nouvelles tables Supabase (talents, idéaux, liens) —
    la conception SQL est une **gate** (migration = validation Paul).
-3. **Passerelle v1** : lien **manuel** (Paul valide les rapprochements réel/idéal)
-   ou **auto** (Léo propose) ?
+3. ✅ **Passerelle v1 (tranché)** : **manuel pour l'instant** (Paul valide les
+   rapprochements réel/idéal) ; auto plus tard quand la donnée est là.
 4. **Analyse de coût** : autonome dans R/Z, ou **déléguée à NICOL BOLAS** ?
    (reco : déléguée.)
 5. **Périmètre v1 de chaque console** : tranché au mini-cadrage de sa boucle,

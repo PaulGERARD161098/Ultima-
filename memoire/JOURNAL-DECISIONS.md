@@ -9,6 +9,14 @@
   fichier `bcp.html` conservé (id stable). Orthographe **« NICOL BOLAS »**
   (réf. MTG confirmée par Paul ; le premier jet avait écrit « NICOLE » tel que
   dicté, corrigé ensuite). Chaîne : BCP → BALTHAZAR GELD (07-19) → NICOL BOLAS.
+- **2026-07-21 (forks R/Z tranchés)** — **Fork 1 (frontières)** : RESHIRAM =
+  **présent/terrain/concret**, ZEKROM = **futur/idéal** (point de départ du
+  rétroplanning), **IMLADRIK = la personne** (dév perso, plus large, « rien à
+  voir » avec R/Z — Paul corrige la reco Léo qui craignait un recouvrement).
+  Trois plans distincts, pas de doublon. RESHIRAM lit TRAVELER sans copier ✅.
+  **Fork 2 (passerelle)** : **manuel pour l'instant** (Paul valide les
+  rapprochements), auto plus tard. **Fork 3 (ordre)** : non tranché — reco Léo
+  RESHIRAM d'abord. Cadrage seul.
 - **2026-07-21 (cadrage consoles)** — **Cadrage des consoles RESHIRAM & ZEKROM
   ouvert** (Paul : « go cadrage console pour Z et R ») → `CADRAGE-RESHIRAM-ZEKROM.md`.
   RESHIRAM = carto du réel (talents/capacités/plus-values/réalisations, vue
