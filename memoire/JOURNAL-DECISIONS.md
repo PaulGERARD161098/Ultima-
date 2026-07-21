@@ -3,6 +3,17 @@
 > Une décision consignée n'est jamais redemandée ni re-litigée.
 > Format : date — décision — conséquence.
 
+- **2026-07-21** — **Ultima LV2 lancé** (cap dicté par Paul) : une boussole
+  d'accueil (rose des vents, carte savante) où chaque cap est un macro-projet ;
+  la console à 4 quadrants devient le macro-projet « Ultima ». Défauts tranchés
+  par Léo, réversibles, à ne pas re-litiger sauf changement de cap de Paul :
+  ① **la boussole devient l'accueil `/`** (console reléguée sur `/ultima`) ;
+  ② **auth inchangée** pour LV2-① (lien magique Gmail conservé ; le « mot de
+  passe » évoqué = gate LV2-② dédiée) ; ③ **registre extensible** — les
+  macro-projets sans URL (Renault Boost, Ikom) sont des caps « à venir »,
+  ajouter/brancher = une ligne dans `MACRO_PROJETS`. LV2-① coque livrée +
+  vérifiée le jour même (Paul avait coupé le questionnaire → Léo a tranché et
+  construit).
 - **2026-07-02** — Ultima = carte interactive du réseau commercial, greenfield,
   Leaflet/OSM (pas de Google Maps sans décision coût), vanilla sans framework.
 - **2026-07-03** — Go création projet Supabase « ultima » (10 $/mois, Paris).

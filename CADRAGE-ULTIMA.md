@@ -2,6 +2,29 @@
 
 ## ÉTAT (2026-07-06, après arbitrage)
 
+- 🧭 **Ultima LV2 — la boussole (cap dicté par Paul, 2026-07-21)** : une couche
+  méta au-dessus de la console. L'accueil `/` devient une **boussole** (carte
+  savante, rose des vents) dont chaque **cap = un macro-projet** ; la console à
+  4 quadrants est reléguée en macro-projet « Ultima » (`ultima.html`). Registre
+  **extensible** : ajouter un macro-projet = une entrée dans `js/boussole.js`
+  (`MACRO_PROJETS`), les caps se redistribuent seuls. Survol/focus d'un cap →
+  illumination + **résumé de Léo** dans un cartouche sous la rose (zéro
+  surcharge : la donnée n'apparaît qu'à la demande).
+  - ✅ **LV2-① Coque boussole (2026-07-21)** — livrée + vérifiée : `index.html`
+    (boussole) + `ultima.html` (console relogée), `css/boussole.css`,
+    `js/boussole.js`, retours « console » des sous-pages repointés vers
+    `ultima.html`. Caps seedés : **Ultima** (ouvert → `/ultima`), **Renault
+    Boost** et **Ikom** (« à venir », en attente d'URL). Harnais
+    `smoke-boussole.mjs` (31 verts) + `smoke-console.mjs` reciblé vert.
+    Aucune touche à l'auth/RLS/données. **Non gated.**
+  - ⏭ **LV2-② Auth** (gate) — connexion « e-mail + mot de passe » évoquée par
+    Paul ; l'existant est un lien magique Gmail (`signInWithOtp`). Boucle
+    dédiée, arbitrage requis (garder le lien magique vs. ajouter un mot de passe).
+  - ⏭ **LV2-③ Résumés vivants** — brancher les vrais « en cours » par
+    macro-projet (Ultima les a déjà via Léo).
+  - ⏳ **Actions humaines LV2** : URLs de Renault Boost (console interne ou lien
+    externe ?) et d'Ikom (plateforme externe) → une ligne chacune dans le registre.
+
 - ✅ **P0 Fondations** — livrée, vérifiée en navigateur, fusionnée dans `main`
   via PR #1 (7 commits atomiques : cadrage, migration RLS, API, middleware,
   front, docs).
