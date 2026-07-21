@@ -3,6 +3,11 @@
 > Une décision consignée n'est jamais redemandée ni re-litigée.
 > Format : date — décision — conséquence.
 
+- **2026-07-21 (précisions Paul)** — **RESHIRAM & ZEKROM = deux caps
+  AUTONOMES** de la boussole, liés par la passerelle data mais **jamais dans une
+  seule division** (ni sous-caps, ni sous IMLADRIK). Sous-titres figés :
+  RESHIRAM « le travail de la réalité », ZEKROM « la quête de l'idéal ». Lecture
+  « projets idéaux » confirmée. Passage brouillé de la dictée : à ignorer.
 - **2026-07-21** — **Caps RESHIRAM & ZEKROM cadrés** (dicté Paul) : doublet
   **réel ↔ idéal** ajouté au registre boussole (§2bis). **RESHIRAM** = carto de
   la **réalité concrète des talents/capacités** (faits, chiffres, data ; rien

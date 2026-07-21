@@ -73,10 +73,11 @@ devenir.
     Permet le **rétroplanning** : partir de l'idéal (ZEKROM) → le décliner en
     réel (RESHIRAM) : de quoi j'ai besoin, à quoi ça correspond, comment on le
     fait, **combien ça coûte** (analyse de besoin réelle, long terme).
-  - **Forme (à trancher, §10)** : deux **sous-caps distincts d'un même
-    macro-projet** (reco Léo, cohérent avec « sous-caps » + passerelle) vs. deux
-    caps indépendants ; rattachement éventuel à **IMLADRIK** (dév. perso) ou
-    macro-projet autonome. RESHIRAM chevauche TRAVELER (réseau) et IMLADRIK.
+  - **Forme (décidée Paul 2026-07-21)** : **deux caps AUTONOMES** de la boussole
+    — liés par la passerelle data, mais **jamais fusionnés en une seule
+    division** (ni sous-caps d'un même macro-projet, ni rangés sous IMLADRIK).
+    RESHIRAM garde un **lien fort avec TRAVELER** (réseau réel) sans y être
+    absorbé.
 
 **Principe directeur — la boussole n'est pas un menu, c'est un cockpit.** Pour un
 solo, la valeur n'est pas de *naviguer* mais de *savoir en 5 secondes où mettre
@@ -314,10 +315,9 @@ servent les 4.
    c. **Data réelle vs saisie manuelle** au démarrage (brancher Gmail/Drive/
       Notion, ou saisir le temps de valider le modèle).
    d. **URL de YCOME** (plateforme externe) pour brancher son cap.
-   e. **RESHIRAM & ZEKROM** (doublet réel/idéal, cf. §2bis) : deux **sous-caps
-      d'un même macro-projet** (reco Léo) ou deux caps indépendants ? Rattaché
-      à **IMLADRIK** ou autonome ? Confirmer aussi la lecture « projets idéaux »
-      (dictée « projets vidéo ») et le passage brouillé de la dictée du 21/07.
+
+   *(Résolu 2026-07-21 : RESHIRAM & ZEKROM = deux caps AUTONOMES liés par
+   passerelle, hors IMLADRIK ; lecture « projets idéaux » confirmée.)*
 
 > Prochaine action après validation de ce cadrage : ouvrir **C1 — la console**
 > (coque réutilisant l'existant), ou d'abord le mini-cadrage du quadrant que

@@ -38,7 +38,7 @@
 | Richardam, Reshiram | RESHIRAM (cap boussole LV2 : « le travail de la réalité » — talents & capacités concrets, data, lien TRAVELER) |
 | Zekrom | ZEKROM (cap boussole LV2 : « la quête de l'idéal » — volontés/idéaux, cap directionnel) |
 | capteur (contexte curseur) | curseur (souris) qu'on glisse sur un cap de la boussole |
-| projets vidéo (contexte réel/idéal) | projets idéaux / idéalistes (interprétation à confirmer) |
+| projets vidéo (contexte réel/idéal) | projets idéaux / idéalistes (confirmé Paul 2026-07-21) |
 | mon Starlog / Claude Normal | son journal de dév. perso dans l'app Claude standard (modèle d'IMLADRIK) |
 
 Règle : en cas de doute sur un mot qui change le sens d'une instruction,
