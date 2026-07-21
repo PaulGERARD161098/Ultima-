@@ -35,6 +35,10 @@
 | Balthazar Geld, BCP | BALTHAZAR GELD (quadrant financier, ex-BCP — renommé Paul 2026-07-19) |
 | Renault Boost, Renoboost | Renoboost IA (socle rémunérateur = chantiers + installations à domicile ; ligne de base du benchmark ADRAMELECH ; macro-projet boussole LV2 → console https://www.renoboostia.fr) |
 | Ikom, Ycom | YCOME (macro-projet boussole LV2, plateforme externe — URL à fournir par Paul) |
+| Richardam, Reshiram | RESHIRAM (cap boussole LV2 : carto du réel/vérité — talents & capacités concrets, data, lien TRAVELER) |
+| Zekrom | ZEKROM (cap boussole LV2 : « la recherche de l'idéal » — volontés/idéaux, cap directionnel) |
+| capteur (contexte curseur) | curseur (souris) qu'on glisse sur un cap de la boussole |
+| projets vidéo (contexte réel/idéal) | projets idéaux / idéalistes (interprétation à confirmer) |
 | mon Starlog / Claude Normal | son journal de dév. perso dans l'app Claude standard (modèle d'IMLADRIK) |
 
 Règle : en cas de doute sur un mot qui change le sens d'une instruction,

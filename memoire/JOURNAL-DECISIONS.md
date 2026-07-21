@@ -3,6 +3,16 @@
 > Une décision consignée n'est jamais redemandée ni re-litigée.
 > Format : date — décision — conséquence.
 
+- **2026-07-21** — **Caps RESHIRAM & ZEKROM cadrés** (dicté Paul) : doublet
+  **réel ↔ idéal** ajouté au registre boussole (§2bis). **RESHIRAM** = carto de
+  la **réalité concrète des talents/capacités** (faits, chiffres, data ; rien
+  d'idéalisé ; lien fort TRAVELER). **ZEKROM** = « la recherche de l'idéal »
+  (volontés, idéaux, cap directionnel, « faire rêver »). Les deux en
+  **concurrence pas opposition**, **passerelle data bidirectionnelle** (« qu'est-ce
+  qui nourrit quoi »), support du **rétroplanning** idéal→réel + analyse de
+  besoin/coût long terme. Ouverts (§10) : sous-caps d'un même macro-projet
+  (reco Léo) vs caps séparés ; rattachement IMLADRIK vs autonome ; confirmer
+  « projets idéaux » (dictée « vidéo ») + passage brouillé. Cadrage seul.
 - **2026-07-21** — **Cadre LV2-cockpit consigné** (Paul : « consigne », posture
   expert accompagnement auto-entrepreneur + pilotage data). Ajout de `§2bis` à
   `CADRAGE-CONSOLE.md` : la boussole = **cockpit** (pas un menu) — signaux au

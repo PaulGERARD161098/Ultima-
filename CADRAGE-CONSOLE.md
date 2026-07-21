@@ -50,6 +50,34 @@ des vents, registre carte savante) où **chaque cap = un macro-projet**. Ultima
 `CADRAGE-ULTIMA.md`). Ce §2bis cadre la **suite** — ce que la boussole doit
 devenir.
 
+**Registre des caps (macro-projets) — en cours :**
+- **Ultima** — les 4 quadrants (livré, cap ouvert → `/ultima`).
+- **Renoboost IA** — console réelle branchée (`www.renoboostia.fr`).
+- **YCOME** — plateforme externe (URL à fournir par Paul).
+- **RESHIRAM & ZEKROM — le doublet réel ↔ idéal** (dicté Paul 2026-07-21, à
+  construire). Deux caps liés, empruntés à la symbolique vérité/idéaux :
+  - **RESHIRAM — la cartographie du réel (la vérité).** Cartographier la
+    **réalité concrète des talents et capacités de Paul** : ce qu'il sait/peut
+    réellement faire, proposer ; ses **plus-values réelles** ; son **réseau
+    réel** (ex. BTP : les artisans qu'il connaît → **lien direct avec
+    TRAVELER**). **Règle d'or : uniquement du concret — faits, chiffres, data ;
+    rien d'imaginé, rien d'idéalisé.**
+  - **ZEKROM — « la recherche de l'idéal ».** Les **volontés, idées hautes,
+    idéaux** de Paul → le **cap directionnel** (motivation, pensée,
+    conceptualisation des projets). Projet **« pour faire rêver »**, à ne pas
+    oublier.
+  - **Relation (cœur du doublet)** : les deux **en concurrence, pas en
+    opposition** — l'un **nourrit** l'autre. **Passerelle de data
+    bidirectionnelle** : au survol de RESHIRAM, Léo montre ce qu'un élément de
+    ZEKROM peut enrichir, et inversement (« qu'est-ce qui peut nourrir quoi »).
+    Permet le **rétroplanning** : partir de l'idéal (ZEKROM) → le décliner en
+    réel (RESHIRAM) : de quoi j'ai besoin, à quoi ça correspond, comment on le
+    fait, **combien ça coûte** (analyse de besoin réelle, long terme).
+  - **Forme (à trancher, §10)** : deux **sous-caps distincts d'un même
+    macro-projet** (reco Léo, cohérent avec « sous-caps » + passerelle) vs. deux
+    caps indépendants ; rattachement éventuel à **IMLADRIK** (dév. perso) ou
+    macro-projet autonome. RESHIRAM chevauche TRAVELER (réseau) et IMLADRIK.
+
 **Principe directeur — la boussole n'est pas un menu, c'est un cockpit.** Pour un
 solo, la valeur n'est pas de *naviguer* mais de *savoir en 5 secondes où mettre
 son énergie aujourd'hui*. La boussole reste sobre (zéro surcharge : la donnée
@@ -286,6 +314,10 @@ servent les 4.
    c. **Data réelle vs saisie manuelle** au démarrage (brancher Gmail/Drive/
       Notion, ou saisir le temps de valider le modèle).
    d. **URL de YCOME** (plateforme externe) pour brancher son cap.
+   e. **RESHIRAM & ZEKROM** (doublet réel/idéal, cf. §2bis) : deux **sous-caps
+      d'un même macro-projet** (reco Léo) ou deux caps indépendants ? Rattaché
+      à **IMLADRIK** ou autonome ? Confirmer aussi la lecture « projets idéaux »
+      (dictée « projets vidéo ») et le passage brouillé de la dictée du 21/07.
 
 > Prochaine action après validation de ce cadrage : ouvrir **C1 — la console**
 > (coque réutilisant l'existant), ou d'abord le mini-cadrage du quadrant que
