@@ -79,8 +79,8 @@ Mécanisme qui relie les deux consoles autonomes :
   inversement, un idéal ZEKROM montre les talents réels qui pourraient le
   concrétiser.
 - **Analyse de coût/besoin** : chaque projet (réel comme idéal) porte un
-  **besoin chiffré sur la durée**. Reco Léo : **déléguer le calcul à BALTHAZAR
-  GELD** (finance) plutôt que de le dupliquer.
+  **besoin chiffré sur la durée**. Reco Léo : **déléguer le calcul à NICOL
+  BOLAS** (finance) plutôt que de le dupliquer.
 - Traduction visuelle déjà posée sur la boussole : la **passerelle pointillée**
   entre les deux caps (LV2-①). Ici on cadre la passerelle **de données**.
 
@@ -99,7 +99,7 @@ Mécanisme qui relie les deux consoles autonomes :
 
 Auto-évaluation, talents, idéaux = **données personnelles/introspectives**. Le
 §5 de `CADRAGE-CONSOLE.md` s'applique : **auth, RLS, jamais en logs**,
-chiffrement au repos à évaluer (comme IMLADRIK/NICOLE BOLAS). Les consoles
+chiffrement au repos à évaluer (comme IMLADRIK/NICOL BOLAS). Les consoles
 n'exposent que des données **derrière auth**.
 
 ## 6. Arbitrages ouverts — décisions attendues de Paul
@@ -110,7 +110,7 @@ n'exposent que des données **derrière auth**.
    la conception SQL est une **gate** (migration = validation Paul).
 3. **Passerelle v1** : lien **manuel** (Paul valide les rapprochements réel/idéal)
    ou **auto** (Léo propose) ?
-4. **Analyse de coût** : autonome dans R/Z, ou **déléguée à NICOLE BOLAS** ?
+4. **Analyse de coût** : autonome dans R/Z, ou **déléguée à NICOL BOLAS** ?
    (reco : déléguée.)
 5. **Périmètre v1 de chaque console** : tranché au mini-cadrage de sa boucle,
    pas maintenant (pas de spéculation).

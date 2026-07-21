@@ -127,7 +127,7 @@ bâtiment**, en trois étages qui se nourrissent l'un l'autre :
 
 - **TRAVELER** : Godefroy (partenaire pressenti) ; le réseau d'artisans
   d'Ultima est le vivier naturel des premiers clients « mise à la benne ».
-- **NICOLE BOLAS** : à terme, structure à part — pilotage financier séparé.
+- **NICOL BOLAS** : à terme, structure à part — pilotage financier séparé.
 
 ### Analyse stratégique
 
@@ -280,7 +280,7 @@ n'est pas un produit unique mais la **vitesse de réaction** :
 
 - **TRAVELER** : Julien (partenaire pressenti) ; le réseau fournit
   sous-traitants et apporteurs d'affaires.
-- **NICOLE BOLAS** : à terme, structure à part — pilotage financier séparé.
+- **NICOL BOLAS** : à terme, structure à part — pilotage financier séparé.
 
 ### Analyse stratégique
 
@@ -377,7 +377,7 @@ Mise en concurrence mécanique avec le socle **Renoboost IA (chantiers + install
 #### G. Provision d'exécution
 
 Si la version *extension disciplinée du socle* est retenue :
-- **`data-ingenieur`** — modèle chantier énergie (activité, équipement, ticket, aide associée, statut du dossier d'aide, encours à recevoir) adossé à la fiche chantier TRAVELER existante ; suivi du BFR aides (poste financier NICOLE BOLAS).
+- **`data-ingenieur`** — modèle chantier énergie (activité, équipement, ticket, aide associée, statut du dossier d'aide, encours à recevoir) adossé à la fiche chantier TRAVELER existante ; suivi du BFR aides (poste financier NICOL BOLAS).
 - **`front-carto`** — vue chantiers par activité/saison sur carte, planning de charge des équipes polyvalentes ; fiche dossier d'aide.
 - **`interface-ux`** — parcours « monter un dossier d'aide » (checklist MaPrimeRénov'/CEE) et parcours devis multi-activité ; wording sobre, cohérent avec la promesse fiabilité.
 - **`securite-auditeur` / `verificateur`** — dès qu'une donnée client (éligibilité aide = PII sensible : revenus, adresse, situation) est en base : surface à risque élevée, RLS stricte obligatoire.
@@ -387,7 +387,7 @@ Si la version *extension disciplinée du socle* est retenue :
 1. **Veille réglementaire des aides** — surveillance des dispositifs + alerte de pivot ; c'est le différenciant opérationnel cité au registre, à automatiser en premier.
 2. **Montage des dossiers d'aide** — checklist + pré-remplissage par chantier (éligibilité → pièces → dépôt → suivi de paiement) ; réduit le BFR en accélérant l'encaissement.
 3. **Planification multi-métier saisonnière** — affectation des équipes polyvalentes selon saison/charge (clim été ↔ PAC hiver) ; maximise le taux de charge annuel.
-4. **Suivi de l'encours d'aides à recevoir** — tableau de bord BFR (pendant financier NICOLE BOLAS) ; pilote le risque trésorerie du prémortem.
+4. **Suivi de l'encours d'aides à recevoir** — tableau de bord BFR (pendant financier NICOL BOLAS) ; pilote le risque trésorerie du prémortem.
 
 ---
 
@@ -451,7 +451,7 @@ impossible : le manquant se voit **avant** le jour de pose, pas dessus.
 - **ADR-001 GLANEUR** : les surplus de chantier détectés par l'INTENDANT
   (lignes commandées non posées) sont exactement la matière que GLANEUR
   collecte et revalorise.
-- **NICOLE BOLAS** : chaque commande est une charge — le rapprochement commande/facture
+- **NICOL BOLAS** : chaque commande est une charge — le rapprochement commande/facture
   a un pendant financier.
 
 ### Analyse stratégique
@@ -544,7 +544,7 @@ La pondération orientée vitesse/rentabilité *maintient* le score haut — INT
 #### G. Provision d'exécution
 
 Si la version *outil interne v1* est retenue :
-- **`data-ingenieur`** — modèle de données du matching (ligne : besoin / commande / stock, 3 états + étape « contrôlé en bon état ») **adossé à la fiche chantier TRAVELER existante plutôt qu'un silo neuf** ; pendant financier NICOLE BOLAS (chaque commande = une charge, rapprochement commande/facture).
+- **`data-ingenieur`** — modèle de données du matching (ligne : besoin / commande / stock, 3 états + étape « contrôlé en bon état ») **adossé à la fiche chantier TRAVELER existante plutôt qu'un silo neuf** ; pendant financier NICOL BOLAS (chaque commande = une charge, rapprochement commande/facture).
 - **`front-carto` / `interface-ux`** — saisie rapide (vocale en priorité, registre ADRAMELECH oblige), vue check-list par chantier, **alertes J-2** lisibles ; parcours « ajouter un besoin en cours → recalcul des manquants » ; wording sobre, registre antique.
 - **`securite-auditeur` / `verificateur`** — dès qu'une donnée chantier/client/fournisseur est en base (surface à risque).
 
@@ -808,7 +808,7 @@ délai de devis ; le verdict de faisabilité **évite les projets invendables**
   sert le pont frigoriste↔PAC dès la vente.
 - **ADR-003 INTENDANT** : la recommandation + l'estimation produisent la liste
   des pièces nécessaires → alimente les besoins INTENDANT du chantier signé.
-- **NICOLE BOLAS** : chaque estimation/devis a un pendant financier.
+- **NICOL BOLAS** : chaque estimation/devis a un pendant financier.
 
 ### Analyse stratégique
 
@@ -986,7 +986,7 @@ jamais un outil à côté).
   d'autres — c'est ça, le « plug-and-play sur n'importe quel site avec une API ».
 - **Couche de filtrage Claude** par-dessus (profil métier → pertinence + extrait).
 - **Dépôt dans Ultima** : chaque signal devient une **alerte/carte routée vers le
-  bon quadrant** (fiscalité/TVA → NICOLE BOLAS, chantiers → TRAVELER), et
+  bon quadrant** (fiscalité/TVA → NICOL BOLAS, chantiers → TRAVELER), et
   **Léo présente le digest** — Paul ne lit jamais le flux brut.
 
 **Séquencement (boucler petit d'abord).**
@@ -1007,7 +1007,7 @@ toujours sa source officielle.
 
 ### Liens inter-segments
 
-- **NICOLE BOLAS** : lien le plus direct — TVA, impôts, dispositifs fiscaux
+- **NICOL BOLAS** : lien le plus direct — TVA, impôts, dispositifs fiscaux
   sont le cœur du quadrant finance ; une règle détectée y a son pendant chiffré.
 - **TRAVELER** : les chantiers/leads concernés — éligibilité à un dispositif =
   **argument commercial** auprès des clients et des artisans du réseau.

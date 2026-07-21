@@ -13,7 +13,7 @@ export const MAX_TOTAL_CHARS = 24000; // plafond global de l'historique
 export const MAX_TOKENS_REPONSE = 1024; // réponses de majordome, pas d'essais
 
 // Les 4 quadrants et leur registre (CADRAGE-LEO-SITE §1 : opérationnel sur
-// TRAVELER/NICOLE BOLAS, réflexif sur ADRAMELECH/IMLADRIK).
+// TRAVELER/NICOL BOLAS, réflexif sur ADRAMELECH/IMLADRIK).
 const QUADRANTS = {
   traveler: {
     nom: 'TRAVELER',
@@ -23,7 +23,7 @@ const QUADRANTS = {
       'chantiers en cours et leur intendance.'
   },
   bcp: {
-    nom: 'NICOLE BOLAS',
+    nom: 'NICOL BOLAS',
     registre: 'opérationnel',
     sujet: 'le pilotage financier de Paul : revenus, charges, prévision ' +
       "d'impôts, échéancier. Ce quadrant est encore en chantier : aide à " +

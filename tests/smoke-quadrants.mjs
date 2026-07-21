@@ -296,9 +296,9 @@ console.log('— D. adramelech.html fixture 200 → registre + cartouche Léo r�
   await page.close();
 }
 
-// ===================== E/F. NICOLE BOLAS et IMLADRIK : antichambres de chantier =====================
+// ===================== E/F. NICOL BOLAS et IMLADRIK : antichambres de chantier =====================
 for (const quadrant of [
-  { fichier: 'bcp.html', nom: 'NICOLE BOLAS', cle: 'ultima-leo-accueil-vu-bcp' },
+  { fichier: 'bcp.html', nom: 'NICOL BOLAS', cle: 'ultima-leo-accueil-vu-bcp' },
   { fichier: 'imladrik.html', nom: 'IMLADRIK', cle: 'ultima-leo-accueil-vu-imladrik' },
 ]) {
   console.log(`— ${quadrant.nom} : antichambre de chantier (${quadrant.fichier}) —`);

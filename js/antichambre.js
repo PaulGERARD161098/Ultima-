@@ -1,4 +1,4 @@
-// Ultima — antichambres des quadrants PAS ENCORE BÂTIS (NICOLE BOLAS, IMLADRIK).
+// Ultima — antichambres des quadrants PAS ENCORE BÂTIS (NICOL BOLAS, IMLADRIK).
 // Un seul script pour les deux coquilles : il lit `data-quadrant` sur <body>
 // et ouvre le cartouche Léo « majordome de chantier » (js/leo-accueil.js,
 // accueillirQuadrant) — état statique et sincère, aucune donnée personnelle,

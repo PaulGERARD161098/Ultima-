@@ -13,7 +13,7 @@
 - **Rien sur la page d'accueil** : la console (4 quadrants) reste muette.
 - **Au moment où Paul entre dans un quadrant** : un **pop-up d'accueil de Léo**
   qui récapitule **où on en est** et **les travaux en cours** s'il y en a.
-  - **TRAVELER et NICOLE BOLAS** : registre **opérationnel** — relances qui dorment,
+  - **TRAVELER et NICOL BOLAS** : registre **opérationnel** — relances qui dorment,
     leads chauds, échéances fiscales, chantiers en cours. C'est là que le
     récapitulatif a le plus de valeur immédiate.
   - **ADRAMELECH et IMLADRIK** : registre **réflexif** (quadrants personnels) —
@@ -44,7 +44,7 @@ Pour être étendue/puissante/pertinente, Léo-au-site a besoin de **quatre
 2. **Le contexte (les yeux de Léo)** — le pop-up est nourri par les **données
    réelles** du quadrant via les API `requireUser` existantes et à venir :
    - TRAVELER : journal « où j'en suis », relances dues, leads, relations.
-   - NICOLE BOLAS : échéancier fiscal, charges/revenus du mois (quand le quadrant
+   - NICOL BOLAS : échéancier fiscal, charges/revenus du mois (quand le quadrant
      existera).
    - ADRAMELECH : `/api/idees` (statuts, bilan de l'archipel, top 3 stratégique).
    - IMLADRIK : objectifs, journal, quart d'heure du jour (quand il existera).
@@ -99,7 +99,7 @@ Le pop-up touche à terme PII réseau + finance + intime (§5 CADRAGE-CONSOLE) :
   pilote TRAVELER fusionné (PR #52) puis **diffusion aux 4 quadrants** sur
   ordre de Paul (PR #55) : module `js/leo-accueil.js` généralisé
   (`accueillirQuadrant`), antichambre ADRAMELECH derrière auth (registre
-  d'idées via /api/idees, cartouche réflexif, fail-closed prouvé), NICOLE BOLAS/IMLADRIK
+  d'idées via /api/idees, cartouche réflexif, fail-closed prouvé), NICOL BOLAS/IMLADRIK
   en majordome de chantier, console à 4 portes actives. Middleware : allowlist
   du chemin exact `/adramelech` — **contre-passe securite-auditeur GO** (29
   attaques, zéro contournement) + réserves figées au harnais (2026-07-19).
@@ -115,7 +115,7 @@ Le pop-up touche à terme PII réseau + finance + intime (§5 CADRAGE-CONSOLE) :
   `api/_lib/leo.js`, harnais `unit-leo-voix.mjs` + smoke section C (API
   stubée : contrat Bearer/historique, gate, panne). **GATE coût** : la voix
   ne parle qu'une fois la clé posée par Paul en env Vercel (+ plafond de
-  dépense côté console Anthropic). Antichambres NICOLE BOLAS/IMLADRIK :
+  dépense côté console Anthropic). Antichambres NICOL BOLAS/IMLADRIK :
   muettes tant qu'elles n'ont pas d'auth (fail-closed voulu).
 - **L2b — les mains (agir sur dictée)** : tool use branché sur les API du
   site (idées, INTENDANT, journal, relances), session de Paul uniquement,
@@ -131,7 +131,7 @@ Le pop-up touche à terme PII réseau + finance + intime (§5 CADRAGE-CONSOLE) :
 
 **Actées (Paul, 2026-07-18)** : agent actif à l'initiative ; rien sur
 l'accueil ; pop-up récapitulatif à l'entrée de chaque quadrant ; opérationnel
-sur TRAVELER/NICOLE BOLAS, réflexif sur ADRAMELECH/IMLADRIK ; cohérence quadrant ;
+sur TRAVELER/NICOL BOLAS, réflexif sur ADRAMELECH/IMLADRIK ; cohérence quadrant ;
 ton Jarvis ; adaptation/apprentissage ; **Léo agit sur dictée** (« ouvrir
 Ultima, parler à Léo, ça fait avancer les choses ») et **tourne sur Claude** ;
 visuel + fonctionnement différés.
