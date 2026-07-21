@@ -3,6 +3,10 @@
 > Une décision consignée n'est jamais redemandée ni re-litigée.
 > Format : date — décision — conséquence.
 
+- **2026-07-21 (posés)** — **RESHIRAM & ZEKROM posés sur la boussole** (Paul :
+  « pose Z et R et ensuite merge ») : 2 caps autonomes « à venir » (ancre /
+  flambeau) + passerelle pointillée réel↔idéal. Boussole = 5 caps, harnais
+  40 verts. Puis merge du cadrage + pose (PR #70).
 - **2026-07-21 (précisions Paul)** — **RESHIRAM & ZEKROM = deux caps
   AUTONOMES** de la boussole, liés par la passerelle data mais **jamais dans une
   seule division** (ni sous-caps, ni sous IMLADRIK). Sous-titres figés :
