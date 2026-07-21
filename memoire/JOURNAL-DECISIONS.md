@@ -3,6 +3,15 @@
 > Une décision consignée n'est jamais redemandée ni re-litigée.
 > Format : date — décision — conséquence.
 
+- **2026-07-21** — **Cadre LV2-cockpit consigné** (Paul : « consigne », posture
+  expert accompagnement auto-entrepreneur + pilotage data). Ajout de `§2bis` à
+  `CADRAGE-CONSOLE.md` : la boussole = **cockpit** (pas un menu) — signaux au
+  survol, cap du jour, état du jour transversal, capture-dispatch, résumés
+  vivants ; évolution de Léo (ingestion data réelle via connecteurs, briefing
+  quotidien, pilote fiscal/tréso = `agent-finances`, signaux faibles, rédaction
+  assistée). §3.2 (finance) et §5 (sécu) inchangés, restent valables. Arbitrages
+  LV2 reportés en §10 (périmètre cockpit, statut fiscal, data réelle vs saisie,
+  URL YCOME). **On reste en cadrage : rien codé.**
 - **2026-07-21** — **Ultima LV2 lancé** (cap dicté par Paul) : une boussole
   d'accueil (rose des vents, carte savante) où chaque cap est un macro-projet ;
   la console à 4 quadrants devient le macro-projet « Ultima ». Défauts tranchés

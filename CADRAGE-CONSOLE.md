@@ -36,6 +36,62 @@ Page d'accueil = **console de sélection** :
 - **Registre visuel** : antique et sérieux (décision 2026-07-08, maintenue) —
   carte savante, parchemin, cartouches, typographie old-style. Rien d'enfantin.
 - Chaque quadrant ouvre son outil ; Léo reste l'interlocuteur unique partout.
+- **MàJ LV2 (2026-07-21)** : cette console à 4 quadrants n'est plus la page
+  d'accueil racine — elle est devenue le macro-projet « Ultima » (`/ultima`),
+  atteint depuis la **boussole** LV2 (cf. §2bis). Bandeau et invite conservés.
+
+## 2bis. LV2 — la boussole des macro-projets (couche méta, cadrée 2026-07-21)
+
+Le travail de Paul dépasse Ultima seul : d'autres macro-projets existent
+(**Renoboost IA**, **YCOME**, et d'autres à venir). LV2 pose une **couche
+au-dessus des quadrants** : l'accueil racine `/` devient une **boussole** (rose
+des vents, registre carte savante) où **chaque cap = un macro-projet**. Ultima
+(les 4 quadrants) n'est qu'un cap parmi d'autres. Coque livrée = LV2-① (cf.
+`CADRAGE-ULTIMA.md`). Ce §2bis cadre la **suite** — ce que la boussole doit
+devenir.
+
+**Principe directeur — la boussole n'est pas un menu, c'est un cockpit.** Pour un
+solo, la valeur n'est pas de *naviguer* mais de *savoir en 5 secondes où mettre
+son énergie aujourd'hui*. La boussole reste sobre (zéro surcharge : la donnée
+n'apparaît qu'au survol/focus), mais elle **agrège du sens** au-dessus des
+projets.
+
+**Ce que LV2 ajoute (par ordre de valeur) :**
+1. **Signaux au survol/sur le cap** — badges discrets par macro-projet
+   (« 3 relances dues », « échéance URSSAF J-6 », « 1 facture impayée »). La
+   donnée dort, s'allume quand elle compte.
+2. **Cap du jour** — Léo **désigne** le cap prioritaire (data-driven : ce qui
+   coûte de l'argent ou du temps si non traité), au lieu d'une invite passive.
+3. **État du jour transversal** — une ligne consolidée **tous macro-projets
+   confondus** (trésorerie, prochaine échéance, top action).
+4. **Capture-dispatch** — une note dictée depuis la boussole est **rangée par
+   Léo dans le bon quadrant/projet** (directive JL : absorber → dispatcher).
+5. **Résumés vivants** (LV2-③) — le survol montre le vrai « en cours » du
+   projet, pas un texte figé.
+
+**Léo — l'évolution que LV2 appelle :**
+- **Ingestion de la vraie data** via les connecteurs déjà disponibles (Gmail,
+  Google Calendar, Drive, Notion, Supabase) — piloter sur du réel, pas de la
+  saisie manuelle.
+- **Briefing quotidien** (tréso, échéances, RDV, relances, top-3 actions),
+  **pilote fiscal & trésorerie** (= activation d'`agent-finances`, cf. §7),
+  **détection de signaux faibles**, **rédaction assistée** (brouillons ;
+  envoi sur ordre explicite seulement).
+
+**Sécurité** : les KPIs remontés sur la boussole peuvent agréger de la donnée
+**finance = ultra-sensible** (RC2). Le §5 s'applique intégralement à cette
+couche (RLS, gates, jamais de finance en logs, chiffrement au repos à évaluer).
+La boussole n'affiche que des **agrégats derrière auth**, jamais de PII/finance
+en clair dans le HTML servi.
+
+**Séquencement proposé (une boucle à la fois, à valider hors cadrage) :**
+LV2-② (auth) ou la boucle **BALTHAZAR GELD** (pilote fiscal + tréso) qui
+**alimente les 2 premiers KPIs de la boussole** — c'est le plus fort levier
+auto-entrepreneur et il transforme la boussole en cockpit dès la 1ʳᵉ brique.
+
+**Arbitrages ouverts (reportés en §10) :** périmètre du cockpit (2 KPIs vs
+bandeau complet) ; statut fiscal réel (micro-BIC/BNC, TVA) ; data réelle vs
+saisie manuelle au démarrage ; niveau de chiffrement finance.
 
 ## 3. Les 4 quadrants (noms de code confirmés par Paul, 2026-07-12)
 
@@ -222,6 +278,14 @@ servent les 4.
    applicatif exigé, ou RLS + repos Supabase suffisant en v1 ? (sécurité).
 3. **Périmètre v1 de chaque quadrant** : tranché au mini-cadrage de sa boucle,
    pas maintenant (pas de spéculation).
+4. **LV2 cockpit (cf. §2bis, ajoutés 2026-07-21)** :
+   a. **Périmètre du cockpit** : 2 KPIs sobres sur la boussole, ou bandeau
+      « état du jour » complet ?
+   b. **Statut fiscal réel** de Paul (micro-BIC/BNC, TVA franchise ou assujetti)
+      — nécessaire pour caler les calculs BALTHAZAR GELD.
+   c. **Data réelle vs saisie manuelle** au démarrage (brancher Gmail/Drive/
+      Notion, ou saisir le temps de valider le modèle).
+   d. **URL de YCOME** (plateforme externe) pour brancher son cap.
 
 > Prochaine action après validation de ce cadrage : ouvrir **C1 — la console**
 > (coque réutilisant l'existant), ou d'abord le mini-cadrage du quadrant que
