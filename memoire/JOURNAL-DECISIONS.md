@@ -6,7 +6,8 @@
 - **2026-07-21** — **Caps RESHIRAM & ZEKROM cadrés** (dicté Paul) : doublet
   **réel ↔ idéal** ajouté au registre boussole (§2bis). **RESHIRAM** = carto de
   la **réalité concrète des talents/capacités** (faits, chiffres, data ; rien
-  d'idéalisé ; lien fort TRAVELER). **ZEKROM** = « la recherche de l'idéal »
+  d'idéalisé ; lien fort TRAVELER), sous-titre figé **« le travail de la
+  réalité »**. **ZEKROM** = sous-titre figé **« la quête de l'idéal »**
   (volontés, idéaux, cap directionnel, « faire rêver »). Les deux en
   **concurrence pas opposition**, **passerelle data bidirectionnelle** (« qu'est-ce
   qui nourrit quoi »), support du **rétroplanning** idéal→réel + analyse de

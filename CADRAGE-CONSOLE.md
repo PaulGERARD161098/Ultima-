@@ -56,13 +56,13 @@ devenir.
 - **YCOME** — plateforme externe (URL à fournir par Paul).
 - **RESHIRAM & ZEKROM — le doublet réel ↔ idéal** (dicté Paul 2026-07-21, à
   construire). Deux caps liés, empruntés à la symbolique vérité/idéaux :
-  - **RESHIRAM — la cartographie du réel (la vérité).** Cartographier la
+  - **RESHIRAM — « le travail de la réalité ».** Cartographier et travailler la
     **réalité concrète des talents et capacités de Paul** : ce qu'il sait/peut
     réellement faire, proposer ; ses **plus-values réelles** ; son **réseau
     réel** (ex. BTP : les artisans qu'il connaît → **lien direct avec
     TRAVELER**). **Règle d'or : uniquement du concret — faits, chiffres, data ;
     rien d'imaginé, rien d'idéalisé.**
-  - **ZEKROM — « la recherche de l'idéal ».** Les **volontés, idées hautes,
+  - **ZEKROM — « la quête de l'idéal ».** Les **volontés, idées hautes,
     idéaux** de Paul → le **cap directionnel** (motivation, pensée,
     conceptualisation des projets). Projet **« pour faire rêver »**, à ne pas
     oublier.
