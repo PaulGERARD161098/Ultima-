@@ -1,0 +1,253 @@
+/* Ultima LV2 — Boussole d'accueil (macro-projets).
+   Registre carte savante : lavis de mer profonde, parchemin noble, rose des
+   vents gravée. Réutilise STRICTEMENT les tokens de css/styles.css
+   (--parchemin*, --encre-sepia*, --or-antique, --cerne-carte, --mer-*,
+   --creme, --police-ancienne, --accent*). Aucun CDN : fond et gravures sont
+   des SVG inline. Le placement des caps et les aiguilles viennent de
+   js/boussole.js ; ici, l'habillage. */
+
+/* ---------- Fond : même mer que la console + vignette ---------- */
+body.boussole {
+  height: auto;
+  min-height: 100vh;
+  display: block;
+  color: var(--creme);
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='60'%3E%3Cpath d='M0,30 q17,-10 35,0 t35,0 t35,0 t35,0' fill='none' stroke='%238fc2d4' stroke-opacity='0.16' stroke-width='1.2'/%3E%3Cpath d='M0,52 q17,-8 35,0 t35,0 t35,0 t35,0' fill='none' stroke='%238fc2d4' stroke-opacity='0.10' stroke-width='1'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse at 50% 20%, rgba(120, 190, 210, 0.16), rgba(0, 0, 0, 0) 60%),
+    radial-gradient(ellipse at 50% 60%, rgba(0, 0, 0, 0) 52%, rgba(4, 24, 36, 0.6) 100%),
+    linear-gradient(180deg, var(--mer-claire), var(--mer-profonde) 62%, #0a2d42);
+}
+
+/* ---------- Colonne centrale ---------- */
+.boussole-scene {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1rem, 3.2vw, 1.9rem);
+  padding: clamp(1.4rem, 4vw, 2.6rem) clamp(1rem, 4vw, 2rem)
+           calc(clamp(1.4rem, 4vw, 2.6rem) + env(safe-area-inset-bottom));
+}
+
+/* L'entête réutilise .console-entete (flex colonne centrée) ; petit resserrage. */
+.boussole-entete { gap: 0.45rem; }
+
+/* ---------- Le plateau (carré, la boussole s'y déploie) ---------- */
+.boussole-plateau {
+  position: relative;
+  width: min(86vmin, 540px);
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+}
+
+/* Anneau gradué : fines graduations d'or au bord du plateau (mask en couronne). */
+.boussole-plateau::before {
+  content: "";
+  position: absolute;
+  inset: 1.5%;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from -90deg,
+    var(--or-antique) 0deg 0.5deg, transparent 0.5deg 7.5deg);
+  -webkit-mask: radial-gradient(circle, transparent 0 45%, #000 46% 49%, transparent 50%);
+          mask: radial-gradient(circle, transparent 0 45%, #000 46% 49%, transparent 50%);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Cercle de cadran discret (le disque de la boussole sous les caps). */
+.boussole-plateau::after {
+  content: "";
+  position: absolute;
+  inset: 6%;
+  border-radius: 50%;
+  border: 1px solid rgba(169, 136, 74, 0.35);
+  box-shadow: inset 0 0 44px rgba(4, 24, 36, 0.45);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---------- Aiguilles (SVG plein plateau) ---------- */
+.boussole-aiguilles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 1;
+}
+.aiguille-trait { stroke: var(--or-antique); stroke-width: 0.6; opacity: 0.5; }
+.aiguille-pointe { fill: var(--or-antique); opacity: 0.55; }
+.aiguille.is-actif .aiguille-trait { stroke: #f4e6bd; stroke-width: 1.1; opacity: 1; }
+.aiguille.is-actif .aiguille-pointe { fill: #f4e6bd; opacity: 1; }
+
+/* ---------- Cœur : rose des vents gravée ---------- */
+.boussole-coeur {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 34%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  padding: 5%;
+  z-index: 2;
+  background: radial-gradient(circle at 50% 40%, var(--parchemin), var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte);
+  box-shadow:
+    inset 0 0 0 3px rgba(169, 136, 74, 0.45),
+    0 4px 14px rgba(0, 10, 20, 0.5);
+}
+.boussole-coeur svg { width: 100%; height: auto; display: block; }
+
+/* ---------- Caps (cartouches disposés autour, placés par le JS) ---------- */
+.cap {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  width: clamp(94px, 21vmin, 148px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.32rem;
+  padding: 0.6rem 0.5rem 0.55rem;
+  text-decoration: none;
+  text-align: center;
+  color: var(--encre-sepia);
+  background: linear-gradient(180deg, var(--parchemin), var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte);
+  border-radius: 8px;
+  box-shadow:
+    inset 0 0 0 3px rgba(169, 136, 74, 0.45),
+    0 3px 10px rgba(0, 10, 20, 0.4);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+a.cap { cursor: pointer; }
+.cap--avenir { cursor: default; opacity: 0.85; }
+
+/* Illumination (survol souris, focus clavier, ou état actif imposé par le JS). */
+.cap.is-actif,
+a.cap:hover {
+  border-color: var(--or-antique);
+  background: linear-gradient(180deg, #fbf5e6, var(--parchemin));
+  box-shadow:
+    inset 0 0 0 3px rgba(169, 136, 74, 0.7),
+    0 7px 18px rgba(0, 10, 20, 0.5),
+    0 0 0 2px rgba(244, 230, 189, 0.35);
+  transform: translate(-50%, -50%) scale(1.06);
+}
+.cap:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.cap-blason { flex: none; }
+.cap-blason-svg {
+  width: clamp(42px, 9.5vmin, 58px);
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 1px 2px rgba(0, 10, 20, 0.25));
+}
+.cap-corps { display: flex; flex-direction: column; gap: 0.12rem; }
+.cap-nom {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  font-size: clamp(0.72rem, 2vmin, 0.9rem);
+  letter-spacing: 0.09em;
+  color: var(--encre-sepia);
+}
+.cap-etat {
+  font-family: var(--police-ancienne);
+  font-variant: small-caps;
+  font-size: clamp(0.63rem, 1.7vmin, 0.76rem);
+  letter-spacing: 0.06em;
+  color: var(--encre-sepia-douce);
+}
+
+/* ---------- Parole de Léo (cartouche sous la boussole) ---------- */
+.boussole-parole {
+  width: min(100%, 520px);
+  min-height: 4.6rem;
+  margin: 0 auto;
+  padding: 0.85rem 1.1rem;
+  text-align: center;
+  color: var(--encre-sepia);
+  background: linear-gradient(180deg, var(--parchemin), var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte);
+  border-radius: 8px;
+  box-shadow:
+    inset 0 0 0 3px rgba(169, 136, 74, 0.42),
+    0 3px 10px rgba(0, 10, 20, 0.35);
+  transition: border-color 0.15s ease;
+}
+.boussole-parole.is-actif { border-color: var(--or-antique); }
+
+.parole-defaut {
+  margin: 0;
+  font-family: var(--police-ancienne);
+  font-style: italic;
+  font-size: clamp(0.86rem, 2.4vw, 1.02rem);
+  color: var(--encre-sepia-douce);
+}
+.parole-nom {
+  margin: 0 0 0.1rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  font-size: clamp(0.92rem, 2.6vw, 1.1rem);
+}
+.parole-etat {
+  margin: 0 0 0.4rem;
+  font-family: var(--police-ancienne);
+  font-variant: small-caps;
+  letter-spacing: 0.07em;
+  font-size: clamp(0.68rem, 1.9vw, 0.8rem);
+  color: var(--encre-sepia-douce);
+}
+.parole-texte {
+  margin: 0 0 0.4rem;
+  font-family: var(--police-ancienne);
+  font-size: clamp(0.82rem, 2.3vw, 0.96rem);
+  line-height: 1.4;
+}
+.parole-action {
+  margin: 0;
+  font-family: var(--police-ancienne);
+  font-variant: small-caps;
+  letter-spacing: 0.07em;
+  font-size: clamp(0.72rem, 2vw, 0.84rem);
+  color: var(--accent-fonce);
+}
+
+/* ---------- Repli sans JavaScript ---------- */
+.boussole-noscript {
+  list-style: none;
+  margin: 0;
+  padding: 1rem;
+  color: var(--creme);
+  font-family: var(--police-ancienne);
+  text-align: center;
+}
+.boussole-noscript a { color: #f4e6bd; }
+
+/* ---------- Petits écrans : la rose reste lisible ---------- */
+@media (max-width: 560px) {
+  .boussole-scene { justify-content: flex-start; }
+  .boussole-plateau { width: min(94vw, 420px); }
+  .cap { width: clamp(84px, 27vw, 120px); }
+}
+
+/* Respect du réglage « moins d'animations ». */
+@media (prefers-reduced-motion: reduce) {
+  .cap { transition: none; }
+  .cap.is-actif, a.cap:hover { transform: translate(-50%, -50%); }
+}

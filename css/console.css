@@ -46,6 +46,29 @@ body.console {
            calc(clamp(1.6rem, 4vw, 3rem) + env(safe-area-inset-bottom));
 }
 
+/* ---------- Retour boussole (LV2) : lien discret en tête de console ---------- */
+.console-retour {
+  margin: 0 0 0.2rem;
+  text-align: left;
+}
+.console-retour a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--or-antique);
+  background: rgba(20, 46, 62, 0.35);
+  color: var(--creme);
+  text-decoration: none;
+  font-family: var(--police-ancienne);
+  font-size: 0.9rem;
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+}
+.console-retour a:hover { background: rgba(20, 46, 62, 0.6); border-color: var(--or-antique); }
+.console-retour a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
 /* ---------- Bandeau : sceau + accueil + invite ---------- */
 .console-entete {
   display: flex;
