@@ -52,8 +52,10 @@ console.log('— A. Boussole d\'accueil —');
 await page.goto(`${BASE}/`, { waitUntil: 'load', timeout: 20000 });
 await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
 
-const titre = (await page.locator('h1.console-titre').textContent())?.trim();
-verifier('Bandeau « Bienvenue sur Ultima »', titre === 'Bienvenue sur Ultima', `lu: ${titre}`);
+const surligne = (await page.locator('h1.console-titre .titre-surligne').textContent())?.trim();
+const principal = (await page.locator('h1.console-titre .titre-principal').textContent())?.trim();
+verifier('Titre ligne 1 « Ultima LV2 »', surligne === 'Ultima LV2', `lu: ${surligne}`);
+verifier('Titre ligne 2 « Bienvenue »', principal === 'Bienvenue', `lu: ${principal}`);
 const invite = (await page.locator('.console-invite').textContent())?.trim();
 verifier('Invite présente', /Sur quoi est-ce qu'on travaille aujourd'hui/.test(invite || ''), `lu: ${invite}`);
 

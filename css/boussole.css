@@ -38,6 +38,27 @@ body.boussole {
 /* L'entête réutilise .console-entete (flex colonne centrée) ; petit resserrage. */
 .boussole-entete { gap: 0.45rem; }
 
+/* Titre d'accueil sur deux lignes : surligne d'or « Ultima LV2 » + « Bienvenue ». */
+.console-titre--boussole {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  line-height: 1.05;
+}
+.titre-surligne {
+  font-family: var(--police-ancienne);
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: clamp(0.9rem, 2.6vw, 1.25rem);
+  letter-spacing: 0.22em;
+  color: #e8cf8f;                 /* or antique clair, cohérent avec le sceau */
+  text-shadow: 0 1px 2px rgba(0, 10, 20, 0.55);
+}
+.titre-principal {
+  font-size: clamp(1.9rem, 6vw, 3rem);
+}
+
 /* ---------- Le plateau (carré, la boussole s'y déploie) ---------- */
 .boussole-plateau {
   position: relative;
