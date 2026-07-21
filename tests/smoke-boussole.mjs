@@ -62,24 +62,32 @@ verifier('Invite présente', /Sur quoi est-ce qu'on travaille aujourd'hui/.test(
 // Les 3 caps rendus.
 const noms = (await page.locator('.cap-nom').allTextContents()).map((n) => n.trim());
 verifier('3 caps rendus', noms.length === 3, `trouvés: ${JSON.stringify(noms)}`);
-for (const attendu of ['ULTIMA', 'RENAULT BOOST', 'IKOM']) {
+for (const attendu of ['ULTIMA', 'RENOBOOST IA', 'YCOME']) {
   verifier(`Cap ${attendu} présent`, noms.includes(attendu));
 }
 
-// ULTIMA est une porte ouverte (ancre vers ultima.html).
+// ULTIMA est une porte ouverte interne (ancre vers ultima.html, même onglet).
 const capUltima = page.locator('a.cap[data-id="ultima"]');
 verifier('Cap ULTIMA ouvrable (ancre)', (await capUltima.count()) === 1);
 verifier('Cap ULTIMA pointe vers ultima.html',
   (await capUltima.getAttribute('href')) === 'ultima.html');
 
-// RENAULT BOOST et IKOM sont « à venir » : non-liens, aria-disabled.
-for (const id of ['renault-boost', 'ikom']) {
-  const cap = page.locator(`.cap[data-id="${id}"]`);
-  const tag = await cap.evaluate((e) => e.tagName.toLowerCase());
-  verifier(`Cap ${id} inerte (pas une ancre)`, tag !== 'a', `tag: ${tag}`);
-  verifier(`Cap ${id} aria-disabled`, (await cap.getAttribute('aria-disabled')) === 'true');
-}
-verifier('2 caps « à venir »', (await page.locator('.cap--avenir').count()) === 2);
+// RENOBOOST IA est branché : ancre externe (nouvel onglet, rel noopener).
+const capReno = page.locator('a.cap[data-id="renoboost-ia"]');
+verifier('Cap RENOBOOST IA ouvrable (ancre)', (await capReno.count()) === 1);
+verifier('Cap RENOBOOST IA pointe vers la console renoboostia.fr',
+  (await capReno.getAttribute('href') || '').startsWith('https://www.renoboostia.fr'));
+verifier('Cap RENOBOOST IA ouvre un nouvel onglet',
+  (await capReno.getAttribute('target')) === '_blank');
+verifier('Cap RENOBOOST IA en rel noopener',
+  /noopener/.test(await capReno.getAttribute('rel') || ''));
+
+// YCOME reste « à venir » : non-lien, aria-disabled.
+const capYcome = page.locator('.cap[data-id="ycome"]');
+const tagYcome = await capYcome.evaluate((e) => e.tagName.toLowerCase());
+verifier('Cap YCOME inerte (pas une ancre)', tagYcome !== 'a', `tag: ${tagYcome}`);
+verifier('Cap YCOME aria-disabled', (await capYcome.getAttribute('aria-disabled')) === 'true');
+verifier('1 seul cap « à venir »', (await page.locator('.cap--avenir').count()) === 1);
 
 // La rose au cœur + les 3 aiguilles.
 verifier('Rose des vents au cœur', (await page.locator('.boussole-coeur svg').count()) === 1);
@@ -108,12 +116,11 @@ await page.waitForSelector('#boussole-parole:not(.is-actif)', { timeout: 5000 })
 verifier('Sortie du survol → retour à l\'invite',
   (await page.locator('#boussole-parole .parole-texte').count()) === 0);
 
-// Accès clavier : focus d'un cap « à venir » montre aussi son résumé.
-const capIkom = page.locator('.cap[data-id="ikom"]');
-await capIkom.focus();
+// Accès clavier : focus du cap « à venir » montre aussi son résumé.
+await capYcome.focus();
 await page.waitForSelector('#boussole-parole.is-actif', { timeout: 5000 });
-const nomIkom = (await page.locator('#boussole-parole .parole-nom').textContent())?.trim();
-verifier('Focus clavier d\'un cap montre son résumé', nomIkom === 'IKOM', `lu: ${nomIkom}`);
+const nomYcome = (await page.locator('#boussole-parole .parole-nom').textContent())?.trim();
+verifier('Focus clavier d\'un cap montre son résumé', nomYcome === 'YCOME', `lu: ${nomYcome}`);
 
 // Repli sans JS présent dans le document.
 verifier('Repli <noscript> présent', (await page.locator('noscript').count()) >= 1);

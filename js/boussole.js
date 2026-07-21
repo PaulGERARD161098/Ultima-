@@ -34,23 +34,23 @@
       blason: blasonRose(),
     },
     {
-      id: 'renault-boost',
-      nom: 'RENAULT BOOST',
-      cible: null,
+      id: 'renoboost-ia',
+      nom: 'RENOBOOST IA',
+      cible: 'https://www.renoboostia.fr',
       externe: true,
-      etat: 'À venir',
-      resume: 'Console de pilotage Renault Boost. Le cap est prêt : donne-moi '
-        + 'le lien et je l’ouvre directement depuis la boussole.',
+      etat: 'Ouvert',
+      resume: 'Console Renoboost IA — le socle rémunérateur (chantiers + '
+        + 'installations à domicile). S’ouvre dans un nouvel onglet.',
       blason: blasonEssor(),
     },
     {
-      id: 'ikom',
-      nom: 'IKOM',
+      id: 'ycome',
+      nom: 'YCOME',
       cible: null,
       externe: true,
       etat: 'À venir',
-      resume: 'Plateforme Ikom, en ouverture externe. Le cap est prêt : '
-        + 'transmets-moi l’URL et je le branche.',
+      resume: 'Projet YCOME, plateforme externe. Le cap est prêt : transmets-moi '
+        + 'son URL et je le branche.',
       blason: blasonPortail(),
     },
   ];
@@ -207,21 +207,21 @@
   }
 
   function blasonEssor() {
-    // Renault Boost : l'étoile en essor, sillage montant.
+    // Renoboost IA : l'étoile en essor, sillage montant.
     return disque(
       '<path d="M22 50 L46 26" stroke="#3b2f1c" stroke-width="2.6" stroke-linecap="round" fill="none"/>'
       + '<path d="M28 50 L48 30" stroke="#a9884a" stroke-width="1.4" stroke-linecap="round" opacity="0.7"/>'
       + '<path d="M46 22 l2.6 6.4 6.4 2.6 -6.4 2.6 -2.6 6.4 -2.6 -6.4 -6.4 -2.6 6.4 -2.6 Z" fill="#3b2f1c"/>',
-      'l’étoile en essor de Renault Boost');
+      'l’étoile en essor de Renoboost IA');
   }
 
   function blasonPortail() {
-    // Ikom : le portail ouvert, flèche sortante (ouverture externe).
+    // YCOME : le portail ouvert, flèche sortante (ouverture externe).
     return disque(
       '<path d="M23 51 V37 a13 13 0 0 1 26 0 V51" fill="none" stroke="#3b2f1c" stroke-width="2.4"/>'
       + '<path d="M20 51 H52" stroke="#3b2f1c" stroke-width="2.4" stroke-linecap="round"/>'
       + '<path d="M31 40 h10 m0 0 l-3.6 -3.6 m3.6 3.6 l-3.6 3.6" fill="none" stroke="#a9884a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
-      'le portail d’Ikom');
+      'le portail d’YCOME');
   }
 
   function roseDesVents() {
