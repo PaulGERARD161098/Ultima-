@@ -1,4 +1,6 @@
-// Console d'accueil (boucle C1-a) : coque à 4 quadrants (index.html).
+// Console Ultima (boucle C1-a) : coque à 4 quadrants (ultima.html).
+// LV2 : depuis Ultima LV2, l'accueil « / » est la boussole ; la console vit
+// désormais sur /ultima.html (reléguée par la boussole).
 // Prouve : rendu de la console (accueil + invite + 4 cartouches), blasons
 // étiquetés, TRAVELER actif qui navigue vers traveler.html, 3 quadrants
 // « à venir » inertes (aria-disabled, non-liens), AUCUNE requête réseau
@@ -77,9 +79,9 @@ page.on('request', (req) => {
 
 await preparerRoutes(page);
 
-// ===================== A. La console (index.html) =====================
-console.log('— A. Console d\'accueil —');
-await page.goto(`${BASE}/`, { waitUntil: 'load', timeout: 20000 });
+// ===================== A. La console (ultima.html) =====================
+console.log('— A. Console Ultima —');
+await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
 
 const titre = (await page.locator('h1.console-titre').textContent())?.trim();
 verifier('Bandeau « Bienvenue sur Ultima »', titre === 'Bienvenue sur Ultima', `lu: ${titre}`);

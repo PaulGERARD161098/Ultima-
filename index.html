@@ -3,34 +3,22 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ultima — Console</title>
-  <meta name="description" content="Console personnelle d'Ultima : quatre quadrants — le réseau, le pilotage financier, la bibliothèque d'idées et le développement personnel.">
+  <title>Ultima — Boussole</title>
+  <meta name="description" content="Boussole d'accueil d'Ultima : chaque cap de la rose des vents ouvre un macro-projet de Paul. Léo en dépose l'essentiel au survol.">
   <meta name="theme-color" content="#0e3a52">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%231e6fb8'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23ffffff'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/console.css">
+  <link rel="stylesheet" href="css/boussole.css">
 </head>
-<body class="console">
+<body class="boussole">
 
-  <!-- Rose des vents décorative (registre carte savante), muette. -->
-  <div class="console-decor" aria-hidden="true">
-    <svg viewBox="0 0 72 72" focusable="false">
-      <circle cx="36" cy="36" r="26" fill="none" stroke="#c9a659" stroke-width="1.4" opacity="0.85"/>
-      <path d="M36 4 L42 30 L68 36 L42 42 L36 68 L30 42 L4 36 L30 30 Z"
-            fill="#e8cf8f" stroke="#c9a659" stroke-width="1"/>
-      <path d="M36 18 L39 33 L54 36 L39 39 L36 54 L33 39 L18 36 L33 33 Z"
-            fill="#c9a659" stroke="none" opacity="0.55"/>
-      <text x="36" y="14" text-anchor="middle" font-size="9" fill="#e8cf8f" font-style="italic">N</text>
-    </svg>
-  </div>
-
-  <div class="console-conteneur">
+  <div class="boussole-scene">
 
     <!-- ===== Bandeau : sceau ULTIMA + accueil + invite ===== -->
-    <header class="console-entete">
-      <!-- Sceau ULTIMA : médaillon d'or gravé (emblème « monde-anneau » + rayons).
-           Décor pur, aria-hidden ; l'accueil est porté par le H1 réel ci-dessous. -->
+    <header class="console-entete boussole-entete">
+      <!-- Sceau ULTIMA : médaillon d'or gravé (emblème « monde-anneau »). Décor pur. -->
       <svg class="sceau" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
         <defs>
           <radialGradient id="sceau-or" cx="38%" cy="32%" r="78%">
@@ -42,7 +30,6 @@
         <circle cx="60" cy="60" r="55" fill="url(#sceau-or)" stroke="#6e5320" stroke-width="2.6"/>
         <circle cx="60" cy="60" r="49" fill="none" stroke="#6e5320" stroke-width="1" opacity="0.7"/>
         <circle cx="60" cy="60" r="45" fill="none" stroke="#a9884a" stroke-width="0.8"/>
-        <!-- couronne de 8 clous gravés sur l'anneau -->
         <g fill="#6e5320">
           <circle cx="60" cy="8.5" r="1.7"/>
           <circle cx="60" cy="111.5" r="1.7"/>
@@ -53,7 +40,6 @@
           <circle cx="96.4" cy="96.4" r="1.5"/>
           <circle cx="23.6" cy="96.4" r="1.5"/>
         </g>
-        <!-- emblème central : monde-anneau + rayons (encre sépia) -->
         <g stroke="#4a3512" fill="none" stroke-linecap="round">
           <circle cx="60" cy="60" r="17" stroke-width="2.4"/>
           <circle cx="60" cy="60" r="8.5" stroke-width="1.6"/>
@@ -64,166 +50,33 @@
         <circle cx="60" cy="60" r="2.1" fill="#4a3512"/>
       </svg>
 
-      <h1 class="console-titre">Bienvenue sur Ultima</h1>
+      <h1 class="console-titre console-titre--boussole">
+        <span class="titre-surligne">Ultima LV2</span>
+        <span class="titre-principal">Bienvenue</span>
+      </h1>
       <p class="console-invite">Sur quoi est-ce qu'on travaille aujourd'hui&nbsp;?</p>
     </header>
 
-    <!-- ===== Grille 2×2 des quadrants ===== -->
-    <main class="console-grille" aria-label="Les quatre quadrants d'Ultima">
-
-      <!-- TRAVELER — boussole — ACTIF (cleanUrls : traveler.html / traveler). -->
-      <a class="quadrant quadrant-actif" href="traveler.html">
-        <span class="blason">
-          <svg class="blason-svg" viewBox="0 0 72 72" role="img"
-               aria-label="Blason gravé : une boussole" focusable="false">
-            <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
-            <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
-            <path d="M36 12 L40.5 31.5 L60 36 L40.5 40.5 L36 60 L31.5 40.5 L12 36 L31.5 31.5 Z"
-                  fill="#3b2f1c"/>
-            <g stroke="#5a4118" stroke-width="1.3" stroke-linecap="round">
-              <path d="M36 36 L50 22 M36 36 L50 50 M36 36 L22 50 M36 36 L22 22"/>
-            </g>
-            <circle cx="36" cy="36" r="2.4" fill="#f9f1dc" stroke="#5a4118" stroke-width="1"/>
-          </svg>
-        </span>
-        <span class="quadrant-corps">
-          <h2 class="quadrant-nom">TRAVELER</h2>
-          <span class="quadrant-etat">
-            Accéder
-            <svg class="quadrant-fleche" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M5 12h13M13 6l6 6-6 6"/>
-            </svg>
-          </span>
-        </span>
-      </a>
-
-      <!-- BALTHAZAR GELD (ex-BCP, renommé Paul 2026-07-19) — balance —
-           antichambre ouverte (chantier pas encore bâti). -->
-      <a class="quadrant quadrant-actif" href="bcp.html">
-        <span class="blason">
-          <svg class="blason-svg" viewBox="0 0 72 72" role="img"
-               aria-label="Blason gravé : une balance" focusable="false">
-            <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
-            <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
-            <g stroke="#5a4118" stroke-width="1.9" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M36 22 V49"/>
-              <path d="M20 27 H52"/>
-              <path d="M28 51 Q36 47.5 44 51"/>
-              <path d="M22 27 L17 37 M22 27 L27 37 M15 37 Q22 45 29 37"/>
-              <path d="M50 27 L45 37 M50 27 L55 37 M43 37 Q50 45 57 37"/>
-            </g>
-            <circle cx="36" cy="22" r="2.6" fill="#3b2f1c"/>
-          </svg>
-        </span>
-        <span class="quadrant-corps">
-          <h2 class="quadrant-nom">BALTHAZAR GELD</h2>
-          <span class="quadrant-etat">
-            En chantier
-            <svg class="quadrant-fleche" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M5 12h13M13 6l6 6-6 6"/>
-            </svg>
-          </span>
-        </span>
-      </a>
-
-      <!-- ADRAMELECH — dragon — antichambre ouverte (registre privé, derrière
-           auth) ; la carte des archipels (AD-4c, idees.html) s'ouvre depuis
-           l'antichambre. -->
-      <a class="quadrant quadrant-actif" href="adramelech.html">
-        <span class="blason">
-          <svg class="blason-svg" viewBox="0 0 72 72" role="img"
-               aria-label="Blason gravé : un ouroboros ailé" focusable="false">
-            <!-- Ouroboros ailé — choix de Paul (option B, 2026-07-18) : le serpent
-                 qui se mord la queue, aile membranée dressée, dans l'esprit des
-                 manuscrits alchimiques. Le cycle des idées, gardé par le dragon.
-                 (Planche de choix : design/preview-blason-ouroboros.html.) -->
-            <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
-            <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
-            <!-- Aile membranée dressée. -->
-            <g fill="none" stroke="#3b2f1c" stroke-width="1.4" stroke-linejoin="round">
-              <path d="M30 24.5 C 26.5 17.5, 21 12.8, 13.5 12.3
-                       C 15.7 15.2, 15.1 17.8, 12.8 19.6
-                       C 16.3 20, 18.4 22.2, 17.6 25.3
-                       C 20.7 24.3, 23.6 25.7, 25 28.6
-                       C 26.5 26.5, 28.3 25.3, 30 25.5 Z"/>
-            </g>
-            <g fill="none" stroke="#3b2f1c" stroke-width="0.9" opacity="0.85">
-              <path d="M29.4 24.8 C 25 20.6, 19.8 16.2, 14.4 13.8"/>
-              <path d="M29.4 25.4 C 24.6 22.8, 19.4 20.8, 13.8 19.8"/>
-            </g>
-            <!-- Corps : anneau, la gueule refermée sur la queue. -->
-            <path d="M34.78 22.05 A14 14 0 1 0 37.22 22.05"
-                  fill="none" stroke="#3b2f1c" stroke-width="3" stroke-linecap="round"/>
-            <path d="M37.2 20.9 L41.2 23 L37.6 23.7 Z" fill="#3b2f1c"/>
-            <path d="M31.4 21.8 C 32.4 19.5, 35.4 18.7, 38 19.9 L 40.6 21.3 L 38.8 22.1
-                     L 40.4 23.5 L 36.8 23.9 C 33.9 24.3, 31.9 23.4, 31.4 21.8 Z"
-                  fill="#3b2f1c"/>
-            <!-- Petite corne. -->
-            <path d="M32.8 20.2 L 33.6 17.4 L 34.9 19.8 Z" fill="#3b2f1c"/>
-            <circle cx="34.3" cy="21.3" r="0.9" fill="#e0c48a"/>
-            <!-- Rehaut d'or sur la courbe basse du cycle. -->
-            <path d="M43 47.5 A14 14 0 0 0 49.8 39" fill="none" stroke="#e0c48a"
-                  stroke-width="0.8" opacity="0.6"/>
-          </svg>
-        </span>
-        <span class="quadrant-corps">
-          <h2 class="quadrant-nom">ADRAMELECH</h2>
-          <span class="quadrant-etat">
-            Privé — auth requise
-            <svg class="quadrant-fleche" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M5 12h13M13 6l6 6-6 6"/>
-            </svg>
-          </span>
-        </span>
-      </a>
-
-      <!-- IMLADRIK — épée au soleil (re-figé Paul 2026-07-17, remplace l'étoile) —
-           antichambre ouverte. Lame dressée traversant le disque solaire : l'aube
-           et la tenue de cap, gravées dans le même registre que les autres blasons. -->
-      <a class="quadrant quadrant-actif" href="imladrik.html">
-        <span class="blason">
-          <svg class="blason-svg" viewBox="0 0 72 72" role="img"
-               aria-label="Blason gravé : une épée dressée devant un soleil" focusable="false">
-            <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
-            <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
-            <!-- Soleil : disque rayonnant gravé au trait (derrière la lame). -->
-            <g fill="none" stroke="#3b2f1c" stroke-width="1.6">
-              <circle cx="36" cy="29" r="9.5"/>
-              <path d="M20.5 29 H 24.5"/>
-              <path d="M47.5 29 H 51.5"/>
-              <path d="M25.2 18.2 l 2.9 2.9"/>
-              <path d="M43.9 36.9 l 2.9 2.9"/>
-              <path d="M46.8 18.2 l -2.9 2.9"/>
-              <path d="M28.1 36.9 l -2.9 2.9"/>
-            </g>
-            <circle cx="36" cy="29" r="6.5" fill="none" stroke="#e0c48a" stroke-width="0.8" opacity="0.7"/>
-            <!-- Épée : lame vers le ciel, garde, fusée, pommeau. -->
-            <g fill="#3b2f1c">
-              <path d="M36 11.5 L38.2 16.5 L38.2 48 L33.8 48 L33.8 16.5 Z"/>
-              <rect x="26.5" y="48" width="19" height="3.4" rx="1.7"/>
-              <rect x="34.2" y="51.4" width="3.6" height="7"/>
-              <circle cx="36" cy="61" r="2.9"/>
-            </g>
-            <path d="M36 15.5 V 46.5" stroke="#e0c48a" stroke-width="0.8" opacity="0.7"/>
-          </svg>
-        </span>
-        <span class="quadrant-corps">
-          <h2 class="quadrant-nom">IMLADRIK</h2>
-          <span class="quadrant-etat">
-            En chantier
-            <svg class="quadrant-fleche" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M5 12h13M13 6l6 6-6 6"/>
-            </svg>
-          </span>
-        </span>
-      </a>
-
+    <!-- ===== La boussole : caps + aiguilles + cœur, rendus par js/boussole.js ===== -->
+    <main class="boussole-plateau" id="boussole-plateau"
+          aria-label="Boussole des macro-projets d'Ultima">
+      <!-- Repli sans JavaScript : au moins la porte d'Ultima reste ouverte. -->
+      <noscript>
+        <ul class="boussole-noscript">
+          <li><a href="ultima.html">Ultima — la console à quatre quadrants</a></li>
+          <li><a href="https://www.renoboostia.fr" rel="noopener noreferrer">Renoboost IA — la console</a></li>
+          <li>YCOME — à venir</li>
+        </ul>
+      </noscript>
     </main>
+
+    <!-- Parole de Léo : l'essentiel du cap survolé (rempli par js/boussole.js). -->
+    <aside class="boussole-parole" id="boussole-parole" role="status" aria-live="polite">
+      <p class="parole-defaut">Survole un cap&nbsp;— Léo t'en dit l'essentiel.</p>
+    </aside>
+
   </div>
 
+  <script src="js/boussole.js" defer></script>
 </body>
 </html>
