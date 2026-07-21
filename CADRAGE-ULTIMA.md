@@ -241,7 +241,7 @@
   `design/spec-arbre-responsive.md`.
 - ✅ **PIVOT PLATEFORME — cadrage acté (2026-07-12)** : dicté par Paul, tournant
   majeur. Ultima devient sa **plateforme personnelle en console à 4 quadrants**
-  (TRAVELER réseau · BALTHAZAR GELD finances · ADRAMELECH idées · IMLADRIK dév. perso),
+  (TRAVELER réseau · NICOLE BOLAS finances · ADRAMELECH idées · IMLADRIK dév. perso),
   pilotée par la seule Léo (désormais **féminine**), un repo, mémoire
   inter-segment. Le réseau existant (v1→A4) devient le quadrant TRAVELER — rien
   de jeté. Livré en **cadrage pur** (zéro code produit) : `CADRAGE-CONSOLE.md`
@@ -251,7 +251,7 @@
   console** (coque réutilisant l'existant) OU le mini-cadrage du quadrant que
   Paul veut voir en premier. **Arbitrages ouverts (décisions Paul)** : ordre des
   quadrants (reco : le moins dépendant d'un service externe d'abord) ; niveau de
-  chiffrement au repos BALTHAZAR GELD/IMLADRIK ; périmètre v1 par quadrant.
+  chiffrement au repos NICOLE BOLAS/IMLADRIK ; périmètre v1 par quadrant.
 - ✅ **ADRAMELECH — premières captures (2026-07-16)** : registre de capture
   `adramelech/IDEES.md` ouvert (format prêt pour l'import en base à la boucle
   ADRAMELECH). Deux idées dictées par Paul, nommées et enrichies :
@@ -280,7 +280,7 @@
   agent (Léo) pilote tout Ultima — seule en cross-plateforme, seule
   interlocutrice, mémoire unique ; les autres `.claude/agents/` sont ses
   sous-agents. Blasons de quadrant figés : TRAVELER = boussole · ADRAMELECH =
-  dragon · BALTHAZAR GELD = balance · IMLADRIK = étoile · Console = sceau ULTIMA.
+  dragon · NICOLE BOLAS = balance · IMLADRIK = étoile · Console = sceau ULTIMA.
 - 🟡 **Boucle ADRAMELECH — mini-cadrage (2026-07-16, directive EB « on boucle
   Adramelech »)** : `adramelech/CADRAGE-ADRAMELECH.md` déposé (cadrage pur).
   Périmètre v1 recommandé = « bibliothèque vivante sans base » (générateur de

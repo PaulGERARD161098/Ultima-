@@ -3,6 +3,12 @@
 > Une décision consignée n'est jamais redemandée ni re-litigée.
 > Format : date — décision — conséquence.
 
+- **2026-07-21 (renommage)** — **BALTHAZAR GELD → NICOLE BOLAS** (dicté Paul).
+  Quadrant financier renommé partout (UI `ultima.html`/`bcp.html`, code
+  `api/_lib/leo.js` + js, tests, cadrages, charte). Emblème inchangé (balance),
+  fichier `bcp.html` conservé (id stable). Orthographe « NICOLE BOLAS » appliquée
+  telle que dictée ; variante MTG « Nicol Bolas » notée au lexique, à corriger en
+  un coup si Paul le confirme. Chaîne : BCP → BALTHAZAR GELD (07-19) → NICOLE BOLAS.
 - **2026-07-21 (cadrage consoles)** — **Cadrage des consoles RESHIRAM & ZEKROM
   ouvert** (Paul : « go cadrage console pour Z et R ») → `CADRAGE-RESHIRAM-ZEKROM.md`.
   RESHIRAM = carto du réel (talents/capacités/plus-values/réalisations, vue

@@ -99,7 +99,7 @@ Mécanisme qui relie les deux consoles autonomes :
 
 Auto-évaluation, talents, idéaux = **données personnelles/introspectives**. Le
 §5 de `CADRAGE-CONSOLE.md` s'applique : **auth, RLS, jamais en logs**,
-chiffrement au repos à évaluer (comme IMLADRIK/BALTHAZAR GELD). Les consoles
+chiffrement au repos à évaluer (comme IMLADRIK/NICOLE BOLAS). Les consoles
 n'exposent que des données **derrière auth**.
 
 ## 6. Arbitrages ouverts — décisions attendues de Paul
@@ -110,7 +110,7 @@ n'exposent que des données **derrière auth**.
    la conception SQL est une **gate** (migration = validation Paul).
 3. **Passerelle v1** : lien **manuel** (Paul valide les rapprochements réel/idéal)
    ou **auto** (Léo propose) ?
-4. **Analyse de coût** : autonome dans R/Z, ou **déléguée à BALTHAZAR GELD** ?
+4. **Analyse de coût** : autonome dans R/Z, ou **déléguée à NICOLE BOLAS** ?
    (reco : déléguée.)
 5. **Périmètre v1 de chaque console** : tranché au mini-cadrage de sa boucle,
    pas maintenant (pas de spéculation).

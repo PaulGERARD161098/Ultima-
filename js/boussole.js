@@ -29,7 +29,7 @@
       externe: false,
       etat: 'Ouvert',
       resume: 'La console à quatre quadrants. TRAVELER (réseau commercial) est '
-        + 'actif ; BALTHAZAR GELD, ADRAMELECH et IMLADRIK sont en chantier. '
+        + 'actif ; NICOLE BOLAS, ADRAMELECH et IMLADRIK sont en chantier. '
         + 'Entre pour piloter tes données.',
       blason: blasonRose(),
     },

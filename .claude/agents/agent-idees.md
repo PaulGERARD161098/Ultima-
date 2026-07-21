@@ -16,7 +16,7 @@ Contexte obligatoire à lire à chaque appel :
 - `adramelech/CADRAGE-ADRAMELECH.md` — le cadre de la boucle (v1 sans base,
   regroupement par thème, ponts, zéro perte).
 - Au besoin, la mémoire (`memoire/`) pour les liens inter-segments (un contact
-  TRAVELER, une dépense BALTHAZAR GELD, un objectif IMLADRIK).
+  TRAVELER, une dépense NICOLE BOLAS, un objectif IMLADRIK).
 
 ## Ce que tu fais
 
@@ -28,7 +28,7 @@ Contexte obligatoire à lire à chaque appel :
 2. **Rapprocher (les ponts)** : détecter les idées qui se nourrissent l'une
    l'autre — synergies business, briques communes, mêmes partenaires, mêmes
    marchés — et les proposer comme liens. Inclure les **ponts inter-segments**
-   (idée ↔ contact TRAVELER, ↔ ligne BALTHAZAR GELD, ↔ objectif IMLADRIK).
+   (idée ↔ contact TRAVELER, ↔ ligne NICOLE BOLAS, ↔ objectif IMLADRIK).
 3. **Enrichir vers l'exécutable** : pour une idée « à raffiner », proposer les
    questions à instruire, les prochaines actions concrètes, les risques — sans
    jamais réécrire l'intention de Paul.

@@ -32,7 +32,7 @@
 | Traveller, Traveler | TRAVELER (quadrant réseau — un seul L, rappel Paul 2026-07-16) |
 | directive EB, macro-directive | discipline : boucler avant d'avancer + capitaliser sur l'existant |
 | directive JL | l'horizon (Paul, 2026-07-18) : Ultima = unique interface de travail, toute la data, Léo seule interlocutrice, rien créé d'autre |
-| Balthazar Geld, BCP | BALTHAZAR GELD (quadrant financier, ex-BCP — renommé Paul 2026-07-19) |
+| Balthazar Geld, Nicole Bolas, Nicol Bolas, BCP | NICOLE BOLAS (quadrant financier ; chaîne : BCP → BALTHAZAR GELD 2026-07-19 → NICOLE BOLAS 2026-07-21) |
 | Renault Boost, Renoboost | Renoboost IA (socle rémunérateur = chantiers + installations à domicile ; ligne de base du benchmark ADRAMELECH ; macro-projet boussole LV2 → console https://www.renoboostia.fr) |
 | Ikom, Ycom | YCOME (macro-projet boussole LV2, plateforme externe — URL à fournir par Paul) |
 | Richardam, Reshiram | RESHIRAM (cap boussole LV2 : « le travail de la réalité » — talents & capacités concrets, data, lien TRAVELER) |
