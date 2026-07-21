@@ -15,8 +15,8 @@
   voir » avec R/Z — Paul corrige la reco Léo qui craignait un recouvrement).
   Trois plans distincts, pas de doublon. RESHIRAM lit TRAVELER sans copier ✅.
   **Fork 2 (passerelle)** : **manuel pour l'instant** (Paul valide les
-  rapprochements), auto plus tard. **Fork 3 (ordre)** : non tranché — reco Léo
-  RESHIRAM d'abord. Cadrage seul.
+  rapprochements), auto plus tard. **Fork 3 (ordre)** : ✅ **RESHIRAM d'abord**,
+  ZEKROM ensuite. **Cadrage R/Z complet.** Cadrage seul.
 - **2026-07-21 (cadrage consoles)** — **Cadrage des consoles RESHIRAM & ZEKROM
   ouvert** (Paul : « go cadrage console pour Z et R ») → `CADRAGE-RESHIRAM-ZEKROM.md`.
   RESHIRAM = carto du réel (talents/capacités/plus-values/réalisations, vue

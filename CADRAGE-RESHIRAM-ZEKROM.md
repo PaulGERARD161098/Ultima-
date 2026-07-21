@@ -120,8 +120,8 @@ n'exposent que des données **derrière auth**.
    (reco : déléguée.)
 5. **Périmètre v1 de chaque console** : tranché au mini-cadrage de sa boucle,
    pas maintenant (pas de spéculation).
-6. **Ordre** : commencer par **RESHIRAM** (le réel — socle factuel, alimente le
-   rétroplanning) puis **ZEKROM**, ou l'inverse ? (reco Léo : RESHIRAM d'abord.)
+6. ✅ **Ordre (tranché Paul 2026-07-21)** : **RESHIRAM d'abord** (le présent
+   concret — socle factuel qui alimente le rétroplanning), **ZEKROM ensuite**.
 
-> Prochaine étape après validation : mini-cadrage de la **première console**
-> (reco : RESHIRAM), puis conception du modèle de données (gate migration).
+> **Cadrage complet.** Prochaine étape : **mini-cadrage de RESHIRAM** (périmètre
+> v1, objets, écrans), puis conception du modèle de données (gate migration).
