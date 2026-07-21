@@ -103,10 +103,12 @@ verdicts.bienFormeeOk = !echoue(fixtureSansTheme) && parseRegistre(md).length ==
 // ---------- 6. Ponts : synergies ADR↔ADR détectées (non orientées, dédupliquées) ----------
 const ponts = detecterPonts(idees);
 const cles = new Set(ponts.map((p) => `${p.a}|${p.b}`));
-verdicts.pontsDetectes = ponts.length === 6 &&
+verdicts.pontsDetectes = ponts.length === 9 &&
   cles.has('ADR-001|ADR-002') && cles.has('ADR-001|ADR-003') &&
   cles.has('ADR-002|ADR-004') && cles.has('ADR-003|ADR-004') &&
-  cles.has('ADR-002|ADR-005') && cles.has('ADR-003|ADR-005');
+  cles.has('ADR-002|ADR-005') && cles.has('ADR-003|ADR-005') &&
+  cles.has('ADR-001|ADR-006') && cles.has('ADR-003|ADR-006') &&
+  cles.has('ADR-005|ADR-006');
 
 // ---------- 7. Bilan chiffré (AD-2) : compteurs cohérents et zéro-perte ----------
 const bilan = calculerBilan(idees);

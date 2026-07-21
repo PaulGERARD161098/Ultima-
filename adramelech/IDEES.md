@@ -915,3 +915,114 @@ rendez-vous mobile), `securite-auditeur`/`verificateur` (photos = PII éphémèr
 API `requireUser`). Automatisation n°1 : extraction PDF → table `produits`
 validée par Paul. Rien n'est lancé sans le go CC-α.
 
+---
+
+## ADR-006 — HÉRAUT
+
+*Nom : le héraut est l'officier qui lit à voix haute les proclamations et les
+édits, et qui ne rapporte au maître que celle qui le concerne — registre ancien
+et sérieux, fidèle au rôle exact de l'outil : lire tout le Journal officiel du
+jour et n'apporter que ce qui touche les chantiers de Paul.*
+
+- **Capturée le** : 2026-07-21 (dictée vocale de Paul)
+- **Type** : pro · business (outil né d'un besoin propre, généralisable au BTP)
+- **Thème** : veille juridique · fiscalité · réglementation BTP · aides &
+  dispositifs · ingestion de données
+- **Partenaire envisagé** : — (besoin propre de Paul)
+- **Statut** : à raffiner (cadrage posé ; analyse stratégique différée sur
+  demande de Paul — « on le met de côté, on verra ce qu'on va faire »)
+- **Cadrage** : capture seule pour l'instant (pas de §CADRAGE-ADRAMELECH dédié
+  tant que l'idée est en réserve)
+
+### L'idée
+
+Un **agent (ou brique « plug-and-play »)** branché sur **n'importe quelle source
+officielle disposant d'une API** (ou logiciel exploitable), qui fait de la
+**veille juridique et réglementaire automatique** :
+
+1. **Scanner chaque jour tous les textes qui sortent** — Journal officiel (JORF),
+   bulletins officiels (dont le bulletin fiscal), textes réglementaires du jour.
+2. **Détecter le signal utile pour les chantiers** : repérer, dans le flot, tout
+   ce qui concerne l'activité de Paul — typiquement une **baisse de TVA à 5,5 %**
+   pour tel ou tel type de projet, la **fin ou l'ouverture d'un dispositif
+   d'aide**, un changement de règle qui touche la rénovation, la clim/CVC, les
+   PAC, l'artisanat du bâtiment.
+3. **Rapporter court** : n'apporter à Paul que ce qui le concerne, résumé en une
+   alerte claire (quoi, pour qui, à partir de quand), le bruit filtré.
+
+Idée capturée pour la bibliothèque, **mise en réserve** : Paul cadre maintenant,
+décidera plus tard s'il la construit.
+
+### Enrichissement (pistes pour rendre l'idée exécutable)
+
+**Les sources officielles françaises exposent déjà des API/Open Data — la
+matière première existe et est gratuite.**
+- **Légifrance via PISTE** (plateforme d'API de la DILA) : API officielle qui
+  donne accès au **Journal officiel (fonds JORF)**, aux codes, à la
+  jurisprudence — compte + application OAuth à créer, accès gratuit. C'est la
+  porte d'entrée n°1 du « tous les textes du jour ».
+- **BOFiP-Impôts** (Bulletin Officiel des Finances Publiques) : la doctrine
+  fiscale — **c'est là que vivent les règles de TVA** (taux réduit 5,5 % pour
+  la rénovation énergétique, etc.), disponible en Open Data (millésimes).
+- **Bulletins officiels ministériels** (Transition écologique / Logement) pour
+  les dispositifs type aides à la rénovation, MaPrimeRénov'.
+- **data.gouv.fr** (jeux de données DILA/JORF en XML) et, si besoin d'Europe,
+  **EUR-Lex** pour les directives (dont TVA).
+
+**Le cœur de valeur = le filtre de pertinence métier, et c'est la brique
+« Claude ».** Le JO publie des centaines de textes/jour, quasi tous hors sujet :
+la difficulté n'est pas de récupérer les textes, c'est de **trier**. On donne à
+Claude un **profil métier de Paul** (chantiers, rénovation énergétique, clim/CVC,
+PAC, TVA, aides, artisanat BTP) et il **classe/score** chaque texte, **extrait
+le signal** (taux, périmètre bénéficiaire, date d'entrée en vigueur) et rédige
+l'alerte. Raisonnement sur texte structuré, zéro vidéo → parfaitement dans le
+métier de Claude et cohérent avec Ultima (directive JL : extension d'Ultima,
+jamais un outil à côté).
+
+**Architecture « plug-and-play » cohérente Ultima.**
+- **Connecteur d'ingestion générique** : « une source = une API + un parseur »,
+  planifié une fois par jour (edge function Supabase planifiée ou GitHub Action
+  cron). On branche Légifrance, puis BOFiP, puis les BO ministériels, puis
+  d'autres — c'est ça, le « plug-and-play sur n'importe quel site avec une API ».
+- **Couche de filtrage Claude** par-dessus (profil métier → pertinence + extrait).
+- **Dépôt dans Ultima** : chaque signal devient une **alerte/carte routée vers le
+  bon quadrant** (fiscalité/TVA → BALTHAZAR GELD, chantiers → TRAVELER), et
+  **Léo présente le digest** — Paul ne lit jamais le flux brut.
+
+**Séquencement (boucler petit d'abord).**
+- **v1** : ingestion **Légifrance JORF + BOFiP du jour** → filtre Claude sur un
+  profil métier figé → **digest quotidien** déposé et relu par Paul. Zéro
+  action automatique, juste la détection fiable. Déjà très utile.
+- **v2** : sources élargies (BO ministériels, aides), routage automatique vers
+  le bon quadrant, historisation et recherche des alertes passées.
+- **v3** : **Léo proactive avec les données réelles** — « un taux de TVA à 5,5 %
+  s'ouvre pour ce type de chantier : 3 de tes chantiers TRAVELER sont
+  éligibles » (le pont avec la base fait la vraie valeur commerciale).
+
+**Point de vigilance.** Une veille fiscale/réglementaire qui **se trompe coûte
+cher** (dispositif annoncé à tort → devis faux). En v1, l'agent **détecte et
+signale** (avec le lien vers le texte source), il **ne conseille jamais seul** :
+Paul (ou une vérification) tranche avant tout usage commercial. L'alerte cite
+toujours sa source officielle.
+
+### Liens inter-segments
+
+- **BALTHAZAR GELD** : lien le plus direct — TVA, impôts, dispositifs fiscaux
+  sont le cœur du quadrant finance ; une règle détectée y a son pendant chiffré.
+- **TRAVELER** : les chantiers/leads concernés — éligibilité à un dispositif =
+  **argument commercial** auprès des clients et des artisans du réseau.
+- **ADR-003 INTENDANT** : même famille « enabler du socle né d'un besoin propre,
+  généralisable au BTP » — l'INTENDANT sécurise l'appro, le HÉRAUT sécurise la
+  conformité réglementaire.
+- **ADR-005 CHAMBRE CLAIRE** : un taux de TVA détecté par le HÉRAUT nourrit
+  l'**estimation live** de la CHAMBRE CLAIRE en rendez-vous (prix juste, à jour).
+- **ADR-001 GLANEUR** : même logique d'ingestion « une source = un connecteur » —
+  brique d'ingestion générique potentiellement mutualisable.
+
+### Analyse stratégique
+
+> **Différée sur demande de Paul** (2026-07-21). L'idée est capturée et cadrée,
+> puis **mise en réserve** ; la grille des 7 blocs (ERRC/5 forces, TOWS, business
+> model, prémortem, benchmark Renoboost IA, séquence, provision d'exécution) sera
+> passée quand Paul décidera de la sortir du stock. Rien n'est lancé d'ici là.
+

@@ -391,3 +391,17 @@
   par session de navigation) — une présence persistante de Léo dans la page
   relève du volet « présence visuelle » différé. ⏳ Gate Paul : clé API +
   plafond de dépense + env Vercel `ANTHROPIC_API_KEY`.
+- **2026-07-21 (ADR-006 HÉRAUT — veille juridique, gardée en stock)** — Paul
+  dicte une idée pour ADRAMELECH : un agent « plug-and-play » branché sur les
+  sources officielles à API, qui lit chaque jour les textes du Journal
+  officiel/bulletins et **détecte le signal utile aux chantiers** (typiquement
+  une TVA à 5,5 % pour tel projet, un dispositif qui s'ouvre/s'arrête), bruit
+  filtré. Consigne explicite : **cadrer et garder en stock**, pas de build.
+  Livré : fiche `ADR-006 HÉRAUT` dans `IDEES.md` (capture + enrichissement —
+  sources réelles Légifrance/PISTE·JORF, BOFiP pour la TVA, BO ministériels,
+  EUR-Lex ; cœur de valeur = filtre de pertinence métier, brique Claude ;
+  séquencement v1 digest→v3 Léo proactive ; liens BALTHAZAR GELD/TRAVELER).
+  Statut **à raffiner**, **analyse stratégique différée** sur demande de Paul.
+  Sur « renseigne bien dans l'archipel » : carto régénérée → nouvel archipel
+  « Veille juridique » (HÉRAUT seul), 3 ponts vers GLANEUR/INTENDANT/CHAMBRE
+  CLAIRE ; test `unit-carto-generee` mis à jour (ponts 6→9). PR draft #68.
