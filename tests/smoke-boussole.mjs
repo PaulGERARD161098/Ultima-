@@ -59,10 +59,10 @@ verifier('Titre ligne 2 « Bienvenue »', principal === 'Bienvenue', `lu: ${prin
 const invite = (await page.locator('.console-invite').textContent())?.trim();
 verifier('Invite présente', /Sur quoi est-ce qu'on travaille aujourd'hui/.test(invite || ''), `lu: ${invite}`);
 
-// Les 3 caps rendus.
+// Les 5 caps rendus.
 const noms = (await page.locator('.cap-nom').allTextContents()).map((n) => n.trim());
-verifier('3 caps rendus', noms.length === 3, `trouvés: ${JSON.stringify(noms)}`);
-for (const attendu of ['ULTIMA', 'RENOBOOST IA', 'YCOME']) {
+verifier('5 caps rendus', noms.length === 5, `trouvés: ${JSON.stringify(noms)}`);
+for (const attendu of ['ULTIMA', 'RENOBOOST IA', 'YCOME', 'RESHIRAM', 'ZEKROM']) {
   verifier(`Cap ${attendu} présent`, noms.includes(attendu));
 }
 
@@ -82,16 +82,23 @@ verifier('Cap RENOBOOST IA ouvre un nouvel onglet',
 verifier('Cap RENOBOOST IA en rel noopener',
   /noopener/.test(await capReno.getAttribute('rel') || ''));
 
-// YCOME reste « à venir » : non-lien, aria-disabled.
+// YCOME, RESHIRAM, ZEKROM restent « à venir » : non-liens, aria-disabled.
+for (const id of ['ycome', 'reshiram', 'zekrom']) {
+  const cap = page.locator(`.cap[data-id="${id}"]`);
+  const tag = await cap.evaluate((e) => e.tagName.toLowerCase());
+  verifier(`Cap ${id} inerte (pas une ancre)`, tag !== 'a', `tag: ${tag}`);
+  verifier(`Cap ${id} aria-disabled`, (await cap.getAttribute('aria-disabled')) === 'true');
+}
 const capYcome = page.locator('.cap[data-id="ycome"]');
-const tagYcome = await capYcome.evaluate((e) => e.tagName.toLowerCase());
-verifier('Cap YCOME inerte (pas une ancre)', tagYcome !== 'a', `tag: ${tagYcome}`);
-verifier('Cap YCOME aria-disabled', (await capYcome.getAttribute('aria-disabled')) === 'true');
-verifier('1 seul cap « à venir »', (await page.locator('.cap--avenir').count()) === 1);
+verifier('3 caps « à venir »', (await page.locator('.cap--avenir').count()) === 3);
 
-// La rose au cœur + les 3 aiguilles.
+// Passerelle visuelle RESHIRAM ↔ ZEKROM tracée.
+verifier('Passerelle RESHIRAM ↔ ZEKROM tracée',
+  (await page.locator('.boussole-aiguilles .passerelle').count()) === 1);
+
+// La rose au cœur + les 5 aiguilles.
 verifier('Rose des vents au cœur', (await page.locator('.boussole-coeur svg').count()) === 1);
-verifier('3 aiguilles tracées', (await page.locator('.boussole-aiguilles .aiguille').count()) === 3);
+verifier('5 aiguilles tracées', (await page.locator('.boussole-aiguilles .aiguille').count()) === 5);
 
 // Le résumé Léo n'apparaît QU'au survol : au repos, invite par défaut.
 const paroleRepos = (await page.locator('#boussole-parole').textContent())?.trim();

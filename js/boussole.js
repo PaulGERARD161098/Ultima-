@@ -53,6 +53,30 @@
         + 'son URL et je le branche.',
       blason: blasonPortail(),
     },
+    {
+      id: 'reshiram',
+      nom: 'RESHIRAM',
+      cible: null,
+      externe: false,
+      etat: 'À venir',
+      resume: '« Le travail de la réalité » — cartographier tes talents et '
+        + 'capacités concrets : ce que tu sais vraiment faire, tes plus-values '
+        + 'réelles, ton réseau (lien fort avec TRAVELER). Rien que du concret, '
+        + 'faits et chiffres. Passerelle avec ZEKROM.',
+      blason: blasonAncre(),
+      lien: 'zekrom', // passerelle réel ↔ idéal
+    },
+    {
+      id: 'zekrom',
+      nom: 'ZEKROM',
+      cible: null,
+      externe: false,
+      etat: 'À venir',
+      resume: '« La quête de l’idéal » — tes volontés et idées hautes, le cap '
+        + 'directionnel qui nourrit la motivation et fait rêver. Passerelle avec '
+        + 'RESHIRAM (rétroplanning idéal → réel).',
+      blason: blasonFlambeau(),
+    },
   ];
 
   // ============================ GÉOMÉTRIE ============================
@@ -105,6 +129,22 @@
       svg.appendChild(g);
       aiguilles.push(g);
     });
+
+    // Passerelle(s) : lien visuel entre deux caps liés (RESHIRAM ↔ ZEKROM) —
+    // trait pointillé posé DERRIÈRE les aiguilles. `lien` = id du cap jumeau.
+    MACRO_PROJETS.forEach(function (projet, i) {
+      if (!projet.lien) return;
+      var j = MACRO_PROJETS.findIndex(function (p) { return p.id === projet.lien; });
+      if (j < 0) return;
+      var pont = document.createElementNS(ns, 'line');
+      pont.setAttribute('x1', String(50 + RAYON_CAP * pts[i].cos));
+      pont.setAttribute('y1', String(50 + RAYON_CAP * pts[i].sin));
+      pont.setAttribute('x2', String(50 + RAYON_CAP * pts[j].cos));
+      pont.setAttribute('y2', String(50 + RAYON_CAP * pts[j].sin));
+      pont.setAttribute('class', 'passerelle');
+      svg.insertBefore(pont, svg.firstChild);
+    });
+
     plateau.appendChild(svg);
 
     // 2. Cœur de la rose (décor stable, toujours visible).
@@ -222,6 +262,30 @@
       + '<path d="M20 51 H52" stroke="#3b2f1c" stroke-width="2.4" stroke-linecap="round"/>'
       + '<path d="M31 40 h10 m0 0 l-3.6 -3.6 m3.6 3.6 l-3.6 3.6" fill="none" stroke="#a9884a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
       'le portail d’YCOME');
+  }
+
+  function blasonAncre() {
+    // RESHIRAM — l'ancre : le réel, ancré dans le concret.
+    return disque(
+      '<circle cx="36" cy="20" r="3.4" fill="none" stroke="#3b2f1c" stroke-width="2"/>'
+      + '<path d="M36 23 V52" stroke="#3b2f1c" stroke-width="2.6" stroke-linecap="round"/>'
+      + '<path d="M27 31 H45" stroke="#3b2f1c" stroke-width="2.4" stroke-linecap="round"/>'
+      + '<path d="M22 43 a14 14 0 0 0 28 0" fill="none" stroke="#3b2f1c" stroke-width="2.6"/>'
+      + '<path d="M22 43 l-2.6 -6 l6.2 1.8 Z" fill="#3b2f1c"/>'
+      + '<path d="M50 43 l2.6 -6 l-6.2 1.8 Z" fill="#3b2f1c"/>'
+      + '<path d="M36 26 V49" stroke="#a9884a" stroke-width="0.8" opacity="0.6"/>',
+      'l’ancre du réel de RESHIRAM');
+  }
+
+  function blasonFlambeau() {
+    // ZEKROM — le flambeau : la flamme de l'idéal qui éclaire le cap.
+    return disque(
+      '<path d="M36 55 V37" stroke="#3b2f1c" stroke-width="2.8" stroke-linecap="round"/>'
+      + '<path d="M30 37 H42" stroke="#3b2f1c" stroke-width="2.4" stroke-linecap="round"/>'
+      + '<path d="M36 14 c 6.5 6.5, 5.5 13, 0 19 c -5.5 -6, -6.5 -12.5, 0 -19 Z" fill="#3b2f1c"/>'
+      + '<path d="M36 20 c 3.3 4, 2.6 7.5, 0 11 c -2.6 -3.5, -3.3 -7, 0 -11 Z" fill="#a9884a" opacity="0.6"/>'
+      + '<path d="M27 24 l-3 -2 M45 24 l3 -2" stroke="#a9884a" stroke-width="1.2" stroke-linecap="round"/>',
+      'le flambeau de l’idéal de ZEKROM');
   }
 
   function roseDesVents() {
