@@ -20,7 +20,7 @@ failles → améliorer l'UX »** sur **Ultima**, devenue depuis le 2026-07-12 la
 `CADRAGE-CONSOLE.md`), pilotée par la seule Léo :
 - **TRAVELER** — le réseau commercial (artisans, partenaires, leads, chantiers
   + relations) : l'acquis historique d'Ultima, désormais un quadrant.
-- **BALTHAZAR GELD** — pilotage financier (revenus/charges, prévision d'impôts, échéancier).
+- **NICOL BOLAS** — pilotage financier (revenus/charges, prévision d'impôts, échéancier).
 - **ADRAMELECH** — bibliothèque d'idées (capturer, classer, rapprocher, enrichir).
 - **IMLADRIK** — développement personnel (objectifs, journal, valeurs, culture).
 

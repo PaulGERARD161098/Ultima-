@@ -452,7 +452,7 @@
     return svg;
   }
 
-  // BALTHAZAR GELD (ex-BCP) : la balance.
+  // NICOL BOLAS (ex-BCP) : la balance.
   function svgBalance() {
     var svg = socleBlason();
     var traits = svgEl('g', {

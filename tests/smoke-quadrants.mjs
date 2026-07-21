@@ -105,7 +105,8 @@ async function nouvellePage(options = {}) {
 console.log('— A. Console : les 4 portes —');
 {
   const { page, erreurs, externes } = await nouvellePage({ configVide: true });
-  await page.goto(`${BASE}/`, { waitUntil: 'load', timeout: 20000 });
+  // LV2 : « / » est la boussole ; la console à 4 quadrants vit sur /ultima.html.
+  await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
   const hrefs = await page.locator('a.quadrant-actif').evaluateAll((els) =>
     els.map((e) => e.getAttribute('href')));
   verifier('4 liens actifs sur la console', hrefs.length === 4, JSON.stringify(hrefs));
@@ -295,9 +296,9 @@ console.log('— D. adramelech.html fixture 200 → registre + cartouche Léo r�
   await page.close();
 }
 
-// ===================== E/F. BALTHAZAR GELD et IMLADRIK : antichambres de chantier =====================
+// ===================== E/F. NICOL BOLAS et IMLADRIK : antichambres de chantier =====================
 for (const quadrant of [
-  { fichier: 'bcp.html', nom: 'BALTHAZAR GELD', cle: 'ultima-leo-accueil-vu-bcp' },
+  { fichier: 'bcp.html', nom: 'NICOL BOLAS', cle: 'ultima-leo-accueil-vu-bcp' },
   { fichier: 'imladrik.html', nom: 'IMLADRIK', cle: 'ultima-leo-accueil-vu-imladrik' },
 ]) {
   console.log(`— ${quadrant.nom} : antichambre de chantier (${quadrant.fichier}) —`);
@@ -339,7 +340,7 @@ for (const quadrant of [
     /pas encore bâti/.test((await page.locator('.cartouche-page').textContent()) || ''));
   const retour = page.locator('a.retour-console');
   verifier('Retour console présent', (await retour.count()) === 1 &&
-    (await retour.getAttribute('href')) === 'index.html');
+    (await retour.getAttribute('href')) === 'ultima.html');
   const hRetour = await retour.evaluate((el) => el.getBoundingClientRect().height);
   verifier('Tap target retour ≥ 44 px', hRetour >= 44, `${hRetour}px`);
 

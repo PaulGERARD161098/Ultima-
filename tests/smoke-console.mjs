@@ -91,7 +91,7 @@ verifier('Invite présente', /Sur quoi est-ce qu'on travaille aujourd'hui/.test(
 
 const noms = await page.locator('.quadrant-nom').allTextContents();
 verifier('4 quadrants présents', noms.length === 4, `trouvés: ${noms.length}`);
-for (const attendu of ['TRAVELER', 'BALTHAZAR GELD', 'ADRAMELECH', 'IMLADRIK']) {
+for (const attendu of ['TRAVELER', 'NICOL BOLAS', 'ADRAMELECH', 'IMLADRIK']) {
   verifier(`Quadrant ${attendu} présent`, noms.map((n) => n.trim()).includes(attendu));
 }
 // Épure actée (Paul, 2026-07-19) : plus de sous-titres sous les noms.
@@ -114,8 +114,8 @@ async function etatDe(nom) {
 const adraEtat = await etatDe('ADRAMELECH');
 verifier('ADRAMELECH marqué « privé — auth requise »',
   /priv/i.test(adraEtat || '') && /auth/i.test(adraEtat || ''), `état: ${adraEtat}`);
-const bcpEtat = await etatDe('BALTHAZAR GELD');
-verifier('BALTHAZAR GELD marqué « en chantier »', /chantier/i.test(bcpEtat || ''), `état: ${bcpEtat}`);
+const bcpEtat = await etatDe('NICOL BOLAS');
+verifier('NICOL BOLAS marqué « en chantier »', /chantier/i.test(bcpEtat || ''), `état: ${bcpEtat}`);
 const imlaEtat = await etatDe('IMLADRIK');
 verifier('IMLADRIK marqué « en chantier »', /chantier/i.test(imlaEtat || ''), `état: ${imlaEtat}`);
 

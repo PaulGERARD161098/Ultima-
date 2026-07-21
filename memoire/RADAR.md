@@ -26,16 +26,16 @@
 
 ## Besoins anticipés — plateforme 4 quadrants (2026-07-12)
 
-- **Brique « rappels/échéanciers » transverse** : BALTHAZAR GELD (fiscal), ADRAMELECH
+- **Brique « rappels/échéanciers » transverse** : NICOL BOLAS (fiscal), ADRAMELECH
   (bilan mensuel), IMLADRIK (quart d'heure quotidien) en ont tous besoin →
   concevoir une seule fois, réutiliser (capitaliser).
 - **Capture vocale rapide** dans ADRAMELECH et IMLADRIK : Paul dictera « au fur
   et à mesure » → réutiliser la dictée navigateur v3-④ déjà en place.
-- **Stockage de fichiers** (BALTHAZAR GELD : bulletins, factures) : nouvelle brique
+- **Stockage de fichiers** (NICOL BOLAS : bulletins, factures) : nouvelle brique
   Supabase Storage → cadrer la sécurité AVANT (uploads = surface d'attaque).
 - **Mémoire inter-segment** : prévoir dès la console comment Léo relie une idée
   (ADRAMELECH) à un contact (TRAVELER) ou un objectif (IMLADRIK) à une dépense
-  (BALTHAZAR GELD) — modèle de données transverse à penser tôt, sans sur-concevoir.
+  (NICOL BOLAS) — modèle de données transverse à penser tôt, sans sur-concevoir.
 - **Dashboards** : chaque quadrant en a un (exigence explicite de Paul, besoin
   de cadre) → motif de composant à mutualiser.
 

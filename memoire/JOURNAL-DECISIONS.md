@@ -3,6 +3,29 @@
 > Une décision consignée n'est jamais redemandée ni re-litigée.
 > Format : date — décision — conséquence.
 
+- **2026-07-21 (renommage)** — **BALTHAZAR GELD → NICOL BOLAS** (dicté Paul).
+  Quadrant financier renommé partout (UI `ultima.html`/`bcp.html`, code
+  `api/_lib/leo.js` + js, tests, cadrages, charte). Emblème inchangé (balance),
+  fichier `bcp.html` conservé (id stable). Orthographe **« NICOL BOLAS »**
+  (réf. MTG confirmée par Paul ; le premier jet avait écrit « NICOLE » tel que
+  dicté, corrigé ensuite). Chaîne : BCP → BALTHAZAR GELD (07-19) → NICOL BOLAS.
+- **2026-07-21 (forks R/Z tranchés)** — **Fork 1 (frontières)** : RESHIRAM =
+  **présent/terrain/concret**, ZEKROM = **futur/idéal** (point de départ du
+  rétroplanning), **IMLADRIK = la personne** (dév perso, plus large, « rien à
+  voir » avec R/Z — Paul corrige la reco Léo qui craignait un recouvrement).
+  Trois plans distincts, pas de doublon. RESHIRAM lit TRAVELER sans copier ✅.
+  **Fork 2 (passerelle)** : **manuel pour l'instant** (Paul valide les
+  rapprochements), auto plus tard. **Fork 3 (ordre)** : ✅ **RESHIRAM d'abord**,
+  ZEKROM ensuite. **Cadrage R/Z complet.** Cadrage seul.
+- **2026-07-21 (cadrage consoles)** — **Cadrage des consoles RESHIRAM & ZEKROM
+  ouvert** (Paul : « go cadrage console pour Z et R ») → `CADRAGE-RESHIRAM-ZEKROM.md`.
+  RESHIRAM = carto du réel (talents/capacités/plus-values/réalisations, vue
+  réseau lue depuis TRAVELER sans copie, ancrage sur preuve). ZEKROM = idéaux/
+  volontés/cap directionnel (expression libre, faire rêver). Passerelle =
+  rétroplanning idéal→réel + enrichissement bidirectionnel + besoin chiffré
+  (coût délégué à BALTHAZAR GELD, reco). Arbitrages ouverts : frontières
+  ZEKROM↔IMLADRIK↔ADRAMELECH, modèle de données (gate migration), passerelle
+  manuelle vs auto, ordre (reco RESHIRAM d'abord). Cadrage seul, aucun code.
 - **2026-07-21 (posés)** — **RESHIRAM & ZEKROM posés sur la boussole** (Paul :
   « pose Z et R et ensuite merge ») : 2 caps autonomes « à venir » (ancre /
   flambeau) + passerelle pointillée réel↔idéal. Boussole = 5 caps, harnais
