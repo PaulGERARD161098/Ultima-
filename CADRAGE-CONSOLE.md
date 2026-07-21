@@ -78,6 +78,9 @@ devenir.
     division** (ni sous-caps d'un même macro-projet, ni rangés sous IMLADRIK).
     RESHIRAM garde un **lien fort avec TRAVELER** (réseau réel) sans y être
     absorbé.
+  - **Cadrage des consoles** : `CADRAGE-RESHIRAM-ZEKROM.md` (but de chaque
+    console, objets, passerelle réel↔idéal, articulation anti-duplication avec
+    les quadrants, arbitrages). Cadrage seul, pas encore de code.
 
 **Principe directeur — la boussole n'est pas un menu, c'est un cockpit.** Pour un
 solo, la valeur n'est pas de *naviguer* mais de *savoir en 5 secondes où mettre

@@ -3,6 +3,15 @@
 > Une décision consignée n'est jamais redemandée ni re-litigée.
 > Format : date — décision — conséquence.
 
+- **2026-07-21 (cadrage consoles)** — **Cadrage des consoles RESHIRAM & ZEKROM
+  ouvert** (Paul : « go cadrage console pour Z et R ») → `CADRAGE-RESHIRAM-ZEKROM.md`.
+  RESHIRAM = carto du réel (talents/capacités/plus-values/réalisations, vue
+  réseau lue depuis TRAVELER sans copie, ancrage sur preuve). ZEKROM = idéaux/
+  volontés/cap directionnel (expression libre, faire rêver). Passerelle =
+  rétroplanning idéal→réel + enrichissement bidirectionnel + besoin chiffré
+  (coût délégué à BALTHAZAR GELD, reco). Arbitrages ouverts : frontières
+  ZEKROM↔IMLADRIK↔ADRAMELECH, modèle de données (gate migration), passerelle
+  manuelle vs auto, ordre (reco RESHIRAM d'abord). Cadrage seul, aucun code.
 - **2026-07-21 (posés)** — **RESHIRAM & ZEKROM posés sur la boussole** (Paul :
   « pose Z et R et ensuite merge ») : 2 caps autonomes « à venir » (ancre /
   flambeau) + passerelle pointillée réel↔idéal. Boussole = 5 caps, harnais
