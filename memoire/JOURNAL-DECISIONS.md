@@ -9,6 +9,12 @@
   fichier `bcp.html` conservé (id stable). Orthographe **« NICOL BOLAS »**
   (réf. MTG confirmée par Paul ; le premier jet avait écrit « NICOLE » tel que
   dicté, corrigé ensuite). Chaîne : BCP → BALTHAZAR GELD (07-19) → NICOL BOLAS.
+- **2026-07-22 (hébergement RESHIRAM)** — Paul : **RESHIRAM vit DANS Ultima,
+  rien de plus.** Même repo, même déploiement Vercel `ultima`, même projet
+  Supabase `leosfqyidgsaescjbfom` ; console = **page interne** (même onglet,
+  `externe: false` — déjà le cas dans le registre boussole), PAS un lien externe.
+  **Aucune ressource facturée en plus** (pas de nouveau Vercel/Supabase/domaine).
+  ZEKROM idem. Consigné `CADRAGE-RESHIRAM-ZEKROM.md §7 Hébergement`.
 - **2026-07-22 (modèle données RESHIRAM v1)** — conception par data-ingénieur +
   contre-passe Léo (validée). Migration **`0009_reshiram_talents.sql` déposée,
   NON appliquée (gate Paul)**. 2 tables (`talents`, `preuves`) + 2 vues
