@@ -16,9 +16,10 @@
   étayés). Conventions respectées : RLS `(select auth.uid())` initplan, owner_id
   default, trigger `set_updated_at` réutilisé, vues security_invoker, scellement
   AD-4 (owner_id,id), index justifiés, zéro GRANT (cohérent), zéro seed.
-  **Décisions ouvertes pour Paul** : ① échelle `niveau` (proposée : notion/
-  pratique/maitrise, sans « expert ») ② secteurs texte libre `text[]` (reco)
-  vs référentiel ③ `plus_value` bornée 2000. Application = gate.
+  **Décisions validées Paul 2026-07-22** : ① `niveau` = notion/pratique/maitrise
+  (sans « expert ») ② secteurs = texte libre `text[]` ③ `plus_value` bornée 2000.
+  Le fichier 0009 reflète déjà ces choix. **Application = gate (en attente du
+  « applique 0009 » de Paul).**
 - **2026-07-22 (emblèmes R/Z)** — blasons des caps changés (dicté Paul, réf.
   dragons) : **RESHIRAM = aile blanche**, **ZEKROM = aile noire** (même aile
   plumée, en miroir → les deux se font face de part et d'autre de la passerelle).
