@@ -9,6 +9,52 @@
   fichier `bcp.html` conservé (id stable). Orthographe **« NICOL BOLAS »**
   (réf. MTG confirmée par Paul ; le premier jet avait écrit « NICOLE » tel que
   dicté, corrigé ensuite). Chaîne : BCP → BALTHAZAR GELD (07-19) → NICOL BOLAS.
+- **2026-07-22 (feuille de route LV2 cadrée)** — Paul : « on fait le restant sur
+  LV2, cadre bien proprement ». Reste LV2 ordonné par dépendances dans
+  `CADRAGE-ULTIMA.md` (bloc 🗺️ RESTE LV2) : ① débloqueur = finaliser LV2-② Auth
+  (config Google/Supabase, action Paul, verrou d'usage) ; ② ZEKROM v1 (mini-
+  cadrage → migration 0010 → console) ; ③ passerelle données R↔Z (liaison
+  talent↔idéal + rétroplanning, manuel v1) ; ④ connexions v2 RESHIRAM→RIVEN
+  (talent_refs_reseau + capital réseau) ; ⑤ cockpit LV2-③ + résumés vivants.
+  Autres : YCOME (URL), NICOL BOLAS finance (grande boucle §3.2). Gates :
+  migrations 0010+, fusions, OAuth ; zéro ressource facturée. Cadrage seul.
+- **2026-07-22 (RESHIRAM v1 implémentée)** — console livrée (agent + contre-passe
+  Léo + patrimoine 100% vert). API `api/talents.js` (GET/POST/DELETE) +
+  `api/preuves.js` (POST/DELETE) : `requireUser` réel, **owner_id jamais du
+  client** (`rejectUnknown` + défaut base), validation miroir des CHECK 0009,
+  scellement composite cross-owner, erreurs génériques/logs sans PII. Front
+  `reshiram.html` + `js/reshiram.js` : shell fail-closed, carte des talents,
+  badge « à étayer » + défi de Léo sur la preuve, bascule « Mon offre réelle »
+  (filtre `a_etayer=false`). Cap boussole RESHIRAM ouvert (interne, `reshiram.html`).
+  Harnais `unit-reshiram-validate` (27) + `smoke-reshiram` (A/B/C). Correctif
+  contre-passe : retour → **boussole** `/` (pas la console Ultima, car RESHIRAM
+  est un cap boussole). Rien à migration/RLS/middleware. **Fusion = gate Paul.**
+- **2026-07-22 (hébergement RESHIRAM)** — Paul : **RESHIRAM vit DANS Ultima,
+  rien de plus.** Même repo, même déploiement Vercel `ultima`, même projet
+  Supabase `leosfqyidgsaescjbfom` ; console = **page interne** (même onglet,
+  `externe: false` — déjà le cas dans le registre boussole), PAS un lien externe.
+  **Aucune ressource facturée en plus** (pas de nouveau Vercel/Supabase/domaine).
+  ZEKROM idem. Consigné `CADRAGE-RESHIRAM-ZEKROM.md §7 Hébergement`.
+- **2026-07-22 (modèle données RESHIRAM v1)** — conception par data-ingénieur +
+  contre-passe Léo (validée). Migration **`0009_reshiram_talents.sql` déposée,
+  NON appliquée (gate Paul)**. 2 tables (`talents`, `preuves`) + 2 vues
+  (`talents_etat` avec `a_etayer` dérivé, `talents_offre_reelle` = talents
+  étayés). Conventions respectées : RLS `(select auth.uid())` initplan, owner_id
+  default, trigger `set_updated_at` réutilisé, vues security_invoker, scellement
+  AD-4 (owner_id,id), index justifiés, zéro GRANT (cohérent), zéro seed.
+  **Décisions validées Paul 2026-07-22** : ① `niveau` = notion/pratique/maitrise
+  (sans « expert ») ② secteurs = texte libre `text[]` ③ `plus_value` bornée 2000.
+  Le fichier 0009 reflète déjà ces choix. **✅ Appliquée 2026-07-22 sur « Go »
+  de Paul** (escalade Opus, gate fermée) : `talents` + `preuves` créées, **RLS
+  activée** confirmée (`list_tables`), 2 vues. ⏳ Auto-check advisors non lançable
+  (approbation MCP indisponible en async) — schéma conçu 0-lint (RLS on, vues
+  security_invoker, trigger réutilisé) ; à reconfirmer au dashboard/prochaine
+  session. Fichier fusionné dans `main`.
+- **2026-07-22 (emblèmes R/Z)** — blasons des caps changés (dicté Paul, réf.
+  dragons) : **RESHIRAM = aile blanche**, **ZEKROM = aile noire** (même aile
+  plumée, en miroir → les deux se font face de part et d'autre de la passerelle).
+  Remplace ancre/flambeau. `js/boussole.js` (fonctions `aile()` +
+  `blasonAileBlanche/Noire`). smoke-boussole vert.
 - **2026-07-22 (renommage)** — **TRAVELER → RIVEN** (dicté Paul, « implante
   partout »). Nom affiché du quadrant réseau renommé partout (UI, code, tests,
   cadrages, charte, mémoire, commentaires migration/validate). **Identifiants

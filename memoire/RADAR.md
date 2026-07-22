@@ -273,3 +273,20 @@
   ④ S-L2-2 : mitigation centrale fermée en L2b (proposition déterministe +
   confirmation + cible affichée + RLS mono-owner) ; S-L2b-4 en vivier
   (carte auto-vérifiante client si le serveur devenait hostile).
+- 2026-07-22 (Ultima LV2 : boussole → RESHIRAM v1) — deux frictions **confirmées**
+  et transformées en pratiques permanentes (charte §Optimisation) :
+  ① **Run partiel = régression manquée** : le repointage des liens « retour »
+  en LV2-① a laissé `smoke-quadrants` rouge, non vu car seuls boussole+console
+  avaient été relancés — détecté bien plus tard, au renommage RIVEN. → Leçon :
+  **`lancer.sh` en entier** avant toute fusion front/routage/renommage large.
+  ② **Conflit de merge post-squash (récurrent)** : après chaque squash, la
+  branche locale gardait le commit pré-squash et empilait dessus → 405 « merge
+  conflicts » / non-fast-forward. Résolu à chaque fois par
+  `git rebase --onto origin/main` + force-with-lease. → Leçon : **repartir la
+  branche de `origin/main` avant tout nouveau commit** après un squash-merge.
+  ③ **Confirmé (motif réutilisé sans friction)** : RESHIRAM v1 a repris tel quel
+  le motif idees/adramelech (brique + route mince + validate miroir des CHECK +
+  fail-closed + unit purs + smoke à API stubée) — 0 surprise. À reproduire pour
+  ZEKROM. ④ Angle mort environnement : `get_advisors`/`send_later`/subscribe MCP
+  demandent une approbation indisponible en async → advisors 0009 à reconfirmer
+  au dashboard (action Paul), ne pas considérer l'auto-check comme fait.

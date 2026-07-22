@@ -209,6 +209,248 @@ body.page-quadrant .console-conteneur {
   color: var(--encre-deco);
 }
 
+/* ---------- RESHIRAM : saisie ancrée sur preuve ---------- */
+.reshiram-form { display: flex; flex-direction: column; gap: 0.7rem; }
+
+.reshiram-champ { display: flex; flex-direction: column; gap: 0.25rem; }
+
+.reshiram-champ label {
+  font-family: var(--police-ancienne);
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+  color: var(--encre-sepia);
+}
+
+.reshiram-aide {
+  font-variant: normal;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--encre-sepia-douce);
+}
+
+.reshiram-champ input,
+.reshiram-champ select,
+.reshiram-preuve-input {
+  min-height: 44px;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--encre-sepia);
+  background: var(--creme);
+  border: 1px solid var(--cerne-carte);
+  border-radius: 6px;
+}
+
+.reshiram-champ input::placeholder,
+.reshiram-preuve-input::placeholder { color: var(--encre-sepia-douce); }
+
+.reshiram-form-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.reshiram-bouton {
+  min-height: 44px;
+  padding: 0.5rem 1.2rem;
+  font-family: var(--police-ancienne);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #f2e8cd;
+  background: linear-gradient(#1a5a78, #0e3a52);
+  border: 1.5px solid var(--or-antique);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 10, 20, 0.35);
+  cursor: pointer;
+}
+
+.reshiram-bouton:hover { background: linear-gradient(#1f6787, #114560); }
+.reshiram-bouton:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+.reshiram-form-message {
+  font-family: var(--police-ancienne);
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--encre-sepia-douce);
+}
+
+.reshiram-form-message--erreur { color: var(--danger-parchemin); font-style: normal; }
+
+/* ---------- RESHIRAM : bascule de vue (toute la carte / offre réelle) ---------- */
+.reshiram-bascule { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.6rem; }
+
+.reshiram-onglet {
+  min-height: 44px;
+  padding: 0.4rem 1rem;
+  font-family: var(--police-ancienne);
+  font-size: 0.92rem;
+  font-weight: 700;
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  color: var(--encre-sepia);
+  background: var(--parchemin-ombre);
+  border: 1px solid var(--or-antique);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.reshiram-onglet[aria-pressed="true"] {
+  color: #f2e8cd;
+  background: linear-gradient(#1a5a78, #0e3a52);
+  border-color: var(--or-antique);
+}
+
+.reshiram-onglet:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.reshiram-vue-note {
+  margin: 0 0 0.7rem;
+  font-family: var(--police-ancienne);
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--encre-sepia-douce);
+}
+
+/* ---------- RESHIRAM : carte d'un talent ---------- */
+.reshiram-talent {
+  padding: 0.8rem 0.95rem;
+  background: linear-gradient(180deg, var(--parchemin), var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte);
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 2px rgba(169, 136, 74, 0.35);
+}
+
+.reshiram-talent + .reshiram-talent { margin-top: 0.6rem; }
+
+.reshiram-talent--a-etayer { border-style: dashed; }
+
+.reshiram-talent-entete {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.reshiram-talent-nom {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.04rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--encre-sepia);
+}
+
+.reshiram-niveau {
+  flex: none;
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--or-antique);
+  background: var(--parchemin-ombre);
+  font-family: var(--police-ancienne);
+  font-size: 0.8rem;
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  color: var(--encre-sepia);
+}
+
+.reshiram-secteurs {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.reshiram-secteur {
+  padding: 0.08rem 0.5rem;
+  border: 1px solid var(--or-antique);
+  border-radius: 4px;
+  background: var(--parchemin-ombre);
+  font-size: 0.85rem;
+  color: var(--encre-sepia);
+}
+
+.reshiram-transversal {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.08rem 0.55rem;
+  border: 1px dashed var(--or-antique);
+  border-radius: 4px;
+  font-family: var(--police-ancienne);
+  font-size: 0.82rem;
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  color: var(--encre-sepia-douce);
+}
+
+.reshiram-plusvalue {
+  margin: 0.5rem 0 0;
+  font-size: 0.92rem;
+  color: var(--encre-sepia-douce);
+}
+
+.reshiram-preuves {
+  list-style: none;
+  margin: 0.55rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.reshiram-preuve {
+  position: relative;
+  padding-left: 1.35rem;
+  font-size: 0.93rem;
+  color: var(--encre-sepia);
+}
+
+.reshiram-preuve::before {
+  content: "◆";
+  position: absolute;
+  left: 0.15rem;
+  font-size: 0.7rem;
+  color: var(--encre-deco);
+}
+
+.reshiram-aetayer {
+  display: inline-block;
+  margin-top: 0.55rem;
+  padding: 0.12rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--danger-parchemin);
+  background: var(--parchemin-ombre);
+  font-family: var(--police-ancienne);
+  font-size: 0.8rem;
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  color: var(--danger-parchemin);
+}
+
+.reshiram-defi {
+  margin: 0.4rem 0 0;
+  font-family: var(--police-ancienne);
+  font-style: italic;
+  font-size: 0.92rem;
+  color: var(--encre-sepia);
+}
+
+.reshiram-preuve-form {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.6rem;
+}
+
+.reshiram-preuve-input { flex: 1 1 12rem; min-width: 0; }
+
+.reshiram-bouton-preuve { padding: 0.5rem 0.95rem; }
+
 /* ---------- Retour à la console (tap target ≥ 44 px) ---------- */
 .retour { margin: 0; text-align: center; }
 

@@ -25,14 +25,83 @@
     boussole — RESHIRAM (« le travail de la réalité », blason ancre) et ZEKROM
     (« la quête de l'idéal », blason flambeau), « à venir », reliés par une
     **passerelle pointillée** (champ `lien` du registre). Boussole = 5 caps ;
-    harnais 40 verts. Cadre en `CADRAGE-CONSOLE.md §2bis`.
-  - ⏭ **LV2-② Auth** (gate) — connexion « e-mail + mot de passe » évoquée par
-    Paul ; l'existant est un lien magique Gmail (`signInWithOtp`). Boucle
-    dédiée, arbitrage requis (garder le lien magique vs. ajouter un mot de passe).
-  - ⏭ **LV2-③ Résumés vivants** — brancher les vrais « en cours » par
-    macro-projet (Ultima les a déjà via Léo).
-  - ⏳ **Actions humaines LV2** : **URL de YCOME** (plateforme externe) → une
-    ligne dans le registre `MACRO_PROJETS`.
+    harnais 40 verts. Cadre en `CADRAGE-CONSOLE.md §2bis`. Emblèmes changés
+    2026-07-22 : RESHIRAM = **aile blanche**, ZEKROM = **aile noire** (miroir).
+  - ✅ **RESHIRAM v1 construite (2026-07-22)** : hébergée DANS Ultima (décision
+    Paul — même repo/Vercel/Supabase, page interne). Migration `0009` appliquée
+    (`talents`/`preuves` + vues `talents_etat`/`talents_offre_reelle`, RLS).
+    API `api/talents.js` + `api/preuves.js` (requireUser, owner_id jamais du
+    client, validation miroir des CHECK, scellement cross-owner). Front
+    `reshiram.html`/`js/reshiram.js` : carte des talents, badge « à étayer » +
+    défi de Léo, bascule « mon offre réelle ». Cap boussole ouvert (interne).
+    Harnais `unit-reshiram-validate` (27) + `smoke-reshiram` ; patrimoine vert.
+    Cadre détaillé (v1+v2) : `CADRAGE-RESHIRAM-ZEKROM.md §7`.
+  - 🔶 **LV2-② Auth — Google OAuth (2026-07-22)** : bouton « Se connecter
+    avec Google » ajouté À CÔTÉ du lien magique (décision Paul : Google en
+    plus, pas à la place). Code livré + vérifié : `js/app.js`
+    (`seConnecterGoogle` → `signInWithOAuth({provider:'google'})`),
+    `traveler.html` (bouton + séparateur « ou »), `css/styles.css` (registre
+    antique, contraste 12,5:1), harnais `smoke-connexion.mjs` enrichi (31
+    verts, dont visibilité/clic/contraste Google). Navigation top-level →
+    aucune retouche CSP. **⏳ Action humaine Paul (bloquant fonctionnel)** :
+    (1) créer des identifiants OAuth dans Google Cloud Console (écran de
+    consentement en mode **Test**, adresse de Paul seul « test user » = verrou
+    mono-utilisateur, zéro code) ; (2) activer le provider Google dans Supabase
+    → Auth → Providers avec Client ID/Secret ; (3) déclarer les URLs de
+    redirection (URL de prod + `.../auth/v1/callback`). Sans (2), le bouton
+    renvoie « provider not enabled ». Secrets → jamais committés. **✅ Config
+    Paul faite (2026-07-22), testée sur preview.**
+  - ✅ **LV2-② Auth à l'accueil — porte unique (2026-07-22)** : constat Paul —
+    Google (et le lien magique) renvoient sur `origin` = la boussole, qui
+    n'avait AUCUN consommateur → jeton bloqué dans l'URL, session jamais
+    établie. Corrigé : `index.html` charge désormais `js/config.js` +
+    supabase + `js/boussole-auth.js` (module autonome calqué sur `app.js`).
+    L'accueil est la **porte de connexion unique et verrouillée** (décision
+    Paul) : overlay réutilisé de `traveler.html` (Google + lien magique),
+    boussole cachée/inerte tant que non connecté ; le retour OAuth est consommé
+    là (`detectSessionInUrl`) et l'URL nettoyée ; session partagée à tous les
+    quadrants via `localStorage`. Répare aussi le lien magique (même bug).
+    Aucune retouche CSP/RLS/migration/secret. Harnais `smoke-boussole.mjs`
+    enrichi (stub Supabase + section verrou déconnecté/connecté) — tout vert,
+    `smoke-connexion.mjs` non régressé.
+  - 🗺️ **RESTE LV2 — feuille de route (cadrée 2026-07-22, ordonnée par
+    dépendances, une boucle à la fois)** :
+
+    **① ✅ Débloqueur levé — LV2-② Auth finalisée (2026-07-22) :** config
+    Google Cloud + provider Supabase faite par Paul, ET connexion terminée à
+    l'accueil (porte unique verrouillée). Le **verrou d'usage** est levé :
+    connecté, RESHIRAM et tout ce qui vit derrière auth sont accessibles.
+
+    **② ZEKROM v1** (miroir RESHIRAM) : mini-cadrage (objets : idéaux/visions/
+    projets idéaux) → **modèle de données** (gate migration `0010`) → console
+    interne `zekrom.html` (aile noire, cap ouvert). Complète le doublet.
+
+    **③ Passerelle de données R↔Z** : table de liaison `talent ↔ idéal` (gate
+    migration) + le **rétroplanning** (depuis un idéal ZEKROM : « talents que
+    j'ai / qui manquent » → besoin chiffré, coût délégué à NICOL BOLAS) +
+    enrichissement bidirectionnel. **Manuel en v1** (Paul valide les liens).
+    Dépend de ZEKROM (②).
+
+    **④ Connexions v2 RESHIRAM→RIVEN** : `talent_refs_reseau` (lecture des
+    fiches RIVEN, jamais de copie) + vue « capital réseau » chiffrée par
+    secteur. Rend mesurables les talents « réseau ». Dépend de RIVEN (déjà là).
+
+    **⑤ LV2-③ Cockpit + résumés vivants** (`CADRAGE-CONSOLE.md §2bis`) : survol
+    d'un cap → vrai « en cours » du macro-projet ; puis signaux/badges, cap du
+    jour, état du jour transversal, capture-dispatch. Dépend des consoles
+    alimentées en data (②–④).
+
+    **Autres caps :**
+    - **YCOME** — dès que Paul fournit l'URL (action humaine, 1 ligne dans le
+      registre `MACRO_PROJETS`).
+    - **NICOL BOLAS (finance, ex-BALTHAZAR GELD, `CADRAGE-CONSOLE.md §3.2`)** :
+      quadrant financier — pilote fiscal/tréso qui **alimente les KPIs du
+      cockpit** (⑤). Grande boucle à part (son propre mini-cadrage), à
+      ordonnancer avec Paul.
+
+    **Gates du reste** : migrations `0010`+ (application = Paul), fusions PR,
+    finalisation OAuth (Paul). **Aucune ressource facturée** (tout dans Ultima —
+    décision hébergement 2026-07-22).
 
 - ✅ **P0 Fondations** — livrée, vérifiée en navigateur, fusionnée dans `main`
   via PR #1 (7 commits atomiques : cadrage, migration RLS, API, middleware,

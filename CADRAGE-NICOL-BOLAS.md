@@ -66,7 +66,7 @@ bouge — esprit HÉRAUT/veille).
    hypothèses, **exportables/importables en JSON** (pas de base).
 
 **Hors v1, explicitement** :
-- **Aucune persistance en base** (cf. §5 — surface minimale ; la table `0009`
+- **Aucune persistance en base** (cf. §5 — surface minimale ; la table `0011`
   n'est ni écrite ni appliquée tant que la boucle 3 n'est pas ouverte).
 - **Pas d'import de vrais bulletins/factures** pour caler les hypothèses (surface
   upload = gate + cadrage sécu §5).
@@ -122,7 +122,7 @@ l'optimisme de trésorerie initialement signalé. Prouvé au harnais (net + coti
   étendue : IDs seuls). Décision retenue (contre-passe Léo) : **on ne crée la
   table que quand la sauvegarde de scénarios devient un besoin explicite de Paul**,
   pas avant.
-- **Si persistance (boucle 3)** : draft `supabase/migrations/0009_simulateur.sql`
+- **Si persistance (boucle 3)** : draft `supabase/migrations/0011_simulateur.sql`
   en **miroir strict de 0007/0008** (RLS mono-owner, une policy par opération,
   `WITH CHECK` sur écritures, CHECK d'énumération, `set_updated_at`, unicité
   `(owner_id, nom)`, en-tête scalaire + soute `hypotheses jsonb` bornée + snapshot
@@ -161,7 +161,7 @@ l'optimisme de trésorerie initialement signalé. Prouvé au harnais (net + coti
   UI de l'arbitrage achat/location (`arbitrageAchatLocation` déjà dans le moteur —
   cas « louer le parc » de VERTUMNE) ; saisonnalité + module TVA au formulaire.
 - **NB-3 — persistance (optionnelle, seulement si Paul la demande)** : application
-  du draft `0009`. **Gate Paul + escalade Opus + contre-passe sécu + advisors.**
+  du draft `0011`. **Gate Paul + escalade Opus + contre-passe sécu + advisors.**
   Ne pas ouvrir tant que NB-1 n'est pas bouclée (EB : une boucle à la fois).
 
 ## 7. Garde-fous EB
@@ -201,7 +201,7 @@ Chacun **affiché et modifiable** dans l'UI, jamais un chiffre en dur :
    TNS). Traité en NB-1 comme entrée vivante.
 3. **NB-1** : ✅ **go donné et livré** (2026-07-22) — moteur de calcul pur testé.
 4. **Persistance** : v1 **sans base** (recommandation retenue) — NB-3 (table
-   `0009`, gate) seulement si Paul veut sauvegarder des scénarios. ⏳ ouvert.
+   `0011`, gate) seulement si Paul veut sauvegarder des scénarios. ⏳ ouvert.
 
 **État** : NB-1 (moteur) ✅ et NB-2 (front) ✅ livrés — le simulateur marche à
 l'écran et chiffre un lancement (seed type VERTUMNE au démarrage). **Prochaines

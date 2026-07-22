@@ -370,6 +370,106 @@ export function validateLien(body) {
   return { value: { source_id: body.source_id, target_id: body.target_id } };
 }
 
+// --- RESHIRAM (v1) : talents + preuves. Enums/bornes en MIROIR EXACT des CHECK
+// de supabase/migrations/0009_reshiram_talents.sql (défense en profondeur AU-DESSUS
+// de la RLS). Ce que l'API refuse, la base le refuse aussi. owner_id n'est jamais
+// accepté du client : il est imposé par le défaut base (auth.uid()).
+
+// Échelle réelle à 3 crans (SANS « expert » — règle cardinale RESHIRAM).
+export const TALENT_NIVEAUX = ['notion', 'pratique', 'maitrise'];
+
+// Champs autorisés en écriture (owner_id/id/dates gérés serveur).
+const TALENT_FIELDS = ['nom', 'secteurs', 'niveau', 'plus_value'];
+const PREUVE_FIELDS = ['talent_id', 'contenu'];
+
+// Borne PAR élément de `secteurs` : non exprimable en CHECK de table sans
+// fonction (0009 le documente) → assurée ici. Alignée sur secteur_activite RIVEN
+// (0006 : 120). Cardinalité bornée à 20 (miroir du CHECK array_length ≤ 20).
+const SECTEUR_MAX = 120;
+const SECTEURS_MAX_CARD = 20;
+
+// Valide un talent. mode 'create' impose le nom ; 'update' rend tout optionnel.
+// secteurs : tableau de textes non vides bornés (vide '{}' = talent transversal).
+// niveau ∈ TALENT_NIVEAUX. plus_value nullable, bornée. owner_id jamais accepté.
+export function validateTalent(body, mode) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, TALENT_FIELDS);
+  if (unknown) return { error: unknown };
+
+  const out = {};
+
+  if (mode === 'create' || body.nom !== undefined) {
+    if (typeof body.nom !== 'string') return { error: 'Nom invalide' };
+    const nom = body.nom.trim();
+    if (nom.length < 1 || nom.length > 200) return { error: 'Nom invalide' };
+    out.nom = nom;
+  }
+
+  if (body.secteurs !== undefined) {
+    if (!Array.isArray(body.secteurs)) return { error: 'Secteurs invalides' };
+    if (body.secteurs.length > SECTEURS_MAX_CARD) return { error: 'Trop de secteurs' };
+    const secteurs = [];
+    for (const s of body.secteurs) {
+      if (typeof s !== 'string') return { error: 'Secteur invalide' };
+      const v = s.trim();
+      if (v.length < 1 || v.length > SECTEUR_MAX) return { error: 'Secteur invalide' };
+      secteurs.push(v);
+    }
+    out.secteurs = secteurs;
+  }
+
+  if (body.niveau !== undefined) {
+    if (!TALENT_NIVEAUX.includes(body.niveau)) return { error: 'Niveau invalide' };
+    out.niveau = body.niveau;
+  }
+
+  // plus_value : null efface, chaîne bornée sinon.
+  if (body.plus_value === null) {
+    out.plus_value = null;
+  } else {
+    const msg = checkOptionalText(body.plus_value, 'Plus-value', 2000);
+    if (msg) return { error: msg };
+    if (body.plus_value !== undefined) out.plus_value = body.plus_value;
+  }
+
+  if (mode === 'update' && Object.keys(out).length === 0) {
+    return { error: 'Aucun champ à mettre à jour' };
+  }
+  return { value: out };
+}
+
+// Valide une preuve (le socle factuel d'un talent). mode 'create' impose
+// talent_id (UUID) + contenu (1..2000). owner_id imposé par le défaut base ; le
+// scellement composite (owner_id, talent_id) empêche d'étayer le talent d'autrui.
+export function validatePreuve(body, mode) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, PREUVE_FIELDS);
+  if (unknown) return { error: unknown };
+
+  const out = {};
+
+  if (mode === 'create') {
+    if (!isUuid(body.talent_id)) return { error: 'Identifiant de talent invalide' };
+    out.talent_id = body.talent_id;
+  }
+
+  if (mode === 'create' || body.contenu !== undefined) {
+    if (typeof body.contenu !== 'string') return { error: 'Preuve invalide' };
+    const contenu = body.contenu.trim();
+    if (contenu.length < 1 || contenu.length > 2000) return { error: 'Preuve invalide' };
+    out.contenu = contenu;
+  }
+
+  if (mode === 'update' && Object.keys(out).length === 0) {
+    return { error: 'Aucun champ à mettre à jour' };
+  }
+  return { value: out };
+}
+
 // --- INTENDANT (AD-5c) : chantiers pilotés + besoins. Enums/bornes en MIROIR
 // EXACT des CHECK de supabase/migrations/0008_intendant.sql. Ce que l'API refuse,
 // la base le refuse aussi (et vice versa) ; la base reste le backstop ultime pour
