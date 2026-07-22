@@ -142,6 +142,17 @@ l'accessibilité ni la sécurité.
   motifs de code), fixtures en cache, une seule fusion par boucle.
 - **Économie de contexte** : sous-agents pour les gros volumes de lecture,
   synthèses seulement dans le fil principal.
+- **Patrimoine COMPLET avant fusion** (renfort 2026-07-22) : avant toute fusion
+  touchant le front, le routage ou un renommage large, lancer
+  `bash tests/lancer.sh` en **entier** — pas seulement les harnais du fichier
+  modifié. Leçon : un changement des liens « retour » en LV2-① a laissé
+  `smoke-quadrants` rouge, invisible car seuls boussole+console avaient été
+  relancés ; rattrapé bien plus tard.
+- **Reprise de branche après squash-merge** (2026-07-22) : après chaque fusion
+  **squash**, repartir la branche de `origin/main`
+  (`git fetch origin main && git checkout -B <branche> origin/main`) **avant**
+  tout nouveau commit — ne jamais empiler sur l'historique pré-squash (source
+  de conflits de merge récurrents ; résolus au `git rebase --onto origin/main`).
 
 ## ⚙️ Règles permanentes
 
