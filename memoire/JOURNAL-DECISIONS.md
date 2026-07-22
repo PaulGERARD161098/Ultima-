@@ -578,3 +578,13 @@
   `lancer.sh`. Non gaté. Reports non bloquants consignés (NB-2b) : export JSON,
   UI arbitrage achat/location, saisonnalité/TVA. Le simulateur MARCHE à l'écran.
   PR #75.
+- **2026-07-22 (premier chiffrage VERTUMNE par ABAQUE — gardé pour le lancement)** —
+  Ma reco (option 1 : chiffrer VERTUMNE) lancée. Les hypothèses d'ADR-007 bloc C
+  passées dans `abaque.mjs` → masse chargée ≈ 9 800 €/mois (~120 k€/an), seuil
+  ≈ 42 k€ CA/mois, point mort mois 9, **besoin de financement ≈ 100 600 €**
+  (tréso encore −85 k€ à 18 mois) : **plus lourd que l'estimation « 50-90 k€ »**,
+  cohérent avec « capex lourd, build différé ». Paul : « je n'ai pas ces éléments
+  pour le moment, garde-les pour le lancement, pour l'instant on cadre tout ».
+  **Décision : chiffres parkés**, consignés dans ADR-007 bloc C comme premier
+  passage [hyp.] à instruire au lancement (rejouable dans `abaque.html`). Aucun
+  build supplémentaire ouvert ; on reste en cadrage. PR #75.

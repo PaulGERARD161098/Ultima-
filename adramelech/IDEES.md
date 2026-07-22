@@ -1197,6 +1197,23 @@ explicitement à **MYCÉLIUM** (ADR-004 : « on peut lier ça à Muselium »).
 
 **Ce que cet audit rend évident.** Six à huit variables **[hyp.] qui interagissent** (ETP × charges × délai d'encaissement × mix propre/sous-traité/apport × achat vs location du parc) ne se pilotent pas de tête. **VERTUMNE *est* le cas d'usage fondateur du simulateur de lancement d'entreprise sur NICOL BOLAS** : un modèle paramétrique qui, pour un périmètre donné, sort masse salariale chargée, BFR, seuil de rentabilité et point mort. Sans lui, le chiffrage reste un doigt mouillé ; avec lui, VERTUMNE devient décidable.
 
+**Premier passage ABAQUE (2026-07-22) — [hyp.], gardé pour le lancement.** Les
+hypothèses du registre passées dans le moteur `abaque.mjs` (SASU ; Paul dirigeant
++ 2 poseurs dès le départ ; camion 30 k€ + outillage 15 k€ achetés au mois 1 ;
+parc de clim loué 1 500 €/mois ; structure 2 500 €/mois ; apport 20 k€ ; CA en
+montée 10 k€ → plateau 45 k€/mois vers le mois 9 ; marge 35 % ; encaissement
+45 j) donnent : masse salariale chargée **≈ 9 800 €/mois (~120 k€/an)**, seuil de
+rentabilité **≈ 42 000 € de CA/mois**, point mort durable **au mois 9**, et
+surtout un **besoin de financement ≈ 100 600 €** (point bas au mois 10), la
+trésorerie restant **négative (~−85 k€) à 18 mois**. Lecture : le besoin de cash
+est **plus lourd que l'estimation initiale « 50-90 k€ »**, et l'affaire ne se
+refinance pas seule en 18 mois avec ce jeu d'hypothèses — cohérent avec le verdict
+« capex lourd, build différé » (bloc F). **Chiffres non tenus pour acquis** :
+très sensibles à trois curseurs (nombre de personnes au démarrage, vitesse de
+montée du CA, apport). **Décision Paul (2026-07-22) : on garde ce passage pour le
+lancement** ; les vrais chiffres seront instruits le moment venu (Paul ne les a
+pas encore). Le scénario est rejouable tel quel dans ABAQUE (`abaque.html`).
+
 #### D. Risque — Prémortem (2-3 ans, VERTUMNE a échoué)
 
 - **Dispersion — le risque n°1.** Grisé par le « tout capter », le dirigeant glisse vers le « tout faire en propre » : embauches multiples, métiers empilés, aucun maîtrisé — le piège exactement inverse du mono-produit. La compétence-clé (le routage) est noyée sous l'exécution. — *Signal avancé : masse salariale qui gonfle plus vite que la marge ; part sous-traitée qui baisse au lieu de monter ; Paul sur les chantiers au lieu d'être sur l'orchestration.*
