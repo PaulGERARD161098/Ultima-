@@ -18,8 +18,12 @@
   AD-4 (owner_id,id), index justifiés, zéro GRANT (cohérent), zéro seed.
   **Décisions validées Paul 2026-07-22** : ① `niveau` = notion/pratique/maitrise
   (sans « expert ») ② secteurs = texte libre `text[]` ③ `plus_value` bornée 2000.
-  Le fichier 0009 reflète déjà ces choix. **Application = gate (en attente du
-  « applique 0009 » de Paul).**
+  Le fichier 0009 reflète déjà ces choix. **✅ Appliquée 2026-07-22 sur « Go »
+  de Paul** (escalade Opus, gate fermée) : `talents` + `preuves` créées, **RLS
+  activée** confirmée (`list_tables`), 2 vues. ⏳ Auto-check advisors non lançable
+  (approbation MCP indisponible en async) — schéma conçu 0-lint (RLS on, vues
+  security_invoker, trigger réutilisé) ; à reconfirmer au dashboard/prochaine
+  session. Fichier fusionné dans `main`.
 - **2026-07-22 (emblèmes R/Z)** — blasons des caps changés (dicté Paul, réf.
   dragons) : **RESHIRAM = aile blanche**, **ZEKROM = aile noire** (même aile
   plumée, en miroir → les deux se font face de part et d'autre de la passerelle).
