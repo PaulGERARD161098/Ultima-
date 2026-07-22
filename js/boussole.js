@@ -63,7 +63,7 @@
         + 'capacités concrets : ce que tu sais vraiment faire, tes plus-values '
         + 'réelles, ton réseau (lien fort avec RIVEN). Rien que du concret, '
         + 'faits et chiffres. Passerelle avec ZEKROM.',
-      blason: blasonAncre(),
+      blason: blasonAileBlanche(),
       lien: 'zekrom', // passerelle réel ↔ idéal
     },
     {
@@ -75,7 +75,7 @@
       resume: '« La quête de l’idéal » — tes volontés et idées hautes, le cap '
         + 'directionnel qui nourrit la motivation et fait rêver. Passerelle avec '
         + 'RESHIRAM (rétroplanning idéal → réel).',
-      blason: blasonFlambeau(),
+      blason: blasonAileNoire(),
     },
   ];
 
@@ -264,28 +264,29 @@
       'le portail d’YCOME');
   }
 
-  function blasonAncre() {
-    // RESHIRAM — l'ancre : le réel, ancré dans le concret.
-    return disque(
-      '<circle cx="36" cy="20" r="3.4" fill="none" stroke="#3b2f1c" stroke-width="2"/>'
-      + '<path d="M36 23 V52" stroke="#3b2f1c" stroke-width="2.6" stroke-linecap="round"/>'
-      + '<path d="M27 31 H45" stroke="#3b2f1c" stroke-width="2.4" stroke-linecap="round"/>'
-      + '<path d="M22 43 a14 14 0 0 0 28 0" fill="none" stroke="#3b2f1c" stroke-width="2.6"/>'
-      + '<path d="M22 43 l-2.6 -6 l6.2 1.8 Z" fill="#3b2f1c"/>'
-      + '<path d="M50 43 l2.6 -6 l-6.2 1.8 Z" fill="#3b2f1c"/>'
-      + '<path d="M36 26 V49" stroke="#a9884a" stroke-width="0.8" opacity="0.6"/>',
-      'l’ancre du réel de RESHIRAM');
+  // Aile plumée (facing right), réutilisée par les deux caps du doublet.
+  // remplissage = couleur des plumes ; le cerne encre et les nervures d'or
+  // donnent le relief. RESHIRAM = aile blanche, ZEKROM = aile noire (miroir).
+  function aile(remplissage) {
+    return '<g stroke="#3b2f1c" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round">'
+      + '<path d="M23 49 C 23 40, 25 32, 33 27 C 40 22, 48 22, 54 23'
+      + ' C 49 26, 47 29, 47.5 32 C 44 30, 41 31, 40 34'
+      + ' C 43 34, 45 36, 45 39 C 41 37, 38 38, 37 41'
+      + ' C 40 41, 42 43, 42 45 C 37 44, 30 47, 23 49 Z" fill="' + remplissage + '"/>'
+      + '</g>'
+      + '<path d="M27 46 C 31 35, 40 28, 51 25" stroke="#a9884a" stroke-width="0.7" fill="none" opacity="0.6"/>';
   }
 
-  function blasonFlambeau() {
-    // ZEKROM — le flambeau : la flamme de l'idéal qui éclaire le cap.
+  function blasonAileBlanche() {
+    // RESHIRAM — l'aile blanche (le dragon blanc de la réalité).
+    return disque(aile('#ffffff'), 'l’aile blanche de RESHIRAM');
+  }
+
+  function blasonAileNoire() {
+    // ZEKROM — l'aile noire (le dragon noir de l'idéal), en miroir.
     return disque(
-      '<path d="M36 55 V37" stroke="#3b2f1c" stroke-width="2.8" stroke-linecap="round"/>'
-      + '<path d="M30 37 H42" stroke="#3b2f1c" stroke-width="2.4" stroke-linecap="round"/>'
-      + '<path d="M36 14 c 6.5 6.5, 5.5 13, 0 19 c -5.5 -6, -6.5 -12.5, 0 -19 Z" fill="#3b2f1c"/>'
-      + '<path d="M36 20 c 3.3 4, 2.6 7.5, 0 11 c -2.6 -3.5, -3.3 -7, 0 -11 Z" fill="#a9884a" opacity="0.6"/>'
-      + '<path d="M27 24 l-3 -2 M45 24 l3 -2" stroke="#a9884a" stroke-width="1.2" stroke-linecap="round"/>',
-      'le flambeau de l’idéal de ZEKROM');
+      '<g transform="translate(72,0) scale(-1,1)">' + aile('#241c12') + '</g>',
+      'l’aile noire de ZEKROM');
   }
 
   function roseDesVents() {
