@@ -9,6 +9,17 @@
   fichier `bcp.html` conservé (id stable). Orthographe **« NICOL BOLAS »**
   (réf. MTG confirmée par Paul ; le premier jet avait écrit « NICOLE » tel que
   dicté, corrigé ensuite). Chaîne : BCP → BALTHAZAR GELD (07-19) → NICOL BOLAS.
+- **2026-07-22 (RESHIRAM v1 implémentée)** — console livrée (agent + contre-passe
+  Léo + patrimoine 100% vert). API `api/talents.js` (GET/POST/DELETE) +
+  `api/preuves.js` (POST/DELETE) : `requireUser` réel, **owner_id jamais du
+  client** (`rejectUnknown` + défaut base), validation miroir des CHECK 0009,
+  scellement composite cross-owner, erreurs génériques/logs sans PII. Front
+  `reshiram.html` + `js/reshiram.js` : shell fail-closed, carte des talents,
+  badge « à étayer » + défi de Léo sur la preuve, bascule « Mon offre réelle »
+  (filtre `a_etayer=false`). Cap boussole RESHIRAM ouvert (interne, `reshiram.html`).
+  Harnais `unit-reshiram-validate` (27) + `smoke-reshiram` (A/B/C). Correctif
+  contre-passe : retour → **boussole** `/` (pas la console Ultima, car RESHIRAM
+  est un cap boussole). Rien à migration/RLS/middleware. **Fusion = gate Paul.**
 - **2026-07-22 (hébergement RESHIRAM)** — Paul : **RESHIRAM vit DANS Ultima,
   rien de plus.** Même repo, même déploiement Vercel `ultima`, même projet
   Supabase `leosfqyidgsaescjbfom` ; console = **page interne** (même onglet,

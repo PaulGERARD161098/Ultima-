@@ -56,9 +56,9 @@
     {
       id: 'reshiram',
       nom: 'RESHIRAM',
-      cible: null,
+      cible: 'reshiram.html',
       externe: false,
-      etat: 'À venir',
+      etat: 'Ouvert',
       resume: '« Le travail de la réalité » — cartographier tes talents et '
         + 'capacités concrets : ce que tu sais vraiment faire, tes plus-values '
         + 'réelles, ton réseau (lien fort avec RIVEN). Rien que du concret, '
