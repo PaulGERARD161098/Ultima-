@@ -25,7 +25,17 @@
     boussole — RESHIRAM (« le travail de la réalité », blason ancre) et ZEKROM
     (« la quête de l'idéal », blason flambeau), « à venir », reliés par une
     **passerelle pointillée** (champ `lien` du registre). Boussole = 5 caps ;
-    harnais 40 verts. Cadre en `CADRAGE-CONSOLE.md §2bis`.
+    harnais 40 verts. Cadre en `CADRAGE-CONSOLE.md §2bis`. Emblèmes changés
+    2026-07-22 : RESHIRAM = **aile blanche**, ZEKROM = **aile noire** (miroir).
+  - ✅ **RESHIRAM v1 construite (2026-07-22)** : hébergée DANS Ultima (décision
+    Paul — même repo/Vercel/Supabase, page interne). Migration `0009` appliquée
+    (`talents`/`preuves` + vues `talents_etat`/`talents_offre_reelle`, RLS).
+    API `api/talents.js` + `api/preuves.js` (requireUser, owner_id jamais du
+    client, validation miroir des CHECK, scellement cross-owner). Front
+    `reshiram.html`/`js/reshiram.js` : carte des talents, badge « à étayer » +
+    défi de Léo, bascule « mon offre réelle ». Cap boussole ouvert (interne).
+    Harnais `unit-reshiram-validate` (27) + `smoke-reshiram` ; patrimoine vert.
+    Cadre détaillé (v1+v2) : `CADRAGE-RESHIRAM-ZEKROM.md §7`.
   - 🔶 **LV2-② Auth — Google OAuth (2026-07-22)** : bouton « Se connecter
     avec Google » ajouté À CÔTÉ du lien magique (décision Paul : Google en
     plus, pas à la place). Code livré + vérifié : `js/app.js`
@@ -40,10 +50,44 @@
     → Auth → Providers avec Client ID/Secret ; (3) déclarer les URLs de
     redirection (URL de prod + `.../auth/v1/callback`). Sans (2), le bouton
     renvoie « provider not enabled ». Secrets → jamais committés.
-  - ⏭ **LV2-③ Résumés vivants** — brancher les vrais « en cours » par
-    macro-projet (Ultima les a déjà via Léo).
-  - ⏳ **Actions humaines LV2** : **URL de YCOME** (plateforme externe) → une
-    ligne dans le registre `MACRO_PROJETS`.
+  - 🗺️ **RESTE LV2 — feuille de route (cadrée 2026-07-22, ordonnée par
+    dépendances, une boucle à la fois)** :
+
+    **① Débloqueur — action Paul, pas du code (à faire dès que possible) :**
+    **Finaliser LV2-② Auth** (config Google Cloud + provider Supabase, cf. le
+    bullet LV2-②). C'est le **verrou d'usage** : sans compte connecté, RESHIRAM
+    et tout ce qui vit derrière auth reste en fail-closed (normal, mais inerte).
+
+    **② ZEKROM v1** (miroir RESHIRAM) : mini-cadrage (objets : idéaux/visions/
+    projets idéaux) → **modèle de données** (gate migration `0010`) → console
+    interne `zekrom.html` (aile noire, cap ouvert). Complète le doublet.
+
+    **③ Passerelle de données R↔Z** : table de liaison `talent ↔ idéal` (gate
+    migration) + le **rétroplanning** (depuis un idéal ZEKROM : « talents que
+    j'ai / qui manquent » → besoin chiffré, coût délégué à NICOL BOLAS) +
+    enrichissement bidirectionnel. **Manuel en v1** (Paul valide les liens).
+    Dépend de ZEKROM (②).
+
+    **④ Connexions v2 RESHIRAM→RIVEN** : `talent_refs_reseau` (lecture des
+    fiches RIVEN, jamais de copie) + vue « capital réseau » chiffrée par
+    secteur. Rend mesurables les talents « réseau ». Dépend de RIVEN (déjà là).
+
+    **⑤ LV2-③ Cockpit + résumés vivants** (`CADRAGE-CONSOLE.md §2bis`) : survol
+    d'un cap → vrai « en cours » du macro-projet ; puis signaux/badges, cap du
+    jour, état du jour transversal, capture-dispatch. Dépend des consoles
+    alimentées en data (②–④).
+
+    **Autres caps :**
+    - **YCOME** — dès que Paul fournit l'URL (action humaine, 1 ligne dans le
+      registre `MACRO_PROJETS`).
+    - **NICOL BOLAS (finance, ex-BALTHAZAR GELD, `CADRAGE-CONSOLE.md §3.2`)** :
+      quadrant financier — pilote fiscal/tréso qui **alimente les KPIs du
+      cockpit** (⑤). Grande boucle à part (son propre mini-cadrage), à
+      ordonnancer avec Paul.
+
+    **Gates du reste** : migrations `0010`+ (application = Paul), fusions PR,
+    finalisation OAuth (Paul). **Aucune ressource facturée** (tout dans Ultima —
+    décision hébergement 2026-07-22).
 
 - ✅ **P0 Fondations** — livrée, vérifiée en navigateur, fusionnée dans `main`
   via PR #1 (7 commits atomiques : cadrage, migration RLS, API, middleware,
