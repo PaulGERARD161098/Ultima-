@@ -59,6 +59,7 @@ async function ouvrir(viewport, client, requetes) {
           getSession: function () { return Promise.resolve({ data: { session: ${session} } }); },
           onAuthStateChange: function () {},
           signInWithOtp: function () { window.__otpAppele = true; return Promise.resolve({ data: {}, error: null }); },
+          signInWithOAuth: function (opts) { window.__oauthAppele = opts && opts.provider; return Promise.resolve({ data: {}, error: null }); },
           signOut: function () { return Promise.resolve({ error: null }); }
         }
       }; } };`
@@ -126,9 +127,11 @@ verdicts.sansScrollHorizontal = await deco.evaluate(() =>
 const cLabel = await poseContraste(deco, '.ecran-label');
 const cInput = await poseContraste(deco, '#champ-email');
 const cBouton = await poseContraste(deco, '.bouton-lien-magique');
+const cGoogle = await poseContraste(deco, '.bouton-google');
 verdicts.contrasteLabel = cLabel >= 4.5;
 verdicts.contrasteInput = cInput >= 4.5;
 verdicts.contrasteBouton = cBouton >= 4.5;
+verdicts.contrasteGoogle = cGoogle >= 4.5;
 
 // ---- RB2. Aide de la page connexion (.ecran-aide) : texte sépia sur le
 // cartouche parchemin. Mesure DÉDIÉE au PIRE CAS de fond = le bas du dégradé
@@ -195,6 +198,15 @@ verdicts.toastAuDessusEcran = await deco.evaluate(() => {
   return zToast > zEcran;
 });
 
+// ---- 2bis. Bouton Google : visible dans l'écran, tap target ≥ 44 px, et le
+// clic appelle signInWithOAuth avec provider 'google' (handler seConnecterGoogle).
+verdicts.googleVisible = await deco.locator('#ecran-connexion #bouton-google').isVisible();
+verdicts.googleTapTarget = await deco.evaluate(() =>
+  document.getElementById('bouton-google').getBoundingClientRect().height >= 44);
+await deco.locator('#bouton-google').click();
+await deco.waitForTimeout(200);
+verdicts.oauthGoogleAppele = await deco.evaluate(() => window.__oauthAppele === 'google');
+
 // ---- 6. Zéro requête réseau externe nouvelle à l'affichage de l'écran. ----
 verdicts.zeroRequeteExterne = requetesDeco.every((h) => HOTES_OK.includes(h));
 await deco.screenshot({ path: `${SCRATCH}/connexion-deconnecte.png` });
@@ -230,7 +242,7 @@ verdicts.appInteractiveDemo = await demo.evaluate(() => {
 await demo.close();
 
 console.log(JSON.stringify(verdicts, null, 2));
-console.log('contrastes (label / input / bouton):', cLabel, cInput, cBouton);
+console.log('contrastes (label / input / bouton / google):', cLabel, cInput, cBouton, cGoogle);
 console.log('contraste aide (.ecran-aide, pire cas fond):', cAide);
 console.log('erreurs page/console:', erreurs.length ? erreurs : 'aucune');
 const ok = Object.values(verdicts).every((v) => v === true) && erreurs.length === 0;

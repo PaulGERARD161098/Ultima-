@@ -26,9 +26,20 @@
     (« la quête de l'idéal », blason flambeau), « à venir », reliés par une
     **passerelle pointillée** (champ `lien` du registre). Boussole = 5 caps ;
     harnais 40 verts. Cadre en `CADRAGE-CONSOLE.md §2bis`.
-  - ⏭ **LV2-② Auth** (gate) — connexion « e-mail + mot de passe » évoquée par
-    Paul ; l'existant est un lien magique Gmail (`signInWithOtp`). Boucle
-    dédiée, arbitrage requis (garder le lien magique vs. ajouter un mot de passe).
+  - 🔶 **LV2-② Auth — Google OAuth (2026-07-22)** : bouton « Se connecter
+    avec Google » ajouté À CÔTÉ du lien magique (décision Paul : Google en
+    plus, pas à la place). Code livré + vérifié : `js/app.js`
+    (`seConnecterGoogle` → `signInWithOAuth({provider:'google'})`),
+    `traveler.html` (bouton + séparateur « ou »), `css/styles.css` (registre
+    antique, contraste 12,5:1), harnais `smoke-connexion.mjs` enrichi (31
+    verts, dont visibilité/clic/contraste Google). Navigation top-level →
+    aucune retouche CSP. **⏳ Action humaine Paul (bloquant fonctionnel)** :
+    (1) créer des identifiants OAuth dans Google Cloud Console (écran de
+    consentement en mode **Test**, adresse de Paul seul « test user » = verrou
+    mono-utilisateur, zéro code) ; (2) activer le provider Google dans Supabase
+    → Auth → Providers avec Client ID/Secret ; (3) déclarer les URLs de
+    redirection (URL de prod + `.../auth/v1/callback`). Sans (2), le bouton
+    renvoie « provider not enabled ». Secrets → jamais committés.
   - ⏭ **LV2-③ Résumés vivants** — brancher les vrais « en cours » par
     macro-projet (Ultima les a déjà via Léo).
   - ⏳ **Actions humaines LV2** : **URL de YCOME** (plateforme externe) → une

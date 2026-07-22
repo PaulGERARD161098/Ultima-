@@ -3170,6 +3170,25 @@
     }
   }
 
+  // Connexion via Google (OAuth). Le provider Google doit être activé côté
+  // Supabase (Auth → Providers) avec des identifiants OAuth Google Cloud ;
+  // le verrou mono-utilisateur se fait côté Google (écran de consentement en
+  // mode Test, Paul seul autorisé) — voir CADRAGE-ULTIMA.md, LV2-② Auth.
+  // signInWithOAuth redirige le navigateur vers Google puis revient sur
+  // window.location.origin : navigation top-level, pas bloquée par la CSP.
+  async function seConnecterGoogle() {
+    if (!etat.client) { return; }
+    try {
+      var resultat = await etat.client.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: window.location.origin }
+      });
+      if (resultat.error) { throw resultat.error; }
+    } catch (e) {
+      toast('Connexion Google impossible.', 'erreur');
+    }
+  }
+
   async function seDeconnecter() {
     if (!etat.client) { return; }
     try {
@@ -3246,6 +3265,8 @@
     $('#form-noeud').addEventListener('submit', soumettreFormNoeud);
     $('#form-relation').addEventListener('submit', soumettreFormRelation);
     $('#form-connexion').addEventListener('submit', envoyerLienMagique);
+    var boutonGoogle = $('#bouton-google');
+    if (boutonGoogle) { boutonGoogle.addEventListener('click', seConnecterGoogle); }
     $('#bouton-deconnexion').addEventListener('click', seDeconnecter);
 
     document.querySelectorAll('input[data-filtre]').forEach(function (caseFiltre) {
