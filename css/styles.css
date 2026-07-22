@@ -350,6 +350,48 @@ body {
   color: var(--encre-sepia-douce);
 }
 
+/* Séparateur « ou » entre lien magique et Google : filet à l'encre sépia. */
+.ecran-separateur {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.85rem 0 0.15rem;
+  color: var(--encre-sepia-douce);
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  font-size: 0.82rem;
+}
+.ecran-separateur::before,
+.ecran-separateur::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: var(--or-antique);
+}
+
+/* Bouton Google : parchemin clair bordé d'or, distinct du lien magique (bleu). */
+.bouton-google {
+  display: block;
+  width: 100%;
+  min-height: 46px;
+  margin-top: 0.35rem;
+  font: inherit;
+  font-size: 1.02rem;
+  font-weight: 700;
+  font-variant: small-caps;
+  letter-spacing: 0.09em;
+  color: var(--encre-sepia);
+  background: #fffaf0;
+  border: 1.5px solid var(--or-antique);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.bouton-google:hover { background: #fff4dd; }
+.bouton-google:focus-visible {
+  outline: 3px solid var(--accent-fonce);
+  outline-offset: 2px;
+}
+
 /* ---------- Boutons ---------- */
 
 .bouton {
