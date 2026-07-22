@@ -47,8 +47,32 @@ page.on('request', (req) => {
   if (!url.startsWith(BASE) && !url.startsWith('data:')) requetesExternes.push(url);
 });
 
+// Stub du client Supabase (js/boussole-auth.js) : mêmes signatures que celles
+// appelées, zéro réseau. `session` = littéral JS injecté dans getSession, pour
+// jouer les scénarios connecté / déconnecté. Sans stub, l'accueil verrouillé
+// afficherait l'overlay et masquerait la boussole (et getSession tenterait un
+// appel externe) : ici tout reste local.
+function stubSupabase(session) {
+  return (route) => route.fulfill({
+    contentType: 'application/javascript',
+    body: `window.supabase = { createClient: function () { return {
+      auth: {
+        getSession: function () { return Promise.resolve({ data: { session: ${session} } }); },
+        onAuthStateChange: function () {},
+        signInWithOtp: function () { window.__otpAppele = true; return Promise.resolve({ data: {}, error: null }); },
+        signInWithOAuth: function (opts) { window.__oauthAppele = opts && opts.provider; return Promise.resolve({ data: {}, error: null }); },
+        signOut: function () { return Promise.resolve({ error: null }); }
+      }
+    }; } };`,
+  });
+}
+
 // ===================== A. La boussole (index.html) =====================
+// Scénario CONNECTÉ : session présente → overlay masqué, boussole pleinement
+// interactive (non-régression de tout l'existant ci-dessous).
 console.log('— A. Boussole d\'accueil —');
+await page.route('**/js/vendor/supabase-js-2.110.0.min.js',
+  stubSupabase('{ user: { id: "u-test" }, access_token: "jeton-factice" }'));
 await page.goto(`${BASE}/`, { waitUntil: 'load', timeout: 20000 });
 await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
 
@@ -171,6 +195,50 @@ const nomsQuadrants = (await page.locator('.quadrant-nom').allTextContents()).ma
 verifier('Console à 4 quadrants rendue', nomsQuadrants.length === 4, JSON.stringify(nomsQuadrants));
 verifier('Retour boussole présent sur la console',
   (await page.locator('.console-retour a[href="/"]').count()) === 1);
+
+// ============ C. Verrou d'accueil : déconnecté = boussole cachée ============
+// La boussole est la porte de connexion unique : sans session, l'écran de
+// connexion couvre tout, la boussole est inerte, et Google / lien magique sont
+// offerts. C'est aussi ici que le retour OAuth Google se termine (jeton
+// consommé au chargement — non observable en stub, mais le câblage l'est).
+console.log('— C. Verrou d\'accueil (déconnecté) —');
+const ctxDeco = await navigateur.newContext();
+const pageDeco = await ctxDeco.newPage();
+const erreursDeco = [];
+pageDeco.on('console', (m) => { if (m.type() === 'error') erreursDeco.push(m.text()); });
+pageDeco.on('pageerror', (e) => erreursDeco.push(String(e)));
+await pageDeco.route('**/js/vendor/supabase-js-2.110.0.min.js', stubSupabase('null'));
+await pageDeco.goto(`${BASE}/`, { waitUntil: 'load', timeout: 20000 });
+await pageDeco.waitForSelector('#ecran-connexion:not([hidden])', { timeout: 10000 });
+
+verifier('Déconnecté : écran de connexion visible', await pageDeco.locator('#ecran-connexion').isVisible());
+verifier('Déconnecté : formulaire de connexion visible', await pageDeco.locator('#form-connexion').isVisible());
+verifier('Déconnecté : boussole rendue inerte', await pageDeco.evaluate(() => {
+  const scene = document.querySelector('.boussole-scene');
+  return !!scene && scene.hasAttribute('inert');
+}));
+verifier('Bouton Google présent et visible', await pageDeco.locator('#bouton-google').isVisible());
+verifier('Lien magique (champ e-mail) présent', await pageDeco.locator('#champ-email').isVisible());
+// Clic Google → signInWithOAuth('google') (handler seConnecterGoogle).
+await pageDeco.locator('#bouton-google').click();
+await pageDeco.waitForTimeout(200);
+verifier('Clic Google → signInWithOAuth(\'google\')',
+  await pageDeco.evaluate(() => window.__oauthAppele === 'google'));
+verifier('Zéro erreur console (accueil déconnecté)', erreursDeco.length === 0, erreursDeco.slice(0, 3).join(' | '));
+
+// Scénario CONNECTÉ (2e passe isolée) : session présente → overlay masqué, la
+// boussole n'est plus inerte (le verrou se lève bien).
+const ctxCo = await navigateur.newContext();
+const pageCo = await ctxCo.newPage();
+await pageCo.route('**/js/vendor/supabase-js-2.110.0.min.js',
+  stubSupabase('{ user: { id: "u-test" }, access_token: "jeton-factice" }'));
+await pageCo.goto(`${BASE}/`, { waitUntil: 'load', timeout: 20000 });
+await pageCo.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
+verifier('Connecté : écran de connexion masqué', await pageCo.locator('#ecran-connexion').isHidden());
+verifier('Connecté : boussole non inerte', await pageCo.evaluate(() => {
+  const scene = document.querySelector('.boussole-scene');
+  return !!scene && !scene.hasAttribute('inert');
+}));
 
 await navigateur.close();
 
