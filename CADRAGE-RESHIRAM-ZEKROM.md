@@ -125,3 +125,51 @@ n'exposent que des données **derrière auth**.
 
 > **Cadrage complet.** Prochaine étape : **mini-cadrage de RESHIRAM** (périmètre
 > v1, objets, écrans), puis conception du modèle de données (gate migration).
+
+## 7. Mini-cadrage RESHIRAM (validé Paul 2026-07-21)
+
+### v1 — la carte des talents, ancrée sur preuve
+
+- **Objet central : le talent/savoir-faire réel.** Champs :
+  `nom`, `secteur(s)`, `niveau réel`, **≥ 1 preuve** (réalisation ou chiffre),
+  `plus-value` (optionnel). **Sans preuve → statut « à étayer »**, pas un talent
+  affirmé.
+- **Un écran** : la carte/liste des talents + saisie où **Léo challenge**
+  l'auto-complaisance (« sur quoi tu bases ça ? un fait, un chiffre »).
+- **Une vue dérivée** : « **mon offre réelle** » (ce que Paul peut proposer
+  aujourd'hui).
+
+**Exemples réels seed (Paul, servent de test des champs) :**
+1. **Sourcing d'artisans rapide** — secteurs **CVC, cuisine, salle de bain,
+   rénovation** ; plus-value = **rapidité** ; preuve = à documenter (artisans /
+   chantiers effectivement trouvés). *Pont naturel avec TRAVELER (v2).*
+2. **Trancher les situations floues** — esprit **analytique et décisionnel** ;
+   talent **transversal** (sans secteur) ; preuve = décisions passées à citer.
+3. **Petit réseau de contacts utiles + capacité à en trouver aisément** —
+   à la fois **capital** (le réseau) et **capacité** (savoir en créer). *Se
+   branche sur TRAVELER (v2).*
+
+Ces exemples valident le modèle : `talent { nom, secteurs[], niveau, preuve,
+plus_value? }`, avec des talents **sectoriels** (n°1) comme **transversaux**
+(n°2) et des talents qui sont aussi du **capital/réseau** (n°3).
+
+### v2 — étendre (pour boucler la boucle)
+
+- **Vue réseau lue depuis TRAVELER** : le talent n°3 (et n°1) s'y branchent —
+  le réseau réel **vit dans TRAVELER**, RESHIRAM en lit une vue « capital
+  réseau » (lien, pas copie, cf. §4).
+- **Capacités / moyens mobilisables** : temps réellement dispo, outils, capital
+  (le talent n°2 et le versant « capacité » du n°3 en relèvent).
+- **Plus-values chiffrées** : ex. **délai de sourcing** mesuré (n°1) — passer du
+  qualitatif au chiffré (méthode de Paul).
+- **Passerelle vers ZEKROM** : le socle réel alimente le **rétroplanning
+  idéal → réel** (manuel en v1 de la passerelle, cf. §3 & §6).
+
+### Modèle de données (gate migration)
+
+v1 minimal : une table `talents` (+ preuves / plus-values). La **conception SQL
+et la migration = gate** (validation Paul), traitée à la boucle de conception —
+pas ici. Sécurité : données introspectives → **auth + RLS**, §5 s'applique.
+
+> **Boucle cadrage RESHIRAM close.** Suite : conception du modèle de données
+> (gate), puis implémentation v1.

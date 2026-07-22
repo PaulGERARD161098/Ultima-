@@ -9,6 +9,15 @@
   fichier `bcp.html` conservé (id stable). Orthographe **« NICOL BOLAS »**
   (réf. MTG confirmée par Paul ; le premier jet avait écrit « NICOLE » tel que
   dicté, corrigé ensuite). Chaîne : BCP → BALTHAZAR GELD (07-19) → NICOL BOLAS.
+- **2026-07-21 (mini-cadrage RESHIRAM)** — v1 **validé** par Paul : carte des
+  **talents ancrés sur preuve** (`nom, secteurs[], niveau, preuve, plus-value?` ;
+  sans preuve → « à étayer »), écran unique + Léo challenge, vue « mon offre
+  réelle ». 3 talents réels seed donnés : ① sourcing artisans rapide (CVC,
+  cuisine, SdB, réno ; plus-value rapidité) ② trancher le flou (analytique/
+  décisionnel, transversal) ③ réseau de contacts + capacité à en trouver
+  (capital + capacité → TRAVELER). v2 cadrée : vue réseau depuis TRAVELER,
+  capacités/moyens, plus-values chiffrées, passerelle ZEKROM. Modèle de données
+  = gate migration. Consigné en `CADRAGE-RESHIRAM-ZEKROM.md §7`. Cadrage seul.
 - **2026-07-21 (forks R/Z tranchés)** — **Fork 1 (frontières)** : RESHIRAM =
   **présent/terrain/concret**, ZEKROM = **futur/idéal** (point de départ du
   rétroplanning), **IMLADRIK = la personne** (dév perso, plus large, « rien à
