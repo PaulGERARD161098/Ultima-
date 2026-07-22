@@ -13,7 +13,7 @@
 - **Rien sur la page d'accueil** : la console (4 quadrants) reste muette.
 - **Au moment où Paul entre dans un quadrant** : un **pop-up d'accueil de Léo**
   qui récapitule **où on en est** et **les travaux en cours** s'il y en a.
-  - **TRAVELER et NICOL BOLAS** : registre **opérationnel** — relances qui dorment,
+  - **RIVEN et NICOL BOLAS** : registre **opérationnel** — relances qui dorment,
     leads chauds, échéances fiscales, chantiers en cours. C'est là que le
     récapitulatif a le plus de valeur immédiate.
   - **ADRAMELECH et IMLADRIK** : registre **réflexif** (quadrants personnels) —
@@ -43,7 +43,7 @@ Pour être étendue/puissante/pertinente, Léo-au-site a besoin de **quatre
    bloquant n°1, déjà consigné aux boucles AD-4/AD-5. → **action Paul**.
 2. **Le contexte (les yeux de Léo)** — le pop-up est nourri par les **données
    réelles** du quadrant via les API `requireUser` existantes et à venir :
-   - TRAVELER : journal « où j'en suis », relances dues, leads, relations.
+   - RIVEN : journal « où j'en suis », relances dues, leads, relations.
    - NICOL BOLAS : échéancier fiscal, charges/revenus du mois (quand le quadrant
      existera).
    - ADRAMELECH : `/api/idees` (statuts, bilan de l'archipel, top 3 stratégique).
@@ -96,7 +96,7 @@ Le pop-up touche à terme PII réseau + finance + intime (§5 CADRAGE-CONSOLE) :
   immédiate : **seed des 4 idées appliqué** dans la foulée. La voie est libre
   pour L1.
 - **L1 — le pop-up « majordome » SANS IA ✅ LIVRÉ ET DIFFUSÉ (2026-07-18)** :
-  pilote TRAVELER fusionné (PR #52) puis **diffusion aux 4 quadrants** sur
+  pilote RIVEN fusionné (PR #52) puis **diffusion aux 4 quadrants** sur
   ordre de Paul (PR #55) : module `js/leo-accueil.js` généralisé
   (`accueillirQuadrant`), antichambre ADRAMELECH derrière auth (registre
   d'idées via /api/idees, cartouche réflexif, fail-closed prouvé), NICOL BOLAS/IMLADRIK
@@ -110,7 +110,7 @@ Le pop-up touche à terme PII réseau + finance + intime (§5 CADRAGE-CONSOLE) :
   max_tokens 1024, historique borné 30×4000, prompt système Jarvis par
   quadrant SANS donnée personnelle, modèle serveur seulement — `LEO_MODELE`
   en env pour en changer) + zone « Parler à Léo » dans le cartouche
-  (TRAVELER et ADRAMELECH, session réelle uniquement ; 503 = « voix pas
+  (RIVEN et ADRAMELECH, session réelle uniquement ; 503 = « voix pas
   encore branchée », la zone se retire proprement). Briques pures dans
   `api/_lib/leo.js`, harnais `unit-leo-voix.mjs` + smoke section C (API
   stubée : contrat Bearer/historique, gate, panne). **GATE coût** : la voix
@@ -131,7 +131,7 @@ Le pop-up touche à terme PII réseau + finance + intime (§5 CADRAGE-CONSOLE) :
 
 **Actées (Paul, 2026-07-18)** : agent actif à l'initiative ; rien sur
 l'accueil ; pop-up récapitulatif à l'entrée de chaque quadrant ; opérationnel
-sur TRAVELER/NICOL BOLAS, réflexif sur ADRAMELECH/IMLADRIK ; cohérence quadrant ;
+sur RIVEN/NICOL BOLAS, réflexif sur ADRAMELECH/IMLADRIK ; cohérence quadrant ;
 ton Jarvis ; adaptation/apprentissage ; **Léo agit sur dictée** (« ouvrir
 Ultima, parler à Léo, ça fait avancer les choses ») et **tourne sur Claude** ;
 visuel + fonctionnement différés.
@@ -144,4 +144,4 @@ visuel + fonctionnement différés.
    `ANTHROPIC_API_KEY` (jamais dans le repo). Optionnel : `LEO_MODELE` pour
    choisir le modèle (défaut serveur : Opus — qualité Jarvis ; un modèle
    plus économe se règle sans toucher au code).
-3. ~~Périmètre du pilote L1~~ ✅ tranché (TRAVELER) puis diffusé aux 4.
+3. ~~Périmètre du pilote L1~~ ✅ tranché (RIVEN) puis diffusé aux 4.

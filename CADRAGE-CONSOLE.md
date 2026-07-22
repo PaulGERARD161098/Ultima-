@@ -13,7 +13,7 @@ que la console de Rennes Boost. Un seul pilote : **Léo**. Un seul repo. Une
 **mémoire inter-segment** (Léo relie ce qui se répond d'un quadrant à l'autre).
 
 La carte/arbre du réseau déjà construite n'est **pas jetée** : elle **devient le
-premier quadrant** (TRAVELER). Capitaliser sur l'existant, comme toujours.
+premier quadrant** (RIVEN). Capitaliser sur l'existant, comme toujours.
 
 **Directive JL (Paul, 2026-07-18 — l'horizon de cette vision).** À terme,
 Ultima est **l'unique interface de travail de Paul** (travail au sens large) :
@@ -60,7 +60,7 @@ devenir.
     **réalité concrète des talents et capacités de Paul** : ce qu'il sait/peut
     réellement faire, proposer ; ses **plus-values réelles** ; son **réseau
     réel** (ex. BTP : les artisans qu'il connaît → **lien direct avec
-    TRAVELER**). **Règle d'or : uniquement du concret — faits, chiffres, data ;
+    RIVEN**). **Règle d'or : uniquement du concret — faits, chiffres, data ;
     rien d'imaginé, rien d'idéalisé.**
   - **ZEKROM — « la quête de l'idéal ».** Les **volontés, idées hautes,
     idéaux** de Paul → le **cap directionnel** (motivation, pensée,
@@ -76,7 +76,7 @@ devenir.
   - **Forme (décidée Paul 2026-07-21)** : **deux caps AUTONOMES** de la boussole
     — liés par la passerelle data, mais **jamais fusionnés en une seule
     division** (ni sous-caps d'un même macro-projet, ni rangés sous IMLADRIK).
-    RESHIRAM garde un **lien fort avec TRAVELER** (réseau réel) sans y être
+    RESHIRAM garde un **lien fort avec RIVEN** (réseau réel) sans y être
     absorbé.
   - **Cadrage des consoles** : `CADRAGE-RESHIRAM-ZEKROM.md` (but de chaque
     console, objets, passerelle réel↔idéal, articulation anti-duplication avec
@@ -127,7 +127,7 @@ saisie manuelle au démarrage ; niveau de chiffrement finance.
 
 ## 3. Les 4 quadrants (noms de code confirmés par Paul, 2026-07-12)
 
-### 3.1 TRAVELER — le réseau (existant, absorbé)
+### 3.1 RIVEN — le réseau (existant, absorbé)
 Outil de réseau commercial : **arbre des contacts**, **carte**, **contacts**,
 **relations** (rapprochements pilotables), **journal « où j'en suis »** +
 **relances**. C'est tout l'acquis v1→A4 renommé et rangé sous ce quadrant.
@@ -165,7 +165,7 @@ déverse la donnée. Exigences actées :
   affiché. L'agent propose les regroupements ; Paul valide.
 - **Ponts entre idées** : l'interface matérialise les liens (comme les
   routes de synergie déjà dessinées entre GLANEUR/INTENDANT/MYCÉLIUM/PROTÉE),
-  y compris inter-segments (une idée ↔ un contact TRAVELER, ↔ une dépense NICOL BOLAS).
+  y compris inter-segments (une idée ↔ un contact RIVEN, ↔ une dépense NICOL BOLAS).
 - **Zéro perte** : tout est cartographié, rien ne tombe hors carte — le tri
   réorganise, il n'écarte jamais.
 Implémentation différée (pas de code produit tant que la boucle ADRAMELECH
@@ -188,7 +188,7 @@ vocale. Dashboard de suivi comme les autres.
 
 - **Un seul pilote** : Léo, sur tous les quadrants. Paul ne parle qu'à Léo.
 - **Mémoire inter-segment** : une idée d'ADRAMELECH peut toucher un contact de
-  TRAVELER, un objectif d'IMLADRIK peut cadrer une dépense de NICOL BOLAS — Léo fait
+  RIVEN, un objectif d'IMLADRIK peut cadrer une dépense de NICOL BOLAS — Léo fait
   les liens. La mémoire `memoire/` s'étend aux 4 domaines.
 - **Un dashboard par quadrant** : Paul est très créatif et change souvent de cap
   → il a besoin de **cadre**. Chaque outil rend son pilotage lisible
@@ -232,7 +232,7 @@ Conséquences (à tenir à chaque boucle) :
 
 - **Léo est féminine** (une femme) — décision Paul 2026-07-12. Charte et profil
   mis à jour (accords au féminin).
-- **Mandat élargi aux 4 domaines** : Léo pilote TRAVELER, NICOL BOLAS, ADRAMELECH et
+- **Mandat élargi aux 4 domaines** : Léo pilote RIVEN, NICOL BOLAS, ADRAMELECH et
   IMLADRIK, avec la même discipline et les mêmes gates.
 - **UN SEUL agent, verrouillé (Paul, 2026-07-16)** : Léo est le seul agent qui
   agit en cross-plateforme et le seul interlocuteur de Paul — une seule mémoire
@@ -244,7 +244,7 @@ Conséquences (à tenir à chaque boucle) :
 - **Déclinaison par sigle de quadrant** : Léo reste le même agent et **reprend
   le sigle du quadrant courant** — un seul agent, plusieurs blasons.
   Correspondance **figée (Paul, 2026-07-16 ; IMLADRIK re-figé 2026-07-17)** :
-  TRAVELER = boussole · ADRAMELECH = dragon · NICOL BOLAS = balance · IMLADRIK =
+  RIVEN = boussole · ADRAMELECH = dragon · NICOL BOLAS = balance · IMLADRIK =
   **épée au soleil** (décision antérieure de Paul dont la trace écrite avait été
   perdue — session non poussée ; re-confirmée oralement le 2026-07-17, remplace
   l'étoile) · Console = sceau ULTIMA. Les emblèmes gravés sont en ligne (C1).
@@ -265,7 +265,7 @@ servent les 4.
 | Quadrant | Sous-agents à prévoir (appelés par Léo) | Skills à prévoir |
 |---|---|---|
 | Console | (équipe front existante) | `frontend-design`, `theme-factory` |
-| TRAVELER | existant + **agent-liaison** (entremetteur outillé) | existants |
+| RIVEN | existant + **agent-liaison** (entremetteur outillé) | existants |
 | NICOL BOLAS | **agent-finances** (compta perso, fiscalité FR, échéances) + data-ingenieur | parsing/OCR bulletins = **externe/coût → gate** |
 | ADRAMELECH | **agent-idees** (classement, rapprochements sémantiques) + data-ingenieur | (à évaluer) |
 | IMLADRIK | **agent-devperso** (coach fidèle aux valeurs de Paul, curation) | scraping culturel = **externe/coût → gate** |
@@ -275,7 +275,7 @@ servent les 4.
 - **C0 — cadrage + mémoire** (cette session) : ce document + implantation
   mémoire + charte Léo + CLAUDE.md. ✅ en cours.
 - **C1 — la console** : coque d'accueil (bandeau, invite, 4 quadrants,
-  routing), en **réutilisant l'existant** — TRAVELER = l'app actuelle rangée
+  routing), en **réutilisant l'existant** — RIVEN = l'app actuelle rangée
   sous son quadrant, zéro régression. Reste antique et sérieux.
 - **C2…C5 — un quadrant à la fois** : chacun **cadré avant d'être construit**
   (mini-cadrage + previews si visuel), puis livré en boucles A#-style
@@ -296,7 +296,7 @@ servent les 4.
   visait l'isolement d'Ultima **vis-à-vis des AUTRES systèmes de Paul** — elle
   tient. Ce qui change : **à l'intérieur** d'Ultima, on passe d'un domaine à
   quatre, avec mémoire inter-segment. Pas de contradiction, re-scope assumé.
-- **RC5 — nommage** : Traveler / NICOL BOLAS / Adramelech / Imladrik confirmés **par
+- **RC5 — nommage** : Riven / NICOL BOLAS / Adramelech / Imladrik confirmés **par
   écrit** par Paul → figés (lexique vocal mis à jour pour les variantes
   entendues).
 

@@ -29,13 +29,13 @@
 | Adram Erech, Adram Alège, un drame à neige, Adram Elech | ADRAMELECH (variantes supplémentaires) |
 | jaris de Ironman, Jaris | Jarvis (l'assistant d'Iron Man — modèle d'état d'esprit de Léo-au-site) |
 | l'agence (contexte agent) | l'agent (Léo) |
-| Traveller, Traveler | TRAVELER (quadrant réseau — un seul L, rappel Paul 2026-07-16) |
+| Traveller, Traveler | RIVEN (quadrant réseau — un seul L, rappel Paul 2026-07-16) |
 | directive EB, macro-directive | discipline : boucler avant d'avancer + capitaliser sur l'existant |
 | directive JL | l'horizon (Paul, 2026-07-18) : Ultima = unique interface de travail, toute la data, Léo seule interlocutrice, rien créé d'autre |
 | Balthazar Geld, Nicol Bolas, Nicole Bolas, BCP | NICOL BOLAS (quadrant financier ; chaîne : BCP → BALTHAZAR GELD 2026-07-19 → NICOL BOLAS 2026-07-21) |
 | Renault Boost, Renoboost | Renoboost IA (socle rémunérateur = chantiers + installations à domicile ; ligne de base du benchmark ADRAMELECH ; macro-projet boussole LV2 → console https://www.renoboostia.fr) |
 | Ikom, Ycom | YCOME (macro-projet boussole LV2, plateforme externe — URL à fournir par Paul) |
-| Richardam, Reshiram | RESHIRAM (cap boussole LV2 : « le travail de la réalité » — talents & capacités concrets, data, lien TRAVELER) |
+| Richardam, Reshiram | RESHIRAM (cap boussole LV2 : « le travail de la réalité » — talents & capacités concrets, data, lien RIVEN) |
 | Zekrom | ZEKROM (cap boussole LV2 : « la quête de l'idéal » — volontés/idéaux, cap directionnel) |
 | capteur (contexte curseur) | curseur (souris) qu'on glisse sur un cap de la boussole |
 | projets vidéo (contexte réel/idéal) | projets idéaux / idéalistes (confirmé Paul 2026-07-21) |

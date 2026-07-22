@@ -103,7 +103,7 @@ Défini dans `api/_lib/leo.js` (pur, exporté, testable) :
   affiche « cible introuvable/ambiguë » et **seul « Annuler » reste actif**
   (aucun choix hasardeux). Candidats : les données déjà chargées du
   quadrant (idées via `/api/idees` déjà servies au cartouche ADRAMELECH ;
-  chantiers/nœuds via la config du quadrant TRAVELER — le module reçoit
+  chantiers/nœuds via la config du quadrant RIVEN — le module reçoit
   `config.voix.candidats` fourni par `app.js`/`adramelech.js`, tableaux
   `{ id, libelle }` minimaux).
 - **Confirmer** → appel `fetch` vers l'API d'exécution (Bearer session,

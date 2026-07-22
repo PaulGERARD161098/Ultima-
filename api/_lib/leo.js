@@ -13,10 +13,10 @@ export const MAX_TOTAL_CHARS = 24000; // plafond global de l'historique
 export const MAX_TOKENS_REPONSE = 1024; // réponses de majordome, pas d'essais
 
 // Les 4 quadrants et leur registre (CADRAGE-LEO-SITE §1 : opérationnel sur
-// TRAVELER/NICOL BOLAS, réflexif sur ADRAMELECH/IMLADRIK).
+// RIVEN/NICOL BOLAS, réflexif sur ADRAMELECH/IMLADRIK).
 const QUADRANTS = {
   traveler: {
-    nom: 'TRAVELER',
+    nom: 'RIVEN',
     registre: 'opérationnel',
     sujet: 'le réseau commercial de Paul : artisans, partenaires, leads, ' +
       'chantiers et relations. Priorités : relances qui dorment, leads chauds, ' +

@@ -26,7 +26,7 @@ dans le registre antique existant. Les 4 idées + 4 ponts sont déjà en base
    le rendu client est data-driven depuis la réponse API.
 3. **Console** : dans `index.html`, la div `quadrant-avenir` d'ADRAMELECH
    devient un lien actif `href="idees.html"` sur le motif exact du quadrant
-   TRAVELER (émblème ouroboros conservé tel quel). AUCUNE autre retouche de
+   RIVEN (émblème ouroboros conservé tel quel). AUCUNE autre retouche de
    `index.html` (session parallèle en cours sur la console/L1).
 
 ## Contrat de données (réponse `GET /api/idees`)

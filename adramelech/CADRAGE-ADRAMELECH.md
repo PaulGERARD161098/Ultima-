@@ -336,14 +336,14 @@ d'autres artisans (**après** un cycle chantier complet piloté en interne).
 
 ### 9.3 Contrat de données — ✅ proposé par `data-ingenieur` (draft `0008_intendant.sql`)
 
-Principe non négociable : **s'accrocher à la fiche chantier TRAVELER existante**
+Principe non négociable : **s'accrocher à la fiche chantier RIVEN existante**
 (FK vers le chantier), **pas de silo**. RLS mono-owner en miroir de `0007`.
 SQL draft dans `supabase/migrations/0008_intendant.sql` (**jamais appliqué —
 gate β**).
 
 **Deux tables neuves, additives** (aucune brique ERP) :
 - **`intendant_chantiers`** — le chantier *piloté* + sa `date_pose`. Satellite
-  1-1 d'un `network_nodes` de type `chantier` (l'accroche à TRAVELER, aucun
+  1-1 d'un `network_nodes` de type `chantier` (l'accroche à RIVEN, aucun
   chantier recréé). Unicité `(owner_id, node_id)` : un dossier par chantier.
 - **`intendant_besoins`** — une ligne = une pièce exigée (le cœur du matching).
   `designation`, `quantite`, `mode ∈ {stock, commande, aucune}` (la couverture) ;
@@ -435,7 +435,7 @@ côté API (un trigger serait de la sur-ingénierie v1).
 ### 9.7 Note d'architecture — INTENDANT « sort » de la bibliothèque
 
 Une fois construit, l'INTENDANT est un **outil opérationnel du socle**
-(pilotage d'approvisionnement de chantier) : il vit dans l'orbite **TRAVELER /
+(pilotage d'approvisionnement de chantier) : il vit dans l'orbite **RIVEN /
 Renoboost IA**, pas dans la bibliothèque d'idées. ADRAMELECH a fait son travail
 (capter → analyser → trancher) ; le build est une **diplomation hors du quadrant
 idées**. Ce cadrage AD-5c reste ici par continuité, mais l'exécution et la
@@ -448,7 +448,7 @@ mémoire opérationnelle de l'INTENDANT relèvent du socle.
 > ADRAMELECH »). Source : fiche ADR-005 dans `IDEES.md`. **Escalade Opus 4.8
 > demandée par Paul et signalée** (décision d'archi). Comme l'INTENDANT (§9.7),
 > CHAMBRE CLAIRE est un outil du socle : ADRAMELECH capte et cadre, l'exécution
-> relèvera de l'orbite TRAVELER / Renoboost IA.
+> relèvera de l'orbite RIVEN / Renoboost IA.
 
 ### 10.1 Décisions déjà actées (Paul, 2026-07-20)
 
@@ -457,13 +457,13 @@ mémoire opérationnelle de l'INTENDANT relèvent du socle.
    isolée, jamais socle). Le « temps réel » (incrustation à l'échelle) = AR du
    téléphone (RoomPlan/ARCore), reporté en v2.
 2. **Extension d'Ultima** (directive JL) — pas d'application à côté ; l'outil
-   s'accroche à la fiche chantier/lead TRAVELER et Léo l'orchestre.
+   s'accroche à la fiche chantier/lead RIVEN et Léo l'orchestre.
 3. **Faisabilité via le catalogue IceStream** — le verdict de pose fait partie
    du produit dès la v1.
 
 ### 10.2 Périmètre v1 — « l'œil du rendez-vous » (photos, pas d'AR)
 
-Depuis une fiche chantier/lead TRAVELER, en rendez-vous :
+Depuis une fiche chantier/lead RIVEN, en rendez-vous :
 1. **Photos de la pièce** (prises ou chargées au téléphone).
 2. **Analyse Claude (vision)** : lecture de la pièce — mur candidat,
    contraintes visibles (hauteur, obstacles, passage des liaisons,

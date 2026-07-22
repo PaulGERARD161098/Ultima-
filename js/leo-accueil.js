@@ -14,7 +14,7 @@
 // Fail-closed : pas de session → cartouche muet, comportement L1 inchangé.
 //
 // Deux entrées publiques :
-//   - accueillir(donnees, actions)  — TRAVELER, comportement historique intact
+//   - accueillir(donnees, actions)  — RIVEN, comportement historique intact
 //     (clé sessionStorage d'origine, mêmes règles, même DOM) ;
 //   - accueillirQuadrant({quadrant, blason, salutation, sections,
 //     propositions}) — le même rendu (dialog accessible, une fois par session
@@ -24,7 +24,7 @@
 (function () {
   'use strict';
 
-  var CLE_SESSION = 'ultima-leo-accueil-vu'; // TRAVELER — clé historique, gardée
+  var CLE_SESSION = 'ultima-leo-accueil-vu'; // RIVEN — clé historique, gardée
   var SVG_NS = 'http://www.w3.org/2000/svg';
 
   // ---------- Fonctions PURES (testables via window.UltimaLeo) ----------
@@ -406,7 +406,7 @@
     return svg;
   }
 
-  // TRAVELER : la boussole.
+  // RIVEN : la boussole.
   function svgBoussole() {
     var svg = socleBlason();
     svg.appendChild(svgEl('path', {
@@ -878,7 +878,7 @@
     return section;
   }
 
-  // ---------- TRAVELER (comportement historique, inchangé) ----------
+  // ---------- RIVEN (comportement historique, inchangé) ----------
 
   // Ouvre le cartouche. `donnees` = { noeuds, relations, journal } (l'état
   // déjà chargé par app.js) ; `actions.ouvrirCible(nodeId)` mène à la fiche ;

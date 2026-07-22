@@ -187,21 +187,21 @@ verdicts.refVide = resoudreRef('', CANDIDATS).ok === false &&
   resoudreRef('x', null).ok === false && resoudreRef('x', []).ok === false;
 
 // ---------- 7. Gabarits d'exécution : corps EXACTS des API existantes ----------
-const CAND_TRAVELER = {
+const CAND_RIVEN = {
   cibles: [{ id: 'n-1', libelle: 'M. Lambert' }],
   chantiers: [{ id: 'ch-1', libelle: 'Réhabilitation immeuble Voltaire' }]
 };
 verdicts.planJournal = (() => {
   const p = construirePlanExecution(
     { outil: 'proposer_journal', args: { cible_ref: 'lambert', texte: 'Appelé ce matin.' } },
-    CAND_TRAVELER);
+    CAND_RIVEN);
   return p.ok === true && p.url === '/api/reseau/journal' && p.methode === 'POST' &&
     JSON.stringify(p.corps) === JSON.stringify({ node_id: 'n-1', note: 'Appelé ce matin.' });
 })();
 verdicts.planRelance = (() => {
   const p = construirePlanExecution(
     { outil: 'proposer_relance', args: { cible_ref: 'Lambert', echeance: '2026-08-01', note: 'Relancer le devis' } },
-    CAND_TRAVELER);
+    CAND_RIVEN);
   // Contrat journal : une relance exige note + prochaine_etape + relance_at.
   return p.ok === true && p.corps.node_id === 'n-1' && p.corps.relance_at === '2026-08-01' &&
     p.corps.note === 'Relancer le devis' && p.corps.prochaine_etape === 'Relancer le devis';
@@ -209,14 +209,14 @@ verdicts.planRelance = (() => {
 verdicts.planRelanceSansNote = (() => {
   const p = construirePlanExecution(
     { outil: 'proposer_relance', args: { cible_ref: 'Lambert', echeance: '2026-08-01' } },
-    CAND_TRAVELER);
+    CAND_RIVEN);
   return p.ok === true && typeof p.corps.note === 'string' && p.corps.note.length > 0 &&
     typeof p.corps.prochaine_etape === 'string' && p.corps.prochaine_etape.length > 0;
 })();
 verdicts.planBesoinQuantite = (() => {
   const p = construirePlanExecution(
     { outil: 'proposer_besoin', args: { chantier_ref: 'Voltaire', libelle: 'Sacs de chaux', quantite: '12 sacs' } },
-    CAND_TRAVELER);
+    CAND_RIVEN);
   return p.ok === true && p.url === '/api/intendant/besoins' &&
     p.corps.chantier_id === 'ch-1' && p.corps.designation === 'Sacs de chaux' &&
     p.corps.quantite === 12 && p.corps.unite === 'sacs';
@@ -225,7 +225,7 @@ verdicts.planBesoinQuantiteIllisible = (() => {
   // Quantité non numérique : elle rejoint la désignation (jamais devinée).
   const p = construirePlanExecution(
     { outil: 'proposer_besoin', args: { chantier_ref: 'Voltaire', libelle: 'Chaux', quantite: 'quelques sacs' } },
-    CAND_TRAVELER);
+    CAND_RIVEN);
   return p.ok === true && p.corps.designation === 'Chaux — quelques sacs' &&
     !('quantite' in p.corps);
 })();
@@ -233,7 +233,7 @@ verdicts.planBesoinEcheance = (() => {
   // Pas de champ d'échéance côté API besoins : la date rejoint la désignation.
   const p = construirePlanExecution(
     { outil: 'proposer_besoin', args: { chantier_ref: 'Voltaire', libelle: 'Chaux', echeance: '2026-07-25' } },
-    CAND_TRAVELER);
+    CAND_RIVEN);
   return p.ok === true && p.corps.designation === 'Chaux (pour le 25/07/2026)';
 })();
 verdicts.planIdee = (() => {
@@ -256,11 +256,11 @@ verdicts.planEnrichissementAjoute = (() => {
 })();
 verdicts.planRefIntrouvable = (() => {
   const p = construirePlanExecution(
-    { outil: 'proposer_journal', args: { cible_ref: 'Godefroy', texte: 'x' } }, CAND_TRAVELER);
+    { outil: 'proposer_journal', args: { cible_ref: 'Godefroy', texte: 'x' } }, CAND_RIVEN);
   return p.ok === false && p.raison === 'introuvable';
 })();
 verdicts.planOutilInconnu = construirePlanExecution(
-  { outil: 'supprimer_noeud', args: {} }, CAND_TRAVELER).ok === false;
+  { outil: 'supprimer_noeud', args: {} }, CAND_RIVEN).ok === false;
 
 // ---------- 8. Fermetures de la contre-passe sécurité (S-L2b-1/2/3) ----------
 // S-L2b-2 : une clé héritée d'Object.prototype est un surnuméraire comme un
@@ -295,10 +295,10 @@ verdicts.planPorteCible = (() => {
 verdicts.planCiblePartout = (() => {
   const r = construirePlanExecution(
     { outil: 'proposer_relance', args: { cible_ref: 'Lambert', echeance: '2026-08-01' } },
-    CAND_TRAVELER);
+    CAND_RIVEN);
   const b = construirePlanExecution(
     { outil: 'proposer_besoin', args: { chantier_ref: 'Voltaire', libelle: 'Sacs de chaux' } },
-    CAND_TRAVELER);
+    CAND_RIVEN);
   const e = construirePlanExecution(
     { outil: 'proposer_enrichissement_idee', args: { idee_ref: 'ADR-3', ajout: 'X' } },
     { idees: [{ id: 'i-3', libelle: 'ADR-3', essence: '' }] });

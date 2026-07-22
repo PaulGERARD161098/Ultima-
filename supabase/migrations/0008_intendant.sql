@@ -10,7 +10,7 @@
 -- Périmètre v1 = check-list de rapprochement, PAS un ERP (risque n°1 du prémortem
 -- ADR-003 §D : sur-ingénierie). Deux tables neuves, additives et non destructives :
 --   - intendant_chantiers : le chantier PILOTÉ + sa date de pose (satellite 1-1
---     de network_nodes, s'accroche à la fiche chantier TRAVELER, ne la recrée pas).
+--     de network_nodes, s'accroche à la fiche chantier RIVEN, ne la recrée pas).
 --   - intendant_besoins   : les lignes de besoin (le cœur du matching à 3 sources),
 --     avec l'état dérivé (couvert / commande_en_attente / manquant) en colonne
 --     GÉNÉRÉE — la base est l'unique source de vérité de l'état, il ne peut pas
@@ -51,7 +51,7 @@ create unique index if not exists network_nodes_owner_id_uniq
 
 -- ---------------------------------------------------------------------------
 -- 1. intendant_chantiers : un chantier piloté par l'INTENDANT + sa date de pose.
---    Satellite 1-1 d'un network_node de type 'chantier' (l'accroche à TRAVELER).
+--    Satellite 1-1 d'un network_node de type 'chantier' (l'accroche à RIVEN).
 --    date_pose nullable : un chantier peut être ouvert avant que la date soit
 --    connue ; l'alerte J-2 ne se déclenche que lorsqu'elle est renseignée.
 -- ---------------------------------------------------------------------------
@@ -122,7 +122,7 @@ create table public.intendant_besoins (
   -- Volet commande (dénormalisé, seulement signifiant quand mode='commande') :
   commande_ref        text
                       check (commande_ref is null or char_length(commande_ref) <= 120),
-  -- Fournisseur = un contact du réseau (optionnel, s'accroche à TRAVELER).
+  -- Fournisseur = un contact du réseau (optionnel, s'accroche à RIVEN).
   fournisseur_node_id uuid references public.network_nodes (id) on delete set null,
   -- Cycle de vie : livree_le null = pas encore livrée.
   livree_le           date,

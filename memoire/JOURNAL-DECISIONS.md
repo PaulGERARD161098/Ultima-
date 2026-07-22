@@ -9,27 +9,40 @@
   fichier `bcp.html` conservé (id stable). Orthographe **« NICOL BOLAS »**
   (réf. MTG confirmée par Paul ; le premier jet avait écrit « NICOLE » tel que
   dicté, corrigé ensuite). Chaîne : BCP → BALTHAZAR GELD (07-19) → NICOL BOLAS.
+- **2026-07-22 (renommage)** — **TRAVELER → RIVEN** (dicté Paul, « implante
+  partout »). Nom affiché du quadrant réseau renommé partout (UI, code, tests,
+  cadrages, charte, mémoire, commentaires migration/validate). **Identifiants
+  structurels conservés** : `traveler.html`, hrefs, clé quadrant `traveler`,
+  classes/ids, sessionStorage — inchangés (zéro risque). Lexique : Traveller/
+  Traveler → RIVEN.
+- **2026-07-22 (v2 RESHIRAM finalisée)** — connexions détaillées (§7 v2) :
+  **RESHIRAM → RIVEN** = lecture seule (refs de fiches réseau, vue « capital
+  réseau » chiffrée par secteur, jamais de copie, RIVEN = source de vérité) ;
+  **RESHIRAM → ZEKROM** = passerelle manuelle (talent↔idéal), rétroplanning
+  « quels talents j'ai / manquent » → besoin chiffré (coût délégué NICOL BOLAS),
+  enrichissement bidirectionnel. Modèle de données v2 : `talent_refs_reseau`
+  (lecture) + liaison `talent↔idéal`. Migration = gate. Cadrage seul.
 - **2026-07-21 (mini-cadrage RESHIRAM)** — v1 **validé** par Paul : carte des
   **talents ancrés sur preuve** (`nom, secteurs[], niveau, preuve, plus-value?` ;
   sans preuve → « à étayer »), écran unique + Léo challenge, vue « mon offre
   réelle ». 3 talents réels seed donnés : ① sourcing artisans rapide (CVC,
   cuisine, SdB, réno ; plus-value rapidité) ② trancher le flou (analytique/
   décisionnel, transversal) ③ réseau de contacts + capacité à en trouver
-  (capital + capacité → TRAVELER). v2 cadrée : vue réseau depuis TRAVELER,
+  (capital + capacité → RIVEN). v2 cadrée : vue réseau depuis RIVEN,
   capacités/moyens, plus-values chiffrées, passerelle ZEKROM. Modèle de données
   = gate migration. Consigné en `CADRAGE-RESHIRAM-ZEKROM.md §7`. Cadrage seul.
 - **2026-07-21 (forks R/Z tranchés)** — **Fork 1 (frontières)** : RESHIRAM =
   **présent/terrain/concret**, ZEKROM = **futur/idéal** (point de départ du
   rétroplanning), **IMLADRIK = la personne** (dév perso, plus large, « rien à
   voir » avec R/Z — Paul corrige la reco Léo qui craignait un recouvrement).
-  Trois plans distincts, pas de doublon. RESHIRAM lit TRAVELER sans copier ✅.
+  Trois plans distincts, pas de doublon. RESHIRAM lit RIVEN sans copier ✅.
   **Fork 2 (passerelle)** : **manuel pour l'instant** (Paul valide les
   rapprochements), auto plus tard. **Fork 3 (ordre)** : ✅ **RESHIRAM d'abord**,
   ZEKROM ensuite. **Cadrage R/Z complet.** Cadrage seul.
 - **2026-07-21 (cadrage consoles)** — **Cadrage des consoles RESHIRAM & ZEKROM
   ouvert** (Paul : « go cadrage console pour Z et R ») → `CADRAGE-RESHIRAM-ZEKROM.md`.
   RESHIRAM = carto du réel (talents/capacités/plus-values/réalisations, vue
-  réseau lue depuis TRAVELER sans copie, ancrage sur preuve). ZEKROM = idéaux/
+  réseau lue depuis RIVEN sans copie, ancrage sur preuve). ZEKROM = idéaux/
   volontés/cap directionnel (expression libre, faire rêver). Passerelle =
   rétroplanning idéal→réel + enrichissement bidirectionnel + besoin chiffré
   (coût délégué à BALTHAZAR GELD, reco). Arbitrages ouverts : frontières
@@ -47,7 +60,7 @@
 - **2026-07-21** — **Caps RESHIRAM & ZEKROM cadrés** (dicté Paul) : doublet
   **réel ↔ idéal** ajouté au registre boussole (§2bis). **RESHIRAM** = carto de
   la **réalité concrète des talents/capacités** (faits, chiffres, data ; rien
-  d'idéalisé ; lien fort TRAVELER), sous-titre figé **« le travail de la
+  d'idéalisé ; lien fort RIVEN), sous-titre figé **« le travail de la
   réalité »**. **ZEKROM** = sous-titre figé **« la quête de l'idéal »**
   (volontés, idéaux, cap directionnel, « faire rêver »). Les deux en
   **concurrence pas opposition**, **passerelle data bidirectionnelle** (« qu'est-ce
@@ -205,7 +218,7 @@
   Ultima » + « sur quoi on travaille aujourd'hui ? » + **4 quadrants** cliquables.
   Un seul pilote (Léo), un seul repo, **mémoire inter-segment**. Les 4 outils
   (noms de code **confirmés par écrit** par Paul) :
-  ① **TRAVELER** — le réseau (absorbe tout l'acquis : arbre, carte, contacts,
+  ① **RIVEN** — le réseau (absorbe tout l'acquis : arbre, carte, contacts,
   relations, journal, relances) + un agent de liaison de contacts productif ;
   ② **BCP** — pilotage financier long terme (upload bulletins/factures, revenus
   vs charges, mois par mois, prévision impôts, échéancier avec rappels) ;
@@ -243,7 +256,7 @@
   **Arbre responsive en largeur** (paliers 3→6 col), **validé tel quel** par
   Paul (« je valide ainsi »). Reste esthétique non tranché : sous-titre du
   cartouche à 4,594:1 (AA mais marge fine) — micro-arbitrage laissé ouvert.
-- **2026-07-16 (orthographe TRAVELER)** — Paul : « c'est TRAVELER avec un seul
+- **2026-07-16 (orthographe RIVEN)** — Paul : « c'est RIVEN avec un seul
   L, je te l'avais déjà dit ». Correction appliquée partout (CLAUDE.md, cadrages,
   mémoire, charte Léo, registre ADRAMELECH) ; lexique vocal mis à jour. Leçon :
   la graphie avait été figée à deux L au cadrage console (RC5) sans retrouver
@@ -267,7 +280,7 @@
   boussole…), un seul agent plusieurs blasons — mapping sigle↔quadrant à figer
   avec le graphisme. Gravé dans la charte (leo.md) et CADRAGE-CONSOLE §6/§7.
 - **2026-07-16 (blasons de quadrant — FIGÉS)** — Paul « go a et b ». Sigles
-  Léo↔quadrant figés (reco Léo suivie) : TRAVELER = boussole · ADRAMELECH =
+  Léo↔quadrant figés (reco Léo suivie) : RIVEN = boussole · ADRAMELECH =
   dragon · BCP = balance · IMLADRIK = étoile · Console = sceau ULTIMA. Sens
   figé, exécution visuelle (emblèmes gravés) laissée au graphisme. PR #41
   fusionnée sur go Paul (« merge et push »).
@@ -331,11 +344,11 @@
     MYCÉLIUM → PROTÉE bridée**.
   - **AD-5c** (build du 1ᵉʳ retenu, INTENDANT v1 outil interne) : cadrage §9 (la
     check-list PAS l'ERP) ; **contrat de données** data-ingenieur (2 tables,
-    état en colonne GÉNÉRÉE déterministe, accroché à la fiche chantier TRAVELER,
+    état en colonne GÉNÉRÉE déterministe, accroché à la fiche chantier RIVEN,
     RLS miroir 0007, scellement croisé) ; **migration 0008 APPLIQUÉE** en base
     (gate Paul « appliquer avec le scellement » + Go ×2 ; RLS activée vérifiée
     post-apply ; prod intacte). Note d'archi : une fois construit, l'INTENDANT
-    **sort de la bibliothèque** (outil du socle/TRAVELER, pas une idée).
+    **sort de la bibliothèque** (outil du socle/RIVEN, pas une idée).
   - **⏳ RESTENT** : (a) contre-passe sécu d'isolation inter-owner + advisors sur
     0008 (agent coupé par limite de session ; validité moteur confirmée, revue
     Léo + RLS post-apply en substitut) ; (b) AD-5c-γ API requireUser + δ front ;
@@ -345,7 +358,7 @@
   prod « datée » : diagnostic = la console n'avait jamais été construite (+ cache
   PWA). Sur son go (« merge and push je veux que ce soit en ligne ») : **coque C1
   bâtie** (front-carto, index.html = accueil 4 quadrants, blasons gravés SVG,
-  zéro CDN, 23 verdicts smoke, TRAVELER déplacé sur traveler.html sans
+  zéro CDN, 23 verdicts smoke, RIVEN déplacé sur traveler.html sans
   régression) et **PR #46 fusionnée dans main** → console en prod. Page accueil
   validée par Paul. Puis **emblème IMLADRIK re-figé : épée au soleil** (décision
   antérieure de Paul, trace perdue — session non poussée ; recherche exhaustive
@@ -361,7 +374,7 @@
   sceau. ② **Léo dans le site — vision dictée et cadrée** (`CADRAGE-LEO-SITE.md`) :
   agent ACTIF à l'initiative ; rien sur l'accueil ; **pop-up d'accueil de Léo à
   l'entrée de chaque quadrant** (récap état + travaux en cours) ; opérationnel
-  sur TRAVELER/BCP, réflexif sur ADRAMELECH/IMLADRIK ; initiative cohérente
+  sur RIVEN/BCP, réflexif sur ADRAMELECH/IMLADRIK ; initiative cohérente
   avec les objectifs du quadrant ; ton **Jarvis (Iron Man)** ; s'adapte et
   apprend. Visuel + fonctionnement étendu : différés. Architecture en 4 étages
   (auth → contexte data → voix IA → mémoire apprenante), proactivité = règles
@@ -376,7 +389,7 @@
   **appliqué et vérifié : 4 idées + 4 ponts en base**. Débloqués d'un coup :
   AD-4c front (fin du « noir en prod »), front INTENDANT (AD-5c-δ), et Léo L1
   (pop-up par quadrant). Prochaine boucle recommandée : **Léo L1 pilote
-  TRAVELER** ou AD-4c front — arbitrage Paul.
+  RIVEN** ou AD-4c front — arbitrage Paul.
 - **2026-07-18 (LÉO AGIT SUR DICTÉE — complément de vision)** — Paul précise :
   Léo-au-site doit aussi **faire avancer le travail sur dictée** (« ouvrir
   Ultima, parler à Léo, ça fait avancer les choses ») et **tourner sur
@@ -402,7 +415,7 @@
   la boucle en cours ; elle cadre tous les choix d'architecture à venir
   (absorption de data externe = nouvelles boucles cadrées, gates inchangées).
 - **2026-07-18 (LÉO L1 LIVRÉE PUIS DIFFUSÉE — 4 quadrants en ligne)** — sur
-  « go léo l1 » : cartouche majordome construit sur TRAVELER (front-carto,
+  « go léo l1 » : cartouche majordome construit sur RIVEN (front-carto,
   js/leo-accueil.js, calcul pur testable, dialog accessible, 1×/session,
   fail-closed ; 19/19 harnais ; 12 smokes historiques repointés
   /traveler.html) — **fusionné PR #52 sur go Paul**. Puis « diffuse sur tout
@@ -445,7 +458,7 @@
   BALTHAZAR GELD** (ex-BCP ; graphie « GELD » retenue telle qu'entendue, à
   reconfirmer si autre orthographe voulue). Renommage appliqué partout dans
   les documents vivants (CLAUDE.md, cadrages, chartes, profil, radar, registre
-  ADRAMELECH) — leçon TRAVELER appliquée d'office ; les entrées HISTORIQUES de
+  ADRAMELECH) — leçon RIVEN appliquée d'office ; les entrées HISTORIQUES de
   ce journal gardent « BCP » (fidélité du registre). Blason balance inchangé.
   Livré sur la PR #54 (smoke-console adapté, suite verte).
 - **2026-07-19 (« Focus Léo » — L2 la voix, construite)** — Paul : « les
@@ -454,7 +467,7 @@
   `POST /api/leo` (requireUser fail-closed → API Claude, clé env Vercel
   uniquement, timeout 30 s, bornes d'historique et de réponse, prompt
   système Jarvis par quadrant sans PII) + zone « Parler à Léo » dans le
-  cartouche (TRAVELER + ADRAMELECH, session réelle exigée ; antichambres
+  cartouche (RIVEN + ADRAMELECH, session réelle exigée ; antichambres
   muettes tant que sans auth — fail-closed voulu). Décisions techniques :
   modèle par défaut Opus côté serveur, surclassable par l'env `LEO_MODELE`
   sans code ; l'historique du cartouche est la SEULE donnée envoyée à l'IA
@@ -472,7 +485,7 @@
   Livré : fiche `ADR-006 HÉRAUT` dans `IDEES.md` (capture + enrichissement —
   sources réelles Légifrance/PISTE·JORF, BOFiP pour la TVA, BO ministériels,
   EUR-Lex ; cœur de valeur = filtre de pertinence métier, brique Claude ;
-  séquencement v1 digest→v3 Léo proactive ; liens BALTHAZAR GELD/TRAVELER).
+  séquencement v1 digest→v3 Léo proactive ; liens BALTHAZAR GELD/RIVEN).
   Statut **à raffiner**, **analyse stratégique différée** sur demande de Paul.
   Sur « renseigne bien dans l'archipel » : carto régénérée → nouvel archipel
   « Veille juridique » (HÉRAUT seul), 3 ponts vers GLANEUR/INTENDANT/CHAMBRE
