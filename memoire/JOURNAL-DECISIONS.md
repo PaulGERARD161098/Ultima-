@@ -9,6 +9,15 @@
   fichier `bcp.html` conservé (id stable). Orthographe **« NICOL BOLAS »**
   (réf. MTG confirmée par Paul ; le premier jet avait écrit « NICOLE » tel que
   dicté, corrigé ensuite). Chaîne : BCP → BALTHAZAR GELD (07-19) → NICOL BOLAS.
+- **2026-07-22 (feuille de route LV2 cadrée)** — Paul : « on fait le restant sur
+  LV2, cadre bien proprement ». Reste LV2 ordonné par dépendances dans
+  `CADRAGE-ULTIMA.md` (bloc 🗺️ RESTE LV2) : ① débloqueur = finaliser LV2-② Auth
+  (config Google/Supabase, action Paul, verrou d'usage) ; ② ZEKROM v1 (mini-
+  cadrage → migration 0010 → console) ; ③ passerelle données R↔Z (liaison
+  talent↔idéal + rétroplanning, manuel v1) ; ④ connexions v2 RESHIRAM→RIVEN
+  (talent_refs_reseau + capital réseau) ; ⑤ cockpit LV2-③ + résumés vivants.
+  Autres : YCOME (URL), NICOL BOLAS finance (grande boucle §3.2). Gates :
+  migrations 0010+, fusions, OAuth ; zéro ressource facturée. Cadrage seul.
 - **2026-07-22 (RESHIRAM v1 implémentée)** — console livrée (agent + contre-passe
   Léo + patrimoine 100% vert). API `api/talents.js` (GET/POST/DELETE) +
   `api/preuves.js` (POST/DELETE) : `requireUser` réel, **owner_id jamais du
