@@ -536,3 +536,101 @@
   Sur « renseigne bien dans l'archipel » : carto régénérée → nouvel archipel
   « Veille juridique » (HÉRAUT seul), 3 ponts vers GLANEUR/INTENDANT/CHAMBRE
   CLAIRE ; test `unit-carto-generee` mis à jour (ponts 6→9). PR draft #68.
+- **2026-07-22 (ADR-007 VERTUMNE + ADR-008 JANUS — deux projets « stars »)** —
+  Paul dicte deux projets à consigner dans ADRAMELECH, montés de zéro.
+  (1) **VERTUMNE — l'entreprise souple** : ni mono-produit ni mono-service,
+  capte tous les besoins d'un même client par 3 voies (compétences propres /
+  sous-traitance à partenaires validés / apport d'affaires) ; joue le saisonnier
+  météo (clim l'été, en vente **ou location**) ET le patrimonial long terme
+  (cuisine, salle de bain, valorisation de bien) ; moteur « chaque client/projet
+  en amène 1-2 autres » **explicitement relié par Paul à MYCÉLIUM** (« Muselium »
+  = MYCÉLIUM, décodage vocal confirmé par le sens). Accompagnement outil demandé :
+  un **simulateur de lancement d'entreprise sur NICOL BOLAS** (audit complet à la
+  façon d'un expert-comptable : main d'œuvre, masse salariale, URSSAF, matériel,
+  cash, seuil de rentabilité) → besoin consigné, à cadrer en boucle propre du
+  quadrant financier. (2) **JANUS — le pont générationnel** : mettre en réseau les
+  45-50 ans qui ont le réseau/les connexions (mais plus tout à fait « in ») et les
+  jeunes qui ont la faim/l'énergie/les idées (mais pas le réseau) ; échange à
+  double sens (deux visages de Janus) ; à travailler avec **Anselme** (partenaire
+  à confirmer, mot dicté). Noms attribués dans le registre antique et sérieux
+  (Vertumne = dieu des saisons + métamorphose ; Janus = dieu des seuils, deux
+  visages). Statut des deux : **à raffiner, analyse stratégique différée** (modèle
+  HÉRAUT), donc **hors classement AD-5b** tant que la grille n'est pas passée.
+  Livré : fiches `ADR-007`/`ADR-008` dans `IDEES.md` ; carto régénérée → 8 idées,
+  5 archipels (+ « Stratégie d'entreprise » et « Réseau »), **ponts 9→14** (liens
+  VERTUMNE↔MYCÉLIUM/PROTÉE/INTENDANT/JANUS, JANUS↔MYCÉLIUM) ; test
+  `unit-carto-generee` mis à jour ; suite ADRAMELECH verte (unit-carto-generee
+  16/16, unit-idees-carto, unit-idees-validate, unit-adramelech-guard).
+  ⏳ Ambiguïtés vocales consignées : nom de marque « Souqt » ? et partenaire
+  « Anselme » — à confirmer par Paul.
+- **2026-07-22 (confirmations + analyse VERTUMNE)** — Paul tranche : nom
+  **VERTUMNE** retenu (« Souqt » abandonné), **Anselme confirmé** comme partenaire
+  de JANUS, et « ensuite je suis tes reco » → j'instruis VERTUMNE en premier.
+  Fiches mises à jour (confirmations) puis **analyse stratégique complète de
+  VERTUMNE (ADR-007)** dispatchée à `agent-idees`, contre-passe Léo (calcul de
+  score revérifié 34/7=4,9 ; cohérence charte). **Verdict clé (bloc F)** :
+  VERTUMNE n'est **ni concurrent ni satellite** du socle Renoboost IA — elle en
+  est l'**enveloppe souple qui le contient** (Renoboost IA = son 1er métier en
+  propre ; INTENDANT/MYCÉLIUM/PROTÉE/JANUS tiennent dedans). **Score pondéré
+  4,9/10** (rang 6) = non pas « faible valeur » mais « **prématuré comme
+  chantier** » (Temps 2/10, capex + masse salariale + BFR lourds). **Discipline
+  EB actée : build différé** derrière le socle ; VERTUMNE reste hors séquence de
+  build active (comme CHAMBRE CLAIRE). Enjeu chiffré n°1 [hyp.] : le **BFR ≈
+  50-90 k€** (4-6 mois de charges, décalage paie/URSSAF vs encaissement 30-60 j).
+  Seul chantier court terme ouvert : le **simulateur de lancement NICOL BOLAS**
+  (bloc G), dont VERTUMNE est le cas d'usage fondateur — à cadrer en boucle propre
+  du quadrant financier. Livré : `IDEES.md` (analyse 7 blocs sous ADR-007 +
+  VERTUMNE au classement AD-5b rang 6 + note d'actualisation) ; carto régénérée
+  (**ponts 14→16** : +ADR-001|ADR-007, +ADR-005|ADR-007) ; test `unit-carto-generee`
+  MAJ (16) ; suite ADRAMELECH verte (4/4). PR #75.
+- **2026-07-22 (go Paul « ok pour les 2 » → cadrage simulateur NICOL BOLAS =
+  ABAQUE)** — Paul acte : VERTUMNE = enveloppe-cadre / build différé, ET on
+  ouvre la boucle cadrage du simulateur. Modèle de calcul déterministe dispatché
+  à `data-ingenieur` (entrées paramétrables, formules MS chargée/URSSAF/BFR/seuil/
+  échéancier de trésorerie, arbitrage achat-vs-location avec contrainte de cash,
+  recommandation persistance), contre-passe Léo (déterminisme OK ; réserve
+  relevée : part salariale non décaissée en v1 = léger optimisme tréso, à raffiner
+  NB-2). Livré : `CADRAGE-NICOL-BOLAS.md` (nom de code proposé **ABAQUE**,
+  l'instrument de calcul antique). **Décisions actées dans le cadrage** : v1
+  **SANS base** (finance ultra-sensible §5 → surface minimale ; draft `0009`
+  décrit mais NON écrit sur disque tant que NB-3 non ouverte) ; découpage
+  NB-1 (moteur pur, non gaté) → NB-2 (front) → NB-3 (persistance, GATE). ⏳
+  Décisions Paul : nom ABAQUE ? statut juridique défaut (SASU proposé) ? go NB-1 ?
+  persistance ou non. Cadrage pur, rien codé, rien gaté ouvert. PR #75.
+- **2026-07-22 (ABAQUE NB-1 livré — moteur de calcul)** — Paul : « ok pour abaque ;
+  ok pour le statut par défaut mais je dois pouvoir changer de statut pour voir,
+  les données doivent s'adapter ; ok pour la prochaine boucle ». Décisions actées
+  (ABAQUE, SASU par défaut + switch, go NB-1) et **NB-1 construit** : `js/abaque.mjs`
+  (module ES pur, déterministe, zéro I/O/DOM/horloge/aléa) — `simuler(entrées)` +
+  `arbitrageAchatLocation`. Le **statut juridique est une entrée vivante** (SASU/SAS
+  assimilé ↔ EURL/EI TNS → charges dirigeant recalculées, exigence Paul). Contre-passe
+  Léo : **réserve URSSAF corrigée dès NB-1** (part salariale intégrée au décaissement
+  → optimisme tréso levé). Harnais `tests/unit-abaque.mjs` (9 verdicts chiffrés
+  vérifiés main : masse salariale, statut adaptatif, BFR, point mort durable,
+  trésorerie plancher/besoin de financement, déterminisme, garde-fou marge ≤ 0,
+  arbitrage cash + coût actualisé), ajouté à `lancer.sh`. Non gaté. Cadrage MAJ
+  (NB-1 ✅, décisions ✅). Prochaine boucle proposée : NB-2 (front). PR #75.
+- **2026-07-22 (ABAQUE NB-2 livré — le front, « go suite logique »)** — Paul :
+  « oui go suite logique » → front du simulateur. Dispatch `front-carto` (spec Léo,
+  moteur `abaque.mjs` = seule source de calcul), contre-passe Léo (smoke rejoué au
+  navigateur = vert). Livré : `abaque.html` + `js/abaque-ui.js` + `css/abaque.css`
+  (registre antique, CSP stricte, zéro inline/CDN/réseau, DOM createElement/
+  textContent, finance jamais en logs) ; **statut juridique vivant** (SASU↔EI
+  recalcule les charges à l'écran — exigence Paul prouvée au smoke) ; **courbe de
+  trésorerie SVG déterministe** (point bas + besoin de financement + coussin en
+  évidence) ; presets prudent/médian/volontariste ; garde-fou marge ≤ 0.
+  Accès depuis `bcp.html` (antichambre → « premier outil : ABAQUE »). Harnais
+  `tests/smoke-abaque.mjs` (~40 verdicts, contrastes AA clair+sombre) ajouté à
+  `lancer.sh`. Non gaté. Reports non bloquants consignés (NB-2b) : export JSON,
+  UI arbitrage achat/location, saisonnalité/TVA. Le simulateur MARCHE à l'écran.
+  PR #75.
+- **2026-07-22 (premier chiffrage VERTUMNE par ABAQUE — gardé pour le lancement)** —
+  Ma reco (option 1 : chiffrer VERTUMNE) lancée. Les hypothèses d'ADR-007 bloc C
+  passées dans `abaque.mjs` → masse chargée ≈ 9 800 €/mois (~120 k€/an), seuil
+  ≈ 42 k€ CA/mois, point mort mois 9, **besoin de financement ≈ 100 600 €**
+  (tréso encore −85 k€ à 18 mois) : **plus lourd que l'estimation « 50-90 k€ »**,
+  cohérent avec « capex lourd, build différé ». Paul : « je n'ai pas ces éléments
+  pour le moment, garde-les pour le lancement, pour l'instant on cadre tout ».
+  **Décision : chiffres parkés**, consignés dans ADR-007 bloc C comme premier
+  passage [hyp.] à instruire au lancement (rejouable dans `abaque.html`). Aucun
+  build supplémentaire ouvert ; on reste en cadrage. PR #75.

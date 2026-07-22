@@ -38,6 +38,8 @@ echo "=== unit-leo-mains.mjs ==="
 node unit-leo-mains.mjs
 echo "=== unit-idees-carto.mjs ==="
 node unit-idees-carto.mjs
+echo "=== unit-abaque.mjs ==="
+node unit-abaque.mjs
 echo "=== unit-reshiram-validate.mjs ==="
 node unit-reshiram-validate.mjs
 
@@ -48,7 +50,7 @@ trap 'kill $SERVEUR 2>/dev/null || true' EXIT
 sleep 1
 
 # 4. Les harnais navigateur (chacun sort en erreur si un verdict échoue).
-for h in smoke-boussole.mjs smoke-console.mjs smoke-quadrants.mjs smoke-idees.mjs smoke-reshiram.mjs smoke-leo-accueil.mjs smoke-intendant.mjs smoke-flux-fiche.mjs smoke-accueil.mjs smoke-accueil-etats.mjs smoke-connexion.mjs smoke-contacts.mjs smoke-secteur.mjs smoke-dictee.mjs smoke-geocode.mjs smoke-recherche.mjs smoke-antique.mjs smoke-arbre.mjs; do
+for h in smoke-boussole.mjs smoke-console.mjs smoke-quadrants.mjs smoke-idees.mjs smoke-abaque.mjs smoke-reshiram.mjs smoke-leo-accueil.mjs smoke-intendant.mjs smoke-flux-fiche.mjs smoke-accueil.mjs smoke-accueil-etats.mjs smoke-connexion.mjs smoke-contacts.mjs smoke-secteur.mjs smoke-dictee.mjs smoke-geocode.mjs smoke-recherche.mjs smoke-antique.mjs smoke-arbre.mjs; do
   echo "=== $h ==="
   node "$h"
 done

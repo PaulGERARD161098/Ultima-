@@ -1,0 +1,375 @@
+/* Ultima — Quadrant NICOL BOLAS : simulateur ABAQUE (boucle NB-2).
+   Registre antique (gravure à l'encre, parchemin noble, cartouches) — mêmes
+   jetons que css/idees.css, teinte bleue du quadrant NICOL BOLAS pour l'accent.
+   Zéro style inline (CSP), thèmes clair/sombre, aucune animation. Tout le rendu
+   dynamique (résultats, courbe SVG) est posé par js/abaque-ui.js via
+   createElement/textContent — les classes ci-dessous stylent ces éléments. */
+
+:root {
+  --parchemin: #efe3c8;
+  --mer: #e6d5ae;
+  --ile: #ecdfbe;
+  --encre: #3b2b14;
+  --encre-claire: #5a4118;
+  --encre-pale: #7c6338;
+  --cire: #8a3324;
+  --filet: #a98e5f;
+  --bleu: #0e3a52;
+  --bleu-clair: #1a5578;
+  --accent-focus: #1e6fb8;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --parchemin: #201a10;
+    --mer: #181307;
+    --ile: #262013;
+    --encre: #e6d7b4;
+    --encre-claire: #c8b184;
+    --encre-pale: #a4906a;
+    --cire: #d08060;
+    --filet: #6a5a3a;
+    --bleu: #a9d3e6;
+    --bleu-clair: #8fc2d4;
+    --accent-focus: #8fc2d4;
+  }
+}
+:root[data-theme="dark"] {
+  --parchemin: #201a10;
+  --mer: #181307;
+  --ile: #262013;
+  --encre: #e6d7b4;
+  --encre-claire: #c8b184;
+  --encre-pale: #a4906a;
+  --cire: #d08060;
+  --filet: #6a5a3a;
+  --bleu: #a9d3e6;
+  --bleu-clair: #8fc2d4;
+  --accent-focus: #8fc2d4;
+}
+:root[data-theme="light"] {
+  --parchemin: #efe3c8;
+  --mer: #e6d5ae;
+  --ile: #ecdfbe;
+  --encre: #3b2b14;
+  --encre-claire: #5a4118;
+  --encre-pale: #7c6338;
+  --cire: #8a3324;
+  --filet: #a98e5f;
+  --bleu: #0e3a52;
+  --bleu-clair: #1a5578;
+  --accent-focus: #1e6fb8;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body.abaque {
+  background: var(--parchemin);
+  color: var(--encre);
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino,
+    "Book Antiqua", Georgia, "Times New Roman", serif;
+  line-height: 1.55;
+  margin: 0;
+  padding: 1rem 1.25rem 3.5rem;
+}
+
+/* ——— Barre de retour ——— */
+.barre-retour {
+  max-width: 1180px;
+  margin: 0 auto 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.retour-ultima {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 1rem;
+  color: var(--encre);
+  text-decoration: none;
+  font-variant: small-caps;
+  letter-spacing: 0.14em;
+  border: 1px solid var(--encre-claire);
+  outline: 1px solid var(--filet);
+  outline-offset: 3px;
+  background: var(--ile);
+}
+.retour-ultima:hover { border-color: var(--encre); background: var(--parchemin); }
+.retour-ultima:focus-visible { outline: 3px solid var(--accent-focus); outline-offset: 3px; }
+
+/* ——— Feuille ——— */
+.feuille {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ——— En-tête en cartouche (blason balance NICOL BOLAS) ——— */
+header.cartouche {
+  border: 1px solid var(--encre-claire);
+  outline: 1px solid var(--filet);
+  outline-offset: 4px;
+  padding: 1.5rem 2rem 1.3rem;
+  text-align: center;
+}
+.entete-quadrant .blason-svg {
+  width: clamp(60px, 13vw, 80px);
+  height: auto;
+  display: block;
+  margin: 0 auto 0.6rem;
+}
+.surtitre {
+  font-size: 0.78rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--encre-pale);
+  margin: 0 0 0.5rem;
+}
+h1 {
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: clamp(1.9rem, 4.5vw, 2.7rem);
+  letter-spacing: 0.18em;
+  margin: 0;
+  text-wrap: balance;
+}
+.devise {
+  font-style: italic;
+  color: var(--encre-claire);
+  margin: 0.5rem 0 0;
+  font-size: 1.02rem;
+}
+
+/* ——— Bandeau d'avertissement (aide non contractuelle) ——— */
+.avertissement {
+  margin: 0;
+  border: 1px dashed var(--cire);
+  background: var(--ile);
+  color: var(--encre-claire);
+  font-style: italic;
+  font-size: 0.9rem;
+  padding: 0.6rem 1rem;
+  text-align: center;
+}
+
+/* ——— Disposition à deux colonnes (hypothèses / résultats) ——— */
+.atelier {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+}
+.atelier > section { min-width: 0; }
+@media (min-width: 900px) {
+  .atelier { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: start; }
+}
+
+.colonne-titre {
+  font-variant: small-caps;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  font-size: 1.25rem;
+  margin: 0 0 1rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--filet);
+}
+
+/* ——— Formulaire (hypothèses) ——— */
+form.hypotheses { margin: 0; }
+fieldset {
+  border: 1px solid var(--encre-claire);
+  outline: 1px solid var(--filet);
+  outline-offset: 3px;
+  padding: 1rem 1.1rem 1.2rem;
+  margin: 0 0 1.6rem;
+  background: var(--ile);
+}
+legend {
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  padding: 0 0.5rem;
+  color: var(--encre);
+}
+.grille-champs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem 1rem;
+}
+@media (max-width: 520px) { .grille-champs { grid-template-columns: 1fr; } }
+.grille-champs > *, .grille-res > *, .ligne > * { min-width: 0; }
+.champ { display: flex; flex-direction: column; gap: 0.3rem; min-width: 0; }
+.champ.large { grid-column: 1 / -1; }
+.champ label { font-size: 0.9rem; color: var(--encre-claire); }
+.champ .unite { color: var(--encre-pale); font-style: italic; font-size: 0.82rem; }
+.champ input,
+.champ select {
+  font: inherit;
+  font-size: 1rem;
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0.35rem 0.55rem;
+  color: var(--encre);
+  background: var(--parchemin);
+  border: 1px solid var(--encre-claire);
+  border-radius: 2px;
+}
+.champ input:focus-visible,
+.champ select:focus-visible {
+  outline: 3px solid var(--accent-focus);
+  outline-offset: 1px;
+}
+.regime-note {
+  grid-column: 1 / -1;
+  margin: 0.2rem 0 0;
+  font-style: italic;
+  color: var(--encre-claire);
+  font-size: 0.9rem;
+}
+.regime-note strong { font-style: normal; font-variant: small-caps; letter-spacing: 0.06em; }
+.note-hypotheses {
+  grid-column: 1 / -1;
+  margin: 0.6rem 0 0;
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--encre-pale);
+}
+
+/* ——— Lignes ajoutables (postes, investissements, locations) ——— */
+.liste-lignes { display: flex; flex-direction: column; gap: 0.7rem; }
+.ligne {
+  display: grid;
+  gap: 0.5rem 0.7rem;
+  align-items: end;
+  padding: 0.7rem;
+  border: 1px solid var(--filet);
+  background: var(--parchemin);
+}
+.ligne.ligne-poste { grid-template-columns: 2fr 1fr 1.4fr auto; }
+.ligne.ligne-invest { grid-template-columns: 2fr 1.4fr 1fr 1fr auto; }
+.ligne.ligne-location { grid-template-columns: 2fr 1.4fr 1fr auto; }
+@media (max-width: 620px) {
+  .ligne.ligne-poste,
+  .ligne.ligne-invest,
+  .ligne.ligne-location { grid-template-columns: 1fr 1fr; }
+  .ligne .champ.large { grid-column: 1 / -1; }
+}
+.ligne .champ label { font-size: 0.82rem; }
+.ligne-case {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+}
+.ligne-case input[type="checkbox"] { width: 22px; height: 22px; min-height: 22px; }
+.ligne-case label { font-size: 0.88rem; }
+
+.bouton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 1.1rem;
+  font: inherit;
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+  color: var(--parchemin);
+  background: var(--encre-claire);
+  border: 1px solid var(--encre);
+  cursor: pointer;
+  text-decoration: none;
+}
+.bouton:hover { background: var(--encre); }
+.bouton:focus-visible { outline: 3px solid var(--accent-focus); outline-offset: 2px; }
+.bouton.discret {
+  color: var(--encre);
+  background: var(--ile);
+  letter-spacing: 0.06em;
+}
+.bouton.discret:hover { background: var(--mer); }
+.bouton-supprimer {
+  min-width: 44px;
+  padding: 0 0.7rem;
+  color: var(--cire);
+  background: transparent;
+  border: 1px solid var(--cire);
+  font-size: 1.1rem;
+  line-height: 1;
+}
+.bouton-supprimer:hover { background: var(--cire); color: var(--parchemin); }
+.actions-liste { margin-top: 0.8rem; }
+
+.scenarios { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 0.4rem; }
+
+/* ——— Résultats ——— */
+.resultats { display: flex; flex-direction: column; gap: 1.4rem; }
+.bloc-res {
+  border: 1px solid var(--encre-claire);
+  outline: 1px solid var(--filet);
+  outline-offset: 3px;
+  padding: 1rem 1.1rem 1.1rem;
+  background: var(--ile);
+}
+.bloc-res h3 {
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+  font-size: 1.05rem;
+  margin: 0 0 0.8rem;
+  color: var(--encre);
+}
+.grille-res {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem 1rem;
+}
+@media (max-width: 420px) { .grille-res { grid-template-columns: 1fr; } }
+.res { display: flex; flex-direction: column; gap: 0.15rem; }
+.res-libelle { font-size: 0.85rem; color: var(--encre-claire); }
+.res-valeur {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--encre);
+  font-variant-numeric: tabular-nums;
+}
+.res-note { font-size: 0.78rem; font-style: italic; color: var(--encre-pale); }
+
+/* Le chiffre maître : le coussin recommandé. */
+.bloc-res.maitre { background: var(--parchemin); border-color: var(--cire); }
+.res.phare .res-libelle { color: var(--cire); font-variant: small-caps; letter-spacing: 0.08em; }
+.res.phare .res-valeur { font-size: 1.9rem; color: var(--cire); }
+
+.alerte-marge {
+  margin: 0.8rem 0 0;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--cire);
+  color: var(--cire);
+  font-size: 0.9rem;
+}
+.alerte-marge[hidden] { display: none; }
+
+/* ——— Courbe de trésorerie (SVG posé par le module) ——— */
+.courbe-cadre { overflow-x: auto; background: var(--parchemin); border: 1px solid var(--filet); }
+.courbe-cadre svg { display: block; width: 100%; height: auto; min-width: 480px; }
+
+.courbe-fond { fill: var(--parchemin); }
+.courbe-grille { stroke: var(--filet); stroke-width: 0.5; opacity: 0.6; }
+.courbe-zero { stroke: var(--encre-claire); stroke-width: 1; stroke-dasharray: 4 4; }
+.courbe-aire { fill: var(--bleu-clair); opacity: 0.14; }
+.courbe-ligne { fill: none; stroke: var(--bleu-clair); stroke-width: 2.2; stroke-linejoin: round; }
+.courbe-point { fill: var(--bleu-clair); }
+.courbe-pointbas { fill: var(--cire); stroke: var(--parchemin); stroke-width: 1.4; }
+.courbe-pointbas-halo { fill: none; stroke: var(--cire); stroke-width: 1; opacity: 0.6; }
+.courbe-label { fill: var(--encre-claire); font-size: 12px; font-family: inherit; }
+.courbe-label-bas { fill: var(--cire); font-size: 12px; font-family: inherit; font-weight: 600; }
+
+figcaption.courbe-legende {
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--encre-pale);
+  padding: 0.5rem 0.2rem 0;
+  margin: 0;
+}
