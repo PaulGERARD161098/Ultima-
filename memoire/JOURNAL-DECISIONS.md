@@ -490,3 +490,30 @@
   Sur « renseigne bien dans l'archipel » : carto régénérée → nouvel archipel
   « Veille juridique » (HÉRAUT seul), 3 ponts vers GLANEUR/INTENDANT/CHAMBRE
   CLAIRE ; test `unit-carto-generee` mis à jour (ponts 6→9). PR draft #68.
+- **2026-07-22 (ADR-007 VERTUMNE + ADR-008 JANUS — deux projets « stars »)** —
+  Paul dicte deux projets à consigner dans ADRAMELECH, montés de zéro.
+  (1) **VERTUMNE — l'entreprise souple** : ni mono-produit ni mono-service,
+  capte tous les besoins d'un même client par 3 voies (compétences propres /
+  sous-traitance à partenaires validés / apport d'affaires) ; joue le saisonnier
+  météo (clim l'été, en vente **ou location**) ET le patrimonial long terme
+  (cuisine, salle de bain, valorisation de bien) ; moteur « chaque client/projet
+  en amène 1-2 autres » **explicitement relié par Paul à MYCÉLIUM** (« Muselium »
+  = MYCÉLIUM, décodage vocal confirmé par le sens). Accompagnement outil demandé :
+  un **simulateur de lancement d'entreprise sur NICOL BOLAS** (audit complet à la
+  façon d'un expert-comptable : main d'œuvre, masse salariale, URSSAF, matériel,
+  cash, seuil de rentabilité) → besoin consigné, à cadrer en boucle propre du
+  quadrant financier. (2) **JANUS — le pont générationnel** : mettre en réseau les
+  45-50 ans qui ont le réseau/les connexions (mais plus tout à fait « in ») et les
+  jeunes qui ont la faim/l'énergie/les idées (mais pas le réseau) ; échange à
+  double sens (deux visages de Janus) ; à travailler avec **Anselme** (partenaire
+  à confirmer, mot dicté). Noms attribués dans le registre antique et sérieux
+  (Vertumne = dieu des saisons + métamorphose ; Janus = dieu des seuils, deux
+  visages). Statut des deux : **à raffiner, analyse stratégique différée** (modèle
+  HÉRAUT), donc **hors classement AD-5b** tant que la grille n'est pas passée.
+  Livré : fiches `ADR-007`/`ADR-008` dans `IDEES.md` ; carto régénérée → 8 idées,
+  5 archipels (+ « Stratégie d'entreprise » et « Réseau »), **ponts 9→14** (liens
+  VERTUMNE↔MYCÉLIUM/PROTÉE/INTENDANT/JANUS, JANUS↔MYCÉLIUM) ; test
+  `unit-carto-generee` mis à jour ; suite ADRAMELECH verte (unit-carto-generee
+  16/16, unit-idees-carto, unit-idees-validate, unit-adramelech-guard).
+  ⏳ Ambiguïtés vocales consignées : nom de marque « Souqt » ? et partenaire
+  « Anselme » — à confirmer par Paul.

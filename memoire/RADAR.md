@@ -38,6 +38,12 @@
   (NICOL BOLAS) — modèle de données transverse à penser tôt, sans sur-concevoir.
 - **Dashboards** : chaque quadrant en a un (exigence explicite de Paul, besoin
   de cadre) → motif de composant à mutualiser.
+- **Simulateur de lancement d'entreprise sur NICOL BOLAS** (consigné 2026-07-22,
+  dépendance de VERTUMNE / ADR-007) : outil « expert-comptable » qui chiffre un
+  audit de lancement complet — main d'œuvre, masse salariale, URSSAF/charges,
+  matériel, trésorerie de démarrage, seuil de rentabilité — pour un projet donné.
+  À cadrer comme boucle propre du quadrant financier quand Paul décidera
+  d'instruire VERTUMNE ; premier vrai pont ADRAMELECH→NICOL BOLAS à outiller.
 
 ## Rétrospective (erreurs → corrections)
 

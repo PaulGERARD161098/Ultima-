@@ -1026,3 +1026,177 @@ toujours sa source officielle.
 > model, prémortem, benchmark Renoboost IA, séquence, provision d'exécution) sera
 > passée quand Paul décidera de la sortir du stock. Rien n'est lancé d'ici là.
 
+---
+
+## ADR-007 — VERTUMNE
+
+*Nom : Vertumne, dieu romain des saisons, des vergers et de la métamorphose, qui
+change de forme à volonté et préside au cycle des récoltes — l'image exacte de
+l'entreprise souple : elle épouse la saison (la clim quand il fait chaud) et
+change de forme selon le besoin du client. Distinct de PROTÉE (ADR-002), qui se
+transforme pour fuir ; Vertumne, lui, se transforme pour servir et récolter.*
+
+- **Capturée le** : 2026-07-22 (dictée vocale de Paul)
+- **Type** : business (projet « star », monté de zéro)
+- **Thème** : stratégie d'entreprise · services · bâtiment · saisonnier · apport d'affaires
+- **Partenaire envisagé** : — (levier propre de Paul ; nom de marque de travail « Souqt » ? — à confirmer, mot dicté)
+- **Statut** : à raffiner (cadrage posé ; analyse stratégique différée — voir §Analyse)
+
+### L'idée
+
+Monter **de zéro** une **entreprise souple** : ni mono-produit, ni mono-service.
+Le principe — **capter tous les besoins d'un même client** dans un secteur, par
+trois voies qui se complètent :
+
+1. **En propre** : des compétences internes assez larges pour traiter directement
+   une grande part des demandes.
+2. **En sous-traitance** : ce qu'elle ne fait pas elle-même, elle le confie à des
+   **partenaires validés, de confiance** (réseau qualifié).
+3. **En apport d'affaires** : quand elle ne fait ni ne sous-traite, elle capte
+   quand même la demande et la **place** contre commission.
+
+Elle joue sur **deux horizons de demande** :
+
+- **Le court terme, saisonnier, météo-dépendant** : « il fait chaud → je veux une
+  clim » ; et si le client ne peut pas se faire installer une clim, « → je **loue**
+  une clim ». Le besoin immédiat, collé à la météo et à la tendance.
+- **Le long terme, patrimonial** : « je veux **valoriser mon bien** », « je veux
+  refaire ma **cuisine** ou ma **salle de bain** ». Les projets de fond, à plus
+  forte marge.
+
+Moteur de croissance : **chaque client en amène un ou deux autres, chaque projet
+en amène un ou deux autres** — la propagation par la satisfaction, que Paul relie
+explicitement à **MYCÉLIUM** (ADR-004 : « on peut lier ça à Muselium »).
+
+### Enrichissement (pistes pour rendre l'idée exécutable)
+
+- **La souplesse est un modèle d'orchestration, pas un catalogue.** La valeur
+  n'est pas « tout savoir faire » (impossible) mais **tout capter** : un guichet
+  unique pour le client, un back-office qui arbitre entre faire / faire-faire /
+  placer. La compétence-clé est le **routage** de la demande, pas l'exécution de
+  chacune.
+- **Le saisonnier finance l'acquisition, le patrimonial finance la marge.** La
+  clim en été (vente **ou location**) est un aimant à clients à cycle court et à
+  forte fréquence ; une fois le client entré, on remonte vers les projets longs
+  (cuisine, salle de bain, valorisation) à plus forte marge. La **location** de
+  clim est une brique à instruire (parc, logistique, maintenance, modèle locatif).
+- **Besoin explicite de Paul : un audit de lancement complet.** Chiffrer les
+  **besoins réels** — main d'œuvre, **masse salariale**, **URSSAF/charges**,
+  matériel, trésorerie de démarrage, seuil de rentabilité — à la manière d'un
+  expert-comptable. C'est le **pont vers NICOL BOLAS** : y construire un
+  **simulateur de lancement d'entreprise** (cf. Liens inter-segments).
+- **Le réseau de partenaires validés est un actif à constituer tôt** : une
+  entreprise souple ne vaut que par la qualité de ses sous-traitants et
+  apporteurs — c'est là que **RIVEN** (le réseau) devient le socle de VERTUMNE.
+- Points à instruire : périmètre sectoriel de départ (l'habitat/rénovation semble
+  le terrain naturel) ; cadre juridique et logistique de la **location** de
+  matériel ; contrats-cadres avec les partenaires ; commissionnement de l'apport
+  d'affaires.
+
+### Liens inter-segments
+
+- **MYCÉLIUM (ADR-004)** — lien dicté par Paul (« on peut lier ça à Muselium ») :
+  le moteur « 1 client → 2 clients » de MYCÉLIUM **est** le moteur de croissance
+  de VERTUMNE. La doctrine commerciale de MYCÉLIUM s'applique directement à
+  l'entreprise souple.
+- **NICOL BOLAS** — le principal accompagnement outil de VERTUMNE : le
+  **simulateur de lancement d'entreprise** demandé par Paul. Un outil qui, à la
+  manière d'un expert-comptable, dresse l'**audit complet des besoins** (main
+  d'œuvre, masse salariale, URSSAF, matériel, cash de démarrage, seuil de
+  rentabilité) pour un projet donné. Besoin consigné → à cadrer comme **boucle
+  propre du quadrant financier**.
+- **RIVEN** — le réseau commercial (artisans, partenaires, apporteurs d'affaires)
+  est le **vivier des partenaires validés** et le canal d'apport d'affaires de
+  l'entreprise souple ; les trois voies (propre / sous-traitance / apport)
+  s'appuient sur les relations typées de RIVEN.
+- **PROTÉE (ADR-002)** — même famille « polyvalence rénovation » : PROTÉE est une
+  montée en puissance multi-métier disciplinée, VERTUMNE en est la version large
+  et souple. À lire ensemble — l'une peut être le noyau exécutant de l'autre.
+- **INTENDANT (ADR-003)** — dès que VERTUMNE opère des chantiers, l'appro sans
+  manquant de l'INTENDANT sécurise l'exécution.
+- **JANUS (ADR-008)** — l'autre projet « star » : le pont générationnel peut
+  **alimenter VERTUMNE en connexions et en partenaires** (le réseau des anciens
+  devient des affaires pour l'entreprise souple).
+
+### Analyse stratégique
+
+> **Différée** (2026-07-22). Projet « star » monté de zéro, capturé et cadré ; la
+> grille des 7 blocs (ERRC/5 forces, TOWS, Lean Canvas chiffré, prémortem,
+> benchmark Renoboost IA, scoring pondéré, provision d'exécution) sera passée
+> quand Paul décidera de l'instruire — en priorité le volet chiffré (besoins en
+> main d'œuvre, masse salariale, URSSAF), qui rejoint le simulateur NICOL BOLAS.
+
+---
+
+## ADR-008 — JANUS
+
+*Nom : Janus, dieu romain aux deux visages, gardien des portes, des seuils et des
+passages, qui regarde à la fois vers le passé et vers l'avenir — un visage tourné
+vers les anciens et leur réseau accumulé, l'autre vers les jeunes et leur énergie,
+réunis en une seule tête au seuil où les connexions se transmettent. Le pont fait
+dieu.*
+
+- **Capturée le** : 2026-07-22 (dictée vocale de Paul)
+- **Type** : business (projet « star », monté de zéro)
+- **Thème** : réseau · intergénérationnel · mise en relation · transmission
+- **Partenaire envisagé** : Anselme (à confirmer — mot dicté)
+- **Statut** : à raffiner (cadrage posé ; analyse stratégique différée — voir §Analyse)
+
+### L'idée
+
+Créer un **pont générationnel** : mettre en réseau deux populations
+complémentaires —
+
+- **Les 45-50 ans** qui ont **le réseau, les connexions, les liens** : on leur
+  « mange dans la main », tout le monde les courtise, mais ils ne sont plus tout
+  à fait **« in »** — leur capital est le carnet d'adresses, pas l'énergie du
+  moment.
+- **Les jeunes** (la génération de Paul) qui ont **la faim, l'énergie, les
+  idées** — mais **pas encore le réseau ni les connexions**.
+
+L'idée : **par ce pont, faire circuler le réseau des anciens vers l'élan des
+jeunes**, et créer ainsi de **bonnes connexions** que ni les uns ni les autres ne
+feraient seuls. L'ancien ouvre des portes ; le jeune apporte l'exécution et
+l'énergie. Un **échange à double sens** (d'où les deux visages de Janus), pas un
+mécénat descendant.
+
+### Enrichissement (pistes pour rendre l'idée exécutable)
+
+- **Le cœur de valeur est l'appariement (matching) de confiance.** Le produit
+  n'est pas un annuaire, c'est la **qualité de la mise en relation** : comprendre
+  ce que l'ancien peut ouvrir, ce que le jeune peut porter, et n'apparier que ce
+  qui a du sens. La confiance — garantie par le tiers qui apparie — est l'actif.
+- **Modèle économique à instruire** : apport d'affaires / commission sur l'affaire
+  née du pont ? abonnement côté jeunes (ceux qui cherchent) ? cercle/club côté
+  anciens ? Le registre ne tranche pas — à cadrer.
+- **Le déclic psychologique de l'ancien** (dicté par Paul) : celui qui a le réseau
+  mais se sent sortir du jeu a une **motivation à rester utile et courtisé** ; le
+  pont lui rend un rôle. C'est le ressort d'engagement à activer côté offre.
+- **Amorçage** : partir du réseau réel (dont le partenaire pressenti, Anselme — à
+  confirmer) plutôt que d'une place de marché froide — quelques appariements
+  réussis valent mieux qu'un large catalogue vide.
+- Points à instruire : cadre de la mise en relation (qui garantit quoi),
+  rémunération, RGPD/PII (les deux populations sont de la donnée personnelle),
+  périmètre de départ (un secteur, une ville).
+
+### Liens inter-segments
+
+- **RIVEN** — le pont générationnel **est du réseau** : il produit et qualifie des
+  relations (anciens ↔ jeunes) et des apports d'affaires, exactement la matière de
+  RIVEN. Les personnes et les liens typés du réseau sont son terrain naturel.
+- **MYCÉLIUM (ADR-004)** — même famille « faire naître des connexions qui en
+  engendrent d'autres » : le pont est un générateur de réseau, MYCÉLIUM la
+  discipline qui en exploite la propagation.
+- **VERTUMNE (ADR-007)** — l'autre projet « star » : les connexions ouvertes par
+  les anciens **alimentent l'entreprise souple** en clients, partenaires validés
+  et apporteurs d'affaires. Les deux projets se nourrissent.
+- **IMLADRIK** — dimension développement personnel : le pont est aussi une histoire
+  de transmission et de posture (le jeune qui « a les crocs ») — angle à garder si
+  le projet touche au parcours de Paul lui-même.
+
+### Analyse stratégique
+
+> **Différée** (2026-07-22). Projet « star » monté de zéro, à travailler avec
+> Anselme (partenaire à confirmer) ; capturé et cadré, la grille des 7 blocs sera
+> passée quand Paul décidera de l'instruire.
+
