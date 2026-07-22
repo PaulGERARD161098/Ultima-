@@ -537,3 +537,17 @@
   VERTUMNE au classement AD-5b rang 6 + note d'actualisation) ; carto régénérée
   (**ponts 14→16** : +ADR-001|ADR-007, +ADR-005|ADR-007) ; test `unit-carto-generee`
   MAJ (16) ; suite ADRAMELECH verte (4/4). PR #75.
+- **2026-07-22 (go Paul « ok pour les 2 » → cadrage simulateur NICOL BOLAS =
+  ABAQUE)** — Paul acte : VERTUMNE = enveloppe-cadre / build différé, ET on
+  ouvre la boucle cadrage du simulateur. Modèle de calcul déterministe dispatché
+  à `data-ingenieur` (entrées paramétrables, formules MS chargée/URSSAF/BFR/seuil/
+  échéancier de trésorerie, arbitrage achat-vs-location avec contrainte de cash,
+  recommandation persistance), contre-passe Léo (déterminisme OK ; réserve
+  relevée : part salariale non décaissée en v1 = léger optimisme tréso, à raffiner
+  NB-2). Livré : `CADRAGE-NICOL-BOLAS.md` (nom de code proposé **ABAQUE**,
+  l'instrument de calcul antique). **Décisions actées dans le cadrage** : v1
+  **SANS base** (finance ultra-sensible §5 → surface minimale ; draft `0009`
+  décrit mais NON écrit sur disque tant que NB-3 non ouverte) ; découpage
+  NB-1 (moteur pur, non gaté) → NB-2 (front) → NB-3 (persistance, GATE). ⏳
+  Décisions Paul : nom ABAQUE ? statut juridique défaut (SASU proposé) ? go NB-1 ?
+  persistance ou non. Cadrage pur, rien codé, rien gaté ouvert. PR #75.

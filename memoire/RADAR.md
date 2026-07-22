@@ -42,8 +42,11 @@
   dépendance de VERTUMNE / ADR-007) : outil « expert-comptable » qui chiffre un
   audit de lancement complet — main d'œuvre, masse salariale, URSSAF/charges,
   matériel, trésorerie de démarrage, seuil de rentabilité — pour un projet donné.
-  À cadrer comme boucle propre du quadrant financier quand Paul décidera
-  d'instruire VERTUMNE ; premier vrai pont ADRAMELECH→NICOL BOLAS à outiller.
+  ✅ **Cadré (2026-07-22)** dans `CADRAGE-NICOL-BOLAS.md` sous le nom **ABAQUE** :
+  moteur de calcul déterministe (masse salariale chargée, URSSAF, BFR, seuil,
+  échéancier de trésorerie, arbitrage achat/location), v1 sans base. Reste à
+  builder : NB-1 (moteur pur, non gaté) → NB-2 (front) → NB-3 (persistance, gate).
+  Premier vrai pont ADRAMELECH→NICOL BOLAS. ⏳ Go NB-1 = décision Paul.
 
 ## Rétrospective (erreurs → corrections)
 
