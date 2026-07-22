@@ -517,3 +517,23 @@
   16/16, unit-idees-carto, unit-idees-validate, unit-adramelech-guard).
   ⏳ Ambiguïtés vocales consignées : nom de marque « Souqt » ? et partenaire
   « Anselme » — à confirmer par Paul.
+- **2026-07-22 (confirmations + analyse VERTUMNE)** — Paul tranche : nom
+  **VERTUMNE** retenu (« Souqt » abandonné), **Anselme confirmé** comme partenaire
+  de JANUS, et « ensuite je suis tes reco » → j'instruis VERTUMNE en premier.
+  Fiches mises à jour (confirmations) puis **analyse stratégique complète de
+  VERTUMNE (ADR-007)** dispatchée à `agent-idees`, contre-passe Léo (calcul de
+  score revérifié 34/7=4,9 ; cohérence charte). **Verdict clé (bloc F)** :
+  VERTUMNE n'est **ni concurrent ni satellite** du socle Renoboost IA — elle en
+  est l'**enveloppe souple qui le contient** (Renoboost IA = son 1er métier en
+  propre ; INTENDANT/MYCÉLIUM/PROTÉE/JANUS tiennent dedans). **Score pondéré
+  4,9/10** (rang 6) = non pas « faible valeur » mais « **prématuré comme
+  chantier** » (Temps 2/10, capex + masse salariale + BFR lourds). **Discipline
+  EB actée : build différé** derrière le socle ; VERTUMNE reste hors séquence de
+  build active (comme CHAMBRE CLAIRE). Enjeu chiffré n°1 [hyp.] : le **BFR ≈
+  50-90 k€** (4-6 mois de charges, décalage paie/URSSAF vs encaissement 30-60 j).
+  Seul chantier court terme ouvert : le **simulateur de lancement NICOL BOLAS**
+  (bloc G), dont VERTUMNE est le cas d'usage fondateur — à cadrer en boucle propre
+  du quadrant financier. Livré : `IDEES.md` (analyse 7 blocs sous ADR-007 +
+  VERTUMNE au classement AD-5b rang 6 + note d'actualisation) ; carto régénérée
+  (**ponts 14→16** : +ADR-001|ADR-007, +ADR-005|ADR-007) ; test `unit-carto-generee`
+  MAJ (16) ; suite ADRAMELECH verte (4/4). PR #75.

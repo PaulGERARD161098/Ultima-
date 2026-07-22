@@ -37,6 +37,7 @@
 | 3 | **CHAMBRE CLAIRE** (ADR-005) | **6,9**/10 | enabler commercial | Grille passée le 2026-07-20 — dérisque et accélère la *vente* du socle ; build derrière la séquence validée |
 | 4 | PROTÉE (ADR-002) | 6,3/10 | montée en puissance | Extension disciplinée du socle |
 | 5 | GLANEUR (ADR-001) | 5,0/10 | satellite | Hors top — retenir le *service* (débarras chantier), ajourner l'*entreprise* |
+| 6 | VERTUMNE (ADR-007) | 4,9/10 | structure-cadre | Hors course build — l'**enveloppe souple qui *contient* le socle** ; build différé derrière lui (cf. ADR-007 bloc F) |
 
 > Mise à jour 2026-07-20 : CHAMBRE CLAIRE scorée **6,9** s'intercale au rang 3.
 > Le moteur système s'enrichit : **CHAMBRE CLAIRE conclut la vente** →
@@ -47,6 +48,20 @@
 > → PROTÉE bridée**, inchangée. CHAMBRE CLAIRE est prête à démarrer (fiche +
 > cadrage §10 complets) le jour où Paul l'appelle ; aucun travail de build
 > engagé d'ici là.
+
+> Mise à jour 2026-07-22 : VERTUMNE (ADR-007) passée à la grille → **4,9/10**,
+> rang 6. Son rang bas ne dit pas « faible valeur » mais « **prématuré comme
+> chantier** » (Temps 2/10 ; capex + masse salariale + BFR lourds). Verdict
+> tranché (bloc F) : VERTUMNE n'est **ni concurrent ni satellite** du socle, elle
+> en est l'**enveloppe souple qui le contient** — Renoboost IA est son premier
+> métier en propre, et les briques (INTENDANT, MYCÉLIUM, PROTÉE, JANUS) tiennent
+> dedans. Discipline EB : **build différé** — on consolide d'abord le socle et
+> ses enablers rapides, puis on laisse VERTUMNE émerger comme structure-cadre.
+> Reste **hors séquence de build active** (comme CHAMBRE CLAIRE). Le seul chantier
+> qu'elle ouvre à court terme est son **préalable de décision** : le simulateur de
+> lancement d'entreprise sur **NICOL BOLAS** (bloc G), à cadrer en boucle propre
+> du quadrant financier. La séquence de build reste **INTENDANT → MYCÉLIUM →
+> PROTÉE bridée**, inchangée.
 
 **Lecture système (l'essentiel).** Ce ne sont pas 4 paris indépendants mais **un
 moteur qui se renforce** : **PROTÉE** industrialise le socle → **INTENDANT**
@@ -1040,7 +1055,7 @@ transforme pour fuir ; Vertumne, lui, se transforme pour servir et récolter.*
 - **Type** : business (projet « star », monté de zéro)
 - **Thème** : stratégie d'entreprise · services · bâtiment · saisonnier · apport d'affaires
 - **Partenaire envisagé** : — (levier propre de Paul ; nom **VERTUMNE** confirmé par Paul 2026-07-22)
-- **Statut** : à raffiner (cadrage posé ; analyse stratégique différée — voir §Analyse)
+- **Statut** : à raffiner (analyse stratégique passée le 2026-07-22 — voir §Analyse ; verdict : enveloppe-cadre, build différé derrière le socle)
 
 ### L'idée
 
@@ -1120,11 +1135,110 @@ explicitement à **MYCÉLIUM** (ADR-004 : « on peut lier ça à Muselium »).
 
 ### Analyse stratégique
 
-> **Différée** (2026-07-22). Projet « star » monté de zéro, capturé et cadré ; la
-> grille des 7 blocs (ERRC/5 forces, TOWS, Lean Canvas chiffré, prémortem,
-> benchmark Renoboost IA, scoring pondéré, provision d'exécution) sera passée
-> quand Paul décidera de l'instruire — en priorité le volet chiffré (besoins en
-> main d'œuvre, masse salariale, URSSAF), qui rejoint le simulateur NICOL BOLAS.
+> Fiche stratégique ADRAMELECH (volet 2, grille des 7 blocs). Ligne de base du
+> benchmark : le cœur rémunérateur d'Ultima = **Renoboost IA** (chantiers +
+> installations à domicile). Particularité de VERTUMNE : ce n'est ni une brique
+> ni une doctrine, mais une **entreprise entière montée de zéro** — une structure
+> souple qui *orchestre* la demande (faire / faire-faire / placer) plutôt qu'un
+> métier. Conséquence directe : contrairement à MYCÉLIUM (ADR-004, capex ~0),
+> VERTUMNE porte un **capex et une masse salariale réels**, et son analyse est
+> d'abord un **audit de lancement chiffré**. Toute valeur absente du registre est
+> marquée **[hyp.]** — à instruire, jamais tenue pour acquise.
+
+#### A. Positionnement — Océan Bleu/Rouge et 5 forces
+
+**Grille ERRC** (référentiel : artisans mono-métier · entreprises générales du bâtiment · courtiers / apporteurs d'affaires · plateformes de mise en relation · loueurs de matériel)
+
+- **Exclure** — le **mono-produit / mono-métier** (le piège inverse : ne savoir capter qu'un besoin) ; la **possession lourde de tout l'appareil de production** (VERTUMNE n'a pas à *tout faire en propre* pour *tout capter*) ; l'achat de leads froids déconnecté de la relation client.
+- **Atténuer** — la **saisonnalité subie** (un pur installateur clim s'effondre hors été) en la couplant au patrimonial contra-cyclique ; la dépendance à une seule compétence interne rare.
+- **Renforcer** — le **guichet unique** pour le client (un seul interlocuteur pour tous ses besoins d'habitat) ; le **réseau de partenaires validés** (le vrai actif, adossé à RIVEN) ; le **moteur de recommandation** « 1 client → 2 clients » (doctrine MYCÉLIUM, ADR-004, appliquée telle quelle).
+- **Créer** — le **routage discipliné de la demande** (arbitrage faire / faire-faire / placer au niveau du besoin, inexistant chez l'artisan mono-métier comme chez l'entreprise générale rigide) ; la **double temporalité** saisonnier-aimant / patrimonial-marge sur un même client ; la **location de clim** comme produit d'appel à faible barrière (le client qui « ne peut pas installer » reste capté au lieu d'être perdu).
+
+**5 forces de Porter** (VERTUMNE lue comme entreprise-orchestratrice de l'habitat)
+
+- **Rivalité intra-secteur — forte.** Marché de la rénovation/CVC dense, atomisé, à faible différenciation perçue ; sur chaque *métier pris isolément*, VERTUMNE affronte des spécialistes mieux installés. L'échappatoire n'est pas le métier, c'est **l'orchestration** — un terrain bien moins disputé.
+- **Nouveaux entrants — moyen à fort.** Monter « une boîte qui fait un peu de tout » est facile à imiter dans la forme ; ce qui ne s'imite pas est le **réseau de partenaires validés de confiance** et la **discipline de routage** — un fossé lent à creuser, donc fragile au départ.
+- **Substituts — moyen.** Les plateformes de mise en relation (type marketplaces travaux) et les courtiers captent déjà de la demande sans exécuter ; VERTUMNE s'en distingue en **assumant la qualité de bout en bout** (guichet responsable, pas simple annuaire).
+- **Pouvoir des fournisseurs (sous-traitants + loueurs de matériel) — moyen à fort.** Le modèle *dépend* de la disponibilité et de la fiabilité des partenaires ; un sous-traitant qui fait défaut engage la marque VERTUMNE. Pour la location de clim, le pouvoir du loueur/fournisseur de parc pèse sur la marge locative.
+- **Pouvoir des clients — moyen.** Le client compare et négocie ; mais le **coût de recherche évité** (un seul interlocuteur pour tout) et la continuité relationnelle (saisonnier → patrimonial) réduisent son incitation à aller voir ailleurs une fois entré.
+
+**Conclusion.** Océan **violet — bleu par le modèle, rouge par les métiers.** L'*orchestration guichet-unique + double temporalité + captation par la location* est un angle réellement peu peuplé (**bleu**) ; mais VERTUMNE reste exposée, sur chaque prestation exécutée, à la **rivalité rouge et vive** des spécialistes, et sa défendabilité repose entièrement sur un actif lent à constituer (le réseau validé). L'avantage n'est donc **pas dans le faire, mais dans le router** — l'analyse doit protéger cette thèse contre la tentation de tout internaliser (cf. bloc D).
+
+#### B. Diagnostic — SWOT croisé (TOWS)
+
+**Forces (internes)** — modèle **anti-fragile à la saison** (saisonnier + patrimonial se compensent) ; capte **tous les besoins d'un client**, pas un seul ; s'appuie sur des actifs Ultima déjà là (réseau RIVEN, moteur MYCÉLIUM ADR-004, appro INTENDANT ADR-003) ; nom/identité posés, portage propre par Paul.
+**Faiblesses (internes)** — **capex et masse salariale réels** (à l'opposé des briques légères de l'archipel) ; **compétence-clé = le routage**, encore non outillé ; **dépend d'un réseau de sous-traitants validés non encore constitué** ; **temps de lancement long** ; risque n°1 de **dispersion** du dirigeant (tout vouloir faire en propre).
+**Opportunités (externes)** — demande clim tirée par les canicules et la tendance ; marché patrimonial (valorisation, cuisine, SDB) à forte marge et récurrent ; défiance envers l'artisanat isolé → prime au **guichet unique responsable** ; MaPrimeRénov'/CEE qui solvabilisent le patrimonial [hyp.].
+**Menaces (externes)** — **saisonnalité brutale** si le patrimonial ne prend pas le relais ; **défaillance d'un sous-traitant** qui salit la marque VERTUMNE ; guerre des prix des spécialistes ; cadre juridique/logistique de la **location** de matériel (assurance, maintenance, sinistralité) mal maîtrisé ; tension de trésorerie sur le décalage paie/encaissement.
+
+**Axes issus des croisements**
+- **FO (offensif) — la thèse centrale.** Attaquer par le **saisonnier clim (vente *et* location)** comme aimant à clients à cycle court, puis **remonter chaque client vers le patrimonial** à forte marge (guichet unique) : une force (double temporalité) sur la meilleure opportunité (demande clim + patrimonial solvabilisé). Le saisonnier finance l'acquisition, le patrimonial finance la marge.
+- **WO (réorientation) — désamorcer la dispersion.** La faiblesse « tout faire en propre » se corrige en assumant le modèle d'**orchestration** : garder en interne un **noyau étroit de compétences** (celles de départ), **sous-traiter** le reste au réseau validé (RIVEN), **placer** en apport ce qu'on ne fait ni ne sous-traite. On croît par le réseau, pas par l'embauche — la version large et souple de PROTÉE (ADR-002), qui peut en être le noyau exécutant.
+- **WT (survie) — sécuriser réseau et cash.** Contre la défaillance sous-traitant + la tension de trésorerie : **contrats-cadres et qualification stricte** des partenaires dès le départ, **location du parc de clim** plutôt qu'achat (capex évité, risque transféré), et **dimensionnement du BFR** avant toute embauche — d'où le simulateur NICOL BOLAS (bloc C/G).
+
+#### C. Business model — Lean Canvas + audit de lancement chiffré
+
+**Nature.** VERTUMNE **est un centre de profit autonome** — c'est même le plus « entreprise » de l'archipel : elle a un CA propre, une masse salariale, un besoin en fonds de roulement. Son Lean Canvas se double donc d'un **audit de lancement** à la manière d'un expert-comptable — l'attente explicite de Paul.
+
+**Segments** — propriétaires occupants (habitat), à deux besoins : *court terme saisonnier* (clim, vente ou location) et *long terme patrimonial* (cuisine, SDB, valorisation).
+**Proposition de valeur** — « un seul interlocuteur pour tous vos besoins d'habitat, de la clim en urgence l'été à la rénovation de fond ».
+**Canaux** — saisonnier comme produit d'appel ; recommandation « 1 client → 2 » (MYCÉLIUM, ADR-004) ; apport RIVEN ; à terme les connexions ouvertes par JANUS (ADR-008).
+**Voies de revenu (les 3 de l'idée)** — marge d'exécution **en propre** ; marge d'intermédiation **en sous-traitance** ; **commission d'apport d'affaires**. Plus, à instruire, le **loyer récurrent** du parc de clim.
+**Structure de coûts** — masse salariale du noyau, camion + outillage, structure (assurances, local, gestion), parc locatif, BFR.
+
+**Audit de lancement [hyp., illustratif — le registre ne porte aucun chiffre ; ordres de grandeur à instruire]**
+- **Compétences propres de départ** : Paul (routage, commerce, pilotage) + **1 à 2 poseurs polyvalents** (clim/CVC + second-œuvre de base) [hyp.] — noyau volontairement étroit, le reste sous-traité.
+- **ETP / masse salariale** : **2 à 3 ETP** au démarrage [hyp.] ; salaire chargé **≈ 35–45 k€/ETP/an** [hyp.] → **≈ 90–135 k€/an** de masse salariale [hyp.].
+- **URSSAF / charges patronales** : **≈ 40–45 % du brut** [hyp.], déjà inclus dans le chargé ci-dessus — poste à modéliser finement (le décalage de paiement pèse sur le BFR).
+- **Camion + matériel** : VUL équipé **25–40 k€** à l'achat *ou* LOA/location [hyp.] ; outillage clim + second-œuvre **10–20 k€** [hyp.].
+- **Parc de clim en location** : unité mobile **≈ 800–1 500 € pièce** [hyp.] ; un parc de **20–50 unités = 20–75 k€ immobilisés** [hyp.] → **argument fort pour *louer le parc* plutôt que l'acheter** (capex évité, risque de sur-stock et de maintenance transféré), à arbitrer par le simulateur.
+- **BFR / cash avant équilibre** : décalage **paie + URSSAF mensuels** vs **encaissement chantier à 30–60 j** [hyp.] → trésorerie plancher **≈ 4 à 6 mois de charges fixes**, soit **≈ 50–90 k€** à mobiliser avant équilibre [hyp.]. C'est le poste le plus dangereux et le moins intuitif.
+- **Seuil de rentabilité** : CA mensuel couvrant masse salariale + camion + structure, soit **≈ 12–18 k€/mois de marge brute** à atteindre [hyp.] — c.-à-d. un **flux de chantiers minimal** à sécuriser avant la première embauche.
+
+**Ce que cet audit rend évident.** Six à huit variables **[hyp.] qui interagissent** (ETP × charges × délai d'encaissement × mix propre/sous-traité/apport × achat vs location du parc) ne se pilotent pas de tête. **VERTUMNE *est* le cas d'usage fondateur du simulateur de lancement d'entreprise sur NICOL BOLAS** : un modèle paramétrique qui, pour un périmètre donné, sort masse salariale chargée, BFR, seuil de rentabilité et point mort. Sans lui, le chiffrage reste un doigt mouillé ; avec lui, VERTUMNE devient décidable.
+
+#### D. Risque — Prémortem (2-3 ans, VERTUMNE a échoué)
+
+- **Dispersion — le risque n°1.** Grisé par le « tout capter », le dirigeant glisse vers le « tout faire en propre » : embauches multiples, métiers empilés, aucun maîtrisé — le piège exactement inverse du mono-produit. La compétence-clé (le routage) est noyée sous l'exécution. — *Signal avancé : masse salariale qui gonfle plus vite que la marge ; part sous-traitée qui baisse au lieu de monter ; Paul sur les chantiers au lieu d'être sur l'orchestration.*
+- **Réseau de sous-traitants validés défaillant.** Les partenaires manquent, se révèlent peu fiables, ou saturent en pleine saison : VERTUMNE promet au client ce qu'elle ne peut plus tenir, la marque guichet-unique se retourne en marque du travail bâclé. — *Signal avancé : délais qui dérapent ; réclamations client sur des lots sous-traités ; dépendance à un ou deux partenaires irremplaçables.*
+- **Tension de trésorerie.** Le BFR est sous-estimé ; la paie et l'URSSAF tombent avant les encaissements ; la saison creuse (hiver, si le patrimonial n'a pas pris le relais) assèche le cash. — *Signal avancé : trésorerie qui plonge chaque fin de mois ; recours au découvert ; retards fournisseurs/paie.*
+- **Dilution de marque.** À force de tout faire (vente, location, sous-traitance, apport, saisonnier, patrimonial), VERTUMNE n'est identifiée pour rien : ni le meilleur climaticien, ni le meilleur rénovateur, « le truc qui fait un peu de tout ». — *Signal avancé : bouche-à-oreille flou ; taux de recommandation en berne (le moteur MYCÉLIUM ne prend pas) ; difficulté à formuler l'offre en une phrase.*
+- **Saisonnalité non compensée.** L'aimant clim marche l'été mais la remontée vers le patrimonial ne se fait pas : l'entreprise vit six mois et meurt six mois. — *Signal avancé : CA concentré sur l'été ; faible taux de conversion saisonnier → patrimonial ; carnet vide dès l'automne.*
+- **Location de clim mal maîtrisée.** Parc, logistique, maintenance et sinistralité coûtent plus que le loyer ne rapporte ; l'idée « produit d'appel » devient un centre de perte. — *Signal avancé : taux d'immobilisation/panne élevé ; marge locative négative ; SAV qui dévore le temps du noyau.*
+
+#### E. Scoring /10
+
+- **Simple — 3/10.** C'est **l'idée la moins simple de l'archipel** : une entreprise entière montée de zéro (embauches, camion, réseau, parc locatif, trois modèles de revenu, deux temporalités). La souplesse elle-même est une complexité d'orchestration à maîtriser.
+- **Efficace — 6/10.** Le modèle capte *tout* le besoin d'un client, ce qui est puissant ; mais l'efficacité dépend entièrement de la qualité du **routage** et du **réseau validé**, tous deux non encore constitués. Fort potentiel, exécution non prouvée.
+- **Rémunérateur — 7/10.** Plafond élevé (patrimonial à forte marge + volume saisonnier + loyers récurrents), et VERTUMNE *contient* le socle Renoboost IA comme premier métier ; mais la rémunération nette est **tirée vers le bas par le capex, la masse salariale et un long temps avant équilibre**.
+- **Utile — 7/10.** Vraie utilité client (guichet unique, fin du parcours du combattant multi-artisans) et utilité économique forte pour Paul ; moins d'utilité sociétale directe.
+- **Temps — 2/10.** **La plus lente à lancer de tout l'archipel** : recruter, équiper, constituer le réseau validé, dimensionner le BFR, atteindre le point mort. Rien d'immédiat, à l'inverse de MYCÉLIUM (ADR-004) ou INTENDANT (ADR-003).
+
+**Pondération actée (Temps ×2 et Rémunérateur ×2, dénominateur 7).**
+`(3 + 6 + 7×2 + 7 + 2×2) / 7` = `(3 + 6 + 14 + 7 + 4) / 7` = `34/7` = **4,9/10**.
+*À titre de repère, moyenne simple = (3+6+7+7+2)/5 = **5,0/10**.* Ici, comme pour GLANEUR (ADR-001), la pondération **abaisse** le score : VERTUMNE est faible précisément **là où Paul a le moins de marge** — le temps (2/10) — et son rendement est différé derrière un capex lourd. Le message du chiffre est net : **comme *idée à construire maintenant*, VERTUMNE ne bat pas les briques légères de l'archipel**. Ce n'est pas un désaveu du projet — c'est le signal que sa bonne lecture n'est pas « brique à ranger dans le top 3 » (cf. bloc F).
+
+#### F. Benchmark obligatoire vs Renoboost IA
+
+Mise en concurrence mécanique avec le socle **Renoboost IA**. La question imposée : VERTUMNE est-elle un **concurrent** du socle, un **satellite**, ou l'**enveloppe/holding souple qui le contient et le prolonge** ?
+
+- **Concurrent ?** — **Non, et l'inverse serait dangereux.** VERTUMNE ne se dresse pas *face* à Renoboost IA : elle le **contient**. Renoboost IA (chantiers + installations à domicile) *est* le **premier métier en propre** de VERTUMNE — sa compétence de départ, son aimant saisonnier, sa preuve d'exécution. Les traiter en rivaux reviendrait à opposer une maison à sa fondation.
+- **Satellite ?** — **Non, trop petit pour le rôle.** Un satellite gravite autour du socle (comme GLANEUR, ADR-001, ou CHAMBRE CLAIRE, ADR-005) ; VERTUMNE est **plus grande** que le socle : elle l'englobe et lui ajoute la sous-traitance, l'apport d'affaires, la location, le patrimonial et le moteur de propagation.
+- **Enveloppe / structure-cadre ?** — **Oui. Verdict tranché : VERTUMNE est la structure-cadre souple qui contient et prolonge le socle**, Renoboost IA en étant le premier métier. Elle n'est donc **pas en compétition pour une place du top 3** : elle est le **contenant** des briques (INTENDANT sécurise son appro, MYCÉLIUM est son moteur de croissance, PROTÉE en est le noyau exécutant multi-métier, JANUS l'alimente en connexions). Formulé comme pour MYCÉLIUM : **ce n'est pas une idée de plus dans la liste, c'est le cadre dans lequel les autres pourraient tenir.**
+
+**Conséquence de discipline (le score 4,9 et le verdict ne se contredisent pas).** Précisément parce que VERTUMNE est l'enveloppe, son **build ne s'ouvre pas maintenant** : la séquence saine est **consolider d'abord le socle Renoboost IA** (et ses enablers légers et rapides — INTENDANT, MYCÉLIUM), *puis* laisser VERTUMNE **émerger comme la structure qui vient englober** un socle devenu solide et un réseau devenu dense. Ouvrir VERTUMNE en parallèle du socle, capex et masse salariale en avant, **c'est le risque n°1 (dispersion) réalisé dès le premier jour**. Le score 4,9 dit exactement cela : puissant comme horizon, prématuré comme chantier. **VERTUMNE = destination-cadre, pas prochain build.**
+
+#### G. Provision d'exécution
+
+- **Simulateur de lancement d'entreprise sur NICOL BOLAS — brique-outil n°1.** Le préalable non négociable : un modèle paramétrique (compétences de départ → ETP/masse salariale chargée → URSSAF → camion/matériel → arbitrage *achat vs location* du parc clim → BFR → seuil de rentabilité → point mort) qui rend VERTUMNE **chiffrable et décidable**. VERTUMNE est son **cas d'usage fondateur** ; l'outil sert ensuite tout projet « monté de zéro ». À cadrer comme **boucle propre du quadrant financier**.
+- **`data-ingenieur`** — construction du modèle chiffré du simulateur (postes, charges, échéancier de trésorerie, sensibilité) ; typage, dans RIVEN, du **réseau de partenaires validés** (sous-traitants + apporteurs, statut de qualification, contrats-cadres) comme actif suivi.
+- **`interface-ux`** — interface du simulateur (curseurs d'hypothèses → sorties lisibles, scénarios prudent/volontariste) ; conception du **poste de routage** (arbitrage faire / faire-faire / placer au niveau du besoin), cœur opérationnel de VERTUMNE.
+- **`securite-auditeur` / `verificateur`** — dès que données financières prévisionnelles et fiches partenaires (PII) entrent en base : conformité, RLS mono-owner en miroir du registre existant.
+
+**Automatisations à plus forte valeur** (ordre de priorité) :
+1. **Simulateur de lancement NICOL BOLAS** — sans lui, aucune décision fiable ; à instruire **avant** tout engagement.
+2. **Routage de la demande** (règle faire / faire-faire / placer + rattachement au partenaire validé) — la compétence-clé, à outiller pour éviter la dispersion.
+3. **Moteur de recommandation MYCÉLIUM** (ADR-004) branché sur les chantiers VERTUMNE — la croissance « 1 client → 2 » à coût marginal, une fois le socle en marche.
 
 ---
 
