@@ -551,3 +551,16 @@
   NB-1 (moteur pur, non gaté) → NB-2 (front) → NB-3 (persistance, GATE). ⏳
   Décisions Paul : nom ABAQUE ? statut juridique défaut (SASU proposé) ? go NB-1 ?
   persistance ou non. Cadrage pur, rien codé, rien gaté ouvert. PR #75.
+- **2026-07-22 (ABAQUE NB-1 livré — moteur de calcul)** — Paul : « ok pour abaque ;
+  ok pour le statut par défaut mais je dois pouvoir changer de statut pour voir,
+  les données doivent s'adapter ; ok pour la prochaine boucle ». Décisions actées
+  (ABAQUE, SASU par défaut + switch, go NB-1) et **NB-1 construit** : `js/abaque.mjs`
+  (module ES pur, déterministe, zéro I/O/DOM/horloge/aléa) — `simuler(entrées)` +
+  `arbitrageAchatLocation`. Le **statut juridique est une entrée vivante** (SASU/SAS
+  assimilé ↔ EURL/EI TNS → charges dirigeant recalculées, exigence Paul). Contre-passe
+  Léo : **réserve URSSAF corrigée dès NB-1** (part salariale intégrée au décaissement
+  → optimisme tréso levé). Harnais `tests/unit-abaque.mjs` (9 verdicts chiffrés
+  vérifiés main : masse salariale, statut adaptatif, BFR, point mort durable,
+  trésorerie plancher/besoin de financement, déterminisme, garde-fou marge ≤ 0,
+  arbitrage cash + coût actualisé), ajouté à `lancer.sh`. Non gaté. Cadrage MAJ
+  (NB-1 ✅, décisions ✅). Prochaine boucle proposée : NB-2 (front). PR #75.

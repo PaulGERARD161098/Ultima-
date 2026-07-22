@@ -38,6 +38,8 @@ echo "=== unit-leo-mains.mjs ==="
 node unit-leo-mains.mjs
 echo "=== unit-idees-carto.mjs ==="
 node unit-idees-carto.mjs
+echo "=== unit-abaque.mjs ==="
+node unit-abaque.mjs
 
 # 3. Serveur statique sur la racine du repo.
 (cd .. && python3 -m http.server 8123 >/dev/null 2>&1) &

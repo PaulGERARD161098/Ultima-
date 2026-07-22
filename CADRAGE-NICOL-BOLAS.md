@@ -109,11 +109,11 @@ charges de structure) ; **module fiscal** off par défaut.
   réelle **après** la règle de cash (si l'achat casse la trésorerie plancher →
   louer, quel que soit le coût actualisé).
 
-**Réserve v1 relevée en contre-passe (à raffiner)** : le décaissement URSSAF
-modélise les charges **patronales** ; la **part salariale** (brut − net) reversée
-à l'URSSAF n'est pas décaissée séparément → **léger optimisme de trésorerie**.
-Simplification v1 assumée, à corriger dès la boucle 2 (ou marquée comme telle
-dans les sorties).
+**Réserve relevée en contre-passe → ✅ corrigée dès NB-1** : le décaissement
+URSSAF intègre **patronales + salariales** (tout ce qui est reversé à l'URSSAF) ;
+la paie décaissée = **net** seul. Total sortie main d'œuvre = super-brut, sans
+l'optimisme de trésorerie initialement signalé. Prouvé au harnais (net + cotisations
+= chargée).
 
 ## 5. Sécurité — finance = surface ultra-sensible (RC2, §5 console)
 
@@ -135,10 +135,16 @@ dans les sorties).
 
 ## 6. Découpage en sous-boucles (une à la fois, gates respectées)
 
-- **NB-1 — moteur de calcul pur** (JS `js/`/`api/`, zéro base) : `simuler(entrées)`
-  + arbitrage achat/location, livré avec **harnais déterministe** dans `tests/`
-  (jeux d'entrées → sorties figées ; le test casse si une formule dérive).
-  **Non gaté.** C'est la brique-outil n°1 (ADR-007 bloc G).
+- **NB-1 — moteur de calcul pur** ✅ **LIVRÉ (2026-07-22)** : `js/abaque.mjs`
+  (module ES pur, zéro I/O/DOM/horloge/aléa) — `simuler(entrées)` +
+  `arbitrageAchatLocation` + `mainDoeuvre`/`regimeDirigeant`/`differe` exportés.
+  Le **statut juridique est une entrée vivante** : SASU/SAS = dirigeant
+  assimilé-salarié, EURL/EI = TNS → charges recalculées (exigence Paul). Harnais
+  `tests/unit-abaque.mjs` (9 verdicts chiffrés vérifiés à la main : masse
+  salariale, statut adaptatif, BFR, point mort, trésorerie plancher/besoin de
+  financement, déterminisme, garde-fou marge ≤ 0, arbitrage cash + coût
+  actualisé), ajouté à `tests/lancer.sh`. **Non gaté.** Brique-outil n°1 (ADR-007
+  bloc G).
 - **NB-2 — front NICOL BOLAS** : `data-ingenieur` cadre le modèle, `interface-ux`
   conçoit, `front-carto`/`graphisme` implémentent au registre antique. Curseurs
   d'hypothèses → sorties lisibles, scénarios prudent/volontariste, **courbe de
@@ -173,15 +179,20 @@ Chacun **affiché et modifiable** dans l'UI, jamais un chiffre en dur :
 | `taux_tva` | 0,20 | Décalage de TVA oublié = erreur de trésorerie ; 10 %/5,5 % possibles en rénovation |
 | `taux_is` + acomptes | 15 %/25 % | IS/acomptes non décaissés en v1 → trésorerie optimiste (limite affichée) |
 | Cotisations à seuils | taux moyen linéarisé | Ment sur bas et très hauts salaires → afficher « taux moyen, non barémisé » |
-| Part salariale au décaissement URSSAF | non décaissée (v1) | Léger optimisme de trésorerie → à corriger en NB-2 |
+| Part salariale au décaissement URSSAF | ✅ décaissée (corrigé NB-1) | Optimisme de trésorerie levé : URSSAF = patronales + salariales |
 | `délais` encaissement / fournisseur / charges | 45 / 30 / 25 j | Sous-estimer le délai client = sous-estimer le BFR (poste le plus dangereux) |
 | `marge_brute_cible` | 0,35 | Optimisme → point mort artificiellement bas ; scénario prudent obligatoire |
 
-## 9. Décisions attendues de Paul
+## 9. Décisions Paul
 
-1. **Nom** : ABAQUE convient-il pour le simulateur ? (sinon, autre nom au registre.)
-2. **Statut juridique par défaut** : SASU (assimilé-salarié) proposé — le confirmer
-   ou le changer (structure les formules de charge du dirigeant).
-3. **Go NB-1** (moteur de calcul pur, non gaté) comme prochaine boucle de build ?
-4. **Persistance** : v1 **sans base** validée par défaut (recommandation) — on
-   n'ouvre NB-3 (table `0009`, gate) que si tu veux sauvegarder des scénarios.
+1. **Nom** : ✅ **ABAQUE confirmé** (Paul, 2026-07-22).
+2. **Statut juridique** : ✅ **SASU par défaut confirmé**, avec exigence : **le
+   statut est changeable et les résultats s'adaptent** (SASU/SAS assimilé ↔ EURL/EI
+   TNS). Traité en NB-1 comme entrée vivante.
+3. **NB-1** : ✅ **go donné et livré** (2026-07-22) — moteur de calcul pur testé.
+4. **Persistance** : v1 **sans base** (recommandation retenue) — NB-3 (table
+   `0009`, gate) seulement si Paul veut sauvegarder des scénarios. ⏳ ouvert.
+
+**Prochaine boucle** : NB-2 — le front NICOL BOLAS (curseurs d'hypothèses,
+scénarios prudent/volontariste, courbe de trésorerie) qui branche `abaque.mjs` sur
+l'écran et chiffre VERTUMNE pour de vrai.
