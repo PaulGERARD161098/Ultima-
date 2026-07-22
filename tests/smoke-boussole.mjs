@@ -82,15 +82,24 @@ verifier('Cap RENOBOOST IA ouvre un nouvel onglet',
 verifier('Cap RENOBOOST IA en rel noopener',
   /noopener/.test(await capReno.getAttribute('rel') || ''));
 
-// YCOME, RESHIRAM, ZEKROM restent « à venir » : non-liens, aria-disabled.
-for (const id of ['ycome', 'reshiram', 'zekrom']) {
+// RESHIRAM est désormais un cap OUVRABLE interne (page reshiram.html, même
+// onglet, PAS un lien externe façon Renoboost/YCOME).
+const capReshiram = page.locator('a.cap[data-id="reshiram"]');
+verifier('Cap RESHIRAM ouvrable (ancre)', (await capReshiram.count()) === 1);
+verifier('Cap RESHIRAM pointe vers reshiram.html (interne)',
+  (await capReshiram.getAttribute('href')) === 'reshiram.html');
+verifier('Cap RESHIRAM en interne (pas de nouvel onglet)',
+  (await capReshiram.getAttribute('target')) === null);
+
+// YCOME, ZEKROM restent « à venir » : non-liens, aria-disabled.
+for (const id of ['ycome', 'zekrom']) {
   const cap = page.locator(`.cap[data-id="${id}"]`);
   const tag = await cap.evaluate((e) => e.tagName.toLowerCase());
   verifier(`Cap ${id} inerte (pas une ancre)`, tag !== 'a', `tag: ${tag}`);
   verifier(`Cap ${id} aria-disabled`, (await cap.getAttribute('aria-disabled')) === 'true');
 }
 const capYcome = page.locator('.cap[data-id="ycome"]');
-verifier('3 caps « à venir »', (await page.locator('.cap--avenir').count()) === 3);
+verifier('2 caps « à venir » (YCOME + ZEKROM)', (await page.locator('.cap--avenir').count()) === 2);
 
 // Passerelle visuelle RESHIRAM ↔ ZEKROM tracée.
 verifier('Passerelle RESHIRAM ↔ ZEKROM tracée',
