@@ -49,14 +49,28 @@
     mono-utilisateur, zéro code) ; (2) activer le provider Google dans Supabase
     → Auth → Providers avec Client ID/Secret ; (3) déclarer les URLs de
     redirection (URL de prod + `.../auth/v1/callback`). Sans (2), le bouton
-    renvoie « provider not enabled ». Secrets → jamais committés.
+    renvoie « provider not enabled ». Secrets → jamais committés. **✅ Config
+    Paul faite (2026-07-22), testée sur preview.**
+  - ✅ **LV2-② Auth à l'accueil — porte unique (2026-07-22)** : constat Paul —
+    Google (et le lien magique) renvoient sur `origin` = la boussole, qui
+    n'avait AUCUN consommateur → jeton bloqué dans l'URL, session jamais
+    établie. Corrigé : `index.html` charge désormais `js/config.js` +
+    supabase + `js/boussole-auth.js` (module autonome calqué sur `app.js`).
+    L'accueil est la **porte de connexion unique et verrouillée** (décision
+    Paul) : overlay réutilisé de `traveler.html` (Google + lien magique),
+    boussole cachée/inerte tant que non connecté ; le retour OAuth est consommé
+    là (`detectSessionInUrl`) et l'URL nettoyée ; session partagée à tous les
+    quadrants via `localStorage`. Répare aussi le lien magique (même bug).
+    Aucune retouche CSP/RLS/migration/secret. Harnais `smoke-boussole.mjs`
+    enrichi (stub Supabase + section verrou déconnecté/connecté) — tout vert,
+    `smoke-connexion.mjs` non régressé.
   - 🗺️ **RESTE LV2 — feuille de route (cadrée 2026-07-22, ordonnée par
     dépendances, une boucle à la fois)** :
 
-    **① Débloqueur — action Paul, pas du code (à faire dès que possible) :**
-    **Finaliser LV2-② Auth** (config Google Cloud + provider Supabase, cf. le
-    bullet LV2-②). C'est le **verrou d'usage** : sans compte connecté, RESHIRAM
-    et tout ce qui vit derrière auth reste en fail-closed (normal, mais inerte).
+    **① ✅ Débloqueur levé — LV2-② Auth finalisée (2026-07-22) :** config
+    Google Cloud + provider Supabase faite par Paul, ET connexion terminée à
+    l'accueil (porte unique verrouillée). Le **verrou d'usage** est levé :
+    connecté, RESHIRAM et tout ce qui vit derrière auth sont accessibles.
 
     **② ZEKROM v1** (miroir RESHIRAM) : mini-cadrage (objets : idéaux/visions/
     projets idéaux) → **modèle de données** (gate migration `0010`) → console
