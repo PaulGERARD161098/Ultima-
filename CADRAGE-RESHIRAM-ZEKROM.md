@@ -201,3 +201,18 @@ RIVEN (le réel), et alimente ZEKROM (l'idéal).**
 
 > **Boucle cadrage RESHIRAM close.** Suite : conception du modèle de données
 > (gate), puis implémentation v1.
+
+### Hébergement (tranché Paul 2026-07-22)
+
+**RESHIRAM vit DANS Ultima — rien de plus.** Pour l'instant, pas d'hébergement
+séparé :
+- **même repo** `Ultima-`, **même déploiement Vercel `ultima`** (une page interne,
+  ex. `reshiram.html` → `/reshiram`, ouverte **dans le même onglet** depuis la
+  boussole — `externe: false`, comme les quadrants, PAS un lien externe façon
+  Renoboost IA / YCOME) ;
+- **même projet Supabase** `leosfqyidgsaescjbfom` (là où `talents`/`preuves`
+  sont créées) ;
+- **aucune ressource facturée en plus** : pas de nouveau projet Vercel/Supabase,
+  pas de domaine. (Cohérent avec la gate « toute création de ressource facturée
+  = validation Paul ».)
+- ZEKROM suivra le même hébergement interne.
