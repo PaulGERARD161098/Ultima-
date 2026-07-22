@@ -130,7 +130,7 @@ console.log('— B. adramelech.html SANS session (fail-closed) —');
 
   const auth = (await page.locator('#adr-auth').textContent()) || '';
   verifier('Cartouche « Authentification requise »', /Authentification requise/.test(auth));
-  verifier('Lien vers TRAVELER (flux lien-magique)',
+  verifier('Lien vers RIVEN (flux lien-magique)',
     (await page.locator('#adr-auth a[href="traveler.html"]').count()) === 1);
   verifier('Registre caché', await page.locator('#adr-registre').evaluate((el) => el.hidden));
   verifier('Aucune idée dans le DOM', (await page.locator('.adr-idee').count()) === 0 &&

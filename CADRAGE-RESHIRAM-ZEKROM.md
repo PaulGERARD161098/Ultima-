@@ -31,9 +31,9 @@ savoir précisément **ce qu'il peut réellement proposer**. Registre :
 - **Plus-values** — ce qui distingue concrètement Paul, **chiffré si possible**.
 - **Réalisations / preuves** — chantiers faits, projets livrés (le socle
   factuel des talents).
-- **Réseau réel** — **ne pas dupliquer TRAVELER** : RESHIRAM en lit une **vue
+- **Réseau réel** — **ne pas dupliquer RIVEN** : RESHIRAM en lit une **vue
   « capital réseau »** (qui je connais, dans quel secteur) et pointe vers les
-  fiches TRAVELER. Reco Léo : lien, pas copie.
+  fiches RIVEN. Reco Léo : lien, pas copie.
 
 **Fonctions visées (v1 mini, à cadrer par boucle) :**
 - Cartographie visuelle des talents (registre carte savante).
@@ -90,7 +90,7 @@ Mécanisme qui relie les deux consoles autonomes :
 
 Les plans sont **distincts par nature**, pas en concurrence :
 - **RESHIRAM = le présent concret** — le développement de terrain, ce qui est
-  réel ici et maintenant. **Lit TRAVELER** (réseau réel) sans le copier ✅.
+  réel ici et maintenant. **Lit RIVEN** (réseau réel) sans le copier ✅.
 - **ZEKROM = le futur idéal** — tourné vers l'avenir ; c'est le point de départ
   du **rétroplanning « comment on y arrive »**. Se nourrit d'ADRAMELECH (idées)
   sans le remplacer.
@@ -110,7 +110,7 @@ n'exposent que des données **derrière auth**.
 ## 6. Arbitrages ouverts — décisions attendues de Paul
 
 1. ✅ **Frontières (tranché §4)** : RESHIRAM = présent/terrain, ZEKROM =
-   futur/idéal, **IMLADRIK = la personne** (rien à voir). RESHIRAM lit TRAVELER
+   futur/idéal, **IMLADRIK = la personne** (rien à voir). RESHIRAM lit RIVEN
    sans copier.
 2. **Modèle de données** : nouvelles tables Supabase (talents, idéaux, liens) —
    la conception SQL est une **gate** (migration = validation Paul).
@@ -142,34 +142,62 @@ n'exposent que des données **derrière auth**.
 **Exemples réels seed (Paul, servent de test des champs) :**
 1. **Sourcing d'artisans rapide** — secteurs **CVC, cuisine, salle de bain,
    rénovation** ; plus-value = **rapidité** ; preuve = à documenter (artisans /
-   chantiers effectivement trouvés). *Pont naturel avec TRAVELER (v2).*
+   chantiers effectivement trouvés). *Pont naturel avec RIVEN (v2).*
 2. **Trancher les situations floues** — esprit **analytique et décisionnel** ;
    talent **transversal** (sans secteur) ; preuve = décisions passées à citer.
 3. **Petit réseau de contacts utiles + capacité à en trouver aisément** —
    à la fois **capital** (le réseau) et **capacité** (savoir en créer). *Se
-   branche sur TRAVELER (v2).*
+   branche sur RIVEN (v2).*
 
 Ces exemples valident le modèle : `talent { nom, secteurs[], niveau, preuve,
 plus_value? }`, avec des talents **sectoriels** (n°1) comme **transversaux**
 (n°2) et des talents qui sont aussi du **capital/réseau** (n°3).
 
-### v2 — étendre (pour boucler la boucle)
+### v2 — les connexions (finalisé Paul 2026-07-22)
 
-- **Vue réseau lue depuis TRAVELER** : le talent n°3 (et n°1) s'y branchent —
-  le réseau réel **vit dans TRAVELER**, RESHIRAM en lit une vue « capital
-  réseau » (lien, pas copie, cf. §4).
-- **Capacités / moyens mobilisables** : temps réellement dispo, outils, capital
-  (le talent n°2 et le versant « capacité » du n°3 en relèvent).
-- **Plus-values chiffrées** : ex. **délai de sourcing** mesuré (n°1) — passer du
-  qualitatif au chiffré (méthode de Paul).
-- **Passerelle vers ZEKROM** : le socle réel alimente le **rétroplanning
-  idéal → réel** (manuel en v1 de la passerelle, cf. §3 & §6).
+La v2 branche RESHIRAM sur ses deux voisins. **Sens à retenir : RESHIRAM lit
+RIVEN (le réel), et alimente ZEKROM (l'idéal).**
+
+**Connexion RESHIRAM → RIVEN (le réseau réel) — lecture, jamais copie.**
+- Un talent qui **mobilise le réseau** (n°1 sourcing artisans, n°3 réseau de
+  contacts) porte des **références vers des fiches RIVEN** (les artisans /
+  contacts réels), pas leur duplicata. RIVEN reste la **source de vérité** ; si
+  une fiche bouge, RESHIRAM suit sans resaisie.
+- RESHIRAM en dérive une **vue « capital réseau »** orientée talent/offre : par
+  secteur, **combien de contacts activables** (compté depuis RIVEN). C'est ce
+  qui transforme un talent qualitatif en **preuve chiffrée** (ex. n°1 : « je
+  couvre le CVC → X artisans RIVEN mobilisables », plus-value = délai).
+- Sens unique : **RIVEN → RESHIRAM** (lecture agrégée). RESHIRAM n'écrit jamais
+  dans RIVEN.
+
+**Connexion RESHIRAM → ZEKROM (la passerelle réel ↔ idéal) — manuelle en v1.**
+- La passerelle relie un **talent RESHIRAM** à un **idéal ZEKROM** : « ce talent
+  réel **rend possible** cet idéal » / « cet idéal **appelle** ce talent ».
+- **Rétroplanning** (le cœur) : depuis un idéal ZEKROM, RESHIRAM répond « quels
+  talents j'ai **déjà**, lesquels **manquent** » → génère le **besoin** (à quoi
+  ça correspond, comment, **combien** — coût **délégué à NICOL BOLAS**, cf. §6.4).
+- **Enrichissement bidirectionnel** : un talent **nourrit** un idéal (le rend
+  atteignable) ; un idéal **appelle** des talents (à acquérir → apparaissent en
+  « à construire » côté RESHIRAM).
+- v1 de la passerelle = **manuel** : Paul crée/valide le lien talent↔idéal
+  (auto plus tard, cf. §6.3).
+
+**Autres briques v2** (dérivées, moindre priorité) :
+- **Capacités / moyens mobilisables** : temps dispo, outils, capital (n°2, et le
+  versant « capacité » du n°3).
+- **Plus-values chiffrées** : passer chaque plus-value du qualitatif au chiffré
+  (méthode de Paul).
 
 ### Modèle de données (gate migration)
 
-v1 minimal : une table `talents` (+ preuves / plus-values). La **conception SQL
-et la migration = gate** (validation Paul), traitée à la boucle de conception —
-pas ici. Sécurité : données introspectives → **auth + RLS**, §5 s'applique.
+- **v1** : table `talents` (`nom, secteurs[], niveau, plus_value`) + table
+  `preuves` (rattachées au talent).
+- **v2 connexions** : `talent_refs_reseau` (ids de fiches RIVEN, **lecture
+  seule**, jamais de copie) + table de liaison `talent ↔ idéal` (passerelle
+  ZEKROM), créée à la boucle passerelle.
+- La **conception SQL et la migration = gate** (validation Paul), traitée à la
+  boucle de conception — pas ici. Sécurité : données introspectives →
+  **auth + RLS**, §5 s'applique.
 
 > **Boucle cadrage RESHIRAM close.** Suite : conception du modèle de données
 > (gate), puis implémentation v1.

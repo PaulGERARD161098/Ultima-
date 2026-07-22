@@ -28,7 +28,7 @@
       cible: 'ultima.html',
       externe: false,
       etat: 'Ouvert',
-      resume: 'La console à quatre quadrants. TRAVELER (réseau commercial) est '
+      resume: 'La console à quatre quadrants. RIVEN (réseau commercial) est '
         + 'actif ; NICOL BOLAS, ADRAMELECH et IMLADRIK sont en chantier. '
         + 'Entre pour piloter tes données.',
       blason: blasonRose(),
@@ -61,7 +61,7 @@
       etat: 'À venir',
       resume: '« Le travail de la réalité » — cartographier tes talents et '
         + 'capacités concrets : ce que tu sais vraiment faire, tes plus-values '
-        + 'réelles, ton réseau (lien fort avec TRAVELER). Rien que du concret, '
+        + 'réelles, ton réseau (lien fort avec RIVEN). Rien que du concret, '
         + 'faits et chiffres. Passerelle avec ZEKROM.',
       blason: blasonAncre(),
       lien: 'zekrom', // passerelle réel ↔ idéal

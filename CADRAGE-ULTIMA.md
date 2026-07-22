@@ -241,9 +241,9 @@
   `design/spec-arbre-responsive.md`.
 - ✅ **PIVOT PLATEFORME — cadrage acté (2026-07-12)** : dicté par Paul, tournant
   majeur. Ultima devient sa **plateforme personnelle en console à 4 quadrants**
-  (TRAVELER réseau · NICOL BOLAS finances · ADRAMELECH idées · IMLADRIK dév. perso),
+  (RIVEN réseau · NICOL BOLAS finances · ADRAMELECH idées · IMLADRIK dév. perso),
   pilotée par la seule Léo (désormais **féminine**), un repo, mémoire
-  inter-segment. Le réseau existant (v1→A4) devient le quadrant TRAVELER — rien
+  inter-segment. Le réseau existant (v1→A4) devient le quadrant RIVEN — rien
   de jeté. Livré en **cadrage pur** (zéro code produit) : `CADRAGE-CONSOLE.md`
   (console, 4 quadrants, sécurité relevée §5, carte agents/skills §7, roadmap
   C0→C5 §8, risques RC1-RC5, arbitrages §10). Mémoire implantée (journal, profil,
@@ -268,9 +268,9 @@
   moment, séquence post-chantier satisfaction → avis Google → recommandation
   nominative ; maxime « frappez après une victoire »). Lexique vocal enrichi.
   **Fusionné dans `main`** (PR #40, go Paul « Allons-y », 2026-07-16 ; inclut
-  la correction globale TRAVELER à un seul L). **Carto des idées livrée** :
+  la correction globale RIVEN à un seul L). **Carto des idées livrée** :
   `adramelech/carto-idees.html` (archipel gravé — 4 îles, routes de synergie,
-  ancrages TRAVELER, cartouches de précision ; thèmes clair/sombre, zéro JS,
+  ancrages RIVEN, cartouches de précision ; thèmes clair/sombre, zéro JS,
   vérifiée en navigateur) + artifact Claude pour consultation immédiate.
   ⏳ Sécurité à trancher à la boucle ADRAMELECH : le contenu `adramelech/`
   (idées = données personnelles, §5 CADRAGE-CONSOLE) est servi statiquement
@@ -279,7 +279,7 @@
 - ✅ **Verrou architecture agent + blasons (2026-07-16, PR #41)** : un seul
   agent (Léo) pilote tout Ultima — seule en cross-plateforme, seule
   interlocutrice, mémoire unique ; les autres `.claude/agents/` sont ses
-  sous-agents. Blasons de quadrant figés : TRAVELER = boussole · ADRAMELECH =
+  sous-agents. Blasons de quadrant figés : RIVEN = boussole · ADRAMELECH =
   dragon · NICOL BOLAS = balance · IMLADRIK = étoile · Console = sceau ULTIMA.
 - 🟡 **Boucle ADRAMELECH — mini-cadrage (2026-07-16, directive EB « on boucle
   Adramelech »)** : `adramelech/CADRAGE-ADRAMELECH.md` déposé (cadrage pur).
@@ -296,7 +296,7 @@
     `*.md` de la surface publique ; contre-passe adversariale GO ; durcissements
     S1/S2/S3 différés à AD-4. Conséquence actée : quadrant « noir en prod » en v1.
   - **AD-1 carto générée** (PR #43 mergée) : `adramelech/generer-carto.mjs`
-    déterministe (archipels par thème, ponts, ancrages TRAVELER data-driven),
+    déterministe (archipels par thème, ponts, ancrages RIVEN data-driven),
     parseur zéro-perte, harnais de fermeture.
   - **AD-2 agent-idees + bilan** (PR en cours) : sous-agent `agent-idees` recruté
     + bilan chiffré (dashboard statique) dans la carto.
@@ -335,7 +335,7 @@
   `POST /api/leo` (requireUser fail-closed → API Claude, clé env Vercel
   uniquement, timeout 30 s, bornes historique/réponse, garde de débit
   1 appel/3 s/utilisateur [S-L2-1], prompt Jarvis par quadrant sans PII) +
-  zone « Parler à Léo » dans le cartouche (TRAVELER + ADRAMELECH, session
+  zone « Parler à Léo » dans le cartouche (RIVEN + ADRAMELECH, session
   réelle exigée ; 503 sincère tant que la clé n'est pas posée). Contre-passe
   securite-auditeur **GO** (S-L2-1 fermé même boucle ; S-L2-2 injection =
   angle mort consigné pour L2b) ; harnais complet vert (24 verdicts unit +

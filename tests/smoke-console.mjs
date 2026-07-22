@@ -2,7 +2,7 @@
 // LV2 : depuis Ultima LV2, l'accueil « / » est la boussole ; la console vit
 // désormais sur /ultima.html (reléguée par la boussole).
 // Prouve : rendu de la console (accueil + invite + 4 cartouches), blasons
-// étiquetés, TRAVELER actif qui navigue vers traveler.html, 3 quadrants
+// étiquetés, RIVEN actif qui navigue vers traveler.html, 3 quadrants
 // « à venir » inertes (aria-disabled, non-liens), AUCUNE requête réseau
 // externe (zéro CDN), zéro erreur console, contraste AA calculé sur les
 // couleurs réellement rendues. Puis NON-RÉGRESSION : traveler.html s'ouvre
@@ -91,7 +91,7 @@ verifier('Invite présente', /Sur quoi est-ce qu'on travaille aujourd'hui/.test(
 
 const noms = await page.locator('.quadrant-nom').allTextContents();
 verifier('4 quadrants présents', noms.length === 4, `trouvés: ${noms.length}`);
-for (const attendu of ['TRAVELER', 'NICOL BOLAS', 'ADRAMELECH', 'IMLADRIK']) {
+for (const attendu of ['RIVEN', 'NICOL BOLAS', 'ADRAMELECH', 'IMLADRIK']) {
   verifier(`Quadrant ${attendu} présent`, noms.map((n) => n.trim()).includes(attendu));
 }
 // Épure actée (Paul, 2026-07-19) : plus de sous-titres sous les noms.
@@ -120,7 +120,7 @@ const imlaEtat = await etatDe('IMLADRIK');
 verifier('IMLADRIK marqué « en chantier »', /chantier/i.test(imlaEtat || ''), `état: ${imlaEtat}`);
 
 const traveler = page.locator('a.quadrant-actif[href="traveler.html"]');
-verifier('TRAVELER garde sa porte', (await traveler.count()) === 1);
+verifier('RIVEN garde sa porte', (await traveler.count()) === 1);
 
 // Blasons étiquetés (aria-label).
 const blasons = await page.locator('.blason-svg').evaluateAll((els) =>
@@ -154,12 +154,12 @@ verifier('Zéro requête réseau externe (aucun CDN)', requetesExternes.length =
 verifier('Zéro erreur console (console)', erreursConsole.length === 0, erreursConsole.slice(0, 3).join(' | '));
 
 // ===================== B. Navigation + non-régression traveler.html =====================
-console.log('— B. TRAVELER → traveler.html (carte) —');
+console.log('— B. RIVEN → traveler.html (carte) —');
 const erreursTraveler = [];
 page.on('console', (msg) => { if (msg.type() === 'error') erreursTraveler.push(msg.text()); });
 await traveler.click();
 await page.waitForURL('**/traveler.html', { timeout: 20000 });
-verifier('Clic TRAVELER → URL traveler.html', /\/traveler\.html$/.test(page.url()), page.url());
+verifier('Clic RIVEN → URL traveler.html', /\/traveler\.html$/.test(page.url()), page.url());
 
 // L'app démarre : cartouche ULTIMA visible.
 await page.waitForSelector('.cartouche-ultima', { timeout: 20000 });

@@ -67,7 +67,7 @@ L'ordre du score n'est pas l'ordre d'exécution ; la dépendance logique command
 1. **INTENDANT en premier** — le moins cher (**3-8 j-h [hyp.]**, zéro actif),
    dérisque le socle *tout de suite* et **fabrique la matière première de
    MYCÉLIUM** (les victoires). Version *outil interne* d'abord (SaaS ajourné).
-2. **MYCÉLIUM ensuite** — capex ~0, se déploie sur l'outillage TRAVELER existant,
+2. **MYCÉLIUM ensuite** — capex ~0, se déploie sur l'outillage RIVEN existant,
    mais **a besoin des victoires** de l'INTENDANT pour ne pas tourner à vide.
 3. **PROTÉE en parallèle/fond** — le vrai moteur de revenu, mais lourd (BFR aides,
    certifications, recrutement) : la démarrer **bridée** (frigoriste↔PAC + une
@@ -125,7 +125,7 @@ bâtiment**, en trois étages qui se nourrissent l'un l'autre :
 
 ### Liens inter-segments
 
-- **TRAVELER** : Godefroy (partenaire pressenti) ; le réseau d'artisans
+- **RIVEN** : Godefroy (partenaire pressenti) ; le réseau d'artisans
   d'Ultima est le vivier naturel des premiers clients « mise à la benne ».
 - **NICOL BOLAS** : à terme, structure à part — pilotage financier séparé.
 
@@ -157,13 +157,13 @@ bâtiment**, en trois étages qui se nourrissent l'un l'autre :
 
 #### B. Diagnostic — SWOT croisé (TOWS)
 
-**Forces (internes)** — coût d'acquisition matière nul/négatif ; double revenu ; réseau d'artisans TRAVELER déjà là (vivier de clients « mise à la benne ») ; adossement possible au socle chantiers (matière captive via PROTÉE/INTENDANT).
+**Forces (internes)** — coût d'acquisition matière nul/négatif ; double revenu ; réseau d'artisans RIVEN déjà là (vivier de clients « mise à la benne ») ; adossement possible au socle chantiers (matière captive via PROTÉE/INTENDANT).
 **Faiblesses (internes)** — intensité capitalistique (camion + entrepôt) ; besoin de volume pour amortir les fixes ; compétence logistique/négociation d'enseigne non détenue aujourd'hui ; structure « à part » = dispersion du dirigeant.
 **Opportunités (externes)** — obligation REP bâtiment des enseignes depuis 2023 (angle d'entrée) ; pression réglementaire et image sur le réemploi ; hausse du coût de mise en décharge qui rend le service plus attractif.
 **Menaces (externes)** — cadre réglementaire déchet/réemploi contraignant (agréments, statut de « déchet ») ; internalisation par l'enseigne ; substituts moins chers ; entrants faciles.
 
 **Axes issus des croisements**
-- **FO (offensif)** — brancher le réseau d'artisans TRAVELER sur le service débarras, et vendre à Leroy Merlin le « on absorbe votre REP » : les deux forces adressent les deux meilleures opportunités. **C'est l'axe le plus fort.**
+- **FO (offensif)** — brancher le réseau d'artisans RIVEN sur le service débarras, et vendre à Leroy Merlin le « on absorbe votre REP » : les deux forces adressent les deux meilleures opportunités. **C'est l'axe le plus fort.**
 - **WO (réorientation)** — la faiblesse capitalistique se compense en démarrant *sans entrepôt* : commencer par le service débarras chantier (revenu immédiat, actif léger), l'entrepôt/revente en phase 2 une fois le flux prouvé.
 - **WT (survie)** — sans convention d'enseigne signée et sans clarté réglementaire, ne pas engager le capital lourd : tester le débarras facturé seul avant tout achat de camion/bail.
 
@@ -171,7 +171,7 @@ bâtiment**, en trois étages qui se nourrissent l'un l'autre :
 
 **Segments clients** — (1) artisans du réseau (payeurs du débarras) ; (2) enseignes de bricolage (source amont, cible d'un contrat de reprise) ; (3) acheteurs de matière revalorisée (particuliers bricoleurs, petits artisans, autoconstructeurs).
 **Proposition de valeur** — « on vous débarrasse vos déchets de chantier moins cher et plus simple qu'une benne, et on revend la matière encore bonne à petit prix ».
-**Canaux** — réseau TRAVELER (bouche-à-oreille artisan), convention d'enseigne, entrepôt-vitrine + revente en ligne [hyp.].
+**Canaux** — réseau RIVEN (bouche-à-oreille artisan), convention d'enseigne, entrepôt-vitrine + revente en ligne [hyp.].
 **Sources de revenus** — **double** : (a) facturation du débarras à l'artisan ; (b) revente de la matière (marge quasi totale, acquisition nulle/négative).
 **Structure de coûts** — camion (achat/loc + carburant + entretien), entrepôt (loyer + charges), main-d'œuvre (chauffeur-manutentionnaire), assurance/réglementaire, temps dirigeant.
 
@@ -211,14 +211,14 @@ bâtiment**, en trois étages qui se nourrissent l'un l'autre :
 Mise en concurrence mécanique avec le socle **chantiers + installations à domicile** :
 
 - **Rapporte-t-elle plus / mieux / plus vite ?** — **Non, pas en l'état.** Le socle génère du revenu *immédiat*, avec des compétences *déjà détenues* et un actif *déjà amorti*. GLANEUR exige capital neuf (camion, entrepôt), compétences neuves (logistique, négo d'enseigne) et une rampe de plusieurs mois avant équilibre incertain. Sur les axes qui comptent pour Paul (Temps, Rémunérateur nets de mise de fonds), **le socle bat GLANEUR**.
-- **Complète-t-elle ou disperse-t-elle ?** — **Elle complète, mais par le bas et par synergie, pas comme entreprise rivale.** Les artisans du réseau TRAVELER sont des clients « mise à la benne » naturels ; PROTÉE (déposes/surplus) et INTENDANT (lignes commandées non posées) *alimentent* la matière de GLANEUR. La synergie est réelle et déjà notée au registre. Mais montée en structure autonome « à part », elle **disperse** le dirigeant hors du socle.
+- **Complète-t-elle ou disperse-t-elle ?** — **Elle complète, mais par le bas et par synergie, pas comme entreprise rivale.** Les artisans du réseau RIVEN sont des clients « mise à la benne » naturels ; PROTÉE (déposes/surplus) et INTENDANT (lignes commandées non posées) *alimentent* la matière de GLANEUR. La synergie est réelle et déjà notée au registre. Mais montée en structure autonome « à part », elle **disperse** le dirigeant hors du socle.
 
 **Verdict tranché.** GLANEUR **ne mérite pas une place au top 3 comme entreprise autonome** : trop lourde, trop lente, équilibre conditionnel, elle perd le benchmark contre le socle sur les critères prioritaires. **Elle mérite d'être conservée comme *service satellite adossé au socle*** : démarrer par le seul débarras facturé sur les chantiers du réseau (actif léger, revenu immédiat, zéro entrepôt), en faire une ligne de service du cœur plutôt qu'une structure séparée. Le volet entrepôt/revente/convention d'enseigne reste une option de phase 2, à n'ouvrir que sur signaux de volume prouvés (cf. prémortem). Formulé autrement : **retenir le *service*, ajourner l'*entreprise*.**
 
 #### G. Provision d'exécution
 
 Si la version *service satellite* est retenue :
-- **`data-ingenieur`** — modèle de la matière collectée (catalogue de stock : matière, m³, provenance chantier, état, prix) et du flux débarras (passage → facturation) ; adossement à la fiche chantier TRAVELER existante plutôt qu'un silo neuf.
+- **`data-ingenieur`** — modèle de la matière collectée (catalogue de stock : matière, m³, provenance chantier, état, prix) et du flux débarras (passage → facturation) ; adossement à la fiche chantier RIVEN existante plutôt qu'un silo neuf.
 - **`front-carto`** — vue tournée sur carte (points de collecte, optimisation d'itinéraire OSM déjà dans la stack) et fiche stock.
 - **`interface-ux`** — parcours artisan « demander un débarras » et parcours acheteur « voir le stock » ; wording sobre.
 - **`securite-auditeur` / `verificateur`** — dès qu'une donnée client/artisan ou une facturation est en base (surface à risque).
@@ -278,7 +278,7 @@ n'est pas un produit unique mais la **vitesse de réaction** :
 
 ### Liens inter-segments
 
-- **TRAVELER** : Julien (partenaire pressenti) ; le réseau fournit
+- **RIVEN** : Julien (partenaire pressenti) ; le réseau fournit
   sous-traitants et apporteurs d'affaires.
 - **NICOL BOLAS** : à terme, structure à part — pilotage financier séparé.
 
@@ -313,7 +313,7 @@ n'est pas un produit unique mais la **vitesse de réaction** :
 
 #### B. Diagnostic — SWOT croisé (TOWS)
 
-**Forces (internes)** — compétences installation déjà détenues via le socle Renoboost IA (PROTÉE n'invente pas le métier) ; positionnement fiabilité aligné sur l'ADN d'Ultima ; polyvalence des équipes = lissage de charge ; réseau TRAVELER (Julien, sous-traitants, apporteurs).
+**Forces (internes)** — compétences installation déjà détenues via le socle Renoboost IA (PROTÉE n'invente pas le métier) ; positionnement fiabilité aligné sur l'ADN d'Ultima ; polyvalence des équipes = lissage de charge ; réseau RIVEN (Julien, sous-traitants, apporteurs).
 **Faiblesses (internes)** — multi-métier = complexité opérationnelle et certifications multiples ; BFR lourd (aides payées en différé) ; recrutement de polyvalents rares ; dispersion possible du dirigeant sur trop de fronts.
 **Opportunités (externes)** — vague durable de la rénovation énergétique (aides publiques massives) ; secteur décrédibilisé = place ouverte pour un acteur *fiable* ; saisonnalité clim/PAC exploitable en couverture annuelle.
 **Menaces (externes)** — instabilité chronique du calendrier des aides (rabot MaPrimeRénov', évolutions CEE) ; guerre des prix ; durcissement des contrôles anti-fraude (double tranchant : assainit mais alourdit) ; pénurie de main-d'œuvre qualifiée.
@@ -325,9 +325,9 @@ n'est pas un produit unique mais la **vitesse de réaction** :
 
 #### C. Business model — Lean Canvas chiffré (besoins réels)
 
-**Segments clients** — (1) particuliers propriétaires éligibles aux aides (rénovation énergétique du logement) ; (2) petit tertiaire / copropriétés [hyp.] ; (3) apporteurs d'affaires du réseau TRAVELER (Julien, sous-traitants).
+**Segments clients** — (1) particuliers propriétaires éligibles aux aides (rénovation énergétique du logement) ; (2) petit tertiaire / copropriétés [hyp.] ; (3) apporteurs d'affaires du réseau RIVEN (Julien, sous-traitants).
 **Proposition de valeur** — « on installe PAC, clim et photovoltaïque **bien fait et fiable**, on capte proprement toutes vos aides, et on est là toute l'année quelle que soit la saison — l'inverse des acteurs qui ont abîmé le secteur ».
-**Canaux** — réseau TRAVELER (apport d'affaires, recommandation type MYCÉLIUM), référencement RGE (annuaire officiel des aides), bouche-à-oreille de la fiabilité.
+**Canaux** — réseau RIVEN (apport d'affaires, recommandation type MYCÉLIUM), référencement RGE (annuaire officiel des aides), bouche-à-oreille de la fiabilité.
 **Sources de revenus** — vente + pose d'équipements (PAC, clim, PV), le montant d'aide venant *réduire le reste-à-charge client* (pas un revenu propre) ; marge sur matériel + main-d'œuvre.
 **Structure de coûts** — main-d'œuvre qualifiée (poste dominant), matériel/stock multi-métier, outillage spécialisé par activité, certifications RGE et leur maintien, veille réglementaire, portage de trésorerie (BFR aides), assurances (décennale par activité).
 
@@ -377,7 +377,7 @@ Mise en concurrence mécanique avec le socle **Renoboost IA (chantiers + install
 #### G. Provision d'exécution
 
 Si la version *extension disciplinée du socle* est retenue :
-- **`data-ingenieur`** — modèle chantier énergie (activité, équipement, ticket, aide associée, statut du dossier d'aide, encours à recevoir) adossé à la fiche chantier TRAVELER existante ; suivi du BFR aides (poste financier NICOL BOLAS).
+- **`data-ingenieur`** — modèle chantier énergie (activité, équipement, ticket, aide associée, statut du dossier d'aide, encours à recevoir) adossé à la fiche chantier RIVEN existante ; suivi du BFR aides (poste financier NICOL BOLAS).
 - **`front-carto`** — vue chantiers par activité/saison sur carte, planning de charge des équipes polyvalentes ; fiche dossier d'aide.
 - **`interface-ux`** — parcours « monter un dossier d'aide » (checklist MaPrimeRénov'/CEE) et parcours devis multi-activité ; wording sobre, cohérent avec la promesse fiabilité.
 - **`securite-auditeur` / `verificateur`** — dès qu'une donnée client (éligibilité aide = PII sensible : revenus, adresse, situation) est en base : surface à risque élevée, RLS stricte obligatoire.
@@ -445,7 +445,7 @@ impossible : le manquant se voit **avant** le jour de pose, pas dessus.
 
 ### Liens inter-segments
 
-- **TRAVELER** : les chantiers sont déjà des nœuds du réseau — l'INTENDANT
+- **RIVEN** : les chantiers sont déjà des nœuds du réseau — l'INTENDANT
   pourrait s'adosser à une fiche chantier existante plutôt que créer un
   silo ; les fournisseurs sont des contacts.
 - **ADR-001 GLANEUR** : les surplus de chantier détectés par l'INTENDANT
@@ -486,7 +486,7 @@ impossible : le manquant se voit **avant** le jour de pose, pas dessus.
 
 #### B. Diagnostic — SWOT croisé (TOWS)
 
-**Forces (internes)** — **né d'un besoin propre vécu** (le cas de l'aile de recouvrement) : v1 immédiatement utile et testable sur un vrai chantier, *product-market fit interne garanti* ; stack Ultima déjà là ; adossable à la fiche chantier TRAVELER existante ; saisie vocale déjà dans le registre ADRAMELECH ; actif quasi nul (aucun capital lourd, contraste total avec GLANEUR/PROTÉE).
+**Forces (internes)** — **né d'un besoin propre vécu** (le cas de l'aile de recouvrement) : v1 immédiatement utile et testable sur un vrai chantier, *product-market fit interne garanti* ; stack Ultima déjà là ; adossable à la fiche chantier RIVEN existante ; saisie vocale déjà dans le registre ADRAMELECH ; actif quasi nul (aucun capital lourd, contraste total avec GLANEUR/PROTÉE).
 **Faiblesses (internes)** — suppose une **discipline de saisie au quotidien** (besoins/commandes tenus à jour dans le feu du chantier) ; la valeur est un **évitement** (invisible, difficile à mesurer et à facturer) ; parsing BC fournisseurs incertain ; un seul utilisateur au départ = pas de validation multi-contexte.
 **Opportunités (externes)** — aucun outil ne fait ce matching fin pour les petits poseurs ; digitalisation lente mais réelle du BTP ; le coût des reprises/pénalités est un vrai point de douleur secteur.
 **Menaces (externes)** — « Excel suffit » pour beaucoup ; un ERP existant peut ajouter la brique ; adoption des autres artisans difficile.
@@ -544,7 +544,7 @@ La pondération orientée vitesse/rentabilité *maintient* le score haut — INT
 #### G. Provision d'exécution
 
 Si la version *outil interne v1* est retenue :
-- **`data-ingenieur`** — modèle de données du matching (ligne : besoin / commande / stock, 3 états + étape « contrôlé en bon état ») **adossé à la fiche chantier TRAVELER existante plutôt qu'un silo neuf** ; pendant financier NICOL BOLAS (chaque commande = une charge, rapprochement commande/facture).
+- **`data-ingenieur`** — modèle de données du matching (ligne : besoin / commande / stock, 3 états + étape « contrôlé en bon état ») **adossé à la fiche chantier RIVEN existante plutôt qu'un silo neuf** ; pendant financier NICOL BOLAS (chaque commande = une charge, rapprochement commande/facture).
 - **`front-carto` / `interface-ux`** — saisie rapide (vocale en priorité, registre ADRAMELECH oblige), vue check-list par chantier, **alertes J-2** lisibles ; parcours « ajouter un besoin en cours → recalcul des manquants » ; wording sobre, registre antique.
 - **`securite-auditeur` / `verificateur`** — dès qu'une donnée chantier/client/fournisseur est en base (surface à risque).
 
@@ -605,7 +605,7 @@ pas une prouesse technique. **À ne pas oublier.**
 
 ### Liens inter-segments
 
-- **TRAVELER** : le cœur du mécanisme existe déjà — relances au bon moment
+- **RIVEN** : le cœur du mécanisme existe déjà — relances au bon moment
   (journal/relances v2), leads et relations d'apport d'affaires ; MYCÉLIUM
   est la doctrine commerciale qui exploite cet outillage. Le lien
   parrain → filleul est une relation typée du réseau.
@@ -631,7 +631,7 @@ pas une prouesse technique. **À ne pas oublier.**
 
 - **Exclure** — l'achat de leads froids en agence ; l'attente passive que le client satisfait parle « un jour » de lui-même ; l'avis sollicité au hasard, hors du moment de satisfaction.
 - **Atténuer** — la dépendance à un canal publicitaire payant ; la déperdition du signal de satisfaction (client content dont l'enthousiasme n'est jamais capté ni converti).
-- **Renforcer** — la **relance au bon moment pilotée par la donnée** (outillage TRAVELER relances v2 déjà là) ; la **traçabilité parrain → filleul** comme relation typée du réseau.
+- **Renforcer** — la **relance au bon moment pilotée par la donnée** (outillage RIVEN relances v2 déjà là) ; la **traçabilité parrain → filleul** comme relation typée du réseau.
 - **Créer** — la **séquence disciplinée « frapper après une victoire »** (J+2 satisfaction → avis 5★ Google + recommandation nominative → lead rattaché au parrain), et le **coefficient de propagation** comme métrique de pilotage chantier par chantier — inexistants dans le bouche-à-oreille passif et dans le parrainage classique non instrumenté.
 
 **5 forces de Porter** (lues du point de vue de MYCÉLIUM comme *levier d'acquisition du socle*, non comme entreprise)
@@ -646,13 +646,13 @@ pas une prouesse technique. **À ne pas oublier.**
 
 #### B. Diagnostic — SWOT croisé (TOWS)
 
-**Forces (internes)** — coût de mise en œuvre quasi nul ; s'appuie sur l'outillage TRAVELER **déjà existant** (relances v2, leads, relations d'apport, lien parrain → filleul typé) ; agit directement sur l'acquisition du socle ; métrique claire et pilotable (coefficient de propagation) ; cohérente avec la fiabilité revendiquée (avis sincères, cf. PROTÉE).
+**Forces (internes)** — coût de mise en œuvre quasi nul ; s'appuie sur l'outillage RIVEN **déjà existant** (relances v2, leads, relations d'apport, lien parrain → filleul typé) ; agit directement sur l'acquisition du socle ; métrique claire et pilotable (coefficient de propagation) ; cohérente avec la fiabilité revendiquée (avis sincères, cf. PROTÉE).
 **Faiblesses (internes)** — dépend entièrement de la qualité d'exécution en amont (« sans victoire, rien à exploiter ») ; exige une **discipline d'équipe tenue dans la durée**, la partie humaine la plus fragile ; coefficient réel non prouvé, l'objectif de 2 est une cible ambitieuse ; suppose une data client tenue proprement.
 **Opportunités (externes)** — poids décisif des avis Google dans la décision d'achat en rénovation ; secteur BTP où le coût du lead payant est élevé et la confiance rare — la recommandation nominative vaut plus qu'une pub ; réputation du secteur abîmée par les acteurs peu fiables (angle de différenciation).
 **Menaces (externes)** — durcissement de la politique Google sur la sollicitation d'avis (filtrage, pénalisation) ; lassitude client si la sollicitation est trop mécanique ; RGPD/consentement sur la donnée de recommandation nominative.
 
 **Axes issus des croisements**
-- **FO (offensif) — l'axe le plus fort.** Brancher la séquence post-chantier sur l'outillage de relance TRAVELER *déjà en place* pour capter systématiquement l'avis 5★ + la reco nominative au pic de satisfaction : une force interne (coût nul, outil existant) sur la meilleure opportunité (poids des avis en BTP). Retour quasi immédiat, mise de fonds quasi nulle.
+- **FO (offensif) — l'axe le plus fort.** Brancher la séquence post-chantier sur l'outillage de relance RIVEN *déjà en place* pour capter systématiquement l'avis 5★ + la reco nominative au pic de satisfaction : une force interne (coût nul, outil existant) sur la meilleure opportunité (poids des avis en BTP). Retour quasi immédiat, mise de fonds quasi nulle.
 - **WO (réorientation)** — la faiblesse « dépend de la qualité amont » se compense en **couplant MYCÉLIUM à INTENDANT** : l'INTENDANT fabrique des fins de chantier réussies (rien ne manque le jour de pose), MYCÉLIUM n'a plus qu'à les exploiter. On ne sollicite que sur les chantiers effectivement réussis.
 - **WT (survie)** — contre le risque Google + discipline non tenue : n'automatiser que la partie conforme (consentement explicite, pas d'incitation à l'avis), et ancrer la séquence dans le process (déclenchement automatique à J+2) plutôt que dans la bonne volonté quotidienne d'un humain.
 
@@ -662,7 +662,7 @@ pas une prouesse technique. **À ne pas oublier.**
 
 **Segments** — les clients existants de Renoboost IA (parrains potentiels) ; les leads qu'ils génèrent (filleuls) ; l'équipe qui exécute la discipline.
 **Proposition de valeur** — pour Renoboost IA : « chaque chantier réussi devient une machine à en produire d'autres, sans budget pub » ; pour le client : reconnaissance de sa satisfaction et facilité à recommander un artisan fiable.
-**Canaux** — outillage TRAVELER existant (relances v2, fiche lead, relations d'apport) ; avis Google ; le lien parrain → filleul typé en base.
+**Canaux** — outillage RIVEN existant (relances v2, fiche lead, relations d'apport) ; avis Google ; le lien parrain → filleul typé en base.
 **Sources de « revenu »** — indirecte : marge des chantiers additionnels acquis gratuitement.
 **Structure de coûts** — quasi nulle en capex ; l'essentiel est de l'**effort de mise en place** (paramétrage de la séquence, intégration à l'outil de suivi) + de la **discipline** récurrente.
 
@@ -672,7 +672,7 @@ pas une prouesse technique. **À ne pas oublier.**
 - **Valeur créée** : à marge chantier **≈ 2-4 k€** [hyp.], 5 à 15 chantiers additionnels = **10-60 k€ de marge/an** captés à coût marginal quasi nul.
 - **Comparaison au payant** : un lead BTP qualifié coûte **30-150 €** [hyp.] et un client acquis en publicité/agence **300-1 500 €** [hyp.]. Les 5-15 clients de MYCÉLIUM représentent donc **1,5 à 22 k€ de coût d'acquisition évité/an** [hyp.], *en plus* de la marge. Le ratio valeur/coût est structurellement le plus élevé de l'archipel.
 
-**Besoins réels** — **faible capex.** (1) Effort de mise en place de la **séquence post-chantier automatisée** (chantier livré → J+2 satisfaction → avis Google + reco nominative → lead rattaché au parrain) ; (2) **intégration à l'outil de suivi existant** (TRAVELER, relances v2 — pas de silo neuf) ; (3) **discipline d'équipe** dans la durée, le vrai coût récurrent. Estimation : **quelques jours-agents de paramétrage** [hyp.], zéro actif immobilisé.
+**Besoins réels** — **faible capex.** (1) Effort de mise en place de la **séquence post-chantier automatisée** (chantier livré → J+2 satisfaction → avis Google + reco nominative → lead rattaché au parrain) ; (2) **intégration à l'outil de suivi existant** (RIVEN, relances v2 — pas de silo neuf) ; (3) **discipline d'équipe** dans la durée, le vrai coût récurrent. Estimation : **quelques jours-agents de paramétrage** [hyp.], zéro actif immobilisé.
 
 #### D. Risque — Prémortem (2-3 ans, MYCÉLIUM a échoué)
 
@@ -689,7 +689,7 @@ pas une prouesse technique. **À ne pas oublier.**
 - **Efficace — 7/10.** Elle attaque directement l'acquisition, au point de contact le plus favorable (le pic de satisfaction). Mécanisme net ; efficacité entièrement conditionnée à la qualité amont et au coefficient réel.
 - **Rémunérateur — 9/10.** C'est le **revenu du socle démultiplié à coût quasi nul** : marge additionnelle de 10-60 k€/an [hyp.] pour un capex proche de zéro. Le meilleur ratio valeur/mise de fonds de l'archipel.
 - **Utile — 7/10.** Utilité surtout économique (croissance du socle) et réputationnelle (avis sincères, fiabilité) ; moins d'utilité sociétale directe que GLANEUR, mais renforce la confiance dans un secteur qui en manque.
-- **Temps — 9/10.** **Déployable très vite** : elle s'adosse à l'outillage TRAVELER déjà en place (relances v2, leads, relations d'apport). Pas de camion, pas d'entrepôt, pas de convention à négocier — quelques jours de paramétrage.
+- **Temps — 9/10.** **Déployable très vite** : elle s'adosse à l'outillage RIVEN déjà en place (relances v2, leads, relations d'apport). Pas de camion, pas d'entrepôt, pas de convention à négocier — quelques jours de paramétrage.
 
 **Pondération actée (Temps ×2 et Rémunérateur ×2, dénominateur 7).**
 `(7 + 7 + 9×2 + 7 + 9×2) / 7` = `(7 + 7 + 18 + 7 + 18) / 7` = `57/7` = **8,1/10**.
@@ -706,7 +706,7 @@ Mise en concurrence mécanique avec le socle **Renoboost IA** — mais la questi
 
 #### G. Provision d'exécution
 
-- **`data-ingenieur`** — pilotage de la **data client** et calcul du **coefficient de propagation** (clients générés / client) ; typage propre de la relation **parrain → filleul** dans TRAVELER (lead rattaché à son parrain) ; adossement aux relances v2 et à la fiche lead existantes plutôt qu'un silo neuf.
+- **`data-ingenieur`** — pilotage de la **data client** et calcul du **coefficient de propagation** (clients générés / client) ; typage propre de la relation **parrain → filleul** dans RIVEN (lead rattaché à son parrain) ; adossement aux relances v2 et à la fiche lead existantes plutôt qu'un silo neuf.
 - **`interface-ux`** — conception de la **séquence post-chantier** (J+2 satisfaction → avis Google + reco nominative) et du **dashboard chantier par chantier** (qui a donné, qui reste à solliciter, coefficient courant) ; wording sobre, non mécanique, pour éviter la lassitude.
 - **`securite-auditeur` / `verificateur`** — **conformité consentement/avis** dès que la donnée de recommandation nominative entre en base (PII, RGPD, politique Google : pas d'achat ni d'incitation à l'avis).
 
@@ -802,7 +802,7 @@ délai de devis ; le verdict de faisabilité **évite les projets invendables**
 
 ### Liens inter-segments
 
-- **TRAVELER** : le rendez-vous client est un lead/chantier du réseau — la
+- **RIVEN** : le rendez-vous client est un lead/chantier du réseau — la
   simulation et l'estimation s'accrochent à la fiche chantier existante.
 - **ADR-002 PROTÉE** : arme commerciale directe des installations clim/PAC —
   sert le pont frigoriste↔PAC dès la vente.
@@ -986,7 +986,7 @@ jamais un outil à côté).
   d'autres — c'est ça, le « plug-and-play sur n'importe quel site avec une API ».
 - **Couche de filtrage Claude** par-dessus (profil métier → pertinence + extrait).
 - **Dépôt dans Ultima** : chaque signal devient une **alerte/carte routée vers le
-  bon quadrant** (fiscalité/TVA → NICOL BOLAS, chantiers → TRAVELER), et
+  bon quadrant** (fiscalité/TVA → NICOL BOLAS, chantiers → RIVEN), et
   **Léo présente le digest** — Paul ne lit jamais le flux brut.
 
 **Séquencement (boucler petit d'abord).**
@@ -996,7 +996,7 @@ jamais un outil à côté).
 - **v2** : sources élargies (BO ministériels, aides), routage automatique vers
   le bon quadrant, historisation et recherche des alertes passées.
 - **v3** : **Léo proactive avec les données réelles** — « un taux de TVA à 5,5 %
-  s'ouvre pour ce type de chantier : 3 de tes chantiers TRAVELER sont
+  s'ouvre pour ce type de chantier : 3 de tes chantiers RIVEN sont
   éligibles » (le pont avec la base fait la vraie valeur commerciale).
 
 **Point de vigilance.** Une veille fiscale/réglementaire qui **se trompe coûte
@@ -1009,7 +1009,7 @@ toujours sa source officielle.
 
 - **NICOL BOLAS** : lien le plus direct — TVA, impôts, dispositifs fiscaux
   sont le cœur du quadrant finance ; une règle détectée y a son pendant chiffré.
-- **TRAVELER** : les chantiers/leads concernés — éligibilité à un dispositif =
+- **RIVEN** : les chantiers/leads concernés — éligibilité à un dispositif =
   **argument commercial** auprès des clients et des artisans du réseau.
 - **ADR-003 INTENDANT** : même famille « enabler du socle né d'un besoin propre,
   généralisable au BTP » — l'INTENDANT sécurise l'appro, le HÉRAUT sécurise la

@@ -3,7 +3,7 @@
 // Rôle : REMPLACER la carte écrite à la main par un rendu DÉTERMINISTE calculé
 // depuis le registre `adramelech/IDEES.md` (source unique de vérité). On ne
 // refait pas le style — le registre antique de `carto-idees.html` (thèmes
-// clair/sombre, cartouches, rose des vents, terre ferme TRAVELER) est réutilisé
+// clair/sombre, cartouches, rose des vents, terre ferme RIVEN) est réutilisé
 // tel quel ; on branche seulement la source.
 //
 // Contraintes NON négociables (cadrage AD-1) :
@@ -411,7 +411,7 @@ ${routes}
       </g>`
     : '';
   const blocAncrages = (ancrLignes || ports)
-    ? `      <!-- ancrages au réseau TRAVELER -->
+    ? `      <!-- ancrages au réseau RIVEN -->
       <g fill="none" stroke="var(--encre-pale)" stroke-width="0.9">
 ${ancrLignes}
       </g>
@@ -420,7 +420,7 @@ ${ports}
       </g>`
     : '';
 
-  return `    <svg viewBox="0 0 1000 640" role="img" aria-label="Carte de l’archipel d’ADRAMELECH : ${N} îles d’idées regroupées en ${archipels.length} archipels par thème, reliées par des routes de synergie, au-dessus de la terre ferme de TRAVELER">
+  return `    <svg viewBox="0 0 1000 640" role="img" aria-label="Carte de l’archipel d’ADRAMELECH : ${N} îles d’idées regroupées en ${archipels.length} archipels par thème, reliées par des routes de synergie, au-dessus de la terre ferme de RIVEN">
       <defs>
         <filter id="grain" x="0" y="0" width="100%" height="100%">
           <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="n"/>
@@ -463,7 +463,7 @@ ${corpsIles}
 
 ${blocRoutes}
 
-      <!-- terre ferme TRAVELER -->
+      <!-- terre ferme RIVEN -->
       <path d="M-5,575 C120,552 240,592 380,570 C520,548 610,590 740,566 C850,546 930,570 1005,558 L1005,645 L-5,645 Z"
             fill="var(--ile)" stroke="var(--encre)" stroke-width="1.6"/>
       <g stroke="var(--encre-claire)" stroke-width="0.5" opacity="0.6">
@@ -490,7 +490,7 @@ ${blocAncrages}
         <line x1="654" y1="54" x2="700" y2="54" stroke="var(--cire)" stroke-width="1.4" stroke-dasharray="6 5"/>
         <text x="710" y="58" font-size="11" fill="var(--encre)">route de synergie entre idées</text>
         <line x1="654" y1="74" x2="700" y2="74" stroke="var(--encre-pale)" stroke-width="0.9"/>
-        <text x="710" y="78" font-size="11" fill="var(--encre)">ancrage au réseau TRAVELER</text>
+        <text x="710" y="78" font-size="11" fill="var(--encre)">ancrage au réseau RIVEN</text>
         <circle cx="677" cy="92" r="3" fill="var(--encre)"/>
         <text x="710" y="96" font-size="11" fill="var(--encre)">port d’attache (contact, acquis)</text>
       </g>

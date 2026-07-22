@@ -379,7 +379,7 @@ export function validateLien(body) {
 export const INTENDANT_MODES = ['stock', 'commande', 'aucune'];
 export const INTENDANT_CONTROLES = ['en_attente', 'conforme', 'casse'];
 
-// node_id figé à la création (l'accroche TRAVELER ne se déplace pas) ; seule la
+// node_id figé à la création (l'accroche RIVEN ne se déplace pas) ; seule la
 // date de pose se renseigne/décale ensuite. owner_id/id/etat jamais acceptés.
 const CHANTIER_CREATE_FIELDS = ['node_id', 'date_pose'];
 const CHANTIER_UPDATE_FIELDS = ['date_pose'];
