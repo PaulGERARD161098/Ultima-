@@ -9,6 +9,11 @@
   fichier `bcp.html` conservé (id stable). Orthographe **« NICOL BOLAS »**
   (réf. MTG confirmée par Paul ; le premier jet avait écrit « NICOLE » tel que
   dicté, corrigé ensuite). Chaîne : BCP → BALTHAZAR GELD (07-19) → NICOL BOLAS.
+- **2026-07-22 (emblèmes R/Z)** — blasons des caps changés (dicté Paul, réf.
+  dragons) : **RESHIRAM = aile blanche**, **ZEKROM = aile noire** (même aile
+  plumée, en miroir → les deux se font face de part et d'autre de la passerelle).
+  Remplace ancre/flambeau. `js/boussole.js` (fonctions `aile()` +
+  `blasonAileBlanche/Noire`). smoke-boussole vert.
 - **2026-07-22 (renommage)** — **TRAVELER → RIVEN** (dicté Paul, « implante
   partout »). Nom affiché du quadrant réseau renommé partout (UI, code, tests,
   cadrages, charte, mémoire, commentaires migration/validate). **Identifiants
