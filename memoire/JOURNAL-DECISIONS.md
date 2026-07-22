@@ -9,6 +9,21 @@
   fichier `bcp.html` conservé (id stable). Orthographe **« NICOL BOLAS »**
   (réf. MTG confirmée par Paul ; le premier jet avait écrit « NICOLE » tel que
   dicté, corrigé ensuite). Chaîne : BCP → BALTHAZAR GELD (07-19) → NICOL BOLAS.
+- **2026-07-22 (modèle données RESHIRAM v1)** — conception par data-ingénieur +
+  contre-passe Léo (validée). Migration **`0009_reshiram_talents.sql` déposée,
+  NON appliquée (gate Paul)**. 2 tables (`talents`, `preuves`) + 2 vues
+  (`talents_etat` avec `a_etayer` dérivé, `talents_offre_reelle` = talents
+  étayés). Conventions respectées : RLS `(select auth.uid())` initplan, owner_id
+  default, trigger `set_updated_at` réutilisé, vues security_invoker, scellement
+  AD-4 (owner_id,id), index justifiés, zéro GRANT (cohérent), zéro seed.
+  **Décisions validées Paul 2026-07-22** : ① `niveau` = notion/pratique/maitrise
+  (sans « expert ») ② secteurs = texte libre `text[]` ③ `plus_value` bornée 2000.
+  Le fichier 0009 reflète déjà ces choix. **✅ Appliquée 2026-07-22 sur « Go »
+  de Paul** (escalade Opus, gate fermée) : `talents` + `preuves` créées, **RLS
+  activée** confirmée (`list_tables`), 2 vues. ⏳ Auto-check advisors non lançable
+  (approbation MCP indisponible en async) — schéma conçu 0-lint (RLS on, vues
+  security_invoker, trigger réutilisé) ; à reconfirmer au dashboard/prochaine
+  session. Fichier fusionné dans `main`.
 - **2026-07-22 (emblèmes R/Z)** — blasons des caps changés (dicté Paul, réf.
   dragons) : **RESHIRAM = aile blanche**, **ZEKROM = aile noire** (même aile
   plumée, en miroir → les deux se font face de part et d'autre de la passerelle).
