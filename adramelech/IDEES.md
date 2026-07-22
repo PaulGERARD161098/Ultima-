@@ -1039,7 +1039,7 @@ transforme pour fuir ; Vertumne, lui, se transforme pour servir et récolter.*
 - **Capturée le** : 2026-07-22 (dictée vocale de Paul)
 - **Type** : business (projet « star », monté de zéro)
 - **Thème** : stratégie d'entreprise · services · bâtiment · saisonnier · apport d'affaires
-- **Partenaire envisagé** : — (levier propre de Paul ; nom de marque de travail « Souqt » ? — à confirmer, mot dicté)
+- **Partenaire envisagé** : — (levier propre de Paul ; nom **VERTUMNE** confirmé par Paul 2026-07-22)
 - **Statut** : à raffiner (cadrage posé ; analyse stratégique différée — voir §Analyse)
 
 ### L'idée
@@ -1139,7 +1139,7 @@ dieu.*
 - **Capturée le** : 2026-07-22 (dictée vocale de Paul)
 - **Type** : business (projet « star », monté de zéro)
 - **Thème** : réseau · intergénérationnel · mise en relation · transmission
-- **Partenaire envisagé** : Anselme (à confirmer — mot dicté)
+- **Partenaire envisagé** : Anselme (confirmé par Paul 2026-07-22)
 - **Statut** : à raffiner (cadrage posé ; analyse stratégique différée — voir §Analyse)
 
 ### L'idée
@@ -1172,8 +1172,8 @@ mécénat descendant.
 - **Le déclic psychologique de l'ancien** (dicté par Paul) : celui qui a le réseau
   mais se sent sortir du jeu a une **motivation à rester utile et courtisé** ; le
   pont lui rend un rôle. C'est le ressort d'engagement à activer côté offre.
-- **Amorçage** : partir du réseau réel (dont le partenaire pressenti, Anselme — à
-  confirmer) plutôt que d'une place de marché froide — quelques appariements
+- **Amorçage** : partir du réseau réel (dont le partenaire confirmé, **Anselme**)
+  plutôt que d'une place de marché froide — quelques appariements
   réussis valent mieux qu'un large catalogue vide.
 - Points à instruire : cadre de la mise en relation (qui garantit quoi),
   rémunération, RGPD/PII (les deux populations sont de la donnée personnelle),
@@ -1197,6 +1197,6 @@ mécénat descendant.
 ### Analyse stratégique
 
 > **Différée** (2026-07-22). Projet « star » monté de zéro, à travailler avec
-> Anselme (partenaire à confirmer) ; capturé et cadré, la grille des 7 blocs sera
+> Anselme (partenaire confirmé) ; capturé et cadré, la grille des 7 blocs sera
 > passée quand Paul décidera de l'instruire.
 
