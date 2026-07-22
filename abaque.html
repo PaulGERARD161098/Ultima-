@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Ultima — ABAQUE, simulateur de lancement</title>
+  <meta name="description" content="ABAQUE — le simulateur de lancement d'entreprise du quadrant NICOL BOLAS : hypothèses paramétrables, masse salariale chargée, BFR, seuil de rentabilité et courbe de trésorerie.">
+  <meta name="theme-color" content="#0e3a52">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%231e6fb8'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23ffffff'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/abaque.css">
+</head>
+<body class="abaque">
+
+  <!-- Barre de retour vers la console Ultima. -->
+  <nav class="barre-retour" aria-label="Retour à la console">
+    <a class="retour-ultima" href="ultima.html">← Ultima</a>
+  </nav>
+
+  <div class="feuille">
+
+    <!-- Cartouche du quadrant : blason balance (repris de bcp.html), titre. -->
+    <header class="cartouche entete-quadrant">
+      <svg class="blason-svg" viewBox="0 0 72 72" role="img"
+           aria-label="Blason gravé : une balance" focusable="false">
+        <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
+        <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
+        <g stroke="#5a4118" stroke-width="1.9" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M36 22 V49"/>
+          <path d="M20 27 H52"/>
+          <path d="M28 51 Q36 47.5 44 51"/>
+          <path d="M22 27 L17 37 M22 27 L27 37 M15 37 Q22 45 29 37"/>
+          <path d="M50 27 L45 37 M50 27 L55 37 M43 37 Q50 45 57 37"/>
+        </g>
+        <circle cx="36" cy="22" r="2.6" fill="#3b2f1c"/>
+      </svg>
+      <p class="surtitre">Ultima · Quadrant Nicol Bolas</p>
+      <h1>Abaque</h1>
+      <p class="devise">Simulateur de lancement d'entreprise — chiffrer avant de décider.</p>
+    </header>
+
+    <!-- Avertissement permanent (nature de l'outil), horodaté par le module. -->
+    <p id="avertissement" class="avertissement" role="note">Aide à la décision non contractuelle.</p>
+
+    <div class="atelier">
+
+      <!-- ===== (A) Les hypothèses ===== -->
+      <section aria-labelledby="titre-hypotheses">
+        <h2 id="titre-hypotheses" class="colonne-titre">Les hypothèses</h2>
+
+        <form class="hypotheses" id="form-abaque" novalidate>
+
+          <fieldset>
+            <legend>Cadre du projet</legend>
+            <div class="grille-champs">
+              <div class="champ large">
+                <label for="statutJuridique">Statut juridique</label>
+                <select id="statutJuridique" name="statutJuridique">
+                  <option value="sasu">SASU</option>
+                  <option value="sas">SAS</option>
+                  <option value="eurl_ir">EURL (IR)</option>
+                  <option value="eurl_is">EURL (IS)</option>
+                  <option value="ei">EI — entreprise individuelle</option>
+                </select>
+                <p id="regime-note" class="regime-note">Régime du dirigeant : <strong id="regime-libelle">—</strong></p>
+              </div>
+              <div class="champ">
+                <label for="tresorerieInitiale">Trésorerie initiale</label>
+                <input type="number" id="tresorerieInitiale" inputmode="decimal" step="100" value="20000">
+                <span class="unite">euros</span>
+              </div>
+              <div class="champ">
+                <label for="horizonMois">Horizon</label>
+                <input type="number" id="horizonMois" inputmode="numeric" min="12" max="24" step="1" value="18">
+                <span class="unite">mois (12 à 24)</span>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Activité</legend>
+            <div class="grille-champs">
+              <div class="champ">
+                <label for="caMensuel">CA mensuel prévisionnel</label>
+                <input type="number" id="caMensuel" inputmode="decimal" step="100" value="25000">
+                <span class="unite">euros HT / mois</span>
+              </div>
+              <div class="champ">
+                <label for="margeBruteCible">Marge brute cible</label>
+                <input type="number" id="margeBruteCible" inputmode="decimal" step="1" min="0" max="100" value="35">
+                <span class="unite">%</span>
+              </div>
+              <div class="champ">
+                <label for="chargesStructureMensuelles">Charges de structure</label>
+                <input type="number" id="chargesStructureMensuelles" inputmode="decimal" step="50" value="2000">
+                <span class="unite">euros / mois (assurances, compta…)</span>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Délais de règlement</legend>
+            <div class="grille-champs">
+              <div class="champ">
+                <label for="delaiEncaissementJours">Encaissement client</label>
+                <input type="number" id="delaiEncaissementJours" inputmode="numeric" step="1" min="0" value="45">
+                <span class="unite">jours</span>
+              </div>
+              <div class="champ">
+                <label for="delaiFournisseurJours">Paiement fournisseur</label>
+                <input type="number" id="delaiFournisseurJours" inputmode="numeric" step="1" min="0" value="30">
+                <span class="unite">jours</span>
+              </div>
+              <div class="champ">
+                <label for="delaiChargesJours">Paiement des charges</label>
+                <input type="number" id="delaiChargesJours" inputmode="numeric" step="1" min="0" value="25">
+                <span class="unite">jours</span>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Main d'œuvre</legend>
+            <div class="liste-lignes" id="postes-liste" aria-live="off"></div>
+            <div class="actions-liste">
+              <button type="button" class="bouton discret" id="ajouter-poste">+ Ajouter un poste</button>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Investissements (achat)</legend>
+            <div class="liste-lignes" id="invest-liste" aria-live="off"></div>
+            <div class="actions-liste">
+              <button type="button" class="bouton discret" id="ajouter-invest">+ Ajouter un investissement</button>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Locations</legend>
+            <div class="liste-lignes" id="location-liste" aria-live="off"></div>
+            <div class="actions-liste">
+              <button type="button" class="bouton discret" id="ajouter-location">+ Ajouter une location</button>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Taux &amp; provisions</legend>
+            <div class="grille-champs">
+              <div class="champ">
+                <label for="tauxChargesPatronales">Charges patronales</label>
+                <input type="number" id="tauxChargesPatronales" inputmode="decimal" step="0.5" min="0" value="42">
+                <span class="unite">% du brut</span>
+              </div>
+              <div class="champ">
+                <label for="tauxChargesSalariales">Charges salariales</label>
+                <input type="number" id="tauxChargesSalariales" inputmode="decimal" step="0.5" min="0" value="22">
+                <span class="unite">% du brut</span>
+              </div>
+              <div class="champ">
+                <label for="tauxChargesDirigeantTns">Charges dirigeant TNS</label>
+                <input type="number" id="tauxChargesDirigeantTns" inputmode="decimal" step="0.5" min="0" value="45">
+                <span class="unite">% de la rémunération nette</span>
+              </div>
+              <div class="champ">
+                <label for="coefAnnualisation">Coefficient d'annualisation</label>
+                <input type="number" id="coefAnnualisation" inputmode="decimal" step="0.1" min="12" value="12.3">
+                <span class="unite">× mensuel (congés, 13ᵉ)</span>
+              </div>
+              <div class="champ">
+                <label for="margeSecurite">Marge de sécurité (coussin)</label>
+                <input type="number" id="margeSecurite" inputmode="decimal" step="1" min="0" value="20">
+                <span class="unite">% au-dessus du besoin</span>
+              </div>
+              <p id="note-hypotheses" class="note-hypotheses">Hypothèses à vérifier.</p>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Scénario</legend>
+            <div class="scenarios">
+              <button type="button" class="bouton discret" id="scenario-prudent">Prudent</button>
+              <button type="button" class="bouton discret" id="scenario-median">Médian</button>
+              <button type="button" class="bouton discret" id="scenario-volontariste">Volontariste</button>
+            </div>
+            <p class="note-hypotheses">Les scénarios ajustent la marge et le délai d'encaissement — les autres hypothèses restent les vôtres.</p>
+          </fieldset>
+
+        </form>
+      </section>
+
+      <!-- ===== (B) Les résultats ===== -->
+      <section aria-labelledby="titre-resultats">
+        <h2 id="titre-resultats" class="colonne-titre">Ce que cela donne</h2>
+
+        <div class="resultats">
+
+          <div class="bloc-res">
+            <h3>Masse salariale</h3>
+            <div class="grille-res">
+              <div class="res">
+                <span class="res-libelle">Chargée (mensuelle)</span>
+                <span class="res-valeur" id="res-ms-chargee-mensuelle">—</span>
+              </div>
+              <div class="res">
+                <span class="res-libelle">Chargée (annuelle)</span>
+                <span class="res-valeur" id="res-ms-chargee-annuelle">—</span>
+              </div>
+              <div class="res">
+                <span class="res-libelle">Net décaissé (mensuel)</span>
+                <span class="res-valeur" id="res-ms-nette">—</span>
+              </div>
+              <div class="res">
+                <span class="res-libelle">URSSAF / cotisations (mensuel)</span>
+                <span class="res-valeur" id="res-cotisations">—</span>
+                <span class="res-note">patronales + salariales, ou forfait TNS</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bloc-res">
+            <h3>Équilibre</h3>
+            <div class="grille-res">
+              <div class="res">
+                <span class="res-libelle">BFR de régime</span>
+                <span class="res-valeur" id="res-bfr">—</span>
+              </div>
+              <div class="res">
+                <span class="res-libelle">Seuil de rentabilité (CA)</span>
+                <span class="res-valeur" id="res-seuil">—</span>
+                <span class="res-note">CA mensuel du point mort</span>
+              </div>
+              <div class="res">
+                <span class="res-libelle">Point mort atteint</span>
+                <span class="res-valeur" id="res-point-mort">—</span>
+              </div>
+              <div class="res">
+                <span class="res-libelle">Trésorerie plancher</span>
+                <span class="res-valeur" id="res-plancher">—</span>
+                <span class="res-note" id="res-point-bas">—</span>
+              </div>
+            </div>
+            <p class="alerte-marge" id="alerte-marge" hidden>Marge brute ≤ 0 : le seuil de rentabilité n'est pas calculable. Corrigez la marge cible.</p>
+          </div>
+
+          <div class="bloc-res maitre">
+            <h3>Le besoin de financement</h3>
+            <div class="grille-res">
+              <div class="res">
+                <span class="res-libelle">Besoin de financement minimal</span>
+                <span class="res-valeur" id="res-besoin">—</span>
+              </div>
+              <div class="res phare">
+                <span class="res-libelle">Coussin recommandé</span>
+                <span class="res-valeur" id="res-coussin">—</span>
+              </div>
+            </div>
+          </div>
+
+          <figure class="bloc-res" aria-labelledby="titre-courbe">
+            <h3 id="titre-courbe">Courbe de trésorerie</h3>
+            <div class="courbe-cadre" id="courbe"></div>
+            <figcaption class="courbe-legende">Solde de trésorerie mois par mois. Le point le plus bas (en rouge) fixe le besoin de financement.</figcaption>
+          </figure>
+
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script type="module" src="js/abaque-ui.js"></script>
+</body>
+</html>

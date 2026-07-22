@@ -564,3 +564,17 @@
   trésorerie plancher/besoin de financement, déterminisme, garde-fou marge ≤ 0,
   arbitrage cash + coût actualisé), ajouté à `lancer.sh`. Non gaté. Cadrage MAJ
   (NB-1 ✅, décisions ✅). Prochaine boucle proposée : NB-2 (front). PR #75.
+- **2026-07-22 (ABAQUE NB-2 livré — le front, « go suite logique »)** — Paul :
+  « oui go suite logique » → front du simulateur. Dispatch `front-carto` (spec Léo,
+  moteur `abaque.mjs` = seule source de calcul), contre-passe Léo (smoke rejoué au
+  navigateur = vert). Livré : `abaque.html` + `js/abaque-ui.js` + `css/abaque.css`
+  (registre antique, CSP stricte, zéro inline/CDN/réseau, DOM createElement/
+  textContent, finance jamais en logs) ; **statut juridique vivant** (SASU↔EI
+  recalcule les charges à l'écran — exigence Paul prouvée au smoke) ; **courbe de
+  trésorerie SVG déterministe** (point bas + besoin de financement + coussin en
+  évidence) ; presets prudent/médian/volontariste ; garde-fou marge ≤ 0.
+  Accès depuis `bcp.html` (antichambre → « premier outil : ABAQUE »). Harnais
+  `tests/smoke-abaque.mjs` (~40 verdicts, contrastes AA clair+sombre) ajouté à
+  `lancer.sh`. Non gaté. Reports non bloquants consignés (NB-2b) : export JSON,
+  UI arbitrage achat/location, saisonnalité/TVA. Le simulateur MARCHE à l'écran.
+  PR #75.

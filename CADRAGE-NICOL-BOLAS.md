@@ -145,11 +145,21 @@ l'optimisme de trésorerie initialement signalé. Prouvé au harnais (net + coti
   financement, déterminisme, garde-fou marge ≤ 0, arbitrage cash + coût
   actualisé), ajouté à `tests/lancer.sh`. **Non gaté.** Brique-outil n°1 (ADR-007
   bloc G).
-- **NB-2 — front NICOL BOLAS** : `data-ingenieur` cadre le modèle, `interface-ux`
-  conçoit, `front-carto`/`graphisme` implémentent au registre antique. Curseurs
-  d'hypothèses → sorties lisibles, scénarios prudent/volontariste, **courbe de
-  trésorerie**, bandeau « hypothèses à vérifier » horodaté, export/import JSON.
-  **Non gaté** (pas de persistance).
+- **NB-2 — front NICOL BOLAS** ✅ **LIVRÉ (2026-07-22)** : `abaque.html` +
+  `js/abaque-ui.js` (import `abaque.mjs`, zéro formule dupliquée) + `css/abaque.css`,
+  registre antique, CSP stricte (zéro inline/CDN/réseau, DOM createElement/
+  textContent, finance jamais en logs). Formulaire d'hypothèses (dont **statut
+  juridique vivant** SASU↔EI qui recalcule les charges), sorties lisibles (masse
+  chargée + URSSAF à part, BFR, seuil + point mort), **courbe de trésorerie SVG
+  déterministe** avec point bas + besoin de financement + coussin en évidence,
+  presets prudent/médian/volontariste, bandeau « non contractuel » + hypothèses
+  horodatées. Accès depuis `bcp.html`. Harnais `tests/smoke-abaque.mjs`
+  (Playwright, ~40 verdicts : rendu, statut vivant prouvé, courbe déterministe,
+  contrastes AA clair+sombre, zéro erreur/requête externe, responsive 390 px),
+  ajouté à `lancer.sh`. Contre-passe Léo (smoke rejoué) = vert. **Non gaté.**
+  *Reports non bloquants (NB-2b si Paul veut)* : export/import JSON des scénarios ;
+  UI de l'arbitrage achat/location (`arbitrageAchatLocation` déjà dans le moteur —
+  cas « louer le parc » de VERTUMNE) ; saisonnalité + module TVA au formulaire.
 - **NB-3 — persistance (optionnelle, seulement si Paul la demande)** : application
   du draft `0009`. **Gate Paul + escalade Opus + contre-passe sécu + advisors.**
   Ne pas ouvrir tant que NB-1 n'est pas bouclée (EB : une boucle à la fois).
@@ -193,6 +203,8 @@ Chacun **affiché et modifiable** dans l'UI, jamais un chiffre en dur :
 4. **Persistance** : v1 **sans base** (recommandation retenue) — NB-3 (table
    `0009`, gate) seulement si Paul veut sauvegarder des scénarios. ⏳ ouvert.
 
-**Prochaine boucle** : NB-2 — le front NICOL BOLAS (curseurs d'hypothèses,
-scénarios prudent/volontariste, courbe de trésorerie) qui branche `abaque.mjs` sur
-l'écran et chiffre VERTUMNE pour de vrai.
+**État** : NB-1 (moteur) ✅ et NB-2 (front) ✅ livrés — le simulateur marche à
+l'écran et chiffre un lancement (seed type VERTUMNE au démarrage). **Prochaines
+options** (au choix de Paul) : NB-2b (export JSON + UI arbitrage achat/location +
+saisonnalité/TVA) ; ou NB-3 (persistance des scénarios en base, **gate**) ; ou
+brancher ABAQUE sur un chiffrage VERTUMNE réel instruit avec Paul.
