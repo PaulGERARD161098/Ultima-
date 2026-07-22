@@ -40,6 +40,12 @@
 | capteur (contexte curseur) | curseur (souris) qu'on glisse sur un cap de la boussole |
 | projets vidéo (contexte réel/idéal) | projets idéaux / idéalistes (confirmé Paul 2026-07-21) |
 | mon Starlog / Claude Normal | son journal de dév. perso dans l'app Claude standard (modèle d'IMLADRIK) |
+| Musélium, Muselium | MYCÉLIUM (ADR-004 — confirmé par le sens 2026-07-22 : « chaque client en génère un autre ») |
+| Souqt (contexte entreprise souple) | nom de marque entendu pour l'entreprise souple — **abandonné** ; nom retenu = VERTUMNE (ADR-007) |
+| Vertumne | VERTUMNE (ADR-007 — l'entreprise souple ; dieu romain des saisons + métamorphose) |
+| Janus | JANUS (ADR-008 — le pont générationnel ; dieu aux deux visages) |
+| Anselme | partenaire confirmé du pont générationnel JANUS (2026-07-22) |
+| Abaque | ABAQUE (simulateur de lancement d'entreprise, quadrant NICOL BOLAS ; confirmé Paul 2026-07-22) |
 
 Règle : en cas de doute sur un mot qui change le sens d'une instruction,
 reformuler et demander — jamais deviner avant une action irréversible.
