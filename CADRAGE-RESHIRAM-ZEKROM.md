@@ -216,3 +216,64 @@ séparé :
   pas de domaine. (Cohérent avec la gate « toute création de ressource facturée
   = validation Paul ».)
 - ZEKROM suivra le même hébergement interne.
+
+## 8. Mini-cadrage ZEKROM (validé Paul 2026-07-23 — dictée « implante mes 3 rêves »)
+
+### v1 — la carte des idéaux, tournée vers le cap
+
+Miroir EXACT de RESHIRAM (§7), règle cardinale **inversée** : le réel ne bride
+pas l'idéal. Là où RESHIRAM ancre un talent sur une **preuve**, ZEKROM capte un
+**idéal** et le formule en **direction** (le « cap »).
+
+- **Objet central : l'idéal** (le rêve / la vision / le projet idéal). Champs :
+  `intitule`, `registre` ∈ (`vision`, `volonte`, `projet`), `horizon` (le sens,
+  optionnel). Défaut `vision` (le cran le plus libre — symétrie inverse du
+  `notion` humble de RESHIRAM : ici on part du rêve).
+- **Objet d'appui : la direction** — « un idéal → une direction ». 0..n par idéal.
+  Un idéal **sans** direction = **« à orienter »** : une **INVITATION** à formuler
+  le cap, **jamais** une dévaluation (contrairement à « à étayer » côté RESHIRAM
+  qui, lui, retire un talent de l'offre). Léo **inspire** (« vers quoi ce rêve
+  t'emmène ? »), il ne challenge pas.
+- **Un écran** : la carte/liste des idéaux + saisie **libre** (aucune censure
+  par le réel).
+- **Une vue dérivée** : « **mon cap directionnel** » = les idéaux **déjà orientés**
+  (au moins une direction). Vue d'**enrichissement**, PAS un filtre de validité
+  comme « mon offre réelle » (un idéal « à orienter » reste un idéal plein).
+
+**Les 3 idéaux réels seed (Paul, dictée 2026-07-23) — valident le modèle :**
+1. **Prendre soin du domaine et des terres autour du moulin** — `registre='projet'`,
+   horizon « enraciner, transmettre, faire vivre le lieu » ; directions :
+   restaurer/entretenir le domaine, cultiver les terres.
+2. **Partir avec une femme aimée — un moment dans un village de pêcheurs** —
+   `registre='vision'`, horizon « partager une vie et un ailleurs à deux » ;
+   direction : rencontrer, bâtir une vie mobile à deux.
+3. **Travailler d'où je veux, libre de voyager et d'ouvrir des business partout** —
+   `registre='projet'`, horizon « liberté, mobilité, sans contrainte de lieu » ;
+   directions : revenus délocalisables, ouvrir des business en plusieurs lieux.
+
+Ces 3 idéaux couvrent les registres `projet` (n°1, n°3) et `vision` (n°2), avec
+et sans horizon, avec 1 ou 2 directions — le modèle les accueille sans champ
+manquant. ✅
+
+### Modèle de données (gate migration)
+
+- **v1** : table `ideaux` (`intitule, registre, horizon`) + table `directions`
+  (rattachées à l'idéal). Vues dérivées `ideaux_etat` (badge « à orienter ») et
+  `ideaux_cap` (« mon cap directionnel »). Migration **`0010_zekrom_ideaux.sql`
+  écrite — GATE : non appliquée sans go Paul**. Sécurité : données
+  introspectives → **auth + RLS**, §5 s'applique (miroir strict de 0009).
+- **Seed** : `supabase/seed-zekrom-paul.sql` (les 3 rêves ci-dessus), paramétré
+  par `owner_id`, **idempotent**, à exécuter APRÈS 0010 et sur go Paul.
+- **v2 passerelle** (LV2-③) : table de liaison `idéal ↔ talent` (rétroplanning
+  idéal → réel), à la boucle passerelle — le scellement (owner_id, id) de
+  `ideaux` en est déjà la cible.
+
+### Hébergement — identique à RESHIRAM
+
+Même repo `Ultima-`, même déploiement Vercel `ultima` (`zekrom.html` → `/zekrom`,
+`externe: false`, ouvert dans le même onglet depuis la boussole), même projet
+Supabase `leosfqyidgsaescjbfom`, aucune ressource facturée en plus.
+
+> **Boucle ZEKROM v1 close (code + tests verts + contre-passe sécu).** Le doublet
+> réel ↔ idéal est complet côté consoles. Suite : LV2-③ **passerelle de données
+> R↔Z** (rétroplanning). ⏳ Actions Paul : appliquer 0010, exécuter le seed.
