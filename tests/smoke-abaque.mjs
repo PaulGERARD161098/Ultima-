@@ -181,6 +181,49 @@ console.log('— 3. Scénarios et garde-fou marge ≤ 0 —');
   await page.close();
 }
 
+// ============ 4. Arbitrage acheter/louer (NB-2b) ============
+console.log('— 4. Arbitrage acheter / louer (règle de cash prioritaire) —');
+{
+  const { page, journal } = await ouvrir({ width: 1200, height: 900 });
+
+  // Rendu de base : une recommandation + VAN + planchers + bascule chiffrés.
+  const reco0 = (await page.locator('#arb-reco').textContent()) || '';
+  verifier('Recommandation affichée (Louer/Acheter)', /Louer|Acheter/.test(reco0), reco0);
+  for (const id of ['arb-van-achat', 'arb-van-location', 'arb-plancher-achat', 'arb-plancher-location']) {
+    const t = (await page.locator('#' + id).textContent()) || '';
+    verifier(`Arbitrage #${id} chiffré (€)`, /\d/.test(t) && /€/.test(t), t);
+  }
+  const motif0 = (await page.locator('#arb-motif').textContent()) || '';
+  verifier('Motif de la recommandation affiché', motif0.length > 10, motif0.slice(0, 40));
+  const bascule0 = (await page.locator('#arb-bascule').textContent()) || '';
+  verifier('Durée de bascule renseignée', /mois|sans objet/.test(bascule0), bascule0);
+
+  // Règle de cash prioritaire (le cœur VERTUMNE « louer le parc ») : trésorerie
+  // confortable + achat massif → l'achat casse le plancher, la location le
+  // préserve → reco « Louer » motivée par le cash, quel que soit le coût.
+  await page.fill('#tresorerieInitiale', '1000000');
+  await page.fill('#arb-montant', '2000000');
+  await page.fill('#arb-loyer', '100');
+  await page.waitForFunction(() =>
+    /Louer/.test(document.getElementById('arb-reco').textContent || ''), { timeout: 5000 }).catch(() => {});
+  const recoCash = (await page.locator('#arb-reco').textContent()) || '';
+  const motifCash = (await page.locator('#arb-motif').textContent()) || '';
+  const badgeReco = await page.locator('#arb-reco').getAttribute('data-reco');
+  verifier('Achat massif + tréso confortable → « Louer »', /Louer/.test(recoCash), recoCash);
+  verifier('Motif = contrainte de trésorerie', /trésorerie|plancher/i.test(motifCash), motifCash.slice(0, 60));
+  verifier('Badge data-reco = louer', badgeReco === 'louer', String(badgeReco));
+  const plancherAchatCash = (await page.locator('#arb-plancher-achat').textContent()) || '';
+  verifier('Plancher si achat négatif (achat casse le cash)', /-/.test(plancherAchatCash), plancherAchatCash);
+
+  // Contraste AA du badge de reco sur son fond (--ile).
+  const cBadge = await contraste(page, '.arb-reco-badge', 'color', '--ile');
+  verifier('Contraste badge de reco ≥ 4,5:1', cBadge >= 4.5, `${cBadge}:1`);
+
+  verifier('Zéro erreur console (arbitrage)', journal.erreurs.length === 0, journal.erreurs.slice(0, 3).join(' | '));
+  await page.screenshot({ path: `${SCRATCH}/abaque-arbitrage.png`, fullPage: true });
+  await page.close();
+}
+
 await navigateur.close();
 console.log(echecs === 0 ? '\n=== SMOKE ABAQUE VERT ===' : `\n=== ${echecs} VERDICT(S) EN ÉCHEC ===`);
 process.exit(echecs === 0 ? 0 : 1);

@@ -265,6 +265,80 @@
         </div>
       </section>
 
+      <!-- ===== (C) Acheter ou louer un actif ? (branché sur arbitrageAchatLocation) ===== -->
+      <section class="arbitrage" aria-labelledby="titre-arbitrage">
+        <h2 id="titre-arbitrage" class="colonne-titre">Acheter ou louer&nbsp;?</h2>
+        <p class="arbitrage-intro">Compare l'achat et la location d'un actif sur sa durée d'usage réelle.
+          <strong>La règle de trésorerie prime</strong>&nbsp;: si l'achat fait plonger la trésorerie plancher
+          du scénario ci-dessus alors que la location la préserve, on loue — quel que soit le coût actualisé.</p>
+        <div class="arbitrage-grille">
+          <div class="champ">
+            <label for="arb-montant">Prix d'achat TTC</label>
+            <input type="number" id="arb-montant" inputmode="decimal" step="500" min="0" value="30000">
+            <span class="unite">€</span>
+          </div>
+          <div class="champ">
+            <label for="arb-revente">Valeur de revente TTC</label>
+            <input type="number" id="arb-revente" inputmode="decimal" step="500" min="0" value="6000">
+            <span class="unite">€ en fin d'usage</span>
+          </div>
+          <div class="champ">
+            <label for="arb-maintenance">Maintenance (mensuelle)</label>
+            <input type="number" id="arb-maintenance" inputmode="decimal" step="10" min="0" value="120">
+            <span class="unite">€ · si achat</span>
+          </div>
+          <div class="champ">
+            <label for="arb-loyer">Loyer TTC (mensuel)</label>
+            <input type="number" id="arb-loyer" inputmode="decimal" step="50" min="0" value="950">
+            <span class="unite">€ · si location</span>
+          </div>
+          <div class="champ">
+            <label for="arb-depot">Dépôt de garantie TTC</label>
+            <input type="number" id="arb-depot" inputmode="decimal" step="100" min="0" value="1900">
+            <span class="unite">€ · si location</span>
+          </div>
+          <div class="champ">
+            <label for="arb-duree">Durée d'usage</label>
+            <input type="number" id="arb-duree" inputmode="decimal" step="1" min="1" value="48">
+            <span class="unite">mois</span>
+          </div>
+          <div class="champ">
+            <label for="arb-taux">Taux d'actualisation</label>
+            <input type="number" id="arb-taux" inputmode="decimal" step="0.5" min="0" value="8">
+            <span class="unite">% / an</span>
+          </div>
+        </div>
+        <div class="arbitrage-verdict" id="arb-verdict" role="status" aria-live="polite">
+          <p class="arb-reco">
+            <span class="arb-reco-badge" id="arb-reco">—</span>
+            <span class="arb-motif" id="arb-motif"></span>
+          </p>
+          <div class="grille-res">
+            <div class="res">
+              <span class="res-libelle">Coût actualisé — achat</span>
+              <span class="res-valeur" id="arb-van-achat">—</span>
+            </div>
+            <div class="res">
+              <span class="res-libelle">Coût actualisé — location</span>
+              <span class="res-valeur" id="arb-van-location">—</span>
+            </div>
+            <div class="res">
+              <span class="res-libelle">Trésorerie plancher si achat</span>
+              <span class="res-valeur" id="arb-plancher-achat">—</span>
+            </div>
+            <div class="res">
+              <span class="res-libelle">Trésorerie plancher si location</span>
+              <span class="res-valeur" id="arb-plancher-location">—</span>
+            </div>
+            <div class="res">
+              <span class="res-libelle">Durée de bascule</span>
+              <span class="res-valeur" id="arb-bascule">—</span>
+              <span class="res-note">au-delà, l'achat devient le moins cher</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
   </div>
 

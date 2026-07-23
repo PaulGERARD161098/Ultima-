@@ -11,7 +11,7 @@
 //     l'heure ni de l'aléa) ;
 //   - v1 sans base, sans réseau : tout est local dans la page.
 
-import { simuler, regimeDirigeant, DEFAUTS } from './abaque.mjs';
+import { simuler, arbitrageAchatLocation, regimeDirigeant, DEFAUTS } from './abaque.mjs';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -317,10 +317,66 @@ function rendre(sortie) {
   poser('regime-libelle', LIBELLE_REGIME[regimeDirigeant(document.getElementById('statutJuridique').value)] || '—');
 }
 
+// ---------- Arbitrage acheter / louer (branché sur le moteur) ----------
+// Lit l'actif du panneau, puis calcule l'IMPACT CASH réel en RE-SIMULANT le
+// scénario courant avec l'actif ajouté en achat (décaissement au mois 1) PUIS en
+// location (loyer mensuel). Les deux trésoreries plancher alimentent la règle de
+// cash prioritaire d'arbitrageAchatLocation. Aucune formule ici : on compose le
+// moteur figé. Montants saisis TTC → passés en Ht avec TVA 0 (le décaissement =
+// le TTC, cohérent avec le module TVA off par défaut).
+function lireActif() {
+  return {
+    montantTtc: lireNombre('arb-montant', 0),
+    valeurReventeTtc: lireNombre('arb-revente', 0),
+    maintenanceMensuelle: lireNombre('arb-maintenance', 0),
+    mensualiteLoyerTtc: lireNombre('arb-loyer', 0),
+    depotGarantieTtc: lireNombre('arb-depot', 0),
+    dureeUsageMois: lireNombre('arb-duree', 12),
+    tauxActualisationAnnuel: lireNombre('arb-taux', 8) / 100,
+  };
+}
+
+const MOTIF_ARBITRAGE = {
+  contrainte_cash: 'La règle de trésorerie tranche : l’achat ferait plonger la trésorerie plancher, la location la préserve.',
+  cout_actualise: 'Décision au moindre coût actualisé sur la durée d’usage réelle.',
+};
+
+function rendreArbitrage(entrees) {
+  const actif = lireActif();
+  // Impact cash : trésorerie plancher du scénario avec l'actif en achat vs en location.
+  const invests = (entrees.investissements || []).slice();
+  invests.push({ montantHt: actif.montantTtc, tauxTva: 0, moisEngagement: 1, dureeAmortMois: actif.dureeUsageMois });
+  const locs = (entrees.locations || []).slice();
+  locs.push({ mensualiteHt: actif.mensualiteLoyerTtc, tauxTva: 0, moisDebut: 1 });
+
+  const plancherAchat = simuler({ ...entrees, investissements: invests }).tresoreriePlancher;
+  const plancherLocation = simuler({ ...entrees, locations: locs }).tresoreriePlancher;
+
+  const res = arbitrageAchatLocation({
+    ...actif,
+    impactPlancherAchat: plancherAchat,
+    impactPlancherLocation: plancherLocation,
+  });
+
+  const badge = document.getElementById('arb-reco');
+  badge.textContent = res.recommandation === 'louer' ? 'Louer' : 'Acheter';
+  badge.dataset.reco = res.recommandation;
+  poser('arb-motif', MOTIF_ARBITRAGE[res.motif] || '');
+  poser('arb-van-achat', euro(res.vanAchat));
+  poser('arb-van-location', euro(res.vanLocation));
+  poser('arb-plancher-achat', euro(plancherAchat));
+  poser('arb-plancher-location', euro(plancherLocation));
+  poser('arb-bascule', res.uBascule === null
+    ? 'sans objet (le loyer ne dépasse pas la maintenance)'
+    : 'au-delà de ' + Math.max(1, Math.round(res.uBascule)) + ' mois');
+}
+
 // ---------- Boucle de recalcul ----------
 function recalculer() {
   try {
-    rendre(simuler(lireEntrees()));
+    const entrees = lireEntrees();
+    rendre(simuler(entrees));
+    rendreArbitrage(entrees);
   } catch (e) {
     // Erreur générique : jamais de détail (ni de donnée) en console.
     const courbe = document.getElementById('courbe');
@@ -353,6 +409,12 @@ function amorcer() {
   const form = document.getElementById('form-abaque');
   form.addEventListener('input', recalculer);
   form.addEventListener('change', recalculer);
+
+  // Le panneau d'arbitrage vit HORS du formulaire : ses champs relancent aussi le
+  // calcul (l'impact cash dépend du scénario ET de l'actif saisi).
+  const arb = document.getElementById('arb-verdict').parentElement;
+  arb.addEventListener('input', recalculer);
+  arb.addEventListener('change', recalculer);
 
   document.getElementById('ajouter-poste').addEventListener('click', () => {
     postes.appendChild(lignePoste({ libelle: 'Nouveau poste', nbEtp: 1, brutMensuel: 2000, estDirigeant: false }));
