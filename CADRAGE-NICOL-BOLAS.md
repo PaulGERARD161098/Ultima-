@@ -157,9 +157,20 @@ l'optimisme de trésorerie initialement signalé. Prouvé au harnais (net + coti
   (Playwright, ~40 verdicts : rendu, statut vivant prouvé, courbe déterministe,
   contrastes AA clair+sombre, zéro erreur/requête externe, responsive 390 px),
   ajouté à `lancer.sh`. Contre-passe Léo (smoke rejoué) = vert. **Non gaté.**
-  *Reports non bloquants (NB-2b si Paul veut)* : export/import JSON des scénarios ;
-  UI de l'arbitrage achat/location (`arbitrageAchatLocation` déjà dans le moteur —
-  cas « louer le parc » de VERTUMNE) ; saisonnalité + module TVA au formulaire.
+- **NB-2b — UI arbitrage achat/location** ✅ **LIVRÉ (2026-07-23)** : panneau
+  « Acheter ou louer ? » sur `abaque.html` branché sur `arbitrageAchatLocation`
+  (moteur figé, zéro formule dupliquée). **Impact cash calculé en RE-SIMULANT** le
+  scénario courant avec l'actif en achat (décaissement mois 1) puis en location
+  (loyer mensuel) → les deux trésoreries plancher alimentent la **règle de cash
+  prioritaire** : si l'achat casse le plancher et pas la location, on loue quel que
+  soit le coût actualisé (le cas fondateur VERTUMNE « louer le parc de clim »).
+  Sortie : reco Louer/Acheter + motif (cash vs coût), VAN achat/location, planchers,
+  durée de bascule. `abaque-ui.js` (`lireActif`/`rendreArbitrage`), `abaque.html`
+  (section C), `css/abaque.css` (badge de reco, contraste AA clair+sombre).
+  Harnais `smoke-abaque.mjs` §4 (rendu + règle de cash prouvée + AA). **Non gaté**
+  (front-only : zéro persistance, zéro réseau, finance jamais en logs, `textContent`
+  only). *Reports restants (NB-2c si Paul veut)* : export/import JSON des scénarios ;
+  saisonnalité + module TVA au formulaire.
 - **NB-3 — persistance (optionnelle, seulement si Paul la demande)** : application
   du draft `0011`. **Gate Paul + escalade Opus + contre-passe sécu + advisors.**
   Ne pas ouvrir tant que NB-1 n'est pas bouclée (EB : une boucle à la fois).
@@ -203,8 +214,10 @@ Chacun **affiché et modifiable** dans l'UI, jamais un chiffre en dur :
 4. **Persistance** : v1 **sans base** (recommandation retenue) — NB-3 (table
    `0011`, gate) seulement si Paul veut sauvegarder des scénarios. ⏳ ouvert.
 
-**État** : NB-1 (moteur) ✅ et NB-2 (front) ✅ livrés — le simulateur marche à
-l'écran et chiffre un lancement (seed type VERTUMNE au démarrage). **Prochaines
-options** (au choix de Paul) : NB-2b (export JSON + UI arbitrage achat/location +
-saisonnalité/TVA) ; ou NB-3 (persistance des scénarios en base, **gate**) ; ou
-brancher ABAQUE sur un chiffrage VERTUMNE réel instruit avec Paul.
+**État** : NB-1 (moteur) ✅, NB-2 (front) ✅ et **NB-2b (arbitrage achat/location) ✅
+livrés** — le simulateur chiffre un lancement ET tranche « acheter ou louer » avec
+la règle de trésorerie. **Prochaines options** (au choix de Paul, ordre reco Léo) :
+NB-2c (export/import JSON des scénarios) ; puis saisonnalité + module TVA au
+formulaire ; puis NB-3 (persistance en base, **gate** — migration renumérotée
+`0012`, `0011` étant désormais la passerelle R↔Z) ; ou brancher ABAQUE sur un
+chiffrage VERTUMNE réel instruit avec Paul.
