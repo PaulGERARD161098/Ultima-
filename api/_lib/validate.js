@@ -550,6 +550,57 @@ export function validateDirection(body, mode) {
   return { value: out };
 }
 
+// --- PASSERELLE R↔Z (LV2-③) : liens idéal ↔ talent. Enums/bornes en MIROIR EXACT
+// des CHECK de supabase/migrations/0011_passerelle_retroplanning.sql. Le lien porte
+// une nature (acquis = talent qui rend l'idéal possible ; a_construire = talent que
+// l'idéal appelle et qui manque). owner_id jamais accepté ; le double scellement
+// (owner_id, ideal_id)/(owner_id, talent_id) est garanti en base.
+export const PASSERELLE_NATURES = ['acquis', 'a_construire'];
+
+// Champs autorisés en écriture. ideal_id/talent_id figés après création (comme
+// source/cible d'un edge RIVEN) : seuls nature/note évoluent en update.
+const PASSERELLE_FIELDS = ['ideal_id', 'talent_id', 'nature', 'note'];
+const PASSERELLE_UPDATE_FIELDS = ['nature', 'note'];
+
+// Valide une passerelle. create : ideal_id + talent_id (UUID) + nature imposés,
+// note optionnelle bornée. update : nature/note seulement (les FK sont figées).
+export function validatePasserelle(body, mode) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const allowed = mode === 'update' ? PASSERELLE_UPDATE_FIELDS : PASSERELLE_FIELDS;
+  const unknown = rejectUnknown(body, allowed);
+  if (unknown) return { error: unknown };
+
+  const out = {};
+
+  if (mode === 'create') {
+    if (!isUuid(body.ideal_id)) return { error: 'Identifiant d’idéal invalide' };
+    if (!isUuid(body.talent_id)) return { error: 'Identifiant de talent invalide' };
+    out.ideal_id = body.ideal_id;
+    out.talent_id = body.talent_id;
+  }
+
+  if (mode === 'create' || body.nature !== undefined) {
+    if (!PASSERELLE_NATURES.includes(body.nature)) return { error: 'Nature invalide' };
+    out.nature = body.nature;
+  }
+
+  // note : null efface, chaîne bornée sinon.
+  if (body.note === null) {
+    out.note = null;
+  } else {
+    const msg = checkOptionalText(body.note, 'Note', 2000);
+    if (msg) return { error: msg };
+    if (body.note !== undefined) out.note = body.note;
+  }
+
+  if (mode === 'update' && Object.keys(out).length === 0) {
+    return { error: 'Aucun champ à mettre à jour' };
+  }
+  return { value: out };
+}
+
 // --- INTENDANT (AD-5c) : chantiers pilotés + besoins. Enums/bornes en MIROIR
 // EXACT des CHECK de supabase/migrations/0008_intendant.sql. Ce que l'API refuse,
 // la base le refuse aussi (et vice versa) ; la base reste le backstop ultime pour

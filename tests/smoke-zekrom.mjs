@@ -154,6 +154,21 @@ console.log('— B. zekrom.html fixture 200 → registre, à orienter, cap direc
       body: JSON.stringify(FIXTURE),
     });
   });
+  // Passerelle R↔Z (LV2-③) : talents à relier + liens existants. Fixtures NEUTRES.
+  const TALENTS_FIXTURE = { ok: true, data: { talents: [
+    { id: 'ta', nom: 'CARTOGRAPHE', secteurs: [], niveau: 'maitrise', nb_preuves: 1, a_etayer: false },
+    { id: 'tb', nom: 'ARBITRE', secteurs: [], niveau: 'pratique', nb_preuves: 1, a_etayer: false },
+  ], preuves: [] } };
+  const PASSERELLES_FIXTURE = { ok: true, data: {
+    passerelles: [{ id: 'pa', ideal_id: 'i1', talent_id: 'ta', nature: 'acquis', note: 'précis' }],
+    retroplanning: [{ id: 'i1', intitule: 'PHARE', registre: 'projet', nb_acquis: 1, nb_a_construire: 0, nb_liens: 1 }],
+  } };
+  await page.route('**/api/talents', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(TALENTS_FIXTURE),
+  }));
+  await page.route('**/api/passerelles', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(PASSERELLES_FIXTURE),
+  }));
   await page.goto(`${BASE}/zekrom.html`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForSelector('#zekrom-registre:not([hidden])', { timeout: 20000 });
 
@@ -188,6 +203,22 @@ console.log('— B. zekrom.html fixture 200 → registre, à orienter, cap direc
   verifier('COMÈTE : aucune direction listée', (await i3.locator('.zekrom-direction').count()) === 0);
   verifier('Formulaire d’ajout de direction sur chaque idéal',
     (await page.locator('.zekrom-direction-form').count()) === 4);
+
+  // 4bis. Rétroplanning (passerelle R↔Z, LV2-③) : bilan + lien existant + formulaire.
+  verifier('Panneau rétroplanning sur chaque idéal', (await page.locator('.zekrom-retro').count()) === 4);
+  const retro1 = i1.locator('.zekrom-retro');
+  verifier('Rétroplanning : entête « ce que j’ai, ce qui me manque »',
+    /ce que j’ai/i.test((await retro1.locator('.zekrom-retro-entete').textContent()) || ''));
+  verifier('Lien acquis rendu (PHARE ← CARTOGRAPHE)',
+    /CARTOGRAPHE/.test((await retro1.locator('.zekrom-retro-talent').first().textContent()) || ''));
+  verifier('Note du lien rendue', /précis/.test((await retro1.textContent()) || ''));
+  verifier('Bouton « détacher » sur le lien', (await retro1.locator('.zekrom-retro-detacher').count()) === 1);
+  verifier('Formulaire de lien : sélecteurs talent + nature',
+    (await retro1.locator('.zekrom-retro-form .zekrom-retro-select').count()) === 2);
+  // Le talent déjà relié (CARTOGRAPHE=ta) est exclu du sélecteur → seul ARBITRE reste.
+  const optionsTalent = await retro1.locator('.zekrom-retro-form select[name="talent_id"] option').allTextContents();
+  verifier('Talent déjà relié exclu du sélecteur (reste ARBITRE)',
+    optionsTalent.length === 1 && /ARBITRE/.test(optionsTalent[0]), JSON.stringify(optionsTalent));
 
   await page.screenshot({ path: `${CAPTURES}/zekrom-carte.png`, fullPage: true });
 
@@ -250,14 +281,15 @@ console.log('— C. zekrom.html fausse session → 401 fail-closed —');
   await page.route(`**://${REF_SUPABASE}.supabase.co/**`, (route) =>
     route.fulfill({ status: 503, contentType: 'application/json', body: '{}' }));
   const appelsApi = [];
-  await page.route('**/api/ideaux', (route) => {
-    appelsApi.push(route.request().headers());
-    return route.fulfill({
-      status: 401,
-      contentType: 'application/json; charset=utf-8',
-      body: JSON.stringify({ ok: false, error: 'Authentification requise' }),
-    });
+  const un401 = (route) => route.fulfill({
+    status: 401,
+    contentType: 'application/json; charset=utf-8',
+    body: JSON.stringify({ ok: false, error: 'Authentification requise' }),
   });
+  await page.route('**/api/ideaux', (route) => { appelsApi.push(route.request().headers()); return un401(route); });
+  // Les 3 lectures authentifiées tombent en 401 (fail-closed fidèle, pas de 404 parasite).
+  await page.route('**/api/talents', un401);
+  await page.route('**/api/passerelles', un401);
   await page.goto(`${BASE}/zekrom.html`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForSelector('#zekrom-auth:not([hidden])', { timeout: 20000 });
 
