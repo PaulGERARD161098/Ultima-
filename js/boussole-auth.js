@@ -45,6 +45,15 @@
     else { scene.removeAttribute('inert'); }
   }
 
+  // Livre la session (ou son absence) au cockpit de la boussole (LV2-⑤) : il en
+  // tire les résumés vivants. Fail-closed : token null → la boussole garde le
+  // texte figé. Le hook peut ne pas être encore prêt (ordre de scripts) → garde.
+  function livrerCockpit() {
+    if (!window.UltimaBoussole || typeof window.UltimaBoussole.poserSession !== 'function') { return; }
+    var token = (etat.session && etat.session.access_token) || null;
+    window.UltimaBoussole.poserSession(token);
+  }
+
   function majAuthUi() {
     if (etat.modeDemo) { return; }
     var connecte = Boolean(etat.session);
@@ -54,6 +63,7 @@
     var ecran = $('#ecran-connexion');
     if (ecran) { ecran.hidden = !overlayVisible; }
     majInert(overlayVisible);
+    livrerCockpit();
   }
 
   async function envoyerLienMagique(evenement) {

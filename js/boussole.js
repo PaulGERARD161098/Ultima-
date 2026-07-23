@@ -15,6 +15,67 @@
 (function () {
   'use strict';
 
+  // ======================= COCKPIT (LV2-⑤) =========================
+  // Résumés vivants : une fois connecté, le survol d'un cap DATA montre le vrai
+  // « en cours » (agrégats de /api/cockpit) au lieu du texte figé. Sécurité :
+  // que des COMPTES, derrière auth, jamais de contenu/PII. La boussole HTML ne
+  // contient aucune donnée : elle est récupérée côté client avec le Bearer.
+  // Fail-closed : sans session ou sur échec, on retombe sur le texte figé.
+  var cockpit = { data: null, actif: null, rafraichir: null };
+
+  // Ligne « vrai en cours » d'un cap (PUR, testable). null si pas d'agrégat pour
+  // ce cap. N'accueille que des entiers + du texte statique → sûr en innerHTML.
+  function ligneVivante(id, data) {
+    if (!data) { return null; }
+    function n(v) { return Math.max(0, parseInt(v, 10) || 0); }
+    function s(compte) { return compte > 1 ? 's' : ''; }
+    if (id === 'reshiram' && data.reshiram) {
+      var r = data.reshiram;
+      var t = n(r.talents);
+      return t + ' talent' + s(t) + ' réel' + s(t) + ' · ' + n(r.a_etayer) + ' à étayer.';
+    }
+    if (id === 'zekrom' && data.zekrom) {
+      var z = data.zekrom;
+      var i = n(z.ideaux);
+      var a = n(z.acquis);
+      return i + ' ' + (i > 1 ? 'idéaux' : 'idéal') + ' · ' + n(z.a_orienter)
+        + ' à orienter · ' + a + ' talent' + s(a) + ' relié' + s(a)
+        + ' (acquis), ' + n(z.a_construire) + ' à construire.';
+    }
+    return null;
+  }
+
+  // Récupère les agrégats après connexion (appelé par boussole-auth via le hook
+  // window.UltimaBoussole.poserSession). token null (déconnexion) → texte figé.
+  async function chargerCockpit(token) {
+    if (!token) {
+      cockpit.data = null;
+      if (cockpit.rafraichir) { cockpit.rafraichir(); }
+      return;
+    }
+    var rep;
+    try {
+      rep = await fetch('/api/cockpit', {
+        method: 'GET',
+        headers: { Accept: 'application/json', Authorization: 'Bearer ' + token }
+      });
+    } catch (e) { return; } // silencieux : dégradation au texte figé
+    if (!rep.ok) { return; }
+    var corps = null;
+    try { corps = await rep.json(); } catch (e) { corps = null; }
+    if (corps && corps.ok === true) {
+      cockpit.data = corps.data || null;
+      if (cockpit.rafraichir) { cockpit.rafraichir(); }
+    }
+  }
+
+  // Hook exposé à boussole-auth.js (défini AVANT tout await → toujours prêt).
+  // ligneVivante exposée pour les unitaires (fonction pure, aucune donnée réelle).
+  window.UltimaBoussole = {
+    poserSession: function (token) { chargerCockpit(token); },
+    ligneVivante: ligneVivante
+  };
+
   // ============================ REGISTRE ============================
   // cible   : URL interne (même onglet) ou externe ; null = cap « à venir ».
   // externe : true → ouverture nouvel onglet (rel noopener).
@@ -157,10 +218,14 @@
 
     // 3. Parole de Léo (cartouche sous la boussole).
     function afficherResume(projet) {
+      cockpit.actif = projet;
       parole.classList.add('is-actif');
+      // Ligne vivante (agrégats réels) si dispo pour ce cap ; sinon rien (texte figé seul).
+      var vivante = ligneVivante(projet.id, cockpit.data);
       parole.innerHTML =
         '<p class="parole-nom">' + projet.nom + '</p>' +
         '<p class="parole-etat">' + projet.etat + '</p>' +
+        (vivante ? '<p class="parole-cockpit">En cours — ' + vivante + '</p>' : '') +
         '<p class="parole-texte">' + projet.resume + '</p>' +
         '<p class="parole-action">' +
           (projet.cible
@@ -169,9 +234,14 @@
         '</p>';
     }
     function reinitResume() {
+      cockpit.actif = null;
       parole.classList.remove('is-actif');
       parole.innerHTML = paroleDefaut;
     }
+    // Quand les agrégats arrivent après coup, on redessine le cap survolé courant.
+    cockpit.rafraichir = function () {
+      if (cockpit.actif) { afficherResume(cockpit.actif); }
+    };
 
     // 4. Les caps, disposés autour de la rose.
     MACRO_PROJETS.forEach(function (projet, i) {

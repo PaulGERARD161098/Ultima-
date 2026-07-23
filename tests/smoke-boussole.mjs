@@ -67,12 +67,22 @@ function stubSupabase(session) {
   });
 }
 
+// Fixture d'agrégats du cockpit (LV2-⑤) : que des COMPTES, aucun contenu/PII.
+const COCKPIT = { ok: true, data: {
+  reshiram: { talents: 3, a_etayer: 1, offre: 2 },
+  zekrom: { ideaux: 3, a_orienter: 0, acquis: 2, a_construire: 1 },
+} };
+
 // ===================== A. La boussole (index.html) =====================
 // Scénario CONNECTÉ : session présente → overlay masqué, boussole pleinement
 // interactive (non-régression de tout l'existant ci-dessous).
 console.log('— A. Boussole d\'accueil —');
 await page.route('**/js/vendor/supabase-js-2.110.0.min.js',
   stubSupabase('{ user: { id: "u-test" }, access_token: "jeton-factice" }'));
+// Connecté → la boussole interroge /api/cockpit : on le stube (sinon 404 = bruit).
+await page.route('**/api/cockpit', (route) => route.fulfill({
+  status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(COCKPIT),
+}));
 await page.goto(`${BASE}/`, { waitUntil: 'load', timeout: 20000 });
 await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
 
@@ -235,11 +245,20 @@ verifier('Clic Google → signInWithOAuth(\'google\')',
 verifier('Zéro erreur console (accueil déconnecté)', erreursDeco.length === 0, erreursDeco.slice(0, 3).join(' | '));
 
 // Scénario CONNECTÉ (2e passe isolée) : session présente → overlay masqué, la
-// boussole n'est plus inerte (le verrou se lève bien).
+// boussole n'est plus inerte (le verrou se lève bien) + COCKPIT (LV2-⑤) : les
+// résumés vivants apparaissent sur les caps data au survol.
 const ctxCo = await navigateur.newContext();
 const pageCo = await ctxCo.newPage();
+const erreursCo = [];
+pageCo.on('console', (msg) => { if (msg.type() === 'error') erreursCo.push(msg.text()); });
+pageCo.on('pageerror', (err) => erreursCo.push(String(err)));
 await pageCo.route('**/js/vendor/supabase-js-2.110.0.min.js',
   stubSupabase('{ user: { id: "u-test" }, access_token: "jeton-factice" }'));
+let bearerCockpit = '';
+await pageCo.route('**/api/cockpit', (route) => {
+  bearerCockpit = route.request().headers().authorization || '';
+  return route.fulfill({ status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(COCKPIT) });
+});
 await pageCo.goto(`${BASE}/`, { waitUntil: 'load', timeout: 20000 });
 await pageCo.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
 verifier('Connecté : écran de connexion masqué', await pageCo.locator('#ecran-connexion').isHidden());
@@ -247,6 +266,45 @@ verifier('Connecté : boussole non inerte', await pageCo.evaluate(() => {
   const scene = document.querySelector('.boussole-scene');
   return !!scene && !scene.hasAttribute('inert');
 }));
+
+// Cockpit : le Bearer de la session est transmis à /api/cockpit.
+await pageCo.waitForResponse('**/api/cockpit', { timeout: 10000 }).catch(() => {});
+verifier('Cockpit : Bearer transmis à /api/cockpit', bearerCockpit === 'Bearer jeton-factice', `lu: ${bearerCockpit}`);
+
+// Survol RESHIRAM → ligne vivante avec les agrégats réels (pas le texte figé seul).
+await pageCo.locator('.cap[data-id="reshiram"]').hover();
+await pageCo.waitForSelector('.parole-cockpit', { timeout: 5000 });
+const vivanteR = (await pageCo.locator('.parole-cockpit').textContent()) || '';
+verifier('Résumé vivant RESHIRAM (3 talents · 1 à étayer)',
+  /En cours/.test(vivanteR) && /3 talents réels/.test(vivanteR) && /1 à étayer/.test(vivanteR), `lu: ${vivanteR}`);
+
+// Survol ZEKROM → sa ligne vivante propre.
+await pageCo.locator('.cap[data-id="zekrom"]').hover();
+await pageCo.waitForFunction(
+  () => /3 idéaux/.test((document.querySelector('.parole-cockpit') || {}).textContent || ''),
+  { timeout: 5000 }).catch(() => {});
+const vivanteZ = (await pageCo.locator('.parole-cockpit').textContent()) || '';
+verifier('Résumé vivant ZEKROM (3 idéaux · 2 acquis · 1 à construire)',
+  /3 idéaux/.test(vivanteZ) && /2 talents reliés/.test(vivanteZ) && /1 à construire/.test(vivanteZ), `lu: ${vivanteZ}`);
+
+// Un cap SANS data (YCOME) n'a pas de ligne vivante (texte figé seul).
+await pageCo.locator('.cap[data-id="ycome"]').focus();
+await pageCo.waitForTimeout(150);
+verifier('Cap sans data (YCOME) : aucune ligne vivante',
+  (await pageCo.locator('.parole-cockpit').count()) === 0);
+
+// Fonction pure ligneVivante exposée (aucune donnée réelle).
+const pur = await pageCo.evaluate((d) => ({
+  r: window.UltimaBoussole.ligneVivante('reshiram', d),
+  z: window.UltimaBoussole.ligneVivante('zekrom', d),
+  vide: window.UltimaBoussole.ligneVivante('ycome', d),
+  sansData: window.UltimaBoussole.ligneVivante('reshiram', null),
+}), COCKPIT.data);
+verifier('ligneVivante pure : RESHIRAM', /3 talents réels · 1 à étayer\./.test(pur.r || ''), `lu: ${pur.r}`);
+verifier('ligneVivante pure : ZEKROM', /3 idéaux · 0 à orienter · 2 talents reliés \(acquis\), 1 à construire\./.test(pur.z || ''), `lu: ${pur.z}`);
+verifier('ligneVivante pure : cap sans data → null', pur.vide === null && pur.sansData === null);
+
+verifier('Zéro erreur console (accueil connecté + cockpit)', erreursCo.length === 0, erreursCo.slice(0, 3).join(' | '));
 
 await navigateur.close();
 

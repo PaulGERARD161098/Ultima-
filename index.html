@@ -211,7 +211,11 @@
 
   <script src="js/vendor/supabase-js-2.110.0.min.js"></script>
   <script src="js/config.js"></script>
-  <script src="js/boussole-auth.js" defer></script>
+  <!-- boussole.js AVANT boussole-auth.js : la boussole définit son hook cockpit
+       (window.UltimaBoussole) de façon synchrone, pour qu'il existe déjà quand
+       boussole-auth livre la session (le résumé vivant, LV2-⑤). Les deux en defer
+       (ordre préservé) ; aucune dépendance inverse. -->
   <script src="js/boussole.js" defer></script>
+  <script src="js/boussole-auth.js" defer></script>
 </body>
 </html>
