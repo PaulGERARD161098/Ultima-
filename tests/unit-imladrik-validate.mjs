@@ -1,6 +1,6 @@
 // Unitaires validation IMLADRIK (Node pur, zéro réseau) : v1 « pouvoir écrire ».
 // Parité API↔base : les bornes de validateEntreeImladrik reflètent les CHECK de
-// supabase/migrations/0010_imladrik_journal.sql. Cas de fermeture : champ inconnu
+// supabase/migrations/0012_imladrik_journal.sql. Cas de fermeture : champ inconnu
 // rejeté, owner_id jamais accepté, contenu obligatoire, bornes respectées.
 import { validateEntreeImladrik } from '../api/_lib/validate.js';
 

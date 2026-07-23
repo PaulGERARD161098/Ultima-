@@ -298,14 +298,15 @@ console.log('— D. adramelech.html fixture 200 → registre + cartouche Léo r�
 }
 
 // ===================== E. NICOL BOLAS : landing du premier outil (ABAQUE) =====================
-// bcp.html a évolué (commit #75, simulateur ABAQUE) : le shell affiche « Premier
-// outil ouvert » + lien vers abaque.html, mais garde encore le cartouche Léo
-// « majordome de chantier » (leo-accueil.js + antichambre.js). Cette incohérence
-// (cartouche « pas encore bâti » sur un quadrant dont le 1er outil est ouvert)
-// est PRÉ-EXISTANTE — à trancher dans la boucle NICOL BOLAS, pas ici. Le harnais
-// prouve le comportement RÉEL : cartouche Léo (§1-2) + shell « premier outil » (§3).
+// bcp.html a évolué (#75, simulateur ABAQUE) : badge « Premier outil ouvert »,
+// cartouche ABAQUE, un second lien vers abaque.html, tout en gardant encore le
+// cartouche Léo « majordome de chantier » (leo-accueil.js + antichambre.js).
+// Incohérence cartouche/shell PRÉ-EXISTANTE (#75), à trancher dans la boucle
+// NICOL BOLAS. Test paramétré par quadrant. IMLADRIK n'est plus une antichambre
+// (quadrant bâti — voir smoke-imladrik).
 for (const quadrant of [
-  { fichier: 'bcp.html', nom: 'NICOL BOLAS', cle: 'ultima-leo-accueil-vu-bcp' },
+  { fichier: 'bcp.html', nom: 'NICOL BOLAS', cle: 'ultima-leo-accueil-vu-bcp',
+    badge: 'Premier outil ouvert', cartoucheRe: /ABAQUE/, retours: 2 },
 ]) {
   console.log(`— ${quadrant.nom} : landing du premier outil (${quadrant.fichier}) —`);
   const { page, erreurs, externes } = await nouvellePage();
@@ -341,14 +342,17 @@ for (const quadrant of [
   const mission = (await page.locator('.quadrant-mission').textContent())?.trim();
   verifier('Ligne de mission présente (cadrage)', Boolean(mission) && mission.length > 20);
   const badge = (await page.locator('.quadrant-bandeau .quadrant-etat').textContent())?.trim();
-  verifier('Badge « Premier outil ouvert »', badge === 'Premier outil ouvert', `lu: ${badge}`);
-  verifier('Cartouche annonce le premier outil (ABAQUE)',
-    /ABAQUE/.test((await page.locator('.cartouche-page').textContent()) || ''));
-  verifier('Lien vers le simulateur ABAQUE',
-    (await page.locator('a.retour-console[href="abaque.html"]').count()) === 1);
-  const retour = page.locator('a.retour-console[href="ultima.html"]');
-  verifier('Retour console présent', (await retour.count()) === 1);
-  const hRetour = await retour.evaluate((el) => el.getBoundingClientRect().height);
+  verifier(`Badge « ${quadrant.badge} »`, badge === quadrant.badge, `lu: ${badge}`);
+  verifier('Cartouche honnête (état réel du quadrant)',
+    quadrant.cartoucheRe.test((await page.locator('.cartouche-page').textContent()) || ''));
+  // Retour vers la console (toujours présent) ; NICOL BOLAS porte en plus le lien
+  // vers son premier outil (ABAQUE). Le retour console est le dernier lien.
+  const retours = page.locator('a.retour-console');
+  verifier('Nombre de liens retour attendu', (await retours.count()) === quadrant.retours,
+    `${await retours.count()} vs ${quadrant.retours}`);
+  const retourConsole = page.locator('a.retour-console[href="ultima.html"]');
+  verifier('Retour console présent', (await retourConsole.count()) === 1);
+  const hRetour = await retourConsole.evaluate((el) => el.getBoundingClientRect().height);
   verifier('Tap target retour ≥ 44 px', hRetour >= 44, `${hRetour}px`);
 
   // 4. Contrastes AA (mission sur mer, texte sur parchemin).

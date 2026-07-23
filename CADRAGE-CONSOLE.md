@@ -188,8 +188,8 @@ vocale. Dashboard de suivi comme les autres.
 > bâti : `imladrik.html` refondu (antichambre → **atelier d'écriture + journal**),
 > `js/imladrik.js`, API `/api/imladrik` (GET) + `/api/imladrik/entrees`
 > (POST/PATCH/DELETE), `validateEntreeImladrik` (miroir CHECK), migration
-> `0010_imladrik_journal.sql` (table `imladrik_entrees`, RLS par owner — **GATE :
-> non appliquée**). Posture §5 : **fail-closed, aucune donnée simulée, pas de mode
+> `0012_imladrik_journal.sql` (table `imladrik_entrees`, RLS par owner —
+> **APPLIQUÉE en prod le 2026-07-23**). Posture §5 : **fail-closed, aucune donnée simulée, pas de mode
 > démo** (intime). Harnais `unit-imladrik-validate` + `smoke-imladrik`. Reste HORS
 > v1 (boucles suivantes, une à la fois) : objectifs de vie, valeurs/principes,
 > citations, quart d'heure quotidien, suggestions culturelles.

@@ -36,14 +36,33 @@
     défi de Léo, bascule « mon offre réelle ». Cap boussole ouvert (interne).
     Harnais `unit-reshiram-validate` (27) + `smoke-reshiram` ; patrimoine vert.
     Cadre détaillé (v1+v2) : `CADRAGE-RESHIRAM-ZEKROM.md §7`.
-  - ✅ **IMLADRIK v1 « pouvoir écrire » (2026-07-23)** : le journal intime en
-    base, calqué RESHIRAM/ADRAMELECH. Migration `0010_imladrik_journal.sql`
-    (`imladrik_entrees`, RLS par owner — **GATE, non appliquée**). API
+  - ✅ **ZEKROM v1 LIVRÉE + EN PROD (2026-07-23, PR #83 mergée en solo)** : miroir
+    de RESHIRAM, hébergée DANS Ultima (même repo/Vercel/Supabase, page interne
+    `zekrom.html`). Migration **`0010` APPLIQUÉE en prod (solo)** (`ideaux`/
+    `directions` + vues `ideaux_etat`/`ideaux_cap`, RLS miroir strict de 0009). API
+    `api/ideaux.js` + `api/directions.js` (requireUser, owner_id jamais du client,
+    validation miroir des CHECK, scellement cross-owner). Front `zekrom.html`/
+    `js/zekrom.js` : carte des idéaux, badge « à orienter » (INVITATION, pas une
+    dévaluation — règle cardinale inverse de RESHIRAM) + Léo qui inspire, bascule
+    « mon cap directionnel ». Cap boussole ouvert (interne). **Seed exécuté (solo)** :
+    les **3 rêves de Paul** en base (3 idéaux + 5 directions, owner Paul) — vérifiés
+    via `ideaux_etat`. Harnais `unit-zekrom-validate` + `smoke-zekrom` (3 scénarios) ;
+    patrimoine COMPLET vert. Contre-passe sécu CONFORME ; **advisors post-0010
+    propres** (aucun warning RLS/security_definer sur ZEKROM ; les INFO
+    `unindexed_fk`/`unused_index` sur `directions` = parité EXACTE de RESHIRAM,
+    design accepté). **Doublet réel ↔ idéal complet et vivant.** Cadre : §8 de
+    `CADRAGE-RESHIRAM-ZEKROM.md`. **Dette repérée (hors ZEKROM)** : `smoke-quadrants` était rouge depuis #75
+    (ABAQUE a fait évoluer `bcp.html` sans resync du test) — resynchronisé ici
+    (test-only) pour débloquer le runner partagé.
+  - ✅ **IMLADRIK v1 « pouvoir écrire » (2026-07-23, PR #86)** : le journal intime
+    en base, calqué RESHIRAM/ADRAMELECH. Migration `0012_imladrik_journal.sql`
+    (`imladrik_entrees`, RLS par owner — **APPLIQUÉE en prod (2026-07-23, go Paul)**,
+    renumérotée 0010→0012 après merge de ZEKROM 0010 / passerelle 0011). API
     `api/imladrik.js` (GET) + `api/imladrik/entrees.js` (POST/PATCH/DELETE),
     `validateEntreeImladrik` (miroir CHECK). Front `imladrik.html` (atelier
     d'écriture + journal, chrome quadrant) + `js/imladrik.js` : **fail-closed,
     pas de mode démo** (intime §5). Harnais `unit-imladrik-validate` +
-    `smoke-imladrik` ; patrimoine vert. **Boucle Drive suivante (GATÉE)** :
+    `smoke-imladrik` ; patrimoine COMPLET vert. **Boucle Drive suivante (GATÉE)** :
     Paul veut synchro DEUX SENS + l'app Ultima connectée → projet Google Cloud
     + secret Vercel (actions Paul) + contre-passe `securite-auditeur` avant code.
     Cadre : `CADRAGE-CONSOLE.md §3.4`.
@@ -83,15 +102,23 @@
     l'accueil (porte unique verrouillée). Le **verrou d'usage** est levé :
     connecté, RESHIRAM et tout ce qui vit derrière auth sont accessibles.
 
-    **② ZEKROM v1** (miroir RESHIRAM) : mini-cadrage (objets : idéaux/visions/
-    projets idéaux) → **modèle de données** (gate migration `0010`) → console
-    interne `zekrom.html` (aile noire, cap ouvert). Complète le doublet.
+    **② ✅ ZEKROM v1 construite (2026-07-23)** : mini-cadrage (§8 R/Z) + modèle de
+    données (migration `0010` **APPLIQUÉE en prod, solo**) + console interne
+    `zekrom.html` (aile noire, cap ouvert) + **seed des 3 rêves de Paul exécuté
+    (solo)**. Le doublet réel ↔ idéal est complet et vivant. PR #83 mergée.
 
-    **③ Passerelle de données R↔Z** : table de liaison `talent ↔ idéal` (gate
-    migration) + le **rétroplanning** (depuis un idéal ZEKROM : « talents que
-    j'ai / qui manquent » → besoin chiffré, coût délégué à NICOL BOLAS) +
-    enrichissement bidirectionnel. **Manuel en v1** (Paul valide les liens).
-    Dépend de ZEKROM (②).
+    **③ ✅ Passerelle de données R↔Z v1 construite (2026-07-23, solo)** : table
+    de liaison `passerelles` (idéal ↔ talent, nature `acquis`/`a_construire`,
+    note) — migration `0011` **APPLIQUÉE en prod (solo, advisors propres)** + vue `ideaux_retroplanning`, RLS **double scellement
+    AD-4** (miroir 0009/0010). API `api/passerelles.js` (GET/POST/PATCH/DELETE,
+    owner_id serveur-only, FK figées en update). Front : panneau **rétroplanning
+    par idéal** sur `zekrom.html` (« ce que j'ai déjà / ce qui me manque », relier
+    un talent réel + nature, détacher). Harnais `unit-zekrom-validate` +
+    `smoke-zekrom` enrichis. **Manuel en v1** (Paul crée/valide les liens).
+    Le **chiffrage du coût reste délégué à NICOL BOLAS** (hors v1 ; la note amorce
+    le besoin en mots). Cadre : §9 de `CADRAGE-RESHIRAM-ZEKROM.md`. **Le doublet
+    réel ↔ idéal devient AGISSANT.** v2 différé : miroir côté RESHIRAM,
+    auto-suggestion, chiffrage.
 
     **④ Connexions v2 RESHIRAM→RIVEN** : `talent_refs_reseau` (lecture des
     fiches RIVEN, jamais de copie) + vue « capital réseau » chiffrée par

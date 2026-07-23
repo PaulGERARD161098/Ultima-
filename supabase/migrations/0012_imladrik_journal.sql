@@ -1,4 +1,5 @@
--- Ultima — migration 0010 : IMLADRIK v1 « pouvoir écrire » — le journal intime.
+-- Ultima — migration 0012 : IMLADRIK v1 « pouvoir écrire » — le journal intime.
+-- (Renumérotée 0010→0012 après merge : ZEKROM a pris 0010, la passerelle R↔Z 0011.)
 -- Ne JAMAIS appliquer sans validation Paul explicite (gate migrations) : le SQL
 -- vit ici, Léo l'applique au fil principal après contre-passe sécu.
 --

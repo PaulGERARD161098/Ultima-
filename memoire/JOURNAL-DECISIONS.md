@@ -3,6 +3,40 @@
 > Une décision consignée n'est jamais redemandée ni re-litigée.
 > Format : date — décision — conséquence.
 
+- **2026-07-23 (LV2-③ passerelle R↔Z v1 — GO SOLO, « go la suite »)** — À la
+  suite de ZEKROM, construit le **cœur du doublet** : la table de liaison
+  `passerelles` (idéal ZEKROM ↔ talent RESHIRAM) porteuse d'une **nature**
+  (`acquis` = talent que j'ai qui rend l'idéal possible ; `a_construire` = talent
+  que l'idéal appelle et qui me manque) + note libre. **Rétroplanning** rendu par
+  idéal sur `zekrom.html` (« ce que j'ai déjà / ce qui me manque »), **manuel v1**
+  (Paul crée/valide les liens). **Chiffrage du coût délégué à NICOL BOLAS** (hors
+  v1 ; la note amorce le besoin). Migration `0011` + vue `ideaux_retroplanning`,
+  RLS **double scellement AD-4** (un lien ne relie qu'un idéal ET un talent du
+  même owner). API `api/passerelles.js` (owner_id serveur-only, FK figées en
+  PATCH). Décisions v1 tranchées par Léo (cadré §9 R/Z) : lien depuis l'idéal
+  (côté ZEKROM) ; miroir RESHIRAM = v2. Patrimoine complet vert. Le doublet réel
+  ↔ idéal devient **agissant**.
+
+- **2026-07-23 (ZEKROM v1 construite)** — Paul (dictée) : « implante mes 3 rêves
+  dans ZEKROM ». Boucle LV2-② livrée = miroir de RESHIRAM. Ses **3 objectifs de
+  vie** actés comme idéaux seed : ① prendre soin du domaine/terres du moulin
+  (projet) ; ② partir avec une femme aimée, un moment dans un village de pêcheurs
+  (vision) ; ③ travailler d'où il veut, libre de voyager et d'ouvrir des business
+  partout, sans contrainte géographique (projet). **Modèle** : `ideaux`
+  (`intitule, registre ∈ vision/volonte/projet, horizon`) + `directions` (« un
+  idéal → une direction », le cap). **Règle cardinale inverse de RESHIRAM** : un
+  idéal sans direction = « à orienter » (INVITATION, jamais une dévaluation ; le
+  réel ne censure pas). Vue « mon cap directionnel » = enrichissement, pas un
+  filtre. **GO SOLO (2026-07-23)** : migration `0010` **appliquée en prod**
+  (Supabase Ultima), **seed exécuté** pour l'owner de Paul (d25b59aa…) → 3 idéaux
+  + 5 directions vivants (vérif `ideaux_etat`), **advisors post-DDL propres**
+  (parité RESHIRAM ; seul warning sécu = `leaked_password_protection` global/
+  pré-existant, sans objet — pas d'auth mot de passe), **PR #83 mergée** (squash).
+  Patrimoine complet vert + contre-passe sécu CONFORME. Doublet réel ↔ idéal
+  complet et vivant. Dette annexe resynchronisée (test-only) : `smoke-quadrants`
+  rouge depuis #75 (bcp.html/ABAQUE). Discipline post-squash : branche repartie de
+  `origin/main`.
+
 - **2026-07-21 (renommage)** — **BALTHAZAR GELD → NICOL BOLAS** (dicté Paul).
   Quadrant financier renommé partout (UI `ultima.html`/`bcp.html`, code
   `api/_lib/leo.js` + js, tests, cadrages, charte). Emblème inchangé (balance),
@@ -641,8 +675,9 @@
   qui se connecte au Drive** (pas Léo-en-session). Découpé par Léo en boucles
   (une à la fois) : **Boucle 1 LIVRÉE = « pouvoir écrire »** — le journal intime
   en base, calqué sur ADRAMELECH/RESHIRAM, **fail-closed** (aucune donnée simulée,
-  pas de mode démo — §5 intime). Livré : migration `0010_imladrik_journal.sql`
-  (table `imladrik_entrees`, RLS par owner, GATE — **non appliquée**), API
+  pas de mode démo — §5 intime). Livré : migration `0012_imladrik_journal.sql`
+  (renumérotée 0010→0012 après merge ZEKROM ; table `imladrik_entrees`, RLS par
+  owner, **APPLIQUÉE en prod le 2026-07-23 sur go Paul**), API
   `/api/imladrik` (GET) + `/api/imladrik/entrees` (POST/PATCH/DELETE),
   `validateEntreeImladrik` (miroir CHECK), `imladrik.html` refondu (atelier
   d'écriture + journal, chrome quadrant) + `js/imladrik.js` + styles quadrant.

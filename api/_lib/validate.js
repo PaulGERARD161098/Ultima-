@@ -470,8 +470,139 @@ export function validatePreuve(body, mode) {
   return { value: out };
 }
 
+// --- ZEKROM (LV2-②) : idéaux + directions. Enums/bornes en MIROIR EXACT des
+// CHECK de supabase/migrations/0010_zekrom_ideaux.sql. Miroir de RESHIRAM
+// (validateTalent/validatePreuve) : `ideaux` ← `talents`, `directions` ← `preuves`.
+// Règle cardinale INVERSE : le réel ne bride pas l'idéal (aucune contrainte
+// supplémentaire côté API ; on valide seulement forme/bornes/enum).
+export const IDEAL_REGISTRES = ['vision', 'volonte', 'projet'];
+
+// Champs autorisés en écriture (owner_id/id/dates gérés serveur).
+const IDEAL_FIELDS = ['intitule', 'registre', 'horizon'];
+const DIRECTION_FIELDS = ['ideal_id', 'formulation'];
+
+// Valide un idéal. mode 'create' impose l'intitulé ; 'update' rend tout optionnel.
+// registre ∈ IDEAL_REGISTRES. horizon nullable, borné. owner_id jamais accepté.
+export function validateIdeal(body, mode) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, IDEAL_FIELDS);
+  if (unknown) return { error: unknown };
+
+  const out = {};
+
+  if (mode === 'create' || body.intitule !== undefined) {
+    if (typeof body.intitule !== 'string') return { error: 'Intitulé invalide' };
+    const intitule = body.intitule.trim();
+    if (intitule.length < 1 || intitule.length > 200) return { error: 'Intitulé invalide' };
+    out.intitule = intitule;
+  }
+
+  if (body.registre !== undefined) {
+    if (!IDEAL_REGISTRES.includes(body.registre)) return { error: 'Registre invalide' };
+    out.registre = body.registre;
+  }
+
+  // horizon : null efface, chaîne bornée sinon.
+  if (body.horizon === null) {
+    out.horizon = null;
+  } else {
+    const msg = checkOptionalText(body.horizon, 'Horizon', 2000);
+    if (msg) return { error: msg };
+    if (body.horizon !== undefined) out.horizon = body.horizon;
+  }
+
+  if (mode === 'update' && Object.keys(out).length === 0) {
+    return { error: 'Aucun champ à mettre à jour' };
+  }
+  return { value: out };
+}
+
+// Valide une direction (« un idéal → une direction », le cap). mode 'create'
+// impose ideal_id (UUID) + formulation (1..2000). owner_id imposé par le défaut
+// base ; le scellement composite (owner_id, ideal_id) empêche d'orienter l'idéal
+// d'autrui. Miroir de validatePreuve.
+export function validateDirection(body, mode) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, DIRECTION_FIELDS);
+  if (unknown) return { error: unknown };
+
+  const out = {};
+
+  if (mode === 'create') {
+    if (!isUuid(body.ideal_id)) return { error: 'Identifiant d’idéal invalide' };
+    out.ideal_id = body.ideal_id;
+  }
+
+  if (mode === 'create' || body.formulation !== undefined) {
+    if (typeof body.formulation !== 'string') return { error: 'Direction invalide' };
+    const formulation = body.formulation.trim();
+    if (formulation.length < 1 || formulation.length > 2000) return { error: 'Direction invalide' };
+    out.formulation = formulation;
+  }
+
+  if (mode === 'update' && Object.keys(out).length === 0) {
+    return { error: 'Aucun champ à mettre à jour' };
+  }
+  return { value: out };
+}
+
+// --- PASSERELLE R↔Z (LV2-③) : liens idéal ↔ talent. Enums/bornes en MIROIR EXACT
+// des CHECK de supabase/migrations/0011_passerelle_retroplanning.sql. Le lien porte
+// une nature (acquis = talent qui rend l'idéal possible ; a_construire = talent que
+// l'idéal appelle et qui manque). owner_id jamais accepté ; le double scellement
+// (owner_id, ideal_id)/(owner_id, talent_id) est garanti en base.
+export const PASSERELLE_NATURES = ['acquis', 'a_construire'];
+
+// Champs autorisés en écriture. ideal_id/talent_id figés après création (comme
+// source/cible d'un edge RIVEN) : seuls nature/note évoluent en update.
+const PASSERELLE_FIELDS = ['ideal_id', 'talent_id', 'nature', 'note'];
+const PASSERELLE_UPDATE_FIELDS = ['nature', 'note'];
+
+// Valide une passerelle. create : ideal_id + talent_id (UUID) + nature imposés,
+// note optionnelle bornée. update : nature/note seulement (les FK sont figées).
+export function validatePasserelle(body, mode) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const allowed = mode === 'update' ? PASSERELLE_UPDATE_FIELDS : PASSERELLE_FIELDS;
+  const unknown = rejectUnknown(body, allowed);
+  if (unknown) return { error: unknown };
+
+  const out = {};
+
+  if (mode === 'create') {
+    if (!isUuid(body.ideal_id)) return { error: 'Identifiant d’idéal invalide' };
+    if (!isUuid(body.talent_id)) return { error: 'Identifiant de talent invalide' };
+    out.ideal_id = body.ideal_id;
+    out.talent_id = body.talent_id;
+  }
+
+  if (mode === 'create' || body.nature !== undefined) {
+    if (!PASSERELLE_NATURES.includes(body.nature)) return { error: 'Nature invalide' };
+    out.nature = body.nature;
+  }
+
+  // note : null efface, chaîne bornée sinon.
+  if (body.note === null) {
+    out.note = null;
+  } else {
+    const msg = checkOptionalText(body.note, 'Note', 2000);
+    if (msg) return { error: msg };
+    if (body.note !== undefined) out.note = body.note;
+  }
+
+  if (mode === 'update' && Object.keys(out).length === 0) {
+    return { error: 'Aucun champ à mettre à jour' };
+  }
+  return { value: out };
+}
+
 // --- IMLADRIK (v1) : journal intime « pouvoir écrire ». Bornes en MIROIR EXACT
-// des CHECK de supabase/migrations/0010_imladrik_journal.sql (défense en
+// des CHECK de supabase/migrations/0012_imladrik_journal.sql (défense en
 // profondeur AU-DESSUS de la RLS). Ce que l'API refuse, la base le refuse aussi.
 // owner_id n'est JAMAIS accepté du client : il est imposé par le défaut base
 // (auth.uid()). Données intimes (§5) : erreurs génériques, aucun contenu en log.

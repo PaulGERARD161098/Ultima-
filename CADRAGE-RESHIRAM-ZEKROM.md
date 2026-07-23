@@ -216,3 +216,110 @@ séparé :
   pas de domaine. (Cohérent avec la gate « toute création de ressource facturée
   = validation Paul ».)
 - ZEKROM suivra le même hébergement interne.
+
+## 8. Mini-cadrage ZEKROM (validé Paul 2026-07-23 — dictée « implante mes 3 rêves »)
+
+### v1 — la carte des idéaux, tournée vers le cap
+
+Miroir EXACT de RESHIRAM (§7), règle cardinale **inversée** : le réel ne bride
+pas l'idéal. Là où RESHIRAM ancre un talent sur une **preuve**, ZEKROM capte un
+**idéal** et le formule en **direction** (le « cap »).
+
+- **Objet central : l'idéal** (le rêve / la vision / le projet idéal). Champs :
+  `intitule`, `registre` ∈ (`vision`, `volonte`, `projet`), `horizon` (le sens,
+  optionnel). Défaut `vision` (le cran le plus libre — symétrie inverse du
+  `notion` humble de RESHIRAM : ici on part du rêve).
+- **Objet d'appui : la direction** — « un idéal → une direction ». 0..n par idéal.
+  Un idéal **sans** direction = **« à orienter »** : une **INVITATION** à formuler
+  le cap, **jamais** une dévaluation (contrairement à « à étayer » côté RESHIRAM
+  qui, lui, retire un talent de l'offre). Léo **inspire** (« vers quoi ce rêve
+  t'emmène ? »), il ne challenge pas.
+- **Un écran** : la carte/liste des idéaux + saisie **libre** (aucune censure
+  par le réel).
+- **Une vue dérivée** : « **mon cap directionnel** » = les idéaux **déjà orientés**
+  (au moins une direction). Vue d'**enrichissement**, PAS un filtre de validité
+  comme « mon offre réelle » (un idéal « à orienter » reste un idéal plein).
+
+**Les 3 idéaux réels seed (Paul, dictée 2026-07-23) — valident le modèle :**
+1. **Prendre soin du domaine et des terres autour du moulin** — `registre='projet'`,
+   horizon « enraciner, transmettre, faire vivre le lieu » ; directions :
+   restaurer/entretenir le domaine, cultiver les terres.
+2. **Partir avec une femme aimée — un moment dans un village de pêcheurs** —
+   `registre='vision'`, horizon « partager une vie et un ailleurs à deux » ;
+   direction : rencontrer, bâtir une vie mobile à deux.
+3. **Travailler d'où je veux, libre de voyager et d'ouvrir des business partout** —
+   `registre='projet'`, horizon « liberté, mobilité, sans contrainte de lieu » ;
+   directions : revenus délocalisables, ouvrir des business en plusieurs lieux.
+
+Ces 3 idéaux couvrent les registres `projet` (n°1, n°3) et `vision` (n°2), avec
+et sans horizon, avec 1 ou 2 directions — le modèle les accueille sans champ
+manquant. ✅
+
+### Modèle de données (gate migration)
+
+- **v1** : table `ideaux` (`intitule, registre, horizon`) + table `directions`
+  (rattachées à l'idéal). Vues dérivées `ideaux_etat` (badge « à orienter ») et
+  `ideaux_cap` (« mon cap directionnel »). Migration **`0010_zekrom_ideaux.sql`
+  APPLIQUÉE en prod (2026-07-23, solo)**. Sécurité : données introspectives →
+  **auth + RLS**, §5 s'applique (miroir strict de 0009). Advisors post-0010
+  propres (parité RESHIRAM).
+- **Seed** : `supabase/seed-zekrom-paul.sql` (les 3 rêves ci-dessus), paramétré
+  par `owner_id`, **idempotent**. **Exécuté en prod (2026-07-23, solo)** pour
+  l'owner de Paul → 3 idéaux + 5 directions vivants dans ZEKROM.
+- **v2 passerelle** (LV2-③) : table de liaison `idéal ↔ talent` (rétroplanning
+  idéal → réel), à la boucle passerelle — le scellement (owner_id, id) de
+  `ideaux` en est déjà la cible.
+
+### Hébergement — identique à RESHIRAM
+
+Même repo `Ultima-`, même déploiement Vercel `ultima` (`zekrom.html` → `/zekrom`,
+`externe: false`, ouvert dans le même onglet depuis la boussole), même projet
+Supabase `leosfqyidgsaescjbfom`, aucune ressource facturée en plus.
+
+> **Boucle ZEKROM v1 CLOSE et EN PROD** (code + tests verts + contre-passe sécu
+> CONFORME + `0010` appliquée + seed exécuté + PR #83 mergée, en solo). Le doublet
+> réel ↔ idéal est complet et vivant. Suite : LV2-③ **passerelle de données R↔Z**
+> (rétroplanning idéal → réel, liaison idéal↔talent).
+
+## 9. Mini-cadrage LV2-③ — la passerelle R↔Z (le rétroplanning, manuel v1)
+
+> Cadré + livré 2026-07-23 (GO SOLO, à la suite de ZEKROM). C'est le **cœur du
+> doublet** : ce qui relie les deux consoles autonomes (§3).
+
+### v1 — relier un idéal à ses talents, voir ce qui manque
+
+- **Objet central : la passerelle** = un lien entre un **idéal ZEKROM** et un
+  **talent RESHIRAM**, porteur d'une **nature** :
+  - `acquis` = ce talent réel (que j'ai) **rend possible** cet idéal.
+  - `a_construire` = cet idéal **appelle** ce talent, qui reste **à acquérir /
+    renforcer** (le manque du rétroplanning).
+  - `note` (optionnel) = le besoin, le « comment » qualitatif. **Le chiffrage du
+    coût N'est PAS ici** : délégué à NICOL BOLAS (§6.4), la note ne fait que
+    l'amorcer en mots en attendant.
+- **Le rétroplanning** (la valeur) : depuis un idéal ZEKROM, la passerelle répond
+  **« quels talents j'ai déjà (acquis), lesquels me manquent (à construire) »** —
+  l'écart mesuré réel ↔ idéal EST le plan de route (§0).
+- **Où** : un panneau **rétroplanning** par idéal sur `zekrom.html` (depuis
+  l'idéal, §3). Paul relie un talent existant (choisi dans ses talents RESHIRAM) +
+  la nature ; le panneau affiche le bilan **acquis / à construire**.
+- **Sens** : **manuel en v1** (Paul crée/valide chaque lien — §6.3). Auto plus tard.
+- **Enrichissement bidirectionnel** : v1 = **depuis l'idéal** (côté ZEKROM). Le
+  miroir côté RESHIRAM (un talent montre quels idéaux il sert) = v2, sans
+  retoucher le modèle (la table de liaison le porte déjà des deux côtés).
+
+### Modèle de données (migration 0011)
+
+- Table `passerelles` (`ideal_id`, `talent_id`, `nature` ∈ acquis/a_construire,
+  `note`). **Double scellement AD-4** : les FK composites `(owner_id, ideal_id)`
+  et `(owner_id, talent_id)` garantissent qu'un lien ne relie qu'un idéal ET un
+  talent **du même owner**. Unicité `(owner_id, ideal_id, talent_id)` (un seul lien
+  par paire). Vue `ideaux_retroplanning` (par idéal : nb_acquis, nb_a_construire).
+  RLS complète (initplan), miroir strict de 0009/0010. **Migration `0011`
+  APPLIQUÉE en prod (2026-07-23, solo)** ; contre-passe sécu CONFORME (double
+  scellement testé étanche) ; advisors post-DDL propres.
+- **v2** (différé) : miroir côté RESHIRAM, auto-suggestion de liens, chiffrage
+  NICOL BOLAS.
+
+> **Boucle LV2-③ v1 CLOSE et EN PROD** : liaison + rétroplanning manuel depuis
+> l'idéal. Le doublet réel ↔ idéal devient **agissant** (plus seulement
+> co-présent). PR #85 mergée.
