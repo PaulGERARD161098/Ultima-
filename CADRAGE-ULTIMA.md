@@ -112,10 +112,19 @@
     fiches RIVEN, jamais de copie) + vue « capital réseau » chiffrée par
     secteur. Rend mesurables les talents « réseau ». Dépend de RIVEN (déjà là).
 
-    **⑤ LV2-③ Cockpit + résumés vivants** (`CADRAGE-CONSOLE.md §2bis`) : survol
-    d'un cap → vrai « en cours » du macro-projet ; puis signaux/badges, cap du
-    jour, état du jour transversal, capture-dispatch. Dépend des consoles
-    alimentées en data (②–④).
+    **⑤ ✅ LV2-⑤ Cockpit — résumés vivants v1 construits (2026-07-23, solo)** :
+    endpoint `api/cockpit.js` (agrégats derrière auth, **que des comptes, zéro
+    PII** — §5 CADRAGE-CONSOLE) ; la boussole, une fois connectée, remplace le
+    texte figé des caps data (RESHIRAM/ZEKROM) par le **vrai « en cours »** au
+    survol (« N talents, M à étayer » ; « N idéaux, M à orienter, K reliés »).
+    `js/boussole.js` (fetch + `ligneVivante` pure + injection), `boussole-auth.js`
+    (livre la session au cockpit), ordre des scripts corrigé (hook défini avant
+    sollicitation), CSS `.parole-cockpit`. Fail-closed (sans session → texte figé).
+    Harnais `smoke-boussole` enrichi (Bearer, résumés vivants R/Z, cap sans data,
+    fonction pure). **La boussole devient un cockpit** (pas un menu). Reste (v2,
+    par ordre de valeur §2bis) : signaux/badges, cap du jour, état du jour
+    transversal, capture-dispatch — dépendent de NICOL BOLAS (finance) et de la
+    data réelle via connecteurs.
 
     **Autres caps :**
     - **YCOME** — dès que Paul fournit l'URL (action humaine, 1 ligne dans le

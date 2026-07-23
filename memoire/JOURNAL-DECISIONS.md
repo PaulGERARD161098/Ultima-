@@ -3,6 +3,19 @@
 > Une décision consignée n'est jamais redemandée ni re-litigée.
 > Format : date — décision — conséquence.
 
+- **2026-07-23 (LV2-⑤ cockpit — résumés vivants v1, GO SOLO « go la suite »)** —
+  La boussole devient un **cockpit** (§2bis « pas un menu ») : au survol d'un cap
+  data, le vrai « en cours » (agrégats) remplace le texte figé. Endpoint
+  `api/cockpit.js` = **comptes uniquement, derrière auth, zéro PII** (RESHIRAM :
+  talents/à étayer ; ZEKROM : idéaux/à orienter, liens acquis/à construire).
+  Front : `boussole.js` (fetch + `ligneVivante` pure), `boussole-auth.js` livre la
+  session. **Décision d'archi (Léo, solo)** : `boussole.js` chargé AVANT
+  `boussole-auth.js` — le hook cockpit doit exister avant que l'auth ne le
+  sollicite (bug de timing microtask corrigé : sinon le fetch est sauté au 1er
+  chargement). Fail-closed : sans session → texte figé. Patrimoine complet vert.
+  v2 différé (par valeur, §2bis) : signaux/badges, cap du jour, état transversal,
+  capture-dispatch — dépendent de NICOL BOLAS + connecteurs data réels.
+
 - **2026-07-23 (LV2-③ passerelle R↔Z v1 — GO SOLO, « go la suite »)** — À la
   suite de ZEKROM, construit le **cœur du doublet** : la table de liaison
   `passerelles` (idéal ZEKROM ↔ talent RESHIRAM) porteuse d'une **nature**
