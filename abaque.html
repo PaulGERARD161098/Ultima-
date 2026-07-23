@@ -99,6 +99,33 @@
           </fieldset>
 
           <fieldset>
+            <legend>TVA (optionnel)</legend>
+            <div class="grille-champs">
+              <div class="champ ligne-case">
+                <input type="checkbox" id="moduleTva">
+                <label for="moduleTva">Modéliser le décalage de TVA</label>
+              </div>
+              <div class="champ">
+                <label for="tauxTvaCollectee">TVA collectée</label>
+                <input type="number" id="tauxTvaCollectee" inputmode="decimal" step="0.5" min="0" value="20" disabled>
+                <span class="unite">% sur les ventes</span>
+              </div>
+              <div class="champ">
+                <label for="tauxTvaDeductible">TVA déductible</label>
+                <input type="number" id="tauxTvaDeductible" inputmode="decimal" step="0.5" min="0" value="20" disabled>
+                <span class="unite">% sur les achats</span>
+              </div>
+            </div>
+            <p class="note-hypotheses">Décalage d'un mois (simplification v1) ; l'IS et les acomptes ne sont pas décaissés. Hors module, la TVA est ignorée — limite affichée.</p>
+          </fieldset>
+
+          <fieldset>
+            <legend>Saisonnalité du CA (optionnel)</legend>
+            <div class="saison-grille" id="saison-grille"></div>
+            <p class="note-hypotheses">Coefficient par mois (1 = mois moyen). La moyenne est ramenée à 1 : le CA mensuel ci-dessus reste la moyenne annuelle.</p>
+          </fieldset>
+
+          <fieldset>
             <legend>Délais de règlement</legend>
             <div class="grille-champs">
               <div class="champ">

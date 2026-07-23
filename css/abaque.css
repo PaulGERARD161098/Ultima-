@@ -434,3 +434,25 @@ figcaption.courbe-legende {
 
 /* Message d'export/import : erreur en registre cire (terracotta). */
 .io-erreur { color: var(--cire); font-style: normal; }
+
+/* ---------- Saisonnalité : 12 coefficients mensuels compacts ---------- */
+.saison-grille {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.5rem 0.6rem;
+}
+@media (max-width: 520px) { .saison-grille { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 360px) { .saison-grille { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.champ-saison { gap: 0.2rem; }
+.champ-saison label {
+  font-size: 0.78rem;
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+  color: var(--encre-pale);
+}
+.champ-saison input { padding: 0.35rem 0.4rem; text-align: center; }
+
+/* Case à cocher TVA (réutilise le motif .ligne-case des lignes). */
+.champ.ligne-case { flex-direction: row; align-items: center; gap: 0.5rem; }
+.champ.ligne-case label { font-size: 0.9rem; color: var(--encre-claire); }
