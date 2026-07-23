@@ -194,13 +194,46 @@ vocale. Dashboard de suivi comme les autres.
 > v1 (boucles suivantes, une à la fois) : objectifs de vie, valeurs/principes,
 > citations, quart d'heure quotidien, suggestions culturelles.
 >
-> **⏭ Boucle Drive (décision Paul 2026-07-23 : synchro DEUX SENS + l'app Ultima
-> se connecte elle-même)** — GATÉE. Prérequis **actions Paul** : projet Google
-> Cloud (OAuth app + scopes Drive), **secret client en env Vercel**. Prérequis
-> sécurité : **contre-passe `securite-auditeur` AVANT tout code** (§5 — stocker des
-> jetons Google = nouvelle surface intime ; mono-utilisateur ; timeout sortant ;
-> aucune fuite). Les colonnes d'ancrage Drive s'ajouteront par migration ADDITIVE
-> (jamais en retouchant `imladrik_entrees`).
+> **⏭ Boucle Drive — CADRÉE (contre-passe `securite-auditeur` faite 2026-07-23).**
+> Décisions Paul (2026-07-23, après cadrage sécu) :
+> - **v1 = UN SEUL SENS** : Ultima → Drive (sauvegarde), **à la demande** (bouton).
+>   Le deux-sens (retour Drive → Ultima) est reporté à une boucle ultérieure —
+>   raison sécu : résolution de conflits sur de l'intime = jamais d'écrasement, la
+>   partie la plus risquée (à ne pas prendre en v1).
+> - **Dossier Drive dédié, contenu LISIBLE** (Paul veut pouvoir le relire dans
+>   Google Docs). Chiffrement du contenu dans Drive = écarté en v1 (revisitable).
+> - **Paul assume explicitement** : dès qu'une page est copiée dans Drive, elle
+>   **quitte la RLS Supabase** et vit sous la sécurité de son compte Google
+>   (propriété irréversible, actée).
+>
+> Architecture sécu (miroir de l'existant, à respecter) :
+> - **Flux OAuth Drive SÉPARÉ, server-side** (surtout PAS les scopes Drive ajoutés
+>   au login Supabase de `boussole-auth.js` — sinon le refresh_token Google finit
+>   dans le navigateur). Authorization Code + PKCE ; **scope minimal `drive.file`**
+>   (l'app ne voit QUE les fichiers qu'elle crée) ; consentement en mode **Test**
+>   (Paul seul test user = verrou mono-utilisateur ; refresh_token à re-consentir
+>   ~tous les 7 j). `state`+`code_verifier` liés à l'owner via **cookie signé
+>   httpOnly** (le callback GET ne porte pas le Bearer).
+> - **Jetons Google chiffrés au repos** (AES-256-GCM, clé `DRIVE_TOKEN_ENC_KEY` en
+>   env Vercel, **hors base**), table `imladrik_drive_tokens` RLS par owner (jamais
+>   service-role, jamais au client, jamais en log). Endpoint « déconnecter » =
+>   révocation Google + purge.
+> - Appels Drive **server-side** uniquement (timeout sortant `fetchWithTimeout`,
+>   backoff 429, jamais de `connect-src` ouvert), aucun partage posé sur les
+>   fichiers, User-Agent dédié. Colonnes d'ancrage (`drive_file_id`, hash, …) en
+>   migration ADDITIVE (réservées en tête de `0012`).
+>
+> Sous-boucles (une à la fois, chacune gatée sur secrets Paul + migration) :
+> 1. **Connexion OAuth** (endpoints connect/callback/disconnect + table jetons
+>    chiffrée + statut « connecté ») — aucune sync.
+> 2. **Push Ultima → Drive à la demande** (upsert idempotent id↔drive_file_id).
+> 3. *(Plus tard, cadrage séparé)* retour / deux sens avec politique de conflit.
+>
+> **⏳ Actions Paul (bloquantes, avant tout code)** : projet Google Cloud + OAuth
+> client *Web* (scope `drive.file`, écran de consentement **Test** avec son compte
+> en seul test user, redirect URI = callback prod) ; env Vercel `GOOGLE_OAUTH_CLIENT_ID`,
+> `GOOGLE_OAUTH_CLIENT_SECRET`, `GOOGLE_OAUTH_REDIRECT_URI`, `DRIVE_TOKEN_ENC_KEY`
+> (32 octets). Restent gate : la migration jetons (RLS → Opus) + tout code auth/token.
 
 ## 4. Principes transverses (les 4 quadrants les partagent)
 
