@@ -1,17 +1,14 @@
-// Ultima — quadrant ZEKROM (v1) : la carte des idéaux, tournée vers le cap.
-// Miroir de js/reshiram.js (ZEKROM ↔ RESHIRAM), avec la règle cardinale INVERSE :
-//   - RESHIRAM ancre un talent sur une PREUVE (rien d'idéalisé sans preuve) ;
-//   - ZEKROM capte un IDÉAL et l'oriente en DIRECTION (le cap). Le réel ne bride
-//     pas l'expression : un idéal sans direction reste un idéal PLEIN — « à
-//     orienter » est une INVITATION à formuler le cap, jamais une dévaluation.
-// Le registre DERRIÈRE AUTH, données réelles uniquement :
-//   - fail-closed : sans config, sans session ou sur échec API (401), la page
-//     n'affiche AUCUNE donnée — seul le cartouche « Authentification requise »
-//     est montré (le flux lien-magique vit sur traveler.html) ;
-//   - avec session : GET /api/ideaux (Bearer) → ideaux (vue ideaux_etat, donc
-//     nb_directions + a_orienter) + directions (rattachées par ideal_id). AUCUN
-//     idéal en dur ici : les données perso ne viennent QUE de l'API authentifiée (RLS) ;
-//   - vue « mon cap directionnel » : ne montre que les idéaux orientés (a_orienter=false).
+// Ultima — quadrant ZEKROM (v1) : la carte des idéaux, tournée vers le cap,
+// + la passerelle R↔Z (LV2-③) : le rétroplanning manuel depuis chaque idéal.
+// Miroir de js/reshiram.js pour la partie idéaux (règle cardinale INVERSE : le réel
+// ne bride pas l'idéal ; « à orienter » = invitation, jamais dévaluation).
+// Passerelle : depuis un idéal, relier un talent RESHIRAM réel avec une nature
+//   - 'acquis'      = ce talent (que j'ai) rend l'idéal possible ;
+//   - 'a_construire' = cet idéal appelle ce talent, qui me manque.
+// Le panneau affiche le bilan « ce que j'ai déjà / ce qui me manque ». Manuel v1.
+// Le registre DERRIÈRE AUTH, données réelles uniquement (fail-closed partout) :
+//   GET /api/ideaux (idéaux + directions), /api/talents (les talents à relier),
+//   /api/passerelles (les liens + le rétroplanning). AUCUNE donnée en dur.
 // Injection DOM : createElement/textContent uniquement (CSP — jamais innerHTML).
 (function () {
   'use strict';
@@ -22,7 +19,14 @@
     projet: 'projet'
   };
 
-  var etat = { session: null, ideaux: [], directions: [], vue: 'tous' };
+  var etat = {
+    session: null,
+    ideaux: [],
+    directions: [],
+    talents: [],
+    passerelles: [],
+    vue: 'tous'
+  };
 
   function el(nom, classe, texte) {
     var element = document.createElement(nom);
@@ -57,13 +61,23 @@
     return etat.directions.filter(function (d) { return d && d.ideal_id === idealId; });
   }
 
+  // Les liens (passerelles) d'un idéal.
+  function liensDe(idealId) {
+    return etat.passerelles.filter(function (p) { return p && p.ideal_id === idealId; });
+  }
+
+  // Nom d'un talent depuis son id (les talents viennent de /api/talents).
+  function nomTalent(talentId) {
+    var t = etat.talents.filter(function (x) { return x && x.id === talentId; })[0];
+    return t ? (t.nom || '') : '(talent supprimé)';
+  }
+
   // ---------- Rendu d'un idéal ----------
 
   function rendreDirections(ideal, carte) {
     var directions = directionsDe(ideal.id);
     if (ideal.a_orienter === true || directions.length === 0) {
       carte.appendChild(el('span', 'zekrom-aorienter', 'à orienter'));
-      // Léo INVITE (jamais ne dévalue) : formuler le cap de ce rêve.
       carte.appendChild(el('p', 'zekrom-invite',
         'Vers quoi ce rêve t’emmène ? Formule une direction — le premier cap.'));
     } else {
@@ -73,7 +87,6 @@
       });
       carte.appendChild(liste);
     }
-    // Formulaire d'ajout de direction, présent sur chaque idéal.
     carte.appendChild(construireFormDirection(ideal));
   }
 
@@ -98,6 +111,100 @@
     return form;
   }
 
+  // ---------- Rétroplanning (passerelle R↔Z) : par idéal ----------
+
+  function rendreGroupeLiens(carte, titre, liens, classeVide, texteVide) {
+    var groupe = el('div', 'zekrom-retro-groupe');
+    groupe.appendChild(el('h5', 'zekrom-retro-titre', titre));
+    if (liens.length === 0) {
+      groupe.appendChild(el('p', classeVide, texteVide));
+    } else {
+      var liste = el('ul', 'zekrom-retro-liste');
+      liens.forEach(function (p) {
+        var item = el('li', 'zekrom-retro-item');
+        item.appendChild(el('span', 'zekrom-retro-talent', nomTalent(p.talent_id)));
+        if (p.note) { item.appendChild(el('span', 'zekrom-retro-note', ' — ' + p.note)); }
+        var detacher = el('button', 'zekrom-retro-detacher', 'détacher');
+        detacher.type = 'button';
+        detacher.setAttribute('aria-label', 'Détacher « ' + nomTalent(p.talent_id) + ' »');
+        detacher.addEventListener('click', function () { detacherLien(p.id); });
+        item.appendChild(detacher);
+        liste.appendChild(item);
+      });
+      groupe.appendChild(liste);
+    }
+    carte.appendChild(groupe);
+  }
+
+  function construireFormLien(ideal) {
+    var form = el('form', 'zekrom-retro-form');
+    // Talents non encore reliés à cet idéal (on ne relie pas deux fois la paire).
+    var dejaLies = liensDe(ideal.id).map(function (p) { return p.talent_id; });
+    var dispo = etat.talents.filter(function (t) { return dejaLies.indexOf(t.id) === -1; });
+
+    if (etat.talents.length === 0) {
+      form.appendChild(el('p', 'zekrom-retro-aide',
+        'Aucun talent réel à relier pour l’instant — dresse tes talents dans RESHIRAM.'));
+      var lien = el('a', 'zekrom-retro-vers-reshiram', 'Ouvrir RESHIRAM');
+      lien.href = 'reshiram.html';
+      form.appendChild(lien);
+      return form;
+    }
+    if (dispo.length === 0) {
+      form.appendChild(el('p', 'zekrom-retro-aide',
+        'Tous tes talents sont déjà reliés à cet idéal.'));
+      return form;
+    }
+
+    var selTalent = el('select', 'zekrom-retro-select');
+    selTalent.name = 'talent_id';
+    selTalent.setAttribute('aria-label', 'Talent à relier');
+    dispo.forEach(function (t) {
+      var opt = el('option', null, t.nom || '(sans nom)');
+      opt.value = t.id;
+      selTalent.appendChild(opt);
+    });
+
+    var selNature = el('select', 'zekrom-retro-select');
+    selNature.name = 'nature';
+    selNature.setAttribute('aria-label', 'Nature du lien');
+    [['acquis', 'je l’ai déjà — il rend l’idéal possible'],
+     ['a_construire', 'il me manque — à construire']].forEach(function (paire) {
+      var opt = el('option', null, paire[1]);
+      opt.value = paire[0];
+      selNature.appendChild(opt);
+    });
+
+    var bouton = el('button', 'zekrom-bouton zekrom-bouton-lien', 'Relier');
+    bouton.type = 'submit';
+
+    form.appendChild(selTalent);
+    form.appendChild(selNature);
+    form.appendChild(bouton);
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      soumettreLien(ideal.id, selTalent.value, selNature.value);
+    });
+    return form;
+  }
+
+  function rendreRetroplanning(ideal, carte) {
+    var section = el('section', 'zekrom-retro');
+    section.appendChild(el('h4', 'zekrom-retro-entete', 'Rétroplanning — ce que j’ai, ce qui me manque'));
+
+    var liens = liensDe(ideal.id);
+    var acquis = liens.filter(function (p) { return p.nature === 'acquis'; });
+    var aConstruire = liens.filter(function (p) { return p.nature === 'a_construire'; });
+
+    rendreGroupeLiens(section, 'Ce que j’ai déjà', acquis,
+      'zekrom-retro-vide', 'Aucun talent réel relié pour l’instant.');
+    rendreGroupeLiens(section, 'Ce qui me manque', aConstruire,
+      'zekrom-retro-vide', 'Aucun manque identifié pour l’instant.');
+
+    section.appendChild(construireFormLien(ideal));
+    carte.appendChild(section);
+  }
+
   function rendreIdeal(ideal) {
     var carte = el('article', 'zekrom-ideal');
     carte.id = 'zekrom-ideal-' + ideal.id;
@@ -114,6 +221,7 @@
     }
 
     rendreDirections(ideal, carte);
+    rendreRetroplanning(ideal, carte);
     return carte;
   }
 
@@ -159,12 +267,13 @@
     zone.classList.toggle('zekrom-form-message--erreur', Boolean(estErreur));
   }
 
-  async function appelApi(chemin, corps) {
+  // Appel générique authentifié (POST par défaut ; méthode surchargeable).
+  async function appelApi(chemin, corps, methode) {
     if (!etat.session || !etat.session.access_token) { return { ok: false, status: 401 }; }
     var reponse;
     try {
       reponse = await fetch(chemin, {
-        method: 'POST',
+        method: methode || 'POST',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
@@ -208,6 +317,24 @@
     await rafraichir();
   }
 
+  async function soumettreLien(idealId, talentId, nature) {
+    if (!talentId) { return; }
+    var res = await appelApi('/api/passerelles', {
+      ideal_id: idealId, talent_id: talentId, nature: nature || 'acquis'
+    });
+    if (res.status === 401) { montrer('zekrom-auth'); return; }
+    if (!res.ok) { messageForm('Lien non enregistré. Réessaie.', true); return; }
+    await rafraichir();
+  }
+
+  async function detacherLien(lienId) {
+    if (!lienId) { return; }
+    var res = await appelApi('/api/passerelles', { id: lienId }, 'DELETE');
+    if (res.status === 401) { montrer('zekrom-auth'); return; }
+    if (!res.ok) { messageForm('Lien non détaché. Réessaie.', true); return; }
+    await rafraichir();
+  }
+
   // ---------- Flux : session → API → registre (fail-closed partout) ----------
 
   function configPresente() {
@@ -215,35 +342,62 @@
     return Boolean(cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY);
   }
 
+  async function lireJson(chemin) {
+    var reponse = await fetch(chemin, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + etat.session.access_token
+      }
+    });
+    return reponse;
+  }
+
   async function chargerRegistre() {
-    var reponse;
+    var repIdeaux, repTalents, repPasserelles;
     try {
-      reponse = await fetch('/api/ideaux', {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          Authorization: 'Bearer ' + etat.session.access_token
-        }
-      });
+      // Les 3 lectures en parallèle : idéaux (+directions), talents (à relier),
+      // passerelles (+rétroplanning). Toutes derrière le même Bearer.
+      var resultats = await Promise.all([
+        lireJson('/api/ideaux'),
+        lireJson('/api/talents'),
+        lireJson('/api/passerelles')
+      ]);
+      repIdeaux = resultats[0];
+      repTalents = resultats[1];
+      repPasserelles = resultats[2];
     } catch (e) {
       montrer('zekrom-erreur');
       return false;
     }
-    if (reponse.status === 401) { montrer('zekrom-auth'); return false; } // fail-closed
-    var corps = null;
-    try { corps = await reponse.json(); } catch (e) { corps = null; }
-    if (!reponse.ok || !corps || corps.ok !== true) {
+    // Fail-closed : une 401 sur n'importe quelle lecture ferme tout.
+    if (repIdeaux.status === 401 || repTalents.status === 401 || repPasserelles.status === 401) {
+      montrer('zekrom-auth');
+      return false;
+    }
+    var cIdeaux = null, cTalents = null, cPasserelles = null;
+    try { cIdeaux = await repIdeaux.json(); } catch (e) { cIdeaux = null; }
+    try { cTalents = await repTalents.json(); } catch (e) { cTalents = null; }
+    try { cPasserelles = await repPasserelles.json(); } catch (e) { cPasserelles = null; }
+
+    if (!repIdeaux.ok || !cIdeaux || cIdeaux.ok !== true) {
       montrer('zekrom-erreur');
       return false;
     }
-    etat.ideaux = (corps.data && corps.data.ideaux) || [];
-    etat.directions = (corps.data && corps.data.directions) || [];
+    etat.ideaux = (cIdeaux.data && cIdeaux.data.ideaux) || [];
+    etat.directions = (cIdeaux.data && cIdeaux.data.directions) || [];
+    // Talents et passerelles sont un enrichissement : s'ils échouent, la carte des
+    // idéaux reste utilisable (le rétroplanning se dégrade sans casser).
+    etat.talents = (repTalents.ok && cTalents && cTalents.ok === true &&
+      cTalents.data && cTalents.data.talents) || [];
+    etat.passerelles = (repPasserelles.ok && cPasserelles && cPasserelles.ok === true &&
+      cPasserelles.data && cPasserelles.data.passerelles) || [];
+
     rendreIdeaux();
     montrer('zekrom-registre');
     return true;
   }
 
-  // Re-lecture après écriture (ideaux_etat recalcule a_orienter/nb_directions).
   async function rafraichir() {
     await chargerRegistre();
   }
@@ -267,7 +421,7 @@
     brancherFormulaires();
     if (!configPresente() ||
         !window.supabase || typeof window.supabase.createClient !== 'function') {
-      montrer('zekrom-auth'); // pas de mode démo : données perso uniquement
+      montrer('zekrom-auth');
       return;
     }
     var cfg = window.ULTIMA_CONFIG;

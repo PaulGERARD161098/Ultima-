@@ -666,6 +666,118 @@ body.page-quadrant .console-conteneur {
 
 .zekrom-bouton-direction { padding: 0.5rem 0.95rem; }
 
+/* ---------- ZEKROM : rétroplanning (passerelle R↔Z, LV2-③) ----------
+   Le pont réel ↔ idéal, posé sous chaque idéal : ce que j'ai déjà (acquis) /
+   ce qui me manque (à construire). Registre sobre, cerne or, encre sépia. */
+.zekrom-retro {
+  margin-top: 0.7rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed var(--or-antique);
+}
+
+.zekrom-retro-entete {
+  margin: 0 0 0.5rem;
+  font-family: var(--police-ancienne);
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+  color: var(--encre-sepia);
+}
+
+.zekrom-retro-groupe { margin-bottom: 0.5rem; }
+
+.zekrom-retro-titre {
+  margin: 0 0 0.25rem;
+  font-family: var(--police-ancienne);
+  font-size: 0.84rem;
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  color: var(--encre-sepia-douce);
+}
+
+.zekrom-retro-liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.zekrom-retro-item {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  font-size: 0.92rem;
+  color: var(--encre-sepia);
+}
+
+.zekrom-retro-talent { font-weight: 700; }
+
+.zekrom-retro-note { color: var(--encre-sepia-douce); }
+
+.zekrom-retro-detacher {
+  min-height: 32px;
+  padding: 0.1rem 0.5rem;
+  font-family: var(--police-ancienne);
+  font-size: 0.78rem;
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+  color: var(--danger-parchemin);
+  background: transparent;
+  border: 1px solid var(--danger-parchemin);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.zekrom-retro-detacher:hover { background: rgba(160, 44, 26, 0.08); }
+.zekrom-retro-detacher:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.zekrom-retro-vide {
+  margin: 0;
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--encre-sepia-douce);
+}
+
+.zekrom-retro-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  align-items: center;
+}
+
+.zekrom-retro-select {
+  min-height: 40px;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: var(--encre-sepia);
+  background: var(--creme);
+  border: 1px solid var(--cerne-carte);
+  border-radius: 6px;
+}
+
+.zekrom-bouton-lien { padding: 0.4rem 0.9rem; min-height: 40px; }
+
+.zekrom-retro-aide {
+  margin: 0.4rem 0 0.3rem;
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--encre-sepia-douce);
+}
+
+.zekrom-retro-vers-reshiram {
+  display: inline-block;
+  font-family: var(--police-ancienne);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
 /* ---------- Retour à la console (tap target ≥ 44 px) ---------- */
 .retour { margin: 0; text-align: center; }
 

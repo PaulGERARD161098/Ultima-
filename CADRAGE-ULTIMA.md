@@ -95,11 +95,18 @@
     `zekrom.html` (aile noire, cap ouvert) + **seed des 3 rêves de Paul exécuté
     (solo)**. Le doublet réel ↔ idéal est complet et vivant. PR #83 mergée.
 
-    **③ Passerelle de données R↔Z** : table de liaison `talent ↔ idéal` (gate
-    migration) + le **rétroplanning** (depuis un idéal ZEKROM : « talents que
-    j'ai / qui manquent » → besoin chiffré, coût délégué à NICOL BOLAS) +
-    enrichissement bidirectionnel. **Manuel en v1** (Paul valide les liens).
-    Dépend de ZEKROM (②).
+    **③ ✅ Passerelle de données R↔Z v1 construite (2026-07-23, solo)** : table
+    de liaison `passerelles` (idéal ↔ talent, nature `acquis`/`a_construire`,
+    note) — migration `0011` + vue `ideaux_retroplanning`, RLS **double scellement
+    AD-4** (miroir 0009/0010). API `api/passerelles.js` (GET/POST/PATCH/DELETE,
+    owner_id serveur-only, FK figées en update). Front : panneau **rétroplanning
+    par idéal** sur `zekrom.html` (« ce que j'ai déjà / ce qui me manque », relier
+    un talent réel + nature, détacher). Harnais `unit-zekrom-validate` +
+    `smoke-zekrom` enrichis. **Manuel en v1** (Paul crée/valide les liens).
+    Le **chiffrage du coût reste délégué à NICOL BOLAS** (hors v1 ; la note amorce
+    le besoin en mots). Cadre : §9 de `CADRAGE-RESHIRAM-ZEKROM.md`. **Le doublet
+    réel ↔ idéal devient AGISSANT.** v2 différé : miroir côté RESHIRAM,
+    auto-suggestion, chiffrage.
 
     **④ Connexions v2 RESHIRAM→RIVEN** : `talent_refs_reseau` (lecture des
     fiches RIVEN, jamais de copie) + vue « capital réseau » chiffrée par

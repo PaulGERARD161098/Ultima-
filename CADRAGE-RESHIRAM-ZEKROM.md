@@ -280,3 +280,43 @@ Supabase `leosfqyidgsaescjbfom`, aucune ressource facturée en plus.
 > CONFORME + `0010` appliquée + seed exécuté + PR #83 mergée, en solo). Le doublet
 > réel ↔ idéal est complet et vivant. Suite : LV2-③ **passerelle de données R↔Z**
 > (rétroplanning idéal → réel, liaison idéal↔talent).
+
+## 9. Mini-cadrage LV2-③ — la passerelle R↔Z (le rétroplanning, manuel v1)
+
+> Cadré + livré 2026-07-23 (GO SOLO, à la suite de ZEKROM). C'est le **cœur du
+> doublet** : ce qui relie les deux consoles autonomes (§3).
+
+### v1 — relier un idéal à ses talents, voir ce qui manque
+
+- **Objet central : la passerelle** = un lien entre un **idéal ZEKROM** et un
+  **talent RESHIRAM**, porteur d'une **nature** :
+  - `acquis` = ce talent réel (que j'ai) **rend possible** cet idéal.
+  - `a_construire` = cet idéal **appelle** ce talent, qui reste **à acquérir /
+    renforcer** (le manque du rétroplanning).
+  - `note` (optionnel) = le besoin, le « comment » qualitatif. **Le chiffrage du
+    coût N'est PAS ici** : délégué à NICOL BOLAS (§6.4), la note ne fait que
+    l'amorcer en mots en attendant.
+- **Le rétroplanning** (la valeur) : depuis un idéal ZEKROM, la passerelle répond
+  **« quels talents j'ai déjà (acquis), lesquels me manquent (à construire) »** —
+  l'écart mesuré réel ↔ idéal EST le plan de route (§0).
+- **Où** : un panneau **rétroplanning** par idéal sur `zekrom.html` (depuis
+  l'idéal, §3). Paul relie un talent existant (choisi dans ses talents RESHIRAM) +
+  la nature ; le panneau affiche le bilan **acquis / à construire**.
+- **Sens** : **manuel en v1** (Paul crée/valide chaque lien — §6.3). Auto plus tard.
+- **Enrichissement bidirectionnel** : v1 = **depuis l'idéal** (côté ZEKROM). Le
+  miroir côté RESHIRAM (un talent montre quels idéaux il sert) = v2, sans
+  retoucher le modèle (la table de liaison le porte déjà des deux côtés).
+
+### Modèle de données (migration 0011)
+
+- Table `passerelles` (`ideal_id`, `talent_id`, `nature` ∈ acquis/a_construire,
+  `note`). **Double scellement AD-4** : les FK composites `(owner_id, ideal_id)`
+  et `(owner_id, talent_id)` garantissent qu'un lien ne relie qu'un idéal ET un
+  talent **du même owner**. Unicité `(owner_id, ideal_id, talent_id)` (un seul lien
+  par paire). Vue `ideaux_retroplanning` (par idéal : nb_acquis, nb_a_construire).
+  RLS complète (initplan), miroir strict de 0009/0010.
+- **v2** (différé) : miroir côté RESHIRAM, auto-suggestion de liens, chiffrage
+  NICOL BOLAS.
+
+> **Boucle LV2-③ v1** : liaison + rétroplanning manuel depuis l'idéal. Le doublet
+> réel ↔ idéal devient **agissant** (plus seulement co-présent).

@@ -3,7 +3,13 @@
 // validateIdeal/validateDirection reflètent les CHECK de
 // supabase/migrations/0010_zekrom_ideaux.sql. Cas de fermeture : champ inconnu
 // rejeté, owner_id jamais accepté, bornes respectées, registre enum, ideal_id = uuid.
-import { validateIdeal, validateDirection, IDEAL_REGISTRES } from '../api/_lib/validate.js';
+import {
+  validateIdeal,
+  validateDirection,
+  validatePasserelle,
+  IDEAL_REGISTRES,
+  PASSERELLE_NATURES,
+} from '../api/_lib/validate.js';
 
 const verdicts = {};
 const U1 = '11111111-1111-4111-8111-111111111111';
@@ -60,6 +66,36 @@ verdicts.directionIdealPasUuid = !!validateDirection({ ideal_id: 'pas-un-uuid', 
 verdicts.directionFormulationVide = !!validateDirection({ ideal_id: U1, formulation: '   ' }, 'create').error;
 verdicts.directionFormulationTropLongue = !!validateDirection({ ideal_id: U1, formulation: 'x'.repeat(2001) }, 'create').error;
 verdicts.directionChampInconnu = !!validateDirection({ ideal_id: U1, formulation: 'ok', owner_id: U1 }, 'create').error;
+
+// ---------- 9. Passerelle R↔Z (LV2-③) : lien idéal ↔ talent ----------
+const U2 = '22222222-2222-4222-8222-222222222222';
+{
+  const { value, error } = validatePasserelle(
+    { ideal_id: U1, talent_id: U2, nature: 'acquis', note: 'délai court' }, 'create');
+  verdicts.passerelleOk = !error && value.ideal_id === U1 && value.talent_id === U2 &&
+    value.nature === 'acquis' && value.note === 'délai court';
+}
+// create : ideal_id + talent_id (uuid) + nature imposés
+verdicts.passerelleSansIdeal = !!validatePasserelle({ talent_id: U2, nature: 'acquis' }, 'create').error;
+verdicts.passerelleSansTalent = !!validatePasserelle({ ideal_id: U1, nature: 'acquis' }, 'create').error;
+verdicts.passerelleIdealPasUuid = !!validatePasserelle({ ideal_id: 'x', talent_id: U2, nature: 'acquis' }, 'create').error;
+verdicts.passerelleSansNature = !!validatePasserelle({ ideal_id: U1, talent_id: U2 }, 'create').error;
+verdicts.passerelleNatureInvalide = !!validatePasserelle({ ideal_id: U1, talent_id: U2, nature: 'peut-etre' }, 'create').error;
+verdicts.passerelleToutesNatures = PASSERELLE_NATURES.every((n) =>
+  !validatePasserelle({ ideal_id: U1, talent_id: U2, nature: n }, 'create').error);
+// owner_id / champ inconnu rejetés
+verdicts.passerelleRejetOwner = !!validatePasserelle({ ideal_id: U1, talent_id: U2, nature: 'acquis', owner_id: U1 }, 'create').error;
+// note : nullable, bornée
+{
+  const { value, error } = validatePasserelle({ ideal_id: U1, talent_id: U2, nature: 'acquis', note: null }, 'create');
+  verdicts.passerelleNoteNull = !error && value.note === null;
+}
+verdicts.passerelleNoteTropLongue = !!validatePasserelle(
+  { ideal_id: U1, talent_id: U2, nature: 'acquis', note: 'x'.repeat(2001) }, 'create').error;
+// update : nature/note seulement ; les FK sont figées (rejetées en update)
+verdicts.passerelleUpdateNature = !validatePasserelle({ nature: 'a_construire' }, 'update').error;
+verdicts.passerelleUpdateFkRejetee = !!validatePasserelle({ ideal_id: U1 }, 'update').error;
+verdicts.passerelleUpdateVide = !!validatePasserelle({}, 'update').error;
 
 // ---------- Bilan ----------
 console.log(JSON.stringify(verdicts, null, 2));

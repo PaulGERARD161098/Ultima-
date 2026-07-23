@@ -3,6 +3,20 @@
 > Une décision consignée n'est jamais redemandée ni re-litigée.
 > Format : date — décision — conséquence.
 
+- **2026-07-23 (LV2-③ passerelle R↔Z v1 — GO SOLO, « go la suite »)** — À la
+  suite de ZEKROM, construit le **cœur du doublet** : la table de liaison
+  `passerelles` (idéal ZEKROM ↔ talent RESHIRAM) porteuse d'une **nature**
+  (`acquis` = talent que j'ai qui rend l'idéal possible ; `a_construire` = talent
+  que l'idéal appelle et qui me manque) + note libre. **Rétroplanning** rendu par
+  idéal sur `zekrom.html` (« ce que j'ai déjà / ce qui me manque »), **manuel v1**
+  (Paul crée/valide les liens). **Chiffrage du coût délégué à NICOL BOLAS** (hors
+  v1 ; la note amorce le besoin). Migration `0011` + vue `ideaux_retroplanning`,
+  RLS **double scellement AD-4** (un lien ne relie qu'un idéal ET un talent du
+  même owner). API `api/passerelles.js` (owner_id serveur-only, FK figées en
+  PATCH). Décisions v1 tranchées par Léo (cadré §9 R/Z) : lien depuis l'idéal
+  (côté ZEKROM) ; miroir RESHIRAM = v2. Patrimoine complet vert. Le doublet réel
+  ↔ idéal devient **agissant**.
+
 - **2026-07-23 (ZEKROM v1 construite)** — Paul (dictée) : « implante mes 3 rêves
   dans ZEKROM ». Boucle LV2-② livrée = miroir de RESHIRAM. Ses **3 objectifs de
   vie** actés comme idéaux seed : ① prendre soin du domaine/terres du moulin
