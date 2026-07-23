@@ -186,10 +186,54 @@ function lireEntrees() {
     tauxChargesDirigeantTns: lireNombre('tauxChargesDirigeantTns', 45) / 100,
     coefAnnualisation: lireNombre('coefAnnualisation', DEFAUTS.coefAnnualisation),
     margeSecurite: lireNombre('margeSecurite', 20) / 100,
+    moduleTva: Boolean(document.getElementById('moduleTva') && document.getElementById('moduleTva').checked),
+    tauxTvaCollectee: lireNombre('tauxTvaCollectee', 20) / 100,
+    tauxTvaDeductible: lireNombre('tauxTvaDeductible', 20) / 100,
+    saisonnalite: lireSaisonnalite(),
     postes: lireLignes('postes-liste'),
     investissements: lireLignes('invest-liste'),
     locations: lireLignes('location-liste'),
   };
+}
+
+// ---------- Saisonnalité : 12 coefficients mensuels (1 = mois moyen) ----------
+const MOIS = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
+
+function lireSaisonnalite() {
+  const coefs = [];
+  for (let m = 1; m <= 12; m++) { coefs.push(lireNombre('saison-' + m, 1)); }
+  return coefs;
+}
+
+function construireSaisonnalite() {
+  const grille = document.getElementById('saison-grille');
+  if (!grille) { return; }
+  grille.replaceChildren();
+  for (let m = 1; m <= 12; m++) {
+    const box = el('div', 'champ champ-saison');
+    const lab = el('label', null, MOIS[m - 1]);
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.id = 'saison-' + m;
+    input.value = '1';
+    input.step = '0.1';
+    input.min = '0';
+    input.setAttribute('inputmode', 'decimal');
+    input.setAttribute('aria-label', 'Coefficient de saisonnalité — ' + MOIS[m - 1]);
+    lab.htmlFor = input.id;
+    box.appendChild(lab);
+    box.appendChild(input);
+    grille.appendChild(box);
+  }
+}
+
+// Active/désactive les taux de TVA selon la case « Modéliser le décalage de TVA ».
+function majTvaEtat() {
+  const actif = Boolean(document.getElementById('moduleTva') && document.getElementById('moduleTva').checked);
+  ['tauxTvaCollectee', 'tauxTvaDeductible'].forEach((id) => {
+    const n = document.getElementById(id);
+    if (n) { n.disabled = !actif; }
+  });
 }
 
 // ---------- Courbe de trésorerie (SVG inline déterministe) ----------
@@ -400,8 +444,16 @@ const SCALAIRES = [
   'margeBruteCible', 'chargesStructureMensuelles', 'delaiEncaissementJours',
   'delaiFournisseurJours', 'delaiChargesJours', 'tauxChargesPatronales',
   'tauxChargesSalariales', 'tauxChargesDirigeantTns', 'coefAnnualisation',
-  'margeSecurite',
-];
+  'margeSecurite', 'moduleTva', 'tauxTvaCollectee', 'tauxTvaDeductible',
+].concat(Array.from({ length: 12 }, (_, i) => 'saison-' + (i + 1)));
+
+// Lit un champ scalaire pour l'export (case → booléen, sinon valeur texte).
+function lireChampScalaire(n) { return n.type === 'checkbox' ? n.checked : n.value; }
+// Applique une valeur scalaire à l'import (case → coché, sinon valeur).
+function poserChampScalaire(n, v) {
+  if (n.type === 'checkbox') { n.checked = (v === true || v === 'true' || v === 'on'); }
+  else { n.value = String(v); }
+}
 const ARB_IDS = ['arb-montant', 'arb-revente', 'arb-maintenance', 'arb-loyer', 'arb-depot', 'arb-duree', 'arb-taux'];
 
 function ioMessage(texte, estErreur) {
@@ -413,7 +465,7 @@ function ioMessage(texte, estErreur) {
 
 function serialiserScenario() {
   const scalaires = {};
-  SCALAIRES.forEach((id) => { const n = document.getElementById(id); if (n) { scalaires[id] = n.value; } });
+  SCALAIRES.forEach((id) => { const n = document.getElementById(id); if (n) { scalaires[id] = lireChampScalaire(n); } });
   const arbitrage = {};
   ARB_IDS.forEach((id) => { const n = document.getElementById(id); if (n) { arbitrage[id] = n.value; } });
   return {
@@ -458,8 +510,9 @@ function appliquerScenarioObjet(obj) {
   Object.keys(obj.scalaires).forEach((id) => {
     if (!SCALAIRES.includes(id)) { return; }
     const n = document.getElementById(id);
-    if (n) { n.value = String(obj.scalaires[id]); }
+    if (n) { poserChampScalaire(n, obj.scalaires[id]); }
   });
+  majTvaEtat();  // reflète l'état du module TVA importé sur les taux
   const arb = (obj.arbitrage && typeof obj.arbitrage === 'object') ? obj.arbitrage : {};
   Object.keys(arb).forEach((id) => {
     if (!ARB_IDS.includes(id)) { return; }
@@ -513,7 +566,14 @@ function amorcer() {
   const locations = document.getElementById('location-liste');
   DEFAUTS_UI.locations.forEach((l) => locations.appendChild(ligneLocation(l)));
 
+  // Saisonnalité (12 coefficients à 1 = plat) + état initial des taux de TVA.
+  construireSaisonnalite();
+  majTvaEtat();
+  const caseTva = document.getElementById('moduleTva');
+  if (caseTva) { caseTva.addEventListener('change', majTvaEtat); }
+
   // Recalcul délégué : tout input/change dans le formulaire relance le calcul.
+  // (Les 12 coefficients de saison et les champs TVA vivent DANS le formulaire.)
   const form = document.getElementById('form-abaque');
   form.addEventListener('input', recalculer);
   form.addEventListener('change', recalculer);

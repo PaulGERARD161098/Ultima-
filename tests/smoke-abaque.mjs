@@ -251,6 +251,8 @@ console.log('— 5. Export / import JSON —');
   verifier('Export : hypothèse capturée (caMensuel)', String(obj.scalaires.caMensuel) === '77777', String(obj.scalaires.caMensuel));
   verifier('Export : lignes de main d’œuvre présentes', Array.isArray(obj.postes) && obj.postes.length >= 1);
   verifier('Export : actif d’arbitrage capturé', obj.arbitrage && 'arb-montant' in obj.arbitrage);
+  verifier('Export : module TVA + saisonnalité capturés',
+    ('moduleTva' in obj.scalaires) && ('saison-1' in obj.scalaires));
 
   // On change la valeur, puis on recharge le fichier → la valeur revient.
   await page.fill('#caMensuel', '10000');
@@ -273,6 +275,36 @@ console.log('— 5. Export / import JSON —');
     /non reconnu/i.test((await page.locator('#io-message').textContent()) || ''));
 
   verifier('Zéro erreur console (export/import)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
+  await page.close();
+}
+
+// ============ 6. Saisonnalité + module TVA (branchés au moteur) ============
+console.log('— 6. Saisonnalité + module TVA —');
+{
+  const { page, journal } = await ouvrir({ width: 1200, height: 900 });
+
+  // Saisonnalité : 12 coefficients rendus ; en modifier un change le résultat.
+  verifier('12 coefficients de saisonnalité rendus', (await page.locator('.saison-grille .champ-saison').count()) === 12);
+  const plancherPlat = (await page.locator('#res-plancher').textContent()) || '';
+  await page.fill('#saison-1', '5');
+  await page.waitForTimeout(120);
+  const plancherSaison = (await page.locator('#res-plancher').textContent()) || '';
+  verifier('Saisonnalité modifie la trésorerie plancher', plancherPlat !== plancherSaison, `${plancherPlat} → ${plancherSaison}`);
+  // On remet le mois à plat pour isoler l'effet TVA.
+  await page.fill('#saison-1', '1');
+  await page.waitForTimeout(80);
+
+  // Module TVA : taux désactivés tant qu'il est off ; activés une fois coché ;
+  // et son activation modifie la trésorerie (décalage de TVA modélisé).
+  verifier('Taux TVA désactivés (module off)', await page.locator('#tauxTvaCollectee').isDisabled());
+  const plancherSansTva = (await page.locator('#res-plancher').textContent()) || '';
+  await page.check('#moduleTva');
+  await page.waitForTimeout(120);
+  verifier('Taux TVA activés quand le module est coché', !(await page.locator('#tauxTvaCollectee').isDisabled()));
+  const plancherAvecTva = (await page.locator('#res-plancher').textContent()) || '';
+  verifier('Module TVA modifie la trésorerie plancher', plancherSansTva !== plancherAvecTva, `${plancherSansTva} → ${plancherAvecTva}`);
+
+  verifier('Zéro erreur console (TVA/saison)', journal.erreurs.length === 0, journal.erreurs.slice(0, 3).join(' | '));
   await page.close();
 }
 
