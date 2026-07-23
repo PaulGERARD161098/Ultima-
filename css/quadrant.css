@@ -801,3 +801,91 @@ body.page-quadrant .console-conteneur {
 
 .retour-console:hover { background: linear-gradient(#1f6787, #114560); }
 .retour-console:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+/* ---------- IMLADRIK : l'atelier d'écriture + le journal intime ---------- */
+/* La zone d'écriture : ample, calligraphique, invite à écrire librement. */
+.imladrik-zone {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.55rem 0.7rem;
+  min-height: 8.5rem;
+  resize: vertical;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--encre-sepia);
+  background: var(--creme);
+  border: 1px solid var(--cerne-carte);
+  border-radius: 4px;
+}
+.imladrik-zone::placeholder { color: var(--encre-sepia-douce); }
+.imladrik-zone:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* Une page du journal : parchemin encadré, la plus récente en tête. */
+.imladrik-entree {
+  padding: 0.85rem 1rem;
+  background: linear-gradient(180deg, var(--parchemin), var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte);
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 2px rgba(169, 136, 74, 0.35);
+}
+.imladrik-entree + .imladrik-entree { margin-top: 0.6rem; }
+
+.imladrik-entree-entete {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--or-antique);
+  padding-bottom: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+
+.imladrik-entree-titre {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.04rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--encre-sepia);
+}
+
+.imladrik-entree-date {
+  flex: none;
+  font-family: var(--police-ancienne);
+  font-size: 0.82rem;
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  color: var(--encre-sepia-douce);
+}
+
+.imladrik-entree-corps p {
+  margin: 0 0 0.5rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: var(--encre-sepia);
+  white-space: pre-wrap;
+}
+.imladrik-entree-corps p:last-child { margin-bottom: 0; }
+
+.imladrik-entree-actions {
+  margin-top: 0.6rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.imladrik-bouton-effacer {
+  padding: 0.25rem 0.7rem;
+  font-family: var(--police-ancienne);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  color: var(--encre-sepia);
+  background: var(--parchemin-ombre);
+  border: 1px solid var(--or-antique);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.imladrik-bouton-effacer:hover { color: var(--danger-parchemin); border-color: var(--danger-parchemin); }
+.imladrik-bouton-effacer:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }

@@ -681,3 +681,25 @@
   **Décision : chiffres parkés**, consignés dans ADR-007 bloc C comme premier
   passage [hyp.] à instruire au lancement (rejouable dans `abaque.html`). Aucun
   build supplémentaire ouvert ; on reste en cadrage. PR #75.
+- **2026-07-23 (IMLADRIK ouvert — « pouvoir écrire »)** — Paul : « rendons
+  IMLADRIK opérationnel, je veux pouvoir écrire et le connecter à mon Google
+  Drive perso ». Deux questions Léo (fondation + accès Drive) → **décisions Paul :
+  (1) synchro DEUX SENS entre Ultima et Drive ; (2) c'est l'APP Ultima elle-même
+  qui se connecte au Drive** (pas Léo-en-session). Découpé par Léo en boucles
+  (une à la fois) : **Boucle 1 LIVRÉE = « pouvoir écrire »** — le journal intime
+  en base, calqué sur ADRAMELECH/RESHIRAM, **fail-closed** (aucune donnée simulée,
+  pas de mode démo — §5 intime). Livré : migration `0012_imladrik_journal.sql`
+  (renumérotée 0010→0012 après merge ZEKROM ; table `imladrik_entrees`, RLS par
+  owner, **APPLIQUÉE en prod le 2026-07-23 sur go Paul**), API
+  `/api/imladrik` (GET) + `/api/imladrik/entrees` (POST/PATCH/DELETE),
+  `validateEntreeImladrik` (miroir CHECK), `imladrik.html` refondu (atelier
+  d'écriture + journal, chrome quadrant) + `js/imladrik.js` + styles quadrant.
+  Harnais `tests/unit-imladrik-validate.mjs` + `tests/smoke-imladrik.mjs`
+  (fail-closed / écriture POST+refresh / effacement DELETE / 401), ajoutés à
+  `lancer.sh`. IMLADRIK retiré des antichambres (`js/antichambre.js`).
+  **Boucle Drive = SUIVANTE, gatée** : synchro deux sens + app connectée exige
+  un projet Google Cloud + secret client en env Vercel (**actions Paul**) et une
+  contre-passe `securite-auditeur` AVANT tout code (§5 : jetons Google = surface
+  intime nouvelle). Correctif adjacent : `smoke-quadrants.mjs` §E réaligné sur
+  `bcp.html` réel (badge « premier outil ouvert » + lien ABAQUE) — échec
+  **pré-existant** du #75 (le simulateur avait fait évoluer bcp sans MAJ du test).

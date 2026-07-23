@@ -10,10 +10,11 @@
 //   D. adramelech.html avec fausse session + API stubée 200 (fixture neutre) :
 //      registre rendu (compteurs, idées, ponts) + cartouche Léo réflexif
 //      (archipel, volet stratégique, propositions déterministes cliquables) ;
-//   E/F. bcp.html et imladrik.html : coquille honnête (bandeau, mission,
-//      badge « en chantier ») + cartouche Léo « majordome de chantier »
-//      (état + proposition unique), une fois par session PAR quadrant,
-//      retour console ≥ 44 px ;
+//   E. bcp.html (NICOL BOLAS) : cartouche Léo « majordome de chantier » (§1-2,
+//      encore présent) + shell « premier outil ouvert » annonçant le simulateur
+//      ABAQUE (§3, badge + lien abaque.html + retour console ≥ 44 px). Incohérence
+//      cartouche/shell pré-existante (#75), flaggée sur place.
+//      (IMLADRIK n'est plus une antichambre : quadrant bâti — voir smoke-imladrik.)
 //   partout : zéro requête externe, zéro erreur console, contrastes AA.
 // NOTE : le flux ADRAMELECH avec session RÉELLE n'est pas prouvable en
 // harnais (auth vivante) — C/D valident le motif Bearer et le fail-closed.
@@ -296,19 +297,18 @@ console.log('— D. adramelech.html fixture 200 → registre + cartouche Léo r�
   await page.close();
 }
 
-// ===================== E/F. NICOL BOLAS et IMLADRIK : antichambres de chantier =====================
-// La coquille (étape 3) est paramétrée par quadrant : IMLADRIK reste une
-// antichambre vierge (« En chantier / pas encore bâti », retour unique) ; NICOL
-// BOLAS a ouvert son premier outil ABAQUE (#75) — badge « Premier outil ouvert »,
-// cartouche ABAQUE, et un second lien vers abaque.html. Le cartouche Léo (étapes
-// 1-2) reste identique pour les deux (chantier encore à cadrer).
+// ===================== E. NICOL BOLAS : landing du premier outil (ABAQUE) =====================
+// bcp.html a évolué (#75, simulateur ABAQUE) : badge « Premier outil ouvert »,
+// cartouche ABAQUE, un second lien vers abaque.html, tout en gardant encore le
+// cartouche Léo « majordome de chantier » (leo-accueil.js + antichambre.js).
+// Incohérence cartouche/shell PRÉ-EXISTANTE (#75), à trancher dans la boucle
+// NICOL BOLAS. Test paramétré par quadrant. IMLADRIK n'est plus une antichambre
+// (quadrant bâti — voir smoke-imladrik).
 for (const quadrant of [
   { fichier: 'bcp.html', nom: 'NICOL BOLAS', cle: 'ultima-leo-accueil-vu-bcp',
     badge: 'Premier outil ouvert', cartoucheRe: /ABAQUE/, retours: 2 },
-  { fichier: 'imladrik.html', nom: 'IMLADRIK', cle: 'ultima-leo-accueil-vu-imladrik',
-    badge: 'En chantier', cartoucheRe: /pas encore bâti/, retours: 1 },
 ]) {
-  console.log(`— ${quadrant.nom} : antichambre de chantier (${quadrant.fichier}) —`);
+  console.log(`— ${quadrant.nom} : landing du premier outil (${quadrant.fichier}) —`);
   const { page, erreurs, externes } = await nouvellePage();
   await page.goto(`${BASE}/${quadrant.fichier}`, { waitUntil: 'load', timeout: 20000 });
 
@@ -335,7 +335,7 @@ for (const quadrant of [
   await page.waitForTimeout(400);
   verifier('Pas de réapparition (même session)', (await page.locator('#leo-cartouche').count()) === 0);
 
-  // 3. La coquille : bandeau, mission, badge, chantier, retour console.
+  // 3. Le shell « premier outil » : bandeau, mission, badge, lien ABAQUE, retour.
   const titre = (await page.locator('h1.console-titre').textContent())?.trim();
   verifier(`Bandeau ${quadrant.nom}`, titre === quadrant.nom, `lu: ${titre}`);
   verifier('Blason du quadrant étiqueté', (await page.locator('.quadrant-bandeau .blason-svg[role="img"]').count()) === 1);

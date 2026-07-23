@@ -184,6 +184,24 @@ christianisme / islam / judaïsme…), et de **suggestions culturelles** issues 
 web (musées à Paris cette semaine, lectures, extraits). Beaucoup de commande
 vocale. Dashboard de suivi comme les autres.
 
+> **✅ Boucle 1 « pouvoir écrire » livrée (2026-07-23)** — le socle d'écriture est
+> bâti : `imladrik.html` refondu (antichambre → **atelier d'écriture + journal**),
+> `js/imladrik.js`, API `/api/imladrik` (GET) + `/api/imladrik/entrees`
+> (POST/PATCH/DELETE), `validateEntreeImladrik` (miroir CHECK), migration
+> `0012_imladrik_journal.sql` (table `imladrik_entrees`, RLS par owner —
+> **APPLIQUÉE en prod le 2026-07-23**). Posture §5 : **fail-closed, aucune donnée simulée, pas de mode
+> démo** (intime). Harnais `unit-imladrik-validate` + `smoke-imladrik`. Reste HORS
+> v1 (boucles suivantes, une à la fois) : objectifs de vie, valeurs/principes,
+> citations, quart d'heure quotidien, suggestions culturelles.
+>
+> **⏭ Boucle Drive (décision Paul 2026-07-23 : synchro DEUX SENS + l'app Ultima
+> se connecte elle-même)** — GATÉE. Prérequis **actions Paul** : projet Google
+> Cloud (OAuth app + scopes Drive), **secret client en env Vercel**. Prérequis
+> sécurité : **contre-passe `securite-auditeur` AVANT tout code** (§5 — stocker des
+> jetons Google = nouvelle surface intime ; mono-utilisateur ; timeout sortant ;
+> aucune fuite). Les colonnes d'ancrage Drive s'ajouteront par migration ADDITIVE
+> (jamais en retouchant `imladrik_entrees`).
+
 ## 4. Principes transverses (les 4 quadrants les partagent)
 
 - **Un seul pilote** : Léo, sur tous les quadrants. Paul ne parle qu'à Léo.

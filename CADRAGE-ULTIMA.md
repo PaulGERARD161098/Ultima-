@@ -54,6 +54,18 @@
     `CADRAGE-RESHIRAM-ZEKROM.md`. **Dette repérée (hors ZEKROM)** : `smoke-quadrants` était rouge depuis #75
     (ABAQUE a fait évoluer `bcp.html` sans resync du test) — resynchronisé ici
     (test-only) pour débloquer le runner partagé.
+  - ✅ **IMLADRIK v1 « pouvoir écrire » (2026-07-23, PR #86)** : le journal intime
+    en base, calqué RESHIRAM/ADRAMELECH. Migration `0012_imladrik_journal.sql`
+    (`imladrik_entrees`, RLS par owner — **APPLIQUÉE en prod (2026-07-23, go Paul)**,
+    renumérotée 0010→0012 après merge de ZEKROM 0010 / passerelle 0011). API
+    `api/imladrik.js` (GET) + `api/imladrik/entrees.js` (POST/PATCH/DELETE),
+    `validateEntreeImladrik` (miroir CHECK). Front `imladrik.html` (atelier
+    d'écriture + journal, chrome quadrant) + `js/imladrik.js` : **fail-closed,
+    pas de mode démo** (intime §5). Harnais `unit-imladrik-validate` +
+    `smoke-imladrik` ; patrimoine COMPLET vert. **Boucle Drive suivante (GATÉE)** :
+    Paul veut synchro DEUX SENS + l'app Ultima connectée → projet Google Cloud
+    + secret Vercel (actions Paul) + contre-passe `securite-auditeur` avant code.
+    Cadre : `CADRAGE-CONSOLE.md §3.4`.
   - 🔶 **LV2-② Auth — Google OAuth (2026-07-22)** : bouton « Se connecter
     avec Google » ajouté À CÔTÉ du lien magique (décision Paul : Google en
     plus, pas à la place). Code livré + vérifié : `js/app.js`

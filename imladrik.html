@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
   <title>Ultima — IMLADRIK</title>
-  <meta name="description" content="Antichambre du quadrant IMLADRIK : le développement personnel, chantier pas encore ouvert.">
+  <meta name="description" content="IMLADRIK — l'outil intime de progression : le journal, privé, derrière authentification.">
   <meta name="theme-color" content="#0e3a52">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%231e6fb8'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23ffffff'/%3E%3C/svg%3E">
@@ -28,8 +29,7 @@
 
   <div class="console-conteneur">
 
-    <!-- ===== Bandeau du quadrant : épée au soleil + nom + mission (mot pour mot,
-         CADRAGE-CONSOLE §3.4) + état ===== -->
+    <!-- ===== Bandeau du quadrant : épée au soleil + nom + mission + état ===== -->
     <header class="console-entete quadrant-bandeau">
       <svg class="blason-svg" viewBox="0 0 72 72" role="img"
            aria-label="Blason gravé : une épée dressée devant un soleil" focusable="false">
@@ -54,26 +54,69 @@
         <path d="M36 15.5 V 46.5" stroke="#e0c48a" stroke-width="0.8" opacity="0.7"/>
       </svg>
       <h1 class="console-titre">IMLADRIK</h1>
-      <p class="console-invite quadrant-mission">Outil intime de progression (héritier du Starlog
-        de «&nbsp;Claude Normal&nbsp;»)&nbsp;: objectifs de vie, journal, valeurs et principes,
-        prise de recul («&nbsp;tel un pointilliste qui recule pour voir le portrait&nbsp;»),
-        rappels de ce que Paul veut vivre — des rappels, pas du jugement.</p>
-      <span class="quadrant-etat">En chantier</span>
+      <p class="console-invite quadrant-mission">Ton outil intime de progression&nbsp;:
+        écris ton journal, prends du recul, garde le cap sur ce que tu veux vivre —
+        des rappels, pas du jugement. Privé, à toi seul.</p>
+      <span class="quadrant-etat">Privé — auth requise</span>
     </header>
 
-    <!-- ===== Antichambre honnête : rien n'est bâti, rien n'est simulé. ===== -->
-    <main class="quadrant-page" aria-label="Antichambre du quadrant IMLADRIK">
-      <section class="cartouche-page">
-        <h2>Le chantier</h2>
-        <p>Ce quadrant n'est pas encore bâti. Il est en attente de son mini-cadrage,
-           qui se dicte à Léo en session — une boucle à la fois.</p>
+    <!-- ===== Le journal DERRIÈRE AUTH, données réelles uniquement (§5 : intime).
+         Un seul état visible à la fois, piloté par js/imladrik.js. AUCUNE page en
+         dur : le contenu ne vient QUE de l'API authentifiée /api/imladrik (RLS,
+         fail-closed sans session). ===== -->
+    <main class="quadrant-page" aria-label="Journal intime du quadrant IMLADRIK">
+
+      <p id="imladrik-chargement" class="adr-chargement">Ouverture du journal…</p>
+
+      <section id="imladrik-auth" class="cartouche-page" hidden>
+        <h2>Authentification requise</h2>
+        <p>Ton journal est intime&nbsp;: il ne s'ouvre qu'une fois ta session ouverte.</p>
+        <p><a class="retour-console" href="/">Se connecter depuis la boussole</a></p>
       </section>
+
+      <section id="imladrik-erreur" class="cartouche-page" hidden>
+        <h2>Journal indisponible</h2>
+        <p>L'ouverture a échoué. Réessaie dans un instant.</p>
+      </section>
+
+      <div id="imladrik-registre" hidden>
+
+        <!-- L'atelier d'écriture : consigner une page. Réutilise les primitives de
+             formulaire du chrome quadrant (reshiram-form/champ/bouton/message). -->
+        <section class="cartouche-page" aria-labelledby="imladrik-titre-ecrire">
+          <h2 id="imladrik-titre-ecrire">Écrire</h2>
+          <form id="imladrik-form" class="reshiram-form" novalidate>
+            <div class="reshiram-champ">
+              <label for="imladrik-titre">Titre <span class="reshiram-aide">(optionnel)</span></label>
+              <input id="imladrik-titre" name="titre" type="text" maxlength="200"
+                     autocomplete="off" placeholder="Un mot, une date, un thème…">
+            </div>
+            <div class="reshiram-champ">
+              <label for="imladrik-contenu">Ta page</label>
+              <textarea id="imladrik-contenu" name="contenu" rows="8" maxlength="20000"
+                        class="imladrik-zone" autocomplete="off"
+                        placeholder="Écris librement…" required></textarea>
+            </div>
+            <div class="reshiram-form-actions">
+              <button type="submit" class="reshiram-bouton">Consigner</button>
+              <span id="imladrik-form-message" class="reshiram-form-message" role="status" aria-live="polite"></span>
+            </div>
+          </form>
+        </section>
+
+        <!-- Le journal : les pages, la plus récente en tête. -->
+        <section class="cartouche-page" aria-labelledby="imladrik-titre-journal">
+          <h2 id="imladrik-titre-journal">Le journal</h2>
+          <div id="imladrik-entrees"></div>
+        </section>
+      </div>
 
       <p class="retour"><a class="retour-console" href="ultima.html">Retour à la console</a></p>
     </main>
   </div>
 
-  <script src="js/leo-accueil.js"></script>
-  <script src="js/antichambre.js"></script>
+  <script src="js/vendor/supabase-js-2.110.0.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/imladrik.js"></script>
 </body>
 </html>
