@@ -314,9 +314,12 @@ Supabase `leosfqyidgsaescjbfom`, aucune ressource facturée en plus.
   et `(owner_id, talent_id)` garantissent qu'un lien ne relie qu'un idéal ET un
   talent **du même owner**. Unicité `(owner_id, ideal_id, talent_id)` (un seul lien
   par paire). Vue `ideaux_retroplanning` (par idéal : nb_acquis, nb_a_construire).
-  RLS complète (initplan), miroir strict de 0009/0010.
+  RLS complète (initplan), miroir strict de 0009/0010. **Migration `0011`
+  APPLIQUÉE en prod (2026-07-23, solo)** ; contre-passe sécu CONFORME (double
+  scellement testé étanche) ; advisors post-DDL propres.
 - **v2** (différé) : miroir côté RESHIRAM, auto-suggestion de liens, chiffrage
   NICOL BOLAS.
 
-> **Boucle LV2-③ v1** : liaison + rétroplanning manuel depuis l'idéal. Le doublet
-> réel ↔ idéal devient **agissant** (plus seulement co-présent).
+> **Boucle LV2-③ v1 CLOSE et EN PROD** : liaison + rétroplanning manuel depuis
+> l'idéal. Le doublet réel ↔ idéal devient **agissant** (plus seulement
+> co-présent). PR #85 mergée.

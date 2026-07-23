@@ -97,7 +97,7 @@
 
     **③ ✅ Passerelle de données R↔Z v1 construite (2026-07-23, solo)** : table
     de liaison `passerelles` (idéal ↔ talent, nature `acquis`/`a_construire`,
-    note) — migration `0011` + vue `ideaux_retroplanning`, RLS **double scellement
+    note) — migration `0011` **APPLIQUÉE en prod (solo, advisors propres)** + vue `ideaux_retroplanning`, RLS **double scellement
     AD-4** (miroir 0009/0010). API `api/passerelles.js` (GET/POST/PATCH/DELETE,
     owner_id serveur-only, FK figées en update). Front : panneau **rétroplanning
     par idéal** sur `zekrom.html` (« ce que j'ai déjà / ce qui me manque », relier
