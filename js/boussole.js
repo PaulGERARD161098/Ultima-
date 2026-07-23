@@ -69,12 +69,13 @@
     {
       id: 'zekrom',
       nom: 'ZEKROM',
-      cible: null,
+      cible: 'zekrom.html',
       externe: false,
-      etat: 'À venir',
-      resume: '« La quête de l’idéal » — tes volontés et idées hautes, le cap '
-        + 'directionnel qui nourrit la motivation et fait rêver. Passerelle avec '
-        + 'RESHIRAM (rétroplanning idéal → réel).',
+      etat: 'Ouvert',
+      resume: '« La quête de l’idéal » — tes rêves et volontés hautes, captés '
+        + 'librement puis formulés en directions (le cap). Un idéal sans cap '
+        + 'reste plein : « à orienter », jamais dévalué. Passerelle avec RESHIRAM '
+        + '(rétroplanning idéal → réel).',
       blason: blasonAileNoire(),
     },
   ];

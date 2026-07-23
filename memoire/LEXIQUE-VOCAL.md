@@ -36,7 +36,7 @@
 | Renault Boost, Renoboost | Renoboost IA (socle rémunérateur = chantiers + installations à domicile ; ligne de base du benchmark ADRAMELECH ; macro-projet boussole LV2 → console https://www.renoboostia.fr) |
 | Ikom, Ycom | YCOME (macro-projet boussole LV2, plateforme externe — URL à fournir par Paul) |
 | Richardam, Reshiram | RESHIRAM (cap boussole LV2 : « le travail de la réalité » — talents & capacités concrets, data, lien RIVEN) |
-| Zekrom | ZEKROM (cap boussole LV2 : « la quête de l'idéal » — volontés/idéaux, cap directionnel) |
+| Zekrom, Chrome | ZEKROM (cap boussole LV2 : « la quête de l'idéal » — volontés/idéaux, cap directionnel) — « Chrome » = déformation vocale observée 2026-07-23 |
 | capteur (contexte curseur) | curseur (souris) qu'on glisse sur un cap de la boussole |
 | projets vidéo (contexte réel/idéal) | projets idéaux / idéalistes (confirmé Paul 2026-07-21) |
 | mon Starlog / Claude Normal | son journal de dév. perso dans l'app Claude standard (modèle d'IMLADRIK) |

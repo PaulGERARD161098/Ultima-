@@ -115,15 +115,23 @@ verifier('Cap RESHIRAM pointe vers reshiram.html (interne)',
 verifier('Cap RESHIRAM en interne (pas de nouvel onglet)',
   (await capReshiram.getAttribute('target')) === null);
 
-// YCOME, ZEKROM restent « à venir » : non-liens, aria-disabled.
-for (const id of ['ycome', 'zekrom']) {
-  const cap = page.locator(`.cap[data-id="${id}"]`);
+// ZEKROM est désormais un cap OUVRABLE interne (page zekrom.html, même onglet,
+// miroir de RESHIRAM — complète le doublet réel ↔ idéal).
+const capZekrom = page.locator('a.cap[data-id="zekrom"]');
+verifier('Cap ZEKROM ouvrable (ancre)', (await capZekrom.count()) === 1);
+verifier('Cap ZEKROM pointe vers zekrom.html (interne)',
+  (await capZekrom.getAttribute('href')) === 'zekrom.html');
+verifier('Cap ZEKROM en interne (pas de nouvel onglet)',
+  (await capZekrom.getAttribute('target')) === null);
+
+// YCOME reste « à venir » : non-lien, aria-disabled.
+{
+  const cap = page.locator('.cap[data-id="ycome"]');
   const tag = await cap.evaluate((e) => e.tagName.toLowerCase());
-  verifier(`Cap ${id} inerte (pas une ancre)`, tag !== 'a', `tag: ${tag}`);
-  verifier(`Cap ${id} aria-disabled`, (await cap.getAttribute('aria-disabled')) === 'true');
+  verifier('Cap ycome inerte (pas une ancre)', tag !== 'a', `tag: ${tag}`);
+  verifier('Cap ycome aria-disabled', (await cap.getAttribute('aria-disabled')) === 'true');
 }
-const capYcome = page.locator('.cap[data-id="ycome"]');
-verifier('2 caps « à venir » (YCOME + ZEKROM)', (await page.locator('.cap--avenir').count()) === 2);
+verifier('1 cap « à venir » (YCOME seul)', (await page.locator('.cap--avenir').count()) === 1);
 
 // Passerelle visuelle RESHIRAM ↔ ZEKROM tracée.
 verifier('Passerelle RESHIRAM ↔ ZEKROM tracée',
@@ -157,7 +165,7 @@ verifier('Sortie du survol → retour à l\'invite',
   (await page.locator('#boussole-parole .parole-texte').count()) === 0);
 
 // Accès clavier : focus du cap « à venir » montre aussi son résumé.
-await capYcome.focus();
+await page.locator('.cap[data-id="ycome"]').focus();
 await page.waitForSelector('#boussole-parole.is-actif', { timeout: 5000 });
 const nomYcome = (await page.locator('#boussole-parole .parole-nom').textContent())?.trim();
 verifier('Focus clavier d\'un cap montre son résumé', nomYcome === 'YCOME', `lu: ${nomYcome}`);

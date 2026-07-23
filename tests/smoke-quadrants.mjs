@@ -297,9 +297,16 @@ console.log('— D. adramelech.html fixture 200 → registre + cartouche Léo r�
 }
 
 // ===================== E/F. NICOL BOLAS et IMLADRIK : antichambres de chantier =====================
+// La coquille (étape 3) est paramétrée par quadrant : IMLADRIK reste une
+// antichambre vierge (« En chantier / pas encore bâti », retour unique) ; NICOL
+// BOLAS a ouvert son premier outil ABAQUE (#75) — badge « Premier outil ouvert »,
+// cartouche ABAQUE, et un second lien vers abaque.html. Le cartouche Léo (étapes
+// 1-2) reste identique pour les deux (chantier encore à cadrer).
 for (const quadrant of [
-  { fichier: 'bcp.html', nom: 'NICOL BOLAS', cle: 'ultima-leo-accueil-vu-bcp' },
-  { fichier: 'imladrik.html', nom: 'IMLADRIK', cle: 'ultima-leo-accueil-vu-imladrik' },
+  { fichier: 'bcp.html', nom: 'NICOL BOLAS', cle: 'ultima-leo-accueil-vu-bcp',
+    badge: 'Premier outil ouvert', cartoucheRe: /ABAQUE/, retours: 2 },
+  { fichier: 'imladrik.html', nom: 'IMLADRIK', cle: 'ultima-leo-accueil-vu-imladrik',
+    badge: 'En chantier', cartoucheRe: /pas encore bâti/, retours: 1 },
 ]) {
   console.log(`— ${quadrant.nom} : antichambre de chantier (${quadrant.fichier}) —`);
   const { page, erreurs, externes } = await nouvellePage();
@@ -335,13 +342,17 @@ for (const quadrant of [
   const mission = (await page.locator('.quadrant-mission').textContent())?.trim();
   verifier('Ligne de mission présente (cadrage)', Boolean(mission) && mission.length > 20);
   const badge = (await page.locator('.quadrant-bandeau .quadrant-etat').textContent())?.trim();
-  verifier('Badge « En chantier »', badge === 'En chantier', `lu: ${badge}`);
-  verifier('Cartouche chantier honnête',
-    /pas encore bâti/.test((await page.locator('.cartouche-page').textContent()) || ''));
-  const retour = page.locator('a.retour-console');
-  verifier('Retour console présent', (await retour.count()) === 1 &&
-    (await retour.getAttribute('href')) === 'ultima.html');
-  const hRetour = await retour.evaluate((el) => el.getBoundingClientRect().height);
+  verifier(`Badge « ${quadrant.badge} »`, badge === quadrant.badge, `lu: ${badge}`);
+  verifier('Cartouche honnête (état réel du quadrant)',
+    quadrant.cartoucheRe.test((await page.locator('.cartouche-page').textContent()) || ''));
+  // Retour vers la console (toujours présent) ; NICOL BOLAS porte en plus le lien
+  // vers son premier outil (ABAQUE). Le retour console est le dernier lien.
+  const retours = page.locator('a.retour-console');
+  verifier('Nombre de liens retour attendu', (await retours.count()) === quadrant.retours,
+    `${await retours.count()} vs ${quadrant.retours}`);
+  const retourConsole = page.locator('a.retour-console[href="ultima.html"]');
+  verifier('Retour console présent', (await retourConsole.count()) === 1);
+  const hRetour = await retourConsole.evaluate((el) => el.getBoundingClientRect().height);
   verifier('Tap target retour ≥ 44 px', hRetour >= 44, `${hRetour}px`);
 
   // 4. Contrastes AA (mission sur mer, texte sur parchemin).

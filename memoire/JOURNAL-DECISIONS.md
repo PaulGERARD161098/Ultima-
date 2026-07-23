@@ -3,6 +3,22 @@
 > Une décision consignée n'est jamais redemandée ni re-litigée.
 > Format : date — décision — conséquence.
 
+- **2026-07-23 (ZEKROM v1 construite)** — Paul (dictée) : « implante mes 3 rêves
+  dans ZEKROM ». Boucle LV2-② livrée = miroir de RESHIRAM. Ses **3 objectifs de
+  vie** actés comme idéaux seed : ① prendre soin du domaine/terres du moulin
+  (projet) ; ② partir avec une femme aimée, un moment dans un village de pêcheurs
+  (vision) ; ③ travailler d'où il veut, libre de voyager et d'ouvrir des business
+  partout, sans contrainte géographique (projet). **Modèle** : `ideaux`
+  (`intitule, registre ∈ vision/volonte/projet, horizon`) + `directions` (« un
+  idéal → une direction », le cap). **Règle cardinale inverse de RESHIRAM** : un
+  idéal sans direction = « à orienter » (INVITATION, jamais une dévaluation ; le
+  réel ne censure pas). Vue « mon cap directionnel » = enrichissement, pas un
+  filtre. Migration `0010` **écrite, gate non appliquée** ; seed gaté
+  `supabase/seed-zekrom-paul.sql` (owner_id paramétré). Patrimoine complet vert +
+  contre-passe sécu. ⏳ Paul : appliquer 0010, exécuter le seed. Dette annexe
+  repérée et resynchronisée (test-only) : `smoke-quadrants` rouge depuis #75
+  (bcp.html/ABAQUE).
+
 - **2026-07-21 (renommage)** — **BALTHAZAR GELD → NICOL BOLAS** (dicté Paul).
   Quadrant financier renommé partout (UI `ultima.html`/`bcp.html`, code
   `api/_lib/leo.js` + js, tests, cadrages, charte). Emblème inchangé (balance),
