@@ -3,6 +3,22 @@
 > Une décision consignée n'est jamais redemandée ni re-litigée.
 > Format : date — décision — conséquence.
 
+- **2026-07-23 (NICOL BOLAS amélioré — GO SOLO « améliorons le »)** — Paul :
+  « passons sur NB, améliorons-le » puis « quel est ton ordre ? » → Léo fixe
+  l'ordre (valeur ↑, risque/dépendance ↓) et enchaîne en solo les 3 boucles
+  non-gatées d'ABAQUE : **NB-2b arbitrage achat/location** (#89 — surface
+  `arbitrageAchatLocation`, impact cash calculé en re-simulant le scénario ; règle
+  « louer si l'achat casse le plancher » = cas VERTUMNE), **NB-2c export/import
+  JSON** (#90 — sauver/recharger un scénario en fichier local, sans base),
+  **NB-2d saisonnalité + module TVA** (#91 — 12 coefficients + TVA optionnelle,
+  params déjà dans le moteur figé). Toutes **front-only** (zéro migration/base/
+  réseau, finance jamais en logs), patrimoine complet vert, mergées en solo.
+  **NB-3 persistance en base NON exécutée** : c'est une **décision produit ouverte
+  (§9.4) + gate finance (RC2)** — réservée à un go explicite de Paul (migration
+  `0013`, `0012` étant pris par IMLADRIK). Contexte : une autre session a mergé
+  IMLADRIK (#86, journal intime, migration `0012`) pendant la session — intégré
+  sans conflit (fichiers disjoints).
+
 - **2026-07-23 (LV2-⑤ cockpit — résumés vivants v1, GO SOLO « go la suite »)** —
   La boussole devient un **cockpit** (§2bis « pas un menu ») : au survol d'un cap
   data, le vrai « en cours » (agrégats) remplace le texte figé. Endpoint
