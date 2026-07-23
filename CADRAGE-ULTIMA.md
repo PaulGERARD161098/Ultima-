@@ -36,20 +36,22 @@
     défi de Léo, bascule « mon offre réelle ». Cap boussole ouvert (interne).
     Harnais `unit-reshiram-validate` (27) + `smoke-reshiram` ; patrimoine vert.
     Cadre détaillé (v1+v2) : `CADRAGE-RESHIRAM-ZEKROM.md §7`.
-  - ✅ **ZEKROM v1 construite (2026-07-23)** : miroir de RESHIRAM, hébergée DANS
-    Ultima (même repo/Vercel/Supabase, page interne `zekrom.html`). Migration
-    **`0010` écrite — GATE non appliquée** (`ideaux`/`directions` + vues
-    `ideaux_etat`/`ideaux_cap`, RLS miroir strict de 0009). API `api/ideaux.js` +
-    `api/directions.js` (requireUser, owner_id jamais du client, validation miroir
-    des CHECK, scellement cross-owner). Front `zekrom.html`/`js/zekrom.js` : carte
-    des idéaux, badge « à orienter » (INVITATION, pas une dévaluation — règle
-    cardinale inverse de RESHIRAM) + Léo qui inspire, bascule « mon cap
-    directionnel ». Cap boussole ouvert (interne). Seed gaté des **3 rêves de Paul**
-    (`supabase/seed-zekrom-paul.sql`, paramétré owner_id). Harnais
-    `unit-zekrom-validate` + `smoke-zekrom` (3 scénarios) ; patrimoine COMPLET vert.
-    **Doublet réel ↔ idéal complet côté consoles.** Cadre : §8 de
-    `CADRAGE-RESHIRAM-ZEKROM.md`. **⏳ Actions Paul** : appliquer 0010, exécuter le
-    seed. **Dette repérée (hors ZEKROM)** : `smoke-quadrants` était rouge depuis #75
+  - ✅ **ZEKROM v1 LIVRÉE + EN PROD (2026-07-23, PR #83 mergée en solo)** : miroir
+    de RESHIRAM, hébergée DANS Ultima (même repo/Vercel/Supabase, page interne
+    `zekrom.html`). Migration **`0010` APPLIQUÉE en prod (solo)** (`ideaux`/
+    `directions` + vues `ideaux_etat`/`ideaux_cap`, RLS miroir strict de 0009). API
+    `api/ideaux.js` + `api/directions.js` (requireUser, owner_id jamais du client,
+    validation miroir des CHECK, scellement cross-owner). Front `zekrom.html`/
+    `js/zekrom.js` : carte des idéaux, badge « à orienter » (INVITATION, pas une
+    dévaluation — règle cardinale inverse de RESHIRAM) + Léo qui inspire, bascule
+    « mon cap directionnel ». Cap boussole ouvert (interne). **Seed exécuté (solo)** :
+    les **3 rêves de Paul** en base (3 idéaux + 5 directions, owner Paul) — vérifiés
+    via `ideaux_etat`. Harnais `unit-zekrom-validate` + `smoke-zekrom` (3 scénarios) ;
+    patrimoine COMPLET vert. Contre-passe sécu CONFORME ; **advisors post-0010
+    propres** (aucun warning RLS/security_definer sur ZEKROM ; les INFO
+    `unindexed_fk`/`unused_index` sur `directions` = parité EXACTE de RESHIRAM,
+    design accepté). **Doublet réel ↔ idéal complet et vivant.** Cadre : §8 de
+    `CADRAGE-RESHIRAM-ZEKROM.md`. **Dette repérée (hors ZEKROM)** : `smoke-quadrants` était rouge depuis #75
     (ABAQUE a fait évoluer `bcp.html` sans resync du test) — resynchronisé ici
     (test-only) pour débloquer le runner partagé.
   - 🔶 **LV2-② Auth — Google OAuth (2026-07-22)** : bouton « Se connecter
@@ -89,10 +91,9 @@
     connecté, RESHIRAM et tout ce qui vit derrière auth sont accessibles.
 
     **② ✅ ZEKROM v1 construite (2026-07-23)** : mini-cadrage (§8 R/Z) + modèle de
-    données (migration `0010` écrite, **GATE non appliquée**) + console interne
-    `zekrom.html` (aile noire, cap ouvert) + seed gaté des 3 rêves de Paul. Le
-    doublet réel ↔ idéal est complet côté consoles. Reste ⏳ Paul : appliquer 0010,
-    exécuter le seed.
+    données (migration `0010` **APPLIQUÉE en prod, solo**) + console interne
+    `zekrom.html` (aile noire, cap ouvert) + **seed des 3 rêves de Paul exécuté
+    (solo)**. Le doublet réel ↔ idéal est complet et vivant. PR #83 mergée.
 
     **③ Passerelle de données R↔Z** : table de liaison `talent ↔ idéal` (gate
     migration) + le **rétroplanning** (depuis un idéal ZEKROM : « talents que

@@ -13,11 +13,15 @@
   idéal → une direction », le cap). **Règle cardinale inverse de RESHIRAM** : un
   idéal sans direction = « à orienter » (INVITATION, jamais une dévaluation ; le
   réel ne censure pas). Vue « mon cap directionnel » = enrichissement, pas un
-  filtre. Migration `0010` **écrite, gate non appliquée** ; seed gaté
-  `supabase/seed-zekrom-paul.sql` (owner_id paramétré). Patrimoine complet vert +
-  contre-passe sécu. ⏳ Paul : appliquer 0010, exécuter le seed. Dette annexe
-  repérée et resynchronisée (test-only) : `smoke-quadrants` rouge depuis #75
-  (bcp.html/ABAQUE).
+  filtre. **GO SOLO (2026-07-23)** : migration `0010` **appliquée en prod**
+  (Supabase Ultima), **seed exécuté** pour l'owner de Paul (d25b59aa…) → 3 idéaux
+  + 5 directions vivants (vérif `ideaux_etat`), **advisors post-DDL propres**
+  (parité RESHIRAM ; seul warning sécu = `leaked_password_protection` global/
+  pré-existant, sans objet — pas d'auth mot de passe), **PR #83 mergée** (squash).
+  Patrimoine complet vert + contre-passe sécu CONFORME. Doublet réel ↔ idéal
+  complet et vivant. Dette annexe resynchronisée (test-only) : `smoke-quadrants`
+  rouge depuis #75 (bcp.html/ABAQUE). Discipline post-squash : branche repartie de
+  `origin/main`.
 
 - **2026-07-21 (renommage)** — **BALTHAZAR GELD → NICOL BOLAS** (dicté Paul).
   Quadrant financier renommé partout (UI `ultima.html`/`bcp.html`, code
