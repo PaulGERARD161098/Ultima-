@@ -260,10 +260,12 @@ manquant. ✅
 - **v1** : table `ideaux` (`intitule, registre, horizon`) + table `directions`
   (rattachées à l'idéal). Vues dérivées `ideaux_etat` (badge « à orienter ») et
   `ideaux_cap` (« mon cap directionnel »). Migration **`0010_zekrom_ideaux.sql`
-  écrite — GATE : non appliquée sans go Paul**. Sécurité : données
-  introspectives → **auth + RLS**, §5 s'applique (miroir strict de 0009).
+  APPLIQUÉE en prod (2026-07-23, solo)**. Sécurité : données introspectives →
+  **auth + RLS**, §5 s'applique (miroir strict de 0009). Advisors post-0010
+  propres (parité RESHIRAM).
 - **Seed** : `supabase/seed-zekrom-paul.sql` (les 3 rêves ci-dessus), paramétré
-  par `owner_id`, **idempotent**, à exécuter APRÈS 0010 et sur go Paul.
+  par `owner_id`, **idempotent**. **Exécuté en prod (2026-07-23, solo)** pour
+  l'owner de Paul → 3 idéaux + 5 directions vivants dans ZEKROM.
 - **v2 passerelle** (LV2-③) : table de liaison `idéal ↔ talent` (rétroplanning
   idéal → réel), à la boucle passerelle — le scellement (owner_id, id) de
   `ideaux` en est déjà la cible.
@@ -274,6 +276,7 @@ Même repo `Ultima-`, même déploiement Vercel `ultima` (`zekrom.html` → `/ze
 `externe: false`, ouvert dans le même onglet depuis la boussole), même projet
 Supabase `leosfqyidgsaescjbfom`, aucune ressource facturée en plus.
 
-> **Boucle ZEKROM v1 close (code + tests verts + contre-passe sécu).** Le doublet
-> réel ↔ idéal est complet côté consoles. Suite : LV2-③ **passerelle de données
-> R↔Z** (rétroplanning). ⏳ Actions Paul : appliquer 0010, exécuter le seed.
+> **Boucle ZEKROM v1 CLOSE et EN PROD** (code + tests verts + contre-passe sécu
+> CONFORME + `0010` appliquée + seed exécuté + PR #83 mergée, en solo). Le doublet
+> réel ↔ idéal est complet et vivant. Suite : LV2-③ **passerelle de données R↔Z**
+> (rétroplanning idéal → réel, liaison idéal↔talent).
