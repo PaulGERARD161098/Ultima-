@@ -470,6 +470,51 @@ export function validatePreuve(body, mode) {
   return { value: out };
 }
 
+// --- IMLADRIK (v1) : journal intime « pouvoir écrire ». Bornes en MIROIR EXACT
+// des CHECK de supabase/migrations/0010_imladrik_journal.sql (défense en
+// profondeur AU-DESSUS de la RLS). Ce que l'API refuse, la base le refuse aussi.
+// owner_id n'est JAMAIS accepté du client : il est imposé par le défaut base
+// (auth.uid()). Données intimes (§5) : erreurs génériques, aucun contenu en log.
+
+// Champs autorisés en écriture (owner_id/id/dates gérés serveur).
+const IMLADRIK_FIELDS = ['titre', 'contenu'];
+
+// Valide une entrée de journal IMLADRIK. mode 'create' impose le contenu
+// (1..20000, non vide) ; 'update' rend tout optionnel (au moins un champ).
+// titre : optionnel, null efface (mirror colonne nullable, borne 1..200).
+export function validateEntreeImladrik(body, mode) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, IMLADRIK_FIELDS);
+  if (unknown) return { error: unknown };
+
+  const out = {};
+
+  // titre : null efface ; sinon chaîne trimée non vide bornée à 200.
+  if (body.titre === null) {
+    out.titre = null;
+  } else if (body.titre !== undefined) {
+    if (typeof body.titre !== 'string') return { error: 'Titre invalide' };
+    const titre = body.titre.trim();
+    if (titre.length < 1 || titre.length > 200) return { error: 'Titre invalide' };
+    out.titre = titre;
+  }
+
+  // contenu : obligatoire en création, trimé non vide, borné à 20000.
+  if (mode === 'create' || body.contenu !== undefined) {
+    if (typeof body.contenu !== 'string') return { error: 'Contenu invalide' };
+    const contenu = body.contenu.trim();
+    if (contenu.length < 1 || contenu.length > 20000) return { error: 'Contenu invalide' };
+    out.contenu = contenu;
+  }
+
+  if (mode === 'update' && Object.keys(out).length === 0) {
+    return { error: 'Aucun champ à mettre à jour' };
+  }
+  return { value: out };
+}
+
 // --- INTENDANT (AD-5c) : chantiers pilotés + besoins. Enums/bornes en MIROIR
 // EXACT des CHECK de supabase/migrations/0008_intendant.sql. Ce que l'API refuse,
 // la base le refuse aussi (et vice versa) ; la base reste le backstop ultime pour

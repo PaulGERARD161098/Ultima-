@@ -10,10 +10,11 @@
 //   D. adramelech.html avec fausse session + API stubée 200 (fixture neutre) :
 //      registre rendu (compteurs, idées, ponts) + cartouche Léo réflexif
 //      (archipel, volet stratégique, propositions déterministes cliquables) ;
-//   E/F. bcp.html et imladrik.html : coquille honnête (bandeau, mission,
-//      badge « en chantier ») + cartouche Léo « majordome de chantier »
-//      (état + proposition unique), une fois par session PAR quadrant,
-//      retour console ≥ 44 px ;
+//   E. bcp.html (NICOL BOLAS) : cartouche Léo « majordome de chantier » (§1-2,
+//      encore présent) + shell « premier outil ouvert » annonçant le simulateur
+//      ABAQUE (§3, badge + lien abaque.html + retour console ≥ 44 px). Incohérence
+//      cartouche/shell pré-existante (#75), flaggée sur place.
+//      (IMLADRIK n'est plus une antichambre : quadrant bâti — voir smoke-imladrik.)
 //   partout : zéro requête externe, zéro erreur console, contrastes AA.
 // NOTE : le flux ADRAMELECH avec session RÉELLE n'est pas prouvable en
 // harnais (auth vivante) — C/D valident le motif Bearer et le fail-closed.
@@ -296,12 +297,17 @@ console.log('— D. adramelech.html fixture 200 → registre + cartouche Léo r�
   await page.close();
 }
 
-// ===================== E/F. NICOL BOLAS et IMLADRIK : antichambres de chantier =====================
+// ===================== E. NICOL BOLAS : landing du premier outil (ABAQUE) =====================
+// bcp.html a évolué (commit #75, simulateur ABAQUE) : le shell affiche « Premier
+// outil ouvert » + lien vers abaque.html, mais garde encore le cartouche Léo
+// « majordome de chantier » (leo-accueil.js + antichambre.js). Cette incohérence
+// (cartouche « pas encore bâti » sur un quadrant dont le 1er outil est ouvert)
+// est PRÉ-EXISTANTE — à trancher dans la boucle NICOL BOLAS, pas ici. Le harnais
+// prouve le comportement RÉEL : cartouche Léo (§1-2) + shell « premier outil » (§3).
 for (const quadrant of [
   { fichier: 'bcp.html', nom: 'NICOL BOLAS', cle: 'ultima-leo-accueil-vu-bcp' },
-  { fichier: 'imladrik.html', nom: 'IMLADRIK', cle: 'ultima-leo-accueil-vu-imladrik' },
 ]) {
-  console.log(`— ${quadrant.nom} : antichambre de chantier (${quadrant.fichier}) —`);
+  console.log(`— ${quadrant.nom} : landing du premier outil (${quadrant.fichier}) —`);
   const { page, erreurs, externes } = await nouvellePage();
   await page.goto(`${BASE}/${quadrant.fichier}`, { waitUntil: 'load', timeout: 20000 });
 
@@ -328,19 +334,20 @@ for (const quadrant of [
   await page.waitForTimeout(400);
   verifier('Pas de réapparition (même session)', (await page.locator('#leo-cartouche').count()) === 0);
 
-  // 3. La coquille : bandeau, mission, badge, chantier, retour console.
+  // 3. Le shell « premier outil » : bandeau, mission, badge, lien ABAQUE, retour.
   const titre = (await page.locator('h1.console-titre').textContent())?.trim();
   verifier(`Bandeau ${quadrant.nom}`, titre === quadrant.nom, `lu: ${titre}`);
   verifier('Blason du quadrant étiqueté', (await page.locator('.quadrant-bandeau .blason-svg[role="img"]').count()) === 1);
   const mission = (await page.locator('.quadrant-mission').textContent())?.trim();
   verifier('Ligne de mission présente (cadrage)', Boolean(mission) && mission.length > 20);
   const badge = (await page.locator('.quadrant-bandeau .quadrant-etat').textContent())?.trim();
-  verifier('Badge « En chantier »', badge === 'En chantier', `lu: ${badge}`);
-  verifier('Cartouche chantier honnête',
-    /pas encore bâti/.test((await page.locator('.cartouche-page').textContent()) || ''));
-  const retour = page.locator('a.retour-console');
-  verifier('Retour console présent', (await retour.count()) === 1 &&
-    (await retour.getAttribute('href')) === 'ultima.html');
+  verifier('Badge « Premier outil ouvert »', badge === 'Premier outil ouvert', `lu: ${badge}`);
+  verifier('Cartouche annonce le premier outil (ABAQUE)',
+    /ABAQUE/.test((await page.locator('.cartouche-page').textContent()) || ''));
+  verifier('Lien vers le simulateur ABAQUE',
+    (await page.locator('a.retour-console[href="abaque.html"]').count()) === 1);
+  const retour = page.locator('a.retour-console[href="ultima.html"]');
+  verifier('Retour console présent', (await retour.count()) === 1);
   const hRetour = await retour.evaluate((el) => el.getBoundingClientRect().height);
   verifier('Tap target retour ≥ 44 px', hRetour >= 44, `${hRetour}px`);
 
