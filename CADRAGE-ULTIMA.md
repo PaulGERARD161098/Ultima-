@@ -36,6 +36,17 @@
     défi de Léo, bascule « mon offre réelle ». Cap boussole ouvert (interne).
     Harnais `unit-reshiram-validate` (27) + `smoke-reshiram` ; patrimoine vert.
     Cadre détaillé (v1+v2) : `CADRAGE-RESHIRAM-ZEKROM.md §7`.
+  - ✅ **IMLADRIK v1 « pouvoir écrire » (2026-07-23)** : le journal intime en
+    base, calqué RESHIRAM/ADRAMELECH. Migration `0010_imladrik_journal.sql`
+    (`imladrik_entrees`, RLS par owner — **GATE, non appliquée**). API
+    `api/imladrik.js` (GET) + `api/imladrik/entrees.js` (POST/PATCH/DELETE),
+    `validateEntreeImladrik` (miroir CHECK). Front `imladrik.html` (atelier
+    d'écriture + journal, chrome quadrant) + `js/imladrik.js` : **fail-closed,
+    pas de mode démo** (intime §5). Harnais `unit-imladrik-validate` +
+    `smoke-imladrik` ; patrimoine vert. **Boucle Drive suivante (GATÉE)** :
+    Paul veut synchro DEUX SENS + l'app Ultima connectée → projet Google Cloud
+    + secret Vercel (actions Paul) + contre-passe `securite-auditeur` avant code.
+    Cadre : `CADRAGE-CONSOLE.md §3.4`.
   - 🔶 **LV2-② Auth — Google OAuth (2026-07-22)** : bouton « Se connecter
     avec Google » ajouté À CÔTÉ du lien magique (décision Paul : Google en
     plus, pas à la place). Code livré + vérifié : `js/app.js`
