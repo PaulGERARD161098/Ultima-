@@ -185,6 +185,16 @@
             <p class="note-hypotheses">Les scénarios ajustent la marge et le délai d'encaissement — les autres hypothèses restent les vôtres.</p>
           </fieldset>
 
+          <fieldset>
+            <legend>Enregistrer / charger</legend>
+            <div class="scenarios">
+              <button type="button" class="bouton discret" id="exporter-json">Exporter (JSON)</button>
+              <button type="button" class="bouton discret" id="importer-json">Charger un fichier</button>
+              <input type="file" id="fichier-json" accept="application/json,.json" hidden>
+            </div>
+            <p class="note-hypotheses" id="io-message" role="status" aria-live="polite">Enregistre toutes tes hypothèses dans un fichier local, ou recharge-en un — sans base, tout reste sur ton appareil.</p>
+          </fieldset>
+
         </form>
       </section>
 

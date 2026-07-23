@@ -391,6 +391,114 @@ function appliquerScenario(marge, delaiEncaissement) {
   recalculer();
 }
 
+// ---------- Export / import d'un scénario (JSON local, sans base) ----------
+// Sérialise toutes les hypothèses (scalaires + lignes + actif d'arbitrage) dans
+// un fichier téléchargé, et les recharge depuis un fichier local. Tout reste sur
+// l'appareil : aucun réseau, aucune base, la finance ne quitte pas la page.
+const SCALAIRES = [
+  'statutJuridique', 'tresorerieInitiale', 'horizonMois', 'caMensuel',
+  'margeBruteCible', 'chargesStructureMensuelles', 'delaiEncaissementJours',
+  'delaiFournisseurJours', 'delaiChargesJours', 'tauxChargesPatronales',
+  'tauxChargesSalariales', 'tauxChargesDirigeantTns', 'coefAnnualisation',
+  'margeSecurite',
+];
+const ARB_IDS = ['arb-montant', 'arb-revente', 'arb-maintenance', 'arb-loyer', 'arb-depot', 'arb-duree', 'arb-taux'];
+
+function ioMessage(texte, estErreur) {
+  const n = document.getElementById('io-message');
+  if (!n) { return; }
+  n.textContent = texte;
+  n.classList.toggle('io-erreur', Boolean(estErreur));
+}
+
+function serialiserScenario() {
+  const scalaires = {};
+  SCALAIRES.forEach((id) => { const n = document.getElementById(id); if (n) { scalaires[id] = n.value; } });
+  const arbitrage = {};
+  ARB_IDS.forEach((id) => { const n = document.getElementById(id); if (n) { arbitrage[id] = n.value; } });
+  return {
+    _type: 'abaque-scenario',
+    _version: 1,
+    scalaires,
+    postes: lireLignes('postes-liste'),
+    investissements: lireLignes('invest-liste'),
+    locations: lireLignes('location-liste'),
+    arbitrage,
+  };
+}
+
+function exporter() {
+  try {
+    const json = JSON.stringify(serialiserScenario(), null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'abaque-scenario.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    ioMessage('Scénario exporté dans « abaque-scenario.json ».');
+  } catch (e) {
+    ioMessage('Export impossible.', true);
+  }
+}
+
+// Coercitions défensives : un fichier édité à la main ne doit jamais casser l'UI.
+function nombreSur(v, d) { const n = parseFloat(v); return Number.isFinite(n) ? n : d; }
+function texteSur(v, d) { return typeof v === 'string' ? v : d; }
+
+function appliquerScenarioObjet(obj) {
+  if (!obj || obj._type !== 'abaque-scenario' || typeof obj.scalaires !== 'object') {
+    ioMessage('Fichier non reconnu (ce n’est pas un scénario ABAQUE).', true);
+    return;
+  }
+  // Scalaires connus uniquement (les clés inconnues sont ignorées).
+  Object.keys(obj.scalaires).forEach((id) => {
+    if (!SCALAIRES.includes(id)) { return; }
+    const n = document.getElementById(id);
+    if (n) { n.value = String(obj.scalaires[id]); }
+  });
+  const arb = (obj.arbitrage && typeof obj.arbitrage === 'object') ? obj.arbitrage : {};
+  Object.keys(arb).forEach((id) => {
+    if (!ARB_IDS.includes(id)) { return; }
+    const n = document.getElementById(id);
+    if (n) { n.value = String(arb[id]); }
+  });
+  // Lignes reconstruites depuis les fabricants (valeurs coercées, jamais innerHTML).
+  const rebuild = (contId, liste, fab) => {
+    const cont = document.getElementById(contId);
+    cont.replaceChildren();
+    (Array.isArray(liste) ? liste : []).forEach((o) => cont.appendChild(fab(o || {})));
+  };
+  rebuild('postes-liste', obj.postes, (o) => lignePoste({
+    libelle: texteSur(o.libelle, 'Poste'), nbEtp: nombreSur(o.nbEtp, 1),
+    brutMensuel: nombreSur(o.brutMensuel, 0), estDirigeant: o.estDirigeant === true,
+  }));
+  rebuild('invest-liste', obj.investissements, (o) => ligneInvest({
+    libelle: texteSur(o.libelle, 'Investissement'), montantHt: nombreSur(o.montantHt, 0),
+    moisEngagement: nombreSur(o.moisEngagement, 1), dureeAmortMois: nombreSur(o.dureeAmortMois, 0),
+  }));
+  rebuild('location-liste', obj.locations, (o) => ligneLocation({
+    libelle: texteSur(o.libelle, 'Location'), mensualiteHt: nombreSur(o.mensualiteHt, 0),
+    moisDebut: nombreSur(o.moisDebut, 1),
+  }));
+  recalculer();
+  ioMessage('Scénario chargé.');
+}
+
+function importer(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    let obj = null;
+    try { obj = JSON.parse(reader.result); } catch (e) { ioMessage('Fichier illisible (JSON invalide).', true); return; }
+    appliquerScenarioObjet(obj);
+  };
+  reader.onerror = () => ioMessage('Lecture du fichier impossible.', true);
+  reader.readAsText(file);
+}
+
 // ---------- Amorçage ----------
 function amorcer() {
   // Mention datée « à vérifier » sur les hypothèses (source unique : DEFAUTS).
@@ -432,6 +540,14 @@ function amorcer() {
   document.getElementById('scenario-prudent').addEventListener('click', () => appliquerScenario(28, 60));
   document.getElementById('scenario-median').addEventListener('click', () => appliquerScenario(35, 45));
   document.getElementById('scenario-volontariste').addEventListener('click', () => appliquerScenario(42, 30));
+
+  // Export / import JSON (local, sans base).
+  document.getElementById('exporter-json').addEventListener('click', exporter);
+  const fichier = document.getElementById('fichier-json');
+  document.getElementById('importer-json').addEventListener('click', () => fichier.click());
+  fichier.addEventListener('change', () => {
+    if (fichier.files && fichier.files[0]) { importer(fichier.files[0]); fichier.value = ''; }
+  });
 
   recalculer();
 }

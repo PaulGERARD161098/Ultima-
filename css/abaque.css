@@ -431,3 +431,6 @@ figcaption.courbe-legende {
   font-style: italic;
   line-height: 1.4;
 }
+
+/* Message d'export/import : erreur en registre cire (terracotta). */
+.io-erreur { color: var(--cire); font-style: normal; }

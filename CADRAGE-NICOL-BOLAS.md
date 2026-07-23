@@ -169,7 +169,18 @@ l'optimisme de trésorerie initialement signalé. Prouvé au harnais (net + coti
   (section C), `css/abaque.css` (badge de reco, contraste AA clair+sombre).
   Harnais `smoke-abaque.mjs` §4 (rendu + règle de cash prouvée + AA). **Non gaté**
   (front-only : zéro persistance, zéro réseau, finance jamais en logs, `textContent`
-  only). *Reports restants (NB-2c si Paul veut)* : export/import JSON des scénarios ;
+  only).
+- **NB-2c — export / import JSON des scénarios** ✅ **LIVRÉ (2026-07-23, solo)** :
+  fieldset « Enregistrer / charger » sur `abaque.html`. Export = sérialise toutes
+  les hypothèses (scalaires + lignes main d'œuvre/invest/location + actif
+  d'arbitrage) dans un fichier `abaque-scenario.json` téléchargé (Blob + object
+  URL, révoqué). Import = `<input type=file>` → FileReader → JSON.parse gardé →
+  reconstruction des champs par les fabricants existants (valeurs **coercées**,
+  jamais `innerHTML`) → recalcul. Fichier non-`abaque-scenario` rejeté avec message
+  explicite. `abaque-ui.js` (`serialiserScenario`/`appliquerScenarioObjet`),
+  `css/abaque.css` (`.io-erreur`). Harnais `smoke-abaque.mjs` §5 (export capturé +
+  round-trip + fichier malformé). **Non gaté** (front-only, tout reste sur
+  l'appareil ; aucune finance ne quitte la page). *Reports restants (au choix)* :
   saisonnalité + module TVA au formulaire.
 - **NB-3 — persistance (optionnelle, seulement si Paul la demande)** : application
   du draft `0011`. **Gate Paul + escalade Opus + contre-passe sécu + advisors.**
@@ -214,10 +225,10 @@ Chacun **affiché et modifiable** dans l'UI, jamais un chiffre en dur :
 4. **Persistance** : v1 **sans base** (recommandation retenue) — NB-3 (table
    `0011`, gate) seulement si Paul veut sauvegarder des scénarios. ⏳ ouvert.
 
-**État** : NB-1 (moteur) ✅, NB-2 (front) ✅ et **NB-2b (arbitrage achat/location) ✅
-livrés** — le simulateur chiffre un lancement ET tranche « acheter ou louer » avec
-la règle de trésorerie. **Prochaines options** (au choix de Paul, ordre reco Léo) :
-NB-2c (export/import JSON des scénarios) ; puis saisonnalité + module TVA au
-formulaire ; puis NB-3 (persistance en base, **gate** — migration renumérotée
-`0012`, `0011` étant désormais la passerelle R↔Z) ; ou brancher ABAQUE sur un
-chiffrage VERTUMNE réel instruit avec Paul.
+**État** : NB-1 (moteur) ✅, NB-2 (front) ✅, **NB-2b (arbitrage) ✅ et NB-2c
+(export/import JSON) ✅ livrés** — le simulateur chiffre un lancement, tranche
+« acheter ou louer » avec la règle de trésorerie, et sauve/recharge un scénario en
+fichier local. **Prochaines options** (au choix de Paul, ordre reco Léo) :
+saisonnalité + module TVA au formulaire ; puis NB-3 (persistance en base, **gate** —
+migration **`0013`** : `0010` = ZEKROM, `0011` = passerelle R↔Z, `0012` = IMLADRIK
+journal) ; ou brancher ABAQUE sur un chiffrage VERTUMNE réel instruit avec Paul.
