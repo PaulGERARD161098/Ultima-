@@ -373,3 +373,86 @@ figcaption.courbe-legende {
   padding: 0.5rem 0.2rem 0;
   margin: 0;
 }
+
+/* ---------- Arbitrage acheter / louer (section C, pleine largeur) ---------- */
+.arbitrage { grid-column: 1 / -1; }
+
+.arbitrage-intro {
+  color: var(--encre-claire);
+  font-size: 0.92rem;
+  line-height: 1.45;
+  margin: 0 0 0.9rem;
+}
+
+.arbitrage-grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.7rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.arbitrage-verdict {
+  border: 1px solid var(--filet);
+  border-radius: 8px;
+  background: var(--ile);
+  padding: 0.9rem 1rem;
+}
+
+.arb-reco {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0 0 0.8rem;
+}
+
+.arb-reco-badge {
+  flex: none;
+  padding: 0.25rem 0.9rem;
+  border-radius: 999px;
+  border: 2px solid var(--bleu);
+  background: var(--parchemin);
+  color: var(--bleu);
+  font-weight: 700;
+  font-size: 1.02rem;
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+}
+
+/* « Louer » = choix protecteur de la trésorerie : registre cire (terracotta). */
+.arb-reco-badge[data-reco="louer"] {
+  border-color: var(--cire);
+  color: var(--cire);
+}
+
+.arb-motif {
+  color: var(--encre-claire);
+  font-size: 0.9rem;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* Message d'export/import : erreur en registre cire (terracotta). */
+.io-erreur { color: var(--cire); font-style: normal; }
+
+/* ---------- Saisonnalité : 12 coefficients mensuels compacts ---------- */
+.saison-grille {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.5rem 0.6rem;
+}
+@media (max-width: 520px) { .saison-grille { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 360px) { .saison-grille { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.champ-saison { gap: 0.2rem; }
+.champ-saison label {
+  font-size: 0.78rem;
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+  color: var(--encre-pale);
+}
+.champ-saison input { padding: 0.35rem 0.4rem; text-align: center; }
+
+/* Case à cocher TVA (réutilise le motif .ligne-case des lignes). */
+.champ.ligne-case { flex-direction: row; align-items: center; gap: 0.5rem; }
+.champ.ligne-case label { font-size: 0.9rem; color: var(--encre-claire); }

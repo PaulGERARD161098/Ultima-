@@ -11,7 +11,7 @@
 //     l'heure ni de l'aléa) ;
 //   - v1 sans base, sans réseau : tout est local dans la page.
 
-import { simuler, regimeDirigeant, DEFAUTS } from './abaque.mjs';
+import { simuler, arbitrageAchatLocation, regimeDirigeant, DEFAUTS } from './abaque.mjs';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -186,10 +186,54 @@ function lireEntrees() {
     tauxChargesDirigeantTns: lireNombre('tauxChargesDirigeantTns', 45) / 100,
     coefAnnualisation: lireNombre('coefAnnualisation', DEFAUTS.coefAnnualisation),
     margeSecurite: lireNombre('margeSecurite', 20) / 100,
+    moduleTva: Boolean(document.getElementById('moduleTva') && document.getElementById('moduleTva').checked),
+    tauxTvaCollectee: lireNombre('tauxTvaCollectee', 20) / 100,
+    tauxTvaDeductible: lireNombre('tauxTvaDeductible', 20) / 100,
+    saisonnalite: lireSaisonnalite(),
     postes: lireLignes('postes-liste'),
     investissements: lireLignes('invest-liste'),
     locations: lireLignes('location-liste'),
   };
+}
+
+// ---------- Saisonnalité : 12 coefficients mensuels (1 = mois moyen) ----------
+const MOIS = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
+
+function lireSaisonnalite() {
+  const coefs = [];
+  for (let m = 1; m <= 12; m++) { coefs.push(lireNombre('saison-' + m, 1)); }
+  return coefs;
+}
+
+function construireSaisonnalite() {
+  const grille = document.getElementById('saison-grille');
+  if (!grille) { return; }
+  grille.replaceChildren();
+  for (let m = 1; m <= 12; m++) {
+    const box = el('div', 'champ champ-saison');
+    const lab = el('label', null, MOIS[m - 1]);
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.id = 'saison-' + m;
+    input.value = '1';
+    input.step = '0.1';
+    input.min = '0';
+    input.setAttribute('inputmode', 'decimal');
+    input.setAttribute('aria-label', 'Coefficient de saisonnalité — ' + MOIS[m - 1]);
+    lab.htmlFor = input.id;
+    box.appendChild(lab);
+    box.appendChild(input);
+    grille.appendChild(box);
+  }
+}
+
+// Active/désactive les taux de TVA selon la case « Modéliser le décalage de TVA ».
+function majTvaEtat() {
+  const actif = Boolean(document.getElementById('moduleTva') && document.getElementById('moduleTva').checked);
+  ['tauxTvaCollectee', 'tauxTvaDeductible'].forEach((id) => {
+    const n = document.getElementById(id);
+    if (n) { n.disabled = !actif; }
+  });
 }
 
 // ---------- Courbe de trésorerie (SVG inline déterministe) ----------
@@ -317,10 +361,66 @@ function rendre(sortie) {
   poser('regime-libelle', LIBELLE_REGIME[regimeDirigeant(document.getElementById('statutJuridique').value)] || '—');
 }
 
+// ---------- Arbitrage acheter / louer (branché sur le moteur) ----------
+// Lit l'actif du panneau, puis calcule l'IMPACT CASH réel en RE-SIMULANT le
+// scénario courant avec l'actif ajouté en achat (décaissement au mois 1) PUIS en
+// location (loyer mensuel). Les deux trésoreries plancher alimentent la règle de
+// cash prioritaire d'arbitrageAchatLocation. Aucune formule ici : on compose le
+// moteur figé. Montants saisis TTC → passés en Ht avec TVA 0 (le décaissement =
+// le TTC, cohérent avec le module TVA off par défaut).
+function lireActif() {
+  return {
+    montantTtc: lireNombre('arb-montant', 0),
+    valeurReventeTtc: lireNombre('arb-revente', 0),
+    maintenanceMensuelle: lireNombre('arb-maintenance', 0),
+    mensualiteLoyerTtc: lireNombre('arb-loyer', 0),
+    depotGarantieTtc: lireNombre('arb-depot', 0),
+    dureeUsageMois: lireNombre('arb-duree', 12),
+    tauxActualisationAnnuel: lireNombre('arb-taux', 8) / 100,
+  };
+}
+
+const MOTIF_ARBITRAGE = {
+  contrainte_cash: 'La règle de trésorerie tranche : l’achat ferait plonger la trésorerie plancher, la location la préserve.',
+  cout_actualise: 'Décision au moindre coût actualisé sur la durée d’usage réelle.',
+};
+
+function rendreArbitrage(entrees) {
+  const actif = lireActif();
+  // Impact cash : trésorerie plancher du scénario avec l'actif en achat vs en location.
+  const invests = (entrees.investissements || []).slice();
+  invests.push({ montantHt: actif.montantTtc, tauxTva: 0, moisEngagement: 1, dureeAmortMois: actif.dureeUsageMois });
+  const locs = (entrees.locations || []).slice();
+  locs.push({ mensualiteHt: actif.mensualiteLoyerTtc, tauxTva: 0, moisDebut: 1 });
+
+  const plancherAchat = simuler({ ...entrees, investissements: invests }).tresoreriePlancher;
+  const plancherLocation = simuler({ ...entrees, locations: locs }).tresoreriePlancher;
+
+  const res = arbitrageAchatLocation({
+    ...actif,
+    impactPlancherAchat: plancherAchat,
+    impactPlancherLocation: plancherLocation,
+  });
+
+  const badge = document.getElementById('arb-reco');
+  badge.textContent = res.recommandation === 'louer' ? 'Louer' : 'Acheter';
+  badge.dataset.reco = res.recommandation;
+  poser('arb-motif', MOTIF_ARBITRAGE[res.motif] || '');
+  poser('arb-van-achat', euro(res.vanAchat));
+  poser('arb-van-location', euro(res.vanLocation));
+  poser('arb-plancher-achat', euro(plancherAchat));
+  poser('arb-plancher-location', euro(plancherLocation));
+  poser('arb-bascule', res.uBascule === null
+    ? 'sans objet (le loyer ne dépasse pas la maintenance)'
+    : 'au-delà de ' + Math.max(1, Math.round(res.uBascule)) + ' mois');
+}
+
 // ---------- Boucle de recalcul ----------
 function recalculer() {
   try {
-    rendre(simuler(lireEntrees()));
+    const entrees = lireEntrees();
+    rendre(simuler(entrees));
+    rendreArbitrage(entrees);
   } catch (e) {
     // Erreur générique : jamais de détail (ni de donnée) en console.
     const courbe = document.getElementById('courbe');
@@ -333,6 +433,123 @@ function appliquerScenario(marge, delaiEncaissement) {
   document.getElementById('margeBruteCible').value = String(marge);
   document.getElementById('delaiEncaissementJours').value = String(delaiEncaissement);
   recalculer();
+}
+
+// ---------- Export / import d'un scénario (JSON local, sans base) ----------
+// Sérialise toutes les hypothèses (scalaires + lignes + actif d'arbitrage) dans
+// un fichier téléchargé, et les recharge depuis un fichier local. Tout reste sur
+// l'appareil : aucun réseau, aucune base, la finance ne quitte pas la page.
+const SCALAIRES = [
+  'statutJuridique', 'tresorerieInitiale', 'horizonMois', 'caMensuel',
+  'margeBruteCible', 'chargesStructureMensuelles', 'delaiEncaissementJours',
+  'delaiFournisseurJours', 'delaiChargesJours', 'tauxChargesPatronales',
+  'tauxChargesSalariales', 'tauxChargesDirigeantTns', 'coefAnnualisation',
+  'margeSecurite', 'moduleTva', 'tauxTvaCollectee', 'tauxTvaDeductible',
+].concat(Array.from({ length: 12 }, (_, i) => 'saison-' + (i + 1)));
+
+// Lit un champ scalaire pour l'export (case → booléen, sinon valeur texte).
+function lireChampScalaire(n) { return n.type === 'checkbox' ? n.checked : n.value; }
+// Applique une valeur scalaire à l'import (case → coché, sinon valeur).
+function poserChampScalaire(n, v) {
+  if (n.type === 'checkbox') { n.checked = (v === true || v === 'true' || v === 'on'); }
+  else { n.value = String(v); }
+}
+const ARB_IDS = ['arb-montant', 'arb-revente', 'arb-maintenance', 'arb-loyer', 'arb-depot', 'arb-duree', 'arb-taux'];
+
+function ioMessage(texte, estErreur) {
+  const n = document.getElementById('io-message');
+  if (!n) { return; }
+  n.textContent = texte;
+  n.classList.toggle('io-erreur', Boolean(estErreur));
+}
+
+function serialiserScenario() {
+  const scalaires = {};
+  SCALAIRES.forEach((id) => { const n = document.getElementById(id); if (n) { scalaires[id] = lireChampScalaire(n); } });
+  const arbitrage = {};
+  ARB_IDS.forEach((id) => { const n = document.getElementById(id); if (n) { arbitrage[id] = n.value; } });
+  return {
+    _type: 'abaque-scenario',
+    _version: 1,
+    scalaires,
+    postes: lireLignes('postes-liste'),
+    investissements: lireLignes('invest-liste'),
+    locations: lireLignes('location-liste'),
+    arbitrage,
+  };
+}
+
+function exporter() {
+  try {
+    const json = JSON.stringify(serialiserScenario(), null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'abaque-scenario.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    ioMessage('Scénario exporté dans « abaque-scenario.json ».');
+  } catch (e) {
+    ioMessage('Export impossible.', true);
+  }
+}
+
+// Coercitions défensives : un fichier édité à la main ne doit jamais casser l'UI.
+function nombreSur(v, d) { const n = parseFloat(v); return Number.isFinite(n) ? n : d; }
+function texteSur(v, d) { return typeof v === 'string' ? v : d; }
+
+function appliquerScenarioObjet(obj) {
+  if (!obj || obj._type !== 'abaque-scenario' || typeof obj.scalaires !== 'object') {
+    ioMessage('Fichier non reconnu (ce n’est pas un scénario ABAQUE).', true);
+    return;
+  }
+  // Scalaires connus uniquement (les clés inconnues sont ignorées).
+  Object.keys(obj.scalaires).forEach((id) => {
+    if (!SCALAIRES.includes(id)) { return; }
+    const n = document.getElementById(id);
+    if (n) { poserChampScalaire(n, obj.scalaires[id]); }
+  });
+  majTvaEtat();  // reflète l'état du module TVA importé sur les taux
+  const arb = (obj.arbitrage && typeof obj.arbitrage === 'object') ? obj.arbitrage : {};
+  Object.keys(arb).forEach((id) => {
+    if (!ARB_IDS.includes(id)) { return; }
+    const n = document.getElementById(id);
+    if (n) { n.value = String(arb[id]); }
+  });
+  // Lignes reconstruites depuis les fabricants (valeurs coercées, jamais innerHTML).
+  const rebuild = (contId, liste, fab) => {
+    const cont = document.getElementById(contId);
+    cont.replaceChildren();
+    (Array.isArray(liste) ? liste : []).forEach((o) => cont.appendChild(fab(o || {})));
+  };
+  rebuild('postes-liste', obj.postes, (o) => lignePoste({
+    libelle: texteSur(o.libelle, 'Poste'), nbEtp: nombreSur(o.nbEtp, 1),
+    brutMensuel: nombreSur(o.brutMensuel, 0), estDirigeant: o.estDirigeant === true,
+  }));
+  rebuild('invest-liste', obj.investissements, (o) => ligneInvest({
+    libelle: texteSur(o.libelle, 'Investissement'), montantHt: nombreSur(o.montantHt, 0),
+    moisEngagement: nombreSur(o.moisEngagement, 1), dureeAmortMois: nombreSur(o.dureeAmortMois, 0),
+  }));
+  rebuild('location-liste', obj.locations, (o) => ligneLocation({
+    libelle: texteSur(o.libelle, 'Location'), mensualiteHt: nombreSur(o.mensualiteHt, 0),
+    moisDebut: nombreSur(o.moisDebut, 1),
+  }));
+  recalculer();
+  ioMessage('Scénario chargé.');
+}
+
+function importer(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    let obj = null;
+    try { obj = JSON.parse(reader.result); } catch (e) { ioMessage('Fichier illisible (JSON invalide).', true); return; }
+    appliquerScenarioObjet(obj);
+  };
+  reader.onerror = () => ioMessage('Lecture du fichier impossible.', true);
+  reader.readAsText(file);
 }
 
 // ---------- Amorçage ----------
@@ -349,10 +566,23 @@ function amorcer() {
   const locations = document.getElementById('location-liste');
   DEFAUTS_UI.locations.forEach((l) => locations.appendChild(ligneLocation(l)));
 
+  // Saisonnalité (12 coefficients à 1 = plat) + état initial des taux de TVA.
+  construireSaisonnalite();
+  majTvaEtat();
+  const caseTva = document.getElementById('moduleTva');
+  if (caseTva) { caseTva.addEventListener('change', majTvaEtat); }
+
   // Recalcul délégué : tout input/change dans le formulaire relance le calcul.
+  // (Les 12 coefficients de saison et les champs TVA vivent DANS le formulaire.)
   const form = document.getElementById('form-abaque');
   form.addEventListener('input', recalculer);
   form.addEventListener('change', recalculer);
+
+  // Le panneau d'arbitrage vit HORS du formulaire : ses champs relancent aussi le
+  // calcul (l'impact cash dépend du scénario ET de l'actif saisi).
+  const arb = document.getElementById('arb-verdict').parentElement;
+  arb.addEventListener('input', recalculer);
+  arb.addEventListener('change', recalculer);
 
   document.getElementById('ajouter-poste').addEventListener('click', () => {
     postes.appendChild(lignePoste({ libelle: 'Nouveau poste', nbEtp: 1, brutMensuel: 2000, estDirigeant: false }));
@@ -370,6 +600,14 @@ function amorcer() {
   document.getElementById('scenario-prudent').addEventListener('click', () => appliquerScenario(28, 60));
   document.getElementById('scenario-median').addEventListener('click', () => appliquerScenario(35, 45));
   document.getElementById('scenario-volontariste').addEventListener('click', () => appliquerScenario(42, 30));
+
+  // Export / import JSON (local, sans base).
+  document.getElementById('exporter-json').addEventListener('click', exporter);
+  const fichier = document.getElementById('fichier-json');
+  document.getElementById('importer-json').addEventListener('click', () => fichier.click());
+  fichier.addEventListener('change', () => {
+    if (fichier.files && fichier.files[0]) { importer(fichier.files[0]); fichier.value = ''; }
+  });
 
   recalculer();
 }

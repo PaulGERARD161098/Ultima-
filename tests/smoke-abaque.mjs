@@ -7,6 +7,7 @@
 // inline déterministe) ; contraste AA mesuré sur les couleurs réellement
 // rendues ; responsive mobile (390×844, pas de scroll horizontal).
 import { chromium } from 'playwright';
+import { readFileSync, writeFileSync } from 'node:fs';
 
 const SCRATCH = new URL('./.cache', import.meta.url).pathname;
 const BASE = 'http://127.0.0.1:8123';
@@ -178,6 +179,132 @@ console.log('— 3. Scénarios et garde-fou marge ≤ 0 —');
   verifier('Alerte marge invalide visible', await page.locator('#alerte-marge').isVisible());
   verifier('Seuil affiché « marge invalide »', /marge invalide/i.test((await page.locator('#res-seuil').textContent()) || ''));
   verifier('Zéro erreur console (marge 0)', journal.erreurs.length === 0, journal.erreurs.slice(0, 3).join(' | '));
+  await page.close();
+}
+
+// ============ 4. Arbitrage acheter/louer (NB-2b) ============
+console.log('— 4. Arbitrage acheter / louer (règle de cash prioritaire) —');
+{
+  const { page, journal } = await ouvrir({ width: 1200, height: 900 });
+
+  // Rendu de base : une recommandation + VAN + planchers + bascule chiffrés.
+  const reco0 = (await page.locator('#arb-reco').textContent()) || '';
+  verifier('Recommandation affichée (Louer/Acheter)', /Louer|Acheter/.test(reco0), reco0);
+  for (const id of ['arb-van-achat', 'arb-van-location', 'arb-plancher-achat', 'arb-plancher-location']) {
+    const t = (await page.locator('#' + id).textContent()) || '';
+    verifier(`Arbitrage #${id} chiffré (€)`, /\d/.test(t) && /€/.test(t), t);
+  }
+  const motif0 = (await page.locator('#arb-motif').textContent()) || '';
+  verifier('Motif de la recommandation affiché', motif0.length > 10, motif0.slice(0, 40));
+  const bascule0 = (await page.locator('#arb-bascule').textContent()) || '';
+  verifier('Durée de bascule renseignée', /mois|sans objet/.test(bascule0), bascule0);
+
+  // Règle de cash prioritaire (le cœur VERTUMNE « louer le parc ») : trésorerie
+  // confortable + achat massif → l'achat casse le plancher, la location le
+  // préserve → reco « Louer » motivée par le cash, quel que soit le coût.
+  await page.fill('#tresorerieInitiale', '1000000');
+  await page.fill('#arb-montant', '2000000');
+  await page.fill('#arb-loyer', '100');
+  await page.waitForFunction(() =>
+    /Louer/.test(document.getElementById('arb-reco').textContent || ''), { timeout: 5000 }).catch(() => {});
+  const recoCash = (await page.locator('#arb-reco').textContent()) || '';
+  const motifCash = (await page.locator('#arb-motif').textContent()) || '';
+  const badgeReco = await page.locator('#arb-reco').getAttribute('data-reco');
+  verifier('Achat massif + tréso confortable → « Louer »', /Louer/.test(recoCash), recoCash);
+  verifier('Motif = contrainte de trésorerie', /trésorerie|plancher/i.test(motifCash), motifCash.slice(0, 60));
+  verifier('Badge data-reco = louer', badgeReco === 'louer', String(badgeReco));
+  const plancherAchatCash = (await page.locator('#arb-plancher-achat').textContent()) || '';
+  verifier('Plancher si achat négatif (achat casse le cash)', /-/.test(plancherAchatCash), plancherAchatCash);
+
+  // Contraste AA du badge de reco sur son fond (--ile).
+  const cBadge = await contraste(page, '.arb-reco-badge', 'color', '--ile');
+  verifier('Contraste badge de reco ≥ 4,5:1', cBadge >= 4.5, `${cBadge}:1`);
+
+  verifier('Zéro erreur console (arbitrage)', journal.erreurs.length === 0, journal.erreurs.slice(0, 3).join(' | '));
+  await page.screenshot({ path: `${SCRATCH}/abaque-arbitrage.png`, fullPage: true });
+  await page.close();
+}
+
+// ============ 5. Export / import JSON (scénario local, sans base) ============
+console.log('— 5. Export / import JSON —');
+{
+  const page = await navigateur.newPage({ viewport: { width: 1200, height: 900 }, acceptDownloads: true });
+  const erreurs = [];
+  page.on('pageerror', (e) => erreurs.push('pageerror: ' + e.message));
+  page.on('console', (m) => { if (m.type() === 'error') erreurs.push(m.text()); });
+  await page.goto(`${BASE}/abaque.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForFunction(() => {
+    const n = document.getElementById('res-coussin');
+    return n && n.textContent && n.textContent !== '—';
+  }, { timeout: 10000 });
+
+  // Une valeur distinctive, puis export → fichier téléchargé, parsé.
+  await page.fill('#caMensuel', '77777');
+  await page.waitForTimeout(80);
+  const [download] = await Promise.all([
+    page.waitForEvent('download', { timeout: 8000 }),
+    page.click('#exporter-json'),
+  ]);
+  const chemin = await download.path();
+  const obj = JSON.parse(readFileSync(chemin, 'utf-8'));
+  verifier('Export : fichier de type « abaque-scenario »', obj._type === 'abaque-scenario', obj._type);
+  verifier('Export : hypothèse capturée (caMensuel)', String(obj.scalaires.caMensuel) === '77777', String(obj.scalaires.caMensuel));
+  verifier('Export : lignes de main d’œuvre présentes', Array.isArray(obj.postes) && obj.postes.length >= 1);
+  verifier('Export : actif d’arbitrage capturé', obj.arbitrage && 'arb-montant' in obj.arbitrage);
+  verifier('Export : module TVA + saisonnalité capturés',
+    ('moduleTva' in obj.scalaires) && ('saison-1' in obj.scalaires));
+
+  // On change la valeur, puis on recharge le fichier → la valeur revient.
+  await page.fill('#caMensuel', '10000');
+  await page.waitForTimeout(50);
+  const tmp = `${SCRATCH}/scenario-test.json`;
+  writeFileSync(tmp, JSON.stringify(obj));
+  await page.setInputFiles('#fichier-json', tmp);
+  await page.waitForFunction(() => document.getElementById('caMensuel').value === '77777', { timeout: 5000 }).catch(() => {});
+  verifier('Import : hypothèse restaurée (round-trip)', (await page.locator('#caMensuel').inputValue()) === '77777');
+  verifier('Import : message de succès', /chargé/i.test((await page.locator('#io-message').textContent()) || ''));
+  // Le recalcul a bien tourné après import (coussin chiffré).
+  verifier('Import : recalcul effectué', /\d/.test((await page.locator('#res-coussin').textContent()) || ''));
+
+  // Fichier non-scénario → message d'erreur, aucune casse.
+  const mauvais = `${SCRATCH}/scenario-bad.json`;
+  writeFileSync(mauvais, JSON.stringify({ foo: 1 }));
+  await page.setInputFiles('#fichier-json', mauvais);
+  await page.waitForTimeout(200);
+  verifier('Import fichier non-scénario → erreur explicite',
+    /non reconnu/i.test((await page.locator('#io-message').textContent()) || ''));
+
+  verifier('Zéro erreur console (export/import)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
+  await page.close();
+}
+
+// ============ 6. Saisonnalité + module TVA (branchés au moteur) ============
+console.log('— 6. Saisonnalité + module TVA —');
+{
+  const { page, journal } = await ouvrir({ width: 1200, height: 900 });
+
+  // Saisonnalité : 12 coefficients rendus ; en modifier un change le résultat.
+  verifier('12 coefficients de saisonnalité rendus', (await page.locator('.saison-grille .champ-saison').count()) === 12);
+  const plancherPlat = (await page.locator('#res-plancher').textContent()) || '';
+  await page.fill('#saison-1', '5');
+  await page.waitForTimeout(120);
+  const plancherSaison = (await page.locator('#res-plancher').textContent()) || '';
+  verifier('Saisonnalité modifie la trésorerie plancher', plancherPlat !== plancherSaison, `${plancherPlat} → ${plancherSaison}`);
+  // On remet le mois à plat pour isoler l'effet TVA.
+  await page.fill('#saison-1', '1');
+  await page.waitForTimeout(80);
+
+  // Module TVA : taux désactivés tant qu'il est off ; activés une fois coché ;
+  // et son activation modifie la trésorerie (décalage de TVA modélisé).
+  verifier('Taux TVA désactivés (module off)', await page.locator('#tauxTvaCollectee').isDisabled());
+  const plancherSansTva = (await page.locator('#res-plancher').textContent()) || '';
+  await page.check('#moduleTva');
+  await page.waitForTimeout(120);
+  verifier('Taux TVA activés quand le module est coché', !(await page.locator('#tauxTvaCollectee').isDisabled()));
+  const plancherAvecTva = (await page.locator('#res-plancher').textContent()) || '';
+  verifier('Module TVA modifie la trésorerie plancher', plancherSansTva !== plancherAvecTva, `${plancherSansTva} → ${plancherAvecTva}`);
+
+  verifier('Zéro erreur console (TVA/saison)', journal.erreurs.length === 0, journal.erreurs.slice(0, 3).join(' | '));
   await page.close();
 }
 
