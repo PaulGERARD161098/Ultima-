@@ -225,14 +225,36 @@
     }
     section.hidden = false;
     if (payload.connected) {
-      driveEtat('Connecté ✓ — tes pages pourront être sauvegardées dans ton Drive.');
+      driveEtat('Connecté ✓ — sauvegarde tes pages dans ton Drive quand tu veux.');
       driveBouton('imladrik-drive-connecter', false);
+      driveBouton('imladrik-drive-sauver', true);
       driveBouton('imladrik-drive-deconnecter', true);
     } else {
       driveEtat('Ton journal n’est pas encore relié à ton Google Drive.');
       driveBouton('imladrik-drive-connecter', true);
+      driveBouton('imladrik-drive-sauver', false);
       driveBouton('imladrik-drive-deconnecter', false);
     }
+  }
+
+  async function sauverSurDrive() {
+    driveEtat('Sauvegarde en cours…');
+    driveBouton('imladrik-drive-sauver', false);
+    var res = await appelApi('/api/imladrik/drive/push', 'POST', {});
+    if (res.status === 401) { montrer('imladrik-auth'); return; }
+    var p = res.data && res.data.data;
+    if (!res.ok || !p) {
+      var msg = (res.data && res.data.error) || 'La sauvegarde a échoué. Réessaie.';
+      driveEtat(msg);
+      driveBouton('imladrik-drive-sauver', true);
+      return;
+    }
+    var parts = [];
+    if (p.pousses) { parts.push(p.pousses + ' page' + (p.pousses > 1 ? 's' : '') + ' sauvegardée' + (p.pousses > 1 ? 's' : '')); }
+    if (p.inchanges) { parts.push(p.inchanges + ' déjà à jour'); }
+    if (p.echoues) { parts.push(p.echoues + ' en échec'); }
+    driveEtat('Sauvegarde terminée ✓ — ' + (parts.length ? parts.join(', ') : 'rien à sauvegarder') + '.');
+    driveBouton('imladrik-drive-sauver', true);
   }
 
   async function connecterDrive() {
@@ -286,6 +308,8 @@
     }
     var bConn = document.getElementById('imladrik-drive-connecter');
     if (bConn) { bConn.addEventListener('click', connecterDrive); }
+    var bSauver = document.getElementById('imladrik-drive-sauver');
+    if (bSauver) { bSauver.addEventListener('click', sauverSurDrive); }
     var bDeco = document.getElementById('imladrik-drive-deconnecter');
     if (bDeco) { bDeco.addEventListener('click', deconnecterDrive); }
   }

@@ -158,14 +158,24 @@ console.log('— B. imladrik.html fixture 200 → journal, écriture (POST), eff
       body: JSON.stringify({ ok: true, data: { id: 'e-nouveau' } }),
     });
   });
-  // Statut Drive : configuré mais pas encore connecté (section visible, bouton connecter).
+  // Statut Drive : configuré ET connecté (section visible, boutons Sauvegarder + Déconnecter).
   const appelsDriveStatut = [];
   await page.route('**/api/imladrik/drive/status', (route) => {
     appelsDriveStatut.push(route.request().headers());
     return route.fulfill({
       status: 200,
       contentType: 'application/json; charset=utf-8',
-      body: JSON.stringify({ ok: true, data: { configured: true, connected: false } }),
+      body: JSON.stringify({ ok: true, data: { configured: true, connected: true } }),
+    });
+  });
+  // Push : sauvegarde à la demande (fixture neutre).
+  const appelsPush = [];
+  await page.route('**/api/imladrik/drive/push', (route) => {
+    appelsPush.push({ methode: route.request().method(), headers: route.request().headers() });
+    return route.fulfill({
+      status: 200,
+      contentType: 'application/json; charset=utf-8',
+      body: JSON.stringify({ ok: true, data: { pousses: 2, inchanges: 0, echoues: 0, total: 2 } }),
     });
   });
 
@@ -190,17 +200,28 @@ console.log('— B. imladrik.html fixture 200 → journal, écriture (POST), eff
   verifier('Page sans titre : corps présent',
     /sans titre/.test((await e2.locator('.imladrik-entree-corps').textContent()) || ''));
 
-  // 2bis. Section Drive : configurée mais NON connectée → section visible,
-  // bouton « Connecter » visible, « Déconnecter » caché, statut lu avec Bearer.
+  // 2bis. Section Drive : configurée ET connectée → section visible, statut lu
+  // avec Bearer, « Connecter » caché, « Sauvegarder » + « Déconnecter » visibles.
   await page.waitForSelector('#imladrik-drive:not([hidden])', { timeout: 5000 });
   verifier('Section Drive visible (configurée)',
     !(await page.locator('#imladrik-drive').evaluate((el) => el.hidden)));
   verifier('GET /drive/status avec Bearer', appelsDriveStatut.length >= 1 &&
     (appelsDriveStatut[0] || {}).authorization === 'Bearer jeton-de-test');
-  verifier('Bouton « Connecter mon Drive » visible',
-    !(await page.locator('#imladrik-drive-connecter').evaluate((el) => el.hidden)));
-  verifier('Bouton « Déconnecter » caché (non connecté)',
-    await page.locator('#imladrik-drive-deconnecter').evaluate((el) => el.hidden));
+  verifier('Bouton « Connecter » caché (déjà connecté)',
+    await page.locator('#imladrik-drive-connecter').evaluate((el) => el.hidden));
+  verifier('Bouton « Sauvegarder sur Drive » visible',
+    !(await page.locator('#imladrik-drive-sauver').evaluate((el) => el.hidden)));
+  verifier('Bouton « Déconnecter » visible (connecté)',
+    !(await page.locator('#imladrik-drive-deconnecter').evaluate((el) => el.hidden)));
+
+  // 2ter. Clic « Sauvegarder sur Drive » → POST /push avec Bearer + message de succès.
+  await page.locator('#imladrik-drive-sauver').click();
+  await page.waitForTimeout(250);
+  const push = appelsPush.find((a) => a.methode === 'POST');
+  verifier('POST /api/imladrik/drive/push émis', Boolean(push));
+  verifier('Push : Bearer transmis', push && push.headers.authorization === 'Bearer jeton-de-test');
+  verifier('Message de sauvegarde affiché',
+    /sauvegard/i.test((await page.locator('#imladrik-drive-etat').textContent()) || ''));
 
   // 3. Atelier d'écriture présent.
   verifier('Champ titre présent', (await page.locator('#imladrik-titre').count()) === 1);
