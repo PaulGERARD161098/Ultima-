@@ -451,6 +451,137 @@ body.page-quadrant .console-conteneur {
 
 .reshiram-bouton-preuve { padding: 0.5rem 0.95rem; }
 
+/* ---------- RESHIRAM : capital réseau (LIT RIVEN, sens unique) ----------
+   Panneau sous chaque talent : le qualitatif « je connais du monde » devenu
+   preuve chiffrée. Registre antique, cerne or, encre sépia. */
+.reshiram-capital {
+  margin-top: 0.7rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed var(--or-antique);
+}
+
+.reshiram-capital-titre {
+  margin: 0 0 0.45rem;
+  font-family: var(--police-ancienne);
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+  color: var(--encre-sepia);
+}
+
+/* Le compteur = la preuve : le chiffre en évidence. */
+.reshiram-capital-compte {
+  margin: 0 0 0.4rem;
+  font-size: 0.95rem;
+  color: var(--encre-sepia);
+}
+
+.reshiram-capital-nombre {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-right: 0.25rem;
+}
+
+.reshiram-capital-compte--vide {
+  font-style: italic;
+  color: var(--encre-sepia-douce);
+}
+
+.reshiram-capital-secteurs {
+  list-style: none;
+  margin: 0 0 0.5rem;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.reshiram-capital-secteur {
+  padding: 0.08rem 0.5rem;
+  border: 1px solid var(--or-antique);
+  border-radius: 4px;
+  background: var(--parchemin-ombre);
+  font-size: 0.85rem;
+  color: var(--encre-sepia);
+}
+
+.reshiram-capital-fiche {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.35rem;
+  font-size: 0.93rem;
+  color: var(--encre-sepia);
+}
+
+.reshiram-capital-nom { font-weight: 700; }
+
+.reshiram-capital-type {
+  flex: none;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--or-antique);
+  background: var(--parchemin-ombre);
+  font-family: var(--police-ancienne);
+  font-size: 0.76rem;
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  color: var(--encre-sepia);
+}
+
+.reshiram-bouton-detacher {
+  min-height: 44px;
+  margin-left: auto;
+  padding: 0.1rem 0.7rem;
+  font-family: var(--police-ancienne);
+  font-size: 0.8rem;
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+  color: var(--danger-parchemin);
+  background: transparent;
+  border: 1px solid var(--danger-parchemin);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.reshiram-bouton-detacher:hover { background: rgba(160, 44, 26, 0.08); }
+.reshiram-bouton-detacher:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.reshiram-capital-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  align-items: center;
+}
+
+.reshiram-capital-select {
+  flex: 1 1 12rem;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: var(--encre-sepia);
+  background: var(--creme);
+  border: 1px solid var(--cerne-carte);
+  border-radius: 6px;
+}
+
+.reshiram-capital-select:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.reshiram-bouton-relier { padding: 0.5rem 0.95rem; }
+
+.reshiram-capital-aide {
+  margin: 0.4rem 0 0;
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--encre-sepia-douce);
+}
+
 /* ---------- ZEKROM : miroir de RESHIRAM (saisie libre d'un idéal) ----------
    Mêmes mécaniques et mêmes tokens antiques. Différence de registre : le badge
    « à orienter » est une INVITATION (encre sépia douce), PAS un signal de danger

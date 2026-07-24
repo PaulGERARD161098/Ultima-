@@ -74,6 +74,33 @@ const FIXTURE = {
   },
 };
 
+// Fixture NEUTRE du capital réseau (RESHIRAM LIT RIVEN) — noms RIVEN INVENTÉS,
+// jamais de vraie fiche de Paul. Cohérente avec FIXTURE (talents t1..t4) :
+//   - reseau : 3 fiches (dont une sans secteur → « À classer ») ;
+//   - refs   : t1↔n1, t1↔n2, t4↔n3 ; t2/t3 non reliés ;
+//   - capital : une ligne par talent (t1:2 secteurs, t4:1 sans secteur, t2/t3:0).
+const FIXTURE_REFS = {
+  ok: true,
+  data: {
+    refs: [
+      { id: 'r1', owner_id: 'o1', talent_id: 't1', node_id: 'n1', created_at: '2026-07-05T10:00:00Z' },
+      { id: 'r2', owner_id: 'o1', talent_id: 't1', node_id: 'n2', created_at: '2026-07-05T11:00:00Z' },
+      { id: 'r3', owner_id: 'o1', talent_id: 't4', node_id: 'n3', created_at: '2026-07-06T10:00:00Z' },
+    ],
+    capital: [
+      { talent_id: 't1', owner_id: 'o1', nom: 'CARTOGRAPHE', nb_contacts: 2, secteurs_reseau: ['métaux', 'orient'] },
+      { talent_id: 't2', owner_id: 'o1', nom: 'ARBITRE', nb_contacts: 0, secteurs_reseau: [] },
+      { talent_id: 't3', owner_id: 'o1', nom: 'FONDEUR', nb_contacts: 0, secteurs_reseau: [] },
+      { talent_id: 't4', owner_id: 'o1', nom: 'VEILLEUR', nb_contacts: 1, secteurs_reseau: [] },
+    ],
+    reseau: [
+      { id: 'n1', nom: 'FORGE DU NORD', secteur_activite: 'métaux', type: 'artisan' },
+      { id: 'n2', nom: 'RELAIS DU LEVANT', secteur_activite: 'orient', type: 'partenaire' },
+      { id: 'n3', nom: 'GUET SANS NOM', secteur_activite: null, type: 'lead' },
+    ],
+  },
+};
+
 const navigateur = await chromium.launch({
   executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
 });
@@ -112,6 +139,8 @@ console.log('— A. reshiram.html SANS session (fail-closed) —');
     (await page.locator('#reshiram-auth a[href="traveler.html"]').count()) === 1);
   verifier('Registre caché', await page.locator('#reshiram-registre').evaluate((el) => el.hidden));
   verifier('Aucun talent dans le DOM', (await page.locator('.reshiram-talent').count()) === 0);
+  verifier('Aucun panneau capital réseau (registre caché)',
+    (await page.locator('.reshiram-capital').count()) === 0);
   verifier('Chargement effacé (état auth seul visible)',
     await page.locator('#reshiram-chargement').evaluate((el) => el.hidden));
 
@@ -155,6 +184,35 @@ console.log('— B. reshiram.html fixture 200 → registre, à étayer, offre r�
       body: JSON.stringify(FIXTURE),
     });
   });
+  // Capital réseau : GET renvoie la fixture ; POST (relier) et DELETE (détacher)
+  // sont capturés pour prouver méthode + corps + Bearer (le front LIT RIVEN).
+  const refsGet = [];
+  const refsPost = [];
+  const refsDelete = [];
+  await page.route('**/api/talent-refs', (route) => {
+    const req = route.request();
+    const methode = req.method();
+    if (methode === 'POST') {
+      refsPost.push({ headers: req.headers(), corps: req.postDataJSON() });
+      return route.fulfill({
+        status: 200, contentType: 'application/json; charset=utf-8',
+        body: JSON.stringify({ ok: true, data: { ref: {} } }),
+      });
+    }
+    if (methode === 'DELETE') {
+      const corps = req.postDataJSON() || {};
+      refsDelete.push({ headers: req.headers(), corps });
+      return route.fulfill({
+        status: 200, contentType: 'application/json; charset=utf-8',
+        body: JSON.stringify({ ok: true, data: { id: corps.id } }),
+      });
+    }
+    refsGet.push(req.headers());
+    return route.fulfill({
+      status: 200, contentType: 'application/json; charset=utf-8',
+      body: JSON.stringify(FIXTURE_REFS),
+    });
+  });
   await page.goto(`${BASE}/reshiram.html`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForSelector('#reshiram-registre:not([hidden])', { timeout: 20000 });
 
@@ -195,6 +253,99 @@ console.log('— B. reshiram.html fixture 200 → registre, à étayer, offre r�
     (await page.locator('.reshiram-preuve-form').count()) === 4);
 
   await page.screenshot({ path: `${CAPTURES}/reshiram-carte.png`, fullPage: true });
+
+  // 4bis. Capital réseau (RESHIRAM LIT RIVEN, sens unique).
+  verifier('Bearer transmis à /api/talent-refs', refsGet.length >= 1 &&
+    (refsGet[0] || {}).authorization === 'Bearer jeton-de-test',
+    `n=${refsGet.length} lu=${(refsGet[0] || {}).authorization || ''}`);
+  verifier('Panneau capital réseau sur chaque talent (4)',
+    (await page.locator('.reshiram-capital').count()) === 4);
+
+  // t1 : compteur chiffré + 2 fiches reliées + secteurs couverts.
+  verifier('t1 : compteur « 2 » contacts',
+    ((await t1.locator('.reshiram-capital-nombre').textContent()) || '').trim() === '2');
+  verifier('t1 : libellé « contact(s) mobilisable(s) »',
+    /contact.*mobilisable/.test((await t1.locator('.reshiram-capital-compte').textContent()) || ''));
+  verifier('t1 : 2 fiches reliées listées',
+    (await t1.locator('.reshiram-capital-fiche').count()) === 2);
+  const nomsFiches = (await t1.locator('.reshiram-capital-nom').allTextContents()).map((s) => s.trim());
+  verifier('t1 : FORGE DU NORD rendue', nomsFiches.includes('FORGE DU NORD'));
+  verifier('t1 : RELAIS DU LEVANT rendue', nomsFiches.includes('RELAIS DU LEVANT'));
+  const secteursCap = (await t1.locator('.reshiram-capital-secteur').allTextContents()).map((s) => s.trim());
+  verifier('t1 : secteurs métaux + orient', secteursCap.includes('métaux') && secteursCap.includes('orient'));
+  verifier('t1 : badges de type rendus (artisan/partenaire)',
+    (await t1.locator('.reshiram-capital-type').count()) === 2);
+
+  // t3 : aucune fiche reliée (compteur vide) + sélecteur présent.
+  verifier('t3 : « aucune fiche reliée » (compteur vide)',
+    /Aucune fiche reliée/.test((await t3.locator('.reshiram-capital-compte--vide').textContent()) || ''));
+  verifier('t3 : aucune fiche listée', (await t3.locator('.reshiram-capital-fiche').count()) === 0);
+  verifier('t3 : sélecteur de liaison présent',
+    (await t3.locator('.reshiram-capital-select').count()) === 1);
+
+  // Sélecteur de t1 : n1/n2 déjà reliés absents, n3 offert.
+  const optionsT1 = await t1.locator('.reshiram-capital-select option').evaluateAll(
+    (opts) => opts.map((o) => o.value));
+  verifier('t1 : sélecteur n’offre PAS n1 (déjà relié)', !optionsT1.includes('n1'));
+  verifier('t1 : sélecteur n’offre PAS n2 (déjà relié)', !optionsT1.includes('n2'));
+  verifier('t1 : sélecteur offre n3 (non relié)', optionsT1.includes('n3'));
+
+  // Contrastes AA du panneau (parchemin invariant clair/sombre pour ce quadrant).
+  const cc = await page.evaluate(() => {
+    const cs = getComputedStyle(document.documentElement);
+    const compte = document.querySelector('.reshiram-capital-compte:not(.reshiram-capital-compte--vide)');
+    const type = document.querySelector('.reshiram-capital-type');
+    const det = document.querySelector('.reshiram-bouton-detacher');
+    return {
+      parchemin: cs.getPropertyValue('--parchemin').trim(),
+      parcheminCarte: cs.getPropertyValue('--parchemin-carte').trim(),
+      parcheminOmbre: cs.getPropertyValue('--parchemin-ombre').trim(),
+      compte: getComputedStyle(compte).color,
+      type: getComputedStyle(type).color,
+      detacher: getComputedStyle(det).color,
+    };
+  });
+  for (const [nom, couleur, fond] of [
+    ['compteur capital', cc.compte, cc.parcheminCarte],
+    ['badge type', cc.type, cc.parcheminOmbre],
+    ['bouton détacher', cc.detacher, cc.parchemin],
+    ['bouton détacher (fond ombré)', cc.detacher, cc.parcheminOmbre],
+  ]) {
+    const r = ratio(versHex(couleur), fond);
+    verifier(`Contraste ${nom} ≥ 4,5:1`, r >= 4.5, `${r.toFixed(2)}:1`);
+  }
+
+  // Détacher une fiche de t1 → DELETE /api/talent-refs (méthode + corps + Bearer).
+  await t1.locator('.reshiram-bouton-detacher').first().click();
+  await page.waitForTimeout(300);
+  verifier('Détacher t1 : un DELETE /api/talent-refs émis', refsDelete.length === 1, `${refsDelete.length}`);
+  verifier('Détacher t1 : corps { id } transmis',
+    Boolean((refsDelete[0] || {}).corps) && typeof refsDelete[0].corps.id === 'string' && refsDelete[0].corps.id.length > 0,
+    JSON.stringify((refsDelete[0] || {}).corps));
+  verifier('Détacher t1 : Bearer transmis',
+    ((refsDelete[0] || {}).headers || {}).authorization === 'Bearer jeton-de-test');
+
+  // Relier n3 à t3 → POST /api/talent-refs { talent_id:'t3', node_id:'n3' } + Bearer.
+  const selT3 = page.locator('#reshiram-talent-t3 .reshiram-capital-select');
+  await selT3.selectOption('n3');
+  await page.locator('#reshiram-talent-t3 .reshiram-bouton-relier').click();
+  await page.waitForTimeout(300);
+  verifier('Relier t3 : un POST /api/talent-refs émis', refsPost.length === 1, `${refsPost.length}`);
+  verifier('Relier t3 : corps { talent_id:t3, node_id:n3 }',
+    (refsPost[0] || {}).corps && refsPost[0].corps.talent_id === 't3' && refsPost[0].corps.node_id === 'n3',
+    JSON.stringify((refsPost[0] || {}).corps));
+  verifier('Relier t3 : Bearer transmis',
+    ((refsPost[0] || {}).headers || {}).authorization === 'Bearer jeton-de-test');
+
+  // Fonction pure capitalDe exposée pour le harnais.
+  const capPur = await page.evaluate((fx) => {
+    const c = window.UltimaReshiram.capitalDe(fx.data.capital, 't1');
+    const vide = window.UltimaReshiram.capitalDe(fx.data.capital, 'inconnu');
+    return { nb: c.nb_contacts, secteurs: c.secteurs_reseau.length, videNb: vide.nb_contacts };
+  }, FIXTURE_REFS);
+  verifier('capitalDe pur : t1 nb_contacts=2', capPur.nb === 2, JSON.stringify(capPur));
+  verifier('capitalDe pur : t1 2 secteurs', capPur.secteurs === 2);
+  verifier('capitalDe pur : talent absent → 0', capPur.videNb === 0);
 
   // 5. Vue « mon offre réelle » : uniquement les étayés (a_etayer=false).
   await page.locator('#reshiram-vue-offre').click();

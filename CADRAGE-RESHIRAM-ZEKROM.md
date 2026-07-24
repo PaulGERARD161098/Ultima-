@@ -182,6 +182,18 @@ RIVEN (le réel), et alimente ZEKROM (l'idéal).**
 - v1 de la passerelle = **manuel** : Paul crée/valide le lien talent↔idéal
   (auto plus tard, cf. §6.3).
 
+> **✅ Connexion RESHIRAM → RIVEN CONSTRUITE (2026-07-24, boucle ④, PR #93 draft).**
+> Migration `0013_talent_refs_reseau.sql` (référence lecture seule, double
+> scellement AD-4, RLS ; + contrainte d'unicité `(owner_id, id)` sur
+> `network_nodes` comme cible de FK) + vue `talents_capital_reseau` (par talent :
+> `nb_contacts`, `secteurs_reseau[]`). API `api/talent-refs.js` (GET/POST/DELETE,
+> owner_id serveur-only, projection RIVEN minimale sans PII de contact) +
+> `validateTalentRef`. Front : panneau « capital réseau » par talent dans
+> `js/reshiram.js` (relier/détacher une fiche, compteur chiffré par secteur ;
+> fail-closed). Manuel en v1 (Paul relie). Contre-passe COMPLÈTE verte. **Gates** :
+> application `0013` = Paul ; fusion = Paul. Différé : auto-suggestion de liens,
+> miroir « quels talents mobilisent cette fiche » (la table le porte déjà).
+
 **Autres briques v2** (dérivées, moindre priorité) :
 - **Capacités / moyens mobilisables** : temps dispo, outils, capital (n°2, et le
   versant « capacité » du n°3).

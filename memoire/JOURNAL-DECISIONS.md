@@ -719,3 +719,24 @@
   intime nouvelle). Correctif adjacent : `smoke-quadrants.mjs` §E réaligné sur
   `bcp.html` réel (badge « premier outil ouvert » + lien ABAQUE) — échec
   **pré-existant** du #75 (le simulateur avait fait évoluer bcp sans MAJ du test).
+- **2026-07-24 (reprise Zekrom — housekeeping + boucle ④ RESHIRAM→RIVEN)** — Paul :
+  « Reprise sur Zekrom. Plus de boucle à boucler ? » → constat : branche propre sur
+  main, aucune boucle en cours, mais 3 PR draft périmées traînaient. Paul : « on fait
+  les reliquats et on lance ④ ». **Housekeeping** : PR #62 (docs clôture 20/07,
+  superseded), #67 (L2b les mains, déjà en prod sous api/leo.js + unit-leo-mains),
+  #88 (cadrage Drive, absorbé dans CADRAGE-CONSOLE §3.4) **fermées**. Branche repartie
+  propre de origin/main. **Boucle ④ CONSTRUITE (PR #93 draft)** : connexion RESHIRAM
+  → RIVEN, le « capital réseau ». Cœur données/API gardé au fil principal (escalade
+  Opus signalée, RLS/auth) : migration `0013_talent_refs_reseau.sql` (référence
+  lecture seule talent↔fiche RIVEN, double scellement AD-4, RLS ; vue
+  `talents_capital_reseau` par talent : nb contacts + secteurs ; + contrainte
+  d'unicité (owner_id,id) sur network_nodes), `api/talent-refs.js` (owner_id
+  serveur-only, projection RIVEN minimale ZÉRO PII de contact), `validateTalentRef`,
+  `unit-reshiram-reseau` (12 verts). Front dispatché à **front-carto** (spec déposée
+  en fichier) : panneau « capital réseau » par talent (relier/détacher, compteur
+  chiffré par secteur, fail-closed), enrichissement `smoke-reshiram`. Contre-passe
+  Léo INDÉPENDANTE : `bash tests/lancer.sh` COMPLET, exit 0, tous harnais verts ;
+  contrôle CSP/PII manuel (0 innerHTML, 0 log). Deux commits atomiques (données puis
+  front). **Règle cardinale tenue** : RESHIRAM lit RIVEN, ne copie jamais, sens
+  unique. **Gates non franchies (hors solo)** : application `0013` = Paul ; fusion
+  PR #93 = Paul ; contre-passe advisors securite-auditeur recommandée après appli.

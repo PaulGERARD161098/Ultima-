@@ -42,6 +42,8 @@ echo "=== unit-abaque.mjs ==="
 node unit-abaque.mjs
 echo "=== unit-reshiram-validate.mjs ==="
 node unit-reshiram-validate.mjs
+echo "=== unit-reshiram-reseau.mjs ==="
+node unit-reshiram-reseau.mjs
 echo "=== unit-zekrom-validate.mjs ==="
 node unit-zekrom-validate.mjs
 echo "=== unit-imladrik-validate.mjs ==="
