@@ -120,9 +120,19 @@
     réel ↔ idéal devient AGISSANT.** v2 différé : miroir côté RESHIRAM,
     auto-suggestion, chiffrage.
 
-    **④ Connexions v2 RESHIRAM→RIVEN** : `talent_refs_reseau` (lecture des
-    fiches RIVEN, jamais de copie) + vue « capital réseau » chiffrée par
-    secteur. Rend mesurables les talents « réseau ». Dépend de RIVEN (déjà là).
+    **④ ✅ Connexions RESHIRAM→RIVEN construites (2026-07-24, PR #93 draft)** :
+    `talent_refs_reseau` (référence LECTURE SEULE vers les fiches RIVEN, jamais
+    de copie ; double scellement AD-4) + vue `talents_capital_reseau` (par talent :
+    nb de contacts mobilisables + secteurs couverts). Migration `0013`, API
+    `api/talent-refs.js` (owner_id serveur-only, projection RIVEN minimale — zéro
+    PII de contact), `validateTalentRef`. Front `js/reshiram.js` : panneau
+    « capital réseau » par talent (relier une fiche, compteur chiffré par secteur,
+    détacher ; fail-closed, dégrade en « indisponible » sans casser la carte).
+    Le talent qualitatif devient **preuve chiffrée**. Harnais `unit-reshiram-reseau`
+    (12) + `smoke-reshiram` enrichi ; contre-passe COMPLÈTE verte (exit 0). Sens
+    UNIQUE : RESHIRAM lit RIVEN, n'y écrit jamais. Cadre : §v2 R/Z. **Gates
+    (non franchies, hors solo)** : application `0013` en prod = Paul ; fusion PR
+    #93 = Paul. Contre-passe `securite-auditeur` advisors recommandée après appli.
 
     **⑤ ✅ LV2-⑤ Cockpit — résumés vivants v1 construits (2026-07-23, solo)** :
     endpoint `api/cockpit.js` (agrégats derrière auth, **que des comptes, zéro
