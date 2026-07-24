@@ -283,14 +283,23 @@ vocale. Dashboard de suivi comme les autres.
 >    Migration `0014_imladrik_drive_tokens` (renumérotée depuis 0013) **APPLIQUÉE
 >    en prod**. Config Paul faite (client Google Cloud `drive.file` + 4 env Vercel).
 >    30 unitaires + smoke Drive verts. **Vérif live = clic « Connecter » sur la prod.**
-> 2. **⏭ Push Ultima → Drive à la demande** (upsert idempotent id↔drive_file_id) —
->    prochaine sous-boucle (migration additive des colonnes d'ancrage).
+> 2. **✅ ② Push « Sauvegarder sur Drive » (2026-07-24, PR #98)** : un Google Doc
+>    par page dans le dossier dédié, à la demande, idempotent (hash de contenu →
+>    saut si inchangé). `api/imladrik/drive/push.js` (refresh token chiffré,
+>    dossier dédié, RLS, garde-fou quota 200/run), helpers `drive.js` (create/
+>    update Doc), bouton front. Migration `0015_imladrik_drive_sync` (colonnes
+>    d'ancrage `drive_file_id`/`drive_content_hash`/`drive_synced_at`) **APPLIQUÉE
+>    en prod**. 44 unitaires + smoke push. **Vérif live = clic « Sauvegarder ».**
 > 3. *(Plus tard, cadrage séparé)* retour / deux sens avec politique de conflit.
 >
-> **⏳ Reste côté Paul** : tester la connexion en prod (IMLADRIK → « Connecter mon
-> Drive » → consentement Google → « Connecté ✓ » + dossier « Ultima — Journal
-> IMLADRIK » créé dans son Drive). Rappels : re-consentement Google ~tous les 7 j
-> (mode Test) ; le contenu poussé (sous-boucle ②) quittera la RLS Supabase (acté).
+> **✅ Connexion Drive VÉRIFIÉE EN VRAI par Paul (2026-07-24, « c'est ok »)** —
+> dossier « Ultima — Journal IMLADRIK » créé. Rappels : re-consentement Google
+> ~7 j (mode Test) ; le contenu poussé quitte la RLS pour Google (acté).
+>
+> **⏭ Prochaine boucle envisagée (Paul, 2026-07-24) : rendre IMLADRIK plus
+> INTERACTIF** — reporté « à une prochaine fois ». À CADRER (Paul dictera ses
+> attentes : dialogue avec Léo dans le quadrant ? objectifs/valeurs/citations ?
+> quart d'heure quotidien ? relances ? — cf. §3.4 « HORS v1 »). Ne rien présumer.
 
 ## 4. Principes transverses (les 4 quadrants les partagent)
 

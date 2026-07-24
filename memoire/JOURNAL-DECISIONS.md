@@ -820,6 +820,19 @@
   la demande (prochaine) ; deux-sens/retour = plus tard. Vérif LIVE (clic
   « Connecter » → Google → dossier) = à faire par Paul sur la prod. Rappels :
   re-consent Google ~7 j (mode Test) ; le contenu poussé quittera la RLS (acté).
+- **2026-07-24 (boucle Drive ② — « Sauvegarder sur Drive » EN PROD, PR #98)** —
+  « go push ». Livré : `api/imladrik/drive/push.js` (POST) — refresh de l'access
+  token depuis le refresh_token chiffré, dossier dédié, un Google Doc par page
+  (create via multipart/convert, update via media), **idempotent** (hash de
+  contenu → saut si inchangé), séquentiel + garde-fou quota 200/run, RLS, zéro
+  contenu en log. Helpers purs dans `drive.js` (nom/rendu/hash/multipart) +
+  appels Google. Bouton front « Sauvegarder sur Drive ». Migration
+  `0015_imladrik_drive_sync` (ancrage `drive_file_id`/`drive_content_hash`/
+  `drive_synced_at`) **APPLIQUÉE en prod**. 44 unitaires + smoke push ; patrimoine
+  vert. **Connexion Drive vérifiée en vrai par Paul plus tôt (« c'est ok »).**
+  IMLADRIK v1 = écrire + Drive (un sens) complet. Reste : retour/deux-sens (boucle
+  future). **Idée reportée par Paul : rendre IMLADRIK « plus interactif » — à
+  CADRER la prochaine fois (ne rien présumer).** Fin de session.
 - **2026-07-24 (IMLADRIK — la cartographie boussole, dictée + GO SOLO)** —
   Paul dicte la nouvelle carto du quadrant : IMLADRIK devient une **boussole
   interne** (modèle LV2, registre dév. perso). Noms dictés : **MINETHNIR** =
