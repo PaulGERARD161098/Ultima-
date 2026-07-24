@@ -7,6 +7,7 @@ import {
   encryptToken, decryptToken,
   signState, verifyState,
   driveConfig, buildAuthUrl, DRIVE_SCOPE,
+  serializeCookie, clearCookie, parseCookies, COOKIE_OAUTH,
 } from '../api/_lib/drive.js';
 import crypto from 'node:crypto';
 
@@ -103,6 +104,27 @@ const SECRET = 'secret-de-signature-etat';
     u.searchParams.get('prompt') === 'consent';
   verdicts.urlState = u.searchParams.get('state') === 'st' &&
     u.searchParams.get('client_id') === 'cid';
+}
+
+// ---------- 7. Cookies (httpOnly / Secure / SameSite=Lax, round-trip) ----------
+{
+  const c = serializeCookie(COOKIE_OAUTH, 'val eur+/=', { maxAge: 600 });
+  verdicts.cookieAttributs = /HttpOnly/.test(c) && /Secure/.test(c) &&
+    /SameSite=Lax/.test(c) && /Path=\/api\/imladrik\/drive/.test(c) && /Max-Age=600/.test(c);
+  // Valeur encodée (pas de caractères bruts qui casseraient l'en-tête).
+  verdicts.cookieEncode = c.includes(encodeURIComponent('val eur+/='));
+  // Round-trip parse.
+  const brut = `${COOKIE_OAUTH}=${encodeURIComponent('abc.def')}; autre=x`;
+  const p = parseCookies(brut);
+  verdicts.cookieParse = p[COOKIE_OAUTH] === 'abc.def' && p.autre === 'x';
+  verdicts.cookieParseVide = Object.keys(parseCookies('')).length === 0 &&
+    Object.keys(parseCookies(undefined)).length === 0;
+  // Effacement : Max-Age=0.
+  verdicts.cookieClear = /Max-Age=0/.test(clearCookie(COOKIE_OAUTH));
+  // Un état signé survit à un aller-retour cookie (sérialise → parse → vérifie).
+  const jeton = signState({ state: 'n', verifier: 'v' }, SECRET, 1000);
+  const rt = parseCookies(`${COOKIE_OAUTH}=${encodeURIComponent(jeton)}`)[COOKIE_OAUTH];
+  verdicts.cookieEtatSurvit = Boolean(verifyState(rt, SECRET, 600_000, 1500));
 }
 
 // ---------- Bilan ----------
