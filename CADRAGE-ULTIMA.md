@@ -130,9 +130,15 @@
     détacher ; fail-closed, dégrade en « indisponible » sans casser la carte).
     Le talent qualitatif devient **preuve chiffrée**. Harnais `unit-reshiram-reseau`
     (12) + `smoke-reshiram` enrichi ; contre-passe COMPLÈTE verte (exit 0). Sens
-    UNIQUE : RESHIRAM lit RIVEN, n'y écrit jamais. Cadre : §v2 R/Z. **Gates
-    (non franchies, hors solo)** : application `0013` en prod = Paul ; fusion PR
-    #93 = Paul. Contre-passe `securite-auditeur` advisors recommandée après appli.
+    UNIQUE : RESHIRAM lit RIVEN, n'y écrit jamais. Cadre : §v2 R/Z.
+    **✅ Fermée en solo (2026-07-24)** : **PR #93 FUSIONNÉE** (squash) dans `main` ;
+    **migration `0013` APPLIQUÉE en prod (solo)**. Correctif à l'application : le
+    `§0` (création de `network_nodes_owner_id_uniq`) était fautif — l'index unique
+    existe DÉJÀ depuis 0008 (intendant), qui s'en sert comme cible de FK ; Postgres
+    accepte un index unique comme cible (prouvé par 0008). 0013 réappliquée SANS le
+    §0, et le fichier de migration corrigé en conséquence (rejouable à neuf).
+    ⏳ **Reste (registre)** : contre-passe advisors `securite-auditeur` (Paul a
+    décliné le run advisors cette session) ; à repasser à la prochaine occasion.
 
     **⑤ ✅ LV2-⑤ Cockpit — résumés vivants v1 construits (2026-07-23, solo)** :
     endpoint `api/cockpit.js` (agrégats derrière auth, **que des comptes, zéro
