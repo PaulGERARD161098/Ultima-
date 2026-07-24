@@ -1020,3 +1020,11 @@ body.page-quadrant .console-conteneur {
 }
 .imladrik-bouton-effacer:hover { color: var(--danger-parchemin); border-color: var(--danger-parchemin); }
 .imladrik-bouton-effacer:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- IMLADRIK : ligne de statut de la sauvegarde Drive ---------- */
+.imladrik-drive-etat {
+  margin: 0 0 0.6rem;
+  font-family: var(--police-ancienne);
+  font-size: 0.95rem;
+  color: var(--encre-sepia);
+}

@@ -109,6 +109,18 @@
           <h2 id="imladrik-titre-journal">Le journal</h2>
           <div id="imladrik-entrees"></div>
         </section>
+
+        <!-- Sauvegarde Google Drive (sous-boucle ①b). Piloté par js/imladrik.js :
+             statut, connexion (redirection OAuth), déconnexion. Caché tant que la
+             connexion Drive n'est pas configurée côté serveur. -->
+        <section id="imladrik-drive" class="cartouche-page" aria-labelledby="imladrik-titre-drive" hidden>
+          <h2 id="imladrik-titre-drive">Sauvegarde Google Drive</h2>
+          <p id="imladrik-drive-etat" class="imladrik-drive-etat" role="status" aria-live="polite">Vérification…</p>
+          <div class="reshiram-form-actions">
+            <button type="button" id="imladrik-drive-connecter" class="reshiram-bouton" hidden>Connecter mon Drive</button>
+            <button type="button" id="imladrik-drive-deconnecter" class="imladrik-bouton-effacer" hidden>Déconnecter</button>
+          </div>
+        </section>
       </div>
 
       <p class="retour"><a class="retour-console" href="ultima.html">Retour à la console</a></p>

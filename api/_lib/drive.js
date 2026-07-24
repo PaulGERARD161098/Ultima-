@@ -134,3 +134,85 @@ export function buildAuthUrl(cfg, { state, challenge }) {
   });
   return `${GOOGLE_AUTH_ENDPOINT}?${params.toString()}`;
 }
+
+// ---------- Cookies (fonctions PURES, testables) ----------
+// Cookie de transport de l'état OAuth : httpOnly, Secure, SameSite=Lax (envoyé
+// sur la navigation top-level de retour Google), Path restreint au sous-arbre Drive.
+export const COOKIE_OAUTH = 'imladrik_drive_oauth';      // état aller (state+verifier)
+export const COOKIE_EXCHANGE = 'imladrik_drive_exchange'; // code à échanger (finalize)
+
+export function serializeCookie(name, value, { maxAge = 600 } = {}) {
+  return `${name}=${encodeURIComponent(value)}; Max-Age=${maxAge}; Path=/api/imladrik/drive; ` +
+    'HttpOnly; Secure; SameSite=Lax';
+}
+// Cookie d'effacement (Max-Age=0).
+export function clearCookie(name) {
+  return `${name}=; Max-Age=0; Path=/api/imladrik/drive; HttpOnly; Secure; SameSite=Lax`;
+}
+export function parseCookies(header) {
+  const out = {};
+  if (typeof header !== 'string' || !header) return out;
+  for (const part of header.split(';')) {
+    const i = part.indexOf('=');
+    if (i < 0) continue;
+    const k = part.slice(0, i).trim();
+    if (!k) continue;
+    try { out[k] = decodeURIComponent(part.slice(i + 1).trim()); }
+    catch { out[k] = part.slice(i + 1).trim(); }
+  }
+  return out;
+}
+
+// ---------- Appels Google server-side (bornés, jamais côté client) ----------
+const TIMEOUT_MS = 8000;
+export const GOOGLE_TOKEN_ENDPOINT = 'https://oauth2.googleapis.com/token';
+export const GOOGLE_REVOKE_ENDPOINT = 'https://oauth2.googleapis.com/revoke';
+export const DRIVE_FILES_ENDPOINT = 'https://www.googleapis.com/drive/v3/files';
+
+function fetchWithTimeout(url, options = {}) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
+}
+
+// Échange le code d'autorisation contre les jetons (Authorization Code + PKCE).
+// Renvoie { refresh_token, access_token, scope }. Lève en cas d'échec (borné).
+export async function exchangeCodeForTokens(cfg, { code, verifier }) {
+  const body = new URLSearchParams({
+    code,
+    client_id: cfg.clientId,
+    client_secret: cfg.clientSecret,
+    redirect_uri: cfg.redirectUri,
+    grant_type: 'authorization_code',
+    code_verifier: verifier,
+  });
+  const r = await fetchWithTimeout(GOOGLE_TOKEN_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' },
+    body: body.toString(),
+  });
+  const data = await r.json().catch(() => null);
+  if (!r.ok || !data) throw new Error('token_exchange_failed');
+  return { refresh_token: data.refresh_token, access_token: data.access_token, scope: data.scope };
+}
+
+// Révoque un jeton côté Google (best-effort : on n'échoue pas la déconnexion).
+export async function revokeToken(token) {
+  try {
+    await fetchWithTimeout(`${GOOGLE_REVOKE_ENDPOINT}?token=${encodeURIComponent(token)}`, {
+      method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    });
+  } catch { /* silencieux : la purge en base reste la source de vérité */ }
+}
+
+// Crée le dossier dédié (scope drive.file) et renvoie son id. Borné.
+export async function createDriveFolder(accessToken, name) {
+  const r = await fetchWithTimeout(DRIVE_FILES_ENDPOINT, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, mimeType: 'application/vnd.google-apps.folder' }),
+  });
+  const data = await r.json().catch(() => null);
+  if (!r.ok || !data || !data.id) throw new Error('folder_create_failed');
+  return data.id;
+}

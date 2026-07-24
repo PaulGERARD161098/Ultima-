@@ -1,4 +1,5 @@
--- Ultima — migration 0013 : IMLADRIK / boucle Drive, sous-boucle ① (connexion).
+-- Ultima — migration 0014 : IMLADRIK / boucle Drive, sous-boucle ① (connexion).
+-- (Renumérotée 0013→0014 : le n° 0013 avait été pris en parallèle par talent_refs_reseau.)
 -- Ne JAMAIS appliquer sans validation Paul explicite (gate migrations / RLS →
 -- escalade Opus). Le SQL vit ici ; Léo l'applique au fil principal après go Paul.
 --
