@@ -34,20 +34,18 @@
 -- PAS DE SEED : les liens sont un geste de Paul en session (comme passerelles/0011).
 
 -- ---------------------------------------------------------------------------
--- 0. Cible de scellement AD-4 sur RIVEN.
+-- 0. Cible de scellement AD-4 sur RIVEN : DÉJÀ EN PLACE (0008), rien à créer.
 --
 --    Le double scellement (owner_id, node_id) → network_nodes(owner_id, id) exige
---    une contrainte d'unicité sur (owner_id, id) de network_nodes — table créée
---    en 0001, AVANT l'introduction du motif AD-4 (0008), donc sans cette paire.
---    id étant déjà PK, la paire est trivialement unique : contrainte additive,
---    aucun conflit possible, aucune donnée touchée. C'est le SEUL geste sur
---    network_nodes (jamais d'écriture métier RESHIRAM → RIVEN).
---    IF NOT EXISTS-like : ADD CONSTRAINT n'a pas d'IF NOT EXISTS en Postgres ;
---    la contrainte est nouvelle (nom dédié), l'application est idempotente au sens
---    où re-lancer la migration entière n'est pas prévu (motif de tout le schéma).
+--    une cible unique sur (owner_id, id) de network_nodes. Cette cible existe
+--    DÉJÀ : l'index unique `network_nodes_owner_id_uniq` a été créé par 0008
+--    (intendant) — qui s'en sert lui-même comme cible de sa FK composite
+--    `intendant_chantiers_node_scelle`. Postgres accepte un index unique comme
+--    cible de FK (prouvé en prod par 0008). On ne le recrée donc PAS ici : le
+--    refaire en `alter table ... add constraint` du même nom échoue (42P07,
+--    « relation already exists »). Aucun geste sur network_nodes : RESHIRAM lit
+--    RIVEN, ne le touche jamais. (Constat 2026-07-24 à l'application de 0013.)
 -- ---------------------------------------------------------------------------
-alter table public.network_nodes
-  add constraint network_nodes_owner_id_uniq unique (owner_id, id);
 
 -- ---------------------------------------------------------------------------
 -- 1. talent_refs_reseau : une référence (talent RESHIRAM → fiche RIVEN).
@@ -74,7 +72,7 @@ create table public.talent_refs_reseau (
   -- DOUBLE scellement AD-4 (motif 0008/0009/0011) : une référence ne relie qu'un
   -- talent ET une fiche RIVEN du MÊME owner — impossible de pointer vers le réseau
   -- d'autrui, même si la RLS était mal configurée. Cibles = talents_owner_id_uniq
-  -- (0009) et network_nodes_owner_id_uniq (ci-dessus, §0).
+  -- (0009) et network_nodes_owner_id_uniq (index unique créé par 0008, cf. §0).
   constraint talent_refs_reseau_talent_scelle
     foreign key (owner_id, talent_id)
     references public.talents (owner_id, id) on delete cascade,
@@ -148,6 +146,6 @@ group by t.id;   -- t.id est PK : toutes les colonnes t.* en dépendent
 --   drop policy if exists talent_refs_reseau_insert on public.talent_refs_reseau;
 --   drop policy if exists talent_refs_reseau_select on public.talent_refs_reseau;
 --   drop table if exists public.talent_refs_reseau;   -- (index + FK en cascade)
---   alter table public.network_nodes drop constraint if exists network_nodes_owner_id_uniq;
---   -- Données : talent_refs_reseau vides tant que le lien manuel n'a pas commencé ;
---   -- network_nodes non touchée (contrainte seule retirée).
+--   -- network_nodes NON touchée : l'index network_nodes_owner_id_uniq appartient
+--   -- à 0008 (intendant s'en sert), 0013 ne l'a jamais créé — ne pas le dropper.
+--   -- Données : talent_refs_reseau vides tant que le lien manuel n'a pas commencé.

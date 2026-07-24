@@ -290,3 +290,13 @@
   ZEKROM. ④ Angle mort environnement : `get_advisors`/`send_later`/subscribe MCP
   demandent une approbation indisponible en async → advisors 0009 à reconfirmer
   au dashboard (action Paul), ne pas considérer l'auto-check comme fait.
+
+- 2026-07-24 — **Migration : ne pas recréer une cible de scellement AD-4 déjà
+  existante.** 0013 recréait `network_nodes_owner_id_uniq` déjà posé par 0008
+  (intendant) → échec 42P07 à l'application. Réflexe : avant d'ajouter une clé
+  unique (owner_id, id) sur une table ANCIENNE (0001) comme cible de FK composite,
+  vérifier qu'une migration antérieure ne l'a pas déjà créée. Corollaire prouvé en
+  prod : **Postgres accepte un index unique comme cible de FK** (pas besoin d'une
+  contrainte de table) — 0008 le fait déjà. Bon réflexe tenu : appliquer PUIS
+  vérifier (l'erreur a été vue et corrigée, rien de partiel appliqué grâce à la
+  transaction).

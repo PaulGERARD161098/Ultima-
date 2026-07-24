@@ -740,3 +740,17 @@
   front). **Règle cardinale tenue** : RESHIRAM lit RIVEN, ne copie jamais, sens
   unique. **Gates non franchies (hors solo)** : application `0013` = Paul ; fusion
   PR #93 = Paul ; contre-passe advisors securite-auditeur recommandée après appli.
+- **2026-07-24 (solo — fermeture ④ : fusion + application 0013, correctif §0)** —
+  Paul : « go solo pour la suite ». Fermeture end-to-end de la boucle ④ : **PR #93
+  fusionnée** (squash) dans main ; branche repartie de origin/main. **Migration
+  `0013` APPLIQUÉE en prod (solo)** — précédent 0010/0011. **Constat à
+  l'application** : le §0 de 0013 (create `network_nodes_owner_id_uniq`) échoue en
+  42P07 « already exists » — l'index unique existe DÉJÀ depuis **0008** (intendant),
+  qui s'en sert comme cible de sa FK composite `intendant_chantiers_node_scelle`.
+  Leçon : Postgres accepte un **index unique** comme cible de FK (pas besoin d'une
+  contrainte de table) — prouvé en prod par 0008 ; donc 0013 n'avait rien à créer
+  sur network_nodes. 0013 réappliquée SANS le §0 (success), et le fichier de
+  migration corrigé (renvois + rollback) pour rester rejouable à neuf. **Advisors
+  non repassés** : Paul a décliné le run get_advisors cette session → consigné au
+  registre (à repasser). RADAR : ajouter « vérifier l'existant AD-4 sur une table
+  déjà ciblée avant de recréer la clé unique » aux réflexes migration.
