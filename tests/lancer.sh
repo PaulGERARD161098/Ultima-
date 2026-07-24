@@ -48,6 +48,8 @@ echo "=== unit-zekrom-validate.mjs ==="
 node unit-zekrom-validate.mjs
 echo "=== unit-imladrik-validate.mjs ==="
 node unit-imladrik-validate.mjs
+echo "=== unit-imladrik-drive.mjs ==="
+node unit-imladrik-drive.mjs
 
 # 3. Serveur statique sur la racine du repo.
 (cd .. && python3 -m http.server 8123 >/dev/null 2>&1) &
