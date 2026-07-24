@@ -754,3 +754,16 @@
   non repassés** : Paul a décliné le run get_advisors cette session → consigné au
   registre (à repasser). RADAR : ajouter « vérifier l'existant AD-4 sur une table
   déjà ciblée avant de recréer la clé unique » aux réflexes migration.
+- **2026-07-24 (boucle Drive ①a+①b LIVRÉES + EN PROD)** — « on reprend pour
+  boucler la boucle » puis config Google Cloud + 4 env Vercel posées par Paul.
+  Livré : cœur sécurité `api/_lib/drive.js` (AES-256-GCM des jetons hors base,
+  PKCE, cookie d'état signé anti-CSRF, scope `drive.file`) + endpoints OAuth
+  `api/imladrik/drive/*` (authorize/callback/finalize/status/disconnect, flux
+  séparé server-side, refresh_token chiffré sous RLS jamais au navigateur,
+  dossier Drive dédié) + section front « Sauvegarde Google Drive » (bouton
+  Connecter/Déconnecter). Migration `0014_imladrik_drive_tokens` (renumérotée
+  0013→0014) **APPLIQUÉE en prod**. 30 unitaires + smoke Drive verts. PR #94 (①a)
+  + #96 (①b) mergées. **v1 = un seul sens** (sauvegarde) ; sous-boucle ② = push à
+  la demande (prochaine) ; deux-sens/retour = plus tard. Vérif LIVE (clic
+  « Connecter » → Google → dossier) = à faire par Paul sur la prod. Rappels :
+  re-consent Google ~7 j (mode Test) ; le contenu poussé quittera la RLS (acté).
