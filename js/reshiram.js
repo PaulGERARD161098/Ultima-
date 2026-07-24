@@ -19,7 +19,25 @@
     maitrise: 'maîtrise'
   };
 
-  var etat = { session: null, talents: [], preuves: [], vue: 'tous' };
+  var etat = {
+    session: null,
+    talents: [],
+    preuves: [],
+    vue: 'tous',
+    // Capital réseau (RESHIRAM LIT RIVEN, sens unique — on n'affiche que ce que
+    // l'API renvoie, on ne pointe que par node_id, on ne loggue rien).
+    refs: [],
+    capital: [],
+    reseau: [],
+    capitalIndisponible: false
+  };
+
+  var LIBELLE_TYPE = {
+    artisan: 'artisan',
+    partenaire: 'partenaire',
+    lead: 'lead',
+    chantier: 'chantier'
+  };
 
   function el(nom, classe, texte) {
     var element = document.createElement(nom);
@@ -52,6 +70,29 @@
   // Les preuves d'un talent (rattachées par talent_id).
   function preuvesDe(talentId) {
     return etat.preuves.filter(function (p) { return p && p.talent_id === talentId; });
+  }
+
+  // ---------- Capital réseau (pur, testable) ----------
+  // La ligne agrégée de la vue talents_capital_reseau pour un talent, ou un
+  // capital vide si le talent n'y figure pas encore.
+  function capitalDe(capital, talentId) {
+    var liste = Array.isArray(capital) ? capital : [];
+    var ligne = liste.find(function (c) { return c && c.talent_id === talentId; });
+    if (!ligne) { return { nb_contacts: 0, secteurs_reseau: [] }; }
+    return {
+      nb_contacts: Number(ligne.nb_contacts) || 0,
+      secteurs_reseau: Array.isArray(ligne.secteurs_reseau) ? ligne.secteurs_reseau : []
+    };
+  }
+
+  // Les liens (refs) d'un talent, et le nom résolu d'une fiche RIVEN par node_id
+  // (jamais de PII stockée : on lit la projection minimale renvoyée par l'API).
+  function refsDe(talentId) {
+    return etat.refs.filter(function (r) { return r && r.talent_id === talentId; });
+  }
+
+  function ficheDe(nodeId) {
+    return etat.reseau.find(function (n) { return n && n.id === nodeId; }) || null;
   }
 
   // ---------- Rendu d'un talent ----------
@@ -108,6 +149,105 @@
     return form;
   }
 
+  // ---------- Panneau « capital réseau » (LIT RIVEN, sens unique) ----------
+
+  function rendreCapitalCompte(talent, section) {
+    var cap = capitalDe(etat.capital, talent.id);
+    if (cap.nb_contacts === 0) {
+      section.appendChild(el('p', 'reshiram-capital-compte reshiram-capital-compte--vide',
+        'Aucune fiche reliée — relie un contact RIVEN que ce talent mobilise.'));
+      return;
+    }
+    var mot = cap.nb_contacts > 1 ? ' contacts mobilisables' : ' contact mobilisable';
+    var compte = el('p', 'reshiram-capital-compte');
+    compte.appendChild(el('strong', 'reshiram-capital-nombre', String(cap.nb_contacts)));
+    compte.appendChild(el('span', null, mot));
+    section.appendChild(compte);
+    if (cap.secteurs_reseau.length > 0) {
+      var liste = el('ul', 'reshiram-capital-secteurs');
+      cap.secteurs_reseau.forEach(function (s) {
+        liste.appendChild(el('li', 'reshiram-capital-secteur', String(s)));
+      });
+      section.appendChild(liste);
+    }
+  }
+
+  function rendreFicheReliee(ref, section) {
+    var fiche = ficheDe(ref.node_id);
+    var ligne = el('div', 'reshiram-capital-fiche');
+    ligne.appendChild(el('span', 'reshiram-capital-nom', (fiche && fiche.nom) || 'fiche RIVEN'));
+    if (fiche && fiche.type) {
+      ligne.appendChild(el('span', 'reshiram-capital-type',
+        LIBELLE_TYPE[fiche.type] || fiche.type));
+    }
+    var detacher = el('button', 'reshiram-bouton-detacher', 'Détacher');
+    detacher.type = 'button';
+    detacher.setAttribute('aria-label',
+      'Détacher « ' + ((fiche && fiche.nom) || 'fiche RIVEN') + ' »');
+    detacher.addEventListener('click', function () { detacherRef(ref.id); });
+    ligne.appendChild(detacher);
+    section.appendChild(ligne);
+  }
+
+  function construireFormRelier(talent, section) {
+    var dejaRelies = refsDe(talent.id).map(function (r) { return r.node_id; });
+    var dispo = etat.reseau.filter(function (n) { return dejaRelies.indexOf(n.id) === -1; });
+
+    if (etat.reseau.length === 0) {
+      section.appendChild(el('p', 'reshiram-capital-aide',
+        'Aucune fiche RIVEN à relier — ajoute des contacts dans RIVEN d’abord.'));
+      return;
+    }
+    if (dispo.length === 0) {
+      section.appendChild(el('p', 'reshiram-capital-aide',
+        'Toutes tes fiches RIVEN sont déjà reliées à ce talent.'));
+      return;
+    }
+
+    var form = el('form', 'reshiram-capital-form');
+    var select = el('select', 'reshiram-capital-select');
+    select.name = 'node_id';
+    select.setAttribute('aria-label', 'Fiche RIVEN à relier à « ' + (talent.nom || '') + ' »');
+    var vide = el('option', null, 'Relier une fiche RIVEN…');
+    vide.value = '';
+    select.appendChild(vide);
+    dispo.forEach(function (n) {
+      var libelle = n.nom || 'fiche RIVEN';
+      if (n.secteur_activite) { libelle += ' (' + n.secteur_activite + ')'; }
+      var opt = el('option', null, libelle);
+      opt.value = n.id;
+      select.appendChild(opt);
+    });
+
+    var bouton = el('button', 'reshiram-bouton reshiram-bouton-relier', 'Relier');
+    bouton.type = 'submit';
+
+    form.appendChild(select);
+    form.appendChild(bouton);
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      relierFiche(talent.id, select.value);
+    });
+    section.appendChild(form);
+  }
+
+  function rendreCapitalReseau(talent, carte) {
+    var section = el('section', 'reshiram-capital');
+    section.appendChild(el('h4', 'reshiram-capital-titre', 'Capital réseau'));
+
+    if (etat.capitalIndisponible) {
+      section.appendChild(el('p', 'reshiram-capital-aide',
+        'Capital réseau indisponible pour l’instant.'));
+      carte.appendChild(section);
+      return;
+    }
+
+    rendreCapitalCompte(talent, section);
+    refsDe(talent.id).forEach(function (ref) { rendreFicheReliee(ref, section); });
+    construireFormRelier(talent, section);
+    carte.appendChild(section);
+  }
+
   function rendreTalent(talent) {
     var carte = el('article', 'reshiram-talent');
     carte.id = 'reshiram-talent-' + talent.id;
@@ -126,6 +266,7 @@
     }
 
     rendrePreuves(talent, carte);
+    rendreCapitalReseau(talent, carte);
     return carte;
   }
 
@@ -171,12 +312,12 @@
     zone.classList.toggle('reshiram-form-message--erreur', Boolean(estErreur));
   }
 
-  async function appelApi(chemin, corps) {
+  async function appelApi(chemin, corps, methode) {
     if (!etat.session || !etat.session.access_token) { return { ok: false, status: 401 }; }
     var reponse;
     try {
       reponse = await fetch(chemin, {
-        method: 'POST',
+        method: methode || 'POST',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
@@ -225,6 +366,24 @@
     await rafraichir();
   }
 
+  // Relier / détacher une fiche RIVEN (lien lecture seule ; jamais d'écriture RIVEN).
+  async function relierFiche(talentId, nodeId) {
+    if (!nodeId) { return; }
+    var res = await appelApi('/api/talent-refs', { talent_id: talentId, node_id: nodeId });
+    if (res.status === 401) { montrer('reshiram-auth'); return; }
+    if (res.status === 409) { messageForm('Déjà reliée.', true); return; }
+    if (!res.ok) { messageForm('Lien non enregistré. Réessaie.', true); return; }
+    await rafraichir();
+  }
+
+  async function detacherRef(refId) {
+    if (!refId) { return; }
+    var res = await appelApi('/api/talent-refs', { id: refId }, 'DELETE');
+    if (res.status === 401) { montrer('reshiram-auth'); return; }
+    if (!res.ok) { messageForm('Lien non détaché. Réessaie.', true); return; }
+    await rafraichir();
+  }
+
   // ---------- Flux : session → API → registre (fail-closed partout) ----------
 
   function configPresente() {
@@ -255,8 +414,45 @@
     }
     etat.talents = (corps.data && corps.data.talents) || [];
     etat.preuves = (corps.data && corps.data.preuves) || [];
+    // Second appel : le capital réseau. Un 401 reste fail-closed global ; tout
+    // autre échec dégrade le panneau en « indisponible » sans casser la carte.
+    var statutCapital = await chargerCapital();
+    if (statutCapital === 'auth') { montrer('reshiram-auth'); return false; }
     rendreTalents();
     montrer('reshiram-registre');
+    return true;
+  }
+
+  // GET /api/talent-refs (même Bearer). Renvoie 'auth' sur 401 (fail-closed),
+  // true sinon (succès → refs/capital/reseau rangés ; échec → indisponible).
+  async function chargerCapital() {
+    etat.refs = [];
+    etat.capital = [];
+    etat.reseau = [];
+    etat.capitalIndisponible = false;
+    var reponse;
+    try {
+      reponse = await fetch('/api/talent-refs', {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          Authorization: 'Bearer ' + etat.session.access_token
+        }
+      });
+    } catch (e) {
+      etat.capitalIndisponible = true;
+      return true;
+    }
+    if (reponse.status === 401) { return 'auth'; } // fail-closed global
+    var corps = null;
+    try { corps = await reponse.json(); } catch (e) { corps = null; }
+    if (!reponse.ok || !corps || corps.ok !== true) {
+      etat.capitalIndisponible = true;
+      return true;
+    }
+    etat.refs = (corps.data && corps.data.refs) || [];
+    etat.capital = (corps.data && corps.data.capital) || [];
+    etat.reseau = (corps.data && corps.data.reseau) || [];
     return true;
   }
 
@@ -305,7 +501,7 @@
   }
 
   // Fonctions pures exposées pour les unitaires/harnais (aucune donnée réelle).
-  window.UltimaReshiram = { talentsVisibles: talentsVisibles };
+  window.UltimaReshiram = { talentsVisibles: talentsVisibles, capitalDe: capitalDe };
 
   demarrer().catch(function () { montrer('reshiram-erreur'); });
 })();
