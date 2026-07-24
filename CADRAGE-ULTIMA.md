@@ -66,6 +66,22 @@
     Paul veut synchro DEUX SENS + l'app Ultima connectée → projet Google Cloud
     + secret Vercel (actions Paul) + contre-passe `securite-auditeur` avant code.
     Cadre : `CADRAGE-CONSOLE.md §3.4`.
+  - ✅ **IMLADRIK B0 — cadrage de la cartographie boussole (2026-07-24, GO
+    SOLO)** : dicté Paul — le quadrant devient une **carto en mode boussole**
+    (modèle boussole LV2, registre dév. perso) : le journal renommé
+    **MINETHNIR**, deux nouveaux caps **VRANESH** (les futurs potentiels —
+    anticiper « dans un cas donné ») et **DRAUKHAIN** (la volonté au-delà du
+    possible — objectifs, foi, rappels sans jugement), au centre la boussole
+    **KALAMN-TALAEN** (épée + dragon) = **le guide, l'agent d'IMLADRIK**
+    (successeur nommé de l'« agent-devperso » §7 console ; sous-agent de Léo,
+    principe verrouillé respecté). Livré : `CADRAGE-IMLADRIK.md` (vision,
+    articulation avec l'acquis — renommage front seul, zéro migration —
+    séquencement B1→B3) + **prototype statique**
+    `design/preview-imladrik-boussole.html` — **zéro code produit**, harnais
+    non concernés. **⏳ Décisions Paul (§8 du cadrage)** : ① noms figés tels
+    quels ; ② sigle console « épée au soleil » conservé (boussole épée+dragon
+    interne au quadrant, reco oui) ; ③ ordre DRAUKHAIN avant VRANESH (reco
+    oui) ; ④ go B1 (implémentation carto).
   - 🔶 **LV2-② Auth — Google OAuth (2026-07-22)** : bouton « Se connecter
     avec Google » ajouté À CÔTÉ du lien magique (décision Paul : Google en
     plus, pas à la place). Code livré + vérifié : `js/app.js`

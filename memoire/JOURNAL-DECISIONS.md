@@ -767,3 +767,18 @@
   la demande (prochaine) ; deux-sens/retour = plus tard. Vérif LIVE (clic
   « Connecter » → Google → dossier) = à faire par Paul sur la prod. Rappels :
   re-consent Google ~7 j (mode Test) ; le contenu poussé quittera la RLS (acté).
+- **2026-07-24 (IMLADRIK — la cartographie boussole, dictée + GO SOLO)** —
+  Paul dicte la nouvelle carto du quadrant : IMLADRIK devient une **boussole
+  interne** (modèle LV2, registre dév. perso). Noms dictés : **MINETHNIR** =
+  le journal intime (renommage de l'acquis boucle 1, rien n'est reconstruit) ;
+  **VRANESH** = les différents futurs potentiels (anticiper « dans un cas
+  donné » : scénarios, signaux, parades) ; **DRAUKHAIN** = la volonté au-delà
+  du possible (objectifs, volonté inébranlable, foi — absorbe « objectifs de
+  vie ») ; au centre, **KALAMN-TALAEN**, boussole au symbole épée + dragon =
+  **le guide, l'agent d'IMLADRIK** (successeur nommé d'« agent-devperso »,
+  sous-agent de Léo — principe verrouillé 2026-07-16 respecté). **B0 livré en
+  solo** : `CADRAGE-IMLADRIK.md` + prototype statique
+  `design/preview-imladrik-boussole.html` (« montre-moi un prototype sans
+  coder » → zéro code produit). Restent à Paul (registre) : valider les
+  4 noms/orthographes, le maintien du sigle « épée au soleil » sur la console,
+  l'ordre DRAUKHAIN→VRANESH, le go B1.
