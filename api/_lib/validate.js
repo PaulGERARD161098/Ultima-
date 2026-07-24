@@ -601,6 +601,33 @@ export function validatePasserelle(body, mode) {
   return { value: out };
 }
 
+// --- RESHIRAM → RIVEN (boucle ④) : référence LECTURE SEULE d'un talent vers une
+// fiche RIVEN. Bornes en MIROIR EXACT des CHECK/FK de
+// supabase/migrations/0013_talent_refs_reseau.sql. Une référence est un lien nu
+// (talent_id, node_id) : rien de modifiable → create + delete seulement, PAS
+// d'update. owner_id n'est JAMAIS accepté du client (imposé par le défaut base).
+// node_id est une RÉFÉRENCE, jamais une copie de la fiche : aucun champ RIVEN ici.
+
+// Champs autorisés en écriture (owner_id/id/created_at gérés serveur ; les deux
+// FK sont figées — une référence ne se « déplace » pas, on la retire et on la
+// recrée, comme source/cible d'un edge RIVEN).
+const TALENT_REF_FIELDS = ['talent_id', 'node_id'];
+
+// Valide une référence talent↔fiche RIVEN (mode 'create' uniquement : les deux
+// UUID imposés). Pas de mode 'update' — la table n'a aucun champ mutable.
+export function validateTalentRef(body) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, TALENT_REF_FIELDS);
+  if (unknown) return { error: unknown };
+
+  if (!isUuid(body.talent_id)) return { error: 'Identifiant de talent invalide' };
+  if (!isUuid(body.node_id)) return { error: 'Identifiant de fiche invalide' };
+
+  return { value: { talent_id: body.talent_id, node_id: body.node_id } };
+}
+
 // --- IMLADRIK (v1) : journal intime « pouvoir écrire ». Bornes en MIROIR EXACT
 // des CHECK de supabase/migrations/0012_imladrik_journal.sql (défense en
 // profondeur AU-DESSUS de la RLS). Ce que l'API refuse, la base le refuse aussi.
