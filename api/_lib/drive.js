@@ -216,3 +216,96 @@ export async function createDriveFolder(accessToken, name) {
   if (!r.ok || !data || !data.id) throw new Error('folder_create_failed');
   return data.id;
 }
+
+// ---------- Sous-boucle ② : push d'une page de journal vers Drive ----------
+export const DRIVE_UPLOAD_ENDPOINT = 'https://www.googleapis.com/upload/drive/v3/files';
+export const DOC_MIME = 'application/vnd.google-apps.document';
+
+// --- Fonctions PURES (testables) ---
+
+// Nettoie un fragment pour un nom de fichier Drive (une ligne, borné).
+function nettoyerNom(s) {
+  return String(s == null ? '' : s).replace(/[\r\n\t]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 120);
+}
+// Nom du Doc d'une page : « IMLADRIK — <titre ou date> ».
+export function buildEntryFileName(entry) {
+  const e = entry || {};
+  const base = e.titre ? nettoyerNom(e.titre) : (typeof e.created_at === 'string' ? e.created_at.slice(0, 10) : 'page');
+  return `IMLADRIK — ${base || 'page'}`;
+}
+// Corps texte d'une page (converti en Google Doc à l'upload) : titre, date, contenu.
+export function renderEntryText(entry) {
+  const e = entry || {};
+  const lignes = [];
+  if (e.titre) lignes.push(String(e.titre));
+  if (e.created_at) lignes.push(String(e.created_at));
+  if (lignes.length) lignes.push('');
+  lignes.push(String(e.contenu == null ? '' : e.contenu));
+  return lignes.join('\n');
+}
+// Empreinte stable du contenu poussé (idempotence : saute le ré-upload si inchangé).
+export function contentHash(text) {
+  return crypto.createHash('sha256').update(String(text == null ? '' : text), 'utf8').digest('hex');
+}
+// Construit un corps multipart/related (métadonnées JSON + média texte). Pur :
+// le boundary est fourni (aléatoire côté appelant), donc déterministe en test.
+export function buildMultipartBody(metadata, text, boundary) {
+  return (
+    `--${boundary}\r\n` +
+    'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
+    `${JSON.stringify(metadata)}\r\n` +
+    `--${boundary}\r\n` +
+    'Content-Type: text/plain; charset=UTF-8\r\n\r\n' +
+    `${String(text == null ? '' : text)}\r\n` +
+    `--${boundary}--`
+  );
+}
+
+// --- Appels Google (bornés) ---
+
+// Régénère un access_token à partir du refresh_token (grant_type=refresh_token).
+export async function refreshAccessToken(cfg, refreshToken) {
+  const body = new URLSearchParams({
+    client_id: cfg.clientId,
+    client_secret: cfg.clientSecret,
+    grant_type: 'refresh_token',
+    refresh_token: refreshToken,
+  });
+  const r = await fetchWithTimeout(GOOGLE_TOKEN_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' },
+    body: body.toString(),
+  });
+  const data = await r.json().catch(() => null);
+  if (!r.ok || !data || !data.access_token) throw new Error('token_refresh_failed');
+  return data.access_token;
+}
+
+// Crée un Google Doc (converti depuis le texte) dans le dossier dédié → id.
+export async function driveCreateDoc(accessToken, { name, text, folderId }) {
+  const boundary = `ultima-${b64url(crypto.randomBytes(12))}`;
+  const metadata = { name, mimeType: DOC_MIME };
+  if (folderId) metadata.parents = [folderId];
+  const r = await fetchWithTimeout(`${DRIVE_UPLOAD_ENDPOINT}?uploadType=multipart&fields=id`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': `multipart/related; boundary=${boundary}`,
+    },
+    body: buildMultipartBody(metadata, text, boundary),
+  });
+  const data = await r.json().catch(() => null);
+  if (!r.ok || !data || !data.id) throw new Error('doc_create_failed');
+  return data.id;
+}
+
+// Remplace le contenu d'un Google Doc existant par le texte (uploadType=media).
+export async function driveUpdateDoc(accessToken, fileId, text) {
+  const r = await fetchWithTimeout(`${DRIVE_UPLOAD_ENDPOINT}/${encodeURIComponent(fileId)}?uploadType=media`, {
+    method: 'PATCH',
+    headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'text/plain; charset=UTF-8' },
+    body: String(text == null ? '' : text),
+  });
+  if (!r.ok) throw new Error('doc_update_failed');
+  return fileId;
+}

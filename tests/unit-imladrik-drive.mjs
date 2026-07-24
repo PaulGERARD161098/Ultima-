@@ -8,6 +8,7 @@ import {
   signState, verifyState,
   driveConfig, buildAuthUrl, DRIVE_SCOPE,
   serializeCookie, clearCookie, parseCookies, COOKIE_OAUTH,
+  buildEntryFileName, renderEntryText, contentHash, buildMultipartBody,
 } from '../api/_lib/drive.js';
 import crypto from 'node:crypto';
 
@@ -125,6 +126,33 @@ const SECRET = 'secret-de-signature-etat';
   const jeton = signState({ state: 'n', verifier: 'v' }, SECRET, 1000);
   const rt = parseCookies(`${COOKIE_OAUTH}=${encodeURIComponent(jeton)}`)[COOKIE_OAUTH];
   verdicts.cookieEtatSurvit = Boolean(verifyState(rt, SECRET, 600_000, 1500));
+}
+
+// ---------- 8. Push (sous-boucle ②) : nom, rendu texte, hash, multipart ----------
+{
+  // Nom : « IMLADRIK — <titre> » ; repli sur la date si pas de titre ; assaini.
+  verdicts.nomTitre = buildEntryFileName({ titre: 'Cap tenu' }) === 'IMLADRIK — Cap tenu';
+  verdicts.nomDate = buildEntryFileName({ created_at: '2026-07-22T14:05:00Z' }) === 'IMLADRIK — 2026-07-22';
+  verdicts.nomAssaini = buildEntryFileName({ titre: 'a\nb\tc' }) === 'IMLADRIK — a b c';
+  verdicts.nomBorne = buildEntryFileName({ titre: 'x'.repeat(300) }).length <= 132;
+
+  // Rendu : titre + date + contenu ; sans titre → pas de ligne de titre.
+  const t1 = renderEntryText({ titre: 'T', created_at: '2026-07-22', contenu: 'corps' });
+  verdicts.renduComplet = /T/.test(t1) && /2026-07-22/.test(t1) && /corps/.test(t1);
+  const t2 = renderEntryText({ contenu: 'seul' });
+  verdicts.renduSansTitre = t2 === 'seul';
+
+  // Hash : déterministe, sensible, 64 hex.
+  const h = contentHash('abc');
+  verdicts.hashDeterministe = h === contentHash('abc');
+  verdicts.hashSensible = h !== contentHash('abd');
+  verdicts.hashHex = /^[0-9a-f]{64}$/.test(h);
+
+  // Multipart : boundary, métadonnées JSON, média texte, clôture.
+  const mp = buildMultipartBody({ name: 'N', mimeType: 'm' }, 'texte ici', 'BND');
+  verdicts.mpBoundary = mp.startsWith('--BND\r\n') && mp.endsWith('--BND--');
+  verdicts.mpMeta = mp.includes('"name":"N"') && mp.includes('application/json');
+  verdicts.mpMedia = mp.includes('text/plain') && mp.includes('texte ici');
 }
 
 // ---------- Bilan ----------
