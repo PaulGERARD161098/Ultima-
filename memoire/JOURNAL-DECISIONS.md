@@ -830,3 +830,18 @@
   « Léo t'en dit l'essentiel ») ; la légende centrale inchangée. Patch front +
   docs + harnais (parole par défaut = Léo, légende toujours vérifiée), zéro
   surface à risque. Puis « ensuite on avance » → enchaîner B3.
+- **2026-07-25 (IMLADRIK B3 — VRANESH v1, « ensuite on avance », GO SOLO)** —
+  Enchaîné après la correction Léo/Kalamn-talaen. Construit **VRANESH** (les
+  différents futurs potentiels) en **miroir strict de DRAUKHAIN** : **situations**
+  (« un cas donné » + contexte) → **scénarios** (le déroulé du futur +
+  vraisemblance faible/moyenne/forte + signaux avant-coureurs + parade préparée).
+  **Règle cardinale POSITIVE** : situation sans scénario = **« à explorer »** =
+  invitation à imaginer ses futurs (anticiper sereinement, PUIS revenir au
+  présent — pas de rumination). Livré : migration `0017_vranesh_situations.sql`
+  (2 tables + vues `situations_etat`/`situations_anticipees`, RLS + scellement
+  AD-4 miroir 0016), API `api/situations.js` + `api/scenarios.js`, validation
+  `validateSituation`/`validateScenario`, front `vranesh.html` + `js/vranesh.js`
+  (front délégué à `front-carto`, contre-passe sécu Léo). Cap VRANESH ouvert →
+  **le quadrant IMLADRIK est complet (MINETHNIR + DRAUKHAIN + VRANESH, 3 caps)**.
+  Harnais `unit-vranesh-validate` + `smoke-vranesh`. **GATE §5 : migration `0017`
+  ÉCRITE mais NON APPLIQUÉE** (go Paul, comme 0012/0016). Registre ⏳.

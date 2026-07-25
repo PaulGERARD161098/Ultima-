@@ -74,21 +74,19 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
     verifier(`Cap ${attendu} présent`, noms.includes(attendu), noms.join(', '));
   }
 
-  // 2. MINETHNIR + DRAUKHAIN ouvrables (liens internes) ; VRANESH seul à venir.
+  // 2. Les 3 caps sont ouvrables (liens internes) — le quadrant est complet.
   const minethnir = page.locator('.cap[data-id="minethnir"]');
-  verifier('MINETHNIR est un lien', (await minethnir.evaluate((el) => el.tagName)) === 'A');
-  verifier('MINETHNIR → minethnir.html',
-    (await minethnir.getAttribute('href')) === 'minethnir.html');
-  const draukhain = page.locator('.cap[data-id="draukhain"]');
-  verifier('DRAUKHAIN est un lien', (await draukhain.evaluate((el) => el.tagName)) === 'A');
-  verifier('DRAUKHAIN → draukhain.html',
-    (await draukhain.getAttribute('href')) === 'draukhain.html');
-  {
-    const cap = page.locator('.cap[data-id="vranesh"]');
-    verifier('vranesh : cap « à venir » (non-lien)',
-      (await cap.evaluate((el) => el.tagName)) === 'DIV'
-      && (await cap.getAttribute('aria-disabled')) === 'true');
+  for (const [id, cible] of [
+    ['minethnir', 'minethnir.html'],
+    ['draukhain', 'draukhain.html'],
+    ['vranesh', 'vranesh.html'],
+  ]) {
+    const cap = page.locator(`.cap[data-id="${id}"]`);
+    verifier(`${id} est un lien`, (await cap.evaluate((el) => el.tagName)) === 'A');
+    verifier(`${id} → ${cible}`, (await cap.getAttribute('href')) === cible);
   }
+  verifier('Aucun cap « à venir » restant (quadrant complet)',
+    (await page.locator('.cap[aria-disabled="true"], .cap--avenir').count()) === 0);
 
   // 3. Le cœur Kalamn-talaen + sa légende gravée.
   verifier('Cœur Kalamn-talaen présent', (await page.locator('.boussole-coeur svg').count()) === 1);
@@ -107,12 +105,12 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
   verifier('Aiguille MINETHNIR illuminée',
     (await page.locator('.aiguille.is-actif').count()) >= 1);
 
-  // 5. Survol VRANESH (à venir) : parole « en préparation ».
+  // 5. Survol VRANESH (ouvert) : parole « les futurs potentiels » + appel à entrer.
   await page.locator('.cap[data-id="vranesh"]').hover();
   await page.waitForTimeout(150);
   const pv = (await page.locator('#boussole-parole').textContent()) || '';
   verifier('Survol VRANESH : futurs potentiels', /futurs potentiels/i.test(pv));
-  verifier('Survol VRANESH : cap en préparation', /préparation/i.test(pv));
+  verifier('Survol VRANESH : appel à entrer', /entrer/i.test(pv));
 
   // 6. Retour à la console + repli noscript présents.
   verifier('Retour « Console » vers ultima.html',

@@ -120,7 +120,19 @@ mécanique éprouvée : registre extensible (un cap = une entrée), survol/focus
   cartographie. Harnais `unit-draukhain-validate` + `smoke-draukhain` ;
   patrimoine COMPLET (22 harnais) vert. **⏳ Reste Paul : appliquer `0016` en
   prod + go.**
-- **B3 — VRANESH v1.**
+- **✅ B3 — VRANESH v1 (2026-07-25, « ensuite on avance »)** : les futurs
+  potentiels, miroir strict de DRAUKHAIN/ZEKROM. Modèle **situations** (« un cas
+  donné » + contexte) → **scénarios** (le déroulé du futur + vraisemblance
+  faible/moyenne/forte + signaux avant-coureurs + parade préparée). Règle
+  cardinale POSITIVE : situation sans scénario = **« à explorer »** = invitation
+  à imaginer ses futurs. Migration `0017_vranesh_situations.sql` (2 tables +
+  vues `situations_etat`/`situations_anticipees`, RLS + scellement AD-4, miroir
+  0016) **ÉCRITE, NON APPLIQUÉE** (gate §5 intime → go Paul). API
+  `api/situations.js` + `api/scenarios.js`. Front `vranesh.html` + `js/vranesh.js`
+  (fail-closed, textContent only, badge « à explorer », bascule « situations
+  anticipées »). Cap VRANESH ouvert dans la carto → **le quadrant IMLADRIK est
+  complet (3 caps ouverts)**. Harnais `unit-vranesh-validate` + `smoke-vranesh`.
+  **⏳ Reste Paul : appliquer `0017` en prod + go.**
 
 ## 8. Décisions attendues de Paul
 

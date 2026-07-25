@@ -114,6 +114,19 @@
     fonctionnel) : appliquer la migration `0016` en prod + go** (jusque-là,
     DRAUKHAIN est fail-closed : la page s'ouvre, l'API répond « erreur interne »
     tant que les tables n'existent pas). **Prochaine boucle : B3 — VRANESH v1.**
+  - 🔶 **IMLADRIK B3 — VRANESH v1 (2026-07-25, GO SOLO « ensuite on avance »)** :
+    les futurs potentiels, **miroir strict de DRAUKHAIN**. Modèle **situations**
+    (« un cas donné » + contexte) → **scénarios** (déroulé + vraisemblance
+    faible/moyenne/forte + signaux avant-coureurs + parade préparée). Situation
+    sans scénario = **« à explorer »** = invitation (anticiper, puis revenir au
+    présent). Migration `0017_vranesh_situations.sql` (2 tables + vues
+    `situations_etat`/`situations_anticipees`, RLS + AD-4, miroir 0016) **ÉCRITE,
+    NON APPLIQUÉE — gate §5 intime (go Paul)**. API `api/situations.js` +
+    `api/scenarios.js` ; front `vranesh.html` + `js/vranesh.js` (délégué
+    `front-carto`, contre-passe sécu Léo). Cap VRANESH ouvert → **le quadrant
+    IMLADRIK est COMPLET (3 caps ouverts autour de Kalamn-talaen ; Léo guide)**.
+    Harnais `unit-vranesh-validate` + `smoke-vranesh`. **⏳ Action Paul :
+    appliquer `0017` en prod + go.**
   - 🔶 **LV2-② Auth — Google OAuth (2026-07-22)** : bouton « Se connecter
     avec Google » ajouté À CÔTÉ du lien magique (décision Paul : Google en
     plus, pas à la place). Code livré + vérifié : `js/app.js`
