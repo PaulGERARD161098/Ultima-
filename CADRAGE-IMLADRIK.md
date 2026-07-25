@@ -80,8 +80,9 @@ mécanique éprouvée : registre extensible (un cap = une entrée), survol/focus
   qualitatifs, signaux avant-coureurs, parade préparée).
 - **Posture** : anticipation sereine, pas anxiété — Kalamn-talaen aide à
   dérouler les embranchements puis à **revenir au présent**.
-- **Passerelles** : un scénario peut pointer un objectif DRAUKHAIN (ce qu'il
-  menace ou sert) ou une page MINETHNIR (d'où vient la question).
+- **Passerelles** ✅ **construites (v2, 2026-07-25)** : un scénario peut pointer
+  un objectif DRAUKHAIN (ce qu'il *menace* ou *sert*) ou une page MINETHNIR
+  (d'où vient la question). Table `scenario_liens` (migration 0018), cible XOR.
 
 ## 6. DRAUKHAIN — mini-vision v1 (cadrage fin à l'ouverture de sa boucle)
 
@@ -89,8 +90,9 @@ mécanique éprouvée : registre extensible (un cap = une entrée), survol/focus
   l'horizon) ; *flammes* (rappels de foi : citations choisies, victoires
   passées consignées) ; *relecture* périodique de la volonté — rappel,
   jamais jugement.
-- **Passerelles** : un serment peut naître d'un idéal ZEKROM (idéal →
-  serment) et se suivre dans MINETHNIR (pages liées).
+- **Passerelles** ✅ **construites (v2, 2026-07-25)** : un serment peut naître
+  d'un idéal ZEKROM (idéal → serment) et se suivre dans MINETHNIR (pages liées).
+  Table `serment_liens` (migration 0018), cible XOR.
 
 ## 7. Séquencement (une boucle à la fois, directive EB)
 
@@ -133,6 +135,19 @@ mécanique éprouvée : registre extensible (un cap = une entrée), survol/focus
   anticipées »). Cap VRANESH ouvert dans la carto → **le quadrant IMLADRIK est
   complet (3 caps ouverts)**. Harnais `unit-vranesh-validate` + `smoke-vranesh`.
   **⏳ Reste Paul : appliquer `0017` en prod + go.**
+- **✅ B4 — Passerelles v2 (2026-07-25, « établis les passerelles v2, termine
+  les boucles »)** : la mémoire inter-cap. Deux tables de liens à **cible XOR**,
+  double scellement AD-4, miroir de la passerelle R↔Z (0011) :
+  **`serment_liens`** (serment → idéal ZEKROM *ou* page MINETHNIR) et
+  **`scenario_liens`** (scénario → serment DRAUKHAIN, rapport *menace*/*sert*,
+  *ou* page MINETHNIR). Migration `0018_imladrik_passerelles.sql` (ancrages
+  composites manquants sur `imladrik_entrees` + `scenarios`, puis 2 tables +
+  RLS) **ÉCRITE, NON APPLIQUÉE — gate §5 (dépend de 0016 + 0017)**. API
+  `api/serment-liens.js` + `api/scenario-liens.js` ; liens repliés dans les GET
+  `/api/serments` et `/api/situations` (dégradation propre à `[]` si 0018 pas
+  appliquée). Front : section « Passerelles » sur `draukhain.html` et
+  `vranesh.html`. Harnais `unit-imladrik-passerelles` + extensions smoke.
+  **⏳ Reste Paul : appliquer `0018` (après 0016 + 0017) en prod + go.**
 
 ## 8. Décisions attendues de Paul
 

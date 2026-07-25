@@ -54,6 +54,8 @@ echo "=== unit-draukhain-validate.mjs ==="
 node unit-draukhain-validate.mjs
 echo "=== unit-vranesh-validate.mjs ==="
 node unit-vranesh-validate.mjs
+echo "=== unit-imladrik-passerelles.mjs ==="
+node unit-imladrik-passerelles.mjs
 
 # 3. Serveur statique sur la racine du repo.
 (cd .. && python3 -m http.server 8123 >/dev/null 2>&1) &

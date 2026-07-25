@@ -859,6 +859,71 @@ export function validateScenario(body, mode) {
   return { value: out };
 }
 
+// --- IMLADRIK passerelles v2 (B4) : liens inter-cap. Enums/cibles en MIROIR EXACT
+// des CHECK de supabase/migrations/0018_imladrik_passerelles.sql. Cible XOR : un
+// lien pointe EXACTEMENT un objet parmi deux types (motif node_id/edge_id du
+// journal). owner_id jamais accepté ; le double scellement composite (owner_id,
+// source)/(owner_id, cible) est garanti en base. Un lien se crée ou se supprime
+// (pas d'update). Données intimes (§5) : erreurs génériques.
+export const SCENARIO_RAPPORTS = ['menace', 'sert'];
+
+const SERMENT_LIEN_FIELDS = ['serment_id', 'ideal_id', 'entree_id'];
+const SCENARIO_LIEN_FIELDS = ['scenario_id', 'serment_id', 'entree_id', 'rapport'];
+
+// Compte les cibles renseignées (UUID) parmi une liste ; renvoie { error } si
+// une valeur présente n'est pas un UUID, sinon { champs } = les champs cibles posés.
+function collectCibleXor(body, champs) {
+  const poses = {};
+  for (const f of champs) {
+    if (body[f] === undefined || body[f] === null) continue;
+    if (!isUuid(body[f])) return { error: `Identifiant ${f} invalide` };
+    poses[f] = body[f];
+  }
+  const n = Object.keys(poses).length;
+  if (n !== 1) return { error: 'Une passerelle vise exactement une cible' };
+  return { poses };
+}
+
+// Valide un lien serment → (idéal XOR page). create uniquement.
+export function validateSermentLien(body) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, SERMENT_LIEN_FIELDS);
+  if (unknown) return { error: unknown };
+  if (!isUuid(body.serment_id)) return { error: 'Identifiant de serment invalide' };
+
+  const cible = collectCibleXor(body, ['ideal_id', 'entree_id']);
+  if (cible.error) return { error: cible.error };
+
+  return { value: { serment_id: body.serment_id, ...cible.poses } };
+}
+
+// Valide un lien scénario → (serment XOR page), avec rapport (menace/sert) réservé
+// à la cible serment. create uniquement.
+export function validateScenarioLien(body) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, SCENARIO_LIEN_FIELDS);
+  if (unknown) return { error: unknown };
+  if (!isUuid(body.scenario_id)) return { error: 'Identifiant de scénario invalide' };
+
+  const cible = collectCibleXor(body, ['serment_id', 'entree_id']);
+  if (cible.error) return { error: cible.error };
+
+  const out = { scenario_id: body.scenario_id, ...cible.poses };
+
+  if (body.rapport !== undefined && body.rapport !== null) {
+    if (!SCENARIO_RAPPORTS.includes(body.rapport)) return { error: 'Rapport invalide' };
+    // rapport n'a de sens qu'avec une cible serment (miroir CHECK scope).
+    if (!out.serment_id) return { error: 'Le rapport ne vaut que pour un serment' };
+    out.rapport = body.rapport;
+  }
+
+  return { value: out };
+}
+
 // --- INTENDANT (AD-5c) : chantiers pilotés + besoins. Enums/bornes en MIROIR
 // EXACT des CHECK de supabase/migrations/0008_intendant.sql. Ce que l'API refuse,
 // la base le refuse aussi (et vice versa) ; la base reste le backstop ultime pour

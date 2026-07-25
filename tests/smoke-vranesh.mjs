@@ -72,6 +72,28 @@ const FIXTURE = {
       { id: 'sc2', situation_id: 's1', deroule: 'la mer reste étale plus longtemps', vraisemblance: 'moyenne', signaux: null, parade: null },
       { id: 'sc3', situation_id: 's1', deroule: 'un grain passe puis se dissipe', vraisemblance: 'faible', signaux: null, parade: null },
     ],
+    // Passerelles v2 (scenario_liens) — cibles NEUTRES inventées : 1 vers un
+    // objectif (rapport 'menace'), 1 vers une page ; toutes deux sur sc1.
+    liens: [
+      { id: 'l1', owner_id: 'o', scenario_id: 'sc1', serment_id: 'serm1', entree_id: null, rapport: 'menace', created_at: '2026-07-03T10:00:00Z' },
+      { id: 'l2', owner_id: 'o', scenario_id: 'sc1', serment_id: null, entree_id: 'ent1', rapport: null, created_at: '2026-07-03T11:00:00Z' },
+    ],
+  },
+};
+
+// Cibles NEUTRES pour résoudre les libellés des passerelles (aucune donnée réelle).
+const FIXTURE_SERMENTS = {
+  ok: true,
+  data: {
+    serments: [{ id: 'serm1', intitule: 'GARDER LE CAP' }],
+    flammes: [],
+    liens: [],
+  },
+};
+const FIXTURE_IMLADRIK = {
+  ok: true,
+  data: {
+    entrees: [{ id: 'ent1', titre: 'La question du départ', contenu: 'texte neutre', created_at: '2026-06-20T09:00:00Z' }],
   },
 };
 
@@ -181,6 +203,24 @@ console.log('— B. vranesh.html fixture 200 → registre, à explorer, situatio
       body: JSON.stringify({ ok: true, data: { id: 'sc-cible' } }),
     });
   });
+  // Cibles des passerelles (résolution des libellés + pickers).
+  await page.route('**/api/serments**', (route) =>
+    route.fulfill({ status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_SERMENTS) }));
+  await page.route('**/api/imladrik**', (route) =>
+    route.fulfill({ status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IMLADRIK) }));
+  // Passerelles : POST (relier) + DELETE (détacher) → 200 vide, corps + Bearer captés.
+  const postsLien = [];
+  const deletesLien = [];
+  await page.route('**/api/scenario-liens**', (route) => {
+    const req = route.request();
+    if (req.method() === 'POST') { postsLien.push({ headers: req.headers(), body: req.postData() }); }
+    if (req.method() === 'DELETE') { deletesLien.push({ headers: req.headers(), body: req.postData() }); }
+    return route.fulfill({
+      status: 200,
+      contentType: 'application/json; charset=utf-8',
+      body: JSON.stringify({ ok: true, data: { id: 'lien-cible' } }),
+    });
+  });
 
   await page.goto(`${BASE}/vranesh.html`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForSelector('#vranesh-registre:not([hidden])', { timeout: 20000 });
@@ -209,7 +249,7 @@ console.log('— B. vranesh.html fixture 200 → registre, à explorer, situatio
   const vraisS1 = (await s1.locator('.zekrom-direction .zekrom-registre').allTextContents()).map((t) => t.trim());
   verifier('Vraisemblances variées (faible/moyenne/forte)',
     ['faible', 'moyenne', 'forte'].every((n) => vraisS1.includes(n)), JSON.stringify(vraisS1));
-  verifier('Bouton « retirer » sur chaque scénario', (await s1.locator('.zekrom-retro-detacher').count()) === 3);
+  verifier('Bouton « retirer » sur chaque scénario', (await s1.locator('.zekrom-direction > .zekrom-retro-detacher').count()) === 3);
 
   // 4b. Signaux + parade rendus quand présents (scénario sc1) et absents sinon.
   const sc1txt = (await s1.locator('.zekrom-direction').first().textContent()) || '';
@@ -280,11 +320,66 @@ console.log('— B. vranesh.html fixture 200 → registre, à explorer, situatio
   verifier('Bearer transmis (POST scénario)',
     ((postsScenario[0] || {}).authorization || '') === 'Bearer jeton-de-test');
 
-  await page.locator('#vranesh-situation-s1 .zekrom-retro-detacher').first().click();
+  await page.locator('#vranesh-situation-s1 .zekrom-direction').first()
+    .locator('> .zekrom-retro-detacher').first().click();
   await page.waitForTimeout(200);
   verifier('DELETE /api/scenarios émis', deletesScenario.length >= 1, `${deletesScenario.length}`);
   verifier('Bearer transmis (DELETE scénario)',
     ((deletesScenario[0] || {}).authorization || '') === 'Bearer jeton-de-test');
+
+  // 8bis. PASSERELLES v2 : affichage résolu (objectif + rapport, page), ajout, détachement.
+  //   Après le DELETE scénario ci-dessus, le registre s'est rafraîchi (rendu identique
+  //   grâce aux stubs 200) : la passerelle sc1 est de nouveau présente.
+  const sc1 = page.locator('#vranesh-situation-s1 .zekrom-direction').first();
+  const passerelle = sc1.locator('.zekrom-retro');
+  verifier('Section « Passerelles » sous le scénario', (await passerelle.locator('.zekrom-retro-entete').textContent()) === 'Passerelles');
+  const liensTxt = (await passerelle.locator('.zekrom-retro-item').allTextContents()).map((t) => t.trim());
+  verifier('2 passerelles listées sur sc1', (await passerelle.locator('.zekrom-retro-item').count()) === 2, JSON.stringify(liensTxt));
+  verifier('Objectif résolu affiché (« Objectif : GARDER LE CAP »)',
+    liensTxt.some((t) => /Objectif\s*:\s*GARDER LE CAP/.test(t)), JSON.stringify(liensTxt));
+  verifier('Rapport « menace » affiché sur l’objectif',
+    liensTxt.some((t) => /GARDER LE CAP/.test(t) && /\(menace\)/.test(t)), JSON.stringify(liensTxt));
+  verifier('Page résolue affichée (« Page : La question du départ »)',
+    liensTxt.some((t) => /Page\s*:\s*La question du départ/.test(t)), JSON.stringify(liensTxt));
+
+  // Ajout d'une passerelle vers un objectif avec rapport « sert ».
+  const formLien = sc1.locator('.zekrom-retro-form');
+  await formLien.locator('select[name="cible-type"]').selectOption('serment');
+  await formLien.locator('select[name="serment"]').selectOption('serm1');
+  await formLien.locator('select[name="rapport"]').selectOption('sert');
+  await formLien.locator('button[type="submit"]').click();
+  await page.waitForTimeout(200);
+  verifier('POST /api/scenario-liens émis (relier objectif)', postsLien.length >= 1, `${postsLien.length}`);
+  verifier('Bearer transmis (POST passerelle)',
+    ((postsLien[0] || {}).headers || {}).authorization === 'Bearer jeton-de-test');
+  const corpsLien = JSON.parse((postsLien[0] || {}).body || '{}');
+  verifier('Corps POST objectif : scenario_id + serment_id + rapport',
+    corpsLien.scenario_id === 'sc1' && corpsLien.serment_id === 'serm1' && corpsLien.rapport === 'sert'
+      && !('entree_id' in corpsLien), JSON.stringify(corpsLien));
+
+  // Ajout d'une passerelle vers une page (aucun rapport dans le corps).
+  const sc2 = page.locator('#vranesh-situation-s1 .zekrom-direction').nth(1);
+  const formLienPage = sc2.locator('.zekrom-retro-form');
+  await formLienPage.locator('select[name="cible-type"]').selectOption('entree');
+  await formLienPage.locator('select[name="entree"]').selectOption('ent1');
+  await formLienPage.locator('button[type="submit"]').click();
+  await page.waitForTimeout(200);
+  verifier('POST /api/scenario-liens émis (relier page)', postsLien.length >= 2, `${postsLien.length}`);
+  const corpsPage = JSON.parse((postsLien[postsLien.length - 1] || {}).body || '{}');
+  verifier('Corps POST page : scenario_id + entree_id, SANS rapport ni serment_id',
+    corpsPage.scenario_id === 'sc2' && corpsPage.entree_id === 'ent1'
+      && !('rapport' in corpsPage) && !('serment_id' in corpsPage), JSON.stringify(corpsPage));
+
+  // Détachement d'une passerelle.
+  await sc1.locator('.zekrom-retro-item').first().locator('.zekrom-retro-detacher').click();
+  await page.waitForTimeout(200);
+  verifier('DELETE /api/scenario-liens émis', deletesLien.length >= 1, `${deletesLien.length}`);
+  verifier('Bearer transmis (DELETE passerelle)',
+    ((deletesLien[0] || {}).headers || {}).authorization === 'Bearer jeton-de-test');
+  const corpsDetache = JSON.parse((deletesLien[0] || {}).body || '{}');
+  verifier('Corps DELETE : l’id de la passerelle', corpsDetache.id === 'l1', JSON.stringify(corpsDetache));
+
+  await page.screenshot({ path: `${CAPTURES}/vranesh-passerelles.png`, fullPage: true });
 
   // 9. Contrastes AA sur les couleurs réellement rendues.
   const cr = await page.evaluate(() => {
