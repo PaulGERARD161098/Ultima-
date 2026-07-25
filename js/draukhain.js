@@ -21,6 +21,11 @@
     session: null,
     serments: [],
     flammes: [],
+    liens: [],          // passerelles v2 : serment → idéal ZEKROM | page MINETHNIR
+    ideauxListe: [],     // idéaux disponibles (picker « Idéal »)
+    pagesListe: [],      // pages MINETHNIR disponibles (picker « Page »)
+    ideaux: {},          // id idéal → intitulé (résolution du libellé)
+    pages: {},           // id page → titre|date lisible (résolution du libellé)
     vue: 'tous'
   };
 
@@ -29,6 +34,14 @@
     if (classe) { element.className = classe; }
     if (texte !== undefined && texte !== null) { element.textContent = texte; }
     return element;
+  }
+
+  // Date lisible et pure (repli quand une page MINETHNIR n'a pas de titre).
+  function dateLisible(iso) {
+    if (typeof iso !== 'string' || !iso) { return ''; }
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) { return ''; }
+    return d.toLocaleDateString('fr-FR');
   }
 
   // ---------- États de la page (un seul visible à la fois) ----------
@@ -56,6 +69,48 @@
   // Les flammes d'un serment (rattachées par serment_id).
   function flammesDe(sermentId) {
     return etat.flammes.filter(function (f) { return f && f.serment_id === sermentId; });
+  }
+
+  // Les passerelles d'un serment (rattachées par serment_id).
+  function liensDe(sermentId) {
+    return etat.liens.filter(function (l) { return l && l.serment_id === sermentId; });
+  }
+
+  // Libellé d'un idéal MINETHNIR/ZEKROM depuis les tables de correspondance.
+  // Dégradation propre : si la cible n'a pas pu être résolue (idéaux/pages non
+  // chargés, table absente…), on affiche un libellé neutre — jamais d'erreur.
+  function libelleLien(lien) {
+    if (!lien) { return ''; }
+    if (lien.ideal_id) {
+      var intitule = etat.ideaux[lien.ideal_id];
+      return intitule ? ('Idéal : ' + intitule) : 'idéal lié';
+    }
+    if (lien.entree_id) {
+      var titre = etat.pages[lien.entree_id];
+      return titre ? ('Page : ' + titre) : 'page liée';
+    }
+    return '';
+  }
+
+  // Libellé d'une page MINETHNIR : son titre, sinon sa date lisible.
+  function libellePage(entree) {
+    var titre = (entree && entree.titre) ? String(entree.titre).trim() : '';
+    if (titre) { return titre; }
+    return dateLisible(entree && entree.created_at);
+  }
+
+  // Construit les listes de cibles + les tables id→libellé (résolution + pickers).
+  function indexerCibles(ideaux, entrees) {
+    etat.ideauxListe = (Array.isArray(ideaux) ? ideaux : []).map(function (i) {
+      return { id: i.id, intitule: (i.intitule || '').trim() };
+    });
+    etat.pagesListe = (Array.isArray(entrees) ? entrees : []).map(function (e) {
+      return { id: e.id, label: libellePage(e) };
+    });
+    etat.ideaux = {};
+    etat.ideauxListe.forEach(function (i) { etat.ideaux[i.id] = i.intitule; });
+    etat.pages = {};
+    etat.pagesListe.forEach(function (p) { etat.pages[p.id] = p.label; });
   }
 
   // Libellé du compte de flammes (pastille du cartouche).
@@ -133,6 +188,99 @@
     return form;
   }
 
+  // ---------- Passerelles (v2) : d'où naît le serment, où il se suit ----------
+  //   « Un serment naît d'un idéal (ZEKROM) » et « se suit dans le journal
+  //   (MINETHNIR) ». Manuel : Paul relie et détache chaque passerelle.
+
+  function optionsCibles(type) {
+    if (type === 'ideal') {
+      return etat.ideauxListe.map(function (i) {
+        return [i.id, i.intitule || '(idéal sans intitulé)'];
+      });
+    }
+    return etat.pagesListe.map(function (p) {
+      return [p.id, p.label || '(page sans titre)'];
+    });
+  }
+
+  function construireFormLien(serment) {
+    var form = el('form', 'zekrom-retro-form');
+    form.dataset.sermentId = serment.id;
+
+    var selType = el('select', 'zekrom-retro-select');
+    selType.name = 'type';
+    selType.setAttribute('aria-label', 'Type de passerelle');
+    [['ideal', 'Idéal (ZEKROM)'],
+     ['page', 'Page (MINETHNIR)']].forEach(function (paire) {
+      var opt = el('option', null, paire[1]);
+      opt.value = paire[0];
+      selType.appendChild(opt);
+    });
+
+    var selCible = el('select', 'zekrom-retro-select');
+    selCible.name = 'cible';
+    selCible.setAttribute('aria-label', 'Cible à relier');
+
+    function peupler() {
+      selCible.textContent = '';
+      optionsCibles(selType.value).forEach(function (paire) {
+        var opt = el('option', null, paire[1]);
+        opt.value = paire[0];
+        selCible.appendChild(opt);
+      });
+    }
+    peupler();
+    selType.addEventListener('change', peupler);
+
+    var bouton = el('button', 'zekrom-bouton zekrom-bouton-lien', 'Relier');
+    bouton.type = 'submit';
+
+    form.appendChild(selType);
+    form.appendChild(selCible);
+    form.appendChild(bouton);
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      soumettreLien(serment.id, selType.value, selCible.value);
+    });
+    return form;
+  }
+
+  function rendrePasserelles(serment, carte) {
+    var section = el('section', 'zekrom-retro');
+    section.appendChild(el('h4', 'zekrom-retro-entete',
+      'Passerelles — d’où naît ce serment, où il se suit'));
+
+    var liens = liensDe(serment.id);
+    if (liens.length === 0) {
+      section.appendChild(el('p', 'zekrom-retro-vide',
+        'Aucune passerelle pour l’instant — relie un idéal ZEKROM ou une page MINETHNIR.'));
+    } else {
+      var liste = el('ul', 'zekrom-retro-liste');
+      liens.forEach(function (lien) {
+        var item = el('li', 'zekrom-retro-item');
+        var libelle = libelleLien(lien);
+        item.appendChild(el('span', 'zekrom-retro-talent', libelle));
+        var detacher = el('button', 'zekrom-retro-detacher', 'détacher');
+        detacher.type = 'button';
+        detacher.setAttribute('aria-label', 'Détacher « ' + libelle + ' »');
+        detacher.addEventListener('click', function () { detacherLien(lien.id); });
+        item.appendChild(detacher);
+        liste.appendChild(item);
+      });
+      section.appendChild(liste);
+    }
+
+    // Picker d'ajout : présent dès qu'au moins une cible existe. Sans idéal ni
+    // page chargés, on se contente d'une aide (dégradation propre, jamais bloquant).
+    if (etat.ideauxListe.length === 0 && etat.pagesListe.length === 0) {
+      section.appendChild(el('p', 'zekrom-retro-aide',
+        'Aucun idéal ni page à relier pour l’instant — capte un idéal dans ZEKROM ou écris une page dans MINETHNIR.'));
+    } else {
+      section.appendChild(construireFormLien(serment));
+    }
+    carte.appendChild(section);
+  }
+
   // ---------- Rendu d'un serment ----------
 
   function rendreSerment(serment) {
@@ -154,6 +302,7 @@
     }
 
     rendreFlammes(serment, carte);
+    rendrePasserelles(serment, carte);
     return carte;
   }
 
@@ -258,6 +407,26 @@
     await rafraichir();
   }
 
+  // Relier une passerelle : exactement UNE cible (idéal ZEKROM OU page MINETHNIR).
+  async function soumettreLien(sermentId, type, cibleId) {
+    if (!sermentId || !cibleId) { return; }
+    var corps = { serment_id: sermentId };
+    if (type === 'ideal') { corps.ideal_id = cibleId; }
+    else { corps.entree_id = cibleId; }
+    var res = await appelApi('/api/serment-liens', corps);
+    if (res.status === 401) { montrer('draukhain-auth'); return; }
+    if (!res.ok) { messageForm('Passerelle non reliée. Réessaie.', true); return; }
+    await rafraichir();
+  }
+
+  async function detacherLien(lienId) {
+    if (!lienId) { return; }
+    var res = await appelApi('/api/serment-liens', { id: lienId }, 'DELETE');
+    if (res.status === 401) { montrer('draukhain-auth'); return; }
+    if (!res.ok) { messageForm('Passerelle non détachée. Réessaie.', true); return; }
+    await rafraichir();
+  }
+
   // ---------- Flux : session → API → registre (fail-closed partout) ----------
 
   function configPresente() {
@@ -298,10 +467,39 @@
     }
     etat.serments = (contenu.data && contenu.data.serments) || [];
     etat.flammes = (contenu.data && contenu.data.flammes) || [];
+    etat.liens = (contenu.data && contenu.data.liens) || [];
+
+    // Cibles des passerelles (idéaux ZEKROM + pages MINETHNIR) : enrichissement
+    // pour résoudre les libellés et peupler les pickers. Chargées APRÈS le check
+    // 401 du registre : leur échec ne bloque jamais le rendu des serments.
+    await chargerCibles();
 
     rendreSerments();
     montrer('draukhain-registre');
     return true;
+  }
+
+  // Lit /api/ideaux (ZEKROM) et /api/imladrik (MINETHNIR) en parallèle. Toute
+  // panne (table absente, erreur, réseau) → tables vides = libellés neutres et
+  // pickers vides, sans jamais empêcher l'affichage des serments (§5, fail-soft).
+  async function chargerCibles() {
+    indexerCibles([], []);
+    var repIdeaux, repPages;
+    try {
+      var res = await Promise.all([lireJson('/api/ideaux'), lireJson('/api/imladrik')]);
+      repIdeaux = res[0];
+      repPages = res[1];
+    } catch (e) {
+      return;
+    }
+    var cIdeaux = null, cPages = null;
+    try { cIdeaux = await repIdeaux.json(); } catch (e) { cIdeaux = null; }
+    try { cPages = await repPages.json(); } catch (e) { cPages = null; }
+    var ideaux = (repIdeaux.ok && cIdeaux && cIdeaux.ok === true &&
+      cIdeaux.data && cIdeaux.data.ideaux) || [];
+    var entrees = (repPages.ok && cPages && cPages.ok === true &&
+      cPages.data && cPages.data.entrees) || [];
+    indexerCibles(ideaux, entrees);
   }
 
   async function rafraichir() {

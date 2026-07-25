@@ -69,6 +69,27 @@ const FIXTURE = {
       { id: 'f2', serment_id: 's1', nature: 'victoire', texte: 'j’ai tenu bon tout l’hiver' },
       { id: 'f3', serment_id: 's1', nature: 'rappel', texte: 'ne pas perdre la foi' },
     ],
+    // Passerelles v2 : une vers un idéal ZEKROM, une vers une page MINETHNIR
+    // (exactement une des deux cibles renseignée par lien).
+    liens: [
+      { id: 'l1', owner_id: 'o', serment_id: 's1', ideal_id: 'i1', entree_id: null, created_at: '2026-07-04T10:00:00Z' },
+      { id: 'l2', owner_id: 'o', serment_id: 's1', ideal_id: null, entree_id: 'e1', created_at: '2026-07-04T11:00:00Z' },
+    ],
+  },
+};
+
+// Cibles NEUTRES inventées pour résoudre les libellés + peupler les pickers.
+const FIXTURE_IDEAUX = {
+  ok: true,
+  data: {
+    ideaux: [{ id: 'i1', intitule: 'CONSTANCE', registre: 'volonte' }],
+    directions: [],
+  },
+};
+const FIXTURE_PAGES = {
+  ok: true,
+  data: {
+    entrees: [{ id: 'e1', titre: 'Page du matin', contenu: 'texte neutre', created_at: '2026-07-03T08:00:00Z' }],
   },
 };
 
@@ -178,6 +199,24 @@ console.log('— B. draukhain.html fixture 200 → registre, à raviver, serment
       body: JSON.stringify({ ok: true, data: { id: 'f-cible' } }),
     });
   });
+  // Cibles des passerelles (résolution des libellés + pickers).
+  await page.route('**/api/ideaux**', (route) =>
+    route.fulfill({ status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IDEAUX) }));
+  await page.route('**/api/imladrik**', (route) =>
+    route.fulfill({ status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_PAGES) }));
+  // Écritures de passerelles : POST (relier) + DELETE (détacher).
+  const postsLien = [];
+  const deletesLien = [];
+  await page.route('**/api/serment-liens**', (route) => {
+    const req = route.request();
+    if (req.method() === 'POST') { postsLien.push({ headers: req.headers(), corps: req.postDataJSON() }); }
+    if (req.method() === 'DELETE') { deletesLien.push({ headers: req.headers(), corps: req.postDataJSON() }); }
+    return route.fulfill({
+      status: 200,
+      contentType: 'application/json; charset=utf-8',
+      body: JSON.stringify({ ok: true, data: { id: 'lien-cible' } }),
+    });
+  });
 
   await page.goto(`${BASE}/draukhain.html`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForSelector('#draukhain-registre:not([hidden])', { timeout: 20000 });
@@ -207,7 +246,27 @@ console.log('— B. draukhain.html fixture 200 → registre, à raviver, serment
   const naturesS1 = (await s1.locator('.zekrom-direction .zekrom-registre').allTextContents()).map((t) => t.trim());
   verifier('Natures variées (citation/victoire/rappel)',
     ['citation', 'victoire', 'rappel'].every((n) => naturesS1.includes(n)), JSON.stringify(naturesS1));
-  verifier('Bouton « retirer » sur chaque flamme', (await s1.locator('.zekrom-retro-detacher').count()) === 3);
+  verifier('Bouton « retirer » sur chaque flamme',
+    (await s1.locator('.zekrom-direction .zekrom-retro-detacher').count()) === 3);
+
+  // 4bis. Passerelles v2 : liens résolus en libellé (idéal ZEKROM / page MINETHNIR).
+  const passerelles1 = s1.locator('.zekrom-retro');
+  verifier('Section « Passerelles » sur AURORE', (await passerelles1.count()) === 1);
+  verifier('En-tête « Passerelles » présent',
+    /Passerelles/.test((await passerelles1.locator('.zekrom-retro-entete').textContent()) || ''));
+  const libellesLiens = (await s1.locator('.zekrom-retro-item .zekrom-retro-talent').allTextContents()).map((t) => t.trim());
+  verifier('AURORE : 2 passerelles listées', libellesLiens.length === 2, JSON.stringify(libellesLiens));
+  verifier('Passerelle idéal résolue (« Idéal : CONSTANCE »)', libellesLiens.includes('Idéal : CONSTANCE'), JSON.stringify(libellesLiens));
+  verifier('Passerelle page résolue (« Page : Page du matin »)', libellesLiens.includes('Page : Page du matin'), JSON.stringify(libellesLiens));
+  verifier('Bouton « détacher » sur chaque passerelle',
+    (await s1.locator('.zekrom-retro-item .zekrom-retro-detacher').count()) === 2);
+  verifier('Picker d’ajout de passerelle (2 sélecteurs : type + cible)',
+    (await s1.locator('.zekrom-retro-form select').count()) === 2);
+  verifier('Picker type : Idéal + Page',
+    (await s1.locator('.zekrom-retro-form select[name="type"] option').count()) === 2);
+  // Le serment « à raviver » (ENCLUME) porte aussi une section passerelles (vide).
+  verifier('ENCLUME : section passerelles présente (état vide)',
+    (await page.locator('#draukhain-serment-s2 .zekrom-retro .zekrom-retro-vide').count()) === 1);
 
   // 5. « à raviver » : le cœur DRAUKHAIN, présenté en INVITATION positive.
   const s2 = page.locator('#draukhain-serment-s2');
@@ -268,11 +327,44 @@ console.log('— B. draukhain.html fixture 200 → registre, à raviver, serment
   verifier('Bearer transmis (POST flamme)',
     ((postsFlamme[0] || {}).authorization || '') === 'Bearer jeton-de-test');
 
-  await page.locator('#draukhain-serment-s1 .zekrom-retro-detacher').first().click();
+  await page.locator('#draukhain-serment-s1 .zekrom-direction .zekrom-retro-detacher').first().click();
   await page.waitForTimeout(200);
   verifier('DELETE /api/flammes émis', deletesFlamme.length >= 1, `${deletesFlamme.length}`);
   verifier('Bearer transmis (DELETE flamme)',
     ((deletesFlamme[0] || {}).authorization || '') === 'Bearer jeton-de-test');
+
+  // 8bis. Passerelles v2 : relier un idéal, relier une page, détacher.
+  const formLien = page.locator('#draukhain-serment-s1 .zekrom-retro-form');
+  // Type par défaut = Idéal → cible par défaut = i1 (CONSTANCE).
+  await formLien.locator('button[type="submit"]').click();
+  await page.waitForTimeout(200);
+  verifier('POST /api/serment-liens émis (idéal)', postsLien.length >= 1, `${postsLien.length}`);
+  verifier('Bearer transmis (POST lien idéal)',
+    ((postsLien[0] || {}).headers || {}).authorization === 'Bearer jeton-de-test');
+  verifier('Corps POST lien idéal { serment_id, ideal_id }',
+    JSON.stringify((postsLien[0] || {}).corps) === JSON.stringify({ serment_id: 's1', ideal_id: 'i1' }),
+    JSON.stringify((postsLien[0] || {}).corps));
+
+  // Basculer le type sur Page → cible = e1, puis relier.
+  const formLien2 = page.locator('#draukhain-serment-s1 .zekrom-retro-form');
+  await formLien2.locator('select[name="type"]').selectOption('page');
+  await page.waitForTimeout(50);
+  await formLien2.locator('button[type="submit"]').click();
+  await page.waitForTimeout(200);
+  verifier('POST /api/serment-liens émis (page)', postsLien.length >= 2, `${postsLien.length}`);
+  verifier('Corps POST lien page { serment_id, entree_id }',
+    JSON.stringify((postsLien[1] || {}).corps) === JSON.stringify({ serment_id: 's1', entree_id: 'e1' }),
+    JSON.stringify((postsLien[1] || {}).corps));
+
+  // Détacher la première passerelle (l1, vers l'idéal).
+  await page.locator('#draukhain-serment-s1 .zekrom-retro-item .zekrom-retro-detacher').first().click();
+  await page.waitForTimeout(200);
+  verifier('DELETE /api/serment-liens émis', deletesLien.length >= 1, `${deletesLien.length}`);
+  verifier('Bearer transmis (DELETE lien)',
+    ((deletesLien[0] || {}).headers || {}).authorization === 'Bearer jeton-de-test');
+  verifier('Corps DELETE lien { id: l1 }',
+    JSON.stringify((deletesLien[0] || {}).corps) === JSON.stringify({ id: 'l1' }),
+    JSON.stringify((deletesLien[0] || {}).corps));
 
   // 9. Contrastes AA sur les couleurs réellement rendues.
   const cr = await page.evaluate(() => {
