@@ -818,3 +818,15 @@
   migration `0016` ÉCRITE mais NON APPLIQUÉE** — l'application en prod des données
   intimes reste un go explicite de Paul (comme le journal `0012`), consignée au
   registre ⏳. Prochaine boucle : **B3 — VRANESH v1**.
+- **2026-07-25 (IMLADRIK — Kalamn-talaen = boussole, pas agent ; Léo guide)** —
+  Paul : « remplace l'agent Kalamn-talaen par Léo, l'agent unique sur Ultima ;
+  garde cependant les mots sur la boussole centrale ». Correction du cadre B0 :
+  **KALAMN-TALAEN n'est PAS un agent** — c'est le **nom gravé de la boussole
+  centrale** d'IMLADRIK (emblème épée+dragon). L'**agent unique reste Léo**
+  (renfort du principe verrouillé 2026-07-16 ; l'« agent-devperso » §7 console
+  est abandonné, Léo couvre le quadrant). **Les mots « Kalamn-talaen » restent
+  gravés** sous le médaillon (demande explicite de Paul). Front : la parole et
+  l'invite de la carto sont désormais attribuées à **Léo** (« Léo te guide »,
+  « Léo t'en dit l'essentiel ») ; la légende centrale inchangée. Patch front +
+  docs + harnais (parole par défaut = Léo, légende toujours vérifiée), zéro
+  surface à risque. Puis « ensuite on avance » → enchaîner B3.

@@ -2,8 +2,10 @@
    ------------------------------------------------------------------
    Même mécanique que la boussole d'accueil (js/boussole.js), réduite au
    quadrant : une rose interne dont chaque cap est un pan d'IMLADRIK. Au
-   centre, KALAMN-TALAEN (épée + dragon) = le guide ; sa parole se dépose
-   dans le cartouche sous la carte au survol/focus. Clic → on entre dans le cap.
+   centre, la boussole KALAMN-TALAEN (épée + dragon) — c'est son nom gravé,
+   l'emblème de la carte, pas un agent. L'agent unique d'Ultima reste LÉO
+   (principe verrouillé) : c'est sa parole qui se dépose dans le cartouche sous
+   la carte au survol/focus. Clic → on entre dans le cap.
 
    Muette et sans donnée : la carto ne contient AUCUNE donnée intime (§5) —
    le journal MINETHNIR vit derrière auth sur sa propre page. Ici, que du
@@ -115,7 +117,7 @@
     legende.textContent = 'Kalamn-talaen';
     plateau.appendChild(legende);
 
-    // 3. Parole de Kalamn-talaen (cartouche sous la carte).
+    // 3. Parole de Léo (cartouche sous la carte).
     var actif = null;
     function afficherResume(cap) {
       actif = cap;
@@ -187,9 +189,10 @@
     plateau.classList.add('is-pret');
   }
 
-  // ===================== KALAMN-TALAEN (le guide) =====================
+  // ===================== KALAMN-TALAEN (la boussole) =====================
   // Le centre : épée dressée (la lame fait l'aiguille Nord) enlacée d'un dragon,
-  // gravure encre sur médaillon d'or. Emblème du guide d'IMLADRIK.
+  // gravure encre sur médaillon d'or. C'est l'emblème de la boussole d'IMLADRIK
+  // (son nom gravé « Kalamn-talaen »), pas un agent — l'agent d'Ultima est Léo.
   function kalamnTalaen() {
     return '<svg viewBox="0 0 120 120" focusable="false" aria-hidden="true">'
       + '<defs><radialGradient id="kt-or" cx="38%" cy="32%" r="78%">'

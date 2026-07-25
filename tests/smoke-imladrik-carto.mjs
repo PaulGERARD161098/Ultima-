@@ -2,7 +2,7 @@
 // (modèle LV2), MUETTE et sans donnée intime (§5). Prouve :
 //   A. La carto rend 3 caps (MINETHNIR ouvert → minethnir.html ; VRANESH +
 //      DRAUKHAIN à venir), le cœur Kalamn-talaen, la légende gravée, la parole
-//      par défaut ; le survol d'un cap dépose la parole du guide ; zéro requête
+//      par défaut ; le survol d'un cap dépose la parole de Léo ; zéro requête
 //      externe (aucun CDN, aucune donnée), zéro erreur console ; contrastes AA.
 //   B. Fail-safe : la carto ne porte AUCUNE donnée (aucun appel réseau du tout),
 //      même config vide → elle s'affiche pareil (rien à protéger, rien à fuir).
@@ -95,9 +95,9 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
   const legende = (await page.locator('.kalamn-legende').textContent()) || '';
   verifier('Légende « Kalamn-talaen » gravée', /Kalamn-talaen/.test(legende), legende);
 
-  // 4. Parole par défaut, puis parole du guide au survol d'un cap.
-  verifier('Parole par défaut affichée',
-    /Kalamn-talaen/.test((await page.locator('#boussole-parole').textContent()) || ''));
+  // 4. Parole par défaut (Léo, l'agent unique), puis parole au survol d'un cap.
+  verifier('Parole par défaut affichée (Léo)',
+    /Léo/.test((await page.locator('#boussole-parole').textContent()) || ''));
   await minethnir.hover();
   await page.waitForSelector('#boussole-parole.is-actif', { timeout: 5000 });
   const parole = (await page.locator('#boussole-parole').textContent()) || '';

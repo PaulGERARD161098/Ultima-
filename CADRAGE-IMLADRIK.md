@@ -30,12 +30,14 @@ mécanique éprouvée : registre extensible (un cap = une entrée), survol/focus
   objectifs, entretenir la **volonté inébranlable**, ne pas perdre la foi.
   Absorbe le module « objectifs de vie » provisionné au cadrage console
   (§3.4) + la règle « des rappels, pas du jugement ».
-- **KALAMN-TALAEN — la boussole centrale, symbole épée et dragon.** C'est
-  **le guide, l'agent d'IMLADRIK** : successeur nommé de l'« agent-devperso »
-  provisionné en `CADRAGE-CONSOLE.md §7`. Principe verrouillé respecté
-  (2026-07-16) : **sous-agent de Léo**, jamais interlocuteur direct de Paul —
-  à l'écran c'est la voix du quadrant (cartouche de parole sous la boussole),
-  en session c'est un sous-agent que Léo dispatche et synthétise.
+- **KALAMN-TALAEN — la boussole centrale, symbole épée et dragon.** C'est le
+  **nom gravé de la boussole** d'IMLADRIK (l'emblème au centre de la carte),
+  **pas un agent** (correction Paul 2026-07-25). L'agent unique d'Ultima reste
+  **Léo** (principe verrouillé 2026-07-16) : c'est Léo qui guide et dont la
+  parole se dépose dans le cartouche sous la boussole. Les mots
+  « Kalamn-talaen » restent gravés sous le médaillon (décision Paul : garder
+  les mots sur la boussole centrale). L'« agent-devperso » provisionné en
+  `CADRAGE-CONSOLE.md §7` n'a donc pas lieu d'être : Léo couvre le quadrant.
 
 ## 3. La cartographie — forme
 
@@ -46,8 +48,8 @@ mécanique éprouvée : registre extensible (un cap = une entrée), survol/focus
 - **Caps v1 (3)** : MINETHNIR (**Ouvert** — le journal existant), VRANESH
   (À venir), DRAUKHAIN (À venir). Aiguilles du centre vers chaque cap,
   rehaussées au survol — même patron que `js/boussole.js`.
-- **Parole** : cartouche sous la rose ; au repos « Survole un cap —
-  Kalamn-talaen t'en dit l'essentiel », au survol la parole du cap.
+- **Parole** : cartouche sous la rose ; au repos « Survole un cap — Léo t'en
+  dit l'essentiel », au survol la parole de Léo sur le cap (Léo = agent unique).
 - **Extensible** : les modules restants du cadrage console §3.4 (valeurs &
   principes, citations, quart d'heure quotidien, suggestions culturelles)
   deviendront des caps — une entrée de registre chacun, les caps se
