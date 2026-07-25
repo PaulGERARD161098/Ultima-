@@ -765,6 +765,100 @@ export function validateFlamme(body, mode) {
   return { value: out };
 }
 
+// --- VRANESH (IMLADRIK B3) : situations + scénarios. Enums/bornes en MIROIR
+// EXACT des CHECK de supabase/migrations/0017_vranesh_situations.sql (défense en
+// profondeur AU-DESSUS de la RLS). Miroir de DRAUKHAIN/ZEKROM : `situations` ←
+// `serments`/`ideaux`, `scenarios` ← `flammes`/`directions`. VRANESH explore ce
+// qui PEUT arriver (jamais ce qu'on veut) ; aucune contrainte de « validité » sur
+// un futur — on valide seulement forme/bornes/enum. owner_id jamais accepté.
+// Données intimes (§5) : erreurs génériques, aucun contenu en log.
+export const SCENARIO_VRAISEMBLANCES = ['faible', 'moyenne', 'forte'];
+
+// Champs autorisés en écriture (owner_id/id/dates gérés serveur).
+const SITUATION_FIELDS = ['intitule', 'contexte'];
+const SCENARIO_FIELDS = ['situation_id', 'deroule', 'vraisemblance', 'signaux', 'parade'];
+
+// Valide une situation. mode 'create' impose l'intitulé (le cas) ; 'update' rend
+// tout optionnel. contexte nullable borné 2000. owner_id jamais accepté.
+export function validateSituation(body, mode) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, SITUATION_FIELDS);
+  if (unknown) return { error: unknown };
+
+  const out = {};
+
+  if (mode === 'create' || body.intitule !== undefined) {
+    if (typeof body.intitule !== 'string') return { error: 'Intitulé invalide' };
+    const intitule = body.intitule.trim();
+    if (intitule.length < 1 || intitule.length > 200) return { error: 'Intitulé invalide' };
+    out.intitule = intitule;
+  }
+
+  // contexte : null efface, chaîne bornée sinon.
+  if (body.contexte === null) {
+    out.contexte = null;
+  } else {
+    const msg = checkOptionalText(body.contexte, 'Contexte', 2000);
+    if (msg) return { error: msg };
+    if (body.contexte !== undefined) out.contexte = body.contexte;
+  }
+
+  if (mode === 'update' && Object.keys(out).length === 0) {
+    return { error: 'Aucun champ à mettre à jour' };
+  }
+  return { value: out };
+}
+
+// Valide un scénario (« un futur potentiel » d'une situation). mode 'create'
+// impose situation_id (UUID) + deroule (1..2000) ; vraisemblance optionnelle
+// (défaut base 'moyenne'), signaux/parade optionnels bornés. owner_id imposé par
+// le défaut base ; le scellement (owner_id, situation_id) empêche d'anticiper la
+// situation d'autrui. Miroir de validateFlamme (create/delete seulement).
+export function validateScenario(body, mode) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, SCENARIO_FIELDS);
+  if (unknown) return { error: unknown };
+
+  const out = {};
+
+  if (mode === 'create') {
+    if (!isUuid(body.situation_id)) return { error: 'Identifiant de situation invalide' };
+    out.situation_id = body.situation_id;
+  }
+
+  if (mode === 'create' || body.deroule !== undefined) {
+    if (typeof body.deroule !== 'string') return { error: 'Scénario invalide' };
+    const deroule = body.deroule.trim();
+    if (deroule.length < 1 || deroule.length > 2000) return { error: 'Scénario invalide' };
+    out.deroule = deroule;
+  }
+
+  if (body.vraisemblance !== undefined) {
+    if (!SCENARIO_VRAISEMBLANCES.includes(body.vraisemblance)) return { error: 'Vraisemblance invalide' };
+    out.vraisemblance = body.vraisemblance;
+  }
+
+  // signaux / parade : null efface, chaîne bornée sinon.
+  for (const [field, label] of [['signaux', 'Signaux'], ['parade', 'Parade']]) {
+    if (body[field] === null) {
+      out[field] = null;
+    } else {
+      const msg = checkOptionalText(body[field], label, 2000);
+      if (msg) return { error: msg };
+      if (body[field] !== undefined) out[field] = body[field];
+    }
+  }
+
+  if (mode === 'update' && Object.keys(out).length === 0) {
+    return { error: 'Aucun champ à mettre à jour' };
+  }
+  return { value: out };
+}
+
 // --- INTENDANT (AD-5c) : chantiers pilotés + besoins. Enums/bornes en MIROIR
 // EXACT des CHECK de supabase/migrations/0008_intendant.sql. Ce que l'API refuse,
 // la base le refuse aussi (et vice versa) ; la base reste le backstop ultime pour

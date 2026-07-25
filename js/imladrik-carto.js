@@ -34,8 +34,8 @@
     {
       id: 'vranesh',
       nom: 'VRANESH',
-      cible: null,
-      etat: 'À venir',
+      cible: 'vranesh.html',
+      etat: 'Ouvert',
       resume: 'Les différents futurs potentiels. Dans un cas donné, dérouler ce '
         + 'qui peut arriver : scénarios, signaux à surveiller, parades préparées. '
         + 'Anticiper sereinement, puis revenir au présent.',
