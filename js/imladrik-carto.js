@@ -42,8 +42,8 @@
     {
       id: 'draukhain',
       nom: 'DRAUKHAIN',
-      cible: null,
-      etat: 'À venir',
+      cible: 'draukhain.html',
+      etat: 'Ouvert',
       resume: 'La volonté au-delà du possible. Tes serments et tes flammes : ne '
         + 'jamais oublier tes objectifs, entretenir la volonté inébranlable, ne '
         + 'pas perdre la foi. Des rappels, pas du jugement.',

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Ultima — DRAUKHAIN</title>
+  <meta name="description" content="DRAUKHAIN : la carte des serments de Paul, la volonté au-delà du possible — privée, derrière authentification.">
+  <meta name="theme-color" content="#0e3a52">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23241c12'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23e8cf8f'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/console.css">
+  <link rel="stylesheet" href="css/quadrant.css">
+</head>
+<body class="console page-quadrant" data-quadrant="draukhain">
+
+  <!-- Rose des vents décorative (registre carte savante), muette. -->
+  <div class="console-decor" aria-hidden="true">
+    <svg viewBox="0 0 72 72" focusable="false">
+      <circle cx="36" cy="36" r="26" fill="none" stroke="#c9a659" stroke-width="1.4" opacity="0.85"/>
+      <path d="M36 4 L42 30 L68 36 L42 42 L36 68 L30 42 L4 36 L30 30 Z"
+            fill="#e8cf8f" stroke="#c9a659" stroke-width="1"/>
+      <path d="M36 18 L39 33 L54 36 L39 39 L36 54 L33 39 L18 36 L33 33 Z"
+            fill="#c9a659" stroke="none" opacity="0.55"/>
+      <text x="36" y="14" text-anchor="middle" font-size="9" fill="#e8cf8f" font-style="italic">N</text>
+    </svg>
+  </div>
+
+  <div class="console-conteneur">
+
+    <!-- ===== Bandeau du quadrant : la flamme qui ne s'éteint pas (blason
+         DRAUKHAIN, repris de blasonFlamme() de js/imladrik-carto.js)
+         + nom + mission + état ===== -->
+    <header class="console-entete quadrant-bandeau">
+      <svg class="blason-svg" viewBox="0 0 72 72" role="img"
+           aria-label="Blason gravé : une flamme qui ne s’éteint pas" focusable="false">
+        <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
+        <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
+        <path d="M36 15 C 42 23, 48 28, 48 38 C 48 47, 43 53, 36 54
+                 C 29 53, 24 47, 24 38 C 24 31, 28 27, 30 23
+                 C 31 27, 33 29, 36 30 C 34 25, 34 20, 36 15 Z" fill="#3b2f1c"/>
+        <path d="M36 32 C 39 36, 41 38, 41 42 C 41 47, 39 49, 36 50
+                 C 33 49, 31 47, 31 42 C 31 38, 33 36, 36 32 Z" fill="#e8cf8f"/>
+        <path d="M26 58 H 46" stroke="#3b2f1c" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <h1 class="console-titre">DRAUKHAIN</h1>
+      <p class="console-invite quadrant-mission">La volonté au-delà du possible&nbsp;:
+        tes serments, les vœux que tu tiens — chaque flamme entretient la foi,
+        ici on ne perd pas le cap de sa propre parole.</p>
+      <span class="quadrant-etat">Privé — auth requise</span>
+    </header>
+
+    <!-- ===== Le registre (un seul état visible à la fois, piloté par js/draukhain.js).
+         AUCUN serment en dur ici : les données personnelles ne viennent QUE de
+         l'API authentifiée /api/serments (fail-closed sans session). ===== -->
+    <main class="quadrant-page" aria-label="Carte des serments du quadrant DRAUKHAIN">
+
+      <p id="draukhain-chargement" class="adr-chargement">Consultation de la carte des serments…</p>
+
+      <section id="draukhain-auth" class="cartouche-page" hidden>
+        <h2>Authentification requise</h2>
+        <p>La carte de tes serments est intime&nbsp;: elle ne s'ouvre qu'une fois ta session ouverte.</p>
+        <p><a class="retour-console" href="/">Se connecter depuis la boussole</a></p>
+      </section>
+
+      <section id="draukhain-erreur" class="cartouche-page" hidden>
+        <h2>Carte indisponible</h2>
+        <p>La consultation a échoué. Réessaie dans un instant.</p>
+      </section>
+
+      <div id="draukhain-registre" hidden>
+
+        <!-- Saisie libre : sceller un serment (le vœu que l'on tient). -->
+        <section class="cartouche-page" aria-labelledby="draukhain-titre-saisie">
+          <h2 id="draukhain-titre-saisie">Sceller un serment</h2>
+          <form id="draukhain-form-serment" class="zekrom-form" novalidate>
+            <div class="zekrom-champ">
+              <label for="draukhain-intitule">Le serment, le vœu</label>
+              <input id="draukhain-intitule" name="intitule" type="text" maxlength="200"
+                     autocomplete="off" required>
+            </div>
+            <div class="zekrom-champ">
+              <label for="draukhain-pourquoi">Pourquoi <span class="zekrom-aide">(le sens, optionnel)</span></label>
+              <input id="draukhain-pourquoi" name="pourquoi" type="text" maxlength="2000"
+                     autocomplete="off" placeholder="pourquoi ce serment compte…">
+            </div>
+            <div class="zekrom-champ">
+              <label for="draukhain-horizon">Horizon <span class="zekrom-aide">(optionnel)</span></label>
+              <input id="draukhain-horizon" name="horizon" type="text" maxlength="2000"
+                     autocomplete="off" placeholder="jusqu'où ce serment te porte…">
+            </div>
+            <div class="zekrom-form-actions">
+              <button type="submit" class="zekrom-bouton">Sceller</button>
+              <span id="draukhain-form-message" class="zekrom-form-message" role="status" aria-live="polite"></span>
+            </div>
+          </form>
+        </section>
+
+        <!-- Bascule de vue : tous les serments / mes serments vivants (≥ 1 flamme). -->
+        <section class="cartouche-page" aria-labelledby="draukhain-titre-vue">
+          <h2 id="draukhain-titre-vue">La carte des serments</h2>
+          <div class="zekrom-bascule" role="group" aria-label="Vue de la carte">
+            <button type="button" id="draukhain-vue-tous" class="zekrom-onglet" aria-pressed="true">Tous les serments</button>
+            <button type="button" id="draukhain-vue-vivants" class="zekrom-onglet" aria-pressed="false">Mes serments vivants</button>
+          </div>
+          <p id="draukhain-vue-note" class="zekrom-vue-note"></p>
+          <div id="draukhain-serments"></div>
+        </section>
+      </div>
+
+      <p class="retour"><a class="retour-console" href="imladrik.html">Retour à la cartographie IMLADRIK</a></p>
+    </main>
+  </div>
+
+  <script src="js/vendor/supabase-js-2.110.0.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/draukhain.js"></script>
+</body>
+</html>

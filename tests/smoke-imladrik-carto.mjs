@@ -74,14 +74,18 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
     verifier(`Cap ${attendu} présent`, noms.includes(attendu), noms.join(', '));
   }
 
-  // 2. MINETHNIR ouvrable → minethnir.html ; VRANESH/DRAUKHAIN à venir.
+  // 2. MINETHNIR + DRAUKHAIN ouvrables (liens internes) ; VRANESH seul à venir.
   const minethnir = page.locator('.cap[data-id="minethnir"]');
   verifier('MINETHNIR est un lien', (await minethnir.evaluate((el) => el.tagName)) === 'A');
   verifier('MINETHNIR → minethnir.html',
     (await minethnir.getAttribute('href')) === 'minethnir.html');
-  for (const id of ['vranesh', 'draukhain']) {
-    const cap = page.locator(`.cap[data-id="${id}"]`);
-    verifier(`${id} : cap « à venir » (non-lien)`,
+  const draukhain = page.locator('.cap[data-id="draukhain"]');
+  verifier('DRAUKHAIN est un lien', (await draukhain.evaluate((el) => el.tagName)) === 'A');
+  verifier('DRAUKHAIN → draukhain.html',
+    (await draukhain.getAttribute('href')) === 'draukhain.html');
+  {
+    const cap = page.locator('.cap[data-id="vranesh"]');
+    verifier('vranesh : cap « à venir » (non-lien)',
       (await cap.evaluate((el) => el.tagName)) === 'DIV'
       && (await cap.getAttribute('aria-disabled')) === 'true');
   }

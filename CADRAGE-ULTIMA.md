@@ -96,6 +96,24 @@
     `smoke-console` mis à jour ; **patrimoine COMPLET (21 harnais) vert**. Recos
     Paul validées (sigle épée au soleil conservé, DRAUKHAIN→VRANESH). **Prochaine
     boucle : B2 — DRAUKHAIN v1.**
+  - 🔶 **IMLADRIK B2 — DRAUKHAIN v1 (2026-07-25, GO SOLO « ok go »)** : la volonté
+    au-delà du possible, **miroir strict de ZEKROM**. Modèle **serments** (le quoi
+    + le pourquoi profond + l'horizon) → **flammes** (rappels de foi :
+    citation/victoire/rappel). Serment sans flamme = **« à raviver »** = invitation
+    positive (jamais un reproche — « des rappels, pas du jugement »). Migration
+    `0016_draukhain_serments.sql` (2 tables + vues `serments_etat`/`serments_vivants`,
+    RLS + scellement AD-4, miroir 0010) **ÉCRITE, NON APPLIQUÉE — gate §5 intime
+    (go Paul requis)**. API `api/serments.js` + `api/flammes.js` (requireUser,
+    owner_id serveur-only, validation miroir CHECK). Front `draukhain.html` +
+    `js/draukhain.js` (fail-closed, textContent only, badge « à raviver » en
+    invitation, bascule « serments vivants ») — cap DRAUKHAIN ouvert dans la carto
+    Kalamn-talaen. Front délégué à `front-carto` (miroir ZEKROM), **contre-passe
+    sécu Léo OK** (zéro innerHTML de données, Bearer lectures+écritures,
+    fail-closed 401→auth). Harnais `unit-draukhain-validate` + `smoke-draukhain` ;
+    **patrimoine COMPLET (22 harnais) vert**. **⏳ Action humaine Paul (bloquant
+    fonctionnel) : appliquer la migration `0016` en prod + go** (jusque-là,
+    DRAUKHAIN est fail-closed : la page s'ouvre, l'API répond « erreur interne »
+    tant que les tables n'existent pas). **Prochaine boucle : B3 — VRANESH v1.**
   - 🔶 **LV2-② Auth — Google OAuth (2026-07-22)** : bouton « Se connecter
     avec Google » ajouté À CÔTÉ du lien magique (décision Paul : Google en
     plus, pas à la place). Code livré + vérifié : `js/app.js`
