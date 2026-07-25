@@ -16,6 +16,22 @@
 4. **Champs d'affinité** — valeurs / état d'esprit devront être des données
    structurées (tags) pour que la carte suggère des passerelles.
 
+## Signaux de session (2026-07-25)
+
+- ✅ CONFIRMÉ — **le cap « donnée » l'emporte sur le cap « code »** : après un
+  quadrant IMLADRIK complet, Paul a coupé net (« assez de code, il faut de la
+  donnée »). Réflexe à garder : quand la structure existe, proposer d'abord de la
+  **nourrir de réel** (voie A : Léo pilote en direct via connecteurs) plutôt qu'un
+  nouveau chantier de code.
+- ⚠️ NUANCE apprise — Paul distingue « piloter sur la donnée » (veut) et
+  « construire la plomberie de la donnée » (= « chantier technique », a mis en
+  pause le cockpit web voie B). Corollaire : privilégier la **valeur immédiate à
+  la demande** (briefing live) et ne cadrer la plomberie (OAuth déployé) que sur
+  un go explicite « voie B ».
+- 🕒 À surveiller (vu en pilotant sa boîte, non consigné en détail — PII) :
+  échéance **Google Cloud** (essai gratuit ~fin juillet) qui porte le client Drive
+  d'IMLADRIK ; relance YCOME en attente. À reproposer si le sujet revient.
+
 ## Pistes d'amélioration à proposer (fil continu)
 
 - Routine d'arrière-plan (sécurité + données) : à cadrer puis activer (gate
