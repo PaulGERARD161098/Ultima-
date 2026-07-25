@@ -23,8 +23,16 @@
     session: null,
     situations: [],
     scenarios: [],
+    liens: [],
+    // Tables de résolution des cibles de passerelles (best-effort, dégradables).
+    sermentsListe: [],   // [{ id, libelle }] pour le picker Objectif DRAUKHAIN
+    sermentsParId: {},   // id → intitulé (résolution d'un lien)
+    pagesListe: [],      // [{ id, libelle }] pour le picker Page MINETHNIR
+    pagesParId: {},      // id → libellé (titre sinon date lisible)
     vue: 'toutes'
   };
+
+  var LIBELLE_RAPPORT = { menace: 'menace', sert: 'sert' };
 
   function el(nom, classe, texte) {
     var element = document.createElement(nom);
@@ -63,6 +71,42 @@
   // Libellé du compte de scénarios (pastille du cartouche).
   function libelleCompte(n) {
     return n <= 1 ? (n + ' scénario') : (n + ' scénarios');
+  }
+
+  // Les passerelles (scenario_liens) d'un scénario, rattachées par scenario_id.
+  function liensDe(scenarioId) {
+    return etat.liens.filter(function (l) { return l && l.scenario_id === scenarioId; });
+  }
+
+  // Date lisible en français (repli si created_at absent/illisible).
+  function dateLisible(iso) {
+    if (!iso) { return 'page liée'; }
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) { return 'page liée'; }
+    try {
+      return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+    } catch (e) {
+      return String(iso).slice(0, 10);
+    }
+  }
+
+  // Libellé d'une page MINETHNIR : son titre, sinon sa date lisible.
+  function libellePage(page) {
+    var titre = (page && page.titre ? String(page.titre) : '').trim();
+    if (titre) { return titre; }
+    return dateLisible(page && page.created_at);
+  }
+
+  // Résolution d'une passerelle → { prefixe, nom }. Dégradation propre : libellé
+  // neutre si la cible n'a pas pu être résolue (table de cibles indisponible).
+  function libelleLien(lien) {
+    if (lien && lien.serment_id) {
+      return { prefixe: 'Objectif : ', nom: etat.sermentsParId[lien.serment_id] || 'serment lié' };
+    }
+    if (lien && lien.entree_id) {
+      return { prefixe: 'Page : ', nom: etat.pagesParId[lien.entree_id] || 'page liée' };
+    }
+    return { prefixe: '', nom: 'passerelle' };
   }
 
   // ---------- Rendu des scénarios d'une situation ----------
@@ -106,6 +150,9 @@
       'Retirer ce scénario de la situation « ' + (situation.intitule || '') + ' »');
     retirer.addEventListener('click', function () { retirerScenario(scenario.id); });
     item.appendChild(retirer);
+
+    // Passerelles v2 : relier ce futur à un objectif DRAUKHAIN ou une page MINETHNIR.
+    item.appendChild(rendrePasserelles(scenario));
     return item;
   }
 
@@ -160,6 +207,116 @@
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       soumettreScenario(situation.id, champ.value, vraisemblance.value, signaux.value, parade.value);
+    });
+    return form;
+  }
+
+  // ---------- Passerelles v2 : relier un scénario à un objectif DRAUKHAIN
+  //            (rapport menace/sert) OU à une page MINETHNIR (§5 CADRAGE-IMLADRIK). ----------
+
+  function rendrePasserelles(scenario) {
+    var section = el('section', 'zekrom-retro');
+    section.appendChild(el('h4', 'zekrom-retro-entete', 'Passerelles'));
+
+    var liens = liensDe(scenario.id);
+    if (liens.length === 0) {
+      section.appendChild(el('p', 'zekrom-retro-vide',
+        'Aucune passerelle — relie ce futur à un objectif qu’il menace ou qu’il sert, ou à la page d’où vient la question.'));
+    } else {
+      var liste = el('ul', 'zekrom-retro-liste');
+      liens.forEach(function (lien) { liste.appendChild(rendreLien(lien, scenario)); });
+      section.appendChild(liste);
+    }
+    section.appendChild(construireFormLien(scenario));
+    return section;
+  }
+
+  function rendreLien(lien, scenario) {
+    var item = el('li', 'zekrom-retro-item');
+    var resolu = libelleLien(lien);
+    item.appendChild(el('span', 'zekrom-retro-note', resolu.prefixe));
+    item.appendChild(el('span', 'zekrom-retro-talent', resolu.nom));
+    // Rapport (menace/sert) : pastille, UNIQUEMENT quand la cible est un serment.
+    if (lien.serment_id && lien.rapport) {
+      item.appendChild(el('span', 'zekrom-registre',
+        '(' + (LIBELLE_RAPPORT[lien.rapport] || lien.rapport) + ')'));
+    }
+    var detacher = el('button', 'zekrom-retro-detacher', 'détacher');
+    detacher.type = 'button';
+    detacher.setAttribute('aria-label',
+      'Détacher cette passerelle du scénario « ' + String(scenario.deroule || '') + ' »');
+    detacher.addEventListener('click', function () { detacherLien(lien.id); });
+    item.appendChild(detacher);
+    return item;
+  }
+
+  function construireFormLien(scenario) {
+    var form = el('form', 'zekrom-retro-form');
+    form.dataset.scenarioId = scenario.id;
+
+    // 1. Type de cible : Objectif DRAUKHAIN ou Page MINETHNIR.
+    var typeSel = el('select', 'zekrom-retro-select');
+    typeSel.name = 'cible-type';
+    typeSel.setAttribute('aria-label', 'Type de passerelle à relier');
+    [['serment', 'Objectif DRAUKHAIN'], ['entree', 'Page MINETHNIR']].forEach(function (paire) {
+      var opt = el('option', null, paire[1]);
+      opt.value = paire[0];
+      typeSel.appendChild(opt);
+    });
+
+    // 2a. Sélecteur d'objectif (serment) — vide/absent d'options si non chargé.
+    var sermentSel = el('select', 'zekrom-retro-select');
+    sermentSel.name = 'serment';
+    sermentSel.setAttribute('aria-label', 'Objectif DRAUKHAIN à relier');
+    etat.sermentsListe.forEach(function (s) {
+      var opt = el('option', null, s.libelle);
+      opt.value = s.id;
+      sermentSel.appendChild(opt);
+    });
+
+    // 2b. Rapport au serment : ce que ce futur MENACE ou SERT.
+    var rapportSel = el('select', 'zekrom-retro-select');
+    rapportSel.name = 'rapport';
+    rapportSel.setAttribute('aria-label', 'Rapport à l’objectif');
+    [['menace', 'menace — ce futur menace cet objectif'],
+     ['sert', 'sert — ce futur sert cet objectif']].forEach(function (paire) {
+      var opt = el('option', null, paire[1]);
+      opt.value = paire[0];
+      rapportSel.appendChild(opt);
+    });
+    rapportSel.value = 'menace';
+
+    // 2c. Sélecteur de page MINETHNIR.
+    var pageSel = el('select', 'zekrom-retro-select');
+    pageSel.name = 'entree';
+    pageSel.setAttribute('aria-label', 'Page MINETHNIR à relier');
+    etat.pagesListe.forEach(function (p) {
+      var opt = el('option', null, p.libelle);
+      opt.value = p.id;
+      pageSel.appendChild(opt);
+    });
+
+    var bouton = el('button', 'zekrom-bouton zekrom-bouton-lien', 'Relier');
+    bouton.type = 'submit';
+
+    // Bascule d'affichage selon le type choisi (via .hidden, jamais de style inline).
+    function majVisibilite() {
+      var estServ = typeSel.value === 'serment';
+      sermentSel.hidden = !estServ;
+      rapportSel.hidden = !estServ;
+      pageSel.hidden = estServ;
+    }
+    typeSel.addEventListener('change', majVisibilite);
+    majVisibilite();
+
+    form.appendChild(typeSel);
+    form.appendChild(sermentSel);
+    form.appendChild(rapportSel);
+    form.appendChild(pageSel);
+    form.appendChild(bouton);
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      soumettreLien(scenario.id, typeSel.value, sermentSel.value, rapportSel.value, pageSel.value);
     });
     return form;
   }
@@ -292,6 +449,32 @@
     await rafraichir();
   }
 
+  async function soumettreLien(scenarioId, type, sermentId, rapport, entreeId) {
+    if (!scenarioId) { return; }
+    var corps;
+    if (type === 'serment') {
+      if (!sermentId) { messageForm('Choisis un objectif à relier.', true); return; }
+      corps = { scenario_id: scenarioId, serment_id: sermentId };
+      // rapport UNIQUEMENT avec un serment (contrat API).
+      if (rapport) { corps.rapport = rapport; }
+    } else {
+      if (!entreeId) { messageForm('Choisis une page à relier.', true); return; }
+      corps = { scenario_id: scenarioId, entree_id: entreeId };
+    }
+    var res = await appelApi('/api/scenario-liens', corps);
+    if (res.status === 401) { montrer('vranesh-auth'); return; }
+    if (!res.ok) { messageForm('Passerelle non créée. Réessaie.', true); return; }
+    await rafraichir();
+  }
+
+  async function detacherLien(lienId) {
+    if (!lienId) { return; }
+    var res = await appelApi('/api/scenario-liens', { id: lienId }, 'DELETE');
+    if (res.status === 401) { montrer('vranesh-auth'); return; }
+    if (!res.ok) { messageForm('Passerelle non détachée. Réessaie.', true); return; }
+    await rafraichir();
+  }
+
   // ---------- Flux : session → API → registre (fail-closed partout) ----------
 
   function configPresente() {
@@ -308,6 +491,53 @@
       }
     });
     return reponse;
+  }
+
+  // Lecture best-effort d'une source de cibles (serments / pages). Renvoie data ou
+  // null — jamais d'exception propagée : une cible indisponible dégrade le picker
+  // et les libellés, mais n'empêche JAMAIS le rendu des situations.
+  async function lireCible(chemin) {
+    try {
+      var rep = await lireJson(chemin);
+      if (!rep.ok) { return null; }
+      var c = await rep.json();
+      if (!c || c.ok !== true) { return null; }
+      return c.data || null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  async function chargerServments() {
+    var data = await lireCible('/api/serments');
+    var serments = (data && data.serments) || [];
+    serments.forEach(function (s) {
+      if (s && s.id) {
+        var lib = (s.intitule ? String(s.intitule) : '').trim();
+        etat.sermentsParId[s.id] = lib;
+        etat.sermentsListe.push({ id: s.id, libelle: lib || 'serment lié' });
+      }
+    });
+  }
+
+  async function chargerPages() {
+    var data = await lireCible('/api/imladrik');
+    var entrees = (data && data.entrees) || [];
+    entrees.forEach(function (p) {
+      if (p && p.id) {
+        var lib = libellePage(p);
+        etat.pagesParId[p.id] = lib;
+        etat.pagesListe.push({ id: p.id, libelle: lib });
+      }
+    });
+  }
+
+  async function chargerCibles() {
+    etat.sermentsListe = [];
+    etat.sermentsParId = {};
+    etat.pagesListe = [];
+    etat.pagesParId = {};
+    await Promise.all([chargerServments(), chargerPages()]);
   }
 
   async function chargerRegistre() {
@@ -332,6 +562,10 @@
     }
     etat.situations = (contenu.data && contenu.data.situations) || [];
     etat.scenarios = (contenu.data && contenu.data.scenarios) || [];
+    etat.liens = (contenu.data && contenu.data.liens) || [];
+
+    // Cibles des passerelles (best-effort, dégradation propre).
+    await chargerCibles();
 
     rendreSituations();
     montrer('vranesh-registre');
