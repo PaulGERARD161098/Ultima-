@@ -673,6 +673,98 @@ export function validateEntreeImladrik(body, mode) {
   return { value: out };
 }
 
+// --- DRAUKHAIN (IMLADRIK B2) : serments + flammes. Enums/bornes en MIROIR EXACT
+// des CHECK de supabase/migrations/0016_draukhain_serments.sql (défense en
+// profondeur AU-DESSUS de la RLS). Miroir de ZEKROM (validateIdeal/validateDirection) :
+// `serments` ← `ideaux`, `flammes` ← `directions`. Règle cardinale POSITIVE : un
+// serment sans flamme n'est jamais dévalué (aucune contrainte supplémentaire ;
+// on valide seulement forme/bornes/enum). owner_id n'est JAMAIS accepté du client.
+// Données intimes (§5) : erreurs génériques, aucun contenu en log.
+export const FLAMME_NATURES = ['citation', 'victoire', 'rappel'];
+
+// Champs autorisés en écriture (owner_id/id/dates gérés serveur).
+const SERMENT_FIELDS = ['intitule', 'pourquoi', 'horizon'];
+const FLAMME_FIELDS = ['serment_id', 'nature', 'texte'];
+
+// Valide un serment. mode 'create' impose l'intitulé (le quoi) ; 'update' rend
+// tout optionnel. pourquoi (le pourquoi profond) nullable borné 2000 ; horizon
+// (l'échéance) nullable borné 200. owner_id jamais accepté.
+export function validateSerment(body, mode) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, SERMENT_FIELDS);
+  if (unknown) return { error: unknown };
+
+  const out = {};
+
+  if (mode === 'create' || body.intitule !== undefined) {
+    if (typeof body.intitule !== 'string') return { error: 'Intitulé invalide' };
+    const intitule = body.intitule.trim();
+    if (intitule.length < 1 || intitule.length > 200) return { error: 'Intitulé invalide' };
+    out.intitule = intitule;
+  }
+
+  // pourquoi / horizon : null efface, chaîne bornée sinon.
+  if (body.pourquoi === null) {
+    out.pourquoi = null;
+  } else {
+    const msg = checkOptionalText(body.pourquoi, 'Pourquoi', 2000);
+    if (msg) return { error: msg };
+    if (body.pourquoi !== undefined) out.pourquoi = body.pourquoi;
+  }
+
+  if (body.horizon === null) {
+    out.horizon = null;
+  } else {
+    const msg = checkOptionalText(body.horizon, 'Horizon', 200);
+    if (msg) return { error: msg };
+    if (body.horizon !== undefined) out.horizon = body.horizon;
+  }
+
+  if (mode === 'update' && Object.keys(out).length === 0) {
+    return { error: 'Aucun champ à mettre à jour' };
+  }
+  return { value: out };
+}
+
+// Valide une flamme (« rappel de foi » rattaché à un serment). mode 'create'
+// impose serment_id (UUID) + texte (1..2000) ; nature optionnelle (défaut base
+// 'rappel'). owner_id imposé par le défaut base ; le scellement composite
+// (owner_id, serment_id) empêche d'entretenir le serment d'autrui. Miroir de
+// validateDirection (create/delete seulement — une flamme ne se modifie pas).
+export function validateFlamme(body, mode) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, FLAMME_FIELDS);
+  if (unknown) return { error: unknown };
+
+  const out = {};
+
+  if (mode === 'create') {
+    if (!isUuid(body.serment_id)) return { error: 'Identifiant de serment invalide' };
+    out.serment_id = body.serment_id;
+  }
+
+  if (body.nature !== undefined) {
+    if (!FLAMME_NATURES.includes(body.nature)) return { error: 'Nature invalide' };
+    out.nature = body.nature;
+  }
+
+  if (mode === 'create' || body.texte !== undefined) {
+    if (typeof body.texte !== 'string') return { error: 'Flamme invalide' };
+    const texte = body.texte.trim();
+    if (texte.length < 1 || texte.length > 2000) return { error: 'Flamme invalide' };
+    out.texte = texte;
+  }
+
+  if (mode === 'update' && Object.keys(out).length === 0) {
+    return { error: 'Aucun champ à mettre à jour' };
+  }
+  return { value: out };
+}
+
 // --- INTENDANT (AD-5c) : chantiers pilotés + besoins. Enums/bornes en MIROIR
 // EXACT des CHECK de supabase/migrations/0008_intendant.sql. Ce que l'API refuse,
 // la base le refuse aussi (et vice versa) ; la base reste le backstop ultime pour

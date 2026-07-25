@@ -103,9 +103,21 @@ mécanique éprouvée : registre extensible (un cap = une entrée), survol/focus
   IMLADRIK « En chantier » → « Accéder ». Harnais : `smoke-imladrik` reciblé sur
   MINETHNIR, `smoke-imladrik-carto` créé, `smoke-console` mis à jour ; patrimoine
   COMPLET (21 harnais) vert.
-- **B2 — DRAUKHAIN v1** (reco validée Paul : avant VRANESH — socle de volonté,
-  absorbe « objectifs de vie ») : migration + API + front, gates habituelles
-  (intime → contre-passe sécu).
+- **✅ B2 — DRAUKHAIN v1 (2026-07-25, go Paul « ok go »)** : la volonté au-delà
+  du possible, miroir strict de ZEKROM. Modèle **serments** (le quoi + le
+  pourquoi profond + l'horizon) → **flammes** (rappels de foi : nature
+  citation/victoire/rappel + texte). Règle cardinale POSITIVE : serment sans
+  flamme = **« à raviver »** = invitation à nourrir la foi, jamais un reproche
+  (« des rappels, pas du jugement »). Migration `0016_draukhain_serments.sql`
+  (2 tables + 2 vues `serments_etat`/`serments_vivants`, RLS + scellement AD-4,
+  miroir 0010) **ÉCRITE, NON APPLIQUÉE** (gate §5 intime → go Paul). API
+  `api/serments.js` + `api/flammes.js` (requireUser, owner_id serveur-only,
+  validation miroir des CHECK). Front `draukhain.html` + `js/draukhain.js`
+  (carte des serments, badge « à raviver » en invitation, bascule « mes serments
+  vivants », fail-closed, textContent only) — cap DRAUKHAIN ouvert dans la
+  cartographie. Harnais `unit-draukhain-validate` + `smoke-draukhain` ;
+  patrimoine COMPLET (22 harnais) vert. **⏳ Reste Paul : appliquer `0016` en
+  prod + go.**
 - **B3 — VRANESH v1.**
 
 ## 8. Décisions attendues de Paul

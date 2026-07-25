@@ -798,3 +798,23 @@
   et publique (comme la console `ultima.html`) ; le fail-closed reste porté par
   `minethnir.html` (client) + l'API `requireUser` (serveur) — inchangés. Prochaine
   boucle : **B2 — DRAUKHAIN v1** (migration + API + front, gate intime).
+- **2026-07-25 (IMLADRIK B2 — DRAUKHAIN v1, « ok go », GO SOLO)** — Paul valide
+  les recos et lance B2. Construit **DRAUKHAIN** (la volonté au-delà du possible)
+  en **miroir strict de ZEKROM** : **serments** (le quoi + le pourquoi profond +
+  l'horizon) → **flammes** (rappels de foi : nature citation/victoire/rappel +
+  texte). **Règle cardinale POSITIVE** (miroir du « à orienter » ZEKROM) : un
+  serment sans flamme = **« à raviver »** = INVITATION à nourrir la foi, jamais un
+  reproche — DRAUKHAIN « rappelle, ne juge pas » (CADRAGE-CONSOLE §3.4). Livré :
+  migration `0016_draukhain_serments.sql` (2 tables + vues `serments_etat`/
+  `serments_vivants`, RLS + scellement AD-4 miroir 0010), API `api/serments.js` +
+  `api/flammes.js`, validation `validateSerment`/`validateFlamme` (miroir CHECK),
+  front `draukhain.html` + `js/draukhain.js`, cap DRAUKHAIN ouvert dans la carto.
+  **Décision d'archi / méthode (Léo, solo)** : couche à risque (migration +
+  validation + API) construite au fil principal (§5 intime + escalade Opus) ;
+  **front délégué à l'agent `front-carto`** (miroir ZEKROM), puis **contre-passe
+  sécu Léo** (zéro innerHTML de données, Bearer, fail-closed) — pattern optim
+  CLAUDE.md (contexte de Léo préservé). Harnais `unit-draukhain-validate` +
+  `smoke-draukhain` ; **patrimoine COMPLET (22 harnais) vert**. **GATE §5 tenue :
+  migration `0016` ÉCRITE mais NON APPLIQUÉE** — l'application en prod des données
+  intimes reste un go explicite de Paul (comme le journal `0012`), consignée au
+  registre ⏳. Prochaine boucle : **B3 — VRANESH v1**.
