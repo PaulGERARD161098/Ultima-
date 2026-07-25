@@ -82,6 +82,20 @@
     quels ; ② sigle console « épée au soleil » conservé (boussole épée+dragon
     interne au quadrant, reco oui) ; ③ ordre DRAUKHAIN avant VRANESH (reco
     oui) ; ④ go B1 (implémentation carto).
+  - ✅ **IMLADRIK B1 — la cartographie en prod (2026-07-24, GO SOLO, « ok pour
+    tes recos, go b1 »)** : `imladrik.html` devient la **boussole Kalamn-talaen**
+    (3 caps — MINETHNIR ouvert, VRANESH + DRAUKHAIN à venir — autour du médaillon
+    épée + dragon, légende gravée « Kalamn-talaen ») ; le journal migre vers
+    **`minethnir.html`**. **Renommage front seul** : `js/imladrik.js`, API
+    `/api/imladrik*`, migrations `0012`/`0014`, RLS et harnais **inchangés** —
+    zéro migration, zéro touche à l'auth/données. Réutilise `css/boussole.css`
+    (langage caps/aiguilles/parole) ; nouveaux `js/imladrik-carto.js` (clone du
+    cœur de `boussole.js`, sans cockpit — carto muette §5) + `css/imladrik-carto.css`
+    (sceau + légende). Console : IMLADRIK « En chantier » → « Accéder ». Harnais :
+    `smoke-imladrik` reciblé sur MINETHNIR, **`smoke-imladrik-carto` créé**,
+    `smoke-console` mis à jour ; **patrimoine COMPLET (21 harnais) vert**. Recos
+    Paul validées (sigle épée au soleil conservé, DRAUKHAIN→VRANESH). **Prochaine
+    boucle : B2 — DRAUKHAIN v1.**
   - 🔶 **LV2-② Auth — Google OAuth (2026-07-22)** : bouton « Se connecter
     avec Google » ajouté À CÔTÉ du lien magique (décision Paul : Google en
     plus, pas à la place). Code livré + vérifié : `js/app.js`

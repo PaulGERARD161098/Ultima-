@@ -782,3 +782,19 @@
   coder » → zéro code produit). Restent à Paul (registre) : valider les
   4 noms/orthographes, le maintien du sigle « épée au soleil » sur la console,
   l'ordre DRAUKHAIN→VRANESH, le go B1.
+- **2026-07-24 (IMLADRIK B1 — la cartographie en prod, « ok pour tes recos, go
+  b1 », GO SOLO)** — Paul valide les recos (sigle console « épée au soleil »
+  conservé, la boussole épée+dragon reste interne au quadrant ; ordre
+  **DRAUKHAIN (B2) avant VRANESH (B3)**) et donne le go B1. Livré : `imladrik.html`
+  devient la **boussole Kalamn-talaen** (3 caps autour du médaillon épée+dragon,
+  légende gravée) ; le journal migre vers **`minethnir.html`**. **Renommage front
+  seul** — `js/imladrik.js`, API `/api/imladrik*`, migrations `0012`/`0014`, RLS
+  **intacts** (zéro migration, zéro touche auth/données). Capitalisation :
+  réutilise `css/boussole.css` ; `js/imladrik-carto.js` = clone du cœur de
+  `boussole.js` **sans le cockpit** (carto muette, aucune donnée intime dans le
+  HTML §5). Console : IMLADRIK « Accéder ». Harnais : `smoke-imladrik` reciblé sur
+  MINETHNIR + **`smoke-imladrik-carto`** créé + `smoke-console` MàJ ; **patrimoine
+  COMPLET (21 harnais) vert**. Décision d'archi (Léo, solo) : la carto est muette
+  et publique (comme la console `ultima.html`) ; le fail-closed reste porté par
+  `minethnir.html` (client) + l'API `requireUser` (serveur) — inchangés. Prochaine
+  boucle : **B2 — DRAUKHAIN v1** (migration + API + front, gate intime).

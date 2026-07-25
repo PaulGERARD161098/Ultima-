@@ -92,12 +92,20 @@ mécanique éprouvée : registre extensible (un cap = une entrée), survol/focus
 
 ## 7. Séquencement (une boucle à la fois, directive EB)
 
-- **✅ B0 (cette boucle)** : cadrage + prototype statique. Zéro code produit.
-- **B1 — la carto en prod** : `imladrik.html` → boussole Kalamn-talaen,
-  journal → MINETHNIR (renommage front seul, harnais patrimoine COMPLET).
-- **B2 — DRAUKHAIN v1** (reco : avant VRANESH — c'est le socle de volonté et
-  il absorbe « objectifs de vie » déjà provisionné) : migration + API +
-  front, gates habituelles (intime → contre-passe sécu).
+- **✅ B0 (cadrage)** : cadrage + prototype statique. Zéro code produit.
+- **✅ B1 — la carto en prod (2026-07-24, go Paul « go b1 »)** : `imladrik.html`
+  est devenue la cartographie boussole Kalamn-talaen (3 caps autour du médaillon
+  épée + dragon, légende gravée) ; le journal a migré vers `minethnir.html`
+  (renommage front seul — `js/imladrik.js`, API `/api/imladrik*`, migrations
+  `0012`/`0014`, RLS **inchangés**). Carto muette et sans donnée (§5) sur le
+  langage de `css/boussole.css` (réutilisé) + `js/imladrik-carto.js` (clone du
+  cœur de `boussole.js`, sans cockpit) + `css/imladrik-carto.css`. Console : état
+  IMLADRIK « En chantier » → « Accéder ». Harnais : `smoke-imladrik` reciblé sur
+  MINETHNIR, `smoke-imladrik-carto` créé, `smoke-console` mis à jour ; patrimoine
+  COMPLET (21 harnais) vert.
+- **B2 — DRAUKHAIN v1** (reco validée Paul : avant VRANESH — socle de volonté,
+  absorbe « objectifs de vie ») : migration + API + front, gates habituelles
+  (intime → contre-passe sécu).
 - **B3 — VRANESH v1.**
 
 ## 8. Décisions attendues de Paul
