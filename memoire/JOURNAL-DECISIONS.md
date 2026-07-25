@@ -845,3 +845,24 @@
   **le quadrant IMLADRIK est complet (MINETHNIR + DRAUKHAIN + VRANESH, 3 caps)**.
   Harnais `unit-vranesh-validate` + `smoke-vranesh`. **GATE §5 : migration `0017`
   ÉCRITE mais NON APPLIQUÉE** (go Paul, comme 0012/0016). Registre ⏳.
+- **2026-07-25 (IMLADRIK B4 — passerelles v2, « établis les passerelles v2,
+  termine les boucles, laisse-moi ce qui est à ma main », GO SOLO)** — Construit
+  la **mémoire inter-cap** du quadrant : deux tables de liens à **cible XOR**
+  (motif node_id/edge_id du journal RIVEN) avec **double scellement AD-4** (miroir
+  de la passerelle R↔Z 0011). `serment_liens` : serment DRAUKHAIN → idéal ZEKROM
+  (lien inter-quadrant) *ou* page MINETHNIR. `scenario_liens` : scénario VRANESH →
+  serment DRAUKHAIN (rapport *menace*/*sert*) *ou* page MINETHNIR. **Décision
+  d'archi (Léo, solo)** : (1) cible XOR à FK composites nullables (MATCH SIMPLE :
+  scellement non vérifié quand NULL, vérifié dès que posé) plutôt que 4 tables ;
+  (2) ancrages composites `unique(owner_id,id)` ajoutés sur `imladrik_entrees` +
+  `scenarios` (additifs — étaient les seuls sans, cf. 0012/0017) ; (3) liens
+  **repliés dans les GET existants** `/api/serments`+`/api/situations` avec
+  **dégradation propre à `[]`** si 0018 pas encore appliquée (le front reste
+  fonctionnel). Migration `0018_imladrik_passerelles.sql` + API
+  `serment-liens`/`scenario-liens` + validation `validateSermentLien`/
+  `validateScenarioLien` (XOR + rapport scellé au serment) construites au fil
+  principal (§5) ; **fronts délégués à 2 agents front-carto en parallèle**
+  (draukhain + vranesh, fichiers disjoints) puis contre-passe sécu Léo. Harnais
+  `unit-imladrik-passerelles` + extensions smoke. **GATE §5 : `0018` ÉCRITE, NON
+  APPLIQUÉE** (dépend de 0016+0017 ; ordre d'application 0016→0017→0018). « Ce qui
+  est à la main de Paul » = appliquer les 3 migrations + go + synchro Notion.

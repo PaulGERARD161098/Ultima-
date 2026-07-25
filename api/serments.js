@@ -45,9 +45,13 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === 'GET') {
-      const [sermentsRes, flammesRes] = await Promise.all([
+      // liens = passerelles v2 (serment → idéal ZEKROM / page MINETHNIR, migration
+      // 0018). Tant que 0018 n'est pas appliquée, la table n'existe pas → on
+      // dégrade proprement à [] (les autres lectures restent servies).
+      const [sermentsRes, flammesRes, liensRes] = await Promise.all([
         client.from('serments_etat').select('*').order('created_at', { ascending: true }),
         client.from('flammes').select('*').order('created_at', { ascending: true }),
+        client.from('serment_liens').select('*').order('created_at', { ascending: true }),
       ]);
       const error = sermentsRes.error || flammesRes.error;
       if (error) {
@@ -58,6 +62,7 @@ export default async function handler(req, res) {
       return ok(res, {
         serments: sermentsRes.data || [],
         flammes: flammesRes.data || [],
+        liens: liensRes.error ? [] : (liensRes.data || []),
       });
     }
 

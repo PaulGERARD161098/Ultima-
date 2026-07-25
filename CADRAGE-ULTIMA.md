@@ -127,6 +127,18 @@
     IMLADRIK est COMPLET (3 caps ouverts autour de Kalamn-talaen ; Léo guide)**.
     Harnais `unit-vranesh-validate` + `smoke-vranesh`. **⏳ Action Paul :
     appliquer `0017` en prod + go.**
+  - 🔶 **IMLADRIK B4 — Passerelles v2 (2026-07-25, GO SOLO)** : la mémoire
+    inter-cap. Deux tables de liens à **cible XOR** + double scellement AD-4
+    (miroir 0011) : **`serment_liens`** (serment → idéal ZEKROM / page MINETHNIR)
+    et **`scenario_liens`** (scénario → serment DRAUKHAIN [rapport menace/sert] /
+    page MINETHNIR). Migration `0018_imladrik_passerelles.sql` (+ ancrages
+    composites sur `imladrik_entrees`/`scenarios`) **ÉCRITE, NON APPLIQUÉE — gate
+    §5, dépend de 0016+0017**. API `serment-liens`/`scenario-liens` ; liens
+    repliés dans les GET (dégradation propre à `[]`). Front « Passerelles » sur
+    draukhain/vranesh (2 agents front-carto, contre-passe sécu Léo). Harnais
+    `unit-imladrik-passerelles` + smoke étendus. **⏳ Action Paul : appliquer
+    `0016 → 0017 → 0018` en prod + go.** **Le quadrant IMLADRIK est complet et
+    tissé (mémoire inter-cap).**
   - 🔶 **LV2-② Auth — Google OAuth (2026-07-22)** : bouton « Se connecter
     avec Google » ajouté À CÔTÉ du lien magique (décision Paul : Google en
     plus, pas à la place). Code livré + vérifié : `js/app.js`

@@ -43,9 +43,13 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === 'GET') {
-      const [situationsRes, scenariosRes] = await Promise.all([
+      // liens = passerelles v2 (scénario → serment DRAUKHAIN / page MINETHNIR,
+      // migration 0018). Tant que 0018 n'est pas appliquée, la table n'existe pas
+      // → dégradation propre à [] (les autres lectures restent servies).
+      const [situationsRes, scenariosRes, liensRes] = await Promise.all([
         client.from('situations_etat').select('*').order('created_at', { ascending: true }),
         client.from('scenarios').select('*').order('created_at', { ascending: true }),
+        client.from('scenario_liens').select('*').order('created_at', { ascending: true }),
       ]);
       const error = situationsRes.error || scenariosRes.error;
       if (error) {
@@ -56,6 +60,7 @@ export default async function handler(req, res) {
       return ok(res, {
         situations: situationsRes.data || [],
         scenarios: scenariosRes.data || [],
+        liens: liensRes.error ? [] : (liensRes.data || []),
       });
     }
 
