@@ -2,6 +2,16 @@
 
 ## ÉTAT (2026-07-06, après arbitrage)
 
+- 🧭 **CAP DU JOUR (2026-07-25) — passer du code à la DONNÉE.** Arbitrage Paul :
+  « assez de code, il faut de la donnée maintenant » (directive JL). Le quadrant
+  **IMLADRIK est complet et tissé** (MINETHNIR + DRAUKHAIN + VRANESH + passerelles
+  v2 autour de Kalamn-talaen ; Léo guide). Prochain mouvement = nourrir Ultima de
+  réel, pas un nouveau quadrant. Cockpit connecté (Gmail/Agenda) **voie A** (Léo
+  pilote en direct) validé par une preuve live, puis **mis en pause par Paul**
+  (« chantier technique »). **⏳ À la main de Paul** : appliquer les migrations
+  **`0016 → 0017 → 0018`** (activent DRAUKHAIN/VRANESH/passerelles) + go ; synchro
+  Notion. Détail : `memoire/JOURNAL-DECISIONS.md` (2026-07-25).
+
 - 🧭 **Ultima LV2 — la boussole (cap dicté par Paul, 2026-07-21)** : une couche
   méta au-dessus de la console. L'accueil `/` devient une **boussole** (carte
   savante, rose des vents) dont chaque **cap = un macro-projet** ; la console à

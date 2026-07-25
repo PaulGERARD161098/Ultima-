@@ -866,3 +866,18 @@
   `unit-imladrik-passerelles` + extensions smoke. **GATE §5 : `0018` ÉCRITE, NON
   APPLIQUÉE** (dépend de 0016+0017 ; ordre d'application 0016→0017→0018). « Ce qui
   est à la main de Paul » = appliquer les 3 migrations + go + synchro Notion.
+- **2026-07-25 (Cap DONNÉE posé, cockpit connecté exploré puis MIS EN PAUSE)** —
+  Paul : « on a assez avancé sur le code, il faut de la donnée maintenant ».
+  Cap stratégique acté : le prochain mouvement n'est pas un nouveau quadrant mais
+  **nourrir Ultima de données réelles** (directive JL). Léo a posé 2 voies : **A —
+  Léo pilote en direct** (lecture des connecteurs Gmail/Agenda en session, rien
+  stocké, zéro code/gate) ; **B — cockpit web self-service** (OAuth déployé, gros
+  chantier sécu gaté, comme la boucle Drive). Paul a choisi **A** (Gmail + Agenda).
+  Preuve livrée : un premier **« Cockpit du jour »** synthétisé en direct depuis
+  sa vraie boîte (relances dues, mails importants non lus, une échéance technique)
+  — l'agenda étant vide sur 15 j. **Décision Paul (même session)** : « c'est un
+  chantier technique, on arrête ce morceau pour le moment ». → **Cockpit connecté
+  EN PAUSE.** Acquis à garder : la voie A fonctionne (Léo sait piloter sur le réel
+  à la demande) ; rien construit, rien à défaire. **PII : aucune donnée de la
+  boîte/agenda n'est consignée** (règle CLAUDE.md — la synthèse est restée dans le
+  fil). Reprise = « go cockpit » (voie A à la demande, ou cadrer la voie B).
