@@ -754,6 +754,31 @@
   non repassés** : Paul a décliné le run get_advisors cette session → consigné au
   registre (à repasser). RADAR : ajouter « vérifier l'existant AD-4 sur une table
   déjà ciblée avant de recréer la clé unique » aux réflexes migration.
+- **2026-07-24 (cadrage ⑤ cockpit v2 — « partons sur le 5 en cadrage »)** — Paul :
+  cadrer le cockpit v2. Deux arbitrages tranchés : **forme = badges discrets au
+  survol** (pas de bandeau permanent, cohérent v1 sobre) ; **départ = palier A**
+  (« bouclons une boucle à la fois donc go A »). Cadrage figé dans
+  `CADRAGE-CONSOLE §2bis.1` : la v2 ÉTEND le cockpit v1 (comptes-seuls, RLS,
+  fail-closed), séquencement **A→B→C**. **Palier A** (buildable, AUCUNE gate) =
+  signaux sur données déjà en base : RIVEN « N relances dues » (journal
+  `relance_at ≤ jour` & `relance_faite=false`, index partiel existant en 0005) +
+  RESHIRAM « à étayer » / ZEKROM « à orienter » promus en badges. **B** = cap du
+  jour déterministe (relances > à étayer/orienter), après A. **C GATÉ** : signaux
+  finance = NICOL BOLAS ; capture-dispatch = clé Anthropic ; RDV/email =
+  connecteurs ; le bandeau « état du jour » transversal appartient au palier C.
+  Sécu §5 : palier A/B = comptes seuls, zéro PII/finance ; §5 intégral dès qu'un
+  signal finance entre. Prochaine boucle : BUILD palier A (solo, go Paul).
+- **2026-07-24 (build ⑤ palier A — signaux badges au survol, solo « go A »)** —
+  Palier A du cockpit v2 LIVRÉ (PR #107). Extension du cockpit v1 (comptes-seuls) :
+  `api/cockpit.js` +`riven.relances_dues` (journal `relance_at ≤ jour UTC` &
+  `relance_faite=false`, head+count, RLS, fail-closed) ; `js/boussole.js`
+  `signalDe(id,data)` pur (ultima→relances dues, reshiram→à étayer, zekrom→à
+  orienter, seulement si compte > 0) + badge `.parole-signal` injecté au survol
+  du cap ; CSS badge en encre rouge sobre `--danger-parchemin` (AA vérifié) ;
+  `smoke-boussole` enrichi (badge présent Ultima/RESHIRAM, absent ZEKROM 0 /
+  YCOME sans data, fonction pure, contraste). Contre-passe Léo : harnais COMPLET
+  vert. « La donnée dort, s'allume quand elle compte » respecté. Palier B (cap du
+  jour déterministe) = prochaine boucle candidate ; C reste gaté.
 - **2026-07-24 (boucle Drive ①a+①b LIVRÉES + EN PROD)** — « on reprend pour
   boucler la boucle » puis config Google Cloud + 4 env Vercel posées par Paul.
   Livré : cœur sécurité `api/_lib/drive.js` (AES-256-GCM des jetons hors base,

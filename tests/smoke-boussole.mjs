@@ -67,10 +67,13 @@ function stubSupabase(session) {
   });
 }
 
-// Fixture d'agrégats du cockpit (LV2-⑤) : que des COMPTES, aucun contenu/PII.
+// Fixture d'agrégats du cockpit (LV2-⑤ + v2 palier A) : que des COMPTES, aucun
+// contenu/PII. a_etayer=1 → badge RESHIRAM ; a_orienter=0 → PAS de badge ZEKROM
+// (test d'absence) ; riven.relances_dues=2 → badge du cap Ultima.
 const COCKPIT = { ok: true, data: {
   reshiram: { talents: 3, a_etayer: 1, offre: 2 },
   zekrom: { ideaux: 3, a_orienter: 0, acquis: 2, a_construire: 1 },
+  riven: { relances_dues: 2 },
 } };
 
 // ===================== A. La boussole (index.html) =====================
@@ -287,11 +290,48 @@ const vivanteZ = (await pageCo.locator('.parole-cockpit').textContent()) || '';
 verifier('Résumé vivant ZEKROM (3 idéaux · 2 acquis · 1 à construire)',
   /3 idéaux/.test(vivanteZ) && /2 talents reliés/.test(vivanteZ) && /1 à construire/.test(vivanteZ), `lu: ${vivanteZ}`);
 
+// --- v2 palier A : badges « à traiter » au survol (signaux actionnables). ---
+// Cap Ultima → badge RIVEN « 2 relances dues » (aucune ligne vivante pour ce cap).
+await pageCo.locator('.cap[data-id="ultima"]').hover();
+await pageCo.waitForSelector('.parole-signal', { timeout: 5000 }).catch(() => {});
+const signalU = (await pageCo.locator('.parole-signal').textContent()) || '';
+verifier('Badge Ultima « À traiter — 2 relances dues »',
+  /À traiter/.test(signalU) && /2 relances dues/.test(signalU), `lu: ${signalU}`);
+
+// Contraste AA du badge (encre rouge sobre sur parchemin ombré).
+const cSig = await pageCo.evaluate(() => {
+  const cs = getComputedStyle(document.documentElement);
+  return {
+    fond: cs.getPropertyValue('--parchemin-ombre').trim(),
+    texte: getComputedStyle(document.querySelector('.parole-signal')).color,
+  };
+});
+verifier('Contraste badge signal ≥ 4,5:1', ratio(versHex(cSig.texte), cSig.fond) >= 4.5,
+  `${ratio(versHex(cSig.texte), cSig.fond).toFixed(2)}:1`);
+
+// Cap RESHIRAM → badge « 1 talent à étayer » (en plus de sa ligne vivante).
+await pageCo.locator('.cap[data-id="reshiram"]').hover();
+await pageCo.waitForFunction(
+  () => /à étayer/.test((document.querySelector('.parole-signal') || {}).textContent || ''),
+  { timeout: 5000 }).catch(() => {});
+const signalR = (await pageCo.locator('.parole-signal').textContent()) || '';
+verifier('Badge RESHIRAM « 1 talent à étayer »', /1 talent à étayer/.test(signalR), `lu: ${signalR}`);
+
+// Cap ZEKROM (a_orienter=0) → PAS de badge (la donnée dort quand rien à traiter).
+await pageCo.locator('.cap[data-id="zekrom"]').hover();
+await pageCo.waitForFunction(
+  () => /3 idéaux/.test((document.querySelector('.parole-cockpit') || {}).textContent || ''),
+  { timeout: 5000 }).catch(() => {});
+verifier('ZEKROM sans compte actionnable : aucun badge',
+  (await pageCo.locator('.parole-signal').count()) === 0);
+
 // Un cap SANS data (YCOME) n'a pas de ligne vivante (texte figé seul).
 await pageCo.locator('.cap[data-id="ycome"]').focus();
 await pageCo.waitForTimeout(150);
 verifier('Cap sans data (YCOME) : aucune ligne vivante',
   (await pageCo.locator('.parole-cockpit').count()) === 0);
+verifier('Cap sans data (YCOME) : aucun badge',
+  (await pageCo.locator('.parole-signal').count()) === 0);
 
 // Fonction pure ligneVivante exposée (aucune donnée réelle).
 const pur = await pageCo.evaluate((d) => ({
@@ -303,6 +343,19 @@ const pur = await pageCo.evaluate((d) => ({
 verifier('ligneVivante pure : RESHIRAM', /3 talents réels · 1 à étayer\./.test(pur.r || ''), `lu: ${pur.r}`);
 verifier('ligneVivante pure : ZEKROM', /3 idéaux · 0 à orienter · 2 talents reliés \(acquis\), 1 à construire\./.test(pur.z || ''), `lu: ${pur.z}`);
 verifier('ligneVivante pure : cap sans data → null', pur.vide === null && pur.sansData === null);
+
+// Fonction pure signalDe exposée (v2 palier A) — que des entiers, aucune PII.
+const sig = await pageCo.evaluate((d) => ({
+  u: window.UltimaBoussole.signalDe('ultima', d),
+  r: window.UltimaBoussole.signalDe('reshiram', d),
+  zZero: window.UltimaBoussole.signalDe('zekrom', d),      // a_orienter=0 → null
+  ycome: window.UltimaBoussole.signalDe('ycome', d),        // pas de signal défini
+  sansData: window.UltimaBoussole.signalDe('ultima', null),
+}), COCKPIT.data);
+verifier('signalDe pur : Ultima → « 2 relances dues »', sig.u === '2 relances dues', `lu: ${sig.u}`);
+verifier('signalDe pur : RESHIRAM → « 1 talent à étayer »', sig.r === '1 talent à étayer', `lu: ${sig.r}`);
+verifier('signalDe pur : ZEKROM (0 à orienter) → null', sig.zZero === null);
+verifier('signalDe pur : cap sans signal / sans data → null', sig.ycome === null && sig.sansData === null);
 
 verifier('Zéro erreur console (accueil connecté + cockpit)', erreursCo.length === 0, erreursCo.slice(0, 3).join(' | '));
 
