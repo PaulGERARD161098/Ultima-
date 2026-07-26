@@ -673,6 +673,257 @@ export function validateEntreeImladrik(body, mode) {
   return { value: out };
 }
 
+// --- DRAUKHAIN (IMLADRIK B2) : serments + flammes. Enums/bornes en MIROIR EXACT
+// des CHECK de supabase/migrations/0016_draukhain_serments.sql (défense en
+// profondeur AU-DESSUS de la RLS). Miroir de ZEKROM (validateIdeal/validateDirection) :
+// `serments` ← `ideaux`, `flammes` ← `directions`. Règle cardinale POSITIVE : un
+// serment sans flamme n'est jamais dévalué (aucune contrainte supplémentaire ;
+// on valide seulement forme/bornes/enum). owner_id n'est JAMAIS accepté du client.
+// Données intimes (§5) : erreurs génériques, aucun contenu en log.
+export const FLAMME_NATURES = ['citation', 'victoire', 'rappel'];
+
+// Champs autorisés en écriture (owner_id/id/dates gérés serveur).
+const SERMENT_FIELDS = ['intitule', 'pourquoi', 'horizon'];
+const FLAMME_FIELDS = ['serment_id', 'nature', 'texte'];
+
+// Valide un serment. mode 'create' impose l'intitulé (le quoi) ; 'update' rend
+// tout optionnel. pourquoi (le pourquoi profond) nullable borné 2000 ; horizon
+// (l'échéance) nullable borné 200. owner_id jamais accepté.
+export function validateSerment(body, mode) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, SERMENT_FIELDS);
+  if (unknown) return { error: unknown };
+
+  const out = {};
+
+  if (mode === 'create' || body.intitule !== undefined) {
+    if (typeof body.intitule !== 'string') return { error: 'Intitulé invalide' };
+    const intitule = body.intitule.trim();
+    if (intitule.length < 1 || intitule.length > 200) return { error: 'Intitulé invalide' };
+    out.intitule = intitule;
+  }
+
+  // pourquoi / horizon : null efface, chaîne bornée sinon.
+  if (body.pourquoi === null) {
+    out.pourquoi = null;
+  } else {
+    const msg = checkOptionalText(body.pourquoi, 'Pourquoi', 2000);
+    if (msg) return { error: msg };
+    if (body.pourquoi !== undefined) out.pourquoi = body.pourquoi;
+  }
+
+  if (body.horizon === null) {
+    out.horizon = null;
+  } else {
+    const msg = checkOptionalText(body.horizon, 'Horizon', 200);
+    if (msg) return { error: msg };
+    if (body.horizon !== undefined) out.horizon = body.horizon;
+  }
+
+  if (mode === 'update' && Object.keys(out).length === 0) {
+    return { error: 'Aucun champ à mettre à jour' };
+  }
+  return { value: out };
+}
+
+// Valide une flamme (« rappel de foi » rattaché à un serment). mode 'create'
+// impose serment_id (UUID) + texte (1..2000) ; nature optionnelle (défaut base
+// 'rappel'). owner_id imposé par le défaut base ; le scellement composite
+// (owner_id, serment_id) empêche d'entretenir le serment d'autrui. Miroir de
+// validateDirection (create/delete seulement — une flamme ne se modifie pas).
+export function validateFlamme(body, mode) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, FLAMME_FIELDS);
+  if (unknown) return { error: unknown };
+
+  const out = {};
+
+  if (mode === 'create') {
+    if (!isUuid(body.serment_id)) return { error: 'Identifiant de serment invalide' };
+    out.serment_id = body.serment_id;
+  }
+
+  if (body.nature !== undefined) {
+    if (!FLAMME_NATURES.includes(body.nature)) return { error: 'Nature invalide' };
+    out.nature = body.nature;
+  }
+
+  if (mode === 'create' || body.texte !== undefined) {
+    if (typeof body.texte !== 'string') return { error: 'Flamme invalide' };
+    const texte = body.texte.trim();
+    if (texte.length < 1 || texte.length > 2000) return { error: 'Flamme invalide' };
+    out.texte = texte;
+  }
+
+  if (mode === 'update' && Object.keys(out).length === 0) {
+    return { error: 'Aucun champ à mettre à jour' };
+  }
+  return { value: out };
+}
+
+// --- VRANESH (IMLADRIK B3) : situations + scénarios. Enums/bornes en MIROIR
+// EXACT des CHECK de supabase/migrations/0017_vranesh_situations.sql (défense en
+// profondeur AU-DESSUS de la RLS). Miroir de DRAUKHAIN/ZEKROM : `situations` ←
+// `serments`/`ideaux`, `scenarios` ← `flammes`/`directions`. VRANESH explore ce
+// qui PEUT arriver (jamais ce qu'on veut) ; aucune contrainte de « validité » sur
+// un futur — on valide seulement forme/bornes/enum. owner_id jamais accepté.
+// Données intimes (§5) : erreurs génériques, aucun contenu en log.
+export const SCENARIO_VRAISEMBLANCES = ['faible', 'moyenne', 'forte'];
+
+// Champs autorisés en écriture (owner_id/id/dates gérés serveur).
+const SITUATION_FIELDS = ['intitule', 'contexte'];
+const SCENARIO_FIELDS = ['situation_id', 'deroule', 'vraisemblance', 'signaux', 'parade'];
+
+// Valide une situation. mode 'create' impose l'intitulé (le cas) ; 'update' rend
+// tout optionnel. contexte nullable borné 2000. owner_id jamais accepté.
+export function validateSituation(body, mode) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, SITUATION_FIELDS);
+  if (unknown) return { error: unknown };
+
+  const out = {};
+
+  if (mode === 'create' || body.intitule !== undefined) {
+    if (typeof body.intitule !== 'string') return { error: 'Intitulé invalide' };
+    const intitule = body.intitule.trim();
+    if (intitule.length < 1 || intitule.length > 200) return { error: 'Intitulé invalide' };
+    out.intitule = intitule;
+  }
+
+  // contexte : null efface, chaîne bornée sinon.
+  if (body.contexte === null) {
+    out.contexte = null;
+  } else {
+    const msg = checkOptionalText(body.contexte, 'Contexte', 2000);
+    if (msg) return { error: msg };
+    if (body.contexte !== undefined) out.contexte = body.contexte;
+  }
+
+  if (mode === 'update' && Object.keys(out).length === 0) {
+    return { error: 'Aucun champ à mettre à jour' };
+  }
+  return { value: out };
+}
+
+// Valide un scénario (« un futur potentiel » d'une situation). mode 'create'
+// impose situation_id (UUID) + deroule (1..2000) ; vraisemblance optionnelle
+// (défaut base 'moyenne'), signaux/parade optionnels bornés. owner_id imposé par
+// le défaut base ; le scellement (owner_id, situation_id) empêche d'anticiper la
+// situation d'autrui. Miroir de validateFlamme (create/delete seulement).
+export function validateScenario(body, mode) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, SCENARIO_FIELDS);
+  if (unknown) return { error: unknown };
+
+  const out = {};
+
+  if (mode === 'create') {
+    if (!isUuid(body.situation_id)) return { error: 'Identifiant de situation invalide' };
+    out.situation_id = body.situation_id;
+  }
+
+  if (mode === 'create' || body.deroule !== undefined) {
+    if (typeof body.deroule !== 'string') return { error: 'Scénario invalide' };
+    const deroule = body.deroule.trim();
+    if (deroule.length < 1 || deroule.length > 2000) return { error: 'Scénario invalide' };
+    out.deroule = deroule;
+  }
+
+  if (body.vraisemblance !== undefined) {
+    if (!SCENARIO_VRAISEMBLANCES.includes(body.vraisemblance)) return { error: 'Vraisemblance invalide' };
+    out.vraisemblance = body.vraisemblance;
+  }
+
+  // signaux / parade : null efface, chaîne bornée sinon.
+  for (const [field, label] of [['signaux', 'Signaux'], ['parade', 'Parade']]) {
+    if (body[field] === null) {
+      out[field] = null;
+    } else {
+      const msg = checkOptionalText(body[field], label, 2000);
+      if (msg) return { error: msg };
+      if (body[field] !== undefined) out[field] = body[field];
+    }
+  }
+
+  if (mode === 'update' && Object.keys(out).length === 0) {
+    return { error: 'Aucun champ à mettre à jour' };
+  }
+  return { value: out };
+}
+
+// --- IMLADRIK passerelles v2 (B4) : liens inter-cap. Enums/cibles en MIROIR EXACT
+// des CHECK de supabase/migrations/0018_imladrik_passerelles.sql. Cible XOR : un
+// lien pointe EXACTEMENT un objet parmi deux types (motif node_id/edge_id du
+// journal). owner_id jamais accepté ; le double scellement composite (owner_id,
+// source)/(owner_id, cible) est garanti en base. Un lien se crée ou se supprime
+// (pas d'update). Données intimes (§5) : erreurs génériques.
+export const SCENARIO_RAPPORTS = ['menace', 'sert'];
+
+const SERMENT_LIEN_FIELDS = ['serment_id', 'ideal_id', 'entree_id'];
+const SCENARIO_LIEN_FIELDS = ['scenario_id', 'serment_id', 'entree_id', 'rapport'];
+
+// Compte les cibles renseignées (UUID) parmi une liste ; renvoie { error } si
+// une valeur présente n'est pas un UUID, sinon { champs } = les champs cibles posés.
+function collectCibleXor(body, champs) {
+  const poses = {};
+  for (const f of champs) {
+    if (body[f] === undefined || body[f] === null) continue;
+    if (!isUuid(body[f])) return { error: `Identifiant ${f} invalide` };
+    poses[f] = body[f];
+  }
+  const n = Object.keys(poses).length;
+  if (n !== 1) return { error: 'Une passerelle vise exactement une cible' };
+  return { poses };
+}
+
+// Valide un lien serment → (idéal XOR page). create uniquement.
+export function validateSermentLien(body) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, SERMENT_LIEN_FIELDS);
+  if (unknown) return { error: unknown };
+  if (!isUuid(body.serment_id)) return { error: 'Identifiant de serment invalide' };
+
+  const cible = collectCibleXor(body, ['ideal_id', 'entree_id']);
+  if (cible.error) return { error: cible.error };
+
+  return { value: { serment_id: body.serment_id, ...cible.poses } };
+}
+
+// Valide un lien scénario → (serment XOR page), avec rapport (menace/sert) réservé
+// à la cible serment. create uniquement.
+export function validateScenarioLien(body) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, SCENARIO_LIEN_FIELDS);
+  if (unknown) return { error: unknown };
+  if (!isUuid(body.scenario_id)) return { error: 'Identifiant de scénario invalide' };
+
+  const cible = collectCibleXor(body, ['serment_id', 'entree_id']);
+  if (cible.error) return { error: cible.error };
+
+  const out = { scenario_id: body.scenario_id, ...cible.poses };
+
+  if (body.rapport !== undefined && body.rapport !== null) {
+    if (!SCENARIO_RAPPORTS.includes(body.rapport)) return { error: 'Rapport invalide' };
+    // rapport n'a de sens qu'avec une cible serment (miroir CHECK scope).
+    if (!out.serment_id) return { error: 'Le rapport ne vaut que pour un serment' };
+    out.rapport = body.rapport;
+  }
+
+  return { value: out };
+}
+
 // --- INTENDANT (AD-5c) : chantiers pilotés + besoins. Enums/bornes en MIROIR
 // EXACT des CHECK de supabase/migrations/0008_intendant.sql. Ce que l'API refuse,
 // la base le refuse aussi (et vice versa) ; la base reste le backstop ultime pour

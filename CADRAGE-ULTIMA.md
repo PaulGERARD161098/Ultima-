@@ -2,6 +2,16 @@
 
 ## ÉTAT (2026-07-06, après arbitrage)
 
+- 🧭 **CAP DU JOUR (2026-07-25) — passer du code à la DONNÉE.** Arbitrage Paul :
+  « assez de code, il faut de la donnée maintenant » (directive JL). Le quadrant
+  **IMLADRIK est complet et tissé** (MINETHNIR + DRAUKHAIN + VRANESH + passerelles
+  v2 autour de Kalamn-talaen ; Léo guide). Prochain mouvement = nourrir Ultima de
+  réel, pas un nouveau quadrant. Cockpit connecté (Gmail/Agenda) **voie A** (Léo
+  pilote en direct) validé par une preuve live, puis **mis en pause par Paul**
+  (« chantier technique »). **⏳ À la main de Paul** : appliquer les migrations
+  **`0016 → 0017 → 0018`** (activent DRAUKHAIN/VRANESH/passerelles) + go ; synchro
+  Notion. Détail : `memoire/JOURNAL-DECISIONS.md` (2026-07-25).
+
 - 🧭 **Ultima LV2 — la boussole (cap dicté par Paul, 2026-07-21)** : une couche
   méta au-dessus de la console. L'accueil `/` devient une **boussole** (carte
   savante, rose des vents) dont chaque **cap = un macro-projet** ; la console à
@@ -66,6 +76,79 @@
     Paul veut synchro DEUX SENS + l'app Ultima connectée → projet Google Cloud
     + secret Vercel (actions Paul) + contre-passe `securite-auditeur` avant code.
     Cadre : `CADRAGE-CONSOLE.md §3.4`.
+  - ✅ **IMLADRIK B0 — cadrage de la cartographie boussole (2026-07-24, GO
+    SOLO)** : dicté Paul — le quadrant devient une **carto en mode boussole**
+    (modèle boussole LV2, registre dév. perso) : le journal renommé
+    **MINETHNIR**, deux nouveaux caps **VRANESH** (les futurs potentiels —
+    anticiper « dans un cas donné ») et **DRAUKHAIN** (la volonté au-delà du
+    possible — objectifs, foi, rappels sans jugement), au centre la boussole
+    **KALAMN-TALAEN** (épée + dragon) = **le guide, l'agent d'IMLADRIK**
+    (successeur nommé de l'« agent-devperso » §7 console ; sous-agent de Léo,
+    principe verrouillé respecté). Livré : `CADRAGE-IMLADRIK.md` (vision,
+    articulation avec l'acquis — renommage front seul, zéro migration —
+    séquencement B1→B3) + **prototype statique**
+    `design/preview-imladrik-boussole.html` — **zéro code produit**, harnais
+    non concernés. **⏳ Décisions Paul (§8 du cadrage)** : ① noms figés tels
+    quels ; ② sigle console « épée au soleil » conservé (boussole épée+dragon
+    interne au quadrant, reco oui) ; ③ ordre DRAUKHAIN avant VRANESH (reco
+    oui) ; ④ go B1 (implémentation carto).
+  - ✅ **IMLADRIK B1 — la cartographie en prod (2026-07-24, GO SOLO, « ok pour
+    tes recos, go b1 »)** : `imladrik.html` devient la **boussole Kalamn-talaen**
+    (3 caps — MINETHNIR ouvert, VRANESH + DRAUKHAIN à venir — autour du médaillon
+    épée + dragon, légende gravée « Kalamn-talaen ») ; le journal migre vers
+    **`minethnir.html`**. **Renommage front seul** : `js/imladrik.js`, API
+    `/api/imladrik*`, migrations `0012`/`0014`, RLS et harnais **inchangés** —
+    zéro migration, zéro touche à l'auth/données. Réutilise `css/boussole.css`
+    (langage caps/aiguilles/parole) ; nouveaux `js/imladrik-carto.js` (clone du
+    cœur de `boussole.js`, sans cockpit — carto muette §5) + `css/imladrik-carto.css`
+    (sceau + légende). Console : IMLADRIK « En chantier » → « Accéder ». Harnais :
+    `smoke-imladrik` reciblé sur MINETHNIR, **`smoke-imladrik-carto` créé**,
+    `smoke-console` mis à jour ; **patrimoine COMPLET (21 harnais) vert**. Recos
+    Paul validées (sigle épée au soleil conservé, DRAUKHAIN→VRANESH). **Prochaine
+    boucle : B2 — DRAUKHAIN v1.**
+  - 🔶 **IMLADRIK B2 — DRAUKHAIN v1 (2026-07-25, GO SOLO « ok go »)** : la volonté
+    au-delà du possible, **miroir strict de ZEKROM**. Modèle **serments** (le quoi
+    + le pourquoi profond + l'horizon) → **flammes** (rappels de foi :
+    citation/victoire/rappel). Serment sans flamme = **« à raviver »** = invitation
+    positive (jamais un reproche — « des rappels, pas du jugement »). Migration
+    `0016_draukhain_serments.sql` (2 tables + vues `serments_etat`/`serments_vivants`,
+    RLS + scellement AD-4, miroir 0010) **ÉCRITE, NON APPLIQUÉE — gate §5 intime
+    (go Paul requis)**. API `api/serments.js` + `api/flammes.js` (requireUser,
+    owner_id serveur-only, validation miroir CHECK). Front `draukhain.html` +
+    `js/draukhain.js` (fail-closed, textContent only, badge « à raviver » en
+    invitation, bascule « serments vivants ») — cap DRAUKHAIN ouvert dans la carto
+    Kalamn-talaen. Front délégué à `front-carto` (miroir ZEKROM), **contre-passe
+    sécu Léo OK** (zéro innerHTML de données, Bearer lectures+écritures,
+    fail-closed 401→auth). Harnais `unit-draukhain-validate` + `smoke-draukhain` ;
+    **patrimoine COMPLET (22 harnais) vert**. **⏳ Action humaine Paul (bloquant
+    fonctionnel) : appliquer la migration `0016` en prod + go** (jusque-là,
+    DRAUKHAIN est fail-closed : la page s'ouvre, l'API répond « erreur interne »
+    tant que les tables n'existent pas). **Prochaine boucle : B3 — VRANESH v1.**
+  - 🔶 **IMLADRIK B3 — VRANESH v1 (2026-07-25, GO SOLO « ensuite on avance »)** :
+    les futurs potentiels, **miroir strict de DRAUKHAIN**. Modèle **situations**
+    (« un cas donné » + contexte) → **scénarios** (déroulé + vraisemblance
+    faible/moyenne/forte + signaux avant-coureurs + parade préparée). Situation
+    sans scénario = **« à explorer »** = invitation (anticiper, puis revenir au
+    présent). Migration `0017_vranesh_situations.sql` (2 tables + vues
+    `situations_etat`/`situations_anticipees`, RLS + AD-4, miroir 0016) **ÉCRITE,
+    NON APPLIQUÉE — gate §5 intime (go Paul)**. API `api/situations.js` +
+    `api/scenarios.js` ; front `vranesh.html` + `js/vranesh.js` (délégué
+    `front-carto`, contre-passe sécu Léo). Cap VRANESH ouvert → **le quadrant
+    IMLADRIK est COMPLET (3 caps ouverts autour de Kalamn-talaen ; Léo guide)**.
+    Harnais `unit-vranesh-validate` + `smoke-vranesh`. **⏳ Action Paul :
+    appliquer `0017` en prod + go.**
+  - 🔶 **IMLADRIK B4 — Passerelles v2 (2026-07-25, GO SOLO)** : la mémoire
+    inter-cap. Deux tables de liens à **cible XOR** + double scellement AD-4
+    (miroir 0011) : **`serment_liens`** (serment → idéal ZEKROM / page MINETHNIR)
+    et **`scenario_liens`** (scénario → serment DRAUKHAIN [rapport menace/sert] /
+    page MINETHNIR). Migration `0018_imladrik_passerelles.sql` (+ ancrages
+    composites sur `imladrik_entrees`/`scenarios`) **ÉCRITE, NON APPLIQUÉE — gate
+    §5, dépend de 0016+0017**. API `serment-liens`/`scenario-liens` ; liens
+    repliés dans les GET (dégradation propre à `[]`). Front « Passerelles » sur
+    draukhain/vranesh (2 agents front-carto, contre-passe sécu Léo). Harnais
+    `unit-imladrik-passerelles` + smoke étendus. **⏳ Action Paul : appliquer
+    `0016 → 0017 → 0018` en prod + go.** **Le quadrant IMLADRIK est complet et
+    tissé (mémoire inter-cap).**
   - 🔶 **LV2-② Auth — Google OAuth (2026-07-22)** : bouton « Se connecter
     avec Google » ajouté À CÔTÉ du lien magique (décision Paul : Google en
     plus, pas à la place). Code livré + vérifié : `js/app.js`

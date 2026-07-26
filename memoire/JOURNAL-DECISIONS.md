@@ -779,3 +779,130 @@
   YCOME sans data, fonction pure, contraste). Contre-passe Léo : harnais COMPLET
   vert. « La donnée dort, s'allume quand elle compte » respecté. Palier B (cap du
   jour déterministe) = prochaine boucle candidate ; C reste gaté.
+- **2026-07-24 (boucle Drive ①a+①b LIVRÉES + EN PROD)** — « on reprend pour
+  boucler la boucle » puis config Google Cloud + 4 env Vercel posées par Paul.
+  Livré : cœur sécurité `api/_lib/drive.js` (AES-256-GCM des jetons hors base,
+  PKCE, cookie d'état signé anti-CSRF, scope `drive.file`) + endpoints OAuth
+  `api/imladrik/drive/*` (authorize/callback/finalize/status/disconnect, flux
+  séparé server-side, refresh_token chiffré sous RLS jamais au navigateur,
+  dossier Drive dédié) + section front « Sauvegarde Google Drive » (bouton
+  Connecter/Déconnecter). Migration `0014_imladrik_drive_tokens` (renumérotée
+  0013→0014) **APPLIQUÉE en prod**. 30 unitaires + smoke Drive verts. PR #94 (①a)
+  + #96 (①b) mergées. **v1 = un seul sens** (sauvegarde) ; sous-boucle ② = push à
+  la demande (prochaine) ; deux-sens/retour = plus tard. Vérif LIVE (clic
+  « Connecter » → Google → dossier) = à faire par Paul sur la prod. Rappels :
+  re-consent Google ~7 j (mode Test) ; le contenu poussé quittera la RLS (acté).
+- **2026-07-24 (IMLADRIK — la cartographie boussole, dictée + GO SOLO)** —
+  Paul dicte la nouvelle carto du quadrant : IMLADRIK devient une **boussole
+  interne** (modèle LV2, registre dév. perso). Noms dictés : **MINETHNIR** =
+  le journal intime (renommage de l'acquis boucle 1, rien n'est reconstruit) ;
+  **VRANESH** = les différents futurs potentiels (anticiper « dans un cas
+  donné » : scénarios, signaux, parades) ; **DRAUKHAIN** = la volonté au-delà
+  du possible (objectifs, volonté inébranlable, foi — absorbe « objectifs de
+  vie ») ; au centre, **KALAMN-TALAEN**, boussole au symbole épée + dragon =
+  **le guide, l'agent d'IMLADRIK** (successeur nommé d'« agent-devperso »,
+  sous-agent de Léo — principe verrouillé 2026-07-16 respecté). **B0 livré en
+  solo** : `CADRAGE-IMLADRIK.md` + prototype statique
+  `design/preview-imladrik-boussole.html` (« montre-moi un prototype sans
+  coder » → zéro code produit). Restent à Paul (registre) : valider les
+  4 noms/orthographes, le maintien du sigle « épée au soleil » sur la console,
+  l'ordre DRAUKHAIN→VRANESH, le go B1.
+- **2026-07-24 (IMLADRIK B1 — la cartographie en prod, « ok pour tes recos, go
+  b1 », GO SOLO)** — Paul valide les recos (sigle console « épée au soleil »
+  conservé, la boussole épée+dragon reste interne au quadrant ; ordre
+  **DRAUKHAIN (B2) avant VRANESH (B3)**) et donne le go B1. Livré : `imladrik.html`
+  devient la **boussole Kalamn-talaen** (3 caps autour du médaillon épée+dragon,
+  légende gravée) ; le journal migre vers **`minethnir.html`**. **Renommage front
+  seul** — `js/imladrik.js`, API `/api/imladrik*`, migrations `0012`/`0014`, RLS
+  **intacts** (zéro migration, zéro touche auth/données). Capitalisation :
+  réutilise `css/boussole.css` ; `js/imladrik-carto.js` = clone du cœur de
+  `boussole.js` **sans le cockpit** (carto muette, aucune donnée intime dans le
+  HTML §5). Console : IMLADRIK « Accéder ». Harnais : `smoke-imladrik` reciblé sur
+  MINETHNIR + **`smoke-imladrik-carto`** créé + `smoke-console` MàJ ; **patrimoine
+  COMPLET (21 harnais) vert**. Décision d'archi (Léo, solo) : la carto est muette
+  et publique (comme la console `ultima.html`) ; le fail-closed reste porté par
+  `minethnir.html` (client) + l'API `requireUser` (serveur) — inchangés. Prochaine
+  boucle : **B2 — DRAUKHAIN v1** (migration + API + front, gate intime).
+- **2026-07-25 (IMLADRIK B2 — DRAUKHAIN v1, « ok go », GO SOLO)** — Paul valide
+  les recos et lance B2. Construit **DRAUKHAIN** (la volonté au-delà du possible)
+  en **miroir strict de ZEKROM** : **serments** (le quoi + le pourquoi profond +
+  l'horizon) → **flammes** (rappels de foi : nature citation/victoire/rappel +
+  texte). **Règle cardinale POSITIVE** (miroir du « à orienter » ZEKROM) : un
+  serment sans flamme = **« à raviver »** = INVITATION à nourrir la foi, jamais un
+  reproche — DRAUKHAIN « rappelle, ne juge pas » (CADRAGE-CONSOLE §3.4). Livré :
+  migration `0016_draukhain_serments.sql` (2 tables + vues `serments_etat`/
+  `serments_vivants`, RLS + scellement AD-4 miroir 0010), API `api/serments.js` +
+  `api/flammes.js`, validation `validateSerment`/`validateFlamme` (miroir CHECK),
+  front `draukhain.html` + `js/draukhain.js`, cap DRAUKHAIN ouvert dans la carto.
+  **Décision d'archi / méthode (Léo, solo)** : couche à risque (migration +
+  validation + API) construite au fil principal (§5 intime + escalade Opus) ;
+  **front délégué à l'agent `front-carto`** (miroir ZEKROM), puis **contre-passe
+  sécu Léo** (zéro innerHTML de données, Bearer, fail-closed) — pattern optim
+  CLAUDE.md (contexte de Léo préservé). Harnais `unit-draukhain-validate` +
+  `smoke-draukhain` ; **patrimoine COMPLET (22 harnais) vert**. **GATE §5 tenue :
+  migration `0016` ÉCRITE mais NON APPLIQUÉE** — l'application en prod des données
+  intimes reste un go explicite de Paul (comme le journal `0012`), consignée au
+  registre ⏳. Prochaine boucle : **B3 — VRANESH v1**.
+- **2026-07-25 (IMLADRIK — Kalamn-talaen = boussole, pas agent ; Léo guide)** —
+  Paul : « remplace l'agent Kalamn-talaen par Léo, l'agent unique sur Ultima ;
+  garde cependant les mots sur la boussole centrale ». Correction du cadre B0 :
+  **KALAMN-TALAEN n'est PAS un agent** — c'est le **nom gravé de la boussole
+  centrale** d'IMLADRIK (emblème épée+dragon). L'**agent unique reste Léo**
+  (renfort du principe verrouillé 2026-07-16 ; l'« agent-devperso » §7 console
+  est abandonné, Léo couvre le quadrant). **Les mots « Kalamn-talaen » restent
+  gravés** sous le médaillon (demande explicite de Paul). Front : la parole et
+  l'invite de la carto sont désormais attribuées à **Léo** (« Léo te guide »,
+  « Léo t'en dit l'essentiel ») ; la légende centrale inchangée. Patch front +
+  docs + harnais (parole par défaut = Léo, légende toujours vérifiée), zéro
+  surface à risque. Puis « ensuite on avance » → enchaîner B3.
+- **2026-07-25 (IMLADRIK B3 — VRANESH v1, « ensuite on avance », GO SOLO)** —
+  Enchaîné après la correction Léo/Kalamn-talaen. Construit **VRANESH** (les
+  différents futurs potentiels) en **miroir strict de DRAUKHAIN** : **situations**
+  (« un cas donné » + contexte) → **scénarios** (le déroulé du futur +
+  vraisemblance faible/moyenne/forte + signaux avant-coureurs + parade préparée).
+  **Règle cardinale POSITIVE** : situation sans scénario = **« à explorer »** =
+  invitation à imaginer ses futurs (anticiper sereinement, PUIS revenir au
+  présent — pas de rumination). Livré : migration `0017_vranesh_situations.sql`
+  (2 tables + vues `situations_etat`/`situations_anticipees`, RLS + scellement
+  AD-4 miroir 0016), API `api/situations.js` + `api/scenarios.js`, validation
+  `validateSituation`/`validateScenario`, front `vranesh.html` + `js/vranesh.js`
+  (front délégué à `front-carto`, contre-passe sécu Léo). Cap VRANESH ouvert →
+  **le quadrant IMLADRIK est complet (MINETHNIR + DRAUKHAIN + VRANESH, 3 caps)**.
+  Harnais `unit-vranesh-validate` + `smoke-vranesh`. **GATE §5 : migration `0017`
+  ÉCRITE mais NON APPLIQUÉE** (go Paul, comme 0012/0016). Registre ⏳.
+- **2026-07-25 (IMLADRIK B4 — passerelles v2, « établis les passerelles v2,
+  termine les boucles, laisse-moi ce qui est à ma main », GO SOLO)** — Construit
+  la **mémoire inter-cap** du quadrant : deux tables de liens à **cible XOR**
+  (motif node_id/edge_id du journal RIVEN) avec **double scellement AD-4** (miroir
+  de la passerelle R↔Z 0011). `serment_liens` : serment DRAUKHAIN → idéal ZEKROM
+  (lien inter-quadrant) *ou* page MINETHNIR. `scenario_liens` : scénario VRANESH →
+  serment DRAUKHAIN (rapport *menace*/*sert*) *ou* page MINETHNIR. **Décision
+  d'archi (Léo, solo)** : (1) cible XOR à FK composites nullables (MATCH SIMPLE :
+  scellement non vérifié quand NULL, vérifié dès que posé) plutôt que 4 tables ;
+  (2) ancrages composites `unique(owner_id,id)` ajoutés sur `imladrik_entrees` +
+  `scenarios` (additifs — étaient les seuls sans, cf. 0012/0017) ; (3) liens
+  **repliés dans les GET existants** `/api/serments`+`/api/situations` avec
+  **dégradation propre à `[]`** si 0018 pas encore appliquée (le front reste
+  fonctionnel). Migration `0018_imladrik_passerelles.sql` + API
+  `serment-liens`/`scenario-liens` + validation `validateSermentLien`/
+  `validateScenarioLien` (XOR + rapport scellé au serment) construites au fil
+  principal (§5) ; **fronts délégués à 2 agents front-carto en parallèle**
+  (draukhain + vranesh, fichiers disjoints) puis contre-passe sécu Léo. Harnais
+  `unit-imladrik-passerelles` + extensions smoke. **GATE §5 : `0018` ÉCRITE, NON
+  APPLIQUÉE** (dépend de 0016+0017 ; ordre d'application 0016→0017→0018). « Ce qui
+  est à la main de Paul » = appliquer les 3 migrations + go + synchro Notion.
+- **2026-07-25 (Cap DONNÉE posé, cockpit connecté exploré puis MIS EN PAUSE)** —
+  Paul : « on a assez avancé sur le code, il faut de la donnée maintenant ».
+  Cap stratégique acté : le prochain mouvement n'est pas un nouveau quadrant mais
+  **nourrir Ultima de données réelles** (directive JL). Léo a posé 2 voies : **A —
+  Léo pilote en direct** (lecture des connecteurs Gmail/Agenda en session, rien
+  stocké, zéro code/gate) ; **B — cockpit web self-service** (OAuth déployé, gros
+  chantier sécu gaté, comme la boucle Drive). Paul a choisi **A** (Gmail + Agenda).
+  Preuve livrée : un premier **« Cockpit du jour »** synthétisé en direct depuis
+  sa vraie boîte (relances dues, mails importants non lus, une échéance technique)
+  — l'agenda étant vide sur 15 j. **Décision Paul (même session)** : « c'est un
+  chantier technique, on arrête ce morceau pour le moment ». → **Cockpit connecté
+  EN PAUSE.** Acquis à garder : la voie A fonctionne (Léo sait piloter sur le réel
+  à la demande) ; rien construit, rien à défaire. **PII : aucune donnée de la
+  boîte/agenda n'est consignée** (règle CLAUDE.md — la synthèse est restée dans le
+  fil). Reprise = « go cockpit » (voie A à la demande, ou cadrer la voie B).

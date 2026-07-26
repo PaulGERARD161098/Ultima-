@@ -46,6 +46,10 @@
 | Janus | JANUS (ADR-008 — le pont générationnel ; dieu aux deux visages) |
 | Anselme | partenaire confirmé du pont générationnel JANUS (2026-07-22) |
 | Abaque | ABAQUE (simulateur de lancement d'entreprise, quadrant NICOL BOLAS ; confirmé Paul 2026-07-22) |
+| Minethnir, Minet nir, Minesnir | MINETHNIR (cap IMLADRIK : le journal intime — renommage dicté 2026-07-24) |
+| Vranesh, Vranèche, Vranaiche | VRANESH (cap IMLADRIK : les différents futurs potentiels — anticiper) |
+| Draukhain, Drokhain, Drau Kain, Drôle de Kain | DRAUKHAIN (cap IMLADRIK : la volonté au-delà du possible — objectifs, foi) |
+| Kalamn-talaen, Kalamntalaen, Calamne Talaën, Kalam Talent, Kalemn Talaen | KALAMN-TALAEN (le **nom gravé de la boussole centrale** épée+dragon d'IMLADRIK — un emblème, **pas un agent** ; corrigé Paul 2026-07-25 : l'agent unique reste **Léo**. Les mots restent sur la boussole) |
 
 Règle : en cas de doute sur un mot qui change le sens d'une instruction,
 reformuler et demander — jamais deviner avant une action irréversible.

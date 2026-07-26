@@ -270,16 +270,23 @@ vocale. Dashboard de suivi comme les autres.
 >   migration ADDITIVE (réservées en tête de `0012`).
 >
 > Sous-boucles (une à la fois, chacune gatée sur secrets Paul + migration) :
-> 1. **Connexion OAuth** (endpoints connect/callback/disconnect + table jetons
->    chiffrée + statut « connecté ») — aucune sync.
-> 2. **Push Ultima → Drive à la demande** (upsert idempotent id↔drive_file_id).
+> 1. **✅ ①a Cœur sécurité (2026-07-24, PR #94)** : `api/_lib/drive.js` (AES-256-GCM,
+>    PKCE, cookie d'état signé, config, scope minimal) + migration table jetons +
+>    24 unitaires. **✅ ①b Connexion OAuth live (2026-07-24, PR #96)** : endpoints
+>    authorize/callback/finalize/status/disconnect (flux séparé server-side,
+>    refresh_token chiffré sous RLS jamais au navigateur, dossier Drive dédié créé)
+>    + section front « Sauvegarde Google Drive » (bouton Connecter/Déconnecter).
+>    Migration `0014_imladrik_drive_tokens` (renumérotée depuis 0013) **APPLIQUÉE
+>    en prod**. Config Paul faite (client Google Cloud `drive.file` + 4 env Vercel).
+>    30 unitaires + smoke Drive verts. **Vérif live = clic « Connecter » sur la prod.**
+> 2. **⏭ Push Ultima → Drive à la demande** (upsert idempotent id↔drive_file_id) —
+>    prochaine sous-boucle (migration additive des colonnes d'ancrage).
 > 3. *(Plus tard, cadrage séparé)* retour / deux sens avec politique de conflit.
 >
-> **⏳ Actions Paul (bloquantes, avant tout code)** : projet Google Cloud + OAuth
-> client *Web* (scope `drive.file`, écran de consentement **Test** avec son compte
-> en seul test user, redirect URI = callback prod) ; env Vercel `GOOGLE_OAUTH_CLIENT_ID`,
-> `GOOGLE_OAUTH_CLIENT_SECRET`, `GOOGLE_OAUTH_REDIRECT_URI`, `DRIVE_TOKEN_ENC_KEY`
-> (32 octets). Restent gate : la migration jetons (RLS → Opus) + tout code auth/token.
+> **⏳ Reste côté Paul** : tester la connexion en prod (IMLADRIK → « Connecter mon
+> Drive » → consentement Google → « Connecté ✓ » + dossier « Ultima — Journal
+> IMLADRIK » créé dans son Drive). Rappels : re-consentement Google ~tous les 7 j
+> (mode Test) ; le contenu poussé (sous-boucle ②) quittera la RLS Supabase (acté).
 
 ## 4. Principes transverses (les 4 quadrants les partagent)
 

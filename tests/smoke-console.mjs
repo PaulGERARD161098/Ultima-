@@ -117,7 +117,8 @@ verifier('ADRAMELECH marqué « privé — auth requise »',
 const bcpEtat = await etatDe('NICOL BOLAS');
 verifier('NICOL BOLAS marqué « en chantier »', /chantier/i.test(bcpEtat || ''), `état: ${bcpEtat}`);
 const imlaEtat = await etatDe('IMLADRIK');
-verifier('IMLADRIK marqué « en chantier »', /chantier/i.test(imlaEtat || ''), `état: ${imlaEtat}`);
+// Depuis B1, IMLADRIK est un quadrant bâti (cartographie Kalamn-talaen) → porte ouverte.
+verifier('IMLADRIK marqué « Accéder » (quadrant bâti)', /accéder/i.test(imlaEtat || ''), `état: ${imlaEtat}`);
 
 const traveler = page.locator('a.quadrant-actif[href="traveler.html"]');
 verifier('RIVEN garde sa porte', (await traveler.count()) === 1);

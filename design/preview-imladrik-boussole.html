@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IMLADRIK — prototype de la cartographie</title>
+<!-- Prototype B0 (2026-07-24) — maquette STATIQUE de la boussole interne
+     d'IMLADRIK (cadrage : CADRAGE-IMLADRIK.md). Zéro code produit : ce
+     fichier ne touche ni l'app, ni l'auth, ni les données. Registre antique
+     et sérieux d'Ultima (palette de css/console.css + js/boussole.js). -->
+<style>
+  :root {
+    --nuit: #0e3a52;
+    --mer: #145070;
+    --parchemin: #f9f1dc;
+    --parchemin-doux: #f6eed9;
+    --or-clair: #e8cf8f;
+    --or: #c9a659;
+    --bronze: #a9884a;
+    --encre: #3b2f1c;
+    --encre-brune: #5a4118;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { min-height: 100%; }
+  body {
+    background:
+      radial-gradient(ellipse 120% 80% at 50% -10%, var(--mer), var(--nuit) 70%);
+    color: var(--parchemin);
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 2rem 1rem 3rem; gap: 1.6rem;
+  }
+
+  /* ===== Cartouche d'en-tête ===== */
+  .entete { text-align: center; max-width: 34rem; }
+  .entete .surligne {
+    display: block; font-size: 0.78rem; letter-spacing: 0.28em;
+    text-transform: uppercase; color: var(--or-clair); opacity: 0.85;
+  }
+  .entete h1 {
+    font-size: clamp(1.7rem, 5vw, 2.4rem); font-weight: 600;
+    letter-spacing: 0.12em; color: var(--parchemin); margin-top: 0.35rem;
+    text-wrap: balance;
+  }
+  .entete .invite {
+    font-style: italic; color: var(--or-clair); margin-top: 0.5rem;
+    font-size: 1.02rem;
+  }
+  .filet {
+    width: 9rem; height: 1px; margin: 0.9rem auto 0;
+    background: linear-gradient(90deg, transparent, var(--or), transparent);
+  }
+
+  .bandeau-proto {
+    font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--nuit); background: var(--or-clair);
+    border: 1px solid var(--bronze); border-radius: 2px;
+    padding: 0.28rem 0.9rem;
+  }
+
+  /* ===== Le plateau ===== */
+  .plateau {
+    position: relative;
+    width: min(88vw, 540px); height: min(88vw, 540px);
+    flex-shrink: 0;
+  }
+  .aiguilles { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .aiguille-trait {
+    stroke: var(--or); stroke-width: 0.55; opacity: 0.5;
+    stroke-dasharray: 1.6 2.2; transition: opacity 0.25s, stroke-width 0.25s;
+  }
+  .aiguille-pointe { fill: var(--or-clair); opacity: 0.6; transition: opacity 0.25s; }
+  .aiguille.is-actif .aiguille-trait { opacity: 1; stroke-width: 0.9; stroke-dasharray: none; }
+  .aiguille.is-actif .aiguille-pointe { opacity: 1; }
+  .cercle-plateau { fill: none; stroke: var(--or); opacity: 0.28; }
+  .graduation { stroke: var(--or); opacity: 0.35; }
+
+  /* ===== Le cœur : Kalamn-talaen ===== */
+  .coeur {
+    position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    width: 38%; text-align: center; border: 0; background: none;
+    cursor: help; font: inherit; color: inherit;
+  }
+  .coeur svg { width: 100%; height: auto; display: block;
+    filter: drop-shadow(0 4px 14px rgba(0,0,0,0.45)); }
+  .coeur-legende {
+    display: block; margin-top: 0.55rem;
+    font-style: italic; font-size: clamp(0.85rem, 2.6vw, 1.05rem);
+    letter-spacing: 0.14em; color: var(--or-clair);
+  }
+  .coeur:hover svg, .coeur:focus-visible svg { filter: drop-shadow(0 4px 18px rgba(232,207,143,0.35)); }
+  .coeur:focus-visible { outline: 2px solid var(--or-clair); outline-offset: 6px; }
+
+  /* ===== Les caps ===== */
+  .cap {
+    position: absolute; transform: translate(-50%, -50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+    text-decoration: none; color: var(--parchemin);
+    width: 7.4rem; text-align: center; cursor: pointer;
+    transition: transform 0.25s;
+  }
+  .cap:hover, .cap:focus-visible { transform: translate(-50%, -50%) scale(1.06); }
+  .cap:focus-visible { outline: 2px solid var(--or-clair); outline-offset: 4px; border-radius: 6px; }
+  .cap-blason { width: 4.6rem; height: 4.6rem; }
+  .cap-blason svg { width: 100%; height: 100%; filter: drop-shadow(0 3px 9px rgba(0,0,0,0.4)); }
+  .cap-nom {
+    font-size: 0.95rem; letter-spacing: 0.14em; font-weight: 600;
+  }
+  .cap-sens { font-style: italic; font-size: 0.76rem; color: var(--or-clair); opacity: 0.9; line-height: 1.25; }
+  .cap-etat {
+    font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 0.14rem 0.55rem; border-radius: 2px; margin-top: 0.1rem;
+  }
+  .cap-etat--ouvert { color: var(--nuit); background: var(--or-clair); border: 1px solid var(--bronze); }
+  .cap-etat--avenir { color: var(--or-clair); border: 1px solid var(--bronze); opacity: 0.85; }
+
+  /* ===== La parole de Kalamn-talaen ===== */
+  .parole {
+    max-width: 30rem; min-height: 7.2rem; width: min(92vw, 30rem);
+    background: linear-gradient(180deg, var(--parchemin), var(--parchemin-doux));
+    color: var(--encre); border: 1px solid var(--bronze); border-radius: 3px;
+    box-shadow: 0 6px 22px rgba(0,0,0,0.4), inset 0 0 0 3px rgba(201,166,89,0.25);
+    padding: 1rem 1.3rem; text-align: center;
+  }
+  .parole-nom {
+    font-size: 0.85rem; letter-spacing: 0.22em; font-weight: 700;
+    color: var(--encre-brune);
+  }
+  .parole-etat { font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--bronze); margin-top: 0.15rem; }
+  .parole-texte { font-size: 0.95rem; line-height: 1.5; margin-top: 0.5rem; }
+  .parole-defaut { font-style: italic; color: var(--encre-brune); padding-top: 1.6rem; }
+
+  .pied {
+    font-size: 0.78rem; font-style: italic; color: var(--or-clair);
+    opacity: 0.75; text-align: center; max-width: 34rem; line-height: 1.5;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cap, .aiguille-trait, .aiguille-pointe { transition: none; }
+  }
+  @media (max-width: 480px) {
+    .cap { width: 6rem; }
+    .cap-blason { width: 3.6rem; height: 3.6rem; }
+    .cap-sens { display: none; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="entete">
+    <span class="surligne">Ultima — quadrant Imladrik</span>
+    <h1>La cartographie</h1>
+    <p class="invite">Trois caps, un guide. « You become the dragon, the dragon becomes you. »</p>
+    <div class="filet" role="presentation"></div>
+  </header>
+
+  <span class="bandeau-proto">Prototype B0 — maquette statique, zéro code produit</span>
+
+  <main class="plateau" aria-label="Boussole du quadrant IMLADRIK (prototype)">
+
+    <!-- Aiguilles + cercles gradués (décor, sous les caps) -->
+    <svg class="aiguilles" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+      <circle class="cercle-plateau" cx="50" cy="50" r="47" stroke-width="0.35"/>
+      <circle class="cercle-plateau" cx="50" cy="50" r="42" stroke-width="0.2"/>
+      <g class="graduation" stroke-width="0.3">
+        <path d="M50 3 V6 M50 94 V97 M3 50 H6 M94 50 H97"/>
+        <path d="M17.2 17.2 l2.1 2.1 M80.7 80.7 l2.1 2.1 M80.7 19.3 l2.1 -2.1 M17.2 82.8 l2.1 -2.1"/>
+      </g>
+      <g class="aiguille" id="aig-minethnir">
+        <line class="aiguille-trait" x1="50" y1="50" x2="50" y2="14"/>
+        <circle class="aiguille-pointe" cx="50" cy="14" r="1.6"/>
+      </g>
+      <g class="aiguille" id="aig-vranesh">
+        <line class="aiguille-trait" x1="50" y1="50" x2="81.2" y2="68"/>
+        <circle class="aiguille-pointe" cx="81.2" cy="68" r="1.6"/>
+      </g>
+      <g class="aiguille" id="aig-draukhain">
+        <line class="aiguille-trait" x1="50" y1="50" x2="18.8" y2="68"/>
+        <circle class="aiguille-pointe" cx="18.8" cy="68" r="1.6"/>
+      </g>
+    </svg>
+
+    <!-- Le cœur : médaillon Kalamn-talaen (épée + dragon) -->
+    <button class="coeur" type="button" data-cap="kalamn"
+            aria-label="Kalamn-talaen, le guide d'IMLADRIK — épée et dragon">
+      <svg viewBox="0 0 120 120" focusable="false" aria-hidden="true">
+        <defs>
+          <radialGradient id="medaille-or" cx="38%" cy="32%" r="78%">
+            <stop offset="0" stop-color="#f4e6bd"/>
+            <stop offset="55%" stop-color="#e3cd93"/>
+            <stop offset="100%" stop-color="#cbab63"/>
+          </radialGradient>
+        </defs>
+        <!-- médaillon -->
+        <circle cx="60" cy="60" r="55" fill="url(#medaille-or)" stroke="#6e5320" stroke-width="2.6"/>
+        <circle cx="60" cy="60" r="49" fill="none" stroke="#6e5320" stroke-width="1" opacity="0.7"/>
+        <circle cx="60" cy="60" r="45" fill="none" stroke="#a9884a" stroke-width="0.8"/>
+        <!-- pointes cardinales -->
+        <g fill="#6e5320">
+          <circle cx="60" cy="8.5" r="1.7"/><circle cx="60" cy="111.5" r="1.7"/>
+          <circle cx="8.5" cy="60" r="1.7"/><circle cx="111.5" cy="60" r="1.7"/>
+        </g>
+        <!-- le dragon : corps serpentin derrière la lame -->
+        <g fill="none" stroke="#3b2f1c" stroke-width="3.2" stroke-linecap="round">
+          <path d="M38 82 C 30 74, 30 62, 42 58 C 54 54, 70 56, 76 46"/>
+          <path d="M76 46 C 80 39, 76 31, 68 30"/>
+        </g>
+        <!-- queue effilée -->
+        <path d="M38 82 C 42 88, 50 90, 57 87 L 53 83 C 48 85, 43 84, 40 80 Z" fill="#3b2f1c"/>
+        <!-- aile repliée -->
+        <path d="M47 57 C 42 47, 46 38, 56 34 C 52 40, 52 46, 55 51 Z"
+              fill="#3b2f1c" opacity="0.85"/>
+        <!-- la lame (l'aiguille Nord), par-dessus le corps -->
+        <g fill="#3b2f1c">
+          <path d="M60 14 L62.4 20 L62.4 74 L57.6 74 L57.6 20 Z"/>
+          <rect x="49" y="74" width="22" height="3.6" rx="1.8"/>
+          <rect x="58.1" y="77.6" width="3.8" height="8"/>
+          <circle cx="60" cy="89" r="3.1"/>
+        </g>
+        <path d="M60 18 V 72" stroke="#e0c48a" stroke-width="0.9" opacity="0.75"/>
+        <!-- avant-corps du dragon PAR-DESSUS la lame (enroulement) -->
+        <path d="M52 66 C 58 63, 66 63, 70 58" fill="none"
+              stroke="#3b2f1c" stroke-width="3.2" stroke-linecap="round"/>
+        <!-- tête : tournée vers la lame, œil d'or -->
+        <path d="M68 30 C 63 29, 59 31, 57 35 C 61 36, 66 36, 69 34
+                 L 74 33 L 69.5 31.5 Z" fill="#3b2f1c"/>
+        <circle cx="64.5" cy="32.5" r="1" fill="#e8cf8f"/>
+        <path d="M67 29.5 l 1.5 -3.5 l 1.5 3" fill="none" stroke="#3b2f1c" stroke-width="1.1" stroke-linecap="round"/>
+        <!-- souffle : trois traits d'or vers la lame -->
+        <g stroke="#a9884a" stroke-width="0.9" opacity="0.8" stroke-linecap="round">
+          <path d="M56 34.5 q -3 1 -5.5 0.5"/>
+          <path d="M56.5 37 q -3 1.5 -6 1.5"/>
+        </g>
+      </svg>
+      <span class="coeur-legende">Kalamn-talaen</span>
+    </button>
+
+    <!-- Cap Nord : MINETHNIR -->
+    <a class="cap" href="#" data-cap="minethnir" style="left: 50%; top: 10%;"
+       aria-label="MINETHNIR, le journal intime — ouvert">
+      <span class="cap-blason">
+        <svg viewBox="0 0 72 72" focusable="false" aria-hidden="true">
+          <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
+          <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
+          <!-- la plume -->
+          <path d="M46 16 C 38 20, 30 30, 27 44 L 29.5 45 C 35 33, 41 24, 48 19 Z" fill="#3b2f1c"/>
+          <path d="M43 22 C 39 27, 35 33, 32 40" stroke="#e0c48a" stroke-width="0.8" fill="none" opacity="0.8"/>
+          <path d="M27 44 L 24.5 50 L 30 47.5 Z" fill="#3b2f1c"/>
+          <!-- la ligne écrite -->
+          <path d="M22 55 H 50" stroke="#3b2f1c" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M22 55 H 38" stroke="#a9884a" stroke-width="0.8" stroke-linecap="round" opacity="0.7"/>
+        </svg>
+      </span>
+      <span class="cap-nom">MINETHNIR</span>
+      <span class="cap-sens">le journal intime</span>
+      <span class="cap-etat cap-etat--ouvert">Ouvert</span>
+    </a>
+
+    <!-- Cap Sud-Est : VRANESH -->
+    <a class="cap" href="#" data-cap="vranesh" style="left: 84.6%; top: 70%;"
+       aria-label="VRANESH, les différents futurs potentiels — à venir">
+      <span class="cap-blason">
+        <svg viewBox="0 0 72 72" focusable="false" aria-hidden="true">
+          <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
+          <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
+          <!-- le chemin qui bifurque : un tronc, trois futurs -->
+          <path d="M36 56 V 40" stroke="#3b2f1c" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+          <path d="M36 40 C 36 32, 28 30, 24 22" stroke="#3b2f1c" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M36 40 C 36 30, 36 26, 36 20" stroke="#3b2f1c" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M36 40 C 36 32, 44 30, 48 22" stroke="#3b2f1c" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- les trois possibles : étoiles d'or -->
+          <g fill="#a9884a">
+            <path d="M24 20 l1.4 3 3 1.4 -3 1.4 -1.4 3 -1.4 -3 -3 -1.4 3 -1.4 Z" transform="translate(0,-6)"/>
+            <path d="M36 18 l1.4 3 3 1.4 -3 1.4 -1.4 3 -1.4 -3 -3 -1.4 3 -1.4 Z" transform="translate(0,-8)"/>
+            <path d="M48 20 l1.4 3 3 1.4 -3 1.4 -1.4 3 -1.4 -3 -3 -1.4 3 -1.4 Z" transform="translate(0,-6)"/>
+          </g>
+        </svg>
+      </span>
+      <span class="cap-nom">VRANESH</span>
+      <span class="cap-sens">les futurs potentiels</span>
+      <span class="cap-etat cap-etat--avenir">À venir</span>
+    </a>
+
+    <!-- Cap Sud-Ouest : DRAUKHAIN -->
+    <a class="cap" href="#" data-cap="draukhain" style="left: 15.4%; top: 70%;"
+       aria-label="DRAUKHAIN, la volonté au-delà du possible — à venir">
+      <span class="cap-blason">
+        <svg viewBox="0 0 72 72" focusable="false" aria-hidden="true">
+          <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
+          <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
+          <!-- la flamme qui ne s'éteint pas -->
+          <path d="M36 15 C 42 23, 48 28, 48 38 C 48 47, 43 53, 36 54
+                   C 29 53, 24 47, 24 38 C 24 31, 28 27, 30 23
+                   C 31 27, 33 29, 36 30 C 34 25, 34 20, 36 15 Z" fill="#3b2f1c"/>
+          <path d="M36 32 C 39 36, 41 38, 41 42 C 41 47, 39 49, 36 50
+                   C 33 49, 31 47, 31 42 C 31 38, 33 36, 36 32 Z" fill="#e8cf8f"/>
+          <!-- le socle : la volonté tient -->
+          <path d="M26 58 H 46" stroke="#3b2f1c" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span class="cap-nom">DRAUKHAIN</span>
+      <span class="cap-sens">la volonté au-delà du possible</span>
+      <span class="cap-etat cap-etat--avenir">À venir</span>
+    </a>
+  </main>
+
+  <!-- La parole de Kalamn-talaen -->
+  <aside class="parole" id="parole" role="status" aria-live="polite">
+    <p class="parole-defaut">Survole un cap — Kalamn-talaen t'en dit l'essentiel.</p>
+  </aside>
+
+  <p class="pied">
+    Prototype de cadrage (B0) — la mécanique reprend la boussole LV2 de
+    l'accueil&nbsp;: registre extensible, un cap = une entrée, les prochains
+    modules (valeurs, citations, quart d'heure) deviendront des caps.
+  </p>
+
+<script>
+  // Démo de survol UNIQUEMENT (prototype) : aucun appel, aucune donnée,
+  // textes statiques définis ici. La version produit réutilisera js/boussole.js.
+  (function () {
+    'use strict';
+    var PAROLES = {
+      minethnir: {
+        nom: 'MINETHNIR', etat: 'Ouvert — le journal intime',
+        texte: 'Tes pages, l’atelier d’écriture, la sauvegarde Drive — tout l’acquis de la boucle 1, sous son vrai nom. Clique pour entrer ↝'
+      },
+      vranesh: {
+        nom: 'VRANESH', etat: 'À venir — les futurs potentiels',
+        texte: 'Dans un cas donné, dérouler ce qui peut arriver : scénarios, signaux à surveiller, parades préparées. Anticiper sereinement, puis revenir au présent.'
+      },
+      draukhain: {
+        nom: 'DRAUKHAIN', etat: 'À venir — la volonté au-delà du possible',
+        texte: 'Tes serments et tes flammes : ne jamais oublier tes objectifs, entretenir la volonté inébranlable, ne pas perdre la foi. Des rappels, pas du jugement.'
+      },
+      kalamn: {
+        nom: 'KALAMN-TALAEN', etat: 'Le guide d’IMLADRIK',
+        texte: 'L’épée et le dragon. Il oriente, relie les caps entre eux et parle d’une voix — celle que Léo lui prête. C’est lui qui t’accueille sur le quadrant.'
+      }
+    };
+    var parole = document.getElementById('parole');
+    var defaut = parole.innerHTML;
+    function montrer(id) {
+      var p = PAROLES[id];
+      if (!p) { return; }
+      parole.innerHTML =
+        '<p class="parole-nom">' + p.nom + '</p>' +
+        '<p class="parole-etat">' + p.etat + '</p>' +
+        '<p class="parole-texte">' + p.texte + '</p>';
+      var aig = document.getElementById('aig-' + id);
+      if (aig) { aig.classList.add('is-actif'); }
+    }
+    function reposer(id) {
+      parole.innerHTML = defaut;
+      var aig = document.getElementById('aig-' + id);
+      if (aig) { aig.classList.remove('is-actif'); }
+    }
+    Array.prototype.forEach.call(document.querySelectorAll('[data-cap]'), function (el) {
+      var id = el.dataset.cap;
+      el.addEventListener('mouseenter', function () { montrer(id); });
+      el.addEventListener('mouseleave', function () { reposer(id); });
+      el.addEventListener('focus', function () { montrer(id); });
+      el.addEventListener('blur', function () { reposer(id); });
+      el.addEventListener('click', function (e) { e.preventDefault(); montrer(id); });
+    });
+  })();
+</script>
+</body>
+</html>

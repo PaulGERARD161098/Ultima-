@@ -1,0 +1,43 @@
+/* IMLADRIK — cartographie : le peu qui s'ajoute à css/boussole.css.
+   La carto réutilise STRICTEMENT le langage de la boussole d'accueil
+   (.boussole-*, .cap, .aiguille, .parole*) et ses tokens ; ici seulement le
+   sceau du bandeau et la légende gravée « Kalamn-talaen » sous le médaillon. */
+
+/* Sigle IMLADRIK (épée au soleil) en tête de carte — décor pur. */
+.imladrik-carto-sceau {
+  width: clamp(52px, 12vw, 74px);
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 2px 6px rgba(0, 10, 20, 0.45));
+}
+
+/* Retour « Console » aligné à gauche de la colonne, discret. */
+.boussole-retour {
+  align-self: flex-start;
+  margin: 0;
+}
+
+/* Légende de la boussole : le nom du guide, gravé juste sous Kalamn-talaen,
+   centré entre les deux caps du bas. Muette (aria-hidden), n'intercepte rien. */
+.kalamn-legende {
+  position: absolute;
+  left: 50%;
+  top: 68.5%;
+  transform: translate(-50%, 0);
+  z-index: 4;
+  margin: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  font-family: var(--police-ancienne);
+  font-variant: small-caps;
+  font-style: italic;
+  letter-spacing: 0.16em;
+  font-size: clamp(0.72rem, 2vmin, 0.92rem);
+  color: #f0dca0;                 /* or antique clair — lisible sur le parchemin */
+  text-shadow: 0 1px 2px rgba(0, 10, 20, 0.6);
+}
+
+/* Petits écrans : la légende reste sous le médaillon resserré. */
+@media (max-width: 560px) {
+  .kalamn-legende { top: 69.5%; }
+}

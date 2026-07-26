@@ -192,11 +192,110 @@
     etat.entrees = (corps.data && corps.data.entrees) || [];
     rendreEntrees();
     montrer('imladrik-registre');
+    // Section Drive : traite un éventuel retour de connexion, sinon peint le statut.
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('drive')) { traiterRetourDrive(); } else { initDrive(); }
     return true;
   }
 
   async function rafraichir() {
     await chargerJournal();
+  }
+
+  // ----- Sauvegarde Google Drive (sous-boucle ①b) -----
+
+  function driveEtat(texte) {
+    var z = document.getElementById('imladrik-drive-etat');
+    if (z) { z.textContent = texte || ''; }
+  }
+  function driveBouton(id, visible) {
+    var b = document.getElementById(id);
+    if (b) { b.hidden = !visible; }
+  }
+
+  // Lit le statut de connexion Drive et peint la section (cachée si non configurée).
+  async function initDrive() {
+    var section = document.getElementById('imladrik-drive');
+    if (!section) { return; }
+    var res = await appelApi('/api/imladrik/drive/status', 'GET');
+    var payload = res.data && res.data.data; // appelApi renvoie le corps complet {ok,data}
+    if (!res.ok || !payload || payload.configured !== true) {
+      section.hidden = true; // pas de connexion Drive configurée côté serveur
+      return;
+    }
+    section.hidden = false;
+    if (payload.connected) {
+      driveEtat('Connecté ✓ — sauvegarde tes pages dans ton Drive quand tu veux.');
+      driveBouton('imladrik-drive-connecter', false);
+      driveBouton('imladrik-drive-sauver', true);
+      driveBouton('imladrik-drive-deconnecter', true);
+    } else {
+      driveEtat('Ton journal n’est pas encore relié à ton Google Drive.');
+      driveBouton('imladrik-drive-connecter', true);
+      driveBouton('imladrik-drive-sauver', false);
+      driveBouton('imladrik-drive-deconnecter', false);
+    }
+  }
+
+  async function sauverSurDrive() {
+    driveEtat('Sauvegarde en cours…');
+    driveBouton('imladrik-drive-sauver', false);
+    var res = await appelApi('/api/imladrik/drive/push', 'POST', {});
+    if (res.status === 401) { montrer('imladrik-auth'); return; }
+    var p = res.data && res.data.data;
+    if (!res.ok || !p) {
+      var msg = (res.data && res.data.error) || 'La sauvegarde a échoué. Réessaie.';
+      driveEtat(msg);
+      driveBouton('imladrik-drive-sauver', true);
+      return;
+    }
+    var parts = [];
+    if (p.pousses) { parts.push(p.pousses + ' page' + (p.pousses > 1 ? 's' : '') + ' sauvegardée' + (p.pousses > 1 ? 's' : '')); }
+    if (p.inchanges) { parts.push(p.inchanges + ' déjà à jour'); }
+    if (p.echoues) { parts.push(p.echoues + ' en échec'); }
+    driveEtat('Sauvegarde terminée ✓ — ' + (parts.length ? parts.join(', ') : 'rien à sauvegarder') + '.');
+    driveBouton('imladrik-drive-sauver', true);
+  }
+
+  async function connecterDrive() {
+    driveEtat('Redirection vers Google…');
+    var res = await appelApi('/api/imladrik/drive/authorize', 'GET');
+    if (res.status === 401) { montrer('imladrik-auth'); return; }
+    var payload = res.data && res.data.data;
+    if (!res.ok || !payload || !payload.url) {
+      driveEtat('Connexion Drive indisponible pour l’instant. Réessaie.');
+      return;
+    }
+    // Navigation top-level vers le consentement Google (hors CSP connect-src).
+    window.location.href = payload.url;
+  }
+
+  async function deconnecterDrive() {
+    if (typeof window.confirm === 'function' &&
+        !window.confirm('Déconnecter ton Google Drive d’Ultima ?')) { return; }
+    var res = await appelApi('/api/imladrik/drive/disconnect', 'POST', {});
+    if (res.status === 401) { montrer('imladrik-auth'); return; }
+    await initDrive();
+  }
+
+  // Retour du callback OAuth : le front (authentifié) déclenche l'échange final.
+  async function traiterRetourDrive() {
+    var params = new URLSearchParams(window.location.search);
+    var drive = params.get('drive');
+    if (!drive) { return; }
+    // Nettoie l'URL quoi qu'il arrive (pas de paramètre qui traîne).
+    try { window.history.replaceState({}, document.title, window.location.pathname); } catch (e) { /* noop */ }
+    if (drive === 'error') {
+      driveEtat('La connexion à Google a été interrompue. Tu peux réessayer.');
+      return;
+    }
+    if (drive === 'callback') {
+      driveEtat('Finalisation de la connexion…');
+      var res = await appelApi('/api/imladrik/drive/finalize', 'POST', {});
+      if (res.status === 401) { montrer('imladrik-auth'); return; }
+      if (!res.ok) { driveEtat('La connexion n’a pas pu être finalisée. Réessaie.'); return; }
+    }
+    await initDrive();
   }
 
   function brancherFormulaire() {
@@ -207,6 +306,12 @@
         soumettreEntree(form);
       });
     }
+    var bConn = document.getElementById('imladrik-drive-connecter');
+    if (bConn) { bConn.addEventListener('click', connecterDrive); }
+    var bSauver = document.getElementById('imladrik-drive-sauver');
+    if (bSauver) { bSauver.addEventListener('click', sauverSurDrive); }
+    var bDeco = document.getElementById('imladrik-drive-deconnecter');
+    if (bDeco) { bDeco.addEventListener('click', deconnecterDrive); }
   }
 
   async function demarrer() {

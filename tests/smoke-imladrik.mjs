@@ -1,13 +1,16 @@
-// Quadrant IMLADRIK (v1) : le journal intime « pouvoir écrire » — DERRIÈRE AUTH.
-// Miroir de smoke-reshiram.mjs. Prouve :
-//   A. imladrik.html SANS session (config vide) : FAIL-CLOSED — aucune page au
+// Cap MINETHNIR (le journal intime « pouvoir écrire ») — DERRIÈRE AUTH.
+// Depuis B1, le journal vit sur minethnir.html (imladrik.html est devenue la
+// cartographie ; voir smoke-imladrik-carto). Le moteur js/imladrik.js et
+// l'API /api/imladrik sont INCHANGÉS : ce harnais les exerce sur la page
+// MINETHNIR. Miroir de smoke-reshiram.mjs. Prouve :
+//   A. minethnir.html SANS session (config vide) : FAIL-CLOSED — aucune page au
 //      DOM, cartouche « Authentification requise », lien vers la boussole,
 //      registre caché, zéro fuite réseau, zéro erreur console ;
-//   B. imladrik.html avec FAUSSE session + /api/imladrik STUBÉE 200 (fixture
+//   B. minethnir.html avec FAUSSE session + /api/imladrik STUBÉE 200 (fixture
 //      NEUTRE inventée) : journal rendu (titre, date, corps multi-ligne),
 //      atelier d'écriture présent, écriture (POST + refresh) et effacement
 //      (DELETE avec confirmation) transmettent le Bearer, contrastes AA, zéro CDN ;
-//   C. imladrik.html fausse session + 401 → fail-closed propre.
+//   C. minethnir.html fausse session + 401 → fail-closed propre.
 // AUCUNE donnée intime réelle : tout est inventé pour le harnais.
 import { chromium } from 'playwright';
 import { mkdirSync } from 'node:fs';
@@ -89,10 +92,10 @@ async function nouvellePage(options = {}) {
 }
 
 // ===================== A. SANS session : fail-closed =====================
-console.log('— A. imladrik.html SANS session (fail-closed) —');
+console.log('— A. minethnir.html SANS session (fail-closed) —');
 {
   const { page, erreurs, externes } = await nouvellePage({ configVide: true });
-  await page.goto(`${BASE}/imladrik.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.goto(`${BASE}/minethnir.html`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForSelector('#imladrik-auth:not([hidden])', { timeout: 20000 });
 
   const auth = (await page.locator('#imladrik-auth').textContent()) || '';
@@ -130,7 +133,7 @@ console.log('— A. imladrik.html SANS session (fail-closed) —');
 }
 
 // ===================== B. Fixture 200 : journal + écriture + effacement =====================
-console.log('— B. imladrik.html fixture 200 → journal, écriture (POST), effacement (DELETE), Bearer —');
+console.log('— B. minethnir.html fixture 200 → journal, écriture (POST), effacement (DELETE), Bearer —');
 {
   const { page, erreurs, externes } = await nouvellePage();
   await page.addInitScript(scriptFausseSession());
@@ -158,8 +161,28 @@ console.log('— B. imladrik.html fixture 200 → journal, écriture (POST), eff
       body: JSON.stringify({ ok: true, data: { id: 'e-nouveau' } }),
     });
   });
+  // Statut Drive : configuré ET connecté (section visible, boutons Sauvegarder + Déconnecter).
+  const appelsDriveStatut = [];
+  await page.route('**/api/imladrik/drive/status', (route) => {
+    appelsDriveStatut.push(route.request().headers());
+    return route.fulfill({
+      status: 200,
+      contentType: 'application/json; charset=utf-8',
+      body: JSON.stringify({ ok: true, data: { configured: true, connected: true } }),
+    });
+  });
+  // Push : sauvegarde à la demande (fixture neutre).
+  const appelsPush = [];
+  await page.route('**/api/imladrik/drive/push', (route) => {
+    appelsPush.push({ methode: route.request().method(), headers: route.request().headers() });
+    return route.fulfill({
+      status: 200,
+      contentType: 'application/json; charset=utf-8',
+      body: JSON.stringify({ ok: true, data: { pousses: 2, inchanges: 0, echoues: 0, total: 2 } }),
+    });
+  });
 
-  await page.goto(`${BASE}/imladrik.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.goto(`${BASE}/minethnir.html`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForSelector('#imladrik-registre:not([hidden])', { timeout: 20000 });
 
   // 1. Bearer transmis au GET.
@@ -179,6 +202,29 @@ console.log('— B. imladrik.html fixture 200 → journal, écriture (POST), eff
   verifier('Page sans titre : aucun titre rendu', (await e2.locator('.imladrik-entree-titre').count()) === 0);
   verifier('Page sans titre : corps présent',
     /sans titre/.test((await e2.locator('.imladrik-entree-corps').textContent()) || ''));
+
+  // 2bis. Section Drive : configurée ET connectée → section visible, statut lu
+  // avec Bearer, « Connecter » caché, « Sauvegarder » + « Déconnecter » visibles.
+  await page.waitForSelector('#imladrik-drive:not([hidden])', { timeout: 5000 });
+  verifier('Section Drive visible (configurée)',
+    !(await page.locator('#imladrik-drive').evaluate((el) => el.hidden)));
+  verifier('GET /drive/status avec Bearer', appelsDriveStatut.length >= 1 &&
+    (appelsDriveStatut[0] || {}).authorization === 'Bearer jeton-de-test');
+  verifier('Bouton « Connecter » caché (déjà connecté)',
+    await page.locator('#imladrik-drive-connecter').evaluate((el) => el.hidden));
+  verifier('Bouton « Sauvegarder sur Drive » visible',
+    !(await page.locator('#imladrik-drive-sauver').evaluate((el) => el.hidden)));
+  verifier('Bouton « Déconnecter » visible (connecté)',
+    !(await page.locator('#imladrik-drive-deconnecter').evaluate((el) => el.hidden)));
+
+  // 2ter. Clic « Sauvegarder sur Drive » → POST /push avec Bearer + message de succès.
+  await page.locator('#imladrik-drive-sauver').click();
+  await page.waitForTimeout(250);
+  const push = appelsPush.find((a) => a.methode === 'POST');
+  verifier('POST /api/imladrik/drive/push émis', Boolean(push));
+  verifier('Push : Bearer transmis', push && push.headers.authorization === 'Bearer jeton-de-test');
+  verifier('Message de sauvegarde affiché',
+    /sauvegard/i.test((await page.locator('#imladrik-drive-etat').textContent()) || ''));
 
   // 3. Atelier d'écriture présent.
   verifier('Champ titre présent', (await page.locator('#imladrik-titre').count()) === 1);
@@ -238,7 +284,7 @@ console.log('— B. imladrik.html fixture 200 → journal, écriture (POST), eff
 }
 
 // ===================== C. 401 : fail-closed =====================
-console.log('— C. imladrik.html fausse session → 401 fail-closed —');
+console.log('— C. minethnir.html fausse session → 401 fail-closed —');
 {
   const { page, erreurs } = await nouvellePage();
   await page.addInitScript(scriptFausseSession());
@@ -253,7 +299,7 @@ console.log('— C. imladrik.html fausse session → 401 fail-closed —');
       body: JSON.stringify({ ok: false, error: 'Authentification requise' }),
     });
   });
-  await page.goto(`${BASE}/imladrik.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.goto(`${BASE}/minethnir.html`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForSelector('#imladrik-auth:not([hidden])', { timeout: 20000 });
 
   verifier('Un GET /api/imladrik (et un seul)', appelsGet.length === 1, `${appelsGet.length}`);
