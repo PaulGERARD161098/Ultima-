@@ -768,3 +768,14 @@
   connecteurs ; le bandeau « état du jour » transversal appartient au palier C.
   Sécu §5 : palier A/B = comptes seuls, zéro PII/finance ; §5 intégral dès qu'un
   signal finance entre. Prochaine boucle : BUILD palier A (solo, go Paul).
+- **2026-07-24 (build ⑤ palier A — signaux badges au survol, solo « go A »)** —
+  Palier A du cockpit v2 LIVRÉ (PR #107). Extension du cockpit v1 (comptes-seuls) :
+  `api/cockpit.js` +`riven.relances_dues` (journal `relance_at ≤ jour UTC` &
+  `relance_faite=false`, head+count, RLS, fail-closed) ; `js/boussole.js`
+  `signalDe(id,data)` pur (ultima→relances dues, reshiram→à étayer, zekrom→à
+  orienter, seulement si compte > 0) + badge `.parole-signal` injecté au survol
+  du cap ; CSS badge en encre rouge sobre `--danger-parchemin` (AA vérifié) ;
+  `smoke-boussole` enrichi (badge présent Ultima/RESHIRAM, absent ZEKROM 0 /
+  YCOME sans data, fonction pure, contraste). Contre-passe Léo : harnais COMPLET
+  vert. « La donnée dort, s'allume quand elle compte » respecté. Palier B (cap du
+  jour déterministe) = prochaine boucle candidate ; C reste gaté.

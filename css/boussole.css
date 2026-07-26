@@ -255,6 +255,22 @@ a.cap:hover {
   line-height: 1.35;
   color: var(--encre-sepia);
 }
+
+/* Signal « à traiter » (v2 palier A) : badge discret d'alerte, encre rouge sobre
+   du registre (--danger-parchemin), distinct du doré « en cours ». Ne s'affiche
+   que quand un compte est actionnable (rendu conditionnel côté JS). */
+.parole-signal {
+  margin: 0 0 0.45rem;
+  padding: 0.28rem 0.55rem;
+  border-left: 3px solid var(--danger-parchemin);
+  background: var(--parchemin-ombre);
+  border-radius: 0 4px 4px 0;
+  font-family: var(--police-ancienne);
+  font-weight: 700;
+  font-size: clamp(0.78rem, 2.1vw, 0.9rem);
+  line-height: 1.35;
+  color: var(--danger-parchemin);
+}
 .parole-texte {
   margin: 0 0 0.4rem;
   font-family: var(--police-ancienne);

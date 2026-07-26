@@ -45,6 +45,29 @@
     return null;
   }
 
+  // Signal « à traiter » d'un cap (PUR, testable) — v2 palier A (§2bis.1). Un
+  // badge discret qui ne s'allume QUE quand un compte actionnable est > 0 (la
+  // donnée dort, s'allume quand elle compte). null sinon. N'accueille que des
+  // entiers + du texte statique → sûr en innerHTML (même contrat que ligneVivante).
+  //   ultima   ← RIVEN relances dues ; reshiram ← à étayer ; zekrom ← à orienter.
+  function signalDe(id, data) {
+    if (!data) { return null; }
+    function n(v) { return Math.max(0, parseInt(v, 10) || 0); }
+    function s(compte) { return compte > 1 ? 's' : ''; }
+    var c;
+    if (id === 'ultima' && data.riven) {
+      c = n(data.riven.relances_dues);
+      if (c > 0) { return c + ' relance' + s(c) + ' due' + s(c); }
+    } else if (id === 'reshiram' && data.reshiram) {
+      c = n(data.reshiram.a_etayer);
+      if (c > 0) { return c + ' talent' + s(c) + ' à étayer'; }
+    } else if (id === 'zekrom' && data.zekrom) {
+      c = n(data.zekrom.a_orienter);
+      if (c > 0) { return c + ' idéal' + (c > 1 ? 'aux' : '') + ' à orienter'; }
+    }
+    return null;
+  }
+
   // Récupère les agrégats après connexion (appelé par boussole-auth via le hook
   // window.UltimaBoussole.poserSession). token null (déconnexion) → texte figé.
   async function chargerCockpit(token) {
@@ -73,7 +96,8 @@
   // ligneVivante exposée pour les unitaires (fonction pure, aucune donnée réelle).
   window.UltimaBoussole = {
     poserSession: function (token) { chargerCockpit(token); },
-    ligneVivante: ligneVivante
+    ligneVivante: ligneVivante,
+    signalDe: signalDe
   };
 
   // ============================ REGISTRE ============================
@@ -222,9 +246,12 @@
       parole.classList.add('is-actif');
       // Ligne vivante (agrégats réels) si dispo pour ce cap ; sinon rien (texte figé seul).
       var vivante = ligneVivante(projet.id, cockpit.data);
+      // Signal « à traiter » (v2 palier A) : badge discret, seulement si actionnable.
+      var signal = signalDe(projet.id, cockpit.data);
       parole.innerHTML =
         '<p class="parole-nom">' + projet.nom + '</p>' +
         '<p class="parole-etat">' + projet.etat + '</p>' +
+        (signal ? '<p class="parole-signal">À traiter — ' + signal + '</p>' : '') +
         (vivante ? '<p class="parole-cockpit">En cours — ' + vivante + '</p>' : '') +
         '<p class="parole-texte">' + projet.resume + '</p>' +
         '<p class="parole-action">' +

@@ -136,7 +136,12 @@ jamais de refonte. **Décisions Paul (2026-07-24)** :
   est **repoussé** au palier C (quand la finance alimente une vraie ligne).
 - **Séquencement figé A → B → C, une boucle à la fois** ; on démarre par **A**.
 
-**🟢 Palier A — signaux sur la donnée DÉJÀ en base (buildable, aucune gate).**
+**🟢 Palier A — ✅ LIVRÉ (2026-07-24, solo, PR #107).** Signaux sur la donnée
+DÉJÀ en base (aucune gate). `api/cockpit.js` étendu (`riven.relances_dues`,
+head+count, RLS, fail-closed), `js/boussole.js` (`signalDe()` pur + badge
+`.parole-signal` au survol, encre rouge sobre `--danger-parchemin`, AA), CSS,
+`smoke-boussole` enrichi (badge présent/absent, fonction pure, contraste).
+Harnais COMPLET vert.
 - **RIVEN « N relances dues »** : compte des entrées `journal` avec
   `relance_at ≤ aujourd'hui` ET `relance_faite = false` (index partiel dédié
   existe déjà, 0005). Badge sur le cap Ultima.
@@ -163,7 +168,8 @@ traité » (finance = palier C). Remplace l'invite passive par une désignation.
 - Signaux « RDV demain / email en attente » → **dépendent des connecteurs**
   (Gmail/Calendar).
 
-**Boucle en cours : palier A.** B et C consignés, non ouverts.
+**Palier A livré (PR #107).** Prochaine boucle candidate : palier B (cap du
+jour). B et C consignés, C non ouvert (gates : finance/clé/connecteurs).
 
 ## 3. Les 4 quadrants (noms de code confirmés par Paul, 2026-07-12)
 

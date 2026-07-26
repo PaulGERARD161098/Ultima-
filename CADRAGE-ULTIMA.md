@@ -156,8 +156,11 @@
     données déjà en base : RIVEN « N relances dues » (journal `relance_at` ≤ jour
     & non faite) + RESHIRAM « à étayer » / ZEKROM « à orienter » promus en badges.
     B = cap du jour (déterministe, après A). C GATÉ : signaux finance (NICOL
-    BOLAS), capture-dispatch (clé Anthropic), RDV/email (connecteurs). **Boucle en
-    cours : palier A.**
+    BOLAS), capture-dispatch (clé Anthropic), RDV/email (connecteurs).
+    **✅ Palier A LIVRÉ (2026-07-24, solo, PR #107)** : `api/cockpit.js`
+    (+`riven.relances_dues`), `js/boussole.js` (`signalDe()` pur + badge
+    `.parole-signal` au survol), CSS, `smoke-boussole` enrichi. Harnais COMPLET
+    vert. Prochaine boucle candidate : palier B (cap du jour déterministe).
 
     **Autres caps :**
     - **YCOME** — dès que Paul fournit l'URL (action humaine, 1 ligne dans le
