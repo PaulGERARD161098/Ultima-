@@ -906,3 +906,18 @@
   à la demande) ; rien construit, rien à défaire. **PII : aucune donnée de la
   boîte/agenda n'est consignée** (règle CLAUDE.md — la synthèse est restée dans le
   fil). Reprise = « go cockpit » (voie A à la demande, ou cadrer la voie B).
+- **2026-07-26 (recalage des deux fils — « on recale les fils »)** — Après la
+  fusion du cockpit ⑤ (mon fil) avec le gros travail IMLADRIK parallèle (#96→#106),
+  Paul : « on recale les fils ». Constat clé : **pas de contradiction technique**,
+  deux modèles mentaux à fusionner. Le « cockpit EN PAUSE » (07-25) ne vise QUE la
+  couche **connecteurs** (Gmail/Agenda, voie A live / voie B OAuth) = **palier C**
+  de mon cadrage cockpit v2 ; ce que j'ai livré (07-26) = **palier A** = badges sur
+  la **donnée déjà en base** (aucun connecteur) — qui sert le cap stratégique
+  « passer à la DONNÉE » en rendant le réel visible. Modèles unifiés : cockpit v2
+  A→B→C, où **C = le cockpit connecté en pause**. Tableau de bord (CADRAGE-ULTIMA
+  CAP DU JOUR) réécrit en version réconciliée 07-26. **Registre migrations unifié** :
+  `0013`+`0014` appliquées ; `0015` (Drive sync) **à confirmer** ; `0016/0017/0018`
+  (DRAUKHAIN/VRANESH/passerelles) **écrites, NON appliquées** = gate Paul pour
+  activer IMLADRIK. Reste aussi advisors `0013` (run MCP bloqué async) + synchro
+  Notion. **Décision de cap laissée à Paul** : cockpit palier B, ou cap DONNÉE pur
+  (migrations IMLADRIK + Léo voie A), ou autre — les deux voies sont indépendantes.
