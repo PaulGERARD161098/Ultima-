@@ -754,3 +754,17 @@
   non repassés** : Paul a décliné le run get_advisors cette session → consigné au
   registre (à repasser). RADAR : ajouter « vérifier l'existant AD-4 sur une table
   déjà ciblée avant de recréer la clé unique » aux réflexes migration.
+- **2026-07-24 (cadrage ⑤ cockpit v2 — « partons sur le 5 en cadrage »)** — Paul :
+  cadrer le cockpit v2. Deux arbitrages tranchés : **forme = badges discrets au
+  survol** (pas de bandeau permanent, cohérent v1 sobre) ; **départ = palier A**
+  (« bouclons une boucle à la fois donc go A »). Cadrage figé dans
+  `CADRAGE-CONSOLE §2bis.1` : la v2 ÉTEND le cockpit v1 (comptes-seuls, RLS,
+  fail-closed), séquencement **A→B→C**. **Palier A** (buildable, AUCUNE gate) =
+  signaux sur données déjà en base : RIVEN « N relances dues » (journal
+  `relance_at ≤ jour` & `relance_faite=false`, index partiel existant en 0005) +
+  RESHIRAM « à étayer » / ZEKROM « à orienter » promus en badges. **B** = cap du
+  jour déterministe (relances > à étayer/orienter), après A. **C GATÉ** : signaux
+  finance = NICOL BOLAS ; capture-dispatch = clé Anthropic ; RDV/email =
+  connecteurs ; le bandeau « état du jour » transversal appartient au palier C.
+  Sécu §5 : palier A/B = comptes seuls, zéro PII/finance ; §5 intégral dès qu'un
+  signal finance entre. Prochaine boucle : BUILD palier A (solo, go Paul).

@@ -149,10 +149,15 @@
     (livre la session au cockpit), ordre des scripts corrigé (hook défini avant
     sollicitation), CSS `.parole-cockpit`. Fail-closed (sans session → texte figé).
     Harnais `smoke-boussole` enrichi (Bearer, résumés vivants R/Z, cap sans data,
-    fonction pure). **La boussole devient un cockpit** (pas un menu). Reste (v2,
-    par ordre de valeur §2bis) : signaux/badges, cap du jour, état du jour
-    transversal, capture-dispatch — dépendent de NICOL BOLAS (finance) et de la
-    data réelle via connecteurs.
+    fonction pure). **La boussole devient un cockpit** (pas un menu).
+    **🗺️ Cockpit v2 CADRÉ (2026-07-24, `CADRAGE-CONSOLE §2bis.1`)** : décisions
+    Paul = **badges discrets au survol** (pas de bandeau), séquencement **A→B→C**
+    une boucle à la fois. **Palier A** (buildable, aucune gate) = signaux sur
+    données déjà en base : RIVEN « N relances dues » (journal `relance_at` ≤ jour
+    & non faite) + RESHIRAM « à étayer » / ZEKROM « à orienter » promus en badges.
+    B = cap du jour (déterministe, après A). C GATÉ : signaux finance (NICOL
+    BOLAS), capture-dispatch (clé Anthropic), RDV/email (connecteurs). **Boucle en
+    cours : palier A.**
 
     **Autres caps :**
     - **YCOME** — dès que Paul fournit l'URL (action humaine, 1 ligne dans le

@@ -125,6 +125,46 @@ auto-entrepreneur et il transforme la boussole en cockpit dès la 1ʳᵉ brique.
 bandeau complet) ; statut fiscal réel (micro-BIC/BNC, TVA) ; data réelle vs
 saisie manuelle au démarrage ; niveau de chiffrement finance.
 
+### 2bis.1 Cockpit v2 — cadrage détaillé (arbitré Paul, 2026-07-24)
+
+Le cockpit **v1** est en prod (`api/cockpit.js` : agrégats comptes-seuls
+RESHIRAM/ZEKROM, RLS, fail-closed ; survol de la boussole). La v2 l'**étend** —
+jamais de refonte. **Décisions Paul (2026-07-24)** :
+- **Forme = badges discrets au survol** (pas de bandeau permanent) : cohérent
+  avec la sobriété v1 — la donnée dort, s'allume au survol/focus du cap. Une
+  pastille compteur par macro-projet. Le bandeau « état du jour » transversal
+  est **repoussé** au palier C (quand la finance alimente une vraie ligne).
+- **Séquencement figé A → B → C, une boucle à la fois** ; on démarre par **A**.
+
+**🟢 Palier A — signaux sur la donnée DÉJÀ en base (buildable, aucune gate).**
+- **RIVEN « N relances dues »** : compte des entrées `journal` avec
+  `relance_at ≤ aujourd'hui` ET `relance_faite = false` (index partiel dédié
+  existe déjà, 0005). Badge sur le cap Ultima.
+- **RESHIRAM « M à étayer »** et **ZEKROM « K à orienter »** : déjà comptés en
+  v1 → **promus en badges d'alerte** (plus seulement texte de survol).
+- Extension de `api/cockpit.js` (mêmes motifs comptes-seuls head+count, RLS,
+  fail-closed) + rendu badge dans `js/boussole.js`. Sécu §5 : agrégats derrière
+  auth, **zéro PII/finance** en clair. Fonction pure de calcul de badge testée
+  (unit) + smoke boussole enrichi (badges présents/masqués, fail-closed).
+
+**🟡 Palier B — cap du jour (léger, juste après A).** Léo *désigne* le cap
+prioritaire à partir des signaux du palier A (règle de priorité déterministe :
+relances dues > à étayer/à orienter). PAS encore le chiffrage « coût si non
+traité » (finance = palier C). Remplace l'invite passive par une désignation.
+
+**🔴 Palier C — GATÉ (ne pas builder avant les dépendances).**
+- Signaux **finance** (« URSSAF J-6 », « facture impayée », état du jour tréso,
+  cap du jour *chiffré*) → **dépendent de NICOL BOLAS** (aujourd'hui ABAQUE seul,
+  simulateur sans persistance des échéances réelles). Dès qu'un signal finance
+  entre : **§5 intégral** (jamais de finance en clair/logs ; chiffrement au repos
+  à évaluer). C'est le bandeau « état du jour » transversal.
+- **Capture-dispatch** (Léo range une note dictée dans le bon quadrant) →
+  **dépend de la clé Anthropic** (L2/L2b construits, dormants).
+- Signaux « RDV demain / email en attente » → **dépendent des connecteurs**
+  (Gmail/Calendar).
+
+**Boucle en cours : palier A.** B et C consignés, non ouverts.
+
 ## 3. Les 4 quadrants (noms de code confirmés par Paul, 2026-07-12)
 
 ### 3.1 RIVEN — le réseau (existant, absorbé)
