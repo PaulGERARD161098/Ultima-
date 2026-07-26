@@ -2,15 +2,31 @@
 
 ## ÉTAT (2026-07-06, après arbitrage)
 
-- 🧭 **CAP DU JOUR (2026-07-25) — passer du code à la DONNÉE.** Arbitrage Paul :
-  « assez de code, il faut de la donnée maintenant » (directive JL). Le quadrant
-  **IMLADRIK est complet et tissé** (MINETHNIR + DRAUKHAIN + VRANESH + passerelles
-  v2 autour de Kalamn-talaen ; Léo guide). Prochain mouvement = nourrir Ultima de
-  réel, pas un nouveau quadrant. Cockpit connecté (Gmail/Agenda) **voie A** (Léo
-  pilote en direct) validé par une preuve live, puis **mis en pause par Paul**
-  (« chantier technique »). **⏳ À la main de Paul** : appliquer les migrations
-  **`0016 → 0017 → 0018`** (activent DRAUKHAIN/VRANESH/passerelles) + go ; synchro
-  Notion. Détail : `memoire/JOURNAL-DECISIONS.md` (2026-07-25).
+- 🧭 **CAP DU JOUR (recalé 2026-07-26 — deux fils réconciliés).** Cap stratégique
+  tenu (07-25) : **passer du code à la DONNÉE** (« assez de code, il faut de la
+  donnée », directive JL). Deux fils de travail ont avancé en parallèle ; les voici
+  fusionnés au réel :
+  - **IMLADRIK complet et tissé** (MINETHNIR + DRAUKHAIN + VRANESH + passerelles
+    v2 autour de Kalamn-talaen ; Léo guide) — **code livré**, ⏳ **non activé** tant
+    que les migrations ne sont pas appliquées (voir registre).
+  - **Cockpit v2 — modèle unifié A→B→C** (`CADRAGE-CONSOLE §2bis.1`). ✅ **Palier A
+    LIVRÉ (07-26)** : badges « à traiter » au survol sur la **donnée DÉJÀ en base**
+    (RIVEN relances dues / RESHIRAM à étayer / ZEKROM à orienter) — **aucun
+    connecteur**, sert le cap DONNÉE en rendant le réel visible. **Le « cockpit en
+    pause » (07-25) ne concerne QUE la couche connecteurs** = **palier C** (Gmail/
+    Agenda, voie A « Léo pilote en direct » / voie B OAuth self-service). Palier C
+    reste **EN PAUSE** (décision Paul « chantier technique »). Palier B (cap du jour
+    déterministe) non ouvert.
+  - **Léo voie A** (piloter Gmail/Agenda en direct à la demande) **fonctionne** —
+    disponible « à la demande » (« go cockpit »), pas ré-ouvert en chantier.
+  - **⏳ Registre unifié À LA MAIN DE PAUL** : (1) appliquer les migrations IMLADRIK
+    **`0016 → 0017 → 0018`** (DRAUKHAIN/VRANESH/passerelles ; `0015` Drive sync **à
+    confirmer**) pour ACTIVER la donnée intime ; (2) contre-passe **advisors `0013`**
+    (cockpit ④, run MCP bloqué en async) ; (3) synchro Notion. `0013`+`0014`
+    appliquées. Détail : `memoire/JOURNAL-DECISIONS.md` (2026-07-25 / 2026-07-26).
+  - **Décision qui reste à Paul** : cap de la suite — (a) continuer **cockpit palier
+    B**, (b) revenir au **cap DONNÉE pur** (appliquer les migrations IMLADRIK + Léo
+    voie A à la demande), (c) autre. Aucune des deux voies n'est bloquée par l'autre.
 
 - 🧭 **Ultima LV2 — la boussole (cap dicté par Paul, 2026-07-21)** : une couche
   méta au-dessus de la console. L'accueil `/` devient une **boussole** (carte
