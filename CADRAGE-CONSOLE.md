@@ -73,11 +73,15 @@ devenir.
     Permet le **rétroplanning** : partir de l'idéal (ZEKROM) → le décliner en
     réel (RESHIRAM) : de quoi j'ai besoin, à quoi ça correspond, comment on le
     fait, **combien ça coûte** (analyse de besoin réelle, long terme).
-  - **Forme (décidée Paul 2026-07-21)** : **deux caps AUTONOMES** de la boussole
-    — liés par la passerelle data, mais **jamais fusionnés en une seule
-    division** (ni sous-caps d'un même macro-projet, ni rangés sous IMLADRIK).
-    RESHIRAM garde un **lien fort avec RIVEN** (réseau réel) sans y être
-    absorbé.
+  - **Forme (décidée Paul 2026-07-21 ; RÉVISÉE 2026-07-29)** : ~~deux caps
+    AUTONOMES de la boussole~~ → **RÉUNIS sous un cap unique « TAO »** (décision
+    Paul 2026-07-29). Le Tao = la voie qui unit le **réel** (RESHIRAM) et
+    l'**idéal** (ZEKROM), deux pôles complémentaires. Sur la boussole : **un seul
+    cap TAO** qui **s'ouvre en arborescence** (`tao.html`) sur les deux branches
+    (RESHIRAM aile blanche / ZEKROM aile noire, chacune vers sa page). La
+    passerelle réel↔idéal devient **interne à TAO** (plus de trait inter-caps).
+    RESHIRAM garde son **lien fort avec RIVEN** (inchangé). Livré 2026-07-29
+    (solo, front) — cockpit du cap TAO agrège « à étayer » + « à orienter ».
   - **Cadrage des consoles** : `CADRAGE-RESHIRAM-ZEKROM.md` (but de chaque
     console, objets, passerelle réel↔idéal, articulation anti-duplication avec
     les quadrants, arbitrages). Cadrage seul, pas encore de code.

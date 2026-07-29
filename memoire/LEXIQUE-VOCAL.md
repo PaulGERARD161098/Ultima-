@@ -53,3 +53,7 @@
 
 Règle : en cas de doute sur un mot qui change le sens d'une instruction,
 reformuler et demander — jamais deviner avant une action irréversible.
+
+- **TAO** (« tao », « taux », « t.a.o. ») = le cap boussole qui réunit RESHIRAM
+  (le réel) et ZEKROM (l'idéal) et s'ouvre en arborescence sur les deux
+  (décision Paul 2026-07-29). Page `tao.html`.
