@@ -114,13 +114,13 @@ mécanique éprouvée : registre extensible (un cap = une entrée), survol/focus
   flamme = **« à raviver »** = invitation à nourrir la foi, jamais un reproche
   (« des rappels, pas du jugement »). Migration `0016_draukhain_serments.sql`
   (2 tables + 2 vues `serments_etat`/`serments_vivants`, RLS + scellement AD-4,
-  miroir 0010) **ÉCRITE, NON APPLIQUÉE** (gate §5 intime → go Paul). API
+  miroir 0010) **ÉCRITE, **APPLIQUÉE en prod (2026-07-26, solo)**** (gate §5 intime → go Paul). API
   `api/serments.js` + `api/flammes.js` (requireUser, owner_id serveur-only,
   validation miroir des CHECK). Front `draukhain.html` + `js/draukhain.js`
   (carte des serments, badge « à raviver » en invitation, bascule « mes serments
   vivants », fail-closed, textContent only) — cap DRAUKHAIN ouvert dans la
   cartographie. Harnais `unit-draukhain-validate` + `smoke-draukhain` ;
-  patrimoine COMPLET (22 harnais) vert. **⏳ Reste Paul : appliquer `0016` en
+  patrimoine COMPLET (22 harnais) vert. **✅ FAIT — appliqué 2026-07-26 (solo) (ex-reste : appliquer `0016` en
   prod + go.**
 - **✅ B3 — VRANESH v1 (2026-07-25, « ensuite on avance »)** : les futurs
   potentiels, miroir strict de DRAUKHAIN/ZEKROM. Modèle **situations** (« un cas
@@ -129,12 +129,12 @@ mécanique éprouvée : registre extensible (un cap = une entrée), survol/focus
   cardinale POSITIVE : situation sans scénario = **« à explorer »** = invitation
   à imaginer ses futurs. Migration `0017_vranesh_situations.sql` (2 tables +
   vues `situations_etat`/`situations_anticipees`, RLS + scellement AD-4, miroir
-  0016) **ÉCRITE, NON APPLIQUÉE** (gate §5 intime → go Paul). API
+  0016) **ÉCRITE, **APPLIQUÉE en prod (2026-07-26, solo)**** (gate §5 intime → go Paul). API
   `api/situations.js` + `api/scenarios.js`. Front `vranesh.html` + `js/vranesh.js`
   (fail-closed, textContent only, badge « à explorer », bascule « situations
   anticipées »). Cap VRANESH ouvert dans la carto → **le quadrant IMLADRIK est
   complet (3 caps ouverts)**. Harnais `unit-vranesh-validate` + `smoke-vranesh`.
-  **⏳ Reste Paul : appliquer `0017` en prod + go.**
+  **✅ FAIT — appliqué 2026-07-26 (solo) (ex-reste : appliquer `0017` en prod + go.**
 - **✅ B4 — Passerelles v2 (2026-07-25, « établis les passerelles v2, termine
   les boucles »)** : la mémoire inter-cap. Deux tables de liens à **cible XOR**,
   double scellement AD-4, miroir de la passerelle R↔Z (0011) :
@@ -142,12 +142,12 @@ mécanique éprouvée : registre extensible (un cap = une entrée), survol/focus
   **`scenario_liens`** (scénario → serment DRAUKHAIN, rapport *menace*/*sert*,
   *ou* page MINETHNIR). Migration `0018_imladrik_passerelles.sql` (ancrages
   composites manquants sur `imladrik_entrees` + `scenarios`, puis 2 tables +
-  RLS) **ÉCRITE, NON APPLIQUÉE — gate §5 (dépend de 0016 + 0017)**. API
+  RLS) **ÉCRITE, **APPLIQUÉE en prod (2026-07-26, solo)** — gate §5 (dépend de 0016 + 0017)**. API
   `api/serment-liens.js` + `api/scenario-liens.js` ; liens repliés dans les GET
   `/api/serments` et `/api/situations` (dégradation propre à `[]` si 0018 pas
   appliquée). Front : section « Passerelles » sur `draukhain.html` et
   `vranesh.html`. Harnais `unit-imladrik-passerelles` + extensions smoke.
-  **⏳ Reste Paul : appliquer `0018` (après 0016 + 0017) en prod + go.**
+  **✅ FAIT — appliqué 2026-07-26 (solo) (ex-reste : appliquer `0018` (après 0016 + 0017) en prod + go.**
 
 ## 8. Décisions attendues de Paul
 

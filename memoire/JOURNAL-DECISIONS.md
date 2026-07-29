@@ -921,3 +921,19 @@
   activer IMLADRIK. Reste aussi advisors `0013` (run MCP bloqué async) + synchro
   Notion. **Décision de cap laissée à Paul** : cockpit palier B, ou cap DONNÉE pur
   (migrations IMLADRIK + Léo voie A), ou autre — les deux voies sont indépendantes.
+- **2026-07-26 (cap DONNÉE « on commence par b » — IMLADRIK ACTIVÉ, solo)** —
+  Paul choisit la voie (b). J'applique en prod, dans l'ordre, les 4 migrations
+  IMLADRIK laissées en gate par la session parallèle : **`0015`** (Drive sync :
+  3 colonnes d'ancrage `add column if not exists` sur `imladrik_entrees`),
+  **`0016`** (DRAUKHAIN : serments + flammes + vues, miroir ZEKROM 0010),
+  **`0017`** (VRANESH : situations + scénarios + vues, miroir 0016), **`0018`**
+  (passerelles v2 : `serment_liens` + `scenario_liens`, cible XOR, double scellement
+  AD-4 ; + `add constraint unique (owner_id,id)` sur `imladrik_entrees` et
+  `scenarios`). **Garde-fou pré-application** : j'ai lu les 4 fichiers (additifs,
+  zéro drop/delete hors rollback) ET vérifié qu'aucune contrainte `owner_id_uniq`
+  n'existait déjà sur les tables ciblées par 0018 (piège 0013 évité). **Les 4
+  applications : success.** Front + API IMLADRIK déjà en prod (#96→#106) → le
+  quadrant est vivant. **Tout le schéma 0001-0018 est en prod.** **Advisors** :
+  `get_advisors` reste bloqué par approbation MCP en async (les `apply_migration`,
+  eux, sont passés) → consigné : Paul lit Security/Performance au dashboard.
+  **⏳ Reste Paul** : advisors dashboard + preuve live (écrire un serment/situation).

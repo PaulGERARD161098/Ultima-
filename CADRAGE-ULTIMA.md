@@ -19,11 +19,17 @@
     déterministe) non ouvert.
   - **Léo voie A** (piloter Gmail/Agenda en direct à la demande) **fonctionne** —
     disponible « à la demande » (« go cockpit »), pas ré-ouvert en chantier.
-  - **⏳ Registre unifié À LA MAIN DE PAUL** : (1) appliquer les migrations IMLADRIK
-    **`0016 → 0017 → 0018`** (DRAUKHAIN/VRANESH/passerelles ; `0015` Drive sync **à
-    confirmer**) pour ACTIVER la donnée intime ; (2) contre-passe **advisors `0013`**
-    (cockpit ④, run MCP bloqué en async) ; (3) synchro Notion. `0013`+`0014`
-    appliquées. Détail : `memoire/JOURNAL-DECISIONS.md` (2026-07-25 / 2026-07-26).
+  - **✅ IMLADRIK ACTIVÉ (2026-07-26, solo — cap DONNÉE « on commence par b »)** :
+    migrations **`0015 → 0016 → 0017 → 0018`** **APPLIQUÉES en prod** (Drive sync +
+    DRAUKHAIN + VRANESH + passerelles v2 ; toutes additives, vérifiées sans piège
+    de contrainte pré-existante). Front + API IMLADRIK déjà en prod (#96→#106) →
+    le quadrant est **vivant** (tables/vues/RLS créées). `0013`+`0014` déjà
+    appliquées → **tout le schéma `0001-0018` est en prod.**
+  - **⏳ Registre À LA MAIN DE PAUL** : (1) **advisors** post-DDL (0013 + 0015-0018,
+    run MCP `get_advisors` bloqué en async → à lire au dashboard Supabase, onglets
+    Security/Performance) ; (2) **preuve live** : se connecter, ouvrir IMLADRIK,
+    écrire un serment/situation ; (3) synchro Notion. Détail :
+    `memoire/JOURNAL-DECISIONS.md` (2026-07-25 / 2026-07-26).
   - **Décision qui reste à Paul** : cap de la suite — (a) continuer **cockpit palier
     B**, (b) revenir au **cap DONNÉE pur** (appliquer les migrations IMLADRIK + Léo
     voie A à la demande), (c) autre. Aucune des deux voies n'est bloquée par l'autre.
