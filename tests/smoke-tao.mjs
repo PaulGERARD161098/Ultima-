@@ -1,6 +1,6 @@
 // TAO (Ultima LV2) : le hub arborescence qui réunit RESHIRAM (le réel) et
 // ZEKROM (l'idéal) sous une seule voie. Prouve : la racine TAO (blason des deux
-// ailes réunies, titre, devise), les 2 branches cliquables vers reshiram.html
+// yin-yang, titre, devise), les 2 branches cliquables vers reshiram.html
 // et zekrom.html (1 lien chacune), leurs blasons gravés, la passerelle
 // (rétroplanning) discrète, le retour vers la boussole (/), les tap targets
 // ≥ 44 px, le contraste AA sur les couleurs réellement rendues, AUCUNE requête
@@ -50,7 +50,7 @@ console.log('— TAO : la voie (arborescence RESHIRAM ⇄ ZEKROM) —');
 await page.goto(`${BASE}/tao.html`, { waitUntil: 'load', timeout: 20000 });
 await page.waitForSelector('.tao-arbre', { timeout: 20000 });
 
-// ---- La racine TAO : titre + devise + blason des deux ailes réunies. ----
+// ---- La racine TAO : titre + devise + blason yin-yang. ----
 const titre = (await page.locator('h1.console-titre').textContent())?.trim();
 verifier('Racine : titre « TAO »', titre === 'TAO', `lu: ${titre}`);
 const devise = (await page.locator('.console-invite').textContent())?.trim();
@@ -58,8 +58,8 @@ verifier('Racine : devise « La voie — le réel et l\'idéal »',
   /La voie/.test(devise || '') && /réel/.test(devise || '') && /idéal/.test(devise || ''), `lu: ${devise}`);
 verifier('Racine : blason gravé présent (bandeau)',
   (await page.locator('.console-entete .blason-svg').count()) === 1);
-verifier('Racine : blason TAO = les deux ailes réunies',
-  /deux ailes réunies/.test(await page.locator('.console-entete .blason-svg').getAttribute('aria-label') || ''));
+verifier('Racine : blason TAO = le yin-yang',
+  /yin-yang/.test(await page.locator('.console-entete .blason-svg').getAttribute('aria-label') || ''));
 
 // ---- L'arbre : un tronc gravé + deux branches. ----
 verifier('Tronc gravé (une racine, deux ramifications)', (await page.locator('.tao-tronc').count()) === 1);
