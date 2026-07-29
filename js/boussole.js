@@ -29,6 +29,15 @@
     if (!data) { return null; }
     function n(v) { return Math.max(0, parseInt(v, 10) || 0); }
     function s(compte) { return compte > 1 ? 's' : ''; }
+    // TAO — cap agrégé (RESHIRAM + ZEKROM réunis) : le réel ET l'idéal en une ligne.
+    if (id === 'tao' && (data.reshiram || data.zekrom)) {
+      var rt = data.reshiram || {};
+      var zt = data.zekrom || {};
+      var tt = n(rt.talents);
+      var it = n(zt.ideaux);
+      return tt + ' talent' + s(tt) + ' réel' + s(tt) + ' · ' + n(rt.a_etayer) + ' à étayer'
+        + ' — ' + it + ' ' + (it > 1 ? 'idéaux' : 'idéal') + ' · ' + n(zt.a_orienter) + ' à orienter.';
+    }
     if (id === 'reshiram' && data.reshiram) {
       var r = data.reshiram;
       var t = n(r.talents);
@@ -58,12 +67,22 @@
     if (id === 'ultima' && data.riven) {
       c = n(data.riven.relances_dues);
       if (c > 0) { return c + ' relance' + s(c) + ' due' + s(c); }
+    } else if (id === 'tao' && (data.reshiram || data.zekrom)) {
+      // Cumul « à traiter » du cap réuni : RESHIRAM (à étayer) + ZEKROM (à orienter).
+      var ae = n((data.reshiram || {}).a_etayer);
+      var ao = n((data.zekrom || {}).a_orienter);
+      if (ae + ao > 0) {
+        var parts = [];
+        if (ae > 0) { parts.push(ae + ' talent' + s(ae) + ' à étayer'); }
+        if (ao > 0) { parts.push(ao + ' ' + (ao > 1 ? 'idéaux' : 'idéal') + ' à orienter'); }
+        return parts.join(' · ');
+      }
     } else if (id === 'reshiram' && data.reshiram) {
       c = n(data.reshiram.a_etayer);
       if (c > 0) { return c + ' talent' + s(c) + ' à étayer'; }
     } else if (id === 'zekrom' && data.zekrom) {
       c = n(data.zekrom.a_orienter);
-      if (c > 0) { return c + ' idéal' + (c > 1 ? 'aux' : '') + ' à orienter'; }
+      if (c > 0) { return c + ' ' + (c > 1 ? 'idéaux' : 'idéal') + ' à orienter'; }
     }
     return null;
   }
@@ -139,29 +158,15 @@
       blason: blasonPortail(),
     },
     {
-      id: 'reshiram',
-      nom: 'RESHIRAM',
-      cible: 'reshiram.html',
+      id: 'tao',
+      nom: 'TAO',
+      cible: 'tao.html',
       externe: false,
       etat: 'Ouvert',
-      resume: '« Le travail de la réalité » — cartographier tes talents et '
-        + 'capacités concrets : ce que tu sais vraiment faire, tes plus-values '
-        + 'réelles, ton réseau (lien fort avec RIVEN). Rien que du concret, '
-        + 'faits et chiffres. Passerelle avec ZEKROM.',
-      blason: blasonAileBlanche(),
-      lien: 'zekrom', // passerelle réel ↔ idéal
-    },
-    {
-      id: 'zekrom',
-      nom: 'ZEKROM',
-      cible: 'zekrom.html',
-      externe: false,
-      etat: 'Ouvert',
-      resume: '« La quête de l’idéal » — tes rêves et volontés hautes, captés '
-        + 'librement puis formulés en directions (le cap). Un idéal sans cap '
-        + 'reste plein : « à orienter », jamais dévalué. Passerelle avec RESHIRAM '
-        + '(rétroplanning idéal → réel).',
-      blason: blasonAileNoire(),
+      resume: '« La voie » — le réel et l’idéal réunis. RESHIRAM (tes talents réels) '
+        + 'et ZEKROM (tes idéaux) : deux pôles complémentaires, reliés par le '
+        + 'rétroplanning. Entre : l’arbre s’ouvre sur les deux.',
+      blason: blasonTao(),
     },
   ];
 
@@ -385,6 +390,16 @@
     return disque(
       '<g transform="translate(72,0) scale(-1,1)">' + aile('#241c12') + '</g>',
       'l’aile noire de ZEKROM');
+  }
+
+  function blasonTao() {
+    // TAO — les deux ailes réunies : aile blanche (RESHIRAM, le réel) et aile
+    // noire (ZEKROM, l'idéal) en rotation de 180°, façon yin/yang gravé. Une
+    // seule voie qui relie les deux pôles complémentaires.
+    return disque(
+      aile('#ffffff')
+      + '<g transform="rotate(180 36 36)">' + aile('#241c12') + '</g>',
+      'les deux ailes réunies du TAO');
   }
 
   function roseDesVents() {
