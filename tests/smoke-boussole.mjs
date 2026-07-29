@@ -96,12 +96,15 @@ verifier('Titre ligne 2 « Bienvenue »', principal === 'Bienvenue', `lu: ${prin
 const invite = (await page.locator('.console-invite').textContent())?.trim();
 verifier('Invite présente', /Sur quoi est-ce qu'on travaille aujourd'hui/.test(invite || ''), `lu: ${invite}`);
 
-// Les 5 caps rendus.
+// Les 4 caps rendus (RESHIRAM + ZEKROM désormais réunis sous le seul cap TAO).
 const noms = (await page.locator('.cap-nom').allTextContents()).map((n) => n.trim());
-verifier('5 caps rendus', noms.length === 5, `trouvés: ${JSON.stringify(noms)}`);
-for (const attendu of ['ULTIMA', 'RENOBOOST IA', 'YCOME', 'RESHIRAM', 'ZEKROM']) {
+verifier('4 caps rendus', noms.length === 4, `trouvés: ${JSON.stringify(noms)}`);
+for (const attendu of ['ULTIMA', 'RENOBOOST IA', 'YCOME', 'TAO']) {
   verifier(`Cap ${attendu} présent`, noms.includes(attendu));
 }
+// RESHIRAM / ZEKROM ne sont plus des caps autonomes de la boussole.
+verifier('Plus de cap RESHIRAM autonome', (await page.locator('.cap[data-id="reshiram"]').count()) === 0);
+verifier('Plus de cap ZEKROM autonome', (await page.locator('.cap[data-id="zekrom"]').count()) === 0);
 
 // ULTIMA est une porte ouverte interne (ancre vers ultima.html, même onglet).
 const capUltima = page.locator('a.cap[data-id="ultima"]');
@@ -119,23 +122,14 @@ verifier('Cap RENOBOOST IA ouvre un nouvel onglet',
 verifier('Cap RENOBOOST IA en rel noopener',
   /noopener/.test(await capReno.getAttribute('rel') || ''));
 
-// RESHIRAM est désormais un cap OUVRABLE interne (page reshiram.html, même
-// onglet, PAS un lien externe façon Renoboost/YCOME).
-const capReshiram = page.locator('a.cap[data-id="reshiram"]');
-verifier('Cap RESHIRAM ouvrable (ancre)', (await capReshiram.count()) === 1);
-verifier('Cap RESHIRAM pointe vers reshiram.html (interne)',
-  (await capReshiram.getAttribute('href')) === 'reshiram.html');
-verifier('Cap RESHIRAM en interne (pas de nouvel onglet)',
-  (await capReshiram.getAttribute('target')) === null);
-
-// ZEKROM est désormais un cap OUVRABLE interne (page zekrom.html, même onglet,
-// miroir de RESHIRAM — complète le doublet réel ↔ idéal).
-const capZekrom = page.locator('a.cap[data-id="zekrom"]');
-verifier('Cap ZEKROM ouvrable (ancre)', (await capZekrom.count()) === 1);
-verifier('Cap ZEKROM pointe vers zekrom.html (interne)',
-  (await capZekrom.getAttribute('href')) === 'zekrom.html');
-verifier('Cap ZEKROM en interne (pas de nouvel onglet)',
-  (await capZekrom.getAttribute('target')) === null);
+// TAO est un cap OUVRABLE interne (hub tao.html, même onglet) : il réunit
+// RESHIRAM (le réel) et ZEKROM (l'idéal) et s'ouvre en arborescence sur les deux.
+const capTao = page.locator('a.cap[data-id="tao"]');
+verifier('Cap TAO ouvrable (ancre)', (await capTao.count()) === 1);
+verifier('Cap TAO pointe vers tao.html (interne)',
+  (await capTao.getAttribute('href')) === 'tao.html');
+verifier('Cap TAO en interne (pas de nouvel onglet)',
+  (await capTao.getAttribute('target')) === null);
 
 // YCOME reste « à venir » : non-lien, aria-disabled.
 {
@@ -146,13 +140,14 @@ verifier('Cap ZEKROM en interne (pas de nouvel onglet)',
 }
 verifier('1 cap « à venir » (YCOME seul)', (await page.locator('.cap--avenir').count()) === 1);
 
-// Passerelle visuelle RESHIRAM ↔ ZEKROM tracée.
-verifier('Passerelle RESHIRAM ↔ ZEKROM tracée',
-  (await page.locator('.boussole-aiguilles .passerelle').count()) === 1);
+// La passerelle réel ↔ idéal est désormais INTERNE à TAO (plus de trait entre
+// deux caps sur la boussole).
+verifier('Aucune passerelle inter-caps (interne à TAO)',
+  (await page.locator('.boussole-aiguilles .passerelle').count()) === 0);
 
-// La rose au cœur + les 5 aiguilles.
+// La rose au cœur + les 4 aiguilles.
 verifier('Rose des vents au cœur', (await page.locator('.boussole-coeur svg').count()) === 1);
-verifier('5 aiguilles tracées', (await page.locator('.boussole-aiguilles .aiguille').count()) === 5);
+verifier('4 aiguilles tracées', (await page.locator('.boussole-aiguilles .aiguille').count()) === 4);
 
 // Le résumé Léo n'apparaît QU'au survol : au repos, invite par défaut.
 const paroleRepos = (await page.locator('#boussole-parole').textContent())?.trim();
@@ -274,21 +269,13 @@ verifier('Connecté : boussole non inerte', await pageCo.evaluate(() => {
 await pageCo.waitForResponse('**/api/cockpit', { timeout: 10000 }).catch(() => {});
 verifier('Cockpit : Bearer transmis à /api/cockpit', bearerCockpit === 'Bearer jeton-factice', `lu: ${bearerCockpit}`);
 
-// Survol RESHIRAM → ligne vivante avec les agrégats réels (pas le texte figé seul).
-await pageCo.locator('.cap[data-id="reshiram"]').hover();
+// Survol TAO → ligne vivante AGRÉGÉE (RESHIRAM + ZEKROM), pas le texte figé seul.
+await pageCo.locator('.cap[data-id="tao"]').hover();
 await pageCo.waitForSelector('.parole-cockpit', { timeout: 5000 });
-const vivanteR = (await pageCo.locator('.parole-cockpit').textContent()) || '';
-verifier('Résumé vivant RESHIRAM (3 talents · 1 à étayer)',
-  /En cours/.test(vivanteR) && /3 talents réels/.test(vivanteR) && /1 à étayer/.test(vivanteR), `lu: ${vivanteR}`);
-
-// Survol ZEKROM → sa ligne vivante propre.
-await pageCo.locator('.cap[data-id="zekrom"]').hover();
-await pageCo.waitForFunction(
-  () => /3 idéaux/.test((document.querySelector('.parole-cockpit') || {}).textContent || ''),
-  { timeout: 5000 }).catch(() => {});
-const vivanteZ = (await pageCo.locator('.parole-cockpit').textContent()) || '';
-verifier('Résumé vivant ZEKROM (3 idéaux · 2 acquis · 1 à construire)',
-  /3 idéaux/.test(vivanteZ) && /2 talents reliés/.test(vivanteZ) && /1 à construire/.test(vivanteZ), `lu: ${vivanteZ}`);
+const vivanteTao = (await pageCo.locator('.parole-cockpit').textContent()) || '';
+verifier('Résumé vivant TAO agrège R (3 talents · 1 à étayer) + Z (3 idéaux · 0 à orienter)',
+  /En cours/.test(vivanteTao) && /3 talents réels/.test(vivanteTao) && /1 à étayer/.test(vivanteTao)
+    && /3 idéaux/.test(vivanteTao) && /0 à orienter/.test(vivanteTao), `lu: ${vivanteTao}`);
 
 // --- v2 palier A : badges « à traiter » au survol (signaux actionnables). ---
 // Cap Ultima → badge RIVEN « 2 relances dues » (aucune ligne vivante pour ce cap).
@@ -309,21 +296,15 @@ const cSig = await pageCo.evaluate(() => {
 verifier('Contraste badge signal ≥ 4,5:1', ratio(versHex(cSig.texte), cSig.fond) >= 4.5,
   `${ratio(versHex(cSig.texte), cSig.fond).toFixed(2)}:1`);
 
-// Cap RESHIRAM → badge « 1 talent à étayer » (en plus de sa ligne vivante).
-await pageCo.locator('.cap[data-id="reshiram"]').hover();
+// Cap TAO → badge « à traiter » cumulé. Fixture : reshiram.a_etayer=1,
+// zekrom.a_orienter=0 → seul le terme « à étayer » s'affiche.
+await pageCo.locator('.cap[data-id="tao"]').hover();
 await pageCo.waitForFunction(
   () => /à étayer/.test((document.querySelector('.parole-signal') || {}).textContent || ''),
   { timeout: 5000 }).catch(() => {});
-const signalR = (await pageCo.locator('.parole-signal').textContent()) || '';
-verifier('Badge RESHIRAM « 1 talent à étayer »', /1 talent à étayer/.test(signalR), `lu: ${signalR}`);
-
-// Cap ZEKROM (a_orienter=0) → PAS de badge (la donnée dort quand rien à traiter).
-await pageCo.locator('.cap[data-id="zekrom"]').hover();
-await pageCo.waitForFunction(
-  () => /3 idéaux/.test((document.querySelector('.parole-cockpit') || {}).textContent || ''),
-  { timeout: 5000 }).catch(() => {});
-verifier('ZEKROM sans compte actionnable : aucun badge',
-  (await pageCo.locator('.parole-signal').count()) === 0);
+const signalTao = (await pageCo.locator('.parole-signal').textContent()) || '';
+verifier('Badge TAO « 1 talent à étayer » (cumul R+Z, 0 à orienter masqué)',
+  /1 talent à étayer/.test(signalTao) && !/à orienter/.test(signalTao), `lu: ${signalTao}`);
 
 // Un cap SANS data (YCOME) n'a pas de ligne vivante (texte figé seul).
 await pageCo.locator('.cap[data-id="ycome"]').focus();
@@ -333,28 +314,37 @@ verifier('Cap sans data (YCOME) : aucune ligne vivante',
 verifier('Cap sans data (YCOME) : aucun badge',
   (await pageCo.locator('.parole-signal').count()) === 0);
 
-// Fonction pure ligneVivante exposée (aucune donnée réelle).
+// Fonction pure ligneVivante exposée (aucune donnée réelle). Le cap TAO agrège
+// RESHIRAM + ZEKROM ; les branches reshiram/zekrom restent pures et testables.
 const pur = await pageCo.evaluate((d) => ({
+  tao: window.UltimaBoussole.ligneVivante('tao', d),
   r: window.UltimaBoussole.ligneVivante('reshiram', d),
   z: window.UltimaBoussole.ligneVivante('zekrom', d),
   vide: window.UltimaBoussole.ligneVivante('ycome', d),
-  sansData: window.UltimaBoussole.ligneVivante('reshiram', null),
+  sansData: window.UltimaBoussole.ligneVivante('tao', null),
 }), COCKPIT.data);
+verifier('ligneVivante pure : TAO agrège R+Z',
+  /3 talents réels · 1 à étayer — 3 idéaux · 0 à orienter\./.test(pur.tao || ''), `lu: ${pur.tao}`);
 verifier('ligneVivante pure : RESHIRAM', /3 talents réels · 1 à étayer\./.test(pur.r || ''), `lu: ${pur.r}`);
 verifier('ligneVivante pure : ZEKROM', /3 idéaux · 0 à orienter · 2 talents reliés \(acquis\), 1 à construire\./.test(pur.z || ''), `lu: ${pur.z}`);
 verifier('ligneVivante pure : cap sans data → null', pur.vide === null && pur.sansData === null);
 
 // Fonction pure signalDe exposée (v2 palier A) — que des entiers, aucune PII.
+// Le cap TAO cumule RESHIRAM (à étayer) + ZEKROM (à orienter).
 const sig = await pageCo.evaluate((d) => ({
   u: window.UltimaBoussole.signalDe('ultima', d),
-  r: window.UltimaBoussole.signalDe('reshiram', d),
-  zZero: window.UltimaBoussole.signalDe('zekrom', d),      // a_orienter=0 → null
+  tao: window.UltimaBoussole.signalDe('tao', d),           // a_etayer=1, a_orienter=0
+  taoDouble: window.UltimaBoussole.signalDe('tao', { reshiram: { a_etayer: 2 }, zekrom: { a_orienter: 3 } }),
+  taoZero: window.UltimaBoussole.signalDe('tao', { reshiram: { a_etayer: 0 }, zekrom: { a_orienter: 0 } }),
   ycome: window.UltimaBoussole.signalDe('ycome', d),        // pas de signal défini
-  sansData: window.UltimaBoussole.signalDe('ultima', null),
+  sansData: window.UltimaBoussole.signalDe('tao', null),
 }), COCKPIT.data);
 verifier('signalDe pur : Ultima → « 2 relances dues »', sig.u === '2 relances dues', `lu: ${sig.u}`);
-verifier('signalDe pur : RESHIRAM → « 1 talent à étayer »', sig.r === '1 talent à étayer', `lu: ${sig.r}`);
-verifier('signalDe pur : ZEKROM (0 à orienter) → null', sig.zZero === null);
+verifier('signalDe pur : TAO (1 à étayer, 0 à orienter) → « 1 talent à étayer »',
+  sig.tao === '1 talent à étayer', `lu: ${sig.tao}`);
+verifier('signalDe pur : TAO (2 à étayer · 3 à orienter) → cumul des deux termes',
+  sig.taoDouble === '2 talents à étayer · 3 idéaux à orienter', `lu: ${sig.taoDouble}`);
+verifier('signalDe pur : TAO (cumul 0) → null', sig.taoZero === null);
 verifier('signalDe pur : cap sans signal / sans data → null', sig.ycome === null && sig.sansData === null);
 
 verifier('Zéro erreur console (accueil connecté + cockpit)', erreursCo.length === 0, erreursCo.slice(0, 3).join(' | '));

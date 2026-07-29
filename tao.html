@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Ultima — TAO</title>
+  <meta name="description" content="TAO : la voie qui réunit RESHIRAM (le réel) et ZEKROM (l'idéal). L'arbre s'ouvre sur les deux pôles, reliés par le rétroplanning.">
+  <meta name="theme-color" content="#0e3a52">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%230e3a52'/%3E%3Cpath d='M16 4a12 12 0 0 0 0 24 6 6 0 0 1 0-12 6 6 0 0 0 0-12z' fill='%23e8cf8f'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/console.css">
+  <link rel="stylesheet" href="css/tao.css">
+</head>
+<body class="console page-tao">
+
+  <!-- Rose des vents décorative (registre carte savante), muette. -->
+  <div class="console-decor" aria-hidden="true">
+    <svg viewBox="0 0 72 72" focusable="false">
+      <circle cx="36" cy="36" r="26" fill="none" stroke="#c9a659" stroke-width="1.4" opacity="0.85"/>
+      <path d="M36 4 L42 30 L68 36 L42 42 L36 68 L30 42 L4 36 L30 30 Z"
+            fill="#e8cf8f" stroke="#c9a659" stroke-width="1"/>
+      <path d="M36 18 L39 33 L54 36 L39 39 L36 54 L33 39 L18 36 L33 33 Z"
+            fill="#c9a659" stroke="none" opacity="0.55"/>
+      <text x="36" y="14" text-anchor="middle" font-size="9" fill="#e8cf8f" font-style="italic">N</text>
+    </svg>
+  </div>
+
+  <div class="console-conteneur">
+
+    <!-- Retour à la boussole d'accueil (Ultima LV2). -->
+    <p class="console-retour"><a href="/">↞ Boussole</a></p>
+
+    <!-- ===== Racine TAO : les deux ailes réunies (blanche + noire), titre, devise ===== -->
+    <header class="console-entete">
+      <svg class="blason-svg" viewBox="0 0 72 72" role="img"
+           aria-label="Blason gravé : les deux ailes réunies du TAO, blanche et noire" focusable="false"
+           width="118">
+        <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
+        <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
+        <!-- Aile blanche (RESHIRAM, le réel). -->
+        <g stroke="#3b2f1c" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round">
+          <path d="M23 49 C 23 40, 25 32, 33 27 C 40 22, 48 22, 54 23
+                   C 49 26, 47 29, 47.5 32 C 44 30, 41 31, 40 34
+                   C 43 34, 45 36, 45 39 C 41 37, 38 38, 37 41
+                   C 40 41, 42 43, 42 45 C 37 44, 30 47, 23 49 Z" fill="#ffffff"/>
+        </g>
+        <path d="M27 46 C 31 35, 40 28, 51 25" stroke="#a9884a" stroke-width="0.7"
+              fill="none" opacity="0.6"/>
+        <!-- Aile noire (ZEKROM, l'idéal), en rotation de 180° : le yin/yang gravé. -->
+        <g transform="rotate(180 36 36)">
+          <g stroke="#3b2f1c" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round">
+            <path d="M23 49 C 23 40, 25 32, 33 27 C 40 22, 48 22, 54 23
+                     C 49 26, 47 29, 47.5 32 C 44 30, 41 31, 40 34
+                     C 43 34, 45 36, 45 39 C 41 37, 38 38, 37 41
+                     C 40 41, 42 43, 42 45 C 37 44, 30 47, 23 49 Z" fill="#241c12"/>
+          </g>
+          <path d="M27 46 C 31 35, 40 28, 51 25" stroke="#a9884a" stroke-width="0.7"
+                fill="none" opacity="0.6"/>
+        </g>
+      </svg>
+      <h1 class="console-titre">TAO</h1>
+      <p class="console-invite">La voie — le réel et l'idéal</p>
+    </header>
+
+    <!-- ===== L'arbre : le tronc gravé se ramifie en deux branches ===== -->
+    <main class="tao-arbre" aria-label="Les deux pôles réunis du TAO">
+
+      <!-- Tronc gravé : une racine, deux ramifications (décor pur, muet). -->
+      <svg class="tao-tronc" viewBox="0 0 240 70" role="presentation" aria-hidden="true" focusable="false">
+        <g fill="none" stroke="#a9884a" stroke-width="2.2" stroke-linecap="round">
+          <path d="M120 6 V26"/>
+          <path d="M120 26 C 120 44, 60 44, 44 62"/>
+          <path d="M120 26 C 120 44, 180 44, 196 62"/>
+        </g>
+        <g fill="#a9884a">
+          <circle cx="120" cy="6" r="3"/>
+          <circle cx="44" cy="62" r="3"/>
+          <circle cx="196" cy="62" r="3"/>
+        </g>
+      </svg>
+
+      <ul class="tao-branches">
+
+        <!-- RESHIRAM — l'aile blanche, le travail de la réalité. -->
+        <li class="tao-branche-item">
+          <a class="tao-branche" href="reshiram.html">
+            <span class="tao-branche-blason">
+              <svg class="blason-svg" viewBox="0 0 72 72" role="img"
+                   aria-label="Blason gravé : une aile blanche" focusable="false">
+                <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
+                <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
+                <g stroke="#3b2f1c" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round">
+                  <path d="M23 49 C 23 40, 25 32, 33 27 C 40 22, 48 22, 54 23
+                           C 49 26, 47 29, 47.5 32 C 44 30, 41 31, 40 34
+                           C 43 34, 45 36, 45 39 C 41 37, 38 38, 37 41
+                           C 40 41, 42 43, 42 45 C 37 44, 30 47, 23 49 Z" fill="#ffffff"/>
+                </g>
+                <path d="M27 46 C 31 35, 40 28, 51 25" stroke="#a9884a" stroke-width="0.7"
+                      fill="none" opacity="0.6"/>
+              </svg>
+            </span>
+            <span class="tao-branche-corps">
+              <span class="tao-branche-nom">RESHIRAM</span>
+              <span class="tao-branche-sous">Le travail de la réalité</span>
+            </span>
+          </a>
+        </li>
+
+        <!-- Passerelle réel ↔ idéal : le rétroplanning (mention discrète, statique). -->
+        <li class="tao-lien">
+          <span class="tao-lien-chip">⇄ rétroplanning</span>
+        </li>
+
+        <!-- ZEKROM — l'aile noire, la quête de l'idéal. -->
+        <li class="tao-branche-item">
+          <a class="tao-branche" href="zekrom.html">
+            <span class="tao-branche-blason">
+              <svg class="blason-svg" viewBox="0 0 72 72" role="img"
+                   aria-label="Blason gravé : une aile noire" focusable="false">
+                <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
+                <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
+                <g transform="translate(72,0) scale(-1,1)">
+                  <g stroke="#3b2f1c" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round">
+                    <path d="M23 49 C 23 40, 25 32, 33 27 C 40 22, 48 22, 54 23
+                             C 49 26, 47 29, 47.5 32 C 44 30, 41 31, 40 34
+                             C 43 34, 45 36, 45 39 C 41 37, 38 38, 37 41
+                             C 40 41, 42 43, 42 45 C 37 44, 30 47, 23 49 Z" fill="#241c12"/>
+                  </g>
+                  <path d="M27 46 C 31 35, 40 28, 51 25" stroke="#a9884a" stroke-width="0.7"
+                        fill="none" opacity="0.6"/>
+                </g>
+              </svg>
+            </span>
+            <span class="tao-branche-corps">
+              <span class="tao-branche-nom">ZEKROM</span>
+              <span class="tao-branche-sous">La quête de l'idéal</span>
+            </span>
+          </a>
+        </li>
+
+      </ul>
+    </main>
+
+  </div>
+
+</body>
+</html>

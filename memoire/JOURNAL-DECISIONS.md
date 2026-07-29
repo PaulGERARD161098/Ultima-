@@ -937,3 +937,18 @@
   `get_advisors` reste bloqué par approbation MCP en async (les `apply_migration`,
   eux, sont passés) → consigné : Paul lit Security/Performance au dashboard.
   **⏳ Reste Paul** : advisors dashboard + preuve live (écrire un serment/situation).
+- **2026-07-29 (cap TAO — RESHIRAM + ZEKROM réunis en arborescence)** — Paul :
+  « regroupe R et Z sous un même cap, TAO, qui s'ouvre en arborescence sur les 2 ».
+  **Revient explicitement sur la décision du 21-07** (« deux caps autonomes, jamais
+  fusionnés »). Le Tao = la voie qui unit le réel (RESHIRAM) et l'idéal (ZEKROM).
+  Livré (solo, dispatch front-carto + contre-passe Léo) : boussole → un cap unique
+  `tao` (blasonTao gravé, deux ailes en miroir) qui ouvre `tao.html`, hub
+  arborescence statique sur les 2 branches (RESHIRAM aile blanche / ZEKROM aile
+  noire → leurs pages). Passerelle réel↔idéal devenue INTERNE à TAO (plus de trait
+  inter-caps). Cockpit palier A préservé : `ligneVivante('tao')` + `signalDe('tao')`
+  agrègent « à étayer » (RESHIRAM) + « à orienter » (ZEKROM) au survol du cap.
+  Retours reshiram/zekrom → tao.html (« ↞ TAO »), tao.html → boussole. Harnais :
+  `smoke-tao` + `smoke-boussole` MAJ, patrimoine COMPLET vert. Aucune touche
+  API/migrations/données (front pur). Deux autres points de la session tranchés :
+  Google Cloud = 0 € pour garder le Drive (OAuth + Drive API gratuits) ; advisors
+  rendus automatiques (`.claude/settings.json` auto-approuve les lectures Supabase).
