@@ -35,30 +35,15 @@
     <!-- ===== Racine TAO : les deux ailes réunies (blanche + noire), titre, devise ===== -->
     <header class="console-entete">
       <svg class="blason-svg" viewBox="0 0 72 72" role="img"
-           aria-label="Blason gravé : les deux ailes réunies du TAO, blanche et noire" focusable="false"
+           aria-label="Blason gravé : le yin-yang du TAO" focusable="false"
            width="118">
         <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
         <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
-        <!-- Aile blanche (RESHIRAM, le réel). -->
-        <g stroke="#3b2f1c" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round">
-          <path d="M23 49 C 23 40, 25 32, 33 27 C 40 22, 48 22, 54 23
-                   C 49 26, 47 29, 47.5 32 C 44 30, 41 31, 40 34
-                   C 43 34, 45 36, 45 39 C 41 37, 38 38, 37 41
-                   C 40 41, 42 43, 42 45 C 37 44, 30 47, 23 49 Z" fill="#ffffff"/>
-        </g>
-        <path d="M27 46 C 31 35, 40 28, 51 25" stroke="#a9884a" stroke-width="0.7"
-              fill="none" opacity="0.6"/>
-        <!-- Aile noire (ZEKROM, l'idéal), en rotation de 180° : le yin/yang gravé. -->
-        <g transform="rotate(180 36 36)">
-          <g stroke="#3b2f1c" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round">
-            <path d="M23 49 C 23 40, 25 32, 33 27 C 40 22, 48 22, 54 23
-                     C 49 26, 47 29, 47.5 32 C 44 30, 41 31, 40 34
-                     C 43 34, 45 36, 45 39 C 41 37, 38 38, 37 41
-                     C 40 41, 42 43, 42 45 C 37 44, 30 47, 23 49 Z" fill="#241c12"/>
-          </g>
-          <path d="M27 46 C 31 35, 40 28, 51 25" stroke="#a9884a" stroke-width="0.7"
-                fill="none" opacity="0.6"/>
-        </g>
+        <!-- Yin-yang gravé : le réel (RESHIRAM) et l'idéal (ZEKROM), une seule voie. -->
+        <circle cx="36" cy="36" r="24" fill="#efe3c4" stroke="#5a4118" stroke-width="1"/>
+        <path d="M36 12 A24 24 0 0 1 36 60 A12 12 0 0 1 36 36 A12 12 0 0 0 36 12 Z" fill="#3b2f1c"/>
+        <circle cx="36" cy="24" r="4.5" fill="#efe3c4"/>
+        <circle cx="36" cy="48" r="4.5" fill="#3b2f1c"/>
       </svg>
       <h1 class="console-titre">TAO</h1>
       <p class="console-invite">La voie — le réel et l'idéal</p>

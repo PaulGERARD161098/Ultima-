@@ -393,13 +393,15 @@
   }
 
   function blasonTao() {
-    // TAO — les deux ailes réunies : aile blanche (RESHIRAM, le réel) et aile
-    // noire (ZEKROM, l'idéal) en rotation de 180°, façon yin/yang gravé. Une
-    // seule voie qui relie les deux pôles complémentaires.
+    // TAO — le yin-yang gravé : le réel (RESHIRAM) et l'idéal (ZEKROM), deux
+    // pôles complémentaires dans une seule voie. Registre antique (encre +
+    // parchemin). Tracé yin-yang classique (grand demi-cercle + deux petits).
     return disque(
-      aile('#ffffff')
-      + '<g transform="rotate(180 36 36)">' + aile('#241c12') + '</g>',
-      'les deux ailes réunies du TAO');
+      '<circle cx="36" cy="36" r="24" fill="#efe3c4" stroke="#5a4118" stroke-width="1"/>'
+      + '<path d="M36 12 A24 24 0 0 1 36 60 A12 12 0 0 1 36 36 A12 12 0 0 0 36 12 Z" fill="#3b2f1c"/>'
+      + '<circle cx="36" cy="24" r="4.5" fill="#efe3c4"/>'
+      + '<circle cx="36" cy="48" r="4.5" fill="#3b2f1c"/>',
+      'le yin-yang du TAO');
   }
 
   function roseDesVents() {
