@@ -2632,6 +2632,13 @@ textarea:focus-visible,
   gap: 0.5rem;
 }
 
+/* Micro dans le champ de Léo : c'est l'enveloppe .champ-vocal qui devient
+   l'élément flexible, le champ occupant toute sa largeur (boucle ④). */
+.leo-voix-formulaire .champ-vocal {
+  flex: 1;
+  min-width: 0;
+}
+
 .leo-voix-champ {
   flex: 1;
   min-height: 44px;

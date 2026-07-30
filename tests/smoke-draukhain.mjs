@@ -97,6 +97,28 @@ const FIXTURE_PAGES = {
   },
 };
 
+// Stub minimal de la Web Speech API (absente en headless) : suffit à prouver
+// que le micro s'installe et qu'une transcription atterrit dans le champ.
+// Le cycle complet de la dictée est couvert par smoke-dictee.mjs.
+function stubSpeechRecognition() {
+  window.__stubReco = { instances: [] };
+  class FauxSpeechRecognition {
+    constructor() {
+      this.onstart = null; this.onresult = null; this.onerror = null; this.onend = null;
+      window.__stubReco.instances.push(this);
+    }
+    start() { setTimeout(() => { if (this.onstart) this.onstart(); }, 0); }
+    stop() { setTimeout(() => { if (this.onend) this.onend(); }, 0); }
+    abort() { setTimeout(() => { if (this.onend) this.onend(); }, 0); }
+    emettre(texte) {
+      const segment = [{ transcript: texte }];
+      segment.isFinal = true;
+      if (this.onresult) this.onresult({ resultIndex: 0, results: [segment] });
+    }
+  }
+  window.SpeechRecognition = FauxSpeechRecognition;
+}
+
 const navigateur = await chromium.launch({
   executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
 });
@@ -482,6 +504,7 @@ console.log('— D. draukhain.html : cartouche de Léo + mains sur IMLADRIK —'
       user: { id: '00000000-0000-4000-8000-000000000000', aud: 'authenticated', role: 'authenticated' }
     }));
   } catch (e) {}`);
+  await page.addInitScript(stubSpeechRecognition);
   await page.route(`**://${REF_SUPABASE}.supabase.co/**`, (route) =>
     route.fulfill({ status: 503, contentType: 'application/json', body: '{}' }));
   await page.route('**/api/serments**', (route) => route.fulfill({
@@ -537,8 +560,27 @@ console.log('— D. draukhain.html : cartouche de Léo + mains sur IMLADRIK —'
     !/volonté au-delà du possible|tenu bon tout/.test(cartouche));
   verifier('Zone « Parler à Léo » présente', (await page.locator('.leo-voix-champ').count()) === 1);
 
+  // 1bis. Le micro (composant partagé js/dictee.js) : Paul dicte, il n'écrit pas.
+  const micro = page.locator('.leo-voix-formulaire .bouton-micro');
+  verifier('Micro adjoint au champ de Léo', (await micro.count()) === 1);
+  const tailleMicro = await micro.evaluate((el) => el.getBoundingClientRect());
+  verifier('Tap target micro ≥ 44 px',
+    tailleMicro.width >= 44 && tailleMicro.height >= 44,
+    `${tailleMicro.width}×${tailleMicro.height}`);
+  verifier('Micro annoncé au lecteur d’écran',
+    /Dicter/.test((await micro.getAttribute('aria-label')) || ''));
+  await micro.click();
+  await page.waitForTimeout(60);
+  await page.evaluate(() => {
+    const i = window.__stubReco.instances;
+    i[i.length - 1].emettre('ravive AURORE : tenu bon');
+    i[i.length - 1].stop();
+  });
+  await page.waitForTimeout(120);
+  verifier('La dictée atterrit dans le champ de Léo',
+    /ravive AURORE/.test(await page.locator('.leo-voix-champ').inputValue()));
+
   // 2. La dictée part vers /api/leo avec le Bearer et le bon quadrant.
-  await page.locator('.leo-voix-champ').fill('ravive AURORE : tenu bon');
   await page.locator('.leo-voix-envoyer').click();
   await page.waitForSelector('.leo-carte-action', { timeout: 20000 });
   verifier('Un appel POST /api/leo', appelsLeo.length === 1, `${appelsLeo.length}`);

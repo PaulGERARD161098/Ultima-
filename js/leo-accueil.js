@@ -784,6 +784,13 @@
     formulaire.appendChild(envoyer);
     section.appendChild(formulaire);
 
+    // Le micro (composant partagé js/dictee.js) : progressive enhancement —
+    // module absent ou navigateur sans Web Speech → champ nu, aucune erreur.
+    // Il enveloppe le champ dans .champ-vocal, d'où la règle de flex dédiée.
+    if (window.UltimaDictee && window.UltimaDictee.disponible()) {
+      window.UltimaDictee.attacher(champ, 'votre message à Léo');
+    }
+
     var historique = [];
     var enCours = false;
 

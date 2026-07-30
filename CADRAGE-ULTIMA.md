@@ -45,7 +45,16 @@
   de la carte, aucune barre de progression. Harnais : +13 assertions à
   `smoke-draukhain`, **patrimoine COMPLET vert (779)**. Zéro migration, zéro
   touche auth/API/données. Détail : `CADRAGE-IMLADRIK.md §9`.
-  **⏭ Boucle suivante ouverte par Paul** : **dicter dans IMLADRIK** (§10).
+  **✅ Boucle ④ enchaînée le même jour (go Paul « ok pour tout ») — DICTER DANS
+  IMLADRIK** : 5 outils de quadrant `imladrik` dans les mains de Léo (page de
+  journal, serment, flamme, situation, scénario), support `enum` au catalogue
+  (rejet, jamais correction silencieuse), cartouche de Léo monté sur les 3
+  pages du quadrant (comptes seuls, §5 tenue), et le composant de **dictée
+  vocale extrait** de `js/app.js` vers **`js/dictee.js`** — le micro équipe
+  désormais le champ « Parler à Léo » partout. Chaîne prouvée de bout en bout
+  (micro → /api/leo → carte de confirmation → aucune écriture → confirmation →
+  POST avec Bearer). **Patrimoine COMPLET vert (824)**. Détail :
+  `CADRAGE-IMLADRIK.md §9-§10`.
 
 - 🗄️ **Le cheminement — la maquette d'origine (dicté 2026-07-30)** :
   constat de Paul — les **gros pavés-quadrants ne sont pas gracieux** pour dire
