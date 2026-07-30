@@ -1008,3 +1008,17 @@
   `smoke-quadrants` + `smoke-tao` recalés ; les harnais comparent désormais le
   bandeau au **registre** (anti-dérive des coques). Patrimoine COMPLET vert.
   Front pur. Restent L3 (TAO en boussole) et L4 (NICOL BOLAS + ADRAMELECH).
+- **2026-07-30 (Lv3 — L3 : TAO en boussole)** — PR #115 (L2) **fusionnée** sur go
+  Paul (« Fusion, ensuite enchaîne sur l3 ») ; conflit avec la PR #114 d'une
+  session parallèle (cheminement IMLADRIK) **résolu par rebase** — journal des
+  décisions réconcilié en gardant les deux entrées (fichier append-only),
+  patrimoine repassé vert avant fusion. Puis **L3 livrée** : `tao.html` quitte
+  l'arborescence (tronc + 2 branches) pour la boussole — RESHIRAM et ZEKROM
+  autour du yin-yang. **La passerelle devient un ARC** dans le noyau (une corde
+  entre deux caps opposés passait derrière le médaillon et disparaissait —
+  constat de la preview Lv3), avec son nom **gravé sur le tracé** (`lienLibelle`
+  → `textPath`) : « ⇄ rétroplanning ». Les deux résumés disent aussi le
+  rétroplanning (l'arc est décor, la parole de Léo est annoncée). `css/tao.css`
+  **supprimé** (133 lignes). `smoke-tao` réécrit (33 verdicts) avec une preuve
+  géométrique que l'arc sort du médaillon. Patrimoine COMPLET vert. Front pur.
+  Reste L4 (NICOL BOLAS + ADRAMELECH en boussoles).

@@ -166,10 +166,12 @@ pointillée** déjà supportée par le moteur (champ `lien`), légendée
 « ⇄ rétroplanning ». Cœur : yin-yang. L'arborescence actuelle est remplacée ;
 `css/tao.css` devient inutile.
 
-> ⚠️ Constaté en preview : à **deux caps**, ils sont diamétralement opposés
-> (Nord / Sud) et la passerelle droite **passe derrière le médaillon** — donc
-> invisible. Parade à retenir en L3 : la tracer **en arc** contournant le cœur,
-> avec sa mention gravée « ⇄ rétroplanning » posée sur l'arc.
+> ✅ **Résolu en L3.** Constat de la preview : à **deux caps** diamétralement
+> opposés, une passerelle droite **passe derrière le médaillon** — donc
+> invisible. Le noyau ne trace plus de corde : **toute passerelle est un arc**
+> le long du cercle des caps, avec son nom gravé dessus (`lienLibelle`, posé en
+> `textPath`). Vérifié géométriquement au harnais : le milieu de l'arc est à
+> plus de 34 % du plateau, donc hors du médaillon.
 
 ### 4.5 NICOL BOLAS et ADRAMELECH — caps **proposés** (à valider par Paul)
 
@@ -228,10 +230,26 @@ n'ont pas à bouger (les nouvelles pages sont des coques muettes).
 | --- | --- | --- | --- |
 | **L1 ✅** | Le noyau | **LIVRÉ 2026-07-30** — voir §6bis | faible |
 | **L2 ✅** | Les deux supra-divisions | **LIVRÉ 2026-07-30** — voir §6ter |
-| **L3** | TAO en boussole | remplace l'arborescence ; passerelle rétroplanning | faible |
+| **L3 ✅** | TAO en boussole | **LIVRÉ 2026-07-30** — voir §6quater |
 | **L4** | Les deux antichambres | NICOL BOLAS + ADRAMELECH en boussoles (caps §4.5, après validation) | faible |
 
 Chaque boucle : livrée → patrimoine COMPLET vert → commit → PR → annotation.
+
+### 6quater. ✅ L3 — TAO en boussole (livré le 2026-07-30)
+
+| Fichier | Ce qui change |
+| --- | --- |
+| `tao.html` | L'**arborescence** (tronc gravé + deux branches) laisse place à la boussole : RESHIRAM et ZEKROM autour du yin-yang, reliés par l'arc « ⇄ rétroplanning ». Coque pure (`data-noeud="tao"`). |
+| `js/boussole-noyau.mjs` | La passerelle devient un **arc** (`<path>` suivant le cercle des caps) au lieu d'une corde, et accepte un **nom gravé sur le tracé** (`lienLibelle` → `textPath`). |
+| `css/boussole.css` | `.passerelle` passe en `<path>` (`fill: none`) ; nouvelle `.passerelle-libelle` (or antique, cerné d'encre pour rester lisible sur tous les fonds). |
+| `js/registre-lv3.mjs` | `lienLibelle: '⇄ rétroplanning'` sur RESHIRAM ; les deux résumés **disent** le rétroplanning — l'arc est décor, la parole de Léo est ce qui est annoncé aux lecteurs d'écran. |
+| `css/tao.css` | **Supprimé** (133 lignes) : l'arborescence n'existe plus, la boussole habille tout. |
+
+**Vérification** : `smoke-tao` réécrit (33 verdicts) — dont une **preuve
+géométrique** que l'arc sort du médaillon (le milieu du tracé est à plus de
+34 % du plateau du centre) et que le rétroplanning est dit **deux fois** :
+gravé sur l'arc, et prononcé par Léo au survol de chacun des deux pôles.
+Patrimoine COMPLET vert.
 
 ### 6ter. ✅ L2 — les deux supra-divisions (livré le 2026-07-30)
 

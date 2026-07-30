@@ -124,12 +124,28 @@ body.boussole {
 .aiguille.is-actif .aiguille-trait { stroke: #f4e6bd; stroke-width: 1.1; opacity: 1; }
 .aiguille.is-actif .aiguille-pointe { fill: #f4e6bd; opacity: 1; }
 
-/* Passerelle : lien pointillé entre deux caps jumeaux (RESHIRAM ↔ ZEKROM). */
+/* Passerelle : lien pointillé entre deux caps jumeaux (RESHIRAM ↔ ZEKROM).
+   Tracée en ARC le long du cercle des caps par le noyau — une corde passerait
+   derrière le médaillon. `fill: none` : c'est un <path>, pas une <line>. */
 .passerelle {
+  fill: none;
   stroke: var(--or-antique);
   stroke-width: 0.7;
   stroke-dasharray: 1.6 2.2;
   opacity: 0.7;
+}
+
+/* Le nom gravé de la passerelle, posé SUR l'arc (textPath). Décor : la même
+   information est dite par Léo dans le cartouche, qui, lui, est annoncé. */
+.passerelle-libelle {
+  fill: #f0dca0;
+  font-family: var(--police-ancienne);
+  font-style: italic;
+  font-size: 3.4px;              /* unités du viewBox 0..100 */
+  letter-spacing: 0.28px;
+  paint-order: stroke;
+  stroke: rgba(4, 24, 36, 0.55);
+  stroke-width: 0.9px;
 }
 
 /* ---------- Cœur : rose des vents gravée ---------- */
