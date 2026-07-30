@@ -5,6 +5,10 @@
 // Boucle L2 (la voix) : si l'appelant fournit une session réelle via
 // config.voix = { quadrant, jeton }, une zone « Parler à Léo » s'ajoute —
 // appel réseau vers POST /api/leo (IA côté serveur).
+// Boucle « lecture » (les yeux, 2026-07-30) : config.voix.etat — comptes et
+// intitulés bornés, calculés par le quadrant appelant, joints à chaque tour
+// pour que Léo sache répondre « où j'en suis ». Jamais de contenu (page de
+// journal, texte de flamme, déroulé de scénario), jamais d'identifiant.
 // Boucle L2b (les mains) : config.voix.candidats ({ cibles, chantiers,
 // idees, prochainAdrNum } — tableaux { id, libelle } minimaux, données déjà
 // chargées par le quadrant) permet d'exécuter, APRÈS confirmation explicite
@@ -931,7 +935,12 @@
           Accept: 'application/json',
           Authorization: 'Bearer ' + voix.jeton
         },
-        body: JSON.stringify({ quadrant: voix.quadrant, messages: historique })
+        // Les yeux de Léo : l'état du quadrant part avec la question, calculé
+        // par la page appelante sur des données DÉJÀ chargées (aucun second
+        // fetch). Absent → l'appel repart exactement comme avant (L2 intact).
+        body: JSON.stringify(voix.etat
+          ? { quadrant: voix.quadrant, messages: historique, etat: voix.etat }
+          : { quadrant: voix.quadrant, messages: historique })
       }).then(function (reponse) {
         return reponse.json().then(function (corps) {
           return { statut: reponse.status, corps: corps };

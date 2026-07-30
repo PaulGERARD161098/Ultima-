@@ -215,6 +215,13 @@
     var etatCarte = total === 0
       ? 'Le journal est encore vierge.'
       : (total === 1 ? '1 page écrite' : total + ' pages écrites') + '.';
+    // Date de la dernière page (jamais son titre, jamais son contenu).
+    var derniere = '';
+    etat.entrees.forEach(function (e) {
+      var d = e && (e.created_at || '');
+      if (d && d > derniere) { derniere = d; }
+    });
+    derniere = derniere ? String(derniere).slice(0, 10) : '';
 
     window.UltimaLeo.accueillirQuadrant({
       quadrant: 'imladrik',
@@ -232,7 +239,16 @@
       voix: {
         quadrant: 'imladrik',
         jeton: etat.session.access_token,
-        candidats: {}
+        candidats: {},
+        // Les yeux de Léo, au régime le plus strict du quadrant : des COMPTES
+        // et une date, RIEN d'autre. Un titre de page de journal est déjà de
+        // l'intime — il ne quitte pas la page (§5).
+        etat: {
+          compteurs: { 'pages écrites au journal': total },
+          listes: derniere
+            ? { 'Dernière page': [{ libelle: derniere, marque: 'date seule' }] }
+            : {}
+        }
       }
     });
   }

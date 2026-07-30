@@ -714,6 +714,27 @@
           serments: etat.serments.map(function (s) {
             return { id: s.id, libelle: (s.intitule || '').trim() };
           })
+        },
+        // Les yeux de Léo : de quoi répondre « où j'en suis » sur ce cap.
+        // Comptes + INTITULÉS (ceux que Paul nomme lui-même quand il dicte) —
+        // jamais le texte d'une flamme, jamais un identifiant.
+        etat: {
+          compteurs: {
+            'serments scellés': total,
+            'serments à raviver': aRaviver,
+            'flammes vivantes': etat.flammes.length
+          },
+          listes: {
+            'Les serments de Paul (cap DRAUKHAIN)': etat.serments
+              .slice(0, 40)
+              .map(function (s) {
+                var item = { libelle: (s.intitule || '').trim() };
+                if (s.a_raviver === true) { item.marque = 'à raviver'; }
+                else { item.marque = libelleCompte(flammesDe(s.id).length); }
+                return item;
+              })
+              .filter(function (i) { return Boolean(i.libelle); })
+          }
         }
       }
     });
