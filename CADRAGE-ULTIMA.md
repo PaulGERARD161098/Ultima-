@@ -30,6 +30,48 @@
     confirmation du `niveau` (`maitrise` = cran que seul Paul monte) ; sort des 3
     talents seed du §7 non redictés ; frontière ① / ③ (tranchée par Léo :
     ① = AVANT/prévoyance, ③ = PENDANT/sang-froid) à confirmer.
+- 🎯 **PROCHAINES BOUCLES — posées le 2026-07-30 pour la session suivante**
+  (demandé par Paul : « implante-toi ces pistes pour la prochaine session »).
+  Rien n'est engagé : ce sont trois boucles **prêtes à ouvrir**, cadrées, avec
+  leur première action. Ordre recommandé **① → ② → ③** (valeur décroissante,
+  effort croissant). Aucune ne demande de migration ni ne touche l'auth.
+
+  - **① Les yeux de Léo sur les autres quadrants** *(reprise de l'acquis #120)*.
+    **Pourquoi** : la forme `{ compteurs, listes }` est déjà générique et validée
+    fail-closed côté serveur — il ne reste qu'un **branchement page par page**.
+    C'est le meilleur rapport valeur/effort en réserve, et ça sert directement le
+    cap DONNÉE (rendre le réel visible sans écrire une ligne de schéma).
+    **Première action** : lire `CADRAGE-IMLADRIK.md §11` (la forme retenue), puis
+    brancher **RIVEN** en premier (c'est là qu'il y a le plus de données réelles).
+    **Touche** : `js/leo-accueil.js`, `api/_lib/leo.js` (`OUTILS_PAR_QUADRANT`),
+    la page du quadrant. **Gate** : aucune — mais §5 (confidentialité) s'applique,
+    et la règle de charte tient : **une règle de confidentialité se teste par
+    l'ABSENCE** (le harnais cherche l'interdit dans ce qui part et exige de ne
+    pas l'y trouver). **Effort** : une boucle par quadrant, courte.
+
+  - **② NICOL BOLAS — le premier vrai outil financier.** **Pourquoi** : trois caps
+    y sont déclarés « à venir » (REVENUS & CHARGES, IMPÔTS, ÉCHÉANCIER) et le
+    quadrant ne vit que par l'ABAQUE, qui est un **simulateur**, pas le réel.
+    Construire **REVENUS & CHARGES** fait entrer la donnée financière réelle —
+    exactement la directive JL. **Première action** : un **cadrage dicté par
+    Paul** (ce qui entre, ce qui sort, à quelle maille) — c'est lui qui manque,
+    pas le code ; `CADRAGE-NICOL-BOLAS.md` existe déjà pour l'accueillir.
+    **Touche** : nouvelle table + RLS (**gate migration**), une API `requireUser`,
+    une page-feuille sous la boussole du quadrant. **Effort** : plusieurs boucles.
+
+  - **③ RIVEN en boussole.** **Pourquoi** : c'est le seul quadrant resté une
+    **feuille** (règle nœud/feuille §2.1 de `CADRAGE-LV3.md` : une boussole à un
+    seul cap n'a pas de sens). Il le deviendra dès qu'un **deuxième cap** existe.
+    **Première action** : décider **quel deuxième cap** — candidats : l'arbre des
+    relations extrait de `traveler.html`, les chantiers, les secteurs. C'est un
+    **choix produit de Paul**, pas une décision technique. **Touche** : une entrée
+    dans `js/registre-lv3.mjs` + une coque de 40 lignes + l'extraction de la vue
+    choisie. **Effort** : moyen, dominé par l'extraction.
+
+  - **Rappel de méthode acquis en Lv3** : ajouter un projet, un quadrant ou un cap
+    = **une entrée dans `js/registre-lv3.mjs`** (+ une coque de 40 lignes si c'est
+    un nouveau nœud) ; les harnais **comparent le bandeau au registre**, donc une
+    coque ne peut plus dériver en silence.
 
 - 🏁 **CLÔTURE DE SESSION — 2026-07-30 (fil « cheminement + Léo dans IMLADRIK »).**
   Trois boucles ouvertes, **trois boucles fermées et fusionnées dans `main`** ;
