@@ -34,7 +34,7 @@ select :owner,
   'Toujours avoir un plan B',
   '{}',
   'pratique',
-  'Planification et visualisation des futurs possibles — les bons comme les mauvais — assez en amont pour qu''il y ait toujours une solution de repli prête. Ce n''est pas « résoudre les problèmes » : c''est ne jamais rester bloqué.'
+  'Planification et visualisation des futurs possibles — les bons comme les mauvais — assez en amont pour qu''il y ait toujours une solution de repli prête. Ce n''est pas « résoudre les problèmes » : c''est ne jamais rester bloqué. Parade type (cas d''école) : l''artisan ne répond plus ou prend du retard, le client s''impatiente — le doublon est déjà prévu, un second artisan capable d''assurer le même chantier et mobilisable au plus vite.'
 where not exists (
   select 1 from public.talents
   where owner_id = :owner and nom = 'Toujours avoir un plan B'

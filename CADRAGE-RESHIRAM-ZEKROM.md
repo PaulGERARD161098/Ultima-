@@ -275,6 +275,28 @@ où Léo challenge), elles ne sont **jamais seedées**.
 > l'énoncé d'offre. Piste pour la vue « mon offre réelle » : les présenter comme
 > **un triptyque** plutôt que trois lignes indépendantes.
 
+**La parade type du ① (dictée Paul, même jour) — et ce qu'elle révèle.**
+Interrogé sur une preuve, Paul répond par la **figure classique** : l'artisan ne
+répond plus ou prend du retard, le client s'impatiente — qu'est-ce qu'on fait ?
+La parade : **avoir déjà prévu le doublon**, un second artisan capable d'assurer
+le même chantier, mobilisable au plus vite. Paul qualifie lui-même la chose :
+« c'est juste un cas d'école ». **Donc PAS une preuve** (aucun fait, aucun
+chiffre) — consignée en `plus_value` du talent ①, jamais en `preuves`. La règle
+cardinale n'est pas contournée.
+
+**Ce que ça change (observation Léo, à trancher par Paul).** Paul pense en
+**méthodes**, pas en anecdotes datées — lui réclamer un récit de chantier est mal
+calibré. Or sa parade est **directement chiffrable** : « avoir un doublon » se
+mesure en **nombre d'artisans mobilisables par secteur**, et c'est exactement ce
+que produit la connexion **RESHIRAM → RIVEN** déjà construite (boucle ④, `0013` +
+vue `talents_capital_reseau` : `nb_contacts`, `secteurs_reseau[]`). La preuve
+chiffrée du talent ① n'est donc pas à raconter, elle est à **compter**.
+**Blocage constaté (2026-07-30, vérifié en prod)** : `network_nodes` est **vide**
+(0 fiche) — la machinerie existe, la matière manque. **Conséquence pour le cap
+DONNÉE** : peupler RIVEN (les artisans réels de Paul, par secteur) **produit
+mécaniquement** la preuve chiffrée du ①, au lieu d'attendre une anecdote. Piste
+recommandée par Léo pour la boucle suivante ; décision Paul.
+
 **Ouvert — décisions de Paul :**
 - **Les preuves** (bloquant pour l'offre réelle) : un chantier daté où le plan B
   a sauvé la mise ; un problème décortiqué avec le gain (délai / euros).

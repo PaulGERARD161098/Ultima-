@@ -16,6 +16,20 @@
 4. **Champs d'affinité** — valeurs / état d'esprit devront être des données
    structurées (tags) pour que la carte suggère des passerelles.
 
+## Signaux de session (2026-07-30)
+
+- ✅ CONFIRMÉ — **Paul pense en MÉTHODES, pas en anecdotes**. Sollicité pour une
+  preuve de talent (« un chantier daté »), il répond par la **figure classique**
+  et sa **parade** (« l'artisan ne répond plus → avoir déjà le doublon »), en
+  précisant lui-même « c'est un cas d'école ». Réflexe à garder : ne pas lui
+  arracher un récit ; **chercher la preuve CHIFFRÉE que sa méthode implique**
+  (ici : combien d'artisans doublons par secteur → `talents_capital_reseau`).
+- ⚠️ **La donnée manque à la racine** : RESHIRAM était vide, **RIVEN l'est aussi**
+  (0 fiche, vérifié en prod) — alors que toute la machinerie (0013, vues, API,
+  front) attend. Corollaire du cap DONNÉE : **peupler RIVEN est le goulot** ;
+  c'est lui qui débloque les preuves chiffrées de RESHIRAM, donc « mon offre
+  réelle ». À proposer avant tout nouveau chantier de code.
+
 ## Signaux de session (2026-07-25)
 
 - ✅ CONFIRMÉ — **le cap « donnée » l'emporte sur le cap « code »** : après un
