@@ -972,3 +972,25 @@
   patrimoine COMPLET vert, + `unit-registre-lv3` (27 verdicts). Front pur, zéro
   touche auth/API/migrations/données. Reste : L2 (les deux supra-divisions),
   L3 (TAO en boussole), L4 (les deux antichambres).
+- **2026-07-30 (le cheminement — l'affichage des projets en cours)** — Paul, dicté :
+  ① « est-ce qu'on peut dicter dans Ultima — *ouvre tel projet et renseigne cela* —
+  en particulier sur IMLADRIK, et voir où j'en suis depuis l'app ? » ; ② « rebosser
+  l'affichage des projets en cours : ce n'était pas très gracieux d'avoir des gros
+  quadrants ; pour IMLADRIK surtout, montrer une **progression, un cheminement** —
+  aller de l'avant, devenir meilleur ». **Réponse ① (constat, pas une opinion)** :
+  non — les mains de Léo (L2b, `api/_lib/leo.js`) ne couvrent que **ADRAMELECH**
+  (idées) et **RIVEN** (besoin/journal/relance) ; le micro par champ (Web Speech,
+  `js/app.js`) n'est que sur **RIVEN** ; le cartouche Léo n'est monté que sur
+  traveler/bcp/adramelech ; `OUTILS_PAR_QUADRANT.imladrik` est **vide** — son
+  commentaire « pas d'API de données » date d'avant `0016 → 0018`, appliquées
+  depuis. Boucle à ouvrir, gate §5 intime. **Livré ②** (PR #114, draft, branche
+  `claude/affichage-projets-cours-fwbgi0`) : `design/preview-imladrik-cheminement.html`
+  — **3 formes, zéro code produit**, chiffres fictifs : **A la voie jalonnée**
+  (route gravée par projet, bornes franchies → « tu es ici » → l'horizon, la route
+  **sort de la carte**, jamais de ligne d'arrivée ; un pavé devient une ligne ;
+  repli en colonne sur téléphone) = **reco Léo** ; **B l'ascension** (un sommet =
+  une fin → réserve pour la vue de détail d'un serment) ; **C les anneaux**
+  (doublon avec la boussole → écarté). Cadre : `CADRAGE-IMLADRIK.md §9` (forme) et
+  **§10** (dictée). Patrimoine COMPLET vert. **⏳ Décisions Paul** : la forme, le
+  périmètre (IMLADRIK seul ou console + autres quadrants), l'unité de la voie
+  (un serment = une voie, reco), et l'ouverture de la boucle « dicter dans IMLADRIK ».
