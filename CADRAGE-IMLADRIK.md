@@ -189,10 +189,29 @@ intitulés **fictifs** (§5 : aucune donnée intime dans le repo).
 `imladrik_entrees` (jalons d'écriture). Règle §5 tenue : **comptes et dates
 seulement, jamais de contenu** ; fail-closed, rien dans le HTML servi.
 
-**⏳ Décisions attendues de Paul** : ① la forme retenue (reco A) ; ② son
-périmètre — IMLADRIK seul, ou aussi la console `ultima.html` et les autres
-quadrants ; ③ l'unité de la voie pour IMLADRIK : **un serment = une voie**
-(reco) ou un cap = une voie.
+**✅ Décisions de Paul (2026-07-30)** : ① **forme A** ; ② **IMLADRIK seul**
+(ni console ni autres quadrants pour l'instant) ; ③ **un serment = une voie**
+(sa reco suivie) ; ④ **boucle « dicter dans IMLADRIK » ouverte** (§10).
+
+**✅ v1 LIVRÉE (2026-07-30)** — la voie jalonnée sur **DRAUKHAIN**, la page où
+les serments vivent déjà derrière auth (§5 tenue : la carto `imladrik.html`
+reste muette, aucune donnée intime dans un HTML servi).
+- `css/voie.css` : vocabulaire **neutre** (`voie-*`, `borne-*`), réemployable
+  tel quel par VRANESH et MINETHNIR quand leur tour viendra. Tokens de
+  `css/styles.css`, zéro valeur en dur. Repli en colonne sous 46 rem.
+- `js/draukhain.js` : trois fonctions **pures** — `jalonsVoie` (départ →
+  flammes → « tu es ici » → horizon), `pointsVoie` (creux/crêtes alternés),
+  `cheminVoie` + `queueVoie` (le tracé et sa sortie de carte). Rendu en
+  `createElement`/`textContent` et `createElementNS` (jamais d'innerHTML) ;
+  le SVG est `aria-hidden`, toute l'information vit dans la liste des bornes.
+- **Règles de la forme, tenues et prouvées au harnais** : jamais de ligne
+  d'arrivée (l'horizon reste « devant », la route sort de la carte), **aucune
+  barre de progression ni pourcentage**, et pour un serment sans flamme on se
+  tient **au départ** avec « à raviver » comme borne devant soi — l'invitation
+  cardinale, jamais un reproche.
+- Au-delà de 3 flammes, les plus anciennes se résument en une borne franchie.
+- Harnais : 13 assertions ajoutées à `smoke-draukhain` ; patrimoine COMPLET
+  vert (779 assertions). Aucune migration, aucune touche à l'auth/API/données.
 
 ## 10. Dicter DANS Ultima — l'état réel (constat 2026-07-30)
 

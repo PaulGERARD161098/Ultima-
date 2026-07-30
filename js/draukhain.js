@@ -281,6 +281,189 @@
     carte.appendChild(section);
   }
 
+  // ---------- La voie jalonnée (forme A, dictée Paul 2026-07-30) ----------
+  // « Montrer un avancement, un cheminement — aller de l'avant, devenir
+  // meilleur. » Un serment = UNE VOIE : le serment prêté → les flammes
+  // franchies → « tu es ici » → l'horizon, la route SORTANT de la carte.
+  // Jamais de ligne d'arrivée ni de barre qui se remplit : on progresse
+  // toujours. Trois fonctions PURES ci-dessous (jalons, points, tracé), toutes
+  // exercées par le harnais ; le rendu DOM reste createElement/textContent.
+
+  var VOIE_SVG_NS = 'http://www.w3.org/2000/svg';
+  var VOIE_LARGEUR = 1000;  // repère du viewBox
+  var VOIE_HAUTEUR = 128;
+  var VOIE_X_DEBUT = 9;     // en % du plateau (marge pour l'étiquette)
+  var VOIE_X_FIN = 92;
+  var VOIE_Y_CREUX = 68;    // en % — étiquette AU-DESSOUS
+  var VOIE_Y_CRETE = 32.8;  // en % — étiquette AU-DESSUS
+  var VOIE_MAX_FLAMMES = 3; // au-delà, les plus anciennes tiennent en une borne
+
+  // Les jalons d'un serment, du départ à l'horizon (PURE).
+  // 0 flamme : on se tient au départ, « raviver » est la borne devant soi —
+  // l'invitation cardinale de DRAUKHAIN, jamais un reproche.
+  function jalonsVoie(serment, flammes) {
+    var liste = Array.isArray(flammes) ? flammes : [];
+    var jalons = [{
+      cle: 'depart',
+      titre: 'Le serment prêté',
+      note: dateLisible(serment && serment.created_at),
+      etat: liste.length === 0 ? 'ici' : 'franchi'
+    }];
+
+    if (liste.length > VOIE_MAX_FLAMMES) {
+      var caches = liste.length - VOIE_MAX_FLAMMES;
+      jalons.push({
+        cle: 'resume',
+        titre: caches + (caches > 1 ? ' flammes' : ' flamme'),
+        note: 'déjà ravivées',
+        etat: 'franchi'
+      });
+    }
+
+    liste.slice(-VOIE_MAX_FLAMMES).forEach(function (f, i, gardees) {
+      var dernier = (i === gardees.length - 1);
+      jalons.push({
+        cle: 'flamme-' + f.id,
+        titre: dernier ? 'Tu es ici' : (LIBELLE_NATURE[f.nature] || f.nature || 'flamme'),
+        note: dernier
+          ? libelleCompte(liste.length) + ' — ' + (LIBELLE_NATURE[f.nature] || f.nature || '')
+          : dateLisible(f.created_at),
+        etat: dernier ? 'ici' : 'franchi'
+      });
+    });
+
+    if (liste.length === 0) {
+      jalons.push({
+        cle: 'raviver',
+        titre: 'À raviver',
+        note: 'une citation, une victoire, un rappel',
+        etat: 'devant'
+      });
+    }
+
+    jalons.push({
+      cle: 'horizon',
+      titre: (serment && serment.horizon) ? serment.horizon : 'L’horizon',
+      note: 'la route continue',
+      etat: 'devant'
+    });
+    return jalons;
+  }
+
+  // Les points de la voie, en % du plateau — creux et crêtes en alternance,
+  // le premier toujours en creux (PURE).
+  function pointsVoie(n) {
+    var total = (typeof n === 'number' && n > 1) ? Math.floor(n) : 2;
+    var pas = (VOIE_X_FIN - VOIE_X_DEBUT) / (total - 1);
+    var points = [];
+    for (var i = 0; i < total; i += 1) {
+      points.push({
+        x: VOIE_X_DEBUT + (pas * i),
+        y: (i % 2 === 0) ? VOIE_Y_CREUX : VOIE_Y_CRETE
+      });
+    }
+    return points;
+  }
+
+  // Le tracé (attribut `d`) qui relie les points, poignées horizontales pour
+  // une ondulation douce ; coordonnées du viewBox (PURE).
+  function cheminVoie(points) {
+    var liste = Array.isArray(points) ? points : [];
+    if (liste.length < 2) { return ''; }
+    function ux(p) { return (p.x / 100) * VOIE_LARGEUR; }
+    function uy(p) { return (p.y / 100) * VOIE_HAUTEUR; }
+    var d = 'M ' + ux(liste[0]).toFixed(1) + ' ' + uy(liste[0]).toFixed(1);
+    for (var i = 1; i < liste.length; i += 1) {
+      var xa = ux(liste[i - 1]), ya = uy(liste[i - 1]);
+      var xb = ux(liste[i]), yb = uy(liste[i]);
+      var dx = (xb - xa) / 2;
+      d += ' C ' + (xa + dx).toFixed(1) + ' ' + ya.toFixed(1)
+        + ' ' + (xb - dx).toFixed(1) + ' ' + yb.toFixed(1)
+        + ' ' + xb.toFixed(1) + ' ' + yb.toFixed(1);
+    }
+    return d;
+  }
+
+  // La queue : la route quitte la carte dans l'élan du dernier jalon (PURE).
+  function queueVoie(points) {
+    var liste = Array.isArray(points) ? points : [];
+    if (liste.length === 0) { return ''; }
+    var dernier = liste[liste.length - 1];
+    var x = (dernier.x / 100) * VOIE_LARGEUR;
+    var y = (dernier.y / 100) * VOIE_HAUTEUR;
+    // Après une crête on redescend, après un creux on remonte : l'élan continue.
+    var fin = (dernier.y < 50) ? Math.min(y + 12, VOIE_HAUTEUR - 4) : Math.max(y - 12, 4);
+    var reste = VOIE_LARGEUR - x;
+    return 'M ' + x.toFixed(1) + ' ' + y.toFixed(1)
+      + ' C ' + (x + reste * 0.4).toFixed(1) + ' ' + y.toFixed(1)
+      + ' ' + (x + reste * 0.75).toFixed(1) + ' ' + ((y + fin) / 2).toFixed(1)
+      + ' ' + VOIE_LARGEUR + ' ' + fin.toFixed(1);
+  }
+
+  function svgVoie(nom, attributs) {
+    var noeud = document.createElementNS(VOIE_SVG_NS, nom);
+    Object.keys(attributs).forEach(function (cle) {
+      noeud.setAttribute(cle, attributs[cle]);
+    });
+    return noeud;
+  }
+
+  function rendreVoie(serment) {
+    var flammes = flammesDe(serment.id);
+    var jalons = jalonsVoie(serment, flammes);
+    var points = pointsVoie(jalons.length);
+    var trace = cheminVoie(points);
+
+    var section = el('div', 'voie');
+    var plateau = el('div', 'voie-plateau');
+
+    // 1. Le tracé — décor pur, jamais lu : toute l'information est dans la liste.
+    var svg = svgVoie('svg', {
+      'class': 'voie-route',
+      viewBox: '0 0 ' + VOIE_LARGEUR + ' ' + VOIE_HAUTEUR,
+      preserveAspectRatio: 'none',
+      'aria-hidden': 'true',
+      focusable: 'false'
+    });
+    svg.appendChild(svgVoie('path', { 'class': 'route-fond', d: trace, pathLength: '100' }));
+
+    // Part parcourue : jusqu'au jalon « tu es ici » (pathLength=100 → en %).
+    var indexIci = 0;
+    jalons.forEach(function (j, i) { if (j.etat === 'ici') { indexIci = i; } });
+    var parcourue = (indexIci / (jalons.length - 1)) * 100;
+    if (parcourue > 0) {
+      svg.appendChild(svgVoie('path', {
+        'class': 'route-faite',
+        d: trace,
+        pathLength: '100',
+        'stroke-dasharray': parcourue.toFixed(1) + ' 100'
+      }));
+    }
+    svg.appendChild(svgVoie('path', { 'class': 'route-queue', d: queueVoie(points) }));
+    plateau.appendChild(svg);
+
+    // 2. Les bornes — c'est ELLES que lisent l'œil et le lecteur d'écran.
+    var liste = el('ol', 'voie-bornes');
+    liste.setAttribute('aria-label',
+      'Le cheminement du serment « ' + (serment.intitule || '') + ' »');
+    jalons.forEach(function (jalon, i) {
+      var borne = el('li', 'borne borne--' + (jalon.etat === 'franchi' ? 'franchie' : jalon.etat)
+        + (points[i].y < 50 ? ' borne--haut' : ' borne--bas')
+        + (jalon.cle === 'horizon' ? ' borne--horizon' : ''));
+      borne.style.setProperty('--x', points[i].x.toFixed(2) + '%');
+      borne.style.setProperty('--y', points[i].y.toFixed(2) + '%');
+      borne.appendChild(el('span', 'borne-sceau'));
+      var titre = el('span', 'borne-titre', jalon.titre);
+      if (jalon.note) { titre.appendChild(el('span', 'borne-note', jalon.note)); }
+      borne.appendChild(titre);
+      liste.appendChild(borne);
+    });
+    plateau.appendChild(liste);
+
+    section.appendChild(plateau);
+    return section;
+  }
+
   // ---------- Rendu d'un serment ----------
 
   function rendreSerment(serment) {
@@ -300,6 +483,9 @@
     if (serment.horizon) {
       carte.appendChild(el('p', 'zekrom-horizon', 'Horizon : ' + serment.horizon));
     }
+
+    // La voie jalonnée : le cheminement du serment, avant le détail des flammes.
+    carte.appendChild(rendreVoie(serment));
 
     rendreFlammes(serment, carte);
     rendrePasserelles(serment, carte);

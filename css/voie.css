@@ -1,0 +1,183 @@
+/* Ultima — LA VOIE JALONNÉE (forme A, dictée Paul 2026-07-30).
+   Le cheminement d'un projet : d'où l'on part → bornes franchies → « tu es ici »
+   → ce qui vient → l'horizon, la route SORTANT de la carte (jamais de ligne
+   d'arrivée : on progresse toujours). Registre antique et sérieux — gravure à
+   l'encre sur parchemin, cerne d'or.
+   Vocabulaire NEUTRE (`voie-*`, `borne-*`) : réemployable tel quel par les
+   autres caps d'IMLADRIK ; v1 posée sur DRAUKHAIN (un serment = une voie).
+   Palette et police : tokens de css/styles.css (aucune valeur en dur ici). */
+
+.voie {
+  margin: 0.7rem 0 0.2rem;
+  padding: 0.5rem 0.2rem 0.2rem;
+  border-top: 1px solid var(--parchemin-ombre);
+}
+
+/* Le plateau porte le tracé (SVG étiré) ET les bornes posées en pourcentage :
+   preserveAspectRatio="none" côté SVG → les deux repères coïncident toujours. */
+.voie-plateau {
+  position: relative;
+  width: 100%;
+  height: 178px;
+}
+
+.voie-route {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Trois traits : ce qui reste à parcourir (pointillé pâle), ce qui est déjà
+   parcouru (encre pleine), et la queue qui s'efface hors de la carte. */
+.route-fond {
+  fill: none;
+  stroke: var(--encre-sepia-douce);
+  stroke-width: 1.6;
+  stroke-dasharray: 2.4 4.2;
+  stroke-linecap: round;
+  opacity: 0.55;
+  vector-effect: non-scaling-stroke;
+}
+
+.route-faite {
+  fill: none;
+  stroke: var(--encre-sepia);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.route-queue {
+  fill: none;
+  stroke: var(--encre-sepia-douce);
+  stroke-width: 1.4;
+  stroke-dasharray: 1.6 5;
+  opacity: 0.35;
+  vector-effect: non-scaling-stroke;
+}
+
+.voie-bornes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  inset: 0;
+}
+
+/* Le sceau se centre PILE sur son point de route ; l'étiquette se range
+   au-dessus (crête) ou au-dessous (creux) — jamais sur le tracé. */
+.borne {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 8.4rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.borne--bas { transform: translate(-50%, -0.8rem); }
+
+.borne--haut {
+  transform: translate(-50%, calc(-100% + 0.8rem));
+  flex-direction: column-reverse;
+}
+
+.borne-sceau {
+  position: relative;
+  width: 1.6rem;
+  height: 1.6rem;
+  flex: 0 0 auto;
+}
+
+.borne-sceau::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 50%;
+  border: 1.4px solid var(--cerne-carte);
+  background: var(--parchemin-ombre);
+}
+
+.borne--franchie .borne-sceau::before {
+  background: var(--encre-sepia);
+  border-color: var(--encre-sepia);
+}
+
+/* « Tu es ici » : le seul sceau d'or de la voie. */
+.borne--ici .borne-sceau::before {
+  width: 1.3rem;
+  height: 1.3rem;
+  background: var(--parchemin-carte);
+  border: 2px solid var(--or-antique);
+  box-shadow: 0 0 0 4px rgba(169, 136, 74, 0.28);
+}
+
+.borne--horizon .borne-sceau::before {
+  border-style: dashed;
+  background: transparent;
+}
+
+.borne-titre {
+  font-family: var(--police-ancienne);
+  font-size: 0.82rem;
+  line-height: 1.25;
+  letter-spacing: 0.03em;
+  color: var(--encre-sepia);
+}
+
+.borne-note {
+  display: block;
+  font-size: 0.72rem;
+  font-style: italic;
+  color: var(--encre-sepia-douce);
+}
+
+.borne--ici .borne-titre { font-weight: 700; }
+
+.borne--devant .borne-titre,
+.borne--devant .borne-note { opacity: 0.62; }
+
+/* Repli étroit : la route se redresse en colonne — même grammaire, sans SVG. */
+@media (max-width: 46rem) {
+  .voie-plateau { height: auto; }
+  .voie-route { display: none; }
+
+  .voie-bornes {
+    position: static;
+    margin-top: 0.3rem;
+    padding-left: 1.1rem;
+    border-left: 2px dotted var(--encre-sepia-douce);
+  }
+
+  .borne {
+    position: static;
+    transform: none;
+    width: auto;
+    text-align: left;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.3rem 0;
+  }
+
+  .borne--haut { flex-direction: row; }
+
+  .borne-sceau {
+    width: 1.3rem;
+    height: 1.3rem;
+    margin-left: -1.75rem;
+    border-radius: 50%;
+    background: var(--parchemin);
+  }
+}
+
+/* Mouvement réduit : aucune animation ici, rien à neutraliser — la voie est
+   entièrement statique (choix assumé : un cheminement se lit, il ne s'anime pas). */
