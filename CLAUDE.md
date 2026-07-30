@@ -153,6 +153,21 @@ l'accessibilité ni la sécurité.
   (`git fetch origin main && git checkout -B <branche> origin/main`) **avant**
   tout nouveau commit — ne jamais empiler sur l'historique pré-squash (source
   de conflits de merge récurrents ; résolus au `git rebase --onto origin/main`).
+- **Sessions parallèles sur le même repo** (2026-07-30) : quand un autre fil
+  pousse sur `main` (constat : 4 avancées de `main` en une session), **rebaser
+  puis fusionner sans délai** — une PR qui dort se fait doubler et le rebase est
+  à refaire. Un conflit sur `memoire/JOURNAL-DECISIONS.md` (deux sessions
+  écrivent le même jour, en fin de fichier) se résout **toujours par
+  concaténation** : garder les DEUX entrées, jamais arbitrer entre elles.
+- **Extraire plutôt que dupliquer, quand un harnais couvre** (2026-07-30) : un
+  composant réclamé par un second appelant se **déplace** vers son propre module
+  (ex. la dictée vocale : `js/app.js` → `js/dictee.js`), il ne se recopie pas.
+  Le harnais dédié rend l'opération sûre — il doit passer **sans retouche**,
+  c'est le critère de réussite de l'extraction.
+- **Une règle de confidentialité se teste par l'ABSENCE** (2026-07-30) : pour
+  toute donnée sensible sortant vers un tiers (IA, log, page servie), le harnais
+  cherche le contenu interdit dans ce qui part et exige de **ne pas l'y
+  trouver** — vérifier seulement la présence du permis ne prouve rien.
 
 ## ⚙️ Règles permanentes
 

@@ -2,6 +2,30 @@
 
 ## ÉTAT (2026-07-06, après arbitrage)
 
+- 🏁 **CLÔTURE DE SESSION — 2026-07-30 (fil « cheminement + Léo dans IMLADRIK »).**
+  Trois boucles ouvertes, **trois boucles fermées et fusionnées dans `main`** ;
+  zéro travail non poussé, aucune gate laissée ouverte, aucune migration.
+  - ✅ **#114 — la voie jalonnée** (forme A, décidée par Paul sur maquette
+    comparée à 2 autres) : un serment = une voie, sur `draukhain.html`.
+    Jamais de ligne d'arrivée. `css/voie.css` au vocabulaire neutre, réutilisable
+    par VRANESH et MINETHNIR. Détail : `CADRAGE-IMLADRIK.md §9`.
+  - ✅ **#118 — les mains de Léo** : 5 outils du quadrant `imladrik` (elle
+    propose, Paul confirme, l'app écrit) + le **micro** partagé, **extrait** de
+    `js/app.js` vers `js/dictee.js`. Détail : `§10`.
+  - ✅ **#120 — les yeux de Léo** : état borné du cap joint à chaque question
+    (comptes + intitulés), validé fail-closed côté serveur, hors cache. §5 tenue
+    et **prouvée par l'absence** au harnais. Détail : `§11`.
+  - **Patrimoine** : 779 → **866 assertions**, vert à chaque fusion.
+  - ⏭ **Reporté (non bloquant, prêt à brancher)** : les **yeux sur les autres
+    quadrants** — la forme `{ compteurs, listes }` est générique, il ne reste
+    qu'un branchement page par page (RIVEN, ADRAMELECH, NICOL BOLAS) ; rien à
+    réécrire côté serveur.
+  - ⏳ **Reste à la main de Paul (hérité, inchangé)** : advisors post-DDL à lire
+    au dashboard Supabase ; preuve live d'écriture dans IMLADRIK.
+  - 🔎 **Friction du jour, actée en charte** : `main` a bougé **4 fois** pendant
+    la session (fil LV3 parallèle) — rebaser puis fusionner **sans délai**, et
+    traiter un conflit de `JOURNAL-DECISIONS.md` en **concaténation**.
+
 - 🧭 **CAP DU JOUR (recalé 2026-07-26 — deux fils réconciliés).** Cap stratégique
   tenu (07-25) : **passer du code à la DONNÉE** (« assez de code, il faut de la
   donnée », directive JL). Deux fils de travail ont avancé en parallèle ; les voici
