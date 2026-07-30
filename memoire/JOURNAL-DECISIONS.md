@@ -23,7 +23,13 @@
   à suivre immédiate) → deux talents, pas un doublon (à confirmer par Paul).
   **Motif observé** : les trois tournent autour d'un noyau unique — *l'imprévu ne
   gagne jamais* (l'anticiper / le décomposer / y répondre) ; piste de triptyque
-  pour la vue « mon offre réelle ».
+  pour la vue « mon offre réelle ». **Liste des talents CLOSE** sur décision de
+  Paul (« on ferme la liste »). **Parade type du ①** dictée ensuite (l'artisan qui
+  ne répond plus → le doublon déjà prévu) : Paul la qualifie lui-même de « cas
+  d'école » → consignée en `plus_value`, **jamais en preuve**. **Fin de session :
+  peupler RIVEN REPORTÉ par Paul** (« on s'occupera de RIVEN plus tard ») alors
+  que Léo le recommandait comme boucle suivante — c'est le goulot des preuves
+  chiffrées. PR #116 et #121 mergées.
 
 - **2026-07-23 (NICOL BOLAS amélioré — GO SOLO « améliorons le »)** — Paul :
   « passons sur NB, améliorons-le » puis « quel est ton ordre ? » → Léo fixe
