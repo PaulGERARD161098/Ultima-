@@ -229,6 +229,65 @@ séparé :
   = validation Paul ».)
 - ZEKROM suivra le même hébergement interne.
 
+### Peuplement réel — les talents dictés par Paul (2026-07-30)
+
+> Fin du cadrage, début de la **donnée** : RESHIRAM était **vide en base** (0
+> talent, vérifié en prod) alors que ZEKROM vivait avec ses 3 idéaux depuis le
+> 07-23. Cette entrée consigne le premier peuplement réel.
+
+**L'énoncé d'offre (le chapeau, dicté Paul).** Ce que Paul propose — **individu
+comme entreprise** — n'est PAS « résoudre les problèmes » : c'est trop large et
+ce n'est pas ce qui se passe. La formulation réelle est **« on fait appel à moi
+parce que j'ai toujours des solutions »**. On l'appelle sur une thématique très
+large (« l'artisan ne vient pas, il est en retard, comment on fait ? ») ; la
+valeur n'est pas le domaine, c'est **le fait qu'il en sorte toujours quelque
+chose**. Cet énoncé est le titre de la vue « mon offre réelle » — pas un talent
+en base (un chapeau n'est pas un savoir-faire ancré sur preuve).
+
+**Les deux talents posés en base** (`seed-reshiram-paul.sql`, exécuté pour
+l'owner de Paul le 2026-07-30) :
+
+1. **« Toujours avoir un plan B »** — transversal (`secteurs = '{}'`),
+   `niveau='pratique'`. Plus-value : planification et **visualisation des futurs
+   possibles, bons comme mauvais**, assez en amont pour qu'il y ait toujours une
+   solution de repli prête. Le talent n'est pas « résoudre », c'est **ne jamais
+   rester bloqué**.
+2. **« Décortiquer précisément un problème »** — transversal,
+   `niveau='pratique'`. Plus-value : découper le problème pièce par pièce pour
+   choisir la résolution **la plus rapide, la plus efficace et la moins chère**.
+   La **méthode d'analyse** est le livrable, pas seulement la solution.
+3. **« Toujours savoir quoi faire »** — transversal, `niveau='pratique'`.
+   Plus-value : **ne jamais être pris par surprise** — quand l'imprévu tombe, la
+   marche à suivre est immédiate, aucun temps mort, aucune sidération.
+   **Frontière avec le n°1 (tranchée Léo, à confirmer par Paul)** : le n°1 se
+   joue **AVANT** (l'alternative préparée en amont, la prévoyance), le n°3 se
+   joue **PENDANT** (le sang-froid dans l'instant). Deux gestes distincts, donc
+   deux talents ; à fusionner si Paul les vit comme un seul.
+
+**Les trois sont « à étayer »** (0 preuve) : conforme à la règle cardinale — ils
+n'apparaissent PAS dans `talents_offre_reelle` tant qu'un fait ou un chiffre ne
+les adosse pas. Les preuves se saisissent depuis `/reshiram` (le geste produit,
+où Léo challenge), elles ne sont **jamais seedées**.
+
+> **Motif qui se dessine (observation Léo).** Les trois talents dictés tournent
+> autour du **même noyau : l'imprévu ne gagne jamais** — l'anticiper (①), le
+> décomposer (②), y répondre sur-le-champ (③). C'est la substance concrète de
+> l'énoncé d'offre. Piste pour la vue « mon offre réelle » : les présenter comme
+> **un triptyque** plutôt que trois lignes indépendantes.
+
+**Ouvert — décisions de Paul :**
+- **Les preuves** (bloquant pour l'offre réelle) : un chantier daté où le plan B
+  a sauvé la mise ; un problème décortiqué avec le gain (délai / euros).
+- **Le niveau** : `pratique` posé par défaut (le cran « je le fais couramment,
+  sur le terrain »). `maitrise` = « c'est une référence pour moi, je peux le
+  transmettre » — à Paul de monter le cran, jamais à Léo.
+- **Le sort des 3 talents seed du §7** (sourcing d'artisans rapide / trancher les
+  situations floues / petit réseau de contacts) : consignés comme réels le
+  07-21 mais **non seedés** — ils n'ont pas été redictés. À noter : « trancher
+  les situations floues » **recoupe partiellement** le talent n°2 ci-dessus
+  (décortiquer = analyser ; trancher = décider — deux gestes, à garder séparés
+  ou à fusionner, décision Paul).
+
 ## 8. Mini-cadrage ZEKROM (validé Paul 2026-07-23 — dictée « implante mes 3 rêves »)
 
 ### v1 — la carte des idéaux, tournée vers le cap

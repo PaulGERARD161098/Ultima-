@@ -3,6 +3,28 @@
 > Une décision consignée n'est jamais redemandée ni re-litigée.
 > Format : date — décision — conséquence.
 
+- **2026-07-30 (RESHIRAM — premier peuplement réel, dictée)** — Paul ouvre le cap
+  **donnée concrète** en commençant par RESHIRAM. **Décision de formulation** :
+  ce qu'il propose n'est PAS « résoudre les problèmes » (trop large) mais
+  **« on fait appel à moi parce que j'ai toujours des solutions »** — l'énoncé
+  d'offre, un chapeau, pas un talent en base. **Deux talents réels posés** (base
+  vide avant : 0 talent) : ① **« Toujours avoir un plan B »** (anticipation par
+  visualisation des futurs bons comme mauvais → ne jamais rester bloqué),
+  ② **« Décortiquer précisément un problème »** (analyse découpée → résolution la
+  plus rapide, efficace et la moins chère). Les deux **transversaux**
+  (`secteurs='{}'`, il est appelé sur une thématique très large) et
+  `niveau='pratique'` par défaut. Les deux naissent **« à étayer »** (0 preuve) :
+  la règle cardinale tient, les preuves se saisissent dans `/reshiram`, jamais en
+  seed. Seed idempotent `supabase/seed-reshiram-paul.sql` (miroir ZEKROM,
+  `owner_id` en paramètre). Dictée : « solutions de revenus » lu **« solutions de
+  repli »**. **Talent ③ ajouté dans la foulée** : **« Toujours savoir quoi
+  faire »** (ne jamais être pris par surprise). **Frontière tranchée par Léo** :
+  ① = AVANT (prévoyance, alternative préparée), ③ = PENDANT (sang-froid, marche
+  à suivre immédiate) → deux talents, pas un doublon (à confirmer par Paul).
+  **Motif observé** : les trois tournent autour d'un noyau unique — *l'imprévu ne
+  gagne jamais* (l'anticiper / le décomposer / y répondre) ; piste de triptyque
+  pour la vue « mon offre réelle ».
+
 - **2026-07-23 (NICOL BOLAS amélioré — GO SOLO « améliorons le »)** — Paul :
   « passons sur NB, améliorons-le » puis « quel est ton ordre ? » → Léo fixe
   l'ordre (valeur ↑, risque/dépendance ↓) et enchaîne en solo les 3 boucles
