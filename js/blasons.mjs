@@ -5,7 +5,7 @@
 // disque parchemin, cerne d'or, emblème encre pour les caps ; médaillon d'or
 // gravé pour le cœur des boussoles.
 //
-// Toutes ces gravures PRÉEXISTENT dans le produit (js/boussole.js,
+// Toutes ces gravures PRÉEXISTAIENT dans le produit (js/boussole.js — supprimé en L2,
 // js/imladrik-carto.js, ultima.html, tao.html) : ce fichier les rassemble en un
 // seul endroit pour que le noyau (js/boussole-noyau.mjs) puisse rendre
 // n'importe quel nœud sans qu'aucune page ne porte de SVG de cap.

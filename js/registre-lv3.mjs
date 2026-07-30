@@ -26,9 +26,10 @@
 //   (true = ce nœud lit les agrégats /api/cockpit après connexion),
 //   expose (nom d'un global d'introspection pour les harnais).
 //
-// ÉTAT DU CÂBLAGE (L1, 2026-07-30) : seul `imladrik` est rendu par le noyau.
-// Les autres nœuds sont décrits ici et seront câblés à leur boucle — L2 (les
-// deux supra-divisions), L3 (TAO), L4 (les deux antichambres).
+// ÉTAT DU CÂBLAGE (L2, 2026-07-30) : `racine`, `ultima-perso`, `alpha` et
+// `imladrik` sont rendus par le noyau. Restent à câbler `tao` (L3) et les deux
+// antichambres `nicol-bolas` / `adramelech` (L4) — elles sont déjà décrites
+// ici, il n'y aura qu'une coque à poser.
 
 export const NOEUDS = {
   // ======================= NIVEAU 0 — la racine =======================
@@ -152,7 +153,7 @@ export const NOEUDS = {
 
   adramelech: {
     nom: 'ADRAMELECH',
-    etat: 'Privé — auth requise',
+    etat: 'Privé',
     blason: 'ouroboros',
     cible: 'adramelech.html',
     resume: 'La bibliothèque d’idées : capturer, classer, rapprocher, enrichir. '

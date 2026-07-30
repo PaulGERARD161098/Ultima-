@@ -11,12 +11,6 @@
   filter: drop-shadow(0 2px 6px rgba(0, 10, 20, 0.45));
 }
 
-/* Retour « Console » aligné à gauche de la colonne, discret. */
-.boussole-retour {
-  align-self: flex-start;
-  margin: 0;
-}
-
 /* Légende de la boussole : le nom du guide, gravé juste sous Kalamn-talaen,
    centré entre les deux caps du bas. Muette (aria-hidden), n'intercepte rien. */
 .kalamn-legende {

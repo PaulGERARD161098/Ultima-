@@ -1,10 +1,11 @@
-/* Ultima LV2 — Boussole d'accueil (macro-projets).
+/* Ultima Lv3 — L'HABILLAGE DE LA BOUSSOLE (tous les étages).
    Registre carte savante : lavis de mer profonde, parchemin noble, rose des
    vents gravée. Réutilise STRICTEMENT les tokens de css/styles.css
    (--parchemin*, --encre-sepia*, --or-antique, --cerne-carte, --mer-*,
    --creme, --police-ancienne, --accent*). Aucun CDN : fond et gravures sont
-   des SVG inline. Le placement des caps et les aiguilles viennent de
-   js/boussole.js ; ici, l'habillage. */
+   des SVG inline. Le placement des caps et les aiguilles viennent du noyau
+   (js/boussole-noyau.mjs) ; ici, l'habillage — le même pour la racine, les
+   supra-divisions et les quadrants (CADRAGE-LV3.md §2). */
 
 /* ---------- Fond : même mer que la console + vignette ---------- */
 body.boussole {
@@ -38,7 +39,21 @@ body.boussole {
 /* L'entête réutilise .console-entete (flex colonne centrée) ; petit resserrage. */
 .boussole-entete { gap: 0.45rem; }
 
-/* Titre d'accueil sur deux lignes : surligne d'or « Ultima LV2 » + « Bienvenue ». */
+/* Sceau du nœud en tête de boussole (décor pur, aria-hidden) — pièce ② du patron. */
+.boussole-sceau {
+  width: clamp(52px, 12vw, 74px);
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 2px 6px rgba(0, 10, 20, 0.45));
+}
+
+/* Retour vers le nœud parent, aligné à gauche de la colonne — pièce ① du patron. */
+.boussole-retour {
+  align-self: flex-start;
+  margin: 0;
+}
+
+/* Titre sur deux lignes : surligne d'or (le nœud) + nom principal. */
 .console-titre--boussole {
   display: flex;
   flex-direction: column;

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ultima — Boussole</title>
-  <meta name="description" content="Boussole d'accueil d'Ultima : chaque cap de la rose des vents ouvre un macro-projet de Paul. Léo en dépose l'essentiel au survol.">
+  <meta name="description" content="Boussole d'accueil d'Ultima : deux supra-divisions — ULTIMA (le personnel) et ALPHA (le professionnel). Léo en dépose l'essentiel au survol.">
   <meta name="theme-color" content="#0e3a52">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%231e6fb8'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23ffffff'/%3E%3C/svg%3E">
@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="css/console.css">
   <link rel="stylesheet" href="css/boussole.css">
 </head>
-<body class="boussole">
+<body class="boussole" data-noeud="racine">
 
   <!-- ===== Écran de connexion plein écran (porte d'entrée unique LV2) =====
        Piloté par js/boussole-auth.js : visible tant qu'aucune session n'est
@@ -179,27 +179,27 @@
       </svg>
 
       <h1 class="console-titre console-titre--boussole">
-        <span class="titre-surligne">Ultima LV2</span>
+        <span class="titre-surligne">Ultima Lv3</span>
         <span class="titre-principal">Bienvenue</span>
       </h1>
       <p class="console-invite">Sur quoi est-ce qu'on travaille aujourd'hui&nbsp;?</p>
     </header>
 
-    <!-- ===== La boussole : caps + aiguilles + cœur, rendus par js/boussole.js ===== -->
+    <!-- ===== La boussole : caps + aiguilles + cœur, rendus par le NOYAU commun
+         (js/boussole-noyau.mjs) à partir du registre Lv3 — `data-noeud="racine"`
+         sur le body désigne le nœud. ===== -->
     <main class="boussole-plateau" id="boussole-plateau"
-          aria-label="Boussole des macro-projets d'Ultima">
-      <!-- Repli sans JavaScript : au moins la porte d'Ultima reste ouverte. -->
+          aria-label="Boussole des deux supra-divisions d'Ultima">
+      <!-- Repli sans JavaScript : les deux portes restent ouvertes. -->
       <noscript>
         <ul class="boussole-noscript">
-          <li><a href="ultima.html">Ultima — la console à quatre quadrants</a></li>
-          <li><a href="https://www.renoboostia.fr" rel="noopener noreferrer">Renoboost IA — la console</a></li>
-          <li>YCOME — à venir</li>
-          <li><a href="tao.html">TAO — la voie : RESHIRAM (le réel) et ZEKROM (l'idéal)</a></li>
+          <li><a href="ultima.html">ULTIMA — les projets personnels</a></li>
+          <li><a href="alpha.html">ALPHA — les projets professionnels</a></li>
         </ul>
       </noscript>
     </main>
 
-    <!-- Parole de Léo : l'essentiel du cap survolé (rempli par js/boussole.js). -->
+    <!-- Parole de Léo : l'essentiel du cap survolé (rempli par le noyau). -->
     <aside class="boussole-parole" id="boussole-parole" role="status" aria-live="polite">
       <p class="parole-defaut">Survole un cap&nbsp;— Léo t'en dit l'essentiel.</p>
     </aside>
@@ -210,11 +210,11 @@
 
   <script src="js/vendor/supabase-js-2.110.0.min.js"></script>
   <script src="js/config.js"></script>
-  <!-- boussole.js AVANT boussole-auth.js : la boussole définit son hook cockpit
-       (window.UltimaBoussole) de façon synchrone, pour qu'il existe déjà quand
-       boussole-auth livre la session (le résumé vivant, LV2-⑤). Les deux en defer
-       (ordre préservé) ; aucune dépendance inverse. -->
-  <script src="js/boussole.js" defer></script>
+  <!-- Le noyau AVANT boussole-auth.js : il pose son hook cockpit
+       (window.UltimaBoussole) pendant son évaluation, donc il existe déjà quand
+       boussole-auth livre la session (le résumé vivant). Module et script defer
+       s'exécutent dans l'ordre du document ; aucune dépendance inverse. -->
+  <script type="module" src="js/boussole-noyau.mjs"></script>
   <script src="js/boussole-auth.js" defer></script>
 </body>
 </html>
