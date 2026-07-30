@@ -192,6 +192,7 @@
     etat.entrees = (corps.data && corps.data.entrees) || [];
     rendreEntrees();
     montrer('imladrik-registre');
+    accueillirLeo();
     // Section Drive : traite un éventuel retour de connexion, sinon peint le statut.
     var params = new URLSearchParams(window.location.search);
     if (params.get('drive')) { traiterRetourDrive(); } else { initDrive(); }
@@ -200,6 +201,40 @@
 
   async function rafraichir() {
     await chargerJournal();
+  }
+
+  // ---------- Léo sur MINETHNIR (boucle ④, 2026-07-30) ----------
+  // Le cartouche + les mains sur le journal : Paul dicte sa page, Léo la lui
+  // propose, il confirme, l'écriture part vers /api/imladrik/entrees.
+  // Fail-closed sans module ni session. §5 intime, tenu à la lettre : le
+  // cartouche ne dit QUE le nombre de pages et la date de la dernière —
+  // jamais un titre, jamais une ligne de contenu.
+  function accueillirLeo() {
+    if (!window.UltimaLeo || !etat.session || !etat.session.access_token) { return; }
+    var total = etat.entrees.length;
+    var etatCarte = total === 0
+      ? 'Le journal est encore vierge.'
+      : (total === 1 ? '1 page écrite' : total + ' pages écrites') + '.';
+
+    window.UltimaLeo.accueillirQuadrant({
+      quadrant: 'imladrik',
+      blason: 'epee',
+      salutation: 'Bienvenue, Paul. Le journal t’attend.',
+      sections: [
+        { titre: 'Où on en est', classe: 'leo-section-etat', lignes: [etatCarte] }
+      ],
+      propositions: [{
+        message: 'Dicte-moi ta page — je te la propose avant de l’écrire.',
+        action: null
+      }],
+      propositionsVide: 'Rien à écrire de force — le journal attend son heure.',
+      // Aucune cible à résoudre ici : écrire une page ne vise rien d'existant.
+      voix: {
+        quadrant: 'imladrik',
+        jeton: etat.session.access_token,
+        candidats: {}
+      }
+    });
   }
 
   // ----- Sauvegarde Google Drive (sous-boucle ①b) -----

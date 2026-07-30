@@ -240,3 +240,33 @@ le micro sur les pages IMLADRIK, et ouvrir 3 à 4 outils miroirs de l'existant
 écriture et **zéro contenu dicté en logs**. S'y ajoute le « où j'en suis » :
 un état de progression lu après auth (comptes et dates seuls) — c'est
 exactement ce que consomme la forme A du §9.
+
+**✅ BOUCLE ④ LIVRÉE (2026-07-30) — dicter dans IMLADRIK.** Le manque est
+comblé : `OUTILS_PAR_QUADRANT.imladrik` n'est plus vide.
+- **Serveur** (`api/_lib/leo.js`) : 5 outils — `proposer_page_journal`
+  (MINETHNIR), `proposer_serment` + `proposer_flamme` (DRAUKHAIN),
+  `proposer_situation` + `proposer_scenario` (VRANESH). Écritures **pures**,
+  aucun outil de suppression (principe L2b §0 intact). Ajout d'un support
+  **`enum`** au catalogue (source unique) : il descend dans le schéma tool-use
+  ET dans `validerProposition` — une nature ou une vraisemblance hors liste est
+  **rejetée**, jamais corrigée en silence. Reformulations déterministes : c'est
+  ce texte, jamais la prose du modèle, que Paul confirme.
+- **Front** : les 5 gabarits d'exécution dans `js/leo-accueil.js` (bornes
+  alignées sur les validateurs serveur — `horizon` refusé au-delà de 200 plutôt
+  que tronqué ; `serment_ref`/`situation_ref` résolus localement) ; le cartouche
+  de Léo monté sur `draukhain.html`, `vranesh.html` et `minethnir.html`.
+- **§5 intime, tenu à la lettre** : le cartouche ne restitue que des **comptes**
+  (« 2 serments scellés, 1 attend d'être ravivé ») — jamais un intitulé, jamais
+  une ligne de contenu ; fail-closed sans session.
+- **Le micro** : le composant de dictée vocale a été **extrait** de `js/app.js`
+  vers **`js/dictee.js`** (code inchangé, ses deux dépendances au shell de RIVEN
+  découplées : région d'annonce créée à la demande, toast devenu un signal
+  injectable). Il équipe désormais le champ « Parler à Léo » sur tous les
+  quadrants. RIVEN le consomme à comportement identique.
+- **Chaîne prouvée de bout en bout** (`smoke-draukhain` §D) : micro → la dictée
+  atterrit dans le champ → POST `/api/leo` avec le Bearer et le quadrant → carte
+  de confirmation = reformulation **serveur** → **aucune écriture** → confirmation
+  → POST `/api/flammes` avec le Bearer. Patrimoine COMPLET vert (824).
+- **⏭ Reste ouvert** : Léo ne sait pas encore *lire* IMLADRIK pour répondre
+  « où j'en suis » en détail (le cartouche donne les comptes, pas plus) — c'est
+  la marche suivante si Paul la veut.

@@ -51,7 +51,11 @@ function scriptFausseSession() {
       refresh_token: 'jeton-refresh',
       user: { id: '00000000-0000-4000-8000-000000000000', aud: 'authenticated', role: 'authenticated' }
     }));
-  } catch (e) {}`;
+  } catch (e) {}
+  // Boucle ④ : le cartouche de Léo s'ouvre désormais à l'entrée du quadrant.
+  // Les sections qui exercent la PAGE le neutralisent (marqueur de session PAR
+  // quadrant, convention smoke-quadrants) ; un bloc dédié le prouve à part.
+  try { window.sessionStorage.setItem('ultima-leo-accueil-vu-imladrik', '1'); } catch (e) {}`;
 }
 
 // Fixture NEUTRE — AUCUNE page intime réelle (contenu inventé pour le harnais).

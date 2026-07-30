@@ -662,7 +662,61 @@
 
     rendreSerments();
     montrer('draukhain-registre');
+    accueillirLeo();
     return true;
+  }
+
+  // ---------- Léo sur DRAUKHAIN (boucle ④, 2026-07-30) ----------
+  // Le cartouche du majordome + ses MAINS sur le cap : Paul dicte « ravive tel
+  // serment avec… » ou « scelle le serment… », Léo propose, Paul confirme,
+  // l'écriture part vers les API existantes avec le Bearer de session.
+  // Fail-closed : pas de module, pas de session → rien du tout.
+  // §5 intime : le cartouche ne restitue que des COMPTES, jamais un contenu.
+  function accueillirLeo() {
+    if (!window.UltimaLeo || !etat.session || !etat.session.access_token) { return; }
+    var total = etat.serments.length;
+    var aRaviver = etat.serments.filter(function (s) { return s && s.a_raviver === true; }).length;
+    var etatCarte = total === 0
+      ? 'Aucun serment scellé pour l’instant.'
+      : (total === 1 ? '1 serment scellé' : total + ' serments scellés')
+        + (aRaviver > 0
+          ? ' — ' + (aRaviver === 1 ? '1 attend' : aRaviver + ' attendent') + ' d’être ravivé'
+            + (aRaviver === 1 ? '' : 's') + '.'
+          : ', tous entretenus.');
+
+    var propositions = [];
+    if (aRaviver > 0) {
+      propositions.push({
+        message: 'Ravive un serment : une citation, une victoire, un rappel — dicte-le-moi.',
+        action: null
+      });
+    }
+    propositions.push({
+      message: 'Sceller un nouveau serment ? Dicte-le-moi, je te le propose avant d’écrire.',
+      action: null
+    });
+
+    window.UltimaLeo.accueillirQuadrant({
+      quadrant: 'imladrik',
+      blason: 'epee',
+      salutation: 'Bienvenue, Paul. Voici l’état de tes serments.',
+      sections: [
+        { titre: 'Où on en est', classe: 'leo-section-etat', lignes: [etatCarte] }
+      ],
+      propositions: propositions,
+      propositionsVide: 'Rien à raviver aujourd’hui — ta parole tient.',
+      // Les mains : candidats de résolution des serments dictés (id + libellé
+      // seuls — aucun contenu de flamme ne quitte la page).
+      voix: {
+        quadrant: 'imladrik',
+        jeton: etat.session.access_token,
+        candidats: {
+          serments: etat.serments.map(function (s) {
+            return { id: s.id, libelle: (s.intitule || '').trim() };
+          })
+        }
+      }
+    });
   }
 
   // Lit /api/ideaux (ZEKROM) et /api/imladrik (MINETHNIR) en parallèle. Toute

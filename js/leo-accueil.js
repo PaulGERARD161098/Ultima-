@@ -374,6 +374,98 @@
       };
     }
 
+    // ---- IMLADRIK (boucle ④, 2026-07-30) : les 3 caps. Mêmes règles que
+    // ci-dessus — bornes alignées sur les validateurs serveur (jamais de
+    // troncature silencieuse : ce que la carte affiche est ce qui sera
+    // stocké), résolution des *_ref côté front, aucun outil destructeur.
+    if (outil === 'proposer_page_journal') {
+      if (typeof args.contenu !== 'string' || !args.contenu || args.contenu.length > 20000) {
+        return { ok: false, raison: 'invalide' };
+      }
+      var corpsPage = { contenu: args.contenu };
+      if (args.titre) {
+        if (args.titre.length > 200) { return { ok: false, raison: 'invalide' }; }
+        corpsPage.titre = args.titre;
+      }
+      return { ok: true, url: '/api/imladrik/entrees', methode: 'POST', corps: corpsPage };
+    }
+
+    if (outil === 'proposer_serment') {
+      if (typeof args.intitule !== 'string' || !args.intitule || args.intitule.length > 200) {
+        return { ok: false, raison: 'invalide' };
+      }
+      var corpsSerment = { intitule: args.intitule };
+      if (args.pourquoi) {
+        if (args.pourquoi.length > 2000) { return { ok: false, raison: 'invalide' }; }
+        corpsSerment.pourquoi = args.pourquoi;
+      }
+      if (args.horizon) {
+        // Borne serveur de `horizon` = 200 (et non 2000) : on refuse plutôt
+        // que de tronquer ce que Paul a dicté.
+        if (args.horizon.length > 200) { return { ok: false, raison: 'invalide' }; }
+        corpsSerment.horizon = args.horizon;
+      }
+      return { ok: true, url: '/api/serments', methode: 'POST', corps: corpsSerment };
+    }
+
+    if (outil === 'proposer_flamme') {
+      var serment = resoudreRef(args.serment_ref, candidats.serments);
+      if (!serment.ok) { return serment; }
+      if (typeof args.texte !== 'string' || !args.texte || args.texte.length > 2000) {
+        return { ok: false, raison: 'invalide' };
+      }
+      var corpsFlamme = { serment_id: serment.candidat.id, texte: args.texte };
+      if (args.nature) {
+        if (['citation', 'victoire', 'rappel'].indexOf(args.nature) === -1) {
+          return { ok: false, raison: 'invalide' };
+        }
+        corpsFlamme.nature = args.nature;
+      }
+      return {
+        ok: true, url: '/api/flammes', methode: 'POST',
+        corps: corpsFlamme, cible: serment.candidat.libelle
+      };
+    }
+
+    if (outil === 'proposer_situation') {
+      if (typeof args.intitule !== 'string' || !args.intitule || args.intitule.length > 200) {
+        return { ok: false, raison: 'invalide' };
+      }
+      var corpsSituation = { intitule: args.intitule };
+      if (args.contexte) {
+        if (args.contexte.length > 2000) { return { ok: false, raison: 'invalide' }; }
+        corpsSituation.contexte = args.contexte;
+      }
+      return { ok: true, url: '/api/situations', methode: 'POST', corps: corpsSituation };
+    }
+
+    if (outil === 'proposer_scenario') {
+      var situation = resoudreRef(args.situation_ref, candidats.situations);
+      if (!situation.ok) { return situation; }
+      if (typeof args.deroule !== 'string' || !args.deroule || args.deroule.length > 2000) {
+        return { ok: false, raison: 'invalide' };
+      }
+      var corpsScenario = { situation_id: situation.candidat.id, deroule: args.deroule };
+      if (args.vraisemblance) {
+        if (['faible', 'moyenne', 'forte'].indexOf(args.vraisemblance) === -1) {
+          return { ok: false, raison: 'invalide' };
+        }
+        corpsScenario.vraisemblance = args.vraisemblance;
+      }
+      if (args.signaux) {
+        if (args.signaux.length > 2000) { return { ok: false, raison: 'invalide' }; }
+        corpsScenario.signaux = args.signaux;
+      }
+      if (args.parade) {
+        if (args.parade.length > 2000) { return { ok: false, raison: 'invalide' }; }
+        corpsScenario.parade = args.parade;
+      }
+      return {
+        ok: true, url: '/api/scenarios', methode: 'POST',
+        corps: corpsScenario, cible: situation.candidat.libelle
+      };
+    }
+
     return { ok: false, raison: 'invalide' };
   }
 
@@ -691,6 +783,13 @@
     formulaire.appendChild(champ);
     formulaire.appendChild(envoyer);
     section.appendChild(formulaire);
+
+    // Le micro (composant partagé js/dictee.js) : progressive enhancement —
+    // module absent ou navigateur sans Web Speech → champ nu, aucune erreur.
+    // Il enveloppe le champ dans .champ-vocal, d'où la règle de flex dédiée.
+    if (window.UltimaDictee && window.UltimaDictee.disponible()) {
+      window.UltimaDictee.attacher(champ, 'votre message à Léo');
+    }
 
     var historique = [];
     var enCours = false;
