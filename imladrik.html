@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="css/boussole.css">
   <link rel="stylesheet" href="css/imladrik-carto.css">
 </head>
-<body class="boussole page-imladrik-carto" data-quadrant="imladrik">
+<body class="boussole page-imladrik-carto" data-quadrant="imladrik" data-noeud="imladrik">
 
   <div class="boussole-scene">
 
@@ -50,8 +50,10 @@
     </header>
 
     <!-- ===== La cartographie : caps + aiguilles + Kalamn-talaen, rendus par
-         js/imladrik-carto.js. Muette et sans donnée (§5 : aucune data intime
-         dans le HTML servi) ; le journal MINETHNIR vit derrière auth. ===== -->
+         le NOYAU commun (js/boussole-noyau.mjs) à partir du registre Lv3 —
+         `data-noeud="imladrik"` sur le body suffit à désigner le nœud.
+         Muette et sans donnée (§5 : aucune data intime dans le HTML servi) ;
+         le journal MINETHNIR vit derrière auth. ===== -->
     <main class="boussole-plateau" id="boussole-plateau"
           aria-label="Cartographie du quadrant IMLADRIK (développement personnel)">
       <!-- Repli sans JavaScript : les caps restent atteignables. -->
@@ -71,6 +73,6 @@
 
   </div>
 
-  <script src="js/imladrik-carto.js" defer></script>
+  <script type="module" src="js/boussole-noyau.mjs"></script>
 </body>
 </html>

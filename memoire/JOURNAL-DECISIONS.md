@@ -952,3 +952,23 @@
   API/migrations/données (front pur). Deux autres points de la session tranchés :
   Google Cloud = 0 € pour garder le Drive (OAuth + Drive API gratuits) ; advisors
   rendus automatiques (`.claude/settings.json` auto-approuve les lectures Supabase).
+- **2026-07-30 (Ultima Lv3 — deux supra-divisions + la boussole comme forme
+  unique)** — Paul dicte : « on passe à Ultima Lv3 ; on regroupe en deux supra
+  divisions : **ULTIMA**, les projets personnels ; **ALPHA**, les projets
+  professionnels. Dans l'ALPHA on inclut **YCOME** et **RENOBOOST IA**. Dans
+  Ultima tu regroupes **TAO**. Chaque supra-division, quadrant et cap devra
+  reprendre l'affichage, la forme de la **boussole IMLADRIK** — c'est ça que je
+  veux. » Cadré dans `CADRAGE-LV3.md` + preview navigable
+  `design/preview-lv3-boussoles.html` (PR #113). **Paul valide tout** (« oui pour
+  tout ») : noms ULTIMA/ALPHA gardés avec légendes gravées « le personnel » / « le
+  professionnel » ; **RIVEN reste une feuille** (accès direct à la carte tant qu'il
+  n'a qu'une porte — règle nœud/feuille §2.1) ; caps proposés de NICOL BOLAS
+  (ABAQUE, REVENUS & CHARGES, IMPÔTS, ÉCHÉANCIER) et d'ADRAMELECH (LES ARCHIPELS,
+  LES RAPPROCHEMENTS) validés ; blason d'ALPHA = la capitale grecque gravée.
+  **Go L1** donné et livré : noyau unique (`js/boussole-noyau.mjs`) + registre de
+  l'arbre (`js/registre-lv3.mjs`) + catalogue de gravures (`js/blasons.mjs`) ;
+  `imladrik.html` rebranché dessus, `js/imladrik-carto.js` supprimé.
+  **Iso-rendu prouvé** : `smoke-imladrik-carto` **inchangé** et vert (29 verdicts),
+  patrimoine COMPLET vert, + `unit-registre-lv3` (27 verdicts). Front pur, zéro
+  touche auth/API/migrations/données. Reste : L2 (les deux supra-divisions),
+  L3 (TAO en boussole), L4 (les deux antichambres).

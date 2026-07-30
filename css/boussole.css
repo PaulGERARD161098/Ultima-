@@ -138,6 +138,28 @@ body.boussole {
 }
 .boussole-coeur svg { width: 100%; height: auto; display: block; }
 
+/* Légende gravée du cœur : le nom de la boussole, sous le médaillon, centré
+   entre les deux caps du bas. Muette (aria-hidden), n'intercepte rien.
+   Générique Lv3 — chaque nœud peut y ajouter sa classe (ex. .kalamn-legende
+   pour IMLADRIK, qui garde ses réglages propres dans css/imladrik-carto.css). */
+.boussole-legende {
+  position: absolute;
+  left: 50%;
+  top: 68.5%;
+  transform: translate(-50%, 0);
+  z-index: 4;
+  margin: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  font-family: var(--police-ancienne);
+  font-variant: small-caps;
+  font-style: italic;
+  letter-spacing: 0.16em;
+  font-size: clamp(0.72rem, 2vmin, 0.92rem);
+  color: #f0dca0;                 /* or antique clair — lisible sur le parchemin */
+  text-shadow: 0 1px 2px rgba(0, 10, 20, 0.6);
+}
+
 /* ---------- Caps (cartouches disposés autour, placés par le JS) ---------- */
 .cap {
   position: absolute;

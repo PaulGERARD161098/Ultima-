@@ -1,0 +1,745 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Ultima Lv3 — preview des boussoles</title>
+<!-- Preview Lv3 (2026-07-30) — maquette STATIQUE et NAVIGABLE de l'arbre à deux
+     supra-divisions (cadrage : CADRAGE-LV3.md). Zéro code produit : ce fichier
+     ne touche ni l'app, ni l'auth, ni les données ; il ne contient aucune donnée
+     (que du texte statique écrit ici). Registre antique et sérieux d'Ultima
+     (palette de css/console.css, blasons de js/boussole.js + js/imladrik-carto.js).
+     Toutes les boussoles sont rendues par LE MÊME code à partir du registre —
+     c'est précisément ce que le cadrage propose d'implanter (§5, noyau unique). -->
+<style>
+  :root {
+    --nuit: #0e3a52;
+    --mer: #145070;
+    --parchemin: #f9f1dc;
+    --parchemin-doux: #f6eed9;
+    --or-clair: #e8cf8f;
+    --or: #c9a659;
+    --bronze: #a9884a;
+    --encre: #3b2f1c;
+    --encre-brune: #5a4118;
+    --police: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { min-height: 100%; }
+  body {
+    background: radial-gradient(ellipse 120% 80% at 50% -10%, var(--mer), var(--nuit) 70%);
+    color: var(--parchemin);
+    font-family: var(--police);
+    display: flex; flex-direction: column; align-items: center;
+    padding: 1.4rem 1rem 3rem; gap: 1.1rem;
+  }
+
+  .bandeau-proto {
+    font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--nuit); background: var(--or-clair);
+    border: 1px solid var(--bronze); border-radius: 2px;
+    padding: 0.28rem 0.9rem; text-align: center;
+  }
+
+  /* ===== Fil d'Ariane (spécifique à la preview : dans l'app, c'est le « ↞ ») ===== */
+  .fil {
+    display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center;
+    font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--or-clair); opacity: 0.9;
+  }
+  .fil button {
+    font: inherit; color: inherit; background: none; border: 0; cursor: pointer;
+    letter-spacing: inherit; text-transform: inherit;
+    border-bottom: 1px solid rgba(232, 207, 143, 0.45); padding: 0 0 1px;
+  }
+  .fil button:hover, .fil button:focus-visible { color: #fff; border-bottom-color: #fff; }
+  .fil .sep { opacity: 0.5; }
+  .fil .courant { opacity: 0.65; }
+
+  /* ===== Bandeau du nœud (pièce nº2 du patron) ===== */
+  .entete { text-align: center; max-width: 34rem; }
+  .entete .surligne {
+    display: block; font-size: 0.74rem; letter-spacing: 0.28em;
+    text-transform: uppercase; color: var(--or-clair); opacity: 0.85;
+  }
+  .entete h1 {
+    font-size: clamp(1.6rem, 5vw, 2.3rem); font-weight: 600;
+    letter-spacing: 0.12em; margin-top: 0.3rem; text-wrap: balance;
+  }
+  .entete .invite { font-style: italic; color: var(--or-clair); margin-top: 0.45rem; }
+  .filet {
+    width: 9rem; height: 1px; margin: 0.8rem auto 0;
+    background: linear-gradient(90deg, transparent, var(--or), transparent);
+  }
+
+  /* ===== Le plateau (pièce nº3) ===== */
+  .plateau { position: relative; width: min(88vw, 540px); height: min(88vw, 540px); flex-shrink: 0; }
+  .aiguilles { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .aiguille-trait {
+    stroke: var(--or); stroke-width: 0.55; opacity: 0.5;
+    stroke-dasharray: 1.6 2.2; transition: opacity 0.25s, stroke-width 0.25s;
+  }
+  .aiguille-pointe { fill: var(--or-clair); opacity: 0.6; transition: opacity 0.25s; }
+  .aiguille.is-actif .aiguille-trait { opacity: 1; stroke-width: 0.9; stroke-dasharray: none; }
+  .aiguille.is-actif .aiguille-pointe { opacity: 1; }
+  .cercle-plateau { fill: none; stroke: var(--or); opacity: 0.28; }
+  .graduation { stroke: var(--or); opacity: 0.35; }
+  .passerelle {
+    stroke: var(--or-clair); stroke-width: 0.5; opacity: 0.45;
+    stroke-dasharray: 1 2.4; fill: none;
+  }
+
+  /* ===== Le cœur + sa légende gravée (pièce nº4 — la signature IMLADRIK) ===== */
+  .coeur {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: 34%; text-align: center; pointer-events: none;
+  }
+  .coeur svg { width: 100%; height: auto; display: block;
+    filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.45)); }
+  .coeur-legende {
+    display: block; margin-top: 0.5rem;
+    font-style: italic; font-variant: small-caps;
+    font-size: clamp(0.78rem, 2.4vw, 1rem); letter-spacing: 0.16em;
+    color: #f0dca0; text-shadow: 0 1px 2px rgba(0, 10, 20, 0.6);
+  }
+
+  /* ===== Les caps ===== */
+  .cap {
+    position: absolute; transform: translate(-50%, -50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.28rem;
+    text-decoration: none; color: var(--parchemin); font: inherit;
+    background: none; border: 0; width: 7.2rem; text-align: center; cursor: pointer;
+    transition: transform 0.25s;
+  }
+  .cap:hover, .cap:focus-visible { transform: translate(-50%, -50%) scale(1.06); }
+  .cap:focus-visible { outline: 2px solid var(--or-clair); outline-offset: 4px; border-radius: 6px; }
+  .cap--avenir { cursor: default; opacity: 0.82; }
+  .cap-blason { width: 4.4rem; height: 4.4rem; }
+  .cap-blason svg { width: 100%; height: 100%; filter: drop-shadow(0 3px 9px rgba(0, 0, 0, 0.4)); }
+  .cap-nom { font-size: 0.9rem; letter-spacing: 0.13em; font-weight: 600; }
+  .cap-etat {
+    font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 0.12rem 0.5rem; border-radius: 2px; margin-top: 0.05rem;
+  }
+  .cap-etat--ouvert { color: var(--nuit); background: var(--or-clair); border: 1px solid var(--bronze); }
+  .cap-etat--avenir { color: var(--or-clair); border: 1px solid var(--bronze); }
+  .cap-etat--outil { color: var(--or-clair); border: 1px dashed var(--bronze); }
+
+  /* ===== Le cartouche : la parole de Léo (pièce nº5) ===== */
+  .parole {
+    max-width: 32rem; min-height: 8rem; width: min(92vw, 32rem);
+    background: linear-gradient(180deg, var(--parchemin), var(--parchemin-doux));
+    color: var(--encre); border: 1px solid var(--bronze); border-radius: 3px;
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.4), inset 0 0 0 3px rgba(201, 166, 89, 0.25);
+    padding: 1rem 1.3rem; text-align: center;
+  }
+  .parole-nom { font-size: 0.82rem; letter-spacing: 0.22em; font-weight: 700; color: var(--encre-brune); }
+  .parole-etat { font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--bronze); margin-top: 0.15rem; }
+  .parole-signal {
+    display: inline-block; margin-top: 0.45rem; font-size: 0.72rem; letter-spacing: 0.08em;
+    color: var(--nuit); background: var(--or-clair);
+    border: 1px solid var(--bronze); border-radius: 2px; padding: 0.1rem 0.5rem;
+  }
+  .parole-texte { font-size: 0.94rem; line-height: 1.5; margin-top: 0.5rem; }
+  .parole-action { font-style: italic; font-size: 0.8rem; color: var(--bronze); margin-top: 0.55rem; }
+  .parole-defaut { font-style: italic; color: var(--encre-brune); padding-top: 1.9rem; }
+
+  .pied {
+    font-size: 0.78rem; font-style: italic; color: var(--or-clair);
+    opacity: 0.78; text-align: center; max-width: 38rem; line-height: 1.55;
+  }
+  .pied code { font-style: normal; font-size: 0.92em; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cap, .aiguille-trait, .aiguille-pointe { transition: none; }
+  }
+  @media (max-width: 480px) {
+    .cap { width: 5.8rem; }
+    .cap-blason { width: 3.5rem; height: 3.5rem; }
+    .cap-nom { font-size: 0.78rem; letter-spacing: 0.08em; }
+  }
+</style>
+</head>
+<body>
+
+  <span class="bandeau-proto">Preview Lv3 — maquette statique, zéro code produit</span>
+
+  <nav class="fil" id="fil" aria-label="Fil d'Ariane de la preview"></nav>
+
+  <header class="entete" id="entete"></header>
+
+  <main class="plateau" id="plateau" aria-label="Boussole du nœud courant (preview)"></main>
+
+  <aside class="parole" id="parole" role="status" aria-live="polite">
+    <p class="parole-defaut">Survole un cap&nbsp;— Léo t'en dit l'essentiel.</p>
+  </aside>
+
+  <p class="pied">
+    Toutes ces boussoles sortent du <strong>même rendu</strong>, alimenté par un
+    <strong>registre</strong> : ajouter un projet = une entrée. Clique un cap
+    <em>nœud</em> pour descendre l'arbre&nbsp;; les caps <em>outil</em> sont les
+    feuilles (pages de travail existantes, inchangées). Cadrage complet&nbsp;:
+    <code>CADRAGE-LV3.md</code>.
+  </p>
+
+<script>
+/* eslint-disable */
+(function () {
+  'use strict';
+
+  // ===================== BLASONS (gravures existantes) =====================
+  // Repris tels quels de js/boussole.js, js/imladrik-carto.js et ultima.html.
+  function disque(interieur) {
+    return '<svg viewBox="0 0 72 72" focusable="false" aria-hidden="true">'
+      + '<circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>'
+      + '<circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>'
+      + interieur + '</svg>';
+  }
+  function medaille(interieur) {
+    return '<svg viewBox="0 0 120 120" focusable="false" aria-hidden="true">'
+      + '<defs><radialGradient id="or-' + (medaille.n = (medaille.n || 0) + 1) + '" cx="38%" cy="32%" r="78%">'
+      + '<stop offset="0" stop-color="#f4e6bd"/><stop offset="55%" stop-color="#e3cd93"/>'
+      + '<stop offset="100%" stop-color="#cbab63"/></radialGradient></defs>'
+      + '<circle cx="60" cy="60" r="55" fill="url(#or-' + medaille.n + ')" stroke="#6e5320" stroke-width="2.6"/>'
+      + '<circle cx="60" cy="60" r="49" fill="none" stroke="#6e5320" stroke-width="1" opacity="0.7"/>'
+      + '<circle cx="60" cy="60" r="45" fill="none" stroke="#a9884a" stroke-width="0.8"/>'
+      + '<g fill="#6e5320"><circle cx="60" cy="8.5" r="1.7"/><circle cx="60" cy="111.5" r="1.7"/>'
+      + '<circle cx="8.5" cy="60" r="1.7"/><circle cx="111.5" cy="60" r="1.7"/></g>'
+      + interieur + '</svg>';
+  }
+
+  var B = {};
+
+  // — Existants —
+  B.rose = disque(
+    '<path d="M36 12 L40.5 31.5 L60 36 L40.5 40.5 L36 60 L31.5 40.5 L12 36 L31.5 31.5 Z" fill="#3b2f1c"/>'
+    + '<path d="M36 18 L38.5 33.5 L54 36 L38.5 38.5 L36 54 L33.5 38.5 L18 36 L33.5 33.5 Z" fill="#a9884a" opacity="0.55"/>'
+    + '<circle cx="36" cy="36" r="2.4" fill="#f9f1dc" stroke="#5a4118" stroke-width="1"/>');
+
+  B.essor = disque(
+    '<path d="M22 50 L46 26" stroke="#3b2f1c" stroke-width="2.6" stroke-linecap="round" fill="none"/>'
+    + '<path d="M28 50 L48 30" stroke="#a9884a" stroke-width="1.4" stroke-linecap="round" opacity="0.7"/>'
+    + '<path d="M46 22 l2.6 6.4 6.4 2.6 -6.4 2.6 -2.6 6.4 -2.6 -6.4 -6.4 -2.6 6.4 -2.6 Z" fill="#3b2f1c"/>');
+
+  B.portail = disque(
+    '<path d="M23 51 V37 a13 13 0 0 1 26 0 V51" fill="none" stroke="#3b2f1c" stroke-width="2.4"/>'
+    + '<path d="M20 51 H52" stroke="#3b2f1c" stroke-width="2.4" stroke-linecap="round"/>'
+    + '<path d="M31 40 h10 m0 0 l-3.6 -3.6 m3.6 3.6 l-3.6 3.6" fill="none" stroke="#a9884a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>');
+
+  B.tao = disque(
+    '<circle cx="36" cy="36" r="24" fill="#efe3c4" stroke="#5a4118" stroke-width="1"/>'
+    + '<path d="M36 12 A24 24 0 0 1 36 60 A12 12 0 0 1 36 36 A12 12 0 0 0 36 12 Z" fill="#3b2f1c"/>'
+    + '<circle cx="36" cy="24" r="4.5" fill="#efe3c4"/>'
+    + '<circle cx="36" cy="48" r="4.5" fill="#3b2f1c"/>');
+
+  B.riven = disque(
+    '<path d="M36 12 L40.5 31.5 L60 36 L40.5 40.5 L36 60 L31.5 40.5 L12 36 L31.5 31.5 Z" fill="#3b2f1c"/>'
+    + '<g stroke="#5a4118" stroke-width="1.3" stroke-linecap="round">'
+    + '<path d="M36 36 L50 22 M36 36 L50 50 M36 36 L22 50 M36 36 L22 22"/></g>'
+    + '<circle cx="36" cy="36" r="2.4" fill="#f9f1dc" stroke="#5a4118" stroke-width="1"/>');
+
+  B.balance = disque(
+    '<g stroke="#5a4118" stroke-width="1.9" fill="none" stroke-linecap="round" stroke-linejoin="round">'
+    + '<path d="M36 22 V49"/><path d="M20 27 H52"/><path d="M28 51 Q36 47.5 44 51"/>'
+    + '<path d="M22 27 L17 37 M22 27 L27 37 M15 37 Q22 45 29 37"/>'
+    + '<path d="M50 27 L45 37 M50 27 L55 37 M43 37 Q50 45 57 37"/></g>'
+    + '<circle cx="36" cy="22" r="2.6" fill="#3b2f1c"/>');
+
+  B.ouroboros = disque(
+    '<g fill="none" stroke="#3b2f1c" stroke-width="1.4" stroke-linejoin="round">'
+    + '<path d="M30 24.5 C 26.5 17.5, 21 12.8, 13.5 12.3 C 15.7 15.2, 15.1 17.8, 12.8 19.6'
+    + ' C 16.3 20, 18.4 22.2, 17.6 25.3 C 20.7 24.3, 23.6 25.7, 25 28.6 C 26.5 26.5, 28.3 25.3, 30 25.5 Z"/></g>'
+    + '<path d="M34.78 22.05 A14 14 0 1 0 37.22 22.05" fill="none" stroke="#3b2f1c" stroke-width="3" stroke-linecap="round"/>'
+    + '<path d="M31.4 21.8 C 32.4 19.5, 35.4 18.7, 38 19.9 L 40.6 21.3 L 38.8 22.1 L 40.4 23.5 L 36.8 23.9'
+    + ' C 33.9 24.3, 31.9 23.4, 31.4 21.8 Z" fill="#3b2f1c"/>'
+    + '<path d="M32.8 20.2 L 33.6 17.4 L 34.9 19.8 Z" fill="#3b2f1c"/>'
+    + '<circle cx="34.3" cy="21.3" r="0.9" fill="#e0c48a"/>');
+
+  var EPEE_SOLEIL =
+    '<g fill="none" stroke="#3b2f1c" stroke-width="1.6">'
+    + '<circle cx="36" cy="29" r="9.5"/>'
+    + '<path d="M20.5 29 H 24.5"/><path d="M47.5 29 H 51.5"/>'
+    + '<path d="M25.2 18.2 l 2.9 2.9"/><path d="M43.9 36.9 l 2.9 2.9"/>'
+    + '<path d="M46.8 18.2 l -2.9 2.9"/><path d="M28.1 36.9 l -2.9 2.9"/></g>'
+    + '<circle cx="36" cy="29" r="6.5" fill="none" stroke="#e0c48a" stroke-width="0.8" opacity="0.7"/>'
+    + '<g fill="#3b2f1c"><path d="M36 11.5 L38.2 16.5 L38.2 48 L33.8 48 L33.8 16.5 Z"/>'
+    + '<rect x="26.5" y="48" width="19" height="3.4" rx="1.7"/>'
+    + '<rect x="34.2" y="51.4" width="3.6" height="7"/><circle cx="36" cy="61" r="2.9"/></g>'
+    + '<path d="M36 15.5 V 46.5" stroke="#e0c48a" stroke-width="0.8" opacity="0.7"/>';
+  B.imladrik = disque(EPEE_SOLEIL);
+
+  function aile(remplissage) {
+    return '<g stroke="#3b2f1c" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round">'
+      + '<path d="M23 49 C 23 40, 25 32, 33 27 C 40 22, 48 22, 54 23'
+      + ' C 49 26, 47 29, 47.5 32 C 44 30, 41 31, 40 34'
+      + ' C 43 34, 45 36, 45 39 C 41 37, 38 38, 37 41'
+      + ' C 40 41, 42 43, 42 45 C 37 44, 30 47, 23 49 Z" fill="' + remplissage + '"/></g>'
+      + '<path d="M27 46 C 31 35, 40 28, 51 25" stroke="#a9884a" stroke-width="0.7" fill="none" opacity="0.6"/>';
+  }
+  B.aileBlanche = disque(aile('#ffffff'));
+  B.aileNoire = disque('<g transform="translate(72,0) scale(-1,1)">' + aile('#241c12') + '</g>');
+
+  B.plume = disque(
+    '<path d="M46 16 C 38 20, 30 30, 27 44 L 29.5 45 C 35 33, 41 24, 48 19 Z" fill="#3b2f1c"/>'
+    + '<path d="M43 22 C 39 27, 35 33, 32 40" stroke="#e0c48a" stroke-width="0.8" fill="none" opacity="0.8"/>'
+    + '<path d="M27 44 L 24.5 50 L 30 47.5 Z" fill="#3b2f1c"/>'
+    + '<path d="M22 55 H 50" stroke="#3b2f1c" stroke-width="1.6" stroke-linecap="round"/>'
+    + '<path d="M22 55 H 38" stroke="#a9884a" stroke-width="0.8" stroke-linecap="round" opacity="0.7"/>');
+
+  B.bifurcation = disque(
+    '<path d="M36 56 V 40" stroke="#3b2f1c" stroke-width="2.6" fill="none" stroke-linecap="round"/>'
+    + '<path d="M36 40 C 36 32, 28 30, 24 22" stroke="#3b2f1c" stroke-width="2" fill="none" stroke-linecap="round"/>'
+    + '<path d="M36 40 C 36 30, 36 26, 36 20" stroke="#3b2f1c" stroke-width="2" fill="none" stroke-linecap="round"/>'
+    + '<path d="M36 40 C 36 32, 44 30, 48 22" stroke="#3b2f1c" stroke-width="2" fill="none" stroke-linecap="round"/>'
+    + '<g fill="#a9884a">'
+    + '<path d="M24 14 l1.4 3 3 1.4 -3 1.4 -1.4 3 -1.4 -3 -3 -1.4 3 -1.4 Z"/>'
+    + '<path d="M36 10 l1.4 3 3 1.4 -3 1.4 -1.4 3 -1.4 -3 -3 -1.4 3 -1.4 Z"/>'
+    + '<path d="M48 14 l1.4 3 3 1.4 -3 1.4 -1.4 3 -1.4 -3 -3 -1.4 3 -1.4 Z"/></g>');
+
+  B.flamme = disque(
+    '<path d="M36 15 C 42 23, 48 28, 48 38 C 48 47, 43 53, 36 54 C 29 53, 24 47, 24 38'
+    + ' C 24 31, 28 27, 30 23 C 31 27, 33 29, 36 30 C 34 25, 34 20, 36 15 Z" fill="#3b2f1c"/>'
+    + '<path d="M36 32 C 39 36, 41 38, 41 42 C 41 47, 39 49, 36 50 C 33 49, 31 47, 31 42'
+    + ' C 31 38, 33 36, 36 32 Z" fill="#e8cf8f"/>'
+    + '<path d="M26 58 H 46" stroke="#3b2f1c" stroke-width="2" stroke-linecap="round"/>');
+
+  // — Nouveaux (proposés par cette preview) —
+  B.alpha = disque(
+    // ALPHA : la capitale grecque gravée (Α), posée sur son stylobate d'or —
+    // la première lettre, l'édifice du métier.
+    '<g fill="none" stroke="#3b2f1c" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round">'
+    + '<path d="M23 50 L 36 18 L 49 50"/><path d="M28.5 39 H 43.5"/></g>'
+    + '<path d="M18 56 H 54" stroke="#a9884a" stroke-width="1.6" stroke-linecap="round" opacity="0.85"/>'
+    + '<path d="M22 20 q 14 -7 28 0" fill="none" stroke="#a9884a" stroke-width="1.1" opacity="0.6"/>');
+
+  B.abaque = disque(
+    // ABAQUE : le boulier — trois tringles, les jetons comptés.
+    '<g stroke="#3b2f1c" stroke-width="1.8" stroke-linecap="round">'
+    + '<path d="M18 26 H 54"/><path d="M18 36 H 54"/><path d="M18 46 H 54"/></g>'
+    + '<g fill="#3b2f1c"><circle cx="25" cy="26" r="3"/><circle cx="33" cy="26" r="3"/>'
+    + '<circle cx="47" cy="36" r="3"/><circle cx="39" cy="36" r="3"/>'
+    + '<circle cx="25" cy="46" r="3"/></g>'
+    + '<g fill="#a9884a"><circle cx="47" cy="26" r="3"/><circle cx="25" cy="36" r="3"/>'
+    + '<circle cx="47" cy="46" r="3"/></g>'
+    + '<path d="M16 20 H 56" stroke="#a9884a" stroke-width="1.1" opacity="0.7"/>');
+
+  B.revenus = disque(
+    // REVENUS & CHARGES : les deux flux, entrée et sortie.
+    '<g fill="none" stroke="#3b2f1c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'
+    + '<path d="M27 50 V 24 m0 0 l-5 6 m5 -6 l5 6"/>'
+    + '<path d="M45 22 V 48 m0 0 l-5 -6 m5 6 l5 -6"/></g>'
+    + '<path d="M18 56 H 54" stroke="#a9884a" stroke-width="1.2" stroke-linecap="round" opacity="0.75"/>');
+
+  B.impots = disque(
+    // IMPÔTS : le parchemin scellé (la déclaration).
+    '<path d="M24 16 H 48 V 50 H 24 Z" fill="#f4ead0" stroke="#3b2f1c" stroke-width="1.8"/>'
+    + '<g stroke="#3b2f1c" stroke-width="1.2" stroke-linecap="round">'
+    + '<path d="M29 24 H 43"/><path d="M29 30 H 43"/><path d="M29 36 H 38"/></g>'
+    + '<circle cx="44" cy="52" r="6" fill="#3b2f1c"/>'
+    + '<circle cx="44" cy="52" r="3" fill="none" stroke="#e0c48a" stroke-width="0.9"/>');
+
+  B.echeancier = disque(
+    // ÉCHÉANCIER : le sablier — ce qui tombe et quand.
+    '<g fill="none" stroke="#3b2f1c" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">'
+    + '<path d="M24 16 H 48"/><path d="M24 56 H 48"/>'
+    + '<path d="M26 16 C 26 30, 46 42, 46 56"/><path d="M46 16 C 46 30, 26 42, 26 56"/></g>'
+    + '<path d="M31 50 q 5 -5 10 0 l 0 4 H 31 Z" fill="#3b2f1c"/>'
+    + '<path d="M36 30 v 8" stroke="#a9884a" stroke-width="1.4" stroke-linecap="round"/>');
+
+  B.archipels = disque(
+    // LES ARCHIPELS : les îles des idées sur la mer gravée.
+    '<g fill="#3b2f1c">'
+    + '<path d="M20 34 q 6 -9 13 -2 q 5 5 -1 6 q -8 1 -12 -4 Z"/>'
+    + '<path d="M40 26 q 5 -7 11 -1 q 4 4 -1 5 q -7 1 -10 -4 Z"/>'
+    + '<path d="M34 46 q 7 -8 14 -1 q 4 4 -2 5 q -9 1 -12 -4 Z"/></g>'
+    + '<g fill="none" stroke="#a9884a" stroke-width="1.1" stroke-linecap="round" opacity="0.8">'
+    + '<path d="M18 44 q 5 -3 10 0 t 10 0"/><path d="M20 54 q 6 -3 12 0 t 12 0"/></g>');
+
+  B.rapprochements = disque(
+    // LES RAPPROCHEMENTS : deux idées reliées par le pont d'or.
+    '<g fill="#3b2f1c"><circle cx="24" cy="28" r="6"/><circle cx="48" cy="44" r="6"/></g>'
+    + '<path d="M28.5 32.5 L 43.5 39.5" stroke="#a9884a" stroke-width="2" stroke-linecap="round"/>'
+    + '<g fill="none" stroke="#3b2f1c" stroke-width="1.2" opacity="0.6">'
+    + '<circle cx="24" cy="28" r="10"/><circle cx="48" cy="44" r="10"/></g>');
+
+  // — Cœurs (médaillons) —
+  var COEUR = {};
+  COEUR.anneau = medaille(
+    '<g stroke="#4a3512" fill="none" stroke-linecap="round">'
+    + '<circle cx="60" cy="60" r="17" stroke-width="2.4"/>'
+    + '<circle cx="60" cy="60" r="8.5" stroke-width="1.6"/>'
+    + '<path d="M60 40 L60 30 M60 80 L60 90 M80 60 L90 60 M40 60 L30 60'
+    + ' M74.1 45.9 L81.2 38.8 M45.9 45.9 L38.8 38.8'
+    + ' M74.1 74.1 L81.2 81.2 M45.9 74.1 L38.8 81.2" stroke-width="1.4"/></g>'
+    + '<circle cx="60" cy="60" r="2.1" fill="#4a3512"/>');
+
+  COEUR.rose = medaille(
+    '<path d="M60 18 L66 54 L102 60 L66 66 L60 102 L54 66 L18 60 L54 54 Z" fill="#3b2f1c"/>'
+    + '<path d="M60 30 L64 56 L90 60 L64 64 L60 90 L56 64 L30 60 L56 56 Z" fill="#a9884a" opacity="0.5"/>'
+    + '<circle cx="60" cy="60" r="3.4" fill="#f9f1dc" stroke="#5a4118" stroke-width="1"/>');
+
+  COEUR.alpha = medaille(
+    '<g fill="none" stroke="#4a3512" stroke-width="6.4" stroke-linecap="round" stroke-linejoin="round">'
+    + '<path d="M38 84 L 60 30 L 82 84"/><path d="M47 65 H 73"/></g>'
+    + '<path d="M32 94 H 88" stroke="#a9884a" stroke-width="2.4" stroke-linecap="round" opacity="0.85"/>'
+    + '<path d="M36 30 q 24 -12 48 0" fill="none" stroke="#a9884a" stroke-width="1.8" opacity="0.6"/>');
+
+  COEUR.tao = medaille(
+    '<circle cx="60" cy="60" r="34" fill="#efe3c4" stroke="#5a4118" stroke-width="1.4"/>'
+    + '<path d="M60 26 A34 34 0 0 1 60 94 A17 17 0 0 1 60 60 A17 17 0 0 0 60 26 Z" fill="#3b2f1c"/>'
+    + '<circle cx="60" cy="43" r="6.4" fill="#efe3c4"/>'
+    + '<circle cx="60" cy="77" r="6.4" fill="#3b2f1c"/>');
+
+  COEUR.balance = medaille(
+    '<g stroke="#4a3512" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">'
+    + '<path d="M60 36 V 84"/><path d="M33 45 H 87"/><path d="M46 88 Q60 82 74 88"/>'
+    + '<path d="M36 45 L 27 62 M36 45 L 45 62 M23 62 Q36 76 49 62"/>'
+    + '<path d="M84 45 L 75 62 M84 45 L 93 62 M71 62 Q84 76 97 62"/></g>'
+    + '<circle cx="60" cy="36" r="4.4" fill="#3b2f1c"/>');
+
+  COEUR.ouroboros = medaille(
+    '<g fill="none" stroke="#3b2f1c" stroke-width="2.4" stroke-linejoin="round">'
+    + '<path d="M50 40 C 44 26, 34 17, 21 16 C 25 21, 24 26, 20 29'
+    + ' C 26 30, 30 34, 28 39 C 34 37, 39 40, 41 45 C 44 41, 47 39, 50 40 Z"/></g>'
+    + '<path d="M57.5 36 A25 25 0 1 0 62.5 36" fill="none" stroke="#3b2f1c" stroke-width="5.4" stroke-linecap="round"/>'
+    + '<path d="M52 35 C 54 31, 59 29, 64 32 L 69 34 L 65 36 L 68 39 L 61 39.5'
+    + ' C 56 40, 53 38, 52 35 Z" fill="#3b2f1c"/>'
+    + '<circle cx="57" cy="34.5" r="1.5" fill="#e0c48a"/>');
+
+  COEUR.kalamn = medaille(
+    '<g fill="none" stroke="#3b2f1c" stroke-width="3.2" stroke-linecap="round">'
+    + '<path d="M38 82 C 30 74, 30 62, 42 58 C 54 54, 70 56, 76 46"/>'
+    + '<path d="M76 46 C 80 39, 76 31, 68 30"/></g>'
+    + '<path d="M38 82 C 42 88, 50 90, 57 87 L 53 83 C 48 85, 43 84, 40 80 Z" fill="#3b2f1c"/>'
+    + '<path d="M47 57 C 42 47, 46 38, 56 34 C 52 40, 52 46, 55 51 Z" fill="#3b2f1c" opacity="0.85"/>'
+    + '<g fill="#3b2f1c"><path d="M60 14 L62.4 20 L62.4 74 L57.6 74 L57.6 20 Z"/>'
+    + '<rect x="49" y="74" width="22" height="3.6" rx="1.8"/>'
+    + '<rect x="58.1" y="77.6" width="3.8" height="8"/><circle cx="60" cy="89" r="3.1"/></g>'
+    + '<path d="M60 18 V 72" stroke="#e0c48a" stroke-width="0.9" opacity="0.75"/>'
+    + '<path d="M52 66 C 58 63, 66 63, 70 58" fill="none" stroke="#3b2f1c" stroke-width="3.2" stroke-linecap="round"/>'
+    + '<path d="M68 30 C 63 29, 59 31, 57 35 C 61 36, 66 36, 69 34 L 74 33 L 69.5 31.5 Z" fill="#3b2f1c"/>'
+    + '<circle cx="64.5" cy="32.5" r="1" fill="#e8cf8f"/>'
+    + '<path d="M67 29.5 l 1.5 -3.5 l 1.5 3" fill="none" stroke="#3b2f1c" stroke-width="1.1" stroke-linecap="round"/>');
+
+  // ============================ LE REGISTRE ============================
+  // C'est LUI que le cadrage propose d'implanter (js/registre-lv3.js) : l'arbre
+  // entier en données. Chaque nœud = un écran boussole ; chaque feuille = un outil.
+  var NOEUDS = {
+    racine: {
+      surligne: 'Ultima Lv3',
+      titre: 'Bienvenue',
+      invite: 'Sur quoi est-ce qu’on travaille aujourd’hui ?',
+      coeur: COEUR.anneau,
+      legende: 'Ultima',
+      caps: [
+        { id: 'ultima-perso', nom: 'ULTIMA', etat: 'Ouvert', blason: B.rose,
+          resume: 'La supra-division personnelle. Ton réseau, ton argent, tes idées, '
+            + 'ton développement et ta voie — cinq caps sous une seule rose.' },
+        { id: 'alpha', nom: 'ALPHA', etat: 'Ouvert', blason: B.alpha,
+          resume: 'La supra-division professionnelle. Les projets qui te font vivre : '
+            + 'Renoboost IA aujourd’hui, YCOME dès que tu me donnes son adresse.' },
+      ],
+    },
+
+    'ultima-perso': {
+      parent: 'racine',
+      surligne: 'Supra-division — le personnel',
+      titre: 'ULTIMA',
+      invite: 'Léo te guide — survole un cap.',
+      coeur: COEUR.rose,
+      legende: 'le personnel',
+      caps: [
+        { id: 'riven', nom: 'RIVEN', etat: 'Outil', blason: B.riven, feuille: 'traveler.html',
+          resume: 'Le réseau commercial : artisans, partenaires, leads, chantiers et '
+            + 'leurs relations. Une seule porte aujourd’hui → la carte s’ouvre directement.' },
+        { id: 'nicol-bolas', nom: 'NICOL BOLAS', etat: 'En chantier', blason: B.balance,
+          resume: 'Le pilotage financier : revenus, charges, prévision d’impôts, '
+            + 'échéancier. L’ABAQUE y est déjà ouvert.' },
+        { id: 'adramelech', nom: 'ADRAMELECH', etat: 'Privé', blason: B.ouroboros,
+          resume: 'La bibliothèque d’idées : capturer, classer, rapprocher, enrichir. '
+            + 'Privée — derrière authentification.' },
+        { id: 'imladrik', nom: 'IMLADRIK', etat: 'Ouvert', blason: B.imladrik,
+          resume: 'Le développement personnel. C’est lui le modèle de forme : '
+            + 'trois caps autour de Kalamn-talaen.' },
+        { id: 'tao', nom: 'TAO', etat: 'Ouvert', blason: B.tao,
+          resume: '« La voie » — le réel et l’idéal réunis : '
+            + 'RESHIRAM et ZEKROM, reliés par le rétroplanning.' },
+      ],
+    },
+
+    alpha: {
+      parent: 'racine',
+      surligne: 'Supra-division — le professionnel',
+      titre: 'ALPHA',
+      invite: 'Léo te guide — survole un cap.',
+      coeur: COEUR.alpha,
+      legende: 'le professionnel',
+      caps: [
+        { id: 'renoboost', nom: 'RENOBOOST IA', etat: 'Ouvert', blason: B.essor, externe: true,
+          feuille: 'https://www.renoboostia.fr',
+          resume: 'Le socle rémunérateur (chantiers + installations à domicile). '
+            + 'Sa console s’ouvre dans un nouvel onglet.' },
+        { id: 'ycome', nom: 'YCOME', etat: 'À venir', blason: B.portail, avenir: true,
+          resume: 'Plateforme externe. Le cap est prêt : transmets-moi son URL et je le branche.' },
+      ],
+    },
+
+    'nicol-bolas': {
+      parent: 'ultima-perso',
+      surligne: 'Ultima — quadrant Nicol Bolas',
+      titre: 'Le pilotage financier',
+      invite: 'Léo te guide — survole un cap.',
+      coeur: COEUR.balance,
+      legende: 'la balance',
+      propose: true,
+      caps: [
+        { id: 'abaque', nom: 'ABAQUE', etat: 'Outil', blason: B.abaque, feuille: 'abaque.html',
+          resume: 'Le simulateur de lancement — déjà en service.' },
+        { id: 'revenus', nom: 'REVENUS &amp; CHARGES', etat: 'À venir', blason: B.revenus, avenir: true,
+          resume: 'Ce qui entre, ce qui sort. Cap proposé — à valider.' },
+        { id: 'impots', nom: 'IMPÔTS', etat: 'À venir', blason: B.impots, avenir: true,
+          resume: 'La prévision fiscale, sans mauvaise surprise. Cap proposé — à valider.' },
+        { id: 'echeancier', nom: 'ÉCHÉANCIER', etat: 'À venir', blason: B.echeancier, avenir: true,
+          resume: 'Ce qui tombe, et quand. Cap proposé — à valider.' },
+      ],
+    },
+
+    adramelech: {
+      parent: 'ultima-perso',
+      surligne: 'Ultima — quadrant Adramelech',
+      titre: 'La bibliothèque d’idées',
+      invite: 'Léo te guide — survole un cap.',
+      coeur: COEUR.ouroboros,
+      legende: 'le cycle',
+      propose: true,
+      caps: [
+        { id: 'archipels', nom: 'LES ARCHIPELS', etat: 'Outil', blason: B.archipels, feuille: 'idees.html',
+          resume: 'La carte des idées par archipels — déjà en service.' },
+        { id: 'rapprochements', nom: 'LES RAPPROCHEMENTS', etat: 'À venir', blason: B.rapprochements, avenir: true,
+          resume: 'Les ponts entre idées, y compris inter-quadrants. Cap proposé — à valider.' },
+      ],
+    },
+
+    imladrik: {
+      parent: 'ultima-perso',
+      surligne: 'Ultima — quadrant Imladrik',
+      titre: 'La cartographie',
+      invite: 'Léo te guide — survole un cap.',
+      coeur: COEUR.kalamn,
+      legende: 'Kalamn-talaen',
+      acquis: true,
+      caps: [
+        { id: 'minethnir', nom: 'MINETHNIR', etat: 'Outil', blason: B.plume, feuille: 'minethnir.html',
+          resume: 'Le journal intime. Écris librement : rien ne se perd.' },
+        { id: 'vranesh', nom: 'VRANESH', etat: 'Outil', blason: B.bifurcation, feuille: 'vranesh.html',
+          resume: 'Les différents futurs potentiels : scénarios, signaux, parades.' },
+        { id: 'draukhain', nom: 'DRAUKHAIN', etat: 'Outil', blason: B.flamme, feuille: 'draukhain.html',
+          resume: 'La volonté au-delà du possible. Des rappels, pas du jugement.' },
+      ],
+    },
+
+    tao: {
+      parent: 'ultima-perso',
+      surligne: 'Ultima — quadrant Tao',
+      titre: 'La voie',
+      invite: 'Léo te guide — survole un cap.',
+      coeur: COEUR.tao,
+      legende: 'la voie',
+      caps: [
+        { id: 'reshiram', nom: 'RESHIRAM', etat: 'Outil', blason: B.aileBlanche, feuille: 'reshiram.html',
+          lien: 'zekrom',
+          resume: 'Le travail de la réalité : tes talents réels et leurs preuves.' },
+        { id: 'zekrom', nom: 'ZEKROM', etat: 'Outil', blason: B.aileNoire, feuille: 'zekrom.html',
+          resume: 'La quête de l’idéal : tes idéaux et leurs directions.' },
+      ],
+    },
+  };
+
+  // ====================== LE NOYAU (rendu unique) ======================
+  // Même géométrie que js/boussole.js et js/imladrik-carto.js : premier cap
+  // plein Nord, puis sens horaire, à parts égales.
+  // (RAYON_AIGUILLE raccourci à 24 : à 30, la pointe de l'aiguille chevauche le
+  // blason et barre le badge d'état du cap — réglage à reprendre dans le noyau.)
+  var RAYON_CAP = 40, RAYON_AIGUILLE = 24, DEPART = -90;
+  var NS = 'http://www.w3.org/2000/svg';
+
+  function positions(n) {
+    var pas = 360 / n, out = [], i, rad;
+    for (i = 0; i < n; i += 1) {
+      rad = (DEPART + i * pas) * Math.PI / 180;
+      out.push({ cos: Math.cos(rad), sin: Math.sin(rad) });
+    }
+    return out;
+  }
+
+  var filEl = document.getElementById('fil');
+  var enteteEl = document.getElementById('entete');
+  var plateauEl = document.getElementById('plateau');
+  var paroleEl = document.getElementById('parole');
+  var PAROLE_REPOS = '<p class="parole-defaut">Survole un cap — '
+    + 'Léo t’en dit l’essentiel.</p>';
+
+  function chemin(id) {
+    var out = [], n = id;
+    while (n) { out.unshift(n); n = NOEUDS[n].parent; }
+    return out;
+  }
+
+  function rendreFil(id) {
+    var suite = chemin(id);
+    filEl.innerHTML = '';
+    suite.forEach(function (nid, i) {
+      var noeud = NOEUDS[nid];
+      // « Ultima Lv3 » pour la racine : lève l'ambiguïté avec la supra-division
+      // ULTIMA dans le fil (c'est le point à trancher, CADRAGE-LV3 §3).
+      var libelle = nid === 'racine' ? 'Ultima Lv3' : noeud.titre === 'ULTIMA' || noeud.titre === 'ALPHA'
+        ? noeud.titre : nid.toUpperCase().replace('-', ' ');
+      if (i > 0) {
+        var sep = document.createElement('span');
+        sep.className = 'sep'; sep.textContent = '›';
+        filEl.appendChild(sep);
+      }
+      if (i === suite.length - 1) {
+        var courant = document.createElement('span');
+        courant.className = 'courant'; courant.textContent = libelle;
+        filEl.appendChild(courant);
+      } else {
+        var b = document.createElement('button');
+        b.type = 'button'; b.textContent = libelle;
+        b.addEventListener('click', function () { rendre(nid); });
+        filEl.appendChild(b);
+      }
+    });
+  }
+
+  function rendre(id) {
+    var noeud = NOEUDS[id];
+    if (!noeud) return;
+
+    rendreFil(id);
+
+    // 1-2. Le bandeau.
+    enteteEl.innerHTML =
+      '<span class="surligne">' + noeud.surligne + '</span>'
+      + '<h1>' + noeud.titre + '</h1>'
+      + '<p class="invite">' + noeud.invite + '</p>'
+      + '<div class="filet" role="presentation"></div>';
+
+    // 3. Le plateau : aiguilles + passerelles.
+    plateauEl.innerHTML = '';
+    var pts = positions(noeud.caps.length);
+    var svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('class', 'aiguilles');
+    svg.setAttribute('viewBox', '0 0 100 100');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('focusable', 'false');
+    svg.innerHTML =
+      '<circle class="cercle-plateau" cx="50" cy="50" r="47" stroke-width="0.35"/>'
+      + '<circle class="cercle-plateau" cx="50" cy="50" r="42" stroke-width="0.2"/>'
+      + '<g class="graduation" stroke-width="0.3">'
+      + '<path d="M50 3 V6 M50 94 V97 M3 50 H6 M94 50 H97"/>'
+      + '<path d="M17.2 17.2 l2.1 2.1 M80.7 80.7 l2.1 2.1 M80.7 19.3 l2.1 -2.1 M17.2 82.8 l2.1 -2.1"/>'
+      + '</g>';
+
+    var aiguilles = [];
+    noeud.caps.forEach(function (cap, i) {
+      var x = 50 + RAYON_AIGUILLE * pts[i].cos;
+      var y = 50 + RAYON_AIGUILLE * pts[i].sin;
+      var g = document.createElementNS(NS, 'g');
+      g.setAttribute('class', 'aiguille');
+      var trait = document.createElementNS(NS, 'line');
+      trait.setAttribute('x1', '50'); trait.setAttribute('y1', '50');
+      trait.setAttribute('x2', String(x)); trait.setAttribute('y2', String(y));
+      trait.setAttribute('class', 'aiguille-trait');
+      var pointe = document.createElementNS(NS, 'circle');
+      pointe.setAttribute('cx', String(x)); pointe.setAttribute('cy', String(y));
+      pointe.setAttribute('r', '1.6');
+      pointe.setAttribute('class', 'aiguille-pointe');
+      g.appendChild(trait); g.appendChild(pointe);
+      svg.appendChild(g);
+      aiguilles.push(g);
+    });
+
+    // Passerelle (TAO : RESHIRAM ⇄ ZEKROM), posée derrière les aiguilles.
+    noeud.caps.forEach(function (cap, i) {
+      if (!cap.lien) return;
+      var j = -1;
+      noeud.caps.forEach(function (c, k) { if (c.id === cap.lien) j = k; });
+      if (j < 0) return;
+      var pont = document.createElementNS(NS, 'line');
+      pont.setAttribute('x1', String(50 + RAYON_CAP * pts[i].cos));
+      pont.setAttribute('y1', String(50 + RAYON_CAP * pts[i].sin));
+      pont.setAttribute('x2', String(50 + RAYON_CAP * pts[j].cos));
+      pont.setAttribute('y2', String(50 + RAYON_CAP * pts[j].sin));
+      pont.setAttribute('class', 'passerelle');
+      svg.insertBefore(pont, svg.firstChild);
+    });
+    plateauEl.appendChild(svg);
+
+    // 4. Le cœur + sa légende gravée.
+    var coeur = document.createElement('div');
+    coeur.className = 'coeur';
+    coeur.setAttribute('aria-hidden', 'true');
+    coeur.innerHTML = noeud.coeur + '<span class="coeur-legende">' + noeud.legende + '</span>';
+    plateauEl.appendChild(coeur);
+
+    // 5. Les caps.
+    paroleEl.innerHTML = PAROLE_REPOS;
+    noeud.caps.forEach(function (cap, i) {
+      var descendable = Boolean(NOEUDS[cap.id]);
+      var el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'cap' + (cap.avenir ? ' cap--avenir' : '');
+      el.style.left = (50 + RAYON_CAP * pts[i].cos) + '%';
+      el.style.top = (50 + RAYON_CAP * pts[i].sin) + '%';
+      el.setAttribute('aria-label', cap.nom + ' — ' + cap.etat);
+
+      var classeEtat = cap.avenir ? 'avenir' : (cap.etat === 'Outil' ? 'outil' : 'ouvert');
+      el.innerHTML =
+        '<span class="cap-blason">' + cap.blason + '</span>'
+        + '<span class="cap-nom">' + cap.nom + '</span>'
+        + '<span class="cap-etat cap-etat--' + classeEtat + '">' + cap.etat + '</span>';
+
+      function action() {
+        if (descendable) return 'Clique pour entrer ⇝';
+        if (cap.avenir) return 'Cap en préparation';
+        if (cap.externe) return 'Feuille — s’ouvre dans un nouvel onglet ↗ ('
+          + cap.feuille + ')';
+        return 'Feuille — on entre dans l’outil (' + cap.feuille + ')';
+      }
+      function activer() {
+        el.classList.add('is-actif');
+        aiguilles[i].classList.add('is-actif');
+        paroleEl.innerHTML =
+          '<p class="parole-nom">' + cap.nom + '</p>'
+          + '<p class="parole-etat">' + cap.etat + '</p>'
+          + (NOEUDS[cap.id] && NOEUDS[cap.id].propose
+            ? '<p class="parole-signal">Caps proposés — à valider</p>' : '')
+          + '<p class="parole-texte">' + cap.resume + '</p>'
+          + '<p class="parole-action">' + action() + '</p>';
+      }
+      function desactiver() {
+        el.classList.remove('is-actif');
+        aiguilles[i].classList.remove('is-actif');
+        paroleEl.innerHTML = PAROLE_REPOS;
+      }
+      el.addEventListener('mouseenter', activer);
+      el.addEventListener('mouseleave', desactiver);
+      el.addEventListener('focus', activer);
+      el.addEventListener('blur', desactiver);
+      el.addEventListener('click', function () {
+        if (descendable) { rendre(cap.id); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        else { activer(); }
+      });
+
+      plateauEl.appendChild(el);
+    });
+  }
+
+  rendre('racine');
+})();
+</script>
+</body>
+</html>
