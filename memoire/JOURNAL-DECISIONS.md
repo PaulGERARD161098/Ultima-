@@ -17,7 +17,13 @@
   la règle cardinale tient, les preuves se saisissent dans `/reshiram`, jamais en
   seed. Seed idempotent `supabase/seed-reshiram-paul.sql` (miroir ZEKROM,
   `owner_id` en paramètre). Dictée : « solutions de revenus » lu **« solutions de
-  repli »**.
+  repli »**. **Talent ③ ajouté dans la foulée** : **« Toujours savoir quoi
+  faire »** (ne jamais être pris par surprise). **Frontière tranchée par Léo** :
+  ① = AVANT (prévoyance, alternative préparée), ③ = PENDANT (sang-froid, marche
+  à suivre immédiate) → deux talents, pas un doublon (à confirmer par Paul).
+  **Motif observé** : les trois tournent autour d'un noyau unique — *l'imprévu ne
+  gagne jamais* (l'anticiper / le décomposer / y répondre) ; piste de triptyque
+  pour la vue « mon offre réelle ».
 
 - **2026-07-23 (NICOL BOLAS amélioré — GO SOLO « améliorons le »)** — Paul :
   « passons sur NB, améliorons-le » puis « quel est ton ordre ? » → Léo fixe

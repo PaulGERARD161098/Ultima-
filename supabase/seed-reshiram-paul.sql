@@ -54,3 +54,20 @@ where not exists (
   select 1 from public.talents
   where owner_id = :owner and nom = 'Décortiquer précisément un problème'
 );
+
+-- ── Talent n°3 — le sang-froid : l'imprévu ne prend jamais de vitesse ────────
+-- « Toujours savoir quoi faire. Ne jamais être pris par surprise. »
+--   (dictée Paul 2026-07-30)
+-- Distinct du n°1, et la frontière compte : le n°1 se joue AVANT (l'alternative
+-- préparée en amont), le n°3 se joue PENDANT (l'imprévu tombe, la marche à
+-- suivre est immédiate). L'un est de la prévoyance, l'autre du sang-froid.
+insert into public.talents (owner_id, nom, secteurs, niveau, plus_value)
+select :owner,
+  'Toujours savoir quoi faire',
+  '{}',
+  'pratique',
+  'Ne jamais être pris par surprise : quand l''imprévu tombe, la marche à suivre est immédiate — aucun temps mort, aucune sidération. Là où le plan B est préparé en amont, celui-ci se joue dans l''instant.'
+where not exists (
+  select 1 from public.talents
+  where owner_id = :owner and nom = 'Toujours savoir quoi faire'
+);

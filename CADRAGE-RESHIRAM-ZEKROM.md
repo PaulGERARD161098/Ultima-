@@ -256,11 +256,24 @@ l'owner de Paul le 2026-07-30) :
    `niveau='pratique'`. Plus-value : découper le problème pièce par pièce pour
    choisir la résolution **la plus rapide, la plus efficace et la moins chère**.
    La **méthode d'analyse** est le livrable, pas seulement la solution.
+3. **« Toujours savoir quoi faire »** — transversal, `niveau='pratique'`.
+   Plus-value : **ne jamais être pris par surprise** — quand l'imprévu tombe, la
+   marche à suivre est immédiate, aucun temps mort, aucune sidération.
+   **Frontière avec le n°1 (tranchée Léo, à confirmer par Paul)** : le n°1 se
+   joue **AVANT** (l'alternative préparée en amont, la prévoyance), le n°3 se
+   joue **PENDANT** (le sang-froid dans l'instant). Deux gestes distincts, donc
+   deux talents ; à fusionner si Paul les vit comme un seul.
 
-**Les deux sont « à étayer »** (0 preuve) : conforme à la règle cardinale — ils
+**Les trois sont « à étayer »** (0 preuve) : conforme à la règle cardinale — ils
 n'apparaissent PAS dans `talents_offre_reelle` tant qu'un fait ou un chiffre ne
 les adosse pas. Les preuves se saisissent depuis `/reshiram` (le geste produit,
 où Léo challenge), elles ne sont **jamais seedées**.
+
+> **Motif qui se dessine (observation Léo).** Les trois talents dictés tournent
+> autour du **même noyau : l'imprévu ne gagne jamais** — l'anticiper (①), le
+> décomposer (②), y répondre sur-le-champ (③). C'est la substance concrète de
+> l'énoncé d'offre. Piste pour la vue « mon offre réelle » : les présenter comme
+> **un triptyque** plutôt que trois lignes indépendantes.
 
 **Ouvert — décisions de Paul :**
 - **Les preuves** (bloquant pour l'offre réelle) : un chantier daté où le plan B
