@@ -106,6 +106,36 @@
   `OUTILS_PAR_QUADRANT.imladrik` est resté **vide** alors que les migrations
   `0016 → 0018` sont appliquées. Boucle à ouvrir (gate §5).
 
+- 🧭 **Ultima Lv3 — LIVRÉ ET COMPLET (2026-07-30).** Cap dicté par Paul : deux
+  **supra-divisions** — **ULTIMA** (les projets personnels, TAO inclus) et
+  **ALPHA** (les projets professionnels : RENOBOOST IA + YCOME) — et **la
+  boussole IMLADRIK comme forme unique de tout niveau de navigation**. Cadre
+  complet : `CADRAGE-LV3.md`. Quatre boucles, quatre PR fusionnées :
+  - ✅ **L1 (#113)** — le **noyau unique** `js/boussole-noyau.mjs` + le **registre
+    de l'arbre** `js/registre-lv3.mjs` + le catalogue de gravures
+    `js/blasons.mjs` ; `imladrik.html` rebranché dessus. **Iso-rendu prouvé** :
+    `smoke-imladrik-carto` inchangé et vert. `js/imladrik-carto.js` supprimé.
+  - ✅ **L2 (#115)** — la racine `/` ouvre sur les **2 supra-divisions** ;
+    **`alpha.html`** créée ; `ultima.html` perd sa **grille 2×2** pour la
+    boussole à 5 caps. `js/boussole.js` supprimé. Le badge cockpit du cap ULTIMA
+    **cumule** ce que ses quadrants ont à traiter.
+  - ✅ **L3 (#117)** — `tao.html` quitte l'arborescence ; la **passerelle devient
+    un ARC** (une corde entre deux caps opposés disparaissait derrière le
+    médaillon) avec « ⇄ rétroplanning » gravé dessus. `css/tao.css` supprimé.
+  - ✅ **L4 (#119)** — `bcp.html` et `adramelech.html` en boussoles.
+    **Arbitrage** : `adramelech.html` n'était pas une antichambre mais une page
+    de travail → la vue registre a **déménagé telle quelle** sur
+    **`registre.html`** et devient le cap **LE REGISTRE**. `js/antichambre.js`
+    supprimé.
+  - **Ce que ça change pour la suite** : ajouter un projet, un quadrant ou un cap
+    = **une entrée dans `js/registre-lv3.mjs`** (+ une coque de 40 lignes si
+    c'est un nouveau nœud). Les harnais **comparent le bandeau au registre** :
+    une coque ne peut plus dériver en silence.
+  - **⏳ À LA MAIN DE PAUL** : l'**URL d'YCOME** (« i comme moi-même ») — le cap
+    existe, il est « à venir » ; une ligne dans le registre et il s'ouvre.
+  - Front pur de bout en bout : aucune touche à l'auth, au middleware (hors
+    commentaire), aux RLS, aux API, aux migrations ni aux données.
+
 - 🧭 **Ultima LV2 — la boussole (cap dicté par Paul, 2026-07-21)** : une couche
   méta au-dessus de la console. L'accueil `/` devient une **boussole** (carte
   savante, rose des vents) dont chaque **cap = un macro-projet** ; la console à

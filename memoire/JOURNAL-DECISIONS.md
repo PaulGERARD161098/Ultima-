@@ -1093,3 +1093,20 @@
   par GitHub** (auteur : Paul, committer : GitHub), présent sur `main` comme les
   12 précédents ; l'amender réécrirait `main` → **écarté sciemment**, la
   configuration locale (`Claude <noreply@anthropic.com>`) étant déjà correcte.
+- **2026-07-30 (Lv3 — L4 : les deux antichambres, Lv3 COMPLET)** — PR #117 (L3)
+  fusionnée sur go Paul (« Merge tout et push tout, ensuite go L4 »). **L4
+  livrée** : `bcp.html` devient la boussole de NICOL BOLAS (ABAQUE ouvert +
+  REVENUS & CHARGES / IMPÔTS / ÉCHÉANCIER à venir) ; `adramelech.html` devient la
+  boussole d'ADRAMELECH (LE REGISTRE / LES ARCHIPELS / LES RAPPROCHEMENTS).
+  **Arbitrage pris et signalé** : `adramelech.html` n'était PAS une antichambre
+  mais une **page de travail** (auth-gate + compteurs + idées + ponts via
+  `/api/idees`) — en faire une coque aurait supprimé une vue qui marche. Elle a
+  donc **déménagé telle quelle** sur **`registre.html`** (`js/adramelech.js`
+  inchangé) et devient un cap à part entière, **LE REGISTRE**, ajouté au registre
+  Lv3 en plus des deux caps validés. `js/antichambre.js` **supprimé** (il ne
+  servait que le cartouche « majordome de chantier » de bcp). Commentaire
+  `middleware.js` rafraîchi : `/adramelech` reste l'exception de chemin exact
+  mais n'est plus qu'une coque muette. **Preuve du déménagement** : les sections
+  fail-closed de `smoke-quadrants` visent `registre.html` et passent **sans qu'une
+  seule assertion change**. Patrimoine COMPLET vert. **Lv3 est complet** : tous
+  les nœuds de l'arbre sont rendus par le noyau unique.

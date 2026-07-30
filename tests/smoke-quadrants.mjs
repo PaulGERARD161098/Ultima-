@@ -1,13 +1,13 @@
 // Diffusion Léo sur les 4 quadrants : antichambres racine + console.
 // Prouve :
 //   A. console : les 4 portes sont des liens actifs (badges conservés) ;
-//   B. adramelech.html SANS session (config vide) : FAIL-CLOSED — aucune idée
+//   B. registre.html SANS session (config vide) : FAIL-CLOSED — aucune idée
 //      dans le DOM, cartouche « Authentification requise », lien vers traveler,
 //      pas de cartouche Léo, zéro fuite réseau ;
-//   C. adramelech.html avec FAUSSE session : le code appelle bien /api/idees
+//   C. registre.html avec FAUSSE session : le code appelle bien /api/idees
 //      avec le Bearer de la session, et un 401 retombe en fail-closed propre
 //      (cartouche auth, aucune donnée, zéro appel Supabase direct) ;
-//   D. adramelech.html avec fausse session + API stubée 200 (fixture neutre) :
+//   D. registre.html avec fausse session + API stubée 200 (fixture neutre) :
 //      registre rendu (compteurs, idées, ponts) + cartouche Léo réflexif
 //      (archipel, volet stratégique, propositions déterministes cliquables) ;
 //   E. bcp.html (NICOL BOLAS) : cartouche Léo « majordome de chantier » (§1-2,
@@ -19,6 +19,7 @@
 // NOTE : le flux ADRAMELECH avec session RÉELLE n'est pas prouvable en
 // harnais (auth vivante) — C/D valident le motif Bearer et le fail-closed.
 import { chromium } from 'playwright';
+import { NOEUDS, capsDe } from '../js/registre-lv3.mjs';
 import { mkdirSync } from 'node:fs';
 
 const BASE = 'http://127.0.0.1:8123';
@@ -124,10 +125,10 @@ console.log('— A. ULTIMA : les 5 portes —');
 }
 
 // ===================== B. ADRAMELECH sans session : fail-closed =====================
-console.log('— B. adramelech.html SANS session (fail-closed) —');
+console.log('— B. registre.html SANS session (fail-closed) —');
 {
   const { page, erreurs, externes } = await nouvellePage({ configVide: true });
-  await page.goto(`${BASE}/adramelech.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.goto(`${BASE}/registre.html`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForSelector('#adr-auth:not([hidden])', { timeout: 20000 });
 
   const auth = (await page.locator('#adr-auth').textContent()) || '';
@@ -170,7 +171,7 @@ console.log('— B. adramelech.html SANS session (fail-closed) —');
 }
 
 // ===================== C. ADRAMELECH fausse session : Bearer + 401 fail-closed =====================
-console.log('— C. adramelech.html fausse session → /api/idees Bearer, 401 fail-closed —');
+console.log('— C. registre.html fausse session → /api/idees Bearer, 401 fail-closed —');
 {
   const { page, erreurs } = await nouvellePage();
   await page.addInitScript(scriptFausseSession());
@@ -188,7 +189,7 @@ console.log('— C. adramelech.html fausse session → /api/idees Bearer, 401 fa
       body: JSON.stringify({ ok: false, error: 'Authentification requise' }),
     });
   });
-  await page.goto(`${BASE}/adramelech.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.goto(`${BASE}/registre.html`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForSelector('#adr-auth:not([hidden])', { timeout: 20000 });
 
   verifier('Un appel /api/idees (et un seul)', appelsApi.length === 1, `${appelsApi.length}`);
@@ -209,7 +210,7 @@ console.log('— C. adramelech.html fausse session → /api/idees Bearer, 401 fa
 }
 
 // ===================== D. ADRAMELECH fixture 200 : registre + Léo réflexif =====================
-console.log('— D. adramelech.html fixture 200 → registre + cartouche Léo réflexif —');
+console.log('— D. registre.html fixture 200 → registre + cartouche Léo réflexif —');
 {
   const { page, erreurs } = await nouvellePage();
   await page.addInitScript(scriptFausseSession());
@@ -220,7 +221,7 @@ console.log('— D. adramelech.html fixture 200 → registre + cartouche Léo r�
     contentType: 'application/json; charset=utf-8',
     body: JSON.stringify(FIXTURE),
   }));
-  await page.goto(`${BASE}/adramelech.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.goto(`${BASE}/registre.html`, { waitUntil: 'load', timeout: 20000 });
 
   // 1. Cartouche Léo réflexif à l'entrée.
   await page.waitForSelector('#leo-cartouche', { timeout: 20000 });
@@ -298,82 +299,66 @@ console.log('— D. adramelech.html fixture 200 → registre + cartouche Léo r�
   await page.close();
 }
 
-// ===================== E. NICOL BOLAS : landing du premier outil (ABAQUE) =====================
-// bcp.html a évolué (#75, simulateur ABAQUE) : badge « Premier outil ouvert »,
-// cartouche ABAQUE, un second lien vers abaque.html, tout en gardant encore le
-// cartouche Léo « majordome de chantier » (leo-accueil.js + antichambre.js).
-// Incohérence cartouche/shell PRÉ-EXISTANTE (#75), à trancher dans la boucle
-// NICOL BOLAS. Test paramétré par quadrant. IMLADRIK n'est plus une antichambre
-// (quadrant bâti — voir smoke-imladrik).
-for (const quadrant of [
-  { fichier: 'bcp.html', nom: 'NICOL BOLAS', cle: 'ultima-leo-accueil-vu-bcp',
-    badge: 'Premier outil ouvert', cartoucheRe: /ABAQUE/, retours: 2 },
+// ============ E. Les deux quadrants devenus BOUSSOLES (Lv3, L4) ============
+// bcp.html et adramelech.html ne sont plus des antichambres en colonne : ce sont
+// des coques de boussole rendues par le noyau. Le cartouche Léo « majordome de
+// chantier » disparaît avec elles — Léo parle désormais cap par cap dans le
+// cartouche de la boussole. Vérifié pour chacune : bandeau conforme au REGISTRE,
+// caps dans l'ordre, portes ouvertes, cœur + légende, retour vers ULTIMA,
+// parole au survol, zéro requête réseau, zéro erreur console.
+for (const noeud of [
+  { id: 'nicol-bolas', fichier: 'bcp.html', ouvertes: ['abaque.html'], avenir: 3 },
+  { id: 'adramelech', fichier: 'adramelech.html', ouvertes: ['registre.html', 'idees.html'], avenir: 1 },
 ]) {
-  console.log(`— ${quadrant.nom} : landing du premier outil (${quadrant.fichier}) —`);
-  const { page, erreurs, externes } = await nouvellePage();
-  await page.goto(`${BASE}/${quadrant.fichier}`, { waitUntil: 'load', timeout: 20000 });
+  console.log(`— ${NOEUDS[noeud.id].nom} en boussole (${noeud.fichier}) —`);
+  const { page, erreurs, externes } = await nouvellePage({ configVide: true });
+  const appelsApi = [];
+  await page.route('**/api/**', (route) => { appelsApi.push(route.request().url()); return route.abort(); });
+  await page.goto(`${BASE}/${noeud.fichier}`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
 
-  // 1. Cartouche Léo « majordome de chantier ».
-  await page.waitForSelector('#leo-cartouche', { timeout: 20000 });
-  const salutation = (await page.locator('.leo-salutation').textContent()) || '';
-  verifier('Salutation de chantier sincère',
-    /pas encore bâti/.test(salutation) && /où en est le chantier/.test(salutation), `lue: ${salutation}`);
-  const etatChantier = (await page.locator('.leo-travail').allTextContents()).join(' ');
-  verifier('État : en attente du mini-cadrage', /mini-cadrage/.test(etatChantier), etatChantier);
-  const propositions = (await page.locator('.leo-proposition').allTextContents()).map((t) => t.trim());
-  verifier('Proposition unique : ouvrir le chantier', propositions.length === 1 &&
-    /^Ouvrir le chantier : dictez le cadrage à Léo en session\.$/.test(propositions[0]), JSON.stringify(propositions));
-  const hProposition = await page.locator('.leo-proposition').evaluate((el) => el.getBoundingClientRect().height);
-  verifier('Tap target proposition ≥ 44 px', hProposition >= 44, `${hProposition}px`);
-  await page.screenshot({ path: `${CAPTURES}/${quadrant.fichier.replace('.html', '')}-antichambre.png`, fullPage: true });
+  // Le bandeau suit le registre (anti-dérive de la coque).
+  const surligne = (await page.locator('h1.console-titre .titre-surligne').textContent())?.trim();
+  const titre = (await page.locator('h1.console-titre .titre-principal').textContent())?.trim();
+  verifier('Surligne = celle du registre', surligne === NOEUDS[noeud.id].surligne, `lu: ${surligne}`);
+  verifier('Titre = celui du registre', titre === NOEUDS[noeud.id].titre, `lu: ${titre}`);
 
-  // 2. Échap ferme ; marqueur PAR quadrant ; pas de réapparition.
-  await page.keyboard.press('Escape');
-  verifier('Échap ferme le cartouche', (await page.locator('#leo-cartouche').count()) === 0);
-  verifier(`Marqueur de session « ${quadrant.cle} »`, await page.evaluate((cle) =>
-    window.sessionStorage.getItem(cle) === '1', quadrant.cle));
-  await page.reload({ waitUntil: 'load' });
-  await page.waitForTimeout(400);
-  verifier('Pas de réapparition (même session)', (await page.locator('#leo-cartouche').count()) === 0);
+  // Les caps, dans l'ordre du registre.
+  const attendus = capsDe(noeud.id).map((c) => c.nom);
+  const noms = (await page.locator('.cap .cap-nom').allTextContents()).map((n) => n.trim());
+  verifier('Caps dans l\'ordre du registre', JSON.stringify(noms) === JSON.stringify(attendus),
+    `lu: ${JSON.stringify(noms)}`);
 
-  // 3. Le shell « premier outil » : bandeau, mission, badge, lien ABAQUE, retour.
-  const titre = (await page.locator('h1.console-titre').textContent())?.trim();
-  verifier(`Bandeau ${quadrant.nom}`, titre === quadrant.nom, `lu: ${titre}`);
-  verifier('Blason du quadrant étiqueté', (await page.locator('.quadrant-bandeau .blason-svg[role="img"]').count()) === 1);
-  const mission = (await page.locator('.quadrant-mission').textContent())?.trim();
-  verifier('Ligne de mission présente (cadrage)', Boolean(mission) && mission.length > 20);
-  const badge = (await page.locator('.quadrant-bandeau .quadrant-etat').textContent())?.trim();
-  verifier(`Badge « ${quadrant.badge} »`, badge === quadrant.badge, `lu: ${badge}`);
-  verifier('Cartouche honnête (état réel du quadrant)',
-    quadrant.cartoucheRe.test((await page.locator('.cartouche-page').textContent()) || ''));
-  // Retour vers la console (toujours présent) ; NICOL BOLAS porte en plus le lien
-  // vers son premier outil (ABAQUE). Le retour console est le dernier lien.
-  const retours = page.locator('a.retour-console');
-  verifier('Nombre de liens retour attendu', (await retours.count()) === quadrant.retours,
-    `${await retours.count()} vs ${quadrant.retours}`);
-  const retourConsole = page.locator('a.retour-console[href="ultima.html"]');
-  verifier('Retour console présent', (await retourConsole.count()) === 1);
-  const hRetour = await retourConsole.evaluate((el) => el.getBoundingClientRect().height);
-  verifier('Tap target retour ≥ 44 px', hRetour >= 44, `${hRetour}px`);
+  const hrefs = await page.locator('a.cap').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
+  for (const cible of noeud.ouvertes) {
+    verifier(`Porte ouverte vers ${cible}`, hrefs.includes(cible), JSON.stringify(hrefs));
+  }
+  verifier(`${noeud.avenir} cap(s) « à venir »`, (await page.locator('.cap--avenir').count()) === noeud.avenir);
 
-  // 4. Contrastes AA (mission sur mer, texte sur parchemin).
-  const c = await page.evaluate(() => {
-    const cs = getComputedStyle(document.documentElement);
-    return {
-      merProfonde: cs.getPropertyValue('--mer-profonde').trim(),
-      parchemin: cs.getPropertyValue('--parchemin').trim(),
-      mission: getComputedStyle(document.querySelector('.quadrant-mission')).color,
-      texte: getComputedStyle(document.querySelector('.cartouche-page p')).color,
-    };
-  });
-  const rMission = ratio(versHex(c.mission), c.merProfonde);
-  verifier('Contraste mission ≥ 4,5:1', rMission >= 4.5, `${rMission.toFixed(2)}:1`);
-  const rTexte = ratio(versHex(c.texte), c.parchemin);
-  verifier('Contraste cartouche ≥ 4,5:1', rTexte >= 4.5, `${rTexte.toFixed(2)}:1`);
+  // Cœur + légende + aiguilles (pièces ③ et ④ du patron).
+  verifier('Cœur gravé au centre', (await page.locator('.boussole-coeur svg').count()) === 1);
+  const legende = (await page.locator('.boussole-legende').textContent())?.trim();
+  verifier('Légende gravée = celle du registre', legende === NOEUDS[noeud.id].legende, `lu: ${legende}`);
+  verifier('Autant d\'aiguilles que de caps',
+    (await page.locator('.boussole-aiguilles .aiguille').count()) === attendus.length);
 
+  // Retour vers ULTIMA (pièce ① du patron).
+  verifier('Retour « ↞ ULTIMA »', (await page.locator('.console-retour a[href="ultima.html"]').count()) === 1);
+
+  // Léo parle au survol du premier cap.
+  await page.locator('.cap').first().hover();
+  await page.waitForSelector('#boussole-parole.is-actif', { timeout: 5000 });
+  const paroleNom = (await page.locator('.parole-nom').textContent())?.trim();
+  verifier('Parole de Léo au survol du premier cap', paroleNom === attendus[0], `lu: ${paroleNom}`);
+
+  // Plus de cartouche « majordome de chantier » : la forme unique l'a remplacé.
+  verifier('Plus de cartouche d\'antichambre', (await page.locator('#leo-cartouche').count()) === 0);
+
+  // Une coque ne porte aucune donnée.
+  verifier('Aucun appel /api (coque muette)', appelsApi.length === 0, appelsApi.slice(0, 3).join(', '));
   verifier('Zéro requête externe', externes.length === 0, externes.slice(0, 3).join(', '));
   verifier('Zéro erreur console', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
-  await page.screenshot({ path: `${CAPTURES}/${quadrant.fichier.replace('.html', '')}-coquille.png`, fullPage: true });
+  await page.screenshot({ path: `${CAPTURES}/${noeud.id}-boussole.png`, fullPage: true });
   await page.close();
 }
 

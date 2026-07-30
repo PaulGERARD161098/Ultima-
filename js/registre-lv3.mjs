@@ -27,10 +27,11 @@
 //   (true = ce nœud lit les agrégats /api/cockpit après connexion),
 //   expose (nom d'un global d'introspection pour les harnais).
 //
-// ÉTAT DU CÂBLAGE (L3, 2026-07-30) : `racine`, `ultima-perso`, `alpha`, `tao`
-// et `imladrik` sont rendus par le noyau. Restent à câbler les deux antichambres
-// `nicol-bolas` / `adramelech` (L4) — elles sont déjà décrites ici, il n'y aura
-// qu'une coque à poser.
+// ÉTAT DU CÂBLAGE (L4, 2026-07-30) : TOUS les nœuds de l'arbre sont rendus par
+// le noyau — `racine`, les deux supra-divisions, et les quadrants `nicol-bolas`,
+// `adramelech`, `imladrik`, `tao`. Lv3 est complet : ajouter un projet, un
+// quadrant ou un cap n'est plus qu'une entrée ici (+ une coque de 40 lignes si
+// c'est un nouveau nœud).
 
 export const NOEUDS = {
   // ======================= NIVEAU 0 — la racine =======================
@@ -164,7 +165,15 @@ export const NOEUDS = {
     invite: 'Léo te guide — survole un cap.',
     coeur: 'ouroboros',
     legende: 'le cycle',
-    enfants: ['archipels', 'rapprochements'],
+    enfants: ['registre', 'archipels', 'rapprochements'],
+  },
+  registre: {
+    nom: 'LE REGISTRE',
+    etat: 'Privé',
+    blason: 'registre',
+    cible: 'registre.html',
+    resume: 'Les idées en liste : leurs compteurs, leurs thèmes et les ponts '
+      + 'déjà tissés. Privé — le registre ne s’ouvre qu’une fois ta session ouverte.',
   },
   archipels: {
     nom: 'LES ARCHIPELS',
