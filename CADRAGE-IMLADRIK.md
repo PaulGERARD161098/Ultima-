@@ -157,3 +157,86 @@ mécanique éprouvée : registre extensible (un cap = une entrée), survol/focus
    boussole épée+dragon restant interne au quadrant ? (reco : oui)
 3. **L'ordre** : DRAUKHAIN (B2) avant VRANESH (B3) ? (reco : oui)
 4. **Go B1** (implémentation de la carto) après validation du prototype.
+
+## 9. L'affichage de la progression — « le cheminement » (dicté 2026-07-30)
+
+**Constat de Paul** : les gros pavés-quadrants ne sont « pas très gracieux »
+pour montrer les **projets en cours**. Pour IMLADRIK en particulier — c'est du
+développement personnel — l'affichage doit dire **une progression, un
+cheminement** : aller de l'avant, progresser, devenir meilleur.
+
+**Maquette (zéro code produit)** :
+`design/preview-imladrik-cheminement.html` — trois formes, chiffres et
+intitulés **fictifs** (§5 : aucune donnée intime dans le repo).
+
+- **A — La voie jalonnée** (reco Léo). Une **route gravée par projet** :
+  d'où l'on part → bornes franchies → **« tu es ici »** → ce qui vient →
+  l'horizon, la route sortant de la carte (**jamais de ligne d'arrivée**).
+  Un pavé devient une ligne : plusieurs projets tiennent dans la hauteur d'un
+  seul quadrant. Se replie en liste verticale sur téléphone (même grammaire,
+  sans SVG). Réemployable **hors IMLADRIK** (console, autres quadrants).
+- **B — L'ascension**. L'altitude dit le progrès ; très juste pour un objectif
+  **unique** (un serment, un idéal ZEKROM) mais installe un **sommet**, donc une
+  fin, et n'en montre qu'un par écran. → réserve pour une vue de détail.
+- **C — Les anneaux de Kalamn-talaen**. Progression du centre vers le large,
+  sans dernier anneau ; symboliquement juste et raccord avec la boussole, mais
+  « où j'en suis / le prochain pas » s'y lit mal, et fait doublon avec la
+  boussole déjà en place. → écarté.
+
+**Ce que la forme A consomme (données déjà en prod, aucune migration)** :
+`serments_etat` / `serments_vivants` (bornes = flammes, badge « à raviver »),
+`situations_etat` / `situations_anticipees` (bornes = scénarios, « à explorer »),
+`imladrik_entrees` (jalons d'écriture). Règle §5 tenue : **comptes et dates
+seulement, jamais de contenu** ; fail-closed, rien dans le HTML servi.
+
+**✅ Décisions de Paul (2026-07-30)** : ① **forme A** ; ② **IMLADRIK seul**
+(ni console ni autres quadrants pour l'instant) ; ③ **un serment = une voie**
+(sa reco suivie) ; ④ **boucle « dicter dans IMLADRIK » ouverte** (§10).
+
+**✅ v1 LIVRÉE (2026-07-30)** — la voie jalonnée sur **DRAUKHAIN**, la page où
+les serments vivent déjà derrière auth (§5 tenue : la carto `imladrik.html`
+reste muette, aucune donnée intime dans un HTML servi).
+- `css/voie.css` : vocabulaire **neutre** (`voie-*`, `borne-*`), réemployable
+  tel quel par VRANESH et MINETHNIR quand leur tour viendra. Tokens de
+  `css/styles.css`, zéro valeur en dur. Repli en colonne sous 46 rem.
+- `js/draukhain.js` : trois fonctions **pures** — `jalonsVoie` (départ →
+  flammes → « tu es ici » → horizon), `pointsVoie` (creux/crêtes alternés),
+  `cheminVoie` + `queueVoie` (le tracé et sa sortie de carte). Rendu en
+  `createElement`/`textContent` et `createElementNS` (jamais d'innerHTML) ;
+  le SVG est `aria-hidden`, toute l'information vit dans la liste des bornes.
+- **Règles de la forme, tenues et prouvées au harnais** : jamais de ligne
+  d'arrivée (l'horizon reste « devant », la route sort de la carte), **aucune
+  barre de progression ni pourcentage**, et pour un serment sans flamme on se
+  tient **au départ** avec « à raviver » comme borne devant soi — l'invitation
+  cardinale, jamais un reproche.
+- Au-delà de 3 flammes, les plus anciennes se résument en une borne franchie.
+- Harnais : 13 assertions ajoutées à `smoke-draukhain` ; patrimoine COMPLET
+  vert (779 assertions). Aucune migration, aucune touche à l'auth/API/données.
+
+## 10. Dicter DANS Ultima — l'état réel (constat 2026-07-30)
+
+Question de Paul : « puis-je dicter *ouvre tel projet et renseigne cela*,
+en particulier sur IMLADRIK, et voir où j'en suis depuis l'app ? »
+
+**Non, pas encore sur IMLADRIK.** Ce qui existe déjà :
+- **Les mains de Léo** (`api/_lib/leo.js`, boucle L2b) : catalogue d'outils
+  par quadrant, proposition → **reformulation déterministe** → confirmation de
+  Paul avant toute écriture. Couvre **ADRAMELECH** (capturer/enrichir une idée)
+  et **RIVEN** (besoin de chantier, note de journal, relance datée).
+- **La dictée vocale par champ** (Web Speech API, `js/app.js`) : bouton micro
+  qui **ajoute** au champ, jamais ne remplace — **RIVEN uniquement**.
+- Le cartouche Léo est monté sur `traveler.html`, `bcp.html`, `adramelech.html`.
+
+**Le manque** : `OUTILS_PAR_QUADRANT.imladrik` est **vide** — le commentaire
+« pas d'API de données » date d'avant les migrations `0016 → 0018`, appliquées
+depuis. Les APIs existent donc (`serments`, `flammes`, `situations`,
+`scenarios`, `imladrik/entrees`), mais Léo n'a **aucune main** dessus, aucune
+page IMLADRIK ne monte le cartouche, et aucun champ n'y a de micro.
+
+**Boucle à ouvrir (à cadrer, gate §5 intime)** : monter le cartouche Léo +
+le micro sur les pages IMLADRIK, et ouvrir 3 à 4 outils miroirs de l'existant
+(`proposer_page_journal`, `proposer_flamme`, `proposer_scenario`, et un
+`proposer_serment`/`proposer_situation`), **toujours** avec confirmation avant
+écriture et **zéro contenu dicté en logs**. S'y ajoute le « où j'en suis » :
+un état de progression lu après auth (comptes et dates seuls) — c'est
+exactement ce que consomme la forme A du §9.

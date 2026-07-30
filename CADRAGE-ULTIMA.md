@@ -34,6 +34,36 @@
     B**, (b) revenir au **cap DONNÉE pur** (appliquer les migrations IMLADRIK + Léo
     voie A à la demande), (c) autre. Aucune des deux voies n'est bloquée par l'autre.
 
+- ✅ **Le cheminement — la voie jalonnée LIVRÉE (2026-07-30)** : Paul a tranché
+  — **forme A**, **IMLADRIK seul**, **un serment = une voie**. Implantée sur
+  **DRAUKHAIN** (la page où les serments vivent déjà derrière auth ; la carto
+  `imladrik.html` reste muette, §5 tenue) : `css/voie.css` (vocabulaire neutre
+  `voie-*`/`borne-*`, réemployable par VRANESH et MINETHNIR) + `js/draukhain.js`
+  (4 fonctions pures : jalons, points, tracé, queue ; SVG `aria-hidden`, toute
+  l'information dans la liste des bornes) + `draukhain.html` (une feuille de
+  style). **Jamais de ligne d'arrivée** : l'horizon reste devant, la route sort
+  de la carte, aucune barre de progression. Harnais : +13 assertions à
+  `smoke-draukhain`, **patrimoine COMPLET vert (779)**. Zéro migration, zéro
+  touche auth/API/données. Détail : `CADRAGE-IMLADRIK.md §9`.
+  **⏭ Boucle suivante ouverte par Paul** : **dicter dans IMLADRIK** (§10).
+
+- 🗄️ **Le cheminement — la maquette d'origine (dicté 2026-07-30)** :
+  constat de Paul — les **gros pavés-quadrants ne sont pas gracieux** pour dire
+  les projets en cours ; pour **IMLADRIK** (développement personnel) il faut une
+  forme qui montre **une progression, un cheminement** (aller de l'avant,
+  devenir meilleur). Livré : maquette statique
+  `design/preview-imladrik-cheminement.html` — **3 formes** (A la voie jalonnée
+  ★reco, B l'ascension, C les anneaux), **zéro code produit**, chiffres fictifs
+  (§5 intime), patrimoine COMPLET vert (aucun harnais concerné). Cadre et
+  décisions : `CADRAGE-IMLADRIK.md §9`. **Décisions prises le jour même**
+  (voir la ligne ci-dessus) — la maquette reste le témoin des trois formes
+  comparées, B et C n'étant pas jetées mais mises en réserve.
+  **Constat joint (`CADRAGE-IMLADRIK.md §10`)** : **dicter dans IMLADRIK n'est
+  pas possible aujourd'hui** — les mains de Léo ne couvrent que ADRAMELECH +
+  RIVEN, le micro par champ n'est que sur RIVEN, et
+  `OUTILS_PAR_QUADRANT.imladrik` est resté **vide** alors que les migrations
+  `0016 → 0018` sont appliquées. Boucle à ouvrir (gate §5).
+
 - 🧭 **Ultima LV2 — la boussole (cap dicté par Paul, 2026-07-21)** : une couche
   méta au-dessus de la console. L'accueil `/` devient une **boussole** (carte
   savante, rose des vents) dont chaque **cap = un macro-projet** ; la console à

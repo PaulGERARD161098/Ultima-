@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IMLADRIK — trois formes pour l'affichage de la progression</title>
+<!-- Maquette STATIQUE (dictée Paul 2026-07-30) — « rebosser l'affichage des
+     projets en cours : les gros quadrants ne sont pas gracieux ; pour IMLADRIK,
+     montrer une progression, un cheminement, aller de l'avant ».
+     Zéro code produit : ce fichier ne touche ni l'app, ni l'auth, ni les
+     données, ni les harnais. Registre antique et sérieux (palette de
+     css/console.css + design/preview-imladrik-boussole.html).
+     TOUS LES CHIFFRES ET INTITULÉS SONT FICTIFS — aucune donnée intime ici
+     (règle §5 du cadrage console : rien de MINETHNIR/DRAUKHAIN dans le repo). -->
+<style>
+  :root {
+    --nuit: #0e3a52;
+    --mer: #145070;
+    --parchemin: #f9f1dc;
+    --parchemin-doux: #f6eed9;
+    --parchemin-ombre: #e3d3ab;
+    --or-clair: #e8cf8f;
+    --or: #c9a659;
+    --bronze: #a9884a;
+    --encre: #3b2f1c;
+    --encre-brune: #5a4118;
+    --encre-douce: #6a5636;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { min-height: 100%; }
+  body {
+    background: radial-gradient(ellipse 120% 80% at 50% -10%, var(--mer), var(--nuit) 70%);
+    color: var(--parchemin);
+    font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 2rem 1rem 4rem; gap: 1.6rem;
+    line-height: 1.5;
+  }
+
+  /* ===== En-tête ===== */
+  .entete { text-align: center; max-width: 46rem; }
+  .entete .surligne {
+    display: block; font-size: 0.78rem; letter-spacing: 0.28em;
+    text-transform: uppercase; color: var(--or-clair); opacity: 0.85;
+  }
+  .entete h1 {
+    font-size: clamp(1.6rem, 4.4vw, 2.2rem); font-weight: 600;
+    letter-spacing: 0.1em; margin-top: 0.35rem; text-wrap: balance;
+  }
+  .entete .invite { font-style: italic; color: var(--or-clair); margin-top: 0.6rem; }
+  .filet { width: 9rem; height: 1px; margin: 0.9rem auto 0;
+           background: linear-gradient(90deg, transparent, var(--or), transparent); }
+  .bandeau-proto {
+    font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--nuit); background: var(--or-clair);
+    border: 1px solid var(--bronze); border-radius: 2px; padding: 0.28rem 0.9rem;
+  }
+
+  /* ===== Une variante = une feuille de parchemin ===== */
+  .variante {
+    width: min(96vw, 62rem);
+    background: linear-gradient(180deg, var(--parchemin) 0%, var(--parchemin-doux) 100%);
+    border: 1px solid var(--bronze);
+    border-radius: 3px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+    color: var(--encre);
+    padding: 1.4rem clamp(0.9rem, 3vw, 2rem) 1.6rem;
+  }
+  .variante + .variante { margin-top: 0.4rem; }
+  .variante-entete { display: flex; flex-wrap: wrap; align-items: baseline;
+                     gap: 0.5rem 0.9rem; border-bottom: 1px solid var(--parchemin-ombre);
+                     padding-bottom: 0.7rem; margin-bottom: 1.2rem; }
+  .variante-lettre {
+    font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--encre-douce);
+  }
+  .variante-nom { font-size: 1.28rem; letter-spacing: 0.06em; font-weight: 600; }
+  .variante-reco {
+    font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--nuit); background: var(--or-clair);
+    border: 1px solid var(--bronze); border-radius: 2px; padding: 0.18rem 0.6rem;
+  }
+  .variante-dit { flex: 1 1 100%; font-style: italic; color: var(--encre-douce);
+                  font-size: 0.95rem; }
+
+  /* ================= A — La voie jalonnée ================= */
+  .voie { margin-bottom: 1.5rem; }
+  .voie + .voie { border-top: 1px dashed var(--parchemin-ombre); padding-top: 1.2rem; }
+  .voie-tete { display: flex; flex-wrap: wrap; align-items: baseline;
+               justify-content: space-between; gap: 0.3rem 1rem; margin-bottom: 0.2rem; }
+  .voie-nom { font-size: 1.02rem; letter-spacing: 0.1em; text-transform: uppercase; }
+  .voie-nom .voie-cap { color: var(--encre-douce); font-size: 0.74rem;
+                        letter-spacing: 0.2em; margin-right: 0.55rem; }
+  .voie-horizon { font-style: italic; color: var(--encre-douce); font-size: 0.9rem; }
+
+  .voie-plateau { position: relative; width: 100%; height: 176px; }
+  /* preserveAspectRatio="none" : le tracé épouse EXACTEMENT la boîte, donc les
+     bornes posées en % tombent pile sur leurs points d'ancrage. */
+  .voie-route { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .route-fond { fill: none; stroke: var(--encre-douce); stroke-width: 1.6;
+                stroke-dasharray: 2.4 4.2; stroke-linecap: round; opacity: 0.55;
+                vector-effect: non-scaling-stroke; }
+  .route-faite { fill: none; stroke: var(--encre); stroke-width: 2.4;
+                 stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  .route-tail { fill: none; stroke: var(--encre-douce); stroke-width: 1.4;
+                stroke-dasharray: 1.6 5; opacity: 0.35;
+                vector-effect: non-scaling-stroke; }
+
+  .voie-bornes { list-style: none; position: absolute; inset: 0; }
+  /* Le sceau est centré PILE sur son point de route ; l'étiquette se range
+     au-dessus (crête) ou au-dessous (creux) — jamais sur le tracé. */
+  .borne { position: absolute; left: var(--x); top: var(--y);
+           width: 8.4rem; text-align: center;
+           display: flex; flex-direction: column; align-items: center; gap: 0.15rem; }
+  .borne--bas { transform: translate(-50%, -0.8rem); }
+  .borne--haut { transform: translate(-50%, calc(-100% + 0.8rem)); flex-direction: column-reverse; }
+  .borne-sceau { position: relative; width: 1.6rem; height: 1.6rem; flex: 0 0 auto; }
+  .borne-sceau::before {
+    content: ""; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0.85rem; height: 0.85rem; border-radius: 50%;
+    border: 1.4px solid var(--encre-brune); background: var(--parchemin-ombre);
+  }
+  .borne--franchie .borne-sceau::before { background: var(--encre); border-color: var(--encre); }
+  .borne--ici .borne-sceau::before {
+    width: 1.3rem; height: 1.3rem; background: var(--or-clair);
+    border: 2px solid var(--bronze); box-shadow: 0 0 0 4px rgba(201, 166, 89, 0.28);
+  }
+  .borne--horizon .borne-sceau::before { border-style: dashed; background: transparent; }
+  .borne-titre { font-size: 0.82rem; letter-spacing: 0.04em; line-height: 1.25; }
+  .borne-note { display: block; font-size: 0.72rem; color: var(--encre-douce);
+                font-style: italic; }
+  .borne--ici .borne-titre { font-weight: 600; }
+  .borne--devant .borne-titre, .borne--devant .borne-note { opacity: 0.62; }
+
+  /* Repli étroit : la route se redresse en colonne (même grammaire, sans SVG). */
+  @media (max-width: 46rem) {
+    .voie-plateau { height: auto; }
+    .voie-route { display: none; }
+    .voie-bornes { position: static; padding-left: 1.1rem; margin-top: 0.4rem;
+                   border-left: 2px dotted var(--encre-douce); }
+    .borne { position: static; transform: none; width: auto; text-align: left;
+             flex-direction: row; align-items: center; gap: 0.5rem; padding: 0.3rem 0; }
+    .borne--haut { flex-direction: row; }
+    .borne-sceau { width: 1.3rem; height: 1.3rem; margin-left: -1.75rem;
+                   background: var(--parchemin-doux); border-radius: 50%; }
+  }
+
+  /* ================= B — L'ascension ================= */
+  .ascension { position: relative; width: 100%; max-width: 40rem; margin: 0 auto; }
+  .ascension svg { display: block; width: 100%; height: auto; }
+  .mont-silhouette { fill: var(--parchemin-ombre); stroke: var(--encre-brune); stroke-width: 1.6; }
+  .mont-courbe { fill: none; stroke: var(--encre-douce); stroke-width: 0.8; opacity: 0.45; }
+  .mont-sente { fill: none; stroke: var(--encre); stroke-width: 2.2;
+                stroke-linecap: round; stroke-linejoin: round; }
+  .mont-sente--devant { stroke: var(--encre-douce); stroke-width: 1.6;
+                        stroke-dasharray: 2.6 4; opacity: 0.7; }
+  .mont-palier { fill: var(--encre); }
+  .mont-palier--ici { fill: var(--or-clair); stroke: var(--bronze); stroke-width: 2; }
+  .mont-palier--devant { fill: var(--parchemin); stroke: var(--encre-douce); stroke-width: 1.4; }
+  .mont-texte { font-family: inherit; font-size: 11px; fill: var(--encre); letter-spacing: 0.04em; }
+  .mont-texte--douce { fill: var(--encre-douce); font-style: italic; font-size: 10px; }
+
+  /* ================= C — Les anneaux ================= */
+  .anneaux { display: flex; flex-wrap: wrap; align-items: center;
+             justify-content: center; gap: 1.4rem 2rem; }
+  .anneaux svg { flex: 0 0 auto; width: min(84vw, 21rem); height: auto; }
+  .anneau-cercle { fill: none; stroke: var(--encre-douce); stroke-width: 0.9;
+                   stroke-dasharray: 2.6 3.6; opacity: 0.55; }
+  .anneau-cercle--atteint { stroke: var(--encre); stroke-width: 1.6;
+                            stroke-dasharray: none; opacity: 1; }
+  .anneau-sceau { fill: var(--parchemin-ombre); stroke: var(--encre-brune); stroke-width: 1.6; }
+  .anneau-jeton { fill: var(--encre); }
+  .anneau-jeton--ici { fill: var(--or-clair); stroke: var(--bronze); stroke-width: 1.8; }
+  .anneau-legende { list-style: none; font-size: 0.9rem; max-width: 17rem; }
+  .anneau-legende li { display: flex; gap: 0.55rem; align-items: baseline;
+                       padding: 0.3rem 0; border-bottom: 1px dashed var(--parchemin-ombre); }
+  .anneau-legende li:last-child { border-bottom: 0; }
+  .anneau-legende .puce { flex: 0 0 auto; width: 0.7rem; height: 0.7rem; border-radius: 50%;
+                          background: var(--encre); }
+  .anneau-legende .puce--ici { background: var(--or-clair); border: 1.5px solid var(--bronze); }
+  .anneau-legende .puce--devant { background: transparent; border: 1.4px solid var(--encre-douce); }
+
+  /* ===== Verdict ===== */
+  .verdict { width: min(96vw, 62rem); color: var(--parchemin); }
+  .verdict h2 { font-size: 1.05rem; letter-spacing: 0.16em; text-transform: uppercase;
+                color: var(--or-clair); margin-bottom: 0.6rem; }
+  .verdict ul { list-style: none; }
+  .verdict li { padding: 0.4rem 0 0.4rem 1.1rem; position: relative; }
+  .verdict li::before { content: "❖"; position: absolute; left: 0; color: var(--or); font-size: 0.7rem; top: 0.55rem; }
+  .verdict strong { color: var(--or-clair); font-weight: 600; }
+</style>
+</head>
+<body>
+
+  <p class="bandeau-proto">Maquette — chiffres et intitulés fictifs</p>
+
+  <header class="entete">
+    <span class="surligne">IMLADRIK — développement personnel</span>
+    <h1>Trois formes pour dire le cheminement</h1>
+    <p class="invite">« Montrer un avancement, un cheminement&nbsp;— aller de l'avant,
+      progresser, devenir meilleur. » (dicté le 30 juillet 2026)</p>
+    <div class="filet"></div>
+  </header>
+
+  <!-- ============================================================= A -->
+  <section class="variante">
+    <div class="variante-entete">
+      <span class="variante-lettre">Forme A</span>
+      <h2 class="variante-nom">La voie jalonnée</h2>
+      <span class="variante-reco">Recommandation de Léo</span>
+      <p class="variante-dit">Une route gravée par projet&nbsp;: d'où l'on part, les bornes
+        franchies, où l'on en est, ce qui vient — et la route qui sort de la carte,
+        jamais de ligne d'arrivée. Un pavé devient une ligne&nbsp;: quatre projets tiennent
+        dans la hauteur d'un seul gros quadrant.</p>
+    </div>
+
+    <!-- Voie 1 — bien engagée (--p = part de la route déjà parcourue, sur 100) -->
+    <article class="voie">
+      <div class="voie-tete">
+        <h3 class="voie-nom"><span class="voie-cap">Draukhain</span>Tenir ma parole donnée</h3>
+        <p class="voie-horizon">Horizon&nbsp;: en faire une évidence</p>
+      </div>
+      <div class="voie-plateau">
+        <svg class="voie-route" viewBox="0 0 1000 128" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <path class="route-fond" pathLength="100"
+                d="M 90 87 C 170 87 200 42 300 42 C 396 42 430 87 520 87 C 618 87 654 42 762 42 C 852 42 892 74 920 80"/>
+          <path class="route-faite" pathLength="100" style="stroke-dasharray: 52 100"
+                d="M 90 87 C 170 87 200 42 300 42 C 396 42 430 87 520 87 C 618 87 654 42 762 42 C 852 42 892 74 920 80"/>
+          <path class="route-tail" d="M 920 80 C 952 84 980 86 1000 87"/>
+        </svg>
+        <ol class="voie-bornes">
+          <li class="borne borne--franchie borne--bas" style="--x: 9%; --y: 68%">
+            <span class="borne-sceau"></span>
+            <span class="borne-titre">Le serment prêté<span class="borne-note">12 avril</span></span>
+          </li>
+          <li class="borne borne--franchie borne--haut" style="--x: 30%; --y: 32.8%">
+            <span class="borne-sceau"></span>
+            <span class="borne-titre">Première flamme<span class="borne-note">une victoire notée</span></span>
+          </li>
+          <li class="borne borne--ici borne--bas" style="--x: 52%; --y: 68%">
+            <span class="borne-sceau"></span>
+            <span class="borne-titre">Tu es ici<span class="borne-note">3 flammes vivantes</span></span>
+          </li>
+          <li class="borne borne--devant borne--haut" style="--x: 76.2%; --y: 32.8%">
+            <span class="borne-sceau"></span>
+            <span class="borne-titre">À raviver<span class="borne-note">rien depuis 3 semaines</span></span>
+          </li>
+          <li class="borne borne--devant borne--horizon borne--bas" style="--x: 92%; --y: 62.5%">
+            <span class="borne-sceau"></span>
+            <span class="borne-titre">L'horizon<span class="borne-note">la route continue</span></span>
+          </li>
+        </ol>
+      </div>
+    </article>
+
+    <!-- Voie 2 — au tout début -->
+    <article class="voie">
+      <div class="voie-tete">
+        <h3 class="voie-nom"><span class="voie-cap">Vranesh</span>Le cas «&nbsp;si tout s'accélère&nbsp;»</h3>
+        <p class="voie-horizon">Horizon&nbsp;: n'être jamais pris de court</p>
+      </div>
+      <div class="voie-plateau">
+        <svg class="voie-route" viewBox="0 0 1000 128" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <path class="route-fond" pathLength="100"
+                d="M 90 87 C 170 87 200 42 300 42 C 396 42 430 87 520 87 C 618 87 654 42 762 42 C 852 42 892 74 920 80"/>
+          <path class="route-faite" pathLength="100" style="stroke-dasharray: 25 100"
+                d="M 90 87 C 170 87 200 42 300 42 C 396 42 430 87 520 87 C 618 87 654 42 762 42 C 852 42 892 74 920 80"/>
+          <path class="route-tail" d="M 920 80 C 952 84 980 86 1000 87"/>
+        </svg>
+        <ol class="voie-bornes">
+          <li class="borne borne--franchie borne--bas" style="--x: 9%; --y: 68%">
+            <span class="borne-sceau"></span>
+            <span class="borne-titre">Situation ouverte<span class="borne-note">28 juillet</span></span>
+          </li>
+          <li class="borne borne--ici borne--haut" style="--x: 30%; --y: 32.8%">
+            <span class="borne-sceau"></span>
+            <span class="borne-titre">Tu es ici<span class="borne-note">1 scénario écrit</span></span>
+          </li>
+          <li class="borne borne--devant borne--bas" style="--x: 52%; --y: 68%">
+            <span class="borne-sceau"></span>
+            <span class="borne-titre">À explorer<span class="borne-note">2 embranchements</span></span>
+          </li>
+          <li class="borne borne--devant borne--haut" style="--x: 76.2%; --y: 32.8%">
+            <span class="borne-sceau"></span>
+            <span class="borne-titre">Les parades<span class="borne-note">aucune préparée</span></span>
+          </li>
+          <li class="borne borne--devant borne--horizon borne--bas" style="--x: 92%; --y: 62.5%">
+            <span class="borne-sceau"></span>
+            <span class="borne-titre">L'horizon<span class="borne-note">la route continue</span></span>
+          </li>
+        </ol>
+      </div>
+    </article>
+
+    <!-- Voie 3 — le journal : une route sans fin, jalonnée par les saisons d'écriture -->
+    <article class="voie">
+      <div class="voie-tete">
+        <h3 class="voie-nom"><span class="voie-cap">Minethnir</span>Le journal</h3>
+        <p class="voie-horizon">Horizon&nbsp;: écrire, sans compter les pages</p>
+      </div>
+      <div class="voie-plateau">
+        <svg class="voie-route" viewBox="0 0 1000 128" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <path class="route-fond" pathLength="100"
+                d="M 90 87 C 170 87 200 42 300 42 C 396 42 430 87 520 87 C 618 87 654 42 762 42 C 852 42 892 74 920 80"/>
+          <path class="route-faite" pathLength="100" style="stroke-dasharray: 81 100"
+                d="M 90 87 C 170 87 200 42 300 42 C 396 42 430 87 520 87 C 618 87 654 42 762 42 C 852 42 892 74 920 80"/>
+          <path class="route-tail" d="M 920 80 C 952 84 980 86 1000 87"/>
+        </svg>
+        <ol class="voie-bornes">
+          <li class="borne borne--franchie borne--bas" style="--x: 9%; --y: 68%">
+            <span class="borne-sceau"></span>
+            <span class="borne-titre">Première page<span class="borne-note">3 mars</span></span>
+          </li>
+          <li class="borne borne--franchie borne--haut" style="--x: 30%; --y: 32.8%">
+            <span class="borne-sceau"></span>
+            <span class="borne-titre">Le pli pris<span class="borne-note">10 pages</span></span>
+          </li>
+          <li class="borne borne--franchie borne--bas" style="--x: 52%; --y: 68%">
+            <span class="borne-sceau"></span>
+            <span class="borne-titre">Le printemps<span class="borne-note">24 pages</span></span>
+          </li>
+          <li class="borne borne--ici borne--haut" style="--x: 76.2%; --y: 32.8%">
+            <span class="borne-sceau"></span>
+            <span class="borne-titre">Tu es ici<span class="borne-note">écrit avant-hier</span></span>
+          </li>
+          <li class="borne borne--devant borne--horizon borne--bas" style="--x: 92%; --y: 62.5%">
+            <span class="borne-sceau"></span>
+            <span class="borne-titre">Demain<span class="borne-note">la route continue</span></span>
+          </li>
+        </ol>
+      </div>
+    </article>
+  </section>
+
+  <!-- ============================================================= B -->
+  <section class="variante">
+    <div class="variante-entete">
+      <span class="variante-lettre">Forme B</span>
+      <h2 class="variante-nom">L'ascension</h2>
+      <p class="variante-dit">L'altitude dit le progrès&nbsp;: une sente en lacets, des paliers
+        gagnés, le sommet au bout. Très parlant pour « devenir meilleur » — mais un sommet
+        est une fin, et il n'en tient qu'un par écran.</p>
+    </div>
+
+    <div class="ascension">
+      <svg viewBox="0 0 640 364" role="img" aria-label="Maquette : une montagne gravée, une sente qui monte de gauche à droite, quatre paliers dont celui où l'on se tient.">
+        <!-- Silhouette + courbes de niveau (le massif contient toute la sente) -->
+        <path class="mont-silhouette" d="M 0 330 L 120 214 L 190 254 L 330 96 L 420 162 L 520 112 L 640 330 Z"/>
+        <path class="mont-courbe" d="M 40 296 C 180 282 340 276 470 286 C 545 292 590 304 616 314"/>
+        <path class="mont-courbe" d="M 268 232 C 340 226 400 230 452 240 C 500 250 536 262 566 274"/>
+        <path class="mont-courbe" d="M 268 168 C 292 142 310 122 330 104 C 352 128 374 150 396 168"/>
+
+        <!-- La sente : parcourue (pleine), puis à venir (pointillée) -->
+        <path class="mont-sente" d="M 60 308 C 160 298 195 258 252 238 C 302 220 344 198 382 176"/>
+        <path class="mont-sente mont-sente--devant" d="M 382 176 C 424 152 462 138 516 120"/>
+
+        <!-- Paliers -->
+        <circle class="mont-palier" cx="60" cy="308" r="5"/>
+        <circle class="mont-palier" cx="252" cy="238" r="5"/>
+        <circle class="mont-palier--ici" cx="382" cy="176" r="8"/>
+        <circle class="mont-palier--devant" cx="516" cy="120" r="5.5"/>
+
+        <!-- Légendes (toutes hors du tracé) -->
+        <text class="mont-texte" x="26" y="348">Le départ</text>
+        <text class="mont-texte mont-texte--douce" x="26" y="360">12 avril</text>
+        <text class="mont-texte" x="138" y="206">Premier palier</text>
+        <text class="mont-texte mont-texte--douce" x="138" y="218">une victoire notée</text>
+        <text class="mont-texte" x="398" y="196">Tu es ici</text>
+        <text class="mont-texte mont-texte--douce" x="398" y="208">3 flammes vivantes</text>
+        <text class="mont-texte" x="452" y="100">L'horizon</text>
+        <text class="mont-texte mont-texte--douce" x="452" y="112">en faire une évidence</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============================================================= C -->
+  <section class="variante">
+    <div class="variante-entete">
+      <span class="variante-lettre">Forme C</span>
+      <h2 class="variante-nom">Les anneaux de Kalamn-talaen</h2>
+      <p class="variante-dit">On progresse du centre vers le large&nbsp;: chaque anneau franchi
+        est un palier, tous les projets tiennent sur un même cadran. Parfaitement raccord
+        avec la boussole déjà en place — mais « où j'en suis » s'y lit moins vite qu'une route.</p>
+    </div>
+
+    <div class="anneaux">
+      <svg viewBox="0 0 320 320" role="img" aria-label="Maquette : quatre anneaux concentriques autour du sceau Kalamn-talaen, trois jetons de progression posés dessus.">
+        <circle class="anneau-cercle anneau-cercle--atteint" cx="160" cy="160" r="52"/>
+        <circle class="anneau-cercle anneau-cercle--atteint" cx="160" cy="160" r="84"/>
+        <circle class="anneau-cercle anneau-cercle--atteint" cx="160" cy="160" r="116"/>
+        <circle class="anneau-cercle" cx="160" cy="160" r="146"/>
+
+        <!-- Sceau central -->
+        <circle class="anneau-sceau" cx="160" cy="160" r="26"/>
+        <path d="M 160 142 L 163 148 L 163 176 L 157 176 L 157 148 Z" fill="#3b2f1c"/>
+        <rect x="150" y="176" width="20" height="3" rx="1.5" fill="#3b2f1c"/>
+
+        <!-- Jetons : un par projet, posé sur l'anneau atteint (r = 116 / 84 / 52) -->
+        <circle class="anneau-jeton--ici" cx="160" cy="44" r="8"/>
+        <circle class="anneau-jeton" cx="233" cy="202" r="6"/>
+        <circle class="anneau-jeton" cx="115" cy="186" r="6"/>
+
+        <!-- Aiguilles discrètes du centre vers chaque jeton -->
+        <path d="M 160 134 L 160 56" stroke="#6a5636" stroke-width="0.9" stroke-dasharray="2 3" fill="none"/>
+        <path d="M 179 178 L 224 196" stroke="#6a5636" stroke-width="0.9" stroke-dasharray="2 3" fill="none"/>
+        <path d="M 144 179 L 122 182" stroke="#6a5636" stroke-width="0.9" stroke-dasharray="2 3" fill="none"/>
+      </svg>
+
+      <ul class="anneau-legende">
+        <li><span class="puce puce--ici"></span><span><strong>Tenir ma parole donnée</strong> —
+          3<sup>e</sup> anneau, 3 flammes vivantes</span></li>
+        <li><span class="puce"></span><span><strong>Le journal</strong> — 2<sup>e</sup> anneau,
+          écrit avant-hier</span></li>
+        <li><span class="puce"></span><span><strong>Si tout s'accélère</strong> —
+          1<sup>er</sup> anneau, 1 scénario</span></li>
+        <li><span class="puce puce--devant"></span><span>Les anneaux extérieurs restent
+          ouverts&nbsp;: il n'y a pas de dernier anneau.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================================================= -->
+  <section class="verdict">
+    <h2>Ce que chaque forme dit</h2>
+    <ul>
+      <li><strong>A — la voie jalonnée.</strong> Dit le chemin <em>parcouru</em> et le
+        <em>prochain pas</em>, sans jamais promettre une fin (la route sort de la carte).
+        Se plie en liste verticale sur téléphone, se répète sans lourdeur&nbsp;: c'est la seule
+        des trois qui remplace vraiment les gros pavés-quadrants, partout dans Ultima.</li>
+      <li><strong>B — l'ascension.</strong> La plus émouvante pour un objectif unique
+        (un serment, un idéal ZEKROM), mais elle installe un sommet — donc une fin — et
+        n'en montre qu'un à la fois. À garder en réserve&nbsp;: la vue « plein écran » d'un
+        seul serment.</li>
+      <li><strong>C — les anneaux.</strong> Le plus juste symboliquement (on progresse sans
+        borne finale) et raccord avec la boussole&nbsp;; mais le lecteur doit apprendre la
+        grille de lecture, et « le prochain pas » n'y apparaît pas.</li>
+      <li><strong>Reco&nbsp;:</strong> A pour la liste des projets en cours (console et
+        IMLADRIK), B en vue de détail plus tard si le besoin s'en fait sentir. C écarté&nbsp;:
+        la boussole tient déjà ce rôle symbolique, un deuxième cadran ferait doublon.</li>
+    </ul>
+  </section>
+
+</body>
+</html>

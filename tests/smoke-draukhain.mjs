@@ -283,6 +283,46 @@ console.log('— B. draukhain.html fixture 200 → registre, à raviver, serment
   verifier('Formulaire de flamme : sélecteur de nature',
     (await s2.locator('.zekrom-direction-form select[name="nature"]').count()) === 1);
 
+  // 5bis. LA VOIE JALONNÉE (forme A, 2026-07-30) : le cheminement du serment.
+  // Règle cardinale de la forme : jamais de ligne d'arrivée — la route sort de
+  // la carte (queue) et l'horizon reste « devant ».
+  verifier('Une voie par serment', (await page.locator('.voie').count()) === 2);
+  const bornes1 = s1.locator('.borne');
+  // AURORE : départ + 3 flammes (la dernière = « tu es ici ») + horizon = 5 bornes.
+  verifier('AURORE : 5 bornes (départ + 3 flammes + horizon)',
+    (await bornes1.count()) === 5, `${await bornes1.count()}`);
+  verifier('AURORE : un seul « tu es ici »', (await s1.locator('.borne--ici').count()) === 1);
+  verifier('AURORE : le « tu es ici » est la dernière flamme, pas l’horizon',
+    /Tu es ici/.test((await bornes1.nth(3).textContent()) || ''));
+  verifier('AURORE : 3 bornes franchies (départ + 2 flammes)',
+    (await s1.locator('.borne--franchie').count()) === 3);
+  verifier('AURORE : horizon rendu depuis le serment (« chaque matin »)',
+    /chaque matin/.test((await s1.locator('.borne--horizon').textContent()) || ''));
+  verifier('AURORE : l’horizon reste devant (jamais franchi)',
+    (await s1.locator('.borne--horizon.borne--devant').count()) === 1);
+  verifier('AURORE : « la route continue » gravé à l’horizon',
+    /la route continue/.test((await s1.locator('.borne--horizon').textContent()) || ''));
+  // ENCLUME (0 flamme) : on se tient AU DÉPART, « à raviver » est la borne devant.
+  const bornes2 = s2.locator('.borne');
+  verifier('ENCLUME : 3 bornes (départ + à raviver + horizon)',
+    (await bornes2.count()) === 3, `${await bornes2.count()}`);
+  verifier('ENCLUME : « tu es ici » posé sur le départ',
+    /Le serment prêté/.test((await s2.locator('.borne--ici').textContent()) || ''));
+  verifier('ENCLUME : « À raviver » est la borne devant soi',
+    /À raviver/.test((await s2.locator('.borne--devant').first().textContent()) || ''));
+  // Le tracé : décor muet, part parcourue proportionnelle, queue toujours là.
+  const voie1 = s1.locator('.voie-route');
+  verifier('Tracé SVG muet (aria-hidden)', (await voie1.getAttribute('aria-hidden')) === 'true');
+  verifier('Liste des bornes annoncée au lecteur d’écran',
+    /cheminement/i.test((await s1.locator('.voie-bornes').getAttribute('aria-label')) || ''));
+  const parcourue = await s1.locator('.route-faite').getAttribute('stroke-dasharray');
+  verifier('AURORE : part parcourue = 3 bornes sur 4 intervalles (75 %)',
+    parcourue === '75.0 100', `lu: ${parcourue}`);
+  verifier('La route sort de la carte (queue présente sur chaque voie)',
+    (await page.locator('.route-queue').count()) === 2);
+  verifier('Aucune barre de progression ni pourcentage affiché',
+    !/%/.test((await page.locator('#draukhain-serments').textContent()) || ''));
+
   await page.screenshot({ path: `${CAPTURES}/draukhain-carte.png`, fullPage: true });
 
   // 6. Vue « mes serments vivants » : uniquement les serments entretenus (a_raviver=false).
