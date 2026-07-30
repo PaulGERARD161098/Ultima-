@@ -1,15 +1,15 @@
-// Console Ultima (boucle C1-a) : coque à 4 quadrants (ultima.html).
-// LV2 : depuis Ultima LV2, l'accueil « / » est la boussole ; la console vit
-// désormais sur /ultima.html (reléguée par la boussole).
-// Prouve : rendu de la console (accueil + invite + 4 cartouches), blasons
-// étiquetés, RIVEN actif qui navigue vers traveler.html, 3 quadrants
-// « à venir » inertes (aria-disabled, non-liens), AUCUNE requête réseau
-// externe (zéro CDN), zéro erreur console, contraste AA calculé sur les
-// couleurs réellement rendues. Puis NON-RÉGRESSION : traveler.html s'ouvre
-// et la carte Leaflet s'initialise.
+// Supra-division ULTIMA (Ultima Lv3, boucle L2) : ultima.html.
+// La grille 2×2 de la console a laissé place à la FORME UNIQUE — la boussole,
+// rendue par le noyau à partir du registre. Prouve : bandeau conforme au
+// REGISTRE, 5 caps (RIVEN, NICOL BOLAS, ADRAMELECH, IMLADRIK, TAO), blasons
+// étiquetés, retour vers la racine, RIVEN qui navigue vers traveler.html,
+// AUCUNE requête réseau externe (zéro CDN), zéro erreur console, contraste AA
+// calculé sur les couleurs réellement rendues. Puis NON-RÉGRESSION :
+// traveler.html s'ouvre et la carte Leaflet s'initialise.
 // Mode démo forcé, Leaflet/OSM stubés (pour traveler.html), zéro erreur tolérée.
 import { chromium } from 'playwright';
 import { readFileSync } from 'node:fs';
+import { NOEUDS, capsDe } from '../js/registre-lv3.mjs';
 
 const SCRATCH = new URL('./.cache', import.meta.url).pathname;
 const leafletJs = readFileSync(`${SCRATCH}/package/dist/leaflet.js`);
@@ -79,65 +79,76 @@ page.on('request', (req) => {
 
 await preparerRoutes(page);
 
-// ===================== A. La console (ultima.html) =====================
-console.log('— A. Console Ultima —');
+// ============ A. La boussole ULTIMA (ultima.html) ============
+console.log('— A. Supra-division ULTIMA —');
 await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
+await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
 
-const titre = (await page.locator('h1.console-titre').textContent())?.trim();
-verifier('Bandeau « Bienvenue sur Ultima »', titre === 'Bienvenue sur Ultima', `lu: ${titre}`);
-
+// Le bandeau ne peut pas dériver du registre sans que ce harnais le voie.
+const surligne = (await page.locator('h1.console-titre .titre-surligne').textContent())?.trim();
+const principal = (await page.locator('h1.console-titre .titre-principal').textContent())?.trim();
+verifier('Surligne = celle du registre', surligne === NOEUDS['ultima-perso'].surligne, `lu: ${surligne}`);
+verifier('Titre = celui du registre', principal === NOEUDS['ultima-perso'].titre, `lu: ${principal}`);
 const invite = (await page.locator('.console-invite').textContent())?.trim();
-verifier('Invite présente', /Sur quoi est-ce qu'on travaille aujourd'hui/.test(invite || ''), `lu: ${invite}`);
+verifier('Invite « Léo te guide »', /Léo te guide/.test(invite || ''), `lu: ${invite}`);
 
-const noms = await page.locator('.quadrant-nom').allTextContents();
-verifier('4 quadrants présents', noms.length === 4, `trouvés: ${noms.length}`);
-for (const attendu of ['RIVEN', 'NICOL BOLAS', 'ADRAMELECH', 'IMLADRIK']) {
-  verifier(`Quadrant ${attendu} présent`, noms.map((n) => n.trim()).includes(attendu));
-}
-// Épure actée (Paul, 2026-07-19) : plus de sous-titres sous les noms.
-verifier('Zéro sous-titre de quadrant', (await page.locator('.quadrant-desc').count()) === 0);
+// Les 5 caps de la supra-division personnelle, dans l'ordre du registre.
+const attendus = capsDe('ultima-perso').map((c) => c.nom);
+const noms = (await page.locator('.cap .cap-nom').allTextContents()).map((n) => n.trim());
+verifier('5 caps rendus', noms.length === 5, `trouvés: ${JSON.stringify(noms)}`);
+verifier('Caps dans l\'ordre du registre', JSON.stringify(noms) === JSON.stringify(attendus),
+  `lu: ${JSON.stringify(noms)}`);
 
-// Diffusion Léo : les 4 quadrants sont des LIENS ACTIFS (plus d'inertes).
-const actifs = page.locator('a.quadrant-actif');
-verifier('4 quadrants actifs (ancres)', (await actifs.count()) === 4);
-const hrefs = await actifs.evaluateAll((els) => els.map((e) => e.getAttribute('href')));
-for (const attendu of ['traveler.html', 'bcp.html', 'adramelech.html', 'imladrik.html']) {
+// Toutes les portes sont ouvertes (aucun cap « à venir » à cet étage).
+const hrefs = await page.locator('a.cap').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
+for (const attendu of ['traveler.html', 'bcp.html', 'adramelech.html', 'imladrik.html', 'tao.html']) {
   verifier(`Porte ouverte vers ${attendu}`, hrefs.includes(attendu), JSON.stringify(hrefs));
 }
-verifier('Plus aucun quadrant inerte (aria-disabled / à venir)',
-  (await page.locator('.quadrant[aria-disabled], .quadrant-avenir').count()) === 0);
+verifier('Aucun cap inerte (aria-disabled / à venir)',
+  (await page.locator('.cap[aria-disabled], .cap--avenir').count()) === 0);
+verifier('Aucun cap externe à cet étage (tout est interne)',
+  (await page.locator('.cap[target="_blank"]').count()) === 0);
 
-// Badges d'état conservés sur les portes.
-async function etatDe(nom) {
-  return (await page.locator('a.quadrant-actif', { hasText: nom }).locator('.quadrant-etat').textContent())?.trim();
+// Badges d'état, repris du registre.
+async function etatDe(id) {
+  return (await page.locator(`.cap[data-id="${id}"] .cap-etat`).textContent())?.trim();
 }
-const adraEtat = await etatDe('ADRAMELECH');
-verifier('ADRAMELECH marqué « privé — auth requise »',
-  /priv/i.test(adraEtat || '') && /auth/i.test(adraEtat || ''), `état: ${adraEtat}`);
-const bcpEtat = await etatDe('NICOL BOLAS');
-verifier('NICOL BOLAS marqué « en chantier »', /chantier/i.test(bcpEtat || ''), `état: ${bcpEtat}`);
-const imlaEtat = await etatDe('IMLADRIK');
-// Depuis B1, IMLADRIK est un quadrant bâti (cartographie Kalamn-talaen) → porte ouverte.
-verifier('IMLADRIK marqué « Accéder » (quadrant bâti)', /accéder/i.test(imlaEtat || ''), `état: ${imlaEtat}`);
+verifier('ADRAMELECH marqué « Privé »', /priv/i.test(await etatDe('adramelech') || ''));
+verifier('NICOL BOLAS marqué « En chantier »', /chantier/i.test(await etatDe('nicol-bolas') || ''));
+verifier('IMLADRIK marqué « Accéder »', /accéder/i.test(await etatDe('imladrik') || ''));
 
-const traveler = page.locator('a.quadrant-actif[href="traveler.html"]');
-verifier('RIVEN garde sa porte', (await traveler.count()) === 1);
+// Le cœur gravé + sa légende (pièce ④ du patron).
+verifier('Cœur gravé au centre', (await page.locator('.boussole-coeur svg').count()) === 1);
+const legende = (await page.locator('.boussole-legende').textContent())?.trim();
+verifier('Légende gravée = celle du registre', legende === NOEUDS['ultima-perso'].legende, `lu: ${legende}`);
+verifier('5 aiguilles tracées', (await page.locator('.boussole-aiguilles .aiguille').count()) === 5);
 
-// Blasons étiquetés (aria-label).
-const blasons = await page.locator('.blason-svg').evaluateAll((els) =>
+// Retour vers la racine (pièce ① du patron).
+verifier('Retour vers la boussole racine',
+  (await page.locator('.console-retour a[href="/"]').count()) === 1);
+
+// La parole de Léo au survol d'un cap.
+const traveler = page.locator('a.cap[data-id="riven"]');
+await traveler.hover();
+await page.waitForSelector('#boussole-parole.is-actif', { timeout: 5000 });
+const parole = (await page.locator('#boussole-parole').textContent()) || '';
+verifier('Survol RIVEN : la parole de Léo se dépose',
+  /RIVEN/.test(parole) && /réseau commercial/i.test(parole), `lu: ${parole.slice(0, 120)}`);
+
+// Blasons étiquetés (aria-label) — un par cap, aucun SVG de cap dans la page.
+const blasons = await page.locator('.cap-blason-svg').evaluateAll((els) =>
   els.map((e) => e.getAttribute('aria-label')));
-verifier('4 blasons étiquetés (aria-label)', blasons.length === 4 && blasons.every((l) => l && /Blason/i.test(l)),
+verifier('5 blasons étiquetés (aria-label)', blasons.length === 5 && blasons.every((l) => l && /Blason/i.test(l)),
   JSON.stringify(blasons));
 
-// Focus clavier visible sur le quadrant actif (il est focusable).
+// Focus clavier visible sur un cap ouvrable.
 await traveler.focus();
-const estFocalise = await traveler.evaluate((el) => el === document.activeElement);
-verifier('Quadrant actif focusable au clavier', estFocalise);
+verifier('Cap focusable au clavier', await traveler.evaluate((el) => el === document.activeElement));
 
 // Contraste AA sur les couleurs réellement rendues.
 const styles = await page.evaluate(() => {
   const cs = getComputedStyle(document.documentElement);
-  const nom = getComputedStyle(document.querySelector('.quadrant-nom'));
+  const nom = getComputedStyle(document.querySelector('.cap-nom'));
   const t = getComputedStyle(document.querySelector('.console-titre'));
   return {
     parcheminCarte: cs.getPropertyValue('--parchemin-carte').trim(),
@@ -146,13 +157,13 @@ const styles = await page.evaluate(() => {
   };
 });
 const rNom = ratio(versHex(styles.nom), styles.parcheminCarte);
-verifier('Contraste nom de quadrant ≥ 4,5:1', rNom >= 4.5, `${rNom.toFixed(2)}:1`);
+verifier('Contraste nom de cap ≥ 4,5:1', rNom >= 4.5, `${rNom.toFixed(2)}:1`);
 const rTitre = ratio(versHex(styles.titre), styles.merProfonde);
 verifier('Contraste titre sur fond mer ≥ 4,5:1', rTitre >= 4.5, `${rTitre.toFixed(2)}:1`);
 
 verifier('Zéro requête réseau externe (aucun CDN)', requetesExternes.length === 0,
   requetesExternes.slice(0, 3).join(', '));
-verifier('Zéro erreur console (console)', erreursConsole.length === 0, erreursConsole.slice(0, 3).join(' | '));
+verifier('Zéro erreur console (ULTIMA)', erreursConsole.length === 0, erreursConsole.slice(0, 3).join(' | '));
 
 // ===================== B. Navigation + non-régression traveler.html =====================
 console.log('— B. RIVEN → traveler.html (carte) —');
@@ -174,5 +185,5 @@ verifier('Zéro erreur console (traveler.html)', erreursTraveler.length === 0, e
 
 await navigateur.close();
 
-console.log(echecs === 0 ? '\n=== SMOKE CONSOLE VERT ===' : `\n=== ${echecs} VERDICT(S) EN ÉCHEC ===`);
+console.log(echecs === 0 ? '\n=== SMOKE ULTIMA (SUPRA-DIVISION) VERT ===' : `\n=== ${echecs} VERDICT(S) EN ÉCHEC ===`);
 process.exit(echecs === 0 ? 0 : 1);

@@ -994,3 +994,17 @@
   **§10** (dictée). Patrimoine COMPLET vert. **⏳ Décisions Paul** : la forme, le
   périmètre (IMLADRIK seul ou console + autres quadrants), l'unité de la voie
   (un serment = une voie, reco), et l'ouverture de la boucle « dicter dans IMLADRIK ».
+- **2026-07-30 (Lv3 — L2 : les deux supra-divisions en prod)** — PR #113 (cadrage
+  + preview + L1) **fusionnée dans `main`** sur go Paul (« go merge and push »),
+  branche repartie de `main` (règle post-squash). Puis **L2 livrée** : la racine
+  `/` devient la boussole des deux supra-divisions (ULTIMA, ALPHA) ; **nouvelle
+  page `alpha.html`** (RENOBOOST IA ouvert, YCOME en attente d'URL) ;
+  `ultima.html` perd sa **grille 2×2** pour la boussole à 5 caps (RIVEN, NICOL
+  BOLAS, ADRAMELECH, IMLADRIK, TAO) ; retour de `tao.html` repointé vers
+  `ultima.html`. `js/boussole.js` **supprimé** (le noyau l'a remplacé) ;
+  `.boussole-sceau` / `.boussole-retour` deviennent génériques. Badge cockpit du
+  cap ULTIMA = **cumul** RIVEN + TAO. Harnais : `smoke-boussole` réécrit,
+  `smoke-console` recalé sur la boussole ULTIMA, **nouveau `smoke-alpha`**,
+  `smoke-quadrants` + `smoke-tao` recalés ; les harnais comparent désormais le
+  bandeau au **registre** (anti-dérive des coques). Patrimoine COMPLET vert.
+  Front pur. Restent L3 (TAO en boussole) et L4 (NICOL BOLAS + ADRAMELECH).

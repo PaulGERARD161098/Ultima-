@@ -102,23 +102,24 @@ async function nouvellePage(options = {}) {
   return { page, erreurs, externes };
 }
 
-// ===================== A. Console : 4 portes actives =====================
-console.log('— A. Console : les 4 portes —');
+// ============ A. Supra-division ULTIMA : les 5 portes ============
+console.log('— A. ULTIMA : les 5 portes —');
 {
   const { page, erreurs, externes } = await nouvellePage({ configVide: true });
-  // LV2 : « / » est la boussole ; la console à 4 quadrants vit sur /ultima.html.
+  // Lv3 : « / » est la boussole racine ; les quadrants sont les caps d'ULTIMA.
   await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
-  const hrefs = await page.locator('a.quadrant-actif').evaluateAll((els) =>
+  await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
+  const hrefs = await page.locator('a.cap').evaluateAll((els) =>
     els.map((e) => e.getAttribute('href')));
-  verifier('4 liens actifs sur la console', hrefs.length === 4, JSON.stringify(hrefs));
-  for (const attendu of ['traveler.html', 'bcp.html', 'adramelech.html', 'imladrik.html']) {
+  verifier('5 caps ouvrables sur ULTIMA', hrefs.length === 5, JSON.stringify(hrefs));
+  for (const attendu of ['traveler.html', 'bcp.html', 'adramelech.html', 'imladrik.html', 'tao.html']) {
     verifier(`Porte ${attendu}`, hrefs.includes(attendu));
   }
-  verifier('Aucun quadrant inerte restant',
-    (await page.locator('.quadrant[aria-disabled], .quadrant-avenir').count()) === 0);
-  verifier('Zéro requête externe (console)', externes.length === 0, externes.slice(0, 3).join(', '));
-  verifier('Zéro erreur console (console)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
-  await page.screenshot({ path: `${CAPTURES}/console-4-portes.png`, fullPage: true });
+  verifier('Aucun cap inerte restant',
+    (await page.locator('.cap[aria-disabled], .cap--avenir').count()) === 0);
+  verifier('Zéro requête externe (ULTIMA)', externes.length === 0, externes.slice(0, 3).join(', '));
+  verifier('Zéro erreur console (ULTIMA)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
+  await page.screenshot({ path: `${CAPTURES}/ultima-5-portes.png`, fullPage: true });
   await page.close();
 }
 

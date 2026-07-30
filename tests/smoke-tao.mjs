@@ -90,10 +90,10 @@ const pont = (await page.locator('.tao-lien-chip').textContent()) || '';
 verifier('Passerelle rétroplanning mentionnée (statique, sans donnée)',
   /rétroplanning/.test(pont) && (await page.locator('.tao-lien-chip').count()) === 1, `lu: ${pont}`);
 
-// Retour vers la boussole d'accueil (/).
-const retour = page.locator('.console-retour a[href="/"]');
-verifier('Retour « ↞ Boussole » vers /', (await retour.count()) === 1);
-verifier('Retour libellé « ↞ Boussole »', /Boussole/.test(await retour.textContent() || ''));
+// Retour vers la supra-division ULTIMA (Lv3 : TAO en est un cap).
+const retour = page.locator('.console-retour a[href="ultima.html"]');
+verifier('Retour « ↞ ULTIMA » vers ultima.html', (await retour.count()) === 1);
+verifier('Retour libellé « ↞ ULTIMA »', /ULTIMA/.test(await retour.textContent() || ''));
 
 // ---- Tap targets ≥ 44 px sur les deux branches cliquables. ----
 for (const [nom, loc] of [['RESHIRAM', bReshiram], ['ZEKROM', bZekrom]]) {

@@ -227,11 +227,32 @@ n'ont pas à bouger (les nouvelles pages sont des coques muettes).
 | # | Boucle | Contenu | Risque |
 | --- | --- | --- | --- |
 | **L1 ✅** | Le noyau | **LIVRÉ 2026-07-30** — voir §6bis | faible |
-| **L2** | Les deux supra-divisions | racine à 2 caps + `alpha.html` + `ultima.html` en boussole à 5 caps ; retours repointés | moyen (tous les liens d'entrée) |
+| **L2 ✅** | Les deux supra-divisions | **LIVRÉ 2026-07-30** — voir §6ter |
 | **L3** | TAO en boussole | remplace l'arborescence ; passerelle rétroplanning | faible |
 | **L4** | Les deux antichambres | NICOL BOLAS + ADRAMELECH en boussoles (caps §4.5, après validation) | faible |
 
 Chaque boucle : livrée → patrimoine COMPLET vert → commit → PR → annotation.
+
+### 6ter. ✅ L2 — les deux supra-divisions (livré le 2026-07-30)
+
+| Fichier | Ce qui change |
+| --- | --- |
+| `index.html` | La racine devient la boussole des **deux supra-divisions** (ULTIMA, ALPHA). Coque pure (`data-noeud="racine"`) ; l'écran de connexion et `boussole-auth.js` sont inchangés — la racine reste la porte d'entrée unique. |
+| `alpha.html` | **Nouvelle page** : la boussole d'ALPHA (RENOBOOST IA ouvert en nouvel onglet, YCOME « à venir »). Sceau propre : l'alpha gravé sur son stylobate. |
+| `ultima.html` | La **grille 2×2 disparaît** : c'est la boussole à 5 caps (RIVEN, NICOL BOLAS, ADRAMELECH, IMLADRIK, TAO). Le sceau monde-anneau reste en tête. |
+| `tao.html` | Retour repointé vers `ultima.html` (« ↞ ULTIMA ») — TAO est un cap d'ULTIMA, plus de la racine. |
+| `css/boussole.css` | `.boussole-sceau` et `.boussole-retour` deviennent **génériques** (pièces ① et ② du patron) ; elles quittent `css/imladrik-carto.css`. |
+| `js/boussole.js` | **Supprimé** — le noyau a pris sa place. Plus aucune mécanique de boussole en double. |
+
+**Vérification** : patrimoine **COMPLET** vert. `smoke-boussole` réécrit pour la
+racine (2 caps + verrou d'accueil + cockpit), `smoke-console` pour la boussole
+ULTIMA, nouveau `smoke-alpha`, `smoke-quadrants` et `smoke-tao` recalés. Les
+harnais **comparent le bandeau au registre** : une coque ne peut plus dériver
+sans qu'un verdict tombe.
+
+**Cockpit** : le badge « à traiter » du cap ULTIMA **cumule** ce que ses
+quadrants ont à traiter (relances RIVEN + talents à étayer + idéaux à orienter),
+et se tait terme par terme quand un compte est à zéro.
 
 ### 6bis. ✅ L1 — le noyau (livré le 2026-07-30, go Paul « oui pour tout, go L1 »)
 
