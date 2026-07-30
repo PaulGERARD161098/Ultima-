@@ -146,18 +146,36 @@ export function rendre(idNoeud, options = {}) {
     return g;
   });
 
-  // Passerelle : trait pointillé entre deux caps jumeaux, DERRIÈRE les aiguilles.
+  // Passerelle : lien pointillé entre deux caps jumeaux, DERRIÈRE les aiguilles.
+  // Tracée en ARC le long du cercle des caps, jamais en corde : une corde entre
+  // deux caps opposés passerait derrière le médaillon et disparaîtrait (constat
+  // de la preview Lv3, CADRAGE-LV3 §4.4). `lienLibelle` grave son nom sur l'arc.
   caps.forEach((cap, i) => {
     if (!cap.lien) return;
     const j = caps.findIndex((c) => c.id === cap.lien);
     if (j < 0) return;
-    const pont = doc.createElementNS(NS, 'line');
-    pont.setAttribute('x1', String(50 + RAYON_CAP * pts[i].cos));
-    pont.setAttribute('y1', String(50 + RAYON_CAP * pts[i].sin));
-    pont.setAttribute('x2', String(50 + RAYON_CAP * pts[j].cos));
-    pont.setAttribute('y2', String(50 + RAYON_CAP * pts[j].sin));
+    const x1 = 50 + RAYON_CAP * pts[i].cos, y1 = 50 + RAYON_CAP * pts[i].sin;
+    const x2 = 50 + RAYON_CAP * pts[j].cos, y2 = 50 + RAYON_CAP * pts[j].sin;
+    // Sens de l'arc : on suit le cercle dans l'ordre des caps (i → j horaire si
+    // j suit i), toujours par le petit côté ; l'arc reste hors du médaillon.
+    const horaire = ((j - i) + caps.length) % caps.length <= caps.length / 2;
+    const pont = doc.createElementNS(NS, 'path');
+    pont.setAttribute('d', `M ${x1} ${y1} A ${RAYON_CAP} ${RAYON_CAP} 0 0 ${horaire ? 1 : 0} ${x2} ${y2}`);
     pont.setAttribute('class', 'passerelle');
+    pont.setAttribute('id', `passerelle-${cap.id}-${cap.lien}`);
     svg.insertBefore(pont, svg.firstChild);
+
+    if (cap.lienLibelle) {
+      const texte = doc.createElementNS(NS, 'text');
+      texte.setAttribute('class', 'passerelle-libelle');
+      const chemin = doc.createElementNS(NS, 'textPath');
+      chemin.setAttribute('href', `#passerelle-${cap.id}-${cap.lien}`);
+      chemin.setAttribute('startOffset', '50%');
+      chemin.setAttribute('text-anchor', 'middle');
+      chemin.textContent = cap.lienLibelle;
+      texte.appendChild(chemin);
+      svg.insertBefore(texte, svg.firstChild.nextSibling);
+    }
   });
   plateau.appendChild(svg);
 

@@ -17,6 +17,7 @@
 //   cible    : URL ouverte au clic ; null = cap « à venir ».
 //   externe  : true → nouvel onglet (rel noopener).
 //   lien     : id d'un cap jumeau → passerelle pointillée entre les deux.
+//   lienLibelle : le nom gravé sur cette passerelle (ex. « ⇄ rétroplanning »).
 //   enfants  : présent = le nœud EST une boussole (ordre = ordre des caps,
 //              premier plein Nord puis sens horaire). Absent = c'est une
 //              FEUILLE, la page où l'on travaille (règle §2.1 du cadrage).
@@ -26,10 +27,10 @@
 //   (true = ce nœud lit les agrégats /api/cockpit après connexion),
 //   expose (nom d'un global d'introspection pour les harnais).
 //
-// ÉTAT DU CÂBLAGE (L2, 2026-07-30) : `racine`, `ultima-perso`, `alpha` et
-// `imladrik` sont rendus par le noyau. Restent à câbler `tao` (L3) et les deux
-// antichambres `nicol-bolas` / `adramelech` (L4) — elles sont déjà décrites
-// ici, il n'y aura qu'une coque à poser.
+// ÉTAT DU CÂBLAGE (L3, 2026-07-30) : `racine`, `ultima-perso`, `alpha`, `tao`
+// et `imladrik` sont rendus par le noyau. Restent à câbler les deux antichambres
+// `nicol-bolas` / `adramelech` (L4) — elles sont déjà décrites ici, il n'y aura
+// qu'une coque à poser.
 
 export const NOEUDS = {
   // ======================= NIVEAU 0 — la racine =======================
@@ -247,14 +248,18 @@ export const NOEUDS = {
     blason: 'aileBlanche',
     cible: 'reshiram.html',
     lien: 'zekrom',
-    resume: 'Le travail de la réalité : tes talents réels et leurs preuves.',
+    lienLibelle: '⇄ rétroplanning',
+    resume: 'Le travail de la réalité : tes talents réels et leurs preuves. '
+      + 'Relié à ZEKROM par le rétroplanning — c’est là que l’idéal redescend '
+      + 'en marches concrètes.',
   },
   zekrom: {
     nom: 'ZEKROM',
     etat: 'Ouvert',
     blason: 'aileNoire',
     cible: 'zekrom.html',
-    resume: 'La quête de l’idéal : tes idéaux et les directions qui y mènent.',
+    resume: 'La quête de l’idéal : tes idéaux et les directions qui y mènent. '
+      + 'Relié à RESHIRAM par le rétroplanning — l’idéal ne reste jamais en l’air.',
   },
 };
 

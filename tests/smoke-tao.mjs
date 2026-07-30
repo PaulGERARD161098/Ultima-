@@ -1,11 +1,14 @@
-// TAO (Ultima LV2) : le hub arborescence qui réunit RESHIRAM (le réel) et
-// ZEKROM (l'idéal) sous une seule voie. Prouve : la racine TAO (blason des deux
-// yin-yang, titre, devise), les 2 branches cliquables vers reshiram.html
-// et zekrom.html (1 lien chacune), leurs blasons gravés, la passerelle
-// (rétroplanning) discrète, le retour vers la boussole (/), les tap targets
-// ≥ 44 px, le contraste AA sur les couleurs réellement rendues, AUCUNE requête
-// réseau externe (zéro CDN, page statique) et zéro erreur console.
+// TAO — la voie (Ultima Lv3, boucle L3) : tao.html.
+// L'arborescence tronc + deux branches a laissé place à la FORME UNIQUE — la
+// boussole rendue par le noyau. Prouve : bandeau conforme au REGISTRE, 2 caps
+// (RESHIRAM → reshiram.html, ZEKROM → zekrom.html), le cœur yin-yang + sa
+// légende, la PASSERELLE tracée en ARC (jamais une corde : elle disparaîtrait
+// derrière le médaillon) avec son nom « ⇄ rétroplanning » gravé dessus, le
+// rétroplanning dit AUSSI par Léo dans le cartouche (l'arc est décoratif, la
+// parole est annoncée), le retour vers ULTIMA, les tap targets, les contrastes
+// AA, zéro requête réseau, zéro erreur console.
 import { chromium } from 'playwright';
+import { NOEUDS, capsDe } from '../js/registre-lv3.mjs';
 
 const BASE = 'http://127.0.0.1:8123';
 let echecs = 0;
@@ -32,98 +35,125 @@ function versHex(rgb) {
 const navigateur = await chromium.launch({
   executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
 });
-const contexte = await navigateur.newContext();
-const page = await contexte.newPage();
+const page = await navigateur.newPage({ viewport: { width: 1280, height: 900 } });
 
 const erreursConsole = [];
 page.on('console', (msg) => { if (msg.type() === 'error') erreursConsole.push(msg.text()); });
 page.on('pageerror', (err) => erreursConsole.push(String(err)));
-
-// Toute requête hors 127.0.0.1:8123 / data: est une fuite réseau interdite.
-const requetesExternes = [];
+const externes = [];
 page.on('request', (req) => {
   const url = req.url();
-  if (!url.startsWith(BASE) && !url.startsWith('data:')) requetesExternes.push(url);
+  if (!url.startsWith(BASE) && !url.startsWith('data:')) externes.push(url);
 });
+const appelsApi = [];
+await page.route('**/api/**', (route) => { appelsApi.push(route.request().url()); return route.abort(); });
 
-console.log('— TAO : la voie (arborescence RESHIRAM ⇄ ZEKROM) —');
+console.log('— TAO : la voie, en boussole —');
 await page.goto(`${BASE}/tao.html`, { waitUntil: 'load', timeout: 20000 });
-await page.waitForSelector('.tao-arbre', { timeout: 20000 });
+await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
 
-// ---- La racine TAO : titre + devise + blason yin-yang. ----
-const titre = (await page.locator('h1.console-titre').textContent())?.trim();
-verifier('Racine : titre « TAO »', titre === 'TAO', `lu: ${titre}`);
-const devise = (await page.locator('.console-invite').textContent())?.trim();
-verifier('Racine : devise « La voie — le réel et l\'idéal »',
-  /La voie/.test(devise || '') && /réel/.test(devise || '') && /idéal/.test(devise || ''), `lu: ${devise}`);
-verifier('Racine : blason gravé présent (bandeau)',
-  (await page.locator('.console-entete .blason-svg').count()) === 1);
-verifier('Racine : blason TAO = le yin-yang',
-  /yin-yang/.test(await page.locator('.console-entete .blason-svg').getAttribute('aria-label') || ''));
+// Le bandeau suit le registre (anti-dérive de la coque).
+const surligne = (await page.locator('h1.console-titre .titre-surligne').textContent())?.trim();
+const principal = (await page.locator('h1.console-titre .titre-principal').textContent())?.trim();
+verifier('Surligne = celle du registre', surligne === NOEUDS.tao.surligne, `lu: ${surligne}`);
+verifier('Titre = celui du registre', principal === NOEUDS.tao.titre, `lu: ${principal}`);
+verifier('Invite « Léo te guide »',
+  /Léo te guide/.test((await page.locator('.console-invite').textContent()) || ''));
 
-// ---- L'arbre : un tronc gravé + deux branches. ----
-verifier('Tronc gravé (une racine, deux ramifications)', (await page.locator('.tao-tronc').count()) === 1);
-verifier('Deux branches rendues', (await page.locator('a.tao-branche').count()) === 2);
+// Les deux pôles, dans l'ordre du registre.
+const attendus = capsDe('tao').map((c) => c.nom);
+const noms = (await page.locator('.cap .cap-nom').allTextContents()).map((n) => n.trim());
+verifier('2 caps rendus', noms.length === 2, `trouvés: ${JSON.stringify(noms)}`);
+verifier('Caps dans l\'ordre du registre', JSON.stringify(noms) === JSON.stringify(attendus),
+  `lu: ${JSON.stringify(noms)}`);
 
-// Branche RESHIRAM → reshiram.html (1 lien exact), blason + libellé.
-const bReshiram = page.locator('a.tao-branche[href="reshiram.html"]');
-verifier('Branche RESHIRAM : 1 lien exact vers reshiram.html', (await bReshiram.count()) === 1);
-verifier('Branche RESHIRAM : nom affiché',
-  (await bReshiram.locator('.tao-branche-nom').textContent())?.trim() === 'RESHIRAM');
-verifier('Branche RESHIRAM : sous-titre « Le travail de la réalité »',
-  /Le travail de la réalité/.test(await bReshiram.locator('.tao-branche-sous').textContent() || ''));
-verifier('Branche RESHIRAM : blason gravé présent',
-  (await bReshiram.locator('.blason-svg').count()) === 1);
+for (const [id, cible] of [['reshiram', 'reshiram.html'], ['zekrom', 'zekrom.html']]) {
+  const cap = page.locator(`.cap[data-id="${id}"]`);
+  verifier(`${id} est un lien`, (await cap.evaluate((el) => el.tagName)) === 'A');
+  verifier(`${id} → ${cible}`, (await cap.getAttribute('href')) === cible);
+  verifier(`${id} en interne (pas de nouvel onglet)`, (await cap.getAttribute('target')) === null);
+}
+verifier('Aucun cap « à venir » (les deux pôles sont bâtis)',
+  (await page.locator('.cap--avenir, .cap[aria-disabled]').count()) === 0);
 
-// Branche ZEKROM → zekrom.html (1 lien exact), blason + libellé.
-const bZekrom = page.locator('a.tao-branche[href="zekrom.html"]');
-verifier('Branche ZEKROM : 1 lien exact vers zekrom.html', (await bZekrom.count()) === 1);
-verifier('Branche ZEKROM : nom affiché',
-  (await bZekrom.locator('.tao-branche-nom').textContent())?.trim() === 'ZEKROM');
-verifier('Branche ZEKROM : sous-titre « La quête de l\'idéal »',
-  /La quête de l'idéal/.test(await bZekrom.locator('.tao-branche-sous').textContent() || ''));
-verifier('Branche ZEKROM : blason gravé présent',
-  (await bZekrom.locator('.blason-svg').count()) === 1);
+// Le cœur yin-yang + sa légende gravée.
+verifier('Cœur gravé au centre', (await page.locator('.boussole-coeur svg').count()) === 1);
+const legende = (await page.locator('.boussole-legende').textContent())?.trim();
+verifier('Légende gravée = celle du registre', legende === NOEUDS.tao.legende, `lu: ${legende}`);
+verifier('2 aiguilles tracées', (await page.locator('.boussole-aiguilles .aiguille').count()) === 2);
 
-// La passerelle réel ↔ idéal (rétroplanning), mention discrète et statique.
-const pont = (await page.locator('.tao-lien-chip').textContent()) || '';
-verifier('Passerelle rétroplanning mentionnée (statique, sans donnée)',
-  /rétroplanning/.test(pont) && (await page.locator('.tao-lien-chip').count()) === 1, `lu: ${pont}`);
+// ---- La passerelle : un ARC, pas une corde. ----
+const passerelle = page.locator('.boussole-aiguilles .passerelle');
+verifier('1 passerelle tracée', (await passerelle.count()) === 1);
+verifier('Passerelle en <path> (et non <line>)',
+  (await passerelle.evaluate((el) => el.tagName.toLowerCase())) === 'path');
+const d = (await passerelle.getAttribute('d')) || '';
+verifier('Passerelle tracée en arc (commande A)', /\sA\s/.test(d), `d: ${d}`);
+// Preuve géométrique : le milieu de l'arc est LOIN du centre (une corde entre
+// deux caps opposés passerait exactement dessus et serait masquée).
+const distanceMilieu = await passerelle.evaluate((el) => {
+  const m = el.getPointAtLength(el.getTotalLength() / 2);
+  return Math.hypot(m.x - 50, m.y - 50);
+});
+verifier('Milieu de l\'arc hors du médaillon (> 34 % du plateau)',
+  distanceMilieu > 34, `${distanceMilieu.toFixed(1)} unités du centre`);
 
-// Retour vers la supra-division ULTIMA (Lv3 : TAO en est un cap).
+// Son nom gravé, posé sur l'arc.
+const libelle = (await page.locator('.passerelle-libelle').textContent())?.trim();
+verifier('Nom gravé « ⇄ rétroplanning » sur l\'arc', /rétroplanning/.test(libelle || ''), `lu: ${libelle}`);
+verifier('Le libellé suit le tracé (textPath)',
+  (await page.locator('.passerelle-libelle textPath').count()) === 1);
+
+// Retour vers ULTIMA (pièce ① du patron).
 const retour = page.locator('.console-retour a[href="ultima.html"]');
 verifier('Retour « ↞ ULTIMA » vers ultima.html', (await retour.count()) === 1);
-verifier('Retour libellé « ↞ ULTIMA »', /ULTIMA/.test(await retour.textContent() || ''));
+verifier('Retour libellé « ULTIMA »', /ULTIMA/.test((await retour.textContent()) || ''));
 
-// ---- Tap targets ≥ 44 px sur les deux branches cliquables. ----
-for (const [nom, loc] of [['RESHIRAM', bReshiram], ['ZEKROM', bZekrom]]) {
-  const h = await loc.evaluate((el) => el.getBoundingClientRect().height);
-  verifier(`Tap target branche ${nom} ≥ 44 px`, h >= 44, `${h.toFixed(1)} px`);
+// La parole de Léo dit le rétroplanning — l'arc est décor, la parole est annoncée.
+await page.locator('.cap[data-id="reshiram"]').hover();
+await page.waitForSelector('#boussole-parole.is-actif', { timeout: 5000 });
+const paroleR = (await page.locator('#boussole-parole').textContent()) || '';
+verifier('Survol RESHIRAM : le réel + le rétroplanning dits par Léo',
+  /RESHIRAM/.test(paroleR) && /talents réels/i.test(paroleR) && /rétroplanning/i.test(paroleR),
+  `lu: ${paroleR.slice(0, 140)}`);
+await page.locator('.cap[data-id="zekrom"]').hover();
+await page.waitForTimeout(150);
+const paroleZ = (await page.locator('#boussole-parole').textContent()) || '';
+verifier('Survol ZEKROM : l\'idéal + le rétroplanning dits par Léo',
+  /ZEKROM/.test(paroleZ) && /idéal/i.test(paroleZ) && /rétroplanning/i.test(paroleZ),
+  `lu: ${paroleZ.slice(0, 140)}`);
+
+// Tap targets ≥ 44 px sur les deux caps.
+for (const id of ['reshiram', 'zekrom']) {
+  const boite = await page.locator(`.cap[data-id="${id}"]`).boundingBox();
+  verifier(`Tap target ${id} ≥ 44 px`, Boolean(boite) && boite.height >= 44 && boite.width >= 44,
+    boite ? `${boite.width.toFixed(0)}×${boite.height.toFixed(0)}` : 'introuvable');
 }
 
-// ---- Contraste AA sur les couleurs réellement rendues. ----
+// Contrastes AA sur les couleurs réellement rendues.
 const styles = await page.evaluate(() => {
   const cs = getComputedStyle(document.documentElement);
   return {
     parcheminCarte: cs.getPropertyValue('--parchemin-carte').trim(),
     merProfonde: cs.getPropertyValue('--mer-profonde').trim(),
-    nom: getComputedStyle(document.querySelector('.tao-branche-nom')).color,
-    sous: getComputedStyle(document.querySelector('.tao-branche-sous')).color,
+    nom: getComputedStyle(document.querySelector('.cap-nom')).color,
     titre: getComputedStyle(document.querySelector('.console-titre')).color,
+    legende: getComputedStyle(document.querySelector('.boussole-legende')).color,
   };
 });
 const rNom = ratio(versHex(styles.nom), styles.parcheminCarte);
-verifier('Contraste nom de branche ≥ 4,5:1', rNom >= 4.5, `${rNom.toFixed(2)}:1`);
-const rSous = ratio(versHex(styles.sous), styles.parcheminCarte);
-verifier('Contraste sous-titre de branche ≥ 4,5:1', rSous >= 4.5, `${rSous.toFixed(2)}:1`);
+verifier('Contraste nom de cap ≥ 4,5:1', rNom >= 4.5, `${rNom.toFixed(2)}:1`);
 const rTitre = ratio(versHex(styles.titre), styles.merProfonde);
-verifier('Contraste titre TAO sur fond mer ≥ 4,5:1', rTitre >= 4.5, `${rTitre.toFixed(2)}:1`);
+verifier('Contraste titre sur mer ≥ 4,5:1', rTitre >= 4.5, `${rTitre.toFixed(2)}:1`);
+const rLeg = ratio(versHex(styles.legende), styles.merProfonde);
+verifier('Contraste légende sur mer ≥ 4,5:1', rLeg >= 4.5, `${rLeg.toFixed(2)}:1`);
 
-verifier('Zéro requête réseau externe (page statique, aucun CDN)',
-  requetesExternes.length === 0, requetesExternes.slice(0, 3).join(', '));
+// TAO est une coque : aucune donnée n'y transite (les chiffres vivent sur les
+// pages RESHIRAM / ZEKROM, derrière auth).
+verifier('Aucun appel /api (coque sans donnée)', appelsApi.length === 0, appelsApi.slice(0, 3).join(', '));
+verifier('Zéro requête réseau externe (aucun CDN)', externes.length === 0, externes.slice(0, 3).join(', '));
 verifier('Zéro erreur console (TAO)', erreursConsole.length === 0, erreursConsole.slice(0, 3).join(' | '));
 
 await navigateur.close();
-
 console.log(echecs === 0 ? '\n=== SMOKE TAO VERT ===' : `\n=== ${echecs} VERDICT(S) EN ÉCHEC ===`);
 process.exit(echecs === 0 ? 0 : 1);
