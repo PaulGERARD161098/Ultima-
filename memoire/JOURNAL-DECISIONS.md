@@ -1044,3 +1044,21 @@
   **supprimé** (133 lignes). `smoke-tao` réécrit (33 verdicts) avec une preuve
   géométrique que l'arc sort du médaillon. Patrimoine COMPLET vert. Front pur.
   Reste L4 (NICOL BOLAS + ADRAMELECH en boussoles).
+- **2026-07-30 (suite — « ok pour tout, fusion et étapes suivantes ok »)** :
+  Paul tranche les 4 questions du cheminement — **① forme A** (la voie
+  jalonnée), **② IMLADRIK seul**, **③ un serment = une voie**, **④ ouvrir la
+  boucle « dicter dans IMLADRIK »** — et autorise la fusion. **PR #114 fusionnée
+  dans `main`** (squash) après rebase sur le LV3 (#113) : conflit unique sur ce
+  journal, résolu en gardant les deux entrées. **Voie jalonnée en prod** sur
+  `draukhain.html` (choix de Léo : la page est déjà derrière auth, alors que la
+  carto `imladrik.html` est servie en HTML public — §5 tenue sans compromis).
+  Puis **boucle ④ enchaînée le même jour** : 5 outils `imladrik` dans les mains
+  de Léo, support `enum` au catalogue (rejet, jamais correction silencieuse),
+  cartouche monté sur les 3 pages du quadrant (**comptes seuls**), et le
+  composant de **dictée vocale extrait** de `js/app.js` vers **`js/dictee.js`**
+  (réutilisation, pas réécriture) pour équiper le champ « Parler à Léo » partout.
+  Chaîne prouvée de bout en bout au harnais : micro → `/api/leo` → carte de
+  confirmation déterministe → **aucune écriture** → confirmation → POST avec
+  Bearer. Patrimoine COMPLET vert (**824**). **⏭ Reste** : Léo ne sait pas encore
+  LIRE IMLADRIK en détail pour répondre « où j'en suis » (le cartouche donne les
+  comptes) — marche suivante si Paul la veut.
