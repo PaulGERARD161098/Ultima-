@@ -34,6 +34,23 @@
     B**, (b) revenir au **cap DONNÉE pur** (appliquer les migrations IMLADRIK + Léo
     voie A à la demande), (c) autre. Aucune des deux voies n'est bloquée par l'autre.
 
+- 🔶 **Le cheminement — l'affichage des projets en cours (dicté 2026-07-30)** :
+  constat de Paul — les **gros pavés-quadrants ne sont pas gracieux** pour dire
+  les projets en cours ; pour **IMLADRIK** (développement personnel) il faut une
+  forme qui montre **une progression, un cheminement** (aller de l'avant,
+  devenir meilleur). Livré : maquette statique
+  `design/preview-imladrik-cheminement.html` — **3 formes** (A la voie jalonnée
+  ★reco, B l'ascension, C les anneaux), **zéro code produit**, chiffres fictifs
+  (§5 intime), patrimoine COMPLET vert (aucun harnais concerné). Cadre et
+  décisions : `CADRAGE-IMLADRIK.md §9`. **⏳ Décisions Paul** : ① la forme ;
+  ② le périmètre (IMLADRIK seul, ou aussi la console et les autres quadrants) ;
+  ③ l'unité de la voie (un serment = une voie, reco).
+  **Constat joint (`CADRAGE-IMLADRIK.md §10`)** : **dicter dans IMLADRIK n'est
+  pas possible aujourd'hui** — les mains de Léo ne couvrent que ADRAMELECH +
+  RIVEN, le micro par champ n'est que sur RIVEN, et
+  `OUTILS_PAR_QUADRANT.imladrik` est resté **vide** alors que les migrations
+  `0016 → 0018` sont appliquées. Boucle à ouvrir (gate §5).
+
 - 🧭 **Ultima LV2 — la boussole (cap dicté par Paul, 2026-07-21)** : une couche
   méta au-dessus de la console. L'accueil `/` devient une **boussole** (carte
   savante, rose des vents) dont chaque **cap = un macro-projet** ; la console à
