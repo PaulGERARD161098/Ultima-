@@ -2,6 +2,35 @@
 
 ## ÉTAT (2026-07-06, après arbitrage)
 
+- 🗃️ **CAP DONNÉE — premier peuplement réel (session 2026-07-30, close).** Le cap
+  « assez de code, il faut de la donnée » passe à l'acte sur **RESHIRAM**, qui
+  était **vide en base**. ✅ **3 talents réels dictés par Paul et posés en prod**
+  (PR #116 + #121 mergées) : ① « Toujours avoir un plan B », ② « Décortiquer
+  précisément un problème », ③ « Toujours savoir quoi faire » — tous
+  **transversaux**, `niveau='pratique'`. **Énoncé d'offre acté** : ce que Paul
+  propose n'est PAS « résoudre les problèmes » (trop large) mais **« on fait appel
+  à moi parce que j'ai toujours des solutions »** (un chapeau, pas un talent).
+  Seed idempotent `supabase/seed-reshiram-paul.sql`. Zéro migration, zéro DDL.
+  - ⚠️ **Les 3 talents sont « à étayer »** (0 preuve) → **« mon offre réelle » est
+    VIDE**. C'est la règle cardinale qui joue son rôle, pas un défaut.
+  - 🔎 **Goulot identifié (le constat de la session)** : sollicité pour une preuve,
+    Paul répond par la **méthode**, pas par l'anecdote (« c'est un cas d'école »).
+    Or sa parade — *avoir toujours un second artisan mobilisable* — est
+    **chiffrable** : elle se compte en artisans par secteur, ce que produit déjà
+    `talents_capital_reseau` (connexion RESHIRAM → RIVEN, `0013`). **Mais
+    `network_nodes` est VIDE (0 fiche, vérifié en prod).** Toute la machinerie
+    existe, la matière manque.
+  - 📏 **État de la donnée en prod (2026-07-30)** : RESHIRAM 3 talents / 0 preuve ;
+    ZEKROM 3 idéaux / 5 directions ; passerelles R↔Z **0** ; RIVEN **0** ;
+    ADRAMELECH 4 idées.
+  - ⏭ **Reporté par Paul (décision explicite, fin de session)** : **peupler RIVEN**
+    — reco de Léo comme boucle suivante (c'est lui qui débloque les preuves
+    chiffrées, donc « mon offre réelle »). « On s'occupera de RIVEN plus tard. »
+  - ⏳ **Registre à la main de Paul** (inchangé, reporté) : preuves des 3 talents ;
+    confirmation du `niveau` (`maitrise` = cran que seul Paul monte) ; sort des 3
+    talents seed du §7 non redictés ; frontière ① / ③ (tranchée par Léo :
+    ① = AVANT/prévoyance, ③ = PENDANT/sang-froid) à confirmer.
+
 - 🏁 **CLÔTURE DE SESSION — 2026-07-30 (fil « cheminement + Léo dans IMLADRIK »).**
   Trois boucles ouvertes, **trois boucles fermées et fusionnées dans `main`** ;
   zéro travail non poussé, aucune gate laissée ouverte, aucune migration.
