@@ -57,7 +57,7 @@ même patron, gravé à l'identique, à tous les étages.
 | `ultima.html` | **grille 2×2** des quadrants | **boussole à 5 caps** (les 4 quadrants + TAO) |
 | `alpha.html` | *n'existe pas* | **nouvelle page** — boussole à 2 caps |
 | `tao.html` | **arborescence** (tronc + 2 branches) | **boussole à 2 caps** + passerelle rétroplanning |
-| `bcp.html` / `adramelech.html` | antichambres en colonne | **boussoles** (caps §4.3) |
+| `bcp.html` / `adramelech.html` | antichambres en colonne | **boussoles** ✅ (+ `registre.html`, la vue liste déménagée) |
 | `imladrik.html` | **boussole** Kalamn-talaen | inchangée — c'est **le modèle** |
 | `traveler.html`, `abaque.html`, `idees.html`, `minethnir.html`, `vranesh.html`, `draukhain.html`, `reshiram.html`, `zekrom.html` | outils | **inchangés** (ce sont des feuilles, pas des nœuds) |
 
@@ -231,9 +231,34 @@ n'ont pas à bouger (les nouvelles pages sont des coques muettes).
 | **L1 ✅** | Le noyau | **LIVRÉ 2026-07-30** — voir §6bis | faible |
 | **L2 ✅** | Les deux supra-divisions | **LIVRÉ 2026-07-30** — voir §6ter |
 | **L3 ✅** | TAO en boussole | **LIVRÉ 2026-07-30** — voir §6quater |
-| **L4** | Les deux antichambres | NICOL BOLAS + ADRAMELECH en boussoles (caps §4.5, après validation) | faible |
+| **L4 ✅** | Les deux antichambres | **LIVRÉ 2026-07-30** — voir §6quinquies |
 
 Chaque boucle : livrée → patrimoine COMPLET vert → commit → PR → annotation.
+
+### 6quinquies. ✅ L4 — les deux antichambres (livré le 2026-07-30) — **Lv3 complet**
+
+| Fichier | Ce qui change |
+| --- | --- |
+| `bcp.html` | NICOL BOLAS devient une boussole à 4 caps : ABAQUE (ouvert) + REVENUS & CHARGES, IMPÔTS, ÉCHÉANCIER (à venir). |
+| `adramelech.html` | ADRAMELECH devient une boussole à 3 caps : LE REGISTRE, LES ARCHIPELS, LES RAPPROCHEMENTS. |
+| `registre.html` | **Nouvelle page** — la vue registre (compteurs / idées / ponts) **déménage telle quelle** depuis `adramelech.html`, avec `js/adramelech.js` inchangé. |
+| `js/antichambre.js` | **Supprimé** : il ne servait que le cartouche « majordome de chantier » de `bcp.html`. Léo parle désormais cap par cap dans le cartouche de la boussole. |
+| `middleware.js` | Commentaire seul : `/adramelech` reste l'exception de chemin exact, mais c'est maintenant une **coque muette** — la donnée vit sur `/registre`, toujours fail-closed. |
+
+**Le point qui a demandé un arbitrage.** `adramelech.html` n'était pas une
+antichambre : c'était une **page de travail** (auth-gate + compteurs + idées +
+ponts, alimentés par `/api/idees`). La transformer en coque aurait **supprimé une
+vue qui marche**. Elle a donc déménagé sur `registre.html` et devient un cap à
+part entière — **LE REGISTRE**, ajouté au registre Lv3 en plus des deux caps
+validés par Paul. Rien n'est perdu, et la structure y gagne : le quadrant offre
+maintenant deux vues sur la même donnée (la **liste** et la **carte**).
+
+**Vérification** : `smoke-quadrants` recalé — ses sections fail-closed (sans
+session → aucune idée ; fausse session → Bearer transmis, 401 fail-closed ;
+fixture 200 → registre + cartouche Léo) visent désormais `registre.html` et
+restent vertes **sans changer une assertion**, ce qui prouve que le déménagement
+est fidèle. Nouvelle section E : les deux quadrants en boussoles. Patrimoine
+COMPLET vert.
 
 ### 6quater. ✅ L3 — TAO en boussole (livré le 2026-07-30)
 

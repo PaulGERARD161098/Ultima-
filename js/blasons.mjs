@@ -211,6 +211,13 @@ export const BLASONS = {
     'un sablier'),
 
   // — Les caps d'ADRAMELECH.
+  registre: disque(
+    '<path d="M22 18 H 50 V 54 H 22 Z" fill="#f4ead0" stroke="#3b2f1c" stroke-width="1.8"/>'
+    + '<path d="M22 18 V 54" stroke="#3b2f1c" stroke-width="3.4"/>'
+    + '<g stroke="#3b2f1c" stroke-width="1.2" stroke-linecap="round">'
+    + '<path d="M28 27 H 45"/><path d="M28 34 H 45"/><path d="M28 41 H 39"/></g>'
+    + '<path d="M44 18 V 34 l -3.2 -3.4 L 37.6 34 V 18 Z" fill="#a9884a" opacity="0.85"/>',
+    'un registre relié'),
   archipels: disque(
     '<g fill="#3b2f1c">'
     + '<path d="M20 34 q 6 -9 13 -2 q 5 5 -1 6 q -8 1 -12 -4 Z"/>'

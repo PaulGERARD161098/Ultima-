@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Ultima — Le registre des idées</title>
+  <meta name="description" content="Le registre des idées d'ADRAMELECH : compteurs, idées et ponts. Privé — derrière authentification.">
+  <meta name="theme-color" content="#0e3a52">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%231e6fb8'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23ffffff'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/console.css">
+  <link rel="stylesheet" href="css/quadrant.css">
+</head>
+<!-- LE REGISTRE — la vue liste des idées (compteurs, idées, ponts), cap
+     d'ADRAMELECH (Lv3, boucle L4). Cette page portait auparavant le nom
+     adramelech.html ; le quadrant est devenu une boussole, et sa page de
+     travail a pris son propre nom. Le markup et js/adramelech.js sont
+     INCHANGÉS : mêmes ids, mêmes états, même fail-closed (aucune idée en dur,
+     les données ne viennent QUE de l'API authentifiée /api/idees). -->
+<body class="console page-quadrant">
+
+  <!-- Rose des vents décorative (registre carte savante), muette. -->
+  <div class="console-decor" aria-hidden="true">
+    <svg viewBox="0 0 72 72" focusable="false">
+      <circle cx="36" cy="36" r="26" fill="none" stroke="#c9a659" stroke-width="1.4" opacity="0.85"/>
+      <path d="M36 4 L42 30 L68 36 L42 42 L36 68 L30 42 L4 36 L30 30 Z"
+            fill="#e8cf8f" stroke="#c9a659" stroke-width="1"/>
+      <path d="M36 18 L39 33 L54 36 L39 39 L36 54 L33 39 L18 36 L33 33 Z"
+            fill="#c9a659" stroke="none" opacity="0.55"/>
+      <text x="36" y="14" text-anchor="middle" font-size="9" fill="#e8cf8f" font-style="italic">N</text>
+    </svg>
+  </div>
+
+  <div class="console-conteneur">
+
+    <header class="console-entete quadrant-bandeau">
+      <svg class="blason-svg" viewBox="0 0 72 72" role="img"
+           aria-label="Blason gravé : un registre relié" focusable="false">
+        <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
+        <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
+        <path d="M22 18 H 50 V 54 H 22 Z" fill="#f4ead0" stroke="#3b2f1c" stroke-width="1.8"/>
+        <path d="M22 18 V 54" stroke="#3b2f1c" stroke-width="3.4"/>
+        <g stroke="#3b2f1c" stroke-width="1.2" stroke-linecap="round">
+          <path d="M28 27 H 45"/><path d="M28 34 H 45"/><path d="M28 41 H 39"/>
+        </g>
+        <path d="M44 18 V 34 l -3.2 -3.4 L 37.6 34 V 18 Z" fill="#a9884a" opacity="0.85"/>
+      </svg>
+      <h1 class="console-titre">Le registre</h1>
+      <p class="console-invite quadrant-mission">Les idées, leurs compteurs et leurs ponts.</p>
+      <span class="quadrant-etat">Privé — auth requise</span>
+    </header>
+
+    <!-- ===== Le registre (un seul état visible à la fois, piloté par js/adramelech.js).
+         AUCUNE idée en dur ici : les données personnelles ne viennent QUE de
+         l'API authentifiée /api/idees (fail-closed sans session). ===== -->
+    <main class="quadrant-page" aria-label="Registre des idées du quadrant ADRAMELECH">
+
+      <p id="adr-chargement" class="adr-chargement">Consultation du registre…</p>
+
+      <section id="adr-auth" class="cartouche-page" hidden>
+        <h2>Authentification requise</h2>
+        <p>Le registre des idées est privé&nbsp;: il ne s'ouvre qu'une fois votre session ouverte.</p>
+        <p><a class="retour-console" href="traveler.html">Se connecter depuis RIVEN</a></p>
+      </section>
+
+      <section id="adr-erreur" class="cartouche-page" hidden>
+        <h2>Registre indisponible</h2>
+        <p>La consultation a échoué. Réessayez dans un instant.</p>
+      </section>
+
+      <div id="adr-registre" hidden>
+        <section class="cartouche-page" aria-labelledby="adr-titre-compteurs">
+          <h2 id="adr-titre-compteurs">Le registre</h2>
+          <ul id="adr-compteurs" class="adr-compteurs"></ul>
+        </section>
+        <section class="cartouche-page" aria-labelledby="adr-titre-idees">
+          <h2 id="adr-titre-idees">Les idées</h2>
+          <div id="adr-idees"></div>
+        </section>
+        <section class="cartouche-page" aria-labelledby="adr-titre-ponts">
+          <h2 id="adr-titre-ponts">Les ponts</h2>
+          <ul id="adr-ponts" class="adr-ponts"></ul>
+        </section>
+        <!-- La vue carte du même registre (AD-4c) : archipels par thème + routes
+             de synergie, rendus depuis la même API authentifiée. -->
+        <section class="cartouche-page" aria-labelledby="adr-titre-carte">
+          <h2 id="adr-titre-carte">La carte</h2>
+          <p><a class="retour-console" href="idees.html">Ouvrir la carte des archipels</a></p>
+        </section>
+      </div>
+
+    </main>
+
+    <p class="retour"><a class="retour-console" href="adramelech.html">↞ ADRAMELECH</a></p>
+  </div>
+
+  <script src="js/vendor/supabase-js-2.110.0.min.js"></script>
+  <script src="js/config.js"></script>
+  <!-- Dictée vocale : composant partagé (micro par champ) — repris d'adramelech.html
+       (#118) : c'est cette page qui porte désormais les champs du quadrant. -->
+  <script src="js/dictee.js"></script>
+  <script src="js/leo-accueil.js"></script>
+  <script src="js/adramelech.js"></script>
+</body>
+</html>

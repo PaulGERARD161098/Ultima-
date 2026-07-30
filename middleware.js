@@ -43,13 +43,14 @@ const CSP = [
 // `requireUser` (gate — voir adramelech/CADRAGE-ADRAMELECH.md, AD-4).
 const PREFIXES_PRIVES = ['/adramelech', '/memoire'];
 
-// Antichambre publique du quadrant (diffusion Léo) : la page RACINE
-// adramelech.html est servie par `cleanUrls` sur le chemin EXACT '/adramelech'
-// (la visite de /adramelech.html y est 308-redirigée par Vercel). La page est
-// fail-closed côté client (aucune donnée sans session — js/adramelech.js,
-// les idées ne viennent QUE de /api/idees authentifiée) et ne contient aucune
-// idée en dur. Seul ce chemin exact passe : tout ce qui vit SOUS /adramelech/
-// (IDEES.md, cadrages, scripts d'import) reste bloqué, *.md compris.
+// Boussole publique du quadrant : la page RACINE adramelech.html est servie par
+// `cleanUrls` sur le chemin EXACT '/adramelech' (la visite de /adramelech.html y
+// est 308-redirigée par Vercel). Depuis Lv3-L4 c'est une COQUE DE BOUSSOLE : elle
+// ne porte plus aucune donnée ni aucun appel réseau (la vue registre a déménagé
+// sur /registre, toujours fail-closed côté client — js/adramelech.js, les idées
+// ne viennent QUE de /api/idees authentifiée). Seul ce chemin exact passe : tout
+// ce qui vit SOUS /adramelech/ (IDEES.md, cadrages, scripts d'import) reste
+// bloqué, *.md compris.
 const CHEMINS_ANTICHAMBRE = ['/adramelech'];
 
 export function estCheminPrive(pathname) {
