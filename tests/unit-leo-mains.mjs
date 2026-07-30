@@ -31,14 +31,18 @@ verdicts.catalogueTraveler = Array.isArray(outilsPour('traveler')) &&
 verdicts.catalogueAdramelech = Array.isArray(outilsPour('adramelech')) &&
   outilsPour('adramelech').map((o) => o.name).sort().join(',') ===
   'proposer_enrichissement_idee,proposer_idee';
-// bcp/imladrik : catalogue VIDE → null (l'appel IA part sans le champ tools).
-verdicts.catalogueVide = outilsPour('bcp') === null && outilsPour('imladrik') === null &&
+// IMLADRIK (boucle ④, 2026-07-30) : les 3 caps ont leurs mains.
+verdicts.catalogueImladrik = Array.isArray(outilsPour('imladrik')) &&
+  outilsPour('imladrik').map((o) => o.name).sort().join(',') ===
+  'proposer_flamme,proposer_page_journal,proposer_scenario,proposer_serment,proposer_situation';
+// bcp : catalogue VIDE → null (l'appel IA part sans le champ tools).
+verdicts.catalogueVide = outilsPour('bcp') === null &&
   outilsPour('inconnu') === null && outilsPour(undefined) === null;
 // Aucun outil de suppression, jamais (principe fondateur §0).
 verdicts.zeroSuppression = Object.values(OUTILS_PAR_QUADRANT).every((liste) =>
   liste.every((o) => !/suppr|delete|retir|efface/i.test(o.name)));
 // Schémas stricts : object, requis, bornes, additionalProperties: false.
-verdicts.schemasStricts = ['traveler', 'adramelech'].every((q) =>
+verdicts.schemasStricts = ['traveler', 'adramelech', 'imladrik'].every((q) =>
   outilsPour(q).every((o) =>
     o.input_schema.type === 'object' &&
     o.input_schema.additionalProperties === false &&
@@ -305,6 +309,86 @@ verdicts.planCiblePartout = (() => {
   return r.ok === true && r.cible === 'M. Lambert' &&
     b.ok === true && b.cible === 'Réhabilitation immeuble Voltaire' &&
     e.ok === true && e.cible === 'ADR-3';
+})();
+
+// ---------- IMLADRIK (boucle ④) : validation, enums, reformulation, gabarits ----------
+
+const CAND_IMLADRIK = {
+  serments: [{ id: 's-1', libelle: 'Tenir ma parole donnée' }],
+  situations: [{ id: 'z-1', libelle: 'Si tout s’accélère' }]
+};
+
+// Cloisonnement : un outil IMLADRIK est refusé depuis un autre quadrant.
+verdicts.imladrikCloisonne =
+  validerProposition('proposer_serment', { intitule: 'X' }, 'adramelech').ok === false &&
+  validerProposition('proposer_idee', { titre: 'X' }, 'imladrik').ok === false;
+
+// Enum : une nature/vraisemblance hors liste est REJETÉE, jamais corrigée.
+verdicts.imladrikEnum =
+  validerProposition('proposer_flamme',
+    { serment_ref: 'A', texte: 'B', nature: 'citation' }, 'imladrik').ok === true &&
+  validerProposition('proposer_flamme',
+    { serment_ref: 'A', texte: 'B', nature: 'prophetie' }, 'imladrik').ok === false &&
+  validerProposition('proposer_scenario',
+    { situation_ref: 'A', deroule: 'B', vraisemblance: 'certaine' }, 'imladrik').ok === false;
+
+// Requis et surnuméraires, mêmes règles que partout ailleurs.
+verdicts.imladrikRequis =
+  validerProposition('proposer_page_journal', { titre: 'seul' }, 'imladrik').ok === false &&
+  validerProposition('proposer_serment', { intitule: '   ' }, 'imladrik').ok === false &&
+  validerProposition('proposer_serment',
+    { intitule: 'X', owner_id: 'moi' }, 'imladrik').ok === false;
+
+// Reformulation déterministe : le texte que Paul confirmera.
+verdicts.imladrikReformule =
+  reformulerProposition({ outil: 'proposer_serment', args: { intitule: 'Tenir', horizon: 'toujours' } })
+    === 'Sceller le serment « Tenir » dans DRAUKHAIN. Horizon : « toujours »' &&
+  /Raviver le serment « Tenir » d’une flamme \(victoire\)/.test(
+    reformulerProposition({ outil: 'proposer_flamme',
+      args: { serment_ref: 'Tenir', texte: 'tenu tout l’hiver', nature: 'victoire' } }));
+
+// Gabarits : corps EXACTS des API existantes, cible résolue localement.
+verdicts.imladrikPlans = (() => {
+  const page = construirePlanExecution(
+    { outil: 'proposer_page_journal', args: { contenu: 'Ma page.', titre: 'Matin' } }, {});
+  const serment = construirePlanExecution(
+    { outil: 'proposer_serment', args: { intitule: 'Tenir', pourquoi: 'le sens' } }, {});
+  const flamme = construirePlanExecution(
+    { outil: 'proposer_flamme', args: { serment_ref: 'parole', texte: 'tenu', nature: 'victoire' } },
+    CAND_IMLADRIK);
+  const situation = construirePlanExecution(
+    { outil: 'proposer_situation', args: { intitule: 'Si tout casse' } }, {});
+  const scenario = construirePlanExecution(
+    { outil: 'proposer_scenario',
+      args: { situation_ref: 'accélère', deroule: 'ça part vite', vraisemblance: 'forte' } },
+    CAND_IMLADRIK);
+  return page.ok === true && page.url === '/api/imladrik/entrees' &&
+    page.methode === 'POST' && page.corps.contenu === 'Ma page.' && page.corps.titre === 'Matin' &&
+    serment.ok === true && serment.url === '/api/serments' &&
+    serment.corps.intitule === 'Tenir' && serment.corps.pourquoi === 'le sens' &&
+    flamme.ok === true && flamme.url === '/api/flammes' &&
+    flamme.corps.serment_id === 's-1' && flamme.corps.nature === 'victoire' &&
+    flamme.cible === 'Tenir ma parole donnée' &&
+    situation.ok === true && situation.url === '/api/situations' &&
+    scenario.ok === true && scenario.url === '/api/scenarios' &&
+    scenario.corps.situation_id === 'z-1' && scenario.corps.vraisemblance === 'forte';
+})();
+
+// Fail-closed du front : cible introuvable, bornes serveur, enum — jamais
+// d'écriture bancale (et jamais de troncature silencieuse).
+verdicts.imladrikPlansRefus = (() => {
+  const introuvable = construirePlanExecution(
+    { outil: 'proposer_flamme', args: { serment_ref: 'inconnu', texte: 'x' } }, CAND_IMLADRIK);
+  const sansCandidats = construirePlanExecution(
+    { outil: 'proposer_scenario', args: { situation_ref: 'x', deroule: 'y' } }, {});
+  // horizon : borne serveur = 200 (et non 2000) — on refuse plutôt que tronquer.
+  const horizonTropLong = construirePlanExecution(
+    { outil: 'proposer_serment', args: { intitule: 'X', horizon: 'h'.repeat(201) } }, {});
+  const natureInconnue = construirePlanExecution(
+    { outil: 'proposer_flamme', args: { serment_ref: 'parole', texte: 'x', nature: 'espoir' } },
+    CAND_IMLADRIK);
+  return introuvable.ok === false && sansCandidats.ok === false &&
+    horizonTropLong.ok === false && natureInconnue.ok === false;
 })();
 
 // ---------- Bilan ----------

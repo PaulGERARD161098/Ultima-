@@ -39,8 +39,10 @@ const QUADRANTS = {
   imladrik: {
     nom: 'IMLADRIK',
     registre: 'réflexif',
-    sujet: 'le développement personnel de Paul : objectifs, journal, valeurs, ' +
-      'culture. Ce quadrant est encore en chantier : accompagne la réflexion.'
+    sujet: 'le développement personnel de Paul, en 3 caps : MINETHNIR (le ' +
+      'journal intime), DRAUKHAIN (les serments — la volonté au-delà du ' +
+      'possible, ravivés par des flammes) et VRANESH (les situations et leurs ' +
+      'futurs possibles). Registre intime : accompagne, ne juge jamais.'
   }
 };
 
@@ -104,6 +106,77 @@ const CATALOGUE = {
       texte: { max: 2000, requis: true, description: 'La note dictée, fidèle à la dictée.' }
     }
   },
+  // ---- IMLADRIK (boucle ④, dictée Paul 2026-07-30) : « ouvre tel cap et
+  // renseigne cela ». Les 3 caps du quadrant, un outil de création par objet
+  // + un outil d'enrichissement par objet fils. Données INTIMES (§5) : rien
+  // n'est écrit avant confirmation de Paul, aucun contenu dicté en logs, et
+  // AUCUN outil de suppression (règle L2b inchangée).
+  proposer_page_journal: {
+    quadrant: 'imladrik',
+    description: "Proposer d'écrire une page au journal intime (cap MINETHNIR) " +
+      "à partir de ce que Paul dicte. Rien n'est écrit avant sa confirmation.",
+    args: {
+      contenu: { max: 20000, requis: true, description: 'La page dictée, fidèle à la dictée.' },
+      titre: { max: 200, description: 'Titre de la page (optionnel).' }
+    }
+  },
+  proposer_serment: {
+    quadrant: 'imladrik',
+    description: 'Proposer de sceller un serment (cap DRAUKHAIN) : le vœu que ' +
+      "Paul tient. Rien n'est scellé avant sa confirmation.",
+    args: {
+      intitule: { max: 200, requis: true, description: 'Le serment dicté, fidèle à la dictée.' },
+      pourquoi: { max: 2000, description: 'Le sens profond du serment (optionnel).' },
+      horizon: { max: 200, description: "Jusqu'où ce serment porte Paul (optionnel)." }
+    }
+  },
+  proposer_flamme: {
+    quadrant: 'imladrik',
+    description: "Proposer de raviver un serment EXISTANT (cap DRAUKHAIN) d'une " +
+      "flamme dictée par Paul : une citation, une victoire ou un rappel. " +
+      "Rien n'est écrit avant sa confirmation.",
+    args: {
+      serment_ref: {
+        max: 200, requis: true,
+        description: 'Le serment visé, tel que dicté (son intitulé).'
+      },
+      texte: { max: 2000, requis: true, description: 'La flamme dictée, fidèle à la dictée.' },
+      nature: {
+        max: 20, enum: ['citation', 'victoire', 'rappel'],
+        description: "Nature de la flamme : « citation », « victoire » ou « rappel » (défaut : rappel)."
+      }
+    }
+  },
+  proposer_situation: {
+    quadrant: 'imladrik',
+    description: 'Proposer d’ouvrir une situation à explorer (cap VRANESH) : ' +
+      "un cas donné dont Paul veut anticiper les futurs. Rien n'est ouvert " +
+      'avant sa confirmation.',
+    args: {
+      intitule: { max: 200, requis: true, description: 'La situation dictée, fidèle à la dictée.' },
+      contexte: { max: 2000, description: 'Le contexte dicté (optionnel).' }
+    }
+  },
+  proposer_scenario: {
+    quadrant: 'imladrik',
+    description: 'Proposer d’ajouter un futur possible à une situation EXISTANTE ' +
+      "(cap VRANESH) : le déroulé dicté par Paul. Rien n'est écrit avant sa " +
+      'confirmation.',
+    args: {
+      situation_ref: {
+        max: 200, requis: true,
+        description: 'La situation visée, telle que dictée (son intitulé).'
+      },
+      deroule: { max: 2000, requis: true, description: 'Le déroulé dicté, fidèle à la dictée.' },
+      vraisemblance: {
+        max: 20, enum: ['faible', 'moyenne', 'forte'],
+        description: 'Vraisemblance dictée : « faible », « moyenne » ou « forte » (optionnelle).'
+      },
+      signaux: { max: 2000, description: 'Les signaux avant-coureurs dictés (optionnels).' },
+      parade: { max: 2000, description: 'La parade préparée, dictée (optionnelle).' }
+    }
+  },
+
   proposer_relance: {
     quadrant: 'traveler',
     description: 'Proposer de programmer une relance datée sur un contact du ' +
@@ -116,8 +189,10 @@ const CATALOGUE = {
   }
 };
 
-// Catalogue au format tool-use Anthropic, par quadrant. bcp/imladrik : vides
-// (pas d'API de données) — l'appel IA part alors SANS le paramètre tools.
+// Catalogue au format tool-use Anthropic, par quadrant. bcp : vide (pas d'API
+// de données) — l'appel IA part alors SANS le paramètre tools. imladrik est
+// servi depuis la boucle ④ (2026-07-30) : ses 3 caps ont leurs APIs en prod
+// (migrations 0016 → 0018 appliquées).
 export const OUTILS_PAR_QUADRANT = { traveler: [], bcp: [], adramelech: [], imladrik: [] };
 for (const nom of Object.keys(CATALOGUE)) {
   const outil = CATALOGUE[nom];
@@ -127,6 +202,7 @@ for (const nom of Object.keys(CATALOGUE)) {
     const arg = outil.args[cle];
     properties[cle] = { type: 'string', description: arg.description, maxLength: arg.max };
     if (arg.date) properties[cle].pattern = '^\\d{4}-\\d{2}-\\d{2}$';
+    if (arg.enum) properties[cle].enum = arg.enum.slice();
     if (arg.requis) required.push(cle);
   }
   OUTILS_PAR_QUADRANT[outil.quadrant].push({
@@ -181,6 +257,9 @@ export function validerProposition(nomOutil, args, quadrant) {
     const nette = valeur.trim();
     if (!nette) continue; // optionnel vide : ignoré (le requis vide est rattrapé plus bas)
     if (attendu.date && !dateReelle(nette)) return { ok: false };
+    // Enum : une valeur hors liste est un outil qui invente — rejet total,
+    // jamais une correction silencieuse (même règle que les surnuméraires).
+    if (attendu.enum && !attendu.enum.includes(nette)) return { ok: false };
     propres[cle] = nette;
   }
   for (const cle of Object.keys(outil.args)) {
@@ -220,6 +299,27 @@ export function reformulerProposition(proposition) {
       return 'Programmer une relance de « ' + args.cible_ref + ' » pour le ' +
         dateFrancaise(args.echeance) +
         (args.note ? ' — « ' + args.note + ' »' : '') + '.';
+    case 'proposer_page_journal':
+      return 'Écrire une page au journal MINETHNIR' +
+        (args.titre ? ' — « ' + args.titre + ' »' : '') +
+        ' : « ' + args.contenu + ' »';
+    case 'proposer_serment':
+      return 'Sceller le serment « ' + args.intitule + ' » dans DRAUKHAIN.' +
+        (args.pourquoi ? ' Pourquoi : « ' + args.pourquoi + ' »' : '') +
+        (args.horizon ? ' Horizon : « ' + args.horizon + ' »' : '');
+    case 'proposer_flamme':
+      return 'Raviver le serment « ' + args.serment_ref + ' » d\u2019une flamme' +
+        (args.nature ? ' (' + args.nature + ')' : '') +
+        ' : « ' + args.texte + ' »';
+    case 'proposer_situation':
+      return 'Ouvrir la situation « ' + args.intitule + ' » dans VRANESH.' +
+        (args.contexte ? ' Contexte : « ' + args.contexte + ' »' : '');
+    case 'proposer_scenario':
+      return 'Ajouter un futur possible à « ' + args.situation_ref + ' »' +
+        (args.vraisemblance ? ' (vraisemblance ' + args.vraisemblance + ')' : '') +
+        ' : « ' + args.deroule + ' »' +
+        (args.signaux ? ' Signaux : « ' + args.signaux + ' »' : '') +
+        (args.parade ? ' Parade : « ' + args.parade + ' »' : '');
     default:
       return '';
   }

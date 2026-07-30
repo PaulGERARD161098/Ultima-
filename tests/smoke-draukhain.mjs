@@ -50,7 +50,11 @@ function scriptFausseSession() {
       refresh_token: 'jeton-refresh',
       user: { id: '00000000-0000-4000-8000-000000000000', aud: 'authenticated', role: 'authenticated' }
     }));
-  } catch (e) {}`;
+  } catch (e) {}
+  // Boucle ④ : le cartouche de Léo s'ouvre désormais à l'entrée du quadrant.
+  // Les sections qui exercent la PAGE le neutralisent (marqueur de session PAR
+  // quadrant, convention smoke-quadrants) ; un bloc dédié le prouve à part.
+  try { window.sessionStorage.setItem('ultima-leo-accueil-vu-imladrik', '1'); } catch (e) {}`;
 }
 
 // Fixture NEUTRE — AUCUN serment réel de Paul (intitulés inventés pour le harnais).
@@ -459,6 +463,107 @@ console.log('— C. draukhain.html fausse session → 401 fail-closed —');
   verifier('401 → registre caché', await page.locator('#draukhain-registre').evaluate((el) => el.hidden));
   const erreursApp = erreurs.filter((e) => !/Failed to load resource.*401/.test(e));
   verifier('Zéro erreur console applicative (401)', erreursApp.length === 0, erreursApp.slice(0, 3).join(' | '));
+  await page.close();
+}
+
+// ============ D. Le cartouche de Léo + ses MAINS sur le cap (boucle ④) ============
+// Prouve : le cartouche s'ouvre à l'entrée du quadrant (marqueur de session PAR
+// quadrant), il ne dit que des COMPTES (§5 : jamais un intitulé, jamais un
+// contenu), la zone « Parler à Léo » est branchée avec le Bearer, et la
+// proposition d'action de Léo n'écrit RIEN avant confirmation explicite de Paul.
+console.log('— D. draukhain.html : cartouche de Léo + mains sur IMLADRIK —');
+{
+  const { page, erreurs } = await nouvellePage();
+  // Fausse session SANS le marqueur : on veut le cartouche.
+  await page.addInitScript(`try {
+    window.localStorage.setItem('sb-${REF_SUPABASE}-auth-token', JSON.stringify({
+      access_token: 'jeton-de-test', token_type: 'bearer', expires_in: 3600,
+      expires_at: Math.floor(Date.now() / 1000) + 3600, refresh_token: 'r',
+      user: { id: '00000000-0000-4000-8000-000000000000', aud: 'authenticated', role: 'authenticated' }
+    }));
+  } catch (e) {}`);
+  await page.route(`**://${REF_SUPABASE}.supabase.co/**`, (route) =>
+    route.fulfill({ status: 503, contentType: 'application/json', body: '{}' }));
+  await page.route('**/api/serments**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE),
+  }));
+  await page.route('**/api/ideaux**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IDEAUX),
+  }));
+  await page.route('**/api/imladrik**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_PAGES),
+  }));
+
+  // La voix de Léo : une proposition d'outil, jamais exécutée par le serveur.
+  const appelsLeo = [];
+  await page.route('**/api/leo**', (route) => {
+    appelsLeo.push({ headers: route.request().headers(), corps: route.request().postData() });
+    return route.fulfill({
+      status: 200, contentType: 'application/json; charset=utf-8',
+      body: JSON.stringify({
+        ok: true,
+        data: {
+          reponse: 'Je te propose de raviver ce serment.',
+          proposition: {
+            outil: 'proposer_flamme',
+            args: { serment_ref: 'AURORE', texte: 'tenu bon', nature: 'victoire' },
+            reformulation: 'Raviver le serment « AURORE » d’une flamme (victoire) : « tenu bon »',
+          },
+        },
+      }),
+    });
+  });
+  // Toute écriture de flamme est comptée : elle ne doit partir QU'après confirmation.
+  const ecrituresFlamme = [];
+  await page.route('**/api/flammes**', (route) => {
+    ecrituresFlamme.push({ methode: route.request().method(), headers: route.request().headers() });
+    return route.fulfill({
+      status: 200, contentType: 'application/json; charset=utf-8',
+      body: JSON.stringify({ ok: true, data: { id: 'f-neuve' } }),
+    });
+  });
+
+  await page.goto(`${BASE}/draukhain.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForSelector('#leo-cartouche', { timeout: 20000 });
+
+  // 1. Le cartouche : comptes seulement, aucune donnée intime.
+  const cartouche = (await page.locator('#leo-cartouche').textContent()) || '';
+  verifier('Cartouche de Léo ouvert sur DRAUKHAIN', (await page.locator('#leo-cartouche').count()) === 1);
+  verifier('État en COMPTES (2 serments, 1 à raviver)',
+    /2 serments scellés/.test(cartouche) && /1 attend/.test(cartouche), cartouche.slice(0, 200));
+  verifier('§5 : aucun intitulé de serment dans le cartouche',
+    !/AURORE|ENCLUME/.test(cartouche));
+  verifier('§5 : aucun contenu de flamme dans le cartouche',
+    !/volonté au-delà du possible|tenu bon tout/.test(cartouche));
+  verifier('Zone « Parler à Léo » présente', (await page.locator('.leo-voix-champ').count()) === 1);
+
+  // 2. La dictée part vers /api/leo avec le Bearer et le bon quadrant.
+  await page.locator('.leo-voix-champ').fill('ravive AURORE : tenu bon');
+  await page.locator('.leo-voix-envoyer').click();
+  await page.waitForSelector('.leo-carte-action', { timeout: 20000 });
+  verifier('Un appel POST /api/leo', appelsLeo.length === 1, `${appelsLeo.length}`);
+  verifier('Bearer transmis à Léo',
+    (appelsLeo[0] || {}).headers.authorization === 'Bearer jeton-de-test');
+  verifier('Quadrant « imladrik » transmis', /"quadrant"\s*:\s*"imladrik"/.test((appelsLeo[0] || {}).corps || ''));
+
+  // 3. La carte de confirmation : le texte DÉTERMINISTE du serveur, et RIEN d'écrit.
+  const carte = (await page.locator('.leo-carte-action').textContent()) || '';
+  verifier('Carte de confirmation = reformulation serveur',
+    /Raviver le serment « AURORE » d’une flamme \(victoire\)/.test(carte), carte.slice(0, 160));
+  verifier('AUCUNE écriture avant confirmation', ecrituresFlamme.length === 0,
+    JSON.stringify(ecrituresFlamme));
+
+  // 4. Confirmation → l'écriture part, avec le Bearer, vers l'API existante.
+  await page.locator('.leo-carte-confirmer').click();
+  await page.waitForTimeout(300);
+  verifier('Après confirmation : une écriture de flamme', ecrituresFlamme.length === 1,
+    JSON.stringify(ecrituresFlamme));
+  verifier('Écriture en POST', (ecrituresFlamme[0] || {}).methode === 'POST');
+  verifier('Bearer transmis à l’écriture',
+    (ecrituresFlamme[0] || {}).headers.authorization === 'Bearer jeton-de-test');
+
+  verifier('Zéro erreur console (cartouche)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
+  await page.screenshot({ path: `${CAPTURES}/draukhain-leo-mains.png`, fullPage: true });
   await page.close();
 }
 

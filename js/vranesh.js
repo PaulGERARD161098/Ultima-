@@ -569,7 +569,57 @@
 
     rendreSituations();
     montrer('vranesh-registre');
+    accueillirLeo();
     return true;
+  }
+
+  // ---------- Léo sur VRANESH (boucle ④, 2026-07-30) ----------
+  // Miroir strict de DRAUKHAIN : le cartouche + les mains sur le cap. Paul
+  // dicte « ouvre la situation… » ou « si tel cas, il pourrait se passer… »,
+  // Léo propose, Paul confirme, l'écriture part vers /api/situations et
+  // /api/scenarios. Fail-closed sans module ni session ; §5 : comptes seuls.
+  function accueillirLeo() {
+    if (!window.UltimaLeo || !etat.session || !etat.session.access_token) { return; }
+    var total = etat.situations.length;
+    var aExplorer = etat.situations.filter(function (s) { return s && s.a_explorer === true; }).length;
+    var etatCarte = total === 0
+      ? 'Aucune situation ouverte pour l’instant.'
+      : (total === 1 ? '1 situation ouverte' : total + ' situations ouvertes')
+        + (aExplorer > 0
+          ? ' — ' + (aExplorer === 1 ? '1 reste' : aExplorer + ' restent') + ' à explorer.'
+          : ', toutes anticipées.');
+
+    var propositions = [];
+    if (aExplorer > 0) {
+      propositions.push({
+        message: 'Explore un futur possible : dicte-moi le déroulé, je te le propose.',
+        action: null
+      });
+    }
+    propositions.push({
+      message: 'Un cas donné à anticiper ? Dicte-le-moi, rien n’est ouvert sans ton accord.',
+      action: null
+    });
+
+    window.UltimaLeo.accueillirQuadrant({
+      quadrant: 'imladrik',
+      blason: 'epee',
+      salutation: 'Bienvenue, Paul. Voici les futurs que tu explores.',
+      sections: [
+        { titre: 'Où on en est', classe: 'leo-section-etat', lignes: [etatCarte] }
+      ],
+      propositions: propositions,
+      propositionsVide: 'Rien à explorer aujourd’hui — tes futurs sont cartographiés.',
+      voix: {
+        quadrant: 'imladrik',
+        jeton: etat.session.access_token,
+        candidats: {
+          situations: etat.situations.map(function (s) {
+            return { id: s.id, libelle: (s.intitule || '').trim() };
+          })
+        }
+      }
+    });
   }
 
   async function rafraichir() {
