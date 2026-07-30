@@ -1062,3 +1062,18 @@
   Bearer. Patrimoine COMPLET vert (**824**). **⏭ Reste** : Léo ne sait pas encore
   LIRE IMLADRIK en détail pour répondre « où j'en suis » (le cartouche donne les
   comptes) — marche suivante si Paul la veut.
+- **2026-07-30 (« go merge and go lecture Léo »)** — **PR #118 fusionnée** (les
+  mains + le micro), après **deux rebases** : `main` a bougé deux fois pendant
+  la boucle (LV3 L2 #115, puis L3 #117, session parallèle) — conflit à chaque
+  fois sur ce seul journal, résolu en gardant les deux entrées. Leçon confirmée :
+  quand une autre session pousse vite, **rebaser puis fusionner sans délai**.
+  Puis **boucle « lecture » livrée** : les **yeux de Léo**. Le front joint à
+  chaque question un **état borné** du cap (comptes + intitulés), calculé sur
+  les données déjà chargées ; le serveur le valide **fail-closed**
+  (`validerEtatQuadrant`, bornes dures, rejet total sur surnuméraire) et le rend
+  en bloc système déterministe (`decrireEtat`) **hors cache**, pour ne pas
+  invalider le préfixe stable. **§5 tenue et prouvée au harnais** : ni texte de
+  flamme, ni déroulé de scénario, ni pourquoi/horizon, ni identifiant ne quitte
+  la page ; MINETHNIR au régime le plus strict (comptes + date de la dernière
+  page, jamais un titre). Consigne anti-invention dans le prompt : « ce qui n'y
+  figure pas, tu ne le sais pas ». Patrimoine COMPLET vert (**866**).
