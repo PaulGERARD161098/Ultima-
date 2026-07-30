@@ -1116,3 +1116,15 @@
   fail-closed de `smoke-quadrants` visent `registre.html` et passent **sans qu'une
   seule assertion change**. Patrimoine COMPLET vert. **Lv3 est complet** : tous
   les nœuds de l'arbre sont rendus par le noyau unique.
+- **2026-07-30 (fin du fil Lv3 — trois boucles posées pour la suite)** — Paul :
+  « implante-toi ces pistes pour la prochaine session ». Consignées **en tête de
+  l'ÉTAT de `CADRAGE-ULTIMA.md`** (le fichier lu au protocole de DÉBUT de
+  session), donc reprises sans re-scan ni re-décision : **①** brancher les *yeux
+  de Léo* sur les autres quadrants (RIVEN d'abord — la forme `{ compteurs,
+  listes }` de #120 est générique, il ne reste qu'un branchement page par page ;
+  meilleur rapport valeur/effort en réserve) ; **②** NICOL BOLAS — construire
+  REVENUS & CHARGES pour faire entrer la donnée financière **réelle** (ce qui
+  manque n'est pas le code mais un **cadrage dicté par Paul** ; gate migration) ;
+  **③** RIVEN en boussole, dès qu'un **deuxième cap** est choisi (choix produit de
+  Paul : l'arbre des relations, les chantiers, ou les secteurs). Ordre recommandé
+  ①→②→③. Aucune n'engage l'auth ; seule ② demande une migration.
