@@ -330,3 +330,25 @@
   contrainte de table) — 0008 le fait déjà. Bon réflexe tenu : appliquer PUIS
   vérifier (l'erreur a été vue et corrigée, rien de partiel appliqué grâce à la
   transaction).
+
+- 2026-07-30 (cheminement + mains + yeux de Léo) — une friction **nouvelle**,
+  deux motifs **confirmés** :
+  ① **NOUVEAU — deux sessions en parallèle sur le même repo.** `main` a bougé
+  **quatre fois** pendant la session (LV3 L1/L2/L3 + peuplement RESHIRAM,
+  session parallèle). Chaque fusion a exigé un rebase, et le conflit tombait
+  **toujours au même endroit** : `memoire/JOURNAL-DECISIONS.md`, où les deux
+  sessions écrivent le même jour, en fin de fichier. Résolution invariable :
+  garder les DEUX entrées. → Leçon actée en charte : quand un autre fil pousse,
+  **rebaser puis fusionner sans délai** (une PR qui dort se refait doubler), et
+  traiter un conflit du journal comme une **concaténation**, jamais un arbitrage.
+  ② **Confirmé — réutiliser plutôt que réécrire paie.** Le micro n'a pas été
+  redéveloppé : le composant a été **extrait** de `js/app.js` vers
+  `js/dictee.js`. Preuve que l'extraction était saine : `smoke-dictee` (le
+  harnais le plus fin du repo) est passé **sans une seule retouche**. Réflexe à
+  garder : une extraction couverte par un harnais dédié est peu risquée — c'est
+  l'absence de harnais qui rend un refactor dangereux, pas le refactor.
+  ③ **Confirmé — la règle « §5 comptes seuls » se teste par l'ABSENCE.** Les
+  harnais ne vérifient pas seulement ce qui part vers Léo, ils cherchent les
+  contenus intimes et les identifiants dans le corps envoyé et exigent de ne
+  **pas** les trouver. Motif à reproduire pour toute donnée sensible.
+

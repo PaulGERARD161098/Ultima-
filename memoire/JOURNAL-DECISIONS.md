@@ -1077,3 +1077,19 @@
   la page ; MINETHNIR au régime le plus strict (comptes + date de la dernière
   page, jamais un titre). Consigne anti-invention dans le prompt : « ce qui n'y
   figure pas, tu ne le sais pas ». Patrimoine COMPLET vert (**866**).
+- **2026-07-30 (clôture de session — « boucler toutes les boucles du jour »)** :
+  **#120 fusionnée** (les yeux). Bilan du fil : **3 boucles ouvertes, 3 fermées
+  et fusionnées** (#114 la voie jalonnée, #118 les mains + le micro, #120 les
+  yeux), patrimoine **779 → 866** assertions, **zéro migration**, zéro touche à
+  l'auth/middleware/RLS, zéro travail non poussé. Charte enrichie de 3 règles
+  permanentes tirées du jour : ① sessions parallèles → rebaser puis fusionner
+  sans délai, conflit du journal = concaténation ; ② extraire plutôt que
+  dupliquer quand un harnais couvre (critère : le harnais passe **sans
+  retouche**) ; ③ une règle de confidentialité se teste **par l'absence**.
+  Lexique enrichi (voie jalonnée, bornes, mains/yeux de Léo, « le cheminement »).
+  **⏭ Reporté, prêt à brancher** : les yeux sur RIVEN / ADRAMELECH / NICOL BOLAS
+  (forme générique déjà en place). **Signalé, non traité** : le hook de fin a
+  pointé `722b2e2` comme « unverified » — c'est le commit de **squash-merge créé
+  par GitHub** (auteur : Paul, committer : GitHub), présent sur `main` comme les
+  12 précédents ; l'amender réécrirait `main` → **écarté sciemment**, la
+  configuration locale (`Claude <noreply@anthropic.com>`) étant déjà correcte.

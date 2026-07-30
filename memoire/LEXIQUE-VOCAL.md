@@ -57,3 +57,17 @@ reformuler et demander — jamais deviner avant une action irréversible.
 - **TAO** (« tao », « taux », « t.a.o. ») = le cap boussole qui réunit RESHIRAM
   (le réel) et ZEKROM (l'idéal) et s'ouvre en arborescence sur les deux
   (décision Paul 2026-07-29). Page `tao.html`.
+
+- **La voie jalonnée** (« la voix jalonnée », « la voie jalonée ») = la forme A
+  d'affichage d'un projet en cours, décidée par Paul le 2026-07-30 : une route
+  gravée avec ses **bornes** (départ, jalons franchis, « tu es ici », horizon),
+  la route **sortant de la carte** — jamais de ligne d'arrivée. Vocabulaire CSS
+  neutre `voie-*`/`borne-*` (`css/voie.css`), v1 sur DRAUKHAIN.
+- **Les mains de Léo** = ses outils d'écriture (elle propose, Paul confirme,
+  l'app écrit). **Les yeux de Léo** = l'état borné du quadrant qu'elle reçoit
+  pour répondre « où j'en suis » (comptes + intitulés, jamais de contenu).
+  Termes actés 2026-07-30 ; à réutiliser tels quels dans les cadrages.
+- **« Le cheminement »** (contexte IMLADRIK) = montrer une progression, un
+  avancement — « aller de l'avant, progresser, devenir meilleur » (dicté Paul
+  2026-07-30). C'est le besoin, la voie jalonnée en est la réponse.
+
