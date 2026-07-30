@@ -226,12 +226,37 @@ n'ont pas à bouger (les nouvelles pages sont des coques muettes).
 
 | # | Boucle | Contenu | Risque |
 | --- | --- | --- | --- |
-| **L1** | Le noyau | `boussole-noyau.js` + `registre-lv3.js`, `imladrik.html` rebranché dessus (iso-rendu prouvé par `smoke-imladrik-carto` intact) | faible |
+| **L1 ✅** | Le noyau | **LIVRÉ 2026-07-30** — voir §6bis | faible |
 | **L2** | Les deux supra-divisions | racine à 2 caps + `alpha.html` + `ultima.html` en boussole à 5 caps ; retours repointés | moyen (tous les liens d'entrée) |
 | **L3** | TAO en boussole | remplace l'arborescence ; passerelle rétroplanning | faible |
 | **L4** | Les deux antichambres | NICOL BOLAS + ADRAMELECH en boussoles (caps §4.5, après validation) | faible |
 
 Chaque boucle : livrée → patrimoine COMPLET vert → commit → PR → annotation.
+
+### 6bis. ✅ L1 — le noyau (livré le 2026-07-30, go Paul « oui pour tout, go L1 »)
+
+Trois modules ES purs, plus une coque rebranchée :
+
+| Fichier | Rôle |
+| --- | --- |
+| `js/blasons.mjs` | **Catalogue des gravures** : tous les blasons de cap + les cœurs (médaillons). Aucune page ne porte plus de SVG de cap. |
+| `js/registre-lv3.mjs` | **L'arbre en données** + les fonctions pures `parentDe`, `chemin`, `estBoussole`, `capsDe`, `verifierRegistre`. Le parent est **déduit** des `enfants` → aucune désynchronisation possible. |
+| `js/boussole-noyau.mjs` | **Le moteur unique** : géométrie, aiguilles, passerelles, cœur + légende, caps, parole de Léo, cockpit. Rend n'importe quel nœud ; une page ne déclare que `<body data-noeud="…">`. |
+| `imladrik.html` | Rebranché sur le noyau ; `js/imladrik-carto.js` **supprimé**. |
+| `css/boussole.css` | Ajout de la classe générique `.boussole-legende` (la légende gravée devient un élément du patron, plus une exception d'IMLADRIK). |
+
+**Iso-rendu prouvé** : `tests/smoke-imladrik-carto.mjs` n'a **pas été modifié**
+et reste vert (29 verdicts — 3 caps, cœur, légende « Kalamn-talaen », parole au
+survol, contrastes AA, zéro requête externe, zéro erreur console, registre
+exposé). Patrimoine **COMPLET** vert. Nouveau : `tests/unit-registre-lv3.mjs`
+(27 verdicts — cohérence de l'arbre, règle nœud/feuille, structure dictée par
+Paul, géométrie de la rose, et le cockpit qui ne rend **que des entiers** et se
+tait quand il n'y a rien à traiter).
+
+Effet de bord voulu : le registre décrit **tout l'arbre** dès maintenant, donc
+L2/L3/L4 ne sont plus que du **câblage de coques** — aucune logique à réécrire.
+Tant que L2 n'est pas livrée, `js/boussole.js` continue de servir l'accueil LV2 ;
+il disparaîtra à ce moment-là.
 
 ---
 
