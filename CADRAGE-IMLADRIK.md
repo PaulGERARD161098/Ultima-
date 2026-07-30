@@ -270,3 +270,37 @@ comblé : `OUTILS_PAR_QUADRANT.imladrik` n'est plus vide.
 - **⏭ Reste ouvert** : Léo ne sait pas encore *lire* IMLADRIK pour répondre
   « où j'en suis » en détail (le cartouche donne les comptes, pas plus) — c'est
   la marche suivante si Paul la veut.
+
+## 11. Les YEUX de Léo — répondre « où j'en suis » (livré 2026-07-30)
+
+Boucle enchaînée sur go Paul (« go lecture Léo »), en réponse au reste ouvert
+du §10 : Léo savait **écrire** dans IMLADRIK, pas le **lire**.
+
+- **Le front calcule, le serveur valide.** Chaque page du quadrant joint à la
+  question un **état borné** (`voix.etat`), calculé sur les données **déjà
+  chargées** — aucun second fetch, aucune requête supplémentaire.
+- **Forme unique et générique** (réutilisable par les autres quadrants) :
+  `{ compteurs: { 'libellé': nombre }, listes: { 'libellé': [ { libelle, marque? } ] } }`.
+  Bornes dures : 12 compteurs, 4 listes, 40 entrées par liste, 200 caractères
+  par intitulé, entiers 0..99999. `validerEtatQuadrant` est **fail-closed** :
+  une clé surnuméraire, un type inattendu, une borne dépassée → **rejet de
+  l'ensemble**, jamais un rattrapage silencieux (même règle que les mains).
+- **Règle de minimisation (§5), explicite** : des **comptes** et des
+  **intitulés** — ceux que Paul nomme lui-même quand il dicte — et **rien
+  d'autre**. Jamais le texte d'une flamme, le déroulé d'un scénario, le
+  `pourquoi`/`horizon` d'un serment, ni **aucun identifiant**. MINETHNIR est au
+  régime le plus strict : **comptes + la date de la dernière page**, jamais un
+  titre (un titre de page de journal est déjà de l'intime).
+- **Le prompt reste honnête** : le bloc d'état se termine par une consigne
+  déterministe — « ce qui n'y figure pas, tu ne le sais pas ; tu n'as pas le
+  contenu des pages, des flammes ni des scénarios : ne fais jamais semblant de
+  les avoir lus ».
+- **Coût** : l'état voyage dans un **second bloc système, hors cache**, pour ne
+  pas invalider le préfixe stable (le cache du prompt par quadrant est préservé).
+- **Compatibilité** : `etat` absent → l'appel repart **exactement** comme avant
+  (RIVEN, ADRAMELECH, NICOL BOLAS inchangés).
+- Harnais : `unit-leo-voix` (+6 verdicts : absence, nominal, fail-closed,
+  bornes, rendu déterministe, système stable sans donnée) et `smoke-draukhain`
+  §D (+6 : état transmis, comptes réels, intitulés marqués, **aucun texte de
+  flamme**, **aucun identifiant**, ni pourquoi ni horizon). Patrimoine COMPLET
+  vert (**866**).

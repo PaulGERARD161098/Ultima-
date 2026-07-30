@@ -55,6 +55,15 @@
   (micro → /api/leo → carte de confirmation → aucune écriture → confirmation →
   POST avec Bearer). **Patrimoine COMPLET vert (824)**. Détail :
   `CADRAGE-IMLADRIK.md §9-§10`.
+  **✅ Boucle « lecture » enchaînée (go Paul « go lecture Léo ») — LES YEUX** :
+  chaque page d'IMLADRIK joint à la question un **état borné** (comptes +
+  intitulés) calculé sur les données déjà chargées ; `validerEtatQuadrant` le
+  vérifie **fail-closed** côté serveur et `decrireEtat` le rend en bloc système
+  déterministe, **hors cache** (le préfixe stable reste cacheable). §5 tenue :
+  jamais un texte de flamme, un déroulé de scénario, un pourquoi/horizon ni un
+  identifiant ; MINETHNIR au régime le plus strict (comptes + date de la
+  dernière page). `etat` absent → appel inchangé (les autres quadrants ne
+  bougent pas). **Patrimoine COMPLET vert (866)**. Détail : `§11`.
 
 - 🗄️ **Le cheminement — la maquette d'origine (dicté 2026-07-30)** :
   constat de Paul — les **gros pavés-quadrants ne sont pas gracieux** pour dire

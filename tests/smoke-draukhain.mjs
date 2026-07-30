@@ -588,6 +588,28 @@ console.log('— D. draukhain.html : cartouche de Léo + mains sur IMLADRIK —'
     (appelsLeo[0] || {}).headers.authorization === 'Bearer jeton-de-test');
   verifier('Quadrant « imladrik » transmis', /"quadrant"\s*:\s*"imladrik"/.test((appelsLeo[0] || {}).corps || ''));
 
+  // 2bis. Les YEUX de Léo : l'état du cap part avec la question — des comptes
+  // et des intitulés, JAMAIS un contenu ni un identifiant (§5).
+  const envoi = JSON.parse((appelsLeo[0] || {}).corps || '{}');
+  verifier('État du cap transmis à Léo', Boolean(envoi.etat));
+  verifier('État : les comptes réels (2 serments, 1 à raviver, 3 flammes)',
+    envoi.etat && envoi.etat.compteurs['serments scellés'] === 2 &&
+    envoi.etat.compteurs['serments à raviver'] === 1 &&
+    envoi.etat.compteurs['flammes vivantes'] === 3,
+    JSON.stringify(envoi.etat && envoi.etat.compteurs));
+  const listeEtat = (envoi.etat && envoi.etat.listes &&
+    envoi.etat.listes['Les serments de Paul (cap DRAUKHAIN)']) || [];
+  verifier('État : les intitulés des serments, avec leur marque',
+    listeEtat.length === 2 && listeEtat[0].libelle === 'AURORE' &&
+    listeEtat[1].libelle === 'ENCLUME' && listeEtat[1].marque === 'à raviver',
+    JSON.stringify(listeEtat));
+  const brutEnvoi = (appelsLeo[0] || {}).corps || '';
+  verifier('§5 : AUCUN texte de flamme envoyé à Léo',
+    !/volonté au-delà du possible|tenu bon tout l’hiver|ne pas perdre la foi/.test(brutEnvoi));
+  verifier('§5 : AUCUN identifiant envoyé à Léo', !/"s1"|"s2"|"f1"|"f2"|"f3"/.test(brutEnvoi));
+  verifier('§5 : ni pourquoi ni horizon envoyés à Léo',
+    !/tenir la parole donnée|chaque matin/.test(brutEnvoi));
+
   // 3. La carte de confirmation : le texte DÉTERMINISTE du serveur, et RIEN d'écrit.
   const carte = (await page.locator('.leo-carte-action').textContent()) || '';
   verifier('Carte de confirmation = reformulation serveur',

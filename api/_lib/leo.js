@@ -10,6 +10,20 @@ export const LEO_MODELE = 'claude-opus-4-8';
 export const MAX_MESSAGES = 30; // tours cumulés user+assistant
 export const MAX_MESSAGE_CHARS = 4000; // un tour dicté reste court
 export const MAX_TOTAL_CHARS = 24000; // plafond global de l'historique
+
+// ---------- Les YEUX de Léo (boucle « lecture », 2026-07-30) ----------
+// Pour répondre « où j'en suis ? », Léo a besoin de l'état du quadrant. Le
+// FRONT le calcule (données déjà chargées par la page, aucun second fetch) et
+// l'envoie sous une forme STRICTEMENT bornée. Règle de minimisation, miroir de
+// celle des mains : des COMPTES et des INTITULÉS — ceux que Paul nomme lui-même
+// quand il dicte —, JAMAIS un contenu (page de journal, texte de flamme,
+// déroulé de scénario) et JAMAIS un identifiant.
+export const MAX_ETAT_COMPTEURS = 12;   // clés de comptage par quadrant
+export const MAX_ETAT_LISTES = 4;       // listes d'intitulés par quadrant
+export const MAX_ETAT_ENTREES = 40;     // intitulés par liste
+export const MAX_ETAT_LIBELLE = 200;    // = borne `intitule` des APIs
+export const MAX_ETAT_CLE = 60;         // longueur d'un libellé de compteur
+const ETAT_CLE_MOTIF = /^[\wÀ-ÿ' ’()–-]{1,60}$/;
 export const MAX_TOKENS_REPONSE = 1024; // réponses de majordome, pas d'essais
 
 // Les 4 quadrants et leur registre (CADRAGE-LEO-SITE §1 : opérationnel sur
@@ -336,6 +350,99 @@ export function extraireProposition(contenu) {
 // est inconnu (fail-closed côté route). `avecOutils` (L2b) : sur les
 // quadrants au catalogue non vide, la règle « pas encore AGIR » cède la
 // place aux règles de proposition d'action ; ailleurs, règle L2 inchangée.
+// Valide l'état de quadrant envoyé par le front (PURE, fail-closed : tout ce
+// qui sort de la forme attendue fait rejeter l'ENSEMBLE — on ne rattrape rien
+// en silence, exactement comme pour les propositions d'outil).
+// Forme : { compteurs: { 'libellé': nombre }, listes: { 'libellé': [ { libelle, marque? } ] } }
+// → { ok: true, etat } | { ok: false }
+export function validerEtatQuadrant(brut) {
+  if (brut === undefined || brut === null) return { ok: true, etat: null };
+  if (typeof brut !== 'object' || Array.isArray(brut)) return { ok: false };
+
+  const permis = ['compteurs', 'listes'];
+  for (const cle of Object.keys(brut)) {
+    if (!permis.includes(cle)) return { ok: false }; // surnuméraire → rejet total
+  }
+
+  const etat = { compteurs: {}, listes: {} };
+
+  const compteurs = brut.compteurs;
+  if (compteurs !== undefined) {
+    if (!compteurs || typeof compteurs !== 'object' || Array.isArray(compteurs)) return { ok: false };
+    const cles = Object.keys(compteurs);
+    if (cles.length > MAX_ETAT_COMPTEURS) return { ok: false };
+    for (const cle of cles) {
+      if (!ETAT_CLE_MOTIF.test(cle)) return { ok: false };
+      const valeur = compteurs[cle];
+      if (typeof valeur !== 'number' || !Number.isInteger(valeur) ||
+          valeur < 0 || valeur > 99999) return { ok: false };
+      etat.compteurs[cle] = valeur;
+    }
+  }
+
+  const listes = brut.listes;
+  if (listes !== undefined) {
+    if (!listes || typeof listes !== 'object' || Array.isArray(listes)) return { ok: false };
+    const cles = Object.keys(listes);
+    if (cles.length > MAX_ETAT_LISTES) return { ok: false };
+    for (const cle of cles) {
+      if (!ETAT_CLE_MOTIF.test(cle)) return { ok: false };
+      const brute = listes[cle];
+      if (!Array.isArray(brute) || brute.length > MAX_ETAT_ENTREES) return { ok: false };
+      const propre = [];
+      for (const entree of brute) {
+        if (!entree || typeof entree !== 'object' || Array.isArray(entree)) return { ok: false };
+        for (const k of Object.keys(entree)) {
+          if (k !== 'libelle' && k !== 'marque') return { ok: false };
+        }
+        if (typeof entree.libelle !== 'string') return { ok: false };
+        const libelle = entree.libelle.trim();
+        if (!libelle || libelle.length > MAX_ETAT_LIBELLE) return { ok: false };
+        const item = { libelle };
+        if (entree.marque !== undefined) {
+          if (typeof entree.marque !== 'string') return { ok: false };
+          const marque = entree.marque.trim();
+          if (!marque || marque.length > MAX_ETAT_CLE) return { ok: false };
+          item.marque = marque;
+        }
+        propre.push(item);
+      }
+      etat.listes[cle] = propre;
+    }
+  }
+
+  if (Object.keys(etat.compteurs).length === 0 &&
+      Object.keys(etat.listes).length === 0) return { ok: true, etat: null };
+  return { ok: true, etat };
+}
+
+// Rend l'état validé en un bloc système DÉTERMINISTE (PURE). Renvoie ''
+// quand il n'y a rien à dire — l'appel repart alors exactement comme avant.
+export function decrireEtat(etat) {
+  if (!etat) return '';
+  const lignes = [];
+  const compteurs = Object.keys(etat.compteurs || {});
+  if (compteurs.length > 0) {
+    lignes.push(...compteurs.map((cle) => '- ' + cle + ' : ' + etat.compteurs[cle]));
+  }
+  for (const cle of Object.keys(etat.listes || {})) {
+    const items = etat.listes[cle];
+    if (!items.length) continue;
+    lignes.push('- ' + cle + ' : ' + items
+      .map((i) => '« ' + i.libelle + ' »' + (i.marque ? ' (' + i.marque + ')' : ''))
+      .join(' ; '));
+  }
+  if (lignes.length === 0) return '';
+  return [
+    "État RÉEL du quadrant à cet instant (déjà chargé par la page de Paul) :",
+    ...lignes,
+    "Sers-toi de cet état pour répondre « où j'en suis ». Tu ne l'enrichis " +
+      "JAMAIS : ce qui n'y figure pas, tu ne le sais pas — dis-le simplement. " +
+      "Tu n'as PAS le contenu des pages, des flammes ni des scénarios : ne fais " +
+      'jamais semblant de les avoir lus.'
+  ].join('\n');
+}
+
 export function construireSysteme(quadrant, avecOutils) {
   const q = QUADRANTS[quadrant];
   if (!q) return null;

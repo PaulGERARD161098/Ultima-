@@ -1,13 +1,16 @@
 // POST /api/leo — la voix de Léo (boucle L2) : conversation du cartouche.
-// Corps : { quadrant, messages: [{ role: 'user'|'assistant', content }] }.
+// Corps : { quadrant, messages: [{ role: 'user'|'assistant', content }],
+//           etat? } — `etat` (les yeux de Léo) = comptes et intitulés bornés,
+// calculés par le front sur les données déjà chargées ; jamais de contenu.
 // Réponse : { ok: true, data: { reponse } }.
 //
 // Sécurité (CADRAGE-LEO-SITE §3) :
 //  - requireUser fail-closed : pas de session valide → 401, jamais de dégradé.
 //  - Clé API Claude en env Vercel UNIQUEMENT (ANTHROPIC_API_KEY) ; absente →
 //    503 explicite « voix non branchée » (la gate coût reste à Paul).
-//  - Minimisation : seul l'historique du cartouche part vers l'IA — jamais de
-//    dump de données ; le prompt système ne contient aucune donnée personnelle.
+//  - Minimisation : l'historique du cartouche et, si le front l'envoie, l'ÉTAT
+//    borné du quadrant (comptes + intitulés, validés ici) — jamais de dump, ni
+//    d'identifiant, ni le contenu d'une page, d'une flamme ou d'un scénario.
 //  - Timeout sortant borné, une seule relance ; erreurs génériques client,
 //    détail (statut/nom d'erreur seulement, jamais le contenu) en logs serveur.
 //  - Plafond de coût par appel : MAX_TOKENS_REPONSE + bornes d'historique.
@@ -25,7 +28,9 @@ import {
   outilsPour,
   extraireProposition,
   validerProposition,
-  reformulerProposition
+  reformulerProposition,
+  validerEtatQuadrant,
+  decrireEtat
 } from './_lib/leo.js';
 
 const TIMEOUT_MS = 30_000; // appel IA sortant borné (au-dessus : 502 générique)
@@ -59,13 +64,25 @@ export default async function handler(req, res) {
   const conversation = validerConversation(corps.messages);
   if (!conversation.ok) return fail(res, 400, 'Conversation invalide');
 
+  // Les yeux de Léo : l'état du quadrant, calculé et borné par le front.
+  // Fail-closed : une forme inattendue fait échouer l'appel, jamais un
+  // rattrapage silencieux. Absent → l'appel repart exactement comme avant.
+  const verdictEtat = validerEtatQuadrant(corps.etat);
+  if (!verdictEtat.ok) return fail(res, 400, 'État de quadrant invalide');
+  const texteEtat = decrireEtat(verdictEtat.etat);
+
   const client = new Anthropic({ apiKey: cle, timeout: TIMEOUT_MS, maxRetries: 1 });
   try {
     const reponse = await client.messages.create({
       model: process.env.LEO_MODELE || LEO_MODELE,
       max_tokens: MAX_TOKENS_REPONSE,
       // Le système est stable par quadrant : cacheable (≈ -90 % sur le préfixe).
-      system: [{ type: 'text', text: systeme, cache_control: { type: 'ephemeral' } }],
+      // L'état, lui, change à chaque tour : second bloc, HORS cache, pour ne
+      // pas invalider le préfixe stable.
+      system: [
+        { type: 'text', text: systeme, cache_control: { type: 'ephemeral' } },
+        ...(texteEtat ? [{ type: 'text', text: texteEtat }] : [])
+      ],
       // Spread conditionnel : pas de champ tools quand le catalogue est vide.
       ...(outils ? { tools: outils } : {}),
       messages: conversation.messages

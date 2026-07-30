@@ -617,6 +617,25 @@
           situations: etat.situations.map(function (s) {
             return { id: s.id, libelle: (s.intitule || '').trim() };
           })
+        },
+        // Les yeux de Léo : comptes + intitulés des situations — jamais le
+        // déroulé d'un scénario, jamais un identifiant.
+        etat: {
+          compteurs: {
+            'situations ouvertes': total,
+            'situations à explorer': aExplorer,
+            'futurs écrits': etat.scenarios.length
+          },
+          listes: {
+            'Les situations de Paul (cap VRANESH)': etat.situations
+              .slice(0, 40)
+              .map(function (s) {
+                var item = { libelle: (s.intitule || '').trim() };
+                item.marque = (s.a_explorer === true) ? 'à explorer' : 'anticipée';
+                return item;
+              })
+              .filter(function (i) { return Boolean(i.libelle); })
+          }
         }
       }
     });
