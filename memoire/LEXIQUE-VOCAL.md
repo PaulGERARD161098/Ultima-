@@ -25,7 +25,7 @@
 | la vanvaille | l'avant-veille |
 | la pause (contexte chantier) | la pose |
 | on stocke à moi | mon stock à moi |
-| Humladric, Imladric, Imladrik, Emadryx | IMLADRIK (quadrant dév. perso) |
+| Humladric, Imladric, Imladrik, Emadryx, Yamaladric | IMLADRIK (quadrant dév. perso) |
 | Adram Erech, Adram Alège, un drame à neige, Adram Elech | ADRAMELECH (variantes supplémentaires) |
 | jaris de Ironman, Jaris | Jarvis (l'assistant d'Iron Man — modèle d'état d'esprit de Léo-au-site) |
 | l'agence (contexte agent) | l'agent (Léo) |
@@ -46,12 +46,19 @@
 | Janus | JANUS (ADR-008 — le pont générationnel ; dieu aux deux visages) |
 | Anselme | partenaire confirmé du pont générationnel JANUS (2026-07-22) |
 | Abaque | ABAQUE (simulateur de lancement d'entreprise, quadrant NICOL BOLAS ; confirmé Paul 2026-07-22) |
-| Minethnir, Minet nir, Minesnir | MINETHNIR (cap IMLADRIK : le journal intime — renommage dicté 2026-07-24) |
-| Vranesh, Vranèche, Vranaiche | VRANESH (cap IMLADRIK : les différents futurs potentiels — anticiper) |
+| Minethnir, Minet nir, Minesnir, Minette-Nea | MINETHNIR (cap IMLADRIK : le journal intime — renommage dicté 2026-07-24) |
+| Vranesh, Vranèche, Vranaiche, Ramesh, vraie neige, Vranesh de vraie neige, votre ranache | VRANESH (cap IMLADRIK : les différents futurs potentiels — anticiper) |
 | Draukhain, Drokhain, Drau Kain, Drôle de Kain | DRAUKHAIN (cap IMLADRIK : la volonté au-delà du possible — objectifs, foi) |
 | Kalamn-talaen, Kalamntalaen, Calamne Talaën, Kalam Talent, Kalemn Talaen | KALAMN-TALAEN (le **nom gravé de la boussole centrale** épée+dragon d'IMLADRIK — un emblème, **pas un agent** ; corrigé Paul 2026-07-25 : l'agent unique reste **Léo**. Les mots restent sur la boussole) |
 | i comme moi-même, y comme moi | YCOME (cap professionnel d'ALPHA) |
 | cent dix neuf (et autres nombres dictés) | le numéro de la PR (#119) |
+| Liandra | LIANDRA (situation VRANESH dictée 2026-07-31 : la relation amour ↔ devoir — nom choisi par Paul, cohérent avec la nomenclature des caps d'IMLADRIK) |
+| Madrid (contexte cadran) | [sous-]cadran (déformation observée 2026-07-31 : « il y a un sous-cadran ») |
+| walking on leg | on marche sur des œufs (interprétation retenue 2026-07-31, contexte relation fragile) |
+| FINUBAR → THORIOL | THORIOL (situation VRANESH créée 2026-07-31 : « mes premiers pas dans l'entrepreneuriat » — nommée FINUBAR puis renommée THORIOL sur instruction de Paul) |
+| entreprises innocentes | entreprises naissantes (contexte entrepreneuriat 2026-07-31) |
+| Dans patrice (contexte entreprise) | l'entrepreneuriat (déformation observée 2026-07-31) |
+| exploser la gueule (contexte entreprise) | se casser la figure (échec possible d'une entreprise naissante) |
 
 Règle : en cas de doute sur un mot qui change le sens d'une instruction,
 reformuler et demander — jamais deviner avant une action irréversible.
