@@ -300,15 +300,21 @@
 
   // L'état borné de RIVEN — ce que Léo « voit » pour répondre « où j'en suis ».
   //
-  // RÈGLE DE CONFIDENTIALITÉ, PLUS STRICTE QUE SUR IMLADRIK ET ASSUMÉE ICI :
-  // le réseau commercial est de la PII, et surtout la PII de TIERS — des
-  // artisans, des partenaires, des clients qui n'ont rien demandé. Là où
-  // DRAUKHAIN/VRANESH envoient les intitulés de Paul (ses propres objectifs),
-  // RIVEN n'envoie **AUCUN NOM** : uniquement des COMPTES, plus la liste des
-  // SECTEURS D'ACTIVITÉ, qui sont des métiers et non des personnes.
-  // Conséquence acceptée : Léo peut dire « 3 relances dues », jamais
-  // « relance Godefroy ». Pour agir sur une cible nommée, Paul la dicte et la
-  // résolution se fait EN LOCAL (`candidats`, jamais envoyés à l'IA).
+  // ARBITRAGE DE PAUL (2026-08-01) : « je valide les noms dans l'IA, mais bien
+  // protégés. » Les NOMS partent donc — c'est ce qui permet à Léo d'être utile
+  // (« relance Untel » plutôt que « 3 relances dues »). « Bien protégés » se
+  // traduit en règles dures, tenues ici et prouvées PAR L'ABSENCE au harnais :
+  //   ① UN NOM, RIEN D'AUTRE. Jamais de téléphone, d'e-mail, d'adresse, de
+  //      coordonnées géographiques — ce sont elles qui permettent de JOINDRE
+  //      un tiers, pas son nom.
+  //   ② JAMAIS DE CONTENU. Aucune note de fiche, aucune note de journal,
+  //      aucune prochaine étape : ce que Paul écrit SUR quelqu'un ne sort pas.
+  //   ③ JAMAIS D'IDENTIFIANT. Les id restent locaux (règle permanente : le
+  //      réseau EST de la PII, IDs uniquement en log — ici, même pas eux).
+  //   ④ BORNÉ. 40 entrées par liste au plus (borne serveur), donc jamais un
+  //      export du carnet d'adresses.
+  //   ⑤ La marque qui accompagne un nom est une CATÉGORIE (type, échéance),
+  //      jamais une appréciation ni un chiffre d'affaires.
   function etatRiven() {
     return construireEtatRiven(
       etat.noeuds || [],
@@ -321,17 +327,69 @@
 
   // La construction proprement dite : PURE (aucun accès au DOM ni à l'état
   // global) → exercée directement par le harnais, qui cherche dans son résultat
-  // les noms interdits et exige de NE PAS les y trouver.
+  // les coordonnées, les notes et les identifiants, et exige de NE PAS les y
+  // trouver.
   function construireEtatRiven(noeuds, relations, journal, alertes, aujourdHui) {
-
     function compter(liste, predicat) { return liste.filter(predicat).length; }
+
+    // Un nom, borné, rien d'autre. Le point de passage OBLIGÉ de toute donnée
+    // nominative vers l'IA : si un jour un champ s'ajoute à une fiche, il ne
+    // peut pas sortir par ici sans qu'on le décide.
+    function nomSeul(noeud) {
+      return (noeud && noeud.nom ? String(noeud.nom) : '').trim().slice(0, 200);
+    }
+    function parId(liste) {
+      var index = {};
+      liste.forEach(function (n) { if (n && n.id) { index[n.id] = n; } });
+      return index;
+    }
+    var noeudParId = parId(noeuds);
 
     var dues = journal.filter(function (j) {
       return j && j.relance_at && j.relance_at <= aujourdHui && !j.relance_faite;
     });
 
-    // Les secteurs : un métier, pas une personne. Triés par poids décroissant,
-    // bornés à 40 entrées (MAX_ETAT_ENTREES côté serveur).
+    var listes = {};
+
+    // ① Les contacts : le nom + sa catégorie. Les plus « vivants » d'abord
+    // (leads et relations en cours passent avant les chantiers terminés), pour
+    // que la troncature à 40 coupe le moins utile.
+    var RANG = { lead: 0, artisan: 1, partenaire: 2, chantier: 3 };
+    var contacts = noeuds
+      .filter(function (n) { return nomSeul(n); })
+      .slice()
+      .sort(function (a, b) {
+        var ra = RANG[a.type] === undefined ? 9 : RANG[a.type];
+        var rb = RANG[b.type] === undefined ? 9 : RANG[b.type];
+        if (ra !== rb) { return ra - rb; }
+        return nomSeul(a).localeCompare(nomSeul(b), 'fr');
+      })
+      .slice(0, 40)
+      .map(function (n) {
+        var item = { libelle: nomSeul(n) };
+        var type = (n.type ? String(n.type) : '').trim();
+        if (type) { item.marque = type; }
+        return item;
+      });
+    if (contacts.length > 0) { listes['Les contacts du réseau'] = contacts; }
+
+    // ② Les relances dues, nommées : c'est ce qui rend Léo utile. Le NOM du
+    // contact et l'échéance — jamais la note ni la prochaine étape écrite.
+    var relances = dues
+      .map(function (j) {
+        var cible = j.node_id ? noeudParId[j.node_id] : null;
+        var nom = nomSeul(cible);
+        if (!nom) { return null; }
+        return {
+          libelle: nom,
+          marque: j.relance_at < aujourdHui ? 'en retard' : 'aujourd’hui'
+        };
+      })
+      .filter(Boolean)
+      .slice(0, 40);
+    if (relances.length > 0) { listes['Les relances dues'] = relances; }
+
+    // ③ Les secteurs : un métier, pas une personne.
     var parSecteur = {};
     noeuds.forEach(function (n) {
       var secteur = (n && n.secteur_activite ? String(n.secteur_activite) : '').trim();
@@ -347,8 +405,6 @@
           marque: parSecteur[secteur] + (parSecteur[secteur] > 1 ? ' contacts' : ' contact')
         };
       });
-
-    var listes = {};
     if (secteurs.length > 0) { listes['Les secteurs du réseau'] = secteurs; }
 
     return {
