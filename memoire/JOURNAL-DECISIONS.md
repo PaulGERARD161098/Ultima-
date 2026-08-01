@@ -1239,3 +1239,24 @@
     l'affichage aurait masqué le vrai défaut. Acquis pour la forme de lecture
     (boucle ③) : les déclencheurs de Paul sont *une sensation, un jalon, une
     petite victoire, une accumulation*.
+- **2026-08-01 (la voix de Léo branchée — gate clé API FERMÉE)** — Paul pose
+  `ANTHROPIC_API_KEY` dans les variables d'environnement Vercel. La gate de
+  coût ouverte le **2026-07-19** (PR #60) est **fermée**, après six mois… non :
+  après treize jours au registre. Le redéploiement provoqué par la fusion de
+  **#132** a suffi à la faire prendre — rappel utile : *une variable
+  d'environnement Vercel n'agit qu'après un redéploiement*.
+  - **Preuve en production** (capture de Paul, `ultima-plum.vercel.app`,
+    `minethnir.html`) : Léo répond, et sa réponse démontre **trois** choses à la
+    fois — la voix est branchée ; **les YEUX de Léo fonctionnent** (« ton
+    journal est vierge — zéro page écrite », plus la connaissance des serments
+    et des situations : c'est l'état borné livré le matin même) ; et **la §5
+    tient** — elle parle en comptes et en noms de caps, **jamais** en contenu.
+    C'est la première preuve EN PROD que les yeux servent à quelque chose.
+  - **Ce qui borne la dépense**, rappelé à Paul : un appel toutes les 3 s par
+    utilisateur (`gardeVoix`), 60 req/min/IP (middleware), timeout sortant 30 s.
+    Ces trois-là **lissent** ; le seul plafond DUR reste la console Anthropic.
+  - **Prémisse corrigée en cours de route** : Paul allait ouvrir la dépense en
+    croyant la clé nécessaire à **la dictée**. Elle ne l'est pas — sa propre
+    capture montrait un texte dicté arrivé dans le champ, et `/ecrire.html`
+    dépose en base sans aucune IA. La clé ne sert qu'à ce que Léo **réponde**.
+    Léo l'a dit avant qu'il n'engage l'argent, plutôt qu'après.
