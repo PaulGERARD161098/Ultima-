@@ -1141,3 +1141,38 @@
   **③** RIVEN en boussole, dès qu'un **deuxième cap** est choisi (choix produit de
   Paul : l'arbre des relations, les chantiers, ou les secteurs). Ordre recommandé
   ①→②→③. Aucune n'engage l'auth ; seule ② demande une migration.
+- **2026-07-31 (dictée → VRANESH peuplé : LIANDRA et THORIOL)** — Session de
+  **dictée pure**, zéro code produit : Paul dicte, Léo reformule, met au propre
+  et **grave en base**. VRANESH était **ouvert mais vide** depuis B3 (2026-07-25)
+  ; il porte désormais ses **deux premières situations réelles**, chacune
+  complète (aucune « à explorer ») :
+  - **LIANDRA** — « l'amour et le devoir », **5 scénarios**. Nom dicté par Paul.
+  - **THORIOL** — « mes premiers pas dans l'entrepreneuriat », **3 scénarios**
+    (Renoboost IA marche → sphères d'expansion / ne marche pas → plan B / voie
+    plus souple, registre VERTUMNE). **Nommée FINUBAR puis renommée THORIOL**
+    dans la même dictée — les deux noms restent au lexique (la déformation
+    vocale porte sur le nom retenu, pas sur l'abandonné).
+  - **Règle confirmée par l'usage (à ne plus redécider)** : le contenu intime
+    **ne touche jamais le repo**. Il vit en base sous RLS, écrit par les mains de
+    Léo. Le repo n'en garde que **le nom** (lexique vocal) — jamais le déroulé
+    d'un scénario ni le contexte d'une situation. Seul le lexique a été committé.
+  - **Vérification** : `situations_etat` relue après écriture (2 situations,
+    5+3 scénarios, `a_explorer = false` partout). Patrimoine COMPLET lancé
+    **avant** la fusion : `TOUS LES HARNAIS VERTS`. PR **#125** fusionnée
+    (squash `58d3a17`), zéro migration, zéro touche auth/RLS.
+  - **Arbitrage pris et signalé** : le futur désiré de LIANDRA (« par la
+    discipline, l'exigence, la patience ») est resté **en préambule du contexte**,
+    PAS en sixième scénario — VRANESH anticipe ce qui *peut* arriver, la volonté
+    relève de DRAUKHAIN. Bascule en serment relié proposée à Paul, non exécutée.
+  - **Hook de fin, 2ᵉ occurrence du même faux positif** (déjà consigné le
+    2026-07-30 pour `722b2e2`) : `58d3a17` signalé « unverified » — c'est encore
+    le **commit de squash créé par GitHub**, présent sur `main`. L'amender
+    réécrirait `main` → écarté. **Nouveau, à retenir** : l'alerte se **taisait**
+    en alignant la branche distante sur `main` fusionné
+    (`git push --force-with-lease`), la branche ne portant que de l'historique
+    déjà absorbé par le squash — geste sûr et conforme à la règle de reprise de
+    branche post-squash.
+  - ⏳ **Registre à la main de Paul** : sort du futur « je m'engage »
+    (préambule / scénario / serment DRAUKHAIN) ; pour THORIOL — confirmer
+    « Julien », « d'ici janvier » (ou le 16 janvier), et « premiers **pas** » vs
+    « premiers **profits** » dans l'intitulé.
