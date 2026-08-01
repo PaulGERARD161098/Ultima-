@@ -1176,3 +1176,41 @@
     (préambule / scénario / serment DRAUKHAIN) ; pour THORIOL — confirmer
     « Julien », « d'ici janvier » (ou le 16 janvier), et « premiers **pas** » vs
     « premiers **profits** » dans l'intitulé.
+- **2026-08-01 (VRANESH : la boussole, l'advenu, puis l'arbre à la demande)** —
+  Trois boucles livrées et fusionnées dans la journée (#127, #128), migration
+  `0019` appliquée, patrimoine **944 → 959** assertions.
+  - **La boussole des futurs** (#127) : un thème = une situation, une branche =
+    un scénario. Réutilise la géométrie du noyau Lv3 et l'habillage
+    `css/boussole.css` plutôt que d'en refaire un.
+  - **L'advenu** (#127 + `0019`) : désigner la branche qui a poussé, ou en créer
+    une neuve si l'imprévu est arrivé. **Décision de Paul, redite après réserve
+    de Léo : suppression RÉELLE** des branches potentielles. Léo avait proposé
+    d'élaguer sans détruire ; Paul a maintenu, sa consigne prime. Contreparties
+    tenues : la coupe est **portée par l'API, jamais par la base** (aucune
+    cascade), **confirmée en deux temps** avec le nombre de branches annoncé, et
+    la branche retenue est **verrouillée par la FK du triplet AVANT** que les
+    autres ne tombent.
+  - **L'arbre à la demande** (#128) — **la v1 de la boussole a été REJETÉE par
+    Paul** : « c'est trop gros, c'est trop général et surtout il y a trop de
+    textes ». **Leçon centrale de la journée : sur un cap intime, le défaut
+    principal est la DENSITÉ, pas le manque d'information.** Forme retenue,
+    choisie **sur preview avant tout code** : la rose porte le **nom seul**, un
+    clic ouvre l'**arbre** du thème, le côté donne **une ligne** au survol et
+    **tout** au clic ; le registre complet passe en `<details>` replié — on
+    l'ouvre pour écrire, pas pour consulter.
+  - **Méthode validée par l'usage** : *previews d'abord, code ensuite*. Deux
+    formes prototypées côte à côte (`design/preview-vranesh-arbre.html`), Paul
+    tranche, on implémente la retenue. Coût du prototype largement inférieur à
+    celui d'une deuxième refonte.
+  - **Deux pièges techniques consignés** : une pousse en `stroke-dasharray`
+    fixe **coupe** les traits plus longs que lui (mesurer avec
+    `getTotalLength`) ; le centre de la boîte englobante d'une **courbe** est du
+    vide (zone de préhension large obligatoire, le harnais vise le bourgeon).
+  - **Confusion à ne pas refaire** : ABAQUE (simulateur de **NICOL BOLAS**)
+    avait été pris comme thème d'exemple dans une preview d'IMLADRIK. Repéré par
+    Paul. **Les noms d'un quadrant ne servent jamais d'exemple dans un autre.**
+  - ⏳ **Registre à la main de Paul** : sort du futur désiré de LIANDRA
+    (préambule / scénario / serment DRAUKHAIN) ; THORIOL — « Julien »,
+    « d'ici janvier » (ou le 16), « premiers **pas** » vs « premiers **profits** ».
+  - ⏳ **Bloqués par une approbation d'outil non accordée** : synchronisation de
+    la fiche Notion, advisors Supabase post-DDL (contrôle RLS fait à la main).

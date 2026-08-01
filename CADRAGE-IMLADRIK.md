@@ -83,22 +83,46 @@ mécanique éprouvée : registre extensible (un cap = une entrée), survol/focus
 - **Passerelles** ✅ **construites (v2, 2026-07-25)** : un scénario peut pointer
   un objectif DRAUKHAIN (ce qu'il *menace* ou *sert*) ou une page MINETHNIR
   (d'où vient la question). Table `scenario_liens` (migration 0018), cible XOR.
-- **La boussole des futurs** ✅ **livrée (2026-08-01, dictée Paul)** : « les
-  différents thèmes de futurs sous forme de boussole comme IMLADRIK, puis depuis
-  chaque thème des ramifications comme des branches qui poussent ».
+- **La boussole puis L'ARBRE** ✅ **livré et validé par Paul (2026-08-01)** —
+  « les différents thèmes de futurs sous forme de boussole comme IMLADRIK, puis
+  depuis chaque thème des ramifications comme des branches qui poussent ».
   **Correspondance actée** : un **thème de futurs = une situation** (le cas
-  donné) ; une **branche = un scénario**. Une situation « à explorer » est donc
-  un **cap nu** — la règle cardinale positive se lit d'un coup d'œil.
-  Réutilise le **noyau Lv3** pour la géométrie (`window.UltimaBoussoleNoyau
-  .positions`, déjà couvert par `unit-registre-lv3`) et `css/boussole.css` pour
-  l'habillage ; `css/vranesh-boussole.css` n'ajoute que les ramifications.
-  **Différence essentielle avec les boussoles Lv3** : ici les caps portent des
-  **intitulés dictés par Paul** — de la donnée intime. Donc **rien en innerHTML**
-  (createElement/textContent partout), **rien dans le HTML servi**, rendu
-  seulement après session validée. Le harnais le prouve **par l'ABSENCE** :
-  aucun intitulé dans la page servie, aucun déroulé de scénario dans le
-  cartouche de parole. La vraisemblance se lit à l'**épaisseur** du trait ET en
-  toutes lettres dans le cartouche (jamais la couleur seule).
+  donné) ; une **branche = un scénario**.
+  - **v1 (matin) : rejetée par Paul.** Les branches poussaient directement sur
+    la rose et le registre complet s'affichait dessous. Verdict : « c'est trop
+    gros, c'est trop général et surtout il y a trop de textes. L'affichage n'est
+    vraiment pas très heureux. » **Leçon à ne pas reperdre : sur un cap intime,
+    la densité est le défaut principal — pas le manque d'information.**
+  - **v2 retenue — AFFICHAGE À LA DEMANDE, en trois étages** (Forme ① de
+    `design/preview-vranesh-arbre.html`, choisie sur preview avant tout code) :
+    ① la rose ne porte que le **NOM** du thème (`nomCourt` : le sous-titre après
+    le tiret cadratin tombe) + une pastille de compte ; ② un **CLIC** ouvre
+    l'**arbre** du thème et **efface la rose** — un tronc qui part de la base,
+    une branche par futur, une **étiquette de quelques mots** par branche
+    (`etiquetteBranche`, bornée à 34 signes, tirée de la 1ʳᵉ phrase du déroulé —
+    option **zéro migration**, un vrai champ « titre » reste possible) ;
+    ③ le **côté** donne **UNE LIGNE** au survol, **TOUT** au clic (signaux,
+    parade, passerelles) + un lien vers le registre.
+  - **Le registre détaillé passe en `<details>` REPLIÉ.** Rien n'est retiré
+    (écriture, passerelles, dénouement) : on l'ouvre pour **écrire**, pas pour
+    **consulter**. C'est lui qui produisait le mur de texte.
+  - **Réutilisation** : géométrie de la rose = noyau Lv3
+    (`window.UltimaBoussoleNoyau.positions`, couvert par `unit-registre-lv3`) ;
+    habillage = `css/boussole.css`. `css/vranesh-boussole.css` n'ajoute que
+    l'arbre. La **charpente** de l'arbre est une fonction pure (`charpente`).
+  - **Deux pièges tombés en route, à retenir** : ① une **pousse** en
+    `stroke-dasharray` fixe **coupe** tout trait plus long que lui — la longueur
+    se **mesure** (`getTotalLength`) ; ② le centre de la boîte englobante d'une
+    **courbe** est du vide : il faut une **zone de préhension** large, sinon la
+    branche se rate à la souris (et le harnais vise le bourgeon).
+  - **Différence essentielle avec les boussoles Lv3** : ici les caps portent des
+    **intitulés dictés par Paul** — de la donnée intime. Donc **rien en
+    innerHTML** (createElement/textContent partout), **rien dans le HTML servi**,
+    rendu seulement après session validée. Le harnais prouve la retenue **par
+    l'ABSENCE** : aucun intitulé dans la page servie, aucun sous-titre sur la
+    rose, aucun déroulé complet sur l'arbre, ni signaux ni parade au simple
+    survol, aucun scénario visible à l'arrivée. La vraisemblance se lit à
+    l'**épaisseur** du trait ET en toutes lettres (jamais la couleur seule).
 - **L'ADVENU — « la branche qui a poussé »** ✅ **construit (2026-08-01)**,
   **migration `0019` écrite et NON appliquée — gate Paul** : quand un futur est
   advenu, Paul revient sur l'arbre et **désigne la branche qui a poussé** — soit
@@ -125,8 +149,11 @@ mécanique éprouvée : registre extensible (un cap = une entrée), survol/focus
     passager clandestin d'une modification d'intitulé. `advenu_le` n'est pas
     accepté du client — la date vient du serveur.
   - **Rouvrir** un thème (`scenario_advenu_id: null`) ne supprime rien.
-  - **Reste à faire** : appliquer `0019` (gate) — sans elle, le PATCH échoue
-    proprement et le reste du cap continue de fonctionner.
+  - **Migration `0019` APPLIQUÉE en prod le 2026-08-01** (go de Paul « on merge,
+    je veux pouvoir tester »). Vérifié après coup : situations intactes, RLS
+    active sur `situations` et `scenarios` (4 policies chacune), vues en
+    `security_invoker`. ⏭ **Advisors post-DDL non joués** (l'appel demande une
+    approbation d'outil non accordée) — contrôle fait à la main à la place.
 - **Peuplé le 2026-07-31 (dictée de Paul)** : VRANESH n'est plus vide. Deux
   situations réelles, toutes deux complètes (aucune « à explorer ») —
   **LIANDRA** (5 scénarios) et **THORIOL** (3 scénarios). Écriture par les mains
