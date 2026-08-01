@@ -191,6 +191,41 @@ body.boussole {
   text-shadow: 0 1px 2px rgba(0, 10, 20, 0.6);
 }
 
+/* ---------- Macro-quadrants : noms gravés au-dessus des hémicycles ----------
+   Posés par le noyau quand le registre déclare des `groupes` (RIMA / NAGA).
+   Même encre d'or que le surligne du bandeau : c'est une gravure de carte,
+   pas un bouton — elle n'intercepte rien. */
+.boussole-domaine {
+  position: absolute;
+  transform: translate(-50%, 0);
+  z-index: 2;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.06rem;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.domaine-nom {
+  font-family: var(--police-ancienne);
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: clamp(0.82rem, 2.4vmin, 1.05rem);
+  letter-spacing: 0.2em;
+  color: #e8cf8f;                 /* or antique clair, comme .titre-surligne */
+  text-shadow: 0 1px 2px rgba(0, 10, 20, 0.55);
+}
+.domaine-sous-titre {
+  font-family: var(--police-ancienne);
+  font-style: italic;
+  font-size: clamp(0.68rem, 1.9vmin, 0.85rem);
+  letter-spacing: 0.05em;
+  color: #f0dca0;                 /* même encre que la légende du cœur */
+  text-shadow: 0 1px 2px rgba(0, 10, 20, 0.6);
+}
+
 /* ---------- Caps (cartouches disposés autour, placés par le JS) ---------- */
 .cap {
   position: absolute;
@@ -355,6 +390,9 @@ a.cap:hover {
   .boussole-scene { justify-content: flex-start; }
   .boussole-plateau { width: min(94vw, 420px); }
   .cap { width: clamp(84px, 27vw, 120px); }
+  /* Les caps montent plus haut sur la petite rose : la gravure des
+     macro-quadrants remonte d'autant pour rester dégagée. */
+  .boussole-domaine { transform: translate(-50%, -60%); }
 }
 
 /* Respect du réglage « moins d'animations ». */

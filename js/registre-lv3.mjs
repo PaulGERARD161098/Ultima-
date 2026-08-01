@@ -21,6 +21,13 @@
 //   enfants  : présent = le nœud EST une boussole (ordre = ordre des caps,
 //              premier plein Nord puis sens horaire). Absent = c'est une
 //              FEUILLE, la page où l'on travaille (règle §2.1 du cadrage).
+//   groupes  : optionnel, sur une boussole — les MACRO-QUADRANTS d'affichage
+//              (dictés par Paul le 2026-08-01). Chaque groupe = { nom,
+//              sousTitre, caps } ; l'union des caps doit couvrir exactement
+//              `enfants`. Le noyau range alors chaque groupe sur son propre
+//              hémicycle et grave son nom + sous-titre au-dessus. Pur
+//              affichage : les portes restent directes, la navigation ne
+//              change pas.
 // Les nœuds-boussoles portent en plus leur bandeau et leur cœur :
 //   titre, surligne, invite, coeur (clé dans COEURS), legende (le nom gravé
 //   sous le médaillon), legendeClasse (classe CSS additionnelle), cockpit
@@ -55,12 +62,18 @@ export const NOEUDS = {
     resume: 'La supra-division personnelle. Ton réseau, ton argent, tes idées, '
       + 'ton développement et ta voie — cinq caps sous une seule rose.',
     titre: 'ULTIMA',
-    surligne: 'Supra-division — le personnel',
+    surligne: 'Supra-division Ultima',
     invite: 'Léo te guide — survole un cap.',
     coeur: 'rose',
     legende: 'le personnel',
     cockpit: true,
     enfants: ['riven', 'nicol-bolas', 'adramelech', 'imladrik', 'tao'],
+    // Les deux macro-quadrants dictés par Paul (2026-08-01) : RIMA à l'ouest
+    // (l'acquis qui sert), NAGA au levant (ce qui grandit).
+    groupes: [
+      { nom: 'RIMA', sousTitre: 'Ce qui est utile', caps: ['riven', 'nicol-bolas'] },
+      { nom: 'NAGA', sousTitre: 'Ce qui fait grandir', caps: ['imladrik', 'adramelech', 'tao'] },
+    ],
   },
 
   alpha: {
@@ -71,7 +84,7 @@ export const NOEUDS = {
     resume: 'La supra-division professionnelle. Les projets qui te font vivre : '
       + 'Renoboost IA aujourd’hui, YCOME dès que tu me donnes son adresse.',
     titre: 'ALPHA',
-    surligne: 'Supra-division — le professionnel',
+    surligne: 'Supra-division Alpha',
     invite: 'Léo te guide — survole un cap.',
     coeur: 'alpha',
     legende: 'le professionnel',
@@ -341,6 +354,37 @@ export function verifierRegistre(noeuds = NOEUDS, blasons = null, coeurs = null)
       if (!n.coeur) anomalies.push(`${id} : cœur manquant`);
       if (!n.legende) anomalies.push(`${id} : légende gravée manquante`);
       if (coeurs && !coeurs[n.coeur]) anomalies.push(`${id} : cœur « ${n.coeur} » absent du catalogue`);
+
+      // Macro-quadrants : les groupes doivent recouvrir exactement `enfants`.
+      if (n.groupes !== undefined) {
+        if (!Array.isArray(n.groupes) || n.groupes.length < 2) {
+          anomalies.push(`${id} : groupes présents mais moins de 2 (regrouper n'a pas de sens)`);
+        } else {
+          const couverts = [];
+          n.groupes.forEach((g, gi) => {
+            if (!g.nom) anomalies.push(`${id} : groupe ${gi} sans nom`);
+            if (!g.sousTitre) anomalies.push(`${id} : groupe « ${g.nom || gi} » sans sous-titre`);
+            if (!Array.isArray(g.caps) || !g.caps.length) {
+              anomalies.push(`${id} : groupe « ${g.nom || gi} » sans caps`);
+              return;
+            }
+            for (const cid of g.caps) {
+              if (n.enfants.indexOf(cid) === -1) {
+                anomalies.push(`${id} : groupe « ${g.nom} » cite un cap hors enfants « ${cid} »`);
+              }
+              if (couverts.indexOf(cid) !== -1) {
+                anomalies.push(`${id} : cap « ${cid} » présent dans deux groupes`);
+              }
+              couverts.push(cid);
+            }
+          });
+          for (const eid of n.enfants) {
+            if (couverts.indexOf(eid) === -1) {
+              anomalies.push(`${id} : cap « ${eid} » n'appartient à aucun groupe`);
+            }
+          }
+        }
+      }
     }
 
     // Tout nœud sauf la racine est un cap de quelqu'un → il lui faut sa parure.

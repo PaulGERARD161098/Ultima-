@@ -14,7 +14,7 @@ import {
   NOEUDS, RACINE, parentDe, chemin, estBoussole, capsDe, verifierRegistre,
 } from '../js/registre-lv3.mjs';
 import { BLASONS, COEURS } from '../js/blasons.mjs';
-import { positions, ligneVivante, signalDe } from '../js/boussole-noyau.mjs';
+import { positions, positionsGroupees, ligneVivante, signalDe } from '../js/boussole-noyau.mjs';
 
 const verdicts = {};
 const detail = {};
@@ -41,6 +41,37 @@ verdicts.quatreQuadrantsPlusTao = JSON.stringify(NOEUDS['ultima-perso'].enfants)
   === JSON.stringify(['riven', 'nicol-bolas', 'adramelech', 'imladrik', 'tao']);
 verdicts.cheminTaoComplet = JSON.stringify(chemin('reshiram'))
   === JSON.stringify(['racine', 'ultima-perso', 'tao', 'reshiram']);
+
+// ---------- 3 bis. Les macro-quadrants dictés par Paul (2026-08-01) ----------
+// RIMA (« Ce qui est utile ») = RIVEN + NICOL BOLAS ; NAGA (« Ce qui fait
+// grandir ») = IMLADRIK + ADRAMELECH + TAO. Pur affichage : les enfants ne
+// changent pas, les groupes doivent les recouvrir exactement (vérifié aussi
+// par verifierRegistre, dont l'anomalie ferait tomber registreSain).
+const groupes = NOEUDS['ultima-perso'].groupes;
+verdicts.deuxMacroQuadrants = Array.isArray(groupes) && groupes.length === 2
+  && groupes[0].nom === 'RIMA' && groupes[0].sousTitre === 'Ce qui est utile'
+  && groupes[1].nom === 'NAGA' && groupes[1].sousTitre === 'Ce qui fait grandir';
+verdicts.rimaRegroupeUtile = JSON.stringify(groupes && groupes[0].caps)
+  === JSON.stringify(['riven', 'nicol-bolas']);
+verdicts.nagaRegroupeCroissance = JSON.stringify(groupes && groupes[1].caps)
+  === JSON.stringify(['imladrik', 'adramelech', 'tao']);
+verdicts.groupesInvalidesDetectes = verifierRegistre({
+  racine: {
+    nom: 'X', titre: 't', invite: 'i', coeur: 'rose', legende: 'l',
+    enfants: ['a', 'b'],
+    groupes: [
+      { nom: 'G1', sousTitre: 's', caps: ['a', 'a'] },     // doublon + b oublié
+      { nom: '', sousTitre: '', caps: ['z'] },             // sans nom ni sous-titre, cap inconnu
+    ],
+  },
+  a: { nom: 'A', etat: 'Ouvert', resume: 'r', blason: 'x', cible: 'a.html' },
+  b: { nom: 'B', etat: 'Ouvert', resume: 'r', blason: 'x', cible: 'b.html' },
+}).some((a) => /deux groupes|aucun groupe|hors enfants|sans nom|sans sous-titre/.test(a));
+
+// Le surligné des supra-divisions porte leur nom, plus « le personnel /
+// le professionnel » (dicté par Paul le 2026-08-01).
+verdicts.surlignesSupraDivisions = NOEUDS['ultima-perso'].surligne === 'Supra-division Ultima'
+  && NOEUDS.alpha.surligne === 'Supra-division Alpha';
 
 // L'acquis IMLADRIK est intact (le noyau doit le rendre à l'identique).
 const capsImladrik = capsDe('imladrik');
@@ -74,6 +105,20 @@ verdicts.repartitionReguliere = [2, 3, 4, 5].every((n) => {
   return pts.every((pt) => Math.abs(Math.hypot(pt.cos, pt.sin) - 1) < 1e-12);
 });
 verdicts.sensHoraire = positions(4)[1].cos > 0.99; // deuxième cap plein Est
+
+// Géométrie groupée (macro-quadrants) : premier groupe plein ouest, second au
+// levant, chaque groupe confiné à son hémicycle, lecture du haut vers le bas.
+const geo = positionsGroupees([2, 3]);
+verdicts.groupesHemicycles = geo.pts.length === 5
+  && geo.pts.slice(0, 2).every((pt) => pt.cos < 0)   // RIMA : tout à l'ouest
+  && geo.pts.slice(2).every((pt) => pt.cos > 0);     // NAGA : tout au levant
+verdicts.groupesLectureHautEnBas = geo.pts[0].sin < geo.pts[1].sin // 1er cap plus haut
+  && geo.pts[2].sin < geo.pts[3].sin && geo.pts[3].sin < geo.pts[4].sin;
+verdicts.groupesSurLeCercle = geo.pts.every((pt) => Math.abs(Math.hypot(pt.cos, pt.sin) - 1) < 1e-12);
+verdicts.groupesNordReserveAuxNoms = geo.pts.every((pt) => pt.sin > -0.95) // aucun cap plein nord
+  && geo.ancres.length === 2
+  && geo.ancres[0].x < 50 && geo.ancres[1].x > 50    // un nom par hémicycle
+  && geo.ancres.every((a) => a.y < 15);              // gravés en haut du plateau
 
 // ---------- 5. Cockpit : des comptes, rien d'autre ----------
 const AGREGATS = {

@@ -9,7 +9,7 @@
 // Mode démo forcé, Leaflet/OSM stubés (pour traveler.html), zéro erreur tolérée.
 import { chromium } from 'playwright';
 import { readFileSync } from 'node:fs';
-import { NOEUDS, capsDe } from '../js/registre-lv3.mjs';
+import { NOEUDS } from '../js/registre-lv3.mjs';
 
 const SCRATCH = new URL('./.cache', import.meta.url).pathname;
 const leafletJs = readFileSync(`${SCRATCH}/package/dist/leaflet.js`);
@@ -92,12 +92,55 @@ verifier('Titre = celui du registre', principal === NOEUDS['ultima-perso'].titre
 const invite = (await page.locator('.console-invite').textContent())?.trim();
 verifier('Invite « Léo te guide »', /Léo te guide/.test(invite || ''), `lu: ${invite}`);
 
-// Les 5 caps de la supra-division personnelle, dans l'ordre du registre.
-const attendus = capsDe('ultima-perso').map((c) => c.nom);
+// Les 5 caps de la supra-division personnelle, dans l'ordre des MACRO-QUADRANTS
+// (dictés le 2026-08-01) : RIMA (RIVEN, NICOL BOLAS) puis NAGA (IMLADRIK,
+// ADRAMELECH, TAO).
+const groupes = NOEUDS['ultima-perso'].groupes;
+const attendus = groupes.flatMap((g) => g.caps).map((id) => NOEUDS[id].nom);
 const noms = (await page.locator('.cap .cap-nom').allTextContents()).map((n) => n.trim());
 verifier('5 caps rendus', noms.length === 5, `trouvés: ${JSON.stringify(noms)}`);
-verifier('Caps dans l\'ordre du registre', JSON.stringify(noms) === JSON.stringify(attendus),
+verifier('Caps dans l\'ordre des macro-quadrants', JSON.stringify(noms) === JSON.stringify(attendus),
   `lu: ${JSON.stringify(noms)}`);
+
+// Les deux macro-quadrants sont gravés : nom + sous-titre, RIMA à l'ouest,
+// NAGA au levant, et chaque cap est rangé du bon côté du plateau.
+const domaines = await page.locator('.boussole-domaine').evaluateAll((els) => els.map((el) => ({
+  nom: el.querySelector('.domaine-nom')?.textContent.trim(),
+  sousTitre: el.querySelector('.domaine-sous-titre')?.textContent.trim(),
+  x: parseFloat(el.style.left),
+})));
+verifier('2 macro-quadrants gravés', domaines.length === 2, JSON.stringify(domaines));
+verifier('RIMA — « Ce qui est utile » à l\'ouest',
+  domaines[0]?.nom === 'RIMA' && domaines[0]?.sousTitre === 'Ce qui est utile' && domaines[0]?.x < 50,
+  JSON.stringify(domaines[0]));
+verifier('NAGA — « Ce qui fait grandir » au levant',
+  domaines[1]?.nom === 'NAGA' && domaines[1]?.sousTitre === 'Ce qui fait grandir' && domaines[1]?.x > 50,
+  JSON.stringify(domaines[1]));
+const cotes = await page.locator('.cap').evaluateAll((els) =>
+  els.map((el) => ({ id: el.dataset.id, x: parseFloat(el.style.left) })));
+verifier('Caps de RIMA sur l\'hémicycle ouest',
+  cotes.filter((c) => groupes[0].caps.includes(c.id)).every((c) => c.x < 50), JSON.stringify(cotes));
+verifier('Caps de NAGA sur l\'hémicycle du levant',
+  cotes.filter((c) => groupes[1].caps.includes(c.id)).every((c) => c.x > 50), JSON.stringify(cotes));
+// Aucun chevauchement gravure / cap : les cartouches commencent sous les noms
+// — vérifié en desktop ET en mobile (constat du 2026-08-01 : le sous-titre de
+// NAGA passait sous IMLADRIK sur petit écran).
+async function chevauchements() {
+  return page.evaluate(() => {
+    const bas = Math.max(...[...document.querySelectorAll('.boussole-domaine')]
+      .map((el) => el.getBoundingClientRect().bottom));
+    return [...document.querySelectorAll('.cap')]
+      .filter((el) => el.getBoundingClientRect().top < bas).length;
+  });
+}
+const chevDesktop = await chevauchements();
+verifier('Noms gravés dégagés (desktop)', chevDesktop === 0,
+  `${chevDesktop} cap(s) sous la ligne des noms`);
+await page.setViewportSize({ width: 390, height: 844 });
+const chevMobile = await chevauchements();
+verifier('Noms gravés dégagés (mobile 390px)', chevMobile === 0,
+  `${chevMobile} cap(s) sous la ligne des noms`);
+await page.setViewportSize({ width: 1280, height: 720 });
 
 // Toutes les portes sont ouvertes (aucun cap « à venir » à cet étage).
 const hrefs = await page.locator('a.cap').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
@@ -154,12 +197,18 @@ const styles = await page.evaluate(() => {
     parcheminCarte: cs.getPropertyValue('--parchemin-carte').trim(),
     merProfonde: cs.getPropertyValue('--mer-profonde').trim(),
     nom: nom.color, titre: t.color,
+    domaineNom: getComputedStyle(document.querySelector('.domaine-nom')).color,
+    domaineSousTitre: getComputedStyle(document.querySelector('.domaine-sous-titre')).color,
   };
 });
 const rNom = ratio(versHex(styles.nom), styles.parcheminCarte);
 verifier('Contraste nom de cap ≥ 4,5:1', rNom >= 4.5, `${rNom.toFixed(2)}:1`);
 const rTitre = ratio(versHex(styles.titre), styles.merProfonde);
 verifier('Contraste titre sur fond mer ≥ 4,5:1', rTitre >= 4.5, `${rTitre.toFixed(2)}:1`);
+const rDomaine = ratio(versHex(styles.domaineNom), styles.merProfonde);
+verifier('Contraste nom de macro-quadrant ≥ 4,5:1', rDomaine >= 4.5, `${rDomaine.toFixed(2)}:1`);
+const rSousTitre = ratio(versHex(styles.domaineSousTitre), styles.merProfonde);
+verifier('Contraste sous-titre de macro-quadrant ≥ 4,5:1', rSousTitre >= 4.5, `${rSousTitre.toFixed(2)}:1`);
 
 verifier('Zéro requête réseau externe (aucun CDN)', requetesExternes.length === 0,
   requetesExternes.slice(0, 3).join(', '));
