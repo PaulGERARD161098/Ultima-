@@ -1214,3 +1214,28 @@
     « d'ici janvier » (ou le 16), « premiers **pas** » vs « premiers **profits** ».
   - ⏳ **Bloqués par une approbation d'outil non accordée** : synchronisation de
     la fiche Notion, advisors Supabase post-DDL (contrôle RLS fait à la main).
+- **2026-08-01 (directive EL gravée + MINETHNIR : le diagnostic)** — Paul dicte
+  la **troisième directive maîtresse, EL (Edouard Lebrun)** : le COMMENT
+  entièrement défini et assumé AVANT la première ligne de travail ; rien au
+  hasard, dans les mots comme dans le code ; **gate d'entrée bloquant**.
+  Les trois directives (EB le cap, JL le sens et le plan, EL le chemin) passent
+  **en tête de `CLAUDE.md`** et leur relecture devient le **point 0** du
+  protocole de début de session. Léo a **explicité le format 6 points** que le
+  principe 3 invoquait sans le définir (but · étapes · moyens · critères de
+  réussite · hors périmètre · pre-mortem) : sans lui, « le cadrage n'est pas
+  bon » restait invérifiable et le gate décoratif.
+  - **Note de fidélité** : Paul a présenté EL comme « telle que définie dans le
+    `CLAUDE.md` du repo ». Elle n'y était **pas** (vérifié : EB et JL y étaient,
+    EL nulle part). Elle y entre maintenant, et ce fichier en est la source
+    unique — plutôt que de laisser croire à une relecture.
+  - **Première application immédiate** : la maquette avant le code, éprouvée le
+    jour même sur VRANESH et DRAUKHAIN, cesse d'être une bonne pratique
+    optionnelle — c'est EL.
+  - **MINETHNIR, boucle ① (diagnostic, zéro code)** : le cap est complet mais le
+    journal est **vide**. Trois questions fermées, et la cause nommée en une
+    phrase validée par Paul : **le cap n'est pas atteignable au moment où
+    l'envie d'écrire arrive** — elle surgit en marchant, au pouce et à la voix.
+    **Ce n'est ni la forme ni le contenu : c'est la DISTANCE.** Refaire
+    l'affichage aurait masqué le vrai défaut. Acquis pour la forme de lecture
+    (boucle ③) : les déclencheurs de Paul sont *une sensation, un jalon, une
+    petite victoire, une accumulation*.

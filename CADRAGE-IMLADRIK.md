@@ -73,6 +73,45 @@ mécanique éprouvée : registre extensible (un cap = une entrée), survol/focus
   (compteurs, dernière page) n'apparaîtrait qu'après auth, motif cockpit
   LV2-⑤ (comptes seuls, jamais de contenu).
 
+## 4 bis. MINETHNIR — le diagnostic du 2026-08-01 (boucle ①, EL)
+
+**Constat de départ** : le cap est complet — table `imladrik_entrees` (0012),
+API `/api/imladrik`, atelier d'écriture, sauvegarde Drive, Léo au régime §5 le
+plus strict — et pourtant **le journal est VIDE (0 page en base)**. Les
+passerelles scénario → page MINETHNIR (0018) restent à 0 lien, faute de pages.
+
+**Boucle ① menée en dictée** (zéro code, format 6 points, EL). Trois questions
+fermées à Paul, ses réponses :
+1. **Où écris-tu ?** « N'importe où, en déplacement, en train de marcher souvent. »
+2. **Qu'est-ce que l'app Claude te donne que MINETHNIR ne donne pas ?**
+   « Commande vocale, accès rapide, interface iPhone très simple, accessible en
+   **2 clics du pouce**. »
+3. **Qu'est-ce qui déclenche une entrée ?** « Une sensation, un jalon, une
+   petite victoire, une accumulation. »
+
+**LA CAUSE, NOMMÉE (critère de réussite de la boucle ①)** :
+> **MINETHNIR n'est pas atteignable au moment où l'envie d'écrire arrive.**
+> Elle surgit **en marchant, au pouce et à la voix** ; le cap suppose un écran,
+> une session et quatre niveaux de navigation avant le premier mot.
+
+**Ce que le diagnostic ferme et ce qu'il ouvre** :
+- Ce n'est **ni** un problème de forme **ni** un problème de contenu : c'est un
+  problème de **DISTANCE**. Refaire l'affichage n'aurait rien changé — et
+  l'aurait fait croire réglé.
+- Le journal restera vide tant que la distance ne sera pas réduite. Toute
+  boucle MINETHNIR passe donc **après** l'entrée en écriture au pouce.
+- **La réponse 3 est un acquis pour plus tard** : les déclencheurs de Paul sont
+  *une sensation · un jalon · une petite victoire · une accumulation*. C'est le
+  vocabulaire naturel du cap — il servira la forme de lecture (boucle ③), pas
+  la capture. Ne pas le réinventer, ne pas le forcer maintenant.
+
+**Constat technique relevé au passage** (à vérifier sur l'iPhone de Paul avant
+d'en conclure quoi que ce soit) : `manifest.webmanifest` a `start_url: "/"` —
+une icône d'accueil ouvre donc la console, jamais l'écriture. Et `js/dictee.js`
+n'affiche son micro que si `SpeechRecognition`/`webkitSpeechRecognition` existe ;
+là où l'API manque, **la dictée clavier iOS reste disponible** dans un champ
+ordinaire — c'est elle qui porterait la voix.
+
 ## 5. VRANESH — mini-vision v1 (cadrage fin à l'ouverture de sa boucle)
 
 - **Objets** : *situations* (« un cas donné ») → *scénarios* (futurs
