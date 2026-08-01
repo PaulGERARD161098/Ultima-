@@ -83,6 +83,12 @@ mécanique éprouvée : registre extensible (un cap = une entrée), survol/focus
 - **Passerelles** ✅ **construites (v2, 2026-07-25)** : un scénario peut pointer
   un objectif DRAUKHAIN (ce qu'il *menace* ou *sert*) ou une page MINETHNIR
   (d'où vient la question). Table `scenario_liens` (migration 0018), cible XOR.
+- **Peuplé le 2026-07-31 (dictée de Paul)** : VRANESH n'est plus vide. Deux
+  situations réelles, toutes deux complètes (aucune « à explorer ») —
+  **LIANDRA** (5 scénarios) et **THORIOL** (3 scénarios). Écriture par les mains
+  de Léo, contenu **en base sous RLS uniquement** : le repo n'en garde que le nom
+  (lexique vocal), jamais un déroulé ni un contexte (§5). Passerelles
+  scénario → serment DRAUKHAIN **disponibles mais non encore utilisées**.
 
 ## 6. DRAUKHAIN — mini-vision v1 (cadrage fin à l'ouverture de sa boucle)
 

@@ -2,6 +2,42 @@
 
 ## ÉTAT (2026-07-06, après arbitrage)
 
+- 🎤 **SESSION 2026-07-31 (dictée pure — VRANESH peuplé), CLOSE.** Zéro code
+  produit : Paul dicte, Léo reformule, met au propre et grave en base. VRANESH
+  passe de **vide** à **2 situations réelles complètes** — **LIANDRA** (l'amour
+  et le devoir, 5 scénarios) et **THORIOL** (les premiers pas dans
+  l'entrepreneuriat, 3 scénarios ; dictée sous le nom FINUBAR puis renommée).
+  PR **#125** fusionnée (lexique vocal seul), patrimoine COMPLET vert avant
+  fusion, zéro migration, zéro touche auth/RLS.
+  - 🔒 **Règle confirmée par l'usage, à ne plus redécider** : le contenu intime
+    **ne touche jamais le repo**. Il vit en base sous RLS, écrit par les mains de
+    Léo ; le repo n'en garde que **le nom** (lexique vocal). Corollaire pour
+    toute session future : ne jamais chercher LIANDRA/THORIOL dans les fichiers.
+  - ⏳ **Registre à la main de Paul** : sort du futur désiré de LIANDRA
+    (préambule du contexte — choix actuel — ou scénario, ou serment DRAUKHAIN
+    relié) ; pour THORIOL, confirmer « Julien », « d'ici janvier » (ou le 16) et
+    « premiers **pas** » vs « premiers **profits** » dans l'intitulé.
+
+- 🎯 **CADRAGE DE LA SUITE — posé le 2026-07-31 (« on cadre, on n'implémente
+  pas »).** Les trois boucles du 2026-07-30 (①②③ ci-dessous) **restent valides
+  et non engagées**. La dictée du jour en fait apparaître une **quatrième**, qui
+  passe devant ① dans l'ordre recommandé parce qu'elle a la même nature que ce
+  que Paul vient de faire (dicter du réel) et qu'elle ne coûte presque rien :
+
+  - **⓪ VRANESH — de l'anticipation à la volonté (la passerelle qui dort).**
+    **Pourquoi** : la table `scenario_liens` (migration `0018`, appliquée) permet
+    de relier un scénario à un serment DRAUKHAIN — *ce qu'un futur menace ou
+    sert*. Elle est **construite mais jamais utilisée** : 0 lien en base. Or
+    LIANDRA appelle exactement ça — son futur désiré est une **volonté**
+    (DRAUKHAIN), pas un futur subi (VRANESH), et l'arbitrage du 2026-07-31 l'a
+    laissé en préambule faute de go. **Première action** : demander à Paul le
+    sort de ce futur (registre ci-dessus) ; s'il choisit le serment, le créer
+    dans DRAUKHAIN et poser le lien depuis les scénarios concernés. **Touche** :
+    aucune ligne de code — API et front existent déjà. **Gate** : aucune
+    (écriture de donnée, pas de DDL) ; §5 s'applique. **Effort** : une dictée.
+    C'est la boucle qui **prouve la passerelle par l'usage** au lieu de la
+    laisser théorique.
+
 - 🗃️ **CAP DONNÉE — premier peuplement réel (session 2026-07-30, close).** Le cap
   « assez de code, il faut de la donnée » passe à l'acte sur **RESHIRAM**, qui
   était **vide en base**. ✅ **3 talents réels dictés par Paul et posés en prod**
@@ -20,9 +56,10 @@
     `talents_capital_reseau` (connexion RESHIRAM → RIVEN, `0013`). **Mais
     `network_nodes` est VIDE (0 fiche, vérifié en prod).** Toute la machinerie
     existe, la matière manque.
-  - 📏 **État de la donnée en prod (2026-07-30)** : RESHIRAM 3 talents / 0 preuve ;
+  - 📏 **État de la donnée en prod (2026-07-31)** : RESHIRAM 3 talents / 0 preuve ;
     ZEKROM 3 idéaux / 5 directions ; passerelles R↔Z **0** ; RIVEN **0** ;
-    ADRAMELECH 4 idées.
+    ADRAMELECH 4 idées ; **VRANESH 2 situations / 8 scénarios** (LIANDRA 5,
+    THORIOL 3 — peuplé le 2026-07-31, aucune « à explorer »).
   - ⏭ **Reporté par Paul (décision explicite, fin de session)** : **peupler RIVEN**
     — reco de Léo comme boucle suivante (c'est lui qui débloque les preuves
     chiffrées, donc « mon offre réelle »). « On s'occupera de RIVEN plus tard. »
