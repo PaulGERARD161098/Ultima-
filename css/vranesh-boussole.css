@@ -1,0 +1,113 @@
+/* Ultima — VRANESH : LA BOUSSOLE DES FUTURS (habillage des ramifications).
+   ---------------------------------------------------------------------------
+   Complément de css/boussole.css, qui fournit déjà le plateau, les caps, les
+   aiguilles et le cartouche de parole. Ici, uniquement ce que la boussole des
+   futurs ajoute : les BRANCHES qui poussent depuis chaque thème (un scénario =
+   une ramification), leur bourgeon, et les quelques recalages nécessaires parce
+   que cette boussole vit sur une page de quadrant (`body.console`) et non sur
+   une coque de nœud (`body.boussole`).
+
+   Registre antique : encre et or, gravure sèche, aucune ressource externe.
+   Le mouvement (la pousse) vit sous `prefers-reduced-motion: no-preference` —
+   sous « reduce », aucune règle ne s'applique, donc rien à neutraliser (même
+   motif que .arbre-feuille--pousse dans css/styles.css). */
+
+/* ---------- Le plateau sur une page de quadrant ---------- */
+/* Le plateau de css/boussole.css est dimensionné pour une coque plein écran ;
+   dans un cartouche de quadrant on le contient un peu plus. */
+.vranesh-boussole .boussole-plateau {
+  width: min(78vmin, 460px);
+  margin-block: 0.6rem 1.1rem;
+}
+
+/* Les caps portent ici des intitulés dictés par Paul (longueur libre), là où
+   le registre Lv3 n'a que des noms courts figés : on borne la largeur et on
+   laisse le texte passer à la ligne plutôt que déborder du plateau. */
+.vranesh-boussole .cap { max-width: 11.5rem; }
+.vranesh-boussole .cap-nom { white-space: normal; }
+
+/* ---------- Les ramifications : un scénario = une branche ---------- */
+.vranesh-branches {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 0;   /* sous les caps (z-index 2), au niveau des aiguilles */
+}
+
+.vranesh-branche-trait {
+  fill: none;
+  stroke: var(--or-antique);
+  stroke-width: 0.55;
+  stroke-linecap: round;
+  opacity: 0.42;
+}
+
+.vranesh-bourgeon {
+  fill: var(--or-antique);
+  opacity: 0.5;
+}
+
+/* Le thème survolé illumine ses propres branches — la lecture suit l'œil. */
+.vranesh-branches-groupe.is-actif .vranesh-branche-trait {
+  stroke: #f4e6bd;
+  stroke-width: 0.95;
+  opacity: 1;
+}
+.vranesh-branches-groupe.is-actif .vranesh-bourgeon {
+  fill: #f4e6bd;
+  opacity: 1;
+}
+
+/* Vraisemblance : la branche d'un futur probable est plus affirmée que celle
+   d'un futur improbable — l'épaisseur porte le sens, jamais la couleur seule
+   (accessibilité : la même information est écrite dans le cartouche). */
+.vranesh-branche-trait--faible { stroke-width: 0.4; opacity: 0.3; }
+.vranesh-branche-trait--forte { stroke-width: 0.8; opacity: 0.6; }
+.vranesh-branches-groupe.is-actif .vranesh-branche-trait--faible { stroke-width: 0.7; }
+.vranesh-branches-groupe.is-actif .vranesh-branche-trait--forte { stroke-width: 1.3; }
+
+/* ---------- La pousse : les branches sortent du thème ---------- */
+/* Chaque branche se dessine de son attache vers son bourgeon. Le décalage par
+   branche est posé en CSS (variable --pousse-retard), jamais en style inline :
+   la CSP interdit le style inline, et le noyau ne pose que des classes. */
+@media (prefers-reduced-motion: no-preference) {
+  .vranesh-branche-trait {
+    stroke-dasharray: 22;
+    stroke-dashoffset: 22;
+    animation: vranesh-pousse 520ms cubic-bezier(0.22, 0.68, 0.32, 1) both;
+    animation-delay: var(--pousse-retard, 0ms);
+  }
+  .vranesh-bourgeon {
+    animation: vranesh-bourgeonne 320ms ease-out both;
+    animation-delay: calc(var(--pousse-retard, 0ms) + 380ms);
+  }
+  @keyframes vranesh-pousse {
+    from { stroke-dashoffset: 22; }
+    to   { stroke-dashoffset: 0; }
+  }
+  @keyframes vranesh-bourgeonne {
+    from { opacity: 0; }
+    to   { opacity: 0.5; }
+  }
+}
+
+/* ---------- États ---------- */
+.vranesh-boussole-vide {
+  text-align: center;
+  font-style: italic;
+  color: var(--creme);
+  opacity: 0.85;
+  margin: 1.4rem auto;
+  max-width: 34rem;
+}
+
+/* Le cartouche de parole hérite de css/boussole.css ; on lui ajoute la seule
+   ligne propre à VRANESH : le rappel de la posture (anticiper, puis revenir). */
+.vranesh-boussole .parole-posture {
+  margin: 0.5rem 0 0;
+  font-style: italic;
+  opacity: 0.8;
+}

@@ -364,6 +364,279 @@
     visibles.forEach(function (s) { conteneur.appendChild(rendreSituation(s)); });
   }
 
+  // ---------- LA BOUSSOLE DES FUTURS (dictée Paul 2026-08-01) ----------
+  // Forme voulue : « les différents thèmes de futurs sous forme de boussole
+  // comme IMLADRIK, puis depuis chaque thème des ramifications comme des
+  // branches qui poussent ».
+  //   un THÈME de futurs = une SITUATION (le cas donné : LIANDRA, THORIOL…)
+  //   une RAMIFICATION    = un SCÉNARIO de cette situation (un futur possible)
+  // Une situation « à explorer » est donc un thème SANS branche : la règle
+  // cardinale positive se lit d'un coup d'œil — un thème nu appelle qu'on lui
+  // imagine des futurs, il ne signale pas un manque.
+  //
+  // Différence essentielle avec la boussole Lv3 (js/boussole-noyau.mjs) : là-bas
+  // les caps sont STATIQUES (registre figé) et posés en innerHTML ; ici ils
+  // portent des intitulés dictés par Paul — donc de la donnée intime. Tout est
+  // écrit en createElement/textContent, jamais en innerHTML, et rien n'est rendu
+  // avant que la session ait été validée (chargerRegistre est déjà fail-closed).
+
+  var GEO = {
+    RAYON_CAP: 40,        // rayon des caps (unités viewBox 0..100) — miroir du noyau
+    RAYON_AIGUILLE: 30,   // longueur des aiguilles depuis le centre
+    ATTACHE: 45,          // départ des branches, juste au-delà du cap
+    LONGUEUR: 11,         // longueur d'une branche
+    ETALEMENT: 32         // demi-angle (degrés) de l'éventail des branches
+  };
+  var NS_SVG = 'http://www.w3.org/2000/svg';
+  var boussoleEnAttente = false;   // un seul réveil armé à la fois (cf. rendreBoussole)
+
+  // La géométrie vient du NOYAU de la boussole (window.UltimaBoussoleNoyau,
+  // posé par js/boussole-noyau.mjs) : on ne recopie pas sa trigonométrie, déjà
+  // couverte par tests/unit-registre-lv3.mjs. Sans le noyau, la boussole ne se
+  // dessine pas — le registre en dessous reste entier (dégradation propre).
+  function positionsCaps(n) {
+    var noyau = window.UltimaBoussoleNoyau;
+    if (!noyau || typeof noyau.positions !== 'function') { return null; }
+    return noyau.positions(n);
+  }
+
+  function svgEl(nom, classe) {
+    var element = document.createElementNS(NS_SVG, nom);
+    if (classe) { element.setAttribute('class', classe); }
+    return element;
+  }
+
+  // Le médaillon gravé au cœur de la rose : le chemin qui bifurque, blason de
+  // VRANESH. Entièrement statique (aucune donnée), construit nœud par nœud.
+  function medaillon() {
+    var svg = svgEl('svg');
+    svg.setAttribute('viewBox', '0 0 72 72');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('focusable', 'false');
+
+    var fond = svgEl('circle');
+    fond.setAttribute('cx', '36'); fond.setAttribute('cy', '36'); fond.setAttribute('r', '33');
+    fond.setAttribute('fill', '#f9f1dc');
+    fond.setAttribute('stroke', '#a9884a');
+    fond.setAttribute('stroke-width', '2.4');
+    svg.appendChild(fond);
+
+    var cerne = svgEl('circle');
+    cerne.setAttribute('cx', '36'); cerne.setAttribute('cy', '36'); cerne.setAttribute('r', '28.5');
+    cerne.setAttribute('fill', 'none');
+    cerne.setAttribute('stroke', '#5a4118');
+    cerne.setAttribute('stroke-width', '1');
+    svg.appendChild(cerne);
+
+    ['M36 56 V 40',
+     'M36 40 C 36 32, 28 30, 24 22',
+     'M36 40 C 36 30, 36 26, 36 20',
+     'M36 40 C 36 32, 44 30, 48 22'].forEach(function (d, i) {
+      var trait = svgEl('path');
+      trait.setAttribute('d', d);
+      trait.setAttribute('stroke', '#3b2f1c');
+      trait.setAttribute('stroke-width', i === 0 ? '2.6' : '2');
+      trait.setAttribute('fill', 'none');
+      trait.setAttribute('stroke-linecap', 'round');
+      svg.appendChild(trait);
+    });
+    return svg;
+  }
+
+  // L'éventail des branches d'un thème : m scénarios répartis autour de la
+  // direction du cap. Fonction PURE (aucun DOM) → testable unitairement.
+  // base = angle du cap en radians ; retourne les points d'attache/contrôle/bout.
+  function eventail(base, m) {
+    var out = [];
+    if (m <= 0) { return out; }
+    var etalement = GEO.ETALEMENT * Math.PI / 180;
+    for (var k = 0; k < m; k += 1) {
+      // m === 1 → une seule branche dans l'axe du cap ; sinon réparties.
+      var t = (m === 1) ? 0 : ((k / (m - 1)) * 2 - 1);
+      var angle = base + t * etalement;
+      var courbe = base + t * etalement * 0.35; // le contrôle redresse la branche
+      out.push({
+        ax: 50 + GEO.ATTACHE * Math.cos(base),
+        ay: 50 + GEO.ATTACHE * Math.sin(base),
+        cx: 50 + (GEO.ATTACHE + GEO.LONGUEUR * 0.5) * Math.cos(courbe),
+        cy: 50 + (GEO.ATTACHE + GEO.LONGUEUR * 0.5) * Math.sin(courbe),
+        bx: 50 + (GEO.ATTACHE + GEO.LONGUEUR) * Math.cos(angle),
+        by: 50 + (GEO.ATTACHE + GEO.LONGUEUR) * Math.sin(angle)
+      });
+    }
+    return out;
+  }
+
+  // La parole de Léo sous la boussole : ce que dit le thème survolé. Comptes et
+  // intitulé seulement — jamais le déroulé d'un scénario, qui reste dans le
+  // registre en dessous (même discipline que les yeux de Léo).
+  function paroleThemeDefaut(parole) {
+    parole.textContent = '';
+    parole.classList.remove('is-actif');
+    parole.appendChild(el('p', 'parole-defaut',
+      'Survole un thème — Léo t’en dit l’essentiel.'));
+  }
+
+  function paroleTheme(parole, situation, scenarios) {
+    parole.textContent = '';
+    parole.classList.add('is-actif');
+    parole.appendChild(el('p', 'parole-nom', situation.intitule || ''));
+    parole.appendChild(el('p', 'parole-etat', situation.a_explorer === true
+      ? 'À explorer — aucun futur déroulé pour l’instant'
+      : libelleCompte(scenarios.length) + ' déroulé' + (scenarios.length > 1 ? 's' : '')));
+
+    if (scenarios.length > 0) {
+      var forces = scenarios.filter(function (sc) { return sc && sc.vraisemblance === 'forte'; }).length;
+      var faibles = scenarios.filter(function (sc) { return sc && sc.vraisemblance === 'faible'; }).length;
+      var repartition = [];
+      if (forces > 0) { repartition.push(forces + ' probable' + (forces > 1 ? 's' : '')); }
+      if (faibles > 0) { repartition.push(faibles + ' peu probable' + (faibles > 1 ? 's' : '')); }
+      if (repartition.length > 0) {
+        parole.appendChild(el('p', 'parole-cockpit', 'Vraisemblance — ' + repartition.join(' · ')));
+      }
+    }
+
+    parole.appendChild(el('p', 'parole-posture', situation.a_explorer === true
+      ? 'Un thème nu appelle qu’on lui imagine des futurs — rien ne manque.'
+      : 'Anticiper sereinement, puis revenir au présent.'));
+    parole.appendChild(el('p', 'parole-action', 'Clique pour ouvrir ce thème ↝'));
+  }
+
+  function rendreBoussole() {
+    var section = document.getElementById('vranesh-boussole');
+    var plateau = document.getElementById('vranesh-plateau');
+    var parole = document.getElementById('vranesh-parole');
+    if (!section || !plateau || !parole) { return; }
+
+    plateau.textContent = '';
+    paroleThemeDefaut(parole);
+
+    var themes = Array.isArray(etat.situations) ? etat.situations : [];
+
+    // Aucun thème : la boussole reste visible et invite à en poser un premier.
+    if (themes.length === 0) {
+      section.hidden = false;
+      plateau.appendChild(el('p', 'vranesh-boussole-vide',
+        'Aucun thème de futurs pour l’instant — pose une première situation ci-dessous, '
+        + 'elle deviendra un cap de ta boussole.'));
+      return;
+    }
+
+    var pts = positionsCaps(themes.length);
+
+    // Le noyau de géométrie est un MODULE, donc différé : le registre (une seule
+    // requête locale) peut être rendu avant qu'il ne soit évalué. On redessine
+    // alors à `load`, qui arrive toujours après l'exécution des modules. Si la
+    // page est déjà complète sans le noyau, c'est qu'il ne viendra pas : la
+    // boussole s'efface et le registre en dessous porte tout le travail.
+    if (!pts) {
+      section.hidden = true;
+      if (!boussoleEnAttente && document.readyState !== 'complete') {
+        boussoleEnAttente = true;
+        window.addEventListener('load', function () {
+          boussoleEnAttente = false;
+          rendreBoussole();
+        }, { once: true });
+      }
+      return;
+    }
+    section.hidden = false;
+
+    // ---- Aiguilles + branches (une seule couche SVG, sous les caps) ----
+    var svg = svgEl('svg', 'vranesh-branches');
+    svg.setAttribute('viewBox', '0 0 100 100');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('focusable', 'false');
+
+    var groupes = themes.map(function (situation, i) {
+      var base = Math.atan2(pts[i].sin, pts[i].cos);
+      var groupe = svgEl('g', 'vranesh-branches-groupe');
+
+      // L'aiguille du cap (habillage repris de css/boussole.css).
+      var aiguille = svgEl('g', 'aiguille');
+      var trait = svgEl('line', 'aiguille-trait');
+      trait.setAttribute('x1', '50'); trait.setAttribute('y1', '50');
+      trait.setAttribute('x2', String(50 + GEO.RAYON_AIGUILLE * pts[i].cos));
+      trait.setAttribute('y2', String(50 + GEO.RAYON_AIGUILLE * pts[i].sin));
+      var pointe = svgEl('circle', 'aiguille-pointe');
+      pointe.setAttribute('cx', String(50 + GEO.RAYON_AIGUILLE * pts[i].cos));
+      pointe.setAttribute('cy', String(50 + GEO.RAYON_AIGUILLE * pts[i].sin));
+      pointe.setAttribute('r', '2.1');
+      aiguille.appendChild(trait);
+      aiguille.appendChild(pointe);
+      groupe.appendChild(aiguille);
+
+      // Les ramifications : un scénario = une branche qui pousse hors du thème.
+      var scenarios = scenariosDe(situation.id);
+      eventail(base, scenarios.length).forEach(function (b, k) {
+        var vraisemblance = (scenarios[k] && scenarios[k].vraisemblance) || 'moyenne';
+        var branche = svgEl('path',
+          'vranesh-branche-trait vranesh-branche-trait--' + vraisemblance);
+        branche.setAttribute('d',
+          'M ' + b.ax + ' ' + b.ay + ' Q ' + b.cx + ' ' + b.cy + ' ' + b.bx + ' ' + b.by);
+        // Décalage de pousse : les branches d'un thème sortent l'une après
+        // l'autre. Propriété custom (CSSOM), jamais d'attribut style en dur.
+        branche.style.setProperty('--pousse-retard', (i * 90 + k * 70) + 'ms');
+        groupe.appendChild(branche);
+
+        var bourgeon = svgEl('circle', 'vranesh-bourgeon');
+        bourgeon.setAttribute('cx', String(b.bx));
+        bourgeon.setAttribute('cy', String(b.by));
+        bourgeon.setAttribute('r', '1.35');
+        bourgeon.style.setProperty('--pousse-retard', (i * 90 + k * 70) + 'ms');
+        groupe.appendChild(bourgeon);
+      });
+
+      svg.appendChild(groupe);
+      return groupe;
+    });
+    plateau.appendChild(svg);
+
+    // ---- Le cœur gravé ----
+    var coeur = el('div', 'boussole-coeur');
+    coeur.setAttribute('aria-hidden', 'true');
+    coeur.appendChild(medaillon());
+    plateau.appendChild(coeur);
+
+    // ---- Les caps : un thème de futurs par cap ----
+    themes.forEach(function (situation, i) {
+      var scenarios = scenariosDe(situation.id);
+      var cap = document.createElement('a');
+      cap.className = 'cap' + (situation.a_explorer === true ? ' cap--avenir' : '');
+      cap.href = '#vranesh-situation-' + situation.id;
+      cap.style.left = (50 + GEO.RAYON_CAP * pts[i].cos) + '%';
+      cap.style.top = (50 + GEO.RAYON_CAP * pts[i].sin) + '%';
+      cap.setAttribute('aria-label', (situation.intitule || '') + ' — '
+        + (situation.a_explorer === true ? 'à explorer' : libelleCompte(scenarios.length)));
+
+      var corps = el('span', 'cap-corps');
+      corps.appendChild(el('span', 'cap-nom', situation.intitule || ''));
+      corps.appendChild(el('span', 'cap-etat', situation.a_explorer === true
+        ? 'à explorer'
+        : libelleCompte(scenarios.length)));
+      cap.appendChild(corps);
+
+      function activer() {
+        cap.classList.add('is-actif');
+        groupes[i].classList.add('is-actif');
+        paroleTheme(parole, situation, scenarios);
+      }
+      function desactiver() {
+        cap.classList.remove('is-actif');
+        groupes[i].classList.remove('is-actif');
+        paroleThemeDefaut(parole);
+      }
+      cap.addEventListener('mouseenter', activer);
+      cap.addEventListener('mouseleave', desactiver);
+      cap.addEventListener('focus', activer);
+      cap.addEventListener('blur', desactiver);
+
+      plateau.appendChild(cap);
+    });
+
+    plateau.classList.add('is-pret');
+  }
+
   // ---------- Bascule de vue ----------
 
   function poserVue(vue) {
@@ -568,6 +841,7 @@
     await chargerCibles();
 
     rendreSituations();
+    rendreBoussole();
     montrer('vranesh-registre');
     accueillirLeo();
     return true;
@@ -684,8 +958,11 @@
     await chargerRegistre();
   }
 
-  // Fonction pure exposée pour les unitaires/harnais (aucune donnée réelle).
-  window.UltimaVranesh = { situationsVisibles: situationsVisibles };
+  // Fonctions pures exposées pour les unitaires/harnais (aucune donnée réelle).
+  window.UltimaVranesh = {
+    situationsVisibles: situationsVisibles,
+    eventail: eventail
+  };
 
   demarrer().catch(function () { montrer('vranesh-erreur'); });
 })();
