@@ -246,6 +246,96 @@ await pageM.close();
 // L'API /api/leo est STUBÉE (zéro IA, zéro coût, zéro réseau sortant) : on
 // prouve le contrat front — Bearer + quadrant + historique envoyés, bulles
 // rendues, gate 503 qui retire la zone, panne qui restitue le texte dicté.
+// ======= B-bis. LES YEUX DE LÉO SUR RIVEN (boucle ①, 2026-08-01) =======
+// L'état borné du quadrant, joint à chaque question, pour répondre « où j'en
+// suis ». RIVEN est un cas PLUS STRICT que les caps d'IMLADRIK : son contenu
+// est de la PII de TIERS (artisans, partenaires, clients). La règle assumée
+// est donc « COMPTES + SECTEURS, AUCUN NOM ».
+// Conformément à la charte, cette règle se teste PAR L'ABSENCE : on cherche les
+// noms de la démo dans ce qui partirait vers l'IA et on exige de ne pas les y
+// trouver. Vérifier seulement la présence des compteurs ne prouverait rien.
+console.log('— B-bis. Les yeux de Léo sur RIVEN (comptes + secteurs, aucun nom) —');
+{
+  const pageY = await navigateur.newPage({ viewport: { width: 1280, height: 900 } });
+  await pageY.goto(`${BASE}/traveler.html`, { waitUntil: 'load', timeout: 20000 });
+  await pageY.waitForFunction(() => window.UltimaRiven !== undefined, null, { timeout: 20000 });
+
+  // On exerce la fonction PURE sur les fixtures de démo déjà chargées par la
+  // page — donc sur des noms réellement présents à l'écran.
+  const vu = await pageY.evaluate(() => {
+    const noeuds = [
+      { id: 'n1', type: 'artisan', nom: 'Menuiserie Delcourt', secteur_activite: 'Menuiserie', statut: 'actif' },
+      { id: 'n2', type: 'artisan', nom: 'Plomberie Roux & Fils', secteur_activite: 'Plomberie', statut: 'actif' },
+      { id: 'n3', type: 'partenaire', nom: 'Agence Habitat Sud', secteur_activite: 'Courtage', statut: 'actif' },
+      { id: 'n4', type: 'partenaire', nom: 'Courtage Bâti Ouest', secteur_activite: 'Courtage', statut: 'actif' },
+      { id: 'n5', type: 'lead', nom: 'M. Lambert — rénovation toiture', secteur_activite: 'Toiture', statut: 'prospect' },
+      { id: 'n6', type: 'lead', nom: 'Mme Nguyen — extension maison', statut: 'termine' },
+      { id: 'n7', type: 'chantier', nom: 'Réhabilitation immeuble Voltaire', statut: 'en_cours' },
+    ];
+    const relations = [
+      { id: 'r1', statut: 'en_cours' }, { id: 'r2', statut: 'contact_etabli' },
+      { id: 'r3', statut: 'fructueux' }, { id: 'r4', statut: 'arrete' },
+    ];
+    const journal = [
+      { id: 'j1', relance_at: '2026-07-01', relance_faite: false, note: 'rappeler Delcourt' },
+      { id: 'j2', relance_at: '2026-08-01', relance_faite: false, note: 'devis Lambert' },
+      { id: 'j3', relance_at: '2026-09-01', relance_faite: false, note: 'plus tard' },
+      { id: 'j4', relance_at: '2026-07-02', relance_faite: true, note: 'déjà fait' },
+    ];
+    const etat = window.UltimaRiven.construireEtatRiven(
+      noeuds, relations, journal, [{ id: 'a1' }], '2026-08-01');
+    return { etat, brut: JSON.stringify(etat) };
+  });
+
+  const c = vu.etat.compteurs;
+  verifier('Yeux RIVEN : le réseau est compté', c['contacts au réseau'] === 7, JSON.stringify(c));
+  verifier('Yeux RIVEN : les types sont comptés',
+    c['artisans'] === 2 && c['partenaires'] === 2 && c['chantiers'] === 1, JSON.stringify(c));
+  verifier('Yeux RIVEN : un lead terminé n’est plus actif', c['leads actifs'] === 1, JSON.stringify(c));
+  verifier('Yeux RIVEN : les relations vivantes sont comptées',
+    c['relations en cours'] === 2 && c['relations fructueuses'] === 1, JSON.stringify(c));
+  verifier('Yeux RIVEN : relances dues = échues ou du jour, jamais celles déjà faites',
+    c['relances dues'] === 2, JSON.stringify(c));
+  verifier('Yeux RIVEN : les relances en retard sont distinguées du jour même',
+    c['relances en retard'] === 1, JSON.stringify(c));
+  verifier('Yeux RIVEN : les alertes J-2 remontent', c['chantiers en alerte J-2'] === 1);
+
+  const secteurs = vu.etat.listes['Les secteurs du réseau'] || [];
+  verifier('Yeux RIVEN : les secteurs sont listés (un métier, pas une personne)',
+    secteurs.length === 4, JSON.stringify(secteurs));
+  verifier('Yeux RIVEN : le secteur le plus fourni vient en tête',
+    secteurs[0].libelle === 'Courtage' && secteurs[0].marque === '2 contacts', JSON.stringify(secteurs[0]));
+
+  // ---- L'ABSENCE : aucun nom de contact ne doit figurer dans ce qui part. ----
+  const interdits = ['Delcourt', 'Roux', 'Habitat Sud', 'Bâti Ouest', 'Lambert',
+    'Nguyen', 'Voltaire', 'rappeler', 'devis'];
+  const fuites = interdits.filter((mot) => vu.brut.includes(mot));
+  verifier('ABSENCE — aucun nom de contact dans les yeux de RIVEN',
+    fuites.length === 0, fuites.join(', '));
+  verifier('ABSENCE — aucune note de journal dans les yeux de RIVEN',
+    !/rappeler|devis|plus tard/.test(vu.brut));
+  verifier('ABSENCE — aucun identifiant dans les yeux de RIVEN',
+    !/"n1"|"r1"|"j1"|"a1"/.test(vu.brut));
+
+  // ---- Bornes du serveur : l'état doit passer validerEtatQuadrant. ----
+  verifier('Yeux RIVEN : ≤ 12 compteurs (borne serveur)', Object.keys(c).length <= 12);
+  verifier('Yeux RIVEN : ≤ 4 listes (borne serveur)',
+    Object.keys(vu.etat.listes).length <= 4);
+  verifier('Yeux RIVEN : chaque libellé de compteur respecte le motif serveur',
+    Object.keys(c).every((k) => /^[\wÀ-ÿ' ’()–-]{1,60}$/.test(k)), JSON.stringify(Object.keys(c)));
+  verifier('Yeux RIVEN : chaque secteur respecte les bornes serveur',
+    secteurs.every((s) => s.libelle.length <= 200 && s.marque.length <= 60));
+
+  // Un réseau vide ne fabrique pas de liste fantôme.
+  const vide = await pageY.evaluate(() =>
+    window.UltimaRiven.construireEtatRiven([], [], [], [], '2026-08-01'));
+  verifier('Yeux RIVEN : un réseau vide donne des comptes à zéro, aucune liste',
+    vide.compteurs['contacts au réseau'] === 0 && Object.keys(vide.listes).length === 0,
+    JSON.stringify(vide));
+
+  await pageY.close();
+}
+
 console.log('— C. Voix de Léo (L2, /api/leo stubée) —');
 const pageV = await navigateur.newPage({ viewport: { width: 1280, height: 800 } });
 const erreursVoix = [];

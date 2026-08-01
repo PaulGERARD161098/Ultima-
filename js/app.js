@@ -289,11 +289,93 @@
                 return { id: c.id, libelle: nomNoeud(c.node_id) };
               })
             },
-            notifier: function (message) { toast(message, 'succes'); }
+            notifier: function (message) { toast(message, 'succes'); },
+            // Les YEUX de Léo sur RIVEN (boucle ①, 2026-08-01) : l'état borné
+            // du quadrant, calculé sur les données DÉJÀ chargées par la page.
+            etat: etatRiven()
           }
         : null
     );
   }
+
+  // L'état borné de RIVEN — ce que Léo « voit » pour répondre « où j'en suis ».
+  //
+  // RÈGLE DE CONFIDENTIALITÉ, PLUS STRICTE QUE SUR IMLADRIK ET ASSUMÉE ICI :
+  // le réseau commercial est de la PII, et surtout la PII de TIERS — des
+  // artisans, des partenaires, des clients qui n'ont rien demandé. Là où
+  // DRAUKHAIN/VRANESH envoient les intitulés de Paul (ses propres objectifs),
+  // RIVEN n'envoie **AUCUN NOM** : uniquement des COMPTES, plus la liste des
+  // SECTEURS D'ACTIVITÉ, qui sont des métiers et non des personnes.
+  // Conséquence acceptée : Léo peut dire « 3 relances dues », jamais
+  // « relance Godefroy ». Pour agir sur une cible nommée, Paul la dicte et la
+  // résolution se fait EN LOCAL (`candidats`, jamais envoyés à l'IA).
+  function etatRiven() {
+    return construireEtatRiven(
+      etat.noeuds || [],
+      etat.relations || [],
+      etat.journal || [],
+      (etat.intendant && Array.isArray(etat.intendant.alertes)) ? etat.intendant.alertes : [],
+      new Date().toISOString().slice(0, 10)
+    );
+  }
+
+  // La construction proprement dite : PURE (aucun accès au DOM ni à l'état
+  // global) → exercée directement par le harnais, qui cherche dans son résultat
+  // les noms interdits et exige de NE PAS les y trouver.
+  function construireEtatRiven(noeuds, relations, journal, alertes, aujourdHui) {
+
+    function compter(liste, predicat) { return liste.filter(predicat).length; }
+
+    var dues = journal.filter(function (j) {
+      return j && j.relance_at && j.relance_at <= aujourdHui && !j.relance_faite;
+    });
+
+    // Les secteurs : un métier, pas une personne. Triés par poids décroissant,
+    // bornés à 40 entrées (MAX_ETAT_ENTREES côté serveur).
+    var parSecteur = {};
+    noeuds.forEach(function (n) {
+      var secteur = (n && n.secteur_activite ? String(n.secteur_activite) : '').trim();
+      if (!secteur) { return; }
+      parSecteur[secteur] = (parSecteur[secteur] || 0) + 1;
+    });
+    var secteurs = Object.keys(parSecteur)
+      .sort(function (a, b) { return parSecteur[b] - parSecteur[a] || a.localeCompare(b, 'fr'); })
+      .slice(0, 40)
+      .map(function (secteur) {
+        return {
+          libelle: secteur.slice(0, 200),
+          marque: parSecteur[secteur] + (parSecteur[secteur] > 1 ? ' contacts' : ' contact')
+        };
+      });
+
+    var listes = {};
+    if (secteurs.length > 0) { listes['Les secteurs du réseau'] = secteurs; }
+
+    return {
+      compteurs: {
+        'contacts au réseau': noeuds.length,
+        'artisans': compter(noeuds, function (n) { return n && n.type === 'artisan'; }),
+        'partenaires': compter(noeuds, function (n) { return n && n.type === 'partenaire'; }),
+        'leads actifs': compter(noeuds, function (n) {
+          return n && n.type === 'lead' && n.statut !== 'termine' && n.statut !== 'inactif';
+        }),
+        'chantiers': compter(noeuds, function (n) { return n && n.type === 'chantier'; }),
+        'relations en cours': compter(relations, function (r) {
+          return r && (r.statut === 'en_cours' || r.statut === 'contact_etabli');
+        }),
+        'relations fructueuses': compter(relations, function (r) {
+          return r && r.statut === 'fructueux';
+        }),
+        'relances dues': dues.length,
+        'relances en retard': compter(dues, function (j) { return j.relance_at < aujourdHui; }),
+        'chantiers en alerte J-2': alertes.length
+      },
+      listes: listes
+    };
+  }
+
+  // Exposé pour les harnais : fonction PURE, aucune donnée réelle embarquée.
+  window.UltimaRiven = { construireEtatRiven: construireEtatRiven };
 
   function rafraichir() {
     window.UltimaCarte.rendre(etat.noeuds, etat.relations, etat.filtres);
