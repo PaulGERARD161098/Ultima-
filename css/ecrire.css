@@ -130,8 +130,25 @@ body.ecrire {
   letter-spacing: 0.08em;
 }
 
-/* Le micro de js/dictee.js, s'il apparaît, se pose sous le champ et reste au
-   pouce. Là où l'API manque (iOS notamment), la dictée clavier du système
-   prend le relais dans ce champ ordinaire — prévu, pas subi. */
+/* ---------- La dictée sur fond de mer ---------- */
+/* Le micro de js/dictee.js se pose en haut à droite du champ (position absolue
+   dans `.champ-vocal`, qui reste `position: relative`). Là où l'API manque, la
+   dictée clavier du système prend le relais dans ce champ ordinaire. */
+.ecrire-bloc .champ-vocal {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
 .ecrire-bloc .bouton-micro { min-height: 44px; min-width: 44px; }
-.ecrire-bloc .champ-vocal { display: flex; flex-direction: column; gap: 0.4rem; flex: 1; }
+
+/* La ligne « Je vous écoute… » est écrite en `--accent-fonce` dans
+   css/styles.css : un bleu sombre, prévu pour un fond parchemin. Sur la mer
+   d'ici, elle était INVISIBLE — la dictée pouvait tourner sans qu'on le voie.
+   On la repeint en crème, et on lui donne de l'air sous le champ. */
+.ecrire-bloc .etat-vocal {
+  color: var(--creme);
+  font-style: italic;
+  font-weight: 400;
+  margin: 0.35rem 0 0;
+}

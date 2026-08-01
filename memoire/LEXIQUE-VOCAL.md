@@ -86,3 +86,9 @@ reformuler et demander — jamais deviner avant une action irréversible.
   (Edouard Lebrun, dictée 2026-08-01) = le chemin (le COMMENT entièrement
   défini et assumé avant la première ligne de travail, gate d'entrée bloquant,
   rien au hasard — dans les mots comme dans le code).
+
+- **Le domaine de production d'Ultima : `https://ultima-plum.vercel.app`**
+  (relevé sur une capture d'écran de Paul le 2026-08-01 — il ne figurait nulle
+  part dans le repo, Léo l'avait cherché en vain). Les deux entrées du cap
+  MINETHNIR : `…/ecrire.html` (**la capture**, celle à poser sur l'écran
+  d'accueil de l'iPhone) et `…/minethnir.html` (**l'atelier posé**).

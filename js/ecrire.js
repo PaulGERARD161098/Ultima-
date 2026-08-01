@@ -196,7 +196,16 @@
       // La dictée RÉ-EMBOÎTE le champ dans son enveloppe : poser le focus avant
       // le ferait perdre. On attache d'abord, on focalise ensuite.
       if (window.UltimaDictee && typeof window.UltimaDictee.attacher === 'function') {
-        window.UltimaDictee.attacher(champ);
+        // `signaler` vaut function(){} PAR DÉFAUT dans js/dictee.js : sans cette
+        // configuration, TOUT ce que la dictée a à dire est avalé en silence —
+        // « je n'ai rien entendu », « micro refusé », « la dictée n'a pas
+        // abouti ». C'était le défaut : le bouton répondait, mais muet.
+        if (typeof window.UltimaDictee.configurer === 'function') {
+          window.UltimaDictee.configurer({
+            signaler: function (texte, ton) { message(texte, ton === 'erreur' ? 'erreur' : ''); }
+          });
+        }
+        window.UltimaDictee.attacher(champ, 'ce qui vient');
       }
       try { champ.focus(); } catch (e) { /* focus refusé : sans conséquence */ }
     }
