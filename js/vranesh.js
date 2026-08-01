@@ -339,7 +339,163 @@
     }
 
     rendreScenarios(situation, carte);
+    rendreDenouement(situation, carte);
     return carte;
+  }
+
+  // ---------- LE DÉNOUEMENT : « la branche qui a poussé » (0019) ----------
+  // Dictée Paul : quand le futur est advenu, il revient sur l'arbre et désigne
+  // la branche qui a poussé — l'une des anticipées, ou une neuve si l'imprévu
+  // est arrivé — et les autres branches potentielles sont SUPPRIMÉES.
+  // La coupe est irréversible : elle se fait en DEUX temps (demander, puis
+  // confirmer en sachant combien de branches tombent). Aucune boîte système —
+  // la confirmation vit dans la page, donc lisible, stylée et vérifiable.
+
+  function scenarioAdvenu(situation) {
+    if (!situation || !situation.scenario_advenu_id) { return null; }
+    var trouves = scenariosDe(situation.id).filter(function (sc) {
+      return sc && sc.id === situation.scenario_advenu_id;
+    });
+    return trouves.length > 0 ? trouves[0] : null;
+  }
+
+  function rendreDenouement(situation, carte) {
+    var scenarios = scenariosDe(situation.id);
+    var bloc = el('section', 'zekrom-retro vranesh-denouement');
+
+    // ---- Déjà advenu : on montre la branche qui a poussé, et on peut rouvrir.
+    if (situation.advenue === true) {
+      bloc.classList.add('vranesh-denouement--advenu');
+      bloc.appendChild(el('h4', 'zekrom-retro-entete', 'La branche qui a poussé'));
+      var advenu = scenarioAdvenu(situation);
+      bloc.appendChild(el('p', 'vranesh-advenu-deroule',
+        advenu ? (advenu.deroule || '') : 'Ce futur n’est plus dans la carte.'));
+      if (situation.advenu_le) {
+        bloc.appendChild(el('p', 'zekrom-retro-note',
+          'Advenu — constaté le ' + dateLisible(situation.advenu_le) + '.'));
+      }
+      var rouvrir = el('button', 'zekrom-retro-detacher', 'Rouvrir ce thème');
+      rouvrir.type = 'button';
+      rouvrir.addEventListener('click', function () { poserDenouement(situation.id, null); });
+      bloc.appendChild(rouvrir);
+      carte.appendChild(bloc);
+      return;
+    }
+
+    // Un thème « à explorer » n'a rien à trancher : on ne lui propose pas de
+    // dénouement, on le laisse à son invitation. (Le jour où il aura des
+    // branches, la question se posera d'elle-même.)
+    if (scenarios.length === 0) { return; }
+
+    // ---- Pas encore tranché : proposer de désigner la branche.
+    bloc.appendChild(el('h4', 'zekrom-retro-entete', 'Ce futur est-il advenu ?'));
+    bloc.appendChild(el('p', 'zekrom-retro-note',
+      'Désigne la branche qui a poussé. Les autres branches potentielles seront '
+      + 'supprimées — le geste est définitif.'));
+
+    var form = el('form', 'zekrom-form vranesh-denouement-form');
+    form.setAttribute('novalidate', 'novalidate');
+
+    var champChoix = el('div', 'zekrom-champ');
+    var idChoix = 'vranesh-advenu-' + situation.id;
+    var labelChoix = el('label', null, 'La branche qui a poussé');
+    labelChoix.setAttribute('for', idChoix);
+    champChoix.appendChild(labelChoix);
+    var choix = document.createElement('select');
+    choix.id = idChoix;
+    choix.className = 'zekrom-select';
+    scenarios.forEach(function (sc) {
+      var option = document.createElement('option');
+      option.value = sc.id;
+      option.textContent = sc.deroule || '';
+      choix.appendChild(option);
+    });
+    var optionNeuve = document.createElement('option');
+    optionNeuve.value = '';
+    optionNeuve.textContent = 'Autre chose est arrivé — une branche neuve';
+    choix.appendChild(optionNeuve);
+    champChoix.appendChild(choix);
+    form.appendChild(champChoix);
+
+    // La branche neuve : « en créer une autre si nouvelle branche ».
+    var champNeuf = el('div', 'zekrom-champ vranesh-branche-neuve');
+    champNeuf.hidden = true;
+    var idNeuf = 'vranesh-advenu-neuf-' + situation.id;
+    var labelNeuf = el('label', null, 'Ce qui est réellement arrivé');
+    labelNeuf.setAttribute('for', idNeuf);
+    champNeuf.appendChild(labelNeuf);
+    var neuf = document.createElement('input');
+    neuf.id = idNeuf;
+    neuf.type = 'text';
+    neuf.maxLength = 2000;
+    neuf.autocomplete = 'off';
+    neuf.placeholder = 'le futur qui n’avait pas été anticipé…';
+    champNeuf.appendChild(neuf);
+    form.appendChild(champNeuf);
+
+    choix.addEventListener('change', function () {
+      champNeuf.hidden = choix.value !== '';
+    });
+
+    // Deux temps : demander, puis confirmer en sachant ce qui tombe.
+    var actions = el('div', 'zekrom-form-actions');
+    var demander = el('button', 'zekrom-bouton', 'Cette branche a poussé');
+    demander.type = 'submit';
+    actions.appendChild(demander);
+    var messageDeno = el('span', 'zekrom-form-message');
+    messageDeno.setAttribute('role', 'status');
+    messageDeno.setAttribute('aria-live', 'polite');
+    actions.appendChild(messageDeno);
+    form.appendChild(actions);
+
+    var confirmation = el('div', 'vranesh-confirmation');
+    confirmation.hidden = true;
+    form.appendChild(confirmation);
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var choisi = choix.value;
+      var texteNeuf = neuf.value.trim();
+      if (!choisi && texteNeuf.length === 0) {
+        messageDeno.textContent = 'Dis-moi ce qui est arrivé.';
+        messageDeno.classList.add('zekrom-form-message--erreur');
+        return;
+      }
+      messageDeno.textContent = '';
+      messageDeno.classList.remove('zekrom-form-message--erreur');
+
+      // Combien de branches tombent : toutes sauf celle qui a poussé. Une
+      // branche neuve n'existe pas encore en base → toutes les anticipées.
+      var coupees = choisi ? Math.max(0, scenarios.length - 1) : scenarios.length;
+
+      confirmation.textContent = '';
+      confirmation.hidden = false;
+      confirmation.appendChild(el('p', 'vranesh-confirmation-texte',
+        coupees === 0
+          ? 'Aucune autre branche à couper. Confirmer ?'
+          : (coupees === 1
+            ? 'Confirmer ? L’autre branche potentielle sera supprimée définitivement.'
+            : 'Confirmer ? Les ' + coupees + ' autres branches potentielles seront '
+              + 'supprimées définitivement.')));
+      var confirmer = el('button', 'zekrom-bouton vranesh-confirmer', 'Confirmer la coupe');
+      confirmer.type = 'button';
+      confirmer.addEventListener('click', function () {
+        if (choisi) { poserDenouement(situation.id, choisi); }
+        else { poserDenouementNeuf(situation.id, texteNeuf); }
+      });
+      var annuler = el('button', 'zekrom-retro-detacher', 'Annuler');
+      annuler.type = 'button';
+      annuler.addEventListener('click', function () {
+        confirmation.hidden = true;
+        confirmation.textContent = '';
+      });
+      confirmation.appendChild(confirmer);
+      confirmation.appendChild(annuler);
+      confirmer.focus();
+    });
+
+    bloc.appendChild(form);
+    carte.appendChild(bloc);
   }
 
   function rendreSituations() {
@@ -481,6 +637,16 @@
     parole.textContent = '';
     parole.classList.add('is-actif');
     parole.appendChild(el('p', 'parole-nom', situation.intitule || ''));
+
+    // Le futur a tranché : ce thème ne s'anticipe plus, il se relit.
+    if (situation.advenue === true) {
+      parole.appendChild(el('p', 'parole-etat', 'Advenu — la branche qui a poussé'));
+      parole.appendChild(el('p', 'parole-posture',
+        'Ce futur a tranché. Il ne reste plus à anticiper, seulement à en tirer la leçon.'));
+      parole.appendChild(el('p', 'parole-action', 'Clique pour ouvrir ce thème ↝'));
+      return;
+    }
+
     parole.appendChild(el('p', 'parole-etat', situation.a_explorer === true
       ? 'À explorer — aucun futur déroulé pour l’instant'
       : libelleCompte(scenarios.length) + ' déroulé' + (scenarios.length > 1 ? 's' : '')));
@@ -570,8 +736,12 @@
       var scenarios = scenariosDe(situation.id);
       eventail(base, scenarios.length).forEach(function (b, k) {
         var vraisemblance = (scenarios[k] && scenarios[k].vraisemblance) || 'moyenne';
-        var branche = svgEl('path',
-          'vranesh-branche-trait vranesh-branche-trait--' + vraisemblance);
+        // La branche qui a poussé se distingue de toutes les autres : le futur
+        // a tranché, ce n'est plus une hypothèse (0019).
+        var aPousse = situation.advenue === true
+          && scenarios[k] && scenarios[k].id === situation.scenario_advenu_id;
+        var branche = svgEl('path', 'vranesh-branche-trait vranesh-branche-trait--'
+          + (aPousse ? 'advenue' : vraisemblance));
         branche.setAttribute('d',
           'M ' + b.ax + ' ' + b.ay + ' Q ' + b.cx + ' ' + b.cy + ' ' + b.bx + ' ' + b.by);
         // Décalage de pousse : les branches d'un thème sortent l'une après
@@ -579,10 +749,11 @@
         branche.style.setProperty('--pousse-retard', (i * 90 + k * 70) + 'ms');
         groupe.appendChild(branche);
 
-        var bourgeon = svgEl('circle', 'vranesh-bourgeon');
+        var bourgeon = svgEl('circle',
+          'vranesh-bourgeon' + (aPousse ? ' vranesh-bourgeon--advenu' : ''));
         bourgeon.setAttribute('cx', String(b.bx));
         bourgeon.setAttribute('cy', String(b.by));
-        bourgeon.setAttribute('r', '1.35');
+        bourgeon.setAttribute('r', aPousse ? '2.1' : '1.35');
         bourgeon.style.setProperty('--pousse-retard', (i * 90 + k * 70) + 'ms');
         groupe.appendChild(bourgeon);
       });
@@ -601,19 +772,21 @@
     // ---- Les caps : un thème de futurs par cap ----
     themes.forEach(function (situation, i) {
       var scenarios = scenariosDe(situation.id);
+      var etatCap = situation.advenue === true
+        ? 'advenu'
+        : (situation.a_explorer === true ? 'à explorer' : libelleCompte(scenarios.length));
       var cap = document.createElement('a');
-      cap.className = 'cap' + (situation.a_explorer === true ? ' cap--avenir' : '');
+      cap.className = 'cap'
+        + (situation.a_explorer === true ? ' cap--avenir' : '')
+        + (situation.advenue === true ? ' cap--advenu' : '');
       cap.href = '#vranesh-situation-' + situation.id;
       cap.style.left = (50 + GEO.RAYON_CAP * pts[i].cos) + '%';
       cap.style.top = (50 + GEO.RAYON_CAP * pts[i].sin) + '%';
-      cap.setAttribute('aria-label', (situation.intitule || '') + ' — '
-        + (situation.a_explorer === true ? 'à explorer' : libelleCompte(scenarios.length)));
+      cap.setAttribute('aria-label', (situation.intitule || '') + ' — ' + etatCap);
 
       var corps = el('span', 'cap-corps');
       corps.appendChild(el('span', 'cap-nom', situation.intitule || ''));
-      corps.appendChild(el('span', 'cap-etat', situation.a_explorer === true
-        ? 'à explorer'
-        : libelleCompte(scenarios.length)));
+      corps.appendChild(el('span', 'cap-etat', etatCap));
       cap.appendChild(corps);
 
       function activer() {
@@ -720,6 +893,41 @@
     if (res.status === 401) { montrer('vranesh-auth'); return; }
     if (!res.ok) { messageForm('Scénario non retiré. Réessaie.', true); return; }
     await rafraichir();
+  }
+
+  // ---- Le dénouement (0019) : désigner la branche qui a poussé ----
+  // scenarioId null → rouvrir le thème (aucune suppression).
+  // Sinon → le serveur protège d'abord la branche retenue, PUIS coupe les
+  // autres. Le geste a déjà été confirmé dans la page ; ici, on l'émet.
+  async function poserDenouement(situationId, scenarioId) {
+    if (!situationId) { return; }
+    var res = await appelApi('/api/situations',
+      { id: situationId, scenario_advenu_id: scenarioId || null }, 'PATCH');
+    if (res.status === 401) { montrer('vranesh-auth'); return; }
+    if (!res.ok) {
+      messageForm(scenarioId
+        ? 'La branche n’a pas été retenue. Rien n’a été supprimé.'
+        : 'Le thème n’a pas été rouvert. Réessaie.', true);
+      return;
+    }
+    await rafraichir();
+  }
+
+  // « En créer une autre si nouvelle branche » : l'imprévu s'écrit d'abord
+  // comme un scénario ordinaire, puis se désigne comme advenu. En deux appels,
+  // et dans cet ordre — si le second échoue, la branche neuve est déjà en base
+  // et rien n'a été coupé : Paul peut recommencer sans avoir rien perdu.
+  async function poserDenouementNeuf(situationId, deroule) {
+    if (!situationId || !deroule) { return; }
+    var res = await appelApi('/api/scenarios',
+      { situation_id: situationId, deroule: deroule }, 'POST');
+    if (res.status === 401) { montrer('vranesh-auth'); return; }
+    var cree = res.ok && res.data && res.data.data ? res.data.data : null;
+    if (!cree || !cree.id) {
+      messageForm('La branche neuve n’a pas été écrite. Rien n’a été supprimé.', true);
+      return;
+    }
+    await poserDenouement(situationId, cree.id);
   }
 
   async function soumettreLien(scenarioId, type, sermentId, rapport, entreeId) {

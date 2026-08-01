@@ -99,34 +99,34 @@ mécanique éprouvée : registre extensible (un cap = une entrée), survol/focus
   aucun intitulé dans la page servie, aucun déroulé de scénario dans le
   cartouche de parole. La vraisemblance se lit à l'**épaisseur** du trait ET en
   toutes lettres dans le cartouche (jamais la couleur seule).
-- **⏭ L'ADVENU — « la branche qui a poussé »** *(dicté 2026-08-01, cadré,
-  **migration écrite et NON appliquée — gate Paul**)* : quand un futur est
+- **L'ADVENU — « la branche qui a poussé »** ✅ **construit (2026-08-01)**,
+  **migration `0019` écrite et NON appliquée — gate Paul** : quand un futur est
   advenu, Paul revient sur l'arbre et **désigne la branche qui a poussé** — soit
   l'un des scénarios déjà anticipés, soit **une branche neuve** si ce qui est
-  arrivé n'avait pas été prévu (le cas est absorbé par le modèle 0017 : un
-  scénario ordinaire, simplement constaté au lieu d'être anticipé). Les autres
-  branches disparaissent alors de la boussole.
+  arrivé n'avait pas été prévu (cas absorbé par le modèle 0017 : un scénario
+  ordinaire, simplement constaté au lieu d'être anticipé). Les autres branches
+  potentielles sont alors **supprimées**.
   - **Modèle** : `situations.scenario_advenu_id` + `advenu_le`, scellés par une
     FK sur le **triplet** `(owner_id, situation_id, id)` de `scenarios` — la
-    contrainte garantit à elle seule que la branche retenue appartient bien au
-    même owner ET à cette situation, sans trigger. Vue `scenarios_etat`
-    (`advenu` / `elague`), `situations_etat` étendue (`advenue`,
-    `nb_scenarios_vivants`). Migration `0019_vranesh_advenu.sql`.
-  - **Arbitrage pris et signalé — élaguer, jamais détruire.** Paul dit
-    « supprimer » ; la **promesse visuelle est tenue** (la boussole ne montre
-    plus que la branche qui a poussé) mais les futurs non réalisés **restent en
-    base, marqués élagués**. Motifs : ① comparer ce qu'on avait anticipé à ce
-    qui est arrivé EST la valeur du cap ; ② une suppression de données non
-    vérifiées vides est bloquante même en solo ; ③ `DELETE /api/scenarios`
-    existe déjà pour qui veut vraiment supprimer, un scénario à la fois et
-    explicitement. **À confirmer par Paul** — s'il tranche pour la destruction
-    réelle, elle passera par un geste dédié et confirmé, jamais par un effet de
-    bord du dénouement.
-  - **`elague` est DÉRIVÉ**, jamais stocké — même discipline que `a_explorer` /
-    `a_raviver` / `a_orienter` : un seul lieu de vérité, zéro désynchronisation.
-  - **Reste à faire au go** : API (PATCH du dénouement sur `/api/situations`),
-    front (désigner la branche depuis la fiche du thème, boussole qui n'affiche
-    plus que la branche advenue), harnais.
+    contrainte garantit à elle seule que la branche retenue appartient au même
+    owner ET à cette situation, sans trigger. `situations_etat` étendue
+    (`scenario_advenu_id`, `advenu_le`, `advenue`).
+  - **DÉCISION DE PAUL — suppression réelle.** Léo avait proposé d'élaguer sans
+    détruire (garder les futurs non réalisés, marqués) ; **Paul a redit sa
+    consigne, elle prime**. Ce que la suppression exige en retour, et qui est
+    tenu : ① elle est **portée par l'API, jamais par la base** — aucun ON DELETE
+    en cascade ni trigger ne coupe une branche tout seul ; ② le front la fait
+    **confirmer en deux temps**, en annonçant **combien** de branches tombent ;
+    ③ la branche retenue est **protégée par la FK avant** que les autres ne
+    soient coupées — un échec en cours de route laisse le thème dénoué mais
+    complet, jamais l'inverse.
+  - **`validateDenouement` est SÉPARÉ de `validateSituation`** : le dénouement
+    déclenche une suppression irréversible, il ne doit jamais voyager en
+    passager clandestin d'une modification d'intitulé. `advenu_le` n'est pas
+    accepté du client — la date vient du serveur.
+  - **Rouvrir** un thème (`scenario_advenu_id: null`) ne supprime rien.
+  - **Reste à faire** : appliquer `0019` (gate) — sans elle, le PATCH échoue
+    proprement et le reste du cap continue de fonctionner.
 - **Peuplé le 2026-07-31 (dictée de Paul)** : VRANESH n'est plus vide. Deux
   situations réelles, toutes deux complètes (aucune « à explorer ») —
   **LIANDRA** (5 scénarios) et **THORIOL** (3 scénarios). Écriture par les mains

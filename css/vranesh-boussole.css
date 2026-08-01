@@ -69,6 +69,46 @@
 .vranesh-branches-groupe.is-actif .vranesh-branche-trait--faible { stroke-width: 0.7; }
 .vranesh-branches-groupe.is-actif .vranesh-branche-trait--forte { stroke-width: 1.3; }
 
+/* ---------- L'advenu : la branche qui a poussé (0019) ---------- */
+/* Le futur a tranché : cette branche n'est plus une hypothèse. Trait plein et
+   franc, bourgeon devenu fruit — la différence se voit sans légende. */
+.vranesh-branche-trait--advenue {
+  stroke: var(--creme);
+  stroke-width: 1.2;
+  opacity: 0.95;
+}
+.vranesh-branches-groupe.is-actif .vranesh-branche-trait--advenue {
+  stroke: #f4e6bd;
+  stroke-width: 1.6;
+  opacity: 1;
+}
+.vranesh-bourgeon--advenu { fill: var(--creme); opacity: 0.95; }
+.vranesh-branches-groupe.is-actif .vranesh-bourgeon--advenu { fill: #f4e6bd; opacity: 1; }
+
+/* Le cap d'un thème advenu : scellé, plus une question ouverte. */
+.vranesh-boussole .cap--advenu { border-color: var(--creme); }
+
+/* ---------- Le dénouement dans le registre ---------- */
+.vranesh-advenu-deroule {
+  margin: 0.3rem 0 0.5rem;
+  font-weight: 600;
+}
+.vranesh-denouement--advenu { border-left: 3px solid var(--or-antique); padding-left: 0.7rem; }
+
+/* La confirmation de coupe : le geste est définitif, il se voit. */
+.vranesh-confirmation {
+  margin-top: 0.7rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--or-antique);
+  border-radius: 6px;
+  background: rgba(169, 136, 74, 0.1);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+.vranesh-confirmation-texte { margin: 0; flex: 1 1 16rem; }
+
 /* ---------- La pousse : les branches sortent du thème ---------- */
 /* Chaque branche se dessine de son attache vers son bourgeon. Le décalage par
    branche est posé en CSS (variable --pousse-retard), jamais en style inline :

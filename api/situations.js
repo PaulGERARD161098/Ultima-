@@ -4,6 +4,11 @@
 //            scenarios = les scénarios de l'utilisateur (rattachés côté front par situation_id).
 //   POST   → crée une situation { intitule, contexte? }. owner_id n'est JAMAIS
 //            accepté du client : il est imposé par le défaut base.
+//   PATCH  → pose le DÉNOUEMENT (0019) : « la branche qui a poussé ». Désigne le
+//            scénario advenu, PUIS supprime les autres branches potentielles de
+//            cette situation (décision Paul, geste irréversible confirmé côté
+//            front). scenario_advenu_id: null rouvre la situation sans rien
+//            supprimer.
 //   DELETE → supprime une situation (ses scénarios suivent en cascade).
 // Miroir EXACT de api/serments.js (VRANESH ↔ DRAUKHAIN). Données intimes (§5).
 
@@ -16,9 +21,9 @@ import {
   logError,
   readJsonBody,
 } from './_lib/http.js';
-import { validateSituation, isUuid } from './_lib/validate.js';
+import { validateSituation, validateDenouement, isUuid } from './_lib/validate.js';
 
-const ALLOWED = ['GET', 'POST', 'DELETE'];
+const ALLOWED = ['GET', 'POST', 'PATCH', 'DELETE'];
 
 function resolveId(req, body) {
   const fromQuery = req.query?.id;
@@ -77,6 +82,53 @@ export default async function handler(req, res) {
         .single();
       if (dbError) return dbFail(res, dbError, 'situations:post');
       return ok(res, data);
+    }
+
+    if (req.method === 'PATCH') {
+      const body = await readJsonBody(req);
+      if (body === null || typeof body !== 'object') return bodyFail(res, body);
+      const { value, error } = validateDenouement(body);
+      if (error) return fail(res, 400, error);
+
+      // ORDRE VOLONTAIRE — la branche retenue est protégée AVANT que les autres
+      // ne soient coupées. La FK du triplet (owner_id, situation_id, id) rejette
+      // ici tout scénario qui n'appartiendrait pas à CETTE situation ou à un
+      // autre owner : si l'écriture passe, la cible est certaine. Un échec après
+      // ce point laisse la situation dénouée mais complète — jamais l'inverse.
+      const advenu = value.scenario_advenu_id;
+      const { data, error: dbError } = await client
+        .from('situations')
+        .update({
+          scenario_advenu_id: advenu,
+          // La date vient du serveur, jamais du client.
+          advenu_le: advenu === null ? null : new Date().toISOString(),
+        })
+        .eq('id', value.id)
+        .select()
+        .maybeSingle();
+      if (dbError) return dbFail(res, dbError, 'situations:patch');
+      if (!data) return fail(res, 404, 'Situation introuvable');
+
+      // Rouvrir une situation ne supprime rien : on s'arrête là.
+      if (advenu === null) return ok(res, { id: data.id, scenario_advenu_id: null, coupees: 0 });
+
+      // Le futur a tranché : les autres branches potentielles sont supprimées
+      // (décision Paul). RLS + le filtre situation_id bornent la coupe à cette
+      // situation ; la branche retenue en est exclue explicitement.
+      const { data: coupees, error: coupeError } = await client
+        .from('scenarios')
+        .delete()
+        .eq('situation_id', value.id)
+        .neq('id', advenu)
+        .select('id');
+      if (coupeError) return dbFail(res, coupeError, 'situations:patch:coupe');
+
+      return ok(res, {
+        id: data.id,
+        scenario_advenu_id: advenu,
+        advenu_le: data.advenu_le,
+        coupees: (coupees || []).length,
+      });
     }
 
     // DELETE

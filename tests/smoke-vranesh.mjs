@@ -586,6 +586,225 @@ console.log('— D. vranesh.html fixture 200 → boussole des futurs + ramificat
   await page.close();
 }
 
+// ============ E. Le dénouement : « la branche qui a poussé » (0019) ============
+// Dictée Paul : quand le futur est advenu, désigner la branche qui a poussé —
+// l'une des anticipées ou une neuve — et les autres branches potentielles sont
+// SUPPRIMÉES. Prouve : le geste est en DEUX temps (jamais de coupe au premier
+// clic), la confirmation ANNONCE combien de branches tombent, le PATCH part
+// avec le bon corps, la branche neuve est écrite AVANT d'être désignée, et
+// annuler ne coupe rien.
+console.log('— E. vranesh.html → dénouement (la branche qui a poussé) —');
+{
+  const { page, erreurs, externes } = await nouvellePage();
+  await page.addInitScript(scriptFausseSession());
+  await page.route(`**://${REF_SUPABASE}.supabase.co/**`, (route) =>
+    route.fulfill({ status: 503, contentType: 'application/json', body: '{}' }));
+
+  const patchs = [];
+  const postsScenario = [];
+  await page.route('**/api/situations**', (route) => {
+    const req = route.request();
+    if (req.method() === 'PATCH') {
+      patchs.push({ headers: req.headers(), body: req.postData() });
+      return route.fulfill({
+        status: 200, contentType: 'application/json; charset=utf-8',
+        body: JSON.stringify({ ok: true, data: { id: 's1', scenario_advenu_id: 'sc2', coupees: 2 } }),
+      });
+    }
+    return route.fulfill({
+      status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE),
+    });
+  });
+  await page.route('**/api/scenarios**', (route) => {
+    const req = route.request();
+    if (req.method() === 'POST') { postsScenario.push({ headers: req.headers(), body: req.postData() }); }
+    return route.fulfill({
+      status: 200, contentType: 'application/json; charset=utf-8',
+      body: JSON.stringify({ ok: true, data: { id: 'sc-neuve' } }),
+    });
+  });
+  await page.route('**/api/serments**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_SERMENTS) }));
+  await page.route('**/api/imladrik**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IMLADRIK) }));
+
+  await page.goto(`${BASE}/vranesh.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForSelector('#vranesh-registre:not([hidden])', { timeout: 20000 });
+
+  const s1 = page.locator('#vranesh-situation-s1');
+  const s2 = page.locator('#vranesh-situation-s2');
+  const deno = s1.locator('.vranesh-denouement');
+
+  // 1. Le dénouement n'est proposé que là où il y a des branches à trancher.
+  verifier('Dénouement proposé sur un thème doté de futurs', (await deno.count()) === 1);
+  verifier('Aucun dénouement sur un thème « à explorer »',
+    (await s2.locator('.vranesh-denouement').count()) === 0);
+  verifier('Le caractère définitif est annoncé AVANT tout clic',
+    /supprimées — le geste est définitif/.test((await deno.textContent()) || ''));
+
+  // 2. Le choix propose les branches anticipées ET la branche neuve.
+  const options = await deno.locator('select option').allTextContents();
+  verifier('Les 3 futurs anticipés sont proposés',
+    options.filter((o) => !/Autre chose/.test(o)).length === 3, JSON.stringify(options));
+  verifier('« Autre chose est arrivé » proposé (branche neuve)',
+    options.some((o) => /Autre chose est arrivé/.test(o)));
+  verifier('Le champ de branche neuve est masqué par défaut',
+    await deno.locator('.vranesh-branche-neuve').evaluate((el) => el.hidden));
+
+  // 3. DEUX TEMPS : le premier clic ne coupe rien, il demande confirmation.
+  await deno.locator('select').selectOption('sc2');
+  await deno.locator('button[type="submit"]').click();
+  await page.waitForSelector('#vranesh-situation-s1 .vranesh-confirmation:not([hidden])', { timeout: 5000 });
+  verifier('Premier clic : AUCUN PATCH émis (rien n’est coupé)', patchs.length === 0, `${patchs.length}`);
+  verifier('La confirmation annonce le nombre exact de branches coupées (3 − 1 = 2)',
+    /Les 2 autres branches potentielles seront supprimées/.test(
+      (await deno.locator('.vranesh-confirmation').textContent()) || ''),
+    (await deno.locator('.vranesh-confirmation').textContent()) || '');
+
+  // 4. Annuler ne coupe rien.
+  await deno.locator('.vranesh-confirmation button:not(.vranesh-confirmer)').click();
+  verifier('Annuler : toujours aucun PATCH', patchs.length === 0, `${patchs.length}`);
+  verifier('Annuler : la confirmation se referme',
+    await deno.locator('.vranesh-confirmation').evaluate((el) => el.hidden));
+
+  // 5. Confirmer émet le dénouement, avec le bon corps et le Bearer.
+  await deno.locator('button[type="submit"]').click();
+  await page.waitForSelector('#vranesh-situation-s1 .vranesh-confirmation:not([hidden])', { timeout: 5000 });
+  await deno.locator('.vranesh-confirmer').click();
+  await page.waitForFunction(() => true, null, { timeout: 1000 }).catch(() => {});
+  await page.waitForTimeout(300);
+  verifier('Confirmer : un PATCH /api/situations émis', patchs.length === 1, `${patchs.length}`);
+  const corpsPatch = JSON.parse((patchs[0] || {}).body || '{}');
+  verifier('Corps du dénouement : id du thème + branche retenue',
+    corpsPatch.id === 's1' && corpsPatch.scenario_advenu_id === 'sc2', JSON.stringify(corpsPatch));
+  verifier('Le client ne pose PAS la date de l’advenu (serveur seul)',
+    !('advenu_le' in corpsPatch), JSON.stringify(corpsPatch));
+  verifier('Bearer transmis (dénouement)',
+    ((patchs[0] || {}).headers || {}).authorization === 'Bearer jeton-de-test');
+
+  // 6. La branche neuve : écrite d'abord, désignée ensuite.
+  await page.reload({ waitUntil: 'load' });
+  await page.waitForSelector('#vranesh-registre:not([hidden])', { timeout: 20000 });
+  const deno2 = page.locator('#vranesh-situation-s1 .vranesh-denouement');
+  await deno2.locator('select').selectOption('');
+  verifier('Branche neuve choisie : le champ de saisie s’ouvre',
+    (await deno2.locator('.vranesh-branche-neuve').evaluate((el) => el.hidden)) === false);
+  await deno2.locator('.vranesh-branche-neuve input').fill('rien de ce qui était prévu');
+  await deno2.locator('button[type="submit"]').click();
+  await page.waitForSelector('#vranesh-situation-s1 .vranesh-confirmation:not([hidden])', { timeout: 5000 });
+  verifier('Branche neuve : les 3 branches anticipées seront coupées',
+    /Les 3 autres branches potentielles seront supprimées/.test(
+      (await deno2.locator('.vranesh-confirmation').textContent()) || ''));
+  await deno2.locator('.vranesh-confirmer').click();
+  await page.waitForTimeout(400);
+  verifier('Branche neuve : POST /api/scenarios émis AVANT le dénouement',
+    postsScenario.length === 1, `${postsScenario.length}`);
+  const corpsNeuf = JSON.parse((postsScenario[0] || {}).body || '{}');
+  verifier('Branche neuve : corps = situation + déroulé constaté',
+    corpsNeuf.situation_id === 's1' && corpsNeuf.deroule === 'rien de ce qui était prévu',
+    JSON.stringify(corpsNeuf));
+  verifier('Branche neuve : le dénouement désigne la branche fraîchement écrite',
+    patchs.length === 2 && JSON.parse(patchs[1].body).scenario_advenu_id === 'sc-neuve',
+    JSON.stringify(patchs.map((p) => p.body)));
+
+  // 7. Saisie vide : rien ne part.
+  await page.reload({ waitUntil: 'load' });
+  await page.waitForSelector('#vranesh-registre:not([hidden])', { timeout: 20000 });
+  const deno3 = page.locator('#vranesh-situation-s1 .vranesh-denouement');
+  await deno3.locator('select').selectOption('');
+  await deno3.locator('button[type="submit"]').click();
+  verifier('Branche neuve vide : aucune confirmation ouverte',
+    await deno3.locator('.vranesh-confirmation').evaluate((el) => el.hidden));
+  verifier('Branche neuve vide : aucun appel supplémentaire',
+    patchs.length === 2 && postsScenario.length === 1);
+
+  verifier('Zéro requête externe (dénouement)', externes.length === 0, externes.slice(0, 3).join(', '));
+  verifier('Zéro erreur console (dénouement)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
+  await page.close();
+}
+
+// ============ F. Un thème ADVENU : la branche qui a poussé se voit ============
+console.log('— F. vranesh.html thème advenu → une seule branche, scellée —');
+{
+  const { page, erreurs } = await nouvellePage();
+  await page.addInitScript(scriptFausseSession());
+  await page.route(`**://${REF_SUPABASE}.supabase.co/**`, (route) =>
+    route.fulfill({ status: 503, contentType: 'application/json', body: '{}' }));
+
+  // Après un dénouement, la base ne garde qu'UNE branche pour ce thème : celle
+  // qui a poussé (les autres ont été supprimées). C'est cet état-là qu'on rend.
+  const FIXTURE_ADVENUE = {
+    ok: true,
+    data: {
+      situations: [
+        { id: 's1', intitule: 'TRAVERSÉE', contexte: 'un départ à préparer', nb_scenarios: 1,
+          a_explorer: false, advenue: true, scenario_advenu_id: 'sc1',
+          advenu_le: '2026-07-20T09:00:00Z', created_at: '2026-07-01T10:00:00Z' },
+        { id: 's2', intitule: 'CARREFOUR', contexte: null, nb_scenarios: 0, a_explorer: true,
+          advenue: false, scenario_advenu_id: null, advenu_le: null, created_at: '2026-07-02T10:00:00Z' },
+      ],
+      scenarios: [
+        { id: 'sc1', situation_id: 's1', deroule: 'le vent tourne au nord et porte la voile',
+          vraisemblance: 'forte', signaux: null, parade: null },
+      ],
+      liens: [],
+    },
+  };
+  await page.route('**/api/situations**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_ADVENUE) }));
+  await page.route('**/api/serments**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_SERMENTS) }));
+  await page.route('**/api/imladrik**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IMLADRIK) }));
+
+  await page.goto(`${BASE}/vranesh.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForSelector('#vranesh-plateau .cap', { timeout: 20000 });
+
+  // La boussole : une seule branche, tracée comme advenue.
+  verifier('Une seule branche subsiste sur le thème advenu',
+    (await page.locator('.vranesh-branche-trait').count()) === 1);
+  verifier('La branche qui a poussé est tracée comme advenue',
+    (await page.locator('.vranesh-branche-trait--advenue').count()) === 1);
+  verifier('Son bourgeon est devenu fruit',
+    (await page.locator('.vranesh-bourgeon--advenu').count()) === 1);
+  const capAdvenu = page.locator('#vranesh-plateau .cap', { hasText: 'TRAVERSÉE' });
+  verifier('Le cap porte l’état « advenu »', /advenu/.test((await capAdvenu.textContent()) || ''));
+  verifier('Le cap est marqué scellé', await capAdvenu.evaluate((el) => el.classList.contains('cap--advenu')));
+
+  // Le trait advenu est plus affirmé que n'importe quelle hypothèse.
+  const epaisseurs = await page.evaluate(() => ({
+    advenue: parseFloat(getComputedStyle(document.querySelector('.vranesh-branche-trait--advenue')).strokeWidth),
+    forte: parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--x') || '0'),
+  }));
+  verifier('La branche advenue est plus épaisse que le plus probable des futurs (0,8)',
+    epaisseurs.advenue > 0.8, JSON.stringify(epaisseurs));
+
+  // La parole : ce thème ne s'anticipe plus.
+  await capAdvenu.hover();
+  await page.waitForSelector('#vranesh-parole.is-actif', { timeout: 5000 });
+  const parole = (await page.locator('#vranesh-parole').textContent()) || '';
+  verifier('Parole : le futur a tranché', /a tranché/.test(parole), parole);
+  verifier('Parole : plus d’invitation à anticiper', !/anticiper sereinement/i.test(parole), parole);
+
+  // Le registre : la branche qui a poussé, sa date, et la possibilité de rouvrir.
+  const deno = page.locator('#vranesh-situation-s1 .vranesh-denouement');
+  verifier('Registre : le bloc du dénouement est celui d’un thème advenu',
+    await deno.evaluate((el) => el.classList.contains('vranesh-denouement--advenu')));
+  verifier('Registre : la branche qui a poussé est rendue',
+    /le vent tourne au nord/.test((await deno.locator('.vranesh-advenu-deroule').textContent()) || ''));
+  verifier('Registre : la date du constat est lisible',
+    /constaté le/.test((await deno.textContent()) || ''));
+  verifier('Registre : aucun formulaire de dénouement sur un thème déjà advenu',
+    (await deno.locator('form').count()) === 0);
+  verifier('Registre : le thème peut être rouvert',
+    (await deno.locator('button').count()) === 1
+    && /Rouvrir/.test((await deno.locator('button').textContent()) || ''));
+
+  verifier('Zéro erreur console (thème advenu)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
+  await page.screenshot({ path: `${CAPTURES}/vranesh-advenu.png`, fullPage: true });
+  await page.close();
+}
+
 await navigateur.close();
 console.log(echecs === 0 ? '\n=== SMOKE VRANESH VERT ===' : `\n=== ${echecs} VERDICT(S) EN ÉCHEC ===`);
 process.exit(echecs === 0 ? 0 : 1);
