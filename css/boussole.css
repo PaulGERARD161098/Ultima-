@@ -273,6 +273,39 @@ a.cap:hover {
 }
 .boussole-parole.is-actif { border-color: var(--or-antique); }
 
+/* Le cartouche de Léo des BOUSSOLES (#boussole-parole) ne se matérialise
+   qu'au survol / focus d'un cap (Paul, 2026-08-01 : plus de messages affichés
+   au repos — les fonctions restent). Surimpression au bas de l'écran : il ne
+   réserve aucune place et n'intercepte rien (pointer-events none, sinon il
+   volerait le survol du cap le plus bas). `visibility` plutôt que `display`
+   pour que la région aria-live reste annonçable. VRANESH garde son propre
+   cartouche (#vranesh-parole), qui n'est pas la parole de Léo. */
+#boussole-parole {
+  position: fixed;
+  right: 1rem;
+  bottom: calc(1rem + env(safe-area-inset-bottom));
+  width: min(44vw, 400px);
+  margin: 0;
+  z-index: 6;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+#boussole-parole.is-actif {
+  visibility: visible;
+  opacity: 1;
+}
+/* Petit écran : le coin est trop étroit — cartouche pleine largeur au bas. */
+@media (max-width: 700px) {
+  #boussole-parole {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: min(92vw, 520px);
+  }
+}
+
 .parole-defaut {
   margin: 0;
   font-family: var(--police-ancienne);

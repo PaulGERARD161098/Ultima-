@@ -90,8 +90,12 @@ const surligne = (await page.locator('h1.console-titre .titre-surligne').textCon
 const principal = (await page.locator('h1.console-titre .titre-principal').textContent())?.trim();
 verifier('Surligne = celle du registre', surligne === NOEUDS['ultima-perso'].surligne, `lu: ${surligne}`);
 verifier('Titre = celui du registre', principal === NOEUDS['ultima-perso'].titre, `lu: ${principal}`);
-const invite = (await page.locator('.console-invite').textContent())?.trim();
-verifier('Invite « Léo te guide »', /Léo te guide/.test(invite || ''), `lu: ${invite}`);
+// Plus de message de Léo affiché au repos (Paul, 2026-08-01) — tests d'ABSENCE.
+verifier('Invite « Léo te guide » retirée du bandeau',
+  (await page.locator('.console-invite').count()) === 0);
+verifier('Cartouche invisible et muet au repos',
+  await page.locator('#boussole-parole').evaluate((el) =>
+    getComputedStyle(el).visibility === 'hidden' && el.textContent.trim() === ''));
 
 // Les 2 macro-quadrants, dans l'ordre du registre (dictée 2026-08-01).
 const attendus = capsDe('ultima-perso').map((c) => c.nom);

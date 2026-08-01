@@ -93,9 +93,11 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
   const legende = (await page.locator('.kalamn-legende').textContent()) || '';
   verifier('Légende « Kalamn-talaen » gravée', /Kalamn-talaen/.test(legende), legende);
 
-  // 4. Parole par défaut (Léo, l'agent unique), puis parole au survol d'un cap.
-  verifier('Parole par défaut affichée (Léo)',
-    /Léo/.test((await page.locator('#boussole-parole').textContent()) || ''));
+  // 4. Au repos, plus AUCUN message affiché (Paul, 2026-08-01) ; la parole de
+  //    Léo ne se matérialise qu'au survol d'un cap — test d'ABSENCE puis survol.
+  verifier('Cartouche invisible et muet au repos',
+    await page.locator('#boussole-parole').evaluate((el) =>
+      getComputedStyle(el).visibility === 'hidden' && el.textContent.trim() === ''));
   await minethnir.hover();
   await page.waitForSelector('#boussole-parole.is-actif', { timeout: 5000 });
   const parole = (await page.locator('#boussole-parole').textContent()) || '';
@@ -125,14 +127,12 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
       merProfonde: cs.getPropertyValue('--mer-profonde').trim(),
       capNom: getComputedStyle(capNom).color,
       capNomFond: cs.getPropertyValue('--parchemin-carte').trim(),
-      invite: getComputedStyle(document.querySelector('.console-invite')).color,
       legende: getComputedStyle(document.querySelector('.kalamn-legende')).color,
     };
   });
   verifier('Contraste nom de cap ≥ 4,5:1',
     ratio(versHex(cr.capNom), cr.capNomFond) >= 4.5, `${ratio(versHex(cr.capNom), cr.capNomFond).toFixed(2)}:1`);
-  verifier('Contraste invite sur mer ≥ 4,5:1',
-    ratio(versHex(cr.invite), cr.merProfonde) >= 4.5, `${ratio(versHex(cr.invite), cr.merProfonde).toFixed(2)}:1`);
+  // (l'invite « Léo te guide » a été retirée le 2026-08-01 — plus rien à mesurer ici)
   // La légende (or antique) est posée sous le médaillon, sur le fond de mer du
   // plateau (comme .titre-surligne) → contraste mesuré contre la mer profonde.
   verifier('Contraste légende sur mer ≥ 4,5:1',

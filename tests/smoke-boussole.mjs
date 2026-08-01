@@ -128,10 +128,11 @@ const legende = (await page.locator('.boussole-legende').textContent())?.trim();
 verifier('Légende gravée = celle du registre', legende === NOEUDS.racine.legende, `lu: ${legende}`);
 verifier('2 aiguilles tracées', (await page.locator('.boussole-aiguilles .aiguille').count()) === 2);
 
-// Le résumé Léo n'apparaît QU'au survol : au repos, invite par défaut.
-const paroleRepos = (await page.locator('#boussole-parole').textContent())?.trim();
-verifier('Parole au repos : invite au survol', /Léo t'en dit l'essentiel/.test(paroleRepos || ''),
-  `lu: ${paroleRepos}`);
+// Le résumé Léo n'apparaît QU'au survol : au repos, le cartouche est
+// invisible et muet (plus de messages affichés — Paul, 2026-08-01).
+verifier('Cartouche invisible et muet au repos',
+  await page.locator('#boussole-parole').evaluate((el) =>
+    getComputedStyle(el).visibility === 'hidden' && el.textContent.trim() === ''));
 verifier('Aucun résumé de projet au repos',
   (await page.locator('#boussole-parole .parole-texte').count()) === 0);
 
@@ -145,13 +146,18 @@ const paroleTexte = (await page.locator('#boussole-parole .parole-texte').textCo
 verifier('Résumé : essentiel de Léo affiché', /supra-division personnelle/i.test(paroleTexte || ''), `lu: ${paroleTexte}`);
 verifier('Résumé : appel à l\'action', (await page.locator('#boussole-parole .parole-action').count()) === 1);
 
-// Sortie du survol → retour à l'invite (zéro surcharge).
+// Sortie du survol → le cartouche s'efface entièrement (zéro surcharge).
 await page.locator('h1.console-titre').hover();
-await page.waitForSelector('#boussole-parole:not(.is-actif)', { timeout: 5000 });
-verifier('Sortie du survol → retour à l\'invite',
-  (await page.locator('#boussole-parole .parole-texte').count()) === 0);
+await page.waitForSelector('#boussole-parole:not(.is-actif)', { state: 'attached', timeout: 5000 });
+verifier('Sortie du survol → cartouche effacé',
+  (await page.locator('#boussole-parole .parole-texte').count()) === 0
+  && await page.locator('#boussole-parole').evaluate((el) => getComputedStyle(el).visibility === 'hidden'));
 
 // Accès clavier : le focus montre aussi le résumé (clavier = souris).
+// La souris se gare dans un coin neutre AVANT : le focus fait défiler la page
+// et un cap qui glisse sous un curseur immobile déclencherait un mouseenter
+// parasite qui réécrirait le cartouche après celui du focus.
+await page.mouse.move(5, 5);
 await capAlpha.focus();
 await page.waitForSelector('#boussole-parole.is-actif', { timeout: 5000 });
 const nomAlpha = (await page.locator('#boussole-parole .parole-nom').textContent())?.trim();

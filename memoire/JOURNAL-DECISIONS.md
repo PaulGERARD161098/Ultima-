@@ -1289,3 +1289,20 @@
   - **Leçon de méthode (EL)** : la preview Vercel a joué le rôle de maquette —
     une interprétation ambiguë (« regrouper » = visuel ou navigation ?) s'est
     tranchée en un aller-retour sur du rendu réel, sans fusion prématurée.
+  3. **Les messages de Léo disparaissent des boussoles** (même session) :
+     « ça prend de la place et ce n'est pas utile — on garde toutes les
+     fonctions, on enlève les messages affichés ». Retirés : l'invite « Léo te
+     guide — survole un cap » (8 coques de boussole) et le message au repos
+     « Survole un cap — Léo t'en dit l'essentiel » (9 coques, racine incluse).
+     **Les fonctions restent** : au survol/focus d'un cap, la parole de Léo
+     (résumé, état, signaux du cockpit) se matérialise en **cartouche de coin**
+     (bas-droite, surimpression `pointer-events: none` — zéro place réservée,
+     zéro occlusion des caps ; pleine largeur en bas sur petit écran).
+     Non touchés (hors dictée) : le bandeau d'accueil « Sur quoi est-ce qu'on
+     travaille aujourd'hui ? » (c'est la console, pas un message de Léo), les
+     invites de mission des feuilles (MINETHNIR, VRANESH…), le cartouche
+     propre de VRANESH et l'accueil de Léo à la première visite (L1) — à
+     retirer aussi si Paul le veut, consigné.
+  - **Leçon d'harnais** : un focus clavier fait défiler la page et un cap qui
+    glisse sous une souris immobile déclenche un mouseenter parasite — la
+    souris se gare dans un coin neutre avant toute étape clavier.
