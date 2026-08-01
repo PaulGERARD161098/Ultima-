@@ -1,153 +1,146 @@
-/* Ultima — VRANESH : LA BOUSSOLE DES FUTURS (habillage des ramifications).
+/* Ultima — VRANESH : LA BOUSSOLE PUIS L'ARBRE (habillage, v2 2026-08-01).
    ---------------------------------------------------------------------------
    Complément de css/boussole.css, qui fournit déjà le plateau, les caps, les
-   aiguilles et le cartouche de parole. Ici, uniquement ce que la boussole des
-   futurs ajoute : les BRANCHES qui poussent depuis chaque thème (un scénario =
-   une ramification), leur bourgeon, et les quelques recalages nécessaires parce
-   que cette boussole vit sur une page de quadrant (`body.console`) et non sur
-   une coque de nœud (`body.boussole`).
+   aiguilles et le cartouche de parole.
+
+   Constat de Paul sur la v1 : « c'est trop gros, c'est trop général et surtout
+   il y a trop de textes. » Forme retenue (Forme ① de
+   design/preview-vranesh-arbre.html) — AFFICHAGE À LA DEMANDE :
+     ① la rose ne porte que les NOMS des thèmes ;
+     ② un clic ouvre l'ARBRE de ce thème (un tronc, des branches) et efface la rose ;
+     ③ le côté donne UNE LIGNE au survol d'une branche, TOUT au clic.
 
    Registre antique : encre et or, gravure sèche, aucune ressource externe.
    Le mouvement (la pousse) vit sous `prefers-reduced-motion: no-preference` —
-   sous « reduce », aucune règle ne s'applique, donc rien à neutraliser (même
-   motif que .arbre-feuille--pousse dans css/styles.css). */
+   sous « reduce », aucune règle ne s'applique, donc rien à neutraliser. */
 
-/* ---------- Le plateau sur une page de quadrant ---------- */
-/* Le plateau de css/boussole.css est dimensionné pour une coque plein écran ;
-   dans un cartouche de quadrant on le contient un peu plus. */
+/* ---------- La scène : la carte à gauche, le cartouche à droite ---------- */
+.vranesh-scene { display: grid; gap: 1rem; }
+@media (min-width: 62rem) {
+  .vranesh-scene { grid-template-columns: 1.3fr 1fr; align-items: start; }
+}
+
+/* ---------- ① La rose sur une page de quadrant ---------- */
 .vranesh-boussole .boussole-plateau {
-  width: min(78vmin, 460px);
-  margin-block: 0.6rem 1.1rem;
+  width: min(74vmin, 420px);
+  margin-block: 0.4rem 0.8rem;
 }
-
-/* Les caps portent ici des intitulés dictés par Paul (longueur libre), là où
-   le registre Lv3 n'a que des noms courts figés : on borne la largeur et on
-   laisse le texte passer à la ligne plutôt que déborder du plateau. */
-.vranesh-boussole .cap { max-width: 11.5rem; }
+/* Le cap porte le NOM SEUL : court, donc on le laisse sur une ligne. */
+.vranesh-boussole .cap {
+  width: auto;
+  min-width: 6.5rem;
+  max-width: 12rem;
+  font-family: inherit;
+}
 .vranesh-boussole .cap-nom { white-space: normal; }
-
-/* ---------- Les ramifications : un scénario = une branche ---------- */
-.vranesh-branches {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  pointer-events: none;
-  z-index: 0;   /* sous les caps (z-index 2), au niveau des aiguilles */
-}
-
-.vranesh-branche-trait {
-  fill: none;
-  stroke: var(--or-antique);
-  stroke-width: 0.55;
-  stroke-linecap: round;
-  opacity: 0.42;
-}
-
-.vranesh-bourgeon {
-  fill: var(--or-antique);
-  opacity: 0.5;
-}
-
-/* Le thème survolé illumine ses propres branches — la lecture suit l'œil. */
-.vranesh-branches-groupe.is-actif .vranesh-branche-trait {
-  stroke: #f4e6bd;
-  stroke-width: 0.95;
-  opacity: 1;
-}
-.vranesh-branches-groupe.is-actif .vranesh-bourgeon {
-  fill: #f4e6bd;
-  opacity: 1;
-}
-
-/* Vraisemblance : la branche d'un futur probable est plus affirmée que celle
-   d'un futur improbable — l'épaisseur porte le sens, jamais la couleur seule
-   (accessibilité : la même information est écrite dans le cartouche). */
-.vranesh-branche-trait--faible { stroke-width: 0.4; opacity: 0.3; }
-.vranesh-branche-trait--forte { stroke-width: 0.8; opacity: 0.6; }
-.vranesh-branches-groupe.is-actif .vranesh-branche-trait--faible { stroke-width: 0.7; }
-.vranesh-branches-groupe.is-actif .vranesh-branche-trait--forte { stroke-width: 1.3; }
-
-/* ---------- L'advenu : la branche qui a poussé (0019) ---------- */
-/* Le futur a tranché : cette branche n'est plus une hypothèse. Trait plein et
-   franc, bourgeon devenu fruit — la différence se voit sans légende. */
-.vranesh-branche-trait--advenue {
-  stroke: var(--creme);
-  stroke-width: 1.2;
-  opacity: 0.95;
-}
-.vranesh-branches-groupe.is-actif .vranesh-branche-trait--advenue {
-  stroke: #f4e6bd;
-  stroke-width: 1.6;
-  opacity: 1;
-}
-.vranesh-bourgeon--advenu { fill: var(--creme); opacity: 0.95; }
-.vranesh-branches-groupe.is-actif .vranesh-bourgeon--advenu { fill: #f4e6bd; opacity: 1; }
-
-/* Le cap d'un thème advenu : scellé, plus une question ouverte. */
 .vranesh-boussole .cap--advenu { border-color: var(--creme); }
 
-/* ---------- Le dénouement dans le registre ---------- */
-.vranesh-advenu-deroule {
-  margin: 0.3rem 0 0.5rem;
-  font-weight: 600;
+/* ---------- ② L'arbre du thème ouvert ---------- */
+.vranesh-arbre-cadre {
+  position: relative;
+  background: linear-gradient(180deg, #fbf5e6, var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte);
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 3px rgba(169, 136, 74, 0.35);
+  min-height: 320px;
 }
+.vranesh-arbre-svg { display: block; width: 100%; height: auto; padding: 0.4rem; }
+
+.vranesh-tronc {
+  fill: none; stroke: var(--cerne-carte); stroke-width: 2.6; stroke-linecap: round;
+}
+.vranesh-branche {
+  fill: none; stroke: var(--or-antique); stroke-width: 1.6; stroke-linecap: round;
+  cursor: pointer;
+}
+/* Zone de préhension : une courbe fine se rate à la souris. Invisible, large. */
+.vranesh-branche-zone { fill: none; stroke: transparent; stroke-width: 16; cursor: pointer; }
+.vranesh-bourgeon { fill: var(--or-antique); cursor: pointer; }
+.vranesh-etiquette {
+  font-family: var(--police-ancienne); font-size: 7.5px; letter-spacing: 0.04em;
+  fill: var(--encre-sepia-douce); pointer-events: none;
+}
+.vranesh-arbre-vide {
+  font-family: var(--police-ancienne); font-size: 8px; font-style: italic;
+  fill: var(--encre-sepia-douce);
+}
+
+/* Vraisemblance : l'épaisseur porte le sens, jamais la couleur seule — la même
+   information est écrite en toutes lettres dans le cartouche de côté. */
+.vranesh-branche--faible { stroke-width: 1.1; opacity: 0.75; }
+.vranesh-branche--forte { stroke-width: 2.2; }
+
+/* La branche qui a poussé : le futur a tranché, ce n'est plus une hypothèse. */
+.vranesh-branche--advenue { stroke: var(--cerne-carte); stroke-width: 2.8; }
+.vranesh-branche-g.is-advenue .vranesh-bourgeon { fill: var(--cerne-carte); }
+
+/* Survol / focus : la branche s'illumine seule. */
+.vranesh-branche-g { outline: none; }
+.vranesh-branche-g:focus-visible .vranesh-bourgeon { stroke: var(--accent); stroke-width: 2; }
+.vranesh-branche-g.is-actif .vranesh-branche { stroke: var(--cerne-carte); stroke-width: 2.8; }
+.vranesh-branche-g.is-actif .vranesh-bourgeon { fill: var(--cerne-carte); }
+.vranesh-branche-g.is-actif .vranesh-etiquette { fill: var(--encre-sepia); font-weight: 700; }
+/* Branche choisie : elle reste marquée pendant qu'on lit son détail. */
+.vranesh-branche-g.is-choisie .vranesh-branche { stroke: var(--accent); stroke-width: 3; }
+.vranesh-branche-g.is-choisie .vranesh-bourgeon { fill: var(--accent); }
+
+.vranesh-arbre-nom {
+  position: absolute; left: 50%; bottom: 0.5rem; transform: translateX(-50%);
+  margin: 0; font-weight: 700; letter-spacing: 0.16em; color: var(--encre-sepia);
+}
+.vranesh-arbre-retour {
+  position: absolute; left: 0.6rem; top: 0.5rem;
+  font-family: inherit; font-size: 0.78rem; font-variant: small-caps; letter-spacing: 0.08em;
+  background: none; border: none; cursor: pointer; color: var(--encre-sepia-douce);
+  padding: 0.6rem 0.4rem; min-height: 44px;
+}
+.vranesh-arbre-retour:hover { color: var(--encre-sepia); text-decoration: underline; }
+.vranesh-arbre-retour:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- ③ Le cartouche de côté ---------- */
+.vranesh-cote { min-height: 12rem; }
+.vranesh-cote-detail { margin: 0.7rem 0 0; padding-top: 0.6rem; border-top: 1px dashed var(--or-antique); }
+.vranesh-cote-detail dt {
+  font-size: 0.7rem; font-variant: small-caps; letter-spacing: 0.1em;
+  color: var(--encre-sepia-douce); margin-top: 0.55rem;
+}
+.vranesh-cote-detail dd { margin: 0.15rem 0 0; }
+.vranesh-cote-lien {
+  display: inline-block; margin-top: 0.8rem; min-height: 44px; line-height: 44px;
+  font-variant: small-caps; letter-spacing: 0.08em; color: var(--accent);
+}
+
+/* ---------- La pousse ---------- */
+/* La longueur du trait est mesurée en JS (getTotalLength) et posée en style :
+   un stroke-dasharray fixe couperait tout trait plus long que lui. */
+@media (prefers-reduced-motion: no-preference) {
+  .vranesh-pousse { animation: vranesh-pousser 560ms cubic-bezier(0.22, 0.68, 0.32, 1) forwards; }
+  @keyframes vranesh-pousser { to { stroke-dashoffset: 0; } }
+  .vranesh-branche { transition: stroke 0.12s ease, stroke-width 0.12s ease; }
+}
+
+/* ---------- Le registre détaillé, replié par défaut ---------- */
+.vranesh-registre-repli > summary {
+  cursor: pointer; font-weight: 700; font-variant: small-caps; letter-spacing: 0.1em;
+  padding: 0.5rem 0; min-height: 44px; display: flex; align-items: center;
+}
+.vranesh-registre-repli > summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- États ---------- */
+.vranesh-boussole-vide {
+  text-align: center; font-style: italic; color: var(--creme); opacity: 0.85;
+  margin: 1.4rem auto; max-width: 34rem;
+}
+
+/* ---------- Le dénouement dans le registre ---------- */
+.vranesh-advenu-deroule { margin: 0.3rem 0 0.5rem; font-weight: 600; }
 .vranesh-denouement--advenu { border-left: 3px solid var(--or-antique); padding-left: 0.7rem; }
 
 /* La confirmation de coupe : le geste est définitif, il se voit. */
 .vranesh-confirmation {
-  margin-top: 0.7rem;
-  padding: 0.7rem 0.8rem;
-  border: 1px solid var(--or-antique);
-  border-radius: 6px;
+  margin-top: 0.7rem; padding: 0.7rem 0.8rem;
+  border: 1px solid var(--or-antique); border-radius: 6px;
   background: rgba(169, 136, 74, 0.1);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.6rem;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem;
 }
 .vranesh-confirmation-texte { margin: 0; flex: 1 1 16rem; }
-
-/* ---------- La pousse : les branches sortent du thème ---------- */
-/* Chaque branche se dessine de son attache vers son bourgeon. Le décalage par
-   branche est posé en CSS (variable --pousse-retard), jamais en style inline :
-   la CSP interdit le style inline, et le noyau ne pose que des classes. */
-@media (prefers-reduced-motion: no-preference) {
-  .vranesh-branche-trait {
-    stroke-dasharray: 22;
-    stroke-dashoffset: 22;
-    animation: vranesh-pousse 520ms cubic-bezier(0.22, 0.68, 0.32, 1) both;
-    animation-delay: var(--pousse-retard, 0ms);
-  }
-  .vranesh-bourgeon {
-    animation: vranesh-bourgeonne 320ms ease-out both;
-    animation-delay: calc(var(--pousse-retard, 0ms) + 380ms);
-  }
-  @keyframes vranesh-pousse {
-    from { stroke-dashoffset: 22; }
-    to   { stroke-dashoffset: 0; }
-  }
-  @keyframes vranesh-bourgeonne {
-    from { opacity: 0; }
-    to   { opacity: 0.5; }
-  }
-}
-
-/* ---------- États ---------- */
-.vranesh-boussole-vide {
-  text-align: center;
-  font-style: italic;
-  color: var(--creme);
-  opacity: 0.85;
-  margin: 1.4rem auto;
-  max-width: 34rem;
-}
-
-/* Le cartouche de parole hérite de css/boussole.css ; on lui ajoute la seule
-   ligne propre à VRANESH : le rappel de la posture (anticiper, puis revenir). */
-.vranesh-boussole .parole-posture {
-  margin: 0.5rem 0 0;
-  font-style: italic;
-  opacity: 0.8;
-}

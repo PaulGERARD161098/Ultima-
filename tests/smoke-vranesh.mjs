@@ -241,6 +241,9 @@ console.log('— B. vranesh.html fixture 200 → registre, à explorer, situatio
 
   await page.goto(`${BASE}/vranesh.html`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForSelector('#vranesh-registre:not([hidden])', { timeout: 20000 });
+  // Le registre détaillé est REPLIÉ depuis la v2 (constat de Paul : trop de
+  // textes affichés d'un coup). On l'ouvre : cette section exerce l'écriture.
+  await page.locator('#vranesh-registre-detail summary').click();
 
   // 1. Bearer transmis au GET.
   verifier('Un appel GET /api/situations au moins', appelsGet.length >= 1, `${appelsGet.length}`);
@@ -454,12 +457,13 @@ console.log('— C. vranesh.html fausse session → 401 fail-closed —');
   await page.close();
 }
 
-// ============ D. La boussole des futurs (thèmes en caps + ramifications) ============
-// Forme dictée par Paul (2026-08-01) : un cap = un THÈME de futurs (une
-// situation), une branche qui pousse = un SCÉNARIO. Prouve la géométrie, le
-// rattachement des branches au bon thème, l'état « à explorer » sans branche,
-// et — par l'ABSENCE — qu'aucun déroulé de scénario ne fuit dans le cartouche.
-console.log('— D. vranesh.html fixture 200 → boussole des futurs + ramifications —');
+// ====== D. La boussole → l'arbre : affichage À LA DEMANDE (v2, 2026-08-01) ======
+// Constat de Paul sur la v1 : « c'est trop gros, trop général, il y a trop de
+// textes ». Forme retenue : ① la rose ne porte que les NOMS ; ② un CLIC ouvre
+// l'arbre du thème (tronc + branches) et efface la rose ; ③ le côté donne UNE
+// LIGNE au survol, TOUT au clic. Le registre détaillé est REPLIÉ.
+// Ce qui se prouve ici est autant ce qui s'affiche que ce qui NE s'affiche PAS.
+console.log('— D. vranesh.html → la rose (noms seuls), puis l’arbre au clic —');
 {
   const { page, erreurs, externes } = await nouvellePage();
   await page.addInitScript(scriptFausseSession());
@@ -477,112 +481,135 @@ console.log('— D. vranesh.html fixture 200 → boussole des futurs + ramificat
     status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IMLADRIK) }));
 
   await page.goto(`${BASE}/vranesh.html`, { waitUntil: 'load', timeout: 20000 });
-  await page.waitForSelector('#vranesh-boussole:not([hidden])', { timeout: 20000 });
   await page.waitForSelector('#vranesh-plateau .cap', { timeout: 20000 });
 
-  // 1. Un cap par thème de futurs.
+  // ---- ① La rose : les noms, rien d'autre. ----
   verifier('2 thèmes rendus en caps', (await page.locator('#vranesh-plateau .cap').count()) === 2);
   const noms = await page.locator('#vranesh-plateau .cap-nom').allTextContents();
-  verifier('Les caps portent les intitulés des thèmes',
+  verifier('Le cap porte le NOM SEUL, pas l’intitulé complet',
     noms.includes('TRAVERSÉE') && noms.includes('CARREFOUR'), JSON.stringify(noms));
-  verifier('2 aiguilles (une par thème)', (await page.locator('.vranesh-branches .aiguille').count()) === 2);
+  verifier('ABSENCE — aucun sous-titre de thème sur la rose',
+    !/un départ à préparer|—\s*l/.test((await page.locator('#vranesh-plateau').textContent()) || ''));
+  verifier('Aucune branche tant qu’aucun thème n’est ouvert',
+    (await page.locator('.vranesh-branche').count()) === 0);
+  verifier('L’arbre est fermé à l’arrivée',
+    await page.locator('#vranesh-arbre').evaluate((el) => el.hidden));
   verifier('Médaillon gravé au cœur', (await page.locator('#vranesh-plateau .boussole-coeur svg').count()) === 1);
+  verifier('CARREFOUR (0 scénario) porte l’état « à explorer »',
+    /à explorer/.test((await page.locator('#vranesh-plateau .cap', { hasText: 'CARREFOUR' }).textContent()) || ''));
 
-  // 2. Les ramifications : un scénario = une branche, rattachée à SON thème.
-  const capTraversee = page.locator('#vranesh-plateau .cap', { hasText: 'TRAVERSÉE' });
-  const capCarrefour = page.locator('#vranesh-plateau .cap', { hasText: 'CARREFOUR' });
-  verifier('3 branches au total (les 3 scénarios de TRAVERSÉE)',
-    (await page.locator('.vranesh-branche-trait').count()) === 3);
-  verifier('3 bourgeons (un par branche)',
-    (await page.locator('.vranesh-bourgeon').count()) === 3);
-  const parGroupe = await page.evaluate(() => Array.from(
-    document.querySelectorAll('.vranesh-branches-groupe'),
-    (g) => g.querySelectorAll('.vranesh-branche-trait').length));
-  verifier('Les branches sont rattachées au bon thème (3 et 0)',
-    parGroupe.length === 2 && parGroupe.includes(3) && parGroupe.includes(0), JSON.stringify(parGroupe));
+  // ---- Le registre détaillé est REPLIÉ : plus de mur de texte à l'arrivée. ----
+  const repli = page.locator('#vranesh-registre-detail');
+  verifier('Le registre détaillé est replié par défaut',
+    (await repli.evaluate((el) => el.open)) === false);
+  verifier('ABSENCE — aucun déroulé de scénario visible à l’arrivée',
+    !(await page.locator('#vranesh-situations').isVisible()));
 
-  // 3. La vraisemblance se lit sur l'épaisseur (jamais la couleur seule).
-  verifier('Une branche « forte » et une branche « faible » distinguées',
-    (await page.locator('.vranesh-branche-trait--forte').count()) === 1
-    && (await page.locator('.vranesh-branche-trait--faible').count()) === 1);
+  // ---- ② Le clic ouvre l'arbre et efface la rose. ----
+  await page.locator('#vranesh-plateau .cap', { hasText: 'TRAVERSÉE' }).click();
+  await page.waitForSelector('#vranesh-arbre:not([hidden])', { timeout: 5000 });
+  verifier('La rose s’efface au profit de l’arbre',
+    await page.locator('#vranesh-plateau').evaluate((el) => el.hidden));
+  verifier('Le tronc part de la base', (await page.locator('.vranesh-tronc').count()) === 1);
+  verifier('3 branches — une par futur de ce thème',
+    (await page.locator('.vranesh-branche').count()) === 3);
+  verifier('3 bourgeons (un par branche)', (await page.locator('.vranesh-bourgeon').count()) === 3);
+  verifier('Le nom du thème est gravé au pied de l’arbre',
+    (await page.locator('#vranesh-arbre-nom').textContent()) === 'TRAVERSÉE');
+  const etiquettes = await page.locator('.vranesh-etiquette').allTextContents();
+  verifier('Chaque branche porte une étiquette COURTE (≤ 35 signes)',
+    etiquettes.length === 3 && etiquettes.every((e) => e.length <= 35), JSON.stringify(etiquettes));
+  verifier('ABSENCE — le déroulé complet n’est PAS écrit sur l’arbre',
+    !/porte la voile/.test((await page.locator('#vranesh-arbre-dessin').textContent()) || ''));
+  verifier('Vraisemblances distinguées sur les traits',
+    (await page.locator('.vranesh-branche--forte').count()) === 1
+    && (await page.locator('.vranesh-branche--faible').count()) === 1);
   const largeurs = await page.evaluate(() => {
-    const w = (sel) => parseFloat(getComputedStyle(document.querySelector(sel)).strokeWidth);
-    return { forte: w('.vranesh-branche-trait--forte'), faible: w('.vranesh-branche-trait--faible') };
+    const w = (s) => parseFloat(getComputedStyle(document.querySelector(s)).strokeWidth);
+    return { forte: w('.vranesh-branche--forte'), faible: w('.vranesh-branche--faible') };
   });
   verifier('Un futur probable est tracé plus épais qu’un futur improbable',
     largeurs.forte > largeurs.faible, JSON.stringify(largeurs));
 
-  // 4. Le thème « à explorer » : un cap NU, invitation et non manque.
-  verifier('CARREFOUR (0 scénario) porte l’état « à explorer »',
-    /à explorer/.test((await capCarrefour.textContent()) || ''));
-  verifier('CARREFOUR marqué comme cap sans futur déroulé',
-    (await capCarrefour.evaluate((el) => el.classList.contains('cap--avenir'))) === true);
-  verifier('TRAVERSÉE affiche son compte de scénarios',
-    /3 scénarios/.test((await capTraversee.textContent()) || ''));
-
-  // 5. Un cap ouvre son thème dans le registre en dessous.
-  verifier('Le cap pointe la fiche du thème', (await capTraversee.getAttribute('href')) === '#vranesh-situation-s1');
-
-  // 6. La parole de Léo au survol — et l'ABSENCE de tout déroulé de scénario.
-  await capTraversee.hover();
+  // ---- ③ Survol : UNE LIGNE. Clic : TOUT. ----
+  // On vise le bourgeon : le centre de la boîte englobante d'une courbe est du
+  // vide, la souris d'un humain vise le trait ou son bout.
+  const branche = page.locator('.vranesh-bourgeon').first();
+  await branche.hover();
   await page.waitForSelector('#vranesh-parole.is-actif', { timeout: 5000 });
-  const parole = (await page.locator('#vranesh-parole').textContent()) || '';
-  verifier('Parole : le thème survolé est nommé', /TRAVERSÉE/.test(parole), parole);
-  verifier('Parole : la vraisemblance est écrite, pas seulement tracée',
-    /probable/.test(parole), parole);
-  verifier('Parole : posture VRANESH rappelée (revenir au présent)',
-    /revenir au présent/.test(parole), parole);
-  verifier('ABSENCE — aucun déroulé de scénario dans le cartouche',
-    !/le vent tourne au nord|la mer reste étale|un grain passe/.test(parole), parole);
-  verifier('Le thème survolé illumine SES branches (et elles seules)',
-    (await page.locator('.vranesh-branches-groupe.is-actif').count()) === 1);
+  const survol = (await page.locator('#vranesh-parole').textContent()) || '';
+  verifier('Survol : le côté nomme la branche et son rang',
+    /futur 1 sur 3/.test(survol), survol);
+  verifier('Survol : le déroulé du futur est donné', /porte la voile/.test(survol), survol);
+  verifier('Survol : la vraisemblance est écrite, pas seulement tracée',
+    /vraisemblance/.test(survol), survol);
+  verifier('ABSENCE — signaux et parade ne sortent PAS au simple survol',
+    !/le ciel se dégage|deux jours d’avance/.test(survol), survol);
+  verifier('Survol : la branche s’illumine seule',
+    (await page.locator('.vranesh-branche-g.is-actif').count()) === 1);
 
-  // 7. Le thème nu parle en invitation, jamais en reproche.
-  await capCarrefour.hover();
-  await page.waitForFunction(() => /CARREFOUR/.test(document.getElementById('vranesh-parole').textContent || ''), null, { timeout: 5000 });
-  const paroleNue = (await page.locator('#vranesh-parole').textContent()) || '';
-  verifier('Thème nu : invitation positive', /rien ne manque/i.test(paroleNue), paroleNue);
+  await page.locator('.vranesh-bourgeon').first().click();
+  await page.waitForSelector('.vranesh-branche-g.is-choisie', { timeout: 5000 });
+  const detail = (await page.locator('#vranesh-parole').textContent()) || '';
+  verifier('Clic : les signes avant-coureurs s’affichent',
+    /le ciel se dégage/.test(detail), detail);
+  verifier('Clic : la parade s’affiche', /deux jours d’avance/.test(detail), detail);
+  verifier('Clic : les passerelles s’affichent', /GARDER LE CAP/.test(detail), detail);
+  verifier('Clic : un lien mène au registre de ce thème',
+    (await page.locator('#vranesh-parole a[href="#vranesh-situation-s1"]').count()) === 1);
+
+  // ---- Retour : on retrouve la rose intacte. ----
+  await page.locator('#vranesh-arbre-retour').click();
+  verifier('Retour : la rose revient',
+    (await page.locator('#vranesh-plateau').evaluate((el) => el.hidden)) === false);
+  verifier('Retour : l’arbre se referme',
+    await page.locator('#vranesh-arbre').evaluate((el) => el.hidden));
+
+  // ---- Un thème sans futur : une base qui attend, jamais un reproche. ----
+  await page.locator('#vranesh-plateau .cap', { hasText: 'CARREFOUR' }).click();
+  await page.waitForSelector('#vranesh-arbre:not([hidden])', { timeout: 5000 });
+  verifier('Thème nu : aucune branche', (await page.locator('.vranesh-branche').count()) === 0);
+  const nu = (await page.locator('#vranesh-arbre-dessin').textContent()) || '';
+  verifier('Thème nu : la base attend ses branches (invitation)',
+    /attend ses branches/.test(nu), nu);
   verifier('Thème nu : aucun vocabulaire de reproche',
-    !/manqu(e|es|ement)\b(?! )|retard|néglig|oubli|devrais|faute/i.test(paroleNue.replace(/rien ne manque/i, '')), paroleNue);
+    !/manque|retard|néglig|oubli|devrais|faute/i.test(nu + (await page.locator('#vranesh-parole').textContent())));
 
-  // 8. La géométrie de l'éventail — fonction pure exposée aux harnais.
-  const geo = await page.evaluate(() => {
-    const e = window.UltimaVranesh.eventail;
-    const une = e(0, 1);
-    const trois = e(0, 3);
+  // ---- Les réductions de texte, fonctions pures. ----
+  const pur = await page.evaluate(() => {
+    const V = window.UltimaVranesh;
     return {
-      uneLongueur: une.length,
-      uneDansLAxe: Math.abs(une[0].by - 50) < 0.001,
-      troisLongueur: trois.length,
-      // symétrie : la 1re et la 3e branche s'écartent également de l'axe
-      symetrique: Math.abs((trois[0].by - 50) + (trois[2].by - 50)) < 0.001,
-      mediane: Math.abs(trois[1].by - 50) < 0.001,
-      aucune: e(0, 0).length,
+      nomAvecTiret: V.nomCourt('LIANDRA — l’amour et le devoir'),
+      nomSansTiret: V.nomCourt('CARREFOUR'),
+      nomVide: V.nomCourt(''),
+      etiquetteCourte: V.etiquetteBranche('Je referme.'),
+      etiquetteLongue: V.etiquetteBranche('Le vent tourne au nord et porte la voile jusqu’au bout du détroit'),
+      etiquetteVide: V.etiquetteBranche(''),
+      charpenteVide: V.charpente(0).length,
+      charpente3: V.charpente(3).branches.length,
+      alternance: V.charpente(3).branches.map((b) => b.sens).join(','),
+      surTronc: V.charpente(3).branches.every((b) => b.ax === 120),
     };
   });
-  verifier('Éventail : 1 scénario → 1 branche dans l’axe du cap',
-    geo.uneLongueur === 1 && geo.uneDansLAxe, JSON.stringify(geo));
-  verifier('Éventail : 3 scénarios → 3 branches symétriques autour de l’axe',
-    geo.troisLongueur === 3 && geo.symetrique && geo.mediane, JSON.stringify(geo));
-  verifier('Éventail : 0 scénario → aucune branche', geo.aucune === 0);
+  verifier('nomCourt : le sous-titre tombe', pur.nomAvecTiret === 'LIANDRA', JSON.stringify(pur));
+  verifier('nomCourt : un nom sans sous-titre est gardé entier', pur.nomSansTiret === 'CARREFOUR');
+  verifier('nomCourt : un intitulé vide ne casse rien', pur.nomVide === '');
+  verifier('etiquetteBranche : une phrase courte passe telle quelle',
+    pur.etiquetteCourte === 'Je referme', pur.etiquetteCourte);
+  verifier('etiquetteBranche : une phrase longue est bornée et suspendue',
+    pur.etiquetteLongue.length <= 35 && /…$/.test(pur.etiquetteLongue), pur.etiquetteLongue);
+  verifier('etiquetteBranche : un déroulé vide ne casse rien', pur.etiquetteVide === 'un futur');
+  verifier('charpente : 0 futur → aucune branche', pur.charpenteVide === 0);
+  verifier('charpente : 3 futurs → 3 branches alternées, toutes sur le tronc',
+    pur.charpente3 === 3 && pur.alternance === '-1,1,-1' && pur.surTronc, JSON.stringify(pur));
 
-  // 9. Lisibilité et hygiène.
-  const cc = await page.evaluate(() => {
-    const cs = getComputedStyle(document.documentElement);
-    return {
-      parchemin: cs.getPropertyValue('--parchemin').trim(),
-      nom: getComputedStyle(document.querySelector('#vranesh-plateau .cap-nom')).color,
-      etat: getComputedStyle(document.querySelector('#vranesh-plateau .cap-etat')).color,
-    };
-  });
-  verifier('Contraste nom de thème ≥ 4,5:1', ratio(versHex(cc.nom), cc.parchemin) >= 4.5);
-  verifier('Contraste état de thème ≥ 4,5:1', ratio(versHex(cc.etat), cc.parchemin) >= 4.5);
-  const hCap = await capTraversee.evaluate((el) => el.getBoundingClientRect().height);
+  // ---- Hygiène (de retour sur la rose : un cap n'a de taille que visible). ----
+  await page.locator('#vranesh-arbre-retour').click();
+  const hCap = await page.locator('#vranesh-plateau .cap').first().evaluate((el) => el.getBoundingClientRect().height);
   verifier('Tap target cap ≥ 44 px', hCap >= 44, `${hCap}px`);
-  verifier('Zéro requête externe (boussole)', externes.length === 0, externes.slice(0, 3).join(', '));
-  verifier('Zéro erreur console (boussole)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
-
-  await page.screenshot({ path: `${CAPTURES}/vranesh-boussole.png`, fullPage: true });
+  verifier('Zéro requête externe (arbre)', externes.length === 0, externes.slice(0, 3).join(', '));
+  verifier('Zéro erreur console (arbre)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
+  await page.screenshot({ path: `${CAPTURES}/vranesh-arbre.png`, fullPage: true });
   await page.close();
 }
 
@@ -630,6 +657,8 @@ console.log('— E. vranesh.html → dénouement (la branche qui a poussé) —'
 
   await page.goto(`${BASE}/vranesh.html`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForSelector('#vranesh-registre:not([hidden])', { timeout: 20000 });
+  // Le registre est replié par défaut : on l'ouvre pour écrire.
+  await page.locator('#vranesh-registre-detail summary').click();
 
   const s1 = page.locator('#vranesh-situation-s1');
   const s2 = page.locator('#vranesh-situation-s2');
@@ -685,6 +714,7 @@ console.log('— E. vranesh.html → dénouement (la branche qui a poussé) —'
   // 6. La branche neuve : écrite d'abord, désignée ensuite.
   await page.reload({ waitUntil: 'load' });
   await page.waitForSelector('#vranesh-registre:not([hidden])', { timeout: 20000 });
+  await page.locator('#vranesh-registre-detail summary').click();
   const deno2 = page.locator('#vranesh-situation-s1 .vranesh-denouement');
   await deno2.locator('select').selectOption('');
   verifier('Branche neuve choisie : le champ de saisie s’ouvre',
@@ -710,6 +740,7 @@ console.log('— E. vranesh.html → dénouement (la branche qui a poussé) —'
   // 7. Saisie vide : rien ne part.
   await page.reload({ waitUntil: 'load' });
   await page.waitForSelector('#vranesh-registre:not([hidden])', { timeout: 20000 });
+  await page.locator('#vranesh-registre-detail summary').click();
   const deno3 = page.locator('#vranesh-situation-s1 .vranesh-denouement');
   await deno3.locator('select').selectOption('');
   await deno3.locator('button[type="submit"]').click();
@@ -760,33 +791,38 @@ console.log('— F. vranesh.html thème advenu → une seule branche, scellée �
   await page.goto(`${BASE}/vranesh.html`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForSelector('#vranesh-plateau .cap', { timeout: 20000 });
 
-  // La boussole : une seule branche, tracée comme advenue.
-  verifier('Une seule branche subsiste sur le thème advenu',
-    (await page.locator('.vranesh-branche-trait').count()) === 1);
-  verifier('La branche qui a poussé est tracée comme advenue',
-    (await page.locator('.vranesh-branche-trait--advenue').count()) === 1);
-  verifier('Son bourgeon est devenu fruit',
-    (await page.locator('.vranesh-bourgeon--advenu').count()) === 1);
   const capAdvenu = page.locator('#vranesh-plateau .cap', { hasText: 'TRAVERSÉE' });
   verifier('Le cap porte l’état « advenu »', /advenu/.test((await capAdvenu.textContent()) || ''));
   verifier('Le cap est marqué scellé', await capAdvenu.evaluate((el) => el.classList.contains('cap--advenu')));
 
-  // Le trait advenu est plus affirmé que n'importe quelle hypothèse.
-  const epaisseurs = await page.evaluate(() => ({
-    advenue: parseFloat(getComputedStyle(document.querySelector('.vranesh-branche-trait--advenue')).strokeWidth),
-    forte: parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--x') || '0'),
-  }));
-  verifier('La branche advenue est plus épaisse que le plus probable des futurs (0,8)',
-    epaisseurs.advenue > 0.8, JSON.stringify(epaisseurs));
+  // L'arbre du thème advenu : une seule branche, tracée comme telle.
+  await capAdvenu.click();
+  await page.waitForSelector('#vranesh-arbre:not([hidden])', { timeout: 5000 });
+  verifier('Une seule branche subsiste sur le thème advenu',
+    (await page.locator('.vranesh-branche').count()) === 1);
+  verifier('La branche qui a poussé est tracée comme advenue',
+    (await page.locator('.vranesh-branche--advenue').count()) === 1);
+  verifier('Le groupe de la branche est marqué advenu',
+    (await page.locator('.vranesh-branche-g.is-advenue').count()) === 1);
 
-  // La parole : ce thème ne s'anticipe plus.
-  await capAdvenu.hover();
+  // Le trait advenu est plus affirmé que n'importe quelle hypothèse (forte = 2,2).
+  const epaisseurs = await page.evaluate(() => ({
+    advenue: parseFloat(getComputedStyle(document.querySelector('.vranesh-branche--advenue')).strokeWidth),
+  }));
+  verifier('La branche advenue est plus épaisse que le plus probable des futurs (2,2)',
+    epaisseurs.advenue > 2.2, JSON.stringify(epaisseurs));
+
+  // Le côté : cette branche est celle qui a poussé.
+  await page.locator('.vranesh-bourgeon').first().hover();
   await page.waitForSelector('#vranesh-parole.is-actif', { timeout: 5000 });
   const parole = (await page.locator('#vranesh-parole').textContent()) || '';
-  verifier('Parole : le futur a tranché', /a tranché/.test(parole), parole);
-  verifier('Parole : plus d’invitation à anticiper', !/anticiper sereinement/i.test(parole), parole);
+  verifier('Côté : la branche est annoncée comme celle qui a poussé',
+    /la branche qui a poussé/.test(parole), parole);
+  verifier('Côté : aucune vraisemblance affichée pour un futur advenu',
+    !/vraisemblance/.test(parole), parole);
 
   // Le registre : la branche qui a poussé, sa date, et la possibilité de rouvrir.
+  await page.locator('#vranesh-registre-detail summary').click();
   const deno = page.locator('#vranesh-situation-s1 .vranesh-denouement');
   verifier('Registre : le bloc du dénouement est celui d’un thème advenu',
     await deno.evaluate((el) => el.classList.contains('vranesh-denouement--advenu')));

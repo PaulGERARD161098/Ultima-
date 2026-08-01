@@ -88,16 +88,30 @@
         <section id="vranesh-boussole" class="cartouche-page vranesh-boussole"
                  aria-labelledby="vranesh-titre-boussole" hidden>
           <h2 id="vranesh-titre-boussole">La boussole des futurs</h2>
-          <p class="zekrom-vue-note">Chaque cap est un thème&nbsp;; chaque branche qui
-            en pousse est un futur possible. Un thème sans branche reste entier — il
-            attend seulement qu'on lui imagine ses futurs.</p>
+          <p class="zekrom-vue-note">Chaque cap est un thème. Clique-le&nbsp;: son arbre
+            se déplie, une branche par futur possible. Survole une branche pour savoir
+            ce qu'elle est, clique-la pour tout voir.</p>
 
-          <div class="boussole-plateau" id="vranesh-plateau"
-               aria-label="Boussole des thèmes de futurs"></div>
+          <div class="vranesh-scene">
+            <!-- ① La rose : les NOMS des thèmes, rien d'autre. Vide dans le HTML
+                 servi — les intitulés sont intimes et ne viennent que de
+                 /api/situations, après session validée (§5). -->
+            <div class="boussole-plateau" id="vranesh-plateau"
+                 aria-label="Boussole des thèmes de futurs"></div>
 
-          <aside class="boussole-parole" id="vranesh-parole" role="status" aria-live="polite">
-            <p class="parole-defaut">Survole un thème&nbsp;— Léo t'en dit l'essentiel.</p>
-          </aside>
+            <!-- ② L'arbre du thème ouvert : un tronc, des branches. -->
+            <div id="vranesh-arbre" class="vranesh-arbre-cadre" hidden>
+              <button type="button" class="vranesh-arbre-retour" id="vranesh-arbre-retour">↞ La boussole</button>
+              <svg class="vranesh-arbre-svg" id="vranesh-arbre-dessin" viewBox="0 0 240 196"
+                   role="img" aria-label="Arbre des futurs du thème ouvert"></svg>
+              <p class="vranesh-arbre-nom" id="vranesh-arbre-nom"></p>
+            </div>
+
+            <!-- ③ Le côté : une ligne au survol, le détail au clic. -->
+            <aside class="boussole-parole vranesh-cote" id="vranesh-parole" role="status" aria-live="polite">
+              <p class="parole-defaut">Clique un thème&nbsp;— son arbre se déplie.</p>
+            </aside>
+          </div>
         </section>
 
         <!-- Saisie libre : poser une situation (le cas donné à anticiper). -->
@@ -121,16 +135,19 @@
           </form>
         </section>
 
-        <!-- Bascule de vue : toutes les situations / mes situations anticipées (≥ 1 scénario). -->
-        <section class="cartouche-page" aria-labelledby="vranesh-titre-vue">
-          <h2 id="vranesh-titre-vue">La carte des futurs</h2>
+        <!-- Le registre détaillé — REPLIÉ par défaut (constat de Paul 2026-08-01 :
+             « il y a trop de textes »). Tout y reste : écriture des scénarios,
+             passerelles, dénouement. On l'ouvre quand on veut écrire, pas pour
+             consulter — la consultation se fait sur l'arbre au-dessus. -->
+        <details class="cartouche-page vranesh-registre-repli" id="vranesh-registre-detail">
+          <summary id="vranesh-titre-vue">Le registre détaillé — écrire, relier, dénouer</summary>
           <div class="zekrom-bascule" role="group" aria-label="Vue de la carte">
             <button type="button" id="vranesh-vue-toutes" class="zekrom-onglet" aria-pressed="true">Toutes les situations</button>
             <button type="button" id="vranesh-vue-anticipees" class="zekrom-onglet" aria-pressed="false">Mes situations anticipées</button>
           </div>
           <p id="vranesh-vue-note" class="zekrom-vue-note"></p>
           <div id="vranesh-situations"></div>
-        </section>
+        </details>
       </div>
 
       <p class="retour"><a class="retour-console" href="imladrik.html">Retour à la cartographie IMLADRIK</a></p>
