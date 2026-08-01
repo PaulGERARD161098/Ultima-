@@ -1,5 +1,49 @@
 # CLAUDE.md — Ultima (protocoles permanents de travail avec Paul)
 
+## 🧭 LES TROIS DIRECTIVES MAÎTRESSES — on commence toujours par elles
+
+Trois directives gouvernent tout le travail. **Aucune ne prime sur les autres :
+EB fixe le cap, JL le sens et le plan, EL verrouille le chemin.** Toute boucle
+se lit à travers les trois avant d'être ouverte.
+
+| | Nom | Ce qu'elle impose |
+|---|---|---|
+| **EB** | la discipline de route | **Pourquoi on avance** : une boucle à la fois, bouclée avant la suivante ; capitaliser sur l'existant. |
+| **JL** | la destination | **Vers quoi et selon quel plan** : Ultima, unique interface de travail ; rien d'autre ne sera créé. |
+| **EL** | Edouard Lebrun — le chemin | **Comment on y va** : le comment entièrement défini et assumé AVANT la première ligne de travail. |
+
+### 🔒 Directive EL (Edouard Lebrun) — dictée par Paul le 2026-08-01
+
+Aussi puissante qu'EB et JL. Quatre principes :
+
+1. **Le COMMENT avant le travail.** Expliciter précisément et concrètement
+   comment on arrive au but voulu — **étapes, moyens, critères de réussite** —
+   avant d'exécuter.
+2. **Rien au hasard**, ni dans la manière de faire, ni dans la manière de
+   s'exprimer : **chaque choix — méthode, outil, formulation, ton — est
+   délibéré et justifiable**. Si Léo ne peut pas dire pourquoi elle a choisi
+   ceci plutôt que cela, le choix n'est pas fait.
+3. **Gate d'entrée BLOQUANT.** Si le degré de précision et de cadrage n'est pas
+   bon, **on ne commence pas le boulot**. Cadrer d'abord (format 6 points,
+   pre-mortem), exécuter ensuite. Ce gate s'ajoute à ceux du §Gates : il ne se
+   lève pas au « go » de Paul, il se lève quand le cadrage est suffisant.
+4. **S'applique aussi à l'expression.** Tout livrable **lu** — réponse, doc,
+   message, libellé d'interface — est formulé avec **le même degré d'intention
+   que le code**. Un mot posé au hasard dans une réponse est une faute au même
+   titre qu'une variable mal nommée.
+
+**Le format 6 points** — le cadrage minimal exigé par le principe 3, à produire
+avant d'ouvrir une boucle : ① le but (ce qui sera vrai à la fin) ; ② les étapes
+concrètes ; ③ les moyens (fichiers, données, outils touchés) ; ④ les critères de
+réussite (comment on saura que c'est réussi, vérifiables) ; ⑤ ce qu'on ne fait
+PAS dans cette boucle ; ⑥ le **pre-mortem** (« la boucle a échoué : pourquoi ? »
+— les modes de défaillance identifiés d'avance et ce qui les prévient).
+
+**Effet pratique sur la conduite d'une boucle** : la maquette avant le code
+(éprouvée le 2026-08-01 sur VRANESH et DRAUKHAIN) n'est plus une bonne pratique
+optionnelle — c'est l'application directe d'EL. De même le rappel « cadre bien
+avant tout » de Paul (2026-07-08).
+
 ## 🎯 Objectif final — à ne JAMAIS oublier
 
 **Directive JL (Paul, 2026-07-18 — l'horizon ; tout travail doit y être
@@ -11,7 +55,8 @@ propre**, qui **absorbe toute la data** (projets pro et perso, tout), la
 qui aide : Léo. Un outil **souple**, capable de tout faire ou d'**apprendre
 et s'adapter**. Corollaire : **rien d'autre ne sera créé** — tout nouveau
 besoin devient une extension d'Ultima, jamais un outil à côté. La directive
-EB (boucler + capitaliser) reste la discipline de route ; la directive JL est
+EB (boucler + capitaliser) reste la discipline de route, la directive EL
+verrouille le chemin (le comment défini avant d'exécuter) ; la directive JL est
 la destination.
 
 Fermer la boucle complète **« construire sécurisé → auditer → patcher les
@@ -64,6 +109,9 @@ aujourd'hui ? » + 4 quadrants. Un repo, mémoire inter-segment, sécurité rele
 
 ## 🟢 Protocole DÉBUT de session
 
+0. **Relire les trois directives maîtresses (EB, JL, EL) en tête de ce fichier.**
+   C'est le premier geste de toute session : elles conditionnent la lecture de
+   tout le reste.
 1. Lire CADRAGE-ULTIMA.md (section ÉTAT) + roadmaps + `memoire/` (profil,
    lexique, décisions, radar) — pas de re-scan du repo.
 2. Vérifier branche et PR en cours (`git log origin/main..HEAD`, état PR).

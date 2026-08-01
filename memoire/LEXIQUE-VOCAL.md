@@ -80,3 +80,9 @@ reformuler et demander — jamais deviner avant une action irréversible.
   avancement — « aller de l'avant, progresser, devenir meilleur » (dicté Paul
   2026-07-30). C'est le besoin, la voie jalonnée en est la réponse.
 
+- **Les TROIS directives maîtresses** (à relire au début de chaque session,
+  en tête de `CLAUDE.md`) : **EB** = la discipline de route (pourquoi on
+  avance) · **JL** = la destination (vers quoi et selon quel plan) · **EL**
+  (Edouard Lebrun, dictée 2026-08-01) = le chemin (le COMMENT entièrement
+  défini et assumé avant la première ligne de travail, gate d'entrée bloquant,
+  rien au hasard — dans les mots comme dans le code).
