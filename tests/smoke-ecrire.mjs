@@ -273,6 +273,104 @@ console.log('— D. ecrire.html → session expirée : le texte est gardé avant
   await page.close();
 }
 
+// ====== E. LA DICTÉE : elle doit PARLER quand elle échoue ======
+// Défaut trouvé le 2026-08-01 par un test de Paul sur son iPhone : « un micro,
+// mais rien ne se passe ». Cause : `signaler` vaut `function () {}` PAR DÉFAUT
+// dans js/dictee.js — sans configuration, tout ce que la dictée a à dire est
+// avalé. Et la ligne « Je vous écoute… » est écrite en `--accent-fonce`, un
+// bleu sombre invisible sur la mer de cet écran.
+// Deux défauts d'INTÉGRATION, pas du composant. Ce bloc les cloue.
+console.log('— E. ecrire.html → la dictée parle, en écoute comme en échec —');
+{
+  const { page } = await nouvellePage();
+  await page.addInitScript(scriptFausseSession());
+  // Une API de reconnaissance FACTICE, pilotable : aucun micro réel, aucun
+  // réseau. On veut éprouver ce que l'écran DIT, pas ce que le système entend.
+  await page.addInitScript(() => {
+    function Faux() { this.lang = ''; this.continuous = false; this.interimResults = false; }
+    Faux.prototype.start = function () {
+      window.__recoVivante = this;
+      if (this.onstart) { this.onstart(); }
+    };
+    Faux.prototype.stop = function () { if (this.onend) { this.onend(); } };
+    Faux.prototype.abort = function () {};
+    window.SpeechRecognition = Faux;
+    window.webkitSpeechRecognition = Faux;
+  });
+  await page.route(`**://${REF_SUPABASE}.supabase.co/**`, (route) =>
+    route.fulfill({ status: 503, contentType: 'application/json', body: '{}' }));
+  await page.route('**/api/imladrik**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8',
+    body: JSON.stringify({ ok: true, data: { id: 'p1' } }),
+  }));
+
+  await page.goto(`${BASE}/ecrire.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForSelector('#ecrire-form:not([hidden])', { timeout: 20000 });
+
+  verifier('Le micro est adjoint au champ quand le navigateur sait écouter',
+    (await page.locator('.bouton-micro').count()) === 1);
+  const hMicro = await page.locator('.bouton-micro').evaluate((el) => {
+    const r = el.getBoundingClientRect();
+    return { h: r.height, l: r.width };
+  });
+  verifier('Micro ≥ 44 px (cible tactile)', hMicro.h >= 44 && hMicro.l >= 44, JSON.stringify(hMicro));
+
+  // ---- L'écoute doit SE VOIR. ----
+  await page.locator('.bouton-micro').click();
+  await page.waitForSelector('.etat-vocal:not([hidden])', { timeout: 5000 });
+  verifier('En écoute : la page le dit',
+    /écoute/.test((await page.locator('.etat-vocal').textContent()) || ''));
+  const lisible = await page.evaluate(() => {
+    const ligne = document.querySelector('.etat-vocal');
+    const fond = getComputedStyle(document.body).backgroundColor;
+    return { couleur: getComputedStyle(ligne).color, fond };
+  });
+  // La mer est très sombre : le texte d'état doit être CLAIR pour exister.
+  const clarte = lisible.couleur.match(/\d+/g).slice(0, 3).map(Number)
+    .reduce((a, b) => a + b, 0) / 3;
+  verifier('En écoute : la ligne d’état est LISIBLE sur la mer (pas un bleu sombre)',
+    clarte > 180, JSON.stringify(lisible));
+  verifier('En écoute : le micro se marque enfoncé',
+    (await page.locator('.bouton-micro').getAttribute('aria-pressed')) === 'true');
+
+  // ---- L'échec doit PARLER. C'est le défaut trouvé par Paul. ----
+  await page.evaluate(() => {
+    window.__recoVivante.onerror({ error: 'no-speech' });
+  });
+  const dit = (await page.locator('#ecrire-message').textContent()) || '';
+  verifier('Échec « rien entendu » : la page le DIT (défaut du 2026-08-01)',
+    /rien entendu/i.test(dit), dit || '(muet)');
+  verifier('Échec : le message est marqué comme tel',
+    await page.locator('#ecrire-message').evaluate((el) =>
+      el.classList.contains('ecrire-message--erreur')));
+
+  // ---- Micro refusé : on dit quoi faire, on ne laisse pas dans le noir. ----
+  await page.locator('.bouton-micro').click();
+  await page.waitForSelector('.etat-vocal:not([hidden])', { timeout: 5000 });
+  await page.evaluate(() => { window.__recoVivante.onerror({ error: 'not-allowed' }); });
+  const refus = (await page.locator('#ecrire-message').textContent()) || '';
+  verifier('Micro refusé : la page dit quoi faire',
+    /Autorisez le micro|tapez votre texte/i.test(refus), refus || '(muet)');
+
+  // ---- Ce qui est dicté arrive dans le champ ET dans le brouillon. ----
+  await page.locator('.bouton-micro').click();
+  await page.waitForSelector('.etat-vocal:not([hidden])', { timeout: 5000 });
+  await page.evaluate(() => {
+    const r = window.__recoVivante;
+    r.onresult({ resultIndex: 0, results: [
+      Object.assign([{ transcript: 'une petite victoire' }], { isFinal: true }),
+    ] });
+    r.stop();
+  });
+  verifier('Dicté : le texte arrive dans le champ',
+    /une petite victoire/.test(await page.locator('#ecrire-contenu').inputValue()));
+  verifier('Dicté : le brouillon suit (rien ne se perd si l’app est tuée)',
+    /une petite victoire/.test(await page.evaluate(() =>
+      window.localStorage.getItem(window.UltimaEcrire.CLE_BROUILLON) || '')));
+
+  await page.close();
+}
+
 await navigateur.close();
 console.log(echecs === 0 ? '\n=== SMOKE ECRIRE VERT ===' : `\n=== ${echecs} VERDICT(S) EN ÉCHEC ===`);
 process.exit(echecs === 0 ? 0 : 1);
