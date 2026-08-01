@@ -246,6 +246,146 @@ await pageM.close();
 // L'API /api/leo est STUBÉE (zéro IA, zéro coût, zéro réseau sortant) : on
 // prouve le contrat front — Bearer + quadrant + historique envoyés, bulles
 // rendues, gate 503 qui retire la zone, panne qui restitue le texte dicté.
+// ======= B-bis. LES YEUX DE LÉO SUR RIVEN (boucle ①, 2026-08-01) =======
+// L'état borné du quadrant, joint à chaque question, pour répondre « où j'en
+// suis ». Arbitrage de Paul : les NOMS partent vers l'IA — c'est ce qui rend
+// Léo utile (« relance Untel ») — mais « bien protégés ». La protection tient
+// en cinq règles dures, et une règle de confidentialité se teste PAR
+// L'ABSENCE : on cherche dans ce qui partirait les coordonnées, les notes et
+// les identifiants, et on exige de NE PAS les y trouver. Vérifier seulement la
+// présence des noms ne prouverait rien.
+console.log('— B-bis. Les yeux de Léo sur RIVEN (noms protégés) —');
+{
+  const pageY = await navigateur.newPage({ viewport: { width: 1280, height: 900 } });
+  await pageY.goto(`${BASE}/traveler.html`, { waitUntil: 'load', timeout: 20000 });
+  await pageY.waitForFunction(() => window.UltimaRiven !== undefined, null, { timeout: 20000 });
+
+  // Fixture volontairement COMPLÈTE : chaque fiche porte tout ce qu'une vraie
+  // fiche porte (téléphone, e-mail, adresse, coordonnées, notes), pour que
+  // l'absence prouve quelque chose.
+  const vu = await pageY.evaluate(() => {
+    const noeuds = [
+      { id: 'n1', type: 'artisan', nom: 'Menuiserie Delcourt', secteur_activite: 'Menuiserie', statut: 'actif',
+        telephone: '03 20 55 41 20', email: 'contact@menuiserie-delcourt.fr', adresse: '12 rue Nationale',
+        ville: 'Lille', lat: 50.6292, lng: 3.0573, notes: 'Très fiable sur les délais.' },
+      { id: 'n2', type: 'artisan', nom: 'Plomberie Roux & Fils', secteur_activite: 'Plomberie', statut: 'actif',
+        telephone: '04 78 30 12 45', email: 'contact@plomberie-roux.fr', notes: 'Disponible sous 48 h.' },
+      { id: 'n3', type: 'partenaire', nom: 'Agence Habitat Sud', secteur_activite: 'Courtage', statut: 'actif',
+        telephone: '04 91 54 22 10', notes: 'Apporte des dossiers de rénovation.' },
+      { id: 'n4', type: 'partenaire', nom: 'Courtage Bâti Ouest', secteur_activite: 'Courtage', statut: 'actif',
+        notes: 'Commission 5 %.' },
+      { id: 'n5', type: 'lead', nom: 'M. Lambert — rénovation toiture', secteur_activite: 'Toiture',
+        statut: 'prospect', telephone: '06 12 34 56 78', email: 'p.lambert@gmail.com',
+        notes: 'Devis envoyé le 15/06.' },
+      { id: 'n6', type: 'lead', nom: 'Mme Nguyen — extension maison', statut: 'termine',
+        email: 'nguyen.famille@free.fr', notes: 'Budget à confirmer.' },
+      { id: 'n7', type: 'chantier', nom: 'Réhabilitation immeuble Voltaire', statut: 'en_cours',
+        adresse: '112 boulevard Voltaire', notes: 'Livraison en septembre.' },
+    ];
+    const relations = [
+      { id: 'r1', statut: 'en_cours', notes: 'Dossiers copropriétés.' },
+      { id: 'r2', statut: 'contact_etabli' }, { id: 'r3', statut: 'fructueux' },
+      { id: 'r4', statut: 'arrete', raison_arret: 'plus de disponibilité' },
+    ];
+    const journal = [
+      { id: 'j1', node_id: 'n5', relance_at: '2026-07-01', relance_faite: false,
+        note: 'Devis toiture envoyé, attend la banque.', prochaine_etape: 'Relancer M. Lambert' },
+      { id: 'j2', node_id: 'n7', relance_at: '2026-08-01', relance_faite: false,
+        note: 'Plans reçus de l’architecte.', prochaine_etape: 'Envoyer le chiffrage' },
+      { id: 'j3', node_id: 'n1', relance_at: '2026-09-01', relance_faite: false, note: 'plus tard' },
+      { id: 'j4', node_id: 'n2', relance_at: '2026-07-02', relance_faite: true, note: 'déjà fait' },
+    ];
+    const etat = window.UltimaRiven.construireEtatRiven(
+      noeuds, relations, journal, [{ id: 'a1' }], '2026-08-01');
+    return { etat, brut: JSON.stringify(etat) };
+  });
+
+  // ---- Les comptes. ----
+  const c = vu.etat.compteurs;
+  verifier('Yeux RIVEN : le réseau est compté', c['contacts au réseau'] === 7, JSON.stringify(c));
+  verifier('Yeux RIVEN : les types sont comptés',
+    c['artisans'] === 2 && c['partenaires'] === 2 && c['chantiers'] === 1, JSON.stringify(c));
+  verifier('Yeux RIVEN : un lead terminé n’est plus actif', c['leads actifs'] === 1, JSON.stringify(c));
+  verifier('Yeux RIVEN : les relations vivantes sont comptées',
+    c['relations en cours'] === 2 && c['relations fructueuses'] === 1, JSON.stringify(c));
+  verifier('Yeux RIVEN : relances dues = échues ou du jour, jamais celles déjà faites',
+    c['relances dues'] === 2, JSON.stringify(c));
+  verifier('Yeux RIVEN : les relances en retard sont distinguées du jour même',
+    c['relances en retard'] === 1, JSON.stringify(c));
+  verifier('Yeux RIVEN : les alertes J-2 remontent', c['chantiers en alerte J-2'] === 1);
+
+  // ---- Les noms : présents, c'est l'arbitrage de Paul. ----
+  const contacts = vu.etat.listes['Les contacts du réseau'] || [];
+  verifier('Yeux RIVEN : les contacts sont nommés', contacts.length === 7, JSON.stringify(contacts.length));
+  verifier('Yeux RIVEN : un nom est accompagné de sa CATÉGORIE, rien de plus',
+    contacts.every((e) => Object.keys(e).every((k) => k === 'libelle' || k === 'marque'))
+    && contacts.every((e) => ['artisan', 'partenaire', 'lead', 'chantier'].includes(e.marque)),
+    JSON.stringify(contacts[0]));
+  verifier('Yeux RIVEN : les plus vivants d’abord (leads en tête, chantiers en queue)',
+    contacts[0].marque === 'lead' && contacts[contacts.length - 1].marque === 'chantier',
+    JSON.stringify(contacts.map((e) => e.marque)));
+
+  const relances = vu.etat.listes['Les relances dues'] || [];
+  verifier('Yeux RIVEN : les relances dues sont NOMMÉES (c’est l’utilité de Léo)',
+    relances.length === 2 && relances.some((r) => /Lambert/.test(r.libelle)), JSON.stringify(relances));
+  verifier('Yeux RIVEN : l’échéance est une catégorie, jamais une date brute',
+    relances.every((r) => r.marque === 'en retard' || r.marque === 'aujourd’hui'), JSON.stringify(relances));
+
+  const secteurs = vu.etat.listes['Les secteurs du réseau'] || [];
+  verifier('Yeux RIVEN : les secteurs sont listés',
+    secteurs.length === 4 && secteurs[0].libelle === 'Courtage', JSON.stringify(secteurs[0]));
+
+  // ---- L'ABSENCE : « bien protégés » se prouve par ce qui NE part PAS. ----
+  const coordonnees = ['03 20 55 41 20', '04 78 30 12 45', '04 91 54 22 10', '06 12 34 56 78',
+    'contact@menuiserie-delcourt.fr', 'p.lambert@gmail.com', 'nguyen.famille@free.fr',
+    '12 rue Nationale', '112 boulevard Voltaire', '50.6292', '3.0573', 'Lille'];
+  const fuitesCoord = coordonnees.filter((mot) => vu.brut.includes(mot));
+  verifier('ABSENCE — aucune coordonnée (téléphone, e-mail, adresse, position, ville)',
+    fuitesCoord.length === 0, fuitesCoord.join(', '));
+
+  const contenus = ['fiable sur les délais', 'Disponible sous 48', 'dossiers de rénovation',
+    'Commission 5', 'Devis envoyé le 15/06', 'Budget à confirmer', 'Livraison en septembre',
+    'attend la banque', 'Plans reçus', 'Relancer M. Lambert', 'Envoyer le chiffrage',
+    'plus tard', 'déjà fait', 'copropriétés', 'plus de disponibilité'];
+  const fuitesContenu = contenus.filter((mot) => vu.brut.includes(mot));
+  verifier('ABSENCE — aucun contenu écrit SUR quelqu’un (notes, journal, prochaine étape)',
+    fuitesContenu.length === 0, fuitesContenu.join(', '));
+
+  verifier('ABSENCE — aucun identifiant',
+    !/"n[1-7]"|"r[1-4]"|"j[1-4]"|"a1"/.test(vu.brut), vu.brut.slice(0, 120));
+  verifier('ABSENCE — aucune date brute',
+    !/2026-0[789]-\d\d/.test(vu.brut));
+
+  // ---- Bornes du serveur : l'état doit passer validerEtatQuadrant. ----
+  verifier('Yeux RIVEN : ≤ 12 compteurs (borne serveur)', Object.keys(c).length <= 12);
+  verifier('Yeux RIVEN : ≤ 4 listes (borne serveur)', Object.keys(vu.etat.listes).length <= 4);
+  verifier('Yeux RIVEN : chaque libellé de compteur respecte le motif serveur',
+    Object.keys(c).every((k) => /^[\wÀ-ÿ' ’()–-]{1,60}$/.test(k)), JSON.stringify(Object.keys(c)));
+  verifier('Yeux RIVEN : chaque entrée respecte les bornes serveur',
+    Object.keys(vu.etat.listes).every((k) => vu.etat.listes[k].length <= 40
+      && vu.etat.listes[k].every((e) => e.libelle.length <= 200 && (!e.marque || e.marque.length <= 60))));
+
+  // ---- Le carnet d'adresses ne s'exporte pas : 200 fiches → 40 au plus. ----
+  const borne = await pageY.evaluate(() => {
+    const gros = Array.from({ length: 200 }, (_, i) => ({
+      id: 'x' + i, type: 'artisan', nom: 'Contact numéro ' + i, statut: 'actif',
+    }));
+    const e = window.UltimaRiven.construireEtatRiven(gros, [], [], [], '2026-08-01');
+    return { contacts: e.listes['Les contacts du réseau'].length, compte: e.compteurs['contacts au réseau'] };
+  });
+  verifier('Yeux RIVEN : 200 fiches → 40 noms au plus (jamais un export du carnet)',
+    borne.contacts === 40 && borne.compte === 200, JSON.stringify(borne));
+
+  // Un réseau vide ne fabrique pas de liste fantôme.
+  const vide = await pageY.evaluate(() =>
+    window.UltimaRiven.construireEtatRiven([], [], [], [], '2026-08-01'));
+  verifier('Yeux RIVEN : un réseau vide donne des comptes à zéro, aucune liste',
+    vide.compteurs['contacts au réseau'] === 0 && Object.keys(vide.listes).length === 0,
+    JSON.stringify(vide));
+
+  await pageY.close();
+}
+
 console.log('— C. Voix de Léo (L2, /api/leo stubée) —');
 const pageV = await navigateur.newPage({ viewport: { width: 1280, height: 800 } });
 const erreursVoix = [];
