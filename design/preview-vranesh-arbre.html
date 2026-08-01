@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Preview — VRANESH : l'arbre à la demande (2 formes)</title>
+<!--
+  PREVIEW DE TRAVAIL — aucune donnée réelle.
+  Constat de Paul (2026-08-01) sur la v1 de la boussole des futurs :
+    « c'est trop gros, c'est trop général et surtout il y a trop de textes.
+      L'affichage n'est vraiment pas très heureux. »
+  Ce qu'il demande :
+    ① sur les caps, LE NOM SEUL (« THORIOL », « LIANDRA ») — pas le sous-titre ;
+    ② au CLIC sur un thème, un ARBRE qui part d'une BASE et se ramifie ;
+    ③ au SURVOL d'une branche, elle s'illumine et un cartouche SUR LE CÔTÉ dit
+       ce que c'est (une ligne) ;
+    ④ au CLIC sur la branche, les données s'affichent.
+    → affichage À LA DEMANDE, jamais tout d'un coup.
+  Deux formes sont proposées ici pour trancher. Contenus NEUTRES et inventés :
+  aucune situation ni aucun scénario réel n'entre dans le repo (§5).
+  Zéro ressource externe, zéro CDN.
+-->
+<style>
+:root {
+  --accent: #1e6fb8; --cerne-carte: #5a4118; --or-antique: #a9884a;
+  --mer-profonde: #0e3a52; --mer-claire: #17506b;
+  --parchemin: #f6eed9; --parchemin-carte: #efe3c6; --parchemin-ombre: #e3d3ab;
+  --encre-sepia: #3b2f1c; --encre-sepia-douce: #6a5636; --creme: #f6eed9;
+  --police-ancienne: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 1.4rem 1rem 3rem; color: var(--creme);
+  font-family: var(--police-ancienne);
+  background:
+    radial-gradient(ellipse at 50% 15%, rgba(120,190,210,.14), rgba(0,0,0,0) 60%),
+    linear-gradient(180deg, var(--mer-claire), var(--mer-profonde) 62%, #0a2d42);
+  min-height: 100vh;
+}
+h1, h2, h3 { font-weight: 700; letter-spacing: .06em; margin: 0; }
+.entete { max-width: 62rem; margin: 0 auto 1.6rem; text-align: center; }
+.entete h1 { font-size: 1.5rem; letter-spacing: .16em; }
+.entete p { margin: .5rem 0 0; font-style: italic; opacity: .88; }
+
+/* ---------- Bascule de forme ---------- */
+.formes { display: flex; gap: .6rem; justify-content: center; margin: 1.2rem auto; flex-wrap: wrap; }
+.forme-onglet {
+  font-family: inherit; font-size: .82rem; letter-spacing: .08em; font-variant: small-caps;
+  padding: .55rem 1rem; min-height: 44px; cursor: pointer; border-radius: 999px;
+  border: 1px solid var(--or-antique); background: rgba(169,136,74,.14); color: var(--creme);
+}
+.forme-onglet[aria-pressed="true"] { background: var(--parchemin); color: var(--encre-sepia); font-weight: 700; }
+
+.panneau { max-width: 62rem; margin: 0 auto; }
+.panneau[hidden] { display: none; }
+.cartouche {
+  background: linear-gradient(180deg, var(--parchemin), var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte); border-radius: 10px;
+  box-shadow: inset 0 0 0 3px rgba(169,136,74,.35), 0 4px 16px rgba(0,10,20,.35);
+  color: var(--encre-sepia); padding: 1rem 1.1rem; margin-bottom: 1.2rem;
+}
+.cartouche > h2 {
+  font-size: .95rem; font-variant: small-caps; letter-spacing: .12em;
+  border-bottom: 1px solid var(--or-antique); padding-bottom: .4rem; margin-bottom: .7rem;
+}
+.note { font-style: italic; color: var(--encre-sepia-douce); margin: 0 0 .8rem; font-size: .92rem; }
+
+/* ---------- ÉTAGE 1 : la boussole, NOMS SEULS ---------- */
+.rose { position: relative; width: min(70vmin, 380px); aspect-ratio: 1/1; margin: .4rem auto 1rem; }
+.rose::after {
+  content: ""; position: absolute; inset: 8%; border-radius: 50%;
+  border: 1px solid rgba(169,136,74,.4); box-shadow: inset 0 0 40px rgba(4,24,36,.12);
+}
+.rose-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.rose-aiguille { stroke: var(--or-antique); stroke-width: .7; opacity: .5; }
+.rose-coeur {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+  width: 24%; opacity: .9;
+}
+/* Le cap : NOM SEUL, court, lisible d'un coup d'œil. */
+.cap {
+  position: absolute; transform: translate(-50%,-50%); z-index: 2;
+  font-family: inherit; font-size: .92rem; font-weight: 700; letter-spacing: .13em;
+  padding: .6rem 1rem; min-height: 44px; cursor: pointer; white-space: nowrap;
+  color: var(--encre-sepia); background: linear-gradient(180deg,#fbf5e6,var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte); border-radius: 8px;
+  box-shadow: inset 0 0 0 3px rgba(169,136,74,.45), 0 3px 10px rgba(0,10,20,.25);
+}
+.cap:hover, .cap:focus-visible, .cap[aria-pressed="true"] {
+  border-color: var(--or-antique); box-shadow: inset 0 0 0 3px rgba(169,136,74,.75), 0 0 0 2px rgba(169,136,74,.3);
+}
+.cap-pastille {
+  display: block; font-size: .62rem; font-weight: 400; font-variant: small-caps;
+  letter-spacing: .08em; color: var(--encre-sepia-douce); margin-top: .12rem;
+}
+
+/* ---------- L'ARBRE : un tronc, des branches ---------- */
+.scene-arbre { display: grid; gap: 1rem; }
+@media (min-width: 62rem) { .scene-arbre { grid-template-columns: 1.35fr 1fr; align-items: start; } }
+.arbre-cadre {
+  position: relative; background: linear-gradient(180deg,#fbf5e6,var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte); border-radius: 10px;
+  box-shadow: inset 0 0 0 3px rgba(169,136,74,.35);
+  min-height: 320px;
+}
+.arbre-svg { display: block; width: 100%; height: auto; padding: .4rem; }
+.tronc { stroke: var(--cerne-carte); stroke-width: 2.6; fill: none; stroke-linecap: round; }
+.branche { stroke: var(--or-antique); stroke-width: 1.6; fill: none; stroke-linecap: round; cursor: pointer; }
+.branche-zone { stroke: transparent; stroke-width: 16; fill: none; cursor: pointer; }
+.bourgeon { fill: var(--or-antique); cursor: pointer; }
+.branche-g { outline: none; }
+.branche-g:focus-visible .bourgeon { stroke: var(--accent); stroke-width: 2; }
+.branche-g.is-actif .branche { stroke: var(--cerne-carte); stroke-width: 2.6; }
+.branche-g.is-actif .bourgeon { fill: var(--cerne-carte); r: 4.2; }
+.branche-g.is-choisie .branche { stroke: var(--accent); stroke-width: 3; }
+.branche-g.is-choisie .bourgeon { fill: var(--accent); }
+.branche-etiquette {
+  font-family: var(--police-ancienne); font-size: 7.5px; fill: var(--encre-sepia-douce);
+  pointer-events: none;
+  letter-spacing: .04em;
+}
+.branche-g.is-actif .branche-etiquette, .branche-g.is-choisie .branche-etiquette {
+  fill: var(--encre-sepia); font-weight: 700;
+}
+.arbre-titre {
+  position: absolute; left: 50%; bottom: .5rem; transform: translateX(-50%);
+  font-size: .95rem; letter-spacing: .16em; color: var(--encre-sepia); font-weight: 700;
+}
+.arbre-retour {
+  position: absolute; left: .7rem; top: .6rem; font-size: .72rem; font-variant: small-caps;
+  letter-spacing: .08em; background: none; border: none; cursor: pointer;
+  color: var(--encre-sepia-douce); font-family: inherit; padding: .35rem .2rem; min-height: 32px;
+}
+.arbre-retour:hover { color: var(--encre-sepia); text-decoration: underline; }
+
+/* ---------- LE CARTOUCHE DE CÔTÉ : une ligne au survol, tout au clic ---------- */
+.cote {
+  background: linear-gradient(180deg, var(--parchemin), var(--parchemin-ombre));
+  border: 1px solid var(--cerne-carte); border-radius: 10px; color: var(--encre-sepia);
+  padding: .9rem 1rem; min-height: 200px;
+}
+.cote-repos { font-style: italic; color: var(--encre-sepia-douce); margin: 0; }
+.cote-titre { font-size: .95rem; letter-spacing: .06em; margin: 0 0 .2rem; }
+.cote-rang {
+  font-size: .68rem; font-variant: small-caps; letter-spacing: .1em;
+  color: var(--encre-sepia-douce); margin: 0 0 .6rem;
+}
+.cote-ligne { margin: 0 0 .7rem; font-size: .95rem; }
+.cote-detail { border-top: 1px dashed var(--or-antique); padding-top: .6rem; margin-top: .6rem; }
+.cote-detail dt {
+  font-size: .68rem; font-variant: small-caps; letter-spacing: .1em;
+  color: var(--encre-sepia-douce); margin-top: .5rem;
+}
+.cote-detail dd { margin: .15rem 0 0; font-size: .9rem; }
+.cote-invite { font-style: italic; color: var(--encre-sepia-douce); font-size: .85rem; margin: .7rem 0 0; }
+
+/* ---------- Forme ② : la boussole reste, l'arbre pousse au centre ---------- */
+.rose--deployee .cap:not([aria-pressed="true"]) { opacity: .35; }
+.rose-arbre { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.rose-arbre[hidden] { display: none; }
+
+.legende { max-width: 62rem; margin: 1.4rem auto 0; opacity: .9; font-size: .9rem; }
+.legende li { margin-bottom: .35rem; }
+@media (prefers-reduced-motion: no-preference) {
+  .branche { transition: stroke .12s ease, stroke-width .12s ease; }
+  /* La pousse : chaque trait se dessine de son attache vers son bout. La
+     longueur est mesurée en JS (getTotalLength) et posée en style — un
+     dasharray fixe couperait les traits plus longs que lui. */
+  .pousse { animation: pousser 560ms ease-out forwards; }
+  @keyframes pousser { to { stroke-dashoffset: 0; } }
+}
+</style>
+</head>
+<body>
+
+<div class="entete">
+  <h1>VRANESH — l'arbre à la demande</h1>
+  <p>Deux formes à trancher. Le nom seul sur les caps ; l'arbre au clic ; le détail sur le côté.</p>
+</div>
+
+<div class="formes" role="group" aria-label="Forme d'affichage">
+  <button type="button" class="forme-onglet" id="onglet-a" aria-pressed="true">Forme ① — l'arbre plein cadre</button>
+  <button type="button" class="forme-onglet" id="onglet-b" aria-pressed="false">Forme ② — l'arbre dans la rose</button>
+</div>
+
+<!-- ========================= FORME ① ========================= -->
+<div class="panneau" id="panneau-a">
+  <div class="cartouche">
+    <h2>Forme ① — l'arbre plein cadre</h2>
+    <p class="note">La boussole ne porte que les noms. Un clic sur un cap
+      <strong>remplace</strong> la rose par l'arbre de ce thème seul : le tronc part du bas,
+      les branches montent. Rien d'autre à l'écran. Retour d'un clic.</p>
+
+    <div id="a-rose-zone">
+      <div class="rose" id="a-rose"></div>
+    </div>
+
+    <div class="scene-arbre" id="a-arbre-zone" hidden>
+      <div class="arbre-cadre">
+        <button type="button" class="arbre-retour" id="a-retour">↞ La boussole</button>
+        <svg class="arbre-svg" viewBox="0 0 240 196" aria-label="Arbre des futurs du thème"></svg>
+        <p class="arbre-titre" id="a-arbre-titre"></p>
+      </div>
+      <aside class="cote" id="a-cote" aria-live="polite">
+        <p class="cote-repos">Survole une branche — elle te dit ce qu'elle est. Clique-la pour tout voir.</p>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<!-- ========================= FORME ② ========================= -->
+<div class="panneau" id="panneau-b" hidden>
+  <div class="cartouche">
+    <h2>Forme ② — l'arbre dans la rose</h2>
+    <p class="note">La boussole <strong>reste en place</strong>. Un clic sur un cap fait pousser son
+      arbre depuis le cœur vers ce cap ; les autres caps s'effacent sans disparaître. On garde
+      toujours la carte d'ensemble sous les yeux.</p>
+
+    <div class="scene-arbre">
+      <div class="arbre-cadre" style="padding:.6rem">
+        <div class="rose" id="b-rose"></div>
+      </div>
+      <aside class="cote" id="b-cote" aria-live="polite">
+        <p class="cote-repos">Clique un thème pour faire pousser son arbre, puis survole une branche.</p>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<ul class="legende">
+  <li><strong>Commun aux deux</strong> : le cap porte <em>le nom seul</em> ; une pastille discrète
+    dit combien de futurs (ou « à explorer »).</li>
+  <li><strong>Survol d'une branche</strong> → elle s'illumine, le côté donne <em>une ligne</em>.</li>
+  <li><strong>Clic sur une branche</strong> → le côté déplie le détail (signaux, parade, passerelles).</li>
+  <li>Aucun texte long n'est affiché tant qu'il n'a pas été demandé.</li>
+</ul>
+
+<script>
+// Données NEUTRES et inventées — aucune situation réelle (§5).
+var THEMES = [
+  { id: 't1', nom: 'THORIOL', futurs: [
+      { t: 'Le socle tient', v: 'moyenne', d: 'L’activité rapporte d’ici l’hiver ; il faut alors des sphères d’expansion.', s: 'Demande entrante stable, trésorerie qui se constitue.', p: 'Préparer les axes d’expansion avant de subir la croissance.' },
+      { t: 'Le socle cède', v: 'moyenne', d: 'L’activité ne prend pas ; il faut un plan B déjà prêt.', s: 'Carnet qui se vide, trésorerie qui s’érode.', p: 'Construire le plan B avant d’en avoir besoin.' },
+      { t: 'Une voie plus souple', v: 'faible', d: 'Une autre forme d’activité s’ouvre, plus légère.', s: 'Une occasion concrète se présente.', p: 'Explorer sans cannibaliser le socle.' }
+    ] },
+  { id: 't2', nom: 'LIANDRA', futurs: [
+      { t: 'Je referme', v: 'moyenne', d: 'La porte se ferme et on n’en parle plus.', s: 'La douleur l’emporte durablement sur l’élan.', p: 'Décider à froid, jamais sous le coup de l’émotion.' },
+      { t: 'L’autre referme', v: 'moyenne', d: 'La décision vient d’en face ; il faudra l’accepter.', s: 'Les échanges s’espacent.', p: 'Accepter sans négocier.' },
+      { t: 'Le temps fait', v: 'faible', d: 'Rien ne se décide ; on se regarde plus tard.', s: 'Les semaines passent sans qu’un mot soit posé.', p: 'Se donner une échéance à soi-même.' },
+      { t: 'On se revoit', v: 'moyenne', d: 'Un lien d’amitié s’entretient, et l’on verra.', s: 'Envie partagée, échanges redevenus légers.', p: 'Tenir le cadre pour ce qu’il est.' },
+      { t: 'Autre chose', v: 'faible', d: 'Un imprévu change les termes.', s: 'Un événement extérieur.', p: 'Revenir ici et déplier ce futur-là.' }
+    ] },
+  { id: 't3', nom: 'ESCALE', futurs: [] }
+];
+var NS = 'http://www.w3.org/2000/svg';
+function svg(n, cl) { var e = document.createElementNS(NS, n); if (cl) e.setAttribute('class', cl); return e; }
+function el(n, cl, t) { var e = document.createElement(n); if (cl) e.className = cl; if (t != null) e.textContent = t; return e; }
+
+// ---------- La rose : caps = NOM SEUL ----------
+function poserRose(hote, auClic, avecArbre) {
+  hote.textContent = '';
+  var n = THEMES.length, pas = 360 / n;
+  var s = svg('svg', 'rose-svg'); s.setAttribute('viewBox', '0 0 100 100'); s.setAttribute('aria-hidden', 'true');
+  var coeur = svg('svg', 'rose-coeur'); coeur.setAttribute('viewBox', '0 0 72 72'); coeur.setAttribute('aria-hidden', 'true');
+  [['circle', { cx: 36, cy: 36, r: 33, fill: '#f9f1dc', stroke: '#a9884a', 'stroke-width': 2.4 }],
+   ['path', { d: 'M36 56 V 40', stroke: '#3b2f1c', 'stroke-width': 2.6, fill: 'none', 'stroke-linecap': 'round' }],
+   ['path', { d: 'M36 40 C 36 32, 28 30, 24 22', stroke: '#3b2f1c', 'stroke-width': 2, fill: 'none', 'stroke-linecap': 'round' }],
+   ['path', { d: 'M36 40 C 36 30, 36 26, 36 20', stroke: '#3b2f1c', 'stroke-width': 2, fill: 'none', 'stroke-linecap': 'round' }],
+   ['path', { d: 'M36 40 C 36 32, 44 30, 48 22', stroke: '#3b2f1c', 'stroke-width': 2, fill: 'none', 'stroke-linecap': 'round' }]
+  ].forEach(function (p) { var e = svg(p[0]); for (var k in p[1]) e.setAttribute(k, p[1][k]); coeur.appendChild(e); });
+
+  var arbreCouche = svg('svg', 'rose-arbre'); arbreCouche.setAttribute('viewBox', '0 0 100 100');
+  arbreCouche.setAttribute('aria-hidden', 'true'); arbreCouche.hidden = true;
+
+  THEMES.forEach(function (th, i) {
+    var a = (-90 + i * pas) * Math.PI / 180, cos = Math.cos(a), sin = Math.sin(a);
+    var l = svg('line', 'rose-aiguille');
+    l.setAttribute('x1', 50); l.setAttribute('y1', 50);
+    l.setAttribute('x2', 50 + 28 * cos); l.setAttribute('y2', 50 + 28 * sin);
+    s.appendChild(l);
+    var b = el('button', 'cap'); b.type = 'button';
+    b.style.left = (50 + 40 * cos) + '%'; b.style.top = (50 + 40 * sin) + '%';
+    b.setAttribute('aria-pressed', 'false');
+    b.appendChild(document.createTextNode(th.nom));
+    b.appendChild(el('span', 'cap-pastille',
+      th.futurs.length === 0 ? 'à explorer' : th.futurs.length + (th.futurs.length > 1 ? ' futurs' : ' futur')));
+    b.addEventListener('click', function () {
+      Array.prototype.forEach.call(hote.querySelectorAll('.cap'), function (c) { c.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      auClic(th, { cos: cos, sin: sin }, arbreCouche);
+    });
+    hote.appendChild(b);
+  });
+  hote.appendChild(s); hote.appendChild(coeur); hote.appendChild(arbreCouche);
+  return arbreCouche;
+}
+
+// ---------- Le cartouche de côté : une ligne, puis tout ----------
+function coteRepos(cote, texte) {
+  cote.textContent = ''; cote.appendChild(el('p', 'cote-repos', texte));
+}
+function coteSurvol(cote, th, f, i) {
+  cote.textContent = '';
+  cote.appendChild(el('h3', 'cote-titre', f.t));
+  cote.appendChild(el('p', 'cote-rang', th.nom + ' — futur ' + (i + 1) + ' sur ' + th.futurs.length
+    + ' · vraisemblance ' + f.v));
+  cote.appendChild(el('p', 'cote-ligne', f.d));
+  cote.appendChild(el('p', 'cote-invite', 'Clique la branche pour voir signaux et parade.'));
+}
+function coteDetail(cote, th, f, i) {
+  coteSurvol(cote, th, f, i);
+  cote.removeChild(cote.lastChild);
+  var dl = el('dl', 'cote-detail');
+  dl.appendChild(el('dt', null, 'Signes avant-coureurs')); dl.appendChild(el('dd', null, f.s));
+  dl.appendChild(el('dt', null, 'Parade préparée')); dl.appendChild(el('dd', null, f.p));
+  dl.appendChild(el('dt', null, 'Passerelles')); dl.appendChild(el('dd', null, 'Aucune — relie ce futur à un objectif.'));
+  cote.appendChild(dl);
+}
+
+// ---------- FORME ① : l'arbre plein cadre ----------
+var aZoneRose = document.getElementById('a-rose-zone');
+var aZoneArbre = document.getElementById('a-arbre-zone');
+var aCote = document.getElementById('a-cote');
+var aTitre = document.getElementById('a-arbre-titre');
+var aSvg = aZoneArbre.querySelector('.arbre-svg');
+
+poserRose(document.getElementById('a-rose'), function (th) {
+  aZoneRose.hidden = true; aZoneArbre.hidden = false;
+  aTitre.textContent = th.nom;
+  dessinerArbre(aSvg, th, aCote);
+  coteRepos(aCote, th.futurs.length === 0
+    ? 'Ce thème n’a pas encore de futur — il attend qu’on lui en imagine.'
+    : 'Survole une branche — elle te dit ce qu’elle est. Clique-la pour tout voir.');
+});
+document.getElementById('a-retour').addEventListener('click', function () {
+  aZoneArbre.hidden = true; aZoneRose.hidden = false;
+});
+
+// Un tronc qui monte, des branches qui s'en détachent en alternance.
+function dessinerArbre(cible, th, cote) {
+  cible.textContent = '';
+  var n = th.futurs.length;
+  if (n === 0) {
+    var vide = svg('text'); vide.setAttribute('x', 120); vide.setAttribute('y', 100);
+    vide.setAttribute('text-anchor', 'middle'); vide.setAttribute('class', 'branche-etiquette');
+    vide.textContent = 'aucun futur déroulé — la base attend ses branches';
+    cible.appendChild(vide);
+  }
+  // Le tronc part de la BASE (le thème) et monte ; les branches s'en détachent
+  // de bas en haut, en alternance, la plus ancienne au pied.
+  var hautTronc = n ? Math.max(46, 164 - n * 24) : 96;
+  var tronc = svg('path', 'tronc pousse');
+  tronc.setAttribute('d', 'M120 186 C 117 156, 123 126, 120 ' + hautTronc);
+  cible.appendChild(tronc);
+
+  th.futurs.forEach(function (f, i) {
+    var pas = (158 - hautTronc) / Math.max(1, n - 1 || 1);
+    var y = n === 1 ? 126 : 160 - i * pas;         // du bas vers le haut
+    var cote_ = (i % 2 === 0) ? -1 : 1;            // alternance gauche / droite
+    var x2 = 120 + cote_ * (52 + (i % 3) * 6);
+    var y2 = y - 20;
+    var g = svg('g', 'branche-g'); g.setAttribute('tabindex', '0');
+    g.setAttribute('role', 'button');
+    g.setAttribute('aria-label', f.t + ' — vraisemblance ' + f.v);
+    var d = 'M120 ' + y + ' Q ' + (120 + cote_ * 28) + ' ' + (y - 5) + ' ' + x2 + ' ' + y2;
+    var zone = svg('path', 'branche-zone'); zone.setAttribute('d', d);
+    var br = svg('path', 'branche pousse'); br.setAttribute('d', d);
+    br.style.animationDelay = (i * 90) + 'ms';
+    var bo = svg('circle', 'bourgeon');
+    bo.setAttribute('cx', x2); bo.setAttribute('cy', y2); bo.setAttribute('r', 3);
+    var et = svg('text', 'branche-etiquette');
+    et.setAttribute('x', x2 + cote_ * 6); et.setAttribute('y', y2 - 7);
+    et.setAttribute('text-anchor', cote_ < 0 ? 'end' : 'start');
+    et.textContent = f.t;
+    g.appendChild(br); g.appendChild(bo); g.appendChild(et); g.appendChild(zone);
+
+    function entrer() { g.classList.add('is-actif'); coteSurvol(cote, th, f, i); }
+    function sortir() { if (!g.classList.contains('is-choisie')) g.classList.remove('is-actif'); }
+    g.addEventListener('mouseenter', entrer);
+    g.addEventListener('mouseleave', sortir);
+    g.addEventListener('focus', entrer);
+    g.addEventListener('blur', sortir);
+    function choisir() {
+      Array.prototype.forEach.call(cible.querySelectorAll('.branche-g'), function (o) {
+        o.classList.remove('is-choisie'); o.classList.remove('is-actif');
+      });
+      g.classList.add('is-choisie'); g.classList.add('is-actif');
+      coteDetail(cote, th, f, i);
+    }
+    g.addEventListener('click', choisir);
+    g.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choisir(); }
+    });
+    cible.appendChild(g);
+  });
+  amorcerPousse(cible);
+}
+
+// Amorce la pousse : dasharray = longueur réelle du trait, offset = idem.
+function amorcerPousse(racine) {
+  Array.prototype.forEach.call(racine.querySelectorAll('.pousse'), function (t) {
+    var L = t.getTotalLength ? t.getTotalLength() : 0;
+    if (!L) { return; }
+    t.style.strokeDasharray = L;
+    t.style.strokeDashoffset = L;
+  });
+}
+
+// ---------- FORME ② : l'arbre pousse dans la rose ----------
+var bCote = document.getElementById('b-cote');
+var bRose = document.getElementById('b-rose');
+var bCouche = poserRose(bRose, function (th, dir, couche) {
+  bRose.classList.add('rose--deployee');
+  couche.hidden = false;
+  dessinerArbreRadial(couche, th, dir, bCote);
+  coteRepos(bCote, th.futurs.length === 0
+    ? th.nom + ' — aucun futur déroulé pour l’instant.'
+    : th.nom + ' — survole une branche, clique-la pour tout voir.');
+});
+
+// Les branches partent du cap vers l'extérieur, en éventail depuis une base.
+function dessinerArbreRadial(couche, th, dir, cote) {
+  couche.textContent = '';
+  var base = Math.atan2(dir.sin, dir.cos), n = th.futurs.length;
+  th.futurs.forEach(function (f, i) {
+    var t = (n === 1) ? 0 : ((i / (n - 1)) * 2 - 1);
+    var ang = base + t * (38 * Math.PI / 180);
+    var ax = 50 + 46 * Math.cos(base), ay = 50 + 46 * Math.sin(base);
+    var bx = 50 + 62 * Math.cos(ang), by = 50 + 62 * Math.sin(ang);
+    var cx = 50 + 54 * Math.cos(base + t * 13 * Math.PI / 180);
+    var cy = 50 + 54 * Math.sin(base + t * 13 * Math.PI / 180);
+    var g = svg('g', 'branche-g'); g.setAttribute('tabindex', '0'); g.setAttribute('role', 'button');
+    g.setAttribute('aria-label', f.t);
+    var d = 'M ' + ax + ' ' + ay + ' Q ' + cx + ' ' + cy + ' ' + bx + ' ' + by;
+    var br = svg('path', 'branche'); br.setAttribute('d', d); br.setAttribute('stroke-width', '1.1');
+    var zone = svg('path', 'branche-zone'); zone.setAttribute('d', d); zone.setAttribute('stroke-width', '5');
+    var bo = svg('circle', 'bourgeon');
+    bo.setAttribute('cx', bx); bo.setAttribute('cy', by); bo.setAttribute('r', 1.8);
+    g.appendChild(br); g.appendChild(bo); g.appendChild(zone);
+    function entrer() { g.classList.add('is-actif'); coteSurvol(cote, th, f, i); }
+    function sortir() { if (!g.classList.contains('is-choisie')) g.classList.remove('is-actif'); }
+    g.addEventListener('mouseenter', entrer); g.addEventListener('mouseleave', sortir);
+    g.addEventListener('focus', entrer); g.addEventListener('blur', sortir);
+    function choisir() {
+      Array.prototype.forEach.call(couche.querySelectorAll('.branche-g'), function (o) {
+        o.classList.remove('is-choisie'); o.classList.remove('is-actif');
+      });
+      g.classList.add('is-choisie'); g.classList.add('is-actif'); coteDetail(cote, th, f, i);
+    }
+    g.addEventListener('click', choisir);
+    g.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choisir(); }
+    });
+    couche.appendChild(g);
+  });
+}
+
+// ---------- Bascule ----------
+var oa = document.getElementById('onglet-a'), ob = document.getElementById('onglet-b');
+var pa = document.getElementById('panneau-a'), pb = document.getElementById('panneau-b');
+function basculer(versA) {
+  oa.setAttribute('aria-pressed', String(versA)); ob.setAttribute('aria-pressed', String(!versA));
+  pa.hidden = !versA; pb.hidden = versA;
+}
+oa.addEventListener('click', function () { basculer(true); });
+ob.addEventListener('click', function () { basculer(false); });
+</script>
+</body>
+</html>
