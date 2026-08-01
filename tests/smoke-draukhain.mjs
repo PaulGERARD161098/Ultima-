@@ -246,6 +246,9 @@ console.log('— B. draukhain.html fixture 200 → registre, à raviver, serment
 
   await page.goto(`${BASE}/draukhain.html`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForSelector('#draukhain-registre:not([hidden])', { timeout: 20000 });
+  // Le registre détaillé est REPLIÉ depuis le foyer (2026-08-01) : on l'ouvre,
+  // cette section exerce l'écriture.
+  await page.locator('#draukhain-registre-detail summary').click();
 
   // 1. Bearer transmis au GET.
   verifier('Un appel GET /api/serments au moins', appelsGet.length >= 1, `${appelsGet.length}`);
@@ -458,6 +461,166 @@ console.log('— B. draukhain.html fixture 200 → registre, à raviver, serment
 }
 
 // ===================== C. 401 : fail-closed =====================
+// ============ E. LE FOYER DES SERMENTS (forme A, 2026-08-01) ============
+// « Sortir de la fiche textuelle statique : un affichage progressif, dynamique,
+// évolutif. » Le serment est un FEU : sa flamme au centre, les flammes posées
+// autour, un halo dont l'éclat croît avec leur nombre. Grammaire de VRANESH :
+// les noms d'abord, un clic déploie un serment, survol = une ligne, clic = tout.
+// Ce qui se prouve ici est autant ce qui s'affiche que ce qui NE s'affiche PAS.
+console.log('— E. draukhain.html → le foyer des serments —');
+{
+  const { page, erreurs, externes } = await nouvellePage();
+  await page.addInitScript(scriptFausseSession());
+  await page.route(`**://${REF_SUPABASE}.supabase.co/**`, (route) =>
+    route.fulfill({ status: 503, contentType: 'application/json', body: '{}' }));
+  await page.route('**/api/serments**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE),
+  }));
+  await page.route('**/api/flammes**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify({ ok: true, data: {} }),
+  }));
+  // Cibles des passerelles : sans elles la page émet des 404 (bruit de harnais,
+  // pas un défaut produit).
+  await page.route('**/api/ideaux**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IDEAUX) }));
+  await page.route('**/api/imladrik**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_PAGES) }));
+
+  await page.goto(`${BASE}/draukhain.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForSelector('#draukhain-foyer-serments .foyer-serment', { timeout: 20000 });
+
+  // ---- ① Les serments : les noms, rien d'autre. ----
+  const noms = await page.locator('.foyer-serment-nom').allTextContents();
+  verifier('Foyer : un bouton par serment', noms.length >= 2, JSON.stringify(noms));
+  verifier('Foyer : le bouton porte le NOM SEUL',
+    noms.every((n) => !/\s+[—–-]\s+/.test(n)), JSON.stringify(noms));
+  verifier('Foyer : aucun foyer allumé à l’arrivée',
+    (await page.locator('.foyer-flamme-g').count()) === 0);
+  verifier('Foyer : le retour n’apparaît qu’une fois un serment ouvert',
+    await page.locator('#draukhain-foyer-retour').evaluate((el) => el.hidden));
+
+  // Le registre détaillé est replié : plus de mur de texte à l'arrivée.
+  verifier('Foyer : le registre détaillé est replié par défaut',
+    (await page.locator('#draukhain-registre-detail').evaluate((el) => el.open)) === false);
+  verifier('ABSENCE — aucun texte de flamme visible à l’arrivée',
+    !(await page.locator('#draukhain-serments').isVisible()));
+
+  // ---- ② Le clic allume le foyer. ----
+  const premier = page.locator('.foyer-serment').first();
+  const nomPremier = (await premier.locator('.foyer-serment-nom').textContent()) || '';
+  await premier.click();
+  await page.waitForSelector('.foyer-flamme-g', { timeout: 5000 });
+  verifier('Foyer : le serment ouvert est marqué',
+    (await premier.getAttribute('aria-pressed')) === 'true');
+  verifier('Foyer : le nom du serment est gravé sous le foyer',
+    (await page.locator('#draukhain-foyer-nom').textContent()) === nomPremier);
+  verifier('Foyer : une flamme AU CENTRE (consigne de Paul)',
+    (await page.locator('.foyer-flamme-centre').count()) === 1);
+  verifier('Foyer : le cercle du foyer est allumé, pas en braise',
+    (await page.locator('.foyer-cercle').count()) === 1
+    && (await page.locator('.foyer-cercle--braise').count()) === 0);
+  verifier('Foyer : un halo est posé quand des flammes brûlent',
+    (await page.locator('.foyer-halo').count()) === 1);
+  const nbFlammes = await page.locator('.foyer-flamme-g').count();
+  verifier('Foyer : une flamme qui gravite par flamme posée', nbFlammes >= 1, `${nbFlammes}`);
+  const etiquettes = await page.locator('.foyer-etiquette').allTextContents();
+  verifier('Foyer : chaque flamme porte une étiquette COURTE (≤ 25 signes)',
+    etiquettes.length === nbFlammes && etiquettes.every((e) => e.length <= 25),
+    JSON.stringify(etiquettes));
+
+  // Le halo n'est PAS opaque : l'éclat calculé ne doit pas être écrasé par une
+  // animation d'apparition (piège relevé en preview).
+  const opacite = await page.locator('.foyer-halo').evaluate((el) =>
+    parseFloat(getComputedStyle(el).opacity));
+  verifier('Foyer : le halo reste une lueur, jamais un aplat',
+    opacite > 0 && opacite <= 0.2, String(opacite));
+
+  // ---- ③ Survol : UNE LIGNE. Clic : TOUT. ----
+  await page.locator('.foyer-zone').first().hover();
+  await page.waitForSelector('.foyer-flamme-g.is-actif', { timeout: 5000 });
+  const survol = (await page.locator('#draukhain-foyer-cote').textContent()) || '';
+  verifier('Survol : le côté nomme la flamme et son rang', /flamme 1 sur/.test(survol), survol);
+  verifier('Survol : la nature est écrite, pas seulement dessinée',
+    /citation|victoire|rappel/.test(survol), survol);
+  verifier('ABSENCE — le pourquoi du serment ne sort PAS au simple survol',
+    !/Pourquoi ce serment/.test(survol), survol);
+  verifier('Survol : une seule flamme s’illumine',
+    (await page.locator('.foyer-flamme-g.is-actif').count()) === 1);
+
+  await page.locator('.foyer-zone').first().click();
+  await page.waitForSelector('.foyer-flamme-g.is-choisie', { timeout: 5000 });
+  const detail = (await page.locator('#draukhain-foyer-cote').textContent()) || '';
+  verifier('Clic : le serment entier se déplie', /Pourquoi ce serment|Horizon|Passerelles/.test(detail), detail);
+  verifier('Clic : un lien mène au registre de ce serment',
+    (await page.locator('#draukhain-foyer-cote a[href^="#draukhain-serment-"]').count()) === 1);
+
+  // ---- Le retour. ----
+  await page.locator('#draukhain-foyer-retour').click();
+  verifier('Retour : le foyer s’éteint', (await page.locator('.foyer-flamme-g').count()) === 0);
+  verifier('Retour : aucun serment n’est plus marqué',
+    (await page.locator('.foyer-serment[aria-pressed="true"]').count()) === 0);
+
+  // ---- Un serment « à raviver » : braise, invitation, jamais reproche. ----
+  const aRaviver = page.locator('.foyer-serment', { hasText: 'à raviver' });
+  if ((await aRaviver.count()) > 0) {
+    await aRaviver.first().click();
+    await page.waitForSelector('.foyer-cercle--braise', { timeout: 5000 });
+    verifier('À raviver : le foyer est une braise en pointillé',
+      (await page.locator('.foyer-cercle--braise').count()) === 1);
+    verifier('À raviver : la flamme centrale reste dessinée, jamais éteinte',
+      (await page.locator('.foyer-flamme-centre--braise').count()) === 1);
+    verifier('À raviver : aucun halo (rien ne l’entretient encore)',
+      (await page.locator('.foyer-halo').count()) === 0);
+    const braise = (await page.locator('#draukhain-foyer-dessin').textContent() || '')
+      + (await page.locator('#draukhain-foyer-cote').textContent() || '');
+    verifier('À raviver : une invitation (« un souffle »)', /souffle/.test(braise), braise);
+    verifier('À raviver : aucun vocabulaire de reproche',
+      !/manqu|retard|néglig|oubli|devrais|faute|échec/i.test(braise), braise);
+    await page.locator('#draukhain-foyer-retour').click();
+  }
+
+  // ---- Les fonctions pures. ----
+  const pur = await page.evaluate(() => {
+    const D = window.UltimaDraukhain;
+    const c3 = D.couronne(3);
+    return {
+      nomAvecTiret: D.nomCourt('TENIR LA LIGNE — la constance'),
+      nomSansTiret: D.nomCourt('FAIRE FACE'),
+      etiquetteCourte: D.etiquetteFlamme('Je tiens.'),
+      etiquetteLongue: D.etiquetteFlamme('Ce qui se fait sans effort ne dure jamais bien longtemps'),
+      etiquetteVide: D.etiquetteFlamme(''),
+      couronneVide: D.couronne(0).length,
+      couronne3: c3.length,
+      premiereAuNord: Math.abs(c3[0].x - 120) < 0.001 && c3[0].y < 100,
+      eclatVide: D.eclat(0),
+      eclat1: D.eclat(1).opacite,
+      eclat4: D.eclat(4).opacite,
+      eclatPlafond: D.eclat(40).opacite,
+      rayonCroit: D.eclat(6).rayon > D.eclat(2).rayon,
+    };
+  });
+  verifier('nomCourt : le pourquoi accolé tombe', pur.nomAvecTiret === 'TENIR LA LIGNE', JSON.stringify(pur));
+  verifier('nomCourt : un nom sans tiret est gardé entier', pur.nomSansTiret === 'FAIRE FACE');
+  verifier('etiquetteFlamme : une phrase courte passe telle quelle',
+    pur.etiquetteCourte === 'Je tiens', pur.etiquetteCourte);
+  verifier('etiquetteFlamme : une phrase longue est bornée et suspendue',
+    pur.etiquetteLongue.length <= 25 && /…$/.test(pur.etiquetteLongue), pur.etiquetteLongue);
+  verifier('etiquetteFlamme : un texte vide ne casse rien', pur.etiquetteVide === 'une flamme');
+  verifier('couronne : 0 flamme → aucune place', pur.couronneVide === 0);
+  verifier('couronne : 3 flammes → 3 places, la première plein Nord',
+    pur.couronne3 === 3 && pur.premiereAuNord, JSON.stringify(pur));
+  verifier('eclat : sans flamme, aucun halo', pur.eclatVide === null);
+  verifier('eclat : la lueur croît avec les flammes', pur.eclat4 > pur.eclat1);
+  verifier('eclat : un foyer bien tenu éclaire, il n’aveugle pas (plafond)',
+    pur.eclatPlafond <= 0.18, String(pur.eclatPlafond));
+  verifier('eclat : le rayon croît lui aussi', pur.rayonCroit);
+
+  verifier('Zéro requête externe (foyer)', externes.length === 0, externes.slice(0, 3).join(', '));
+  verifier('Zéro erreur console (foyer)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
+  await page.screenshot({ path: `${CAPTURES}/draukhain-foyer.png`, fullPage: true });
+  await page.close();
+}
+
 console.log('— C. draukhain.html fausse session → 401 fail-closed —');
 {
   const { page, erreurs } = await nouvellePage();

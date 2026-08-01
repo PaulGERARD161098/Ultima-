@@ -14,6 +14,9 @@
   <link rel="stylesheet" href="css/quadrant.css">
   <!-- La voie jalonnée : le cheminement d'un serment (forme A, 2026-07-30). -->
   <link rel="stylesheet" href="css/voie.css">
+  <!-- Le foyer des serments (forme A, 2026-08-01) : la consultation se fait
+       désormais sur le foyer ; le registre détaillé se replie en dessous. -->
+  <link rel="stylesheet" href="css/draukhain-foyer.css">
 </head>
 <body class="console page-quadrant" data-quadrant="draukhain">
 
@@ -99,16 +102,45 @@
           </form>
         </section>
 
-        <!-- Bascule de vue : tous les serments / mes serments vivants (≥ 1 flamme). -->
-        <section class="cartouche-page" aria-labelledby="draukhain-titre-vue">
-          <h2 id="draukhain-titre-vue">La carte des serments</h2>
+        <!-- ===== LE FOYER DES SERMENTS (forme A, dictée Paul 2026-08-01).
+             Un serment est un feu qu'on entretient : ses flammes gravitent
+             autour, le halo croît avec leur nombre. Vide dans le HTML servi —
+             les intitulés sont intimes et ne viennent que de /api/serments,
+             après session validée (§5). ===== -->
+        <section id="draukhain-foyer" class="cartouche-page"
+                 aria-labelledby="draukhain-titre-foyer" hidden>
+          <h2 id="draukhain-titre-foyer">Le foyer des serments</h2>
+          <p class="zekrom-vue-note">Chaque serment est un feu. Clique-le&nbsp;: ses flammes
+            s'allument autour du foyer — plus il y en a, plus il éclaire. Survole une
+            flamme pour savoir ce qu'elle est, clique-la pour tout voir.</p>
+
+          <div class="foyer-serments" id="draukhain-foyer-serments"></div>
+
+          <div class="foyer-scene">
+            <div class="foyer-cadre">
+              <button type="button" class="foyer-retour" id="draukhain-foyer-retour" hidden>↞ Les serments</button>
+              <svg class="foyer-dessin" id="draukhain-foyer-dessin" viewBox="0 0 240 200"
+                   role="img" aria-label="Le foyer du serment ouvert"></svg>
+              <p class="foyer-nom" id="draukhain-foyer-nom"></p>
+            </div>
+            <aside class="foyer-cote" id="draukhain-foyer-cote" role="status" aria-live="polite">
+              <p class="foyer-cote-repos">Clique un serment&nbsp;— son foyer s'allume.</p>
+            </aside>
+          </div>
+        </section>
+
+        <!-- Le registre détaillé — REPLIÉ par défaut : on l'ouvre pour ÉCRIRE
+             (flammes, passerelles), pas pour consulter. La consultation se fait
+             sur le foyer au-dessus. -->
+        <details class="cartouche-page draukhain-registre-repli" id="draukhain-registre-detail">
+          <summary id="draukhain-titre-vue">Le registre détaillé — écrire, relier</summary>
           <div class="zekrom-bascule" role="group" aria-label="Vue de la carte">
             <button type="button" id="draukhain-vue-tous" class="zekrom-onglet" aria-pressed="true">Tous les serments</button>
             <button type="button" id="draukhain-vue-vivants" class="zekrom-onglet" aria-pressed="false">Mes serments vivants</button>
           </div>
           <p id="draukhain-vue-note" class="zekrom-vue-note"></p>
           <div id="draukhain-serments"></div>
-        </section>
+        </details>
       </div>
 
       <p class="retour"><a class="retour-console" href="imladrik.html">Retour à la cartographie IMLADRIK</a></p>

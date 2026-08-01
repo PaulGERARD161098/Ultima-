@@ -1,0 +1,169 @@
+/* Ultima — DRAUKHAIN : LE FOYER DES SERMENTS (forme A, dictée Paul 2026-08-01).
+   ---------------------------------------------------------------------------
+   « Il faut un affichage progressif, quelque chose de dynamique, d'évolutif —
+   sortir de la fiche textuelle statique. » Forme A choisie sur preview
+   (design/preview-draukhain-formes.html), avec deux consignes explicites :
+   **garder le champ lexical du feu** et **une flamme au centre**.
+
+   Le serment est un FEU QU'ON ENTRETIENT. Chaque flamme posée gravite autour du
+   foyer ; le halo croît avec leur nombre — la discipline se voit. Un serment
+   sans flamme est un cercle de BRAISE en pointillé : il ne demande qu'un
+   souffle. Rien ne « finit » ici : un foyer s'entretient ou s'éteint — c'est
+   pourquoi la forme n'a ni ligne d'arrivée, ni pourcentage, ni sommet.
+
+   Grammaire commune à VRANESH (validée le 2026-08-01) : les NOMS d'abord, un
+   clic déploie UN serment, le survol donne UNE LIGNE et le clic donne TOUT.
+
+   Registre antique : encre et or sur parchemin, braise pour le feu vivant.
+   Tokens de css/styles.css, aucune valeur en dur hormis la braise, propre à
+   cette forme. Le mouvement vit sous `prefers-reduced-motion: no-preference`. */
+
+:root { --braise: #b4622a; }
+
+/* ---------- La scène : le foyer à gauche, le cartouche à droite ---------- */
+.foyer-scene { display: grid; gap: 1rem; }
+@media (min-width: 62rem) {
+  .foyer-scene { grid-template-columns: 1.3fr 1fr; align-items: start; }
+}
+
+/* ---------- ① Les serments : les NOMS seuls ---------- */
+.foyer-serments { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0.6rem 0 1rem; }
+.foyer-serment {
+  font-family: var(--police-ancienne);
+  font-size: 0.9rem; font-weight: 700; letter-spacing: 0.12em;
+  padding: 0.6rem 1rem; min-height: 44px; cursor: pointer; border-radius: 8px;
+  color: var(--encre-sepia);
+  background: linear-gradient(180deg, #fbf5e6, var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte);
+  box-shadow: inset 0 0 0 3px rgba(169, 136, 74, 0.45);
+  display: flex; flex-direction: column; align-items: flex-start; gap: 0.1rem;
+  text-align: left;
+}
+.foyer-serment[aria-pressed="true"] {
+  border-color: var(--or-antique);
+  box-shadow: inset 0 0 0 3px rgba(169, 136, 74, 0.8);
+}
+.foyer-serment:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.foyer-serment-pastille {
+  font-size: 0.62rem; font-weight: 400; font-variant: small-caps; letter-spacing: 0.08em;
+  color: var(--encre-sepia-douce);
+}
+
+/* ---------- ② Le foyer ---------- */
+.foyer-cadre {
+  position: relative;
+  background: linear-gradient(180deg, #fbf5e6, var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte); border-radius: 10px;
+  box-shadow: inset 0 0 0 3px rgba(169, 136, 74, 0.35);
+  min-height: 300px;
+}
+.foyer-dessin { display: block; width: 100%; height: auto; padding: 0.4rem; }
+.foyer-nom {
+  position: absolute; left: 50%; bottom: 0.5rem; transform: translateX(-50%);
+  margin: 0; font-weight: 700; letter-spacing: 0.14em; color: var(--encre-sepia);
+}
+.foyer-retour {
+  position: absolute; left: 0.6rem; top: 0.5rem;
+  font-family: inherit; font-size: 0.78rem; font-variant: small-caps; letter-spacing: 0.08em;
+  background: none; border: none; cursor: pointer; color: var(--encre-sepia-douce);
+  padding: 0.6rem 0.4rem; min-height: 44px;
+}
+.foyer-retour:hover { color: var(--encre-sepia); text-decoration: underline; }
+.foyer-retour:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* Le halo : son rayon et son opacité sont posés au rendu, proportionnels au
+   nombre de flammes. Il ne porte AUCUNE animation d'opacité — elle écraserait
+   l'éclat calculé (piège tombé en preview). */
+.foyer-halo { fill: var(--braise); }
+
+/* Le cercle du foyer, et sa version « braise » quand aucune flamme ne brûle. */
+.foyer-cercle { fill: none; stroke: var(--cerne-carte); stroke-width: 2; }
+.foyer-cercle--braise {
+  fill: none; stroke: var(--encre-sepia-douce); stroke-width: 1.4; stroke-dasharray: 3 3;
+}
+
+/* La flamme AU CENTRE (consigne de Paul) : le feu du serment lui-même. Elle
+   brûle en braise dès qu'une flamme l'entretient, et reste en encre pâle quand
+   le foyer n'est que braise — présente, jamais éteinte, jamais accusatrice. */
+.foyer-flamme-centre { fill: var(--braise); }
+.foyer-flamme-centre--braise { fill: none; stroke: var(--encre-sepia-douce); stroke-width: 1.2; }
+.foyer-flamme-coeur { fill: var(--parchemin); opacity: 0.75; }
+
+.foyer-mot {
+  font-family: var(--police-ancienne); font-size: 8px; font-style: italic;
+  fill: var(--encre-sepia-douce);
+}
+
+/* ---------- Les flammes qui gravitent ---------- */
+.foyer-flamme-g { outline: none; cursor: pointer; }
+.foyer-tige { fill: none; stroke: var(--or-antique); stroke-width: 1.2; opacity: 0.45; }
+.foyer-flamme { fill: var(--or-antique); }
+/* Zone de préhension généreuse : une flamme fine se rate à la souris. */
+.foyer-zone { fill: transparent; cursor: pointer; }
+.foyer-etiquette {
+  font-family: var(--police-ancienne); font-size: 7px; letter-spacing: 0.03em;
+  fill: var(--encre-sepia-douce); pointer-events: none;
+}
+/* La nature se lit à la taille du feu : une victoire brûle plus haut qu'un
+   rappel. L'information est AUSSI écrite dans le cartouche — jamais la forme
+   seule. */
+.foyer-flamme--victoire { fill: var(--braise); }
+
+.foyer-flamme-g:focus-visible .foyer-flamme { stroke: var(--accent); stroke-width: 2; }
+.foyer-flamme-g.is-actif .foyer-flamme,
+.foyer-flamme-g.is-choisie .foyer-flamme { fill: var(--braise); }
+.foyer-flamme-g.is-actif .foyer-tige,
+.foyer-flamme-g.is-choisie .foyer-tige { stroke: var(--braise); stroke-width: 2; opacity: 1; }
+.foyer-flamme-g.is-actif .foyer-etiquette,
+.foyer-flamme-g.is-choisie .foyer-etiquette { fill: var(--encre-sepia); font-weight: 700; }
+
+/* ---------- ③ Le cartouche de côté ---------- */
+.foyer-cote {
+  background: linear-gradient(180deg, var(--parchemin), var(--parchemin-ombre));
+  border: 1px solid var(--cerne-carte); border-radius: 10px; color: var(--encre-sepia);
+  padding: 0.9rem 1rem; min-height: 12rem;
+}
+.foyer-cote-repos { font-style: italic; color: var(--encre-sepia-douce); margin: 0; }
+.foyer-cote-titre { font-size: 0.95rem; margin: 0 0 0.2rem; }
+.foyer-cote-rang {
+  font-size: 0.68rem; font-variant: small-caps; letter-spacing: 0.1em;
+  color: var(--encre-sepia-douce); margin: 0 0 0.6rem;
+}
+.foyer-cote-texte { margin: 0 0 0.5rem; }
+.foyer-cote-invite { font-style: italic; color: var(--encre-sepia-douce); font-size: 0.85rem; margin: 0.7rem 0 0; }
+.foyer-cote-detail {
+  margin: 0.7rem 0 0; padding-top: 0.6rem; border-top: 1px dashed var(--or-antique);
+}
+.foyer-cote-detail dt {
+  font-size: 0.7rem; font-variant: small-caps; letter-spacing: 0.1em;
+  color: var(--encre-sepia-douce); margin-top: 0.55rem;
+}
+.foyer-cote-detail dd { margin: 0.15rem 0 0; }
+.foyer-cote-lien {
+  display: inline-block; margin-top: 0.8rem; min-height: 44px; line-height: 44px;
+  font-variant: small-caps; letter-spacing: 0.08em; color: var(--accent);
+}
+
+/* ---------- Le registre détaillé, replié par défaut ---------- */
+.draukhain-registre-repli > summary {
+  cursor: pointer; font-weight: 700; font-variant: small-caps; letter-spacing: 0.1em;
+  padding: 0.5rem 0; min-height: 44px; display: flex; align-items: center;
+}
+.draukhain-registre-repli > summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.foyer-vide {
+  text-align: center; font-style: italic; color: var(--creme); opacity: 0.85;
+  margin: 1.4rem auto; max-width: 34rem;
+}
+
+/* ---------- Le feu prend ---------- */
+/* Les flammes s'allument l'une après l'autre ; la longueur des tiges est
+   mesurée au rendu (getTotalLength), jamais posée en dasharray fixe. */
+@media (prefers-reduced-motion: no-preference) {
+  .foyer-tige { animation: foyer-monter 560ms ease-out forwards; }
+  @keyframes foyer-monter { to { stroke-dashoffset: 0; } }
+  .foyer-flamme-g .foyer-flamme,
+  .foyer-flamme-g .foyer-etiquette { animation: foyer-prendre 420ms ease-out both; }
+  @keyframes foyer-prendre { from { opacity: 0; } to { opacity: 1; } }
+  .foyer-flamme { transition: fill 0.12s ease; }
+}
