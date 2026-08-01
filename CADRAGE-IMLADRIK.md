@@ -83,6 +83,50 @@ mécanique éprouvée : registre extensible (un cap = une entrée), survol/focus
 - **Passerelles** ✅ **construites (v2, 2026-07-25)** : un scénario peut pointer
   un objectif DRAUKHAIN (ce qu'il *menace* ou *sert*) ou une page MINETHNIR
   (d'où vient la question). Table `scenario_liens` (migration 0018), cible XOR.
+- **La boussole des futurs** ✅ **livrée (2026-08-01, dictée Paul)** : « les
+  différents thèmes de futurs sous forme de boussole comme IMLADRIK, puis depuis
+  chaque thème des ramifications comme des branches qui poussent ».
+  **Correspondance actée** : un **thème de futurs = une situation** (le cas
+  donné) ; une **branche = un scénario**. Une situation « à explorer » est donc
+  un **cap nu** — la règle cardinale positive se lit d'un coup d'œil.
+  Réutilise le **noyau Lv3** pour la géométrie (`window.UltimaBoussoleNoyau
+  .positions`, déjà couvert par `unit-registre-lv3`) et `css/boussole.css` pour
+  l'habillage ; `css/vranesh-boussole.css` n'ajoute que les ramifications.
+  **Différence essentielle avec les boussoles Lv3** : ici les caps portent des
+  **intitulés dictés par Paul** — de la donnée intime. Donc **rien en innerHTML**
+  (createElement/textContent partout), **rien dans le HTML servi**, rendu
+  seulement après session validée. Le harnais le prouve **par l'ABSENCE** :
+  aucun intitulé dans la page servie, aucun déroulé de scénario dans le
+  cartouche de parole. La vraisemblance se lit à l'**épaisseur** du trait ET en
+  toutes lettres dans le cartouche (jamais la couleur seule).
+- **⏭ L'ADVENU — « la branche qui a poussé »** *(dicté 2026-08-01, cadré,
+  **migration écrite et NON appliquée — gate Paul**)* : quand un futur est
+  advenu, Paul revient sur l'arbre et **désigne la branche qui a poussé** — soit
+  l'un des scénarios déjà anticipés, soit **une branche neuve** si ce qui est
+  arrivé n'avait pas été prévu (le cas est absorbé par le modèle 0017 : un
+  scénario ordinaire, simplement constaté au lieu d'être anticipé). Les autres
+  branches disparaissent alors de la boussole.
+  - **Modèle** : `situations.scenario_advenu_id` + `advenu_le`, scellés par une
+    FK sur le **triplet** `(owner_id, situation_id, id)` de `scenarios` — la
+    contrainte garantit à elle seule que la branche retenue appartient bien au
+    même owner ET à cette situation, sans trigger. Vue `scenarios_etat`
+    (`advenu` / `elague`), `situations_etat` étendue (`advenue`,
+    `nb_scenarios_vivants`). Migration `0019_vranesh_advenu.sql`.
+  - **Arbitrage pris et signalé — élaguer, jamais détruire.** Paul dit
+    « supprimer » ; la **promesse visuelle est tenue** (la boussole ne montre
+    plus que la branche qui a poussé) mais les futurs non réalisés **restent en
+    base, marqués élagués**. Motifs : ① comparer ce qu'on avait anticipé à ce
+    qui est arrivé EST la valeur du cap ; ② une suppression de données non
+    vérifiées vides est bloquante même en solo ; ③ `DELETE /api/scenarios`
+    existe déjà pour qui veut vraiment supprimer, un scénario à la fois et
+    explicitement. **À confirmer par Paul** — s'il tranche pour la destruction
+    réelle, elle passera par un geste dédié et confirmé, jamais par un effet de
+    bord du dénouement.
+  - **`elague` est DÉRIVÉ**, jamais stocké — même discipline que `a_explorer` /
+    `a_raviver` / `a_orienter` : un seul lieu de vérité, zéro désynchronisation.
+  - **Reste à faire au go** : API (PATCH du dénouement sur `/api/situations`),
+    front (désigner la branche depuis la fiche du thème, boussole qui n'affiche
+    plus que la branche advenue), harnais.
 - **Peuplé le 2026-07-31 (dictée de Paul)** : VRANESH n'est plus vide. Deux
   situations réelles, toutes deux complètes (aucune « à explorer ») —
   **LIANDRA** (5 scénarios) et **THORIOL** (3 scénarios). Écriture par les mains
