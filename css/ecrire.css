@@ -1,0 +1,137 @@
+/* Ultima — LA CAPTURE (boucle ② MINETHNIR, 2026-08-01).
+   ---------------------------------------------------------------------------
+   Diagnostic de la boucle ① : le journal est vide parce que le cap n'est pas
+   atteignable au moment où l'envie d'écrire arrive — elle surgit EN MARCHANT,
+   AU POUCE et À LA VOIX. Cet écran est donc conçu pour le pouce d'abord :
+
+     - UNE SEULE CHOSE à l'écran. Pas de bandeau, pas de navigation, pas de
+       décor : rien qui demande une décision avant le premier mot.
+     - Le CHAMP occupe la hauteur utile, le BOUTON tombe sous le pouce (en bas,
+       pleine largeur) — pas en haut, où il faudrait changer de main.
+     - Tout ce qui se touche fait au moins 44 px.
+     - `100dvh` et `env(safe-area-inset-*)` : sur iPhone, la barre d'adresse et
+       l'encoche ne mangent ni le champ ni le bouton.
+
+   Registre antique et sérieux, mais dépouillé : ici la beauté, c'est le vide.
+   Tokens de css/styles.css, aucune valeur en dur hormis les ombres. */
+
+body.ecrire {
+  /* css/styles.css met `body` en display:flex : sans ce retour à `block`, la
+     scène devient un item de flex-row et se rétrécit à son contenu — mesuré à
+     288 px sur 375, et le bouton tombait à 259 px au lieu de la pleine largeur.
+     Même correctif que `body.boussole` dans css/boussole.css. */
+  display: block;
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  color: var(--creme);
+  font-family: var(--police-ancienne);
+  background:
+    radial-gradient(ellipse at 50% 12%, rgba(120, 190, 210, 0.14), rgba(0, 0, 0, 0) 60%),
+    linear-gradient(180deg, var(--mer-claire), var(--mer-profonde) 62%, #0a2d42);
+}
+
+.ecrire-scene {
+  min-height: 100vh;
+  min-height: 100dvh;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding:
+    calc(0.9rem + env(safe-area-inset-top)) calc(0.9rem + env(safe-area-inset-right))
+    calc(0.9rem + env(safe-area-inset-bottom)) calc(0.9rem + env(safe-area-inset-left));
+  display: flex;
+  flex-direction: column;
+}
+
+.ecrire-etat { margin: auto; font-style: italic; opacity: 0.85; text-align: center; }
+
+/* Le bloc : le formulaire prend toute la hauteur, le bouton est poussé en bas. */
+.ecrire-bloc {
+  flex: 1;
+  /* align-self + width : le bloc est item d'un flex colonne et une règle
+     générale de css/styles.css le rétrécissait — mesuré à 259 px sur 345
+     disponibles. Le bouton doit tomber sous le pouce sur TOUTE la largeur. */
+  align-self: stretch;
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 0;
+}
+.ecrire-bloc[hidden] { display: none; }
+
+.ecrire-titre { font-size: 1.15rem; letter-spacing: 0.1em; margin: 0 0 0.3rem; }
+
+.ecrire-label {
+  font-size: 0.72rem;
+  font-variant: small-caps;
+  letter-spacing: 0.12em;
+  color: var(--creme);
+  opacity: 0.8;
+}
+
+/* Le champ : il occupe tout ce qui reste. Fond parchemin, encre sépia — on
+   écrit sur du papier, pas dans une boîte de dialogue. */
+.ecrire-champ {
+  flex: 1;
+  min-height: 40vh;
+  width: 100%;
+  resize: none;
+  padding: 0.9rem;
+  border: 1px solid var(--cerne-carte);
+  border-radius: 10px;
+  background: linear-gradient(180deg, var(--parchemin), var(--parchemin-carte));
+  color: var(--encre-sepia);
+  font-family: var(--police-ancienne);
+  /* 16 px au moins : en dessous, iOS zoome à la mise au point et casse la mise
+     en page — un détail qui se paie cher sur le seul écran qui compte ici. */
+  font-size: 1rem;
+  line-height: 1.5;
+  box-shadow: inset 0 0 0 3px rgba(169, 136, 74, 0.35);
+}
+.ecrire-champ::placeholder { color: var(--encre-sepia-douce); opacity: 0.75; }
+.ecrire-champ:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* Le bouton : pleine largeur, sous le pouce, impossible à rater. */
+.ecrire-envoyer {
+  width: 100%;
+  min-height: 56px;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--or-antique);
+  border-radius: 10px;
+  background: linear-gradient(180deg, #fbf5e6, var(--parchemin-carte));
+  color: var(--encre-sepia);
+  font-family: var(--police-ancienne);
+  font-size: 1rem;
+  font-weight: 700;
+  font-variant: small-caps;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 3px rgba(169, 136, 74, 0.45), 0 3px 12px rgba(0, 10, 20, 0.35);
+}
+.ecrire-envoyer:disabled { opacity: 0.6; cursor: default; }
+.ecrire-envoyer:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+.ecrire-message { margin: 0; min-height: 1.4em; font-style: italic; opacity: 0.9; }
+.ecrire-message--erreur { color: #ffd9c2; font-style: normal; }
+/* « Gardé ici » n'est pas une erreur : c'est la promesse tenue. Ton neutre,
+   jamais alarmant — on vient d'écrire en marchant, on n'a pas à s'inquiéter. */
+.ecrire-message--garde { color: var(--parchemin); font-style: italic; }
+
+.ecrire-pied { margin: 0; text-align: center; }
+.ecrire-lien {
+  display: inline-block;
+  min-height: 44px;
+  line-height: 44px;
+  padding: 0 0.6rem;
+  color: #f4e6bd;
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+}
+
+/* Le micro de js/dictee.js, s'il apparaît, se pose sous le champ et reste au
+   pouce. Là où l'API manque (iOS notamment), la dictée clavier du système
+   prend le relais dans ce champ ordinaire — prévu, pas subi. */
+.ecrire-bloc .bouton-micro { min-height: 44px; min-width: 44px; }
+.ecrire-bloc .champ-vocal { display: flex; flex-direction: column; gap: 0.4rem; flex: 1; }
