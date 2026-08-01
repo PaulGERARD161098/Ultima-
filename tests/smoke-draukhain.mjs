@@ -524,8 +524,8 @@ console.log('— E. draukhain.html → le foyer des serments —');
   const nbFlammes = await page.locator('.foyer-flamme-g').count();
   verifier('Foyer : une flamme qui gravite par flamme posée', nbFlammes >= 1, `${nbFlammes}`);
   const etiquettes = await page.locator('.foyer-etiquette').allTextContents();
-  verifier('Foyer : chaque flamme porte une étiquette COURTE (≤ 25 signes)',
-    etiquettes.length === nbFlammes && etiquettes.every((e) => e.length <= 25),
+  verifier('Foyer : chaque flamme porte une étiquette COURTE (≤ 23 signes)',
+    etiquettes.length === nbFlammes && etiquettes.every((e) => e.length <= 23),
     JSON.stringify(etiquettes));
 
   // Le halo n'est PAS opaque : l'éclat calculé ne doit pas être écrasé par une
@@ -579,6 +579,49 @@ console.log('— E. draukhain.html → le foyer des serments —');
     await page.locator('#draukhain-foyer-retour').click();
   }
 
+  // ---- Les étiquettes doivent TENIR DANS LE CADRE. ----
+  // Constat de Paul (2026-08-01) : elles débordaient à gauche et à droite. La
+  // correction ne se juge pas à l'œil — on MESURE la boîte de chaque texte
+  // contre le repère, et on le fait sur un thème CHARGÉ, pas sur celui qui
+  // passait déjà. `couronne` borne désormais chaque étiquette à la place
+  // réellement disponible de son côté.
+  await page.locator('.foyer-serment').first().click();
+  await page.waitForSelector('.foyer-flamme-g', { timeout: 5000 });
+  const debords = await page.evaluate(() => {
+    const svg = document.getElementById('draukhain-foyer-dessin');
+    const vb = svg.viewBox.baseVal;
+    return Array.from(svg.querySelectorAll('.foyer-etiquette'))
+      .filter((t) => (t.textContent || '').length > 0)
+      .map((t) => {
+        const b = t.getBBox();
+        return { texte: t.textContent, x1: Math.round(b.x), x2: Math.round(b.x + b.width) };
+      })
+      .filter((e) => e.x1 < vb.x || e.x2 > vb.x + vb.width);
+  });
+  verifier('Aucune étiquette ne déborde du cadre (mesuré, pas jugé à l’œil)',
+    debords.length === 0, JSON.stringify(debords));
+
+  // Le vrai test : un thème très chargé, là où la couronne s'élargit le plus.
+  const charge = await page.evaluate(() => {
+    const svg = document.getElementById('draukhain-foyer-dessin');
+    const vb = svg.viewBox.baseVal;
+    const D = window.UltimaDraukhain;
+    const trop = [];
+    // 12 flammes : le pire cas réaliste. Chaque place doit pouvoir porter un
+    // texte sans sortir — ou renoncer à l'étiquette plutôt que de déborder.
+    D.couronne(12).forEach((place) => {
+      if (place.signes < 6) { return; }   // étiquette omise : rien à mesurer
+      const largeur = place.signes * 3.6;
+      const gauche = place.ancre === 'end' ? place.x - 6 - largeur
+        : (place.ancre === 'start' ? place.x + 6 : place.x - largeur / 2);
+      const droite = gauche + largeur;
+      if (gauche < vb.x || droite > vb.x + vb.width) { trop.push(place); }
+    });
+    return trop.length;
+  });
+  verifier('12 flammes : aucune étiquette ne peut déborder (borne calculée)',
+    charge === 0, `${charge} place(s) hors cadre`);
+
   // ---- Les fonctions pures. ----
   const pur = await page.evaluate(() => {
     const D = window.UltimaDraukhain;
@@ -591,7 +634,7 @@ console.log('— E. draukhain.html → le foyer des serments —');
       etiquetteVide: D.etiquetteFlamme(''),
       couronneVide: D.couronne(0).length,
       couronne3: c3.length,
-      premiereAuNord: Math.abs(c3[0].x - 120) < 0.001 && c3[0].y < 100,
+      premiereAuNord: Math.abs(c3[0].x - 150) < 0.001 && c3[0].y < 100,
       eclatVide: D.eclat(0),
       eclat1: D.eclat(1).opacite,
       eclat4: D.eclat(4).opacite,

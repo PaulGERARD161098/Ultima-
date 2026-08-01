@@ -482,7 +482,14 @@
   // le survol donne UNE LIGNE, le clic donne TOUT. Les intitulés sont intimes :
   // createElement/textContent uniquement, rien dans le HTML servi.
 
-  var FOYER = { L: 240, H: 200, CX: 120, CY: 100, RAYON_CERCLE: 20 };
+  // Le repère est plus large que haut : les étiquettes des flammes vivent à
+  // gauche et à droite du foyer, il leur faut une GOUTTIÈRE. Sans elle, elles
+  // sortaient du cadre (constat de Paul sur la preview du 2026-08-01).
+  var FOYER = {
+    L: 300, H: 200, CX: 150, CY: 100, RAYON_CERCLE: 20,
+    MARGE: 6,          // air incompressible entre un texte et le bord
+    LARGEUR_CAR: 3.6   // largeur moyenne d'un signe à 7 px dans cette serif
+  };
   var NS_SVG = 'http://www.w3.org/2000/svg';
   var sermentOuvert = null;
 
@@ -520,12 +527,24 @@
     for (var i = 0; i < n; i += 1) {
       var angle = (-90 + i * (360 / n)) * Math.PI / 180;
       var cos = Math.cos(angle), sin = Math.sin(angle);
+      var x = FOYER.CX + rayon * cos;
+      var ancre = cos < -0.15 ? 'end' : (cos > 0.15 ? 'start' : 'middle');
+      // La place RÉELLEMENT disponible de ce côté-là, en unités du repère. On
+      // en déduit combien de signes l'étiquette peut porter — plutôt que de
+      // tronquer à l'aveugle et d'espérer que ça tienne.
+      var dispo;
+      if (ancre === 'end') { dispo = x - FOYER.MARGE - FOYER.MARGE; }
+      else if (ancre === 'start') { dispo = FOYER.L - x - FOYER.MARGE - FOYER.MARGE; }
+      else { dispo = 2 * Math.min(x, FOYER.L - x) - FOYER.MARGE; }
       out.push({
-        x: FOYER.CX + rayon * cos,
+        x: x,
         y: FOYER.CY + rayon * sin,
         cos: cos,
         // Le texte fuit le centre : à gauche il s'aligne à droite, et vice versa.
-        ancre: cos < -0.15 ? 'end' : (cos > 0.15 ? 'start' : 'middle')
+        ancre: ancre,
+        // Borne haute de l'étiquette, en signes. Jamais moins de 6 : en dessous
+        // une étiquette ne reconnaît plus rien, mieux vaut alors ne rien écrire.
+        signes: Math.max(0, Math.floor(dispo / FOYER.LARGEUR_CAR))
       });
     }
     return out;
@@ -678,7 +697,16 @@
         : (place.ancre === 'start' ? 6 : 0))));
       etiquette.setAttribute('y', String(place.y + 14));
       etiquette.setAttribute('text-anchor', place.ancre);
-      etiquette.textContent = etiquetteFlamme(flamme.texte);
+      // Sous 6 signes, une étiquette ne reconnaît plus rien : on l'omet plutôt
+      // que d'afficher un moignon. Le cartouche de côté dit tout, lui.
+      // DEUX bornes, et la plus serrée gagne : la place réellement disponible
+      // (elle protège le cadre) ET 22 signes (elle protège l'intention — une
+      // étiquette sert à RECONNAÎTRE la flamme, pas à la lire ; le cartouche de
+      // côté dit tout). Sous 6 signes on n'écrit rien : un moignon ne reconnaît
+      // rien et salit le dessin.
+      etiquette.textContent = place.signes >= 6
+        ? etiquetteFlamme(flamme.texte, Math.min(22, place.signes))
+        : '';
       etiquette.style.animationDelay = (i * 110 + 200) + 'ms';
 
       var zone = svgEl('circle', 'foyer-zone');
