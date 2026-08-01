@@ -352,3 +352,16 @@
   contenus intimes et les identifiants dans le corps envoyé et exigent de ne
   **pas** les trouver. Motif à reproduire pour toute donnée sensible.
 
+
+- 2026-08-01 (le foyer débordait) — une friction **nouvelle**, une **confirmée** :
+  ① **NOUVEAU — la validation à l'œil est un angle mort structurel.** La forme A
+  de DRAUKHAIN a été livrée « validée » sur un rendu contrôlé visuellement, avec
+  les données du jour. Paul a vu le débordement, pas moi : mon échantillon était
+  favorable et je n'avais pas de cas extrême. → **Toute géométrie dans un cadre
+  borné se mesure au harnais** (bbox contre viewBox) et s'éprouve sur un **pire
+  cas construit**, jamais sur les données réelles seules. À surveiller : le même
+  angle mort guette la boussole et l'arbre VRANESH quand ils se peupleront.
+  ② **Confirmé — l'ordre « prémisse d'abord, dépense ensuite ».** Paul allait
+  payer une clé API en croyant qu'elle débloquait la dictée. La prémisse a été
+  corrigée **avant** l'engagement, sur la foi de sa propre capture. Réflexe à
+  garder : quand Paul s'apprête à dépenser, vérifier ce qu'il croit acheter.

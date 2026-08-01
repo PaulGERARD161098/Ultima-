@@ -212,6 +212,13 @@ l'accessibilité ni la sécurité.
   (ex. la dictée vocale : `js/app.js` → `js/dictee.js`), il ne se recopie pas.
   Le harnais dédié rend l'opération sûre — il doit passer **sans retouche**,
   c'est le critère de réussite de l'extraction.
+- **Une géométrie se MESURE, elle ne se valide pas à l'œil** (2026-08-01) : tout
+  élément placé dans un cadre borné (boussole, arbre VRANESH, foyer DRAUKHAIN)
+  voit sa `getBBox()` comparée au `viewBox` par le harnais, et s'éprouve sur un
+  **pire cas construit** (ex. `couronne(12)`) — jamais sur les seules données du
+  jour, qui sont un échantillon favorable. Leçon : le foyer débordait chez Paul
+  alors qu'il avait été « validé » sur un rendu regardé. « Ça a l'air bien »
+  n'est pas un critère de réussite au sens d'EL ④ : c'est l'absence de critère.
 - **Une règle de confidentialité se teste par l'ABSENCE** (2026-07-30) : pour
   toute donnée sensible sortant vers un tiers (IA, log, page servie), le harnais
   cherche le contenu interdit dans ce qui part et exige de **ne pas l'y

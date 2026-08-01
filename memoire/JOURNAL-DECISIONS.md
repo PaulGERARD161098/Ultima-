@@ -1261,7 +1261,7 @@
     dépose en base sans aucune IA. La clé ne sert qu'à ce que Léo **réponde**.
     Léo l'a dit avant qu'il n'engage l'argent, plutôt qu'après.
 - **2026-08-01 (dictée affichage Lv3 — supra-divisions nommées + macro-quadrants
-  RIMA / NAGA)** — Deux correctifs d'affichage dictés par Paul, session dédiée
+  GRIMA / NAGA)** — Deux correctifs d'affichage dictés par Paul, session dédiée
   (parallèle à la session MINETHNIR ; aucun fichier de boucle partagé).
   1. **Les bandeaux des supra-divisions portent leur nom** : « Supra-division
      Ultima » et « Supra-division Alpha » remplacent « Supra-division — le
@@ -1311,3 +1311,28 @@
     accueil de première visite conservé, invites de mission des feuilles
     conservées. Aucune session future ne retire ni ne déplace quoi que ce soit
     d'autre concernant Léo sans nouvelle demande explicite de Paul.
+- **2026-08-01 (le foyer DRAUKHAIN mesuré, plus estimé — PR #135)** — Paul :
+  « léger débordement des étiquettes sur le foyer DRAUKHAIN, **que tu as validé
+  tel quel** ». Le reproche porte juste : la forme A avait été livrée sur un
+  contrôle **à l'œil**, sur les seules données du jour (peu de flammes, textes
+  courts). Le défaut n'était pas visible là, il l'était chez Paul.
+  - **Correctif de fond, pas de symptôme** : `couronne(n)` ne pose plus une
+    troncature arbitraire — elle **calcule la place réellement disponible** de
+    chaque côté du foyer (`signes = plancher(dispo / largeur_moyenne_du_signe)`)
+    et l'étiquette s'y plie. **Deux bornes se disputent, la plus serrée
+    l'emporte** : la place protège le cadre, 22 signes protègent l'intention.
+    Sous 6 signes utiles, **rien** ne s'affiche — mieux vaut le vide qu'un mot
+    coupé. Cadre élargi à `0 0 300 200` pour rendre l'air, pas pour cacher.
+  - **Le harnais ne regarde plus, il mesure** : chaque étiquette voit sa
+    `getBBox()` comparée au `viewBox`, et un **cas extrême à douze flammes** est
+    éprouvé via `couronne(12)` — les données du jour ne sont plus le juge.
+    Patrimoine complet au vert : **1071 assertions**.
+  - 🔻 **Leçon actée en règle permanente** : **une géométrie ne se valide pas à
+    l'œil, elle se mesure au harnais.** « Ça a l'air bien » n'est pas un critère
+    de réussite au sens d'EL ④ — c'est l'absence de critère. Vaut pour tout ce
+    qui est placé dans un cadre borné : boussole, arbre VRANESH, foyer.
+  - **Bouclage MINETHNIR laissé OUVERT et à la main de Paul** : la boucle ③ (la
+    forme de lecture) ne se cadre **qu'après** qu'il ait déposé une première
+    page sur `/ecrire.html`. Cadrer une lecture sans rien à relire serait
+    exactement l'erreur de la boucle ① (refaire l'affichage au lieu de traiter
+    la distance). Rien n'est donc « en attente de Léo » ici — c'est voulu.
