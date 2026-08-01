@@ -1306,3 +1306,8 @@
   - **Leçon d'harnais** : un focus clavier fait défiler la page et un cap qui
     glisse sous une souris immobile déclenche un mouseenter parasite — la
     souris se gare dans un coin neutre avant toute étape clavier.
+  - **Décision de clôture (Paul, au go de fusion) : « ne touche plus à Léo ».**
+    L'état de Léo au 2026-08-01 est le bon : cartouche de coin au survol,
+    accueil de première visite conservé, invites de mission des feuilles
+    conservées. Aucune session future ne retire ni ne déplace quoi que ce soit
+    d'autre concernant Léo sans nouvelle demande explicite de Paul.
