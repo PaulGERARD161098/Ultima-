@@ -811,6 +811,32 @@ export function validateSituation(body, mode) {
   return { value: out };
 }
 
+// Valide un DÉNOUEMENT (0019) : « la branche qui a poussé ».
+//   { id, scenario_advenu_id }        → ce futur-là est advenu ;
+//   { id, scenario_advenu_id: null }  → rouvrir la situation (le futur n'a
+//                                       finalement pas tranché).
+// Volontairement SÉPARÉ de validateSituation : le dénouement déclenche une
+// suppression irréversible des autres branches (décision Paul), il ne doit
+// jamais pouvoir voyager en passager clandestin d'une simple modification
+// d'intitulé ou de contexte. `advenu_le` n'est PAS accepté du client : la date
+// est posée par le serveur (une horloge cliente ne fait pas foi).
+const DENOUEMENT_FIELDS = ['id', 'scenario_advenu_id'];
+
+export function validateDenouement(body) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, DENOUEMENT_FIELDS);
+  if (unknown) return { error: unknown };
+
+  if (!isUuid(body.id)) return { error: 'Identifiant invalide' };
+  if (!('scenario_advenu_id' in body)) return { error: 'Futur advenu manquant' };
+  if (body.scenario_advenu_id !== null && !isUuid(body.scenario_advenu_id)) {
+    return { error: 'Futur advenu invalide' };
+  }
+  return { value: { id: body.id, scenario_advenu_id: body.scenario_advenu_id } };
+}
+
 // Valide un scénario (« un futur potentiel » d'une situation). mode 'create'
 // impose situation_id (UUID) + deroule (1..2000) ; vraisemblance optionnelle
 // (défaut base 'moyenne'), signaux/parade optionnels bornés. owner_id imposé par

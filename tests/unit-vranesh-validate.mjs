@@ -7,6 +7,7 @@
 import {
   validateSituation,
   validateScenario,
+  validateDenouement,
   SCENARIO_VRAISEMBLANCES,
 } from '../api/_lib/validate.js';
 
@@ -80,6 +81,33 @@ verdicts.scenarioParadeTropLongue = !!validateScenario({ situation_id: U1, derou
   verdicts.scenarioSignauxNull = !error && value.signaux === null && value.parade === null;
 }
 verdicts.scenarioChampInconnu = !!validateScenario({ situation_id: U1, deroule: 'ok', owner_id: U1 }, 'create').error;
+
+// ---------- Le dénouement (0019) : « la branche qui a poussé » ----------
+// Parité API↔base : validateDenouement reflète la FK du triplet
+// (owner_id, situation_id, id) et le CHECK de cohérence de 0019. Le dénouement
+// déclenche une suppression irréversible : il est volontairement SÉPARÉ de
+// validateSituation, et rien d'autre ne doit pouvoir passer par cette porte.
+const U2 = '22222222-2222-4222-8222-222222222222';
+{
+  const { value, error } = validateDenouement({ id: U1, scenario_advenu_id: U2 });
+  verdicts.denouementOk = !error && value.id === U1 && value.scenario_advenu_id === U2;
+}
+{
+  // Rouvrir un thème : null explicite, aucune suppression derrière.
+  const { value, error } = validateDenouement({ id: U1, scenario_advenu_id: null });
+  verdicts.denouementRouvrirOk = !error && value.scenario_advenu_id === null;
+}
+verdicts.denouementSansId = !!validateDenouement({ scenario_advenu_id: U2 }).error;
+verdicts.denouementIdPasUuid = !!validateDenouement({ id: 'x', scenario_advenu_id: U2 }).error;
+verdicts.denouementAdvenuPasUuid = !!validateDenouement({ id: U1, scenario_advenu_id: 'x' }).error;
+// Champ absent ≠ null : omettre le futur advenu ne doit pas valoir « rouvrir ».
+verdicts.denouementAdvenuManquant = !!validateDenouement({ id: U1 }).error;
+verdicts.denouementChampInconnu = !!validateDenouement({ id: U1, scenario_advenu_id: U2, owner_id: U1 }).error;
+// La date de l'advenu vient du SERVEUR : le client ne peut pas la poser.
+verdicts.denouementDateRefusee = !!validateDenouement({ id: U1, scenario_advenu_id: U2, advenu_le: '2026-08-01T00:00:00Z' }).error;
+// Le dénouement ne passe JAMAIS par la porte d'une modification ordinaire.
+verdicts.situationRefuseAdvenu = !!validateSituation({ intitule: 'ok', scenario_advenu_id: U2 }, 'update').error;
+verdicts.denouementCorpsInvalide = !!validateDenouement(null).error && !!validateDenouement([]).error;
 
 // ---------- Bilan ----------
 console.log(JSON.stringify(verdicts, null, 2));

@@ -12,6 +12,12 @@
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/console.css">
   <link rel="stylesheet" href="css/quadrant.css">
+  <!-- La boussole des futurs réutilise l'habillage Lv3 (plateau, caps,
+       aiguilles, cartouche de parole) ; vranesh-boussole.css n'ajoute que les
+       ramifications. `body` n'a pas la classe `boussole`, donc aucune règle de
+       fond de coque ne s'applique ici. -->
+  <link rel="stylesheet" href="css/boussole.css">
+  <link rel="stylesheet" href="css/vranesh-boussole.css">
 </head>
 <body class="console page-quadrant" data-quadrant="vranesh">
 
@@ -74,6 +80,26 @@
 
       <div id="vranesh-registre" hidden>
 
+        <!-- ===== La boussole des futurs (dictée Paul 2026-08-01) : un cap =
+             un THÈME de futurs (une situation), et depuis chaque thème des
+             RAMIFICATIONS (un scénario = une branche qui pousse).
+             Vide dans le HTML servi : les intitulés sont intimes et ne
+             viennent QUE de /api/situations, après session validée (§5). ===== -->
+        <section id="vranesh-boussole" class="cartouche-page vranesh-boussole"
+                 aria-labelledby="vranesh-titre-boussole" hidden>
+          <h2 id="vranesh-titre-boussole">La boussole des futurs</h2>
+          <p class="zekrom-vue-note">Chaque cap est un thème&nbsp;; chaque branche qui
+            en pousse est un futur possible. Un thème sans branche reste entier — il
+            attend seulement qu'on lui imagine ses futurs.</p>
+
+          <div class="boussole-plateau" id="vranesh-plateau"
+               aria-label="Boussole des thèmes de futurs"></div>
+
+          <aside class="boussole-parole" id="vranesh-parole" role="status" aria-live="polite">
+            <p class="parole-defaut">Survole un thème&nbsp;— Léo t'en dit l'essentiel.</p>
+          </aside>
+        </section>
+
         <!-- Saisie libre : poser une situation (le cas donné à anticiper). -->
         <section class="cartouche-page" aria-labelledby="vranesh-titre-saisie">
           <h2 id="vranesh-titre-saisie">Poser une situation</h2>
@@ -119,5 +145,10 @@
   <script src="js/dictee.js"></script>
   <script src="js/leo-accueil.js"></script>
   <script src="js/vranesh.js"></script>
+  <!-- Le NOYAU de la boussole, uniquement pour sa géométrie (window.
+       UltimaBoussoleNoyau.positions) : on ne recopie pas sa trigonométrie.
+       Son démarrage automatique ne fait rien ici — il exige `data-noeud` sur
+       le body, que cette page ne porte pas. -->
+  <script type="module" src="js/boussole-noyau.mjs"></script>
 </body>
 </html>
