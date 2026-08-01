@@ -2,6 +2,47 @@
 
 ## ÉTAT (2026-07-06, après arbitrage)
 
+> **Deux sessions ont tourné en parallèle le 2026-08-01** (fil affichage Lv3
+> et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
+> concatène, on n'arbitre pas — même règle que pour le journal.
+
+- 🔥 **SESSION 2026-08-01 (EL gravée + IMLADRIK rendu vivant), CLOSE.** Six
+  livraisons fusionnées dans `main` (#126 → #135), patrimoine COMPLET vert à
+  **1071 assertions**, rien de non poussé.
+  - ✅ **La directive EL (Edouard Lebrun) est gravée** en tête de `CLAUDE.md`,
+    à égalité avec EB et JL, et sa relecture devient le **point 0** du protocole
+    de début de session. Léo a **explicité le format 6 points** que le principe
+    3 invoquait sans le définir — sans lui, le gate d'entrée restait décoratif.
+  - ✅ **VRANESH** : forme v1 refusée par Paul → **maquettes comparatives avant
+    code**, forme 1 retenue. Grammaire actée et déjà réutilisée : **les noms
+    d'abord → un clic déplie un seul item → le survol donne une ligne → le clic
+    donne tout.** **L'advenu** livré (migration `0019` appliquée) : la branche
+    qui a poussé est désignée, **les autres sont supprimées** — instruction de
+    Paul maintenue après objection, donc suppression réelle, encadrée.
+  - ✅ **DRAUKHAIN** : le **foyer** (forme A, champ lexical du feu), puis ses
+    étiquettes **mesurées** au lieu d'être estimées (#135).
+  - ✅ **MINETHNIR** : boucle ① = diagnostic **sans une ligne de code** — le
+    journal est vide **par distance**, pas par forme ni par contenu. Boucle ② =
+    **`/ecrire.html`, la capture** (une seule chose à l'écran, pas de titre,
+    brouillon local écrit **avant** tout appel réseau).
+  - ✅ **Gate coût du 2026-07-19 (PR #60) FERMÉE** : `ANTHROPIC_API_KEY` posée
+    en env Vercel par Paul. Preuve en prod : Léo répond, **ses yeux
+    fonctionnent**, et **la §5 tient** — comptes et noms de caps, jamais de
+    contenu. *Rappel gagné : une variable d'env Vercel n'agit qu'après un
+    redéploiement.*
+  - ⏳ **Actions à la main de Paul** : ① **déposer une première page sur
+    `/ecrire.html`** — la boucle ③ de MINETHNIR (la forme de **lecture**) ne se
+    cadre **qu'après**, sinon on refait l'erreur de la boucle ① ; ② cadrage
+    dicté de **NICOL BOLAS** ; ③ sur VRANESH, un 6ᵉ futur a été demandé alors
+    qu'« Autre chose » occupait déjà la 5ᵉ place — garder ou remplacer ? ; ④ le
+    registre du 2026-07-31 ci-dessous, toujours ouvert.
+  - ⏳ **Toujours bloqués par une approbation d'outil non accordée** :
+    **synchronisation de la fiche Notion** (texte de synchro rédigé, refusé à
+    l'écriture — `memoire/JOURNAL-DECISIONS.md` reste la source de vérité) et
+    **advisors Supabase** post-`0019` (contrôle RLS fait **à la main** : RLS
+    active sur `situations` et `scenarios`, 4 politiques chacune, vues en
+    `security_invoker`).
+
 - ✅ **SESSION 2026-08-01 (dictée affichage Lv3), CLOSE.** Bandeaux
   « Supra-division Ultima / Alpha » (fini le « — le personnel / le
   professionnel ») et **ULTIMA naviguée en deux macro-quadrants cliquables**,
