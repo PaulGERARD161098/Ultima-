@@ -4,7 +4,7 @@
 // gravé + sa légende, 2 aiguilles, le résumé de Léo qui n'apparaît QU'au
 // survol/focus, illumination du cap actif, AUCUNE requête réseau externe (zéro
 // CDN), zéro erreur console, contraste AA sur les couleurs réellement rendues.
-// Puis navigation : clic ULTIMA → /ultima.html, la boussole à 5 caps se rend.
+// Puis navigation : clic ULTIMA → /ultima.html, la boussole des 2 macro-quadrants (GRIMA, NAGA) se rend.
 // Enfin le verrou d'accueil (déconnecté = boussole cachée) et le COCKPIT (les
 // agrégats derrière Bearer, jamais dans le HTML).
 //
@@ -190,7 +190,8 @@ await page.waitForURL('**/ultima.html', { timeout: 20000 });
 verifier('Clic ULTIMA → URL ultima.html', /\/ultima\.html$/.test(page.url()), page.url());
 await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
 const capsUltima = (await page.locator('.cap-nom').allTextContents()).map((n) => n.trim());
-verifier('Boussole ULTIMA à 5 caps rendue', capsUltima.length === 5, JSON.stringify(capsUltima));
+verifier('Boussole ULTIMA : les 2 macro-quadrants (GRIMA, NAGA)',
+  JSON.stringify(capsUltima) === JSON.stringify(['GRIMA', 'NAGA']), JSON.stringify(capsUltima));
 verifier('Retour vers la racine présent',
   (await page.locator('.console-retour a[href="/"]').count()) === 1);
 

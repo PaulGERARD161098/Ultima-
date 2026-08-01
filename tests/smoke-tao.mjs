@@ -105,9 +105,9 @@ verifier('Le libellé suit le tracé (textPath)',
   (await page.locator('.passerelle-libelle textPath').count()) === 1);
 
 // Retour vers ULTIMA (pièce ① du patron).
-const retour = page.locator('.console-retour a[href="ultima.html"]');
-verifier('Retour « ↞ ULTIMA » vers ultima.html', (await retour.count()) === 1);
-verifier('Retour libellé « ULTIMA »', /ULTIMA/.test((await retour.textContent()) || ''));
+const retour = page.locator('.console-retour a[href="naga.html"]');
+verifier('Retour « ↞ NAGA » vers naga.html (TAO vit sous le macro-quadrant)', (await retour.count()) === 1);
+verifier('Retour libellé « NAGA »', /NAGA/.test((await retour.textContent()) || ''));
 
 // La parole de Léo dit le rétroplanning — l'arc est décor, la parole est annoncée.
 await page.locator('.cap[data-id="reshiram"]').hover();

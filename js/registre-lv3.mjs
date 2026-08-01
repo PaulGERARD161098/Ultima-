@@ -21,24 +21,19 @@
 //   enfants  : présent = le nœud EST une boussole (ordre = ordre des caps,
 //              premier plein Nord puis sens horaire). Absent = c'est une
 //              FEUILLE, la page où l'on travaille (règle §2.1 du cadrage).
-//   groupes  : optionnel, sur une boussole — les MACRO-QUADRANTS d'affichage
-//              (dictés par Paul le 2026-08-01). Chaque groupe = { nom,
-//              sousTitre, caps } ; l'union des caps doit couvrir exactement
-//              `enfants`. Le noyau range alors chaque groupe sur son propre
-//              hémicycle et grave son nom + sous-titre au-dessus. Pur
-//              affichage : les portes restent directes, la navigation ne
-//              change pas.
 // Les nœuds-boussoles portent en plus leur bandeau et leur cœur :
 //   titre, surligne, invite, coeur (clé dans COEURS), legende (le nom gravé
 //   sous le médaillon), legendeClasse (classe CSS additionnelle), cockpit
 //   (true = ce nœud lit les agrégats /api/cockpit après connexion),
 //   expose (nom d'un global d'introspection pour les harnais).
 //
-// ÉTAT DU CÂBLAGE (L4, 2026-07-30) : TOUS les nœuds de l'arbre sont rendus par
-// le noyau — `racine`, les deux supra-divisions, et les quadrants `nicol-bolas`,
-// `adramelech`, `imladrik`, `tao`. Lv3 est complet : ajouter un projet, un
-// quadrant ou un cap n'est plus qu'une entrée ici (+ une coque de 40 lignes si
-// c'est un nouveau nœud).
+// ÉTAT DU CÂBLAGE (L4, 2026-07-30 ; macro-quadrants 2026-08-01) : TOUS les
+// nœuds de l'arbre sont rendus par le noyau — `racine`, les deux
+// supra-divisions, les macro-quadrants `grima` / `naga` (dictés par Paul :
+// deux cadrans cliquables entre ULTIMA et ses quadrants), et les quadrants
+// `nicol-bolas`, `adramelech`, `imladrik`, `tao`. Lv3 est complet : ajouter
+// un projet, un quadrant ou un cap n'est plus qu'une entrée ici (+ une coque
+// de 40 lignes si c'est un nouveau nœud).
 
 export const NOEUDS = {
   // ======================= NIVEAU 0 — la racine =======================
@@ -67,13 +62,41 @@ export const NOEUDS = {
     coeur: 'rose',
     legende: 'le personnel',
     cockpit: true,
-    enfants: ['riven', 'nicol-bolas', 'adramelech', 'imladrik', 'tao'],
-    // Les deux macro-quadrants dictés par Paul (2026-08-01) : RIMA à l'ouest
-    // (l'acquis qui sert), NAGA au levant (ce qui grandit).
-    groupes: [
-      { nom: 'RIMA', sousTitre: 'Ce qui est utile', caps: ['riven', 'nicol-bolas'] },
-      { nom: 'NAGA', sousTitre: 'Ce qui fait grandir', caps: ['imladrik', 'adramelech', 'tao'] },
-    ],
+    enfants: ['grima', 'naga'],
+  },
+
+  // ======== NIVEAU 1,5 — les macro-quadrants d'ULTIMA (Paul, 2026-08-01) ====
+  // Deux cadrans cliquables entre la supra-division et ses quadrants : GRIMA
+  // rassemble l'utile, NAGA ce qui grandit. Leur devise tient lieu de badge.
+  grima: {
+    nom: 'GRIMA',
+    etat: 'Ce qui est utile',
+    blason: 'ancre',
+    cible: 'grima.html',
+    resume: 'Ce qui est utile : le réseau commercial (RIVEN) et le pilotage '
+      + 'financier (NICOL BOLAS). L’outillage qui te fait vivre.',
+    titre: 'GRIMA',
+    surligne: 'Ce qui est utile',
+    invite: 'Léo te guide — survole un cap.',
+    coeur: 'ancre',
+    legende: 'ce qui est utile',
+    cockpit: true,
+    enfants: ['riven', 'nicol-bolas'],
+  },
+  naga: {
+    nom: 'NAGA',
+    etat: 'Ce qui fait grandir',
+    blason: 'pousse',
+    cible: 'naga.html',
+    resume: 'Ce qui fait grandir : le développement personnel (IMLADRIK), la '
+      + 'bibliothèque d’idées (ADRAMELECH) et la voie (TAO).',
+    titre: 'NAGA',
+    surligne: 'Ce qui fait grandir',
+    invite: 'Léo te guide — survole un cap.',
+    coeur: 'pousse',
+    legende: 'ce qui fait grandir',
+    cockpit: true,
+    enfants: ['imladrik', 'adramelech', 'tao'],
   },
 
   alpha: {
@@ -354,37 +377,6 @@ export function verifierRegistre(noeuds = NOEUDS, blasons = null, coeurs = null)
       if (!n.coeur) anomalies.push(`${id} : cœur manquant`);
       if (!n.legende) anomalies.push(`${id} : légende gravée manquante`);
       if (coeurs && !coeurs[n.coeur]) anomalies.push(`${id} : cœur « ${n.coeur} » absent du catalogue`);
-
-      // Macro-quadrants : les groupes doivent recouvrir exactement `enfants`.
-      if (n.groupes !== undefined) {
-        if (!Array.isArray(n.groupes) || n.groupes.length < 2) {
-          anomalies.push(`${id} : groupes présents mais moins de 2 (regrouper n'a pas de sens)`);
-        } else {
-          const couverts = [];
-          n.groupes.forEach((g, gi) => {
-            if (!g.nom) anomalies.push(`${id} : groupe ${gi} sans nom`);
-            if (!g.sousTitre) anomalies.push(`${id} : groupe « ${g.nom || gi} » sans sous-titre`);
-            if (!Array.isArray(g.caps) || !g.caps.length) {
-              anomalies.push(`${id} : groupe « ${g.nom || gi} » sans caps`);
-              return;
-            }
-            for (const cid of g.caps) {
-              if (n.enfants.indexOf(cid) === -1) {
-                anomalies.push(`${id} : groupe « ${g.nom} » cite un cap hors enfants « ${cid} »`);
-              }
-              if (couverts.indexOf(cid) !== -1) {
-                anomalies.push(`${id} : cap « ${cid} » présent dans deux groupes`);
-              }
-              couverts.push(cid);
-            }
-          });
-          for (const eid of n.enfants) {
-            if (couverts.indexOf(eid) === -1) {
-              anomalies.push(`${id} : cap « ${eid} » n'appartient à aucun groupe`);
-            }
-          }
-        }
-      }
     }
 
     // Tout nœud sauf la racine est un cap de quelqu'un → il lui faut sa parure.

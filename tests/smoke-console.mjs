@@ -1,15 +1,16 @@
-// Supra-division ULTIMA (Ultima Lv3, boucle L2) : ultima.html.
-// La grille 2×2 de la console a laissé place à la FORME UNIQUE — la boussole,
-// rendue par le noyau à partir du registre. Prouve : bandeau conforme au
-// REGISTRE, 5 caps (RIVEN, NICOL BOLAS, ADRAMELECH, IMLADRIK, TAO), blasons
-// étiquetés, retour vers la racine, RIVEN qui navigue vers traveler.html,
-// AUCUNE requête réseau externe (zéro CDN), zéro erreur console, contraste AA
-// calculé sur les couleurs réellement rendues. Puis NON-RÉGRESSION :
-// traveler.html s'ouvre et la carte Leaflet s'initialise.
+// Supra-division ULTIMA (Ultima Lv3) : ultima.html et ses MACRO-QUADRANTS.
+// Depuis la dictée du 2026-08-01, ULTIMA ne montre plus que DEUX cadrans
+// cliquables — GRIMA « Ce qui est utile » (RIVEN, NICOL BOLAS) et NAGA « Ce qui
+// fait grandir » (IMLADRIK, ADRAMELECH, TAO) — chacun ouvrant sa propre
+// boussole. Prouve : bandeau conforme au REGISTRE, 2 caps GRIMA/NAGA avec leur
+// devise en badge, navigation ULTIMA → GRIMA → RIVEN → traveler.html (carte
+// Leaflet intacte), boussole NAGA complète avec retour vers ULTIMA, AUCUNE
+// requête réseau externe (zéro CDN), zéro erreur console, contraste AA calculé
+// sur les couleurs réellement rendues.
 // Mode démo forcé, Leaflet/OSM stubés (pour traveler.html), zéro erreur tolérée.
 import { chromium } from 'playwright';
 import { readFileSync } from 'node:fs';
-import { NOEUDS } from '../js/registre-lv3.mjs';
+import { NOEUDS, capsDe } from '../js/registre-lv3.mjs';
 
 const SCRATCH = new URL('./.cache', import.meta.url).pathname;
 const leafletJs = readFileSync(`${SCRATCH}/package/dist/leaflet.js`);
@@ -79,8 +80,8 @@ page.on('request', (req) => {
 
 await preparerRoutes(page);
 
-// ============ A. La boussole ULTIMA (ultima.html) ============
-console.log('— A. Supra-division ULTIMA —');
+// ============ A. La boussole ULTIMA (ultima.html) : deux macro-quadrants ============
+console.log('— A. Supra-division ULTIMA : GRIMA + NAGA —');
 await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
 await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
 
@@ -92,59 +93,16 @@ verifier('Titre = celui du registre', principal === NOEUDS['ultima-perso'].titre
 const invite = (await page.locator('.console-invite').textContent())?.trim();
 verifier('Invite « Léo te guide »', /Léo te guide/.test(invite || ''), `lu: ${invite}`);
 
-// Les 5 caps de la supra-division personnelle, dans l'ordre des MACRO-QUADRANTS
-// (dictés le 2026-08-01) : RIMA (RIVEN, NICOL BOLAS) puis NAGA (IMLADRIK,
-// ADRAMELECH, TAO).
-const groupes = NOEUDS['ultima-perso'].groupes;
-const attendus = groupes.flatMap((g) => g.caps).map((id) => NOEUDS[id].nom);
+// Les 2 macro-quadrants, dans l'ordre du registre (dictée 2026-08-01).
+const attendus = capsDe('ultima-perso').map((c) => c.nom);
 const noms = (await page.locator('.cap .cap-nom').allTextContents()).map((n) => n.trim());
-verifier('5 caps rendus', noms.length === 5, `trouvés: ${JSON.stringify(noms)}`);
-verifier('Caps dans l\'ordre des macro-quadrants', JSON.stringify(noms) === JSON.stringify(attendus),
-  `lu: ${JSON.stringify(noms)}`);
+verifier('2 macro-quadrants rendus', noms.length === 2, `trouvés: ${JSON.stringify(noms)}`);
+verifier('GRIMA puis NAGA (ordre du registre)', JSON.stringify(noms) === JSON.stringify(attendus)
+  && attendus[0] === 'GRIMA' && attendus[1] === 'NAGA', `lu: ${JSON.stringify(noms)}`);
 
-// Les deux macro-quadrants sont gravés : nom + sous-titre, RIMA à l'ouest,
-// NAGA au levant, et chaque cap est rangé du bon côté du plateau.
-const domaines = await page.locator('.boussole-domaine').evaluateAll((els) => els.map((el) => ({
-  nom: el.querySelector('.domaine-nom')?.textContent.trim(),
-  sousTitre: el.querySelector('.domaine-sous-titre')?.textContent.trim(),
-  x: parseFloat(el.style.left),
-})));
-verifier('2 macro-quadrants gravés', domaines.length === 2, JSON.stringify(domaines));
-verifier('RIMA — « Ce qui est utile » à l\'ouest',
-  domaines[0]?.nom === 'RIMA' && domaines[0]?.sousTitre === 'Ce qui est utile' && domaines[0]?.x < 50,
-  JSON.stringify(domaines[0]));
-verifier('NAGA — « Ce qui fait grandir » au levant',
-  domaines[1]?.nom === 'NAGA' && domaines[1]?.sousTitre === 'Ce qui fait grandir' && domaines[1]?.x > 50,
-  JSON.stringify(domaines[1]));
-const cotes = await page.locator('.cap').evaluateAll((els) =>
-  els.map((el) => ({ id: el.dataset.id, x: parseFloat(el.style.left) })));
-verifier('Caps de RIMA sur l\'hémicycle ouest',
-  cotes.filter((c) => groupes[0].caps.includes(c.id)).every((c) => c.x < 50), JSON.stringify(cotes));
-verifier('Caps de NAGA sur l\'hémicycle du levant',
-  cotes.filter((c) => groupes[1].caps.includes(c.id)).every((c) => c.x > 50), JSON.stringify(cotes));
-// Aucun chevauchement gravure / cap : les cartouches commencent sous les noms
-// — vérifié en desktop ET en mobile (constat du 2026-08-01 : le sous-titre de
-// NAGA passait sous IMLADRIK sur petit écran).
-async function chevauchements() {
-  return page.evaluate(() => {
-    const bas = Math.max(...[...document.querySelectorAll('.boussole-domaine')]
-      .map((el) => el.getBoundingClientRect().bottom));
-    return [...document.querySelectorAll('.cap')]
-      .filter((el) => el.getBoundingClientRect().top < bas).length;
-  });
-}
-const chevDesktop = await chevauchements();
-verifier('Noms gravés dégagés (desktop)', chevDesktop === 0,
-  `${chevDesktop} cap(s) sous la ligne des noms`);
-await page.setViewportSize({ width: 390, height: 844 });
-const chevMobile = await chevauchements();
-verifier('Noms gravés dégagés (mobile 390px)', chevMobile === 0,
-  `${chevMobile} cap(s) sous la ligne des noms`);
-await page.setViewportSize({ width: 1280, height: 720 });
-
-// Toutes les portes sont ouvertes (aucun cap « à venir » à cet étage).
+// Les deux cadrans sont cliquables et ouvrent leur propre boussole.
 const hrefs = await page.locator('a.cap').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
-for (const attendu of ['traveler.html', 'bcp.html', 'adramelech.html', 'imladrik.html', 'tao.html']) {
+for (const attendu of ['grima.html', 'naga.html']) {
   verifier(`Porte ouverte vers ${attendu}`, hrefs.includes(attendu), JSON.stringify(hrefs));
 }
 verifier('Aucun cap inerte (aria-disabled / à venir)',
@@ -152,41 +110,41 @@ verifier('Aucun cap inerte (aria-disabled / à venir)',
 verifier('Aucun cap externe à cet étage (tout est interne)',
   (await page.locator('.cap[target="_blank"]').count()) === 0);
 
-// Badges d'état, repris du registre.
+// La devise de chaque cadran tient lieu de badge (dictée : le sous-titre).
 async function etatDe(id) {
   return (await page.locator(`.cap[data-id="${id}"] .cap-etat`).textContent())?.trim();
 }
-verifier('ADRAMELECH marqué « Privé »', /priv/i.test(await etatDe('adramelech') || ''));
-verifier('NICOL BOLAS marqué « En chantier »', /chantier/i.test(await etatDe('nicol-bolas') || ''));
-verifier('IMLADRIK marqué « Accéder »', /accéder/i.test(await etatDe('imladrik') || ''));
+verifier('GRIMA — badge « Ce qui est utile »', (await etatDe('grima')) === 'Ce qui est utile');
+verifier('NAGA — badge « Ce qui fait grandir »', (await etatDe('naga')) === 'Ce qui fait grandir');
 
 // Le cœur gravé + sa légende (pièce ④ du patron).
 verifier('Cœur gravé au centre', (await page.locator('.boussole-coeur svg').count()) === 1);
 const legende = (await page.locator('.boussole-legende').textContent())?.trim();
 verifier('Légende gravée = celle du registre', legende === NOEUDS['ultima-perso'].legende, `lu: ${legende}`);
-verifier('5 aiguilles tracées', (await page.locator('.boussole-aiguilles .aiguille').count()) === 5);
+verifier('2 aiguilles tracées', (await page.locator('.boussole-aiguilles .aiguille').count()) === 2);
 
 // Retour vers la racine (pièce ① du patron).
 verifier('Retour vers la boussole racine',
   (await page.locator('.console-retour a[href="/"]').count()) === 1);
 
-// La parole de Léo au survol d'un cap.
-const traveler = page.locator('a.cap[data-id="riven"]');
-await traveler.hover();
+// La parole de Léo au survol d'un cadran : la devise et le contenu.
+const capGrima = page.locator('a.cap[data-id="grima"]');
+await capGrima.hover();
 await page.waitForSelector('#boussole-parole.is-actif', { timeout: 5000 });
 const parole = (await page.locator('#boussole-parole').textContent()) || '';
-verifier('Survol RIVEN : la parole de Léo se dépose',
-  /RIVEN/.test(parole) && /réseau commercial/i.test(parole), `lu: ${parole.slice(0, 120)}`);
+verifier('Survol GRIMA : la parole de Léo se dépose',
+  /GRIMA/.test(parole) && /réseau commercial/i.test(parole) && /pilotage/i.test(parole),
+  `lu: ${parole.slice(0, 120)}`);
 
-// Blasons étiquetés (aria-label) — un par cap, aucun SVG de cap dans la page.
+// Blasons étiquetés (aria-label) — un par cadran, aucun SVG de cap dans la page.
 const blasons = await page.locator('.cap-blason-svg').evaluateAll((els) =>
   els.map((e) => e.getAttribute('aria-label')));
-verifier('5 blasons étiquetés (aria-label)', blasons.length === 5 && blasons.every((l) => l && /Blason/i.test(l)),
+verifier('2 blasons étiquetés (aria-label)', blasons.length === 2 && blasons.every((l) => l && /Blason/i.test(l)),
   JSON.stringify(blasons));
 
-// Focus clavier visible sur un cap ouvrable.
-await traveler.focus();
-verifier('Cap focusable au clavier', await traveler.evaluate((el) => el === document.activeElement));
+// Focus clavier visible sur un cadran ouvrable.
+await capGrima.focus();
+verifier('Cadran focusable au clavier', await capGrima.evaluate((el) => el === document.activeElement));
 
 // Contraste AA sur les couleurs réellement rendues.
 const styles = await page.evaluate(() => {
@@ -197,28 +155,51 @@ const styles = await page.evaluate(() => {
     parcheminCarte: cs.getPropertyValue('--parchemin-carte').trim(),
     merProfonde: cs.getPropertyValue('--mer-profonde').trim(),
     nom: nom.color, titre: t.color,
-    domaineNom: getComputedStyle(document.querySelector('.domaine-nom')).color,
-    domaineSousTitre: getComputedStyle(document.querySelector('.domaine-sous-titre')).color,
+    etat: getComputedStyle(document.querySelector('.cap-etat')).color,
   };
 });
 const rNom = ratio(versHex(styles.nom), styles.parcheminCarte);
-verifier('Contraste nom de cap ≥ 4,5:1', rNom >= 4.5, `${rNom.toFixed(2)}:1`);
+verifier('Contraste nom de cadran ≥ 4,5:1', rNom >= 4.5, `${rNom.toFixed(2)}:1`);
+const rEtat = ratio(versHex(styles.etat), styles.parcheminCarte);
+verifier('Contraste devise (badge) ≥ 4,5:1', rEtat >= 4.5, `${rEtat.toFixed(2)}:1`);
 const rTitre = ratio(versHex(styles.titre), styles.merProfonde);
 verifier('Contraste titre sur fond mer ≥ 4,5:1', rTitre >= 4.5, `${rTitre.toFixed(2)}:1`);
-const rDomaine = ratio(versHex(styles.domaineNom), styles.merProfonde);
-verifier('Contraste nom de macro-quadrant ≥ 4,5:1', rDomaine >= 4.5, `${rDomaine.toFixed(2)}:1`);
-const rSousTitre = ratio(versHex(styles.domaineSousTitre), styles.merProfonde);
-verifier('Contraste sous-titre de macro-quadrant ≥ 4,5:1', rSousTitre >= 4.5, `${rSousTitre.toFixed(2)}:1`);
 
 verifier('Zéro requête réseau externe (aucun CDN)', requetesExternes.length === 0,
   requetesExternes.slice(0, 3).join(', '));
 verifier('Zéro erreur console (ULTIMA)', erreursConsole.length === 0, erreursConsole.slice(0, 3).join(' | '));
 
-// ===================== B. Navigation + non-régression traveler.html =====================
-console.log('— B. RIVEN → traveler.html (carte) —');
+// ============ B. Navigation ULTIMA → GRIMA → RIVEN (traveler.html) ============
+console.log('— B. GRIMA → grima.html, puis RIVEN → traveler.html (carte) —');
+await capGrima.click();
+await page.waitForURL('**/grima.html', { timeout: 20000 });
+verifier('Clic GRIMA → URL grima.html', /\/grima\.html$/.test(page.url()), page.url());
+await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
+
+const surligneGrima = (await page.locator('h1.console-titre .titre-surligne').textContent())?.trim();
+const titreGrima = (await page.locator('h1.console-titre .titre-principal').textContent())?.trim();
+verifier('GRIMA : surligne = celle du registre', surligneGrima === NOEUDS.grima.surligne, `lu: ${surligneGrima}`);
+verifier('GRIMA : titre = celui du registre', titreGrima === NOEUDS.grima.titre, `lu: ${titreGrima}`);
+
+const attendusGrima = capsDe('grima').map((c) => c.nom);
+const nomsGrima = (await page.locator('.cap .cap-nom').allTextContents()).map((n) => n.trim());
+verifier('GRIMA : RIVEN + NICOL BOLAS dans l\'ordre',
+  JSON.stringify(nomsGrima) === JSON.stringify(attendusGrima)
+    && JSON.stringify(attendusGrima) === JSON.stringify(['RIVEN', 'NICOL BOLAS']),
+  `lu: ${JSON.stringify(nomsGrima)}`);
+const hrefsGrima = await page.locator('a.cap').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
+for (const attendu of ['traveler.html', 'bcp.html']) {
+  verifier(`GRIMA : porte ouverte vers ${attendu}`, hrefsGrima.includes(attendu), JSON.stringify(hrefsGrima));
+}
+const legendeGrima = (await page.locator('.boussole-legende').textContent())?.trim();
+verifier('GRIMA : légende gravée « ce qui est utile »', legendeGrima === NOEUDS.grima.legende, `lu: ${legendeGrima}`);
+verifier('GRIMA : retour « ↞ ULTIMA »',
+  (await page.locator('.console-retour a[href="ultima.html"]').count()) === 1);
+
+// RIVEN navigue toujours vers la carte : zéro régression sur l'acquis.
 const erreursTraveler = [];
 page.on('console', (msg) => { if (msg.type() === 'error') erreursTraveler.push(msg.text()); });
-await traveler.click();
+await page.locator('a.cap[data-id="riven"]').click();
 await page.waitForURL('**/traveler.html', { timeout: 20000 });
 verifier('Clic RIVEN → URL traveler.html', /\/traveler\.html$/.test(page.url()), page.url());
 
@@ -231,6 +212,43 @@ await page.locator('.onglet[data-onglet="carte"]').click();
 await page.waitForSelector('.leaflet-container', { timeout: 20000 });
 verifier('Carte Leaflet initialisée (zéro régression)', await page.locator('.leaflet-container').count() >= 1);
 verifier('Zéro erreur console (traveler.html)', erreursTraveler.length === 0, erreursTraveler.slice(0, 3).join(' | '));
+
+// ============ C. La boussole NAGA (naga.html) ============
+console.log('— C. NAGA → naga.html (ce qui fait grandir) —');
+const erreursNaga = [];
+const pageNaga = await contexte.newPage();
+pageNaga.on('console', (msg) => { if (msg.type() === 'error') erreursNaga.push(msg.text()); });
+pageNaga.on('pageerror', (err) => erreursNaga.push(String(err)));
+await preparerRoutes(pageNaga);
+await pageNaga.goto(`${BASE}/naga.html`, { waitUntil: 'load', timeout: 20000 });
+await pageNaga.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
+
+const surligneNaga = (await pageNaga.locator('h1.console-titre .titre-surligne').textContent())?.trim();
+const titreNaga = (await pageNaga.locator('h1.console-titre .titre-principal').textContent())?.trim();
+verifier('NAGA : surligne = celle du registre', surligneNaga === NOEUDS.naga.surligne, `lu: ${surligneNaga}`);
+verifier('NAGA : titre = celui du registre', titreNaga === NOEUDS.naga.titre, `lu: ${titreNaga}`);
+
+const attendusNaga = capsDe('naga').map((c) => c.nom);
+const nomsNaga = (await pageNaga.locator('.cap .cap-nom').allTextContents()).map((n) => n.trim());
+verifier('NAGA : IMLADRIK + ADRAMELECH + TAO dans l\'ordre',
+  JSON.stringify(nomsNaga) === JSON.stringify(attendusNaga)
+    && JSON.stringify(attendusNaga) === JSON.stringify(['IMLADRIK', 'ADRAMELECH', 'TAO']),
+  `lu: ${JSON.stringify(nomsNaga)}`);
+const hrefsNaga = await pageNaga.locator('a.cap').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
+for (const attendu of ['imladrik.html', 'adramelech.html', 'tao.html']) {
+  verifier(`NAGA : porte ouverte vers ${attendu}`, hrefsNaga.includes(attendu), JSON.stringify(hrefsNaga));
+}
+verifier('NAGA : 3 aiguilles tracées', (await pageNaga.locator('.boussole-aiguilles .aiguille').count()) === 3);
+const legendeNaga = (await pageNaga.locator('.boussole-legende').textContent())?.trim();
+verifier('NAGA : légende gravée « ce qui fait grandir »', legendeNaga === NOEUDS.naga.legende, `lu: ${legendeNaga}`);
+verifier('NAGA : retour « ↞ ULTIMA »',
+  (await pageNaga.locator('.console-retour a[href="ultima.html"]').count()) === 1);
+
+// ADRAMELECH garde son état « Privé » sur son nouveau cadran.
+verifier('NAGA : ADRAMELECH marqué « Privé »',
+  /priv/i.test((await pageNaga.locator('.cap[data-id="adramelech"] .cap-etat').textContent()) || ''));
+
+verifier('Zéro erreur console (NAGA)', erreursNaga.length === 0, erreursNaga.slice(0, 3).join(' | '));
 
 await navigateur.close();
 

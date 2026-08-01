@@ -89,6 +89,28 @@ export const BLASONS = {
     + '<path d="M22 20 q 14 -7 28 0" fill="none" stroke="#a9884a" stroke-width="1.1" opacity="0.6"/>',
     'la capitale alpha gravée'),
 
+  // — Les macro-quadrants d'ULTIMA (Paul, 2026-08-01).
+  // GRIMA « ce qui est utile » : l'ancre — l'outillage qui tient (registre marin
+  // de la carte savante). NAGA « ce qui fait grandir » : la pousse — le germe
+  // à deux feuilles qui monte.
+  ancre: disque(
+    '<circle cx="36" cy="17" r="4" fill="none" stroke="#3b2f1c" stroke-width="2.2"/>'
+    + '<path d="M36 21 V 52" stroke="#3b2f1c" stroke-width="2.6" stroke-linecap="round"/>'
+    + '<path d="M26 28 H 46" stroke="#3b2f1c" stroke-width="2.2" stroke-linecap="round"/>'
+    + '<path d="M20 41 C 22 49, 28 54, 36 55 C 44 54, 50 49, 52 41" fill="none" stroke="#3b2f1c" stroke-width="2.6" stroke-linecap="round"/>'
+    + '<path d="M21 42 L 15.5 46.5 L 23.5 48.5 Z" fill="#3b2f1c"/>'
+    + '<path d="M51 42 L 56.5 46.5 L 48.5 48.5 Z" fill="#3b2f1c"/>'
+    + '<path d="M36 24 V 50" stroke="#e0c48a" stroke-width="0.8" opacity="0.7"/>',
+    'une ancre gravée'),
+  pousse: disque(
+    '<path d="M36 56 C 36 46, 36 36, 36 26" stroke="#3b2f1c" stroke-width="2.4" fill="none" stroke-linecap="round"/>'
+    + '<path d="M36 40 C 28 40, 22 35, 21 26 C 29 26, 35 31, 36 40 Z" fill="#3b2f1c"/>'
+    + '<path d="M36 33 C 44 33, 50 28, 51 19 C 43 19, 37 24, 36 33 Z" fill="#3b2f1c"/>'
+    + '<path d="M36 26 C 34 22, 34 19, 36 15 C 38 19, 38 22, 36 26 Z" fill="#a9884a"/>'
+    + '<path d="M22 58 H 50" stroke="#3b2f1c" stroke-width="2" stroke-linecap="round"/>'
+    + '<path d="M25 29 C 30 31, 33 34, 35 38" stroke="#e0c48a" stroke-width="0.8" fill="none" opacity="0.8"/>',
+    'une pousse qui grandit'),
+
   // — Les quatre quadrants (gravures d'ultima.html).
   riven: disque(
     '<path d="M36 12 L40.5 31.5 L60 36 L40.5 40.5 L36 60 L31.5 40.5 L12 36 L31.5 31.5 Z" fill="#3b2f1c"/>'
@@ -259,6 +281,25 @@ export const COEURS = {
     + '<path d="M38 84 L 60 30 L 82 84"/><path d="M47 65 H 73"/></g>'
     + '<path d="M32 94 H 88" stroke="#a9884a" stroke-width="2.4" stroke-linecap="round" opacity="0.85"/>'
     + '<path d="M36 30 q 24 -12 48 0" fill="none" stroke="#a9884a" stroke-width="1.8" opacity="0.6"/>'),
+
+  // GRIMA : l'ancre — ce qui est utile tient la maison.
+  ancre: medaillon('ancre',
+    '<circle cx="60" cy="27" r="7" fill="none" stroke="#4a3512" stroke-width="3.4"/>'
+    + '<path d="M60 34 V 86" stroke="#4a3512" stroke-width="4.2" stroke-linecap="round"/>'
+    + '<path d="M43 45 H 77" stroke="#4a3512" stroke-width="3.4" stroke-linecap="round"/>'
+    + '<path d="M34 68 C 37 80, 47 88, 60 89 C 73 88, 83 80, 86 68" fill="none" stroke="#4a3512" stroke-width="4.2" stroke-linecap="round"/>'
+    + '<path d="M35.5 69.5 L 27 76.5 L 39.5 79.5 Z" fill="#4a3512"/>'
+    + '<path d="M84.5 69.5 L 93 76.5 L 80.5 79.5 Z" fill="#4a3512"/>'
+    + '<path d="M60 38 V 82" stroke="#e0c48a" stroke-width="1.2" opacity="0.7"/>'),
+
+  // NAGA : la pousse — ce qui fait grandir.
+  pousse: medaillon('pousse',
+    '<path d="M60 92 C 60 76, 60 60, 60 42" stroke="#4a3512" stroke-width="4" fill="none" stroke-linecap="round"/>'
+    + '<path d="M60 66 C 47 66, 37 58, 35 44 C 48 44, 58 52, 60 66 Z" fill="#4a3512"/>'
+    + '<path d="M60 55 C 73 55, 83 47, 85 33 C 72 33, 62 41, 60 55 Z" fill="#4a3512"/>'
+    + '<path d="M60 42 C 57 36, 57 31, 60 25 C 63 31, 63 36, 60 42 Z" fill="#a9884a"/>'
+    + '<path d="M38 96 H 82" stroke="#4a3512" stroke-width="3.2" stroke-linecap="round"/>'
+    + '<path d="M41 49 C 49 52, 55 57, 58 63" stroke="#e0c48a" stroke-width="1.2" fill="none" opacity="0.8"/>'),
 
   // NICOL BOLAS : la balance.
   balance: medaillon('balance',

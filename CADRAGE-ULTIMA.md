@@ -4,16 +4,19 @@
 
 - ✅ **SESSION 2026-08-01 (dictée affichage Lv3), CLOSE.** Bandeaux
   « Supra-division Ultima / Alpha » (fini le « — le personnel / le
-  professionnel ») et boussole ULTIMA regroupée en deux **macro-quadrants
-  gravés** : **RIMA — « Ce qui est utile »** (RIVEN, NICOL BOLAS) et **NAGA —
-  « Ce qui fait grandir »** (IMLADRIK, ADRAMELECH, TAO). Pur affichage : les
-  cinq portes restent directes. Patrimoine COMPLET vert, harnais enrichis
-  (macro-quadrants + non-chevauchement desktop/mobile). Détail et registre
-  d'arbitrages : `memoire/JOURNAL-DECISIONS.md` (entrée du jour).
-  - ⏳ **À la main de Paul** : la légende sous le médaillon (« le personnel » /
-    « le professionnel ») est conservée — la retirer ou la renommer ? Et si les
-    macro-quadrants devaient devenir de **vraies boussoles** (RIMA / NAGA comme
-    étage de navigation), le dire : le registre sait déjà le porter.
+  professionnel ») et **ULTIMA naviguée en deux macro-quadrants cliquables**,
+  tranché par Paul sur preview : **GRIMA — « Ce qui est utile »** (RIVEN,
+  NICOL BOLAS, `grima.html`, l'ancre) et **NAGA — « Ce qui fait grandir »**
+  (IMLADRIK, ADRAMELECH, TAO, `naga.html`, la pousse) — deux vraies boussoles,
+  retours remontant quadrant → macro-quadrant → ULTIMA, cockpit recâblé.
+  L'orthographe est **GRIMA** (confirmée par Paul). Patrimoine COMPLET vert,
+  harnais recalés sur le nouvel arbre. Détail et itération (regroupement
+  visuel → sous-boussoles) : `memoire/JOURNAL-DECISIONS.md` (entrée du jour).
+  - ⏳ **À la main de Paul** : la légende sous le médaillon d'ULTIMA
+    (« le personnel ») et celle d'ALPHA (« le professionnel ») sont
+    conservées — les retirer ou les renommer ? Et les retours des feuilles
+    ABAQUE / ARCHIPELS pointent toujours vers `ultima.html` (comportement
+    antérieur, hors dictée) — les faire remonter vers leur quadrant ?
 
 - 🎤 **SESSION 2026-07-31 (dictée pure — VRANESH peuplé), CLOSE.** Zéro code
   produit : Paul dicte, Léo reformule, met au propre et grave en base. VRANESH

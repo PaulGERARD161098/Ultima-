@@ -1268,21 +1268,24 @@
      personnel / le professionnel » (registre + coques + preview). La légende
      gravée sous le médaillon (« le personnel » / « le professionnel ») n'était
      pas visée par la dictée : conservée, à confirmer par Paul.
-  2. **La boussole ULTIMA se lit en deux macro-quadrants** : **RIMA — « Ce qui
-     est utile »** (RIVEN, NICOL BOLAS) à l'ouest, **NAGA — « Ce qui fait
-     grandir »** (IMLADRIK, ADRAMELECH, TAO) au levant, noms gravés au-dessus
-     de chaque hémicycle. **Choix d'interprétation assumé** (« petits
-     correctifs d'affichage ») : pur regroupement visuel — les cinq portes
-     restent des accès directs, **aucun niveau de navigation ajouté**.
-     L'alternative « deux vraies boussoles intermédiaires » (un clic de plus
-     partout) reste possible si Paul la préfère : le registre sait déjà la
-     porter (`groupes` deviendrait deux nœuds).
-  - **Mécanique** : le registre gagne un champ optionnel `groupes` (validé par
-    `verifierRegistre` : recouvrement exact des enfants), le noyau une géométrie
-    `positionsGroupees` (un hémicycle par groupe, lecture du haut vers le bas,
-    nord réservé aux noms gravés). Générique : tout nœud-boussole peut se
-    regrouper demain par une simple entrée de registre.
-  - **Leçon mobile** : le sous-titre de NAGA passait sous IMLADRIK à 390 px —
-    vu sur capture, corrigé en CSS, et le harnais vérifie désormais le
-    non-chevauchement en desktop ET en mobile (la règle se teste par l'absence
-    de collision, pas par la seule présence des gravures).
+  2. **ULTIMA se navigue en deux MACRO-QUADRANTS cliquables** — tranché par
+     Paul en deux temps. Première lecture (« petits correctifs d'affichage ») :
+     un regroupement purement visuel sur la boussole à cinq caps. Paul, preview
+     Vercel en main : « je pensais plutôt des cadrans cliquables, des sortes de
+     sous-boussoles — sinon ce n'est pas très clair ». Décision finale :
+     **GRIMA — « Ce qui est utile »** (RIVEN, NICOL BOLAS, blason l'ancre) et
+     **NAGA — « Ce qui fait grandir »** (IMLADRIK, ADRAMELECH, TAO, blason la
+     pousse) sont de **vraies boussoles** (`grima.html`, `naga.html`) ;
+     ultima.html ne montre plus que ces deux cadrans, leur devise en badge.
+     **Orthographe confirmée par Paul : GRIMA** (pas « Rima » — c'était la
+     dictée). Les retours remontent l'arbre : quadrant → macro-quadrant →
+     ULTIMA ; le cockpit suit (GRIMA cumule les relances de RIVEN, NAGA les
+     comptes de TAO).
+  - **Mécanique** : deux entrées de registre + deux coques de 40 lignes —
+    exactement le contrat Lv3 (« ajouter un nœud = une entrée + une coque »).
+    Le regroupement visuel (`groupes`, `positionsGroupees`, gravures CSS) a
+    été **entièrement retiré** : la maquette a servi, on ne garde pas de
+    mécanique morte.
+  - **Leçon de méthode (EL)** : la preview Vercel a joué le rôle de maquette —
+    une interprétation ambiguë (« regrouper » = visuel ou navigation ?) s'est
+    tranchée en un aller-retour sur du rendu réel, sans fusion prématurée.

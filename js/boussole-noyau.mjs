@@ -40,37 +40,6 @@ export function positions(n) {
   return out;
 }
 
-// Macro-quadrants (registre : `groupes`) — chaque groupe reçoit son propre
-// secteur du cercle (2 groupes = 2 hémicycles, RIMA à l'ouest / NAGA au
-// levant) ; ses caps s'y répartissent à parts égales, en retrait des
-// frontières (PAD) pour laisser le nord aux noms gravés. Sur un secteur
-// gauche, l'ordre s'inverse pour que le premier cap reste le plus haut —
-// la lecture va toujours du haut vers le bas.
-const PAD_SECTEUR = 15; // degrés de retrait à chaque frontière de secteur
-
-export function positionsGroupees(comptes) {
-  const secteur = 360 / comptes.length;
-  const pts = [];
-  const ancres = [];
-  comptes.forEach((k, i) => {
-    const debut = 90 + i * secteur;           // premier secteur : plein ouest
-    const centre = (debut + secteur / 2) * Math.PI / 180;
-    const arc = secteur - 2 * PAD_SECTEUR;
-    const angles = [];
-    for (let j = 0; j < k; j += 1) {
-      angles.push(debut + PAD_SECTEUR + arc * (j + 1) / (k + 1));
-    }
-    if (Math.cos(centre) < 0) angles.reverse(); // côté gauche : du haut vers le bas
-    for (const a of angles) {
-      const rad = a * Math.PI / 180;
-      pts.push({ cos: Math.cos(rad), sin: Math.sin(rad) });
-    }
-    // Le nom gravé du groupe, au-dessus de son hémicycle (en % du plateau).
-    ancres.push({ x: 50 + 26 * Math.cos(centre), y: 6 });
-  });
-  return { pts, ancres };
-}
-
 // ======================= COCKPIT (fonctions pures) =======================
 // Reprises telles quelles de la boussole LV2 (js/boussole.js), recalées sur les
 // identifiants Lv3. N'accueillent QUE des entiers + du texte statique → sûres
@@ -123,8 +92,11 @@ export function signalDe(id, data) {
     return parts.length ? parts.join(' · ') : null;
   }
 
-  // La supra-division cumule ce que ses quadrants ont à traiter.
+  // La supra-division cumule ce que ses quadrants ont à traiter ; chaque
+  // macro-quadrant (GRIMA / NAGA) ne cumule que les siens.
   if (id === 'ultima-perso') return morceaux(Boolean(data.riven), Boolean(data.reshiram || data.zekrom));
+  if (id === 'grima') return morceaux(Boolean(data.riven), false);
+  if (id === 'naga') return morceaux(false, Boolean(data.reshiram || data.zekrom));
   if (id === 'riven') return morceaux(Boolean(data.riven), false);
   if (id === 'tao') return morceaux(false, Boolean(data.reshiram || data.zekrom));
   if (id === 'reshiram') return aEtayer > 0 ? aEtayer + ' talent' + s(aEtayer) + ' à étayer' : null;
@@ -145,27 +117,11 @@ export function rendre(idNoeud, options = {}) {
   const parole = doc.getElementById('boussole-parole');
   if (!plateau || !parole) return null;
 
-  let caps = capsDe(idNoeud, options.noeuds || NOEUDS);
+  const caps = capsDe(idNoeud, options.noeuds || NOEUDS);
   if (!caps.length) return null;
 
-  // Macro-quadrants : les caps se rangent par groupe (ordre du registre),
-  // chaque groupe sur son hémicycle, son nom gravé au-dessus.
-  const groupes = Array.isArray(noeud.groupes) && noeud.groupes.length >= 2 ? noeud.groupes : null;
-  let ancres = null;
-  let pts;
-  if (groupes) {
-    const parId = {};
-    caps.forEach((c) => { parId[c.id] = c; });
-    caps = [];
-    groupes.forEach((g) => g.caps.forEach((cid) => { if (parId[cid]) caps.push(parId[cid]); }));
-    const geo = positionsGroupees(groupes.map((g) => g.caps.length));
-    pts = geo.pts;
-    ancres = geo.ancres;
-  } else {
-    pts = positions(caps.length);
-  }
-
   const paroleDefaut = parole.innerHTML; // conservé pour le retour au repos
+  const pts = positions(caps.length);
   const cockpit = { data: null, actif: null };
 
   // ---- ③ Aiguilles (SVG en fond, sous les caps) + passerelles ----
@@ -268,27 +224,7 @@ export function rendre(idNoeud, options = {}) {
   }
 
   // ---- ③ Les caps, disposés autour de la rose ----
-  // Avec des macro-quadrants, le nom gravé de chaque groupe précède ses caps
-  // dans le DOM : la lecture (écran comme lecteur d'écran) va « RIMA puis ses
-  // portes, NAGA puis les siennes ».
-  const debuts = [];
-  if (groupes) {
-    let idx = 0;
-    groupes.forEach((g) => { debuts.push(idx); idx += g.caps.length; });
-  }
-
   caps.forEach((cap, i) => {
-    if (groupes && debuts.indexOf(i) !== -1) {
-      const gi = debuts.indexOf(i);
-      const domaine = doc.createElement('p');
-      domaine.className = 'boussole-domaine';
-      domaine.style.left = ancres[gi].x + '%';
-      domaine.style.top = ancres[gi].y + '%';
-      domaine.innerHTML = '<span class="domaine-nom">' + groupes[gi].nom + '</span>'
-        + '<span class="domaine-sous-titre">' + groupes[gi].sousTitre + '</span>';
-      plateau.appendChild(domaine);
-    }
-
     const ouvrable = Boolean(cap.cible);
     const el = doc.createElement(ouvrable ? 'a' : 'div');
     el.className = 'cap' + (ouvrable ? '' : ' cap--avenir');
@@ -388,7 +324,7 @@ function demarrer() {
 
 if (typeof document !== 'undefined') {
   if (typeof window !== 'undefined') {
-    window.UltimaBoussoleNoyau = { rendre, positions, positionsGroupees, ligneVivante, signalDe };
+    window.UltimaBoussoleNoyau = { rendre, positions, ligneVivante, signalDe };
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', demarrer);

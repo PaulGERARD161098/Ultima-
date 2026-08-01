@@ -113,8 +113,8 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
   verifier('Survol VRANESH : appel à entrer', /entrer/i.test(pv));
 
   // 6. Retour à la console + repli noscript présents.
-  verifier('Retour « Console » vers ultima.html',
-    (await page.locator('.boussole-retour a[href="ultima.html"]').count()) === 1);
+  verifier('Retour vers naga.html (IMLADRIK vit sous le macro-quadrant NAGA)',
+    (await page.locator('.boussole-retour a[href="naga.html"]').count()) === 1);
 
   // 7. Contrastes AA sur les couleurs réellement rendues.
   const cr = await page.evaluate(() => {
