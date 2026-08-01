@@ -1260,3 +1260,29 @@
     capture montrait un texte dicté arrivé dans le champ, et `/ecrire.html`
     dépose en base sans aucune IA. La clé ne sert qu'à ce que Léo **réponde**.
     Léo l'a dit avant qu'il n'engage l'argent, plutôt qu'après.
+- **2026-08-01 (dictée affichage Lv3 — supra-divisions nommées + macro-quadrants
+  RIMA / NAGA)** — Deux correctifs d'affichage dictés par Paul, session dédiée
+  (parallèle à la session MINETHNIR ; aucun fichier de boucle partagé).
+  1. **Les bandeaux des supra-divisions portent leur nom** : « Supra-division
+     Ultima » et « Supra-division Alpha » remplacent « Supra-division — le
+     personnel / le professionnel » (registre + coques + preview). La légende
+     gravée sous le médaillon (« le personnel » / « le professionnel ») n'était
+     pas visée par la dictée : conservée, à confirmer par Paul.
+  2. **La boussole ULTIMA se lit en deux macro-quadrants** : **RIMA — « Ce qui
+     est utile »** (RIVEN, NICOL BOLAS) à l'ouest, **NAGA — « Ce qui fait
+     grandir »** (IMLADRIK, ADRAMELECH, TAO) au levant, noms gravés au-dessus
+     de chaque hémicycle. **Choix d'interprétation assumé** (« petits
+     correctifs d'affichage ») : pur regroupement visuel — les cinq portes
+     restent des accès directs, **aucun niveau de navigation ajouté**.
+     L'alternative « deux vraies boussoles intermédiaires » (un clic de plus
+     partout) reste possible si Paul la préfère : le registre sait déjà la
+     porter (`groupes` deviendrait deux nœuds).
+  - **Mécanique** : le registre gagne un champ optionnel `groupes` (validé par
+    `verifierRegistre` : recouvrement exact des enfants), le noyau une géométrie
+    `positionsGroupees` (un hémicycle par groupe, lecture du haut vers le bas,
+    nord réservé aux noms gravés). Générique : tout nœud-boussole peut se
+    regrouper demain par une simple entrée de registre.
+  - **Leçon mobile** : le sous-titre de NAGA passait sous IMLADRIK à 390 px —
+    vu sur capture, corrigé en CSS, et le harnais vérifie désormais le
+    non-chevauchement en desktop ET en mobile (la règle se teste par l'absence
+    de collision, pas par la seule présence des gravures).

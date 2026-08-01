@@ -2,6 +2,19 @@
 
 ## ÉTAT (2026-07-06, après arbitrage)
 
+- ✅ **SESSION 2026-08-01 (dictée affichage Lv3), CLOSE.** Bandeaux
+  « Supra-division Ultima / Alpha » (fini le « — le personnel / le
+  professionnel ») et boussole ULTIMA regroupée en deux **macro-quadrants
+  gravés** : **RIMA — « Ce qui est utile »** (RIVEN, NICOL BOLAS) et **NAGA —
+  « Ce qui fait grandir »** (IMLADRIK, ADRAMELECH, TAO). Pur affichage : les
+  cinq portes restent directes. Patrimoine COMPLET vert, harnais enrichis
+  (macro-quadrants + non-chevauchement desktop/mobile). Détail et registre
+  d'arbitrages : `memoire/JOURNAL-DECISIONS.md` (entrée du jour).
+  - ⏳ **À la main de Paul** : la légende sous le médaillon (« le personnel » /
+    « le professionnel ») est conservée — la retirer ou la renommer ? Et si les
+    macro-quadrants devaient devenir de **vraies boussoles** (RIMA / NAGA comme
+    étage de navigation), le dire : le registre sait déjà le porter.
+
 - 🎤 **SESSION 2026-07-31 (dictée pure — VRANESH peuplé), CLOSE.** Zéro code
   produit : Paul dicte, Léo reformule, met au propre et grave en base. VRANESH
   passe de **vide** à **2 situations réelles complètes** — **LIANDRA** (l'amour
