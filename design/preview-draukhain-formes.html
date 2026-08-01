@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Preview — DRAUKHAIN : trois formes pour les serments</title>
+<!--
+  PREVIEW DE TRAVAIL — aucune donnée réelle (§5). Contenus NEUTRES inventés.
+  Zéro ressource externe, zéro CDN.
+
+  Dictée de Paul (2026-08-01), après VRANESH :
+    « il faudra revoir l'affichage pour les serments — les objectifs, le travail
+      de la cohérence par la discipline. Il faut un affichage progressif,
+      quelque chose de dynamique, d'évolutif. Il faut sortir de la fiche
+      textuelle statique. Sur VRANESH on a fait des arbres qui abritent les
+      embranchements de futurs possibles ; sur DRAUKHAIN pareil. Je n'ai pas
+      trop d'idées : fais-moi trois propositions. »
+
+  Le modèle en base (rien à migrer) : un SERMENT (intitulé, pourquoi, horizon)
+  entretenu par des FLAMMES (nature : citation / victoire / rappel ; texte).
+  Règle cardinale POSITIVE, à ne jamais trahir : un serment SANS flamme est
+  « à raviver » — une INVITATION, jamais un reproche. Et il n'y a JAMAIS de
+  ligne d'arrivée : on ne « termine » pas un serment, on le tient.
+
+  Les trois formes partagent la grammaire validée sur VRANESH :
+    ① on ne voit d'abord que les NOMS ; ② un clic déploie UN serment ;
+    ③ le survol d'un élément donne UNE LIGNE sur le côté, le clic donne TOUT.
+-->
+<style>
+:root {
+  --accent: #1e6fb8; --cerne-carte: #5a4118; --or-antique: #a9884a;
+  --mer-profonde: #0e3a52; --mer-claire: #17506b;
+  --parchemin: #f6eed9; --parchemin-carte: #efe3c6; --parchemin-ombre: #e3d3ab;
+  --encre-sepia: #3b2f1c; --encre-sepia-douce: #6a5636; --creme: #f6eed9;
+  --braise: #b4622a;
+  --police-ancienne: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 1.4rem 1rem 3rem; color: var(--creme);
+  font-family: var(--police-ancienne);
+  background:
+    radial-gradient(ellipse at 50% 15%, rgba(120,190,210,.14), rgba(0,0,0,0) 60%),
+    linear-gradient(180deg, var(--mer-claire), var(--mer-profonde) 62%, #0a2d42);
+  min-height: 100vh;
+}
+h1, h2, h3 { font-weight: 700; letter-spacing: .06em; margin: 0; }
+.entete { max-width: 64rem; margin: 0 auto 1.2rem; text-align: center; }
+.entete h1 { font-size: 1.5rem; letter-spacing: .16em; }
+.entete p { margin: .5rem 0 0; font-style: italic; opacity: .88; }
+
+.formes { display: flex; gap: .6rem; justify-content: center; margin: 1.2rem auto; flex-wrap: wrap; }
+.forme-onglet {
+  font-family: inherit; font-size: .82rem; letter-spacing: .08em; font-variant: small-caps;
+  padding: .55rem 1rem; min-height: 44px; cursor: pointer; border-radius: 999px;
+  border: 1px solid var(--or-antique); background: rgba(169,136,74,.14); color: var(--creme);
+}
+.forme-onglet[aria-pressed="true"] { background: var(--parchemin); color: var(--encre-sepia); font-weight: 700; }
+
+.panneau { max-width: 64rem; margin: 0 auto; }
+.panneau[hidden] { display: none; }
+.cartouche {
+  background: linear-gradient(180deg, var(--parchemin), var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte); border-radius: 10px;
+  box-shadow: inset 0 0 0 3px rgba(169,136,74,.35), 0 4px 16px rgba(0,10,20,.35);
+  color: var(--encre-sepia); padding: 1rem 1.1rem; margin-bottom: 1.2rem;
+}
+.cartouche > h2 {
+  font-size: .95rem; font-variant: small-caps; letter-spacing: .12em;
+  border-bottom: 1px solid var(--or-antique); padding-bottom: .4rem; margin-bottom: .7rem;
+}
+.note { font-style: italic; color: var(--encre-sepia-douce); margin: 0 0 .8rem; font-size: .92rem; }
+
+/* ---------- ÉTAGE 1 commun : les serments, NOMS SEULS ---------- */
+.serments { display: flex; flex-wrap: wrap; gap: .6rem; margin: .6rem 0 1rem; }
+.serment-nom {
+  font-family: inherit; font-size: .9rem; font-weight: 700; letter-spacing: .12em;
+  padding: .6rem 1rem; min-height: 44px; cursor: pointer; border-radius: 8px;
+  color: var(--encre-sepia); background: linear-gradient(180deg,#fbf5e6,var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte);
+  box-shadow: inset 0 0 0 3px rgba(169,136,74,.45);
+  display: flex; flex-direction: column; align-items: flex-start; gap: .1rem;
+}
+.serment-nom[aria-pressed="true"] { border-color: var(--or-antique); box-shadow: inset 0 0 0 3px rgba(169,136,74,.8); }
+.serment-pastille {
+  font-size: .62rem; font-weight: 400; font-variant: small-caps; letter-spacing: .08em;
+  color: var(--encre-sepia-douce);
+}
+
+.scene { display: grid; gap: 1rem; }
+@media (min-width: 62rem) { .scene { grid-template-columns: 1.3fr 1fr; align-items: start; } }
+.cadre {
+  position: relative; background: linear-gradient(180deg,#fbf5e6,var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte); border-radius: 10px;
+  box-shadow: inset 0 0 0 3px rgba(169,136,74,.35); min-height: 300px;
+}
+.cadre svg { display: block; width: 100%; height: auto; padding: .4rem; }
+.cadre-nom {
+  position: absolute; left: 50%; bottom: .5rem; transform: translateX(-50%);
+  margin: 0; font-weight: 700; letter-spacing: .14em; color: var(--encre-sepia);
+}
+.cote {
+  background: linear-gradient(180deg, var(--parchemin), var(--parchemin-ombre));
+  border: 1px solid var(--cerne-carte); border-radius: 10px; color: var(--encre-sepia);
+  padding: .9rem 1rem; min-height: 200px;
+}
+.cote-repos { font-style: italic; color: var(--encre-sepia-douce); margin: 0; }
+.cote-titre { font-size: .95rem; margin: 0 0 .2rem; }
+.cote-rang {
+  font-size: .68rem; font-variant: small-caps; letter-spacing: .1em;
+  color: var(--encre-sepia-douce); margin: 0 0 .6rem;
+}
+.cote-ligne { margin: 0 0 .5rem; }
+.cote-detail { border-top: 1px dashed var(--or-antique); padding-top: .6rem; margin-top: .6rem; }
+.cote-detail dt {
+  font-size: .68rem; font-variant: small-caps; letter-spacing: .1em;
+  color: var(--encre-sepia-douce); margin-top: .5rem;
+}
+.cote-detail dd { margin: .15rem 0 0; font-size: .92rem; }
+.cote-invite { font-style: italic; color: var(--encre-sepia-douce); font-size: .85rem; margin: .7rem 0 0; }
+
+/* ---------- Éléments interactifs communs ---------- */
+.item { outline: none; cursor: pointer; }
+.item-zone { fill: transparent; stroke: transparent; stroke-width: 16; cursor: pointer; }
+.etiquette {
+  font-family: var(--police-ancienne); font-size: 7px; fill: var(--encre-sepia-douce);
+  letter-spacing: .03em; pointer-events: none;
+}
+.item.is-actif .etiquette, .item.is-choisi .etiquette { fill: var(--encre-sepia); font-weight: 700; }
+
+/* ---------- A : LE FOYER ---------- */
+.foyer-halo { fill: var(--braise); }
+.foyer-coeur { fill: none; stroke: var(--cerne-carte); stroke-width: 2; }
+.flamme-trait { fill: none; stroke: var(--or-antique); stroke-width: 1.2; }
+.flamme-corps { fill: var(--or-antique); }
+.item.is-actif .flamme-corps, .item.is-choisi .flamme-corps { fill: var(--braise); }
+.item.is-actif .flamme-trait, .item.is-choisi .flamme-trait { stroke: var(--braise); stroke-width: 2; }
+.foyer-braise { fill: none; stroke: var(--encre-sepia-douce); stroke-width: 1.4; stroke-dasharray: 3 3; }
+
+/* ---------- B : LA VOIE (l'acquis) ---------- */
+.voie-route { fill: none; stroke: var(--cerne-carte); stroke-width: 2.2; }
+.voie-queue { fill: none; stroke: var(--cerne-carte); stroke-width: 2.2; stroke-dasharray: 5 5; opacity: .55; }
+.borne-marque { fill: var(--or-antique); }
+.borne-ici { fill: var(--braise); }
+.item.is-actif .borne-marque, .item.is-choisi .borne-marque { fill: var(--cerne-carte); }
+
+/* ---------- C : LES RACINES ---------- */
+.tronc-serment { fill: none; stroke: var(--cerne-carte); stroke-width: 3; stroke-linecap: round; }
+.racine { fill: none; stroke: var(--or-antique); stroke-width: 1.4; stroke-linecap: round; }
+.radicelle { fill: var(--or-antique); }
+.item.is-actif .racine, .item.is-choisi .racine { stroke: var(--cerne-carte); stroke-width: 2.4; }
+.item.is-actif .radicelle, .item.is-choisi .radicelle { fill: var(--cerne-carte); }
+.sol { stroke: var(--parchemin-ombre); stroke-width: 1.2; stroke-dasharray: 4 3; }
+.vide-mot { font-family: var(--police-ancienne); font-size: 8px; font-style: italic; fill: var(--encre-sepia-douce); }
+
+.legende { max-width: 64rem; margin: 1.4rem auto 0; opacity: .92; font-size: .9rem; }
+.legende li { margin-bottom: .45rem; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .pousse { animation: pousser 620ms ease-out forwards; }
+  @keyframes pousser { to { stroke-dashoffset: 0; } }
+  .apparait { animation: apparaitre 480ms ease-out both; }
+  @keyframes apparaitre { from { opacity: 0; } to { opacity: 1; } }
+}
+</style>
+</head>
+<body>
+
+<div class="entete">
+  <h1>DRAUKHAIN — trois formes pour les serments</h1>
+  <p>La volonté au-delà du possible. Un serment est entretenu par des flammes —
+     citations, victoires, rappels. Jamais de ligne d'arrivée : on ne termine
+     pas un serment, on le tient.</p>
+</div>
+
+<div class="formes" role="group" aria-label="Forme d'affichage">
+  <button type="button" class="forme-onglet" id="onglet-a" aria-pressed="true">A — Le foyer</button>
+  <button type="button" class="forme-onglet" id="onglet-b" aria-pressed="false">B — La voie jalonnée</button>
+  <button type="button" class="forme-onglet" id="onglet-c" aria-pressed="false">C — Les racines</button>
+</div>
+
+<div class="panneau" id="panneau-a">
+  <div class="cartouche">
+    <h2>A — Le foyer</h2>
+    <p class="note">Le serment est un <strong>feu qu'on entretient</strong>. Chaque flamme
+      posée gravite autour du foyer et l'éclaire ; le halo <strong>croît avec le nombre de
+      flammes</strong> — la discipline se voit. Un serment sans flamme est un cercle de
+      braise en pointillé : il ne demande qu'un souffle. Rien ne « finit » : un foyer
+      s'entretient ou s'éteint.</p>
+    <div class="serments" id="a-serments"></div>
+    <div class="scene">
+      <div class="cadre"><svg id="a-dessin" viewBox="0 0 240 200" aria-label="Le foyer du serment"></svg>
+        <p class="cadre-nom" id="a-nom"></p></div>
+      <aside class="cote" id="a-cote" aria-live="polite"><p class="cote-repos">Clique un serment.</p></aside>
+    </div>
+  </div>
+</div>
+
+<div class="panneau" id="panneau-b" hidden>
+  <div class="cartouche">
+    <h2>B — La voie jalonnée <em>(l'acquis, repris à la demande)</em></h2>
+    <p class="note">La route déjà livrée le 30 juillet et validée — mais soumise à la
+      grammaire de VRANESH : on ne voit d'abord que les noms, la voie d'<strong>un seul</strong>
+      serment se déploie au clic, et le détail vient sur le côté. D'où l'on part →
+      les bornes franchies → <strong>« tu es ici »</strong> → l'horizon, la route
+      <strong>sortant de la carte</strong>. Zéro nouvelle métaphore à apprendre.</p>
+    <div class="serments" id="b-serments"></div>
+    <div class="scene">
+      <div class="cadre"><svg id="b-dessin" viewBox="0 0 240 170" aria-label="La voie du serment"></svg>
+        <p class="cadre-nom" id="b-nom"></p></div>
+      <aside class="cote" id="b-cote" aria-live="polite"><p class="cote-repos">Clique un serment.</p></aside>
+    </div>
+  </div>
+</div>
+
+<div class="panneau" id="panneau-c" hidden>
+  <div class="cartouche">
+    <h2>C — Les racines <em>(le miroir de VRANESH)</em></h2>
+    <p class="note">VRANESH pousse <strong>vers le haut</strong> — les futurs possibles.
+      DRAUKHAIN s'enfonce <strong>vers le bas</strong> : le serment est le tronc, chaque
+      flamme une <strong>racine qui l'ancre</strong>. Plus il y a de racines, mieux l'arbre
+      tient au vent. Un serment sans racine se tient encore debout, mais nu — l'invitation
+      est évidente sans être un reproche. Même grammaire, même code visuel que VRANESH.</p>
+    <div class="serments" id="c-serments"></div>
+    <div class="scene">
+      <div class="cadre"><svg id="c-dessin" viewBox="0 0 240 200" aria-label="Les racines du serment"></svg>
+        <p class="cadre-nom" id="c-nom"></p></div>
+      <aside class="cote" id="c-cote" aria-live="polite"><p class="cote-repos">Clique un serment.</p></aside>
+    </div>
+  </div>
+</div>
+
+<ul class="legende">
+  <li><strong>Commun aux trois</strong> : d'abord les <em>noms</em> seuls ; un clic déploie
+    <em>un</em> serment ; survol d'un élément → <em>une ligne</em> sur le côté ; clic → <em>tout</em>.</li>
+  <li><strong>Dynamique et évolutif</strong> : A fait croître le halo avec les flammes ;
+    B avance la borne « tu es ici » ; C épaissit et multiplie les racines.</li>
+  <li><strong>Jamais de fin</strong> : aucune ligne d'arrivée, aucun pourcentage, aucun sommet.</li>
+  <li>Un serment <em>à raviver</em> (zéro flamme) reste entier — l'invitation ne culpabilise jamais.</li>
+</ul>
+
+<script>
+// Données NEUTRES inventées — aucun serment réel (§5).
+var NATURES = { citation: 'citation', victoire: 'victoire', rappel: 'rappel' };
+var SERMENTS = [
+  { id: 's1', nom: 'TENIR LA LIGNE', pourquoi: 'Parce que la constance vaut mieux que l’élan.',
+    horizon: 'sans échéance — il se tient jour après jour', flammes: [
+    { t: 'Ce qui se fait sans effort ne dure pas', n: 'citation' },
+    { t: 'Trois semaines tenues sans céder', n: 'victoire' },
+    { t: 'Se souvenir du matin où j’ai failli lâcher', n: 'rappel' },
+    { t: 'Le froid ne décourage que ceux qui n’ont pas de cap', n: 'citation' },
+  ] },
+  { id: 's2', nom: 'FAIRE FACE', pourquoi: 'Ne pas détourner le regard quand c’est difficile.',
+    horizon: 'chaque fois que l’occasion se présente', flammes: [
+    { t: 'La conversation que j’ai fini par avoir', n: 'victoire' },
+    { t: 'Ce qu’on n’affronte pas revient plus grand', n: 'citation' },
+  ] },
+  { id: 's3', nom: 'GARDER LA MAIN', pourquoi: 'Rester l’auteur de ce qui m’arrive.',
+    horizon: 'toujours', flammes: [] },
+];
+var NS = 'http://www.w3.org/2000/svg';
+function sv(n, cl) { var e = document.createElementNS(NS, n); if (cl) e.setAttribute('class', cl); return e; }
+function el(n, cl, t) { var e = document.createElement(n); if (cl) e.className = cl; if (t != null) e.textContent = t; return e; }
+function etiquetteCourte(texte, borne) {
+  var max = borne || 30;
+  var t = (texte || '').trim();
+  if (t.length <= max) return t;
+  var m = t.slice(0, max).split(' '); if (m.length > 1) m.pop();
+  return m.join(' ') + '…';
+}
+function amorcer(racine) {
+  Array.prototype.forEach.call(racine.querySelectorAll('.pousse'), function (t) {
+    var L = t.getTotalLength ? t.getTotalLength() : 0;
+    if (!L) return;
+    t.style.strokeDasharray = L; t.style.strokeDashoffset = L;
+  });
+}
+
+// ---------- Le cartouche de côté (commun) ----------
+function repos(cote, texte) { cote.textContent = ''; cote.appendChild(el('p', 'cote-repos', texte)); }
+function survol(cote, serment, f, i, mot) {
+  cote.textContent = '';
+  cote.appendChild(el('h3', 'cote-titre', etiquetteCourte(f.t)));
+  cote.appendChild(el('p', 'cote-rang', serment.nom + ' — ' + mot + ' ' + (i + 1)
+    + ' sur ' + serment.flammes.length + ' · ' + NATURES[f.n]));
+  cote.appendChild(el('p', 'cote-ligne', f.t));
+  cote.appendChild(el('p', 'cote-invite', 'Clique pour voir le serment entier.'));
+}
+function detail(cote, serment, f, i, mot) {
+  survol(cote, serment, f, i, mot);
+  cote.removeChild(cote.lastChild);
+  var dl = el('dl', 'cote-detail');
+  dl.appendChild(el('dt', null, 'Le serment')); dl.appendChild(el('dd', null, serment.nom));
+  dl.appendChild(el('dt', null, 'Pourquoi')); dl.appendChild(el('dd', null, serment.pourquoi));
+  dl.appendChild(el('dt', null, 'Horizon')); dl.appendChild(el('dd', null, serment.horizon));
+  cote.appendChild(dl);
+}
+
+// ---------- La rangée de noms (commune) ----------
+function poserNoms(hote, auClic) {
+  hote.textContent = '';
+  SERMENTS.forEach(function (s) {
+    var b = el('button', 'serment-nom'); b.type = 'button';
+    b.setAttribute('aria-pressed', 'false');
+    b.appendChild(document.createTextNode(s.nom));
+    b.appendChild(el('span', 'serment-pastille', s.flammes.length === 0
+      ? 'à raviver'
+      : s.flammes.length + (s.flammes.length > 1 ? ' flammes' : ' flamme')));
+    b.addEventListener('click', function () {
+      Array.prototype.forEach.call(hote.querySelectorAll('.serment-nom'), function (o) {
+        o.setAttribute('aria-pressed', 'false');
+      });
+      b.setAttribute('aria-pressed', 'true');
+      auClic(s);
+    });
+    hote.appendChild(b);
+  });
+}
+
+// Branche survol/clic sur un groupe SVG.
+function brancher(g, cadre, cote, serment, f, i, mot) {
+  function entrer() { g.classList.add('is-actif'); survol(cote, serment, f, i, mot); }
+  function sortir() { if (!g.classList.contains('is-choisi')) g.classList.remove('is-actif'); }
+  function choisir() {
+    Array.prototype.forEach.call(cadre.querySelectorAll('.item'), function (o) {
+      o.classList.remove('is-choisi'); o.classList.remove('is-actif');
+    });
+    g.classList.add('is-choisi'); g.classList.add('is-actif');
+    detail(cote, serment, f, i, mot);
+  }
+  g.setAttribute('tabindex', '0'); g.setAttribute('role', 'button');
+  g.setAttribute('aria-label', etiquetteCourte(f.t) + ' — ' + NATURES[f.n]);
+  g.addEventListener('mouseenter', entrer); g.addEventListener('mouseleave', sortir);
+  g.addEventListener('focus', entrer); g.addEventListener('blur', sortir);
+  g.addEventListener('click', choisir);
+  g.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choisir(); }
+  });
+}
+
+// ================= A — LE FOYER =================
+var aCadre = document.getElementById('a-dessin'), aCote = document.getElementById('a-cote');
+poserNoms(document.getElementById('a-serments'), function (s) {
+  document.getElementById('a-nom').textContent = s.nom;
+  dessinerFoyer(s);
+  repos(aCote, s.flammes.length === 0
+    ? 'Ce serment n’a pas encore de flamme — un souffle suffit à le raviver.'
+    : 'Survole une flamme, clique-la pour voir le serment entier.');
+});
+function dessinerFoyer(s) {
+  aCadre.textContent = '';
+  var cx = 120, cy = 104, n = s.flammes.length;
+  // Le halo croît avec le nombre de flammes : la discipline SE VOIT.
+  if (n > 0) {
+    var halo = sv('circle', 'foyer-halo');
+    halo.setAttribute('cx', cx); halo.setAttribute('cy', cy);
+    halo.setAttribute('r', 20 + n * 5);
+    halo.setAttribute('opacity', String(Math.min(0.18, 0.04 + n * 0.03)));
+    aCadre.appendChild(halo);
+  }
+  var coeur = sv('circle', n === 0 ? 'foyer-braise' : 'foyer-coeur');
+  coeur.setAttribute('cx', cx); coeur.setAttribute('cy', cy); coeur.setAttribute('r', 20);
+  aCadre.appendChild(coeur);
+  if (n === 0) {
+    var mot = sv('text', 'vide-mot');
+    mot.setAttribute('x', cx); mot.setAttribute('y', cy + 46); mot.setAttribute('text-anchor', 'middle');
+    mot.textContent = 'braise — il ne demande qu’un souffle';
+    aCadre.appendChild(mot); return;
+  }
+  s.flammes.forEach(function (f, i) {
+    var a = (-90 + i * (360 / n)) * Math.PI / 180;
+    var r = 30 + n * 4;
+    var x = cx + r * Math.cos(a), y = cy + r * Math.sin(a);
+    var g = sv('g', 'item apparait');
+    g.style.animationDelay = (i * 110) + 'ms';
+    var tige = sv('path', 'flamme-trait');
+    tige.setAttribute('d', 'M' + cx + ' ' + cy + ' L ' + x + ' ' + y);
+    tige.setAttribute('opacity', '.45');
+    var corps = sv('path', 'flamme-corps');
+    corps.setAttribute('d', 'M' + x + ' ' + (y - 7) + ' q 5 5 0 10 q -5 -5 0 -10 Z');
+    var et = sv('text', 'etiquette');
+    var aGauche = Math.cos(a) < -0.15;
+    et.setAttribute('x', x + (aGauche ? -6 : 6)); et.setAttribute('y', y + 12);
+    et.setAttribute('text-anchor', aGauche ? 'end' : (Math.cos(a) > 0.15 ? 'start' : 'middle'));
+    et.textContent = etiquetteCourte(f.t, 22);
+    var zone = sv('circle', 'item-zone');
+    zone.setAttribute('cx', x); zone.setAttribute('cy', y); zone.setAttribute('r', 11);
+    g.appendChild(tige); g.appendChild(corps); g.appendChild(et); g.appendChild(zone);
+    brancher(g, aCadre, aCote, s, f, i, 'flamme');
+    aCadre.appendChild(g);
+  });
+}
+
+// ================= B — LA VOIE JALONNÉE =================
+var bCadre = document.getElementById('b-dessin'), bCote = document.getElementById('b-cote');
+poserNoms(document.getElementById('b-serments'), function (s) {
+  document.getElementById('b-nom').textContent = s.nom;
+  dessinerVoie(s);
+  repos(bCote, s.flammes.length === 0
+    ? 'On se tient au départ — « à raviver » est la borne devant soi.'
+    : 'Survole une borne, clique-la pour voir le serment entier.');
+});
+function dessinerVoie(s) {
+  bCadre.textContent = '';
+  var n = s.flammes.length, y0 = 74;
+  var d = 'M14 ' + y0, pas = 190 / Math.max(1, n + 1);
+  for (var k = 0; k <= n + 1; k += 1) {
+    var x = 14 + k * pas, y = y0 + (k % 2 === 0 ? -14 : 14);
+    d += ' Q ' + (x - pas / 2) + ' ' + y + ' ' + x + ' ' + y0;
+  }
+  var route = sv('path', 'voie-route pousse'); route.setAttribute('d', d);
+  bCadre.appendChild(route);
+  // La route SORT de la carte : jamais de ligne d'arrivée.
+  var queue = sv('path', 'voie-queue');
+  queue.setAttribute('d', 'M204 ' + y0 + ' L 236 ' + (y0 - 6));
+  bCadre.appendChild(queue);
+  var horizon = sv('text', 'etiquette');
+  horizon.setAttribute('x', 234); horizon.setAttribute('y', y0 - 16);
+  horizon.setAttribute('text-anchor', 'end'); horizon.textContent = 'l’horizon →';
+  bCadre.appendChild(horizon);
+
+  var depart = sv('text', 'etiquette');
+  depart.setAttribute('x', 14); depart.setAttribute('y', y0 + 56); depart.textContent = 'le départ';
+  bCadre.appendChild(depart);
+
+  s.flammes.forEach(function (f, i) {
+    var x = 14 + (i + 1) * pas;
+    var g = sv('g', 'item apparait'); g.style.animationDelay = (i * 110) + 'ms';
+    var borne = sv('circle', 'borne-marque');
+    borne.setAttribute('cx', x); borne.setAttribute('cy', y0); borne.setAttribute('r', 4);
+    var et = sv('text', 'etiquette');
+    // Les étiquettes alternent au-dessus / en dessous de la route : sur une
+    // seule ligne, des bornes rapprochées se marchent dessus.
+    et.setAttribute('x', x); et.setAttribute('y', i % 2 === 0 ? y0 - 16 : y0 + 26);
+    et.setAttribute('text-anchor', 'middle');
+    et.textContent = etiquetteCourte(f.t, 16);
+    var zone = sv('circle', 'item-zone');
+    zone.setAttribute('cx', x); zone.setAttribute('cy', y0); zone.setAttribute('r', 12);
+    g.appendChild(borne); g.appendChild(et); g.appendChild(zone);
+    brancher(g, bCadre, bCote, s, f, i, 'borne');
+    bCadre.appendChild(g);
+  });
+
+  // « Tu es ici » : après la dernière borne franchie (ou au départ si aucune).
+  var xIci = 14 + (n === 0 ? 0 : n) * pas;
+  var ici = sv('circle', 'borne-ici');
+  ici.setAttribute('cx', xIci + (n === 0 ? 0 : pas / 2)); ici.setAttribute('cy', y0);
+  ici.setAttribute('r', 5.5);
+  bCadre.appendChild(ici);
+  var motIci = sv('text', 'etiquette');
+  motIci.setAttribute('x', xIci + (n === 0 ? 0 : pas / 2)); motIci.setAttribute('y', y0 + 56);
+  motIci.setAttribute('text-anchor', 'middle');
+  motIci.textContent = n === 0 ? 'tu es ici — à raviver' : 'tu es ici';
+  bCadre.appendChild(motIci);
+  amorcer(bCadre);
+}
+
+// ================= C — LES RACINES =================
+var cCadre = document.getElementById('c-dessin'), cCote = document.getElementById('c-cote');
+poserNoms(document.getElementById('c-serments'), function (s) {
+  document.getElementById('c-nom').textContent = s.nom;
+  dessinerRacines(s);
+  repos(cCote, s.flammes.length === 0
+    ? 'Ce serment tient debout, mais nu — il n’a pas encore de racine.'
+    : 'Survole une racine, clique-la pour voir le serment entier.');
+});
+function dessinerRacines(s) {
+  cCadre.textContent = '';
+  var x0 = 120, sol = 74, n = s.flammes.length;
+  var ligne = sv('line', 'sol');
+  ligne.setAttribute('x1', 16); ligne.setAttribute('y1', sol);
+  ligne.setAttribute('x2', 224); ligne.setAttribute('y2', sol);
+  cCadre.appendChild(ligne);
+  // Le tronc s'épaissit avec le nombre de racines : l'ancrage SE VOIT.
+  var tronc = sv('path', 'tronc-serment pousse');
+  tronc.setAttribute('d', 'M' + x0 + ' 20 C ' + (x0 - 3) + ' 44, ' + (x0 + 3) + ' 60, ' + x0 + ' ' + sol);
+  tronc.setAttribute('stroke-width', String(2.4 + n * 0.5));
+  cCadre.appendChild(tronc);
+  if (n === 0) {
+    var mot = sv('text', 'vide-mot');
+    mot.setAttribute('x', x0); mot.setAttribute('y', sol + 34); mot.setAttribute('text-anchor', 'middle');
+    mot.textContent = 'debout, mais sans racine — donne-lui la première';
+    cCadre.appendChild(mot); return;
+  }
+  s.flammes.forEach(function (f, i) {
+    var sens = (i % 2 === 0) ? -1 : 1;
+    var y = sol + 16 + Math.floor(i / 2) * 34;
+    var bx = x0 + sens * (38 + (i % 3) * 6), by = y + 20;
+    var g = sv('g', 'item apparait'); g.style.animationDelay = (i * 110) + 'ms';
+    var d = 'M' + x0 + ' ' + (sol + 2) + ' Q ' + (x0 + sens * 22) + ' ' + y + ' ' + bx + ' ' + by;
+    var trait = sv('path', 'racine pousse'); trait.setAttribute('d', d);
+    var bout = sv('circle', 'radicelle');
+    bout.setAttribute('cx', bx); bout.setAttribute('cy', by); bout.setAttribute('r', 2.6);
+    var et = sv('text', 'etiquette');
+    et.setAttribute('x', bx + sens * 5); et.setAttribute('y', by + 9);
+    et.setAttribute('text-anchor', sens < 0 ? 'end' : 'start');
+    et.textContent = etiquetteCourte(f.t, 20);
+    var zone = sv('path', 'item-zone'); zone.setAttribute('d', d);
+    g.appendChild(trait); g.appendChild(bout); g.appendChild(et); g.appendChild(zone);
+    brancher(g, cCadre, cCote, s, f, i, 'racine');
+    cCadre.appendChild(g);
+  });
+  amorcer(cCadre);
+}
+
+// ---------- Bascule ----------
+var onglets = ['a', 'b', 'c'];
+onglets.forEach(function (cle) {
+  document.getElementById('onglet-' + cle).addEventListener('click', function () {
+    onglets.forEach(function (autre) {
+      document.getElementById('onglet-' + autre).setAttribute('aria-pressed', String(autre === cle));
+      document.getElementById('panneau-' + autre).hidden = (autre !== cle);
+    });
+  });
+});
+</script>
+</body>
+</html>

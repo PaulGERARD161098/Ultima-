@@ -466,6 +466,331 @@
 
   // ---------- Rendu d'un serment ----------
 
+  // ---------- LE FOYER DES SERMENTS (forme A, dictée Paul 2026-08-01) ----------
+  // « Sortir de la fiche textuelle statique : un affichage progressif,
+  //   dynamique, évolutif. » Forme A choisie sur preview, avec deux consignes
+  //   explicites : GARDER LE CHAMP LEXICAL DU FEU, et UNE FLAMME AU CENTRE.
+  //
+  // Le serment est un FEU QU'ON ENTRETIENT : au centre sa flamme, autour les
+  // flammes posées (citations, victoires, rappels), et un halo dont l'éclat
+  // croît avec leur nombre — la discipline SE VOIT. Un serment sans flamme est
+  // un cercle de braise : il ne demande qu'un souffle, jamais un reproche.
+  // Rien ne « finit » : un foyer s'entretient ou s'éteint (ni ligne d'arrivée,
+  // ni pourcentage, ni sommet).
+  //
+  // Grammaire commune à VRANESH : les NOMS d'abord, un clic déploie UN serment,
+  // le survol donne UNE LIGNE, le clic donne TOUT. Les intitulés sont intimes :
+  // createElement/textContent uniquement, rien dans le HTML servi.
+
+  var FOYER = { L: 240, H: 200, CX: 120, CY: 100, RAYON_CERCLE: 20 };
+  var NS_SVG = 'http://www.w3.org/2000/svg';
+  var sermentOuvert = null;
+
+  function svgEl(nom, classe) {
+    var element = document.createElementNS(NS_SVG, nom);
+    if (classe) { element.setAttribute('class', classe); }
+    return element;
+  }
+
+  // Le NOM SEUL du serment : un intitulé « X — le pourquoi » se porte « X ».
+  function nomCourt(intitule) {
+    var texte = (intitule || '').trim();
+    var coupe = texte.split(/\s+[—–-]\s+/)[0];
+    return coupe.trim() || texte;
+  }
+
+  // L'étiquette d'une flamme : de quoi la reconnaître, pas de quoi la lire.
+  function etiquetteFlamme(texte, borne) {
+    var max = borne || 22;
+    var t = (texte || '').trim();
+    if (!t) { return 'une flamme'; }
+    var phrase = t.split(/[.;:!?]/)[0].trim() || t;
+    if (phrase.length <= max) { return phrase; }
+    var mots = phrase.slice(0, max).split(' ');
+    if (mots.length > 1) { mots.pop(); }
+    return mots.join(' ') + '…';
+  }
+
+  // La couronne : n flammes réparties autour du foyer, la première plein Nord.
+  // Fonction PURE (aucun DOM) → testable unitairement.
+  function couronne(n) {
+    var out = [];
+    if (n <= 0) { return out; }
+    var rayon = 30 + n * 4;
+    for (var i = 0; i < n; i += 1) {
+      var angle = (-90 + i * (360 / n)) * Math.PI / 180;
+      var cos = Math.cos(angle), sin = Math.sin(angle);
+      out.push({
+        x: FOYER.CX + rayon * cos,
+        y: FOYER.CY + rayon * sin,
+        cos: cos,
+        // Le texte fuit le centre : à gauche il s'aligne à droite, et vice versa.
+        ancre: cos < -0.15 ? 'end' : (cos > 0.15 ? 'start' : 'middle')
+      });
+    }
+    return out;
+  }
+
+  // L'éclat du halo : il croît avec le nombre de flammes, mais plafonne — un
+  // foyer bien tenu éclaire, il n'aveugle pas. Fonction PURE.
+  function eclat(n) {
+    if (n <= 0) { return null; }
+    return { rayon: 20 + n * 5, opacite: Math.min(0.18, 0.04 + n * 0.03) };
+  }
+
+  // Le dessin d'une flamme (gravure), posé en (x, y). `hauteur` porte la
+  // nature : une victoire brûle plus haut qu'un rappel.
+  function traceFlamme(x, y, hauteur) {
+    var l = hauteur * 0.42;
+    return 'M' + x + ' ' + (y - hauteur)
+      + ' q ' + l + ' ' + (hauteur * 0.62) + ' 0 ' + hauteur
+      + ' q ' + (-l) + ' ' + (-hauteur * 0.38) + ' 0 ' + (-hauteur) + ' Z';
+  }
+
+  function hauteurFlamme(nature) {
+    if (nature === 'victoire') { return 11; }
+    if (nature === 'citation') { return 9; }
+    return 7.5;
+  }
+
+  // ---- Le cartouche de côté ----
+
+  function coteRepos(texte) {
+    var cote = document.getElementById('draukhain-foyer-cote');
+    if (!cote) { return; }
+    cote.textContent = '';
+    cote.appendChild(el('p', 'foyer-cote-repos', texte));
+  }
+
+  function coteFlamme(serment, flamme, rang, total, detail) {
+    var cote = document.getElementById('draukhain-foyer-cote');
+    if (!cote) { return; }
+    cote.textContent = '';
+    cote.appendChild(el('h3', 'foyer-cote-titre', etiquetteFlamme(flamme.texte, 40)));
+    cote.appendChild(el('p', 'foyer-cote-rang', nomCourt(serment.intitule)
+      + ' — flamme ' + rang + ' sur ' + total
+      + ' · ' + (LIBELLE_NATURE[flamme.nature] || flamme.nature || 'rappel')));
+    cote.appendChild(el('p', 'foyer-cote-texte', flamme.texte || ''));
+
+    if (!detail) {
+      cote.appendChild(el('p', 'foyer-cote-invite', 'Clique la flamme pour voir le serment entier ↝'));
+      return;
+    }
+    var dl = el('dl', 'foyer-cote-detail');
+    if (serment.pourquoi) {
+      dl.appendChild(el('dt', null, 'Pourquoi ce serment'));
+      dl.appendChild(el('dd', null, serment.pourquoi));
+    }
+    if (serment.horizon) {
+      dl.appendChild(el('dt', null, 'Horizon'));
+      dl.appendChild(el('dd', null, serment.horizon));
+    }
+    var liens = liensDe(serment.id);
+    dl.appendChild(el('dt', null, 'Passerelles'));
+    if (liens.length === 0) {
+      dl.appendChild(el('dd', null, 'Aucune — relie ce serment dans le registre.'));
+    } else {
+      liens.forEach(function (lien) {
+        var lu = libelleLien(lien);
+        dl.appendChild(el('dd', null, (lu.prefixe || '') + (lu.nom || '')));
+      });
+    }
+    if (dl.childNodes.length > 0) { cote.appendChild(dl); }
+
+    var aller = el('a', 'foyer-cote-lien', 'Ouvrir ce serment dans le registre ↝');
+    aller.href = '#draukhain-serment-' + serment.id;
+    cote.appendChild(aller);
+  }
+
+  // ---- Le dessin du foyer ----
+
+  function dessinerFoyer(serment) {
+    var cadre = document.getElementById('draukhain-foyer-dessin');
+    var titre = document.getElementById('draukhain-foyer-nom');
+    if (!cadre || !titre) { return; }
+    cadre.textContent = '';
+    titre.textContent = nomCourt(serment.intitule);
+
+    var flammes = flammesDe(serment.id);
+    var n = flammes.length;
+
+    // Le halo : posé AVANT tout, sans animation d'opacité (elle écraserait
+    // l'éclat calculé — piège relevé en preview).
+    var lueur = eclat(n);
+    if (lueur) {
+      var halo = svgEl('circle', 'foyer-halo');
+      halo.setAttribute('cx', String(FOYER.CX));
+      halo.setAttribute('cy', String(FOYER.CY));
+      halo.setAttribute('r', String(lueur.rayon));
+      halo.setAttribute('opacity', String(lueur.opacite));
+      cadre.appendChild(halo);
+    }
+
+    var cercle = svgEl('circle', n === 0 ? 'foyer-cercle--braise' : 'foyer-cercle');
+    cercle.setAttribute('cx', String(FOYER.CX));
+    cercle.setAttribute('cy', String(FOYER.CY));
+    cercle.setAttribute('r', String(FOYER.RAYON_CERCLE));
+    cadre.appendChild(cercle);
+
+    // LA FLAMME AU CENTRE (consigne de Paul) : le feu du serment lui-même. Elle
+    // grandit un peu avec ce qui l'entretient, et reste dessinée en encre pâle
+    // quand le foyer n'est que braise — présente, jamais éteinte.
+    var hauteurCentre = 14 + Math.min(6, n * 1.5);
+    var centre = svgEl('path', n === 0 ? 'foyer-flamme-centre--braise' : 'foyer-flamme-centre');
+    centre.setAttribute('d', traceFlamme(FOYER.CX, FOYER.CY + hauteurCentre / 2, hauteurCentre));
+    cadre.appendChild(centre);
+    if (n > 0) {
+      var coeur = svgEl('path', 'foyer-flamme-coeur');
+      coeur.setAttribute('d', traceFlamme(FOYER.CX, FOYER.CY + hauteurCentre / 2 - 1,
+        hauteurCentre * 0.45));
+      cadre.appendChild(coeur);
+    }
+
+    if (n === 0) {
+      var mot = svgEl('text', 'foyer-mot');
+      mot.setAttribute('x', String(FOYER.CX));
+      mot.setAttribute('y', String(FOYER.CY + 48));
+      mot.setAttribute('text-anchor', 'middle');
+      mot.textContent = 'braise — il ne demande qu’un souffle';
+      cadre.appendChild(mot);
+      return;
+    }
+
+    couronne(n).forEach(function (place, i) {
+      var flamme = flammes[i];
+      var g = svgEl('g', 'foyer-flamme-g');
+      g.setAttribute('tabindex', '0');
+      g.setAttribute('role', 'button');
+      g.setAttribute('aria-label', etiquetteFlamme(flamme.texte) + ' — '
+        + (LIBELLE_NATURE[flamme.nature] || 'rappel'));
+
+      var tige = svgEl('path', 'foyer-tige');
+      tige.setAttribute('d', 'M' + FOYER.CX + ' ' + FOYER.CY + ' L ' + place.x + ' ' + place.y);
+      tige.style.animationDelay = (i * 110) + 'ms';
+
+      var feu = svgEl('path', 'foyer-flamme foyer-flamme--'
+        + (flamme.nature || 'rappel'));
+      feu.setAttribute('d', traceFlamme(place.x, place.y, hauteurFlamme(flamme.nature)));
+      feu.style.animationDelay = (i * 110 + 200) + 'ms';
+
+      var etiquette = svgEl('text', 'foyer-etiquette');
+      etiquette.setAttribute('x', String(place.x + (place.ancre === 'end' ? -6
+        : (place.ancre === 'start' ? 6 : 0))));
+      etiquette.setAttribute('y', String(place.y + 14));
+      etiquette.setAttribute('text-anchor', place.ancre);
+      etiquette.textContent = etiquetteFlamme(flamme.texte);
+      etiquette.style.animationDelay = (i * 110 + 200) + 'ms';
+
+      var zone = svgEl('circle', 'foyer-zone');
+      zone.setAttribute('cx', String(place.x));
+      zone.setAttribute('cy', String(place.y));
+      zone.setAttribute('r', '12');
+
+      g.appendChild(tige); g.appendChild(feu);
+      g.appendChild(etiquette); g.appendChild(zone);
+
+      function entrer() {
+        g.classList.add('is-actif');
+        coteFlamme(serment, flamme, i + 1, n, false);
+      }
+      function sortir() {
+        if (!g.classList.contains('is-choisie')) { g.classList.remove('is-actif'); }
+      }
+      function choisir() {
+        Array.prototype.forEach.call(cadre.querySelectorAll('.foyer-flamme-g'), function (o) {
+          o.classList.remove('is-choisie'); o.classList.remove('is-actif');
+        });
+        g.classList.add('is-choisie'); g.classList.add('is-actif');
+        coteFlamme(serment, flamme, i + 1, n, true);
+      }
+      g.addEventListener('mouseenter', entrer);
+      g.addEventListener('mouseleave', sortir);
+      g.addEventListener('focus', entrer);
+      g.addEventListener('blur', sortir);
+      g.addEventListener('click', choisir);
+      g.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choisir(); }
+      });
+      cadre.appendChild(g);
+    });
+
+    // Les tiges se dessinent du centre vers la flamme : longueur MESURÉE, un
+    // dasharray fixe couperait les plus longues.
+    Array.prototype.forEach.call(cadre.querySelectorAll('.foyer-tige'), function (t) {
+      var L = t.getTotalLength ? t.getTotalLength() : 0;
+      if (!L) { return; }
+      t.style.strokeDasharray = L;
+      t.style.strokeDashoffset = L;
+    });
+  }
+
+  function ouvrirFoyer(serment) {
+    sermentOuvert = serment.id;
+    var retour = document.getElementById('draukhain-foyer-retour');
+    if (retour) { retour.hidden = false; }
+    Array.prototype.forEach.call(
+      document.querySelectorAll('#draukhain-foyer-serments .foyer-serment'),
+      function (b) { b.setAttribute('aria-pressed', String(b.dataset.id === serment.id)); });
+    dessinerFoyer(serment);
+    coteRepos(flammesDe(serment.id).length === 0
+      ? 'Ce serment n’a pas encore de flamme — un souffle suffit à le raviver.'
+      : 'Survole une flamme — elle te dit ce qu’elle est. Clique-la pour tout voir.');
+  }
+
+  function fermerFoyer() {
+    sermentOuvert = null;
+    var cadre = document.getElementById('draukhain-foyer-dessin');
+    var titre = document.getElementById('draukhain-foyer-nom');
+    var retour = document.getElementById('draukhain-foyer-retour');
+    if (cadre) { cadre.textContent = ''; }
+    if (titre) { titre.textContent = ''; }
+    if (retour) { retour.hidden = true; }
+    Array.prototype.forEach.call(
+      document.querySelectorAll('#draukhain-foyer-serments .foyer-serment'),
+      function (b) { b.setAttribute('aria-pressed', 'false'); });
+    coteRepos('Clique un serment — son foyer s’allume.');
+  }
+
+  function rendreFoyer() {
+    var section = document.getElementById('draukhain-foyer');
+    var rangee = document.getElementById('draukhain-foyer-serments');
+    if (!section || !rangee) { return; }
+    rangee.textContent = '';
+    var serments = Array.isArray(etat.serments) ? etat.serments : [];
+    section.hidden = false;
+
+    if (serments.length === 0) {
+      rangee.appendChild(el('p', 'foyer-vide',
+        'Aucun serment scellé pour l’instant — scelle le premier ci-dessous, '
+        + 'il deviendra un foyer.'));
+      coteRepos('Clique un serment — son foyer s’allume.');
+      return;
+    }
+
+    serments.forEach(function (serment) {
+      var flammes = flammesDe(serment.id);
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'foyer-serment';
+      b.dataset.id = serment.id;
+      b.setAttribute('aria-pressed', 'false');
+      b.appendChild(el('span', 'foyer-serment-nom', nomCourt(serment.intitule)));
+      b.appendChild(el('span', 'foyer-serment-pastille', flammes.length === 0
+        ? 'à raviver'
+        : flammes.length + (flammes.length > 1 ? ' flammes' : ' flamme')));
+      b.addEventListener('click', function () { ouvrirFoyer(serment); });
+      rangee.appendChild(b);
+    });
+
+    // Rafraîchissement après écriture : si un foyer était ouvert, on le rouvre.
+    if (sermentOuvert) {
+      var encore = serments.filter(function (s) { return s.id === sermentOuvert; });
+      if (encore.length === 1) { ouvrirFoyer(encore[0]); return; }
+      sermentOuvert = null;
+    }
+    fermerFoyer();
+  }
+
   function rendreSerment(serment) {
     var carte = el('article', 'zekrom-ideal');
     carte.id = 'draukhain-serment-' + serment.id;
@@ -523,6 +848,7 @@
     if (bTous) { bTous.setAttribute('aria-pressed', String(etat.vue === 'tous')); }
     if (bVivants) { bVivants.setAttribute('aria-pressed', String(etat.vue === 'vivants')); }
     rendreSerments();
+    rendreFoyer();
   }
 
   // ---------- Écritures (Bearer, erreurs génériques) ----------
@@ -661,6 +987,7 @@
     await chargerCibles();
 
     rendreSerments();
+    rendreFoyer();
     montrer('draukhain-registre');
     accueillirLeo();
     return true;
@@ -768,6 +1095,8 @@
   }
 
   function brancherFormulaires() {
+    var retourFoyer = document.getElementById('draukhain-foyer-retour');
+    if (retourFoyer) { retourFoyer.addEventListener('click', fermerFoyer); }
     var formSerment = document.getElementById('draukhain-form-serment');
     if (formSerment) {
       formSerment.addEventListener('submit', function (e) {
@@ -806,8 +1135,14 @@
     await chargerRegistre();
   }
 
-  // Fonction pure exposée pour les unitaires/harnais (aucune donnée réelle).
-  window.UltimaDraukhain = { sermentsVisibles: sermentsVisibles };
+  // Fonctions pures exposées pour les unitaires/harnais (aucune donnée réelle).
+  window.UltimaDraukhain = {
+    sermentsVisibles: sermentsVisibles,
+    nomCourt: nomCourt,
+    etiquetteFlamme: etiquetteFlamme,
+    couronne: couronne,
+    eclat: eclat
+  };
 
   demarrer().catch(function () { montrer('draukhain-erreur'); });
 })();
