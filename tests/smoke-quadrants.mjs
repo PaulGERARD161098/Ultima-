@@ -103,24 +103,46 @@ async function nouvellePage(options = {}) {
   return { page, erreurs, externes };
 }
 
-// ============ A. Supra-division ULTIMA : les 5 portes ============
-console.log('— A. ULTIMA : les 5 portes —');
+// ============ A. ULTIMA → macro-quadrants : les 5 portes en deux cadrans ============
+// Depuis la dictée du 2026-08-01, ULTIMA n'ouvre que GRIMA et NAGA ; les cinq
+// portes historiques restent toutes atteignables, réparties sur les deux
+// boussoles des macro-quadrants.
+console.log('— A. ULTIMA : 2 cadrans, puis les 5 portes via GRIMA / NAGA —');
 {
   const { page, erreurs, externes } = await nouvellePage({ configVide: true });
-  // Lv3 : « / » est la boussole racine ; les quadrants sont les caps d'ULTIMA.
   await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
   const hrefs = await page.locator('a.cap').evaluateAll((els) =>
     els.map((e) => e.getAttribute('href')));
-  verifier('5 caps ouvrables sur ULTIMA', hrefs.length === 5, JSON.stringify(hrefs));
-  for (const attendu of ['traveler.html', 'bcp.html', 'adramelech.html', 'imladrik.html', 'tao.html']) {
+  verifier('2 cadrans ouvrables sur ULTIMA', hrefs.length === 2, JSON.stringify(hrefs));
+  for (const attendu of ['grima.html', 'naga.html']) {
     verifier(`Porte ${attendu}`, hrefs.includes(attendu));
   }
   verifier('Aucun cap inerte restant',
     (await page.locator('.cap[aria-disabled], .cap--avenir').count()) === 0);
-  verifier('Zéro requête externe (ULTIMA)', externes.length === 0, externes.slice(0, 3).join(', '));
-  verifier('Zéro erreur console (ULTIMA)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
-  await page.screenshot({ path: `${CAPTURES}/ultima-5-portes.png`, fullPage: true });
+
+  const portes = {};
+  for (const cadran of ['grima.html', 'naga.html']) {
+    await page.goto(`${BASE}/${cadran}`, { waitUntil: 'load', timeout: 20000 });
+    await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
+    portes[cadran] = await page.locator('a.cap').evaluateAll((els) =>
+      els.map((e) => e.getAttribute('href')));
+    verifier(`Retour « ↞ ULTIMA » depuis ${cadran}`,
+      (await page.locator('.console-retour a[href="ultima.html"]').count()) === 1);
+    await page.screenshot({ path: `${CAPTURES}/${cadran.replace('.html', '')}-portes.png`, fullPage: true });
+  }
+  const toutes = [...portes['grima.html'], ...portes['naga.html']];
+  for (const attendu of ['traveler.html', 'bcp.html', 'adramelech.html', 'imladrik.html', 'tao.html']) {
+    verifier(`Porte ${attendu} (via son macro-quadrant)`, toutes.includes(attendu), JSON.stringify(toutes));
+  }
+  verifier('GRIMA porte l\'utile (RIVEN + NICOL BOLAS)',
+    JSON.stringify(portes['grima.html']) === JSON.stringify(['traveler.html', 'bcp.html']),
+    JSON.stringify(portes['grima.html']));
+  verifier('NAGA porte la croissance (IMLADRIK + ADRAMELECH + TAO)',
+    JSON.stringify(portes['naga.html']) === JSON.stringify(['imladrik.html', 'adramelech.html', 'tao.html']),
+    JSON.stringify(portes['naga.html']));
+  verifier('Zéro requête externe (ULTIMA + cadrans)', externes.length === 0, externes.slice(0, 3).join(', '));
+  verifier('Zéro erreur console (ULTIMA + cadrans)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
   await page.close();
 }
 
@@ -307,8 +329,8 @@ console.log('— D. registre.html fixture 200 → registre + cartouche Léo réf
 // caps dans l'ordre, portes ouvertes, cœur + légende, retour vers ULTIMA,
 // parole au survol, zéro requête réseau, zéro erreur console.
 for (const noeud of [
-  { id: 'nicol-bolas', fichier: 'bcp.html', ouvertes: ['abaque.html'], avenir: 3 },
-  { id: 'adramelech', fichier: 'adramelech.html', ouvertes: ['registre.html', 'idees.html'], avenir: 1 },
+  { id: 'nicol-bolas', fichier: 'bcp.html', ouvertes: ['abaque.html'], avenir: 3, retour: 'grima.html' },
+  { id: 'adramelech', fichier: 'adramelech.html', ouvertes: ['registre.html', 'idees.html'], avenir: 1, retour: 'naga.html' },
 ]) {
   console.log(`— ${NOEUDS[noeud.id].nom} en boussole (${noeud.fichier}) —`);
   const { page, erreurs, externes } = await nouvellePage({ configVide: true });
@@ -342,8 +364,9 @@ for (const noeud of [
   verifier('Autant d\'aiguilles que de caps',
     (await page.locator('.boussole-aiguilles .aiguille').count()) === attendus.length);
 
-  // Retour vers ULTIMA (pièce ① du patron).
-  verifier('Retour « ↞ ULTIMA »', (await page.locator('.console-retour a[href="ultima.html"]').count()) === 1);
+  // Retour vers le macro-quadrant parent (pièce ① du patron, arbre 2026-08-01).
+  verifier(`Retour vers ${noeud.retour}`,
+    (await page.locator(`.console-retour a[href="${noeud.retour}"]`).count()) === 1);
 
   // Léo parle au survol du premier cap.
   await page.locator('.cap').first().hover();

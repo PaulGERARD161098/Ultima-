@@ -27,11 +27,13 @@
 //   (true = ce nœud lit les agrégats /api/cockpit après connexion),
 //   expose (nom d'un global d'introspection pour les harnais).
 //
-// ÉTAT DU CÂBLAGE (L4, 2026-07-30) : TOUS les nœuds de l'arbre sont rendus par
-// le noyau — `racine`, les deux supra-divisions, et les quadrants `nicol-bolas`,
-// `adramelech`, `imladrik`, `tao`. Lv3 est complet : ajouter un projet, un
-// quadrant ou un cap n'est plus qu'une entrée ici (+ une coque de 40 lignes si
-// c'est un nouveau nœud).
+// ÉTAT DU CÂBLAGE (L4, 2026-07-30 ; macro-quadrants 2026-08-01) : TOUS les
+// nœuds de l'arbre sont rendus par le noyau — `racine`, les deux
+// supra-divisions, les macro-quadrants `grima` / `naga` (dictés par Paul :
+// deux cadrans cliquables entre ULTIMA et ses quadrants), et les quadrants
+// `nicol-bolas`, `adramelech`, `imladrik`, `tao`. Lv3 est complet : ajouter
+// un projet, un quadrant ou un cap n'est plus qu'une entrée ici (+ une coque
+// de 40 lignes si c'est un nouveau nœud).
 
 export const NOEUDS = {
   // ======================= NIVEAU 0 — la racine =======================
@@ -55,12 +57,46 @@ export const NOEUDS = {
     resume: 'La supra-division personnelle. Ton réseau, ton argent, tes idées, '
       + 'ton développement et ta voie — cinq caps sous une seule rose.',
     titre: 'ULTIMA',
-    surligne: 'Supra-division — le personnel',
+    surligne: 'Supra-division Ultima',
     invite: 'Léo te guide — survole un cap.',
     coeur: 'rose',
     legende: 'le personnel',
     cockpit: true,
-    enfants: ['riven', 'nicol-bolas', 'adramelech', 'imladrik', 'tao'],
+    enfants: ['grima', 'naga'],
+  },
+
+  // ======== NIVEAU 1,5 — les macro-quadrants d'ULTIMA (Paul, 2026-08-01) ====
+  // Deux cadrans cliquables entre la supra-division et ses quadrants : GRIMA
+  // rassemble l'utile, NAGA ce qui grandit. Leur devise tient lieu de badge.
+  grima: {
+    nom: 'GRIMA',
+    etat: 'Ce qui est utile',
+    blason: 'ancre',
+    cible: 'grima.html',
+    resume: 'Ce qui est utile : le réseau commercial (RIVEN) et le pilotage '
+      + 'financier (NICOL BOLAS). L’outillage qui te fait vivre.',
+    titre: 'GRIMA',
+    surligne: 'Ce qui est utile',
+    invite: 'Léo te guide — survole un cap.',
+    coeur: 'ancre',
+    legende: 'ce qui est utile',
+    cockpit: true,
+    enfants: ['riven', 'nicol-bolas'],
+  },
+  naga: {
+    nom: 'NAGA',
+    etat: 'Ce qui fait grandir',
+    blason: 'pousse',
+    cible: 'naga.html',
+    resume: 'Ce qui fait grandir : le développement personnel (IMLADRIK), la '
+      + 'bibliothèque d’idées (ADRAMELECH) et la voie (TAO).',
+    titre: 'NAGA',
+    surligne: 'Ce qui fait grandir',
+    invite: 'Léo te guide — survole un cap.',
+    coeur: 'pousse',
+    legende: 'ce qui fait grandir',
+    cockpit: true,
+    enfants: ['imladrik', 'adramelech', 'tao'],
   },
 
   alpha: {
@@ -71,7 +107,7 @@ export const NOEUDS = {
     resume: 'La supra-division professionnelle. Les projets qui te font vivre : '
       + 'Renoboost IA aujourd’hui, YCOME dès que tu me donnes son adresse.',
     titre: 'ALPHA',
-    surligne: 'Supra-division — le professionnel',
+    surligne: 'Supra-division Alpha',
     invite: 'Léo te guide — survole un cap.',
     coeur: 'alpha',
     legende: 'le professionnel',

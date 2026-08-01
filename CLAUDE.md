@@ -219,6 +219,11 @@ l'accessibilité ni la sécurité.
 
 ## ⚙️ Règles permanentes
 
+- **Preview Vercel en fin de travail** (Paul, 2026-08-01) : tout rapport de fin
+  de boucle qui a poussé du front se termine par le **lien de la preview
+  Vercel** de la branche (donné par le commentaire `vercel[bot]` sur la PR),
+  avec la page à ouvrir pour juger le rendu.
+
 - Jamais de secret committé (env Vercel uniquement) ; jamais de PII en logs
   (le réseau commercial EST de la PII — IDs uniquement).
 - Commits atomiques : `fix(sec): … [S#]`, `feat(ux): … [U#]`, 1 commit = 1 constat.

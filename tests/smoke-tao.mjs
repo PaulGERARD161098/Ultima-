@@ -57,8 +57,9 @@ const surligne = (await page.locator('h1.console-titre .titre-surligne').textCon
 const principal = (await page.locator('h1.console-titre .titre-principal').textContent())?.trim();
 verifier('Surligne = celle du registre', surligne === NOEUDS.tao.surligne, `lu: ${surligne}`);
 verifier('Titre = celui du registre', principal === NOEUDS.tao.titre, `lu: ${principal}`);
-verifier('Invite « Léo te guide »',
-  /Léo te guide/.test((await page.locator('.console-invite').textContent()) || ''));
+// Plus de message de Léo affiché au repos (Paul, 2026-08-01) — test d'ABSENCE.
+verifier('Invite « Léo te guide » retirée du bandeau',
+  (await page.locator('.console-invite').count()) === 0);
 
 // Les deux pôles, dans l'ordre du registre.
 const attendus = capsDe('tao').map((c) => c.nom);
@@ -105,9 +106,9 @@ verifier('Le libellé suit le tracé (textPath)',
   (await page.locator('.passerelle-libelle textPath').count()) === 1);
 
 // Retour vers ULTIMA (pièce ① du patron).
-const retour = page.locator('.console-retour a[href="ultima.html"]');
-verifier('Retour « ↞ ULTIMA » vers ultima.html', (await retour.count()) === 1);
-verifier('Retour libellé « ULTIMA »', /ULTIMA/.test((await retour.textContent()) || ''));
+const retour = page.locator('.console-retour a[href="naga.html"]');
+verifier('Retour « ↞ NAGA » vers naga.html (TAO vit sous le macro-quadrant)', (await retour.count()) === 1);
+verifier('Retour libellé « NAGA »', /NAGA/.test((await retour.textContent()) || ''));
 
 // La parole de Léo dit le rétroplanning — l'arc est décor, la parole est annoncée.
 await page.locator('.cap[data-id="reshiram"]').hover();

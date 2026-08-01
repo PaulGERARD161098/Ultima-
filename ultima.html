@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ultima — ULTIMA (le personnel)</title>
-  <meta name="description" content="ULTIMA, la supra-division personnelle : cinq caps autour de la rose — RIVEN, NICOL BOLAS, ADRAMELECH, IMLADRIK et TAO.">
+  <meta name="description" content="ULTIMA, la supra-division personnelle : deux macro-quadrants autour de la rose — GRIMA (ce qui est utile) et NAGA (ce qui fait grandir).">
   <meta name="theme-color" content="#0e3a52">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%231e6fb8'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23ffffff'/%3E%3C/svg%3E">
@@ -12,10 +12,11 @@
   <link rel="stylesheet" href="css/console.css">
   <link rel="stylesheet" href="css/boussole.css">
 </head>
-<!-- ULTIMA — supra-division personnelle (Lv3, boucle L2). La grille 2×2 de la
-     console a laissé place à la FORME UNIQUE : la boussole. Cette page n'est
-     qu'une coque — les caps, les aiguilles, le cœur et la parole de Léo sont
-     rendus par js/boussole-noyau.mjs à partir du registre (`data-noeud`). -->
+<!-- ULTIMA — supra-division personnelle (Lv3, boucle L2 ; macro-quadrants
+     2026-08-01). Deux cadrans cliquables : GRIMA (ce qui est utile) et NAGA
+     (ce qui fait grandir). Cette page n'est qu'une coque — les caps, les
+     aiguilles, le cœur et la parole de Léo sont rendus par
+     js/boussole-noyau.mjs à partir du registre (`data-noeud`). -->
 <body class="boussole" data-noeud="ultima-perso">
 
   <div class="boussole-scene">
@@ -59,30 +60,25 @@
       </svg>
 
       <h1 class="console-titre console-titre--boussole">
-        <span class="titre-surligne">Supra-division — le personnel</span>
+        <span class="titre-surligne">Supra-division Ultima</span>
         <span class="titre-principal">ULTIMA</span>
       </h1>
-      <p class="console-invite">Léo te guide&nbsp;— survole un cap.</p>
     </header>
 
-    <!-- ===== La boussole des cinq caps, rendue par le noyau ===== -->
+    <!-- ===== La boussole des deux macro-quadrants, rendue par le noyau ===== -->
     <main class="boussole-plateau" id="boussole-plateau"
           aria-label="Boussole de la supra-division personnelle ULTIMA">
-      <!-- Repli sans JavaScript : toutes les portes restent atteignables. -->
+      <!-- Repli sans JavaScript : les deux cadrans restent atteignables. -->
       <noscript>
         <ul class="boussole-noscript">
-          <li><a href="traveler.html">RIVEN — le réseau commercial</a></li>
-          <li><a href="bcp.html">NICOL BOLAS — le pilotage financier</a></li>
-          <li><a href="adramelech.html">ADRAMELECH — la bibliothèque d'idées</a></li>
-          <li><a href="imladrik.html">IMLADRIK — le développement personnel</a></li>
-          <li><a href="tao.html">TAO — la voie : le réel et l'idéal</a></li>
+          <li><a href="grima.html">GRIMA — ce qui est utile (RIVEN, NICOL BOLAS)</a></li>
+          <li><a href="naga.html">NAGA — ce qui fait grandir (IMLADRIK, ADRAMELECH, TAO)</a></li>
         </ul>
       </noscript>
     </main>
 
     <!-- Parole de Léo : l'essentiel du cap survolé (rempli par le noyau). -->
     <aside class="boussole-parole" id="boussole-parole" role="status" aria-live="polite">
-      <p class="parole-defaut">Survole un cap&nbsp;— Léo t'en dit l'essentiel.</p>
     </aside>
 
   </div>

@@ -34,13 +34,39 @@ verdicts.feuillesSansEnfants = ['minethnir', 'vranesh', 'draukhain', 'reshiram',
 
 // ---------- 3. La structure dictée par Paul (2026-07-30) ----------
 verdicts.deuxSupraDivisions = JSON.stringify(NOEUDS[RACINE].enfants) === JSON.stringify(['ultima-perso', 'alpha']);
-verdicts.taoSousUltima = parentDe('tao') === 'ultima-perso';
+verdicts.taoSousNaga = parentDe('tao') === 'naga'
+  && chemin('tao')[1] === 'ultima-perso'; // TAO reste sous ULTIMA, via NAGA
 verdicts.ycomeSousAlpha = parentDe('ycome') === 'alpha';
 verdicts.renoboostSousAlpha = parentDe('renoboost-ia') === 'alpha';
-verdicts.quatreQuadrantsPlusTao = JSON.stringify(NOEUDS['ultima-perso'].enfants)
-  === JSON.stringify(['riven', 'nicol-bolas', 'adramelech', 'imladrik', 'tao']);
 verdicts.cheminTaoComplet = JSON.stringify(chemin('reshiram'))
-  === JSON.stringify(['racine', 'ultima-perso', 'tao', 'reshiram']);
+  === JSON.stringify(['racine', 'ultima-perso', 'naga', 'tao', 'reshiram']);
+
+// ---------- 3 bis. Les macro-quadrants dictés par Paul (2026-08-01) ----------
+// ULTIMA ne montre plus que DEUX cadrans cliquables : GRIMA « Ce qui est
+// utile » (RIVEN, NICOL BOLAS) et NAGA « Ce qui fait grandir » (IMLADRIK,
+// ADRAMELECH, TAO) — chacun est une vraie boussole avec sa coque.
+verdicts.ultimaDeuxCadrans = JSON.stringify(NOEUDS['ultima-perso'].enfants)
+  === JSON.stringify(['grima', 'naga']);
+verdicts.grimaRegroupeUtile = JSON.stringify(NOEUDS.grima.enfants)
+  === JSON.stringify(['riven', 'nicol-bolas'])
+  && NOEUDS.grima.cible === 'grima.html' && estBoussole('grima');
+verdicts.nagaRegroupeCroissance = JSON.stringify(NOEUDS.naga.enfants)
+  === JSON.stringify(['imladrik', 'adramelech', 'tao'])
+  && NOEUDS.naga.cible === 'naga.html' && estBoussole('naga');
+verdicts.devisesDesCadrans = NOEUDS.grima.etat === 'Ce qui est utile'
+  && NOEUDS.grima.surligne === 'Ce qui est utile'
+  && NOEUDS.naga.etat === 'Ce qui fait grandir'
+  && NOEUDS.naga.surligne === 'Ce qui fait grandir';
+verdicts.cheminsParMacroQuadrant = parentDe('riven') === 'grima'
+  && parentDe('nicol-bolas') === 'grima'
+  && parentDe('imladrik') === 'naga'
+  && parentDe('adramelech') === 'naga'
+  && parentDe('tao') === 'naga';
+
+// Le surligné des supra-divisions porte leur nom, plus « le personnel /
+// le professionnel » (dicté par Paul le 2026-08-01).
+verdicts.surlignesSupraDivisions = NOEUDS['ultima-perso'].surligne === 'Supra-division Ultima'
+  && NOEUDS.alpha.surligne === 'Supra-division Alpha';
 
 // L'acquis IMLADRIK est intact (le noyau doit le rendre à l'identique).
 const capsImladrik = capsDe('imladrik');
@@ -86,6 +112,11 @@ verdicts.cockpitTaoAgrege = /5 talents réels · 2 à étayer — 3 idéaux · 1
 verdicts.cockpitSupraCumule = signalDe('ultima-perso', AGREGATS)
   === '3 relances dues · 2 talents à étayer · 1 idéal à orienter';
 verdicts.cockpitRivenSeul = signalDe('riven', AGREGATS) === '3 relances dues';
+// Chaque macro-quadrant ne cumule que les siens : GRIMA les relances de RIVEN,
+// NAGA les comptes de TAO (RESHIRAM + ZEKROM).
+verdicts.cockpitGrimaCumuleUtile = signalDe('grima', AGREGATS) === '3 relances dues';
+verdicts.cockpitNagaCumuleCroissance = signalDe('naga', AGREGATS)
+  === '2 talents à étayer · 1 idéal à orienter';
 verdicts.cockpitSeTaitSiRienAFaire = signalDe('ultima-perso', {
   riven: { relances_dues: 0 }, reshiram: { a_etayer: 0 }, zekrom: { a_orienter: 0 },
 }) === null;

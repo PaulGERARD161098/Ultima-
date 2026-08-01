@@ -1260,3 +1260,54 @@
     capture montrait un texte dicté arrivé dans le champ, et `/ecrire.html`
     dépose en base sans aucune IA. La clé ne sert qu'à ce que Léo **réponde**.
     Léo l'a dit avant qu'il n'engage l'argent, plutôt qu'après.
+- **2026-08-01 (dictée affichage Lv3 — supra-divisions nommées + macro-quadrants
+  RIMA / NAGA)** — Deux correctifs d'affichage dictés par Paul, session dédiée
+  (parallèle à la session MINETHNIR ; aucun fichier de boucle partagé).
+  1. **Les bandeaux des supra-divisions portent leur nom** : « Supra-division
+     Ultima » et « Supra-division Alpha » remplacent « Supra-division — le
+     personnel / le professionnel » (registre + coques + preview). La légende
+     gravée sous le médaillon (« le personnel » / « le professionnel ») n'était
+     pas visée par la dictée : conservée, à confirmer par Paul.
+  2. **ULTIMA se navigue en deux MACRO-QUADRANTS cliquables** — tranché par
+     Paul en deux temps. Première lecture (« petits correctifs d'affichage ») :
+     un regroupement purement visuel sur la boussole à cinq caps. Paul, preview
+     Vercel en main : « je pensais plutôt des cadrans cliquables, des sortes de
+     sous-boussoles — sinon ce n'est pas très clair ». Décision finale :
+     **GRIMA — « Ce qui est utile »** (RIVEN, NICOL BOLAS, blason l'ancre) et
+     **NAGA — « Ce qui fait grandir »** (IMLADRIK, ADRAMELECH, TAO, blason la
+     pousse) sont de **vraies boussoles** (`grima.html`, `naga.html`) ;
+     ultima.html ne montre plus que ces deux cadrans, leur devise en badge.
+     **Orthographe confirmée par Paul : GRIMA** (pas « Rima » — c'était la
+     dictée). Les retours remontent l'arbre : quadrant → macro-quadrant →
+     ULTIMA ; le cockpit suit (GRIMA cumule les relances de RIVEN, NAGA les
+     comptes de TAO).
+  - **Mécanique** : deux entrées de registre + deux coques de 40 lignes —
+    exactement le contrat Lv3 (« ajouter un nœud = une entrée + une coque »).
+    Le regroupement visuel (`groupes`, `positionsGroupees`, gravures CSS) a
+    été **entièrement retiré** : la maquette a servi, on ne garde pas de
+    mécanique morte.
+  - **Leçon de méthode (EL)** : la preview Vercel a joué le rôle de maquette —
+    une interprétation ambiguë (« regrouper » = visuel ou navigation ?) s'est
+    tranchée en un aller-retour sur du rendu réel, sans fusion prématurée.
+  3. **Les messages de Léo disparaissent des boussoles** (même session) :
+     « ça prend de la place et ce n'est pas utile — on garde toutes les
+     fonctions, on enlève les messages affichés ». Retirés : l'invite « Léo te
+     guide — survole un cap » (8 coques de boussole) et le message au repos
+     « Survole un cap — Léo t'en dit l'essentiel » (9 coques, racine incluse).
+     **Les fonctions restent** : au survol/focus d'un cap, la parole de Léo
+     (résumé, état, signaux du cockpit) se matérialise en **cartouche de coin**
+     (bas-droite, surimpression `pointer-events: none` — zéro place réservée,
+     zéro occlusion des caps ; pleine largeur en bas sur petit écran).
+     Non touchés (hors dictée) : le bandeau d'accueil « Sur quoi est-ce qu'on
+     travaille aujourd'hui ? » (c'est la console, pas un message de Léo), les
+     invites de mission des feuilles (MINETHNIR, VRANESH…), le cartouche
+     propre de VRANESH et l'accueil de Léo à la première visite (L1) — à
+     retirer aussi si Paul le veut, consigné.
+  - **Leçon d'harnais** : un focus clavier fait défiler la page et un cap qui
+    glisse sous une souris immobile déclenche un mouseenter parasite — la
+    souris se gare dans un coin neutre avant toute étape clavier.
+  - **Décision de clôture (Paul, au go de fusion) : « ne touche plus à Léo ».**
+    L'état de Léo au 2026-08-01 est le bon : cartouche de coin au survol,
+    accueil de première visite conservé, invites de mission des feuilles
+    conservées. Aucune session future ne retire ni ne déplace quoi que ce soit
+    d'autre concernant Léo sans nouvelle demande explicite de Paul.

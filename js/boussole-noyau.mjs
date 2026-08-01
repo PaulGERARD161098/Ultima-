@@ -92,8 +92,11 @@ export function signalDe(id, data) {
     return parts.length ? parts.join(' · ') : null;
   }
 
-  // La supra-division cumule ce que ses quadrants ont à traiter.
+  // La supra-division cumule ce que ses quadrants ont à traiter ; chaque
+  // macro-quadrant (GRIMA / NAGA) ne cumule que les siens.
   if (id === 'ultima-perso') return morceaux(Boolean(data.riven), Boolean(data.reshiram || data.zekrom));
+  if (id === 'grima') return morceaux(Boolean(data.riven), false);
+  if (id === 'naga') return morceaux(false, Boolean(data.reshiram || data.zekrom));
   if (id === 'riven') return morceaux(Boolean(data.riven), false);
   if (id === 'tao') return morceaux(false, Boolean(data.reshiram || data.zekrom));
   if (id === 'reshiram') return aEtayer > 0 ? aEtayer + ' talent' + s(aEtayer) + ' à étayer' : null;

@@ -55,8 +55,9 @@ const surligne = (await page.locator('h1.console-titre .titre-surligne').textCon
 const principal = (await page.locator('h1.console-titre .titre-principal').textContent())?.trim();
 verifier('Surligne = celle du registre', surligne === NOEUDS.alpha.surligne, `lu: ${surligne}`);
 verifier('Titre = celui du registre', principal === NOEUDS.alpha.titre, `lu: ${principal}`);
-verifier('Invite « Léo te guide »',
-  /Léo te guide/.test((await page.locator('.console-invite').textContent()) || ''));
+// Plus de message de Léo affiché au repos (Paul, 2026-08-01) — test d'ABSENCE.
+verifier('Invite « Léo te guide » retirée du bandeau',
+  (await page.locator('.console-invite').count()) === 0);
 
 // Les 2 caps, dans l'ordre du registre.
 const attendus = capsDe('alpha').map((c) => c.nom);
@@ -90,14 +91,18 @@ verifier('2 aiguilles tracées', (await page.locator('.boussole-aiguilles .aigui
 verifier('Retour vers la boussole racine',
   (await page.locator('.console-retour a[href="/"]').count()) === 1);
 
-// La parole de Léo : au repos l'invite, au survol le résumé du cap.
-verifier('Parole au repos : invite au survol',
-  /Léo t'en dit l'essentiel/.test((await page.locator('#boussole-parole').textContent()) || ''));
+// La parole de Léo : rien d'affiché au repos, le cartouche ne se matérialise
+// qu'au survol (fonctions conservées, messages retirés — Paul, 2026-08-01).
+verifier('Cartouche invisible et muet au repos',
+  await page.locator('#boussole-parole').evaluate((el) =>
+    getComputedStyle(el).visibility === 'hidden' && el.textContent.trim() === ''));
 await reno.hover();
 await page.waitForSelector('#boussole-parole.is-actif', { timeout: 5000 });
 const paroleReno = (await page.locator('#boussole-parole').textContent()) || '';
 verifier('Survol RENOBOOST IA : nom + résumé', /RENOBOOST IA/.test(paroleReno) && /socle rémunérateur/i.test(paroleReno),
   `lu: ${paroleReno.slice(0, 120)}`);
+verifier('Survol : le cartouche se matérialise (visible)',
+  await page.locator('#boussole-parole').evaluate((el) => getComputedStyle(el).visibility === 'visible'));
 verifier('Survol RENOBOOST IA : action « nouvel onglet »', /nouvel onglet/i.test(paroleReno), `lu: ${paroleReno}`);
 verifier('Aiguille illuminée au survol', (await page.locator('.aiguille.is-actif').count()) === 1);
 
