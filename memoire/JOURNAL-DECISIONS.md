@@ -1451,3 +1451,18 @@
     CROISEMENTS** : chaque paire d'étiquettes, et chaque étiquette contre les
     cartouches. Critère ajouté à la maquette, éprouvé aux volumes 1/5/12 sur
     desktop et mobile.
+  - 🔻 **Trouvaille de dernière minute, et elle vaut pour tout le patrimoine
+    `design/`** : le CSP d'Ultima pose `script-src 'self'` **sans**
+    `'unsafe-inline'`, et le middleware l'applique à **tous** les chemins servis,
+    `/design/*` compris. Une maquette à `<script>` inline s'ouvre donc **muette**
+    sur la preview Vercel — le décor s'affiche, le dessin non. La maquette du
+    jour a été corrigée (script sorti dans `preview-draukhain-carto.js`) et la
+    conformité **prouvée par l'absence** : page rejouée avec l'en-tête CSP réel
+    injecté → zéro violation, 12 feux dessinés. **Cinq maquettes antérieures
+    sont dans le même cas** (`preview-draukhain-formes`, `preview-imladrik-boussole`,
+    `preview-lv3-boussoles`, `preview-vranesh-arbre`, `preview-vranesh-lecture`).
+    ⏳ **Registre — à la main de Paul** : une passe d'extraction les remettrait
+    toutes en état (hors boucle en cours, discipline EB).
+    🔻 **Leçon** : un livrable qu'on demande à Paul d'ouvrir se vérifie **dans
+    les conditions où il l'ouvrira**, pas seulement en local — le local n'a pas
+    de CSP.
