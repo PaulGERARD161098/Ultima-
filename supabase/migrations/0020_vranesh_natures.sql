@@ -47,6 +47,13 @@ alter table public.scenarios
 
 -- La cause n'existe QUE sur un plan écarté : ailleurs elle ne voudrait rien
 -- dire, et une donnée qui ne veut rien dire finit par être lue de travers.
+--
+-- ⚠️ CETTE FORME EST DÉFECTUEUSE — corrigée par 0021, à lire avant de rejouer
+-- ce fichier. `etat = 'ecarte'` vaut NULL quand `etat` est NULL, et un CHECK ne
+-- rejette que sur FALSE : la contrainte ne refusait donc RIEN sur les plans non
+-- qualifiés. Elle est conservée telle quelle ici parce que 0020 a été appliquée
+-- en l'état (une migration appliquée ne se réécrit pas — elle se corrige par la
+-- suivante). Toute reconstruction depuis zéro doit enchaîner 0020 puis 0021.
 alter table public.scenarios
   add constraint scenarios_cause_scope
   check (cause is null or etat = 'ecarte');
