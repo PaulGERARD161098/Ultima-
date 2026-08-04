@@ -6,6 +6,54 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🔥 **SESSION 2026-08-04 (DRAUKHAIN — la voûte des serments), CLOSE.**
+  PR **#141 fusionnée** dans `main` au go de Paul, patrimoine COMPLET vert à
+  **1217 assertions**, rien de non poussé. Deux dictées, deux boucles bouclées.
+  - ✅ **État des lieux CHIFFRÉ du cap, avant toute ligne de code** : 1 serment,
+    0 flamme, 0 lien sortant, 1 lien entrant — et c'est ce chiffre qui donne le
+    diagnostic. Le foyer, sa couronne, son halo croissant : **toute la grammaire
+    était du code qui ne s'exprimait jamais**. 🔻 *Une forme se juge sur le
+    volume RÉEL qu'elle porte, pas sur celui qu'elle anticipe.*
+  - ✅ **La voûte livrée (forme A, choisie par Paul sur maquette comparative)** :
+    les serments COEXISTENT enfin, les fils vers ZEKROM / VRANESH / MINETHNIR se
+    voient. Chaque vue a désormais UN travail — la voûte l'ensemble, le foyer un
+    serment, le registre l'écriture ; la rangée de boutons disparaît (c'était la
+    troisième liste des mêmes noms). « Sceller un serment » passe **derrière** la
+    carte : miroir de « l'image d'abord » acté sur VRANESH.
+  - ✅ **Migration `0020` APPLIQUÉE** (go explicite) : `flammes.survenu_le` — une
+    flamme dit **quand** c'est arrivé, distinct de la date d'écriture. Validation
+    en miroir exact du CHECK, preuve par l'ABSENCE aux deux bouts.
+  - ✅ **La première flamme d'Ultima est écrite** : Paul a dicté sa victoire du
+    2026-08-03, consignée sur « ne plus jamais perdre mon calme ». **Le cap
+    compte 3 serments dont 1 vivant** — le premier depuis l'ouverture de
+    DRAUKHAIN. *Comptes seuls dans les docs : le texte vit en base, derrière RLS.*
+  - 🔻 **DEUX défauts trouvés par la MESURE, aucun par l'œil** : ① une étiquette
+    débordait de 7 px sur des noms en capitales — le budget de signes *estimait*
+    une largeur moyenne, il **mesure** désormais le texte tracé ; ② le correctif
+    a alors **vidé toutes les étiquettes**, car la carte se dessinait dans un
+    conteneur `hidden` où **`getBBox()` vaut zéro**. La page se montre avant
+    d'être dessinée. *Une mesure prise dans un conteneur masqué n'est pas une
+    mesure : c'est un zéro qui a l'air d'une mesure.*
+  - 🔻 **Le harnais avait le trou correspondant** : « tout tient dans le cadre »
+    et « aucun croisement » passaient **aussi** sur une carte aux étiquettes
+    vides. Critère ajouté : **la carte NOMME ses serments**. *Vérifier qu'on n'a
+    pas satisfait un critère en supprimant ce qu'il mesurait.*
+  - 🔻 **Collision de deux sessions sur le même constat** : la PR **#140**, menée
+    en parallèle, fermait la passerelle borgne côté serveur pendant que je la
+    fermais côté front. **Sa mécanique a été adoptée, la mienne supprimée** — un
+    appel réseau de moins. *Quand deux sessions résolvent le même constat, celle
+    qui est déjà fusionnée gagne : on rebase dessus, on ne défend pas son code.
+    Et avant d'ouvrir une boucle sur un cap, on regarde les PR ouvertes du cap.*
+  - 🔻 **Le gate d'entrée EL a servi pour de bon** : la dictée d'ouverture ne
+    nommait pas son outil (quatre candidats plausibles). Question posée au lieu
+    de deviner → DRAUKHAIN. Sans le gate, toute la boucle partait sur le mauvais
+    cap. *Une dictée qui ne nomme pas sa cible est un cadrage incomplet, pas une
+    instruction à interpréter.*
+  - ⏳ **Registre — à la main de Paul** : **cinq maquettes antérieures** de
+    `design/` portent un `<script>` inline et s'ouvrent donc **muettes** sur la
+    preview Vercel (CSP `script-src 'self'`). Une passe d'extraction les
+    remettrait toutes en état — non traitée ici, discipline EB.
+
 - 🌿 **SESSION 2026-08-04 (VRANESH — le futur advenu se choisit), EN COURS.**
   PR **#137 fusionnée** dans `main` au go de Paul, patrimoine COMPLET vert,
   rien de non poussé.
