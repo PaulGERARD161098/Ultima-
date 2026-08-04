@@ -54,6 +54,8 @@ echo "=== unit-draukhain-validate.mjs ==="
 node unit-draukhain-validate.mjs
 echo "=== unit-vranesh-validate.mjs ==="
 node unit-vranesh-validate.mjs
+echo "=== unit-draukhain-futurs.mjs ==="
+node unit-draukhain-futurs.mjs
 echo "=== unit-imladrik-passerelles.mjs ==="
 node unit-imladrik-passerelles.mjs
 echo "=== unit-registre-lv3.mjs ==="

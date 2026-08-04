@@ -837,6 +837,93 @@ console.log('— D. draukhain.html : cartouche de Léo + mains sur IMLADRIK —'
   await page.close();
 }
 
+// ====== LE RETOUR DE LA PASSERELLE : les futurs VRANESH sur un serment ======
+// Jusqu'au 2026-08-04 le pont était à SENS UNIQUE : VRANESH savait quel
+// objectif un futur menace ou sert, DRAUKHAIN n'en savait rien. Prouve :
+// le retour s'affiche sur le BON serment, le rapport se lit, un futur ADVENU
+// est marqué et passe en tête — et surtout ce retour n'écrit RIEN (le lien se
+// pose et se détache depuis VRANESH, là où le futur se pense).
+console.log('— Le retour de la passerelle : les futurs qui touchent un serment —');
+{
+  const { page, erreurs, externes } = await nouvellePage();
+  await page.addInitScript(scriptFausseSession());
+  await page.route(`**://${REF_SUPABASE}.supabase.co/**`, (route) =>
+    route.fulfill({ status: 503, contentType: 'application/json', body: '{}' }));
+
+  const ecritures = [];
+  const FIXTURE_FUTURS = {
+    ok: true,
+    data: {
+      ...FIXTURE.data,
+      // Recousus côté serveur (api/serments.js) : le front ne reçoit que ce
+      // qu'il affiche. s1 porte deux futurs, s2 aucun.
+      futurs: [
+        { id: 'x1', serment_id: 's1', scenario_id: 'sc2', situation_id: 'si1',
+          rapport: 'menace', deroule: 'le vent tombe et la traversée s’allonge',
+          theme: 'TRAVERSÉE — un départ à préparer', advenu: false },
+        { id: 'x2', serment_id: 's1', scenario_id: 'sc1', situation_id: 'si1',
+          rapport: 'sert', deroule: 'le vent tourne au nord et porte la voile',
+          theme: 'TRAVERSÉE — un départ à préparer', advenu: true },
+      ],
+    },
+  };
+  await page.route('**/api/serments**', (route) => {
+    const req = route.request();
+    if (req.method() !== 'GET') { ecritures.push({ methode: req.method(), url: req.url() }); }
+    return route.fulfill({
+      status: 200, contentType: 'application/json; charset=utf-8',
+      body: JSON.stringify(FIXTURE_FUTURS),
+    });
+  });
+  await page.route('**/api/ideaux**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IDEAUX) }));
+  await page.route('**/api/imladrik**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_PAGES) }));
+
+  await page.goto(`${BASE}/draukhain.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForSelector('#draukhain-registre:not([hidden])', { timeout: 20000 });
+  const repli = page.locator('#draukhain-registre-detail');
+  if ((await repli.count()) === 1 && (await repli.evaluate((el) => el.open)) === false) {
+    await page.locator('#draukhain-registre-detail summary').click();
+  }
+
+  const s1 = page.locator('#draukhain-serment-s1');
+  const futurs = s1.locator('.draukhain-futurs');
+  verifier('Le serment montre les futurs qui le touchent', (await futurs.count()) === 1);
+  const txt = (await futurs.textContent()) || '';
+  verifier('Le titre dit d’où ça vient (VRANESH)', /depuis VRANESH/.test(txt), txt);
+  verifier('Un futur qui SERT est annoncé comme tel', /sert/.test(txt), txt);
+  verifier('Un futur qui MENACE est annoncé comme tel', /menace/.test(txt), txt);
+  verifier('Le déroulé du futur est lisible', /porte la voile/.test(txt), txt);
+  verifier('Le thème d’origine est nommé, sans son sous-titre',
+    /TRAVERSÉE/.test(txt) && !/un départ à préparer/.test(txt), txt);
+
+  // L'ADVENU passe devant : ce n'est plus une hypothèse qui pèse, c'est arrivé.
+  const items = await futurs.locator('.zekrom-retro-item').allTextContents();
+  verifier('Le futur ADVENU est marqué d’un sceau',
+    (await futurs.locator('.draukhain-futur-sceau').count()) === 1);
+  verifier('Le futur ADVENU passe en tête de liste',
+    /porte la voile/.test(items[0] || ''), JSON.stringify(items));
+
+  // ABSENCE : un serment sans futur relié n'ouvre pas une section vide.
+  verifier('ABSENCE — aucun bloc « futurs » sur un serment qui n’en a pas',
+    (await page.locator('#draukhain-serment-s2 .draukhain-futurs').count()) === 0);
+
+  // Le retour MONTRE, il n'écrit pas : aucune commande de lien de ce côté-ci.
+  verifier('ABSENCE — aucun formulaire d’écriture dans le retour',
+    (await futurs.locator('form, select, input').count()) === 0);
+  verifier('Le retour renvoie vers VRANESH pour agir',
+    (await futurs.locator('a[href="vranesh.html"]').count()) === 1);
+  await page.waitForTimeout(200);
+  verifier('Aucune écriture émise par l’affichage du retour',
+    ecritures.length === 0, JSON.stringify(ecritures));
+
+  verifier('Zéro requête externe (retour passerelle)', externes.length === 0, externes.slice(0, 3).join(', '));
+  verifier('Zéro erreur console (retour passerelle)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
+  await page.screenshot({ path: `${CAPTURES}/draukhain-futurs.png`, fullPage: true });
+  await page.close();
+}
+
 await navigateur.close();
 console.log(echecs === 0 ? '\n=== SMOKE DRAUKHAIN VERT ===' : `\n=== ${echecs} VERDICT(S) EN ÉCHEC ===`);
 process.exit(echecs === 0 ? 0 : 1);

@@ -22,6 +22,7 @@
     serments: [],
     flammes: [],
     liens: [],          // passerelles v2 : serment → idéal ZEKROM | page MINETHNIR
+    futurs: [],         // passerelles ENTRANTES : un futur VRANESH qui menace/sert ce serment
     ideauxListe: [],     // idéaux disponibles (picker « Idéal »)
     pagesListe: [],      // pages MINETHNIR disponibles (picker « Page »)
     ideaux: {},          // id idéal → intitulé (résolution du libellé)
@@ -74,6 +75,15 @@
   // Les passerelles d'un serment (rattachées par serment_id).
   function liensDe(sermentId) {
     return etat.liens.filter(function (l) { return l && l.serment_id === sermentId; });
+  }
+
+  // Les futurs VRANESH qui touchent ce serment (passerelles ENTRANTES).
+  // Un futur ADVENU passe devant : ce n'est plus une hypothèse, c'est arrivé.
+  function futursDe(sermentId) {
+    return etat.futurs
+      .filter(function (f) { return f && f.serment_id === sermentId; })
+      .slice()
+      .sort(function (a, b) { return (b.advenu === true) - (a.advenu === true); });
   }
 
   // Libellé d'un idéal MINETHNIR/ZEKROM depuis les tables de correspondance.
@@ -278,6 +288,51 @@
     } else {
       section.appendChild(construireFormLien(serment));
     }
+    carte.appendChild(section);
+  }
+
+  // ---------- LE RETOUR DE LA PASSERELLE (2026-08-04) ----------
+  // `scenario_liens` reliait déjà un futur VRANESH à un serment — mais seul
+  // VRANESH lisait ce lien. Depuis DRAUKHAIN, un serment ne savait RIEN des
+  // futurs qui le menacent ou qui le servent : le pont était à sens unique, et
+  // le sens manquant était celui qui compte le jour où un futur ADVIENT.
+  // Rien de nouveau n'est écrit ici : on montre, on ne crée pas. Le lien se
+  // pose et se détache depuis VRANESH, là où le futur se pense.
+  var LIBELLE_RAPPORT = { menace: 'menace', sert: 'sert' };
+
+  function rendreFuturs(serment, carte) {
+    var futurs = futursDe(serment.id);
+    if (futurs.length === 0) {
+      // Rien à dire : on n'ouvre pas une section vide pour la remplir de vide.
+      // (L'invitation à relier vit dans VRANESH, au bon endroit.)
+      return;
+    }
+
+    var section = el('section', 'zekrom-retro draukhain-futurs');
+    section.appendChild(el('h4', 'zekrom-retro-entete',
+      'Les futurs qui le touchent — depuis VRANESH'));
+
+    var liste = el('ul', 'zekrom-retro-liste');
+    futurs.forEach(function (f) {
+      var item = el('li', 'zekrom-retro-item' + (f.advenu ? ' draukhain-futur--advenu' : ''));
+      // Le rapport d'abord : ce futur SERT ou MENACE — c'est ce qu'on lit en premier.
+      if (f.rapport) {
+        item.appendChild(el('span', 'zekrom-registre', LIBELLE_RAPPORT[f.rapport] || f.rapport));
+      }
+      item.appendChild(el('span', 'zekrom-retro-talent', ' ' + String(f.deroule || '')));
+      if (f.theme) {
+        item.appendChild(el('span', 'zekrom-retro-note', ' — ' + nomCourt(f.theme)));
+      }
+      if (f.advenu === true) {
+        item.appendChild(el('span', 'draukhain-futur-sceau', 'advenu'));
+      }
+      liste.appendChild(item);
+    });
+    section.appendChild(liste);
+
+    var aller = el('a', 'zekrom-retro-aide', 'Voir ces futurs dans VRANESH ↝');
+    aller.href = 'vranesh.html';
+    section.appendChild(aller);
     carte.appendChild(section);
   }
 
@@ -841,6 +896,7 @@
     carte.appendChild(rendreVoie(serment));
 
     rendreFlammes(serment, carte);
+    rendreFuturs(serment, carte);
     rendrePasserelles(serment, carte);
     return carte;
   }
@@ -1008,6 +1064,7 @@
     etat.serments = (contenu.data && contenu.data.serments) || [];
     etat.flammes = (contenu.data && contenu.data.flammes) || [];
     etat.liens = (contenu.data && contenu.data.liens) || [];
+    etat.futurs = (contenu.data && contenu.data.futurs) || [];
 
     // Cibles des passerelles (idéaux ZEKROM + pages MINETHNIR) : enrichissement
     // pour résoudre les libellés et peupler les pickers. Chargées APRÈS le check

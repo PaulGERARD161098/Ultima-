@@ -167,3 +167,21 @@
   @keyframes foyer-prendre { from { opacity: 0; } to { opacity: 1; } }
   .foyer-flamme { transition: fill 0.12s ease; }
 }
+
+/* ---------- LE RETOUR DE LA PASSERELLE (2026-08-04) ----------
+   Un serment montre désormais les futurs VRANESH qui le MENACENT ou le
+   SERVENT. Le pont existait depuis la migration 0018, mais seul VRANESH le
+   lisait : de ce côté-ci, un serment ignorait tout des futurs qui le visent.
+   Aucune écriture ici — on montre, on ne crée pas. */
+.draukhain-futurs { border-left: 3px solid var(--or-antique); padding-left: 0.7rem; }
+
+/* Le futur ADVENU : ce n'est plus une hypothèse qui pèse sur le serment, c'est
+   arrivé. Il passe en tête de liste (tri JS) et se marque d'un sceau. */
+.draukhain-futur--advenu { font-weight: 600; }
+.draukhain-futur-sceau {
+  margin-left: 0.4rem; padding: 0.05rem 0.5rem;
+  border: 1px solid var(--cerne-carte); border-radius: 999px;
+  font-family: var(--police-ancienne); font-size: 0.72rem;
+  font-variant: small-caps; letter-spacing: 0.1em;
+  color: var(--encre-sepia); background: rgba(169, 136, 74, 0.16);
+}
