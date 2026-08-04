@@ -1547,3 +1547,22 @@
     qu'on ne rencontre pas là où on la cherche n'existe pas ») — le champ de
     saisie sans l'affichage aurait été la même faute que le dénouement VRANESH
     caché dans un menu déroulant.
+- **2026-08-04 (la première flamme d'Ultima)** — Paul a dicté sa victoire ; elle
+  est consignée en flamme **victoire** datée du **2026-08-03** sur le serment
+  « ne plus jamais perdre mon calme ». **Comptes seuls ici (§5)** : le texte de
+  la flamme vit en base, derrière RLS, et n'est recopié dans aucun document —
+  pas même dans ce journal, qui n'est pourtant pas déployé. La règle ne se
+  relâche pas parce que le fichier est privé.
+  - **État du cap** : 3 serments, dont **1 vivant** — le tout premier. Les deux
+    autres restent « à raviver », c'est-à-dire en attente d'un souffle, pas en
+    défaut.
+  - **Ce que la boucle du jour a réellement prouvé** : la chaîne complète a
+    fonctionné du premier coup sur de la donnée réelle — colonne `0020`, champ
+    de saisie, validation miroir, affichage. La date de l'événement (hier) est
+    **distincte** de la date d'écriture (aujourd'hui) : c'était tout l'objet de
+    la migration, et c'est vérifiable à l'œil sur la fiche.
+  - 🔻 **Une ambiguïté de dictée signalée, pas devinée** : « je l'ai accepté, je
+    n'ai pas écouté » suivi de « j'ai écouté Liandra jusqu'au bout ». Lecture
+    retenue et annoncée à Paul : le premier « écouté » porte sur **la fureur** —
+    accueillie sans être suivie. Sur un contenu intime, on annonce
+    l'interprétation au lieu de la fondre silencieusement dans le texte.
