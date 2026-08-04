@@ -1,0 +1,93 @@
+/* Ultima — DRAUKHAIN : LA VOÛTE DES SERMENTS (forme A, dictée Paul 2026-08-04).
+   ---------------------------------------------------------------------------
+   « J'aime bien l'outil, mais la forme n'est pas adaptée. Essayons de faire
+   quelque chose de plus visuel — une belle cartographie. » Forme A retenue sur
+   preview (design/preview-draukhain-carto.html), contre le brasier (B) et la
+   frise (C).
+
+   Ce que la voûte répare, et que ni le foyer ni le registre ne faisaient :
+   les serments COEXISTENT (on ne voyait jamais qu'un serment à la fois) et les
+   FILS vers les caps voisins SE VOIENT (le lien entrant depuis VRANESH existait
+   en base sans avoir nulle part où s'afficher).
+
+   Division du travail entre les trois vues, pour qu'aucune ne redise l'autre :
+     la VOÛTE   → l'ensemble : quels serments, lequel brûle, vers quoi ils tirent ;
+     le FOYER   → UN serment : ses flammes, leur nature, leur texte ;
+     le REGISTRE→ écrire et relier. Il ne se consulte pas, il se remplit.
+
+   Au repos les fils sont tissés en encre pâle : la carte dit QU'IL Y A un
+   tissage sans le donner à lire. Le survol allume les fils du seul serment
+   visé — le détail vient à la demande, jamais d'emblée (grammaire actée le
+   2026-08-01 : les noms d'abord, le survol donne UNE ligne, le clic donne tout).
+
+   Registre antique : encre et or sur parchemin, braise pour le feu vivant.
+   Tokens de css/styles.css ; --braise est déjà posée par draukhain-foyer.css. */
+
+/* ---------- Le cadre de la carte ---------- */
+.voute-cadre {
+  background: radial-gradient(ellipse at 50% 45%, #fbf5e6, var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte); border-radius: 10px;
+  box-shadow: inset 0 0 0 3px rgba(169, 136, 74, 0.35);
+  padding: 0.4rem;
+}
+.voute-dessin { display: block; width: 100%; height: auto; }
+.voute-dessin text { font-family: var(--police-ancienne); fill: var(--encre-sepia); }
+
+/* ---------- Le cœur du cap : la flamme qui ne s'éteint pas ---------- */
+.voute-anneau { fill: none; stroke: var(--or-antique); stroke-width: 1; opacity: 0.5; }
+.voute-coeur { fill: var(--encre-sepia); }
+.voute-coeur-feu { fill: #e8cf8f; }
+
+/* ---------- Un serment : un feu, ou une braise ---------- */
+.voute-halo { fill: var(--braise); }
+.voute-feu-trace { fill: var(--encre-sepia); }
+.voute-feu-coeur { fill: #e8cf8f; }
+/* Sans flamme : un cercle de braise en pointillé. Il ne demande qu'un souffle —
+   ce n'est PAS un manque, c'est une invitation (règle cardinale du cap). */
+.voute-braise {
+  fill: none; stroke: var(--braise); stroke-width: 1.2;
+  stroke-dasharray: 3 3; opacity: 0.85;
+}
+.voute-nom { font-size: 12px; letter-spacing: 0.04em; }
+.voute-zone { fill: transparent; cursor: pointer; }
+.voute-feu { transition: opacity 0.18s ease; }
+.voute-feu:focus-visible { outline: none; }
+.voute-feu:focus-visible .voute-nom { text-decoration: underline; }
+/* Un serment visé : les autres reculent, aucun ne disparaît. */
+.voute-dessin.a-choix .voute-feu { opacity: 0.3; }
+.voute-dessin.a-choix .voute-feu.is-actif { opacity: 1; }
+
+/* ---------- Les fils vers les caps voisins ---------- */
+.voute-fil {
+  stroke: var(--encre-sepia-douce); stroke-width: 0.8; fill: none;
+  opacity: 0.16; stroke-dasharray: 2 3;
+}
+.voute-fil.is-vif {
+  opacity: 0.95; stroke: var(--braise); stroke-width: 1.4; stroke-dasharray: none;
+}
+
+/* ---------- Les cartouches des caps voisins ---------- */
+.voute-cartouche { fill: rgba(246, 238, 217, 0.9); stroke: var(--cerne-carte); stroke-width: 1; }
+.voute-cap-nom { font-size: 10px; letter-spacing: 0.1em; text-anchor: middle; }
+.voute-cap-role {
+  font-size: 8px; font-style: italic; text-anchor: middle;
+  fill: var(--encre-sepia-douce);
+}
+
+/* ---------- La parole : UNE ligne, sous la carte ---------- */
+.voute-parole {
+  min-height: 2.6rem; margin: 0.7rem 0 0; padding: 0.55rem 0.2rem;
+  border-top: 1px solid rgba(169, 136, 74, 0.5);
+  color: var(--encre-sepia); font-size: 0.92rem;
+}
+.voute-parole-repos { font-style: italic; color: var(--encre-sepia-douce); }
+.voute-parole-nom { font-weight: 700; letter-spacing: 0.06em; }
+
+/* ---------- La carte vide : jamais un reproche ---------- */
+.voute-vide { font-style: italic; color: var(--encre-sepia-douce); margin: 0.6rem 0; }
+
+/* Le mouvement, seulement si l'utilisateur ne l'a pas refusé. */
+@media (prefers-reduced-motion: no-preference) {
+  .voute-feu { animation: voute-apparait 420ms ease both; }
+  @keyframes voute-apparait { from { opacity: 0; } to { opacity: 1; } }
+}

@@ -209,6 +209,52 @@ ordinaire — c'est elle qui porterait la voix.
 - **Passerelles** ✅ **construites (v2, 2026-07-25)** : un serment peut naître
   d'un idéal ZEKROM (idéal → serment) et se suivre dans MINETHNIR (pages liées).
   Table `serment_liens` (migration 0018), cible XOR.
+- 🔶 **BOUCLE OUVERTE (2026-08-04) — la forme, pas le fond.** Paul : « j'aime
+  bien l'outil, mais la forme n'est pas adaptée ; essayons quelque chose de plus
+  visuel — une belle cartographie ». **État des lieux + trois formes livrés en
+  maquette** (`design/preview-draukhain-carto.html`), **zéro ligne de production
+  touchée**. Six constats, tous chiffrés : ① la page s'ouvre sur un formulaire,
+  pas sur une carte ; ② trois représentations du même objet cohabitent (rangée de
+  boutons + foyer + voie jalonnée) ; ③ le dessin n'a rien à dessiner (**1 serment,
+  0 flamme** en base — toute la grammaire du foyer est du code qui ne s'exprime
+  jamais) ; ④ ce n'est pas une cartographie mais une liste et un détail (jamais
+  plus d'un serment à l'écran) ; ⑤ **la passerelle est borgne** —
+  `GET /api/serments` ne replie que `serment_liens` (sortants), donc le fil
+  entrant `scenario_liens` depuis VRANESH (**1 posé en base**) n'est affiché
+  nulle part ; ⑥ le repli sans JS d'`imladrik.html` annonce encore « DRAUKHAIN —
+  à venir ». Trois formes au choix : **A la voûte** (les serments coexistent, les
+  fils vers ZEKROM/VRANESH/MINETHNIR se voient — **reco**), **B le brasier**
+  (la plus belle, aucune place pour les fils), **C la frise** (la plus solide en
+  volume, mais une liste reste une liste). Chaque forme est **mesurée** aux trois
+  volumes 1/5/12 : bbox contre viewBox **et croisement des étiquettes** — ce
+  second critère manquait à la règle du 2026-08-01 et a rattrapé deux noms qui se
+  chevauchaient en forme A.
+- ✅ **LA VOÛTE LIVRÉE (2026-08-04, Paul : forme A + « la date sur la flamme »).**
+  `draukhain.html` s'ouvre désormais sur la **voûte** : tous les serments à la
+  fois, les fils vers les caps voisins tissés en encre pâle, allumés au survol ;
+  le clic ouvre le **foyer** du serment visé. Chaque vue a UN travail et un seul
+  — la voûte l'ensemble, le foyer un serment, le registre l'écriture (la rangée
+  de boutons du foyer disparaît : c'était la troisième liste). « Sceller un
+  serment » passe **derrière** la carte (miroir de « l'image d'abord » acté sur
+  VRANESH). Le fil entrant depuis VRANESH — **fermé côté serveur par la PR #140,
+  menée en parallèle le même jour** — se voit désormais **sur la carte** : le
+  futur qui *menace* ou *sert* un serment se dit dans la parole, et un futur
+  **advenu** s'y signale ; le déroulé, lui, reste dans la fiche (§5, prouvé par
+  l'ABSENCE). Front seul : `css/draukhain-voute.css`, `js/draukhain.js`,
+  `draukhain.html`.
+  **Les deux serments réels de Paul** sont scellés en base (dictée du jour).
+- ✅ **LA DATE DE CE QUE LA FLAMME RACONTE (2026-08-04, « ok go » de Paul).**
+  Migration `0020_flammes_survenu_le.sql` **APPLIQUÉE en prod** : colonne
+  `survenu_le date` optionnelle sur `flammes`, additive, RLS inchangée. Le
+  champ se saisit au formulaire de flamme (optionnel, `max` = aujourd'hui) et
+  **se lit** sur la flamme, en français, posé avant le texte — on cherche la
+  date avant de lire l'histoire. `validateFlamme` porte le **miroir exact du
+  CHECK** (`estJourPasse` : format `AAAA-MM-JJ` strict, borne haute à J+1 pour
+  absorber le fuseau, refus par défaut). Preuve par l'ABSENCE aux deux bouts :
+  aucune clé `survenu_le` n'est envoyée quand le champ est vide, et une flamme
+  sans date n'en affiche aucune.
+- ⏳ **Attendu de Paul** : l'histoire de l'exemple vécu cette semaine, à consigner
+  en flamme « victoire » datée sur le serment « ne plus jamais perdre mon calme ».
 
 ## 7. Séquencement (une boucle à la fois, directive EB)
 

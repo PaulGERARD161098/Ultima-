@@ -684,7 +684,23 @@ export const FLAMME_NATURES = ['citation', 'victoire', 'rappel'];
 
 // Champs autorisés en écriture (owner_id/id/dates gérés serveur).
 const SERMENT_FIELDS = ['intitule', 'pourquoi', 'horizon'];
-const FLAMME_FIELDS = ['serment_id', 'nature', 'texte'];
+const FLAMME_FIELDS = ['serment_id', 'nature', 'texte', 'survenu_le'];
+
+// Un JOUR (et non un instant) au format ISO court, MIROIR du CHECK de la
+// migration 0020 : `survenu_le <= current_date + 1`. La borne haute seule est
+// contrainte — une flamme peut raconter l'enfance, jamais demain : une victoire
+// qui n'a pas eu lieu n'étaye rien. La marge d'un jour absorbe l'écart de
+// fuseau entre le client et le serveur, sans ouvrir la porte à une date
+// inventée. Refus par défaut : tout ce qui n'est pas exactement AAAA-MM-JJ, et
+// tout ce qui ne se relit pas identique (le 31 février tombe ici).
+export function estJourPasse(valeur) {
+  if (typeof valeur !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(valeur)) return false;
+  const jour = new Date(`${valeur}T00:00:00Z`);
+  if (Number.isNaN(jour.getTime())) return false;
+  if (jour.toISOString().slice(0, 10) !== valeur) return false;
+  const demain = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  return jour.toISOString().slice(0, 10) <= demain.toISOString().slice(0, 10);
+}
 
 // Valide un serment. mode 'create' impose l'intitulé (le quoi) ; 'update' rend
 // tout optionnel. pourquoi (le pourquoi profond) nullable borné 2000 ; horizon
@@ -757,6 +773,18 @@ export function validateFlamme(body, mode) {
     const texte = body.texte.trim();
     if (texte.length < 1 || texte.length > 2000) return { error: 'Flamme invalide' };
     out.texte = texte;
+  }
+
+  // La date de ce que la flamme RACONTE (0020) — distincte de created_at, qui
+  // date l'écriture. Optionnelle : une citation n'a pas de date d'événement,
+  // une victoire en a une. Vide explicite (null ou '') = on efface la date.
+  if (body.survenu_le !== undefined) {
+    if (body.survenu_le === null || body.survenu_le === '') {
+      out.survenu_le = null;
+    } else {
+      if (!estJourPasse(body.survenu_le)) return { error: 'Date invalide' };
+      out.survenu_le = body.survenu_le;
+    }
   }
 
   if (mode === 'update' && Object.keys(out).length === 0) {

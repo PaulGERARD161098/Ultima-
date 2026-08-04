@@ -1414,3 +1414,155 @@
     VRAIES données** (mêmes clés Supabase que la production). Une preview n'est
     pas un brouillon. Le dire à Paul chaque fois qu'elle porte un geste
     destructif, avant qu'il ne l'exerce.
+- **2026-08-04 (DRAUKHAIN — état des lieux et cartographie, boucle OUVERTE)** —
+  Paul : « d'abord on va faire un état des lieux de ce que ça fait, quel est
+  l'objectif, quelles sont les passerelles avec ce qui existe. C'est plutôt un
+  souci de forme que de fond, parce que j'aime bien l'outil, mais je pense que
+  la forme n'est pas adaptée. Essayons de faire quelque chose de plus visuel —
+  comment faire une belle cartographie. »
+  - **Gate d'entrée EL tenu, et il a servi** : la dictée ne nommait pas l'outil.
+    Quatre candidats plausibles (ADRAMELECH, DRAUKHAIN, VRANESH, l'accueil) →
+    question posée au lieu de deviner. Réponse : **DRAUKHAIN**. Sans le gate, la
+    boucle partait sur la carto des idées — le mauvais outil, tout le travail
+    perdu. 🔻 **Une dictée qui ne nomme pas sa cible est un cadrage incomplet,
+    pas une instruction à interpréter.**
+  - **L'état des lieux a été CHIFFRÉ, pas raconté** : comptes relevés en base
+    (sans lire une ligne d'intime, §5) — **1 serment, 0 flamme, 0 lien sortant,
+    1 lien entrant depuis VRANESH**. C'est ce chiffre qui donne le vrai
+    diagnostic : le foyer, sa couronne, son halo croissant, ses natures qui
+    brûlent plus ou moins haut — **toute la grammaire est du code qui ne
+    s'exprime jamais**. 🔻 **Une forme se juge sur le volume RÉEL de données
+    qu'elle porte, pas sur celui qu'elle anticipe.**
+  - **Constat qui vaut au-delà de DRAUKHAIN** : `GET /api/serments` ne replie
+    que les liens **sortants**. Le fil entrant depuis VRANESH existe en base et
+    n'a **aucune représentation**. 🔻 **Une passerelle n'est établie que si elle
+    se voit des DEUX côtés** — la moitié d'un pont n'est pas un pont. À
+    re-vérifier sur les autres passerelles (R↔Z, scénario→page).
+  - **Trois formes livrées en maquette** (`design/preview-draukhain-carto.html`,
+    zéro production touchée) : **A la voûte** (reco — la seule qui traite à la
+    fois l'absence de vue d'ensemble et l'invisibilité des fils), **B le
+    brasier** (la plus belle, mais pas de place pour les fils — or c'est
+    justement ce qui manque), **C la frise** (la plus solide en volume, mais une
+    liste reste une liste).
+  - 🔻 **La règle du 2026-08-01 était incomplète, elle est complétée** : mesurer
+    la bbox contre le viewBox ne suffit pas. La forme A est passée « au vert »
+    alors que **deux étiquettes se croisaient plein Nord** — dans le cadre, donc
+    invisibles au critère, et illisibles à l'œil. **Un dessin se mesure aussi en
+    CROISEMENTS** : chaque paire d'étiquettes, et chaque étiquette contre les
+    cartouches. Critère ajouté à la maquette, éprouvé aux volumes 1/5/12 sur
+    desktop et mobile.
+  - 🔻 **Trouvaille de dernière minute, et elle vaut pour tout le patrimoine
+    `design/`** : le CSP d'Ultima pose `script-src 'self'` **sans**
+    `'unsafe-inline'`, et le middleware l'applique à **tous** les chemins servis,
+    `/design/*` compris. Une maquette à `<script>` inline s'ouvre donc **muette**
+    sur la preview Vercel — le décor s'affiche, le dessin non. La maquette du
+    jour a été corrigée (script sorti dans `preview-draukhain-carto.js`) et la
+    conformité **prouvée par l'absence** : page rejouée avec l'en-tête CSP réel
+    injecté → zéro violation, 12 feux dessinés. **Cinq maquettes antérieures
+    sont dans le même cas** (`preview-draukhain-formes`, `preview-imladrik-boussole`,
+    `preview-lv3-boussoles`, `preview-vranesh-arbre`, `preview-vranesh-lecture`).
+    ⏳ **Registre — à la main de Paul** : une passe d'extraction les remettrait
+    toutes en état (hors boucle en cours, discipline EB).
+    🔻 **Leçon** : un livrable qu'on demande à Paul d'ouvrir se vérifie **dans
+    les conditions où il l'ouvrira**, pas seulement en local — le local n'a pas
+    de CSP.
+- **2026-08-04 (DRAUKHAIN — la voûte livrée, deux serments réels)** — Paul :
+  « on travaille DRAUKHAIN. En fait c'est ça, sur deux serments : on va tester
+  cette refonte de l'affichage. Le premier, ne plus jamais perdre mon calme —
+  et j'ai un très bon exemple. Ce qu'on peut associer à chaque serment, on peut
+  associer une date, une petite histoire, histoire d'étayer. Le deuxième,
+  toujours rechercher la vérité et avoir la force et le courage de le dire. »
+  - **Arbitrages** : forme **A (la voûte)** ; la date **sur la flamme**.
+  - **Réponse au besoin « une date, une petite histoire »** : l'histoire avait
+    déjà sa place — la flamme de nature *victoire* (0016), faite pour ça. Le
+    manque était **la date de l'ÉVÉNEMENT** : une flamme ne portait que
+    `created_at`, la date de son écriture. Migration `0020` écrite (colonne
+    `survenu_le date`, additive, RLS inchangée), **non appliquée — gate**.
+    🔻 **Réflexe à garder** : quand Paul demande une capacité, chercher d'abord
+    ce qui la porte déjà à moitié — le correctif est alors une colonne, pas un
+    objet de plus.
+  - **COLLISION DE SESSIONS, et ce qu'elle enseigne** : pendant que cette boucle
+    tournait, un **autre fil** a livré la PR **#140 — « le retour de la
+    passerelle depuis VRANESH »**, c'est-à-dire *le même constat ⑤*, résolu
+    autrement : jointure **côté serveur** dans `api/serments.js`, qui sert des
+    `futurs` déjà recousus (`rapport`, `deroule`, `theme`, `advenu`). J'avais,
+    moi, lu `/api/situations` depuis le front. Au rebase, **j'ai adopté leur
+    mécanique et supprimé la mienne** — la leur est meilleure (un appel réseau
+    de moins, le thème et l'advenu joints à la source) et surtout elle était
+    **déjà dans `main`**. La voûte lit `futursDe()` comme la fiche.
+    🔻 **Règle : quand deux sessions résolvent le même constat, celle qui est
+    déjà fusionnée gagne — on rebrase dessus, on ne défend pas son code.** Et
+    corollaire de méthode : mon constat ⑤ annonçait le défaut sans annoncer que
+    quelqu'un d'autre pouvait être en train de le corriger. **Avant d'ouvrir une
+    boucle sur un cap, regarder les PR ouvertes du même cap.**
+  - **Ce qui reste vraiment de ma part sur la passerelle** : elle se voit
+    maintenant **sur la carte** (fil tissé vers VRANESH, rapport dit dans la
+    parole, futur advenu signalé), là où #140 la montre **dans la fiche**. Les
+    deux sont complémentaires — et les deux sections de harnais ont été gardées,
+    par concaténation, jamais par arbitrage.
+  - 🔻 **DEUX défauts trouvés par la MESURE, aucun par l'œil** — et c'est la
+    leçon du jour :
+    ① À douze serments en capitales, une étiquette **débordait de 7 px**. Le
+    budget de signes de la couronne *estime* une largeur moyenne ; une capitale
+    est plus large. Correctif : après l'estimation, on **mesure le texte
+    réellement tracé** et on retire des signes tant qu'il dépasse.
+    ② Ce correctif a alors **vidé toutes les étiquettes** : `rendreVoute`
+    tournait pendant que le registre était encore `hidden`, où **`getBBox()`
+    vaut zéro** — chaque nom était raboté jusqu'au vide. La page se **montre**
+    donc avant d'être dessinée. 🔻 **Une mesure prise dans un conteneur masqué
+    n'est pas une mesure, c'est un zéro qui a l'air d'une mesure.**
+  - 🔻 **Le harnais avait un trou, et il est bouché** : « tout tient dans le
+    cadre » et « aucun croisement » passaient **aussi** sur une carte dont
+    toutes les étiquettes étaient vides. Un critère de non-débordement ne dit
+    rien de la lisibilité. Ajouté : **la carte NOMME ses serments** (≥ 10 sur 12).
+    Vaut pour toute mesure future : vérifier qu'on n'a pas satisfait le critère
+    en supprimant ce qu'il mesurait.
+  - **Chaque vue a désormais UN travail** : la voûte l'ensemble, le foyer un
+    serment, le registre l'écriture. La rangée de boutons du foyer disparaît —
+    c'était la troisième liste des mêmes noms. « Sceller un serment » passe
+    derrière la carte (miroir de « l'image d'abord », VRANESH).
+  - **Les deux serments de Paul sont scellés en base.** ⏳ Reste à sa main :
+    l'histoire de l'exemple vécu cette semaine, et le go sur `0020`.
+- **2026-08-04 (la date de ce que la flamme raconte — « ok go » de Paul)** —
+  Migration `0020` **APPLIQUÉE en prod** (gate levée par le go explicite) :
+  `flammes.survenu_le date`, optionnelle, additive, RLS inchangée.
+  - **Ce que la boucle a refusé de faire** : ni nouvelle table, ni nouvelle
+    nature de flamme, ni date de scellement sur le serment. Le besoin de Paul
+    (« une date, une petite histoire, histoire d'étayer ») était couvert **aux
+    trois quarts** par la flamme de nature *victoire* — il manquait **une
+    colonne**. 🔻 **Chercher ce qui porte déjà le besoin à moitié avant
+    d'inventer l'objet qui le porterait en entier.**
+  - **La validation est le MIROIR EXACT du CHECK**, pas une approximation :
+    `estJourPasse` exige `AAAA-MM-JJ` strict, relit la date pour la comparer à
+    elle-même (le 31 février tombe là), et borne à **J+1** — la même tolérance
+    d'un jour que le CHECK, qui absorbe l'écart de fuseau client/serveur sans
+    ouvrir la porte à une date inventée. Une flamme peut raconter l'enfance,
+    jamais demain : **une victoire qui n'a pas eu lieu n'étaye rien.**
+  - **Preuve par l'ABSENCE aux DEUX bouts** : aucune clé `survenu_le` n'est
+    envoyée quand le champ est vide (le contrat refuse les champs inconnus, pas
+    les absents), et une flamme sans date n'affiche aucune date. Vérifier la
+    présence du permis n'aurait rien prouvé.
+  - **La date se LIT là où on la cherche** : posée avant le texte de la flamme,
+    en français. Application directe de la leçon du 2026-08-04 (« une fonction
+    qu'on ne rencontre pas là où on la cherche n'existe pas ») — le champ de
+    saisie sans l'affichage aurait été la même faute que le dénouement VRANESH
+    caché dans un menu déroulant.
+- **2026-08-04 (la première flamme d'Ultima)** — Paul a dicté sa victoire ; elle
+  est consignée en flamme **victoire** datée du **2026-08-03** sur le serment
+  « ne plus jamais perdre mon calme ». **Comptes seuls ici (§5)** : le texte de
+  la flamme vit en base, derrière RLS, et n'est recopié dans aucun document —
+  pas même dans ce journal, qui n'est pourtant pas déployé. La règle ne se
+  relâche pas parce que le fichier est privé.
+  - **État du cap** : 3 serments, dont **1 vivant** — le tout premier. Les deux
+    autres restent « à raviver », c'est-à-dire en attente d'un souffle, pas en
+    défaut.
+  - **Ce que la boucle du jour a réellement prouvé** : la chaîne complète a
+    fonctionné du premier coup sur de la donnée réelle — colonne `0020`, champ
+    de saisie, validation miroir, affichage. La date de l'événement (hier) est
+    **distincte** de la date d'écriture (aujourd'hui) : c'était tout l'objet de
+    la migration, et c'est vérifiable à l'œil sur la fiche.
+  - 🔻 **Une ambiguïté de dictée signalée, pas devinée** : « je l'ai accepté, je
+    n'ai pas écouté » suivi de « j'ai écouté Liandra jusqu'au bout ». Lecture
+    retenue et annoncée à Paul : le premier « écouté » porte sur **la fureur** —
+    accueillie sans être suivie. Sur un contenu intime, on annonce
+    l'interprétation au lieu de la fondre silencieusement dans le texte.

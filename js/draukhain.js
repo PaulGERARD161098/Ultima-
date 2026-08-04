@@ -21,7 +21,7 @@
     session: null,
     serments: [],
     flammes: [],
-    liens: [],          // passerelles v2 : serment → idéal ZEKROM | page MINETHNIR
+    liens: [],          // passerelles v2 SORTANTES : serment → idéal ZEKROM | page MINETHNIR
     futurs: [],         // passerelles ENTRANTES : un futur VRANESH qui menace/sert ce serment
     ideauxListe: [],     // idéaux disponibles (picker « Idéal »)
     pagesListe: [],      // pages MINETHNIR disponibles (picker « Page »)
@@ -41,6 +41,16 @@
   function dateLisible(iso) {
     if (typeof iso !== 'string' || !iso) { return ''; }
     var d = new Date(iso);
+    if (isNaN(d.getTime())) { return ''; }
+    return d.toLocaleDateString('fr-FR');
+  }
+
+  // Un jour ISO (AAAA-MM-JJ) rendu lisible. Fonction PURE. `new Date('...')`
+  // sur un jour nu est interprété UTC : on force midi pour qu'aucun fuseau ne
+  // fasse reculer la date d'un jour à l'affichage.
+  function jourLisible(iso) {
+    if (typeof iso !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) { return ''; }
+    var d = new Date(iso + 'T12:00:00');
     if (isNaN(d.getTime())) { return ''; }
     return d.toLocaleDateString('fr-FR');
   }
@@ -152,6 +162,12 @@
     // Nature en petite étiquette (small-caps, cerne or).
     item.appendChild(el('span', 'zekrom-registre',
       LIBELLE_NATURE[flamme.nature] || flamme.nature || ''));
+    // QUAND c'est arrivé, quand la flamme le dit (0020). Posé AVANT le texte :
+    // on cherche la date avant de lire l'histoire.
+    if (flamme.survenu_le) {
+      item.appendChild(el('span', 'zekrom-retro-note',
+        ' ' + (jourLisible(flamme.survenu_le) || '')));
+    }
     item.appendChild(el('span', 'zekrom-retro-talent', ' ' + String(flamme.texte || '')));
     var retirer = el('button', 'zekrom-retro-detacher', 'retirer');
     retirer.type = 'button';
@@ -185,15 +201,27 @@
       nature.appendChild(opt);
     });
 
+    // QUAND c'est arrivé (0020, dictée Paul 2026-08-04 : « on peut associer une
+    // date, une petite histoire, histoire d'étayer »). Optionnel — une citation
+    // n'a pas de date, une victoire en a une. `max` = aujourd'hui : une flamme
+    // raconte ce qui a eu lieu, jamais ce qui aura lieu (le serveur le
+    // revérifie — un `max` d'attribut ne protège rien).
+    var quand = el('input', 'zekrom-direction-date');
+    quand.type = 'date';
+    quand.name = 'survenu_le';
+    quand.max = new Date().toISOString().slice(0, 10);
+    quand.setAttribute('aria-label', 'Quand est-ce arrivé ? (optionnel)');
+
     var bouton = el('button', 'zekrom-bouton zekrom-bouton-direction', 'Raviver');
     bouton.type = 'submit';
 
     form.appendChild(champ);
     form.appendChild(nature);
+    form.appendChild(quand);
     form.appendChild(bouton);
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      soumettreFlamme(serment.id, champ.value, nature.value);
+      soumettreFlamme(serment.id, champ.value, nature.value, quand.value);
     });
     return form;
   }
@@ -519,7 +547,292 @@
     return section;
   }
 
-  // ---------- Rendu d'un serment ----------
+  // ---------- LA VOÛTE DES SERMENTS (forme A, dictée Paul 2026-08-04) ----------
+  // « J'aime bien l'outil, mais la forme n'est pas adaptée. Essayons de faire
+  //   quelque chose de plus visuel — une belle cartographie. »
+  //
+  // Ce que la voûte répare, et qu'aucune vue ne faisait : les serments
+  // COEXISTENT (on ne voyait jamais qu'un serment à la fois) et les FILS vers
+  // les caps voisins SE VOIENT — le lien entrant depuis VRANESH existait en
+  // base sans avoir nulle part où s'afficher.
+  //
+  // Chaque vue a désormais UN travail, et un seul : la voûte montre l'ensemble,
+  // le foyer montre UN serment, le registre sert à écrire.
+  //
+  // Le repère est repris de la maquette éprouvée (design/preview-draukhain-carto)
+  // et mesuré aux volumes 1 / 5 / 12 : cadre ET croisements d'étiquettes.
+  var VOUTE = {
+    L: 640, H: 420, CX: 330, CY: 214,
+    MARGE: 8,          // air incompressible entre un texte et le bord
+    LARGEUR_CAR: 6.1   // largeur moyenne d'un signe à 12 px dans cette serif
+  };
+
+  // Les caps voisins, en cartouches de bord. L'ordre est celui du récit : d'où
+  // le serment naît, ce qui le menace ou le sert, où il se suit.
+  var CAPS_VOUTE = [
+    { cle: 'zekrom', nom: 'ZEKROM', role: 'l’idéal dont il naît', x: 74, y: 58 },
+    { cle: 'vranesh', nom: 'VRANESH', role: 'ce qui le menace ou le sert', x: 566, y: 58 },
+    { cle: 'minethnir', nom: 'MINETHNIR', role: 'où il se suit', x: 74, y: 362 }
+  ];
+
+  // Les caps auxquels ce serment est relié, sortants ET entrants confondus.
+  // Les entrants viennent de `futursDe` (jointure servie par /api/serments) :
+  // le fil de VRANESH est la moitié du pont qui manquait à DRAUKHAIN.
+  function capsDe(sermentId) {
+    var vus = {};
+    liensDe(sermentId).forEach(function (lien) {
+      if (lien.ideal_id) { vus.zekrom = true; }
+      if (lien.entree_id) { vus.minethnir = true; }
+    });
+    if (futursDe(sermentId).length > 0) { vus.vranesh = true; }
+    return CAPS_VOUTE.filter(function (c) { return vus[c.cle] === true; });
+  }
+
+  // La couronne de la voûte : n serments répartis autour du cœur du cap, le
+  // premier plein Nord. Fonction PURE (aucun DOM) → testable unitairement.
+  // Même motif que `couronne()` du foyer, avec DEUX différences dictées par la
+  // mesure : le budget de signes se calcule sur la place réelle de chaque côté,
+  // et un nom plein Nord ou plein Sud se pose AU-DESSUS / EN DESSOUS — sinon il
+  // vient croiser les étiquettes de ses deux voisins (constat mesuré en maquette).
+  function couronneVoute(n) {
+    var out = [];
+    if (n <= 0) { return out; }
+    var rayon = n === 1 ? 0 : Math.min(132, 84 + n * 4);
+    for (var i = 0; i < n; i += 1) {
+      var angle = (-90 + i * (360 / n)) * Math.PI / 180;
+      var cos = n === 1 ? 0 : Math.cos(angle);
+      var sin = n === 1 ? 0 : Math.sin(angle);
+      var x = VOUTE.CX + rayon * cos;
+      var y = VOUTE.CY + rayon * sin;
+      var ancre = cos < -0.15 ? 'end' : (cos > 0.15 ? 'start' : 'middle');
+      var dispo;
+      if (ancre === 'end') { dispo = x - 2 * VOUTE.MARGE; }
+      else if (ancre === 'start') { dispo = VOUTE.L - x - 2 * VOUTE.MARGE; }
+      else { dispo = 2 * Math.min(x, VOUTE.L - x) - VOUTE.MARGE; }
+      out.push({
+        x: x, y: y, ancre: ancre,
+        // Décalage vertical du nom : à côté du feu sur les flancs, au-dessus
+        // au Nord, en dessous au Sud.
+        dy: ancre !== 'middle' ? 3 : (y <= VOUTE.CY ? -26 : 32),
+        signes: Math.max(0, Math.floor(dispo / VOUTE.LARGEUR_CAR))
+      });
+    }
+    return out;
+  }
+
+  // Le budget de signes de `couronneVoute` reste une ESTIMATION : il suppose un
+  // signe de largeur moyenne. Un nom tout en capitales est plus large que cette
+  // moyenne — au pire cas à douze, une étiquette débordait de 7 px du cadre, et
+  // c'est la mesure du harnais qui l'a dit, pas l'œil. On repasse donc derrière
+  // l'estimation avec la largeur RÉELLEMENT tracée : on retire des signes tant
+  // que le texte dépasse sa place. Sous 6 signes utiles, on n'écrit rien — un
+  // moignon ne reconnaît rien, et la parole sous la carte dit tout, elle.
+  function ajusterAuCadre(etiquette) {
+    if (!etiquette || typeof etiquette.getBBox !== 'function') { return; }
+    var brut = (etiquette.textContent || '').replace(/…$/, '');
+    if (!brut) { return; }
+    for (var garde = 0; garde < 40; garde += 1) {
+      var boite = etiquette.getBBox();
+      if (!boite || boite.width === 0) { return; }
+      if (boite.x >= VOUTE.MARGE - 0.5
+        && boite.x + boite.width <= VOUTE.L - VOUTE.MARGE + 0.5) { return; }
+      brut = brut.slice(0, -1).replace(/\s+$/, '');
+      if (brut.length < 6) { etiquette.textContent = ''; return; }
+      etiquette.textContent = brut + '…';
+    }
+  }
+
+  // Une énumération se dit en français : « A, B et C » — jamais « A et B et C ».
+  function enumerer(noms) {
+    if (noms.length <= 1) { return noms.join(''); }
+    return noms.slice(0, -1).join(', ') + ' et ' + noms[noms.length - 1];
+  }
+
+  function paroleVouteRepos() {
+    var zone = document.getElementById('draukhain-voute-parole');
+    if (!zone) { return; }
+    zone.textContent = '';
+    zone.appendChild(el('span', 'voute-parole-repos',
+      etat.serments.length === 0
+        ? 'Aucun serment scellé pour l’instant — le premier allumera la voûte.'
+        : 'Survole un feu — il te dit ce qu’il est. Clique-le pour ouvrir son foyer.'));
+  }
+
+  // UNE ligne au survol : le nom, ce qui l'entretient, ce à quoi il tient.
+  function paroleVoute(serment) {
+    var zone = document.getElementById('draukhain-voute-parole');
+    if (!zone) { return; }
+    zone.textContent = '';
+    zone.appendChild(el('span', 'voute-parole-nom', nomCourt(serment.intitule)));
+
+    var suite = ' — ' + libelleCompte(flammesDe(serment.id).length);
+    var caps = capsDe(serment.id).map(function (c) { return c.nom; });
+    if (caps.length > 0) { suite += ' · relié à ' + enumerer(caps); }
+    zone.appendChild(document.createTextNode(suite));
+
+    // Le rapport d'un futur au serment se dit en toutes lettres — et un futur
+    // ADVENU se signale : ce n'est plus une hypothèse, c'est arrivé.
+    futursDe(serment.id).forEach(function (futur) {
+      var verbe = futur.rapport === 'menace' ? 'menace' : 'sert';
+      var theme = futur.theme ? nomCourt(futur.theme) : '';
+      zone.appendChild(document.createTextNode(
+        ' · un futur ' + (futur.advenu === true ? 'ADVENU ' : '') + verbe
+        + ' ce serment' + (theme ? ' (' + theme + ')' : '')));
+    });
+  }
+
+  function rendreVoute() {
+    var section = document.getElementById('draukhain-voute');
+    var cadre = document.getElementById('draukhain-voute-dessin');
+    if (!section || !cadre) { return; }
+    section.hidden = false;
+    cadre.textContent = '';
+    cadre.classList.remove('a-choix');
+
+    var serments = Array.isArray(etat.serments) ? etat.serments : [];
+    if (serments.length === 0) { paroleVouteRepos(); return; }
+
+    // Le cœur du cap — seulement quand il y a une couronne autour de lui : à un
+    // seul serment, le feu du serment occupe déjà le centre.
+    var anneau = svgEl('circle', 'voute-anneau');
+    anneau.setAttribute('cx', String(VOUTE.CX));
+    anneau.setAttribute('cy', String(VOUTE.CY));
+    anneau.setAttribute('r', '30');
+    cadre.appendChild(anneau);
+    if (serments.length > 1) {
+      var coeur = svgEl('path', 'voute-coeur');
+      coeur.setAttribute('d', traceFlamme(VOUTE.CX, VOUTE.CY + 11, 22));
+      cadre.appendChild(coeur);
+      var coeurFeu = svgEl('path', 'voute-coeur-feu');
+      coeurFeu.setAttribute('d', traceFlamme(VOUTE.CX, VOUTE.CY + 9, 10));
+      cadre.appendChild(coeurFeu);
+    }
+
+    // Les cartouches des caps voisins, avec le compte de fils qui y aboutit.
+    CAPS_VOUTE.forEach(function (cap) {
+      var n = serments.filter(function (s) {
+        return capsDe(s.id).some(function (c) { return c.cle === cap.cle; });
+      }).length;
+      var g = svgEl('g', 'voute-cap');
+      var rect = svgEl('rect', 'voute-cartouche');
+      rect.setAttribute('x', String(cap.x - 52));
+      rect.setAttribute('y', String(cap.y - 17));
+      rect.setAttribute('width', '104');
+      rect.setAttribute('height', '34');
+      rect.setAttribute('rx', '5');
+      var nom = svgEl('text', 'voute-cap-nom');
+      nom.setAttribute('x', String(cap.x));
+      nom.setAttribute('y', String(cap.y - 2));
+      nom.textContent = cap.nom;
+      var role = svgEl('text', 'voute-cap-role');
+      role.setAttribute('x', String(cap.x));
+      role.setAttribute('y', String(cap.y + 10));
+      role.textContent = n === 0 ? 'aucun fil' : (n + (n > 1 ? ' fils' : ' fil'));
+      g.appendChild(rect); g.appendChild(nom); g.appendChild(role);
+      cadre.appendChild(g);
+    });
+
+    var places = couronneVoute(serments.length);
+
+    // Les fils d'abord : ils passent SOUS les feux.
+    serments.forEach(function (serment, i) {
+      capsDe(serment.id).forEach(function (cap) {
+        var fil = svgEl('path', 'voute-fil');
+        fil.setAttribute('d', 'M' + places[i].x + ' ' + places[i].y
+          + ' Q ' + ((places[i].x + cap.x) / 2) + ' ' + ((places[i].y + cap.y) / 2 - 26)
+          + ' ' + cap.x + ' ' + (cap.y + (cap.cle === 'minethnir' ? -18 : 18)));
+        fil.dataset.serment = serment.id;
+        cadre.appendChild(fil);
+      });
+    });
+
+    serments.forEach(function (serment, i) {
+      var place = places[i];
+      var flammes = flammesDe(serment.id);
+      var n = flammes.length;
+      var g = svgEl('g', 'voute-feu');
+      g.dataset.id = serment.id;
+      g.setAttribute('tabindex', '0');
+      g.setAttribute('role', 'button');
+      // L'étiquette peut être bornée par la place ; l'intitulé entier vit ici,
+      // pour le lecteur d'écran comme pour le harnais.
+      g.setAttribute('aria-label', (serment.intitule || '') + ' — ' + libelleCompte(n));
+
+      if (n > 0) {
+        var halo = svgEl('circle', 'voute-halo');
+        halo.setAttribute('cx', String(place.x));
+        halo.setAttribute('cy', String(place.y));
+        halo.setAttribute('r', String(11 + n * 1.9));
+        halo.setAttribute('opacity', String(Math.min(0.16, 0.04 + n * 0.022)));
+        g.appendChild(halo);
+        var feu = svgEl('path', 'voute-feu-trace');
+        feu.setAttribute('d', traceFlamme(place.x, place.y + 8, 17 + Math.min(8, n * 1.4)));
+        g.appendChild(feu);
+        var coeurFlamme = svgEl('path', 'voute-feu-coeur');
+        coeurFlamme.setAttribute('d', traceFlamme(place.x, place.y + 6, 8));
+        g.appendChild(coeurFlamme);
+      } else {
+        var braise = svgEl('circle', 'voute-braise');
+        braise.setAttribute('cx', String(place.x));
+        braise.setAttribute('cy', String(place.y));
+        braise.setAttribute('r', '9');
+        g.appendChild(braise);
+      }
+
+      var etiquette = svgEl('text', 'voute-nom');
+      etiquette.setAttribute('x', String(place.x
+        + (place.ancre === 'end' ? -14 : (place.ancre === 'start' ? 14 : 0))));
+      etiquette.setAttribute('y', String(place.y + place.dy));
+      etiquette.setAttribute('text-anchor', place.ancre);
+      // Sous 6 signes une étiquette ne reconnaît plus rien : mieux vaut le vide
+      // qu'un moignon — la parole sous la carte, elle, dit tout.
+      etiquette.textContent = place.signes >= 6
+        ? etiquetteFlamme(nomCourt(serment.intitule), Math.min(26, place.signes))
+        : '';
+      g.appendChild(etiquette);
+
+      var zone = svgEl('circle', 'voute-zone');
+      zone.setAttribute('cx', String(place.x));
+      zone.setAttribute('cy', String(place.y));
+      zone.setAttribute('r', '16');
+      g.appendChild(zone);
+
+      function viser() {
+        cadre.classList.add('a-choix');
+        Array.prototype.forEach.call(cadre.querySelectorAll('.voute-feu'), function (o) {
+          o.classList.toggle('is-actif', o === g);
+        });
+        Array.prototype.forEach.call(cadre.querySelectorAll('.voute-fil'), function (f) {
+          f.classList.toggle('is-vif', f.dataset.serment === serment.id);
+        });
+        paroleVoute(serment);
+      }
+      function relacher() {
+        cadre.classList.remove('a-choix');
+        g.classList.remove('is-actif');
+        Array.prototype.forEach.call(cadre.querySelectorAll('.voute-fil'), function (f) {
+          f.classList.remove('is-vif');
+        });
+        paroleVouteRepos();
+      }
+      g.addEventListener('mouseenter', viser);
+      g.addEventListener('mouseleave', relacher);
+      g.addEventListener('focus', viser);
+      g.addEventListener('blur', relacher);
+      g.addEventListener('click', function () { ouvrirFoyer(serment); });
+      g.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ouvrirFoyer(serment); }
+      });
+
+      cadre.appendChild(g);
+    });
+
+    // L'estimation posée, on la corrige sur la largeur réellement tracée : les
+    // étiquettes ne sont ajustées qu'une fois toutes dans le document.
+    Array.prototype.forEach.call(cadre.querySelectorAll('.voute-nom'), ajusterAuCadre);
+
+    paroleVouteRepos();
+  }
 
   // ---------- LE FOYER DES SERMENTS (forme A, dictée Paul 2026-08-01) ----------
   // « Sortir de la fiche textuelle statique : un affichage progressif,
@@ -811,9 +1124,11 @@
     sermentOuvert = serment.id;
     var retour = document.getElementById('draukhain-foyer-retour');
     if (retour) { retour.hidden = false; }
+    // Le feu choisi reste marqué sur la voûte : on sait toujours quel serment
+    // le foyer est en train de montrer.
     Array.prototype.forEach.call(
-      document.querySelectorAll('#draukhain-foyer-serments .foyer-serment'),
-      function (b) { b.setAttribute('aria-pressed', String(b.dataset.id === serment.id)); });
+      document.querySelectorAll('#draukhain-voute-dessin .voute-feu'),
+      function (g) { g.setAttribute('aria-pressed', String(g.dataset.id === serment.id)); });
     dessinerFoyer(serment);
     coteRepos(flammesDe(serment.id).length === 0
       ? 'Ce serment n’a pas encore de flamme — un souffle suffit à le raviver.'
@@ -829,41 +1144,23 @@
     if (titre) { titre.textContent = ''; }
     if (retour) { retour.hidden = true; }
     Array.prototype.forEach.call(
-      document.querySelectorAll('#draukhain-foyer-serments .foyer-serment'),
-      function (b) { b.setAttribute('aria-pressed', 'false'); });
-    coteRepos('Clique un serment — son foyer s’allume.');
+      document.querySelectorAll('#draukhain-voute-dessin .voute-feu'),
+      function (g) { g.setAttribute('aria-pressed', 'false'); });
+    coteRepos('Clique un feu sur la voûte — son foyer s’allume.');
   }
 
+  // Le foyer ne porte plus sa propre rangée de noms : c'est la VOÛTE qui
+  // désigne le serment (une seule liste de serments à l'écran, plus deux).
   function rendreFoyer() {
     var section = document.getElementById('draukhain-foyer');
-    var rangee = document.getElementById('draukhain-foyer-serments');
-    if (!section || !rangee) { return; }
-    rangee.textContent = '';
+    if (!section) { return; }
     var serments = Array.isArray(etat.serments) ? etat.serments : [];
     section.hidden = false;
 
     if (serments.length === 0) {
-      rangee.appendChild(el('p', 'foyer-vide',
-        'Aucun serment scellé pour l’instant — scelle le premier ci-dessous, '
-        + 'il deviendra un foyer.'));
-      coteRepos('Clique un serment — son foyer s’allume.');
+      coteRepos('Aucun serment scellé pour l’instant — le premier allumera la voûte.');
       return;
     }
-
-    serments.forEach(function (serment) {
-      var flammes = flammesDe(serment.id);
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'foyer-serment';
-      b.dataset.id = serment.id;
-      b.setAttribute('aria-pressed', 'false');
-      b.appendChild(el('span', 'foyer-serment-nom', nomCourt(serment.intitule)));
-      b.appendChild(el('span', 'foyer-serment-pastille', flammes.length === 0
-        ? 'à raviver'
-        : flammes.length + (flammes.length > 1 ? ' flammes' : ' flamme')));
-      b.addEventListener('click', function () { ouvrirFoyer(serment); });
-      rangee.appendChild(b);
-    });
 
     // Rafraîchissement après écriture : si un foyer était ouvert, on le rouvre.
     if (sermentOuvert) {
@@ -932,6 +1229,7 @@
     if (bTous) { bTous.setAttribute('aria-pressed', String(etat.vue === 'tous')); }
     if (bVivants) { bVivants.setAttribute('aria-pressed', String(etat.vue === 'vivants')); }
     rendreSerments();
+    rendreVoute();
     rendreFoyer();
   }
 
@@ -984,12 +1282,16 @@
     await rafraichir();
   }
 
-  async function soumettreFlamme(sermentId, texte, nature) {
+  async function soumettreFlamme(sermentId, texte, nature, survenuLe) {
     var propre = (texte || '').trim();
     if (!propre) { return; }
-    var res = await appelApi('/api/flammes', {
+    var corps = {
       serment_id: sermentId, texte: propre, nature: nature || 'citation'
-    });
+    };
+    // Champ vide = pas de date : on n'envoie pas la clé plutôt que d'envoyer du
+    // vide (le contrat d'API refuse les champs inconnus, pas les absents).
+    if (survenuLe) { corps.survenu_le = survenuLe; }
+    var res = await appelApi('/api/flammes', corps);
     if (res.status === 401) { montrer('draukhain-auth'); return; }
     if (!res.ok) { messageForm('Flamme non enregistrée. Réessaie.', true); return; }
     await rafraichir();
@@ -1071,9 +1373,14 @@
     // 401 du registre : leur échec ne bloque jamais le rendu des serments.
     await chargerCibles();
 
-    rendreSerments();
-    rendreFoyer();
+    // Le registre se montre AVANT de dessiner : la voûte MESURE ses étiquettes
+    // (getBBox), et une mesure prise dans un conteneur `hidden` vaut zéro —
+    // elle rabotait chaque nom jusqu'au vide. Une géométrie ne se mesure que
+    // sur une page effectivement mise en page.
     montrer('draukhain-registre');
+    rendreSerments();
+    rendreVoute();
+    rendreFoyer();
     accueillirLeo();
     return true;
   }
@@ -1226,6 +1533,8 @@
     nomCourt: nomCourt,
     etiquetteFlamme: etiquetteFlamme,
     couronne: couronne,
+    couronneVoute: couronneVoute,
+    jourLisible: jourLisible,
     eclat: eclat
   };
 
