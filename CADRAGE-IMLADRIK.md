@@ -236,11 +236,12 @@ ordinaire — c'est elle qui porterait la voix.
   — la voûte l'ensemble, le foyer un serment, le registre l'écriture (la rangée
   de boutons du foyer disparaît : c'était la troisième liste). « Sceller un
   serment » passe **derrière** la carte (miroir de « l'image d'abord » acté sur
-  VRANESH). **La passerelle borgne est fermée** : `/api/situations` est lu comme
-  on lit déjà ZEKROM et MINETHNIR — zéro changement d'API — et le futur qui
-  *menace* ou *sert* un serment se dit enfin, sans que le déroulé du scénario ne
-  quitte son cap (§5, prouvé par l'ABSENCE). Front seul :
-  `css/draukhain-voute.css`, `js/draukhain.js`, `draukhain.html`.
+  VRANESH). Le fil entrant depuis VRANESH — **fermé côté serveur par la PR #140,
+  menée en parallèle le même jour** — se voit désormais **sur la carte** : le
+  futur qui *menace* ou *sert* un serment se dit dans la parole, et un futur
+  **advenu** s'y signale ; le déroulé, lui, reste dans la fiche (§5, prouvé par
+  l'ABSENCE). Front seul : `css/draukhain-voute.css`, `js/draukhain.js`,
+  `draukhain.html`.
   **Les deux serments réels de Paul** sont scellés en base (dictée du jour).
 - ⏳ **GATE OUVERTE — migration `0020_flammes_survenu_le.sql` ÉCRITE, NON
   APPLIQUÉE** : une colonne `survenu_le date` optionnelle sur `flammes`, pour

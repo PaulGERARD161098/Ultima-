@@ -1481,11 +1481,25 @@
     🔻 **Réflexe à garder** : quand Paul demande une capacité, chercher d'abord
     ce qui la porte déjà à moitié — le correctif est alors une colonne, pas un
     objet de plus.
-  - **La passerelle borgne est fermée SANS toucher à l'API** : `/api/situations`
-    sert déjà `scenario_liens`. La lire depuis DRAUKHAIN, comme on lit déjà
-    ZEKROM et MINETHNIR, suffit à faire apparaître le futur qui *menace* ou
-    *sert* un serment. 🔻 **Avant d'élargir un contrat d'API, regarder ce que
-    les caps voisins servent déjà.**
+  - **COLLISION DE SESSIONS, et ce qu'elle enseigne** : pendant que cette boucle
+    tournait, un **autre fil** a livré la PR **#140 — « le retour de la
+    passerelle depuis VRANESH »**, c'est-à-dire *le même constat ⑤*, résolu
+    autrement : jointure **côté serveur** dans `api/serments.js`, qui sert des
+    `futurs` déjà recousus (`rapport`, `deroule`, `theme`, `advenu`). J'avais,
+    moi, lu `/api/situations` depuis le front. Au rebase, **j'ai adopté leur
+    mécanique et supprimé la mienne** — la leur est meilleure (un appel réseau
+    de moins, le thème et l'advenu joints à la source) et surtout elle était
+    **déjà dans `main`**. La voûte lit `futursDe()` comme la fiche.
+    🔻 **Règle : quand deux sessions résolvent le même constat, celle qui est
+    déjà fusionnée gagne — on rebrase dessus, on ne défend pas son code.** Et
+    corollaire de méthode : mon constat ⑤ annonçait le défaut sans annoncer que
+    quelqu'un d'autre pouvait être en train de le corriger. **Avant d'ouvrir une
+    boucle sur un cap, regarder les PR ouvertes du même cap.**
+  - **Ce qui reste vraiment de ma part sur la passerelle** : elle se voit
+    maintenant **sur la carte** (fil tissé vers VRANESH, rapport dit dans la
+    parole, futur advenu signalé), là où #140 la montre **dans la fiche**. Les
+    deux sont complémentaires — et les deux sections de harnais ont été gardées,
+    par concaténation, jamais par arbitrage.
   - 🔻 **DEUX défauts trouvés par la MESURE, aucun par l'œil** — et c'est la
     leçon du jour :
     ① À douze serments en capitales, une étiquette **débordait de 7 px**. Le
