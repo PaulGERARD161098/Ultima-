@@ -381,6 +381,9 @@ console.log('— B. draukhain.html fixture 200 → registre, à raviver, serment
   verifier('sermentsVisibles pur : tous=2, vivants=1', filtre.tous === 2 && filtre.vivants === 1, JSON.stringify(filtre));
 
   // 8. Écritures authentifiées : POST serment + POST flamme + DELETE flamme portent le Bearer.
+  // « Sceller un serment » est REPLIÉ depuis la voûte (2026-08-04) : on arrive
+  // sur DRAUKHAIN pour VOIR, pas pour remplir. On l'ouvre pour écrire.
+  await page.locator('summary#draukhain-titre-saisie').click();
   await page.locator('#draukhain-intitule').fill('VIGIE-TEST');
   await page.locator('#draukhain-form-serment button[type="submit"]').click();
   await page.waitForTimeout(200);
@@ -487,14 +490,17 @@ console.log('— E. draukhain.html → le foyer des serments —');
     status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_PAGES) }));
 
   await page.goto(`${BASE}/draukhain.html`, { waitUntil: 'load', timeout: 20000 });
-  await page.waitForSelector('#draukhain-foyer-serments .foyer-serment', { timeout: 20000 });
+  await page.waitForSelector('#draukhain-voute-dessin .voute-feu', { timeout: 20000 });
 
-  // ---- ① Les serments : les noms, rien d'autre. ----
-  const noms = await page.locator('.foyer-serment-nom').allTextContents();
-  verifier('Foyer : un bouton par serment', noms.length >= 2, JSON.stringify(noms));
-  verifier('Foyer : le bouton porte le NOM SEUL',
+  // ---- ① Les serments : les noms, rien d'autre. C'est la VOÛTE qui les
+  //      désigne depuis le 2026-08-04 — le foyer n'a plus sa propre rangée.
+  const noms = (await page.locator('#draukhain-voute-dessin .voute-nom').allTextContents())
+    .filter((n) => n.length > 0);
+  verifier('Voûte : un feu par serment',
+    (await page.locator('.voute-feu').count()) === 2, JSON.stringify(noms));
+  verifier('Voûte : l’étiquette porte le NOM SEUL',
     noms.every((n) => !/\s+[—–-]\s+/.test(n)), JSON.stringify(noms));
-  verifier('Foyer : aucun foyer allumé à l’arrivée',
+  verifier('Voûte : aucun foyer allumé à l’arrivée',
     (await page.locator('.foyer-flamme-g').count()) === 0);
   verifier('Foyer : le retour n’apparaît qu’une fois un serment ouvert',
     await page.locator('#draukhain-foyer-retour').evaluate((el) => el.hidden));
@@ -506,11 +512,11 @@ console.log('— E. draukhain.html → le foyer des serments —');
     !(await page.locator('#draukhain-serments').isVisible()));
 
   // ---- ② Le clic allume le foyer. ----
-  const premier = page.locator('.foyer-serment').first();
-  const nomPremier = (await premier.locator('.foyer-serment-nom').textContent()) || '';
+  const premier = page.locator('.voute-feu').first();
+  const nomPremier = 'AURORE';   // fixture : le premier serment de la voûte
   await premier.click();
   await page.waitForSelector('.foyer-flamme-g', { timeout: 5000 });
-  verifier('Foyer : le serment ouvert est marqué',
+  verifier('Voûte : le feu ouvert reste marqué',
     (await premier.getAttribute('aria-pressed')) === 'true');
   verifier('Foyer : le nom du serment est gravé sous le foyer',
     (await page.locator('#draukhain-foyer-nom').textContent()) === nomPremier);
@@ -557,11 +563,11 @@ console.log('— E. draukhain.html → le foyer des serments —');
   // ---- Le retour. ----
   await page.locator('#draukhain-foyer-retour').click();
   verifier('Retour : le foyer s’éteint', (await page.locator('.foyer-flamme-g').count()) === 0);
-  verifier('Retour : aucun serment n’est plus marqué',
-    (await page.locator('.foyer-serment[aria-pressed="true"]').count()) === 0);
+  verifier('Retour : aucun feu n’est plus marqué sur la voûte',
+    (await page.locator('.voute-feu[aria-pressed="true"]').count()) === 0);
 
   // ---- Un serment « à raviver » : braise, invitation, jamais reproche. ----
-  const aRaviver = page.locator('.foyer-serment', { hasText: 'à raviver' });
+  const aRaviver = page.locator('.voute-feu[aria-label*="à raviver"]');
   if ((await aRaviver.count()) > 0) {
     await aRaviver.first().click();
     await page.waitForSelector('.foyer-cercle--braise', { timeout: 5000 });
@@ -585,7 +591,7 @@ console.log('— E. draukhain.html → le foyer des serments —');
   // contre le repère, et on le fait sur un thème CHARGÉ, pas sur celui qui
   // passait déjà. `couronne` borne désormais chaque étiquette à la place
   // réellement disponible de son côté.
-  await page.locator('.foyer-serment').first().click();
+  await page.locator('.voute-feu').first().click();
   await page.waitForSelector('.foyer-flamme-g', { timeout: 5000 });
   const debords = await page.evaluate(() => {
     const svg = document.getElementById('draukhain-foyer-dessin');
@@ -923,6 +929,238 @@ console.log('— Le retour de la passerelle : les futurs qui touchent un serment
   await page.screenshot({ path: `${CAPTURES}/draukhain-futurs.png`, fullPage: true });
   await page.close();
 }
+
+// ===================== F. LA VOÛTE DES SERMENTS (2026-08-04) =====================
+// Forme A retenue par Paul sur preview. La section du dessus prouve le retour de
+// la passerelle DANS LA FICHE d'un serment ; celle-ci le prouve SUR LA CARTE, et
+// prouve en plus ce qu'aucune autre ne pouvait prouver avant elle :
+//   ① les serments COEXISTENT (on ne voyait jamais qu'un serment à la fois) ;
+//   ② le fil vers chaque cap voisin se VOIT, entrant compris ;
+//   ③ le déroulé du futur, lui, RESTE dans la fiche (§5, vérifié par l'ABSENCE) ;
+//   ④ la carte se MESURE : cadre ET croisements d'étiquettes — la règle du
+//      2026-08-01 ne regardait que le cadre, et deux noms se croisaient sans
+//      qu'elle s'en aperçoive (constat de la maquette du jour).
+console.log('— F. draukhain.html : la voûte des serments —');
+
+// La mesure, faite DANS la page : emprise du dessin contre son viewBox, et
+// croisement de chaque paire d'étiquettes (noms + cartouches des caps).
+function mesurerVoute() {
+  const svg = document.getElementById('draukhain-voute-dessin');
+  const vb = svg.viewBox.baseVal;
+  let min = { x: Infinity, y: Infinity }, max = { x: -Infinity, y: -Infinity };
+  svg.querySelectorAll('text, path, circle, rect').forEach((n) => {
+    const b = n.getBBox();
+    if (!b || (b.width === 0 && b.height === 0)) return;
+    min.x = Math.min(min.x, b.x); min.y = Math.min(min.y, b.y);
+    max.x = Math.max(max.x, b.x + b.width); max.y = Math.max(max.y, b.y + b.height);
+  });
+  const boites = [];
+  svg.querySelectorAll('.voute-nom, .voute-cartouche').forEach((n) => {
+    const b = n.getBBox();
+    if (b && b.width > 0) boites.push(b);
+  });
+  let croisements = 0;
+  for (let i = 0; i < boites.length; i += 1) {
+    for (let j = i + 1; j < boites.length; j += 1) {
+      const a = boites[i], c = boites[j];
+      if (a.x < c.x + c.width - 1 && c.x < a.x + a.width - 1
+        && a.y < c.y + c.height - 1 && c.y < a.y + a.height - 1) croisements += 1;
+    }
+  }
+  return {
+    dedans: min.x >= vb.x - 0.5 && min.y >= vb.y - 0.5
+      && max.x <= vb.x + vb.width + 0.5 && max.y <= vb.y + vb.height + 0.5,
+    cadre: [Math.round(min.x), Math.round(max.x), Math.round(min.y), Math.round(max.y)],
+    croisements,
+  };
+}
+
+{
+  const { page, erreurs, externes } = await nouvellePage();
+  await page.addInitScript(scriptFausseSession());
+  // Le fil entrant arrive AVEC les serments (jointure serveur, api/serments.js) :
+  // la voûte s'éprouve donc sur la même donnée que la fiche, pas sur une autre.
+  const FIXTURE_VOUTE = {
+    ok: true,
+    data: {
+      ...FIXTURE.data,
+      futurs: [
+        { id: 'x1', serment_id: 's1', scenario_id: 'sc1', situation_id: 'si1',
+          rapport: 'menace', deroule: 'un déroulé qui doit rester dans la fiche',
+          theme: 'LIANDRA — un cap à tenir', advenu: false },
+      ],
+    },
+  };
+  await page.route('**/api/serments**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_VOUTE) }));
+  await page.route('**/api/ideaux**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IDEAUX) }));
+  await page.route('**/api/imladrik**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_PAGES) }));
+
+  await page.goto(`${BASE}/draukhain.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForSelector('#draukhain-voute-dessin .voute-feu', { timeout: 20000 });
+
+  // ---- ① L'ARRIVÉE : la carte d'abord, l'écriture derrière. ----
+  verifier('Voûte : les deux serments coexistent',
+    (await page.locator('.voute-feu').count()) === 2);
+  verifier('Voûte : un feu allumé et une braise (3 flammes / 0 flamme)',
+    (await page.locator('.voute-feu-trace').count()) === 1
+    && (await page.locator('.voute-braise').count()) === 1);
+  verifier('Voûte : le cœur du cap brûle au centre',
+    (await page.locator('.voute-coeur').count()) === 1);
+  verifier('Voûte : les trois caps voisins sont en bord de carte',
+    (await page.locator('.voute-cartouche').count()) === 3);
+  verifier('Arrivée : « Sceller un serment » est REPLIÉ (l’image d’abord)',
+    !(await page.locator('#draukhain-form-serment').isVisible()));
+  verifier('Arrivée : le registre détaillé reste replié',
+    (await page.locator('#draukhain-registre-detail').evaluate((el) => el.open)) === false);
+
+  // ---- ② LES FILS : sortants ET entrant, sur la carte. ----
+  const capsTexte = (await page.locator('#draukhain-voute-dessin').textContent()) || '';
+  verifier('Voûte : ZEKROM, VRANESH et MINETHNIR comptent chacun leur fil',
+    /ZEKROM/.test(capsTexte) && /VRANESH/.test(capsTexte) && /MINETHNIR/.test(capsTexte), capsTexte);
+  verifier('Voûte : trois fils tissés (2 sortants + 1 entrant)',
+    (await page.locator('.voute-fil').count()) === 3,
+    `${await page.locator('.voute-fil').count()}`);
+
+  await page.locator('.voute-feu').first().locator('.voute-zone').hover();
+  await page.waitForSelector('.voute-feu.is-actif', { timeout: 5000 });
+  const parole = (await page.locator('#draukhain-voute-parole').textContent()) || '';
+  verifier('Survol : UNE ligne — le nom et ce qui l’entretient',
+    /AURORE/.test(parole) && /flamme/.test(parole), parole);
+  // La langue se soigne comme le code (directive EL ④) : une énumération se dit
+  // « A, B et C », jamais « A et B et C ».
+  verifier('Survol : les caps s’énumèrent en français',
+    /relié à ZEKROM, VRANESH et MINETHNIR/.test(parole), parole);
+  verifier('Survol : le futur qui MENACE le serment est dit sur la carte',
+    /un futur menace ce serment/.test(parole), parole);
+  verifier('Survol : le thème d’où vient ce futur est nommé, sans son sous-titre',
+    /LIANDRA/.test(parole) && !/un cap à tenir/.test(parole), parole);
+  verifier('Survol : seuls les fils du serment visé s’allument',
+    (await page.locator('.voute-fil.is-vif').count()) === 3
+    && (await page.locator('.voute-feu.is-actif').count()) === 1);
+
+  // ---- ③ ABSENCE (§5) : le déroulé du futur reste dans la fiche. ----
+  const domVoute = await page.locator('#draukhain-voute').textContent();
+  verifier('ABSENCE — le déroulé du futur ne fuit pas sur la voûte',
+    !/déroulé qui doit rester dans la fiche/.test(domVoute || ''), (domVoute || '').slice(0, 120));
+
+  // ---- ④ Le clic ouvre le foyer du serment visé. ----
+  await page.locator('.voute-feu').first().click();
+  await page.waitForSelector('.foyer-flamme-g', { timeout: 5000 });
+  verifier('Clic : le foyer s’ouvre sur le serment choisi',
+    (await page.locator('#draukhain-foyer-nom').textContent()) === 'AURORE');
+  verifier('Clic : le feu choisi reste marqué sur la voûte',
+    (await page.locator('.voute-feu[aria-pressed="true"]').count()) === 1);
+
+  // ---- ⑤ LA MESURE, sur les données du jour. ----
+  const m2 = await page.evaluate(mesurerVoute);
+  verifier('Mesure (2 serments) : tout tient dans le cadre', m2.dedans, JSON.stringify(m2.cadre));
+  verifier('Mesure (2 serments) : aucune étiquette ne se croise',
+    m2.croisements === 0, `${m2.croisements}`);
+  const nommes2 = (await page.locator('#draukhain-voute-dessin .voute-nom').allTextContents())
+    .filter((n) => n.length > 0);
+  verifier('Mesure (2 serments) : la carte NOMME ses serments',
+    nommes2.length === 2, JSON.stringify(nommes2));
+
+  verifier('Zéro erreur console (voûte)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
+  verifier('Zéro ressource externe (voûte)', externes.length === 0, externes.slice(0, 3).join(' | '));
+  await page.screenshot({ path: `${CAPTURES}/draukhain-voute.png`, fullPage: true });
+  await page.close();
+}
+
+// ---- ⑥ LE PIRE CAS CONSTRUIT : douze serments aux noms interminables. ----
+// Les données du jour sont un échantillon favorable — elles ne sont pas le juge
+// (règle du 2026-08-01). Douze serments, tous reliés aux trois caps : c'est la
+// carte la plus chargée qu'on puisse lui demander de tenir.
+{
+  const { page, erreurs } = await nouvellePage();
+  await page.addInitScript(scriptFausseSession());
+  const DOUZE = { ok: true, data: { serments: [], flammes: [], liens: [], futurs: [] } };
+  for (let i = 0; i < 12; i += 1) {
+    const id = `p${i}`;
+    DOUZE.data.serments.push({
+      id, intitule: `SERMENT INTERMINABLE NUMÉRO ${i} DONT LE NOM NE FINIT PAS`,
+      pourquoi: null, horizon: null, nb_flammes: i % 7, a_raviver: (i % 7) === 0,
+      created_at: '2026-07-01T10:00:00Z',
+    });
+    for (let f = 0; f < i % 7; f += 1) {
+      DOUZE.data.flammes.push({ id: `${id}f${f}`, serment_id: id, nature: 'rappel', texte: 'flamme de mesure' });
+    }
+    DOUZE.data.liens.push({ id: `${id}l1`, owner_id: 'o', serment_id: id, ideal_id: 'i1', entree_id: null });
+    DOUZE.data.liens.push({ id: `${id}l2`, owner_id: 'o', serment_id: id, ideal_id: null, entree_id: 'e1' });
+    DOUZE.data.futurs.push({
+      id: `${id}x`, serment_id: id, scenario_id: 'sc1', situation_id: 'si1',
+      rapport: 'sert', deroule: 'neutre', theme: 'LIANDRA — un cap à tenir', advenu: false,
+    });
+  }
+  await page.route('**/api/serments**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(DOUZE) }));
+  await page.route('**/api/ideaux**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IDEAUX) }));
+  await page.route('**/api/imladrik**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_PAGES) }));
+
+  await page.goto(`${BASE}/draukhain.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForSelector('#draukhain-voute-dessin .voute-feu', { timeout: 20000 });
+
+  verifier('Pire cas : les douze feux sont là',
+    (await page.locator('.voute-feu').count()) === 12);
+  verifier('Pire cas : trente-six fils tissés',
+    (await page.locator('.voute-fil').count()) === 36,
+    `${await page.locator('.voute-fil').count()}`);
+  const m12 = await page.evaluate(mesurerVoute);
+  verifier('Mesure (12 serments) : tout tient dans le cadre', m12.dedans, JSON.stringify(m12.cadre));
+  verifier('Mesure (12 serments) : aucune étiquette ne se croise',
+    m12.croisements === 0, `${m12.croisements}`);
+  // Sous 6 signes une étiquette ne reconnaît plus rien : on préfère le vide au
+  // moignon. La parole sous la carte, elle, dit toujours tout.
+  const etiquettes12 = await page.locator('#draukhain-voute-dessin .voute-nom').allTextContents();
+  const courtes = etiquettes12.filter((n) => n.length > 0 && n.length < 6);
+  verifier('Pire cas : aucun moignon d’étiquette', courtes.length === 0, JSON.stringify(courtes));
+  // Le piège que les deux mesures ci-dessus ne voient PAS : une carte dont
+  // toutes les étiquettes ont été rabotées à vide « tient dans le cadre » et
+  // « ne croise rien ». Elle est pourtant illisible. Une carte se juge aussi à
+  // ce qu'elle NOMME. (Défaut réel : la mesure tournait dans un conteneur
+  // masqué, où getBBox vaut zéro — chaque nom y était raboté jusqu'au vide.)
+  const nommes12 = etiquettes12.filter((n) => n.length >= 6).length;
+  verifier('Pire cas : la carte NOMME ses serments (≥ 10 sur 12)',
+    nommes12 >= 10, `${nommes12} nommés sur ${etiquettes12.length}`);
+
+  verifier('Zéro erreur console (pire cas)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
+  await page.screenshot({ path: `${CAPTURES}/draukhain-voute-12.png`, fullPage: true });
+  await page.close();
+}
+
+// ---- ⑦ La couronne de la voûte, fonction PURE. ----
+{
+  const { page } = await nouvellePage({ configVide: true });
+  await page.goto(`${BASE}/draukhain.html`, { waitUntil: 'load', timeout: 20000 });
+  const pur = await page.evaluate(() => {
+    const c = window.UltimaDraukhain.couronneVoute;
+    return {
+      vide: c(0).length,
+      seul: c(1).length,
+      seulAuCentre: c(1)[0].x === 330 && c(1)[0].y === 214,
+      douze: c(12).length,
+      // Un nom plein Nord se pose AU-DESSUS, plein Sud EN DESSOUS : sinon il
+      // croise les étiquettes de ses deux voisins.
+      nordAuDessus: c(12)[0].ancre === 'middle' && c(12)[0].dy < 0,
+      sudEnDessous: c(12)[6].ancre === 'middle' && c(12)[6].dy > 0,
+      // Le budget de signes se calcule sur la place réelle, jamais à l'aveugle.
+      budgetsPositifs: c(12).every((p) => p.signes > 0),
+    };
+  });
+  verifier('couronneVoute pure : 0 → rien, 1 → au centre',
+    pur.vide === 0 && pur.seul === 1 && pur.seulAuCentre, JSON.stringify(pur));
+  verifier('couronneVoute pure : 12 places, Nord au-dessus, Sud en dessous',
+    pur.douze === 12 && pur.nordAuDessus && pur.sudEnDessous, JSON.stringify(pur));
+  verifier('couronneVoute pure : chaque place a un budget de signes mesuré',
+    pur.budgetsPositifs, JSON.stringify(pur));
+  await page.close();
+}
+
 
 await navigateur.close();
 console.log(echecs === 0 ? '\n=== SMOKE DRAUKHAIN VERT ===' : `\n=== ${echecs} VERDICT(S) EN ÉCHEC ===`);

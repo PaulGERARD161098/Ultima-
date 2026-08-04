@@ -1466,3 +1466,46 @@
     🔻 **Leçon** : un livrable qu'on demande à Paul d'ouvrir se vérifie **dans
     les conditions où il l'ouvrira**, pas seulement en local — le local n'a pas
     de CSP.
+- **2026-08-04 (DRAUKHAIN — la voûte livrée, deux serments réels)** — Paul :
+  « on travaille DRAUKHAIN. En fait c'est ça, sur deux serments : on va tester
+  cette refonte de l'affichage. Le premier, ne plus jamais perdre mon calme —
+  et j'ai un très bon exemple. Ce qu'on peut associer à chaque serment, on peut
+  associer une date, une petite histoire, histoire d'étayer. Le deuxième,
+  toujours rechercher la vérité et avoir la force et le courage de le dire. »
+  - **Arbitrages** : forme **A (la voûte)** ; la date **sur la flamme**.
+  - **Réponse au besoin « une date, une petite histoire »** : l'histoire avait
+    déjà sa place — la flamme de nature *victoire* (0016), faite pour ça. Le
+    manque était **la date de l'ÉVÉNEMENT** : une flamme ne portait que
+    `created_at`, la date de son écriture. Migration `0020` écrite (colonne
+    `survenu_le date`, additive, RLS inchangée), **non appliquée — gate**.
+    🔻 **Réflexe à garder** : quand Paul demande une capacité, chercher d'abord
+    ce qui la porte déjà à moitié — le correctif est alors une colonne, pas un
+    objet de plus.
+  - **La passerelle borgne est fermée SANS toucher à l'API** : `/api/situations`
+    sert déjà `scenario_liens`. La lire depuis DRAUKHAIN, comme on lit déjà
+    ZEKROM et MINETHNIR, suffit à faire apparaître le futur qui *menace* ou
+    *sert* un serment. 🔻 **Avant d'élargir un contrat d'API, regarder ce que
+    les caps voisins servent déjà.**
+  - 🔻 **DEUX défauts trouvés par la MESURE, aucun par l'œil** — et c'est la
+    leçon du jour :
+    ① À douze serments en capitales, une étiquette **débordait de 7 px**. Le
+    budget de signes de la couronne *estime* une largeur moyenne ; une capitale
+    est plus large. Correctif : après l'estimation, on **mesure le texte
+    réellement tracé** et on retire des signes tant qu'il dépasse.
+    ② Ce correctif a alors **vidé toutes les étiquettes** : `rendreVoute`
+    tournait pendant que le registre était encore `hidden`, où **`getBBox()`
+    vaut zéro** — chaque nom était raboté jusqu'au vide. La page se **montre**
+    donc avant d'être dessinée. 🔻 **Une mesure prise dans un conteneur masqué
+    n'est pas une mesure, c'est un zéro qui a l'air d'une mesure.**
+  - 🔻 **Le harnais avait un trou, et il est bouché** : « tout tient dans le
+    cadre » et « aucun croisement » passaient **aussi** sur une carte dont
+    toutes les étiquettes étaient vides. Un critère de non-débordement ne dit
+    rien de la lisibilité. Ajouté : **la carte NOMME ses serments** (≥ 10 sur 12).
+    Vaut pour toute mesure future : vérifier qu'on n'a pas satisfait le critère
+    en supprimant ce qu'il mesurait.
+  - **Chaque vue a désormais UN travail** : la voûte l'ensemble, le foyer un
+    serment, le registre l'écriture. La rangée de boutons du foyer disparaît —
+    c'était la troisième liste des mêmes noms. « Sceller un serment » passe
+    derrière la carte (miroir de « l'image d'abord », VRANESH).
+  - **Les deux serments de Paul sont scellés en base.** ⏳ Reste à sa main :
+    l'histoire de l'exemple vécu cette semaine, et le go sur `0020`.

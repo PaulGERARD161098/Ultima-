@@ -228,7 +228,27 @@ ordinaire — c'est elle qui porterait la voix.
   volume, mais une liste reste une liste). Chaque forme est **mesurée** aux trois
   volumes 1/5/12 : bbox contre viewBox **et croisement des étiquettes** — ce
   second critère manquait à la règle du 2026-08-01 et a rattrapé deux noms qui se
-  chevauchaient en forme A. ⏳ **À la main de Paul : une lettre.**
+  chevauchaient en forme A.
+- ✅ **LA VOÛTE LIVRÉE (2026-08-04, Paul : forme A + « la date sur la flamme »).**
+  `draukhain.html` s'ouvre désormais sur la **voûte** : tous les serments à la
+  fois, les fils vers les caps voisins tissés en encre pâle, allumés au survol ;
+  le clic ouvre le **foyer** du serment visé. Chaque vue a UN travail et un seul
+  — la voûte l'ensemble, le foyer un serment, le registre l'écriture (la rangée
+  de boutons du foyer disparaît : c'était la troisième liste). « Sceller un
+  serment » passe **derrière** la carte (miroir de « l'image d'abord » acté sur
+  VRANESH). **La passerelle borgne est fermée** : `/api/situations` est lu comme
+  on lit déjà ZEKROM et MINETHNIR — zéro changement d'API — et le futur qui
+  *menace* ou *sert* un serment se dit enfin, sans que le déroulé du scénario ne
+  quitte son cap (§5, prouvé par l'ABSENCE). Front seul :
+  `css/draukhain-voute.css`, `js/draukhain.js`, `draukhain.html`.
+  **Les deux serments réels de Paul** sont scellés en base (dictée du jour).
+- ⏳ **GATE OUVERTE — migration `0020_flammes_survenu_le.sql` ÉCRITE, NON
+  APPLIQUÉE** : une colonne `survenu_le date` optionnelle sur `flammes`, pour
+  dater ce que l'histoire raconte (distinct de `created_at`, qui date
+  l'écriture). Additive, non destructive, RLS inchangée. **Au go de Paul** :
+  application + saisie de la date dans le formulaire de flamme.
+- ⏳ **Attendu de Paul** : l'histoire de l'exemple vécu cette semaine, à consigner
+  en flamme « victoire » sur le serment « ne plus jamais perdre mon calme ».
 
 ## 7. Séquencement (une boucle à la fois, directive EB)
 

@@ -17,6 +17,9 @@
   <!-- Le foyer des serments (forme A, 2026-08-01) : la consultation se fait
        désormais sur le foyer ; le registre détaillé se replie en dessous. -->
   <link rel="stylesheet" href="css/draukhain-foyer.css">
+  <!-- La voûte des serments (forme A, 2026-08-04) : l'arrivée du cap — tous les
+       serments à la fois, et les fils vers les caps voisins. -->
+  <link rel="stylesheet" href="css/draukhain-voute.css">
 </head>
 <body class="console page-quadrant" data-quadrant="draukhain">
 
@@ -76,9 +79,31 @@
 
       <div id="draukhain-registre" hidden>
 
-        <!-- Saisie libre : sceller un serment (le vœu que l'on tient). -->
-        <section class="cartouche-page" aria-labelledby="draukhain-titre-saisie">
-          <h2 id="draukhain-titre-saisie">Sceller un serment</h2>
+        <!-- ===== LA VOÛTE DES SERMENTS (forme A, dictée Paul 2026-08-04).
+             L'ARRIVÉE : tous les serments à la fois, et les fils vers les caps
+             voisins. Ce que ni le foyer (un serment) ni le registre (écrire) ne
+             faisaient. Vide dans le HTML servi — les intitulés sont intimes et
+             ne viennent que de /api/serments, après session validée (§5). ===== -->
+        <section id="draukhain-voute" class="cartouche-page"
+                 aria-labelledby="draukhain-titre-voute" hidden>
+          <h2 id="draukhain-titre-voute">La voûte des serments</h2>
+          <p class="zekrom-vue-note">Tes serments, tous à la fois. L'éclat d'un feu dit
+            ce qui l'entretient&nbsp;; les fils vont vers les caps voisins. Survole un
+            feu pour savoir ce qu'il est, clique-le pour ouvrir son foyer.</p>
+
+          <div class="voute-cadre">
+            <svg class="voute-dessin" id="draukhain-voute-dessin" viewBox="0 0 640 420"
+                 role="img" aria-label="La voûte des serments : chaque feu est un serment"></svg>
+          </div>
+          <p class="voute-parole" id="draukhain-voute-parole" role="status" aria-live="polite"></p>
+        </section>
+
+        <!-- Saisie libre : sceller un serment (le vœu que l'on tient). REPLIÉE —
+             on arrive sur DRAUKHAIN pour VOIR ses serments, pas pour remplir un
+             formulaire (constat du 2026-08-04, miroir de « l'image d'abord »
+             acté sur VRANESH). -->
+        <details class="cartouche-page draukhain-registre-repli">
+          <summary id="draukhain-titre-saisie">Sceller un serment</summary>
           <form id="draukhain-form-serment" class="zekrom-form" novalidate>
             <div class="zekrom-champ">
               <label for="draukhain-intitule">Le serment, le vœu</label>
@@ -100,7 +125,7 @@
               <span id="draukhain-form-message" class="zekrom-form-message" role="status" aria-live="polite"></span>
             </div>
           </form>
-        </section>
+        </details>
 
         <!-- ===== LE FOYER DES SERMENTS (forme A, dictée Paul 2026-08-01).
              Un serment est un feu qu'on entretient : ses flammes gravitent
@@ -109,16 +134,14 @@
              après session validée (§5). ===== -->
         <section id="draukhain-foyer" class="cartouche-page"
                  aria-labelledby="draukhain-titre-foyer" hidden>
-          <h2 id="draukhain-titre-foyer">Le foyer des serments</h2>
-          <p class="zekrom-vue-note">Chaque serment est un feu. Clique-le&nbsp;: ses flammes
-            s'allument autour du foyer — plus il y en a, plus il éclaire. Survole une
-            flamme pour savoir ce qu'elle est, clique-la pour tout voir.</p>
-
-          <div class="foyer-serments" id="draukhain-foyer-serments"></div>
+          <h2 id="draukhain-titre-foyer">Le foyer du serment</h2>
+          <p class="zekrom-vue-note">Le serment choisi sur la voûte, et ce qui l'entretient&nbsp;:
+            ses flammes s'allument autour du foyer — plus il y en a, plus il éclaire.
+            Survole une flamme pour savoir ce qu'elle est, clique-la pour tout voir.</p>
 
           <div class="foyer-scene">
             <div class="foyer-cadre">
-              <button type="button" class="foyer-retour" id="draukhain-foyer-retour" hidden>↞ Les serments</button>
+              <button type="button" class="foyer-retour" id="draukhain-foyer-retour" hidden>↞ La voûte</button>
               <svg class="foyer-dessin" id="draukhain-foyer-dessin" viewBox="0 0 300 200"
                    role="img" aria-label="Le foyer du serment ouvert"></svg>
               <p class="foyer-nom" id="draukhain-foyer-nom"></p>
