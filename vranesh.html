@@ -54,9 +54,10 @@
         </g>
       </svg>
       <h1 class="console-titre">VRANESH</h1>
-      <p class="console-invite quadrant-mission">Les différents futurs potentiels&nbsp;:
-        partir d'un cas donné et dérouler ce qui peut advenir — anticiper
-        sereinement, puis revenir au présent, sans rien ruminer.</p>
+      <!-- Mission ramenée à une ligne (dictée Paul 2026-08-04 : « réduire le
+           texte au maximum »). Le sens complet vit dans CADRAGE-IMLADRIK. -->
+      <p class="console-invite quadrant-mission">Les futurs potentiels — anticiper,
+        puis revenir au présent.</p>
       <span class="quadrant-etat">Privé — auth requise</span>
     </header>
 
@@ -85,13 +86,16 @@
              RAMIFICATIONS (un scénario = une branche qui pousse).
              Vide dans le HTML servi : les intitulés sont intimes et ne
              viennent QUE de /api/situations, après session validée (§5). ===== -->
+        <!-- L'ARRIVÉE, dépouillée (dictée Paul 2026-08-04) : à l'ouverture de
+             VRANESH, ses thèmes s'affichent tout de suite, « réduire le texte au
+             maximum, maximiser le visuel ». Donc : la rosace, les noms, et rien
+             d'autre. La notice qui vivait ici est supprimée — le cartouche de
+             côté dit déjà quoi faire en une ligne, au bon moment.
+             (Aucun nom de thème n'est cité ici : le HTML servi n'en porte
+             aucun, et un harnais le vérifie par l'ABSENCE.) -->
         <section id="vranesh-boussole" class="cartouche-page vranesh-boussole"
                  aria-labelledby="vranesh-titre-boussole" hidden>
           <h2 id="vranesh-titre-boussole">La boussole des futurs</h2>
-          <p class="zekrom-vue-note">Chaque cap est un thème. Clique-le&nbsp;: son arbre
-            se déplie, une branche par futur possible. Survole une branche pour savoir
-            ce qu'elle est, clique-la pour tout voir — et pour désigner celle qui a
-            poussé quand le futur a tranché.</p>
 
           <div class="vranesh-scene">
             <!-- ① La rose : les NOMS des thèmes, rien d'autre. Vide dans le HTML
@@ -118,9 +122,12 @@
           </div>
         </section>
 
-        <!-- Saisie libre : poser une situation (le cas donné à anticiper). -->
-        <section class="cartouche-page" aria-labelledby="vranesh-titre-saisie">
-          <h2 id="vranesh-titre-saisie">Poser une situation</h2>
+        <!-- Saisie libre : poser une situation (le cas donné à anticiper).
+             REPLIÉE depuis le 2026-08-04, comme le registre : on l'ouvre pour
+             écrire, elle n'occupe plus le premier écran, qui est fait pour
+             regarder. Rien n'est perdu — le pli reste visible et cliquable. -->
+        <details class="cartouche-page vranesh-registre-repli" id="vranesh-saisie">
+          <summary id="vranesh-titre-saisie">Poser une situation</summary>
           <form id="vranesh-form-situation" class="zekrom-form" novalidate>
             <div class="zekrom-champ">
               <label for="vranesh-intitule">La situation, le cas à anticiper</label>
@@ -137,7 +144,7 @@
               <span id="vranesh-form-message" class="zekrom-form-message" role="status" aria-live="polite"></span>
             </div>
           </form>
-        </section>
+        </details>
 
         <!-- Le registre détaillé — REPLIÉ par défaut (constat de Paul 2026-08-01 :
              « il y a trop de textes »). Tout y reste : écriture des scénarios,
