@@ -6,6 +6,41 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🌿 **SESSION 2026-08-04 (VRANESH — le futur advenu se choisit), EN COURS.**
+  PR **#137 fusionnée** dans `main` au go de Paul, patrimoine COMPLET vert,
+  rien de non poussé.
+  - ✅ **Le dénouement rejoint la branche.** Constat de Paul : « je clique sur
+    une branche, ça me donne le choix si je la sélectionne, si le futur est
+    advenu. En l'état, ce n'est pas le cas. » Diagnostic : le geste **existait**
+    (migration `0019` + `PATCH /api/situations`, livrés le 2026-08-01) mais ne
+    vivait **que** dans le registre détaillé replié, sous forme de menu
+    déroulant. **Une fonction qu'on ne rencontre pas là où on la cherche
+    n'existe pas** — leçon à porter à toutes les livraisons futures : la
+    livraison ne s'arrête pas au code qui marche, elle s'arrête au geste
+    atteignable. Désormais : clic sur branche → « Cette branche a poussé »,
+    deux temps, compte exact des branches coupées annoncé avant la coupe.
+  - ✅ **Un thème dénoué s'ouvre sur son dénouement** : futur advenu déplié
+    d'emblée, en grand, sceau sur l'arbre, plus de coupe proposée mais une
+    réouverture. C'est le « méga affichage » demandé.
+  - ✅ **L'arbre VRANESH est enfin MESURÉ** (la règle du 2026-08-01 le nommait
+    déjà, elle n'y avait jamais été appliquée) : les étiquettes de gauche
+    **sortaient du cadre** chez Paul. Repère élargi `240 → 300`, budget de
+    signes calculé sur la place réelle de chaque côté, `getBBox()` comparée au
+    `viewBox` **et pire cas construit** (6 futurs interminables). +45
+    assertions sur `smoke-vranesh`. *Le défaut a été trouvé par une capture de
+    vérification, pas par Paul : c'est la mesure qui doit précéder l'envoi.*
+  - 🔶 **BOUCLE OUVERTE — l'image d'abord, le texte ensuite.** Dictée du jour :
+    « quand j'arrive sur VRANESH il faut m'afficher tout de suite LIANDRA et
+    THORIOL […] réduire le texte au maximum, maximiser le visuel […] ensuite
+    quand je sélectionne une branche, là je peux avoir du texte, mais il y en a
+    trop, c'est du texte brut. » **Maquettes livrées, code non engagé**
+    (`design/preview-vranesh-lecture.html`) : étage ① l'arrivée (A les deux
+    portes · B la rose épurée · **C les arbres en miniature, reco**) ; étage ③
+    la branche choisie (**A trois vignettes gravées, reco** · B le ruban du
+    futur · C l'existant, 48 mots dont le déroulé écrit deux fois).
+  - ⏳ **Action à la main de Paul** : choisir **une forme par étage** (deux
+    lettres suffisent) — l'implémentation suit derrière, avec ses harnais.
+
 - 🔥 **SESSION 2026-08-01 (EL gravée + IMLADRIK rendu vivant), CLOSE.** Six
   livraisons fusionnées dans `main` (#126 → #135), patrimoine COMPLET vert à
   **1071 assertions**, rien de non poussé.
