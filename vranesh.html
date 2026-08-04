@@ -90,7 +90,8 @@
           <h2 id="vranesh-titre-boussole">La boussole des futurs</h2>
           <p class="zekrom-vue-note">Chaque cap est un thème. Clique-le&nbsp;: son arbre
             se déplie, une branche par futur possible. Survole une branche pour savoir
-            ce qu'elle est, clique-la pour tout voir.</p>
+            ce qu'elle est, clique-la pour tout voir — et pour désigner celle qui a
+            poussé quand le futur a tranché.</p>
 
           <div class="vranesh-scene">
             <!-- ① La rose : les NOMS des thèmes, rien d'autre. Vide dans le HTML
@@ -102,7 +103,10 @@
             <!-- ② L'arbre du thème ouvert : un tronc, des branches. -->
             <div id="vranesh-arbre" class="vranesh-arbre-cadre" hidden>
               <button type="button" class="vranesh-arbre-retour" id="vranesh-arbre-retour">↞ La boussole</button>
-              <svg class="vranesh-arbre-svg" id="vranesh-arbre-dessin" viewBox="0 0 240 196"
+              <!-- Le sceau d'un thème dénoué. Texte FIXE (aucune donnée intime),
+                   montré par js/vranesh.js quand le futur a tranché. -->
+              <p class="vranesh-arbre-sceau" id="vranesh-arbre-sceau" hidden>La branche qui a poussé</p>
+              <svg class="vranesh-arbre-svg" id="vranesh-arbre-dessin" viewBox="0 0 300 196"
                    role="img" aria-label="Arbre des futurs du thème ouvert"></svg>
               <p class="vranesh-arbre-nom" id="vranesh-arbre-nom"></p>
             </div>

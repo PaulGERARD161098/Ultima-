@@ -56,8 +56,11 @@
 /* Zone de préhension : une courbe fine se rate à la souris. Invisible, large. */
 .vranesh-branche-zone { fill: none; stroke: transparent; stroke-width: 16; cursor: pointer; }
 .vranesh-bourgeon { fill: var(--or-antique); cursor: pointer; }
+/* La taille est SOLIDAIRE de ARBRE.LARGEUR_CAR (js/vranesh.js), qui en déduit
+   combien de signes chaque étiquette peut porter sans sortir du cadre : changer
+   l'une sans l'autre fait déborder. Le harnais mesure les deux ensemble. */
 .vranesh-etiquette {
-  font-family: var(--police-ancienne); font-size: 7.5px; letter-spacing: 0.04em;
+  font-family: var(--police-ancienne); font-size: 8.5px; letter-spacing: 0.04em;
   fill: var(--encre-sepia-douce); pointer-events: none;
 }
 .vranesh-arbre-vide {
@@ -108,6 +111,45 @@
 .vranesh-cote-lien {
   display: inline-block; margin-top: 0.8rem; min-height: 44px; line-height: 44px;
   font-variant: small-caps; letter-spacing: 0.08em; color: var(--accent);
+}
+
+/* ---------- Choisir la branche DEPUIS L'ARBRE (2026-08-04) ----------
+   Le dénouement se pose là où Paul regarde : sous le détail de la branche
+   cliquée. Le bouton porte le geste, la confirmation porte sa gravité. */
+.vranesh-cote-action {
+  margin-top: 0.9rem; padding-top: 0.7rem;
+  border-top: 1px dashed var(--or-antique);
+}
+.vranesh-cote-choisir { min-height: 44px; }
+.vranesh-cote-scelle {
+  margin: 0 0 0.4rem; font-variant: small-caps; letter-spacing: 0.08em;
+  color: var(--encre-sepia-douce);
+}
+.vranesh-cote-confirmation { margin-top: 0.7rem; }
+
+/* ---------- Le thème DÉNOUÉ : le futur advenu s'affiche en grand ----------
+   Une fois le futur tranché, il ne reste qu'une branche : elle n'a plus à se
+   défendre parmi d'autres, elle occupe la place. */
+.vranesh-arbre-sceau {
+  position: absolute; right: 0.7rem; top: 0.6rem; margin: 0;
+  font-family: var(--police-ancienne); font-size: 0.74rem;
+  font-variant: small-caps; letter-spacing: 0.12em;
+  color: var(--encre-sepia); border: 1px solid var(--or-antique);
+  border-radius: 999px; padding: 0.25rem 0.7rem;
+  background: rgba(169, 136, 74, 0.14);
+}
+/* Le rayon du bourgeon est posé en JS (attribut SVG), pas ici : `r` en CSS est
+   une propriété de géométrie SVG2 inégalement gérée selon les moteurs. */
+.vranesh-arbre-cadre.is-advenu .vranesh-branche--advenue { stroke-width: 3.6; }
+/* Solidaire de ARBRE.LARGEUR_CAR_SCEAU (js/vranesh.js) — même règle. */
+.vranesh-arbre-cadre.is-advenu .vranesh-branche-g.is-advenue .vranesh-etiquette {
+  font-size: 12px; font-weight: 700; fill: var(--encre-sepia);
+}
+/* Le cartouche de côté d'un thème dénoué : le déroulé passe au premier plan. */
+.vranesh-cote.is-advenu .parole-nom { font-size: 1.15rem; }
+.vranesh-cote.is-advenu .parole-texte {
+  font-size: 1.1rem; line-height: 1.5; font-weight: 600;
+  border-left: 3px solid var(--or-antique); padding-left: 0.7rem;
 }
 
 /* ---------- La pousse ---------- */
