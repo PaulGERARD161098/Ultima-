@@ -209,6 +209,26 @@ ordinaire — c'est elle qui porterait la voix.
 - **Passerelles** ✅ **construites (v2, 2026-07-25)** : un serment peut naître
   d'un idéal ZEKROM (idéal → serment) et se suivre dans MINETHNIR (pages liées).
   Table `serment_liens` (migration 0018), cible XOR.
+- 🔶 **BOUCLE OUVERTE (2026-08-04) — la forme, pas le fond.** Paul : « j'aime
+  bien l'outil, mais la forme n'est pas adaptée ; essayons quelque chose de plus
+  visuel — une belle cartographie ». **État des lieux + trois formes livrés en
+  maquette** (`design/preview-draukhain-carto.html`), **zéro ligne de production
+  touchée**. Six constats, tous chiffrés : ① la page s'ouvre sur un formulaire,
+  pas sur une carte ; ② trois représentations du même objet cohabitent (rangée de
+  boutons + foyer + voie jalonnée) ; ③ le dessin n'a rien à dessiner (**1 serment,
+  0 flamme** en base — toute la grammaire du foyer est du code qui ne s'exprime
+  jamais) ; ④ ce n'est pas une cartographie mais une liste et un détail (jamais
+  plus d'un serment à l'écran) ; ⑤ **la passerelle est borgne** —
+  `GET /api/serments` ne replie que `serment_liens` (sortants), donc le fil
+  entrant `scenario_liens` depuis VRANESH (**1 posé en base**) n'est affiché
+  nulle part ; ⑥ le repli sans JS d'`imladrik.html` annonce encore « DRAUKHAIN —
+  à venir ». Trois formes au choix : **A la voûte** (les serments coexistent, les
+  fils vers ZEKROM/VRANESH/MINETHNIR se voient — **reco**), **B le brasier**
+  (la plus belle, aucune place pour les fils), **C la frise** (la plus solide en
+  volume, mais une liste reste une liste). Chaque forme est **mesurée** aux trois
+  volumes 1/5/12 : bbox contre viewBox **et croisement des étiquettes** — ce
+  second critère manquait à la règle du 2026-08-01 et a rattrapé deux noms qui se
+  chevauchaient en forme A. ⏳ **À la main de Paul : une lettre.**
 
 ## 7. Séquencement (une boucle à la fois, directive EB)
 

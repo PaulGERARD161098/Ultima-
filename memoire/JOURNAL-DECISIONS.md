@@ -1414,3 +1414,40 @@
     VRAIES données** (mêmes clés Supabase que la production). Une preview n'est
     pas un brouillon. Le dire à Paul chaque fois qu'elle porte un geste
     destructif, avant qu'il ne l'exerce.
+- **2026-08-04 (DRAUKHAIN — état des lieux et cartographie, boucle OUVERTE)** —
+  Paul : « d'abord on va faire un état des lieux de ce que ça fait, quel est
+  l'objectif, quelles sont les passerelles avec ce qui existe. C'est plutôt un
+  souci de forme que de fond, parce que j'aime bien l'outil, mais je pense que
+  la forme n'est pas adaptée. Essayons de faire quelque chose de plus visuel —
+  comment faire une belle cartographie. »
+  - **Gate d'entrée EL tenu, et il a servi** : la dictée ne nommait pas l'outil.
+    Quatre candidats plausibles (ADRAMELECH, DRAUKHAIN, VRANESH, l'accueil) →
+    question posée au lieu de deviner. Réponse : **DRAUKHAIN**. Sans le gate, la
+    boucle partait sur la carto des idées — le mauvais outil, tout le travail
+    perdu. 🔻 **Une dictée qui ne nomme pas sa cible est un cadrage incomplet,
+    pas une instruction à interpréter.**
+  - **L'état des lieux a été CHIFFRÉ, pas raconté** : comptes relevés en base
+    (sans lire une ligne d'intime, §5) — **1 serment, 0 flamme, 0 lien sortant,
+    1 lien entrant depuis VRANESH**. C'est ce chiffre qui donne le vrai
+    diagnostic : le foyer, sa couronne, son halo croissant, ses natures qui
+    brûlent plus ou moins haut — **toute la grammaire est du code qui ne
+    s'exprime jamais**. 🔻 **Une forme se juge sur le volume RÉEL de données
+    qu'elle porte, pas sur celui qu'elle anticipe.**
+  - **Constat qui vaut au-delà de DRAUKHAIN** : `GET /api/serments` ne replie
+    que les liens **sortants**. Le fil entrant depuis VRANESH existe en base et
+    n'a **aucune représentation**. 🔻 **Une passerelle n'est établie que si elle
+    se voit des DEUX côtés** — la moitié d'un pont n'est pas un pont. À
+    re-vérifier sur les autres passerelles (R↔Z, scénario→page).
+  - **Trois formes livrées en maquette** (`design/preview-draukhain-carto.html`,
+    zéro production touchée) : **A la voûte** (reco — la seule qui traite à la
+    fois l'absence de vue d'ensemble et l'invisibilité des fils), **B le
+    brasier** (la plus belle, mais pas de place pour les fils — or c'est
+    justement ce qui manque), **C la frise** (la plus solide en volume, mais une
+    liste reste une liste).
+  - 🔻 **La règle du 2026-08-01 était incomplète, elle est complétée** : mesurer
+    la bbox contre le viewBox ne suffit pas. La forme A est passée « au vert »
+    alors que **deux étiquettes se croisaient plein Nord** — dans le cadre, donc
+    invisibles au critère, et illisibles à l'œil. **Un dessin se mesure aussi en
+    CROISEMENTS** : chaque paire d'étiquettes, et chaque étiquette contre les
+    cartouches. Critère ajouté à la maquette, éprouvé aux volumes 1/5/12 sur
+    desktop et mobile.

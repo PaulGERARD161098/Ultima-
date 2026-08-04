@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Preview — DRAUKHAIN : l'état des lieux et la cartographie des serments</title>
+<!--
+  PREVIEW DE TRAVAIL — AUCUNE DONNÉE RÉELLE.
+  §5 (IMLADRIK = intime) : les serments affichés ici sont INVENTÉS pour la
+  maquette. Le serment réel de Paul n'a pas été lu ; seuls des COMPTES ont été
+  relevés en base (1 serment, 0 flamme, 1 lien entrant depuis VRANESH).
+
+  Constat de Paul (dictée 2026-08-04) :
+    « D'abord on va faire un état des lieux de ce que ça fait, quel est
+      l'objectif, quelles sont les passerelles avec ce qui existe. C'est plutôt
+      un souci de forme que de fond pour moi, parce que j'aime bien l'outil,
+      mais je pense que la forme n'est pas adaptée. Essayons de faire quelque
+      chose de plus visuel — comment faire une belle cartographie. »
+
+  La page tient donc DEUX choses :
+    ① L'ÉTAT DES LIEUX — ce que DRAUKHAIN fait, son objectif, ses passerelles,
+      et les six constats de forme (chiffrés, pas jugés à l'œil).
+    ② TROIS FORMES de cartographie, à comparer, dont UNE SEULE sera retenue.
+
+  Chaque forme s'éprouve à TROIS VOLUMES — 1 serment (le réel d'aujourd'hui),
+  5 (le proche), 12 (le PIRE CAS CONSTRUIT). Règle du 2026-08-01 : une
+  géométrie se MESURE. Le cadre est donc mesuré à l'écran (bbox contre
+  viewBox), et le nombre de mots au repos est compté automatiquement.
+
+  Zéro ressource externe, zéro CDN, zéro donnée réelle.
+-->
+<style>
+:root {
+  --accent: #1e6fb8; --cerne-carte: #5a4118; --or-antique: #a9884a;
+  --mer-profonde: #0e3a52; --mer-claire: #17506b;
+  --parchemin: #f6eed9; --parchemin-carte: #efe3c6; --parchemin-ombre: #e3d3ab;
+  --encre-sepia: #3b2f1c; --encre-sepia-douce: #6a5636; --creme: #f6eed9;
+  --braise: #b4632a; --feu: #e8cf8f;
+  --police-ancienne: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 1.4rem 1rem 3rem; color: var(--creme);
+  font-family: var(--police-ancienne);
+  background:
+    radial-gradient(ellipse at 50% 12%, rgba(232,207,143,.13), rgba(0,0,0,0) 58%),
+    linear-gradient(180deg, var(--mer-claire), var(--mer-profonde) 62%, #0a2d42);
+  min-height: 100vh;
+}
+h1, h2, h3, h4 { font-weight: 700; letter-spacing: .06em; margin: 0; }
+.entete { max-width: 64rem; margin: 0 auto 1.2rem; text-align: center; }
+.entete h1 { font-size: 1.5rem; letter-spacing: .16em; }
+.entete p { margin: .5rem 0 0; font-style: italic; opacity: .88; }
+.avertissement {
+  max-width: 46rem; margin: .9rem auto 0; font-size: .82rem; font-style: italic;
+  border: 1px dashed rgba(169,136,74,.6); border-radius: 8px; padding: .5rem .9rem;
+}
+
+.cartouche {
+  background: linear-gradient(180deg, var(--parchemin), var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte); border-radius: 10px;
+  box-shadow: inset 0 0 0 3px rgba(169,136,74,.35), 0 4px 16px rgba(0,10,20,.35);
+  color: var(--encre-sepia); padding: 1.1rem 1.2rem;
+}
+.etage { max-width: 64rem; margin: 2.4rem auto 0; }
+.etage-titre {
+  text-align: center; font-size: 1.05rem; letter-spacing: .14em;
+  font-variant: small-caps; padding-bottom: .5rem;
+  border-bottom: 1px solid rgba(169,136,74,.5);
+}
+.etage-quoi { text-align: center; font-style: italic; opacity: .85; margin: .6rem 0 1rem; }
+
+/* ===================== ① L'ÉTAT DES LIEUX ===================== */
+.etat { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); }
+.etat h3 {
+  font-size: .82rem; letter-spacing: .12em; font-variant: small-caps;
+  color: var(--encre-sepia-douce); border-bottom: 1px solid rgba(169,136,74,.5);
+  padding-bottom: .3rem; margin-bottom: .6rem;
+}
+.etat p, .etat li { font-size: .9rem; line-height: 1.5; margin: .4rem 0; }
+.etat ul { margin: 0; padding-left: 1.1rem; }
+.chiffre { font-weight: 700; font-variant: tabular-nums; }
+.constats { max-width: 64rem; margin: 1rem auto 0; }
+.constats ol { margin: .4rem 0 0; padding-left: 1.4rem; }
+.constats li { font-size: .92rem; line-height: 1.55; margin: .55rem 0; }
+.constats b { letter-spacing: .02em; }
+.verdict {
+  margin-top: .9rem; padding-top: .7rem; border-top: 1px solid rgba(169,136,74,.5);
+  font-style: italic; font-size: .92rem;
+}
+
+/* ===================== BASCULES ===================== */
+.bascules { display: flex; gap: .6rem; justify-content: center; margin: 1rem auto; flex-wrap: wrap; }
+.bascule-titre {
+  align-self: center; font-size: .74rem; letter-spacing: .12em;
+  font-variant: small-caps; opacity: .75; margin-right: .2rem;
+}
+.onglet {
+  font-family: inherit; font-size: .82rem; letter-spacing: .08em; font-variant: small-caps;
+  padding: .55rem 1rem; min-height: 44px; cursor: pointer; border-radius: 999px;
+  border: 1px solid var(--or-antique); background: rgba(169,136,74,.14); color: var(--creme);
+}
+.onglet[aria-pressed="true"] { background: var(--parchemin); color: var(--encre-sepia); font-weight: 700; }
+.onglet:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.panneau[hidden] { display: none; }
+
+/* ===================== LA CARTE (formes A et B) ===================== */
+.carte-cadre { position: relative; }
+.carte-svg {
+  display: block; width: 100%; height: auto;
+  background: radial-gradient(ellipse at 50% 45%, var(--parchemin), var(--parchemin-ombre));
+  border: 1px solid var(--cerne-carte); border-radius: 8px;
+  box-shadow: inset 0 0 0 2px rgba(169,136,74,.3);
+}
+.carte-svg text { font-family: var(--police-ancienne); fill: var(--encre-sepia); }
+
+.n-coeur { fill: #3b2f1c; }
+.n-coeur-feu { fill: var(--feu); }
+.n-cercle-or { fill: none; stroke: var(--or-antique); stroke-width: 1; opacity: .5; }
+
+.n-halo { fill: var(--braise); }
+.n-feu { fill: #3b2f1c; }
+.n-feu-coeur { fill: var(--feu); }
+.n-braise { fill: none; stroke: var(--braise); stroke-width: 1.2; stroke-dasharray: 3 3; opacity: .8; }
+.n-nom { font-size: 12px; letter-spacing: .04em; }
+.n-compte { font-size: 9px; fill: var(--encre-sepia-douce); font-style: italic; }
+.n-zone { fill: transparent; cursor: pointer; }
+.n-g { transition: opacity .18s ease; }
+.n-g:focus-visible { outline: none; }
+.n-g:focus-visible .n-nom { text-decoration: underline; }
+.carte-svg.a-choix .n-g { opacity: .32; }
+.carte-svg.a-choix .n-g.is-actif { opacity: 1; }
+
+.f-fil { stroke: var(--encre-sepia-douce); stroke-width: .8; fill: none; opacity: .16; stroke-dasharray: 2 3; }
+.n-g.is-actif ~ .f-fil { opacity: .16; }
+.f-fil.is-vif { opacity: .95; stroke: var(--braise); stroke-width: 1.4; stroke-dasharray: none; }
+
+.c-cartouche { fill: rgba(246,238,217,.9); stroke: var(--cerne-carte); stroke-width: 1; }
+.c-nom { font-size: 10px; letter-spacing: .1em; text-anchor: middle; }
+.c-role { font-size: 8px; font-style: italic; fill: var(--encre-sepia-douce); text-anchor: middle; }
+
+/* ===================== FORME C — LA FRISE DES STÈLES ===================== */
+.frise { display: flex; gap: .7rem; overflow-x: auto; padding: .4rem .2rem 1rem; }
+.stele {
+  flex: 0 0 8.6rem; min-height: 13rem; cursor: pointer; font-family: inherit;
+  display: flex; flex-direction: column; align-items: center; gap: .45rem;
+  background: linear-gradient(180deg, #fbf5e5, var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte); border-radius: 6px 6px 2px 2px;
+  box-shadow: inset 0 0 0 2px rgba(169,136,74,.28); color: var(--encre-sepia);
+  padding: .7rem .5rem;
+}
+.stele:hover, .stele:focus-visible { box-shadow: inset 0 0 0 2px var(--or-antique); outline: none; }
+.stele svg { width: 3.2rem; height: 3.6rem; }
+.stele-nom { font-size: .8rem; line-height: 1.25; text-align: center; }
+.stele-compte { font-size: .68rem; font-variant: small-caps; letter-spacing: .08em; color: var(--encre-sepia-douce); }
+.stele-fils { display: flex; gap: .25rem; flex-wrap: wrap; justify-content: center; margin-top: auto; }
+.fil-pastille {
+  font-size: .6rem; letter-spacing: .08em; font-variant: small-caps;
+  border: 1px solid var(--or-antique); border-radius: 999px; padding: .05rem .4rem;
+  color: var(--encre-sepia-douce);
+}
+
+/* ===================== LA PAROLE (une ligne au survol) ===================== */
+.parole {
+  min-height: 3.2rem; margin-top: .7rem; padding: .55rem .8rem;
+  border-top: 1px solid rgba(169,136,74,.5); font-size: .9rem; color: var(--encre-sepia);
+}
+.parole-repos { font-style: italic; color: var(--encre-sepia-douce); }
+.parole-nom { font-weight: 700; letter-spacing: .06em; }
+
+/* ===================== LA MESURE (règle du 2026-08-01) ===================== */
+.mesure {
+  display: flex; gap: 1.2rem; flex-wrap: wrap; justify-content: center;
+  margin-top: .9rem; font-size: .78rem; font-variant: small-caps; letter-spacing: .08em;
+}
+.mesure span { border: 1px solid rgba(169,136,74,.55); border-radius: 999px; padding: .25rem .8rem; }
+.mesure .ok { color: #cfe8c9; border-color: rgba(140,200,130,.6); }
+.mesure .ko { color: #f2c0b0; border-color: rgba(220,130,110,.75); }
+.note { max-width: 48rem; margin: 1rem auto 0; text-align: center; font-size: .88rem; font-style: italic; opacity: .82; }
+.reco {
+  max-width: 48rem; margin: .9rem auto 0; text-align: center; font-size: .88rem;
+  border: 1px dashed rgba(169,136,74,.6); border-radius: 8px; padding: .7rem 1rem;
+}
+.pour-contre { display: grid; gap: .8rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); margin-top: 1rem; }
+.pour-contre div { font-size: .86rem; }
+.pour-contre h4 { font-size: .74rem; letter-spacing: .12em; font-variant: small-caps; opacity: .8; margin-bottom: .3rem; }
+</style>
+</head>
+<body>
+
+<header class="entete">
+  <h1>DRAUKHAIN — l'état des lieux, puis la carte</h1>
+  <p>Le fond est bon, la forme ne l'est pas. Trois cartographies au choix — une seule sera bâtie.</p>
+  <p class="avertissement">Maquette&nbsp;: les serments affichés sont <b>inventés</b>. Rien de l'intime de Paul
+    n'a été lu — seuls des comptes ont été relevés en base.</p>
+</header>
+
+<!-- ============================================================= -->
+<!-- ① L'ÉTAT DES LIEUX                                            -->
+<!-- ============================================================= -->
+<section class="etage">
+  <h2 class="etage-titre">① L'état des lieux</h2>
+  <p class="etage-quoi">Ce que DRAUKHAIN fait, pourquoi il existe, à quoi il est relié.</p>
+
+  <div class="etat">
+    <div class="cartouche">
+      <h3>Ce qu'il fait</h3>
+      <p>Deux objets, rien de plus. Un <b>serment</b> — le vœu que Paul se fait à lui-même
+        (le quoi, le pourquoi profond, l'horizon). Des <b>flammes</b> qui l'entretiennent —
+        une citation, une victoire consignée, un rappel.</p>
+      <p>Un serment sans flamme n'est pas un échec&nbsp;: il est <b>« à raviver »</b>.
+        DRAUKHAIN rappelle, il ne juge jamais.</p>
+    </div>
+    <div class="cartouche">
+      <h3>L'objectif</h3>
+      <p>La volonté au-delà du possible&nbsp;: <b>ne pas perdre le cap de sa propre parole</b>.
+        Là où ZEKROM tient les idéaux et VRANESH les futurs possibles, DRAUKHAIN tient
+        ce qui est <b>décidé</b>.</p>
+      <p>Rien n'y « finit »&nbsp;: pas de ligne d'arrivée, pas de pourcentage.
+        Un feu s'entretient ou s'éteint.</p>
+    </div>
+    <div class="cartouche">
+      <h3>Les passerelles (réel en base)</h3>
+      <ul>
+        <li><b>ZEKROM → serment</b> — l'idéal dont naît le vœu.
+          <span class="chiffre">0</span> lien posé (3 idéaux disponibles).</li>
+        <li><b>serment → MINETHNIR</b> — où le serment se suit au journal.
+          <span class="chiffre">0</span> lien&nbsp;: aucune page n'existe encore.</li>
+        <li><b>VRANESH → serment</b> — le futur qui <i>menace</i> ou <i>sert</i> le vœu.
+          <span class="chiffre">1</span> lien posé… <b>invisible sur DRAUKHAIN</b>.</li>
+        <li><b>IMLADRIK</b> — le cap est ouvert sur la boussole du quadrant.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cartouche constats" style="margin-top:1rem">
+    <h3>Les six constats de forme</h3>
+    <ol>
+      <li><b>La page s'ouvre sur un formulaire, pas sur une carte.</b> « Sceller un serment »
+        (trois champs) occupe le premier écran&nbsp;; la carte vient après. On a acté l'inverse
+        sur VRANESH le 2026-08-04&nbsp;: <i>l'image d'abord</i>.</li>
+      <li><b>Trois représentations du même objet cohabitent</b> — la rangée de boutons, le foyer
+        dessiné, la voie jalonnée du registre — plus la fiche texte. Ce n'est pas de la richesse,
+        c'est de la redite&nbsp;: chacune redit la même chose dans une langue différente.</li>
+      <li><b>Le dessin n'a rien à dessiner.</b> En base&nbsp;: <span class="chiffre">1</span> serment,
+        <span class="chiffre">0</span> flamme. La couronne, le halo croissant, les natures qui brûlent
+        plus ou moins haut — toute la grammaire est du code qui ne s'exprime jamais.
+        La forme a été conçue pour un volume qui n'existe pas.</li>
+      <li><b>Ce n'est pas une cartographie, c'est une liste et un détail.</b> On ne voit
+        <i>jamais</i> qu'un serment à la fois. Aucune vue où ils coexistent, aucun endroit où
+        les relations sont dessinées.</li>
+      <li><b>La passerelle est borgne.</b> <code>GET /api/serments</code> ne replie que les liens
+        <i>sortants</i>&nbsp;: le fil entrant depuis VRANESH existe en base et n'est affiché
+        nulle part. Le lien est posé, il n'a pas de représentation.</li>
+      <li><b>Une légende ment encore</b>&nbsp;: le repli sans JavaScript d'<code>imladrik.html</code>
+        annonce « DRAUKHAIN — à venir ». Le cap est ouvert depuis le 2026-07-25.</li>
+    </ol>
+    <p class="verdict">Diagnostic&nbsp;: le fond tient (le modèle est juste, la règle positive est juste).
+      Ce qui manque, c'est <b>une vue d'ensemble où les serments coexistent et où les fils se voient</b> —
+      exactement ce qu'aucune des trois représentations actuelles ne fait.</p>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- ② LES TROIS FORMES                                            -->
+<!-- ============================================================= -->
+<section class="etage">
+  <h2 class="etage-titre">② La cartographie — trois formes</h2>
+  <p class="etage-quoi">Même jeu de serments, même volume, trois langages. On n'en garde qu'un.</p>
+
+  <div class="bascules" role="group" aria-label="Choix de la forme">
+    <span class="bascule-titre">Forme</span>
+    <button type="button" class="onglet" data-forme="A" aria-pressed="true">A — la voûte</button>
+    <button type="button" class="onglet" data-forme="B" aria-pressed="false">B — le brasier</button>
+    <button type="button" class="onglet" data-forme="C" aria-pressed="false">C — la frise</button>
+  </div>
+
+  <div class="bascules" role="group" aria-label="Volume éprouvé">
+    <span class="bascule-titre">Volume</span>
+    <button type="button" class="onglet" data-volume="1" aria-pressed="true">1 — le réel d'aujourd'hui</button>
+    <button type="button" class="onglet" data-volume="5" aria-pressed="false">5 — le proche</button>
+    <button type="button" class="onglet" data-volume="12" aria-pressed="false">12 — le pire cas</button>
+  </div>
+
+  <!-- ---------- FORME A — LA VOÛTE ---------- -->
+  <div class="panneau" id="panneau-A">
+    <div class="cartouche carte-cadre">
+      <svg class="carte-svg" id="svg-a" viewBox="0 0 640 420" role="img"
+           aria-label="La voûte des serments : chaque feu est un serment, les fils vont vers les caps voisins"></svg>
+      <p class="parole" id="parole-a"><span class="parole-repos">Survole un feu&nbsp;— il te dit ce qu'il est.</span></p>
+    </div>
+    <p class="note">Les serments <b>coexistent</b> autour du cœur du cap. L'éclat d'un feu dit combien de flammes
+      l'entretiennent&nbsp;; un serment sans flamme est un cercle de braise, jamais un vide. Les fils vers
+      ZEKROM, VRANESH et MINETHNIR sont tissés en encre pâle au repos — la carte dit <i>qu'il y a un tissage</i> —
+      et s'allument au survol.</p>
+  </div>
+
+  <!-- ---------- FORME B — LE BRASIER ---------- -->
+  <div class="panneau" id="panneau-B" hidden>
+    <div class="cartouche carte-cadre">
+      <!-- Repère resserré sur le feu : un brasier n'a pas besoin du ciel au-dessus. -->
+      <svg class="carte-svg" id="svg-b" viewBox="0 96 640 200" role="img"
+           aria-label="Le brasier : chaque serment est une flamme d'un même feu"></svg>
+      <p class="parole" id="parole-b"><span class="parole-repos">Survole une flamme&nbsp;— elle te dit ce qu'elle est.</span></p>
+    </div>
+    <p class="note">Un seul feu, et chaque serment en est une flamme&nbsp;: sa hauteur dit sa vitalité.
+      C'est la forme la plus belle et la plus économe en mots — mais elle ne sait pas montrer les fils
+      vers les autres caps sans se salir.</p>
+  </div>
+
+  <!-- ---------- FORME C — LA FRISE ---------- -->
+  <div class="panneau" id="panneau-C" hidden>
+    <div class="cartouche">
+      <div class="frise" id="frise-c"></div>
+      <p class="parole" id="parole-c"><span class="parole-repos">Survole une stèle&nbsp;— elle te dit ce qu'elle est.</span></p>
+    </div>
+    <p class="note">Chaque serment est une stèle gravée, sa flamme au sommet. La forme la plus solide sur
+      téléphone et à fort volume (elle défile), la moins « carte »&nbsp;: les serments sont alignés,
+      pas situés les uns par rapport aux autres.</p>
+  </div>
+
+  <div class="mesure" id="mesure" aria-live="polite"></div>
+
+  <div class="cartouche pour-contre">
+    <div>
+      <h4>A — la voûte</h4>
+      <p><b>Pour</b>&nbsp;: la seule vraie carte. Les serments coexistent, les fils se voient, le champ
+        lexical du feu est intact. Tient de 1 à 12.<br>
+        <b>Contre</b>&nbsp;: au-delà de ~14 serments, la couronne se serre.</p>
+    </div>
+    <div>
+      <h4>B — le brasier</h4>
+      <p><b>Pour</b>&nbsp;: la plus belle image, la plus économe en mots, un seul feu pour une seule volonté.<br>
+        <b>Contre</b>&nbsp;: aucune place pour les passerelles — or c'est justement ce qui manque.</p>
+    </div>
+    <div>
+      <h4>C — la frise</h4>
+      <p><b>Pour</b>&nbsp;: imbattable en volume et sur téléphone.<br>
+        <b>Contre</b>&nbsp;: une liste horizontale reste une liste. On perd la vue d'ensemble.</p>
+    </div>
+  </div>
+
+  <p class="reco"><b>Recommandation de Léo&nbsp;: forme A.</b> Le constat n°4 dit qu'il manque une vue
+    d'ensemble et le n°5 que les fils sont invisibles&nbsp;: A est la seule des trois qui traite les deux.
+    B est plus belle mais ne répond qu'au constat n°3&nbsp;; C répond à un problème de volume qu'on n'a pas.</p>
+</section>
+
+<script>
+(function () {
+  'use strict';
+
+  // ---------------------------------------------------------------------
+  // Jeu de maquette — INVENTÉ (§5). Douze serments, du plus nourri au plus nu.
+  // `f` = nombre de flammes ; `fils` = caps reliés (z=ZEKROM, v=VRANESH, m=MINETHNIR).
+  // ---------------------------------------------------------------------
+  var SERMENTS = [
+    { nom: 'Tenir la parole donnée',   f: 3, fils: ['z'] },
+    { nom: 'La forge quotidienne',     f: 5, fils: ['z', 'm'] },
+    { nom: 'Ne rien devoir au hasard', f: 2, fils: ['v'] },
+    { nom: 'Bâtir avant de parler',    f: 0, fils: [] },
+    { nom: 'L’heure du matin',    f: 4, fils: ['m'] },
+    { nom: 'Dire non sans trembler',   f: 0, fils: ['v'] },
+    { nom: 'La patience du chêne',     f: 2, fils: ['v', 'm'] },
+    { nom: 'Transmettre ce que je sais', f: 1, fils: ['z'] },
+    { nom: 'Le corps comme outil',     f: 1, fils: [] },
+    { nom: 'L’argent sert, il ne commande pas', f: 3, fils: ['z', 'v'] },
+    { nom: 'Ne pas fuir le conflit utile', f: 0, fils: [] },
+    { nom: 'Marcher chaque jour',      f: 6, fils: ['m', 'v'] }
+  ];
+
+  var CAPS = {
+    z: { nom: 'ZEKROM',    role: 'l’idéal dont il naît', x: 74,  y: 58 },
+    v: { nom: 'VRANESH',   role: 'ce qui le menace ou le sert', x: 566, y: 58 },
+    m: { nom: 'MINETHNIR', role: 'où il se suit', x: 74, y: 362 }
+  };
+
+  var NS = 'http://www.w3.org/2000/svg';
+  var CARTE = { L: 640, H: 420, CX: 330, CY: 214, MARGE: 8, LARGEUR_CAR: 6.1 };
+
+  var etat = { forme: 'A', volume: 1 };
+
+  function jeu() { return SERMENTS.slice(0, etat.volume); }
+
+  function svgEl(nom, classe) {
+    var e = document.createElementNS(NS, nom);
+    if (classe) { e.setAttribute('class', classe); }
+    return e;
+  }
+  function attrs(e, o) {
+    Object.keys(o).forEach(function (k) { e.setAttribute(k, String(o[k])); });
+    return e;
+  }
+  function el(nom, classe, texte) {
+    var e = document.createElement(nom);
+    if (classe) { e.className = classe; }
+    if (texte !== undefined) { e.textContent = texte; }
+    return e;
+  }
+  function compteFlammes(n) {
+    if (n === 0) { return 'à raviver'; }
+    return n + (n > 1 ? ' flammes' : ' flamme');
+  }
+
+  // Le tracé d'une flamme gravée, posée en (x, y), de hauteur donnée.
+  // Motif repris tel quel de js/draukhain.js — réemployé, pas réinventé.
+  function traceFlamme(x, y, h) {
+    var l = h * 0.42;
+    return 'M' + x + ' ' + (y - h)
+      + ' q ' + l + ' ' + (h * 0.62) + ' 0 ' + h
+      + ' q ' + (-l) + ' ' + (-h * 0.38) + ' 0 ' + (-h) + ' Z';
+  }
+
+  // Budget de signes d'une étiquette : la place RÉELLEMENT disponible de son
+  // côté, jamais une troncature à l'aveugle (règle du 2026-08-01).
+  function borner(texte, signes) {
+    var t = (texte || '').trim();
+    if (signes < 6) { return ''; }
+    if (t.length <= signes) { return t; }
+    var mots = t.slice(0, signes).split(' ');
+    if (mots.length > 1) { mots.pop(); }
+    return mots.join(' ') + '…';
+  }
+
+  // ---------------------------------------------------------------------
+  // FORME A — LA VOÛTE : les serments en couronne autour du cœur du cap,
+  // les caps voisins en cartouches de bord, les fils tissés entre les deux.
+  // ---------------------------------------------------------------------
+  function couronne(n) {
+    var out = [];
+    if (n <= 0) { return out; }
+    var rayon = n === 1 ? 0 : Math.min(132, 84 + n * 4);
+    for (var i = 0; i < n; i += 1) {
+      var angle = (-90 + i * (360 / n)) * Math.PI / 180;
+      var cos = n === 1 ? 0 : Math.cos(angle);
+      var sin = n === 1 ? 0 : Math.sin(angle);
+      var x = CARTE.CX + rayon * cos;
+      var y = CARTE.CY + rayon * sin;
+      var ancre = cos < -0.15 ? 'end' : (cos > 0.15 ? 'start' : 'middle');
+      var dispo;
+      if (ancre === 'end') { dispo = x - 2 * CARTE.MARGE; }
+      else if (ancre === 'start') { dispo = CARTE.L - x - 2 * CARTE.MARGE; }
+      else { dispo = 2 * Math.min(x, CARTE.L - x) - CARTE.MARGE; }
+      out.push({
+        x: x, y: y, ancre: ancre,
+        signes: Math.max(0, Math.floor(dispo / CARTE.LARGEUR_CAR))
+      });
+    }
+    return out;
+  }
+
+  function rendreA() {
+    var svg = document.getElementById('svg-a');
+    svg.textContent = '';
+    svg.classList.remove('a-choix');
+    var serments = jeu();
+
+    // Le cœur du cap : la flamme qui ne s'éteint pas (blason DRAUKHAIN).
+    var anneau = svgEl('circle', 'n-cercle-or');
+    attrs(anneau, { cx: CARTE.CX, cy: CARTE.CY, r: 30 });
+    svg.appendChild(anneau);
+    if (serments.length > 1) {
+      var coeur = svgEl('path', 'n-coeur');
+      coeur.setAttribute('d', traceFlamme(CARTE.CX, CARTE.CY + 11, 22));
+      svg.appendChild(coeur);
+      var coeurFeu = svgEl('path', 'n-coeur-feu');
+      coeurFeu.setAttribute('d', traceFlamme(CARTE.CX, CARTE.CY + 9, 10));
+      svg.appendChild(coeurFeu);
+    }
+
+    // Les cartouches des caps voisins, avec le compte de fils qui y aboutit.
+    Object.keys(CAPS).forEach(function (cle) {
+      var cap = CAPS[cle];
+      var n = serments.filter(function (s) { return s.fils.indexOf(cle) !== -1; }).length;
+      var g = svgEl('g', 'c-g');
+      var rect = svgEl('rect', 'c-cartouche');
+      attrs(rect, { x: cap.x - 52, y: cap.y - 17, width: 104, height: 34, rx: 5 });
+      var nom = svgEl('text', 'c-nom');
+      attrs(nom, { x: cap.x, y: cap.y - 2 });
+      nom.textContent = cap.nom;
+      var role = svgEl('text', 'c-role');
+      attrs(role, { x: cap.x, y: cap.y + 10 });
+      role.textContent = n === 0 ? 'aucun fil' : (n + (n > 1 ? ' fils' : ' fil'));
+      g.appendChild(rect); g.appendChild(nom); g.appendChild(role);
+      svg.appendChild(g);
+    });
+
+    var places = couronne(serments.length);
+    var groupes = [];
+
+    // Les fils d'abord (ils passent SOUS les feux).
+    serments.forEach(function (s, i) {
+      s.fils.forEach(function (cle) {
+        var cap = CAPS[cle];
+        var fil = svgEl('path', 'f-fil');
+        fil.setAttribute('d', 'M' + places[i].x + ' ' + places[i].y
+          + ' Q ' + ((places[i].x + cap.x) / 2) + ' ' + ((places[i].y + cap.y) / 2 - 26)
+          + ' ' + cap.x + ' ' + (cap.y + (cle === 'm' ? -18 : 18)));
+        fil.dataset.serment = String(i);
+        svg.appendChild(fil);
+      });
+    });
+
+    serments.forEach(function (s, i) {
+      var p = places[i];
+      var g = svgEl('g', 'n-g');
+      attrs(g, { tabindex: '0', role: 'button' });
+      g.setAttribute('aria-label', s.nom + ' — ' + compteFlammes(s.f));
+
+      if (s.f > 0) {
+        var halo = svgEl('circle', 'n-halo');
+        attrs(halo, { cx: p.x, cy: p.y, r: 11 + s.f * 1.9,
+          opacity: Math.min(0.16, 0.04 + s.f * 0.022) });
+        g.appendChild(halo);
+        var feu = svgEl('path', 'n-feu');
+        feu.setAttribute('d', traceFlamme(p.x, p.y + 8, 17 + Math.min(8, s.f * 1.4)));
+        g.appendChild(feu);
+        var coeurF = svgEl('path', 'n-feu-coeur');
+        coeurF.setAttribute('d', traceFlamme(p.x, p.y + 6, 8));
+        g.appendChild(coeurF);
+      } else {
+        var braise = svgEl('circle', 'n-braise');
+        attrs(braise, { cx: p.x, cy: p.y, r: 9 });
+        g.appendChild(braise);
+      }
+
+      // Un feu plein Nord ou plein Sud n'a personne à sa gauche ni à sa droite :
+      // son nom se pose AU-DESSUS s'il est en haut, EN DESSOUS s'il est en bas —
+      // sinon il vient croiser les étiquettes de ses deux voisins (constat
+      // mesuré sur la première passe à douze serments).
+      var nom = svgEl('text', 'n-nom');
+      var dy = p.ancre !== 'middle' ? 3 : (p.y <= CARTE.CY ? -26 : 32);
+      attrs(nom, { x: p.x + (p.ancre === 'end' ? -14 : (p.ancre === 'start' ? 14 : 0)),
+        y: p.y + dy, 'text-anchor': p.ancre });
+      nom.textContent = borner(s.nom, Math.min(26, p.signes));
+      g.appendChild(nom);
+
+      var zone = svgEl('circle', 'n-zone');
+      attrs(zone, { cx: p.x, cy: p.y, r: 16 });
+      g.appendChild(zone);
+
+      function allumer() {
+        svg.classList.add('a-choix');
+        groupes.forEach(function (o) { o.classList.remove('is-actif'); });
+        g.classList.add('is-actif');
+        Array.prototype.forEach.call(svg.querySelectorAll('.f-fil'), function (f) {
+          f.classList.toggle('is-vif', f.dataset.serment === String(i));
+        });
+        parole('parole-a', s);
+      }
+      function eteindre() {
+        svg.classList.remove('a-choix');
+        g.classList.remove('is-actif');
+        Array.prototype.forEach.call(svg.querySelectorAll('.f-fil'), function (f) {
+          f.classList.remove('is-vif');
+        });
+        repos('parole-a', 'Survole un feu — il te dit ce qu’il est.');
+      }
+      g.addEventListener('mouseenter', allumer);
+      g.addEventListener('mouseleave', eteindre);
+      g.addEventListener('focus', allumer);
+      g.addEventListener('blur', eteindre);
+
+      groupes.push(g);
+      svg.appendChild(g);
+    });
+  }
+
+  // ---------------------------------------------------------------------
+  // FORME B — LE BRASIER : un seul feu, chaque serment en est une flamme.
+  // ---------------------------------------------------------------------
+  function rendreB() {
+    var svg = document.getElementById('svg-b');
+    svg.textContent = '';
+    var serments = jeu();
+    // Le brasier a son propre repère, plus bas que large : un feu couché sur son
+    // lit de braise n'a que faire de la hauteur d'une carte.
+    var base = 236;
+    var pas = 560 / (serments.length + 1);
+
+    var lit = svgEl('path', 'n-cercle-or');
+    lit.setAttribute('d', 'M 44 ' + base + ' Q 320 ' + (base + 22) + ' 596 ' + base);
+    svg.appendChild(lit);
+
+    serments.forEach(function (s, i) {
+      var x = 40 + pas * (i + 1);
+      var hauteur = 40 + s.f * 12;
+      var g = svgEl('g', 'n-g');
+      attrs(g, { tabindex: '0', role: 'button' });
+      g.setAttribute('aria-label', s.nom + ' — ' + compteFlammes(s.f));
+
+      if (s.f > 0) {
+        var halo = svgEl('circle', 'n-halo');
+        attrs(halo, { cx: x, cy: base - hauteur / 2, r: hauteur * 0.44,
+          opacity: Math.min(0.16, 0.04 + s.f * 0.022) });
+        g.appendChild(halo);
+        var feu = svgEl('path', 'n-feu');
+        feu.setAttribute('d', traceFlamme(x, base, hauteur));
+        g.appendChild(feu);
+        var coeurF = svgEl('path', 'n-feu-coeur');
+        coeurF.setAttribute('d', traceFlamme(x, base - 4, hauteur * 0.42));
+        g.appendChild(coeurF);
+      } else {
+        var braise = svgEl('circle', 'n-braise');
+        attrs(braise, { cx: x, cy: base - 12, r: 10 });
+        g.appendChild(braise);
+      }
+
+      // Deux rangs d'étiquettes en alternance : à douze flammes, un rang
+      // unique se chevaucherait. La place disponible fixe le budget de signes.
+      var rang = i % 2;
+      var nom = svgEl('text', 'n-nom');
+      attrs(nom, { x: x, y: base + 24 + rang * 18, 'text-anchor': 'middle' });
+      nom.textContent = borner(s.nom, Math.floor((pas * 1.9) / CARTE.LARGEUR_CAR));
+      g.appendChild(nom);
+
+      var zone = svgEl('rect', 'n-zone');
+      attrs(zone, { x: x - pas / 2, y: base - hauteur - 14, width: pas, height: hauteur + 60 });
+      g.appendChild(zone);
+
+      g.addEventListener('mouseenter', function () { parole('parole-b', s); });
+      g.addEventListener('focus', function () { parole('parole-b', s); });
+      g.addEventListener('mouseleave', function () {
+        repos('parole-b', 'Survole une flamme — elle te dit ce qu’elle est.');
+      });
+      g.addEventListener('blur', function () {
+        repos('parole-b', 'Survole une flamme — elle te dit ce qu’elle est.');
+      });
+      svg.appendChild(g);
+    });
+  }
+
+  // ---------------------------------------------------------------------
+  // FORME C — LA FRISE DES STÈLES.
+  // ---------------------------------------------------------------------
+  function rendreC() {
+    var frise = document.getElementById('frise-c');
+    frise.textContent = '';
+    jeu().forEach(function (s) {
+      var b = el('button', 'stele');
+      b.type = 'button';
+
+      var svg = document.createElementNS(NS, 'svg');
+      attrs(svg, { viewBox: '0 0 60 68', focusable: 'false', 'aria-hidden': 'true' });
+      if (s.f > 0) {
+        var feu = svgEl('path', 'n-feu');
+        feu.setAttribute('d', traceFlamme(30, 46, 26 + Math.min(14, s.f * 2.6)));
+        svg.appendChild(feu);
+        var coeurF = svgEl('path', 'n-feu-coeur');
+        coeurF.setAttribute('d', traceFlamme(30, 43, 11));
+        svg.appendChild(coeurF);
+      } else {
+        var braise = svgEl('circle', 'n-braise');
+        attrs(braise, { cx: 30, cy: 38, r: 11 });
+        svg.appendChild(braise);
+      }
+      var socle = svgEl('path', 'n-cercle-or');
+      socle.setAttribute('d', 'M 12 54 H 48');
+      svg.appendChild(socle);
+      b.appendChild(svg);
+
+      b.appendChild(el('span', 'stele-nom', s.nom));
+      b.appendChild(el('span', 'stele-compte', compteFlammes(s.f)));
+
+      var fils = el('span', 'stele-fils');
+      s.fils.forEach(function (cle) {
+        fils.appendChild(el('span', 'fil-pastille', CAPS[cle].nom));
+      });
+      b.appendChild(fils);
+
+      b.addEventListener('mouseenter', function () { parole('parole-c', s); });
+      b.addEventListener('focus', function () { parole('parole-c', s); });
+      b.addEventListener('mouseleave', function () {
+        repos('parole-c', 'Survole une stèle — elle te dit ce qu’elle est.');
+      });
+      b.addEventListener('blur', function () {
+        repos('parole-c', 'Survole une stèle — elle te dit ce qu’elle est.');
+      });
+      frise.appendChild(b);
+    });
+  }
+
+  // ---------------------------------------------------------------------
+  // La parole : UNE ligne au survol (grammaire actée le 2026-08-01).
+  // ---------------------------------------------------------------------
+  function parole(id, s) {
+    var zone = document.getElementById(id);
+    if (!zone) { return; }
+    zone.textContent = '';
+    zone.appendChild(el('span', 'parole-nom', s.nom));
+    var suite = ' — ' + compteFlammes(s.f);
+    if (s.fils.length) {
+      suite += ' · relié à ' + s.fils.map(function (c) { return CAPS[c].nom; }).join(' et ');
+    }
+    zone.appendChild(document.createTextNode(suite));
+  }
+  function repos(id, texte) {
+    var zone = document.getElementById(id);
+    if (!zone) { return; }
+    zone.textContent = '';
+    zone.appendChild(el('span', 'parole-repos', texte));
+  }
+
+  // ---------------------------------------------------------------------
+  // LA MESURE — règle permanente du 2026-08-01 : une géométrie se mesure,
+  // elle ne se valide pas à l'œil. On compare l'emprise réelle du dessin au
+  // viewBox, et on compte les mots affichés au repos.
+  // ---------------------------------------------------------------------
+  function mesurer() {
+    var zone = document.getElementById('mesure');
+    zone.textContent = '';
+    var panneau = document.getElementById('panneau-' + etat.forme);
+    var svg = panneau.querySelector('.carte-svg');
+
+    if (svg) {
+      // ① LE CADRE : l'emprise réelle du dessin contre SON viewBox (chaque forme
+      //    a le sien — on le lit sur l'élément, on ne le suppose pas).
+      var vb = svg.viewBox.baseVal;
+      var min = { x: Infinity, y: Infinity }, max = { x: -Infinity, y: -Infinity };
+      Array.prototype.forEach.call(svg.querySelectorAll('text, path, circle, rect'), function (n) {
+        var b;
+        try { b = n.getBBox(); } catch (e) { return; }
+        if (!b || (b.width === 0 && b.height === 0)) { return; }
+        min.x = Math.min(min.x, b.x); min.y = Math.min(min.y, b.y);
+        max.x = Math.max(max.x, b.x + b.width); max.y = Math.max(max.y, b.y + b.height);
+      });
+      var dedans = min.x >= vb.x - 0.5 && min.y >= vb.y - 0.5
+        && max.x <= vb.x + vb.width + 0.5 && max.y <= vb.y + vb.height + 0.5;
+      zone.appendChild(el('span', dedans ? 'ok' : 'ko',
+        'cadre : ' + Math.round(min.x) + '…' + Math.round(max.x) + ' × '
+        + Math.round(min.y) + '…' + Math.round(max.y)
+        + (dedans ? ' — tout tient ✓' : ' — ça déborde ✗')));
+
+      // ② LES CROISEMENTS : tenir dans le cadre ne suffit pas — deux étiquettes
+      //    qui se chevauchent sont illisibles à l'intérieur du cadre. On teste
+      //    chaque paire d'étiquettes, et chaque étiquette contre les cartouches
+      //    des caps voisins. (Manque relevé sur la première passe : la forme A
+      //    était « au vert » alors que deux noms se croisaient plein Nord.)
+      var boites = [];
+      Array.prototype.forEach.call(svg.querySelectorAll('.n-nom, .c-cartouche'), function (n) {
+        var b;
+        try { b = n.getBBox(); } catch (e) { return; }
+        if (b && b.width > 0) { boites.push(b); }
+      });
+      var croisements = 0;
+      for (var i = 0; i < boites.length; i += 1) {
+        for (var j = i + 1; j < boites.length; j += 1) {
+          var a = boites[i], c = boites[j];
+          if (a.x < c.x + c.width - 1 && c.x < a.x + a.width - 1
+            && a.y < c.y + c.height - 1 && c.y < a.y + a.height - 1) { croisements += 1; }
+        }
+      }
+      zone.appendChild(el('span', croisements === 0 ? 'ok' : 'ko',
+        croisements === 0 ? 'étiquettes : aucun croisement ✓'
+          : 'étiquettes : ' + croisements + ' croisement(s) ✗'));
+    }
+
+    var texte = (panneau.querySelector('.cartouche').textContent || '')
+      .replace(/\s+/g, ' ').trim();
+    var mots = texte ? texte.split(' ').length : 0;
+    zone.appendChild(el('span', null, 'mots à l’écran : ' + mots));
+    zone.appendChild(el('span', null, 'serments : ' + etat.volume));
+  }
+
+  // ---------------------------------------------------------------------
+  // Bascules.
+  // ---------------------------------------------------------------------
+  function rendre() {
+    ['A', 'B', 'C'].forEach(function (f) {
+      document.getElementById('panneau-' + f).hidden = (f !== etat.forme);
+    });
+    if (etat.forme === 'A') { rendreA(); repos('parole-a', 'Survole un feu — il te dit ce qu’il est.'); }
+    if (etat.forme === 'B') { rendreB(); repos('parole-b', 'Survole une flamme — elle te dit ce qu’elle est.'); }
+    if (etat.forme === 'C') { rendreC(); repos('parole-c', 'Survole une stèle — elle te dit ce qu’elle est.'); }
+    mesurer();
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-forme]'), function (b) {
+    b.addEventListener('click', function () {
+      etat.forme = b.dataset.forme;
+      Array.prototype.forEach.call(document.querySelectorAll('[data-forme]'), function (o) {
+        o.setAttribute('aria-pressed', String(o === b));
+      });
+      rendre();
+    });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-volume]'), function (b) {
+    b.addEventListener('click', function () {
+      etat.volume = parseInt(b.dataset.volume, 10);
+      Array.prototype.forEach.call(document.querySelectorAll('[data-volume]'), function (o) {
+        o.setAttribute('aria-pressed', String(o === b));
+      });
+      rendre();
+    });
+  });
+
+  rendre();
+})();
+</script>
+</body>
+</html>
