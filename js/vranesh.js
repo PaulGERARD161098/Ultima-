@@ -683,12 +683,13 @@
     cote.classList.add('is-actif');
     var advenue = situation.advenue === true && scenario.id === situation.scenario_advenu_id;
 
-    cote.appendChild(el('p', 'parole-nom', etiquetteBranche(scenario.deroule)));
+    // Le déroulé est écrit UNE SEULE FOIS, en tête et en entier (constat de
+    // Paul 2026-08-04 : il figurait deux fois, en titre tronqué puis en corps).
+    cote.appendChild(el('p', 'parole-nom', scenario.deroule || 'un futur'));
     cote.appendChild(el('p', 'parole-etat', nomCourt(situation.intitule)
       + ' — futur ' + rang + ' sur ' + total
       + (advenue ? ' · la branche qui a poussé'
                  : ' · vraisemblance ' + (LIBELLE_VRAISEMBLANCE[scenario.vraisemblance] || 'moyenne'))));
-    cote.appendChild(el('p', 'parole-texte', scenario.deroule || ''));
 
     if (advenue) { cote.classList.add('is-advenu'); }
 
@@ -699,27 +700,7 @@
       return;
     }
 
-    var dl = el('dl', 'vranesh-cote-detail');
-    if (scenario.signaux) {
-      dl.appendChild(el('dt', null, 'Signes avant-coureurs'));
-      dl.appendChild(el('dd', null, scenario.signaux));
-    }
-    if (scenario.parade) {
-      dl.appendChild(el('dt', null, 'Parade préparée'));
-      dl.appendChild(el('dd', null, scenario.parade));
-    }
-    var liens = liensDe(scenario.id);
-    dl.appendChild(el('dt', null, 'Passerelles'));
-    if (liens.length === 0) {
-      dl.appendChild(el('dd', null, 'Aucune — relie ce futur à un objectif dans le registre.'));
-    } else {
-      liens.forEach(function (lien) {
-        var lu = libelleLien(lien);
-        dl.appendChild(el('dd', null, lu.prefixe + lu.nom
-          + (lien.rapport ? ' (' + (LIBELLE_RAPPORT[lien.rapport] || lien.rapport) + ')' : '')));
-      });
-    }
-    if (dl.childNodes.length > 0) { cote.appendChild(dl); }
+    cote.appendChild(vignettes(scenario));
 
     var aller = el('a', 'vranesh-cote-lien', 'Ouvrir ce futur dans le registre ↝');
     aller.href = '#vranesh-situation-' + situation.id;
@@ -727,6 +708,74 @@
 
     // Le geste vit LÀ OÙ Paul regarde : sur la branche qu'il vient de cliquer.
     cote.appendChild(actionDenouement(situation, scenario, total));
+  }
+
+  // ---- LES TROIS VIGNETTES (forme A, tranchée par Paul le 2026-08-04) ----
+  // Constat : « quand je sélectionne une branche je peux avoir du texte, mais
+  // il y en a trop, c'est purement du texte brut. » Le détail ne s'empile plus
+  // en liste de définitions : une VIGNETTE par NATURE d'information, chacune
+  // annoncée par une icône gravée — l'œil sait où regarder avant de lire.
+  // Une vignette n'existe QUE si elle a quelque chose à dire : rien à écrire,
+  // rien à l'écran (c'est la réduction de texte, pas un habillage de plus).
+  var ICONES = {
+    // L'œil : ce qui annonce le futur, ce qu'on guette.
+    signaux: ['M2 12 C 6 5, 18 5, 22 12 C 18 19, 6 19, 2 12 Z', 'M12 12 m -3.4 0 a 3.4 3.4 0 1 0 6.8 0 a 3.4 3.4 0 1 0 -6.8 0'],
+    // Le bouclier : ce qu'on a préparé contre lui, ou pour lui.
+    parade: ['M12 2 L21 6 V12 C 21 17, 17 21, 12 22 C 7 21, 3 17, 3 12 V6 Z', 'M8 12 l3 3 5 -6'],
+    // Le maillon : ce que ce futur touche ailleurs dans Ultima.
+    liens: ['M9 14 a4 4 0 0 1 0 -5 l2 -2 a4 4 0 0 1 6 6 l-1 1', 'M15 10 a4 4 0 0 1 0 5 l-2 2 a4 4 0 0 1 -6 -6 l1 -1']
+  };
+
+  function icone(nom) {
+    var svg = svgEl('svg', 'vranesh-vignette-icone');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('focusable', 'false');
+    (ICONES[nom] || []).forEach(function (d, i) {
+      var trait = svgEl('path');
+      trait.setAttribute('d', d);
+      trait.setAttribute('fill', 'none');
+      trait.setAttribute('stroke-width', '1.6');
+      trait.setAttribute('stroke-linecap', 'round');
+      trait.setAttribute('class', i === 0 ? 'vranesh-trait-cerne' : 'vranesh-trait-or');
+      svg.appendChild(trait);
+    });
+    return svg;
+  }
+
+  function vignette(nom, quoi, texte) {
+    var bloc = el('div', 'vranesh-vignette');
+    bloc.appendChild(icone(nom));
+    var corps = el('div', 'vranesh-vignette-corps');
+    corps.appendChild(el('span', 'vranesh-vignette-quoi', quoi));
+    corps.appendChild(el('p', 'vranesh-vignette-texte', texte));
+    bloc.appendChild(corps);
+    return bloc;
+  }
+
+  function vignettes(scenario) {
+    var zone = el('div', 'vranesh-vignettes');
+    if (scenario.signaux) {
+      zone.appendChild(vignette('signaux', 'Ce qui l’annonce', scenario.signaux));
+    }
+    if (scenario.parade) {
+      zone.appendChild(vignette('parade', 'Ce que j’ai prévu', scenario.parade));
+    }
+    var liens = liensDe(scenario.id);
+    if (liens.length > 0) {
+      zone.appendChild(vignette('liens', 'Ce que ça touche',
+        liens.map(function (lien) {
+          var lu = libelleLien(lien);
+          return lu.prefixe + lu.nom
+            + (lien.rapport ? ' (' + (LIBELLE_RAPPORT[lien.rapport] || lien.rapport) + ')' : '');
+        }).join(' · ')));
+    }
+    if (zone.childNodes.length === 0) {
+      // Rien n'est noté : on le dit en une ligne, on ne dresse pas trois cases vides.
+      zone.appendChild(el('p', 'vranesh-vignettes-vide',
+        'Rien d’autre n’est noté sur ce futur — le registre permet de l’enrichir.'));
+    }
+    return zone;
   }
 
   // ---- Choisir la branche DEPUIS L'ARBRE (dictée Paul 2026-08-04 : « je clique

@@ -59,6 +59,9 @@
 | entreprises innocentes | entreprises naissantes (contexte entrepreneuriat 2026-07-31) |
 | Dans patrice (contexte entreprise) | l'entrepreneuriat (déformation observée 2026-07-31) |
 | exploser la gueule (contexte entreprise) | se casser la figure (échec possible d'une entreprise naissante) |
+| Torrio, Toriole | THORIOL (déformations observées 2026-08-04) |
+| Lyendra, le Lyendra | LIANDRA (déformations observées 2026-08-04) |
+| méga affichage | l'affichage majeur d'un élément choisi — il occupe la place au lieu de rester une ligne parmi d'autres (dicté 2026-08-04 pour le futur advenu de VRANESH) |
 
 Règle : en cas de doute sur un mot qui change le sens d'une instruction,
 reformuler et demander — jamais deviner avant une action irréversible.

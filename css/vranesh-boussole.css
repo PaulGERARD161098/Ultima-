@@ -20,18 +20,23 @@
   .vranesh-scene { grid-template-columns: 1.3fr 1fr; align-items: start; }
 }
 
-/* ---------- ① La rose sur une page de quadrant ---------- */
+/* ---------- ① La rose sur une page de quadrant ----------
+   Dictée Paul 2026-08-04 : à l'arrivée, « juste LIANDRA, THORIOL ». La notice
+   a disparu du HTML et la saisie s'est repliée ; la rose récupère la place et
+   ses caps grandissent d'autant — c'est le seul objet du premier écran. */
 .vranesh-boussole .boussole-plateau {
-  width: min(74vmin, 420px);
-  margin-block: 0.4rem 0.8rem;
+  width: min(84vmin, 480px);
+  margin-block: 0.6rem 1rem;
 }
 /* Le cap porte le NOM SEUL : court, donc on le laisse sur une ligne. */
 .vranesh-boussole .cap {
   width: auto;
-  min-width: 6.5rem;
-  max-width: 12rem;
+  min-width: 7.5rem;
+  max-width: 13rem;
   font-family: inherit;
+  padding-block: 0.7rem;
 }
+.vranesh-boussole .cap-nom { font-size: clamp(0.95rem, 2.6vmin, 1.2rem); }
 .vranesh-boussole .cap-nom { white-space: normal; }
 .vranesh-boussole .cap--advenu { border-color: var(--creme); }
 
@@ -102,12 +107,33 @@
 
 /* ---------- ③ Le cartouche de côté ---------- */
 .vranesh-cote { min-height: 12rem; }
-.vranesh-cote-detail { margin: 0.7rem 0 0; padding-top: 0.6rem; border-top: 1px dashed var(--or-antique); }
-.vranesh-cote-detail dt {
-  font-size: 0.7rem; font-variant: small-caps; letter-spacing: 0.1em;
-  color: var(--encre-sepia-douce); margin-top: 0.55rem;
+
+/* Les TROIS VIGNETTES (forme A tranchée par Paul le 2026-08-04). Une case par
+   NATURE d'information, annoncée par une icône gravée : l'œil sait où regarder
+   avant de lire. Remplace la liste de définitions, qui empilait tout à la même
+   taille sans dire par où commencer. */
+.vranesh-vignettes {
+  margin: 0.8rem 0 0; padding-top: 0.7rem;
+  border-top: 1px dashed var(--or-antique);
+  display: grid; gap: 0.5rem;
+  /* Le cartouche est centré ; une vignette, non : on lit une case ligne à
+     ligne, et un texte centré sur trois lignes se relit mal. */
+  text-align: left;
 }
-.vranesh-cote-detail dd { margin: 0.15rem 0 0; }
+.vranesh-vignette {
+  display: flex; gap: 0.6rem; align-items: flex-start;
+  border: 1px solid var(--or-antique); border-radius: 8px;
+  padding: 0.6rem 0.7rem; background: rgba(169, 136, 74, 0.09);
+}
+.vranesh-vignette-icone { width: 1.5rem; height: 1.5rem; flex: none; margin-top: 0.1rem; }
+.vranesh-trait-cerne { stroke: var(--cerne-carte); }
+.vranesh-trait-or { stroke: var(--or-antique); }
+.vranesh-vignette-quoi {
+  font-size: 0.68rem; font-variant: small-caps; letter-spacing: 0.11em;
+  color: var(--encre-sepia-douce);
+}
+.vranesh-vignette-texte { margin: 0.1rem 0 0; line-height: 1.35; }
+.vranesh-vignettes-vide { margin: 0; font-style: italic; color: var(--encre-sepia-douce); }
 .vranesh-cote-lien {
   display: inline-block; margin-top: 0.8rem; min-height: 44px; line-height: 44px;
   font-variant: small-caps; letter-spacing: 0.08em; color: var(--accent);
@@ -145,10 +171,11 @@
 .vranesh-arbre-cadre.is-advenu .vranesh-branche-g.is-advenue .vranesh-etiquette {
   font-size: 12px; font-weight: 700; fill: var(--encre-sepia);
 }
-/* Le cartouche de côté d'un thème dénoué : le déroulé passe au premier plan. */
-.vranesh-cote.is-advenu .parole-nom { font-size: 1.15rem; }
-.vranesh-cote.is-advenu .parole-texte {
-  font-size: 1.1rem; line-height: 1.5; font-weight: 600;
+/* Le cartouche de côté d'un thème dénoué : le déroulé passe au premier plan.
+   (Le déroulé n'est plus écrit qu'une fois, dans `.parole-nom` — c'est donc lui
+   qu'on agrandit, et non plus un second exemplaire du même texte.) */
+.vranesh-cote.is-advenu .parole-nom {
+  font-size: 1.15rem; line-height: 1.45;
   border-left: 3px solid var(--or-antique); padding-left: 0.7rem;
 }
 

@@ -325,6 +325,9 @@ console.log('— B. vranesh.html fixture 200 → registre, à explorer, situatio
   verifier('situationsVisibles pur : toutes=2, anticipees=1', filtre.toutes === 2 && filtre.anticipees === 1, JSON.stringify(filtre));
 
   // 8. Écritures authentifiées : POST situation + POST scénario + DELETE scénario portent le Bearer.
+  // La saisie est repliée depuis le 2026-08-04 (l'arrivée est faite pour
+  // regarder, pas pour écrire) : on ouvre le pli avant d'écrire.
+  await page.locator('#vranesh-saisie summary').click();
   await page.locator('#vranesh-intitule').fill('CAP-TEST');
   await page.locator('#vranesh-form-situation button[type="submit"]').click();
   await page.waitForTimeout(200);
@@ -505,6 +508,46 @@ console.log('— D. vranesh.html → la rose (noms seuls), puis l’arbre au cli
   verifier('ABSENCE — aucun déroulé de scénario visible à l’arrivée',
     !(await page.locator('#vranesh-situations').isVisible()));
 
+  // ---- L'ARRIVÉE DÉPOUILLÉE (dictée Paul 2026-08-04 : « juste LIANDRA,
+  //      THORIOL »). Le dépouillement se MESURE en mots réellement visibles,
+  //      il ne s'apprécie pas : sinon « épuré » veut dire ce qu'on veut.
+  verifier('La saisie d’une situation est repliée à l’arrivée',
+    (await page.locator('#vranesh-saisie').evaluate((el) => el.open)) === false);
+  verifier('ABSENCE — aucun champ de saisie sur le premier écran',
+    !(await page.locator('#vranesh-intitule').isVisible()));
+  verifier('ABSENCE — la notice de la boussole a disparu',
+    !/Survole une branche pour savoir|Chaque cap est un thème/
+      .test((await page.locator('#vranesh-boussole').textContent()) || ''));
+  const motsArrivee = await page.evaluate(() => {
+    // Tout le texte VISIBLE de la page à l'arrivée, hors éléments repliés.
+    // `checkVisibility` et NON `offsetParent` : sous Chromium, un <details>
+    // fermé masque son contenu par `content-visibility`, et ses enfants
+    // gardent un offsetParent — la mesure aurait compté un texte invisible.
+    const vu = (n) => (n.checkVisibility
+      ? n.checkVisibility({ contentVisibilityAuto: true, opacityProperty: true, visibilityProperty: true })
+      : n.offsetParent !== null);
+    let mots = 0;
+    const blocs = [];
+    document.querySelectorAll('.console-conteneur *').forEach((n) => {
+      if (n.children.length > 0 || !vu(n)) { return; }
+      const compte = (n.textContent || '').trim().split(/\s+/).filter(Boolean).length;
+      mots += compte;
+      if (compte > 0) { blocs.push(compte); }
+    });
+    return { mots, plusLongBloc: Math.max(0, ...blocs) };
+  });
+  // Deux bornes, parce qu'un total bas peut cacher un pavé, et un pavé absent
+  // peut cacher un total qui enfle. Composition au 2026-08-04 : 47 mots =
+  // titre + mission (9) + « privé » + titre de section + les 2 noms et leur
+  // état + la ligne d'amorce (8) + les 2 plis + le retour. Aucune prose.
+  verifier('Moins de 50 mots à l’écran en arrivant sur VRANESH',
+    motsArrivee.mots < 50, `${motsArrivee.mots} mots`);
+  verifier('Aucun pavé à l’arrivée : le plus long bloc tient en 12 mots',
+    motsArrivee.plusLongBloc <= 12, `${motsArrivee.plusLongBloc} mots dans le plus long`);
+  const nomsVus = await page.locator('#vranesh-plateau .cap-nom').allTextContents();
+  verifier('Les deux thèmes sont là, tout de suite, sans un clic',
+    nomsVus.length === 2, JSON.stringify(nomsVus));
+
   // ---- ② Le clic ouvre l'arbre et efface la rose. ----
   await page.locator('#vranesh-plateau .cap', { hasText: 'TRAVERSÉE' }).click();
   await page.waitForSelector('#vranesh-arbre:not([hidden])', { timeout: 5000 });
@@ -574,6 +617,32 @@ console.log('— D. vranesh.html → la rose (noms seuls), puis l’arbre au cli
   verifier('Clic : les passerelles s’affichent', /GARDER LE CAP/.test(detail), detail);
   verifier('Clic : un lien mène au registre de ce thème',
     (await page.locator('#vranesh-parole a[href="#vranesh-situation-s1"]').count()) === 1);
+
+  // ---- LE DÉTAIL EN TROIS VIGNETTES (forme A, tranchée par Paul 2026-08-04).
+  //      Constat qu'elles corrigent : « c'est purement du texte brut », et le
+  //      déroulé était écrit DEUX fois (titre tronqué, puis corps).
+  const vignettes = page.locator('#vranesh-parole .vranesh-vignette');
+  verifier('Trois vignettes : ce qui l’annonce, ce que j’ai prévu, ce que ça touche',
+    (await vignettes.count()) === 3, `${await vignettes.count()}`);
+  const natures = await page.locator('#vranesh-parole .vranesh-vignette-quoi').allTextContents();
+  verifier('Chaque vignette annonce sa NATURE d’information',
+    natures.join('|') === 'Ce qui l’annonce|Ce que j’ai prévu|Ce que ça touche',
+    JSON.stringify(natures));
+  verifier('Chaque vignette porte son icône gravée',
+    (await page.locator('#vranesh-parole .vranesh-vignette-icone').count()) === 3);
+  const fois = (detail.match(/porte la voile/g) || []).length;
+  verifier('Le déroulé n’est écrit QU’UNE FOIS (il l’était deux)', fois === 1, `${fois} fois`);
+  verifier('ABSENCE — plus de liste de définitions empilée',
+    (await page.locator('#vranesh-parole dl').count()) === 0);
+
+  // Un futur sans rien de noté ne dresse pas trois cases vides.
+  await page.locator('.vranesh-bourgeon').nth(1).click();
+  await page.waitForTimeout(120);
+  verifier('Futur sans notes : aucune vignette vide, une seule ligne',
+    (await page.locator('#vranesh-parole .vranesh-vignette').count()) === 0
+    && (await page.locator('#vranesh-parole .vranesh-vignettes-vide').count()) === 1);
+  await page.locator('.vranesh-bourgeon').first().click();
+  await page.waitForTimeout(120);
 
   // ---- Retour : on retrouve la rose intacte. ----
   await page.locator('#vranesh-arbre-retour').click();
@@ -1043,7 +1112,7 @@ console.log('— H. vranesh.html thème dénoué → le futur advenu occupe la p
     (await page.locator('#vranesh-arbre-sceau').isVisible())
     && /La branche qui a poussé/.test((await page.locator('#vranesh-arbre-sceau').textContent()) || ''));
   const tailles = await page.evaluate(() => ({
-    deroule: parseFloat(getComputedStyle(document.querySelector('#vranesh-parole .parole-texte')).fontSize),
+    deroule: parseFloat(getComputedStyle(document.querySelector('#vranesh-parole .parole-nom')).fontSize),
     corps: parseFloat(getComputedStyle(document.body).fontSize),
     trait: parseFloat(getComputedStyle(document.querySelector('.vranesh-branche--advenue')).strokeWidth),
   }));

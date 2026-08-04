@@ -1336,3 +1336,47 @@
     page sur `/ecrire.html`. Cadrer une lecture sans rien à relire serait
     exactement l'erreur de la boucle ① (refaire l'affichage au lieu de traiter
     la distance). Rien n'est donc « en attente de Léo » ici — c'est voulu.
+- **2026-08-04 (VRANESH — le futur advenu se choisit sur la branche, PR #137)** —
+  Paul : « je clique sur une branche, ça me donne le choix si je la sélectionne,
+  si le futur est advenu. En l'état, ce n'est pas le cas. Il faut que je puisse
+  sélectionner le futur qui soit advenu. »
+  - **Diagnostic, et c'est là qu'est la leçon** : le geste **existait**. Migration
+    `0019` appliquée, `PATCH /api/situations` fonctionnel, formulaire écrit — le
+    tout livré et annoté « ✅ l'advenu livré » trois jours plus tôt. Mais il ne
+    vivait que dans « Le registre détaillé », **replié par défaut**, en bas de
+    page, sous forme de **menu déroulant**. Paul, lui, cherchait le geste sur la
+    branche qu'il venait de cliquer. Il ne l'a jamais rencontré.
+  - 🔻 **Règle actée** : **une fonction qu'on ne rencontre pas là où on la
+    cherche n'existe pas.** Une livraison ne se clôt pas sur « le code marche »
+    mais sur « le geste est atteignable **depuis l'endroit où l'utilisateur le
+    veut** ». Corollaire pour le cadrage EL ④ : un critère de réussite qui dit
+    « le PATCH part avec le bon corps » est incomplet — il doit dire **d'où** le
+    geste part. Les harnais D et E de `smoke-vranesh` étaient verts et prouvaient
+    un dénouement… que Paul ne pouvait pas atteindre.
+  - **Correctif** : le dénouement est porté par la branche (deux temps conservés,
+    confirmation qui annonce le compte exact des branches coupées avant la
+    coupe — la garde n'a pas été relâchée d'un pouce pour gagner en accès). Un
+    thème dénoué **s'ouvre sur son dénouement** : futur advenu déplié d'emblée,
+    en grand, sceau sur l'arbre, réouverture au lieu de coupe.
+  - **Débord d'étiquettes de l'arbre, trouvé par une capture de vérification**
+    (pas par Paul) : les branches de gauche sortaient du cadre. La règle du
+    2026-08-01 nommait pourtant « l'arbre VRANESH » — elle n'y avait jamais été
+    appliquée. Repère `240 → 300`, budget de signes calculé sur la place réelle
+    de chaque côté (motif `couronne` de DRAUKHAIN, réemployé et non réinventé),
+    `getBBox()` mesurée contre le `viewBox` + **pire cas construit** à 6 futurs
+    interminables. 🔻 **Une règle permanente ne s'applique pas toute seule** :
+    quand elle nomme des cibles, la première session qui touche une cible
+    l'applique — sinon la règle n'est qu'un souvenir.
+  - **Deuxième dictée du jour, boucle NON engagée** : « quand j'arrive sur
+    VRANESH il faut m'afficher tout de suite LIANDRA et THORIOL […] réduire le
+    texte au maximum, maximiser le visuel — ça me permet de vraiment visualiser
+    […] ensuite quand je sélectionne une branche, là je peux avoir du texte,
+    mais il y en a trop, c'est purement du texte brut. » Question de **forme** →
+    **maquette avant le code** (`design/preview-vranesh-lecture.html`), méthode
+    déjà éprouvée le 2026-08-01. Zéro ligne de production touchée tant que Paul
+    n'a pas choisi. Reco de Léo : étage ① **forme C** (chaque thème montre SON
+    arbre en réduction — l'image porte l'information au lieu de décorer un nom) ;
+    étage ③ **forme A** (trois vignettes gravées ; B est plus beau mais coûte un
+    clic et rétrécit sur téléphone). Chaque forme affiche **son nombre de mots à
+    l'écran** : 48 aujourd'hui, 26 en A, 12 en B — un critère de réussite
+    chiffré, pas un jugement esthétique.
