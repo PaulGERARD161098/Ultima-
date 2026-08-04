@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Preview — VRANESH : l'image d'abord, le texte ensuite</title>
+<!--
+  PREVIEW DE TRAVAIL — aucune donnée réelle (§5 : les déroulés sont inventés ;
+  seuls les NOMS des thèmes sont réels, et ils vivent déjà au lexique vocal).
+
+  Constat de Paul (dictée 2026-08-04) :
+    « L'affichage entre THORIOL et LIANDRA n'est pas top. Quand j'arrive sur
+      VRANESH, il faut m'afficher tout de suite LIANDRA et THORIOL, et ensuite
+      je peux cliquer dessus et ça me remet une belle cartographie. L'idée,
+      c'est de réduire le texte au maximum, de maximiser l'affichage du côté
+      visuel — ça me permet de vraiment visualiser les choses. Ensuite, quand
+      je sélectionne une branche, là je peux avoir l'affichage du texte, mais
+      je trouve qu'il y a trop de texte. […] Pour l'instant c'est purement du
+      texte à fond, du texte brut. Ça ne me paraît pas optimisé. »
+
+  Deux étages sont donc à trancher, séparément :
+    ÉTAGE ① L'ARRIVÉE — ce que Paul voit en ouvrant VRANESH. Doit se lire en
+            une seconde, sans lire : c'est du TRI PAR L'IMAGE.
+    ÉTAGE ③ LA BRANCHE CHOISIE — ce qui s'affiche quand il clique une branche.
+            Le texte a le droit d'être là, mais mis en forme, pas empilé.
+  (L'étage ② — l'arbre du thème — n'est pas remis en cause ici : il a été
+   tranché le 2026-08-01 et Paul le garde.)
+
+  Chaque étage propose ses formes ; on n'en retient qu'UNE par étage.
+  Zéro ressource externe, zéro CDN, zéro donnée réelle.
+-->
+<style>
+:root {
+  --accent: #1e6fb8; --cerne-carte: #5a4118; --or-antique: #a9884a;
+  --mer-profonde: #0e3a52; --mer-claire: #17506b;
+  --parchemin: #f6eed9; --parchemin-carte: #efe3c6; --parchemin-ombre: #e3d3ab;
+  --encre-sepia: #3b2f1c; --encre-sepia-douce: #6a5636; --creme: #f6eed9;
+  --police-ancienne: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 1.4rem 1rem 3rem; color: var(--creme);
+  font-family: var(--police-ancienne);
+  background:
+    radial-gradient(ellipse at 50% 15%, rgba(120,190,210,.14), rgba(0,0,0,0) 60%),
+    linear-gradient(180deg, var(--mer-claire), var(--mer-profonde) 62%, #0a2d42);
+  min-height: 100vh;
+}
+h1, h2, h3, h4 { font-weight: 700; letter-spacing: .06em; margin: 0; }
+.entete { max-width: 64rem; margin: 0 auto 1.2rem; text-align: center; }
+.entete h1 { font-size: 1.5rem; letter-spacing: .16em; }
+.entete p { margin: .5rem 0 0; font-style: italic; opacity: .88; }
+
+.etage { max-width: 64rem; margin: 2.4rem auto 0; }
+.etage-titre {
+  text-align: center; font-size: 1.05rem; letter-spacing: .14em;
+  font-variant: small-caps; padding-bottom: .5rem;
+  border-bottom: 1px solid rgba(169,136,74,.5);
+}
+.etage-quoi { text-align: center; font-style: italic; opacity: .85; margin: .6rem 0 0; }
+
+/* ---------- Bascule de forme ---------- */
+.formes { display: flex; gap: .6rem; justify-content: center; margin: 1rem auto 1.2rem; flex-wrap: wrap; }
+.forme-onglet {
+  font-family: inherit; font-size: .82rem; letter-spacing: .08em; font-variant: small-caps;
+  padding: .55rem 1rem; min-height: 44px; cursor: pointer; border-radius: 999px;
+  border: 1px solid var(--or-antique); background: rgba(169,136,74,.14); color: var(--creme);
+}
+.forme-onglet[aria-pressed="true"] { background: var(--parchemin); color: var(--encre-sepia); font-weight: 700; }
+.forme-onglet:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.panneau[hidden] { display: none; }
+.note {
+  max-width: 46rem; margin: 1rem auto 0; text-align: center; font-size: .9rem;
+  font-style: italic; opacity: .8;
+}
+.reco {
+  max-width: 46rem; margin: .8rem auto 0; text-align: center; font-size: .86rem;
+  border: 1px dashed rgba(169,136,74,.6); border-radius: 8px; padding: .6rem .9rem;
+}
+
+/* ---------- Le cadre parchemin commun ---------- */
+.cartouche {
+  background: linear-gradient(180deg, var(--parchemin), var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte); border-radius: 10px;
+  box-shadow: inset 0 0 0 3px rgba(169,136,74,.35), 0 4px 16px rgba(0,10,20,.35);
+  color: var(--encre-sepia); padding: 1.1rem;
+}
+
+/* ===================== ÉTAGE ① — L'ARRIVÉE ===================== */
+
+/* Forme A — LES DEUX PORTES : le nom en grand, un blason par thème. */
+.portes { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
+.porte {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: .7rem; min-height: 17rem; cursor: pointer; font-family: inherit;
+  background: linear-gradient(180deg, var(--parchemin), var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte); border-radius: 10px;
+  box-shadow: inset 0 0 0 3px rgba(169,136,74,.35), 0 4px 16px rgba(0,10,20,.35);
+  color: var(--encre-sepia); padding: 1.2rem;
+}
+.porte:hover, .porte:focus-visible { box-shadow: inset 0 0 0 3px var(--or-antique), 0 6px 22px rgba(0,10,20,.45); outline: none; }
+.porte svg { width: 5.6rem; height: 5.6rem; }
+.porte-nom { font-size: 1.6rem; letter-spacing: .2em; }
+.porte-etat {
+  font-size: .72rem; font-variant: small-caps; letter-spacing: .12em;
+  color: var(--encre-sepia-douce); border: 1px solid var(--or-antique);
+  border-radius: 999px; padding: .12rem .7rem;
+}
+
+/* Forme B — LA ROSE AGRANDIE : la boussole d'aujourd'hui, épurée. */
+.plateau {
+  position: relative; width: min(78vmin, 440px); aspect-ratio: 1; margin: .5rem auto;
+}
+.plateau-fond {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: radial-gradient(circle at 50% 45%, var(--parchemin), var(--parchemin-ombre));
+  border: 1px solid var(--cerne-carte); box-shadow: inset 0 0 0 3px rgba(169,136,74,.35);
+}
+.plateau-coeur {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 5.2rem; height: 5.2rem;
+}
+.plateau .cap {
+  position: absolute; transform: translate(-50%, -50%); cursor: pointer;
+  font-family: inherit; background: var(--parchemin); color: var(--encre-sepia);
+  border: 1px solid var(--cerne-carte); border-radius: 8px;
+  padding: .6rem 1rem; min-height: 44px; box-shadow: 0 2px 8px rgba(0,10,20,.3);
+  display: flex; flex-direction: column; align-items: center; gap: .15rem;
+}
+.plateau .cap-nom { font-size: 1.15rem; letter-spacing: .16em; }
+.plateau .cap-etat { font-size: .66rem; font-variant: small-caps; letter-spacing: .1em; color: var(--encre-sepia-douce); }
+.plateau svg.aiguilles { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* Forme C — LES ARBRES EN MINIATURE : le thème se reconnaît à SA forme. */
+.vitraux { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
+.vitrail {
+  display: flex; flex-direction: column; align-items: center; gap: .4rem;
+  cursor: pointer; font-family: inherit; padding: .9rem .8rem 1rem;
+  background: linear-gradient(180deg, var(--parchemin), var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte); border-radius: 10px;
+  box-shadow: inset 0 0 0 3px rgba(169,136,74,.35), 0 4px 16px rgba(0,10,20,.35);
+  color: var(--encre-sepia);
+}
+.vitrail:hover, .vitrail:focus-visible { box-shadow: inset 0 0 0 3px var(--or-antique), 0 6px 22px rgba(0,10,20,.45); outline: none; }
+.vitrail svg { width: 100%; height: auto; max-height: 12rem; }
+.vitrail-nom { font-size: 1.45rem; letter-spacing: .2em; }
+.vitrail-etat { font-size: .72rem; font-variant: small-caps; letter-spacing: .12em; color: var(--encre-sepia-douce); }
+.mini-tronc { fill: none; stroke: var(--cerne-carte); stroke-width: 3; stroke-linecap: round; }
+.mini-branche { fill: none; stroke: var(--or-antique); stroke-width: 2; stroke-linecap: round; }
+.mini-branche--advenue { stroke: var(--cerne-carte); stroke-width: 4; }
+.mini-bourgeon { fill: var(--or-antique); }
+.mini-bourgeon--advenue { fill: var(--cerne-carte); }
+
+/* ===================== ÉTAGE ③ — LA BRANCHE CHOISIE ===================== */
+.scene3 { display: grid; gap: 1rem; }
+@media (min-width: 60rem) { .scene3 { grid-template-columns: 1fr 1fr; align-items: start; } }
+
+.futur-titre { font-size: 1.25rem; line-height: 1.35; margin: 0 0 .2rem; }
+.futur-thème {
+  font-size: .74rem; font-variant: small-caps; letter-spacing: .12em;
+  color: var(--encre-sepia-douce); margin: 0 0 .9rem;
+}
+
+/* Forme A — TROIS VIGNETTES : une icône gravée par nature d'information. */
+.vignettes { display: grid; gap: .6rem; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); }
+.vignette {
+  border: 1px solid var(--or-antique); border-radius: 8px; padding: .7rem .8rem;
+  background: rgba(169,136,74,.09); display: flex; gap: .6rem; align-items: flex-start;
+}
+.vignette svg { width: 1.6rem; height: 1.6rem; flex: none; margin-top: .1rem; }
+.vignette-quoi { font-size: .68rem; font-variant: small-caps; letter-spacing: .12em; color: var(--encre-sepia-douce); }
+.vignette-texte { margin: .1rem 0 0; font-size: .95rem; line-height: 1.35; }
+
+/* Forme B — LE RUBAN DU FUTUR : trois stations sur une ligne gravée. */
+.ruban { margin: .6rem 0 0; }
+.ruban svg { width: 100%; height: auto; }
+.ruban-ligne { stroke: var(--or-antique); stroke-width: 1.6; fill: none; }
+.ruban-station { fill: var(--parchemin); stroke: var(--cerne-carte); stroke-width: 1.6; }
+.ruban-station--pivot { fill: var(--cerne-carte); }
+.ruban-quoi { font-size: 5.4px; font-variant: small-caps; letter-spacing: .12em; fill: var(--encre-sepia-douce); }
+.ruban-mot { font-size: 7px; fill: var(--encre-sepia); font-weight: 700; }
+.ruban-detail { margin: .8rem 0 0; }
+.ruban-detail summary {
+  cursor: pointer; font-size: .78rem; font-variant: small-caps; letter-spacing: .1em;
+  min-height: 44px; display: flex; align-items: center; color: var(--encre-sepia-douce);
+}
+.ruban-detail p { margin: .2rem 0 .6rem; }
+
+/* Forme C — AUJOURD'HUI : le mur de texte, pour comparer honnêtement. */
+.actuel dt { font-size: .7rem; font-variant: small-caps; letter-spacing: .1em; color: var(--encre-sepia-douce); margin-top: .55rem; }
+.actuel dd { margin: .15rem 0 0; }
+
+.jauge {
+  margin: .9rem 0 0; font-size: .74rem; font-variant: small-caps; letter-spacing: .1em;
+  color: var(--encre-sepia-douce); border-top: 1px dashed var(--or-antique); padding-top: .5rem;
+}
+</style>
+</head>
+<body>
+
+<div class="entete">
+  <h1>VRANESH — l'image d'abord, le texte ensuite</h1>
+  <p>Maquette de travail. Contenus inventés, aucune donnée réelle.<br>
+     Deux étages à trancher séparément : ce que tu vois en <strong>arrivant</strong>,
+     et ce que tu vois quand tu <strong>choisis une branche</strong>.</p>
+</div>
+
+<!-- ==================== ÉTAGE ① ==================== -->
+<section class="etage" aria-labelledby="t1">
+  <h2 class="etage-titre" id="t1">Étage ① — l'arrivée sur VRANESH</h2>
+  <p class="etage-quoi">Se lire en une seconde, sans lire. Zéro paragraphe, zéro formulaire :
+    tes thèmes, tout de suite.</p>
+
+  <div class="formes" role="group" aria-label="Formes de l'arrivée">
+    <button class="forme-onglet" type="button" data-cible="e1" data-forme="a" aria-pressed="true">Forme A — les deux portes</button>
+    <button class="forme-onglet" type="button" data-cible="e1" data-forme="b" aria-pressed="false">Forme B — la rose agrandie</button>
+    <button class="forme-onglet" type="button" data-cible="e1" data-forme="c" aria-pressed="false">Forme C — les arbres en miniature</button>
+  </div>
+
+  <!-- Forme A — LES DEUX PORTES -->
+  <div class="panneau" id="e1-a">
+    <div class="portes">
+      <button class="porte" type="button">
+        <svg viewBox="0 0 72 72" aria-hidden="true" focusable="false">
+          <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
+          <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
+          <path d="M26 52 C 26 40, 46 40, 46 28" stroke="#3b2f1c" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+          <path d="M46 52 C 46 40, 26 40, 26 28" stroke="#3b2f1c" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+          <circle cx="36" cy="40" r="3" fill="#a9884a"/>
+        </svg>
+        <span class="porte-nom">LIANDRA</span>
+        <span class="porte-etat">5 futurs</span>
+      </button>
+      <button class="porte" type="button">
+        <svg viewBox="0 0 72 72" aria-hidden="true" focusable="false">
+          <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
+          <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
+          <path d="M36 54 V 34" stroke="#3b2f1c" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+          <path d="M36 40 C 30 38, 26 32, 26 24 C 34 26, 36 32, 36 40" fill="#a9884a" opacity=".75"/>
+          <path d="M36 38 C 42 36, 46 30, 46 22 C 38 24, 36 30, 36 38" fill="#a9884a" opacity=".55"/>
+        </svg>
+        <span class="porte-nom">THORIOL</span>
+        <span class="porte-etat">3 futurs</span>
+      </button>
+    </div>
+    <p class="note">Le nom occupe la place. Un blason par thème : à terme, tu reconnais
+      la porte sans lire le mot. L'état tient en deux mots.</p>
+  </div>
+
+  <!-- Forme B — LA ROSE AGRANDIE -->
+  <div class="panneau" id="e1-b" hidden>
+    <div class="cartouche">
+      <div class="plateau">
+        <div class="plateau-fond"></div>
+        <svg class="aiguilles" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+          <line x1="50" y1="50" x2="50" y2="20" stroke="#a9884a" stroke-width=".8"/>
+          <line x1="50" y1="50" x2="50" y2="80" stroke="#a9884a" stroke-width=".8"/>
+          <circle cx="50" cy="20" r="1.8" fill="#a9884a"/>
+          <circle cx="50" cy="80" r="1.8" fill="#a9884a"/>
+        </svg>
+        <div class="plateau-coeur">
+          <svg viewBox="0 0 72 72" aria-hidden="true" focusable="false">
+            <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
+            <circle cx="36" cy="36" r="28.5" fill="none" stroke="#5a4118" stroke-width="1"/>
+            <path d="M36 56 V 40 M36 40 C 36 32, 28 30, 24 22 M36 40 C 36 30, 36 26, 36 20 M36 40 C 36 32, 44 30, 48 22"
+                  stroke="#3b2f1c" stroke-width="2" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <button class="cap" type="button" style="left:50%; top:10%">
+          <span class="cap-nom">LIANDRA</span><span class="cap-etat">5 futurs</span>
+        </button>
+        <button class="cap" type="button" style="left:50%; top:90%">
+          <span class="cap-nom">THORIOL</span><span class="cap-etat">3 futurs</span>
+        </button>
+      </div>
+    </div>
+    <p class="note">C'est la boussole d'aujourd'hui, mais débarrassée de sa notice et
+      de son formulaire, avec des caps deux fois plus grands.</p>
+  </div>
+
+  <!-- Forme C — LES ARBRES EN MINIATURE -->
+  <div class="panneau" id="e1-c" hidden>
+    <div class="vitraux">
+      <button class="vitrail" type="button">
+        <svg viewBox="0 0 120 110" aria-hidden="true" focusable="false">
+          <path class="mini-tronc" d="M60 104 C 58 84, 62 60, 60 28"/>
+          <path class="mini-branche" d="M60 90 Q 46 88 34 80"/>
+          <path class="mini-branche" d="M60 76 Q 76 74 88 66"/>
+          <path class="mini-branche" d="M60 62 Q 44 60 32 52"/>
+          <path class="mini-branche" d="M60 48 Q 76 46 86 38"/>
+          <path class="mini-branche" d="M60 34 Q 48 32 40 24"/>
+          <circle class="mini-bourgeon" cx="34" cy="80" r="3"/>
+          <circle class="mini-bourgeon" cx="88" cy="66" r="3"/>
+          <circle class="mini-bourgeon" cx="32" cy="52" r="3"/>
+          <circle class="mini-bourgeon" cx="86" cy="38" r="3"/>
+          <circle class="mini-bourgeon" cx="40" cy="24" r="3"/>
+        </svg>
+        <span class="vitrail-nom">LIANDRA</span>
+        <span class="vitrail-etat">5 futurs</span>
+      </button>
+      <button class="vitrail" type="button">
+        <svg viewBox="0 0 120 110" aria-hidden="true" focusable="false">
+          <path class="mini-tronc" d="M60 104 C 58 88, 62 70, 60 46"/>
+          <path class="mini-branche" d="M60 92 Q 46 90 36 82"/>
+          <path class="mini-branche" d="M60 74 Q 76 72 88 64"/>
+          <path class="mini-branche" d="M60 56 Q 46 54 38 46"/>
+          <circle class="mini-bourgeon" cx="36" cy="82" r="3"/>
+          <circle class="mini-bourgeon" cx="88" cy="64" r="3"/>
+          <circle class="mini-bourgeon" cx="38" cy="46" r="3"/>
+        </svg>
+        <span class="vitrail-nom">THORIOL</span>
+        <span class="vitrail-etat">3 futurs</span>
+      </button>
+      <button class="vitrail" type="button">
+        <svg viewBox="0 0 120 110" aria-hidden="true" focusable="false">
+          <path class="mini-tronc" d="M60 104 C 58 88, 62 76, 60 62"/>
+          <path class="mini-branche mini-branche--advenue" d="M60 84 Q 44 82 32 72"/>
+          <circle class="mini-bourgeon mini-bourgeon--advenue" cx="32" cy="72" r="4.5"/>
+        </svg>
+        <span class="vitrail-nom">EXEMPLE</span>
+        <span class="vitrail-etat">advenu</span>
+      </button>
+    </div>
+    <p class="note">Chaque thème montre <strong>son</strong> arbre en réduction : tu le
+      reconnais à sa silhouette, pas à son nom. Un thème dénoué n'a plus qu'une branche,
+      épaisse — il se distingue au premier coup d'œil (3ᵉ vignette, exemple).</p>
+    <p class="reco"><strong>Ma recommandation pour l'étage ① : la forme C.</strong>
+      C'est la seule où l'image <em>porte une information</em> (combien de futurs, dénoué
+      ou non, arbre touffu ou nu) au lieu de décorer un nom. C'est ta cartographie
+      mentale, et elle se lit sans un mot.</p>
+  </div>
+</section>
+
+<!-- ==================== ÉTAGE ③ ==================== -->
+<section class="etage" aria-labelledby="t3">
+  <h2 class="etage-titre" id="t3">Étage ③ — la branche choisie</h2>
+  <p class="etage-quoi">Là, le texte a le droit d'exister. Mais mis en forme —
+    pas empilé les uns sous les autres.</p>
+
+  <div class="formes" role="group" aria-label="Formes de la branche choisie">
+    <button class="forme-onglet" type="button" data-cible="e3" data-forme="a" aria-pressed="true">Forme A — trois vignettes</button>
+    <button class="forme-onglet" type="button" data-cible="e3" data-forme="b" aria-pressed="false">Forme B — le ruban du futur</button>
+    <button class="forme-onglet" type="button" data-cible="e3" data-forme="c" aria-pressed="false">Forme C — aujourd'hui</button>
+  </div>
+
+  <!-- Forme A — TROIS VIGNETTES -->
+  <div class="panneau" id="e3-a">
+    <div class="cartouche">
+      <p class="futur-titre">Le vent tourne au nord et porte la voile.</p>
+      <p class="futur-thème">Thème d'exemple · futur 1 sur 3 · vraisemblance forte</p>
+      <div class="vignettes">
+        <div class="vignette">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M2 12 C 6 5, 18 5, 22 12 C 18 19, 6 19, 2 12 Z" fill="none" stroke="#5a4118" stroke-width="1.6"/>
+            <circle cx="12" cy="12" r="3.4" fill="#a9884a"/>
+          </svg>
+          <div>
+            <span class="vignette-quoi">Ce qui l'annonce</span>
+            <p class="vignette-texte">Le ciel se dégage à l'aube.</p>
+          </div>
+        </div>
+        <div class="vignette">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M12 2 L21 6 V12 C 21 17, 17 21, 12 22 C 7 21, 3 17, 3 12 V6 Z"
+                  fill="none" stroke="#5a4118" stroke-width="1.6"/>
+            <path d="M8 12 l3 3 5 -6" fill="none" stroke="#a9884a" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <div>
+            <span class="vignette-quoi">Ce que j'ai prévu</span>
+            <p class="vignette-texte">Garder deux jours d'avance.</p>
+          </div>
+        </div>
+        <div class="vignette">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M9 14 a4 4 0 0 1 0 -5 l2 -2 a4 4 0 0 1 6 6 l-1 1"
+                  fill="none" stroke="#5a4118" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M15 10 a4 4 0 0 1 0 5 l-2 2 a4 4 0 0 1 -6 -6 l1 -1"
+                  fill="none" stroke="#a9884a" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <div>
+            <span class="vignette-quoi">Ce que ça touche</span>
+            <p class="vignette-texte">Un objectif — menacé.</p>
+          </div>
+        </div>
+      </div>
+      <p class="jauge">≈ 26 mots à l'écran</p>
+    </div>
+    <p class="note">Une icône gravée par <em>nature</em> d'information : l'œil sait où
+      regarder avant de lire. Chaque case tient en une phrase ; le reste se déplie.</p>
+  </div>
+
+  <!-- Forme B — LE RUBAN DU FUTUR -->
+  <div class="panneau" id="e3-b" hidden>
+    <div class="cartouche">
+      <p class="futur-titre">Le vent tourne au nord et porte la voile.</p>
+      <p class="futur-thème">Thème d'exemple · futur 1 sur 3 · vraisemblance forte</p>
+      <div class="ruban">
+        <svg viewBox="0 0 240 74" role="img" aria-label="Le signe qui annonce ce futur, le futur, puis la parade préparée">
+          <!-- Les stations extrêmes sont rentrées (x=42 / x=198) et les mots
+               bornés : au bord du cadre, un mot de plus et le texte sort. -->
+          <path class="ruban-ligne" d="M42 40 H 198"/>
+          <circle class="ruban-station" cx="42" cy="40" r="7"/>
+          <circle class="ruban-station ruban-station--pivot" cx="120" cy="40" r="10"/>
+          <circle class="ruban-station" cx="198" cy="40" r="7"/>
+          <text class="ruban-quoi" x="42" y="22" text-anchor="middle">ce qui l'annonce</text>
+          <text class="ruban-quoi" x="120" y="18" text-anchor="middle">le futur</text>
+          <text class="ruban-quoi" x="198" y="22" text-anchor="middle">ma parade</text>
+          <text class="ruban-mot" x="42" y="60" text-anchor="middle">ciel dégagé</text>
+          <text class="ruban-mot" x="120" y="62" text-anchor="middle">le vent tourne</text>
+          <text class="ruban-mot" x="198" y="60" text-anchor="middle">deux jours</text>
+        </svg>
+      </div>
+      <details class="ruban-detail">
+        <summary>Le détail, si tu le veux ↓</summary>
+        <p><strong>Signes avant-coureurs</strong> — le ciel se dégage à l'aube.</p>
+        <p><strong>Parade préparée</strong> — garder deux jours d'avance.</p>
+        <p><strong>Passerelles</strong> — un objectif, menacé.</p>
+      </details>
+      <p class="jauge">≈ 12 mots à l'écran (le reste est replié)</p>
+    </div>
+    <p class="note">Le futur se lit comme une trajectoire : ce qui l'annonce, lui,
+      ce que j'ai prévu. Trois mots par station ; le texte entier n'apparaît que si
+      tu le demandes. <strong>Défaut mesuré</strong> : sur téléphone le ruban se
+      réduit avec l'écran et ses mots deviennent minuscules — regarde cette page
+      sur ton portable avant de trancher pour cette forme.</p>
+    <p class="reco"><strong>Ma recommandation pour l'étage ③ : la forme A</strong>, et la
+      forme B si tu veux aller plus loin dans le dépouillement. A garde toute
+      l'information lisible d'un coup ; B en montre le tiers et cache le reste — plus
+      beau, mais un clic de plus à chaque fois que tu veux vraiment savoir.</p>
+  </div>
+
+  <!-- Forme C — AUJOURD'HUI (référence) -->
+  <div class="panneau" id="e3-c" hidden>
+    <div class="cartouche">
+      <p class="futur-titre">Le vent tourne au nord et porte la voile</p>
+      <p class="futur-thème">Thème d'exemple — futur 1 sur 3 · vraisemblance forte</p>
+      <p>Le vent tourne au nord et porte la voile</p>
+      <dl class="actuel">
+        <dt>Signes avant-coureurs</dt><dd>Le ciel se dégage à l'aube</dd>
+        <dt>Parade préparée</dt><dd>Garder deux jours d'avance</dd>
+        <dt>Passerelles</dt><dd>Objectif : un objectif d'exemple (menace)</dd>
+        <dd>Page : une page d'exemple</dd>
+      </dl>
+      <p style="margin:.8rem 0 0"><a href="#" onclick="return false">Ouvrir ce futur dans le registre ↝</a></p>
+      <p class="jauge">≈ 48 mots à l'écran, dont le déroulé écrit deux fois</p>
+    </div>
+    <p class="note">L'existant, pour comparer honnêtement. Le déroulé y figure
+      <strong>deux fois</strong> (en titre et en corps), et tout est de la même taille :
+      rien ne dit à l'œil par où commencer.</p>
+  </div>
+</section>
+
+<script>
+// Bascule de forme, par étage. Aucun état persistant : c'est une maquette.
+document.querySelectorAll('.forme-onglet').forEach(function (onglet) {
+  onglet.addEventListener('click', function () {
+    var cible = onglet.dataset.cible;
+    document.querySelectorAll('.forme-onglet[data-cible="' + cible + '"]').forEach(function (o) {
+      var actif = o === onglet;
+      o.setAttribute('aria-pressed', String(actif));
+      document.getElementById(cible + '-' + o.dataset.forme).hidden = !actif;
+    });
+  });
+});
+</script>
+</body>
+</html>

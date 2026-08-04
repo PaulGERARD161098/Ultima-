@@ -521,6 +521,23 @@ console.log('— D. vranesh.html → la rose (noms seuls), puis l’arbre au cli
     etiquettes.length === 3 && etiquettes.every((e) => e.length <= 35), JSON.stringify(etiquettes));
   verifier('ABSENCE — le déroulé complet n’est PAS écrit sur l’arbre',
     !/porte la voile/.test((await page.locator('#vranesh-arbre-dessin').textContent()) || ''));
+  // ---- Les étiquettes doivent TENIR DANS LE CADRE (constat Paul 2026-08-04 :
+  //      « au nord et porte… » sortait par la gauche). Une géométrie se MESURE :
+  //      on compare la boîte de chaque texte au repère, on ne la juge pas à l'œil.
+  const debords = await page.evaluate(() => {
+    const svg = document.getElementById('vranesh-arbre-dessin');
+    const vb = svg.viewBox.baseVal;
+    return Array.from(svg.querySelectorAll('.vranesh-etiquette'))
+      .filter((t) => (t.textContent || '').length > 0)
+      .map((t) => {
+        const b = t.getBBox();
+        return { texte: t.textContent, x1: Math.round(b.x), x2: Math.round(b.x + b.width) };
+      })
+      .filter((e) => e.x1 < vb.x || e.x2 > vb.x + vb.width);
+  });
+  verifier('Aucune étiquette ne déborde du cadre (mesuré, pas jugé à l’œil)',
+    debords.length === 0, JSON.stringify(debords));
+
   verifier('Vraisemblances distinguées sur les traits',
     (await page.locator('.vranesh-branche--forte').count()) === 1
     && (await page.locator('.vranesh-branche--faible').count()) === 1);
@@ -588,9 +605,18 @@ console.log('— D. vranesh.html → la rose (noms seuls), puis l’arbre au cli
       charpenteVide: V.charpente(0).length,
       charpente3: V.charpente(3).branches.length,
       alternance: V.charpente(3).branches.map((b) => b.sens).join(','),
-      surTronc: V.charpente(3).branches.every((b) => b.ax === 120),
+      surTronc: V.charpente(3).branches.every((b) => b.ax === 150),
+      // La place disponible est calculée branche par branche : positive des
+      // deux côtés, et jamais plus large que le demi-cadre.
+      dispos: V.charpente(6).branches.map((b) => Math.round(b.dispo)),
+      signes: V.charpente(6).branches.map((b) => b.signes),
     };
   });
+  verifier('charpente : chaque branche connaît la place réelle de son étiquette',
+    pur.dispos.length === 6 && pur.dispos.every((d) => d > 0 && d < 150),
+    JSON.stringify(pur.dispos));
+  verifier('charpente : le budget de signes en découle, jamais nul',
+    pur.signes.every((s) => s >= 6), JSON.stringify(pur.signes));
   verifier('nomCourt : le sous-titre tombe', pur.nomAvecTiret === 'LIANDRA', JSON.stringify(pur));
   verifier('nomCourt : un nom sans sous-titre est gardé entier', pur.nomSansTiret === 'CARREFOUR');
   verifier('nomCourt : un intitulé vide ne casse rien', pur.nomVide === '');
@@ -838,6 +864,308 @@ console.log('— F. vranesh.html thème advenu → une seule branche, scellée �
 
   verifier('Zéro erreur console (thème advenu)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
   await page.screenshot({ path: `${CAPTURES}/vranesh-advenu.png`, fullPage: true });
+  await page.close();
+}
+
+// ====== G. CHOISIR LA BRANCHE DEPUIS L'ARBRE (dictée Paul 2026-08-04) ======
+// Constat de Paul : « je clique sur une branche, ça me donne le choix si je la
+// sélectionne, si le futur est advenu. En l'état ce n'est pas le cas. » Le
+// dénouement existait, mais seulement au fond du registre replié : hors du
+// regard, donc hors d'usage.
+// Prouve : ① le clic sur une branche OFFRE le choix ; ② le survol seul ne
+// l'offre pas (un geste irréversible ne s'attrape pas à la volée) ; ③ deux
+// temps — le premier clic ne coupe rien et annonce le nombre exact de branches
+// coupées ; ④ annuler ne coupe rien ; ⑤ confirmer émet le PATCH de CETTE
+// branche, avec le Bearer, sans poser la date ; ⑥ un thème dénoué s'ouvre SUR
+// son futur advenu, en grand, sans le moindre clic — et n'offre plus de couper.
+console.log('— G. vranesh.html → choisir la branche qui a poussé depuis l’arbre —');
+{
+  const { page, erreurs, externes } = await nouvellePage();
+  await page.addInitScript(scriptFausseSession());
+  await page.route(`**://${REF_SUPABASE}.supabase.co/**`, (route) =>
+    route.fulfill({ status: 503, contentType: 'application/json', body: '{}' }));
+
+  const patchs = [];
+  await page.route('**/api/situations**', (route) => {
+    const req = route.request();
+    if (req.method() === 'PATCH') {
+      patchs.push({ headers: req.headers(), body: req.postData() });
+      return route.fulfill({
+        status: 200, contentType: 'application/json; charset=utf-8',
+        body: JSON.stringify({ ok: true, data: { id: 's1', scenario_advenu_id: 'sc1', coupees: 2 } }),
+      });
+    }
+    return route.fulfill({
+      status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE),
+    });
+  });
+  await page.route('**/api/scenarios**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify({ ok: true, data: {} }) }));
+  await page.route('**/api/serments**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_SERMENTS) }));
+  await page.route('**/api/imladrik**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IMLADRIK) }));
+
+  await page.goto(`${BASE}/vranesh.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForSelector('#vranesh-plateau .cap', { timeout: 20000 });
+  await page.locator('#vranesh-plateau .cap', { hasText: 'TRAVERSÉE' }).click();
+  await page.waitForSelector('#vranesh-arbre:not([hidden])', { timeout: 5000 });
+
+  const cote = page.locator('#vranesh-parole');
+
+  // ---- ① L'invitation est annoncée AVANT tout clic : le geste existe et se sait.
+  verifier('Le côté annonce qu’on peut désigner la branche qui a poussé',
+    /désigner celle qui a poussé/.test((await cote.textContent()) || ''),
+    (await cote.textContent()) || '');
+
+  // ---- ② Survol seul : le choix n'est PAS offert (rien d'irréversible à la volée).
+  await page.locator('.vranesh-bourgeon').first().hover();
+  await page.waitForSelector('#vranesh-parole.is-actif', { timeout: 5000 });
+  verifier('ABSENCE — le survol seul n’offre pas de trancher',
+    (await cote.locator('.vranesh-cote-choisir').count()) === 0);
+
+  // ---- ③ Le clic sur la branche OFFRE le choix — c'est le constat de Paul.
+  await page.locator('.vranesh-bourgeon').first().click();
+  await page.waitForSelector('.vranesh-branche-g.is-choisie', { timeout: 5000 });
+  const choisir = cote.locator('.vranesh-cote-choisir');
+  verifier('Clic sur une branche : « Cette branche a poussé » est proposé',
+    (await choisir.count()) === 1);
+  verifier('Le bouton nomme la branche visée pour les lecteurs d’écran',
+    /futur advenu/.test((await choisir.getAttribute('aria-label')) || ''),
+    (await choisir.getAttribute('aria-label')) || '');
+  const hChoisir = await choisir.evaluate((el) => el.getBoundingClientRect().height);
+  verifier('Tap target du choix ≥ 44 px', hChoisir >= 44, `${hChoisir}px`);
+  verifier('Le choix est offert sans dérouler le registre',
+    (await page.locator('#vranesh-registre-detail').evaluate((el) => el.open)) === false);
+
+  // ---- ④ DEUX TEMPS : le premier clic ne coupe rien, il annonce ce qui tombe.
+  await choisir.click();
+  await page.waitForSelector('#vranesh-parole .vranesh-cote-confirmation:not([hidden])', { timeout: 5000 });
+  verifier('Premier clic : AUCUN PATCH émis (rien n’est coupé)', patchs.length === 0, `${patchs.length}`);
+  const txtConf = (await cote.locator('.vranesh-cote-confirmation').textContent()) || '';
+  verifier('La confirmation annonce le nombre exact de branches coupées (3 − 1 = 2)',
+    /Les 2 autres branches potentielles seront supprimées définitivement/.test(txtConf), txtConf);
+
+  // ---- ⑤ Annuler ne coupe rien.
+  await cote.locator('.vranesh-cote-annuler').click();
+  verifier('Annuler : toujours aucun PATCH', patchs.length === 0, `${patchs.length}`);
+  verifier('Annuler : la confirmation se referme',
+    await cote.locator('.vranesh-cote-confirmation').evaluate((el) => el.hidden));
+
+  await page.screenshot({ path: `${CAPTURES}/vranesh-choix-branche.png`, fullPage: true });
+
+  // ---- ⑥ Confirmer : le dénouement part, sur CETTE branche, avec le Bearer.
+  await choisir.click();
+  await page.waitForSelector('#vranesh-parole .vranesh-cote-confirmation:not([hidden])', { timeout: 5000 });
+  await cote.locator('.vranesh-confirmer').click();
+  await page.waitForTimeout(400);
+  verifier('Confirmer : un PATCH /api/situations émis', patchs.length === 1, `${patchs.length}`);
+  const corps = JSON.parse((patchs[0] || {}).body || '{}');
+  verifier('Le dénouement porte le thème ouvert et la branche CLIQUÉE',
+    corps.id === 's1' && corps.scenario_advenu_id === 'sc1', JSON.stringify(corps));
+  verifier('Le client ne pose PAS la date de l’advenu (serveur seul)',
+    !('advenu_le' in corps), JSON.stringify(corps));
+  verifier('Bearer transmis (choix depuis l’arbre)',
+    ((patchs[0] || {}).headers || {}).authorization === 'Bearer jeton-de-test');
+
+  verifier('Zéro requête externe (choix depuis l’arbre)', externes.length === 0, externes.slice(0, 3).join(', '));
+  verifier('Zéro erreur console (choix depuis l’arbre)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
+  await page.close();
+}
+
+// ====== H. Un thème DÉNOUÉ s'ouvre sur son futur, en grand, sans un clic ======
+// « Peut-être d'avoir un méga affichage ensuite, ouvrir le futur… comme ça ça
+// oriente tout. » Une fois le futur tranché, il n'y a plus rien à comparer : il
+// occupe la place, et on ne propose plus de couper mais de rouvrir.
+console.log('— H. vranesh.html thème dénoué → le futur advenu occupe la place —');
+{
+  const { page, erreurs } = await nouvellePage();
+  await page.addInitScript(scriptFausseSession());
+  await page.route(`**://${REF_SUPABASE}.supabase.co/**`, (route) =>
+    route.fulfill({ status: 503, contentType: 'application/json', body: '{}' }));
+
+  const patchs = [];
+  const FIXTURE_DENOUEE = {
+    ok: true,
+    data: {
+      situations: [
+        { id: 's1', intitule: 'TRAVERSÉE', contexte: 'un départ à préparer', nb_scenarios: 1,
+          a_explorer: false, advenue: true, scenario_advenu_id: 'sc1',
+          advenu_le: '2026-07-20T09:00:00Z', created_at: '2026-07-01T10:00:00Z' },
+      ],
+      scenarios: [
+        { id: 'sc1', situation_id: 's1', deroule: 'le vent tourne au nord et porte la voile',
+          vraisemblance: 'forte', signaux: null, parade: null },
+      ],
+      liens: [],
+    },
+  };
+  await page.route('**/api/situations**', (route) => {
+    const req = route.request();
+    if (req.method() === 'PATCH') {
+      patchs.push({ body: req.postData() });
+      return route.fulfill({
+        status: 200, contentType: 'application/json; charset=utf-8',
+        body: JSON.stringify({ ok: true, data: { id: 's1', scenario_advenu_id: null, coupees: 0 } }),
+      });
+    }
+    return route.fulfill({
+      status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_DENOUEE) });
+  });
+  await page.route('**/api/serments**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_SERMENTS) }));
+  await page.route('**/api/imladrik**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IMLADRIK) }));
+
+  await page.goto(`${BASE}/vranesh.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForSelector('#vranesh-plateau .cap', { timeout: 20000 });
+  await page.locator('#vranesh-plateau .cap', { hasText: 'TRAVERSÉE' }).click();
+  await page.waitForSelector('#vranesh-arbre:not([hidden])', { timeout: 5000 });
+
+  const cote = page.locator('#vranesh-parole');
+  const texteCote = (await cote.textContent()) || '';
+
+  // Le futur advenu est déplié D'EMBLÉE : aucun survol, aucun clic.
+  verifier('Sans un clic : le déroulé du futur advenu est affiché',
+    /le vent tourne au nord/.test(texteCote), texteCote);
+  verifier('Sans un clic : il est annoncé comme la branche qui a poussé',
+    /la branche qui a poussé/.test(texteCote), texteCote);
+  verifier('Sans un clic : la date du constat est lisible', /constaté le/.test(texteCote), texteCote);
+  verifier('ABSENCE — aucune invitation à survoler sur un thème dénoué',
+    !/Survole une branche/.test(texteCote), texteCote);
+  verifier('ABSENCE — aucune vraisemblance sur un futur advenu',
+    !/vraisemblance/.test(texteCote), texteCote);
+
+  // Le méga affichage : le cartouche et l'arbre passent en registre « dénoué ».
+  verifier('Le cartouche passe en affichage majeur',
+    await cote.evaluate((el) => el.classList.contains('is-advenu')));
+  verifier('L’arbre porte le sceau du dénouement',
+    (await page.locator('#vranesh-arbre-sceau').isVisible())
+    && /La branche qui a poussé/.test((await page.locator('#vranesh-arbre-sceau').textContent()) || ''));
+  const tailles = await page.evaluate(() => ({
+    deroule: parseFloat(getComputedStyle(document.querySelector('#vranesh-parole .parole-texte')).fontSize),
+    corps: parseFloat(getComputedStyle(document.body).fontSize),
+    trait: parseFloat(getComputedStyle(document.querySelector('.vranesh-branche--advenue')).strokeWidth),
+  }));
+  verifier('Le déroulé advenu est écrit plus grand que le corps de texte',
+    tailles.deroule > tailles.corps, JSON.stringify(tailles));
+  verifier('La branche advenue est tracée plus épaisse que tout futur hypothétique (2,2)',
+    tailles.trait > 2.2, JSON.stringify(tailles));
+
+  // La capture se prend ICI : sur le thème dénoué ouvert, pas après le retour.
+  await page.waitForTimeout(900);
+  await page.screenshot({ path: `${CAPTURES}/vranesh-futur-advenu.png`, fullPage: true });
+
+  // On ne propose plus de couper — on propose de rouvrir.
+  verifier('ABSENCE — plus aucune proposition de couper sur un thème dénoué',
+    (await cote.locator('.vranesh-cote-choisir').count()) === 0);
+  const rouvrir = cote.locator('.vranesh-cote-rouvrir');
+  verifier('Le thème peut être rouvert depuis l’arbre', (await rouvrir.count()) === 1);
+  await rouvrir.click();
+  await page.waitForTimeout(300);
+  verifier('Rouvrir : un PATCH qui remet le futur à NULL (aucune coupe)',
+    patchs.length === 1 && JSON.parse(patchs[0].body || '{}').scenario_advenu_id === null,
+    JSON.stringify(patchs.map((p) => p.body)));
+
+  // Retour à la rose : le sceau ne survit pas au thème.
+  await page.locator('#vranesh-arbre-retour').click();
+  verifier('Retour : le sceau du dénouement disparaît',
+    await page.locator('#vranesh-arbre-sceau').evaluate((el) => el.hidden));
+
+  // Le futur advenu écrit PLUS GROS : c'est là qu'un débord passerait inaperçu.
+  const debordAdvenu = await page.evaluate(() => {
+    const svg = document.getElementById('vranesh-arbre-dessin');
+    const vb = svg.viewBox.baseVal;
+    return Array.from(svg.querySelectorAll('.vranesh-etiquette'))
+      .filter((t) => (t.textContent || '').length > 0)
+      .map((t) => {
+        const b = t.getBBox();
+        return { texte: t.textContent, x1: Math.round(b.x), x2: Math.round(b.x + b.width) };
+      })
+      .filter((e) => e.x1 < vb.x || e.x2 > vb.x + vb.width);
+  });
+  verifier('L’étiquette agrandie du futur advenu tient dans le cadre (mesuré)',
+    debordAdvenu.length === 0, JSON.stringify(debordAdvenu));
+
+  verifier('Zéro erreur console (thème dénoué)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
+  await page.close();
+}
+
+// ====== I. PIRE CAS CONSTRUIT : un thème chargé de futurs très longs ======
+// Règle de charte (2026-08-01) : une géométrie s'éprouve sur un pire cas
+// CONSTRUIT, jamais sur les seules données du jour qui sont un échantillon
+// favorable. 6 futurs, déroulés interminables, des deux côtés du tronc.
+console.log('— I. vranesh.html arbre chargé → aucune étiquette hors cadre —');
+{
+  const { page, erreurs } = await nouvellePage();
+  await page.addInitScript(scriptFausseSession());
+  await page.route(`**://${REF_SUPABASE}.supabase.co/**`, (route) =>
+    route.fulfill({ status: 503, contentType: 'application/json', body: '{}' }));
+
+  const LONG = 'un enchaînement interminable de conséquences qui se déroulent sans jamais rien conclure';
+  const FIXTURE_CHARGEE = {
+    ok: true,
+    data: {
+      situations: [
+        { id: 's1', intitule: 'PIRE CAS', contexte: null, nb_scenarios: 6, a_explorer: false,
+          advenue: false, scenario_advenu_id: null, advenu_le: null, created_at: '2026-07-01T10:00:00Z' },
+      ],
+      scenarios: Array.from({ length: 6 }, (_, i) => ({
+        id: `sc${i + 1}`, situation_id: 's1', deroule: `${LONG} — variante ${i + 1}`,
+        vraisemblance: ['faible', 'moyenne', 'forte'][i % 3], signaux: null, parade: null,
+      })),
+      liens: [],
+    },
+  };
+  await page.route('**/api/situations**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_CHARGEE) }));
+  await page.route('**/api/serments**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_SERMENTS) }));
+  await page.route('**/api/imladrik**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IMLADRIK) }));
+
+  await page.goto(`${BASE}/vranesh.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForSelector('#vranesh-plateau .cap', { timeout: 20000 });
+  await page.locator('#vranesh-plateau .cap', { hasText: 'PIRE CAS' }).click();
+  await page.waitForSelector('#vranesh-arbre:not([hidden])', { timeout: 5000 });
+
+  verifier('6 branches tracées', (await page.locator('.vranesh-branche').count()) === 6);
+  // La pousse dure ~560 ms + 90 ms de retard par branche : on mesure l'arbre
+  // FINI, pas un arbre à mi-course (et la capture montre alors le vrai rendu).
+  await page.waitForTimeout(1200);
+  const mesures = await page.evaluate(() => {
+    const svg = document.getElementById('vranesh-arbre-dessin');
+    const vb = svg.viewBox.baseVal;
+    const etiquettes = Array.from(svg.querySelectorAll('.vranesh-etiquette'));
+    const boites = etiquettes.map((t) => {
+      const b = t.getBBox();
+      return { texte: t.textContent, x1: b.x, x2: b.x + b.width, y1: b.y, y2: b.y + b.height };
+    });
+    return {
+      ecrites: boites.filter((b) => b.texte.length > 0).length,
+      horsCadreX: boites.filter((b) => b.texte.length > 0)
+        .filter((b) => b.x1 < vb.x || b.x2 > vb.x + vb.width)
+        .map((b) => ({ texte: b.texte, x1: Math.round(b.x1), x2: Math.round(b.x2) })),
+      horsCadreY: boites.filter((b) => b.texte.length > 0)
+        .filter((b) => b.y1 < vb.y || b.y2 > vb.y + vb.height).length,
+      // Le tronc et les branches vivent dans le même cadre : eux aussi se mesurent.
+      traitsHorsCadre: Array.from(svg.querySelectorAll('.vranesh-branche, .vranesh-tronc'))
+        .map((t) => t.getBBox())
+        .filter((b) => b.x < vb.x || b.x + b.width > vb.x + vb.width
+          || b.y < vb.y || b.y + b.height > vb.y + vb.height).length,
+    };
+  });
+  verifier('6 futurs très longs : aucune étiquette ne sort du cadre (mesuré)',
+    mesures.horsCadreX.length === 0, JSON.stringify(mesures.horsCadreX));
+  verifier('6 futurs très longs : aucune étiquette ne sort par le haut ni le bas',
+    mesures.horsCadreY === 0, `${mesures.horsCadreY}`);
+  verifier('6 futurs très longs : tronc et branches restent dans le cadre',
+    mesures.traitsHorsCadre === 0, `${mesures.traitsHorsCadre}`);
+  verifier('Chaque branche garde une étiquette lisible (aucune n’est sacrifiée ici)',
+    mesures.ecrites === 6, `${mesures.ecrites}/6`);
+
+  verifier('Zéro erreur console (arbre chargé)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
+  await page.screenshot({ path: `${CAPTURES}/vranesh-arbre-charge.png`, fullPage: true });
   await page.close();
 }
 

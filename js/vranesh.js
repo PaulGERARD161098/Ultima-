@@ -541,10 +541,19 @@
     RAYON_CAP: 40,        // rayon des caps sur la rose (viewBox 0..100)
     RAYON_AIGUILLE: 30    // longueur des aiguilles depuis le centre
   };
-  // L'arbre vit dans son propre repère (viewBox 0 0 240 196), tronc au milieu.
+  // L'arbre vit dans son propre repère (viewBox 0 0 300 196), tronc au milieu.
+  // Le repère a été ÉLARGI de 240 à 300 le 2026-08-04 : à 240, les étiquettes
+  // des branches de gauche sortaient du cadre chez Paul (constat en capture).
+  // La largeur ne se règle pas à l'œil — elle est bornée branche par branche
+  // ci-dessous, et mesurée par le harnais (motif DRAUKHAIN, foyer #135).
   var ARBRE = {
-    L: 240, H: 196, TRONC_X: 120, PIED: 186,
-    HAUT_MIN: 46, PREMIERE: 158, ECART: 24, PORTEE: 52, MONTEE: 20
+    L: 300, H: 196, TRONC_X: 150, PIED: 186,
+    HAUT_MIN: 46, PREMIERE: 158, ECART: 24, PORTEE: 52, MONTEE: 20,
+    MARGE: 5,               // air incompressible entre un texte et le bord
+    LARGEUR_CAR: 4.4,       // largeur moyenne d'un signe à 8,5 px dans cette serif
+    LARGEUR_CAR_SCEAU: 6.2, // idem pour l'étiquette agrandie d'un futur advenu
+    ETIQ_MAX: 24,           // au-delà, on ne reconnaît plus, on lit — c'est le rôle du côté
+    ETIQ_MIN: 6             // en deçà, une étiquette ne reconnaît plus rien : on n'écrit pas
   };
   var NS_SVG = 'http://www.w3.org/2000/svg';
   var boussoleEnAttente = false;   // un seul réveil armé à la fois
@@ -578,12 +587,16 @@
 
   // L'étiquette d'une branche : de quoi la reconnaître, pas de quoi la lire.
   // Première phrase du déroulé, bornée — le détail vit dans le cartouche.
-  function etiquetteBranche(deroule) {
+  // `borne` = le nombre de signes que la place RÉELLE peut porter (calculé par
+  // charpente) ; sans borne, la valeur de référence hors cadre (aria-label,
+  // titre du cartouche), qui n'a pas de bord à respecter.
+  function etiquetteBranche(deroule, borne) {
+    var max = borne || 34;
     var texte = (deroule || '').trim();
     if (!texte) { return 'un futur'; }
     var phrase = texte.split(/[.;:!?]/)[0].trim() || texte;
-    if (phrase.length <= 34) { return phrase; }
-    var mots = phrase.slice(0, 34).split(' ');
+    if (phrase.length <= max) { return phrase; }
+    var mots = phrase.slice(0, max).split(' ');
     if (mots.length > 1) { mots.pop(); }
     return mots.join(' ') + '…';
   }
@@ -601,12 +614,20 @@
       var sens = (i % 2 === 0) ? -1 : 1;
       var bx = ARBRE.TRONC_X + sens * (ARBRE.PORTEE + (i % 3) * 6);
       var by = y - ARBRE.MONTEE;
+      var tx = bx + sens * 6;
+      // La place RÉELLEMENT disponible pour l'étiquette de CETTE branche, en
+      // unités du repère : à gauche le texte s'aligne à droite et court vers le
+      // bord gauche, à droite l'inverse. On en déduit combien de signes elle
+      // peut porter — plutôt que de tronquer à l'aveugle et d'espérer.
+      var dispo = (sens < 0) ? (tx - ARBRE.MARGE) : (ARBRE.L - tx - ARBRE.MARGE);
       out.push({
         sens: sens,
         ax: ARBRE.TRONC_X, ay: y,
         cx: ARBRE.TRONC_X + sens * 28, cy: y - 5,
         bx: bx, by: by,
-        tx: bx + sens * 6, ty: by - 7
+        tx: tx, ty: by - 7,
+        dispo: dispo,
+        signes: Math.max(0, Math.floor(dispo / ARBRE.LARGEUR_CAR))
       });
     }
     return { haut: haut, branches: out };
@@ -651,6 +672,7 @@
     if (!cote) { return; }
     cote.textContent = '';
     cote.classList.remove('is-actif');
+    cote.classList.remove('is-advenu');
     cote.appendChild(el('p', 'parole-defaut', texte));
   }
 
@@ -668,8 +690,12 @@
                  : ' · vraisemblance ' + (LIBELLE_VRAISEMBLANCE[scenario.vraisemblance] || 'moyenne'))));
     cote.appendChild(el('p', 'parole-texte', scenario.deroule || ''));
 
+    if (advenue) { cote.classList.add('is-advenu'); }
+
     if (!detail) {
-      cote.appendChild(el('p', 'parole-action', 'Clique la branche pour voir signaux et parade ↝'));
+      cote.appendChild(el('p', 'parole-action', advenue
+        ? 'Clique la branche pour tout voir ↝'
+        : 'Clique la branche pour tout voir — et pour dire si c’est elle qui a poussé ↝'));
       return;
     }
 
@@ -698,6 +724,77 @@
     var aller = el('a', 'vranesh-cote-lien', 'Ouvrir ce futur dans le registre ↝');
     aller.href = '#vranesh-situation-' + situation.id;
     cote.appendChild(aller);
+
+    // Le geste vit LÀ OÙ Paul regarde : sur la branche qu'il vient de cliquer.
+    cote.appendChild(actionDenouement(situation, scenario, total));
+  }
+
+  // ---- Choisir la branche DEPUIS L'ARBRE (dictée Paul 2026-08-04 : « je clique
+  //      sur une branche, ça me donne le choix… il faut que je puisse
+  //      sélectionner le futur qui soit advenu »).
+  //      Le dénouement existait déjà, mais uniquement au fond du registre replié,
+  //      sous forme de menu déroulant : hors du regard, donc hors d'usage. Il est
+  //      ici porté par la branche elle-même — sans rien relâcher de la garde,
+  //      puisque la coupe est irréversible : DEUX TEMPS, et la confirmation dit
+  //      combien de branches tombent avant qu'aucune ne tombe.
+  function actionDenouement(situation, scenario, total) {
+    var zone = el('div', 'vranesh-cote-action');
+
+    // Déjà tranché : on ne repropose pas de trancher, on rappelle l'état et on
+    // laisse rouvrir (aucune suppression à la réouverture).
+    if (situation.advenue === true) {
+      if (situation.advenu_le) {
+        zone.appendChild(el('p', 'vranesh-cote-scelle',
+          'Advenu — constaté le ' + dateLisible(situation.advenu_le) + '.'));
+      }
+      var rouvrir = el('button', 'zekrom-retro-detacher vranesh-cote-rouvrir', 'Rouvrir ce thème');
+      rouvrir.type = 'button';
+      rouvrir.setAttribute('aria-label',
+        'Rouvrir le thème « ' + nomCourt(situation.intitule) +' » — le futur redevient ouvert');
+      rouvrir.addEventListener('click', function () { poserDenouement(situation.id, null); });
+      zone.appendChild(rouvrir);
+      return zone;
+    }
+
+    var demander = el('button', 'zekrom-bouton vranesh-cote-choisir', 'Cette branche a poussé');
+    demander.type = 'button';
+    demander.setAttribute('aria-label',
+      'Désigner « ' + etiquetteBranche(scenario.deroule) + ' » comme le futur advenu');
+
+    var confirmation = el('div', 'vranesh-confirmation vranesh-cote-confirmation');
+    confirmation.hidden = true;
+
+    demander.addEventListener('click', function () {
+      var coupees = Math.max(0, total - 1);
+      confirmation.textContent = '';
+      confirmation.hidden = false;
+      confirmation.appendChild(el('p', 'vranesh-confirmation-texte',
+        coupees === 0
+          ? 'Aucune autre branche à couper. Confirmer ?'
+          : (coupees === 1
+            ? 'Confirmer ? L’autre branche potentielle sera supprimée définitivement.'
+            : 'Confirmer ? Les ' + coupees + ' autres branches potentielles seront '
+              + 'supprimées définitivement.')));
+      var confirmer = el('button', 'zekrom-bouton vranesh-confirmer', 'Confirmer la coupe');
+      confirmer.type = 'button';
+      confirmer.addEventListener('click', function () {
+        poserDenouement(situation.id, scenario.id);
+      });
+      var annuler = el('button', 'zekrom-retro-detacher vranesh-cote-annuler', 'Annuler');
+      annuler.type = 'button';
+      annuler.addEventListener('click', function () {
+        confirmation.hidden = true;
+        confirmation.textContent = '';
+        demander.focus();
+      });
+      confirmation.appendChild(confirmer);
+      confirmation.appendChild(annuler);
+      confirmer.focus();
+    });
+
+    zone.appendChild(demander);
+    zone.appendChild(confirmation);
+    return zone;
   }
 
   // ---- ② L'arbre d'un thème : un tronc, des branches ----
@@ -748,12 +845,24 @@
       var bourgeon = svgEl('circle', 'vranesh-bourgeon');
       bourgeon.setAttribute('cx', String(b.bx));
       bourgeon.setAttribute('cy', String(b.by));
-      bourgeon.setAttribute('r', advenue ? '4' : '3');
+      // La branche qui a poussé porte un bourgeon franchement plus gros : c'est
+      // elle qu'on lit d'abord quand le thème est dénoué.
+      bourgeon.setAttribute('r', advenue ? '5.5' : '3');
       var etiquette = svgEl('text', 'vranesh-etiquette');
       etiquette.setAttribute('x', String(b.tx));
       etiquette.setAttribute('y', String(b.ty));
       etiquette.setAttribute('text-anchor', b.sens < 0 ? 'end' : 'start');
-      etiquette.textContent = etiquetteBranche(sc.deroule);
+      // Le budget de signes vient de la place réelle. Une branche advenue écrit
+      // plus gros : son budget se recalcule à cette largeur-là, sinon elle
+      // déborderait précisément là où on veut qu'elle se voie. En deçà du
+      // minimum, on n'écrit rien plutôt que d'écrire dehors — le bourgeon et le
+      // cartouche de côté portent alors seuls l'information.
+      var budget = advenue
+        ? Math.floor(b.dispo / ARBRE.LARGEUR_CAR_SCEAU)
+        : b.signes;
+      etiquette.textContent = budget >= ARBRE.ETIQ_MIN
+        ? etiquetteBranche(sc.deroule, Math.min(ARBRE.ETIQ_MAX, budget))
+        : '';
       // Zone de préhension généreuse : une courbe fine se rate à la souris.
       var zone = svgEl('path', 'vranesh-branche-zone');
       zone.setAttribute('d', d);
@@ -763,7 +872,9 @@
 
       function entrer() {
         g.classList.add('is-actif');
-        coteBranche(situation, sc, i + 1, scenarios.length, false);
+        // Un futur ADVENU ne se replie jamais en une ligne : il a tranché, il
+        // reste ouvert en grand même au simple survol.
+        coteBranche(situation, sc, i + 1, scenarios.length, advenue);
       }
       function sortir() {
         if (!g.classList.contains('is-choisie')) { g.classList.remove('is-actif'); }
@@ -808,9 +919,22 @@
     plateau.hidden = true;
     scene.hidden = false;
     dessinerArbre(situation);
-    coteRepos(scenariosDe(situation.id).length === 0
-      ? 'Ce thème n’a pas encore de futur — il attend qu’on lui en imagine.'
-      : 'Survole une branche — elle te dit ce qu’elle est. Clique-la pour tout voir.');
+
+    // Un thème dénoué s'ouvre SUR SON DÉNOUEMENT : le futur qui a poussé est
+    // déplié d'emblée, en grand — plus rien à survoler, il n'y a plus qu'un
+    // futur et c'est lui qui oriente le reste (dictée Paul 2026-08-04).
+    var advenu = scenarioAdvenu(situation);
+    var sceau = document.getElementById('vranesh-arbre-sceau');
+    scene.classList.toggle('is-advenu', Boolean(advenu));
+    if (sceau) { sceau.hidden = !advenu; }
+    if (advenu) {
+      coteBranche(situation, advenu, 1, scenariosDe(situation.id).length, true);
+    } else {
+      coteRepos(scenariosDe(situation.id).length === 0
+        ? 'Ce thème n’a pas encore de futur — il attend qu’on lui en imagine.'
+        : 'Survole une branche — elle te dit ce qu’elle est. Clique-la pour tout '
+          + 'voir, et pour désigner celle qui a poussé.');
+    }
     var retour = document.getElementById('vranesh-arbre-retour');
     if (retour) { retour.focus(); }
   }
@@ -821,6 +945,9 @@
     if (!plateau || !scene) { return; }
     themeOuvert = null;
     scene.hidden = true;
+    scene.classList.remove('is-advenu');
+    var sceau = document.getElementById('vranesh-arbre-sceau');
+    if (sceau) { sceau.hidden = true; }
     plateau.hidden = false;
     coteRepos('Clique un thème — son arbre se déplie.');
   }
