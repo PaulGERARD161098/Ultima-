@@ -45,6 +45,16 @@
     return d.toLocaleDateString('fr-FR');
   }
 
+  // Un jour ISO (AAAA-MM-JJ) rendu lisible. Fonction PURE. `new Date('...')`
+  // sur un jour nu est interprété UTC : on force midi pour qu'aucun fuseau ne
+  // fasse reculer la date d'un jour à l'affichage.
+  function jourLisible(iso) {
+    if (typeof iso !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) { return ''; }
+    var d = new Date(iso + 'T12:00:00');
+    if (isNaN(d.getTime())) { return ''; }
+    return d.toLocaleDateString('fr-FR');
+  }
+
   // ---------- États de la page (un seul visible à la fois) ----------
 
   function montrer(id) {
@@ -152,6 +162,12 @@
     // Nature en petite étiquette (small-caps, cerne or).
     item.appendChild(el('span', 'zekrom-registre',
       LIBELLE_NATURE[flamme.nature] || flamme.nature || ''));
+    // QUAND c'est arrivé, quand la flamme le dit (0020). Posé AVANT le texte :
+    // on cherche la date avant de lire l'histoire.
+    if (flamme.survenu_le) {
+      item.appendChild(el('span', 'zekrom-retro-note',
+        ' ' + (jourLisible(flamme.survenu_le) || '')));
+    }
     item.appendChild(el('span', 'zekrom-retro-talent', ' ' + String(flamme.texte || '')));
     var retirer = el('button', 'zekrom-retro-detacher', 'retirer');
     retirer.type = 'button';
@@ -185,15 +201,27 @@
       nature.appendChild(opt);
     });
 
+    // QUAND c'est arrivé (0020, dictée Paul 2026-08-04 : « on peut associer une
+    // date, une petite histoire, histoire d'étayer »). Optionnel — une citation
+    // n'a pas de date, une victoire en a une. `max` = aujourd'hui : une flamme
+    // raconte ce qui a eu lieu, jamais ce qui aura lieu (le serveur le
+    // revérifie — un `max` d'attribut ne protège rien).
+    var quand = el('input', 'zekrom-direction-date');
+    quand.type = 'date';
+    quand.name = 'survenu_le';
+    quand.max = new Date().toISOString().slice(0, 10);
+    quand.setAttribute('aria-label', 'Quand est-ce arrivé ? (optionnel)');
+
     var bouton = el('button', 'zekrom-bouton zekrom-bouton-direction', 'Raviver');
     bouton.type = 'submit';
 
     form.appendChild(champ);
     form.appendChild(nature);
+    form.appendChild(quand);
     form.appendChild(bouton);
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      soumettreFlamme(serment.id, champ.value, nature.value);
+      soumettreFlamme(serment.id, champ.value, nature.value, quand.value);
     });
     return form;
   }
@@ -1254,12 +1282,16 @@
     await rafraichir();
   }
 
-  async function soumettreFlamme(sermentId, texte, nature) {
+  async function soumettreFlamme(sermentId, texte, nature, survenuLe) {
     var propre = (texte || '').trim();
     if (!propre) { return; }
-    var res = await appelApi('/api/flammes', {
+    var corps = {
       serment_id: sermentId, texte: propre, nature: nature || 'citation'
-    });
+    };
+    // Champ vide = pas de date : on n'envoie pas la clé plutôt que d'envoyer du
+    // vide (le contrat d'API refuse les champs inconnus, pas les absents).
+    if (survenuLe) { corps.survenu_le = survenuLe; }
+    var res = await appelApi('/api/flammes', corps);
     if (res.status === 401) { montrer('draukhain-auth'); return; }
     if (!res.ok) { messageForm('Flamme non enregistrée. Réessaie.', true); return; }
     await rafraichir();
@@ -1502,6 +1534,7 @@
     etiquetteFlamme: etiquetteFlamme,
     couronne: couronne,
     couronneVoute: couronneVoute,
+    jourLisible: jourLisible,
     eclat: eclat
   };
 

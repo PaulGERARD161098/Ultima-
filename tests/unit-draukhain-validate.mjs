@@ -72,6 +72,51 @@ verdicts.flammeToutesNatures = FLAMME_NATURES.every((n) =>
   !validateFlamme({ serment_id: U1, nature: n, texte: 'ok' }, 'create').error);
 verdicts.flammeChampInconnu = !!validateFlamme({ serment_id: U1, texte: 'ok', owner_id: U1 }, 'create').error;
 
+// ---------- survenu_le : la DATE de ce que la flamme raconte (0020) ----------
+// Miroir du CHECK `survenu_le <= current_date + 1`. Ce qui compte ici : une
+// flamme peut raconter l'enfance, JAMAIS demain — une victoire qui n'a pas eu
+// lieu n'étaye rien. Et la validation refuse par DÉFAUT : tout ce qui n'est pas
+// exactement AAAA-MM-JJ tombe, y compris ce qui en a l'air.
+const JOUR = (decalageJours) =>
+  new Date(Date.now() + decalageJours * 86400000).toISOString().slice(0, 10);
+
+verdicts.flammeDatePasseeOk = (() => {
+  const { value, error } = validateFlamme(
+    { serment_id: U1, texte: 'ce mardi-là', survenu_le: '2026-08-01' }, 'create');
+  return !error && value.survenu_le === '2026-08-01';
+})();
+verdicts.flammeDateAujourdhuiOk =
+  !validateFlamme({ serment_id: U1, texte: 'ok', survenu_le: JOUR(0) }, 'create').error;
+// Tolérance d'UN jour : elle absorbe l'écart de fuseau client/serveur, pas plus.
+verdicts.flammeDateDemainToleree =
+  !validateFlamme({ serment_id: U1, texte: 'ok', survenu_le: JOUR(1) }, 'create').error;
+verdicts.flammeDateFutureRefusee =
+  !!validateFlamme({ serment_id: U1, texte: 'ok', survenu_le: JOUR(3) }, 'create').error;
+verdicts.flammeDateLointaineRefusee =
+  !!validateFlamme({ serment_id: U1, texte: 'ok', survenu_le: '2999-01-01' }, 'create').error;
+// Une flamme sans date reste une flamme entière : le champ ne devient pas requis.
+verdicts.flammeSansDateOk = (() => {
+  const { value, error } = validateFlamme({ serment_id: U1, texte: 'ok' }, 'create');
+  return !error && value.survenu_le === undefined;
+})();
+// Vide explicite = on EFFACE la date (et non « champ invalide »).
+verdicts.flammeDateVideEfface = (() => {
+  const { value, error } = validateFlamme(
+    { serment_id: U1, texte: 'ok', survenu_le: '' }, 'create');
+  return !error && value.survenu_le === null;
+})();
+verdicts.flammeDateNullEfface = (() => {
+  const { value, error } = validateFlamme(
+    { serment_id: U1, texte: 'ok', survenu_le: null }, 'create');
+  return !error && value.survenu_le === null;
+})();
+// Formes qui « ressemblent » à une date et n'en sont pas.
+verdicts.flammeDateMalFormee = ['01/08/2026', '2026-8-1', '2026-08-01T10:00:00Z',
+  '2026-02-31', 'hier', '', ' ', 20260801].every((mauvaise, i) =>
+  // '' est traité plus haut comme un effacement volontaire : on l'exclut ici.
+  i === 5 ? true : !!validateFlamme(
+    { serment_id: U1, texte: 'ok', survenu_le: mauvaise }, 'create').error);
+
 // ---------- Bilan ----------
 console.log(JSON.stringify(verdicts, null, 2));
 const ok = Object.values(verdicts).every((v) => v === true);

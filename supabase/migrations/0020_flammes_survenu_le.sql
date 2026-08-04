@@ -1,7 +1,7 @@
 -- Ultima — migration 0020 : la DATE de ce que la flamme raconte.
--- Ne JAMAIS appliquer sans validation Paul explicite (gate migrations, ET §5
--- IMLADRIK = données intimes) : le SQL vit ici, Léo l'applique au fil principal
--- après go explicite de Paul.
+-- ✅ APPLIQUÉE EN PROD le 2026-08-04, au « ok go » explicite de Paul.
+-- (Gate migrations + §5 IMLADRIK = données intimes : le SQL vit ici, Léo
+-- l'applique au fil principal après go explicite de Paul.)
 --
 -- Dictée de Paul (2026-08-04) : « ce qu'on peut associer à chaque serment, on
 -- peut associer une date, quelque chose comme ça, une petite histoire, histoire

@@ -70,7 +70,8 @@ const FIXTURE = {
     ],
     flammes: [
       { id: 'f1', serment_id: 's1', nature: 'citation', texte: 'la volonté au-delà du possible' },
-      { id: 'f2', serment_id: 's1', nature: 'victoire', texte: 'j’ai tenu bon tout l’hiver' },
+      // Une victoire PORTE sa date (0020) : c'est ce qui l'étaye.
+      { id: 'f2', serment_id: 's1', nature: 'victoire', texte: 'j’ai tenu bon tout l’hiver', survenu_le: '2026-07-15' },
       { id: 'f3', serment_id: 's1', nature: 'rappel', texte: 'ne pas perdre la foi' },
     ],
     // Passerelles v2 : une vers un idéal ZEKROM, une vers une page MINETHNIR
@@ -217,7 +218,9 @@ console.log('— B. draukhain.html fixture 200 → registre, à raviver, serment
   });
   await page.route('**/api/flammes**', (route) => {
     const req = route.request();
-    if (req.method() === 'POST') { postsFlamme.push(req.headers()); }
+    if (req.method() === 'POST') {
+      postsFlamme.push(Object.assign({}, req.headers(), { corps: req.postData() || '' }));
+    }
     if (req.method() === 'DELETE') { deletesFlamme.push(req.headers()); }
     return route.fulfill({
       status: 200,
@@ -391,6 +394,15 @@ console.log('— B. draukhain.html fixture 200 → registre, à raviver, serment
   verifier('Bearer transmis (POST serment)',
     ((postsSerment[0] || {}).authorization || '') === 'Bearer jeton-de-test');
 
+  // 7ter. La date de la flamme se LIT — en français, et seulement là où elle
+  // existe. Une fonction qu'on ne rencontre pas n'existe pas (leçon 2026-08-04).
+  const flammesTexte = (await page.locator('#draukhain-serment-s1').textContent()) || '';
+  verifier('La date de la victoire se lit, en français',
+    /15\/07\/2026/.test(flammesTexte), flammesTexte.slice(0, 200));
+  const datesAffichees = await page.locator('#draukhain-serment-s1 .zekrom-direction .zekrom-retro-note').count();
+  verifier('ABSENCE — les flammes sans date n’en affichent aucune',
+    datesAffichees === 1, `${datesAffichees}`);
+
   const formFlamme = page.locator('#draukhain-serment-s1 .zekrom-direction-form');
   await formFlamme.locator('input[name="texte"]').fill('un rappel de test');
   await formFlamme.locator('button[type="submit"]').click();
@@ -398,6 +410,33 @@ console.log('— B. draukhain.html fixture 200 → registre, à raviver, serment
   verifier('POST /api/flammes émis', postsFlamme.length >= 1, `${postsFlamme.length}`);
   verifier('Bearer transmis (POST flamme)',
     ((postsFlamme[0] || {}).authorization || '') === 'Bearer jeton-de-test');
+  // Sans date saisie, la clé ne part PAS : le contrat d'API refuse les champs
+  // inconnus, pas les absents — on n'envoie donc jamais du vide « au cas où ».
+  verifier('ABSENCE — aucune date envoyée quand le champ est vide',
+    !/survenu_le/.test((postsFlamme[0] || {}).corps || ''), (postsFlamme[0] || {}).corps);
+
+  // 8ter. LA DATE DE CE QUE LA FLAMME RACONTE (0020, dictée Paul 2026-08-04 :
+  // « on peut associer une date, une petite histoire, histoire d'étayer »).
+  const champDate = formFlamme.locator('input[name="survenu_le"]');
+  verifier('Le formulaire de flamme porte un champ de date',
+    (await champDate.count()) === 1);
+  verifier('La date est OPTIONNELLE (jamais requise)',
+    (await champDate.evaluate((el) => el.required)) === false);
+  // `max` = aujourd'hui : une flamme raconte ce qui a EU lieu. Garde de confort
+  // — le serveur revérifie, un attribut ne protège rien.
+  const aujourdhui = new Date().toISOString().slice(0, 10);
+  verifier('La date ne se saisit pas dans le futur (max = aujourd’hui)',
+    (await champDate.getAttribute('max')) === aujourdhui,
+    `${await champDate.getAttribute('max')}`);
+  verifier('Tap target du champ de date ≥ 44 px',
+    (await champDate.evaluate((el) => el.getBoundingClientRect().height)) >= 44);
+
+  await formFlamme.locator('input[name="texte"]').fill('la fois où j’ai tenu bon');
+  await champDate.fill('2026-08-01');
+  await formFlamme.locator('button[type="submit"]').click();
+  await page.waitForTimeout(200);
+  const corpsDate = (postsFlamme[postsFlamme.length - 1] || {}).corps || '';
+  verifier('La date part avec la flamme', /"survenu_le":"2026-08-01"/.test(corpsDate), corpsDate);
 
   await page.locator('#draukhain-serment-s1 .zekrom-direction .zekrom-retro-detacher').first().click();
   await page.waitForTimeout(200);

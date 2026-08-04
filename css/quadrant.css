@@ -606,8 +606,11 @@ body.page-quadrant .console-conteneur {
   color: var(--encre-sepia-douce);
 }
 
+/* .zekrom-direction-date : la date de ce que raconte une flamme (0020). Même
+   habit que les autres champs — un champ de plus, pas un objet de plus. */
 .zekrom-champ input,
 .zekrom-champ select,
+.zekrom-direction-date,
 .zekrom-direction-input {
   min-height: 44px;
   padding: 0.5rem 0.7rem;
@@ -794,6 +797,8 @@ body.page-quadrant .console-conteneur {
 }
 
 .zekrom-direction-input { flex: 1 1 12rem; min-width: 0; }
+/* La date ne prend jamais la place du texte : elle se contente du sien. */
+.zekrom-direction-date { flex: 0 0 auto; min-width: 0; }
 
 .zekrom-bouton-direction { padding: 0.5rem 0.95rem; }
 

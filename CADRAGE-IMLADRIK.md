@@ -243,13 +243,18 @@ ordinaire — c'est elle qui porterait la voix.
   l'ABSENCE). Front seul : `css/draukhain-voute.css`, `js/draukhain.js`,
   `draukhain.html`.
   **Les deux serments réels de Paul** sont scellés en base (dictée du jour).
-- ⏳ **GATE OUVERTE — migration `0020_flammes_survenu_le.sql` ÉCRITE, NON
-  APPLIQUÉE** : une colonne `survenu_le date` optionnelle sur `flammes`, pour
-  dater ce que l'histoire raconte (distinct de `created_at`, qui date
-  l'écriture). Additive, non destructive, RLS inchangée. **Au go de Paul** :
-  application + saisie de la date dans le formulaire de flamme.
+- ✅ **LA DATE DE CE QUE LA FLAMME RACONTE (2026-08-04, « ok go » de Paul).**
+  Migration `0020_flammes_survenu_le.sql` **APPLIQUÉE en prod** : colonne
+  `survenu_le date` optionnelle sur `flammes`, additive, RLS inchangée. Le
+  champ se saisit au formulaire de flamme (optionnel, `max` = aujourd'hui) et
+  **se lit** sur la flamme, en français, posé avant le texte — on cherche la
+  date avant de lire l'histoire. `validateFlamme` porte le **miroir exact du
+  CHECK** (`estJourPasse` : format `AAAA-MM-JJ` strict, borne haute à J+1 pour
+  absorber le fuseau, refus par défaut). Preuve par l'ABSENCE aux deux bouts :
+  aucune clé `survenu_le` n'est envoyée quand le champ est vide, et une flamme
+  sans date n'en affiche aucune.
 - ⏳ **Attendu de Paul** : l'histoire de l'exemple vécu cette semaine, à consigner
-  en flamme « victoire » sur le serment « ne plus jamais perdre mon calme ».
+  en flamme « victoire » datée sur le serment « ne plus jamais perdre mon calme ».
 
 ## 7. Séquencement (une boucle à la fois, directive EB)
 

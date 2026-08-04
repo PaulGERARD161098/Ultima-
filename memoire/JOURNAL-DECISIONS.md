@@ -1523,3 +1523,27 @@
     derrière la carte (miroir de « l'image d'abord », VRANESH).
   - **Les deux serments de Paul sont scellés en base.** ⏳ Reste à sa main :
     l'histoire de l'exemple vécu cette semaine, et le go sur `0020`.
+- **2026-08-04 (la date de ce que la flamme raconte — « ok go » de Paul)** —
+  Migration `0020` **APPLIQUÉE en prod** (gate levée par le go explicite) :
+  `flammes.survenu_le date`, optionnelle, additive, RLS inchangée.
+  - **Ce que la boucle a refusé de faire** : ni nouvelle table, ni nouvelle
+    nature de flamme, ni date de scellement sur le serment. Le besoin de Paul
+    (« une date, une petite histoire, histoire d'étayer ») était couvert **aux
+    trois quarts** par la flamme de nature *victoire* — il manquait **une
+    colonne**. 🔻 **Chercher ce qui porte déjà le besoin à moitié avant
+    d'inventer l'objet qui le porterait en entier.**
+  - **La validation est le MIROIR EXACT du CHECK**, pas une approximation :
+    `estJourPasse` exige `AAAA-MM-JJ` strict, relit la date pour la comparer à
+    elle-même (le 31 février tombe là), et borne à **J+1** — la même tolérance
+    d'un jour que le CHECK, qui absorbe l'écart de fuseau client/serveur sans
+    ouvrir la porte à une date inventée. Une flamme peut raconter l'enfance,
+    jamais demain : **une victoire qui n'a pas eu lieu n'étaye rien.**
+  - **Preuve par l'ABSENCE aux DEUX bouts** : aucune clé `survenu_le` n'est
+    envoyée quand le champ est vide (le contrat refuse les champs inconnus, pas
+    les absents), et une flamme sans date n'affiche aucune date. Vérifier la
+    présence du permis n'aurait rien prouvé.
+  - **La date se LIT là où on la cherche** : posée avant le texte de la flamme,
+    en français. Application directe de la leçon du 2026-08-04 (« une fonction
+    qu'on ne rencontre pas là où on la cherche n'existe pas ») — le champ de
+    saisie sans l'affichage aurait été la même faute que le dénouement VRANESH
+    caché dans un menu déroulant.
