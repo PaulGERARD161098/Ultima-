@@ -29,7 +29,27 @@
     `viewBox` **et pire cas construit** (6 futurs interminables). +45
     assertions sur `smoke-vranesh`. *Le défaut a été trouvé par une capture de
     vérification, pas par Paul : c'est la mesure qui doit précéder l'envoi.*
-  - 🔶 **BOUCLE OUVERTE — l'image d'abord, le texte ensuite.** Dictée du jour :
+  - ✅ **L'IMAGE D'ABORD — formes tranchées par Paul et livrées (PR #138).**
+    Étage ① **la rosace** : à l'arrivée, *juste* les noms des thèmes. Notice de
+    la boussole supprimée, saisie repliée comme le registre, mission ramenée à
+    une ligne, rose et caps agrandis — le premier écran est fait pour regarder,
+    pas pour écrire. Étage ③ **la forme A** : une vignette par nature
+    d'information (ce qui l'annonce · ce que j'ai prévu · ce que ça touche),
+    icône gravée, et une vignette n'existe que si elle a quelque chose à dire.
+    Le déroulé n'est plus écrit deux fois. **Le dépouillement est MESURÉ** :
+    47 mots visibles à l'arrivée, aucun bloc de plus de 12 mots, aucun champ de
+    saisie au premier écran — deux bornes, parce qu'un total bas peut cacher un
+    pavé et l'inverse aussi.
+  - 🎯 **PREUVE PAR L'USAGE RÉEL, la seule qui manquait.** Paul a exercé le
+    dénouement **lui-même, sur ses propres données**, depuis la preview :
+    session réelle, RLS réelle, coupe réelle et irréversible. Aucun harnais ne
+    pouvait le prouver (`smoke-vranesh` le dit en tête de fichier depuis le
+    début). Verdict de Paul : « c'est exactement ça ».
+    ⚠️ **À retenir pour toute preview future** : une preview Vercel utilise les
+    **mêmes clés Supabase que la production**. Ce qu'on y fait n'est pas un
+    essai — c'est écrit dans les vraies données. À dire à Paul chaque fois
+    qu'une preview porte un geste destructif.
+  - 🔶 **BOUCLE PRÉCÉDENTE, close par ce qui précède — l'image d'abord.** Dictée :
     « quand j'arrive sur VRANESH il faut m'afficher tout de suite LIANDRA et
     THORIOL […] réduire le texte au maximum, maximiser le visuel […] ensuite
     quand je sélectionne une branche, là je peux avoir du texte, mais il y en a
@@ -38,8 +58,7 @@
     portes · B la rose épurée · **C les arbres en miniature, reco**) ; étage ③
     la branche choisie (**A trois vignettes gravées, reco** · B le ruban du
     futur · C l'existant, 48 mots dont le déroulé écrit deux fois).
-  - ⏳ **Action à la main de Paul** : choisir **une forme par étage** (deux
-    lettres suffisent) — l'implémentation suit derrière, avec ses harnais.
+    **Formes choisies : ① la rosace, ③ la forme A.** Boucle refermée ci-dessus.
 
 - 🔥 **SESSION 2026-08-01 (EL gravée + IMLADRIK rendu vivant), CLOSE.** Six
   livraisons fusionnées dans `main` (#126 → #135), patrimoine COMPLET vert à

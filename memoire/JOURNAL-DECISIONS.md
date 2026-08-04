@@ -1380,3 +1380,37 @@
     clic et rétrécit sur téléphone). Chaque forme affiche **son nombre de mots à
     l'écran** : 48 aujourd'hui, 26 en A, 12 en B — un critère de réussite
     chiffré, pas un jugement esthétique.
+- **2026-08-04 (VRANESH — l'image d'abord, le texte ensuite, PR #138)** — Paul,
+  sur la maquette comparative : « pour les arbres miniatures option C, mais
+  j'aimais bien l'idée d'avoir la rosace. J'arrive sur VRANESH et la rosace,
+  **juste** [ses deux thèmes] […] ensuite quand je clique dessus, c'est là où je
+  vois les ramifications. […] Option A pour l'étage 3, oui. »
+  - **Formes actées** : ① **la rosace** à l'arrivée (les noms seuls) ; ② l'arbre
+    au clic (inchangé, tranché le 2026-08-01) ; ③ **la forme A**, une vignette
+    par nature d'information avec son icône gravée.
+  - **L'arbitrage qui aurait pu se rater** : la première phrase approuvait la
+    forme C (les arbres miniatures), la troisième décrivait un flux où ils
+    n'apparaissent qu'**au clic**. C'est le mot « **juste** » qui tranche — « la
+    rosace, juste tel et tel thème ». 🔻 **Règle** : dans une dictée qui semble
+    se contredire, chercher le **quantificateur** (juste, seulement, tout de
+    suite, d'abord) — il porte l'intention mieux que le nom de l'option citée.
+  - 🔻 **Un dépouillement se MESURE, comme une géométrie.** « Réduire le texte au
+    maximum » n'est pas vérifiable ; **47 mots visibles à l'arrivée et aucun bloc
+    de plus de 12 mots** le sont. Deux bornes et non une : un total bas peut
+    cacher un pavé, un pavé absent peut cacher un total qui enfle. La mesure
+    compte le texte **réellement rendu** — `checkVisibility` et non
+    `offsetParent`, parce qu'un `<details>` fermé masque son contenu par
+    `content-visibility` sous Chromium (première version : 250 mots comptés au
+    lieu de 47).
+  - **Le harnais a repris son propre auteur** : la règle « une confidentialité se
+    teste par l'ABSENCE » a fait échouer un commentaire HTML où Léo avait
+    recopié les noms des thèmes de Paul. Gardé tel quel — une règle qui ne mord
+    que les autres ne sert à rien.
+  - ⭐ **PREUVE PAR L'USAGE RÉEL** : Paul a exercé le dénouement lui-même sur ses
+    données depuis la preview — session réelle, RLS réelle, coupe réelle et
+    irréversible — et a répondu « c'est exactement ça ». C'est la preuve que le
+    harnais déclare hors de sa portée depuis le premier jour.
+    ⚠️ **Conséquence à ne plus oublier** : **une preview Vercel écrit dans les
+    VRAIES données** (mêmes clés Supabase que la production). Une preview n'est
+    pas un brouillon. Le dire à Paul chaque fois qu'elle porte un geste
+    destructif, avant qu'il ne l'exerce.
