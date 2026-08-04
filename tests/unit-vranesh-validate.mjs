@@ -109,6 +109,34 @@ verdicts.denouementDateRefusee = !!validateDenouement({ id: U1, scenario_advenu_
 verdicts.situationRefuseAdvenu = !!validateSituation({ intitule: 'ok', scenario_advenu_id: U2 }, 'update').error;
 verdicts.denouementCorpsInvalide = !!validateDenouement(null).error && !!validateDenouement([]).error;
 
+// ---------- 0020 : la NATURE du thème et l'ÉTAT d'un plan ----------
+// Parité API↔base : ces règles sont le miroir EXACT des CHECK de
+// supabase/migrations/0020_vranesh_natures.sql. Ce qui compte ici est surtout
+// ce qui est REFUSÉ — une cause posée ailleurs que sur un plan écarté serait
+// lue de travers pour toujours.
+verdicts.natureDirection = validateSituation({ intitule: 'ok', nature: 'direction' }, 'create').value.nature === 'direction';
+verdicts.natureConstruction = validateSituation({ nature: 'construction' }, 'update').value.nature === 'construction';
+verdicts.natureInconnue = !!validateSituation({ nature: 'chantier' }, 'update').error;
+// La nature n'est jamais nulle : le défaut base et le CHECK l'imposent.
+verdicts.natureNullRefusee = !!validateSituation({ nature: null }, 'update').error;
+
+verdicts.etatTenu = validateScenario({ etat: 'tenu' }, 'update').value.etat === 'tenu';
+verdicts.etatReserve = validateScenario({ etat: 'reserve' }, 'update').value.etat === 'reserve';
+verdicts.etatInconnu = !!validateScenario({ etat: 'brouillon' }, 'update').error;
+// `etat: null` déqualifie un plan (retour à l'indifférencié) : c'est permis.
+verdicts.etatNullEfface = validateScenario({ etat: null }, 'update').value.etat === null;
+
+// La CAUSE : uniquement sur un plan écarté, jamais ailleurs.
+verdicts.causeAvecEcarte =
+  validateScenario({ etat: 'ecarte', cause: 'trop lent' }, 'update').value.cause === 'trop lent';
+verdicts.causeSansEtatRefusee = !!validateScenario({ cause: 'trop lent' }, 'update').error;
+verdicts.causeSurTenuRefusee = !!validateScenario({ etat: 'tenu', cause: 'trop lent' }, 'update').error;
+// Quitter « écarté » efface la cause : ce geste-là doit passer.
+verdicts.causeNullSurTenu = validateScenario({ etat: 'tenu', cause: null }, 'update').value.cause === null;
+verdicts.causeBornee = !!validateScenario({ etat: 'ecarte', cause: 'x'.repeat(2001) }, 'update').error;
+// owner_id n'entre jamais, même déguisé en qualification.
+verdicts.qualifRefuseOwner = !!validateScenario({ etat: 'tenu', owner_id: U1 }, 'update').error;
+
 // ---------- Bilan ----------
 console.log(JSON.stringify(verdicts, null, 2));
 const ok = Object.values(verdicts).every((v) => v === true);

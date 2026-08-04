@@ -1238,6 +1238,216 @@ console.log('— I. vranesh.html arbre chargé → aucune étiquette hors cadre 
   await page.close();
 }
 
+// ====== J. LA GREFFE : un thème qui se CONSTRUIT (forme B, 0020) ======
+// Dictée Paul (2026-08-04) : « THORIOL n'est pas une direction comme LIANDRA,
+// c'est une construction. Le but ne bouge pas, ce sont les moyens qui cassent —
+// toujours avoir des plans B, et surtout anticiper l'adaptation : comment faire
+// pousser une nouvelle branche, même projet. »
+// Prouve : la FORME SUIT LA NATURE (greffe et non arbre), les trois états d'un
+// plan se distinguent, la CAUSE d'un plan écarté est rendue, la qualification
+// s'écrit avec le bon corps, la cause est effacée quand on quitte « écarté »,
+// et un thème « direction » n'est PAS touché.
+console.log('— J. vranesh.html → la greffe (thème « construction ») —');
+{
+  const { page, erreurs, externes } = await nouvellePage();
+  await page.addInitScript(scriptFausseSession());
+  await page.route(`**://${REF_SUPABASE}.supabase.co/**`, (route) =>
+    route.fulfill({ status: 503, contentType: 'application/json', body: '{}' }));
+
+  const patchsScenario = [];
+  const patchsSituation = [];
+  const FIXTURE_CONSTRUCTION = {
+    ok: true,
+    data: {
+      situations: [
+        { id: 's1', intitule: 'CHANTIER — le premier client', contexte: null, nb_scenarios: 4,
+          a_explorer: false, advenue: false, scenario_advenu_id: null, advenu_le: null,
+          nature: 'construction', created_at: '2026-07-01T10:00:00Z' },
+        { id: 's2', intitule: 'CARREFOUR', contexte: null, nb_scenarios: 1, a_explorer: false,
+          advenue: false, scenario_advenu_id: null, advenu_le: null,
+          nature: 'direction', created_at: '2026-07-02T10:00:00Z' },
+      ],
+      scenarios: [
+        { id: 'p1', situation_id: 's1', deroule: 'le bouche-à-oreille du réseau', etat: 'tenu', cause: null },
+        { id: 'p2', situation_id: 's1', deroule: 'la recommandation d’un pair', etat: 'reserve', cause: null },
+        { id: 'p3', situation_id: 's1', deroule: 'la prospection directe', etat: 'ecarte',
+          cause: 'trop lente pour la trésorerie' },
+        // Un plan NON qualifié : la dégradation doit le traiter en réserve,
+        // jamais le faire disparaître du dessin.
+        { id: 'p4', situation_id: 's1', deroule: 'le salon professionnel', etat: null, cause: null },
+        { id: 'd1', situation_id: 's2', deroule: 'le vent tourne au nord', vraisemblance: 'forte' },
+      ],
+      liens: [],
+    },
+  };
+  await page.route('**/api/situations**', (route) => {
+    const req = route.request();
+    if (req.method() === 'PATCH') {
+      patchsSituation.push({ body: req.postData() });
+      return route.fulfill({ status: 200, contentType: 'application/json; charset=utf-8',
+        body: JSON.stringify({ ok: true, data: { id: 's1', nature: 'direction' } }) });
+    }
+    return route.fulfill({ status: 200, contentType: 'application/json; charset=utf-8',
+      body: JSON.stringify(FIXTURE_CONSTRUCTION) });
+  });
+  await page.route('**/api/scenarios**', (route) => {
+    const req = route.request();
+    if (req.method() === 'PATCH') { patchsScenario.push({ headers: req.headers(), body: req.postData() }); }
+    return route.fulfill({ status: 200, contentType: 'application/json; charset=utf-8',
+      body: JSON.stringify({ ok: true, data: {} }) });
+  });
+  await page.route('**/api/serments**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_SERMENTS) }));
+  await page.route('**/api/imladrik**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IMLADRIK) }));
+
+  await page.goto(`${BASE}/vranesh.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForSelector('#vranesh-plateau .cap', { timeout: 20000 });
+  await page.locator('#vranesh-plateau .cap', { hasText: 'CHANTIER' }).click();
+  await page.waitForSelector('#vranesh-arbre:not([hidden])', { timeout: 5000 });
+
+  // ---- La FORME SUIT LA NATURE : une greffe, pas un arbre. ----
+  verifier('Le thème qui se construit est dessiné en GREFFE, pas en arbre',
+    (await page.locator('.vranesh-tronc-greffe').count()) === 1
+    && (await page.locator('.vranesh-tronc').count()) === 0);
+  verifier('La terre est là — l’élément du thème',
+    (await page.locator('.vranesh-sol').count()) === 1
+    && (await page.locator('.vranesh-hachure').count()) > 4);
+  verifier('Les racines disent les appuis', (await page.locator('.vranesh-racine').count()) === 6);
+
+  // ---- Les trois états se distinguent par la FORME, pas par la couleur seule. ----
+  verifier('La branche qui porte est feuillue',
+    (await page.locator('.vranesh-branche--tenue').count()) === 1
+    && (await page.locator('.vranesh-feuille').count()) === 3);
+  verifier('Le plan non qualifié est traité en réserve (dégradation), jamais perdu',
+    (await page.locator('.vranesh-branche--reserve').count()) === 2);
+  verifier('Une greffe porte sa ligature — prête, pas encore employée',
+    (await page.locator('.vranesh-ligature').count()) === 2);
+  verifier('Le plan écarté est un moignon cicatrisé',
+    (await page.locator('.vranesh-branche--ecarte').count()) === 1
+    && (await page.locator('.vranesh-cicatrice').count()) === 1);
+
+  const dessin = (await page.locator('#vranesh-arbre-dessin').textContent()) || '';
+  verifier('La cause du plan écarté est gravée sur le dessin',
+    /trop lente/.test(dessin), dessin);
+  verifier('ABSENCE — aucune vraisemblance sur un thème qui se construit',
+    !/vraisemblance/.test(dessin), dessin);
+
+  // ---- La géométrie se MESURE, elle ne se juge pas à l'œil. ----
+  const debords = await page.evaluate(() => {
+    const svg = document.getElementById('vranesh-arbre-dessin');
+    const vb = svg.viewBox.baseVal;
+    return Array.from(svg.querySelectorAll('text'))
+      .filter((t) => (t.textContent || '').length > 0)
+      .map((t) => {
+        const b = t.getBBox();
+        return { texte: t.textContent, x1: Math.round(b.x), x2: Math.round(b.x + b.width) };
+      })
+      .filter((e) => e.x1 < vb.x || e.x2 > vb.x + vb.width);
+  });
+  verifier('Greffe : aucune étiquette ne déborde du cadre (mesuré)',
+    debords.length === 0, JSON.stringify(debords));
+  const croisements = await page.evaluate(() => {
+    const svg = document.getElementById('vranesh-arbre-dessin');
+    const boites = Array.from(svg.querySelectorAll('text'))
+      .filter((t) => (t.textContent || '').length > 0)
+      .map((t) => t.getBBox());
+    let n = 0;
+    for (let i = 0; i < boites.length; i += 1) {
+      for (let j = i + 1; j < boites.length; j += 1) {
+        const a = boites[i], c = boites[j];
+        if (a.x < c.x + c.width - 1 && c.x < a.x + a.width - 1
+          && a.y < c.y + c.height - 1 && c.y < a.y + a.height - 1) { n += 1; }
+      }
+    }
+    return n;
+  });
+  verifier('Greffe : aucune étiquette n’en croise une autre (mesuré)',
+    croisements === 0, `${croisements} croisement(s)`);
+
+  // ---- Le côté parle en PLANS, pas en futurs probables. ----
+  await page.locator('.vranesh-branche-g.is-tenu .vranesh-zone-pleine').first().hover();
+  await page.waitForSelector('#vranesh-parole.is-actif', { timeout: 5000 });
+  const cote = (await page.locator('#vranesh-parole').textContent()) || '';
+  verifier('Côté : on parle de PLAN, et de celui qui porte',
+    /plan 1 sur 4/.test(cote) && /le plan tenu/.test(cote), cote);
+  verifier('ABSENCE — aucune vraisemblance dans le cartouche d’une construction',
+    !/vraisemblance/.test(cote), cote);
+
+  // ---- La cause passe en tête des vignettes au clic. ----
+  await page.locator('.vranesh-branche-g.is-ecarte .vranesh-zone-pleine').first().click();
+  await page.waitForSelector('.vranesh-branche-g.is-choisie', { timeout: 5000 });
+  const natures = await page.locator('#vranesh-parole .vranesh-vignette-quoi').allTextContents();
+  verifier('Clic sur un plan écarté : la CAUSE est la première vignette',
+    natures[0] === 'Pourquoi ça a cassé', JSON.stringify(natures));
+
+  // ---- La qualification s'écrit, avec le bon corps. ----
+  await page.locator('#vranesh-registre-detail summary').click();
+  const s1 = page.locator('#vranesh-situation-s1');
+  // LE POINT DE SÉCURITÉ DE CETTE BOUCLE : le dénouement SUPPRIME les branches
+  // non retenues. Sur une construction, ce sont les PLANS B — c'est-à-dire tout
+  // ce que le thème existe pour garder. Il ne doit être offert NULLE PART.
+  verifier('ABSENCE — aucune coupe proposée sur un thème qui se construit',
+    (await s1.locator('.vranesh-denouement').count()) === 0);
+  verifier('ABSENCE — aucune coupe proposée non plus depuis le dessin',
+    (await page.locator('#vranesh-parole .vranesh-cote-choisir').count()) === 0);
+  verifier('Le registre marque la nature du thème',
+    /construction/.test((await s1.locator('.vranesh-nature-marque').textContent()) || ''));
+  const qualif = s1.locator('.vranesh-qualif').first();
+  verifier('Chaque plan porte son formulaire de qualification',
+    (await s1.locator('.vranesh-qualif').count()) === 4);
+  verifier('Le champ « cause » est masqué tant que le plan n’est pas écarté',
+    await qualif.locator('input[name="cause"]').evaluate((el) => el.hidden));
+
+  await qualif.locator('select').selectOption('ecarte');
+  verifier('Choisir « écarté » ouvre le champ de la cause',
+    (await qualif.locator('input[name="cause"]').evaluate((el) => el.hidden)) === false);
+  await qualif.locator('input[name="cause"]').fill('le carnet ne suffit pas');
+  await qualif.locator('button[type="submit"]').click();
+  await page.waitForTimeout(250);
+  verifier('Qualifier : un PATCH /api/scenarios est émis', patchsScenario.length === 1,
+    `${patchsScenario.length}`);
+  const corpsQ = JSON.parse((patchsScenario[0] || {}).body || '{}');
+  verifier('Corps : le plan, son état et sa cause',
+    corpsQ.id === 'p1' && corpsQ.etat === 'ecarte' && corpsQ.cause === 'le carnet ne suffit pas',
+    JSON.stringify(corpsQ));
+  verifier('Bearer transmis (qualification)',
+    ((patchsScenario[0] || {}).headers || {}).authorization === 'Bearer jeton-de-test');
+
+  // Quitter « écarté » EFFACE la cause : une cause sur un plan qui porte serait
+  // lue de travers pour toujours (et l'API la refuserait).
+  const qualif2 = page.locator('#vranesh-situation-s1 .vranesh-qualif').nth(2);
+  await qualif2.locator('select').selectOption('tenu');
+  await qualif2.locator('button[type="submit"]').click();
+  await page.waitForTimeout(250);
+  const corpsQ2 = JSON.parse((patchsScenario[1] || {}).body || '{}');
+  verifier('Quitter « écarté » efface la cause dans le corps émis',
+    corpsQ2.etat === 'tenu' && corpsQ2.cause === null, JSON.stringify(corpsQ2));
+
+  // ---- La nature se change, et ce geste ne supprime rien. ----
+  await page.locator('#vranesh-situation-s1 .vranesh-nature').click();
+  await page.waitForTimeout(250);
+  const corpsN = JSON.parse((patchsSituation[0] || {}).body || '{}');
+  verifier('Basculer la nature : un PATCH avec la seule nature',
+    corpsN.id === 's1' && corpsN.nature === 'direction' && Object.keys(corpsN).length === 2,
+    JSON.stringify(corpsN));
+  verifier('ABSENCE — aucun scénario supprimé en changeant de nature',
+    !patchsScenario.some((p) => /"deroule"/.test(p.body || '')));
+
+  // ---- Un thème « direction » n'est PAS touché : il garde son arbre. ----
+  await page.locator('#vranesh-arbre-retour').click().catch(() => {});
+  await page.locator('#vranesh-plateau .cap', { hasText: 'CARREFOUR' }).click();
+  await page.waitForSelector('#vranesh-arbre:not([hidden])', { timeout: 5000 });
+  verifier('Un thème « direction » garde l’arbre, intact',
+    (await page.locator('.vranesh-tronc').count()) === 1
+    && (await page.locator('.vranesh-tronc-greffe').count()) === 0);
+
+  verifier('Zéro requête externe (greffe)', externes.length === 0, externes.slice(0, 3).join(', '));
+  verifier('Zéro erreur console (greffe)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
+  await page.screenshot({ path: `${CAPTURES}/vranesh-greffe.png`, fullPage: true });
+  await page.close();
+}
+
 await navigateur.close();
 console.log(echecs === 0 ? '\n=== SMOKE VRANESH VERT ===' : `\n=== ${echecs} VERDICT(S) EN ÉCHEC ===`);
 process.exit(echecs === 0 ? 0 : 1);

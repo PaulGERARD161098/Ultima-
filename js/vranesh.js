@@ -151,9 +151,57 @@
     retirer.addEventListener('click', function () { retirerScenario(scenario.id); });
     item.appendChild(retirer);
 
+    // Un thème qui se construit qualifie ses plans : tenu, en réserve, écarté
+    // — et pourquoi. C'est le seul endroit où cette qualification s'écrit.
+    if (estConstruction(situation)) {
+      item.appendChild(construireFormQualif(scenario, situation));
+    }
+
     // Passerelles v2 : relier ce futur à un objectif DRAUKHAIN ou une page MINETHNIR.
     item.appendChild(rendrePasserelles(scenario));
     return item;
+  }
+
+  function construireFormQualif(scenario, situation) {
+    var form = el('form', 'zekrom-retro-form vranesh-qualif');
+    form.dataset.scenarioId = scenario.id;
+
+    var sel = el('select', 'zekrom-retro-select');
+    sel.name = 'etat';
+    sel.setAttribute('aria-label', 'État de ce plan');
+    [['tenu', 'il porte aujourd’hui'],
+     ['reserve', 'en réserve — un plan B prêt'],
+     ['ecarte', 'écarté — il a cassé']].forEach(function (paire) {
+      var opt = el('option', null, paire[1]);
+      opt.value = paire[0];
+      sel.appendChild(opt);
+    });
+    sel.value = etatPlan(scenario, situation);
+
+    var cause = el('input', 'zekrom-direction-input');
+    cause.type = 'text';
+    cause.name = 'cause';
+    cause.maxLength = 2000;
+    cause.autocomplete = 'off';
+    cause.setAttribute('aria-label', 'Pourquoi ce plan a cassé');
+    cause.placeholder = 'pourquoi ça a cassé…';
+    cause.value = scenario.cause || '';
+
+    function majVisibilite() { cause.hidden = sel.value !== 'ecarte'; }
+    sel.addEventListener('change', majVisibilite);
+    majVisibilite();
+
+    var bouton = el('button', 'zekrom-bouton zekrom-bouton-lien', 'Qualifier');
+    bouton.type = 'submit';
+
+    form.appendChild(sel);
+    form.appendChild(cause);
+    form.appendChild(bouton);
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      qualifierPlan(scenario.id, sel.value, cause.value);
+    });
+    return form;
   }
 
   function construireFormScenario(situation) {
@@ -332,11 +380,26 @@
     entete.appendChild(el('h3', 'zekrom-ideal-intitule', situation.intitule || ''));
     entete.appendChild(el('span', 'zekrom-registre',
       libelleCompte(scenariosDe(situation.id).length)));
+    entete.appendChild(el('span', 'zekrom-registre vranesh-nature-marque',
+      estConstruction(situation) ? 'construction' : 'direction'));
     carte.appendChild(entete);
 
     if (situation.contexte) {
       carte.appendChild(el('p', 'zekrom-horizon', 'Contexte : ' + situation.contexte));
     }
+
+    // La NATURE se change ici, et nulle part ailleurs. Le geste ne supprime
+    // rien : un thème qui bascule garde tous ses plans, simplement pas encore
+    // qualifiés (aucun écran vide, la dégradation s'en charge).
+    var bascule = el('button', 'zekrom-retro-detacher vranesh-nature',
+      estConstruction(situation)
+        ? 'Ce thème est une construction — le traiter comme une direction'
+        : 'Ce thème est une direction — le traiter comme une construction');
+    bascule.type = 'button';
+    bascule.addEventListener('click', function () {
+      poserNature(situation.id, estConstruction(situation) ? 'direction' : 'construction');
+    });
+    carte.appendChild(bascule);
 
     rendreScenarios(situation, carte);
     rendreDenouement(situation, carte);
@@ -360,6 +423,12 @@
   }
 
   function rendreDenouement(situation, carte) {
+    // UN THÈME QUI SE CONSTRUIT NE SE DÉNOUE PAS (0020). Le dénouement supprime
+    // les branches non retenues — sur une construction, ce sont exactement les
+    // PLANS B, c'est-à-dire ce que le thème existe pour garder. Ici, le mouvement
+    // se dit par l'état d'un plan (tenu / réserve / écarté), jamais par une coupe.
+    if (estConstruction(situation)) { return; }
+
     var scenarios = scenariosDe(situation.id);
     var bloc = el('section', 'zekrom-retro vranesh-denouement');
 
@@ -686,10 +755,15 @@
     // Le déroulé est écrit UNE SEULE FOIS, en tête et en entier (constat de
     // Paul 2026-08-04 : il figurait deux fois, en titre tronqué puis en corps).
     cote.appendChild(el('p', 'parole-nom', scenario.deroule || 'un futur'));
+    // Un thème qui se CONSTRUIT ne parle pas de vraisemblance : un plan n'est
+    // pas plus ou moins probable, il porte, il attend, ou il a cassé.
+    var construction = estConstruction(situation);
     cote.appendChild(el('p', 'parole-etat', nomCourt(situation.intitule)
-      + ' — futur ' + rang + ' sur ' + total
-      + (advenue ? ' · la branche qui a poussé'
-                 : ' · vraisemblance ' + (LIBELLE_VRAISEMBLANCE[scenario.vraisemblance] || 'moyenne'))));
+      + (construction ? ' — plan ' : ' — futur ') + rang + ' sur ' + total
+      + (construction
+        ? ' · ' + (LIBELLE_ETAT[etatPlan(scenario, situation)] || '')
+        : (advenue ? ' · la branche qui a poussé'
+                   : ' · vraisemblance ' + (LIBELLE_VRAISEMBLANCE[scenario.vraisemblance] || 'moyenne')))));
 
     if (advenue) { cote.classList.add('is-advenu'); }
 
@@ -723,7 +797,9 @@
     // Le bouclier : ce qu'on a préparé contre lui, ou pour lui.
     parade: ['M12 2 L21 6 V12 C 21 17, 17 21, 12 22 C 7 21, 3 17, 3 12 V6 Z', 'M8 12 l3 3 5 -6'],
     // Le maillon : ce que ce futur touche ailleurs dans Ultima.
-    liens: ['M9 14 a4 4 0 0 1 0 -5 l2 -2 a4 4 0 0 1 6 6 l-1 1', 'M15 10 a4 4 0 0 1 0 5 l-2 2 a4 4 0 0 1 -6 -6 l1 -1']
+    liens: ['M9 14 a4 4 0 0 1 0 -5 l2 -2 a4 4 0 0 1 6 6 l-1 1', 'M15 10 a4 4 0 0 1 0 5 l-2 2 a4 4 0 0 1 -6 -6 l1 -1'],
+    // La pierre fendue : pourquoi un plan a cassé (thème « construction »).
+    cause: ['M4 8 h16 v8 h-16 Z', 'M12 8 l3 4 l-3 4']
   };
 
   function icone(nom) {
@@ -755,6 +831,12 @@
 
   function vignettes(scenario) {
     var zone = el('div', 'vranesh-vignettes');
+    // La CAUSE d'un plan écarté passe devant tout le reste : c'est elle qui se
+    // transmet au plan suivant (dictée du 2026-08-04 — anticiper l'adaptation,
+    // pas seulement l'échec).
+    if (scenario.cause) {
+      zone.appendChild(vignette('cause', 'Pourquoi ça a cassé', scenario.cause));
+    }
     if (scenario.signaux) {
       zone.appendChild(vignette('signaux', 'Ce qui l’annonce', scenario.signaux));
     }
@@ -788,6 +870,13 @@
   //      combien de branches tombent avant qu'aucune ne tombe.
   function actionDenouement(situation, scenario, total) {
     var zone = el('div', 'vranesh-cote-action');
+
+    // Même règle que dans le registre : sur une construction, aucune coupe n'est
+    // offerte. La qualification d'un plan s'écrit au registre, jamais ici.
+    if (estConstruction(situation)) {
+      zone.appendChild(el('p', 'vranesh-cote-scelle', LIBELLE_ETAT[etatPlan(scenario, situation)] || ''));
+      return zone;
+    }
 
     // Déjà tranché : on ne repropose pas de trancher, on rappelle l'état et on
     // laisse rouvrir (aucune suppression à la réouverture).
@@ -848,12 +937,48 @@
 
   // ---- ② L'arbre d'un thème : un tronc, des branches ----
 
+  // ---- LA NATURE DU THÈME (0020) : la forme suit la nature ----
+  // Dictée Paul (2026-08-04) : « THORIOL n'est pas une direction comme LIANDRA,
+  // c'est une construction. Le but ne bouge pas, ce sont les moyens qui cassent
+  // — l'idée c'est de toujours avoir des plans B, et surtout d'anticiper
+  // l'adaptation : comment faire pousser une nouvelle branche, même projet. »
+  //   · direction    → L'ARBRE. Un futur t'arrive, l'un pousse, les autres tombent.
+  //   · construction → LA GREFFE. Le tronc ne change pas ; la branche qui porte,
+  //     les moignons de ce qui a cassé (avec leur cause), et les greffes
+  //     ligaturées : les plans B, prêts et pas encore employés.
+  function estConstruction(situation) {
+    return Boolean(situation) && situation.nature === 'construction';
+  }
+
+  // L'état d'un plan, avec sa dégradation : tant que Paul n'a rien qualifié
+  // (etat NULL, ou migration 0020 non appliquée), le futur advenu tient lieu de
+  // plan tenu et tout le reste est en réserve. Aucun écran vide, jamais.
+  function etatPlan(scenario, situation) {
+    if (scenario && scenario.etat) { return scenario.etat; }
+    if (situation && situation.scenario_advenu_id === scenario.id) { return 'tenu'; }
+    return 'reserve';
+  }
+
+  var LIBELLE_ETAT = {
+    tenu: 'le plan tenu',
+    reserve: 'en réserve — prêt à prendre le relais',
+    ecarte: 'écarté'
+  };
+
+  function plansDe(situation, etatVoulu) {
+    return scenariosDe(situation.id).filter(function (sc) {
+      return etatPlan(sc, situation) === etatVoulu;
+    });
+  }
+
   function dessinerArbre(situation) {
     var cadre = document.getElementById('vranesh-arbre-dessin');
     var titre = document.getElementById('vranesh-arbre-nom');
     if (!cadre || !titre) { return; }
     cadre.textContent = '';
     titre.textContent = nomCourt(situation.intitule);
+
+    if (estConstruction(situation)) { dessinerGreffe(situation, cadre); return; }
 
     var scenarios = scenariosDe(situation.id);
     var plan = charpente(scenarios.length);
@@ -945,6 +1070,181 @@
       });
       cadre.appendChild(g);
     });
+    amorcerPousse(cadre);
+  }
+
+  // ---- LA GREFFE : la forme d'un thème qui se CONSTRUIT (forme B, 2026-08-04) ----
+  // Le tronc est le projet, enraciné dans la terre — il ne change pas. Autour :
+  // la branche qui porte (feuillue), les moignons cicatrisés de ce qui a cassé
+  // avec leur cause, et les greffes ligaturées, prêtes à pousser. Une branche
+  // perdue ne fait pas tomber l'arbre : on regreffe sur le même tronc.
+  var GREFFE = {
+    SOL: 150, TRONC_X: 150, HAUT: 56,
+    MARGE: 5, LARGEUR_CAR: 4.4, ETIQ_MAX: 24, ETIQ_MIN: 6,
+    MAX_GREFFES: 3   // au-delà, le tronc se hérisse : le reste tient en une borne
+  };
+
+  // Budget de signes d'une étiquette, depuis la place RÉELLE de son côté.
+  function budgetGreffe(x, versLaDroite) {
+    var dispo = versLaDroite ? (ARBRE.L - x - GREFFE.MARGE) : (x - GREFFE.MARGE);
+    return Math.max(0, Math.floor(dispo / GREFFE.LARGEUR_CAR));
+  }
+
+  function etiquetteGreffe(cadre, x, y, versLaDroite, classe, texte) {
+    var budget = Math.min(GREFFE.ETIQ_MAX, budgetGreffe(x, versLaDroite));
+    if (budget < GREFFE.ETIQ_MIN) { return; }
+    var t = svgEl('text', classe);
+    t.setAttribute('x', String(x));
+    t.setAttribute('y', String(y));
+    t.setAttribute('text-anchor', versLaDroite ? 'start' : 'end');
+    t.textContent = etiquetteBranche(texte, budget);
+    cadre.appendChild(t);
+  }
+
+  function dessinerGreffe(situation, cadre) {
+    // La terre : le trait de sol et sa hachure. C'est l'élément du thème —
+    // « c'est à partir de là qu'on va construire les choses ».
+    var sol = svgEl('path', 'vranesh-sol');
+    sol.setAttribute('d', 'M6 ' + GREFFE.SOL + ' H ' + (ARBRE.L - 6));
+    cadre.appendChild(sol);
+    for (var x = 12; x < ARBRE.L - 6; x += 14) {
+      var h = svgEl('path', 'vranesh-hachure');
+      h.setAttribute('d', 'M' + x + ' ' + GREFFE.SOL + ' l -5 9');
+      cadre.appendChild(h);
+    }
+    // Les racines : les appuis, le pendant souterrain du tronc.
+    [-1, 1].forEach(function (sens) {
+      [14, 30, 46].forEach(function (portee, i) {
+        var r = svgEl('path', 'vranesh-racine');
+        r.setAttribute('d', 'M' + GREFFE.TRONC_X + ' ' + GREFFE.SOL
+          + ' q ' + (sens * portee * 0.5) + ' ' + (8 + i * 2)
+          + ' ' + (sens * portee) + ' ' + (14 + i * 4));
+        cadre.appendChild(r);
+      });
+    });
+
+    var tronc = svgEl('path', 'vranesh-tronc-greffe vranesh-pousse');
+    tronc.setAttribute('d', 'M' + (GREFFE.TRONC_X - 5) + ' ' + GREFFE.SOL
+      + ' L ' + (GREFFE.TRONC_X - 3) + ' ' + GREFFE.HAUT
+      + ' L ' + (GREFFE.TRONC_X + 3) + ' ' + GREFFE.HAUT
+      + ' L ' + (GREFFE.TRONC_X + 5) + ' ' + GREFFE.SOL + ' Z');
+    cadre.appendChild(tronc);
+
+    var tenus = plansDe(situation, 'tenu');
+    var reserves = plansDe(situation, 'reserve');
+    var ecartes = plansDe(situation, 'ecarte');
+    var total = scenariosDe(situation.id).length;
+    var rang = 0;
+
+    function brancherPlan(g, sc) {
+      rang += 1;
+      var monRang = rang;
+      g.setAttribute('tabindex', '0');
+      g.setAttribute('role', 'button');
+      g.setAttribute('aria-label', etiquetteBranche(sc.deroule) + ' — '
+        + (LIBELLE_ETAT[etatPlan(sc, situation)] || ''));
+      function entrer() {
+        g.classList.add('is-actif');
+        coteBranche(situation, sc, monRang, total, false);
+      }
+      function sortir() {
+        if (!g.classList.contains('is-choisie')) { g.classList.remove('is-actif'); }
+      }
+      function choisir() {
+        Array.prototype.forEach.call(cadre.querySelectorAll('.vranesh-branche-g'), function (o) {
+          o.classList.remove('is-choisie'); o.classList.remove('is-actif');
+        });
+        g.classList.add('is-choisie'); g.classList.add('is-actif');
+        coteBranche(situation, sc, monRang, total, true);
+      }
+      g.addEventListener('mouseenter', entrer);
+      g.addEventListener('mouseleave', sortir);
+      g.addEventListener('focus', entrer);
+      g.addEventListener('blur', sortir);
+      g.addEventListener('click', choisir);
+      g.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choisir(); }
+      });
+      cadre.appendChild(g);
+    }
+
+    // ① LA BRANCHE QUI PORTE : franche, feuillue, à droite.
+    tenus.slice(0, 1).forEach(function (sc) {
+      var g = svgEl('g', 'vranesh-branche-g is-tenu');
+      var br = svgEl('path', 'vranesh-branche vranesh-branche--tenue vranesh-pousse');
+      br.setAttribute('d', 'M' + GREFFE.TRONC_X + ' 104 Q 190 94 226 74');
+      g.appendChild(br);
+      [[226, 74], [212, 68], [200, 82]].forEach(function (pt, i) {
+        var f = svgEl('ellipse', 'vranesh-feuille');
+        f.setAttribute('cx', String(pt[0])); f.setAttribute('cy', String(pt[1]));
+        f.setAttribute('rx', String(6 - i * 0.6)); f.setAttribute('ry', '3');
+        f.setAttribute('transform', 'rotate(-28 ' + pt[0] + ' ' + pt[1] + ')');
+        g.appendChild(f);
+      });
+      var zone = svgEl('circle', 'vranesh-zone-pleine');
+      zone.setAttribute('cx', '218'); zone.setAttribute('cy', '76'); zone.setAttribute('r', '20');
+      g.appendChild(zone);
+      brancherPlan(g, sc);
+      etiquetteGreffe(cadre, ARBRE.L - GREFFE.MARGE, 50, false, 'vranesh-etiquette', sc.deroule);
+      var porte = svgEl('text', 'vranesh-etiquette-etat');
+      porte.setAttribute('x', String(ARBRE.L - GREFFE.MARGE));
+      porte.setAttribute('y', '60');
+      porte.setAttribute('text-anchor', 'end');
+      porte.textContent = 'elle porte aujourd’hui';
+      cadre.appendChild(porte);
+    });
+
+    // ② LES GREFFES LIGATURÉES : prêtes, pas encore employées. C'est l'objet que
+    //    l'arbre ne savait pas dire — un plan B qui ne se voit pas n'existe pas.
+    reserves.slice(0, GREFFE.MAX_GREFFES).forEach(function (sc, i) {
+      var y = 134 - i * 14;
+      var g = svgEl('g', 'vranesh-branche-g is-reserve');
+      var pousse = svgEl('path', 'vranesh-branche vranesh-branche--reserve');
+      pousse.setAttribute('d', 'M' + GREFFE.TRONC_X + ' ' + y + ' q 24 -3 38 -11');
+      g.appendChild(pousse);
+      var lig = svgEl('path', 'vranesh-ligature');
+      lig.setAttribute('d', 'M' + (GREFFE.TRONC_X + 6) + ' ' + (y - 3) + ' l 0 6');
+      g.appendChild(lig);
+      var zone = svgEl('rect', 'vranesh-zone-pleine');
+      zone.setAttribute('x', String(GREFFE.TRONC_X)); zone.setAttribute('y', String(y - 12));
+      zone.setAttribute('width', '46'); zone.setAttribute('height', '16');
+      g.appendChild(zone);
+      brancherPlan(g, sc);
+      etiquetteGreffe(cadre, GREFFE.TRONC_X + 42, y - 13, true, 'vranesh-etiquette', sc.deroule);
+    });
+    if (reserves.length > GREFFE.MAX_GREFFES) {
+      var reste = reserves.length - GREFFE.MAX_GREFFES;
+      var borne = svgEl('text', 'vranesh-etiquette-etat');
+      borne.setAttribute('x', String(GREFFE.TRONC_X + 42));
+      borne.setAttribute('y', '146');
+      borne.setAttribute('text-anchor', 'start');
+      borne.textContent = '+ ' + reste + (reste > 1 ? ' autres prêtes' : ' autre prête');
+      cadre.appendChild(borne);
+    }
+
+    // ③ LES MOIGNONS : ce qui a cassé, cicatrisé, la CAUSE gravée dessous —
+    //    c'est elle qu'on anticipe, pas l'échec.
+    ecartes.slice(0, 2).forEach(function (sc, i) {
+      var y = 128 - i * 26;
+      var g = svgEl('g', 'vranesh-branche-g is-ecarte');
+      var moignon = svgEl('path', 'vranesh-branche vranesh-branche--ecarte');
+      moignon.setAttribute('d', 'M' + GREFFE.TRONC_X + ' ' + y + ' l -26 -6 l -8 4');
+      g.appendChild(moignon);
+      var cic = svgEl('path', 'vranesh-cicatrice');
+      cic.setAttribute('d', 'M' + (GREFFE.TRONC_X - 38) + ' ' + (y - 5)
+        + ' l -5 5 M' + (GREFFE.TRONC_X - 43) + ' ' + (y - 5) + ' l 5 5');
+      g.appendChild(cic);
+      var zone = svgEl('rect', 'vranesh-zone-pleine');
+      zone.setAttribute('x', String(GREFFE.TRONC_X - 48)); zone.setAttribute('y', String(y - 12));
+      zone.setAttribute('width', '48'); zone.setAttribute('height', '16');
+      g.appendChild(zone);
+      brancherPlan(g, sc);
+      etiquetteGreffe(cadre, GREFFE.TRONC_X - 50, y - 4, false, 'vranesh-etiquette', sc.deroule);
+      if (sc.cause) {
+        etiquetteGreffe(cadre, GREFFE.TRONC_X - 50, y + 6, false, 'vranesh-etiquette-cause', sc.cause);
+      }
+    });
+
     amorcerPousse(cadre);
   }
 
@@ -1176,6 +1476,30 @@
     var res = await appelApi('/api/scenarios', corps);
     if (res.status === 401) { montrer('vranesh-auth'); return; }
     if (!res.ok) { messageForm('Scénario non enregistré. Réessaie.', true); return; }
+    await rafraichir();
+  }
+
+  // ---- 0020 : la nature du thème, et la qualification d'un plan ----
+  // Deux écritures ADDITIVES, sans aucune suppression : changer de nature ne
+  // touche à aucun plan, qualifier un plan n'en efface aucun autre.
+  async function poserNature(situationId, nature) {
+    if (!situationId) { return; }
+    var res = await appelApi('/api/situations', { id: situationId, nature: nature }, 'PATCH');
+    if (res.status === 401) { montrer('vranesh-auth'); return; }
+    if (!res.ok) { messageForm('La nature du thème n’a pas changé. Réessaie.', true); return; }
+    await rafraichir();
+  }
+
+  async function qualifierPlan(scenarioId, etat, cause) {
+    if (!scenarioId) { return; }
+    var propre = (cause || '').trim();
+    // La cause n'existe QUE sur un plan écarté (contrat API, miroir du CHECK) :
+    // quitter « écarté » l'efface, plutôt que de la laisser traîner sur un plan
+    // qui porte — une donnée qui ne veut plus rien dire finit mal lue.
+    var corps = { id: scenarioId, etat: etat, cause: (etat === 'ecarte' && propre) ? propre : null };
+    var res = await appelApi('/api/scenarios', corps, 'PATCH');
+    if (res.status === 401) { montrer('vranesh-auth'); return; }
+    if (!res.ok) { messageForm('Ce plan n’a pas été qualifié. Réessaie.', true); return; }
     await rafraichir();
   }
 

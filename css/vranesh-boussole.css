@@ -213,3 +213,38 @@
   display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem;
 }
 .vranesh-confirmation-texte { margin: 0; flex: 1 1 16rem; }
+
+/* ---------- LA GREFFE : la forme d'un thème qui se CONSTRUIT (0020) ----------
+   Dictée Paul (2026-08-04) : THORIOL n'est pas une direction, c'est une
+   construction — l'élément est la TERRE, le socle d'où l'on bâtit. Le tronc ne
+   change pas ; ce sont les moyens qui cassent et qu'on regreffe.
+   Registre chromatique distinct de l'arbre : ocres de labour, pas ors du feu. */
+.vranesh-sol { stroke: #4a3620; stroke-width: 1.6; fill: none; }
+.vranesh-hachure { stroke: #8a6a3c; stroke-width: 0.7; opacity: .55; }
+.vranesh-racine { stroke: #8a6a3c; stroke-width: 0.9; fill: none; opacity: .8; }
+.vranesh-tronc-greffe { fill: #c3a071; stroke: #4a3620; stroke-width: 1.4; }
+
+/* La branche qui PORTE : franche et feuillue — elle tient aujourd'hui. */
+.vranesh-branche--tenue { stroke: #4a3620; stroke-width: 2.4; fill: none; }
+.vranesh-feuille { fill: #5d7a44; opacity: .85; }
+/* La GREFFE : prête, pas encore employée. Le pointillé dit l'attente, la
+   ligature dit qu'elle est déjà en place — c'est ça, un plan B. */
+.vranesh-branche--reserve { stroke: #8a6a3c; stroke-width: 1.4; fill: none; stroke-dasharray: 4 3; }
+.vranesh-ligature { stroke: #4a3620; stroke-width: 2; fill: none; stroke-linecap: round; }
+/* Le MOIGNON : ce qui a cassé, cicatrisé. Jamais effacé — sa cause se transmet. */
+.vranesh-branche--ecarte { stroke: var(--encre-sepia-douce); stroke-width: 1.1; fill: none; opacity: .7; }
+.vranesh-cicatrice { stroke: var(--encre-sepia); stroke-width: 1.1; fill: none; }
+
+.vranesh-etiquette-etat,
+.vranesh-etiquette-cause {
+  font-family: var(--police-ancienne); font-size: 7px; font-style: italic;
+  letter-spacing: .03em; fill: var(--encre-sepia-douce); pointer-events: none;
+}
+
+/* La nature du thème, dans le registre. */
+.vranesh-nature-marque { font-style: italic; }
+.vranesh-nature { display: block; margin-top: 0.4rem; }
+.vranesh-qualif { margin-top: 0.5rem; }
+/* Zone de préhension PLEINE : un rect ou un cercle ne capte rien avec
+   `fill: none` (la classe des courbes ne vaut que pour un trait épais). */
+.vranesh-zone-pleine { fill: transparent; cursor: pointer; }

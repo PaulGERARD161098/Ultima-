@@ -774,9 +774,18 @@ export function validateFlamme(body, mode) {
 // Données intimes (§5) : erreurs génériques, aucun contenu en log.
 export const SCENARIO_VRAISEMBLANCES = ['faible', 'moyenne', 'forte'];
 
+// 0020 — les deux NATURES d'un thème. `direction` : un futur t'arrive, l'un
+// pousse et les autres tombent (le modèle d'origine). `construction` : le but ne
+// bouge pas, ce sont les MOYENS qui cassent et se remplacent.
+export const SITUATION_NATURES = ['direction', 'construction'];
+// 0020 — l'état d'un plan dans une construction. `reserve` est le plan B : prêt,
+// pas encore employé — précisément ce que le modèle d'origine ne savait pas dire.
+export const SCENARIO_ETATS = ['tenu', 'reserve', 'ecarte'];
+
 // Champs autorisés en écriture (owner_id/id/dates gérés serveur).
-const SITUATION_FIELDS = ['intitule', 'contexte'];
-const SCENARIO_FIELDS = ['situation_id', 'deroule', 'vraisemblance', 'signaux', 'parade'];
+const SITUATION_FIELDS = ['intitule', 'contexte', 'nature'];
+const SCENARIO_FIELDS = ['situation_id', 'deroule', 'vraisemblance', 'signaux', 'parade',
+  'etat', 'cause'];
 
 // Valide une situation. mode 'create' impose l'intitulé (le cas) ; 'update' rend
 // tout optionnel. contexte nullable borné 2000. owner_id jamais accepté.
@@ -803,6 +812,13 @@ export function validateSituation(body, mode) {
     const msg = checkOptionalText(body.contexte, 'Contexte', 2000);
     if (msg) return { error: msg };
     if (body.contexte !== undefined) out.contexte = body.contexte;
+  }
+
+  // 0020 — la nature du thème : elle décide de la FORME. Jamais null (le CHECK
+  // et le défaut base l'imposent) : on refuse plutôt que d'effacer.
+  if (body.nature !== undefined) {
+    if (!SITUATION_NATURES.includes(body.nature)) return { error: 'Nature de thème invalide' };
+    out.nature = body.nature;
   }
 
   if (mode === 'update' && Object.keys(out).length === 0) {
@@ -877,6 +893,31 @@ export function validateScenario(body, mode) {
       if (msg) return { error: msg };
       if (body[field] !== undefined) out[field] = body[field];
     }
+  }
+
+  // 0020 — l'état d'un plan, et sa cause. La cause n'existe QUE sur un plan
+  // écarté : miroir EXACT du CHECK `scenarios_cause_scope`, refusé ici pour que
+  // le client reçoive un 400 lisible au lieu d'une 500 de contrainte.
+  if (body.etat !== undefined) {
+    if (body.etat === null) {
+      out.etat = null;
+    } else {
+      if (!SCENARIO_ETATS.includes(body.etat)) return { error: 'État de plan invalide' };
+      out.etat = body.etat;
+    }
+  }
+  if (body.cause === null) {
+    out.cause = null;
+  } else if (body.cause !== undefined) {
+    const msg = checkOptionalText(body.cause, 'Cause', 2000);
+    if (msg) return { error: msg };
+    out.cause = body.cause;
+  }
+  // Portée : une cause posée sans dire dans le même geste que le plan est écarté
+  // est refusée. On ne peut pas prouver ici l'état en base — et une cause qui
+  // atterrit sur un plan tenu serait lue de travers pour toujours.
+  if (out.cause !== undefined && out.cause !== null && out.etat !== 'ecarte') {
+    return { error: 'Une cause ne vaut que pour un plan écarté' };
   }
 
   if (mode === 'update' && Object.keys(out).length === 0) {

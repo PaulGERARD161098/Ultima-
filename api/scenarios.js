@@ -17,7 +17,7 @@ import {
 } from './_lib/http.js';
 import { validateScenario, isUuid } from './_lib/validate.js';
 
-const ALLOWED = ['POST', 'DELETE'];
+const ALLOWED = ['POST', 'PATCH', 'DELETE'];
 
 function resolveId(req, body) {
   const fromQuery = req.query?.id;
@@ -55,6 +55,35 @@ export default async function handler(req, res) {
         .select()
         .single();
       if (dbError) return dbFail(res, dbError, 'scenarios:post');
+      return ok(res, data);
+    }
+
+    if (req.method === 'PATCH') {
+      // 0020 — QUALIFIER un plan dans un thème « construction » : tenu, en
+      // réserve, écarté (et alors pourquoi). Le déroulé, lui, ne se modifie
+      // toujours pas : un futur écrit reste ce qu'il était (0017, pas
+      // d'updated_at). Seule la qualification bouge, parce qu'elle EST le
+      // mouvement du plan — c'est ce que la dictée appelle l'adaptation.
+      const body = await readJsonBody(req);
+      if (body === null || typeof body !== 'object') return bodyFail(res, body);
+      const id = resolveId(req, body);
+      if (!isUuid(id)) return fail(res, 400, 'Identifiant invalide');
+
+      const { id: _ignore, ...champs } = body;
+      const { value, error } = validateScenario(champs, 'update');
+      if (error) return fail(res, 400, error);
+      // Le déroulé n'est pas modifiable : on le refuse explicitement plutôt que
+      // de l'écrire en silence (validateScenario l'accepterait en 'update').
+      if ('deroule' in value) return fail(res, 400, 'Le déroulé ne se modifie pas');
+
+      const { data, error: dbError } = await client
+        .from('scenarios')
+        .update(value)
+        .eq('id', id)
+        .select()
+        .maybeSingle();
+      if (dbError) return dbFail(res, dbError, 'scenarios:patch');
+      if (!data) return fail(res, 404, 'Scénario introuvable');
       return ok(res, data);
     }
 
