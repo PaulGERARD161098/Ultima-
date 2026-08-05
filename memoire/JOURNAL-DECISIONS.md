@@ -1566,3 +1566,46 @@
     retenue et annoncée à Paul : le premier « écouté » porte sur **la fureur** —
     accueillie sans être suivie. Sur un contenu intime, on annonce
     l'interprétation au lieu de la fondre silencieusement dans le texte.
+- **2026-08-04 (THORIOL — la greffe, et un CHECK qui ne mordait pas, PR #142)** —
+  Paul : « THORIOL a besoin de se construire […] il correspond à un élément de la
+  terre […] ce n'est pas une direction comme LIANDRA, c'est une construction, et
+  l'idée c'est de toujours avoir des plans B […] anticiper les causes d'échec,
+  mais bien surtout anticiper l'adaptation à un nouveau plan — comment faire
+  pousser une nouvelle branche, même projet. »
+  - **La FORME SUIT LA NATURE.** VRANESH dessinait tous les thèmes en arbre.
+    Deux natures cohabitent : `direction` (un futur t'arrive, l'un pousse) et
+    `construction` (le but ne bouge pas, les MOYENS cassent). 🔻 **Ce que l'arbre
+    ne savait pas dire : un plan PRÊT MAIS PAS ENCORE EMPLOYÉ.** C'est pourtant
+    la définition d'un plan B — et c'est ce vide qui a justifié une forme neuve,
+    pas un goût esthétique.
+  - ⚠️ **Le piège évité de justesse** : sur une construction, le dénouement
+    aurait supprimé les branches non retenues — **c'est-à-dire les plans B**,
+    exactement ce que le thème existe pour garder. Vu **en capture de
+    vérification**, fermé partout, prouvé par deux assertions d'ABSENCE.
+    🔻 **Une fonction juste ailleurs peut être destructrice ici** : toute
+    fonction transversale se re-questionne quand on ajoute une nature d'objet.
+  - 🔻 **RÈGLE MAJEURE DU JOUR — une contrainte se teste PAR LE REFUS, et sur le
+    cas NULL d'abord.** `0020` posait
+    `check (cause is null or etat = 'ecarte')`. Sur un plan non qualifié
+    (`etat` NULL) : `false OR NULL` = NULL, et **un CHECK ne rejette que sur
+    FALSE**. La contrainte ne refusait donc rien, précisément là où elle
+    prétendait protéger. Elle **se lit juste** — aucune relecture ne l'attrape.
+    Trouvée en jouant, tout de suite après l'application, un UPDATE illégitime
+    attendu en échec… qui a réussi. Corrigée par `0021`
+    (`is not distinct from`, qui ne renvoie jamais NULL), les DEUX sens éprouvés
+    ensuite, sans laisser une écriture (sondes annulées au savepoint).
+    C'est l'extension directe de « une règle de confidentialité se teste par
+    l'ABSENCE » (2026-07-30) : **la logique ternaire SQL laisse passer en
+    silence ce qu'on croit interdire.**
+  - 🔻 **Une migration appliquée ne se réécrit pas, elle se corrige par la
+    suivante.** `0020` est conservée fautive et ANNOTÉE ; `0021` porte le
+    correctif. Sinon le repo ment sur ce qu'est la prod.
+  - **Gate advisors fermée** (ouverte depuis le 2026-08-01) : Security et
+    Performance sans alerte après `0019`/`0020`/`0021` ; RLS contrôlée par Paul
+    (active partout, 4 policies par table).
+  - **Deux sessions en parallèle sur DRAUKHAIN, sans un seul conflit** : diffs
+    comparés AVANT fusion (aucun fichier commun), et le constat ⑤ du fil voisin
+    — « la passerelle est borgne » — s'est trouvé **fermé par la PR #140 du fil
+    VRANESH le même jour**. 🔻 **Deux fils qui diagnostiquent la même chose ne se
+    doublent pas : le premier qui corrige doit ANNOTER le constat de l'autre**,
+    sinon la source de vérité garde une phrase fausse.

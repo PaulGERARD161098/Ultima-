@@ -218,10 +218,12 @@ ordinaire — c'est elle qui porterait la voix.
   boutons + foyer + voie jalonnée) ; ③ le dessin n'a rien à dessiner (**1 serment,
   0 flamme** en base — toute la grammaire du foyer est du code qui ne s'exprime
   jamais) ; ④ ce n'est pas une cartographie mais une liste et un détail (jamais
-  plus d'un serment à l'écran) ; ⑤ **la passerelle est borgne** —
-  `GET /api/serments` ne replie que `serment_liens` (sortants), donc le fil
-  entrant `scenario_liens` depuis VRANESH (**1 posé en base**) n'est affiché
-  nulle part ; ⑥ le repli sans JS d'`imladrik.html` annonce encore « DRAUKHAIN —
+  plus d'un serment à l'écran) ; ⑤ ~~**la passerelle est borgne**~~ — **FERMÉ le
+  2026-08-04 (PR #140, fil VRANESH)** : `GET /api/serments` sert désormais les
+  futurs entrants et un serment montre ce qui le *menace* ou le *sert*, l'advenu
+  en tête. Le constat était juste, il ne l'est plus — deux fils l'ont diagnostiqué
+  le même jour, l'un l'a écrit, l'autre l'a corrigé ; ⑥ le repli sans JS
+  d'`imladrik.html` annonce encore « DRAUKHAIN —
   à venir ». Trois formes au choix : **A la voûte** (les serments coexistent, les
   fils vers ZEKROM/VRANESH/MINETHNIR se voient — **reco**), **B le brasier**
   (la plus belle, aucune place pour les fils), **C la frise** (la plus solide en
