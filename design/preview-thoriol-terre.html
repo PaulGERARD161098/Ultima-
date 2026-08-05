@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Preview — THORIOL : la terre, le plan B, la greffe</title>
+<!--
+  PREVIEW DE TRAVAIL — AUCUNE DONNÉE RÉELLE.
+  §5 (IMLADRIK = intime) : les plans affichés ici sont INVENTÉS. Le contenu réel
+  de THORIOL n'a pas été lu ; seul son COMPTE a été relevé en base (3 futurs).
+
+  Dictée de Paul (2026-08-04) :
+    « THORIOL a besoin de se construire. C'est un intermédiaire de base, il
+      correspond à un élément de la terre, puisque c'est à partir de là qu'on va
+      construire les choses. Ce n'est pas une direction comme LIANDRA, c'est
+      plutôt une construction, et l'idée c'est de toujours avoir des plans B.
+      THORIOL : anticiper les causes d'échec, mais bien surtout anticiper
+      l'adaptation à un nouveau plan — comment est-ce qu'on va faire pousser une
+      nouvelle branche, même projet, pour qu'au final ça marche bien. Il faut un
+      affichage cohérent avec ça. Donne-moi des propositions. »
+
+  CE QUE CETTE DICTÉE POSE, ET QUI DÉPASSE THORIOL :
+  VRANESH dessine aujourd'hui TOUS les thèmes de la même façon — un arbre de
+  futurs qui adviennent. Or Paul distingue deux natures :
+    · LIANDRA = une DIRECTION. Un futur t'arrive, tu l'anticipes, l'un d'eux
+      pousse et les autres tombent. C'est l'arbre actuel, et il convient.
+    · THORIOL = une CONSTRUCTION. Le but ne change pas ; ce sont les MOYENS qui
+      cassent et se remplacent. Rien ne « t'arrive » : tu regreffes.
+  Les trois formes ci-dessous ne cherchent donc pas à embellir l'arbre — elles
+  cherchent la forme d'un objet que l'arbre ne sait pas dire.
+
+  Chaque forme montre les TROIS états d'un plan, sinon elle est écartée :
+    ① LE PLAN TENU — celui qui porte aujourd'hui ;
+    ② LES PLANS EN RÉSERVE — les plans B, prêts, jamais « au cas où » ;
+    ③ LES PLANS ÉCARTÉS — et LA CAUSE, car c'est elle qu'on anticipe.
+
+  Chaque forme s'éprouve à TROIS VOLUMES — 1 plan, 3 (le réel d'aujourd'hui),
+  8 (le pire cas construit). Le cadre est MESURÉ (bbox contre viewBox) et les
+  ÉTIQUETTES sont testées en CROISEMENT : tenir dans le cadre ne suffit pas.
+
+  Le script est dans un fichier SÉPARÉ, à dessein : le CSP d'Ultima pose
+  `script-src 'self'` sans 'unsafe-inline' et s'applique à /design/* — une
+  maquette à script inline s'ouvre MUETTE sur la preview Vercel.
+  Zéro ressource externe, zéro CDN, zéro donnée réelle.
+-->
+<style>
+:root {
+  --accent: #1e6fb8; --cerne-carte: #5a4118; --or-antique: #a9884a;
+  --mer-profonde: #0e3a52; --mer-claire: #17506b;
+  --parchemin: #f6eed9; --parchemin-carte: #efe3c6; --parchemin-ombre: #e3d3ab;
+  --encre-sepia: #3b2f1c; --encre-sepia-douce: #6a5636; --creme: #f6eed9;
+  /* THORIOL — l'élément TERRE. Ocres et bruns de labour, pas les ors du feu. */
+  --terre: #8a6a3c; --terre-sombre: #4a3620; --terre-claire: #c3a071;
+  --pousse: #5d7a44;
+  --police-ancienne: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 1.4rem 1rem 3rem; color: var(--creme);
+  font-family: var(--police-ancienne);
+  background:
+    radial-gradient(ellipse at 50% 12%, rgba(195,160,113,.14), rgba(0,0,0,0) 58%),
+    linear-gradient(180deg, var(--mer-claire), var(--mer-profonde) 62%, #0a2d42);
+  min-height: 100vh;
+}
+h1, h2, h3, h4 { font-weight: 700; letter-spacing: .06em; margin: 0; }
+.entete { max-width: 64rem; margin: 0 auto 1.2rem; text-align: center; }
+.entete h1 { font-size: 1.5rem; letter-spacing: .16em; }
+.entete p { margin: .5rem 0 0; font-style: italic; opacity: .88; }
+.avertissement {
+  max-width: 46rem; margin: .9rem auto 0; font-size: .82rem; font-style: italic;
+  border: 1px dashed rgba(169,136,74,.6); border-radius: 8px; padding: .5rem .9rem;
+}
+.cartouche {
+  background: linear-gradient(180deg, var(--parchemin), var(--parchemin-carte));
+  border: 1px solid var(--cerne-carte); border-radius: 10px;
+  box-shadow: inset 0 0 0 3px rgba(169,136,74,.35), 0 4px 16px rgba(0,10,20,.35);
+  color: var(--encre-sepia); padding: 1.1rem 1.2rem;
+}
+.etage { max-width: 64rem; margin: 2.4rem auto 0; }
+.etage-titre {
+  text-align: center; font-size: 1.05rem; letter-spacing: .14em;
+  font-variant: small-caps; padding-bottom: .5rem;
+  border-bottom: 1px solid rgba(169,136,74,.5);
+}
+.etage-quoi { text-align: center; font-style: italic; opacity: .85; margin: .6rem 0 1rem; }
+
+/* ---------- La nature de THORIOL, posée avant les formes ---------- */
+.natures { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); }
+.natures h3 {
+  font-size: .82rem; letter-spacing: .12em; font-variant: small-caps;
+  color: var(--encre-sepia-douce); border-bottom: 1px solid rgba(169,136,74,.5);
+  padding-bottom: .3rem; margin-bottom: .6rem;
+}
+.natures p { font-size: .92rem; line-height: 1.5; margin: .4rem 0; }
+.exigences { margin: 1rem auto 0; }
+.exigences ol { margin: .4rem 0 0; padding-left: 1.4rem; }
+.exigences li { font-size: .92rem; line-height: 1.55; margin: .5rem 0; }
+
+/* ---------- Bascules ---------- */
+.bascules { display: flex; gap: .6rem; justify-content: center; margin: 1rem auto; flex-wrap: wrap; }
+.bascule-titre {
+  align-self: center; font-size: .74rem; letter-spacing: .12em;
+  font-variant: small-caps; opacity: .75; margin-right: .2rem;
+}
+.onglet {
+  font-family: inherit; font-size: .82rem; letter-spacing: .08em; font-variant: small-caps;
+  padding: .55rem 1rem; min-height: 44px; cursor: pointer; border-radius: 999px;
+  border: 1px solid var(--or-antique); background: rgba(169,136,74,.14); color: var(--creme);
+}
+.onglet[aria-pressed="true"] { background: var(--parchemin); color: var(--encre-sepia); font-weight: 700; }
+.onglet:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.panneau[hidden] { display: none; }
+
+/* ---------- Le dessin ---------- */
+.carte-svg {
+  display: block; width: 100%; height: auto;
+  background:
+    linear-gradient(180deg, var(--parchemin) 0%, var(--parchemin-carte) 100%);
+  border: 1px solid var(--cerne-carte); border-radius: 8px;
+  box-shadow: inset 0 0 0 2px rgba(169,136,74,.3);
+}
+.carte-svg text { font-family: var(--police-ancienne); fill: var(--encre-sepia); }
+
+/* La terre : le trait de sol et sa hachure. C'est l'élément de THORIOL. */
+.t-sol { stroke: var(--terre-sombre); stroke-width: 2.2; fill: none; }
+.t-hachure { stroke: var(--terre); stroke-width: 1; opacity: .55; }
+.t-socle { fill: var(--terre-claire); stroke: var(--terre-sombre); stroke-width: 1.6; opacity: .55; }
+
+/* Les trois états d'un plan — la forme porte le sens, jamais la couleur seule. */
+.p-tenu { fill: var(--terre-claire); stroke: var(--terre-sombre); stroke-width: 2.2; }
+.p-reserve { fill: none; stroke: var(--terre); stroke-width: 1.6; stroke-dasharray: 5 4; }
+.p-ecarte { fill: none; stroke: var(--encre-sepia-douce); stroke-width: 1.2; opacity: .7; }
+.p-fissure { stroke: var(--encre-sepia); stroke-width: 1.4; fill: none; }
+.p-feuille { fill: var(--pousse); opacity: .85; }
+.p-ligature { stroke: var(--terre-sombre); stroke-width: 2.4; fill: none; stroke-linecap: round; }
+.p-racine { stroke: var(--terre); stroke-width: 1.4; fill: none; opacity: .8; }
+
+.t-nom { font-size: 12px; letter-spacing: .03em; }
+.t-etat { font-size: 9px; font-style: italic; fill: var(--encre-sepia-douce); }
+.t-cause { font-size: 9px; font-style: italic; fill: var(--encre-sepia-douce); }
+.t-legende { font-size: 9.5px; font-variant: small-caps; letter-spacing: .1em; fill: var(--encre-sepia-douce); }
+.z-zone { fill: transparent; cursor: pointer; }
+.g-plan:focus-visible { outline: none; }
+.g-plan:focus-visible .t-nom { text-decoration: underline; }
+.carte-svg.a-choix .g-plan { opacity: .34; }
+.carte-svg.a-choix .g-plan.is-actif { opacity: 1; }
+
+/* ---------- Forme C — le registre gravé ---------- */
+.registre { display: grid; gap: .8rem; }
+.registre-bloc { border-left: 3px solid var(--or-antique); padding-left: .8rem; }
+.registre-bloc h4 {
+  font-size: .72rem; font-variant: small-caps; letter-spacing: .12em;
+  color: var(--encre-sepia-douce);
+}
+.registre-ligne { display: flex; gap: .5rem; align-items: baseline; margin: .35rem 0; flex-wrap: wrap; }
+.registre-nom { font-weight: 600; }
+.registre-cause { font-style: italic; color: var(--encre-sepia-douce); font-size: .88rem; }
+.pastille {
+  font-size: .64rem; font-variant: small-caps; letter-spacing: .1em;
+  border: 1px solid var(--or-antique); border-radius: 999px; padding: .05rem .5rem;
+  color: var(--encre-sepia-douce); flex: none;
+}
+
+/* ---------- La parole : une ligne au survol ---------- */
+.parole {
+  min-height: 3rem; margin-top: .7rem; padding: .55rem .2rem 0;
+  border-top: 1px solid rgba(169,136,74,.5); font-size: .9rem; color: var(--encre-sepia);
+}
+.parole-repos { font-style: italic; color: var(--encre-sepia-douce); }
+.parole-nom { font-weight: 700; letter-spacing: .04em; }
+
+/* ---------- La mesure ---------- */
+.mesure {
+  display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+  margin-top: .9rem; font-size: .78rem; font-variant: small-caps; letter-spacing: .08em;
+}
+.mesure span { border: 1px solid rgba(169,136,74,.55); border-radius: 999px; padding: .25rem .8rem; }
+.mesure .ok { color: #cfe8c9; border-color: rgba(140,200,130,.6); }
+.mesure .ko { color: #f2c0b0; border-color: rgba(220,130,110,.75); }
+.note { max-width: 48rem; margin: 1rem auto 0; text-align: center; font-size: .88rem; font-style: italic; opacity: .82; }
+.reco {
+  max-width: 48rem; margin: .9rem auto 0; text-align: center; font-size: .88rem;
+  border: 1px dashed rgba(169,136,74,.6); border-radius: 8px; padding: .7rem 1rem;
+}
+.pour-contre { display: grid; gap: .8rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); margin-top: 1rem; }
+.pour-contre h4 { font-size: .74rem; letter-spacing: .12em; font-variant: small-caps; opacity: .8; margin-bottom: .3rem; }
+.pour-contre p { font-size: .86rem; margin: 0; }
+</style>
+</head>
+<body>
+
+<header class="entete">
+  <h1>THORIOL — la terre, le plan B, la greffe</h1>
+  <p>Le but ne bouge pas. Ce sont les moyens qui cassent — et qu'on regreffe.</p>
+  <p class="avertissement">Maquette&nbsp;: les plans affichés sont <b>inventés</b>. Rien de l'intime
+    de Paul n'a été lu — seul son compte a été relevé en base.</p>
+</header>
+
+<!-- ============================================================= -->
+<!-- ① LA NATURE                                                   -->
+<!-- ============================================================= -->
+<section class="etage">
+  <h2 class="etage-titre">① Pourquoi THORIOL ne peut pas être un arbre de plus</h2>
+  <p class="etage-quoi">Deux natures de thème cohabitent dans VRANESH. Une seule forme les sert aujourd'hui.</p>
+
+  <div class="natures">
+    <div class="cartouche">
+      <h3>LIANDRA — une direction</h3>
+      <p>Un futur <b>t'arrive</b>. Tu en imagines plusieurs, tu guettes leurs signes,
+        tu prépares tes parades. Le jour venu, <b>l'un pousse et les autres tombent</b>.</p>
+      <p>L'arbre actuel dit exactement ça, et il le dit bien. On n'y touche pas.</p>
+    </div>
+    <div class="cartouche">
+      <h3>THORIOL — une construction</h3>
+      <p>Le but <b>ne change pas</b>&nbsp;: ce sont les <b>moyens</b> qui cassent. Rien ne
+        t'arrive — tu bâtis, un appui cède, tu en poses un autre.</p>
+      <p>L'élément est la <b>terre</b>&nbsp;: le socle d'où l'on construit. Et la question
+        n'est pas « lequel adviendra&nbsp;? » mais <b>« par où, sinon&nbsp;? »</b>.</p>
+    </div>
+    <div class="cartouche">
+      <h3>Ce que l'arbre ne sait pas dire</h3>
+      <p>Sur un arbre, une branche coupée est une <b>perte</b>. Ici, un plan écarté est
+        un <b>renseignement</b>&nbsp;: il a une <b>cause</b>, et c'est elle qu'on anticipe.</p>
+      <p>Et surtout&nbsp;: l'arbre n'a aucun moyen de montrer un plan <b>prêt mais pas
+        encore employé</b>. Or c'est ça, un plan B.</p>
+    </div>
+  </div>
+
+  <div class="cartouche exigences">
+    <h3 style="font-size:.82rem;letter-spacing:.12em;font-variant:small-caps;color:var(--encre-sepia-douce)">
+      Les trois exigences — une forme qui en rate une est écartée</h3>
+    <ol>
+      <li><b>Le plan tenu</b> — celui qui porte aujourd'hui, lisible en un coup d'œil.</li>
+      <li><b>Les plans en réserve</b> — prêts, dessinés comme tels&nbsp;: ni fantômes, ni
+        déchets. Un plan B qui ne se voit pas n'existe pas le jour où il faut y aller.</li>
+      <li><b>Les plans écartés et leur cause</b> — parce que la cause est ce qui se
+        transmet d'un plan au suivant. C'est le cœur de la dictée&nbsp;:
+        <i>anticiper l'adaptation</i>, pas seulement l'échec.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- ② LES TROIS FORMES                                            -->
+<!-- ============================================================= -->
+<section class="etage">
+  <h2 class="etage-titre">② Trois formes — une seule sera bâtie</h2>
+  <p class="etage-quoi">Même projet, mêmes plans, trois langages. Éprouve-les aux trois volumes.</p>
+
+  <div class="bascules" role="group" aria-label="Choix de la forme">
+    <span class="bascule-titre">Forme</span>
+    <button type="button" class="onglet" data-forme="A" aria-pressed="true">A — le chantier</button>
+    <button type="button" class="onglet" data-forme="B" aria-pressed="false">B — la greffe</button>
+    <button type="button" class="onglet" data-forme="C" aria-pressed="false">C — le registre gravé</button>
+  </div>
+
+  <div class="bascules" role="group" aria-label="Volume éprouvé">
+    <span class="bascule-titre">Plans</span>
+    <button type="button" class="onglet" data-volume="1" aria-pressed="false">1 — le début</button>
+    <button type="button" class="onglet" data-volume="3" aria-pressed="true">3 — le réel d'aujourd'hui</button>
+    <button type="button" class="onglet" data-volume="8" aria-pressed="false">8 — le pire cas</button>
+  </div>
+
+  <!-- ---------- FORME A — LE CHANTIER ---------- -->
+  <div class="panneau" id="panneau-A">
+    <div class="cartouche">
+      <svg class="carte-svg" id="svg-a" viewBox="0 0 640 400" role="img"
+           aria-label="Le chantier : le plan tenu est l'assise posée sur le socle, les plans en réserve sont des pierres d'attente, les plans écartés sont des pierres fendues au pied"></svg>
+      <p class="parole" id="parole-a"><span class="parole-repos">Survole une pierre&nbsp;— elle te dit ce qu'elle est.</span></p>
+    </div>
+    <p class="note">Le projet est un ouvrage qui monte depuis <b>la terre</b>. Le plan tenu est
+      <b>l'assise en place</b>&nbsp;; les plans B sont des <b>pierres d'attente</b>, taillées, rangées
+      sur le côté — prêtes à prendre le relais sans qu'on retaille quoi que ce soit&nbsp;; les plans
+      écartés sont des <b>pierres fendues</b> au pied de l'ouvrage, et la fente porte sa cause.</p>
+  </div>
+
+  <!-- ---------- FORME B — LA GREFFE ---------- -->
+  <div class="panneau" id="panneau-B" hidden>
+    <div class="cartouche">
+      <svg class="carte-svg" id="svg-b" viewBox="0 0 640 400" role="img"
+           aria-label="La greffe : un tronc enraciné, la branche qui porte, les moignons secs avec leur cause, et les greffes ligaturées prêtes à pousser"></svg>
+      <p class="parole" id="parole-b"><span class="parole-repos">Survole une branche&nbsp;— elle te dit ce qu'elle est.</span></p>
+    </div>
+    <p class="note">Tes mots, littéralement&nbsp;: <i>« faire pousser une nouvelle branche, même
+      projet »</i>. Le tronc est le projet, enraciné dans la terre&nbsp;; la branche qui <b>porte</b>
+      est feuillue&nbsp;; les plans écartés sont des <b>moignons secs</b> — coupés, cicatrisés, leur
+      cause gravée dessous&nbsp;; les plans B sont des <b>greffes ligaturées</b> au tronc, en attente
+      de pousse. L'arbre ne meurt jamais d'une branche perdue.</p>
+  </div>
+
+  <!-- ---------- FORME C — LE REGISTRE GRAVÉ ---------- -->
+  <div class="panneau" id="panneau-C" hidden>
+    <div class="cartouche">
+      <div class="registre" id="registre-c"></div>
+      <p class="parole" id="parole-c"><span class="parole-repos">Survole une ligne&nbsp;— elle te dit ce qu'elle est.</span></p>
+    </div>
+    <p class="note">Aucun dessin&nbsp;: trois blocs gravés — <b>ce qui porte</b>, <b>ce qui est prêt</b>,
+      <b>ce qui a cassé et pourquoi</b>. C'est la forme la plus solide à fort volume et sur téléphone,
+      et la seule qui donne la cause en toutes lettres sans la réduire à une ligne d'étiquette.</p>
+  </div>
+
+  <div class="mesure" id="mesure" aria-live="polite"></div>
+
+  <div class="cartouche pour-contre">
+    <div>
+      <h4>A — le chantier</h4>
+      <p><b>Pour</b>&nbsp;: l'élément terre est là, et la <b>pierre d'attente</b> dit « prêt » mieux
+        qu'aucun mot. Les trois états se distinguent par la forme, pas par la couleur.<br>
+        <b>Contre</b>&nbsp;: statique. Il montre un état, pas une adaptation en train de se faire.</p>
+    </div>
+    <div>
+      <h4>B — la greffe</h4>
+      <p><b>Pour</b>&nbsp;: la seule qui dessine <b>l'adaptation elle-même</b> — la greffe qui va
+        pousser sur le même tronc. C'est ta phrase, dessinée.<br>
+        <b>Contre</b>&nbsp;: parenté visuelle avec l'arbre de LIANDRA — il faut que la ligne de terre
+        et les ligatures suffisent à les distinguer d'un coup d'œil.</p>
+    </div>
+    <div>
+      <h4>C — le registre gravé</h4>
+      <p><b>Pour</b>&nbsp;: les causes en entier, imbattable en volume et sur téléphone.<br>
+        <b>Contre</b>&nbsp;: ce n'est pas une carte. Tu viens de demander l'inverse pour VRANESH —
+        l'image d'abord.</p>
+    </div>
+  </div>
+
+  <p class="reco"><b>Recommandation de Léo&nbsp;: la forme B, la greffe.</b> C'est la seule des trois
+    qui dessine <i>l'adaptation</i> et pas seulement l'inventaire des plans — or c'est le mot que tu as
+    souligné toi-même. La parenté avec l'arbre de LIANDRA n'est pas un défaut&nbsp;: c'est le même
+    quadrant, et la <b>ligne de terre</b> plus les <b>ligatures</b> les séparent nettement. A est la
+    plus juste sur l'élément terre, mais elle montre un état&nbsp;; C est la plus lisible, mais tu
+    viens de trancher pour l'image d'abord.</p>
+</section>
+
+<script src="preview-thoriol-terre.js"></script>
+</body>
+</html>

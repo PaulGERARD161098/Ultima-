@@ -87,6 +87,30 @@ export default async function handler(req, res) {
     if (req.method === 'PATCH') {
       const body = await readJsonBody(req);
       if (body === null || typeof body !== 'object') return bodyFail(res, body);
+
+      // 0020 — CHANGER LA NATURE d'un thème (direction ↔ construction). C'est
+      // un geste distinct du dénouement, et il n'entraîne AUCUNE suppression :
+      // un thème qui bascule garde tous ses plans, simplement pas encore
+      // qualifiés. Les deux gestes ne se mélangent pas dans un même corps.
+      if ('nature' in body) {
+        if (!isUuid(body.id)) return fail(res, 400, 'Identifiant invalide');
+        const { id: _ignore, ...champs } = body;
+        const nat = validateSituation(champs, 'update');
+        if (nat.error) return fail(res, 400, nat.error);
+        if (!('nature' in nat.value) || Object.keys(nat.value).length !== 1) {
+          return fail(res, 400, 'La nature se change seule');
+        }
+        const { data: majNature, error: erreurNature } = await client
+          .from('situations')
+          .update({ nature: nat.value.nature })
+          .eq('id', body.id)
+          .select('id, nature')
+          .maybeSingle();
+        if (erreurNature) return dbFail(res, erreurNature, 'situations:patch:nature');
+        if (!majNature) return fail(res, 404, 'Situation introuvable');
+        return ok(res, majNature);
+      }
+
       const { value, error } = validateDenouement(body);
       if (error) return fail(res, 400, error);
 
