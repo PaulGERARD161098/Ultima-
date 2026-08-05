@@ -49,6 +49,41 @@
     **mêmes clés Supabase que la production**. Ce qu'on y fait n'est pas un
     essai — c'est écrit dans les vraies données. À dire à Paul chaque fois
     qu'une preview porte un geste destructif.
+  - ✅ **THORIOL EST UNE CONSTRUCTION — la greffe livrée (PR #142).** Dictée de
+    Paul : « THORIOL n'est pas une direction comme LIANDRA, c'est une
+    construction, il correspond à l'élément terre — l'idée c'est de toujours
+    avoir des plans B, et surtout d'anticiper l'adaptation : comment faire
+    pousser une nouvelle branche, même projet. » Trois formes en maquette
+    (`design/preview-thoriol-terre`), **forme B tranchée**. **La forme suit
+    désormais la nature du thème** : `direction` garde l'arbre, `construction`
+    devient la greffe (le tronc enraciné, la branche qui porte, les moignons
+    cicatrisés **avec leur cause**, et les greffes ligaturées — les plans B,
+    prêts et pas encore employés, objet que l'arbre ne savait pas dire).
+    ⚠️ **Point de sécurité** : le dénouement supprime les branches non retenues
+    — sur une construction ce sont les **plans B**, donc il n'est offert nulle
+    part, prouvé par deux assertions d'ABSENCE. Défaut vu **en capture**, pas en
+    relecture.
+  - ✅ **Migrations `0020` + `0021` APPLIQUÉES** (go de Paul), THORIOL basculé en
+    `construction`. **`0021` corrige une faille de `0020` trouvée dans la
+    minute** : `check (cause is null or etat = 'ecarte')` ne refusait RIEN quand
+    `etat` était NULL (l'expression vaut NULL, et un CHECK ne rejette que sur
+    FALSE). Trouvée par une **preuve par le refus** jouée en base juste après
+    l'application — jamais par relecture. Les deux sens éprouvés ensuite, sans
+    laisser une écriture.
+  - ✅ **GATE ADVISORS FERMÉE** (ouverte depuis le 2026-08-01) : Security et
+    Performance **sans aucune alerte** après `0019`, `0020` et `0021`. RLS
+    vérifiée à la main par Paul : active sur `situations`, `scenarios` et
+    `scenario_liens`, **4 policies chacune**.
+  - ✅ **DRAUKHAIN — le retour de la passerelle (PR #140).** `scenario_liens` ne
+    dormait pas (le cadrage du 2026-07-31 le croyait) : elle était **à sens
+    unique**. Un serment montre désormais les futurs qui le *menacent* ou le
+    *servent*, l'advenu en tête. Le constat ⑤ du fil DRAUKHAIN parallèle est
+    donc **périmé et annoté** dans `CADRAGE-IMLADRIK.md`.
+  - ⏳ **À la main de Paul** : ① **qualifier les 3 plans de THORIOL** (lequel
+    porte, lequel attend, lequel a cassé et pourquoi) — sans cette donnée la
+    greffe dessine trois branches en réserve et rien d'autre ; ② l'extraction du
+    `<script>` des **5 maquettes antérieures** (registre du fil DRAUKHAIN) ;
+    ③ déposer une première page sur `/ecrire.html` (MINETHNIR, inchangé).
   - 🔶 **BOUCLE PRÉCÉDENTE, close par ce qui précède — l'image d'abord.** Dictée :
     « quand j'arrive sur VRANESH il faut m'afficher tout de suite LIANDRA et
     THORIOL […] réduire le texte au maximum, maximiser le visuel […] ensuite
