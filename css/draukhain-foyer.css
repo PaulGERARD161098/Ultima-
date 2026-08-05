@@ -58,9 +58,18 @@
   min-height: 300px;
 }
 .foyer-dessin { display: block; width: 100%; height: auto; padding: 0.4rem; }
+/* Le nom du serment ouvert : une LÉGENDE sous le dessin, jamais un calque
+   par-dessus. Il était posé en absolu (`bottom: .5rem`) — il tombait donc
+   exactement sur la mention « braise » du SVG, et un intitulé long (73 signes
+   chez Paul) s'y étalait sur cinq lignes illisibles. En flux normal, la
+   superposition devient IMPOSSIBLE quelle que soit la longueur du nom : on ne
+   corrige pas un chevauchement, on retire ce qui le permettait.
+   Interlettrage adouci (0.14em → 0.08em) : une capitale espacée se lit bien sur
+   trois mots, mal sur trois lignes. */
 .foyer-nom {
-  position: absolute; left: 50%; bottom: 0.5rem; transform: translateX(-50%);
-  margin: 0; font-weight: 700; letter-spacing: 0.14em; color: var(--encre-sepia);
+  margin: 0.2rem auto 0.7rem; max-width: 26rem; padding: 0 0.8rem;
+  text-align: center; line-height: 1.35;
+  font-weight: 700; letter-spacing: 0.08em; color: var(--encre-sepia);
 }
 .foyer-retour {
   position: absolute; left: 0.6rem; top: 0.5rem;

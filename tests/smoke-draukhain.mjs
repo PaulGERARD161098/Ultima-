@@ -1172,6 +1172,86 @@ function mesurerVoute() {
   await page.close();
 }
 
+// ---- ⑧ LE NOM DU SERMENT OUVERT NE RECOUVRE PAS SON DESSIN. ----
+// Défaut RÉEL vu par Paul (2026-08-04, capture) : la légende du foyer était
+// posée en absolu au bas du cadre, exactement là où le SVG écrit « braise — il
+// ne demande qu'un souffle ». Avec un intitulé long (73 signes, un de ses vrais
+// serments), les deux textes se superposaient — illisibles.
+// Le harnais mesurait la géométrie DANS le SVG ; il ne regardait pas ce que le
+// HTML posait PAR-DESSUS. Une mesure qui s'arrête au bord du dessin ne prouve
+// rien de ce qui vient se coucher dessus.
+{
+  const { page, erreurs } = await nouvellePage();
+  await page.addInitScript(scriptFausseSession());
+  const LONG = 'Toujours rechercher la vérité, et avoir la force et le courage de la dire';
+  const FIXTURE_LONG = {
+    ok: true,
+    data: {
+      serments: [
+        { id: 'L1', intitule: LONG, pourquoi: null, horizon: null, nb_flammes: 0, a_raviver: true, created_at: '2026-07-01T10:00:00Z' },
+        { id: 'L2', intitule: 'Ne plus jamais perdre mon calme', pourquoi: null, horizon: null, nb_flammes: 1, a_raviver: false, created_at: '2026-07-02T10:00:00Z' },
+      ],
+      flammes: [{ id: 'Lf1', serment_id: 'L2', nature: 'victoire', texte: 'une victoire', survenu_le: '2026-08-03' }],
+      liens: [], futurs: [],
+    },
+  };
+  await page.route('**/api/serments**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_LONG) }));
+  await page.route('**/api/ideaux**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IDEAUX) }));
+  await page.route('**/api/imladrik**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_PAGES) }));
+
+  await page.goto(`${BASE}/draukhain.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForSelector('#draukhain-voute-dessin .voute-feu', { timeout: 20000 });
+  await page.locator(`.voute-feu[aria-label*="Toujours"]`).click();
+  await page.waitForTimeout(300);
+
+  const foyer = await page.evaluate(() => {
+    const nom = document.getElementById('draukhain-foyer-nom');
+    const svg = document.getElementById('draukhain-foyer-dessin');
+    const cadre = svg.closest('.foyer-cadre');
+    const rn = nom.getBoundingClientRect();
+    const rs = svg.getBoundingClientRect();
+    const rc = cadre.getBoundingClientRect();
+    return {
+      texte: nom.textContent,
+      surLeDessin: rn.left < rs.right && rs.left < rn.right && rn.top < rs.bottom && rs.top < rn.bottom,
+      dansLeCadre: rn.left >= rc.left - 1 && rn.right <= rc.right + 1
+        && rn.top >= rc.top - 1 && rn.bottom <= rc.bottom + 1,
+    };
+  });
+  verifier('Foyer : le nom du serment ouvert est ENTIER',
+    foyer.texte === 'Toujours rechercher la vérité, et avoir la force et le courage de la dire',
+    foyer.texte);
+  verifier('Foyer : le nom NE RECOUVRE PAS le dessin (défaut vu par Paul)',
+    foyer.surLeDessin === false);
+  verifier('Foyer : le nom reste dans le cadre', foyer.dansLeCadre);
+
+  // Le clic ne peint aucun anneau (il désigne déjà) ; le CLAVIER en reçoit un.
+  const apresClic = await page.locator('.voute-feu[aria-pressed="true"]')
+    .evaluate((el) => getComputedStyle(el).outlineStyle);
+  verifier('Voûte : aucun anneau noir après un clic (défaut vu par Paul)',
+    apresClic === 'none', apresClic);
+  // Chromium n'accorde `:focus-visible` que si la DERNIÈRE interaction fut au
+  // clavier — un `.focus()` posé juste après un clic n'y a pas droit. On frappe
+  // donc une touche d'abord : c'est le vrai scénario du clavier, pas un artifice.
+  await page.keyboard.press('Tab');
+  const auClavier = await page.locator('.voute-feu').first().evaluate((el) => {
+    el.focus();
+    const cs = getComputedStyle(el);
+    return { style: cs.outlineStyle, largeur: cs.outlineWidth, focusVisible: el.matches(':focus-visible') };
+  });
+  verifier('Voûte : le clavier, lui, reçoit un anneau visible',
+    auClavier.focusVisible && auClavier.style === 'solid' && parseFloat(auClavier.largeur) >= 2,
+    JSON.stringify(auClavier));
+
+  verifier('Zéro erreur console (nom long)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
+  await page.screenshot({ path: `${CAPTURES}/draukhain-nom-long.png`, fullPage: true });
+  await page.close();
+}
+
+
 // ---- ⑦ La couronne de la voûte, fonction PURE. ----
 {
   const { page } = await nouvellePage({ configVide: true });

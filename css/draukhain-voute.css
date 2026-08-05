@@ -51,8 +51,18 @@
 .voute-nom { font-size: 12px; letter-spacing: 0.04em; }
 .voute-zone { fill: transparent; cursor: pointer; }
 .voute-feu { transition: opacity 0.18s ease; }
-.voute-feu:focus-visible { outline: none; }
-.voute-feu:focus-visible .voute-nom { text-decoration: underline; }
+/* Le focus, dans le bon ordre — c'est la nuance qui manquait, et Paul l'a vue :
+   au CLIC, le navigateur peignait son rectangle noir (`:focus`), que la règle
+   précédente ne visait pas puisqu'elle ne parlait qu'à `:focus-visible`. Un
+   clic désigne déjà ce qu'il vise : il n'a besoin d'aucun anneau. Le CLAVIER,
+   lui, en a absolument besoin — et il le reçoit au registre d'Ultima, l'anneau
+   bleu des boutons du site. On ne masque jamais un indicateur de focus utile ;
+   on retire celui qui ne sert personne. */
+.voute-feu:focus { outline: none; }
+.voute-feu:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
 /* Un serment visé : les autres reculent, aucun ne disparaît. */
 .voute-dessin.a-choix .voute-feu { opacity: 0.3; }
 .voute-dessin.a-choix .voute-feu.is-actif { opacity: 1; }
