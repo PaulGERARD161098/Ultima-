@@ -60,6 +60,10 @@ echo "=== unit-imladrik-passerelles.mjs ==="
 node unit-imladrik-passerelles.mjs
 echo "=== unit-registre-lv3.mjs ==="
 node unit-registre-lv3.mjs
+echo "=== unit-althea-progression.mjs ==="
+node unit-althea-progression.mjs
+echo "=== unit-althea-validate.mjs ==="
+node unit-althea-validate.mjs
 
 # 3. Serveur statique sur la racine du repo.
 (cd .. && python3 -m http.server 8123 >/dev/null 2>&1) &
@@ -68,7 +72,7 @@ trap 'kill $SERVEUR 2>/dev/null || true' EXIT
 sleep 1
 
 # 4. Les harnais navigateur (chacun sort en erreur si un verdict échoue).
-for h in smoke-ecrire.mjs smoke-boussole.mjs smoke-alpha.mjs smoke-tao.mjs smoke-console.mjs smoke-quadrants.mjs smoke-idees.mjs smoke-abaque.mjs smoke-reshiram.mjs smoke-zekrom.mjs smoke-imladrik.mjs smoke-imladrik-carto.mjs smoke-draukhain.mjs smoke-vranesh.mjs smoke-leo-accueil.mjs smoke-intendant.mjs smoke-flux-fiche.mjs smoke-accueil.mjs smoke-accueil-etats.mjs smoke-connexion.mjs smoke-contacts.mjs smoke-secteur.mjs smoke-dictee.mjs smoke-geocode.mjs smoke-recherche.mjs smoke-antique.mjs smoke-arbre.mjs; do
+for h in smoke-ecrire.mjs smoke-boussole.mjs smoke-alpha.mjs smoke-tao.mjs smoke-console.mjs smoke-quadrants.mjs smoke-idees.mjs smoke-abaque.mjs smoke-reshiram.mjs smoke-zekrom.mjs smoke-imladrik.mjs smoke-imladrik-carto.mjs smoke-draukhain.mjs smoke-vranesh.mjs smoke-leo-accueil.mjs smoke-intendant.mjs smoke-flux-fiche.mjs smoke-accueil.mjs smoke-accueil-etats.mjs smoke-connexion.mjs smoke-contacts.mjs smoke-secteur.mjs smoke-dictee.mjs smoke-geocode.mjs smoke-recherche.mjs smoke-antique.mjs smoke-arbre.mjs smoke-althea.mjs; do
   echo "=== $h ==="
   node "$h"
 done
