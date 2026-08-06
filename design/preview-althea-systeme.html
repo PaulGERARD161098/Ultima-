@@ -129,8 +129,15 @@ body {
   color: var(--parch);
   margin: 0;
 }
+.identite .cle-titre {
+  margin: 8px 0 0;
+  font-size: .68rem;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--parch-bas);
+}
 .identite .titre {
-  margin: 4px 0 14px;
+  margin: 1px 0 14px;
   font-size: 1.05rem;
   font-style: italic;
   color: var(--or);
@@ -450,6 +457,42 @@ body {
 .aptitudes p { margin: 0; }
 .aptitudes p + p { margin-top: 8px; }
 
+/* ── LES TROIS VITRUVE — propositions d'avatar. Chacune est montrée DEUX fois :
+      à sa taille réelle (132 px, celle de la fiche) et agrandie. Un sceau se
+      juge à la taille où il sera vu, pas à la taille où il est beau. ── */
+.propals { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 22px; }
+@media (max-width: 860px) { .propals { grid-template-columns: 1fr; } }
+.propal { border: 1px solid var(--trait); background: var(--nuit-2); padding: 16px; }
+.propal h4 {
+  margin: 0 0 4px; font-size: .72rem; letter-spacing: .24em;
+  text-transform: uppercase; color: var(--or); font-weight: normal;
+}
+.propal .quoi { margin: 0 0 14px; font-size: .82rem; color: var(--parch-bas); min-height: 3.4em; }
+.propal .duo { display: flex; align-items: center; gap: 16px; }
+.propal .grand { width: 200px; height: 200px; flex: 0 0 200px; }
+.propal .vrai  { width: 66px; height: 66px; flex: 0 0 66px; }
+.legende-apt { list-style: none; margin: 14px 0 0; padding: 0;
+  display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.legende-apt li { font-size: .76rem; color: var(--or); letter-spacing: .06em; }
+.legende-apt b { color: var(--parch-bas); font-weight: normal; }
+.propal .taille { font-size: .64rem; letter-spacing: .16em; text-transform: uppercase; color: var(--parch-bas); }
+.vitruve .cadre  { fill: none; stroke: var(--spectre-f); stroke-width: 1; }
+.vitruve .corps  { fill: none; stroke: var(--or); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.vitruve .corps-fin { fill: none; stroke: var(--or); stroke-width: 1.4; stroke-linecap: round; }
+.vitruve .noeud  { fill: var(--spectre); }
+.vitruve .halo   { fill: none; stroke: var(--spectre); stroke-width: 1; opacity: .55; }
+
+/* ── LES APTITUDES — proposition. Elles ne se cochent pas : elles se DÉRIVENT
+      des skills tenus. D'où la barre pleine et l'absence de case. ── */
+.aptitude { display: grid; grid-template-columns: 132px 1fr auto; gap: 14px;
+  align-items: center; padding: 9px 0; border-top: 1px solid var(--trait); }
+.aptitude:first-of-type { border-top: 0; }
+.aptitude .nom-apt { font-size: .84rem; letter-spacing: .18em; text-transform: uppercase; color: var(--or); }
+.aptitude .barre { height: 5px; background: var(--trait); }
+.aptitude .barre i { display: block; height: 5px; background: var(--or); }
+.aptitude .val-apt { font-size: .82rem; color: var(--parch); min-width: 2.4em; text-align: right; }
+.aptitude .source { grid-column: 1 / -1; font-size: .74rem; color: var(--parch-bas); margin-top: 2px; }
+
 /* ───────────────────────── ⑥ l'écran d'accueil ───────────────────────── */
 .accueil { display: flex; align-items: center; gap: 18px; margin-top: 18px; }
 .icone {
@@ -518,58 +561,41 @@ body {
 
   <section class="systeme spectral">
     <div class="fiche">
-      <svg class="avatar" viewBox="0 0 120 120" role="img"
-           aria-label="Sceau du personnage : un homme de profil, tourné vers un horizon lointain">
-        <circle cx="60" cy="60" r="55" fill="none" stroke="var(--or-sourd)" stroke-width="1"/>
-        <circle cx="60" cy="60" r="49" fill="var(--nuit-2)" stroke="var(--or)" stroke-width="1.5"/>
-        <clipPath id="medaillon"><circle cx="60" cy="60" r="48"/></clipPath>
-        <!-- L’HORIZON — ce que Farsight regarde. Tracé AVANT la figure : le buste
-             est rempli de la couleur du fond, il masque donc la ligne qu’il
-             traverse, comme dans une gravure. -->
-        <g stroke="var(--spectre-f)" fill="none" opacity=".9">
-          <path d="M14 71 H106" stroke-width="1"/>
-          <path d="M78 71 l10 -13 l7 8 l5 -6 l6 11" stroke-width="1" stroke-linejoin="round"/>
-        </g>
-        <circle cx="97" cy="45" r="1.8" fill="var(--spectre)"/>
-        <path d="M97 40 v-4 M97 50 v4 M92 45 h-4 M102 45 h4"
-              stroke="var(--spectre)" stroke-width=".7" opacity=".7"/>
-
-        <!-- LA FIGURE — profil droit, tracé continu, gravure au trait. -->
-        <g fill="var(--nuit-2)" stroke="var(--or)" stroke-width="1.7"
-           stroke-linecap="round" stroke-linejoin="round" clip-path="url(#medaillon)">
-          <path d="M24 118 C26 92 43 82 55 81 L58 74
-                   C50 73 45 68 43 60
-                   C41 44 48 30 61 29
-                   C73 28 79 37 78 47
-                   L84 58 C85 60 84 61 81 61
-                   C78 61 77 62 77 64
-                   C78 66 78 67 76 68
-                   C78 70 78 73 75 75
-                   C71 77 68 77 65 76
-                   L64 81 C77 82 94 92 96 118 Z"/>
-        </g>
-        <g fill="none" stroke="var(--or)" stroke-linecap="round" clip-path="url(#medaillon)">
-          <!-- la chevelure, en mèches gravées -->
-          <path d="M44 50 C43 34 51 27 62 27 C72 27 78 34 78 42" stroke-width="1.5"/>
-          <path d="M47 42 l6 -8 M55 36 l5 -7 M64 33 l5 -6 M71 34 l4 -4" stroke-width=".9"/>
-          <!-- l’œil qui vise loin, et le sourcil -->
-          <path d="M66 49 q4 -2 7 1" stroke-width="1.2"/>
-          <path d="M65 44 q5 -2 9 1" stroke-width="1.1"/>
-          <!-- l’oreille -->
-          <path d="M55 55 q5 -2 5 4 q0 4 -4 4" stroke-width="1.1"/>
-          <!-- le col -->
-          <path d="M55 81 l5 8 l4 -8" stroke-width="1.3"/>
-        </g>
-        <circle cx="69.5" cy="50" r="1.4" fill="var(--or)"/>
-      </svg>
+      <svg class="avatar vitruve" viewBox="0 0 120 120" role="img"
+             aria-label="Vitruve spectral : la figure en segments, ses cinq aptitudes en nœuds de lumière">
+          <circle cx="60" cy="60" r="55" fill="none" stroke="var(--or-sourd)" stroke-width="1"/>
+          <circle cx="60" cy="60" r="49" fill="var(--nuit-2)" stroke="var(--or)" stroke-width="1.2"/>
+          <rect class="cadre" x="26" y="28" width="68" height="68"/>
+          <circle class="cadre" cx="60" cy="64" r="33"/>
+          <g class="corps-fin">
+            <path d="M60 42 L32 34 M60 42 L88 34"/>
+            <path d="M60 68 L36 94 M60 68 L84 94"/>
+          </g>
+          <g class="corps">
+            <circle cx="60" cy="32" r="6.5" fill="none"/>
+            <path d="M60 39 V68"/>
+            <path d="M30 50 L60 45 L90 50"/>
+            <path d="M60 68 L47 96 M60 68 L73 96"/>
+          </g>
+          <!-- LES CINQ NŒUDS : une aptitude par point du corps -->
+          <g>
+            <!-- une aptitude par point du corps, dans l'ordre où on les lit :
+                 tête, poitrine, cœur, ventre, membres. -->
+            <circle class="halo" cx="60" cy="32" r="9"/><circle class="noeud" cx="60" cy="32" r="2.6"/>
+            <circle class="halo" cx="60" cy="44" r="6"/><circle class="noeud" cx="60" cy="44" r="2.1"/>
+            <circle class="halo" cx="60" cy="54" r="6"/><circle class="noeud" cx="60" cy="54" r="2.1"/>
+            <circle class="halo" cx="60" cy="66" r="5.5"/><circle class="noeud" cx="60" cy="66" r="2"/>
+            <circle class="halo" cx="54" cy="81" r="6"/><circle class="noeud" cx="54" cy="81" r="2.1"/>
+          </g>
+        </svg>
       <div class="identite">
         <p class="nom">Paul Gerard</p>
+        <p class="cle-titre">Titre</p>
         <p class="titre">Farsight — celui qui voit loin</p>
         <div class="stats">
           <div class="stat"><span class="cle">Niveau</span><span class="val">48</span></div>
-          <div class="stat"><span class="cle">Élan</span><span class="val">12 <small>jours</small></span></div>
-          <div class="stat"><span class="cle">Meilleur élan</span><span class="val">41 <small>jours</small></span></div>
           <div class="stat"><span class="cle">Skills tenus</span><span class="val">3 <small>/ 5</small></span></div>
+          <div class="stat"><span class="cle">Aptitudes</span><span class="val">5</span></div>
         </div>
       </div>
     </div>
@@ -778,14 +804,50 @@ body {
           </ul>
         </div>
 
-        <p class="bloc-titre">Les aptitudes</p>
-        <div class="aptitudes">
-          <p><strong style="color:var(--parch)">À définir avec toi.</strong> Tu as
-          annoncé un second registre après les skills — je ne l'invente pas.</p>
-          <p>Ce que j'ai besoin de savoir : <em>une aptitude, c'est quoi par rapport
-          à un skill ?</em> Une capacité de fond qui ne se coche pas (force,
-          souffle, mémoire, sang-froid) et que les skills font monter ? Ou autre
-          chose ? Dis-le-moi et je la cadre.</p>
+        <p class="bloc-titre">Les aptitudes — proposition</p>
+        <div class="releve">
+          <p style="margin:0 0 12px;font-size:.88rem;color:var(--parch)">
+          <strong style="color:var(--or)">Un skill se tient. Une aptitude se dérive.</strong>
+          Tu ne coches jamais une aptitude : elle monte toute seule, à mesure que
+          les skills qui la nourrissent sont tenus. C'est ce que ton corps vaut,
+          pas ce que tu as fait hier.</p>
+
+          <div class="aptitude">
+            <span class="nom-apt">Esprit</span>
+            <span class="barre"><i style="width:71%"></i></span>
+            <span class="val-apt">71</span>
+            <span class="source">la tête — nourrie par TRADUCTEUR</span>
+          </div>
+          <div class="aptitude">
+            <span class="nom-apt">Volonté</span>
+            <span class="barre"><i style="width:58%"></i></span>
+            <span class="val-apt">58</span>
+            <span class="source">le cœur — nourrie par CONSTANCE</span>
+          </div>
+          <div class="aptitude">
+            <span class="nom-apt">Vigueur</span>
+            <span class="barre"><i style="width:46%"></i></span>
+            <span class="val-apt">46</span>
+            <span class="source">les membres — nourrie par PEAK PERFORMANCE</span>
+          </div>
+          <div class="aptitude">
+            <span class="nom-apt">Souffle</span>
+            <span class="barre"><i style="width:20%"></i></span>
+            <span class="val-apt">20</span>
+            <span class="source">la poitrine — nourrie par PIEDS LÉGERS</span>
+          </div>
+          <div class="aptitude">
+            <span class="nom-apt">Racine</span>
+            <span class="barre"><i style="width:33%"></i></span>
+            <span class="val-apt">33</span>
+            <span class="source">le ventre — nourrie par OMNIVORE</span>
+          </div>
+
+          <p style="margin:14px 0 0;font-size:.8rem;color:var(--parch-bas)">
+          Cinq aptitudes, cinq points du corps de Vitruve — c'est pour ça que
+          l'avatar C les porte. <strong style="color:var(--parch)">Chiffres
+          illustratifs</strong> : la formule exacte (comment un skill tenu fait
+          monter son aptitude) reste à trancher avec toi.</p>
         </div>
 
         <p class="bloc-titre">Sur l'écran d'accueil</p>
@@ -797,6 +859,170 @@ body {
           la notification ne nomme jamais un geste.</p>
         </div>
       </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════ L'AVATAR — trois propositions ═══════════ -->
+  <h2 class="forme-titre">L'avatar — <em>trois Vitruve</em></h2>
+  <p class="forme-note">Chacune est montrée à <strong>sa taille réelle</strong> (celle
+  de la fiche) et agrandie : un sceau se juge à la taille où il sera vu, pas à celle
+  où il est beau. Le cercle et le carré sont en bleu spectral — ce sont des tracés
+  du Système ; le corps reste en or, parce que c'est ce que tu as gagné.</p>
+
+  <section class="systeme spectral">
+    <div class="propals">
+
+      <div class="propal">
+        <h4>A — le Vitruve fidèle</h4>
+        <p class="quoi">Les deux poses superposées, comme chez Léonard. Le plus
+        savant, le plus chargé — et c'est là son risque à 66 px.</p>
+        <div class="duo">
+          <svg class="vitruve grand" viewBox="0 0 120 120" role="img"
+             aria-label="Vitruve fidèle : la figure aux deux poses, dans le cercle et le carré">
+          <circle cx="60" cy="60" r="55" fill="none" stroke="var(--or-sourd)" stroke-width="1"/>
+          <circle cx="60" cy="60" r="49" fill="var(--nuit-2)" stroke="var(--or)" stroke-width="1.2"/>
+          <rect class="cadre" x="24" y="26" width="72" height="72"/>
+          <circle class="cadre" cx="60" cy="66" r="34"/>
+          <g class="corps-fin">
+            <!-- la pose écartée : bras levés, jambes ouvertes -->
+            <path d="M60 44 L32 32 M60 44 L88 32"/>
+            <path d="M60 74 L38 96 M60 74 L82 96"/>
+          </g>
+          <g class="corps">
+            <circle cx="60" cy="35" r="7" fill="none"/>
+            <path d="M60 42 V74"/>
+            <!-- la pose droite : bras à l'horizontale, jambes jointes -->
+            <path d="M26 48 H94"/>
+            <path d="M60 74 L52 99 M60 74 L68 99"/>
+          </g>
+        </svg>
+          <div><svg class="vitruve vrai" viewBox="0 0 120 120" role="img"
+             aria-label="Vitruve fidèle : la figure aux deux poses, dans le cercle et le carré">
+          <circle cx="60" cy="60" r="55" fill="none" stroke="var(--or-sourd)" stroke-width="1"/>
+          <circle cx="60" cy="60" r="49" fill="var(--nuit-2)" stroke="var(--or)" stroke-width="1.2"/>
+          <rect class="cadre" x="24" y="26" width="72" height="72"/>
+          <circle class="cadre" cx="60" cy="66" r="34"/>
+          <g class="corps-fin">
+            <!-- la pose écartée : bras levés, jambes ouvertes -->
+            <path d="M60 44 L32 32 M60 44 L88 32"/>
+            <path d="M60 74 L38 96 M60 74 L82 96"/>
+          </g>
+          <g class="corps">
+            <circle cx="60" cy="35" r="7" fill="none"/>
+            <path d="M60 42 V74"/>
+            <!-- la pose droite : bras à l'horizontale, jambes jointes -->
+            <path d="M26 48 H94"/>
+            <path d="M60 74 L52 99 M60 74 L68 99"/>
+          </g>
+        </svg><p class="taille">taille réelle</p></div>
+        </div>
+      </div>
+
+      <div class="propal">
+        <h4>B — le Vitruve épuré</h4>
+        <p class="quoi">Une seule pose, trait épais, presque un pictogramme. Le plus
+        lisible en petit — et le moins reconnaissable comme Vitruve.</p>
+        <div class="duo">
+          <svg class="vitruve grand" viewBox="0 0 120 120" role="img"
+             aria-label="Vitruve épuré : une seule pose, dans le cercle et le carré">
+          <circle cx="60" cy="60" r="55" fill="none" stroke="var(--or-sourd)" stroke-width="1"/>
+          <circle cx="60" cy="60" r="49" fill="var(--nuit-2)" stroke="var(--or)" stroke-width="1.2"/>
+          <rect class="cadre" x="26" y="28" width="68" height="68"/>
+          <circle class="cadre" cx="60" cy="64" r="33"/>
+          <g class="corps">
+            <circle cx="60" cy="36" r="8" fill="none"/>
+            <path d="M60 44 V72"/>
+            <path d="M28 52 L60 47 L92 52"/>
+            <path d="M60 72 L44 97 M60 72 L76 97"/>
+          </g>
+        </svg>
+          <div><svg class="vitruve vrai" viewBox="0 0 120 120" role="img"
+             aria-label="Vitruve épuré : une seule pose, dans le cercle et le carré">
+          <circle cx="60" cy="60" r="55" fill="none" stroke="var(--or-sourd)" stroke-width="1"/>
+          <circle cx="60" cy="60" r="49" fill="var(--nuit-2)" stroke="var(--or)" stroke-width="1.2"/>
+          <rect class="cadre" x="26" y="28" width="68" height="68"/>
+          <circle class="cadre" cx="60" cy="64" r="33"/>
+          <g class="corps">
+            <circle cx="60" cy="36" r="8" fill="none"/>
+            <path d="M60 44 V72"/>
+            <path d="M28 52 L60 47 L92 52"/>
+            <path d="M60 72 L44 97 M60 72 L76 97"/>
+          </g>
+        </svg><p class="taille">taille réelle</p></div>
+        </div>
+      </div>
+
+      <div class="propal">
+        <h4>C — le Vitruve des aptitudes</h4>
+        <p class="quoi">La figure porte <strong>tes cinq aptitudes</strong> en nœuds
+        de lumière : tête, cœur, ventre, jambes, poitrine. Ton avatar devient la
+        carte de ce que tu vaux. <em>Recommandation de Léo.</em></p>
+        <div class="duo">
+          <svg class="vitruve grand" viewBox="0 0 120 120" role="img"
+             aria-label="Vitruve spectral : la figure en segments, ses cinq aptitudes en nœuds de lumière">
+          <circle cx="60" cy="60" r="55" fill="none" stroke="var(--or-sourd)" stroke-width="1"/>
+          <circle cx="60" cy="60" r="49" fill="var(--nuit-2)" stroke="var(--or)" stroke-width="1.2"/>
+          <rect class="cadre" x="26" y="28" width="68" height="68"/>
+          <circle class="cadre" cx="60" cy="64" r="33"/>
+          <g class="corps-fin">
+            <path d="M60 42 L32 34 M60 42 L88 34"/>
+            <path d="M60 68 L36 94 M60 68 L84 94"/>
+          </g>
+          <g class="corps">
+            <circle cx="60" cy="32" r="6.5" fill="none"/>
+            <path d="M60 39 V68"/>
+            <path d="M30 50 L60 45 L90 50"/>
+            <path d="M60 68 L47 96 M60 68 L73 96"/>
+          </g>
+          <!-- LES CINQ NŒUDS : une aptitude par point du corps -->
+          <g>
+            <!-- une aptitude par point du corps, dans l'ordre où on les lit :
+                 tête, poitrine, cœur, ventre, membres. -->
+            <circle class="halo" cx="60" cy="32" r="9"/><circle class="noeud" cx="60" cy="32" r="2.6"/>
+            <circle class="halo" cx="60" cy="44" r="6"/><circle class="noeud" cx="60" cy="44" r="2.1"/>
+            <circle class="halo" cx="60" cy="54" r="6"/><circle class="noeud" cx="60" cy="54" r="2.1"/>
+            <circle class="halo" cx="60" cy="66" r="5.5"/><circle class="noeud" cx="60" cy="66" r="2"/>
+            <circle class="halo" cx="54" cy="81" r="6"/><circle class="noeud" cx="54" cy="81" r="2.1"/>
+          </g>
+        </svg>
+          <div><svg class="vitruve vrai" viewBox="0 0 120 120" role="img"
+             aria-label="Vitruve spectral : la figure en segments, ses cinq aptitudes en nœuds de lumière">
+          <circle cx="60" cy="60" r="55" fill="none" stroke="var(--or-sourd)" stroke-width="1"/>
+          <circle cx="60" cy="60" r="49" fill="var(--nuit-2)" stroke="var(--or)" stroke-width="1.2"/>
+          <rect class="cadre" x="26" y="28" width="68" height="68"/>
+          <circle class="cadre" cx="60" cy="64" r="33"/>
+          <g class="corps-fin">
+            <path d="M60 42 L32 34 M60 42 L88 34"/>
+            <path d="M60 68 L36 94 M60 68 L84 94"/>
+          </g>
+          <g class="corps">
+            <circle cx="60" cy="32" r="6.5" fill="none"/>
+            <path d="M60 39 V68"/>
+            <path d="M30 50 L60 45 L90 50"/>
+            <path d="M60 68 L47 96 M60 68 L73 96"/>
+          </g>
+          <!-- LES CINQ NŒUDS : une aptitude par point du corps -->
+          <g>
+            <!-- une aptitude par point du corps, dans l'ordre où on les lit :
+                 tête, poitrine, cœur, ventre, membres. -->
+            <circle class="halo" cx="60" cy="32" r="9"/><circle class="noeud" cx="60" cy="32" r="2.6"/>
+            <circle class="halo" cx="60" cy="44" r="6"/><circle class="noeud" cx="60" cy="44" r="2.1"/>
+            <circle class="halo" cx="60" cy="54" r="6"/><circle class="noeud" cx="60" cy="54" r="2.1"/>
+            <circle class="halo" cx="60" cy="66" r="5.5"/><circle class="noeud" cx="60" cy="66" r="2"/>
+            <circle class="halo" cx="54" cy="81" r="6"/><circle class="noeud" cx="54" cy="81" r="2.1"/>
+          </g>
+        </svg><p class="taille">taille réelle</p></div>
+        </div>
+        <ul class="legende-apt">
+          <li><b>tête</b> — Esprit</li>
+          <li><b>poitrine</b> — Souffle</li>
+          <li><b>cœur</b> — Volonté</li>
+          <li><b>ventre</b> — Racine</li>
+          <li><b>membres</b> — Vigueur</li>
+        </ul>
+      </div>
+
     </div>
   </section>
 
@@ -820,13 +1046,13 @@ body {
         <circle cx="60" cy="24" r="3.4" fill="var(--verrou)"/>
       </svg>
       <div class="identite">
-        <p class="nom">Le Voyageur</p>
+        <p class="nom">Paul Gerard</p>
+        <p class="cle-titre">Titre</p>
         <p class="titre">En dette</p>
         <div class="stats">
-          <div class="stat"><span class="cle">Niveau</span><span class="val">7</span></div>
-          <div class="stat"><span class="cle">Élan</span><span class="val">12 <small>jours</small></span></div>
-          <div class="stat"><span class="cle">Meilleur élan</span><span class="val">41 <small>jours</small></span></div>
-          <div class="stat"><span class="cle">Titres</span><span class="val">3 <small>/ 7, suspendus</small></span></div>
+          <div class="stat"><span class="cle">Niveau</span><span class="val">48</span></div>
+          <div class="stat"><span class="cle">Skills tenus</span><span class="val">1 <small>/ 5</small></span></div>
+          <div class="stat"><span class="cle">Titres</span><span class="val">3 <small>, suspendus</small></span></div>
         </div>
       </div>
     </div>

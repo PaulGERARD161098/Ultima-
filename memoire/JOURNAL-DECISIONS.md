@@ -1855,3 +1855,40 @@
     personne n'aurait vu : le nom du cap Nord sur deux lignes **sortait du cadre
     de 3 px** — le SVG écrête **en silence**. *L'œil de Paul a trouvé le
     symptôme ; seule la mesure a trouvé les deux causes.*
+
+- **2026-08-06 (ALTHEA — Vitruve, et les aptitudes qui trouvent leur place)** —
+  Paul dicte quatre ajustements : **avatar en homme de Vitruve schématisé**
+  (« fais-moi des propals ») · **enlever les élans** de la fiche · **ajouter les
+  aptitudes** · **étiqueter le titre** avant Farsight.
+  - 🔻 **LA TROUVAILLE DE LA DICTÉE — Vitruve EST une carte du corps.** Les deux
+    demandes (l'avatar et les aptitudes) sont arrivées dans la même phrase, et
+    elles se répondent : **l'avatar devient la carte des aptitudes.** Cinq nœuds
+    de lumière sur la figure — tête, poitrine, cœur, ventre, membres — chacun
+    brillant à la mesure de l'aptitude qui y siège. *Le sceau du personnage
+    cesse d'être une illustration : il devient un instrument de lecture.*
+    Trois propositions maquettées (A fidèle, B épuré, **C des aptitudes**, reco).
+  - **Les cinq aptitudes proposées**, une par skill : **ESPRIT** (tête ←
+    Traducteur) · **SOUFFLE** (poitrine ← Pieds légers) · **VOLONTÉ** (cœur ←
+    Constance) · **RACINE** (ventre ← Omnivore) · **VIGUEUR** (membres ← Peak
+    performance). **Règle qui les distingue des skills : un skill se TIENT, une
+    aptitude se DÉRIVE.** Aucune case à cocher, aucune cadence, aucune quête —
+    elle monte toute seule. Aucune valeur stockée : dérivée, comme le niveau et
+    la dette.
+  - 🔻 **La seule chose d'ALTHEA qui ait le droit de BAISSER.** Position posée :
+    une aptitude descend, **lentement**. Ce n'est pas une entorse à « l'acquis ne
+    se perd jamais » — c'est sa contrepartie exacte : *le rang dit ce que tu as
+    FAIT (jamais perdu), l'aptitude dit ce que tu VAUX aujourd'hui.* Un corps
+    qui ne court plus perd son souffle ; il ne perd pas les kilomètres courus.
+  - 🔻 **Défaut trouvé à la mesure, et sa leçon** : la proposition C portait ses
+    libellés **dans** le médaillon — ils se posaient sur le carré et sur le
+    corps, et « SOUFFLE » **sortait du cadre de 21 px**. Sortis du dessin.
+    *Un médaillon de 66 px ne porte pas de texte* — et chaque proposition est
+    désormais montrée **à sa taille réelle ET agrandie** : **un sceau se juge à
+    la taille où il sera vu, pas à celle où il est beau.** Règle à réemployer
+    pour tout blason d'Ultima.
+  - **Les élans quittent la fiche**, sans quitter le jeu : l'élan reste au niveau
+    du **skill**, où il a un sens. La fiche porte Niveau · Skills tenus ·
+    Aptitudes.
+  - **Lecture incertaine signalée, non devinée** : « le titre avant Farsight » lu
+    comme *étiqueter la ligne* (clé TITRE au-dessus). Si Paul voulait un titre
+    porté antérieur à Farsight, c'est à corriger.
