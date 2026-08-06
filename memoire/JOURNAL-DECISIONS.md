@@ -1755,3 +1755,51 @@
   - **Séquencement acté en CINQ boucles** (B1 le personnage et ses skills · B2
     le journal des quêtes · B3 la composition par Léo · B4 l'interpellation ·
     B5 le widget), parce que les vouloir ensemble, c'est n'en finir aucune.
+
+- **2026-08-06 (ALTHEA — les cinq arbitrages qui ferment B0)** — Paul tranche :
+  **forme B** (le Système spectral) · **Léo pilote le Système** · **ALTHEA est
+  autonome** · **les skills viennent de Paul OU de Léo en récompense de quête**
+  · **endormissement + un peu de sévérité** · **3ᵉ cadran d'ULTIMA Lv3**.
+  Cadrage mis à jour, maquette passée en forme unique. B0 **CLOS**.
+  - 🔻 **DEUX réponses sur cinq ont CORRIGÉ le cadrage au lieu de le
+    confirmer** — et ce sont les deux qui comptent.
+    ① **« On garde Léo dans le Système, c'est Léo qui pilote. »** J'avais sauvé
+    le principe de l'agent unique en faisant du Système un **instrument**
+    impersonnel. Correct sur le fond, **incomplet** : Paul veut Léo **visible et
+    aux commandes**, pas cachée derrière une machine. Il écrit lui-même « Léo
+    (le système) ». Formulation retenue : **le Système, c'est Léo en tenue de
+    jeu** — deux registres de parole (elle *conseille* dans son cartouche, elle
+    *proclame* entre crochets), **une seule voix**. Conséquence d'écran : le
+    cartouche de Léo est **obligatoire** dans ALTHEA.
+    ② **« Je ne veux pas forcément de liens avec le reste d'Ultima : c'est un
+    jeu pour la vie quotidienne, très réel et concret. »** J'avais résolu la
+    collision « quête principale vs ZEKROM/DRAUKHAIN » par **un lien** (la
+    quête référence un idéal). Paul choisit l'inverse : **l'autonomie**. La
+    frontière tient désormais par la **nature** de ce qu'on y met, pas par une
+    référence — **test d'appartenance : est-ce que ça se coche un soir ?** Si ça
+    se médite, c'est ailleurs. Colonnes `ideal_id`/`serment_id` supprimées.
+    *Bénéfice non cherché et considérable : **ALTHEA devient livrable seul**,
+    sans qu'aucun autre quadrant n'ait à bouger.*
+  - 🔻 **LA SÉVÉRITÉ — « ok pour l'endormissement, mais aussi un peu de
+    sévérité si je rate trop souvent ».** Le défi : mordre sans violer « le
+    silence n'est pas une faute ». **La ligne qui rend les deux compatibles :
+    la sévérité ne vient JAMAIS du Système, elle vient d'un engagement que Paul
+    a pris.** On ne peut manquer que ce qu'on a **accepté**. Mécanisme : **LE
+    GEL** — trois quêtes acceptées puis laissées (ni reprises ni rangées) et le
+    Système se ferme : plus aucune quête proposée (*on ne charge pas une table
+    déjà pleine*), le titre **suspendu** et remplacé par **« En dette »**, la
+    lumière qui tombe. **Rien n'est perdu** : rangs, jours nourris, élan, skills
+    débloqués, titres obtenus — intacts. Le gel **touche l'ornement et le flux,
+    jamais l'acquis**, et se lève en un geste par quête. *Une sanction dont on
+    ne peut pas sortir n'est pas une sanction : c'est une raison d'arrêter de
+    jouer.*
+  - **L'origine des skills règle un faux bloquant** : puisque Léo peut en offrir
+    en récompense, **la liste de départ n'a plus besoin d'être complète**. Quatre
+    skills suffisent, **le reste se gagne**. Un skill offert est la plus forte
+    récompense du jeu : elle ne se consomme pas, elle **ouvre**.
+  - 🔻 **Piège de modèle évité** : la tentation d'une colonne `dette` sur
+    l'avatar. Un compteur stocké se désynchronise — et ici il se
+    désynchroniserait **en punissant** (gelé sans raison, ou dégelé à tort).
+    La dette et le gel sont **entièrement dérivés** de l'état des quêtes.
+  - **Place tranchée** : `ultima-perso.enfants = ['grima', 'naga', 'althea']` —
+    ALTHEA ne relève ni de « ce qui est utile » ni de « ce qui fait grandir ».

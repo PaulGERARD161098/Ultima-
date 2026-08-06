@@ -135,3 +135,21 @@ reformuler et demander — jamais deviner avant une action irréversible.
     jamais or.
   - **Le badge, pas le widget** : iOS n'accorde aucune tuile-widget à une app
     web ; ce qui existe, c'est l'icône installée + un chiffre.
+
+- **ALTHEA — le vocabulaire tranché le 2026-08-06 (soir)** :
+  - **Le Système, c'est Léo en tenue de jeu.** Pas une seconde entité : deux
+    registres, une seule voix. Léo **conseille** dans son cartouche (présence
+    obligatoire à l'écran) ; le Système **proclame** entre crochets. Ne jamais
+    écrire « le Système et Léo » comme s'ils étaient deux.
+  - **ALTHEA est AUTONOME** : aucun lien requis avec ZEKROM, DRAUKHAIN ou
+    RESHIRAM. **Test d'appartenance : « est-ce que ça se coche un soir ? »** Si
+    ça se médite, c'est ailleurs. ALTHEA = la vie quotidienne, réelle et concrète.
+  - **LE GEL** = la sévérité. Trois quêtes **acceptées** puis laissées → le
+    Système se ferme, le titre est **suspendu** (« En dette »), la lumière tombe.
+    Il **touche l'ornement et le flux, jamais l'acquis**. La dette ne compte que
+    des **engagements pris** — jamais un jour non renseigné.
+  - **« En dette »** = l'état porté à la place du titre pendant le gel. Ce n'est
+    pas un titre : pas de guillemets, pas d'honneur — un état, réversible.
+  - **La forme d'ALTHEA = le Système spectral** (forme B). Bleu et nuit
+    profonde, l'or en accent. La forme A (nuit et or) a été comparée puis
+    abandonnée.

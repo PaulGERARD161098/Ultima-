@@ -8,9 +8,12 @@
 > **Boucle B0 : cadrer et étudier. Zéro code produit, zéro migration écrite.**
 > Gate EL : le COMMENT est posé ici avant la première ligne de travail.
 >
-> **Décisions déjà prises par Paul** (§12) : ALTHEA vit **à part** · l'unité
-> s'appelle un **SKILL** · le moteur est **cumul + élan** · la v1 livre **les
-> skills, leurs noms et ce qu'il y a dedans**.
+> **Décisions prises par Paul** (§12) : l'unité s'appelle un **SKILL** · le
+> moteur est **cumul + élan** · la v1 livre **les skills et ce qu'il y a
+> dedans** · **forme B**, le Système spectral · **Léo pilote le Système** ·
+> **ALTHEA est autonome** — pas de liens imposés avec le reste d'Ultima ·
+> une quête endormie s'accompagne d'une **sévérité** · ALTHEA est le
+> **3ᵉ cadran d'ULTIMA Lv3**.
 >
 > Sources amont — `CADRAGE-LV3.md` (l'arbre, la règle nœud/feuille),
 > `CADRAGE-IMLADRIK.md` (DRAUKHAIN : serments et flammes),
@@ -83,7 +86,8 @@ seul endroit qui est un jeu.
 
 > **Ce n'est pas un conflit, c'est une articulation.** Un talent RESHIRAM
 > réclame une preuve ; ALTHEA **fabrique** de la preuve (« 214 jours de japonais
-> nourris »). Passerelle plus tard (§11), jamais un mot commun.
+> nourris »). Un jour, peut-être, une passerelle — mais **facultative** :
+> Paul a tranché l'autonomie d'ALTHEA (§1.5). Jamais un mot commun, en revanche.
 
 ### 1.2 Collision d'OBJET — « je n'ai pas fumé » ressemble à DRAUKHAIN
 
@@ -100,6 +104,12 @@ seul endroit qui est un jeu.
 
 ### 1.3 Collision de FORME — un cadran n'est pas une boussole
 
+**✅ Tranché par Paul : ALTHEA est le 3ᵉ cadran d'ULTIMA Lv3**, aux côtés de
+**GRIMA** (« ce qui est utile ») et **NAGA** (« ce qui fait grandir »). Il n'est
+rangé sous aucune des deux devises — c'est le « tout seul » qu'il avait dicté.
+Concrètement : `ultima-perso.enfants = ['grima', 'naga', 'althea']`, chemin
+*accueil → ULTIMA → ALTHEA*.
+
 Règle Lv3 §2.1 : **est une boussole tout nœud qui a au moins deux enfants ;
 reste un outil toute feuille.** ALTHEA n'a qu'une porte → **c'est une FEUILLE**,
 `althea.html`. Le cadran **ressemblera** à une rose de caps ; il ne doit pas s'y
@@ -112,54 +122,84 @@ Principe verrouillé le 2026-07-16 : **l'agent unique d'Ultima est Léo.** Un
 Système qui converse serait un second personnage — et casserait le principe le
 plus structurant de toute la plateforme.
 
-> **Réponse retenue, et c'est la clé de voûte de tout ce cadrage :
-> le Système n'est pas un personnage, c'est un INSTRUMENT.**
+> **✅ Tranché par Paul (2026-08-06) : « on garde Léo dans le Système, c'est
+> Léo qui pilote le Système, c'est important ».**
 >
-> Il ne converse pas : il **annonce**. Ses phrases sont des **gabarits fixes**,
-> composés en clair dans le code — `[ RANG ATTEINT — LA CONSTANCE ]`. Il n'a ni
-> avis, ni mémoire, ni conseil. Une horloge qui sonne n'est pas quelqu'un.
+> **Le Système, c'est Léo en tenue de jeu.** Ce n'est pas une seconde entité :
+> c'est la façon dont Léo se manifeste dans ALTHEA. Paul l'écrit lui-même —
+> *« Léo (le système) »*. Le principe de l'agent unique n'est donc pas
+> contourné, il est **habillé**.
 >
-> **Léo reste la seule qui parle**, la seule qui conseille, la seule qui
-> compose. Répartition sans zone grise :
+> Ce qui reste vrai de l'analyse : **deux registres de parole, une seule
+> voix.** Léo **parle** (elle guide, elle compose, elle explique, dans son
+> cartouche comme partout ailleurs dans Ultima) ; le Système **annonce** — des
+> **gabarits fixes** en clair dans le code, `[ RANG ATTEINT — LA CONSTANCE ]`.
+> L'annonce est **le ton de cérémonie que Léo prend** quand quelque chose se
+> franchit, pas quelqu'un d'autre qui prendrait la parole.
 >
-> | | **Léo** — l'intelligence | **Le Système** — l'instrument |
+> **Conséquence pratique — Léo est PRÉSENTE à l'écran d'ALTHEA**, son cartouche
+> compris. Un ALTHEA où l'on n'entendrait que des crochets serait un ALTHEA sans
+> Léo, et ce n'est pas ce que Paul a demandé. Répartition sans zone grise :
+>
+> | | **Léo qui parle** — le cartouche | **Le Système qui annonce** — les crochets |
 > | --- | --- | --- |
-> | Compose les quêtes | ✅ elle connaît Paul | ❌ |
+> | Compose les quêtes et les skills | ✅ elle connaît Paul | ❌ |
 > | Conseille, relance, explique | ✅ | ❌ |
-> | Annonce un rang, un titre, une échéance | ❌ | ✅ gabarits fixes |
+> | Annonce un rang, un titre, un gel | ❌ | ✅ gabarits fixes |
 > | Coût en IA | oui, borné et gaté | **zéro** |
 > | Déterministe / testable au harnais | non | **oui, entièrement** |
+>
+> C'est **la même personne dans deux registres** — comme on hausse la voix pour
+> proclamer et qu'on la baisse pour conseiller.
 
-**Ce que ça règle au passage, et qui n'est pas mince** : toutes les annonces du
-Système sont **gratuites, hors-ligne et vérifiables au harnais**. Seule la
-composition d'une quête coûte un appel IA — donc seule elle est à borner (§8.3).
+**Ce que ça règle au passage, et qui n'est pas mince** : toutes les annonces
+sont **gratuites, hors-ligne et vérifiables au harnais**. Seule la composition
+d'une quête ou d'un skill coûte un appel IA — donc seule elle est à borner
+(§8.3). ALTHEA reste donc entièrement utilisable **sans un centime d'IA** : le
+jeu tourne, seule la proposition de nouveauté s'arrête.
 
-### 1.5 Collision de PÉRIMÈTRE — « quête principale » contre ZEKROM et DRAUKHAIN ⚠️
+### 1.5 Collision de PÉRIMÈTRE — « quête principale » contre ZEKROM et DRAUKHAIN
 
-**C'est le vrai danger du Système.** Une « quête principale », spontanément,
+**C'était le vrai danger du Système.** Une « quête principale », spontanément,
 c'est un grand objectif de vie. Or les grands objectifs de vie ont **déjà** deux
 maisons dans Ultima : **ZEKROM** (les idéaux, le cap directionnel) et
-**DRAUKHAIN** (les serments, la volonté), reliés à RESHIRAM par le
-**rétroplanning**. Laisser ALTHEA se remplir d'objectifs de vie, c'est
+**DRAUKHAIN** (les serments, la volonté). Laisser ALTHEA s'en remplir, c'est
 reconstruire un tiers d'Ultima **à l'intérieur d'un jeu** — et se retrouver avec
 deux vérités contradictoires sur ce que Paul veut vraiment.
 
-**La frontière, écrite :**
+J'avais proposé de résoudre ça **par un lien** : la quête principale aurait
+*référencé* un idéal ZEKROM. **Paul a tranché autrement, et c'est mieux :**
 
-> **Une quête ALTHEA ne porte QUE de l'entraînement de soi** — ce qui se
-> pratique, se répète, se muscle. Jamais un chantier, jamais un rendez-vous,
-> jamais un objectif de vie.
+> **✅ « Attention, je ne veux pas forcément de liens avec le reste d'Ultima :
+> ALTHEA est davantage un jeu pour la vie quotidienne, donc très réel et
+> concret. »**
 
-**Et la passerelle qui donne au jeu sa gravité** : une **quête principale** est
-*le reflet jouable* d'un idéal ZEKROM ou d'un serment DRAUKHAIN — elle le
-**référence**, elle ne le recopie pas.
+**ALTHEA est AUTONOME.** Aucune passerelle imposée, aucun objet d'un autre
+quadrant requis pour jouer. La frontière ne tient plus par un **lien** — elle
+tient par la **nature de ce qu'on y met**, ce qui est plus simple et plus
+solide :
 
-*« Parler japonais couramment »* reste un idéal chez ZEKROM. Dans ALTHEA, il
-devient une quête principale qui pointe vers lui. Ta quête principale n'est donc
-pas inventée par un jeu : **c'est ton idéal qui entre dans l'arène.** En v1 le
-lien reste facultatif, mais Léo proposera toujours de le poser.
+| | ZEKROM / DRAUKHAIN | ALTHEA |
+| --- | --- | --- |
+| Registre | l'**idéal**, le **serment** — ce qui oriente une vie | le **quotidien concret** — ce qui se fait aujourd'hui |
+| Horizon | des années | un jour, une semaine |
+| Ce qu'on y écrit | *ce que je veux devenir* | *ce que j'ai fait, et ce que j'entreprends de faire* |
+| Test d'appartenance | ça se médite | **ça se coche** |
 
----
+**Le test d'appartenance d'ALTHEA, en une question** : *est-ce que ça se coche
+un soir ?* Si oui, c'est ici. Sinon, c'est ailleurs.
+
+Une **quête principale** ALTHEA reste donc un arc long — mais un arc long
+**concret** : *« marcher 200 km cette année »*, *« tenir une conversation de dix
+minutes en japonais »*. Elle vit **entièrement dans ALTHEA**, sans dépendre de
+rien.
+
+**Ce que la décision de Paul supprime, concrètement** : les colonnes `ideal_id`
+et `serment_id` des quêtes (§8.2) et toute lecture croisée vers ZEKROM ou
+DRAUKHAIN. Une passerelle restera **possible un jour** — mais elle sera
+**facultative, tardive, et jamais nécessaire pour jouer**. Bénéfice qui n'était
+pas cherché : ALTHEA devient **livrable seul**, sans qu'aucun autre quadrant
+n'ait à bouger.
 
 ## 2. Ce qu'est ALTHEA, en une phrase
 
@@ -335,8 +375,19 @@ les deux compteurs que le widget affichera (§7.4).
 
 ### 6.2 Une quête donne un skill — le déblocage
 
-Dicté : *« que je débloque de nouveaux skills »*, *« que les quêtes me donnent
-des skills »*. Mécanique retenue :
+> **✅ Tranché par Paul : « les skills, je les détermine — ou Léo (le Système)
+> en détermine, en récompense à des quêtes ».**
+>
+> **Deux origines, jamais une seule.** Paul **crée** ses skills quand il sait ce
+> qu'il veut travailler ; **Léo en compose** quand elle voit une quête mériter
+> mieux qu'un merci. Un skill offert en récompense est **la plus forte
+> récompense du jeu** — elle ne se consomme pas, elle **ouvre**.
+>
+> Conséquence sur la v1 : **la liste de départ n'a pas à être complète.** Trois
+> ou quatre skills suffisent à commencer, le reste **se gagne**. C'est ce qui
+> lève le bloquant que je croyais avoir (§13).
+
+Mécanique retenue :
 
 - Un skill peut naître **verrouillé** (`verrouille = true`) : il se voit sur le
   cadran, **grisé, nommé**, avec la quête qui l'ouvre. **Voir ce qui est
@@ -345,7 +396,7 @@ des skills »*. Mécanique retenue :
   `[ SKILL DÉBLOQUÉ — ESPAGNOL ]`.
 - Un skill déverrouillé **ne se reverrouille jamais** (règle cardinale 2).
 
-### 6.3 Le cycle de vie d'une quête — et le refus de la pénalité
+### 6.3 Le cycle de vie d'une quête
 
 ```
 proposée ──(Paul accepte)──▶ acceptée ──(Paul achève)──▶ accomplie ──▶ [allongement proposé]
@@ -354,13 +405,64 @@ proposée ──(Paul accepte)──▶ acceptée ──(Paul achève)──▶ 
     └──(Paul décline)──▶ déclinée                                └──(Paul range)───▶ rangée
 ```
 
-**Il n'y a pas d'état « échouée ».** *Solo Leveling* inflige des pénalités quand
-la quête quotidienne n'est pas tenue — c'est son ressort dramatique. **Je le
-déconseille ici**, et c'est un choix, pas une timidité : une pénalité punit le
-silence, et Paul a posé « ce n'est pas obligatoire » comme condition d'existence
-du quadrant. Une quête dépassée **s'endort**, et le Système le nomme sans
-reproche : `[ QUÊTE ENDORMIE DEPUIS 12 JOURS — reprendre ? ranger ? ]`.
-→ **Décision D9 (§12) si Paul veut la morsure de la pénalité malgré tout.**
+**Il n'y a pas d'état « échouée ».** Une quête dépassée **s'endort**, et le
+Système le nomme sans reproche : `[ QUÊTE ENDORMIE DEPUIS 12 JOURS ]`. **Ranger
+une quête n'est pas un échec** — c'est une décision, et c'est même le geste
+sain : on ne garde pas dix engagements morts pour se donner l'illusion d'en
+avoir dix.
+
+### 6.3bis La sévérité — LE GEL DU SYSTÈME ⚠️
+
+> **✅ Tranché par Paul : « ok pour l'endormissement, mais aussi un peu de
+> sévérité si je rate trop souvent ».**
+
+Le défi est réel : ajouter une morsure **sans** violer la règle cardinale 1
+(le silence n'est pas une faute) ni la 3 (aucun jugement). La ligne qui rend les
+deux compatibles :
+
+> **La sévérité ne vient JAMAIS du Système. Elle vient d'un engagement que Paul
+> a pris lui-même.**
+>
+> On ne peut manquer que ce qu'on a **accepté**. Un jour non renseigné ne
+> déclenche rien, jamais. Une **quête acceptée** puis laissée à l'abandon,
+> plusieurs fois, oui — parce que c'est Paul qui a dit oui.
+
+**Le mécanisme — le gel.**
+
+- **La dette** = le nombre de quêtes **acceptées** et laissées **endormies** sans
+  être ni reprises ni rangées. Elle ne compte que des engagements.
+- **Le seuil : trois.** À la troisième, **le Système gèle**, et il l'annonce
+  franchement : `[ SYSTÈME EN SOMMEIL — TROIS ENGAGEMENTS LAISSÉS ]`.
+- **Trois effets, et pas un de plus :**
+  1. **Le flux se coupe.** Plus aucune quête proposée, plus aucun allongement.
+     Ce n'est pas une punition arbitraire, c'est logique : **on ne charge pas
+     une table déjà pleine.**
+  2. **Le titre est suspendu.** L'avatar ne porte plus son titre mais
+     **« En dette »**. Les titres gagnés ne sont **pas perdus** — ils sont
+     **inaccessibles** le temps du gel.
+  3. **La lumière tombe.** Le cadran se désature, le bleu du Système se ternit.
+     En forme B (spectrale), c'est spectaculaire — et c'est **une seule classe
+     CSS**, donc gratuit.
+- **La sortie tient en un geste par quête** : *reprendre* ou *ranger*. Dès que
+  la dette repasse sous trois, le gel se lève et le Système le dit :
+  `[ SYSTÈME RÉVEILLÉ ]`.
+
+**Ce que le gel ne touche JAMAIS** : les rangs, les jours nourris, l'élan, les
+skills débloqués, les titres obtenus. **Il touche l'ornement et le flux, jamais
+l'acquis** — sinon il violerait la règle cardinale 2, et un rang qu'on peut
+perdre est un rang qu'on n'ose plus viser.
+
+**Le second cran, si Paul veut que rater un entraînement morde aussi** : une
+**quête de fond peut porter une exigence** — *« nourrir SOUFFLE au moins 4 jours
+sur 7 »*. La manquer alimente alors la dette. Mais remarque bien ce qui se
+passe : **c'est toujours Paul qui a armé la sévérité**, en acceptant une quête
+qui la contenait. Le Système n'invente aucune exigence. → **Décision D12 (§12).**
+
+> **Pourquoi le gel est la bonne sévérité, et pas la perte de niveau** :
+> il fait mal **sur-le-champ** (le titre tombe, la couleur meurt, le jeu se
+> tait), il se répare **en trois clics**, et il ne détruit **rien** de ce qui a
+> été gagné. Une sanction dont on ne peut pas sortir n'est pas une sanction :
+> c'est une raison d'arrêter de jouer.
 
 ### 6.4 ④ La génération et les allongements
 
@@ -509,13 +611,13 @@ s'affiche, il motive, **il ne détruit rien** quand il retombe. Le **meilleur
 
 | Table | Ce qu'elle porte |
 | --- | --- |
-| **`althea_avatar`** | une ligne par propriétaire : `titre_code` (le titre **porté**), `reglages` (rappels on/off, heure). **Pas de niveau** — il est dérivé. |
+| **`althea_avatar`** | une ligne par propriétaire : `nom`, `titre_code` (le titre **porté**), `reglages` (rappels on/off, heure). **Pas de niveau, pas de dette** — les deux sont **dérivés** (§8.3-1). |
 | **`althea_titres_obtenus`** | `code`, `obtenu_le`. **Le fait seulement** ; les conditions vivent en code (§5.1). |
 | **`althea_skills`** | `nom`, `blason`, `seuils` (5 entiers croissants), `nourriture` (`tous`\|`un`), `verrouille`, `actif`. **L'étage qui progresse.** |
 | **`althea_gestes`** | `skill_id`, `libelle`, `nature` (`pratique`\|`garde`), `mesure` (`presence`\|`duree`), `rang_affichage`, `actif`. **Aucun compteur ici.** |
 | **`althea_paliers`** | `skill_id`, `rang` (1..5), `recompense` (texte), `reclame_le`. On ne stocke **pas** « atteint » : c'est dérivé. |
 | **`althea_releves`** | `geste_id`, `jour`, `tenu`, `minutes`, `mot` (court). **Unicité (owner, geste, jour)** ; `jour <= current_date` ; **pas de ligne = non renseigné** (règle 1 exprimée dans le schéma, pas seulement dans l'UI). |
-| **`althea_quetes`** | `type` (`principale`\|`secondaire`\|`fond`), `titre`, `intention`, `etat` (`proposee`\|`acceptee`\|`accomplie`\|`endormie`\|`rangee`\|`declinee`), `origine` (`paul`\|`leo`), `echeance`, `parent_id` (l'allongement), `debloque_skill_id`, `recompense`, `ideal_id`/`serment_id` (le lien §1.5, facultatif). |
+| **`althea_quetes`** | `type` (`principale`\|`secondaire`\|`fond`), `titre`, `intention`, `etat` (`proposee`\|`acceptee`\|`accomplie`\|`endormie`\|`rangee`\|`declinee`), `origine` (`paul`\|`leo`), `echeance`, `exigence` (le second cran de sévérité, facultatif), `parent_id` (l'allongement), `debloque_skill_id`, `recompense`. **Aucune colonne vers un autre quadrant** — ALTHEA est autonome (§1.5). |
 | **`althea_interpellations`** | le journal de ce que le Système a envoyé : `jour`, `motif`. **Sa raison d'être : faire respecter la loi des interpellations** (une par jour, jamais deux fois la même) — une règle qu'on n'écrit nulle part est une règle qu'on n'applique pas. |
 | **`althea_abonnements_push`** | (boucle rappels) l'abonnement Web Push du téléphone. |
 
@@ -542,6 +644,13 @@ rang atteint.
    court sans surveillance. **Parade** : au plus une composition par jour, sur
    ouverture ou geste explicite ; jamais de boucle de fond ; le compteur de
    générations vit en base et le refus est **serveur**, pas client.
+5. **La dette ne se stocke pas.** Tentation immédiate : une colonne `dette` sur
+   l'avatar. Ce serait un compteur **désynchronisable** — il suffirait qu'une
+   quête change d'état sans passer par le bon chemin pour que Paul soit gelé
+   sans raison, ou dégelé à tort. **Parade** : la dette et le gel sont
+   **entièrement dérivés** de l'état des quêtes, calculés en vue. Même règle que
+   pour le niveau et les paliers : *une donnée dérivée qu'on stocke finit
+   toujours par mentir* — et ici, elle mentirait en punissant.
 
 ---
 
@@ -639,18 +748,22 @@ décoratif :
 nocturne — le bleu spectral pâle sur nuit est précisément le couple qui échoue
 si on le choisit à l'œil. `smoke-antique` teste déjà les contrastes ailleurs.
 
-### 10.4 Les deux formes à trancher sur l'image
+### 10.4 La forme retenue
 
-Comme sur VRANESH et DRAUKHAIN : **maquette d'abord, Paul choisit sur le
-dessin**, jamais sur ma description.
+Les deux formes ont été maquettées et comparées sur l'image (méthode VRANESH /
+DRAUKHAIN : Paul tranche sur le dessin, jamais sur une description).
 
-- **Forme A — le Système gravé.** Nuit et or dominants, le bleu **réservé** à la
-  voix du Système. Continuité assumée avec Ultima : ALTHEA en est une pièce, de
-  nuit. *Recommandation de Léo.*
-- **Forme B — le Système spectral.** Rupture franche : bleu et noir dominants,
-  l'or en accent seul. ALTHEA devient visiblement **un corps étranger** dans
-  Ultima — ce qui est peut-être exactement ce que « c'est un autre système »
-  voulait dire.
+> **✅ Tranché par Paul : FORME B — le Système spectral.**
+> Bleu et nuit profonde dominants, l'or en accent seul. ALTHEA cesse
+> visiblement d'appartenir à Ultima — cohérent avec « c'est un autre système »
+> et avec l'autonomie tranchée en §1.5. **La forme A est abandonnée** ; la
+> maquette de référence ne porte plus qu'une seule forme.
+
+**Ce qui ne bouge pas malgré le choix de B** : la **règle de couleur** (l'or
+pour ce qui est **gagné**, le bleu pour ce qui est **annoncé**). C'est elle qui
+empêche B de devenir un dégradé bleu indifférencié où plus rien ne se distingue.
+Et **le gel** (§6.3bis) s'y lit mieux que partout : quand le Système dort, la
+lumière tombe.
 
 ---
 
@@ -670,9 +783,11 @@ la fois, bouclée avant la suivante ».
 | **B4** | **L'interpellation** | PWA installable + service worker + badge chiffré + rappels push. **Gate coût sur le cron.** | C'est la boucle qui touche à l'extérieur : elle vient quand l'intérieur est juste. |
 | **B5** | **Le widget signé** *(si Paul le veut)* | route lecture seule, jeton révocable, entiers uniquement. | Optionnelle, et la seule qui pose une clé hors d'Ultima. |
 
-**Les passerelles** (ALTHEA → RESHIRAM : un skill mûr **étaye** un talent
-prouvé ; quête principale ↔ idéal ZEKROM / serment DRAUKHAIN) viennent **après**,
-en lecture seule et à sens unique, sur le motif `talent_refs_reseau` (`0013`).
+**Les passerelles ne sont plus au programme.** Paul a tranché l'autonomie
+d'ALTHEA (§1.5) : le jeu se joue entier sans qu'aucun autre quadrant n'existe.
+Si un pont vers RESHIRAM naît un jour (un skill mûr qui **étaye** un talent
+prouvé), il sera **facultatif, en lecture seule et à sens unique** — jamais une
+condition pour jouer. **Effet de bord précieux : ALTHEA est livrable seul.**
 
 ## 12. Décisions
 
@@ -680,43 +795,53 @@ en lecture seule et à sens unique, sur le motif `talent_refs_reseau` (`0013`).
 
 | # | Question | ✅ Décision |
 | --- | --- | --- |
-| **D1** | Où ALTHEA s'accroche | **« Tout seul : c'est un autre système, car c'est plutôt un jeu qu'autre chose. »** Ni GRIMA, ni NAGA, ni IMLADRIK. Précision encore due (D7). |
+| **D1** | Où ALTHEA s'accroche | *« Tout seul »*, puis précisé : **3ᵉ cadran d'ULTIMA Lv3**, à côté de GRIMA et NAGA (§1.3). |
 | **D2** | Le mot de l'unité | **Un SKILL.** Tranche la collision avec RESHIRAM par le registre. |
 | **D3** | Le moteur | **Cumul + élan.** Le rang ne se reperd jamais. |
 | **D4** | Périmètre v1 | **« Les skills : leurs noms, et ce qu'il y a dedans. »** A révélé les deux étages (§8.1). |
+| **D5** | L'origine des skills | **Paul les détermine, OU Léo en offre en récompense de quête** (§6.2). La liste de départ n'a donc pas à être complète. |
+| **D6** | La forme visuelle | **Forme B — le Système spectral** (§10.4). La forme A est abandonnée. |
+| **D7** | Léo dans le Système | **« Léo pilote le Système, c'est important. »** Le Système, c'est **Léo en tenue de jeu** ; elle reste présente et visible à l'écran (§1.4). |
+| **D8** | Les liens avec Ultima | **ALTHEA est AUTONOME** — *« je ne veux pas forcément de liens : c'est un jeu pour la vie quotidienne, très réel et concret »*. Colonnes vers ZEKROM/DRAUKHAIN supprimées (§1.5). |
+| **D9** | La sévérité | **Endormissement + un peu de sévérité si Paul rate trop souvent** → **le gel du Système** (§6.3bis), déclenché par les **engagements pris**, jamais par le silence. |
 
 ### 12.2 Ce qui reste à trancher
 
 | # | Question | Recommandation de Léo |
 | --- | --- | --- |
-| **D5** | **Les skills de Paul** — leurs noms et leur contenu (§13). | *À dicter.* C'est le bloquant n°1 : sans eux, B1 livre un écran vide. |
-| **D6** | **La forme visuelle** : A (le Système gravé) ou B (le Système spectral) ? | **A**, sur maquette. Mais B est légitime si « autre système » veut dire « visiblement étranger ». |
-| **D7** | **La place exacte** : troisième cap de la **racine** (1 clic) ou troisième cadran d'**ULTIMA** (2 clics) ? | **La racine.** Un jeu qu'on ouvre tous les jours doit être à un clic. |
-| **D8** | **Le titre de départ** et le nom du personnage. | *Sans titre* au départ — un titre se gagne. Le nom : celui de Paul, ou un nom de jeu ? |
-| **D9** | **La pénalité** : une quête dépassée s'endort (reco) ou inflige une sanction façon Solo Leveling ? | **Elle s'endort.** Une pénalité punit le silence, que tu as posé comme non punissable. Mais c'est ton jeu — si tu veux la morsure, je la construis. |
-| **D10** | **Le widget Scriptable** (§7.4) : on le fait, avec son jeton hors d'Ultima ? | **Le badge chiffré d'abord** (natif, sans clé, sans app tierce). Le widget seulement si le badge ne te suffit pas. |
-| **D11** | **Le cron des rappels** — gate coût sur le plan Vercel. | Décision de Paul, jamais une initiative de Léo. À poser en B4, pas avant. |
+| **D10** | **Les trois ou quatre skills de départ** (§13) — validation de la liste proposée. | Les quatre du §13. Le reste **se gagnera** en quête, c'est le principe même. |
+| **D11** | **Le nom du personnage** et son titre de départ. | *Sans titre* au départ — un titre se gagne. Le nom : le tien, ou un nom de jeu ? |
+| **D12** | **Le second cran de sévérité** : une quête de fond peut-elle porter une exigence (« 4 jours sur 7 ») qui alimente la dette ? | **Oui, mais facultative.** C'est toi qui l'armes en acceptant la quête ; le Système n'invente aucune exigence. |
+| **D13** | **Le widget Scriptable** (§7.4) : on le fait, avec son jeton hors d'Ultima ? | **Le badge chiffré d'abord** (natif, sans clé, sans app tierce). Le widget seulement si le badge ne suffit pas. |
+| **D14** | **Le cron des rappels** — gate coût sur le plan Vercel. | Décision de Paul. À poser en B4, pas avant. |
 
-## 13. Ce que Léo attend pour ouvrir B1 — tes skills
+## 13. Les skills de départ — proposition à valider
 
-**Un skill = un nom + ce qu'il y a dedans.** Ce qui est déjà connu de ta dictée,
-à confirmer et compléter :
+La décision D5 change la donne : **je n'ai plus besoin d'une liste complète.**
+Trois ou quatre skills suffisent à ouvrir le jeu ; **le reste se gagne**. Voici
+donc une liste courte, tirée de ta dictée, à valider ou corriger.
 
-| Skill | Ce qu'il y a dedans (les gestes) | Nature |
-| --- | --- | --- |
-| **PEAK PERFORMANCE** | « pas fumé » · « pas bu d'alcool » · *(à compléter : sommeil ? sport ?)* | garde |
-| **JAPONAIS** | « pratiqué le japonais » *(+ minutes)* | pratique |
-| **ESPAGNOL** | « pratiqué l'espagnol » *(+ minutes)* | pratique |
-| **SPORT** | *(une seule case, ou plusieurs portes — course / salle / vélo ?)* | pratique |
+| Skill | Ce qu'il y a dedans (les gestes) | Nature | Règle |
+| --- | --- | --- | --- |
+| **PEAK PERFORMANCE** | « pas fumé » · « pas bu d'alcool » | garde | `tous` — une journée sans tabac mais arrosée n'en est pas une |
+| **JAPONAIS** | « étudié le japonais » *(+ minutes)* | pratique | `un` |
+| **ESPAGNOL** | « étudié l'espagnol » *(+ minutes)* | pratique | `un` |
+| **SPORT** | « séance » · « marche longue » · « vélo » | pratique | `un` — plusieurs portes, peu importe laquelle |
 
-Trois questions ouvertes sur ce tableau :
+**Et un cinquième, VERROUILLÉ dès le départ** — pour que le mécanisme de
+déblocage existe dès le premier jour et se voie :
 
-1. **Peak performance** — quels gestes exactement, et faut-il **tous** les tenir
-   pour que le jour compte (règle `tous`) ? C'est ce qui décide si le skill est
-   exigeant ou complaisant.
-2. **Sport** — un seul geste, ou plusieurs portes en règle `un` ?
-3. **Le rythme des paliers** — 7 / 30 / 90 / 180 / 365 jours nourris. Trop lents
-   pour le japonais ? Trop rapides pour la garde ?
+| Skill | S'ouvre en achevant… |
+| --- | --- |
+| **SOMMEIL** *(verrouillé)* | la quête *« sept soirs sans écran au lit »* |
+
+Trois questions ouvertes, et elles se répondent en une phrase chacune :
+
+1. **Peak performance** — deux gestes suffisent, ou tu en ajoutes (sommeil,
+   sport, alimentation) ?
+2. **Sport** — mes trois portes te vont, ou tu en veux d'autres ?
+3. **Le rythme des paliers** — 7 / 30 / 90 / 180 / 365 jours nourris. Le japonais
+   mérite peut-être plus serré ; la garde, plus large ?
 
 ## 14. Le format 6 points de B1
 
@@ -724,9 +849,10 @@ Trois questions ouvertes sur ce tableau :
 nom, blason, gestes, paliers. Paul les nourrit pour aujourd'hui et pour la
 semaine écoulée, voit son rang, son élan et son titre.
 
-**② Étapes** — (a) **Paul dicte ses skills** (§13) ; (b) maquette comparative
-**forme A / forme B**, Paul tranche sur l'image ; (c) place dans l'arbre (D7) :
-entrée au registre Lv3 + coque `althea.html` ; (d) migration `0022` écrite,
+**② Étapes** — (a) **Paul valide les skills de départ** (§13) ; (b) la maquette
+de référence est **passée en forme B** ✅ ; (c) place dans l'arbre ✅ tranchée —
+entrée au registre Lv3 (`ultima-perso.enfants` + `althea`) + coque
+`althea.html` ; (d) migration `0022` écrite,
 **non appliquée** (gate) ; (e) `api/althea.js` + validation miroir ; (f) le
 cadran, le relevé, la fiche du personnage ; (g) harnais ; (h) seed paramétré par
 `owner_id` (motif RESHIRAM/ZEKROM : idempotent, jamais d'`owner_id` en dur).
@@ -750,9 +876,11 @@ preuve par l'ABSENCE sur `/api/leo` et `/api/cockpit` ; un relevé pris à 23 h 
 se range au bon jour ; **nourrir un skill coûte moins de cinq secondes**, mesuré
 en nombre de gestes d'interface, pas à l'œil.
 
-**⑤ Ce qu'on ne fait PAS en B1** — les quêtes (B2), la composition par Léo (B3),
-les rappels/badge/PWA (B4), le widget (B5), les passerelles, les jauges
-physique/psychique, l'application de la migration (gate Paul).
+**⑤ Ce qu'on ne fait PAS en B1** — les quêtes (B2), donc **ni le gel ni la
+dette** (ils n'ont de sens qu'avec des quêtes), la composition par Léo (B3), les
+rappels/badge/PWA (B4), le widget (B5), les jauges physique/psychique,
+l'application de la migration (gate Paul). Un skill **verrouillé** s'affiche
+pourtant dès B1 : c'est ce qui donne envie de la suite.
 
 **⑥ Pre-mortem — « la boucle a échoué : pourquoi ? »**
 
@@ -763,7 +891,8 @@ physique/psychique, l'application de la migration (gate Paul).
 | **On construit les cinq boucles à la fois** et aucune n'aboutit. | Le §11, et la discipline EB. B1 ne contient **aucune** quête. |
 | **Les deux étages s'écrasent** (un skill par geste, ou un skill flou). | Le §8.1 + une assertion : *peak performance* porte **plusieurs** gestes et **un seul** rang. |
 | **Le Système devient un second Léo** (deux voix, principe verrouillé cassé). | §1.4 : gabarits fixes, zéro IA dans l'annonce ; assertion de harnais sur la forme `[ … ]`. |
-| **ALTHEA avale ZEKROM et DRAUKHAIN** (les objectifs de vie migrent dans le jeu). | §1.5 : une quête ne porte que de l'entraînement de soi ; la principale **référence** un idéal, ne le recopie pas. |
+| **ALTHEA avale ZEKROM et DRAUKHAIN** (les objectifs de vie migrent dans le jeu). | §1.5, test d'appartenance : **est-ce que ça se coche un soir ?** Si ça se médite, c'est ailleurs. ALTHEA est autonome, il n'emprunte rien. |
+| **La sévérité blesse au lieu de mordre** — Paul se fait geler pour du silence et n'ouvre plus le jeu. | §6.3bis : la dette ne compte que des **engagements acceptés** ; le gel se lève en un geste par quête ; il ne touche **aucun acquis**. Assertion dédiée : *aucun jour non renseigné n'incrémente jamais la dette*. |
 | **Un rang qui bouge tout seul** quand un geste est désactivé. | §8.3-1, cas de test dédié. |
 | **La donnée de santé fuit** — cockpit, IA, **écran verrouillé**, widget, log. | Comptes seuls, intitulés de gestes exclus partout, **notification qui ne nomme jamais un geste**, preuve par l'ABSENCE aux six sorties. |
 | **Le robinet IA coule.** | §8.3-4 : une composition par jour, refus **serveur**, jamais de boucle de fond. |
@@ -773,14 +902,17 @@ physique/psychique, l'application de la migration (gate Paul).
 
 ## 15. État de la boucle
 
-- **B0 — cadrage et étude** : ce document. ✅ livré le 2026-08-06. **Zéro code,
-  zéro migration.** Deux dictées absorbées, cinq collisions écrites, la boucle de
-  jeu fermée, la réalité technique des rappels et du widget **vérifiée avant
-  d'être promise**.
-- **Bloquants pour ouvrir B1** : **D5** (les skills de Paul, dictés) · **D6** (la
-  forme, sur maquette) · **D7** (la place exacte).
-- **Prochaine action unique** : la **maquette comparative** du Système
-  (`design/preview-althea-systeme.html`) — la fiche du personnage, le cadran, le
-  journal des quêtes et la fenêtre du Système, en **forme A et forme B côte à
-  côte**. **Sans `<script>` inline** (CSP `script-src 'self'` — cinq maquettes
-  antérieures sont muettes en preview pour cette raison exacte).
+- **B0 — cadrage et étude** : ✅ **CLOS le 2026-08-06.** Deux dictées absorbées,
+  cinq collisions écrites, la boucle de jeu fermée, la réalité technique des
+  rappels et du widget **vérifiée avant d'être promise**, la maquette livrée et
+  tranchée. **Zéro code d'application, zéro migration.**
+- **Neuf décisions prises** (§12.1). Deux d'entre elles ont **corrigé le
+  cadrage** plutôt que de le confirmer — l'autonomie d'ALTHEA (qui supprime les
+  liens que je proposais) et le pilotage par Léo (qui rhabille l'architecture de
+  l'agent). C'est exactement ce que le gate d'entrée EL existe pour produire.
+- **Reste avant d'ouvrir B1** : **D10** (valider les quatre skills de départ) et
+  **D11** (le nom du personnage). Ce ne sont plus des bloquants de conception —
+  la décision D5 a fait tomber l'exigence d'une liste complète : **le reste des
+  skills se gagnera en quête.**
+- **Prochaine action unique** : Paul valide les skills du §13, puis **B1
+  s'ouvre** — le personnage et ses skills, sans aucune quête.

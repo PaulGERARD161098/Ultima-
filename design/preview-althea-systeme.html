@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Preview — ALTHEA : le Système, deux formes</title>
+<title>Preview — ALTHEA : le Système spectral</title>
 <!--
   PREVIEW DE TRAVAIL — aucune donnée réelle. Contenus NEUTRES inventés.
   Zéro ressource externe, zéro CDN, ZÉRO <script> (CSP script-src 'self').
@@ -30,7 +30,10 @@
   manque que DEUX choses : l'apparition, et la nuit. D'où « l'antique vu de
   nuit ».
 
-  RÈGLE DE COULEUR, identique dans les deux formes :
+  FORME RETENUE : B, le Système spectral (Paul, 2026-08-06). La forme A a été
+  comparée puis abandonnée — la maquette ne porte plus qu'une forme.
+
+  RÈGLE DE COULEUR :
     OR   = ce qui est GAGNÉ (rangs, titres, sceaux).
     BLEU = ce qui est ANNONCÉ (la voix du Système, et elle seule).
   Un rang ne devient jamais bleu ; une annonce ne devient jamais or.
@@ -77,8 +80,8 @@ body {
 .forme-titre em { font-style: normal; color: #e3c46a; }
 .forme-note { margin: 0 0 18px; font-size: .9rem; color: #9c8f72; }
 
-/* ── Le cadre d'une forme : toutes les couleurs passent par des variables,
-      donc les deux formes partagent EXACTEMENT le même balisage. ── */
+/* ── Toutes les couleurs passent par des variables : la forme se change en
+      changeant la palette, jamais le balisage. ── */
 .systeme {
   --nuit:      #14110c;   /* le fond */
   --nuit-2:    #1d1810;   /* les panneaux */
@@ -337,6 +340,57 @@ body {
   box-shadow: inset 0 0 26px rgba(111,192,255,.10), 0 0 20px rgba(111,192,255,.09);
 }
 
+/* ── LÉO — elle pilote le Système et reste PRÉSENTE (décision Paul).
+      Deux registres, une seule voix : le Système proclame entre crochets,
+      Léo conseille dans son cartouche. La différence se voit à l'œil nu —
+      pas de crochets, pas de capitales, une voix qui s'adresse à toi. ── */
+.leo {
+  border: 1px solid var(--or-sourd);
+  border-left-width: 3px;
+  background: var(--nuit-2);
+  padding: 14px 16px;
+  margin-top: 18px;
+}
+.leo .qui {
+  font-size: .66rem;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin: 0 0 6px;
+}
+.leo p { margin: 0; font-size: .93rem; color: var(--parch); }
+.leo p + p { margin-top: 8px; }
+.leo em { color: var(--or); font-style: italic; }
+
+/* ── LE GEL — la sévérité. La lumière tombe sur ce qui est acquis et sur le
+      flux, JAMAIS sur les chiffres eux-mêmes : rien n'est perdu, tout est
+      suspendu. L'annonce, elle, reste vive : c'est elle qu'il faut lire. ── */
+.systeme.gele .cadran,
+.systeme.gele .releve,
+.systeme.gele .quete { filter: saturate(.12) opacity(.72); }
+.systeme.gele .identite .titre {
+  color: var(--parch-bas);
+  font-style: normal;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-size: .9rem;
+}
+/* « En dette » n'est pas un titre : c'est un état. Il ne prend pas les
+   guillemets qui honorent un titre gagné. */
+.systeme.gele .identite .titre::before,
+.systeme.gele .identite .titre::after { content: ''; }
+/* Les panneaux qui EXPLIQUENT le gel ne le subissent pas — ce sont des notes
+   de maquette, pas la surface de jeu. */
+.systeme.gele .explication { filter: none; }
+.systeme.gele .fenetre {
+  border-color: #7a3b3b;
+  background: linear-gradient(180deg, rgba(200,90,90,.10), transparent 65%);
+  box-shadow: inset 0 0 26px rgba(200,90,90,.08);
+}
+.systeme.gele .fenetre::before { background: #d98a8a; box-shadow: 0 0 9px #d98a8a; }
+.systeme.gele .fenetre .voix { color: #e3a2a2; }
+.systeme.gele .bouton { border-color: #7a3b3b; color: #e3a2a2; }
+
 /* ───────────────────────── ⑥ l'écran d'accueil ───────────────────────── */
 .accueil { display: flex; align-items: center; gap: 18px; margin-top: 18px; }
 .icone {
@@ -366,27 +420,29 @@ body {
 
   <div class="chapeau">
     <h1>ALTHEA — le Système</h1>
-    <p><strong>Deux formes, exactement le même balisage.</strong> Seule la
-    palette change : c'est la preuve que le choix qui t'est demandé est un choix
-    de <em>lumière</em>, pas de structure. Tu peux prendre l'une ou l'autre sans
-    rien recoder.</p>
-    <p><strong>La thèse :</strong> Solo Leveling et Ultima partagent déjà la
-    grammaire — capitales espacées, cartouche, voix rituelle, blocs de stats.
-    Il ne manquait que deux choses : <strong>l'apparition</strong> et
-    <strong>la nuit</strong>. D'où « l'antique vu de nuit ».</p>
-    <p><strong>La règle de couleur, dans les deux formes :</strong> l'<span
-    style="color:#e3c46a">or</span> pour ce qui est <strong>gagné</strong> (rangs,
-    titres, sceaux) · le <span style="color:#9fd4ff">bleu spectral</span> pour ce
-    qui est <strong>annoncé</strong> — la voix du Système, et elle seule.</p>
+    <p><strong>Forme retenue : le Système spectral.</strong> Bleu et nuit
+    profonde, l'or en accent seul. ALTHEA cesse visiblement d'appartenir à
+    Ultima — c'est cohérent avec « c'est un autre système », et avec le fait
+    qu'il soit désormais <strong>autonome</strong> : le jeu se joue entier sans
+    qu'aucun autre quadrant n'existe.</p>
+    <p><strong>La règle de couleur :</strong> l'<span style="color:#e3c46a">or</span>
+    pour ce qui est <strong>gagné</strong> (rangs, titres, sceaux) · le
+    <span style="color:#9fd4ff">bleu spectral</span> pour ce qui est
+    <strong>annoncé</strong> — la voix du Système, et elle seule. C'est elle qui
+    empêche le spectral de devenir un dégradé bleu où plus rien ne se distingue.</p>
+    <p><strong>Léo pilote.</strong> Deux registres, une seule voix : le Système
+    <em>proclame</em> entre crochets, Léo <em>conseille</em> dans son cartouche.
+    Tu les distingues à l'œil nu, et pourtant c'est la même personne.</p>
     <p><strong>Ce qu'il faut juger, dans l'ordre :</strong></p>
     <ol>
       <li>La <strong>fiche du personnage</strong> et son titre : est-ce que ça te
       donne envie d'en gagner un autre ?</li>
-      <li>Le <strong>cadran</strong> : est-ce qu'on voit d'un coup d'œil où tu en
-      es — et le skill <strong>verrouillé</strong> donne-t-il envie de l'ouvrir ?</li>
+      <li>Le <strong>cadran</strong> : voit-on d'un coup d'œil où tu en es — et le
+      skill <strong>verrouillé</strong> donne-t-il envie de l'ouvrir ?</li>
       <li>La <strong>fenêtre du Système</strong> : recharge la page, elle surgit.
       Est-ce que ça sonne comme un Système, ou comme une notification de plus ?</li>
-      <li><strong>A ou B</strong> : Ultima de nuit, ou un corps étranger dans Ultima ?</li>
+      <li><strong>Le gel</strong>, en bas de page : est-ce que ça mord assez —
+      ou trop ?</li>
     </ol>
     <p style="color:#8a7c5f"><em>Contenus inventés. Les gestes réels (tabac,
     alcool) n'apparaissent pas ici : une maquette est servie en preview publique,
@@ -394,174 +450,12 @@ body {
     aussi pour les maquettes.</em></p>
   </div>
 
-  <!-- ══════════════════════ FORME A ══════════════════════ -->
-  <h2 class="forme-titre">Forme A — <em>le Système gravé</em> · l'antique vu de nuit</h2>
-  <p class="forme-note">Nuit et or dominants, le bleu strictement réservé à la
-  voix du Système. ALTHEA reste une pièce d'Ultima — mais de nuit.</p>
-
-  <section class="systeme">
-
-    <!-- ① la fiche du personnage -->
-    <div class="fiche">
-      <svg class="avatar" viewBox="0 0 120 120" role="img" aria-label="Sceau du personnage : la couronne de laurier">
-        <circle cx="60" cy="60" r="55" fill="none" stroke="var(--or-sourd)" stroke-width="1"/>
-        <circle cx="60" cy="60" r="49" fill="var(--nuit-2)" stroke="var(--or)" stroke-width="1.5"/>
-        <path d="M60 26 L60 84" stroke="var(--or)" stroke-width="2" stroke-linecap="round"/>
-        <path d="M60 34 L49 43 M60 34 L71 43 M60 46 L47 55 M60 46 L73 55 M60 58 L49 67 M60 58 L71 67"
-              stroke="var(--or)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
-        <path d="M38 74 Q60 92 82 74" fill="none" stroke="var(--or)" stroke-width="1.8" stroke-linecap="round"/>
-        <circle cx="60" cy="24" r="3.4" fill="var(--or)"/>
-      </svg>
-      <div class="identite">
-        <p class="nom">Le Voyageur</p>
-        <p class="titre">Celui qui revient</p>
-        <div class="stats">
-          <div class="stat"><span class="cle">Niveau</span><span class="val">7</span></div>
-          <div class="stat"><span class="cle">Élan</span><span class="val">12 <small>jours</small></span></div>
-          <div class="stat"><span class="cle">Meilleur élan</span><span class="val">41 <small>jours</small></span></div>
-          <div class="stat"><span class="cle">Titres</span><span class="val">3 <small>/ 7</small></span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="deux-colonnes">
-      <div>
-        <!-- ② le cadran -->
-        <p class="bloc-titre">Le cadran — quatre skills, un verrouillé</p>
-        <svg class="cadran" viewBox="0 0 380 380" role="img"
-             aria-label="Cadran des skills : Endurance rang III, Langue du Nord rang II, Souffle rang I, Calligraphie verrouillée">
-          <!-- Nord : Endurance, rang III, 62 % vers le rang IV -->
-          <g transform="translate(190,64)">
-            <circle class="anneau-fond" r="34"/>
-            <circle class="anneau-plein" r="34" stroke-dasharray="132 214" pathLength="214"/>
-            <circle class="disque" r="27"/>
-            <path class="emb" d="M-11 6 L-3 -8 L4 2 L11 -9"/>
-            <text class="rang" y="42">III</text>
-            <text class="nom-skill" y="58">ENDURANCE</text>
-          </g>
-          <!-- Est : Langue du Nord, rang II, 38 % -->
-          <g transform="translate(300,190)">
-            <circle class="anneau-fond" r="34"/>
-            <circle class="anneau-plein" r="34" stroke-dasharray="81 214" pathLength="214"/>
-            <circle class="disque" r="27"/>
-            <path class="emb" d="M-10 -8 H10 M-10 0 H10 M-10 8 H4"/>
-            <text class="rang" y="42">II</text>
-            <text class="nom-skill" y="58">LANGUE DU NORD</text>
-          </g>
-          <!-- Sud : Souffle, rang I, 80 % -->
-          <g transform="translate(190,316)">
-            <circle class="anneau-fond" r="34"/>
-            <circle class="anneau-plein" r="34" stroke-dasharray="171 214" pathLength="214"/>
-            <circle class="disque" r="27"/>
-            <path class="emb" d="M-10 4 Q0 -12 10 4" />
-            <circle class="emb" cx="0" cy="-1" r="3"/>
-            <text class="rang" y="42">I</text>
-            <text class="nom-skill" y="58">SOUFFLE</text>
-          </g>
-          <!-- Ouest : verrouillé -->
-          <g transform="translate(80,190)" class="verrouille">
-            <circle class="anneau-fond" r="34"/>
-            <circle class="disque" r="27"/>
-            <path class="emb" d="M-7 3 h14 v9 h-14 z M-4 3 v-5 a4 4 0 0 1 8 0 v5"/>
-            <text class="nom-skill" y="42">CALLIGRAPHIE</text>
-            <text class="nom-skill" y="56" style="font-size:7.5px">quête « la main sûre »</text>
-          </g>
-          <!-- le cœur : le sceau du jour, c'est un bouton, pas un cap -->
-          <circle class="coeur-disque" cx="190" cy="190" r="51"/>
-          <circle class="coeur-cerne" cx="190" cy="190" r="45"/>
-          <text class="coeur-txt" x="190" y="182">6 AOÛT</text>
-          <text class="coeur-sous" x="190" y="197">NOURRIR LE JOUR</text>
-          <text class="coeur-attente" x="190" y="210">2 gestes en attente</text>
-        </svg>
-
-        <!-- ⑤ la fenêtre du Système -->
-        <div class="fenetre">
-          <p class="voix">[ Rang atteint — La Constance ]</p>
-          <p class="corps"><b>ENDURANCE</b> passe au rang III après 90 jours
-          nourris. Récompense déclarée : <b>une journée entière sans obligation</b>.</p>
-          <div class="actions">
-            <button class="bouton or" type="button">Réclamer</button>
-            <button class="bouton" type="button">Plus tard</button>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <!-- ③ le relevé -->
-        <p class="bloc-titre">Le relevé — un geste par case</p>
-        <div class="releve">
-          <h4>Aujourd'hui · jeudi 6</h4>
-          <div class="geste">
-            <span class="case tenu" aria-hidden="true">✦</span>
-            <span class="lib">Sommeil tenu<small>SOUFFLE · garde</small></span>
-          </div>
-          <div class="geste">
-            <span class="case tenu" aria-hidden="true">✦</span>
-            <span class="lib">Sans écran le soir<small>SOUFFLE · garde</small></span>
-          </div>
-          <div class="geste">
-            <span class="case vide" aria-hidden="true"></span>
-            <span class="lib">Marche longue<small>ENDURANCE · pratique · 40 min</small></span>
-          </div>
-          <div class="geste">
-            <span class="case vide" aria-hidden="true"></span>
-            <span class="lib">Étude du soir<small>LANGUE DU NORD · pratique</small></span>
-          </div>
-          <div class="geste" style="border-top:1px solid var(--trait);margin-top:6px;padding-top:12px">
-            <span class="lib" style="color:var(--parch-bas);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase">La semaine</span>
-            <span class="semaine">
-              <span class="jour tenu">L</span><span class="jour tenu">M</span>
-              <span class="jour muet">M</span><span class="jour tenu">J</span>
-              <span class="jour muet">V</span><span class="jour muet">S</span>
-              <span class="jour muet">D</span>
-            </span>
-          </div>
-        </div>
-
-        <!-- ④ le journal des quêtes -->
-        <p class="bloc-titre">Le journal — 1 principale · 2 secondaires · 2 de fond</p>
-        <div class="quete">
-          <p class="type">Quête principale</p>
-          <p class="intitule">Tenir une conversation entière dans la langue du Nord</p>
-          <p class="detail">Reflet de l'idéal <em>« parler sans traduire »</em> — ZEKROM.</p>
-          <div class="jauge"><i style="width:34%"></i></div>
-        </div>
-        <div class="quete secondaire">
-          <p class="type">Secondaire · proposée par Léo</p>
-          <p class="intitule">Cinq séances d'étude d'ici dimanche</p>
-          <p class="detail">3 / 5 · échéance dans 2 jours</p>
-          <p class="recompense">Récompense : débloque le skill CALLIGRAPHIE</p>
-        </div>
-        <div class="quete secondaire">
-          <p class="type">Secondaire · endormie depuis 12 jours</p>
-          <p class="intitule">Marcher dix kilomètres d'une traite</p>
-          <p class="detail">Le Système ne reproche rien — il demande seulement :
-          reprendre, ou ranger ?</p>
-        </div>
-        <div class="quete fond">
-          <p class="type">Quête de fond</p>
-          <p class="intitule">Nourrir SOUFFLE chaque jour</p>
-          <p class="detail">Élan 12 jours · meilleur 41</p>
-        </div>
-
-        <!-- ⑥ l'écran d'accueil -->
-        <p class="bloc-titre">Sur l'écran d'accueil</p>
-        <div class="accueil">
-          <div class="icone"><span>✦</span><span class="badge">4</span></div>
-          <p><b>Ce qu'iOS autorise réellement à une application web :</b> l'icône
-          d'Ultima et un chiffre — ici <b>4 à continuer</b>. Pas de tuile-widget :
-          iOS ne l'accorde à aucune app web. Le détail attend derrière ta session ;
-          la notification ne nomme jamais un geste.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════ FORME B ══════════════════════ -->
-  <h2 class="forme-titre">Forme B — <em>le Système spectral</em> · un corps étranger</h2>
-  <p class="forme-note">Rupture franche : bleu et nuit profonde dominants, l'or
-  en accent seul. ALTHEA cesse visiblement d'appartenir à Ultima — ce qui est
-  peut-être exactement ce que « c'est un autre système » voulait dire.</p>
+  <!-- ═══════════ LA FORME RETENUE — B, le Système spectral ═══════════ -->
+  <h2 class="forme-titre">Le Système <em>spectral</em> — forme retenue</h2>
+  <p class="forme-note">Choisie par Paul le 2026-08-06. Bleu et nuit profonde
+  dominants, l'or en accent seul : ALTHEA cesse visiblement d'appartenir à
+  Ultima — cohérent avec « c'est un autre système » et avec son autonomie.
+  La forme A (nuit et or) est abandonnée.</p>
 
   <section class="systeme spectral">
     <div class="fiche">
@@ -639,6 +533,16 @@ body {
             <button class="bouton" type="button">Plus tard</button>
           </div>
         </div>
+
+        <div class="leo">
+          <p class="qui">Léo</p>
+          <p>Trois cent quatre-vingt-dix jours que tu tiens SOUFFLE, en comptant
+          les reprises. Le rang IV est à <em>onze jours</em> — c'est le plus près
+          que tu aies jamais été.</p>
+          <p>Je te propose d'allonger la quête d'étude : dix séances sur le mois,
+          au lieu de cinq sur la semaine. Tu tiens le rythme depuis trois
+          semaines, autant que ça compte pour quelque chose.</p>
+        </div>
       </div>
 
       <div>
@@ -675,8 +579,9 @@ body {
         <p class="bloc-titre">Le journal — 1 principale · 2 secondaires · 2 de fond</p>
         <div class="quete">
           <p class="type">Quête principale</p>
-          <p class="intitule">Tenir une conversation entière dans la langue du Nord</p>
-          <p class="detail">Reflet de l'idéal <em>« parler sans traduire »</em> — ZEKROM.</p>
+          <p class="intitule">Tenir dix minutes de conversation, sans traduire</p>
+          <p class="detail">Concrète, quotidienne, et qui ne dépend de rien d'autre
+          dans Ultima — 34 séances sur les 100 visées.</p>
           <div class="jauge"><i style="width:34%"></i></div>
         </div>
         <div class="quete secondaire">
@@ -704,6 +609,81 @@ body {
           d'Ultima et un chiffre — ici <b>4 à continuer</b>. Pas de tuile-widget :
           iOS ne l'accorde à aucune app web. Le détail attend derrière ta session ;
           la notification ne nomme jamais un geste.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ LA SÉVÉRITÉ — le Système gelé ═══════════ -->
+  <h2 class="forme-titre">La sévérité — <em>le gel du Système</em></h2>
+  <p class="forme-note">Trois quêtes acceptées puis laissées à l'abandon, ni
+  reprises ni rangées : le Système se ferme. Il ne compte que des
+  <strong>engagements pris</strong> — un jour non renseigné n'y entre jamais.
+  Rien n'est perdu : le titre est <em>suspendu</em>, le flux est <em>coupé</em>,
+  la lumière tombe. Trois clics et tout revient.</p>
+
+  <section class="systeme spectral gele">
+    <div class="fiche">
+      <svg class="avatar" viewBox="0 0 120 120" role="img" aria-label="Sceau du personnage, éteint">
+        <circle cx="60" cy="60" r="55" fill="none" stroke="var(--verrou)" stroke-width="1"/>
+        <circle cx="60" cy="60" r="49" fill="var(--nuit-2)" stroke="var(--verrou)" stroke-width="1.5"/>
+        <path d="M60 26 L60 84" stroke="var(--verrou)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M60 34 L49 43 M60 34 L71 43 M60 46 L47 55 M60 46 L73 55 M60 58 L49 67 M60 58 L71 67"
+              stroke="var(--verrou)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        <path d="M38 74 Q60 92 82 74" fill="none" stroke="var(--verrou)" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="60" cy="24" r="3.4" fill="var(--verrou)"/>
+      </svg>
+      <div class="identite">
+        <p class="nom">Le Voyageur</p>
+        <p class="titre">En dette</p>
+        <div class="stats">
+          <div class="stat"><span class="cle">Niveau</span><span class="val">7</span></div>
+          <div class="stat"><span class="cle">Élan</span><span class="val">12 <small>jours</small></span></div>
+          <div class="stat"><span class="cle">Meilleur élan</span><span class="val">41 <small>jours</small></span></div>
+          <div class="stat"><span class="cle">Titres</span><span class="val">3 <small>/ 7, suspendus</small></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fenetre">
+      <p class="voix">[ Système en sommeil — trois engagements laissés ]</p>
+      <p class="corps">Aucune nouvelle quête ne sera proposée. Ton titre est
+      suspendu — <b>il n'est pas perdu</b>. Reprends ou range, et le Système se
+      réveille.</p>
+      <div class="actions">
+        <button class="bouton" type="button">Reprendre les trois</button>
+        <button class="bouton" type="button">Ranger</button>
+        <button class="bouton" type="button">Voir lesquelles</button>
+      </div>
+    </div>
+
+    <div class="leo">
+      <p class="qui">Léo</p>
+      <p>Trois quêtes dorment. Je ne t'en proposerai pas d'autres tant qu'elles
+      sont là — ce n'est pas une punition, c'est que <em>ça ne servirait à
+      rien</em>.</p>
+      <p>Range celle des dix kilomètres, franchement. Tu l'as acceptée un soir
+      d'enthousiasme et elle ne te ressemble pas. Ranger, ce n'est pas
+      abandonner : c'est décider.</p>
+    </div>
+
+    <div class="deux-colonnes" style="margin-top:22px">
+      <div>
+        <p class="bloc-titre">Ce que le gel NE touche PAS</p>
+        <div class="releve explication">
+          <div class="geste"><span class="lib">Les rangs acquis<small>intacts — un rang ne se reperd jamais</small></span></div>
+          <div class="geste"><span class="lib">Les jours nourris et l'élan<small>intacts — ils continuent de compter</small></span></div>
+          <div class="geste"><span class="lib">Les skills débloqués<small>intacts — rien ne se reverrouille</small></span></div>
+          <div class="geste"><span class="lib">Les titres obtenus<small>suspendus, jamais perdus</small></span></div>
+        </div>
+      </div>
+      <div>
+        <p class="bloc-titre">Ce que le gel touche</p>
+        <div class="releve explication">
+          <div class="geste"><span class="lib">Le flux de quêtes<small>coupé — plus aucune proposition</small></span></div>
+          <div class="geste"><span class="lib">Le titre porté<small>remplacé par « En dette »</small></span></div>
+          <div class="geste"><span class="lib">La lumière<small>le cadran se ternit</small></span></div>
+          <div class="geste"><span class="lib" style="color:var(--parch-bas)">…et rien d'autre.<small>Il touche l'ornement et le flux, jamais l'acquis</small></span></div>
         </div>
       </div>
     </div>
