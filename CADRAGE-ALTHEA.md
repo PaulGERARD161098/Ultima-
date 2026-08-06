@@ -622,8 +622,17 @@ s'affiche, il motive, **il ne détruit rien** quand il retombe. Le **meilleur
 | **`althea_abonnements_push`** | (boucle rappels) l'abonnement Web Push du téléphone. |
 
 Une **vue dérivée** `althea_progression` en `security_invoker`, **par skill** :
-jours nourris (au sens de la règle `nourriture`), élan courant, meilleur élan,
-rang atteint.
+jours (ou semaines) tenus au sens des cadences, élan courant, meilleur élan,
+rang atteint, **et l'état du jour — `tenu` / `en sommeil`**.
+
+> **La distinction qui sort des skills réels : ACQUIS ≠ TENU.**
+> *« Le joueur court au moins 10 km par semaine »* est vrai ou faux **cette
+> semaine**. Le skill peut donc **dormir** — et pourtant **rien n'est perdu** :
+> son rang, ses semaines tenues, son meilleur élan restent gravés. La règle
+> cardinale 2 s'énonce donc plus précisément qu'avant : **l'ACQUIS ne se perd
+> jamais ; l'ÉTAT, lui, respire.** Un skill en sommeil n'est pas une faute :
+> c'est une phrase qui n'est pas vraie aujourd'hui, et qui peut le redevenir
+> demain.
 
 ### 8.3 Les pièges déjà identifiés — trouvés en écrivant le modèle
 
@@ -644,7 +653,14 @@ rang atteint.
    court sans surveillance. **Parade** : au plus une composition par jour, sur
    ouverture ou geste explicite ; jamais de boucle de fond ; le compteur de
    générations vit en base et le refus est **serveur**, pas client.
-5. **La dette ne se stocke pas.** Tentation immédiate : une colonne `dette` sur
+5. **Les cadences se calculent sur une FENÊTRE, pas sur une date.** « Tous les
+   2 jours » et « 10 km par semaine » se lisent sur une fenêtre glissante — et
+   une fenêtre glissante mal bornée compte deux fois le même relevé ou en oublie
+   un au changement de semaine. **Parade** : la fenêtre est **fermée à gauche,
+   ouverte à droite**, en date locale, et le harnais l'éprouve **sur un
+   changement de semaine et sur un changement d'heure d'été** — pas sur une
+   semaine ordinaire, qui ne prouve rien.
+6. **La dette ne se stocke pas.** Tentation immédiate : une colonne `dette` sur
    l'avatar. Ce serait un compteur **désynchronisable** — il suffirait qu'une
    quête change d'état sans passer par le bon chemin pour que Paul soit gelé
    sans raison, ou dégelé à tort. **Parade** : la dette et le gel sont
@@ -809,39 +825,130 @@ condition pour jouer. **Effet de bord précieux : ALTHEA est livrable seul.**
 
 | # | Question | Recommandation de Léo |
 | --- | --- | --- |
-| **D10** | **Les trois ou quatre skills de départ** (§13) — validation de la liste proposée. | Les quatre du §13. Le reste **se gagnera** en quête, c'est le principe même. |
-| **D11** | **Le nom du personnage** et son titre de départ. | *Sans titre* au départ — un titre se gagne. Le nom : le tien, ou un nom de jeu ? |
-| **D12** | **Le second cran de sévérité** : une quête de fond peut-elle porter une exigence (« 4 jours sur 7 ») qui alimente la dette ? | **Oui, mais facultative.** C'est toi qui l'armes en acceptant la quête ; le Système n'invente aucune exigence. |
-| **D13** | **Le widget Scriptable** (§7.4) : on le fait, avec son jeton hors d'Ultima ? | **Le badge chiffré d'abord** (natif, sans clé, sans app tierce). Le widget seulement si le badge ne suffit pas. |
+| **D10** | ~~Les skills de départ~~ | ✅ **Dictés le 2026-08-06** — les cinq du §13. |
+| **D11** | ~~Le nom du personnage~~ | ✅ **Paul Gerard, niveau 48, titre *Farsight — celui qui voit loin*** (§13bis). |
+| **D15** | **Le rang II s'appelle « La Constance »**, or c'est aussi le nom d'un skill de Paul. Comment renommer le rang ? | **L'ASSIDUITÉ** → L'Éveil · L'Assiduité · L'Endurance · La Maîtrise · Le Renom. *(Ou : La Régularité.)* Le skill garde son nom — c'est le tien. |
+| **D16** | **Le niveau 48 est-il un socle déclaré** (ta vie compte déjà) **ou le jeu part-il de 1** ? | **Un socle déclaré.** Tu n'entres pas dans ta propre vie au niveau 1, et *Farsight* est un titre déjà gagné. |
+| **D17** | **Les aptitudes** — c'est quoi, par rapport à un skill ? | Hypothèse à confirmer : une **capacité de fond** que les skills font monter (force, souffle, mémoire, sang-froid). **Un skill se tient, une aptitude se dérive.** Dis-moi si c'est ça (§13ter). |
+| **D18** | **Le sport apparaît deux fois** (condition de *Peak performance* tous les 2 jours, et cœur de *Pieds légers* 10 km/semaine). Voulu ? | **Probablement voulu** — deux exigences différentes sur la même activité. Mais si tu préfères, *Pieds légers* absorbe le sport et *Peak performance* n'en parle plus. |
+| **D19** | **« Alimentation ok »** (condition de *Peak performance*) et **Omnivore** se recouvrent. | *Omnivore* **est** la définition d'« alimentation ok » → on retire la condition de *Peak performance* et on la remplace par « *Omnivore* est tenu ». Un second méta-lien, comme *Constance*. |
+| **D12** | **Le second cran de sévérité** : une quête de fond peut-elle porter une exigence (« 4 jours sur 7 ») qui alimente la dette ? | **Oui, mais facultative.** C'est toi qui l'armes en acceptant la quête. |
+| **D13** | **Le widget Scriptable** (§7.4) : on le fait, avec son jeton hors d'Ultima ? | **Le badge chiffré d'abord** (natif, sans clé, sans app tierce). |
 | **D14** | **Le cron des rappels** — gate coût sur le plan Vercel. | Décision de Paul. À poser en B4, pas avant. |
 
-## 13. Les skills de départ — proposition à valider
+## 13. Les skills de Paul — dictés le 2026-08-06
 
-La décision D5 change la donne : **je n'ai plus besoin d'une liste complète.**
-Trois ou quatre skills suffisent à ouvrir le jeu ; **le reste se gagne**. Voici
-donc une liste courte, tirée de ta dictée, à valider ou corriger.
+**Ce ne sont pas des compteurs. Ce sont des ÉNONCÉS.** C'est la révélation de
+cette dictée, et elle change le quadrant en profondeur : Paul n'écrit pas
+« japonais : 30 min », il écrit **« le joueur sait parler au moins 2 langues à
+haut niveau »**. Un skill est **une phrase au présent, sur le joueur** — vraie
+ou non, aujourd'hui. Le compteur n'est plus le but : il est **la preuve** que
+l'énoncé tient.
 
-| Skill | Ce qu'il y a dedans (les gestes) | Nature | Règle |
+### 13.1 Les cinq skills, tels que dictés
+
+| Skill | Énoncé | Conditions | Cadence |
 | --- | --- | --- | --- |
-| **PEAK PERFORMANCE** | « pas fumé » · « pas bu d'alcool » | garde | `tous` — une journée sans tabac mais arrosée n'en est pas une |
-| **JAPONAIS** | « étudié le japonais » *(+ minutes)* | pratique | `un` |
-| **ESPAGNOL** | « étudié l'espagnol » *(+ minutes)* | pratique | `un` |
-| **SPORT** | « séance » · « marche longue » · « vélo » | pratique | `un` — plusieurs portes, peu importe laquelle |
+| **PEAK PERFORMANCE** | *« Le joueur est au top de sa forme ! »* | pas de recours à substance externe · sommeil en ordre · stop écran tard · alimentation ok | chaque jour |
+| | | sport | **tous les 2 jours** |
+| **PIEDS LÉGERS** | *« Le joueur court au moins 10 km par semaine. »* | course | **10 km / semaine** |
+| **TRADUCTEUR** | *« Le joueur sait parler au moins 2 langues à haut niveau. »* | italien **OU** espagnol **OU** japonais | **30 min / jour**, l'une des trois suffit |
+| **OMNIVORE** | *« Le joueur peut manger de tout. »* | des légumes · quatre repas | chaque jour |
+| **CONSTANCE** | *« Le joueur se relève toujours après avoir chuté, il ne reste pas au sol. »* | **se lit sur les autres skills** | à chaque rupture |
 
-**Et un cinquième, VERROUILLÉ dès le départ** — pour que le mécanisme de
-déblocage existe dès le premier jour et se voie :
+**Évolution dictée** : **TRADUCTEUR → TRADUCTEUR UNIVERSEL** — *« savoir parler
+3 langues »*. C'est le premier maillon de **l'arbre de capacités** que Paul
+nommait dès sa première dictée.
 
-| Skill | S'ouvre en achevant… |
+### 13.2 Ce que ces cinq skills obligent à changer dans le modèle
+
+Cinq exemples réels ont fait apparaître ce qu'aucune spéculation n'avait vu.
+
+1. **L'ÉNONCÉ devient un champ de premier rang.** `enonce` sur le skill —
+   la phrase que le Système affiche et que Léo reprend. Sans elle, ALTHEA n'est
+   qu'un tableau de cases ; avec elle, c'est **une déclaration sur soi**.
+2. **La CADENCE remplace « une case par jour ».** Mon modèle ne savait dire que
+   *quotidien*. Les cinq skills en exigent quatre de plus :
+
+   | Cadence | Exemple de Paul | Comment ça se compte |
+   | --- | --- | --- |
+   | `quotidien` | légumes, sommeil | une case par jour |
+   | `tous_les_n_jours` | sport tous les 2 jours | tenu si le dernier remonte à ≤ N jours |
+   | `volume_semaine` | 10 km / semaine | somme glissante sur 7 jours ≥ seuil |
+   | `duree_jour` | 30 min de langue | minutes du jour ≥ seuil |
+   | `n_par_jour` | 4 repas | compte du jour ≥ seuil |
+
+3. **Les conditions peuvent être en OU.** *Italien ou espagnol ou japonais* :
+   un **groupe** de conditions dont une seule suffit. Ma règle `un` / `tous`
+   monte donc **d'un cran** : elle s'applique à un **groupe** de conditions, pas
+   seulement au skill entier.
+4. **Un skill ÉVOLUE.** `evolue_en` → un skill supérieur, débloqué quand une
+   condition renforcée est atteinte. C'est l'arbre. Sur le cadran, un **chevron
+   spectral** signale un skill qui peut monter.
+5. **CONSTANCE est un MÉTA-SKILL.** Ses conditions ne lisent aucun geste : elles
+   lisent **l'état des autres skills** (« après une rupture, reprendre »). C'est
+   une catégorie neuve, et elle est précieuse — elle récompense exactement ce
+   que tout système de série punit.
+
+### 13.3 Deux points d'attention, l'un est une collision
+
+⚠️ **« CONSTANCE » est déjà le nom du rang II** (L'Éveil · **La Constance** ·
+L'Endurance · La Maîtrise · Le Renom). Un skill nommé *Constance* qui atteint
+*La Constance* est une phrase que personne ne peut lire. **Le skill de Paul
+gagne** — c'est le sien. Le rang II doit être renommé.
+→ **Proposition : L'ASSIDUITÉ.** L'échelle devient : L'Éveil · **L'Assiduité** ·
+L'Endurance · La Maîtrise · Le Renom. *(Autre option : La Régularité.)*
+→ **Décision D15.**
+
+✅ **Convergence heureuse** : *Constance* — « se relever après avoir chuté » —
+**est exactement** le titre que j'avais proposé au §5.1, **« Celui qui
+revient »**. Les deux disent la même chose. Ils fusionnent : **tenir le skill
+CONSTANCE débloque le titre « Celui qui revient »**. Le catalogue de titres et
+la liste de skills se répondent au lieu de se doubler.
+
+### 13.4 Ce qui reste ouvert sur les skills
+
+1. **Les seuils de rang.** 7 / 30 / 90 / 180 / 365 jours tenus, pour tous les
+   skills ? *Pieds légers* se compte en semaines, pas en jours — son échelle
+   devrait sans doute être **en semaines tenues** (4 / 12 / 26 / 52 / 104).
+2. **Le sport apparaît deux fois** : condition de *Peak performance* (tous les
+   2 jours) et cœur de *Pieds légers* (10 km/semaine). Est-ce voulu — deux
+   exigences distinctes sur la même activité — ou faut-il n'en garder qu'une ?
+3. **« Alimentation ok »** et *Omnivore* se recouvrent partiellement. *Omnivore*
+   est-il la définition de « alimentation ok », ou deux choses différentes ?
+
+## 13bis. Le personnage — dicté le 2026-08-06
+
+| | |
 | --- | --- |
-| **SOMMEIL** *(verrouillé)* | la quête *« sept soirs sans écran au lit »* |
+| **Nom** | Paul Gerard |
+| **Niveau** | 48 |
+| **Titre porté** | **Farsight** — *« celui qui voit loin »* |
+| **Sceau** | un homme de profil, tourné vers un horizon lointain (le titre fait le dessin) |
 
-Trois questions ouvertes, et elles se répondent en une phrase chacune :
+**Le titre de départ n'est donc pas *Sans titre*.** Paul entre dans le jeu avec
+un titre déjà gagné — ce qui est juste : il a quarante-huit ans de vie derrière
+lui, pas zéro. Le niveau 48 dit la même chose. **Conséquence de modèle** : le
+niveau n'est pas seulement dérivé du jeu ; il **part d'un socle** que Paul
+déclare. À confirmer (**D16**).
 
-1. **Peak performance** — deux gestes suffisent, ou tu en ajoutes (sommeil,
-   sport, alimentation) ?
-2. **Sport** — mes trois portes te vont, ou tu en veux d'autres ?
-3. **Le rythme des paliers** — 7 / 30 / 90 / 180 / 365 jours nourris. Le japonais
-   mérite peut-être plus serré ; la garde, plus large ?
+## 13ter. Les aptitudes — le second registre, à définir
+
+Paul annonce, après la liste des skills, **une liste d'aptitudes** : *« on va
+les faire »*. Ce registre n'est **pas inventé ici** — la maquette lui réserve un
+cadre vide et annoncé, ce qui vaut mieux qu'un remplissage à sa place.
+
+**Ce que Léo a besoin de savoir pour le cadrer** : *une aptitude, c'est quoi par
+rapport à un skill ?* Hypothèse la plus probable, à confirmer ou démentir : une
+**capacité de fond** qui ne se coche pas et que les skills font monter — force,
+souffle, mémoire, sang-froid, à la manière des caractéristiques d'un
+personnage. Si c'est ça, la mécanique diffère complètement : **un skill se
+tient, une aptitude se dérive.** → **Décision D17.**
+
+> **Note de lexique** : Paul a écrit *« Talents : omnivore »* dans sa dernière
+> dictée. Le mot **SKILL** reste acté (D2) — *talent* appartient à RESHIRAM avec
+> un sens opposé. Signalé une fois, sans insistance : si Paul veut revenir en
+> arrière, c'est sa décision, mais il faudra alors renommer côté RESHIRAM.
 
 ## 14. Le format 6 points de B1
 
@@ -902,17 +1009,19 @@ pourtant dès B1 : c'est ce qui donne envie de la suite.
 
 ## 15. État de la boucle
 
-- **B0 — cadrage et étude** : ✅ **CLOS le 2026-08-06.** Deux dictées absorbées,
-  cinq collisions écrites, la boucle de jeu fermée, la réalité technique des
-  rappels et du widget **vérifiée avant d'être promise**, la maquette livrée et
-  tranchée. **Zéro code d'application, zéro migration.**
-- **Neuf décisions prises** (§12.1). Deux d'entre elles ont **corrigé le
-  cadrage** plutôt que de le confirmer — l'autonomie d'ALTHEA (qui supprime les
-  liens que je proposais) et le pilotage par Léo (qui rhabille l'architecture de
-  l'agent). C'est exactement ce que le gate d'entrée EL existe pour produire.
-- **Reste avant d'ouvrir B1** : **D10** (valider les quatre skills de départ) et
-  **D11** (le nom du personnage). Ce ne sont plus des bloquants de conception —
-  la décision D5 a fait tomber l'exigence d'une liste complète : **le reste des
-  skills se gagnera en quête.**
-- **Prochaine action unique** : Paul valide les skills du §13, puis **B1
-  s'ouvre** — le personnage et ses skills, sans aucune quête.
+- **B0 — cadrage et étude** : ✅ **CLOS.** Deux dictées de fond absorbées, cinq
+  collisions écrites, la boucle de jeu fermée, la réalité technique des rappels
+  et du widget **vérifiée avant d'être promise**, la forme tranchée sur maquette,
+  **les cinq skills réels de Paul recueillis**, le personnage nommé.
+  **Zéro code d'application, zéro migration.**
+- **Le cadrage a été corrigé TROIS fois par les réponses de Paul**, jamais par
+  une relecture : ① *« ce qu'il y a dedans »* a révélé les deux étages ;
+  ② *« pas de liens »* a rendu ALTHEA autonome ; ③ **les skills réels ont fait
+  apparaître l'ÉNONCÉ, les CADENCES, l'ÉVOLUTION et le MÉTA-SKILL** — quatre
+  mécaniques qu'aucune spéculation n'avait vues. *La leçon se répète : le
+  cadrage ne se valide pas, il se confronte au réel de Paul.*
+- **Reste avant d'ouvrir B1** : **D15** (renommer le rang II), **D17** (ce
+  qu'est une aptitude), et les deux recouvrements **D18 / D19**. Aucun n'est
+  bloquant pour commencer la forme ; tous le sont pour figer le schéma.
+- **Prochaine action unique** : Paul tranche D15 et D17, puis **B1 s'ouvre** —
+  le personnage, le cadran, la liste des skills, le relevé. Sans aucune quête.

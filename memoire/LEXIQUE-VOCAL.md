@@ -153,3 +153,23 @@ reformuler et demander — jamais deviner avant une action irréversible.
   - **La forme d'ALTHEA = le Système spectral** (forme B). Bleu et nuit
     profonde, l'or en accent. La forme A (nuit et or) a été comparée puis
     abandonnée.
+
+- **ALTHEA — le vocabulaire des skills réels (2026-08-06)** :
+  - **Un ÉNONCÉ** = la phrase au présent qui définit un skill (« le joueur est
+    au top de sa forme ! »). C'est le cœur du skill ; le compteur n'en est que
+    la preuve. Toujours formulé « **le joueur** … », jamais « tu ».
+  - **Une CADENCE** = le rythme d'une condition : *quotidien*, *tous les N
+    jours*, *volume par semaine* (10 km), *durée par jour* (30 min), *N par
+    jour* (4 repas). « Une case par jour » ne suffit pas à décrire ALTHEA.
+  - **ACQUIS ≠ TENU** : un skill **acquis** l'est pour toujours ; un skill
+    **tenu** l'est aujourd'hui. Un skill peut être **en sommeil** sans que rien
+    ne soit perdu. Ne jamais dire « perdu » d'un skill.
+  - **Une ÉVOLUTION** = un skill qui monte en un skill supérieur (TRADUCTEUR →
+    TRADUCTEUR UNIVERSEL). C'est l'arbre de capacités.
+  - **Un MÉTA-SKILL** = un skill dont les conditions lisent **les autres
+    skills**, pas des gestes (CONSTANCE).
+  - **Le personnage de Paul** : **Paul Gerard, niveau 48**, titre **Farsight**,
+    « celui qui voit loin ». Le niveau et le titre sont un **socle déclaré** —
+    on n'entre pas dans sa propre vie au niveau 1.
+  - **Les APTITUDES** = second registre annoncé par Paul, **non encore défini**.
+    Ne rien inventer dessus.

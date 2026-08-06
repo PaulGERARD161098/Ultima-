@@ -1803,3 +1803,55 @@
     La dette et le gel sont **entièrement dérivés** de l'état des quêtes.
   - **Place tranchée** : `ultima-perso.enfants = ['grima', 'naga', 'althea']` —
     ALTHEA ne relève ni de « ce qui est utile » ni de « ce qui fait grandir ».
+
+- **2026-08-06 (ALTHEA — les skills RÉELS, et la troisième correction du modèle)** —
+  Paul dicte ses cinq skills, son personnage, et signale un défaut d'affichage.
+  - 🔻 **LA RÉVÉLATION : un skill n'est pas un compteur, c'est un ÉNONCÉ.**
+    Paul n'écrit pas « japonais : 30 min », il écrit **« le joueur sait parler
+    au moins 2 langues à haut niveau »**. Un skill est **une phrase au présent,
+    sur le joueur**, vraie ou non aujourd'hui. Le compteur n'est plus le but :
+    il est **la preuve que l'énoncé tient**. Champ `enonce` de premier rang.
+  - **Les cinq skills** : **PEAK PERFORMANCE** (« le joueur est au top de sa
+    forme ! » — substance externe, sommeil, écran, alimentation, sport tous les
+    2 jours) · **PIEDS LÉGERS** (« court au moins 10 km par semaine ») ·
+    **TRADUCTEUR** (« sait parler au moins 2 langues à haut niveau » — italien
+    OU espagnol OU japonais, 30 min/jour) · **OMNIVORE** (« peut manger de
+    tout » — légumes chaque jour, 4 repas) · **CONSTANCE** (« se relève toujours
+    après avoir chuté, ne reste pas au sol »).
+  - 🔻 **QUATRE mécaniques qu'aucune spéculation n'avait vues** — cinq exemples
+    réels ont suffi là où trois jours de cadrage n'auraient pas suffi :
+    ① **les CADENCES** — mon modèle ne savait dire que *quotidien* ; il en faut
+    quatre de plus (`tous_les_n_jours`, `volume_semaine`, `duree_jour`,
+    `n_par_jour`). ② **les conditions en OU** (italien/espagnol/japonais) : la
+    règle `un`/`tous` monte d'un cran, au niveau d'un **groupe**. ③ **l'ÉVOLUTION
+    d'un skill** — TRADUCTEUR → TRADUCTEUR UNIVERSEL : c'est **l'arbre de
+    capacités** de la première dictée qui apparaît enfin. ④ **le MÉTA-SKILL** :
+    CONSTANCE ne lit aucun geste, elle lit **l'état des autres skills**.
+  - 🔻 **ACQUIS ≠ TENU — la règle cardinale 2 s'énonce plus précisément.**
+    « Le joueur court 10 km par semaine » est vrai ou faux **cette semaine**. Un
+    skill peut donc **dormir** sans que rien ne soit perdu : rang, semaines
+    tenues, meilleur élan restent gravés. **L'acquis ne se perd jamais ; l'état,
+    lui, respire.** Un skill en sommeil n'est pas une faute — c'est une phrase
+    qui n'est pas vraie aujourd'hui.
+  - ⚠️ **Collision de noms** : le skill **CONSTANCE** contre le rang II **La
+    Constance**. Le skill de Paul gagne ; le rang à renommer (**L'Assiduité**
+    proposé). ✅ **Convergence heureuse au même endroit** : *Constance* — « se
+    relever après avoir chuté » — **est exactement** le titre « Celui qui
+    revient » proposé la veille. Les deux fusionnent au lieu de se doubler.
+  - **Le personnage** : **Paul Gerard, niveau 48, titre *Farsight — celui qui
+    voit loin***. Conséquence : **le titre de départ n'est pas « Sans titre »**
+    et le niveau ne part pas de 1 — Paul entre dans le jeu avec un **socle
+    déclaré**. On n'entre pas dans sa propre vie au niveau 1.
+  - **Les APTITUDES** : Paul annonce un second registre après les skills (« on va
+    les faire »). **Non inventé** — la maquette lui réserve un cadre vide et
+    ANNONCÉ, et la question est posée. *Un cadre vide assumé vaut mieux qu'un
+    remplissage à sa place.*
+  - 🔻 **Défaut d'affichage signalé par Paul, puis MESURÉ** : « chevauchement de
+    caractères au milieu ». Diagnostic chiffré par comparaison des boîtes
+    englobantes — **les chiffres de rang mordaient leur propre anneau de 4 px**
+    (le trait compte : `stroke/2` s'ajoute à la `getBBox`). Corrigé, et **le cap
+    plein Nord écrit désormais vers l'EXTÉRIEUR** de la rose — le faire écrire
+    vers le bas l'amenait sur le cœur. Second défaut trouvé dans la foulée, que
+    personne n'aurait vu : le nom du cap Nord sur deux lignes **sortait du cadre
+    de 3 px** — le SVG écrête **en silence**. *L'œil de Paul a trouvé le
+    symptôme ; seule la mesure a trouvé les deux causes.*
