@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Preview — ALTHEA : le Système, deux formes</title>
+<!--
+  PREVIEW DE TRAVAIL — aucune donnée réelle. Contenus NEUTRES inventés.
+  Zéro ressource externe, zéro CDN, ZÉRO <script> (CSP script-src 'self').
+
+  ⚠️ NOTE DE SÉCURITÉ, ET C'EST VOLONTAIRE :
+  les gestes affichés ici ("sommeil tenu", "sans écran le soir"…) ne sont PAS
+  ceux dictés par Paul. Une maquette est servie en preview publique ; les gestes
+  réels d'ALTHEA sont de la donnée de santé et ne sortent jamais du quadrant
+  authentifié (CADRAGE-ALTHEA.md §9). La règle s'applique donc à la maquette
+  elle-même, pas seulement à l'application.
+
+  Dictée de Paul (2026-08-06, seconde dictée) :
+    « Mon Système, style Solo Leveling. J'ai un titre important, une sorte
+      d'avatar. Des quêtes principales, des quêtes secondaires, que le système
+      me génère des quêtes secondaires, des allongements de quête, toujours au
+      fur et à mesure. Les récompenses également. Que je renseigne tous mes
+      skills, que je débloque de nouveaux skills, que les quêtes me donnent des
+      skills. Que le système m'envoie des rappels automatiques. Va chercher loin
+      pour le côté graphique. Un système complet, à la fois proactif et passif. »
+
+  LA THÈSE (CADRAGE-ALTHEA.md §10) : Solo Leveling et Ultima partagent déjà la
+  grammaire (capitales espacées, cartouche, voix rituelle, blocs de stats). Il ne
+  manque que DEUX choses : l'apparition, et la nuit. D'où « l'antique vu de
+  nuit ».
+
+  RÈGLE DE COULEUR, identique dans les deux formes :
+    OR   = ce qui est GAGNÉ (rangs, titres, sceaux).
+    BLEU = ce qui est ANNONCÉ (la voix du Système, et elle seule).
+  Un rang ne devient jamais bleu ; une annonce ne devient jamais or.
+-->
+<style>
+/* ───────────────────────── socle commun ───────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+  background: #1b1710;
+  color: #e8dcc4;
+  line-height: 1.5;
+}
+.page { max-width: 1180px; margin: 0 auto; padding: 28px 18px 72px; }
+
+.chapeau {
+  border: 1px solid #6b5c3a;
+  background: #221d14;
+  padding: 20px 22px;
+  margin-bottom: 34px;
+}
+.chapeau h1 {
+  margin: 0 0 6px;
+  font-size: 1.35rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: #e3c46a;
+}
+.chapeau p { margin: 8px 0 0; font-size: .95rem; color: #cdbf9f; }
+.chapeau strong { color: #e8dcc4; }
+.chapeau ol { margin: 10px 0 0; padding-left: 20px; font-size: .95rem; color: #cdbf9f; }
+.chapeau li { margin: 4px 0; }
+
+.forme-titre {
+  margin: 46px 0 14px;
+  font-size: 1rem;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: #8e7f5c;
+  border-bottom: 1px solid #40382a;
+  padding-bottom: 8px;
+}
+.forme-titre em { font-style: normal; color: #e3c46a; }
+.forme-note { margin: 0 0 18px; font-size: .9rem; color: #9c8f72; }
+
+/* ── Le cadre d'une forme : toutes les couleurs passent par des variables,
+      donc les deux formes partagent EXACTEMENT le même balisage. ── */
+.systeme {
+  --nuit:      #14110c;   /* le fond */
+  --nuit-2:    #1d1810;   /* les panneaux */
+  --trait:     #4a3f28;   /* les filets */
+  --or:        #e3c46a;   /* ce qui est GAGNÉ */
+  --or-sourd:  #a08a4e;
+  --parch:     #ded0b0;   /* le texte courant */
+  --parch-bas: #9c8f72;   /* le texte secondaire */
+  --spectre:   #9fd4ff;   /* la VOIX du Système */
+  --spectre-f: #3d6a8c;   /* son filet */
+  --verrou:    #5c5344;
+
+  background: var(--nuit);
+  border: 1px solid var(--trait);
+  padding: 26px 24px 30px;
+  color: var(--parch);
+}
+.systeme.spectral {
+  --nuit:      #04060b;
+  --nuit-2:    #080d16;
+  --trait:     #1d3550;
+  --or:        #d8b45c;
+  --or-sourd:  #8a733a;
+  --parch:     #b9cfe4;
+  --parch-bas: #6d8299;
+  --spectre:   #6fc0ff;
+  --spectre-f: #2a6ea8;
+  --verrou:    #3a4a5c;
+}
+
+/* ───────────────────────── ① la fiche du personnage ───────────────────────── */
+.fiche {
+  display: grid;
+  grid-template-columns: 132px 1fr;
+  gap: 22px;
+  align-items: center;
+  border-bottom: 1px solid var(--trait);
+  padding-bottom: 22px;
+}
+.avatar { width: 132px; height: 132px; }
+.identite .nom {
+  font-size: 1.5rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--parch);
+  margin: 0;
+}
+.identite .titre {
+  margin: 4px 0 14px;
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--or);
+}
+.identite .titre::before { content: '« '; }
+.identite .titre::after  { content: ' »'; }
+
+.stats { display: flex; flex-wrap: wrap; gap: 26px; }
+.stat .cle {
+  display: block;
+  font-size: .68rem;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--parch-bas);
+}
+.stat .val { font-size: 1.5rem; color: var(--or); }
+.stat .val small { font-size: .8rem; color: var(--parch-bas); letter-spacing: .1em; }
+
+/* ───────────────────────── ② le cadran des skills ───────────────────────── */
+.bloc-titre {
+  margin: 30px 0 4px;
+  font-size: .72rem;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--parch-bas);
+}
+.deux-colonnes { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 30px; }
+@media (max-width: 860px) { .deux-colonnes { grid-template-columns: 1fr; } }
+
+.cadran { width: 100%; max-width: 470px; margin: 0 auto; display: block; }
+.cadran .anneau-fond { fill: none; stroke: var(--trait); stroke-width: 5; }
+.cadran .anneau-plein {
+  fill: none;
+  stroke: var(--or);
+  stroke-width: 5;
+  stroke-linecap: round;
+  /* L'anneau part du Nord : on le fait pivoter d'un quart de tour.
+     transform-box: fill-box est OBLIGATOIRE — sans lui, `transform-origin:
+     center` désigne le centre du viewBox (initial value de transform-box en
+     SVG), et l'anneau part pivoter à 700 px hors du cadre, donc invisible.
+     Défaut trouvé par la MESURE (getBBox vs viewBox), jamais par l'œil. */
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: rotate(-90deg);
+}
+.cadran .disque { fill: var(--nuit-2); stroke: var(--or-sourd); stroke-width: 1; }
+.cadran .emb { fill: none; stroke: var(--or); stroke-width: 1.6; stroke-linecap: round; }
+.cadran .nom-skill {
+  fill: var(--parch);
+  font-size: 9.5px;
+  letter-spacing: 1.6px;
+  text-anchor: middle;
+  font-family: Georgia, serif;
+}
+.cadran .rang {
+  fill: var(--or);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-anchor: middle;
+  font-family: Georgia, serif;
+}
+.cadran .coeur-disque { fill: var(--nuit-2); stroke: var(--or); stroke-width: 1.5; }
+.cadran .coeur-txt {
+  fill: var(--or);
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-anchor: middle;
+  font-family: Georgia, serif;
+}
+.cadran .coeur-cerne { fill: none; stroke: var(--or-sourd); stroke-width: .8; }
+.cadran .coeur-sous {
+  fill: var(--parch);
+  font-size: 7.5px;
+  letter-spacing: 1.6px;
+  text-anchor: middle;
+  font-family: Georgia, serif;
+}
+/* Le compte des gestes en attente : c'est l'appel à l'action du cadran,
+   il se lit — donc il prend la couleur du texte courant, pas celle du décor. */
+.cadran .coeur-attente {
+  fill: var(--parch);
+  font-size: 8px;
+  text-anchor: middle;
+  font-family: Georgia, serif;
+}
+/* un skill VERROUILLÉ se voit, se nomme, et dit qui l'ouvre */
+.cadran .verrouille .disque { stroke: var(--verrou); stroke-dasharray: 3 3; }
+.cadran .verrouille .emb    { stroke: var(--verrou); }
+.cadran .verrouille .nom-skill { fill: var(--verrou); }
+.cadran .verrouille .anneau-fond { stroke: var(--verrou); stroke-dasharray: 2 4; }
+
+/* ───────────────────────── ③ le relevé du jour ───────────────────────── */
+.releve { border: 1px solid var(--trait); background: var(--nuit-2); padding: 14px 16px; }
+.releve h4 {
+  margin: 0 0 12px;
+  font-size: .68rem;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--parch-bas);
+  font-weight: normal;
+}
+.geste { display: flex; align-items: center; gap: 11px; padding: 7px 0; border-top: 1px solid var(--trait); }
+.geste:first-of-type { border-top: 0; }
+.case {
+  width: 21px; height: 21px; flex: 0 0 21px;
+  border: 1px solid var(--or-sourd);
+  display: grid; place-items: center;
+  font-size: 12px; color: var(--or);
+}
+.case.tenu { background: var(--or); color: var(--nuit); border-color: var(--or); }
+.case.vide { border-style: dashed; border-color: var(--verrou); }
+.geste .lib { flex: 1; font-size: .93rem; }
+.geste .lib small { display: block; color: var(--parch-bas); font-size: .74rem; letter-spacing: .06em; }
+.semaine { display: flex; gap: 5px; }
+.jour {
+  width: 19px; height: 19px;
+  border: 1px solid var(--trait);
+  display: grid; place-items: center;
+  font-size: 9px; color: var(--parch-bas);
+}
+.jour.tenu { background: var(--or-sourd); color: var(--nuit); border-color: var(--or-sourd); }
+.jour.muet { border-style: dashed; }
+
+/* ───────────────────────── ④ le journal des quêtes ───────────────────────── */
+.quete {
+  border-left: 2px solid var(--or-sourd);
+  padding: 10px 0 10px 14px;
+  margin-bottom: 14px;
+}
+.quete.secondaire { border-left-color: var(--trait); }
+.quete.fond { border-left-color: var(--spectre-f); }
+.quete .type {
+  font-size: .62rem;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--parch-bas);
+}
+.quete .intitule { font-size: 1rem; color: var(--parch); margin: 2px 0 4px; }
+.quete .detail { font-size: .82rem; color: var(--parch-bas); }
+.quete .recompense { font-size: .82rem; color: var(--or); font-style: italic; }
+.jauge { height: 3px; background: var(--trait); margin-top: 8px; }
+.jauge i { display: block; height: 3px; background: var(--or); }
+
+/* ───────────────────────── ⑤ la fenêtre du Système ───────────────────────── */
+/* L'APPARITION : un trait de lumière s'ouvre, puis le cadre, puis le texte.
+   Respecte prefers-reduced-motion — sans animation, la fenêtre est là. */
+.fenetre {
+  position: relative;
+  border: 1px solid var(--spectre-f);
+  background: linear-gradient(180deg, rgba(159,212,255,.07), transparent 65%);
+  padding: 16px 18px;
+  margin: 18px 0 0;
+  /* les angles COUPÉS : un instrument n'est pas tendre */
+  clip-path: polygon(11px 0, 100% 0, 100% calc(100% - 11px), calc(100% - 11px) 100%, 0 100%, 0 11px);
+  animation: surgir 900ms ease-out both;
+}
+.fenetre::before {
+  content: '';
+  position: absolute; left: 0; right: 0; top: -1px;
+  height: 1px; background: var(--spectre);
+  box-shadow: 0 0 9px var(--spectre);
+  animation: trait 900ms ease-out both;
+}
+.fenetre .voix {
+  color: var(--spectre);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  font-size: .82rem;
+  margin: 0;
+}
+.fenetre .corps { margin: 8px 0 0; font-size: .9rem; color: var(--parch); }
+.fenetre .corps b { color: var(--or); font-weight: normal; }
+.fenetre .actions { margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap; }
+.bouton {
+  border: 1px solid var(--spectre-f);
+  color: var(--spectre);
+  background: transparent;
+  padding: 6px 14px;
+  font-family: inherit;
+  font-size: .78rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.bouton.or { border-color: var(--or-sourd); color: var(--or); }
+
+@keyframes trait {
+  0%   { transform: scaleX(0); opacity: 1; }
+  45%  { transform: scaleX(1); opacity: 1; }
+  100% { transform: scaleX(1); opacity: .5; }
+}
+@keyframes surgir {
+  0%   { opacity: 0; transform: translateY(-4px); clip-path: inset(0 0 100% 0); }
+  40%  { opacity: 1; }
+  100% { opacity: 1; transform: none; clip-path: polygon(11px 0, 100% 0, 100% calc(100% - 11px), calc(100% - 11px) 100%, 0 100%, 0 11px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fenetre, .fenetre::before { animation: none; }
+}
+
+/* En forme B, la fenêtre s'auréole — c'est le seul ajout qui pousse vers
+   l'hologramme SANS toucher à la règle de couleur (or = gagné, bleu = annoncé).
+   J'ai refusé de rendre les anneaux bleus pour creuser l'écart entre A et B :
+   ça aurait rendu la comparaison plus spectaculaire en cassant ce qui tient
+   tout le dessin. L'écart entre les deux formes est donc volontairement étroit. */
+.systeme.spectral .fenetre {
+  box-shadow: inset 0 0 26px rgba(111,192,255,.10), 0 0 20px rgba(111,192,255,.09);
+}
+
+/* ───────────────────────── ⑥ l'écran d'accueil ───────────────────────── */
+.accueil { display: flex; align-items: center; gap: 18px; margin-top: 18px; }
+.icone {
+  position: relative;
+  width: 66px; height: 66px;
+  border-radius: 15px;
+  background: var(--nuit-2);
+  border: 1px solid var(--or-sourd);
+  display: grid; place-items: center;
+}
+.icone span { color: var(--or); font-size: 1.5rem; letter-spacing: .1em; }
+.badge {
+  position: absolute; top: -8px; right: -8px;
+  min-width: 24px; height: 24px; padding: 0 6px;
+  border-radius: 12px;
+  background: #b3261e; color: #fff;
+  font-family: -apple-system, system-ui, sans-serif;
+  font-size: .82rem; font-weight: 600;
+  display: grid; place-items: center;
+}
+.accueil p { margin: 0; font-size: .86rem; color: var(--parch-bas); max-width: 460px; }
+.accueil p b { color: var(--parch); font-weight: normal; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="chapeau">
+    <h1>ALTHEA — le Système</h1>
+    <p><strong>Deux formes, exactement le même balisage.</strong> Seule la
+    palette change : c'est la preuve que le choix qui t'est demandé est un choix
+    de <em>lumière</em>, pas de structure. Tu peux prendre l'une ou l'autre sans
+    rien recoder.</p>
+    <p><strong>La thèse :</strong> Solo Leveling et Ultima partagent déjà la
+    grammaire — capitales espacées, cartouche, voix rituelle, blocs de stats.
+    Il ne manquait que deux choses : <strong>l'apparition</strong> et
+    <strong>la nuit</strong>. D'où « l'antique vu de nuit ».</p>
+    <p><strong>La règle de couleur, dans les deux formes :</strong> l'<span
+    style="color:#e3c46a">or</span> pour ce qui est <strong>gagné</strong> (rangs,
+    titres, sceaux) · le <span style="color:#9fd4ff">bleu spectral</span> pour ce
+    qui est <strong>annoncé</strong> — la voix du Système, et elle seule.</p>
+    <p><strong>Ce qu'il faut juger, dans l'ordre :</strong></p>
+    <ol>
+      <li>La <strong>fiche du personnage</strong> et son titre : est-ce que ça te
+      donne envie d'en gagner un autre ?</li>
+      <li>Le <strong>cadran</strong> : est-ce qu'on voit d'un coup d'œil où tu en
+      es — et le skill <strong>verrouillé</strong> donne-t-il envie de l'ouvrir ?</li>
+      <li>La <strong>fenêtre du Système</strong> : recharge la page, elle surgit.
+      Est-ce que ça sonne comme un Système, ou comme une notification de plus ?</li>
+      <li><strong>A ou B</strong> : Ultima de nuit, ou un corps étranger dans Ultima ?</li>
+    </ol>
+    <p style="color:#8a7c5f"><em>Contenus inventés. Les gestes réels (tabac,
+    alcool) n'apparaissent pas ici : une maquette est servie en preview publique,
+    et la donnée de santé ne sort jamais du quadrant authentifié. La règle vaut
+    aussi pour les maquettes.</em></p>
+  </div>
+
+  <!-- ══════════════════════ FORME A ══════════════════════ -->
+  <h2 class="forme-titre">Forme A — <em>le Système gravé</em> · l'antique vu de nuit</h2>
+  <p class="forme-note">Nuit et or dominants, le bleu strictement réservé à la
+  voix du Système. ALTHEA reste une pièce d'Ultima — mais de nuit.</p>
+
+  <section class="systeme">
+
+    <!-- ① la fiche du personnage -->
+    <div class="fiche">
+      <svg class="avatar" viewBox="0 0 120 120" role="img" aria-label="Sceau du personnage : la couronne de laurier">
+        <circle cx="60" cy="60" r="55" fill="none" stroke="var(--or-sourd)" stroke-width="1"/>
+        <circle cx="60" cy="60" r="49" fill="var(--nuit-2)" stroke="var(--or)" stroke-width="1.5"/>
+        <path d="M60 26 L60 84" stroke="var(--or)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M60 34 L49 43 M60 34 L71 43 M60 46 L47 55 M60 46 L73 55 M60 58 L49 67 M60 58 L71 67"
+              stroke="var(--or)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        <path d="M38 74 Q60 92 82 74" fill="none" stroke="var(--or)" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="60" cy="24" r="3.4" fill="var(--or)"/>
+      </svg>
+      <div class="identite">
+        <p class="nom">Le Voyageur</p>
+        <p class="titre">Celui qui revient</p>
+        <div class="stats">
+          <div class="stat"><span class="cle">Niveau</span><span class="val">7</span></div>
+          <div class="stat"><span class="cle">Élan</span><span class="val">12 <small>jours</small></span></div>
+          <div class="stat"><span class="cle">Meilleur élan</span><span class="val">41 <small>jours</small></span></div>
+          <div class="stat"><span class="cle">Titres</span><span class="val">3 <small>/ 7</small></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="deux-colonnes">
+      <div>
+        <!-- ② le cadran -->
+        <p class="bloc-titre">Le cadran — quatre skills, un verrouillé</p>
+        <svg class="cadran" viewBox="0 0 380 380" role="img"
+             aria-label="Cadran des skills : Endurance rang III, Langue du Nord rang II, Souffle rang I, Calligraphie verrouillée">
+          <!-- Nord : Endurance, rang III, 62 % vers le rang IV -->
+          <g transform="translate(190,64)">
+            <circle class="anneau-fond" r="34"/>
+            <circle class="anneau-plein" r="34" stroke-dasharray="132 214" pathLength="214"/>
+            <circle class="disque" r="27"/>
+            <path class="emb" d="M-11 6 L-3 -8 L4 2 L11 -9"/>
+            <text class="rang" y="42">III</text>
+            <text class="nom-skill" y="58">ENDURANCE</text>
+          </g>
+          <!-- Est : Langue du Nord, rang II, 38 % -->
+          <g transform="translate(300,190)">
+            <circle class="anneau-fond" r="34"/>
+            <circle class="anneau-plein" r="34" stroke-dasharray="81 214" pathLength="214"/>
+            <circle class="disque" r="27"/>
+            <path class="emb" d="M-10 -8 H10 M-10 0 H10 M-10 8 H4"/>
+            <text class="rang" y="42">II</text>
+            <text class="nom-skill" y="58">LANGUE DU NORD</text>
+          </g>
+          <!-- Sud : Souffle, rang I, 80 % -->
+          <g transform="translate(190,316)">
+            <circle class="anneau-fond" r="34"/>
+            <circle class="anneau-plein" r="34" stroke-dasharray="171 214" pathLength="214"/>
+            <circle class="disque" r="27"/>
+            <path class="emb" d="M-10 4 Q0 -12 10 4" />
+            <circle class="emb" cx="0" cy="-1" r="3"/>
+            <text class="rang" y="42">I</text>
+            <text class="nom-skill" y="58">SOUFFLE</text>
+          </g>
+          <!-- Ouest : verrouillé -->
+          <g transform="translate(80,190)" class="verrouille">
+            <circle class="anneau-fond" r="34"/>
+            <circle class="disque" r="27"/>
+            <path class="emb" d="M-7 3 h14 v9 h-14 z M-4 3 v-5 a4 4 0 0 1 8 0 v5"/>
+            <text class="nom-skill" y="42">CALLIGRAPHIE</text>
+            <text class="nom-skill" y="56" style="font-size:7.5px">quête « la main sûre »</text>
+          </g>
+          <!-- le cœur : le sceau du jour, c'est un bouton, pas un cap -->
+          <circle class="coeur-disque" cx="190" cy="190" r="51"/>
+          <circle class="coeur-cerne" cx="190" cy="190" r="45"/>
+          <text class="coeur-txt" x="190" y="182">6 AOÛT</text>
+          <text class="coeur-sous" x="190" y="197">NOURRIR LE JOUR</text>
+          <text class="coeur-attente" x="190" y="210">2 gestes en attente</text>
+        </svg>
+
+        <!-- ⑤ la fenêtre du Système -->
+        <div class="fenetre">
+          <p class="voix">[ Rang atteint — La Constance ]</p>
+          <p class="corps"><b>ENDURANCE</b> passe au rang III après 90 jours
+          nourris. Récompense déclarée : <b>une journée entière sans obligation</b>.</p>
+          <div class="actions">
+            <button class="bouton or" type="button">Réclamer</button>
+            <button class="bouton" type="button">Plus tard</button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <!-- ③ le relevé -->
+        <p class="bloc-titre">Le relevé — un geste par case</p>
+        <div class="releve">
+          <h4>Aujourd'hui · jeudi 6</h4>
+          <div class="geste">
+            <span class="case tenu" aria-hidden="true">✦</span>
+            <span class="lib">Sommeil tenu<small>SOUFFLE · garde</small></span>
+          </div>
+          <div class="geste">
+            <span class="case tenu" aria-hidden="true">✦</span>
+            <span class="lib">Sans écran le soir<small>SOUFFLE · garde</small></span>
+          </div>
+          <div class="geste">
+            <span class="case vide" aria-hidden="true"></span>
+            <span class="lib">Marche longue<small>ENDURANCE · pratique · 40 min</small></span>
+          </div>
+          <div class="geste">
+            <span class="case vide" aria-hidden="true"></span>
+            <span class="lib">Étude du soir<small>LANGUE DU NORD · pratique</small></span>
+          </div>
+          <div class="geste" style="border-top:1px solid var(--trait);margin-top:6px;padding-top:12px">
+            <span class="lib" style="color:var(--parch-bas);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase">La semaine</span>
+            <span class="semaine">
+              <span class="jour tenu">L</span><span class="jour tenu">M</span>
+              <span class="jour muet">M</span><span class="jour tenu">J</span>
+              <span class="jour muet">V</span><span class="jour muet">S</span>
+              <span class="jour muet">D</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- ④ le journal des quêtes -->
+        <p class="bloc-titre">Le journal — 1 principale · 2 secondaires · 2 de fond</p>
+        <div class="quete">
+          <p class="type">Quête principale</p>
+          <p class="intitule">Tenir une conversation entière dans la langue du Nord</p>
+          <p class="detail">Reflet de l'idéal <em>« parler sans traduire »</em> — ZEKROM.</p>
+          <div class="jauge"><i style="width:34%"></i></div>
+        </div>
+        <div class="quete secondaire">
+          <p class="type">Secondaire · proposée par Léo</p>
+          <p class="intitule">Cinq séances d'étude d'ici dimanche</p>
+          <p class="detail">3 / 5 · échéance dans 2 jours</p>
+          <p class="recompense">Récompense : débloque le skill CALLIGRAPHIE</p>
+        </div>
+        <div class="quete secondaire">
+          <p class="type">Secondaire · endormie depuis 12 jours</p>
+          <p class="intitule">Marcher dix kilomètres d'une traite</p>
+          <p class="detail">Le Système ne reproche rien — il demande seulement :
+          reprendre, ou ranger ?</p>
+        </div>
+        <div class="quete fond">
+          <p class="type">Quête de fond</p>
+          <p class="intitule">Nourrir SOUFFLE chaque jour</p>
+          <p class="detail">Élan 12 jours · meilleur 41</p>
+        </div>
+
+        <!-- ⑥ l'écran d'accueil -->
+        <p class="bloc-titre">Sur l'écran d'accueil</p>
+        <div class="accueil">
+          <div class="icone"><span>✦</span><span class="badge">4</span></div>
+          <p><b>Ce qu'iOS autorise réellement à une application web :</b> l'icône
+          d'Ultima et un chiffre — ici <b>4 à continuer</b>. Pas de tuile-widget :
+          iOS ne l'accorde à aucune app web. Le détail attend derrière ta session ;
+          la notification ne nomme jamais un geste.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════ FORME B ══════════════════════ -->
+  <h2 class="forme-titre">Forme B — <em>le Système spectral</em> · un corps étranger</h2>
+  <p class="forme-note">Rupture franche : bleu et nuit profonde dominants, l'or
+  en accent seul. ALTHEA cesse visiblement d'appartenir à Ultima — ce qui est
+  peut-être exactement ce que « c'est un autre système » voulait dire.</p>
+
+  <section class="systeme spectral">
+    <div class="fiche">
+      <svg class="avatar" viewBox="0 0 120 120" role="img" aria-label="Sceau du personnage : la couronne de laurier">
+        <circle cx="60" cy="60" r="55" fill="none" stroke="var(--or-sourd)" stroke-width="1"/>
+        <circle cx="60" cy="60" r="49" fill="var(--nuit-2)" stroke="var(--or)" stroke-width="1.5"/>
+        <path d="M60 26 L60 84" stroke="var(--or)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M60 34 L49 43 M60 34 L71 43 M60 46 L47 55 M60 46 L73 55 M60 58 L49 67 M60 58 L71 67"
+              stroke="var(--or)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        <path d="M38 74 Q60 92 82 74" fill="none" stroke="var(--or)" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="60" cy="24" r="3.4" fill="var(--or)"/>
+      </svg>
+      <div class="identite">
+        <p class="nom">Le Voyageur</p>
+        <p class="titre">Celui qui revient</p>
+        <div class="stats">
+          <div class="stat"><span class="cle">Niveau</span><span class="val">7</span></div>
+          <div class="stat"><span class="cle">Élan</span><span class="val">12 <small>jours</small></span></div>
+          <div class="stat"><span class="cle">Meilleur élan</span><span class="val">41 <small>jours</small></span></div>
+          <div class="stat"><span class="cle">Titres</span><span class="val">3 <small>/ 7</small></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="deux-colonnes">
+      <div>
+        <p class="bloc-titre">Le cadran — quatre skills, un verrouillé</p>
+        <svg class="cadran" viewBox="0 0 380 380" role="img"
+             aria-label="Cadran des skills : Endurance rang III, Langue du Nord rang II, Souffle rang I, Calligraphie verrouillée">
+          <g transform="translate(190,64)">
+            <circle class="anneau-fond" r="34"/>
+            <circle class="anneau-plein" r="34" stroke-dasharray="132 214" pathLength="214"/>
+            <circle class="disque" r="27"/>
+            <path class="emb" d="M-11 6 L-3 -8 L4 2 L11 -9"/>
+            <text class="rang" y="42">III</text>
+            <text class="nom-skill" y="58">ENDURANCE</text>
+          </g>
+          <g transform="translate(300,190)">
+            <circle class="anneau-fond" r="34"/>
+            <circle class="anneau-plein" r="34" stroke-dasharray="81 214" pathLength="214"/>
+            <circle class="disque" r="27"/>
+            <path class="emb" d="M-10 -8 H10 M-10 0 H10 M-10 8 H4"/>
+            <text class="rang" y="42">II</text>
+            <text class="nom-skill" y="58">LANGUE DU NORD</text>
+          </g>
+          <g transform="translate(190,316)">
+            <circle class="anneau-fond" r="34"/>
+            <circle class="anneau-plein" r="34" stroke-dasharray="171 214" pathLength="214"/>
+            <circle class="disque" r="27"/>
+            <path class="emb" d="M-10 4 Q0 -12 10 4"/>
+            <circle class="emb" cx="0" cy="-1" r="3"/>
+            <text class="rang" y="42">I</text>
+            <text class="nom-skill" y="58">SOUFFLE</text>
+          </g>
+          <g transform="translate(80,190)" class="verrouille">
+            <circle class="anneau-fond" r="34"/>
+            <circle class="disque" r="27"/>
+            <path class="emb" d="M-7 3 h14 v9 h-14 z M-4 3 v-5 a4 4 0 0 1 8 0 v5"/>
+            <text class="nom-skill" y="42">CALLIGRAPHIE</text>
+            <text class="nom-skill" y="56" style="font-size:7.5px">quête « la main sûre »</text>
+          </g>
+          <circle class="coeur-disque" cx="190" cy="190" r="51"/>
+          <circle class="coeur-cerne" cx="190" cy="190" r="45"/>
+          <text class="coeur-txt" x="190" y="182">6 AOÛT</text>
+          <text class="coeur-sous" x="190" y="197">NOURRIR LE JOUR</text>
+          <text class="coeur-attente" x="190" y="210">2 gestes en attente</text>
+        </svg>
+
+        <div class="fenetre">
+          <p class="voix">[ Rang atteint — La Constance ]</p>
+          <p class="corps"><b>ENDURANCE</b> passe au rang III après 90 jours
+          nourris. Récompense déclarée : <b>une journée entière sans obligation</b>.</p>
+          <div class="actions">
+            <button class="bouton or" type="button">Réclamer</button>
+            <button class="bouton" type="button">Plus tard</button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p class="bloc-titre">Le relevé — un geste par case</p>
+        <div class="releve">
+          <h4>Aujourd'hui · jeudi 6</h4>
+          <div class="geste">
+            <span class="case tenu" aria-hidden="true">✦</span>
+            <span class="lib">Sommeil tenu<small>SOUFFLE · garde</small></span>
+          </div>
+          <div class="geste">
+            <span class="case tenu" aria-hidden="true">✦</span>
+            <span class="lib">Sans écran le soir<small>SOUFFLE · garde</small></span>
+          </div>
+          <div class="geste">
+            <span class="case vide" aria-hidden="true"></span>
+            <span class="lib">Marche longue<small>ENDURANCE · pratique · 40 min</small></span>
+          </div>
+          <div class="geste">
+            <span class="case vide" aria-hidden="true"></span>
+            <span class="lib">Étude du soir<small>LANGUE DU NORD · pratique</small></span>
+          </div>
+          <div class="geste" style="border-top:1px solid var(--trait);margin-top:6px;padding-top:12px">
+            <span class="lib" style="color:var(--parch-bas);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase">La semaine</span>
+            <span class="semaine">
+              <span class="jour tenu">L</span><span class="jour tenu">M</span>
+              <span class="jour muet">M</span><span class="jour tenu">J</span>
+              <span class="jour muet">V</span><span class="jour muet">S</span>
+              <span class="jour muet">D</span>
+            </span>
+          </div>
+        </div>
+
+        <p class="bloc-titre">Le journal — 1 principale · 2 secondaires · 2 de fond</p>
+        <div class="quete">
+          <p class="type">Quête principale</p>
+          <p class="intitule">Tenir une conversation entière dans la langue du Nord</p>
+          <p class="detail">Reflet de l'idéal <em>« parler sans traduire »</em> — ZEKROM.</p>
+          <div class="jauge"><i style="width:34%"></i></div>
+        </div>
+        <div class="quete secondaire">
+          <p class="type">Secondaire · proposée par Léo</p>
+          <p class="intitule">Cinq séances d'étude d'ici dimanche</p>
+          <p class="detail">3 / 5 · échéance dans 2 jours</p>
+          <p class="recompense">Récompense : débloque le skill CALLIGRAPHIE</p>
+        </div>
+        <div class="quete secondaire">
+          <p class="type">Secondaire · endormie depuis 12 jours</p>
+          <p class="intitule">Marcher dix kilomètres d'une traite</p>
+          <p class="detail">Le Système ne reproche rien — il demande seulement :
+          reprendre, ou ranger ?</p>
+        </div>
+        <div class="quete fond">
+          <p class="type">Quête de fond</p>
+          <p class="intitule">Nourrir SOUFFLE chaque jour</p>
+          <p class="detail">Élan 12 jours · meilleur 41</p>
+        </div>
+
+        <p class="bloc-titre">Sur l'écran d'accueil</p>
+        <div class="accueil">
+          <div class="icone"><span>✦</span><span class="badge">4</span></div>
+          <p><b>Ce qu'iOS autorise réellement à une application web :</b> l'icône
+          d'Ultima et un chiffre — ici <b>4 à continuer</b>. Pas de tuile-widget :
+          iOS ne l'accorde à aucune app web. Le détail attend derrière ta session ;
+          la notification ne nomme jamais un geste.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

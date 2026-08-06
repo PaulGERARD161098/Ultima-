@@ -1692,3 +1692,66 @@
     `actif=false` ne vaut qu'à partir du jour de la désactivation ; le calcul
     d'antériorité ne considère que les gestes actifs **à la date du jour
     considéré**.
+
+- **2026-08-06 (ALTHEA — seconde dictée : le Système)** — Paul change la nature
+  du quadrant : ALTHEA devient **un Système, style Solo Leveling**. Un
+  **avatar** portant **un titre** qui compte (« j'ai un titre important »), des
+  **quêtes principales / secondaires / de fond**, des quêtes **générées** par le
+  système avec leurs **allongements** « au fur et à mesure », des
+  **récompenses**, des skills qu'on **débloque**, des **quêtes qui donnent des
+  skills**, des **rappels automatiques d'entraînement**, des **widgets d'écran
+  d'accueil**. Consigne : *« un travail d'étude, analyse et cadre bien tout ça »*,
+  *« va chercher loin »*, **« un système complet, à la fois proactif et passif »**.
+  Cadrage complet réécrit : `CADRAGE-ALTHEA.md` (5 parties) + maquette
+  `design/preview-althea-systeme.html`. **Zéro code produit, zéro migration.**
+  - 🔻 **RÈGLE MAJEURE — le Système n'est PAS un personnage, c'est un
+    INSTRUMENT.** Le principe verrouillé du 2026-07-16 (« l'agent unique
+    d'Ultima est Léo ») allait sauter : un Système qui converse est une seconde
+    voix. Résolution : **le Système n'a pas d'avis, il ANNONCE** — des gabarits
+    fixes en clair dans le code, `[ RANG ATTEINT — LA CONSTANCE ]`. **Léo
+    compose** (elle connaît Paul), **le Système annonce**. Bénéfices non
+    anticipés mais décisifs : toutes les annonces deviennent **gratuites,
+    hors-ligne et testables au harnais** ; seule la composition d'une quête
+    coûte un appel IA, donc **une seule chose est à borner**.
+  - 🔻 **La collision la plus dangereuse : « quête principale » contre ZEKROM et
+    DRAUKHAIN.** Un grand objectif de vie a DÉJÀ deux maisons dans Ultima.
+    Laisser le jeu s'en remplir, c'est reconstruire un tiers d'Ultima dedans et
+    obtenir **deux vérités contradictoires** sur ce que Paul veut. Frontière
+    écrite : **une quête ALTHEA ne porte QUE de l'entraînement de soi** ; une
+    quête principale **référence** un idéal ZEKROM / un serment DRAUKHAIN, elle
+    ne le recopie pas. *« Ton idéal entre dans l'arène »* — c'est ce qui donne
+    au jeu sa gravité au lieu de le faire flotter à côté du réel.
+  - 🔻 **Le widget iPhone n'existe pas — vérifié AVANT d'être promis.** iOS
+    n'accorde **aucune tuile-widget** à une application web. Ce qui est réel :
+    la PWA installée + **le badge chiffré sur l'icône** (`setAppBadge`), qui est
+    presque mot pour mot ce que Paul décrivait (« 4 à continuer »). Voie
+    alternative pour un vrai widget : l'app tierce **Scriptable** + une route
+    signée — **prix dit franchement** : ce serait la première clé d'Ultima posée
+    hors de sa propre session. *Une étude qui promet ce que la plateforme
+    refuse n'est pas une étude, c'est une vente.*
+  - **Rappels** : faisables (PWA installée + service worker + Web Push VAPID +
+    cron). **Rien de tout ça n'existe** aujourd'hui (aucun service worker, aucun
+    cron dans `vercel.json`). Le cron est une **gate coût** → décision de Paul.
+    Règle absolue posée : **une notification ne nomme JAMAIS un geste** (elle
+    s'affiche sur l'écran verrouillé, devant n'importe qui).
+  - **Proactif/passif défini au lieu d'être invoqué** : le passif doit être
+    **beau à retrouver après deux semaines d'absence**, jamais accusateur ; le
+    proactif obéit à une **loi des interpellations** — une par jour maximum,
+    toujours actionnable, jamais culpabilisante, coupable en un geste, et le
+    silence est une réponse valide.
+  - **Graphisme, « chercher loin »** : la vraie trouvaille est que Solo Leveling
+    et Ultima **partagent déjà la grammaire** (capitales espacées, cartouche,
+    voix rituelle, blocs de stats) — **il ne manquait que l'apparition et la
+    nuit**. D'où la thèse **« l'antique vu de nuit »** : ALTHEA est la seule page
+    d'Ultima sur fond nocturne ; **l'or reste l'or pour ce qui est GAGNÉ, le bleu
+    spectral est réservé à la VOIX du Système** et n'existe nulle part ailleurs.
+  - 🔻 **La mesure a encore trouvé ce que l'œil ne pouvait pas voir** : sur la
+    maquette, les anneaux de progression se dessinaient **à 700 px hors du
+    viewBox de 380** — donc invisibles. Cause : en SVG, `transform-origin:
+    center` se rapporte au **viewBox** (valeur initiale de `transform-box`), pas
+    à l'élément ; il faut `transform-box: fill-box`. Trouvé par `getBBox()` vs
+    `viewBox`, jamais à l'œil. Contrastes des DEUX formes mesurés au passage :
+    tous **AA**, y compris le texte secondaire (4.91 au plus bas).
+  - **Séquencement acté en CINQ boucles** (B1 le personnage et ses skills · B2
+    le journal des quêtes · B3 la composition par Léo · B4 l'interpellation ·
+    B5 le widget), parce que les vouloir ensemble, c'est n'en finir aucune.

@@ -112,3 +112,26 @@ reformuler et demander — jamais deviner avant une action irréversible.
     l'anglais est admis (*skill*), parce que c'est le seul endroit qui est un
     jeu. Partout ailleurs, le registre antique français s'applique sans
     exception.
+
+- **ALTHEA — le vocabulaire du Système** (seconde dictée, 2026-08-06) :
+  - **Le Système** = **un instrument, pas un personnage**. Il **annonce** par
+    gabarits fixes entre crochets — `[ RANG ATTEINT — LA CONSTANCE ]` — il ne
+    converse jamais. **Léo reste la voix unique d'Ultima** : elle compose et
+    conseille, le Système annonce. Ne jamais écrire « le Système te conseille ».
+  - **Une quête** : *principale* (l'arc long, reflet jouable d'un idéal ZEKROM
+    ou d'un serment DRAUKHAIN — elle le **référence**, ne le recopie jamais) ·
+    *secondaire* (bornée, récompensée, souvent proposée par Léo) · **de fond**
+    (la récurrente, celle qui ne s'achève pas — dictée « 4 de fond à continuer »).
+  - **Un allongement** = la quête enfant qui prolonge une quête accomplie. La
+    chaîne ne se voit jamais d'avance : elle se déroule « au fur et à mesure ».
+  - **Une quête ne rate pas : elle S'ENDORT.** Pas de pénalité — une pénalité
+    punirait le silence, que Paul a posé comme non punissable.
+  - **« Celui qui revient »** = le titre qui se débloque en reprenant une garde
+    rompue. Le plus important du catalogue : il récompense exactement ce que
+    tout système de série punit.
+  - **« L'antique vu de nuit »** = la thèse graphique d'ALTHEA. Seule page
+    d'Ultima sur fond nocturne. **L'or pour ce qui est GAGNÉ, le bleu spectral
+    pour ce qui est ANNONCÉ** — un rang ne devient jamais bleu, une annonce
+    jamais or.
+  - **Le badge, pas le widget** : iOS n'accorde aucune tuile-widget à une app
+    web ; ce qui existe, c'est l'icône installée + un chiffre.
