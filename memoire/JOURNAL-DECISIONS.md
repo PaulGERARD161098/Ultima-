@@ -1935,3 +1935,36 @@
     parades adoptées : toute réécriture automatique **assert** que sa cible
     existe, et le harnais vérifie **le résultat rendu** (la source est-elle sur
     sa propre ligne ?) et non la présence de la règle CSS.
+
+- **2026-08-06 (ALTHEA — les stats passent par le NIVEAU, et une trouvaille meurt)** —
+  Paul tranche : *« laisse Constance, c'est un skill »* · **« les stats sont
+  arbitraires, elles augmentent avec les niveaux — chaque niveau fait gagner un
+  point partout »** · *« emblème ok »* · les deux recouvrements validés.
+  - 🔻 **UNE RÈGLE DE PAUL TUE UNE MÉCANIQUE DE LÉO, ET C'EST BIEN.** J'avais
+    fait **dériver** chaque stat des skills qui la nourrissent, et j'en avais
+    tiré une trouvaille dont j'étais content : *« aucun skill ne nourrit ton
+    charisme — un creux visible est une invitation »*. **La règle de Paul la tue
+    net** : si chaque niveau donne +1 partout, aucune stat ne peut rester à
+    zéro. Retirée sans être défendue. *Ce qu'on a trouvé de beau n'est pas un
+    argument contre ce que Paul veut.*
+  - **Ce que sa règle apporte en échange, et qui vaut mieux** : la lecture est
+    immédiate (personne n'a besoin qu'on lui explique « +1 par niveau »), il n'y
+    a **rien à calculer donc rien qui puisse mentir**, et surtout — **ce qui
+    distingue Paul, c'est son SOCLE**. *Le niveau le fait monter, il ne le
+    dessine pas.* Une stat = `socle` (posé par Paul) + `niveau`.
+  - 🔻 **Déplacement majeur : le NIVEAU devient le cœur du jeu.** Hier il n'était
+    qu'un affichage dérivé ; aujourd'hui **tout passe par lui** — skills et
+    quêtes → niveau → +1 à toutes les stats. **D'où une question qui n'existait
+    pas et qui est maintenant centrale : qu'est-ce qui fait monter un niveau ?**
+    Sans réponse, les stats ne bougeront jamais. Proposition : un palier de skill
+    franchi = +1 · une quête accomplie = +1. *Un changement de règle peut créer
+    une question centrale là où il n'y avait rien — c'est ça qu'il faut chercher
+    après chaque dictée, pas seulement ce qu'elle modifie.*
+  - **La table `althea_skill_stat`**, envisagée une heure plus tôt, **n'a plus
+    lieu d'être** : aucun skill ne nourrit une stat en particulier.
+  - **Le rang II devient L'ASSIDUITÉ** — le skill *Constance* de Paul garde son
+    nom. Échelle : L'Éveil · L'Assiduité · L'Endurance · La Maîtrise · Le Renom.
+  - **Validés** : le sport apparaît **volontairement** deux fois (cadence chez
+    *Peak performance*, volume chez *Pieds légers*) · **« alimentation ok » =
+    *Omnivore*** (second méta-lien du jeu, après *Constance*) · **la gravure de
+    l'emblème** tient lieu de sceau.

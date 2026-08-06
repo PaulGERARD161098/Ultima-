@@ -598,7 +598,7 @@ qui fait la langue du quadrant :
 | Rang | Nom | Seuil par défaut (jours nourris) |
 | --- | --- | --- |
 | I | **L'Éveil** | 7 |
-| II | **La Constance** | 30 |
+| II | **L'Assiduité** | 30 |
 | III | **L'Endurance** | 90 |
 | IV | **La Maîtrise** | 180 |
 | V | **Le Renom** | 365 |
@@ -827,20 +827,18 @@ condition pour jouer. **Effet de bord précieux : ALTHEA est livrable seul.**
 
 | # | Question | Recommandation de Léo |
 | --- | --- | --- |
-| **D10** | ~~Les skills de départ~~ | ✅ **Dictés le 2026-08-06** — les cinq du §13. |
-| **D11** | ~~Le nom du personnage~~ | ✅ **Paul Gerard, niveau 48, titre *Farsight — celui qui voit loin*** (§13bis). |
-| **D15** | **Le rang II s'appelle « La Constance »**, or c'est aussi le nom d'un skill de Paul. Comment renommer le rang ? | **L'ASSIDUITÉ** → L'Éveil · L'Assiduité · L'Endurance · La Maîtrise · Le Renom. *(Ou : La Régularité.)* Le skill garde son nom — c'est le tien. |
-| **D16** | **Le niveau 48 est-il un socle déclaré** (ta vie compte déjà) **ou le jeu part-il de 1** ? | **Un socle déclaré.** Tu n'entres pas dans ta propre vie au niveau 1, et *Farsight* est un titre déjà gagné. |
-| **D17** | ~~Les aptitudes~~ | ✅ **Ce sont les STATS de Paul** : force, endurance, agilité, intelligence, charisme (§13ter). |
-| **D20** | ~~L'avatar Vitruve~~ | ✅ **Abandonné** au profit de **l'emblème** envoyé par Paul, redessiné en gravure (§13ter.3). |
-| **D21** | **La formule d'une stat**, et a-t-elle le droit de **descendre** ? | **Oui, lentement.** La seule chose d'ALTHEA qui puisse baisser : le rang dit ce que tu as **fait**, la stat ce que tu **vaux aujourd'hui**. |
-| **D22** | **Le charisme n'est nourri par aucun skill.** On en crée un sixième ? | **Pas tout de suite.** La stat reste **visible et vide** — le creux est une invitation. Le sixième skill viendra quand tu sauras ce qu'il doit dire. |
-| **D23** | **Le fichier de l'emblème** : tu me le déposes au dépôt, ou on garde ma gravure ? | Dis-moi. La gravure a l'avantage d'être **au registre d'ALTHEA** et de peser quelques kilo-octets. |
-| **D18** | **Le sport apparaît deux fois** (condition de *Peak performance* tous les 2 jours, et cœur de *Pieds légers* 10 km/semaine). Voulu ? | **Probablement voulu** — deux exigences différentes sur la même activité. Mais si tu préfères, *Pieds légers* absorbe le sport et *Peak performance* n'en parle plus. |
-| **D19** | **« Alimentation ok »** (condition de *Peak performance*) et **Omnivore** se recouvrent. | *Omnivore* **est** la définition d'« alimentation ok » → on retire la condition de *Peak performance* et on la remplace par « *Omnivore* est tenu ». Un second méta-lien, comme *Constance*. |
+| **D24** | **Qu'est-ce qui fait monter un NIVEAU ?** Devenue la question centrale : les stats en dépendent entièrement (§13ter.2). | **Un palier de skill franchi = +1 niveau · une quête accomplie = +1 niveau.** C'est ce qui referme la boucle : les gestes font les skills, les skills font les paliers, les paliers font le niveau, le niveau fait les stats. |
+| **D25** | **Tes cinq socles** — les entiers de départ de force, endurance, agilité, intelligence, charisme. | À poser par toi : **c'est ton socle qui te dessine**, le niveau ne fait que monter. Ceux de la maquette (14 · 10 · 9 · 21 · 16) sont illustratifs. |
 | **D12** | **Le second cran de sévérité** : une quête de fond peut-elle porter une exigence (« 4 jours sur 7 ») qui alimente la dette ? | **Oui, mais facultative.** C'est toi qui l'armes en acceptant la quête. |
 | **D13** | **Le widget Scriptable** (§7.4) : on le fait, avec son jeton hors d'Ultima ? | **Le badge chiffré d'abord** (natif, sans clé, sans app tierce). |
 | **D14** | **Le cron des rappels** — gate coût sur le plan Vercel. | Décision de Paul. À poser en B4, pas avant. |
+
+**Tranchées depuis** : D15 ✅ le rang II devient **L'Assiduité** (le skill
+*Constance* garde son nom) · D17 ✅ ce sont les **stats** de Paul · D18 ✅ le
+sport en double est **voulu** · D19 ✅ *Omnivore* **est** « alimentation ok » ·
+D20 ✅ Vitruve abandonné · D21 ✅ pas de formule, **socle + niveau** ·
+D22 ✅ le creux du charisme **n'existe plus** (chaque niveau donne +1 partout) ·
+D23 ✅ **la gravure de l'emblème est validée**.
 
 ## 13. Les skills de Paul — dictés le 2026-08-06
 
@@ -855,7 +853,7 @@ l'énoncé tient.
 
 | Skill | Énoncé | Conditions | Cadence |
 | --- | --- | --- | --- |
-| **PEAK PERFORMANCE** | *« Le joueur est au top de sa forme ! »* | pas de recours à substance externe · sommeil en ordre · stop écran tard · alimentation ok | chaque jour |
+| **PEAK PERFORMANCE** | *« Le joueur est au top de sa forme ! »* | pas de recours à substance externe · sommeil en ordre · stop écran tard · **OMNIVORE tenu** *(✅ D19 : « alimentation ok » = Omnivore, second méta-lien après Constance)* | chaque jour |
 | | | sport | **tous les 2 jours** |
 | **PIEDS LÉGERS** | *« Le joueur court au moins 10 km par semaine. »* | course | **10 km / semaine** |
 | **TRADUCTEUR** | *« Le joueur sait parler au moins 2 langues à haut niveau. »* | italien **OU** espagnol **OU** japonais | **30 min / jour**, l'une des trois suffit |
@@ -898,13 +896,14 @@ Cinq exemples réels ont fait apparaître ce qu'aucune spéculation n'avait vu.
 
 ### 13.3 Deux points d'attention, l'un est une collision
 
-⚠️ **« CONSTANCE » est déjà le nom du rang II** (L'Éveil · **La Constance** ·
-L'Endurance · La Maîtrise · Le Renom). Un skill nommé *Constance* qui atteint
-*La Constance* est une phrase que personne ne peut lire. **Le skill de Paul
-gagne** — c'est le sien. Le rang II doit être renommé.
-→ **Proposition : L'ASSIDUITÉ.** L'échelle devient : L'Éveil · **L'Assiduité** ·
-L'Endurance · La Maîtrise · Le Renom. *(Autre option : La Régularité.)*
-→ **Décision D15.**
+✅ **Résolu.** « CONSTANCE » était aussi le nom du rang II — un skill nommé
+*Constance* atteignant *La Constance* est une phrase que personne ne peut lire.
+Paul a tranché : *« laisse Constance, c'est un skill »*. **Le skill garde son
+nom, le rang est renommé.** L'échelle devient : L'Éveil · **L'ASSIDUITÉ** ·
+L'Endurance · La Maîtrise · Le Renom.
+*(Lecture retenue de « laisse » : ne pas toucher au skill. Si Paul voulait dire
+« la collision ne me gêne pas, ne touche à rien », le rang II reprend son nom
+d'une ligne.)*
 
 ✅ **Convergence heureuse** : *Constance* — « se relever après avoir chuté » —
 **est exactement** le titre que j'avais proposé au §5.1, **« Celui qui
@@ -920,8 +919,12 @@ la liste de skills se répondent au lieu de se doubler.
 2. **Le sport apparaît deux fois** : condition de *Peak performance* (tous les
    2 jours) et cœur de *Pieds légers* (10 km/semaine). Est-ce voulu — deux
    exigences distinctes sur la même activité — ou faut-il n'en garder qu'une ?
-3. **« Alimentation ok »** et *Omnivore* se recouvrent partiellement. *Omnivore*
-   est-il la définition de « alimentation ok », ou deux choses différentes ?
+3. ✅ **« Alimentation ok » = *Omnivore*** (D19 validé) : la condition disparaît
+   de *Peak performance*, remplacée par « *Omnivore* est tenu ». Second méta-lien
+   du jeu, après *Constance*.
+4. ✅ **Le sport apparaît bien deux fois, et c'est voulu** (D18 validé) : une
+   cadence chez *Peak performance* (tous les 2 jours), un volume chez *Pieds
+   légers* (10 km/semaine). Deux exigences différentes sur la même activité.
 
 ## 13bis. Le personnage — dicté le 2026-08-06
 
@@ -942,76 +945,89 @@ déclare. À confirmer (**D16**).
 
 > **✅ « Il me faut aussi mes stats : force, endurance, agilité, intelligence,
 > charisme. »**
-
-Ce sont **ses mots**, et ils remplacent les cinq aptitudes que je proposais
-(Esprit, Souffle, Volonté, Racine, Vigueur). Le registre RPG classique tient
-mieux ici : ALTHEA est un jeu, et ces cinq-là se comprennent sans explication.
-
-**La règle qui les distingue des skills ne bouge pas :**
-
-> **Un skill se TIENT. Une stat se DÉRIVE.**
 >
-> On ne coche jamais une stat, elle n'a ni condition, ni cadence, ni quête.
-> Elle **monte toute seule** à mesure que les skills qui la nourrissent sont
-> tenus. Aucune valeur n'est stockée : elle est calculée, comme le niveau et
-> comme la dette. *Une donnée dérivée qu'on stocke finit toujours par mentir.*
+> **✅ « Les stats sont arbitraires, elles augmentent avec les niveaux — chaque
+> niveau fait gagner un point partout. »**
 
-### 13ter.1 La table de nourriture
+Les cinq aptitudes que je proposais (Esprit, Souffle, Volonté, Racine, Vigueur)
+sont **abandonnées** : ce sont les stats de Paul, dans son vocabulaire.
 
-| Stat | Nourrie par |
+### 13ter.1 La mécanique — et ce qu'elle remplace
+
+**Une stat = un SOCLE, posé arbitrairement par Paul, + UN POINT PAR NIVEAU.**
+
+```
+      FORCE = socle 14 + niveau 48 = 62
+```
+
+C'est tout. Aucune dérivation depuis les skills, aucune formule, aucun lissage.
+
+> 🔻 **Cette règle TUE la mécanique que Léo avait construite, et c'est bien.**
+> J'avais fait dériver chaque stat des skills qui la nourrissent — au point d'en
+> tirer une belle trouvaille : *« aucun skill ne nourrit ton charisme, le
+> Système montre le creux »*. **Cette trouvaille est morte** : si chaque niveau
+> donne un point partout, aucune stat ne peut rester à zéro, et le creux
+> n'existe plus. Je la retire sans la défendre.
+>
+> **Ce que la règle de Paul apporte en échange, et qui vaut mieux** : la lecture
+> est immédiate (personne n'a besoin qu'on lui explique « +1 par niveau »), il
+> n'y a **rien à calculer** donc rien qui puisse mentir, et surtout —
+> **ce qui distingue Paul, c'est son SOCLE**. Le niveau le fait monter, il ne le
+> dessine pas. Un homme de niveau 48 n'est pas quelqu'un d'égal partout : c'est
+> quelqu'un qui a un socle, et qui a monté de 48.
+
+### 13ter.2 Ce que ça déplace — le NIVEAU devient le cœur du jeu
+
+Avant, les stats venaient des skills et le niveau n'était qu'un affichage.
+Maintenant **tout passe par le niveau** :
+
+```
+   SKILLS TENUS + QUÊTES ACCOMPLIES  ──▶  NIVEAU  ──▶  +1 à TOUTES les stats
+```
+
+**D'où la question qui n'existait pas hier et qui est maintenant centrale :
+qu'est-ce qui fait monter un niveau ?** Sans réponse, les stats ne bougeront
+jamais. Proposition de Léo, la plus lisible :
+
+- **un palier de skill franchi = +1 niveau** ;
+- **une quête accomplie = +1 niveau** (principale ou secondaire).
+
+Ce qui relie enfin toute la boucle : *les gestes nourrissent les skills, les
+skills franchissent des paliers, les paliers font le niveau, le niveau fait les
+stats.* → **Décision D24.**
+
+### 13ter.3 Le modèle
+
+| Table | Ce qu'elle porte |
 | --- | --- |
-| **FORCE** | PEAK PERFORMANCE · OMNIVORE |
-| **ENDURANCE** | PIEDS LÉGERS · CONSTANCE |
-| **AGILITÉ** | PIEDS LÉGERS |
-| **INTELLIGENCE** | TRADUCTEUR |
-| **CHARISME** | **aucun skill** |
+| **`althea_stats`** | `code` (`force`, `endurance`, `agilite`, `intelligence`, `charisme`), `nom`, `socle` (l'entier posé par Paul), `rang_affichage`. **La valeur affichée n'est pas stockée** : c'est `socle + niveau`, calculé. |
 
-### 13ter.2 Ce que ce changement fait apparaître — et qu'il ne faut pas masquer
+La table de liaison `althea_skill_stat` envisagée une heure plus tôt **n'a plus
+lieu d'être** : aucun skill ne nourrit une stat en particulier.
 
-**Le lien skill → stat passe de un-à-un à plusieurs-à-plusieurs.** Mes cinq
-aptitudes épousaient exactement les cinq skills : une symétrie confortable, et
-fausse. Les stats de Paul ne se laissent pas ranger comme ça — *Pieds légers*
-nourrit l'endurance **et** l'agilité, *Peak performance* la force **et**
-l'endurance. C'est plus juste, et ça coûte une table de liaison
-(`althea_skill_stat`) au lieu d'une colonne.
+### 13ter.4 Le sceau — l'emblème (✅ validé)
 
-⚠️ **Et surtout : le CHARISME n'est nourri par rien.** Aucun des cinq skills ne
-s'en occupe. Deux façons de traiter ça :
+Paul a envoyé une image — **un disque cranté, une lame qui le traverse, des
+banderoles** — et validé la gravure : *« emblème ok »*. Les trois propositions
+Vitruve sont abandonnées.
 
-- la masquer (n'afficher que les quatre nourries) — **non** ;
-- **la montrer vide, et le dire.** C'est ce qui est retenu : le Système affiche
-  la stat à zéro et l'annonce — *« aucun skill ne nourrit ton charisme »*.
+**Redessiné, pas intégré**, et c'est un choix contraint dit franchement : le
+fichier d'origine n'est pas au dépôt et une maquette **ne charge aucune
+ressource externe** (CSP). Géométrie reprise (couronne de huit lames, disque à
+anneaux, lame traversante, banderoles fendues), palette d'ALTHEA — **l'or pour
+le corps, le spectral pour la lame**.
 
-> **Un creux visible est une invitation ; un creux masqué est un oubli.**
-> C'est peut-être le meilleur usage du Système : il ne se contente pas de
-> compter ce que Paul fait, **il montre ce que Paul ne fait pas** — sans le lui
-> reprocher (règle cardinale 3). Un sixième skill ouvrirait le charisme.
+**Une décision de dessin qui n'est pas décorative** : le centre porte **un œil
+ouvert**, et l'œil passe **devant** la lame. C'est le titre qui le dicte —
+*Farsight, celui qui voit loin*. **Le sceau dit le titre.**
 
-### 13ter.3 Le sceau — l'emblème dicté (image de référence)
+### 13ter.5 Les ajustements de la fiche (dictés)
 
-Paul a envoyé une image : **un disque cranté, une lame qui le traverse, des
-banderoles**. Les trois propositions Vitruve sont **abandonnées**.
-
-**Redessiné, pas intégré** — et c'est un choix contraint, dit franchement : le
-fichier d'origine n'est pas au dépôt, et une maquette **ne charge aucune
-ressource externe** (CSP, règle de la maison). La géométrie est reprise (couronne
-de huit lames, disque à anneaux, lame traversante, banderoles fendues) ; la
-palette reste celle d'ALTHEA — **l'or pour le corps de l'emblème, le spectral
-pour la lame** —, la règle de couleur du §10.3 tenant jusque dans le sceau.
-*Si Paul dépose le fichier, il remplacera le dessin.*
-
-**Une décision de dessin qui n'est pas décorative** : le centre du disque porte
-**un œil ouvert**, et l'œil passe **devant** la lame. C'est le titre qui le
-dicte — *Farsight, celui qui voit loin*. Le sceau dit le titre.
-
-### 13ter.4 Les ajustements de la fiche (dictés)
-
-- **Les élans quittent la fiche** (« enlève les élans »). Ils restent au niveau
+- **Les élans quittent la fiche** (« enlève les élans ») ; ils restent au niveau
   du **skill**, là où ils ont un sens. La fiche porte : **Niveau · Skills tenus ·
   Stats · Quêtes**.
 - **Le titre est étiqueté** (« le titre avant Farsight ») : la clé **TITRE**
-  au-dessus du nom du titre. *Lecture retenue faute de certitude — si Paul
-  voulait un titre porté antérieur à Farsight, c'est une autre mécanique.*
+  au-dessus du nom du titre. *Lecture retenue faute de certitude.*
 
 ## 13quater. La mise en page — un seul visuel, deux blocs alignés
 
@@ -1119,8 +1135,11 @@ pourtant dès B1 : c'est ce qui donne envie de la suite.
 - **La forme est arrêtée** : fiche pleine largeur, puis **un seul visuel à deux
   blocs alignés** (§13quater). Le sceau est l'emblème de Paul. Les stats sont
   les siennes.
-- **Reste avant d'ouvrir B1** : **D15** (renommer le rang II — collision avec le
-  skill *Constance*), **D21** (la formule d'une stat), et les deux recouvrements
-  **D18 / D19**. Plus rien ne bloque la **forme** ; tout cela bloque le **schéma**.
-- **Prochaine action unique** : Paul tranche D15, puis **B1 s'ouvre** — la fiche,
-  le cadran, les skills, les stats, le relevé. Sans aucune quête.
+- **La forme est arrêtée et validée** : fiche pleine largeur, un seul visuel à
+  deux blocs alignés, l'emblème de Paul en sceau, ses cinq stats.
+- **Reste avant d'ouvrir B1** : **D24** (ce qui fait monter un niveau — devenu
+  central : les stats en dépendent entièrement) et **D25** (les cinq socles de
+  Paul). Ni l'un ni l'autre ne bloque la forme ; les deux bloquent le schéma.
+- **Prochaine action unique** : Paul tranche D24 et pose ses socles, puis
+  **B1 s'ouvre** — la fiche, le cadran, les skills, les stats, le relevé.
+  Sans aucune quête.
