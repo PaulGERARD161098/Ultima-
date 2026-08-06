@@ -1147,30 +1147,60 @@ pourtant dès B1 : c'est ce qui donne envie de la suite.
 | **Le bleu spectral sur nuit échoue au contraste.** | AA vérifié au harnais, pas à l'œil (leçon « une géométrie se mesure », étendue à la couleur). |
 | **On construit sur une dictée mal entendue** (« widget », « quêtes de fond », « arbre de capacités »). | Signalés au §0/§0bis, confirmés par Paul avant B1. |
 
-## 15. État de la boucle
+## 15. État des boucles
 
-- **B0 — cadrage et étude** : ✅ **CLOS.** Deux dictées de fond absorbées, cinq
-  collisions écrites, la boucle de jeu fermée, la réalité technique des rappels
-  et du widget **vérifiée avant d'être promise**, la forme tranchée sur maquette,
-  **les cinq skills réels de Paul recueillis**, le personnage nommé.
-  **Zéro code d'application, zéro migration.**
-- **Le cadrage a été corrigé TROIS fois par les réponses de Paul**, jamais par
-  une relecture : ① *« ce qu'il y a dedans »* a révélé les deux étages ;
-  ② *« pas de liens »* a rendu ALTHEA autonome ; ③ **les skills réels ont fait
-  apparaître l'ÉNONCÉ, les CADENCES, l'ÉVOLUTION et le MÉTA-SKILL** — quatre
-  mécaniques qu'aucune spéculation n'avait vues. *La leçon se répète : le
-  cadrage ne se valide pas, il se confronte au réel de Paul.*
-- **La forme est arrêtée** : fiche pleine largeur, puis **un seul visuel à deux
-  blocs alignés** (§13quater). Le sceau est l'emblème de Paul. Les stats sont
-  les siennes.
-- **La forme est arrêtée, mesurée et validée** : **deux cadrans sur une ligne** —
-  LE PROFIL (636 px) et LES QUÊTES (872 px) —, l'emblème de Paul en sceau, ses
-  cinq stats en socle + niveau, ses cinq skills en une ligne chacun. **Zéro texte
-  sous 9 px.**
-- **La boucle est fermée** : les gestes nourrissent les skills · les skills
-  franchissent des paliers · **un palier franchi = +1 niveau · une quête
-  accomplie = +1 niveau** · le niveau donne **+1 à toutes les stats**.
-- **Rien ne bloque plus B1.** Seul **D26** reste ouvert (le sort du cadran), et
-  il ne concerne qu'une vue ultérieure.
-- **Prochaine action unique** : **ouvrir B1** — le profil, les skills, les stats,
-  le relevé, sur données réelles. Sans aucune quête (c'est B2).
+- **B0 — cadrage et étude** : ✅ **CLOS le 2026-08-06.**
+- **B1 — le personnage, ses skills, ses stats** : ✅ **LIVRÉ le 2026-08-06.**
+
+### 15.1 Ce que B1 contient
+
+| Fichier | Rôle |
+| --- | --- |
+| `js/althea-progression.mjs` | **le moteur**, module ES pur : cadences, jours tenus, élan, rangs, niveau, stats. Aucune I/O. |
+| `supabase/migrations/0022_althea_skills.sql` | 5 tables + RLS + trigger. **ÉCRITE, NON APPLIQUÉE** (gate Paul). |
+| `supabase/seed-althea-paul.sql` | les skills réels, **paramétré par `owner_id`**, idempotent. À jouer après 0022. |
+| `api/althea.js` | GET l'état brut · POST le relevé du jour (upsert) · DELETE = revenir au silence. |
+| `api/_lib/validate.js` | `validateAltheaReleve` — miroir exact de la migration. |
+| `althea.html` · `css/althea.css` · `js/althea.js` | le Système : deux cadrans sur une ligne, muets tant qu'aucune session. |
+| `althea-cadran.html` · `js/althea-cadran.js` | **la vue en grand** du cadran (décision Paul). |
+| `js/registre-lv3.mjs` · `js/blasons.mjs` | ALTHEA au 3ᵉ rang d'ULTIMA, et son sceau gravé. |
+| `tests/unit-althea-progression.mjs` | **74 assertions** — les règles cardinales, prouvées. |
+| `tests/unit-althea-validate.mjs` | **53 assertions**, les refus d'abord. |
+| `tests/smoke-althea.mjs` | le flux réel au navigateur, la forme mesurée, la preuve par l'absence. |
+
+### 15.2 Ce que le harnais a trouvé, et que personne n'aurait vu
+
+Quatre défauts, tous attrapés par la mesure — aucun par relecture :
+
+1. **Une sémantique non tranchée.** Une cadence « tous les 2 jours » dont la
+   fenêtre est vide : `false` ou `null` ? Le test m'a forcé à choisir, et la
+   règle cardinale ① a tranché — **`null`**. Répondre `false` ferait retomber
+   l'élan sur un simple silence. *La cadence sert à faire COMPTER un jour
+   couvert, jamais à fabriquer un échec.*
+2. **Un harnais vert sur une page morte.** Ma fausse session stubait
+   `window.supabase` — or le vendor s'installe **après** les scripts d'init et
+   écrasait le stub. Le motif de la maison (semer un jeton en `localStorage`,
+   laisser le VRAI client le lire) est meilleur, et il a été adopté.
+3. **Une page rétractée à 292 px.** `css/styles.css` met le `body` en
+   `display:flex` ; sans `width:100%`, ALTHEA se réduisait à la largeur de son
+   contenu — et le cadran y tombait à **5,4 px de texte**. Trouvé parce que le
+   harnais mesure la **taille de rendu du texte**, pas la largeur du cadre.
+4. **Trois harnais existants qui comptaient en dur.** « ULTIMA a 2 cadrans »,
+   « 2 aiguilles », « 2 blasons ». Ils ont été **réécrits pour se comparer au
+   REGISTRE** au lieu d'un nombre écrit à la main. *Un test qui compte en dur
+   se refait à chaque dictée de Paul ; un test qui compare à la source de
+   vérité tient.*
+
+### 15.3 ⏳ Actions humaines
+
+- **Appliquer la migration `0022`** — gate Paul, jamais Léo seule.
+- **Jouer le seed** `supabase/seed-althea-paul.sql` avec son `owner_id`, après
+  0022. Sans lui, ALTHEA s'ouvre correctement mais dit « aucun skill posé ».
+
+### 15.4 La suite
+
+**B2 — le journal des quêtes** : les trois types, le cycle de vie,
+l'endormissement, **le gel** (§6.3bis), le déblocage de skill par une quête, et
+la montée de niveau qu'une quête accomplie déclenche. Rien n'a été anticipé en
+base : le scellement `(owner_id, id)` des skills et des conditions attend déjà
+les FK composites de B2, sans qu'aucune table ne soit à retoucher.

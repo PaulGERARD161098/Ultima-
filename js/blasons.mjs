@@ -179,6 +179,29 @@ export const BLASONS = {
     + '<path d="M48 14 l1.4 3 3 1.4 -3 1.4 -1.4 3 -1.4 -3 -3 -1.4 3 -1.4 Z"/></g>',
     'un chemin qui bifurque vers trois futurs'),
 
+  // ALTHEA — le sceau du Système : un disque cranté traversé d'une lame, l'œil
+  // ouvert en son centre. Dicté par Paul (image de référence, 2026-08-06) et
+  // gravé au registre d'Ultima. L'œil n'est pas décoratif : c'est le titre de
+  // Paul qui le dicte — « Farsight, celui qui voit loin ».
+  althea: disque(
+    // les huit lames de la couronne
+    '<g fill="#3b2f1c">'
+    + '<path d="M36 6 L39 17 H33 Z"/><path d="M66 36 L55 39 V33 Z"/>'
+    + '<path d="M36 66 L33 55 H39 Z"/><path d="M6 36 L17 33 V39 Z"/>'
+    + '<path d="M57 15 L52 25 L47 20 Z"/><path d="M57 57 L47 52 L52 47 Z"/>'
+    + '<path d="M15 57 L20 47 L25 52 Z"/><path d="M15 15 L25 20 L20 25 Z"/>'
+    + '</g>'
+    // le disque et ses anneaux
+    + '<circle cx="36" cy="36" r="19" fill="#f9f1dc" stroke="#3b2f1c" stroke-width="2"/>'
+    + '<circle cx="36" cy="36" r="14" fill="none" stroke="#a9884a" stroke-width="1"/>'
+    // la lame traversante
+    + '<path d="M34 16 H38 L37.2 52 L36 57 L34.8 52 Z" fill="#3b2f1c"/>'
+    + '<path d="M27 22 H45" stroke="#3b2f1c" stroke-width="2.4" stroke-linecap="round"/>'
+    // l'œil, par-dessus la lame : il ne se laisse pas couper
+    + '<path d="M28 36 q8 -7 16 0 q-8 7 -16 0 z" fill="#f9f1dc" stroke="#3b2f1c" stroke-width="1.6"/>'
+    + '<circle cx="36" cy="36" r="2.6" fill="#3b2f1c"/>',
+    'un disque cranté, sa lame et l’œil qui voit loin'),
+
   flamme: disque(
     '<path d="M36 15 C 42 23, 48 28, 48 38 C 48 47, 43 53, 36 54'
     + ' C 29 53, 24 47, 24 38 C 24 31, 28 27, 30 23'

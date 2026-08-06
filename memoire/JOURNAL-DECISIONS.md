@@ -1999,3 +1999,47 @@
   - **Socles validés** tels que proposés (14 · 10 · 9 · 21 · 16), modifiables.
   - **Deux cadrans nommés** : **LE PROFIL** (qui je suis, où j'en suis) et
     **LES QUÊTES** (ce qui m'attend).
+
+- **2026-08-06 (ALTHEA — B1 LIVRÉ : le personnage, ses skills, ses stats)** —
+  Paul dit « go pour la suite » et « propre vue en grand » pour le cadran.
+  B1 livré : moteur pur, migration écrite (non appliquée), API, front, la vue du
+  cadran, trois harnais neufs. **Le cœur du quadrant est un module ES PUR**
+  (`js/althea-progression.mjs`) : cadences, jours tenus, élan, rangs, niveau,
+  stats — aucune I/O, donc éprouvable **sans base ni navigateur**. Les règles
+  cardinales n'y sont pas commentées, elles y sont **exécutées**.
+  - 🔻 **UN TEST A TRANCHÉ UNE SÉMANTIQUE QUE JE N'AVAIS PAS VUE.** Une cadence
+    « tous les 2 jours » dont la fenêtre est vide : `false` ou `null` ? J'avais
+    écrit le test en attendant `false`. Le code répondait `null` — et **c'est le
+    code qui avait raison** : répondre `false` ferait retomber l'élan sur un
+    simple silence, exactement ce que la règle ① interdit. *La cadence sert à
+    faire COMPTER un jour couvert par une séance récente, jamais à fabriquer un
+    échec.* Le test a été corrigé, pas le moteur. *Écrire le harnais force à
+    trancher des questions qu'on ne se pose pas en écrivant le code.*
+  - 🔻 **UN HARNAIS VERT SUR UNE PAGE MORTE — le piège le plus dangereux.**
+    Ma fausse session stubait `window.supabase` en `addInitScript` ; or le
+    vendor s'installe **après** et écrasait le stub. Sans la vérification du
+    rendu réel, j'aurais eu des verdicts verts sur une page qui n'affichait
+    rien. Motif de la maison adopté (semer un jeton en `localStorage`, laisser
+    le VRAI client le lire) : *stuber la dépendance ment ; semer l'état exerce.*
+  - 🔻 **LA PAGE SE RÉTRACTAIT À 292 px.** `css/styles.css` met le `body` en
+    `display:flex` ; sans `width:100%`, ALTHEA se réduisait à la largeur de son
+    contenu — et le cadran y tombait à **5,4 px de texte**. Trouvé UNIQUEMENT
+    parce que le harnais mesure la **taille de rendu du texte** (`taille SVG ×
+    échelle`) et pas la largeur du cadre. La règle du matin a payé le jour même.
+  - 🔻 **TROIS HARNAIS EXISTANTS COMPTAIENT EN DUR** (« ULTIMA a 2 cadrans »,
+    « 2 aiguilles », « 2 blasons ») et tombaient tous les trois à l'arrivée
+    d'ALTHEA. Réécrits pour **se comparer au REGISTRE** au lieu d'un nombre
+    écrit à la main. *Un test qui compte en dur se refait à chaque dictée ; un
+    test qui compare à la source de vérité tient.* Enrichis, jamais affaiblis.
+  - **Le schéma porte les règles**, pas seulement l'interface : `tenu` NOT NULL
+    (le troisième état est **l'absence de ligne**), unicité (owner, condition,
+    jour), croissance stricte des cinq seuils contrainte en CHECK — un palier IV
+    inférieur au III rendrait le rang non monotone et la règle ② tomberait.
+  - 🔻 **`check (jour <= current_date)` est IMPOSSIBLE** : `current_date` n'est
+    pas immutable, Postgres refuse. La seule voie correcte est un **trigger** —
+    documenté en toutes lettres dans la migration pour que la prochaine personne
+    qui voudra « simplifier en CHECK » lise pourquoi ça ne peut pas marcher.
+  - **Rien n'est stocké qui puisse redescendre** : ni rang, ni élan, ni jours
+    tenus, ni valeur de stat, ni niveau. Tout est dérivé du module pur.
+  - ⏳ **Actions humaines** : appliquer `0022` (gate) · jouer
+    `supabase/seed-althea-paul.sql` avec l'`owner_id` de Paul.

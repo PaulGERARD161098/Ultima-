@@ -196,8 +196,16 @@ await page.waitForURL('**/ultima.html', { timeout: 20000 });
 verifier('Clic ULTIMA → URL ultima.html', /\/ultima\.html$/.test(page.url()), page.url());
 await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
 const capsUltima = (await page.locator('.cap-nom').allTextContents()).map((n) => n.trim());
-verifier('Boussole ULTIMA : les 2 macro-quadrants (GRIMA, NAGA)',
-  JSON.stringify(capsUltima) === JSON.stringify(['GRIMA', 'NAGA']), JSON.stringify(capsUltima));
+// 2026-08-01 : deux macro-quadrants. 2026-08-06 : Paul ajoute ALTHEA en
+// TROISIÈME cadran — « tout seul, c'est un autre système, c'est plutôt un jeu
+// qu'autre chose ». Il n'est rangé sous aucune des deux devises, et c'est ce
+// que le rendu doit montrer : trois caps au même étage.
+verifier('Boussole ULTIMA : les 3 cadrans (GRIMA, NAGA, ALTHEA)',
+  JSON.stringify(capsUltima) === JSON.stringify(['GRIMA', 'NAGA', 'ALTHEA']),
+  JSON.stringify(capsUltima));
+// ALTHEA mène à sa page, pas à une boussole : il n'a qu'une porte (règle §2.1).
+verifier('Le cap ALTHEA ouvre bien le Système',
+  (await page.locator('.cap[data-cap="althea"] a, a[href$="althea.html"]').count()) >= 1);
 verifier('Retour vers la racine présent',
   (await page.locator('.console-retour a[href="/"]').count()) === 1);
 

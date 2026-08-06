@@ -173,3 +173,18 @@ reformuler et demander — jamais deviner avant une action irréversible.
     on n'entre pas dans sa propre vie au niveau 1.
   - **Les APTITUDES** = second registre annoncé par Paul, **non encore défini**.
     Ne rien inventer dessus.
+
+- **ALTHEA — le vocabulaire de B1 (livré 2026-08-06)** :
+  - **Une CONDITION** (ex-« geste ») = ce qu'on coche dans une journée. Elle
+    porte sa **cadence** et son **groupe** (les conditions d'un même groupe sont
+    en OU). Table `althea_conditions`.
+  - **Un RELEVÉ** = une ligne : un jour, une condition, `tenu` vrai ou faux.
+    **Il n'y a jamais de relevé « vide »** : le troisième état — non renseigné —
+    est **l'absence de ligne**. Ne jamais parler de « relevé nul ».
+  - **« En sommeil »** = l'état d'un skill non tenu aujourd'hui. **Jamais**
+    « raté », « manqué », « échec » ni « perdu » — le harnais interdit
+    littéralement ces mots à l'écran d'ALTHEA.
+  - **Les cinq rangs** : L'Éveil · **L'Assiduité** · L'Endurance · La Maîtrise ·
+    Le Renom. (Le rang II ne s'appelle plus « La Constance » — c'est un skill.)
+  - **Le socle** = ce que Paul déclare (niveau 48, et un entier par stat). Le
+    niveau le fait monter, **le socle le dessine**.
