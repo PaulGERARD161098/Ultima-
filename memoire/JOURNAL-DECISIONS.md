@@ -1892,3 +1892,46 @@
   - **Lecture incertaine signalée, non devinée** : « le titre avant Farsight » lu
     comme *étiqueter la ligne* (clé TITRE au-dessus). Si Paul voulait un titre
     porté antérieur à Farsight, c'est à corriger.
+
+- **2026-08-06 (ALTHEA — l'emblème, les stats, et un seul visuel)** — Trois
+  dictées de forme : **« c'est un peu trop gros »** → un seul visuel à deux blocs
+  alignés · **« utilise ça pour l'avatar »** (image d'un disque cranté à lame
+  traversante) · **« il me faut aussi mes stats : force, endurance, agilité,
+  intelligence, charisme »**.
+  - **La mise en page arrêtée** : la fiche reste pleine largeur (Paul l'a
+    validée) ; en dessous, **deux blocs alignés par le haut** — à gauche
+    **l'état des lieux** (cadran, skills, stats : *où j'en suis*), à droite
+    **le Système** (annonce, jour, quêtes, Léo, badge : *ce qui m'attend*).
+    Ce qui a permis de tenir : **un skill = une ligne** (pas une carte), **une
+    stat = UNE ligne de grille** (sa source logée dans la cellule du nom), le
+    cadran resserré 470 → 360 px, et `align-items: start` pour que les blocs
+    gardent leur hauteur propre.
+  - **Les stats de Paul remplacent les cinq aptitudes que Léo proposait**
+    (Esprit/Souffle/Volonté/Racine/Vigueur). Le registre RPG classique se
+    comprend sans explication. **La règle ne bouge pas : un skill se TIENT, une
+    stat se DÉRIVE** — aucune valeur stockée.
+  - 🔻 **Le lien skill → stat passe de un-à-un à PLUSIEURS-À-PLUSIEURS.** Mes
+    cinq aptitudes épousaient exactement les cinq skills : symétrie confortable,
+    et **fausse**. *Pieds légers* nourrit l'endurance **et** l'agilité ; *Peak
+    performance* la force **et** l'endurance. Coût : une table de liaison au lieu
+    d'une colonne. *Une symétrie trop belle est un signe qu'on a plié le réel.*
+  - 🔻 **LE CREUX — la meilleure trouvaille de la dictée.** Aucun des cinq skills
+    ne nourrit le **charisme**. Deux options : masquer la stat, ou **la montrer
+    vide et le dire**. Retenu : le Système l'affiche à zéro et l'annonce.
+    **Un creux visible est une invitation ; un creux masqué est un oubli.**
+    C'est peut-être le meilleur usage du Système — il ne compte pas seulement ce
+    que Paul fait, **il montre ce qu'il ne fait pas**, sans le lui reprocher.
+  - **Le sceau** : les trois Vitruve sont **abandonnés**. L'emblème de Paul est
+    **redessiné, pas intégré** — le fichier n'est pas au dépôt et une maquette ne
+    charge aucune ressource externe (CSP). Géométrie reprise, palette d'ALTHEA
+    (or pour le corps, spectral pour la lame). **L'œil au centre passe DEVANT la
+    lame** : c'est le titre qui le dicte — *Farsight, celui qui voit loin*. Le
+    sceau dit le titre.
+  - 🔻 **DÉFAUT DE MÉTHODE, à retenir** : la compaction des stats avait été
+    écrite une première fois **sans effet** — la substitution de texte n'avait
+    pas trouvé sa cible et **avait échoué en silence**. Résultat visible :
+    « FORCEPEAK PERFORMANCE · OMNIVORE » en capitales collées. **Une substitution
+    sans assertion est un changement qui n'a peut-être pas eu lieu.** Deux
+    parades adoptées : toute réécriture automatique **assert** que sa cible
+    existe, et le harnais vérifie **le résultat rendu** (la source est-elle sur
+    sa propre ligne ?) et non la présence de la règle CSS.

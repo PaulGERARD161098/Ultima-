@@ -618,7 +618,8 @@ s'affiche, il motive, **il ne détruit rien** quand il retombe. Le **meilleur
 | **`althea_paliers`** | `skill_id`, `rang` (1..5), `recompense` (texte), `reclame_le`. On ne stocke **pas** « atteint » : c'est dérivé. |
 | **`althea_releves`** | `geste_id`, `jour`, `tenu`, `minutes`, `mot` (court). **Unicité (owner, geste, jour)** ; `jour <= current_date` ; **pas de ligne = non renseigné** (règle 1 exprimée dans le schéma, pas seulement dans l'UI). |
 | **`althea_quetes`** | `type` (`principale`\|`secondaire`\|`fond`), `titre`, `intention`, `etat` (`proposee`\|`acceptee`\|`accomplie`\|`endormie`\|`rangee`\|`declinee`), `origine` (`paul`\|`leo`), `echeance`, `exigence` (le second cran de sévérité, facultatif), `parent_id` (l'allongement), `debloque_skill_id`, `recompense`. **Aucune colonne vers un autre quadrant** — ALTHEA est autonome (§1.5). |
-| **`althea_aptitudes`** | `code`, `nom`, `siege` (tête, poitrine, cœur, ventre, membres), `skill_id` (celui qui la nourrit). **Aucune valeur stockée** : le niveau d'une aptitude est **dérivé** du skill qui la nourrit (§13ter). Comme le niveau, comme la dette : *une donnée dérivée qu'on stocke finit toujours par mentir.* |
+| **`althea_stats`** | `code` (`force`, `endurance`, `agilite`, `intelligence`, `charisme`), `nom`, `rang_affichage`. **Aucune valeur stockée** : une stat est **dérivée** des skills qui la nourrissent (§13ter). |
+| **`althea_skill_stat`** | table de liaison `skill_id` ↔ `stat_id` (+ `poids`). **Plusieurs-à-plusieurs** : un skill nourrit plusieurs stats, une stat est nourrie par plusieurs skills. Une stat sans aucune ligne ici est **montrée vide**, jamais masquée. |
 | **`althea_interpellations`** | le journal de ce que le Système a envoyé : `jour`, `motif`. **Sa raison d'être : faire respecter la loi des interpellations** (une par jour, jamais deux fois la même) — une règle qu'on n'écrit nulle part est une règle qu'on n'applique pas. |
 | **`althea_abonnements_push`** | (boucle rappels) l'abonnement Web Push du téléphone. |
 
@@ -830,9 +831,11 @@ condition pour jouer. **Effet de bord précieux : ALTHEA est livrable seul.**
 | **D11** | ~~Le nom du personnage~~ | ✅ **Paul Gerard, niveau 48, titre *Farsight — celui qui voit loin*** (§13bis). |
 | **D15** | **Le rang II s'appelle « La Constance »**, or c'est aussi le nom d'un skill de Paul. Comment renommer le rang ? | **L'ASSIDUITÉ** → L'Éveil · L'Assiduité · L'Endurance · La Maîtrise · Le Renom. *(Ou : La Régularité.)* Le skill garde son nom — c'est le tien. |
 | **D16** | **Le niveau 48 est-il un socle déclaré** (ta vie compte déjà) **ou le jeu part-il de 1** ? | **Un socle déclaré.** Tu n'entres pas dans ta propre vie au niveau 1, et *Farsight* est un titre déjà gagné. |
-| **D17** | **Les aptitudes** — les cinq proposées (Esprit, Souffle, Volonté, Racine, Vigueur) conviennent-elles ? | **Oui, cinq pour cinq skills** (§13ter.1). Un skill se tient, une aptitude se dérive. |
-| **D20** | **L'avatar** : A (Vitruve fidèle), B (épuré) ou **C (des aptitudes)** ? | **C.** C'est le seul qui fasse du sceau un instrument de lecture au lieu d'une illustration. |
-| **D21** | **La formule d'une aptitude**, et a-t-elle le droit de **descendre** ? | **Oui, lentement.** La seule chose d'ALTHEA qui puisse baisser : le rang dit ce que tu as **fait**, l'aptitude ce que tu **vaux aujourd'hui**. |
+| **D17** | ~~Les aptitudes~~ | ✅ **Ce sont les STATS de Paul** : force, endurance, agilité, intelligence, charisme (§13ter). |
+| **D20** | ~~L'avatar Vitruve~~ | ✅ **Abandonné** au profit de **l'emblème** envoyé par Paul, redessiné en gravure (§13ter.3). |
+| **D21** | **La formule d'une stat**, et a-t-elle le droit de **descendre** ? | **Oui, lentement.** La seule chose d'ALTHEA qui puisse baisser : le rang dit ce que tu as **fait**, la stat ce que tu **vaux aujourd'hui**. |
+| **D22** | **Le charisme n'est nourri par aucun skill.** On en crée un sixième ? | **Pas tout de suite.** La stat reste **visible et vide** — le creux est une invitation. Le sixième skill viendra quand tu sauras ce qu'il doit dire. |
+| **D23** | **Le fichier de l'emblème** : tu me le déposes au dépôt, ou on garde ma gravure ? | Dis-moi. La gravure a l'avantage d'être **au registre d'ALTHEA** et de peser quelques kilo-octets. |
 | **D18** | **Le sport apparaît deux fois** (condition de *Peak performance* tous les 2 jours, et cœur de *Pieds légers* 10 km/semaine). Voulu ? | **Probablement voulu** — deux exigences différentes sur la même activité. Mais si tu préfères, *Pieds légers* absorbe le sport et *Peak performance* n'en parle plus. |
 | **D19** | **« Alimentation ok »** (condition de *Peak performance*) et **Omnivore** se recouvrent. | *Omnivore* **est** la définition d'« alimentation ok » → on retire la condition de *Peak performance* et on la remplace par « *Omnivore* est tenu ». Un second méta-lien, comme *Constance*. |
 | **D12** | **Le second cran de sévérité** : une quête de fond peut-elle porter une exigence (« 4 jours sur 7 ») qui alimente la dette ? | **Oui, mais facultative.** C'est toi qui l'armes en acceptant la quête. |
@@ -935,87 +938,113 @@ lui, pas zéro. Le niveau 48 dit la même chose. **Conséquence de modèle** : l
 niveau n'est pas seulement dérivé du jeu ; il **part d'un socle** que Paul
 déclare. À confirmer (**D16**).
 
-## 13ter. Les aptitudes — proposition (dictée « ajoute les aptitudes »)
+## 13ter. Les STATS — dictées par Paul le 2026-08-06
 
-Paul a annoncé un second registre après les skills, puis demandé de l'ajouter.
-Voici la proposition ; elle n'est pas encore une décision.
+> **✅ « Il me faut aussi mes stats : force, endurance, agilité, intelligence,
+> charisme. »**
 
-> **Un skill se TIENT. Une aptitude se DÉRIVE.**
+Ce sont **ses mots**, et ils remplacent les cinq aptitudes que je proposais
+(Esprit, Souffle, Volonté, Racine, Vigueur). Le registre RPG classique tient
+mieux ici : ALTHEA est un jeu, et ces cinq-là se comprennent sans explication.
+
+**La règle qui les distingue des skills ne bouge pas :**
+
+> **Un skill se TIENT. Une stat se DÉRIVE.**
 >
-> On ne coche jamais une aptitude et elle n'a ni condition, ni cadence, ni
-> quête. Elle **monte toute seule**, à mesure que les skills qui la nourrissent
-> sont tenus. C'est **ce que le corps et l'esprit valent** — pas ce qui a été
-> fait hier.
+> On ne coche jamais une stat, elle n'a ni condition, ni cadence, ni quête.
+> Elle **monte toute seule** à mesure que les skills qui la nourrissent sont
+> tenus. Aucune valeur n'est stockée : elle est calculée, comme le niveau et
+> comme la dette. *Une donnée dérivée qu'on stocke finit toujours par mentir.*
 
-### 13ter.1 Les cinq aptitudes proposées
+### 13ter.1 La table de nourriture
 
-| Aptitude | Où elle siège | Nourrie par |
+| Stat | Nourrie par |
+| --- | --- |
+| **FORCE** | PEAK PERFORMANCE · OMNIVORE |
+| **ENDURANCE** | PIEDS LÉGERS · CONSTANCE |
+| **AGILITÉ** | PIEDS LÉGERS |
+| **INTELLIGENCE** | TRADUCTEUR |
+| **CHARISME** | **aucun skill** |
+
+### 13ter.2 Ce que ce changement fait apparaître — et qu'il ne faut pas masquer
+
+**Le lien skill → stat passe de un-à-un à plusieurs-à-plusieurs.** Mes cinq
+aptitudes épousaient exactement les cinq skills : une symétrie confortable, et
+fausse. Les stats de Paul ne se laissent pas ranger comme ça — *Pieds légers*
+nourrit l'endurance **et** l'agilité, *Peak performance* la force **et**
+l'endurance. C'est plus juste, et ça coûte une table de liaison
+(`althea_skill_stat`) au lieu d'une colonne.
+
+⚠️ **Et surtout : le CHARISME n'est nourri par rien.** Aucun des cinq skills ne
+s'en occupe. Deux façons de traiter ça :
+
+- la masquer (n'afficher que les quatre nourries) — **non** ;
+- **la montrer vide, et le dire.** C'est ce qui est retenu : le Système affiche
+  la stat à zéro et l'annonce — *« aucun skill ne nourrit ton charisme »*.
+
+> **Un creux visible est une invitation ; un creux masqué est un oubli.**
+> C'est peut-être le meilleur usage du Système : il ne se contente pas de
+> compter ce que Paul fait, **il montre ce que Paul ne fait pas** — sans le lui
+> reprocher (règle cardinale 3). Un sixième skill ouvrirait le charisme.
+
+### 13ter.3 Le sceau — l'emblème dicté (image de référence)
+
+Paul a envoyé une image : **un disque cranté, une lame qui le traverse, des
+banderoles**. Les trois propositions Vitruve sont **abandonnées**.
+
+**Redessiné, pas intégré** — et c'est un choix contraint, dit franchement : le
+fichier d'origine n'est pas au dépôt, et une maquette **ne charge aucune
+ressource externe** (CSP, règle de la maison). La géométrie est reprise (couronne
+de huit lames, disque à anneaux, lame traversante, banderoles fendues) ; la
+palette reste celle d'ALTHEA — **l'or pour le corps de l'emblème, le spectral
+pour la lame** —, la règle de couleur du §10.3 tenant jusque dans le sceau.
+*Si Paul dépose le fichier, il remplacera le dessin.*
+
+**Une décision de dessin qui n'est pas décorative** : le centre du disque porte
+**un œil ouvert**, et l'œil passe **devant** la lame. C'est le titre qui le
+dicte — *Farsight, celui qui voit loin*. Le sceau dit le titre.
+
+### 13ter.4 Les ajustements de la fiche (dictés)
+
+- **Les élans quittent la fiche** (« enlève les élans »). Ils restent au niveau
+  du **skill**, là où ils ont un sens. La fiche porte : **Niveau · Skills tenus ·
+  Stats · Quêtes**.
+- **Le titre est étiqueté** (« le titre avant Farsight ») : la clé **TITRE**
+  au-dessus du nom du titre. *Lecture retenue faute de certitude — si Paul
+  voulait un titre porté antérieur à Farsight, c'est une autre mécanique.*
+
+## 13quater. La mise en page — un seul visuel, deux blocs alignés
+
+> **✅ « C'est un peu trop gros. En dessous de l'écran de présentation, qui est
+> très bien : l'état des lieux à gauche, le Système à droite. Faire tenir les
+> skills, les stats et les quêtes en un seul visuel, deux blocs alignés. »**
+
+| | **Bloc gauche — l'état des lieux** | **Bloc droit — le Système** |
 | --- | --- | --- |
-| **ESPRIT** | la tête | TRADUCTEUR |
-| **SOUFFLE** | la poitrine | PIEDS LÉGERS |
-| **VOLONTÉ** | le cœur | CONSTANCE |
-| **RACINE** | le ventre | OMNIVORE |
-| **VIGUEUR** | les membres | PEAK PERFORMANCE |
+| Ce qu'il montre | le cadran · les skills · les stats | l'annonce · le jour · les quêtes · Léo · le badge |
+| Ce qu'il dit | **où j'en suis** | **ce qui m'attend** |
+| Ton | l'inventaire, calme | la voix, l'action |
 
-**Cinq skills, cinq aptitudes, cinq points du corps.** Ce n'est pas une
-coïncidence arrangée : c'est ce qui a fait choisir la forme de l'avatar (§13ter.2).
+**Ce qui a permis de tenir en deux blocs**, et qui vaut comme règle de forme :
 
-### 13ter.2 Ce que Vitruve rend possible — et qu'il ne faut pas manquer
+1. **La fiche reste pleine largeur** — Paul l'a validée, elle ne bouge pas.
+2. **Un skill = une ligne**, pas une carte : rang, nom, énoncé, jauge, état.
+   Cinq skills tiennent dans une demi-colonne.
+3. **Une stat = une ligne de grille**, sa source logée **dans** la cellule du
+   nom. En deux lignes de grille, les cinq stats doublaient la hauteur.
+4. **Le cadran se resserre** (470 → 360 px) : il indexe les skills, il ne les
+   remplace pas.
+5. **`align-items: start`** — les deux blocs s'alignent **par le haut** et
+   gardent leur hauteur propre ; ils ne s'étirent pas l'un sur l'autre.
 
-Paul a demandé un avatar « **modèle homme de Vitruve, mais schématisé** ». Or
-Vitruve **est** un corps découpé en proportions. D'où l'idée qui unifie les deux
-demandes de la même dictée :
-
-> **L'avatar EST la carte des aptitudes.** La figure porte cinq **nœuds de
-> lumière** — tête, poitrine, cœur, ventre, membres — et chacun brille à la
-> mesure de l'aptitude qui y siège. Le sceau du personnage cesse d'être une
-> illustration : il devient **un instrument de lecture**.
-
-**Trois propositions maquettées** (`design/preview-althea-systeme.html`), chacune
-montrée **à sa taille réelle et agrandie** — *un sceau se juge à la taille où il
-sera vu, pas à celle où il est beau* :
-
-- **A — le Vitruve fidèle** : les deux poses superposées, comme chez Léonard.
-  Le plus savant, le plus chargé — et c'est là son risque à 66 px.
-- **B — le Vitruve épuré** : une seule pose, trait épais, presque un
-  pictogramme. Le plus lisible en petit, le moins reconnaissable comme Vitruve.
-- **C — le Vitruve des aptitudes** : la figure porte les cinq nœuds.
-  **Recommandation de Léo**, pour la raison ci-dessus.
-
-Dans les trois : **le cercle et le carré sont en bleu spectral** (ce sont des
-tracés du Système) et **le corps reste en or** (c'est ce qui est gagné) — la
-règle de couleur du §10.3 tient jusque dans le sceau.
-
-> **Défaut trouvé à la mesure, et instructif** : la version C portait d'abord ses
-> libellés **dans** le médaillon. Ils se posaient sur le carré et sur le corps —
-> illisibles — et « SOUFFLE » **sortait du cadre de 21 px**. Les libellés sont
-> sortis du dessin : **un médaillon de 66 px ne porte pas de texte**, et l'avatar
-> réel n'en portera jamais. La légende est du HTML, à côté.
-
-### 13ter.3 Ce qui reste à trancher sur les aptitudes
-
-1. **La formule.** Comment un skill tenu fait-il monter son aptitude ? Piste :
-   l'aptitude vaut le **rang du skill**, lissé sur la durée où il a été tenu —
-   ce qui la rend lente à monter et **lente à descendre**. À trancher (**D21**).
-2. **Une aptitude peut-elle DESCENDRE ?** Position de Léo : **oui, lentement.**
-   C'est la seule chose d'ALTHEA qui ait le droit de baisser, et c'est
-   cohérent — *le rang dit ce que tu as fait* (acquis, jamais perdu), *l'aptitude
-   dit ce que tu vaux aujourd'hui*. Un corps qui ne court plus perd son souffle ;
-   il ne perd pas les kilomètres déjà courus.
-3. **Cinq suffisent-elles ?** Le corps de Vitruve en accueillerait deux de plus
-   (les mains, les yeux). Mais **cinq skills, cinq aptitudes** est une symétrie
-   qui se lit d'un coup d'œil — on n'en ajoute que si un besoin l'exige.
-
-### 13ter.4 Deux ajustements de la fiche (dictés)
-
-- **Les élans quittent la fiche du personnage** (« enlève les élans »). Ils ne
-  disparaissent pas du jeu — l'élan reste au niveau du **skill**, là où il a un
-  sens. En tête d'écran, il ne restait qu'un chiffre de plus à lire.
-  La fiche porte désormais : **Niveau · Skills tenus · Aptitudes**.
-- **Le titre est étiqueté** (« le titre avant Farsight ») : la ligne porte
-  maintenant la clé **TITRE** au-dessus du nom du titre, comme les autres
-  champs de la fiche. *Lecture retenue faute de certitude : si Paul voulait
-  autre chose — un titre porté avant Farsight, par exemple — c'est à corriger.*
+> 🔻 **Défaut de méthode, à retenir** : la compaction des stats avait été écrite
+> une première fois **sans effet** — le remplacement de texte n'avait pas trouvé
+> sa cible et **avait échoué en silence**. Le rendu montrait « FORCEPEAK
+> PERFORMANCE · OMNIVORE » en capitales collées. **Une substitution sans
+> assertion est un changement qui n'a peut-être pas eu lieu** : toute réécriture
+> automatique doit vérifier que sa cible existe, et le harnais doit contrôler le
+> **résultat** (ici : la source est bien sur sa propre ligne), pas la présence de
+> la règle.
 
 ## 14. Le format 6 points de B1
 
@@ -1087,9 +1116,11 @@ pourtant dès B1 : c'est ce qui donne envie de la suite.
   apparaître l'ÉNONCÉ, les CADENCES, l'ÉVOLUTION et le MÉTA-SKILL** — quatre
   mécaniques qu'aucune spéculation n'avait vues. *La leçon se répète : le
   cadrage ne se valide pas, il se confronte au réel de Paul.*
-- **Reste avant d'ouvrir B1** : **D20** (quel Vitruve), **D15** (renommer le
-  rang II), **D21** (la formule d'une aptitude), et les deux recouvrements
-  **D18 / D19**. Seul D20 bloque la forme ; les autres bloquent le schéma.
-- **Prochaine action unique** : Paul choisit son Vitruve (D20) et tranche D15,
-  puis **B1 s'ouvre** — le personnage, le cadran, la liste des skills, les
-  aptitudes, le relevé. Sans aucune quête.
+- **La forme est arrêtée** : fiche pleine largeur, puis **un seul visuel à deux
+  blocs alignés** (§13quater). Le sceau est l'emblème de Paul. Les stats sont
+  les siennes.
+- **Reste avant d'ouvrir B1** : **D15** (renommer le rang II — collision avec le
+  skill *Constance*), **D21** (la formule d'une stat), et les deux recouvrements
+  **D18 / D19**. Plus rien ne bloque la **forme** ; tout cela bloque le **schéma**.
+- **Prochaine action unique** : Paul tranche D15, puis **B1 s'ouvre** — la fiche,
+  le cadran, les skills, les stats, le relevé. Sans aucune quête.

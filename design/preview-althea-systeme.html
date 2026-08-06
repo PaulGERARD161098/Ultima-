@@ -156,6 +156,67 @@ body {
 .stat .val { font-size: 1.5rem; color: var(--or); }
 .stat .val small { font-size: .8rem; color: var(--parch-bas); letter-spacing: .1em; }
 
+/* ── UN SEUL VISUEL, DEUX BLOCS ALIGNÉS (dicté par Paul) ──
+      À gauche l'état des lieux (skills + aptitudes, sur le cadran),
+      à droite le Système (annonce, jour, quêtes, Léo). `align-items: start`
+      les aligne par le HAUT — deux blocs de hauteurs différentes restent
+      alignés, ils ne s'étirent pas l'un sur l'autre. ── */
+.visuel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+  margin-top: 22px;
+}
+@media (max-width: 900px) { .visuel { grid-template-columns: 1fr; } }
+.bloc { border: 1px solid var(--trait); padding: 16px 18px 20px; }
+.bloc-entete {
+  margin: -16px -18px 14px;
+  padding: 9px 18px;
+  background: var(--nuit-2);
+  border-bottom: 1px solid var(--trait);
+  font-size: .7rem;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--or);
+}
+.sous-titre {
+  margin: 20px 0 8px;
+  font-size: .68rem;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--parch-bas);
+}
+.sous-titre em { font-style: italic; letter-spacing: .04em; text-transform: none; }
+
+/* ── UNE LIGNE DE SKILL — le format compact de l'inventaire.
+      Le rang à gauche, l'énoncé au milieu, l'état à droite. Trois lignes de
+      texte par skill, pas une carte : c'est ce qui fait tenir cinq skills
+      dans la moitié d'un écran. ── */
+.ligne-skill {
+  display: grid;
+  grid-template-columns: 30px minmax(0,1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 9px 0;
+  border-top: 1px solid var(--trait);
+}
+.ligne-skill:first-of-type { border-top: 0; }
+.ls-rang { font-size: 1rem; color: var(--or); text-align: center; letter-spacing: .06em; }
+.ls-corps { display: block; min-width: 0; }
+.ls-nom { display: block; font-size: .92rem; color: var(--parch); letter-spacing: .04em; }
+.ls-nom .evo-tag { font-size: .7rem; color: var(--spectre); font-style: normal; letter-spacing: .1em; }
+.ls-enonce { display: block; font-size: .76rem; color: var(--parch-bas); font-style: italic; }
+.ls-barre { display: block; height: 3px; background: var(--trait); margin-top: 5px; }
+.ls-barre i { display: block; height: 3px; background: var(--or); }
+.ls-etat {
+  font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
+  border: 1px solid var(--spectre-f); color: var(--spectre); padding: 2px 7px;
+}
+.ls-etat.dort { border-color: var(--verrou); color: var(--parch-bas); }
+.ligne-skill.dort .ls-rang { color: var(--or-sourd); }
+.releve.nu { border: 0; background: transparent; padding: 0; }
+
 /* ───────────────────────── ② le cadran des skills ───────────────────────── */
 .bloc-titre {
   margin: 30px 0 4px;
@@ -167,7 +228,7 @@ body {
 .deux-colonnes { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 30px; }
 @media (max-width: 860px) { .deux-colonnes { grid-template-columns: 1fr; } }
 
-.cadran { width: 100%; max-width: 470px; margin: 0 auto; display: block; }
+.cadran { width: 100%; max-width: 360px; margin: 0 auto 4px; display: block; }
 .cadran .anneau-fond { fill: none; stroke: var(--trait); stroke-width: 5; }
 .cadran .anneau-plein {
   fill: none;
@@ -457,9 +518,24 @@ body {
 .aptitudes p { margin: 0; }
 .aptitudes p + p { margin-top: 8px; }
 
-/* ── LES TROIS VITRUVE — propositions d'avatar. Chacune est montrée DEUX fois :
-      à sa taille réelle (132 px, celle de la fiche) et agrandie. Un sceau se
-      juge à la taille où il sera vu, pas à la taille où il est beau. ── */
+/* ── LE SCEAU — l'emblème dicté par Paul (image de référence), REDESSINÉ en
+      gravure : une maquette ne charge aucune ressource externe (CSP), et le
+      fichier d'origine n'est pas au dépôt. La géométrie est reprise — disque
+      cranté, lame traversante, banderoles ; la palette est celle d'ALTHEA :
+      l'or pour le corps de l'emblème, le spectral pour la lame et l'œil. ── */
+.embleme .lames path { fill: var(--or-sourd); stroke: var(--or); stroke-width: .8; stroke-linejoin: round; }
+.embleme .plaque { fill: var(--nuit-2); stroke: var(--or); stroke-width: 2; }
+.embleme .cerne  { fill: none; stroke: var(--or-sourd); stroke-width: 1; }
+.embleme .banderole path { fill: none; stroke: var(--or-sourd); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.embleme .pommeau { fill: var(--spectre); }
+.embleme .poignee { fill: none; stroke: var(--spectre); stroke-width: 2.6; stroke-linecap: round; }
+.embleme .garde   { fill: none; stroke: var(--spectre); stroke-width: 2.6; stroke-linecap: round; }
+.embleme .tranchant { fill: var(--spectre); stroke: none; opacity: .92; }
+.embleme .gorge   { fill: none; stroke: var(--nuit-2); stroke-width: 1; opacity: .55; }
+/* L'ŒIL — la seule figure du sceau, et elle n'est pas décorative :
+   c'est le titre de Paul qui la dicte, « Farsight, celui qui voit loin ». */
+.embleme .paupiere { fill: var(--nuit); stroke: var(--spectre); stroke-width: 1.5; }
+.embleme .pupille { fill: var(--spectre); }
 .propals { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 22px; }
 @media (max-width: 860px) { .propals { grid-template-columns: 1fr; } }
 .propal { border: 1px solid var(--trait); background: var(--nuit-2); padding: 16px; }
@@ -484,19 +560,31 @@ body {
 
 /* ── LES APTITUDES — proposition. Elles ne se cochent pas : elles se DÉRIVENT
       des skills tenus. D'où la barre pleine et l'absence de case. ── */
-.aptitude { display: grid; grid-template-columns: 132px 1fr auto; gap: 14px;
-  align-items: center; padding: 9px 0; border-top: 1px solid var(--trait); }
+.aptitude { display: grid; grid-template-columns: 152px minmax(0,1fr) 32px;
+  gap: 12px; align-items: center; padding: 7px 0; border-top: 1px solid var(--trait); }
 .aptitude:first-of-type { border-top: 0; }
-.aptitude .nom-apt { font-size: .84rem; letter-spacing: .18em; text-transform: uppercase; color: var(--or); }
+.aptitude .nom-apt { font-size: .82rem; letter-spacing: .14em; text-transform: uppercase; color: var(--or); }
+/* La source tient DANS la cellule du nom — une stat = UNE ligne de grille,
+   pas deux. C'est ce qui fait tenir les cinq dans la moitié d'un écran.
+   `display:block` est indispensable : sans lui le nom et sa source se
+   collent bout à bout, en capitales, et deviennent illisibles. */
+.aptitude .nom-apt small {
+  display: block;
+  font-size: .66rem;
+  letter-spacing: .03em;
+  text-transform: none;
+  color: var(--parch-bas);
+  margin-top: 1px;
+}
 .aptitude .barre { height: 5px; background: var(--trait); }
 .aptitude .barre i { display: block; height: 5px; background: var(--or); }
-.aptitude .val-apt { font-size: .82rem; color: var(--parch); min-width: 2.4em; text-align: right; }
-.aptitude .source { grid-column: 1 / -1; font-size: .74rem; color: var(--parch-bas); margin-top: 2px; }
+.aptitude .val-apt { font-size: .82rem; color: var(--parch); text-align: right; }
 
 /* ───────────────────────── ⑥ l'écran d'accueil ───────────────────────── */
 .accueil { display: flex; align-items: center; gap: 18px; margin-top: 18px; }
 .icone {
   position: relative;
+  flex: 0 0 66px;
   width: 66px; height: 66px;
   border-radius: 15px;
   background: var(--nuit-2);
@@ -560,34 +648,45 @@ body {
   La forme A (nuit et or) est abandonnée.</p>
 
   <section class="systeme spectral">
+
+    <!-- ① L'ÉCRAN DE PRÉSENTATION — inchangé, Paul l'a validé -->
     <div class="fiche">
-      <svg class="avatar vitruve" viewBox="0 0 120 120" role="img"
-             aria-label="Vitruve spectral : la figure en segments, ses cinq aptitudes en nœuds de lumière">
-          <circle cx="60" cy="60" r="55" fill="none" stroke="var(--or-sourd)" stroke-width="1"/>
-          <circle cx="60" cy="60" r="49" fill="var(--nuit-2)" stroke="var(--or)" stroke-width="1.2"/>
-          <rect class="cadre" x="26" y="28" width="68" height="68"/>
-          <circle class="cadre" cx="60" cy="64" r="33"/>
-          <g class="corps-fin">
-            <path d="M60 42 L32 34 M60 42 L88 34"/>
-            <path d="M60 68 L36 94 M60 68 L84 94"/>
-          </g>
-          <g class="corps">
-            <circle cx="60" cy="32" r="6.5" fill="none"/>
-            <path d="M60 39 V68"/>
-            <path d="M30 50 L60 45 L90 50"/>
-            <path d="M60 68 L47 96 M60 68 L73 96"/>
-          </g>
-          <!-- LES CINQ NŒUDS : une aptitude par point du corps -->
-          <g>
-            <!-- une aptitude par point du corps, dans l'ordre où on les lit :
-                 tête, poitrine, cœur, ventre, membres. -->
-            <circle class="halo" cx="60" cy="32" r="9"/><circle class="noeud" cx="60" cy="32" r="2.6"/>
-            <circle class="halo" cx="60" cy="44" r="6"/><circle class="noeud" cx="60" cy="44" r="2.1"/>
-            <circle class="halo" cx="60" cy="54" r="6"/><circle class="noeud" cx="60" cy="54" r="2.1"/>
-            <circle class="halo" cx="60" cy="66" r="5.5"/><circle class="noeud" cx="60" cy="66" r="2"/>
-            <circle class="halo" cx="54" cy="81" r="6"/><circle class="noeud" cx="54" cy="81" r="2.1"/>
-          </g>
-        </svg>
+      <svg class="avatar embleme" viewBox="0 0 120 120" role="img"
+           aria-label="Sceau du personnage : un disque cranté à l’œil ouvert, sa lame traversante et ses banderoles">
+        <circle cx="60" cy="60" r="55" fill="none" stroke="var(--or-sourd)" stroke-width="1"/>
+        <circle cx="60" cy="60" r="49" fill="var(--nuit-2)" stroke="var(--or)" stroke-width="1.2"/>
+        <!-- LA COURONNE — huit lames larges, taillées en aile -->
+        <g class="lames">
+          <path d="M56.1 31.3 L57.9 9.0 L60.0 6.0 L62.1 9.0 L63.9 31.3 Z"/>
+          <path d="M74.7 35.8 L91.7 21.3 L95.4 20.6 L94.7 24.3 L80.2 41.3 Z"/>
+          <path d="M84.7 52.1 L107.0 53.9 L110.0 56.0 L107.0 58.1 L84.7 59.9 Z"/>
+          <path d="M80.2 70.7 L94.7 87.7 L95.4 91.4 L91.7 90.7 L74.7 76.2 Z"/>
+          <path d="M63.9 80.7 L62.1 103.0 L60.0 106.0 L57.9 103.0 L56.1 80.7 Z"/>
+          <path d="M45.3 76.2 L28.3 90.7 L24.6 91.4 L25.3 87.7 L39.8 70.7 Z"/>
+          <path d="M35.3 59.9 L13.0 58.1 L10.0 56.0 L13.0 53.9 L35.3 52.1 Z"/>
+          <path d="M39.8 41.3 L25.3 24.3 L24.6 20.6 L28.3 21.3 L45.3 35.8 Z"/>
+        </g>
+        <!-- LES BANDEROLES — elles pendent sous le disque, l’extrémité fendue -->
+        <g class="banderole">
+          <path d="M50 80 q-5 9 -2 16 q3 7 -2 13 l4 -2 l3 4"/>
+          <path d="M70 80 q5 9 2 16 q-3 7 2 13 l-4 -2 l-3 4"/>
+        </g>
+        <!-- LE DISQUE -->
+        <circle class="plaque" cx="60" cy="56" r="27"/>
+        <circle class="cerne" cx="60" cy="56" r="21"/>
+        <circle class="cerne" cx="60" cy="56" r="15"/>
+        <!-- LA LAME — elle traverse le disque de part en part -->
+        <g class="lame-maitresse">
+          <circle class="pommeau" cx="60" cy="15" r="3"/>
+          <path class="poignee" d="M60 18 V29"/>
+          <path class="garde" d="M45 31 H75"/>
+          <path class="tranchant" d="M55 34 H65 L62.5 92 L60 104 L57.5 92 Z"/>
+          <path class="gorge" d="M60 37 V92"/>
+        </g>
+        <!-- L’ŒIL OUVERT — c’est Farsight : « celui qui voit loin » -->
+        <path class="paupiere" d="M48 56 q12 -11 24 0 q-12 11 -24 0 z"/>
+        <circle class="pupille" cx="60" cy="56" r="3.4"/>
+      </svg>
       <div class="identite">
         <p class="nom">Paul Gerard</p>
         <p class="cle-titre">Titre</p>
@@ -595,15 +694,20 @@ body {
         <div class="stats">
           <div class="stat"><span class="cle">Niveau</span><span class="val">48</span></div>
           <div class="stat"><span class="cle">Skills tenus</span><span class="val">3 <small>/ 5</small></span></div>
-          <div class="stat"><span class="cle">Aptitudes</span><span class="val">5</span></div>
+          <div class="stat"><span class="cle">Stats</span><span class="val">4 <small>/ 5 nourries</small></span></div>
+          <div class="stat"><span class="cle">Quêtes</span><span class="val">5 <small>en cours</small></span></div>
         </div>
       </div>
     </div>
 
-    <div class="deux-colonnes">
-      <div>
-        <p class="bloc-titre">Le cadran — cinq skills</p>
-        <svg class="cadran" viewBox="0 0 460 400" role="img"
+    <!-- ② UN SEUL VISUEL, DEUX BLOCS ALIGNÉS -->
+    <div class="visuel">
+
+      <!-- ══ BLOC GAUCHE — l'état des lieux ══ -->
+      <div class="bloc">
+        <p class="bloc-entete">L'état des lieux</p>
+
+          <svg class="cadran" viewBox="0 0 460 400" role="img"
              aria-label="Le cadran des skills : Peak performance rang II, Traducteur rang III (évolution disponible), Omnivore rang I, Constance rang IV, Pieds légers rang I">
           <g transform="translate(230,88)">
             <circle class="anneau-fond" r="34"/>
@@ -655,372 +759,142 @@ body {
           <text class="coeur-attente" x="230" y="220">3 gestes en attente</text>
         </svg>
 
+        <p class="sous-titre">Les skills</p>
+        <div class="ligne-skill">
+          <span class="ls-rang">II</span>
+          <span class="ls-corps">
+            <span class="ls-nom">Peak performance</span>
+            <span class="ls-enonce">« le joueur est au top de sa forme ! »</span>
+            <span class="ls-barre"><i style="width:46%"></i></span>
+          </span>
+          <span class="ls-etat">Tenu</span>
+        </div>
+        <div class="ligne-skill">
+          <span class="ls-rang">III</span>
+          <span class="ls-corps">
+            <span class="ls-nom">Traducteur <em class="evo-tag">↗ évolue</em></span>
+            <span class="ls-enonce">« sait parler au moins 2 langues à haut niveau »</span>
+            <span class="ls-barre"><i style="width:71%"></i></span>
+          </span>
+          <span class="ls-etat">Tenu</span>
+        </div>
+        <div class="ligne-skill">
+          <span class="ls-rang">IV</span>
+          <span class="ls-corps">
+            <span class="ls-nom">Constance</span>
+            <span class="ls-enonce">« se relève toujours après avoir chuté »</span>
+            <span class="ls-barre"><i style="width:58%"></i></span>
+          </span>
+          <span class="ls-etat">Tenu</span>
+        </div>
+        <div class="ligne-skill dort">
+          <span class="ls-rang">I</span>
+          <span class="ls-corps">
+            <span class="ls-nom">Pieds légers</span>
+            <span class="ls-enonce">« court au moins 10 km par semaine » — 6,2 / 10</span>
+            <span class="ls-barre"><i style="width:20%"></i></span>
+          </span>
+          <span class="ls-etat dort">Sommeil</span>
+        </div>
+        <div class="ligne-skill dort">
+          <span class="ls-rang">I</span>
+          <span class="ls-corps">
+            <span class="ls-nom">Omnivore</span>
+            <span class="ls-enonce">« peut manger de tout » — légumes non cochés</span>
+            <span class="ls-barre"><i style="width:33%"></i></span>
+          </span>
+          <span class="ls-etat dort">Sommeil</span>
+        </div>
+
+        <p class="sous-titre">Les stats<em> — elles ne se cochent pas, elles se dérivent des skills</em></p>
+        <div class="aptitude">
+          <span class="nom-apt">Force<small>PEAK PERFORMANCE · OMNIVORE</small></span><span class="barre"><i style="width:46%"></i></span><span class="val-apt">46</span>
+        </div>
+        <div class="aptitude">
+          <span class="nom-apt">Endurance<small>PIEDS LÉGERS · CONSTANCE</small></span><span class="barre"><i style="width:39%"></i></span><span class="val-apt">39</span>
+        </div>
+        <div class="aptitude">
+          <span class="nom-apt">Agilité<small>PIEDS LÉGERS</small></span><span class="barre"><i style="width:20%"></i></span><span class="val-apt">20</span>
+        </div>
+        <div class="aptitude">
+          <span class="nom-apt">Intelligence<small>TRADUCTEUR</small></span><span class="barre"><i style="width:71%"></i></span><span class="val-apt">71</span>
+        </div>
+        <div class="aptitude vide">
+          <span class="nom-apt">Charisme<small>aucun skill ne la nourrit</small></span><span class="barre"><i style="width:0%"></i></span><span class="val-apt">—</span>
+        </div>
+        <p class="creux">↯ <b>Le Système voit un creux.</b> Aucun de tes cinq skills
+        ne nourrit ton <b>charisme</b> — il restera à zéro tant qu'aucun ne s'en
+        chargera. C'est une invitation, pas un reproche : un sixième skill
+        l'ouvrirait.</p>
+      </div>
+
+      <!-- ══ BLOC DROIT — le Système ══ -->
+      <div class="bloc">
+        <p class="bloc-entete">Le Système</p>
+
         <div class="fenetre">
-          <p class="voix">[ Rang atteint — La Constance ]</p>
-          <p class="corps"><b>ENDURANCE</b> passe au rang III après 90 jours
-          nourris. Récompense déclarée : <b>une journée entière sans obligation</b>.</p>
+          <p class="voix">[ Rang atteint — L'Endurance ]</p>
+          <p class="corps"><b>TRADUCTEUR</b> passe au rang III. Une évolution
+          s'ouvre : <b>Traducteur universel</b>, s'il sait parler 3 langues.</p>
           <div class="actions">
             <button class="bouton or" type="button">Réclamer</button>
             <button class="bouton" type="button">Plus tard</button>
           </div>
         </div>
 
-        <div class="leo">
-          <p class="qui">Léo</p>
-          <p>Trois cent quatre-vingt-dix jours que tu tiens SOUFFLE, en comptant
-          les reprises. Le rang IV est à <em>onze jours</em> — c'est le plus près
-          que tu aies jamais été.</p>
-          <p>Je te propose d'allonger la quête d'étude : dix séances sur le mois,
-          au lieu de cinq sur la semaine. Tu tiens le rythme depuis trois
-          semaines, autant que ça compte pour quelque chose.</p>
-        </div>
-      </div>
-
-      <div>
-        <p class="bloc-titre">Le relevé — chaque condition à sa cadence</p>
-        <div class="releve">
-          <h4>Aujourd'hui · jeudi 6</h4>
-          <div class="geste">
-            <span class="case tenu" aria-hidden="true">✦</span>
-            <span class="lib">Sommeil en ordre<small>PEAK PERFORMANCE · chaque jour</small></span>
-          </div>
-          <div class="geste">
-            <span class="case tenu" aria-hidden="true">✦</span>
-            <span class="lib">Stop écran tard<small>PEAK PERFORMANCE · chaque jour</small></span>
-          </div>
+        <p class="sous-titre">Le jour — 3 gestes en attente</p>
+        <div class="releve nu">
           <div class="geste">
             <span class="case vide" aria-hidden="true"></span>
             <span class="lib">Des légumes<small>OMNIVORE · chaque jour</small></span>
           </div>
           <div class="geste">
-            <span class="case tenu" aria-hidden="true">✦</span>
-            <span class="lib">Trente minutes de japonais<small>TRADUCTEUR · 30 min/jour — l'une des trois langues suffit</small></span>
+            <span class="case vide" aria-hidden="true"></span>
+            <span class="lib">Sport<small>PEAK PERFORMANCE · tous les 2 jours</small></span>
           </div>
           <div class="geste">
             <span class="case vide" aria-hidden="true"></span>
-            <span class="lib">Sport<small>PEAK PERFORMANCE · tous les 2 jours — dernier il y a 2 jours</small></span>
-          </div>
-          <div class="geste">
-            <span class="case vide" aria-hidden="true"></span>
-            <span class="lib">Course — 6,2 / 10 km<small>PIEDS LÉGERS · volume de la semaine, pas une case du jour</small></span>
-          </div>
-          <div class="geste" style="border-top:1px solid var(--trait);margin-top:6px;padding-top:12px">
-            <span class="lib" style="color:var(--parch-bas);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase">La semaine</span>
-            <span class="semaine">
-              <span class="jour tenu">L</span><span class="jour tenu">M</span>
-              <span class="jour muet">M</span><span class="jour tenu">J</span>
-              <span class="jour muet">V</span><span class="jour muet">S</span>
-              <span class="jour muet">D</span>
-            </span>
+            <span class="lib">Course — 6,2 / 10 km<small>PIEDS LÉGERS · volume de la semaine</small></span>
           </div>
         </div>
 
-        <p class="bloc-titre">Le journal — 1 principale · 2 secondaires · 2 de fond</p>
+        <p class="sous-titre">Les quêtes — 1 principale · 2 secondaires · 2 de fond</p>
         <div class="quete">
           <p class="type">Quête principale</p>
           <p class="intitule">Tenir dix minutes de conversation, sans traduire</p>
-          <p class="detail">Concrète, quotidienne, et qui ne dépend de rien d'autre
-          dans Ultima — 34 séances sur les 100 visées.</p>
+          <p class="detail">34 séances sur les 100 visées</p>
           <div class="jauge"><i style="width:34%"></i></div>
         </div>
         <div class="quete secondaire">
           <p class="type">Secondaire · proposée par Léo</p>
           <p class="intitule">Cinq séances d'étude d'ici dimanche</p>
           <p class="detail">3 / 5 · échéance dans 2 jours</p>
-          <p class="recompense">Récompense : débloque le skill CALLIGRAPHIE</p>
+          <p class="recompense">Récompense : ouvre le skill CALLIGRAPHIE</p>
         </div>
         <div class="quete secondaire">
           <p class="type">Secondaire · endormie depuis 12 jours</p>
           <p class="intitule">Marcher dix kilomètres d'une traite</p>
-          <p class="detail">Le Système ne reproche rien — il demande seulement :
-          reprendre, ou ranger ?</p>
+          <p class="detail">Reprendre, ou ranger ?</p>
         </div>
         <div class="quete fond">
-          <p class="type">Quête de fond</p>
-          <p class="intitule">Nourrir SOUFFLE chaque jour</p>
-          <p class="detail">Élan 12 jours · meilleur 41</p>
+          <p class="type">Quêtes de fond</p>
+          <p class="intitule">Nourrir PEAK PERFORMANCE · nourrir TRADUCTEUR</p>
+          <p class="detail">élan 12 jours · meilleur 41</p>
         </div>
 
-        <p class="bloc-titre">La liste des skills</p>
-
-        <div class="skill">
-          <div class="entete"><span class="nom">Peak performance</span>
-            <span class="rang-txt">rang II · La Constance</span>
-            <span class="etat">Tenu</span></div>
-          <p class="enonce">« Le joueur est au top de sa forme ! »</p>
-          <ul>
-            <li><b>Pas de recours à substance externe</b> <span class="cadence">— chaque jour</span></li>
-            <li><b>Sommeil en ordre</b> <span class="cadence">— chaque jour</span></li>
-            <li><b>Stop écran tard</b> <span class="cadence">— chaque jour</span></li>
-            <li><b>Alimentation ok</b> <span class="cadence">— chaque jour</span></li>
-            <li><b>Sport</b> <span class="cadence">— tous les 2 jours</span></li>
-          </ul>
+        <div class="leo">
+          <p class="qui">Léo</p>
+          <p>Deux skills dorment, et c'est le même geste qui les réveille : sors
+          courir. <em>Pieds légers</em> reprend, et <em>Peak performance</em>
+          coche son sport du jour.</p>
         </div>
 
-        <div class="skill">
-          <div class="entete"><span class="nom">Traducteur</span>
-            <span class="rang-txt">rang III · L'Endurance</span>
-            <span class="etat">Tenu</span></div>
-          <p class="enonce">« Le joueur sait parler au moins 2 langues à haut niveau. »</p>
-          <ul>
-            <li><b>Italien</b>, <b>espagnol</b> ou <b>japonais</b>
-            <span class="cadence">— 30 min par jour, l'une des trois suffit</span></li>
-          </ul>
-          <p class="evolution">↗ Évolue en <b>Traducteur universel</b> — « savoir parler
-          3 langues ». Il te manque la troisième.</p>
-        </div>
-
-        <div class="skill">
-          <div class="entete"><span class="nom">Constance</span>
-            <span class="rang-txt">rang IV · La Maîtrise</span>
-            <span class="etat">Tenu</span></div>
-          <p class="enonce">« Le joueur se relève toujours après avoir chuté&nbsp;;
-          il ne reste pas au sol. »</p>
-          <ul>
-            <li>Se mesure sur <b>les autres skills</b> : après une rupture, reprendre
-            <span class="cadence">— sous 7 jours</span></li>
-            <li>7 chutes, 7 relevés <span class="cadence">— aucune rupture laissée au sol</span></li>
-          </ul>
-        </div>
-
-        <div class="skill sommeil">
-          <div class="entete"><span class="nom">Pieds légers</span>
-            <span class="rang-txt">rang I · L'Éveil</span>
-            <span class="etat dort">En sommeil</span></div>
-          <p class="enonce">« Le joueur court au moins 10 km par semaine. »</p>
-          <ul>
-            <li><b>Course</b> <span class="cadence">— 10 km par semaine · 6,2 km cette semaine</span></li>
-          </ul>
-        </div>
-
-        <div class="skill sommeil">
-          <div class="entete"><span class="nom">Omnivore</span>
-            <span class="rang-txt">rang I · L'Éveil</span>
-            <span class="etat dort">En sommeil</span></div>
-          <p class="enonce">« Le joueur peut manger de tout. »</p>
-          <ul>
-            <li><b>Des légumes</b> <span class="cadence">— chaque jour</span></li>
-            <li><b>Quatre repas</b> <span class="cadence">— chaque jour</span></li>
-          </ul>
-        </div>
-
-        <p class="bloc-titre">Les aptitudes — proposition</p>
-        <div class="releve">
-          <p style="margin:0 0 12px;font-size:.88rem;color:var(--parch)">
-          <strong style="color:var(--or)">Un skill se tient. Une aptitude se dérive.</strong>
-          Tu ne coches jamais une aptitude : elle monte toute seule, à mesure que
-          les skills qui la nourrissent sont tenus. C'est ce que ton corps vaut,
-          pas ce que tu as fait hier.</p>
-
-          <div class="aptitude">
-            <span class="nom-apt">Esprit</span>
-            <span class="barre"><i style="width:71%"></i></span>
-            <span class="val-apt">71</span>
-            <span class="source">la tête — nourrie par TRADUCTEUR</span>
-          </div>
-          <div class="aptitude">
-            <span class="nom-apt">Volonté</span>
-            <span class="barre"><i style="width:58%"></i></span>
-            <span class="val-apt">58</span>
-            <span class="source">le cœur — nourrie par CONSTANCE</span>
-          </div>
-          <div class="aptitude">
-            <span class="nom-apt">Vigueur</span>
-            <span class="barre"><i style="width:46%"></i></span>
-            <span class="val-apt">46</span>
-            <span class="source">les membres — nourrie par PEAK PERFORMANCE</span>
-          </div>
-          <div class="aptitude">
-            <span class="nom-apt">Souffle</span>
-            <span class="barre"><i style="width:20%"></i></span>
-            <span class="val-apt">20</span>
-            <span class="source">la poitrine — nourrie par PIEDS LÉGERS</span>
-          </div>
-          <div class="aptitude">
-            <span class="nom-apt">Racine</span>
-            <span class="barre"><i style="width:33%"></i></span>
-            <span class="val-apt">33</span>
-            <span class="source">le ventre — nourrie par OMNIVORE</span>
-          </div>
-
-          <p style="margin:14px 0 0;font-size:.8rem;color:var(--parch-bas)">
-          Cinq aptitudes, cinq points du corps de Vitruve — c'est pour ça que
-          l'avatar C les porte. <strong style="color:var(--parch)">Chiffres
-          illustratifs</strong> : la formule exacte (comment un skill tenu fait
-          monter son aptitude) reste à trancher avec toi.</p>
-        </div>
-
-        <p class="bloc-titre">Sur l'écran d'accueil</p>
         <div class="accueil">
           <div class="icone"><span>✦</span><span class="badge">4</span></div>
-          <p><b>Ce qu'iOS autorise réellement à une application web :</b> l'icône
-          d'Ultima et un chiffre — ici <b>4 à continuer</b>. Pas de tuile-widget :
-          iOS ne l'accorde à aucune app web. Le détail attend derrière ta session ;
-          la notification ne nomme jamais un geste.</p>
+          <p><b>Sur ton écran d'accueil :</b> l'icône d'Ultima et un chiffre —
+          <b>4 à continuer</b>. iOS n'accorde aucune tuile-widget à une app web ;
+          le badge est la vraie réponse. La notification ne nomme jamais un geste.</p>
         </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ═══════════ L'AVATAR — trois propositions ═══════════ -->
-  <h2 class="forme-titre">L'avatar — <em>trois Vitruve</em></h2>
-  <p class="forme-note">Chacune est montrée à <strong>sa taille réelle</strong> (celle
-  de la fiche) et agrandie : un sceau se juge à la taille où il sera vu, pas à celle
-  où il est beau. Le cercle et le carré sont en bleu spectral — ce sont des tracés
-  du Système ; le corps reste en or, parce que c'est ce que tu as gagné.</p>
-
-  <section class="systeme spectral">
-    <div class="propals">
-
-      <div class="propal">
-        <h4>A — le Vitruve fidèle</h4>
-        <p class="quoi">Les deux poses superposées, comme chez Léonard. Le plus
-        savant, le plus chargé — et c'est là son risque à 66 px.</p>
-        <div class="duo">
-          <svg class="vitruve grand" viewBox="0 0 120 120" role="img"
-             aria-label="Vitruve fidèle : la figure aux deux poses, dans le cercle et le carré">
-          <circle cx="60" cy="60" r="55" fill="none" stroke="var(--or-sourd)" stroke-width="1"/>
-          <circle cx="60" cy="60" r="49" fill="var(--nuit-2)" stroke="var(--or)" stroke-width="1.2"/>
-          <rect class="cadre" x="24" y="26" width="72" height="72"/>
-          <circle class="cadre" cx="60" cy="66" r="34"/>
-          <g class="corps-fin">
-            <!-- la pose écartée : bras levés, jambes ouvertes -->
-            <path d="M60 44 L32 32 M60 44 L88 32"/>
-            <path d="M60 74 L38 96 M60 74 L82 96"/>
-          </g>
-          <g class="corps">
-            <circle cx="60" cy="35" r="7" fill="none"/>
-            <path d="M60 42 V74"/>
-            <!-- la pose droite : bras à l'horizontale, jambes jointes -->
-            <path d="M26 48 H94"/>
-            <path d="M60 74 L52 99 M60 74 L68 99"/>
-          </g>
-        </svg>
-          <div><svg class="vitruve vrai" viewBox="0 0 120 120" role="img"
-             aria-label="Vitruve fidèle : la figure aux deux poses, dans le cercle et le carré">
-          <circle cx="60" cy="60" r="55" fill="none" stroke="var(--or-sourd)" stroke-width="1"/>
-          <circle cx="60" cy="60" r="49" fill="var(--nuit-2)" stroke="var(--or)" stroke-width="1.2"/>
-          <rect class="cadre" x="24" y="26" width="72" height="72"/>
-          <circle class="cadre" cx="60" cy="66" r="34"/>
-          <g class="corps-fin">
-            <!-- la pose écartée : bras levés, jambes ouvertes -->
-            <path d="M60 44 L32 32 M60 44 L88 32"/>
-            <path d="M60 74 L38 96 M60 74 L82 96"/>
-          </g>
-          <g class="corps">
-            <circle cx="60" cy="35" r="7" fill="none"/>
-            <path d="M60 42 V74"/>
-            <!-- la pose droite : bras à l'horizontale, jambes jointes -->
-            <path d="M26 48 H94"/>
-            <path d="M60 74 L52 99 M60 74 L68 99"/>
-          </g>
-        </svg><p class="taille">taille réelle</p></div>
-        </div>
-      </div>
-
-      <div class="propal">
-        <h4>B — le Vitruve épuré</h4>
-        <p class="quoi">Une seule pose, trait épais, presque un pictogramme. Le plus
-        lisible en petit — et le moins reconnaissable comme Vitruve.</p>
-        <div class="duo">
-          <svg class="vitruve grand" viewBox="0 0 120 120" role="img"
-             aria-label="Vitruve épuré : une seule pose, dans le cercle et le carré">
-          <circle cx="60" cy="60" r="55" fill="none" stroke="var(--or-sourd)" stroke-width="1"/>
-          <circle cx="60" cy="60" r="49" fill="var(--nuit-2)" stroke="var(--or)" stroke-width="1.2"/>
-          <rect class="cadre" x="26" y="28" width="68" height="68"/>
-          <circle class="cadre" cx="60" cy="64" r="33"/>
-          <g class="corps">
-            <circle cx="60" cy="36" r="8" fill="none"/>
-            <path d="M60 44 V72"/>
-            <path d="M28 52 L60 47 L92 52"/>
-            <path d="M60 72 L44 97 M60 72 L76 97"/>
-          </g>
-        </svg>
-          <div><svg class="vitruve vrai" viewBox="0 0 120 120" role="img"
-             aria-label="Vitruve épuré : une seule pose, dans le cercle et le carré">
-          <circle cx="60" cy="60" r="55" fill="none" stroke="var(--or-sourd)" stroke-width="1"/>
-          <circle cx="60" cy="60" r="49" fill="var(--nuit-2)" stroke="var(--or)" stroke-width="1.2"/>
-          <rect class="cadre" x="26" y="28" width="68" height="68"/>
-          <circle class="cadre" cx="60" cy="64" r="33"/>
-          <g class="corps">
-            <circle cx="60" cy="36" r="8" fill="none"/>
-            <path d="M60 44 V72"/>
-            <path d="M28 52 L60 47 L92 52"/>
-            <path d="M60 72 L44 97 M60 72 L76 97"/>
-          </g>
-        </svg><p class="taille">taille réelle</p></div>
-        </div>
-      </div>
-
-      <div class="propal">
-        <h4>C — le Vitruve des aptitudes</h4>
-        <p class="quoi">La figure porte <strong>tes cinq aptitudes</strong> en nœuds
-        de lumière : tête, cœur, ventre, jambes, poitrine. Ton avatar devient la
-        carte de ce que tu vaux. <em>Recommandation de Léo.</em></p>
-        <div class="duo">
-          <svg class="vitruve grand" viewBox="0 0 120 120" role="img"
-             aria-label="Vitruve spectral : la figure en segments, ses cinq aptitudes en nœuds de lumière">
-          <circle cx="60" cy="60" r="55" fill="none" stroke="var(--or-sourd)" stroke-width="1"/>
-          <circle cx="60" cy="60" r="49" fill="var(--nuit-2)" stroke="var(--or)" stroke-width="1.2"/>
-          <rect class="cadre" x="26" y="28" width="68" height="68"/>
-          <circle class="cadre" cx="60" cy="64" r="33"/>
-          <g class="corps-fin">
-            <path d="M60 42 L32 34 M60 42 L88 34"/>
-            <path d="M60 68 L36 94 M60 68 L84 94"/>
-          </g>
-          <g class="corps">
-            <circle cx="60" cy="32" r="6.5" fill="none"/>
-            <path d="M60 39 V68"/>
-            <path d="M30 50 L60 45 L90 50"/>
-            <path d="M60 68 L47 96 M60 68 L73 96"/>
-          </g>
-          <!-- LES CINQ NŒUDS : une aptitude par point du corps -->
-          <g>
-            <!-- une aptitude par point du corps, dans l'ordre où on les lit :
-                 tête, poitrine, cœur, ventre, membres. -->
-            <circle class="halo" cx="60" cy="32" r="9"/><circle class="noeud" cx="60" cy="32" r="2.6"/>
-            <circle class="halo" cx="60" cy="44" r="6"/><circle class="noeud" cx="60" cy="44" r="2.1"/>
-            <circle class="halo" cx="60" cy="54" r="6"/><circle class="noeud" cx="60" cy="54" r="2.1"/>
-            <circle class="halo" cx="60" cy="66" r="5.5"/><circle class="noeud" cx="60" cy="66" r="2"/>
-            <circle class="halo" cx="54" cy="81" r="6"/><circle class="noeud" cx="54" cy="81" r="2.1"/>
-          </g>
-        </svg>
-          <div><svg class="vitruve vrai" viewBox="0 0 120 120" role="img"
-             aria-label="Vitruve spectral : la figure en segments, ses cinq aptitudes en nœuds de lumière">
-          <circle cx="60" cy="60" r="55" fill="none" stroke="var(--or-sourd)" stroke-width="1"/>
-          <circle cx="60" cy="60" r="49" fill="var(--nuit-2)" stroke="var(--or)" stroke-width="1.2"/>
-          <rect class="cadre" x="26" y="28" width="68" height="68"/>
-          <circle class="cadre" cx="60" cy="64" r="33"/>
-          <g class="corps-fin">
-            <path d="M60 42 L32 34 M60 42 L88 34"/>
-            <path d="M60 68 L36 94 M60 68 L84 94"/>
-          </g>
-          <g class="corps">
-            <circle cx="60" cy="32" r="6.5" fill="none"/>
-            <path d="M60 39 V68"/>
-            <path d="M30 50 L60 45 L90 50"/>
-            <path d="M60 68 L47 96 M60 68 L73 96"/>
-          </g>
-          <!-- LES CINQ NŒUDS : une aptitude par point du corps -->
-          <g>
-            <!-- une aptitude par point du corps, dans l'ordre où on les lit :
-                 tête, poitrine, cœur, ventre, membres. -->
-            <circle class="halo" cx="60" cy="32" r="9"/><circle class="noeud" cx="60" cy="32" r="2.6"/>
-            <circle class="halo" cx="60" cy="44" r="6"/><circle class="noeud" cx="60" cy="44" r="2.1"/>
-            <circle class="halo" cx="60" cy="54" r="6"/><circle class="noeud" cx="60" cy="54" r="2.1"/>
-            <circle class="halo" cx="60" cy="66" r="5.5"/><circle class="noeud" cx="60" cy="66" r="2"/>
-            <circle class="halo" cx="54" cy="81" r="6"/><circle class="noeud" cx="54" cy="81" r="2.1"/>
-          </g>
-        </svg><p class="taille">taille réelle</p></div>
-        </div>
-        <ul class="legende-apt">
-          <li><b>tête</b> — Esprit</li>
-          <li><b>poitrine</b> — Souffle</li>
-          <li><b>cœur</b> — Volonté</li>
-          <li><b>ventre</b> — Racine</li>
-          <li><b>membres</b> — Vigueur</li>
-        </ul>
       </div>
 
     </div>
