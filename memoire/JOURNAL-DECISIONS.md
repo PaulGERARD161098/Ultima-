@@ -1653,3 +1653,42 @@
   - **Deux passages de la dictée signalés au lieu d'être devinés** : « une arme
     de capacité » → lu *arbre de capacités* ; « combien de temps je suis bien en
     ma science de sport » → lu *où j'en suis dans ma pratique du sport*.
+
+- **2026-08-06 (ALTHEA — les quatre décisions, prises le jour même)** —
+  ① **L'accroche** : Paul refuse GRIMA (« ce qui est utile ») ET NAGA (« ce qui
+  fait grandir ») — *« tout seul : c'est un autre système, car c'est plutôt un
+  jeu qu'autre chose »*. ALTHEA ne se range sous aucune devise. **Précision
+  encore due** : racine (à côté d'ULTIMA et ALPHA, 1 clic) ou troisième cadran
+  d'ULTIMA (à côté de GRIMA et NAGA, 2 clics) — reco Léo : la racine, un jeu
+  quotidien se doit d'être à un clic. ② **Le mot : SKILL** (mot de Paul).
+  La collision avec les `talents` de RESHIRAM se tranche par le registre —
+  *skill* = le jeu, *talent* = le prouvé ; la table `talents` n'est pas touchée.
+  **Conséquence de langue actée** : ALTHEA est le SEUL endroit d'Ultima où
+  l'anglais est admis, parce que c'est le seul endroit qui est un jeu.
+  ③ **Le moteur : cumul + élan** (le rang ne se reperd jamais).
+  ④ **Périmètre v1** : *« on livre les skills : leurs noms, et ce qu'il y a
+  dedans »*.
+  - 🔻 **RÈGLE MAJEURE DU JOUR — une réponse de cadrage peut CORRIGER le modèle,
+    et c'est le but du gate.** Le « ce qu'il y a dedans » de la réponse ④ a
+    révélé que le premier modèle écrasait **deux étages en un seul**. Relecture
+    de la dictée d'ouverture à sa lumière : *« le talent, ce sera peak
+    performance […] je n'ai pas fumé, je n'ai pas bu d'alcool »* — **peak
+    performance n'est pas un compteur, c'est un contenant**, et les deux
+    abstinences sont deux **gestes** qui le nourrissent. D'où : **le SKILL**
+    (nom, blason, rang, paliers — le seul étage qui progresse) contient **des
+    GESTES** (ce qu'on coche, sans rang). Sans cette question posée, on livrait
+    soit un skill par geste (écran de bricoles), soit un skill flou qu'on ne
+    sait pas cocher. *Le gate d'entrée EL ne sert pas à valider un plan : il
+    sert à ce que le plan change tant que c'est gratuit.*
+  - **Corollaire mécanique** : un skill porte une **règle de nourriture** —
+    `tous` (le jour compte si TOUS ses gestes sont tenus : le bon réglage pour
+    peak performance, une journée sans tabac mais arrosée n'en est pas une) ou
+    `un` (au moins un geste : le bon pour « sport », plusieurs portes). Deux
+    valeurs, pas de seuil chiffré.
+  - 🔻 **Piège trouvé en écrivant le modèle, invisible depuis l'écran** :
+    désactiver un geste **réécrirait le passé** (un jour jadis « à moitié tenu »
+    deviendrait « tenu »), donc **le rang bougerait tout seul** — violation de la
+    règle « un rang acquis ne se perd jamais », dans les deux sens. Parade :
+    `actif=false` ne vaut qu'à partir du jour de la désactivation ; le calcul
+    d'antériorité ne considère que les gestes actifs **à la date du jour
+    considéré**.

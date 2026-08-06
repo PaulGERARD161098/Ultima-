@@ -95,3 +95,20 @@ reformuler et demander — jamais deviner avant une action irréversible.
   part dans le repo, Léo l'avait cherché en vain). Les deux entrées du cap
   MINETHNIR : `…/ecrire.html` (**la capture**, celle à poser sur l'écran
   d'accueil de l'iPhone) et `…/minethnir.html` (**l'atelier posé**).
+
+- **ALTHEA** (quadrant dicté par Paul le 2026-08-06) = le suivi **ludique** des
+  performances physiques et psychiques — un **cadran**, pas une boussole.
+  Vocabulaire propre au quadrant, à réutiliser tel quel :
+  - **un SKILL** = ce qui porte un nom, un rang et des paliers, et qui monte
+    (*peak performance*, *japonais*). **À ne jamais confondre avec un TALENT**,
+    qui appartient à RESHIRAM et désigne l'inverse : un savoir-faire **prouvé
+    et statique**. *Skill* = le jeu ; *talent* = le prouvé.
+  - **un GESTE** = ce qu'on coche dans une journée (*pas de tabac*, *30 min de
+    japonais*). Un geste n'a **pas de rang** : il nourrit son skill.
+  - **un jour nourri** = le jour qui compte pour le rang. **L'élan** = la série
+    en cours (elle respire, elle ne détruit rien). Les cinq rangs :
+    L'Éveil · La Constance · L'Endurance · La Maîtrise · Le Renom.
+  - **Exception de langue actée** : ALTHEA est le seul endroit d'Ultima où
+    l'anglais est admis (*skill*), parce que c'est le seul endroit qui est un
+    jeu. Partout ailleurs, le registre antique français s'applique sans
+    exception.
