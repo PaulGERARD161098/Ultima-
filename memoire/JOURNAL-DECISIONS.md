@@ -1609,3 +1609,47 @@
     VRANESH le même jour**. 🔻 **Deux fils qui diagnostiquent la même chose ne se
     doublent pas : le premier qui corrige doit ANNOTER le constat de l'autre**,
     sinon la source de vérité garde une phrase fausse.
+
+- **2026-08-06 (ALTHEA — ouverture du quadrant, cadrage B0)** — Paul dicte un
+  **nouveau quadrant Lv3, ALTHEA** : le suivi **ludique** des performances
+  physiques et psychiques. Un **cadran unique** (pas une boussole) portant des
+  unités qui **montent par paliers** et débloquent des **récompenses** — la garde
+  (pas de tabac, pas d'alcool) et la pratique (japonais, espagnol, sport).
+  Remplissage quotidien **ou** hebdomadaire, **explicitement non obligatoire**,
+  « rigolo à remplir ». Finalité assumée : le jeu est le **moyen**, l'amélioration
+  réelle des skills est le but. Cadrage complet : `CADRAGE-ALTHEA.md` — **zéro
+  code, zéro migration** (gate EL tenu).
+  - 🔻 **Trois collisions relevées AVANT de construire, aucune trouvée en codant.**
+    ① **Le mot « talent » est déjà pris** par RESHIRAM (table `talents`, `0009`)
+    avec un sens **opposé** : savoir-faire *prouvé et statique* contre unité
+    *entraînée et progressive*. Proposition : l'unité d'ALTHEA est **une
+    DISCIPLINE**. ② **« Je n'ai pas fumé aujourd'hui » frôle DRAUKHAIN** :
+    frontière écrite — DRAUKHAIN est **la volonté** (*pourquoi je tiens*, un
+    récit), ALTHEA est **la mesure** (*combien de fois j'ai tenu*, une marque).
+    ③ **Un cadran n'est pas une boussole** : ALTHEA reste une **feuille**
+    (règle Lv3 §2.1), et son anneau de progression est ce qui le distingue
+    visuellement d'une rose de caps.
+  - 🔻 **La règle qui décide de la vie du quadrant** : *un jour non renseigné
+    n'est pas un échec*. Trois états (nourri / manqué déclaré / non renseigné),
+    le troisième ne s'infère jamais dans les deux autres, et **un rang acquis ne
+    se perd jamais**. Un *streak* qui remet à zéro punirait exactement ce que
+    Paul a posé comme condition (« ce n'est pas obligatoire ») — il se ferait
+    abandonner en trois semaines. L'élan respire, il ne détruit rien.
+  - 🔻 **Le palier compte des JOURS, pas des points.** Un point est arbitraire et
+    se gonfle ; un jour est un fait. Les minutes ornent (« 42 h de japonais »),
+    elles ne font pas monter le rang — sinon on récompense qui **déclare** des
+    heures, pas qui pratique.
+  - 🔻 **ALTHEA porte la donnée la plus sensible d'Ultima** (santé, addictions,
+    psychisme). Conséquence sur un contrat existant : **les yeux de Léo**
+    (`/api/leo`, champ `etat`) transportent aujourd'hui « comptes **et intitulés**
+    bornés » — pour ALTHEA, **les intitulés sont exclus**, seuls des comptes
+    partent, parce que l'intitulé *est* l'information (« garde du tabac » dit
+    tout). Exception à écrire dans `validerEtatQuadrant`, pas une consigne de
+    prudence. Preuve par l'ABSENCE aux quatre sorties (IA, cockpit, HTML, logs).
+  - **Décisions attendues de Paul (D1→D4 bloquantes)** : l'accroche (quadrant
+    sous **NAGA**, reco) · le mot (**discipline**, reco) · le moteur (**cumul +
+    élan**, reco) · le périmètre v1 (**disciplines seules**, les jauges
+    physique/psychique sont une courbe et non un rang → boucle suivante).
+  - **Deux passages de la dictée signalés au lieu d'être devinés** : « une arme
+    de capacité » → lu *arbre de capacités* ; « combien de temps je suis bien en
+    ma science de sport » → lu *où j'en suis dans ma pratique du sport*.
