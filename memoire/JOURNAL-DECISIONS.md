@@ -1968,3 +1968,34 @@
     *Peak performance*, volume chez *Pieds légers*) · **« alimentation ok » =
     *Omnivore*** (second méta-lien du jeu, après *Constance*) · **la gravure de
     l'emblème** tient lieu de sceau.
+
+- **2026-08-06 (ALTHEA — « embrassables du même coup d'œil », et la boucle se ferme)** —
+  Paul rappelle une consigne **à moitié appliquée** : *« je t'avais pas dit de
+  mettre le cadran du profil et celui des quêtes sur la même ligne ? que les deux
+  soient embrassables du même coup d'œil »*. Il avait raison sur les deux points :
+  ① la fiche restait une **bannière séparée au-dessus**, donc le profil n'était
+  pas sur la même ligne que les quêtes ; ② chaque bloc faisait **plus de
+  1 200 px** — on ne les embrassait pas, on les déroulait. Et il valide la montée
+  de niveau proposée.
+  - 🔻 **« Embrassable du même coup d'œil » EST un critère chiffrable** — et tant
+    qu'il n'est pas chiffré, il n'est pas tenu. Traduction retenue : *les deux
+    blocs commencent à la même ordonnée, et le plus haut tient sous 900 px*.
+    Résultat mesuré : **PROFIL 636 px · QUÊTES 872 px**, même ordonnée. Chaque
+    coupe a été **mesurée avant d'être décidée** (la fiche en en-tête : −90 ; les
+    stats en rangée : −130 ; un skill sur une ligne : −110 ; une quête de 114 à
+    72 px : −170 ; la note d'écran d'accueil sortie des blocs : −80).
+  - 🔻 **RÈGLE DE FORME NOUVELLE, valable pour tout Ultima — un dessin qu'on
+    réduit jusqu'à rendre son texte illisible n'est pas un dessin réduit, c'est
+    un dessin perdu.** Le cadran, tassé à 270 px pour entrer dans la colonne,
+    rendait ses étiquettes à **5,6 px à l'écran** (mesuré : `taille SVG ×
+    échelle`, 9,5 × 0,587). Il est **retiré du visuel principal** — la liste des
+    skills disait déjà tout ce qu'il disait, en lisible. **Seuil adopté : 9 px de
+    rendu**, vérifié au harnais sur tout le visuel (zéro texte en dessous).
+    *On mesure la taille de rendu du TEXTE, pas la largeur du cadre.*
+  - ✅ **La boucle du jeu est fermée** (« ok pour tes reco de montée de niv ») :
+    les gestes nourrissent les skills · les skills franchissent des paliers ·
+    **un palier franchi = +1 niveau · une quête accomplie = +1 niveau** · le
+    niveau donne **+1 à toutes les stats**. Plus aucun maillon manquant.
+  - **Socles validés** tels que proposés (14 · 10 · 9 · 21 · 16), modifiables.
+  - **Deux cadrans nommés** : **LE PROFIL** (qui je suis, où j'en suis) et
+    **LES QUÊTES** (ce qui m'attend).

@@ -827,13 +827,15 @@ condition pour jouer. **Effet de bord précieux : ALTHEA est livrable seul.**
 
 | # | Question | Recommandation de Léo |
 | --- | --- | --- |
-| **D24** | **Qu'est-ce qui fait monter un NIVEAU ?** Devenue la question centrale : les stats en dépendent entièrement (§13ter.2). | **Un palier de skill franchi = +1 niveau · une quête accomplie = +1 niveau.** C'est ce qui referme la boucle : les gestes font les skills, les skills font les paliers, les paliers font le niveau, le niveau fait les stats. |
-| **D25** | **Tes cinq socles** — les entiers de départ de force, endurance, agilité, intelligence, charisme. | À poser par toi : **c'est ton socle qui te dessine**, le niveau ne fait que monter. Ceux de la maquette (14 · 10 · 9 · 21 · 16) sont illustratifs. |
+| **D26** | **Le cadran des skills**, retiré du visuel principal parce qu'illisible à la taille disponible (§13quater.2) : on le laisse de côté, ou on lui ouvre **sa propre vue** ? | **Sa propre vue**, plus tard. Le coup d'œil unique vaut mieux qu'un dessin tassé — mais le cadran mérite d'exister en grand. |
 | **D12** | **Le second cran de sévérité** : une quête de fond peut-elle porter une exigence (« 4 jours sur 7 ») qui alimente la dette ? | **Oui, mais facultative.** C'est toi qui l'armes en acceptant la quête. |
 | **D13** | **Le widget Scriptable** (§7.4) : on le fait, avec son jeton hors d'Ultima ? | **Le badge chiffré d'abord** (natif, sans clé, sans app tierce). |
 | **D14** | **Le cron des rappels** — gate coût sur le plan Vercel. | Décision de Paul. À poser en B4, pas avant. |
 
-**Tranchées depuis** : D15 ✅ le rang II devient **L'Assiduité** (le skill
+**Tranchées depuis** : D24 ✅ **un palier de skill franchi = +1 niveau, une
+quête accomplie = +1 niveau** (« ok pour tes reco de montée de niv ») ·
+D25 ✅ les socles proposés sont validés (14 · 10 · 9 · 21 · 16), modifiables à
+tout moment · D15 ✅ le rang II devient **L'Assiduité** (le skill
 *Constance* garde son nom) · D17 ✅ ce sont les **stats** de Paul · D18 ✅ le
 sport en double est **voulu** · D19 ✅ *Omnivore* **est** « alimentation ok » ·
 D20 ✅ Vitruve abandonné · D21 ✅ pas de formule, **socle + niveau** ·
@@ -1029,38 +1031,64 @@ ouvert**, et l'œil passe **devant** la lame. C'est le titre qui le dicte —
 - **Le titre est étiqueté** (« le titre avant Farsight ») : la clé **TITRE**
   au-dessus du nom du titre. *Lecture retenue faute de certitude.*
 
-## 13quater. La mise en page — un seul visuel, deux blocs alignés
+## 13quater. La mise en page — deux cadrans embrassables d'un coup d'œil
 
-> **✅ « C'est un peu trop gros. En dessous de l'écran de présentation, qui est
-> très bien : l'état des lieux à gauche, le Système à droite. Faire tenir les
-> skills, les stats et les quêtes en un seul visuel, deux blocs alignés. »**
+> **✅ « Je t'avais pas dit de mettre le cadran du profil et celui des quêtes sur
+> la même ligne ? Que les deux soient embrassables du même coup d'œil. »**
 
-| | **Bloc gauche — l'état des lieux** | **Bloc droit — le Système** |
+Paul avait raison, et le rappel valait mieux qu'un rattrapage silencieux :
+**c'était à moitié fait.** Les deux blocs étaient bien côte à côte, mais ① la
+fiche restait une **bannière séparée au-dessus**, donc le profil n'était pas sur
+la même ligne que les quêtes, et ② chaque bloc faisait **plus de 1 200 px** —
+donc on ne les embrassait pas, on les déroulait.
+
+**La forme arrêtée : deux cadrans, une ligne, un écran.**
+
+| | **LE PROFIL** | **LES QUÊTES** |
 | --- | --- | --- |
-| Ce qu'il montre | le cadran · les skills · les stats | l'annonce · le jour · les quêtes · Léo · le badge |
-| Ce qu'il dit | **où j'en suis** | **ce qui m'attend** |
-| Ton | l'inventaire, calme | la voix, l'action |
+| Ce qu'il porte | sceau · nom · titre · niveau · stats · skills | annonce du Système · le jour · les quêtes · Léo |
+| Ce qu'il dit | **qui je suis, où j'en suis** | **ce qui m'attend** |
+| Hauteur mesurée | 636 px | 872 px |
 
-**Ce qui a permis de tenir en deux blocs**, et qui vaut comme règle de forme :
+**Critère de réussite, chiffré et vérifié au harnais** : *les deux blocs
+commencent à la même ordonnée, et le plus haut tient sous 900 px* — c'est ce que
+« embrassable du même coup d'œil » veut dire en nombres.
 
-1. **La fiche reste pleine largeur** — Paul l'a validée, elle ne bouge pas.
-2. **Un skill = une ligne**, pas une carte : rang, nom, énoncé, jauge, état.
-   Cinq skills tiennent dans une demi-colonne.
-3. **Une stat = une ligne de grille**, sa source logée **dans** la cellule du
-   nom. En deux lignes de grille, les cinq stats doublaient la hauteur.
-4. **Le cadran se resserre** (470 → 360 px) : il indexe les skills, il ne les
-   remplace pas.
-5. **`align-items: start`** — les deux blocs s'alignent **par le haut** et
-   gardent leur hauteur propre ; ils ne s'étirent pas l'un sur l'autre.
+### 13quater.1 Ce qu'il a fallu couper, et pourquoi
 
-> 🔻 **Défaut de méthode, à retenir** : la compaction des stats avait été écrite
-> une première fois **sans effet** — le remplacement de texte n'avait pas trouvé
-> sa cible et **avait échoué en silence**. Le rendu montrait « FORCEPEAK
-> PERFORMANCE · OMNIVORE » en capitales collées. **Une substitution sans
-> assertion est un changement qui n'a peut-être pas eu lieu** : toute réécriture
-> automatique doit vérifier que sa cible existe, et le harnais doit contrôler le
-> **résultat** (ici : la source est bien sur sa propre ligne), pas la présence de
-> la règle.
+Chaque coupe a été **mesurée avant d'être décidée** :
+
+| Coupe | Gain | Raison |
+| --- | --- | --- |
+| La fiche devient l'en-tête du bloc PROFIL (sceau 132 → 96 px) | ~90 px | Elle n'est plus une bannière : elle est **sur la même ligne** que les quêtes, comme demandé. |
+| Les stats passent en rangée compacte (5 × 52 → 5 × 26 px) | ~130 px | La valeur d'abord, la barre ensuite : on lit le chiffre, la barre le situe. |
+| Un skill tient sur **une** ligne de texte (nom + énoncé) | ~110 px | L'énoncé se tronque s'il déborde ; il rappelle la phrase, il ne la récite pas. |
+| Une quête passe de 114 à ~72 px | ~170 px | Interlignes resserrés, aucune information retirée. |
+| La note « écran d'accueil » sort des blocs | ~80 px | Ce n'est pas un élément de jeu, c'est une explication. |
+
+### 13quater.2 Le cadran retiré du visuel principal — décision par la MESURE
+
+⚠️ **Le cadran des skills n'est plus dans le visuel principal.** Ce n'est pas un
+choix de goût, c'est un chiffre : pour entrer dans la colonne, il descendait à
+**270 px de large**, ce qui rendait ses étiquettes à **5,6 px à l'écran**. Un
+texte de 5,6 px n'est pas petit — il est **illisible**.
+
+Les trois issues possibles, dites franchement :
+
+1. **Le retirer du visuel** — retenu. La liste des skills dit **déjà** tout ce
+   que le cadran disait (rang, nom, énoncé, progression, état), en plus lisible.
+2. **Le remettre en pleine taille** (440 px) : le bloc PROFIL repasse à ~1 030 px
+   et **on perd le coup d'œil unique** que Paul vient de demander.
+3. **Lui donner sa propre vue** — le cadran comme écran à part, atteignable
+   depuis le profil.
+
+> **Règle de forme à retenir pour tout Ultima** : *un dessin qu'on réduit
+> jusqu'à rendre son texte illisible n'est pas un dessin réduit, c'est un dessin
+> perdu.* On mesure la **taille de rendu du texte** (`taille SVG × échelle`),
+> pas la largeur du cadre. Seuil retenu : **9 px à l'écran**. Vérifié au harnais
+> pour tout le visuel principal — **zéro texte sous 9 px**.
+
+→ **Décision D26** : on garde le cadran retiré, ou on lui ouvre sa propre vue ?
 
 ## 14. Le format 6 points de B1
 
@@ -1135,11 +1163,14 @@ pourtant dès B1 : c'est ce qui donne envie de la suite.
 - **La forme est arrêtée** : fiche pleine largeur, puis **un seul visuel à deux
   blocs alignés** (§13quater). Le sceau est l'emblème de Paul. Les stats sont
   les siennes.
-- **La forme est arrêtée et validée** : fiche pleine largeur, un seul visuel à
-  deux blocs alignés, l'emblème de Paul en sceau, ses cinq stats.
-- **Reste avant d'ouvrir B1** : **D24** (ce qui fait monter un niveau — devenu
-  central : les stats en dépendent entièrement) et **D25** (les cinq socles de
-  Paul). Ni l'un ni l'autre ne bloque la forme ; les deux bloquent le schéma.
-- **Prochaine action unique** : Paul tranche D24 et pose ses socles, puis
-  **B1 s'ouvre** — la fiche, le cadran, les skills, les stats, le relevé.
-  Sans aucune quête.
+- **La forme est arrêtée, mesurée et validée** : **deux cadrans sur une ligne** —
+  LE PROFIL (636 px) et LES QUÊTES (872 px) —, l'emblème de Paul en sceau, ses
+  cinq stats en socle + niveau, ses cinq skills en une ligne chacun. **Zéro texte
+  sous 9 px.**
+- **La boucle est fermée** : les gestes nourrissent les skills · les skills
+  franchissent des paliers · **un palier franchi = +1 niveau · une quête
+  accomplie = +1 niveau** · le niveau donne **+1 à toutes les stats**.
+- **Rien ne bloque plus B1.** Seul **D26** reste ouvert (le sort du cadran), et
+  il ne concerne qu'une vue ultérieure.
+- **Prochaine action unique** : **ouvrir B1** — le profil, les skills, les stats,
+  le relevé, sur données réelles. Sans aucune quête (c'est B2).
