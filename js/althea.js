@@ -24,18 +24,36 @@ const etat = { session: null, donnees: null, jour: jourLocal() };
 
 function texte(el, valeur) { if (el) el.textContent = valeur; }
 
-function muet(message) {
-  texte($('althea-skills'), '');
-  const skills = $('althea-skills');
-  if (skills) skills.innerHTML = '<p class="althea-vide"></p>';
-  const p = skills && skills.querySelector('p');
-  if (p) p.textContent = message;
-  const jour = $('althea-jour');
-  if (jour) {
-    jour.innerHTML = '<p class="althea-vide"></p>';
-    jour.querySelector('p').textContent = message;
-  }
-  texte($('althea-leo'), 'Ouvre ta session et je te dis où tu en es.');
+// Dire « ouvre ta session » sans donner la porte, c'est constater sans proposer
+// le geste — et une fonction qu'on ne rencontre pas là où on la cherche
+// n'existe pas (leçon VRANESH, 2026-08-04). Le message porte donc SON LIEN vers
+// la porte de connexion unique d'Ultima : la racine.
+// Rappel utile quand ça arrive : le jeton de session est cloisonné PAR ORIGINE.
+// Ouvrir ALTHEA depuis une preview alors qu'on s'est connecté en production
+// donne exactement cet écran — la page n'est pas cassée, elle est ailleurs.
+function messageAvecPorte(hote, message, avecLien) {
+  if (!hote) return;
+  hote.textContent = '';
+  const p = document.createElement('p');
+  p.className = 'althea-vide';
+  p.textContent = message;
+  hote.appendChild(p);
+  if (!avecLien) return;
+  const porte = document.createElement('p');
+  porte.className = 'althea-porte';
+  const a = document.createElement('a');
+  a.href = '/';
+  a.textContent = 'Ouvrir ma session ↝';
+  porte.appendChild(a);
+  hote.appendChild(porte);
+}
+
+function muet(message, avecLien) {
+  messageAvecPorte($('althea-skills'), message, avecLien);
+  messageAvecPorte($('althea-jour'), message, false);
+  texte($('althea-leo'), avecLien
+    ? 'Ta session n’est pas ouverte sur ce domaine — le jeton ne suit pas d’une adresse à l’autre. Ouvre-la et je te dis où tu en es.'
+    : 'Je te dirai où tu en es dès que le Système répondra.');
 }
 
 async function session() {
@@ -279,7 +297,7 @@ async function charger() {
   if (!r.ok) {
     muet(r.status === 401
       ? 'Ouvre ta session pour voir ton Système.'
-      : 'Le Système ne répond pas pour l’instant.');
+      : 'Le Système ne répond pas pour l’instant.', r.status === 401);
     return;
   }
   const d = r.data || {};
@@ -316,7 +334,7 @@ async function charger() {
 (async function demarrer() {
   etat.session = await session();
   if (!etat.session) {
-    muet('Ouvre ta session pour voir ton Système.');
+    muet('Ouvre ta session pour voir ton Système.', true);
     return;
   }
   await charger();

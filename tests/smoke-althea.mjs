@@ -131,6 +131,10 @@ console.log('— A. althea.html SANS session (fail-closed) —');
     (await page.locator('.althea-skill').count()) === 0);
   verifier('retour vers ULTIMA',
     (await page.getAttribute('.retour-althea', 'href')) === 'ultima.html');
+  // Un écran qui dit « ouvre ta session » DOIT donner la porte : constater sans
+  // proposer le geste, c'est obliger Paul à le chercher (leçon VRANESH).
+  verifier('la porte de connexion est offerte, pas seulement nommée',
+    (await page.locator('.althea-porte a[href="/"]').count()) === 1);
   verifier('zéro requête externe', externes.length === 0, externes.join(', '));
   verifier('zéro erreur console', erreurs.length === 0, erreurs.join(' | '));
 
