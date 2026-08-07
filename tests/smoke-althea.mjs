@@ -256,6 +256,44 @@ console.log('— B. althea.html avec session et Système peuplé —');
   verifier('contraste du texte courant AA', cTexte >= 4.5, cTexte.toFixed(2));
   verifier('contraste du texte secondaire AA', cSecond >= 4.5, cSecond.toFixed(2));
 
+  // La devise du Système. On l'éprouve sur les TROIS choses qui peuvent casser
+  // sans qu'on le voie : le texte exact (une devise se cite, elle ne se
+  // paraphrase pas), la couleur (la règle --or/--spectre n'a d'exception
+  // nulle part), et la langue déclarée (sinon un lecteur d'écran francophone
+  // récite de l'anglais à la française).
+  // On lit les couleurs sur des éléments RENDUS (l'en-tête porte var(--or), le
+  // gras de la note porte var(--spectre)) : getPropertyValue rendrait le hex
+  // brut de la variable, que versHex ne sait pas lire.
+  const devise = await page.evaluate(() => {
+    const d = document.querySelector('.althea-devise');
+    if (!d) return null;
+    const s = getComputedStyle(d);
+    return {
+      texte: d.textContent.replace(/\s+/g, ' ').trim(),
+      langue: d.getAttribute('lang'),
+      couleur: s.color,
+      spectre: getComputedStyle(document.querySelector('.althea-note b')).color,
+      or: getComputedStyle(document.querySelector('.althea-entete')).color,
+      fond: getComputedStyle(document.querySelector('.althea')).backgroundColor,
+      italique: s.fontStyle,
+    };
+  });
+  verifier('la devise est là', devise !== null);
+  verifier('la devise est citée AU MOT PRÈS',
+    devise && devise.texte === 'I am the record of your struggles, '
+      + 'the evidence of your resistance and the reward of your pain',
+    devise && devise.texte);
+  verifier('la devise déclare sa langue', devise && devise.langue === 'en', devise && devise.langue);
+  verifier('la devise est en italique', devise && devise.italique === 'italic');
+  // La voix du Système est ANNONCÉE, jamais GAGNÉE : spectre, et surtout pas or.
+  verifier('la devise porte la couleur du spectre',
+    devise && versHex(devise.couleur) === versHex(devise.spectre),
+    devise && `${versHex(devise.couleur)} ≠ ${versHex(devise.spectre)}`);
+  verifier('la devise n’est PAS en or',
+    devise && versHex(devise.couleur) !== versHex(devise.or));
+  const cDevise = devise ? ratio(versHex(devise.fond), versHex(devise.couleur)) : 0;
+  verifier('contraste de la devise AA', cDevise >= 4.5, cDevise.toFixed(2));
+
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForTimeout(200);
   const deborde = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);

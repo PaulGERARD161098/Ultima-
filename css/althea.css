@@ -124,6 +124,24 @@
 }
 .althea-sous-titre em { font-style: italic; letter-spacing: .04em; text-transform: none; }
 
+/* ── La devise du Système ──────────────────────────────────────────────────
+   Épigraphe, pas un sous-titre : elle NE reprend PAS .althea-sous-titre, qui
+   est une étiquette de rubrique (capitales, interlettrage large). Une devise
+   se lit d'un trait — donc bas-de-casse, italique, et une mesure bornée à
+   46em pour qu'elle ne s'étale jamais sur toute la largeur d'un grand écran.
+   Couleur --spectre : elle parle à la première personne, c'est la voix du
+   Système. Pas de guillemets — l'italique et la couleur marquent déjà la
+   citation ; les ajouter serait un ornement qui ne dit rien de plus. ── */
+.althea-devise {
+  margin: 0 0 14px;
+  max-width: 46em;
+  font-style: italic;
+  font-size: .93rem;
+  line-height: 1.5;
+  letter-spacing: .01em;
+  color: var(--spectre);
+}
+
 /* ── Un skill = une ligne. C'est ce qui fait tenir cinq skills dans la moitié
       d'un écran, à côté des quêtes. ── */
 .althea-skill {
