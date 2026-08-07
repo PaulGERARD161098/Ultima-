@@ -1,0 +1,1284 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Preview — ALTHEA : le Système spectral</title>
+<!--
+  PREVIEW DE TRAVAIL — aucune donnée réelle. Contenus NEUTRES inventés.
+  Zéro ressource externe, zéro CDN, ZÉRO <script> (CSP script-src 'self').
+
+  ⚠️ NOTE DE SÉCURITÉ, ET C'EST VOLONTAIRE :
+  les gestes affichés ici ("sommeil tenu", "sans écran le soir"…) ne sont PAS
+  ceux dictés par Paul. Une maquette est servie en preview publique ; les gestes
+  réels d'ALTHEA sont de la donnée de santé et ne sortent jamais du quadrant
+  authentifié (CADRAGE-ALTHEA.md §9). La règle s'applique donc à la maquette
+  elle-même, pas seulement à l'application.
+
+  Dictée de Paul (2026-08-06, seconde dictée) :
+    « Mon Système, style Solo Leveling. J'ai un titre important, une sorte
+      d'avatar. Des quêtes principales, des quêtes secondaires, que le système
+      me génère des quêtes secondaires, des allongements de quête, toujours au
+      fur et à mesure. Les récompenses également. Que je renseigne tous mes
+      skills, que je débloque de nouveaux skills, que les quêtes me donnent des
+      skills. Que le système m'envoie des rappels automatiques. Va chercher loin
+      pour le côté graphique. Un système complet, à la fois proactif et passif. »
+
+  LA THÈSE (CADRAGE-ALTHEA.md §10) : Solo Leveling et Ultima partagent déjà la
+  grammaire (capitales espacées, cartouche, voix rituelle, blocs de stats). Il ne
+  manque que DEUX choses : l'apparition, et la nuit. D'où « l'antique vu de
+  nuit ».
+
+  FORME RETENUE : B, le Système spectral (Paul, 2026-08-06). La forme A a été
+  comparée puis abandonnée — la maquette ne porte plus qu'une forme.
+
+  RÈGLE DE COULEUR :
+    OR   = ce qui est GAGNÉ (rangs, titres, sceaux).
+    BLEU = ce qui est ANNONCÉ (la voix du Système, et elle seule).
+  Un rang ne devient jamais bleu ; une annonce ne devient jamais or.
+-->
+<style>
+/* ───────────────────────── socle commun ───────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+  background: #1b1710;
+  color: #e8dcc4;
+  line-height: 1.5;
+}
+.page { max-width: 1180px; margin: 0 auto; padding: 28px 18px 72px; }
+
+.chapeau {
+  border: 1px solid #6b5c3a;
+  background: #221d14;
+  padding: 20px 22px;
+  margin-bottom: 34px;
+}
+.chapeau h1 {
+  margin: 0 0 6px;
+  font-size: 1.35rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: #e3c46a;
+}
+.chapeau p { margin: 8px 0 0; font-size: .95rem; color: #cdbf9f; }
+.chapeau strong { color: #e8dcc4; }
+.chapeau ol { margin: 10px 0 0; padding-left: 20px; font-size: .95rem; color: #cdbf9f; }
+.chapeau li { margin: 4px 0; }
+
+.forme-titre {
+  margin: 46px 0 14px;
+  font-size: 1rem;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: #8e7f5c;
+  border-bottom: 1px solid #40382a;
+  padding-bottom: 8px;
+}
+.forme-titre em { font-style: normal; color: #e3c46a; }
+.forme-note { margin: 0 0 18px; font-size: .9rem; color: #9c8f72; }
+
+/* ── Toutes les couleurs passent par des variables : la forme se change en
+      changeant la palette, jamais le balisage. ── */
+.systeme {
+  --nuit:      #14110c;   /* le fond */
+  --nuit-2:    #1d1810;   /* les panneaux */
+  --trait:     #4a3f28;   /* les filets */
+  --or:        #e3c46a;   /* ce qui est GAGNÉ */
+  --or-sourd:  #a08a4e;
+  --parch:     #ded0b0;   /* le texte courant */
+  --parch-bas: #9c8f72;   /* le texte secondaire */
+  --spectre:   #9fd4ff;   /* la VOIX du Système */
+  --spectre-f: #3d6a8c;   /* son filet */
+  --verrou:    #5c5344;
+
+  background: var(--nuit);
+  border: 1px solid var(--trait);
+  padding: 26px 24px 30px;
+  color: var(--parch);
+}
+.systeme.spectral {
+  --nuit:      #04060b;
+  --nuit-2:    #080d16;
+  --trait:     #1d3550;
+  --or:        #d8b45c;
+  --or-sourd:  #8a733a;
+  --parch:     #b9cfe4;
+  --parch-bas: #6d8299;
+  --spectre:   #6fc0ff;
+  --spectre-f: #2a6ea8;
+  --verrou:    #3a4a5c;
+}
+
+/* ───────────────────────── ① la fiche du personnage ───────────────────────── */
+.fiche {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 16px;
+  align-items: center;
+  border-bottom: 1px solid var(--trait);
+  padding-bottom: 14px;
+}
+.avatar { width: 96px; height: 96px; }
+.identite .nom {
+  font-size: 1.22rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--parch);
+  margin: 0;
+}
+.identite .cle-titre {
+  margin: 6px 0 0;
+  font-size: .68rem;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--parch-bas);
+}
+.identite .titre {
+  margin: 1px 0 9px;
+  font-size: .95rem;
+  font-style: italic;
+  color: var(--or);
+}
+.identite .titre::before { content: '« '; }
+.identite .titre::after  { content: ' »'; }
+
+.stats { display: flex; flex-wrap: wrap; gap: 20px; }
+.stat .cle {
+  display: block;
+  font-size: .68rem;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--parch-bas);
+}
+.stat .val { font-size: 1.2rem; color: var(--or); }
+.stat .val small { font-size: .8rem; color: var(--parch-bas); letter-spacing: .1em; }
+
+/* ── UN SEUL VISUEL, DEUX BLOCS ALIGNÉS (dicté par Paul) ──
+      À gauche l'état des lieux (skills + aptitudes, sur le cadran),
+      à droite le Système (annonce, jour, quêtes, Léo). `align-items: start`
+      les aligne par le HAUT — deux blocs de hauteurs différentes restent
+      alignés, ils ne s'étirent pas l'un sur l'autre. ── */
+.visuel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+  margin-top: 22px;
+}
+@media (max-width: 900px) { .visuel { grid-template-columns: 1fr; } }
+.bloc { border: 1px solid var(--trait); padding: 16px 18px 20px; }
+.bloc-entete {
+  margin: -16px -18px 14px;
+  padding: 9px 18px;
+  background: var(--nuit-2);
+  border-bottom: 1px solid var(--trait);
+  font-size: .7rem;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--or);
+}
+.sous-titre {
+  margin: 15px 0 7px;
+  font-size: .68rem;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--parch-bas);
+}
+.sous-titre em { font-style: italic; letter-spacing: .04em; text-transform: none; }
+
+/* ── UNE LIGNE DE SKILL — le format compact de l'inventaire.
+      Le rang à gauche, l'énoncé au milieu, l'état à droite. Trois lignes de
+      texte par skill, pas une carte : c'est ce qui fait tenir cinq skills
+      dans la moitié d'un écran. ── */
+.ligne-skill {
+  display: grid;
+  grid-template-columns: 26px minmax(0,1fr) auto;
+  gap: 9px;
+  align-items: center;
+  padding: 6px 0;
+  border-top: 1px solid var(--trait);
+}
+.ligne-skill:first-of-type { border-top: 0; }
+.ls-rang { font-size: .92rem; color: var(--or); text-align: center; }
+.ls-corps { display: block; min-width: 0; }
+/* nom et énoncé sur la MÊME ligne : c'est ce qui fait passer un skill de
+   trois lignes de texte à une seule. L'énoncé est tronqué s'il déborde —
+   il rappelle la phrase, la liste complète vit ailleurs. */
+.ls-nom {
+  display: block; font-size: .88rem; color: var(--parch); letter-spacing: .03em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ls-nom .ls-dit { font-size: .76rem; color: var(--parch-bas); font-style: italic; }
+.ls-nom .evo-tag { font-size: .8rem; color: var(--spectre); font-style: normal; }
+.ls-barre { display: block; height: 3px; background: var(--trait); margin-top: 4px; }
+.ls-barre i { display: block; height: 3px; background: var(--or); }
+.ls-etat {
+  font-size: .58rem; letter-spacing: .16em; text-transform: uppercase;
+  border: 1px solid var(--spectre-f); color: var(--spectre); padding: 1px 6px;
+}
+.ls-etat.dort { border-color: var(--verrou); color: var(--parch-bas); }
+.ligne-skill.dort .ls-rang { color: var(--or-sourd); }
+.releve.nu { border: 0; background: transparent; padding: 0; }
+
+/* ───────────────────────── ② le cadran des skills ───────────────────────── */
+.bloc-titre {
+  margin: 30px 0 4px;
+  font-size: .72rem;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--parch-bas);
+}
+.deux-colonnes { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 30px; }
+@media (max-width: 860px) { .deux-colonnes { grid-template-columns: 1fr; } }
+
+.cadran { width: 100%; max-width: 440px; margin: 14px auto 0; display: block; }
+.cadran .anneau-fond { fill: none; stroke: var(--trait); stroke-width: 5; }
+.cadran .anneau-plein {
+  fill: none;
+  stroke: var(--or);
+  stroke-width: 5;
+  stroke-linecap: round;
+  /* L'anneau part du Nord : on le fait pivoter d'un quart de tour.
+     transform-box: fill-box est OBLIGATOIRE — sans lui, `transform-origin:
+     center` désigne le centre du viewBox (initial value de transform-box en
+     SVG), et l'anneau part pivoter à 700 px hors du cadre, donc invisible.
+     Défaut trouvé par la MESURE (getBBox vs viewBox), jamais par l'œil. */
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: rotate(-90deg);
+}
+.cadran .disque { fill: var(--nuit-2); stroke: var(--or-sourd); stroke-width: 1; }
+.cadran .emb { fill: none; stroke: var(--or); stroke-width: 1.6; stroke-linecap: round; }
+.cadran .nom-skill {
+  fill: var(--parch);
+  font-size: 9.5px;
+  letter-spacing: 1.6px;
+  text-anchor: middle;
+  font-family: Georgia, serif;
+}
+.cadran .rang {
+  fill: var(--or);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-anchor: middle;
+  font-family: Georgia, serif;
+}
+.cadran .coeur-disque { fill: var(--nuit-2); stroke: var(--or); stroke-width: 1.5; }
+.cadran .coeur-txt {
+  fill: var(--or);
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-anchor: middle;
+  font-family: Georgia, serif;
+}
+.cadran .coeur-cerne { fill: none; stroke: var(--or-sourd); stroke-width: .8; }
+/* Le chevron d'évolution : ce skill peut monter en un skill SUPÉRIEUR
+   (Traducteur → Traducteur universel). Il se voit sur le cadran, il ne
+   s'explique que dans la liste. */
+.cadran .evo { fill: none; stroke: var(--spectre); stroke-width: 1.6;
+  stroke-linecap: round; stroke-linejoin: round; }
+.cadran .coeur-sous {
+  fill: var(--parch);
+  font-size: 7.5px;
+  letter-spacing: 1.6px;
+  text-anchor: middle;
+  font-family: Georgia, serif;
+}
+/* Le compte des gestes en attente : c'est l'appel à l'action du cadran,
+   il se lit — donc il prend la couleur du texte courant, pas celle du décor. */
+.cadran .coeur-attente {
+  fill: var(--parch);
+  font-size: 8px;
+  text-anchor: middle;
+  font-family: Georgia, serif;
+}
+/* un skill VERROUILLÉ se voit, se nomme, et dit qui l'ouvre */
+.cadran .verrouille .disque { stroke: var(--verrou); stroke-dasharray: 3 3; }
+.cadran .verrouille .emb    { stroke: var(--verrou); }
+.cadran .verrouille .nom-skill { fill: var(--verrou); }
+.cadran .verrouille .anneau-fond { stroke: var(--verrou); stroke-dasharray: 2 4; }
+
+/* ───────────────────────── ③ le relevé du jour ───────────────────────── */
+.releve { border: 1px solid var(--trait); background: var(--nuit-2); padding: 14px 16px; }
+.releve h4 {
+  margin: 0 0 12px;
+  font-size: .68rem;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--parch-bas);
+  font-weight: normal;
+}
+.geste { display: flex; align-items: center; gap: 10px; padding: 5px 0; border-top: 1px solid var(--trait); }
+.geste:first-of-type { border-top: 0; }
+.case {
+  width: 21px; height: 21px; flex: 0 0 21px;
+  border: 1px solid var(--or-sourd);
+  display: grid; place-items: center;
+  font-size: 12px; color: var(--or);
+}
+.case.tenu { background: var(--or); color: var(--nuit); border-color: var(--or); }
+.case.vide { border-style: dashed; border-color: var(--verrou); }
+.geste .lib { flex: 1; font-size: .86rem; }
+.geste .lib small { display: block; color: var(--parch-bas); font-size: .74rem; letter-spacing: .06em; }
+.semaine { display: flex; gap: 5px; }
+.jour {
+  width: 19px; height: 19px;
+  border: 1px solid var(--trait);
+  display: grid; place-items: center;
+  font-size: 9px; color: var(--parch-bas);
+}
+.jour.tenu { background: var(--or-sourd); color: var(--nuit); border-color: var(--or-sourd); }
+.jour.muet { border-style: dashed; }
+
+/* ───────────────────────── ④ le journal des quêtes ───────────────────────── */
+/* Une quête coûtait 114 px ; mesurée, resserrée à ~72. C'est ce qui fait
+   entrer les quêtes dans un écran, à côté du profil. */
+.quete {
+  border-left: 2px solid var(--or-sourd);
+  padding: 4px 0 4px 11px;
+  margin-bottom: 6px;
+  line-height: 1.32;
+}
+.quete.secondaire { border-left-color: var(--trait); }
+.quete.fond { border-left-color: var(--spectre-f); }
+.quete .type {
+  font-size: .58rem;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--parch-bas);
+}
+.quete .intitule { font-size: .88rem; color: var(--parch); margin: 1px 0 2px; }
+.quete .detail { font-size: .74rem; color: var(--parch-bas); margin: 0; }
+.recompense-inline { color: var(--or); font-style: italic; }
+.quete .recompense { font-size: .82rem; color: var(--or); font-style: italic; }
+.jauge { height: 3px; background: var(--trait); margin-top: 5px; }
+.jauge i { display: block; height: 3px; background: var(--or); }
+
+/* ───────────────────────── ⑤ la fenêtre du Système ───────────────────────── */
+/* L'APPARITION : un trait de lumière s'ouvre, puis le cadre, puis le texte.
+   Respecte prefers-reduced-motion — sans animation, la fenêtre est là. */
+.fenetre {
+  position: relative;
+  border: 1px solid var(--spectre-f);
+  background: linear-gradient(180deg, rgba(159,212,255,.07), transparent 65%);
+  padding: 16px 18px;
+  margin: 18px 0 0;
+  /* les angles COUPÉS : un instrument n'est pas tendre */
+  clip-path: polygon(11px 0, 100% 0, 100% calc(100% - 11px), calc(100% - 11px) 100%, 0 100%, 0 11px);
+  animation: surgir 900ms ease-out both;
+}
+.fenetre::before {
+  content: '';
+  position: absolute; left: 0; right: 0; top: -1px;
+  height: 1px; background: var(--spectre);
+  box-shadow: 0 0 9px var(--spectre);
+  animation: trait 900ms ease-out both;
+}
+.fenetre .voix {
+  color: var(--spectre);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  font-size: .82rem;
+  margin: 0;
+}
+.fenetre .corps { margin: 7px 0 0; font-size: .86rem; color: var(--parch); }
+.fenetre .corps b { color: var(--or); font-weight: normal; }
+.fenetre .actions { margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap; }
+.bouton {
+  border: 1px solid var(--spectre-f);
+  color: var(--spectre);
+  background: transparent;
+  padding: 6px 14px;
+  font-family: inherit;
+  font-size: .78rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.bouton.or { border-color: var(--or-sourd); color: var(--or); }
+
+@keyframes trait {
+  0%   { transform: scaleX(0); opacity: 1; }
+  45%  { transform: scaleX(1); opacity: 1; }
+  100% { transform: scaleX(1); opacity: .5; }
+}
+@keyframes surgir {
+  0%   { opacity: 0; transform: translateY(-4px); clip-path: inset(0 0 100% 0); }
+  40%  { opacity: 1; }
+  100% { opacity: 1; transform: none; clip-path: polygon(11px 0, 100% 0, 100% calc(100% - 11px), calc(100% - 11px) 100%, 0 100%, 0 11px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fenetre, .fenetre::before { animation: none; }
+}
+
+/* En forme B, la fenêtre s'auréole — c'est le seul ajout qui pousse vers
+   l'hologramme SANS toucher à la règle de couleur (or = gagné, bleu = annoncé).
+   J'ai refusé de rendre les anneaux bleus pour creuser l'écart entre A et B :
+   ça aurait rendu la comparaison plus spectaculaire en cassant ce qui tient
+   tout le dessin. L'écart entre les deux formes est donc volontairement étroit. */
+.systeme.spectral .fenetre {
+  box-shadow: inset 0 0 26px rgba(111,192,255,.10), 0 0 20px rgba(111,192,255,.09);
+}
+
+/* ── LÉO — elle pilote le Système et reste PRÉSENTE (décision Paul).
+      Deux registres, une seule voix : le Système proclame entre crochets,
+      Léo conseille dans son cartouche. La différence se voit à l'œil nu —
+      pas de crochets, pas de capitales, une voix qui s'adresse à toi. ── */
+.leo {
+  border: 1px solid var(--or-sourd);
+  border-left-width: 3px;
+  background: var(--nuit-2);
+  padding: 11px 14px;
+  margin-top: 14px;
+}
+.leo .qui {
+  font-size: .66rem;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin: 0 0 6px;
+}
+.leo p { margin: 0; font-size: .86rem; color: var(--parch); }
+.leo p + p { margin-top: 8px; }
+.leo em { color: var(--or); font-style: italic; }
+
+/* ── LE GEL — la sévérité. La lumière tombe sur ce qui est acquis et sur le
+      flux, JAMAIS sur les chiffres eux-mêmes : rien n'est perdu, tout est
+      suspendu. L'annonce, elle, reste vive : c'est elle qu'il faut lire. ── */
+.systeme.gele .cadran,
+.systeme.gele .releve,
+.systeme.gele .quete { filter: saturate(.12) opacity(.72); }
+.systeme.gele .identite .titre {
+  color: var(--parch-bas);
+  font-style: normal;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-size: .9rem;
+}
+/* « En dette » n'est pas un titre : c'est un état. Il ne prend pas les
+   guillemets qui honorent un titre gagné. */
+.systeme.gele .identite .titre::before,
+.systeme.gele .identite .titre::after { content: ''; }
+/* Les panneaux qui EXPLIQUENT le gel ne le subissent pas — ce sont des notes
+   de maquette, pas la surface de jeu. */
+.systeme.gele .explication { filter: none; }
+.systeme.gele .fenetre {
+  border-color: #7a3b3b;
+  background: linear-gradient(180deg, rgba(200,90,90,.10), transparent 65%);
+  box-shadow: inset 0 0 26px rgba(200,90,90,.08);
+}
+.systeme.gele .fenetre::before { background: #d98a8a; box-shadow: 0 0 9px #d98a8a; }
+.systeme.gele .fenetre .voix { color: #e3a2a2; }
+.systeme.gele .bouton { border-color: #7a3b3b; color: #e3a2a2; }
+
+/* ── LA LISTE DES SKILLS — le cadran montre l'état, la liste dit l'ÉNONCÉ.
+      Un skill de Paul est une phrase au présent sur le joueur (« le joueur est
+      au top de sa forme ! ») : ça ne tient pas sous un médaillon, ça tient ici. ── */
+.skill {
+  border: 1px solid var(--trait);
+  border-left: 3px solid var(--or-sourd);
+  background: var(--nuit-2);
+  padding: 13px 16px;
+  margin-bottom: 12px;
+}
+.skill.sommeil { border-left-color: var(--verrou); }
+.skill .entete { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.skill .nom {
+  font-size: 1rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--or);
+}
+.skill .rang-txt { font-size: .8rem; color: var(--or-sourd); letter-spacing: .12em; }
+.skill .etat {
+  margin-left: auto;
+  font-size: .64rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  border: 1px solid var(--spectre-f);
+  color: var(--spectre);
+  padding: 2px 8px;
+}
+.skill .etat.dort { border-color: var(--verrou); color: var(--parch-bas); }
+.skill .enonce { margin: 7px 0 0; font-style: italic; color: var(--parch); font-size: .95rem; }
+.skill ul { margin: 9px 0 0; padding-left: 18px; }
+.skill li { font-size: .85rem; color: var(--parch-bas); margin: 3px 0; }
+.skill li b { color: var(--parch); font-weight: normal; }
+.skill li .cadence { color: var(--spectre); font-size: .78rem; letter-spacing: .06em; }
+.skill .evolution {
+  margin: 10px 0 0;
+  padding-top: 9px;
+  border-top: 1px dashed var(--spectre-f);
+  font-size: .85rem;
+  color: var(--parch);
+}
+.skill .evolution b { color: var(--spectre); font-weight: normal; letter-spacing: .1em; }
+
+/* Les aptitudes : le second registre, à définir avec Paul. Un cadre vide et
+   ANNONCÉ vaut mieux qu'une invention — on ne remplit pas à sa place. */
+.aptitudes {
+  border: 1px dashed var(--verrou);
+  padding: 18px 18px;
+  color: var(--parch-bas);
+  font-size: .9rem;
+}
+.aptitudes p { margin: 0; }
+.aptitudes p + p { margin-top: 8px; }
+
+/* ── LE SCEAU — l'emblème dicté par Paul (image de référence), REDESSINÉ en
+      gravure : une maquette ne charge aucune ressource externe (CSP), et le
+      fichier d'origine n'est pas au dépôt. La géométrie est reprise — disque
+      cranté, lame traversante, banderoles ; la palette est celle d'ALTHEA :
+      l'or pour le corps de l'emblème, le spectral pour la lame et l'œil. ── */
+.embleme .lames path { fill: var(--or-sourd); stroke: var(--or); stroke-width: .8; stroke-linejoin: round; }
+.embleme .plaque { fill: var(--nuit-2); stroke: var(--or); stroke-width: 2; }
+.embleme .cerne  { fill: none; stroke: var(--or-sourd); stroke-width: 1; }
+.embleme .banderole path { fill: none; stroke: var(--or-sourd); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.embleme .pommeau { fill: var(--spectre); }
+.embleme .poignee { fill: none; stroke: var(--spectre); stroke-width: 2.6; stroke-linecap: round; }
+.embleme .garde   { fill: none; stroke: var(--spectre); stroke-width: 2.6; stroke-linecap: round; }
+.embleme .tranchant { fill: var(--spectre); stroke: none; opacity: .92; }
+.embleme .gorge   { fill: none; stroke: var(--nuit-2); stroke-width: 1; opacity: .55; }
+/* L'ŒIL — la seule figure du sceau, et elle n'est pas décorative :
+   c'est le titre de Paul qui la dicte, « Farsight, celui qui voit loin ». */
+.embleme .paupiere { fill: var(--nuit); stroke: var(--spectre); stroke-width: 1.5; }
+.embleme .pupille { fill: var(--spectre); }
+.propals { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 22px; }
+@media (max-width: 860px) { .propals { grid-template-columns: 1fr; } }
+.propal { border: 1px solid var(--trait); background: var(--nuit-2); padding: 16px; }
+.propal h4 {
+  margin: 0 0 4px; font-size: .72rem; letter-spacing: .24em;
+  text-transform: uppercase; color: var(--or); font-weight: normal;
+}
+.propal .quoi { margin: 0 0 14px; font-size: .82rem; color: var(--parch-bas); min-height: 3.4em; }
+.propal .duo { display: flex; align-items: center; gap: 16px; }
+.propal .grand { width: 200px; height: 200px; flex: 0 0 200px; }
+.propal .vrai  { width: 66px; height: 66px; flex: 0 0 66px; }
+.legende-apt { list-style: none; margin: 14px 0 0; padding: 0;
+  display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.legende-apt li { font-size: .76rem; color: var(--or); letter-spacing: .06em; }
+.legende-apt b { color: var(--parch-bas); font-weight: normal; }
+.propal .taille { font-size: .64rem; letter-spacing: .16em; text-transform: uppercase; color: var(--parch-bas); }
+.vitruve .cadre  { fill: none; stroke: var(--spectre-f); stroke-width: 1; }
+.vitruve .corps  { fill: none; stroke: var(--or); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.vitruve .corps-fin { fill: none; stroke: var(--or); stroke-width: 1.4; stroke-linecap: round; }
+.vitruve .noeud  { fill: var(--spectre); }
+.vitruve .halo   { fill: none; stroke: var(--spectre); stroke-width: 1; opacity: .55; }
+
+/* ── LES APTITUDES — proposition. Elles ne se cochent pas : elles se DÉRIVENT
+      des skills tenus. D'où la barre pleine et l'absence de case. ── */
+/* LES STATS — une rangée compacte. Cinq stats en 5 × 26 px : c'est la
+   condition pour que le profil et les quêtes s'embrassent du même coup d'œil
+   (dicté par Paul). La valeur d'abord, la barre ensuite : on lit le chiffre,
+   la barre ne fait que le situer. */
+.stats-rangee { margin-top: 12px; }
+.st { display: grid; grid-template-columns: 96px 30px minmax(0,1fr); gap: 10px;
+  align-items: center; padding: 3px 0; }
+.st-cle { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--parch-bas); }
+.st-val { font-size: .9rem; color: var(--or); text-align: right; }
+.st-barre { height: 4px; background: var(--trait); }
+.st-barre i { display: block; height: 4px; background: var(--or); }
+.note-stat { margin: 8px 0 0; font-size: .72rem; color: var(--parch-bas); font-style: italic; }
+.note-stat b { color: var(--spectre); font-weight: normal; font-style: normal; }
+
+.releve.nu { border: 0; background: transparent; padding: 0; }
+
+/* ───────────────────────── ② le cadran des skills ───────────────────────── */
+.bloc-titre {
+  margin: 30px 0 4px;
+  font-size: .72rem;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--parch-bas);
+}
+.deux-colonnes { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 30px; }
+@media (max-width: 860px) { .deux-colonnes { grid-template-columns: 1fr; } }
+
+.cadran { width: 100%; max-width: 440px; margin: 14px auto 0; display: block; }
+.cadran .anneau-fond { fill: none; stroke: var(--trait); stroke-width: 5; }
+.cadran .anneau-plein {
+  fill: none;
+  stroke: var(--or);
+  stroke-width: 5;
+  stroke-linecap: round;
+  /* L'anneau part du Nord : on le fait pivoter d'un quart de tour.
+     transform-box: fill-box est OBLIGATOIRE — sans lui, `transform-origin:
+     center` désigne le centre du viewBox (initial value de transform-box en
+     SVG), et l'anneau part pivoter à 700 px hors du cadre, donc invisible.
+     Défaut trouvé par la MESURE (getBBox vs viewBox), jamais par l'œil. */
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: rotate(-90deg);
+}
+.cadran .disque { fill: var(--nuit-2); stroke: var(--or-sourd); stroke-width: 1; }
+.cadran .emb { fill: none; stroke: var(--or); stroke-width: 1.6; stroke-linecap: round; }
+.cadran .nom-skill {
+  fill: var(--parch);
+  font-size: 9.5px;
+  letter-spacing: 1.6px;
+  text-anchor: middle;
+  font-family: Georgia, serif;
+}
+.cadran .rang {
+  fill: var(--or);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-anchor: middle;
+  font-family: Georgia, serif;
+}
+.cadran .coeur-disque { fill: var(--nuit-2); stroke: var(--or); stroke-width: 1.5; }
+.cadran .coeur-txt {
+  fill: var(--or);
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-anchor: middle;
+  font-family: Georgia, serif;
+}
+.cadran .coeur-cerne { fill: none; stroke: var(--or-sourd); stroke-width: .8; }
+/* Le chevron d'évolution : ce skill peut monter en un skill SUPÉRIEUR
+   (Traducteur → Traducteur universel). Il se voit sur le cadran, il ne
+   s'explique que dans la liste. */
+.cadran .evo { fill: none; stroke: var(--spectre); stroke-width: 1.6;
+  stroke-linecap: round; stroke-linejoin: round; }
+.cadran .coeur-sous {
+  fill: var(--parch);
+  font-size: 7.5px;
+  letter-spacing: 1.6px;
+  text-anchor: middle;
+  font-family: Georgia, serif;
+}
+/* Le compte des gestes en attente : c'est l'appel à l'action du cadran,
+   il se lit — donc il prend la couleur du texte courant, pas celle du décor. */
+.cadran .coeur-attente {
+  fill: var(--parch);
+  font-size: 8px;
+  text-anchor: middle;
+  font-family: Georgia, serif;
+}
+/* un skill VERROUILLÉ se voit, se nomme, et dit qui l'ouvre */
+.cadran .verrouille .disque { stroke: var(--verrou); stroke-dasharray: 3 3; }
+.cadran .verrouille .emb    { stroke: var(--verrou); }
+.cadran .verrouille .nom-skill { fill: var(--verrou); }
+.cadran .verrouille .anneau-fond { stroke: var(--verrou); stroke-dasharray: 2 4; }
+
+/* ───────────────────────── ③ le relevé du jour ───────────────────────── */
+.releve { border: 1px solid var(--trait); background: var(--nuit-2); padding: 14px 16px; }
+.releve h4 {
+  margin: 0 0 12px;
+  font-size: .68rem;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--parch-bas);
+  font-weight: normal;
+}
+.geste { display: flex; align-items: center; gap: 10px; padding: 5px 0; border-top: 1px solid var(--trait); }
+.geste:first-of-type { border-top: 0; }
+.case {
+  width: 21px; height: 21px; flex: 0 0 21px;
+  border: 1px solid var(--or-sourd);
+  display: grid; place-items: center;
+  font-size: 12px; color: var(--or);
+}
+.case.tenu { background: var(--or); color: var(--nuit); border-color: var(--or); }
+.case.vide { border-style: dashed; border-color: var(--verrou); }
+.geste .lib { flex: 1; font-size: .86rem; }
+.geste .lib small { display: block; color: var(--parch-bas); font-size: .74rem; letter-spacing: .06em; }
+.semaine { display: flex; gap: 5px; }
+.jour {
+  width: 19px; height: 19px;
+  border: 1px solid var(--trait);
+  display: grid; place-items: center;
+  font-size: 9px; color: var(--parch-bas);
+}
+.jour.tenu { background: var(--or-sourd); color: var(--nuit); border-color: var(--or-sourd); }
+.jour.muet { border-style: dashed; }
+
+/* ───────────────────────── ④ le journal des quêtes ───────────────────────── */
+/* Une quête coûtait 114 px ; mesurée, resserrée à ~72. C'est ce qui fait
+   entrer les quêtes dans un écran, à côté du profil. */
+.quete {
+  border-left: 2px solid var(--or-sourd);
+  padding: 4px 0 4px 11px;
+  margin-bottom: 6px;
+  line-height: 1.32;
+}
+.quete.secondaire { border-left-color: var(--trait); }
+.quete.fond { border-left-color: var(--spectre-f); }
+.quete .type {
+  font-size: .58rem;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--parch-bas);
+}
+.quete .intitule { font-size: .88rem; color: var(--parch); margin: 1px 0 2px; }
+.quete .detail { font-size: .74rem; color: var(--parch-bas); margin: 0; }
+.recompense-inline { color: var(--or); font-style: italic; }
+.quete .recompense { font-size: .82rem; color: var(--or); font-style: italic; }
+.jauge { height: 3px; background: var(--trait); margin-top: 5px; }
+.jauge i { display: block; height: 3px; background: var(--or); }
+
+/* ───────────────────────── ⑤ la fenêtre du Système ───────────────────────── */
+/* L'APPARITION : un trait de lumière s'ouvre, puis le cadre, puis le texte.
+   Respecte prefers-reduced-motion — sans animation, la fenêtre est là. */
+.fenetre {
+  position: relative;
+  border: 1px solid var(--spectre-f);
+  background: linear-gradient(180deg, rgba(159,212,255,.07), transparent 65%);
+  padding: 16px 18px;
+  margin: 18px 0 0;
+  /* les angles COUPÉS : un instrument n'est pas tendre */
+  clip-path: polygon(11px 0, 100% 0, 100% calc(100% - 11px), calc(100% - 11px) 100%, 0 100%, 0 11px);
+  animation: surgir 900ms ease-out both;
+}
+.fenetre::before {
+  content: '';
+  position: absolute; left: 0; right: 0; top: -1px;
+  height: 1px; background: var(--spectre);
+  box-shadow: 0 0 9px var(--spectre);
+  animation: trait 900ms ease-out both;
+}
+.fenetre .voix {
+  color: var(--spectre);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  font-size: .82rem;
+  margin: 0;
+}
+.fenetre .corps { margin: 7px 0 0; font-size: .86rem; color: var(--parch); }
+.fenetre .corps b { color: var(--or); font-weight: normal; }
+.fenetre .actions { margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap; }
+.bouton {
+  border: 1px solid var(--spectre-f);
+  color: var(--spectre);
+  background: transparent;
+  padding: 6px 14px;
+  font-family: inherit;
+  font-size: .78rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.bouton.or { border-color: var(--or-sourd); color: var(--or); }
+
+@keyframes trait {
+  0%   { transform: scaleX(0); opacity: 1; }
+  45%  { transform: scaleX(1); opacity: 1; }
+  100% { transform: scaleX(1); opacity: .5; }
+}
+@keyframes surgir {
+  0%   { opacity: 0; transform: translateY(-4px); clip-path: inset(0 0 100% 0); }
+  40%  { opacity: 1; }
+  100% { opacity: 1; transform: none; clip-path: polygon(11px 0, 100% 0, 100% calc(100% - 11px), calc(100% - 11px) 100%, 0 100%, 0 11px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fenetre, .fenetre::before { animation: none; }
+}
+
+/* En forme B, la fenêtre s'auréole — c'est le seul ajout qui pousse vers
+   l'hologramme SANS toucher à la règle de couleur (or = gagné, bleu = annoncé).
+   J'ai refusé de rendre les anneaux bleus pour creuser l'écart entre A et B :
+   ça aurait rendu la comparaison plus spectaculaire en cassant ce qui tient
+   tout le dessin. L'écart entre les deux formes est donc volontairement étroit. */
+.systeme.spectral .fenetre {
+  box-shadow: inset 0 0 26px rgba(111,192,255,.10), 0 0 20px rgba(111,192,255,.09);
+}
+
+/* ── LÉO — elle pilote le Système et reste PRÉSENTE (décision Paul).
+      Deux registres, une seule voix : le Système proclame entre crochets,
+      Léo conseille dans son cartouche. La différence se voit à l'œil nu —
+      pas de crochets, pas de capitales, une voix qui s'adresse à toi. ── */
+.leo {
+  border: 1px solid var(--or-sourd);
+  border-left-width: 3px;
+  background: var(--nuit-2);
+  padding: 11px 14px;
+  margin-top: 14px;
+}
+.leo .qui {
+  font-size: .66rem;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin: 0 0 6px;
+}
+.leo p { margin: 0; font-size: .86rem; color: var(--parch); }
+.leo p + p { margin-top: 8px; }
+.leo em { color: var(--or); font-style: italic; }
+
+/* ── LE GEL — la sévérité. La lumière tombe sur ce qui est acquis et sur le
+      flux, JAMAIS sur les chiffres eux-mêmes : rien n'est perdu, tout est
+      suspendu. L'annonce, elle, reste vive : c'est elle qu'il faut lire. ── */
+.systeme.gele .cadran,
+.systeme.gele .releve,
+.systeme.gele .quete { filter: saturate(.12) opacity(.72); }
+.systeme.gele .identite .titre {
+  color: var(--parch-bas);
+  font-style: normal;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-size: .9rem;
+}
+/* « En dette » n'est pas un titre : c'est un état. Il ne prend pas les
+   guillemets qui honorent un titre gagné. */
+.systeme.gele .identite .titre::before,
+.systeme.gele .identite .titre::after { content: ''; }
+/* Les panneaux qui EXPLIQUENT le gel ne le subissent pas — ce sont des notes
+   de maquette, pas la surface de jeu. */
+.systeme.gele .explication { filter: none; }
+.systeme.gele .fenetre {
+  border-color: #7a3b3b;
+  background: linear-gradient(180deg, rgba(200,90,90,.10), transparent 65%);
+  box-shadow: inset 0 0 26px rgba(200,90,90,.08);
+}
+.systeme.gele .fenetre::before { background: #d98a8a; box-shadow: 0 0 9px #d98a8a; }
+.systeme.gele .fenetre .voix { color: #e3a2a2; }
+.systeme.gele .bouton { border-color: #7a3b3b; color: #e3a2a2; }
+
+/* ── LA LISTE DES SKILLS — le cadran montre l'état, la liste dit l'ÉNONCÉ.
+      Un skill de Paul est une phrase au présent sur le joueur (« le joueur est
+      au top de sa forme ! ») : ça ne tient pas sous un médaillon, ça tient ici. ── */
+.skill {
+  border: 1px solid var(--trait);
+  border-left: 3px solid var(--or-sourd);
+  background: var(--nuit-2);
+  padding: 13px 16px;
+  margin-bottom: 12px;
+}
+.skill.sommeil { border-left-color: var(--verrou); }
+.skill .entete { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.skill .nom {
+  font-size: 1rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--or);
+}
+.skill .rang-txt { font-size: .8rem; color: var(--or-sourd); letter-spacing: .12em; }
+.skill .etat {
+  margin-left: auto;
+  font-size: .64rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  border: 1px solid var(--spectre-f);
+  color: var(--spectre);
+  padding: 2px 8px;
+}
+.skill .etat.dort { border-color: var(--verrou); color: var(--parch-bas); }
+.skill .enonce { margin: 7px 0 0; font-style: italic; color: var(--parch); font-size: .95rem; }
+.skill ul { margin: 9px 0 0; padding-left: 18px; }
+.skill li { font-size: .85rem; color: var(--parch-bas); margin: 3px 0; }
+.skill li b { color: var(--parch); font-weight: normal; }
+.skill li .cadence { color: var(--spectre); font-size: .78rem; letter-spacing: .06em; }
+.skill .evolution {
+  margin: 10px 0 0;
+  padding-top: 9px;
+  border-top: 1px dashed var(--spectre-f);
+  font-size: .85rem;
+  color: var(--parch);
+}
+.skill .evolution b { color: var(--spectre); font-weight: normal; letter-spacing: .1em; }
+
+/* Les aptitudes : le second registre, à définir avec Paul. Un cadre vide et
+   ANNONCÉ vaut mieux qu'une invention — on ne remplit pas à sa place. */
+.aptitudes {
+  border: 1px dashed var(--verrou);
+  padding: 18px 18px;
+  color: var(--parch-bas);
+  font-size: .9rem;
+}
+.aptitudes p { margin: 0; }
+.aptitudes p + p { margin-top: 8px; }
+
+/* ── LE SCEAU — l'emblème dicté par Paul (image de référence), REDESSINÉ en
+      gravure : une maquette ne charge aucune ressource externe (CSP), et le
+      fichier d'origine n'est pas au dépôt. La géométrie est reprise — disque
+      cranté, lame traversante, banderoles ; la palette est celle d'ALTHEA :
+      l'or pour le corps de l'emblème, le spectral pour la lame et l'œil. ── */
+.embleme .lames path { fill: var(--or-sourd); stroke: var(--or); stroke-width: .8; stroke-linejoin: round; }
+.embleme .plaque { fill: var(--nuit-2); stroke: var(--or); stroke-width: 2; }
+.embleme .cerne  { fill: none; stroke: var(--or-sourd); stroke-width: 1; }
+.embleme .banderole path { fill: none; stroke: var(--or-sourd); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.embleme .pommeau { fill: var(--spectre); }
+.embleme .poignee { fill: none; stroke: var(--spectre); stroke-width: 2.6; stroke-linecap: round; }
+.embleme .garde   { fill: none; stroke: var(--spectre); stroke-width: 2.6; stroke-linecap: round; }
+.embleme .tranchant { fill: var(--spectre); stroke: none; opacity: .92; }
+.embleme .gorge   { fill: none; stroke: var(--nuit-2); stroke-width: 1; opacity: .55; }
+/* L'ŒIL — la seule figure du sceau, et elle n'est pas décorative :
+   c'est le titre de Paul qui la dicte, « Farsight, celui qui voit loin ». */
+.embleme .paupiere { fill: var(--nuit); stroke: var(--spectre); stroke-width: 1.5; }
+.embleme .pupille { fill: var(--spectre); }
+.propals { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 22px; }
+@media (max-width: 860px) { .propals { grid-template-columns: 1fr; } }
+.propal { border: 1px solid var(--trait); background: var(--nuit-2); padding: 16px; }
+.propal h4 {
+  margin: 0 0 4px; font-size: .72rem; letter-spacing: .24em;
+  text-transform: uppercase; color: var(--or); font-weight: normal;
+}
+.propal .quoi { margin: 0 0 14px; font-size: .82rem; color: var(--parch-bas); min-height: 3.4em; }
+.propal .duo { display: flex; align-items: center; gap: 16px; }
+.propal .grand { width: 200px; height: 200px; flex: 0 0 200px; }
+.propal .vrai  { width: 66px; height: 66px; flex: 0 0 66px; }
+.legende-apt { list-style: none; margin: 14px 0 0; padding: 0;
+  display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.legende-apt li { font-size: .76rem; color: var(--or); letter-spacing: .06em; }
+.legende-apt b { color: var(--parch-bas); font-weight: normal; }
+.propal .taille { font-size: .64rem; letter-spacing: .16em; text-transform: uppercase; color: var(--parch-bas); }
+.vitruve .cadre  { fill: none; stroke: var(--spectre-f); stroke-width: 1; }
+.vitruve .corps  { fill: none; stroke: var(--or); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.vitruve .corps-fin { fill: none; stroke: var(--or); stroke-width: 1.4; stroke-linecap: round; }
+.vitruve .noeud  { fill: var(--spectre); }
+.vitruve .halo   { fill: none; stroke: var(--spectre); stroke-width: 1; opacity: .55; }
+
+/* ── LES APTITUDES — proposition. Elles ne se cochent pas : elles se DÉRIVENT
+      des skills tenus. D'où la barre pleine et l'absence de case. ── */
+.aptitude { display: grid; grid-template-columns: 152px minmax(0,1fr) 32px;
+  gap: 12px; align-items: center; padding: 7px 0; border-top: 1px solid var(--trait); }
+.aptitude:first-of-type { border-top: 0; }
+.aptitude .nom-apt { font-size: .82rem; letter-spacing: .14em; text-transform: uppercase; color: var(--or); }
+/* La source tient DANS la cellule du nom — une stat = UNE ligne de grille,
+   pas deux. C'est ce qui fait tenir les cinq dans la moitié d'un écran.
+   `display:block` est indispensable : sans lui le nom et sa source se
+   collent bout à bout, en capitales, et deviennent illisibles. */
+.aptitude .nom-apt small {
+  display: block;
+  font-size: .66rem;
+  letter-spacing: .03em;
+  text-transform: none;
+  color: var(--parch-bas);
+  margin-top: 1px;
+}
+.aptitude .barre { height: 5px; background: var(--trait); }
+.aptitude .barre i { display: block; height: 5px; background: var(--or); }
+.aptitude .val-apt { font-size: .82rem; color: var(--parch); text-align: right; }
+
+/* ───────────────────────── ⑥ l'écran d'accueil ───────────────────────── */
+.accueil { display: flex; align-items: center; gap: 14px; margin-top: 14px; }
+/* Hors des deux blocs : ce n'est pas un élément de jeu, c'est une note. */
+.accueil.hors-bloc { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--trait); }
+.icone {
+  position: relative;
+  flex: 0 0 66px;
+  width: 66px; height: 66px;
+  border-radius: 15px;
+  background: var(--nuit-2);
+  border: 1px solid var(--or-sourd);
+  display: grid; place-items: center;
+}
+.icone span { color: var(--or); font-size: 1.5rem; letter-spacing: .1em; }
+.badge {
+  position: absolute; top: -8px; right: -8px;
+  min-width: 24px; height: 24px; padding: 0 6px;
+  border-radius: 12px;
+  background: #b3261e; color: #fff;
+  font-family: -apple-system, system-ui, sans-serif;
+  font-size: .82rem; font-weight: 600;
+  display: grid; place-items: center;
+}
+.accueil p { margin: 0; font-size: .78rem; color: var(--parch-bas); max-width: 460px; }
+.accueil p b { color: var(--parch); font-weight: normal; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="chapeau">
+    <h1>ALTHEA — le Système</h1>
+    <p><strong>Forme retenue : le Système spectral.</strong> Bleu et nuit
+    profonde, l'or en accent seul. ALTHEA cesse visiblement d'appartenir à
+    Ultima — c'est cohérent avec « c'est un autre système », et avec le fait
+    qu'il soit désormais <strong>autonome</strong> : le jeu se joue entier sans
+    qu'aucun autre quadrant n'existe.</p>
+    <p><strong>La règle de couleur :</strong> l'<span style="color:#e3c46a">or</span>
+    pour ce qui est <strong>gagné</strong> (rangs, titres, sceaux) · le
+    <span style="color:#9fd4ff">bleu spectral</span> pour ce qui est
+    <strong>annoncé</strong> — la voix du Système, et elle seule. C'est elle qui
+    empêche le spectral de devenir un dégradé bleu où plus rien ne se distingue.</p>
+    <p><strong>Léo pilote.</strong> Deux registres, une seule voix : le Système
+    <em>proclame</em> entre crochets, Léo <em>conseille</em> dans son cartouche.
+    Tu les distingues à l'œil nu, et pourtant c'est la même personne.</p>
+    <p><strong>Ce qu'il faut juger, dans l'ordre :</strong></p>
+    <ol>
+      <li>La <strong>fiche du personnage</strong> et son titre : est-ce que ça te
+      donne envie d'en gagner un autre ?</li>
+      <li>Le <strong>cadran</strong> : voit-on d'un coup d'œil où tu en es — et le
+      skill <strong>verrouillé</strong> donne-t-il envie de l'ouvrir ?</li>
+      <li>La <strong>fenêtre du Système</strong> : recharge la page, elle surgit.
+      Est-ce que ça sonne comme un Système, ou comme une notification de plus ?</li>
+      <li><strong>Le gel</strong>, en bas de page : est-ce que ça mord assez —
+      ou trop ?</li>
+    </ol>
+    <p style="color:#8a7c5f"><em>Contenus inventés. Les gestes réels (tabac,
+    alcool) n'apparaissent pas ici : une maquette est servie en preview publique,
+    et la donnée de santé ne sort jamais du quadrant authentifié. La règle vaut
+    aussi pour les maquettes.</em></p>
+  </div>
+
+  <!-- ═══════════ LA FORME RETENUE — B, le Système spectral ═══════════ -->
+  <h2 class="forme-titre">Le Système <em>spectral</em> — forme retenue</h2>
+  <p class="forme-note">Choisie par Paul le 2026-08-06. Bleu et nuit profonde
+  dominants, l'or en accent seul : ALTHEA cesse visiblement d'appartenir à
+  Ultima — cohérent avec « c'est un autre système » et avec son autonomie.
+  La forme A (nuit et or) est abandonnée.</p>
+
+  <section class="systeme spectral">
+    <div class="visuel">
+
+      <!-- ══ LE PROFIL ══ -->
+      <div class="bloc">
+        <p class="bloc-entete">Le profil</p>
+
+        <div class="fiche">
+      <svg class="avatar embleme" viewBox="0 0 120 120" role="img"
+           aria-label="Sceau du personnage : un disque cranté à l’œil ouvert, sa lame traversante et ses banderoles">
+        <circle cx="60" cy="60" r="55" fill="none" stroke="var(--or-sourd)" stroke-width="1"/>
+        <circle cx="60" cy="60" r="49" fill="var(--nuit-2)" stroke="var(--or)" stroke-width="1.2"/>
+        <!-- LA COURONNE — huit lames larges, taillées en aile -->
+        <g class="lames">
+          <path d="M56.1 31.3 L57.9 9.0 L60.0 6.0 L62.1 9.0 L63.9 31.3 Z"/>
+          <path d="M74.7 35.8 L91.7 21.3 L95.4 20.6 L94.7 24.3 L80.2 41.3 Z"/>
+          <path d="M84.7 52.1 L107.0 53.9 L110.0 56.0 L107.0 58.1 L84.7 59.9 Z"/>
+          <path d="M80.2 70.7 L94.7 87.7 L95.4 91.4 L91.7 90.7 L74.7 76.2 Z"/>
+          <path d="M63.9 80.7 L62.1 103.0 L60.0 106.0 L57.9 103.0 L56.1 80.7 Z"/>
+          <path d="M45.3 76.2 L28.3 90.7 L24.6 91.4 L25.3 87.7 L39.8 70.7 Z"/>
+          <path d="M35.3 59.9 L13.0 58.1 L10.0 56.0 L13.0 53.9 L35.3 52.1 Z"/>
+          <path d="M39.8 41.3 L25.3 24.3 L24.6 20.6 L28.3 21.3 L45.3 35.8 Z"/>
+        </g>
+        <!-- LES BANDEROLES — elles pendent sous le disque, l’extrémité fendue -->
+        <g class="banderole">
+          <path d="M50 80 q-5 9 -2 16 q3 7 -2 13 l4 -2 l3 4"/>
+          <path d="M70 80 q5 9 2 16 q-3 7 2 13 l-4 -2 l-3 4"/>
+        </g>
+        <!-- LE DISQUE -->
+        <circle class="plaque" cx="60" cy="56" r="27"/>
+        <circle class="cerne" cx="60" cy="56" r="21"/>
+        <circle class="cerne" cx="60" cy="56" r="15"/>
+        <!-- LA LAME — elle traverse le disque de part en part -->
+        <g class="lame-maitresse">
+          <circle class="pommeau" cx="60" cy="15" r="3"/>
+          <path class="poignee" d="M60 18 V29"/>
+          <path class="garde" d="M45 31 H75"/>
+          <path class="tranchant" d="M55 34 H65 L62.5 92 L60 104 L57.5 92 Z"/>
+          <path class="gorge" d="M60 37 V92"/>
+        </g>
+        <!-- L’ŒIL OUVERT — c’est Farsight : « celui qui voit loin » -->
+        <path class="paupiere" d="M48 56 q12 -11 24 0 q-12 11 -24 0 z"/>
+        <circle class="pupille" cx="60" cy="56" r="3.4"/>
+      </svg>
+          <div class="identite">
+            <p class="nom">Paul Gerard</p>
+            <p class="cle-titre">Titre</p>
+            <p class="titre">Farsight — celui qui voit loin</p>
+            <div class="stats">
+              <div class="stat"><span class="cle">Niveau</span><span class="val">48</span></div>
+              <div class="stat"><span class="cle">Skills</span><span class="val">3 <small>/ 5 tenus</small></span></div>
+              <div class="stat"><span class="cle">Quêtes</span><span class="val">5</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats-rangee">
+          <div class="st"><span class="st-cle">Force</span><span class="st-val">62</span><span class="st-barre"><i style="width:62%"></i></span></div>
+          <div class="st"><span class="st-cle">Endurance</span><span class="st-val">58</span><span class="st-barre"><i style="width:58%"></i></span></div>
+          <div class="st"><span class="st-cle">Agilité</span><span class="st-val">57</span><span class="st-barre"><i style="width:57%"></i></span></div>
+          <div class="st"><span class="st-cle">Intelligence</span><span class="st-val">69</span><span class="st-barre"><i style="width:69%"></i></span></div>
+          <div class="st"><span class="st-cle">Charisme</span><span class="st-val">64</span><span class="st-barre"><i style="width:64%"></i></span></div>
+        </div>
+        <p class="note-stat">socle posé par toi <b>+ 1 point par niveau</b> — le niveau te fait monter, ton socle te dessine</p>
+
+        <p class="sous-titre">Les skills</p>
+        <div class="ligne-skill">
+          <span class="ls-rang">II</span>
+          <span class="ls-corps">
+            <span class="ls-nom">Peak performance <em class="ls-dit">« au top de sa forme ! »</em></span>
+            <span class="ls-barre"><i style="width:46%"></i></span>
+          </span>
+          <span class="ls-etat">Tenu</span>
+        </div>
+        <div class="ligne-skill">
+          <span class="ls-rang">III</span>
+          <span class="ls-corps">
+            <span class="ls-nom">Traducteur <em class="evo-tag">↗</em> <em class="ls-dit">« parle 2 langues à haut niveau »</em></span>
+            <span class="ls-barre"><i style="width:71%"></i></span>
+          </span>
+          <span class="ls-etat">Tenu</span>
+        </div>
+        <div class="ligne-skill">
+          <span class="ls-rang">IV</span>
+          <span class="ls-corps">
+            <span class="ls-nom">Constance <em class="ls-dit">« se relève toujours »</em></span>
+            <span class="ls-barre"><i style="width:58%"></i></span>
+          </span>
+          <span class="ls-etat">Tenu</span>
+        </div>
+        <div class="ligne-skill dort">
+          <span class="ls-rang">I</span>
+          <span class="ls-corps">
+            <span class="ls-nom">Pieds légers <em class="ls-dit">« 10 km/semaine » — 6,2 / 10</em></span>
+            <span class="ls-barre"><i style="width:20%"></i></span>
+          </span>
+          <span class="ls-etat dort">Sommeil</span>
+        </div>
+        <div class="ligne-skill dort">
+          <span class="ls-rang">I</span>
+          <span class="ls-corps">
+            <span class="ls-nom">Omnivore <em class="ls-dit">« peut manger de tout »</em></span>
+            <span class="ls-barre"><i style="width:33%"></i></span>
+          </span>
+          <span class="ls-etat dort">Sommeil</span>
+        </div>
+
+      </div>
+
+      <!-- ══ LES QUÊTES ══ -->
+      <div class="bloc">
+        <p class="bloc-entete">Les quêtes</p>
+
+        <div class="fenetre">
+          <p class="voix">[ Rang atteint — L'Endurance ]</p>
+          <p class="corps"><b>TRADUCTEUR</b> passe au rang III. <b>+1 niveau</b> —
+          toutes tes stats gagnent un point. Une évolution s'ouvre :
+          <b>Traducteur universel</b>.</p>
+          <div class="actions">
+            <button class="bouton or" type="button">Réclamer</button>
+            <button class="bouton" type="button">Plus tard</button>
+          </div>
+        </div>
+
+        <p class="sous-titre">Le jour — 3 gestes en attente</p>
+        <div class="releve nu">
+          <div class="geste">
+            <span class="case vide" aria-hidden="true"></span>
+            <span class="lib">Des légumes<small>OMNIVORE · chaque jour</small></span>
+          </div>
+          <div class="geste">
+            <span class="case vide" aria-hidden="true"></span>
+            <span class="lib">Sport<small>PEAK PERFORMANCE · tous les 2 jours</small></span>
+          </div>
+          <div class="geste">
+            <span class="case vide" aria-hidden="true"></span>
+            <span class="lib">Course — 6,2 / 10 km<small>PIEDS LÉGERS · volume de la semaine</small></span>
+          </div>
+        </div>
+
+        <p class="sous-titre">En cours — 1 principale · 2 secondaires · 2 de fond</p>
+        <div class="quete">
+          <p class="type">Principale</p>
+          <p class="intitule">Tenir dix minutes de conversation, sans traduire</p>
+          <p class="detail">34 / 100 séances</p>
+          <div class="jauge"><i style="width:34%"></i></div>
+        </div>
+        <div class="quete secondaire">
+          <p class="type">Secondaire · proposée par Léo</p>
+          <p class="intitule">Cinq séances d'étude d'ici dimanche</p>
+          <p class="detail">3 / 5 · dans 2 jours · <span class="recompense-inline">ouvre le skill CALLIGRAPHIE</span></p>
+        </div>
+        <div class="quete secondaire">
+          <p class="type">Secondaire · endormie depuis 12 jours</p>
+          <p class="intitule">Marcher dix kilomètres d'une traite</p>
+          <p class="detail">Reprendre, ou ranger ?</p>
+        </div>
+        <div class="quete fond">
+          <p class="type">De fond</p>
+          <p class="intitule">Nourrir PEAK PERFORMANCE · nourrir TRADUCTEUR</p>
+          <p class="detail">élan 12 jours · meilleur 41</p>
+        </div>
+
+        <div class="leo">
+          <p class="qui">Léo</p>
+          <p>Deux skills dorment, et c'est le même geste qui les réveille : sors
+          courir. <em>Pieds légers</em> reprend, et <em>Peak performance</em>
+          coche son sport du jour.</p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="accueil hors-bloc">
+        <div class="icone"><span>✦</span><span class="badge">4</span></div>
+        <p><b>Sur ton écran d'accueil :</b> l'icône et un chiffre — <b>4 à
+        continuer</b>. iOS n'accorde aucune tuile-widget à une app web ; le
+        badge est la vraie réponse.</p>
+      </div>
+  </section>
+
+  <!-- ═══════════ LA SÉVÉRITÉ — le Système gelé ═══════════ -->
+  <h2 class="forme-titre">La sévérité — <em>le gel du Système</em></h2>
+  <p class="forme-note">Trois quêtes acceptées puis laissées à l'abandon, ni
+  reprises ni rangées : le Système se ferme. Il ne compte que des
+  <strong>engagements pris</strong> — un jour non renseigné n'y entre jamais.
+  Rien n'est perdu : le titre est <em>suspendu</em>, le flux est <em>coupé</em>,
+  la lumière tombe. Trois clics et tout revient.</p>
+
+  <section class="systeme spectral gele">
+    <div class="fiche">
+      <svg class="avatar" viewBox="0 0 120 120" role="img" aria-label="Sceau du personnage, éteint">
+        <circle cx="60" cy="60" r="55" fill="none" stroke="var(--verrou)" stroke-width="1"/>
+        <circle cx="60" cy="60" r="49" fill="var(--nuit-2)" stroke="var(--verrou)" stroke-width="1.5"/>
+        <path d="M60 26 L60 84" stroke="var(--verrou)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M60 34 L49 43 M60 34 L71 43 M60 46 L47 55 M60 46 L73 55 M60 58 L49 67 M60 58 L71 67"
+              stroke="var(--verrou)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        <path d="M38 74 Q60 92 82 74" fill="none" stroke="var(--verrou)" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="60" cy="24" r="3.4" fill="var(--verrou)"/>
+      </svg>
+      <div class="identite">
+        <p class="nom">Paul Gerard</p>
+        <p class="cle-titre">Titre</p>
+        <p class="titre">En dette</p>
+        <div class="stats">
+          <div class="stat"><span class="cle">Niveau</span><span class="val">48</span></div>
+          <div class="stat"><span class="cle">Skills tenus</span><span class="val">1 <small>/ 5</small></span></div>
+          <div class="stat"><span class="cle">Titres</span><span class="val">3 <small>, suspendus</small></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fenetre">
+      <p class="voix">[ Système en sommeil — trois engagements laissés ]</p>
+      <p class="corps">Aucune nouvelle quête ne sera proposée. Ton titre est
+      suspendu — <b>il n'est pas perdu</b>. Reprends ou range, et le Système se
+      réveille.</p>
+      <div class="actions">
+        <button class="bouton" type="button">Reprendre les trois</button>
+        <button class="bouton" type="button">Ranger</button>
+        <button class="bouton" type="button">Voir lesquelles</button>
+      </div>
+    </div>
+
+    <div class="leo">
+      <p class="qui">Léo</p>
+      <p>Trois quêtes dorment. Je ne t'en proposerai pas d'autres tant qu'elles
+      sont là — ce n'est pas une punition, c'est que <em>ça ne servirait à
+      rien</em>.</p>
+      <p>Range celle des dix kilomètres, franchement. Tu l'as acceptée un soir
+      d'enthousiasme et elle ne te ressemble pas. Ranger, ce n'est pas
+      abandonner : c'est décider.</p>
+    </div>
+
+    <div class="deux-colonnes" style="margin-top:22px">
+      <div>
+        <p class="bloc-titre">Ce que le gel NE touche PAS</p>
+        <div class="releve explication">
+          <div class="geste"><span class="lib">Les rangs acquis<small>intacts — un rang ne se reperd jamais</small></span></div>
+          <div class="geste"><span class="lib">Les jours nourris et l'élan<small>intacts — ils continuent de compter</small></span></div>
+          <div class="geste"><span class="lib">Les skills débloqués<small>intacts — rien ne se reverrouille</small></span></div>
+          <div class="geste"><span class="lib">Les titres obtenus<small>suspendus, jamais perdus</small></span></div>
+        </div>
+      </div>
+      <div>
+        <p class="bloc-titre">Ce que le gel touche</p>
+        <div class="releve explication">
+          <div class="geste"><span class="lib">Le flux de quêtes<small>coupé — plus aucune proposition</small></span></div>
+          <div class="geste"><span class="lib">Le titre porté<small>remplacé par « En dette »</small></span></div>
+          <div class="geste"><span class="lib">La lumière<small>le cadran se ternit</small></span></div>
+          <div class="geste"><span class="lib" style="color:var(--parch-bas)">…et rien d'autre.<small>Il touche l'ornement et le flux, jamais l'acquis</small></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

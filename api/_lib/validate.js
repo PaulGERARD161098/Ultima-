@@ -1185,3 +1185,90 @@ export function validateBesoinIntendant(body, mode) {
   }
   return { value: out };
 }
+
+// ---------------------------------------------------------------------------
+// ALTHEA — le relevé d'une condition, pour un jour (B1, 2026-08-06).
+//
+// Miroir EXACT de la migration 0022 : ce que la base contraint, l'API le refuse
+// avant elle. Trois points valent d'être lus avant de toucher à cette fonction :
+//
+//  ① `tenu` est OBLIGATOIRE et booléen strict. Il n'y a pas de valeur par
+//     défaut, pas de « non renseigné » transmissible : le troisième état du
+//     quadrant, c'est **l'ABSENCE de relevé** (règle cardinale ①). Accepter un
+//     `tenu` absent reviendrait à laisser le silence entrer en base sous forme
+//     de faute — exactement ce que Paul a exclu.
+//  ② Le JOUR est une date locale 'AAAA-MM-JJ', jamais un timestamp. On refuse
+//     le futur ici comme la base le refuse par trigger : `current_date` n'étant
+//     pas immutable, un CHECK de table est impossible (voir 0022 §5).
+//  ③ `owner_id` n'est JAMAIS accepté du client : il est imposé par le défaut
+//     base. Le champ n'est même pas dans la liste autorisée.
+// ---------------------------------------------------------------------------
+const ALTHEA_RELEVE_FIELDS = ['condition_id', 'jour', 'tenu', 'quantite', 'mot'];
+
+// Une date locale, réelle. '2026-02-30' est bien formée et n'existe pas : on la
+// refuse, sinon le compteur porterait un jour qui n'a jamais eu lieu.
+export function estJourLocalValide(valeur) {
+  if (typeof valeur !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(valeur)) return false;
+  const [a, m, j] = valeur.split('-').map(Number);
+  if (m < 1 || m > 12 || j < 1 || j > 31) return false;
+  const d = new Date(Date.UTC(a, m - 1, j));
+  return d.getUTCFullYear() === a && d.getUTCMonth() === m - 1 && d.getUTCDate() === j;
+}
+
+export function validateAltheaReleve(body, mode, aujourdhui) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, ALTHEA_RELEVE_FIELDS);
+  if (unknown) return { error: unknown };
+
+  const out = {};
+
+  if (mode === 'create') {
+    if (!isUuid(body.condition_id)) return { error: 'Identifiant de condition invalide' };
+    out.condition_id = body.condition_id;
+
+    if (!estJourLocalValide(body.jour)) return { error: 'Jour invalide' };
+    // Le futur est refusé ici comme en base. `aujourdhui` est fourni par
+    // l'appelant (jamais déduit d'un fuseau serveur) : la journée de Paul est
+    // celle qu'il vit, pas celle d'UTC.
+    if (typeof aujourdhui === 'string' && body.jour > aujourdhui) {
+      return { error: 'Jour invalide' };
+    }
+    out.jour = body.jour;
+  } else if (body.condition_id !== undefined || body.jour !== undefined) {
+    // On ne DÉPLACE pas un relevé d'un jour ou d'une condition à l'autre : ce
+    // serait réécrire le passé (§8.3-1). On en crée un autre, on en supprime un.
+    return { error: 'Un relevé ne change ni de jour ni de condition' };
+  }
+
+  // ① tenu : obligatoire à la création, booléen strict — jamais 'true', jamais 1.
+  if (mode === 'create' || body.tenu !== undefined) {
+    if (typeof body.tenu !== 'boolean') return { error: 'État du relevé invalide' };
+    out.tenu = body.tenu;
+  }
+
+  // quantite : null efface, nombre fini positif sinon.
+  if (body.quantite === null) {
+    out.quantite = null;
+  } else if (body.quantite !== undefined) {
+    if (typeof body.quantite !== 'number' || !Number.isFinite(body.quantite)) {
+      return { error: 'Quantité invalide' };
+    }
+    if (body.quantite < 0 || body.quantite > 99999999) return { error: 'Quantité invalide' };
+    out.quantite = body.quantite;
+  }
+
+  if (body.mot === null) {
+    out.mot = null;
+  } else {
+    const msg = checkOptionalText(body.mot, 'Mot', 280);
+    if (msg) return { error: msg };
+    if (body.mot !== undefined) out.mot = body.mot;
+  }
+
+  if (mode === 'update' && Object.keys(out).length === 0) {
+    return { error: 'Aucun champ à mettre à jour' };
+  }
+  return { value: out };
+}

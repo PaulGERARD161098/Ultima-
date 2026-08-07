@@ -1,0 +1,267 @@
+/* ALTHEA — le Système. Registre SPECTRAL (forme B, choisie par Paul 2026-08-06).
+   ---------------------------------------------------------------------------
+   ALTHEA est la SEULE page d'Ultima sur fond nocturne : « l'antique vu de
+   nuit » (CADRAGE-ALTHEA.md §10.3). C'est assumé — Paul a voulu ce quadrant
+   « tout seul, c'est un autre système, c'est plutôt un jeu qu'autre chose ».
+
+   LA RÈGLE DE COULEUR, qui tient tout le dessin et ne souffre aucune exception :
+     --or       = ce qui est GAGNÉ  (rangs, titres, sceaux, jauges)
+     --spectre  = ce qui est ANNONCÉ (la voix du Système, et elle seule)
+   Un rang ne devient jamais bleu ; une annonce ne devient jamais or. Sans cette
+   règle, le spectral dégénère en dégradé bleu où plus rien ne se distingue.
+
+   RÈGLE DE FORME (2026-08-06, valable pour tout Ultima) : un dessin qu'on
+   réduit jusqu'à rendre son texte illisible n'est pas un dessin réduit, c'est
+   un dessin perdu. Seuil : 9 px de rendu. C'est pourquoi le cadran a sa propre
+   vue (althea-cadran.html) au lieu d'être tassé dans une colonne. */
+
+.althea {
+  --nuit:      #04060b;
+  --nuit-2:    #080d16;
+  --trait:     #1d3550;
+  --or:        #d8b45c;
+  --or-sourd:  #8a733a;
+  --parch:     #b9cfe4;
+  --parch-bas: #6d8299;
+  --spectre:   #6fc0ff;
+  --spectre-f: #2a6ea8;
+  --verrou:    #3a4a5c;
+
+  background: var(--nuit);
+  color: var(--parch);
+  min-height: 100vh;
+  font-family: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+}
+/* `width: 100%` et `flex: 1` ne sont pas décoratifs : css/styles.css met le
+   `body` en display:flex, et sans eux la page se RÉTRACTE à la largeur de son
+   contenu (mesuré : 292 px au lieu de 1180). Le cadran y devenait illisible —
+   défaut trouvé par la mesure de la taille de rendu du texte, pas à l'œil. */
+.althea-page {
+  width: 100%;
+  flex: 1 1 auto;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 22px 18px 64px;
+}
+
+.althea a { color: var(--spectre); }
+.althea .retour-althea {
+  display: inline-block;
+  margin-bottom: 16px;
+  font-size: .8rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--parch-bas);
+  text-decoration: none;
+}
+.althea .retour-althea:hover, .althea .retour-althea:focus { color: var(--or); }
+
+/* ── Le visuel : deux cadrans sur une ligne, embrassables du même coup d'œil
+      (dicté par Paul). `align-items: start` : chacun garde sa hauteur, ils ne
+      s'étirent pas l'un sur l'autre. ── */
+.althea-visuel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 900px) { .althea-visuel { grid-template-columns: 1fr; } }
+
+.althea-bloc { border: 1px solid var(--trait); padding: 16px 18px 20px; }
+.althea-entete {
+  margin: -16px -18px 14px;
+  padding: 9px 18px;
+  background: var(--nuit-2);
+  border-bottom: 1px solid var(--trait);
+  font-size: .7rem; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--or);
+}
+
+/* ── La fiche du personnage ── */
+.althea-fiche {
+  display: grid; grid-template-columns: 96px 1fr; gap: 16px; align-items: center;
+  border-bottom: 1px solid var(--trait); padding-bottom: 14px;
+}
+.althea-sceau { width: 96px; height: 96px; }
+.althea-nom {
+  margin: 0; font-size: 1.22rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--parch);
+}
+.althea-cle-titre {
+  margin: 6px 0 0; font-size: .68rem; letter-spacing: .24em;
+  text-transform: uppercase; color: var(--parch-bas);
+}
+.althea-titre { margin: 1px 0 9px; font-size: .95rem; font-style: italic; color: var(--or); }
+.althea-titre::before { content: '« '; }
+.althea-titre::after  { content: ' »'; }
+.althea-chiffres { display: flex; flex-wrap: wrap; gap: 20px; }
+.althea-chiffre .cle {
+  display: block; font-size: .68rem; letter-spacing: .24em;
+  text-transform: uppercase; color: var(--parch-bas);
+}
+.althea-chiffre .val { font-size: 1.2rem; color: var(--or); }
+.althea-chiffre .val small { font-size: .8rem; color: var(--parch-bas); letter-spacing: .1em; }
+
+/* ── Les stats : une ligne de grille chacune. La valeur d'abord, la barre
+      ensuite — on lit le chiffre, la barre ne fait que le situer. ── */
+.althea-stats { margin-top: 12px; }
+.althea-st {
+  display: grid; grid-template-columns: 96px 30px minmax(0, 1fr);
+  gap: 10px; align-items: center; padding: 3px 0;
+}
+.althea-st .cle { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--parch-bas); }
+.althea-st .val { font-size: .9rem; color: var(--or); text-align: right; }
+.althea-st .barre { height: 4px; background: var(--trait); }
+.althea-st .barre i { display: block; height: 4px; background: var(--or); }
+.althea-note {
+  margin: 8px 0 0; font-size: .72rem; color: var(--parch-bas); font-style: italic;
+}
+.althea-note b { color: var(--spectre); font-weight: normal; font-style: normal; }
+
+.althea-sous-titre {
+  margin: 15px 0 7px; font-size: .68rem; letter-spacing: .24em;
+  text-transform: uppercase; color: var(--parch-bas);
+}
+.althea-sous-titre em { font-style: italic; letter-spacing: .04em; text-transform: none; }
+
+/* ── Un skill = une ligne. C'est ce qui fait tenir cinq skills dans la moitié
+      d'un écran, à côté des quêtes. ── */
+.althea-skill {
+  display: grid; grid-template-columns: 26px minmax(0, 1fr) auto;
+  gap: 9px; align-items: center; padding: 6px 0; border-top: 1px solid var(--trait);
+}
+.althea-skill:first-of-type { border-top: 0; }
+.althea-skill .rang { font-size: .92rem; color: var(--or); text-align: center; }
+.althea-skill.dort .rang { color: var(--or-sourd); }
+.althea-skill .corps { display: block; min-width: 0; }
+.althea-skill .nom {
+  display: block; font-size: .88rem; color: var(--parch); letter-spacing: .03em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.althea-skill .dit { font-size: .76rem; color: var(--parch-bas); font-style: italic; }
+.althea-skill .evo { font-size: .8rem; color: var(--spectre); font-style: normal; }
+.althea-skill .barre { display: block; height: 3px; background: var(--trait); margin-top: 4px; }
+.althea-skill .barre i { display: block; height: 3px; background: var(--or); }
+.althea-skill .etat {
+  font-size: .58rem; letter-spacing: .16em; text-transform: uppercase;
+  border: 1px solid var(--spectre-f); color: var(--spectre); padding: 1px 6px;
+}
+/* « Sommeil » n'est PAS un échec : c'est une phrase qui n'est pas vraie
+   aujourd'hui. D'où le gris sourd, jamais le rouge. */
+.althea-skill .etat.dort { border-color: var(--verrou); color: var(--parch-bas); }
+/* Un skill verrouillé SE VOIT — voir ce qui est verrouillé est la moitié du
+   plaisir ; un skill caché ne donne envie de rien. */
+.althea-skill.verrouille .nom { color: var(--verrou); }
+.althea-skill.verrouille .rang { color: var(--verrou); }
+
+/* ── Le relevé du jour : une case par geste, moins de cinq secondes. ── */
+.althea-geste {
+  display: flex; align-items: center; gap: 10px;
+  padding: 5px 0; border-top: 1px solid var(--trait);
+}
+.althea-geste:first-of-type { border-top: 0; }
+.althea-case {
+  width: 21px; height: 21px; flex: 0 0 21px; padding: 0;
+  border: 1px solid var(--or-sourd); background: transparent;
+  color: var(--or); font-size: 12px; line-height: 1; cursor: pointer;
+}
+.althea-case[aria-pressed="true"] { background: var(--or); color: var(--nuit); border-color: var(--or); }
+.althea-case[aria-pressed="false"] { border-style: dashed; border-color: var(--verrou); }
+.althea-case:focus-visible { outline: 2px solid var(--spectre); outline-offset: 2px; }
+.althea-geste .lib { flex: 1; font-size: .86rem; }
+.althea-geste .lib small { display: block; color: var(--parch-bas); font-size: .72rem; letter-spacing: .06em; }
+
+/* ── La fenêtre du Système : elle SURGIT. Deux registres de parole, une seule
+      voix — Léo conseille dans son cartouche, le Système proclame ici. ── */
+.althea-fenetre {
+  position: relative;
+  border: 1px solid var(--spectre-f);
+  background: linear-gradient(180deg, rgba(111, 192, 255, .07), transparent 65%);
+  box-shadow: inset 0 0 26px rgba(111, 192, 255, .10);
+  padding: 14px 16px; margin-bottom: 6px;
+  clip-path: polygon(11px 0, 100% 0, 100% calc(100% - 11px), calc(100% - 11px) 100%, 0 100%, 0 11px);
+  animation: althea-surgir 900ms ease-out both;
+}
+.althea-fenetre::before {
+  content: ''; position: absolute; left: 0; right: 0; top: -1px; height: 1px;
+  background: var(--spectre); box-shadow: 0 0 9px var(--spectre);
+  animation: althea-trait 900ms ease-out both;
+}
+.althea-fenetre .voix {
+  margin: 0; color: var(--spectre); letter-spacing: .2em;
+  text-transform: uppercase; font-size: .8rem;
+}
+.althea-fenetre .corps { margin: 7px 0 0; font-size: .86rem; color: var(--parch); }
+.althea-fenetre .corps b { color: var(--or); font-weight: normal; }
+
+@keyframes althea-trait {
+  0% { transform: scaleX(0); opacity: 1; }
+  45% { transform: scaleX(1); opacity: 1; }
+  100% { transform: scaleX(1); opacity: .5; }
+}
+@keyframes althea-surgir {
+  0% { opacity: 0; transform: translateY(-4px); }
+  100% { opacity: 1; transform: none; }
+}
+/* Sans animation, la fenêtre est simplement là — jamais absente. */
+@media (prefers-reduced-motion: reduce) {
+  .althea-fenetre, .althea-fenetre::before { animation: none; }
+}
+
+/* ── Léo. Elle pilote le Système et reste PRÉSENTE (décision Paul) : un ALTHEA
+      où l'on n'entendrait que des crochets serait un ALTHEA sans Léo. ── */
+.althea-leo {
+  border: 1px solid var(--or-sourd); border-left-width: 3px;
+  background: var(--nuit-2); padding: 11px 14px; margin-top: 14px;
+}
+.althea-leo .qui {
+  margin: 0 0 6px; font-size: .66rem; letter-spacing: .26em;
+  text-transform: uppercase; color: var(--or);
+}
+.althea-leo p { margin: 0; font-size: .86rem; color: var(--parch); }
+.althea-leo em { color: var(--or); font-style: italic; }
+
+.althea-vide { color: var(--parch-bas); font-size: .88rem; font-style: italic; }
+/* La porte de connexion, offerte AVEC le constat. Un écran qui dit « ouvre ta
+   session » sans donner le chemin oblige à le chercher. */
+.althea-porte { margin: 10px 0 0; }
+.althea-porte a {
+  display: inline-block;
+  border: 1px solid var(--spectre-f);
+  color: var(--spectre);
+  padding: 6px 14px;
+  font-size: .78rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.althea-porte a:hover, .althea-porte a:focus { border-color: var(--spectre); }
+
+/* ── La vue du cadran, en grand (althea-cadran.html) ── */
+.althea-cadran { width: 100%; max-width: 560px; margin: 0 auto; display: block; }
+.althea-cadran .anneau-fond { fill: none; stroke: var(--trait); stroke-width: 5; }
+.althea-cadran .anneau-plein {
+  fill: none; stroke: var(--or); stroke-width: 5; stroke-linecap: round;
+  /* transform-box: fill-box est OBLIGATOIRE — sans lui, `transform-origin:
+     center` désigne le centre du viewBox (valeur initiale en SVG) et l'anneau
+     part pivoter hors du cadre, donc invisible. Défaut trouvé par la MESURE. */
+  transform-box: fill-box; transform-origin: center; transform: rotate(-90deg);
+}
+.althea-cadran .disque { fill: var(--nuit-2); stroke: var(--or-sourd); stroke-width: 1; }
+.althea-cadran .nom-skill {
+  fill: var(--parch); font-size: 11px; letter-spacing: 1.6px;
+  text-anchor: middle; font-family: Georgia, serif;
+}
+.althea-cadran .rang-txt {
+  fill: var(--or); font-size: 13px; letter-spacing: 2px;
+  text-anchor: middle; font-family: Georgia, serif;
+}
+.althea-cadran .coeur { fill: var(--nuit-2); stroke: var(--or); stroke-width: 1.5; }
+.althea-cadran .coeur-txt {
+  fill: var(--or); font-size: 12px; letter-spacing: 2.5px;
+  text-anchor: middle; font-family: Georgia, serif;
+}
+.althea-cadran .coeur-sous {
+  fill: var(--parch); font-size: 9.5px; letter-spacing: 1.4px;
+  text-anchor: middle; font-family: Georgia, serif;
+}

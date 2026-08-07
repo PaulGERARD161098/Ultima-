@@ -1609,3 +1609,470 @@
     VRANESH le même jour**. 🔻 **Deux fils qui diagnostiquent la même chose ne se
     doublent pas : le premier qui corrige doit ANNOTER le constat de l'autre**,
     sinon la source de vérité garde une phrase fausse.
+
+- **2026-08-06 (ALTHEA — ouverture du quadrant, cadrage B0)** — Paul dicte un
+  **nouveau quadrant Lv3, ALTHEA** : le suivi **ludique** des performances
+  physiques et psychiques. Un **cadran unique** (pas une boussole) portant des
+  unités qui **montent par paliers** et débloquent des **récompenses** — la garde
+  (pas de tabac, pas d'alcool) et la pratique (japonais, espagnol, sport).
+  Remplissage quotidien **ou** hebdomadaire, **explicitement non obligatoire**,
+  « rigolo à remplir ». Finalité assumée : le jeu est le **moyen**, l'amélioration
+  réelle des skills est le but. Cadrage complet : `CADRAGE-ALTHEA.md` — **zéro
+  code, zéro migration** (gate EL tenu).
+  - 🔻 **Trois collisions relevées AVANT de construire, aucune trouvée en codant.**
+    ① **Le mot « talent » est déjà pris** par RESHIRAM (table `talents`, `0009`)
+    avec un sens **opposé** : savoir-faire *prouvé et statique* contre unité
+    *entraînée et progressive*. Proposition : l'unité d'ALTHEA est **une
+    DISCIPLINE**. ② **« Je n'ai pas fumé aujourd'hui » frôle DRAUKHAIN** :
+    frontière écrite — DRAUKHAIN est **la volonté** (*pourquoi je tiens*, un
+    récit), ALTHEA est **la mesure** (*combien de fois j'ai tenu*, une marque).
+    ③ **Un cadran n'est pas une boussole** : ALTHEA reste une **feuille**
+    (règle Lv3 §2.1), et son anneau de progression est ce qui le distingue
+    visuellement d'une rose de caps.
+  - 🔻 **La règle qui décide de la vie du quadrant** : *un jour non renseigné
+    n'est pas un échec*. Trois états (nourri / manqué déclaré / non renseigné),
+    le troisième ne s'infère jamais dans les deux autres, et **un rang acquis ne
+    se perd jamais**. Un *streak* qui remet à zéro punirait exactement ce que
+    Paul a posé comme condition (« ce n'est pas obligatoire ») — il se ferait
+    abandonner en trois semaines. L'élan respire, il ne détruit rien.
+  - 🔻 **Le palier compte des JOURS, pas des points.** Un point est arbitraire et
+    se gonfle ; un jour est un fait. Les minutes ornent (« 42 h de japonais »),
+    elles ne font pas monter le rang — sinon on récompense qui **déclare** des
+    heures, pas qui pratique.
+  - 🔻 **ALTHEA porte la donnée la plus sensible d'Ultima** (santé, addictions,
+    psychisme). Conséquence sur un contrat existant : **les yeux de Léo**
+    (`/api/leo`, champ `etat`) transportent aujourd'hui « comptes **et intitulés**
+    bornés » — pour ALTHEA, **les intitulés sont exclus**, seuls des comptes
+    partent, parce que l'intitulé *est* l'information (« garde du tabac » dit
+    tout). Exception à écrire dans `validerEtatQuadrant`, pas une consigne de
+    prudence. Preuve par l'ABSENCE aux quatre sorties (IA, cockpit, HTML, logs).
+  - **Décisions attendues de Paul (D1→D4 bloquantes)** : l'accroche (quadrant
+    sous **NAGA**, reco) · le mot (**discipline**, reco) · le moteur (**cumul +
+    élan**, reco) · le périmètre v1 (**disciplines seules**, les jauges
+    physique/psychique sont une courbe et non un rang → boucle suivante).
+  - **Deux passages de la dictée signalés au lieu d'être devinés** : « une arme
+    de capacité » → lu *arbre de capacités* ; « combien de temps je suis bien en
+    ma science de sport » → lu *où j'en suis dans ma pratique du sport*.
+
+- **2026-08-06 (ALTHEA — les quatre décisions, prises le jour même)** —
+  ① **L'accroche** : Paul refuse GRIMA (« ce qui est utile ») ET NAGA (« ce qui
+  fait grandir ») — *« tout seul : c'est un autre système, car c'est plutôt un
+  jeu qu'autre chose »*. ALTHEA ne se range sous aucune devise. **Précision
+  encore due** : racine (à côté d'ULTIMA et ALPHA, 1 clic) ou troisième cadran
+  d'ULTIMA (à côté de GRIMA et NAGA, 2 clics) — reco Léo : la racine, un jeu
+  quotidien se doit d'être à un clic. ② **Le mot : SKILL** (mot de Paul).
+  La collision avec les `talents` de RESHIRAM se tranche par le registre —
+  *skill* = le jeu, *talent* = le prouvé ; la table `talents` n'est pas touchée.
+  **Conséquence de langue actée** : ALTHEA est le SEUL endroit d'Ultima où
+  l'anglais est admis, parce que c'est le seul endroit qui est un jeu.
+  ③ **Le moteur : cumul + élan** (le rang ne se reperd jamais).
+  ④ **Périmètre v1** : *« on livre les skills : leurs noms, et ce qu'il y a
+  dedans »*.
+  - 🔻 **RÈGLE MAJEURE DU JOUR — une réponse de cadrage peut CORRIGER le modèle,
+    et c'est le but du gate.** Le « ce qu'il y a dedans » de la réponse ④ a
+    révélé que le premier modèle écrasait **deux étages en un seul**. Relecture
+    de la dictée d'ouverture à sa lumière : *« le talent, ce sera peak
+    performance […] je n'ai pas fumé, je n'ai pas bu d'alcool »* — **peak
+    performance n'est pas un compteur, c'est un contenant**, et les deux
+    abstinences sont deux **gestes** qui le nourrissent. D'où : **le SKILL**
+    (nom, blason, rang, paliers — le seul étage qui progresse) contient **des
+    GESTES** (ce qu'on coche, sans rang). Sans cette question posée, on livrait
+    soit un skill par geste (écran de bricoles), soit un skill flou qu'on ne
+    sait pas cocher. *Le gate d'entrée EL ne sert pas à valider un plan : il
+    sert à ce que le plan change tant que c'est gratuit.*
+  - **Corollaire mécanique** : un skill porte une **règle de nourriture** —
+    `tous` (le jour compte si TOUS ses gestes sont tenus : le bon réglage pour
+    peak performance, une journée sans tabac mais arrosée n'en est pas une) ou
+    `un` (au moins un geste : le bon pour « sport », plusieurs portes). Deux
+    valeurs, pas de seuil chiffré.
+  - 🔻 **Piège trouvé en écrivant le modèle, invisible depuis l'écran** :
+    désactiver un geste **réécrirait le passé** (un jour jadis « à moitié tenu »
+    deviendrait « tenu »), donc **le rang bougerait tout seul** — violation de la
+    règle « un rang acquis ne se perd jamais », dans les deux sens. Parade :
+    `actif=false` ne vaut qu'à partir du jour de la désactivation ; le calcul
+    d'antériorité ne considère que les gestes actifs **à la date du jour
+    considéré**.
+
+- **2026-08-06 (ALTHEA — seconde dictée : le Système)** — Paul change la nature
+  du quadrant : ALTHEA devient **un Système, style Solo Leveling**. Un
+  **avatar** portant **un titre** qui compte (« j'ai un titre important »), des
+  **quêtes principales / secondaires / de fond**, des quêtes **générées** par le
+  système avec leurs **allongements** « au fur et à mesure », des
+  **récompenses**, des skills qu'on **débloque**, des **quêtes qui donnent des
+  skills**, des **rappels automatiques d'entraînement**, des **widgets d'écran
+  d'accueil**. Consigne : *« un travail d'étude, analyse et cadre bien tout ça »*,
+  *« va chercher loin »*, **« un système complet, à la fois proactif et passif »**.
+  Cadrage complet réécrit : `CADRAGE-ALTHEA.md` (5 parties) + maquette
+  `design/preview-althea-systeme.html`. **Zéro code produit, zéro migration.**
+  - 🔻 **RÈGLE MAJEURE — le Système n'est PAS un personnage, c'est un
+    INSTRUMENT.** Le principe verrouillé du 2026-07-16 (« l'agent unique
+    d'Ultima est Léo ») allait sauter : un Système qui converse est une seconde
+    voix. Résolution : **le Système n'a pas d'avis, il ANNONCE** — des gabarits
+    fixes en clair dans le code, `[ RANG ATTEINT — LA CONSTANCE ]`. **Léo
+    compose** (elle connaît Paul), **le Système annonce**. Bénéfices non
+    anticipés mais décisifs : toutes les annonces deviennent **gratuites,
+    hors-ligne et testables au harnais** ; seule la composition d'une quête
+    coûte un appel IA, donc **une seule chose est à borner**.
+  - 🔻 **La collision la plus dangereuse : « quête principale » contre ZEKROM et
+    DRAUKHAIN.** Un grand objectif de vie a DÉJÀ deux maisons dans Ultima.
+    Laisser le jeu s'en remplir, c'est reconstruire un tiers d'Ultima dedans et
+    obtenir **deux vérités contradictoires** sur ce que Paul veut. Frontière
+    écrite : **une quête ALTHEA ne porte QUE de l'entraînement de soi** ; une
+    quête principale **référence** un idéal ZEKROM / un serment DRAUKHAIN, elle
+    ne le recopie pas. *« Ton idéal entre dans l'arène »* — c'est ce qui donne
+    au jeu sa gravité au lieu de le faire flotter à côté du réel.
+  - 🔻 **Le widget iPhone n'existe pas — vérifié AVANT d'être promis.** iOS
+    n'accorde **aucune tuile-widget** à une application web. Ce qui est réel :
+    la PWA installée + **le badge chiffré sur l'icône** (`setAppBadge`), qui est
+    presque mot pour mot ce que Paul décrivait (« 4 à continuer »). Voie
+    alternative pour un vrai widget : l'app tierce **Scriptable** + une route
+    signée — **prix dit franchement** : ce serait la première clé d'Ultima posée
+    hors de sa propre session. *Une étude qui promet ce que la plateforme
+    refuse n'est pas une étude, c'est une vente.*
+  - **Rappels** : faisables (PWA installée + service worker + Web Push VAPID +
+    cron). **Rien de tout ça n'existe** aujourd'hui (aucun service worker, aucun
+    cron dans `vercel.json`). Le cron est une **gate coût** → décision de Paul.
+    Règle absolue posée : **une notification ne nomme JAMAIS un geste** (elle
+    s'affiche sur l'écran verrouillé, devant n'importe qui).
+  - **Proactif/passif défini au lieu d'être invoqué** : le passif doit être
+    **beau à retrouver après deux semaines d'absence**, jamais accusateur ; le
+    proactif obéit à une **loi des interpellations** — une par jour maximum,
+    toujours actionnable, jamais culpabilisante, coupable en un geste, et le
+    silence est une réponse valide.
+  - **Graphisme, « chercher loin »** : la vraie trouvaille est que Solo Leveling
+    et Ultima **partagent déjà la grammaire** (capitales espacées, cartouche,
+    voix rituelle, blocs de stats) — **il ne manquait que l'apparition et la
+    nuit**. D'où la thèse **« l'antique vu de nuit »** : ALTHEA est la seule page
+    d'Ultima sur fond nocturne ; **l'or reste l'or pour ce qui est GAGNÉ, le bleu
+    spectral est réservé à la VOIX du Système** et n'existe nulle part ailleurs.
+  - 🔻 **La mesure a encore trouvé ce que l'œil ne pouvait pas voir** : sur la
+    maquette, les anneaux de progression se dessinaient **à 700 px hors du
+    viewBox de 380** — donc invisibles. Cause : en SVG, `transform-origin:
+    center` se rapporte au **viewBox** (valeur initiale de `transform-box`), pas
+    à l'élément ; il faut `transform-box: fill-box`. Trouvé par `getBBox()` vs
+    `viewBox`, jamais à l'œil. Contrastes des DEUX formes mesurés au passage :
+    tous **AA**, y compris le texte secondaire (4.91 au plus bas).
+  - **Séquencement acté en CINQ boucles** (B1 le personnage et ses skills · B2
+    le journal des quêtes · B3 la composition par Léo · B4 l'interpellation ·
+    B5 le widget), parce que les vouloir ensemble, c'est n'en finir aucune.
+
+- **2026-08-06 (ALTHEA — les cinq arbitrages qui ferment B0)** — Paul tranche :
+  **forme B** (le Système spectral) · **Léo pilote le Système** · **ALTHEA est
+  autonome** · **les skills viennent de Paul OU de Léo en récompense de quête**
+  · **endormissement + un peu de sévérité** · **3ᵉ cadran d'ULTIMA Lv3**.
+  Cadrage mis à jour, maquette passée en forme unique. B0 **CLOS**.
+  - 🔻 **DEUX réponses sur cinq ont CORRIGÉ le cadrage au lieu de le
+    confirmer** — et ce sont les deux qui comptent.
+    ① **« On garde Léo dans le Système, c'est Léo qui pilote. »** J'avais sauvé
+    le principe de l'agent unique en faisant du Système un **instrument**
+    impersonnel. Correct sur le fond, **incomplet** : Paul veut Léo **visible et
+    aux commandes**, pas cachée derrière une machine. Il écrit lui-même « Léo
+    (le système) ». Formulation retenue : **le Système, c'est Léo en tenue de
+    jeu** — deux registres de parole (elle *conseille* dans son cartouche, elle
+    *proclame* entre crochets), **une seule voix**. Conséquence d'écran : le
+    cartouche de Léo est **obligatoire** dans ALTHEA.
+    ② **« Je ne veux pas forcément de liens avec le reste d'Ultima : c'est un
+    jeu pour la vie quotidienne, très réel et concret. »** J'avais résolu la
+    collision « quête principale vs ZEKROM/DRAUKHAIN » par **un lien** (la
+    quête référence un idéal). Paul choisit l'inverse : **l'autonomie**. La
+    frontière tient désormais par la **nature** de ce qu'on y met, pas par une
+    référence — **test d'appartenance : est-ce que ça se coche un soir ?** Si ça
+    se médite, c'est ailleurs. Colonnes `ideal_id`/`serment_id` supprimées.
+    *Bénéfice non cherché et considérable : **ALTHEA devient livrable seul**,
+    sans qu'aucun autre quadrant n'ait à bouger.*
+  - 🔻 **LA SÉVÉRITÉ — « ok pour l'endormissement, mais aussi un peu de
+    sévérité si je rate trop souvent ».** Le défi : mordre sans violer « le
+    silence n'est pas une faute ». **La ligne qui rend les deux compatibles :
+    la sévérité ne vient JAMAIS du Système, elle vient d'un engagement que Paul
+    a pris.** On ne peut manquer que ce qu'on a **accepté**. Mécanisme : **LE
+    GEL** — trois quêtes acceptées puis laissées (ni reprises ni rangées) et le
+    Système se ferme : plus aucune quête proposée (*on ne charge pas une table
+    déjà pleine*), le titre **suspendu** et remplacé par **« En dette »**, la
+    lumière qui tombe. **Rien n'est perdu** : rangs, jours nourris, élan, skills
+    débloqués, titres obtenus — intacts. Le gel **touche l'ornement et le flux,
+    jamais l'acquis**, et se lève en un geste par quête. *Une sanction dont on
+    ne peut pas sortir n'est pas une sanction : c'est une raison d'arrêter de
+    jouer.*
+  - **L'origine des skills règle un faux bloquant** : puisque Léo peut en offrir
+    en récompense, **la liste de départ n'a plus besoin d'être complète**. Quatre
+    skills suffisent, **le reste se gagne**. Un skill offert est la plus forte
+    récompense du jeu : elle ne se consomme pas, elle **ouvre**.
+  - 🔻 **Piège de modèle évité** : la tentation d'une colonne `dette` sur
+    l'avatar. Un compteur stocké se désynchronise — et ici il se
+    désynchroniserait **en punissant** (gelé sans raison, ou dégelé à tort).
+    La dette et le gel sont **entièrement dérivés** de l'état des quêtes.
+  - **Place tranchée** : `ultima-perso.enfants = ['grima', 'naga', 'althea']` —
+    ALTHEA ne relève ni de « ce qui est utile » ni de « ce qui fait grandir ».
+
+- **2026-08-06 (ALTHEA — les skills RÉELS, et la troisième correction du modèle)** —
+  Paul dicte ses cinq skills, son personnage, et signale un défaut d'affichage.
+  - 🔻 **LA RÉVÉLATION : un skill n'est pas un compteur, c'est un ÉNONCÉ.**
+    Paul n'écrit pas « japonais : 30 min », il écrit **« le joueur sait parler
+    au moins 2 langues à haut niveau »**. Un skill est **une phrase au présent,
+    sur le joueur**, vraie ou non aujourd'hui. Le compteur n'est plus le but :
+    il est **la preuve que l'énoncé tient**. Champ `enonce` de premier rang.
+  - **Les cinq skills** : **PEAK PERFORMANCE** (« le joueur est au top de sa
+    forme ! » — substance externe, sommeil, écran, alimentation, sport tous les
+    2 jours) · **PIEDS LÉGERS** (« court au moins 10 km par semaine ») ·
+    **TRADUCTEUR** (« sait parler au moins 2 langues à haut niveau » — italien
+    OU espagnol OU japonais, 30 min/jour) · **OMNIVORE** (« peut manger de
+    tout » — légumes chaque jour, 4 repas) · **CONSTANCE** (« se relève toujours
+    après avoir chuté, ne reste pas au sol »).
+  - 🔻 **QUATRE mécaniques qu'aucune spéculation n'avait vues** — cinq exemples
+    réels ont suffi là où trois jours de cadrage n'auraient pas suffi :
+    ① **les CADENCES** — mon modèle ne savait dire que *quotidien* ; il en faut
+    quatre de plus (`tous_les_n_jours`, `volume_semaine`, `duree_jour`,
+    `n_par_jour`). ② **les conditions en OU** (italien/espagnol/japonais) : la
+    règle `un`/`tous` monte d'un cran, au niveau d'un **groupe**. ③ **l'ÉVOLUTION
+    d'un skill** — TRADUCTEUR → TRADUCTEUR UNIVERSEL : c'est **l'arbre de
+    capacités** de la première dictée qui apparaît enfin. ④ **le MÉTA-SKILL** :
+    CONSTANCE ne lit aucun geste, elle lit **l'état des autres skills**.
+  - 🔻 **ACQUIS ≠ TENU — la règle cardinale 2 s'énonce plus précisément.**
+    « Le joueur court 10 km par semaine » est vrai ou faux **cette semaine**. Un
+    skill peut donc **dormir** sans que rien ne soit perdu : rang, semaines
+    tenues, meilleur élan restent gravés. **L'acquis ne se perd jamais ; l'état,
+    lui, respire.** Un skill en sommeil n'est pas une faute — c'est une phrase
+    qui n'est pas vraie aujourd'hui.
+  - ⚠️ **Collision de noms** : le skill **CONSTANCE** contre le rang II **La
+    Constance**. Le skill de Paul gagne ; le rang à renommer (**L'Assiduité**
+    proposé). ✅ **Convergence heureuse au même endroit** : *Constance* — « se
+    relever après avoir chuté » — **est exactement** le titre « Celui qui
+    revient » proposé la veille. Les deux fusionnent au lieu de se doubler.
+  - **Le personnage** : **Paul Gerard, niveau 48, titre *Farsight — celui qui
+    voit loin***. Conséquence : **le titre de départ n'est pas « Sans titre »**
+    et le niveau ne part pas de 1 — Paul entre dans le jeu avec un **socle
+    déclaré**. On n'entre pas dans sa propre vie au niveau 1.
+  - **Les APTITUDES** : Paul annonce un second registre après les skills (« on va
+    les faire »). **Non inventé** — la maquette lui réserve un cadre vide et
+    ANNONCÉ, et la question est posée. *Un cadre vide assumé vaut mieux qu'un
+    remplissage à sa place.*
+  - 🔻 **Défaut d'affichage signalé par Paul, puis MESURÉ** : « chevauchement de
+    caractères au milieu ». Diagnostic chiffré par comparaison des boîtes
+    englobantes — **les chiffres de rang mordaient leur propre anneau de 4 px**
+    (le trait compte : `stroke/2` s'ajoute à la `getBBox`). Corrigé, et **le cap
+    plein Nord écrit désormais vers l'EXTÉRIEUR** de la rose — le faire écrire
+    vers le bas l'amenait sur le cœur. Second défaut trouvé dans la foulée, que
+    personne n'aurait vu : le nom du cap Nord sur deux lignes **sortait du cadre
+    de 3 px** — le SVG écrête **en silence**. *L'œil de Paul a trouvé le
+    symptôme ; seule la mesure a trouvé les deux causes.*
+
+- **2026-08-06 (ALTHEA — Vitruve, et les aptitudes qui trouvent leur place)** —
+  Paul dicte quatre ajustements : **avatar en homme de Vitruve schématisé**
+  (« fais-moi des propals ») · **enlever les élans** de la fiche · **ajouter les
+  aptitudes** · **étiqueter le titre** avant Farsight.
+  - 🔻 **LA TROUVAILLE DE LA DICTÉE — Vitruve EST une carte du corps.** Les deux
+    demandes (l'avatar et les aptitudes) sont arrivées dans la même phrase, et
+    elles se répondent : **l'avatar devient la carte des aptitudes.** Cinq nœuds
+    de lumière sur la figure — tête, poitrine, cœur, ventre, membres — chacun
+    brillant à la mesure de l'aptitude qui y siège. *Le sceau du personnage
+    cesse d'être une illustration : il devient un instrument de lecture.*
+    Trois propositions maquettées (A fidèle, B épuré, **C des aptitudes**, reco).
+  - **Les cinq aptitudes proposées**, une par skill : **ESPRIT** (tête ←
+    Traducteur) · **SOUFFLE** (poitrine ← Pieds légers) · **VOLONTÉ** (cœur ←
+    Constance) · **RACINE** (ventre ← Omnivore) · **VIGUEUR** (membres ← Peak
+    performance). **Règle qui les distingue des skills : un skill se TIENT, une
+    aptitude se DÉRIVE.** Aucune case à cocher, aucune cadence, aucune quête —
+    elle monte toute seule. Aucune valeur stockée : dérivée, comme le niveau et
+    la dette.
+  - 🔻 **La seule chose d'ALTHEA qui ait le droit de BAISSER.** Position posée :
+    une aptitude descend, **lentement**. Ce n'est pas une entorse à « l'acquis ne
+    se perd jamais » — c'est sa contrepartie exacte : *le rang dit ce que tu as
+    FAIT (jamais perdu), l'aptitude dit ce que tu VAUX aujourd'hui.* Un corps
+    qui ne court plus perd son souffle ; il ne perd pas les kilomètres courus.
+  - 🔻 **Défaut trouvé à la mesure, et sa leçon** : la proposition C portait ses
+    libellés **dans** le médaillon — ils se posaient sur le carré et sur le
+    corps, et « SOUFFLE » **sortait du cadre de 21 px**. Sortis du dessin.
+    *Un médaillon de 66 px ne porte pas de texte* — et chaque proposition est
+    désormais montrée **à sa taille réelle ET agrandie** : **un sceau se juge à
+    la taille où il sera vu, pas à celle où il est beau.** Règle à réemployer
+    pour tout blason d'Ultima.
+  - **Les élans quittent la fiche**, sans quitter le jeu : l'élan reste au niveau
+    du **skill**, où il a un sens. La fiche porte Niveau · Skills tenus ·
+    Aptitudes.
+  - **Lecture incertaine signalée, non devinée** : « le titre avant Farsight » lu
+    comme *étiqueter la ligne* (clé TITRE au-dessus). Si Paul voulait un titre
+    porté antérieur à Farsight, c'est à corriger.
+
+- **2026-08-06 (ALTHEA — l'emblème, les stats, et un seul visuel)** — Trois
+  dictées de forme : **« c'est un peu trop gros »** → un seul visuel à deux blocs
+  alignés · **« utilise ça pour l'avatar »** (image d'un disque cranté à lame
+  traversante) · **« il me faut aussi mes stats : force, endurance, agilité,
+  intelligence, charisme »**.
+  - **La mise en page arrêtée** : la fiche reste pleine largeur (Paul l'a
+    validée) ; en dessous, **deux blocs alignés par le haut** — à gauche
+    **l'état des lieux** (cadran, skills, stats : *où j'en suis*), à droite
+    **le Système** (annonce, jour, quêtes, Léo, badge : *ce qui m'attend*).
+    Ce qui a permis de tenir : **un skill = une ligne** (pas une carte), **une
+    stat = UNE ligne de grille** (sa source logée dans la cellule du nom), le
+    cadran resserré 470 → 360 px, et `align-items: start` pour que les blocs
+    gardent leur hauteur propre.
+  - **Les stats de Paul remplacent les cinq aptitudes que Léo proposait**
+    (Esprit/Souffle/Volonté/Racine/Vigueur). Le registre RPG classique se
+    comprend sans explication. **La règle ne bouge pas : un skill se TIENT, une
+    stat se DÉRIVE** — aucune valeur stockée.
+  - 🔻 **Le lien skill → stat passe de un-à-un à PLUSIEURS-À-PLUSIEURS.** Mes
+    cinq aptitudes épousaient exactement les cinq skills : symétrie confortable,
+    et **fausse**. *Pieds légers* nourrit l'endurance **et** l'agilité ; *Peak
+    performance* la force **et** l'endurance. Coût : une table de liaison au lieu
+    d'une colonne. *Une symétrie trop belle est un signe qu'on a plié le réel.*
+  - 🔻 **LE CREUX — la meilleure trouvaille de la dictée.** Aucun des cinq skills
+    ne nourrit le **charisme**. Deux options : masquer la stat, ou **la montrer
+    vide et le dire**. Retenu : le Système l'affiche à zéro et l'annonce.
+    **Un creux visible est une invitation ; un creux masqué est un oubli.**
+    C'est peut-être le meilleur usage du Système — il ne compte pas seulement ce
+    que Paul fait, **il montre ce qu'il ne fait pas**, sans le lui reprocher.
+  - **Le sceau** : les trois Vitruve sont **abandonnés**. L'emblème de Paul est
+    **redessiné, pas intégré** — le fichier n'est pas au dépôt et une maquette ne
+    charge aucune ressource externe (CSP). Géométrie reprise, palette d'ALTHEA
+    (or pour le corps, spectral pour la lame). **L'œil au centre passe DEVANT la
+    lame** : c'est le titre qui le dicte — *Farsight, celui qui voit loin*. Le
+    sceau dit le titre.
+  - 🔻 **DÉFAUT DE MÉTHODE, à retenir** : la compaction des stats avait été
+    écrite une première fois **sans effet** — la substitution de texte n'avait
+    pas trouvé sa cible et **avait échoué en silence**. Résultat visible :
+    « FORCEPEAK PERFORMANCE · OMNIVORE » en capitales collées. **Une substitution
+    sans assertion est un changement qui n'a peut-être pas eu lieu.** Deux
+    parades adoptées : toute réécriture automatique **assert** que sa cible
+    existe, et le harnais vérifie **le résultat rendu** (la source est-elle sur
+    sa propre ligne ?) et non la présence de la règle CSS.
+
+- **2026-08-06 (ALTHEA — les stats passent par le NIVEAU, et une trouvaille meurt)** —
+  Paul tranche : *« laisse Constance, c'est un skill »* · **« les stats sont
+  arbitraires, elles augmentent avec les niveaux — chaque niveau fait gagner un
+  point partout »** · *« emblème ok »* · les deux recouvrements validés.
+  - 🔻 **UNE RÈGLE DE PAUL TUE UNE MÉCANIQUE DE LÉO, ET C'EST BIEN.** J'avais
+    fait **dériver** chaque stat des skills qui la nourrissent, et j'en avais
+    tiré une trouvaille dont j'étais content : *« aucun skill ne nourrit ton
+    charisme — un creux visible est une invitation »*. **La règle de Paul la tue
+    net** : si chaque niveau donne +1 partout, aucune stat ne peut rester à
+    zéro. Retirée sans être défendue. *Ce qu'on a trouvé de beau n'est pas un
+    argument contre ce que Paul veut.*
+  - **Ce que sa règle apporte en échange, et qui vaut mieux** : la lecture est
+    immédiate (personne n'a besoin qu'on lui explique « +1 par niveau »), il n'y
+    a **rien à calculer donc rien qui puisse mentir**, et surtout — **ce qui
+    distingue Paul, c'est son SOCLE**. *Le niveau le fait monter, il ne le
+    dessine pas.* Une stat = `socle` (posé par Paul) + `niveau`.
+  - 🔻 **Déplacement majeur : le NIVEAU devient le cœur du jeu.** Hier il n'était
+    qu'un affichage dérivé ; aujourd'hui **tout passe par lui** — skills et
+    quêtes → niveau → +1 à toutes les stats. **D'où une question qui n'existait
+    pas et qui est maintenant centrale : qu'est-ce qui fait monter un niveau ?**
+    Sans réponse, les stats ne bougeront jamais. Proposition : un palier de skill
+    franchi = +1 · une quête accomplie = +1. *Un changement de règle peut créer
+    une question centrale là où il n'y avait rien — c'est ça qu'il faut chercher
+    après chaque dictée, pas seulement ce qu'elle modifie.*
+  - **La table `althea_skill_stat`**, envisagée une heure plus tôt, **n'a plus
+    lieu d'être** : aucun skill ne nourrit une stat en particulier.
+  - **Le rang II devient L'ASSIDUITÉ** — le skill *Constance* de Paul garde son
+    nom. Échelle : L'Éveil · L'Assiduité · L'Endurance · La Maîtrise · Le Renom.
+  - **Validés** : le sport apparaît **volontairement** deux fois (cadence chez
+    *Peak performance*, volume chez *Pieds légers*) · **« alimentation ok » =
+    *Omnivore*** (second méta-lien du jeu, après *Constance*) · **la gravure de
+    l'emblème** tient lieu de sceau.
+
+- **2026-08-06 (ALTHEA — « embrassables du même coup d'œil », et la boucle se ferme)** —
+  Paul rappelle une consigne **à moitié appliquée** : *« je t'avais pas dit de
+  mettre le cadran du profil et celui des quêtes sur la même ligne ? que les deux
+  soient embrassables du même coup d'œil »*. Il avait raison sur les deux points :
+  ① la fiche restait une **bannière séparée au-dessus**, donc le profil n'était
+  pas sur la même ligne que les quêtes ; ② chaque bloc faisait **plus de
+  1 200 px** — on ne les embrassait pas, on les déroulait. Et il valide la montée
+  de niveau proposée.
+  - 🔻 **« Embrassable du même coup d'œil » EST un critère chiffrable** — et tant
+    qu'il n'est pas chiffré, il n'est pas tenu. Traduction retenue : *les deux
+    blocs commencent à la même ordonnée, et le plus haut tient sous 900 px*.
+    Résultat mesuré : **PROFIL 636 px · QUÊTES 872 px**, même ordonnée. Chaque
+    coupe a été **mesurée avant d'être décidée** (la fiche en en-tête : −90 ; les
+    stats en rangée : −130 ; un skill sur une ligne : −110 ; une quête de 114 à
+    72 px : −170 ; la note d'écran d'accueil sortie des blocs : −80).
+  - 🔻 **RÈGLE DE FORME NOUVELLE, valable pour tout Ultima — un dessin qu'on
+    réduit jusqu'à rendre son texte illisible n'est pas un dessin réduit, c'est
+    un dessin perdu.** Le cadran, tassé à 270 px pour entrer dans la colonne,
+    rendait ses étiquettes à **5,6 px à l'écran** (mesuré : `taille SVG ×
+    échelle`, 9,5 × 0,587). Il est **retiré du visuel principal** — la liste des
+    skills disait déjà tout ce qu'il disait, en lisible. **Seuil adopté : 9 px de
+    rendu**, vérifié au harnais sur tout le visuel (zéro texte en dessous).
+    *On mesure la taille de rendu du TEXTE, pas la largeur du cadre.*
+  - ✅ **La boucle du jeu est fermée** (« ok pour tes reco de montée de niv ») :
+    les gestes nourrissent les skills · les skills franchissent des paliers ·
+    **un palier franchi = +1 niveau · une quête accomplie = +1 niveau** · le
+    niveau donne **+1 à toutes les stats**. Plus aucun maillon manquant.
+  - **Socles validés** tels que proposés (14 · 10 · 9 · 21 · 16), modifiables.
+  - **Deux cadrans nommés** : **LE PROFIL** (qui je suis, où j'en suis) et
+    **LES QUÊTES** (ce qui m'attend).
+
+- **2026-08-06 (ALTHEA — B1 LIVRÉ : le personnage, ses skills, ses stats)** —
+  Paul dit « go pour la suite » et « propre vue en grand » pour le cadran.
+  B1 livré : moteur pur, migration écrite (non appliquée), API, front, la vue du
+  cadran, trois harnais neufs. **Le cœur du quadrant est un module ES PUR**
+  (`js/althea-progression.mjs`) : cadences, jours tenus, élan, rangs, niveau,
+  stats — aucune I/O, donc éprouvable **sans base ni navigateur**. Les règles
+  cardinales n'y sont pas commentées, elles y sont **exécutées**.
+  - 🔻 **UN TEST A TRANCHÉ UNE SÉMANTIQUE QUE JE N'AVAIS PAS VUE.** Une cadence
+    « tous les 2 jours » dont la fenêtre est vide : `false` ou `null` ? J'avais
+    écrit le test en attendant `false`. Le code répondait `null` — et **c'est le
+    code qui avait raison** : répondre `false` ferait retomber l'élan sur un
+    simple silence, exactement ce que la règle ① interdit. *La cadence sert à
+    faire COMPTER un jour couvert par une séance récente, jamais à fabriquer un
+    échec.* Le test a été corrigé, pas le moteur. *Écrire le harnais force à
+    trancher des questions qu'on ne se pose pas en écrivant le code.*
+  - 🔻 **UN HARNAIS VERT SUR UNE PAGE MORTE — le piège le plus dangereux.**
+    Ma fausse session stubait `window.supabase` en `addInitScript` ; or le
+    vendor s'installe **après** et écrasait le stub. Sans la vérification du
+    rendu réel, j'aurais eu des verdicts verts sur une page qui n'affichait
+    rien. Motif de la maison adopté (semer un jeton en `localStorage`, laisser
+    le VRAI client le lire) : *stuber la dépendance ment ; semer l'état exerce.*
+  - 🔻 **LA PAGE SE RÉTRACTAIT À 292 px.** `css/styles.css` met le `body` en
+    `display:flex` ; sans `width:100%`, ALTHEA se réduisait à la largeur de son
+    contenu — et le cadran y tombait à **5,4 px de texte**. Trouvé UNIQUEMENT
+    parce que le harnais mesure la **taille de rendu du texte** (`taille SVG ×
+    échelle`) et pas la largeur du cadre. La règle du matin a payé le jour même.
+  - 🔻 **TROIS HARNAIS EXISTANTS COMPTAIENT EN DUR** (« ULTIMA a 2 cadrans »,
+    « 2 aiguilles », « 2 blasons ») et tombaient tous les trois à l'arrivée
+    d'ALTHEA. Réécrits pour **se comparer au REGISTRE** au lieu d'un nombre
+    écrit à la main. *Un test qui compte en dur se refait à chaque dictée ; un
+    test qui compare à la source de vérité tient.* Enrichis, jamais affaiblis.
+  - **Le schéma porte les règles**, pas seulement l'interface : `tenu` NOT NULL
+    (le troisième état est **l'absence de ligne**), unicité (owner, condition,
+    jour), croissance stricte des cinq seuils contrainte en CHECK — un palier IV
+    inférieur au III rendrait le rang non monotone et la règle ② tomberait.
+  - 🔻 **`check (jour <= current_date)` est IMPOSSIBLE** : `current_date` n'est
+    pas immutable, Postgres refuse. La seule voie correcte est un **trigger** —
+    documenté en toutes lettres dans la migration pour que la prochaine personne
+    qui voudra « simplifier en CHECK » lise pourquoi ça ne peut pas marcher.
+  - **Rien n'est stocké qui puisse redescendre** : ni rang, ni élan, ni jours
+    tenus, ni valeur de stat, ni niveau. Tout est dérivé du module pur.
+  - ⏳ **Actions humaines** : appliquer `0022` (gate) · jouer
+    `supabase/seed-althea-paul.sql` avec l'`owner_id` de Paul.
+
+- **2026-08-06 (ALTHEA — migration 0022 APPLIQUÉE, seed joué, et un défaut grave attrapé au dernier moment)** —
+  Paul lève la gate : « applique les étapes 1 et 2 ». Migration appliquée, seed
+  joué. **ALTHEA est vivant** : 5 tables, RLS sur les cinq, **20 policies toutes
+  ancrées sur `(select auth.uid())`**, aucun advisor nouveau. En base : le
+  personnage (Paul Gerard, niveau 48, *Farsight*), 5 stats, **6 skills** dont un
+  verrouillé (*Traducteur universel*), un méta (*Constance*) et une évolution
+  câblée, 10 conditions dont les 3 langues **dans un seul groupe** (le OU).
+  - 🔻 **LE DÉFAUT DU JOUR, ET LA RÈGLE QU'IL DONNE.** Le trigger de garde
+    écrivait `new.jour > (pg_catalog.current_date)`. Or **`current_date` est un
+    MOT-CLÉ SQL, pas une fonction qualifiable** : le trigger levait une erreur
+    **à chaque insertion**. Aucun relevé n'entrait — ALTHEA aurait été livré avec
+    des cases impossibles à cocher. Le réflexe fautif était juste dans son
+    intention (figer le search_path, invariant 0002) mais appliqué à un objet
+    qui n'est pas résolu par nom.
+  - 🔻 **ET LE TEST « JOUR FUTUR REFUSÉ » PASSAIT AU VERT** — pour la mauvaise
+    raison : **tout** était refusé. Seul le test symétrique — *« et le jour
+    COURANT, passe-t-il ? »* — l'a démasqué.
+    **⚠️ RÈGLE PERMANENTE : TOUT REFUS DOIT ÊTRE ÉPROUVÉ AVEC SON
+    CONTRE-EXEMPLE.** Un refus sans contre-exemple ne prouve pas qu'on a fermé
+    la bonne porte : il prouve seulement qu'une porte est fermée. C'est la leçon
+    0020/0021 (« tester par le refus, cas NULL d'abord ») poussée d'un cran —
+    *tester par le refus **ET** par l'acceptation*.
+  - **Correctif** : migration **0023**, appliquée dans la foulée. **0022 est
+    laissée telle quelle**, avec un avertissement en tête : *une migration
+    appliquée ne se réécrit jamais* — on empile, on ne récrit pas l'histoire.
+  - **Neuf contraintes éprouvées sur la base RÉELLE**, dans une transaction
+    annulée (aucune ligne de test n'a survécu) : jour futur refusé · jour courant
+    accepté · rattrapage à 30 jours accepté · doublon du même jour refusé ·
+    `tenu` NULL refusé · paliers non croissants refusés · cadence chiffrée sans
+    seuil refusée · `quotidien` **avec** seuil refusée · évolution réflexive
+    refusée.
+  - **Plus aucune action humaine en attente.** Paul peut cocher.

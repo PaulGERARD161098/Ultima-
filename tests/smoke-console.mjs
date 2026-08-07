@@ -97,16 +97,24 @@ verifier('Cartouche invisible et muet au repos',
   await page.locator('#boussole-parole').evaluate((el) =>
     getComputedStyle(el).visibility === 'hidden' && el.textContent.trim() === ''));
 
-// Les 2 macro-quadrants, dans l'ordre du registre (dictée 2026-08-01).
+// Les cadrans d'ULTIMA, dans l'ordre du registre.
+//   2026-08-01 : GRIMA « ce qui est utile » et NAGA « ce qui fait grandir ».
+//   2026-08-06 : ALTHEA en TROISIÈME, hors des deux devises — Paul l'a voulu
+//   « tout seul, c'est un autre système ». Le nombre n'est donc plus figé à
+//   deux : ce qu'on vérifie, c'est que le rendu SUIT le registre, quel que
+//   soit le nombre de cadrans. Un test qui compte en dur se refait à chaque
+//   dictée ; un test qui compare à la source de vérité tient.
 const attendus = capsDe('ultima-perso').map((c) => c.nom);
 const noms = (await page.locator('.cap .cap-nom').allTextContents()).map((n) => n.trim());
-verifier('2 macro-quadrants rendus', noms.length === 2, `trouvés: ${JSON.stringify(noms)}`);
-verifier('GRIMA puis NAGA (ordre du registre)', JSON.stringify(noms) === JSON.stringify(attendus)
-  && attendus[0] === 'GRIMA' && attendus[1] === 'NAGA', `lu: ${JSON.stringify(noms)}`);
+verifier('les cadrans rendus = ceux du registre',
+  JSON.stringify(noms) === JSON.stringify(attendus), `trouvés: ${JSON.stringify(noms)}`);
+verifier('GRIMA, NAGA, puis ALTHEA (ordre du registre)',
+  JSON.stringify(attendus) === JSON.stringify(['GRIMA', 'NAGA', 'ALTHEA']),
+  `lu: ${JSON.stringify(attendus)}`);
 
-// Les deux cadrans sont cliquables et ouvrent leur propre boussole.
+// Chaque cadran est cliquable et ouvre sa porte.
 const hrefs = await page.locator('a.cap').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
-for (const attendu of ['grima.html', 'naga.html']) {
+for (const attendu of ['grima.html', 'naga.html', 'althea.html']) {
   verifier(`Porte ouverte vers ${attendu}`, hrefs.includes(attendu), JSON.stringify(hrefs));
 }
 verifier('Aucun cap inerte (aria-disabled / à venir)',
@@ -125,7 +133,10 @@ verifier('NAGA — badge « Ce qui fait grandir »', (await etatDe('naga')) === 
 verifier('Cœur gravé au centre', (await page.locator('.boussole-coeur svg').count()) === 1);
 const legende = (await page.locator('.boussole-legende').textContent())?.trim();
 verifier('Légende gravée = celle du registre', legende === NOEUDS['ultima-perso'].legende, `lu: ${legende}`);
-verifier('2 aiguilles tracées', (await page.locator('.boussole-aiguilles .aiguille').count()) === 2);
+// Une aiguille par cadran — la géométrie suit le registre, pas un nombre écrit.
+verifier('une aiguille par cadran',
+  (await page.locator('.boussole-aiguilles .aiguille').count()) === attendus.length,
+  `${attendus.length} attendues`);
 
 // Retour vers la racine (pièce ① du patron).
 verifier('Retour vers la boussole racine',
@@ -143,7 +154,8 @@ verifier('Survol GRIMA : la parole de Léo se dépose',
 // Blasons étiquetés (aria-label) — un par cadran, aucun SVG de cap dans la page.
 const blasons = await page.locator('.cap-blason-svg').evaluateAll((els) =>
   els.map((e) => e.getAttribute('aria-label')));
-verifier('2 blasons étiquetés (aria-label)', blasons.length === 2 && blasons.every((l) => l && /Blason/i.test(l)),
+verifier('un blason étiqueté par cadran',
+  blasons.length === attendus.length && blasons.every((l) => l && /Blason/i.test(l)),
   JSON.stringify(blasons));
 
 // Focus clavier visible sur un cadran ouvrable.

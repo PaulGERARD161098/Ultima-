@@ -114,10 +114,28 @@ console.log('— A. ULTIMA : 2 cadrans, puis les 5 portes via GRIMA / NAGA —')
   await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
   const hrefs = await page.locator('a.cap').evaluateAll((els) =>
     els.map((e) => e.getAttribute('href')));
-  verifier('2 cadrans ouvrables sur ULTIMA', hrefs.length === 2, JSON.stringify(hrefs));
-  for (const attendu of ['grima.html', 'naga.html']) {
+  // ALTHEA rejoint GRIMA et NAGA le 2026-08-06 (3ᵉ cadran, hors des deux
+  // devises). On compare au REGISTRE plutôt qu'à un nombre écrit en dur : un
+  // test qui compte à la main se refait à chaque dictée de Paul.
+  const portesAttendues = capsDe('ultima-perso').map((c) => c.cible);
+  verifier('les cadrans ouvrables = ceux du registre',
+    JSON.stringify(hrefs) === JSON.stringify(portesAttendues), JSON.stringify(hrefs));
+  for (const attendu of ['grima.html', 'naga.html', 'althea.html']) {
     verifier(`Porte ${attendu}`, hrefs.includes(attendu));
   }
+  // Le repli <noscript> doit lister TOUS les caps du registre. ALTHEA y avait
+  // été oublié à son arrivée : sans JS, il était inatteignable. On compare donc
+  // à la source de vérité, pas à une liste écrite à la main.
+  const noscript = await page.evaluate(() => {
+    const n = document.querySelector('noscript');
+    if (!n) return [];
+    const d = document.createElement('div');
+    d.innerHTML = n.textContent;
+    return [...d.querySelectorAll('a')].map((a) => a.getAttribute('href'));
+  });
+  verifier('Repli <noscript> : tous les caps du registre y sont',
+    portesAttendues.every((c) => noscript.includes(c)),
+    `noscript: ${JSON.stringify(noscript)}`);
   verifier('Aucun cap inerte restant',
     (await page.locator('.cap[aria-disabled], .cap--avenir').count()) === 0);
 

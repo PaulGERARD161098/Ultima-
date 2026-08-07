@@ -41,12 +41,27 @@ verdicts.renoboostSousAlpha = parentDe('renoboost-ia') === 'alpha';
 verdicts.cheminTaoComplet = JSON.stringify(chemin('reshiram'))
   === JSON.stringify(['racine', 'ultima-perso', 'naga', 'tao', 'reshiram']);
 
-// ---------- 3 bis. Les macro-quadrants dictés par Paul (2026-08-01) ----------
-// ULTIMA ne montre plus que DEUX cadrans cliquables : GRIMA « Ce qui est
-// utile » (RIVEN, NICOL BOLAS) et NAGA « Ce qui fait grandir » (IMLADRIK,
-// ADRAMELECH, TAO) — chacun est une vraie boussole avec sa coque.
-verdicts.ultimaDeuxCadrans = JSON.stringify(NOEUDS['ultima-perso'].enfants)
-  === JSON.stringify(['grima', 'naga']);
+// ---------- 3 bis. Les cadrans d'ULTIMA ----------
+// 2026-08-01 : deux macro-quadrants — GRIMA « Ce qui est utile » (RIVEN, NICOL
+// BOLAS) et NAGA « Ce qui fait grandir » (IMLADRIK, ADRAMELECH, TAO), chacun
+// une vraie boussole avec sa coque.
+// 2026-08-06 : Paul ajoute un TROISIÈME cadran, ALTHEA — et il ne se range sous
+// AUCUNE des deux devises (« tout seul : c'est un autre système, c'est plutôt
+// un jeu qu'autre chose »). C'est ce que ce verdict défend : ALTHEA au même
+// étage que les deux autres, jamais dessous.
+verdicts.ultimaTroisCadrans = JSON.stringify(NOEUDS['ultima-perso'].enfants)
+  === JSON.stringify(['grima', 'naga', 'althea']);
+verdicts.altheaHorsDesDeuxDevises = !NOEUDS.grima.enfants.includes('althea')
+  && !NOEUDS.naga.enfants.includes('althea')
+  && parentDe('althea') === 'ultima-perso';
+// ALTHEA n'a qu'une porte → il reste une FEUILLE (règle §2.1 : est une boussole
+// tout nœud qui a au moins DEUX enfants). Le jour où un second cap naît (le
+// cadran en grand, le palmarès), il prendra la forme boussole sans rien casser.
+verdicts.altheaEstUneFeuille = !NOEUDS.althea.enfants
+  && NOEUDS.althea.cible === 'althea.html'
+  && Boolean(NOEUDS.althea.blason);
+verdicts.cheminAlthea = JSON.stringify(chemin('althea'))
+  === JSON.stringify(['racine', 'ultima-perso', 'althea']);
 verdicts.grimaRegroupeUtile = JSON.stringify(NOEUDS.grima.enfants)
   === JSON.stringify(['riven', 'nicol-bolas'])
   && NOEUDS.grima.cible === 'grima.html' && estBoussole('grima');

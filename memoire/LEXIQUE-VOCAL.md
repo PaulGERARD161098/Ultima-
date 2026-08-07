@@ -95,3 +95,106 @@ reformuler et demander — jamais deviner avant une action irréversible.
   part dans le repo, Léo l'avait cherché en vain). Les deux entrées du cap
   MINETHNIR : `…/ecrire.html` (**la capture**, celle à poser sur l'écran
   d'accueil de l'iPhone) et `…/minethnir.html` (**l'atelier posé**).
+
+- **ALTHEA** (quadrant dicté par Paul le 2026-08-06) = le suivi **ludique** des
+  performances physiques et psychiques — un **cadran**, pas une boussole.
+  Vocabulaire propre au quadrant, à réutiliser tel quel :
+  - **un SKILL** = ce qui porte un nom, un rang et des paliers, et qui monte
+    (*peak performance*, *japonais*). **À ne jamais confondre avec un TALENT**,
+    qui appartient à RESHIRAM et désigne l'inverse : un savoir-faire **prouvé
+    et statique**. *Skill* = le jeu ; *talent* = le prouvé.
+  - **un GESTE** = ce qu'on coche dans une journée (*pas de tabac*, *30 min de
+    japonais*). Un geste n'a **pas de rang** : il nourrit son skill.
+  - **un jour nourri** = le jour qui compte pour le rang. **L'élan** = la série
+    en cours (elle respire, elle ne détruit rien). Les cinq rangs :
+    L'Éveil · La Constance · L'Endurance · La Maîtrise · Le Renom.
+  - **Exception de langue actée** : ALTHEA est le seul endroit d'Ultima où
+    l'anglais est admis (*skill*), parce que c'est le seul endroit qui est un
+    jeu. Partout ailleurs, le registre antique français s'applique sans
+    exception.
+
+- **ALTHEA — le vocabulaire du Système** (seconde dictée, 2026-08-06) :
+  - **Le Système** = **un instrument, pas un personnage**. Il **annonce** par
+    gabarits fixes entre crochets — `[ RANG ATTEINT — LA CONSTANCE ]` — il ne
+    converse jamais. **Léo reste la voix unique d'Ultima** : elle compose et
+    conseille, le Système annonce. Ne jamais écrire « le Système te conseille ».
+  - **Une quête** : *principale* (l'arc long, reflet jouable d'un idéal ZEKROM
+    ou d'un serment DRAUKHAIN — elle le **référence**, ne le recopie jamais) ·
+    *secondaire* (bornée, récompensée, souvent proposée par Léo) · **de fond**
+    (la récurrente, celle qui ne s'achève pas — dictée « 4 de fond à continuer »).
+  - **Un allongement** = la quête enfant qui prolonge une quête accomplie. La
+    chaîne ne se voit jamais d'avance : elle se déroule « au fur et à mesure ».
+  - **Une quête ne rate pas : elle S'ENDORT.** Pas de pénalité — une pénalité
+    punirait le silence, que Paul a posé comme non punissable.
+  - **« Celui qui revient »** = le titre qui se débloque en reprenant une garde
+    rompue. Le plus important du catalogue : il récompense exactement ce que
+    tout système de série punit.
+  - **« L'antique vu de nuit »** = la thèse graphique d'ALTHEA. Seule page
+    d'Ultima sur fond nocturne. **L'or pour ce qui est GAGNÉ, le bleu spectral
+    pour ce qui est ANNONCÉ** — un rang ne devient jamais bleu, une annonce
+    jamais or.
+  - **Le badge, pas le widget** : iOS n'accorde aucune tuile-widget à une app
+    web ; ce qui existe, c'est l'icône installée + un chiffre.
+
+- **ALTHEA — le vocabulaire tranché le 2026-08-06 (soir)** :
+  - **Le Système, c'est Léo en tenue de jeu.** Pas une seconde entité : deux
+    registres, une seule voix. Léo **conseille** dans son cartouche (présence
+    obligatoire à l'écran) ; le Système **proclame** entre crochets. Ne jamais
+    écrire « le Système et Léo » comme s'ils étaient deux.
+  - **ALTHEA est AUTONOME** : aucun lien requis avec ZEKROM, DRAUKHAIN ou
+    RESHIRAM. **Test d'appartenance : « est-ce que ça se coche un soir ? »** Si
+    ça se médite, c'est ailleurs. ALTHEA = la vie quotidienne, réelle et concrète.
+  - **LE GEL** = la sévérité. Trois quêtes **acceptées** puis laissées → le
+    Système se ferme, le titre est **suspendu** (« En dette »), la lumière tombe.
+    Il **touche l'ornement et le flux, jamais l'acquis**. La dette ne compte que
+    des **engagements pris** — jamais un jour non renseigné.
+  - **« En dette »** = l'état porté à la place du titre pendant le gel. Ce n'est
+    pas un titre : pas de guillemets, pas d'honneur — un état, réversible.
+  - **La forme d'ALTHEA = le Système spectral** (forme B). Bleu et nuit
+    profonde, l'or en accent. La forme A (nuit et or) a été comparée puis
+    abandonnée.
+
+- **ALTHEA — le vocabulaire des skills réels (2026-08-06)** :
+  - **Un ÉNONCÉ** = la phrase au présent qui définit un skill (« le joueur est
+    au top de sa forme ! »). C'est le cœur du skill ; le compteur n'en est que
+    la preuve. Toujours formulé « **le joueur** … », jamais « tu ».
+  - **Une CADENCE** = le rythme d'une condition : *quotidien*, *tous les N
+    jours*, *volume par semaine* (10 km), *durée par jour* (30 min), *N par
+    jour* (4 repas). « Une case par jour » ne suffit pas à décrire ALTHEA.
+  - **ACQUIS ≠ TENU** : un skill **acquis** l'est pour toujours ; un skill
+    **tenu** l'est aujourd'hui. Un skill peut être **en sommeil** sans que rien
+    ne soit perdu. Ne jamais dire « perdu » d'un skill.
+  - **Une ÉVOLUTION** = un skill qui monte en un skill supérieur (TRADUCTEUR →
+    TRADUCTEUR UNIVERSEL). C'est l'arbre de capacités.
+  - **Un MÉTA-SKILL** = un skill dont les conditions lisent **les autres
+    skills**, pas des gestes (CONSTANCE).
+  - **Le personnage de Paul** : **Paul Gerard, niveau 48**, titre **Farsight**,
+    « celui qui voit loin ». Le niveau et le titre sont un **socle déclaré** —
+    on n'entre pas dans sa propre vie au niveau 1.
+  - **Les APTITUDES** = second registre annoncé par Paul, **non encore défini**.
+    Ne rien inventer dessus.
+
+- **ALTHEA — le vocabulaire de B1 (livré 2026-08-06)** :
+  - **Une CONDITION** (ex-« geste ») = ce qu'on coche dans une journée. Elle
+    porte sa **cadence** et son **groupe** (les conditions d'un même groupe sont
+    en OU). Table `althea_conditions`.
+  - **Un RELEVÉ** = une ligne : un jour, une condition, `tenu` vrai ou faux.
+    **Il n'y a jamais de relevé « vide »** : le troisième état — non renseigné —
+    est **l'absence de ligne**. Ne jamais parler de « relevé nul ».
+  - **« En sommeil »** = l'état d'un skill non tenu aujourd'hui. **Jamais**
+    « raté », « manqué », « échec » ni « perdu » — le harnais interdit
+    littéralement ces mots à l'écran d'ALTHEA.
+  - **Les cinq rangs** : L'Éveil · **L'Assiduité** · L'Endurance · La Maîtrise ·
+    Le Renom. (Le rang II ne s'appelle plus « La Constance » — c'est un skill.)
+  - **Le socle** = ce que Paul déclare (niveau 48, et un entier par stat). Le
+    niveau le fait monter, **le socle le dessine**.
+
+- **« Éprouver par le refus ET par l'acceptation »** (règle née le 2026-08-06,
+  ALTHEA/0023) = tout garde-fou se teste **dans les deux sens**. Un test qui
+  vérifie seulement qu'une chose est refusée peut passer au vert alors que
+  **tout** est refusé — c'est exactement ce qui est arrivé au refus du jour
+  futur. *Un refus sans contre-exemple ne prouve pas qu'on a fermé la bonne
+  porte : il prouve seulement qu'une porte est fermée.*
+- **`current_date` est un MOT-CLÉ SQL**, pas une fonction : ne jamais écrire
+  `pg_catalog.current_date`. Le search_path figé (invariant 0002) ne le concerne
+  pas — un mot-clé n'est pas résolu par nom.

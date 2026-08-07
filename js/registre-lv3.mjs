@@ -62,7 +62,7 @@ export const NOEUDS = {
     coeur: 'rose',
     legende: 'le personnel',
     cockpit: true,
-    enfants: ['grima', 'naga'],
+    enfants: ['grima', 'naga', 'althea'],
   },
 
   // ======== NIVEAU 1,5 — les macro-quadrants d'ULTIMA (Paul, 2026-08-01) ====
@@ -132,6 +132,20 @@ export const NOEUDS = {
     externe: true,
     resume: 'Projet YCOME, plateforme externe. Le cap est prêt : transmets-moi '
       + 'son URL et je le branche.',
+  },
+
+  // ALTHEA — le 3ᵉ cadran d'ULTIMA (Paul, 2026-08-06). Il ne relève NI de
+  // « ce qui est utile » (GRIMA) NI de « ce qui fait grandir » (NAGA) : c'est
+  // un jeu, et Paul l'a voulu « tout seul, c'est un autre système ». Il vit
+  // donc au même étage que les deux macro-quadrants, sans être rangé sous
+  // aucune devise. FEUILLE (une seule porte, règle §2.1).
+  althea: {
+    nom: 'ALTHEA',
+    etat: 'Le Système',
+    blason: 'althea',
+    cible: 'althea.html',
+    resume: 'Le Système : ton personnage, tes skills, tes stats. Le suivi '
+      + 'ludique de ta vie quotidienne — tu coches, ça monte. Privé.',
   },
 
   // ================= NIVEAU 2 — les quadrants d'ULTIMA ================
