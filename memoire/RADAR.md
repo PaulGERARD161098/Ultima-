@@ -365,3 +365,31 @@
   payer une clé API en croyant qu'elle débloquait la dictée. La prémisse a été
   corrigée **avant** l'engagement, sur la foi de sa propre capture. Réflexe à
   garder : quand Paul s'apprête à dépenser, vérifier ce qu'il croit acheter.
+
+
+- 2026-08-06/07 (ALTHEA, un quadrant en une session) — **deux frictions
+  nouvelles, deux confirmées** :
+  ① **NOUVEAU — un test peut être vert POUR LA MAUVAISE RAISON.** Le refus du
+  jour futur passait, alors que le trigger refusait *tout* (mot-clé SQL pris
+  pour une fonction). Un refus sans contre-exemple ne prouve pas qu'on a fermé
+  la bonne porte : seulement qu'une porte est fermée. → **Tout garde-fou
+  s'éprouve dans les deux sens.** À surveiller : chaque CHECK et chaque trigger
+  déjà en base a-t-il son contre-exemple ? (0016, 0017, 0019, 0020 : à repasser
+  au crible à la prochaine boucle sécurité.)
+  ② **NOUVEAU — un test qu'on oublie de brancher est un test qui n'existe pas.**
+  `tests/lancer.sh` énumère ses harnais à la main ; mes trois fichiers ALTHEA
+  tournaient vert isolément et le patrimoine complet les ignorait. À surveiller :
+  vérifier le branchement **à la création** du harnais, pas à la fusion.
+  ③ **Confirmé, et étendu — la mesure trouve ce que la relecture ne voit pas.**
+  Quatre défauts de plus par la mesure seule, dont une page rétractée à 292 px où
+  le texte tombait à **5,4 px de rendu**. Extension de la règle du 2026-08-01 :
+  on mesure la **taille de rendu du texte** (`taille SVG × échelle`), pas la
+  largeur du cadre. Seuil : **9 px**.
+  ④ **Confirmé — un cadrage se corrige par les réponses de Paul.** Quatre
+  corrections successives du modèle, toutes venues de ses dictées, aucune d'une
+  relecture. Corollaire nouveau : **ce que Léo a trouvé de beau n'est pas un
+  argument contre ce que Paul veut** — la règle « les stats montent avec les
+  niveaux » a tué le « creux du charisme », et c'était la bonne décision.
+  ⑤ **À surveiller — un compteur écrit en dur dans un harnais est une dette.**
+  Cinq assertions comptaient les cadrans d'ULTIMA à la main et sont tombées
+  ensemble. Réflexe à généraliser : **comparer au registre**, jamais à un nombre.

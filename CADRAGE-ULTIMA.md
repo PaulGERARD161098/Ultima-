@@ -6,6 +6,75 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🎮 **SESSION 2026-08-06/07 (ALTHEA — le Système), CLOSE.** PR **#146
+  fusionnée** dans `main` au go de Paul (`f5d8eb6`), patrimoine COMPLET vert à
+  **1 302 assertions**, migrations **0022 + 0023 APPLIQUÉES** et seed joué, rien
+  de non poussé. **Un quadrant neuf, de la dictée d'ouverture à la base peuplée,
+  en une session.**
+  - ✅ **ALTHEA existe** — 3ᵉ cadran d'ULTIMA Lv3 (« tout seul : c'est un autre
+    système, c'est plutôt un jeu qu'autre chose »). Le suivi **ludique** du
+    quotidien : un personnage (*Paul Gerard, niveau 48, Farsight*), cinq stats,
+    cinq skills réels + un verrouillé, dix conditions, un relevé à une case par
+    geste, et le cadran dans **sa propre vue en grand**.
+  - ✅ **B0 — le cadrage a tenu son rôle : il a été CORRIGÉ quatre fois par les
+    réponses de Paul, jamais par une relecture.** ① *« ce qu'il y a dedans »* a
+    révélé les **deux étages** (le skill contient des conditions) ; ② *« pas de
+    liens »* a rendu ALTHEA **autonome** et l'a rendu livrable seul ; ③ les
+    **skills réels** ont fait apparaître l'**ÉNONCÉ**, les **CADENCES**,
+    l'**ÉVOLUTION** et le **MÉTA-SKILL** — quatre mécaniques qu'aucune
+    spéculation n'avait vues ; ④ *« les stats montent avec les niveaux »* a **tué
+    une mécanique dont j'étais content** (le creux du charisme) et mis le
+    **niveau** au centre du jeu. 🔻 *Le cadrage ne se valide pas, il se confronte
+    au réel de Paul — et ce qu'on a trouvé de beau n'est pas un argument contre
+    ce qu'il veut.*
+  - ✅ **Cinq collisions écrites AVANT de construire**, aucune trouvée en codant :
+    le mot (`talents` était pris par RESHIRAM → **skill**), l'objet (DRAUKHAIN
+    est la volonté, ALTHEA la mesure), la forme (un cadran reste une feuille),
+    **l'agent** (le Système n'est pas un second personnage : c'est **Léo en tenue
+    de jeu**, deux registres de parole pour une seule voix), et le **périmètre**
+    (test d'appartenance : *est-ce que ça se coche un soir ?*).
+  - ✅ **La sévérité demandée, conçue sans punir le silence** : le **gel** ne se
+    déclenche que sur des **engagements acceptés**, jamais sur un jour non
+    renseigné ; il coupe le flux et suspend le titre, **il ne touche aucun
+    acquis**, et se lève en un geste par quête.
+  - 🔻 **LE DÉFAUT LE PLUS INSTRUCTIF DE LA SESSION — un test vert pour la
+    mauvaise raison.** Le trigger de garde écrivait `pg_catalog.current_date` ;
+    or `current_date` est un **mot-clé SQL**, pas une fonction qualifiable. Le
+    trigger levait une erreur **à chaque insertion** : aucun relevé n'entrait.
+    Et le test *« un jour futur est-il refusé ? »* **passait au vert** — parce
+    que **tout** était refusé. Seul le test symétrique (*« et le jour courant,
+    passe-t-il ? »*) l'a démasqué. → **RÈGLE : tout refus doit être éprouvé avec
+    son CONTRE-EXEMPLE.** Un refus sans contre-exemple ne prouve pas qu'on a
+    fermé la bonne porte, seulement qu'une porte est fermée. Correctif : `0023`.
+  - 🔻 **Quatre autres défauts, tous trouvés par la MESURE, aucun par
+    relecture** : une **sémantique non tranchée** (une cadence dont la fenêtre
+    est vide vaut `null`, pas `false` — sinon l'élan retombe sur un silence) ·
+    un **harnais vert sur une page morte** (mon stub de `window.supabase`
+    écrasé par le vendor ; le motif de la maison — semer un jeton — l'exerce
+    vraiment) · une **page rétractée à 292 px** par le `body` en flex, où le
+    cadran tombait à **5,4 px de texte** · et un **repli `<noscript>` qui
+    oubliait ALTHEA**, donc inatteignable sans JS.
+  - 🔻 **Cinq harnais existants comptaient EN DUR** (« ULTIMA a 2 cadrans »,
+    2 aiguilles, 2 blasons, 2 portes, le repli noscript) et tombaient tous à
+    l'arrivée d'ALTHEA. **Réécrits pour se comparer au REGISTRE.** *Un test qui
+    compte en dur se refait à chaque dictée ; un test qui compare à la source de
+    vérité tient.* Enrichis, jamais affaiblis.
+  - 🔻 **Mes trois harnais neufs n'étaient PAS branchés** dans `tests/lancer.sh`
+    (liste explicite) : ils passaient au vert à la main et le patrimoine complet
+    les **ignorait en silence**. *Un test qu'on oublie de brancher est un test
+    qui n'existe pas.*
+  - ⏳ **À la main de Paul, non résolu** : Paul ne voyait pas ALTHEA depuis la
+    boussole ULTIMA au moment de clôturer. La cause n'est **pas identifiée** —
+    le harnais prouve que la page rend bien ses trois caps, et le domaine de
+    preview est hors de portée depuis l'environnement de Léo. À vérifier **sur
+    la production**, avec un **rechargement forcé** (piste la plus probable :
+    `js/registre-lv3.mjs` en cache navigateur). Si ça résiste, instrumenter la
+    page plutôt que continuer à supposer.
+  - **La suite est cadrée** : **B2 — le journal des quêtes** (les trois types,
+    l'endormissement, le gel, la montée de niveau qu'une quête accomplie
+    déclenche). Rien n'est à retoucher en base : le scellement `(owner_id, id)`
+    des skills et des conditions attend déjà les FK composites de B2.
+
 - 🔥 **SESSION 2026-08-04 (DRAUKHAIN — la voûte des serments), CLOSE.**
   PR **#141 fusionnée** dans `main` au go de Paul, patrimoine COMPLET vert à
   **1217 assertions**, rien de non poussé. Deux dictées, deux boucles bouclées.
