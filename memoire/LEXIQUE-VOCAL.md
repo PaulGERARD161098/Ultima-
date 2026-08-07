@@ -188,3 +188,13 @@ reformuler et demander — jamais deviner avant une action irréversible.
     Le Renom. (Le rang II ne s'appelle plus « La Constance » — c'est un skill.)
   - **Le socle** = ce que Paul déclare (niveau 48, et un entier par stat). Le
     niveau le fait monter, **le socle le dessine**.
+
+- **« Éprouver par le refus ET par l'acceptation »** (règle née le 2026-08-06,
+  ALTHEA/0023) = tout garde-fou se teste **dans les deux sens**. Un test qui
+  vérifie seulement qu'une chose est refusée peut passer au vert alors que
+  **tout** est refusé — c'est exactement ce qui est arrivé au refus du jour
+  futur. *Un refus sans contre-exemple ne prouve pas qu'on a fermé la bonne
+  porte : il prouve seulement qu'une porte est fermée.*
+- **`current_date` est un MOT-CLÉ SQL**, pas une fonction : ne jamais écrire
+  `pg_catalog.current_date`. Le search_path figé (invariant 0002) ne le concerne
+  pas — un mot-clé n'est pas résolu par nom.

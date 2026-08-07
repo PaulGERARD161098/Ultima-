@@ -2043,3 +2043,36 @@
     tenus, ni valeur de stat, ni niveau. Tout est dérivé du module pur.
   - ⏳ **Actions humaines** : appliquer `0022` (gate) · jouer
     `supabase/seed-althea-paul.sql` avec l'`owner_id` de Paul.
+
+- **2026-08-06 (ALTHEA — migration 0022 APPLIQUÉE, seed joué, et un défaut grave attrapé au dernier moment)** —
+  Paul lève la gate : « applique les étapes 1 et 2 ». Migration appliquée, seed
+  joué. **ALTHEA est vivant** : 5 tables, RLS sur les cinq, **20 policies toutes
+  ancrées sur `(select auth.uid())`**, aucun advisor nouveau. En base : le
+  personnage (Paul Gerard, niveau 48, *Farsight*), 5 stats, **6 skills** dont un
+  verrouillé (*Traducteur universel*), un méta (*Constance*) et une évolution
+  câblée, 10 conditions dont les 3 langues **dans un seul groupe** (le OU).
+  - 🔻 **LE DÉFAUT DU JOUR, ET LA RÈGLE QU'IL DONNE.** Le trigger de garde
+    écrivait `new.jour > (pg_catalog.current_date)`. Or **`current_date` est un
+    MOT-CLÉ SQL, pas une fonction qualifiable** : le trigger levait une erreur
+    **à chaque insertion**. Aucun relevé n'entrait — ALTHEA aurait été livré avec
+    des cases impossibles à cocher. Le réflexe fautif était juste dans son
+    intention (figer le search_path, invariant 0002) mais appliqué à un objet
+    qui n'est pas résolu par nom.
+  - 🔻 **ET LE TEST « JOUR FUTUR REFUSÉ » PASSAIT AU VERT** — pour la mauvaise
+    raison : **tout** était refusé. Seul le test symétrique — *« et le jour
+    COURANT, passe-t-il ? »* — l'a démasqué.
+    **⚠️ RÈGLE PERMANENTE : TOUT REFUS DOIT ÊTRE ÉPROUVÉ AVEC SON
+    CONTRE-EXEMPLE.** Un refus sans contre-exemple ne prouve pas qu'on a fermé
+    la bonne porte : il prouve seulement qu'une porte est fermée. C'est la leçon
+    0020/0021 (« tester par le refus, cas NULL d'abord ») poussée d'un cran —
+    *tester par le refus **ET** par l'acceptation*.
+  - **Correctif** : migration **0023**, appliquée dans la foulée. **0022 est
+    laissée telle quelle**, avec un avertissement en tête : *une migration
+    appliquée ne se réécrit jamais* — on empile, on ne récrit pas l'histoire.
+  - **Neuf contraintes éprouvées sur la base RÉELLE**, dans une transaction
+    annulée (aucune ligne de test n'a survécu) : jour futur refusé · jour courant
+    accepté · rattrapage à 30 jours accepté · doublon du même jour refusé ·
+    `tenu` NULL refusé · paliers non croissants refusés · cadence chiffrée sans
+    seuil refusée · `quotidien` **avec** seuil refusée · évolution réflexive
+    refusée.
+  - **Plus aucune action humaine en attente.** Paul peut cocher.

@@ -317,6 +317,13 @@ create index althea_releves_owner_jour_idx
 -- Le refus du jour futur, par trigger (voir la note ci-dessus).
 -- search_path figé à '' comme set_updated_at (advisor 0011, cf. 0002) : la
 -- fonction ne référence que NEW et des fonctions du catalogue, qualifiées.
+-- ⚠️ CETTE VERSION EST DÉFECTUEUSE — corrigée par la migration 0023.
+--    `pg_catalog.current_date` n'existe pas : `current_date` est un MOT-CLÉ SQL,
+--    pas une fonction qualifiable. Le trigger levait donc une erreur à CHAQUE
+--    insertion, et aucun relevé n'entrait. 0022 est laissée telle quelle (une
+--    migration appliquée ne se réécrit jamais) ; lire 0023 pour le correctif et
+--    pour la règle qu'on en a tirée : **tout refus s'éprouve avec son
+--    contre-exemple**.
 create or replace function public.althea_refuse_jour_futur()
 returns trigger
 language plpgsql

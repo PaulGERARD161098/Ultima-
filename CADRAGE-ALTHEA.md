@@ -1191,13 +1191,56 @@ Quatre défauts, tous attrapés par la mesure — aucun par relecture :
    se refait à chaque dictée de Paul ; un test qui compare à la source de
    vérité tient.*
 
-### 15.3 ⏳ Actions humaines
+### 15.3 La migration et le seed — ✅ APPLIQUÉS le 2026-08-06
 
-- **Appliquer la migration `0022`** — gate Paul, jamais Léo seule.
-- **Jouer le seed** `supabase/seed-althea-paul.sql` avec son `owner_id`, après
-  0022. Sans lui, ALTHEA s'ouvre correctement mais dit « aucun skill posé ».
+Paul a levé la gate (« applique les étapes 1 et 2 »). État constaté en base :
 
-### 15.4 La suite
+| | |
+| --- | --- |
+| Tables `althea_*` | **5**, RLS active sur les cinq |
+| Policies | **20** — quatre par table, toutes ancrées sur `(select auth.uid())` |
+| Advisors sécurité | **aucune alerte nouvelle** (une seule préexistante, sans rapport : protection des mots de passe compromis, alors que Paul se connecte par Google et lien magique) |
+| Personnage | 1 — Paul Gerard, niveau 48, *Farsight* |
+| Stats | 5 |
+| Skills | **6** dont 1 verrouillé (*Traducteur universel*), 1 méta (*Constance*), 1 évolution câblée |
+| Conditions | 10, dont 6 à cadence chiffrée ; les 3 langues **dans un seul groupe** (le OU) |
+| Relevés | 0 — normal : c'est à Paul de cocher |
+
+> 🔻 **UN DÉFAUT GRAVE TROUVÉ PAR LA PREUVE PAR LE REFUS, ET LA RÈGLE QUI EN SORT.**
+>
+> Le trigger de 0022 écrivait `new.jour > (pg_catalog.current_date)`. Or
+> `current_date` est un **mot-clé SQL**, pas une fonction qualifiable : le
+> trigger levait une erreur **à chaque insertion**. Aucun relevé n'entrait —
+> ALTHEA aurait été livré avec des cases impossibles à cocher.
+>
+> **Et le test « un jour futur est-il refusé ? » passait au VERT** — pour la
+> mauvaise raison : tout était refusé. Seul le test symétrique, « et le jour
+> COURANT, passe-t-il ? », l'a démasqué.
+>
+> **⚠️ TOUT REFUS DOIT ÊTRE ÉPROUVÉ AVEC SON CONTRE-EXEMPLE.** Un refus sans
+> contre-exemple ne prouve pas qu'on a fermé la bonne porte : il prouve
+> seulement qu'une porte est fermée. C'est la leçon 0020/0021 (« tester par le
+> refus, cas NULL d'abord ») poussée d'un cran — *tester par le refus **et** par
+> l'acceptation*.
+>
+> Corrigé par la migration **0023**, appliquée dans la foulée. 0022 est laissée
+> telle quelle, avec un avertissement en tête : **une migration appliquée ne se
+> réécrit jamais.**
+
+**Éprouvé après correctif, sur la base réelle, dans une transaction annulée** :
+jour futur → refusé · jour courant → accepté · rattrapage à 30 jours → accepté ·
+doublon du même jour → refusé · `tenu` NULL → refusé · paliers non croissants →
+refusés · cadence chiffrée sans seuil → refusée · `quotidien` **avec** seuil →
+refusée · évolution réflexive → refusée. **Aucune ligne de test n'a survécu.**
+
+### 15.4 ⏳ Actions humaines
+
+- ✅ ~~Appliquer la migration `0022`~~ — **fait** (+ `0023` correctrice).
+- ✅ ~~Jouer le seed~~ — **fait** : le personnage, les 5 stats, les 6 skills et
+  les 10 conditions de Paul sont en base.
+- **Rien ne reste en attente.** ALTHEA est vivant : Paul peut cocher.
+
+### 15.5 La suite
 
 **B2 — le journal des quêtes** : les trois types, le cycle de vie,
 l'endormissement, **le gel** (§6.3bis), le déblocage de skill par une quête, et
