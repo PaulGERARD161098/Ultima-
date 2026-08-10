@@ -2076,3 +2076,26 @@
     seuil refusée · `quotidien` **avec** seuil refusée · évolution réflexive
     refusée.
   - **Plus aucune action humaine en attente.** Paul peut cocher.
+
+### 2026-08-07 — ALTHEA : la devise du Système
+
+- **Paul dicte la devise** : *« I am the record of your struggles, the evidence
+  of your resistance and the reward of your pain »*. Elle s'affiche sous
+  l'en-tête « Le Système », au-dessus de la voix de Léo.
+- **La phrase parle à la première personne** — c'est le Système qui se nomme.
+  Elle tombe donc du bon côté de la règle de couleur du quadrant :
+  `--spectre` (ce qui est **annoncé**), jamais `--or` (ce qui est **gagné**).
+  Le harnais l'éprouve dans les deux sens : *elle est spectre* **et** *elle
+  n'est pas or* — un seul des deux ne prouverait rien.
+- **Une devise se cite au mot près.** Le harnais compare la chaîne exacte, pas
+  un fragment : un test qui cherche « I am the record » resterait vert sur une
+  phrase tronquée.
+- **`lang="en"` n'est pas un ornement** : sans lui, un lecteur d'écran
+  francophone récite cette phrase anglaise avec la prononciation française.
+  Premier cas d'une langue étrangère dans une page d'Ultima — la règle vaut
+  pour les suivantes.
+- **Épigraphe ≠ rubrique.** `.althea-devise` ne réutilise pas
+  `.althea-sous-titre` : l'un est une citation qui se lit d'un trait, l'autre
+  une étiquette de section en capitales. Réutiliser la classe aurait été
+  « capitaliser sur l'existant » de travers — c'est la forme qui devait suivre
+  le sens, pas l'inverse.

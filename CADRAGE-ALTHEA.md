@@ -842,6 +842,31 @@ D20 ✅ Vitruve abandonné · D21 ✅ pas de formule, **socle + niveau** ·
 D22 ✅ le creux du charisme **n'existe plus** (chaque niveau donne +1 partout) ·
 D23 ✅ **la gravure de l'emblème est validée**.
 
+### 12bis. La devise du Système — dictée le 2026-08-07
+
+> *I am the record of your struggles, the evidence of your resistance and the
+> reward of your pain*
+
+Elle se cite **au mot près** : c'est une devise, elle ne se paraphrase pas, elle
+ne se traduit pas. Le harnais l'éprouve sur la chaîne exacte.
+
+Trois choix de rendu, tous contraints par ce que la phrase **est** :
+
+1. **Elle parle à la première personne** — c'est le Système qui se nomme. Donc
+   `--spectre`, la couleur de ce qui est *annoncé*, et **jamais** `--or`, qui
+   est réservé à ce qui est *gagné*. La règle de couleur du quadrant n'a
+   d'exception nulle part, et surtout pas pour sa propre devise.
+2. **Elle est en anglais** dans une page française → `lang="en"`. Sans cet
+   attribut, un lecteur d'écran francophone récite l'anglais à la française.
+3. **Épigraphe, pas rubrique** : elle ne reprend pas `.althea-sous-titre`
+   (capitales, interlettrage large, c'est une étiquette). Une devise se lit
+   d'un trait — bas-de-casse, italique, mesure bornée. Pas de guillemets :
+   l'italique et la couleur marquent déjà la citation, les ajouter serait un
+   ornement qui ne dit rien de plus.
+
+Place : sous l'en-tête **« Le Système »**, avant la voix de Léo. C'est le seul
+endroit où le Système se présente ; c'est là que sa devise a un sens.
+
 ## 13. Les skills de Paul — dictés le 2026-08-06
 
 **Ce ne sont pas des compteurs. Ce sont des ÉNONCÉS.** C'est la révélation de
