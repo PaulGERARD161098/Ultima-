@@ -45,7 +45,12 @@ export const NOEUDS = {
     coeur: 'anneau',
     legende: 'Ultima',
     cockpit: true,
-    enfants: ['ultima-perso', 'alpha'],
+    // ALTHEA siège ICI, à la racine, et non sous la supra-division ULTIMA
+    // (correction Paul, 2026-08-07 : « je veux althea ici »). « 3ᵉ cadran
+    // d'Ultima Lv3 » désignait bien cet écran — la racine — et non la
+    // supra-division qui porte le même nom. Le doublon de nom entre les deux
+    // étages est ce qui a induit le mauvais rangement.
+    enfants: ['ultima-perso', 'alpha', 'althea'],
   },
 
   // ================= NIVEAU 1 — les supra-divisions ==================
@@ -62,7 +67,7 @@ export const NOEUDS = {
     coeur: 'rose',
     legende: 'le personnel',
     cockpit: true,
-    enfants: ['grima', 'naga', 'althea'],
+    enfants: ['grima', 'naga'],
   },
 
   // ======== NIVEAU 1,5 — les macro-quadrants d'ULTIMA (Paul, 2026-08-01) ====
@@ -134,11 +139,15 @@ export const NOEUDS = {
       + 'son URL et je le branche.',
   },
 
-  // ALTHEA — le 3ᵉ cadran d'ULTIMA (Paul, 2026-08-06). Il ne relève NI de
-  // « ce qui est utile » (GRIMA) NI de « ce qui fait grandir » (NAGA) : c'est
-  // un jeu, et Paul l'a voulu « tout seul, c'est un autre système ». Il vit
-  // donc au même étage que les deux macro-quadrants, sans être rangé sous
-  // aucune devise. FEUILLE (une seule porte, règle §2.1).
+  // ALTHEA — le 3ᵉ cadran d'ULTIMA Lv3 (Paul, 2026-08-06 ; place corrigée le
+  // 2026-08-07). Il siège À LA RACINE, aux côtés des deux supra-divisions, et
+  // non sous l'une d'elles : Paul l'a voulu « tout seul, c'est un autre
+  // système, c'est plutôt un jeu qu'autre chose ». Le ranger sous ULTIMA le
+  // subordonnait au personnel ; il n'est subordonné à rien.
+  // C'est le seul cap de la racine qui soit une FEUILLE (une porte, règle
+  // §2.1) là où ses deux voisins sont des boussoles — et c'est justement ce
+  // qui se voit : on entre dans le jeu d'un seul geste, sans traverser
+  // d'étage.
   althea: {
     nom: 'ALTHEA',
     etat: 'Le Système',

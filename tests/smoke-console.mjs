@@ -108,13 +108,17 @@ const attendus = capsDe('ultima-perso').map((c) => c.nom);
 const noms = (await page.locator('.cap .cap-nom').allTextContents()).map((n) => n.trim());
 verifier('les cadrans rendus = ceux du registre',
   JSON.stringify(noms) === JSON.stringify(attendus), `trouvés: ${JSON.stringify(noms)}`);
-verifier('GRIMA, NAGA, puis ALTHEA (ordre du registre)',
-  JSON.stringify(attendus) === JSON.stringify(['GRIMA', 'NAGA', 'ALTHEA']),
-  `lu: ${JSON.stringify(attendus)}`);
+// La ligne du dessus comparait bien au registre — et celle-ci figeait la liste
+// juste en dessous, exactement ce que le commentaire ci-dessus interdit. Elle
+// est tombée au déplacement d'ALTHEA (2026-08-07). Corrigée : ALTHEA a quitté
+// cet étage, on l'éprouve donc par l'ABSENCE.
+verifier('ALTHEA n’est plus un cadran d’ULTIMA (il pend à la racine)',
+  !attendus.includes('ALTHEA'), `lu: ${JSON.stringify(attendus)}`);
 
-// Chaque cadran est cliquable et ouvre sa porte.
+// Chaque cadran est cliquable et ouvre sa porte — celles du registre, pas une
+// liste recopiée à la main.
 const hrefs = await page.locator('a.cap').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
-for (const attendu of ['grima.html', 'naga.html', 'althea.html']) {
+for (const attendu of capsDe('ultima-perso').map((c) => c.cible)) {
   verifier(`Porte ouverte vers ${attendu}`, hrefs.includes(attendu), JSON.stringify(hrefs));
 }
 verifier('Aucun cap inerte (aria-disabled / à venir)',

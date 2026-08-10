@@ -842,6 +842,27 @@ D20 ✅ Vitruve abandonné · D21 ✅ pas de formule, **socle + niveau** ·
 D22 ✅ le creux du charisme **n'existe plus** (chaque niveau donne +1 partout) ·
 D23 ✅ **la gravure de l'emblème est validée**.
 
+### 12ter. La place d'ALTHEA — corrigée le 2026-08-07
+
+ALTHEA siège **à la racine**, aux côtés des deux supra-divisions ULTIMA et
+ALPHA. Pas sous ULTIMA, où je l'avais rangé le 2026-08-06.
+
+**Ce qui m'a trompé** : le nom *ULTIMA* désigne **deux étages** de l'arbre — le
+produit entier (*Ultima Lv3*, l'écran d'accueil) et la supra-division
+personnelle. « Je le veux en 3ᵉ cadran de Ultima LV3 » visait le premier ; j'ai
+lu le second. Quand un nom désigne deux étages, une consigne qui l'emploie est
+ambiguë : il fallait lever le doute **avant** de ranger.
+
+**Pourquoi la racine est la bonne place**, et pas seulement la place demandée :
+Paul a voulu ALTHEA « tout seul, c'est un autre système, c'est plutôt un jeu
+qu'autre chose ». Sous ULTIMA, il était subordonné au personnel. À la racine, il
+n'est subordonné à rien — c'est exactement ce que « tout seul » voulait dire.
+
+C'est le seul cap de la racine qui soit une **feuille** là où ses deux voisins
+sont des boussoles. Ce n'est pas une irrégularité à corriger : on entre dans le
+jeu **d'un seul geste**, sans traverser d'étage. `chemin('althea')` vaut
+`['racine', 'althea']`, et le harnais l'éprouve.
+
 ### 12bis. La devise du Système — dictée le 2026-08-07
 
 > *I am the record of your struggles, the evidence of your resistance and the

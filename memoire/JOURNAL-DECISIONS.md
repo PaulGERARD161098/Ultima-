@@ -2099,3 +2099,33 @@
   une étiquette de section en capitales. Réutiliser la classe aurait été
   « capitaliser sur l'existant » de travers — c'est la forme qui devait suivre
   le sens, pas l'inverse.
+
+### 2026-08-07 — ALTHEA remonte à la racine
+
+- **Paul, écran d'accueil en production** : *« je veux althea ici et ce n'est pas
+  le cas »*. Corrigé : `racine.enfants = ['ultima-perso', 'alpha', 'althea']`,
+  et ALTHEA quitte `ultima-perso`, qui retrouve ses deux macro-quadrants.
+- **La cause n'était PAS le cache**, contrairement à ce que j'avais avancé la
+  veille au titre d'hypothèse la plus probable. ALTHEA n'avait jamais été sur
+  la racine : je l'avais rangé sous la supra-division ULTIMA. **Le nom ULTIMA
+  désigne deux étages** — le produit entier (*Ultima Lv3*, l'accueil) et la
+  supra-division personnelle. « 3ᵉ cadran d'Ultima LV3 » visait le premier ;
+  j'ai lu le second.
+  **Leçon : quand un nom désigne deux étages de l'arbre, une consigne qui
+  l'emploie est AMBIGUË — il faut lever l'ambiguïté avant de ranger, pas après.**
+  Le doute était levable en une question ; il a coûté une journée d'écart entre
+  ce que Paul cherchait et ce que j'avais construit.
+- **Et une hypothèse commode a retardé le constat** : « c'est sûrement le cache »
+  expliquait le symptôme sans rien vérifier, et fermait l'enquête. Le harnais
+  prouvait que la page rendait ses caps — il ne prouvait rien sur l'étage où
+  Paul les cherchait. **Un test vert ne réfute pas un constat de Paul : il
+  déplace la question.**
+- **Sept assertions sont tombées** au déplacement, dans quatre harnais. Trois
+  d'entre elles étaient des listes écrites à la main **sous un commentaire qui
+  expliquait qu'il ne fallait pas** en écrire (« un test qui compte à la main se
+  refait à chaque dictée »). Toutes rebranchées sur le registre.
+  **Un commentaire qui énonce la règle ne l'applique pas.**
+- ALTHEA est le seul cap de la racine qui soit une **feuille** là où ses deux
+  voisins sont des boussoles — et c'est juste : on entre dans le jeu d'un seul
+  geste, sans traverser d'étage. `chemin('althea')` vaut `['racine', 'althea']`,
+  et le harnais l'éprouve.
