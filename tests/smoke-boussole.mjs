@@ -98,12 +98,21 @@ verifier('Titre ligne 2 = titre du registre', principal === NOEUDS.racine.titre,
 const invite = (await page.locator('.console-invite').textContent())?.trim();
 verifier('Invite présente', /Sur quoi est-ce qu'on travaille aujourd'hui/.test(invite || ''), `lu: ${invite}`);
 
-// Les 2 caps : les supra-divisions, et rien d'autre à ce niveau.
+// Les caps de la racine : les deux supra-divisions ET ALTHEA (Paul, 2026-08-07).
+// On compte d'après le REGISTRE, jamais d'après un nombre écrit à la main : cinq
+// assertions chiffrées en dur étaient tombées d'un coup à l'arrivée d'ALTHEA le
+// 2026-08-06, et celle-ci est retombée à son déplacement le lendemain.
+const attendus = NOEUDS.racine.enfants.map((id) => NOEUDS[id].nom);
 const noms = (await page.locator('.cap-nom').allTextContents()).map((n) => n.trim());
-verifier('2 caps rendus (les supra-divisions)', noms.length === 2, `trouvés: ${JSON.stringify(noms)}`);
-for (const attendu of ['ULTIMA', 'ALPHA']) {
+verifier('autant de caps que le registre en déclare',
+  noms.length === attendus.length, `attendus ${attendus.length}, trouvés: ${JSON.stringify(noms)}`);
+for (const attendu of attendus) {
   verifier(`Cap ${attendu} présent`, noms.includes(attendu));
 }
+// ALTHEA s'ouvre d'un seul geste depuis l'accueil — c'est la raison d'être de
+// sa place ici, et donc ce qu'il faut éprouver, pas seulement sa présence.
+verifier('ALTHEA s’ouvre en un geste depuis l’accueil',
+  (await page.locator('.cap[data-cap="althea"] a, a[href$="althea.html"]').count()) >= 1);
 // Les projets ne sont plus des caps de la racine : ils vivent sous leur supra-division.
 for (const parti of ['renoboost-ia', 'ycome', 'tao', 'reshiram', 'zekrom']) {
   verifier(`Plus de cap ${parti} à la racine`, (await page.locator(`.cap[data-id="${parti}"]`).count()) === 0);
@@ -126,7 +135,8 @@ verifier('Aucune passerelle à la racine',
 verifier('Cœur gravé au centre', (await page.locator('.boussole-coeur svg').count()) === 1);
 const legende = (await page.locator('.boussole-legende').textContent())?.trim();
 verifier('Légende gravée = celle du registre', legende === NOEUDS.racine.legende, `lu: ${legende}`);
-verifier('2 aiguilles tracées', (await page.locator('.boussole-aiguilles .aiguille').count()) === 2);
+verifier('une aiguille par cap du registre',
+  (await page.locator('.boussole-aiguilles .aiguille').count()) === NOEUDS.racine.enfants.length);
 
 // Le résumé Léo n'apparaît QU'au survol : au repos, le cartouche est
 // invisible et muet (plus de messages affichés — Paul, 2026-08-01).
@@ -196,16 +206,17 @@ await page.waitForURL('**/ultima.html', { timeout: 20000 });
 verifier('Clic ULTIMA → URL ultima.html', /\/ultima\.html$/.test(page.url()), page.url());
 await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
 const capsUltima = (await page.locator('.cap-nom').allTextContents()).map((n) => n.trim());
-// 2026-08-01 : deux macro-quadrants. 2026-08-06 : Paul ajoute ALTHEA en
-// TROISIÈME cadran — « tout seul, c'est un autre système, c'est plutôt un jeu
-// qu'autre chose ». Il n'est rangé sous aucune des deux devises, et c'est ce
-// que le rendu doit montrer : trois caps au même étage.
-verifier('Boussole ULTIMA : les 3 cadrans (GRIMA, NAGA, ALTHEA)',
-  JSON.stringify(capsUltima) === JSON.stringify(['GRIMA', 'NAGA', 'ALTHEA']),
+// 2026-08-01 : deux macro-quadrants. 2026-08-06 : ALTHEA s'y ajoute.
+// 2026-08-07 : Paul le REMONTE à la racine, ULTIMA retrouve ses deux devises.
+verifier('Boussole ULTIMA : les cadrans du registre',
+  JSON.stringify(capsUltima)
+    === JSON.stringify(NOEUDS['ultima-perso'].enfants.map((id) => NOEUDS[id].nom)),
   JSON.stringify(capsUltima));
-// ALTHEA mène à sa page, pas à une boussole : il n'a qu'une porte (règle §2.1).
-verifier('Le cap ALTHEA ouvre bien le Système',
-  (await page.locator('.cap[data-cap="althea"] a, a[href$="althea.html"]').count()) >= 1);
+// Éprouvé par l'ABSENCE : ALTHEA a quitté cet étage. Sans ce contrôle, un
+// doublon de nœud laisserait le cap ici sans qu'aucune assertion ne bronche.
+verifier('ALTHEA n’est PLUS un cap d’ULTIMA',
+  (await page.locator('.cap[data-cap="althea"]').count()) === 0
+    && !capsUltima.includes('ALTHEA'), JSON.stringify(capsUltima));
 verifier('Retour vers la racine présent',
   (await page.locator('.console-retour a[href="/"]').count()) === 1);
 

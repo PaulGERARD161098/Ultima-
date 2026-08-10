@@ -33,7 +33,11 @@ verdicts.feuillesSansEnfants = ['minethnir', 'vranesh', 'draukhain', 'reshiram',
   .every((id) => !Array.isArray(NOEUDS[id].enfants));
 
 // ---------- 3. La structure dictée par Paul (2026-07-30) ----------
-verdicts.deuxSupraDivisions = JSON.stringify(NOEUDS[RACINE].enfants) === JSON.stringify(['ultima-perso', 'alpha']);
+// 2026-08-07 : la racine porte les deux supra-divisions ET ALTHEA. Paul l'a
+// corrigé de vive voix (« je veux althea ici ») : « 3ᵉ cadran d'Ultima Lv3 »
+// désignait cet écran-ci, pas la supra-division qui porte le même nom.
+verdicts.racineDeuxSupraPlusAlthea = JSON.stringify(NOEUDS[RACINE].enfants)
+  === JSON.stringify(['ultima-perso', 'alpha', 'althea']);
 verdicts.taoSousNaga = parentDe('tao') === 'naga'
   && chemin('tao')[1] === 'ultima-perso'; // TAO reste sous ULTIMA, via NAGA
 verdicts.ycomeSousAlpha = parentDe('ycome') === 'alpha';
@@ -45,23 +49,29 @@ verdicts.cheminTaoComplet = JSON.stringify(chemin('reshiram'))
 // 2026-08-01 : deux macro-quadrants — GRIMA « Ce qui est utile » (RIVEN, NICOL
 // BOLAS) et NAGA « Ce qui fait grandir » (IMLADRIK, ADRAMELECH, TAO), chacun
 // une vraie boussole avec sa coque.
-// 2026-08-06 : Paul ajoute un TROISIÈME cadran, ALTHEA — et il ne se range sous
-// AUCUNE des deux devises (« tout seul : c'est un autre système, c'est plutôt
-// un jeu qu'autre chose »). C'est ce que ce verdict défend : ALTHEA au même
-// étage que les deux autres, jamais dessous.
-verdicts.ultimaTroisCadrans = JSON.stringify(NOEUDS['ultima-perso'].enfants)
-  === JSON.stringify(['grima', 'naga', 'althea']);
-verdicts.altheaHorsDesDeuxDevises = !NOEUDS.grima.enfants.includes('althea')
-  && !NOEUDS.naga.enfants.includes('althea')
-  && parentDe('althea') === 'ultima-perso';
+// 2026-08-06 : Paul ajoute ALTHEA — « tout seul : c'est un autre système, c'est
+// plutôt un jeu qu'autre chose ».
+// 2026-08-07 : il le REMONTE À LA RACINE. Sous ULTIMA, il était subordonné au
+// personnel ; à la racine il n'est subordonné à rien, ce qui est exactement ce
+// que « tout seul » voulait dire. ULTIMA retrouve donc ses DEUX macro-quadrants.
+verdicts.ultimaDeuxCadrans = JSON.stringify(NOEUDS['ultima-perso'].enfants)
+  === JSON.stringify(['grima', 'naga']);
+// Éprouvé par l'ABSENCE autant que par la présence : ALTHEA pend à la racine, et
+// ne se retrouve sous AUCUN autre nœud. Vérifier son seul parent ne suffirait
+// pas — un doublon ailleurs dans l'arbre passerait au travers.
+verdicts.altheaNePendQuALaRacine = parentDe('althea') === RACINE
+  && Object.keys(NOEUDS)
+    .filter((id) => id !== RACINE && Array.isArray(NOEUDS[id].enfants))
+    .every((id) => !NOEUDS[id].enfants.includes('althea'));
 // ALTHEA n'a qu'une porte → il reste une FEUILLE (règle §2.1 : est une boussole
 // tout nœud qui a au moins DEUX enfants). Le jour où un second cap naît (le
 // cadran en grand, le palmarès), il prendra la forme boussole sans rien casser.
 verdicts.altheaEstUneFeuille = !NOEUDS.althea.enfants
   && NOEUDS.althea.cible === 'althea.html'
   && Boolean(NOEUDS.althea.blason);
+// Un seul geste depuis l'accueil : c'est la raison d'être de la remontée.
 verdicts.cheminAlthea = JSON.stringify(chemin('althea'))
-  === JSON.stringify(['racine', 'ultima-perso', 'althea']);
+  === JSON.stringify(['racine', 'althea']);
 verdicts.grimaRegroupeUtile = JSON.stringify(NOEUDS.grima.enfants)
   === JSON.stringify(['riven', 'nicol-bolas'])
   && NOEUDS.grima.cible === 'grima.html' && estBoussole('grima');
