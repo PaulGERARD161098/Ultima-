@@ -29,6 +29,16 @@
   front) attend. Corollaire du cap DONNÉE : **peupler RIVEN est le goulot** ;
   c'est lui qui débloque les preuves chiffrées de RESHIRAM, donc « mon offre
   réelle ». À proposer avant tout nouveau chantier de code.
+  - 🔄 **PÉRIMÉ AU 2026-08-10 sur le chiffre, VALIDE sur le fond.** `list_tables`
+    donne **5 fiches**, pas 0 : Paul a commencé à peupler entre les deux
+    sessions. Le goulot reste réel (5 fiches ne prouvent encore aucun talent),
+    mais **le chiffre « 0 » ne doit plus être cité**.
+  - 🔻 **Règle de tenue du RADAR, née de cette erreur** : un constat d'**ÉTAT**
+    (« la table est vide », « le harnais est rouge ») **se périme** — il se
+    **re-mesure** avant d'être re-cité, surtout quand on va en tirer un conseil
+    à Paul. Un constat de **DÉCISION** ou de **MÉTHODE**, non. Marquer les
+    entrées d'état de leur date de mesure, et les re-vérifier au lieu de les
+    relire.
 
 ## Signaux de session (2026-07-25)
 

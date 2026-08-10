@@ -1,4 +1,12 @@
 -- Ultima — migration 0024 : RIVEN en détail (la personne, le métier, la capacité).
+-- ✅ APPLIQUÉE le 2026-08-10 au go explicite de Paul (projet Ultima
+--    leosfqyidgsaescjbfom, version `riven_detail`). Vérifié en base juste après :
+--    `personnes` et `personne_noeuds` créées, **RLS active** sur les deux, 0 ligne ;
+--    network_nodes conserve ses 5 fiches, aucune donnée touchée. Gate close.
+--    ⏳ RESTE : la passe `get_advisors` (sécurité + performance) n'a PAS pu être
+--    jouée — l'appel a été refusé faute d'autorisation du connecteur Supabase.
+--    À rejouer dès que l'autorisation est donnée : c'est le seul contrôle
+--    d'après-application qui manque.
 -- Ne JAMAIS appliquer sans validation Paul explicite (gate migrations) : le SQL
 -- vit ici, Léo l'applique au fil principal après contre-passe sécu.
 --
