@@ -15,10 +15,23 @@ const NODE_FIELDS = [
   'telephone',
   'email',
   'statut',
+  // Métier PRINCIPAL : l'unique clé de regroupement de l'arbre (js/arbre.js).
   'secteur_activite',
   'lat',
   'lng',
   'notes',
+  // 0024 — les quatre axes de détail (cf. CADRAGE-RIVEN-DETAIL.md §8).
+  'nature',              // A — sous-nature libre (entreprise, indépendant, …)
+  'metiers_secondaires', // B — les autres métiers, sans effet sur la branche
+  'prestations',         // C — capacités concrètes
+  'zone_intervention',
+  'rayon_km',
+  'effectif',
+  'certifications',
+  'fiabilite',           // D — qualité de la relation, échelles 1..5
+  'reactivite',
+  'niveau_prix',
+  'disponibilite',
 ];
 const EDGE_FIELDS = [
   'source_id',
@@ -64,6 +77,29 @@ function checkOptionalText(value, label, max) {
   if (typeof value !== 'string') return `${label} invalide`;
   if (value.length > max) return `${label} trop long`;
   return null;
+}
+
+// Valide et NORMALISE un tableau de tags optionnel (0024 : métiers secondaires,
+// certifications, dont la base garantit les mêmes bornes via riven_tags_valides).
+// Renvoie { error } ou { value } — value vaut null quand le tableau est vide :
+// une seule convention entre base, API et front, « rien » s'écrit `null`
+// (pre-mortem P6 de CADRAGE-RIVEN-DETAIL.md). Chaque élément est détouré ; un
+// élément vide, non-texte ou trop long fait échouer TOUT le champ (jamais de
+// rejet silencieux d'un élément).
+function checkOptionalTags(value, label, maxN, maxLen) {
+  if (value === undefined) return { value: undefined };
+  if (value === null) return { value: null };
+  if (!Array.isArray(value)) return { error: `${label} invalide` };
+  if (value.length > maxN) return { error: `${label} : ${maxN} au maximum` };
+  const nettoyes = [];
+  for (const brut of value) {
+    if (typeof brut !== 'string') return { error: `${label} invalide` };
+    const tag = brut.trim();
+    if (tag.length === 0) return { error: `${label} : entrée vide` };
+    if (tag.length > maxLen) return { error: `${label} trop long` };
+    nettoyes.push(tag);
+  }
+  return { value: nettoyes.length ? nettoyes : null };
 }
 
 // Valide une coordonnée optionnelle bornée.
@@ -132,6 +168,39 @@ export function validateNode(body, mode) {
   const lngMsg = checkOptionalCoord(body.lng, 'Longitude', -180, 180);
   if (lngMsg) return { error: lngMsg };
   if (body.lng !== undefined) out.lng = body.lng;
+
+  // ---- 0024 : les quatre axes de détail (miroir exact des CHECK de 0024) ----
+  for (const [field, label, max] of [
+    ['nature', 'Nature', 80],
+    ['prestations', 'Prestations', 2000],
+    ['zone_intervention', "Zone d'intervention", 200],
+    ['disponibilite', 'Disponibilité', 120],
+  ]) {
+    const msg = checkOptionalText(body[field], label, max);
+    if (msg) return { error: msg };
+    if (body[field] !== undefined) out[field] = body[field];
+  }
+
+  for (const [field, label, min, max] of [
+    ['rayon_km', "Rayon d'intervention", 0, 2000],
+    ['effectif', 'Effectif', 0, 100000],
+    ['fiabilite', 'Fiabilité', 1, 5],
+    ['reactivite', 'Réactivité', 1, 5],
+    ['niveau_prix', 'Niveau de prix', 1, 5],
+  ]) {
+    const msg = checkOptionalInt(body[field], label, min, max);
+    if (msg) return { error: msg };
+    if (body[field] !== undefined) out[field] = body[field];
+  }
+
+  for (const [field, label, maxN, maxLen] of [
+    ['metiers_secondaires', 'Métiers', 12, 120],
+    ['certifications', 'Certifications', 12, 80],
+  ]) {
+    const tags = checkOptionalTags(body[field], label, maxN, maxLen);
+    if (tags.error) return { error: tags.error };
+    if (tags.value !== undefined) out[field] = tags.value;
+  }
 
   if (mode === 'update' && Object.keys(out).length === 0) {
     return { error: 'Aucun champ à mettre à jour' };
@@ -594,6 +663,98 @@ export function validatePasserelle(body, mode) {
     if (msg) return { error: msg };
     if (body.note !== undefined) out.note = body.note;
   }
+
+  if (mode === 'update' && Object.keys(out).length === 0) {
+    return { error: 'Aucun champ à mettre à jour' };
+  }
+  return { value: out };
+}
+
+// --- RIVEN 0024 : LA PERSONNE, séparée du nœud. Bornes en MIROIR EXACT des
+// CHECK de supabase/migrations/0024_riven_detail.sql. Une personne existe par
+// elle-même : elle ne porte AUCUN node_id — le lien vit sur le rattachement
+// ci-dessous, seul endroit où il peut être multiple. owner_id n'est jamais
+// accepté du client (imposé par le défaut base + RLS, motif nodes.js).
+
+const PERSONNE_FIELDS = ['nom', 'fonction', 'telephone', 'email', 'notes'];
+
+// Valide une personne. mode 'create' impose le nom ; 'update' le rend optionnel.
+export function validatePersonne(body, mode) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, PERSONNE_FIELDS);
+  if (unknown) return { error: unknown };
+
+  const out = {};
+
+  if (mode === 'create' || body.nom !== undefined) {
+    if (typeof body.nom !== 'string') return { error: 'Nom invalide' };
+    const nom = body.nom.trim();
+    if (nom.length < 1 || nom.length > 200) return { error: 'Nom invalide' };
+    out.nom = nom;
+  }
+
+  for (const [field, label, max] of [
+    ['fonction', 'Fonction', 120],
+    ['notes', 'Notes', 2000],
+  ]) {
+    const msg = checkOptionalText(body[field], label, max);
+    if (msg) return { error: msg };
+    if (body[field] !== undefined) out[field] = body[field];
+  }
+
+  const telMsg = checkOptionalText(body.telephone, 'Téléphone', 30);
+  if (telMsg) return { error: telMsg };
+  if (body.telephone !== undefined) out.telephone = body.telephone;
+
+  // Même règle que pour un nœud : null efface, sinon la forme e-mail est exigée.
+  if (body.email !== undefined && body.email !== null) {
+    if (typeof body.email !== 'string' || body.email.length > 200 || !EMAIL_RE.test(body.email)) {
+      return { error: 'Email invalide' };
+    }
+    out.email = body.email;
+  } else if (body.email === null) {
+    out.email = null;
+  }
+
+  if (mode === 'update' && Object.keys(out).length === 0) {
+    return { error: 'Aucun champ à mettre à jour' };
+  }
+  return { value: out };
+}
+
+// --- RIVEN 0024 : LE RATTACHEMENT (personne × nœud × rôle).
+// Zéro rattachement → une personne sans aucun nœud (demande n°2 de Paul) ;
+// N rattachements → la même personne sur N nœuds, un rôle par nœud (demande
+// n°3). Les deux FK sont figées à la création : on ne « déplace » pas un
+// rattachement, on le retire et on le recrée (motif des edges RIVEN). Seul le
+// rôle est mutable — d'où le mode 'update' restreint à ce champ.
+const RATTACHEMENT_FIELDS = ['personne_id', 'node_id', 'role'];
+const RATTACHEMENT_UPDATE_FIELDS = ['role'];
+
+export function validateRattachement(body, mode) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(
+    body,
+    mode === 'update' ? RATTACHEMENT_UPDATE_FIELDS : RATTACHEMENT_FIELDS,
+  );
+  if (unknown) return { error: unknown };
+
+  const out = {};
+
+  if (mode !== 'update') {
+    if (!isUuid(body.personne_id)) return { error: 'Identifiant de personne invalide' };
+    if (!isUuid(body.node_id)) return { error: 'Identifiant de fiche invalide' };
+    out.personne_id = body.personne_id;
+    out.node_id = body.node_id;
+  }
+
+  const msg = checkOptionalText(body.role, 'Rôle', 120);
+  if (msg) return { error: msg };
+  if (body.role !== undefined) out.role = body.role;
 
   if (mode === 'update' && Object.keys(out).length === 0) {
     return { error: 'Aucun champ à mettre à jour' };

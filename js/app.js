@@ -41,13 +41,22 @@
     noeuds: [],
     relations: [],
     journal: [],
+    // RIVEN 0024 — les PERSONNES, séparées des nœuds. Une personne peut n'avoir
+    // AUCUN rattachement (elle existe quand même) ou en avoir plusieurs (elle
+    // sert plusieurs fiches, avec un rôle sur chacune).
+    personnes: [],
+    rattachements: [],
     filtres: { types: new Set(TYPES), statuts: new Set(STATUTS) },
     modeDemo: true,
     client: null,        // client supabase-js (mode connecté)
     session: null,
     onglet: 'accueil',   // espace actif : accueil | carte | contacts
+    registreContacts: 'fiches', // onglet Contacts : fiches | personnes
     noeudCourant: null,  // id du nœud affiché dans la fiche
     noeudEnEdition: null, // id du nœud en cours d'édition dans le formulaire
+    personneCourante: null,   // id de la personne affichée dans la fiche
+    personneEnEdition: null,  // id de la personne en cours d'édition
+    noeudARattacher: null,    // fiche cible du formulaire de rattachement
     noeudNouveau: null,  // id du contact tout juste ajouté (pousse animée, A4)
     // INTENDANT (AD-5c-δ) : dossiers d'approvisionnement adossés aux chantiers.
     // chantiers = dossiers ouverts, besoins = lignes (avec leur `etat`),
@@ -83,7 +92,9 @@
   function donneesDemo() {
     var noeuds = [
       { id: 'demo-n1', type: 'artisan', nom: 'Menuiserie Delcourt', secteur_activite: 'Menuiserie', ville: 'Lille', adresse: '12 rue Nationale', telephone: '03 20 55 41 20', email: 'contact@menuiserie-delcourt.fr', statut: 'actif', lat: 50.6292, lng: 3.0573, notes: 'Menuiserie bois et alu. Très fiable sur les délais.' },
-      { id: 'demo-n2', type: 'artisan', nom: 'Plomberie Roux & Fils', secteur_activite: 'Plomberie', ville: 'Lyon', adresse: '8 quai Saint-Vincent', telephone: '04 78 30 12 45', email: 'contact@plomberie-roux.fr', statut: 'actif', lat: 45.764, lng: 4.8357, notes: 'Chauffage et sanitaire. Disponible sous 48 h.' },
+      // Fiche de démonstration des quatre axes de détail (0024) : c'est elle
+      // que le harnais lit pour prouver que chaque champ atteint la fiche.
+      { id: 'demo-n2', type: 'artisan', nom: 'Plomberie Roux & Fils', secteur_activite: 'Plomberie', ville: 'Lyon', adresse: '8 quai Saint-Vincent', telephone: '04 78 30 12 45', email: 'contact@plomberie-roux.fr', statut: 'actif', lat: 45.764, lng: 4.8357, notes: 'Chauffage et sanitaire. Disponible sous 48 h.', nature: 'Entreprise', metiers_secondaires: ['Chauffage', 'Pompe à chaleur'], prestations: 'Sanitaire complet, remplacement de chaudière, pose de PAC air/eau.', zone_intervention: 'Rhône et Ain', rayon_km: 60, effectif: 7, certifications: ['RGE', 'QualiPAC'], fiabilite: 5, reactivite: 4, niveau_prix: 3, disponibilite: 'sous 48 h' },
       { id: 'demo-n3', type: 'artisan', nom: 'Élec Ferrand', secteur_activite: 'Électricité', ville: 'Nantes', adresse: '25 rue de Strasbourg', telephone: '02 40 47 89 12', email: 'ferrand.elec@orange.fr', statut: 'prospect', lat: 47.2184, lng: -1.5536, notes: 'Rencontré au salon Habitat. À rappeler.' },
       { id: 'demo-n4', type: 'partenaire', nom: 'Agence Habitat Sud', secteur_activite: 'Courtage', ville: 'Marseille', adresse: '4 la Canebière', telephone: '04 91 54 22 10', email: 'contact@habitat-sud.fr', statut: 'actif', lat: 43.2965, lng: 5.3698, notes: 'Agence immobilière, apporte des dossiers de rénovation.' },
       { id: 'demo-n5', type: 'partenaire', nom: 'Courtage Bâti Ouest', secteur_activite: 'Courtage', ville: 'Rennes', adresse: '2 place de Bretagne', telephone: '02 99 78 34 56', email: 'contact@bati-ouest.fr', statut: 'actif', lat: 48.1173, lng: -1.6778, notes: 'Courtier travaux, commission 5 %.' },
@@ -107,7 +118,29 @@
       { id: 'demo-j2', node_id: null, edge_id: 'demo-r1', date_entree: dateLocaleIso(-8), note: 'Deux dossiers transmis ce mois-ci, bonne dynamique.', prochaine_etape: null, relance_at: null, relance_faite: false },
       { id: 'demo-j3', node_id: 'demo-n7', edge_id: null, date_entree: dateLocaleIso(-1), note: 'Plans reçus de l’architecte, chiffrage à préparer.', prochaine_etape: 'Envoyer le chiffrage à Mme Nguyen', relance_at: dateLocaleIso(0), relance_faite: false }
     ];
-    return { noeuds: noeuds, relations: relations, journal: journal };
+    // 0024 — les personnes de la démo, dans la forme EXACTE du GET /api/reseau
+    // (mêmes clés, mêmes types) : le harnais n'exerce jamais une donnée que la
+    // vraie API ne saurait produire (pre-mortem P7).
+    // Le jeu démontre les deux cas neufs, et rien d'autre :
+    //   - demo-p3 n'a AUCUN rattachement → une personne sans nœud, licite ;
+    //   - demo-p1 en a DEUX, avec deux rôles distincts.
+    var personnes = [
+      { id: 'demo-p1', nom: 'Karim Roux', fonction: 'Gérant', telephone: '06 11 22 33 44', email: 'k.roux@plomberie-roux.fr', notes: 'Décide seul. Répond mieux le matin.' },
+      { id: 'demo-p2', nom: 'Sophie Delcourt', fonction: 'Conductrice de travaux', telephone: '06 55 66 77 88', email: 'sophie@menuiserie-delcourt.fr', notes: '' },
+      { id: 'demo-p3', nom: 'Godefroy Aubert', fonction: 'Courtier indépendant', telephone: '06 44 33 22 11', email: 'g.aubert@courtage.fr', notes: 'Rencontré au salon. Aucune entreprise attachée pour le moment.' }
+    ];
+    var rattachements = [
+      { id: 'demo-pn1', personne_id: 'demo-p1', node_id: 'demo-n2', role: 'Gérant' },
+      { id: 'demo-pn2', personne_id: 'demo-p1', node_id: 'demo-n8', role: "Référent plomberie" },
+      { id: 'demo-pn3', personne_id: 'demo-p2', node_id: 'demo-n1', role: 'Conductrice de travaux' }
+    ];
+    return {
+      noeuds: noeuds,
+      relations: relations,
+      journal: journal,
+      personnes: personnes,
+      rattachements: rattachements
+    };
   }
 
   // INTENDANT — jeu de démo : un dossier ouvert sur le chantier Voltaire
@@ -217,6 +250,8 @@
       etat.noeuds = demo.noeuds;
       etat.relations = demo.relations;
       etat.journal = demo.journal;
+      etat.personnes = demo.personnes;
+      etat.rattachements = demo.rattachements;
       var demoIntendant = donneesDemoIntendant();
       etat.intendant.chantiers = demoIntendant.chantiers;
       etat.intendant.besoins = demoIntendant.besoins;
@@ -230,6 +265,8 @@
       etat.noeuds = [];
       etat.relations = [];
       etat.journal = [];
+      etat.personnes = [];
+      etat.rattachements = [];
       etat.intendant = { chantiers: [], besoins: [], alertes: [], indisponible: false };
       rafraichir();
       return;
@@ -242,6 +279,8 @@
       etat.noeuds = (data && data.nodes) || [];
       etat.relations = (data && data.edges) || [];
       etat.journal = (data && data.journal) || [];
+      etat.personnes = (data && data.personnes) || [];
+      etat.rattachements = (data && data.rattachements) || [];
     } catch (e) {
       toast('Chargement du réseau impossible.', 'erreur');
       return;
@@ -440,6 +479,8 @@
     rendreContacts();
     if (etat.noeudCourant && !$('#vue-fiche').hidden) {
       rendreFiche();
+    } else if (etat.personneCourante && !$('#vue-fiche').hidden) {
+      rendreFichePersonne();
     }
   }
 
@@ -488,6 +529,77 @@
       return;
     }
     await appelApi('/api/reseau/nodes', {
+      method: 'DELETE',
+      body: JSON.stringify({ id: id })
+    });
+    await chargerDonnees();
+  }
+
+  // ---- Personnes (0024) : mêmes gestes que pour un nœud, autre table ----
+
+  async function sauverPersonne(valeurs) {
+    if (etat.modeDemo) {
+      if (etat.personneEnEdition) {
+        var existante = trouverPersonne(etat.personneEnEdition);
+        if (existante) { Object.assign(existante, valeurs); }
+      } else {
+        valeurs.id = idLocal();
+        etat.personnes.push(valeurs);
+      }
+      return valeurs.id || etat.personneEnEdition;
+    }
+    if (etat.personneEnEdition) {
+      await appelApi('/api/reseau/personnes', {
+        method: 'PATCH',
+        body: JSON.stringify(Object.assign({ id: etat.personneEnEdition }, valeurs))
+      });
+      await chargerDonnees();
+      return etat.personneEnEdition;
+    }
+    var creee = await appelApi('/api/reseau/personnes', {
+      method: 'POST',
+      body: JSON.stringify(valeurs)
+    });
+    await chargerDonnees();
+    return creee && creee.id;
+  }
+
+  async function supprimerPersonne(id) {
+    if (etat.modeDemo) {
+      etat.personnes = etat.personnes.filter(function (p) { return p.id !== id; });
+      // Cascade locale identique à la FK on delete cascade : les rattachements
+      // partent, AUCUNE fiche n'est touchée.
+      etat.rattachements = etat.rattachements.filter(function (r) {
+        return r.personne_id !== id;
+      });
+      return;
+    }
+    await appelApi('/api/reseau/personnes', {
+      method: 'DELETE',
+      body: JSON.stringify({ id: id })
+    });
+    await chargerDonnees();
+  }
+
+  async function creerRattachement(valeurs) {
+    if (etat.modeDemo) {
+      valeurs.id = idLocal();
+      etat.rattachements.push(valeurs);
+      return;
+    }
+    await appelApi('/api/reseau/rattachements', {
+      method: 'POST',
+      body: JSON.stringify(valeurs)
+    });
+    await chargerDonnees();
+  }
+
+  async function supprimerRattachement(id) {
+    if (etat.modeDemo) {
+      etat.rattachements = etat.rattachements.filter(function (r) { return r.id !== id; });
+      return;
+    }
+    await appelApi('/api/reseau/rattachements', {
       method: 'DELETE',
       body: JSON.stringify({ id: id })
     });
@@ -670,6 +782,35 @@
 
   function trouverRelation(id) {
     return etat.relations.find(function (r) { return r.id === id; }) || null;
+  }
+
+  // ---- Lectures dérivées des rattachements (0024) ----
+  // Jamais stockées : recalculées à chaque rendu, donc toujours exactes.
+
+  function trouverPersonne(id) {
+    return etat.personnes.find(function (p) { return p.id === id; }) || null;
+  }
+
+  // Les personnes DE cette fiche, ordonnées par nom (l'ordre du registre).
+  function rattachementsDuNoeud(nodeId) {
+    return etat.rattachements
+      .filter(function (r) { return r.node_id === nodeId; })
+      .map(function (r) { return { lien: r, personne: trouverPersonne(r.personne_id) }; })
+      .filter(function (paire) { return paire.personne !== null; })
+      .sort(function (a, b) {
+        return (a.personne.nom || '').localeCompare(b.personne.nom || '', 'fr');
+      });
+  }
+
+  // Les fiches DE cette personne. Zéro est un résultat licite, pas une anomalie.
+  function rattachementsDeLaPersonne(personneId) {
+    return etat.rattachements
+      .filter(function (r) { return r.personne_id === personneId; })
+      .map(function (r) { return { lien: r, noeud: trouverNoeud(r.node_id) }; })
+      .filter(function (paire) { return paire.noeud !== null; })
+      .sort(function (a, b) {
+        return (a.noeud.nom || '').localeCompare(b.noeud.nom || '', 'fr');
+      });
   }
 
   function nomNoeud(id) {
@@ -1244,6 +1385,48 @@
       .sort(function (a, b) { return a.localeCompare(b, 'fr'); });
   }
 
+  // M\u00eame r\u00e8gle que secteursConnus, appliqu\u00e9e \u00e0 n'importe quelle liste de
+  // valeurs d\u00e9j\u00e0 saisies (fonctions des personnes, r\u00f4les des rattachements) :
+  // d\u00e9doublonnage par forme normalis\u00e9e, premi\u00e8re graphie conserv\u00e9e, tri fr.
+  // D3 (0006) : texte libre + suggestions, jamais de liste ferm\u00e9e.
+  function valeursConnues(valeursBrutes) {
+    var vus = Object.create(null);
+    valeursBrutes.forEach(function (valeur) {
+      var brut = (valeur || '').trim();
+      if (!brut) { return; }
+      var cle = normaliserTexte(brut);
+      if (!vus[cle]) { vus[cle] = brut; }
+    });
+    return Object.keys(vus).map(function (cle) { return vus[cle]; })
+      .sort(function (a, b) { return a.localeCompare(b, 'fr'); });
+  }
+
+  function remplirDatalist(selecteur, valeurs) {
+    var dl = $(selecteur);
+    if (!dl) { return; }
+    dl.textContent = '';
+    valeurs.forEach(function (valeur) {
+      var opt = document.createElement('option');
+      opt.value = valeur;
+      dl.appendChild(opt);
+    });
+  }
+
+  function majDatalistFonctions() {
+    remplirDatalist('#liste-fonctions', valeursConnues(
+      etat.personnes.map(function (p) { return p.fonction; })
+    ));
+  }
+
+  function majDatalistRoles() {
+    // Les r\u00f4les d\u00e9j\u00e0 employ\u00e9s ET les fonctions connues : au moment de rattacher,
+    // \u00ab G\u00e9rant \u00bb est le plus souvent d\u00e9j\u00e0 quelque part dans le registre.
+    remplirDatalist('#liste-roles', valeursConnues(
+      etat.rattachements.map(function (r) { return r.role; })
+        .concat(etat.personnes.map(function (p) { return p.fonction; }))
+    ));
+  }
+
   // Alimente la datalist de suggestions du formulaire depuis l'\u00e9tat courant
   // (aucun appel r\u00e9seau : les secteurs viennent des contacts d\u00e9j\u00e0 charg\u00e9s).
   function majDatalistSecteurs() {
@@ -1351,12 +1534,14 @@
     var compteur = $('#contacts-compteur');
     var outils = $('#contacts-outils');
     var boutonAjouter = $('#contacts-ajouter');
+    var registres = $('#contacts-registres');
 
     // Non connecté (config présente, pas de session) : bloc unique.
     if (!etat.modeDemo && !etat.session) {
       compteur.textContent = '';
       outils.hidden = true;
       boutonAjouter.hidden = true;
+      registres.hidden = true;
       conteneur.appendChild(blocEtatContacts(
         'Connectez-vous pour retrouver votre réseau.',
         'Le lien de connexion arrive par e-mail.',
@@ -1368,6 +1553,17 @@
       return;
     }
     boutonAjouter.hidden = false;
+    registres.hidden = false;
+
+    // Registre PERSONNES (0024) : les gens, qui n'ont besoin d'aucun nœud.
+    // Branche entière et distincte — le registre des fiches, plus bas, est
+    // celui d'avant, non modifié.
+    if (etat.registreContacts === 'personnes') {
+      boutonAjouter.textContent = '+ Ajouter une personne';
+      rendreRegistrePersonnes(conteneur, compteur, outils);
+      return;
+    }
+    boutonAjouter.textContent = '+ Ajouter un contact';
 
     // Connecté (ou démo), aucune donnée : invitation au premier contact.
     if (etat.noeuds.length === 0) {
@@ -1405,6 +1601,115 @@
     liste.className = 'liste-contacts';
     visibles.forEach(function (n) { liste.appendChild(itemContact(n)); });
     conteneur.appendChild(liste);
+  }
+
+  // ---------- Registre des personnes (0024) ----------
+
+  // Une entrée de registre dit, en une ligne, ce qu'on cherche à savoir avant
+  // d'appeler quelqu'un : qui, quel rôle, et sur combien de fiches. « Aucune
+  // fiche » est écrit en toutes lettres — c'est un état normal, pas un manque.
+  function itemPersonne(personne) {
+    var item = document.createElement('li');
+    var bouton = document.createElement('button');
+    bouton.type = 'button';
+    bouton.className = 'item-personne';
+
+    var textes = document.createElement('span');
+    textes.className = 'item-contact-textes';
+    var nom = document.createElement('span');
+    nom.className = 'item-personne-nom';
+    nom.textContent = personne.nom || '(sans nom)';
+    textes.appendChild(nom);
+
+    var nb = rattachementsDeLaPersonne(personne.id).length;
+    var detail = document.createElement('span');
+    detail.className = 'item-contact-detail';
+    detail.textContent = (personne.fonction || 'Sans fonction') + ' · ' +
+      (nb === 0 ? 'aucune fiche' : (nb === 1 ? '1 fiche' : nb + ' fiches'));
+    textes.appendChild(detail);
+    bouton.appendChild(textes);
+
+    if (nb === 0) {
+      var badges = document.createElement('span');
+      badges.className = 'item-contact-badges';
+      var libre = document.createElement('span');
+      libre.className = 'badge-a-rattacher';
+      libre.textContent = 'À rattacher';
+      badges.appendChild(libre);
+      bouton.appendChild(badges);
+    }
+
+    bouton.addEventListener('click', function () { ouvrirFichePersonne(personne.id); });
+    item.appendChild(bouton);
+    return item;
+  }
+
+  // Recherche du registre : nom et fonction. La ville n'existe pas ici — une
+  // personne n'a pas d'adresse propre, elle en emprunte à ses fiches.
+  function personneCorrespond(personne, terme) {
+    return normaliserTexte(personne.nom).indexOf(terme) !== -1 ||
+           normaliserTexte(personne.fonction).indexOf(terme) !== -1;
+  }
+
+  function rendreRegistrePersonnes(conteneur, compteur, outils) {
+    if (etat.personnes.length === 0) {
+      compteur.textContent = '0 personne';
+      outils.hidden = true;
+      conteneur.appendChild(blocEtatContacts(
+        'Aucune personne enregistrée.',
+        "Une personne se note seule : elle n'a besoin d'aucune fiche, et pourra en servir plusieurs.",
+        '+ Ajouter une personne',
+        function () { ouvrirFormPersonneDepuisRegistre(); }));
+      return;
+    }
+
+    outils.hidden = false;
+    compteur.textContent = etat.personnes.length +
+      (etat.personnes.length > 1 ? ' personnes' : ' personne');
+
+    var brut = $('#contacts-recherche').value.trim();
+    var terme = normaliserTexte(brut);
+    var visibles = etat.personnes.filter(function (p) {
+      if (!terme) { return true; }
+      return personneCorrespond(p, terme);
+    }).sort(function (a, b) {
+      return (a.nom || '').localeCompare(b.nom || '', 'fr');
+    });
+
+    if (visibles.length === 0) {
+      var aucune = document.createElement('p');
+      aucune.className = 'contacts-aucun';
+      aucune.textContent = 'Aucune personne ne correspond à “' + brut + '”.';
+      conteneur.appendChild(aucune);
+      return;
+    }
+
+    var liste = document.createElement('ul');
+    liste.className = 'liste-contacts';
+    visibles.forEach(function (p) { liste.appendChild(itemPersonne(p)); });
+    conteneur.appendChild(liste);
+  }
+
+  // Le formulaire de personne s'ouvre SUR PLACE, dans l'onglet Contacts : il
+  // n'y a aucune raison de basculer sur la carte pour saisir quelqu'un qui n'y
+  // apparaîtra pas (contrairement à ouvrirFormDepuisAccueil, qui lui y va parce
+  // que la fiche créée s'y place).
+  function ouvrirFormPersonneDepuisRegistre() {
+    ouvrirFormPersonne(null);
+    $('#panneau-titre').focus();
+  }
+
+  function changerRegistreContacts(registre) {
+    if (etat.registreContacts === registre) { return; }
+    etat.registreContacts = registre;
+    // La recherche ne traverse pas les registres : un terme tapé pour trouver
+    // une ville n'a aucun sens dans le registre des personnes.
+    $('#contacts-recherche').value = '';
+    document.querySelectorAll('.contacts-registre').forEach(function (bouton) {
+      var actif = bouton.getAttribute('data-registre') === registre;
+      bouton.setAttribute('aria-selected', actif ? 'true' : 'false');
+    });
+    rendreContacts();
   }
 
   // ---------- Onglet Arbre (A3, le pivot : secteurs = branches) ----------
@@ -1518,12 +1823,17 @@
     $('#vue-fiche').hidden = vue !== 'fiche';
     $('#form-noeud').hidden = vue !== 'noeud';
     $('#form-relation').hidden = vue !== 'relation';
+    $('#form-personne').hidden = vue !== 'personne';
+    $('#form-rattachement').hidden = vue !== 'rattachement';
   }
 
   function fermerPanneau() {
     $('#panneau').hidden = true;
     etat.noeudCourant = null;
     etat.noeudEnEdition = null;
+    etat.personneCourante = null;
+    etat.personneEnEdition = null;
+    etat.noeudARattacher = null;
     reinitialiserGeo(); // l'aperçu et l'état de recherche ne survivent pas
   }
 
@@ -1531,6 +1841,7 @@
 
   function ouvrirFiche(id) {
     etat.noeudCourant = id;
+    etat.personneCourante = null; // une seule fiche à l'écran, jamais deux
     // Toute ouverture de fiche efface le halo de recherche ; la sélection d'un
     // résultat le repose juste après (un seul halo, toujours à jour).
     window.UltimaCarte.effacerSurbrillance();
@@ -1539,6 +1850,26 @@
     ouvrirPanneau('fiche', (noeud && noeud.nom) || 'Fiche');
     rendreFiche();
     signalerDecouverteDictee();
+  }
+
+  // ---- Mise en forme des champs de détail (0024) ----
+  // Chacune renvoie une CHAÎNE ou une valeur fausse : ligneDetail se charge
+  // seule d'omettre la ligne quand le champ n'est pas renseigné. Un 0 licite
+  // (rayon nul, effectif nul) rend « 0 km » / « 0 » — chaîne, donc affichée.
+
+  function listeEnTexte(valeurs) {
+    if (!Array.isArray(valeurs) || valeurs.length === 0) { return ''; }
+    return valeurs.join(' · ');
+  }
+
+  function nombreAvecUnite(valeur, unite) {
+    if (typeof valeur !== 'number' || !isFinite(valeur)) { return ''; }
+    return unite ? String(valeur) + ' ' + unite : String(valeur);
+  }
+
+  function noteSurCinq(valeur) {
+    if (typeof valeur !== 'number' || !isFinite(valeur)) { return ''; }
+    return String(valeur) + '/5';
   }
 
   function ligneDetail(dl, libelle, valeur) {
@@ -1580,12 +1911,27 @@
     var dl = document.createElement('dl');
     dl.className = 'fiche-details';
     ligneDetail(dl, "Secteur d'activité", noeud.secteur_activite);
+    // 0024 — les autres métiers, juste sous le principal : ils décrivent la
+    // fiche sans jamais la déplacer de branche.
+    ligneDetail(dl, 'Autres métiers', listeEnTexte(noeud.metiers_secondaires));
+    ligneDetail(dl, 'Nature', noeud.nature);
     ligneDetail(dl, 'Ville', noeud.ville);
     ligneDetail(dl, 'Adresse', noeud.adresse);
     ligneDetail(dl, 'Téléphone', noeud.telephone);
     ligneDetail(dl, 'E-mail', noeud.email);
+    ligneDetail(dl, 'Prestations', noeud.prestations);
+    ligneDetail(dl, "Zone d'intervention", noeud.zone_intervention);
+    ligneDetail(dl, 'Rayon', nombreAvecUnite(noeud.rayon_km, 'km'));
+    ligneDetail(dl, 'Effectif', nombreAvecUnite(noeud.effectif, null));
+    ligneDetail(dl, 'Certifications', listeEnTexte(noeud.certifications));
+    ligneDetail(dl, 'Fiabilité', noteSurCinq(noeud.fiabilite));
+    ligneDetail(dl, 'Réactivité', noteSurCinq(noeud.reactivite));
+    ligneDetail(dl, 'Niveau de prix', noteSurCinq(noeud.niveau_prix));
+    ligneDetail(dl, 'Disponibilité', noeud.disponibilite);
     ligneDetail(dl, 'Notes', noeud.notes);
     conteneur.appendChild(dl);
+
+    rendrePersonnesDeLaFiche(conteneur, noeud);
 
     // AD-5c-δ : la check-list d'approvisionnement, adossée à la fiche chantier.
     if (noeud.type === 'chantier') {
@@ -1722,6 +2068,190 @@
     });
 
     actions.appendChild(relier);
+    actions.appendChild(modifier);
+    actions.appendChild(supprimer);
+    conteneur.appendChild(actions);
+  }
+
+  // ---------- Personnes rattachées (0024) ----------
+
+  // Bloc « Personnes » d'une fiche : qui, avec quel rôle ICI, et de quoi les
+  // joindre. Détacher retire le lien — jamais la personne, qui reste au
+  // registre : c'est tout l'objet de la boucle.
+  function rendrePersonnesDeLaFiche(conteneur, noeud) {
+    var sousTitre = document.createElement('h3');
+    sousTitre.className = 'fiche-sous-titre';
+    sousTitre.textContent = 'Personnes';
+    conteneur.appendChild(sousTitre);
+
+    var paires = rattachementsDuNoeud(noeud.id);
+
+    if (paires.length === 0) {
+      var vide = document.createElement('p');
+      vide.className = 'aucune-personne';
+      vide.textContent = 'Aucune personne rattachée.';
+      conteneur.appendChild(vide);
+    } else {
+      var liste = document.createElement('ul');
+      liste.className = 'liste-personnes';
+      paires.forEach(function (paire) {
+        var item = document.createElement('li');
+        item.className = 'item-personne-liee';
+
+        var texte = document.createElement('button');
+        texte.type = 'button';
+        texte.className = 'item-personne-texte';
+        var nom = document.createElement('span');
+        nom.className = 'item-personne-nom';
+        nom.textContent = paire.personne.nom || '(sans nom)';
+        texte.appendChild(nom);
+        // Le rôle affiché est celui du RATTACHEMENT (ici), pas la fonction
+        // générale de la personne : la même personne peut être gérante d'un
+        // côté et apporteuse d'affaires de l'autre.
+        var role = paire.lien.role || paire.personne.fonction;
+        if (role) {
+          var detail = document.createElement('span');
+          detail.className = 'item-personne-detail';
+          detail.textContent = role;
+          texte.appendChild(detail);
+        }
+        if (paire.personne.telephone) {
+          var tel = document.createElement('span');
+          tel.className = 'item-personne-detail';
+          tel.textContent = paire.personne.telephone;
+          texte.appendChild(tel);
+        }
+        texte.addEventListener('click', function () {
+          ouvrirFichePersonne(paire.personne.id);
+        });
+        item.appendChild(texte);
+
+        var detacher = document.createElement('button');
+        detacher.type = 'button';
+        detacher.className = 'bouton bouton-danger bouton-detacher';
+        detacher.setAttribute('aria-label', 'Détacher ' + (paire.personne.nom || 'cette personne'));
+        detacher.textContent = '×';
+        detacher.addEventListener('click', function () {
+          if (!window.confirm('Détacher cette personne de la fiche ? Elle reste au registre.')) { return; }
+          supprimerRattachement(paire.lien.id).then(function () {
+            toast('Personne détachée.');
+            rafraichir();
+          }).catch(function () {
+            toast('Détachement impossible.', 'erreur');
+          });
+        });
+        item.appendChild(detacher);
+        liste.appendChild(item);
+      });
+      conteneur.appendChild(liste);
+    }
+
+    var actionsPersonnes = document.createElement('div');
+    actionsPersonnes.className = 'actions-personnes';
+    var rattacher = document.createElement('button');
+    rattacher.type = 'button';
+    rattacher.id = 'fiche-rattacher';
+    rattacher.className = 'bouton bouton-secondaire';
+    rattacher.textContent = 'Rattacher une personne';
+    rattacher.addEventListener('click', function () { ouvrirFormRattachement(noeud.id); });
+    actionsPersonnes.appendChild(rattacher);
+    conteneur.appendChild(actionsPersonnes);
+  }
+
+  function ouvrirFichePersonne(id) {
+    etat.personneCourante = id;
+    etat.noeudCourant = null;
+    var personne = trouverPersonne(id);
+    ouvrirPanneau('fiche', (personne && personne.nom) || 'Personne');
+    rendreFichePersonne();
+  }
+
+  // Fiche d'une personne : ses coordonnées, et les fiches qu'elle sert. Zéro
+  // fiche est un état NORMAL, énoncé comme tel — pas une erreur à corriger.
+  function rendreFichePersonne() {
+    var personne = trouverPersonne(etat.personneCourante);
+    var conteneur = $('#vue-fiche');
+    conteneur.textContent = '';
+    if (!personne) { fermerPanneau(); return; }
+
+    $('#panneau-titre').textContent = personne.nom || 'Personne';
+
+    var badges = document.createElement('div');
+    badges.className = 'badges';
+    var badgePersonne = document.createElement('span');
+    badgePersonne.className = 'badge badge-personne';
+    badgePersonne.textContent = 'Personne';
+    badges.appendChild(badgePersonne);
+    conteneur.appendChild(badges);
+
+    var dl = document.createElement('dl');
+    dl.className = 'fiche-details';
+    ligneDetail(dl, 'Fonction', personne.fonction);
+    ligneDetail(dl, 'Téléphone', personne.telephone);
+    ligneDetail(dl, 'E-mail', personne.email);
+    ligneDetail(dl, 'Notes', personne.notes);
+    conteneur.appendChild(dl);
+
+    var sousTitre = document.createElement('h3');
+    sousTitre.className = 'fiche-sous-titre';
+    sousTitre.textContent = 'Fiches rattachées';
+    conteneur.appendChild(sousTitre);
+
+    var paires = rattachementsDeLaPersonne(personne.id);
+    if (paires.length === 0) {
+      var vide = document.createElement('p');
+      vide.className = 'aucune-personne';
+      vide.textContent = "Rattachée à aucune fiche pour l'instant.";
+      conteneur.appendChild(vide);
+    } else {
+      var liste = document.createElement('ul');
+      liste.className = 'liste-personnes';
+      paires.forEach(function (paire) {
+        var item = document.createElement('li');
+        item.className = 'item-personne-liee';
+        var bouton = document.createElement('button');
+        bouton.type = 'button';
+        bouton.className = 'item-personne-texte';
+        var nom = document.createElement('span');
+        nom.className = 'item-personne-nom';
+        nom.textContent = paire.noeud.nom || '(sans nom)';
+        bouton.appendChild(nom);
+        var detail = document.createElement('span');
+        detail.className = 'item-personne-detail';
+        detail.textContent = (LIBELLES_TYPE[paire.noeud.type] || paire.noeud.type) +
+          (paire.lien.role ? ' · ' + paire.lien.role : '');
+        bouton.appendChild(detail);
+        bouton.addEventListener('click', function () { ouvrirFiche(paire.noeud.id); });
+        item.appendChild(bouton);
+        liste.appendChild(item);
+      });
+      conteneur.appendChild(liste);
+    }
+
+    var actions = document.createElement('div');
+    actions.className = 'actions-fiche';
+
+    var modifier = document.createElement('button');
+    modifier.type = 'button';
+    modifier.className = 'bouton bouton-secondaire';
+    modifier.textContent = 'Modifier';
+    modifier.addEventListener('click', function () { ouvrirFormPersonne(personne.id); });
+
+    var supprimer = document.createElement('button');
+    supprimer.type = 'button';
+    supprimer.className = 'bouton bouton-danger';
+    supprimer.textContent = 'Supprimer';
+    supprimer.addEventListener('click', function () {
+      if (!window.confirm('Supprimer cette personne ? Les fiches du réseau ne sont pas touchées.')) { return; }
+      supprimerPersonne(personne.id).then(function () {
+        toast('Personne supprimée.');
+        fermerPanneau();
+        rafraichir();
+      }).catch(function () {
+        toast('Suppression impossible.', 'erreur');
+      });
+    });
+
     actions.appendChild(modifier);
     actions.appendChild(supprimer);
     conteneur.appendChild(actions);
@@ -2856,6 +3386,29 @@
 
   // ---------- Formulaire nœud (ajout / édition) ----------
 
+  // Les quatre axes de détail (0024), rangés par la façon dont on les LIT et
+  // on les ÉCRIT — pas par axe métier : c'est ce découpage-là qui évite trois
+  // fois le même code dans ouvrirFormNoeud et soumettreFormNoeud.
+  var CHAMPS_DETAIL_TEXTE = ['nature', 'prestations', 'zone_intervention', 'disponibilite'];
+  var CHAMPS_DETAIL_LISTE = ['metiers_secondaires', 'certifications'];
+  var CHAMPS_DETAIL_NOMBRE = ['rayon_km', 'effectif', 'fiabilite', 'reactivite', 'niveau_prix'];
+
+  // Tableau → champ de saisie. La virgule est le séparateur, l'espace suit :
+  // c'est ce qu'on relit sans y penser, et ce qu'on retape sans se tromper.
+  function listeEnSaisie(valeurs) {
+    return Array.isArray(valeurs) ? valeurs.join(', ') : '';
+  }
+
+  // Champ de saisie → tableau. Les entrées vides disparaissent (« a,,b » et
+  // « a, b, » donnent le même résultat) ; un champ vide donne un tableau vide,
+  // que l'appelant traduit en null — une seule convention pour « rien »,
+  // partagée avec l'API (checkOptionalTags) et la base (riven_tags_valides).
+  function saisieEnListe(brut) {
+    return (brut || '').split(',')
+      .map(function (t) { return t.trim(); })
+      .filter(function (t) { return t.length > 0; });
+  }
+
   function ouvrirFormNoeud(idEdition) {
     etat.noeudEnEdition = idEdition || null;
     var noeud = idEdition ? trouverNoeud(idEdition) : null;
@@ -2871,6 +3424,20 @@
     $('#noeud-lat').value = noeud && typeof noeud.lat === 'number' ? String(noeud.lat) : '';
     $('#noeud-lng').value = noeud && typeof noeud.lng === 'number' ? String(noeud.lng) : '';
     $('#noeud-notes').value = noeud ? (noeud.notes || '') : '';
+    // 0024 — les quatre axes. Le pli reste FERMÉ à l'ouverture : le flux court
+    // (nom + type + statut) n'est jamais rallongé par ces champs.
+    CHAMPS_DETAIL_TEXTE.forEach(function (champ) {
+      $('#noeud-' + champ).value = noeud ? (noeud[champ] || '') : '';
+    });
+    CHAMPS_DETAIL_LISTE.forEach(function (champ) {
+      $('#noeud-' + champ).value = noeud ? listeEnSaisie(noeud[champ]) : '';
+    });
+    CHAMPS_DETAIL_NOMBRE.forEach(function (champ) {
+      $('#noeud-' + champ).value =
+        noeud && typeof noeud[champ] === 'number' && isFinite(noeud[champ])
+          ? String(noeud[champ]) : '';
+    });
+    $('#noeud-detail').open = false;
     preparerGeoPourNoeud(noeud);
     ouvrirPanneau('noeud', idEdition ? 'Modifier le nœud' : 'Ajouter un nœud');
   }
@@ -2903,14 +3470,42 @@
     }
     // Champs optionnels : jamais de chaîne vide vers l'API (rejetée pour
     // l'email). Création → champ omis ; édition → null (vidage effectif).
-    ['ville', 'adresse', 'secteur_activite', 'telephone', 'email', 'notes'].forEach(function (champ) {
-      var brut = $('#noeud-' + champ).value.trim();
-      if (brut) {
-        valeurs[champ] = brut;
+    ['ville', 'adresse', 'secteur_activite', 'telephone', 'email', 'notes']
+      .concat(CHAMPS_DETAIL_TEXTE)
+      .forEach(function (champ) {
+        var brut = $('#noeud-' + champ).value.trim();
+        if (brut) {
+          valeurs[champ] = brut;
+        } else if (etat.noeudEnEdition) {
+          valeurs[champ] = null;
+        }
+      });
+    // Listes (0024) : vide → omis à la création, null en édition (vidage) —
+    // exactement la règle des champs texte, jamais un tableau vide sur le fil.
+    CHAMPS_DETAIL_LISTE.forEach(function (champ) {
+      var tags = saisieEnListe($('#noeud-' + champ).value);
+      if (tags.length) {
+        valeurs[champ] = tags;
       } else if (etat.noeudEnEdition) {
         valeurs[champ] = null;
       }
     });
+    // Nombres et échelles (0024) : même règle. Une saisie non numérique est
+    // refusée AVANT l'appel — l'API la refuserait, autant le dire tout de suite.
+    for (var i = 0; i < CHAMPS_DETAIL_NOMBRE.length; i++) {
+      var champNombre = CHAMPS_DETAIL_NOMBRE[i];
+      var brutNombre = $('#noeud-' + champNombre).value.trim();
+      if (!brutNombre) {
+        if (etat.noeudEnEdition) { valeurs[champNombre] = null; }
+        continue;
+      }
+      var nombre = Number(brutNombre);
+      if (!isFinite(nombre) || !Number.isInteger(nombre)) {
+        toast('Les nombres du détail doivent être entiers.', 'erreur');
+        return;
+      }
+      valeurs[champNombre] = nombre;
+    }
     if (!valeurs.nom || TYPES.indexOf(valeurs.type) === -1 || STATUTS.indexOf(valeurs.statut) === -1) {
       toast('Formulaire incomplet.', 'erreur');
       return;
@@ -2926,6 +3521,106 @@
       if (id && trouverNoeud(id)) { ouvrirFiche(id); } else { fermerPanneau(); }
     } catch (e) {
       toast('Enregistrement impossible.', 'erreur');
+    }
+  }
+
+  // ---------- Formulaire personne (0024) ----------
+
+  // Ce formulaire ne crée AUCUN nœud. C'est la demande de Paul, et c'est aussi
+  // la garantie technique : sauverPersonne n'écrit que dans `personnes`.
+  function ouvrirFormPersonne(idEdition) {
+    etat.personneEnEdition = idEdition || null;
+    var personne = idEdition ? trouverPersonne(idEdition) : null;
+    $('#personne-nom').value = personne ? (personne.nom || '') : '';
+    $('#personne-fonction').value = personne ? (personne.fonction || '') : '';
+    $('#personne-telephone').value = personne ? (personne.telephone || '') : '';
+    $('#personne-email').value = personne ? (personne.email || '') : '';
+    $('#personne-notes').value = personne ? (personne.notes || '') : '';
+    majDatalistFonctions();
+    ouvrirPanneau('personne', idEdition ? 'Modifier la personne' : 'Ajouter une personne');
+  }
+
+  async function soumettreFormPersonne(evenement) {
+    evenement.preventDefault();
+    var valeurs = { nom: $('#personne-nom').value.trim() };
+    if (!valeurs.nom) {
+      toast('Le nom est obligatoire.', 'erreur');
+      return;
+    }
+    ['fonction', 'telephone', 'email', 'notes'].forEach(function (champ) {
+      var brut = $('#personne-' + champ).value.trim();
+      if (brut) {
+        valeurs[champ] = brut;
+      } else if (etat.personneEnEdition) {
+        valeurs[champ] = null;
+      }
+    });
+    try {
+      var id = await sauverPersonne(valeurs);
+      toast(etat.personneEnEdition ? 'Personne mise à jour.' : 'Personne ajoutée.');
+      etat.personneEnEdition = null;
+      rafraichir();
+      if (id && trouverPersonne(id)) { ouvrirFichePersonne(id); } else { fermerPanneau(); }
+    } catch (e) {
+      toast('Enregistrement impossible.', 'erreur');
+    }
+  }
+
+  // ---------- Formulaire rattachement (0024) ----------
+
+  function ouvrirFormRattachement(nodeId) {
+    var noeud = trouverNoeud(nodeId);
+    if (!noeud) { return; }
+    etat.noeudARattacher = nodeId;
+
+    $('#rattachement-source').textContent = 'Sur : ' + (noeud.nom || '(sans nom)');
+    var select = $('#rattachement-personne');
+    select.textContent = '';
+    // Une personne déjà rattachée à CETTE fiche n'est pas proposée : le doublon
+    // est interdit en base (unique de 0024), autant ne pas l'offrir.
+    var dejaLa = {};
+    etat.rattachements.forEach(function (r) {
+      if (r.node_id === nodeId) { dejaLa[r.personne_id] = true; }
+    });
+    etat.personnes.slice().sort(function (a, b) {
+      return (a.nom || '').localeCompare(b.nom || '', 'fr');
+    }).forEach(function (p) {
+      if (dejaLa[p.id]) { return; }
+      var option = document.createElement('option');
+      option.value = p.id;
+      option.textContent = (p.nom || '(sans nom)') + (p.fonction ? ' — ' + p.fonction : '');
+      select.appendChild(option);
+    });
+    if (!select.options.length) {
+      toast('Aucune personne disponible : créez-en une depuis le registre.', 'erreur');
+      return;
+    }
+    $('#rattachement-role').value = '';
+    majDatalistRoles();
+    ouvrirPanneau('rattachement', 'Rattacher une personne');
+  }
+
+  async function soumettreFormRattachement(evenement) {
+    evenement.preventDefault();
+    var valeurs = {
+      personne_id: $('#rattachement-personne').value,
+      node_id: etat.noeudARattacher
+    };
+    var role = $('#rattachement-role').value.trim();
+    if (role) { valeurs.role = role; }
+    if (!valeurs.personne_id || !valeurs.node_id) {
+      toast('Formulaire incomplet.', 'erreur');
+      return;
+    }
+    var cible = valeurs.node_id;
+    try {
+      await creerRattachement(valeurs);
+      toast('Personne rattachée.');
+      etat.noeudARattacher = null;
+      rafraichir();
+      ouvrirFiche(cible);
+    } catch (e) {
+      toast('Rattachement impossible.', 'erreur');
     }
   }
 
@@ -3118,7 +3813,18 @@
         toast('Connectez-vous pour ajouter un contact.', 'erreur');
         return;
       }
+      // Le bouton suit le registre affiché : une fiche ici, une personne là.
+      if (etat.registreContacts === 'personnes') {
+        ouvrirFormPersonneDepuisRegistre();
+        return;
+      }
       ouvrirFormDepuisAccueil(null);
+    });
+
+    document.querySelectorAll('.contacts-registre').forEach(function (bouton) {
+      bouton.addEventListener('click', function () {
+        changerRegistreContacts(bouton.getAttribute('data-registre'));
+      });
     });
 
     $('#contacts-recherche').addEventListener('input', rendreContacts);
@@ -3166,9 +3872,23 @@
     $('#bouton-annuler-relation').addEventListener('click', function () {
       if (etat.noeudCourant) { ouvrirFiche(etat.noeudCourant); } else { fermerPanneau(); }
     });
+    // Annuler une personne : on revient à SA fiche si on l'éditait, sinon on
+    // ferme — jamais sur la fiche d'un nœud, où l'on n'était pas.
+    $('#bouton-annuler-personne').addEventListener('click', function () {
+      var retour = etat.personneEnEdition || etat.personneCourante;
+      etat.personneEnEdition = null;
+      if (retour && trouverPersonne(retour)) { ouvrirFichePersonne(retour); } else { fermerPanneau(); }
+    });
+    $('#bouton-annuler-rattachement').addEventListener('click', function () {
+      var retour = etat.noeudARattacher;
+      etat.noeudARattacher = null;
+      if (retour && trouverNoeud(retour)) { ouvrirFiche(retour); } else { fermerPanneau(); }
+    });
 
     $('#form-noeud').addEventListener('submit', soumettreFormNoeud);
     $('#form-relation').addEventListener('submit', soumettreFormRelation);
+    $('#form-personne').addEventListener('submit', soumettreFormPersonne);
+    $('#form-rattachement').addEventListener('submit', soumettreFormRattachement);
     $('#form-connexion').addEventListener('submit', envoyerLienMagique);
     var boutonGoogle = $('#bouton-google');
     if (boutonGoogle) { boutonGoogle.addEventListener('click', seConnecterGoogle); }
