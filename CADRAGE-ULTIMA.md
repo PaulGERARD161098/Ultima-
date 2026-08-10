@@ -6,6 +6,25 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🕸️ **SESSION 2026-08-10 (RIVEN en détail), CLOSE.** PR **#151 fusionnée**
+  (`1f85160`), migration **0024 APPLIQUÉE** au go de Paul, rien de non poussé.
+  - ✅ **`personnes` et `personne_noeuds` existent en production**, RLS active
+    sur les deux, 0 ligne — prêtes à recevoir. `network_nodes` conserve ses
+    **5 fiches** : aucune donnée touchée par l'additif.
+  - 🔻 **Le RADAR était périmé** : il notait « RIVEN vide, 0 fiche (30/07) ».
+    Faux au 2026-08-10 — **5 fiches**. Paul a commencé à peupler entre les deux
+    sessions. *Un constat d'état daté se re-vérifie avant d'être re-cité.*
+  - ⏳ **Un seul contrôle manque** : la passe `get_advisors` (sécurité +
+    performance) après application — appel **refusé faute d'autorisation du
+    connecteur Supabase**. À rejouer dès l'autorisation donnée. **Action Paul.**
+  - 🎯 **PROCHAINE BOUCLE, cadrée avec Paul le 2026-08-10 : peupler RIVEN, par
+    les DEUX voies** (son arbitrage) — ① Léo **ingère** une source existante
+    (contacts, Gmail, tableau, devis) et propose des fiches et des personnes
+    pré-remplies que Paul valide ; ② Léo construit la **saisie en série**
+    (enchaîner des fiches sans rouvrir le formulaire, rattacher une personne
+    depuis sa propre fiche) pour ce qui n'est écrit nulle part. **Premier geste :
+    demander à Paul QUELLE source il apporte — sans elle, ① n'existe pas.**
+
 - 🕸️ **SESSION 2026-08-10 (RIVEN en détail), LIVRÉE — une gate ouverte.**
   Cadrage complet : `CADRAGE-RIVEN-DETAIL.md` (format 6 points, pre-mortem à
   8 entrées). Patrimoine COMPLET vert à **2 068 assertions** (1 310 `✅` +

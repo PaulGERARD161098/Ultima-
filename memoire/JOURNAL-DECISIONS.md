@@ -2174,3 +2174,31 @@
 - ⚠️ **La migration `0024` n'est PAS appliquée** — gate. En attendant, les
   personnes ne vivent qu'en mode démo : la preview montre le flux complet,
   la production ne les stockera qu'après le go de Paul.
+
+### 2026-08-10 (suite) — 0024 appliquée, et la suite cadrée par Paul
+
+- **Go de Paul, migration `0024` APPLIQUÉE** (projet Ultima, version
+  `riven_detail`). Vérifié aussitôt : les deux tables existent, **RLS active**,
+  0 ligne ; `network_nodes` garde ses 5 fiches. L'additif n'a rien touché.
+- ⚠️ **`get_advisors` n'a PAS pu être joué** — appel refusé faute d'autorisation
+  du connecteur. Je le consigne comme **manquant**, je ne le déduis pas de la
+  réussite de l'application : *une vérification qu'on n'a pas pu faire n'est pas
+  une vérification qui passe.* (Même faute que « c'est sûrement le cache » du
+  2026-08-07, si je l'avais présumée verte.)
+- 🔻 **Le RADAR m'a fait dire un faux.** Je m'apprêtais à annoncer à Paul que
+  « RIVEN est vide, c'est le goulot » — sur la foi d'un constat daté du 30/07.
+  `list_tables` a montré **5 fiches** : il avait commencé entre-temps.
+  **Leçon : un constat d'ÉTAT vieillit ; une décision, non. Avant de re-citer un
+  état consigné, on le re-mesure — surtout quand on va en tirer un conseil.**
+  Le RADAR doit distinguer ce qui se périme de ce qui tient.
+- **Arbitrage de Paul sur la suite : les DEUX voies pour peupler RIVEN.**
+  ① Léo ingère une source existante et propose du pré-rempli à valider ;
+  ② Léo construit la saisie en série pour ce qui n'est écrit nulle part.
+  J'avais recommandé ① seule (« la vraie question n'est pas *quoi* renseigner,
+  mais *si tu dois taper* ») ; Paul a pris les deux. **Il refuse de choisir
+  entre l'import et l'outil quand les deux servent** — cohérent avec la
+  directive JL : tout besoin devient une extension d'Ultima, jamais un
+  contournement ponctuel.
+- **Dépendance à ne pas oublier** : la voie ① ne démarre pas sans que Paul
+  DISE quelle source il apporte. C'est le premier geste de la prochaine session,
+  avant toute ligne de code.
