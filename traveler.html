@@ -510,8 +510,13 @@
           <div class="champ">
             <label for="noeud-secteur_activite">Secteur d'activité</label>
             <input id="noeud-secteur_activite" type="text" maxlength="120"
-                   list="liste-secteurs" autocomplete="off">
+                   list="liste-secteurs" autocomplete="off"
+                   aria-describedby="aide-secteur">
             <datalist id="liste-secteurs"></datalist>
+            <!-- Le métier PRINCIPAL, et lui seul, fait la branche de l'arbre
+                 (arbitrage Paul 2026-08-10). Les autres métiers sont plus bas,
+                 dans « Détail » — ils décrivent, ils ne rangent pas. -->
+            <p id="aide-secteur" class="champ-aide">Le métier principal : c'est lui qui fait la branche de l'arbre.</p>
           </div>
           <div class="champ">
             <label for="noeud-ville">Ville</label>
@@ -565,6 +570,117 @@
             <label for="noeud-notes">Notes</label>
             <textarea id="noeud-notes" rows="3" maxlength="2000"></textarea>
           </div>
+
+          <!-- ===== Détail (0024) : les quatre axes, REPLIÉS =====
+               Le flux court d'aujourd'hui (nom + type + statut → Enregistrer)
+               est intact : ces onze champs sont sous un pli, jamais sur le
+               chemin de la saisie au pouce après un rendez-vous. -->
+          <details id="noeud-detail" class="noeud-detail">
+            <summary>Détail — ce qu'ils font</summary>
+
+            <div class="champ">
+              <label for="noeud-nature">Nature</label>
+              <input id="noeud-nature" type="text" maxlength="80"
+                     list="liste-natures" autocomplete="off"
+                     placeholder="entreprise, indépendant, fournisseur…">
+              <datalist id="liste-natures">
+                <option value="Entreprise"></option>
+                <option value="Artisan indépendant"></option>
+                <option value="Fournisseur"></option>
+                <option value="Bureau d'études"></option>
+                <option value="Distributeur"></option>
+                <option value="Apporteur d'affaires"></option>
+                <option value="Institution"></option>
+                <option value="Particulier"></option>
+              </datalist>
+            </div>
+
+            <div class="champ">
+              <label for="noeud-metiers_secondaires">Autres métiers</label>
+              <input id="noeud-metiers_secondaires" type="text" maxlength="1500"
+                     autocomplete="off" aria-describedby="aide-metiers"
+                     placeholder="Chauffage, Pompe à chaleur">
+              <p id="aide-metiers" class="champ-aide">Séparés par des virgules. N'ajoutent pas de branche à l'arbre.</p>
+            </div>
+
+            <div class="champ">
+              <label for="noeud-prestations">Prestations</label>
+              <textarea id="noeud-prestations" rows="3" maxlength="2000"
+                        placeholder="Ce qu'ils savent faire, en clair."></textarea>
+            </div>
+
+            <div class="champ">
+              <label for="noeud-zone_intervention">Zone d'intervention</label>
+              <input id="noeud-zone_intervention" type="text" maxlength="200"
+                     autocomplete="off" placeholder="Nord, Pas-de-Calais">
+            </div>
+
+            <div class="champs-doubles">
+              <div class="champ">
+                <label for="noeud-rayon_km">Rayon (km)</label>
+                <input id="noeud-rayon_km" type="number" min="0" max="2000" step="1" inputmode="numeric">
+              </div>
+              <div class="champ">
+                <label for="noeud-effectif">Effectif</label>
+                <input id="noeud-effectif" type="number" min="0" max="100000" step="1" inputmode="numeric">
+              </div>
+            </div>
+
+            <div class="champ">
+              <label for="noeud-certifications">Certifications</label>
+              <input id="noeud-certifications" type="text" maxlength="1000"
+                     autocomplete="off" aria-describedby="aide-certifications"
+                     placeholder="RGE, Qualibat">
+              <p id="aide-certifications" class="champ-aide">Séparées par des virgules.</p>
+            </div>
+
+            <!-- Échelles 1..5 : mêmes bornes que les efforts d'un rapprochement
+                 (migration 0005). Une seule grammaire de notation dans RIVEN. -->
+            <div class="champs-doubles">
+              <div class="champ">
+                <label for="noeud-fiabilite">Fiabilité</label>
+                <select id="noeud-fiabilite">
+                  <option value="">—</option>
+                  <option value="1">1 — à surveiller</option>
+                  <option value="2">2</option>
+                  <option value="3">3 — correcte</option>
+                  <option value="4">4</option>
+                  <option value="5">5 — les yeux fermés</option>
+                </select>
+              </div>
+              <div class="champ">
+                <label for="noeud-reactivite">Réactivité</label>
+                <select id="noeud-reactivite">
+                  <option value="">—</option>
+                  <option value="1">1 — lente</option>
+                  <option value="2">2</option>
+                  <option value="3">3 — correcte</option>
+                  <option value="4">4</option>
+                  <option value="5">5 — immédiate</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="champs-doubles">
+              <div class="champ">
+                <label for="noeud-niveau_prix">Niveau de prix</label>
+                <select id="noeud-niveau_prix">
+                  <option value="">—</option>
+                  <option value="1">1 — très abordable</option>
+                  <option value="2">2</option>
+                  <option value="3">3 — dans le marché</option>
+                  <option value="4">4</option>
+                  <option value="5">5 — premium</option>
+                </select>
+              </div>
+              <div class="champ">
+                <label for="noeud-disponibilite">Disponibilité</label>
+                <input id="noeud-disponibilite" type="text" maxlength="120"
+                       autocomplete="off" placeholder="sous 48 h">
+              </div>
+            </div>
+          </details>
+
           <div class="actions-formulaire">
             <button type="submit" class="bouton bouton-primaire">Enregistrer</button>
             <button type="button" id="bouton-annuler-noeud" class="bouton bouton-secondaire">Annuler</button>
@@ -594,6 +710,63 @@
             <button type="button" id="bouton-annuler-relation" class="bouton bouton-secondaire">Annuler</button>
           </div>
         </form>
+
+        <!-- ===== La PERSONNE (0024) — elle n'a besoin d'aucun nœud =====
+             Enregistrer une personne ne crée AUCUNE fiche au réseau : elle ne
+             paraît ni sur l'arbre ni sur la carte. C'est la demande de Paul du
+             2026-08-10 (« renseigner des contacts sans forcément créer des
+             nœuds »). Le rattachement est un geste séparé, et facultatif. -->
+        <form id="form-personne" class="panneau-corps formulaire" hidden>
+          <div class="champ">
+            <label for="personne-nom">Nom *</label>
+            <input id="personne-nom" type="text" required maxlength="200">
+          </div>
+          <div class="champ">
+            <label for="personne-fonction">Fonction</label>
+            <input id="personne-fonction" type="text" maxlength="120"
+                   list="liste-fonctions" autocomplete="off"
+                   placeholder="gérant, conducteur de travaux…">
+            <datalist id="liste-fonctions"></datalist>
+          </div>
+          <div class="champ">
+            <label for="personne-telephone">Téléphone</label>
+            <input id="personne-telephone" type="tel" maxlength="30" autocomplete="tel">
+          </div>
+          <div class="champ">
+            <label for="personne-email">E-mail</label>
+            <input id="personne-email" type="email" maxlength="200" autocomplete="off">
+          </div>
+          <div class="champ">
+            <label for="personne-notes">Notes</label>
+            <textarea id="personne-notes" rows="3" maxlength="2000"></textarea>
+          </div>
+          <div class="actions-formulaire">
+            <button type="submit" class="bouton bouton-primaire">Enregistrer</button>
+            <button type="button" id="bouton-annuler-personne" class="bouton bouton-secondaire">Annuler</button>
+          </div>
+        </form>
+
+        <!-- ===== Le RATTACHEMENT (0024) : personne × nœud × rôle =====
+             Répétable sans limite : la même personne se rattache à autant de
+             fiches que nécessaire, avec un rôle différent sur chacune. -->
+        <form id="form-rattachement" class="panneau-corps formulaire" hidden>
+          <p id="rattachement-source" class="relation-source"></p>
+          <div class="champ">
+            <label for="rattachement-personne">Personne *</label>
+            <select id="rattachement-personne" required></select>
+          </div>
+          <div class="champ">
+            <label for="rattachement-role">Rôle dans cette fiche</label>
+            <input id="rattachement-role" type="text" maxlength="120"
+                   list="liste-roles" autocomplete="off"
+                   placeholder="gérant, apporteur d'affaires…">
+            <datalist id="liste-roles"></datalist>
+          </div>
+          <div class="actions-formulaire">
+            <button type="submit" class="bouton bouton-primaire">Rattacher</button>
+            <button type="button" id="bouton-annuler-rattachement" class="bouton bouton-secondaire">Annuler</button>
+          </div>
+        </form>
     </aside>
 
     <!-- ===== Espace Contacts (registre sobre : liste + recherche) ===== -->
@@ -606,6 +779,16 @@
           </div>
           <button id="contacts-ajouter" type="button" class="bouton bouton-primaire">+ Ajouter un contact</button>
         </header>
+        <!-- Deux registres (0024) : les FICHES (les nœuds — arbre et carte) et
+             les PERSONNES (les gens, qui n'ont besoin d'aucun nœud). Le premier
+             est celui d'avant, à l'identique : ouvrir l'onglet ne change rien
+             pour qui ne cherche pas les personnes. -->
+        <div id="contacts-registres" class="contacts-registres" role="tablist" aria-label="Registres du réseau">
+          <button id="registre-fiches" type="button" class="contacts-registre" role="tab"
+                  data-registre="fiches" aria-selected="true">Fiches</button>
+          <button id="registre-personnes" type="button" class="contacts-registre" role="tab"
+                  data-registre="personnes" aria-selected="false">Personnes</button>
+        </div>
         <div id="contacts-outils" class="contacts-outils" hidden>
           <input id="contacts-recherche" type="search" placeholder="Rechercher un nom ou une ville…"
                  aria-label="Rechercher un contact par nom ou ville" autocomplete="off">

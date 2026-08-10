@@ -6,6 +6,32 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🕸️ **SESSION 2026-08-10 (RIVEN en détail), LIVRÉE — une gate ouverte.**
+  Cadrage complet : `CADRAGE-RIVEN-DETAIL.md` (format 6 points, pre-mortem à
+  8 entrées). Patrimoine COMPLET vert à **2 068 assertions** (1 310 `✅` +
+  758 `true`, dont **52 neuves**), rien de non poussé.
+  - ✅ **La personne cesse d'être un nœud.** Tables `personnes` et
+    `personne_noeuds` (personne × nœud × **rôle**) : 0 rattachement = une
+    personne sans aucune fiche, N rattachements = la même personne sur N fiches
+    avec un rôle sur chacune. Les deux demandes de Paul sont vraies pour la même
+    raison — le lien ne vit ni sur la personne ni sur la fiche, mais entre.
+  - ✅ **Onze champs de détail** sur `network_nodes`, en quatre axes : nature
+    affinée, métiers multiples, capacités concrètes (prestations, zone, rayon,
+    effectif, certifications), qualité de la relation (fiabilité, réactivité,
+    prix, disponibilité). Repliés sous « Détail » : le flux court au pouce
+    (nom + type + statut → Enregistrer) n'est **pas** allongé d'un champ.
+  - ✅ **L'arbre n'a pas bougé d'un pixel** — `js/arbre.js` et `js/carte.js` :
+    **zéro ligne de diff**, `smoke-arbre` et `smoke-secteur` verts **sans
+    retouche**. C'était un critère écrit d'avance, pas un constat d'après-coup.
+  - 🔁 **Trois ambiguïtés levées par question AVANT de coder** (leçon du
+    2026-08-07 appliquée à la première occasion) : personne ≠ nœud / les quatre
+    axes / le métier principal fait la branche.
+  - ⏳ **GATE OUVERTE — migration `0024_riven_detail.sql` NON appliquée.**
+    Tant qu'elle ne l'est pas, les personnes n'existent qu'en mode démo. C'est
+    la **prochaine action** : go de Paul, puis application + advisors.
+  - ⏭ **Reporté, sur décision de Paul lui-même** : les archipels et les arbres
+    d'affichage différents (« pour l'instant ce n'est plutôt pas mal »).
+
 - 🎯 **SESSION 2026-08-10 (ALTHEA — sa place et sa devise), CLOSE.** PR **#148
   et #149 fusionnées** (`305d574`, `712af96`), patrimoine COMPLET vert à
   **1 310 assertions**, rien de non poussé. **Le ⏳ de la session précédente est

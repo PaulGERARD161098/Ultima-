@@ -64,6 +64,8 @@ echo "=== unit-althea-progression.mjs ==="
 node unit-althea-progression.mjs
 echo "=== unit-althea-validate.mjs ==="
 node unit-althea-validate.mjs
+echo "=== unit-riven-detail.mjs ==="
+node unit-riven-detail.mjs
 
 # 3. Serveur statique sur la racine du repo.
 (cd .. && python3 -m http.server 8123 >/dev/null 2>&1) &

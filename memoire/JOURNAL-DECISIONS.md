@@ -2129,3 +2129,48 @@
   voisins sont des boussoles — et c'est juste : on entre dans le jeu d'un seul
   geste, sans traverser d'étage. `chemin('althea')` vaut `['racine', 'althea']`,
   et le harnais l'éprouve.
+
+### 2026-08-10 — RIVEN en détail : la personne cesse d'être un nœud
+
+- **Paul, en dictée** : *« les catégorisations des contacts ne sont pas assez
+  précises […] que je puisse renseigner des contacts sans forcément créer des
+  nœuds, que je puisse également créer plusieurs nœuds »*. Trois lectures
+  possibles de cette phrase, toutes défendables. **Je n'en ai retenu aucune :
+  j'ai posé les trois en question avant d'écrire une ligne.** Réponses de Paul :
+  ① séparer la **personne** du **nœud** ; ② les **quatre** axes de détail ;
+  ③ le **métier principal fait la branche**.
+  C'est l'application directe de la leçon du 2026-08-07, à la première occasion
+  qui s'est présentée : *le doute se lève en une question, pas en une journée.*
+- **Le modèle** : `personnes` (les gens) + `personne_noeuds` (personne × nœud ×
+  rôle). Zéro ligne dans la table de lien = une personne sans aucun nœud, licite ;
+  N lignes = la même personne sur N fiches, **avec un rôle différent sur
+  chacune**. Les deux phrases de Paul sont vraies pour la même raison : le lien
+  ne vit ni sur la personne ni sur la fiche, mais entre les deux.
+- **Ce qu'on n'a PAS fait, et c'est le point dur** : `secteur_activite` n'a pas
+  été renommé, pas déplacé, pas multiplié. Il reste le métier **principal** et
+  l'unique clé de regroupement de l'arbre. `js/arbre.js` et `js/carte.js` ont
+  **zéro ligne de diff** — et c'était un **critère de réussite écrit d'avance**,
+  pas une chance : `smoke-arbre` et `smoke-secteur` passent **sans retouche**.
+  *Un champ qui range et un champ qui décrit ne sont pas le même champ.*
+- **Les mots ont été choisis, pas subis.** Le mot juste serait « fiche » pour le
+  nœud et « contact » pour la personne — mais renommer « contact » dans toute
+  l'interface est exactement le geste qui a laissé `smoke-quadrants` rouge le
+  2026-07-22. La notion neuve s'appelle donc **« personne »** : zéro ambiguïté
+  avec l'existant, zéro renommage. Choix délibéré et réversible, consigné comme
+  tel dans `CADRAGE-RIVEN-DETAIL.md` §5.
+- **`CHECK` + tableau = piège Postgres**, prévu au pre-mortem P1 et évité :
+  vérifier « chaque élément est borné » demande un `unnest`, donc une
+  sous-requête, **interdite en contrainte**. Résolu par une fonction
+  `immutable` à `search_path` épinglé, écrite **une fois** pour les deux colonnes.
+  *Un pre-mortem qui nomme le mécanisme d'échec, et pas seulement le risque,
+  fournit sa parade.*
+- **Une seule convention pour « rien »** (pre-mortem P6) : un tableau vide se
+  normalise en `null` côté API, jamais `[]` sur le fil. La règle est écrite une
+  fois et **éprouvée dans les deux sens** — c'est ce qui empêche base, API et
+  front de diverger silencieusement sur la même donnée absente.
+- **La démo ne ment pas** (P7) : les personnes de `donneesDemo()` ont la forme
+  EXACTE du GET `/api/reseau`. Un harnais qui exerce une donnée que la vraie API
+  ne saurait produire ne prouve rien.
+- ⚠️ **La migration `0024` n'est PAS appliquée** — gate. En attendant, les
+  personnes ne vivent qu'en mode démo : la preview montre le flux complet,
+  la production ne les stockera qu'après le go de Paul.

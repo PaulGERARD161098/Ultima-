@@ -123,6 +123,157 @@ await ongletContacts.click();
 await page.waitForTimeout(200);
 verdicts.rienCree = (await page.locator('.item-contact').count()) === 10;
 
+// ===========================================================================
+// RIVEN 0024 — le détail des fiches, et les PERSONNES séparées des nœuds.
+// Critères ①/②/③ de CADRAGE-RIVEN-DETAIL.md §4.
+// ===========================================================================
+
+const registreFiches = page.locator('#registre-fiches');
+const registrePersonnes = page.locator('#registre-personnes');
+
+// Ouvre la fiche d'un nœud depuis le registre des fiches.
+async function ouvrirFicheDepuisRegistre(nomFiche) {
+  await ongletContacts.click();
+  await page.waitForTimeout(200);
+  await registreFiches.click();
+  await page.waitForTimeout(200);
+  await page.locator('.item-contact', { hasText: nomFiche }).click();
+  await page.waitForTimeout(300);
+}
+
+// 8. Les onze champs de détail atteignent la fiche (fixture demo-n2).
+await ouvrirFicheDepuisRegistre('Plomberie Roux');
+const detailsRoux = await page.locator('.fiche-details').innerText();
+verdicts.detailAutresMetiers = detailsRoux.includes('Autres métiers') &&
+  detailsRoux.includes('Chauffage · Pompe à chaleur');
+verdicts.detailCapacites = detailsRoux.includes('Rhône et Ain') &&
+  detailsRoux.includes('60 km') && detailsRoux.includes('RGE · QualiPAC');
+verdicts.detailRelation = detailsRoux.includes('5/5') && detailsRoux.includes('sous 48 h');
+// Le métier principal reste seul en tête : les autres métiers ne le remplacent
+// pas et ne rangent la fiche nulle part ailleurs.
+verdicts.metierPrincipalIntact = detailsRoux.includes("Secteur d'activité") &&
+  detailsRoux.includes('Plomberie');
+
+// 9. Le pli « Détail » existe et s'ouvre FERMÉ : le flux court n'est pas allongé.
+await ongletContacts.click();
+await page.waitForTimeout(200);
+await page.locator('#contacts-ajouter').click();
+await page.waitForTimeout(200);
+verdicts.pliDetailFerme = await page.evaluate(() => {
+  const d = document.querySelector('#noeud-detail');
+  return Boolean(d) && d.open === false;
+});
+verdicts.champsDetailPresents = (await page.locator('#noeud-metiers_secondaires').count()) === 1 &&
+  (await page.locator('#noeud-fiabilite').count()) === 1 &&
+  (await page.locator('#noeud-rayon_km').count()) === 1;
+
+// 10. Le registre des personnes : trois personnes de démo, dont UNE sans nœud.
+await ongletContacts.click();
+await page.waitForTimeout(200);
+await registrePersonnes.click();
+await page.waitForTimeout(200);
+verdicts.troisPersonnes = (await page.locator('.item-personne').count()) === 3;
+verdicts.compteurPersonnes =
+  (await page.locator('#contacts-compteur').textContent()).trim() === '3 personnes';
+verdicts.boutonSuitLeRegistre =
+  (await page.locator('#contacts-ajouter').textContent()).trim() === '+ Ajouter une personne';
+// Zéro fiche est un état NORMAL, écrit en toutes lettres.
+verdicts.badgeARattacher = (await page.locator('.item-personne', { hasText: 'Godefroy Aubert' })
+  .locator('.badge-a-rattacher').textContent()) === 'À rattacher';
+verdicts.aucuneFicheAnnoncee = (await page.locator('.item-personne', { hasText: 'Godefroy Aubert' })
+  .locator('.item-contact-detail').textContent()).includes('aucune fiche');
+// Une personne DÉJÀ sur deux fiches : la demande « plusieurs nœuds », en démo.
+verdicts.deuxFichesAnnoncees = (await page.locator('.item-personne', { hasText: 'Karim Roux' })
+  .locator('.item-contact-detail').textContent()).includes('2 fiches');
+await page.screenshot({ path: `${SCRATCH}/personnes-390.png` });
+
+// 11. C2 — créer une personne NE CRÉE AUCUN NŒUD. Le compte de fiches, mesuré
+//     dans le DOM avant et après, ne bouge pas d'une unité.
+await page.locator('#contacts-ajouter').click();
+await page.waitForTimeout(200);
+verdicts.formPersonneOuvert = await page.locator('#form-personne').isVisible();
+verdicts.formNoeudNonOuvert = !(await page.locator('#form-noeud').isVisible());
+await page.locator('#personne-nom').fill('Mireille Vasseur');
+await page.locator('#personne-fonction').fill('Architecte');
+await page.locator('#form-personne button[type="submit"]').click();
+await page.waitForTimeout(300);
+verdicts.fichePersonneOuverte =
+  (await page.locator('#panneau-titre').textContent()) === 'Mireille Vasseur';
+verdicts.personneNeuveSansFiche =
+  (await page.locator('.aucune-personne').textContent()).includes('aucune fiche');
+await ongletContacts.click();
+await page.waitForTimeout(200);
+await registreFiches.click();
+await page.waitForTimeout(200);
+verdicts.aucunNoeudCree = (await page.locator('.item-contact').count()) === 10;
+await registrePersonnes.click();
+await page.waitForTimeout(200);
+verdicts.quatrePersonnes = (await page.locator('.item-personne').count()) === 4;
+
+// 12. C3 — la MÊME personne sur DEUX fiches, avec DEUX rôles distincts.
+async function rattacherMireille(nomFiche, role) {
+  await ouvrirFicheDepuisRegistre(nomFiche);
+  await page.locator('#fiche-rattacher').click();
+  await page.waitForTimeout(200);
+  const valeur = await page.locator('#rattachement-personne option').evaluateAll(
+    (opts) => (opts.find((o) => o.textContent.startsWith('Mireille')) || {}).value);
+  await page.locator('#rattachement-personne').selectOption(valeur);
+  await page.locator('#rattachement-role').fill(role);
+  await page.locator('#form-rattachement button[type="submit"]').click();
+  await page.waitForTimeout(300);
+}
+
+await rattacherMireille('Élec Ferrand', 'Architecte conseil');
+verdicts.ficheApresRattachement =
+  (await page.locator('#panneau-titre').textContent()) === 'Élec Ferrand';
+verdicts.personneVisibleSurLaFiche = (await page.locator('.liste-personnes').innerText())
+  .includes('Mireille Vasseur');
+verdicts.roleVisibleSurLaFiche = (await page.locator('.liste-personnes').innerText())
+  .includes('Architecte conseil');
+
+await rattacherMireille('Zoé Sans Position', 'Suivi de chantier');
+
+// Depuis la seconde fiche, on ouvre la personne : elle porte bien SES DEUX
+// fiches, chacune avec SON rôle. C'est la preuve de « plusieurs nœuds ».
+await page.locator('.liste-personnes .item-personne-texte').first().click();
+await page.waitForTimeout(300);
+verdicts.retourFichePersonne =
+  (await page.locator('#panneau-titre').textContent()) === 'Mireille Vasseur';
+const fichesDeMireille = await page.locator('.liste-personnes .item-personne-nom').allTextContents();
+const rolesDeMireille = await page.locator('.liste-personnes .item-personne-detail').allTextContents();
+verdicts.deuxFichesRattachees = fichesDeMireille.length === 2 &&
+  fichesDeMireille.includes('Élec Ferrand') && fichesDeMireille.includes('Zoé Sans Position');
+verdicts.deuxRolesDistincts = rolesDeMireille.length === 2 &&
+  rolesDeMireille.some((t) => t.includes('Architecte conseil')) &&
+  rolesDeMireille.some((t) => t.includes('Suivi de chantier'));
+await page.screenshot({ path: `${SCRATCH}/personne-deux-fiches-390.png` });
+
+// 13. Détacher retire le LIEN, jamais la personne : elle reste au registre.
+page.once('dialog', (d) => d.accept());
+await ouvrirFicheDepuisRegistre('Élec Ferrand');
+await page.locator('.item-personne-liee .bouton-detacher').first().click();
+await page.waitForTimeout(300);
+verdicts.detacheDeLaFiche = (await page.locator('.aucune-personne').textContent())
+  .includes('Aucune personne rattachée');
+await ongletContacts.click();
+await page.waitForTimeout(200);
+await registrePersonnes.click();
+await page.waitForTimeout(200);
+verdicts.personneToujoursAuRegistre = (await page.locator('.item-personne').count()) === 4 &&
+  (await page.locator('.item-personne', { hasText: 'Mireille Vasseur' })
+    .locator('.item-contact-detail').textContent()).includes('1 fiche');
+
+// 14. La recherche du registre porte sur le nom ET la fonction, et ne traverse
+//     pas les registres (le terme est remis à zéro au changement).
+await recherche.fill('architecte');
+await page.waitForTimeout(150);
+verdicts.rechercheParFonction = (await page.locator('.item-personne').count()) === 1 &&
+  (await page.locator('.item-personne-nom').first().textContent()) === 'Mireille Vasseur';
+await registreFiches.click();
+await page.waitForTimeout(200);
+verdicts.rechercheRemiseAZero = (await recherche.inputValue()) === '' &&
+  (await page.locator('.item-contact').count()) === 10;
+
 console.log(JSON.stringify(verdicts, null, 2));
 console.log('erreurs:', erreurs.length ? erreurs : 'aucune');
 const ok = Object.values(verdicts).every((v) => v === true) && erreurs.length === 0;
