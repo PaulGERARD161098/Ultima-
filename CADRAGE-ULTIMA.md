@@ -6,6 +6,39 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🎯 **SESSION 2026-08-10 (ALTHEA — sa place et sa devise), CLOSE.** PR **#148
+  et #149 fusionnées** (`305d574`, `712af96`), patrimoine COMPLET vert à
+  **1 310 assertions**, rien de non poussé. **Le ⏳ de la session précédente est
+  fermé, et il ne l'a pas été comme je l'avais prédit.**
+  - ✅ **ALTHEA siège à la RACINE** — aux côtés d'ULTIMA et d'ALPHA, plus sous la
+    supra-division. Nœud **déplacé, jamais dupliqué**. `chemin('althea')` vaut
+    `['racine', 'althea']` : on entre dans le jeu **d'un seul geste**. Seul
+    cap-feuille entre deux boussoles, et c'est voulu.
+  - ✅ **La devise du Système** — *« I am the record of your struggles, the
+    evidence of your resistance and the reward of your pain »*, en épigraphe,
+    en `--spectre` (elle parle à la première personne : c'est ce qui est
+    **annoncé**, jamais ce qui est **gagné**), avec `lang="en"`.
+  - ❌ **Mon hypothèse était fausse.** J'avais écrit « c'est sûrement le cache
+    navigateur ». Ce n'était pas le cache : **ALTHEA n'avait jamais été sur la
+    racine.** Le nom *ULTIMA* désigne **deux étages** — le produit entier
+    (*Ultima Lv3*, l'accueil) et la supra-division personnelle. « 3ᵉ cadran
+    d'Ultima LV3 » visait le premier, j'ai rangé sous le second. Une journée
+    d'écart entre ce que Paul cherchait et ce que j'avais construit, pour une
+    ambiguïté levable en une question.
+  - ⚠️ **Sept assertions sont tombées** au déplacement, dans quatre harnais —
+    dont **trois listes écrites à la main sous un commentaire qui expliquait
+    qu'il ne fallait pas en écrire**. Toutes rebranchées sur le registre.
+  - ⏳ **Reste ouvert** : la **synchro Notion** (fiche « 📦 Repo Ultima- »), dont
+    l'appel est refusé faute d'autorisation du connecteur — l'entrée est
+    rédigée, elle n'a pas le droit de s'écrire. **Action Paul.**
+  - 🎯 **PROCHAINE BOUCLE : B2 — le journal des quêtes.** Elle est **déjà cadrée
+    au format 6 points** dans `CADRAGE-ALTHEA.md` **§16** (pre-mortem compris),
+    à la demande de Paul le 2026-08-10. **Le gate d'entrée d'EL est donc levé :
+    on n'ouvre pas une phase de cadrage, on lit §16 et on exécute** — après
+    avoir vérifié auprès de Paul qu'il n'a pas changé d'avis sur le §16 ⑤ (ce
+    qu'on ne fait pas). Premier geste technique : `list_tables`, pas la lecture
+    de l'esquisse §8.2, **qui est périmée** (le schéma réel est `0022`+`0023`).
+
 - 🎮 **SESSION 2026-08-06/07 (ALTHEA — le Système), CLOSE.** PR **#146
   fusionnée** dans `main` au go de Paul (`f5d8eb6`), patrimoine COMPLET vert à
   **1 302 assertions**, migrations **0022 + 0023 APPLIQUÉES** et seed joué, rien

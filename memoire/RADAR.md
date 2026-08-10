@@ -393,3 +393,40 @@
   ⑤ **À surveiller — un compteur écrit en dur dans un harnais est une dette.**
   Cinq assertions comptaient les cadrans d'ULTIMA à la main et sont tombées
   ensemble. Réflexe à généraliser : **comparer au registre**, jamais à un nombre.
+
+## 2026-08-10 — ALTHEA : sa place, sa devise
+
+**Friction nouvelle — un nom qui désigne deux étages rend toute consigne
+ambiguë.** *ULTIMA* nomme à la fois le produit entier (*Ultima Lv3*, l'écran
+d'accueil) et la supra-division personnelle. « 3ᵉ cadran d'Ultima LV3 » visait
+le premier ; j'ai rangé sous le second, et Paul a cherché ALTHEA pendant une
+journée là où il n'était pas. **Quand un mot du lexique désigne deux nœuds de
+l'arbre, la consigne qui l'emploie doit être levée AVANT d'agir — une question
+coûte trente secondes, le mauvais rangement a coûté une journée.** À vérifier
+sur les autres noms du lexique : ULTIMA n'est peut-être pas le seul.
+
+**Friction nouvelle — une hypothèse commode ferme l'enquête.** J'ai écrit « c'est
+sûrement le cache navigateur » : ça expliquait le symptôme sans rien vérifier,
+et ça a suffi à ne pas chercher. **Un harnais vert ne réfute pas un constat de
+Paul — il déplace la question.** Le mien prouvait que la page rendait ses caps ;
+il ne prouvait rien sur l'étage où Paul les cherchait. Prochaine fois : nommer
+ce que le test prouve ET ce qu'il ne prouve pas, avant de proposer une cause.
+
+**Friction nouvelle — un commentaire qui énonce la règle ne l'applique pas.**
+Trois des sept assertions tombées étaient des listes écrites à la main **juste
+sous** un commentaire disant « un test qui compte à la main se refait à chaque
+dictée ». La règle était écrite, comprise, et pas appliquée deux lignes plus
+bas. **Ce qui protège, c'est le code qui lit la source de vérité — pas la phrase
+qui dit qu'il faudrait le faire.**
+
+**Confirmé** — le patrimoine complet fait son travail sur un changement de
+routage : sept assertions rouges d'un coup, aucune régression passée au travers.
+
+**Confirmé** — la règle du contre-exemple (2026-08-06) tient : les deux
+contrôles ajoutés cette fois sont des contrôles **par l'absence** (ALTHEA ne
+pend sous aucun autre nœud ; il a bien quitté l'étage d'ULTIMA).
+
+**À surveiller** — Paul juge le rendu sur la **production** (`ultima-plum`), pas
+sur les previews de branche. Deux allers-retours perdus pour ça. Conséquence
+pratique : lui donner le lien de preview ne suffit pas, il faut soit fusionner
+tôt, soit dire explicitement que le domaine est différent du sien.
