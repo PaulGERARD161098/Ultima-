@@ -31,6 +31,13 @@
   - ⏳ **Reste ouvert** : la **synchro Notion** (fiche « 📦 Repo Ultima- »), dont
     l'appel est refusé faute d'autorisation du connecteur — l'entrée est
     rédigée, elle n'a pas le droit de s'écrire. **Action Paul.**
+  - 🎯 **PROCHAINE BOUCLE : B2 — le journal des quêtes.** Elle est **déjà cadrée
+    au format 6 points** dans `CADRAGE-ALTHEA.md` **§16** (pre-mortem compris),
+    à la demande de Paul le 2026-08-10. **Le gate d'entrée d'EL est donc levé :
+    on n'ouvre pas une phase de cadrage, on lit §16 et on exécute** — après
+    avoir vérifié auprès de Paul qu'il n'a pas changé d'avis sur le §16 ⑤ (ce
+    qu'on ne fait pas). Premier geste technique : `list_tables`, pas la lecture
+    de l'esquisse §8.2, **qui est périmée** (le schéma réel est `0022`+`0023`).
 
 - 🎮 **SESSION 2026-08-06/07 (ALTHEA — le Système), CLOSE.** PR **#146
   fusionnée** dans `main` au go de Paul (`f5d8eb6`), patrimoine COMPLET vert à

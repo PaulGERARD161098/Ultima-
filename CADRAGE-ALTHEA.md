@@ -1197,6 +1197,9 @@ pourtant dès B1 : c'est ce qui donne envie de la suite.
 
 - **B0 — cadrage et étude** : ✅ **CLOS le 2026-08-06.**
 - **B1 — le personnage, ses skills, ses stats** : ✅ **LIVRÉ le 2026-08-06.**
+- **La place et la devise** : ✅ **LIVRÉES le 2026-08-07/10** — ALTHEA remonté à
+  la racine (§12ter), devise du Système posée (§12bis).
+- **B2 — le journal des quêtes** : 🎯 **CADRÉ, prêt à ouvrir** — §16.
 
 ### 15.1 Ce que B1 contient
 
@@ -1288,8 +1291,92 @@ refusée · évolution réflexive → refusée. **Aucune ligne de test n'a surv�
 
 ### 15.5 La suite
 
-**B2 — le journal des quêtes** : les trois types, le cycle de vie,
-l'endormissement, **le gel** (§6.3bis), le déblocage de skill par une quête, et
-la montée de niveau qu'une quête accomplie déclenche. Rien n'a été anticipé en
-base : le scellement `(owner_id, id)` des skills et des conditions attend déjà
-les FK composites de B2, sans qu'aucune table ne soit à retoucher.
+**B2 — le journal des quêtes.** Cadré au format 6 points en **§16**, à ouvrir
+tel quel à la prochaine session. Rien n'est à retoucher en base : le scellement
+`(owner_id, id)` des skills attend déjà la FK composite de B2.
+
+## 16. Le format 6 points de B2 — **à ouvrir la prochaine fois**
+
+> **Ce cadrage est le gate d'entrée d'EL : il est écrit, donc la boucle peut
+> s'ouvrir sans re-décider.** Ce qui reste à faire au démarrage tient en une
+> chose : **relire §16 et vérifier que Paul n'a pas changé d'avis** sur ⑤.
+
+> ⚠️ **Le §8.2 est une esquisse de B0, et elle est PÉRIMÉE par endroits.** Le
+> schéma réel est celui des migrations `0022` + `0023` : les gestes s'appellent
+> `althea_conditions`, les paliers vivent dans la colonne `seuils` de
+> `althea_skills` (il n'y a pas de table `althea_paliers`), et les stats
+> stockent un `socle`. **B2 se construit sur le schéma RÉEL, jamais sur
+> l'esquisse.** Confondre les deux, c'est écrire une migration contre une base
+> qui n'existe pas.
+
+**① But** — le Système donne à Paul quelque chose **à entreprendre**, pas
+seulement à cocher. Concrètement, à la fin de B2 : Paul voit un **journal des
+quêtes** à côté de ses skills ; il en crée, en accepte, en achève, en range ;
+une quête accomplie **le fait monter d'un niveau** et peut **déverrouiller un
+skill** ; une quête acceptée puis délaissée **s'endort**, et l'accumulation
+d'endormissements **gèle** le Système jusqu'à ce qu'il tranche.
+
+**② Étapes** — (a) **migration `0024`** : `althea_quetes` (§8.2, adaptée au
+schéma réel) avec sa FK composite `(owner_id, skill_id)` vers
+`althea_skills`, ses CHECK d'état et son trigger `set_updated_at` ; (b) le
+**moteur pur** `js/althea-quetes.mjs` — cycle de vie, endormissement, dette,
+gel — éprouvé **avant** toute interface ; (c) branchement du niveau : le
+paramètre `quetesAccomplies` de `niveau()` existe **déjà** et vaut 0, il n'y a
+qu'à l'alimenter ; (d) `api/althea-quetes.js` + validation miroir dans
+`api/_lib/validate.js` ; (e) le journal dans le bloc « Le Système » de
+`althea.html`, sous la devise ; (f) le **gel** à l'écran : titre suspendu, flux
+coupé, sortie en un geste par quête ; (g) harnais — unitaire sur le moteur,
+smoke sur le journal, et enrichissement de `smoke-althea`.
+
+**③ Moyens** — `supabase/migrations/0024_althea_quetes.sql`,
+`js/althea-quetes.mjs`, `js/althea-progression.mjs` (le seul point de contact :
+`quetesAccomplies`), `js/althea.js`, `althea.html`, `css/althea.css`,
+`api/althea-quetes.js`, `api/_lib/validate.js`,
+`tests/unit-althea-quetes.mjs`, `tests/smoke-althea.mjs`, `tests/lancer.sh`
+(**brancher le harnais neuf — la liste est explicite**).
+
+**④ Critères de réussite (vérifiables)** — patrimoine COMPLET vert ;
+`unit-althea-quetes` prouve que **l'absence d'action n'endort rien** tant que
+l'échéance n'est pas passée, qu'une quête **déclinée n'entre jamais dans la
+dette**, et que le **gel ne touche aucun acquis** (rang, élan, titre obtenu,
+skill déverrouillé — vérifiés identiques avant et après) ; **le gel s'éprouve
+avec son contre-exemple** — il mord sur des engagements acceptés ET il ne mord
+pas sur du silence (règle du 2026-08-06) ; une quête accomplie fait **+1
+niveau**, une quête rangée **+0** ; un skill déverrouillé par une quête **ne se
+reverrouille jamais**, même si la quête est ensuite rangée ; les CHECK d'état
+testés **par le refus ET par l'acceptation** (leçon `0022`) ; le journal reste
+**embrassable d'un coup d'œil** avec les skills — hauteur mesurée, pas estimée ;
+contrastes AA ; preuve par l'**ABSENCE** : aucun intitulé de quête ne sort vers
+`/api/leo` ni `/api/cockpit`.
+
+**⑤ Ce qu'on ne fait PAS en B2** — **la composition par Léo** (B3 : c'est elle
+qui propose les quêtes et les allongements ; en B2 c'est **Paul seul** qui les
+crée, et le champ `origine` attend déjà `leo`), les rappels / badge / PWA (B4,
+et le cron reste une **gate coût** — D14), le widget (B5), la vue en grand du
+journal. **L'`exigence` d'une quête de fond (D12, le second cran de sévérité)
+est facultative : on pose la colonne, on ne câble pas l'écran.**
+
+**⑥ Pre-mortem — « la boucle a échoué : pourquoi ? »**
+
+| Mode de défaillance | Ce qui le prévient |
+| --- | --- |
+| **Le gel blesse au lieu de mordre.** Paul se fait geler pour du silence, et n'ouvre plus ALTHEA. C'est le risque n°1 de B2 : il tue le quadrant. | §6.3bis, et une assertion **par l'absence** : aucun jour non renseigné n'incrémente jamais la dette. Le gel ne compte que des quêtes **acceptées**. |
+| **Le gel emporte un acquis** — un rang perdu, un titre retiré. Règle cardinale 2 cassée. | Assertion : état complet du personnage **identique** avant et après le gel, hors le titre **suspendu** (suspendu ≠ retiré). |
+| **On construit B3 dans B2** — Léo se met à générer, et la boucle ne ferme pas. | ⑤, et la discipline EB. En B2, `origine` vaut toujours `paul`. |
+| **Une migration écrite contre l'esquisse §8.2** au lieu du schéma réel. | L'avertissement en tête de §16. Premier geste de la boucle : `list_tables`, pas la lecture du cadrage. |
+| **Le journal fait déborder l'écran** — deux blocs embrassables devient trois blocs qu'on scrolle. | La mesure, pas l'œil (leçon 2026-08-01) : hauteur du bloc comparée à un plafond, sur un **pire cas construit** (une dizaine de quêtes actives), jamais sur les deux quêtes du jour. |
+| **Un test vert pour la mauvaise raison** — le refus d'une transition d'état refuse tout. | La règle du contre-exemple (2026-08-06) : chaque refus a son cas d'acceptation en face. |
+| **Le harnais neuf n'est pas branché** dans `tests/lancer.sh` (liste explicite) — vert à la main, ignoré par la passe complète. | ③ le nomme, et ④ exige le patrimoine **complet**. Friction déjà vécue le 2026-08-06. |
+| **Une quête devient un objectif de vie** et ALTHEA avale ZEKROM ou DRAUKHAIN. | §1.5, test d'appartenance : **est-ce que ça se coche un soir ?** Si ça se médite, c'est ailleurs. |
+| **Le titre d'une quête fuit** vers un log, le cockpit ou l'IA — une quête peut nommer une pathologie, une addiction, un secret. | §9. Preuve par l'ABSENCE aux sorties, comme pour les conditions. |
+
+### 16bis. Ce qui reste en action Paul
+
+- **La synchro Notion** de la fiche « 📦 Repo Ultima- » : l'appel MCP est refusé
+  faute d'autorisation du connecteur. L'entrée est rédigée depuis trois
+  sessions. **Seul Paul peut débloquer.**
+- **La gate coût du cron Vercel** (D14) — elle conditionne B4, pas B2.
+- **Cocher.** La base est à **zéro relevé** : ALTHEA n'a jamais servi. Une
+  semaine d'usage réel dirait si les cadences et les seuils sont justes **avant**
+  qu'on empile les quêtes dessus. Ça ne bloque pas B2 — mais si Paul coche
+  pendant l'intervalle, B2 sera meilleur.
