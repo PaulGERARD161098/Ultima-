@@ -204,8 +204,8 @@ console.log('— 3. 401 API → invite de connexion —');
   const etat = (await page.locator('#carto-etat').textContent()) || '';
   verifier('Invite de connexion (« Archipel sous scellés »)', etat.includes('Archipel sous scellés'), etat.slice(0, 80));
   const lien = page.locator('#carto-etat a.bouton-parchemin');
-  verifier('Lien « Se connecter » → écran existant (traveler.html)',
-    (await lien.getAttribute('href')) === 'traveler.html');
+  verifier('Lien « Se connecter » → écran existant (riven.html)',
+    (await lien.getAttribute('href')) === 'riven.html');
   const boite = await lien.boundingBox();
   verifier('Tap target connexion ≥ 44 px', Boolean(boite) && boite.height >= 44, `h: ${boite && boite.height}`);
   // Seule trace tolérée : le log RESSOURCE natif du navigateur sur le statut

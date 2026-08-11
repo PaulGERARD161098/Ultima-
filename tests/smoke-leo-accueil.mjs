@@ -79,7 +79,7 @@ page.on('request', (req) => {
 });
 
 await preparerPage(page);
-await page.goto(`${BASE}/traveler.html`, { waitUntil: 'load', timeout: 20000 });
+await page.goto(`${BASE}/riven.html`, { waitUntil: 'load', timeout: 20000 });
 
 // 1. Apparition après le boot des données.
 await page.waitForSelector('#leo-cartouche', { timeout: 20000 });
@@ -223,7 +223,7 @@ const erreursMobile = [];
 pageM.on('console', (msg) => { if (msg.type() === 'error') erreursMobile.push(msg.text()); });
 pageM.on('pageerror', (err) => erreursMobile.push(String(err)));
 await preparerPage(pageM);
-await pageM.goto(`${BASE}/traveler.html`, { waitUntil: 'load', timeout: 20000 });
+await pageM.goto(`${BASE}/riven.html`, { waitUntil: 'load', timeout: 20000 });
 await pageM.waitForSelector('#leo-cartouche', { timeout: 20000 });
 
 const gabarit = await pageM.evaluate(() => {
@@ -257,7 +257,7 @@ await pageM.close();
 console.log('— B-bis. Les yeux de Léo sur RIVEN (noms protégés) —');
 {
   const pageY = await navigateur.newPage({ viewport: { width: 1280, height: 900 } });
-  await pageY.goto(`${BASE}/traveler.html`, { waitUntil: 'load', timeout: 20000 });
+  await pageY.goto(`${BASE}/riven.html`, { waitUntil: 'load', timeout: 20000 });
   await pageY.waitForFunction(() => window.UltimaRiven !== undefined, null, { timeout: 20000 });
 
   // Fixture volontairement COMPLÈTE : chaque fiche porte tout ce qu'une vraie
@@ -399,7 +399,7 @@ pageV.on('console', (msg) => {
 });
 pageV.on('pageerror', (err) => erreursVoix.push(String(err)));
 await preparerPage(pageV);
-await pageV.goto(`${BASE}/traveler.html`, { waitUntil: 'load', timeout: 20000 });
+await pageV.goto(`${BASE}/riven.html`, { waitUntil: 'load', timeout: 20000 });
 
 // Ouvre un cartouche AVEC voix (jeton de test — aucune vraie session requise).
 // `candidats` optionnel (L2b) : résolution locale des cibles dictées.
@@ -412,7 +412,7 @@ async function ouvrirCartoucheVoix(cle, candidats) {
       blason: 'boussole',
       salutation: 'Scénario voix.',
       sections: [{ titre: 'Où on en est', lignes: ['—'] }],
-      voix: { quadrant: 'traveler', jeton: 'jeton-de-test', candidats: params.candidats }
+      voix: { quadrant: 'riven', jeton: 'jeton-de-test', candidats: params.candidats }
     });
   }, { cle, candidats });
 }
@@ -437,7 +437,7 @@ await pageV.waitForSelector('.leo-bulle-leo:not(.leo-bulle-attente)', { timeout:
 verifier('Bulle de Paul rendue', (await pageV.locator('.leo-bulle-paul').textContent())?.includes('Où en est le réseau ?'));
 verifier('Bulle de Léo rendue', (await pageV.locator('.leo-bulle-leo:not(.leo-bulle-attente)').textContent() || '').includes('Prochaine action'));
 verifier('Bearer envoyé (jeton de session)', requetesLeo[0]?.autorisation === 'Bearer jeton-de-test');
-verifier('Corps : quadrant + historique user', requetesLeo[0]?.corps?.quadrant === 'traveler' &&
+verifier('Corps : quadrant + historique user', requetesLeo[0]?.corps?.quadrant === 'riven' &&
   Array.isArray(requetesLeo[0]?.corps?.messages) && requetesLeo[0].corps.messages[0].role === 'user');
 
 // Second tour : l'historique repart EN ENTIER (l'API est sans état).

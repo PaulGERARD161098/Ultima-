@@ -43,7 +43,7 @@ async function pageStub(viewport, demo) {
       }; } };`
     }));
   }
-  await page.goto('http://127.0.0.1:8123/traveler.html', { waitUntil: 'load', timeout: 20000 });
+  await page.goto('http://127.0.0.1:8123/riven.html', { waitUntil: 'load', timeout: 20000 });
   await page.waitForTimeout(800);
   // R1 : l'arrivée se fait sur la Carte — ces vérifications portent sur
   // l'Accueil, on y va par son onglet (parcours réel). En non-démo sans

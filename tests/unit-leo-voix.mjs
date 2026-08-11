@@ -22,21 +22,21 @@ import {
 const verdicts = {};
 
 // ---------- 1. Prompt système : les 4 quadrants, le bon registre ----------
-const sysTraveler = construireSysteme('traveler');
+const sysRiven = construireSysteme('riven');
 const sysBcp = construireSysteme('bcp');
 const sysAdramelech = construireSysteme('adramelech');
 const sysImladrik = construireSysteme('imladrik');
-verdicts.quatreQuadrants = [sysTraveler, sysBcp, sysAdramelech, sysImladrik]
+verdicts.quatreQuadrants = [sysRiven, sysBcp, sysAdramelech, sysImladrik]
   .every((s) => typeof s === 'string' && s.length > 200);
-verdicts.registreOperationnel = /OPÉRATIONNEL/.test(sysTraveler) && /OPÉRATIONNEL/.test(sysBcp);
+verdicts.registreOperationnel = /OPÉRATIONNEL/.test(sysRiven) && /OPÉRATIONNEL/.test(sysBcp);
 verdicts.registreReflexif = /RÉFLEXIF/.test(sysAdramelech) && /RÉFLEXIF/.test(sysImladrik);
-verdicts.tonJarvis = [sysTraveler, sysBcp, sysAdramelech, sysImladrik]
+verdicts.tonJarvis = [sysRiven, sysBcp, sysAdramelech, sysImladrik]
   .every((s) => /Jarvis/.test(s) && /féminin/.test(s));
-verdicts.gardeFous = [sysTraveler, sysBcp, sysAdramelech, sysImladrik]
+verdicts.gardeFous = [sysRiven, sysBcp, sysAdramelech, sysImladrik]
   .every((s) => /n'inventes JAMAIS/.test(s) && /pas encore AGIR/.test(s));
 // Minimisation : le système ne transporte AUCUNE donnée personnelle (pas de
 // nom de contact, pas d'e-mail, pas de chiffre financier) — que du cadrage.
-verdicts.systemeSansPii = [sysTraveler, sysBcp, sysAdramelech, sysImladrik]
+verdicts.systemeSansPii = [sysRiven, sysBcp, sysAdramelech, sysImladrik]
   .every((s) => !/@/.test(s) && !/\d{2,} ?€/.test(s));
 
 // ---------- 2. Quadrant inconnu → null (fail-closed) ----------
@@ -48,7 +48,7 @@ verdicts.quadrantInconnu = construireSysteme('finance') === null &&
 // place aux règles de proposition (fidèle à la dictée, un seul outil, jamais
 // d'exécution sans confirmation de Paul).
 {
-  const sysMains = [construireSysteme('traveler', true), construireSysteme('adramelech', true)];
+  const sysMains = [construireSysteme('riven', true), construireSysteme('adramelech', true)];
   verdicts.mainsReglesOutils = sysMains.every((s) =>
     /FIDÈLES à la dictée/.test(s) && /Un seul outil par tour/.test(s) &&
     /confirmation/.test(s) && !/pas encore AGIR/.test(s));
@@ -59,7 +59,7 @@ verdicts.quadrantInconnu = construireSysteme('finance') === null &&
 // avecOutils falsy (bcp/imladrik, ou appel L2 historique) : règle inchangée.
 verdicts.mainsSansOutils = [
   construireSysteme('bcp', false), construireSysteme('imladrik', false),
-  construireSysteme('traveler'), construireSysteme('adramelech')
+  construireSysteme('riven'), construireSysteme('adramelech')
 ].every((s) => /pas encore AGIR/.test(s) && !/Un seul outil par tour/.test(s));
 // Quadrant inconnu : null même avec le drapeau.
 verdicts.mainsQuadrantInconnu = construireSysteme('finance', true) === null;

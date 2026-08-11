@@ -1,7 +1,7 @@
 // Quadrant ZEKROM (v1) : la carte des idéaux, tournée vers le cap — DERRIÈRE AUTH.
 // Miroir de smoke-reshiram.mjs (ZEKROM ↔ RESHIRAM). Prouve :
 //   A. zekrom.html SANS session (config vide) : FAIL-CLOSED — aucun idéal au DOM,
-//      cartouche « Authentification requise », lien vers traveler, registre caché,
+//      cartouche « Authentification requise », lien vers riven, registre caché,
 //      zéro fuite réseau, zéro erreur console ;
 //   B. zekrom.html avec FAUSSE session + /api/ideaux STUBÉE 200 (fixture NEUTRE
 //      inventée) : registre rendu, badge « à orienter » (0 direction) + invitation
@@ -108,7 +108,7 @@ console.log('— A. zekrom.html SANS session (fail-closed) —');
   const auth = (await page.locator('#zekrom-auth').textContent()) || '';
   verifier('Cartouche « Authentification requise »', /Authentification requise/.test(auth));
   verifier('Lien vers RIVEN (flux lien-magique)',
-    (await page.locator('#zekrom-auth a[href="traveler.html"]').count()) === 1);
+    (await page.locator('#zekrom-auth a[href="riven.html"]').count()) === 1);
   verifier('Registre caché', await page.locator('#zekrom-registre').evaluate((el) => el.hidden));
   verifier('Aucun idéal dans le DOM', (await page.locator('.zekrom-ideal').count()) === 0);
   verifier('Chargement effacé (état auth seul visible)',

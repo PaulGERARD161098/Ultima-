@@ -3,11 +3,11 @@
 // cliquables — GRIMA « Ce qui est utile » (RIVEN, NICOL BOLAS) et NAGA « Ce qui
 // fait grandir » (IMLADRIK, ADRAMELECH, TAO) — chacun ouvrant sa propre
 // boussole. Prouve : bandeau conforme au REGISTRE, 2 caps GRIMA/NAGA avec leur
-// devise en badge, navigation ULTIMA → GRIMA → RIVEN → traveler.html (carte
+// devise en badge, navigation ULTIMA → GRIMA → RIVEN → riven.html (carte
 // Leaflet intacte), boussole NAGA complète avec retour vers ULTIMA, AUCUNE
 // requête réseau externe (zéro CDN), zéro erreur console, contraste AA calculé
 // sur les couleurs réellement rendues.
-// Mode démo forcé, Leaflet/OSM stubés (pour traveler.html), zéro erreur tolérée.
+// Mode démo forcé, Leaflet/OSM stubés (pour riven.html), zéro erreur tolérée.
 import { chromium } from 'playwright';
 import { readFileSync } from 'node:fs';
 import { NOEUDS, capsDe } from '../js/registre-lv3.mjs';
@@ -189,8 +189,8 @@ verifier('Zéro requête réseau externe (aucun CDN)', requetesExternes.length =
   requetesExternes.slice(0, 3).join(', '));
 verifier('Zéro erreur console (ULTIMA)', erreursConsole.length === 0, erreursConsole.slice(0, 3).join(' | '));
 
-// ============ B. Navigation ULTIMA → GRIMA → RIVEN (traveler.html) ============
-console.log('— B. GRIMA → grima.html, puis RIVEN → traveler.html (carte) —');
+// ============ B. Navigation ULTIMA → GRIMA → RIVEN (riven.html) ============
+console.log('— B. GRIMA → grima.html, puis RIVEN → riven.html (carte) —');
 await capGrima.click();
 await page.waitForURL('**/grima.html', { timeout: 20000 });
 verifier('Clic GRIMA → URL grima.html', /\/grima\.html$/.test(page.url()), page.url());
@@ -208,7 +208,7 @@ verifier('GRIMA : RIVEN + NICOL BOLAS dans l\'ordre',
     && JSON.stringify(attendusGrima) === JSON.stringify(['RIVEN', 'NICOL BOLAS']),
   `lu: ${JSON.stringify(nomsGrima)}`);
 const hrefsGrima = await page.locator('a.cap').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
-for (const attendu of ['traveler.html', 'bcp.html']) {
+for (const attendu of ['riven.html', 'bcp.html']) {
   verifier(`GRIMA : porte ouverte vers ${attendu}`, hrefsGrima.includes(attendu), JSON.stringify(hrefsGrima));
 }
 const legendeGrima = (await page.locator('.boussole-legende').textContent())?.trim();
@@ -217,11 +217,11 @@ verifier('GRIMA : retour « ↞ ULTIMA »',
   (await page.locator('.console-retour a[href="ultima.html"]').count()) === 1);
 
 // RIVEN navigue toujours vers la carte : zéro régression sur l'acquis.
-const erreursTraveler = [];
-page.on('console', (msg) => { if (msg.type() === 'error') erreursTraveler.push(msg.text()); });
+const erreursRiven = [];
+page.on('console', (msg) => { if (msg.type() === 'error') erreursRiven.push(msg.text()); });
 await page.locator('a.cap[data-id="riven"]').click();
-await page.waitForURL('**/traveler.html', { timeout: 20000 });
-verifier('Clic RIVEN → URL traveler.html', /\/traveler\.html$/.test(page.url()), page.url());
+await page.waitForURL('**/riven.html', { timeout: 20000 });
+verifier('Clic RIVEN → URL riven.html', /\/riven\.html$/.test(page.url()), page.url());
 
 // L'app démarre : cartouche ULTIMA visible.
 await page.waitForSelector('.cartouche-ultima', { timeout: 20000 });
@@ -231,7 +231,7 @@ verifier('App bootée (cartouche ULTIMA)', await page.locator('.cartouche-ultima
 await page.locator('.onglet[data-onglet="carte"]').click();
 await page.waitForSelector('.leaflet-container', { timeout: 20000 });
 verifier('Carte Leaflet initialisée (zéro régression)', await page.locator('.leaflet-container').count() >= 1);
-verifier('Zéro erreur console (traveler.html)', erreursTraveler.length === 0, erreursTraveler.slice(0, 3).join(' | '));
+verifier('Zéro erreur console (riven.html)', erreursRiven.length === 0, erreursRiven.slice(0, 3).join(' | '));
 
 // ============ C. La boussole NAGA (naga.html) ============
 console.log('— C. NAGA → naga.html (ce qui fait grandir) —');

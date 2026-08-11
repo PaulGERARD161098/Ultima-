@@ -471,7 +471,7 @@ ${blocRoutes}
         <line x1="410" y1="598" x2="480" y2="598"/><line x1="560" y1="606" x2="640" y2="606"/>
         <line x1="800" y1="596" x2="880" y2="596"/>
       </g>
-      <text x="500" y="626" text-anchor="middle" font-size="15" letter-spacing="6" fill="var(--encre)" style="font-variant:small-caps">Terre ferme de Traveler — le réseau</text>
+      <text x="500" y="626" text-anchor="middle" font-size="15" letter-spacing="6" fill="var(--encre)" style="font-variant:small-caps">Terre ferme de RIVEN — le réseau</text>
 
 ${blocAncrages}
 

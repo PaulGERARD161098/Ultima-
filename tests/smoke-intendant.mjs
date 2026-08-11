@@ -89,7 +89,7 @@ page.on('request', (req) => {
 });
 
 await preparerPage(page);
-await page.goto(`${BASE}/traveler.html`, { waitUntil: 'load', timeout: 20000 });
+await page.goto(`${BASE}/riven.html`, { waitUntil: 'load', timeout: 20000 });
 
 // 1. Léo : la proposition n°1 EST le manquant le plus urgent à J-2.
 await page.waitForSelector('#leo-cartouche', { timeout: 20000 });
@@ -236,7 +236,7 @@ const erreursMobile = [];
 pageM.on('console', (msg) => { if (msg.type() === 'error') erreursMobile.push(msg.text()); });
 pageM.on('pageerror', (err) => erreursMobile.push(String(err)));
 await preparerPage(pageM);
-await pageM.goto(`${BASE}/traveler.html`, { waitUntil: 'load', timeout: 20000 });
+await pageM.goto(`${BASE}/riven.html`, { waitUntil: 'load', timeout: 20000 });
 await pageM.waitForSelector('#leo-cartouche', { timeout: 20000 });
 await pageM.locator('.leo-proposition').first().click();
 await pageM.waitForSelector('#panneau:not([hidden])', { timeout: 20000 });

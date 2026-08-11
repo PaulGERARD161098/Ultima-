@@ -2,7 +2,7 @@
 // Prouve :
 //   A. console : les 4 portes sont des liens actifs (badges conservés) ;
 //   B. registre.html SANS session (config vide) : FAIL-CLOSED — aucune idée
-//      dans le DOM, cartouche « Authentification requise », lien vers traveler,
+//      dans le DOM, cartouche « Authentification requise », lien vers riven,
 //      pas de cartouche Léo, zéro fuite réseau ;
 //   C. registre.html avec FAUSSE session : le code appelle bien /api/idees
 //      avec le Bearer de la session, et un 401 retombe en fail-closed propre
@@ -152,11 +152,11 @@ console.log('— A. ULTIMA : 2 cadrans, puis les 5 portes via GRIMA / NAGA —')
     await page.screenshot({ path: `${CAPTURES}/${cadran.replace('.html', '')}-portes.png`, fullPage: true });
   }
   const toutes = [...portes['grima.html'], ...portes['naga.html']];
-  for (const attendu of ['traveler.html', 'bcp.html', 'adramelech.html', 'imladrik.html', 'tao.html']) {
+  for (const attendu of ['riven.html', 'bcp.html', 'adramelech.html', 'imladrik.html', 'tao.html']) {
     verifier(`Porte ${attendu} (via son macro-quadrant)`, toutes.includes(attendu), JSON.stringify(toutes));
   }
   verifier('GRIMA porte l\'utile (RIVEN + NICOL BOLAS)',
-    JSON.stringify(portes['grima.html']) === JSON.stringify(['traveler.html', 'bcp.html']),
+    JSON.stringify(portes['grima.html']) === JSON.stringify(['riven.html', 'bcp.html']),
     JSON.stringify(portes['grima.html']));
   verifier('NAGA porte la croissance (IMLADRIK + ADRAMELECH + TAO)',
     JSON.stringify(portes['naga.html']) === JSON.stringify(['imladrik.html', 'adramelech.html', 'tao.html']),
@@ -176,7 +176,7 @@ console.log('— B. registre.html SANS session (fail-closed) —');
   const auth = (await page.locator('#adr-auth').textContent()) || '';
   verifier('Cartouche « Authentification requise »', /Authentification requise/.test(auth));
   verifier('Lien vers RIVEN (flux lien-magique)',
-    (await page.locator('#adr-auth a[href="traveler.html"]').count()) === 1);
+    (await page.locator('#adr-auth a[href="riven.html"]').count()) === 1);
   verifier('Registre caché', await page.locator('#adr-registre').evaluate((el) => el.hidden));
   verifier('Aucune idée dans le DOM', (await page.locator('.adr-idee').count()) === 0 &&
     (await page.locator('#adr-idees').evaluate((el) => el.childNodes.length)) === 0);

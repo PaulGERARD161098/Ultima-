@@ -2,7 +2,7 @@
 // Le registre des idées DERRIÈRE AUTH, données réelles uniquement :
 //   - fail-closed : sans config, sans session ou sur échec API (401), la page
 //     n'affiche AUCUNE donnée — seul le cartouche « Authentification requise »
-//     est montré (le flux lien-magique vit sur traveler.html) ;
+//     est montré (le flux lien-magique vit sur riven.html) ;
 //   - avec session : GET /api/idees (Bearer, même motif qu'appelApi d'app.js)
 //     → compteurs par statut, liste des idées, ponts. AUCUNE idée en dur ici :
 //     les données personnelles ne viennent QUE de l'API authentifiée (RLS) ;

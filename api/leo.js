@@ -26,6 +26,7 @@ import {
   creerGardeVoix,
   extraireTexte,
   outilsPour,
+  normaliserQuadrant,
   extraireProposition,
   validerProposition,
   reformulerProposition,
@@ -57,8 +58,12 @@ export default async function handler(req, res) {
 
   // L2b : catalogue d'outils du quadrant (null si vide → appel L2 inchangé).
   // Les outils ne font que PROPOSER : cette route n'écrit jamais rien.
-  const outils = outilsPour(corps.quadrant);
-  const systeme = construireSysteme(corps.quadrant, outils !== null);
+  // Un seul point de normalisation : tout ce qui suit raisonne sur l'identifiant
+  // courant, jamais sur l'alias — sinon validerProposition rejetterait un outil
+  // de RIVEN venu d'un front qui dit encore « traveler ».
+  const quadrant = normaliserQuadrant(corps.quadrant);
+  const outils = outilsPour(quadrant);
+  const systeme = construireSysteme(quadrant, outils !== null);
   if (!systeme) return fail(res, 400, 'Quadrant inconnu');
 
   const conversation = validerConversation(corps.messages);
@@ -94,7 +99,7 @@ export default async function handler(req, res) {
     // la boucle se referme au tour suivant par le message d'issue du front.
     const blocOutil = extraireProposition(reponse.content);
     if (blocOutil) {
-      const verdict = validerProposition(blocOutil.name, blocOutil.input, corps.quadrant);
+      const verdict = validerProposition(blocOutil.name, blocOutil.input, quadrant);
       if (verdict.ok) {
         return ok(res, {
           reponse: texte,

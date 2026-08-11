@@ -7,9 +7,9 @@
 // et nettoie l'URL (detectSessionInUrl, comportement par défaut de supabase-js).
 //
 // La session vit dans le localStorage (même origine) : une fois ouverte ici,
-// elle vaut pour tous les quadrants (ultima/traveler/idees/adramelech) sans
+// elle vaut pour tous les quadrants (ultima/riven/idees/adramelech) sans
 // nouvelle connexion. Verrou : la boussole reste cachée tant qu'aucune session
-// n'est ouverte (parité avec l'overlay de traveler.html — mêmes id/handlers,
+// n'est ouverte (parité avec l'overlay de riven.html — mêmes id/handlers,
 // mêmes styles css/styles.css).
 //
 // Repli sûr : sans configuration Supabase (mode démo / clés absentes), on
@@ -37,7 +37,7 @@
   }
 
   // Tant que l'overlay couvre l'écran, la boussole derrière ne doit être
-  // atteignable ni au clavier ni au lecteur d'écran (parité A4 de traveler).
+  // atteignable ni au clavier ni au lecteur d'écran (parité A4 de riven).
   function majInert(overlayVisible) {
     var scene = $('.boussole-scene');
     if (!scene) { return; }

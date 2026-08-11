@@ -31,7 +31,7 @@ await page.addInitScript(() => {
 });
 
 const verdicts = {};
-await page.goto('http://127.0.0.1:8123/traveler.html', { waitUntil: 'load', timeout: 20000 });
+await page.goto('http://127.0.0.1:8123/riven.html', { waitUntil: 'load', timeout: 20000 });
 await page.waitForTimeout(1200);
 
 verdicts.modeDemo = !(await page.locator('#bandeau-demo').isHidden());

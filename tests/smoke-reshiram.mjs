@@ -1,7 +1,7 @@
 // Quadrant RESHIRAM (v1) : la carte des talents, ancrée sur preuve — DERRIÈRE AUTH.
 // Miroir des sections ADRAMELECH de smoke-quadrants.mjs + smoke-idees.mjs. Prouve :
 //   A. reshiram.html SANS session (config vide) : FAIL-CLOSED — aucun talent au
-//      DOM, cartouche « Authentification requise », lien vers traveler, registre
+//      DOM, cartouche « Authentification requise », lien vers riven, registre
 //      caché, zéro fuite réseau, zéro erreur console ;
 //   B. reshiram.html avec FAUSSE session + /api/talents STUBÉE 200 (fixture NEUTRE
 //      inventée) : registre rendu (sectoriel multi-secteur, transversal sans
@@ -136,7 +136,7 @@ console.log('— A. reshiram.html SANS session (fail-closed) —');
   const auth = (await page.locator('#reshiram-auth').textContent()) || '';
   verifier('Cartouche « Authentification requise »', /Authentification requise/.test(auth));
   verifier('Lien vers RIVEN (flux lien-magique)',
-    (await page.locator('#reshiram-auth a[href="traveler.html"]').count()) === 1);
+    (await page.locator('#reshiram-auth a[href="riven.html"]').count()) === 1);
   verifier('Registre caché', await page.locator('#reshiram-registre').evaluate((el) => el.hidden));
   verifier('Aucun talent dans le DOM', (await page.locator('.reshiram-talent').count()) === 0);
   verifier('Aucun panneau capital réseau (registre caché)',

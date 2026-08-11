@@ -37,7 +37,7 @@ await page.addInitScript(() => {
 });
 
 const verdicts = {};
-await page.goto('http://127.0.0.1:8123/traveler.html', { waitUntil: 'load', timeout: 20000 });
+await page.goto('http://127.0.0.1:8123/riven.html', { waitUntil: 'load', timeout: 20000 });
 await page.waitForTimeout(900);
 
 // 1. Démarrage sur l'Arbre (A3 : l'arbre est le pivot/hub) ; l'Accueil reste
