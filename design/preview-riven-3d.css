@@ -1,0 +1,182 @@
+/* Feuille de style de la preview RIVEN 3D.
+   Fichier séparé comme le script : la CSP autorise 'unsafe-inline' pour les
+   styles, mais garder les trois fichiers côte à côte évite qu'un jour on
+   remette du style en ligne « parce que ça passait ». */
+
+:root {
+  --nuit-haute: #0a1220;
+  --nuit-basse: #03070e;
+  --or-antique: #a9884a;
+  --or-clair: #d8bd82;
+  --creme: #f2ead6;
+  --creme-douce: #cdc3ad;
+  --t-artisan: #f2a15a;
+  --t-partenaire: #7cb8ea;
+  --t-lead: #6fd39b;
+  --t-chantier: #b995e8;
+  --police-ancienne: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; color: var(--creme); font-family: var(--police-ancienne);
+  /* Le vide est plus noir que la voûte à plat : il n'y a plus de parchemin
+     derrière, seulement de la distance. */
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(30,60,100,.22), rgba(0,0,0,0) 62%),
+    linear-gradient(180deg, var(--nuit-haute), var(--nuit-basse) 75%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+.avertissement {
+  background: rgba(169,136,74,.14); border-bottom: 1px solid rgba(169,136,74,.3);
+  text-align: center; padding: .4rem 1rem; font-size: .78rem; letter-spacing: .08em;
+  color: var(--or-clair);
+}
+
+.bandeau {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; padding: .9rem 1.2rem .7rem;
+  border-bottom: 1px solid rgba(169,136,74,.28);
+}
+.bandeau-titre { display: flex; align-items: baseline; gap: .7rem; }
+.bandeau h1 { margin: 0; font-size: 1.05rem; letter-spacing: .2em; color: var(--or-clair); font-weight: 700; }
+.bandeau .sous { font-size: .76rem; font-style: italic; color: var(--creme-douce); opacity: .85; }
+.bandeau-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+
+.bouton {
+  font-family: inherit; font-size: .82rem; padding: .42rem .85rem; cursor: pointer;
+  border-radius: 3px; border: 1px solid rgba(169,136,74,.5);
+  background: transparent; color: var(--creme-douce);
+}
+.bouton:hover { background: rgba(169,136,74,.18); color: var(--creme); }
+.bouton:focus-visible { outline: 2px solid var(--or-clair); outline-offset: 2px; }
+.bouton--primaire { background: rgba(169,136,74,.3); color: var(--creme); font-weight: 700; }
+
+.outils {
+  display: flex; flex-wrap: wrap; gap: .7rem 1.1rem; align-items: center;
+  padding: .7rem 1.2rem; border-bottom: 1px solid rgba(169,136,74,.2);
+}
+.recherche {
+  font-family: inherit; font-size: .86rem; padding: .42rem .7rem; min-width: 14rem;
+  background: rgba(10,18,32,.85); color: var(--creme);
+  border: 1px solid rgba(169,136,74,.42); border-radius: 3px;
+}
+.recherche::placeholder { color: rgba(205,195,173,.55); font-style: italic; }
+.recherche:focus-visible { outline: 2px solid var(--or-clair); outline-offset: 1px; }
+.filtres { display: flex; flex-wrap: wrap; gap: .5rem .9rem; }
+.filtre, .bascule {
+  display: flex; align-items: center; gap: .35rem;
+  font-size: .82rem; color: var(--creme-douce); cursor: pointer;
+}
+.filtre input, .bascule input { accent-color: var(--or-antique); }
+.pastille { width: .62rem; height: .62rem; border-radius: 50%; display: inline-block; }
+.compte { font-size: .8rem; color: var(--creme-douce); font-style: italic; margin-left: auto; }
+.compte b { color: var(--or-clair); font-style: normal; }
+
+.corps { display: grid; grid-template-columns: 1fr; }
+@media (min-width: 60rem) {
+  .corps.corps--panneau-ouvert { grid-template-columns: 1fr 22rem; }
+}
+.scene { position: relative; overflow: hidden; touch-action: none; cursor: grab; }
+.scene.scene--saisie { cursor: grabbing; }
+.aide-navigation {
+  position: absolute; left: 50%; bottom: .7rem; transform: translateX(-50%);
+  margin: 0; padding: .3rem .8rem; z-index: 2; pointer-events: none;
+  font-size: .74rem; font-style: italic; color: rgba(205,195,173,.6);
+  background: rgba(3,7,14,.55); border-radius: 3px; text-align: center;
+  transition: opacity .4s;
+}
+.aide-navigation.effacee { opacity: 0; }
+.ciel { display: block; width: 100%; height: auto; }
+
+/* Tout ce qui est décor est TRANSPARENT AU POINTEUR. Le nom d'une
+   constellation, dessiné par-dessus les étoiles, interceptait les clics
+   destinés à une fiche — constat du harnais, même famille que les halos.
+   Un décor qui vole un clic n'est plus un décor, c'est un obstacle. */
+.decor, .liens { pointer-events: none; }
+
+.etoile { cursor: pointer; }
+.etoile:focus-visible { outline: none; }
+.etoile:focus-visible .halo-focus, .etoile:hover .halo-focus { opacity: .9; }
+.halo-focus { opacity: 0; transition: opacity .12s; pointer-events: none; }
+.etoile-nom { pointer-events: none; }
+.etoile--choisie .halo-choix { opacity: 1; }
+.halo-choix { opacity: 0; pointer-events: none; }
+
+/* Concentration : au survol ou au focus, le vide se fait et seuls les liens
+   de l'étoile visée subsistent. Identique à la voûte à plat — le geste ne
+   change pas parce que le rendu change. */
+.ciel--concentre .liens line { opacity: .04; }
+.ciel--concentre .liens line.lien--vif { opacity: .95; }
+
+.panneau {
+  border-left: 1px solid rgba(169,136,74,.3);
+  background: rgba(6,12,22,.97);
+  padding: 1rem 1.1rem 2rem; overflow-y: auto; max-height: 100vh;
+}
+.panneau[hidden] { display: none; }
+.panneau-tete { display: flex; align-items: flex-start; justify-content: space-between; gap: .6rem; }
+.panneau h2 { margin: 0; font-size: 1.05rem; color: var(--or-clair); font-weight: 700; line-height: 1.3; }
+.fermer {
+  background: transparent; border: 0; color: var(--creme-douce); font-size: 1.4rem;
+  cursor: pointer; line-height: 1; padding: 0 .2rem;
+}
+.fermer:hover { color: var(--creme); }
+.badges { display: flex; flex-wrap: wrap; gap: .35rem; margin: .55rem 0 .2rem; }
+.badge {
+  font-size: .7rem; letter-spacing: .06em; padding: .18rem .5rem; border-radius: 2px;
+  border: 1px solid rgba(169,136,74,.45); color: var(--creme-douce);
+}
+.section { margin-top: 1.05rem; }
+.section h3 {
+  margin: 0 0 .45rem; font-size: .68rem; letter-spacing: .17em; text-transform: uppercase;
+  color: var(--or-antique); font-weight: 700;
+}
+.champ { display: flex; gap: .5rem; font-size: .84rem; margin: .28rem 0; line-height: 1.45; }
+.champ dt { color: rgba(205,195,173,.7); min-width: 6.4rem; flex: none; }
+.champ dd { margin: 0; color: var(--creme); }
+.vide { font-size: .82rem; font-style: italic; color: rgba(205,195,173,.55); margin: .2rem 0; }
+.liste { list-style: none; margin: 0; padding: 0; }
+.liste li {
+  display: flex; align-items: baseline; gap: .5rem; padding: .4rem .5rem;
+  border: 1px solid rgba(169,136,74,.22); border-radius: 3px; margin-bottom: .35rem;
+  background: rgba(16,30,50,.5); font-size: .84rem;
+}
+.liste li .role, .liste li .etat { font-size: .74rem; color: rgba(205,195,173,.75); font-style: italic; }
+.liste button {
+  margin-left: auto; background: transparent; border: 0; color: var(--or-clair);
+  font-family: inherit; font-size: .76rem; cursor: pointer; text-decoration: underline;
+}
+.actions { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .55rem; }
+.note-maquette {
+  margin-top: 1.4rem; padding: .6rem .7rem; font-size: .76rem; line-height: 1.5;
+  border: 1px dashed rgba(169,136,74,.4); border-radius: 3px;
+  color: rgba(205,195,173,.8); background: rgba(169,136,74,.07);
+}
+
+.mesure-bloc {
+  max-width: 74rem; margin: 1.2rem auto 3rem; padding: .9rem 1.1rem;
+  border: 1px solid rgba(169,136,74,.3); border-radius: 3px;
+  background: rgba(10,18,32,.7);
+}
+.mesure-bloc h2 {
+  margin: 0 0 .6rem; font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--or-antique); font-weight: 700;
+}
+.mesure { font-size: .84rem; line-height: 1.75; color: var(--creme-douce); }
+.mesure b { color: var(--creme); font-weight: 700; }
+.verdict-ok { color: #6fd39b; font-weight: 700; }
+.verdict-ko { color: #ef8b7c; font-weight: 700; }
+.mesure p { margin: .6rem 0 0; font-style: italic; opacity: .8; }
+
+.visuellement-cache {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* Une dérive permanente est une gêne pour qui y est sensible : elle s'arrête
+   net si le système demande moins d'animation. Le JS lit la même préférence. */
+@media (prefers-reduced-motion: reduce) {
+  .aide-navigation { transition: none; }
+}

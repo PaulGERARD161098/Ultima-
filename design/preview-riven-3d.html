@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Preview — RIVEN en 3D : les étoiles dans le vide</title>
+<!--
+  PREVIEW DE TRAVAIL — aucune donnée réelle. Zéro CDN, zéro bibliothèque.
+
+  Paul, 2026-08-11 : « on peut en faire un site en 3D ? pareil pour la voûte,
+  comme c'est des étoiles dans le vide spatial, ça serait + classe ».
+
+  RÉPONSE TECHNIQUE, et pourquoi celle-ci :
+
+  La CSP d'Ultima pose `script-src 'self'` — une bibliothèque 3D venue d'un CDN
+  est bloquée, et vendorisée elle pèse ~600 Ko pour afficher vingt étoiles. Un
+  canvas WebGL, lui, coûte bien plus cher que son poids : il perd le focus
+  clavier, le lecteur d'écran, le texte réel et la cible tactile mesurée —
+  c'est-à-dire tout ce qui a été gagné sur la voûte.
+
+  Alors la perspective est calculée ICI, à la main (une quinzaine de lignes de
+  trigonométrie), et rendue en SVG. On gagne la profondeur, la parallaxe et la
+  rotation ; on ne perd rien : chaque étoile reste un élément focusable, avec
+  son nom en texte et son aria-label.
+
+  CE QUE LA 3D APPORTE VRAIMENT, au-delà du beau : les constellations cessent
+  d'être des paquets côte à côte et deviennent des RÉGIONS DE L'ESPACE. Deux
+  métiers qui travaillent souvent ensemble peuvent être proches dans le vide —
+  une information que la mosaïque plate ne pouvait pas porter.
+
+  CE QU'ELLE COÛTE, et qui est mesuré en bas de page : des images par seconde,
+  et une étoile lointaine plus petite que le plancher tactile.
+-->
+<link rel="stylesheet" href="preview-riven-3d.css">
+</head>
+<body>
+
+<p class="avertissement">PREVIEW DE TRAVAIL — contacts, personnes et relations inventés</p>
+
+<header class="bandeau">
+  <div class="bandeau-titre">
+    <h1>RIVEN</h1>
+    <span class="sous">le réseau, dans le vide</span>
+  </div>
+  <div class="bandeau-actions">
+    <button type="button" class="bouton" id="bouton-plat">Vue à plat</button>
+    <button type="button" class="bouton" id="bouton-arbre">Vue arbre</button>
+    <button type="button" class="bouton bouton--primaire" id="bouton-ajouter">+ Ajouter une fiche</button>
+  </div>
+</header>
+
+<div class="outils">
+  <label for="recherche" class="visuellement-cache">Rechercher un contact, un métier, une ville</label>
+  <input id="recherche" class="recherche" type="search" placeholder="Rechercher un nom, un métier, une ville…">
+  <div class="filtres" id="filtres" role="group" aria-label="Filtrer par type"></div>
+  <label class="bascule"><input type="checkbox" id="opt-derive"> Dérive lente</label>
+  <label class="bascule"><input type="checkbox" id="opt-brume" checked> Brume de profondeur</label>
+  <p class="compte" id="compte" role="status"></p>
+</div>
+
+<div class="corps" id="corps">
+  <main class="scene" id="scene" aria-label="Le réseau en trois dimensions">
+    <p class="aide-navigation" id="aide-navigation">
+      Faites glisser pour tourner autour du réseau · molette pour approcher ·
+      Tab pour passer d'une étoile à l'autre
+    </p>
+  </main>
+  <aside class="panneau" id="panneau" aria-label="Fiche du contact" hidden></aside>
+</div>
+
+<section class="mesure-bloc">
+  <h2>Mesure — ce que la 3D coûte, en chiffres</h2>
+  <div class="mesure" id="mesure"></div>
+</section>
+
+<script src="preview-riven-3d.js"></script>
+</body>
+</html>
