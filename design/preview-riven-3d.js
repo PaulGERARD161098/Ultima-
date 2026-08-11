@@ -782,12 +782,21 @@
   }
   hote.addEventListener('pointerup', relacher);
   hote.addEventListener('pointercancel', relacher);
+  // LA MOLETTE FAIT DÉFILER LA PAGE. Elle ne zoome QUE si Ctrl (ou ⌘) est
+  // tenu — la convention des cartes embarquées. Auparavant la scène
+  // confisquait chaque cran de molette : la page ne descendait jamais.
+  // Le zoom reste atteignable sans raccourci par les deux boutons de la
+  // barre, qui sont aussi la seule voie sur un téléphone.
   hote.addEventListener('wheel', function (e) {
+    if (!e.ctrlKey && !e.metaKey) { return; }  // pas de preventDefault : la page défile
     e.preventDefault();
-    zoomUtilisateur = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX,
-      zoomUtilisateur + e.deltaY * 0.0011));
-    cam.cibleDistance = distanceIdeale() * zoomUtilisateur;
+    zoomer(e.deltaY * 0.0011);
   }, { passive: false });
+
+  function zoomer(delta) {
+    zoomUtilisateur = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, zoomUtilisateur + delta));
+    cam.cibleDistance = distanceIdeale() * zoomUtilisateur;
+  }
 
   // ------------------------------------------------------------------
   // 7. PANNEAU DE FICHE — identique en esprit à la voûte à plat : le rendu
@@ -1034,6 +1043,12 @@
   });
   document.getElementById('opt-brume').addEventListener('change', function (e) {
     etat.brume = e.target.checked;
+  });
+  document.getElementById('bouton-approcher').addEventListener('click', function () {
+    zoomer(-0.18);
+  });
+  document.getElementById('bouton-reculer').addEventListener('click', function () {
+    zoomer(0.18);
   });
   ['bouton-plat', 'bouton-arbre', 'bouton-ajouter'].forEach(function (id) {
     document.getElementById(id).addEventListener('click', function () {

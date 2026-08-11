@@ -54,6 +54,10 @@
   <label for="recherche" class="visuellement-cache">Rechercher un contact, un métier, une ville</label>
   <input id="recherche" class="recherche" type="search" placeholder="Rechercher un nom, un métier, une ville…">
   <div class="filtres" id="filtres" role="group" aria-label="Filtrer par type"></div>
+  <span class="zoom" role="group" aria-label="Distance de vue">
+    <button type="button" class="bouton bouton--rond" id="bouton-approcher" aria-label="Approcher du réseau">+</button>
+    <button type="button" class="bouton bouton--rond" id="bouton-reculer" aria-label="Reculer du réseau">−</button>
+  </span>
   <label class="bascule"><input type="checkbox" id="opt-derive"> Dérive lente</label>
   <label class="bascule"><input type="checkbox" id="opt-brume" checked> Brume de profondeur</label>
   <p class="compte" id="compte" role="status"></p>
@@ -62,8 +66,8 @@
 <div class="corps" id="corps">
   <main class="scene" id="scene" aria-label="Le réseau en trois dimensions">
     <p class="aide-navigation" id="aide-navigation">
-      Faites glisser pour tourner autour du réseau · molette pour approcher ·
-      Tab pour passer d'une étoile à l'autre
+      Faites glisser pour tourner autour du réseau · + et − pour approcher ·
+      Tab pour passer d'une étoile à l'autre · la molette fait défiler la page
     </p>
   </main>
   <aside class="panneau" id="panneau" aria-label="Fiche du contact" hidden></aside>
