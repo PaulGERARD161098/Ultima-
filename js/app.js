@@ -475,6 +475,7 @@
   function rafraichir() {
     window.UltimaCarte.rendre(etat.noeuds, etat.relations, etat.filtres);
     rendreAccueil();
+    if (etat.onglet === 'ciel') { rendreCiel(); }
     rendreArbre();
     rendreContacts();
     if (etat.noeudCourant && !$('#vue-fiche').hidden) {
@@ -822,6 +823,7 @@
 
   var SECTIONS_ONGLETS = {
     accueil: '#espace-accueil',
+    ciel: '#espace-ciel',
     arbre: '#espace-arbre',
     carte: '#espace-carte',
     contacts: '#espace-contacts'
@@ -849,6 +851,13 @@
     if (nom === 'carte') {
       // Leaflet initialisé dans une section cachée a une taille fausse.
       window.UltimaCarte.invaliderTaille();
+    }
+    if (nom === 'ciel') {
+      rendreCiel();
+    } else if (window.UltimaCiel) {
+      // Quitter le ciel arrête sa boucle d'animation. Sans cela elle
+      // continuerait de tourner sous un onglet caché, pour rien.
+      window.UltimaCiel.arreter();
     }
     if (nom === 'accueil') { rendreAccueil(); }
     if (nom === 'arbre') { rendreArbre(); }
@@ -1813,6 +1822,114 @@
         ? 'Aucun contact ne correspond à “' + brut + '”.'
         : (nb + (nb > 1 ? ' contacts mis en évidence.' : ' contact mis en évidence.'));
     }
+  }
+
+  // ---------- Ciel : la vue d'ARRIVÉE du réseau (2026-08-11) ----------
+  // Même charpente que rendreArbre : mêmes états vides, même règle de
+  // recherche (mise en évidence, jamais réduction), mêmes libellés. Ce qui
+  // change est le RENDU, pas ce qu'on vient y chercher.
+
+  function rendreCiel() {
+    var scene = $('#ciel-scene');
+    if (!scene) { return; }
+    var outils = $('#ciel-outils');
+    var boutonAjouter = $('#ciel-ajouter');
+    var message = $('#ciel-message');
+    if (window.UltimaCiel) { window.UltimaCiel.arreter(); }
+    scene.textContent = '';
+    if (message) { message.textContent = ''; }
+
+    // Non connecté : invitation, pas de ciel — mêmes règles que l'arbre.
+    if (!etat.modeDemo && !etat.session) {
+      if (outils) { outils.hidden = true; }
+      if (boutonAjouter) { boutonAjouter.hidden = true; }
+      scene.appendChild(blocEtatCiel(
+        'Connectez-vous pour voir votre réseau',
+        '— le ciel vous attend'));
+      return;
+    }
+    if (boutonAjouter) { boutonAjouter.hidden = false; }
+
+    if (etat.noeuds.length === 0) {
+      if (outils) { outils.hidden = true; }
+      scene.appendChild(blocEtatCiel(
+        'Votre ciel attend sa première étoile',
+        '— touchez +'));
+      return;
+    }
+    if (outils) { outils.hidden = false; }
+
+    // Recherche : MISE EN ÉVIDENCE, pas réduction. Une étoile qui ne
+    // correspond pas s'efface sans quitter sa place — sinon on perdrait
+    // l'orientation dans le volume, qui est justement ce qu'on y gagne.
+    var champ = $('#ciel-recherche');
+    var brut = champ ? champ.value.trim() : '';
+    var terme = normaliserTexte(brut);
+    var correspond = function (noeud) {
+      return !terme || correspondAuTerme(noeud, terme);
+    };
+
+    var instance = window.UltimaCiel.rendre(scene, {
+      noeuds: etat.noeuds,
+      personnes: etat.personnes,
+      rattachements: etat.rattachements,
+      relations: etat.relations
+    }, {
+      surClicNoeud: ouvrirFicheDepuisArbre,
+      surClicPersonne: ouvrirFichePersonneDepuisCiel,
+      libellesType: LIBELLES_TYPE,
+      libellesStatut: LIBELLES_STATUT,
+      correspond: correspond
+    });
+
+    // L'aide de navigation revit à chaque rendu, et s'efface au premier geste.
+    var aide = document.createElement('p');
+    aide.id = 'ciel-aide';
+    aide.className = 'ciel-aide';
+    aide.textContent = 'Faites glisser pour tourner autour du réseau · ' +
+      '+ et − pour approcher · Tab pour passer d’une étoile à l’autre';
+    scene.appendChild(aide);
+    scene.addEventListener('pointerdown', function () {
+      aide.classList.add('est-effacee');
+    }, { once: true });
+
+    if (instance) {
+      instance.derive($('#ciel-derive') && $('#ciel-derive').checked);
+      if (etat.noeudCourant) { instance.choisir(etat.noeudCourant); }
+    }
+
+    if (terme && message) {
+      var nb = etat.noeuds.filter(correspond).length;
+      message.textContent = nb === 0
+        ? 'Aucun contact ne correspond à “' + brut + '”.'
+        : (nb + (nb > 1 ? ' contacts mis en évidence.' : ' contact mis en évidence.'));
+    }
+  }
+
+  // État vide du ciel : même forme que blocEtatArbre, sans bouton — le
+  // « + Ajouter un contact » vit déjà sous la scène.
+  function blocEtatCiel(texteFort, texteSuite) {
+    var bloc = document.createElement('div');
+    bloc.className = 'ciel-bloc-etat';
+    var texte = document.createElement('p');
+    var fort = document.createElement('strong');
+    fort.textContent = texteFort;
+    texte.appendChild(fort);
+    texte.appendChild(document.createTextNode(' ' + texteSuite));
+    bloc.appendChild(texte);
+    return bloc;
+  }
+
+  // Une pastille en orbite ouvre la fiche de la personne, pas celle du nœud :
+  // depuis le 2026-08-10 ce sont deux notions distinctes.
+  function ouvrirFichePersonneDepuisCiel(personneId) {
+    var personne = personneId ? trouverPersonne(personneId) : null;
+    if (!personne) {
+      toast("Cette personne n'existe plus.", 'erreur');
+      return;
+    }
+    ouvrirFichePersonne(personne.id);
+    $('#panneau-titre').focus();
   }
 
   // ---------- Panneau latéral ----------
@@ -3838,6 +3955,30 @@
     });
     $('#arbre-recherche').addEventListener('input', rendreArbre);
 
+    // ---- Commandes du ciel ----
+    $('#ciel-ajouter').addEventListener('click', function () {
+      if (!etat.modeDemo && !etat.session) {
+        toast('Connectez-vous pour ajouter un contact.', 'erreur');
+        return;
+      }
+      ouvrirFormNoeud(null); // panneau overlay : on reste sur le ciel
+    });
+    $('#ciel-recherche').addEventListener('input', rendreCiel);
+    // Le zoom par boutons : la seule voie sur un téléphone, où il n'y a pas de
+    // molette — et celle-ci fait défiler la page (elle ne zoome qu'avec Ctrl).
+    $('#ciel-approcher').addEventListener('click', function () {
+      var vue = window.UltimaCiel && window.UltimaCiel.courant();
+      if (vue) { vue.zoomer(-0.18); }
+    });
+    $('#ciel-reculer').addEventListener('click', function () {
+      var vue = window.UltimaCiel && window.UltimaCiel.courant();
+      if (vue) { vue.zoomer(0.18); }
+    });
+    $('#ciel-derive').addEventListener('change', function (e) {
+      var vue = window.UltimaCiel && window.UltimaCiel.courant();
+      if (vue) { vue.derive(e.target.checked); }
+    });
+
     // Arbre responsive en largeur (A3) : re-rendre à chaud UNIQUEMENT si le
     // palier change (fonction en escalier de la largeur mesurée). Débounce
     // 150 ms pour coalescer les rafales de resize ; court-circuit « palier
@@ -3924,11 +4065,13 @@
     initDictee(); // micros des champs statiques (sans API : ne fait rien)
     initGeocodage(); // « Trouver sur la carte » du formulaire nœud
     initRecherche(); // recherche nom/ville de l'onglet Carte (v3-⑥)
-    // A3 (D2a) : l'arbre est l'écran d'arrivée (le pivot), en démo comme en
-    // connecté. La carte reste pleinement accessible par son onglet ; l'Accueil
-    // v3-① aussi. Les données arrivent juste après (chargerDonnees → rafraichir
-    // → rendreArbre) : l'arbre se peuple sans changement d'onglet.
-    activerOnglet('arbre');
+    // Le CIEL est l'écran d'arrivée depuis le 2026-08-11 (décision de Paul :
+    // « la 3d devient accueil »). Il prend la place que l'arbre tenait depuis
+    // A3/D2a ; l'arbre, la carte et l'Accueil restent pleinement accessibles
+    // par leurs onglets — on ne jette rien tant que l'usage n'a pas tranché.
+    // Les données arrivent juste après (chargerDonnees → rafraichir) : le ciel
+    // se peuple sans changement d'onglet.
+    activerOnglet('ciel');
     await initAuth();
     await chargerDonnees();
   }

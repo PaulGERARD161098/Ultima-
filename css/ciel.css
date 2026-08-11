@@ -1,0 +1,125 @@
+/* Le CIEL de RIVEN — la vue d'arrivée du réseau depuis le 2026-08-11.
+   Fichier séparé, comme boussole.css ou draukhain-foyer.css : le ciel a son
+   propre régime chromatique (fond de nuit) et n'a rien à faire dans le
+   parchemin de styles.css.
+
+   Le thème sombre n'est PAS un « dark mode » : c'est un atlas céleste gravé.
+   Encre de nuit jamais noire, filets dorés, capitales espacées — le registre
+   antique et sérieux du 2026-07-08 tient, il change de fond. */
+
+.espace-ciel {
+  --ciel-nuit-haute: #0a1220;
+  --ciel-nuit-basse: #03070e;
+  --ciel-or: #a9884a;
+  --ciel-or-clair: #d8bd82;
+  --ciel-creme: #f2ead6;
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+}
+
+/* L'entête et les outils vivent HORS de la scène, sur le parchemin d'Ultima :
+   ils en prennent donc l'encre sépia. En or pâle — la couleur du ciel — le
+   titre devenait illisible sur fond clair, constaté à l'écran avant Paul.
+   Le régime de nuit commence au bord de la scène, pas avant. */
+.ciel-cartouche {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem .8rem;
+  padding: 0 .2rem;
+}
+.ciel-cartouche h2 {
+  margin: 0; font-size: 1rem; letter-spacing: .2em; font-weight: 700;
+  color: var(--encre-sepia);
+}
+.ciel-cartouche .ciel-sous {
+  margin: 0; font-size: .78rem; font-style: italic; color: var(--encre-sepia-douce);
+}
+
+/* ---- La scène ---- */
+.ciel-scene {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(169, 136, 74, .4);
+  border-radius: 3px;
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(30, 60, 100, .22), rgba(0, 0, 0, 0) 62%),
+    linear-gradient(180deg, var(--ciel-nuit-haute), var(--ciel-nuit-basse) 78%);
+  cursor: grab;
+  /* `pan-y` et non `none` : le navigateur garde le défilement vertical de la
+     page, seul le geste horizontal nous revient pour tourner. Avec `none`, sur
+     un téléphone où la scène occupe presque l'écran, la page ne descend plus
+     du tout (constat de Paul, 2026-08-11). */
+  touch-action: pan-y;
+}
+.ciel-scene--saisie { cursor: grabbing; }
+/* Le double filet du cartouche, à l'intérieur du cadre. */
+.ciel-scene::after {
+  content: ""; position: absolute; inset: 7px; pointer-events: none;
+  border: 1px solid rgba(169, 136, 74, .18);
+}
+.ciel-svg { display: block; width: 100%; height: auto; }
+
+/* ---- Les étoiles ---- */
+.ciel-etoile { cursor: pointer; }
+.ciel-etoile:focus-visible { outline: none; }
+.ciel-etoile:focus-visible .ciel-halo-focus,
+.ciel-etoile:hover .ciel-halo-focus { opacity: .9; }
+.ciel-halo-focus { opacity: 0; transition: opacity .12s; pointer-events: none; }
+.ciel-etoile--choisie .ciel-halo-choix { opacity: 1; }
+.ciel-halo-choix { opacity: 0; pointer-events: none; }
+.ciel-nom { pointer-events: none; }
+/* Le nom d'une étoile non permanente est PRÉSENT dans le document — donc lu
+   par un lecteur d'écran et trouvable — et se révèle au survol comme au
+   focus clavier. Rien n'est caché à personne. */
+.ciel-nom--demande { opacity: 0; transition: opacity .12s; }
+.ciel-etoile:hover .ciel-nom--demande,
+.ciel-etoile:focus-visible .ciel-nom--demande { opacity: .95; }
+
+/* Tout ce qui est décor est TRANSPARENT AU POINTEUR : un nom de constellation
+   dessiné par-dessus les étoiles intercepterait les clics destinés à une
+   fiche. Un décor qui vole un clic n'est plus un décor, c'est un obstacle. */
+.ciel-decor, .ciel-liens { pointer-events: none; }
+
+/* CONCENTRATION — la réponse au plat de spaghettis : au survol ou au focus
+   d'une étoile, le vide se fait et seuls SES liens brillent. « Avec qui
+   celui-là travaille-t-il ? » se lit d'un coup d'œil. */
+.ciel--concentre .ciel-liens line { opacity: .05; }
+.ciel--concentre .ciel-liens line.ciel-lien--vif { opacity: .95; stroke-width: 1.5; }
+
+/* ---- Barre d'outils du ciel ---- */
+.ciel-outils {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .9rem;
+  padding: 0 .2rem;
+}
+.ciel-zoom { display: flex; gap: .3rem; }
+/* Les deux boutons de distance : la voie SANS raccourci vers le zoom, et la
+   seule qui existe sur un téléphone (pas de molette). 2,2 rem de côté, soit
+   au-dessus du plancher tactile de 24 px — comme les étoiles elles-mêmes. */
+.ciel-bouton-rond {
+  width: 2.2rem; height: 2.2rem; padding: 0; line-height: 1;
+  font-size: 1rem; border-radius: 50%;
+}
+.ciel-bascule {
+  display: flex; align-items: center; gap: .35rem;
+  font-size: .82rem; cursor: pointer; color: var(--encre-sepia);
+}
+.ciel-bascule input { accent-color: var(--ciel-or); }
+.ciel-aide {
+  position: absolute; left: 50%; bottom: .6rem; transform: translateX(-50%);
+  margin: 0; padding: .3rem .8rem; z-index: 2; pointer-events: none;
+  font-size: .74rem; font-style: italic; color: rgba(205, 195, 173, .62);
+  background: rgba(3, 7, 14, .55); border-radius: 3px; text-align: center;
+  max-width: 92%;
+  transition: opacity .4s;
+}
+.ciel-aide.est-effacee { opacity: 0; }
+.ciel-message { margin: 0; font-size: .82rem; color: var(--encre-sepia-douce); }
+
+/* État vide / non connecté : le même bloc que l'arbre, sur fond de nuit. */
+.ciel-bloc-etat {
+  padding: 2.4rem 1.2rem; text-align: center;
+  color: rgba(205, 195, 173, .85); font-style: italic;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ciel-aide { transition: none; }
+}

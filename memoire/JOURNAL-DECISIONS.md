@@ -2285,3 +2285,42 @@
 - **Règle** : un refus d'outil sur un critère d'ergonomie (stabilité, visibilité,
   taille de cible) est un **constat d'usage**, pas un obstacle technique à
   contourner.
+
+### 2026-08-11 (implantation) — le CIEL est en production dans RIVEN
+
+- **Paul : « vasy implante »**, après avoir tranché « la 3d devient accueil ».
+- **Ce que « accueil » voulait dire, vérifié avant d'agir** : l'écran d'arrivée
+  de RIVEN n'était PAS l'onglet Accueil (le tableau de Léo) mais **l'arbre**
+  (`activerOnglet('arbre')` depuis A3/D2a). La décision se traduit donc par
+  *le ciel prend la place de l'arbre à l'arrivée* — **l'Accueil de Léo n'est pas
+  touché**, et l'arbre reste entier derrière son onglet. *Sans ce contrôle,
+  j'aurais supprimé le tableau de bord de Léo en croyant obéir.*
+- **Architecture** : `js/ciel.js` (module autonome `window.UltimaCiel`, même
+  contrat que `js/arbre.js` : exposé en global, `createElementNS`/`textContent`
+  uniquement), `css/ciel.css`, un `#espace-ciel` dans `riven.html`, un cinquième
+  onglet. **Zéro dépendance ajoutée.**
+- **`arreter()` en plus du contrat de l'arbre** : une boucle d'animation qui
+  tourne sous un onglet caché est une batterie qui se vide pour rien. Quitter le
+  ciel l'arrête, y revenir le reconstruit — et le harnais l'exige.
+- **Le défaut le plus grave, trouvé par le harnais** : le tri de profondeur
+  réordonne les étoiles par `appendChild`, ce qui **détache l'élément focusé du
+  document et lui ARRACHE LE FOCUS** — la touche Entrée n'ouvrait plus aucune
+  fiche. Le tri est cosmétique, le focus est fonctionnel : **le tri se suspend
+  tant qu'une étoile a le focus**.
+- **Quatre harnais avaient des assertions PÉRIMÉES**, pas cassées :
+  `smoke-accueil`, `smoke-connexion`, `smoke-antique`, `smoke-arbre` affirmaient
+  tous « l'arrivée est l'arbre ». Actualisés sans affaiblir leur intention — et
+  `smoke-arbre` vérifie désormais que l'arbre reste **accessible par son onglet**,
+  ce qui est le vrai sens de « on ne jette rien ».
+- **Un effet de bord réel** : l'arbre rendu dans un espace caché mesure une
+  largeur nulle et retombe au palier de base. `activerOnglet` le re-rend au bon
+  palier ; c'est le harnais qui devait naviguer, pas le code qui devait changer.
+- **Contraste** : l'entête et les outils du ciel vivent HORS de la scène, sur le
+  parchemin — ils prennent donc l'**encre sépia**. En or pâle (la couleur du
+  ciel) le titre était illisible sur fond clair. *Le régime de nuit commence au
+  bord de la scène, pas avant.*
+- **Vérifié** : `tests/smoke-ciel.mjs` neuf, **31 assertions** — dont la cible
+  tactile MESURÉE (25 px à 390 px de large), l'absence au ciel d'une personne
+  sans rattachement (une règle se teste par l'ABSENCE), le déterminisme du monde,
+  et l'arrêt de la boucle en sortie. Patrimoine COMPLET vert : **53 harnais,
+  1310 assertions, sortie 0**.

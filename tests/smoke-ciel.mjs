@@ -1,0 +1,268 @@
+// Ciel du réseau — la vue d'ARRIVÉE de RIVEN depuis le 2026-08-11.
+// Flux front en mode démo. Ce que ce harnais prouve :
+//   1. Le ciel est l'écran d'arrivée ; l'arbre et la carte restent accessibles.
+//   2. N contacts → N étoiles, groupées en constellations par métier principal.
+//   3. Une personne rattachée à DEUX fiches orbite les DEUX (notion du 10/08).
+//   4. Les relations sont tracées en BLANC, le motif portant le type.
+//   5. Tap sur une étoile → la bonne fiche, sans quitter le ciel.
+//   6. Clavier : étoiles focusables, Entrée ouvre, et le focus RAMÈNE l'étoile
+//      face à la caméra (sans quoi Tab l'enverrait derrière le spectateur).
+//   7. La cible tactile MESURÉE tient le plancher WCAG de 24 px.
+//   8. La molette fait DÉFILER LA PAGE et ne zoome pas (demande de Paul).
+//   9. Quitter l'onglet ARRÊTE la boucle d'animation (batterie).
+//  10. Déterminisme : mêmes données → mêmes coordonnées.
+//  11. Zéro erreur console.
+import { chromium } from 'playwright';
+import { readFileSync } from 'node:fs';
+
+const SCRATCH = new URL('./.cache', import.meta.url).pathname;
+const leafletJs = readFileSync(`${SCRATCH}/package/dist/leaflet.js`);
+const leafletCss = readFileSync(`${SCRATCH}/package/dist/leaflet.css`);
+
+const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+const erreurs = [];
+page.on('pageerror', (e) => erreurs.push('pageerror: ' + e.message));
+page.on('console', (m) => { if (m.type() === 'error') erreurs.push('console: ' + m.text()); });
+
+await page.route('**://unpkg.com/**', (route) => {
+  const url = route.request().url();
+  if (url.endsWith('leaflet.js')) return route.fulfill({ body: leafletJs, contentType: 'application/javascript' });
+  if (url.endsWith('leaflet.css')) return route.fulfill({ body: leafletCss, contentType: 'text/css' });
+  return route.fulfill({ status: 404, body: '' });
+});
+const PNG_1PX = Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
+  'base64');
+await page.route('**://*.openstreetmap.org/**', (r) => r.fulfill({ body: PNG_1PX, contentType: 'image/png' }));
+await page.addInitScript(() => {
+  try { window.sessionStorage.setItem('ultima-leo-accueil-vu', '1'); } catch (e) {}
+  Object.defineProperty(window, 'ULTIMA_CONFIG', {
+    value: { SUPABASE_URL: '', SUPABASE_ANON_KEY: '' },
+    writable: false,
+  });
+});
+
+const verdicts = {};
+await page.goto('http://127.0.0.1:8123/riven.html', { waitUntil: 'load', timeout: 20000 });
+await page.waitForTimeout(1200);
+
+// ---------- 1. Le ciel est l'écran d'arrivée ----------
+verdicts.arriveeCiel = await page.locator('#espace-ciel').isVisible();
+verdicts.ongletCielCourant = (await page.locator('.barre-onglets .onglet[data-onglet="ciel"]')
+  .getAttribute('aria-current')) === 'page';
+
+// ---------- 2. Une fiche = une étoile, groupées en constellations ----------
+const rendu = await page.evaluate(() => {
+  const svg = document.querySelector('#ciel-scene .ciel-svg');
+  return {
+    etoiles: svg.querySelectorAll('g.ciel-etoile[data-noeud-id]').length,
+    liens: svg.querySelectorAll('.ciel-liens line').length,
+    orbites: svg.querySelectorAll('g.ciel-etoile[data-personne-id]').length,
+    constellations: svg.querySelectorAll('.ciel-decor text').length,
+    aria: svg.getAttribute('aria-label') || ''
+  };
+});
+// La démo porte 9 nœuds, 6 relations, 3 rattachements.
+verdicts.neufEtoiles = rendu.etoiles === 9;
+verdicts.sixLiens = rendu.liens === 6;
+verdicts.troisOrbites = rendu.orbites === 3;
+verdicts.constellationsNommees = rendu.constellations >= 5;
+verdicts.ariaDitLeCompte = /9 contacts répartis en \d+ constellations/.test(rendu.aria);
+
+// ---------- 3. Une personne à DEUX rattachements orbite les DEUX ----------
+const multi = await page.evaluate(() => {
+  const gs = [...document.querySelectorAll('#ciel-scene g.ciel-etoile[data-personne-id]')];
+  const compte = {};
+  gs.forEach((g) => {
+    const id = g.getAttribute('data-personne-id');
+    compte[id] = (compte[id] || 0) + 1;
+  });
+  return compte;
+});
+// demo-p1 (Karim Roux) est rattachée à demo-n2 ET demo-n8.
+verdicts.personneDeuxFichesOrbiteLesDeux = multi['demo-p1'] === 2;
+// demo-p3 n'a aucun rattachement : elle ne paraît PAS au ciel (elle vit au
+// registre Contacts). L'absence se teste, elle ne se suppose pas.
+verdicts.personneSansFicheAbsenteDuCiel = !multi['demo-p3'];
+
+// ---------- 4. Les liens sont blancs, le motif porte le type ----------
+const liens = await page.evaluate(() => {
+  const g = document.querySelector('#ciel-scene .ciel-liens');
+  const lignes = [...g.querySelectorAll('line')];
+  return {
+    couleur: g.getAttribute('stroke'),
+    motifs: lignes.map((l) => l.getAttribute('stroke-dasharray') || 'plein').sort(),
+    // demo-r6 est « arrêtée » : son éclat doit être le plus faible du ciel.
+    opacites: lignes.map((l) => +l.getAttribute('opacity'))
+  };
+});
+verdicts.liensBlancs = liens.couleur === '#ffffff';
+verdicts.motifDitLeType = liens.motifs.filter((m) => m === 'plein').length === 3 &&
+  liens.motifs.includes('7 5') && liens.motifs.includes('1.5 5');
+verdicts.eclatDitAvancement = Math.min(...liens.opacites) < Math.max(...liens.opacites);
+
+// ---------- 7. Cible tactile MESURÉE (mobile 390 px) ----------
+const ciblePx = await page.evaluate(() => {
+  const svg = document.querySelector('#ciel-scene .ciel-svg');
+  const vb = svg.getAttribute('viewBox').split(' ').map(Number);
+  const r = svg.getBoundingClientRect();
+  const zones = [...svg.querySelectorAll('g.ciel-etoile[data-noeud-id]')]
+    .filter((e) => e.getAttribute('display') !== 'none')
+    .map((e) => +e.querySelector('.ciel-zone').getAttribute('r'));
+  return +(Math.min(...zones) * 2 * (r.width / vb[2])).toFixed(1);
+});
+verdicts.cibleTactileTientLePlancher = ciblePx >= 24;
+
+// ---------- 5. Tap sur une étoile → la BONNE fiche ----------
+await page.locator('g.ciel-etoile[data-noeud-id="demo-n2"] .ciel-zone').click();
+await page.waitForTimeout(500);
+verdicts.tapOuvreLaBonneFiche =
+  (await page.locator('#panneau-titre').textContent()) === 'Plomberie Roux & Fils';
+verdicts.tapNeQuittePasLeCiel = await page.locator('#espace-ciel').isVisible();
+await page.locator('#bouton-fermer-panneau').click();
+await page.waitForTimeout(300);
+
+// ---------- 6. Clavier : focus, visée, et Entrée ----------
+verdicts.etoileFocusable = await page.evaluate(() => {
+  const e = document.querySelector('#ciel-scene g.ciel-etoile[data-noeud-id]');
+  return e.getAttribute('tabindex') === '0' && e.getAttribute('role') === 'button';
+});
+
+// L'étoile la PLUS excentrée : c'est elle qui prouve que le focus la ramène.
+const excentree = await page.evaluate(() => {
+  const svg = document.querySelector('#ciel-scene .ciel-svg');
+  const vb = svg.getAttribute('viewBox').split(' ').map(Number);
+  const centre = { x: vb[2] / 2, y: vb[3] / 2 };
+  const dist = (el) => {
+    const z = el.querySelector('.ciel-zone');
+    return Math.hypot(+z.getAttribute('cx') - centre.x, +z.getAttribute('cy') - centre.y);
+  };
+  let pire = null;
+  document.querySelectorAll('#ciel-scene g.ciel-etoile[data-noeud-id]').forEach((e) => {
+    if (!pire || dist(e) > dist(pire)) { pire = e; }
+  });
+  return { id: pire.getAttribute('data-noeud-id'), avant: dist(pire) };
+});
+// focus() de Playwright, et non element.focus() dans la page : sur un <g> SVG
+// le focus programmatique ne prend pas toujours — même technique que smoke-arbre.
+await page.locator(`g.ciel-etoile[data-noeud-id="${excentree.id}"]`).focus();
+verdicts.focusEffectif = await page.evaluate((id) =>
+  document.activeElement && document.activeElement.getAttribute('data-noeud-id') === id,
+excentree.id);
+await page.waitForTimeout(1300);
+const apresVisee = await page.evaluate((id) => {
+  const svg = document.querySelector('#ciel-scene .ciel-svg');
+  const vb = svg.getAttribute('viewBox').split(' ').map(Number);
+  const z = svg.querySelector(`g.ciel-etoile[data-noeud-id="${id}"] .ciel-zone`);
+  return Math.hypot(+z.getAttribute('cx') - vb[2] / 2, +z.getAttribute('cy') - vb[3] / 2);
+}, excentree.id);
+// Ramenée à moins de 60 % de son écart d'origine : le monde a bien pivoté.
+verdicts.focusRameneLEtoileFaceALaCamera = apresVisee < excentree.avant * 0.6;
+
+await page.keyboard.press('Enter');
+await page.waitForTimeout(400);
+verdicts.entreeOuvreLaFiche = !(await page.locator('#panneau').isHidden());
+await page.locator('#bouton-fermer-panneau').click();
+await page.waitForTimeout(300);
+
+// ---------- Recherche : mise en évidence, jamais réduction ----------
+await page.fill('#ciel-recherche', 'plomberie');
+await page.waitForTimeout(400);
+const recherche = await page.evaluate(() => ({
+  message: document.getElementById('ciel-message').textContent,
+  // Les étoiles restent TOUTES en place : on atténue, on ne retire pas.
+  presentes: document.querySelectorAll('#ciel-scene g.ciel-etoile[data-noeud-id]').length,
+  attenuees: [...document.querySelectorAll('#ciel-scene g.ciel-etoile[data-noeud-id]')]
+    .filter((e) => +e.getAttribute('opacity') < 0.2).length
+}));
+verdicts.rechercheMetEnEvidence = /1 contact mis en évidence/.test(recherche.message) &&
+  recherche.presentes === 9 && recherche.attenuees > 0;
+await page.fill('#ciel-recherche', 'zzzzz');
+await page.waitForTimeout(400);
+verdicts.rechercheSansResultatLeDit =
+  /Aucun contact ne correspond/.test(await page.locator('#ciel-message').textContent());
+await page.fill('#ciel-recherche', '');
+await page.waitForTimeout(400);
+
+// ---------- 8. La molette LAISSE la page défiler ----------
+// On ne mesure PAS scrollY : la mise en page de RIVEN tient en pleine hauteur,
+// il n'y a donc rien à faire défiler et le test passerait pour de mauvaises
+// raisons. Ce qui décide, c'est que la scène n'ANNULE pas l'événement — le
+// jour où du contenu s'ajoutera sous elle, la page descendra.
+const molette = await page.evaluate(() => {
+  const scene = document.getElementById('ciel-scene');
+  const jouer = (avecCtrl) => {
+    const e = new WheelEvent('wheel', { deltaY: 300, bubbles: true, cancelable: true, ctrlKey: avecCtrl });
+    scene.dispatchEvent(e);
+    return e.defaultPrevented;
+  };
+  return { sansCtrl: jouer(false), avecCtrl: jouer(true) };
+});
+verdicts.moletteLaissePasserLeDefilement = molette.sansCtrl === false;
+verdicts.ctrlMoletteZoomeEtRetientLevenement = molette.avecCtrl === true;
+verdicts.sceneLaisseDefilerAuDoigt =
+  (await page.evaluate(() => getComputedStyle(document.getElementById('ciel-scene')).touchAction)) === 'pan-y';
+await page.evaluate(() => window.scrollTo(0, 0));
+
+// ---------- 9. Quitter le ciel ARRÊTE la boucle ----------
+await page.locator('.barre-onglets .onglet[data-onglet="carte"]').click();
+await page.waitForTimeout(500);
+verdicts.sortieArreteLaBoucle = await page.evaluate(() => window.UltimaCiel.courant() === null);
+
+// ---------- 1bis. L'arbre et la carte restent accessibles ----------
+verdicts.carteAccessible = await page.locator('#espace-carte').isVisible();
+await page.locator('.barre-onglets .onglet[data-onglet="arbre"]').click();
+await page.waitForTimeout(600);
+verdicts.arbreAccessible = await page.locator('#espace-arbre').isVisible() &&
+  (await page.evaluate(() => document.querySelectorAll('#arbre-scene .arbre-feuille').length)) === 9;
+
+// Retour au ciel : il se reconstruit entièrement.
+await page.locator('.barre-onglets .onglet[data-onglet="ciel"]').click();
+await page.waitForTimeout(700);
+verdicts.retourAuCielLeReconstruit = await page.evaluate(() =>
+  window.UltimaCiel.courant() !== null &&
+  document.querySelectorAll('#ciel-scene g.ciel-etoile[data-noeud-id]').length === 9);
+
+// ---------- 10. Déterminisme : mêmes données → mêmes coordonnées ----------
+verdicts.mondeDeterministe = await page.evaluate(() => {
+  const noeuds = [
+    { id: 'a', nom: 'A', secteur_activite: 'Plomberie' },
+    { id: 'b', nom: 'B', secteur_activite: 'Plomberie' },
+    { id: 'c', nom: 'C', secteur_activite: 'Toiture' },
+    { id: 'd', nom: 'D', secteur_activite: '' }
+  ];
+  const cle = (m) => m.etoiles.map((e) =>
+    e.noeud.id + ':' + e.x.toFixed(6) + ',' + e.y.toFixed(6) + ',' + e.z.toFixed(6)).join('|');
+  return cle(window.UltimaCiel.construireMonde(noeuds)) ===
+         cle(window.UltimaCiel.construireMonde(noeuds));
+});
+
+// Le sans-secteur va bien dans « À classer », et en dernier.
+verdicts.sansSecteurAClasser = await page.evaluate(() => {
+  const groupes = window.UltimaCiel.grouper([
+    { id: 'a', nom: 'A', secteur_activite: 'Plomberie' },
+    { id: 'b', nom: 'B', secteur_activite: '' }
+  ]);
+  return groupes[groupes.length - 1].label === window.UltimaCiel.LABEL_A_CLASSER;
+});
+
+// La magnitude compte bien relations ET rattachements.
+verdicts.magnitudeCompteLesDeux = await page.evaluate(() => {
+  const m = window.UltimaCiel.magnitudes(
+    [{ id: 'x' }, { id: 'y' }],
+    [{ source_id: 'x', target_id: 'y' }],
+    [{ personne_id: 'p', node_id: 'x' }]);
+  return m.x === 2 && m.y === 1;
+});
+
+// ---------- 11. Zéro erreur console ----------
+verdicts.zeroErreurConsole = erreurs.length === 0;
+
+console.log(JSON.stringify(verdicts, null, 2));
+if (erreurs.length) { console.log('Erreurs :', erreurs.slice(0, 5)); }
+console.log(`Cible tactile mesurée à 390 px : ${ciblePx} px (plancher 24)`);
+const ok = Object.values(verdicts).every((v) => v === true);
+console.log(ok ? 'SMOKE CIEL VERT' : 'SMOKE CIEL ROUGE');
+await browser.close();
+process.exit(ok ? 0 : 1);

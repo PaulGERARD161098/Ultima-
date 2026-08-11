@@ -215,8 +215,9 @@ await deco.close();
 // ---- 3. Connecté (session simulée) : écran masqué, app visible. ----
 const conn = await ouvrir({ width: 390, height: 844 }, 'connecte');
 verdicts.ecranMasqueConnecte = await conn.locator('#ecran-connexion').isHidden();
-// A3 : l'arrivée connectée est l'arbre (le pivot), plus la carte.
-verdicts.appVisibleConnecte = await conn.locator('#espace-arbre').isVisible();
+// L'arrivée connectée est le CIEL depuis le 2026-08-11 (décision de Paul) ;
+// c'était l'arbre depuis A3, et la carte avant lui.
+verdicts.appVisibleConnecte = await conn.locator('#espace-ciel').isVisible();
 verdicts.deconnexionVisible = await conn.locator('#bouton-deconnexion').isVisible();
 // A4 : connecté, aucun inert résiduel — l'app est pleinement focusable.
 verdicts.appInteractiveConnecte = await conn.evaluate(() => {
@@ -227,10 +228,10 @@ verdicts.appInteractiveConnecte = await conn.evaluate(() => {
 });
 await conn.close();
 
-// ---- 4. Mode démo : pas d'écran de connexion, arbre visible (arrivée A3). ----
+// ---- 4. Mode démo : pas d'écran de connexion, ciel visible (arrivée 11/08). ----
 const demo = await ouvrir({ width: 390, height: 844 }, 'aucun');
 verdicts.ecranMasqueDemo = await demo.locator('#ecran-connexion').isHidden();
-verdicts.arbreVisibleDemo = await demo.locator('#espace-arbre').isVisible();
+verdicts.cielVisibleDemo = await demo.locator('#espace-ciel').isVisible();
 verdicts.bandeauDemo = await demo.locator('#bandeau-demo').isVisible();
 // A4 : mode démo (pas d'overlay) — aucun inert, l'app reste interactive.
 verdicts.appInteractiveDemo = await demo.evaluate(() => {
