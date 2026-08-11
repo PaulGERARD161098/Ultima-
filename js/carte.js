@@ -56,7 +56,7 @@
     coucheSurbrillance = L.layerGroup().addTo(carte);
 
     // Voile Ptolémée (R1) : pane décoratif entre tuiles (200) et vecteurs
-    // (400), muet (pointer-events none). Le SVG vit dans traveler.html
+    // (400), muet (pointer-events none). Le SVG vit dans riven.html
     // (<template id="voile-ptolemee">, 100 % local) et pan/zoome AVEC la
     // carte : jamais de désaccord visuel entre contour et points.
     var paneVoile = carte.createPane('voile');

@@ -2,7 +2,7 @@
 // Le registre DERRIÈRE AUTH, données réelles uniquement :
 //   - fail-closed : sans config, sans session ou sur échec API (401), la page
 //     n'affiche AUCUNE donnée — seul le cartouche « Authentification requise »
-//     est montré (le flux lien-magique vit sur traveler.html) ;
+//     est montré (le flux lien-magique vit sur riven.html) ;
 //   - avec session : GET /api/talents (Bearer) → talents (vue talents_etat, donc
 //     nb_preuves + a_etayer) + preuves (rattachées par talent_id). AUCUN talent en
 //     dur ici : les données personnelles ne viennent QUE de l'API authentifiée (RLS) ;

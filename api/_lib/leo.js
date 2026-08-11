@@ -29,7 +29,7 @@ export const MAX_TOKENS_REPONSE = 1024; // réponses de majordome, pas d'essais
 // Les 4 quadrants et leur registre (CADRAGE-LEO-SITE §1 : opérationnel sur
 // RIVEN/NICOL BOLAS, réflexif sur ADRAMELECH/IMLADRIK).
 const QUADRANTS = {
-  traveler: {
+  riven: {
     nom: 'RIVEN',
     registre: 'opérationnel',
     sujet: 'le réseau commercial de Paul : artisans, partenaires, leads, ' +
@@ -101,7 +101,7 @@ const CATALOGUE = {
     }
   },
   proposer_besoin: {
-    quadrant: 'traveler',
+    quadrant: 'riven',
     description: "Proposer l'ajout d'une ligne de besoin (matériel, fourniture) " +
       "à l'intendance d'un chantier. Rien n'est créé avant confirmation de Paul.",
     args: {
@@ -112,7 +112,7 @@ const CATALOGUE = {
     }
   },
   proposer_journal: {
-    quadrant: 'traveler',
+    quadrant: 'riven',
     description: "Proposer une note au journal d'un contact ou chantier du " +
       "réseau. Rien n'est écrit avant confirmation de Paul.",
     args: {
@@ -192,7 +192,7 @@ const CATALOGUE = {
   },
 
   proposer_relance: {
-    quadrant: 'traveler',
+    quadrant: 'riven',
     description: 'Proposer de programmer une relance datée sur un contact du ' +
       "réseau. Rien n'est programmé avant confirmation de Paul.",
     args: {
@@ -207,7 +207,23 @@ const CATALOGUE = {
 // de données) — l'appel IA part alors SANS le paramètre tools. imladrik est
 // servi depuis la boucle ④ (2026-07-30) : ses 3 caps ont leurs APIs en prod
 // (migrations 0016 → 0018 appliquées).
-export const OUTILS_PAR_QUADRANT = { traveler: [], bcp: [], adramelech: [], imladrik: [] };
+// Alias de TRANSITION (2026-08-11) : le quadrant RIVEN a porté l'identifiant
+// 'traveler' jusqu'au renommage du fichier. Front et API se déploient ensemble,
+// mais un onglet resté ouvert chez Paul continue d'envoyer l'ancien nom et
+// tomberait en 400 « Quadrant inconnu » au milieu d'une dictée. Lecture par
+// hasOwnProperty : sans elle, un quadrant nommé « constructor » résoudrait vers
+// une fonction héritée d'Object.prototype (même motif que validerProposition).
+// À retirer quand les onglets auront tourné.
+const ALIAS_QUADRANT = { traveler: 'riven' };
+
+export function normaliserQuadrant(quadrant) {
+  if (typeof quadrant !== 'string') return quadrant;
+  return Object.prototype.hasOwnProperty.call(ALIAS_QUADRANT, quadrant)
+    ? ALIAS_QUADRANT[quadrant]
+    : quadrant;
+}
+
+export const OUTILS_PAR_QUADRANT = { riven: [], bcp: [], adramelech: [], imladrik: [] };
 for (const nom of Object.keys(CATALOGUE)) {
   const outil = CATALOGUE[nom];
   const properties = {};

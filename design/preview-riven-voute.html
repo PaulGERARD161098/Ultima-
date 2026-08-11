@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Preview — RIVEN : l'écran de la voûte (les 5 décisions appliquées)</title>
+<!--
+  PREVIEW DE TRAVAIL — aucune donnée réelle, aucun contact de Paul.
+  Les entreprises, personnes et relations sont INVENTÉES. Zéro CDN.
+
+  Celle-ci n'est PLUS une planche d'arbitrage : les cinq décisions sont prises
+  (Paul, 2026-08-11) et elle montre l'ÉCRAN qui en résulte.
+
+    ① Voûte — les constellations en mosaïque, pas la galaxie en spirale.
+    ② L'étoile est la FICHE ; la personne orbite autour ; une personne
+      rattachée à deux fiches orbite les deux.
+    ③ Les noms à la demande — six permanents, le reste au survol et au focus.
+    ④ Liens BLANCS : le motif du trait dit le type, l'éclat dit l'avancement.
+    ⑤ La voûte est la vue d'arrivée ; l'arbre reste accessible d'un bouton.
+
+  Ce qui s'y ajoute, et qui est le VRAI sujet de la suite : le panneau de
+  fiche — ce qu'on sait d'un contact, qui y travaille, avec qui il est en
+  relation, et les deux gestes « Rattacher une personne » / « Créer une
+  relation ». C'est là que se joue « renseigner les contacts et les mettre en
+  relation ». Les formulaires eux-mêmes ne sont PAS maquettés ici : ils sont
+  la boucle suivante.
+-->
+<style>
+:root {
+  --nuit-haute: #0b1626;
+  --nuit-basse: #060d18;
+  --or-antique: #a9884a;
+  --or-clair: #d8bd82;
+  --creme: #f2ead6;
+  --creme-douce: #cdc3ad;
+  --t-artisan: #f2a15a;
+  --t-partenaire: #7cb8ea;
+  --t-lead: #6fd39b;
+  --t-chantier: #b995e8;
+  --police-ancienne: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; color: var(--creme); font-family: var(--police-ancienne);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(120,170,220,.10), rgba(0,0,0,0) 55%),
+    linear-gradient(180deg, var(--nuit-haute), var(--nuit-basse) 70%);
+  /* Le dégradé est ancré au viewport : sans cela il s'arrête net au bas du
+     premier écran et laisse une bande claire sur une page qui défile. */
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+.avertissement {
+  background: rgba(169,136,74,.14); border-bottom: 1px solid rgba(169,136,74,.3);
+  text-align: center; padding: .4rem 1rem; font-size: .78rem; letter-spacing: .08em;
+  color: var(--or-clair);
+}
+
+/* ---- Bandeau ---- */
+.bandeau {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; padding: .9rem 1.2rem .7rem;
+  border-bottom: 1px solid rgba(169,136,74,.28);
+}
+.bandeau-titre { display: flex; align-items: baseline; gap: .7rem; }
+.bandeau h1 {
+  margin: 0; font-size: 1.05rem; letter-spacing: .2em; color: var(--or-clair); font-weight: 700;
+}
+.bandeau .sous { font-size: .76rem; font-style: italic; color: var(--creme-douce); opacity: .85; }
+.bandeau-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+
+.bouton {
+  font-family: inherit; font-size: .82rem; padding: .42rem .85rem; cursor: pointer;
+  border-radius: 3px; border: 1px solid rgba(169,136,74,.5);
+  background: transparent; color: var(--creme-douce);
+}
+.bouton:hover { background: rgba(169,136,74,.18); color: var(--creme); }
+.bouton:focus-visible { outline: 2px solid var(--or-clair); outline-offset: 2px; }
+.bouton--primaire { background: rgba(169,136,74,.3); color: var(--creme); font-weight: 700; }
+
+/* ---- Barre d'outils ---- */
+.outils {
+  display: flex; flex-wrap: wrap; gap: .7rem 1.1rem; align-items: center;
+  padding: .7rem 1.2rem; border-bottom: 1px solid rgba(169,136,74,.2);
+}
+.recherche {
+  font-family: inherit; font-size: .86rem; padding: .42rem .7rem; min-width: 15rem;
+  background: rgba(11,22,38,.85); color: var(--creme);
+  border: 1px solid rgba(169,136,74,.42); border-radius: 3px;
+}
+.recherche::placeholder { color: rgba(205,195,173,.55); font-style: italic; }
+.recherche:focus-visible { outline: 2px solid var(--or-clair); outline-offset: 1px; }
+.filtres { display: flex; flex-wrap: wrap; gap: .5rem .9rem; }
+.filtre { display: flex; align-items: center; gap: .35rem; font-size: .82rem; color: var(--creme-douce); cursor: pointer; }
+.filtre input { accent-color: var(--or-antique); }
+.pastille { width: .62rem; height: .62rem; border-radius: 50%; display: inline-block; }
+.compte { font-size: .8rem; color: var(--creme-douce); font-style: italic; margin-left: auto; }
+.compte b { color: var(--or-clair); font-style: normal; }
+
+/* ---- Corps : le ciel + le panneau ---- */
+.corps { display: grid; grid-template-columns: 1fr; gap: 0; }
+@media (min-width: 60rem) {
+  .corps.corps--panneau-ouvert { grid-template-columns: 1fr 22rem; }
+}
+.scene { position: relative; overflow: hidden; }
+.scene::after {
+  content: ""; position: absolute; inset: 8px; pointer-events: none;
+  border: 1px solid rgba(169,136,74,.16);
+}
+.ciel { display: block; width: 100%; height: auto; }
+
+/* Étoiles */
+.etoile { cursor: pointer; }
+.etoile:focus-visible { outline: none; }
+.etoile:focus-visible .halo-focus, .etoile:hover .halo-focus { opacity: .85; }
+.halo-focus { opacity: 0; transition: opacity .12s; pointer-events: none; }
+.etoile-nom { pointer-events: none; }
+.etoile-nom--demande { opacity: 0; transition: opacity .12s; }
+.etoile:hover .etoile-nom--demande,
+.etoile:focus-visible .etoile-nom--demande { opacity: .95; }
+.etoile--eteinte { opacity: .16; }
+.etoile--choisie .halo-choix { opacity: 1; }
+.halo-choix { opacity: 0; }
+
+@keyframes scintille { 0%,100% { opacity: .85; } 50% { opacity: 1; } }
+.scintille { animation: scintille 4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .scintille { animation: none; } }
+
+/* Concentration : au survol/focus d'une étoile, seuls SES liens brillent. */
+.ciel--concentre .liens path { opacity: .05; }
+.ciel--concentre .liens path.lien--vif { opacity: .95; stroke-width: 1.5; }
+
+/* ---- Panneau de fiche ---- */
+.panneau {
+  border-left: 1px solid rgba(169,136,74,.3);
+  background: rgba(9,18,31,.96);
+  padding: 1rem 1.1rem 2rem; overflow-y: auto; max-height: 100vh;
+}
+.panneau[hidden] { display: none; }
+.panneau-tete { display: flex; align-items: flex-start; justify-content: space-between; gap: .6rem; }
+.panneau h2 { margin: 0; font-size: 1.05rem; color: var(--or-clair); font-weight: 700; line-height: 1.3; }
+.fermer {
+  background: transparent; border: 0; color: var(--creme-douce); font-size: 1.4rem;
+  cursor: pointer; line-height: 1; padding: 0 .2rem;
+}
+.fermer:hover { color: var(--creme); }
+.badges { display: flex; flex-wrap: wrap; gap: .35rem; margin: .55rem 0 .2rem; }
+.badge {
+  font-size: .7rem; letter-spacing: .06em; padding: .18rem .5rem; border-radius: 2px;
+  border: 1px solid rgba(169,136,74,.45); color: var(--creme-douce);
+}
+.badge--type { border-color: currentColor; }
+.section { margin-top: 1.05rem; }
+.section h3 {
+  margin: 0 0 .45rem; font-size: .68rem; letter-spacing: .17em; text-transform: uppercase;
+  color: var(--or-antique); font-weight: 700;
+}
+.champ { display: flex; gap: .5rem; font-size: .84rem; margin: .28rem 0; line-height: 1.45; }
+.champ dt { color: rgba(205,195,173,.7); min-width: 6.6rem; flex: none; }
+.champ dd { margin: 0; color: var(--creme); }
+.vide { font-size: .82rem; font-style: italic; color: rgba(205,195,173,.55); margin: .2rem 0; }
+.liste { list-style: none; margin: 0; padding: 0; }
+.liste li {
+  display: flex; align-items: baseline; gap: .5rem; padding: .4rem .5rem;
+  border: 1px solid rgba(169,136,74,.22); border-radius: 3px; margin-bottom: .35rem;
+  background: rgba(18,35,58,.5); font-size: .84rem;
+}
+.liste li .role, .liste li .etat { font-size: .74rem; color: rgba(205,195,173,.75); font-style: italic; }
+.liste button {
+  margin-left: auto; background: transparent; border: 0; color: var(--or-clair);
+  font-family: inherit; font-size: .76rem; cursor: pointer; text-decoration: underline;
+}
+.jauge { display: inline-flex; gap: .12rem; vertical-align: middle; }
+.jauge i { width: .42rem; height: .42rem; border-radius: 50%; background: rgba(205,195,173,.28); }
+.jauge i.plein { background: var(--or-clair); }
+.actions { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .55rem; }
+.note-maquette {
+  margin-top: 1.4rem; padding: .6rem .7rem; font-size: .76rem; line-height: 1.5;
+  border: 1px dashed rgba(169,136,74,.4); border-radius: 3px;
+  color: rgba(205,195,173,.8); background: rgba(169,136,74,.07);
+}
+.accueil-panneau { padding: 2rem 1rem; text-align: center; color: rgba(205,195,173,.7); font-size: .88rem; font-style: italic; }
+.visuellement-cache {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+</style>
+</head>
+<body>
+
+<p class="avertissement">PREVIEW DE TRAVAIL — contacts, personnes et relations inventés</p>
+
+<header class="bandeau">
+  <div class="bandeau-titre">
+    <h1>RIVEN</h1>
+    <span class="sous">le réseau, vu du ciel</span>
+  </div>
+  <div class="bandeau-actions">
+    <button type="button" class="bouton" id="bouton-arbre">Vue arbre</button>
+    <button type="button" class="bouton" id="bouton-carte">Vue carte</button>
+    <button type="button" class="bouton bouton--primaire" id="bouton-ajouter">+ Ajouter une fiche</button>
+  </div>
+</header>
+
+<div class="outils">
+  <label for="recherche" class="visuellement-cache">Rechercher un contact, un métier, une ville</label>
+  <input id="recherche" class="recherche" type="search" placeholder="Rechercher un nom, un métier, une ville…">
+  <div class="filtres" id="filtres" role="group" aria-label="Filtrer par type"></div>
+  <p class="compte" id="compte" role="status"></p>
+</div>
+
+<div class="corps" id="corps">
+  <main class="scene" id="scene" aria-label="Voûte du réseau"></main>
+  <aside class="panneau" id="panneau" aria-label="Fiche du contact" hidden></aside>
+</div>
+
+<script src="preview-riven-voute.js"></script>
+</body>
+</html>

@@ -2225,3 +2225,63 @@
   session ». Un renommage large touche le routage, et c'est précisément ce qui a
   laissé `smoke-quadrants` rouge le 2026-07-22. **Un geste qui a déjà cassé
   quelque chose une fois ne se refait pas en fin de session sans cadrage.**
+
+### 2026-08-11 — RIVEN passe au ciel : la 3D devient l'écran d'arrivée
+
+- **Dicté par Paul** : *« peut-être passer de l'arbre à la galaxie/constellation :
+  thème sombre, une étoile = un contact, les grands thèmes communs deviennent des
+  constellations et des liens entre les étoiles sont en blanc et fins »*, puis
+  *« montre moi avant de coder »*, puis, devant la 3D : *« la 3d devient accueil,
+  tout me va »*.
+- **DÉCISION ACTÉE : la vue 3D devient l'écran d'arrivée de RIVEN.** La vue à
+  plat et l'arbre restent accessibles depuis le bandeau. Reste à implanter dans
+  `riven.html` — c'est la boucle suivante, la maquette en est le contrat.
+- **Les cinq arbitrages, tranchés par Paul** : ① voûte en mosaïque, pas galaxie
+  en spirale ; ② l'étoile est la **fiche**, la personne orbite autour (rattachée
+  à deux fiches, elle orbite les deux) ; ③ six noms permanents, le reste à la
+  demande ; ④ liens blancs, le **motif** dit le type et l'**éclat** l'avancement ;
+  ⑤ la nouvelle vue s'ajoute, l'arbre ne se jette pas.
+- **Le registre antique tient sur fond noir** : ce n'est pas un « dark mode »
+  mais un **atlas céleste gravé** — encre de nuit jamais noire, filets dorés,
+  capitales espacées. Le thème sombre demandé n'a donc rien coûté à la charte
+  du 2026-07-08.
+- **Zéro bibliothèque 3D, et c'est un choix argumenté** : la CSP pose
+  `script-src 'self'` (un CDN est bloqué), Three.js vendorisé pèserait ~600 Ko
+  pour vingt étoiles, et un canvas WebGL coûterait le focus clavier, le lecteur
+  d'écran, le texte réel et la cible tactile mesurée. La perspective tient en
+  quinze lignes de trigonométrie et le rendu reste en SVG : **chaque étoile
+  demeure un élément du document**.
+- **Ce que la 3D apporte, et qu'aucune vue à plat ne pouvait porter** : une
+  constellation devient une **région de l'espace** (Fibonacci sur une sphère,
+  les métiers les plus fournis plus près du centre : le réseau a un cœur), et
+  « voler jusqu'à » fait pivoter le ciel d'une fiche vers son partenaire.
+
+### 2026-08-11 — La leçon de la session : un harnais sans les en-têtes de prod ne prouve rien
+
+- **Constat de Paul devant la preview déployée : « je vois rien ».** La page
+  s'affichait, stylée, et restait vide.
+- **Cause** : la CSP d'Ultima pose `script-src 'self'` **sans** `'unsafe-inline'`.
+  Mes previews portaient leur JS dans un `<script>` en ligne — bloqué en silence.
+  `style-src` autorise l'inline, d'où **l'apparence exacte d'un écran qui
+  marche**. Le motif correct existait déjà au repo (`preview-draukhain-carto.js`).
+- **La faute n'est pas la page, c'est le HARNAIS** : il servait les previews sur
+  un serveur nu, sans en-tête. Un script inline y fonctionne alors qu'il est mort
+  en production. **Trois passes vertes ne prouvaient rien sur la prod.**
+- **Règle permanente qui en naît** : *un harnais qui ne reproduit pas les
+  en-têtes de production ne prouve rien sur la production.* Le harnais sert
+  désormais les pages avec la **CSP recopiée de `middleware.js`**.
+- **Corollaire déjà vérifié deux fois ce jour** : le harnais voit ce que l'œil ne
+  voit pas, mais **seulement s'il exerce le vrai geste**. Un `dispatchEvent`
+  synthétique ouvrait la fiche là où un vrai clic échouait — c'est le clic réel
+  qui a révélé que `setPointerCapture` détournait l'événement.
+
+### 2026-08-11 — « Element is not stable » : quand l'automate dit ce que le doigt dira
+
+- Playwright a refusé de cliquer une étoile en dérive permanente : *« element is
+  not stable »*. Première réaction possible : contourner le harnais. **Mauvaise.**
+- **Ce qu'un automate ne peut pas viser, un doigt le rate aussi.** La dérive lente
+  est donc devenue une **option décochée** : le ciel est fixe pour travailler,
+  vivant si Paul le demande. Elle s'arrête en outre dès que la main approche.
+- **Règle** : un refus d'outil sur un critère d'ergonomie (stabilité, visibilité,
+  taille de cible) est un **constat d'usage**, pas un obstacle technique à
+  contourner.

@@ -1,6 +1,6 @@
 // Carto des idées ADRAMELECH côté client (boucle AD-4c) — module ES.
 // Rendu 100 % data-driven depuis GET /api/idees (jeton de session Supabase,
-// même mécanique que traveler.html : vendor local + js/config.js). Registre
+// même mécanique que riven.html : vendor local + js/config.js). Registre
 // visuel : adramelech/carto-idees.html (encre, parchemin, cartouches), styles
 // dans css/idees.css (zéro style inline, CSP intacte).
 //
@@ -208,7 +208,7 @@ if (EST_NAVIGATEUR) {
       zone.appendChild(htmlEl('p', 'etat-texte',
         'La bibliothèque d’idées est privée : connectez-vous pour lever la carte.'));
       const lien = htmlEl('a', 'bouton-parchemin', 'Se connecter');
-      lien.href = 'traveler.html'; // l'écran de connexion existant (lien magique)
+      lien.href = 'riven.html'; // l'écran de connexion existant (lien magique)
       zone.appendChild(lien);
     });
   }
@@ -366,7 +366,7 @@ if (EST_NAVIGATEUR) {
     }
   }
 
-  // ----- Amorçage : même chaîne que traveler.html (config → client → session) -----
+  // ----- Amorçage : même chaîne que riven.html (config → client → session) -----
 
   function modeDemo() {
     $('#bandeau-demo').hidden = false;

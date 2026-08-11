@@ -157,7 +157,7 @@ const contrasteAutour = async (cx, cy) => {
   return ratioContraste(capture);
 };
 
-await page.goto('http://127.0.0.1:8123/traveler.html', { waitUntil: 'load', timeout: 20000 });
+await page.goto('http://127.0.0.1:8123/riven.html', { waitUntil: 'load', timeout: 20000 });
 await page.waitForTimeout(1100);
 
 // 1. Arrivée : l'espace Arbre est visible sans geste (A3, le pivot) ; l'Accueil
@@ -362,7 +362,7 @@ const erreurs2 = [];
 page2.on('pageerror', (e) => erreurs2.push('pageerror: ' + e.message));
 page2.on('console', (m) => { if (m.type() === 'error') erreurs2.push('console: ' + m.text()); });
 await preparerRoutes(page2);
-await page2.goto('http://127.0.0.1:8123/traveler.html', { waitUntil: 'load', timeout: 20000 });
+await page2.goto('http://127.0.0.1:8123/riven.html', { waitUntil: 'load', timeout: 20000 });
 await page2.waitForTimeout(900);
 
 // 6c. Entête ≤ 60 px à 375 (pastille démo visible incluse), sous-titre masqué.
@@ -384,7 +384,7 @@ const erreurs3 = [];
 page3.on('pageerror', (e) => erreurs3.push('pageerror: ' + e.message));
 page3.on('console', (m) => { if (m.type() === 'error') erreurs3.push('console: ' + m.text()); });
 await preparerRoutes(page3);
-await page3.goto('http://127.0.0.1:8123/traveler.html', { waitUntil: 'load', timeout: 20000 });
+await page3.goto('http://127.0.0.1:8123/riven.html', { waitUntil: 'load', timeout: 20000 });
 await page3.waitForTimeout(900);
 
 // 9b. Reduced-motion : transition calculée none sur le voile (l'opacité saute).

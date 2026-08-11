@@ -28,7 +28,7 @@ detail.registreSain = anomalies.slice(0, 5).join(' | ');
 verdicts.boussolesOntAuMoinsDeuxCaps = Object.keys(NOEUDS)
   .filter((id) => Array.isArray(NOEUDS[id].enfants))
   .every((id) => estBoussole(id));
-verdicts.rivenEstUneFeuille = !estBoussole('riven') && NOEUDS.riven.cible === 'traveler.html';
+verdicts.rivenEstUneFeuille = !estBoussole('riven') && NOEUDS.riven.cible === 'riven.html';
 verdicts.feuillesSansEnfants = ['minethnir', 'vranesh', 'draukhain', 'reshiram', 'zekrom', 'abaque']
   .every((id) => !Array.isArray(NOEUDS[id].enfants));
 

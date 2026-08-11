@@ -318,7 +318,7 @@
       // libelle } minimaux — jamais envoyés à l'IA) + toast de succès.
       (etat.session && etat.session.access_token)
         ? {
-            quadrant: 'traveler',
+            quadrant: 'riven',
             jeton: etat.session.access_token,
             candidats: {
               cibles: etat.noeuds.map(function (n) {

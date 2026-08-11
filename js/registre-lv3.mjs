@@ -163,7 +163,7 @@ export const NOEUDS = {
     nom: 'RIVEN',
     etat: 'Accéder',
     blason: 'riven',
-    cible: 'traveler.html',
+    cible: 'riven.html',
     resume: 'Le réseau commercial : artisans, partenaires, leads, chantiers et '
       + 'leurs relations. L’acquis historique d’Ultima.',
   },

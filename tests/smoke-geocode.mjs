@@ -74,7 +74,7 @@ const focusId = () => page.evaluate(() => document.activeElement && document.act
 const messageStatut = () => page.locator('#geo-message[role="status"]').textContent();
 const apercuPosition = () => page.evaluate(() => window.UltimaCarte.apercuPosition());
 
-await page.goto('http://127.0.0.1:8123/traveler.html', { waitUntil: 'load', timeout: 20000 });
+await page.goto('http://127.0.0.1:8123/riven.html', { waitUntil: 'load', timeout: 20000 });
 await page.waitForTimeout(1000);
 
 // Ouvre le formulaire nœud comme Paul : Contacts → + Ajouter un contact.

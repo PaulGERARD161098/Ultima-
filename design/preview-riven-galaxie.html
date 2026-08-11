@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Preview — RIVEN : la voûte du réseau (galaxie / constellations)</title>
+<!--
+  PREVIEW DE TRAVAIL — aucune donnée réelle, aucun contact de Paul.
+  Toutes les entreprises, personnes, villes et relations affichées ici sont
+  INVENTÉES et générées par une graine fixe. Zéro ressource externe, zéro CDN.
+
+  Ce que Paul a dicté (2026-08-11) :
+    « peut-être passer de l'arbre à la galaxie/constellation : thème sombre,
+      une étoile = un contact, les grands thèmes communs deviennent des
+      constellations et des liens entre les étoiles sont en blanc et fins ».
+
+  Cette maquette existe pour TRANCHER, pas pour décorer. Elle rend visibles
+  les cinq arbitrages qui ne se décident pas dans le vide :
+    ① la disposition — VOÛTE (constellations empilées) ou GALAXIE (spirale) ;
+    ② l'étoile — la FICHE seule, ou la fiche ET ses personnes en orbite ;
+    ③ les noms — tous affichés (illisible passé ~30) ou à la demande ;
+    ④ les liens blancs fins — leur lisibilité quand ils traversent le ciel ;
+    ⑤ la tenue à la CHARGE — 5, 24 puis 90 étoiles : le pire cas se construit,
+      il ne s'espère pas (leçon du foyer DRAUKHAIN, 2026-08-01).
+
+  Le bandeau MESURE en bas applique la règle : une géométrie se mesure.
+  Il compare la bbox réelle du contenu au viewBox et compte les collisions.
+-->
+<style>
+:root {
+  /* Ciel : encre de nuit, jamais noir pur — c'est un atlas céleste gravé,
+     pas une interface « dark mode ». Le registre antique tient. */
+  --nuit-haute: #0b1626;
+  --nuit-basse: #060d18;
+  --nuit-voile: #12233a;
+  --or-antique: #a9884a;
+  --or-clair: #d8bd82;
+  --creme: #f2ead6;
+  --creme-douce: #cdc3ad;
+  --trait-lien: #ffffff;
+  /* Types de contact — mêmes quatre familles qu'aujourd'hui (carte.js),
+     remontées en luminosité pour tenir sur fond de nuit. */
+  --t-artisan: #f2a15a;
+  --t-partenaire: #7cb8ea;
+  --t-lead: #6fd39b;
+  --t-chantier: #b995e8;
+  --police-ancienne: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 1.4rem 1rem 3rem;
+  color: var(--creme);
+  font-family: var(--police-ancienne);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(120,170,220,.10), rgba(0,0,0,0) 55%),
+    linear-gradient(180deg, var(--nuit-haute), var(--nuit-basse) 70%);
+  min-height: 100vh;
+}
+.enveloppe { max-width: 74rem; margin: 0 auto; }
+
+/* ---- Cartouche d'entête : le filet doré du registre, sur fond de nuit ---- */
+.entete { text-align: center; margin-bottom: 1.5rem; }
+.entete h1 {
+  margin: 0; font-size: 1.45rem; letter-spacing: .18em; font-weight: 700;
+  color: var(--or-clair);
+}
+.entete .filet {
+  width: 12rem; height: 1px; margin: .7rem auto;
+  background: linear-gradient(90deg, transparent, var(--or-antique), transparent);
+}
+.entete p { margin: .3rem 0 0; font-style: italic; color: var(--creme-douce); font-size: .95rem; }
+.dictee {
+  max-width: 44rem; margin: 1rem auto 0; padding: .8rem 1rem;
+  border: 1px solid rgba(169,136,74,.35); border-radius: 3px;
+  background: rgba(18,35,58,.5); font-size: .9rem; line-height: 1.55;
+  color: var(--creme-douce);
+}
+.dictee strong { color: var(--or-clair); font-style: normal; }
+
+/* ---- Barre de commandes ---- */
+.commandes {
+  display: flex; flex-wrap: wrap; gap: .9rem 1.4rem; align-items: flex-end;
+  justify-content: center;
+  margin: 1.4rem auto; padding: .9rem 1rem;
+  border: 1px solid rgba(169,136,74,.3); border-radius: 3px;
+  background: rgba(11,22,38,.75);
+}
+.groupe { display: flex; flex-direction: column; gap: .35rem; }
+.groupe > span {
+  font-size: .68rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--or-antique);
+}
+.segments { display: flex; border: 1px solid rgba(169,136,74,.45); border-radius: 3px; overflow: hidden; }
+.segments button {
+  font-family: inherit; font-size: .84rem; padding: .38rem .8rem;
+  background: transparent; color: var(--creme-douce); border: 0; cursor: pointer;
+  border-right: 1px solid rgba(169,136,74,.28);
+}
+.segments button:last-child { border-right: 0; }
+.segments button[aria-pressed="true"] { background: rgba(169,136,74,.28); color: var(--creme); font-weight: 700; }
+.segments button:hover { background: rgba(169,136,74,.16); }
+.segments button:focus-visible { outline: 2px solid var(--or-clair); outline-offset: -2px; }
+.bascule { display: flex; align-items: center; gap: .45rem; font-size: .86rem; color: var(--creme-douce); cursor: pointer; }
+.bascule input { accent-color: var(--or-antique); width: 1rem; height: 1rem; }
+
+/* ---- La scène ---- */
+.scene {
+  position: relative; border: 1px solid rgba(169,136,74,.4); border-radius: 3px;
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(40,70,110,.30), rgba(0,0,0,0) 62%),
+    linear-gradient(180deg, #0a1524, #050b14);
+  overflow: hidden;
+}
+/* Cadre intérieur doré : le cartouche d'un atlas, deux filets. */
+.scene::after {
+  content: ""; position: absolute; inset: 7px; pointer-events: none;
+  border: 1px solid rgba(169,136,74,.22);
+}
+.ciel { display: block; width: 100%; height: auto; }
+
+/* Étoiles */
+.etoile { cursor: pointer; }
+.etoile:focus-visible { outline: none; }
+.etoile:focus-visible .halo-focus { opacity: 1; }
+/* Le halo est PUREMENT visuel. Sans pointer-events:none, il capte le pointeur
+   à 17 u de rayon alors que deux étoiles voisines n'ont que 20 u d'écart : on
+   survolait la voisine au lieu de la cible. Constat du harnais, pas une
+   précaution théorique. La captation est portée par .zone-clic, elle seule. */
+.halo-focus { opacity: 0; transition: opacity .12s; pointer-events: none; }
+.etoile:hover .halo-focus { opacity: .8; }
+.etoile-nom { pointer-events: none; }
+.etoile--attenuee { opacity: .28; }
+
+/* Le nom d'une étoile non permanente : présent dans le DOM (donc lu par un
+   lecteur d'écran et trouvable), révélé au survol et au focus clavier. */
+.etoile-nom--demande { opacity: 0; transition: opacity .12s; }
+.etoile:hover .etoile-nom--demande,
+.etoile:focus-visible .etoile-nom--demande { opacity: .95; }
+
+/* CONCENTRATION — la réponse au plat de spaghettis. Dès qu'une étoile est
+   survolée ou reçoit le focus, le ciel s'éteint et seuls SES liens brillent :
+   « avec qui celui-là est-il en relation ? » se lit d'un coup d'œil, même à
+   90 fiches et 49 liens. La règle CSS bat l'attribut d'opacité du trait. */
+.ciel--concentre .liens path { opacity: .06; }
+.ciel--concentre .liens path.lien--vif { opacity: .95; stroke-width: 1.4; }
+
+/* Scintillement : discret, et coupé net si Paul demande moins d'animation. */
+@keyframes scintille { 0%,100% { opacity: .85; } 50% { opacity: 1; } }
+.scintille { animation: scintille 4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .scintille { animation: none; } }
+
+/* ---- Légende + mesure ---- */
+.sous-scene { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 1rem; }
+@media (min-width: 52rem) { .sous-scene { grid-template-columns: 1.15fr 1fr; } }
+.bloc {
+  border: 1px solid rgba(169,136,74,.3); border-radius: 3px;
+  background: rgba(11,22,38,.7); padding: .85rem 1rem;
+}
+.bloc h2 {
+  margin: 0 0 .6rem; font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--or-antique); font-weight: 700;
+}
+.legende-ligne { display: flex; align-items: center; gap: .55rem; margin: .38rem 0; font-size: .86rem; color: var(--creme-douce); }
+.legende-ligne svg { flex: none; }
+.mesure { font-size: .84rem; line-height: 1.7; color: var(--creme-douce); }
+.mesure b { color: var(--creme); font-weight: 700; }
+.verdict-ok { color: #6fd39b; font-weight: 700; }
+.verdict-ko { color: #ef8b7c; font-weight: 700; }
+
+/* ---- Arbitrages ---- */
+.arbitrages { margin-top: 1.6rem; }
+.arbitrages h2 {
+  font-size: .78rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--or-antique); text-align: center; margin: 0 0 .9rem;
+}
+.arbitrage {
+  border: 1px solid rgba(169,136,74,.28); border-left: 3px solid var(--or-antique);
+  border-radius: 3px; background: rgba(11,22,38,.6);
+  padding: .75rem .95rem; margin-bottom: .7rem;
+}
+.arbitrage h3 { margin: 0 0 .35rem; font-size: .95rem; color: var(--or-clair); font-weight: 700; }
+.arbitrage p { margin: .3rem 0; font-size: .87rem; line-height: 1.6; color: var(--creme-douce); }
+.arbitrage .reco { color: var(--creme); }
+.arbitrage .reco b { color: #6fd39b; }
+.pied {
+  margin-top: 2rem; text-align: center; font-size: .78rem; font-style: italic;
+  color: rgba(205,195,173,.6);
+}
+</style>
+</head>
+<body>
+<div class="enveloppe">
+
+  <header class="entete">
+    <h1>RIVEN — LA VOÛTE DU RÉSEAU</h1>
+    <div class="filet"></div>
+    <p>Maquette de décision — aucune donnée réelle</p>
+    <div class="dictee">
+      <strong>Dicté par Paul :</strong> « peut-être passer de l'arbre à la
+      galaxie/constellation : thème sombre, une étoile = un contact, les grands
+      thèmes communs deviennent des constellations et des liens entre les
+      étoiles sont en blanc et fins ».
+    </div>
+  </header>
+
+  <div class="commandes">
+    <div class="groupe">
+      <span>Disposition</span>
+      <div class="segments" id="seg-dispo" role="group" aria-label="Disposition">
+        <button type="button" data-val="voute" aria-pressed="true">Voûte</button>
+        <button type="button" data-val="galaxie" aria-pressed="false">Galaxie</button>
+      </div>
+    </div>
+    <div class="groupe">
+      <span>Charge (fiches)</span>
+      <div class="segments" id="seg-volume" role="group" aria-label="Nombre de fiches">
+        <button type="button" data-val="5" aria-pressed="false">5 (aujourd'hui)</button>
+        <button type="button" data-val="24" aria-pressed="true">24</button>
+        <button type="button" data-val="90" aria-pressed="false">90 (pire cas)</button>
+      </div>
+    </div>
+    <div class="groupe">
+      <span>Regrouper par</span>
+      <div class="segments" id="seg-critere" role="group" aria-label="Critère de constellation">
+        <button type="button" data-val="metier" aria-pressed="true">Métier</button>
+        <button type="button" data-val="zone" aria-pressed="false">Zone</button>
+      </div>
+    </div>
+    <div class="groupe">
+      <span>Afficher</span>
+      <div style="display:flex; flex-wrap:wrap; gap:.4rem 1rem;">
+        <label class="bascule"><input type="checkbox" id="opt-personnes"> Personnes en orbite</label>
+        <label class="bascule"><input type="checkbox" id="opt-liens" checked> Liens (relations)</label>
+        <label class="bascule"><input type="checkbox" id="opt-figures" checked> Tracés de constellation</label>
+        <label class="bascule"><input type="checkbox" id="opt-noms"> Tous les noms</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div id="ciel-hote"></div>
+  </div>
+
+  <div class="sous-scene">
+    <section class="bloc">
+      <h2>Légende</h2>
+      <div id="legende"></div>
+    </section>
+    <section class="bloc">
+      <h2>Mesure — la géométrie se mesure, elle ne se regarde pas</h2>
+      <div class="mesure" id="mesure"></div>
+    </section>
+  </div>
+
+  <section class="arbitrages">
+    <h2>Les cinq arbitrages — décisions de Paul</h2>
+
+    <div class="arbitrage">
+      <h3>① Disposition : Voûte ou Galaxie ?</h3>
+      <p>La <b>Voûte</b> empile les constellations : elle grandit vers le bas, le
+      pouce fait défiler, chaque constellation garde sa place quoi qu'il arrive.
+      La <b>Galaxie</b> enroule les constellations autour d'un noyau : plus belle
+      d'un seul coup d'œil, mais la place d'une constellation bouge dès qu'une
+      autre grossit — et à 90 fiches elle se serre.</p>
+      <p class="reco">Recommandation : <b>Voûte</b>. Basculez sur « 90 » puis
+      comparez les deux : c'est là que la différence se voit, pas à 5 fiches.</p>
+    </div>
+
+    <div class="arbitrage">
+      <h3>② « Une étoile = un contact » — mais RIVEN a deux notions depuis hier</h3>
+      <p>Depuis la boucle du 10/08, une <b>fiche</b> (l'entreprise, <i>Roux &amp;
+      Fils</i>) et une <b>personne</b> (l'humain, <i>Godefroy</i>) sont deux
+      choses distinctes. « Un contact » désigne laquelle ?</p>
+      <p class="reco">Recommandation : <b>l'étoile est la fiche</b>, la personne
+      est un compagnon en orbite autour d'elle (cochez « Personnes en orbite »).
+      Une personne rattachée à deux fiches orbite les deux — le lien se voit.</p>
+    </div>
+
+    <div class="arbitrage">
+      <h3>③ Les noms : tous, ou à la demande ?</h3>
+      <p>Cochez « Tous les noms » à 90 fiches : le ciel devient un mur de texte —
+      exactement le reproche fait à la boussole VRANESH le 01/08. Non coché, le
+      nom apparaît au survol, au focus clavier, et reste toujours lisible par un
+      lecteur d'écran.</p>
+      <p class="reco">Recommandation : <b>à la demande</b>, plus le registre
+      Contacts qui, lui, liste tout, toujours. Le dessin ne remplace pas la liste.</p>
+    </div>
+
+    <div class="arbitrage">
+      <h3>④ Les liens blancs et fins : et le type de relation ?</h3>
+      <p>Aujourd'hui, une relation dit son type par sa couleur (bleu = apport
+      d'affaires, orange = sous-traitance, violet = chantier commun). Tout passer
+      en blanc perd cette information.</p>
+      <p class="reco">Recommandation : <b>blanc pour tous</b>, comme demandé — le
+      type est porté par le <b>motif</b> du trait (plein, tirets, points, déjà en
+      place sur la carte) et l'avancement par l'<b>intensité</b> : une idée est un
+      trait pâle, un rapprochement fructueux brille.</p>
+    </div>
+
+    <div class="arbitrage">
+      <h3>⑤ La galaxie remplace-t-elle l'arbre, ou s'ajoute-t-elle ?</h3>
+      <p>L'arbre est vivant, mesuré et couvert par ses harnais. Le supprimer le
+      jour où la galaxie arrive, c'est parier sans preuve d'usage.</p>
+      <p class="reco">Recommandation : <b>la galaxie devient la vue d'arrivée</b>,
+      l'arbre reste accessible d'un bouton le temps que l'usage tranche — la même
+      règle qui a été appliquée à la carte quand l'arbre est arrivé. On ne jette
+      rien avant que le nouveau ait fait ses preuves.</p>
+    </div>
+  </section>
+
+  <p class="pied">Preview de travail — Ultima / RIVEN — données inventées, graine fixe.</p>
+</div>
+
+<script src="preview-riven-galaxie.js"></script>
+</body>
+</html>

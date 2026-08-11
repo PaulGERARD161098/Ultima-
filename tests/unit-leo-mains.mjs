@@ -9,6 +9,7 @@ import { readFileSync } from 'node:fs';
 import {
   OUTILS_PAR_QUADRANT,
   outilsPour,
+  normaliserQuadrant,
   validerProposition,
   reformulerProposition,
   extraireProposition
@@ -25,8 +26,8 @@ verdicts.frontExpose = typeof resoudreRef === 'function' &&
   typeof construirePlanExecution === 'function';
 
 // ---------- 1. Catalogue par quadrant ----------
-verdicts.catalogueTraveler = Array.isArray(outilsPour('traveler')) &&
-  outilsPour('traveler').map((o) => o.name).sort().join(',') ===
+verdicts.catalogueRiven = Array.isArray(outilsPour('riven')) &&
+  outilsPour('riven').map((o) => o.name).sort().join(',') ===
   'proposer_besoin,proposer_journal,proposer_relance';
 verdicts.catalogueAdramelech = Array.isArray(outilsPour('adramelech')) &&
   outilsPour('adramelech').map((o) => o.name).sort().join(',') ===
@@ -42,7 +43,7 @@ verdicts.catalogueVide = outilsPour('bcp') === null &&
 verdicts.zeroSuppression = Object.values(OUTILS_PAR_QUADRANT).every((liste) =>
   liste.every((o) => !/suppr|delete|retir|efface/i.test(o.name)));
 // Schémas stricts : object, requis, bornes, additionalProperties: false.
-verdicts.schemasStricts = ['traveler', 'adramelech', 'imladrik'].every((q) =>
+verdicts.schemasStricts = ['riven', 'adramelech', 'imladrik'].every((q) =>
   outilsPour(q).every((o) =>
     o.input_schema.type === 'object' &&
     o.input_schema.additionalProperties === false &&
@@ -52,12 +53,12 @@ verdicts.schemasStricts = ['traveler', 'adramelech', 'imladrik'].every((q) =>
 
 // ---------- 2. validerProposition : portes fermées ----------
 verdicts.outilInconnu = validerProposition('supprimer_idee', { id: 'x' }, 'adramelech').ok === false &&
-  validerProposition('', {}, 'traveler').ok === false &&
-  validerProposition(undefined, {}, 'traveler').ok === false;
+  validerProposition('', {}, 'riven').ok === false &&
+  validerProposition(undefined, {}, 'riven').ok === false;
 // Pollution de prototype : un nom hérité d'Object n'est pas un outil.
-verdicts.outilPrototype = validerProposition('toString', {}, 'traveler').ok === false;
+verdicts.outilPrototype = validerProposition('toString', {}, 'riven').ok === false;
 verdicts.outilHorsQuadrant =
-  validerProposition('proposer_idee', { titre: 'X' }, 'traveler').ok === false &&
+  validerProposition('proposer_idee', { titre: 'X' }, 'riven').ok === false &&
   validerProposition('proposer_journal', { cible_ref: 'X', texte: 'Y' }, 'adramelech').ok === false &&
   validerProposition('proposer_journal', { cible_ref: 'X', texte: 'Y' }, 'bcp').ok === false;
 verdicts.argsInvalides =
@@ -65,14 +66,14 @@ verdicts.argsInvalides =
   validerProposition('proposer_idee', 'titre', 'adramelech').ok === false &&
   validerProposition('proposer_idee', ['titre'], 'adramelech').ok === false;
 verdicts.champManquant =
-  validerProposition('proposer_journal', { texte: 'sans cible' }, 'traveler').ok === false &&
-  validerProposition('proposer_relance', { cible_ref: 'M. Lambert' }, 'traveler').ok === false;
+  validerProposition('proposer_journal', { texte: 'sans cible' }, 'riven').ok === false &&
+  validerProposition('proposer_relance', { cible_ref: 'M. Lambert' }, 'riven').ok === false;
 verdicts.champVide =
   validerProposition('proposer_idee', { titre: '   ' }, 'adramelech').ok === false;
 verdicts.champTropLong =
   validerProposition('proposer_idee', { titre: 'x'.repeat(161) }, 'adramelech').ok === false &&
   validerProposition('proposer_journal',
-    { cible_ref: 'X', texte: 'x'.repeat(2001) }, 'traveler').ok === false;
+    { cible_ref: 'X', texte: 'x'.repeat(2001) }, 'riven').ok === false;
 verdicts.champNonString =
   validerProposition('proposer_idee', { titre: 42 }, 'adramelech').ok === false &&
   validerProposition('proposer_idee', { titre: ['X'] }, 'adramelech').ok === false;
@@ -81,14 +82,14 @@ verdicts.champNonString =
 verdicts.champSurnumeraire =
   validerProposition('proposer_idee', { titre: 'X', owner_id: 'u1' }, 'adramelech').ok === false &&
   validerProposition('proposer_journal',
-    { cible_ref: 'X', texte: 'Y', node_id: 'u-u-u-u-u' }, 'traveler').ok === false;
+    { cible_ref: 'X', texte: 'Y', node_id: 'u-u-u-u-u' }, 'riven').ok === false;
 verdicts.echeanceInvalide =
   validerProposition('proposer_relance',
-    { cible_ref: 'X', echeance: '2026-13-40' }, 'traveler').ok === false &&
+    { cible_ref: 'X', echeance: '2026-13-40' }, 'riven').ok === false &&
   validerProposition('proposer_relance',
-    { cible_ref: 'X', echeance: '2026-02-30' }, 'traveler').ok === false &&
+    { cible_ref: 'X', echeance: '2026-02-30' }, 'riven').ok === false &&
   validerProposition('proposer_relance',
-    { cible_ref: 'X', echeance: 'demain' }, 'traveler').ok === false;
+    { cible_ref: 'X', echeance: 'demain' }, 'riven').ok === false;
 
 // ---------- 3. validerProposition : cas nominaux (args nettoyés) ----------
 {
@@ -101,12 +102,12 @@ verdicts.echeanceInvalide =
 {
   // Optionnel vide après trim : ignoré (jamais transmis), le requis tient.
   const r = validerProposition('proposer_besoin',
-    { chantier_ref: 'Voltaire', libelle: 'Sacs de chaux', quantite: '  ' }, 'traveler');
+    { chantier_ref: 'Voltaire', libelle: 'Sacs de chaux', quantite: '  ' }, 'riven');
   verdicts.nominalBesoin = r.ok === true && !('quantite' in r.proposition.args);
 }
 {
   const r = validerProposition('proposer_relance',
-    { cible_ref: 'M. Lambert', echeance: '2026-08-01', note: 'Devis à relancer' }, 'traveler');
+    { cible_ref: 'M. Lambert', echeance: '2026-08-01', note: 'Devis à relancer' }, 'riven');
   verdicts.nominalRelance = r.ok === true && r.proposition.args.echeance === '2026-08-01';
 }
 {
@@ -115,7 +116,7 @@ verdicts.echeanceInvalide =
   verdicts.nominalEnrichissement = r.ok === true && r.proposition.args.idee_ref === 'ADR-3';
 }
 verdicts.nominalJournal = validerProposition('proposer_journal',
-  { cible_ref: 'Mme Nguyen', texte: 'Plans validés ce matin.' }, 'traveler').ok === true;
+  { cible_ref: 'Mme Nguyen', texte: 'Plans validés ce matin.' }, 'riven').ok === true;
 
 // ---------- 4. reformulerProposition : gabarits déterministes ----------
 verdicts.reformulationIdee = reformulerProposition({
@@ -390,6 +391,30 @@ verdicts.imladrikPlansRefus = (() => {
   return introuvable.ok === false && sansCandidats.ok === false &&
     horizonTropLong.ok === false && natureInconnue.ok === false;
 })();
+
+// ---------- N. Alias de quadrant : 'traveler' → 'riven' (renommage 2026-08-11) ----------
+// Un onglet resté ouvert chez Paul envoie encore l'ancien identifiant. Sans
+// l'alias, l'appel meurt en 400 « Quadrant inconnu » au milieu d'une dictée.
+verdicts.aliasTravelerVersRiven = normaliserQuadrant('traveler') === 'riven';
+verdicts.aliasIdentitePourLesAutres = normaliserQuadrant('riven') === 'riven' &&
+  normaliserQuadrant('bcp') === 'bcp' &&
+  normaliserQuadrant('imladrik') === 'imladrik';
+// Une clé héritée d'Object.prototype ne doit JAMAIS résoudre vers une fonction :
+// c'est le motif de lecture par hasOwnProperty, éprouvé par validerProposition.
+verdicts.aliasSansPollutionPrototype =
+  normaliserQuadrant('constructor') === 'constructor' &&
+  normaliserQuadrant('toString') === 'toString' &&
+  normaliserQuadrant('__proto__') === '__proto__';
+// Une entrée non-texte traverse sans être transformée : c'est construireSysteme
+// qui refusera, avec son message, plutôt qu'une exception ici.
+verdicts.aliasNonTexteInchange = normaliserQuadrant(undefined) === undefined &&
+  normaliserQuadrant(null) === null && normaliserQuadrant(42) === 42;
+// L'alias reste une PORTE D'ENTRÉE, jamais un quadrant à part entière : le
+// catalogue et les registres ne connaissent que l'identifiant courant.
+verdicts.aliasPasUnQuadrantDeplus =
+  !Object.prototype.hasOwnProperty.call(OUTILS_PAR_QUADRANT, 'traveler') &&
+  Object.prototype.hasOwnProperty.call(OUTILS_PAR_QUADRANT, 'riven') &&
+  outilsPour('traveler') === null;
 
 // ---------- Bilan ----------
 console.log(JSON.stringify(verdicts, null, 2));

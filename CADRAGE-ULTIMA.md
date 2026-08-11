@@ -26,6 +26,32 @@
     bloquante : demander à Paul QUELLE source il apporte — sans elle, ① n'existe
     pas.**
 
+- 🌌 **SESSION 2026-08-11 (RIVEN au ciel + renommage), LIVRÉE.** PR #154.
+  - ✅ **`traveler` → `riven` FAIT**, les trois couches : le fichier et ses liens
+    (`git mv`), l'identifiant de quadrant des deux côtés (**vérifié : il n'est
+    persisté nulle part**, donc aucune donnée à migrer) avec un **alias de
+    transition** pour les onglets restés ouverts, et **deux redirections
+    permanentes** dans `vercel.json` pour que le favori de Paul survive.
+    Patrimoine COMPLET relancé **deux fois**, tous harnais verts, 1310 assertions.
+  - 🔻 **Le cadrage du 10/08 se trompait sur un point** : l'interface DISAIT
+    « Traveler » — « Terre ferme de Traveler » sur la carto ADRAMELECH. Corrigé
+    à la source ET dans le fichier généré.
+  - 🎯 **DÉCIDÉ par Paul : la vue 3D devient l'écran d'arrivée de RIVEN**
+    (« la 3d devient accueil, tout me va »). Trois maquettes livrées et mesurées :
+    `design/preview-riven-galaxie.html` (planche d'arbitrage),
+    `preview-riven-voute.html` (l'écran à plat), `preview-riven-3d.{html,css,js}`
+    (le ciel en volume, **zéro bibliothèque**, 60 i/s, cible tactile 25 px).
+  - ⏭ **PROCHAINE BOUCLE : implanter la 3D dans `riven.html`.** La maquette est
+    le contrat ; la vue à plat et l'arbre restent au bandeau. Puis le
+    renseignement des contacts et la mise en relation (les trois boutons
+    d'action du panneau de fiche, qui ne font encore rien).
+  - 🔻 **RÈGLE NÉE DE CETTE SESSION** : *un harnais qui ne reproduit pas les
+    en-têtes de production ne prouve rien sur la production.* Une preview
+    déployée est restée **vide** chez Paul (CSP `script-src 'self'` contre un
+    `<script>` en ligne) alors que trois passes locales étaient vertes. Les
+    harnais servent désormais les pages sous la **CSP recopiée de
+    `middleware.js`**, et chaque preview porte son `.js`.
+
 - 🏷️ **PROCHAINE BOUCLE — `traveler` → `riven`, EN OUVERTURE DE SESSION.**
   Décidé par Paul le 2026-08-10 en clôture (« tu mets encore traveler mais c'est
   riven mtn »). Le quadrant est renommé RIVEN depuis le **2026-07-16** ; le
