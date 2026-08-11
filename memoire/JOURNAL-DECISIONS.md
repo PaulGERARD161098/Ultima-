@@ -2202,3 +2202,26 @@
 - **Dépendance à ne pas oublier** : la voie ① ne démarre pas sans que Paul
   DISE quelle source il apporte. C'est le premier geste de la prochaine session,
   avant toute ligne de code.
+
+### 2026-08-10 (clôture) — « c'est riven mtn » : la dette de nommage
+
+- **Paul, en fin de session** : *« tu mets encore traveler mais c'est riven
+  mtn »*. Il a raison deux fois — dans **mon vocabulaire** (je lui donnais des
+  liens `traveler.html` en disant RIVEN) et dans le **repo**.
+- **Vérifié avant de répondre, et la vérification a changé la réponse** :
+  l'interface n'a **jamais** affiché « Traveler » (le bandeau dit ULTIMA). Ce
+  n'est pas un bug d'affichage, c'est un **nom de fichier** qui a survécu au
+  renommage du 2026-07-16 — et qui ressort dans **chaque URL** que je lui donne.
+  *Sans ce contrôle, j'aurais annoncé un chantier d'interface qui n'existe pas.*
+- **Trois couches, dont une seule casse quelque chose de vivant** : le fichier
+  et ses liens ; l'identifiant `'traveler'` du contrat front/back de Léo ; et
+  **l'URL publique** — sans redirection permanente, le favori de Paul tombe en
+  404. **La couche invisible est la plus risquée : c'est celle qui touche à ce
+  que l'utilisateur a déjà dans les mains.**
+- **Décision de Paul : en OUVERTURE de la prochaine session**, avant le
+  peuplement. Le nom doit être juste avant qu'il saisisse en volume et pose ses
+  favoris — renommer après aurait cassé les repères qu'il vient de se créer.
+- **Je ne l'ai pas lancé à la volée** alors qu'il venait de dire « fin de
+  session ». Un renommage large touche le routage, et c'est précisément ce qui a
+  laissé `smoke-quadrants` rouge le 2026-07-22. **Un geste qui a déjà cassé
+  quelque chose une fois ne se refait pas en fin de session sans cadrage.**

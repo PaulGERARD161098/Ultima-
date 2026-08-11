@@ -17,13 +17,33 @@
   - ⏳ **Un seul contrôle manque** : la passe `get_advisors` (sécurité +
     performance) après application — appel **refusé faute d'autorisation du
     connecteur Supabase**. À rejouer dès l'autorisation donnée. **Action Paul.**
-  - 🎯 **PROCHAINE BOUCLE, cadrée avec Paul le 2026-08-10 : peupler RIVEN, par
+  - 🎯 **BOUCLE SUIVANTE, cadrée avec Paul le 2026-08-10 : peupler RIVEN, par
     les DEUX voies** (son arbitrage) — ① Léo **ingère** une source existante
     (contacts, Gmail, tableau, devis) et propose des fiches et des personnes
     pré-remplies que Paul valide ; ② Léo construit la **saisie en série**
     (enchaîner des fiches sans rouvrir le formulaire, rattacher une personne
-    depuis sa propre fiche) pour ce qui n'est écrit nulle part. **Premier geste :
-    demander à Paul QUELLE source il apporte — sans elle, ① n'existe pas.**
+    depuis sa propre fiche) pour ce qui n'est écrit nulle part. **Dépendance
+    bloquante : demander à Paul QUELLE source il apporte — sans elle, ① n'existe
+    pas.**
+
+- 🏷️ **PROCHAINE BOUCLE — `traveler` → `riven`, EN OUVERTURE DE SESSION.**
+  Décidé par Paul le 2026-08-10 en clôture (« tu mets encore traveler mais c'est
+  riven mtn »). Le quadrant est renommé RIVEN depuis le **2026-07-16** ; le
+  **fichier** ne l'a jamais été, et il ressort dans chaque URL donnée à Paul.
+  L'interface, elle, n'a jamais dit « Traveler » — c'est une dette de nommage,
+  pas un bug d'affichage. **À faire AVANT le peuplement** : le nom doit être
+  juste avant que Paul saisisse en volume et pose ses favoris.
+  - **Trois couches, la troisième est le piège** : ① le fichier et ses liens
+    (`traveler.html` → `riven.html` : 8 fichiers produit, `js/registre-lv3.mjs`
+    `cible:`, ~20 harnais) ; ② l'**identifiant de quadrant** `'traveler'` dans
+    `api/_lib/leo.js` (`OUTILS_PAR_QUADRANT`, les schémas de mains, `js/app.js`
+    l. 321) — contrat front/back, il se change **des deux côtés à la fois** ;
+    ③ **l'URL publique** : sans redirection permanente dans `vercel.json`, un
+    favori ou une icône d'écran d'accueil de Paul tombe en **404**. C'est la
+    seule couche qui casse quelque chose de vivant.
+  - ⚠️ **Un renommage large est EXACTEMENT ce qui a laissé `smoke-quadrants`
+    rouge le 2026-07-22** : patrimoine COMPLET obligatoire avant fusion, pas
+    seulement les harnais des fichiers touchés.
 
 - 🕸️ **SESSION 2026-08-10 (RIVEN en détail), LIVRÉE — une gate ouverte.**
   Cadrage complet : `CADRAGE-RIVEN-DETAIL.md` (format 6 points, pre-mortem à
