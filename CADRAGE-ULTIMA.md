@@ -26,6 +26,23 @@
     bloquante : demander à Paul QUELLE source il apporte — sans elle, ① n'existe
     pas.**
 
+- 🌠 **LE CIEL EST EN PRODUCTION** (2026-08-11, « vasy implante »).
+  `js/ciel.js` + `css/ciel.css` + `#espace-ciel` : la vue 3D est l'écran
+  d'ARRIVÉE de RIVEN. **Zéro dépendance ajoutée** — la perspective est calculée,
+  le rendu reste en SVG, chaque étoile demeure focusable et lisible.
+  - ✅ **Rien n'est jeté** : l'Accueil de Léo, l'arbre et la carte gardent leurs
+    onglets. *Vérifié avant d'agir : l'écran d'arrivée n'était pas l'Accueil
+    mais l'arbre — sans ce contrôle j'aurais supprimé le tableau de bord de Léo.*
+  - ✅ `tests/smoke-ciel.mjs` (**31 assertions**) branché au patrimoine, qui est
+    vert de bout en bout : **53 harnais, 1310 assertions, sortie 0**.
+  - 🔻 **Le défaut le plus grave trouvé par le harnais** : le tri de profondeur
+    par `appendChild` **arrachait le focus clavier** à l'étoile sélectionnée —
+    Entrée n'ouvrait plus aucune fiche. Le tri se suspend désormais tant qu'une
+    étoile a le focus. *Le tri est cosmétique, le focus est fonctionnel.*
+  - ⏭ **PROCHAINE BOUCLE** : le renseignement des contacts et la mise en
+    relation — les trois boutons du panneau de fiche (« Rattacher une personne »,
+    « Créer une relation », « Modifier la fiche ») et la saisie en série.
+
 - 🌌 **SESSION 2026-08-11 (RIVEN au ciel + renommage), LIVRÉE.** PR #154.
   - ✅ **`traveler` → `riven` FAIT**, les trois couches : le fichier et ses liens
     (`git mv`), l'identifiant de quadrant des deux côtés (**vérifié : il n'est

@@ -1,0 +1,736 @@
+// Module Ciel du réseau — exposé en global : window.UltimaCiel
+//
+// La vue d'arrivée de RIVEN depuis le 2026-08-11 (décision de Paul). Le réseau
+// n'est plus un arbre à plat mais un VOLUME : une fiche est une étoile, un
+// métier est une région de l'espace, une personne orbite la ou les fiches où
+// elle travaille, et une relation est un trait blanc qui traverse le vide.
+//
+// Zéro bibliothèque, et c'est un choix argumenté : la CSP d'Ultima pose
+// `script-src 'self'` (un CDN est bloqué), un moteur 3D vendorisé pèserait
+// ~600 Ko pour quelques dizaines d'étoiles, et un canvas WebGL coûterait le
+// focus clavier, le lecteur d'écran et le texte réel. La perspective tient en
+// quinze lignes de trigonométrie et le rendu reste en SVG : chaque étoile
+// demeure un élément du document, focusable et lisible.
+//
+// Même contrat que js/arbre.js (module auto-contenu, exposé en global,
+// injection 100 % createElementNS / textContent, jamais innerHTML), plus un
+// `arreter()` : une boucle d'animation qui tourne dans un onglet caché est une
+// batterie qui se vide pour rien.
+(function () {
+  'use strict';
+
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+
+  // ---- Géométrie du monde (unités de viewBox) ----
+  var RAYON_MONDE = 300;
+  var ANGLE_OR = Math.PI * (3 - Math.sqrt(5));
+  var FOCALE = 620;
+  var R_ETOILE_MIN = 3.2;
+  var ESPACE_MIN = 34;
+  // Plancher de la zone qui reçoit le doigt. Calibré par la mesure, pas au
+  // jugé : sous cette valeur la cible tactile passe sous les 24 px du plancher
+  // WCAG, et une fiche lointaine devient impossible à toucher.
+  var RAYON_CAPTATION_MIN = 12.5;
+  var ZOOM_MIN = 0.55, ZOOM_MAX = 1.9;
+  var MAX_NOMS_PERMANENTS = 6;
+
+  var MOTIFS_RELATION = {
+    apport_affaires: null, sous_traitance: '7 5', chantier_commun: '1.5 5'
+  };
+  var OPACITE_STATUT_RELATION = {
+    idee: 0.22, contact_etabli: 0.42, en_cours: 0.62, fructueux: 0.92, arrete: 0.14
+  };
+  var COULEUR_DEFAUT = '#cccccc';
+  // Les quatre familles de carte.js, remontées en luminosité : sur fond de
+  // nuit, les teintes du parchemin deviennent illisibles.
+  var COULEURS_NUIT = {
+    artisan: '#f2a15a', partenaire: '#7cb8ea', lead: '#6fd39b', chantier: '#b995e8'
+  };
+
+  var CLE_A_CLASSER = ' a-classer';
+  var LABEL_A_CLASSER = 'À classer';
+
+  // Même règle de normalisation qu'arbre.js et que la datalist des secteurs.
+  function normaliser(texte) {
+    return (texte || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  }
+
+  function svg(nom, attributs) {
+    var el = document.createElementNS(SVG_NS, nom);
+    if (attributs) {
+      Object.keys(attributs).forEach(function (cle) {
+        el.setAttribute(cle, attributs[cle]);
+      });
+    }
+    return el;
+  }
+  function texteSvg(attributs, contenu) {
+    var t = svg('text', attributs);
+    t.textContent = contenu; // texte réel : jamais innerHTML
+    return t;
+  }
+  function tronquer(nom, max) {
+    var s = nom || '(sans nom)';
+    return s.length <= max ? s : s.slice(0, max - 1).replace(/\s+$/, '') + '…';
+  }
+
+  // ---- Répartition déterministe : la spirale de Fibonacci sur la sphère.
+  //      Ni paquet ni trou, et le même jeu de données donne toujours le même
+  //      ciel — c'est la règle de layout d'A3, transposée en volume. ----
+  function pointSphere(n, i) {
+    var y = n <= 1 ? 0 : 1 - (i / (n - 1)) * 2;
+    var rayon = Math.sqrt(Math.max(0, 1 - y * y));
+    var theta = ANGLE_OR * i;
+    return { x: Math.cos(theta) * rayon, y: y, z: Math.sin(theta) * rayon };
+  }
+
+  // ---- Regroupement par métier principal : mêmes règles que l'arbre (la
+  //      première graphie fait l'étiquette, les sans-secteur vont ensemble). ----
+  function grouper(noeuds) {
+    var index = Object.create(null);
+    var ordre = [];
+    (noeuds || []).forEach(function (n) {
+      var brut = (n.secteur_activite || '').trim();
+      var cle = brut ? normaliser(brut) : CLE_A_CLASSER;
+      if (!index[cle]) {
+        index[cle] = { cle: cle, label: brut || LABEL_A_CLASSER, noeuds: [] };
+        ordre.push(cle);
+      }
+      index[cle].noeuds.push(n);
+    });
+    var groupes = ordre.map(function (c) { return index[c]; });
+    groupes.sort(function (a, b) {
+      if (a.cle === CLE_A_CLASSER) { return 1; }
+      if (b.cle === CLE_A_CLASSER) { return -1; }
+      if (b.noeuds.length !== a.noeuds.length) { return b.noeuds.length - a.noeuds.length; }
+      return a.label.localeCompare(b.label, 'fr');
+    });
+    groupes.forEach(function (g) {
+      g.noeuds.sort(function (x, y) {
+        var parNom = (x.nom || '').localeCompare(y.nom || '', 'fr');
+        if (parNom !== 0) { return parNom; }
+        return (x.id || '') < (y.id || '') ? -1 : ((x.id || '') > (y.id || '') ? 1 : 0);
+      });
+    });
+    return groupes;
+  }
+
+  // ---- Construction du monde : PURE (aucun DOM), donc testable seule.
+  //      Deux appels sur les mêmes données produisent les mêmes coordonnées. ----
+  function construireMonde(noeuds) {
+    var groupes = grouper(noeuds);
+    var etoiles = [];
+    groupes.forEach(function (g, ig) {
+      var dir = pointSphere(groupes.length, ig);
+      // Les métiers les plus fournis siègent plus près du centre : le réseau a
+      // un cœur, et il se voit sans qu'on ait à le dire.
+      var eloignement = RAYON_MONDE * (0.52 + 0.48 * (1 - Math.min(1, g.noeuds.length / 6)));
+      var centre = {
+        x: dir.x * eloignement,
+        y: dir.y * eloignement * 0.72,
+        z: dir.z * eloignement
+      };
+      g.centre = centre;
+      var n = g.noeuds.length;
+      var rayonAmas = 26 + Math.sqrt(n) * (ESPACE_MIN * 0.59);
+      g.noeuds.forEach(function (noeud, k) {
+        var p = pointSphere(Math.max(n, 2), k);
+        // Rayon modulé : un amas est un VOLUME, pas une coquille creuse.
+        var rr = rayonAmas * (0.55 + 0.45 * ((k * 7 % 11) / 10));
+        etoiles.push({
+          noeud: noeud, groupe: g,
+          x: centre.x + p.x * rr,
+          y: centre.y + p.y * rr,
+          z: centre.z + p.z * rr
+        });
+      });
+    });
+    return { groupes: groupes, etoiles: etoiles };
+  }
+
+  // ---- Magnitude : le poids de la fiche dans le réseau (relations reçues et
+  //      données + personnes rattachées). C'est une information que ni l'arbre
+  //      ni la carte ne montraient : qui est central, qui est isolé. ----
+  function magnitudes(noeuds, relations, rattachements) {
+    var m = Object.create(null);
+    (noeuds || []).forEach(function (n) { m[n.id] = 0; });
+    (relations || []).forEach(function (r) {
+      if (m[r.source_id] !== undefined) { m[r.source_id] += 1; }
+      if (m[r.target_id] !== undefined) { m[r.target_id] += 1; }
+    });
+    (rattachements || []).forEach(function (r) {
+      if (m[r.node_id] !== undefined) { m[r.node_id] += 1; }
+    });
+    return m;
+  }
+
+  // ==================================================================
+  // Instance courante : une seule à la fois (un seul ciel à l'écran).
+  // ==================================================================
+  var courant = null;
+
+  function arreter() {
+    if (courant && courant.image) {
+      window.cancelAnimationFrame(courant.image);
+      courant.image = null;
+    }
+    if (courant && courant.surRedimension) {
+      window.removeEventListener('resize', courant.surRedimension);
+      courant.surRedimension = null;
+    }
+    courant = null;
+  }
+
+  function rendre(conteneur, donnees, options) {
+    if (!conteneur) { return null; }
+    arreter(); // jamais deux boucles d'animation en vol
+    options = options || {};
+
+    var noeuds = (donnees && donnees.noeuds) || [];
+    var personnes = (donnees && donnees.personnes) || [];
+    var rattachements = (donnees && donnees.rattachements) || [];
+    var relations = (donnees && donnees.relations) || [];
+    var libelles = options.libellesType || {};
+    var statuts = options.libellesStatut || {};
+    var correspond = options.correspond;
+
+    var monde = construireMonde(noeuds);
+    var parId = Object.create(null);
+    monde.etoiles.forEach(function (e) { parId[e.noeud.id] = e; });
+    var mags = magnitudes(noeuds, relations, rattachements);
+    var magMax = 1;
+    Object.keys(mags).forEach(function (k) { if (mags[k] > magMax) { magMax = mags[k]; } });
+
+    // Noms permanents : les six plus lourdes. Un seuil laisserait le nombre
+    // dériver avec la taille du réseau et rendrait le ciel illisible ; six,
+    // c'est six. Les autres noms existent quand même dans le document et se
+    // révèlent au survol comme au focus clavier.
+    var lourdes = Object.create(null);
+    if (noeuds.length <= MAX_NOMS_PERMANENTS) {
+      noeuds.forEach(function (n) { lourdes[n.id] = true; });
+    } else {
+      noeuds.slice().sort(function (a, b) {
+        var d = (mags[b.id] || 0) - (mags[a.id] || 0);
+        return d !== 0 ? d : (a.nom || '').localeCompare(b.nom || '', 'fr');
+      }).slice(0, MAX_NOMS_PERMANENTS).forEach(function (n) { lourdes[n.id] = true; });
+    }
+
+    var vbW = 900, vbH = 560;
+    function dimensionner() {
+      vbW = Math.max(320, Math.min(1240, conteneur.clientWidth || 900));
+      vbH = vbW < 600 ? Math.round(vbW * 1.02) : Math.round(vbW * 0.56);
+    }
+    // La distance ne se choisit pas une fois pour toutes : elle se DÉDUIT du
+    // cadre. À la distance D, la demi-hauteur visible vaut (cadre/2)·(D/FOCALE) ;
+    // pour que le monde tienne, il faut D ≥ RAYON_MONDE·FOCALE·2/cadre. Une
+    // constante confortable sur un large écran sort la moitié du réseau du
+    // champ sur un téléphone.
+    function distanceIdeale() {
+      return Math.max(430, (RAYON_MONDE * FOCALE * 2) / Math.max(160, Math.min(vbW, vbH)) * 1.06);
+    }
+
+    dimensionner();
+    var cam = {
+      yaw: 0.6, pitch: -0.28, distance: 0,
+      cibleYaw: 0.6, ciblePitch: -0.28, cibleDistance: 0
+    };
+    // Le zoom est gardé en FACTEUR, pas en distance absolue : il survit ainsi
+    // à un changement de cadre (rotation du téléphone, ouverture du panneau).
+    var zoom = 1;
+    cam.distance = cam.cibleDistance = distanceIdeale();
+
+    var moinsDAnimation = window.matchMedia
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function projeter(p) {
+      var cy = Math.cos(cam.yaw), sy = Math.sin(cam.yaw);
+      var x1 = p.x * cy + p.z * sy;
+      var z1 = -p.x * sy + p.z * cy;
+      var cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch);
+      var y2 = p.y * cp - z1 * sp;
+      var z2 = p.y * sp + z1 * cp;
+      var profondeur = z2 + cam.distance;
+      if (profondeur < 60) { return null; } // derrière la caméra : rien à dessiner
+      var echelle = FOCALE / profondeur;
+      return {
+        sx: vbW / 2 + x1 * echelle, sy: vbH / 2 + y2 * echelle,
+        echelle: echelle, profondeur: profondeur
+      };
+    }
+
+    // Amène un point face à la caméra. C'est la réponse au reproche fait à
+    // toute interface en volume : sans cela, la tabulation enverrait le focus
+    // sur une étoile située derrière le spectateur.
+    function viser(p) {
+      cam.cibleYaw = Math.atan2(-p.x, p.z);
+      var cy = Math.cos(cam.cibleYaw), sy = Math.sin(cam.cibleYaw);
+      var z1 = -p.x * sy + p.z * cy;
+      cam.ciblePitch = Math.atan2(p.y, z1 + cam.distance);
+    }
+    // Écart d'angles ramené dans [-π, π] : sans quoi la caméra fait le tour du
+    // monde par le mauvais côté au passage de ±π.
+    function ecartAngle(a, b) {
+      var d = (a - b) % (Math.PI * 2);
+      if (d > Math.PI) { d -= Math.PI * 2; }
+      if (d < -Math.PI) { d += Math.PI * 2; }
+      return d;
+    }
+
+    // ---- Construction du SVG : une seule fois. Ensuite on ne fait que
+    //      déplacer — recréer les étoiles à chaque image serait absurde. ----
+    conteneur.textContent = '';
+    var racine = svg('svg', {
+      'class': 'ciel-svg', viewBox: '0 0 ' + vbW + ' ' + vbH,
+      preserveAspectRatio: 'xMidYMid meet', role: 'group',
+      'aria-label': 'Le réseau en volume : ' + noeuds.length +
+        (noeuds.length > 1 ? ' contacts répartis en ' : ' contact réparti en ') +
+        monde.groupes.length + (monde.groupes.length > 1 ? ' constellations' : ' constellation')
+    });
+
+    // Poussière lointaine : muette, déterministe, jamais devant.
+    var gDecorFond = svg('g', { 'class': 'ciel-decor', 'aria-hidden': 'true' });
+    var poussiere = [];
+    var graine = 11;
+    function alea() {
+      graine = (graine * 1103515245 + 12345) % 2147483648;
+      return graine / 2147483648;
+    }
+    for (var i = 0; i < 130; i++) {
+      var grain = svg('circle', {
+        cx: 0, cy: 0, r: (0.3 + alea() * 0.8).toFixed(2),
+        fill: '#cfe0f5', opacity: (0.10 + alea() * 0.26).toFixed(2)
+      });
+      poussiere.push({ el: grain, a: alea() * Math.PI * 2, b: alea() * Math.PI, r: 0.6 + alea() * 0.45 });
+      gDecorFond.appendChild(grain);
+    }
+    racine.appendChild(gDecorFond);
+
+    // Les liens : BLANCS et fins (demande de Paul). Le MOTIF dit le type,
+    // l'ÉCLAT dit l'avancement — le double codage de la carte est conservé,
+    // sans quoi le blanc uniforme perdrait l'information du type.
+    var gLiens = svg('g', {
+      'class': 'ciel-liens', 'aria-hidden': 'true', stroke: '#ffffff',
+      'stroke-width': '0.9', 'stroke-linecap': 'round', fill: 'none'
+    });
+    var piecesLien = [];
+    (relations || []).forEach(function (r) {
+      if (!parId[r.source_id] || !parId[r.target_id]) { return; }
+      var ligne = svg('line', {
+        opacity: String(OPACITE_STATUT_RELATION[r.statut] || 0.5)
+      });
+      if (MOTIFS_RELATION[r.type]) { ligne.setAttribute('stroke-dasharray', MOTIFS_RELATION[r.type]); }
+      ligne.setAttribute('data-a', r.source_id);
+      ligne.setAttribute('data-b', r.target_id);
+      gLiens.appendChild(ligne);
+      piecesLien.push({ relation: r, el: ligne });
+    });
+    racine.appendChild(gLiens);
+
+    // Les personnes en orbite : la notion séparée du nœud le 2026-08-10.
+    // Une personne rattachée à deux fiches orbite les deux — c'est ce qui
+    // rend le rattachement multiple visible d'un coup d'œil.
+    var gOrbites = svg('g', {});
+    var piecesOrbite = [];
+    var parPersonne = Object.create(null);
+    (personnes || []).forEach(function (p) { parPersonne[p.id] = p; });
+    var comptePar = Object.create(null);
+    (rattachements || []).forEach(function (r) {
+      comptePar[r.personne_id] = (comptePar[r.personne_id] || 0) + 1;
+    });
+    (rattachements || []).forEach(function (r, ir) {
+      if (!parId[r.node_id]) { return; }
+      var personne = parPersonne[r.personne_id];
+      var nomPersonne = (personne && personne.nom) || 'Personne';
+      var role = (r.role || '').trim();
+      var autres = (comptePar[r.personne_id] || 1) - 1;
+      var trait = svg('line', { stroke: '#f2ead6', 'stroke-width': '0.5', opacity: '0.3' });
+      var g = svg('g', {
+        'class': 'ciel-etoile ciel-personne', tabindex: '0', role: 'button',
+        'data-personne-id': r.personne_id,
+        'aria-label': nomPersonne + (role ? ', ' + role : '') + ', chez ' +
+          (parId[r.node_id].noeud.nom || '(sans nom)') +
+          (autres > 0 ? ', rattachée à ' + (autres + 1) + ' fiches' : '')
+      });
+      var titre = svg('title');
+      titre.textContent = nomPersonne + (role ? ' — ' + role : '');
+      g.appendChild(titre);
+      var halo = svg('circle', { 'class': 'ciel-halo-focus', fill: 'none', stroke: '#f2ead6', 'stroke-width': '1' });
+      var pastille = svg('circle', { fill: '#f2ead6', opacity: '0.9' });
+      var zone = svg('circle', { 'class': 'ciel-zone', fill: '#000000', 'fill-opacity': '0' });
+      g.appendChild(halo); g.appendChild(pastille); g.appendChild(zone);
+      gOrbites.appendChild(trait);
+      gOrbites.appendChild(g);
+      piecesOrbite.push({
+        ancre: r.node_id, g: g, trait: trait, halo: halo, pastille: pastille, zone: zone,
+        angle: ir * ANGLE_OR + 0.7, rayon: 15 + (ir % 3) * 4
+      });
+    });
+    racine.appendChild(gOrbites);
+
+    // Les étoiles : une fiche = une étoile.
+    var gEtoiles = svg('g', { 'font-family': 'Georgia, "Times New Roman", serif' });
+    var pieces = [];
+    monde.etoiles.forEach(function (e) {
+      var noeud = e.noeud;
+      var mag = mags[noeud.id] || 0;
+      var couleur = COULEURS_NUIT[noeud.type] || COULEUR_DEFAUT;
+      var nomComplet = noeud.nom || '(sans nom)';
+      var libelleType = libelles[noeud.type] || noeud.type || '';
+      var libelleStatut = statuts[noeud.statut] || noeud.statut || '';
+      var g = svg('g', {
+        'class': 'ciel-etoile', tabindex: '0', role: 'button',
+        'data-noeud-id': noeud.id,
+        'aria-label': nomComplet + ', ' + libelleType +
+          (e.groupe.cle === CLE_A_CLASSER ? ', sans secteur' : ', secteur ' + e.groupe.label) +
+          (libelleStatut ? ', ' + libelleStatut : '') +
+          ', ' + mag + ' lien' + (mag > 1 ? 's' : '')
+      });
+      var titre = svg('title');
+      titre.textContent = nomComplet;
+      g.appendChild(titre);
+      var haloChoix = svg('circle', { 'class': 'ciel-halo-choix', fill: 'none', stroke: '#d8bd82', 'stroke-width': '1.2' });
+      var haloFocus = svg('circle', { 'class': 'ciel-halo-focus', fill: 'none', stroke: '#fffaf0', 'stroke-width': '1' });
+      var lueur = svg('circle', { fill: couleur, opacity: '0.14' });
+      var branches = svg('path', { fill: couleur, opacity: '0.5' });
+      var corolle = svg('circle', { fill: couleur, opacity: '0.75' });
+      var coeur = svg('circle', { fill: '#fffaf0' });
+      var permanent = !!lourdes[noeud.id];
+      var nom = texteSvg({
+        'class': 'ciel-nom' + (permanent ? '' : ' ciel-nom--demande'),
+        'text-anchor': 'middle', fill: '#e8dfc8', 'font-size': '9.5',
+        opacity: permanent ? '0.85' : '0'
+      }, tronquer(nomComplet, 20));
+      var zone = svg('circle', { 'class': 'ciel-zone', fill: '#000000', 'fill-opacity': '0' });
+      [haloChoix, haloFocus, lueur, branches, corolle, coeur, nom, zone].forEach(function (el) {
+        g.appendChild(el);
+      });
+      gEtoiles.appendChild(g);
+      pieces.push({
+        etoile: e, g: g, haloChoix: haloChoix, haloFocus: haloFocus, lueur: lueur,
+        branches: branches, corolle: corolle, coeur: coeur, nom: nom, zone: zone, mag: mag
+      });
+    });
+    racine.appendChild(gEtoiles);
+
+    // Noms de constellation : capitales espacées, or pâle — le vocabulaire des
+    // cartouches, transposé en perspective.
+    var gNomsAmas = svg('g', {
+      'class': 'ciel-decor', 'aria-hidden': 'true', 'text-anchor': 'middle',
+      'font-family': 'Georgia, "Times New Roman", serif', fill: '#d8bd82'
+    });
+    var piecesAmas = monde.groupes.map(function (g) {
+      var t = texteSvg({ 'font-size': '11', 'letter-spacing': '3' }, g.label.toUpperCase());
+      gNomsAmas.appendChild(t);
+      return { groupe: g, el: t };
+    });
+    racine.appendChild(gNomsAmas);
+
+    conteneur.appendChild(racine);
+
+    // ---- Concentration : au survol ou au focus, le ciel s'éteint et seuls
+    //      les liens de l'étoile visée brillent. Un seul jeu d'écouteurs
+    //      délégués — jamais un par étoile. ----
+    var vifs = [];
+    function eteindre() {
+      vifs.forEach(function (t) { t.classList.remove('ciel-lien--vif'); });
+      vifs = [];
+      racine.classList.remove('ciel--concentre');
+    }
+    function allumer(cible) {
+      var etoile = cible && cible.closest ? cible.closest('[data-noeud-id]') : null;
+      if (!etoile) { eteindre(); return; }
+      eteindre();
+      var id = etoile.getAttribute('data-noeud-id');
+      var liens = racine.querySelectorAll(
+        '.ciel-liens line[data-a="' + id + '"], .ciel-liens line[data-b="' + id + '"]');
+      Array.prototype.forEach.call(liens, function (t) {
+        t.classList.add('ciel-lien--vif');
+        vifs.push(t);
+      });
+      racine.classList.add('ciel--concentre');
+    }
+    racine.addEventListener('mouseover', function (e) { allumer(e.target); });
+    racine.addEventListener('mouseleave', eteindre);
+    racine.addEventListener('focusin', function (e) {
+      allumer(e.target);
+      var g = e.target.closest ? e.target.closest('[data-noeud-id]') : null;
+      if (g && parId[g.getAttribute('data-noeud-id')]) {
+        viser(parId[g.getAttribute('data-noeud-id')]);
+      }
+    });
+    racine.addEventListener('focusout', eteindre);
+
+    function declencher(cible) {
+      if (aGlisse) { return; } // un glissement n'ouvre pas une fiche
+      var g = cible && cible.closest ? cible.closest('[data-noeud-id]') : null;
+      if (g && typeof options.surClicNoeud === 'function') {
+        options.surClicNoeud(g.getAttribute('data-noeud-id'));
+        return;
+      }
+      var p = cible && cible.closest ? cible.closest('[data-personne-id]') : null;
+      if (p && typeof options.surClicPersonne === 'function') {
+        options.surClicPersonne(p.getAttribute('data-personne-id'));
+      }
+    }
+    racine.addEventListener('click', function (e) { declencher(e.target); });
+    racine.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') { return; }
+      var g = e.target.closest ? e.target.closest('[data-noeud-id], [data-personne-id]') : null;
+      if (g) { e.preventDefault(); declencher(e.target); }
+    });
+
+    // ---- Navigation : glisser pour tourner. La capture du pointeur n'est
+    //      prise QU'UNE FOIS le glissement engagé — la prendre dès l'appui
+    //      redirige le `click` vers le conteneur et aucune fiche ne s'ouvre. ----
+    var saisie = null, aGlisse = false, survol = false;
+    conteneur.addEventListener('pointerenter', function () { survol = true; });
+    conteneur.addEventListener('pointerleave', function () { if (!saisie) { survol = false; } });
+    conteneur.addEventListener('pointerdown', function (e) {
+      saisie = {
+        x: e.clientX, y: e.clientY, yaw: cam.cibleYaw, pitch: cam.ciblePitch,
+        pointeur: e.pointerId, capture: false
+      };
+      aGlisse = false;
+      conteneur.classList.add('ciel-scene--saisie');
+    });
+    conteneur.addEventListener('pointermove', function (e) {
+      if (!saisie) { return; }
+      var dx = e.clientX - saisie.x, dy = e.clientY - saisie.y;
+      if (Math.abs(dx) + Math.abs(dy) > 4) {
+        aGlisse = true;
+        if (!saisie.capture && conteneur.setPointerCapture) {
+          try {
+            conteneur.setPointerCapture(saisie.pointeur);
+            saisie.capture = true;
+          } catch (err) { /* sans capture, la rotation fonctionne quand même */ }
+        }
+      }
+      cam.cibleYaw = saisie.yaw + dx * 0.006;
+      // Le pitch est BORNÉ : au-delà on passe par-dessus le pôle et le monde
+      // se retourne — on ne perd jamais le haut et le bas.
+      cam.ciblePitch = Math.max(-1.15, Math.min(1.15, saisie.pitch + dy * 0.005));
+    });
+    function relacher() {
+      saisie = null;
+      conteneur.classList.remove('ciel-scene--saisie');
+      window.setTimeout(function () { aGlisse = false; }, 0);
+    }
+    conteneur.addEventListener('pointerup', relacher);
+    conteneur.addEventListener('pointercancel', relacher);
+
+    // LA MOLETTE FAIT DÉFILER LA PAGE (demande de Paul, 2026-08-11). Elle ne
+    // zoome qu'avec Ctrl/⌘ — la convention des cartes embarquées. Sans cela la
+    // scène confisque chaque cran et la page ne descend jamais.
+    conteneur.addEventListener('wheel', function (e) {
+      if (!e.ctrlKey && !e.metaKey) { return; } // pas de preventDefault : la page défile
+      e.preventDefault();
+      zoomer(e.deltaY * 0.0011);
+    }, { passive: false });
+
+    function zoomer(delta) {
+      zoom = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, zoom + delta));
+      cam.cibleDistance = distanceIdeale() * zoom;
+    }
+
+    function opaciteProfondeur(profondeur) {
+      var t = (profondeur - (cam.distance - RAYON_MONDE)) / (2 * RAYON_MONDE);
+      return Math.max(0.18, Math.min(1, 1.06 - t * 0.9));
+    }
+
+    var derive = 0, imagesDepuisTri = 99;
+
+    function dessiner() {
+      // Approche douce vers la cible : la caméra glisse, elle ne saute pas.
+      cam.yaw += ecartAngle(cam.cibleYaw, cam.yaw) * 0.11;
+      cam.pitch += (cam.ciblePitch - cam.pitch) * 0.11;
+      cam.distance += (cam.cibleDistance - cam.distance) * 0.11;
+
+      // Dérive : seulement si Paul l'a demandée, jamais quand la main approche
+      // (une cible qui bouge est une cible qu'on rate) ni sous prefers-reduced-motion.
+      if (etatDerive && !saisie && !survol && !moinsDAnimation) {
+        derive += 0.0009;
+        cam.cibleYaw += 0.0009;
+        cam.yaw += 0.0009;
+      }
+
+      var projetes = Object.create(null);
+
+      poussiere.forEach(function (p) {
+        var d = RAYON_MONDE * 3.1 * p.r;
+        var pr = projeter({
+          x: Math.cos(p.a + derive * 0.3) * Math.sin(p.b) * d,
+          y: Math.cos(p.b) * d * 0.6,
+          z: Math.sin(p.a + derive * 0.3) * Math.sin(p.b) * d
+        });
+        if (!pr || pr.sx < 0 || pr.sx > vbW || pr.sy < 0 || pr.sy > vbH) {
+          p.el.setAttribute('display', 'none');
+          return;
+        }
+        p.el.removeAttribute('display');
+        p.el.setAttribute('cx', pr.sx.toFixed(1));
+        p.el.setAttribute('cy', pr.sy.toFixed(1));
+      });
+
+      pieces.forEach(function (piece) {
+        var pr = projeter(piece.etoile);
+        projetes[piece.etoile.noeud.id] = pr;
+        if (!pr || pr.sx < -40 || pr.sx > vbW + 40 || pr.sy < -40 || pr.sy > vbH + 40) {
+          piece.g.setAttribute('display', 'none');
+          return;
+        }
+        piece.g.removeAttribute('display');
+        var rayon = Math.max(1.6, Math.min(9,
+          (R_ETOILE_MIN + Math.min(3.2, (piece.mag / magMax) * 3.2)) * pr.echelle * 1.05));
+        var op = opaciteProfondeur(pr.profondeur);
+        var attenue = correspond && !correspond(piece.etoile.noeud);
+        piece.g.setAttribute('opacity', (attenue ? op * 0.14 : op).toFixed(3));
+
+        var x = pr.sx, y = pr.sy;
+        piece.coeur.setAttribute('cx', x); piece.coeur.setAttribute('cy', y);
+        piece.coeur.setAttribute('r', rayon.toFixed(2));
+        piece.corolle.setAttribute('cx', x); piece.corolle.setAttribute('cy', y);
+        piece.corolle.setAttribute('r', (rayon * 1.7).toFixed(2));
+        piece.lueur.setAttribute('cx', x); piece.lueur.setAttribute('cy', y);
+        piece.lueur.setAttribute('r', (rayon * 3.6).toFixed(2));
+        var p3 = rayon * 3.1;
+        piece.branches.setAttribute('d',
+          'M' + x + ',' + (y - p3) + ' L' + (x + rayon * 0.5) + ',' + (y - rayon * 0.5) +
+          ' L' + (x + p3) + ',' + y + ' L' + (x + rayon * 0.5) + ',' + (y + rayon * 0.5) +
+          ' L' + x + ',' + (y + p3) + ' L' + (x - rayon * 0.5) + ',' + (y + rayon * 0.5) +
+          ' L' + (x - p3) + ',' + y + ' L' + (x - rayon * 0.5) + ',' + (y - rayon * 0.5) + ' Z');
+        piece.haloFocus.setAttribute('cx', x); piece.haloFocus.setAttribute('cy', y);
+        piece.haloFocus.setAttribute('r', (rayon * 4.4).toFixed(2));
+        piece.haloChoix.setAttribute('cx', x); piece.haloChoix.setAttribute('cy', y);
+        piece.haloChoix.setAttribute('r', (rayon * 5.4).toFixed(2));
+        // La zone qui reçoit le doigt ne rétrécit PAS autant que l'étoile :
+        // sans ce plancher, la moitié du réseau devient intouchable.
+        piece.zone.setAttribute('cx', x); piece.zone.setAttribute('cy', y);
+        piece.zone.setAttribute('r', Math.max(RAYON_CAPTATION_MIN, rayon * 2.4).toFixed(2));
+
+        var proche = pr.profondeur < cam.distance - RAYON_MONDE * 0.25;
+        piece.nom.setAttribute('x', x);
+        piece.nom.setAttribute('y', (y + rayon * 3.6 + 9).toFixed(1));
+        piece.nom.setAttribute('font-size', Math.max(7.5, 10 * pr.echelle).toFixed(1));
+        if (!piece.nom.classList.contains('ciel-nom--demande')) {
+          piece.nom.setAttribute('opacity', proche && !attenue ? '0.85' : '0.25');
+        }
+      });
+
+      piecesLien.forEach(function (pl) {
+        var a = projetes[pl.relation.source_id], b = projetes[pl.relation.target_id];
+        if (!a || !b) { pl.el.setAttribute('display', 'none'); return; }
+        pl.el.removeAttribute('display');
+        pl.el.setAttribute('x1', a.sx.toFixed(1)); pl.el.setAttribute('y1', a.sy.toFixed(1));
+        pl.el.setAttribute('x2', b.sx.toFixed(1)); pl.el.setAttribute('y2', b.sy.toFixed(1));
+        var opBase = OPACITE_STATUT_RELATION[pl.relation.statut] || 0.5;
+        pl.el.setAttribute('opacity',
+          (opBase * opaciteProfondeur((a.profondeur + b.profondeur) / 2)).toFixed(3));
+        pl.el.setAttribute('stroke-width',
+          (0.55 + 0.75 * ((a.echelle + b.echelle) / 2)).toFixed(2));
+      });
+
+      piecesOrbite.forEach(function (po) {
+        var a = projetes[po.ancre];
+        if (!a) {
+          po.g.setAttribute('display', 'none');
+          po.trait.setAttribute('display', 'none');
+          return;
+        }
+        po.g.removeAttribute('display'); po.trait.removeAttribute('display');
+        var r = po.rayon * a.echelle * 1.1;
+        var ox = a.sx + Math.cos(po.angle) * r;
+        var oy = a.sy + Math.sin(po.angle) * r * 0.85;
+        var op = opaciteProfondeur(a.profondeur);
+        po.g.setAttribute('opacity', op.toFixed(3));
+        po.trait.setAttribute('opacity', (op * 0.3).toFixed(3));
+        po.trait.setAttribute('x1', a.sx.toFixed(1)); po.trait.setAttribute('y1', a.sy.toFixed(1));
+        po.trait.setAttribute('x2', ox.toFixed(1)); po.trait.setAttribute('y2', oy.toFixed(1));
+        po.pastille.setAttribute('cx', ox.toFixed(1)); po.pastille.setAttribute('cy', oy.toFixed(1));
+        po.pastille.setAttribute('r', Math.max(1.1, 2.2 * a.echelle).toFixed(2));
+        po.halo.setAttribute('cx', ox.toFixed(1)); po.halo.setAttribute('cy', oy.toFixed(1));
+        po.halo.setAttribute('r', Math.max(5, 7 * a.echelle).toFixed(2));
+        po.zone.setAttribute('cx', ox.toFixed(1)); po.zone.setAttribute('cy', oy.toFixed(1));
+        po.zone.setAttribute('r', '9');
+      });
+
+      piecesAmas.forEach(function (pa) {
+        var pr = projeter(pa.groupe.centre);
+        // Seule la moitié AVANT parle : sinon un nom lointain vient se poser
+        // sur une étoile proche et le ciel devient illisible.
+        if (!pr || pr.profondeur > cam.distance ||
+            pr.sx < 30 || pr.sx > vbW - 30 || pr.sy < 20 || pr.sy > vbH - 20) {
+          pa.el.setAttribute('opacity', '0');
+          return;
+        }
+        pa.el.setAttribute('x', pr.sx.toFixed(1));
+        pa.el.setAttribute('y', (pr.sy - 38 * pr.echelle - 12).toFixed(1));
+        pa.el.setAttribute('font-size', Math.max(8, 12 * pr.echelle).toFixed(1));
+        pa.el.setAttribute('opacity', (opaciteProfondeur(pr.profondeur) * 0.85).toFixed(3));
+      });
+
+      // Ordre de rendu : les proches par-dessus les lointaines. Réordonner à
+      // chaque image coûterait cher pour rien — l'opacité et la taille portent
+      // déjà l'essentiel de la profondeur.
+      imagesDepuisTri += 1;
+      // JAMAIS pendant qu'une étoile a le focus : réordonner par appendChild
+      // détache l'élément du document et le réinsère, ce qui LUI ARRACHE LE
+      // FOCUS — la touche Entrée n'ouvrait alors plus aucune fiche. Le tri est
+      // cosmétique, le focus est fonctionnel : le focus gagne.
+      if (imagesDepuisTri > 6 && !gEtoiles.contains(document.activeElement)) {
+        imagesDepuisTri = 0;
+        pieces.slice().filter(function (p) { return projetes[p.etoile.noeud.id]; })
+          .sort(function (a, b) {
+            return projetes[b.etoile.noeud.id].profondeur - projetes[a.etoile.noeud.id].profondeur;
+          })
+          .forEach(function (p) { gEtoiles.appendChild(p.g); });
+      }
+
+      if (courant) { courant.image = window.requestAnimationFrame(dessiner); }
+    }
+
+    var etatDerive = false;
+
+    function surRedimension() {
+      var avant = vbW;
+      dimensionner();
+      if (vbW !== avant) { racine.setAttribute('viewBox', '0 0 ' + vbW + ' ' + vbH); }
+      cam.cibleDistance = distanceIdeale() * zoom;
+    }
+    window.addEventListener('resize', surRedimension);
+
+    courant = {
+      image: null,
+      surRedimension: surRedimension,
+      racine: racine,
+      // Le cadre suit la largeur réelle : sans cela, l'ouverture du panneau
+      // rétrécit la scène sans toucher au viewBox et la cible tactile s'effondre.
+      ajusterCadre: surRedimension,
+      zoomer: zoomer,
+      viser: function (idNoeud) { if (parId[idNoeud]) { viser(parId[idNoeud]); } },
+      choisir: function (idNoeud) {
+        pieces.forEach(function (p) {
+          if (p.etoile.noeud.id === idNoeud) { p.g.classList.add('ciel-etoile--choisie'); }
+          else { p.g.classList.remove('ciel-etoile--choisie'); }
+        });
+      },
+      derive: function (actif) { etatDerive = !!actif; },
+      nbEtoiles: pieces.length,
+      nbLiens: piecesLien.length,
+      nbOrbites: piecesOrbite.length,
+      nbConstellations: monde.groupes.length
+    };
+    courant.image = window.requestAnimationFrame(dessiner);
+    return courant;
+  }
+
+  window.UltimaCiel = {
+    rendre: rendre,
+    arreter: arreter,
+    construireMonde: construireMonde,
+    grouper: grouper,
+    magnitudes: magnitudes,
+    courant: function () { return courant; },
+    CLE_A_CLASSER: CLE_A_CLASSER,
+    LABEL_A_CLASSER: LABEL_A_CLASSER
+  };
+})();

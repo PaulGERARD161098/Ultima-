@@ -40,11 +40,17 @@ const verdicts = {};
 await page.goto('http://127.0.0.1:8123/riven.html', { waitUntil: 'load', timeout: 20000 });
 await page.waitForTimeout(900);
 
-// 1. Démarrage sur l'Arbre (A3 : l'arbre est le pivot/hub) ; l'Accueil reste
-// accessible par son onglet — salutation, barre d'onglets, aria-current.
-verdicts.arbreVisibleAuDemarrage = await page.locator('#espace-arbre').isVisible();
-verdicts.ongletActifArbreAuDemarrage = await page
-  .locator('.barre-onglets .onglet[data-onglet="arbre"][aria-current="page"]').count() === 1;
+// 1. Démarrage sur le CIEL depuis le 2026-08-11 (décision de Paul : « la 3d
+// devient accueil »). Il a pris la place que l'arbre tenait depuis A3/D2a.
+// L'arbre reste accessible par son onglet — on ne jette rien —, et l'Accueil
+// aussi : salutation, barre d'onglets, aria-current.
+verdicts.cielVisibleAuDemarrage = await page.locator('#espace-ciel').isVisible();
+verdicts.ongletActifCielAuDemarrage = await page
+  .locator('.barre-onglets .onglet[data-onglet="ciel"][aria-current="page"]').count() === 1;
+// L'arbre n'est plus l'arrivée, mais il n'a pas disparu pour autant.
+await page.locator('.barre-onglets .onglet[data-onglet="arbre"]').click();
+await page.waitForTimeout(300);
+verdicts.arbreToujoursAccessible = await page.locator('#espace-arbre').isVisible();
 await page.locator('.barre-onglets .onglet[data-onglet="accueil"]').click();
 await page.waitForTimeout(300);
 verdicts.accueilVisible = await page.locator('#espace-accueil').isVisible();
@@ -53,7 +59,8 @@ verdicts.titreBienvenue = (await page.locator('#accueil-titre').textContent()) =
 verdicts.sousTitre = (await page.locator('.accueil-question').textContent()) === "On fait quoi aujourd'hui ?";
 verdicts.ongletActifAccueil = await page
   .locator('.barre-onglets .onglet[data-onglet="accueil"][aria-current="page"]').count() === 1;
-verdicts.quatreOnglets = await page.locator('.barre-onglets .onglet').count() === 4;
+// Cinq onglets depuis l'arrivée du Ciel : Accueil, Ciel, Arbre, Carte, Contacts.
+verdicts.cinqOnglets = await page.locator('.barre-onglets .onglet').count() === 5;
 
 // 2. Police à l'ancienne (old-style système) sur le titre — registre antique :
 // la pile typo résolue est serif, plus aucune écriture manuscrite (« Caveat »

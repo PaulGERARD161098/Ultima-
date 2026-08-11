@@ -160,17 +160,18 @@ const contrasteAutour = async (cx, cy) => {
 await page.goto('http://127.0.0.1:8123/riven.html', { waitUntil: 'load', timeout: 20000 });
 await page.waitForTimeout(1100);
 
-// 1. Arrivée : l'espace Arbre est visible sans geste (A3, le pivot) ; l'Accueil
-// et la Carte restent accessibles par leur onglet (aller-retour réel).
-const arbreVisibleArrivee = (await page.locator('#espace-arbre').isVisible()) &&
+// 1. Arrivée : l'espace CIEL est visible sans geste (décision de Paul du
+// 2026-08-11 ; c'était l'arbre depuis A3) ; l'Accueil et la Carte restent
+// accessibles par leur onglet (aller-retour réel).
+const cielVisibleArrivee = (await page.locator('#espace-ciel').isVisible()) &&
   (await page.locator('#espace-accueil').isHidden()) &&
-  (await page.locator('.barre-onglets .onglet[data-onglet="arbre"][aria-current="page"]').count()) === 1;
+  (await page.locator('.barre-onglets .onglet[data-onglet="ciel"][aria-current="page"]').count()) === 1;
 await page.locator('.barre-onglets .onglet[data-onglet="accueil"]').click();
 await page.waitForTimeout(300);
 const accueilAccessible = await page.locator('#espace-accueil').isVisible();
 await page.locator('.barre-onglets .onglet[data-onglet="carte"]').click();
 await page.waitForTimeout(300);
-verdicts.arriveeSurArbre = arbreVisibleArrivee && accueilAccessible &&
+verdicts.arriveeSurCiel = cielVisibleArrivee && accueilAccessible &&
   (await page.locator('#espace-carte').isVisible());
 
 // 6a. Cartouche : H1 « ULTIMA » dans l'entête, .entete-titre disparu,

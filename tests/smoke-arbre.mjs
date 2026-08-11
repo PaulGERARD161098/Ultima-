@@ -45,8 +45,14 @@ const verdicts = {};
 await page.goto('http://127.0.0.1:8123/riven.html', { waitUntil: 'load', timeout: 20000 });
 await page.waitForTimeout(1000);
 
-// ===== 8a. Arrivée : l'écran connecté/démo est l'arbre. =====
-verdicts.arriveeArbre = await page.locator('#espace-arbre').isVisible();
+// ===== 8a. L'arbre n'est plus l'écran d'arrivée depuis le 2026-08-11 (le CIEL
+// a pris sa place, décision de Paul) — mais il reste entier, à un onglet de
+// distance. C'est le sens de « on ne jette rien » : tout ce qui suit éprouve
+// l'arbre exactement comme avant, une fois son onglet ouvert. =====
+verdicts.cielEstLArrivee = await page.locator('#espace-ciel').isVisible();
+await page.locator('.barre-onglets .onglet[data-onglet="arbre"]').click();
+await page.waitForTimeout(400);
+verdicts.arbreAccessibleParSonOnglet = await page.locator('#espace-arbre').isVisible();
 verdicts.ongletArbreCourant = (await page.locator('.barre-onglets .onglet[data-onglet="arbre"]')
   .getAttribute('aria-current')) === 'page';
 verdicts.cartoucheUltima = (await page.locator('#arbre-titre').textContent()).trim() === 'ULTIMA';
@@ -344,6 +350,12 @@ await pageD.addInitScript(() => {
 });
 await pageD.goto('http://127.0.0.1:8123/riven.html', { waitUntil: 'load', timeout: 20000 });
 await pageD.waitForTimeout(1000);
+// L'arrivée est le ciel : il faut ouvrir l'onglet Arbre pour que l'arbre se
+// rende à la largeur RÉELLE. Rendu dans un espace caché, il mesure une largeur
+// nulle et retombe sur le palier de base — activerOnglet le re-rend au bon
+// palier, ce que cette assertion vérifie justement.
+await pageD.locator('.barre-onglets .onglet[data-onglet="arbre"]').click();
+await pageD.waitForTimeout(500);
 
 verdicts.elargissementDesktop = await pageD.evaluate(() => {
   const scene = document.querySelector('#arbre-scene');
