@@ -69,6 +69,17 @@
   involontaire. Corriger le défaut a rendu le harnais rouge — c'est le harnais
   qui avait tort. **Réflexe : une navigation, dans un harnais, s'écrit
   explicitement ; jamais par effet de bord.**
+- 🔻 **Avant de déclarer une protection ABSENTE, chercher TOUS ses lieux.**
+  J'ai conclu « aucun header de sécurité » sur un grep limité à `*.html` +
+  `vercel.json` — en oubliant `middleware.js` (edge Vercel), qui les pose tous.
+  **Une protection peut vivre dans un header de plateforme, un middleware edge,
+  une meta : un grep partiel ment.**
+- 🔻 **Une CSP se MESURE contre l'app, elle ne se relit pas.** La CSP du
+  middleware bloquait 100 % des tuiles (`*.tile.openstreetmap.org` ne matche pas
+  le domaine nu `tile.openstreetmap.org`). L'audit statique l'a jugée saine ;
+  seul le harnais qui l'injecte et exerce la carte l'a vu. **Même leçon que la
+  géométrie : injecter la politique réelle, exercer, compter les violations.**
+  Harnais durable : `smoke-csp.mjs`.
 - 🔻 **« Le cadre tient-il dans l'écran ? »** — la règle du 01/08 (« une
   géométrie se MESURE ») avait été entendue comme « les éléments tiennent dans
   le viewBox ». Insuffisant : **le viewBox lui-même peut être coupé**. Le ciel

@@ -2510,3 +2510,50 @@
   il tire au sort, et il finira par faire douter d'un vrai rouge.*
 - **Vérifié** : patrimoine COMPLET **56 harnais, 1 430 assertions, sortie 0**.
   `js/arbre.js`, `js/carte.js`, `api/**`, `supabase/**` : zéro ligne de diff.
+
+### 2026-08-12 (fusion) — PR #158, les deux boucles du jour dans main
+
+- **Dicté par Paul** : *« merge »*, après avoir jugé le rendu sur la preview.
+- **PR #158 fusionnée** en squash (`fcc9739`). Elle portait **deux boucles** :
+  RIVEN (piloter une relation, corriger sans détruire, proposer un
+  rapprochement) et le cadrage du ciel (« tout voir d'un coup d'œil »).
+- Branche `claude/riven-veille-loop-1er0cs` **repartie de `origin/main`** avant
+  tout nouveau commit (règle du squash-merge, 2026-07-22). Contrôle périodique
+  de la PR supprimé — une routine qui survit à sa raison d'être devient du bruit.
+
+### 2026-08-12 (sécurité) — la CSP cassait la carte, et l'audit ne l'avait pas vu
+
+- **Dicté par Paul** : « diag complet du travail, corrige les bugs et les
+  failles, implante les patchs, sécurise tout ». Routine `securite-max` :
+  agent `securite-auditeur` + contrôles mécaniques + advisors (connecteur
+  autorisé) + **mesure navigateur de la CSP**.
+- **J'ai d'abord conclu FAUX : « aucun header de sécurité ».** Mon grep ne
+  cherchait la CSP que dans `*.html` et `vercel.json` — j'avais **oublié
+  `middleware.js`**, qui pose déjà toute la panoplie (et mieux : il garde
+  `microphone=(self)` pour la dictée, que ma version `vercel.json` aurait
+  cassée). L'agent l'a rattrapé. `vercel.json` réverté. *Règle : avant de
+  déclarer une protection absente, chercher TOUS ses lieux possibles — header
+  de plateforme, middleware edge, meta. Un seul grep partiel ment.*
+- **LE constat, trouvé par la MESURE (S3)** : la CSP du middleware autorisait
+  `img-src *.tile.openstreetmap.org`, mais `carte.js` charge le domaine **nu**
+  `tile.openstreetmap.org` — que le wildcard ne matche pas (spec CSP). Résultat
+  mesuré : **18 violations, 100 % des tuiles bloquées, carte sans fond en
+  prod**, invisible depuis que le ciel est l'écran d'arrivée. L'agent avait relu
+  la CSP et l'avait jugée saine ; seul le harnais qui l'INJECTE et exerce la
+  carte l'a vu. *C'est EXACTEMENT la leçon du ciel, deux heures plus tôt : une
+  géométrie — ou une politique — se mesure, elle ne se relit pas.*
+- **Correctif** : `middleware.js` autorise le domaine nu ET le wildcard. Prouvé
+  par `tests/smoke-csp.mjs` (rouge avant, vert après). Surface middleware =
+  GATE : committé sur la branche, attend le merge de Paul.
+- **Nouveau patrimoine durable** : `smoke-csp.mjs` lit la CSP réelle du
+  middleware (source unique), l'injecte en `<meta>`, exerce carte+ciel, exige
+  zéro violation. Rien ne testait la COMPATIBILITÉ de la CSP avec l'app — une
+  CSP trop stricte ne lève aucune erreur au build, elle casse en silence chez
+  Paul. Ce trou est fermé.
+- **S1 (gated)** : `network_edges` et `journal` sont les 2 dernières tables sur
+  l'ancien motif de FK simple (oracle d'existence d'UUID cross-owner, faible,
+  atténué UUIDv4). Migration `0025` écrite avec garde préalable, NON appliquée.
+- **S2 fermé** : advisors rejoués (connecteur autorisé). Sécurité = 0 lint réel
+  (le WARN mot de passe reste sans objet). Performance = INFO (index FK) →
+  registre, non bloquant.
+- **Vérifié** : patrimoine COMPLET **57 harnais, 1 444 assertions, sortie 0**.

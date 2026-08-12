@@ -6,6 +6,26 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🔒 **SESSION 2026-08-12 (diag sécurité complet — `securite-max`), LIVRÉE.**
+  Demande de Paul : « corrige les bugs et les failles, sécurise tout ». Audit :
+  `AUDIT-2026-08-12.md`. Patrimoine COMPLET : **57 harnais, 1 444 assertions,
+  sortie 0**. Opus 4.8 (surface RLS/middleware) — signalé.
+  - 🔻 **Mon 1er constat était FAUX** (« aucun header ») : j'avais oublié
+    `middleware.js`. Réverté `vercel.json`. L'agent l'a rattrapé.
+  - ✅ **S3 (moyenne, fonctionnel) — trouvé par la MESURE** : la CSP bloquait
+    **100 % des tuiles OSM** (`*.tile…` ≠ domaine nu) — carte sans fond en prod,
+    invisible depuis que le ciel est l'écran d'arrivée. Corrigé `middleware.js`,
+    prouvé par `smoke-csp.mjs` (rouge→vert). **GATE merge (middleware).**
+  - 🔒 **S1 (faible, GATE)** : double-scellement FK `network_edges`/`journal`
+    (oracle UUID cross-owner, atténué v4). Migration **`0025` écrite, non
+    appliquée**.
+  - ✅ **S2 fermé** : advisors rejoués (connecteur autorisé). Sécurité 0 lint
+    réel ; perf = INFO. Le travail RIVEN du 12/08 : **sans faille (RAS prouvés)**.
+  - ⏳ **Actions Paul** : merge (dont S3) ; appliquer ou non `0025` (S1) ;
+    arbitrer les index perf INFO (S2, non bloquant).
+- ✅ **PR #158 FUSIONNÉE** (`fcc9739`, squash) au go de Paul — elle portait
+  **les deux boucles ci-dessous** (RIVEN piloter/corriger/proposer + cadrage du
+  ciel). Branche repartie de `origin/main` avant tout nouveau commit.
 - 🔭 **SESSION 2026-08-12 (le ciel tient dans l'écran), LIVRÉE.** Demande de
   Paul en cours de session, capture à l'appui. Cadrage :
   `CADRAGE-CIEL-CADRAGE.md`. Patrimoine COMPLET vert : **56 harnais,

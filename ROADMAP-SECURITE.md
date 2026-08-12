@@ -51,3 +51,16 @@
 - Tout correctif touchant auth / middleware / RLS / données → stop + validation
   (et bascule Opus 4.8 conformément au cadrage).
 - Jamais de secret committé ; jamais de PII en logs.
+
+## 2026-08-12 — balayage `securite-max` (AUDIT-2026-08-12.md)
+
+- ✅ **S3** (moyenne, fonctionnel) : la CSP `middleware.js` bloquait 100 % des
+  tuiles OSM (`*.tile…` ≠ domaine nu). Corrigé + harnais `smoke-csp.mjs` (mesure
+  la CSP réelle injectée en meta). GATE merge (middleware).
+- 🔒 **S1** (faible, gate) : double-scellement FK `network_edges`/`journal` —
+  migration `0025` écrite, non appliquée. Oracle UUID cross-owner, atténué v4.
+- ✅ **S2** (fermé) : advisors rejoués (connecteur autorisé). Sécurité 0 lint
+  réel ; le WARN mot de passe reste **sans objet** (aucune auth par mot de
+  passe). Perf = INFO (index FK) → non bloquant.
+- **Nouveau patrimoine** : `smoke-csp.mjs` — la compat CSP↔app est désormais
+  testée (elle ne l'était pas ; une CSP trop stricte casse en silence).
