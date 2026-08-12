@@ -1,12 +1,15 @@
-/* Maquette RIVEN — registre de nuit. Script de la maquette UNIQUEMENT.
+/* Maquette RIVEN — thème stellaire. Script de la maquette UNIQUEMENT.
    Trois choses, et rien d'autre :
      ① le commutateur d'états (l'app n'a pas d'états « à montrer », une
         maquette si — c'est même sa raison d'être) ;
-     ② un ciel statique de démonstration, graine fixe, données inventées ;
+     ② un jeu de données INVENTÉ, donné au vrai moteur `js/ciel.js` ;
      ③ le BANDEAU DE MESURE, qui applique le critère ④ du cadrage : le
         contraste se calcule, il ne se regarde pas.
 
-   Aucune ligne d'ici n'ira en production : c'est un brouillon d'arbitrage. */
+   Ce que ce fichier ne fait PAS, et c'est le correctif du jour : il ne
+   dessine plus de ciel. La première version en dessinait un, plat, « pour la
+   démonstration » — et Paul a immédiatement demandé où était passé le 3D. Une
+   maquette qui remplace le moteur qu'elle prétend montrer ne montre plus rien. */
 (function () {
   'use strict';
 
@@ -14,8 +17,6 @@
   // ①  Commutateur d'états
   // ======================================================================
 
-  // Chaque état dit : quel espace est visible, quel onglet est courant, et
-  // ce qui flotte par-dessus (panneau fiche, panneau formulaire, toast).
   var ETATS = {
     accueil:    { espace: 'etat-accueil',    onglet: 'accueil'  },
     ciel:       { espace: 'etat-ciel',       onglet: 'ciel'     },
@@ -62,121 +63,110 @@
       }
     });
 
-    if (etat.espace === 'etat-ciel') { dessinerCiel(); }
+    // Même règle que js/app.js : on rend en entrant, on ARRÊTE en sortant.
+    // Une boucle d'animation qui tourne sous un écran caché est une batterie
+    // qui se vide pour rien.
+    if (etat.espace === 'etat-ciel') {
+      rendreLeCiel();
+    } else if (window.UltimaCiel) {
+      window.UltimaCiel.arreter();
+    }
   }
 
   // ======================================================================
-  // ②  Le ciel de démonstration — statique, graine fixe, tout inventé
+  // ②  Les données — INVENTÉES, et données au vrai moteur
   // ======================================================================
   //
-  // Ce n'est PAS le ciel d'Ultima (js/ciel.js : 3D, dérive, concentration).
-  // C'est une réduction suffisante pour juger ce que la maquette arbitre :
-  // le cadre, le cartouche, les outils et le voisinage du ciel — c'est-à-dire
-  // tout ce qui vivait sur le parchemin jusqu'à aujourd'hui.
+  // Six secteurs : `secteur_activite` est ce qui fait la constellation
+  // (js/ciel.js, fonction `grouper`). Dix-huit fiches, dix personnes dont
+  // deux rattachées à deux fiches (c'est ce cas-là qui rend le rattachement
+  // multiple visible), vingt-deux relations de trois natures.
 
-  var GRAINE = 20260812;
-  function alea() { // générateur déterministe : deux ouvertures, même ciel
-    GRAINE = (GRAINE * 1103515245 + 12345) % 2147483648;
-    return GRAINE / 2147483648;
-  }
-
-  var CONSTELLATIONS = [
-    { nom: 'COUVERTURE', etoiles: 5 },
-    { nom: 'MENUISERIE', etoiles: 4 },
-    { nom: 'PLOMBERIE', etoiles: 3 },
-    { nom: 'MAÇONNERIE', etoiles: 5 },
-    { nom: 'ARCHITECTURE', etoiles: 3 },
-    { nom: 'ÉLECTRICITÉ', etoiles: 4 }
+  var NOEUDS = [
+    { id: 'n1',  nom: 'Maison Vaillant',          type: 'artisan',     statut: 'actif',    secteur_activite: 'Couverture',   ville: 'Melun' },
+    { id: 'n2',  nom: 'Atelier Roquefeuil',       type: 'artisan',     statut: 'actif',    secteur_activite: 'Couverture',   ville: 'Melun' },
+    { id: 'n3',  nom: 'Toitures du Loing',        type: 'artisan',     statut: 'prospect', secteur_activite: 'Couverture',   ville: 'Nemours' },
+    { id: 'n4',  nom: 'Bois & Cadre',             type: 'artisan',     statut: 'actif',    secteur_activite: 'Menuiserie',   ville: 'Provins' },
+    { id: 'n5',  nom: 'Menuiserie Estampe',       type: 'artisan',     statut: 'actif',    secteur_activite: 'Menuiserie',   ville: 'Melun' },
+    { id: 'n6',  nom: 'Fenêtres Aubelin',         type: 'artisan',     statut: 'inactif',  secteur_activite: 'Menuiserie',   ville: 'Fontainebleau' },
+    { id: 'n7',  nom: 'Plomberie Cavelier',       type: 'artisan',     statut: 'actif',    secteur_activite: 'Plomberie',    ville: 'Melun' },
+    { id: 'n8',  nom: 'Sanitaires Brévent',       type: 'artisan',     statut: 'prospect', secteur_activite: 'Plomberie',    ville: 'Nemours' },
+    { id: 'n9',  nom: 'Maçonnerie Delaunay',      type: 'artisan',     statut: 'actif',    secteur_activite: 'Maçonnerie',   ville: 'Provins' },
+    { id: 'n10', nom: 'Pierre & Chaux',           type: 'artisan',     statut: 'actif',    secteur_activite: 'Maçonnerie',   ville: 'Moret' },
+    { id: 'n11', nom: 'Fondations Tercier',       type: 'artisan',     statut: 'prospect', secteur_activite: 'Maçonnerie',   ville: 'Melun' },
+    { id: 'n12', nom: 'Cabinet Ferrand & Fils',   type: 'partenaire',  statut: 'actif',    secteur_activite: 'Architecture', ville: 'Fontainebleau' },
+    { id: 'n13', nom: 'Atelier Marnier',          type: 'partenaire',  statut: 'actif',    secteur_activite: 'Architecture', ville: 'Melun' },
+    { id: 'n14', nom: 'Volts & Compagnie',        type: 'artisan',     statut: 'actif',    secteur_activite: 'Électricité',  ville: 'Melun' },
+    { id: 'n15', nom: 'Réseaux Lambert',          type: 'artisan',     statut: 'inactif',  secteur_activite: 'Électricité',  ville: 'Provins' },
+    { id: 'n16', nom: 'Résidence des Quatre-Vents', type: 'lead',      statut: 'prospect', secteur_activite: 'Syndic',       ville: 'Nemours' },
+    { id: 'n17', nom: 'Les Trois-Ormes',          type: 'chantier',    statut: 'en_cours', secteur_activite: 'Rénovation',   ville: 'Melun' },
+    { id: 'n18', nom: 'Grange de Vaux',           type: 'chantier',    statut: 'termine',  secteur_activite: 'Rénovation',   ville: 'Moret' }
   ];
 
-  function dessinerCiel() {
+  var PERSONNES = [
+    { id: 'p1', nom: 'Godefroy Lasserre' }, { id: 'p2', nom: 'Marion Delcourt' },
+    { id: 'p3', nom: 'Sylvain Bréaud' },    { id: 'p4', nom: 'Alix Ferrand' },
+    { id: 'p5', nom: 'Camille Estampe' },   { id: 'p6', nom: 'Noé Cavelier' },
+    { id: 'p7', nom: 'Irène Delaunay' },    { id: 'p8', nom: 'Basile Tercier' },
+    { id: 'p9', nom: 'Hélène Marnier' },    { id: 'p10', nom: 'Youna Kerbrat' }
+  ];
+
+  var RATTACHEMENTS = [
+    { personne_id: 'p1', node_id: 'n1',  role: 'gérant' },
+    { personne_id: 'p1', node_id: 'n17', role: 'référent chantier' }, // deux fiches
+    { personne_id: 'p2', node_id: 'n1',  role: 'conductrice de travaux' },
+    { personne_id: 'p3', node_id: 'n2',  role: 'gérant' },
+    { personne_id: 'p4', node_id: 'n12', role: 'architecte' },
+    { personne_id: 'p4', node_id: 'n17', role: 'maîtrise d’œuvre' },        // deux fiches
+    { personne_id: 'p5', node_id: 'n5',  role: 'gérante' },
+    { personne_id: 'p6', node_id: 'n7',  role: 'gérant' },
+    { personne_id: 'p7', node_id: 'n9',  role: 'gérante' },
+    { personne_id: 'p8', node_id: 'n11', role: 'commercial' },
+    { personne_id: 'p9', node_id: 'n13', role: 'architecte' },
+    { personne_id: 'p10', node_id: 'n16', role: 'syndic' }
+  ];
+
+  var RELATIONS = [
+    { source_id: 'n1',  target_id: 'n12', type: 'apport_affaires', statut: 'actif' },
+    { source_id: 'n1',  target_id: 'n17', type: 'chantier_commun', statut: 'actif' },
+    { source_id: 'n2',  target_id: 'n17', type: 'chantier_commun', statut: 'actif' },
+    { source_id: 'n12', target_id: 'n17', type: 'apport_affaires', statut: 'actif' },
+    { source_id: 'n5',  target_id: 'n17', type: 'sous_traitance',  statut: 'actif' },
+    { source_id: 'n7',  target_id: 'n17', type: 'sous_traitance',  statut: 'actif' },
+    { source_id: 'n9',  target_id: 'n17', type: 'sous_traitance',  statut: 'actif' },
+    { source_id: 'n14', target_id: 'n17', type: 'sous_traitance',  statut: 'actif' },
+    { source_id: 'n9',  target_id: 'n18', type: 'chantier_commun', statut: 'inactif' },
+    { source_id: 'n10', target_id: 'n18', type: 'chantier_commun', statut: 'inactif' },
+    { source_id: 'n4',  target_id: 'n18', type: 'sous_traitance',  statut: 'inactif' },
+    { source_id: 'n12', target_id: 'n13', type: 'apport_affaires', statut: 'actif' },
+    { source_id: 'n13', target_id: 'n16', type: 'apport_affaires', statut: 'actif' },
+    { source_id: 'n1',  target_id: 'n2',  type: 'sous_traitance',  statut: 'actif' },
+    { source_id: 'n3',  target_id: 'n16', type: 'apport_affaires', statut: 'actif' },
+    { source_id: 'n7',  target_id: 'n8',  type: 'sous_traitance',  statut: 'actif' },
+    { source_id: 'n14', target_id: 'n15', type: 'sous_traitance',  statut: 'inactif' },
+    { source_id: 'n5',  target_id: 'n6',  type: 'sous_traitance',  statut: 'inactif' },
+    { source_id: 'n10', target_id: 'n11', type: 'sous_traitance',  statut: 'actif' },
+    { source_id: 'n4',  target_id: 'n12', type: 'apport_affaires', statut: 'actif' },
+    { source_id: 'n11', target_id: 'n17', type: 'sous_traitance',  statut: 'actif' },
+    { source_id: 'n8',  target_id: 'n16', type: 'apport_affaires', statut: 'actif' }
+  ];
+
+  var LIBELLES_TYPE = {
+    artisan: 'Artisan', partenaire: 'Partenaire', lead: 'Lead', chantier: 'Chantier'
+  };
+  var LIBELLES_STATUT = {
+    actif: 'actif', prospect: 'prospect', en_cours: 'en cours',
+    termine: 'terminé', inactif: 'inactif'
+  };
+
+  function rendreLeCiel() {
     var scene = document.getElementById('ciel-scene');
-    if (!scene) { return; }
-    var largeur = scene.clientWidth;
-    var hauteur = scene.clientHeight;
-    if (!largeur || !hauteur) { return; }
-
-    GRAINE = 20260812; // même ciel à chaque redessin (redimensionnement compris)
-
-    var ancien = scene.querySelector('.ciel-svg');
-    if (ancien) { ancien.remove(); }
-
-    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('class', 'ciel-svg');
-    // Le viewBox épouse la BOÎTE RÉELLE, jamais une proportion choisie a
-    // priori : c'est le correctif du 2026-08-12, et il vaut aussi pour une
-    // maquette — sans quoi elle mentirait sur le cadrage.
-    svg.setAttribute('viewBox', '0 0 ' + largeur + ' ' + hauteur);
-    svg.setAttribute('aria-hidden', 'true');
-
-    var cx = largeur / 2;
-    var cy = hauteur / 2;
-    var rayon = Math.min(largeur, hauteur) * 0.34;
-
-    // Poussière d'étoiles : le fond, jamais un contenu.
-    var poussiere = '';
-    for (var p = 0; p < 90; p += 1) {
-      poussiere += '<circle cx="' + (alea() * largeur).toFixed(1) +
-        '" cy="' + (alea() * hauteur).toFixed(1) +
-        '" r="' + (0.4 + alea() * 0.9).toFixed(2) +
-        '" fill="#f2ead6" opacity="' + (0.08 + alea() * 0.22).toFixed(2) + '"/>';
-    }
-
-    var liens = '';
-    var etoiles = '';
-    var noms = '';
-    var centres = [];
-
-    CONSTELLATIONS.forEach(function (constellation, index) {
-      var angle = (index / CONSTELLATIONS.length) * Math.PI * 2 - Math.PI / 2;
-      var ccx = cx + Math.cos(angle) * rayon;
-      var ccy = cy + Math.sin(angle) * rayon * 0.78; // le ciel est plus large que haut
-      centres.push({ x: ccx, y: ccy });
-
-      var points = [];
-      for (var e = 0; e < constellation.etoiles; e += 1) {
-        var a = alea() * Math.PI * 2;
-        var d = (0.25 + alea() * 0.75) * (rayon * 0.42);
-        points.push({ x: ccx + Math.cos(a) * d, y: ccy + Math.sin(a) * d * 0.8 });
-      }
-
-      // Les liens de la constellation : traits blancs FINS (demande de Paul,
-      // 2026-08-11), une chaîne d'étoile en étoile.
-      for (var l = 1; l < points.length; l += 1) {
-        liens += '<line x1="' + points[l - 1].x.toFixed(1) + '" y1="' + points[l - 1].y.toFixed(1) +
-          '" x2="' + points[l].x.toFixed(1) + '" y2="' + points[l].y.toFixed(1) +
-          '" stroke="#ffffff" stroke-width="0.7" opacity="0.42"/>';
-      }
-
-      points.forEach(function (point, rang) {
-        var taille = rang === 0 ? 4.2 : 2.6 + alea() * 1.2;
-        etoiles += '<g>' +
-          '<circle cx="' + point.x.toFixed(1) + '" cy="' + point.y.toFixed(1) +
-            '" r="' + (taille * 2.6).toFixed(1) + '" fill="#d8bd82" opacity="0.10"/>' +
-          '<circle cx="' + point.x.toFixed(1) + '" cy="' + point.y.toFixed(1) +
-            '" r="' + taille.toFixed(1) + '" fill="#f2ead6"/>' +
-          '</g>';
-      });
-
-      // Le nom de la constellation : or, capitales espacées — le cartouche
-      // gravé, transposé au ciel.
-      noms += '<text x="' + ccx.toFixed(1) + '" y="' + (ccy - rayon * 0.46).toFixed(1) +
-        '" text-anchor="middle" font-size="11" letter-spacing="2.5" fill="#d8bd82" ' +
-        'opacity="0.85" font-family="Palatino, Georgia, serif">' + constellation.nom + '</text>';
-    });
-
-    // Trois liens INTER-constellations : les relations qui traversent les
-    // métiers. Ce sont elles qui font le réseau, et elles doivent se voir.
-    [[0, 3], [1, 4], [2, 5]].forEach(function (paire) {
-      var a = centres[paire[0]];
-      var b = centres[paire[1]];
-      liens += '<line x1="' + a.x.toFixed(1) + '" y1="' + a.y.toFixed(1) +
-        '" x2="' + b.x.toFixed(1) + '" y2="' + b.y.toFixed(1) +
-        '" stroke="#ffffff" stroke-width="0.5" opacity="0.16"/>';
-    });
-
-    svg.innerHTML = '<g>' + poussiere + '</g><g>' + liens + '</g><g>' + etoiles + '</g><g>' + noms + '</g>';
-    scene.insertBefore(svg, scene.firstChild);
+    if (!scene || !window.UltimaCiel) { return; }
+    if (!scene.clientWidth || !scene.clientHeight) { return; } // boîte pas encore posée
+    window.UltimaCiel.rendre(scene, {
+      noeuds: NOEUDS, personnes: PERSONNES,
+      rattachements: RATTACHEMENTS, relations: RELATIONS
+    }, { libellesType: LIBELLES_TYPE, libellesStatut: LIBELLES_STATUT });
   }
 
   // ======================================================================
@@ -318,7 +308,10 @@
 
     // Exposé pour le harnais : une maquette qui se mesure doit pouvoir être
     // interrogée par un test, pas seulement lue par un humain.
-    window.MAQUETTE_NUIT = { mesures: lignes, defauts: defauts, luminanceMax: fondLePlusClair };
+    window.MAQUETTE_STELLAIRE = {
+      mesures: lignes, defauts: defauts, luminanceMax: fondLePlusClair,
+      etoiles: document.querySelectorAll('.ciel-etoile').length
+    };
   }
 
   // ======================================================================
@@ -350,12 +343,6 @@
 
     appliquerEtat('ciel');
     rendreMesures();
-
-    var minuteur = null;
-    window.addEventListener('resize', function () {
-      clearTimeout(minuteur);
-      minuteur = setTimeout(dessinerCiel, 120);
-    });
   }
 
   if (document.readyState === 'loading') {

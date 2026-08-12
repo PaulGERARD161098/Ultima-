@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Maquette — RIVEN passe la nuit (tous les états)</title>
+<title>Maquette — RIVEN, thème stellaire (tous les états)</title>
 <!--
   MAQUETTE DE TRAVAIL — aucune donnée réelle, aucun contact de Paul.
   Toutes les entreprises, personnes, villes et relations sont INVENTÉES.
@@ -12,27 +12,40 @@
   la CSP d'Ultima interdit 'unsafe-inline' sur script-src, une maquette à
   script inline serait BLANCHE sur la preview Vercel.
 
-  Étape ① du cadrage CADRAGE-RIVEN-NUIT.md. Elle existe pour TRANCHER :
-  la page entière de RIVEN passe au registre de nuit, et Paul juge le rendu
-  AVANT qu'on touche à 18 harnais et qu'on supprime 718 lignes de code.
+  Étape ① du cadrage CADRAGE-RIVEN-STELLAIRE.md.
 
-  Ce qu'elle rend — tous les états, pas seulement les jolis :
+  Le thème stellaire n'est pas UN registre parmi d'autres, activable ou non :
+  c'est le thème de RIVEN, tout le temps (arbitrage de Paul, 2026-08-12, sur
+  la première version de cette maquette — « ça doit être comme ça tout le
+  temps, thème stellaire et galaxies »). Rien ici ne le conditionne : ni
+  attribut, ni bascule, ni classe à poser.
+
+  Le ciel est le VRAI : cette page charge `../js/ciel.js` et `../css/ciel.css`
+  du produit et leur donne des données inventées. La première version de la
+  maquette dessinait un ciel plat de démonstration — Paul l'a vu tout de
+  suite : « où est l'accueil 3D comme avant ? ». Une maquette qui remplace le
+  moteur qu'elle prétend montrer ne montre plus rien.
+
+  Elle rend tous les états, pas seulement les jolis :
     ① l'Accueil de pilotage (Léo)      ⑤ le formulaire de saisie
-    ② le Ciel (constellations)          ⑥ le registre des Contacts
+    ② le Ciel 3D (le vrai moteur)       ⑥ le registre des Contacts
     ③ la fiche ouverte (overlay)        ⑦ l'état vide et le non-connecté
     ④ le toast                          ⑧ la barre d'onglets — TROIS onglets
 
   Le bandeau MESURE, en bas, applique le critère ④ du cadrage : le contraste
-  de chaque couple texte/fond est CALCULÉ (WCAG), pas regardé. « Ça a l'air
-  bien » n'est pas un critère de réussite, c'est l'absence de critère.
+  de chaque couple texte/fond est CALCULÉ (WCAG), pas regardé.
 -->
-<link rel="stylesheet" href="preview-riven-nuit.css">
+<!-- Le CSS du ciel du PRODUIT, tel quel : la maquette éprouve les vraies
+     règles dans le nouveau contexte au lieu de les imiter. C'est ainsi qu'on
+     découvre lesquelles s'appuient encore sur les jetons du parchemin. -->
+<link rel="stylesheet" href="../css/ciel.css">
+<link rel="stylesheet" href="preview-riven-stellaire.css">
 </head>
-<body data-registre="nuit">
+<body>
 
 <!-- ====================== BARRE DE MAQUETTE (hors produit) ================= -->
 <div class="mq-barre">
-  <strong class="mq-titre">Maquette RIVEN — registre de nuit</strong>
+  <strong class="mq-titre">Maquette RIVEN</strong>
   <span class="mq-note">données inventées</span>
   <div class="mq-etats" role="group" aria-label="États à montrer">
     <button type="button" class="mq-bouton" data-etat="accueil">Accueil</button>
@@ -46,7 +59,7 @@
   </div>
 </div>
 
-<!-- ====================== L'APPLICATION, EN NUIT ========================== -->
+<!-- ====================== L'APPLICATION ==================================== -->
 <main class="app-main">
 
   <!-- ①  ACCUEIL — le pilotage de Léo. Le parchemin tombe ; la rose des vents
@@ -115,34 +128,35 @@
   </section>
 
   <!-- ②  LE CIEL — l'écran d'arrivée, et désormais la SEULE forme de RIVEN.
-          Le rendu ci-dessous est une réduction statique : le vrai ciel est
-          celui de js/ciel.js (3D, dérive, concentration). Ce qui s'arbitre
-          ici n'est pas le ciel — c'est TOUT CE QUI L'ENTOURE, qui vivait
-          jusqu'ici sur le parchemin. -->
+          Ce n'est PAS un dessin de maquette : `../js/ciel.js` est chargé et
+          rend ici son vrai volume (perspective, dérive, concentration au
+          survol, étoiles focusables au clavier), avec des données inventées.
+          Ce qui s'arbitre sur cet écran, c'est donc uniquement ce qui
+          l'ENTOURE — tout ce qui vivait sur le parchemin jusqu'ici. -->
   <section id="etat-ciel" class="espace espace-ciel">
     <header class="ciel-cartouche">
-      <h2 class="ciel-titre" data-mesure="Ciel — cartouche">RIVEN</h2>
+      <h2 id="ciel-titre" data-mesure="Ciel — cartouche">RIVEN</h2>
       <p class="ciel-sous" data-mesure="Ciel — sous-titre">le réseau, vu du ciel</p>
     </header>
 
-    <div class="ciel-outils">
+    <div id="ciel-outils" class="ciel-outils">
       <div class="champ-recherche">
         <input id="ciel-recherche" type="search" class="saisie-nuit"
                placeholder="Rechercher un nom, un métier, une ville…"
                aria-label="Rechercher un contact">
       </div>
       <span class="ciel-zoom" role="group" aria-label="Distance de vue">
-        <button type="button" class="bouton bouton-secondaire bouton-rond" aria-label="Approcher">+</button>
-        <button type="button" class="bouton bouton-secondaire bouton-rond" aria-label="Reculer">−</button>
-        <button type="button" class="bouton bouton-secondaire bouton-tout-voir">Tout voir</button>
+        <button type="button" class="bouton bouton-secondaire ciel-bouton-rond" aria-label="Approcher">+</button>
+        <button type="button" class="bouton bouton-secondaire ciel-bouton-rond" aria-label="Reculer">−</button>
+        <button type="button" class="bouton bouton-secondaire ciel-tout-voir">Tout voir</button>
       </span>
-      <label class="bascule-nuit" data-mesure="Ciel — bascule">
-        <input type="checkbox"> Dérive lente
+      <label class="ciel-bascule" data-mesure="Ciel — bascule">
+        <input type="checkbox" id="ciel-derive"> Dérive lente
       </label>
+      <p id="ciel-message" class="ciel-message" role="status" data-mesure="Ciel — message">8 constellations · 18 fiches · 12 personnes</p>
     </div>
 
     <div id="ciel-scene" class="ciel-scene">
-      <!-- Le SVG est dessiné par preview-riven-nuit.js (graine fixe). -->
       <p class="ciel-aide" data-mesure="Ciel — aide">
         Glissez pour tourner le ciel. Touchez une étoile pour ouvrir sa fiche.
       </p>
@@ -156,7 +170,7 @@
             pousse ») ne survit pas à l'arbre : il faut le sien. -->
   <section id="etat-vide" class="espace espace-ciel" hidden>
     <header class="ciel-cartouche">
-      <h2 class="ciel-titre">RIVEN</h2>
+      <h2>RIVEN</h2>
       <p class="ciel-sous">le réseau, vu du ciel</p>
     </header>
     <div class="ciel-scene ciel-scene--vide">
@@ -171,10 +185,10 @@
     </div>
   </section>
 
-  <!-- ⑦-b  NON CONNECTÉ — même bord de nuit, aucune donnée, une seule porte. -->
+  <!-- ⑦-b  NON CONNECTÉ — même ciel, aucune donnée, une seule porte. -->
   <section id="etat-deconnecte" class="espace espace-ciel" hidden>
     <header class="ciel-cartouche">
-      <h2 class="ciel-titre">RIVEN</h2>
+      <h2>RIVEN</h2>
       <p class="ciel-sous">le réseau, vu du ciel</p>
     </header>
     <div class="ciel-scene ciel-scene--vide">
@@ -188,7 +202,7 @@
 
   <!-- ⑥  CONTACTS — le registre. Deux registres (fiches / personnes),
           recherche, liste. C'est l'écran le plus « textuel » de RIVEN :
-          c'est donc lui qui dit si la nuit reste LISIBLE. -->
+          c'est donc lui qui dit si le thème reste LISIBLE. -->
   <section id="etat-contacts" class="espace espace-contacts" hidden>
     <div class="contacts-conteneur">
       <header class="contacts-entete">
@@ -237,7 +251,7 @@
 </main>
 
 <!-- ③/⑤  LE PANNEAU — fiche et formulaire. Overlay global : il s'ouvre
-          par-dessus le ciel, donc il DOIT être de la même nuit, sans quoi
+          par-dessus le ciel, donc il DOIT être du même bord, sans quoi
           chaque clic sur une étoile rallume le parchemin. -->
 <aside id="panneau" class="panneau" hidden aria-label="Panneau latéral">
   <div class="panneau-entete">
@@ -306,8 +320,8 @@
     <div class="champ">
       <label for="f-ville">Ville</label>
       <input id="f-ville" type="text" class="saisie-nuit" value="Melun">
-      <!-- Le libellé change AVEC l'écran : « Trouver sur la carte » n'a plus
-           d'objet une fois la carte partie. Le géocodage, lui, reste. -->
+      <!-- Le libellé suit l'écran : « Trouver sur la carte » n'a plus d'objet
+           si la carte part. Le géocodage, lui, reste (cadrage §5). -->
       <button type="button" class="bouton bouton-secondaire bouton-champ">Situer la ville</button>
       <p class="champ-aide">Coordonnées enregistrées : 48,540 · 2,660</p>
     </div>
@@ -323,7 +337,7 @@
   <p class="toast" data-mesure="Toast">Fiche enregistrée.</p>
 </div>
 
-<!-- ⑧  LA BARRE D'ONGLETS — TROIS onglets. L'arbre et la carte n'y sont plus.
+<!-- ⑧  LA BARRE D'ONGLETS — TROIS onglets. L'arbre n'y est plus.
         C'est la preuve la plus courte du remodelage. -->
 <nav class="barre-onglets" aria-label="Navigation principale">
   <button type="button" class="onglet" data-onglet="accueil">
@@ -376,6 +390,8 @@
   </div>
 </section>
 
-<script src="preview-riven-nuit.js"></script>
+<!-- Le moteur du ciel, celui du produit. Aucune copie, aucune imitation. -->
+<script src="../js/ciel.js"></script>
+<script src="preview-riven-stellaire.js"></script>
 </body>
 </html>

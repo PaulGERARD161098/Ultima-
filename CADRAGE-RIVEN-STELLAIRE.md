@@ -1,4 +1,4 @@
-# CADRAGE — RIVEN passe la nuit : une seule forme, le ciel
+# CADRAGE — RIVEN en thème stellaire : une seule forme, le ciel
 
 > Format 6 points (**directive EL**). Demande de Paul, **2026-08-12**, dictée :
 > *« on a mis en place l'installation de la carte […] j'aimerais qu'on fasse un
@@ -18,7 +18,7 @@ le mix constaté) ; « nos **côtosiers racines** » → **les écrans racines
 d'Ultima**, c'est-à-dire la console LV4. Un troisième mot est laissé de côté à
 dessein : **« l'archipel » n'est pas sur RIVEN** — c'est la vue des idées
 d'ADRAMELECH (`idees.html`). Il ne relève donc pas de cette boucle ; il ne sera
-concerné que si le registre de nuit gagne la console (phase 2, §7).
+concerné que si le thème stellaire gagne la console (phase 2, §7).
 
 ---
 
@@ -36,7 +36,7 @@ chromatiques incompatibles**, et un seul est de nuit.
 | `#espace-carte` (Leaflet + OSM) | parchemin | **supprimé** |
 | `#espace-contacts` (registre) | parchemin | **passe en nuit** |
 
-Le régime de nuit existe déjà, il est **bon, et il est enfermé** : `ciel.css`
+Le régime stellaire existe déjà, il est **bon, et il est enfermé** : `ciel.css`
 (142 lignes) déclare ses jetons — `--ciel-nuit-haute #0a1220`, `--ciel-or
 #a9884a`, `--ciel-creme #f2ead6` — **scopés à `.espace-ciel`**. Son propre
 commentaire dit le parti pris à tenir : *« le thème sombre n'est PAS un dark
@@ -70,24 +70,25 @@ encre de nuit jamais noire, filets dorés, capitales espacées, lisibilité et
 accessibilité intactes.
 
 Et le moyen d'y arriver est conçu pour **resservir** (directive EB) : le
-registre de nuit devient une **couche de jetons réutilisable**, pas un patch de
+thème stellaire devient une **couche de jetons réutilisable**, pas un patch de
 `riven.html`. C'est cette couche que la phase 2 posera sur la console LV4.
 
 ## 2. ② Les étapes — dans cet ordre, aucune n'ouvre avant que la précédente ne ferme
 
-1. **La maquette d'abord** (`design/preview-riven-nuit.html`, données inventées,
-   zéro CDN). Elle rend **tous** les états dans le registre de nuit : accueil de
+1. **La maquette d'abord** (`design/preview-riven-stellaire.html`, données inventées,
+   zéro CDN). Elle rend **tous** les états dans le thème stellaire : accueil de
    pilotage, ciel, **fiche**, **formulaire de saisie**, registre des contacts,
    toast, barre d'onglets, états vides et non connecté. Elle porte son **bandeau
    de mesure** : contraste calculé de chaque couple texte/fond. *Motif : la
    pratique éprouvée du 2026-08-01 (VRANESH, DRAUKHAIN) — et surtout, c'est ici
    qu'un « on remplace un mix par un autre » se voit pour rien, au lieu de se
    découvrir après avoir touché 18 harnais.* **→ arbitrage de Paul.**
-2. **La couche de nuit** : `css/nuit.css`, jetons scopés
-   `body[data-registre="nuit"]`, dérivés de ceux de `ciel.css` (une seule
-   source chromatique pour le ciel et sa page). `styles.css` **n'est pas
-   modifié** — c'est la garantie de non-fuite vers les 14 autres pages.
-   `riven.html` déclare l'attribut et charge le fichier.
+2. **La couche stellaire** : `css/stellaire.css`, jetons dérivés de ceux de
+   `ciel.css` (une seule source chromatique pour le ciel et sa page).
+   **Rien ne la conditionne** — ni attribut, ni bascule : une page l'a parce
+   qu'elle charge le fichier, et c'est le seul interrupteur (arbitrage de Paul,
+   2026-08-12 : « ça doit être comme ça tout le temps »). `styles.css` **n'est
+   pas modifié** — c'est la garantie de non-fuite vers les 14 autres pages.
 3. **Le retrait de l'arbre** : onglet, `#espace-arbre`, `js/arbre.js`, CSS
    dédié, `tests/smoke-arbre.mjs`. **Inventaire assertion par assertion avant
    suppression** : celles qui ne parlent pas de l'arbre (recherche, états vides,
@@ -105,7 +106,7 @@ registre de nuit devient une **couche de jetons réutilisable**, pas un patch de
 
 ## 3. ③ Les moyens — fichiers touchés, et eux seuls
 
-| Créé | `design/preview-riven-nuit.html` · `css/nuit.css` |
+| Créé | `design/preview-riven-stellaire.html` · `css/stellaire.css` |
 |---|---|
 | **Modifié** | `riven.html` · `js/app.js` · `js/ciel.js` (jetons rapatriés) · `css/ciel.css` · `middleware.js` (gate) · `tests/smoke-ciel.mjs` · `smoke-contacts` · `smoke-recherche` · `smoke-flux-fiche` · `smoke-accueil*` · `smoke-antique` · `smoke-csp` · `tests/lancer.sh` |
 | **Supprimé** | `js/arbre.js` · `js/carte.js` · `tests/smoke-arbre.mjs` |
@@ -129,7 +130,7 @@ c'est l'absence de critère.*
    domaines OSM et `unpkg` dans l'entête et exige de **ne pas les y trouver**.
 5. **Non-fuite prouvée** : `smoke-console`, `smoke-quadrants`, `smoke-idees`,
    `smoke-imladrik`, `smoke-vranesh`, `smoke-draukhain` passent **sans une seule
-   retouche** — c'est la preuve que la couche de nuit n'a pas débordé.
+   retouche** — c'est la preuve que la couche stellaire n'a pas débordé.
 6. **Zéro perte de couverture** : la baisse d'assertions ne dépasse pas le
    nombre d'assertions **proprement** « arbre » et « carte » recensées à
    l'étape 3. Tout le reste a migré.
@@ -161,7 +162,7 @@ c'est l'absence de critère.*
 |---|---|---|
 | 1 | **Le noir devient un « dark mode » générique** : Ultima perd son registre antique et gagne une interface d'app quelconque. | Les jetons dérivent de `ciel.css` (atlas céleste gravé), pas d'une palette neuve. La maquette tranche **avant** le code. |
 | 2 | **Illisible** : l'encre sépia posée sur la nuit, les filets dorés qui disparaissent. | Le contraste est **calculé** (critère 2), jamais regardé. Le défaut sort au bandeau de mesure de la maquette. |
-| 3 | **Le thème fuit** : `styles.css` est partagé par 14 pages, une variable redéfinie et la console vire au noir sans prévenir. | La couche vit dans son propre fichier, scopée `body[data-registre="nuit"]` ; `styles.css` n'est pas modifié ; six harnais d'autres quadrants doivent passer **sans retouche** (critère 5). |
+| 3 | **Le thème fuit** : `styles.css` est partagé par 14 pages, une variable redéfinie et la console vire au noir sans prévenir. | La couche vit dans son propre fichier, chargé page par page ; `styles.css` n'est pas modifié ; six harnais d'autres quadrants doivent passer **sans retouche** (critère 5). |
 | 4 | **Le retrait de la carte casse des chemins invisibles** : `UltimaCarte` est appelé dans la recherche, l'ouverture de fiche, la surbrillance — 43 fois. | Le retrait est **guidé par les harnais existants** (`smoke-recherche`, `smoke-flux-fiche`, `smoke-contacts`), qui doivent rester verts **sans changer d'attente fonctionnelle**. |
 | 5 | **Trou de données géographiques** : le géocodage part avec la carte, et six mois plus tard plus une seule coordonnée n'est rattrapable. | §5 : l'API, les colonnes et le géocodage à la saisie restent. Seul l'écran disparaît. |
 | 6 | **On remplace un mix par un autre** : la fiche ou le formulaire oubliés, restés blancs au milieu de la nuit. | La maquette rend **tous** les états, y compris fiche, formulaire, toast et états vides. Le critère 1 les ouvre pour les mesurer. |
@@ -173,12 +174,12 @@ c'est l'absence de critère.*
 ## 7. La suite — phase 2, cadrée ici, **non exécutée**
 
 Ce que Paul a demandé pour « **Ultima LV4** », et qui **attend son verdict sur
-le rendu de RIVEN** : le registre de nuit posé sur les **écrans racines**, et,
+le rendu de RIVEN** : le thème stellaire posé sur les **écrans racines**, et,
 à l'arrivée dans la console, **des constellations à la place de la boussole**.
 
 Deux choses sont déjà acquises pour ce jour-là, et c'est délibéré :
 
-- **La couche `css/nuit.css` est écrite pour resservir** — la console la charge
+- **La couche `css/stellaire.css` est écrite pour resservir** — la console la charge
   et déclare l'attribut, rien d'autre. Aucun travail de thème à refaire.
 - **Le savoir-faire « constellations » est capitalisé** dans `js/ciel.js` et les
   maquettes `design/preview-riven-{galaxie,voute,3d}.html`, déjà arbitrées le
@@ -192,14 +193,48 @@ le jour venu.**
 
 ---
 
-## 8. Étape ① — FAITE. Ce que la maquette a mesuré, et ce qu'elle demande
+## 8. Étape ① — FAITE, puis CORRIGÉE par Paul
 
-`design/preview-riven-nuit.html` (+ `.css` + `.js`, données inventées, zéro
-ressource externe, script en fichier séparé car la CSP d'Ultima interdit
+`design/preview-riven-stellaire.html` (+ `.css` + `.js`, données inventées,
+zéro ressource externe, script en fichier séparé car la CSP d'Ultima interdit
 `'unsafe-inline'` — une maquette à script inline serait **blanche** sur la
 preview Vercel). Elle rend **les huit états** et se mesure elle-même.
 
-**Mesuré au navigateur, sur 390 × 844 ET 1670 × 900 :**
+### Le verdict de Paul, et les deux défauts qu'il a vus en dix secondes
+
+*« alors c'est bien comme ça »* — le thème est **validé**. Puis, dans la même
+phrase, deux constats que la mesure ne pouvait pas produire :
+
+1. **« où est l'accueil 3D comme avant ? »** — ma maquette dessinait un ciel
+   **plat**, de fabrication maison, « pour la démonstration ». Le vrai écran
+   d'arrivée est un volume depuis le 2026-08-11. *Une maquette qui remplace le
+   moteur qu'elle prétend montrer ne montre plus rien : elle a fait juger à
+   Paul une régression que personne n'avait décidée.* **Corrigé** : la maquette
+   charge désormais `../js/ciel.js` et `../css/ciel.css` du produit et leur
+   donne 18 fiches, 12 personnes et 22 relations inventées. Le ciel qu'on y
+   voit **est** celui d'Ultima.
+2. **« enlève registre de nuit, ça doit être comme ça tout le temps, thème
+   stellaire et galaxies »** — le mot « registre » supposait un choix parmi
+   d'autres. **Il n'y en a pas.** Renommé partout : le thème est **stellaire**,
+   la couche à naître est `css/stellaire.css`, et **rien ne la conditionne** —
+   ni attribut, ni bascule. Une page l'a parce qu'elle charge le fichier ;
+   l'interrupteur est à la porte, pas dans le CSS.
+
+### Ce que le chargement du VRAI ciel a révélé — et qu'aucune imitation n'aurait dit
+
+- **Les couleurs de type existaient déjà.** `js/ciel.js` porte `COULEURS_NUIT`
+  (artisan `#f2a15a`, partenaire `#7cb8ea`, lead `#6fd39b`, chantier `#b995e8`)
+  depuis le 2026-08-11, toutes **au-dessus de 7:1**. Ma maquette en avait
+  inventé de parallèles : deux vérités chromatiques pour une seule donnée,
+  c'est-à-dire une de trop. **Les miennes sont supprimées**, celles de
+  `ciel.js` adoptées.
+- **Quatre règles de `ciel.css` s'appuient encore sur le parchemin** — relevé
+  exact, obtenu en chargeant le fichier au lieu de le lire :
+  `.ciel-cartouche h2` et `.ciel-bascule` (`--encre-sepia`),
+  `.ciel-cartouche .ciel-sous` et `.ciel-message` (`--encre-sepia-douce`).
+  C'est la liste de ce que l'étape ② devra déplacer, ni plus ni moins.
+
+### Mesuré au navigateur, sur 390 × 844 ET 1670 × 900
 
 | | |
 |---|---|
@@ -207,36 +242,32 @@ preview Vercel). Elle rend **les huit états** et se mesure elle-même.
 | Défauts de contraste (seuils WCAG AA) | **0** |
 | Pire couple | **6,03:1** — bouton « Supprimer », seuil 4,5 |
 | Luminance du fond le plus clair | **0,0191** (plancher du cadrage : < 0,20) |
-| Ciel coupé par sa boîte | **0 px** · débordement horizontal : **non** |
+| Étoiles rendues par le vrai moteur | **30** (18 fiches + 12 personnes en orbite) |
+| Étoiles hors cadre · libellés d'amas hors cadre | **0 · 0** (après convergence) |
 
-*La mesure a fait son travail avant d'être publiée : le bleu partenaire du jour
-(`#1e6fb8`) tombe à **3,28:1** sur la nuit — **sous le seuil AA**. Les quatre
-couleurs de type ont donc une variante de nuit, éclaircie. Aucune n'a été
-choisie à l'œil.*
+*La mesure avait fait son travail avant publication : le bleu partenaire du jour
+(`#1e6fb8`) tombe à **3,28:1** sur le fond stellaire, **sous le seuil AA**.*
 
-**Quatre arbitrages que la maquette pose à Paul** (aucun n'est tranché) :
+**Et une mesure fausse a été jetée en route** : mon premier contrôle de
+géométrie comparait la `getBBox()` du SVG à son `viewBox` et criait au
+débordement. Faux instrument — halos et zones de captation débordent
+**volontairement** et sont rognés. Le harnais du produit mesure les **centres**
+des étoiles et des libellés ; repris tel quel, il dit **0 hors cadre**.
+*Un critère mal choisi produit un défaut qui n'existe pas, aussi sûrement qu'un
+critère absent laisse passer celui qui existe.*
 
-1. **La rose des vents devient une rose stellaire** — même géométrie, même
-   fonction d'orientation, or et crème au lieu de l'encre sépia. La rose gravée
-   sur parchemin n'a plus de sol.
-2. **Le mot de l'état vide.** « Votre arbre attend sa première pousse » ne
-   survit pas à l'arbre. Proposé : **« Votre ciel n'a pas encore d'étoile »** —
-   *la première fiche allume la première étoile.*
-3. **Les quatre couleurs de type, éclaircies** (artisan, partenaire, lead,
-   chantier) : elles portent de l'information, elles tiennent donc le seuil du
-   **texte** (4,5:1), pas celui du décor.
-4. **« Situer la ville »** remplace « Trouver sur la carte », géocodage
-   conservé (déjà consigné au §5, ici rendu visible dans le formulaire).
+### Reste à arbitrer
 
-**Ce que la maquette ne prouve pas, et ne prétend pas prouver** : le ciel qu'elle
-dessine est une **réduction statique** (graine fixe, ni 3D, ni dérive, ni
-concentration). Le vrai ciel reste celui de `js/ciel.js` : la maquette arbitre
-**ce qui l'entoure**, c'est-à-dire tout ce qui vivait sur le parchemin.
+- **Le mot de l'état vide** : « Votre ciel n'a pas encore d'étoile ».
+- **La rose des vents devenue rose stellaire** sur l'Accueil.
+- **« Situer la ville »** à la place de « Trouver sur la carte ».
+- **La carte 2D / 3D** — la phrase de Paul (« la carte en 2d bien, il faut
+  pouvoir la passer en 3D aussi ») admet deux lectures qui ne mènent pas au
+  même travail. **Question posée, non tranchée** : voir le registre ci-dessous.
 
-**La routine de mesure** (`fondEffectif` / `contraste`, avec superposition
-alpha et pire-cas sur les fonds en dégradé) est écrite pour **migrer telle
-quelle** dans le harnais de l'étape 6, où elle s'exercera sur la vraie page.
-Elle n'est pas jetable.
+**La routine de mesure** (`fondEffectif` / `contraste`, superposition alpha et
+pire-cas sur les fonds en dégradé) est écrite pour **migrer telle quelle** dans
+le harnais de l'étape 6. Elle n'est pas jetable.
 
 ---
 
@@ -244,15 +275,25 @@ Elle n'est pas jetable.
 
 | Question | Décision |
 |---|---|
-| Le sort de la carte | **Supprimée** aussi. RIVEN est le ciel, et rien d'autre. |
-| La portée du noir | **Toute la page RIVEN** — accueil, fiches, formulaires, contacts, onglets. |
+| Le sort de la carte | **Supprimée** aussi. RIVEN est le ciel, et rien d'autre. **Rouvert** par la phrase du soir (voir ci-dessous). |
+| La portée du thème | **Toute la page RIVEN** — accueil, fiches, formulaires, contacts, onglets. |
 | Le sort de l'arbre | **Suppression franche** : code, CSS, harnais. VRANESH intact. |
+| Le rendu stellaire | **Validé** — « c'est bien comme ça ». |
+| Le nom | **Thème stellaire**, tout le temps, sans interrupteur. Le mot « registre de nuit » est retiré. |
+| Le ciel de la maquette | **Le vrai moteur**, pas un dessin. |
 
 ### ⏳ Actions Paul
 
-- ✅ **Maquette livrée** (étape 1) — `design/preview-riven-nuit.html`, 33 couples
-  mesurés, 0 défaut. **Verdict de Paul attendu**, plus les 4 arbitrages du §8.
-- **Gate middleware** (étape 5, CSP resserrée) au moment de la fusion.
-- **Arbitrage léger, réversible** : le bouton « Trouver sur la carte » devient
-  « Situer la ville » et le géocodage reste actif (§5). Un mot suffit à
-  l'inverser.
+- ✅ **Maquette livrée et corrigée** (étape ①) — `design/preview-riven-stellaire.html` :
+  33 couples mesurés, 0 défaut, vrai ciel 3D, 30 étoiles, 0 hors cadre.
+- 🔴 **UNE QUESTION BLOQUE L'ÉTAPE ②** : « la carte en 2d bien, il faut pouvoir
+  la passer en 3D aussi ». Deux lectures :
+  ① **la carte géographique** (Leaflet) reste et gagne une vue 3D — ce qui
+  **annule** l'arbitrage « carte supprimée » ; ② **le ciel** garde une vue à
+  plat (2D) doublée de la vue en volume, la carte restant supprimée.
+  *Le travail n'est pas le même : ① rouvre la carte, la CSP et le géocodage ;
+  ② ajoute une bascule au ciel.* **Non tranché, non commencé.**
+- **Gate middleware** (étape ⑤, CSP resserrée) au moment de la fusion —
+  **suspendu** à la réponse ci-dessus.
+- **Arbitrages de forme, réversibles d'un mot** : le mot de l'état vide, la rose
+  stellaire, « Situer la ville ».
