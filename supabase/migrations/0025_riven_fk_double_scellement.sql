@@ -33,8 +33,10 @@
 -- Prérequis présents : network_nodes_owner_id_uniq (index unique créé par 0008).
 -- On crée l'équivalent sur network_edges pour que journal.edge_id puisse le
 -- viser. Additif : les colonnes owner_id existent déjà partout.
-
-begin;
+--
+-- Le runner de migrations enveloppe chaque fichier dans une transaction (comme
+-- les 24 précédentes) : pas de begin/commit explicite ici — un garde qui RAISE
+-- annule donc tout le fichier.
 
 -- ── Garde préalable : refuser d'agir si des données croisent déjà deux owners.
 -- Sur un repo mono-owner, ces comptes valent 0 ; la migration ne doit corrompre
@@ -100,8 +102,6 @@ alter table public.journal
   add constraint journal_edge_scelle
     foreign key (owner_id, edge_id)
     references public.network_edges (owner_id, id) on delete cascade;
-
-commit;
 
 -- ── TEST DE FERMETURE (à jouer sur un projet de test à deux owners seedés) ──
 -- Avant : insérer dans network_edges un target_id appartenant à l'autre owner
