@@ -6,6 +6,27 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🌌 **BOUCLE OUVERTE 2026-08-12 (RIVEN passe la nuit) — CADRAGE LIVRÉ, code
+  non commencé.** Demande de Paul (dictée) : « remodeling de la forme », thème
+  constellation/sombre sur **toute** la page RIVEN, **suppression de l'arbre**,
+  « garder que la constellation et le modèle 3D ». Cadrage :
+  `CADRAGE-RIVEN-NUIT.md` (6 points, pre-mortem à 10 entrées).
+  - **Trois arbitrages pris par Paul** : la **carte est supprimée** elle aussi
+    (RIVEN = le ciel, rien d'autre) ; le noir couvre **toute la page** (accueil,
+    fiches, formulaires, contacts, onglets) ; l'arbre part **franchement**
+    (code, CSS, harnais) — **VRANESH n'est pas touché**.
+  - **Mesuré avant de proposer** : le mix est structurel (5 espaces, 2 registres
+    chromatiques) ; retrait = `arbre.js` 445 l. + `carte.js` 273 l. + 43 appels
+    `UltimaCarte` dans `app.js` + 10 harnais chargeant la fixture Leaflet. Le
+    retrait de la carte **rétrécit la CSP** (tuiles OSM + `unpkg` tombent —
+    le correctif S3 d'hier devient sans objet). **GATE middleware.**
+  - **Moyen conçu pour resservir (EB)** : le registre de nuit devient une
+    **couche de jetons** `css/nuit.css` scopée `body[data-registre="nuit"]`,
+    `styles.css` intouché — c'est elle que la **phase 2 (console LV4,
+    constellations à la place de la boussole)** posera, quand Paul aura jugé le
+    rendu de RIVEN. Phase 2 cadrée au §7, **non exécutée**.
+  - ⏳ **Action Paul** : go sur la **maquette** `design/preview-riven-nuit.html`
+    (tous les états + bandeau de contraste mesuré) — prochaine action unique.
 - 🔒 **SESSION 2026-08-12 (diag sécurité complet — `securite-max`), LIVRÉE.**
   Demande de Paul : « corrige les bugs et les failles, sécurise tout ». Audit :
   `AUDIT-2026-08-12.md`. Patrimoine COMPLET : **57 harnais, 1 444 assertions,
