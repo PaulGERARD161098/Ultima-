@@ -4413,6 +4413,13 @@
       var vue = window.UltimaCiel && window.UltimaCiel.courant();
       if (vue) { vue.zoomer(0.18); }
     });
+    // « Tout voir » : la sortie de secours du volume. On peut s'être approché
+    // d'une constellation et avoir perdu les autres de vue — un geste ramène au
+    // cadrage MESURÉ, celui qui fait tenir tout le réseau dans l'écran.
+    $('#ciel-tout-voir').addEventListener('click', function () {
+      var vue = window.UltimaCiel && window.UltimaCiel.courant();
+      if (vue) { vue.toutVoir(); }
+    });
     $('#ciel-derive').addEventListener('change', function (e) {
       var vue = window.UltimaCiel && window.UltimaCiel.courant();
       if (vue) { vue.derive(e.target.checked); }

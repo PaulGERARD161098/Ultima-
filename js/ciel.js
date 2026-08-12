@@ -145,7 +145,19 @@
         });
       });
     });
-    return { groupes: groupes, etoiles: etoiles };
+    // Le rayon RÉELLEMENT occupé, mesuré sur les étoiles construites — et non
+    // la constante RAYON_MONDE, qui ne décrit que la sphère où l'on POSE les
+    // centres de constellation. Mesuré, il vaut 255 à 278 selon le réseau :
+    // la constante (300) le SUR-comptait, et cadrer sur elle reculait la
+    // caméra pour rien. Cadrer sur la donnée réelle grossit les étoiles.
+    // Calculé UNE fois ici (fonction pure, appelée au montage), jamais dans la
+    // boucle d'animation.
+    var rayon = 0;
+    etoiles.forEach(function (e) {
+      var d = Math.sqrt(e.x * e.x + e.y * e.y + e.z * e.z);
+      if (d > rayon) { rayon = d; }
+    });
+    return { groupes: groupes, etoiles: etoiles, rayon: Math.max(80, rayon) };
   }
 
   // ---- Magnitude : le poids de la fiche dans le réseau (relations reçues et
@@ -216,23 +228,52 @@
     }
 
     var vbW = 900, vbH = 560;
+    // LE CADRE SUIT LA BOÎTE RÉELLE (correctif du 2026-08-12, mesuré).
+    // Avant : vbH se déduisait de la LARGEUR seule (× 0,56 en large). Sur un
+    // écran large et court — 1670 × 900, celui de Paul — le SVG réclamait
+    // 934 px de haut dans une scène qui n'en offre que 689 : `overflow:hidden`
+    // en coupait 245, soit UN QUART DU CIEL, et la page ne défilait pas. Le
+    // bas du réseau n'était pas « hors champ », il était supprimé.
+    // Une proportion choisie a priori ne peut pas connaître la hauteur
+    // disponible : elle se MESURE.
     function dimensionner() {
-      vbW = Math.max(320, Math.min(1240, conteneur.clientWidth || 900));
-      vbH = vbW < 600 ? Math.round(vbW * 1.02) : Math.round(vbW * 0.56);
+      var largeurBoite = conteneur.clientWidth || 900;
+      var hauteurBoite = conteneur.clientHeight || 0;
+      vbW = Math.max(320, Math.min(1240, largeurBoite));
+      // Repli sur l'ancienne proportion tant que la boîte n'a pas de hauteur
+      // (montage avant mise en page) : mieux vaut un cadre approché qu'aucun.
+      vbH = hauteurBoite > 120
+        ? Math.max(200, Math.round(vbW * (hauteurBoite / largeurBoite)))
+        : Math.round(vbW * (vbW < 600 ? 1.02 : 0.56));
     }
     // La distance ne se choisit pas une fois pour toutes : elle se DÉDUIT du
-    // cadre. À la distance D, la demi-hauteur visible vaut (cadre/2)·(D/FOCALE) ;
-    // pour que le monde tienne, il faut D ≥ RAYON_MONDE·FOCALE·2/cadre. Une
-    // constante confortable sur un large écran sort la moitié du réseau du
-    // champ sur un téléphone.
+    // cadre ET du monde. À la distance D, la demi-hauteur visible vaut
+    // (cadre/2)·(D/FOCALE) ; pour que le monde tienne, il faut
+    // D ≥ rayon·FOCALE·2/cadre.
+    //
+    // Correction du 2026-08-12 : le rayon est celui du monde CONSTRUIT
+    // (mesuré : 255 à 278 selon le réseau), non la constante RAYON_MONDE (300)
+    // qui le SUR-comptait. Cadrer sur la donnée réelle rapproche donc la
+    // caméra — les étoiles gagnent en taille sans que rien ne sorte du cadre.
+    // Le plancher `430` a disparu : c'était une constante de confort, et elle
+    // contredisait le principe même de la fonction — le recul se déduit, il ne
+    // se plafonne pas par le bas.
+    // La provision de libellé (le nom d'une constellation est peint 38·échelle
+    // + 12 au-dessus de son étoile) est réglée à 20 : valeur MESURÉE suffisante
+    // sur les six configurations éprouvées, et pas davantage — majorer ici
+    // éloignerait la caméra et rapetisserait le ciel sans rien protéger.
+    var DEBORD_LIBELLE = 20;
     function distanceIdeale() {
-      return Math.max(430, (RAYON_MONDE * FOCALE * 2) / Math.max(160, Math.min(vbW, vbH)) * 1.06);
+      var cadre = Math.max(160, Math.min(vbW, vbH));
+      return ((monde.rayon + DEBORD_LIBELLE) * FOCALE * 2) / cadre * 1.06;
     }
 
     dimensionner();
+    // L'orientation d'ouverture, nommée : « Tout voir » y revient.
+    var YAW_OUVERTURE = 0.6, PITCH_OUVERTURE = -0.28;
     var cam = {
-      yaw: 0.6, pitch: -0.28, distance: 0,
-      cibleYaw: 0.6, ciblePitch: -0.28, cibleDistance: 0
+      yaw: YAW_OUVERTURE, pitch: PITCH_OUVERTURE, distance: 0,
+      cibleYaw: YAW_OUVERTURE, ciblePitch: PITCH_OUVERTURE, cibleDistance: 0
     };
     // Le zoom est gardé en FACTEUR, pas en distance absolue : il survit ainsi
     // à un changement de cadre (rotation du téléphone, ouverture du panneau).
@@ -419,7 +460,9 @@
       'font-family': 'Georgia, "Times New Roman", serif', fill: '#d8bd82'
     });
     var piecesAmas = monde.groupes.map(function (g) {
-      var t = texteSvg({ 'font-size': '11', 'letter-spacing': '3' }, g.label.toUpperCase());
+      var t = texteSvg({
+        'class': 'ciel-nom-amas', 'font-size': '11', 'letter-spacing': '3'
+      }, g.label.toUpperCase());
       gNomsAmas.appendChild(t);
       return { groupe: g, el: t };
     });
@@ -530,6 +573,17 @@
     function zoomer(delta) {
       zoom = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, zoom + delta));
       cam.cibleDistance = distanceIdeale() * zoom;
+    }
+
+    // Retour au cadrage mesuré : tout le réseau dans l'écran. On rétablit AUSSI
+    // l'orientation d'ouverture — s'être approché d'une constellation s'accompagne
+    // presque toujours d'avoir tourné le monde, et un recul seul laisserait Paul
+    // devant un ciel cadré mais désorienté.
+    function toutVoir() {
+      zoom = 1;
+      cam.cibleDistance = distanceIdeale();
+      cam.cibleYaw = YAW_OUVERTURE;
+      cam.ciblePitch = PITCH_OUVERTURE;
     }
 
     function opaciteProfondeur(profondeur) {
@@ -706,6 +760,7 @@
       // rétrécit la scène sans toucher au viewBox et la cible tactile s'effondre.
       ajusterCadre: surRedimension,
       zoomer: zoomer,
+      toutVoir: toutVoir,
       viser: function (idNoeud) { if (parId[idNoeud]) { viser(parId[idNoeud]); } },
       choisir: function (idNoeud) {
         pieces.forEach(function (p) {
