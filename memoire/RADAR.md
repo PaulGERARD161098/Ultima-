@@ -69,12 +69,26 @@
   involontaire. Corriger le défaut a rendu le harnais rouge — c'est le harnais
   qui avait tort. **Réflexe : une navigation, dans un harnais, s'écrit
   explicitement ; jamais par effet de bord.**
+- 🔻 **Un avertissement d'outil est un SIGNAL, pas un verdict.** J'ai inscrit
+  « activer la protection des mots de passe compromis » comme action Paul, sur
+  la foi d'un WARN des advisors Supabase. Sa question — « c'est à dire ? » — m'a
+  fait vérifier : **Ultima n'a aucune authentification par mot de passe**
+  (lien magique + Google). Le WARN était **sans objet**. **Réflexe à garder :
+  qualifier un avertissement contre la surface RÉELLE du produit avant de le
+  transmettre — relayer un avertissement inapplicable fait faire un geste
+  inutile et use la confiance dans les alertes suivantes.**
+- ❌ **DÉMENTI le 2026-08-12 — l'ingestion d'une source existante.** Cadrée le
+  10/08 comme la voie ① du peuplement, elle est **abandonnée** par Paul :
+  *« pour l'instant, je renseigne les contacts à la main »*. La saisie en série
+  est la seule voie. **Ne plus proposer d'ingérer contacts / Gmail / tableau /
+  devis** tant qu'il ne rouvre pas le sujet.
 - ⚠️ **ÉTAT MESURÉ le 2026-08-12** (marqué de sa date, comme l'exige la règle du
   10/08) : RIVEN = **5 fiches, 1 relation, 0 personne, 0 rattachement**. Le
   goulot du peuplement est **entier** : le ciel affiche cinq étoiles et un
-  trait. Les deux voies de saisie sont désormais ouvertes ; **il manque la
-  décision de Paul sur la SOURCE à ingérer** — sans elle, la voie ① n'existe
-  pas. *À reproposer en ouverture de la prochaine session.*
+  trait. La saisie en série est
+  désormais outillée, et c'est **la seule voie retenue** (ingestion abandonnée
+  le jour même). *Le goulot n'est plus un manque d'outil : c'est du temps de
+  saisie. À reproposer sous cet angle — aider à saisir vite, pas à ingérer.*
 - ⚠️ **Du modèle validé mais débranché** : `interet_qualitatif`, `effort_temps`,
   `effort_energie` (migration 0003, go de Paul le 2026-07-03 — entrée n°1
   ci-dessus) sont validés par l'API et **atteignables depuis aucune interface**.

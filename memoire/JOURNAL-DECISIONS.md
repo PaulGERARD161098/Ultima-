@@ -2380,3 +2380,33 @@
   vert : **54 harnais, 1 360 assertions, sortie 0**. `js/ciel.js`,
   `js/arbre.js`, `js/carte.js`, `api/**` : **zéro ligne de diff**, critère
   écrit d'avance et non constat d'après-coup.
+
+### 2026-08-12 (clôture) — l'ingestion abandonnée, et un WARN qui n'avait pas d'objet
+
+- **Dicté par Paul, en réponse aux trois décisions attendues** : ① *« pour
+  l'instant, je renseigne les contacts à la main »* ; ② *« c'est à dire ? »* ;
+  ③ *« merge »*.
+- **DÉCISION ACTÉE : la voie ① du peuplement (ingestion d'une source
+  existante) est ABANDONNÉE.** Elle était cadrée depuis le 10/08 et bloquée sur
+  une question — « quelle source ? ». **Cette question est close sans réponse :
+  elle n'a plus d'objet.** La voie ② (la saisie en série, livrée le jour même)
+  est désormais la seule. *Leçon de tenue du tableau : une dépendance bloquante
+  peut se lever par ABANDON du besoin, pas seulement par obtention de la
+  réponse — et il faut alors le dire explicitement, sinon la question
+  ressurgira à chaque ouverture de session.*
+- **« C'est à dire ? » — et la question de Paul a bien fait de se poser.**
+  J'avais inscrit « activer la protection des mots de passe compromis » comme
+  action Paul, sur la foi du WARN des advisors Supabase. **Vérifié avant de lui
+  faire cliquer quoi que ce soit : Ultima n'a AUCUNE authentification par mot
+  de passe** — `signInWithOtp` (lien magique) et `signInWithOAuth` (Google)
+  sont les deux seules voies. Le réglage n'agit que sur un mot de passe
+  **saisi**. **Le WARN est sans objet, et l'action Paul n'existait pas.**
+- **Ce que ça m'apprend, et qui dépasse ce cas** : *un avertissement d'outil est
+  un signal, pas un verdict — il décrit une classe de risque, pas MON produit.
+  Le relayer sans le confronter à la surface réelle, c'est faire faire à Paul
+  un geste inutile et user sa confiance dans mes alertes.* Un avertissement se
+  **qualifie** avant d'être transmis : est-ce que la surface qu'il vise existe
+  seulement ici ? Consigné au RADAR.
+- **PR #156 fusionnée** en squash (`e1e9144`) au go de Paul ; branche repartie
+  de `origin/main` **avant** tout nouveau commit, comme l'exige la règle du
+  2026-07-22.
