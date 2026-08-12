@@ -1034,8 +1034,31 @@ textarea:focus-visible,
 
 .actions-formulaire {
   display: flex;
+  /* Trois boutons depuis la saisie en série (2026-08-12) : à 390 px ils ne
+     tiennent pas sur une ligne. Ils passent à la ligne au lieu de rétrécir —
+     une cible tactile ne se comprime pas. */
+  flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: 1rem;
+}
+
+/* Compteur de série : ce qui vient d'être créé sans quitter le formulaire.
+   `role="status"` côté HTML — il est ANNONCÉ, pas seulement affiché. */
+.serie-compteur {
+  margin: 0.6rem 0 0;
+  font-size: 0.88rem;
+  color: var(--encre-douce);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Le pli « nouvelle personne » du rattachement : un encart discret, décalé,
+   qui dit visuellement qu'il dépend du choix fait au-dessus. */
+.rattachement-nouvelle {
+  margin: 0 0 0.9rem;
+  padding: 0.75rem 0 0.1rem 0.8rem;
+  /* Filet or : le registre antique marque ainsi la subordination d'un bloc
+     (cartouches, bannières). Décoratif — aucun texte n'en dépend. */
+  border-left: 2px solid var(--or-antique);
 }
 
 .relation-source {

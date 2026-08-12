@@ -723,10 +723,17 @@
             </div>
           </details>
 
+          <!-- Saisie en SÉRIE : « Enregistrer et suivant » sauve puis garde le
+               formulaire ouvert, le curseur au nom, et conserve le contexte de
+               la série (type, statut, secteur, ville). Bouton SECONDAIRE : il
+               s'ajoute au flux court, il ne le remplace pas. Masqué en
+               édition — on n'enchaîne pas des modifications. -->
           <div class="actions-formulaire">
             <button type="submit" class="bouton bouton-primaire">Enregistrer</button>
+            <button type="submit" id="noeud-enchainer" class="bouton bouton-secondaire">Enregistrer et suivant</button>
             <button type="button" id="bouton-annuler-noeud" class="bouton bouton-secondaire">Annuler</button>
           </div>
+          <p id="noeud-serie" class="serie-compteur" role="status" hidden></p>
         </form>
 
         <form id="form-relation" class="panneau-corps formulaire" hidden>
@@ -784,8 +791,10 @@
           </div>
           <div class="actions-formulaire">
             <button type="submit" class="bouton bouton-primaire">Enregistrer</button>
+            <button type="submit" id="personne-enchainer" class="bouton bouton-secondaire">Enregistrer et suivant</button>
             <button type="button" id="bouton-annuler-personne" class="bouton bouton-secondaire">Annuler</button>
           </div>
+          <p id="personne-serie" class="serie-compteur" role="status" hidden></p>
         </form>
 
         <!-- ===== Le RATTACHEMENT (0024) : personne × nœud × rôle =====
@@ -796,6 +805,27 @@
           <div class="champ">
             <label for="rattachement-personne">Personne *</label>
             <select id="rattachement-personne" required></select>
+          </div>
+          <!-- Créer la personne SUR PLACE (2026-08-12). Sans ce pli, une base
+               à zéro personne rendait « Rattacher » inatteignable : le
+               formulaire refusait de s'ouvrir. Les personnes existantes
+               restent proposées EN PREMIER — créer est un choix conscient,
+               c'est la parade au doublon. -->
+          <div id="rattachement-nouvelle" class="rattachement-nouvelle" hidden>
+            <div class="champ">
+              <label for="rattachement-nom">Nom de la personne *</label>
+              <input id="rattachement-nom" type="text" maxlength="200" autocomplete="off">
+            </div>
+            <div class="champ">
+              <label for="rattachement-fonction">Fonction</label>
+              <input id="rattachement-fonction" type="text" maxlength="120"
+                     list="liste-fonctions" autocomplete="off"
+                     placeholder="gérant, conducteur de travaux…">
+            </div>
+            <div class="champ">
+              <label for="rattachement-telephone">Téléphone</label>
+              <input id="rattachement-telephone" type="tel" maxlength="30" autocomplete="off">
+            </div>
           </div>
           <div class="champ">
             <label for="rattachement-role">Rôle dans cette fiche</label>

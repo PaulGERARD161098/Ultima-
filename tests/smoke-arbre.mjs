@@ -90,7 +90,7 @@ async function creerContact(nom, secteur, type) {
   if (type) { await page.locator('#noeud-type').selectOption(type); }
   await page.locator('#noeud-nom').fill(nom);
   if (secteur !== undefined) { await page.locator('#noeud-secteur_activite').fill(secteur); }
-  await page.locator('#form-noeud button[type="submit"]').click();
+  await page.locator('#form-noeud button.bouton-primaire[type="submit"]').click();
   await page.waitForTimeout(250);
   await page.locator('#bouton-fermer-panneau').click();
   await page.waitForTimeout(150);

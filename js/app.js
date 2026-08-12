@@ -58,6 +58,11 @@
     personneEnEdition: null,  // id de la personne en cours d'édition
     noeudARattacher: null,    // fiche cible du formulaire de rattachement
     noeudNouveau: null,  // id du contact tout juste ajouté (pousse animée, A4)
+    // Saisie en SÉRIE (2026-08-12) : combien d'objets créés à la suite sans
+    // avoir rouvert le formulaire. Remis à zéro à chaque ouverture par
+    // « + Ajouter », incrémenté SEULEMENT après une création confirmée.
+    serieNoeuds: 0,
+    seriePersonnes: 0,
     // INTENDANT (AD-5c-δ) : dossiers d'approvisionnement adossés aux chantiers.
     // chantiers = dossiers ouverts, besoins = lignes (avec leur `etat`),
     // alertes = alertes J-2 [{chantier_id, node_id, date_pose, manquants}].
@@ -3555,8 +3560,35 @@
           ? String(noeud[champ]) : '';
     });
     $('#noeud-detail').open = false;
+    // On n'enchaîne pas des MODIFICATIONS : le bouton n'a de sens qu'en
+    // création. Et le compteur repart de zéro à chaque ouverture — sinon il
+    // annoncerait une série qui n'a pas eu lieu (pre-mortem P7).
+    etat.serieNoeuds = 0;
+    $('#noeud-enchainer').hidden = !!idEdition;
+    majCompteurSerie('#noeud-serie', 0, 'fiche');
     preparerGeoPourNoeud(noeud);
     ouvrirPanneau('noeud', idEdition ? 'Modifier le nœud' : 'Ajouter un nœud');
+  }
+
+  // ---------- Saisie en série (2026-08-12) ----------
+
+  // Un envoi n'est « enchaîné » que si le bouton qui l'a déclenché est celui-là.
+  // Lecture DÉFENSIVE : sans `submitter`, on retombe sur le comportement
+  // d'avant (le formulaire se ferme sur la fiche) — jamais l'inverse.
+  function envoiEnchaine(evenement, identifiant) {
+    return !!(evenement && evenement.submitter && evenement.submitter.id === identifiant);
+  }
+
+  function majCompteurSerie(selecteur, compte, mot) {
+    var ligne = $(selecteur);
+    if (compte <= 0) {
+      ligne.textContent = '';
+      ligne.hidden = true;
+      return;
+    }
+    ligne.textContent = compte + ' ' + mot + (compte > 1 ? 's' : '') + ' créée' +
+      (compte > 1 ? 's' : '') + ' à la suite.';
+    ligne.hidden = false;
   }
 
   async function soumettreFormNoeud(evenement) {
@@ -3629,16 +3661,43 @@
     }
     try {
       var creation = !etat.noeudEnEdition;
+      // Une série n'a de sens qu'en création (le bouton est masqué en édition,
+      // la garde le redit ici : l'interface et la logique ne se font pas
+      // mutuellement confiance).
+      var enchainer = creation && envoiEnchaine(evenement, 'noeud-enchainer');
       var id = await sauverNoeud(valeurs);
       toast(etat.noeudEnEdition ? 'Nœud mis à jour.' : 'Nœud ajouté.');
       etat.noeudEnEdition = null;
       // A4 : à la création seulement, la nouvelle feuille pousse à l'écran.
       etat.noeudNouveau = creation ? id : null;
       rafraichir();
+      // Tout ce qui suit est APRÈS l'await : un échec d'écriture n'atteint
+      // jamais ces lignes, la saisie reste donc intacte à l'écran (P1).
+      if (enchainer) {
+        etat.serieNoeuds += 1;
+        viderFormNoeudPourSuivant();
+        majCompteurSerie('#noeud-serie', etat.serieNoeuds, 'fiche');
+        return;
+      }
       if (id && trouverNoeud(id)) { ouvrirFiche(id); } else { fermerPanneau(); }
     } catch (e) {
       toast('Enregistrement impossible.', 'erreur');
     }
+  }
+
+  // Ce qui SURVIT d'une fiche à la suivante : le contexte de la série — on
+  // saisit une tournée d'artisans du même métier dans la même ville. Ce qui
+  // part : tout ce qui identifie la fiche précédente.
+  function viderFormNoeudPourSuivant() {
+    ['nom', 'adresse', 'telephone', 'email', 'lat', 'lng', 'notes'].forEach(function (champ) {
+      $('#noeud-' + champ).value = '';
+    });
+    CHAMPS_DETAIL_TEXTE.concat(CHAMPS_DETAIL_LISTE, CHAMPS_DETAIL_NOMBRE)
+      .forEach(function (champ) { $('#noeud-' + champ).value = ''; });
+    $('#noeud-detail').open = false;
+    majDatalistSecteurs(); // la fiche qu'on vient de créer enrichit la liste
+    preparerGeoPourNoeud(null);
+    $('#noeud-nom').focus();
   }
 
   // ---------- Formulaire personne (0024) ----------
@@ -3653,6 +3712,9 @@
     $('#personne-telephone').value = personne ? (personne.telephone || '') : '';
     $('#personne-email').value = personne ? (personne.email || '') : '';
     $('#personne-notes').value = personne ? (personne.notes || '') : '';
+    etat.seriePersonnes = 0;
+    $('#personne-enchainer').hidden = !!idEdition;
+    majCompteurSerie('#personne-serie', 0, 'personne');
     majDatalistFonctions();
     ouvrirPanneau('personne', idEdition ? 'Modifier la personne' : 'Ajouter une personne');
   }
@@ -3673,10 +3735,23 @@
       }
     });
     try {
+      var enchainer = !etat.personneEnEdition && envoiEnchaine(evenement, 'personne-enchainer');
       var id = await sauverPersonne(valeurs);
       toast(etat.personneEnEdition ? 'Personne mise à jour.' : 'Personne ajoutée.');
       etat.personneEnEdition = null;
       rafraichir();
+      if (enchainer) {
+        etat.seriePersonnes += 1;
+        // Une personne ne partage rien avec la suivante — même une fonction
+        // commune est l'exception. On vide tout, et on rend le curseur.
+        ['nom', 'fonction', 'telephone', 'email', 'notes'].forEach(function (champ) {
+          $('#personne-' + champ).value = '';
+        });
+        majDatalistFonctions();
+        majCompteurSerie('#personne-serie', etat.seriePersonnes, 'personne');
+        $('#personne-nom').focus();
+        return;
+      }
       if (id && trouverPersonne(id)) { ouvrirFichePersonne(id); } else { fermerPanneau(); }
     } catch (e) {
       toast('Enregistrement impossible.', 'erreur');
@@ -3684,6 +3759,10 @@
   }
 
   // ---------- Formulaire rattachement (0024) ----------
+
+  // Valeur sentinelle du select : « je n'en choisis aucune, j'en crée une ».
+  // Ce n'est pas un identifiant — aucune personne ne peut la porter.
+  var RATTACHEMENT_NOUVELLE = '__nouvelle__';
 
   function ouvrirFormRattachement(nodeId) {
     var noeud = trouverNoeud(nodeId);
@@ -3693,12 +3772,20 @@
     $('#rattachement-source').textContent = 'Sur : ' + (noeud.nom || '(sans nom)');
     var select = $('#rattachement-personne');
     select.textContent = '';
+    // Créer est offert EN TÊTE — visible sans dérouler cinquante noms — mais
+    // n'est pas la valeur retenue tant qu'une personne existe (voir plus bas) :
+    // la parade au doublon est que créer reste un choix conscient.
+    var optionNeuve = document.createElement('option');
+    optionNeuve.value = RATTACHEMENT_NOUVELLE;
+    optionNeuve.textContent = '➕ Créer une nouvelle personne';
+    select.appendChild(optionNeuve);
     // Une personne déjà rattachée à CETTE fiche n'est pas proposée : le doublon
     // est interdit en base (unique de 0024), autant ne pas l'offrir.
     var dejaLa = {};
     etat.rattachements.forEach(function (r) {
       if (r.node_id === nodeId) { dejaLa[r.personne_id] = true; }
     });
+    var premiereExistante = '';
     etat.personnes.slice().sort(function (a, b) {
       return (a.nom || '').localeCompare(b.nom || '', 'fr');
     }).forEach(function (p) {
@@ -3707,37 +3794,85 @@
       option.value = p.id;
       option.textContent = (p.nom || '(sans nom)') + (p.fonction ? ' — ' + p.fonction : '');
       select.appendChild(option);
+      if (!premiereExistante) { premiereExistante = p.id; }
     });
-    if (!select.options.length) {
-      toast('Aucune personne disponible : créez-en une depuis le registre.', 'erreur');
-      return;
-    }
+    // Registre vide (l'état RÉEL de la base de Paul le 2026-08-12) : la seule
+    // option est « créer », donc le pli s'ouvre. Le formulaire ne refuse PLUS
+    // de s'ouvrir — c'était un cul-de-sac : le geste devenait inatteignable.
+    select.value = premiereExistante || RATTACHEMENT_NOUVELLE;
+    $('#rattachement-nom').value = '';
+    $('#rattachement-fonction').value = '';
+    $('#rattachement-telephone').value = '';
+    majPliNouvellePersonne();
     $('#rattachement-role').value = '';
     majDatalistRoles();
+    majDatalistFonctions();
     ouvrirPanneau('rattachement', 'Rattacher une personne');
+  }
+
+  // Le pli des trois champs ne paraît que si « créer » est retenu : le flux
+  // court d'hier (choisir + rôle + Rattacher) garde exactement ses touchers.
+  function majPliNouvellePersonne() {
+    var neuve = $('#rattachement-personne').value === RATTACHEMENT_NOUVELLE;
+    $('#rattachement-nouvelle').hidden = !neuve;
   }
 
   async function soumettreFormRattachement(evenement) {
     evenement.preventDefault();
-    var valeurs = {
-      personne_id: $('#rattachement-personne').value,
-      node_id: etat.noeudARattacher
-    };
-    var role = $('#rattachement-role').value.trim();
-    if (role) { valeurs.role = role; }
-    if (!valeurs.personne_id || !valeurs.node_id) {
+    var choix = $('#rattachement-personne').value;
+    var cible = etat.noeudARattacher;
+    if (!choix || !cible) {
       toast('Formulaire incomplet.', 'erreur');
       return;
     }
-    var cible = valeurs.node_id;
+
+    // Cas « créer sur place » : DEUX écritures, dans cet ordre, et l'échec de
+    // la seconde ne doit jamais être muet — la personne existerait alors au
+    // registre sans que Paul le sache (pre-mortem P5).
+    var personneId = choix;
+    if (choix === RATTACHEMENT_NOUVELLE) {
+      var nom = $('#rattachement-nom').value.trim();
+      if (!nom) {
+        toast('Le nom de la personne est obligatoire.', 'erreur');
+        return;
+      }
+      var neuve = { nom: nom };
+      ['fonction', 'telephone'].forEach(function (champ) {
+        var brut = $('#rattachement-' + champ).value.trim();
+        if (brut) { neuve[champ] = brut; }
+      });
+      try {
+        // `sauverPersonne` branche sur `personneEnEdition` : un reliquat d'une
+        // édition abandonnée (Échap) transformerait cette CRÉATION en mise à
+        // jour de quelqu'un d'autre. On l'annule explicitement.
+        etat.personneEnEdition = null;
+        personneId = await sauverPersonne(neuve);
+      } catch (e) {
+        toast('Création de la personne impossible.', 'erreur');
+        return;
+      }
+      if (!personneId) {
+        toast('Création de la personne impossible.', 'erreur');
+        return;
+      }
+    }
+
+    var valeurs = { personne_id: personneId, node_id: cible };
+    var role = $('#rattachement-role').value.trim();
+    if (role) { valeurs.role = role; }
     try {
       await creerRattachement(valeurs);
-      toast('Personne rattachée.');
+      toast(choix === RATTACHEMENT_NOUVELLE ? 'Personne créée et rattachée.' : 'Personne rattachée.');
       etat.noeudARattacher = null;
       rafraichir();
       ouvrirFiche(cible);
     } catch (e) {
-      toast('Rattachement impossible.', 'erreur');
+      // La personne, elle, est bien née : on le DIT, au lieu de laisser croire
+      // que rien ne s'est passé.
+      toast(choix === RATTACHEMENT_NOUVELLE
+        ? 'Personne créée, mais rattachement impossible : elle est au registre.'
+        : 'Rattachement impossible.', 'erreur');
+      if (choix === RATTACHEMENT_NOUVELLE) { rafraichir(); }
     }
   }
 
@@ -3935,7 +4070,13 @@
         ouvrirFormPersonneDepuisRegistre();
         return;
       }
-      ouvrirFormDepuisAccueil(null);
+      // On reste sur Contacts — motif de `#arbre-ajouter` et `#ciel-ajouter`.
+      // `ouvrirFormDepuisAccueil` bascule sur la Carte : c'est juste depuis
+      // l'ACCUEIL (on va quelque part), faux depuis le registre (on y est
+      // déjà). Le défaut se voyait à l'annulation : on atterrissait sur la
+      // carte au lieu de retrouver sa liste. Trouvé par le harnais, 2026-08-12.
+      ouvrirFormNoeud(null);
+      $('#panneau-titre').focus();
     });
 
     document.querySelectorAll('.contacts-registre').forEach(function (bouton) {
@@ -4025,6 +4166,8 @@
       etat.noeudARattacher = null;
       if (retour && trouverNoeud(retour)) { ouvrirFiche(retour); } else { fermerPanneau(); }
     });
+
+    $('#rattachement-personne').addEventListener('change', majPliNouvellePersonne);
 
     $('#form-noeud').addEventListener('submit', soumettreFormNoeud);
     $('#form-relation').addEventListener('submit', soumettreFormRelation);

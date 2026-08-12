@@ -99,7 +99,7 @@ await page.waitForTimeout(300);
 await page.locator('#bouton-ajouter').click();
 await page.waitForTimeout(200);
 await page.locator('#noeud-nom').fill('Fontaine Rénovation');
-await page.locator('#form-noeud button[type="submit"]').click();
+await page.locator('#form-noeud button.bouton-primaire[type="submit"]').click();
 await page.waitForTimeout(300);
 const fontaineCreee = (await page.locator('#panneau-titre').textContent()) === 'Fontaine Rénovation';
 await fermerPanneau();
