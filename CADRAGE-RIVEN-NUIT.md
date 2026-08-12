@@ -192,6 +192,54 @@ le jour venu.**
 
 ---
 
+## 8. Étape ① — FAITE. Ce que la maquette a mesuré, et ce qu'elle demande
+
+`design/preview-riven-nuit.html` (+ `.css` + `.js`, données inventées, zéro
+ressource externe, script en fichier séparé car la CSP d'Ultima interdit
+`'unsafe-inline'` — une maquette à script inline serait **blanche** sur la
+preview Vercel). Elle rend **les huit états** et se mesure elle-même.
+
+**Mesuré au navigateur, sur 390 × 844 ET 1670 × 900 :**
+
+| | |
+|---|---|
+| Couples texte/fond mesurés (sur les 8 états) | **33** |
+| Défauts de contraste (seuils WCAG AA) | **0** |
+| Pire couple | **6,03:1** — bouton « Supprimer », seuil 4,5 |
+| Luminance du fond le plus clair | **0,0191** (plancher du cadrage : < 0,20) |
+| Ciel coupé par sa boîte | **0 px** · débordement horizontal : **non** |
+
+*La mesure a fait son travail avant d'être publiée : le bleu partenaire du jour
+(`#1e6fb8`) tombe à **3,28:1** sur la nuit — **sous le seuil AA**. Les quatre
+couleurs de type ont donc une variante de nuit, éclaircie. Aucune n'a été
+choisie à l'œil.*
+
+**Quatre arbitrages que la maquette pose à Paul** (aucun n'est tranché) :
+
+1. **La rose des vents devient une rose stellaire** — même géométrie, même
+   fonction d'orientation, or et crème au lieu de l'encre sépia. La rose gravée
+   sur parchemin n'a plus de sol.
+2. **Le mot de l'état vide.** « Votre arbre attend sa première pousse » ne
+   survit pas à l'arbre. Proposé : **« Votre ciel n'a pas encore d'étoile »** —
+   *la première fiche allume la première étoile.*
+3. **Les quatre couleurs de type, éclaircies** (artisan, partenaire, lead,
+   chantier) : elles portent de l'information, elles tiennent donc le seuil du
+   **texte** (4,5:1), pas celui du décor.
+4. **« Situer la ville »** remplace « Trouver sur la carte », géocodage
+   conservé (déjà consigné au §5, ici rendu visible dans le formulaire).
+
+**Ce que la maquette ne prouve pas, et ne prétend pas prouver** : le ciel qu'elle
+dessine est une **réduction statique** (graine fixe, ni 3D, ni dérive, ni
+concentration). Le vrai ciel reste celui de `js/ciel.js` : la maquette arbitre
+**ce qui l'entoure**, c'est-à-dire tout ce qui vivait sur le parchemin.
+
+**La routine de mesure** (`fondEffectif` / `contraste`, avec superposition
+alpha et pire-cas sur les fonds en dégradé) est écrite pour **migrer telle
+quelle** dans le harnais de l'étape 6, où elle s'exercera sur la vraie page.
+Elle n'est pas jetable.
+
+---
+
 ### Registre des arbitrages — pris par Paul, 2026-08-12
 
 | Question | Décision |
@@ -202,7 +250,8 @@ le jour venu.**
 
 ### ⏳ Actions Paul
 
-- **Go sur la maquette** (étape 1) — c'est la prochaine action, et la seule.
+- ✅ **Maquette livrée** (étape 1) — `design/preview-riven-nuit.html`, 33 couples
+  mesurés, 0 défaut. **Verdict de Paul attendu**, plus les 4 arbitrages du §8.
 - **Gate middleware** (étape 5, CSP resserrée) au moment de la fusion.
 - **Arbitrage léger, réversible** : le bouton « Trouver sur la carte » devient
   « Situer la ville » et le géocodage reste actif (§5). Un mot suffit à
