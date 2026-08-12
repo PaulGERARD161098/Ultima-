@@ -97,7 +97,7 @@ await page.locator('#contacts-ajouter').click();
 await page.waitForTimeout(200);
 verdicts.formOuvert = await page.locator('#form-noeud').isVisible();
 await page.locator('#noeud-nom').fill('Zoé Sans Position');
-await page.locator('#form-noeud button[type="submit"]').click();
+await page.locator('#form-noeud button.bouton-primaire[type="submit"]').click();
 await page.waitForTimeout(300);
 verdicts.ficheNouveauContact = (await page.locator('#panneau-titre').textContent()) === 'Zoé Sans Position';
 verdicts.pasSurLaCarte = (await page.locator('path.leaflet-interactive').count()) === tracesAvant;
@@ -115,7 +115,7 @@ await page.locator('#noeud-nom').fill('Coordonnée Seule');
 // v3-⑤ : lat/lng vivent dans le details « Coordonnées précises (avancé) ».
 await page.locator('#geo-details summary').click();
 await page.locator('#noeud-lat').fill('48');
-await page.locator('#form-noeud button[type="submit"]').click();
+await page.locator('#form-noeud button.bouton-primaire[type="submit"]').click();
 await page.waitForTimeout(300);
 verdicts.toastCoordonnees = (await page.locator('.toast-erreur').last().textContent())
   .includes('Latitude et longitude vont ensemble');
@@ -195,7 +195,7 @@ verdicts.formPersonneOuvert = await page.locator('#form-personne').isVisible();
 verdicts.formNoeudNonOuvert = !(await page.locator('#form-noeud').isVisible());
 await page.locator('#personne-nom').fill('Mireille Vasseur');
 await page.locator('#personne-fonction').fill('Architecte');
-await page.locator('#form-personne button[type="submit"]').click();
+await page.locator('#form-personne button.bouton-primaire[type="submit"]').click();
 await page.waitForTimeout(300);
 verdicts.fichePersonneOuverte =
   (await page.locator('#panneau-titre').textContent()) === 'Mireille Vasseur';

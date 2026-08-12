@@ -6,6 +6,59 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🪶 **SESSION 2026-08-12 (RIVEN se remplit), LIVRÉE.** Cadrage complet :
+  `CADRAGE-RIVEN-SAISIE.md` (format 6 points, pre-mortem à 9 entrées).
+  Patrimoine COMPLET vert : **54 harnais, 1 360 assertions, sortie 0** (dont
+  **50 neuves**). Rien de non poussé.
+  - 🔻 **LE CADRAGE SE TROMPAIT, et la vérification l'a dit avant le code.** Le
+    tableau annonçait « les trois boutons du panneau de fiche, qui ne font
+    encore rien ». **Ils fonctionnent tous les trois** depuis le 10/08 : ce sont
+    les boutons de la **maquette** `design/preview-riven-3d.js` qui se
+    contentaient d'un `signaler(...)`. *Sans ce contrôle, la boucle aurait
+    ré-implanté trois gestes déjà livrés.*
+  - 🔻 **Le vrai défaut était un CUL-DE-SAC, invisible en démo.** Mesuré en
+    production le 12/08 : **5 fiches, 1 relation, 0 personne, 0 rattachement**.
+    Avec zéro personne, `ouvrirFormRattachement` **refusait d'ouvrir** et
+    jetait une erreur — le geste central du 10/08 était **inatteignable dans
+    la base réelle de Paul**, alors qu'il était livré et testé. *La démo, qui
+    livre 3 personnes, ne pouvait pas le voir.*
+  - ✅ **Créer une personne DEPUIS la fiche** : le formulaire s'ouvre toujours ;
+    un seul envoi crée la personne **et** son rattachement avec son rôle. Les
+    existantes restent premières et sélectionnées par défaut — **créer est un
+    choix conscient**, c'est la parade au doublon.
+  - ✅ **Saisie en série** (fiches et personnes) : « Enregistrer et suivant »
+    garde le formulaire, rend le curseur au nom, **conserve le contexte de la
+    série** (type, statut, secteur, ville) et annonce le compte en
+    `role="status"`. « Enregistrer » n'a pas changé de sens.
+  - 🔻 **Défaut trouvé par le harnais, corrigé à la source** : « + Ajouter un
+    contact » depuis le registre **basculait sur la Carte**
+    (`ouvrirFormDepuisAccueil`) — annuler faisait donc **perdre sa liste**.
+    On reste sur Contacts, comme le font déjà l'arbre et le ciel. Et
+    `smoke-geocode` **s'appuyait sans le dire sur cette bascule** : sa
+    navigation est désormais explicite.
+  - ✅ **L'affichage n'a pas bougé d'un pixel** : `js/ciel.js`, `js/arbre.js`,
+    `js/carte.js`, `api/**` = **zéro ligne de diff**. Critère écrit d'avance.
+  - ✅ **Le ⏳ du 10/08 est FERMÉ** : le connecteur Supabase répond enfin, passe
+    `get_advisors` faite. **Zéro alerte sécurité de schéma** — la RLS de
+    `personnes` et `personne_noeuds` est propre.
+  - ⏳ **Actions Paul** : ① activer la **protection des mots de passe
+    compromis** (seul WARN sécurité, toggle du dashboard Supabase) ; ② dire
+    **QUELLE source** il apporte pour l'ingestion — sans elle, la voie ① du
+    peuplement n'existe pas.
+  - ⏭ **Reporté, avec sa preuve** : `interet_qualitatif`, `effort_temps` et
+    `effort_energie` existent en base depuis la migration **0003**, sont
+    validés par l'API (`api/_lib/validate.js:221-241`) et **ne sont
+    atteignables depuis aucune interface** — zéro occurrence dans le front,
+    zéro dans les harnais. Le `type` d'une relation est en outre **gelé après
+    création** par choix délibéré (`validate.js:47`). **C'est une boucle à soi
+    seule.**
+  - ⏭ **Reporté aussi** : la CSP dans `tests/lancer.sh` (la règle née le 11/08
+    n'est appliquée qu'au harnais des maquettes ; **vérifié : aucune page
+    produit ne porte de script en ligne**, donc le risque est une régression
+    future, pas un défaut présent) ; et les index des deux clés étrangères de
+    `personne_noeuds` (INFO advisors, tables à 0 ligne — la migration serait
+    du bruit).
+
 - 🕸️ **SESSION 2026-08-10 (RIVEN en détail), CLOSE.** PR **#151 fusionnée**
   (`1f85160`), migration **0024 APPLIQUÉE** au go de Paul, rien de non poussé.
   - ✅ **`personnes` et `personne_noeuds` existent en production**, RLS active

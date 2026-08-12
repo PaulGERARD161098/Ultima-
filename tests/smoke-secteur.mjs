@@ -58,7 +58,7 @@ async function creerContact(nom, valeurSecteur) {
   await page.waitForTimeout(150);
   await page.locator('#noeud-nom').fill(nom);
   if (valeurSecteur !== undefined) { await secteur.fill(valeurSecteur); }
-  await page.locator('#form-noeud button[type="submit"]').click();
+  await page.locator('#form-noeud button.bouton-primaire[type="submit"]').click();
   await page.waitForTimeout(250);
 }
 
@@ -133,7 +133,7 @@ await page.waitForTimeout(200);
 verdicts.formEditionOuvert = await page.locator('#form-noeud').isVisible() &&
   (await secteur.inputValue()) === 'Plomberie';
 await secteur.fill('');
-await page.locator('#form-noeud button[type="submit"]').click();
+await page.locator('#form-noeud button.bouton-primaire[type="submit"]').click();
 await page.waitForTimeout(250);
 verdicts.ligneSecteurDisparue = !(await page.locator('.fiche-details').innerText())
   .includes("Secteur d'activité");

@@ -79,6 +79,12 @@ await page.waitForTimeout(1000);
 
 // Ouvre le formulaire nœud comme Paul : Contacts → + Ajouter un contact.
 const ongletContacts = page.locator('.barre-onglets button', { hasText: 'Contacts' });
+// `#bouton-ajouter` est le bouton de la CARTE : ce harnais s'y rendait sans le
+// dire, en s'appuyant sur une bascule d'onglet involontaire de
+// « + Ajouter un contact » (corrigée le 2026-08-12 — on reste désormais sur
+// Contacts). La navigation est donc rendue EXPLICITE : même intention, mais
+// plus aucune dépendance à un effet de bord.
+const ongletCarte = page.locator('.barre-onglets button', { hasText: 'Carte' });
 await ongletContacts.click();
 await page.waitForTimeout(200);
 await page.locator('#contacts-ajouter').click();
@@ -190,6 +196,8 @@ verdicts.geocodeApercuCarte = apercuApresSelection && apercuApresSelection.lat =
   (await page.locator('path[stroke-dasharray="4 4"]').count()) === 0;
 
 // 9. geocodeChanger — champs vidés, ligne disparue, aperçu effacé, focus Adresse.
+await ongletCarte.click();
+await page.waitForTimeout(200);
 await page.locator('#bouton-ajouter').click();
 await page.waitForTimeout(200);
 await page.locator('#noeud-ville').fill('Lille');
@@ -236,7 +244,7 @@ await page.waitForTimeout(400);
 const messageErreur = (await messageStatut()).startsWith("La recherche d'adresse ne répond pas.");
 await page.locator('#geo-changer').click(); // enregistrer sans position
 await page.locator('#noeud-nom').fill('Sans Position Géo');
-await page.locator('#form-noeud button[type="submit"]').click();
+await page.locator('#form-noeud button.bouton-primaire[type="submit"]').click();
 await page.waitForTimeout(300);
 const ficheSansPosition = (await page.locator('#panneau-titre').textContent()) === 'Sans Position Géo';
 await ongletContacts.click();
@@ -255,7 +263,7 @@ await bouton.click(); // cache : liste immédiate
 await listeItems.first().waitFor({ timeout: 2000 });
 await listeItems.first().click();
 await page.waitForTimeout(100);
-await page.locator('#form-noeud button[type="submit"]').click();
+await page.locator('#form-noeud button.bouton-primaire[type="submit"]').click();
 await page.waitForTimeout(300);
 const fichePositionStub = (await page.locator('#panneau-titre').textContent()) === 'Position Stub';
 const apercuEfface = (await apercuPosition()) === null;
@@ -279,6 +287,8 @@ await page.waitForTimeout(200);
 
 // 13. geocodeManuel — saisie à la main : ligne dédiée, valeurs conservées,
 // validation « les deux ou aucun » intacte.
+await ongletCarte.click();
+await page.waitForTimeout(200);
 await page.locator('#bouton-ajouter').click();
 await page.waitForTimeout(200);
 await page.locator('#noeud-nom').fill('Manuel Direct');
@@ -287,7 +297,7 @@ await page.locator('#noeud-lat').fill('48.85');
 await page.locator('#noeud-lng').fill('2.35');
 await page.waitForTimeout(100);
 const ligneManuel = (await confirmation.textContent()).includes('Position saisie à la main');
-await page.locator('#form-noeud button[type="submit"]').click();
+await page.locator('#form-noeud button.bouton-primaire[type="submit"]').click();
 await page.waitForTimeout(300);
 const ficheManuel = (await page.locator('#panneau-titre').textContent()) === 'Manuel Direct';
 await page.locator('.actions-fiche button', { hasText: 'Modifier' }).click();
@@ -299,12 +309,14 @@ await page.locator('#bouton-annuler-noeud').click();
 await page.waitForTimeout(200);
 // Paire incomplète → toast existant, rien de créé.
 await page.locator('#bouton-fermer-panneau').click();
+await ongletCarte.click();
+await page.waitForTimeout(200);
 await page.locator('#bouton-ajouter').click();
 await page.waitForTimeout(200);
 await page.locator('#noeud-nom').fill('Paire Incomplète');
 await page.locator('#geo-details summary').click();
 await page.locator('#noeud-lat').fill('48');
-await page.locator('#form-noeud button[type="submit"]').click();
+await page.locator('#form-noeud button.bouton-primaire[type="submit"]').click();
 await page.waitForTimeout(300);
 verdicts.geocodeManuel = ligneManuel && ficheManuel && valeursManuelles &&
   (await page.locator('.toast-erreur').last().textContent())

@@ -56,6 +56,31 @@
   échéance **Google Cloud** (essai gratuit ~fin juillet) qui porte le client Drive
   d'IMLADRIK ; relance YCOME en attente. À reproposer si le sujet revient.
 
+## Signaux de session (2026-08-12)
+
+- 🔻 **Une fonctionnalité VERTE peut être INATTEIGNABLE.** RIVEN avait la
+  personne séparée du nœud (0024), livrée et testée — mais avec **0 personne en
+  base**, le bouton « Rattacher » refusait d'ouvrir. Aucun harnais ne pouvait le
+  voir : la démo livre 3 personnes. **Réflexe à garder : avant de déclarer un
+  geste disponible, l'exercer dans l'ÉTAT RÉEL de la base de Paul — mesuré, pas
+  supposé.** L'état de départ d'un test est une hypothèse.
+- 🔻 **Un harnais peut dépendre d'un bug et le transformer en contrat.**
+  `smoke-geocode` atteignait le bouton de la Carte grâce à une bascule d'onglet
+  involontaire. Corriger le défaut a rendu le harnais rouge — c'est le harnais
+  qui avait tort. **Réflexe : une navigation, dans un harnais, s'écrit
+  explicitement ; jamais par effet de bord.**
+- ⚠️ **ÉTAT MESURÉ le 2026-08-12** (marqué de sa date, comme l'exige la règle du
+  10/08) : RIVEN = **5 fiches, 1 relation, 0 personne, 0 rattachement**. Le
+  goulot du peuplement est **entier** : le ciel affiche cinq étoiles et un
+  trait. Les deux voies de saisie sont désormais ouvertes ; **il manque la
+  décision de Paul sur la SOURCE à ingérer** — sans elle, la voie ① n'existe
+  pas. *À reproposer en ouverture de la prochaine session.*
+- ⚠️ **Du modèle validé mais débranché** : `interet_qualitatif`, `effort_temps`,
+  `effort_energie` (migration 0003, go de Paul le 2026-07-03 — entrée n°1
+  ci-dessus) sont validés par l'API et **atteignables depuis aucune interface**.
+  L'entrée n°1 est donc **CONFIRMÉE en base, DÉMENTIE en usage**. À proposer :
+  c'est une boucle à soi seule (piloter une relation : intérêt, efforts, notes).
+
 ## Pistes d'amélioration à proposer (fil continu)
 
 - Routine d'arrière-plan (sécurité + données) : à cadrer puis activer (gate
