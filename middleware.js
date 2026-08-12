@@ -22,8 +22,11 @@ const CSP = [
   "script-src 'self' https://unpkg.com",
   // Leaflet applique des styles inline via JS (positionnement carte/marqueurs) → 'unsafe-inline' requis.
   "style-src 'self' https://unpkg.com 'unsafe-inline'",
-  // Tuiles OSM, icônes marqueurs unpkg, images data:.
-  "img-src 'self' data: https://*.tile.openstreetmap.org https://unpkg.com",
+  // Tuiles OSM, icônes marqueurs unpkg, images data:. Le domaine NU
+  // `tile.openstreetmap.org` (celui que carte.js utilise) ET le wildcard :
+  // `*.tile...` ne matche PAS le domaine sans sous-domaine (spec CSP), et son
+  // absence bloquait 100 % des tuiles en prod — carte sans fond, silencieux.
+  "img-src 'self' data: https://tile.openstreetmap.org https://*.tile.openstreetmap.org https://unpkg.com",
   // Restreint au projet Supabase d'Ultima : pas d'exfiltration possible vers un projet tiers.
   "connect-src 'self' https://leosfqyidgsaescjbfom.supabase.co",
   "font-src 'self'",
