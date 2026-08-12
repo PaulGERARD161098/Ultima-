@@ -6,6 +6,9 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- ✅ **PR #158 FUSIONNÉE** (`fcc9739`, squash) au go de Paul — elle portait
+  **les deux boucles ci-dessous** (RIVEN piloter/corriger/proposer + cadrage du
+  ciel). Branche repartie de `origin/main` avant tout nouveau commit.
 - 🔭 **SESSION 2026-08-12 (le ciel tient dans l'écran), LIVRÉE.** Demande de
   Paul en cours de session, capture à l'appui. Cadrage :
   `CADRAGE-CIEL-CADRAGE.md`. Patrimoine COMPLET vert : **56 harnais,

@@ -2510,3 +2510,13 @@
   il tire au sort, et il finira par faire douter d'un vrai rouge.*
 - **Vérifié** : patrimoine COMPLET **56 harnais, 1 430 assertions, sortie 0**.
   `js/arbre.js`, `js/carte.js`, `api/**`, `supabase/**` : zéro ligne de diff.
+
+### 2026-08-12 (fusion) — PR #158, les deux boucles du jour dans main
+
+- **Dicté par Paul** : *« merge »*, après avoir jugé le rendu sur la preview.
+- **PR #158 fusionnée** en squash (`fcc9739`). Elle portait **deux boucles** :
+  RIVEN (piloter une relation, corriger sans détruire, proposer un
+  rapprochement) et le cadrage du ciel (« tout voir d'un coup d'œil »).
+- Branche `claude/riven-veille-loop-1er0cs` **repartie de `origin/main`** avant
+  tout nouveau commit (règle du squash-merge, 2026-07-22). Contrôle périodique
+  de la PR supprimé — une routine qui survit à sa raison d'être devient du bruit.
