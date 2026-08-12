@@ -754,8 +754,44 @@
             <label for="relation-notes">Note</label>
             <textarea id="relation-notes" rows="3" maxlength="2000"></textarea>
           </div>
+          <!-- ===== PILOTAGE (migration 0003, branché le 2026-08-12) =====
+               Ces trois champs vivaient en base et étaient validés par l'API
+               depuis le 2026-07-03, atteignables depuis AUCUN écran. Repliés :
+               le flux court (relier deux fiches) n'est pas allongé. -->
+          <details id="relation-pilotage-pli" class="pli-detail">
+            <summary>Pilotage du rapprochement</summary>
+            <div class="champ">
+              <label for="relation-interet_qualitatif">Intérêt — ce que ça peut donner</label>
+              <textarea id="relation-interet_qualitatif" rows="3" maxlength="2000"
+                        placeholder="ce que j'attends de ce rapprochement, et pourquoi"></textarea>
+            </div>
+            <div class="champs-doubles">
+              <div class="champ">
+                <label for="relation-effort_temps">Effort — temps</label>
+                <select id="relation-effort_temps">
+                  <option value="">—</option>
+                  <option value="1">1 — négligeable</option>
+                  <option value="2">2</option>
+                  <option value="3">3 — modéré</option>
+                  <option value="4">4</option>
+                  <option value="5">5 — lourd</option>
+                </select>
+              </div>
+              <div class="champ">
+                <label for="relation-effort_energie">Effort — énergie</label>
+                <select id="relation-effort_energie">
+                  <option value="">—</option>
+                  <option value="1">1 — facile</option>
+                  <option value="2">2</option>
+                  <option value="3">3 — demandant</option>
+                  <option value="4">4</option>
+                  <option value="5">5 — épuisant</option>
+                </select>
+              </div>
+            </div>
+          </details>
           <div class="actions-formulaire">
-            <button type="submit" class="bouton bouton-primaire">Créer la relation</button>
+            <button type="submit" id="relation-envoyer" class="bouton bouton-primaire">Créer la relation</button>
             <button type="button" id="bouton-annuler-relation" class="bouton bouton-secondaire">Annuler</button>
           </div>
         </form>
@@ -835,7 +871,7 @@
             <datalist id="liste-roles"></datalist>
           </div>
           <div class="actions-formulaire">
-            <button type="submit" class="bouton bouton-primaire">Rattacher</button>
+            <button type="submit" id="rattachement-envoyer" class="bouton bouton-primaire">Rattacher</button>
             <button type="button" id="bouton-annuler-rattachement" class="bouton bouton-secondaire">Annuler</button>
           </div>
         </form>
