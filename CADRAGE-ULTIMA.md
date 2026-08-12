@@ -6,10 +6,27 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
-- 🪶 **SESSION 2026-08-12 (RIVEN se remplit), LIVRÉE.** Cadrage complet :
-  `CADRAGE-RIVEN-SAISIE.md` (format 6 points, pre-mortem à 9 entrées).
-  Patrimoine COMPLET vert : **54 harnais, 1 360 assertions, sortie 0** (dont
-  **50 neuves**). Rien de non poussé.
+- 🪶 **SESSION 2026-08-12 (RIVEN se remplit), CLOSE.** PR **#156 fusionnée**
+  (`e1e9144`) au go de Paul. Cadrage complet : `CADRAGE-RIVEN-SAISIE.md`
+  (format 6 points, pre-mortem à 9 entrées). Patrimoine COMPLET vert :
+  **54 harnais, 1 360 assertions, sortie 0** (dont **50 neuves**). Rien de non
+  poussé.
+  - 🎯 **DÉCISION DE PAUL, 2026-08-12 : l'INGESTION est ABANDONNÉE** — *« pour
+    l'instant, je renseigne les contacts à la main »*. La voie ① du peuplement
+    (Léo ingère une source existante et propose des fiches pré-remplies) **sort
+    du plan** ; la voie ② — la saisie en série, livrée par cette PR — **est la
+    seule**. La question « quelle source ? », bloquante depuis le 10/08, **est
+    donc close, et sans réponse : elle n'a plus d'objet.** *À ne pas
+    reproposer tant que Paul ne rouvre pas le sujet.*
+  - ✅ **Le WARN « protection des mots de passe compromis » est SANS OBJET, et
+    c'est vérifié, pas supposé.** Ultima n'a **aucune authentification par mot
+    de passe** : `signInWithOtp` (lien magique) et `signInWithOAuth` (Google)
+    sont les deux seules voies (`js/app.js:4012` et `4034`,
+    `js/boussole-auth.js:75` et `92`). Le réglage n'agit que sur un mot de
+    passe **saisi** — il n'y en a jamais. **Ce n'est donc PAS une action Paul :
+    l'activer ne changerait rien aujourd'hui.** *Il redeviendra pertinent le
+    jour où une connexion par mot de passe serait ajoutée — et ce jour-là,
+    l'activer AVANT d'ouvrir la voie.*
   - 🔻 **LE CADRAGE SE TROMPAIT, et la vérification l'a dit avant le code.** Le
     tableau annonçait « les trois boutons du panneau de fiche, qui ne font
     encore rien ». **Ils fonctionnent tous les trois** depuis le 10/08 : ce sont
@@ -41,10 +58,10 @@
   - ✅ **Le ⏳ du 10/08 est FERMÉ** : le connecteur Supabase répond enfin, passe
     `get_advisors` faite. **Zéro alerte sécurité de schéma** — la RLS de
     `personnes` et `personne_noeuds` est propre.
-  - ⏳ **Actions Paul** : ① activer la **protection des mots de passe
-    compromis** (seul WARN sécurité, toggle du dashboard Supabase) ; ② dire
-    **QUELLE source** il apporte pour l'ingestion — sans elle, la voie ① du
-    peuplement n'existe pas.
+  - ✅ **Aucune action Paul en attente.** Les deux ⏳ ouverts en cours de
+    session ont été **fermés par ses réponses et par vérification** (voir les
+    deux entrées en tête de cette session) : l'ingestion est abandonnée, le
+    WARN mots de passe est sans objet.
   - ⏭ **Reporté, avec sa preuve** : `interet_qualitatif`, `effort_temps` et
     `effort_energie` existent en base depuis la migration **0003**, sont
     validés par l'API (`api/_lib/validate.js:221-241`) et **ne sont
