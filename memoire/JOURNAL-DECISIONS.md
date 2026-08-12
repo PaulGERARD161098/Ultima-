@@ -2465,3 +2465,48 @@
   `smoke-pilotage.mjs` (47, DOM seul). Patrimoine COMPLET : **56 harnais,
   1 430 assertions, sortie 0**. `js/ciel.js`, `js/arbre.js`, `js/carte.js`,
   `supabase/**` : zéro ligne de diff. Aucune migration.
+
+### 2026-08-12 (4ᵉ boucle) — l'hypothèse séduisante que la mesure a tuée
+
+- **Dicté par Paul, capture à l'appui** : *« j'aimerais tout voir sur le même
+  écran, toutes mes constellations d'un coup d'œil »*. Arbitrage demandé et
+  rendu : **corriger le ciel existant**, pas créer une vue à plat.
+- **J'ai eu une hypothèse fausse, et elle était BELLE.** J'avais calculé que le
+  monde du ciel atteignait un rayon de **322** là où le cadrage n'en suppose que
+  **300** : « le monde déborde par construction », diagnostic élégant, cohérent
+  avec la leçon du 01/08 sur le foyer DRAUKHAIN, et **entièrement faux**. J'avais
+  pris le rayon d'amas à pleine valeur et oublié la compression verticale.
+  **Mesuré sur six configurations dont trois pires cas : 255 à 278, et zéro
+  étoile hors du viewBox, jamais.**
+  - **Ce que ça m'apprend** : *une hypothèse qui CONFIRME une leçon récente est
+    la plus dangereuse de toutes — elle se fait accepter par familiarité. Le
+    réflexe « une géométrie se mesure » ne vaut que si on mesure AUSSI le
+    diagnostic, pas seulement le résultat.* Corriger sur cette hypothèse aurait
+    éloigné la caméra, donc **rapetissé** le ciel : l'exact inverse de la
+    demande de Paul, livré avec un cadrage impeccable à l'appui.
+- **LE VRAI DÉFAUT, mesuré au navigateur** sur l'écran de la capture
+  (1670 × 900) : la scène fait **689 px** de haut, le SVG dedans **934**.
+  `overflow: hidden` en coupait **245 — un quart du ciel** — et la page ne
+  défilait pas. Le bas du réseau n'était pas hors champ : il était **supprimé,
+  en silence**. Cause : `.ciel-svg { height: auto }`, donc une hauteur déduite
+  de la **proportion du viewBox** appliquée à la largeur rendue.
+- **La règle qui en naît, et qui élargit celle du 01/08** : *« une géométrie se
+  mesure » avait été entendu comme « les éléments tiennent dans le viewBox ».
+  Insuffisant : **le viewBox lui-même peut être coupé**. La bonne question n'est
+  pas « le dessin tient-il dans son cadre ? » mais « **le cadre tient-il dans
+  l'écran ?** » — et cela se mesure en comparant la boîte du dessin à celle de
+  son conteneur, puis au viewport.*
+- **Un écran non éprouvé est un écran cassé** : le harnais du ciel ne tournait
+  qu'à 390 × 844, où le défaut n'existe pas. Il tourne désormais **aussi** sur
+  1670 × 900. *Le format d'écran est une dimension du pire cas, au même titre
+  que le volume de données.*
+- **Le harnais a été éprouvé CONTRE l'ancien code** : rétabli, il vire au rouge.
+  *Un harnais qui passe aussi sur le code cassé ne prouve rien ; le vérifier
+  coûte deux minutes et c'est la seule preuve qu'il mord.*
+- **Deux verdicts FLOTTAIENT** — verts lancés seuls, rouges dans la suite
+  complète. Ils mesuraient un transitoire d'animation derrière un
+  `waitForTimeout` fixe. Ils attendent désormais la **convergence** (deux
+  relevés identiques). *Un test qui dépend de la charge machine n'annonce rien :
+  il tire au sort, et il finira par faire douter d'un vrai rouge.*
+- **Vérifié** : patrimoine COMPLET **56 harnais, 1 430 assertions, sortie 0**.
+  `js/arbre.js`, `js/carte.js`, `api/**`, `supabase/**` : zéro ligne de diff.

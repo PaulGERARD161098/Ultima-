@@ -6,6 +6,32 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🔭 **SESSION 2026-08-12 (le ciel tient dans l'écran), LIVRÉE.** Demande de
+  Paul en cours de session, capture à l'appui. Cadrage :
+  `CADRAGE-CIEL-CADRAGE.md`. Patrimoine COMPLET vert : **56 harnais,
+  1 430 assertions, sortie 0**.
+  - 🔻 **UNE HYPOTHÈSE FAUSSE, ET BELLE, TUÉE PAR LA MESURE.** J'avais
+    diagnostiqué « le monde déborde par construction » (rayon 322 pour une
+    constante de 300) — élégant, cohérent avec la leçon du 01/08, et **faux** :
+    mesuré sur six configurations, le rayon vaut **255 à 278** et **aucune
+    étoile ne sortait jamais du viewBox**. *Corriger là-dessus aurait éloigné
+    la caméra, donc rapetissé le ciel : l'inverse exact de la demande.*
+  - ✅ **LE VRAI DÉFAUT** : sur 1670 × 900, la scène fait **689 px**, le SVG
+    dedans **934**. `overflow: hidden` en coupait **245 — un quart du ciel** —
+    sans que la page défile. `.ciel-svg` portait `height: auto`, donc une
+    hauteur déduite de la **proportion du viewBox**, pas de la place réelle.
+    Correctif : **le cadre suit la boîte** (`height: 100%`, `flex: 1`,
+    `vbH` déduit de `clientHeight`). Rayon désormais **mesuré** : plus petit
+    que la constante, il **rapproche** la caméra. Bouton **« Tout voir »**.
+  - 🔻 **La règle du 01/08 est élargie** : « les éléments tiennent dans le
+    viewBox » ne suffit pas — **le viewBox lui-même peut être coupé**. La bonne
+    question est « **le cadre tient-il dans l'écran ?** ».
+  - 🔻 **Un écran non éprouvé est un écran cassé** : le harnais ne tournait
+    qu'à 390 px, où le défaut n'existe pas. Il tourne désormais aussi en large.
+  - ✅ **Harnais éprouvé CONTRE l'ancien code** : rétabli, il vire au rouge.
+  - 🔻 **Deux verdicts flottaient** (verts seuls, rouges en suite chargée) : ils
+    mesuraient un transitoire d'animation. Ils attendent la **convergence**.
+
 - 🧭 **SESSION 2026-08-12 (RIVEN : piloter, corriger, proposer), LIVRÉE.**
   Les **trois boucles restantes de RIVEN**, demandées par Paul (« cadre pour
   qu'on boucle les 3 boucles ce jour »). Cadrage : `CADRAGE-RIVEN-PILOTAGE.md`
