@@ -69,6 +69,40 @@
   involontaire. Corriger le défaut a rendu le harnais rouge — c'est le harnais
   qui avait tort. **Réflexe : une navigation, dans un harnais, s'écrit
   explicitement ; jamais par effet de bord.**
+- 🔻 **« Le cadre tient-il dans l'écran ? »** — la règle du 01/08 (« une
+  géométrie se MESURE ») avait été entendue comme « les éléments tiennent dans
+  le viewBox ». Insuffisant : **le viewBox lui-même peut être coupé**. Le ciel
+  perdait un quart de sa hauteur derrière `overflow: hidden`, en silence.
+  **Réflexe : comparer la boîte du dessin à celle de son conteneur, puis au
+  viewport — pas seulement les éléments à leur viewBox.**
+- 🔻 **Une hypothèse qui CONFIRME une leçon récente est la plus dangereuse.**
+  J'ai diagnostiqué le ciel par analogie avec le foyer DRAUKHAIN — élégant,
+  familier, faux. **Mesurer le RÉSULTAT ne suffit pas : il faut mesurer le
+  DIAGNOSTIC avant d'écrire le correctif.**
+- 🔻 **Un format d'écran non éprouvé est un écran cassé.** Le harnais du ciel
+  ne tournait qu'à 390 × 844 ; le défaut ne vivait qu'en large et court. **La
+  taille d'écran est une dimension du pire cas, au même titre que le volume de
+  données.**
+- 🔻 **Un verdict qui dépend d'une attente à l'heure tire au sort.** Deux
+  verdicts du ciel étaient verts seuls et rouges en suite chargée. **Toute
+  mesure d'un état animé attend la CONVERGENCE, jamais une durée** — sinon un
+  vrai rouge finira par être pris pour du flottement.
+- 🔻 **Dans une liste PLAFONNÉE, l'ordre des règles est un arbitrage de
+  VALEUR.** La règle R5 (proposer un rapprochement inédit) était rangée en
+  cinquième position d'un moteur qui n'affiche que **trois** suggestions :
+  elle ne s'affichait **jamais**. La seule règle qui apprend quelque chose à
+  Paul était affamée par trois règles d'entretien. **Réflexe : à chaque ajout
+  dans une file plafonnée (suggestions, alertes, résultats), décider et ÉCRIRE
+  la place — sinon la dernière ajoutée est silencieusement morte.**
+- 🔻 **« Ce champ porte-t-il l'IDENTITÉ de l'objet ? »** — la bonne question
+  avant de rendre un champ modifiable. `type` décrit une relation (modifiable
+  depuis le 2026-08-12) ; `source_id`/`target_id` la définissent (figés : les
+  changer désignerait un autre objet et le journal adossé deviendrait un faux
+  témoignage). Vaut pour tout quadrant.
+- ✅ **CONFIRMÉE et FERMÉE — l'entrée n°1 (rapprochement objet pilotable).** Les
+  trois champs de 0003 (intérêt qualitatif, efforts chiffrés) sont atteignables
+  depuis le 2026-08-12. La contradiction « confirmée en base / démentie en
+  usage » notée le matin même est levée.
 - 🔻 **Un avertissement d'outil est un SIGNAL, pas un verdict.** J'ai inscrit
   « activer la protection des mots de passe compromis » comme action Paul, sur
   la foi d'un WARN des advisors Supabase. Sa question — « c'est à dire ? » — m'a

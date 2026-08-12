@@ -29,6 +29,10 @@
 
   // Cycle de vie d'un rapprochement (hybride v1×v2).
   var STATUTS_RELATION = ['idee', 'contact_etabli', 'en_cours', 'fructueux', 'arrete'];
+  // Les deux efforts chiffrés de la migration 0003, notés de 1 à 5. Ils vivaient
+  // en base et étaient validés par l'API depuis le 2026-07-03 sans qu'aucun
+  // écran ne puisse les atteindre — branchés le 2026-08-12.
+  var CHAMPS_EFFORT = ['effort_temps', 'effort_energie'];
   var LIBELLES_STATUT_RELATION = {
     idee: 'Idée',
     contact_etabli: 'Contact établi',
@@ -57,6 +61,9 @@
     personneCourante: null,   // id de la personne affichée dans la fiche
     personneEnEdition: null,  // id de la personne en cours d'édition
     noeudARattacher: null,    // fiche cible du formulaire de rattachement
+    // Corriger sans détruire (2026-08-12) : l'objet qu'on répare garde son id.
+    relationEnEdition: null,     // id de la relation en cours d'édition
+    rattachementEnEdition: null, // id du rattachement dont on change le rôle
     noeudNouveau: null,  // id du contact tout juste ajouté (pousse animée, A4)
     // Saisie en SÉRIE (2026-08-12) : combien d'objets créés à la suite sans
     // avoir rouvert le formulaire. Remis à zéro à chaque ouverture par
@@ -596,6 +603,22 @@
     await appelApi('/api/reseau/rattachements', {
       method: 'POST',
       body: JSON.stringify(valeurs)
+    });
+    await chargerDonnees();
+  }
+
+  // Corriger le rôle SANS détacher : le lien garde son id, la personne n'est
+  // ni recréée ni retirée du registre. L'API `PATCH` existait depuis 0024 ; le
+  // front ne l'appelait nulle part.
+  async function majRattachement(id, valeurs) {
+    if (etat.modeDemo) {
+      var lien = etat.rattachements.find(function (r) { return r.id === id; });
+      if (lien) { Object.assign(lien, valeurs); }
+      return;
+    }
+    await appelApi('/api/reseau/rattachements', {
+      method: 'PATCH',
+      body: JSON.stringify(Object.assign({ id: id }, valeurs))
     });
     await chargerDonnees();
   }
@@ -1189,6 +1212,75 @@
   }
 
   // Règles locales R1–R4, au plus 1 suggestion par règle, arrêt à 3.
+  // ---------- R5 : le rapprochement inédit ----------
+
+  // Une DEMANDE est un lead ou un chantier qui nomme un métier ; une OFFRE est
+  // un artisan qui exerce ce métier (principal ou secondaire). On ne propose
+  // que ce couple-là : c'est le seul dont on puisse DIRE la raison. Rapprocher
+  // « un partenaire et un artisan » a été écarté — sans critère de
+  // correspondance, ce serait tous les partenaires × tous les artisans, donc
+  // du bruit présenté comme un conseil.
+  function metiersDuNoeud(noeud) {
+    var liste = [];
+    if (noeud.secteur_activite) { liste.push(normaliserTexte(noeud.secteur_activite)); }
+    if (Array.isArray(noeud.metiers_secondaires)) {
+      noeud.metiers_secondaires.forEach(function (m) {
+        if (m) { liste.push(normaliserTexte(m)); }
+      });
+    }
+    return liste;
+  }
+
+  function estClos(noeud) {
+    return noeud.statut === 'termine' || noeud.statut === 'inactif';
+  }
+
+  function dejaRelies(a, b) {
+    return etat.relations.some(function (r) {
+      return (r.source_id === a && r.target_id === b) ||
+        (r.source_id === b && r.target_id === a);
+    });
+  }
+
+  function meilleurRapprochement() {
+    var demandes = etat.noeuds.filter(function (n) {
+      return (n.type === 'lead' || n.type === 'chantier') && !estClos(n) && n.secteur_activite;
+    });
+    var offres = etat.noeuds.filter(function (n) {
+      return n.type === 'artisan' && !estClos(n);
+    });
+    var candidats = [];
+    demandes.forEach(function (demandeur) {
+      var besoin = normaliserTexte(demandeur.secteur_activite);
+      offres.forEach(function (fournisseur) {
+        if (dejaRelies(demandeur.id, fournisseur.id)) { return; }
+        if (metiersDuNoeud(fournisseur).indexOf(besoin) === -1) { return; }
+        candidats.push({
+          demandeur: demandeur,
+          fournisseur: fournisseur,
+          type: demandeur.type === 'chantier' ? 'sous_traitance' : 'apport_affaires',
+          motif: (fournisseur.nom || 'cet artisan') + ' fait ' +
+            demandeur.secteur_activite.toLowerCase(),
+          memeVille: !!(demandeur.ville && fournisseur.ville &&
+            normaliserTexte(demandeur.ville) === normaliserTexte(fournisseur.ville))
+        });
+      });
+    });
+    if (!candidats.length) { return null; }
+    // Départage DÉTERMINISTE : la fiabilité connue d'abord, puis la proximité,
+    // puis l'alphabet — jamais l'ordre d'arrivée en base.
+    candidats.sort(function (a, b) {
+      var fa = typeof a.fournisseur.fiabilite === 'number' ? a.fournisseur.fiabilite : -1;
+      var fb = typeof b.fournisseur.fiabilite === 'number' ? b.fournisseur.fiabilite : -1;
+      if (fa !== fb) { return fb - fa; }
+      if (a.memeVille !== b.memeVille) { return a.memeVille ? -1 : 1; }
+      var na = (a.demandeur.nom || '') + '|' + (a.fournisseur.nom || '');
+      var nb = (b.demandeur.nom || '') + '|' + (b.fournisseur.nom || '');
+      return na.localeCompare(nb, 'fr');
+    });
+    return candidats[0];
+  }
+
   function calculerSuggestions() {
     var suggestions = [];
     var aujourdHui = dateLocaleIso(0);
@@ -1214,6 +1306,37 @@
         message: message,
         action: function () { ouvrirCibleDepuisAccueil(noeudCibleEntree(plusAncienne)); }
       });
+    }
+
+    // R5 — LE RAPPROCHEMENT INÉDIT (2026-08-12). Placée juste APRÈS R1, et
+    // c'est un défaut trouvé par le harnais : rangée en cinquième position,
+    // elle ne s'affichait JAMAIS. Le moteur plafonne à trois suggestions, et
+    // R1+R2+R3 remplissent les trois places dans n'importe quel réseau réel —
+    // la seule règle qui apprend quelque chose à Paul était affamée par trois
+    // règles d'entretien. L'ordre dit la valeur : une relance en retard passe
+    // d'abord (c'est urgent), puis une affaire possible, et seulement ensuite
+    // « untel n'a pas de téléphone ». Les règles R1 à R4 réveillent
+    // ce que Paul a DÉJÀ saisi ; celle-ci est la seule qui lui apprend quelque
+    // chose : deux fiches qui se répondent et ne se connaissent pas. C'est la
+    // demande du 2026-07-06 — Léo propose, il n'écrit jamais seul : l'action
+    // ouvre le formulaire PRÉ-REMPLI, aucune écriture n'a lieu ici.
+    if (suggestions.length < 3) {
+      var paire = meilleurRapprochement();
+      if (paire) {
+        suggestions.push({
+          message: (paire.demandeur.nom || '(sans nom)') + ' et ' +
+            (paire.fournisseur.nom || '(sans nom)') + ' ne sont pas encore reliés — ' +
+            paire.motif + '. On les rapproche ?',
+          action: function () {
+            activerOnglet('carte');
+            ouvrirFormRelation(paire.demandeur.id, {
+              idCible: paire.fournisseur.id,
+              type: paire.type
+            });
+            $('#panneau-titre').focus();
+          }
+        });
+      }
     }
 
     // R2 — idée dormante : aucune entrée depuis 14 jours.
@@ -1956,6 +2079,8 @@
     etat.personneCourante = null;
     etat.personneEnEdition = null;
     etat.noeudARattacher = null;
+    etat.relationEnEdition = null;
+    etat.rattachementEnEdition = null;
     reinitialiserGeo(); // l'aperçu et l'état de recherche ne survivent pas
   }
 
@@ -2099,6 +2224,26 @@
           raison.textContent = 'Arrêt : ' + relation.raison_arret;
           texte.appendChild(raison);
         }
+        // Le pilotage (0003) : ce que Paul attend du rapprochement, et ce qu'il
+        // lui coûte. Affiché seulement s'il est renseigné — un rapprochement
+        // non pesé n'est pas une anomalie à signaler.
+        if (relation.interet_qualitatif) {
+          var interet = document.createElement('span');
+          interet.className = 'item-relation-note';
+          interet.textContent = 'Intérêt : ' + relation.interet_qualitatif;
+          texte.appendChild(interet);
+        }
+        var efforts = CHAMPS_EFFORT
+          .filter(function (champ) { return typeof relation[champ] === 'number'; })
+          .map(function (champ) {
+            return (champ === 'effort_temps' ? 'temps' : 'énergie') + ' ' + relation[champ] + '/5';
+          });
+        if (efforts.length) {
+          var ligneEffort = document.createElement('span');
+          ligneEffort.className = 'item-relation-note';
+          ligneEffort.textContent = 'Effort : ' + efforts.join(', ');
+          texte.appendChild(ligneEffort);
+        }
 
         // Pilotage : cycle de vie du rapprochement (un arrêt exige sa raison).
         var pilotage = document.createElement('select');
@@ -2132,6 +2277,18 @@
           });
         });
 
+        // Corriger sans détruire : le type, la note et le pilotage se reprennent
+        // ici. La relation garde son id — donc son journal.
+        var modifier = document.createElement('button');
+        modifier.type = 'button';
+        modifier.className = 'bouton bouton-secondaire bouton-modifier-relation';
+        modifier.textContent = 'Modifier';
+        modifier.setAttribute('aria-label',
+          'Modifier la relation avec ' + ((autre && autre.nom) || 'ce nœud'));
+        modifier.addEventListener('click', function () {
+          ouvrirFormRelation(null, { idEdition: relation.id });
+        });
+
         var suppr = document.createElement('button');
         suppr.type = 'button';
         suppr.className = 'bouton bouton-danger';
@@ -2148,6 +2305,7 @@
         var actionsRelation = document.createElement('span');
         actionsRelation.className = 'item-relation-actions';
         actionsRelation.appendChild(pilotage);
+        actionsRelation.appendChild(modifier);
         actionsRelation.appendChild(suppr);
 
         item.appendChild(texte);
@@ -2247,6 +2405,19 @@
           ouvrirFichePersonne(paire.personne.id);
         });
         item.appendChild(texte);
+
+        // Corriger le rôle sans détacher : jusqu'ici il fallait retirer la
+        // personne puis la rattacher — donc détruire le lien pour le réparer.
+        var majRole = document.createElement('button');
+        majRole.type = 'button';
+        majRole.className = 'bouton bouton-secondaire bouton-role';
+        majRole.textContent = 'Rôle';
+        majRole.setAttribute('aria-label',
+          'Modifier le rôle de ' + (paire.personne.nom || 'cette personne'));
+        majRole.addEventListener('click', function () {
+          ouvrirFormRattachement(noeud.id, { idEdition: paire.lien.id });
+        });
+        item.appendChild(majRole);
 
         var detacher = document.createElement('button');
         detacher.type = 'button';
@@ -3764,13 +3935,42 @@
   // Ce n'est pas un identifiant — aucune personne ne peut la porter.
   var RATTACHEMENT_NOUVELLE = '__nouvelle__';
 
-  function ouvrirFormRattachement(nodeId) {
+  function ouvrirFormRattachement(nodeId, options) {
     var noeud = trouverNoeud(nodeId);
     if (!noeud) { return; }
+    var opts = options || {};
+    var lien = opts.idEdition
+      ? etat.rattachements.find(function (r) { return r.id === opts.idEdition; })
+      : null;
+    if (opts.idEdition && !lien) { return; }
     etat.noeudARattacher = nodeId;
+    etat.rattachementEnEdition = lien ? lien.id : null;
+
+    // ÉDITION du rôle : la personne et la fiche sont figées — c'est le rôle,
+    // et lui seul, qu'on répare. Le lien garde son id.
+    if (lien) {
+      var personneLiee = trouverPersonne(lien.personne_id);
+      $('#rattachement-source').textContent = 'Sur : ' + (noeud.nom || '(sans nom)');
+      var selectFige = $('#rattachement-personne');
+      selectFige.textContent = '';
+      var seule = document.createElement('option');
+      seule.value = lien.personne_id;
+      seule.textContent = (personneLiee && personneLiee.nom) || 'Personne';
+      selectFige.appendChild(seule);
+      selectFige.value = lien.personne_id;
+      selectFige.disabled = true;
+      $('#rattachement-nouvelle').hidden = true;
+      $('#rattachement-role').value = lien.role || '';
+      $('#rattachement-envoyer').textContent = 'Enregistrer';
+      majDatalistRoles();
+      ouvrirPanneau('rattachement', 'Modifier le rôle');
+      return;
+    }
 
     $('#rattachement-source').textContent = 'Sur : ' + (noeud.nom || '(sans nom)');
     var select = $('#rattachement-personne');
+    select.disabled = false;
+    $('#rattachement-envoyer').textContent = 'Rattacher';
     select.textContent = '';
     // Créer est offert EN TÊTE — visible sans dérouler cinquante noms — mais
     // n'est pas la valeur retenue tant qu'une personne existe (voir plus bas) :
@@ -3826,6 +4026,24 @@
       return;
     }
 
+    // Corriger le rôle : une seule écriture, le lien garde son id, la personne
+    // reste rattachée pendant toute l'opération.
+    if (etat.rattachementEnEdition) {
+      var idLien = etat.rattachementEnEdition;
+      var roleRepare = $('#rattachement-role').value.trim();
+      try {
+        await majRattachement(idLien, { role: roleRepare || null });
+        toast('Rôle mis à jour.');
+        etat.rattachementEnEdition = null;
+        etat.noeudARattacher = null;
+        rafraichir();
+        ouvrirFiche(cible);
+      } catch (e) {
+        toast('Mise à jour du rôle impossible.', 'erreur');
+      }
+      return;
+    }
+
     // Cas « créer sur place » : DEUX écritures, dans cet ordre, et l'échec de
     // la seconde ne doit jamais être muet — la personne existerait alors au
     // registre sans que Paul le sache (pre-mortem P5).
@@ -3878,16 +4096,28 @@
 
   // ---------- Formulaire relation ----------
 
-  function ouvrirFormRelation(idSource) {
-    var source = trouverNoeud(idSource);
+  // idCible / typePrerempli : la suggestion R5 ouvre ce formulaire DÉJÀ garni.
+  // idEdition : on répare une relation existante — elle garde son id.
+  function ouvrirFormRelation(idSource, options) {
+    var opts = options || {};
+    var edition = opts.idEdition ? trouverRelation(opts.idEdition) : null;
+    if (opts.idEdition && !edition) { return; }
+    var depart = edition ? edition.source_id : idSource;
+    var source = trouverNoeud(depart);
     if (!source) { return; }
-    etat.noeudCourant = idSource;
+    etat.noeudCourant = depart;
+    etat.relationEnEdition = edition ? edition.id : null;
 
     $('#relation-source').textContent = 'Depuis : ' + (source.nom || '(sans nom)');
     var select = $('#relation-cible');
     select.textContent = '';
-    etat.noeuds.forEach(function (n) {
-      if (n.id === idSource) { return; }
+    // En ÉDITION la cible est FIGÉE, et on le dit à l'écran : en changer ne
+    // corrigerait pas cette relation, cela en désignerait une autre — et le
+    // journal qui lui est adossé deviendrait un faux témoignage.
+    var candidats = edition
+      ? etat.noeuds.filter(function (n) { return n.id === edition.target_id; })
+      : etat.noeuds.filter(function (n) { return n.id !== depart; });
+    candidats.forEach(function (n) {
       var option = document.createElement('option');
       option.value = n.id;
       option.textContent = (n.nom || '(sans nom)') + ' — ' + (LIBELLES_TYPE[n.type] || n.type);
@@ -3897,20 +4127,88 @@
       toast('Aucun autre nœud à relier.', 'erreur');
       return;
     }
-    $('#relation-type').value = 'apport_affaires';
-    $('#relation-notes').value = '';
-    ouvrirPanneau('relation', 'Relier deux nœuds');
+    select.disabled = !!edition;
+    if (edition) {
+      select.value = edition.target_id;
+    } else if (opts.idCible && trouverNoeud(opts.idCible)) {
+      select.value = opts.idCible;
+    }
+    $('#relation-type').value = edition
+      ? (edition.type || 'apport_affaires')
+      : (opts.type || 'apport_affaires');
+    $('#relation-notes').value = edition ? (edition.notes || '') : '';
+    $('#relation-interet_qualitatif').value = edition ? (edition.interet_qualitatif || '') : '';
+    CHAMPS_EFFORT.forEach(function (champ) {
+      $('#relation-' + champ).value =
+        edition && typeof edition[champ] === 'number' ? String(edition[champ]) : '';
+    });
+    // Le pli reste FERMÉ : relier deux fiches doit rester un geste court.
+    $('#relation-pilotage-pli').open = false;
+    $('#relation-envoyer').textContent = edition ? 'Enregistrer' : 'Créer la relation';
+    ouvrirPanneau('relation', edition ? 'Modifier la relation' : 'Relier deux nœuds');
   }
 
   async function soumettreFormRelation(evenement) {
     evenement.preventDefault();
-    var valeurs = {
-      source_id: etat.noeudCourant,
+    var type = $('#relation-type').value;
+    var retour = etat.noeudCourant;
+    if (!retour || !LIBELLES_RELATION[type]) {
+      toast('Formulaire incomplet.', 'erreur');
+      return;
+    }
+
+    // Les champs de pilotage suivent la convention du reste du produit :
+    // vide → omis à la création, `null` en édition (vidage effectif).
+    var pilotage = {};
+    var interet = $('#relation-interet_qualitatif').value.trim();
+    if (interet) {
+      pilotage.interet_qualitatif = interet;
+    } else if (etat.relationEnEdition) {
+      pilotage.interet_qualitatif = null;
+    }
+    for (var i = 0; i < CHAMPS_EFFORT.length; i++) {
+      var champ = CHAMPS_EFFORT[i];
+      var brut = $('#relation-' + champ).value;
+      if (!brut) {
+        if (etat.relationEnEdition) { pilotage[champ] = null; }
+        continue;
+      }
+      var note = Number(brut);
+      if (!isFinite(note) || !Number.isInteger(note) || note < 1 || note > 5) {
+        toast('Les efforts se notent de 1 à 5.', 'erreur');
+        return;
+      }
+      pilotage[champ] = note;
+    }
+
+    // ÉDITION — on n'envoie QUE ce que le formulaire porte. Le statut et la
+    // raison d'arrêt n'y sont pas : ils ne peuvent donc pas être écrasés par
+    // une correction de note ou de type.
+    if (etat.relationEnEdition) {
+      var maj = Object.assign({
+        type: type,
+        notes: $('#relation-notes').value.trim() || null
+      }, pilotage);
+      var idRepare = etat.relationEnEdition;
+      try {
+        await majRelation(idRepare, maj);
+        toast('Relation mise à jour.');
+        etat.relationEnEdition = null;
+        rafraichir();
+        ouvrirFiche(retour);
+      } catch (e) {
+        toast(e.message || 'Mise à jour impossible.', 'erreur');
+      }
+      return;
+    }
+
+    var valeurs = Object.assign({
+      source_id: retour,
       target_id: $('#relation-cible').value,
-      type: $('#relation-type').value,
+      type: type,
       notes: $('#relation-notes').value.trim()
-    };
-    if (!valeurs.source_id || !valeurs.target_id || !LIBELLES_RELATION[valeurs.type]) {
+    }, pilotage);
+    if (!valeurs.target_id) {
       toast('Formulaire incomplet.', 'erreur');
       return;
     }
@@ -4115,6 +4413,13 @@
       var vue = window.UltimaCiel && window.UltimaCiel.courant();
       if (vue) { vue.zoomer(0.18); }
     });
+    // « Tout voir » : la sortie de secours du volume. On peut s'être approché
+    // d'une constellation et avoir perdu les autres de vue — un geste ramène au
+    // cadrage MESURÉ, celui qui fait tenir tout le réseau dans l'écran.
+    $('#ciel-tout-voir').addEventListener('click', function () {
+      var vue = window.UltimaCiel && window.UltimaCiel.courant();
+      if (vue) { vue.toutVoir(); }
+    });
     $('#ciel-derive').addEventListener('change', function (e) {
       var vue = window.UltimaCiel && window.UltimaCiel.courant();
       if (vue) { vue.derive(e.target.checked); }
@@ -4152,6 +4457,7 @@
       if (etat.noeudCourant) { ouvrirFiche(etat.noeudCourant); } else { fermerPanneau(); }
     });
     $('#bouton-annuler-relation').addEventListener('click', function () {
+      etat.relationEnEdition = null;
       if (etat.noeudCourant) { ouvrirFiche(etat.noeudCourant); } else { fermerPanneau(); }
     });
     // Annuler une personne : on revient à SA fiche si on l'éditait, sinon on
@@ -4164,6 +4470,7 @@
     $('#bouton-annuler-rattachement').addEventListener('click', function () {
       var retour = etat.noeudARattacher;
       etat.noeudARattacher = null;
+      etat.rattachementEnEdition = null;
       if (retour && trouverNoeud(retour)) { ouvrirFiche(retour); } else { fermerPanneau(); }
     });
 

@@ -2410,3 +2410,103 @@
 - **PR #156 fusionnée** en squash (`e1e9144`) au go de Paul ; branche repartie
   de `origin/main` **avant** tout nouveau commit, comme l'exige la règle du
   2026-07-22.
+
+### 2026-08-12 (3ᵉ boucle) — la règle affamée, ou l'ordre comme arbitrage de valeur
+
+- **Dicté par Paul** : *« cadre pour qu'on boucle les 3 boucles ce jour /
+  allons y une fois que tu as bien cadré et détaillé les étapes »*. Trois
+  boucles fermées dans la foulée : piloter, corriger, proposer.
+- **J'avais mal inventorié, et je l'ai vu en mesurant.** J'avais annoncé à Paul
+  que « Léo qui fait quelque chose de la donnée » attendait **entièrement**.
+  Faux : les relances remontent déjà, le moteur de suggestions existe avec
+  **quatre règles**, une section suit les rapprochements créés. Il manquait
+  **une** chose : proposer un rapprochement **inédit**. *Règle : avant
+  d'annoncer qu'un chantier est à faire, l'ouvrir. J'ai failli réécrire —
+  donc dégrader — un moteur qui marchait.*
+- **LE constat de la boucle : une règle peut être vraie, testée, et JAMAIS
+  ATTEINTE.** R5 (le rapprochement inédit) était rangée en cinquième position.
+  Le moteur plafonne à **trois** suggestions, et R1 (relance en retard) + R2
+  (idée dormante) + R3 (contact injoignable) remplissent les trois places dans
+  n'importe quel réseau réel. **La seule règle qui apprend quelque chose à Paul
+  était affamée par trois règles d'entretien.** Le harnais l'a trouvé du
+  premier coup, parce qu'il exerçait l'écran et pas la fonction.
+  - **Règle permanente qui en naît** : *dans toute liste plafonnée
+    (suggestions, alertes, résultats), l'ORDRE des producteurs est un
+    **arbitrage de valeur**, pas un détail d'implémentation. Il se décide
+    explicitement et s'écrit dans le code — sinon la dernière règle ajoutée est
+    silencieusement morte.* Ordre acté : urgence (relance en retard), puis
+    **affaire possible**, puis entretien.
+  - **C'est la MÊME leçon qu'hier** (le cul-de-sac du rattachement), un étage
+    plus haut : une fonctionnalité verte peut être inatteignable. Hier c'était
+    l'état de la base ; aujourd'hui c'est la place dans une file.
+- **Corriger sans détruire, et pourquoi le `type` dégèle mais pas la cible** :
+  `source_id` et `target_id` **définissent** la relation — en changer un ne
+  corrige pas cet objet, il en désigne un autre, et le journal adossé
+  deviendrait un **faux témoignage**. Le `type`, lui, **décrit** le lien sans
+  l'identifier. *La bonne question n'est pas « ce champ est-il modifiable ? »
+  mais « ce champ porte-t-il l'IDENTITÉ de l'objet ? ».*
+- **La preuve choisie dit ce que Paul veut savoir, pas ce que le code fait** :
+  pour prouver « corriger n'a pas détruit », le harnais ne lit aucun `id` — il
+  vérifie que **l'entrée de journal adossée à la relation est toujours là**. Un
+  supprimer/recréer l'aurait emportée. *Et j'ai refusé d'exposer `etat` en
+  global pour les besoins du test : il porte de la PII, et un harnais qui a
+  besoin d'un crochet en production mesure autre chose que ce que Paul touche.*
+- **Le harnais avait tort avant le produit, une fois de plus** : mon critère C6
+  confondait « ne plus proposer le rapprochement » et « ne plus nommer
+  l'artisan » — R3 le nomme légitimement (« ni téléphone ni e-mail »). *Un
+  critère trop large fait échouer un produit correct : c'est le harnais qu'on
+  précise, pas le produit qu'on fait taire.*
+- **Un rapprochement écarté, et c'est le pré-mortem qui l'a fait** : j'avais
+  cadré « ou bien un partenaire rencontre un artisan ». Sans critère de
+  correspondance, ce serait *tous* les partenaires × *tous* les artisans — du
+  bruit présenté comme un conseil. **On ne propose que ce dont on peut DIRE la
+  raison.** L'amendement est écrit dans le cadrage, pas effacé.
+- **Vérifié** : `unit-relation-pilotage.mjs` (23 assertions, Node pur) et
+  `smoke-pilotage.mjs` (47, DOM seul). Patrimoine COMPLET : **56 harnais,
+  1 430 assertions, sortie 0**. `js/ciel.js`, `js/arbre.js`, `js/carte.js`,
+  `supabase/**` : zéro ligne de diff. Aucune migration.
+
+### 2026-08-12 (4ᵉ boucle) — l'hypothèse séduisante que la mesure a tuée
+
+- **Dicté par Paul, capture à l'appui** : *« j'aimerais tout voir sur le même
+  écran, toutes mes constellations d'un coup d'œil »*. Arbitrage demandé et
+  rendu : **corriger le ciel existant**, pas créer une vue à plat.
+- **J'ai eu une hypothèse fausse, et elle était BELLE.** J'avais calculé que le
+  monde du ciel atteignait un rayon de **322** là où le cadrage n'en suppose que
+  **300** : « le monde déborde par construction », diagnostic élégant, cohérent
+  avec la leçon du 01/08 sur le foyer DRAUKHAIN, et **entièrement faux**. J'avais
+  pris le rayon d'amas à pleine valeur et oublié la compression verticale.
+  **Mesuré sur six configurations dont trois pires cas : 255 à 278, et zéro
+  étoile hors du viewBox, jamais.**
+  - **Ce que ça m'apprend** : *une hypothèse qui CONFIRME une leçon récente est
+    la plus dangereuse de toutes — elle se fait accepter par familiarité. Le
+    réflexe « une géométrie se mesure » ne vaut que si on mesure AUSSI le
+    diagnostic, pas seulement le résultat.* Corriger sur cette hypothèse aurait
+    éloigné la caméra, donc **rapetissé** le ciel : l'exact inverse de la
+    demande de Paul, livré avec un cadrage impeccable à l'appui.
+- **LE VRAI DÉFAUT, mesuré au navigateur** sur l'écran de la capture
+  (1670 × 900) : la scène fait **689 px** de haut, le SVG dedans **934**.
+  `overflow: hidden` en coupait **245 — un quart du ciel** — et la page ne
+  défilait pas. Le bas du réseau n'était pas hors champ : il était **supprimé,
+  en silence**. Cause : `.ciel-svg { height: auto }`, donc une hauteur déduite
+  de la **proportion du viewBox** appliquée à la largeur rendue.
+- **La règle qui en naît, et qui élargit celle du 01/08** : *« une géométrie se
+  mesure » avait été entendu comme « les éléments tiennent dans le viewBox ».
+  Insuffisant : **le viewBox lui-même peut être coupé**. La bonne question n'est
+  pas « le dessin tient-il dans son cadre ? » mais « **le cadre tient-il dans
+  l'écran ?** » — et cela se mesure en comparant la boîte du dessin à celle de
+  son conteneur, puis au viewport.*
+- **Un écran non éprouvé est un écran cassé** : le harnais du ciel ne tournait
+  qu'à 390 × 844, où le défaut n'existe pas. Il tourne désormais **aussi** sur
+  1670 × 900. *Le format d'écran est une dimension du pire cas, au même titre
+  que le volume de données.*
+- **Le harnais a été éprouvé CONTRE l'ancien code** : rétabli, il vire au rouge.
+  *Un harnais qui passe aussi sur le code cassé ne prouve rien ; le vérifier
+  coûte deux minutes et c'est la seule preuve qu'il mord.*
+- **Deux verdicts FLOTTAIENT** — verts lancés seuls, rouges dans la suite
+  complète. Ils mesuraient un transitoire d'animation derrière un
+  `waitForTimeout` fixe. Ils attendent désormais la **convergence** (deux
+  relevés identiques). *Un test qui dépend de la charge machine n'annonce rien :
+  il tire au sort, et il finira par faire douter d'un vrai rouge.*
+- **Vérifié** : patrimoine COMPLET **56 harnais, 1 430 assertions, sortie 0**.
+  `js/arbre.js`, `js/carte.js`, `api/**`, `supabase/**` : zéro ligne de diff.

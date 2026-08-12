@@ -44,8 +44,14 @@ const EDGE_FIELDS = [
   'effort_energie',
   'raison_arret',
 ];
-// Champs de pilotage modifiables après création (source/cible/type sont figés).
+// Champs modifiables après création. `source_id` et `target_id` restent FIGÉS :
+// ils *définissent* la relation — en changer un ne corrige pas cet objet, il en
+// désigne un autre, et le journal qui lui est adossé deviendrait un faux
+// témoignage. Le `type`, lui, *décrit* le lien sans l'identifier : il est
+// modifiable depuis le 2026-08-12 (corriger une erreur de saisie sans détruire
+// la relation ni son journal), validé par le MÊME contrôle qu'à la création.
 const EDGE_UPDATE_FIELDS = [
+  'type',
   'statut',
   'interet_qualitatif',
   'effort_temps',
@@ -258,6 +264,12 @@ export function validateEdge(body, mode) {
     const unknown = rejectUnknown(body, EDGE_UPDATE_FIELDS);
     if (unknown) return { error: unknown };
     const out = {};
+    // Même liste blanche qu'à la création : dégeler le type n'élargit pas ce
+    // qu'un client peut écrire, seulement QUAND il peut l'écrire.
+    if (body.type !== undefined) {
+      if (!EDGE_TYPES.includes(body.type)) return { error: 'Type de relation invalide' };
+      out.type = body.type;
+    }
     const msg = collectEdgePilotage(body, out);
     if (msg) return { error: msg };
     if (Object.keys(out).length === 0) return { error: 'Aucun champ à mettre à jour' };

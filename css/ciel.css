@@ -37,6 +37,11 @@
 /* ---- La scène ---- */
 .ciel-scene {
   position: relative;
+  /* La scène prend la hauteur restante et la DONNE au SVG : c'est elle qui
+     mène, plus la proportion du viewBox. `min-height: 0` sans quoi un enfant
+     flex refuse de descendre sous sa taille intrinsèque. */
+  flex: 1;
+  min-height: 220px;
   overflow: hidden;
   border: 1px solid rgba(169, 136, 74, .4);
   border-radius: 3px;
@@ -56,7 +61,12 @@
   content: ""; position: absolute; inset: 7px; pointer-events: none;
   border: 1px solid rgba(169, 136, 74, .18);
 }
-.ciel-svg { display: block; width: 100%; height: auto; }
+/* `height: 100%` et non `auto` (correctif du 2026-08-12) : avec `auto`, la
+   hauteur du SVG était dictée par la proportion du viewBox appliquée à la
+   largeur rendue. Sur un écran large et court elle dépassait la scène, et
+   `overflow: hidden` en coupait un quart SANS QUE RIEN NE LE DISE. Le SVG
+   remplit désormais exactement sa boîte, dont le viewBox épouse la forme. */
+.ciel-svg { display: block; width: 100%; height: 100%; }
 
 /* ---- Les étoiles ---- */
 .ciel-etoile { cursor: pointer; }
@@ -97,6 +107,13 @@
 .ciel-bouton-rond {
   width: 2.2rem; height: 2.2rem; padding: 0; line-height: 1;
   font-size: 1rem; border-radius: 50%;
+}
+/* « Tout voir » : un mot, pas un signe. Les deux ronds disent un mouvement
+   relatif (+ / −) ; celui-ci dit un état à retrouver, et un état se nomme.
+   Même hauteur que les ronds pour tenir la ligne, et le plancher tactile. */
+.ciel-tout-voir {
+  height: 2.2rem; padding: 0 .7rem; line-height: 1;
+  font-size: .82rem; border-radius: 1.1rem; white-space: nowrap;
 }
 .ciel-bascule {
   display: flex; align-items: center; gap: .35rem;

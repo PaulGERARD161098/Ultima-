@@ -256,6 +256,170 @@ verdicts.magnitudeCompteLesDeux = await page.evaluate(() => {
   return m.x === 2 && m.y === 1;
 });
 
+// ---------- 12. LE CIEL TIENT DANS L'ÉCRAN (2026-08-12) ----------
+// Paul : « je veux tout voir d'un coup d'œil », capture à l'appui.
+//
+// LE DÉFAUT, MESURÉ : la hauteur du SVG se déduisait de la proportion du
+// viewBox (vbH = vbW × 0,56) appliquée à la largeur rendue. Sur l'écran de
+// Paul — 1670 × 900 — cela réclamait 934 px de haut dans une scène qui n'en
+// offre que 689. `overflow: hidden` en coupait 245, soit UN QUART DU CIEL, et
+// la page ne défilait pas : le bas du réseau n'était pas hors champ, il était
+// SUPPRIMÉ. Rien ne le disait.
+//
+// Rien ici ne pouvait le voir : ce harnais mesurait les couleurs, les cibles
+// tactiles et le clavier, jamais le RAPPORT ENTRE LE DESSIN ET SA BOÎTE. Et le
+// seul écran éprouvé était 390 × 844, où le défaut n'existe pas — l'échantillon
+// favorable, encore.
+//
+// Le verdict porte donc sur le seul critère qui traduise la demande de Paul :
+// le SVG tient dans sa scène, et la scène tient dans l'écran.
+const tientDansLaBoite = () => page.evaluate(() => {
+  const sc = document.getElementById('ciel-scene');
+  const svg = sc.querySelector('.ciel-svg');
+  const b = sc.getBoundingClientRect(), s = svg.getBoundingClientRect();
+  return {
+    coupeEnHaut: +(b.top - s.top).toFixed(1),
+    coupeEnBas: +(s.bottom - b.bottom).toFixed(1),
+    coupeAGauche: +(b.left - s.left).toFixed(1),
+    coupeADroite: +(s.right - b.right).toFixed(1),
+    sceneDansEcran: b.top >= -1 && b.bottom <= window.innerHeight + 1,
+    hauteurScene: +b.height.toFixed(0)
+  };
+});
+
+const boite390 = await tientDansLaBoite();
+// Tolérance de 1 px : arrondi sous-pixel du navigateur, pas une troncature.
+verdicts.cielEntierDansSaBoite390 = boite390.coupeEnHaut <= 1 && boite390.coupeEnBas <= 1 &&
+  boite390.coupeAGauche <= 1 && boite390.coupeADroite <= 1;
+verdicts.sceneEntiereDansLEcran390 = boite390.sceneDansEcran;
+
+// Le rayon du monde est désormais MESURÉ sur les étoiles construites, non
+// supposé. Il est plus PETIT que l'ancienne constante (300) : cadrer sur la
+// donnée réelle rapproche la caméra au lieu de l'éloigner.
+verdicts.rayonMesurePlusPetitQueLaConstante = await page.evaluate(() => {
+  const noeuds = [];
+  for (let i = 0; i < 14; i++) {
+    noeuds.push({ id: 'w' + i, nom: 'Fiche ' + i, type: 'artisan', secteur_activite: 'Metier' + i });
+  }
+  const r = window.UltimaCiel.construireMonde(noeuds).rayon;
+  return r > 200 && r < 300;
+});
+
+// Un réseau à UNE fiche ne doit pas produire un rayon nul (pre-mortem P5).
+verdicts.reseauMinusculeGardeUnPlancher = await page.evaluate(() =>
+  window.UltimaCiel.construireMonde([{ id: 'u', nom: 'Seul', secteur_activite: 'Toiture' }]).rayon >= 80);
+
+// Rend le pire cas dans le VRAI conteneur, par la VRAIE fonction publique, et
+// mesure chaque étoile et chaque libellé contre le viewBox.
+async function mesurerDebordement() {
+  return page.evaluate(() => {
+    const noeuds = [];
+    for (let i = 0; i < 14; i++) {
+      noeuds.push({ id: 'w' + i, nom: 'Fiche numéro ' + i, type: 'artisan', secteur_activite: 'Metier' + i });
+    }
+    window.UltimaCiel.rendre(document.getElementById('ciel-scene'),
+      { noeuds, personnes: [], rattachements: [], relations: [] },
+      { libellesType: {}, libellesStatut: {} });
+    const svg = document.querySelector('#ciel-scene .ciel-svg');
+    const vb = svg.getAttribute('viewBox').split(' ').map(Number);
+    const dedans = (x, y) => x >= 0 && x <= vb[2] && y >= 0 && y <= vb[3];
+    let etoilesDehors = 0, etoilesVues = 0;
+    svg.querySelectorAll('g.ciel-etoile[data-noeud-id]').forEach((g) => {
+      const z = g.querySelector('.ciel-zone');
+      if (!z) { return; }
+      etoilesVues++;
+      if (!dedans(+z.getAttribute('cx'), +z.getAttribute('cy'))) { etoilesDehors++; }
+    });
+    let libellesDehors = 0, libellesVus = 0;
+    svg.querySelectorAll('.ciel-nom-amas').forEach((t) => {
+      libellesVus++;
+      if (!dedans(+t.getAttribute('x'), +t.getAttribute('y'))) { libellesDehors++; }
+    });
+    return { etoilesVues, etoilesDehors, libellesVus, libellesDehors };
+  });
+}
+
+// L'animation lisse la distance : on laisse la caméra atteindre sa cible —
+// par convergence mesurée, jamais par une attente à l'heure (voir plus bas).
+async function geoStable() {
+  let precedent = await mesurerDebordement();
+  for (let i = 0; i < 30; i++) {
+    await page.waitForTimeout(250);
+    const actuel = await mesurerDebordement();
+    if (actuel.etoilesDehors === precedent.etoilesDehors &&
+        actuel.libellesDehors === precedent.libellesDehors) { return actuel; }
+    precedent = actuel;
+  }
+  return precedent;
+}
+const geoMobile2 = await geoStable();
+verdicts.pireCasRendu = geoMobile2.etoilesVues === 14 && geoMobile2.libellesVus >= 10;
+// C1 — 100 % des étoiles dans le cadre, à 390 px.
+verdicts.aucuneEtoileHorsCadre390 = geoMobile2.etoilesDehors === 0;
+// C2 — les libellés aussi : c'est le nom que Paul lit en premier.
+verdicts.aucunLibelleHorsCadre390 = geoMobile2.libellesDehors === 0;
+
+// L'ÉCRAN DE LA CAPTURE DE PAUL — large et court. C'est là, et seulement là,
+// que le défaut vivait : jamais éprouvé, donc jamais vu.
+await page.setViewportSize({ width: 1670, height: 900 });
+await page.waitForTimeout(900);
+const boiteLarge = await tientDansLaBoite();
+verdicts.cielEntierDansSaBoiteLarge = boiteLarge.coupeEnHaut <= 1 && boiteLarge.coupeEnBas <= 1 &&
+  boiteLarge.coupeAGauche <= 1 && boiteLarge.coupeADroite <= 1;
+verdicts.sceneEntiereDansLEcranLarge = boiteLarge.sceneDansEcran;
+
+const geoLarge2 = await geoStable();
+verdicts.aucuneEtoileHorsCadreLarge = geoLarge2.etoilesDehors === 0;
+verdicts.aucunLibelleHorsCadreLarge = geoLarge2.libellesDehors === 0;
+// Et le pire cas tient AUSSI dans la boîte, pas seulement la démo.
+const boiteLargePireCas = await tientDansLaBoite();
+verdicts.pireCasEntierDansSaBoiteLarge = boiteLargePireCas.coupeEnBas <= 1 &&
+  boiteLargePireCas.coupeEnHaut <= 1;
+
+// ---------- 13. « Tout voir » ramène le réseau entier ----------
+// P6 — on ZOOME d'abord, sans quoi le bouton n'a rien à défaire et le verdict
+// serait vrai sans rien prouver.
+const ecartMax = () => page.evaluate(() => {
+  const svg = document.querySelector('#ciel-scene .ciel-svg');
+  const vb = svg.getAttribute('viewBox').split(' ').map(Number);
+  let pire = 0;
+  svg.querySelectorAll('g.ciel-etoile[data-noeud-id] .ciel-zone').forEach((z) => {
+    pire = Math.max(pire, Math.hypot(+z.getAttribute('cx') - vb[2] / 2,
+      +z.getAttribute('cy') - vb[3] / 2));
+  });
+  return pire;
+});
+// La caméra rejoint sa cible par interpolation, image par image : attendre une
+// durée FIXE, c'est mesurer un transitoire — vert seul, rouge quand la machine
+// est chargée par la suite complète. On attend donc la STABILITÉ, pas l'heure.
+async function ecartStable() {
+  let precedent = await ecartMax();
+  for (let i = 0; i < 40; i++) {
+    await page.waitForTimeout(200);
+    const actuel = await ecartMax();
+    if (Math.abs(actuel - precedent) < 0.4) { return actuel; }
+    precedent = actuel;
+  }
+  return precedent;
+}
+
+const ecartOuverture = await ecartStable();
+for (let i = 0; i < 6; i++) { await page.locator('#ciel-approcher').click(); }
+const ecartZoome = await ecartStable();
+verdicts.zoomAvantEcarteBien = ecartZoome > ecartOuverture * 1.15;
+await page.locator('#ciel-tout-voir').click();
+const ecartRevenu = await ecartStable();
+// C4 — on retrouve le cadrage d'ouverture (tolérance d'animation : 8 %).
+verdicts.toutVoirRamèneAuCadrageDOuverture =
+  Math.abs(ecartRevenu - ecartOuverture) < ecartOuverture * 0.08;
+
+// C5 — cible tactile de « Tout voir » MESURÉE, à 390 px.
+await page.setViewportSize({ width: 390, height: 844 });
+await page.waitForTimeout(500);
+const boiteToutVoir = await page.locator('#ciel-tout-voir').boundingBox();
+verdicts.cibleTactileToutVoir = !!boiteToutVoir &&
+  boiteToutVoir.height >= 24 && boiteToutVoir.width >= 24;
+
 // ---------- 11. Zéro erreur console ----------
 verdicts.zeroErreurConsole = erreurs.length === 0;
 

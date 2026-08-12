@@ -1042,6 +1042,19 @@ textarea:focus-visible,
   margin-top: 1rem;
 }
 
+/* Pli d'un formulaire (« Détail » d'une fiche, « Pilotage » d'une relation) :
+   ce qui est offert sans jamais allonger le flux court. */
+.pli-detail {
+  margin: 0 0 0.9rem;
+}
+
+.pli-detail > summary {
+  cursor: pointer;
+  padding: 0.5rem 0;
+  font-size: 0.94rem;
+  color: var(--encre-douce);
+}
+
 /* Compteur de série : ce qui vient d'être créé sans quitter le formulaire.
    `role="status"` côté HTML — il est ANNONCÉ, pas seulement affiché. */
 .serie-compteur {
@@ -1161,6 +1174,10 @@ textarea:focus-visible,
   align-items: center;
   gap: 8px;
   flex-shrink: 0;
+  /* Trois actions depuis le 2026-08-12 (statut, Modifier, Retirer) : à 390 px
+     elles passent à la ligne plutôt que de rétrécir sous la cible tactile. */
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .select-statut-relation {
@@ -2878,6 +2895,9 @@ textarea:focus-visible,
   display: flex;
   align-items: center;
   justify-content: space-between;
+  /* « Rôle » s'ajoute à « Détacher » (2026-08-12) : même règle que les
+     actions d'une relation — on passe à la ligne, on ne comprime pas. */
+  flex-wrap: wrap;
   gap: 0.5rem;
   padding: 0.35rem 0;
   border-bottom: 1px solid #edf0f3;
