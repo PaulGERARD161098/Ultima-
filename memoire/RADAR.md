@@ -69,6 +69,22 @@
   involontaire. Corriger le défaut a rendu le harnais rouge — c'est le harnais
   qui avait tort. **Réflexe : une navigation, dans un harnais, s'écrit
   explicitement ; jamais par effet de bord.**
+- 🔻 **Dans une liste PLAFONNÉE, l'ordre des règles est un arbitrage de
+  VALEUR.** La règle R5 (proposer un rapprochement inédit) était rangée en
+  cinquième position d'un moteur qui n'affiche que **trois** suggestions :
+  elle ne s'affichait **jamais**. La seule règle qui apprend quelque chose à
+  Paul était affamée par trois règles d'entretien. **Réflexe : à chaque ajout
+  dans une file plafonnée (suggestions, alertes, résultats), décider et ÉCRIRE
+  la place — sinon la dernière ajoutée est silencieusement morte.**
+- 🔻 **« Ce champ porte-t-il l'IDENTITÉ de l'objet ? »** — la bonne question
+  avant de rendre un champ modifiable. `type` décrit une relation (modifiable
+  depuis le 2026-08-12) ; `source_id`/`target_id` la définissent (figés : les
+  changer désignerait un autre objet et le journal adossé deviendrait un faux
+  témoignage). Vaut pour tout quadrant.
+- ✅ **CONFIRMÉE et FERMÉE — l'entrée n°1 (rapprochement objet pilotable).** Les
+  trois champs de 0003 (intérêt qualitatif, efforts chiffrés) sont atteignables
+  depuis le 2026-08-12. La contradiction « confirmée en base / démentie en
+  usage » notée le matin même est levée.
 - 🔻 **Un avertissement d'outil est un SIGNAL, pas un verdict.** J'ai inscrit
   « activer la protection des mots de passe compromis » comme action Paul, sur
   la foi d'un WARN des advisors Supabase. Sa question — « c'est à dire ? » — m'a

@@ -6,6 +6,51 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🧭 **SESSION 2026-08-12 (RIVEN : piloter, corriger, proposer), LIVRÉE.**
+  Les **trois boucles restantes de RIVEN**, demandées par Paul (« cadre pour
+  qu'on boucle les 3 boucles ce jour »). Cadrage : `CADRAGE-RIVEN-PILOTAGE.md`
+  (6 points par boucle, pre-mortem à 9 entrées). Patrimoine COMPLET vert :
+  **56 harnais, 1 430 assertions, sortie 0** (dont **70 neuves**).
+  - 🔻 **MON PROPRE INVENTAIRE SE TROMPAIT, et la mesure l'a dit avant le code.**
+    J'avais annoncé à Paul que « Léo qui fait quelque chose de la donnée »
+    attendait **entièrement**. Faux : les relances remontent déjà
+    (`relancesDues`, `rendreSectionRelances`), Léo suggère déjà
+    (`calculerSuggestions`, **quatre règles**), et une section suit les
+    rapprochements existants. **Il manquait UNE chose** : proposer un
+    rapprochement **inédit**. *Sans ce contrôle, j'aurais réécrit un moteur qui
+    existe, et probablement dégradé.*
+  - ✅ **A — Piloter.** `interet_qualitatif`, `effort_temps`, `effort_energie`
+    (migration **0003**, go de Paul du 2026-07-03) étaient atteignables depuis
+    **aucun écran**. Ils vivent désormais sous un pli « Pilotage » du
+    formulaire de relation, et s'affichent sur la fiche quand ils sont remplis.
+  - ✅ **B — Corriger sans détruire.** Type et note d'une relation, rôle d'une
+    personne : réparables **sans supprimer l'objet**, donc **sans perdre le
+    journal** qui lui est adossé. `type` dégèle (`EDGE_UPDATE_FIELDS`), validé
+    par le **même** contrôle qu'à la création ; **`source_id` et `target_id`
+    restent FIGÉS** — ils *définissent* la relation, en changer un en
+    désignerait une autre et le journal deviendrait un faux témoignage.
+  - ✅ **C — Proposer.** Règle **R5** : deux fiches qui se répondent et ne sont
+    pas reliées, **avec la raison énoncée**. Léo **pré-remplit**, Paul valide —
+    aucune écriture à l'initiative de Léo, testé par l'**ABSENCE**.
+  - 🔻 **Défaut de conception trouvé par le harnais** : R5 rangée en cinquième
+    position **ne s'affichait jamais**. Le moteur plafonne à **trois**
+    suggestions et R1+R2+R3 remplissent les trois places dans tout réseau réel :
+    **la seule règle qui apprend quelque chose à Paul était affamée par trois
+    règles d'entretien.** Elle passe juste après les relances en retard.
+    *L'ordre des règles n'est pas un détail d'implémentation : c'est un
+    arbitrage de valeur, et il doit être écrit comme tel.*
+  - 🔻 **Et une fois de plus, le harnais avait tort avant le produit** : mon
+    critère C6 confondait « ne plus proposer le rapprochement » et « ne plus
+    nommer l'artisan » — R3 le nomme légitimement. Assertion précisée, produit
+    inchangé.
+  - ⚠️ **Surface à risque touchée, signalée** : `api/_lib/validate.js` — un
+    champ entre dans une liste blanche d'écriture. **Aucun changement de RLS,
+    de portée `owner` ni de migration** ; `unit-relation-pilotage.mjs` prouve
+    que source et cible restent refusées en update et que le type reste borné
+    à `EDGE_TYPES`.
+  - ✅ **L'affichage n'a pas bougé** : `js/ciel.js`, `js/arbre.js`,
+    `js/carte.js`, `supabase/**` = **zéro ligne de diff**.
+
 - 🪶 **SESSION 2026-08-12 (RIVEN se remplit), CLOSE.** PR **#156 fusionnée**
   (`e1e9144`) au go de Paul. Cadrage complet : `CADRAGE-RIVEN-SAISIE.md`
   (format 6 points, pre-mortem à 9 entrées). Patrimoine COMPLET vert :
