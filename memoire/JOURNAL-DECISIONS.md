@@ -2324,3 +2324,59 @@
   sans rattachement (une règle se teste par l'ABSENCE), le déterminisme du monde,
   et l'arrêt de la boucle en sortie. Patrimoine COMPLET vert : **53 harnais,
   1310 assertions, sortie 0**.
+
+### 2026-08-12 — RIVEN se remplit : le cul-de-sac que la démo ne pouvait pas voir
+
+- **Dicté par Paul** : *« on reprend, terminons la boucle de la veille sur
+  Riven »*. Interprétation retenue et annoncée : **la boucle d'hier**, pas un
+  sujet de veille/monitoring.
+- **La vérification a corrigé le cadrage AVANT le code.** Le tableau de bord
+  annonçait « les trois boutons du panneau de fiche, qui ne font encore rien ».
+  Ils fonctionnent **tous les trois** depuis le 10/08 — les boutons inertes
+  étaient ceux de la **maquette** (`design/preview-riven-3d.js`, un
+  `signaler(...)`). *Sans ce contrôle, la boucle aurait ré-implanté trois
+  gestes déjà livrés.* **Règle : un « reste à faire » écrit pendant une boucle
+  de maquette décrit la maquette, pas le produit — il se re-mesure sur le
+  produit avant d'être exécuté.**
+- **Le vrai défaut n'était pas une fonctionnalité manquante, mais une
+  fonctionnalité INATTEIGNABLE.** Mesuré en production : 5 fiches, 1 relation,
+  **0 personne**. Avec zéro personne, `ouvrirFormRattachement` refusait
+  d'ouvrir. Le geste central du 10/08 — la personne séparée du nœud — était
+  livré, testé, vert… et **hors d'atteinte dans la base réelle de Paul**.
+- **Pourquoi aucun harnais ne l'avait vu** : la démo livre **3 personnes**. Le
+  chemin vide n'existait dans aucun état testé. **Règle : un harnais qui ne
+  s'exécute que dans l'état CONFORTABLE ne prouve rien sur l'état RÉEL. L'état
+  de départ d'un test est une hypothèse — elle se mesure en production.**
+  `smoke-serie` vide donc le registre **par les vrais gestes** avant d'exercer
+  le bouton, et conclut par l'**ABSENCE** du toast de refus.
+- **La parade au doublon est une question d'ORDRE, pas de contrôle** : « ➕
+  Créer une nouvelle personne » est offert **en tête** (visible sans dérouler
+  cinquante noms) mais **n'est pas la valeur retenue** tant qu'une personne
+  existe. Créer reste un geste délibéré. Registre vide, c'est la seule option —
+  et le cul-de-sac disparaît de lui-même.
+- **Le harnais a trouvé un défaut que je ne cherchais pas** : Playwright a
+  refusé de cliquer un contact « not visible ». Cause : « + Ajouter un
+  contact » depuis le registre **basculait sur la Carte**
+  (`ouvrirFormDepuisAccueil`) — annuler faisait donc **perdre sa liste**. Le
+  nom de la fonction disait la faute : elle est juste **depuis l'Accueil** (on
+  va quelque part), fausse **depuis le registre** (on y est déjà). Corrigé à la
+  source, sur le motif que l'arbre et le ciel appliquaient déjà.
+- **Corollaire, et c'est le plus instructif** : `smoke-geocode` **dépendait de
+  ce défaut** sans le dire — il atteignait `#bouton-ajouter` (bouton de la
+  Carte) grâce à la bascule involontaire. **Un harnais qui s'appuie sur un
+  effet de bord non écrit transforme un bug en contrat.** Sa navigation est
+  désormais explicite : même intention, plus aucune dépendance cachée.
+- **⏳ Fermé** : le connecteur Supabase répond enfin ; passe `get_advisors`
+  faite — **zéro alerte sécurité de schéma** sur `personnes` /
+  `personne_noeuds`. Reste un WARN de **configuration** (protection des mots de
+  passe compromis désactivée) : action Paul, pas action code.
+- **Constat neuf, reporté avec sa preuve** : `interet_qualitatif`,
+  `effort_temps`, `effort_energie` vivent en base depuis la migration **0003**,
+  sont validés par l'API, et **n'ont jamais été branchés à aucune interface**
+  (zéro occurrence dans le front, zéro dans les harnais). Un modèle de données
+  validé n'est pas un modèle de données **atteignable** — c'est la même leçon
+  que le cul-de-sac, un étage plus bas.
+- **Vérifié** : `tests/smoke-serie.mjs`, **50 assertions**. Patrimoine COMPLET
+  vert : **54 harnais, 1 360 assertions, sortie 0**. `js/ciel.js`,
+  `js/arbre.js`, `js/carte.js`, `api/**` : **zéro ligne de diff**, critère
+  écrit d'avance et non constat d'après-coup.
