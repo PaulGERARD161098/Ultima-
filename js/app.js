@@ -1581,13 +1581,14 @@
 
   // Puce « lieu » colorée par type (le type est aussi écrit en toutes
   // lettres — la couleur ne porte jamais l'information seule). La palette
-  // vivait dans carte.js, supprimé le 2026-08-13 ; ce sont les MÊMES valeurs,
-  // rapatriées ici sans être retouchées. Elles laisseront la place à celles du
-  // ciel (js/ciel.js, COULEURS_NUIT) à l'étape ④, quand l'Accueil passera au
-  // thème stellaire : les changer aujourd'hui ferait deux migrations là où une
-  // suffit, et ternirait la pastille sur le parchemin encore en place.
+  // vivait dans carte.js ; rapatriée ici à sa suppression, elle portait encore
+  // les valeurs du JOUR, choisies pour le parchemin. L'étape ④ ayant fait
+  // passer l'Accueil à la nuit, ce sont désormais celles du CIEL
+  // (js/ciel.js, COULEURS_NUIT) — à l'identique, sans retouche. Une seule
+  // vérité chromatique pour une seule donnée : c'est la règle qu'on s'était
+  // donnée en supprimant mes couleurs inventées, elle vaut aussi ici.
   var COULEURS_TYPE = {
-    artisan: '#e8781e', partenaire: '#1e6fb8', lead: '#1f8a4c', chantier: '#7a3fb5'
+    artisan: '#f2a15a', partenaire: '#7cb8ea', lead: '#6fd39b', chantier: '#b995e8'
   };
   function svgLieuContact(type) {
     var couleurs = COULEURS_TYPE;
@@ -1942,7 +1943,37 @@
       message.textContent = nb === 0
         ? 'Aucun contact ne correspond à “' + brut + '”.'
         : (nb + (nb > 1 ? ' contacts mis en évidence.' : ' contact mis en évidence.'));
+      // ZÉRO RÉSULTAT → CRÉATION PRÉ-REMPLIE. Cette fonction vivait dans la
+      // recherche de la carte ; elle est morte avec elle le 2026-08-13, et le
+      // diagnostic l'a signalée comme la SEULE perte fonctionnelle du
+      // démontage. Paul a demandé de la porter : la voici, à l'identique —
+      // même garde (connexion), même geste (le terme devient le nom, le
+      // curseur au bout), même mot.
+      if (nb === 0) {
+        var boutonCreer = document.createElement('button');
+        boutonCreer.type = 'button';
+        boutonCreer.id = 'ciel-creer-depuis-recherche';
+        boutonCreer.className = 'bouton bouton-secondaire ciel-creer';
+        boutonCreer.textContent = '+ Ajouter “' + tronquer(brut, 40) + '” comme contact';
+        boutonCreer.addEventListener('click', function () { creerDepuisRechercheCiel(brut); });
+        message.appendChild(document.createElement('br'));
+        message.appendChild(boutonCreer);
+      }
     }
+  }
+
+  // Le terme cherché devient le nom du contact à créer. Repris mot pour mot de
+  // `ajouterDepuisRecherche`, l'ancienne fonction de la carte.
+  function creerDepuisRechercheCiel(brut) {
+    if (!etat.modeDemo && !etat.session) {
+      toast('Connectez-vous pour ajouter un contact.', 'erreur');
+      return;
+    }
+    ouvrirFormNoeud(null);
+    var champNom = $('#noeud-nom');
+    champNom.value = brut;
+    champNom.focus();
+    try { champNom.setSelectionRange(brut.length, brut.length); } catch (e) { /* non sélectionnable */ }
   }
 
   // État vide du ciel : sans bouton — le

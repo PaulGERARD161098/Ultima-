@@ -1,0 +1,249 @@
+/* ============================================================================
+   LE THÈME STELLAIRE — la couche de jetons d'Ultima.
+
+   Arbitrage de Paul (2026-08-12) : « ça doit être comme ça tout le temps,
+   thème stellaire et galaxies ». Ce n'est donc PAS un registre parmi d'autres,
+   et RIEN ne le conditionne — ni attribut, ni bascule, ni classe à poser. Une
+   page l'a parce qu'elle charge ce fichier : l'interrupteur est à la porte,
+   jamais dans le CSS.
+
+   Ce que ce fichier est, et n'est pas :
+     — il REDÉFINIT les jetons de styles.css (les 30 variables de `:root`), ce
+       qui bascule d'un coup tout ce qui les respecte : fonds, encres, bordures,
+       boutons, champs, onglets, cartes ;
+     — il n'écrit une règle de composant QUE là où une couleur était posée EN
+       DUR dans styles.css et échappait donc aux jetons. Chacune de ces règles
+       est là parce que la MESURE l'a exigée (tests/smoke-stellaire.mjs :
+       luminance de fond < 0,20 et contraste WCAG AA), pas parce qu'elle
+       paraissait manquer.
+
+   `css/styles.css` n'est pas modifié : c'est la garantie que les quatorze
+   autres pages ne bougent pas d'un pixel. Le jour où la console LV4 passera au
+   stellaire (phase 2), elle chargera ce fichier — et rien d'autre.
+
+   La source chromatique est celle du ciel (css/ciel.css et les COULEURS_NUIT
+   de js/ciel.js), pas une palette neuve : une seule vérité pour une seule
+   donnée. Encre de nuit jamais noire, filets dorés, capitales espacées — le
+   registre antique et sérieux du 2026-07-08 ne change pas de nature, il change
+   de fond.
+   ========================================================================== */
+
+:root {
+  /* ---- Les fonds : trois profondeurs, aucune noire ---- */
+  --nuit-haute: #0a1220;
+  --nuit-basse: #03070e;
+  --nuit-relief: #142640;
+
+  /* ---- Les jetons de styles.css, redéfinis ---- */
+  --encre: #f2ead6;
+  --encre-douce: #cdc3ad;
+  --fond: #0a1220;
+  /* `--blanc` portait DEUX rôles dans styles.css : le fond des surfaces
+     (12 règles) et la couleur du texte posé sur `--accent` (3 règles). Il
+     devient la surface ; les trois textes sont repris plus bas, nommément. */
+  --blanc: #0e1a2b;
+  --bordure: rgba(169, 136, 74, .34);
+  --accent: #17506b;
+  --accent-fonce: #0e3a52;
+  --accent-voile: rgba(216, 189, 130, .35);
+  --danger: #e4796a;
+  --succes: #7ec99a;
+
+  /* ---- Les couleurs de type : celles de js/ciel.js (COULEURS_NUIT), à
+         l'identique. Elles portent de l'information, elles tiennent donc le
+         seuil du TEXTE (4,5:1) et non celui du décor. ---- */
+  --type-artisan: #f2a15a;
+  --type-partenaire: #7cb8ea;
+  --type-lead: #6fd39b;
+  --type-chantier: #b995e8;
+
+  /* ---- Le registre « parchemin » : il ne disparaît pas, il passe la nuit.
+         Les composants qui s'en servent (Accueil, cartouches, plaques) suivent
+         sans qu'aucune de leurs règles ne soit touchée. ---- */
+  --parchemin: #0e1a2b;
+  --parchemin-carte: #12233a;
+  --parchemin-ombre: #142640;
+  --encre-sepia: #f2ead6;
+  --encre-sepia-douce: #cdc3ad;
+  --encre-deco: #a9884a;
+  --creme: #f2ead6;
+  --retard: #e2a94f;
+  --danger-parchemin: #e4796a;
+
+  /* Inchangés : ils étaient déjà de nuit. */
+  --or-antique: #a9884a;
+  --mer-profonde: #0e3a52;
+  --mer-claire: #17506b;
+}
+
+/* ---- Le ciel de la page : le même halo que la scène, en plus discret. Sans
+        cela, `body` reste plat là où la scène respire. ---- */
+body {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(30, 60, 100, .20), rgba(0, 0, 0, 0) 60%),
+    linear-gradient(180deg, var(--nuit-haute), var(--nuit-basse) 70%);
+  background-attachment: fixed;
+}
+
+/* ---- Les trois textes posés sur `--accent` (voir plus haut) ---- */
+.bouton-primaire,
+.bouton-lien-magique {
+  color: var(--creme);
+  border-color: var(--or-antique);
+}
+.bouton-primaire { background-image: linear-gradient(var(--mer-claire), var(--mer-profonde)); }
+.bouton-primaire:hover { background-image: linear-gradient(#1f6787, #114560); }
+
+/* ---- Les boutons secondaires : le blanc franc de styles.css devient une
+        surface de nuit ; le survol s'éclaircit au lieu de s'assombrir. ---- */
+.bouton-secondaire { background: var(--blanc); color: var(--encre); }
+.bouton-secondaire:hover { background: var(--nuit-relief); }
+.bouton-danger { background: transparent; }
+.bouton-danger:hover { background: rgba(228, 121, 106, .12); }
+.bouton-google { color: var(--encre); background: var(--nuit-relief); }
+.bouton-google:hover { background: #1a2f4d; }
+
+/* ---- Les champs de saisie : `background: var(--blanc)` les met déjà en nuit,
+        mais plusieurs portent un blanc cassé écrit en dur. ---- */
+input, select, textarea {
+  color: var(--encre);
+  background-color: var(--blanc);
+  border-color: var(--bordure);
+}
+input::placeholder, textarea::placeholder { color: rgba(205, 195, 173, .62); }
+.champ-recherche-ciel input { background: var(--blanc); color: var(--encre); }
+/* Le focus visible passait par l'accent bleu du jour : invisible sur la nuit. */
+.bouton:focus-visible,
+.bouton-fermer:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible { outline-color: var(--or-clair, #d8bd82); }
+
+/* ---- La barre d'onglets : fond blanc en dur, accent du jour sur l'actif ---- */
+.barre-onglets { background: #050b14; border-top-color: var(--bordure); }
+.onglet[aria-current="page"] {
+  color: #d8bd82;
+  border-top-color: var(--or-antique);
+  background: rgba(169, 136, 74, .08);
+}
+
+/* ---- Le panneau (fiche, formulaires) : overlay posé sur le ciel ---- */
+.panneau { background: var(--blanc); border-color: var(--or-antique); }
+.panneau-entete { background: var(--nuit-relief); border-bottom-color: var(--bordure); }
+
+/* ---- Les toasts : ils portaient leurs couleurs en dur ---- */
+.toast { color: var(--encre); background: #0d2233; border: 1px solid var(--or-antique); }
+.toast-erreur { background: #2a1210; border-color: var(--danger); }
+
+/* ---- L'Accueil, les Contacts, les plaques gravées : RIEN ICI.
+        J'y avais écrit dix règles par anticipation — fonds, bordures, encres —
+        avant toute mesure. C'était contredire le principe même de ce fichier,
+        et l'une d'elles cassait la plaque de relance : `.panneau-bois` porte un
+        DÉGRADÉ en `var(--parchemin)`, donc il suivait déjà les jetons ; ma
+        règle l'avait remplacé par un aplat, et `smoke-antique` l'a dit.
+        Ces composants suivent les jetons. Ils n'ont besoin de rien. ---- */
+
+/* ============================================================================
+   LES COULEURS ÉCRITES EN DUR — reprises une par une, parce que la MESURE les
+   a nommées (`tests/smoke-stellaire.mjs`), jamais parce qu'elles semblaient
+   manquer. Trois défauts distincts sur 223 couples mesurés : le reste a suivi
+   les jetons tout seul, ce qui était le pari de cette couche.
+   ========================================================================== */
+
+/* ① LE CARTOUCHE « ULTIMA » — et la correction d'un correctif.
+      Première passe : j'ai doré le TITRE, qui était en encre sépia foncée
+      (#4a3512, mesuré à 1,61:1 sur la nuit). Le harnais est passé au vert et
+      c'était FAUX : le cartouche, lui, portait toujours son parchemin
+      (`linear-gradient(#f4e6bd, #e3cd93)`), donc j'avais posé de l'or sur du
+      crème — 1,47:1, pire qu'avant. Ma mesure ne l'a pas vu parce qu'elle
+      supposait « sombre » tout dégradé qu'elle ne savait pas lire ; c'est la
+      CAPTURE D'ÉCRAN qui l'a montré, puis l'instrument corrigé qui l'a chiffré.
+      La plaque entière passe la nuit : fond de nuit, double filet d'or,
+      fleurons dorés. Le titre garde son or, qui a enfin un fond pour lui. */
+.cartouche-ultima,
+.ecran-cartouche {
+  background: linear-gradient(#12233a, #0b1728);
+  border-color: var(--or-antique);
+  box-shadow: inset 0 0 0 3px #0b1728, inset 0 0 0 4px var(--or-antique),
+              0 2px 6px rgba(0, 0, 0, .5);
+}
+.cartouche-ultima::before, .cartouche-ultima::after,
+.ecran-cartouche::before, .ecran-cartouche::after { color: var(--or-antique); }
+.cartouche-titre {
+  color: #d8bd82;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .5);
+}
+.cartouche-sous { color: var(--encre-douce); }
+
+/* ② Les badges de la fiche (type, statut) : fond gris clair en dur, mesuré à
+      1,06:1 — du crème sur du blanc cassé, c'est-à-dire rien. */
+.badge {
+  background: var(--nuit-relief);
+  color: var(--encre);
+  border: 1px solid var(--bordure);
+}
+/* Fonds OPAQUES, et c'est un correctif, pas un goût : la première version les
+   posait en `rgba(...,.16)`. Deux défauts d'un coup — un fond translucide se
+   mesure mal (le harnais de l'intendant, qui lit `backgroundColor` sans
+   composer l'alpha, trouvait 1,00:1), et le contraste réel tombait à 4,32:1,
+   sous le seuil AA. Opaques, ils sont mesurables par n'importe quel harnais et
+   tiennent entre 6 et 8:1. */
+.badge-etat-couvert { background: #0f2418; color: #7ec99a; border-color: rgba(126, 201, 154, .45); }
+.badge-etat-attente { background: #2b1f08; color: #e2a94f; border-color: rgba(226, 169, 79, .45); }
+.badge-etat-manquant { background: #2a1210; color: #e4796a; border-color: rgba(228, 121, 106, .45); }
+
+/* ③ Le journal de la fiche : le bloc le plus CLAIR de toute l'application
+      (#f8fafc, luminance 0,95 — un rectangle blanc au milieu du ciel). Ses
+      quatre encres sont écrites en dur elles aussi. */
+.entree-journal { background: var(--parchemin-carte); border-color: var(--bordure); }
+.entree-journal-entete { color: var(--encre-douce); }
+.entree-journal-note { color: var(--encre); }
+.entree-journal-etape { color: #7cb8ea; }
+.entree-journal-relance { color: var(--retard); }
+
+/* ④ Le lien « Effacer » : rouge sombre (#b42318) choisi pour du blanc, mesuré
+      à 2,41:1 sur la nuit. Même rouge que les autres alertes du thème. */
+.bouton-lien-danger { color: var(--danger); }
+
+/* ⑤ La confirmation du géocodage : pastille verte claire (#ddf2e4), le dernier
+      fond clair de l'application — luminance 0,84 au milieu du ciel. Elle garde
+      son rôle (une pastille qui dit « c'est enregistré ») et son vert, en
+      négatif. */
+.geo-confirmation {
+  background: #0f2418;               /* opaque : voir la note des badges */
+  color: var(--succes);
+  border-color: rgba(126, 201, 154, .45);
+}
+
+/* ⑥ Le bouton « + Ajouter “…” comme contact » de la recherche du ciel : il
+      s'affiche sous le message, quand rien ne correspond. */
+.ciel-creer { margin-top: .35rem; font-size: .82rem; min-height: 36px; padding: .3rem .7rem; }
+
+/* ⑦ L'ÉCRAN DE CONNEXION — le seul écran que mon harnais ne visitait pas, et
+      donc le seul défaut qu'il n'a pas vu : c'est `smoke-connexion` qui l'a
+      trouvé (crème sur blanc cassé, 1,15:1). Le champ portait son fond en dur
+      (#fffaf0) sous un sélecteur plus spécifique que ma règle générique.
+      Leçon appliquée deux fois : la règle est reprise ici, ET l'écran est
+      désormais mesuré par smoke-stellaire. Un écran non éprouvé est un écran
+      cassé (2026-08-12). */
+.ecran-parchemin input[type="email"] {
+  color: var(--encre);
+  background: var(--blanc);
+}
+.ecran-parchemin input[type="email"]::placeholder { color: rgba(205, 195, 173, .62); }
+.ecran-parchemin input[type="email"]:focus-visible { outline-color: #d8bd82; }
+
+/* Le cartouche de l'écran de connexion : mêmes encres sépia en dur que celui
+   de l'application (#4a3512, #6e5320), mêmes 1,61:1 et 2,61:1 sur la nuit.
+   Trouvés dès que le harnais a ouvert cet écran — la première passe ne le
+   traversait pas. */
+.ecran-titre { color: #d8bd82; text-shadow: 0 1px 0 rgba(0, 0, 0, .5); }
+.ecran-sous { color: var(--encre-douce); }
+
+/* ⑧ Le bandeau « Mode démo » : fond crème en dur (#fdf3d7, luminance 0,90) —
+      une pastille de plein jour au milieu du ciel. Son contraste, lui, était
+      bon : c'est le critère de LUMINANCE qui l'a trouvé, pas celui du
+      contraste. Deux critères valent mieux qu'un.
+      SEULE rescapée de dix règles que j'avais écrites par anticipation : les
+      neuf autres suivaient déjà les jetons. */
+.bandeau-demo { color: var(--retard); background: #2b1f08; border-color: rgba(226, 169, 79, .45); }

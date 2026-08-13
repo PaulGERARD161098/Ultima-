@@ -49,6 +49,21 @@ for (let i = 0; i < n; i++) {
 }
 verdicts.fichePlomberie = ficheTrouvee;
 
+// GÉOMÉTRIE DE LA LIGNE DE RELATION (2026-08-13, 390 px). Le titre était
+// écrasé par le select et les boutons, jusqu'à se casser une lettre par ligne.
+// On mesure ce qui n'allait pas : la largeur réelle du texte, et la hauteur de
+// la ligne. Un « ça a l'air bien » n'aurait rien attrapé — le défaut a vécu des
+// semaines sous les yeux de tout le monde.
+const ligneRelation = await page.evaluate(() => {
+  const el = document.querySelector('.item-relation');
+  const texte = document.querySelector('.item-relation-texte');
+  if (!el || !texte) return null;
+  return { hauteur: el.getBoundingClientRect().height,
+           largeurTexte: texte.getBoundingClientRect().width };
+});
+verdicts.relationTexteRespirable = !!ligneRelation && ligneRelation.largeurTexte >= 150;
+verdicts.relationLigneCompacte = !!ligneRelation && ligneRelation.hauteur <= 200;
+
 // Journal : la fiche de Plomberie Roux doit voir l'entrée de la relation r1.
 verdicts.entreesAvant = await page.locator('.entree-journal').count();
 

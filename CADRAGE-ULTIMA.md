@@ -6,6 +6,38 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🌌 **SESSION 2026-08-13 (RIVEN passe au thème stellaire), FUSIONNÉE** —
+  PR #160 (`9b61993`, squash) au go de Paul (« Ok go / Merge tout / Puis
+  diagnostique le tout et cadre la suite »). Cadrage : `CADRAGE-RIVEN-STELLAIRE.md`.
+  Diagnostic + cadrage de la suite : **`AUDIT-2026-08-13.md`**.
+  - ✅ **L'ARBRE et LA CARTE sont supprimés.** RIVEN n'a plus qu'une forme, le
+    ciel, et **trois onglets**. `js/arbre.js` (445 l.), `js/carte.js` (273 l.),
+    Leaflet, la recherche carte, les filtres, la légende — plus 253 lignes de
+    CSS mort trouvées au diagnostic. **VRANESH n'est pas touché.**
+  - 🔒 **La surface d'attaque a rétréci** : CSP de **3 hôtes tiers à ZÉRO**,
+    `'unsafe-inline'` tombé avec Leaflet. Prouvé **par l'absence**
+    (`smoke-csp`, `smoke-antique` sans un seul stub). Advisors rejoués :
+    sécurité = 1 WARN sans objet (pas de mot de passe dans Ultima), perf = INFO.
+  - 🔻 **DEUX FOIS J'AI INVENTÉ CE QUI EXISTAIT** (maquette) : les couleurs de
+    type et le mot de l'état vide vivaient déjà dans `ciel.js` et `app.js`.
+    J'ai même présenté à Paul comme arbitrage un mot rendu depuis deux jours.
+  - 🔻 **UN NETTOYAGE CSS AUTOMATIQUE A CASSÉ IMLADRIK.** Le motif a mordu sur
+    la dernière ligne d'une liste de sélecteurs partagée (`:focus-visible`) :
+    corps commun emporté, liste orpheline, formulaire d'écriture mort. **Cinq
+    verdicts rouges dans un quadrant que je n'avais pas touché** — le
+    patrimoine COMPLET l'a vu, un run ciblé ne l'aurait pas vu. Un contrôle
+    d'intégrité CSS (accolades, listes orphelines) entre au patrimoine.
+  - 🔻 **Le ciel dépendait de l'arbre sans le dire** : une fonction rangée dans
+    son bloc (`ouvrirFicheDepuisArbre`) et trois de ses classes CSS. Un
+    écouteur orphelin (`#bouton-ajouter`) a ensuite vidé la page entière sans
+    rien casser à l'œil. Les harnais ont tout attrapé.
+  - ⚠️ **UNE PERTE FONCTIONNELLE SIGNALÉE, non compensée en douce** :
+    « 0 résultat → création pré-remplie » vivait dans la recherche carte.
+    **Décision de Paul attendue** : la porter dans le ciel, ou l'abandonner.
+  - ⏭ **Reste au cadrage** : étape ④ (le thème stellaire sur la vraie page,
+    cadré en 6 points dans `AUDIT-2026-08-13.md`), la bascule 2D du ciel
+    (§9 du cadrage), puis la phase 2 — la console LV4 en constellations.
+  - ✅ **Patrimoine COMPLET, cache VIERGE : 55 harnais, 742 verdicts, sortie 0.**
 - 🌌 **BOUCLE OUVERTE 2026-08-12 (RIVEN passe la nuit) — CADRAGE LIVRÉ, code
   non commencé.** Demande de Paul (dictée) : « remodeling de la forme », thème
   constellation/sombre sur **toute** la page RIVEN, **suppression de l'arbre**,
