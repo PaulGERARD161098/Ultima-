@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Maquette — LV4 : le ciel qui se déplie</title>
+<!--
+  MAQUETTE DE TRAVAIL — étape ① de CADRAGE-LV4-CIEL-DEPLIE.md.
+  Vrai registre (js/registre-lv3.mjs), vrai moteur (js/ciel.js), vrai thème
+  (css/stellaire.css). Aucune donnée personnelle : le registre ne porte que des
+  noms d'écrans et des cibles.
+
+  Ce qu'elle sert à trancher — et c'est Paul qui tranche, pas la mesure :
+    ① les TROIS GALAXIES à l'arrivée : Ultima, Alpha, Althea ;
+    ② le SURVOL qui déplie — on voit ce qu'il y a dedans sans y entrer ;
+    ③ le CLIC qui zoome, jusqu'à une page de travail, et le retour ;
+    ④ ALTHEA, galaxie SANS contenu : elle le dit au lieu de déplier un vide ;
+    ⑤ LE GESTE TACTILE — le survol n'existe pas au doigt. Ici : premier tap =
+      déplier, second = entrer. C'est le candidat (a) du cadrage §8, à éprouver
+      sur 390 px et à comparer aux deux autres ;
+    ⑥ LÉO qui guide à chaque étage (« que Léo me guide », 2026-08-13) : sa
+      parole dit où l'on est, ce qu'il y a dedans, et ce qui mérite l'attention.
+-->
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../css/styles.css">
+<link rel="stylesheet" href="../css/ciel.css">
+<link rel="stylesheet" href="../css/stellaire.css">
+<link rel="stylesheet" href="preview-lv4-ciel-deplie.css">
+</head>
+<body>
+
+<div class="mq-barre">
+  <strong class="mq-titre">Maquette LV4 — le ciel qui se déplie</strong>
+  <span class="mq-note">registre réel · moteur réel</span>
+  <button type="button" id="mq-tactile" class="mq-bouton" aria-pressed="false">Mode doigt</button>
+  <button type="button" id="mq-racine" class="mq-bouton">↞ revenir aux galaxies</button>
+</div>
+
+<main class="ciel-coque">
+
+  <!-- ⑤ LE FIL — où l'on est, et par où l'on remonte. C'est la réponse au
+       premier risque du pre-mortem : un ciel continu où l'on se perd. -->
+  <nav id="mq-fil" class="fil" aria-label="Où vous êtes"></nav>
+
+  <header class="ciel-entete">
+    <h1 id="mq-nom" class="cartouche-titre">ULTIMA</h1>
+    <p id="mq-etage" class="ciel-sous">les galaxies</p>
+  </header>
+
+  <div id="ciel-scene" class="ciel-scene"></div>
+
+  <!-- ⑥ LÉO. Pas un cartouche décoratif : elle dit l'étage, le contenu, et ce
+       qui mérite l'attention. Un ciel muet serait beau et inutilisable. -->
+  <aside class="leo">
+    <p id="mq-leo" class="leo-parole"></p>
+    <p id="mq-leo-conseil" class="leo-conseil"></p>
+  </aside>
+
+  <div class="ciel-outils">
+    <button type="button" id="ciel-plat" class="bouton bouton-secondaire ciel-tout-voir" aria-pressed="false">À plat</button>
+    <button type="button" id="mq-remonter" class="bouton bouton-secondaire ciel-tout-voir">↑ Remonter</button>
+    <span id="mq-etat" class="ciel-message" role="status"></span>
+  </div>
+</main>
+
+<section class="mq-mesure" aria-label="Mesures">
+  <header class="mq-mesure-entete">
+    <strong>MESURE</strong>
+    <span id="mq-verdict" class="mq-verdict">calcul…</span>
+    <button type="button" id="mq-replier" class="mq-bouton">Déplier</button>
+  </header>
+  <div id="mq-mesure-corps" class="mq-mesure-corps" hidden>
+    <table class="mq-table">
+      <thead><tr><th>Étage</th><th>Attendu</th><th>Rendu</th><th>Noms</th><th>Occupation du cadre</th><th>Hors cadre</th><th>Léo parle</th><th></th></tr></thead>
+      <tbody id="mq-lignes"></tbody>
+    </table>
+    <p class="mq-ligne mq-note-bas">
+      « Occupation » : la part de la plus petite dimension du cadre que couvrent
+      les objets. Le cadrage exige <strong>60 %</strong> — c'est la réponse
+      chiffrée au défaut des 5 % mesuré ce matin. « Léo parle » : aucun étage ne
+      doit être muet.
+    </p>
+  </div>
+</section>
+
+<script src="../js/ciel.js"></script>
+<script type="module" src="preview-lv4-ciel-deplie.js"></script>
+</body>
+</html>

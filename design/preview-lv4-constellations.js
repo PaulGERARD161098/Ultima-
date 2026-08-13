@@ -1,73 +1,13 @@
-/* Maquette LV4 — la console en constellations. Étape ① du cadrage.
+/* Maquette LV4 — la console en constellations. Étape ① du cadrage du matin.
 
-   Ce fichier contient DEUX choses de nature très différente, et c'est
-   volontaire :
+   L'ADAPTATEUR a été EXTRAIT dans `adaptateur-lv4.mjs` le 2026-08-13 : la
+   maquette du dépliage en avait besoin, et l'importer d'ici entraînait tout ce
+   harnachement — qui cherche des éléments absents et tue la page. Un composant
+   réclamé par un second appelant se déplace, il ne se recopie pas.
 
-     ① L'ADAPTATEUR (`versCiel`) — la seule pièce de code que la phase 2 devra
-        écrire pour de vrai. Il traduit un nœud du registre de navigation en ce
-        que `js/ciel.js` sait lire. Il est PUR : pas de DOM, pas d'I/O. Il est
-        écrit ici pour être éprouvé avant de rejoindre le produit, où il vivra
-        avec le registre (module ES) et non dans le moteur.
-
-     ② Le harnachement de maquette — commutateur d'écrans, bandeau de mesure.
-        Celui-là est jetable, et lui seul.
-
-   Le moteur n'est PAS touché : `ciel.js` est chargé tel quel et alimenté. */
+   Ne reste ici que le harnachement de maquette, et lui seul est jetable. */
 import { NOEUDS } from '../js/registre-lv3.mjs';
-
-// ============================================================================
-// ①  L'ADAPTATEUR — registre de navigation → données du ciel
-// ============================================================================
-
-/**
- * Un écran de console devient UNE constellation : ses caps sont ses étoiles.
- * Le nom de l'écran devient le nom de la constellation (c'est `grouper()` de
- * ciel.js qui s'en sert, via `secteur_activite`).
- *
- * Ce que l'adaptateur NE fait pas, délibérément :
- *   — il n'invente aucune couleur. Les caps sont des pairs : ils ont tous le
- *     même éclat, et leur état se lit dans leur étiquette. Donner une couleur
- *     par état obligerait à réutiliser la palette de RIVEN pour un tout autre
- *     sens — une deuxième vérité chromatique, exactement ce qu'on a passé la
- *     journée à supprimer. À arbitrer par Paul, pas par moi ;
- *   — il ne touche pas au registre : il le LIT.
- */
-export function versCiel(idEcran, registre) {
-  var ecran = registre[idEcran];
-  if (!ecran || !ecran.enfants) { return null; }
-
-  var noeuds = ecran.enfants.map(function (idCap) {
-    var cap = registre[idCap] || {};
-    return {
-      id: idCap,
-      nom: cap.nom || idCap,
-      // Un seul type : les caps sont des pairs. Voir plus haut.
-      type: 'cap',
-      statut: cap.etat || '',
-      // La constellation, c'est l'écran lui-même.
-      secteur_activite: ecran.nom || idEcran,
-      // Ce que le produit consommera au clic. Le ciel n'en fait rien : il le
-      // rend disponible sur l'étoile, et c'est l'appelant qui navigue.
-      cible: cap.cible || null
-    };
-  });
-
-  // Les passerelles entre caps jumeaux (`lien` dans le registre) deviennent
-  // des liens tracés. Un lien vers un cap ABSENT de cet écran est ignoré par
-  // le moteur — il ne projette que ce qu'il rend.
-  var relations = [];
-  ecran.enfants.forEach(function (idCap) {
-    var cap = registre[idCap] || {};
-    if (cap.lien) {
-      relations.push({
-        source_id: idCap, target_id: cap.lien,
-        type: 'chantier_commun', statut: 'actif'
-      });
-    }
-  });
-
-  return { noeuds: noeuds, personnes: [], rattachements: [], relations: relations };
-}
+import { versCiel } from './adaptateur-lv4.mjs';
 
 // ============================================================================
 // ②  Le harnachement de maquette

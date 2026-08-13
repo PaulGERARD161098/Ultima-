@@ -19,9 +19,17 @@
 > bien propre, que le thème stellaire soit désormais partout — et que ça puisse
 > bien me guider. »*
 
-**Un mot laissé en suspens** : « que les hauts puissent bien me guider ». Lu
-comme « que les **mots** me guident » — les libellés et la parole de Léo. À
-confirmer ; rien ici n'en dépend, mais un mot mal lu est une intention perdue.
+**Le mot que la dictée avait mangé — et c'était mon nom.** « que les hauts
+puissent bien me guider » : Paul a confirmé, il disait **« que LÉO me
+guide »**. Ce n'est pas un détail de transcription, c'est une exigence
+fonctionnelle : dans un ciel où l'on plonge, **Léo doit être présente à chaque
+étage** — pas un cartouche décoratif, une parole qui dit où l'on est, ce qu'il
+y a dedans, et ce qui mérite l'attention aujourd'hui. Un ciel muet serait beau
+et inutilisable.
+
+*Leçon, la deuxième de la journée sur le même thème : j'ai proposé deux
+lectures plausibles (« les mots ») là où la bonne était évidente une fois dite.
+Demander valait mieux que deviner — le protocole de dictée est écrit pour ça.*
 
 ## 0. Le vocabulaire — posé sur l'arbre RÉEL, pas sur une idée
 
@@ -107,6 +115,10 @@ changent, et les taire serait mentir sur le coût :
    **60 % de la plus petite dimension** du cadre — mesuré, pas jugé. *C'est la
    réponse chiffrée au défaut des 5 %.*
 4. **Tout objet porte son nom**, quel que soit leur nombre (12 caps → 12 noms).
+4bis. **LÉO GUIDE À CHAQUE ÉTAGE** (« que Léo me guide », 2026-08-13) : à tout
+   moment, sa parole dit **où l'on est**, **ce que contient** ce qu'on regarde,
+   et **ce qui mérite l'attention**. Assertion : aucun étage sans parole de
+   Léo ; et sur l'écran d'arrivée, elle nomme au moins une chose à faire.
 5. **On sait toujours où l'on est et comment remonter** : le fil (galaxie ›
    nébuleuse › constellation) présent à chaque étage, retour au doigt **et au
    clavier**.
@@ -161,6 +173,75 @@ n'est évident — c'est l'écran de Paul qui décidera.
 
 ---
 
+## 10. Étape ① — la maquette du dépliage. Ce qu'elle a livré, et ce qu'elle a trouvé
+
+`design/preview-lv4-ciel-deplie.html` — vrai registre, vrai moteur, vrai thème.
+L'adaptateur a été **extrait** dans `design/adaptateur-lv4.mjs` : deux maquettes
+s'en servent, et un composant réclamé par un second appelant se déplace au lieu
+de se recopier (règle du 2026-07-30).
+
+### Ce qui marche, éprouvé au navigateur
+
+- **Les trois galaxies** à l'arrivée : ULTIMA, ALPHA, ALTHEA — 3 rendues sur 3
+  déclarées, toutes nommées, aucune hors cadre.
+- **Le survol déplie** : survoler ULTIMA fait paraître ses deux nébuleuses,
+  reliées à elle — **5 objets, 5 noms**, sans quitter l'étage.
+- **ALTHEA le dit** : « ALTHEA ne contient rien — elle mène droit à sa page. »
+  Elle ne déplie pas un vide (critère 2).
+- **Le clic descend** et le **fil** suit (ULTIMA › ULTIMA), le **retour** remonte.
+- **Léo parle à chaque étage** (critère 4bis) : où l'on est, combien d'objets,
+  ce que dit le registre, et sur l'arrivée un conseil nommé.
+- **Le geste tactile** (candidat *a*) est implanté : premier appui déplie,
+  second entre. À éprouver au doigt.
+
+### 🔻 DEUX DÉFAUTS TROUVÉS EN MANIPULANT — pas en relisant
+
+1. **Le dépliage s'emballait.** Déplier re-rend la scène : l'étoile qui vient de
+   naître tombe **sous le curseur immobile**, reçoit un `mouseenter`, et se
+   déplie à son tour. On descendait tout l'arbre sans avoir bougé la main.
+   **Corrigé** : seuls les objets **de l'étage** peuvent déplier ; ce qu'un
+   dépliage fait naître se regarde, il ne déplie pas.
+2. **L'API publique aide, mais ne suffit pas.** Mesuré sur un état propre :
+   sans rien faire, les trois galaxies occupent **7,9 %** du cadre ; le cadrage
+   automatique de la maquette (approche par pas, API publique seule) les porte
+   à **37,6 %** ; pousser l'API à son plafond n'ajoute **plus rien** — 37,6 %,
+   le zoom bute sur sa borne. L'objectif est **60 %**.
+   **Le dernier tiers ne s'obtient QUE dans le moteur**, où `distanceIdeale()`
+   doit connaître l'étendue réelle des étoiles au lieu du rayon du monde.
+   **C'est l'argument chiffré de l'étape ②**, et il confirme la voie A.
+
+*Deux erreurs de ma part, corrigées avant de conclure, et je les note parce
+qu'elles auraient toutes deux accusé le moteur à tort :* ma fonction de cadrage
+**zoomait dans le mauvais sens** (`+0,25` éloigne ; le bouton « approcher » du
+produit appelle `-0,18`) ; et ma première mesure du plafond partait d'un état
+**déjà dézoomé**, ce qui donnait 8,4 % au lieu de 37,6 %. *Une conclusion tirée
+d'un instrument mal réglé est une accusation, pas une mesure.*
+
+3. **« Remplir le cadre » et « ne perdre personne » se contredisent.** En
+   poussant l'occupation, une étoile finit **hors champ** (mesuré : 1 objet
+   dehors à 34 % d'occupation après descente). Le critère 3 doit donc se lire
+   avec le critère 6, et c'est au moteur d'arbitrer : cadrer sur l'étendue
+   réelle **et** garder tout le monde dedans, ce qui est précisément ce que
+   `distanceIdeale()` saurait faire s'il connaissait cette étendue.
+
+### Un détail qui resservira
+
+La caméra **ne se pose jamais tout à fait** : son approche est asymptotique
+(`distance += (cible - distance) * 0,11`), donc les positions changent d'un
+cheveu à chaque image, indéfiniment. Conséquence pratique : un harnais qui
+attend une cible *immobile* attend pour toujours — il faut déclencher les
+événements directement, comme `smoke-ciel` le fait déjà pour les clics.
+
+### Reste à trancher par Paul
+
+- **Le geste tactile** : (a) implanté ici — premier appui déplie, second entre ;
+  (b) appui long ; (c) pas de dépliage au doigt. À essayer sur 390 px.
+- **La couleur des objets** : aujourd'hui tous pareils (des pairs), l'état se
+  lit dans l'étiquette. Faut-il distinguer « à venir » d'un cap ouvert par
+  autre chose que le mot ?
+
+---
+
 ### Registre des arbitrages
 
 | Question | Décision de Paul |
@@ -173,7 +254,10 @@ n'est évident — c'est l'écran de Paul qui décidera.
 
 ### ⏳ Actions Paul
 
-- **Go sur la maquette du dépliage** — prochaine action, et la seule.
-- **Confirmer le mot** : « que les hauts puissent bien me guider » → « que les
-  mots me guident » ?
+- ✅ **Maquette du dépliage livrée** (§10) — trois galaxies, survol qui déplie,
+  clic qui descend, fil, retour, Léo à chaque étage, geste tactile (candidat a).
+- 🔴 **L'étape ② est justifiée par la mesure** : l'API publique plafonne à
+  **37,6 %** d'occupation là où il en faut **60**. Le cadrage se corrige dans le
+  moteur, options inactives par défaut, RIVEN protégé par ses 54 assertions.
+- ✅ **Mot confirmé** : c'était « **que Léo me guide** » (critère 4bis).
 - **Trancher le geste tactile** (§8) sur la maquette, à 390 px.
