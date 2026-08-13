@@ -83,20 +83,27 @@ thème stellaire devient une **couche de jetons réutilisable**, pas un patch de
    pratique éprouvée du 2026-08-01 (VRANESH, DRAUKHAIN) — et surtout, c'est ici
    qu'un « on remplace un mix par un autre » se voit pour rien, au lieu de se
    découvrir après avoir touché 18 harnais.* **→ arbitrage de Paul.**
-2. **La couche stellaire** : `css/stellaire.css`, jetons dérivés de ceux de
-   `ciel.css` (une seule source chromatique pour le ciel et sa page).
-   **Rien ne la conditionne** — ni attribut, ni bascule : une page l'a parce
-   qu'elle charge le fichier, et c'est le seul interrupteur (arbitrage de Paul,
-   2026-08-12 : « ça doit être comme ça tout le temps »). `styles.css` **n'est
-   pas modifié** — c'est la garantie de non-fuite vers les 14 autres pages.
-3. **Le retrait de l'arbre** : onglet, `#espace-arbre`, `js/arbre.js`, CSS
+2. **Le retrait de l'arbre** : onglet, `#espace-arbre`, `js/arbre.js`, CSS
    dédié, `tests/smoke-arbre.mjs`. **Inventaire assertion par assertion avant
    suppression** : celles qui ne parlent pas de l'arbre (recherche, états vides,
    ouverture de fiche) **migrent** vers `smoke-ciel` / `smoke-contacts`.
    **VRANESH** (`vranesh.html`, l'arbre d'IMLADRIK) n'est **pas** touché.
-4. **Le retrait de la carte** : onglet, `#espace-carte`, `js/carte.js`, le
+3. **Le retrait de la carte** : onglet, `#espace-carte`, `js/carte.js`, le
    `<script>` Leaflet, les 43 appels `UltimaCarte` de `app.js`, la légende, le
    cadre gravé, la fixture Leaflet des harnais. **La donnée reste** (§5).
+4. **La couche stellaire** : `css/stellaire.css`, jetons dérivés de ceux de
+   `ciel.css` (une seule source chromatique pour le ciel et sa page), plus les
+   **quatre règles de `ciel.css`** relevées au §8. **Rien ne la conditionne** —
+   ni attribut, ni bascule : une page l'a parce qu'elle charge le fichier, et
+   c'est le seul interrupteur (arbitrage de Paul : « ça doit être comme ça tout
+   le temps »). `styles.css` **n'est pas modifié** — garantie de non-fuite vers
+   les 14 autres pages.
+
+   > **L'ordre a changé le 2026-08-12, et c'est un gain, pas un détail.** Le
+   > cadrage plaçait la couche stellaire AVANT les retraits. C'était thémer
+   > l'arbre et la carte — 38 règles de `styles.css` et une légende — quelques
+   > heures avant de les supprimer. **On retire d'abord, on thème ce qui
+   > reste.**
 5. **Le resserrage de la CSP** (`middleware.js`) : les domaines de tuiles et
    `unpkg.com` tombent. `smoke-csp.mjs` est retourné pour **prouver l'absence**
    (règle du 2026-07-30). **GATE middleware.**
@@ -269,13 +276,66 @@ critère absent laisse passer celui qui existe.*
 pire-cas sur les fonds en dégradé) est écrite pour **migrer telle quelle** dans
 le harnais de l'étape 6. Elle n'est pas jetable.
 
+## 9. La bascule « à plat » du ciel — cadrée à part (format 6 points)
+
+Demandée par Paul le 2026-08-12 : *« on regarde bien la 3D, mais si jamais je
+n'ai pas assez de réseau ou quoi, je peux switcher au mode 2D »*. Le cadrage
+ne la portait pas ; elle ne part donc pas sans son cadrage.
+
+**Une correction de motif, d'abord, parce qu'elle change le critère de
+réussite.** Le ciel 3D ne consomme **aucun réseau** : tout est calculé dans
+l'appareil, en SVG, sans une requête. Ce qu'il coûte, c'est du **calcul et de
+la batterie** — une boucle d'animation qui tourne tant que l'écran est ouvert.
+La bascule est donc justifiée, mais pas par ce qu'on croyait : elle sert
+l'**appareil qui peine**, la **fin de batterie**, et la **lecture d'un coup
+d'œil sans que rien ne bouge**. Un mode « économe » qui n'économiserait rien de
+mesurable serait un bouton décoratif.
+
+① **Le but.** Le ciel garde le volume **par défaut** — c'est l'écran d'arrivée
+validé le 2026-08-11, on n'y touche pas. Un bouton le fait passer à une **vue à
+plat** : mêmes étoiles, mêmes constellations, mêmes noms, **aucune animation,
+aucune perspective**. Le choix est **retenu** d'une visite à l'autre.
+
+② **Les étapes.** (a) `js/ciel.js` gagne une option `plat` : la projection perd
+sa profondeur, la boucle d'animation ne démarre pas ; (b) un bouton dans
+`#ciel-outils`, à côté de « Tout voir » ; (c) le choix est mémorisé
+(`localStorage`) et relu à l'ouverture ; (d) le harnais.
+
+③ **Les moyens.** `js/ciel.js` · `riven.html` · `css/ciel.css` ·
+`tests/smoke-ciel.mjs`. **Rien d'autre.**
+
+④ **Les critères de réussite — mesurés.**
+- En mode plat, **zéro image d'animation** demandée après stabilisation
+  (`requestAnimationFrame` compté par le harnais, pas supposé).
+- **Aucune étoile perdue** : le même nombre d'étoiles, de libellés d'amas et de
+  liens qu'en volume — un mode dégradé qui perd de la donnée est un bug.
+- **Toutes dans le cadre** (critère du produit : centres contre `viewBox`).
+- Le choix **survit au rechargement**.
+- Le bouton dit son état (`aria-pressed`), et le mode plat s'impose **d'office**
+  si `prefers-reduced-motion` est déclaré — la préférence système d'abord.
+
+⑤ **Ce qu'on ne fait PAS.** Aucun autre réglage, aucun « mode économie »
+global, aucune bascule sur les autres écrans. Le volume reste le défaut : la
+2D est un recours, pas une alternative posée sur le même plan.
+
+⑥ **Pre-mortem.**
+- *Le mode plat devient un second moteur à maintenir* → il ne duplique rien :
+  même code, profondeur neutralisée, boucle non démarrée.
+- *On perd des étoiles à plat sans le voir* → le critère 2 les compte.
+- *La bascule ne fait rien de mesurable* → le critère 1 compte les images.
+- *Le réglage mémorisé enferme Paul dans un mode qu'il a oublié d'avoir choisi*
+  → l'état est écrit sur le bouton, visible à chaque ouverture.
+
+**Ordre** : cette bascule vient **après** les retraits et la couche stellaire.
+Elle touche `ciel.js`, qu'on veut stable pendant qu'on démonte autour de lui.
+
 ---
 
 ### Registre des arbitrages — pris par Paul, 2026-08-12
 
 | Question | Décision |
 |---|---|
-| Le sort de la carte | **Supprimée** aussi. RIVEN est le ciel, et rien d'autre. **Rouvert** par la phrase du soir (voir ci-dessous). |
+| Le sort de la carte | **Supprimée** aussi. RIVEN est le ciel, et rien d'autre. **Confirmé** le soir même : « la carte » de la phrase du soir désignait le CIEL, pas la carte géographique. |
 | La portée du thème | **Toute la page RIVEN** — accueil, fiches, formulaires, contacts, onglets. |
 | Le sort de l'arbre | **Suppression franche** : code, CSS, harnais. VRANESH intact. |
 | Le rendu stellaire | **Validé** — « c'est bien comme ça ». |
@@ -286,14 +346,9 @@ le harnais de l'étape 6. Elle n'est pas jetable.
 
 - ✅ **Maquette livrée et corrigée** (étape ①) — `design/preview-riven-stellaire.html` :
   33 couples mesurés, 0 défaut, vrai ciel 3D, 30 étoiles, 0 hors cadre.
-- 🔴 **UNE QUESTION BLOQUE L'ÉTAPE ②** : « la carte en 2d bien, il faut pouvoir
-  la passer en 3D aussi ». Deux lectures :
-  ① **la carte géographique** (Leaflet) reste et gagne une vue 3D — ce qui
-  **annule** l'arbitrage « carte supprimée » ; ② **le ciel** garde une vue à
-  plat (2D) doublée de la vue en volume, la carte restant supprimée.
-  *Le travail n'est pas le même : ① rouvre la carte, la CSP et le géocodage ;
-  ② ajoute une bascule au ciel.* **Non tranché, non commencé.**
-- **Gate middleware** (étape ⑤, CSP resserrée) au moment de la fusion —
-  **suspendu** à la réponse ci-dessus.
+- ✅ **La question du soir est TRANCHÉE** (voir §9) : « la carte » désignait le
+  **ciel**. La carte géographique reste supprimée ; le ciel gagne une **bascule
+  vers une vue à plat**.
+- **Gate middleware** (étape ⑤, CSP resserrée) au moment de la fusion.
 - **Arbitrages de forme, réversibles d'un mot** : le mot de l'état vide, la rose
   stellaire, « Situer la ville ».
