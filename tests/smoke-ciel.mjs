@@ -1,6 +1,7 @@
 // Ciel du réseau — la vue d'ARRIVÉE de RIVEN depuis le 2026-08-11.
 // Flux front en mode démo. Ce que ce harnais prouve :
-//   1. Le ciel est l'écran d'arrivée ; l'arbre et la carte restent accessibles.
+//   1. Le ciel est l'écran d'arrivée — et depuis le 2026-08-13, la SEULE forme
+//      du réseau : l'arbre est supprimé, son onglet aussi.
 //   2. N contacts → N étoiles, groupées en constellations par métier principal.
 //   3. Une personne rattachée à DEUX fiches orbite les DEUX (notion du 10/08).
 //   4. Les relations sont tracées en BLANC, le motif portant le type.
@@ -12,6 +13,15 @@
 //   9. Quitter l'onglet ARRÊTE la boucle d'animation (batterie).
 //  10. Déterminisme : mêmes données → mêmes coordonnées.
 //  11. Zéro erreur console.
+//
+//  REPRIS DE smoke-arbre.mjs, supprimé le 2026-08-13 avec l'arbre (12 à 14).
+//  Ces trois-là ne parlaient PAS de l'arbre : elles parlaient d'Ultima, et
+//  elles seraient tombées avec lui. L'inventaire a été fait assertion par
+//  assertion AVANT la suppression, c'est ce qui les a sauvées.
+//  12. Mouvement réduit : `prefers-reduced-motion` coupe la dérive.
+//  13. État vide : le message EXACT et le bouton d'ajout.
+//  14. Double codage : le type est dit EN TOUTES LETTRES, jamais par la seule
+//      couleur (une couleur seule est illisible pour qui ne la distingue pas).
 import { chromium } from 'playwright';
 import { readFileSync } from 'node:fs';
 
@@ -145,7 +155,7 @@ const excentree = await page.evaluate(() => {
   return { id: pire.getAttribute('data-noeud-id'), avant: dist(pire) };
 });
 // focus() de Playwright, et non element.focus() dans la page : sur un <g> SVG
-// le focus programmatique ne prend pas toujours — même technique que smoke-arbre.
+// le focus programmatique ne prend pas toujours.
 await page.locator(`g.ciel-etoile[data-noeud-id="${excentree.id}"]`).focus();
 verdicts.focusEffectif = await page.evaluate((id) =>
   document.activeElement && document.activeElement.getAttribute('data-noeud-id') === id,
@@ -210,12 +220,14 @@ await page.locator('.barre-onglets .onglet[data-onglet="carte"]').click();
 await page.waitForTimeout(500);
 verdicts.sortieArreteLaBoucle = await page.evaluate(() => window.UltimaCiel.courant() === null);
 
-// ---------- 1bis. L'arbre et la carte restent accessibles ----------
+// ---------- 1bis. La carte reste accessible ----------
+// L'ARBRE N'EST PLUS : supprimé le 2026-08-13. Le verdict `arbreAccessible`
+// qui vivait ici tombe avec lui — et son onglet a disparu de la barre, ce que
+// prouve désormais `troisOngletsSeulement` ci-dessous.
 verdicts.carteAccessible = await page.locator('#espace-carte').isVisible();
-await page.locator('.barre-onglets .onglet[data-onglet="arbre"]').click();
-await page.waitForTimeout(600);
-verdicts.arbreAccessible = await page.locator('#espace-arbre').isVisible() &&
-  (await page.evaluate(() => document.querySelectorAll('#arbre-scene .arbre-feuille').length)) === 9;
+verdicts.plusDOngletArbre =
+  (await page.locator('.barre-onglets .onglet[data-onglet="arbre"]').count()) === 0;
+verdicts.plusDEspaceArbre = (await page.locator('#espace-arbre').count()) === 0;
 
 // Retour au ciel : il se reconstruit entièrement.
 await page.locator('.barre-onglets .onglet[data-onglet="ciel"]').click();
@@ -419,6 +431,82 @@ await page.waitForTimeout(500);
 const boiteToutVoir = await page.locator('#ciel-tout-voir').boundingBox();
 verdicts.cibleTactileToutVoir = !!boiteToutVoir &&
   boiteToutVoir.height >= 24 && boiteToutVoir.width >= 24;
+
+// ---------- 14. Double codage : le type en toutes lettres ----------
+// Repris de smoke-arbre (`typeEnToutesLettres`). Dans le ciel, la couleur de
+// l'étoile dit le type — elle ne peut pas le dire SEULE. L'étiquette
+// accessible doit le porter en clair, sinon l'information n'existe que pour
+// qui distingue quatre teintes sur fond de nuit.
+await page.locator('.barre-onglets .onglet[data-onglet="ciel"]').click();
+await page.waitForTimeout(600);
+const etiquettes = await page.evaluate(() => Array.from(
+  document.querySelectorAll('#ciel-scene .ciel-etoile[data-noeud-id]'))
+  .map((g) => g.getAttribute('aria-label') || ''));
+verdicts.typeEnToutesLettres = etiquettes.length > 0 &&
+  etiquettes.every((l) => /Artisan|Partenaire|Lead|Chantier/.test(l));
+
+// ---------- 12. Mouvement réduit : la dérive s'arrête ----------
+// Repris de smoke-arbre (`pousseCoupeeReduce`). Mesure par CONSTAT du
+// mouvement, pas par lecture du code : on active la dérive, on relève la
+// position d'une étoile, on attend, on la relève à nouveau. Sans préférence,
+// elle doit avoir bougé ; avec `reduce`, elle doit être immobile.
+async function positionEtoile() {
+  return page.evaluate(() => {
+    const z = document.querySelector('#ciel-scene .ciel-etoile[data-noeud-id] .ciel-zone');
+    return z ? Number(z.getAttribute('cx')) : null;
+  });
+}
+await page.locator('#ciel-derive').check();
+await page.waitForTimeout(400);
+const avantDerive = await positionEtoile();
+await page.waitForTimeout(900);
+const apresDerive = await positionEtoile();
+verdicts.deriveBougeSansPreference = avantDerive !== null && apresDerive !== null &&
+  Math.abs(apresDerive - avantDerive) > 0.5;
+
+await page.emulateMedia({ reducedMotion: 'reduce' });
+await page.locator('.barre-onglets .onglet[data-onglet="accueil"]').click();
+await page.waitForTimeout(200);
+await page.locator('.barre-onglets .onglet[data-onglet="ciel"]').click();
+await page.waitForTimeout(700); // la caméra finit sa mise en place
+await page.locator('#ciel-derive').check();
+await page.waitForTimeout(600);
+const avantReduit = await positionEtoile();
+await page.waitForTimeout(900);
+const apresReduit = await positionEtoile();
+verdicts.deriveCoupeeSousReduce = avantReduit !== null && apresReduit !== null &&
+  Math.abs(apresReduit - avantReduit) < 0.01;
+await page.emulateMedia({ reducedMotion: 'no-preference' });
+
+// ---------- 13. État vide : le message EXACT et le bouton ----------
+// Repris de smoke-arbre (`messageVideExact`, `boutonEtatVide`). En DERNIER :
+// il vide le réseau de démo, donc il détruit ce dont tout le reste a besoin.
+page.on('dialog', (d) => d.accept()); // confirmations de suppression
+// La dérive activée deux blocs plus haut fait BOUGER les étoiles : on ne
+// clique pas une cible en mouvement (Playwright refuse, et Paul aussi).
+await page.locator('#ciel-derive').uncheck();
+await page.waitForTimeout(700);
+let garde = 0;
+while ((await page.locator('#ciel-scene .ciel-etoile[data-noeud-id]').count()) > 0 && garde < 80) {
+  // `dispatchEvent` et non `click` : dans un VOLUME, les zones de captation
+  // des étoiles se chevauchent — une étoile devant en masque une autre, et
+  // Playwright refuse alors le clic. Ce chevauchement n'est pas un défaut,
+  // c'est la perspective. Ici on veut vider le réseau, pas éprouver le
+  // pointage : celui-ci est déjà couvert par `tapOuvreLaBonneFiche`.
+  await page.locator('#ciel-scene .ciel-etoile[data-noeud-id]').first().dispatchEvent('click');
+  await page.waitForTimeout(120);
+  const bouton = page.locator('.actions-fiche button', { hasText: 'Supprimer' }).first();
+  if (await bouton.count() === 0) { break; }
+  await bouton.click();
+  await page.waitForTimeout(160);
+  garde += 1;
+}
+verdicts.cielVide = (await page.locator('#ciel-scene .ciel-etoile[data-noeud-id]').count()) === 0;
+const blocVide = page.locator('#ciel-scene .ciel-bloc-etat');
+verdicts.messageVideExact = (await blocVide.first().textContent())
+  .replace(/\s+/g, ' ').trim() === 'Votre ciel attend sa première étoile — touchez +';
+verdicts.outilsCachesQuandVide = await page.locator('#ciel-outils').isHidden();
+verdicts.boutonAjouterVisibleQuandVide = await page.locator('#ciel-ajouter').isVisible();
 
 // ---------- 11. Zéro erreur console ----------
 verdicts.zeroErreurConsole = erreurs.length === 0;

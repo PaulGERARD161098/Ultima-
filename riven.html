@@ -249,17 +249,18 @@
       </div>
     </section>
 
-    <!-- ===== Espace Ciel : la vue d'ARRIVÉE du réseau (décision Paul 2026-08-11).
+    <!-- ===== Espace Ciel : la SEULE forme du réseau depuis le 2026-08-13.
          Une fiche = une étoile, un métier = une région de l'espace, une personne
          orbite les fiches où elle travaille, une relation = un trait blanc.
-         L'arbre et la carte restent accessibles : on ne jette rien. ===== -->
+         L'ARBRE A ÉTÉ SUPPRIMÉ (décision de Paul, 2026-08-12 : « on garde que
+         la constellation et le modèle 3D pour tout RIVEN »). La carte suit. ===== -->
     <section id="espace-ciel" class="espace espace-ciel" hidden aria-labelledby="ciel-titre">
       <header class="ciel-cartouche">
         <h2 id="ciel-titre">RIVEN</h2>
         <p class="ciel-sous">le réseau, vu du ciel</p>
       </header>
       <div id="ciel-outils" class="ciel-outils">
-        <div class="champ-recherche-arbre">
+        <div class="champ-recherche-ciel">
           <label class="visuellement-cache" for="ciel-recherche">Rechercher un contact par nom, métier ou ville</label>
           <svg class="icone-loupe" viewBox="0 0 24 24" width="20" height="20"
                aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"
@@ -267,7 +268,7 @@
             <circle cx="11" cy="11" r="6.5"/>
             <path d="m16 16 4.5 4.5"/>
           </svg>
-          <input id="ciel-recherche" type="search" class="arbre-recherche"
+          <input id="ciel-recherche" type="search" class="ciel-recherche"
                  placeholder="Rechercher un nom, un métier, une ville…" autocomplete="off">
         </div>
         <span class="ciel-zoom" role="group" aria-label="Distance de vue">
@@ -290,33 +291,7 @@
           &middot; Tab pour passer d’une étoile à l’autre
         </p>
       </div>
-      <button id="ciel-ajouter" type="button" class="arbre-ajouter">+ Ajouter un contact</button>
-    </section>
-
-    <!-- ===== Espace Arbre (A3, le pivot : arbre gravé, secteurs = branches) ===== -->
-    <section id="espace-arbre" class="espace espace-arbre" hidden aria-labelledby="arbre-titre">
-      <header class="arbre-entete">
-        <div class="cartouche-arbre">
-          <h2 id="arbre-titre" class="cartouche-arbre-titre">ULTIMA</h2>
-          <p class="cartouche-arbre-sous">l'arbre du réseau</p>
-        </div>
-        <div id="arbre-outils" class="arbre-outils">
-          <div class="champ-recherche-arbre">
-            <label class="visuellement-cache" for="arbre-recherche">Rechercher un contact par nom ou ville</label>
-            <svg class="icone-loupe" viewBox="0 0 24 24" width="20" height="20"
-                 aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"
-                 stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="6.5"/>
-              <path d="m16 16 4.5 4.5"/>
-            </svg>
-            <input id="arbre-recherche" type="search" class="arbre-recherche"
-                   placeholder="Rechercher un nom ou une ville…" autocomplete="off">
-          </div>
-          <p id="arbre-recherche-message" class="arbre-recherche-message" role="status"></p>
-        </div>
-      </header>
-      <div id="arbre-scene" class="arbre-scene"></div>
-      <button id="arbre-ajouter" type="button" class="arbre-ajouter">+ Ajouter un contact</button>
+      <button id="ciel-ajouter" type="button" class="ciel-ajouter-flottant">+ Ajouter un contact</button>
     </section>
 
     <!-- ===== Espace Carte (existant : barre d'outils + carte + légende + panneau) ===== -->
@@ -519,7 +494,7 @@
 
     <!-- Panneau fiche/formulaire : overlay global (position:fixed). Sorti de
          espace-carte (A3) pour rester accessible depuis TOUS les onglets — un
-         tap sur une feuille de l'arbre ouvre la fiche sans quitter l'arbre. -->
+         tap sur une étoile du ciel ouvre la fiche sans quitter le ciel. -->
     <aside id="panneau" class="panneau" hidden aria-label="Panneau latéral">
         <div class="panneau-entete">
           <h2 id="panneau-titre" class="panneau-titre" tabindex="-1">Fiche</h2>
@@ -558,10 +533,12 @@
                    list="liste-secteurs" autocomplete="off"
                    aria-describedby="aide-secteur">
             <datalist id="liste-secteurs"></datalist>
-            <!-- Le métier PRINCIPAL, et lui seul, fait la branche de l'arbre
-                 (arbitrage Paul 2026-08-10). Les autres métiers sont plus bas,
-                 dans « Détail » — ils décrivent, ils ne rangent pas. -->
-            <p id="aide-secteur" class="champ-aide">Le métier principal : c'est lui qui fait la branche de l'arbre.</p>
+            <!-- Le métier PRINCIPAL, et lui seul, fait la CONSTELLATION
+                 (arbitrage Paul 2026-08-10, transposé au ciel le 2026-08-13 :
+                 le métier rangeait les branches, il range les constellations —
+                 c'est le même rôle, l'arbre en moins). Les autres métiers sont
+                 plus bas, dans « Détail » — ils décrivent, ils ne rangent pas. -->
+            <p id="aide-secteur" class="champ-aide">Le métier principal : c'est lui qui fait la constellation.</p>
           </div>
           <div class="champ">
             <label for="noeud-ville">Ville</label>
@@ -645,7 +622,7 @@
               <input id="noeud-metiers_secondaires" type="text" maxlength="1500"
                      autocomplete="off" aria-describedby="aide-metiers"
                      placeholder="Chauffage, Pompe à chaleur">
-              <p id="aide-metiers" class="champ-aide">Séparés par des virgules. N'ajoutent pas de branche à l'arbre.</p>
+              <p id="aide-metiers" class="champ-aide">Séparés par des virgules. N'ajoutent pas de constellation.</p>
             </div>
 
             <div class="champ">
@@ -801,7 +778,7 @@
 
         <!-- ===== La PERSONNE (0024) — elle n'a besoin d'aucun nœud =====
              Enregistrer une personne ne crée AUCUNE fiche au réseau : elle ne
-             paraît ni sur l'arbre ni sur la carte. C'est la demande de Paul du
+             paraît pas dans le ciel. C'est la demande de Paul du
              2026-08-10 (« renseigner des contacts sans forcément créer des
              nœuds »). Le rattachement est un geste séparé, et facultatif. -->
         <form id="form-personne" class="panneau-corps formulaire" hidden>
@@ -890,7 +867,7 @@
           </div>
           <button id="contacts-ajouter" type="button" class="bouton bouton-primaire">+ Ajouter un contact</button>
         </header>
-        <!-- Deux registres (0024) : les FICHES (les nœuds — arbre et carte) et
+        <!-- Deux registres (0024) : les FICHES (les nœuds — les étoiles) et
              les PERSONNES (les gens, qui n'ont besoin d'aucun nœud). Le premier
              est celui d'avant, à l'identique : ouvrir l'onglet ne change rien
              pour qui ne cherche pas les personnes. -->
@@ -925,13 +902,6 @@
       </svg>
       <span>Ciel</span>
     </button>
-    <button type="button" class="onglet" data-onglet="arbre">
-      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
-        <circle cx="12" cy="8.5" r="5.5"/>
-        <path d="M12 14 V20.5 M8.5 20.5 H15.5"/>
-      </svg>
-      <span>Arbre</span>
-    </button>
     <button type="button" class="onglet" data-onglet="carte">
       <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
         <path d="M9 4.5 L15 6.5 L20.5 4.5 V18.5 L15 20.5 L9 18.5 L3.5 20.5 V6.5 Z"/>
@@ -956,7 +926,6 @@
   <script src="js/vendor/supabase-js-2.110.0.min.js"></script>
   <script src="js/config.js"></script>
   <script src="js/carte.js"></script>
-  <script src="js/arbre.js"></script>
   <script src="js/ciel.js"></script>
   <script src="js/leo-accueil.js"></script>
   <!-- Dictée vocale : composant partagé (micro par champ). -->

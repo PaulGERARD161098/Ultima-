@@ -83,7 +83,7 @@ thème stellaire devient une **couche de jetons réutilisable**, pas un patch de
    pratique éprouvée du 2026-08-01 (VRANESH, DRAUKHAIN) — et surtout, c'est ici
    qu'un « on remplace un mix par un autre » se voit pour rien, au lieu de se
    découvrir après avoir touché 18 harnais.* **→ arbitrage de Paul.**
-2. **Le retrait de l'arbre** : onglet, `#espace-arbre`, `js/arbre.js`, CSS
+2. ✅ **FAIT le 2026-08-13 — le retrait de l'arbre** : onglet, `#espace-arbre`, `js/arbre.js`, CSS
    dédié, `tests/smoke-arbre.mjs`. **Inventaire assertion par assertion avant
    suppression** : celles qui ne parlent pas de l'arbre (recherche, états vides,
    ouverture de fiche) **migrent** vers `smoke-ciel` / `smoke-contacts`.
@@ -341,6 +341,61 @@ global, aucune bascule sur les autres écrans. Le volume reste le défaut : la
 **Ordre** : cette bascule vient **après** les retraits et la couche stellaire.
 Elle touche `ciel.js`, qu'on veut stable pendant qu'on démonte autour de lui.
 
+## 10. Étape ② — le retrait de l'arbre. Ce que le démontage a appris
+
+**Fait le 2026-08-13**, au go de Paul (« Go — enlève arbre »).
+
+| Retiré | Volume |
+|---|---|
+| `js/arbre.js` | **445 lignes**, supprimé |
+| `js/app.js` | **103 lignes** (bloc « Onglet Arbre », écouteurs, re-rendu au redimensionnement, dispatch) |
+| `css/styles.css` | le bloc « Espace Arbre » entier |
+| `riven.html` | l'espace, l'onglet, le script |
+| `tests/smoke-arbre.mjs` | **55 assertions**, supprimé après inventaire |
+
+**Vérifié : patrimoine COMPLET, 56 harnais, sortie 0, aucun verdict faux.**
+
+### Trois choses que seul le démontage pouvait révéler
+
+1. **Le ciel dépendait d'une fonction rangée chez l'arbre.**
+   `ouvrirFicheDepuisArbre` vivait dans le bloc « Onglet Arbre » — mais c'est le
+   CIEL qui l'appelle depuis le 2026-08-11. La supprimer avec son bloc a cassé
+   l'ouverture des fiches depuis les étoiles. **Rétablie sous son vrai nom**,
+   `ouvrirFicheDepuisEtoile`, rangée chez son seul appelant. *Un bloc de code
+   n'appartient pas à ce dont parle son titre : il appartient à qui l'appelle.*
+2. **Le ciel EMPRUNTAIT trois classes CSS à l'arbre** — `champ-recherche-arbre`,
+   `arbre-recherche`, `arbre-ajouter`. Supprimer le CSS de l'arbre aurait
+   dépouillé la barre d'outils du ciel **sans qu'aucun harnais ne le voie** (un
+   bouton nu reste un bouton cliquable). Les règles partagées **survivent sous
+   les noms du ciel** ; le reste est parti.
+3. **Des mots visibles parlaient encore de l'arbre.** Le formulaire disait
+   *« le métier principal : c'est lui qui fait la branche de l'arbre »* et
+   *« n'ajoutent pas de branche à l'arbre »*. Sans arbre, ces phrases sont
+   fausses — elles parlent maintenant de **constellation**. La puce des
+   suggestions de Léo, un arbre gravé, est devenue une **étoile** : une icône
+   qui montre un objet disparu ment au lecteur.
+
+### La couverture n'a pas baissé — c'est mesuré, pas espéré
+
+Sur les 55 assertions de `smoke-arbre.mjs`, **sept ne parlaient pas de l'arbre**.
+Elles ont été **écrites dans `smoke-ciel.mjs` et vues vertes AVANT** que le
+fichier ne soit supprimé :
+
+- **le double codage** — le type dit en toutes lettres dans l'étiquette
+  accessible, jamais par la seule couleur ;
+- **le mouvement réduit** — mesuré par CONSTAT : la dérive activée, on relève la
+  position d'une étoile, on attend, on la relève. Elle bouge sans préférence,
+  elle est immobile sous `prefers-reduced-motion` ;
+- **l'état vide** — le message exact, les outils cachés, le bouton d'ajout.
+
+*Deux frictions techniques, notées parce qu'elles resserviront* : dans un
+volume, on ne clique pas une étoile qui dérive (couper la dérive d'abord), et
+les zones de captation se chevauchent — le vidage du réseau passe par
+`dispatchEvent`, le pointage réel restant couvert par `tapOuvreLaBonneFiche`.
+
+**Le compteur d'onglets est devenu le compteur du démontage** : `cinqOnglets`
+est devenu `quatreOnglets`, et deviendra `troisOnglets` quand la carte partira.
+
 ---
 
 ### Registre des arbitrages — pris par Paul, 2026-08-12
@@ -356,6 +411,10 @@ Elle touche `ciel.js`, qu'on veut stable pendant qu'on démonte autour de lui.
 
 ### ⏳ Actions Paul
 
+- ✅ **Étape ② FAITE : l'arbre est supprimé** (2026-08-13). 445 lignes de
+  `js/arbre.js`, 103 lignes d'`app.js`, ~190 lignes de `styles.css`, l'espace,
+  l'onglet, le harnais. **Patrimoine COMPLET vert : 56 harnais, sortie 0,
+  aucun verdict faux.** Trois surprises, toutes consignées au §10.
 - ✅ **Maquette livrée et corrigée** (étape ①) — `design/preview-riven-stellaire.html` :
   33 couples mesurés, 0 défaut, vrai ciel 3D, 30 étoiles, 0 hors cadre.
 - ✅ **La question du soir est TRANCHÉE** (voir §9) : « la carte » désignait le

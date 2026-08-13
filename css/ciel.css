@@ -131,7 +131,7 @@
 .ciel-aide.est-effacee { opacity: 0; }
 .ciel-message { margin: 0; font-size: .82rem; color: var(--encre-sepia-douce); }
 
-/* État vide / non connecté : le même bloc que l'arbre, sur fond de nuit. */
+/* État vide / non connecté, sur fond de nuit. */
 .ciel-bloc-etat {
   padding: 2.4rem 1.2rem; text-align: center;
   color: rgba(205, 195, 173, .85); font-style: italic;

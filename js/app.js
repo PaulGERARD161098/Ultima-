@@ -488,7 +488,6 @@
     window.UltimaCarte.rendre(etat.noeuds, etat.relations, etat.filtres);
     rendreAccueil();
     if (etat.onglet === 'ciel') { rendreCiel(); }
-    rendreArbre();
     rendreContacts();
     if (etat.noeudCourant && !$('#vue-fiche').hidden) {
       rendreFiche();
@@ -852,7 +851,6 @@
   var SECTIONS_ONGLETS = {
     accueil: '#espace-accueil',
     ciel: '#espace-ciel',
-    arbre: '#espace-arbre',
     carte: '#espace-carte',
     contacts: '#espace-contacts'
   };
@@ -888,7 +886,6 @@
       window.UltimaCiel.arreter();
     }
     if (nom === 'accueil') { rendreAccueil(); }
-    if (nom === 'arbre') { rendreArbre(); }
     if (nom === 'contacts') { rendreContacts(); }
     // Changement d'onglet : liste de recherche fermée, halo effacé, texte
     // du champ conservé (règles d'état v3-⑥).
@@ -980,16 +977,19 @@
     return svg;
   }
 
-  // Puce « arbre » des suggestions.
-  function svgArbre() {
+  // Puce des suggestions. C'était un arbre gravé ; l'arbre n'existe plus, et
+  // une puce qui montre un objet disparu ment au lecteur. C'est une ÉTOILE —
+  // le lieu où la suggestion mène désormais.
+  function svgEtoileSuggestion() {
     var svg = svgElement('svg', {
       'class': 'lieu', viewBox: '0 0 24 24', width: '26', height: '26', 'aria-hidden': 'true'
     });
     var g = svgElement('g', {
       fill: '#efe3c6', stroke: '#3b2f1c', 'stroke-width': '1.4', 'stroke-linejoin': 'round'
     });
-    g.appendChild(svgElement('circle', { cx: '12', cy: '9', r: '6' }));
-    g.appendChild(svgElement('path', { d: 'M12 15 V21 M9 21 H15', fill: 'none' }));
+    g.appendChild(svgElement('path', {
+      d: 'M12 3 L13.9 9.4 L20.5 10.4 L15.7 14.6 L17.2 21 L12 17.6 L6.8 21 L8.3 14.6 L3.5 10.4 L10.1 9.4 Z'
+    }));
     svg.appendChild(g);
     return svg;
   }
@@ -1411,7 +1411,7 @@
         var bouton = document.createElement('button');
         bouton.type = 'button';
         bouton.className = 'item-suggestion';
-        bouton.appendChild(svgArbre());
+        bouton.appendChild(svgEtoileSuggestion());
         var texte = document.createElement('span');
         texte.className = 'item-suggestion-texte';
         texte.textContent = suggestion.message;
@@ -1849,29 +1849,15 @@
     rendreContacts();
   }
 
-  // ---------- Onglet Arbre (A3, le pivot : secteurs = branches) ----------
+  // ---------- Ciel : la SEULE forme du réseau (2026-08-13) ----------
 
-  // Bloc d'état de l'arbre (non connecté / réseau vide), sur le parchemin.
-  function blocEtatArbre(texteFort, texteSuite, libelleBouton, action) {
-    var bloc = document.createElement('div');
-    bloc.className = 'arbre-bloc-etat cadre-dessine';
-    var texte = document.createElement('p');
-    texte.className = 'arbre-etat-texte';
-    var fort = document.createElement('strong');
-    fort.textContent = texteFort;
-    texte.appendChild(fort);
-    texte.appendChild(document.createTextNode(' ' + texteSuite));
-    bloc.appendChild(texte);
-    if (libelleBouton) {
-      bloc.appendChild(boutonRaccourci(libelleBouton, 'bouton-primaire', action));
-    }
-    return bloc;
-  }
-
-  // Ouverture de fiche depuis l'arbre : la fiche est un overlay global (A3),
-  // on l'ouvre SANS quitter l'arbre (contraste avec le flux Contacts qui, lui,
-  // bascule vers la carte). Réutilisation stricte de ouvrirFiche / rendreFiche.
-  function ouvrirFicheDepuisArbre(nodeId) {
+  // Ouverture d'une fiche depuis une étoile : la fiche est un overlay global,
+  // on l'ouvre SANS quitter le ciel. Cette fonction vivait dans le bloc de
+  // l'arbre — elle n'était pas à l'arbre, elle était PARTAGÉE : le ciel s'en
+  // sert depuis le 2026-08-11. Supprimer le bloc l'a emportée avec lui, et le
+  // ciel a perdu l'ouverture de ses fiches pendant trois minutes. Rangée ici,
+  // chez son seul appelant.
+  function ouvrirFicheDepuisEtoile(nodeId) {
     var noeud = nodeId ? trouverNoeud(nodeId) : null;
     if (!noeud) {
       toast("Ce contact n'existe plus.", 'erreur');
@@ -1880,82 +1866,9 @@
     ouvrirFiche(noeud.id);
     $('#panneau-titre').focus();
   }
-
-  function rendreArbre() {
-    var scene = $('#arbre-scene');
-    if (!scene) { return; }
-    var outils = $('#arbre-outils');
-    var boutonAjouter = $('#arbre-ajouter');
-    var message = $('#arbre-recherche-message');
-    scene.textContent = '';
-    if (message) { message.textContent = ''; }
-
-    // Non connecté (config présente, pas de session) : invitation, pas d'arbre.
-    if (!etat.modeDemo && !etat.session) {
-      if (outils) { outils.hidden = true; }
-      if (boutonAjouter) { boutonAjouter.hidden = true; }
-      scene.appendChild(blocEtatArbre(
-        'Connectez-vous pour retrouver votre réseau.',
-        'Le lien de connexion arrive par e-mail.',
-        'Se connecter',
-        function () {
-          var champ = $('#champ-email');
-          if (champ) { champ.focus(); }
-        }));
-      return;
-    }
-
-    if (boutonAjouter) { boutonAjouter.hidden = false; }
-
-    // Connecté (ou démo), aucune donnée : invitation au premier contact.
-    // Wording exact de la spec A4 (état vide de l'arbre).
-    if (etat.noeuds.length === 0) {
-      if (outils) { outils.hidden = true; }
-      scene.appendChild(blocEtatArbre(
-        'Votre arbre attend sa première pousse',
-        '— touchez +',
-        '+ Ajouter un contact',
-        function () { ouvrirFormNoeud(null); }));
-      return;
-    }
-
-    if (outils) { outils.hidden = false; }
-
-    // Recherche v3-⑥ (variante arbre) : MISE EN ÉVIDENCE, pas réduction — les
-    // feuilles non correspondantes sont atténuées mais restent en place, pour
-    // ne pas casser l'orientation dans l'arbre. Réutilise correspondAuTerme.
-    var champ = $('#arbre-recherche');
-    var brut = champ ? champ.value.trim() : '';
-    var terme = normaliserTexte(brut);
-    var correspond = function (noeud) {
-      return !terme || correspondAuTerme(noeud, terme);
-    };
-
-    // Pousse animée (A4) : le contact tout juste ajouté apparaît par une
-    // pousse discrète (CSS, coupée sous prefers-reduced-motion). Le marqueur
-    // est consommé après un seul rendu (les re-renders ultérieurs n'animent pas).
-    var nouveau = etat.noeudNouveau;
-    etat.noeudNouveau = null;
-
-    window.UltimaArbre.rendre(scene, etat.noeuds, {
-      surClicNoeud: ouvrirFicheDepuisArbre,
-      libellesType: LIBELLES_TYPE,
-      correspond: correspond,
-      noeudNouveau: nouveau
-    });
-
-    if (terme && message) {
-      var nb = etat.noeuds.filter(correspond).length;
-      message.textContent = nb === 0
-        ? 'Aucun contact ne correspond à “' + brut + '”.'
-        : (nb + (nb > 1 ? ' contacts mis en évidence.' : ' contact mis en évidence.'));
-    }
-  }
-
-  // ---------- Ciel : la vue d'ARRIVÉE du réseau (2026-08-11) ----------
-  // Même charpente que rendreArbre : mêmes états vides, même règle de
-  // recherche (mise en évidence, jamais réduction), mêmes libellés. Ce qui
-  // change est le RENDU, pas ce qu'on vient y chercher.
+  // La charpente vient de l'arbre (états vides, recherche par mise en évidence
+  // et non par réduction, libellés) : elle lui survit, c'est tout ce qui reste
+  // de lui et c'était la partie qui valait d'être gardée.
 
   function rendreCiel() {
     var scene = $('#ciel-scene');
@@ -1967,7 +1880,7 @@
     scene.textContent = '';
     if (message) { message.textContent = ''; }
 
-    // Non connecté : invitation, pas de ciel — mêmes règles que l'arbre.
+    // Non connecté : invitation, pas de ciel.
     if (!etat.modeDemo && !etat.session) {
       if (outils) { outils.hidden = true; }
       if (boutonAjouter) { boutonAjouter.hidden = true; }
@@ -2003,7 +1916,7 @@
       rattachements: etat.rattachements,
       relations: etat.relations
     }, {
-      surClicNoeud: ouvrirFicheDepuisArbre,
+      surClicNoeud: ouvrirFicheDepuisEtoile,
       surClicPersonne: ouvrirFichePersonneDepuisCiel,
       libellesType: LIBELLES_TYPE,
       libellesStatut: LIBELLES_STATUT,
@@ -2034,7 +1947,7 @@
     }
   }
 
-  // État vide du ciel : même forme que blocEtatArbre, sans bouton — le
+  // État vide du ciel : sans bouton — le
   // « + Ajouter un contact » vit déjà sous la scène.
   function blocEtatCiel(texteFort, texteSuite) {
     var bloc = document.createElement('div');
@@ -4368,7 +4281,7 @@
         ouvrirFormPersonneDepuisRegistre();
         return;
       }
-      // On reste sur Contacts — motif de `#arbre-ajouter` et `#ciel-ajouter`.
+      // On reste sur Contacts — motif de `#ciel-ajouter`.
       // `ouvrirFormDepuisAccueil` bascule sur la Carte : c'est juste depuis
       // l'ACCUEIL (on va quelque part), faux depuis le registre (on y est
       // déjà). Le défaut se voyait à l'annulation : on atterrissait sur la
@@ -4384,15 +4297,6 @@
     });
 
     $('#contacts-recherche').addEventListener('input', rendreContacts);
-
-    $('#arbre-ajouter').addEventListener('click', function () {
-      if (!etat.modeDemo && !etat.session) {
-        toast('Connectez-vous pour ajouter un contact.', 'erreur');
-        return;
-      }
-      ouvrirFormNoeud(null); // panneau overlay : on reste sur l'arbre
-    });
-    $('#arbre-recherche').addEventListener('input', rendreArbre);
 
     // ---- Commandes du ciel ----
     $('#ciel-ajouter').addEventListener('click', function () {
@@ -4425,24 +4329,6 @@
       if (vue) { vue.derive(e.target.checked); }
     });
 
-    // Arbre responsive en largeur (A3) : re-rendre à chaud UNIQUEMENT si le
-    // palier change (fonction en escalier de la largeur mesurée). Débounce
-    // 150 ms pour coalescer les rafales de resize ; court-circuit « palier
-    // inchangé » -> idempotent, aucun churn tant qu'on reste dans une bande.
-    // Aucune dépendance nouvelle (window.resize + setTimeout natifs).
-    var palierArbre = null;
-    var tResizeArbre = null;
-    window.addEventListener('resize', function () {
-      clearTimeout(tResizeArbre);
-      tResizeArbre = setTimeout(function () {
-        var scene = $('#arbre-scene');
-        if (!scene || etat.onglet !== 'arbre') { return; }
-        var cols = window.UltimaArbre.choisirPalier(scene.clientWidth).cols;
-        if (cols === palierArbre) { return; }
-        palierArbre = cols;
-        rendreArbre();
-      }, 150);
-    });
 
     $('#bouton-ajouter').addEventListener('click', function () {
       if (!etat.modeDemo && !etat.session) {
@@ -4516,11 +4402,10 @@
     initGeocodage(); // « Trouver sur la carte » du formulaire nœud
     initRecherche(); // recherche nom/ville de l'onglet Carte (v3-⑥)
     // Le CIEL est l'écran d'arrivée depuis le 2026-08-11 (décision de Paul :
-    // « la 3d devient accueil »). Il prend la place que l'arbre tenait depuis
-    // A3/D2a ; l'arbre, la carte et l'Accueil restent pleinement accessibles
-    // par leurs onglets — on ne jette rien tant que l'usage n'a pas tranché.
-    // Les données arrivent juste après (chargerDonnees → rafraichir) : le ciel
-    // se peuple sans changement d'onglet.
+    // « la 3d devient accueil »), et depuis le 2026-08-13 il est la SEULE forme
+    // du réseau : l'usage a tranché, l'arbre est supprimé. Les données arrivent
+    // juste après (chargerDonnees → rafraichir) : le ciel se peuple sans
+    // changement d'onglet.
     activerOnglet('ciel');
     await initAuth();
     await chargerDonnees();

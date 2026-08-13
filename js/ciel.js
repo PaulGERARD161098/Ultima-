@@ -12,8 +12,9 @@
 // quinze lignes de trigonométrie et le rendu reste en SVG : chaque étoile
 // demeure un élément du document, focusable et lisible.
 //
-// Même contrat que js/arbre.js (module auto-contenu, exposé en global,
-// injection 100 % createElementNS / textContent, jamais innerHTML), plus un
+// Contrat hérité de js/arbre.js — supprimé le 2026-08-13, mais sa discipline
+// reste la règle ici : module auto-contenu, exposé en global, injection 100 %
+// createElementNS / textContent, jamais innerHTML. Plus un
 // `arreter()` : une boucle d'animation qui tourne dans un onglet caché est une
 // batterie qui se vide pour rien.
 (function () {
@@ -50,7 +51,7 @@
   var CLE_A_CLASSER = ' a-classer';
   var LABEL_A_CLASSER = 'À classer';
 
-  // Même règle de normalisation qu'arbre.js et que la datalist des secteurs.
+  // Même règle de normalisation que la datalist des secteurs.
   function normaliser(texte) {
     return (texte || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   }
