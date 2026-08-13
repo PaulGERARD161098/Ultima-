@@ -15,7 +15,7 @@ const NODE_FIELDS = [
   'telephone',
   'email',
   'statut',
-  // Métier PRINCIPAL : l'unique clé de regroupement de l'arbre (js/arbre.js).
+  // Métier PRINCIPAL : l'unique clé de regroupement du ciel (js/ciel.js).
   'secteur_activite',
   'lat',
   'lng',

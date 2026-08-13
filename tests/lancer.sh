@@ -5,11 +5,10 @@ set -euo pipefail
 cd "$(dirname "$0")"
 CACHE=.cache
 
-# 1. Préparation (une fois) : fixture Leaflet depuis npm + Playwright.
+# 1. Préparation (une fois) : Playwright.
+# La fixture Leaflet a disparu le 2026-08-13 avec la carte : plus une seule
+# ressource tierce dans Ultima, donc plus rien à mettre en cache ni à stuber.
 mkdir -p "$CACHE"
-if [ ! -f "$CACHE/package/dist/leaflet.js" ]; then
-  (cd "$CACHE" && npm pack leaflet@1.9.4 --silent && tar -xzf leaflet-1.9.4.tgz package/dist/leaflet.js package/dist/leaflet.css)
-fi
 # Playwright à la racine du repo (résolution ESM par répertoires ancêtres).
 # --no-save --no-package-lock : n'écrit JAMAIS dans package.json ni le lock
 # (c'est une dépendance de test à la demande, pas une dépendance du produit).
@@ -76,7 +75,7 @@ trap 'kill $SERVEUR 2>/dev/null || true' EXIT
 sleep 1
 
 # 4. Les harnais navigateur (chacun sort en erreur si un verdict échoue).
-for h in smoke-ecrire.mjs smoke-boussole.mjs smoke-alpha.mjs smoke-tao.mjs smoke-console.mjs smoke-quadrants.mjs smoke-idees.mjs smoke-abaque.mjs smoke-reshiram.mjs smoke-zekrom.mjs smoke-imladrik.mjs smoke-imladrik-carto.mjs smoke-draukhain.mjs smoke-vranesh.mjs smoke-leo-accueil.mjs smoke-intendant.mjs smoke-flux-fiche.mjs smoke-accueil.mjs smoke-accueil-etats.mjs smoke-connexion.mjs smoke-contacts.mjs smoke-secteur.mjs smoke-dictee.mjs smoke-geocode.mjs smoke-recherche.mjs smoke-antique.mjs smoke-csp.mjs smoke-arbre.mjs smoke-ciel.mjs smoke-serie.mjs smoke-pilotage.mjs smoke-althea.mjs; do
+for h in smoke-ecrire.mjs smoke-boussole.mjs smoke-alpha.mjs smoke-tao.mjs smoke-console.mjs smoke-quadrants.mjs smoke-idees.mjs smoke-abaque.mjs smoke-reshiram.mjs smoke-zekrom.mjs smoke-imladrik.mjs smoke-imladrik-carto.mjs smoke-draukhain.mjs smoke-vranesh.mjs smoke-leo-accueil.mjs smoke-intendant.mjs smoke-flux-fiche.mjs smoke-accueil.mjs smoke-accueil-etats.mjs smoke-connexion.mjs smoke-contacts.mjs smoke-secteur.mjs smoke-dictee.mjs smoke-geocode.mjs smoke-antique.mjs smoke-csp.mjs smoke-ciel.mjs smoke-serie.mjs smoke-pilotage.mjs smoke-althea.mjs; do
   echo "=== $h ==="
   node "$h"
 done

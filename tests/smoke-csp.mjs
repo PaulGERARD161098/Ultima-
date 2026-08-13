@@ -17,9 +17,6 @@
 import { chromium } from 'playwright';
 import { readFileSync } from 'node:fs';
 
-const SCRATCH = new URL('./.cache', import.meta.url).pathname;
-const leafletJs = readFileSync(`${SCRATCH}/package/dist/leaflet.js`);
-const leafletCss = readFileSync(`${SCRATCH}/package/dist/leaflet.css`);
 const racine = new URL('..', import.meta.url).pathname;
 
 const middleware = readFileSync(`${racine}/middleware.js`, 'utf8');
@@ -54,7 +51,9 @@ verdicts.antiClickjacking = /frame-ancestors 'none'/.test(csp);
 const urlSupabase = (config.match(/SUPABASE_URL:\s*'([^']+)'/) || [])[1] || '';
 verdicts.supabaseAtteignable = !!urlSupabase &&
   new RegExp('connect-src[^;]*' + urlSupabase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).test(csp);
-verdicts.leafletAtteignable = /script-src[^;]*https:\/\/unpkg\.com/.test(csp);
+// `leafletAtteignable` disait le contraire jusqu'au 2026-08-13 : Leaflet
+// DEVAIT être joignable. Il n'existe plus — l'exigence s'inverse.
+verdicts.aucunScriptTiersAutorise = /script-src 'self'(;|$)/.test(csp);
 
 // ---------- 2. DYNAMIQUE : la CSP réelle ne casse rien ----------
 const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
@@ -69,16 +68,6 @@ async function chargerSousCSP(page) {
     corps = corps.replace(/<head(\s[^>]*)?>/i, (m) => m + meta);
     return route.fulfill({ response: resp, body: corps });
   });
-  await page.route('**://unpkg.com/**', (route) => {
-    const u = route.request().url();
-    if (u.endsWith('leaflet.js')) return route.fulfill({ body: leafletJs, contentType: 'application/javascript' });
-    if (u.endsWith('leaflet.css')) return route.fulfill({ body: leafletCss, contentType: 'text/css' });
-    return route.fulfill({ status: 404, body: '' });
-  });
-  const PNG_1PX = Buffer.from(
-    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
-    'base64');
-  await page.route('**://*.openstreetmap.org/**', (r) => r.fulfill({ body: PNG_1PX, contentType: 'image/png' }));
   await page.addInitScript(() => {
     window.__csp = [];
     document.addEventListener('securitypolicyviolation', (e) => {
@@ -97,11 +86,7 @@ await pRiven.goto('http://127.0.0.1:8123/riven.html', { waitUntil: 'load', timeo
 await pRiven.waitForTimeout(900);
 verdicts.cspActiveSurLaPage = await pRiven.evaluate(() =>
   !!document.querySelector('meta[http-equiv="Content-Security-Policy"]'));
-// Exercer la CARTE (tuiles OSM + styles inline Leaflet) puis le CIEL (SVG).
-await pRiven.locator('.barre-onglets button', { hasText: 'Carte' }).click();
-await pRiven.waitForTimeout(1400);
-verdicts.carteRendueSousCSP = await pRiven.evaluate(() =>
-  !!document.querySelector('.leaflet-container'));
+// La CARTE est supprimée (2026-08-13) : il n'y a plus qu'à exercer le CIEL.
 await pRiven.locator('.barre-onglets button', { hasText: 'Ciel' }).click();
 await pRiven.waitForTimeout(900);
 verdicts.cielRenduSousCSP = await pRiven.evaluate(() =>
@@ -109,8 +94,15 @@ verdicts.cielRenduSousCSP = await pRiven.evaluate(() =>
 const violRiven = await pRiven.evaluate(() => window.__csp);
 // LE verdict qui compte : zéro ressource bloquée. Les tuiles OSM en font partie.
 verdicts.rivenZeroViolationCSP = Array.isArray(violRiven) && violRiven.length === 0;
-verdicts.tuilesNonBloquees = !violRiven.some((v) =>
-  /img-src/.test(v.directive) && /openstreetmap/.test(v.uri));
+// On teste désormais par l'ABSENCE (règle du 2026-07-30) : les domaines tiers
+// ne doivent PLUS figurer dans la politique. Chercher le permis ne prouvait
+// rien ; chercher l'interdit et ne pas le trouver, si.
+verdicts.plusAucunDomaineTiersDansLaCSP =
+  !/openstreetmap/.test(csp) && !/unpkg/.test(csp);
+verdicts.plusDUnsafeInlineDuTout = !/'unsafe-inline'/.test(csp);
+verdicts.aucuneRequeteTierce = await pRiven.evaluate(() =>
+  performance.getEntriesByType('resource')
+    .every((e) => e.name.startsWith('http://127.0.0.1:8123/') || e.name.startsWith('data:')));
 
 const pIndex = await browser.newPage({ viewport: { width: 1280, height: 800 } });
 await chargerSousCSP(pIndex);

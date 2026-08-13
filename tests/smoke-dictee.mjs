@@ -10,8 +10,6 @@ import { readFileSync } from 'node:fs';
 
 // Cache local préparé par lancer.sh (fixture Leaflet npm, captures).
 const SCRATCH = new URL('./.cache', import.meta.url).pathname;
-const leafletJs = readFileSync(`${SCRATCH}/package/dist/leaflet.js`);
-const leafletCss = readFileSync(`${SCRATCH}/package/dist/leaflet.css`);
 
 const TOAST_DECOUVERTE = "Nouveau : touchez le micro d'un champ pour dicter.";
 
@@ -22,13 +20,6 @@ const PNG_1PX = Buffer.from(
   'base64');
 
 async function preparerRoutes(page) {
-  await page.route('**://unpkg.com/**', (route) => {
-    const url = route.request().url();
-    if (url.endsWith('leaflet.js')) return route.fulfill({ body: leafletJs, contentType: 'application/javascript' });
-    if (url.endsWith('leaflet.css')) return route.fulfill({ body: leafletCss, contentType: 'text/css' });
-    return route.fulfill({ status: 404, body: '' });
-  });
-  await page.route('**://*.openstreetmap.org/**', (r) => r.fulfill({ body: PNG_1PX, contentType: 'image/png' }));
   // Force le mode démo malgré la config réelle.
   await page.addInitScript(() => {
   // Léo (L1) : cartouche d'accueil neutralisé ici — couvert par smoke-leo-accueil.mjs.
@@ -148,7 +139,18 @@ await page.waitForTimeout(200);
 const partieRelation = (await page.locator('#relation-notes + button.bouton-micro').count()) === 1;
 await page.locator('#bouton-annuler-relation').click();
 await page.waitForTimeout(200);
-verdicts.couvertureExacte = partieJournal && partieNotes && exclusions && partieRelation;
+// La recherche du CIEL porte un micro en mode remplacement : capacité
+// transférée depuis la recherche carte, supprimée le 2026-08-13 (elle en était
+// le seul porteur, elle serait morte avec elle).
+// Sans changer d'onglet : le micro est dans le document, visible ou non — et
+// une navigation ici laisserait le harnais ailleurs qu'où la suite l'attend
+// (défaut introduit puis corrigé le 2026-08-13).
+const microCiel = page.locator('#ciel-recherche + button.bouton-micro');
+const partieCiel = (await microCiel.count()) === 1 &&
+  (await page.evaluate(() =>
+    document.getElementById('ciel-recherche').dataset.dicteeMode === 'remplacement'));
+verdicts.couvertureExacte = partieJournal && partieNotes && exclusions && partieRelation &&
+  partieCiel;
 
 // 13. tapTarget44 — cibles ≥ 44×44 au viewport 390, texte jamais sous le bouton.
 const boiteNote = await microJournalNote.boundingBox();

@@ -8,8 +8,6 @@
   <meta name="theme-color" content="#0e3a52">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%231e6fb8'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23ffffff'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/ciel.css">
 </head>
@@ -249,17 +247,18 @@
       </div>
     </section>
 
-    <!-- ===== Espace Ciel : la vue d'ARRIVÉE du réseau (décision Paul 2026-08-11).
+    <!-- ===== Espace Ciel : la SEULE forme du réseau depuis le 2026-08-13.
          Une fiche = une étoile, un métier = une région de l'espace, une personne
          orbite les fiches où elle travaille, une relation = un trait blanc.
-         L'arbre et la carte restent accessibles : on ne jette rien. ===== -->
+         L'ARBRE A ÉTÉ SUPPRIMÉ (décision de Paul, 2026-08-12 : « on garde que
+         la constellation et le modèle 3D pour tout RIVEN »). La carte suit. ===== -->
     <section id="espace-ciel" class="espace espace-ciel" hidden aria-labelledby="ciel-titre">
       <header class="ciel-cartouche">
         <h2 id="ciel-titre">RIVEN</h2>
         <p class="ciel-sous">le réseau, vu du ciel</p>
       </header>
       <div id="ciel-outils" class="ciel-outils">
-        <div class="champ-recherche-arbre">
+        <div class="champ-recherche-ciel">
           <label class="visuellement-cache" for="ciel-recherche">Rechercher un contact par nom, métier ou ville</label>
           <svg class="icone-loupe" viewBox="0 0 24 24" width="20" height="20"
                aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"
@@ -267,7 +266,7 @@
             <circle cx="11" cy="11" r="6.5"/>
             <path d="m16 16 4.5 4.5"/>
           </svg>
-          <input id="ciel-recherche" type="search" class="arbre-recherche"
+          <input id="ciel-recherche" type="search" class="ciel-recherche"
                  placeholder="Rechercher un nom, un métier, une ville…" autocomplete="off">
         </div>
         <span class="ciel-zoom" role="group" aria-label="Distance de vue">
@@ -290,236 +289,12 @@
           &middot; Tab pour passer d’une étoile à l’autre
         </p>
       </div>
-      <button id="ciel-ajouter" type="button" class="arbre-ajouter">+ Ajouter un contact</button>
-    </section>
-
-    <!-- ===== Espace Arbre (A3, le pivot : arbre gravé, secteurs = branches) ===== -->
-    <section id="espace-arbre" class="espace espace-arbre" hidden aria-labelledby="arbre-titre">
-      <header class="arbre-entete">
-        <div class="cartouche-arbre">
-          <h2 id="arbre-titre" class="cartouche-arbre-titre">ULTIMA</h2>
-          <p class="cartouche-arbre-sous">l'arbre du réseau</p>
-        </div>
-        <div id="arbre-outils" class="arbre-outils">
-          <div class="champ-recherche-arbre">
-            <label class="visuellement-cache" for="arbre-recherche">Rechercher un contact par nom ou ville</label>
-            <svg class="icone-loupe" viewBox="0 0 24 24" width="20" height="20"
-                 aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"
-                 stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="6.5"/>
-              <path d="m16 16 4.5 4.5"/>
-            </svg>
-            <input id="arbre-recherche" type="search" class="arbre-recherche"
-                   placeholder="Rechercher un nom ou une ville…" autocomplete="off">
-          </div>
-          <p id="arbre-recherche-message" class="arbre-recherche-message" role="status"></p>
-        </div>
-      </header>
-      <div id="arbre-scene" class="arbre-scene"></div>
-      <button id="arbre-ajouter" type="button" class="arbre-ajouter">+ Ajouter un contact</button>
-    </section>
-
-    <!-- ===== Espace Carte (existant : barre d'outils + carte + légende + panneau) ===== -->
-    <section id="espace-carte" class="espace espace-carte" hidden aria-labelledby="carte-titre">
-      <h2 id="carte-titre" class="visuellement-cache">Carte</h2>
-
-      <div class="barre-outils">
-        <!-- Recherche sur la carte (v3-⑥) : nom ou ville, résultats en direct. -->
-        <div class="champ-recherche-carte">
-          <label class="visuellement-cache" for="recherche-carte">Rechercher un contact par nom ou ville</label>
-          <svg class="icone-loupe" viewBox="0 0 24 24" width="20" height="20"
-               aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"
-               stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="6.5"/>
-            <path d="m16 16 4.5 4.5"/>
-          </svg>
-          <input id="recherche-carte" type="search" placeholder="Rechercher un nom ou une ville…"
-                 autocomplete="off" role="combobox" aria-expanded="false"
-                 aria-controls="recherche-resultats" aria-autocomplete="list">
-          <button type="button" id="recherche-effacer" class="bouton-effacer"
-                  aria-label="Effacer la recherche" hidden>
-            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"
-                 fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
-          </button>
-          <ul id="recherche-resultats" class="liste-resultats" role="group"
-              aria-label="Contacts trouvés" hidden></ul>
-          <p id="recherche-message" class="recherche-message" role="status"></p>
-        </div>
-
-        <button id="bouton-filtres" type="button" class="bouton bouton-secondaire bouton-filtres"
-                aria-expanded="false" aria-controls="filtres">Filtres</button>
-
-        <div id="filtres" class="filtres">
-          <fieldset class="groupe-filtres">
-            <legend>Type</legend>
-            <label class="case-filtre"><input type="checkbox" data-filtre="type" value="artisan" checked> Artisan</label>
-            <label class="case-filtre"><input type="checkbox" data-filtre="type" value="partenaire" checked> Partenaire</label>
-            <label class="case-filtre"><input type="checkbox" data-filtre="type" value="lead" checked> Lead</label>
-            <label class="case-filtre"><input type="checkbox" data-filtre="type" value="chantier" checked> Chantier</label>
-          </fieldset>
-          <fieldset class="groupe-filtres">
-            <legend>Statut</legend>
-            <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="actif" checked> Actif</label>
-            <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="prospect" checked> Prospect</label>
-            <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="en_cours" checked> En cours</label>
-            <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="termine" checked> Terminé</label>
-            <label class="case-filtre"><input type="checkbox" data-filtre="statut" value="inactif" checked> Inactif</label>
-          </fieldset>
-        </div>
-
-        <button id="bouton-ajouter" type="button" class="bouton bouton-primaire">+ Ajouter</button>
-      </div>
-
-      <div class="contenu">
-        <div id="carte" class="carte" aria-label="Carte du réseau"></div>
-
-        <!-- Cadre parchemin (R1) : décor muet, jamais dans l'ordre de tabulation. -->
-        <div class="cadre-carte" aria-hidden="true">
-          <span class="coin coin-no"></span>
-          <span class="coin coin-ne"></span>
-          <span class="coin coin-se"></span>
-          <span class="coin coin-so"></span>
-        </div>
-
-        <!-- Voile Ptolémée (R1) : SVG repris de design/preview-accueil-mythologie.html
-             SANS le filtre de turbulence (RA3), posé en L.svgOverlay géo-ancré par
-             js/carte.js. 100 % local (CSP), pointer-events: none via le pane. -->
-        <template id="voile-ptolemee">
-          <svg viewBox="0 0 600 640" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-            <defs>
-              <linearGradient id="voile-fondu-haut" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#000000"/><stop offset="1" stop-color="#ffffff"/>
-              </linearGradient>
-              <linearGradient id="voile-fondu-bas" x1="0" y1="1" x2="0" y2="0">
-                <stop offset="0" stop-color="#000000"/><stop offset="1" stop-color="#ffffff"/>
-              </linearGradient>
-              <linearGradient id="voile-fondu-gauche" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stop-color="#000000"/><stop offset="1" stop-color="#ffffff"/>
-              </linearGradient>
-              <linearGradient id="voile-fondu-droite" x1="1" y1="0" x2="0" y2="0">
-                <stop offset="0" stop-color="#000000"/><stop offset="1" stop-color="#ffffff"/>
-              </linearGradient>
-              <!-- Fondu de 16 px vers transparent sur les 4 bords du lavis
-                   (dégradés/masques autorisés, turbulence non). -->
-              <mask id="voile-masque-lavis" maskUnits="userSpaceOnUse" x="0" y="0" width="600" height="640">
-                <rect width="600" height="640" fill="#ffffff"/>
-                <rect width="600" height="16" fill="url(#voile-fondu-haut)"/>
-                <rect y="624" width="600" height="16" fill="url(#voile-fondu-bas)"/>
-                <rect width="16" height="640" fill="url(#voile-fondu-gauche)"/>
-                <rect x="584" width="16" height="640" fill="url(#voile-fondu-droite)"/>
-              </mask>
-            </defs>
-
-            <!-- 1. Lavis mer, bords fondus -->
-            <rect width="600" height="640" fill="#17506b" opacity="0.45" mask="url(#voile-masque-lavis)"/>
-
-            <!-- 2. Lueur littorale -->
-            <path d="M295,27 L274,32 Q262,50 260,75 Q246,88 230,98 L204,116
-                     Q184,128 170,140 L158,136 Q148,120 136,104 L124,110 Q120,130 128,150 Q136,160 140,168
-                     Q120,170 100,168 Q70,162 50,164 Q25,170 10,180 L6,190 Q8,198 14,204
-                     Q30,212 50,220 Q64,228 78,232 Q96,242 112,249
-                     Q130,276 148,304 L154,310 Q160,330 154,342 L150,336 Q160,342 166,352 Q150,405 138,465
-                     Q156,486 180,499 Q220,514 262,522 L322,528
-                     Q316,508 322,492 Q338,474 356,466 Q372,462 384,469 Q400,477 414,478 Q426,487 438,486 Q452,486 464,480 Q478,467 488,454 L500,447
-                     Q492,432 481,422 Q473,396 476,370 Q479,348 475,331 Q462,318 447,308 Q458,286 471,268 Q490,247 504,230
-                     Q509,199 511,169 Q520,157 527,147 Q492,130 457,117 Q444,112 431,114 Q410,96 393,82 Q362,60 329,42 Q312,33 295,27 Z"
-                  fill="none" stroke="#8fd2e0" stroke-width="10" opacity="0.22"/>
-
-            <!-- 3. Terre : France + Corse, encrées -->
-            <g fill="#ecd9a4" fill-opacity="0.75" stroke="#5a4118">
-              <path d="M295,27 L274,32 Q262,50 260,75 Q246,88 230,98 L204,116
-                       Q184,128 170,140 L158,136 Q148,120 136,104 L124,110 Q120,130 128,150 Q136,160 140,168
-                       Q120,170 100,168 Q70,162 50,164 Q25,170 10,180 L6,190 Q8,198 14,204
-                       Q30,212 50,220 Q64,228 78,232 Q96,242 112,249
-                       Q130,276 148,304 L154,310 Q160,330 154,342 L150,336 Q160,342 166,352 Q150,405 138,465
-                       Q156,486 180,499 Q220,514 262,522 L322,528
-                       Q316,508 322,492 Q338,474 356,466 Q372,462 384,469 Q400,477 414,478 Q426,487 438,486 Q452,486 464,480 Q478,467 488,454 L500,447
-                       Q492,432 481,422 Q473,396 476,370 Q479,348 475,331 Q462,318 447,308 Q458,286 471,268 Q490,247 504,230
-                       Q509,199 511,169 Q520,157 527,147 Q492,130 457,117 Q444,112 431,114 Q410,96 393,82 Q362,60 329,42 Q312,33 295,27 Z"
-                    stroke-width="2.6"/>
-              <path d="M560,492 Q568,500 565,512 Q561,548 557,584 Q549,574 541,558 Q534,538 537,521 Q548,504 560,492 Z"
-                    stroke-width="2.2"/>
-            </g>
-
-            <!-- 4. Verdure : plaines vertes translucides -->
-            <g fill="#7d9a52" opacity="0.30">
-              <ellipse cx="285" cy="140" rx="90" ry="52"/>
-              <ellipse cx="200" cy="330" rx="60" ry="55"/>
-              <ellipse cx="140" cy="215" rx="55" ry="32"/>
-              <ellipse cx="390" cy="240" rx="45" ry="60"/>
-            </g>
-
-            <!-- Relief suggéré : Alpes, Pyrénées, Massif central -->
-            <g stroke="#7a5a2c" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.85">
-              <path d="M448,330 l7,-11 l7,11 M466,345 l7,-11 l7,11 M452,362 l7,-11 l7,11 M470,378 l7,-11 l7,11 M456,394 l7,-11 l7,11"/>
-              <path d="M188,486 l7,-11 l7,11 M212,494 l7,-11 l7,11 M238,500 l7,-11 l7,11 M264,506 l7,-11 l7,11 M290,510 l7,-11 l7,11"/>
-              <path d="M310,380 l6,-9 l6,9 M330,395 l6,-9 l6,9 M312,410 l6,-9 l6,9"/>
-            </g>
-            <!-- Ombres portées du relief -->
-            <g fill="#5a4118" opacity="0.12">
-              <ellipse cx="465" cy="365" rx="26" ry="52" transform="rotate(12 465 365)"/>
-              <ellipse cx="240" cy="502" rx="60" ry="14"/>
-              <ellipse cx="322" cy="396" rx="22" ry="26"/>
-            </g>
-
-            <!-- Fleuves -->
-            <g fill="none" stroke="#2e7d9a" stroke-width="1.6" opacity="0.7">
-              <path d="M204,118 Q250,140 294,153 Q330,160 352,178"/>
-              <path d="M112,249 Q190,262 250,258 Q310,250 352,262"/>
-              <path d="M154,342 Q200,360 240,392 Q256,420 258,458"/>
-              <path d="M414,478 Q404,430 394,333 Q390,300 402,270"/>
-            </g>
-
-            <!-- 5. Graticule léger (sous les textes, au-dessus du lavis) -->
-            <path d="M100 0V640M200 0V640M300 0V640M400 0V640M500 0V640M0 100H600M0 200H600M0 300H600M0 400H600M0 500H600M0 600H600"
-                  fill="none" stroke="#bfe0ea" stroke-width="0.8" opacity="0.18"/>
-
-            <!-- 6. Noms de mers -->
-            <g fill="#bfe0ea" font-size="15" letter-spacing="5" font-style="italic" opacity="0.9">
-              <text x="150" y="60">LA&#160;&#160;MANCHE</text>
-              <text x="52" y="330" transform="rotate(-78 52 330)">OC&#201;AN&#160;&#160;ATLANTIQVE</text>
-              <text x="335" y="600">MER&#160;&#160;M&#201;DITERRAN&#201;E</text>
-            </g>
-
-            <!-- 7. Monstres marins statiques (aucune animation en R1) -->
-            <!-- Serpent de l'Atlantique -->
-            <g stroke="#9fd0dd" fill="none" stroke-width="2.2" opacity="0.5" stroke-linecap="round">
-              <path d="M30,395 q10,-14 22,0"/>
-              <path d="M62,395 q10,-14 22,0"/>
-              <path d="M94,398 q8,-10 16,-2 q6,6 2,10 l-8,-2"/>
-              <path d="M22,398 l-8,-8 M22,398 l-10,2"/>
-            </g>
-            <!-- Créature de Méditerranée : queue plongeante -->
-            <g stroke="#9fd0dd" fill="none" stroke-width="2.2" opacity="0.5" stroke-linecap="round">
-              <path d="M470,570 q12,-16 26,-2"/>
-              <path d="M504,566 q8,-14 4,-22 l-8,6 M508,544 l8,4"/>
-            </g>
-            <!-- Souffle de la Manche -->
-            <g stroke="#9fd0dd" fill="none" stroke-width="2" opacity="0.45" stroke-linecap="round">
-              <path d="M92,66 q9,-12 19,0 M120,68 q7,-9 14,-1 M104,58 l0,-9 M110,52 l-4,4"/>
-            </g>
-          </svg>
-        </template>
-
-        <div class="legende" aria-label="Légende de la carte">
-          <p class="legende-titre">Nœuds</p>
-          <p class="legende-item"><span class="pastille pastille-artisan"></span> Artisan</p>
-          <p class="legende-item"><span class="pastille pastille-partenaire"></span> Partenaire</p>
-          <p class="legende-item"><span class="pastille pastille-lead"></span> Lead</p>
-          <p class="legende-item"><span class="pastille pastille-chantier"></span> Chantier</p>
-          <p class="legende-titre">Relations</p>
-          <p class="legende-item"><span class="trait trait-apport"></span> Apport d'affaires</p>
-          <p class="legende-item"><span class="trait trait-soustraitance"></span> Sous-traitance</p>
-          <p class="legende-item"><span class="trait trait-chantier"></span> Chantier commun</p>
-        </div>
-      </div>
-
+      <button id="ciel-ajouter" type="button" class="ciel-ajouter-flottant">+ Ajouter un contact</button>
     </section>
 
     <!-- Panneau fiche/formulaire : overlay global (position:fixed). Sorti de
          espace-carte (A3) pour rester accessible depuis TOUS les onglets — un
-         tap sur une feuille de l'arbre ouvre la fiche sans quitter l'arbre. -->
+         tap sur une étoile du ciel ouvre la fiche sans quitter le ciel. -->
     <aside id="panneau" class="panneau" hidden aria-label="Panneau latéral">
         <div class="panneau-entete">
           <h2 id="panneau-titre" class="panneau-titre" tabindex="-1">Fiche</h2>
@@ -558,10 +333,12 @@
                    list="liste-secteurs" autocomplete="off"
                    aria-describedby="aide-secteur">
             <datalist id="liste-secteurs"></datalist>
-            <!-- Le métier PRINCIPAL, et lui seul, fait la branche de l'arbre
-                 (arbitrage Paul 2026-08-10). Les autres métiers sont plus bas,
-                 dans « Détail » — ils décrivent, ils ne rangent pas. -->
-            <p id="aide-secteur" class="champ-aide">Le métier principal : c'est lui qui fait la branche de l'arbre.</p>
+            <!-- Le métier PRINCIPAL, et lui seul, fait la CONSTELLATION
+                 (arbitrage Paul 2026-08-10, transposé au ciel le 2026-08-13 :
+                 le métier rangeait les branches, il range les constellations —
+                 c'est le même rôle, l'arbre en moins). Les autres métiers sont
+                 plus bas, dans « Détail » — ils décrivent, ils ne rangent pas. -->
+            <p id="aide-secteur" class="champ-aide">Le métier principal : c'est lui qui fait la constellation.</p>
           </div>
           <div class="champ">
             <label for="noeud-ville">Ville</label>
@@ -578,7 +355,7 @@
                 <path d="M12 21c-4.2-3.7-6.5-7-6.5-10.3a6.5 6.5 0 0 1 13 0C18.5 14 16.2 17.3 12 21Z"/>
                 <circle cx="12" cy="10.5" r="2.5"/>
               </svg>
-              <span id="geo-bouton-libelle">Trouver sur la carte</span>
+              <span id="geo-bouton-libelle">Situer la ville</span>
             </button>
             <ul id="geo-suggestions" class="liste-resultats" role="group" aria-label="Adresses trouvées" hidden></ul>
             <p id="geo-message" class="geo-message" role="status"></p>
@@ -645,7 +422,7 @@
               <input id="noeud-metiers_secondaires" type="text" maxlength="1500"
                      autocomplete="off" aria-describedby="aide-metiers"
                      placeholder="Chauffage, Pompe à chaleur">
-              <p id="aide-metiers" class="champ-aide">Séparés par des virgules. N'ajoutent pas de branche à l'arbre.</p>
+              <p id="aide-metiers" class="champ-aide">Séparés par des virgules. N'ajoutent pas de constellation.</p>
             </div>
 
             <div class="champ">
@@ -801,7 +578,7 @@
 
         <!-- ===== La PERSONNE (0024) — elle n'a besoin d'aucun nœud =====
              Enregistrer une personne ne crée AUCUNE fiche au réseau : elle ne
-             paraît ni sur l'arbre ni sur la carte. C'est la demande de Paul du
+             paraît pas dans le ciel. C'est la demande de Paul du
              2026-08-10 (« renseigner des contacts sans forcément créer des
              nœuds »). Le rattachement est un geste séparé, et facultatif. -->
         <form id="form-personne" class="panneau-corps formulaire" hidden>
@@ -890,7 +667,7 @@
           </div>
           <button id="contacts-ajouter" type="button" class="bouton bouton-primaire">+ Ajouter un contact</button>
         </header>
-        <!-- Deux registres (0024) : les FICHES (les nœuds — arbre et carte) et
+        <!-- Deux registres (0024) : les FICHES (les nœuds — les étoiles) et
              les PERSONNES (les gens, qui n'ont besoin d'aucun nœud). Le premier
              est celui d'avant, à l'identique : ouvrir l'onglet ne change rien
              pour qui ne cherche pas les personnes. -->
@@ -925,20 +702,6 @@
       </svg>
       <span>Ciel</span>
     </button>
-    <button type="button" class="onglet" data-onglet="arbre">
-      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
-        <circle cx="12" cy="8.5" r="5.5"/>
-        <path d="M12 14 V20.5 M8.5 20.5 H15.5"/>
-      </svg>
-      <span>Arbre</span>
-    </button>
-    <button type="button" class="onglet" data-onglet="carte">
-      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
-        <path d="M9 4.5 L15 6.5 L20.5 4.5 V18.5 L15 20.5 L9 18.5 L3.5 20.5 V6.5 Z"/>
-        <path d="M9 4.5 V18.5 M15 6.5 V20.5"/>
-      </svg>
-      <span>Carte</span>
-    </button>
     <button type="button" class="onglet" data-onglet="contacts">
       <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
         <rect x="5" y="3.5" width="15" height="17" rx="2"/>
@@ -950,13 +713,9 @@
 
   <div id="toasts" class="toasts" aria-live="polite"></div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <!-- Bundle UMD officiel npm 2.110.0, vendorisé (S1) : pas de CDN tiers pour le client Supabase. -->
   <script src="js/vendor/supabase-js-2.110.0.min.js"></script>
   <script src="js/config.js"></script>
-  <script src="js/carte.js"></script>
-  <script src="js/arbre.js"></script>
   <script src="js/ciel.js"></script>
   <script src="js/leo-accueil.js"></script>
   <!-- Dictée vocale : composant partagé (micro par champ). -->

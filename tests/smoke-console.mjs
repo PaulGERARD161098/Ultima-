@@ -13,8 +13,6 @@ import { readFileSync } from 'node:fs';
 import { NOEUDS, capsDe } from '../js/registre-lv3.mjs';
 
 const SCRATCH = new URL('./.cache', import.meta.url).pathname;
-const leafletJs = readFileSync(`${SCRATCH}/package/dist/leaflet.js`);
-const leafletCss = readFileSync(`${SCRATCH}/package/dist/leaflet.css`);
 const PNG_1PX = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
   'base64');
@@ -43,13 +41,6 @@ function versHex(rgb) {
 }
 
 async function preparerRoutes(page) {
-  await page.route('**://unpkg.com/**', (route) => {
-    const url = route.request().url();
-    if (url.endsWith('leaflet.js')) return route.fulfill({ body: leafletJs, contentType: 'application/javascript' });
-    if (url.endsWith('leaflet.css')) return route.fulfill({ body: leafletCss, contentType: 'text/css' });
-    return route.fulfill({ status: 404, body: '' });
-  });
-  await page.route('**://*.openstreetmap.org/**', (r) => r.fulfill({ body: PNG_1PX, contentType: 'image/png' }));
   await page.addInitScript(() => {
     // Léo (L1) : cartouche d'accueil neutralisé ici — couvert par smoke-leo-accueil.mjs.
     try { window.sessionStorage.setItem('ultima-leo-accueil-vu', '1'); } catch (e) {}
@@ -227,10 +218,16 @@ verifier('Clic RIVEN → URL riven.html', /\/riven\.html$/.test(page.url()), pag
 await page.waitForSelector('.cartouche-ultima', { timeout: 20000 });
 verifier('App bootée (cartouche ULTIMA)', await page.locator('.cartouche-ultima').isVisible());
 
-// La carte Leaflet s'initialise quand on ouvre l'onglet Carte.
-await page.locator('.onglet[data-onglet="carte"]').click();
-await page.waitForSelector('.leaflet-container', { timeout: 20000 });
-verifier('Carte Leaflet initialisée (zéro régression)', await page.locator('.leaflet-container').count() >= 1);
+// LA CARTE EST SUPPRIMÉE (2026-08-13) : ce qui s'ouvrait ici était l'onglet
+// Carte et sa Leaflet. Le CIEL est la seule forme du réseau — c'est lui qui
+// doit se peupler, et aucune trace de Leaflet ne doit subsister dans la page.
+await page.locator('.onglet[data-onglet="ciel"]').click();
+await page.waitForSelector('#ciel-scene .ciel-svg', { timeout: 20000 });
+verifier('Ciel rendu depuis la console (zéro régression)',
+  await page.locator('#ciel-scene .ciel-etoile').count() >= 1);
+verifier('Plus aucune Leaflet dans la page',
+  await page.locator('.leaflet-container').count() === 0 &&
+  await page.evaluate(() => typeof window.L === 'undefined'));
 verifier('Zéro erreur console (riven.html)', erreursRiven.length === 0, erreursRiven.slice(0, 3).join(' | '));
 
 // ============ C. La boussole NAGA (naga.html) ============

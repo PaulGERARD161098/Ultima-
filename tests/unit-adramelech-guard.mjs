@@ -36,7 +36,7 @@ const publicsAttendus = [
   '/index.html',
   '/css/app.css',
   '/js/app.js',
-  '/js/arbre.js',
+  '/js/ciel.js',
   '/icons/marker.png',
   '/design/preview-accueil-mythologie.html',
   '/manifest.webmanifest',

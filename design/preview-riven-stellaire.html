@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Maquette — RIVEN, thème stellaire (tous les états)</title>
+<!--
+  MAQUETTE DE TRAVAIL — aucune donnée réelle, aucun contact de Paul.
+  Toutes les entreprises, personnes, villes et relations sont INVENTÉES.
+  Zéro ressource externe, zéro CDN. Le script vit dans un fichier séparé :
+  la CSP d'Ultima interdit 'unsafe-inline' sur script-src, une maquette à
+  script inline serait BLANCHE sur la preview Vercel.
+
+  Étape ① du cadrage CADRAGE-RIVEN-STELLAIRE.md.
+
+  Le thème stellaire n'est pas UN registre parmi d'autres, activable ou non :
+  c'est le thème de RIVEN, tout le temps (arbitrage de Paul, 2026-08-12, sur
+  la première version de cette maquette — « ça doit être comme ça tout le
+  temps, thème stellaire et galaxies »). Rien ici ne le conditionne : ni
+  attribut, ni bascule, ni classe à poser.
+
+  Le ciel est le VRAI : cette page charge `../js/ciel.js` et `../css/ciel.css`
+  du produit et leur donne des données inventées. La première version de la
+  maquette dessinait un ciel plat de démonstration — Paul l'a vu tout de
+  suite : « où est l'accueil 3D comme avant ? ». Une maquette qui remplace le
+  moteur qu'elle prétend montrer ne montre plus rien.
+
+  Elle rend tous les états, pas seulement les jolis :
+    ① l'Accueil de pilotage (Léo)      ⑤ le formulaire de saisie
+    ② le Ciel 3D (le vrai moteur)       ⑥ le registre des Contacts
+    ③ la fiche ouverte (overlay)        ⑦ l'état vide et le non-connecté
+    ④ le toast                          ⑧ la barre d'onglets — TROIS onglets
+
+  Le bandeau MESURE, en bas, applique le critère ④ du cadrage : le contraste
+  de chaque couple texte/fond est CALCULÉ (WCAG), pas regardé.
+-->
+<!-- Le CSS du ciel du PRODUIT, tel quel : la maquette éprouve les vraies
+     règles dans le nouveau contexte au lieu de les imiter. C'est ainsi qu'on
+     découvre lesquelles s'appuient encore sur les jetons du parchemin. -->
+<link rel="stylesheet" href="../css/ciel.css">
+<link rel="stylesheet" href="preview-riven-stellaire.css">
+</head>
+<body>
+
+<!-- ====================== BARRE DE MAQUETTE (hors produit) ================= -->
+<div class="mq-barre">
+  <strong class="mq-titre">Maquette RIVEN</strong>
+  <span class="mq-note">données inventées</span>
+  <div class="mq-etats" role="group" aria-label="États à montrer">
+    <button type="button" class="mq-bouton" data-etat="accueil">Accueil</button>
+    <button type="button" class="mq-bouton" data-etat="ciel" aria-pressed="true">Ciel</button>
+    <button type="button" class="mq-bouton" data-etat="contacts">Contacts</button>
+    <button type="button" class="mq-bouton" data-etat="fiche">Fiche</button>
+    <button type="button" class="mq-bouton" data-etat="formulaire">Formulaire</button>
+    <button type="button" class="mq-bouton" data-etat="vide">Ciel vide</button>
+    <button type="button" class="mq-bouton" data-etat="deconnecte">Non connecté</button>
+    <button type="button" class="mq-bouton" data-etat="toast">Toast</button>
+  </div>
+</div>
+
+<!-- ====================== L'APPLICATION ==================================== -->
+<main class="app-main">
+
+  <!-- ①  ACCUEIL — le pilotage de Léo. Le parchemin tombe ; la rose des vents
+          gravée à l'encre sépia n'a plus de sol : elle devient une ROSE
+          STELLAIRE (même géométrie, même fonction d'orientation, autre
+          matière). C'est le premier arbitrage visible de la maquette. -->
+  <section id="etat-accueil" class="espace espace-accueil" hidden>
+    <div class="accueil-conteneur">
+      <header class="accueil-entete">
+        <svg class="rose-stellaire" viewBox="0 0 100 100" aria-hidden="true">
+          <g fill="none" stroke="#a9884a" stroke-width="1.2">
+            <circle cx="50" cy="50" r="30" opacity=".5"/>
+            <circle cx="50" cy="50" r="21" opacity=".28"/>
+            <path d="M50 8 L56 44 L92 50 L56 56 L50 92 L44 56 L8 50 L44 44 Z"
+                  fill="rgba(216,189,130,.14)"/>
+            <path d="M50 26 L54 46 L74 50 L54 54 L50 74 L46 54 L26 50 L46 46 Z"
+                  fill="#d8bd82" stroke="none" opacity=".55"/>
+          </g>
+          <circle cx="50" cy="50" r="2.4" fill="#f2ead6"/>
+          <circle cx="78" cy="24" r="1.1" fill="#f2ead6" opacity=".8"/>
+          <circle cx="24" cy="72" r="1.4" fill="#f2ead6" opacity=".6"/>
+          <text x="50" y="7" text-anchor="middle" font-size="9" fill="#d8bd82">N</text>
+        </svg>
+        <h2 class="accueil-titre" data-mesure="Accueil — titre">Bienvenue, Paul</h2>
+        <p class="accueil-question" data-mesure="Accueil — question">On fait quoi aujourd'hui ?</p>
+      </header>
+
+      <div class="accueil-contenu">
+        <article class="carte-nuit">
+          <h3 class="carte-nuit-titre" data-mesure="Carte — titre">Trois relances dorment</h3>
+          <ul class="liste-nuit">
+            <li><span class="pastille pastille--retard" aria-hidden="true"></span>
+              <span data-mesure="Carte — ligne">Maison Vaillant — sans nouvelle depuis 34 jours</span></li>
+            <li><span class="pastille pastille--retard" aria-hidden="true"></span>
+              <span>Atelier Roquefeuil — devis envoyé, jamais relancé</span></li>
+            <li><span class="pastille pastille--retard" aria-hidden="true"></span>
+              <span>Chantier des Trois-Ormes — dernier point le 2 juin</span></li>
+          </ul>
+          <p class="carte-nuit-pied" data-mesure="Carte — pied de carte">Léo peut préparer les trois messages.</p>
+        </article>
+
+        <article class="carte-nuit">
+          <h3 class="carte-nuit-titre">Un rapprochement à faire</h3>
+          <p class="carte-nuit-texte" data-mesure="Carte — corps de texte">
+            <strong class="accent-or">Godefroy Lasserre</strong> (couverture, Melun) et
+            <strong class="accent-or">Maison Vaillant</strong> travaillent tous deux sur
+            le chantier des Trois-Ormes, sans lien enregistré entre eux.
+          </p>
+          <div class="carte-nuit-actions">
+            <button type="button" class="bouton bouton-primaire">Créer le lien</button>
+            <button type="button" class="bouton bouton-secondaire">Plus tard</button>
+          </div>
+        </article>
+
+        <article class="carte-nuit carte-nuit--chiffres">
+          <h3 class="carte-nuit-titre">Le réseau d'un coup d'œil</h3>
+          <dl class="chiffres">
+            <div><dt data-mesure="Chiffre — libellé">Fiches</dt><dd class="chiffre" data-mesure="Chiffre — valeur">38</dd></div>
+            <div><dt>Personnes</dt><dd class="chiffre">52</dd></div>
+            <div><dt>Constellations</dt><dd class="chiffre">6</dd></div>
+            <div><dt>Liens</dt><dd class="chiffre">71</dd></div>
+          </dl>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ②  LE CIEL — l'écran d'arrivée, et désormais la SEULE forme de RIVEN.
+          Ce n'est PAS un dessin de maquette : `../js/ciel.js` est chargé et
+          rend ici son vrai volume (perspective, dérive, concentration au
+          survol, étoiles focusables au clavier), avec des données inventées.
+          Ce qui s'arbitre sur cet écran, c'est donc uniquement ce qui
+          l'ENTOURE — tout ce qui vivait sur le parchemin jusqu'ici. -->
+  <section id="etat-ciel" class="espace espace-ciel">
+    <header class="ciel-cartouche">
+      <h2 id="ciel-titre" data-mesure="Ciel — cartouche">RIVEN</h2>
+      <p class="ciel-sous" data-mesure="Ciel — sous-titre">le réseau, vu du ciel</p>
+    </header>
+
+    <div id="ciel-outils" class="ciel-outils">
+      <div class="champ-recherche">
+        <input id="ciel-recherche" type="search" class="saisie-nuit"
+               placeholder="Rechercher un nom, un métier, une ville…"
+               aria-label="Rechercher un contact">
+      </div>
+      <span class="ciel-zoom" role="group" aria-label="Distance de vue">
+        <button type="button" class="bouton bouton-secondaire ciel-bouton-rond" aria-label="Approcher">+</button>
+        <button type="button" class="bouton bouton-secondaire ciel-bouton-rond" aria-label="Reculer">−</button>
+        <button type="button" class="bouton bouton-secondaire ciel-tout-voir">Tout voir</button>
+      </span>
+      <label class="ciel-bascule" data-mesure="Ciel — bascule">
+        <input type="checkbox" id="ciel-derive"> Dérive lente
+      </label>
+      <p id="ciel-message" class="ciel-message" role="status" data-mesure="Ciel — message">8 constellations · 18 fiches · 12 personnes</p>
+    </div>
+
+    <div id="ciel-scene" class="ciel-scene">
+      <p class="ciel-aide" data-mesure="Ciel — aide">
+        Glissez pour tourner le ciel. Touchez une étoile pour ouvrir sa fiche.
+      </p>
+    </div>
+
+    <button type="button" class="bouton bouton-primaire bouton-large">+ Ajouter un contact</button>
+  </section>
+
+  <!-- ⑦-a  LE CIEL VIDE — l'état que personne ne dessine et que tout le monde
+            voit un jour. Le mot est CELUI DU PRODUIT (js/app.js), pas un mot
+            de maquette : « Votre ciel attend sa première étoile — touchez + ».
+            La première version en avait inventé un concurrent et me l'a fait
+            présenter à Paul comme un arbitrage à rendre. Il était déjà rendu,
+            le 2026-08-11, en même temps que le ciel. -->
+  <section id="etat-vide" class="espace espace-ciel" hidden>
+    <header class="ciel-cartouche">
+      <h2>RIVEN</h2>
+      <p class="ciel-sous">le réseau, vu du ciel</p>
+    </header>
+    <div class="ciel-scene ciel-scene--vide">
+      <div class="bloc-etat">
+        <p class="bloc-etat-titre" data-mesure="État vide — titre">Votre ciel attend sa première étoile</p>
+        <p class="bloc-etat-texte" data-mesure="État vide — texte">— touchez +</p>
+        <button type="button" class="bouton bouton-primaire">+ Ajouter un contact</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑦-b  NON CONNECTÉ — même ciel, aucune donnée, une seule porte. -->
+  <section id="etat-deconnecte" class="espace espace-ciel" hidden>
+    <header class="ciel-cartouche">
+      <h2>RIVEN</h2>
+      <p class="ciel-sous">le réseau, vu du ciel</p>
+    </header>
+    <div class="ciel-scene ciel-scene--vide">
+      <div class="bloc-etat">
+        <p class="bloc-etat-titre">Connectez-vous pour voir votre réseau</p>
+        <p class="bloc-etat-texte">— le ciel vous attend</p>
+        <button type="button" class="bouton bouton-primaire">Se connecter</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑥  CONTACTS — le registre. Deux registres (fiches / personnes),
+          recherche, liste. C'est l'écran le plus « textuel » de RIVEN :
+          c'est donc lui qui dit si le thème reste LISIBLE. -->
+  <section id="etat-contacts" class="espace espace-contacts" hidden>
+    <div class="contacts-conteneur">
+      <header class="contacts-entete">
+        <div class="contacts-titres">
+          <h2 class="contacts-titre" data-mesure="Contacts — titre">Contacts</h2>
+          <p class="contacts-compteur" data-mesure="Contacts — compteur">38 fiches · 52 personnes</p>
+        </div>
+        <button type="button" class="bouton bouton-primaire">+ Ajouter un contact</button>
+      </header>
+
+      <div class="contacts-registres" role="tablist" aria-label="Registres du réseau">
+        <button type="button" class="contacts-registre" role="tab" aria-selected="true">Fiches</button>
+        <button type="button" class="contacts-registre" role="tab" aria-selected="false">Personnes</button>
+      </div>
+
+      <div class="contacts-outils">
+        <input type="search" class="saisie-nuit" placeholder="Rechercher un nom ou une ville…"
+               aria-label="Rechercher un contact par nom ou ville">
+      </div>
+
+      <ul class="contacts-liste">
+        <li class="contacts-carte">
+          <span class="type-jeton type-jeton--artisan" data-mesure="Jeton — artisan">Artisan</span>
+          <span class="contacts-nom" data-mesure="Contacts — nom">Maison Vaillant</span>
+          <span class="contacts-detail" data-mesure="Contacts — détail">Couverture · Melun · actif</span>
+        </li>
+        <li class="contacts-carte">
+          <span class="type-jeton type-jeton--partenaire" data-mesure="Jeton — partenaire">Partenaire</span>
+          <span class="contacts-nom">Cabinet Ferrand &amp; Fils</span>
+          <span class="contacts-detail">Architecture · Fontainebleau · actif</span>
+        </li>
+        <li class="contacts-carte">
+          <span class="type-jeton type-jeton--lead" data-mesure="Jeton — lead">Lead</span>
+          <span class="contacts-nom">Résidence des Quatre-Vents</span>
+          <span class="contacts-detail">Syndic · Nemours · prospect</span>
+        </li>
+        <li class="contacts-carte">
+          <span class="type-jeton type-jeton--chantier" data-mesure="Jeton — chantier">Chantier</span>
+          <span class="contacts-nom">Les Trois-Ormes</span>
+          <span class="contacts-detail">Rénovation · Melun · en cours</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<!-- ③/⑤  LE PANNEAU — fiche et formulaire. Overlay global : il s'ouvre
+          par-dessus le ciel, donc il DOIT être du même bord, sans quoi
+          chaque clic sur une étoile rallume le parchemin. -->
+<aside id="panneau" class="panneau" hidden aria-label="Panneau latéral">
+  <div class="panneau-entete">
+    <h2 id="panneau-titre" class="panneau-titre" data-mesure="Panneau — titre">Fiche</h2>
+    <button type="button" class="bouton-fermer" aria-label="Fermer le panneau">&times;</button>
+  </div>
+
+  <div id="vue-fiche" class="panneau-corps">
+    <p class="fiche-entete">
+      <span class="type-jeton type-jeton--artisan">Artisan</span>
+      <span class="etat-jeton" data-mesure="Jeton — statut">actif</span>
+    </p>
+    <h3 class="fiche-nom" data-mesure="Fiche — nom">Maison Vaillant</h3>
+    <p class="fiche-sous-titre" data-mesure="Fiche — sous-titre">Couverture · Melun (77000)</p>
+
+    <dl class="fiche-details">
+      <dt data-mesure="Fiche — libellé">Téléphone</dt><dd data-mesure="Fiche — valeur">01 64 00 00 00</dd>
+      <dt>Courriel</dt><dd>contact@exemple-invente.fr</dd>
+      <dt>Métiers</dt><dd>couverture, zinguerie</dd>
+      <dt>Dernier échange</dt><dd class="valeur-retard" data-mesure="Fiche — valeur en retard">il y a 34 jours</dd>
+    </dl>
+
+    <h4 class="fiche-sous-titre">Personnes</h4>
+    <ul class="liste-nuit">
+      <li>Godefroy Lasserre — gérant</li>
+      <li>Marion Delcourt — conductrice de travaux</li>
+    </ul>
+
+    <h4 class="fiche-sous-titre">Liens</h4>
+    <ul class="liste-nuit">
+      <li>travaille avec <span class="accent-or">Cabinet Ferrand &amp; Fils</span></li>
+      <li>intervient sur <span class="accent-or">Les Trois-Ormes</span></li>
+    </ul>
+
+    <div class="panneau-actions">
+      <button type="button" class="bouton bouton-primaire">Modifier</button>
+      <button type="button" class="bouton bouton-danger" data-mesure="Bouton — danger">Supprimer</button>
+    </div>
+  </div>
+
+  <form id="form-noeud" class="panneau-corps formulaire" hidden>
+    <div class="champ">
+      <label for="f-type" data-mesure="Formulaire — label">Type *</label>
+      <select id="f-type" class="saisie-nuit">
+        <option>Artisan</option><option>Partenaire</option><option>Lead</option><option>Chantier</option>
+      </select>
+    </div>
+    <div class="champ">
+      <label for="f-nom">Nom *</label>
+      <input id="f-nom" type="text" class="saisie-nuit" value="Maison Vaillant">
+    </div>
+    <div class="champ">
+      <label for="f-statut">Statut *</label>
+      <select id="f-statut" class="saisie-nuit">
+        <option>Actif</option><option>Prospect</option><option>En cours</option>
+        <option>Terminé</option><option>Inactif</option>
+      </select>
+    </div>
+    <div class="champ">
+      <label for="f-secteur">Secteur d'activité</label>
+      <input id="f-secteur" type="text" class="saisie-nuit" value="Couverture">
+      <p class="champ-aide" data-mesure="Formulaire — aide">
+        Le métier principal : c'est lui qui fait la constellation.
+      </p>
+    </div>
+    <div class="champ">
+      <label for="f-ville">Ville</label>
+      <input id="f-ville" type="text" class="saisie-nuit" value="Melun">
+      <!-- Le libellé suit l'écran : « Trouver sur la carte » n'a plus d'objet
+           si la carte part. Le géocodage, lui, reste (cadrage §5). -->
+      <button type="button" class="bouton bouton-secondaire bouton-champ">Situer la ville</button>
+      <p class="champ-aide">Coordonnées enregistrées : 48,540 · 2,660</p>
+    </div>
+    <div class="panneau-actions">
+      <button type="button" class="bouton bouton-primaire">Enregistrer</button>
+      <button type="button" class="bouton bouton-secondaire">Annuler</button>
+    </div>
+  </form>
+</aside>
+
+<!-- ④  LE TOAST — petit, mais c'est un fond de plus, donc un contraste de plus. -->
+<div id="toasts" class="toasts" aria-live="polite" hidden>
+  <p class="toast" data-mesure="Toast">Fiche enregistrée.</p>
+</div>
+
+<!-- ⑧  LA BARRE D'ONGLETS — TROIS onglets. L'arbre n'y est plus.
+        C'est la preuve la plus courte du remodelage. -->
+<nav class="barre-onglets" aria-label="Navigation principale">
+  <button type="button" class="onglet" data-onglet="accueil">
+    <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M3.5 11 L12 3.5 L20.5 11 V20.5 H14.5 V15 H9.5 V20.5 H3.5 Z"/>
+    </svg>
+    <span>Accueil</span>
+  </button>
+  <button type="button" class="onglet" data-onglet="ciel" aria-current="page">
+    <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M12 2.8 L13.6 8.4 L19.2 10 L13.6 11.6 L12 17.2 L10.4 11.6 L4.8 10 L10.4 8.4 Z"/>
+      <circle cx="18.5" cy="17.5" r="1.1"/>
+      <circle cx="6" cy="18.5" r="1.4"/>
+    </svg>
+    <span>Ciel</span>
+  </button>
+  <button type="button" class="onglet" data-onglet="contacts">
+    <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
+      <rect x="5" y="3.5" width="15" height="17" rx="2"/>
+      <path d="M8.5 3.5 V20.5 M12 9 H16.5 M12 12.5 H16.5"/>
+    </svg>
+    <span>Contacts</span>
+  </button>
+</nav>
+
+<!-- ====================== BANDEAU DE MESURE (hors produit) ================= -->
+<!-- Critère ④ du cadrage, rendu visible : le contraste est CALCULÉ sur les
+     éléments réellement rendus (getComputedStyle + formule WCAG), et la
+     luminance du fond le plus clair est comparée au plancher de 0,20. -->
+<section class="mq-mesure" aria-label="Mesures de lisibilité">
+  <header class="mq-mesure-entete">
+    <strong>MESURE</strong>
+    <span id="mq-verdict" class="mq-verdict">calcul…</span>
+    <button type="button" id="mq-replier" class="mq-bouton">Déplier</button>
+  </header>
+  <!-- Replié à l'ouverture : la preuve reste à un clic, mais elle ne mange pas
+       la page que Paul est venu juger. Le verdict, lui, reste toujours visible
+       dans l'en-tête — une mesure qu'il faut déplier pour connaître n'en est
+       plus une. -->
+  <div id="mq-mesure-corps" class="mq-mesure-corps" hidden>
+    <p id="mq-luminance" class="mq-ligne"></p>
+    <table class="mq-table">
+      <thead><tr><th>Couple texte / fond</th><th>Texte</th><th>Fond</th><th>Contraste</th><th>Exigé</th><th></th></tr></thead>
+      <tbody id="mq-lignes"></tbody>
+    </table>
+    <p class="mq-ligne mq-note-bas">
+      Seuils WCAG AA : 4,5:1 pour le texte courant, 3:1 au-delà de 24 px
+      (ou 19 px en gras). Un couple sous son seuil est un DÉFAUT, pas un goût.
+    </p>
+  </div>
+</section>
+
+<!-- Le moteur du ciel, celui du produit. Aucune copie, aucune imitation. -->
+<script src="../js/ciel.js"></script>
+<script src="preview-riven-stellaire.js"></script>
+</body>
+</html>

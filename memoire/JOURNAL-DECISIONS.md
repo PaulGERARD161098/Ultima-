@@ -2557,3 +2557,48 @@
   (le WARN mot de passe reste sans objet). Performance = INFO (index FK) →
   registre, non bloquant.
 - **Vérifié** : patrimoine COMPLET **57 harnais, 1 444 assertions, sortie 0**.
+
+## 2026-08-12 — RIVEN passe la nuit : la forme se remodèle, l'arbre et la carte tombent
+
+- **Demande de Paul (dictée)** : « remodeling de la forme », thème
+  constellation / sombre appliqué à **toute** la page RIVEN, où « il y a un mix
+  entre le côté galaxie, le côté sombre et l'ancien affichage de l'arbre » ;
+  « on supprime l'arbre, on garde que la constellation et le modèle 3D pour tout
+  RIVEN ». Puis, **explicitement en deuxième temps** : le même registre sur
+  **Ultima LV4**, avec « les constellations plutôt que la boussole » à
+  l'arrivée. « D'abord on termine RIVEN, on voit comment ça rend. »
+- **Deux mots de la dictée tranchés** : « la page dagueuse » → **la page RIVEN**
+  (seule à porter le mix) ; « nos côtosiers racines » → **les écrans racines**
+  (console LV4). Un troisième écarté à dessein : **« l'archipel » n'est pas sur
+  RIVEN** — c'est ADRAMELECH, hors périmètre.
+- **TROIS ARBITRAGES DE PAUL, pris avant la première ligne (gate EL)** :
+  ① la **carte est supprimée** elle aussi — RIVEN sera le ciel et rien d'autre,
+  alors que je recommandais de la garder en régime de nuit (elle venait d'être
+  réparée la veille) ; ② le noir couvre **toute la page**, pas seulement les
+  vues visuelles ; ③ l'arbre part **franchement** (code, CSS, harnais).
+  **VRANESH — l'arbre d'IMLADRIK — n'est pas concerné** : autre arbre, autre
+  quadrant.
+- **Le mix était structurel, pas cosmétique** (mesuré) : 5 espaces dans 2
+  registres chromatiques, un seul de nuit. `ciel.css` disait déjà la couture
+  dans son propre commentaire — *« l'entête et les outils vivent HORS de la
+  scène, sur le parchemin d'Ultima »*. **La frontière était écrite dans le
+  code ; Paul demande de la déplacer au bord de la page.**
+- **Le retrait de la carte rétrécit la surface d'attaque** : les domaines de
+  tuiles OSM et `unpkg` sortent de la CSP — **le correctif S3 de la veille
+  devient sans objet**. Vérifié : Leaflet n'est chargé que par `riven.html`.
+  Surface middleware = **GATE**.
+- **Décision d'architecture, motivée par la phase 2** : le registre de nuit
+  n'est pas un patch de `riven.html` mais une **couche de jetons réutilisable**
+  (`css/nuit.css`, scopée `body[data-registre="nuit"]`, `styles.css` intouché).
+  C'est elle que la console LV4 chargera le jour venu — **zéro thème à
+  refaire** (directive EB : capitaliser).
+- **Ce qu'on ne supprime PAS, et pourquoi** : `/api/geocode`, les colonnes
+  lat/lon et le géocodage à la saisie restent en service sans écran pour les
+  montrer. *Une suppression d'écran se revient d'un `git revert` ; un trou de
+  données, non.* Le bouton « Trouver sur la carte » devient **« Situer la
+  ville »** (EL principe 4).
+- **Cadrage livré, code non commencé** : `CADRAGE-RIVEN-NUIT.md` (6 points,
+  pre-mortem à 10 entrées, 9 critères de réussite tous mesurables — dont
+  luminance de fond, contraste AA calculé, et **preuve de non-fuite** par six
+  harnais d'autres quadrants qui doivent passer sans retouche). Prochaine
+  action unique : **la maquette**, au go de Paul.

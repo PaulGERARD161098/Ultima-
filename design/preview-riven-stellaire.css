@@ -1,0 +1,322 @@
+/* Maquette RIVEN — thème stellaire.
+   Aucune de ces règles n'est destinée à être copiée telle quelle : ce fichier
+   est un BROUILLON D'ARBITRAGE. Ce qui en sortira, si Paul valide, c'est
+   `css/stellaire.css` — une couche de JETONS, posable ensuite sur la console
+   LV4 sans rien réécrire (cadrage §2, étape 2).
+
+   RIEN NE LA CONDITIONNE : ni attribut, ni bascule, ni classe à poser
+   (arbitrage de Paul, 2026-08-12 — « ça doit être comme ça tout le temps,
+   thème stellaire et galaxies »). Une page l'a parce qu'elle charge le
+   fichier ; c'est le seul interrupteur, et il est à la porte, pas dans le
+   CSS.
+
+   Le parti pris tenu ici : ce n'est PAS un « dark mode ». C'est l'atlas
+   céleste gravé de css/ciel.css, étendu à la page entière. Encre de nuit
+   jamais noire, filets dorés, capitales espacées, police ancienne pour tout
+   ce qui titre. Le registre antique et sérieux du 2026-07-08 ne change pas de
+   nature — il change de fond. */
+
+body {
+  /* --- Les fonds : trois profondeurs, aucune noire --- */
+  --nuit-haute: #0a1220;   /* le ciel du haut de page */
+  --nuit-basse: #03070e;   /* le fond de la scène */
+  --nuit-surface: #0e1a2b; /* cartes, panneau, champs : ce qui pose sur la nuit */
+  --nuit-relief: #142640;  /* survol, onglet actif, en-têtes de surface */
+
+  /* --- Les encres : la crème et l'or, hérités de ciel.css --- */
+  --creme: #f2ead6;
+  --creme-douce: #cdc3ad;
+  --or: #a9884a;
+  --or-clair: #d8bd82;
+  --filet: rgba(169, 136, 74, .34);
+  --filet-tenu: rgba(169, 136, 74, .18);
+
+  /* --- Les signaux. Les couleurs du jour ne survivent pas telles quelles à
+         la nuit : le bleu partenaire #1e6fb8 tombe à 3,3:1 sur #0e1a2b, sous
+         le seuil AA. Il FALLAIT donc des variantes éclaircies — et elles
+         existaient déjà : `COULEURS_NUIT` dans js/ciel.js, écrites le
+         2026-08-11 pour les étoiles. Ce sont EXACTEMENT celles-ci, recopiées
+         d'aucune autre source. La première version de cette maquette en avait
+         inventé de parallèles : deux vérités chromatiques pour une seule
+         donnée, c'est-à-dire une de trop. --- */
+  --type-artisan: #f2a15a;
+  --type-partenaire: #7cb8ea;
+  --type-lead: #6fd39b;
+  --type-chantier: #b995e8;
+  --retard: #e2a94f;
+  --danger: #e4796a;
+  --succes: #7ec99a;
+
+  --police-ancienne: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  --hauteur-onglets: 56px;
+
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--creme);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(30, 60, 100, .20), rgba(0, 0, 0, 0) 60%),
+    linear-gradient(180deg, var(--nuit-haute), var(--nuit-basse) 70%);
+  background-attachment: fixed;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+/* ======================= BARRE DE MAQUETTE (hors produit) ================= */
+.mq-barre {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .9rem;
+  padding: .5rem .8rem;
+  background: #050b14;
+  border-bottom: 1px solid var(--filet);
+}
+.mq-titre { font-family: var(--police-ancienne); letter-spacing: .12em; font-size: .9rem; color: var(--or-clair); }
+.mq-note { font-size: .74rem; font-style: italic; color: var(--creme-douce); }
+.mq-etats { display: flex; flex-wrap: wrap; gap: .3rem; margin-left: auto; }
+.mq-bouton {
+  font: inherit; font-size: .76rem; padding: .3rem .6rem; cursor: pointer;
+  color: var(--creme-douce); background: var(--nuit-surface);
+  border: 1px solid var(--filet); border-radius: 3px;
+}
+.mq-bouton:hover { background: var(--nuit-relief); color: var(--creme); }
+.mq-bouton[aria-pressed="true"] { color: #0a1220; background: var(--or-clair); border-color: var(--or-clair); font-weight: 700; }
+
+/* ============================== L'APPLICATION ============================= */
+.app-main {
+  flex: 1; min-height: 0;
+  display: flex; flex-direction: column;
+  /* Le dégagement bas compte DEUX barres : celle du produit (les onglets) et
+     celle de la maquette (le bandeau de mesure, replié). Sans quoi le bandeau
+     recouvre le dernier bouton de la page — et une maquette qui cache ce
+     qu'elle montre ne prouve rien. */
+  padding: .9rem .9rem calc(var(--hauteur-onglets) + 3.6rem);
+}
+.espace { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: .7rem; }
+
+/* ---- Titres : capitales espacées, police ancienne, or clair ---- */
+h2, h3, h4 { font-family: var(--police-ancienne); margin: 0; }
+
+/* ============================== ① ACCUEIL ================================= */
+.accueil-conteneur { max-width: 720px; margin: 0 auto; width: 100%; }
+.accueil-entete { text-align: center; padding: .6rem 0 1.2rem; }
+.rose-stellaire { width: 96px; height: 96px; display: block; margin: 0 auto .4rem; }
+.accueil-titre {
+  font-size: 1.5rem; letter-spacing: .12em; color: var(--creme);
+  font-variant: small-caps;
+}
+.accueil-question { margin: .3rem 0 0; font-style: italic; color: var(--creme-douce); font-size: .95rem; }
+.accueil-contenu { display: grid; gap: .8rem; }
+
+/* ---- La carte de nuit : ce que le « cadre dessiné » du parchemin devient.
+        Le double filet est conservé — c'est lui qui fait le cartouche. ---- */
+.carte-nuit {
+  position: relative;
+  padding: .9rem 1rem;
+  background: var(--nuit-surface);
+  border: 1px solid var(--filet);
+  border-radius: 3px;
+}
+.carte-nuit::after {
+  content: ""; position: absolute; inset: 5px; pointer-events: none;
+  border: 1px solid var(--filet-tenu);
+}
+.carte-nuit-titre {
+  font-size: .95rem; letter-spacing: .1em; font-variant: small-caps;
+  color: var(--or-clair); margin-bottom: .5rem;
+}
+.carte-nuit-texte, .carte-nuit-pied { margin: .4rem 0 0; font-size: .9rem; line-height: 1.5; color: var(--creme-douce); }
+.carte-nuit-pied { font-style: italic; }
+.carte-nuit-actions, .panneau-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .8rem; }
+.accent-or { color: var(--or-clair); font-weight: 600; }
+
+.liste-nuit { list-style: none; margin: .4rem 0 0; padding: 0; display: grid; gap: .4rem; }
+.liste-nuit li { display: flex; align-items: baseline; gap: .5rem; font-size: .9rem; color: var(--creme-douce); }
+.pastille { width: .5rem; height: .5rem; border-radius: 50%; flex: none; background: var(--or); }
+.pastille--retard { background: var(--retard); }
+
+.chiffres { display: flex; flex-wrap: wrap; gap: 1.4rem; margin: .4rem 0 0; }
+.chiffres dt { font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; color: var(--creme-douce); }
+.chiffres dd { margin: .1rem 0 0; }
+.chiffre { font-family: var(--police-ancienne); font-size: 1.5rem; color: var(--or-clair); }
+
+/* ================================ ② CIEL ================================== */
+/* `css/ciel.css` du produit est chargé AVANT ce fichier : la scène, les
+   étoiles, les halos, la concentration et les cibles tactiles viennent de lui,
+   tels quels. Ce qui suit ne corrige qu'une chose — les QUATRE règles où le
+   ciel s'appuyait encore sur les jetons du parchemin, parce que son entête
+   vivait dessus :
+       .ciel-cartouche h2      → var(--encre-sepia)
+       .ciel-cartouche .ciel-sous → var(--encre-sepia-douce)
+       .ciel-bascule           → var(--encre-sepia)
+       .ciel-message           → var(--encre-sepia-douce)
+   C'est le relevé exact de ce que l'étape ② devra déplacer dans ciel.css.
+   La maquette ne l'a pas deviné : elle a chargé le vrai fichier et l'a vu. */
+.ciel-cartouche h2 { color: var(--or-clair); }
+.ciel-cartouche .ciel-sous { color: var(--creme-douce); }
+.ciel-bascule { color: var(--creme-douce); }
+.ciel-message { color: var(--creme-douce); }
+/* Plafonnée : sur un écran large, un champ de recherche étiré sur 1 400 px
+   n'aide personne et écrase le cartouche. */
+.champ-recherche { flex: 1 1 14rem; min-width: 0; max-width: 26rem; }
+
+
+/* ---- États vide et non connecté ---- */
+/* La scène du produit n'a pas de mode « vide » : c'est app.js qui y injecte un
+   bloc. On lui donne ici de quoi centrer ce bloc, rien de plus. */
+.ciel-scene--vide { display: flex; align-items: center; justify-content: center; }
+.bloc-etat { text-align: center; padding: 2rem 1.2rem; max-width: 30rem; }
+.bloc-etat-titre { margin: 0 0 .5rem; font-family: var(--police-ancienne); font-size: 1.15rem; color: var(--creme); }
+.bloc-etat-texte { margin: 0 0 1rem; font-size: .9rem; line-height: 1.5; font-style: italic; color: var(--creme-douce); }
+
+/* ============================== ⑥ CONTACTS ================================ */
+.contacts-conteneur { max-width: 720px; margin: 0 auto; width: 100%; }
+.contacts-entete { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; margin-bottom: .75rem; }
+.contacts-titre { font-size: 1.3rem; letter-spacing: .08em; font-variant: small-caps; color: var(--creme); }
+.contacts-compteur { margin: 0; font-size: .85rem; color: var(--creme-douce); }
+.contacts-entete .bouton-primaire { margin-left: auto; }
+.contacts-registres { display: flex; gap: .3rem; margin-bottom: .7rem; border-bottom: 1px solid var(--filet); }
+.contacts-registre {
+  font: inherit; font-size: .86rem; padding: .5rem .9rem; min-height: 44px; cursor: pointer;
+  color: var(--creme-douce); background: none; border: none; border-bottom: 2px solid transparent;
+}
+.contacts-registre[aria-selected="true"] { color: var(--or-clair); border-bottom-color: var(--or); font-weight: 600; }
+.contacts-outils { margin-bottom: .75rem; }
+.contacts-liste { list-style: none; margin: 0; padding: 0; display: grid; gap: .5rem; }
+.contacts-carte {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem .7rem;
+  padding: .7rem .8rem; background: var(--nuit-surface);
+  border: 1px solid var(--filet); border-radius: 3px;
+}
+.contacts-carte:hover { background: var(--nuit-relief); }
+.contacts-nom { font-family: var(--police-ancienne); font-size: 1.02rem; color: var(--creme); }
+.contacts-detail { font-size: .84rem; color: var(--creme-douce); }
+
+/* ---- Les jetons de type : la couleur PORTE l'information, elle doit donc
+        tenir le seuil de texte (4,5:1), pas celui du décor. ---- */
+.type-jeton {
+  font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 700;
+  padding: .15rem .45rem; border: 1px solid currentColor; border-radius: 2px;
+}
+.type-jeton--artisan { color: var(--type-artisan); }
+.type-jeton--partenaire { color: var(--type-partenaire); }
+.type-jeton--lead { color: var(--type-lead); }
+.type-jeton--chantier { color: var(--type-chantier); }
+.etat-jeton { font-size: .78rem; font-style: italic; color: var(--succes); }
+
+/* ============================ ③/⑤ LE PANNEAU ============================== */
+/* `bottom` compte les deux barres, comme .app-main : dans le produit ce sera
+   la seule hauteur des onglets. Artefact de maquette, assumé et isolé ici. */
+.panneau {
+  position: fixed; inset: auto 0 calc(var(--hauteur-onglets) + 2.6rem) 0; z-index: 1100;
+  max-height: 74vh; overflow: auto;
+  background: var(--nuit-surface);
+  border-top: 1px solid var(--or);
+  box-shadow: 0 -14px 34px rgba(0, 0, 0, .55);
+}
+@media (min-width: 860px) {
+  .panneau { inset: 0 0 0 auto; width: 27rem; max-height: none; border-top: none; border-left: 1px solid var(--or); }
+}
+.panneau-entete {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .7rem .9rem; background: var(--nuit-relief); border-bottom: 1px solid var(--filet);
+}
+.panneau-titre { font-size: 1rem; letter-spacing: .14em; font-variant: small-caps; color: var(--or-clair); }
+.bouton-fermer {
+  margin-left: auto; min-width: 44px; min-height: 44px; font-size: 1.4rem; line-height: 1;
+  color: var(--creme-douce); background: none; border: 1px solid transparent; border-radius: 3px; cursor: pointer;
+}
+.bouton-fermer:hover { color: var(--creme); border-color: var(--filet); }
+.panneau-corps { padding: .9rem 1rem 1.4rem; }
+.fiche-entete { display: flex; gap: .5rem; align-items: baseline; margin: 0 0 .4rem; }
+.fiche-nom { font-size: 1.35rem; color: var(--creme); }
+.fiche-sous-titre {
+  margin: .9rem 0 .2rem; font-family: var(--police-ancienne); font-size: .88rem;
+  letter-spacing: .1em; font-variant: small-caps; color: var(--or-clair);
+}
+.fiche-details { display: grid; grid-template-columns: auto 1fr; gap: .3rem .9rem; margin: .6rem 0 0; }
+.fiche-details dt { font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--creme-douce); }
+.fiche-details dd { margin: 0; font-size: .9rem; color: var(--creme); }
+.valeur-retard { color: var(--retard); }
+
+/* ---- Le formulaire ---- */
+.champ { display: grid; gap: .3rem; margin-bottom: .9rem; }
+.champ label { font-size: .82rem; letter-spacing: .05em; color: var(--creme-douce); }
+.champ-aide { margin: 0; font-size: .76rem; font-style: italic; color: var(--creme-douce); }
+.saisie-nuit {
+  width: 100%; min-height: 44px; padding: .5rem .7rem; font: inherit; font-size: .95rem;
+  color: var(--creme); background: #071120;
+  border: 1px solid var(--filet); border-radius: 3px;
+}
+.saisie-nuit::placeholder { color: rgba(205, 195, 173, .62); }
+.saisie-nuit:focus-visible { outline: 2px solid var(--or-clair); outline-offset: 1px; }
+
+/* ============================== LES BOUTONS =============================== */
+.bouton {
+  min-height: 44px; min-width: 44px; padding: .5rem 1rem; font: inherit; font-size: .92rem;
+  font-weight: 600; letter-spacing: .04em; cursor: pointer;
+  border: 1px solid var(--filet); border-radius: 3px;
+  color: var(--creme); background: var(--nuit-relief);
+}
+/* Le primaire : la mer profonde d'Ultima, cerclée d'or — le même geste que le
+   bouton du parchemin, transposé. La couleur d'accent bleu clair du jour
+   (#1e6fb8 sur blanc) ne se transpose PAS : sur la nuit elle disparaît. */
+.bouton-primaire {
+  color: var(--creme); background-image: linear-gradient(#17506b, #0e3a52);
+  border-color: var(--or); font-variant: small-caps; letter-spacing: .08em;
+}
+.bouton-primaire:hover { background-image: linear-gradient(#1f6787, #114560); }
+.bouton-secondaire { color: var(--creme-douce); background: transparent; }
+.bouton-secondaire:hover { background: var(--nuit-relief); color: var(--creme); }
+.bouton-danger { color: var(--danger); background: transparent; border-color: rgba(228, 121, 106, .5); }
+.bouton-danger:hover { background: rgba(228, 121, 106, .12); }
+.bouton:focus-visible { outline: 2px solid var(--or-clair); outline-offset: 2px; }
+.bouton-large { align-self: flex-start; }
+.bouton-champ { justify-self: start; margin-top: .1rem; }
+
+/* ================================ ④ TOAST ================================= */
+.toasts { position: fixed; left: 50%; bottom: calc(var(--hauteur-onglets) + 3.6rem); transform: translateX(-50%); z-index: 1300; }
+.toast {
+  margin: 0; padding: .6rem 1rem; font-size: .9rem;
+  color: var(--creme); background: #0d2233;
+  border: 1px solid var(--or); border-radius: 3px; box-shadow: 0 6px 20px rgba(0, 0, 0, .5);
+}
+
+/* ============================== ⑧ LES ONGLETS ============================= */
+.barre-onglets {
+  position: fixed; inset: auto 0 0 0; z-index: 1200; display: flex;
+  background: #050b14; border-top: 1px solid var(--filet);
+}
+.onglet {
+  flex: 1; min-height: var(--hauteur-onglets);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  font: inherit; font-size: .72rem; font-weight: 600;
+  color: var(--creme-douce); background: none; border: none; border-top: 2px solid transparent; cursor: pointer;
+}
+.onglet[aria-current="page"] { color: var(--or-clair); border-top-color: var(--or); background: rgba(169, 136, 74, .08); }
+.onglet:hover { color: var(--creme); }
+.onglet:focus-visible { outline: 2px solid var(--or-clair); outline-offset: -2px; }
+
+/* ========================= BANDEAU DE MESURE (hors produit) =============== */
+.mq-mesure {
+  position: fixed; inset: auto 0 var(--hauteur-onglets) 0; z-index: 1400;
+  background: #02060c; border-top: 1px solid var(--or);
+  font-size: .78rem; max-height: 42vh; overflow: auto;
+}
+.mq-mesure-entete { display: flex; align-items: center; gap: .7rem; padding: .4rem .8rem; border-bottom: 1px solid var(--filet-tenu); }
+.mq-mesure-entete strong { letter-spacing: .18em; color: var(--or-clair); }
+.mq-verdict { font-weight: 700; }
+.mq-verdict--ok { color: var(--succes); }
+.mq-verdict--defaut { color: var(--danger); }
+.mq-mesure-entete .mq-bouton { margin-left: auto; }
+.mq-mesure-corps { padding: .5rem .8rem .8rem; }
+.mq-ligne { margin: .2rem 0 .5rem; color: var(--creme-douce); }
+.mq-note-bas { font-style: italic; }
+.mq-table { width: 100%; border-collapse: collapse; }
+.mq-table th, .mq-table td { text-align: left; padding: .22rem .5rem .22rem 0; border-bottom: 1px solid rgba(169, 136, 74, .12); }
+.mq-table th { font-weight: 600; color: var(--or-clair); letter-spacing: .04em; }
+.mq-table td { color: var(--creme-douce); }
+.mq-echantillon { display: inline-block; width: .8rem; height: .8rem; border: 1px solid var(--filet); vertical-align: -1px; margin-right: .3rem; }
+.mq-ok { color: var(--succes); font-weight: 700; }
+.mq-defaut { color: var(--danger); font-weight: 700; }

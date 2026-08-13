@@ -15,18 +15,24 @@ const WINDOW_MS = 60_000; // fenêtre de 60 s
 // quota global. Suffisant pour lisser les abus ; un vrai quota exigerait un store partagé.
 const hits = new Map();
 
-// Content-Security-Policy compatible avec le front prévu (Leaflet + supabase-js CDN).
+// Content-Security-Policy du front. Elle s'est RÉTRÉCIE le 2026-08-13 avec la
+// suppression de la carte : Leaflet (unpkg) et les tuiles OpenStreetMap étaient
+// les SEULS tiers autorisés. Plus de carte, plus de tiers — il ne reste que
+// 'self' et le projet Supabase d'Ultima. Le correctif S3 de la veille (le
+// domaine nu des tuiles, qui bloquait 100 % du fond de carte) devient sans
+// objet : il n'y a plus de tuile à charger.
+// `smoke-csp.mjs` cherche désormais ces domaines et exige de NE PAS les y
+// trouver — une règle de confidentialité, comme une politique, se teste par
+// l'ABSENCE (règle du 2026-07-30).
 const CSP = [
   "default-src 'self'",
-  // Leaflet depuis unpkg (SRI côté front) ; supabase-js vendorisé (self). Pas de 'unsafe-inline'.
-  "script-src 'self' https://unpkg.com",
-  // Leaflet applique des styles inline via JS (positionnement carte/marqueurs) → 'unsafe-inline' requis.
-  "style-src 'self' https://unpkg.com 'unsafe-inline'",
-  // Tuiles OSM, icônes marqueurs unpkg, images data:. Le domaine NU
-  // `tile.openstreetmap.org` (celui que carte.js utilise) ET le wildcard :
-  // `*.tile...` ne matche PAS le domaine sans sous-domaine (spec CSP), et son
-  // absence bloquait 100 % des tuiles en prod — carte sans fond, silencieux.
-  "img-src 'self' data: https://tile.openstreetmap.org https://*.tile.openstreetmap.org https://unpkg.com",
+  // supabase-js est vendorisé (self). Aucun script tiers, pas de 'unsafe-inline'.
+  "script-src 'self'",
+  // 'unsafe-inline' était exigé par Leaflet, qui posait des styles inline sur
+  // les marqueurs. Leaflet parti, il tombe : plus aucun style inline dans
+  // Ultima (la règle « aucun style inline dans le HTML » tenait déjà).
+  "style-src 'self'",
+  "img-src 'self' data:",
   // Restreint au projet Supabase d'Ultima : pas d'exfiltration possible vers un projet tiers.
   "connect-src 'self' https://leosfqyidgsaescjbfom.supabase.co",
   "font-src 'self'",
