@@ -430,6 +430,78 @@ const boiteToutVoir = await page.locator('#ciel-tout-voir').boundingBox();
 verdicts.cibleTactileToutVoir = !!boiteToutVoir &&
   boiteToutVoir.height >= 24 && boiteToutVoir.width >= 24;
 
+// ---------- 16. LA VUE À PLAT (2026-08-13) ----------
+// Le mode ne vaut que par ce qu'il ÉCONOMISE : on compte donc les images
+// d'animation réellement demandées, on ne se fie pas au nom du bouton. Et il ne
+// vaut que s'il ne perd RIEN : mêmes étoiles, mêmes libellés, mêmes liens.
+await page.locator('.barre-onglets .onglet[data-onglet="ciel"]').click();
+await page.waitForTimeout(700);
+
+// Le moteur pose `image = null` quand il cesse de demander des images : c'est
+// le signal qu'on interroge. Une première version comptait aussi les frames du
+// navigateur — inutile : elles mesuraient MA boucle de comptage, pas celle du
+// ciel. Un instrument qui mesure l'instrument ne mesure rien.
+const boucleEnVol = () => page.evaluate(() => new Promise((resolve) => {
+  setTimeout(() => resolve(!!(window.UltimaCiel.courant() || {}).image), 700);
+}));
+
+verdicts.volumeAnimeEnContinu = (await boucleEnVol()) === true;
+
+const avantPlat = await page.evaluate(() => {
+  const svg = document.querySelector('#ciel-scene .ciel-svg');
+  return {
+    etoiles: svg.querySelectorAll('g.ciel-etoile[data-noeud-id]').length,
+    libelles: svg.querySelectorAll('.ciel-nom-amas').length,
+    liens: svg.querySelectorAll('line, path.ciel-lien').length,
+  };
+});
+
+await page.locator('#ciel-plat').click();
+await page.waitForTimeout(900);
+verdicts.boutonPlatDitSonEtat =
+  (await page.locator('#ciel-plat').getAttribute('aria-pressed')) === 'true' &&
+  (await page.locator('#ciel-plat').textContent()) === 'En volume';
+
+verdicts.platArreteLaBoucle = (await boucleEnVol()) === false;
+
+const apresPlat = await page.evaluate(() => {
+  const svg = document.querySelector('#ciel-scene .ciel-svg');
+  return {
+    etoiles: svg.querySelectorAll('g.ciel-etoile[data-noeud-id]').length,
+    libelles: svg.querySelectorAll('.ciel-nom-amas').length,
+    liens: svg.querySelectorAll('line, path.ciel-lien').length,
+  };
+});
+verdicts.platNePerdRien = apresPlat.etoiles === avantPlat.etoiles &&
+  apresPlat.libelles === avantPlat.libelles && apresPlat.liens === avantPlat.liens &&
+  apresPlat.etoiles > 0;
+
+// Toutes les étoiles restent DANS le cadre : à plat aussi, la géométrie se mesure.
+verdicts.platTientDansLeCadre = await page.evaluate(() => {
+  const svg = document.querySelector('#ciel-scene .ciel-svg');
+  const vb = svg.getAttribute('viewBox').split(' ').map(Number);
+  let dehors = 0;
+  svg.querySelectorAll('g.ciel-etoile[data-noeud-id] .ciel-zone').forEach((z) => {
+    const x = +z.getAttribute('cx'); const y = +z.getAttribute('cy');
+    if (!(x >= 0 && x <= vb[2] && y >= 0 && y <= vb[3])) { dehors += 1; }
+  });
+  return dehors === 0;
+});
+
+// Le réglage survit au rechargement : c'est un réglage, pas un état d'écran.
+await page.reload({ waitUntil: 'load' });
+await page.waitForTimeout(1400);
+verdicts.platSurvitAuRechargement =
+  (await page.locator('#ciel-plat').getAttribute('aria-pressed')) === 'true' &&
+  (await page.evaluate(() => window.UltimaCiel.courant().estPlat())) === true;
+
+// Retour au volume, pour ne pas laisser le reste du harnais dans un mode figé.
+await page.locator('#ciel-plat').click();
+await page.waitForTimeout(700);
+verdicts.retourAuVolume =
+  (await page.locator('#ciel-plat').getAttribute('aria-pressed')) === 'false' &&
+  (await page.evaluate(() => window.UltimaCiel.courant().estPlat())) === false;
+
 // ---------- 15. Zéro résultat → création pré-remplie ----------
 // Fonction portée depuis la recherche de la carte le 2026-08-13 (elle était la
 // SEULE perte fonctionnelle du démontage, signalée au diagnostic et arbitrée

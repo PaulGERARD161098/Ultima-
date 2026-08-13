@@ -288,7 +288,22 @@ critère absent laisse passer celui qui existe.*
 pire-cas sur les fonds en dégradé) est écrite pour **migrer telle quelle** dans
 le harnais de l'étape 6. Elle n'est pas jetable.
 
-## 9. La bascule « à plat » du ciel — cadrée à part (format 6 points)
+## 9. La bascule « à plat » du ciel — ✅ FAITE le 2026-08-13 (cadrage ci-dessous)
+
+**Livrée** : bouton « À plat » / « En volume » dans les outils du ciel, réglage
+retenu (`localStorage`), `prefers-reduced-motion` prioritaire. Les six critères
+④ sont éprouvés par **sept assertions** dans `smoke-ciel` :
+la boucle d'animation **s'arrête** à plat (`courant.image === null`) et tourne
+en volume ; **aucune perte** (mêmes étoiles, libellés, liens) ; toutes les
+étoiles **dans le cadre** ; le réglage **survit au rechargement** ; le bouton
+**dit l'état réel** du moteur, pas le réglage demandé — sous mouvement réduit,
+le ciel s'impose à plat et le bouton le reflète, avec un mot à Paul.
+
+*Une mesure jetée en route* : je comptais aussi les images du navigateur. Elles
+mesuraient **ma propre boucle de comptage**, pas celle du ciel. Un instrument
+qui se mesure lui-même ne mesure rien.
+
+### Le cadrage d'origine
 
 Demandée par Paul le 2026-08-12 : *« on regarde bien la 3D, mais si jamais je
 n'ai pas assez de réseau ou quoi, je peux switcher au mode 2D »*. Le cadrage

@@ -284,7 +284,29 @@
     var moinsDAnimation = window.matchMedia
       && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    // VUE À PLAT (2026-08-13, demande de Paul : « si jamais je n'ai pas assez de
+    // réseau ou quoi, je peux switcher au mode 2D »). Le volume reste le défaut.
+    // Ce mode ne double AUCUN calcul : c'est le même monde, la même projection,
+    // la même géométrie — la profondeur est simplement neutralisée et la boucle
+    // d'animation ne repart pas. Ce qu'il économise n'est pas du réseau (le ciel
+    // n'en consomme aucun, tout est calculé ici) mais du CALCUL et de la
+    // BATTERIE : une boucle qui tourne en continu.
+    // `prefers-reduced-motion` l'impose d'office — la préférence système
+    // d'abord, le réglage de Paul ensuite.
+    var plat = !!options.plat || moinsDAnimation;
+
     function projeter(p) {
+      // À plat : ni rotation ni perspective. Une échelle unique, les
+      // coordonnées du monde telles quelles — la carte du ciel, pas le ciel.
+      if (plat) {
+        var echellePlate = FOCALE / cam.distance;
+        return {
+          sx: vbW / 2 + p.x * echellePlate,
+          sy: vbH / 2 + p.y * echellePlate,
+          echelle: echellePlate,
+          profondeur: cam.distance
+        };
+      }
       var cy = Math.cos(cam.yaw), sy = Math.sin(cam.yaw);
       var x1 = p.x * cy + p.z * sy;
       var z1 = -p.x * sy + p.z * cy;
@@ -549,6 +571,9 @@
           } catch (err) { /* sans capture, la rotation fonctionne quand même */ }
         }
       }
+      // À plat, il n'y a rien à tourner : le glissement ne fait rien, et
+      // surtout il ne réveille pas la boucle pour rien.
+      if (plat) { return; }
       cam.cibleYaw = saisie.yaw + dx * 0.006;
       // Le pitch est BORNÉ : au-delà on passe par-dessus le pôle et le monde
       // se retourne — on ne perd jamais le haut et le bas.
@@ -574,6 +599,7 @@
     function zoomer(delta) {
       zoom = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, zoom + delta));
       cam.cibleDistance = distanceIdeale() * zoom;
+      relancer();
     }
 
     // Retour au cadrage mesuré : tout le réseau dans l'écran. On rétablit AUSSI
@@ -585,6 +611,7 @@
       cam.cibleDistance = distanceIdeale();
       cam.cibleYaw = YAW_OUVERTURE;
       cam.ciblePitch = PITCH_OUVERTURE;
+      relancer();
     }
 
     function opaciteProfondeur(profondeur) {
@@ -740,7 +767,22 @@
           .forEach(function (p) { gEtoiles.appendChild(p.g); });
       }
 
+      // À plat, la boucle s'ARRÊTE dès que la caméra a fini de glisser : c'est
+      // tout l'intérêt du mode. `courant.image = null` est le signal qu'aucune
+      // image n'est en vol — `relancer()` la redemande quand quelque chose
+      // change (zoom, cadrage, sélection, redimensionnement).
+      var poseeSurSaCible = Math.abs(cam.distance - cam.cibleDistance) < 0.5;
+      if (courant && plat && poseeSurSaCible && !saisie) {
+        courant.image = null;
+        return;
+      }
       if (courant) { courant.image = window.requestAnimationFrame(dessiner); }
+    }
+
+    function relancer() {
+      if (courant && courant.image === null) {
+        courant.image = window.requestAnimationFrame(dessiner);
+      }
     }
 
     var etatDerive = false;
@@ -750,6 +792,7 @@
       dimensionner();
       if (vbW !== avant) { racine.setAttribute('viewBox', '0 0 ' + vbW + ' ' + vbH); }
       cam.cibleDistance = distanceIdeale() * zoom;
+      relancer(); // à plat, la boucle dort : un cadre qui change la réveille
     }
     window.addEventListener('resize', surRedimension);
 
@@ -762,14 +805,22 @@
       ajusterCadre: surRedimension,
       zoomer: zoomer,
       toutVoir: toutVoir,
-      viser: function (idNoeud) { if (parId[idNoeud]) { viser(parId[idNoeud]); } },
+      viser: function (idNoeud) { if (parId[idNoeud]) { viser(parId[idNoeud]); relancer(); } },
       choisir: function (idNoeud) {
         pieces.forEach(function (p) {
           if (p.etoile.noeud.id === idNoeud) { p.g.classList.add('ciel-etoile--choisie'); }
           else { p.g.classList.remove('ciel-etoile--choisie'); }
         });
+        relancer();
       },
-      derive: function (actif) { etatDerive = !!actif; },
+      derive: function (actif) { etatDerive = !!actif; relancer(); },
+      // La bascule. `moinsDAnimation` garde la main : si le système demande
+      // moins de mouvement, on ne repart pas en volume sur un clic.
+      plat: function (actif) {
+        plat = moinsDAnimation ? true : !!actif;
+        relancer(); // dans les deux sens : il faut redessiner
+      },
+      estPlat: function () { return plat; },
       nbEtoiles: pieces.length,
       nbLiens: piecesLien.length,
       nbOrbites: piecesOrbite.length,
