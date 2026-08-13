@@ -91,15 +91,16 @@ changent, et les taire serait mentir sur le coût :
    défaut** — cadrer sur l'étendue réelle, montrer tous les noms sous un seuil,
    **zoomer vers un nœud**. RIVEN n'a pas bougé : ses assertions ont tourné
    avant et après, vertes les deux fois, sans une retouche. **Livré — voir §11.**
-3. **L'adaptateur** registre → ciel — déjà écrit et éprouvé par la maquette du
-   matin — étendu à la profondeur : une galaxie connaît ses nébuleuses.
+3. ✅ **L'adaptateur** registre → ciel, étendu à la profondeur : une galaxie
+   connaît ses nébuleuses, et le fil d'Ariane se lit dans le registre.
+   **Livré — voir §12.**
 4. **Les neuf coques** passent au ciel et au thème stellaire.
 5. **Les harnais** : les 170 assertions de navigation reprises **une par une**.
 6. **Patrimoine COMPLET** + **preview Vercel**.
 
 ## 3. ③ Les moyens
 
-| Créé | `design/preview-lv4-ciel-deplie.html` · `tests/smoke-lv4-ciel.mjs` |
+| Créé | `design/preview-lv4-ciel-deplie.html` · `tests/smoke-lv4-ciel.mjs` · `tests/unit-adaptateur-lv4.mjs` |
 |---|---|
 | **Modifié** | `js/ciel.js` (**trois options, inactives par défaut**) · `js/boussole-noyau.mjs` · l'adaptateur · `css/boussole.css` · les **9 coques** · `smoke-boussole` · `smoke-quadrants` · `smoke-console` |
 | **Intouché** | `js/registre-lv3.mjs` · `js/blasons.mjs` · `css/styles.css` · **RIVEN** · les API · la base |
