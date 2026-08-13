@@ -227,6 +227,19 @@ phrase, deux constats que la mesure ne pouvait pas produire :
    ni attribut, ni bascule. Une page l'a parce qu'elle charge le fichier ;
    l'interrupteur est à la porte, pas dans le CSS.
 
+### DEUX FOIS J'AI INVENTÉ CE QUI EXISTAIT DÉJÀ
+
+*Le même travers, deux fois dans la même journée, et c'est la leçon de cette
+étape :* la maquette a écrit **des couleurs de type** et **un mot d'état vide**
+qui vivaient déjà dans le produit — `COULEURS_NUIT` dans `js/ciel.js`, et
+« **Votre ciel attend sa première étoile — touchez +** » dans `js/app.js`,
+posés tous deux le 2026-08-11 avec le ciel lui-même. J'ai même **présenté à
+Paul comme un arbitrage à rendre** un mot qui était rendu depuis deux jours.
+**Corrigé** : la maquette reprend les valeurs et les mots du produit. *Avant
+d'inventer quoi que ce soit dans une maquette, chercher si le produit le porte
+déjà — la directive EB le disait, et je ne l'ai pas appliquée à ma propre
+maquette.*
+
 ### Ce que le chargement du VRAI ciel a révélé — et qu'aucune imitation n'aurait dit
 
 - **Les couleurs de type existaient déjà.** `js/ciel.js` porte `COULEURS_NUIT`
@@ -265,7 +278,6 @@ critère absent laisse passer celui qui existe.*
 
 ### Reste à arbitrer
 
-- **Le mot de l'état vide** : « Votre ciel n'a pas encore d'étoile ».
 - **La rose des vents devenue rose stellaire** sur l'Accueil.
 - **« Situer la ville »** à la place de « Trouver sur la carte ».
 - **La carte 2D / 3D** — la phrase de Paul (« la carte en 2d bien, il faut
