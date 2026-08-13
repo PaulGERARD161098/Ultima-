@@ -1,14 +1,12 @@
-// Géocodage d'adresse (v3-⑤) : bouton « Trouver sur la carte », champs vides,
-// requête unique + cadence, liste de 3, sélection, résultat unique, aperçu
-// carte, « Changer », introuvable, erreur (enregistrer sans position marche
+// Géocodage d'adresse (v3-⑤) : bouton « Situer la ville », champs vides,
+// requête unique + cadence, liste de 3, sélection, résultat unique,
+// « Changer », introuvable, erreur (enregistrer sans position marche
 // toujours), enregistrement, saisie manuelle, édition avec position, clavier,
 // tap targets. /api/geocode stubé par interception de route, mode démo forcé.
 import { chromium } from 'playwright';
 import { readFileSync } from 'node:fs';
 
 const SCRATCH = new URL('./.cache', import.meta.url).pathname;
-const leafletJs = readFileSync(`${SCRATCH}/package/dist/leaflet.js`);
-const leafletCss = readFileSync(`${SCRATCH}/package/dist/leaflet.css`);
 const PNG_1PX = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
   'base64');
@@ -46,13 +44,6 @@ page.on('console', (m) => {
   erreurs.push('console: ' + m.text());
 });
 
-await page.route('**://unpkg.com/**', (route) => {
-  const url = route.request().url();
-  if (url.endsWith('leaflet.js')) return route.fulfill({ body: leafletJs, contentType: 'application/javascript' });
-  if (url.endsWith('leaflet.css')) return route.fulfill({ body: leafletCss, contentType: 'text/css' });
-  return route.fulfill({ status: 404, body: '' });
-});
-await page.route('**://*.openstreetmap.org/**', (r) => r.fulfill({ body: PNG_1PX, contentType: 'image/png' }));
 await page.route('**/api/geocode*', async (route) => {
   stub.compteur += 1;
   if (stub.delaiMs) { await new Promise((r) => setTimeout(r, stub.delaiMs)); }
@@ -72,19 +63,21 @@ const verdicts = {};
 const bboxes = {};
 const focusId = () => page.evaluate(() => document.activeElement && document.activeElement.id);
 const messageStatut = () => page.locator('#geo-message[role="status"]').textContent();
-const apercuPosition = () => page.evaluate(() => window.UltimaCarte.apercuPosition());
+// L'APERÇU SUR LA CARTE N'EXISTE PLUS (carte supprimée le 2026-08-13). Le
+// géocodage, lui, reste entier : c'est la décision du cadrage — une
+// suppression d'écran se revient d'un `git revert`, un trou de données non.
+// Ce que la carte montrait, la CONFIRMATION ÉCRITE le disait déjà : c'est elle
+// qui porte désormais seule la preuve du choix, et elle est éprouvée ci-dessous.
 
 await page.goto('http://127.0.0.1:8123/riven.html', { waitUntil: 'load', timeout: 20000 });
 await page.waitForTimeout(1000);
 
 // Ouvre le formulaire nœud comme Paul : Contacts → + Ajouter un contact.
 const ongletContacts = page.locator('.barre-onglets button', { hasText: 'Contacts' });
-// `#bouton-ajouter` est le bouton de la CARTE : ce harnais s'y rendait sans le
-// dire, en s'appuyant sur une bascule d'onglet involontaire de
-// « + Ajouter un contact » (corrigée le 2026-08-12 — on reste désormais sur
-// Contacts). La navigation est donc rendue EXPLICITE : même intention, mais
-// plus aucune dépendance à un effet de bord.
-const ongletCarte = page.locator('.barre-onglets button', { hasText: 'Carte' });
+// Ce harnais passait par l'onglet Carte et son bouton `#bouton-ajouter` : les
+// deux sont supprimés (2026-08-13). Tout passe désormais par Contacts et
+// `#contacts-ajouter` — la seule porte qui reste, et la plus proche du geste
+// de Paul.
 await ongletContacts.click();
 await page.waitForTimeout(200);
 await page.locator('#contacts-ajouter').click();
@@ -97,7 +90,7 @@ const confirmation = page.locator('#geo-confirmation');
 
 // 1. geocodeBoutonPresent — bouton entre Adresse et Téléphone, lat/lng repliés.
 verdicts.geocodeBoutonPresent = (await bouton.isVisible()) &&
-  (await libelle.textContent()) === 'Trouver sur la carte' &&
+  (await libelle.textContent()) === 'Situer la ville' &&
   (await page.evaluate(() => {
     const adresse = document.getElementById('noeud-adresse');
     const geo = document.getElementById('geo-bouton');
@@ -185,21 +178,20 @@ verdicts.geocodeSelection = (await page.locator('#noeud-lat').inputValue()) === 
 bboxes.changer = await page.locator('#geo-changer').boundingBox();
 await page.screenshot({ path: `${SCRATCH}/geocode-selection-390.png` });
 
-// 8a. geocodeApercuCarte — 1 marqueur provisoire (pointillés) aux coordonnées.
-const apercuApresSelection = await apercuPosition();
-const marqueurPointille = await page.locator('path[stroke-dasharray="4 4"]').count();
+// 8a. Les COORDONNÉES sont bien retenues par le formulaire. C'est ce que
+// l'aperçu sur la carte prouvait autrement (un marqueur en pointillés) : la
+// carte est partie, la donnée reste — et c'est elle qui compte.
+const latRetenue = await page.locator('#noeud-lat').inputValue();
+const lngRetenue = await page.locator('#noeud-lng').inputValue();
 await page.locator('#bouton-annuler-noeud').click(); // Annuler le formulaire
 await page.waitForTimeout(200);
-verdicts.geocodeApercuCarte = apercuApresSelection && apercuApresSelection.lat === 50.66 &&
-  apercuApresSelection.lng === 3.045 && marqueurPointille === 1 &&
-  (await apercuPosition()) === null &&
-  (await page.locator('path[stroke-dasharray="4 4"]').count()) === 0;
+verdicts.geocodeCoordonneesRetenues = latRetenue === '50.66' && lngRetenue === '3.045';
 
 // 9. geocodeChanger — champs vidés, ligne disparue, aperçu effacé, focus Adresse.
-await ongletCarte.click();
+await ongletContacts.click();
 await page.waitForTimeout(200);
-await page.locator('#bouton-ajouter').click();
-await page.waitForTimeout(200);
+await page.locator('#contacts-ajouter').click();
+await page.waitForTimeout(300);
 await page.locator('#noeud-ville').fill('Lille');
 await bouton.click(); // cache
 await listeItems.first().waitFor({ timeout: 2000 });
@@ -210,7 +202,6 @@ await page.waitForTimeout(100);
 verdicts.geocodeChanger = (await page.locator('#noeud-lat').inputValue()) === '' &&
   (await page.locator('#noeud-lng').inputValue()) === '' &&
   (await confirmation.isHidden()) &&
-  (await apercuPosition()) === null &&
   (await focusId()) === 'noeud-adresse';
 
 // 7. geocodeResultatUnique — position posée sans tap supplémentaire.
@@ -266,18 +257,17 @@ await page.waitForTimeout(100);
 await page.locator('#form-noeud button.bouton-primaire[type="submit"]').click();
 await page.waitForTimeout(300);
 const fichePositionStub = (await page.locator('#panneau-titre').textContent()) === 'Position Stub';
-const apercuEfface = (await apercuPosition()) === null;
 // Édition du nœud fraîchement positionné : ligne dédiée, zéro requête émise.
 const requetesAvantEdition = stub.compteur;
 await page.locator('.actions-fiche button', { hasText: 'Modifier' }).click();
 await page.waitForTimeout(200);
-const ligneEdition = (await confirmation.textContent()).includes('Position enregistrée sur la carte');
+const ligneEdition = (await confirmation.textContent()).includes('Position enregistrée');
 verdicts.geocodeEditionPosition = ligneEdition &&
   (await page.locator('#geo-changer').isVisible()) &&
   stub.compteur === requetesAvantEdition;
 bboxes.summary = await page.locator('#geo-details summary').boundingBox();
 await page.locator('#geo-details summary').click(); // valeurs visibles à l'ouverture
-verdicts.geocodeEnregistrement = fichePositionStub && apercuEfface &&
+verdicts.geocodeEnregistrement = fichePositionStub &&
   (await page.locator('#noeud-lat').inputValue()) === '50.6301' &&
   (await page.locator('#noeud-lng').inputValue()) === '3.0562';
 await page.locator('#bouton-annuler-noeud').click();
@@ -287,10 +277,10 @@ await page.waitForTimeout(200);
 
 // 13. geocodeManuel — saisie à la main : ligne dédiée, valeurs conservées,
 // validation « les deux ou aucun » intacte.
-await ongletCarte.click();
+await ongletContacts.click();
 await page.waitForTimeout(200);
-await page.locator('#bouton-ajouter').click();
-await page.waitForTimeout(200);
+await page.locator('#contacts-ajouter').click();
+await page.waitForTimeout(300);
 await page.locator('#noeud-nom').fill('Manuel Direct');
 await page.locator('#geo-details summary').click();
 await page.locator('#noeud-lat').fill('48.85');
@@ -309,10 +299,10 @@ await page.locator('#bouton-annuler-noeud').click();
 await page.waitForTimeout(200);
 // Paire incomplète → toast existant, rien de créé.
 await page.locator('#bouton-fermer-panneau').click();
-await ongletCarte.click();
+await ongletContacts.click();
 await page.waitForTimeout(200);
-await page.locator('#bouton-ajouter').click();
-await page.waitForTimeout(200);
+await page.locator('#contacts-ajouter').click();
+await page.waitForTimeout(300);
 await page.locator('#noeud-nom').fill('Paire Incomplète');
 await page.locator('#geo-details summary').click();
 await page.locator('#noeud-lat').fill('48');

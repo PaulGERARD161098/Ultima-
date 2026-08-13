@@ -15,8 +15,6 @@ import { chromium } from 'playwright';
 import { readFileSync } from 'node:fs';
 
 const SCRATCH = new URL('./.cache', import.meta.url).pathname;
-const leafletJs = readFileSync(`${SCRATCH}/package/dist/leaflet.js`);
-const leafletCss = readFileSync(`${SCRATCH}/package/dist/leaflet.css`);
 
 const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
 const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
@@ -24,16 +22,9 @@ const erreurs = [];
 page.on('pageerror', (e) => erreurs.push('pageerror: ' + e.message));
 page.on('console', (m) => { if (m.type() === 'error') erreurs.push('console: ' + m.text()); });
 
-await page.route('**://unpkg.com/**', (route) => {
-  const url = route.request().url();
-  if (url.endsWith('leaflet.js')) return route.fulfill({ body: leafletJs, contentType: 'application/javascript' });
-  if (url.endsWith('leaflet.css')) return route.fulfill({ body: leafletCss, contentType: 'text/css' });
-  return route.fulfill({ status: 404, body: '' });
-});
 const PNG_1PX = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
   'base64');
-await page.route('**://*.openstreetmap.org/**', (r) => r.fulfill({ body: PNG_1PX, contentType: 'image/png' }));
 await page.addInitScript(() => {
   // Léo (L1) : cartouche d'accueil neutralisé ici — couvert par smoke-leo-accueil.mjs.
   try { window.sessionStorage.setItem('ultima-leo-accueil-vu', '1'); } catch (e) {}

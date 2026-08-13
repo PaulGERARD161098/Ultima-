@@ -5,21 +5,12 @@ import { readFileSync } from 'node:fs';
 
 // Cache local préparé par lancer.sh (fixture Leaflet npm, captures).
 const SCRATCH = new URL('./.cache', import.meta.url).pathname;
-const leafletJs = readFileSync(`${SCRATCH}/package/dist/leaflet.js`);
-const leafletCss = readFileSync(`${SCRATCH}/package/dist/leaflet.css`);
 
 const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
 const page = await browser.newPage({ viewport: { width: 1200, height: 800 } });
 const erreurs = [];
 page.on('pageerror', (e) => erreurs.push(e.message));
 
-await page.route('**://unpkg.com/**', (route) => {
-  const url = route.request().url();
-  if (url.endsWith('leaflet.js')) return route.fulfill({ body: leafletJs, contentType: 'application/javascript' });
-  if (url.endsWith('leaflet.css')) return route.fulfill({ body: leafletCss, contentType: 'text/css' });
-  return route.fulfill({ status: 404, body: '' });
-});
-await page.route('**://*.openstreetmap.org/**', (r) => r.abort());
 // Force le mode démo malgré la config réelle.
 await page.addInitScript(() => {
   // Léo (L1) : cartouche d'accueil neutralisé ici — couvert par smoke-leo-accueil.mjs.
@@ -36,19 +27,22 @@ await page.waitForTimeout(1200);
 
 verdicts.modeDemo = !(await page.locator('#bandeau-demo').isHidden());
 
-// L'app démarre désormais sur l'Accueil : basculer sur l'onglet Carte.
-await page.locator('.barre-onglets button', { hasText: 'Carte' }).click();
-await page.waitForTimeout(400);
+// LA CARTE EST SUPPRIMÉE (2026-08-13) : la fiche s'ouvrait depuis un marqueur
+// Leaflet, elle s'ouvre désormais depuis une ÉTOILE. Le flux éprouvé ici —
+// fiche, journal, pilotage — est le même ; seule la porte d'entrée a changé.
+await page.locator('.barre-onglets button', { hasText: 'Ciel' }).click();
+await page.waitForTimeout(800);
 
 // Ouvre la fiche du nœud « Plomberie Roux » (3 relations dont une arrêtée).
-// Les marqueurs sont des <path.leaflet-interactive> ; on les clique jusqu'à
-// trouver la bonne fiche.
-const marqueurs = page.locator('path.leaflet-interactive');
-const n = await marqueurs.count();
-verdicts.marqueurs = n;
+// `dispatchEvent` : dans un volume, les zones de captation se chevauchent et
+// une étoile devant en masque une autre (le pointage réel est couvert par
+// smoke-ciel, `tapOuvreLaBonneFiche`).
+const etoiles = page.locator('#ciel-scene .ciel-etoile[data-noeud-id]');
+const n = await etoiles.count();
+verdicts.etoiles = n;
 let ficheTrouvee = false;
 for (let i = 0; i < n; i++) {
-  await marqueurs.nth(i).click({ force: true });
+  await etoiles.nth(i).dispatchEvent('click');
   await page.waitForTimeout(150);
   const titre = await page.locator('#panneau-titre').textContent();
   if (titre && titre.includes('Plomberie Roux')) { ficheTrouvee = true; break; }

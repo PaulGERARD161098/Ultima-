@@ -88,7 +88,7 @@ thème stellaire devient une **couche de jetons réutilisable**, pas un patch de
    suppression** : celles qui ne parlent pas de l'arbre (recherche, états vides,
    ouverture de fiche) **migrent** vers `smoke-ciel` / `smoke-contacts`.
    **VRANESH** (`vranesh.html`, l'arbre d'IMLADRIK) n'est **pas** touché.
-3. **Le retrait de la carte** : onglet, `#espace-carte`, `js/carte.js`, le
+3. ✅ **FAIT le 2026-08-13 — le retrait de la carte** : onglet, `#espace-carte`, `js/carte.js`, le
    `<script>` Leaflet, les 43 appels `UltimaCarte` de `app.js`, la légende, le
    cadre gravé, la fixture Leaflet des harnais. **La donnée reste** (§5).
 4. **La couche stellaire** : `css/stellaire.css`, jetons dérivés de ceux de
@@ -104,7 +104,7 @@ thème stellaire devient une **couche de jetons réutilisable**, pas un patch de
    > l'arbre et la carte — 38 règles de `styles.css` et une légende — quelques
    > heures avant de les supprimer. **On retire d'abord, on thème ce qui
    > reste.**
-5. **Le resserrage de la CSP** (`middleware.js`) : les domaines de tuiles et
+5. ✅ **FAIT le 2026-08-13 — le resserrage de la CSP** (`middleware.js`) : les domaines de tuiles et
    `unpkg.com` tombent. `smoke-csp.mjs` est retourné pour **prouver l'absence**
    (règle du 2026-07-30). **GATE middleware.**
 6. **Patrimoine COMPLET** (`bash tests/lancer.sh` en entier, règle du
@@ -396,6 +396,71 @@ les zones de captation se chevauchent — le vidage du réseau passe par
 **Le compteur d'onglets est devenu le compteur du démontage** : `cinqOnglets`
 est devenu `quatreOnglets`, et deviendra `troisOnglets` quand la carte partira.
 
+## 11. Étape ③ — le retrait de la carte, et ce qu'il a coûté
+
+**Fait le 2026-08-13** (« Ok go / Merge tout »).
+
+| Retiré | Volume |
+|---|---|
+| `js/carte.js` | **273 lignes**, supprimé |
+| `js/app.js` | l'espace, les **43 appels** `UltimaCarte`, la recherche carte (v3-⑥), les filtres, l'état `filtres` |
+| `riven.html` | l'espace, l'onglet, la légende, **Leaflet** (script + feuille de style) |
+| `middleware.js` | **tous les domaines tiers** de la CSP |
+| `tests/` | `smoke-recherche.mjs` supprimé, `smoke-antique.mjs` réduit de moitié, **la fixture Leaflet retirée de 14 harnais et de `lancer.sh`** |
+
+**Vérifié : patrimoine COMPLET depuis un cache VIERGE — 55 harnais,
+742 verdicts, sortie 0.**
+
+### Le gain de sécurité, chiffré
+
+La CSP est passée de **trois hôtes tiers autorisés** (`unpkg.com`,
+`tile.openstreetmap.org`, `*.tile.openstreetmap.org`) à **zéro**. Et
+`'unsafe-inline'` sur `style-src`, qui n'existait que parce que Leaflet posait
+des styles inline sur ses marqueurs, **est tombé avec lui**. `smoke-csp.mjs`
+est retourné : il **cherche** ces domaines et exige de **ne pas les trouver**
+(règle du 2026-07-30), et vérifie qu'aucune requête ne sort vers un tiers.
+*Le correctif S3 de la veille — le domaine nu des tuiles, qui bloquait 100 % du
+fond de carte — n'a plus d'objet : il n'y a plus de tuile.*
+
+### Quatre pièges, dont un vrai bug que j'ai introduit
+
+1. **Un écouteur orphelin a tout cassé.** `#bouton-ajouter` était le bouton de
+   la barre d'outils de la carte : parti avec elle, son
+   `addEventListener` a levé une TypeError qui a arrêté `brancherEvenements`
+   — donc les données ne se chargeaient plus **du tout**, et le ciel restait
+   vide. *Un harnais l'a vu ; un coup d'œil à l'écran ne l'aurait pas vu, la
+   page s'affichant parfaitement.* Un **audit complet des identifiants**
+   référencés par `app.js` et absents de `riven.html` a suivi : zéro restant.
+2. **Quatre chemins menaient encore à la carte** (`activerOnglet('carte')`) :
+   ouvrir une cible depuis l'Accueil, ouvrir un formulaire, la suggestion de
+   rapprochement de Léo, le raccourci « Voir la carte ». Tous mènent au
+   **ciel**. Le raccourci s'appelle désormais **« Voir le ciel »**.
+3. **La dictée en mode remplacement allait mourir sans qu'on le voie.**
+   `dictee.js` porte une option `remplacer` (chaque dictée remplace au lieu
+   d'ajouter) qui n'avait **qu'un seul porteur** : le champ de recherche de la
+   carte. Elle est **transférée** à la recherche du ciel — pas ajoutée : la
+   capacité existait, elle change de champ.
+4. **Des phrases promettaient une carte** : « il apparaîtra sur la carte »,
+   « n'est pas encore placé sur la carte », « Position enregistrée sur la
+   carte ». Réécrites. Le bouton du formulaire dit **« Situer la ville »**.
+
+### ⚠️ UNE PERTE FONCTIONNELLE RÉELLE, à arbitrer
+
+La recherche de la carte offrait : **0 résultat → création du contact
+pré-remplie avec le terme cherché**. La recherche du ciel ne le fait pas — elle
+dit seulement qu'il n'y a pas de résultat. *Ce n'est pas un oubli de démontage :
+c'est une fonction qui vivait dans l'écran supprimé.* Elle est petite, elle est
+utile, et elle mérite d'être **portée dans le ciel** — cadrée avec la bascule
+2D (§9), pas en douce aujourd'hui.
+
+### Ce que la carte laisse derrière elle, intact
+
+`/api/geocode`, les colonnes `lat`/`lng`, le géocodage à la saisie et la
+confirmation écrite de la position. **Aucune migration, aucune donnée
+supprimée.** Le harnais du géocodage a été retourné : il ne vérifie plus
+l'aperçu sur la carte mais **les coordonnées retenues par le formulaire** —
+c'est-à-dire ce qui compte.
+
 ---
 
 ### Registre des arbitrages — pris par Paul, 2026-08-12
@@ -411,6 +476,10 @@ est devenu `quatreOnglets`, et deviendra `troisOnglets` quand la carte partira.
 
 ### ⏳ Actions Paul
 
+- ✅ **Étape ③ FAITE : la carte est supprimée** (2026-08-13). CSP à **zéro
+  hôte tiers**, `'unsafe-inline'` tombé, fixture Leaflet retirée du patrimoine.
+  **55 harnais, 742 verdicts, sortie 0, cache vierge.** Détail au §11 — dont
+  **une perte fonctionnelle à arbitrer** (0 résultat → création pré-remplie).
 - ✅ **Étape ② FAITE : l'arbre est supprimé** (2026-08-13). 445 lignes de
   `js/arbre.js`, 103 lignes d'`app.js`, ~190 lignes de `styles.css`, l'espace,
   l'onglet, le harnais. **Patrimoine COMPLET vert : 56 harnais, sortie 0,

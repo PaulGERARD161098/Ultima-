@@ -5,8 +5,6 @@ import { chromium } from 'playwright';
 import { readFileSync } from 'node:fs';
 
 const SCRATCH = new URL('./.cache', import.meta.url).pathname;
-const leafletJs = readFileSync(`${SCRATCH}/package/dist/leaflet.js`);
-const leafletCss = readFileSync(`${SCRATCH}/package/dist/leaflet.css`);
 const PNG_1PX = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
   'base64');
@@ -31,13 +29,6 @@ async function ouvrir(viewport, client, requetes) {
       try { requetes.push(new URL(r.url()).host); } catch { /* data: */ }
     });
   }
-  await page.route('**://unpkg.com/**', (route) => {
-    const url = route.request().url();
-    if (url.endsWith('leaflet.js')) return route.fulfill({ body: leafletJs, contentType: 'application/javascript' });
-    if (url.endsWith('leaflet.css')) return route.fulfill({ body: leafletCss, contentType: 'text/css' });
-    return route.fulfill({ status: 404, body: '' });
-  });
-  await page.route('**://*.openstreetmap.org/**', (r) => r.fulfill({ body: PNG_1PX, contentType: 'image/png' }));
 
   if (client === 'aucun') {
     await page.addInitScript(() => {

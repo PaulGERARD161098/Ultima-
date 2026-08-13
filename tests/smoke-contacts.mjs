@@ -5,8 +5,6 @@ import { readFileSync } from 'node:fs';
 
 // Cache local préparé par lancer.sh (fixture Leaflet npm, captures).
 const SCRATCH = new URL('./.cache', import.meta.url).pathname;
-const leafletJs = readFileSync(`${SCRATCH}/package/dist/leaflet.js`);
-const leafletCss = readFileSync(`${SCRATCH}/package/dist/leaflet.css`);
 
 const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
 const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
@@ -14,16 +12,9 @@ const erreurs = [];
 page.on('pageerror', (e) => erreurs.push('pageerror: ' + e.message));
 page.on('console', (m) => { if (m.type() === 'error') erreurs.push('console: ' + m.text()); });
 
-await page.route('**://unpkg.com/**', (route) => {
-  const url = route.request().url();
-  if (url.endsWith('leaflet.js')) return route.fulfill({ body: leafletJs, contentType: 'application/javascript' });
-  if (url.endsWith('leaflet.css')) return route.fulfill({ body: leafletCss, contentType: 'text/css' });
-  return route.fulfill({ status: 404, body: '' });
-});
 const PNG_1PX = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
   'base64');
-await page.route('**://*.openstreetmap.org/**', (r) => r.fulfill({ body: PNG_1PX, contentType: 'image/png' }));
 // Force le mode démo malgré la config réelle.
 await page.addInitScript(() => {
   // Léo (L1) : cartouche d'accueil neutralisé ici — couvert par smoke-leo-accueil.mjs.
@@ -77,10 +68,11 @@ verdicts.aucunResultat = (await page.locator('.contacts-aucun').textContent()) =
 await recherche.fill('');
 await page.waitForTimeout(150);
 
-// 4. Tap sur un contact → onglet Carte + fiche ouverte + focus sur le titre.
+// 4. Tap sur un contact → le CIEL + fiche ouverte + focus sur le titre.
+// (Menait à la carte jusqu'au 2026-08-13 ; elle est supprimée.)
 await page.locator('.item-contact').first().click();
 await page.waitForTimeout(300);
-verdicts.bascueleCarte = await page.locator('#espace-carte').isVisible();
+verdicts.basculeCiel = await page.locator('#espace-ciel').isVisible();
 verdicts.ficheOuverte = (await page.locator('#panneau-titre').textContent()) === 'Agence Habitat Sud';
 verdicts.focusTitre = await page.evaluate(() =>
   document.activeElement && document.activeElement.id === 'panneau-titre');

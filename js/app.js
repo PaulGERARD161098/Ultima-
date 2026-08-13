@@ -50,11 +50,10 @@
     // sert plusieurs fiches, avec un rôle sur chacune).
     personnes: [],
     rattachements: [],
-    filtres: { types: new Set(TYPES), statuts: new Set(STATUTS) },
     modeDemo: true,
     client: null,        // client supabase-js (mode connecté)
     session: null,
-    onglet: 'accueil',   // espace actif : accueil | carte | contacts
+    onglet: 'accueil',   // espace actif : accueil | ciel | contacts
     registreContacts: 'fiches', // onglet Contacts : fiches | personnes
     noeudCourant: null,  // id du nœud affiché dans la fiche
     noeudEnEdition: null, // id du nœud en cours d'édition dans le formulaire
@@ -485,7 +484,6 @@
   window.UltimaRiven = { construireEtatRiven: construireEtatRiven };
 
   function rafraichir() {
-    window.UltimaCarte.rendre(etat.noeuds, etat.relations, etat.filtres);
     rendreAccueil();
     if (etat.onglet === 'ciel') { rendreCiel(); }
     rendreContacts();
@@ -851,7 +849,6 @@
   var SECTIONS_ONGLETS = {
     accueil: '#espace-accueil',
     ciel: '#espace-ciel',
-    carte: '#espace-carte',
     contacts: '#espace-contacts'
   };
 
@@ -874,10 +871,6 @@
         bouton.removeAttribute('aria-current');
       }
     });
-    if (nom === 'carte') {
-      // Leaflet initialisé dans une section cachée a une taille fausse.
-      window.UltimaCarte.invaliderTaille();
-    }
     if (nom === 'ciel') {
       rendreCiel();
     } else if (window.UltimaCiel) {
@@ -887,11 +880,6 @@
     }
     if (nom === 'accueil') { rendreAccueil(); }
     if (nom === 'contacts') { rendreContacts(); }
-    // Changement d'onglet : liste de recherche fermée, halo effacé, texte
-    // du champ conservé (règles d'état v3-⑥).
-    fermerListeRecherche();
-    messageRecherche('');
-    window.UltimaCarte.effacerSurbrillance();
   }
 
   // ---------- Accueil : ouverture d'une cible ----------
@@ -924,16 +912,16 @@
       toast("Ce contact n'existe plus.", 'erreur');
       return; // on reste sur l'Accueil
     }
-    activerOnglet('carte'); // invalide aussi la taille de la carte
-    if (typeof noeud.lat === 'number' && typeof noeud.lng === 'number') {
-      window.UltimaCarte.centrer(noeud.lat, noeud.lng);
-    }
+    // La carte menait le regard sur une position ; le ciel le mène sur une
+    // étoile. C'est le même geste — « montre-moi ce contact » — dans la seule
+    // forme qui reste.
+    activerOnglet('ciel');
     ouvrirFiche(noeud.id);
     $('#panneau-titre').focus();
   }
 
   function ouvrirFormDepuisAccueil(nodeId) {
-    activerOnglet('carte');
+    activerOnglet('ciel');
     ouvrirFormNoeud(nodeId);
     $('#panneau-titre').focus();
   }
@@ -1328,7 +1316,7 @@
             (paire.fournisseur.nom || '(sans nom)') + ' ne sont pas encore reliés — ' +
             paire.motif + '. On les rapproche ?',
           action: function () {
-            activerOnglet('carte');
+            activerOnglet('ciel');
             ouvrirFormRelation(paire.demandeur.id, {
               idCible: paire.fournisseur.id,
               type: paire.type
@@ -1389,7 +1377,7 @@
         var aPlacer = sansPosition[0];
         suggestions.push({
           message: (aPlacer.nom || '(sans nom)') +
-            " n'est pas encore placé sur la carte. On le place ?",
+            " n'a pas encore de ville renseignée. On la situe ?",
           action: function () { ouvrirFormDepuisAccueil(aPlacer.id); }
         });
       }
@@ -1441,11 +1429,13 @@
       ouvrirFormDepuisAccueil(null);
     }));
     bloc.appendChild(boutonRaccourci("Noter où j'en suis", 'bouton-parchemin', function () {
-      activerOnglet('carte');
-      toast('Touchez un contact sur la carte pour ouvrir sa fiche et noter où vous en êtes.');
+      activerOnglet('ciel');
+      toast('Touchez une étoile pour ouvrir sa fiche et noter où vous en êtes.');
     }));
-    bloc.appendChild(boutonRaccourci('Voir la carte', 'bouton-parchemin', function () {
-      activerOnglet('carte');
+    // « Voir la carte » devient « Voir le ciel » : le raccourci mène là où le
+    // réseau se regarde, et il n'y a plus qu'un endroit pour cela.
+    bloc.appendChild(boutonRaccourci('Voir le ciel', 'bouton-parchemin', function () {
+      activerOnglet('ciel');
     }));
     conteneur.appendChild(bloc);
   }
@@ -1484,7 +1474,7 @@
       fortVide.textContent = "Votre réseau est vide pour l'instant.";
       texteVide.appendChild(fortVide);
       texteVide.appendChild(document.createTextNode(
-        ' Commencez par ajouter votre premier contact : il apparaîtra sur la carte.'));
+        ' Commencez par ajouter votre premier contact : il allumera sa première étoile.'));
       blocVide.appendChild(texteVide);
       blocVide.appendChild(boutonRaccourci('+ Ajouter un contact', 'bouton-primaire', function () {
         ouvrirFormDepuisAccueil(null);
@@ -1589,10 +1579,18 @@
            typeof noeud.lng === 'number' && isFinite(noeud.lng);
   }
 
-  // Puce « lieu » colorée par type : la maison de l'Accueil sur une pastille
-  // aux couleurs de la carte (le type est aussi écrit en toutes lettres).
+  // Puce « lieu » colorée par type (le type est aussi écrit en toutes
+  // lettres — la couleur ne porte jamais l'information seule). La palette
+  // vivait dans carte.js, supprimé le 2026-08-13 ; ce sont les MÊMES valeurs,
+  // rapatriées ici sans être retouchées. Elles laisseront la place à celles du
+  // ciel (js/ciel.js, COULEURS_NUIT) à l'étape ④, quand l'Accueil passera au
+  // thème stellaire : les changer aujourd'hui ferait deux migrations là où une
+  // suffit, et ternirait la pastille sur le parchemin encore en place.
+  var COULEURS_TYPE = {
+    artisan: '#e8781e', partenaire: '#1e6fb8', lead: '#1f8a4c', chantier: '#7a3fb5'
+  };
   function svgLieuContact(type) {
-    var couleurs = (window.UltimaCarte && window.UltimaCarte.COULEURS_TYPE) || {};
+    var couleurs = COULEURS_TYPE;
     var svg = svgElement('svg', {
       'class': 'lieu-contact', viewBox: '0 0 24 24', width: '28', height: '28', 'aria-hidden': 'true'
     });
@@ -1708,7 +1706,7 @@
       outils.hidden = true;
       conteneur.appendChild(blocEtatContacts(
         "Votre réseau est vide pour l'instant.",
-        'Commencez par ajouter votre premier contact : il apparaîtra sur la carte.',
+        'Commencez par ajouter votre premier contact : il allumera sa première étoile.',
         '+ Ajouter un contact',
         function () { ouvrirFormDepuisAccueil(null); }));
       return;
@@ -1828,7 +1826,7 @@
   }
 
   // Le formulaire de personne s'ouvre SUR PLACE, dans l'onglet Contacts : il
-  // n'y a aucune raison de basculer sur la carte pour saisir quelqu'un qui n'y
+  // n'y a aucune raison de basculer sur le ciel pour saisir quelqu'un qui n'y
   // apparaîtra pas (contrairement à ouvrirFormDepuisAccueil, qui lui y va parce
   // que la fiche créée s'y place).
   function ouvrirFormPersonneDepuisRegistre() {
@@ -2004,7 +2002,6 @@
     etat.personneCourante = null; // une seule fiche à l'écran, jamais deux
     // Toute ouverture de fiche efface le halo de recherche ; la sélection d'un
     // résultat le repose juste après (un seul halo, toujours à jour).
-    window.UltimaCarte.effacerSurbrillance();
     reinitialiserGeo(); // sortie du formulaire (enregistrement ou annulation)
     var noeud = trouverNoeud(id);
     ouvrirPanneau('fiche', (noeud && noeud.nom) || 'Fiche');
@@ -3041,9 +3038,13 @@
     if (!Reco) { return; } // API absente : l'interface d'avant, complète, sans bruit
     attacherDictee($('#noeud-notes'), 'Notes');
     attacherDictee($('#relation-notes'), 'Note de la relation');
-    // Recherche carte (v3-⑥) : dictée en mode remplacement — une transcription
-    // imparfaite ne corrompt rien, le résultat est visible et gratuit à corriger.
-    attacherDictee($('#recherche-carte'), null, { remplacer: true });
+    // Dictée en mode REMPLACEMENT sur la recherche du ciel. Ce mode n'avait
+    // qu'un champ, celui de la recherche carte : supprimé le 2026-08-13, il
+    // aurait emporté la capacité avec lui. Elle est TRANSFÉRÉE, pas ajoutée —
+    // même raison qu'à l'origine : une transcription imparfaite ne corrompt
+    // rien dans un champ de recherche, le résultat est visible et gratuit à
+    // corriger.
+    attacherDictee($('#ciel-recherche'), null, { remplacer: true });
   }
 
   // Aide contextuelle : un seul toast de découverte, à la première fiche.
@@ -3056,7 +3057,11 @@
     toast("Nouveau : touchez le micro d'un champ pour dicter.");
   }
 
-  // ---------- Géocodage d'adresse : « Trouver sur la carte » (v3-⑤) ----------
+  // ---------- Géocodage d'adresse : « Situer la ville » (v3-⑤) ----------
+  // La CARTE est supprimée (2026-08-13) mais le géocodage RESTE : les
+  // coordonnées continuent d'être renseignées, sans écran pour les montrer.
+  // Motif, consigné au cadrage : une suppression d'écran se revient d'un
+  // `git revert` ; un trou de données, non.
   // Geste explicite, jamais de recherche à la frappe (politique Nominatim
   // ≤ 1 req/s). Le géocodage est une aide, jamais un péage : « Enregistrer »
   // fonctionne toujours, position ou pas. Aucune adresse en console/logs.
@@ -3064,7 +3069,7 @@
   var GEO_LIMITE = 3;         // 3 résultats max : zéro scroll, lisible au pouce
   var GEO_TIMEOUT_MS = 8000;  // filet front (le serveur coupe à 5 s)
   var GEO_CADENCE_MS = 1000;  // anti-rafale : 1 s de repos après chaque réponse
-  var GEO_LIBELLE_BOUTON = 'Trouver sur la carte';
+  var GEO_LIBELLE_BOUTON = 'Situer la ville';
   var GEO_MESSAGES = {
     vide: "Indiquez d'abord une ville ou une adresse.",
     introuvable: "Adresse introuvable. Essayez avec la ville seule, ou vérifiez l'orthographe.",
@@ -3124,7 +3129,6 @@
     bouton.disabled = false;
     $('#geo-bouton-libelle').textContent = GEO_LIBELLE_BOUTON;
     $('#geo-zone').removeAttribute('aria-busy');
-    window.UltimaCarte.effacerApercu();
   }
 
   // Libellé court : sans « France » final, ≤ 80 caractères (repli tronqué).
@@ -3173,13 +3177,14 @@
     return resultats;
   }
 
-  // Sélection (tap ou auto) : champs remplis, confirmation, aperçu carte.
+  // Sélection (tap ou auto) : champs remplis, confirmation. L'aperçu sur la
+  // carte est parti avec elle — la confirmation écrite reste, et c'est elle
+  // qui portait déjà la preuve du choix.
   function choisirResultatGeo(resultat) {
     $('#noeud-lat').value = String(resultat.lat);
     $('#noeud-lng').value = String(resultat.lng);
     fermerListeGeo(false);
     afficherConfirmationGeo('Position : ', resultat.libelle);
-    window.UltimaCarte.apercu(resultat.lat, resultat.lng);
     $('#geo-confirmation').focus(); // l'écran dit où on en est
   }
 
@@ -3243,7 +3248,6 @@
       return;
     }
 
-    window.UltimaCarte.effacerApercu(); // nouvelle recherche : aperçu effacé
     var jeton = ++geoJeton;
     bouton.disabled = true;
     $('#geo-bouton-libelle').textContent = 'Recherche…';
@@ -3286,14 +3290,12 @@
     $('#noeud-lng').value = '';
     masquerConfirmationGeo();
     messageGeo('');
-    window.UltimaCarte.effacerApercu();
     $('#noeud-adresse').focus();
   }
 
   // Saisie manuelle dans le details : la ligne dit d'où vient la position.
   function surSaisieManuelleGeo(evenement) {
     if (!evenement.isTrusted) { return; }
-    window.UltimaCarte.effacerApercu(); // l'aperçu ne reflète plus une sélection
     var lat = $('#noeud-lat').value.trim();
     var lng = $('#noeud-lng').value.trim();
     if (!lat && !lng) {
@@ -3310,7 +3312,7 @@
     if (details) { details.open = false; } // fermé par défaut, toujours
     if (noeud && typeof noeud.lat === 'number' && typeof noeud.lng === 'number') {
       // Position déjà connue : on ne re-géocode jamais pour l'afficher (1 req/s).
-      afficherConfirmationGeo('Position enregistrée sur la carte', '');
+      afficherConfirmationGeo('Position enregistrée', '');
     }
   }
 
@@ -3328,265 +3330,6 @@
         evenement.stopPropagation();
         fermerListeGeo(true);
       }
-    });
-  }
-
-  // ---------- Recherche sur la carte (v3-⑥) : nom + ville, zoom + halo ----------
-  // Client-side sur les nœuds déjà chargés, filtres IGNORÉS (une question
-  // nominative gagne toujours sur une vue de tournée). Zéro endpoint.
-
-  var RECHERCHE_SEUIL = 2;   // en dessous : liste fermée, jamais d'état d'erreur
-  var RECHERCHE_PLAFOND = 5; // ~280 px : la liste tient sous le pouce sans scroll
-
-  function messageRecherche(texte) {
-    var zone = $('#recherche-message');
-    if (zone) { zone.textContent = texte || ''; }
-  }
-
-  function fermerListeRecherche() {
-    var liste = $('#recherche-resultats');
-    if (!liste) { return; }
-    liste.hidden = true;
-    liste.textContent = '';
-    $('#recherche-carte').setAttribute('aria-expanded', 'false');
-  }
-
-  function majCroixRecherche() {
-    $('#recherche-effacer').hidden = $('#recherche-carte').value === '';
-  }
-
-  // Vidage complet : champ, croix, liste, message, halo. La carte reste où
-  // elle est (Paul travaille peut-être sur la zone trouvée).
-  function viderRecherche() {
-    $('#recherche-carte').value = '';
-    majCroixRecherche();
-    fermerListeRecherche();
-    messageRecherche('');
-    window.UltimaCarte.effacerSurbrillance();
-  }
-
-  // Le nœud est-il actuellement visible avec les filtres métier ?
-  function noeudVisibleAvecFiltres(noeud) {
-    return etat.filtres.types.has(noeud.type) && etat.filtres.statuts.has(noeud.statut);
-  }
-
-  // Tri déterministe : nom commençant par le terme, puis nom contenant,
-  // puis ville correspondante ; à égalité, ordre alphabétique fr (Contacts).
-  function rangRecherche(noeud, terme) {
-    var nom = normaliserTexte(noeud.nom);
-    if (nom.indexOf(terme) === 0) { return 0; }
-    if (nom.indexOf(terme) !== -1) { return 1; }
-    return 2;
-  }
-
-  // Sélection d'un résultat : zoom + halo + fiche (l'ouverture de fiche
-  // efface le halo précédent, on le repose après). Nœud sans position :
-  // fiche seule, carte immobile, aucun halo.
-  function choisirResultatRecherche(noeud) {
-    fermerListeRecherche();
-    var masque = !noeudVisibleAvecFiltres(noeud);
-    if (contactAPosition(noeud)) {
-      window.UltimaCarte.zoomerSur(noeud.lat, noeud.lng);
-      ouvrirFiche(noeud.id);
-      window.UltimaCarte.surligner(noeud.lat, noeud.lng);
-      if (masque) {
-        // On ne modifie JAMAIS les filtres en douce : on explique.
-        messageRecherche('Ce contact est masqué par vos filtres — le repère montre son emplacement.');
-      }
-    } else {
-      ouvrirFiche(noeud.id);
-    }
-    $('#panneau-titre').focus();
-  }
-
-  // Échec de recherche → début de création : formulaire nœud, Nom pré-rempli
-  // (texte tel que saisi), curseur en fin de champ.
-  function ajouterDepuisRecherche(brut) {
-    if (!etat.modeDemo && !etat.session) {
-      toast('Connectez-vous pour ajouter un contact.', 'erreur');
-      return;
-    }
-    fermerListeRecherche();
-    messageRecherche('');
-    ouvrirFormDepuisAccueil(null);
-    var champNom = $('#noeud-nom');
-    champNom.value = brut;
-    champNom.focus();
-    try { champNom.setSelectionRange(brut.length, brut.length); } catch (e) { /* non sélectionnable */ }
-  }
-
-  function ligneInfoRecherche(texte) {
-    var item = document.createElement('li');
-    item.className = 'liste-resultats-vide';
-    item.textContent = texte;
-    return item;
-  }
-
-  function itemResultatRecherche(noeud) {
-    var item = document.createElement('li');
-    var bouton = document.createElement('button');
-    bouton.type = 'button';
-    bouton.className = 'item-resultat';
-    bouton.dataset.resultat = 'oui'; // vrai résultat (≠ bouton « + Ajouter »)
-
-    var avant = document.createElement('span');
-    avant.className = 'item-resultat-avant';
-    var pastille = document.createElement('span');
-    pastille.className = 'pastille pastille-' + noeud.type;
-    avant.appendChild(pastille);
-    bouton.appendChild(avant);
-
-    var textes = document.createElement('span');
-    textes.className = 'item-resultat-textes';
-    var principale = document.createElement('span');
-    principale.className = 'item-resultat-principale';
-    principale.textContent = noeud.nom || '(sans nom)';
-    textes.appendChild(principale);
-    var detail = document.createElement('span');
-    detail.className = 'item-resultat-detail';
-    detail.textContent = (LIBELLES_TYPE[noeud.type] || noeud.type) +
-      (noeud.ville ? ' · ' + noeud.ville : '');
-    textes.appendChild(detail);
-    bouton.appendChild(textes);
-
-    if (!contactAPosition(noeud)) {
-      var aPlacer = document.createElement('span');
-      aPlacer.className = 'badge-a-placer';
-      aPlacer.textContent = 'À placer';
-      bouton.appendChild(aPlacer);
-    }
-
-    bouton.addEventListener('click', function () { choisirResultatRecherche(noeud); });
-    item.appendChild(bouton);
-    return item;
-  }
-
-  // Rendu en direct à chaque frappe (la dictée EST une frappe : l'événement
-  // input synthétique passe par ici aussi).
-  function rendreRecherche() {
-    var champ = $('#recherche-carte');
-    var liste = $('#recherche-resultats');
-    majCroixRecherche();
-    window.UltimaCarte.effacerSurbrillance(); // nouvelle saisie : halo effacé
-
-    var brut = champ.value.trim();
-    var terme = normaliserTexte(brut);
-    if (terme.length < RECHERCHE_SEUIL) {
-      fermerListeRecherche();
-      messageRecherche('');
-      return;
-    }
-
-    var correspondants = etat.noeuds.filter(function (n) {
-      return correspondAuTerme(n, terme);
-    }).sort(function (a, b) {
-      var ecart = rangRecherche(a, terme) - rangRecherche(b, terme);
-      if (ecart !== 0) { return ecart; }
-      return (a.nom || '').localeCompare(b.nom || '', 'fr');
-    });
-
-    liste.textContent = '';
-    if (correspondants.length === 0) {
-      liste.appendChild(ligneInfoRecherche('Aucun contact ne correspond à “' + brut + '”.'));
-      var itemAjout = document.createElement('li');
-      var boutonAjout = document.createElement('button');
-      boutonAjout.type = 'button';
-      boutonAjout.className = 'item-resultat item-resultat-ajouter';
-      boutonAjout.textContent = '+ Ajouter “' + tronquer(brut, 40) + '” comme contact';
-      boutonAjout.addEventListener('click', function () { ajouterDepuisRecherche(brut); });
-      itemAjout.appendChild(boutonAjout);
-      liste.appendChild(itemAjout);
-      messageRecherche('Aucun contact trouvé.');
-    } else {
-      correspondants.slice(0, RECHERCHE_PLAFOND).forEach(function (n) {
-        liste.appendChild(itemResultatRecherche(n));
-      });
-      if (correspondants.length > RECHERCHE_PLAFOND) {
-        var reste = correspondants.length - RECHERCHE_PLAFOND;
-        liste.appendChild(ligneInfoRecherche(
-          'et ' + reste + (reste > 1 ? ' autres' : ' autre') + ' — précisez votre recherche'));
-      }
-      messageRecherche(correspondants.length +
-        (correspondants.length > 1 ? ' contacts trouvés.' : ' contact trouvé.'));
-    }
-    liste.hidden = false;
-    champ.setAttribute('aria-expanded', 'true');
-  }
-
-  function initRecherche() {
-    var champ = $('#recherche-carte');
-    if (!champ) { return; }
-    var liste = $('#recherche-resultats');
-    var conteneur = champ.closest('.champ-recherche-carte');
-
-    champ.addEventListener('input', rendreRecherche);
-
-    $('#recherche-effacer').addEventListener('click', function () {
-      viderRecherche();
-      champ.focus();
-    });
-
-    // Clavier dans le champ : ↓ ouvre la navigation, Entrée = 1er résultat,
-    // Échap en deux temps (liste → texte) sans jamais piéger (3e temps :
-    // propagation au gestionnaire global qui ferme le panneau).
-    champ.addEventListener('keydown', function (evenement) {
-      if (evenement.key === 'ArrowDown') {
-        var premierBouton = liste.querySelector('button');
-        if (!liste.hidden && premierBouton) {
-          evenement.preventDefault();
-          premierBouton.focus();
-        }
-      } else if (evenement.key === 'Enter') {
-        // Seul un vrai résultat se sélectionne à l'Entrée (jamais « + Ajouter »).
-        var premierResultat = liste.querySelector('.item-resultat[data-resultat]');
-        if (!liste.hidden && premierResultat) {
-          evenement.preventDefault();
-          premierResultat.click();
-        }
-      } else if (evenement.key === 'Escape') {
-        if (!liste.hidden) {
-          evenement.preventDefault(); // le type=search ne vide pas le texte
-          evenement.stopPropagation(); // le panneau ne se ferme pas
-          fermerListeRecherche();
-          messageRecherche('');
-        } else if (champ.value !== '') {
-          evenement.preventDefault();
-          evenement.stopPropagation();
-          viderRecherche();
-        }
-        // Champ vide et liste fermée : l'événement se propage (fermeture panneau).
-      }
-    });
-
-    // Clavier dans la liste : ↓/↑ circulent, ↑ sur le 1er rend le champ,
-    // Échap ferme la liste et rend le focus au champ.
-    liste.addEventListener('keydown', function (evenement) {
-      if (evenement.key === 'Escape') {
-        evenement.preventDefault();
-        evenement.stopPropagation();
-        champ.focus();
-        fermerListeRecherche();
-        messageRecherche('');
-        return;
-      }
-      if (evenement.key !== 'ArrowDown' && evenement.key !== 'ArrowUp') { return; }
-      var boutons = Array.prototype.slice.call(liste.querySelectorAll('button'));
-      var index = boutons.indexOf(document.activeElement);
-      if (index === -1) { return; }
-      evenement.preventDefault();
-      if (evenement.key === 'ArrowDown') {
-        if (index < boutons.length - 1) { boutons[index + 1].focus(); }
-      } else if (index === 0) {
-        champ.focus();
-      } else {
-        boutons[index - 1].focus();
-      }
-    });
-
-    // Sortie du composant (Tab, tap ailleurs) : la liste se referme.
-    conteneur.addEventListener('focusout', function (evenement) {
-      if (evenement.relatedTarget && conteneur.contains(evenement.relatedTarget)) { return; }
-      fermerListeRecherche();
     });
   }
 
@@ -4135,21 +3878,6 @@
     }
   }
 
-  // ---------- Filtres ----------
-
-  function majFiltres() {
-    var types = new Set();
-    var statuts = new Set();
-    document.querySelectorAll('input[data-filtre="type"]:checked').forEach(function (c) {
-      types.add(c.value);
-    });
-    document.querySelectorAll('input[data-filtre="statut"]:checked').forEach(function (c) {
-      statuts.add(c.value);
-    });
-    etat.filtres = { types: types, statuts: statuts };
-    rafraichir();
-  }
-
   // ---------- Authentification Supabase (mode connecté) ----------
 
   function configPresente() {
@@ -4330,14 +4058,6 @@
     });
 
 
-    $('#bouton-ajouter').addEventListener('click', function () {
-      if (!etat.modeDemo && !etat.session) {
-        toast('Connectez-vous pour ajouter un nœud.', 'erreur');
-        return;
-      }
-      ouvrirFormNoeud(null);
-    });
-
     $('#bouton-fermer-panneau').addEventListener('click', fermerPanneau);
     $('#bouton-annuler-noeud').addEventListener('click', function () {
       if (etat.noeudCourant) { ouvrirFiche(etat.noeudCourant); } else { fermerPanneau(); }
@@ -4371,17 +4091,6 @@
     if (boutonGoogle) { boutonGoogle.addEventListener('click', seConnecterGoogle); }
     $('#bouton-deconnexion').addEventListener('click', seDeconnecter);
 
-    document.querySelectorAll('input[data-filtre]').forEach(function (caseFiltre) {
-      caseFiltre.addEventListener('change', majFiltres);
-    });
-
-    var boutonFiltres = $('#bouton-filtres');
-    boutonFiltres.addEventListener('click', function () {
-      var filtres = $('#filtres');
-      var ouverts = filtres.classList.toggle('ouverts');
-      boutonFiltres.setAttribute('aria-expanded', ouverts ? 'true' : 'false');
-    });
-
     document.addEventListener('keydown', function (evenement) {
       if (evenement.key === 'Escape' && !$('#panneau').hidden) { fermerPanneau(); }
     });
@@ -4390,17 +4099,9 @@
   // ---------- Démarrage ----------
 
   async function demarrer() {
-    if (typeof window.L === 'undefined') {
-      // CDN Leaflet inaccessible : on signale sans planter ; l'Accueil et la
-      // navigation restent utilisables (UltimaCarte.rendre ignore l'appel).
-      toast('Bibliothèque de carte indisponible. Rechargez la page.', 'erreur');
-    } else {
-      window.UltimaCarte.init('carte', { surClicNoeud: ouvrirFiche });
-    }
     brancherEvenements();
     initDictee(); // micros des champs statiques (sans API : ne fait rien)
-    initGeocodage(); // « Trouver sur la carte » du formulaire nœud
-    initRecherche(); // recherche nom/ville de l'onglet Carte (v3-⑥)
+    initGeocodage(); // « Situer la ville » du formulaire nœud
     // Le CIEL est l'écran d'arrivée depuis le 2026-08-11 (décision de Paul :
     // « la 3d devient accueil »), et depuis le 2026-08-13 il est la SEULE forme
     // du réseau : l'usage a tranché, l'arbre est supprimé. Les données arrivent

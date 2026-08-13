@@ -5,8 +5,6 @@ import { readFileSync } from 'node:fs';
 
 // Cache local préparé par lancer.sh (fixture Leaflet npm, captures).
 const SCRATCH = new URL('./.cache', import.meta.url).pathname;
-const leafletJs = readFileSync(`${SCRATCH}/package/dist/leaflet.js`);
-const leafletCss = readFileSync(`${SCRATCH}/package/dist/leaflet.css`);
 
 const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
 // Mobile 390 px, critère d'acceptation de la spec UX.
@@ -15,17 +13,10 @@ const erreurs = [];
 page.on('pageerror', (e) => erreurs.push('pageerror: ' + e.message));
 page.on('console', (m) => { if (m.type() === 'error') erreurs.push('console: ' + m.text()); });
 
-await page.route('**://unpkg.com/**', (route) => {
-  const url = route.request().url();
-  if (url.endsWith('leaflet.js')) return route.fulfill({ body: leafletJs, contentType: 'application/javascript' });
-  if (url.endsWith('leaflet.css')) return route.fulfill({ body: leafletCss, contentType: 'text/css' });
-  return route.fulfill({ status: 404, body: '' });
-});
 // Tuiles OSM : réponse PNG 1x1 valide (pas d'erreurs de tuiles en console).
 const PNG_1PX = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
   'base64');
-await page.route('**://*.openstreetmap.org/**', (r) => r.fulfill({ body: PNG_1PX, contentType: 'image/png' }));
 // Force le mode démo malgré la config réelle.
 await page.addInitScript(() => {
   // Léo (L1) : cartouche d'accueil neutralisé ici — couvert par smoke-leo-accueil.mjs.
@@ -53,15 +44,16 @@ verdicts.plusDOngletArbre =
 await page.locator('.barre-onglets .onglet[data-onglet="accueil"]').click();
 await page.waitForTimeout(300);
 verdicts.accueilVisible = await page.locator('#espace-accueil').isVisible();
-verdicts.carteCachee = await page.locator('#espace-carte').isHidden();
+verdicts.plusDEspaceCarte = (await page.locator('#espace-carte').count()) === 0;
 verdicts.titreBienvenue = (await page.locator('#accueil-titre').textContent()) === 'Bienvenue, Paul';
 verdicts.sousTitre = (await page.locator('.accueil-question').textContent()) === "On fait quoi aujourd'hui ?";
 verdicts.ongletActifAccueil = await page
   .locator('.barre-onglets .onglet[data-onglet="accueil"][aria-current="page"]').count() === 1;
-// QUATRE onglets depuis le retrait de l'arbre (2026-08-13) : Accueil, Ciel,
-// Carte, Contacts. Ils seront TROIS quand la carte partira à son tour — cette
-// assertion est le compteur du démontage, elle doit baisser à chaque étape.
-verdicts.quatreOnglets = await page.locator('.barre-onglets .onglet').count() === 4;
+// TROIS onglets, et c'est le compte final : Accueil, Ciel, Contacts.
+// L'arbre et la carte sont partis le 2026-08-13 — RIVEN n'a plus qu'une forme.
+// Cette assertion a compté 5, puis 4, puis 3 : c'était le compteur du
+// démontage, elle devient le garde-fou de ce qui reste.
+verdicts.troisOnglets = await page.locator('.barre-onglets .onglet').count() === 3;
 
 // 2. Police à l'ancienne (old-style système) sur le titre — registre antique :
 // la pile typo résolue est serif, plus aucune écriture manuscrite (« Caveat »
@@ -107,21 +99,18 @@ verdicts.tapTargets = await page.evaluate(() => {
   return Array.from(cibles).every((el) => el.getBoundingClientRect().height >= 44);
 });
 
-// 7. Tap sur une relance → onglet Carte + fiche ouverte + focus + tuiles OK.
+// 7. Tap sur une relance → le CIEL + fiche ouverte + focus.
+// La carte est supprimée (2026-08-13) : le geste « montre-moi ce contact »
+// menait sur une position, il mène sur une étoile. Le verdict
+// `carteDimensionnee` (tuiles Leaflet chargées) tombe avec elle ; ce qu'il
+// protégeait — un conteneur mal dimensionné dans une section cachée — n'a
+// plus d'objet, le ciel mesurant sa propre boîte (smoke-ciel).
 await page.locator('.panneau-bois', { hasText: 'Relancer M. Lambert' }).click();
 await page.waitForTimeout(600);
-verdicts.ongletCarteActif = await page
-  .locator('.barre-onglets .onglet[data-onglet="carte"][aria-current="page"]').count() === 1;
+verdicts.ongletCielActif = await page
+  .locator('.barre-onglets .onglet[data-onglet="ciel"][aria-current="page"]').count() === 1;
 verdicts.ficheLambert = ((await page.locator('#panneau-titre').textContent()) || '').includes('M. Lambert');
 verdicts.focusPanneauTitre = await page.evaluate(() => document.activeElement?.id === 'panneau-titre');
-// Carte correctement dimensionnée : le conteneur Leaflet couvre la zone
-// (invalidateSize effectif → des tuiles chargées sur toute la largeur).
-verdicts.carteDimensionnee = await page.evaluate(() => {
-  const carte = document.getElementById('carte');
-  const r = carte.getBoundingClientRect();
-  const tuiles = carte.querySelectorAll('.leaflet-tile-loaded');
-  return r.width > 300 && r.height > 300 && tuiles.length >= 4;
-});
 
 // 8. Échap ferme la fiche, l'onglet Accueil ramène au pilotage.
 await page.keyboard.press('Escape');
@@ -129,7 +118,7 @@ verdicts.echapFerme = await page.locator('#panneau').isHidden();
 await page.locator('.barre-onglets .onglet[data-onglet="accueil"]').click();
 await page.waitForTimeout(200);
 verdicts.retourAccueil = await page.locator('#espace-accueil').isVisible() &&
-  await page.locator('#espace-carte').isHidden();
+  await page.locator('#espace-ciel').isHidden();
 
 // 9. Cocher « Fait » retire l'item SANS changer d'onglet + toast.
 const relancesAvant = await page.locator('.item-relance').count();
@@ -147,18 +136,18 @@ verdicts.r3OuvreFormulaire = await page.locator('#form-noeud').isVisible() &&
   ((await page.locator('#noeud-nom').inputValue()) === 'Maison Garonne');
 await page.keyboard.press('Escape');
 
-// 11. Onglet Contacts (v3-②) : le registre s'affiche, tap contact → carte.
+// 11. Onglet Contacts (v3-②) : le registre s'affiche, tap contact → le ciel.
 await page.locator('.barre-onglets .onglet[data-onglet="contacts"]').click();
 verdicts.contactsListe = (await page.locator('.item-contact').count()) === 9;
 await page.locator('.item-contact').first().click();
-verdicts.contactsVersCarte = await page.locator('#espace-carte').isVisible();
+verdicts.contactsVersCiel = await page.locator('#espace-ciel').isVisible();
 await page.keyboard.press('Escape');
 
-// 12. Raccourcis : + Ajouter un contact → carte + formulaire d'ajout.
+// 12. Raccourcis : + Ajouter un contact → le ciel + formulaire d'ajout.
 await page.locator('.barre-onglets .onglet[data-onglet="accueil"]').click();
 await page.locator('.accueil-raccourcis .bouton-primaire').click();
 await page.waitForTimeout(200);
-verdicts.raccourciAjout = await page.locator('#espace-carte').isVisible() &&
+verdicts.raccourciAjout = await page.locator('#espace-ciel').isVisible() &&
   await page.locator('#form-noeud').isVisible() &&
   ((await page.locator('#noeud-nom').inputValue()) === '');
 await page.keyboard.press('Escape');
