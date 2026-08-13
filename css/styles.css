@@ -432,69 +432,9 @@ body {
 .bouton-fermer:focus-visible,
 input:focus-visible,
 select:focus-visible,
-textarea:focus-visible,
-.case-filtre input:focus-visible {
+textarea:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
-}
-
-/* ---------- Barre d'outils / filtres ---------- */
-
-.barre-outils {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 0.5rem 1rem;
-  background: var(--blanc);
-  border-bottom: 1px solid var(--bordure);
-}
-
-.bouton-filtres { display: none; }
-
-.filtres {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-  flex: 1;
-}
-
-.groupe-filtres {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  flex-wrap: wrap;
-  margin: 0;
-  padding: 0.15rem 0.5rem;
-  border: 1px solid var(--bordure);
-  border-radius: 10px;
-}
-
-.groupe-filtres legend {
-  padding: 0 0.35rem;
-  font-size: 0.78rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--encre-douce);
-}
-
-.case-filtre {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  min-height: 44px;
-  padding: 0 0.6rem;
-  font-size: 0.92rem;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.case-filtre:hover { background: #eef1f4; }
-
-.case-filtre input {
-  width: 1.1rem;
-  height: 1.1rem;
-  accent-color: var(--accent);
 }
 
 /* ---------- Espaces (navigation par onglets) ---------- */
@@ -511,11 +451,6 @@ textarea:focus-visible,
 .espace {
   flex: 1;
   min-height: 0;
-}
-
-.espace-carte {
-  display: flex;
-  flex-direction: column;
 }
 
 /* ---------- Espace Contacts (registre sobre, fond clair) ---------- */
@@ -725,11 +660,6 @@ textarea:focus-visible,
   min-height: 0;
 }
 
-.carte {
-  position: absolute;
-  inset: 0;
-}
-
 /* ---------- Habillage antique de la carte (R1) ---------- */
 /* Source contraignante : design/spec-r1-graphisme.md. Interdits fermes :
    aucun feTurbulence ni filtre SVG sur les couches carte (RA3), aucune
@@ -738,87 +668,16 @@ textarea:focus-visible,
 /* Filtre sépia sur le tile-pane SEUL (z 200) : les panes vecteurs/marqueurs
    (400/600) restent en couleurs vraies (RA1). Deux régimes pilotés par la
    classe de palier posée sur #carte par js/carte.js — saut sec assumé. */
-.carte .leaflet-tile-pane {
-  filter: sepia(0.9) saturate(1.4) hue-rotate(-8deg) brightness(0.94) contrast(0.92);
-}
 
 /* Régime rue (zoom ≥ 12) : on relâche pour garder rues et étiquettes nettes. */
-.carte.zoom-rue .leaflet-tile-pane {
-  filter: sepia(0.75) saturate(1.2) hue-rotate(-8deg) brightness(0.97);
-}
 
 /* Fond visible pendant le chargement des tuiles : parchemin, jamais le gris Leaflet. */
-.leaflet-container { background: var(--parchemin-tuile); }
 
 /* Cadre parchemin : cerne encre + liseré or + vignettage, coins en data-URI.
    z 640 : au-dessus des marqueurs, sous légende (900) et contrôles (1000). */
-.cadre-carte {
-  position: absolute;
-  inset: 0;
-  z-index: 640;
-  pointer-events: none;
-  box-shadow:
-    inset 0 0 0 3px var(--cerne-carte),
-    inset 0 0 0 5px var(--or-antique),
-    inset 0 0 42px 10px rgba(58, 42, 16, 0.26); /* vignettage léger */
-}
-
-.cadre-carte .coin {
-  position: absolute;
-  width: 72px;
-  height: 72px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72'%3E%3Cg fill='none'%3E%3Cpath d='M4 68 V16 Q4 4 16 4 H68' stroke='%235a4118' stroke-width='2.5'/%3E%3Cpath d='M10 68 V20 Q10 10 20 10 H68' stroke='%23a9884a' stroke-width='1.2'/%3E%3Cpath d='M16 16 q9 -3 12 5 q-9 3 -12 -5Z' fill='%23a9884a' opacity='.85'/%3E%3C/g%3E%3C/svg%3E") no-repeat;
-}
-
-.cadre-carte .coin-no { top: 0; left: 0; }
-.cadre-carte .coin-ne { top: 0; right: 0; transform: rotate(90deg); }
-.cadre-carte .coin-se { bottom: 0; right: 0; transform: rotate(180deg); }
-.cadre-carte .coin-so { bottom: 0; left: 0; transform: rotate(270deg); }
 
 /* Voile Ptolémée : opacité par palier de zoom, fondu composité (opacity
    seule), coupé en reduced-motion. À zoom ≥ 7 : absent. */
-.pane-voile {
-  opacity: 0;
-  transition: opacity 400ms ease;
-}
-
-.carte.zoom-pays .pane-voile { opacity: 1; }
-.carte.zoom-large .pane-voile { opacity: 0.65; }
-
-@media (prefers-reduced-motion: reduce) {
-  .pane-voile { transition: none; }
-}
-
-.legende {
-  position: absolute;
-  left: 0.75rem;
-  bottom: 1.5rem;
-  z-index: 900;
-  padding: 0.6rem 0.8rem;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid var(--bordure);
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  font-size: 0.82rem;
-}
-
-.legende-titre {
-  margin: 0.35rem 0 0.15rem;
-  font-weight: 650;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--encre-douce);
-}
-
-.legende-titre:first-child { margin-top: 0; }
-
-.legende-item {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  margin: 0.15rem 0;
-}
 
 /* Cerne encre (R1) : la légende montre exactement ce que montre la carte
    (plus de box-shadow de rattrapage). */
@@ -829,25 +688,10 @@ textarea:focus-visible,
   border: 2px solid var(--cerne-carte);
 }
 
-.pastille-artisan { background: var(--type-artisan); }
-.pastille-partenaire { background: var(--type-partenaire); }
-.pastille-lead { background: var(--type-lead); }
-.pastille-chantier { background: var(--type-chantier); }
-
 .trait {
   width: 22px;
   height: 0;
   border-top: 3px solid var(--type-partenaire);
-}
-
-.trait-soustraitance {
-  border-top-color: var(--type-artisan);
-  border-top-style: dashed;
-}
-
-.trait-chantier {
-  border-top-color: var(--type-chantier);
-  border-top-style: dotted;
 }
 
 /* ---------- Panneau latéral ---------- */
@@ -922,11 +766,6 @@ textarea:focus-visible,
   color: var(--encre);
   border: 1px solid var(--bordure);
 }
-
-.badge-artisan { background: #fbe9d7; color: #7a3c05; border-color: #efc9a2; }
-.badge-partenaire { background: #ddebf8; color: #14486f; border-color: #b3d2ec; }
-.badge-lead { background: #ddf2e4; color: #135430; border-color: #aeddc0; }
-.badge-chantier { background: #ecdff8; color: #4c2075; border-color: #d3b8ec; }
 
 .fiche-details {
   margin: 0 0 1rem;
@@ -1135,29 +974,6 @@ textarea:focus-visible,
     overflow: hidden;
     text-overflow: ellipsis;
   }
-
-  .cadre-carte .coin { width: 48px; height: 48px; background-size: 48px 48px; }
-
-  .barre-outils {
-    flex-wrap: wrap;
-    padding: 0.5rem 0.75rem;
-  }
-
-  .bouton-filtres { display: inline-block; }
-
-  .filtres {
-    display: none;
-    flex-basis: 100%;
-    flex-direction: column;
-    gap: 0.5rem;
-    order: 3;
-  }
-
-  .filtres.ouverts { display: flex; }
-
-  .groupe-filtres { width: 100%; }
-
-  #bouton-ajouter { margin-left: auto; }
 
   .panneau { width: 100%; }
 
@@ -2073,49 +1889,10 @@ textarea:focus-visible,
    panneau (1100). Elle replie proprement quand champ + filtres + bouton ne
    tiennent pas sur une ligne (le champ garde alors sa ligne, jamais écrasé
    et jamais de chevauchement de la carte). */
-.barre-outils {
-  position: relative;
-  z-index: 1050;
-  flex-wrap: wrap;
-}
 
-.champ-recherche-carte {
-  position: relative;            /* ancre de la liste flottante */
-  flex: 1 1 14rem;
-  min-width: 0;
-  max-width: 340px;              /* desktop large : un champ, pas une barre Google */
-}
-
-/* Tant que champ + filtres + « + Ajouter » ne tiennent pas sur une seule
-   ligne (filtres ≈ 1030px), le champ prend toute la première ligne — motif
-   mobile de la spec UX étendu, jamais de barre d'outils qui déborde. */
-@media (max-width: 1560px) {
-  .champ-recherche-carte {
-    flex-basis: 100%;
-    max-width: none;
-  }
-}
-
-.champ-recherche-carte input {
-  width: 100%;
-  min-height: 44px;              /* cote des champs existants */
-  padding: 0.5rem 48px 0.5rem 38px; /* 38 = loupe 20px à 12px du bord + 6px d'air ;
-                                       48 = réserve croix (motif .champ-vocal) */
-  border: 1px solid var(--bordure);
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-family: inherit;
-  background: var(--blanc);
-  color: var(--encre);
-}
 /* focus-visible : déjà couvert par la règle globale input:focus-visible. */
 
 /* Une seule croix : la nôtre (la native du type=search ferait doublon). */
-.champ-recherche-carte input::-webkit-search-cancel-button { display: none; }
-
-/* Micro de dictée présent (motif .champ-vocal) : croix décalée, réserve élargie. */
-.champ-recherche-carte .champ-vocal > input { padding-right: 92px; }
-.champ-recherche-carte .champ-vocal ~ .bouton-effacer { right: 44px; }
 
 .icone-loupe {
   position: absolute;
@@ -2151,41 +1928,12 @@ textarea:focus-visible,
   outline-offset: -2px;          /* l'anneau reste dans le champ */
 }
 
-/* La liste de la recherche carte respire au-dessus de la carte. */
-.champ-recherche-carte .liste-resultats { z-index: 20; }
-
 /* Pastille de type en tête d'item : la légende entre dans la liste. */
 .item-resultat-avant .pastille { display: block; margin-top: 3px; }
 
 /* Lignes non cliquables du panneau (0 résultat, « et N autres »). */
-.liste-resultats-vide {
-  display: block;
-  padding: 0.7rem 0.75rem;
-  font-size: 0.92rem;
-  font-style: italic;             /* registre .contacts-aucun existant */
-  color: var(--encre-douce);
-  overflow-wrap: anywhere;
-}
 
 /* Zone de message inline (role=status) : miroir du motif .geo-message. */
-.recherche-message {
-  margin: 0.35rem 0 0;
-  font-size: 0.85rem;
-  color: var(--encre-douce);
-}
-
-.recherche-message:empty { display: none; }
-
-/* Anneau « compas » sur le résultat : 3 pulsations, puis il reste posé. */
-@media (prefers-reduced-motion: no-preference) {
-  .halo-resultat { animation: pulsation-resultat 1.6s ease-out 3; }
-}
-
-@keyframes pulsation-resultat {
-  0%   { stroke-width: 3;  stroke-opacity: 0.9; }
-  60%  { stroke-width: 12; stroke-opacity: 0.25; }
-  100% { stroke-width: 3;  stroke-opacity: 0.9; }
-}
 
 /* ============================================================================
    Ce qui reste de l'arbre, supprimé le 2026-08-13 : deux règles que le CIEL

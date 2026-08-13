@@ -2602,3 +2602,63 @@
   luminance de fond, contraste AA calculé, et **preuve de non-fuite** par six
   harnais d'autres quadrants qui doivent passer sans retouche). Prochaine
   action unique : **la maquette**, au go de Paul.
+
+## 2026-08-13 — L'arbre et la carte tombent ; RIVEN n'a plus qu'une forme
+
+- **Décisions de Paul** : « Go — enlève arbre », puis « Ok go / Merge tout /
+  Puis diagnostique le tout et cadre la suite ». La question qui bloquait a été
+  tranchée avant : « la carte en 2D » de sa phrase du soir désignait **le
+  ciel**, pas la carte géographique — celle-ci reste supprimée, et le ciel
+  gagnera une **bascule vers une vue à plat** (cadrée, pas exécutée).
+- **Le thème s'appelle STELLAIRE, et il n'a pas d'interrupteur.** « Enlève
+  registre de nuit, ça doit être comme ça tout le temps » : le mot « registre »
+  supposait un choix parmi d'autres, il n'y en a pas. Renommé partout ; la
+  couche à naître est `css/stellaire.css`, et une page l'a parce qu'elle charge
+  le fichier — l'interrupteur est à la porte, jamais dans le CSS.
+- **La 3D ne coûte pas de réseau.** Paul voulait la bascule 2D « si je n'ai pas
+  assez de réseau » : le ciel est calculé dans l'appareil, sans une requête. Ce
+  qu'il coûte, c'est du **calcul et de la batterie**. Le motif est corrigé dans
+  le cadrage, et le critère de réussite avec : le harnais **comptera les images
+  d'animation**, sinon le bouton n'économiserait rien de mesurable.
+- **DEUX FOIS J'AI INVENTÉ CE QUI EXISTAIT DÉJÀ.** La maquette a écrit des
+  couleurs de type et un mot d'état vide qui vivaient déjà dans `js/ciel.js`
+  (`COULEURS_NUIT`) et `js/app.js` (« Votre ciel attend sa première étoile »).
+  *J'ai présenté à Paul comme un arbitrage à rendre un mot rendu depuis deux
+  jours.* **Règle** : avant d'inventer dans une maquette, chercher si le
+  produit le porte déjà. C'est la directive EB, appliquée à mon propre travail.
+- **UNE MAQUETTE NE REMPLACE PAS LE MOTEUR QU'ELLE MONTRE.** La première
+  version dessinait un ciel plat « pour la démonstration » ; Paul a demandé en
+  dix secondes où était passé le 3D. Elle charge désormais `js/ciel.js` et
+  `css/ciel.css` du produit avec des données inventées — et c'est CE
+  chargement qui a révélé les quatre règles de `ciel.css` encore accrochées aux
+  jetons du parchemin. Aucune imitation ne l'aurait dit.
+- **UN BLOC DE CODE N'APPARTIENT PAS À CE DONT PARLE SON TITRE.**
+  `ouvrirFicheDepuisArbre` vivait dans le bloc « Onglet Arbre » alors que le
+  CIEL l'appelait : le supprimer a cassé l'ouverture des fiches. De même, le
+  ciel EMPRUNTAIT trois classes CSS à l'arbre. **Il appartient à qui l'appelle.**
+- **UN ÉCOUTEUR ORPHELIN VIDE UNE PAGE SANS RIEN CASSER À L'ŒIL.**
+  `#bouton-ajouter` (bouton de la carte) a levé une TypeError qui a interrompu
+  `brancherEvenements` : plus aucune donnée chargée, page parfaitement
+  affichée. Suivi d'un **audit complet des identifiants** référencés par
+  `app.js` et absents de `riven.html` — geste à refaire à chaque retrait d'écran.
+- **UN NETTOYAGE CSS AUTOMATIQUE N'EST PAS SÛR.** Mon motif a mordu sur la
+  dernière ligne d'une **liste de sélecteurs partagée** (`:focus-visible`) :
+  corps commun emporté, liste orpheline avalant la règle suivante, formulaire
+  d'écriture d'IMLADRIK mort. **Cinq verdicts rouges dans un quadrant que je
+  n'avais pas touché.** Le reste a été retiré à la main, bloc par bloc, et un
+  contrôle d'intégrité (accolades appariées, aucune liste orpheline) entre au
+  patrimoine. *Deuxième fois que le patrimoine COMPLET rattrape ce qu'un run
+  ciblé aurait laissé passer.*
+- **UN CRITÈRE MAL CHOISI INVENTE UN DÉFAUT.** Mon premier contrôle de
+  géométrie comparait la `getBBox()` du ciel à son `viewBox` et criait au
+  débordement : faux instrument — halos et zones de captation débordent
+  volontairement et sont rognés. Le critère du produit (les **centres** des
+  étoiles) dit 0 hors cadre.
+- **Sécurité, chiffré** : CSP de **3 hôtes tiers à ZÉRO**, `'unsafe-inline'`
+  tombé avec Leaflet, plus une seule ressource externe dans Ultima — donc plus
+  aucune fixture à mettre en cache pour tester. Prouvé **par l'absence**.
+- **Perte fonctionnelle SIGNALÉE, pas compensée en douce** : « 0 résultat →
+  création pré-remplie » vivait dans la recherche carte. Décision de Paul
+  attendue.
+- **Vérifié** : patrimoine COMPLET depuis un cache vierge — **55 harnais,
+  742 verdicts, sortie 0**. Fusionné en squash (`9b61993`).
