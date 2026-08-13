@@ -2662,3 +2662,23 @@
   attendue.
 - **Vérifié** : patrimoine COMPLET depuis un cache vierge — **55 harnais,
   742 verdicts, sortie 0**. Fusionné en squash (`9b61993`).
+
+## 2026-08-13 — la migration que je croyais en attente était appliquée depuis la veille
+
+- **Paul : « Applique la migration ».** Vérification faite AVANT d'agir : la
+  contrainte `network_edges_source_scelle` **existait déjà**. Interrogation de
+  la base : les **quatre FK sont composites** (`network_edges_source_scelle`,
+  `network_edges_target_scelle`, `journal_node_scelle`, `journal_edge_scelle`),
+  les FK simples ont disparu, et `supabase_migrations` date l'entrée
+  `riven_fk_double_scellement` du **2026-08-12 à 14:45:40**.
+- **Donc S1 est fermé depuis la veille**, et j'ai répété à Paul pendant une
+  journée que la migration « attendait son arbitrage ». *Trois documents le
+  disaient — CADRAGE-ULTIMA, AUDIT-2026-08-12, ce journal — tous recopiant la
+  même phrase, aucun n'étant allé voir la base.* Corrigés.
+- **La leçon, et elle est la même que celle du thème stellaire** : un état qui
+  se recopie de document en document n'est pas un état vérifié. La base est la
+  source de vérité sur ce qui est appliqué ; le fichier de migration ne dit que
+  ce qu'on a écrit, jamais ce qui tourne.
+- **Ce qui a sauvé la mise** : ne jamais lancer un SQL sans le relire ET sans
+  regarder l'état réel. La tentative d'application a d'ailleurs échoué proprement
+  (« constraint already exists »), la transaction a tout annulé : rien de cassé.
