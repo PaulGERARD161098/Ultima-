@@ -430,6 +430,28 @@ const boiteToutVoir = await page.locator('#ciel-tout-voir').boundingBox();
 verdicts.cibleTactileToutVoir = !!boiteToutVoir &&
   boiteToutVoir.height >= 24 && boiteToutVoir.width >= 24;
 
+// ---------- 15. Zéro résultat → création pré-remplie ----------
+// Fonction portée depuis la recherche de la carte le 2026-08-13 (elle était la
+// SEULE perte fonctionnelle du démontage, signalée au diagnostic et arbitrée
+// par Paul). Le terme cherché devient le nom du contact à créer.
+await page.locator('.barre-onglets .onglet[data-onglet="ciel"]').click();
+await page.waitForTimeout(500);
+await page.locator('#ciel-recherche').fill('zzz');
+await page.waitForTimeout(300);
+verdicts.zeroResultatLeDit =
+  ((await page.locator('#ciel-message').textContent()) || '').includes('Aucun contact ne correspond');
+const boutonCreer = page.locator('#ciel-creer-depuis-recherche');
+verdicts.zeroResultatOffreLaCreation = (await boutonCreer.count()) === 1 &&
+  ((await boutonCreer.textContent()) || '').includes('“zzz”');
+await boutonCreer.click();
+await page.waitForTimeout(300);
+verdicts.creationPreRemplie = (await page.locator('#form-noeud').isVisible()) &&
+  (await page.locator('#noeud-nom').inputValue()) === 'zzz';
+await page.locator('#bouton-annuler-noeud').click();
+await page.waitForTimeout(200);
+await page.locator('#ciel-recherche').fill('');
+await page.waitForTimeout(300);
+
 // ---------- 14. Double codage : le type en toutes lettres ----------
 // Repris de smoke-arbre (`typeEnToutesLettres`). Dans le ciel, la couleur de
 // l'étoile dit le type — elle ne peut pas le dire SEULE. L'étiquette

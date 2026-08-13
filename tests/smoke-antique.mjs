@@ -111,8 +111,17 @@ verdicts.typoAncienneRuntime = await page.evaluate(() => {
 });
 
 // 4. Plaque de relance : plus de poteau (::before) ni de clous (::after) —
-// aucun pseudo-élément décoratif —, fond parchemin en dégradé (rgb --parchemin),
-// texte encre sépia (#3b2f1c), plus aucune couleur bois (#6b4a2b).
+// aucun pseudo-élément décoratif —, fond en dégradé de --parchemin, texte en
+// --encre-sepia, plus aucune couleur bois (#6b4a2b), police à empattements.
+//
+// CE VERDICT NE CONNAÎT PLUS LA PALETTE (2026-08-13). Il exigeait littéralement
+// `rgb(246, 238, 217)` et `rgb(59, 47, 28)` : les valeurs du parchemin, gravées
+// dans le test. Le thème stellaire les a redéfinies et le harnais est passé au
+// rouge — alors que la plaque suivait EXACTEMENT ce qu'on lui demande, ses
+// jetons. Il lit désormais les jetons et vérifie que la plaque les respecte.
+// Ce qu'il protège n'a pas changé d'un mot : le registre gravé, sans bois,
+// sans cursive. Un test doit tenir sur ce qui ne doit pas changer, pas sur ce
+// qui a le droit de changer.
 verdicts.plaqueParcheminSansBois = await page.evaluate(() => {
   const plaque = document.querySelector('.panneau-bois');
   const texte = document.querySelector('.panneau-bois-texte');
@@ -123,12 +132,23 @@ verdicts.plaqueParcheminSansBois = await page.evaluate(() => {
   const ffTexte = getComputedStyle(texte).fontFamily;
   const sansPseudo = (avant === 'none' || avant === 'normal') &&
     (apres === 'none' || apres === 'normal');
+  // Les jetons tels que la page les résout, quels qu'ils soient.
+  const sonde = document.createElement('span');
+  sonde.style.display = 'none';
+  document.body.appendChild(sonde);
+  const rgbDuJeton = (nom) => {
+    sonde.style.color = `var(${nom})`;
+    return getComputedStyle(sonde).color;
+  };
+  const parchemin = rgbDuJeton('--parchemin');
+  const encre = rgbDuJeton('--encre-sepia');
+  sonde.remove();
   return sansPseudo &&
     st.backgroundImage.includes('linear-gradient') &&
-    st.backgroundImage.includes('rgb(246, 238, 217)') &&   // --parchemin, plus le bois
+    st.backgroundImage.includes(parchemin) &&   // le dégradé suit son jeton
     !st.backgroundImage.includes('rgb(107, 74, 43)') &&     // --bois disparu
     !st.backgroundColor.includes('rgb(107, 74, 43)') &&
-    st.color === 'rgb(59, 47, 28)' &&                        // --encre-sepia
+    st.color === encre &&                                    // l'encre suit le sien
     /serif/i.test(ffTexte) && !/cursive/i.test(ffTexte);
 });
 

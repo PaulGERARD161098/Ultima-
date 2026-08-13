@@ -805,13 +805,23 @@ textarea:focus-visible {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  /* `wrap` (2026-08-13) : sur 390 px — l'écran de Paul — le select de statut et
+     les deux boutons prennent presque toute la ligne. Le titre tombait alors à
+     une vingtaine de pixels, et `overflow-wrap: anywhere` le cassait UNE LETTRE
+     PAR LIGNE : « Ap / po / rt / d'a / ffa / ires ». Défaut ANTÉRIEUR au thème
+     stellaire (mesuré identique sans lui : 494 px de haut pour une relation),
+     trouvé par une capture d'écran de la fiche. Les actions passent maintenant
+     à la ligne au lieu d'écraser le texte. */
+  flex-wrap: wrap;
   gap: 0.5rem;
   padding: 0.4rem 0;
   border-bottom: 1px solid #edf0f3;
   font-size: 0.9rem;
 }
 
-.item-relation-texte { overflow-wrap: anywhere; }
+/* `min-width: 0` : sans lui, un enfant flex refuse de descendre sous sa taille
+   intrinsèque et le `flex: 1` ne sert à rien. */
+.item-relation-texte { overflow-wrap: anywhere; flex: 1 1 12rem; min-width: 0; }
 
 .item-relation-note {
   display: block;

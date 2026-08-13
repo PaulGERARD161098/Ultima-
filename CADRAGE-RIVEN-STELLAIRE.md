@@ -91,7 +91,7 @@ thème stellaire devient une **couche de jetons réutilisable**, pas un patch de
 3. ✅ **FAIT le 2026-08-13 — le retrait de la carte** : onglet, `#espace-carte`, `js/carte.js`, le
    `<script>` Leaflet, les 43 appels `UltimaCarte` de `app.js`, la légende, le
    cadre gravé, la fixture Leaflet des harnais. **La donnée reste** (§5).
-4. **La couche stellaire** : `css/stellaire.css`, jetons dérivés de ceux de
+4. ✅ **FAITE le 2026-08-13 — la couche stellaire** : `css/stellaire.css`, jetons dérivés de ceux de
    `ciel.css` (une seule source chromatique pour le ciel et sa page), plus les
    **quatre règles de `ciel.css`** relevées au §8. **Rien ne la conditionne** —
    ni attribut, ni bascule : une page l'a parce qu'elle charge le fichier, et
@@ -461,6 +461,91 @@ supprimée.** Le harnais du géocodage a été retourné : il ne vérifie plus
 l'aperçu sur la carte mais **les coordonnées retenues par le formulaire** —
 c'est-à-dire ce qui compte.
 
+## 12. Étape ④ — le thème stellaire posé. Ce que l'instrument a appris
+
+**Fait le 2026-08-13**, au go de Paul (« Ok pour les deux, on avance »).
+
+`css/stellaire.css` : **une redéfinition de jetons**, et huit règles de
+composant — pas une de plus. `css/styles.css` n'est pas modifié d'une ligne
+pour le thème ; les quatorze autres pages ne bougent pas.
+
+**Mesuré** (`tests/smoke-stellaire.mjs`, nouveau) : **278 couples texte/fond**
+sur **sept états** — ciel, accueil, contacts, fiche, formulaire, connexion,
+toast. **0 défaut de contraste. Fond le plus clair : luminance 0,0698** pour un
+plancher à 0,20. Patrimoine COMPLET : **56 harnais, 755 verdicts, sortie 0**.
+
+### Le pari des jetons, chiffré
+
+Sur les dix règles de composant que j'avais écrites **par anticipation**, la
+mesure en a gardé **une seule** (le bandeau « Mode démo », fond crème en dur).
+Les neuf autres suivaient déjà les jetons — et l'une d'elles **cassait** la
+plaque de relance : `.panneau-bois` porte un dégradé en `var(--parchemin)`,
+donc il basculait tout seul ; ma règle l'avait remplacé par un aplat, et
+`smoke-antique` l'a dit. *J'avais écrit dans ce fichier « une règle seulement
+là où la mesure l'exige », puis j'en ai écrit dix avant la première mesure.*
+
+Les quatre règles de `ciel.css` relevées au §8 (celles qui s'appuyaient sur
+`--encre-sepia`) n'ont **pas eu besoin d'être touchées** : le jeton redéfini
+les emmène. C'était exactement le pari de la couche.
+
+### 🔻 MON INSTRUMENT MENTAIT, ET C'EST UNE CAPTURE D'ÉCRAN QUI L'A DIT
+
+Le harnais rendait un vert franc pendant que le cartouche « ULTIMA » s'affichait
+**doré sur parchemin clair**, en haut de chaque écran. Raison : devant un fond
+en dégradé qu'il ne savait pas lire, il **supposait « sombre »**. Il supposait
+donc le résultat qu'il prétendait mesurer.
+
+Pire : ma première correction avait doré le TITRE (mesuré à 1,61:1 en encre
+sépia) — le harnais était passé au vert et j'avais **aggravé** le défaut, en
+posant de l'or sur du crème (1,47:1). Corrigé deux fois :
+
+- l'instrument **lit les couleurs écrites dans le dégradé** et retient la plus
+  claire (le pire cas), au lieu d'une liste blanche et d'un fallback optimiste ;
+- la **plaque entière** passe la nuit, fond compris — ce qu'il fallait faire
+  depuis le début.
+
+*Un instrument qui suppose ce qu'il mesure est pire qu'une absence de mesure :
+il donne le droit de ne pas regarder.*
+
+### Deux défauts trouvés par d'AUTRES harnais que le mien
+
+1. **`smoke-connexion`** a vu ce que je ne visitais pas : l'écran de connexion
+   (crème sur blanc cassé, 1,15:1). Le champ portait son fond en dur sous un
+   sélecteur plus spécifique que ma règle générique. Corrigé — **et l'écran est
+   désormais mesuré** par `smoke-stellaire`.
+2. **`smoke-intendant`** a refusé mes badges à fond translucide : il lit
+   `backgroundColor` sans composer l'alpha et trouvait 1,00:1. Il avait raison
+   deux fois — le contraste réel tombait à **4,32:1**, sous le seuil. Fonds
+   rendus **opaques** : mesurables par n'importe quel harnais, et entre 6 et
+   8:1.
+
+### Un test qui tient sur ce qui ne doit pas changer
+
+`smoke-antique` exigeait littéralement `rgb(246, 238, 217)` et
+`rgb(59, 47, 28)` : la palette du parchemin, gravée dans le test. Il est passé
+au rouge alors que la plaque faisait exactement ce qu'on lui demande — suivre
+ses jetons. Il **lit désormais les jetons** et vérifie qu'ils sont respectés.
+Ce qu'il protège n'a pas bougé d'un mot : registre gravé, sans bois, sans
+cursive. *Un test doit tenir sur ce qui ne doit pas changer, pas sur ce qui a
+le droit de changer.*
+
+### La perte fonctionnelle est réparée
+
+**« 0 résultat → création pré-remplie »**, seule fonction perdue au démontage
+de la carte, est **portée dans la recherche du ciel** : même garde (connexion),
+même geste (le terme cherché devient le nom, curseur au bout), même mot
+(« + Ajouter “…” comme contact »). Éprouvée par trois assertions neuves dans
+`smoke-ciel`.
+
+### Un défaut ANTÉRIEUR, trouvé au passage
+
+Sur 390 px — l'écran de Paul — la ligne de relation de la fiche cassait son
+titre **une lettre par ligne** (« Ap / po / rt / d'a / ffa / ires ») : le select
+de statut et les deux boutons prenaient toute la largeur. **Antérieur au thème**
+(mesuré identique sans lui : 494 px de haut pour une relation), trouvé par une
+capture d'écran. Corrigé (`flex-wrap`), et **mesuré** désormais : largeur du
+texte ≥ 150 px, hauteur de ligne ≤ 200 px.
+
 ---
 
 ### Registre des arbitrages — pris par Paul, 2026-08-12
@@ -476,6 +561,12 @@ c'est-à-dire ce qui compte.
 
 ### ⏳ Actions Paul
 
+- ✅ **Étape ④ FAITE : le thème stellaire est posé** (2026-08-13). 278 couples
+  mesurés sur 7 écrans, 0 défaut, fond le plus clair à 0,0698. Détail au §12 —
+  dont **mon instrument qui mentait**, deux défauts trouvés par d'autres
+  harnais, et un défaut de mise en page antérieur au thème.
+- ✅ **La perte fonctionnelle est réparée** : « 0 résultat → création
+  pré-remplie » vit dans la recherche du ciel.
 - ✅ **Étape ③ FAITE : la carte est supprimée** (2026-08-13). CSP à **zéro
   hôte tiers**, `'unsafe-inline'` tombé, fixture Leaflet retirée du patrimoine.
   **55 harnais, 742 verdicts, sortie 0, cache vierge.** Détail au §11 — dont
