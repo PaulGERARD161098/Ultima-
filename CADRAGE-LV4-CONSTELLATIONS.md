@@ -138,6 +138,64 @@ posé sur les neuf coques. **Aucune couleur nouvelle n'est inventée.**
 
 ---
 
+## 7. Étape ① — la maquette. **Elle a trouvé un os, et c'est son travail.**
+
+`design/preview-lv4-constellations.html` charge **le vrai registre** et **le vrai
+moteur** (`js/ciel.js`), et rend **les neuf écrans réels** plus un **pire cas
+construit à douze caps**.
+
+### Ce que la mesure dit — le registre est respecté
+
+| | |
+|---|---|
+| Écrans mesurés | **10** (9 réels + le pire cas) |
+| Étoiles rendues = caps déclarés | **oui, sur les dix** |
+| Étoiles hors cadre | **0** |
+| Cible tactile la plus petite | **25 px** (plancher WCAG : 24) |
+| Erreurs console | **0** |
+
+L'adaptateur fonctionne : un écran devient une constellation, ses caps
+deviennent ses étoiles, la passerelle de TAO devient un lien. **Aucune cible
+n'est perdue.**
+
+### 🔻 DEUX DÉFAUTS QUE LE DESSIN NE POUVAIT PAS CACHER
+
+1. **Une constellation de trois caps est minuscule et décentrée.** Mesuré sur
+   la racine : elle occupe **5 % de la largeur et 17 % de la hauteur** du
+   cadre, centrée à **73 % / 41 %** — trois petites étoiles dans le coin d'un
+   grand vide. « Tout voir » n'y change **rien**.
+   *Cause, et elle est nette : la caméra cadre LE MONDE, pas LES ÉTOILES.*
+   Le moteur place ses étoiles sur une sphère de rayon 300 et calcule sa
+   distance sur ce rayon (avec un plancher de 80, posé exprès pour les réseaux
+   minuscules de RIVEN). Sur RIVEN, 20 à 90 étoiles couvrent la sphère : monde
+   et étoiles coïncident. Sur la console, **trois caps occupent une pastille**
+   et le cadre reste celui d'un monde vide.
+2. **Au-delà de six caps, les noms disparaissent.** Le pire cas le prouve :
+   **12 caps → 6 noms**. C'est un réglage juste pour un réseau (`ciel.js`
+   n'affiche en permanence que les six étoiles les plus lourdes) et **faux pour
+   un menu** : un cap sans nom est un cap perdu. Le registre plafonne
+   aujourd'hui à quatre caps — le défaut est donc **latent**, pas actif. Il se
+   réveillera au sixième cap ajouté.
+
+### Ce que ça pose comme question — à Paul, pas à moi
+
+Le cadrage disait « **`js/ciel.js` est intouché, on l'alimente** » (§3). Ces
+deux défauts ne se corrigent **pas** dans l'adaptateur : ils vivent dans le
+cadrage de la caméra et dans la règle des six noms. Trois voies :
+
+| Voie | Ce que ça coûte | Ce que ça risque |
+|---|---|---|
+| **A. Une option de rendu** dans `ciel.js` : cadrer sur l'étendue RÉELLE des étoiles, et afficher tous les noms quand ils sont peu nombreux. | Une trentaine de lignes, deux options par défaut inactives. | Toucher au moteur de RIVEN — mais les **54 assertions de `smoke-ciel`** sont le garde-fou, avant et après. |
+| **B. Rien dans le moteur** : l'adaptateur écarte les caps sur toute la sphère (chaque cap devient sa propre constellation). | Zéro ligne au moteur. | Chaque étoile porterait un nom d'amas : on verrait le nom **deux fois**, et « un écran = une constellation » ne serait plus vrai. |
+| **C. La boussole reste** sur les écrans à peu de caps. | Rien. | Le mix que Paul a fait supprimer sur RIVEN reviendrait sur la console. |
+
+**Ma recommandation : A.** C'est la seule qui tienne la promesse « le tout en
+3D » sans rouvrir un mix, et le moteur reste un moteur — on lui ajoute une
+option, on ne le fourche pas. *Mais c'est un changement de périmètre par
+rapport au §3 : il se décide, il ne se glisse pas.*
+
+---
+
 ### Registre des arbitrages — pris par Paul, 2026-08-13
 
 | Question | Décision |
@@ -148,5 +206,9 @@ posé sur les neuf coques. **Aucune couleur nouvelle n'est inventée.**
 
 ### ⏳ Actions Paul
 
-- **Go sur la maquette** (étape 1) — prochaine action, et la seule.
+- ✅ **Maquette livrée** (étape 1) — 10 écrans mesurés, registre respecté,
+  0 étoile hors cadre, 0 erreur console.
+- 🔴 **UN ARBITRAGE BLOQUE L'ÉTAPE ②** : les deux défauts du §7 ne se corrigent
+  pas dans l'adaptateur. **Voie A, B ou C** — recommandation A (une option de
+  rendu dans `ciel.js`, RIVEN protégé par ses 54 assertions).
 - Reste au registre, non bloquant : les index de performance en INFO (S2).

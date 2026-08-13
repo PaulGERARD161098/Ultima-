@@ -1,0 +1,79 @@
+/* Maquette LV4 — habillage de la COQUE de console, et de la maquette.
+   Le ciel, lui, est habillé par ../css/ciel.css et ../css/stellaire.css :
+   rien n'est réécrit ici de ce qui existe. */
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ---- Barre de maquette (hors produit) ---- */
+.mq-barre {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .9rem;
+  padding: .5rem .8rem; background: #050b14;
+  border-bottom: 1px solid var(--bordure);
+}
+.mq-titre { font-family: var(--police-ancienne); letter-spacing: .12em; font-size: .9rem; color: #d8bd82; }
+.mq-note { font-size: .74rem; font-style: italic; color: var(--encre-douce); }
+.mq-etats { display: flex; flex-wrap: wrap; gap: .3rem; margin-left: auto; }
+.mq-bouton {
+  font: inherit; font-size: .74rem; padding: .3rem .55rem; cursor: pointer;
+  color: var(--encre-douce); background: var(--blanc);
+  border: 1px solid var(--bordure); border-radius: 3px;
+}
+.mq-bouton:hover { background: var(--nuit-relief); color: var(--encre); }
+.mq-bouton[aria-pressed="true"] { color: #0a1220; background: #d8bd82; border-color: #d8bd82; font-weight: 700; }
+
+/* ---- La coque de console : la grammaire de CADRAGE-LV3 §2, inchangée ---- */
+.console-coque {
+  flex: 1; min-height: 0;
+  display: flex; flex-direction: column; gap: .6rem;
+  padding: .8rem .9rem 3.4rem;
+  max-width: 1100px; width: 100%; margin: 0 auto;
+}
+.retour-console {
+  align-self: flex-start; font-size: .82rem; text-decoration: none;
+  color: var(--encre-douce); letter-spacing: .06em;
+}
+.retour-console:hover { color: #d8bd82; text-decoration: underline; }
+
+.console-bandeau { display: flex; flex-direction: column; align-items: center; gap: .35rem; }
+.console-titre {
+  margin: 0; font-family: var(--police-ancienne); font-size: 1.1rem;
+  font-variant: small-caps; letter-spacing: .12em; color: var(--encre);
+}
+
+/* Le plateau devient le ciel. Il prend la place, et la donne au SVG. */
+.console-ciel { flex: 1; min-height: 300px; }
+
+.console-invite {
+  margin: 0; text-align: center; font-style: italic;
+  font-size: .92rem; color: var(--encre-douce);
+}
+.console-outils { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; justify-content: center; }
+.console-etat { font-size: .82rem; color: #d8bd82; min-height: 1.2em; }
+
+/* ---- Bandeau de mesure (hors produit) ---- */
+.mq-mesure {
+  position: fixed; inset: auto 0 0 0; z-index: 1400;
+  background: #02060c; border-top: 1px solid var(--or-antique);
+  font-size: .78rem; max-height: 46vh; overflow: auto;
+}
+.mq-mesure-entete { display: flex; align-items: center; gap: .7rem; padding: .4rem .8rem; }
+.mq-mesure-entete strong { letter-spacing: .18em; color: #d8bd82; }
+.mq-verdict { font-weight: 700; }
+.mq-verdict--ok { color: var(--succes); }
+.mq-verdict--defaut { color: var(--danger); }
+.mq-mesure-entete .mq-bouton { margin-left: auto; }
+.mq-mesure-corps { padding: .5rem .8rem .8rem; }
+.mq-table { width: 100%; border-collapse: collapse; }
+.mq-table th, .mq-table td { text-align: left; padding: .22rem .5rem .22rem 0; border-bottom: 1px solid rgba(169, 136, 74, .12); }
+.mq-table th { font-weight: 600; color: #d8bd82; }
+.mq-table td { color: var(--encre-douce); }
+.mq-ligne { margin: .4rem 0 0; color: var(--encre-douce); }
+.mq-note-bas { font-style: italic; }
+.mq-ok { color: var(--succes); font-weight: 700; }
+.mq-defaut { color: var(--danger); font-weight: 700; }

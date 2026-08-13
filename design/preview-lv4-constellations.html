@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Maquette — LV4 : la console en constellations</title>
+<!--
+  MAQUETTE DE TRAVAIL — étape ① de CADRAGE-LV4-CONSTELLATIONS.md.
+
+  Aucune donnée personnelle : le registre de navigation (js/registre-lv3.mjs)
+  ne contient QUE des noms d'écrans et des cibles. C'est d'ailleurs le vrai
+  registre qui est chargé ici, pas une copie — et le vrai moteur du ciel
+  (js/ciel.js) qui dessine.
+
+  Deux leçons du 12 et du 13 août sont appliquées d'emblée :
+    — une maquette qui REDESSINE le moteur qu'elle prétend montrer fait juger
+      une régression que personne n'a décidée. Donc : le vrai moteur ;
+    — un écran non éprouvé est un écran cassé. Donc : les écrans RÉELS du
+      registre, y compris les plus pauvres, plus un pire cas CONSTRUIT.
+
+  Ce qu'elle sert à trancher :
+    ① un écran de console à 2, 3 ou 4 caps fait-il une constellation lisible,
+       ou un ciel vide ? (c'est LA question, et la mesure ne la tranchera pas
+       à la place de Paul) ;
+    ② le cap « à venir » — visible mais fermé ;
+    ③ la passerelle entre deux caps jumeaux (TAO) ;
+    ④ le pire cas construit à douze caps : ce qui se passe si Paul ajoute des
+       écrans — et où le moteur cesse d'afficher tous les noms.
+-->
+<!-- Sans cette ligne, le navigateur réclame /favicon.ico et le journal de la
+     console porte un 404 qui n'a rien à voir avec la maquette. Une erreur qu'on
+     laisse traîner est une erreur qu'on n'ira plus lire. -->
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../css/styles.css">
+<link rel="stylesheet" href="../css/ciel.css">
+<link rel="stylesheet" href="../css/stellaire.css">
+<link rel="stylesheet" href="preview-lv4-constellations.css">
+</head>
+<body>
+
+<!-- ====================== BARRE DE MAQUETTE (hors produit) ================= -->
+<div class="mq-barre">
+  <strong class="mq-titre">Maquette LV4</strong>
+  <span class="mq-note">registre réel · moteur réel</span>
+  <div id="mq-ecrans" class="mq-etats" role="group" aria-label="Écrans à montrer"></div>
+</div>
+
+<!-- ====================== LA COQUE DE CONSOLE ============================== -->
+<!-- La forme voulue par Paul (CADRAGE-LV3 §2) est CONSERVÉE : ① le retour,
+     ② le bandeau sceau + titre, ③ le plateau — c'est lui qui devient un ciel —,
+     ④ le cœur, ⑤ le cartouche de Léo. On change le ③, pas la grammaire. -->
+<div class="console-coque">
+
+  <a id="mq-retour" class="retour-console" href="#">↞ retour</a>
+
+  <header class="console-bandeau">
+    <div class="cartouche-ultima">
+      <h1 id="mq-nom" class="cartouche-titre">ULTIMA</h1>
+      <p id="mq-surligne" class="cartouche-sous">Ultima Lv4</p>
+    </div>
+    <h2 id="mq-titre" class="console-titre">Bienvenue</h2>
+  </header>
+
+  <div id="ciel-scene" class="ciel-scene console-ciel"></div>
+
+  <!-- ⑤ Le cartouche : la parole de Léo. Il ne bouge pas d'un mot — c'est ce
+       qui empêche « la beauté de manger la navigation » (pre-mortem ②). -->
+  <p id="mq-invite" class="console-invite"></p>
+
+  <div class="console-outils">
+    <button type="button" id="ciel-plat" class="bouton bouton-secondaire ciel-tout-voir"
+            aria-pressed="false">À plat</button>
+    <button type="button" id="mq-tout-voir" class="bouton bouton-secondaire ciel-tout-voir">Tout voir</button>
+    <span id="mq-etat-cap" class="console-etat" role="status"></span>
+  </div>
+</div>
+
+<!-- ====================== BANDEAU DE MESURE (hors produit) ================= -->
+<section class="mq-mesure" aria-label="Mesures">
+  <header class="mq-mesure-entete">
+    <strong>MESURE</strong>
+    <span id="mq-verdict" class="mq-verdict">calcul…</span>
+    <button type="button" id="mq-replier" class="mq-bouton">Déplier</button>
+  </header>
+  <div id="mq-mesure-corps" class="mq-mesure-corps" hidden>
+    <table class="mq-table">
+      <thead><tr><th>Écran</th><th>Caps au registre</th><th>Étoiles rendues</th><th>Noms affichés</th><th>Cible tactile</th><th>Hors cadre</th><th></th></tr></thead>
+      <tbody id="mq-lignes"></tbody>
+    </table>
+    <p class="mq-ligne mq-note-bas">
+      Le registre fait foi : autant d'étoiles que de caps déclarés, chacune
+      menant à la même cible. « Noms affichés » compte les libellés visibles en
+      permanence — sur un menu, un cap sans nom est un cap perdu. La cible
+      tactile est mesurée en pixels (plancher WCAG : 24).
+    </p>
+  </div>
+</section>
+
+<script src="../js/ciel.js"></script>
+<script type="module" src="preview-lv4-constellations.js"></script>
+</body>
+</html>
