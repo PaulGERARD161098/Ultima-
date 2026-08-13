@@ -280,6 +280,13 @@
           <!-- Le retour au cadrage mesuré : tout le réseau dans l'écran. -->
           <button type="button" id="ciel-tout-voir" class="bouton bouton-secondaire ciel-tout-voir"
                   aria-label="Tout voir : replacer tout le réseau dans l'écran">Tout voir</button>
+          <!-- La vue à plat : le volume reste le défaut, ceci est un recours
+               (appareil qui peine, fin de batterie, lecture immobile). L'état
+               est porté par aria-pressed — le bouton DIT dans quel mode on est,
+               sinon Paul retrouverait un ciel figé sans savoir pourquoi. -->
+          <button type="button" id="ciel-plat" class="bouton bouton-secondaire ciel-tout-voir"
+                  aria-pressed="false"
+                  aria-label="Vue à plat : figer le ciel, sans relief ni mouvement">À plat</button>
         </span>
         <label class="ciel-bascule">
           <input type="checkbox" id="ciel-derive"> Dérive lente

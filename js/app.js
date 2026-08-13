@@ -1850,6 +1850,17 @@
 
   // ---------- Ciel : la SEULE forme du réseau (2026-08-13) ----------
 
+  // La vue à plat est un RÉGLAGE, pas un état d'écran : elle survit au
+  // rechargement. `localStorage` et non `sessionStorage` — un appareil qui
+  // peine le fait à chaque ouverture, pas seulement dans l'onglet du jour.
+  var CLE_CIEL_PLAT = 'ultima-ciel-plat';
+  function cielPlatRetenu() {
+    try { return window.localStorage.getItem(CLE_CIEL_PLAT) === '1'; } catch (e) { return false; }
+  }
+  function retenirCielPlat(actif) {
+    try { window.localStorage.setItem(CLE_CIEL_PLAT, actif ? '1' : '0'); } catch (e) { /* navigation privée */ }
+  }
+
   // Ouverture d'une fiche depuis une étoile : la fiche est un overlay global,
   // on l'ouvre SANS quitter le ciel. Cette fonction vivait dans le bloc de
   // l'arbre — elle n'était pas à l'arbre, elle était PARTAGÉE : le ciel s'en
@@ -1919,7 +1930,8 @@
       surClicPersonne: ouvrirFichePersonneDepuisCiel,
       libellesType: LIBELLES_TYPE,
       libellesStatut: LIBELLES_STATUT,
-      correspond: correspond
+      correspond: correspond,
+      plat: cielPlatRetenu()
     });
 
     // L'aide de navigation revit à chaque rendu, et s'efface au premier geste.
@@ -1936,6 +1948,10 @@
     if (instance) {
       instance.derive($('#ciel-derive') && $('#ciel-derive').checked);
       if (etat.noeudCourant) { instance.choisir(etat.noeudCourant); }
+      // Le bouton dit ce que le MOTEUR fait, pas ce que le réglage demande :
+      // sous `prefers-reduced-motion`, le ciel s'impose à plat et le bouton
+      // doit le refléter, sinon il ment.
+      majBoutonPlat(instance.estPlat());
     }
 
     if (terme && message) {
@@ -1974,6 +1990,16 @@
     champNom.value = brut;
     champNom.focus();
     try { champNom.setSelectionRange(brut.length, brut.length); } catch (e) { /* non sélectionnable */ }
+  }
+
+  function majBoutonPlat(actif) {
+    var bouton = $('#ciel-plat');
+    if (!bouton) { return; }
+    bouton.setAttribute('aria-pressed', actif ? 'true' : 'false');
+    bouton.textContent = actif ? 'En volume' : 'À plat';
+    bouton.setAttribute('aria-label', actif
+      ? 'Revenir au ciel en volume'
+      : 'Vue à plat : figer le ciel, sans relief ni mouvement');
   }
 
   // État vide du ciel : sans bouton — le
@@ -4083,6 +4109,21 @@
       var vue = window.UltimaCiel && window.UltimaCiel.courant();
       if (vue) { vue.toutVoir(); }
     });
+    $('#ciel-plat').addEventListener('click', function () {
+      var vue = window.UltimaCiel && window.UltimaCiel.courant();
+      if (!vue) { return; }
+      var versPlat = !vue.estPlat();
+      vue.plat(versPlat);
+      // On retient l'état RÉEL : si le système impose le mode réduit, le clic
+      // n'a pas basculé et il ne faut pas mémoriser le contraire.
+      var reel = vue.estPlat();
+      retenirCielPlat(reel);
+      majBoutonPlat(reel);
+      if (reel !== versPlat) {
+        toast('Votre appareil demande moins de mouvement : le ciel reste à plat.');
+      }
+    });
+
     $('#ciel-derive').addEventListener('change', function (e) {
       var vue = window.UltimaCiel && window.UltimaCiel.courant();
       if (vue) { vue.derive(e.target.checked); }

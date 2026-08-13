@@ -69,12 +69,17 @@
     **100 % des tuiles OSM** (`*.tile…` ≠ domaine nu) — carte sans fond en prod,
     invisible depuis que le ciel est l'écran d'arrivée. Corrigé `middleware.js`,
     prouvé par `smoke-csp.mjs` (rouge→vert). **GATE merge (middleware).**
-  - 🔒 **S1 (faible, GATE)** : double-scellement FK `network_edges`/`journal`
-    (oracle UUID cross-owner, atténué v4). Migration **`0025` écrite, non
-    appliquée**.
+  - ✅ **S1 FERMÉ** : double-scellement FK `network_edges`/`journal` (oracle
+    UUID cross-owner, atténué v4). Migration **`0025` APPLIQUÉE le 2026-08-12
+    à 14 h 45** — vérifié en base le 2026-08-13 : les quatre FK sont
+    composites (`*_scelle`), les FK simples ont disparu, et le registre
+    `supabase_migrations` porte l'entrée. *Ce document a répété « écrite, non
+    appliquée » pendant un jour entier : la ligne était fausse, personne
+    n'était allé voir la base.*
   - ✅ **S2 fermé** : advisors rejoués (connecteur autorisé). Sécurité 0 lint
     réel ; perf = INFO. Le travail RIVEN du 12/08 : **sans faille (RAS prouvés)**.
-  - ⏳ **Actions Paul** : merge (dont S3) ; appliquer ou non `0025` (S1) ;
+  - ⏳ **Actions Paul** : arbitrer les index perf INFO (S2, non bloquant).
+    (Merge fait ; `0025` appliquée — voir S1 ci-dessus.) Ancienne liste :
     arbitrer les index perf INFO (S2, non bloquant).
 - ✅ **PR #158 FUSIONNÉE** (`fcc9739`, squash) au go de Paul — elle portait
   **les deux boucles ci-dessous** (RIVEN piloter/corriger/proposer + cadrage du
