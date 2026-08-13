@@ -367,3 +367,48 @@ Patrimoine complet : **57 harnais, 812 verdicts, sortie 0**.
 - Elle ne décide pas de la **disposition** d'un menu (les objets restent posés
   par `construireMonde` comme un amas de réseau). Si Paul veut une couronne ou
   une ligne, c'est un choix de forme — étape ③ ou ④, pas une correction.
+
+---
+
+## 12. Étape ③ — l'adaptateur descend en profondeur. Livrée le 2026-08-13.
+
+`design/adaptateur-lv4.mjs` gagne deux choses, et **aucune n'est nouvelle** :
+elles vivaient dans la maquette, elles vivent maintenant dans le module que la
+production appellera. Une maquette qui garde pour elle la logique dont la
+production aura besoin fait le travail deux fois, et la seconde fois autrement.
+
+- **`versCiel(idEcran, registre, { deplie })`** — les enfants du déplié
+  paraissent **sans quitter l'étage**, rattachés au parent par un trait, et
+  portant le **nom du parent** en constellation : « leur propre constellation
+  s'affiche », dicté par Paul. Signature à deux arguments inchangée.
+- **`cheminVers(id, registre)`** — le fil d'Ariane se **lit dans le registre**.
+  Une vue qui déduit sa propre hiérarchie finit par en déduire une autre que
+  celle du registre.
+
+**La garde a changé de camp.** « On ne déplie que ce qui appartient à l'étage »
+était une correction dans la maquette (le dépliage s'emballait : l'étoile qui
+vient de naître tombe sous le curseur immobile et se déplie à son tour). C'est
+désormais une règle de l'adaptateur. **Un garde-fou que chaque appelant doit
+penser à installer n'est pas un garde-fou.**
+
+`tests/unit-adaptateur-lv4.mjs` (nouveau, **24 verdicts**, unitaire pur — ni
+navigateur ni réseau) éprouve un **registre à trois étages construit** — le
+registre du jour ne garantit pas cette configuration, on ne l'espère pas, on la
+pose — et une **boucle parent↔enfant** : un registre malade ne doit pas emporter
+la page avec lui. Confidentialité **testée par l'absence** : aucune personne,
+aucune couleur inventée, registre lu et jamais écrit.
+
+Patrimoine : **58 harnais, 836 verdicts, sortie 0**.
+
+### ⏳ Ce qui attend Paul avant l'étape ④
+
+L'étape ④ touche les **neuf coques de production** et les **170 assertions de
+navigation**. Deux arbitrages la précèdent, et aucun n'est de mon ressort :
+
+1. **Le geste tactile** (§8) — candidat (a) implanté, à essayer à 390 px.
+2. **La disposition sur écran large.** Mesuré : les trois galaxies remplissent
+   **72 % de la hauteur** — la plus petite dimension, celle que fixe le
+   critère 3 — mais laissent la largeur presque vide, parce qu'un groupe de
+   trois se range en colonne. Sur téléphone c'est juste ; sur un 1280 c'est
+   creux. **Changer cela, c'est choisir une FORME** (couronne, ligne, grille) —
+   un parti pris visuel, pas une correction de cadrage. Je ne l'ai pas pris.

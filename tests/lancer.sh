@@ -67,6 +67,8 @@ echo "=== unit-relation-pilotage.mjs ==="
 node unit-relation-pilotage.mjs
 echo "=== unit-riven-detail.mjs ==="
 node unit-riven-detail.mjs
+echo "=== unit-adaptateur-lv4.mjs ==="
+node unit-adaptateur-lv4.mjs
 
 # 3. Serveur statique sur la racine du repo.
 (cd .. && python3 -m http.server 8123 >/dev/null 2>&1) &

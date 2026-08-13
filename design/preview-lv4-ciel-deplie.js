@@ -27,27 +27,15 @@ function noeud(id) { return NOEUDS[id] || {}; }
 // paraissent, rattachés à lui par un lien. On reste à l'étage, on n'engage
 // rien — c'est exactement ce que Paul a dicté (« quand je pose le curseur
 // dessus, leur propre constellation s'affiche »).
+// LE DÉPLIAGE A DÉMÉNAGÉ DANS L'ADAPTATEUR (étape ③, 2026-08-13). Il était
+// écrit ici ; il est désormais rendu par `versCiel(…, { deplie })`, avec sa
+// garde — on ne déplie que ce qui appartient à l'étage. Une maquette qui garde
+// pour elle la logique dont la production aura besoin fait le travail deux
+// fois, et la seconde fois autrement.
 function donneesEtage() {
-  var base = versCiel(courant(), NOEUDS);
+  var base = versCiel(courant(), NOEUDS, { deplie: deplie });
   if (!base) { return null; }
-  // Ce qui appartient à l'étage — par opposition à ce qu'un dépliage a fait
-  // apparaître. La distinction n'est pas cosmétique : voir `brancherSurvol`.
-  idsDuNiveau = base.noeuds.map(function (n) { return n.id; });
-  if (!deplie) { return base; }
-
-  var enfants = noeud(deplie).enfants || [];
-  var nomDeplie = noeud(deplie).nom || deplie;
-  enfants.forEach(function (idEnfant) {
-    var e = noeud(idEnfant);
-    base.noeuds.push({
-      id: idEnfant, nom: e.nom || idEnfant, type: 'cap',
-      statut: e.etat || '', secteur_activite: nomDeplie, cible: e.cible || null
-    });
-    base.relations.push({
-      source_id: deplie, target_id: idEnfant,
-      type: 'apport_affaires', statut: 'actif'
-    });
-  });
+  idsDuNiveau = base.idsDuNiveau;
   return base;
 }
 
