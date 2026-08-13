@@ -1,5 +1,13 @@
 # CADRAGE — LV4 : la console en constellations
 
+> ## ⛔ REMPLACÉ le 2026-08-13 (soir) par `CADRAGE-LV4-CIEL-DEPLIE.md`
+> Paul a changé de modèle en cours de journée : il ne veut plus « un écran =
+> une constellation, on change d'écran », mais **un ciel qui se déplie** — le
+> survol montre, le clic zoome. Ce document est **conservé, pas effacé** : sa
+> maquette et ses deux mesures (cadrage à 5 %, noms qui tombent à six) servent
+> encore, et c'est en le comparant au nouveau qu'on voit ce que le modèle
+> retenu coûte en plus.
+
 > Format 6 points (**directive EL**). Phase 2 de la demande dictée par Paul le
 > 2026-08-12 : *« on verra si on ne peut pas passer sur un thème stellaire, un
 > thème galaxie, un thème constellation pour Ultima LV4 […] quand on arrive
