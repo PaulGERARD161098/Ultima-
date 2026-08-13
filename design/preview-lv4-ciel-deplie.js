@@ -63,26 +63,25 @@ function rendre() {
 
   vue = window.UltimaCiel.rendre(document.getElementById('ciel-scene'), donnees, {
     libellesType: { cap: '' }, libellesStatut: {},
+    // ÉTAPE ② — les deux options du moteur, à la place du rattrapage par
+    // l'API publique qui plafonnait à 37,6 %. Ce n'est plus la maquette qui
+    // corrige le cadrage à coups de `zoomer` : c'est le moteur qui cadre juste
+    // du premier coup, parce qu'il connaît enfin l'étendue réelle des étoiles.
+    cadrerSurLesEtoiles: true,
+    tousLesNoms: true,
     surClicNoeud: surClic
   });
   if (vue) { vue.derive(false); }
   brancherSurvol();
-  cadrerSurLesObjets();
 }
 
 // ---------------------------------------------------------------------------
-// ③ LE CADRAGE — la réponse au défaut des 5 %
+// ③ LE CADRAGE — la mesure, gardée telle quelle
 // ---------------------------------------------------------------------------
-// Le moteur cadre LE MONDE (sphère de rayon 300) et non LES ÉTOILES : trois
-// caps occupaient 5 % de la largeur. Ici on approche la caméra jusqu'à ce que
-// les objets occupent vraiment le cadre — en n'utilisant QUE l'API publique
-// (`zoomer`). VERDICT, mesuré le 2026-08-13 sur un état propre : ça aide, et
-// ça NE SUFFIT PAS. Sans rien faire, les trois galaxies occupent 7,9 % du
-// cadre ; ce cadrage automatique les porte à 37,6 % ; et pousser l'API à son
-// plafond d'approche n'ajoute plus RIEN (37,6 % — le zoom bute sur ZOOM_MIN).
-// L'objectif est 60 %. C'est l'argument chiffré de l'étape ② : le dernier
-// tiers ne s'obtient QUE dans le moteur, où `distanceIdeale()` doit connaître
-// l'étendue réelle des étoiles au lieu du rayon du monde.
+// L'ÉTALON N'A PAS BOUGÉ D'UN IOTA entre l'étape ① et l'étape ② : c'est la même
+// fonction, au même endroit, qui a dit 7,9 % avant et qui dit 65 à 75 %
+// maintenant. Changer de yardstick en même temps que de moteur aurait rendu la
+// comparaison sans valeur — et flatteuse, ce qui est pire.
 function occupation() {
   var svg = document.querySelector('#ciel-scene .ciel-svg');
   if (!svg) { return 0; }
@@ -96,22 +95,13 @@ function occupation() {
   return Math.max(l, h);
 }
 
-// La caméra GLISSE vers sa cible : elle n'y est pas à la ligne suivante. Une
-// première version bouclait en synchrone et mesurait avant que rien n'ait
-// bougé — elle « cadrait » sur une image qui n'existait pas encore. On avance
-// donc par pas, en laissant chaque pas s'accomplir.
-function cadrerSurLesObjets(tours) {
-  if (!vue) { return; }
-  tours = tours || 0;
-  if (tours > 12) { return; }
-  if (occupation() >= 0.6) { return; }
-  // APPROCHER = delta NÉGATIF (js/app.js : le bouton « + » appelle
-  // `zoomer(-0.18)`). Ma première version poussait +0,25 : elle s'ÉLOIGNAIT en
-  // croyant approcher. Vérifié dans le produit avant de conclure quoi que ce
-  // soit sur le moteur.
-  vue.zoomer(-0.25);
-  window.setTimeout(function () { cadrerSurLesObjets(tours + 1); mesurer(); }, 180);
-}
+// CE QUI A REMPLACÉ LE RATTRAPAGE — trace de l'étape ②, gardée parce qu'elle
+// explique le chiffre. La maquette approchait elle-même la caméra par pas de
+// `zoomer(-0.25)` : elle portait les trois galaxies de 7,9 % à 37,6 %, puis
+// butait sur ZOOM_MIN sans jamais atteindre les 60 % exigés. Le rattrapage a
+// disparu au profit des options `cadrerSurLesEtoiles` / `tousLesNoms` : le
+// dernier tiers ne s'obtenait pas depuis l'extérieur du moteur, et il ne se
+// négociait pas — il se corrigeait à la source.
 
 // ---------------------------------------------------------------------------
 // Les gestes
@@ -133,11 +123,18 @@ function surClic(id) {
   attenteTap = null;
 
   if ((n.enfants || []).length > 0) {
-    chemin.push(id);
-    deplie = null;
+    // ÉTAPE ② — la troisième capacité : on ENTRE en s'approchant, pas en
+    // changeant d'écran. La caméra vient sur l'objet touché, et l'étage suivant
+    // s'ouvre au bout de ce mouvement. C'est ce que Paul a dicté : « ça fait
+    // une sorte de zoom et ça affiche les projets », pas un changement de page.
+    if (vue) { vue.zoomerVers(id); }
+    window.setTimeout(function () {
+      chemin.push(id);
+      deplie = null;
+      rendre();
+      mesurer();
+    }, 260);
     message.textContent = '';
-    rendre();
-    mesurer();
     return;
   }
   // ④ Une feuille — ou une galaxie sans contenu, comme ALTHEA.

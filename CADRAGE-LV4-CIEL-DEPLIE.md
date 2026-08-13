@@ -82,15 +82,15 @@ changent, et les taire serait mentir sur le coût :
 
 ## 2. ② Les étapes — une seule ouverte à la fois
 
-1. **La maquette du DÉPLIAGE** (`design/preview-lv4-ciel-deplie.html`), sur le
+1. ✅ **La maquette du DÉPLIAGE** (`design/preview-lv4-ciel-deplie.html`), sur le
    vrai registre et le vrai moteur. Elle rend : les trois galaxies à l'arrivée ;
    **le survol qui déplie** ; **le clic qui zoome** jusqu'à une page de travail ;
    le retour ; **ALTHEA** (galaxie sans contenu) ; un cap « à venir » ; le pire
    cas à douze. **→ arbitrage de Paul**, dont le geste tactile (§8).
-2. **Le moteur** : `js/ciel.js` gagne trois capacités, **inactives par défaut** —
-   cadrer sur l'étendue réelle, montrer tous les noms sous un seuil, **zoomer
-   vers un nœud** (la caméra sait déjà viser : `viser()` existe). RIVEN ne bouge
-   pas : ses **54 assertions** tournent avant et après.
+2. ✅ **Le moteur** : `js/ciel.js` gagne trois capacités, **inactives par
+   défaut** — cadrer sur l'étendue réelle, montrer tous les noms sous un seuil,
+   **zoomer vers un nœud**. RIVEN n'a pas bougé : ses assertions ont tourné
+   avant et après, vertes les deux fois, sans une retouche. **Livré — voir §11.**
 3. **L'adaptateur** registre → ciel — déjà écrit et éprouvé par la maquette du
    matin — étendu à la profondeur : une galaxie connaît ses nébuleuses.
 4. **Les neuf coques** passent au ciel et au thème stellaire.
@@ -256,8 +256,114 @@ attend une cible *immobile* attend pour toujours — il faut déclencher les
 
 - ✅ **Maquette du dépliage livrée** (§10) — trois galaxies, survol qui déplie,
   clic qui descend, fil, retour, Léo à chaque étage, geste tactile (candidat a).
-- 🔴 **L'étape ② est justifiée par la mesure** : l'API publique plafonne à
-  **37,6 %** d'occupation là où il en faut **60**. Le cadrage se corrige dans le
-  moteur, options inactives par défaut, RIVEN protégé par ses 54 assertions.
+- ✅ **Étape ② livrée** (§11) — les trois capacités, inactives par défaut.
+  L'occupation passe de **7,9 %** à **65–75 %** (objectif 60), zéro sortie de
+  cadre, tous les noms lisibles. RIVEN vert avant et après, sans une retouche.
 - ✅ **Mot confirmé** : c'était « **que Léo me guide** » (critère 4bis).
 - **Trancher le geste tactile** (§8) sur la maquette, à 390 px.
+
+---
+
+## 11. Étape ② — les trois capacités du moteur. Livrée le 2026-08-13.
+
+**Périmètre tenu** : `js/ciel.js` uniquement, **trois options inactives par
+défaut**. RIVEN n'en active aucune ; sans option, pas une de ces valeurs n'est
+lue et le chemin de rendu reste celui d'hier.
+
+### Ce qui a été implanté
+
+| Capacité | Option | Ce qu'elle fait |
+|---|---|---|
+| Cadrer sur l'étendue réelle | `cadrerSurLesEtoiles` | Recentre le nuage sur l'origine, puis déduit la distance de **chaque étoile** et de **chaque axe**, à l'orientation courante. |
+| Montrer tous les noms | `tousLesNoms` | Tous les noms permanents **et lisibles** sous 14 objets ; retour aux six au-delà. |
+| Approcher un nœud | `zoomerVers(id)` | La caméra vient sur le nœud **et** s'en rapproche. `false` si le nœud est inconnu. |
+
+### 🔻 LA CAUSE RÉELLE DU DÉFAUT — elle n'était pas celle annoncée
+
+L'étape ① concluait : « `distanceIdeale()` doit connaître l'étendue réelle des
+étoiles ». C'était vrai, et **insuffisant**. La cause complète est double, et la
+seconde moitié n'apparaît qu'en écrivant le code :
+
+1. **La caméra tourne autour de l'ORIGINE**, et un étage LV4 n'a qu'**un seul
+   groupe** — tous les caps d'un écran partagent le même « secteur ».
+   `construireMonde` pose donc le centre de l'amas à 228 de l'origine et serre
+   les étoiles dans 55 de rayon autour de lui. La caméra cadrait une sphère de
+   250 pour montrer un nuage de 55, **centré ailleurs qu'où elle regardait**.
+   Elle cadrait du vide, très correctement.
+2. **La formule majorait le danger.** Premier jet du correctif : borner par le
+   rayon du nuage, en supposant la pire étoile à la fois latérale de R et
+   avancée de R. Vrai pour une sphère, **faux pour douze points** — aucune
+   étoile n'est jamais aux deux extrêmes en même temps. Mesuré : **45,8 %**
+   d'occupation, toujours sous les 60 exigés. Écrite sur les étoiles réelles,
+   axe par axe, à l'orientation courante, elle donne le cadrage **le plus serré
+   qui garde tout le monde dedans**.
+
+**La contradiction relevée par la maquette (« remplir le cadre » contre « garder
+tout le monde dedans ») n'en était pas une** : la formule d'hier était trop
+naïve d'un côté — elle ignorait la perspective, donc promettait un cadrage
+qu'elle ne tenait pas — et trop prudente de l'autre. Les deux exigences tiennent
+ensemble dès qu'on écrit la contrainte sur les étoiles au lieu du monde.
+
+### 🔻 UN SECOND DÉFAUT, TROUVÉ PAR LA MESURE SEULE
+
+Rendre les douze noms « permanents » n'en rendait lisibles que **quatre**. La
+classe permanente ne fait que retirer `ciel-nom--demande` ; l'opacité, elle, est
+repeinte à chaque image et retombe à 0,25 pour tout ce qui est au fond. **Un nom
+permanent illisible n'est pas un nom permanent.** La capacité ② était à moitié
+fausse à son premier jet, et c'est la mesure qui l'a dit — pas la relecture.
+Corrigé : en mode menu, la profondeur n'éteint plus un nom (elle reste lisible
+sur l'étoile, qui continue de s'estomper) ; le filtre de recherche garde tous
+ses droits.
+
+### Les chiffres — mesurés, pas regardés
+
+`tests/smoke-lv4-ciel.mjs` (nouveau, 46 verdicts) éprouve **390 px et 1280 px**,
+et un **pire cas construit à 12 puis 20 objets**.
+
+| Configuration | Occupation | Hors cadre | Noms lisibles |
+|---|---|---|---|
+| Sans option (témoin) | 31,7 % / 32,1 % | 0 | 3 sur 12 |
+| 3 objets, cadrage serré | **67,9 %** / **72,0 %** | 0 | 3 sur 3 |
+| 12 objets, cadrage serré | **65,4 %** / **75,2 %** | 0 | 12 sur 12 |
+| 20 objets (au-delà du seuil) | — | 0 | dégradé à 6, volontairement |
+
+Rappel du chemin : **7,9 %** au repos ce matin → **37,6 %** au plafond de l'API
+publique → **65 à 75 %** maintenant, pour un objectif de **60 %**.
+
+Approcher : la caméra passe de 326 à 181 (téléphone) et de 155 à 97 (bureau), et
+le nœud visé vient à **moins de 7,5 %** du centre du cadre.
+
+**Le hors-cadre se mesure sur la `getBBox()` de chaque étoile** — halo, branches
+et nom compris, pas le seul centre : mesurer le centre laisserait passer un nom
+coupé.
+
+### Deux instruments écartés — parce qu'ils mentaient
+
+Fidèle à la leçon du 2026-08-01 (« une conclusion tirée d'un instrument mal
+réglé est une accusation, pas une mesure ») :
+
+- **Le rayon de l'étoile visée** : **saturé**. Il plafonne à 9, la zone tactile
+  à 21,6 ; il lisait « 21,6 avant, 21,6 après » sur une caméra qui avait
+  pourtant parcouru un tiers du monde.
+- **L'étalement horizontal du ciel** : **confondu**. `zoomerVers` tourne aussi
+  le monde, et la rotation change l'étendue latérale pour une raison qui n'est
+  pas l'approche. Un instrument qui mesure deux causes à la fois n'en prouve
+  aucune.
+
+Retenus à la place : la distance réelle de la caméra (nouvellement exposée,
+`distance()`) et l'écart au centre du nœud visé — deux grandeurs non saturées,
+qui répondent chacune à une moitié de la promesse.
+
+### Critère 8 — RIVEN intact
+
+`smoke-ciel.mjs` a tourné **avant** la première ligne et **après** la dernière,
+**vert les deux fois, sans une retouche**, cible tactile identique (25 px).
+Patrimoine complet : **57 harnais, 812 verdicts, sortie 0**.
+
+### Ce que l'étape ② ne fait PAS
+
+- Elle ne touche à **aucun écran de production** : les options ne sont activées
+  que dans la maquette. Les coques LV3, c'est l'étape ④.
+- Elle ne décide pas de la **disposition** d'un menu (les objets restent posés
+  par `construireMonde` comme un amas de réseau). Si Paul veut une couronne ou
+  une ligne, c'est un choix de forme — étape ③ ou ④, pas une correction.
