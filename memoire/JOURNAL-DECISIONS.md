@@ -2682,3 +2682,68 @@
 - **Ce qui a sauvé la mise** : ne jamais lancer un SQL sans le relire ET sans
   regarder l'état réel. La tentative d'application a d'ailleurs échoué proprement
   (« constraint already exists »), la transaction a tout annulé : rien de cassé.
+
+## 2026-08-13 (soir) — le moteur cadrait du vide, très correctement
+
+- **Paul : « Go pour étape 2 / Avance autant que tu peux sans moi ».** Livré les
+  étapes ② (les trois capacités du moteur) et ③ (l'adaptateur en profondeur).
+  Arrêté avant l'étape ④, qui touche neuf écrans de production et attend deux
+  arbitrages de Paul.
+- **LA CAUSE ANNONCÉE N'ÉTAIT QU'UNE MOITIÉ DE LA CAUSE.** L'étape ① concluait
+  « `distanceIdeale()` doit connaître l'étendue réelle des étoiles ». Vrai, et
+  insuffisant. La caméra tourne autour de **l'origine**, or un étage LV4 n'a
+  qu'un groupe, dont `construireMonde` pose le centre à 228 de là : elle cadrait
+  une sphère de 250 pour montrer un nuage de 55, **centré ailleurs qu'où elle
+  regardait**. Un diagnostic tiré d'une maquette est une piste, pas un verdict —
+  la moitié manquante n'apparaît qu'en écrivant le code.
+- **MAJORER LE DANGER COÛTE AUSSI CHER QUE L'IGNORER.** Premier correctif :
+  borner par le rayon du nuage, en supposant la pire étoile à la fois la plus
+  latérale et la plus avancée. Vrai pour une sphère, **faux pour douze points**.
+  Mesuré : 45,8 % d'occupation, sous l'objectif de 60. Écrite sur les étoiles
+  réelles, axe par axe, à l'orientation courante, la contrainte donne le cadrage
+  le plus serré qui garde tout le monde dedans. **La « contradiction » entre
+  remplir le cadre et n'en faire sortir personne n'existait pas** : une formule
+  trop naïve d'un côté, trop prudente de l'autre. 7,9 % → 37,6 % → **65 à 75 %**.
+- **UN NOM PERMANENT ILLISIBLE N'EST PAS UN NOM PERMANENT.** Rendre les douze
+  noms permanents n'en rendait lisibles que quatre : la classe ne fait que
+  retirer `--demande`, tandis que l'opacité est repeinte à chaque image et
+  retombe à 0,25 au fond. La capacité était à moitié fausse à son premier jet.
+  **C'est la mesure qui l'a dit, pas la relecture.**
+- **DEUX INSTRUMENTS ONT MENTI AVANT D'ÊTRE REMPLACÉS.** Le rayon de l'étoile
+  visée : **saturé** (plafond de 9), il lisait « 21,6 avant, 21,6 après » sur une
+  caméra qui avait parcouru un tiers du monde. L'étalement du ciel :
+  **confondu** — `zoomerVers` tourne aussi le monde. *Un instrument qui mesure
+  deux causes à la fois n'en prouve aucune ; une grandeur saturée ne prouve rien
+  du tout.* Retenus : la distance réelle de la caméra et l'écart au centre.
+- **UN TROISIÈME DÉFAUT EST VENU D'UNE CAPTURE, PAS DU HARNAIS** : « ULTIMA »
+  écrit en 36 px en travers du ciel. Le harnais ne regardait que les
+  `g.ciel-etoile` — l'étiquette de constellation n'en est pas une. **Un harnais
+  qui ne regarde qu'une partie de ce qui est peint ne dit rien de ce qui est
+  peint.** Rebouché des deux côtés : le plafond dans le moteur, la mesure dans
+  le harnais. *Deuxième fois de la semaine qu'une capture voit ce que la mesure
+  ne regardait pas — la première, c'était le cartouche or sur parchemin.*
+- **NUANCE À NE PAS CONFONDRE AVEC LA LEÇON DU 12** (« la `getBBox()` du ciel
+  inventait un débordement »). Ce jour-là c'était la boîte du ciel ENTIER, dont
+  les halos débordent volontairement et sont rognés. Ici c'est la `getBBox()` de
+  **chaque étoile**, et le critère est **plus strict à dessein** : sur un
+  RÉSEAU, un halo lointain rogné au bord ne gêne personne ; sur un **MENU**, une
+  entrée rognée au bord a l'air cassée. Même outil, deux contextes, deux
+  critères — et c'est le contexte qui décide, pas l'outil.
+- **L'ÉTALON N'A PAS BOUGÉ.** L'occupation est mesurée par la même fonction, au
+  même endroit, avant et après. Changer de yardstick en même temps que de moteur
+  aurait rendu la comparaison sans valeur — et flatteuse, ce qui est pire.
+- **UN GARDE-FOU QUE L'APPELANT DOIT PENSER À INSTALLER N'EN EST PAS UN.** La
+  garde anti-emballement du dépliage vivait dans la maquette ; elle est passée
+  dans l'adaptateur avec le dépliage lui-même.
+- **Critère 8 tenu** : `smoke-ciel` vert avant la première ligne et après la
+  dernière, **sans une retouche**, cible tactile identique (25 px). Les trois
+  options sont **inactives par défaut** — c'est ce qui rend la promesse tenable
+  plutôt que surveillée.
+- **Vérifié** : patrimoine COMPLET — **58 harnais, 836 verdicts, sortie 0**
+  (55/742 il y a deux jours).
+- **CE QUE JE N'AI PAS TRANCHÉ, ET POURQUOI.** Sur écran large, les trois
+  galaxies remplissent 72 % de la hauteur — le critère — mais laissent la
+  largeur creuse, parce qu'un groupe de trois se range en colonne. Y remédier,
+  c'est choisir une **forme** (couronne, ligne, grille) : un parti pris visuel,
+  pas une correction de cadrage. *Le critère est atteint ; le reste appartient à
+  Paul.*
