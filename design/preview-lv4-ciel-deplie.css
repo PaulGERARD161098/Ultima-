@@ -1,0 +1,69 @@
+/* Maquette LV4 — le ciel qui se déplie. Habillage de la coque et du fil ;
+   le ciel et le thème viennent de ../css/ciel.css et ../css/stellaire.css. */
+
+body { margin: 0; min-height: 100vh; display: flex; flex-direction: column;
+       font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+
+.mq-barre {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .8rem;
+  padding: .5rem .8rem; background: #050b14; border-bottom: 1px solid var(--bordure);
+}
+.mq-titre { font-family: var(--police-ancienne); letter-spacing: .1em; font-size: .88rem; color: #d8bd82; }
+.mq-note { font-size: .74rem; font-style: italic; color: var(--encre-douce); }
+.mq-bouton {
+  font: inherit; font-size: .76rem; padding: .3rem .6rem; cursor: pointer;
+  color: var(--encre-douce); background: var(--blanc);
+  border: 1px solid var(--bordure); border-radius: 3px;
+}
+.mq-bouton:hover { background: var(--nuit-relief); color: var(--encre); }
+.mq-bouton[aria-pressed="true"] { color: #0a1220; background: #d8bd82; border-color: #d8bd82; font-weight: 700; }
+#mq-racine { margin-left: auto; }
+
+.ciel-coque {
+  flex: 1; min-height: 0; display: flex; flex-direction: column; gap: .55rem;
+  padding: .7rem .9rem 4rem; max-width: 1100px; width: 100%; margin: 0 auto;
+}
+
+/* ⑤ LE FIL — la réponse au premier risque : un ciel où l'on se perd. */
+.fil { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem; min-height: 1.6rem; }
+.fil-etape {
+  font: inherit; font-size: .8rem; padding: .2rem .45rem; cursor: pointer;
+  color: var(--encre-douce); background: none; border: none; border-radius: 3px;
+}
+.fil-etape:hover { color: #d8bd82; text-decoration: underline; }
+.fil-etape[aria-current="true"] { color: #d8bd82; font-weight: 700; }
+.fil-sep { color: var(--or-antique); font-size: .8rem; }
+
+.ciel-entete { display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem .8rem; }
+.ciel-entete .cartouche-titre { font-size: 1.25rem; }
+.ciel-scene { flex: 1; min-height: 320px; }
+
+/* ⑥ LÉO — elle parle à chaque étage. */
+.leo {
+  padding: .55rem .8rem; background: var(--parchemin-carte);
+  border: 1px solid var(--bordure); border-radius: 3px;
+}
+.leo-parole { margin: 0; font-size: .88rem; line-height: 1.45; color: var(--encre); }
+.leo-conseil { margin: .3rem 0 0; font-size: .84rem; font-style: italic; color: #d8bd82; }
+
+.ciel-outils { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+
+.mq-mesure {
+  position: fixed; inset: auto 0 0 0; z-index: 1400; background: #02060c;
+  border-top: 1px solid var(--or-antique); font-size: .78rem; max-height: 44vh; overflow: auto;
+}
+.mq-mesure-entete { display: flex; align-items: center; gap: .7rem; padding: .4rem .8rem; }
+.mq-mesure-entete strong { letter-spacing: .18em; color: #d8bd82; }
+.mq-verdict { font-weight: 700; }
+.mq-verdict--ok { color: var(--succes); }
+.mq-verdict--defaut { color: var(--danger); }
+.mq-mesure-entete .mq-bouton { margin-left: auto; }
+.mq-mesure-corps { padding: .5rem .8rem .8rem; }
+.mq-table { width: 100%; border-collapse: collapse; }
+.mq-table th, .mq-table td { text-align: left; padding: .22rem .5rem .22rem 0; border-bottom: 1px solid rgba(169,136,74,.12); }
+.mq-table th { font-weight: 600; color: #d8bd82; }
+.mq-table td { color: var(--encre-douce); }
+.mq-ligne { margin: .4rem 0 0; color: var(--encre-douce); }
+.mq-note-bas { font-style: italic; }
+.mq-ok { color: var(--succes); font-weight: 700; }
+.mq-defaut { color: var(--danger); font-weight: 700; }

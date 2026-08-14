@@ -41,70 +41,17 @@ export function positions(n) {
 }
 
 // ======================= COCKPIT (fonctions pures) =======================
-// Reprises telles quelles de la boussole LV2 (js/boussole.js), recalées sur les
-// identifiants Lv3. N'accueillent QUE des entiers + du texte statique → sûres
-// en innerHTML. Testées dans tests/unit-registre-lv3.mjs.
-
-function n(v) { return Math.max(0, parseInt(v, 10) || 0); }
-function s(compte) { return compte > 1 ? 's' : ''; }
-
-// Le « vrai en cours » d'un cap. null s'il n'y a pas d'agrégat pour ce cap.
-export function ligneVivante(id, data) {
-  if (!data) return null;
-  // TAO — cap agrégé (RESHIRAM + ZEKROM réunis) : le réel ET l'idéal en une ligne.
-  if (id === 'tao' && (data.reshiram || data.zekrom)) {
-    const rt = data.reshiram || {};
-    const zt = data.zekrom || {};
-    const tt = n(rt.talents);
-    const it = n(zt.ideaux);
-    return tt + ' talent' + s(tt) + ' réel' + s(tt) + ' · ' + n(rt.a_etayer) + ' à étayer'
-      + ' — ' + it + ' ' + (it > 1 ? 'idéaux' : 'idéal') + ' · ' + n(zt.a_orienter) + ' à orienter.';
-  }
-  if (id === 'reshiram' && data.reshiram) {
-    const r = data.reshiram;
-    const t = n(r.talents);
-    return t + ' talent' + s(t) + ' réel' + s(t) + ' · ' + n(r.a_etayer) + ' à étayer.';
-  }
-  if (id === 'zekrom' && data.zekrom) {
-    const z = data.zekrom;
-    const i = n(z.ideaux);
-    const a = n(z.acquis);
-    return i + ' ' + (i > 1 ? 'idéaux' : 'idéal') + ' · ' + n(z.a_orienter)
-      + ' à orienter · ' + a + ' talent' + s(a) + ' relié' + s(a)
-      + ' (acquis), ' + n(z.a_construire) + ' à construire.';
-  }
-  return null;
-}
-
-// Le signal « à traiter » d'un cap : un badge discret qui ne s'allume QUE quand
-// un compte actionnable est > 0 (la donnée dort, s'allume quand elle compte).
-export function signalDe(id, data) {
-  if (!data) return null;
-  const relances = n((data.riven || {}).relances_dues);
-  const aEtayer = n((data.reshiram || {}).a_etayer);
-  const aOrienter = n((data.zekrom || {}).a_orienter);
-
-  function morceaux(avecRelances, avecTao) {
-    const parts = [];
-    if (avecRelances && relances > 0) parts.push(relances + ' relance' + s(relances) + ' due' + s(relances));
-    if (avecTao && aEtayer > 0) parts.push(aEtayer + ' talent' + s(aEtayer) + ' à étayer');
-    if (avecTao && aOrienter > 0) parts.push(aOrienter + ' ' + (aOrienter > 1 ? 'idéaux' : 'idéal') + ' à orienter');
-    return parts.length ? parts.join(' · ') : null;
-  }
-
-  // La supra-division cumule ce que ses quadrants ont à traiter ; chaque
-  // macro-quadrant (GRIMA / NAGA) ne cumule que les siens.
-  if (id === 'ultima-perso') return morceaux(Boolean(data.riven), Boolean(data.reshiram || data.zekrom));
-  if (id === 'grima') return morceaux(Boolean(data.riven), false);
-  if (id === 'naga') return morceaux(false, Boolean(data.reshiram || data.zekrom));
-  if (id === 'riven') return morceaux(Boolean(data.riven), false);
-  if (id === 'tao') return morceaux(false, Boolean(data.reshiram || data.zekrom));
-  if (id === 'reshiram') return aEtayer > 0 ? aEtayer + ' talent' + s(aEtayer) + ' à étayer' : null;
-  if (id === 'zekrom') {
-    return aOrienter > 0 ? aOrienter + ' ' + (aOrienter > 1 ? 'idéaux' : 'idéal') + ' à orienter' : null;
-  }
-  return null;
-}
+// EXTRAITES le 2026-08-13 dans js/cockpit-parole.mjs — le ciel de navigation
+// (étape ④a) en a besoin, et importer CE module pour deux fonctions pures
+// entraînerait son démarrage automatique. Elles sont RÉ-EXPORTÉES ici : rien
+// ne change pour qui les importe, ni pour `window.UltimaBoussole`, ni pour les
+// harnais. C'est le critère de réussite de l'extraction — smoke-boussole doit
+// passer SANS UNE RETOUCHE.
+// Importées ET ré-exportées : `export … from` seul ne les lierait PAS dans ce
+// module, or `afficherResume` et les deux globaux d'introspection s'en servent
+// ici même. La forme courte aurait compilé et cassé à l'exécution.
+import { ligneVivante, signalDe } from './cockpit-parole.mjs';
+export { ligneVivante, signalDe };
 
 // ============================== RENDU ==============================
 export function rendre(idNoeud, options = {}) {

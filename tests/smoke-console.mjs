@@ -74,7 +74,11 @@ await preparerRoutes(page);
 // ============ A. La boussole ULTIMA (ultima.html) : deux macro-quadrants ============
 console.log('— A. Supra-division ULTIMA : GRIMA + NAGA —');
 await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
-await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
+// ULTIMA EST PASSÉE AU CIEL (étape ④a). Chaque assertion de cette section a
+// été reprise et CLASSÉE — portée, remplacée, ou abandonnée avec sa raison.
+// Le bandeau, le retour, le cartouche et le repli ne bougent pas : ils
+// appartiennent à la coque, pas au moteur.
+await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
 
 // Le bandeau ne peut pas dériver du registre sans que ce harnais le voie.
 const surligne = (await page.locator('h1.console-titre .titre-surligne').textContent())?.trim();
@@ -96,9 +100,15 @@ verifier('Cartouche invisible et muet au repos',
 //   soit le nombre de cadrans. Un test qui compte en dur se refait à chaque
 //   dictée ; un test qui compare à la source de vérité tient.
 const attendus = capsDe('ultima-perso').map((c) => c.nom);
-const noms = (await page.locator('.cap .cap-nom').allTextContents()).map((n) => n.trim());
+// REMPLACÉE : les noms se lisent sur les étoiles. L'ORDRE est abandonné avec
+// sa raison — une constellation range par géométrie, l'ordre du DOM y suit la
+// profondeur et non le registre. On compare des ensembles ; la garantie qui
+// comptait (les cadrans du registre, tous et rien qu'eux) est intacte.
+const noms = (await page.locator('#ciel-noeud-scene text.ciel-nom').allTextContents())
+  .map((n) => n.trim());
 verifier('les cadrans rendus = ceux du registre',
-  JSON.stringify(noms) === JSON.stringify(attendus), `trouvés: ${JSON.stringify(noms)}`);
+  JSON.stringify(noms.slice().sort()) === JSON.stringify(attendus.slice().sort()),
+  `trouvés: ${JSON.stringify(noms)}`);
 // La ligne du dessus comparait bien au registre — et celle-ci figeait la liste
 // juste en dessous, exactement ce que le commentaire ci-dessus interdit. Elle
 // est tombée au déplacement d'ALTHEA (2026-08-07). Corrigée : ALTHEA a quitté
@@ -108,29 +118,69 @@ verifier('ALTHEA n’est plus un cadran d’ULTIMA (il pend à la racine)',
 
 // Chaque cadran est cliquable et ouvre sa porte — celles du registre, pas une
 // liste recopiée à la main.
-const hrefs = await page.locator('a.cap').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
-for (const attendu of capsDe('ultima-perso').map((c) => c.cible)) {
-  verifier(`Porte ouverte vers ${attendu}`, hrefs.includes(attendu), JSON.stringify(hrefs));
+// REMPLACÉE — et c'est le portage le plus coûteux de la migration, alors il
+// est écrit noir sur blanc. La boussole faisait de chaque cap un `<a href>` ;
+// l'étoile du ciel est un `<g role="button">`. On a ESSAYÉ l'ancre SVG pour
+// garder l'href : mesuré, elle FAIT PERDRE LE FOCUS CLAVIER à l'étoile. Le
+// clavier passe avant, l'ancre est tombée.
+// Ce qui est PERDU, et que personne ne doit découvrir plus tard : le clic du
+// milieu, « ouvrir dans un nouvel onglet », « copier l'adresse du lien ». Ce
+// qui est CONSERVÉ : le repli <noscript> liste toutes les portes, et chaque
+// étoile mène bien où le registre dit — ce qu'on ne lit plus dans un attribut,
+// on l'éprouve donc en CLIQUANT, ce qui est une preuve plus forte.
+for (const attendu of capsDe('ultima-perso')) {
+  await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
+  await page.locator(`#ciel-noeud-scene .ciel-etoile[data-noeud-id="${attendu.id}"]`)
+    .dispatchEvent('click');
+  await page.waitForURL(`**/${attendu.cible}`, { timeout: 8000 }).catch(() => {});
+  verifier(`Porte ouverte vers ${attendu.cible}`, page.url().endsWith(attendu.cible), page.url());
 }
+await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
+await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
 verifier('Aucun cap inerte (aria-disabled / à venir)',
-  (await page.locator('.cap[aria-disabled], .cap--avenir').count()) === 0);
+  (await page.locator('#ciel-noeud-scene .ciel-etoile[aria-disabled]').count()) === 0);
+// Éprouvé sur le REGISTRE : aucun cap de cet étage ne se déclare externe. Au
+// ciel, « externe » n'est plus un attribut du DOM mais une branche du code
+// (`window.open`), donc c'est la source qui fait foi.
 verifier('Aucun cap externe à cet étage (tout est interne)',
-  (await page.locator('.cap[target="_blank"]').count()) === 0);
+  capsDe('ultima-perso').every((c) => !c.externe));
 
 // La devise de chaque cadran tient lieu de badge (dictée : le sous-titre).
+// REMPLACÉE : la devise était un badge peint en permanence sous le cap ; au
+// ciel elle est DITE par Léo quand on approche l'étoile. Même information, même
+// source (le registre), autre moment. On la lit donc là où elle se donne.
 async function etatDe(id) {
-  return (await page.locator(`.cap[data-id="${id}"] .cap-etat`).textContent())?.trim();
+  await page.locator(`#ciel-noeud-scene .ciel-etoile[data-noeud-id="${id}"]`)
+    .dispatchEvent('mouseenter');
+  await page.waitForTimeout(150);
+  return (await page.locator('#boussole-parole .parole-etat').textContent())?.trim();
 }
 verifier('GRIMA — badge « Ce qui est utile »', (await etatDe('grima')) === 'Ce qui est utile');
 verifier('NAGA — badge « Ce qui fait grandir »', (await etatDe('naga')) === 'Ce qui fait grandir');
 
 // Le cœur gravé + sa légende (pièce ④ du patron).
-verifier('Cœur gravé au centre', (await page.locator('.boussole-coeur svg').count()) === 1);
-const legende = (await page.locator('.boussole-legende').textContent())?.trim();
+// REMPLACÉE : le cœur n'est plus au centre du plateau — le centre, au ciel,
+// est là où la caméra regarde. Il est gravé en sceau dans l'angle. La fonction
+// (l'identité gravée du nœud est présente) est tenue, sa place change.
+verifier('Cœur gravé au centre', (await page.locator('.ciel-filigrane svg').count()) === 1);
+const legende = (await page.locator('.ciel-legende').textContent())?.trim();
 verifier('Légende gravée = celle du registre', legende === NOEUDS['ultima-perso'].legende, `lu: ${legende}`);
-// Une aiguille par cadran — la géométrie suit le registre, pas un nombre écrit.
-verifier('une aiguille par cadran',
-  (await page.locator('.boussole-aiguilles .aiguille').count()) === attendus.length,
+// ABANDONNÉE, ET VOICI POURQUOI. L'aiguille joignait le CENTRE de la rose à
+// chaque cap : elle disait « ceci part d'ici ». Un ciel n'a pas de centre d'où
+// partir — les étoiles ne rayonnent pas d'un moyeu, elles occupent un volume.
+// L'assertion ne perd aucune garantie de navigation : « une aiguille par
+// cadran » vérifiait que la géométrie suit le registre, et c'est exactement ce
+// que fait, plus directement, « les cadrans rendus = ceux du registre »
+// ci-dessus. On la remplace donc par le contrôle qu'elle approchait.
+// LE COMPTE SE LIT SUR UN CIEL AU REPOS. Un survol DÉPLIE le cap approché et
+// fait naître ses enfants : compter après avoir survolé, c'est compter deux
+// étages. On repart donc d'une page neuve — trouvé en voyant ce contrôle
+// tomber juste après les contrôles de devise, qui survolent.
+await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
+await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
+verifier('une étoile par cadran, ni plus ni moins',
+  (await page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id]').count()) === attendus.length,
   `${attendus.length} attendues`);
 
 // Retour vers la racine (pièce ① du patron).
@@ -138,43 +188,73 @@ verifier('Retour vers la boussole racine',
   (await page.locator('.console-retour a[href="/"]').count()) === 1);
 
 // La parole de Léo au survol d'un cadran : la devise et le contenu.
-const capGrima = page.locator('a.cap[data-id="grima"]');
-await capGrima.hover();
+// `hover()` EXPIRE sur le ciel : la caméra glisse de façon asymptotique, donc
+// aucun élément n'est jamais « stable » au sens de Playwright. On envoie
+// l'événement, comme partout ailleurs dans le patrimoine.
+const capGrima = page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="grima"]');
+await capGrima.dispatchEvent('mouseenter');
 await page.waitForSelector('#boussole-parole.is-actif', { timeout: 5000 });
 const parole = (await page.locator('#boussole-parole').textContent()) || '';
 verifier('Survol GRIMA : la parole de Léo se dépose',
   /GRIMA/.test(parole) && /réseau commercial/i.test(parole) && /pilotage/i.test(parole),
   `lu: ${parole.slice(0, 120)}`);
 
-// Blasons étiquetés (aria-label) — un par cadran, aucun SVG de cap dans la page.
-const blasons = await page.locator('.cap-blason-svg').evaluateAll((els) =>
-  els.map((e) => e.getAttribute('aria-label')));
+// REMPLACÉE : le blason était peint en permanence sur chaque cap ; au ciel il
+// est gravé dans le cartouche au moment où l'on approche l'étoile — un ciel de
+// nuit ne porte pas de disques de parchemin clair sans cesser d'être un ciel.
+// La garantie tenue est la même et se vérifie cap par cap : CHACUN a sa
+// gravure, et chacune est étiquetée pour le lecteur d'écran.
+const blasons = [];
+for (const c of capsDe('ultima-perso')) {
+  await page.locator(`#ciel-noeud-scene .ciel-etoile[data-noeud-id="${c.id}"]`)
+    .dispatchEvent('mouseenter');
+  await page.waitForTimeout(150);
+  blasons.push(await page.locator('#boussole-parole .parole-blason svg')
+    .getAttribute('aria-label').catch(() => null));
+}
 verifier('un blason étiqueté par cadran',
   blasons.length === attendus.length && blasons.every((l) => l && /Blason/i.test(l)),
   JSON.stringify(blasons));
 
-// Focus clavier visible sur un cadran ouvrable.
-await capGrima.focus();
-verifier('Cadran focusable au clavier', await capGrima.evaluate((el) => el === document.activeElement));
+// PORTÉE. Le focus vit sur le GROUPE de l'étoile : c'est lui qui porte
+// `tabindex="0"`, le nom accessible et la touche Entrée. L'ancre qui l'enveloppe
+// est en `tabindex="-1"` exprès — sans quoi la tabulation s'arrêterait deux
+// fois sur le même cadran.
+await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
+await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
+const etoileGrima = page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="grima"]');
+await etoileGrima.evaluate((el) => el.focus());
+verifier('Cadran focusable au clavier',
+  await etoileGrima.evaluate((el) => el === document.activeElement));
 
 // Contraste AA sur les couleurs réellement rendues.
+// REMPLACÉ : ce bloc lisait `.cap-nom` et `.cap-etat` sur du PARCHEMIN. La
+// coque est passée au ciel : le nom du cadran est peint sur une étoile, la
+// devise se lit dans le cartouche, et le fond est une nuit. Les mêmes
+// grandeurs sont donc mesurées, contre le fond qui les porte réellement —
+// changer d'étalon sans changer de fond aurait donné un chiffre flatteur et
+// faux. Le seuil, lui, ne bouge pas : AA, 4,5:1.
 const styles = await page.evaluate(() => {
   const cs = getComputedStyle(document.documentElement);
-  const nom = getComputedStyle(document.querySelector('.cap-nom'));
+  const plateau = getComputedStyle(document.getElementById('ciel-noeud-plateau'));
+  const nom = document.querySelector('#ciel-noeud-scene text.ciel-nom');
+  const etat = document.querySelector('#boussole-parole .parole-etat');
   const t = getComputedStyle(document.querySelector('.console-titre'));
   return {
-    parcheminCarte: cs.getPropertyValue('--parchemin-carte').trim(),
+    nuit: plateau.getPropertyValue('--ciel-nuit-haute').trim(),
     merProfonde: cs.getPropertyValue('--mer-profonde').trim(),
-    nom: nom.color, titre: t.color,
-    etat: getComputedStyle(document.querySelector('.cap-etat')).color,
+    nom: nom ? getComputedStyle(nom).fill : null,
+    titre: t.color,
+    etat: etat ? getComputedStyle(etat).color : null,
   };
 });
-const rNom = ratio(versHex(styles.nom), styles.parcheminCarte);
+const rNom = ratio(versHex(styles.nom), styles.nuit);
 verifier('Contraste nom de cadran ≥ 4,5:1', rNom >= 4.5, `${rNom.toFixed(2)}:1`);
-const rEtat = ratio(versHex(styles.etat), styles.parcheminCarte);
-verifier('Contraste devise (badge) ≥ 4,5:1', rEtat >= 4.5, `${rEtat.toFixed(2)}:1`);
-const rTitre = ratio(versHex(styles.titre), styles.merProfonde);
-verifier('Contraste titre sur fond mer ≥ 4,5:1', rTitre >= 4.5, `${rTitre.toFixed(2)}:1`);
+const rEtat = ratio(versHex(styles.etat), styles.nuit);
+verifier('Contraste devise (cartouche) ≥ 4,5:1', rEtat >= 4.5, `${rEtat.toFixed(2)}:1`);
+// Le titre est désormais posé sur la nuit, plus sur la mer.
+const rTitre = ratio(versHex(styles.titre), styles.nuit);
+verifier('Contraste titre sur fond de nuit ≥ 4,5:1', rTitre >= 4.5, `${rTitre.toFixed(2)}:1`);
 
 verifier('Zéro requête réseau externe (aucun CDN)', requetesExternes.length === 0,
   requetesExternes.slice(0, 3).join(', '));

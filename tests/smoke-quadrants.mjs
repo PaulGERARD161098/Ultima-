@@ -111,9 +111,27 @@ console.log('— A. ULTIMA : 2 cadrans, puis les 5 portes via GRIMA / NAGA —')
 {
   const { page, erreurs, externes } = await nouvellePage({ configVide: true });
   await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
-  await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
-  const hrefs = await page.locator('a.cap').evaluateAll((els) =>
-    els.map((e) => e.getAttribute('href')));
+  // ULTIMA EST PASSÉE AU CIEL (étape ④a, coque pilote). Les assertions de cette
+  // section sont PORTÉES, pas affaiblies : les étoiles du ciel portent de
+  // VRAIES ancres, si bien qu'on continue de lire des `href`. Seul l'ORDRE est
+  // abandonné, avec sa raison — une constellation range par géométrie, et
+  // l'ordre du DOM y suit la profondeur, pas le registre. La garantie qui
+  // comptait (les portes du registre, toutes et rien qu'elles) est intacte.
+  await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
+  // Les étoiles ne sont pas des ancres : l'ancre SVG a été essayée puis retirée
+  // parce qu'elle faisait perdre le focus clavier (mesuré). On éprouve donc les
+  // portes en CLIQUANT — une preuve plus forte qu'un attribut lu.
+  const hrefs = [];
+  for (const c of capsDe('ultima-perso')) {
+    await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
+    await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
+    await page.locator(`#ciel-noeud-scene .ciel-etoile[data-noeud-id="${c.id}"]`)
+      .dispatchEvent('click');
+    await page.waitForURL(`**/${c.cible}`, { timeout: 8000 }).catch(() => {});
+    if (page.url().endsWith(c.cible)) { hrefs.push(c.cible); }
+  }
+  await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
   // ALTHEA rejoint GRIMA et NAGA le 2026-08-06, puis REMONTE À LA RACINE le
   // 2026-08-07 (« je veux althea ici »). On compare au REGISTRE plutôt qu'à un
   // nombre écrit en dur : un test qui compte à la main se refait à chaque
@@ -121,7 +139,8 @@ console.log('— A. ULTIMA : 2 cadrans, puis les 5 portes via GRIMA / NAGA —')
   // main sous un commentaire qui disait le contraire. Elle est tombée.
   const portesAttendues = capsDe('ultima-perso').map((c) => c.cible);
   verifier('les cadrans ouvrables = ceux du registre',
-    JSON.stringify(hrefs) === JSON.stringify(portesAttendues), JSON.stringify(hrefs));
+    JSON.stringify(hrefs.slice().sort()) === JSON.stringify(portesAttendues.slice().sort()),
+    JSON.stringify(hrefs));
   for (const attendu of portesAttendues) {
     verifier(`Porte ${attendu}`, hrefs.includes(attendu));
   }
@@ -129,7 +148,7 @@ console.log('— A. ULTIMA : 2 cadrans, puis les 5 portes via GRIMA / NAGA —')
   // été oublié à son arrivée : sans JS, il était inatteignable. On compare donc
   // à la source de vérité, pas à une liste écrite à la main.
   const noscript = await page.evaluate(() => {
-    const n = document.querySelector('noscript');
+    const n = document.querySelector('#ciel-noeud-plateau noscript') || document.querySelector('noscript');
     if (!n) return [];
     const d = document.createElement('div');
     d.innerHTML = n.textContent;
@@ -138,8 +157,18 @@ console.log('— A. ULTIMA : 2 cadrans, puis les 5 portes via GRIMA / NAGA —')
   verifier('Repli <noscript> : tous les caps du registre y sont',
     portesAttendues.every((c) => noscript.includes(c)),
     `noscript: ${JSON.stringify(noscript)}`);
+  // PORTÉE : « aucun cap inerte » se lisait sur `.cap--avenir` ; au ciel, c'est
+  // `aria-disabled` que porte une étoile sans cible. Même garantie, même preuve
+  // par l'absence.
   verifier('Aucun cap inerte restant',
-    (await page.locator('.cap[aria-disabled], .cap--avenir').count()) === 0);
+    (await page.locator('#ciel-noeud-scene .ciel-etoile[aria-disabled]').count()) === 0);
+  // Le focus clavier tient sur l'étoile — c'est ce qui a fait renoncer à
+  // l'ancre SVG, donc c'est ce qu'on surveille désormais ici.
+  await page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id]').first().focus();
+  verifier('Une étoile garde le focus clavier',
+    await page.evaluate(() => document.activeElement
+      && document.activeElement.hasAttribute
+      && document.activeElement.hasAttribute('data-noeud-id')));
 
   const portes = {};
   for (const cadran of ['grima.html', 'naga.html']) {

@@ -2682,3 +2682,150 @@
 - **Ce qui a sauvé la mise** : ne jamais lancer un SQL sans le relire ET sans
   regarder l'état réel. La tentative d'application a d'ailleurs échoué proprement
   (« constraint already exists »), la transaction a tout annulé : rien de cassé.
+
+## 2026-08-13 (soir) — le moteur cadrait du vide, très correctement
+
+- **Paul : « Go pour étape 2 / Avance autant que tu peux sans moi ».** Livré les
+  étapes ② (les trois capacités du moteur) et ③ (l'adaptateur en profondeur).
+  Arrêté avant l'étape ④, qui touche neuf écrans de production et attend deux
+  arbitrages de Paul.
+- **LA CAUSE ANNONCÉE N'ÉTAIT QU'UNE MOITIÉ DE LA CAUSE.** L'étape ① concluait
+  « `distanceIdeale()` doit connaître l'étendue réelle des étoiles ». Vrai, et
+  insuffisant. La caméra tourne autour de **l'origine**, or un étage LV4 n'a
+  qu'un groupe, dont `construireMonde` pose le centre à 228 de là : elle cadrait
+  une sphère de 250 pour montrer un nuage de 55, **centré ailleurs qu'où elle
+  regardait**. Un diagnostic tiré d'une maquette est une piste, pas un verdict —
+  la moitié manquante n'apparaît qu'en écrivant le code.
+- **MAJORER LE DANGER COÛTE AUSSI CHER QUE L'IGNORER.** Premier correctif :
+  borner par le rayon du nuage, en supposant la pire étoile à la fois la plus
+  latérale et la plus avancée. Vrai pour une sphère, **faux pour douze points**.
+  Mesuré : 45,8 % d'occupation, sous l'objectif de 60. Écrite sur les étoiles
+  réelles, axe par axe, à l'orientation courante, la contrainte donne le cadrage
+  le plus serré qui garde tout le monde dedans. **La « contradiction » entre
+  remplir le cadre et n'en faire sortir personne n'existait pas** : une formule
+  trop naïve d'un côté, trop prudente de l'autre. 7,9 % → 37,6 % → **65 à 75 %**.
+- **UN NOM PERMANENT ILLISIBLE N'EST PAS UN NOM PERMANENT.** Rendre les douze
+  noms permanents n'en rendait lisibles que quatre : la classe ne fait que
+  retirer `--demande`, tandis que l'opacité est repeinte à chaque image et
+  retombe à 0,25 au fond. La capacité était à moitié fausse à son premier jet.
+  **C'est la mesure qui l'a dit, pas la relecture.**
+- **DEUX INSTRUMENTS ONT MENTI AVANT D'ÊTRE REMPLACÉS.** Le rayon de l'étoile
+  visée : **saturé** (plafond de 9), il lisait « 21,6 avant, 21,6 après » sur une
+  caméra qui avait parcouru un tiers du monde. L'étalement du ciel :
+  **confondu** — `zoomerVers` tourne aussi le monde. *Un instrument qui mesure
+  deux causes à la fois n'en prouve aucune ; une grandeur saturée ne prouve rien
+  du tout.* Retenus : la distance réelle de la caméra et l'écart au centre.
+- **UN TROISIÈME DÉFAUT EST VENU D'UNE CAPTURE, PAS DU HARNAIS** : « ULTIMA »
+  écrit en 36 px en travers du ciel. Le harnais ne regardait que les
+  `g.ciel-etoile` — l'étiquette de constellation n'en est pas une. **Un harnais
+  qui ne regarde qu'une partie de ce qui est peint ne dit rien de ce qui est
+  peint.** Rebouché des deux côtés : le plafond dans le moteur, la mesure dans
+  le harnais. *Deuxième fois de la semaine qu'une capture voit ce que la mesure
+  ne regardait pas — la première, c'était le cartouche or sur parchemin.*
+- **NUANCE À NE PAS CONFONDRE AVEC LA LEÇON DU 12** (« la `getBBox()` du ciel
+  inventait un débordement »). Ce jour-là c'était la boîte du ciel ENTIER, dont
+  les halos débordent volontairement et sont rognés. Ici c'est la `getBBox()` de
+  **chaque étoile**, et le critère est **plus strict à dessein** : sur un
+  RÉSEAU, un halo lointain rogné au bord ne gêne personne ; sur un **MENU**, une
+  entrée rognée au bord a l'air cassée. Même outil, deux contextes, deux
+  critères — et c'est le contexte qui décide, pas l'outil.
+- **L'ÉTALON N'A PAS BOUGÉ.** L'occupation est mesurée par la même fonction, au
+  même endroit, avant et après. Changer de yardstick en même temps que de moteur
+  aurait rendu la comparaison sans valeur — et flatteuse, ce qui est pire.
+- **UN GARDE-FOU QUE L'APPELANT DOIT PENSER À INSTALLER N'EN EST PAS UN.** La
+  garde anti-emballement du dépliage vivait dans la maquette ; elle est passée
+  dans l'adaptateur avec le dépliage lui-même.
+- **Critère 8 tenu** : `smoke-ciel` vert avant la première ligne et après la
+  dernière, **sans une retouche**, cible tactile identique (25 px). Les trois
+  options sont **inactives par défaut** — c'est ce qui rend la promesse tenable
+  plutôt que surveillée.
+- **Vérifié** : patrimoine COMPLET — **58 harnais, 836 verdicts, sortie 0**
+  (55/742 il y a deux jours).
+- **CE QUE JE N'AI PAS TRANCHÉ, ET POURQUOI.** Sur écran large, les trois
+  galaxies remplissent 72 % de la hauteur — le critère — mais laissent la
+  largeur creuse, parce qu'un groupe de trois se range en colonne. Y remédier,
+  c'est choisir une **forme** (couronne, ligne, grille) : un parti pris visuel,
+  pas une correction de cadrage. *Le critère est atteint ; le reste appartient à
+  Paul.*
+
+## 2026-08-13 (nuit) — cadrer l'étape ④, et deux chiffres de mon propre cadrage étaient faux
+
+- **Paul : « On valide comme ça. Cadre la suite. »** Les deux arbitrages
+  ouverts se referment sur l'état livré : geste au doigt **(a)** (premier appui
+  déplie, second entre), disposition **en colonne**. Écrits comme tranchés, pas
+  laissés en suspens.
+- **LE POINT DUR DE L'ÉTAPE ④ N'EST PAS LE RENDU.** Inventaire de
+  `js/boussole-noyau.mjs` ligne à ligne : la boussole porte **cinq fonctions
+  que le ciel n'a pas** — le **cockpit** (`/api/cockpit`, Bearer, fail-closed),
+  les **blasons**, le **cœur + la légende gravée**, la **passerelle avec son
+  nom sur l'arc**, et le **cap « à venir »** inerte au clavier. Remplacer la
+  boussole par le ciel, c'est **porter cinq fonctions ou les perdre**. *Même
+  méthode que pour la suppression de l'arbre : l'inventaire AVANT, c'est ce qui
+  avait sauvé sept assertions.*
+- **`css/boussole.css` NE PEUT PAS ÊTRE TOUCHÉ**, et mon propre cadrage
+  l'annonçait en « modifié ». `vranesh.html` le **charge** et bâtit dessus ;
+  son plateau utilise `.cap`. VRANESH n'est pas une des neuf coques et ne passe
+  pas au ciel. *C'est le piège du ciel qui avait emprunté trois classes à
+  l'arbre, à l'identique — et je l'avais écrit noir sur blanc dans le même
+  document.*
+- **LE PÉRIMÈTRE DES HARNAIS ÉTAIT SOUS-ESTIMÉ.** Le cadrage nommait trois
+  harnais et 170 assertions. Compté : les trois portent bien 170 — le chiffre
+  était juste —, mais **trois autres** tiennent aussi sur la structure de la
+  boussole (`smoke-tao`, `smoke-alpha`, `smoke-imladrik-carto`). **Six harnais,
+  ~236 assertions.**
+- **MON GREP A SUR-COMPTÉ AVANT QUE JE NE LE VÉRIFIE.** Une première passe
+  annonçait treize harnais : le mot **« passerelle » est surchargé** — l'arc de
+  la boussole d'un côté, le pont talent↔idéal de VRANESH / ZEKROM / DRAUKHAIN
+  de l'autre. Vérifié en contexte avant d'écrire le chiffre. *Un instrument qui
+  sur-compte invente un chantier, exactement comme celui qui sature en cache
+  un.*
+- **DÉCOUPAGE PROPOSÉ, PAS EXÉCUTÉ** (gate EL) : une **coque pilote**
+  (`ultima.html`, celle qui cumule le plus de fonctions à porter), puis les
+  sept ordinaires, puis **la racine en dernier** — l'écran le plus particulier
+  ne doit pas servir de modèle aux huit autres. Pre-mortem à 12 entrées.
+
+## 2026-08-13 (nuit) — la coque pilote au ciel, et ce qu'un portage n'a pas le droit de payer en douce
+
+- **Paul : « go »** sur le découpage. Livré l'étape ④a — `ultima.html` quitte la
+  boussole. Les six fonctions inventoriées sont portées, patrimoine vert
+  (**59 harnais**).
+- **LE CLAVIER PASSE AVANT LE CLIC DU MILIEU.** La boussole faisait de chaque
+  cap un `<a href>` ; l'étoile est un `<g role="button">`. J'ai *essayé* de
+  garder le lien en enveloppant l'étoile d'une ancre SVG. **Mesuré : enveloppée,
+  l'étoile perd le focus clavier** — il retombe sur `body`, là où le ciel nu le
+  garde (comparé sur RIVEN, même geste). L'ancre est tombée, et **la perte est
+  ÉCRITE** dans le cadrage, le commit et le code. *Un portage n'a pas le droit
+  de payer avec ce qu'il ne mentionne pas.*
+- **LE FOCUS SE DÉTRUISAIT LUI-MÊME.** Atteindre un cap au clavier le dépliait ;
+  déplier reconstruit la scène ; l'élément focalisé disparaissait. Un menu où la
+  tabulation s'annule elle-même n'est pas navigable. Le focus lui est rendu
+  après le re-dessin.
+- **LE PIRE CAS QUI MANQUAIT ÉTAIT LE PLUS PETIT.** J'éprouvais 3, 12 et 20
+  objets ; la coque réelle en a **DEUX**, et deux objets se rangent aux
+  extrémités du cadre — la configuration la plus TENDUE pour le bord, pas la
+  plus détendue. *Un pire cas ne se cherche pas seulement vers le haut.*
+- **UN RAISONNEMENT N'EST PAS UNE MESURE.** « Le nom est centré, donc sa moitié
+  suffit » → marge latérale à 52 → le pire cas construit (noms de 20
+  caractères) a répondu **93,7 unités de débord**. Une constante ne peut pas
+  borner une largeur de texte : elle se **mesure** sur les libellés peints. Et
+  sur écran étroit, c'est la **POLICE qui cède avant la caméra** — reculer
+  éloigne les étoiles sans jamais rétrécir leurs noms.
+- **UN SEUIL QUI BAISSE DOIT SE JUSTIFIER PAR LA GÉOMÉTRIE, PAS PAR L'ENVIE DE
+  PASSER.** Douze libellés sur 390 px ne laissent que 45 % d'étalement utile :
+  limite physique. Les 60 % restent exigés **là où le produit vit** (4 caps au
+  plus) ; au-delà, un plancher mesuré dont la seule fonction est de détecter une
+  régression. Écrit en toutes lettres dans le harnais.
+- **TROIS DÉFAUTS SUR CAPTURE, DEUX EN RELISANT LE CODE.** Le repli `<noscript>`
+  allait être effacé par le premier rendu (trouvé en relisant le moteur AVANT de
+  lancer la page) ; `body.boussole` battait `stellaire.css` en spécificité et
+  `.boussole-scene` étirait la scène à **2275 px** ; **les jetons de nuit de
+  `ciel.css` sont portés par `.espace-ciel`**, si bien qu'une page qui charge la
+  feuille sans cette classe perd TOUT le régime chromatique **en silence** —
+  elle a l'air sombre grâce au `body`, et rien ne signale la panne.
+- **UNE ASSERTION ABANDONNÉE, UNE SEULE, AVEC SA RAISON** : « une aiguille par
+  cadran ». L'aiguille joignait le centre de la rose à un cap ; un ciel n'a pas
+  de moyeu d'où partir. Remplacée par le contrôle qu'elle approchait. L'ORDRE
+  des caps est abandonné partout : une constellation range par géométrie.
+- **`css/boussole.css` et `js/boussole-noyau.mjs` INTOUCHÉS**, comme le cadrage
+  l'exigeait : VRANESH bâtit sur la première, les huit coques restantes sur le
+  second.

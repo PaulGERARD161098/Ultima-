@@ -35,6 +35,54 @@
   var ZOOM_MIN = 0.55, ZOOM_MAX = 1.9;
   var MAX_NOMS_PERMANENTS = 6;
 
+  // ---- LV4 : les trois capacités du 2026-08-13, TOUTES inactives par défaut --
+  // Elles servent le ciel qui se déplie (CADRAGE-LV4-CIEL-DEPLIE.md §2). RIVEN
+  // n'en active aucune : sans option, pas une seule de ces valeurs n'est lue,
+  // et le chemin de rendu reste celui d'hier, à l'octet près.
+  //
+  // Au-delà de ce seuil, « tous les noms » redevient « les six plus lourdes » :
+  // un menu se lit d'un coup d'œil, un réseau non. 14 — le registre plafonne à
+  // 4 caps aujourd'hui, le pire cas construit en compte 12 ; deux de marge, et
+  // au-delà on dégrade au lieu de rendre illisible.
+  var SEUIL_TOUS_NOMS = 14;
+  // Provision de bord, en unités de viewBox, pour le cadrage serré. Ce n'est
+  // PAS un confort : à courte distance l'étoile plafonne à r=9 mais traîne son
+  // halo de choix (r × 5,4 = 48,6) et son nom (posé à r × 3,6 + 9 = 41,4 sous
+  // elle). Sans provision, « cadrer sur les étoiles » ferait sortir du cadre
+  // exactement ce qu'on cherchait à montrer.
+  //
+  // 50 d'abord, DÉDUIT du halo (48,6, arrondi au-dessus). Porté à 64 le
+  // 2026-08-13, et pas pour arrondir : le halo n'est pas le pire des deux. Le
+  // NOM est posé à r × 3,6 + 9 = 41,4 sous l'étoile et descend encore de sa
+  // propre hauteur, plafonnée à 20 — soit 61. À 50, la coque pilote mesurait
+  // 1,4 de marge résiduelle : dans le cadre au sens strict, et le nom du cap du
+  // bas TOUCHAIT le filet. Vu sur capture, confirmé par la mesure.
+  // 64 borne les deux — mais appliqué AUX QUATRE CÔTÉS il serrait pour rien :
+  // l'occupation retombait à 58 % sur 390 px à douze objets, sous l'exigence.
+  // Or les deux géométries ne sont pas la même. En bas, le nom DESCEND tout
+  // entier sous l'étoile : il faut 64. Sur les côtés, il est CENTRÉ sur elle,
+  // et seule sa moitié dépasse ; c'est le halo (48,6) qui borne. D'où deux
+  // marges, une par géométrie, au lieu d'une moyenne qui n'est juste nulle part.
+  //
+  // ET LE PARI LATÉRAL ÉTAIT FAUX. Première version : « le nom est centré, donc
+  // sa moitié suffit — 52 ». Le pire cas construit (des noms de 20 caractères,
+  // la longueur où le moteur tronque) a répondu **93,7 unités de débord**. Une
+  // constante ne peut pas borner une largeur de texte qu'elle ne connaît pas.
+  // La marge latérale se MESURE donc sur les libellés réellement peints ; celle
+  // du bas reste une constante, parce que la hauteur d'une ligne, elle, est
+  // bornée par le plafond de police.
+  var MARGE_CADRAGE = 64;   // haut et bas : l'étoile, son halo, et son nom dessous
+  var MARGE_HALO = 52;      // côtés : l'étoile et son halo, AVANT le nom
+  // Repli tant qu'aucun libellé n'a encore été mesuré (première image) : la
+  // valeur prudente d'hier. Mieux vaut une image trop large qu'une image
+  // débordante — on resserre à la mesure suivante, pas avant.
+  var DEMI_NOM_INCONNU = 64;
+  // Plafond de taille du nom quand on cadre serré. Sans lui, `10 × échelle`
+  // suit la caméra sans borne et un ciel de trois objets s'écrit en capitales
+  // de 30 px. 20 px = échelle 2,0 ; RIVEN plafonne à 1,65 même zoom à fond
+  // (ZOOM_MIN 0,55), donc ce plafond ne peut pas le toucher.
+  var PLAFOND_NOM = 20;
+
   var MOTIFS_RELATION = {
     apport_affaires: null, sous_traitance: '7 5', chantier_commun: '1.5 5'
   };
@@ -161,6 +209,52 @@
     return { groupes: groupes, etoiles: etoiles, rayon: Math.max(80, rayon) };
   }
 
+  // ---- Recentrage sur les étoiles — option `cadrerSurLesEtoiles` (LV4) ----
+  //
+  // LE DÉFAUT QU'ELLE CORRIGE, mesuré le 2026-08-13 sur la maquette du
+  // dépliage : les trois galaxies occupaient 7,9 % du cadre, et pousser l'API
+  // publique à son plafond d'approche n'allait pas au-delà de 37,6 %.
+  //
+  // LA CAUSE : la caméra tourne autour de l'ORIGINE, et `distanceIdeale()`
+  // cadre une sphère centrée sur elle. Or un étage LV4 n'a qu'UN groupe (tous
+  // les caps d'un écran partagent le même « secteur ») : `construireMonde` pose
+  // son centre à `eloignement` de l'origine — 228 pour trois objets — et serre
+  // les étoiles dans un amas de 55 de rayon autour de ce centre. La caméra
+  // cadrait donc une sphère de 250 pour montrer un nuage de 55, centré ailleurs
+  // qu'où elle regardait. Elle cadrait du vide, très correctement.
+  //
+  // LE REMÈDE : translater les étoiles pour que leur barycentre TOMBE sur
+  // l'origine, et retenir leur étendue RÉELLE. Rien d'autre ne bouge — la
+  // projection, la visée, le glissé travaillent tous sur ces coordonnées-là.
+  // C'est le même geste que la correction du 2026-08-12 (cadrer sur le rayon
+  // mesuré plutôt que sur la constante), poussé jusqu'au centre.
+  //
+  // Le plancher `Math.max(80, …)` de `construireMonde` n'est PAS repris ici :
+  // majorer le rayon recule la caméra pour rien, et c'est précisément le défaut
+  // qu'on corrige. Fonction pure au sens utile : elle ne touche ni au DOM ni au
+  // réseau, et deux appels sur le même monde donnent le même résultat.
+  function recentrerSurLesEtoiles(monde) {
+    var n = monde.etoiles.length;
+    if (!n) { monde.rayonReel = monde.rayon; return monde; }
+    var cx = 0, cy = 0, cz = 0;
+    monde.etoiles.forEach(function (e) { cx += e.x; cy += e.y; cz += e.z; });
+    cx /= n; cy /= n; cz /= n;
+    var rayon = 0;
+    monde.etoiles.forEach(function (e) {
+      e.x -= cx; e.y -= cy; e.z -= cz;
+      var d = Math.sqrt(e.x * e.x + e.y * e.y + e.z * e.z);
+      if (d > rayon) { rayon = d; }
+    });
+    monde.groupes.forEach(function (g) {
+      if (g.centre) { g.centre.x -= cx; g.centre.y -= cy; g.centre.z -= cz; }
+    });
+    // Un objet unique a une étendue nulle : sans plancher, la caméra viendrait
+    // se poser dessus. 12 — le rayon d'une étoile au repos, soit « on la voit,
+    // on ne la traverse pas ».
+    monde.rayonReel = Math.max(12, rayon);
+    return monde;
+  }
+
   // ---- Magnitude : le poids de la fiche dans le réseau (relations reçues et
   //      données + personnes rattachées). C'est une information que ni l'arbre
   //      ni la carte ne montraient : qui est central, qui est isolé. ----
@@ -207,7 +301,20 @@
     var statuts = options.libellesStatut || {};
     var correspond = options.correspond;
 
+    // LV4 — les trois options, toutes fausses par défaut : RIVEN passe ici sans
+    // rien changer à ce qu'il faisait hier.
+    var cadrageSerre = !!options.cadrerSurLesEtoiles;
+
     var monde = construireMonde(noeuds);
+    if (cadrageSerre) { recentrerSurLesEtoiles(monde); }
+    // Rayon de RÉFÉRENCE des effets de profondeur (opacité, seuil « proche »).
+    // Hors cadrage serré c'est la constante d'hier, à l'identique : ces deux
+    // effets sont réglés pour un réseau de 300 de rayon, et les rebaser sur le
+    // monde mesuré changerait le rendu de RIVEN — ce que l'étape ② s'interdit.
+    // En cadrage serré la constante MENT : sur un nuage de 55, elle place le
+    // seuil « proche » derrière tout le monde et éteint tous les noms.
+    var rayonRef = cadrageSerre ? monde.rayonReel : RAYON_MONDE;
+
     var parId = Object.create(null);
     monde.etoiles.forEach(function (e) { parId[e.noeud.id] = e; });
     var mags = magnitudes(noeuds, relations, rattachements);
@@ -218,8 +325,12 @@
     // dériver avec la taille du réseau et rendrait le ciel illisible ; six,
     // c'est six. Les autres noms existent quand même dans le document et se
     // révèlent au survol comme au focus clavier.
+    // LV4 — « tous les noms » : sur un MENU, une entrée sans nom est une entrée
+    // perdue ; six sur douze, c'est la moitié du menu muette. Le seuil dégrade
+    // au lieu de casser : au-delà, on retombe sur les six plus lourdes.
+    var tousLesNoms = !!options.tousLesNoms && noeuds.length <= SEUIL_TOUS_NOMS;
     var lourdes = Object.create(null);
-    if (noeuds.length <= MAX_NOMS_PERMANENTS) {
+    if (tousLesNoms || noeuds.length <= MAX_NOMS_PERMANENTS) {
       noeuds.forEach(function (n) { lourdes[n.id] = true; });
     } else {
       noeuds.slice().sort(function (a, b) {
@@ -263,10 +374,61 @@
     // + 12 au-dessus de son étoile) est réglée à 20 : valeur MESURÉE suffisante
     // sur les six configurations éprouvées, et pas davantage — majorer ici
     // éloignerait la caméra et rapetisserait le ciel sans rien protéger.
+    // La demi-largeur du nom de chaque étoile, en unités de viewBox, MESURÉE
+    // sur le texte peint (voir la mesure dans `dessiner`). DÉCLARÉE ICI, avant
+    // `distanceIdeale`, parce que celle-ci s'exécute dès le montage : laissée
+    // plus bas, la hoisting de `var` la rendait `undefined` au premier appel et
+    // le cadrage plantait avant la première image.
+    var demiNoms = Object.create(null);
+    var nomsMesures = false;
     var DEBORD_LIBELLE = 20;
     function distanceIdeale() {
       var cadre = Math.max(160, Math.min(vbW, vbH));
-      return ((monde.rayon + DEBORD_LIBELLE) * FOCALE * 2) / cadre * 1.06;
+      if (!cadrageSerre) {
+        return ((monde.rayon + DEBORD_LIBELLE) * FOCALE * 2) / cadre * 1.06;
+      }
+      // CADRAGE SERRÉ — la contrainte s'écrit sur CHAQUE étoile, à l'orientation
+      // où la caméra se trouve, et sur CHAQUE axe séparément.
+      //
+      // Première version (mesurée, insuffisante) : borner par le rayon du nuage,
+      // en supposant la pire étoile à la fois latérale de R et avancée de R.
+      // C'est vrai pour une sphère quelconque, et c'est FAUX pour douze points :
+      // aucune étoile n'est jamais aux deux extrêmes en même temps. Cette
+      // majoration reculait la caméra pour un danger qui n'existait pas, et
+      // l'occupation plafonnait à 45,8 % au lieu des 60 % exigés.
+      //
+      // Écrite sur les étoiles réelles : à la distance D, l'étoile i tombe à
+      // x1·FOCALE/(D + z2) du centre. Il faut donc, pour chacune et sur chaque
+      // axe, D ≥ |x1|·FOCALE/utileX − z2. Le maximum de ces bornes EST la
+      // distance la plus serrée qui garde tout le monde dedans — la
+      // contradiction relevée par la maquette n'en était pas une, c'était une
+      // formule trop prudente d'un côté et trop naïve de l'autre.
+      //
+      // Le coût est O(n) sur un MENU (n ≤ 14 par le seuil), et cette fonction
+      // n'est pas appelée par image en mode ordinaire. En cadrage serré elle
+      // l'est — c'est le prix de la justesse quand on tourne le monde, et il se
+      // compte en quelques dizaines d'opérations.
+      var utileY = Math.max(40, vbH / 2 - MARGE_CADRAGE);
+      var cy = Math.cos(cam.yaw), sy = Math.sin(cam.yaw);
+      var cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch);
+      var d = 0;
+      monde.etoiles.forEach(function (e) {
+        var x1 = e.x * cy + e.z * sy;
+        var z1 = -e.x * sy + e.z * cy;
+        var y2 = e.y * cp - z1 * sp;
+        var z2 = e.y * sp + z1 * cp;
+        // La place utile LATÉRALE est propre à CHAQUE étoile : elle dépend de
+        // la largeur de son propre nom, mesurée sur le texte peint.
+        var demiNom = demiNoms[e.noeud.id];
+        if (demiNom === undefined) { demiNom = DEMI_NOM_INCONNU; }
+        var utileX = Math.max(40, vbW / 2 - MARGE_HALO - demiNom);
+        var parX = (Math.abs(x1) * FOCALE) / utileX - z2;
+        var parY = (Math.abs(y2) * FOCALE) / utileY - z2;
+        if (parX > d) { d = parX; }
+        if (parY > d) { d = parY; }
+      });
+      // Plancher : la caméra ne traverse pas le nuage, quoi qu'il arrive.
+      return Math.max(d, monde.rayonReel * 1.35, 90);
     }
 
     dimensionner();
@@ -294,6 +456,9 @@
     // `prefers-reduced-motion` l'impose d'office — la préférence système
     // d'abord, le réglage de Paul ensuite.
     var plat = !!options.plat || moinsDAnimation;
+    // Sans cadrage serré : aucun plafond, donc la ligne du nom se calcule
+    // exactement comme hier (`Math.min(Infinity, …)` ne retire rien).
+    var plafondNom = cadrageSerre ? PLAFOND_NOM : Infinity;
 
     function projeter(p) {
       // À plat : ni rotation ni perspective. Une échelle unique, les
@@ -468,6 +633,15 @@
       [haloChoix, haloFocus, lueur, branches, corolle, coeur, nom, zone].forEach(function (el) {
         g.appendChild(el);
       });
+      // ---- POURQUOI L'ÉTOILE N'EST PAS UNE ANCRE ----------------------------
+      // La boussole faisait de chaque cap un `<a href>`. On a ESSAYÉ de porter
+      // cela au ciel, le 2026-08-13, en enveloppant chaque étoile d'une ancre
+      // SVG — pour ne pas troquer en silence le clic du milieu et l'ouverture
+      // dans un nouvel onglet. MESURÉ : enveloppée, l'étoile PERD LE FOCUS
+      // CLAVIER. Le focus tombait sur `body` dans l'instant, là où le ciel nu
+      // le garde (comparaison faite sur RIVEN, même geste, focus stable).
+      // Le clavier passe avant le clic du milieu : l'ancre a été retirée, et la
+      // perte est DÉCLARÉE au lieu d'être payée en douce (voir §13 du cadrage).
       gEtoiles.appendChild(g);
       pieces.push({
         etoile: e, g: g, haloChoix: haloChoix, haloFocus: haloFocus, lueur: lueur,
@@ -615,13 +789,19 @@
     }
 
     function opaciteProfondeur(profondeur) {
-      var t = (profondeur - (cam.distance - RAYON_MONDE)) / (2 * RAYON_MONDE);
+      var t = (profondeur - (cam.distance - rayonRef)) / (2 * rayonRef);
       return Math.max(0.18, Math.min(1, 1.06 - t * 0.9));
     }
 
     var derive = 0, imagesDepuisTri = 99;
 
     function dessiner() {
+      // En cadrage serré, la bonne distance DÉPEND de l'orientation : tourner
+      // le monde change quelle étoile est la plus excentrée. On la recalcule
+      // donc à chaque image — sans quoi un simple glissé du doigt sortirait du
+      // cadre ce que le cadrage promettait d'y garder. Le facteur de zoom de
+      // Paul est conservé : c'est un multiplicateur, pas une distance.
+      if (cadrageSerre) { cam.cibleDistance = distanceIdeale() * zoom; }
       // Approche douce vers la cible : la caméra glisse, elle ne saute pas.
       cam.yaw += ecartAngle(cam.cibleYaw, cam.yaw) * 0.11;
       cam.pitch += (cam.ciblePitch - cam.pitch) * 0.11;
@@ -689,14 +869,67 @@
         piece.zone.setAttribute('cx', x); piece.zone.setAttribute('cy', y);
         piece.zone.setAttribute('r', Math.max(RAYON_CAPTATION_MIN, rayon * 2.4).toFixed(2));
 
-        var proche = pr.profondeur < cam.distance - RAYON_MONDE * 0.25;
+        var proche = pr.profondeur < cam.distance - rayonRef * 0.25;
         piece.nom.setAttribute('x', x);
         piece.nom.setAttribute('y', (y + rayon * 3.6 + 9).toFixed(1));
-        piece.nom.setAttribute('font-size', Math.max(7.5, 10 * pr.echelle).toFixed(1));
+        piece.nom.setAttribute('font-size',
+          Math.max(7.5, Math.min(plafondNom, 10 * pr.echelle)).toFixed(1));
         if (!piece.nom.classList.contains('ciel-nom--demande')) {
-          piece.nom.setAttribute('opacity', proche && !attenue ? '0.85' : '0.25');
+          // SUR UN MENU, la profondeur n'a pas le droit d'éteindre un nom.
+          // Mesuré le 2026-08-13 : rendre les douze noms « permanents » n'en
+          // laissait lire que quatre — les autres retombaient à 0,25 parce
+          // qu'elles étaient au fond. Un nom permanent illisible n'est pas un
+          // nom permanent ; le premier jet de la capacité ② était donc à moitié
+          // faux, et c'est la mesure qui l'a dit, pas la relecture.
+          // La profondeur reste lisible : elle est portée par l'étoile
+          // elle-même (taille et opacité), qui, elle, continue de s'estomper.
+          // `attenue` (le filtre de recherche) garde tous ses droits.
+          piece.nom.setAttribute('opacity',
+            attenue ? '0.25' : ((proche || tousLesNoms) ? '0.85' : '0.25'));
         }
       });
+
+      // LES NOMS DISENT AU CADRAGE LA PLACE QU'ILS PRENNENT — une fois, à la
+      // première image peinte. Une constante ne peut pas borner une largeur de
+      // texte : elle dépend de la police, de la langue, du nom. On la mesure
+      // donc sur le texte réel.
+      // NON CIRCULAIRE, et c'est la condition pour que ça tienne : la largeur
+      // est ramenée au PLAFOND de police (`PLAFOND_NOM`), la taille maximale
+      // qu'un nom puisse atteindre. On obtient une borne supérieure stable, qui
+      // ne bouge plus quand la caméra s'approche — sans quoi cadrer changerait
+      // la mesure qui décide du cadrage, et la caméra oscillerait sans fin.
+      if (cadrageSerre && !nomsMesures && pieces.length) {
+        nomsMesures = true;
+        var brut = [];
+        var plusLarge = 0;
+        pieces.forEach(function (piece) {
+          var police = parseFloat(piece.nom.getAttribute('font-size')) || 1;
+          var largeur = 0;
+          try { largeur = piece.nom.getComputedTextLength(); } catch (e) { largeur = 0; }
+          // Largeur ramenée au plafond de police : la borne supérieure.
+          var auPlafond = largeur > 0 ? largeur * (plafondNom / police) : 0;
+          brut.push({ id: piece.etoile.noeud.id, largeur: auPlafond });
+          if (auPlafond > plusLarge) { plusLarge = auPlafond; }
+        });
+
+        // LA POLICE CÈDE AVANT LA CAMÉRA — et c'est une limite physique, pas un
+        // réglage. Mesuré : vingt caractères à 20 px font 422 unités de large
+        // dans un cadre de 362. Aucune distance ne corrige cela, parce que le
+        // libellé est peint en unités d'ÉCRAN, plafonnées : reculer la caméra
+        // éloigne les étoiles sans jamais rétrécir leurs noms. À vouloir tenir
+        // le cadrage avec la seule caméra, on obtenait soit un nom coupé (94
+        // unités dehors), soit un ciel réduit à 20 % du cadre. Sur un écran
+        // étroit, c'est donc le NOM qui rapetisse — jamais sous le plancher de
+        // lisibilité de 7,5.
+        var dispo = Math.max(60, vbW - 2 * MARGE_HALO);
+        if (plusLarge > dispo) {
+          var facteur = Math.max(7.5 / plafondNom, dispo / plusLarge);
+          plafondNom = plafondNom * facteur;
+          brut.forEach(function (b) { b.largeur = b.largeur * facteur; });
+        }
+        brut.forEach(function (b) { demiNoms[b.id] = b.largeur / 2; });
+        cam.cibleDistance = distanceIdeale() * zoom;
+      }
 
       piecesLien.forEach(function (pl) {
         var a = projetes[pl.relation.source_id], b = projetes[pl.relation.target_id];
@@ -735,7 +968,26 @@
         po.zone.setAttribute('r', '9');
       });
 
+      // EN CADRAGE SERRÉ, LES ÉTIQUETTES DE CONSTELLATION SE TAISENT.
+      // Ce n'est pas un goût, c'est une conséquence géométrique — et la règle a
+      // dû être élargie deux fois, chaque fois sur une capture.
+      //   — Avec un groupe UNIQUE, le centre de l'amas EST le barycentre, donc
+      //     l'origine : son nom tombe toujours au milieu des entrées, par
+      //     construction. Et il les répète : un étage LV4 nomme son groupe
+      //     d'après l'écran, si bien que « ULTIMA » s'écrivait trois fois — en
+      //     titre, en étiquette d'amas, et en nom d'étoile.
+      //   — Avec DEUX groupes (un cap déplié montre ses enfants), l'étiquette du
+      //     second se posait en travers de la première étoile dépliée : « GRIMA »
+      //     écrit sur RIVEN. Le nom du groupe est déjà dit ailleurs — c'est le
+      //     cap qu'on survole, et le cartouche de Léo l'annonce en toutes
+      //     lettres au même instant.
+      // Sur un MENU, une étiquette de constellation ne dit donc jamais rien que
+      // le titre ou le cartouche ne disent mieux. Elle se tait, tout le temps.
+      // (RIVEN, lui, garde les siennes : ce sont des métiers, et elles sont la
+      // seule chose qui les nomme.)
+      var amasMuet = cadrageSerre;
       piecesAmas.forEach(function (pa) {
+        if (amasMuet) { pa.el.setAttribute('opacity', '0'); return; }
         var pr = projeter(pa.groupe.centre);
         // Seule la moitié AVANT parle : sinon un nom lointain vient se poser
         // sur une étoile proche et le ciel devient illisible.
@@ -744,9 +996,16 @@
           pa.el.setAttribute('opacity', '0');
           return;
         }
+        // Le nom de constellation suit la même règle que celui des étoiles :
+        // à courte distance, `12 × échelle` l'écrivait en 36 px et le posait
+        // 126 unités au-dessus de l'amas — un titre à cheval sur tout le ciel.
+        // Vu sur une CAPTURE, pas dans la mesure : le harnais ne regardait que
+        // les étoiles, et cette étiquette n'en est pas une. Le trou a été
+        // rebouché des deux côtés — le plafond ici, la mesure dans le harnais.
+        var eNom = cadrageSerre ? Math.min(pr.echelle, PLAFOND_NOM / 12) : pr.echelle;
         pa.el.setAttribute('x', pr.sx.toFixed(1));
-        pa.el.setAttribute('y', (pr.sy - 38 * pr.echelle - 12).toFixed(1));
-        pa.el.setAttribute('font-size', Math.max(8, 12 * pr.echelle).toFixed(1));
+        pa.el.setAttribute('y', (pr.sy - 38 * eNom - 12).toFixed(1));
+        pa.el.setAttribute('font-size', Math.max(8, 12 * eNom).toFixed(1));
         pa.el.setAttribute('opacity', (opaciteProfondeur(pr.profondeur) * 0.85).toFixed(3));
       });
 
@@ -806,6 +1065,22 @@
       zoomer: zoomer,
       toutVoir: toutVoir,
       viser: function (idNoeud) { if (parId[idNoeud]) { viser(parId[idNoeud]); relancer(); } },
+      // LV4 — APPROCHER un nœud : la caméra le met face à elle ET s'en
+      // rapproche. `viser` seul tournait le monde sans jamais réduire la
+      // distance ; c'est ce qui manquait au dépliage, où cliquer une galaxie
+      // doit donner le sentiment d'y entrer, pas de la regarder de loin.
+      // Le facteur reste borné par ZOOM_MIN/ZOOM_MAX : approcher n'est pas un
+      // droit de traverser le monde. Renvoie false si le nœud est inconnu —
+      // l'appelant sait alors que rien n'a bougé, au lieu de le supposer.
+      zoomerVers: function (idNoeud, facteur) {
+        if (!parId[idNoeud]) { return false; }
+        viser(parId[idNoeud]);
+        var f = typeof facteur === 'number' ? facteur : ZOOM_MIN;
+        zoom = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, f));
+        cam.cibleDistance = distanceIdeale() * zoom;
+        relancer();
+        return true;
+      },
       choisir: function (idNoeud) {
         pieces.forEach(function (p) {
           if (p.etoile.noeud.id === idNoeud) { p.g.classList.add('ciel-etoile--choisie'); }
@@ -824,7 +1099,18 @@
       nbEtoiles: pieces.length,
       nbLiens: piecesLien.length,
       nbOrbites: piecesOrbite.length,
-      nbConstellations: monde.groupes.length
+      nbConstellations: monde.groupes.length,
+      // Ce que le cadrage a réellement décidé — pour que le harnais mesure la
+      // géométrie au lieu de la regarder (règle du 2026-08-01).
+      cadrageSerre: cadrageSerre,
+      rayonEtoiles: cadrageSerre ? monde.rayonReel : monde.rayon,
+      // La distance RÉELLE de la caméra, pas sa consigne. Sans elle, un harnais
+      // qui veut prouver qu'on s'est approché en est réduit à regarder grossir
+      // l'étoile — or son rayon PLAFONNE à 9 : la mesure sature et déclare
+      // immobile une caméra qui a parcouru la moitié du monde. Constaté le
+      // 2026-08-13 ; l'instrument mentait, pas le moteur.
+      distance: function () { return cam.distance; },
+      nbNomsPermanents: Object.keys(lourdes).length
     };
     courant.image = window.requestAnimationFrame(dessiner);
     return courant;
@@ -834,6 +1120,7 @@
     rendre: rendre,
     arreter: arreter,
     construireMonde: construireMonde,
+    recentrerSurLesEtoiles: recentrerSurLesEtoiles,
     grouper: grouper,
     magnitudes: magnitudes,
     courant: function () { return courant; },
