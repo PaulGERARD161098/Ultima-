@@ -1,0 +1,156 @@
+/* Ultima Lv4 — LA COQUE D'UN NŒUD AU CIEL.
+   ---------------------------------------------------------------------------
+   Cette feuille ne redéfinit RIEN de ce qui existe : elle pose la mise en page
+   du plateau stellaire, le filigrane et la légende gravée. Le ciel lui-même est
+   habillé par `css/ciel.css`, réemployé tel quel — c'est la même scène, la même
+   étoile, le même filet doré qu'à RIVEN, et il n'y a aucune raison d'en
+   redessiner une seconde.
+
+   `css/boussole.css` N'EST PAS TOUCHÉE et reste chargée : la coque lui doit
+   encore son retour, son bandeau, son sceau et son cartouche de parole. Elle
+   est aussi la feuille dont VRANESH bâtit son propre plateau — la retoucher
+   pour arranger le ciel le déshabillerait en silence. */
+
+/* LA COQUE NE SE RÉCLAME PLUS DE LA BOUSSOLE, et ce n'est pas cosmétique.
+   Mesuré le 2026-08-13 : tant que la page portait `body.boussole` et
+   `.boussole-scene`, deux défauts en découlaient.
+     — `body.boussole` (spécificité 0,1,1) BAT le `body` de `stellaire.css`
+       (0,0,1) : le thème stellaire ne s'appliquait pas, la page restait au
+       lavis de mer. Une feuille de thème qui redéfinit des jetons ne peut rien
+       contre une règle plus spécifique qui peint en dur.
+     — `.boussole-scene` impose sa propre colonne flex avec `align-items:
+       center` : la scène du ciel y était réduite à 300 px de large et
+       s'étirait à 2275 px de haut, si bien que le moteur cadrait un viewBox de
+       320 × 2427 et que les étoiles sortaient de l'écran.
+   La coque définit donc SA mise en page, entièrement. `css/boussole.css` reste
+   chargée — le retour, le bandeau, le sceau et le cartouche de parole lui
+   doivent encore leur habillage —, mais la page ne se déclare plus boussole.
+   Sans `min-height: 0`, un enfant flex refuse de descendre sous sa taille
+   intrinsèque et la scène déborde. */
+/* `styles.css` pose `body { display: flex; flex-direction: column }`. Sur un
+   enfant flex, `margin: 0 auto` ne centre pas : il RÉDUIT l'élément à son
+   contenu. Mesuré — la coque tombait à 300 px sur un écran de 390. `console.css`
+   et `boussole.css` neutralisent ce flex pour exactement la même raison ; on
+   fait comme elles plutôt que d'inventer un contournement. */
+body.ciel-noeud {
+  display: block;
+  height: auto;
+  min-height: 100vh;
+  color: var(--creme);
+}
+
+.ciel-noeud-coque {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+  max-width: 760px;
+  margin: 0 auto;
+  min-height: 100svh;
+  padding: .8rem;
+  box-sizing: border-box;
+}
+
+/* Le plateau : la scène, plus ce qui doit SURVIVRE au rendu. Le moteur vide son
+   conteneur à chaque dessin ; le filigrane, la légende et le repli <noscript>
+   vivent donc ici, à côté de la scène, jamais dedans. */
+.ciel-noeud-plateau {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+.ciel-noeud-plateau > .ciel-scene { flex: 1; min-height: 0; }
+
+/* ---- ③ Le filigrane : le cœur de la boussole, passé DERRIÈRE le ciel ----
+   Sur la boussole, le médaillon siégeait au centre et les caps l'orbitaient.
+   Ici le centre est là où la caméra regarde : le médaillon s'efface donc
+   derrière les étoiles au lieu de leur disputer la place. Purement décoratif
+   (`aria-hidden`), et `pointer-events: none` — un ornement ne prend jamais un
+   clic destiné à une étoile. */
+/* AU CENTRE, ÇA NE MARCHAIT PAS — vu sur capture, pas déduit. Sur fond de
+   nuit, le médaillon à 13 % lit comme un DISQUE GRIS plus gros que les
+   étoiles : un troisième objet qui dispute la place à ceux qu'on vient
+   chercher, exactement ce que le commentaire ci-dessus disait d'éviter. Et le
+   centre est précisément là où le cadrage serré ramène les étoiles.
+   Il descend donc dans l'ANGLE, en sceau — l'idiome de la carte savante, où le
+   cartouche du graveur se pose dans un coin et ne traverse jamais la carte.
+   Plus petit, plus franc, et hors du chemin. */
+.ciel-filigrane {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  width: clamp(52px, 14%, 84px);
+  opacity: .3;
+  pointer-events: none;
+  z-index: 2;
+}
+.ciel-filigrane svg { display: block; width: 100%; height: auto; }
+.ciel-noeud-plateau > .ciel-scene { position: relative; z-index: 1; }
+/* La scène du ciel est peinte par `css/ciel.css` avec un fond opaque : le
+   filigrane serait donc invisible dessous. On la rend translucide ICI, et ici
+   seulement — RIVEN garde la sienne intacte. */
+.ciel-noeud-plateau > .ciel-scene { background-color: transparent; }
+.ciel-noeud-plateau {
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(30, 60, 100, .22), rgba(0, 0, 0, 0) 62%),
+    linear-gradient(180deg, var(--ciel-nuit-haute), var(--ciel-nuit-basse) 78%);
+}
+
+/* ---- ③ La légende gravée, sous le ciel ---- */
+.ciel-legende {
+  margin: .35rem 0 0;
+  text-align: center;
+  font-family: var(--police-titre, Georgia, serif);
+  font-size: .82rem;
+  letter-spacing: .14em;
+  text-transform: lowercase;
+  font-style: italic;
+  color: var(--or-doux, #d8bd82);
+  opacity: .78;
+}
+
+/* ---- ⑥ Le repli sans JavaScript ----
+   Il n'est visible que si le ciel n'a pas pu se peindre — et ce jour-là, cette
+   liste EST la navigation. Le ciel étant entièrement dessiné en JavaScript, ce
+   repli compte davantage qu'au temps de la boussole, pas moins. */
+.ciel-noeud-plateau noscript {
+  display: block;
+  padding: 1rem;
+}
+
+/* ---- ② Le blason, dans le cartouche de Léo ----
+   Il vivait sur le cap ; il vit maintenant au survol, où la boussole montrait
+   déjà l'identité du cap. Petit, à gauche du nom : c'est une vignette, pas une
+   illustration — le cartouche sert à LIRE. */
+.parole-blason {
+  float: left;
+  width: 44px;
+  margin: 0 .6rem .2rem 0;
+}
+.parole-blason svg { display: block; width: 100%; height: auto; }
+
+/* ---- Le cartouche de Léo revient DANS LE FLUX ----
+   `boussole.css` le pose en `position: fixed` : sur une boussole, le plateau
+   est centré et le cartouche flotte au bas de l'écran sans rien recouvrir. Au
+   ciel, la scène remplit la hauteur — mesuré, le cartouche mangeait ses 126
+   derniers pixels, et les étoiles dépliées disparaissaient dessous.
+   On le remet donc dans la colonne, ici et seulement ici : la scène rend la
+   place au lieu de la partager. `boussole.css` n'est pas touchée — VRANESH et
+   les huit coques encore à la boussole gardent leur cartouche flottant. */
+body.ciel-noeud #boussole-parole {
+  position: static;
+  flex: 0 0 auto;
+  /* `boussole.css` centrait le cartouche FLOTTANT par `left: 50%` +
+     `translateX(-50%)` sous 700 px. Remis dans le flux, la translation
+     subsiste et le pousse à moitié hors de l'écran — vu sur capture. On la
+     neutralise avec le reste du positionnement : les deux vont ensemble. */
+  left: auto;
+  right: auto;
+  bottom: auto;
+  transform: none;
+  width: min(100%, 520px);
+  margin: 0 auto;
+}

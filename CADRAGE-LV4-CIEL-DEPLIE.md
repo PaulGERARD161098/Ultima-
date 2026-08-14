@@ -597,3 +597,84 @@ plus aucune page ne l'appelle — vérifié par recherche, pas supposé.
 - ✅ Le périmètre réel des harnais est compté (§13.0 ①).
 - ✅ Le piège `boussole.css` / VRANESH est identifié (§13.0 ②).
 - ⏳ **Le go de Paul sur le découpage** (§13.3) et sur la **coque pilote**.
+
+---
+
+## 14. Étape ④a — la coque pilote au ciel. Livrée le 2026-08-13.
+
+`ultima.html` est la première coque à quitter la boussole. **Les six fonctions
+de l'inventaire §13.1 sont portées**, et le patrimoine est vert.
+
+| # | Fonction | Ce qu'elle est devenue |
+|---|---|---|
+| ① | **Cockpit** | Réutilisé tel quel (`js/cockpit-parole.mjs`), **fail-closed compris** — éprouvé avec session ET sur erreur 500. |
+| ② | **Blasons** | **Déplacé** : la gravure paraît dans le cartouche à l'approche, au lieu d'être peinte sur le cap. Un disque de parchemin clair au milieu d'une nuit perdrait la gravure et le registre. |
+| ③ | **Cœur + légende** | **Déplacé** : le médaillon descend en sceau dans l'angle (au centre, il disputait la place aux étoiles — vu sur capture) ; la légende reste, sous le ciel. |
+| ④ | **Passerelle** | Le trait entre caps liés est tracé par le moteur. `ultima-perso` n'a pas de caps jumeaux : **le libellé d'arc reste à porter sur une coque qui en a** (GRIMA, NAGA). |
+| ⑤ | **Cap « à venir »** | **Porté** : `aria-disabled`, atteignable au clavier, Entrée montre le résumé et ne navigue pas. Éprouvé sur un registre construit — `ultima-perso` n'a aucun cap à venir, la fonction aurait été déclarée portée sans jamais tourner. |
+| ⑥ | **Repli `<noscript>`** | **Intact** — et il a failli disparaître : le moteur VIDE son conteneur à chaque dessin. Il vit désormais dans le plateau, à côté de la scène. Personne ne l'aurait vu partir : on ne le regarde qu'avec JavaScript désactivé. |
+
+### 🔻 CE QUI EST PERDU — et qui est écrit ici pour que personne ne le découvre
+
+**Le clic du milieu, « ouvrir dans un nouvel onglet », « copier l'adresse ».**
+La boussole faisait de chaque cap un `<a href>` ; l'étoile est un
+`<g role="button">`. On a **essayé** de garder le lien en enveloppant chaque
+étoile d'une ancre SVG. Mesuré : **enveloppée, l'étoile perd le focus clavier**
+— il retombe sur `body` dans l'instant, là où le ciel nu le garde (comparaison
+faite sur RIVEN, même geste). **Le clavier passe avant le clic du milieu**,
+l'ancre a été retirée. Ce qui reste : le repli `<noscript>` liste toutes les
+portes, et les harnais éprouvent désormais chaque cible **en cliquant**, ce qui
+est une preuve plus forte qu'un attribut lu.
+
+### Cinq défauts trouvés, et comment
+
+1. **Le repli `<noscript>` allait être effacé** par le premier rendu. Trouvé en
+   RELISANT le moteur avant de lancer la page.
+2. **`body.boussole` battait `stellaire.css`** (0,1,1 contre 0,0,1) : le thème
+   ne s'appliquait pas. Et `.boussole-scene` étirait la scène à **2275 px**.
+   La coque ne se réclame plus de la boussole.
+3. **Les jetons de nuit de `ciel.css` sont portés par `.espace-ciel`**, la coque
+   de RIVEN — pas par `:root`. Une page qui charge la feuille sans cette classe
+   perd TOUT le régime chromatique **en silence**, car elle a l'air sombre grâce
+   au `body`. Le sélecteur s'allonge ; les valeurs ne se recopient pas.
+4. **Le focus clavier se détruisait lui-même** : atteindre un cap au clavier le
+   dépliait, le dépliage reconstruit la scène, et l'élément focalisé
+   disparaissait. Le focus lui est désormais rendu après le re-dessin.
+5. **Le cartouche recouvrait le bas de la scène** (`position: fixed` de la
+   boussole) puis débordait à gauche (`translateX(-50%)` résiduel). Les deux vus
+   sur capture, corrigés dans la feuille de la coque — `boussole.css` intacte.
+
+### Le cadrage a encore appris quelque chose
+
+Le pire cas **le plus petit** manquait : `smoke-lv4-ciel` éprouvait 3, 12 et 20
+objets ; `ultima-perso` en a **DEUX**, et deux objets se rangent aux extrémités
+du cadre — la configuration la plus tendue pour le bord. Le nom du cap du bas
+touchait le filet. S'y est ajouté le pire cas **latéral** (noms de 20
+caractères) : il a répondu **93,7 unités de débord**, et démoli au passage un
+raisonnement — « le nom est centré, donc sa moitié suffit ». Une constante ne
+peut pas borner une largeur de texte : **la marge latérale se MESURE** sur les
+libellés peints, et sur un écran étroit c'est **la police qui cède avant la
+caméra**, parce que reculer éloigne les étoiles sans jamais rétrécir leurs noms.
+
+### Assertions reprises — classées, aucune perdue en silence
+
+`smoke-boussole` (5), `smoke-quadrants` (4), `smoke-console` (9) : **portées**
+quand le sélecteur seul changeait, **remplacées** quand le support changeait
+(les devises se disent maintenant au survol ; les contrastes se mesurent sur la
+nuit et non sur le parchemin), **une seule abandonnée** — « une aiguille par
+cadran » : l'aiguille joignait le centre de la rose à un cap, et un ciel n'a pas
+de moyeu. Elle est remplacée par le contrôle qu'elle approchait, « une étoile
+par cadran ». L'**ordre** des caps est abandonné partout, avec sa raison : une
+constellation range par géométrie, pas par liste.
+
+Nouveau : `tests/smoke-lv4-coque.mjs` — une entrée par fonction portée.
+Patrimoine : **59 harnais, sortie 0**.
+
+### ⏳ Ce qui reste pour finir l'étape ④
+
+- **④b — les sept coques ordinaires**, sur le module éprouvé.
+- **④c — la racine**, en dernier.
+- Le **libellé de passerelle** (fonction ④) sur une coque qui a des caps
+  jumeaux : `ultima-perso` n'en a pas.
+- La **disposition en colonne** sur écran large reste celle que Paul a validée ;
+  elle laisse la largeur creuse et se rouvrira s'il le demande.

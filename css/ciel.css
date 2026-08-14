@@ -7,12 +7,28 @@
    Encre de nuit jamais noire, filets dorés, capitales espacées — le registre
    antique et sérieux du 2026-07-08 tient, il change de fond. */
 
-.espace-ciel {
+/* LE RÉGIME CHROMATIQUE DU CIEL EST PORTÉ PAR UNE CLASSE, pas par `:root`, et
+   c'est délibéré : sur RIVEN, le ciel est UN onglet parmi d'autres, et ses
+   couleurs de nuit n'ont rien à faire sur la fiche en parchemin d'à côté.
+   La conséquence, mesurée le 2026-08-13 : une page qui charge `ciel.css` sans
+   porter cette classe perd TOUT le régime en silence — les `var()` deviennent
+   invalides, le fond de la scène ne peint plus, et rien ne le signale (la page
+   a l'air sombre parce que le `body` l'est). La coque LV4 rejoint donc la
+   liste au lieu de recopier les cinq valeurs ailleurs : le bloc est partagé,
+   c'est son sélecteur qui s'allonge. */
+.espace-ciel,
+.ciel-noeud-coque {
   --ciel-nuit-haute: #0a1220;
   --ciel-nuit-basse: #03070e;
   --ciel-or: #a9884a;
   --ciel-or-clair: #d8bd82;
   --ciel-creme: #f2ead6;
+}
+
+/* La MISE EN PAGE de l'onglet RIVEN, elle, ne se partage pas : la coque LV4 a
+   la sienne. Séparée du bloc de jetons ci-dessus pour que rejoindre le régime
+   chromatique n'oblige personne à hériter d'une disposition. */
+.espace-ciel {
   display: flex;
   flex-direction: column;
   gap: .7rem;

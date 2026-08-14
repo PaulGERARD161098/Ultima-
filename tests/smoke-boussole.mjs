@@ -204,18 +204,34 @@ console.log('— B. ULTIMA → /ultima.html (la supra-division) —');
 await capUltima.click();
 await page.waitForURL('**/ultima.html', { timeout: 20000 });
 verifier('Clic ULTIMA → URL ultima.html', /\/ultima\.html$/.test(page.url()), page.url());
-await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
-const capsUltima = (await page.locator('.cap-nom').allTextContents()).map((n) => n.trim());
+// ULTIMA EST PASSÉE AU CIEL le 2026-08-13 (étape ④a) : c'est la coque pilote.
+// Les assertions de cette section ont été reprises UNE PAR UNE et classées.
+//   — « Clic ULTIMA → URL ultima.html » : PORTÉE telle quelle (la racine, elle,
+//     est encore une boussole ; elle passera en dernier).
+//   — L'attente du plateau : REMPLACÉE — on attend les étoiles au lieu de la
+//     rose. Même garantie : l'écran est prêt.
+//   — « les cadrans du registre » : REMPLACÉE, et l'ORDRE est abandonné avec sa
+//     raison. Une boussole range ses caps en liste ; une constellation les pose
+//     par géométrie, et l'ordre du DOM y suit la profondeur, pas le registre.
+//     On compare donc des ENSEMBLES. La garantie qui comptait — tous les caps
+//     du registre, et rien qu'eux — est intégralement tenue ; celle qu'on lâche
+//     est un ordre que le nouveau support ne porte pas.
+//   — « ALTHEA n'est plus un cap » : PORTÉE, nouveau sélecteur, même preuve par
+//     l'ABSENCE.
+//   — « Retour vers la racine » : PORTÉE telle quelle.
+await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
+const capsUltima = (await page.locator('#ciel-noeud-scene text.ciel-nom').allTextContents())
+  .map((n) => n.trim());
+const attendusUltima = NOEUDS['ultima-perso'].enfants.map((id) => NOEUDS[id].nom);
 // 2026-08-01 : deux macro-quadrants. 2026-08-06 : ALTHEA s'y ajoute.
 // 2026-08-07 : Paul le REMONTE à la racine, ULTIMA retrouve ses deux devises.
-verifier('Boussole ULTIMA : les cadrans du registre',
-  JSON.stringify(capsUltima)
-    === JSON.stringify(NOEUDS['ultima-perso'].enfants.map((id) => NOEUDS[id].nom)),
+verifier('Ciel ULTIMA : les cadrans du registre, tous et rien qu\'eux',
+  JSON.stringify(capsUltima.slice().sort()) === JSON.stringify(attendusUltima.slice().sort()),
   JSON.stringify(capsUltima));
 // Éprouvé par l'ABSENCE : ALTHEA a quitté cet étage. Sans ce contrôle, un
 // doublon de nœud laisserait le cap ici sans qu'aucune assertion ne bronche.
 verifier('ALTHEA n’est PLUS un cap d’ULTIMA',
-  (await page.locator('.cap[data-cap="althea"]').count()) === 0
+  (await page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="althea"]').count()) === 0
     && !capsUltima.includes('ALTHEA'), JSON.stringify(capsUltima));
 verifier('Retour vers la racine présent',
   (await page.locator('.console-retour a[href="/"]').count()) === 1);

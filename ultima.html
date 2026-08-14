@@ -5,21 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ultima — ULTIMA (le personnel)</title>
   <meta name="description" content="ULTIMA, la supra-division personnelle : deux cadrans autour de la rose — GRIMA (ce qui est utile) et NAGA (ce qui fait grandir).">
-  <meta name="theme-color" content="#0e3a52">
+  <meta name="theme-color" content="#070d18">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%231e6fb8'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23ffffff'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/console.css">
   <link rel="stylesheet" href="css/boussole.css">
+  <!-- LV4 — le ciel. `ciel.css` est réemployée telle quelle (même scène, même
+       étoile qu'à RIVEN) ; `stellaire.css` vient EN DERNIER car elle redéfinit
+       les jetons de `styles.css` : c'est ainsi que le thème s'applique sans
+       qu'aucune des feuilles précédentes soit modifiée. -->
+  <link rel="stylesheet" href="css/ciel.css">
+  <link rel="stylesheet" href="css/ciel-noeud.css">
+  <link rel="stylesheet" href="css/stellaire.css">
 </head>
-<!-- ULTIMA — supra-division personnelle (Lv3, boucle L2 ; macro-quadrants
-     2026-08-01). Deux cadrans cliquables : GRIMA (ce qui est utile) et NAGA
-     (ce qui fait grandir). Cette page n'est qu'une coque — les caps, les
-     aiguilles, le cœur et la parole de Léo sont rendus par
-     js/boussole-noyau.mjs à partir du registre (`data-noeud`). -->
-<body class="boussole" data-noeud="ultima-perso">
+<!-- ULTIMA — supra-division personnelle. COQUE PILOTE DE L'ÉTAPE ④
+     (2026-08-13) : la première à passer de la boussole au CIEL. Deux cadrans —
+     GRIMA (ce qui est utile) et NAGA (ce qui fait grandir) — désormais rendus
+     en constellation par js/ciel-noeud.mjs à partir du registre
+     (`data-noeud`). La page reste une coque : elle ne porte ni SVG de cap ni
+     logique, c'est ce qui empêche la forme de dériver d'un écran à l'autre.
+     Elle garde son retour, son bandeau, son sceau, son cartouche de parole —
+     et son repli <noscript>. -->
+<body class="ciel-noeud" data-noeud="ultima-perso">
 
-  <div class="boussole-scene">
+  <div class="ciel-noeud-coque">
 
     <!-- Retour à la boussole racine (les supra-divisions et ALTHEA). -->
     <p class="console-retour boussole-retour"><a href="/">↞ Boussole</a></p>
@@ -65,9 +75,17 @@
       </h1>
     </header>
 
-    <!-- ===== La boussole des deux cadrans, rendue par le noyau ===== -->
-    <main class="boussole-plateau" id="boussole-plateau"
-          aria-label="Boussole de la supra-division personnelle ULTIMA">
+    <!-- ===== Le ciel des deux cadrans, rendu par js/ciel-noeud.mjs =====
+         LA SCÈNE EST VIDÉE À CHAQUE DESSIN par le moteur du ciel
+         (`textContent = ''`). Tout ce qui doit lui survivre — le filigrane, la
+         légende gravée, et le repli <noscript> ci-dessous — vit dans le
+         PLATEAU, à côté de la scène. Posé dedans, le repli sans JavaScript
+         aurait été effacé au premier rendu, et personne ne l'aurait vu
+         disparaître : on ne le regarde qu'avec JavaScript désactivé. -->
+    <div class="ciel-noeud-plateau" id="ciel-noeud-plateau">
+      <main class="ciel-scene" id="ciel-noeud-scene"
+            aria-label="Ciel de la supra-division personnelle ULTIMA">
+      </main>
       <!-- Repli sans JavaScript : TOUS les cadrans restent atteignables
            (invariant Lv3 §2). ALTHEA y manquait à son arrivée le 2026-08-06 —
            un cap qu'on n'atteint pas sans JS est un cap qui n'existe pas pour
@@ -79,7 +97,7 @@
           <li><a href="naga.html">NAGA — ce qui fait grandir (IMLADRIK, ADRAMELECH, TAO)</a></li>
         </ul>
       </noscript>
-    </main>
+    </div>
 
     <!-- Parole de Léo : l'essentiel du cap survolé (rempli par le noyau). -->
     <aside class="boussole-parole" id="boussole-parole" role="status" aria-live="polite">
@@ -87,6 +105,9 @@
 
   </div>
 
-  <script type="module" src="js/boussole-noyau.mjs"></script>
+  <!-- Le moteur du ciel est un script classique (il expose `window.UltimaCiel`)
+       et s'exécute avant le module, qui est différé par nature. -->
+  <script src="js/ciel.js"></script>
+  <script type="module" src="js/ciel-noeud.mjs"></script>
 </body>
 </html>
