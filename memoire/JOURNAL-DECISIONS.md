@@ -2783,3 +2783,49 @@
   (`ultima.html`, celle qui cumule le plus de fonctions à porter), puis les
   sept ordinaires, puis **la racine en dernier** — l'écran le plus particulier
   ne doit pas servir de modèle aux huit autres. Pre-mortem à 12 entrées.
+
+## 2026-08-13 (nuit) — la coque pilote au ciel, et ce qu'un portage n'a pas le droit de payer en douce
+
+- **Paul : « go »** sur le découpage. Livré l'étape ④a — `ultima.html` quitte la
+  boussole. Les six fonctions inventoriées sont portées, patrimoine vert
+  (**59 harnais**).
+- **LE CLAVIER PASSE AVANT LE CLIC DU MILIEU.** La boussole faisait de chaque
+  cap un `<a href>` ; l'étoile est un `<g role="button">`. J'ai *essayé* de
+  garder le lien en enveloppant l'étoile d'une ancre SVG. **Mesuré : enveloppée,
+  l'étoile perd le focus clavier** — il retombe sur `body`, là où le ciel nu le
+  garde (comparé sur RIVEN, même geste). L'ancre est tombée, et **la perte est
+  ÉCRITE** dans le cadrage, le commit et le code. *Un portage n'a pas le droit
+  de payer avec ce qu'il ne mentionne pas.*
+- **LE FOCUS SE DÉTRUISAIT LUI-MÊME.** Atteindre un cap au clavier le dépliait ;
+  déplier reconstruit la scène ; l'élément focalisé disparaissait. Un menu où la
+  tabulation s'annule elle-même n'est pas navigable. Le focus lui est rendu
+  après le re-dessin.
+- **LE PIRE CAS QUI MANQUAIT ÉTAIT LE PLUS PETIT.** J'éprouvais 3, 12 et 20
+  objets ; la coque réelle en a **DEUX**, et deux objets se rangent aux
+  extrémités du cadre — la configuration la plus TENDUE pour le bord, pas la
+  plus détendue. *Un pire cas ne se cherche pas seulement vers le haut.*
+- **UN RAISONNEMENT N'EST PAS UNE MESURE.** « Le nom est centré, donc sa moitié
+  suffit » → marge latérale à 52 → le pire cas construit (noms de 20
+  caractères) a répondu **93,7 unités de débord**. Une constante ne peut pas
+  borner une largeur de texte : elle se **mesure** sur les libellés peints. Et
+  sur écran étroit, c'est la **POLICE qui cède avant la caméra** — reculer
+  éloigne les étoiles sans jamais rétrécir leurs noms.
+- **UN SEUIL QUI BAISSE DOIT SE JUSTIFIER PAR LA GÉOMÉTRIE, PAS PAR L'ENVIE DE
+  PASSER.** Douze libellés sur 390 px ne laissent que 45 % d'étalement utile :
+  limite physique. Les 60 % restent exigés **là où le produit vit** (4 caps au
+  plus) ; au-delà, un plancher mesuré dont la seule fonction est de détecter une
+  régression. Écrit en toutes lettres dans le harnais.
+- **TROIS DÉFAUTS SUR CAPTURE, DEUX EN RELISANT LE CODE.** Le repli `<noscript>`
+  allait être effacé par le premier rendu (trouvé en relisant le moteur AVANT de
+  lancer la page) ; `body.boussole` battait `stellaire.css` en spécificité et
+  `.boussole-scene` étirait la scène à **2275 px** ; **les jetons de nuit de
+  `ciel.css` sont portés par `.espace-ciel`**, si bien qu'une page qui charge la
+  feuille sans cette classe perd TOUT le régime chromatique **en silence** —
+  elle a l'air sombre grâce au `body`, et rien ne signale la panne.
+- **UNE ASSERTION ABANDONNÉE, UNE SEULE, AVEC SA RAISON** : « une aiguille par
+  cadran ». L'aiguille joignait le centre de la rose à un cap ; un ciel n'a pas
+  de moyeu d'où partir. Remplacée par le contrôle qu'elle approchait. L'ORDRE
+  des caps est abandonné partout : une constellation range par géométrie.
+- **`css/boussole.css` et `js/boussole-noyau.mjs` INTOUCHÉS**, comme le cadrage
+  l'exigeait : VRANESH bâtit sur la première, les huit coques restantes sur le
+  second.
