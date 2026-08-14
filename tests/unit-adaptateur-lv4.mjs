@@ -16,7 +16,7 @@
 //      pas un garde-fou.
 //   5. LE CHEMIN : le fil d'Ariane se lit dans le registre, et un registre
 //      malade (boucle, nœud inconnu) ne fait pas tourner la page sans fin.
-import { versCiel, cheminVers } from '../design/adaptateur-lv4.mjs';
+import { versCiel, cheminVers } from '../js/adaptateur-lv4.mjs';
 import { NOEUDS } from '../js/registre-lv3.mjs';
 
 const verdicts = {};

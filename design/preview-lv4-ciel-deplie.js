@@ -4,7 +4,7 @@
    module, `adaptateur-lv4.mjs`, où la maquette du matin l'a déjà éprouvé sur
    dix écrans. Deux maquettes, un seul adaptateur. */
 import { NOEUDS } from '../js/registre-lv3.mjs';
-import { versCiel } from './adaptateur-lv4.mjs';
+import { versCiel } from '../js/adaptateur-lv4.mjs';
 
 var ETAGES = ['les galaxies', 'les nébuleuses', 'les constellations', 'les étoiles'];
 

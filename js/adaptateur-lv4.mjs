@@ -10,8 +10,11 @@
    absents et tue la page. Un composant réclamé par un second appelant se
    DÉPLACE vers son propre module, il ne se recopie pas (règle du 2026-07-30).
 
-   Destination : quand la phase 2 sera livrée, ce fichier rejoint js/ et vit à
-   côté du registre, testable sans navigateur. */
+   ARRIVÉ À DESTINATION le 2026-08-13 (étape ④a). Il vivait dans `design/` en
+   attendant que la production s'en serve ; elle s'en sert. Il vit désormais
+   dans `js/`, à côté du registre qu'il lit — et il cesse d'être une pièce de
+   maquette pour devenir du code de production, avec ce que cela impose :
+   `tests/unit-adaptateur-lv4.mjs` le tient, sans navigateur. */
 
 /**
  * Un écran de console devient UNE constellation : ses caps sont ses étoiles,

@@ -7,7 +7,7 @@
 
    Ne reste ici que le harnachement de maquette, et lui seul est jetable. */
 import { NOEUDS } from '../js/registre-lv3.mjs';
-import { versCiel } from './adaptateur-lv4.mjs';
+import { versCiel } from '../js/adaptateur-lv4.mjs';
 
 // ============================================================================
 // ②  Le harnachement de maquette
