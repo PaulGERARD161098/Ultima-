@@ -6,6 +6,36 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🌠 **SESSION 2026-08-13/14 (LV4 — Ultima devient un ciel qui se déplie), EN
+  COURS — PR #163, brouillon, NON fusionnée.** Cadrage :
+  `CADRAGE-LV4-CIEL-DEPLIE.md` (§§10 à 14). Quatre boucles fermées, une ouverte.
+  - ✅ **① La maquette du dépliage** : trois galaxies, le survol qui déplie, le
+    clic qui zoome, ALTHEA sans contenu, Léo à chaque étage.
+  - ✅ **② Le moteur** : `js/ciel.js` gagne trois capacités **inactives par
+    défaut** (cadrer sur l'étendue réelle, tous les noms, approcher un nœud).
+    L'occupation du cadre passe de **7,9 % à 65-75 %** pour un objectif de 60.
+    **RIVEN vert avant et après, sans une retouche.**
+  - ✅ **③ L'adaptateur** descend en profondeur et rejoint `js/` ; la garde
+    anti-emballement passe de la maquette au module — *un garde-fou que chaque
+    appelant doit penser à installer n'en est pas un.*
+  - ✅ **④a La coque pilote** : `ultima.html` quitte la boussole. **Six
+    fonctions portées** (cockpit fail-closed, blasons, cœur + légende, cap
+    « à venir » inerte, repli `<noscript>`, trait entre caps liés).
+  - 🔻 **UNE PERTE, DÉCLARÉE** : le clic du milieu et « ouvrir dans un nouvel
+    onglet ». L'ancre SVG qui les aurait gardés **fait perdre le focus clavier**
+    à l'étoile (mesuré, comparé à RIVEN). *Le clavier passe avant.*
+  - 🔻 **LE PIRE CAS QUI MANQUAIT ÉTAIT LE PLUS PETIT** : j'éprouvais 3, 12 et
+    20 objets ; la coque réelle en a **DEUX**, et deux objets se rangent aux
+    extrémités du cadre. *Un pire cas ne se cherche pas seulement vers le haut.*
+  - 🔻 **LES JETONS DE NUIT DE `ciel.css` SONT PORTÉS PAR `.espace-ciel`** — une
+    page qui charge la feuille sans cette classe perd **tout** le régime
+    chromatique **en silence**, puisqu'elle a l'air sombre grâce au `body`.
+  - 🔒 **`css/boussole.css` et `js/boussole-noyau.mjs` intouchés** : VRANESH
+    bâtit sur la première, les huit coques restantes sur le second. Le cadrage
+    les annonçait « modifiés » — erreur corrigée AVANT d'écrire une ligne.
+  - **Patrimoine : 59 harnais, sortie 0.** Restent ④b (sept coques) et ④c (la
+    racine, en dernier).
+
 - 🌌 **SESSION 2026-08-13 (RIVEN passe au thème stellaire), FUSIONNÉE** —
   PR #160 (`9b61993`, squash) au go de Paul (« Ok go / Merge tout / Puis
   diagnostique le tout et cadre la suite »). Cadrage : `CADRAGE-RIVEN-STELLAIRE.md`.
