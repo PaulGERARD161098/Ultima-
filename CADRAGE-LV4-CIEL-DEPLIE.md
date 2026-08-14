@@ -86,7 +86,8 @@ changent, et les taire serait mentir sur le coût :
    vrai registre et le vrai moteur. Elle rend : les trois galaxies à l'arrivée ;
    **le survol qui déplie** ; **le clic qui zoome** jusqu'à une page de travail ;
    le retour ; **ALTHEA** (galaxie sans contenu) ; un cap « à venir » ; le pire
-   cas à douze. **→ arbitrage de Paul**, dont le geste tactile (§8).
+   cas à douze. **Arbitrages rendus** le 2026-08-13 au soir, geste tactile
+   compris (§8).
 2. ✅ **Le moteur** : `js/ciel.js` gagne trois capacités, **inactives par
    défaut** — cadrer sur l'étendue réelle, montrer tous les noms sous un seuil,
    **zoomer vers un nœud**. RIVEN n'a pas bougé : ses assertions ont tourné
@@ -94,16 +95,23 @@ changent, et les taire serait mentir sur le coût :
 3. ✅ **L'adaptateur** registre → ciel, étendu à la profondeur : une galaxie
    connaît ses nébuleuses, et le fil d'Ariane se lit dans le registre.
    **Livré — voir §12.**
-4. **Les neuf coques** passent au ciel et au thème stellaire.
-5. **Les harnais** : les 170 assertions de navigation reprises **une par une**.
+4. **Les neuf coques** passent au ciel et au thème stellaire. **Cadré en détail
+   au §13** — une coque pilote, puis sept, puis la racine.
+5. **Les harnais** : les assertions de navigation reprises **une par une**.
+   Comptées le 2026-08-13 : **six harnais, ~236 assertions** — et non trois et
+   170 comme ce document l'a d'abord écrit (§13.0 ①).
 6. **Patrimoine COMPLET** + **preview Vercel**.
 
 ## 3. ③ Les moyens
 
 | Créé | `design/preview-lv4-ciel-deplie.html` · `tests/smoke-lv4-ciel.mjs` · `tests/unit-adaptateur-lv4.mjs` |
 |---|---|
-| **Modifié** | `js/ciel.js` (**trois options, inactives par défaut**) · `js/boussole-noyau.mjs` · l'adaptateur · `css/boussole.css` · les **9 coques** · `smoke-boussole` · `smoke-quadrants` · `smoke-console` |
-| **Intouché** | `js/registre-lv3.mjs` · `js/blasons.mjs` · `css/styles.css` · **RIVEN** · les API · la base |
+| **Modifié** | `js/ciel.js` (**trois options, inactives par défaut**) · l'adaptateur · les **9 coques** · les **six** harnais de navigation |
+| **Intouché** | `js/registre-lv3.mjs` · `js/blasons.mjs` · `css/styles.css` · **`css/boussole.css`** · **RIVEN** · **VRANESH** · les API · la base |
+
+> **Corrigé le 2026-08-13.** Ce tableau annonçait `css/boussole.css` en
+> « modifié » : c'était une erreur, et elle aurait coûté cher. `vranesh.html`
+> charge cette feuille et bâtit dessus. Détail et preuve au **§13.0 ②**.
 
 ## 4. ④ Critères de réussite — mesurés
 
@@ -165,12 +173,15 @@ changent, et les taire serait mentir sur le coût :
 - ses **deux défauts chiffrés** (cadrage à 5 %, noms qui tombent à six) sont
   précisément ce que l'étape ② doit corriger.
 
-## 8. La question ouverte — à trancher sur la maquette
+## 8. ✅ TRANCHÉ — le geste tactile
 
-**Le geste tactile.** Le survol n'existe pas au doigt. Trois candidats, à
-éprouver à 390 px : *(a)* premier tap = déplier, second = entrer ; *(b)* appui
-long = déplier ; *(c)* pas de dépliage au doigt, on entre directement. Aucun
-n'est évident — c'est l'écran de Paul qui décidera.
+**Le geste tactile.** Le survol n'existe pas au doigt. Trois candidats étaient
+posés, à éprouver à 390 px : *(a)* premier tap = déplier, second = entrer ;
+*(b)* appui long = déplier ; *(c)* pas de dépliage au doigt.
+
+**Décision de Paul, 2026-08-13 au soir — « on valide comme ça » : c'est (a).**
+C'est le candidat implanté dans la maquette, celui qu'il a eu sous les yeux.
+La question est close ; l'étape ④ le porte tel quel, elle ne le rejuge pas.
 
 ---
 
@@ -233,13 +244,15 @@ cheveu à chaque image, indéfiniment. Conséquence pratique : un harnais qui
 attend une cible *immobile* attend pour toujours — il faut déclencher les
 événements directement, comme `smoke-ciel` le fait déjà pour les clics.
 
-### Reste à trancher par Paul
+### ✅ Tranché par Paul le 2026-08-13 au soir
 
-- **Le geste tactile** : (a) implanté ici — premier appui déplie, second entre ;
-  (b) appui long ; (c) pas de dépliage au doigt. À essayer sur 390 px.
-- **La couleur des objets** : aujourd'hui tous pareils (des pairs), l'état se
-  lit dans l'étiquette. Faut-il distinguer « à venir » d'un cap ouvert par
-  autre chose que le mot ?
+- **Le geste tactile** : **(a)**, tel qu'implanté — premier appui déplie, second
+  entre. Voir §8.
+- **La disposition** : **la colonne**, telle que mesurée. Sur écran large elle
+  remplit 72 % de la hauteur et laisse la largeur creuse ; Paul l'a vue et l'a
+  validée. On ne la rejuge pas sans qu'il le demande.
+- **La couleur des objets** : reste comme aujourd'hui — tous pareils, des
+  pairs, l'état se lisant dans l'étiquette. Aucune seconde vérité chromatique.
 
 ---
 
@@ -260,6 +273,12 @@ attend une cible *immobile* attend pour toujours — il faut déclencher les
 - ✅ **Étape ② livrée** (§11) — les trois capacités, inactives par défaut.
   L'occupation passe de **7,9 %** à **65–75 %** (objectif 60), zéro sortie de
   cadre, tous les noms lisibles. RIVEN vert avant et après, sans une retouche.
+- ✅ **Étape ③ livrée** (§12) — l'adaptateur en profondeur, sa garde, le fil.
+- ✅ **Les deux arbitrages sont rendus** (2026-08-13, « on valide comme ça ») :
+  geste au doigt = premier appui déplie / second entre ; disposition = la
+  colonne. Ils sortent du registre des questions ouvertes.
+- ⏳ **Étape ④ cadrée** (§13) — reste **le go de Paul** sur le découpage
+  (pilote → sept → racine) et sur la coque pilote proposée (`ultima.html`).
 - ✅ **Mot confirmé** : c'était « **que Léo me guide** » (critère 4bis).
 - **Trancher le geste tactile** (§8) sur la maquette, à 390 px.
 
@@ -413,3 +432,168 @@ navigation**. Deux arbitrages la précèdent, et aucun n'est de mon ressort :
    trois se range en colonne. Sur téléphone c'est juste ; sur un 1280 c'est
    creux. **Changer cela, c'est choisir une FORME** (couronne, ligne, grille) —
    un parti pris visuel, pas une correction de cadrage. Je ne l'ai pas pris.
+
+---
+
+# 13. Cadrage détaillé de l'étape ④ — les coques passent au ciel
+
+> Validé par Paul le 2026-08-13 au soir : « **On valide comme ça. Cadre la
+> suite.** » Les deux arbitrages ouverts se referment donc sur l'état livré —
+> **geste au doigt : premier appui déplie, second entre** ; **disposition : la
+> colonne**, telle qu'elle est mesurée. Ils ne sont plus des questions.
+
+## 13.0 Ce que la lecture du réel a corrigé — AVANT de cadrer
+
+Deux chiffres de ce document étaient faux ou incomplets. Ils sont corrigés ici
+plutôt que recopiés : *un état qui se recopie de document en document n'est pas
+un état vérifié* (leçon du 2026-08-13 sur la migration 0025).
+
+**① Le périmètre des harnais était sous-estimé.** Le §3 nommait trois harnais
+(`smoke-boussole`, `smoke-quadrants`, `smoke-console`). Compté : ces trois-là
+portent bien **170 assertions** — le chiffre était juste. Mais **trois autres**
+tiennent aussi sur la structure de la boussole, et personne ne les avait
+comptés :
+
+| Harnais | Assertions | Ce qu'il tient sur la boussole |
+|---|---|---|
+| `smoke-boussole` | 60 | le moteur lui-même |
+| `smoke-quadrants` | 65 | les quadrants |
+| `smoke-console` | 45 | la racine |
+| `smoke-tao` | 30 | `boussole-parole`, aiguilles, libellé de passerelle |
+| `smoke-alpha` | 31 | plateau, cœur, légende, `cap--avenir` |
+| `smoke-imladrik-carto` | 25 | plateau, cœur, parole, retour |
+
+**Six harnais, ~236 assertions**, pas trois et 170.
+
+**② `css/boussole.css` NE PEUT PAS être retiré ni réaffecté.** `vranesh.html`
+le **charge** et bâtit dessus (`vranesh-boussole.css` « n'ajoute que les… »), et
+son plateau utilise la classe `.cap`. VRANESH n'est **pas** une des neuf coques
+et **ne passe pas au ciel**. Retirer ou repeindre `.cap` le déshabillerait en
+silence — seul `smoke-vranesh` (232 assertions) le verrait. *C'est exactement le
+piège du 2026-08-13 : le ciel avait emprunté trois classes à l'arbre, et
+supprimer le CSS de l'arbre aurait emporté sa barre d'outils.*
+
+## 13.1 ⚠️ CE QUE LA BOUSSOLE PORTE ET QUE LE CIEL N'A PAS
+
+**Le point dur de l'étape ④, et il n'est pas le rendu.** Remplacer la boussole
+par le ciel, ce n'est pas échanger deux dessins : c'est **porter cinq
+fonctions**, ou les perdre. Inventaire fait sur `js/boussole-noyau.mjs`, ligne à
+ligne, **avant** d'écrire quoi que ce soit — la méthode qui a sauvé sept
+assertions lors de la suppression de l'arbre.
+
+| # | Ce que la boussole fait | Le ciel aujourd'hui | Difficulté |
+|---|---|---|---|
+| 1 | **Le cockpit** — `/api/cockpit` derrière Bearer, comptes vivants dans la parole (« À traiter — 3 relances dues »), **fail-closed** sans session | rien | **la plus haute** : surface de sécurité |
+| 2 | **Le blason** — une gravure SVG par cap (`BLASONS`) | une étoile, identique pour tous | moyenne |
+| 3 | **Le cœur** — médaillon central (`COEURS`) + **légende gravée** | rien au centre | moyenne |
+| 4 | **La passerelle** — arc entre caps jumeaux, **nom gravé sur l'arc** (`lienLibelle`) | un trait droit, sans libellé | moyenne |
+| 5 | **Le cap « à venir »** — `role=button`, `aria-disabled`, tabulable, Entrée/Espace montre le résumé **sans naviguer** | l'étoile est cliquable comme les autres | basse, mais **accessibilité** |
+
+S'y ajoute `noeud.expose` → `window[…] = { noms }`, l'introspection dont les
+harnais se servent. Elle doit survivre au changement de moteur, sinon ce sont
+les harnais eux-mêmes qui s'aveuglent.
+
+**Le cockpit est le seul point qui touche la sécurité** : Bearer, `/api/cockpit`,
+comptes entiers, jamais de PII. La règle ne bouge pas — **sans session ou en cas
+d'échec, on retombe silencieusement sur le texte figé**. Un port qui perdrait le
+fail-closed serait un défaut de sécurité, pas d'ergonomie.
+
+## 13.2 ① Le but — ce qui sera vrai à la fin
+
+Les **neuf coques** (`index`, `ultima`, `alpha`, `grima`, `naga`, `bcp`, `tao`,
+`imladrik`, `adramelech`) rendent leur nœud **en ciel**, thème stellaire, avec
+le dépliage au survol, le zoom à l'entrée, le fil d'Ariane et **Léo à chaque
+étage**. **Les cinq fonctions ci-dessus sont portées, pas perdues.** VRANESH,
+DRAUKHAIN et RIVEN ne bougent pas. Le registre ne bouge pas.
+
+## 13.3 ② Les étapes — une coque d'abord, les huit autres ensuite
+
+**Pas de big-bang sur neuf écrans.** « Pas dix lièvres à la fois » vaut ici plus
+qu'ailleurs : neuf coques changées d'un coup, c'est six harnais rouges d'un coup
+et aucun moyen de savoir lequel accuse quoi.
+
+1. **④a — LA COQUE PILOTE : `ultima.html` (`ultima-perso`).** Choisie parce
+   qu'elle **cumule le plus de fonctions à porter** : `cockpit: true`, un cœur,
+   une légende, des caps liés, des caps « à venir ». *Si le ciel porte
+   `ultima-perso` en entier, il porte les huit autres.* Le pilote livre aussi le
+   **module de rendu** (`js/ciel-noeud.mjs`) que les huit reprendront tel quel.
+2. **④b — Les sept coques ordinaires**, une par une, sur le module éprouvé.
+3. **④c — LA RACINE (`index.html`) EN DERNIER.** C'est la console à quatre
+   quadrants, 220 lignes, la seule à porter du mobilier propre (bandeau
+   « Bienvenue sur Ultima »). C'est aussi **l'écran que Paul juge**. On y arrive
+   avec un module déjà éprouvé huit fois, pas avec un module qui s'invente.
+4. **④d — Les six harnais**, repris **un par un** — voir §13.5 et §13.6.
+5. **④e — Patrimoine COMPLET + preview Vercel.**
+
+## 13.4 ③ Les moyens
+
+| Créé | `js/ciel-noeud.mjs` (le rendu d'un nœud en ciel — l'équivalent de `boussole-noyau` côté ciel) · `css/ciel-noeud.css` |
+|---|---|
+| **Modifié** | les **9 coques** · `design/adaptateur-lv4.mjs` (blasons, cœur, cockpit) · `js/ciel.js` **si et seulement si** une fonction ne peut pas être portée par-dessus |
+| **Intouché** | `js/registre-lv3.mjs` · `js/blasons.mjs` · `css/styles.css` · **`css/boussole.css`** (VRANESH s'en sert) · **`js/boussole-noyau.mjs`** tant que les neuf coques ne sont pas passées · RIVEN · VRANESH · DRAUKHAIN · les API · la base |
+
+**`js/boussole-noyau.mjs` ne se supprime qu'à la toute fin**, et seulement si
+plus aucune page ne l'appelle — vérifié par recherche, pas supposé.
+
+## 13.5 ④ Critères de réussite — mesurés
+
+1. **Aucune cible perdue** : pour chacune des 9 coques, comparaison
+   **registre ↔ DOM**, automatique. Le registre fait foi.
+2. **Les cinq fonctions sont portées** : une assertion **par fonction et par
+   coque concernée**. Le cockpit s'éprouve **avec session et sans** — et *sans*
+   doit donner le texte figé, jamais une erreur ni un vide.
+3. **Le cap « à venir » reste inerte au clavier** : Entrée/Espace montre le
+   résumé et **ne navigue pas**. Éprouvé au clavier, pas à la souris.
+4. **`noeud.expose` survit** : les globaux d'introspection existent et disent
+   les mêmes noms qu'avant.
+5. **VRANESH INTACT** : `smoke-vranesh` (232 assertions) vert **sans une
+   retouche**. Même promesse que le critère 8 pour RIVEN, même méthode : il
+   tourne **avant** la première ligne et **après** la dernière.
+6. **Le cadre tient** : 390 × 844 et 1670 × 900, occupation ≥ 60 %, **zéro
+   sortie de cadre** — `getBBox()` contre `viewBox`, étiquettes de constellation
+   comprises.
+7. **Lisibilité** : WCAG AA, luminance de fond < 0,20, sur les neuf écrans.
+8. **Le chemin ne s'allonge pas** : gestes pour atteindre une page de travail,
+   comptés **avant et après**, coque par coque. *Un ciel qui rallonge le travail
+   est un échec, si beau soit-il.*
+9. **Patrimoine COMPLET vert, sortie 0.**
+
+## 13.6 ⑤ Ce qu'on ne fait PAS
+
+- **On ne touche pas au registre** : ni nœud ajouté, ni renommé, ni recâblé.
+- **On ne passe pas VRANESH, DRAUKHAIN ni RIVEN au ciel.** Ce sont des pages de
+  travail, pas des étages de navigation. RIVEN a **déjà** son ciel, et c'est le
+  ciel d'un réseau, pas d'un menu.
+- **On ne supprime pas `css/boussole.css`** (§13.0 ②).
+- **On ne réécrit pas les 236 assertions d'un bloc** : une par une, en disant
+  pour chacune si elle est **portée**, **remplacée** ou **abandonnée** — et si
+  elle est abandonnée, **pourquoi**, écrit.
+- **On n'invente aucune couleur ni aucun mot** déjà présents dans le produit.
+  *Deux fois cette semaine j'ai réinventé ce qui existait — les couleurs de
+  type, puis le message d'état vide — et présenté ma version comme un
+  arbitrage à rendre.*
+- **On ne fusionne rien dans `main`** sans le go de Paul.
+
+## 13.7 ⑥ Pre-mortem — « l'étape ④ a échoué : pourquoi ? »
+
+| # | Le mode de défaillance | Ce qui le prévient |
+|---|---|---|
+| 1 | **VRANESH se déshabille en silence** : on a retouché `.cap` ou `boussole.css`. | `boussole.css` déclaré intouchable (§13.6) ; `smoke-vranesh` avant/après. |
+| 2 | **Le cockpit tombe** : plus de comptes vivants, ou pire, il ne **fail-close** plus et laisse fuir une erreur serveur. | Critère 2 : éprouvé **avec ET sans session**. La règle fail-closed est recopiée telle quelle, pas réécrite. |
+| 3 | **Un cap « à venir » devient cliquable** et emmène sur une page qui n'existe pas. | Critère 3, au clavier. |
+| 4 | **Les blasons disparaissent** et tous les caps deviennent des points identiques : la console perd son vocabulaire visuel. | Fonction 2 de l'inventaire, assertion dédiée. |
+| 5 | **Le chemin s'allonge** : il faut désormais deux gestes là où il en fallait un. | Critère 8, compté avant/après. C'est le critère qui peut faire **abandonner** l'étape. |
+| 6 | **Big-bang** : neuf coques d'un coup, six harnais rouges, aucun coupable identifiable. | §13.3 : une coque pilote, puis sept, puis la racine. |
+| 7 | **Le module s'invente sur la racine** — l'écran le plus particulier sert de modèle aux huit autres. | La racine passe **en dernier**. |
+| 8 | **Une assertion est abandonnée en douce** parce qu'elle gênait. | Chaque assertion est classée portée / remplacée / **abandonnée avec sa raison écrite**. |
+| 9 | **On mesure au mauvais étalon** : l'occupation se juge sur un cadre différent d'un écran à l'autre. | Étalon unique, celui de `smoke-lv4-ciel`, inchangé. |
+| 10 | **Léo se tait** sur un étage. | Critère 4bis du §4 : aucun étage muet, assertion par coque. |
+| 11 | **Le ciel oublie le repli à plat.** Paul l'a demandé pour RIVEN (« si je n'ai pas assez de réseau ») ; il vaut pour les neuf. | `plat()` existe déjà : le module pilote le câble, assertion dédiée. |
+| 12 | **Une PII se glisse dans un ciel de navigation.** | Éprouvé **par l'absence**, comme l'adaptateur l'est déjà : aucune personne, aucun rattachement. |
+
+## 13.8 Le gate — ce qui doit être vrai avant d'écrire la première ligne
+
+- ✅ L'inventaire des cinq fonctions est fait (§13.1), sur le code, pas de mémoire.
+- ✅ Le périmètre réel des harnais est compté (§13.0 ①).
+- ✅ Le piège `boussole.css` / VRANESH est identifié (§13.0 ②).
+- ⏳ **Le go de Paul sur le découpage** (§13.3) et sur la **coque pilote**.

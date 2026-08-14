@@ -2747,3 +2747,39 @@
   c'est choisir une **forme** (couronne, ligne, grille) : un parti pris visuel,
   pas une correction de cadrage. *Le critère est atteint ; le reste appartient à
   Paul.*
+
+## 2026-08-13 (nuit) — cadrer l'étape ④, et deux chiffres de mon propre cadrage étaient faux
+
+- **Paul : « On valide comme ça. Cadre la suite. »** Les deux arbitrages
+  ouverts se referment sur l'état livré : geste au doigt **(a)** (premier appui
+  déplie, second entre), disposition **en colonne**. Écrits comme tranchés, pas
+  laissés en suspens.
+- **LE POINT DUR DE L'ÉTAPE ④ N'EST PAS LE RENDU.** Inventaire de
+  `js/boussole-noyau.mjs` ligne à ligne : la boussole porte **cinq fonctions
+  que le ciel n'a pas** — le **cockpit** (`/api/cockpit`, Bearer, fail-closed),
+  les **blasons**, le **cœur + la légende gravée**, la **passerelle avec son
+  nom sur l'arc**, et le **cap « à venir »** inerte au clavier. Remplacer la
+  boussole par le ciel, c'est **porter cinq fonctions ou les perdre**. *Même
+  méthode que pour la suppression de l'arbre : l'inventaire AVANT, c'est ce qui
+  avait sauvé sept assertions.*
+- **`css/boussole.css` NE PEUT PAS ÊTRE TOUCHÉ**, et mon propre cadrage
+  l'annonçait en « modifié ». `vranesh.html` le **charge** et bâtit dessus ;
+  son plateau utilise `.cap`. VRANESH n'est pas une des neuf coques et ne passe
+  pas au ciel. *C'est le piège du ciel qui avait emprunté trois classes à
+  l'arbre, à l'identique — et je l'avais écrit noir sur blanc dans le même
+  document.*
+- **LE PÉRIMÈTRE DES HARNAIS ÉTAIT SOUS-ESTIMÉ.** Le cadrage nommait trois
+  harnais et 170 assertions. Compté : les trois portent bien 170 — le chiffre
+  était juste —, mais **trois autres** tiennent aussi sur la structure de la
+  boussole (`smoke-tao`, `smoke-alpha`, `smoke-imladrik-carto`). **Six harnais,
+  ~236 assertions.**
+- **MON GREP A SUR-COMPTÉ AVANT QUE JE NE LE VÉRIFIE.** Une première passe
+  annonçait treize harnais : le mot **« passerelle » est surchargé** — l'arc de
+  la boussole d'un côté, le pont talent↔idéal de VRANESH / ZEKROM / DRAUKHAIN
+  de l'autre. Vérifié en contexte avant d'écrire le chiffre. *Un instrument qui
+  sur-compte invente un chantier, exactement comme celui qui sature en cache
+  un.*
+- **DÉCOUPAGE PROPOSÉ, PAS EXÉCUTÉ** (gate EL) : une **coque pilote**
+  (`ultima.html`, celle qui cumule le plus de fonctions à porter), puis les
+  sept ordinaires, puis **la racine en dernier** — l'écran le plus particulier
+  ne doit pas servir de modèle aux huit autres. Pre-mortem à 12 entrées.
