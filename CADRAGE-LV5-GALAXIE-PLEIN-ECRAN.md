@@ -506,6 +506,11 @@ surface** aujourd'hui, pour un travail JavaScript qui reste sous 4 ms.
 `smoke-lv4-coque` ont tourné **avant la première ligne et après la dernière**,
 verts les deux fois, **sans une retouche**.
 
+**Patrimoine COMPLET vert, sortie 0** — `bash tests/lancer.sh` en entier, et
+non les seuls harnais des fichiers modifiés (renfort du 2026-07-22 : c'est un
+changement du moteur et d'une feuille partagée, exactement le cas où une
+vérification partielle laisse passer un rouge invisible).
+
 ### 🔻 CINQ DÉFAUTS TROUVÉS — trois par la mesure, deux en regardant
 
 1. **MON INSTRUMENT DE PERFORMANCE NE MESURAIT RIEN.** Le premier lisait
