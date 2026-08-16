@@ -2829,3 +2829,60 @@
 - **`css/boussole.css` et `js/boussole-noyau.mjs` INTOUCHÉS**, comme le cadrage
   l'exigeait : VRANESH bâtit sur la première, les huit coques restantes sur le
   second.
+
+## 2026-08-16 (soir) — LV5 cadré : la galaxie prend l'écran, et deux interdits de LV4 tombent
+
+**Cadrage seul, aucune ligne de code.** Paul : « on fait un gros cadrage ce
+soir, et demain on s'y met tranquillement. » Livré :
+`CADRAGE-LV5-GALAXIE-PLEIN-ECRAN.md`.
+
+- **QUATRE DEMANDES, PAS UNE.** Le plein écran (mise en page), la finesse
+  (moteur de rendu), le geste (déjà livré en LV4), la propagation aux pages de
+  travail (modèle de navigation). *Les confondre était le premier piège : ce
+  sont quatre chantiers de natures différentes, et un seul d'entre eux touche
+  le moteur.*
+- **DEUX INTERDITS DE LV4 TOMBENT, ET C'EST ÉCRIT.** `CADRAGE-LV4 §13.6` disait
+  mot pour mot « on ne passe pas VRANESH, DRAUKHAIN ni RIVEN au ciel ». Paul
+  demande l'inverse. Son droit le plus strict — mais l'argument de LV4 ne
+  devient pas faux pour autant : **un ciel ne remplace pas un formulaire**. Ce
+  qui passe au ciel, c'est la boussole INTERNE de la page, pas la page.
+- **LE « GROSSIER » A UNE CAUSE MESURABLE : 130 grains fixes, en SVG.** Un champ
+  stellaire crédible demande 3 000 à 8 000 points, des voiles et des filaments :
+  **hors budget SVG d'un ordre de grandeur**, et c'est le téléphone à 390 px qui
+  décide, pas l'écran de bureau. D'où le **ciel à deux couches** — canvas 2D
+  décoratif pour le fond, SVG inchangé pour tout ce qui se clique, se focalise
+  et se lit. **Règle dure : si une information n'existe que dans le canvas, elle
+  n'existe pas.**
+- **CANVAS 2D, PAS WEBGL, ET PAS DE BIBLIOTHÈQUE.** WebGL se justifie au-delà de
+  ~50 000 points ; on vise 5 000. `globalCompositeOperation = 'lighter'` donne
+  l'addition lumineuse — ce qui fait le cœur brillant d'un amas — sans shader à
+  maintenir ni 600 Ko sous une CSP `script-src 'self'`.
+- **LE VRAI RISQUE N'EST PAS LA PERFORMANCE, C'EST LA PHASE.** Deux repères
+  (`viewBox` SVG contre pixels canvas × `devicePixelRatio`) qui dérivent donnent
+  un fond qui glisse sous les étoiles. Parade structurelle : **la même fonction
+  `projeter()` pour les deux couches**, et un **point témoin** à 1 px près,
+  écrit AVANT le premier grain.
+- **UN CANVAS QUI N'A PAS PEINT EST NOIR — EXACTEMENT COMME UN BEAU CIEL.** Le
+  fond ne se teste donc pas à la luminance mais à la **variance** des pixels.
+  Encore un instrument qui aurait supposé ce qu'il mesure.
+- **LE CONTRASTE CHANGE DE NATURE EN PLEIN ÉCRAN.** Le texte ne se lit plus sur
+  un jeton CSS connu mais sur un **pixel qui varie**. L'instrument doit mesurer
+  contre le **pire pixel réellement peint** sous la boîte de texte. C'est un
+  harnais neuf, pas un réglage.
+- **`100vh` MENT SUR MOBILE**, et `viewport-fit=cover` est absent des trois
+  coques vérifiées : l'encoche iOS mangerait le bas du ciel. Trouvé en lisant
+  les `<meta>`, pas en supposant.
+- **SIX PALIERS DE SAUVEGARDE**, demandés par Paul. Un palier = un point où l'on
+  peut s'arrêter net, tout vert, tout fusionné, Ultima meilleur qu'avant. P4 (la
+  racine) tient à lui seul la demande prioritaire ; P5 et P6 sont la
+  propagation, et **aucune des 16 pages de travail n'est engagée** par ce
+  cadrage.
+- **LV4 N'EST PAS FINI, ET LV5 L'ABSORBE.** Sept coques ordinaires et la racine
+  attendaient encore (④b, ④c). Les traiter à part aurait fait repeindre deux
+  fois les mêmes huit écrans.
+- **TROIS MOTS DE LA DICTÉE SIGNALÉS AU LIEU D'ÊTRE DEVINÉS** : « surveillance »
+  = surbrillance (sans enjeu) ; « nébuleuses » là où LV4 dit galaxies (renommage
+  de libellés, pas de modèle) ; et surtout **« place des filands »** = « plein de
+  filaments », qui désigne une maquette que Paul a aimée et que je n'ai pas pu
+  identifier avec certitude — deux candidates. **Question bloquante avant P0 :
+  sans elle, je raffinerais à l'aveugle.**
