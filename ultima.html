@@ -107,6 +107,14 @@
 
   <!-- Le moteur du ciel est un script classique (il expose `window.UltimaCiel`)
        et s'exécute avant le module, qui est différé par nature. -->
+  <!-- LV5 — la couche de fond, AVANT le moteur : celui-ci la cherche en global
+       au moment du rendu. Sans cette ligne, le garde `window.UltimaCielFond`
+       du moteur laisse la page fonctionner… sans fond, et SANS RIEN DIRE.
+       C'est exactement ce qui s'est produit au premier essai de P1 : option
+       activée, zéro canvas, aucune erreur console. Un garde qui protège d'une
+       panne masque aussi un oubli — d'où l'assertion dédiée dans le harnais,
+       qui EXIGE le canvas sur cette coque au lieu de s'en remettre au garde. -->
+  <script src="js/ciel-fond.js"></script>
   <script src="js/ciel.js"></script>
   <script type="module" src="js/ciel-noeud.mjs"></script>
 </body>

@@ -6,9 +6,12 @@
 > sont livrés, la coque pilote est en production. LV5 pousse trois choses plus
 > loin et **renverse deux interdits de LV4**, écrits noir sur blanc au §2.
 >
-> **Statut : cadrage. Aucune ligne de code n'est écrite tant que le gate du §10
-> n'est pas levé.** Dicté par Paul le 2026-08-16 au soir : « on fait un gros
-> cadrage ce soir, et demain on s'y met tranquillement. »
+> **Statut au 2026-08-16, 23 h : P0 et P1 LIVRÉES** (§11 et §12). Le gate du
+> §10 a été levé le soir même — Paul a tranché la question bloquante, puis les
+> deux arbitrages de forme (« fond avec les étoiles génial », « charge ok »).
+> Les paliers suivants restent fermés. *Cet en-tête annonçait « aucune ligne de
+> code » ; le laisser tel quel aurait fait de ce document un état périmé qui se
+> recopie — exactement ce que la leçon du 2026-08-13 interdit.*
 
 ---
 
@@ -46,12 +49,11 @@ le premier piège de ce chantier :
 
 1. **« ça le met en surveillance »** → *en **surbrillance***. Aucune ambiguïté
    réelle : c'est le survol qui éclaire, il existe déjà (`ciel-halo-choix`).
-2. **« place des filands »** → très probablement *« **plein de filaments** »*.
-   ⚠️ **Point à confirmer, et il compte** : Paul désigne une maquette qu'il a
-   trouvée « très bien ». Deux candidates dans `design/` : **`preview-riven-galaxie.html`**
-   (amas déterministes, liens tracés — le mot *amas* y est écrit six fois) et
-   **`preview-riven-voute.html`**. **Sans savoir laquelle, je peux raffiner dans
-   la mauvaise direction.** Question 1 du §10.
+2. **« place des filands »** → *« **plein de filaments** »*. Le point était
+   bloquant — Paul désignait une maquette qu'il avait trouvée « très bien », et
+   deux étaient candidates. ✅ **Tranché le soir même** : c'est le mode
+   **« Galaxie »** de **`preview-riven-galaxie.html`**, en charge dense. Voir
+   §11, où la comparaison des sept maquettes est chiffrée.
 3. **« mes trois nébuleuses »** → dans le vocabulaire posé en LV4, les trois
    objets de l'accueil sont des **galaxies** (ULTIMA, ALPHA, ALTHEA), et les
    nébuleuses sont ce qu'elles contiennent. **Le mot n'est pas le sujet** : le
@@ -573,9 +575,55 @@ soirée.
 1670, trois objets alignés verticalement laissent la largeur vide. La
 question 3 reste ouverte, elle a maintenant une image pour l'illustrer.
 
+---
+
+# 12. P1 — le fond sur la coque de production. Livrée le 2026-08-16.
+
+**Les deux arbitrages de forme sont rendus** par Paul, le soir même, sur la
+maquette : « **fond avec les étoiles génial** », « **charge ok** ». L'éclat du
+décor (0,58) et la densité sont donc **fixés** ; ils sortent des questions
+ouvertes et ne se rejugent pas sans demande.
+
+`ultima.html` — la seule coque déjà au ciel — allume la couche de fond. Le
+changement tient en deux lignes : l'option dans `js/ciel-noeud.mjs`, et la
+balise `<script>` dans la coque.
+
+| | 390 × 844 | 1280 × 860 |
+|---|---|---|
+| Grains | **769** | **1 470** |
+| Écart de phase | **0,23 px** | **0,21 px** |
+| Travail par image | 0,39 ms | 0,77 ms |
+| Poussière SVG restante | **0** | **0** |
+
+### 🔻 DEUX DÉFAUTS, ET AUCUN N'ÉTAIT DANS LE RENDU
+
+1. **UN GARDE QUI PROTÈGE D'UNE PANNE MASQUE AUSSI UN OUBLI.** Premier essai :
+   option activée, **aucun canvas**, **zéro erreur console**, page
+   parfaitement fonctionnelle. La coque n'avait pas la balise `<script>`, et
+   le garde `options.fond && window.UltimaCielFond` du moteur avait fait
+   exactement son travail — laisser vivre une page sans le module. Rien ne
+   distinguait « pas demandé » de « demandé et introuvable ».
+   **Le harnais EXIGE désormais le canvas sur cette coque** au lieu de s'en
+   remettre au garde. Sans cette assertion, les huit coques de P3 auraient pu
+   passer une à une avec la même option morte.
+2. **LE REPÈRE D'UNE MESURE DE POSITION DOIT ÊTRE CELUI DE L'OBJET MESURÉ.**
+   La maquette annonçait **0,00 px** de phase, la coque **1,60 px** — pour un
+   code de projection *identique*. Le fond n'y était pour rien : la scène de
+   production porte une **bordure d'1 px**, `getBoundingClientRect()` la compte
+   (border box) et le canvas commence à l'intérieur (padding box). Je mesurais
+   depuis un bord, le fond dessinait depuis l'autre. Depuis le repère du
+   canvas : **0,21 px**. *Une bordure d'un pixel suffit à faire mentir un
+   instrument juste par ailleurs — et c'est le quatrième de la journée.*
+
+### Ce que P1 ne donne PAS encore
+
+Le fond est visible sur la production, mais **discret** : la scène reste un
+plateau encadré de 734 × 524, soit 1 470 grains contre 4 234 en plein écran, et
+le dégradé du plateau l'éclaircit. **Le rendu que Paul a validé sur la maquette
+demande le plein écran** — c'est P2, et c'est là que la finesse paiera vraiment.
+
 ### Prochaine action unique
 
-**Ouvrir P1** — la couche de fond est déjà dans le moteur, inactive par
-défaut ; P1 se réduit donc à l'allumer sur la coque pilote et à trancher, avec
-Paul, le **curseur d'éclat du décor** : c'est le seul réglage qui sépare le
-rendu actuel de la richesse de la maquette de référence.
+**Ouvrir P2** — le plein écran sur `ultima.html`, avec le point dur déjà
+identifié et cadré : les **marges réservées** dans `distanceIdeale()`, pour que
+le cadrage sache qu'une partie du cadre est occupée par le mobilier.

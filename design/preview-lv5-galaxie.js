@@ -117,13 +117,17 @@ function mesurer() {
     //    être la position écran d'une étoile, contre ce que le NAVIGATEUR
     //    mesure sur cette même étoile. Deux chemins indépendants — comparer ma
     //    formule à ma formule ne prouverait rien.
+    //    LE REPÈRE EST CELUI DU CANVAS, pas celui de la scène : une bordure
+    //    d'1 px sur la scène suffit à faire lire 1,60 px d'écart là où il n'y
+    //    en a que 0,21 (constaté sur la coque de production, qui en a une).
+    var repere = canvas.getBoundingClientRect();
     var etoile = svg && svg.querySelector('.ciel-etoile');
     var id = etoile && etoile.getAttribute('data-noeud-id');
     var t = id && vue.temoin(id);
     if (t) {
       var r = etoile.querySelector('circle').getBoundingClientRect();
-      var cx = r.left + r.width / 2 - boite.left;
-      var cy = r.top + r.height / 2 - boite.top;
+      var cx = r.left + r.width / 2 - repere.left;
+      var cy = r.top + r.height / 2 - repere.top;
       var ecart = Math.sqrt(Math.pow(cx - t.px, 2) + Math.pow(cy - t.py, 2));
       lignes.push(verdict(ecart <= 1,
         'phase fond ↔ étoiles : <b>' + ecart.toFixed(2) + ' px</b> d’écart (exigé ≤ 1)'));

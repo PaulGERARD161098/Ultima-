@@ -164,6 +164,14 @@ export function rendre(idNoeud, options = {}) {
       // Les deux capacités de l'étape ②, activées ici et nulle part ailleurs.
       cadrerSurLesEtoiles: true,
       tousLesNoms: true,
+      // LV5 — LA COUCHE DE FOND (P1). Validée par Paul le 2026-08-16 sur la
+      // maquette : « fond avec les étoiles, génial ». Elle remplace les 130
+      // grains SVG fixes par un champ dont la densité suit la surface (1 266 à
+      // 5 200 grains), avec parallaxe, voiles et filaments.
+      // Elle n'est allumée QUE sur les coques de navigation. RIVEN ne l'active
+      // pas : son ciel montre un réseau de personnes, pas un menu, et son
+      // harnais doit continuer de passer sans une retouche.
+      fond: true,
       surClicNoeud: entrer
     });
     if (!vue) { return; }

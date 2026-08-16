@@ -62,10 +62,23 @@ async function ouvrir(largeur, hauteur) {
 // Il choisit donc une étoile que le moteur dessine, et il exige qu'il y en ait
 // une : « aucune étoile visible » est un échec, pas une excuse pour ne rien
 // mesurer.
+// LE REPÈRE EST CELUI DU CANVAS, ET C'EST UNE CORRECTION PAYÉE SUR P1.
+// La maquette annonçait 0,00 px et la coque de production 1,60 px — pour un
+// code de projection identique. La différence n'était pas dans le fond : la
+// scène de production porte une bordure d'1 px, `getBoundingClientRect()` la
+// compte (border box) et le canvas commence à l'intérieur (padding box). Je
+// mesurais depuis un bord, le fond dessinait depuis l'autre.
+// `versEcran` rend des pixels DANS LE REPÈRE DU CANVAS : c'est donc lui, et
+// lui seul, qui fait origine. Depuis ce repère : 0,21 px.
+// *Le repère d'une mesure de position doit être celui de l'objet mesuré, pas
+// celui de son voisin — et une bordure d'un pixel suffit à faire mentir un
+// instrument juste par ailleurs.*
 function ecartDePhase(page) {
   return page.evaluate(() => {
     const v = window.LV5.vue();
-    const boite = document.getElementById('lv5-scene').getBoundingClientRect();
+    const canvas = document.querySelector('canvas.ciel-fond');
+    if (!canvas) { return null; }
+    const boite = canvas.getBoundingClientRect();
     const visibles = Array.from(document.querySelectorAll('.ciel-etoile'))
       .filter((g) => g.getAttribute('display') !== 'none');
     if (!visibles.length) { return null; }
@@ -267,6 +280,85 @@ for (const [largeur, hauteur, nom] of [[390, 844, 'a390'], [1670, 900, 'a1670']]
   verdicts['leFondEstMuet_' + nom] =
     (await page.getAttribute('canvas.ciel-fond', 'aria-hidden')) === 'true';
 
+  await page.close();
+}
+
+// ---------------------------------------------------------------------------
+// ⑧ P1 — LE FOND SUR LA COQUE DE PRODUCTION (`ultima.html`).
+//
+// CE BLOC EXISTE À CAUSE D'UN OUBLI, et il est écrit pour qu'il ne se répète
+// pas. Le moteur ne monte le fond que si `window.UltimaCielFond` existe : ce
+// garde évite qu'une page sans le module se casse. Mais au premier essai de
+// P1, `ultima.html` n'avait pas la balise `<script>` — option activée, aucun
+// canvas, ZÉRO erreur console, page parfaitement fonctionnelle. Un garde qui
+// protège d'une panne masque aussi un oubli.
+// Le harnais EXIGE donc le canvas ici, au lieu de s'en remettre au garde.
+// ---------------------------------------------------------------------------
+for (const [largeur, hauteur, nom] of [[390, 844, 'coque390'], [1280, 860, 'coque1280']]) {
+  const page = await browser.newPage({ viewport: { width: largeur, height: hauteur } });
+  page.on('console', (m) => { if (m.type() === 'error') erreurs.push(m.text()); });
+  page.on('pageerror', (e) => erreurs.push(String(e)));
+  await page.goto('http://127.0.0.1:8123/ultima.html', { waitUntil: 'load' });
+  await page.waitForTimeout(1800);
+
+  const r = await page.evaluate(() => {
+    const c = document.querySelector('canvas.ciel-fond');
+    const v = window.UltimaCiel.courant();
+    let stats = null;
+    if (c) {
+      const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+      let s = 0; let s2 = 0; let n = 0;
+      for (let i = 0; i < d.length; i += 4 * 37) {
+        const l = (d[i] * 0.2126 + d[i + 1] * 0.7152 + d[i + 2] * 0.0722) * (d[i + 3] / 255);
+        s += l; s2 += l * l; n += 1;
+      }
+      const m = s / n;
+      stats = { moyenne: m, variance: s2 / n - m * m };
+    }
+    // La phase, dans le repère du canvas (voir la note plus haut).
+    let phase = null;
+    if (c && v && v.temoin) {
+      const boite = c.getBoundingClientRect();
+      for (const g of document.querySelectorAll('.ciel-etoile')) {
+        if (g.getAttribute('display') === 'none') { continue; }
+        const t = v.temoin(g.getAttribute('data-noeud-id'));
+        if (!t) { continue; }
+        const rr = g.querySelector('circle').getBoundingClientRect();
+        phase = Math.sqrt((rr.left + rr.width / 2 - boite.left - t.px) ** 2
+          + (rr.top + rr.height / 2 - boite.top - t.py) ** 2);
+        break;
+      }
+    }
+    // Le geste va-t-il bien à l'étoile ?
+    const g0 = document.querySelector('.ciel-etoile');
+    const z = g0 && g0.querySelector('.ciel-zone').getBoundingClientRect();
+    const cible = z && document.elementFromPoint(z.left + z.width / 2, z.top + z.height / 2);
+    return {
+      canvas: !!c,
+      stats,
+      phase,
+      grains: v ? v.nbGrains() : 0,
+      cout: v ? v.coutImage() : null,
+      // La poussière SVG d'hier ne doit PLUS être là : deux champs de grains
+      // superposés seraient deux vérités sur le même décor.
+      poussiereSvg: document.querySelectorAll('.ciel-decor circle').length,
+      etoiles: document.querySelectorAll('.ciel-etoile').length,
+      gesteVaALEtoile: !!cible && !!cible.closest('.ciel-etoile')
+    };
+  });
+
+  chiffres[nom] = {
+    grains: r.grains,
+    variance: r.stats ? +r.stats.variance.toFixed(3) : null,
+    phasePx: r.phase === null ? null : +r.phase.toFixed(2),
+    coutMs: r.cout === null ? null : +r.cout.toFixed(2)
+  };
+  verdicts['coqueLeFondEstMonte_' + nom] = r.canvas === true;
+  verdicts['coqueLeFondAPeint_' + nom] = !!r.stats && r.stats.variance > 0.05;
+  verdicts['coquePhaseTenue_' + nom] = r.phase !== null && r.phase <= 1;
+  verdicts['coquePlusDePoussiereSvg_' + nom] = r.poussiereSvg === 0;
+  verdicts['coqueLesCapsSontLa_' + nom] = r.etoiles === 2; // ULTIMA n'a que GRIMA et NAGA
+  verdicts['coqueLeGesteVaALEtoile_' + nom] = r.gesteVaALEtoile === true;
   await page.close();
 }
 
