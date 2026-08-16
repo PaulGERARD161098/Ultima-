@@ -1,0 +1,156 @@
+/* Maquette LV5 — LA GALAXIE PREND L'ÉCRAN.
+   ---------------------------------------------------------------------------
+   Cette feuille ne fait qu'une chose, et c'est le sujet même de l'étape : elle
+   remplace le modèle « page qui défile, plateau centré dedans » par le modèle
+   « scène qui tient l'écran, mobilier posé dessus ». Le ciel lui-même est
+   habillé par `css/ciel.css`, réemployé tel quel.
+
+   POURQUOI CE N'EST PAS UN `max-width` À RETIRER. La console d'Ultima pose
+   partout une colonne centrée (`styles.css`, `console.css`, `boussole.css`,
+   et `ciel-noeud.css` à 760 px). Retirer la largeur laisserait le bandeau, la
+   légende et le cartouche EMPILÉS dans le flux : la scène n'aurait toujours
+   que la place restante. Le plein écran demande que tout ce mobilier SORTE du
+   flux et devienne une surcouche. C'est ce que fait cette feuille. */
+
+/* `dvh` ET NON `vh`. Sur mobile, `100vh` compte la barre d'URL rétractable :
+   la scène déborderait de 60 à 90 px selon le navigateur, et le débordement
+   serait invisible sur un fond noir — on ne verrait que des étoiles coupées.
+   `dvh` suit la hauteur réellement visible. */
+html, body.lv5 {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* un plein écran qui défile n'est pas un plein écran */
+}
+
+body.lv5 {
+  display: block;
+  background: var(--ciel-nuit-basse, #03070e);
+  color: var(--ciel-creme, #f2ead6);
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+/* LA SCÈNE EST LE FOND DE L'ÉCRAN. Elle porte `.ciel-noeud-coque` en plus de
+   sa propre classe : c'est ainsi qu'elle hérite du régime chromatique de nuit,
+   qui est porté par une CLASSE et non par `:root` (piège mesuré le
+   2026-08-13 : une page qui charge `ciel.css` sans l'une de ces classes perd
+   tous les jetons EN SILENCE, car elle a l'air sombre grâce au `body`). */
+.lv5-scene {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  /* Repli pour les navigateurs sans `dvh` : ils prennent la ligne précédente. */
+  min-height: 100vh;
+  border: 0;
+  overflow: hidden;
+}
+/* Le cadre du plateau n'a plus lieu d'être : il n'y a plus de plateau. Le
+   double filet doré, lui, RESTE — c'est l'idiome de la carte savante, et il
+   devient la bordure de l'écran au lieu de celle d'une vignette. */
+.lv5-scene.ciel-scene { border: 0; }
+.lv5-scene.ciel-scene::after {
+  inset: 10px;
+  border-color: rgba(169, 136, 74, .16);
+}
+
+/* ---- LE MOBILIER : une surcouche, jamais un bandeau qui pousse ----
+   RÈGLE ABSOLUE DE CETTE COUCHE : les conteneurs ne reçoivent AUCUN geste,
+   seuls leurs contrôles en reçoivent. Sans cela, une bande transparente rend
+   inerte tout un pan de ciel — et ça ne se voit pas en regardant, ça se
+   découvre en cliquant à côté d'une étoile qui ne répond pas. */
+.lv5-hud {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* L'encoche et la barre système : sans cette provision, le bas du ciel passe
+     sous la barre d'accueil d'iOS. Le `<meta viewport>` de la page porte le
+     `viewport-fit=cover` qui rend ces variables non nulles. */
+  padding: calc(env(safe-area-inset-top, 0px) + 12px)
+           calc(env(safe-area-inset-right, 0px) + 14px)
+           calc(env(safe-area-inset-bottom, 0px) + 12px)
+           calc(env(safe-area-inset-left, 0px) + 14px);
+  box-sizing: border-box;
+}
+.lv5-hud button,
+.lv5-hud a,
+.lv5-hud .lv5-bloc { pointer-events: auto; }
+
+/* LE VOILE SOUS LE TEXTE. Sur un ciel qui bouge, un texte ne se lit plus sur
+   une couleur connue mais sur un pixel qui varie : le contraste doit être
+   RAMENÉ à une valeur maîtrisée avant d'être mesuré. Ce voile est cette
+   valeur. Il est opaque à 82 % — assez pour dominer le pire grain, assez peu
+   pour qu'on voie le ciel dessous. */
+.lv5-bloc {
+  background: rgba(3, 7, 14, .82);
+  border: 1px solid rgba(169, 136, 74, .28);
+  padding: .55rem .8rem;
+  max-width: min(560px, 92vw);
+  box-sizing: border-box;
+}
+
+.lv5-haut { display: flex; align-items: flex-start; justify-content: space-between; gap: .8rem; }
+.lv5-bas { display: flex; align-items: flex-end; justify-content: space-between; gap: .8rem; flex-wrap: wrap; }
+
+.lv5-fil {
+  font-size: .72rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ciel-or-clair, #d8bd82);
+  margin: 0 0 .2rem;
+}
+.lv5-titre {
+  margin: 0;
+  font-size: clamp(1.1rem, 3.4vw, 1.7rem);
+  letter-spacing: .12em;
+  color: var(--ciel-creme, #f2ead6);
+}
+.lv5-parole { margin: .25rem 0 0; font-size: .86rem; font-style: italic; color: #cfe0f5; }
+
+.lv5-outils { display: flex; gap: .4rem; flex-wrap: wrap; }
+.lv5-outils button {
+  font-family: inherit;
+  font-size: .74rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ciel-or-clair, #d8bd82);
+  background: rgba(3, 7, 14, .82);
+  border: 1px solid rgba(169, 136, 74, .4);
+  padding: .4rem .7rem;
+  cursor: pointer;
+  /* 44 px de haut : la cible tactile ne se négocie pas plus en plein écran
+     qu'ailleurs. */
+  min-height: 44px;
+}
+.lv5-outils button:hover,
+.lv5-outils button:focus-visible { border-color: var(--ciel-or-clair, #d8bd82); }
+.lv5-outils button[aria-pressed="true"] { background: rgba(169, 136, 74, .22); }
+
+/* Le bandeau de mesure : la géométrie se MESURE, elle ne se regarde pas
+   (règle du 2026-08-01). Il vit dans la maquette et n'ira jamais en
+   production. */
+.lv5-mesure {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .7rem;
+  line-height: 1.5;
+  color: #9fb6d4;
+  max-width: min(620px, 94vw);
+}
+.lv5-mesure b { color: #f2ead6; font-weight: normal; }
+.lv5-mesure .ok { color: #7fd8a0; }
+.lv5-mesure .ko { color: #e88f8f; }
+
+/* Le repli sans JavaScript. En plein écran il n'y a plus de « sous la
+   scène » : il devient le contenu par défaut, que le ciel recouvre une fois
+   peint. Le ciel étant entièrement dessiné en JavaScript, cette liste EST la
+   navigation le jour où il ne se peint pas. */
+.lv5-repli {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  padding: 2rem;
+  background: var(--ciel-nuit-basse, #03070e);
+}

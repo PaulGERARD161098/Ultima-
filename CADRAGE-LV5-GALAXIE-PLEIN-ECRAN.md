@@ -441,7 +441,7 @@ déshabillerait VRANESH **en silence** — seul `smoke-vranesh` le verrait.
 
 | # | La question | Ma recommandation |
 |---|---|---|
-| **1** | **Quelle maquette** était « très bien, un amas d'étoiles, plein de filaments » ? `preview-riven-galaxie.html` ou `preview-riven-voute.html` ? | **Bloquante avant P0.** Ouvre les deux, dis-moi laquelle — sinon je raffine à l'aveugle. |
+| **1** | ~~Quelle maquette était « très bien, un amas d'étoiles, plein de filaments » ?~~ | ✅ **TRANCHÉ le 2026-08-16 par Paul** : le **mode « Galaxie » de `preview-riven-galaxie.html`, en charge dense**. Voir §11. |
 | **2** | **VRANESH : A, B ou C** (§3.3) ? | **C** — la boussole interne devient un ciel. Littéral, coût 2, et A reste atteignable après. |
 | **3** | **La disposition en plein écran** sur grand écran : la colonne validée en LV4, ou une forme qui remplit (couronne, spirale, amas libre) ? | **Une forme qui remplit.** La colonne avait été validée dans un cadre de 760 px ; le plein écran change la donne. À juger sur maquette en P0. |
 | **4** | **Jusqu'où va « chaque étoile »** ? Les 16 pages de travail, ou seulement les cadrans (VRANESH, DRAUKHAIN, ALTHEA…) ? | **Les cadrans d'abord, une par une.** N'engageons pas 16 pages sur une phrase. |
@@ -452,10 +452,125 @@ déshabillerait VRANESH **en silence** — seul `smoke-vranesh` le verrait.
 
 ### ⏳ Actions Paul
 
-- **Répondre aux six questions ci-dessus** — la n°1 est bloquante.
+- **Répondre aux questions 2 à 6** — la n°1 est tranchée (§11).
 - Rien d'autre : aucune migration, aucun secret, aucune dépense dans ce cadrage.
+
+---
+
+# 11. P0 — la maquette plein écran et la couche de fond. Livrée le 2026-08-16.
+
+**La question 1 est tranchée** : Paul a désigné le **mode « Galaxie » de
+`design/preview-riven-galaxie.html`, en charge dense**, et a précisé la
+direction — « l'étape d'après, c'est le LV5 avec la 3D ».
+
+### Ce que la comparaison des maquettes a établi — et qui a orienté tout P0
+
+Les captures des sept maquettes ont été mises côte à côte, puis vérifiées au
+`grep` plutôt qu'à l'œil :
+
+| | La maquette | Perspective ? |
+|---|---|---|
+| Référence de Paul | `preview-riven-galaxie.html`, mode Galaxie | **aucune** — `FOCALE\|projeter\|yaw\|pitch` → **0** occurrence |
+| Le moteur en production | `js/ciel.js` | **26** occurrences |
+
+**La richesse était du côté de la 2D, la profondeur du côté de la 3D, et
+personne n'avait les deux.** C'est la définition exacte du travail de P0 :
+porter la densité de l'une dans la géométrie de l'autre. Sans cette
+vérification, j'aurais pu passer la soirée à raffiner la mauvaise couche.
+
+### Ce qui a été livré
+
+| Fichier | Ce qu'il fait |
+|---|---|
+| `js/ciel-fond.js` | **Neuf** — la couche de décor sur canvas : grain pré-rendu, trois nappes de profondeur, voiles, filaments, densité par surface, dégradation. |
+| `js/ciel.js` | **Une option `fond`, inactive par défaut**, plus la mesure du coût d'image et la correction du redimensionnement en hauteur. |
+| `css/ciel.css` | L'empilement des deux couches, **sans toucher à celui de RIVEN**. |
+| `design/preview-lv5-galaxie.*` | La maquette plein écran, avec son bandeau de mesure. |
+| `tests/smoke-lv5-fond.mjs` | **Neuf** — 27 verdicts. Ajouté à `tests/lancer.sh`. |
+
+### Les chiffres — mesurés, pas regardés
+
+| | 390 × 844 | 1670 × 900 |
+|---|---|---|
+| Grains | **1 266** | **5 200** (rapport **4,11** — une constante donnerait 1,00) |
+| Plein écran | 100 % × 100 % | 100 % × 100 % |
+| Débordement | 0 px | 0 px |
+| Écart de phase | **0,00 px** | **0,00 px** (à 3 orientations **et** après redimensionnement) |
+| Travail par image, charge réelle | **0,52 ms** | **2,29 ms** |
+| Cadence, charge réelle | 16,4 ms | 18,5 ms |
+
+Rappel du chemin : **130 grains fixes** hier → **1 266 à 5 200 selon la
+surface** aujourd'hui, pour un travail JavaScript qui reste sous 4 ms.
+
+**RIVEN et la coque LV4 sont intacts** : `smoke-ciel`, `smoke-lv4-ciel` et
+`smoke-lv4-coque` ont tourné **avant la première ligne et après la dernière**,
+verts les deux fois, **sans une retouche**.
+
+### 🔻 CINQ DÉFAUTS TROUVÉS — trois par la mesure, deux en regardant
+
+1. **MON INSTRUMENT DE PERFORMANCE NE MESURAIT RIEN.** Le premier lisait
+   l'intervalle entre deux images et répondait **16,4 ms partout** — sur un
+   téléphone comme sur un écran de bureau, à 3 objets comme à 40. Il lisait la
+   **cadence de rafraîchissement de l'écran**, pas le travail. Il aurait dit
+   « budget tenu » jusqu'au jour où le ciel rame, et ce jour-là il aurait
+   encore dit 16,4.
+2. **ET LE SECOND NON PLUS, PAS TOUT SEUL.** Le remplaçant chronomètre
+   l'intérieur de la boucle : il discrimine enfin (0,52 → 3,60 ms selon la
+   charge). Mais sur 1670 × 900 à 40 objets, il annonçait **3,14 ms** pendant
+   que la cadence réelle tombait à **44,6 ms**. Le coût n'est pas dans le
+   JavaScript, il est dans ce que le navigateur paie à **composer** six
+   mégapixels de canvas et quarante étoiles SVG. **Il faut les DEUX
+   instruments** : chacun est aveugle à ce que l'autre voit.
+3. **LA DÉGRADATION AUTOMATIQUE MANQUAIT.** Le cadrage l'exigeait au critère 8 ;
+   je ne l'avais pas écrite. Ajoutée et **éprouvée** : au pire cas, le fond
+   prend **1 cran** et rend de la place. Le critère distingue désormais *là où
+   le produit vit* (≤ 12 objets — le registre n'en donne jamais plus de 4 à un
+   écran) de *ce qui est construit pour casser*, où l'on exige la **réaction**
+   et non la cadence. Même logique que le plancher d'occupation de LV4 : un
+   seuil qui baisse se justifie par la physique, jamais par l'envie de passer.
+4. **LE DÉCOR ÉCRASAIT CE QU'ON VIENT CHERCHER.** Toutes les mesures vertes, et
+   sur l'image **ALTHEA était moins visible qu'un grain de poussière**. Un fond
+   qui rivalise avec les objets n'est plus un fond. Corrigé par l'éclat (0,58)
+   et la taille des grains (2,6 au lieu de 3,2, plafond 6 au lieu de 9) — et le
+   grain lui-même était **laiteux** : son plateau central à 0,22 en faisait un
+   flocon. À 0,10, c'est une étoile. *Aucun de ces deux défauts n'était visible
+   dans un chiffre.*
+5. **MON HARNAIS INTERROGEAIT UN POINT HORS CHAMP.** La phase revenait `null`
+   dès qu'on tournait le monde — non parce que le moteur se trompait, mais
+   parce que `projeter` rend `null` pour ce qui est passé **derrière** la
+   caméra, ce qu'on lui demande. L'instrument choisit maintenant une étoile
+   réellement dessinée, et « aucune étoile visible » est un **échec**, pas une
+   excuse pour ne rien mesurer.
+
+Et un seuil corrigé pour la même raison : « le fond reste-t-il sombre ? »
+comptait les pixels au-dessus de **1/255** et trouvait 26,5 % d'un ciel que
+l'œil voit noir. Le seuil d'un critère de **perception** doit être celui de la
+perception : **8/255**. Fixé une fois, avec sa raison — pas remonté jusqu'à ce
+que la mesure passe.
+
+### 🔻 CE QUI N'EST PAS RÉSOLU, ET QUI DEVIENT L'OBJET DE P2
+
+**LE MOBILIER RECOUVRE LES OBJETS.** Sur 390 px, vu sur capture : le bloc de
+titre masque ULTIMA en haut, le bandeau de mesure masque ALPHA en bas. Le HUD
+**ne vole aucun clic** (le harnais le prouve : au point d'une étoile, c'est
+l'étoile que le document rend) — il les **cache**, ce qui est un défaut
+distinct et que le critère 3 ne voit pas.
+
+La cause est structurelle : le cadrage serré remplit 60 à 75 % de la plus
+petite dimension, donc les objets vont jusqu'aux bords — précisément là où le
+mobilier est posé. **La solution n'est pas de rétrécir le ciel, c'est
+d'apprendre au cadrage qu'une partie du cadre est occupée** : une option de
+marges réservées dans `distanceIdeale()`, haut et bas. C'est le cœur de P2, et
+c'est trop près du cadrage serré pour être touché à la légère en fin de
+soirée.
+
+**Et la disposition en colonne est confirmée creuse** en plein écran : sur
+1670, trois objets alignés verticalement laissent la largeur vide. La
+question 3 reste ouverte, elle a maintenant une image pour l'illustrer.
 
 ### Prochaine action unique
 
-**Ouvrir P0** — la maquette `preview-lv5-galaxie.html` — dès que la question 1
-est tranchée.
+**Ouvrir P1** — la couche de fond est déjà dans le moteur, inactive par
+défaut ; P1 se réduit donc à l'allumer sur la coque pilote et à trancher, avec
+Paul, le **curseur d'éclat du décor** : c'est le seul réglage qui sépare le
+rendu actuel de la richesse de la maquette de référence.

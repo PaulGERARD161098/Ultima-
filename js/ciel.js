@@ -357,6 +357,17 @@
       vbH = hauteurBoite > 120
         ? Math.max(200, Math.round(vbW * (hauteurBoite / largeurBoite)))
         : Math.round(vbW * (vbW < 600 ? 1.02 : 0.56));
+      // LV5 — le fond se pose sur la MÊME boîte et le MÊME viewBox, au même
+      // instant. C'est le seul endroit du moteur qui connaît les deux, donc le
+      // seul où la conversion peut être juste. (`fond` est hoistée : au premier
+      // appel, au montage, elle vaut `undefined` et ce bloc ne fait rien — le
+      // fond est posé par le second appel, juste après sa création.)
+      if (fond) {
+        // La boîte peut n'avoir aucune hauteur au montage ; on prend alors
+        // celle que le viewBox implique, plutôt qu'un canvas de zéro pixel.
+        var hCSS = hauteurBoite > 120 ? hauteurBoite : largeurBoite * (vbH / vbW);
+        fond.poser(largeurBoite, hCSS, vbW, vbH);
+      }
     }
     // La distance ne se choisit pas une fois pour toutes : elle se DÉDUIT du
     // cadre ET du monde. À la distance D, la demi-hauteur visible vaut
@@ -508,6 +519,25 @@
     // ---- Construction du SVG : une seule fois. Ensuite on ne fait que
     //      déplacer — recréer les étoiles à chaque image serait absurde. ----
     conteneur.textContent = '';
+
+    // LV5 — LA COUCHE DE FOND, inactive par défaut. Même méthode que les trois
+    // capacités de LV4 : sans l'option, pas une ligne de ce qui suit ne
+    // s'exécute et le chemin de rendu reste celui d'hier. RIVEN ne l'active
+    // pas ; ses assertions doivent passer sans une retouche.
+    // Le fond est un DÉCOR : il se monte AVANT le SVG (donc dessous), il est
+    // `aria-hidden`, et il ne reçoit aucun événement. Il n'a pas de caméra —
+    // il reçoit `projeter` à chaque image, ce qui rend une dérive entre les
+    // deux couches structurellement impossible (voir l'en-tête de
+    // `js/ciel-fond.js`).
+    var fond = null;
+    if (options.fond && window.UltimaCielFond) {
+      fond = window.UltimaCielFond.creer({ rayonMonde: RAYON_MONDE });
+      conteneur.appendChild(fond.canvas);
+      // Second appel, et il est nécessaire : le premier a eu lieu au montage,
+      // avant que `fond` existe. Idempotent — il recalcule les mêmes vbW/vbH.
+      dimensionner();
+    }
+
     var racine = svg('svg', {
       'class': 'ciel-svg', viewBox: '0 0 ' + vbW + ' ' + vbH,
       preserveAspectRatio: 'xMidYMid meet', role: 'group',
@@ -517,6 +547,10 @@
     });
 
     // Poussière lointaine : muette, déterministe, jamais devant.
+    // LV5 — quand la couche de fond est active, cette poussière-ci ne se crée
+    // PAS : deux champs de grains superposés, c'est deux vérités sur le même
+    // décor, et 130 éléments SVG animés pour rien. Le fond canvas en peint des
+    // milliers, avec la parallaxe en plus.
     var gDecorFond = svg('g', { 'class': 'ciel-decor', 'aria-hidden': 'true' });
     var poussiere = [];
     var graine = 11;
@@ -524,7 +558,7 @@
       graine = (graine * 1103515245 + 12345) % 2147483648;
       return graine / 2147483648;
     }
-    for (var i = 0; i < 130; i++) {
+    for (var i = 0; !fond && i < 130; i++) {
       var grain = svg('circle', {
         cx: 0, cy: 0, r: (0.3 + alea() * 0.8).toFixed(2),
         fill: '#cfe0f5', opacity: (0.10 + alea() * 0.26).toFixed(2)
@@ -795,7 +829,45 @@
 
     var derive = 0, imagesDepuisTri = 99;
 
+    // LV5 — LE COÛT RÉEL D'UNE IMAGE, et il a fallu deux instruments pour
+    // l'obtenir. Le premier mesurait l'intervalle entre deux images : il a
+    // répondu 16,4 ms sur un téléphone comme sur un écran de bureau, à trois
+    // objets comme à quarante — parce qu'il lisait la CADENCE DE L'ÉCRAN, pas
+    // le travail. Un instrument qui rend la même valeur quoi qu'on lui montre
+    // ne mesure rien ; il aurait déclaré « budget tenu » jusqu'au jour où le
+    // ciel rame, et ce jour-là il aurait encore dit 16,4.
+    // Celui-ci chronomètre l'intérieur de `dessiner` : le fond, la projection,
+    // les étoiles. Moyenne glissante, parce qu'une image isolée ne dit rien
+    // (le ramasse-miettes en gonfle une de temps en temps).
+    var coutImage = 0;
+    var imagesMesurees = 0;
+    // La CADENCE, c'est-à-dire l'intervalle réellement observé entre deux
+    // images. Elle mesure ce que le chronomètre ci-dessus ne voit pas : ce que
+    // le navigateur paie à COMPOSER le canvas et les étoiles. Mesuré le
+    // 2026-08-16 sur 1670 × 900 à quarante objets — travail 4,67 ms, cadence
+    // 44,6 ms. Aucun des deux instruments ne suffit seul ; il fallait les deux
+    // pour savoir que le coût n'était pas dans le JavaScript.
+    var cadence = 0;
+    var derniereImage = 0;
+
     function dessiner() {
+      var chrono = performance.now();
+      if (derniereImage) {
+        var ecart = chrono - derniereImage;
+        cadence = cadence ? cadence + (ecart - cadence) * 0.1 : ecart;
+      }
+      derniereImage = chrono;
+
+      // LA DÉGRADATION AUTOMATIQUE. Après 45 images — le temps que la page se
+      // pose, les premières étant toujours lentes —, si la cadence reste
+      // au-dessus de 28 ms (moins de 36 images par seconde), le fond rend de la
+      // place. Deux crans, puis on s'arrête : au-delà, ce ne serait plus un
+      // ciel, et le vrai remède serait ailleurs.
+      // Le compteur repart à zéro après chaque allègement, pour laisser à la
+      // mesure le temps de dire si ça a suffi.
+      if (fond && imagesMesurees > 45 && cadence > 28) {
+        if (fond.alleger()) { imagesMesurees = 0; cadence = 0; }
+      }
       // En cadrage serré, la bonne distance DÉPEND de l'orientation : tourner
       // le monde change quelle étoile est la plus excentrée. On la recalcule
       // donc à chaque image — sans quoi un simple glissé du doigt sortirait du
@@ -816,6 +888,12 @@
       }
 
       var projetes = Object.create(null);
+
+      // LV5 — le fond, d'abord : il est derrière tout. Il reçoit `projeter`,
+      // la fonction que les étoiles utilisent à la ligne suivante — pas une
+      // copie, pas une caméra parallèle. Les deux couches ne peuvent pas se
+      // déphaser parce qu'elles ne font qu'une seule projection.
+      if (fond) { fond.peindre(projeter, { eclat: 1 }); }
 
       poussiere.forEach(function (p) {
         var d = RAYON_MONDE * 3.1 * p.r;
@@ -1030,6 +1108,13 @@
       // tout l'intérêt du mode. `courant.image = null` est le signal qu'aucune
       // image n'est en vol — `relancer()` la redemande quand quelque chose
       // change (zoom, cadrage, sélection, redimensionnement).
+      // Le chronomètre se ferme AVANT la demande d'image suivante : ce qu'on
+      // veut connaître est le temps passé à dessiner, pas celui passé à
+      // attendre l'écran.
+      var passe = performance.now() - chrono;
+      imagesMesurees++;
+      coutImage = imagesMesurees === 1 ? passe : coutImage + (passe - coutImage) * 0.1;
+
       var poseeSurSaCible = Math.abs(cam.distance - cam.cibleDistance) < 0.5;
       if (courant && plat && poseeSurSaCible && !saisie) {
         courant.image = null;
@@ -1047,9 +1132,18 @@
     var etatDerive = false;
 
     function surRedimension() {
-      var avant = vbW;
+      var avant = vbW, avantH = vbH;
       dimensionner();
-      if (vbW !== avant) { racine.setAttribute('viewBox', '0 0 ' + vbW + ' ' + vbH); }
+      // La HAUTEUR aussi, et ce n'est pas de la prudence : elle change seule
+      // dès qu'un panneau s'ouvre ou que la barre d'URL d'un téléphone se
+      // rétracte. Tant que le ciel vivait dans un plateau à proportions fixes,
+      // le défaut ne se voyait pas ; en plein écran, le viewBox resterait
+      // périmé pendant que le fond, lui, se repose sur la boîte réelle — et
+      // les deux couches se décaleraient. Un test sur la largeur seule ne
+      // protège que la moitié des cas.
+      if (vbW !== avant || vbH !== avantH) {
+        racine.setAttribute('viewBox', '0 0 ' + vbW + ' ' + vbH);
+      }
       cam.cibleDistance = distanceIdeale() * zoom;
       relancer(); // à plat, la boucle dort : un cadre qui change la réveille
     }
@@ -1110,7 +1204,31 @@
       // immobile une caméra qui a parcouru la moitié du monde. Constaté le
       // 2026-08-13 ; l'instrument mentait, pas le moteur.
       distance: function () { return cam.distance; },
-      nbNomsPermanents: Object.keys(lourdes).length
+      nbNomsPermanents: Object.keys(lourdes).length,
+
+      // ---- LV5 : de quoi MESURER la couche de fond, jamais la regarder ----
+      // Un canvas qui n'a pas peint est noir — exactement comme un beau ciel.
+      // Ces trois entrées existent pour que le harnais puisse trancher entre
+      // les deux sans se fier à l'apparence.
+      aUnFond: !!fond,
+      nbGrains: function () { return fond ? fond.nbGrains() : 0; },
+      // Le coût moyen d'une image, en millisecondes de travail réel.
+      coutImage: function () { return coutImage; },
+      cadence: function () { return cadence; },
+      imagesMesurees: function () { return imagesMesurees; },
+      // Combien de crans le fond a rendus pour tenir la cadence. 0 = il n'a
+      // jamais eu besoin de reculer.
+      cransDeFond: function () { return fond ? fond.crans() : 0; },
+      // LE POINT TÉMOIN, et il est NON CIRCULAIRE. Il rend la position écran
+      // qu'un point du MONDE occupe selon la couche de fond. Le harnais la
+      // compare à celle que le NAVIGATEUR mesure sur l'étoile correspondante
+      // (`getBoundingClientRect`) : deux chemins indépendants, un seul verdict.
+      // Comparer ma formule à une seconde version de ma formule ne prouverait
+      // rien — c'est la leçon des deux instruments écartés le 2026-08-13.
+      temoin: function (idNoeud) {
+        if (!fond || !parId[idNoeud]) { return null; }
+        return fond.temoin(parId[idNoeud], projeter);
+      }
     };
     courant.image = window.requestAnimationFrame(dessiner);
     return courant;

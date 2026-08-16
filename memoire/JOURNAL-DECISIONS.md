@@ -2886,3 +2886,64 @@ soir, et demain on s'y met tranquillement. » Livré :
   filaments », qui désigne une maquette que Paul a aimée et que je n'ai pas pu
   identifier avec certitude — deux candidates. **Question bloquante avant P0 :
   sans elle, je raffinerais à l'aveugle.**
+
+## 2026-08-16 (nuit) — P0 livrée : deux instruments de performance, et aucun ne suffisait seul
+
+Paul a tranché la question bloquante — la maquette de référence est le mode
+**Galaxie** de `preview-riven-galaxie.html` en charge dense — et a ajouté :
+« l'étape d'après, c'est le LV5 avec la 3D. Si tu peux faire une étape ce soir
+c'est bien aussi. » P0 est livrée.
+
+- **LA COMPARAISON A ÉTÉ VÉRIFIÉE AU `grep`, PAS À L'ŒIL.** La maquette que Paul
+  a aimée n'a **aucune** perspective (`FOCALE|projeter|yaw|pitch` → 0) ; le
+  moteur de production en a **26**. **La richesse était du côté de la 2D, la
+  profondeur du côté de la 3D, et personne n'avait les deux.** C'est ce constat,
+  et non une intuition esthétique, qui a défini le travail de la soirée.
+- **LE FOND N'A PAS DE CAMÉRA, ET C'EST TOUTE SA CONCEPTION.** Le risque n°1 du
+  cadrage était la dérive entre deux repères. Un module qui aurait sa propre
+  caméra et la synchroniserait serait à surveiller pour toujours ; celui-ci
+  reçoit `projeter` du moteur à chaque image. **Il ne peut pas diverger d'une
+  caméra qu'il n'a pas.** Mesuré : **0,00 px** d'écart, à trois orientations et
+  après redimensionnement. Un risque qu'on empêche coûte moins cher qu'un risque
+  qu'on mesure.
+- **MON PREMIER INSTRUMENT DE PERFORMANCE NE MESURAIT RIEN.** Il lisait
+  l'intervalle entre images et répondait **16,4 ms partout** — téléphone ou
+  bureau, 3 objets ou 40. C'était la cadence de l'écran. Il aurait dit « budget
+  tenu » jusqu'au jour où le ciel rame, et ce jour-là il aurait encore dit 16,4.
+  *Troisième fois cette semaine qu'un instrument sature ; celui-ci, je l'ai
+  attrapé parce que la valeur était trop ronde et trop stable pour être vraie.*
+- **ET LE SECOND NON PLUS, PAS TOUT SEUL.** Le remplaçant chronomètre l'intérieur
+  de la boucle et discrimine enfin (0,52 → 3,60 ms). Mais à 1670 × 900 et
+  quarante objets il annonçait **3,14 ms** pendant que la cadence réelle tombait
+  à **44,6 ms** : le coût est dans la **composition** du navigateur, invisible
+  au JavaScript. **Les deux instruments sont désormais gardés, et le harnais
+  exige les deux.** Un instrument qui remplace un instrument menteur peut être
+  menteur autrement.
+- **LA DÉGRADATION AUTOMATIQUE MANQUAIT** alors que le cadrage l'exigeait —
+  écrite d'après la mesure, pas par précaution, et **éprouvée** : au pire cas,
+  le fond prend 1 cran et rend de la place. Le critère sépare *là où le produit
+  vit* (le registre ne donne jamais plus de 4 caps à un écran) de *ce qui est
+  construit pour casser*. Même logique que le plancher d'occupation de LV4.
+- **TOUTES LES MESURES VERTES, ET ALTHEA ÉTAIT MOINS VISIBLE QU'UN GRAIN DE
+  POUSSIÈRE.** Vu sur capture, invisible dans les chiffres. Un décor qui
+  rivalise avec l'objet qu'on vient chercher n'est plus un décor. Corrigé par
+  l'éclat et la taille — et le grain était **laiteux** : son plateau central à
+  0,22 en faisait un flocon, à 0,10 c'est une étoile. **La différence entre
+  « fin » et « grossier » tenait dans un chiffre de gradient.**
+- **UN SEUIL DE PERCEPTION SE FIXE À LA PERCEPTION.** « Le fond reste-t-il
+  sombre ? » comptait les pixels au-dessus de 1/255 et trouvait 26,5 % d'allumé
+  sur un ciel que l'œil voit noir. Porté à 8/255, **une fois, avec sa raison
+  écrite** — et non remonté jusqu'à ce que la mesure passe.
+- **MON HARNAIS INTERROGEAIT UN POINT HORS CHAMP** et accusait le moteur : la
+  phase revenait `null` dès qu'on tournait le monde, parce que `projeter` rend
+  `null` pour ce qui est derrière la caméra — ce qu'on lui demande. *Encore une
+  conclusion tirée d'un instrument mal réglé.*
+- **CE QUI N'EST PAS RÉSOLU EST ÉCRIT** : sur 390 px, le mobilier **recouvre**
+  ULTIMA et ALPHA. Il ne vole aucun clic (le harnais le prouve), il les cache —
+  un défaut distinct que le critère ne voyait pas. La cause est structurelle :
+  le cadrage serré pousse les objets aux bords, là où le mobilier est posé. La
+  solution n'est pas de rétrécir le ciel mais d'apprendre au cadrage qu'une
+  partie du cadre est occupée. **C'est P2, pas une retouche de fin de soirée.**
+- **RIVEN ET LA COQUE LV4 INTACTS** : `smoke-ciel`, `smoke-lv4-ciel`,
+  `smoke-lv4-coque` verts avant la première ligne et après la dernière, sans une
+  retouche. L'option est inactive par défaut, comme les trois de LV4.
