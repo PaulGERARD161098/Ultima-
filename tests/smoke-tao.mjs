@@ -37,6 +37,11 @@ const navigateur = await chromium.launch({
 });
 const page = await navigateur.newPage({ viewport: { width: 1280, height: 900 } });
 
+// LV5 / P3 — la lecture des caps passe par le module partagé : TAO est au ciel
+// depuis le 2026-08-17, et six harnais posaient la même question.
+const { attendrePret, lireCaps, naviguerVers, survoler, lireRepli } =
+  await import('./_caps.mjs');
+
 const erreursConsole = [];
 page.on('console', (msg) => { if (msg.type() === 'error') erreursConsole.push(msg.text()); });
 page.on('pageerror', (err) => erreursConsole.push(String(err)));
@@ -48,9 +53,9 @@ page.on('request', (req) => {
 const appelsApi = [];
 await page.route('**/api/**', (route) => { appelsApi.push(route.request().url()); return route.abort(); });
 
-console.log('— TAO : la voie, en boussole —');
+console.log('— TAO : la voie, AU CIEL (LV5 / P3) —');
 await page.goto(`${BASE}/tao.html`, { waitUntil: 'load', timeout: 20000 });
-await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
+await attendrePret(page);
 
 // Le bandeau suit le registre (anti-dérive de la coque).
 const surligne = (await page.locator('h1.console-titre .titre-surligne').textContent())?.trim();
@@ -63,47 +68,102 @@ verifier('Invite « Léo te guide » retirée du bandeau',
 
 // Les deux pôles, dans l'ordre du registre.
 const attendus = capsDe('tao').map((c) => c.nom);
-const noms = (await page.locator('.cap .cap-nom').allTextContents()).map((n) => n.trim());
+const caps = await lireCaps(page);
+const noms = caps.map((c) => c.nom);
 verifier('2 caps rendus', noms.length === 2, `trouvés: ${JSON.stringify(noms)}`);
-verifier('Caps dans l\'ordre du registre', JSON.stringify(noms) === JSON.stringify(attendus),
-  `lu: ${JSON.stringify(noms)}`);
+// ASSERTION REMPLACÉE (LV5 / P3) : « les caps DANS L'ORDRE du registre » devient
+// « les caps du registre, tous présents ». L'ordre est ABANDONNÉ, avec sa raison,
+// déjà écrite en LV4 ④a : une constellation range par GÉOMÉTRIE, pas par liste.
+// Le contrôle utile — aucune cible perdue, aucune inventée — est conservé
+// entier ; c'est le tri alphabétique de la liste qui disparaît, pas la vérité.
+verifier('Les caps du registre sont tous là (ordre abandonné : la géométrie range)',
+  JSON.stringify([...noms].sort()) === JSON.stringify([...attendus].sort()),
+  `lu: ${JSON.stringify(noms)} / attendu: ${JSON.stringify(attendus)}`);
 
+// ASSERTIONS REMPLACÉES (LV5 / P3) — « est un lien <a> » est ABANDONNÉE, et sa
+// raison est écrite depuis LV4 ④a : l'étoile est un `<g role="button">`, et
+// l'ancre a été RETIRÉE parce qu'enveloppée, l'étoile perdait le focus clavier
+// (mesuré : le focus retombait sur `body`). Le clavier passe avant le clic du
+// milieu, et la perte est assumée en toutes lettres.
+// Ce qui la remplace est une preuve PLUS FORTE qu'un attribut lu : on CLIQUE, et
+// l'on vérifie où l'on arrive. Plus le repli <noscript>, qui est désormais le
+// seul endroit où les `href` vivent — donc la navigation du jour où le
+// JavaScript manque.
+const cibles = await lireRepli(page);
 for (const [id, cible] of [['reshiram', 'reshiram.html'], ['zekrom', 'zekrom.html']]) {
-  const cap = page.locator(`.cap[data-id="${id}"]`);
-  verifier(`${id} est un lien`, (await cap.evaluate((el) => el.tagName)) === 'A');
-  verifier(`${id} → ${cible}`, (await cap.getAttribute('href')) === cible);
-  verifier(`${id} en interne (pas de nouvel onglet)`, (await cap.getAttribute('target')) === null);
+  verifier(`${id} : sa cible est dans le repli sans JavaScript`, cibles.includes(cible),
+    `repli: ${JSON.stringify(cibles)}`);
+}
+{
+  const pageClic = await navigateur.newPage({ viewport: { width: 1280, height: 900 } });
+  await pageClic.goto(`${BASE}/tao.html`, { waitUntil: 'load' });
+  await attendrePret(pageClic);
+  const arrivee = await naviguerVers(pageClic, 'reshiram');
+  verifier('Cliquer RESHIRAM mène à reshiram.html (preuve par le geste)',
+    !!arrivee && arrivee.endsWith('reshiram.html'), String(arrivee));
+  await pageClic.close();
 }
 verifier('Aucun cap « à venir » (les deux pôles sont bâtis)',
-  (await page.locator('.cap--avenir, .cap[aria-disabled]').count()) === 0);
+  caps.filter((c) => c.avenir).length === 0);
 
 // Le cœur yin-yang + sa légende gravée.
-verifier('Cœur gravé au centre', (await page.locator('.boussole-coeur svg').count()) === 1);
-const legende = (await page.locator('.boussole-legende').textContent())?.trim();
+// ASSERTION REMPLACÉE : le cœur ne siège plus AU CENTRE. Au ciel, le centre est
+// là où la caméra regarde, et un médaillon clair y lisait comme un disque gris
+// plus gros que les étoiles — vu sur capture le 2026-08-13. Il descend en sceau
+// dans l'angle, l'idiome de la carte savante. Le contrôle reste : la gravure du
+// nœud est là.
+verifier('Cœur gravé (en sceau dans l\'angle, plus au centre)',
+  (await page.locator('.ciel-filigrane svg').count()) === 1);
+const legende = (await page.locator('.ciel-legende').textContent())?.trim();
 verifier('Légende gravée = celle du registre', legende === NOEUDS.tao.legende, `lu: ${legende}`);
-verifier('2 aiguilles tracées', (await page.locator('.boussole-aiguilles .aiguille').count()) === 2);
+// ASSERTION ABANDONNÉE, avec sa raison : « 2 aiguilles tracées ». L'aiguille
+// joignait le moyeu de la rose à un cap ; UN CIEL N'A PAS DE MOYEU. Même
+// abandon qu'en LV4 ④a, remplacé par le contrôle qu'elle approchait — une
+// étoile par cap.
+verifier('2 étoiles (ce que les aiguilles approchaient)',
+  (await page.locator('g.ciel-etoile[data-noeud-id]').count()) === 2);
 
-// ---- La passerelle : un ARC, pas une corde. ----
-const passerelle = page.locator('.boussole-aiguilles .passerelle');
-verifier('1 passerelle tracée', (await passerelle.count()) === 1);
-verifier('Passerelle en <path> (et non <line>)',
-  (await passerelle.evaluate((el) => el.tagName.toLowerCase())) === 'path');
-const d = (await passerelle.getAttribute('d')) || '';
-verifier('Passerelle tracée en arc (commande A)', /\sA\s/.test(d), `d: ${d}`);
-// Preuve géométrique : le milieu de l'arc est LOIN du centre (une corde entre
-// deux caps opposés passerait exactement dessus et serait masquée).
-const distanceMilieu = await passerelle.evaluate((el) => {
-  const m = el.getPointAtLength(el.getTotalLength() / 2);
-  return Math.hypot(m.x - 50, m.y - 50);
+// ---- LA PASSERELLE AU CIEL : un trait entre deux étoiles, et SON NOM ----
+// TROIS ASSERTIONS ABANDONNÉES ICI, avec leur raison, et c'est la même :
+// « en <path> », « tracée en arc (commande A) », « milieu de l'arc hors du
+// médaillon ». L'arc n'était pas un choix esthétique — il CONTOURNAIT le
+// médaillon central, parce qu'une corde entre deux caps opposés passait derrière
+// lui et disparaissait. **Il n'y a plus de médaillon au centre** (il est descendu
+// en sceau dans l'angle) : le détour n'a plus d'objet, et le lien est le trait
+// droit que le moteur tire entre deux étoiles en volume.
+// Ce qui RESTE exigé, et qui était le fond de ces trois assertions : la
+// passerelle existe, et elle relie les deux bons caps.
+const passerelle = page.locator('.ciel-liens line[data-a="reshiram"][data-b="zekrom"]');
+verifier('1 passerelle tracée entre RESHIRAM et ZEKROM', (await passerelle.count()) === 1);
+verifier('Passerelle en pointillés (le motif dit le type de lien)',
+  !!(await passerelle.getAttribute('stroke-dasharray')));
+
+// SON NOM GRAVÉ — ASSERTION PORTÉE, et elle est la raison d'être de cette reprise.
+// Le nom avait été PERDU au passage au ciel : l'adaptateur créait le lien et
+// jetait `lienLibelle`. La fonction ④ de l'inventaire LV4 §13.1 n'était donc
+// portée qu'à moitié, et la coque pilote ne pouvait pas le voir — elle n'a aucun
+// cap jumeau. Rendu à sa place le 2026-08-17 (LV5 / P3).
+const libelle = (await page.locator('text.ciel-nom-lien').textContent())?.trim();
+verifier('Nom gravé « ⇄ rétroplanning » sur la passerelle',
+  /rétroplanning/.test(libelle || ''), `lu: ${libelle}`);
+// ASSERTION ABANDONNÉE : « le libellé suit le tracé (textPath) ». Un `textPath`
+// sur un segment qui TOURNE en volume s'écrirait à l'envers dès que la caméra
+// passe derrière — un nom illisible la moitié du temps n'est pas un nom. Il est
+// posé horizontalement au milieu de l'arc, et son placement est MESURÉ ci-dessous
+// au lieu d'être délégué au tracé.
+const surLArc = await page.evaluate(() => {
+  const t = document.querySelector('text.ciel-nom-lien');
+  const l = document.querySelector('.ciel-liens line[data-a="reshiram"]');
+  if (!t || !l) { return null; }
+  const mx = (+l.getAttribute('x1') + +l.getAttribute('x2')) / 2;
+  const my = (+l.getAttribute('y1') + +l.getAttribute('y2')) / 2;
+  return { ecartX: Math.abs(+t.getAttribute('x') - mx), ecartY: Math.abs(+t.getAttribute('y') - my) };
 });
-verifier('Milieu de l\'arc hors du médaillon (> 34 % du plateau)',
-  distanceMilieu > 34, `${distanceMilieu.toFixed(1)} unités du centre`);
-
-// Son nom gravé, posé sur l'arc.
-const libelle = (await page.locator('.passerelle-libelle').textContent())?.trim();
-verifier('Nom gravé « ⇄ rétroplanning » sur l\'arc', /rétroplanning/.test(libelle || ''), `lu: ${libelle}`);
-verifier('Le libellé suit le tracé (textPath)',
-  (await page.locator('.passerelle-libelle textPath').count()) === 1);
+verifier('Le nom est posé au milieu de la passerelle (mesuré)',
+  !!surLArc && surLArc.ecartX <= 12 && surLArc.ecartY <= 14,
+  surLArc ? `écart ${surLArc.ecartX.toFixed(1)} / ${surLArc.ecartY.toFixed(1)}` : 'introuvable');
+verifier('Le nom de la passerelle est LISIBLE (opacité utile)',
+  +(await page.locator('text.ciel-nom-lien').getAttribute('opacity') || '1') >= 0.4);
 
 // Retour vers ULTIMA (pièce ① du patron).
 const retour = page.locator('.console-retour a[href="naga.html"]');
@@ -111,43 +171,56 @@ verifier('Retour « ↞ NAGA » vers naga.html (TAO vit sous le macro-quadrant)'
 verifier('Retour libellé « NAGA »', /NAGA/.test((await retour.textContent()) || ''));
 
 // La parole de Léo dit le rétroplanning — l'arc est décor, la parole est annoncée.
-await page.locator('.cap[data-id="reshiram"]').hover();
+await survoler(page, 'reshiram');
 await page.waitForSelector('#boussole-parole.is-actif', { timeout: 5000 });
 const paroleR = (await page.locator('#boussole-parole').textContent()) || '';
 verifier('Survol RESHIRAM : le réel + le rétroplanning dits par Léo',
   /RESHIRAM/.test(paroleR) && /talents réels/i.test(paroleR) && /rétroplanning/i.test(paroleR),
   `lu: ${paroleR.slice(0, 140)}`);
-await page.locator('.cap[data-id="zekrom"]').hover();
-await page.waitForTimeout(150);
+await survoler(page, 'zekrom');
+await page.waitForTimeout(200);
 const paroleZ = (await page.locator('#boussole-parole').textContent()) || '';
 verifier('Survol ZEKROM : l\'idéal + le rétroplanning dits par Léo',
   /ZEKROM/.test(paroleZ) && /idéal/i.test(paroleZ) && /rétroplanning/i.test(paroleZ),
   `lu: ${paroleZ.slice(0, 140)}`);
 
 // Tap targets ≥ 44 px sur les deux caps.
+// ASSERTIONS REMPLACÉES : la cible du doigt n'est plus la boîte du cap mais la
+// ZONE DE CAPTATION de l'étoile — un disque que le moteur maintient au-dessus
+// d'un plancher, précisément pour qu'une étoile lointaine reste touchable
+// (sans ce plancher, la moitié d'un réseau devient intouchable). On mesure donc
+// ce disque, pas un rectangle de mise en page.
 for (const id of ['reshiram', 'zekrom']) {
-  const boite = await page.locator(`.cap[data-id="${id}"]`).boundingBox();
-  verifier(`Tap target ${id} ≥ 44 px`, Boolean(boite) && boite.height >= 44 && boite.width >= 44,
+  const boite = await page.locator(`g.ciel-etoile[data-noeud-id="${id}"] .ciel-zone`).boundingBox();
+  verifier(`Cible tactile ${id} ≥ 44 px`, Boolean(boite) && boite.height >= 44 && boite.width >= 44,
     boite ? `${boite.width.toFixed(0)}×${boite.height.toFixed(0)}` : 'introuvable');
 }
 
 // Contrastes AA sur les couleurs réellement rendues.
+// CONTRASTES REMPLACÉS : le SUPPORT a changé. Les noms ne se lisent plus sur le
+// parchemin d'une rose mais sur la NUIT du ciel, et le titre sur le voile de son
+// cartouche. Mesurer contre `--parchemin-carte` aurait comparé une encre à un
+// fond qui n'est plus derrière elle : un vert franc sur un rapport faux.
 const styles = await page.evaluate(() => {
-  const cs = getComputedStyle(document.documentElement);
+  const cs = getComputedStyle(document.querySelector('.ciel-noeud-coque'));
+  const nuit = cs.getPropertyValue('--ciel-nuit-basse').trim() || '#03070e';
   return {
-    parcheminCarte: cs.getPropertyValue('--parchemin-carte').trim(),
-    merProfonde: cs.getPropertyValue('--mer-profonde').trim(),
-    nom: getComputedStyle(document.querySelector('.cap-nom')).color,
+    nuit,
+    nom: document.querySelector('text.ciel-nom').getAttribute('fill'),
+    lien: getComputedStyle(document.querySelector('text.ciel-nom-lien')).fill,
     titre: getComputedStyle(document.querySelector('.console-titre')).color,
-    legende: getComputedStyle(document.querySelector('.boussole-legende')).color,
+    voile: getComputedStyle(document.querySelector('.console-entete')).backgroundColor,
+    legende: getComputedStyle(document.querySelector('.ciel-legende')).color
   };
 });
-const rNom = ratio(versHex(styles.nom), styles.parcheminCarte);
-verifier('Contraste nom de cap ≥ 4,5:1', rNom >= 4.5, `${rNom.toFixed(2)}:1`);
-const rTitre = ratio(versHex(styles.titre), styles.merProfonde);
-verifier('Contraste titre sur mer ≥ 4,5:1', rTitre >= 4.5, `${rTitre.toFixed(2)}:1`);
-const rLeg = ratio(versHex(styles.legende), styles.merProfonde);
-verifier('Contraste légende sur mer ≥ 4,5:1', rLeg >= 4.5, `${rLeg.toFixed(2)}:1`);
+const rNom = ratio(styles.nom, styles.nuit);
+verifier('Contraste nom d\'étoile sur la nuit ≥ 4,5:1', rNom >= 4.5, `${rNom.toFixed(2)}:1`);
+const rLien = ratio(versHex(styles.lien), styles.nuit);
+verifier('Contraste nom de passerelle sur la nuit ≥ 4,5:1', rLien >= 4.5, `${rLien.toFixed(2)}:1`);
+const rTitre = ratio(versHex(styles.titre), versHex(styles.voile));
+verifier('Contraste titre sur son voile ≥ 4,5:1', rTitre >= 4.5, `${rTitre.toFixed(2)}:1`);
+const rLeg = ratio(versHex(styles.legende), styles.nuit);
+verifier('Contraste légende sur la nuit ≥ 4,5:1', rLeg >= 4.5, `${rLeg.toFixed(2)}:1`);
 
 // TAO est une coque : aucune donnée n'y transite (les chiffres vivent sur les
 // pages RESHIRAM / ZEKROM, derrière auth).
