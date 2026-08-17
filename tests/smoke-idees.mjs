@@ -83,6 +83,39 @@ async function ouvrir({ client, api }) {
   return { page, journal };
 }
 
+// Contraste WCAG d'un texte contre LE FOND QUE SES ANCÊTRES PEIGNENT VRAIMENT.
+// Pour les remplissages SVG (`--ile`, `--mer`), nommer le jeton reste juste : le
+// rectangle porte littéralement cette couleur. Pour un texte posé dans une pile
+// de conteneurs transparents, non — on remonte donc jusqu'au premier fond opaque.
+function contrasteSurFondPeint(page, selecteur) {
+  return page.evaluate(([sel]) => {
+    const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+    const lum = (p) => 0.2126 * f(p[0]) + 0.7152 * f(p[1]) + 0.0722 * f(p[2]);
+    const parse = (c) => {
+      const m = c.match(/rgba?\(([^)]+)\)/);
+      if (!m) { return null; }
+      const p = m[1].split(',').map((x) => parseFloat(x));
+      // L'alpha compte : un fond à 0 ne peint rien, c'est l'ancêtre qui parle.
+      return { rgb: [p[0], p[1], p[2]], a: p.length > 3 ? p[3] : 1 };
+    };
+    const el = document.querySelector(sel);
+    if (!el) { return 0; }
+    const texte = parse(getComputedStyle(el).color);
+    let n = el, fond = null;
+    while (n && n !== document.documentElement.parentNode) {
+      const bg = parse(getComputedStyle(n).backgroundColor);
+      // 0,5 : en dessous, le fond de dessous domine encore et ce n'est pas lui
+      // qui décide de la lisibilité.
+      if (bg && bg.a >= 0.5) { fond = bg; break; }
+      n = n.parentNode;
+    }
+    if (!texte || !fond) { return 0; }
+    const l1 = lum(texte.rgb), l2 = lum(fond.rgb);
+    const r = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+    return Math.round(r * 100) / 100;
+  }, [selecteur]);
+}
+
 // Contraste WCAG entre une couleur rendue (fill/color) et un jeton de fond.
 function contraste(page, selecteur, propriete, jetonFond) {
   return page.evaluate(([sel, prop, jeton]) => {
@@ -169,7 +202,16 @@ console.log('— 1. Connecté : archipels, îles, ponts, badges —');
   verifier('Contraste type d’île ≥ 4,5:1', cType >= 4.5, `${cType}:1`);
   const cSceau = await contraste(page, '.sceau-texte', 'fill', '--parchemin');
   verifier('Contraste badge statut ≥ 4,5:1', cSceau >= 4.5, `${cSceau}:1`);
-  const cDevise = await contraste(page, '.devise', 'color', '--parchemin');
+  // LA DEVISE NE SE MESURE PLUS CONTRE UN JETON, ET C'EST LE SOL ÉTOILÉ QUI L'A
+  // IMPOSÉ (LV5 / P5b, 2026-08-17). Ce test comparait la devise à `--parchemin`,
+  // écrit en dur : c'était juste tant que `body.idees` portait le parchemin.
+  // Depuis que la page est embarquée sur le ciel, la devise vit sur une plaque de
+  // NUIT et elle est passée en crème — le test répondait alors 1,06:1, en
+  // mesurant de la crème contre un parchemin qui n'est plus derrière elle.
+  // *Un jeton dit ce que le fond DEVRAIT être ; seul ce qui est peint dit ce
+  // qu'il EST.* On remonte donc jusqu'au premier ancêtre qui peint réellement un
+  // fond, au lieu de nommer une couleur supposée.
+  const cDevise = await contrasteSurFondPeint(page, '.devise');
   verifier('Contraste devise ≥ 4,5:1', cDevise >= 4.5, `${cDevise}:1`);
 
   verifier('Pas de scroll horizontal (mobile 390 px)', await page.evaluate(() =>

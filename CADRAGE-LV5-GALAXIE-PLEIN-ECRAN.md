@@ -1163,3 +1163,85 @@ boucle à soi seule (EB — pas dix lièvres), à ouvrir explicitement.
 P5b : embarquer le reste du registre atelier (DRAUKHAIN, MAEDRETHNIR, écrire, les
 archipels, les rapprochements) au même instrument — le harnais accepte une
 nouvelle page en une ligne dans `CIBLES`.
+
+---
+
+## 16.10 P5b — le registre atelier au complet. 2026-08-17.
+
+**État : neuf pages embarquées sur le sol étoilé** (8 en atelier, 1 en
+instrument), patrimoine complet vert (84 sections). Les sept nouvelles :
+DRAUKHAIN, MAEDRETHNIR, registre, RESHIRAM, ZEKROM, écrire, idées.
+
+### Cinq pages sur sept n'ont demandé aucune règle — et c'était prévisible
+
+Les coques `console` (DRAUKHAIN, MAEDRETHNIR, registre, RESHIRAM, ZEKROM)
+vivaient **déjà** sur une mer sombre avec leur encre crème : zéro défaut mesuré,
+zéro sélecteur ajouté. C'est la confirmation du diagnostic de P5a, et la preuve
+que le registre atelier était le bon découpage : *ce qui varie d'une page à
+l'autre n'est pas le fond, c'est le mobilier posé dessus.*
+
+La conversion a été faite par un script qui **refuse l'à-peu-près** : il a
+recalé les deux pilotes déjà embarqués au lieu de les convertir deux fois. Une
+page à demi convertie coûte plus cher qu'une page pas convertie, parce qu'elle a
+l'air faite.
+
+### `idees.html` a résisté, et elle a appris trois choses
+
+**① Une surface de parchemin qui ne déclare pas son encre hérite de la nuit.**
+`.carto-etat` porte un fond `--ile` sans `color` : son texte héritait de la crème
+du `body`. Mesuré **1,10:1**. C'est le corollaire exact de la règle d'héritage de
+P5a — qui pose un fond doit poser son encre.
+
+**② Sur un ciel étoilé, une encre de demi-teinte est intenable.** Le surtitre
+était en `rgb(138,113,71)` : **4,30:1** contre la nuit pure, **1,90:1** contre le
+pire pixel peint. La raison est structurelle, pas anecdotique — *un fond de nuit
+étoilée n'a pas UNE luminance, il en a une plage*. Une encre claire reste au-dessus
+de toutes les étoiles ; une demi-teinte finira par en croiser une, et aucun
+réglage ne l'en protège. Conséquence assumée : **un surtitre garde sa
+subordination par sa taille, son interlettrage et ses petites capitales, plus par
+son assombrissement.** La même hiérarchie, obtenue par la forme.
+
+**③ Quand éclaircir l'encre ne suffit pas, il faut assombrir le fond — pour de
+bon.** La devise, passée en crème, tombait sur un point à `rgb(116,128,144)` :
+3,35:1. Trois pistes ont échoué avant la bonne, et l'échec le plus instructif est
+le mien : **sonder le canvas pixel par pixel répondait « blanc pur » à TOUTES les
+options, `eclat: 0` compris** — parce que le canvas est *transparent* et que ses
+pixels sont du blanc à faible alpha. *Lire le RGB brut d'un canvas transparent ne
+mesure rien ; seule la capture composée dit ce que l'œil voit.* La sonde était
+fausse, le harnais avait raison.
+Et **une ombre portée n'aurait rien réglé** : le contraste se mesure contre le
+fond, pas contre un halo. L'en-tête a donc reçu la plaque de nuit translucide
+(0,82) que le registre atelier donne déjà à ses cartouches — les étoiles se
+devinent encore au travers. Devise : **7,48:1**.
+
+### L'instrument avait un angle mort, et il a laissé passer un défaut
+
+Le harnais mesurait à densité 1. **Un petit texte fin en petites capitales n'a
+alors AUCUN pixel pleinement opaque** : tout son tracé est du lissage, donc le
+filtre « coeur de lettre » l'écartait **en silence, dans les deux passes** — et le
+surtitre d'`idees` (4,30:1) a traversé sans être vu.
+
+Deux corrections : **densité doublée** (le même glyphe reçoit quatre fois plus de
+pixels et retrouve un coeur — plus aucun texte non mesurable sur les 9 pages), et
+**les textes non mesurables sont désormais comptés et nommés** au lieu d'être
+sautés, avec un verdict qui borne l'angle mort. *Le texte le plus fin est le plus
+à risque : c'est exactement celui qu'un instrument ne doit pas avoir le droit de
+sauter.*
+
+Le champ étant **déterministe** (« même graine, même ciel »), ce harnais est un
+garde-fou reproductible et non une loterie — vérifié avant de s'y fier.
+
+### Un harnais du patrimoine a attrapé ce que le mien validait
+
+`smoke-idees.mjs` — antérieur à ce chantier — a rougi sur la devise à **1,06:1**
+quand le mien la donnait à 7,48. Il comparait la devise au jeton `--parchemin`
+**écrit en dur** : juste tant que `body.idees` portait le parchemin, faux dès que
+la page est passée sur la nuit. C'est la faute même que P5a avait inscrite en
+tête de son harnais. Le check mesure désormais le fond que les ancêtres
+**peignent réellement** ; les quatre autres checks de ce fichier gardent leurs
+jetons, parce qu'un `fill` SVG porte littéralement la couleur nommée.
+
+### Prochaine action unique
+
+P6 : les instruments restants (`althea.html`, `althea-cadran.html`), puis P4 — la
+racine `index.html`, qui porte l'écran de connexion et reste le point dur.
