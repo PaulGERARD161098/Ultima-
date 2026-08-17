@@ -10,6 +10,11 @@
 import { chromium } from 'playwright';
 import { mkdirSync } from 'node:fs';
 
+// LV5 / P3 — IMLADRIK est au ciel. `legendeClasse` (kalamn-legende) et `expose`
+// (UltimaImladrikCarto) sont portés par `js/ciel-noeud.mjs` : vérifié dans le
+// code avant de réécrire, pas supposé.
+const { attendrePret, lireCaps, survoler } = await import('./_caps.mjs');
+
 const BASE = 'http://127.0.0.1:8123';
 const CAPTURES = new URL('./.cache/captures', import.meta.url).pathname;
 mkdirSync(CAPTURES, { recursive: true });
@@ -65,31 +70,49 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
 {
   const { page, erreurs, externes } = await nouvellePage();
   await page.goto(`${BASE}/imladrik.html`, { waitUntil: 'load', timeout: 20000 });
-  await page.waitForSelector('#boussole-plateau.is-pret', { timeout: 20000 });
+  await attendrePret(page);
 
   // 1. Les trois caps.
-  verifier('3 caps rendus', (await page.locator('.cap').count()) === 3);
-  const noms = (await page.locator('.cap .cap-nom').allTextContents()).map((t) => t.trim());
+  const caps = await lireCaps(page);
+  verifier('3 caps rendus', caps.length === 3);
+  const noms = caps.map((c) => c.nom);
   for (const attendu of ['MINETHNIR', 'VRANESH', 'DRAUKHAIN']) {
     verifier(`Cap ${attendu} présent`, noms.includes(attendu), noms.join(', '));
   }
 
   // 2. Les 3 caps sont ouvrables (liens internes) — le quadrant est complet.
-  const minethnir = page.locator('.cap[data-id="minethnir"]');
+  const minethnir = page.locator('g.ciel-etoile[data-noeud-id="minethnir"]');
+  // SIX ASSERTIONS REMPLACÉES : « est un lien <a> » et « → cible » lisaient une
+  // ancre et son `href`. L'étoile est un `<g role="button">` — l'ancre a été
+  // retirée en LV4 ④a parce qu'enveloppée, l'étoile perdait le focus clavier, et
+  // le clavier passe avant le clic du milieu. Ce que ces assertions
+  // garantissaient — les trois caps mènent quelque part — se lit désormais dans
+  // le repli <noscript>, seul endroit où les adresses subsistent.
+  // ET C'EST AINSI QU'UN DÉFAUT RÉEL EST SORTI : ce repli annonçait VRANESH et
+  // DRAUKHAIN « à venir », SANS LIEN, alors qu'ils sont bâtis. Deux tiers du
+  // quadrant étaient inatteignables sans JavaScript. Corrigé le 2026-08-17.
+  const cibles = await page.evaluate(() => {
+    const n = document.querySelector('#ciel-noeud-plateau noscript');
+    return Array.from((n?.textContent || '').matchAll(/href="([^"]+)"/g)).map((m) => m[1]);
+  });
   for (const [id, cible] of [
     ['minethnir', 'minethnir.html'],
     ['draukhain', 'draukhain.html'],
     ['vranesh', 'vranesh.html'],
   ]) {
-    const cap = page.locator(`.cap[data-id="${id}"]`);
-    verifier(`${id} est un lien`, (await cap.evaluate((el) => el.tagName)) === 'A');
-    verifier(`${id} → ${cible}`, (await cap.getAttribute('href')) === cible);
+    verifier(`${id} rendu au ciel`,
+      (await page.locator(`g.ciel-etoile[data-noeud-id="${id}"]`).count()) === 1);
+    verifier(`${id} → ${cible} (dans le repli sans JavaScript)`, cibles.includes(cible),
+      JSON.stringify(cibles));
   }
   verifier('Aucun cap « à venir » restant (quadrant complet)',
-    (await page.locator('.cap[aria-disabled="true"], .cap--avenir').count()) === 0);
+    caps.filter((c) => c.avenir).length === 0);
 
   // 3. Le cœur Kalamn-talaen + sa légende gravée.
-  verifier('Cœur Kalamn-talaen présent', (await page.locator('.boussole-coeur svg').count()) === 1);
+  // Le cœur descend en SCEAU dans l'angle : au centre, il disputait la place aux
+  // étoiles (vu sur capture le 2026-08-13). La gravure reste exigée.
+  verifier('Cœur Kalamn-talaen présent (en sceau)',
+    (await page.locator('.ciel-filigrane svg').count()) === 1);
   const legende = (await page.locator('.kalamn-legende').textContent()) || '';
   verifier('Légende « Kalamn-talaen » gravée', /Kalamn-talaen/.test(legende), legende);
 
@@ -98,45 +121,57 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
   verifier('Cartouche invisible et muet au repos',
     await page.locator('#boussole-parole').evaluate((el) =>
       getComputedStyle(el).visibility === 'hidden' && el.textContent.trim() === ''));
-  await minethnir.hover();
+  await survoler(page, 'minethnir');
   await page.waitForSelector('#boussole-parole.is-actif', { timeout: 5000 });
   const parole = (await page.locator('#boussole-parole').textContent()) || '';
   verifier('Survol MINETHNIR : nom dans la parole', /MINETHNIR/.test(parole));
   verifier('Survol MINETHNIR : état « Ouvert »', /Ouvert/.test(parole));
   verifier('Survol MINETHNIR : appel à entrer', /entrer/i.test(parole));
-  verifier('Aiguille MINETHNIR illuminée',
-    (await page.locator('.aiguille.is-actif').count()) >= 1);
+  // « L'aiguille s'illumine » ABANDONNÉE : un ciel n'a pas de moyeu d'où la faire
+  // partir. Remplacée par ce qu'elle disait — l'objet visé se signale — et MESURÉE
+  // AU FOCUS, pas au survol : la scène glisse sous le curseur immobile (caméra
+  // asymptotique), donc le `:hover` s'active et se désactive, et l'opacité lue
+  // dépend de l'instant du déclic. Le focus, lui, est stable.
+  await minethnir.focus();
+  await page.waitForTimeout(300);
+  const opHalo = await page.locator('g.ciel-etoile[data-noeud-id="minethnir"] .ciel-halo-focus')
+    .evaluate((el) => +getComputedStyle(el).opacity);
+  verifier('Halo MINETHNIR allumé (mesuré au focus, stable)', opHalo >= 0.5, `opacité ${opHalo}`);
 
   // 5. Survol VRANESH (ouvert) : parole « les futurs potentiels » + appel à entrer.
-  await page.locator('.cap[data-id="vranesh"]').hover();
-  await page.waitForTimeout(150);
+  await survoler(page, 'vranesh');
+  await page.waitForTimeout(250);
   const pv = (await page.locator('#boussole-parole').textContent()) || '';
   verifier('Survol VRANESH : futurs potentiels', /futurs potentiels/i.test(pv));
   verifier('Survol VRANESH : appel à entrer', /entrer/i.test(pv));
 
   // 6. Retour à la console + repli noscript présents.
   verifier('Retour vers naga.html (IMLADRIK vit sous le macro-quadrant NAGA)',
-    (await page.locator('.boussole-retour a[href="naga.html"]').count()) === 1);
+    (await page.locator('.console-retour a[href="naga.html"]').count()) === 1);
 
   // 7. Contrastes AA sur les couleurs réellement rendues.
   const cr = await page.evaluate(() => {
     const cs = getComputedStyle(document.documentElement);
-    const capNom = document.querySelector('.cap-nom');
+    // LE SUPPORT A CHANGÉ : les noms se lisent sur la NUIT, plus sur le parchemin
+    // d'une rose. Mesurer contre `--parchemin-carte` comparerait une encre à un
+    // fond qui n'est plus derrière elle — un vert franc sur un rapport faux.
+    const nuit = getComputedStyle(document.querySelector('.ciel-noeud-coque'))
+      .getPropertyValue('--ciel-nuit-basse').trim() || '#03070e';
     return {
       parchemin: cs.getPropertyValue('--parchemin').trim(),
-      merProfonde: cs.getPropertyValue('--mer-profonde').trim(),
-      capNom: getComputedStyle(capNom).color,
-      capNomFond: cs.getPropertyValue('--parchemin-carte').trim(),
+      nuit,
+      capNom: document.querySelector('text.ciel-nom').getAttribute('fill'),
+      capNomFond: nuit,
       legende: getComputedStyle(document.querySelector('.kalamn-legende')).color,
     };
   });
-  verifier('Contraste nom de cap ≥ 4,5:1',
-    ratio(versHex(cr.capNom), cr.capNomFond) >= 4.5, `${ratio(versHex(cr.capNom), cr.capNomFond).toFixed(2)}:1`);
+  verifier('Contraste nom d\'étoile sur la nuit ≥ 4,5:1',
+    ratio(cr.capNom, cr.capNomFond) >= 4.5, `${ratio(cr.capNom, cr.capNomFond).toFixed(2)}:1`);
   // (l'invite « Léo te guide » a été retirée le 2026-08-01 — plus rien à mesurer ici)
   // La légende (or antique) est posée sous le médaillon, sur le fond de mer du
   // plateau (comme .titre-surligne) → contraste mesuré contre la mer profonde.
-  verifier('Contraste légende sur mer ≥ 4,5:1',
-    ratio(versHex(cr.legende), cr.merProfonde) >= 4.5, `${ratio(versHex(cr.legende), cr.merProfonde).toFixed(2)}:1`);
+  verifier('Contraste légende sur la nuit ≥ 4,5:1',
+    ratio(versHex(cr.legende), cr.nuit) >= 4.5, `${ratio(versHex(cr.legende), cr.nuit).toFixed(2)}:1`);
 
   // 8. Registre exposé pour introspection (donnée statique, aucune PII).
   const exposes = await page.evaluate(() => (window.UltimaImladrikCarto || {}).noms || []);
@@ -157,9 +192,10 @@ console.log('— B. imladrik.html config vide : carto identique, zéro appel —
   const appelsApi = [];
   await page.route('**/api/**', (route) => { appelsApi.push(route.request().url()); return route.abort(); });
   await page.goto(`${BASE}/imladrik.html`, { waitUntil: 'load', timeout: 20000 });
-  await page.waitForSelector('#boussole-plateau.is-pret', { timeout: 20000 });
+  await attendrePret(page);
 
-  verifier('3 caps rendus (config vide)', (await page.locator('.cap').count()) === 3);
+  verifier('3 caps rendus (config vide)',
+    (await page.locator('g.ciel-etoile[data-noeud-id]').count()) === 3);
   verifier('Aucun appel /api (carto sans donnée)', appelsApi.length === 0, appelsApi.slice(0, 3).join(', '));
   verifier('Zéro requête externe (config vide)', externes.length === 0, externes.slice(0, 3).join(', '));
   verifier('Zéro erreur console (config vide)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));

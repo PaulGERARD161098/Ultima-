@@ -149,6 +149,19 @@ for (const nom of COQUES) {
       // Le repli sans JavaScript doit avoir SURVÉCU au rendu : le moteur vide la
       // scène à chaque dessin, donc il doit vivre à côté d'elle, pas dedans.
       repli: document.querySelectorAll('#ciel-noeud-plateau noscript').length,
+      // ET IL DOIT ÊTRE À JOUR. Trouvé le 2026-08-17 sur IMLADRIK : le repli y
+      // annonçait VRANESH et DRAUKHAIN « à venir » et SANS LIEN — vrai le jour
+      // où la liste fut écrite, faux depuis qu'ils sont bâtis. Deux tiers du
+      // quadrant étaient inatteignables sans JavaScript, et personne ne
+      // pouvait le voir : on ne regarde ce repli qu'avec JS désactivé.
+      // Le registre fait foi, la liste doit le suivre.
+      cellesDuRepli: (() => {
+        const n = document.querySelector('#ciel-noeud-plateau noscript');
+        return Array.from((n?.textContent || '').matchAll(/href="([^"]+)"/g)).map((m) => m[1]);
+      })(),
+      ciblesDuRegistre: attendus
+        .map((a) => (NOEUDS[a] || {}).cible)
+        .filter((c) => c && !/^https?:/.test(c)),
       plusDeBoussole: !document.querySelector('.boussole-plateau')
         && !document.body.classList.contains('boussole')
     };
@@ -162,6 +175,16 @@ for (const nom of COQUES) {
   verdicts['plusDePoussiereSvg_' + nom] = r.poussiereSvg === 0;
   verdicts['pleinEcran_' + nom] = r.pleinEcran >= 0.98;
   verdicts['leRepliSurvit_' + nom] = r.repli === 1;
+  // LE REPLI LISTE TOUTES LES CIBLES INTERNES DU REGISTRE. Les externes en sont
+  // exclues volontairement : sans JavaScript, une porte vers un autre domaine
+  // reste un lien ordinaire et n'a pas à figurer dans cette liste.
+  const repliComplet = r.ciblesDuRegistre.every((c) => r.cellesDuRepli.includes(c));
+  verdicts['leRepliEstAJour_' + nom] = repliComplet;
+  if (!repliComplet) {
+    chiffres['coque_' + nom].repliIncomplet = {
+      attendu: r.ciblesDuRegistre, trouve: r.cellesDuRepli
+    };
+  }
   verdicts['plusDeBoussole_' + nom] = r.plusDeBoussole === true;
   if (r.manquants.length) { chiffres['coque_' + nom].manquants = r.manquants; }
 

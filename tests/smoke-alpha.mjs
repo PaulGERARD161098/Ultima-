@@ -178,11 +178,22 @@ verifier('Survol RENOBOOST IA : action « nouvel onglet »', /nouvel onglet/i.te
 // s'allume ». Même intention — le survol doit se VOIR sur l'objet visé — sur le
 // support qui existe. Mesuré sur l'opacité calculée, pas sur une classe.
 {
-  await page.locator('g.ciel-etoile[data-noeud-id="renoboost-ia"]').hover();
-  await page.waitForTimeout(200);
+  // LE SIGNAL SE MESURE SUR LE FOCUS, PAS SUR LE SURVOL — correction d'instrument.
+  // Mesuré le 2026-08-17 : l'opacité du halo lue après un `hover()` valait 0,146
+  // ici et 0 sur IMLADRIK, pour un `:hover` pourtant ACTIF dans les deux cas. Le
+  // halo a une transition de 120 ms, et surtout LA SCÈNE GLISSE SOUS LE CURSEUR
+  // IMMOBILE (la caméra approche de façon asymptotique) : le survol s'active et
+  // se désactive au fil du mouvement, si bien que la valeur lue dépend de
+  // l'instant du déclic. **Cette assertion passait par chance de timing : un
+  // faux vert.** Le FOCUS est stable — il ne dépend d'aucune position de souris —
+  // et il porte la garantie qui compte le plus : qui navigue au clavier doit VOIR
+  // où il est. La même règle CSS allume le halo dans les deux cas.
+  await page.locator('g.ciel-etoile[data-noeud-id="renoboost-ia"]').focus();
+  await page.waitForTimeout(300);
   const op = await page.locator('g.ciel-etoile[data-noeud-id="renoboost-ia"] .ciel-halo-focus')
     .evaluate((el) => +getComputedStyle(el).opacity);
-  verifier('Halo allumé au survol (ce que l\'aiguille approchait)', op >= 0.5, `opacité ${op}`);
+  verifier('Halo allumé sur l\'objet visé (mesuré au focus, stable)', op >= 0.5,
+    `opacité ${op}`);
 }
 
 // Clavier = souris : le focus d'un cap « à venir » parle aussi.

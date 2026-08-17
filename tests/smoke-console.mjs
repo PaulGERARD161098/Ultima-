@@ -17,6 +17,11 @@ const PNG_1PX = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
   'base64');
 
+// LV5 / P3 — GRIMA et NAGA sont au ciel. index.html, la racine, reste en
+// boussole jusqu'à P4 : le module de lecture sert les deux supports, ce qui est
+// exactement sa raison d'être pendant une migration en cours.
+const { attendrePret, lireCaps, lireRepli, naviguerVers } = await import('./_caps.mjs');
+
 const BASE = 'http://127.0.0.1:8123';
 let echecs = 0;
 function verifier(nom, condition, detail = '') {
@@ -265,7 +270,7 @@ console.log('— B. GRIMA → grima.html, puis RIVEN → riven.html (carte) —'
 await capGrima.click();
 await page.waitForURL('**/grima.html', { timeout: 20000 });
 verifier('Clic GRIMA → URL grima.html', /\/grima\.html$/.test(page.url()), page.url());
-await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
+await attendrePret(page);
 
 const surligneGrima = (await page.locator('h1.console-titre .titre-surligne').textContent())?.trim();
 const titreGrima = (await page.locator('h1.console-titre .titre-principal').textContent())?.trim();
@@ -273,16 +278,23 @@ verifier('GRIMA : surligne = celle du registre', surligneGrima === NOEUDS.grima.
 verifier('GRIMA : titre = celui du registre', titreGrima === NOEUDS.grima.titre, `lu: ${titreGrima}`);
 
 const attendusGrima = capsDe('grima').map((c) => c.nom);
-const nomsGrima = (await page.locator('.cap .cap-nom').allTextContents()).map((n) => n.trim());
-verifier('GRIMA : RIVEN + NICOL BOLAS dans l\'ordre',
-  JSON.stringify(nomsGrima) === JSON.stringify(attendusGrima)
-    && JSON.stringify(attendusGrima) === JSON.stringify(['RIVEN', 'NICOL BOLAS']),
+const capsGrima = await lireCaps(page);
+const nomsGrima = capsGrima.map((c) => c.nom);
+// Même scission que pour NAGA plus bas : la déclaration du registre est
+// conservée, l'ordre du DOM est abandonné (la géométrie range).
+verifier('GRIMA : le registre déclare RIVEN + NICOL BOLAS dans cet ordre',
+  JSON.stringify(attendusGrima) === JSON.stringify(['RIVEN', 'NICOL BOLAS']),
+  `registre: ${JSON.stringify(attendusGrima)}`);
+verifier('GRIMA : les deux cadrans sont rendus (ordre abandonné)',
+  JSON.stringify([...nomsGrima].sort()) === JSON.stringify([...attendusGrima].sort()),
   `lu: ${JSON.stringify(nomsGrima)}`);
-const hrefsGrima = await page.locator('a.cap').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
+// Les portes se lisent dans le repli <noscript> : au ciel, l'étoile n'est pas
+// une ancre et c'est là que les `href` vivent désormais.
+const hrefsGrima = await lireRepli(page);
 for (const attendu of ['riven.html', 'bcp.html']) {
   verifier(`GRIMA : porte ouverte vers ${attendu}`, hrefsGrima.includes(attendu), JSON.stringify(hrefsGrima));
 }
-const legendeGrima = (await page.locator('.boussole-legende').textContent())?.trim();
+const legendeGrima = (await page.locator('.ciel-legende').textContent())?.trim();
 verifier('GRIMA : légende gravée « ce qui est utile »', legendeGrima === NOEUDS.grima.legende, `lu: ${legendeGrima}`);
 verifier('GRIMA : retour « ↞ ULTIMA »',
   (await page.locator('.console-retour a[href="ultima.html"]').count()) === 1);
@@ -290,7 +302,8 @@ verifier('GRIMA : retour « ↞ ULTIMA »',
 // RIVEN navigue toujours vers la carte : zéro régression sur l'acquis.
 const erreursRiven = [];
 page.on('console', (msg) => { if (msg.type() === 'error') erreursRiven.push(msg.text()); });
-await page.locator('a.cap[data-id="riven"]').click();
+// LE CLIC, pas l'attribut : c'est la preuve qui reste quand l'ancre disparaît.
+await naviguerVers(page, 'riven');
 await page.waitForURL('**/riven.html', { timeout: 20000 });
 verifier('Clic RIVEN → URL riven.html', /\/riven\.html$/.test(page.url()), page.url());
 
@@ -318,7 +331,7 @@ pageNaga.on('console', (msg) => { if (msg.type() === 'error') erreursNaga.push(m
 pageNaga.on('pageerror', (err) => erreursNaga.push(String(err)));
 await preparerRoutes(pageNaga);
 await pageNaga.goto(`${BASE}/naga.html`, { waitUntil: 'load', timeout: 20000 });
-await pageNaga.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
+await attendrePret(pageNaga);
 
 const surligneNaga = (await pageNaga.locator('h1.console-titre .titre-surligne').textContent())?.trim();
 const titreNaga = (await pageNaga.locator('h1.console-titre .titre-principal').textContent())?.trim();
@@ -326,24 +339,43 @@ verifier('NAGA : surligne = celle du registre', surligneNaga === NOEUDS.naga.sur
 verifier('NAGA : titre = celui du registre', titreNaga === NOEUDS.naga.titre, `lu: ${titreNaga}`);
 
 const attendusNaga = capsDe('naga').map((c) => c.nom);
-const nomsNaga = (await pageNaga.locator('.cap .cap-nom').allTextContents()).map((n) => n.trim());
-verifier('NAGA : IMLADRIK + ADRAMELECH + TAO dans l\'ordre',
-  JSON.stringify(nomsNaga) === JSON.stringify(attendusNaga)
-    && JSON.stringify(attendusNaga) === JSON.stringify(['IMLADRIK', 'ADRAMELECH', 'TAO']),
+const capsNaga = await lireCaps(pageNaga);
+const nomsNaga = capsNaga.map((c) => c.nom);
+// ASSERTION SCINDÉE (LV5 / P3), et c'est plus juste que de l'abandonner en bloc :
+// elle portait DEUX garanties de natures différentes.
+//   ① Le REGISTRE déclare bien ces trois cadrans, dans cet ordre. Cela ne dépend
+//      d'aucun support de rendu : la garantie reste entière et elle protège
+//      contre une modification involontaire du registre. **Conservée.**
+//   ② Le DOM les rend dans le même ordre. Au ciel, l'ordre est celui de la
+//      GÉOMÉTRIE, pas celui de la liste (abandon acté en LV4 ④a). **Abandonnée**,
+//      remplacée par « tous présents, aucun de plus ».
+verifier('NAGA : le registre déclare IMLADRIK + ADRAMELECH + TAO dans cet ordre',
+  JSON.stringify(attendusNaga) === JSON.stringify(['IMLADRIK', 'ADRAMELECH', 'TAO']),
+  `registre: ${JSON.stringify(attendusNaga)}`);
+verifier('NAGA : les trois cadrans sont rendus (ordre abandonné : la géométrie range)',
+  JSON.stringify([...nomsNaga].sort()) === JSON.stringify([...attendusNaga].sort()),
   `lu: ${JSON.stringify(nomsNaga)}`);
-const hrefsNaga = await pageNaga.locator('a.cap').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
+const hrefsNaga = await lireRepli(pageNaga);
 for (const attendu of ['imladrik.html', 'adramelech.html', 'tao.html']) {
   verifier(`NAGA : porte ouverte vers ${attendu}`, hrefsNaga.includes(attendu), JSON.stringify(hrefsNaga));
 }
-verifier('NAGA : 3 aiguilles tracées', (await pageNaga.locator('.boussole-aiguilles .aiguille').count()) === 3);
-const legendeNaga = (await pageNaga.locator('.boussole-legende').textContent())?.trim();
+// « 3 aiguilles » ABANDONNÉE — un ciel n'a pas de moyeu (même abandon qu'en LV4
+// ④a et qu'au §169 de ce fichier). Remplacée par ce qu'elle approchait.
+verifier('NAGA : 3 étoiles (ce que les aiguilles approchaient)',
+  (await pageNaga.locator('g.ciel-etoile[data-noeud-id]').count()) === 3);
+const legendeNaga = (await pageNaga.locator('.ciel-legende').textContent())?.trim();
 verifier('NAGA : légende gravée « ce qui fait grandir »', legendeNaga === NOEUDS.naga.legende, `lu: ${legendeNaga}`);
 verifier('NAGA : retour « ↞ ULTIMA »',
   (await pageNaga.locator('.console-retour a[href="ultima.html"]').count()) === 1);
 
 // ADRAMELECH garde son état « Privé » sur son nouveau cadran.
 verifier('NAGA : ADRAMELECH marqué « Privé »',
-  /priv/i.test((await pageNaga.locator('.cap[data-id="adramelech"] .cap-etat').textContent()) || ''));
+  // L'ÉTAT NE S'ÉCRIT PLUS SOUS LE CAP : au ciel, il vit dans l'étiquette
+  // accessible de l'étoile (`aria-label`), qui est la source de vérité pour qui
+  // n'y voit pas. C'est un meilleur endroit pour le mesurer qu'un `<span>` de
+  // style — et le seul qui existe encore.
+  /priv/i.test((await pageNaga.locator('g.ciel-etoile[data-noeud-id="adramelech"]')
+    .getAttribute('aria-label')) || ''));
 
 verifier('Zéro erreur console (NAGA)', erreursNaga.length === 0, erreursNaga.slice(0, 3).join(' | '));
 

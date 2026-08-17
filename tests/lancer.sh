@@ -77,7 +77,7 @@ trap 'kill $SERVEUR 2>/dev/null || true' EXIT
 sleep 1
 
 # 4. Les harnais navigateur (chacun sort en erreur si un verdict échoue).
-for h in smoke-ecrire.mjs smoke-boussole.mjs smoke-alpha.mjs smoke-tao.mjs smoke-console.mjs smoke-quadrants.mjs smoke-idees.mjs smoke-abaque.mjs smoke-reshiram.mjs smoke-zekrom.mjs smoke-imladrik.mjs smoke-imladrik-carto.mjs smoke-draukhain.mjs smoke-vranesh.mjs smoke-leo-accueil.mjs smoke-intendant.mjs smoke-flux-fiche.mjs smoke-accueil.mjs smoke-accueil-etats.mjs smoke-connexion.mjs smoke-contacts.mjs smoke-secteur.mjs smoke-dictee.mjs smoke-geocode.mjs smoke-antique.mjs smoke-csp.mjs smoke-ciel.mjs smoke-lv4-ciel.mjs smoke-lv4-coque.mjs smoke-lv5-fond.mjs smoke-lv5-plein-ecran.mjs smoke-stellaire.mjs smoke-serie.mjs smoke-pilotage.mjs smoke-althea.mjs; do
+for h in smoke-ecrire.mjs smoke-boussole.mjs smoke-alpha.mjs smoke-tao.mjs smoke-console.mjs smoke-quadrants.mjs smoke-idees.mjs smoke-abaque.mjs smoke-reshiram.mjs smoke-zekrom.mjs smoke-imladrik.mjs smoke-imladrik-carto.mjs smoke-draukhain.mjs smoke-vranesh.mjs smoke-leo-accueil.mjs smoke-intendant.mjs smoke-flux-fiche.mjs smoke-accueil.mjs smoke-accueil-etats.mjs smoke-connexion.mjs smoke-contacts.mjs smoke-secteur.mjs smoke-dictee.mjs smoke-geocode.mjs smoke-antique.mjs smoke-csp.mjs smoke-ciel.mjs smoke-lv4-ciel.mjs smoke-lv4-coque.mjs smoke-lv5-fond.mjs smoke-lv5-plein-ecran.mjs smoke-lv5-passerelle.mjs smoke-stellaire.mjs smoke-serie.mjs smoke-pilotage.mjs smoke-althea.mjs; do
   echo "=== $h ==="
   node "$h"
 done

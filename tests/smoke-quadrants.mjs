@@ -22,6 +22,10 @@ import { chromium } from 'playwright';
 import { NOEUDS, capsDe } from '../js/registre-lv3.mjs';
 import { mkdirSync } from 'node:fs';
 
+// LV5 / P3 — les quadrants sont au ciel : la lecture des caps passe par le
+// module partagé, et les `href` n'existent plus (l'étoile n'est pas une ancre).
+const { attendrePret, lireCaps, lireRepli } = await import('./_caps.mjs');
+
 const BASE = 'http://127.0.0.1:8123';
 const CAPTURES = new URL('./.cache/captures', import.meta.url).pathname;
 mkdirSync(CAPTURES, { recursive: true });
@@ -173,9 +177,13 @@ console.log('— A. ULTIMA : 2 cadrans, puis les 5 portes via GRIMA / NAGA —')
   const portes = {};
   for (const cadran of ['grima.html', 'naga.html']) {
     await page.goto(`${BASE}/${cadran}`, { waitUntil: 'load', timeout: 20000 });
-    await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
-    portes[cadran] = await page.locator('a.cap').evaluateAll((els) =>
-      els.map((e) => e.getAttribute('href')));
+    await attendrePret(page);
+    // LES PORTES SE LISENT DANS LE REPLI <noscript>, et c'est le seul endroit où
+    // elles VIVENT désormais : l'étoile est un `<g role="button">`, pas une
+    // ancre (LV4 ④a — enveloppée, elle perdait le focus clavier). Ce repli
+    // compte donc davantage qu'au temps de la boussole, pas moins : le jour où
+    // le JavaScript manque, cette liste EST la navigation.
+    portes[cadran] = await lireRepli(page);
     verifier(`Retour « ↞ ULTIMA » depuis ${cadran}`,
       (await page.locator('.console-retour a[href="ultima.html"]').count()) === 1);
     await page.screenshot({ path: `${CAPTURES}/${cadran.replace('.html', '')}-portes.png`, fullPage: true });
@@ -386,7 +394,7 @@ for (const noeud of [
   const appelsApi = [];
   await page.route('**/api/**', (route) => { appelsApi.push(route.request().url()); return route.abort(); });
   await page.goto(`${BASE}/${noeud.fichier}`, { waitUntil: 'load', timeout: 20000 });
-  await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
+  await attendrePret(page);
 
   // Le bandeau suit le registre (anti-dérive de la coque).
   const surligne = (await page.locator('h1.console-titre .titre-surligne').textContent())?.trim();
@@ -396,32 +404,49 @@ for (const noeud of [
 
   // Les caps, dans l'ordre du registre.
   const attendus = capsDe(noeud.id).map((c) => c.nom);
-  const noms = (await page.locator('.cap .cap-nom').allTextContents()).map((n) => n.trim());
-  verifier('Caps dans l\'ordre du registre', JSON.stringify(noms) === JSON.stringify(attendus),
+  const caps = await lireCaps(page);
+  const noms = caps.map((c) => c.nom);
+  // ORDRE ABANDONNÉ (LV5 / P3), raison déjà écrite en LV4 ④a : une constellation
+  // range par GÉOMÉTRIE, pas par liste. Le contrôle utile — tous les caps du
+  // registre, aucun de plus — est conservé entier.
+  verifier('Les caps du registre sont tous là (ordre abandonné : la géométrie range)',
+    JSON.stringify([...noms].sort()) === JSON.stringify([...attendus].sort()),
     `lu: ${JSON.stringify(noms)}`);
 
-  const hrefs = await page.locator('a.cap').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
+  // Les portes : lues dans le repli, faute d'ancres (voir plus haut).
+  const cibles = await lireRepli(page);
   for (const cible of noeud.ouvertes) {
-    verifier(`Porte ouverte vers ${cible}`, hrefs.includes(cible), JSON.stringify(hrefs));
+    verifier(`Porte ouverte vers ${cible}`, cibles.includes(cible), JSON.stringify(cibles));
   }
-  verifier(`${noeud.avenir} cap(s) « à venir »`, (await page.locator('.cap--avenir').count()) === noeud.avenir);
+  verifier(`${noeud.avenir} cap(s) « à venir »`,
+    caps.filter((c) => c.avenir).length === noeud.avenir);
 
-  // Cœur + légende + aiguilles (pièces ③ et ④ du patron).
-  verifier('Cœur gravé au centre', (await page.locator('.boussole-coeur svg').count()) === 1);
-  const legende = (await page.locator('.boussole-legende').textContent())?.trim();
+  // Cœur + légende. Le cœur descend en SCEAU dans l'angle : au centre, un
+  // médaillon clair lisait comme un disque plus gros que les étoiles, et le
+  // centre est précisément là où le cadrage serré ramène les étoiles.
+  verifier('Cœur gravé (en sceau dans l\'angle)',
+    (await page.locator('.ciel-filigrane svg').count()) === 1);
+  const legende = (await page.locator('.ciel-legende').textContent())?.trim();
   verifier('Légende gravée = celle du registre', legende === NOEUDS[noeud.id].legende, `lu: ${legende}`);
-  verifier('Autant d\'aiguilles que de caps',
-    (await page.locator('.boussole-aiguilles .aiguille').count()) === attendus.length);
+  // « Autant d'aiguilles que de caps » ABANDONNÉE : un ciel n'a pas de moyeu
+  // d'où les faire partir. Remplacée par le contrôle qu'elle approchait.
+  verifier('Autant d\'étoiles que de caps (ce que les aiguilles approchaient)',
+    (await page.locator('g.ciel-etoile[data-noeud-id]').count()) === attendus.length);
 
   // Retour vers le macro-quadrant parent (pièce ① du patron, arbre 2026-08-01).
   verifier(`Retour vers ${noeud.retour}`,
     (await page.locator(`.console-retour a[href="${noeud.retour}"]`).count()) === 1);
 
   // Léo parle au survol du premier cap.
-  await page.locator('.cap').first().hover();
+  // Le survol d'un cap fait parler Léo. « LE PREMIER » n'a plus de sens quand
+  // l'ordre est celui de la géométrie : on survole une étoile NOMMÉE et on
+  // vérifie que c'est bien d'elle que Léo parle.
+  const premier = caps[0];
+  await page.locator(`g.ciel-etoile[data-noeud-id="${premier.id}"]`).dispatchEvent('mouseenter');
   await page.waitForSelector('#boussole-parole.is-actif', { timeout: 5000 });
   const paroleNom = (await page.locator('.parole-nom').textContent())?.trim();
-  verifier('Parole de Léo au survol du premier cap', paroleNom === attendus[0], `lu: ${paroleNom}`);
+  verifier('Parole de Léo au survol d\'un cap', paroleNom === premier.nom,
+    `survolé: ${premier.nom} / lu: ${paroleNom}`);
 
   // Plus de cartouche « majordome de chantier » : la forme unique l'a remplacé.
   verifier('Plus de cartouche d\'antichambre', (await page.locator('#leo-cartouche').count()) === 0);
