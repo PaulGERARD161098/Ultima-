@@ -2947,3 +2947,42 @@ c'est bien aussi. » P0 est livrée.
 - **RIVEN ET LA COQUE LV4 INTACTS** : `smoke-ciel`, `smoke-lv4-ciel`,
   `smoke-lv4-coque` verts avant la première ligne et après la dernière, sans une
   retouche. L'option est inactive par défaut, comme les trois de LV4.
+
+## 2026-08-16 (nuit) — P1 : un garde qui protège d'une panne masque aussi un oubli
+
+Paul a rendu les deux arbitrages de forme sur la maquette — « **fond avec les
+étoiles génial** », « **charge ok** » — puis « **Go** ». L'éclat du décor (0,58)
+et la densité sont donc **fixés** et sortent des questions ouvertes. P1 allume
+la couche de fond sur `ultima.html`, la seule coque déjà au ciel.
+
+- **UN GARDE QUI PROTÈGE D'UNE PANNE MASQUE AUSSI UN OUBLI.** Premier essai :
+  option `fond: true` posée, **aucun canvas**, **zéro erreur console**, page
+  parfaitement fonctionnelle. La coque n'avait pas la balise `<script>`, et le
+  garde `options.fond && window.UltimaCielFond` avait fait exactement son
+  travail — laisser vivre une page sans le module. **Rien ne distinguait « pas
+  demandé » de « demandé et introuvable ».** Le harnais EXIGE désormais le
+  canvas sur cette coque au lieu de s'en remettre au garde ; sans cette
+  assertion, les huit coques de P3 auraient pu passer une à une avec une option
+  morte, et le fond n'aurait manqué à personne avant Paul.
+- **LE REPÈRE D'UNE MESURE DE POSITION DOIT ÊTRE CELUI DE L'OBJET MESURÉ, PAS
+  CELUI DE SON VOISIN.** La maquette annonçait **0,00 px** de phase, la coque de
+  production **1,60 px** — pour un code de projection *identique*. Le fond n'y
+  était pour rien : la scène de production porte une **bordure d'1 px**,
+  `getBoundingClientRect()` la compte (border box) et le canvas commence à
+  l'intérieur (padding box). Je mesurais depuis un bord, le fond dessinait
+  depuis l'autre. Depuis le repère du canvas : **0,21 px**. *Une bordure d'un
+  pixel suffit à faire mentir un instrument juste par ailleurs.*
+- **QUATRE INSTRUMENTS MENTEURS EN UNE SOIRÉE**, et c'est le vrai bilan de la
+  journée : un chronomètre qui lisait la cadence de l'écran ; son remplaçant
+  aveugle à la composition du navigateur ; un seuil de « perception » fixé sur du
+  bruit de quantification (1/255) ; un repère décalé d'une bordure. **Aucun
+  n'aurait été attrapé par la relecture** — seulement en croisant deux mesures
+  indépendantes, ou en regardant une capture. Ce qui a été durci ce soir, c'est
+  d'abord l'instrumentation, le rendu ensuite.
+- **CE QUE P1 NE DONNE PAS, ET C'EST DIT À PAUL** : sur la coque, le fond est
+  **discret** — 1 470 grains dans un plateau de 734 × 524, contre 4 234 en plein
+  écran, et le dégradé du plateau l'éclaircit. Le rendu qu'il a validé demande le
+  **plein écran** : c'est P2. Livrer P1 en laissant croire qu'elle donne le
+  résultat attendu aurait été un mensonge par omission.
+- **Patrimoine COMPLET vert, sortie 0** — dont `smoke-vranesh` (232 assertions),
+  `smoke-ciel` et `smoke-lv4-ciel`, tous **sans une retouche**.
