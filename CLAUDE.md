@@ -226,10 +226,20 @@ l'accessibilité ni la sécurité.
 
 ## ⚙️ Règles permanentes
 
-- **Preview Vercel en fin de travail** (Paul, 2026-08-01) : tout rapport de fin
-  de boucle qui a poussé du front se termine par le **lien de la preview
-  Vercel** de la branche (donné par le commentaire `vercel[bot]` sur la PR),
-  avec la page à ouvrir pour juger le rendu.
+- **TOUJOURS LES LIENS DE CE QU'IL Y A À VÉRIFIER** (Paul, 2026-08-17 —
+  renforce la règle du 2026-08-01) : dès qu'un travail est poussé, Léo donne
+  **la liste des liens cliquables** de tout ce que Paul peut aller voir, **et ce
+  qu'il faut regarder sur chacun**. Pas un lien générique vers la preview : un
+  lien **par page concernée**, avec en une ligne ce qui a changé dessus et ce
+  qui mérite son œil.
+  *La raison : une preview sans adresse précise oblige Paul à chercher lui-même
+  ce que Léo vient de modifier — c'est du travail rendu à moitié.*
+  S'applique à **chaque rapport**, pas seulement en fin de boucle, et y compris
+  quand le travail est en cours (liens de ce qui est déjà déployé). Le lien de
+  base de la preview vient du commentaire `vercel[bot]` sur la PR ; les pages
+  s'y ajoutent en suffixe.
+  Quand une page n'est PAS encore vérifiable (déploiement en cours, palier non
+  poussé), le dire au lieu de donner un lien qui ne montrera rien.
 
 - Jamais de secret committé (env Vercel uniquement) ; jamais de PII en logs
   (le réseau commercial EST de la PII — IDs uniquement).

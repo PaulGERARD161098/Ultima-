@@ -214,6 +214,18 @@ export function rendre(idNoeud, options = {}) {
       // pas : son ciel montre un réseau de personnes, pas un menu, et son
       // harnais doit continuer de passer sans une retouche.
       fond: true,
+      // LES GÉMEAUX (dicté par Paul le 2026-08-17 : « pour TAO, mets plutôt
+      // Zekrom et Reshiram en opposé, visuellement, en mode constellation Castor
+      // et Pollux »).
+      // La condition n'est PAS « deux caps » mais « deux caps JUMEAUX » : ce que
+      // l'opposition raconte, c'est qu'ils sont deux pôles d'une même chose, et
+      // c'est le lien du registre qui le dit. ULTIMA a aussi deux caps (GRIMA et
+      // NAGA) mais aucun lien entre eux — les opposer y affirmerait une symétrie
+      // que le registre ne déclare pas.
+      opposition: donnees.noeuds.length === 2
+        && (donnees.relations || []).some((r) =>
+          donnees.noeuds.some((n) => n.id === r.source_id)
+          && donnees.noeuds.some((n) => n.id === r.target_id)),
       // LV5 / P2 — la zone où le ciel n'a pas le droit de peindre. On passe LA
       // FONCTION, pas son résultat : le moteur la rappelle à chaque
       // redimensionnement, et la mesure ne peut donc pas se périmer. Passer une
