@@ -821,3 +821,93 @@ verdict rendu pendant qu'on change le code ne vaut rien.
 
 **Ouvrir P4 — la racine (`index.html`)**, le seul écran encore en boussole et
 celui que Paul juge. Elle passe en dernier, sur un module éprouvé huit fois.
+
+---
+
+# 15. La couronne, l'étoile affinée, le fond partout. 2026-08-17.
+
+## 15.1 « Il faut les mêmes standards partout »
+
+Paul, devant ULTIMA : « la rotation n'est pas folle, ça ne me paraît pas à la
+page par rapport à ce qui existe ailleurs ». **Réponse : les Gémeaux ne sont pas
+un cas spécial, c'est le cas n = 2 d'une COURONNE** qui range tous les écrans de
+navigation. La veille, j'avais réservé l'opposition aux caps *jumeaux* en
+arguant qu'opposer deux caps sans lien « affirmerait une symétrie que le registre
+ne déclare pas » ; c'était défendable et ça faisait une **exception**. Un outil
+qui range ses écrans de trois façons n'a pas de forme.
+
+| Écran | Avant (écart horizontal) | Après |
+|---|---|---|
+| ULTIMA (2 caps) | **0** | **905** |
+| NAGA (3), NICOL BOLAS (4) | amas de réseau | couronne, 0,75–0,78 d'occupation |
+
+## 15.2 L'étoile affinée
+
+« Peut-on affiner ? une étoile plus brillante et fine peut-être ? » Le coupable
+était la **corolle** : un disque de 1,7 rayon à 75 % d'opacité qui écrasait tout
+le reste — d'où la « pastille grise ». Réduite à un liseré (1,15) ; les branches
+deviennent des **rais** (4,6 rayons de long, base 4× plus fine) ; le cœur passe
+au blanc pur.
+
+Et surtout : **sur un menu, la profondeur n'a plus le droit d'éteindre une
+entrée.** Les caps sortaient à 0,49 / 0,66 / 0,69 d'opacité — la moitié de
+l'éclat perdue par un effet réglé pour RIVEN, où l'estompage porte une
+information (des centaines de fiches se chevauchent) et où il la garde. Sur un
+menu de deux à quatre caps, il n'informe de rien et fait hésiter à cliquer.
+Plancher à **0,82**.
+
+## 15.3 Le fond étoilé sur RIVEN aussi — mais pas la couronne
+
+« Mettre le fond aux étoiles partout. » Fait, y compris sur le ciel du réseau.
+**Le fond est un décor, la disposition est une donnée** : l'un se partage
+partout, l'autre non — chez RIVEN la position d'une étoile dit son métier.
+
+## 15.4 🔻 QUATRE CORRECTIONS MESURÉES, ET UNE RETIRÉE
+
+La couronne, à son premier jet, a **cassé le mobile** : elle étalait
+horizontalement là où la largeur est la dimension courte (ULTIMA 0,72 → 0,55).
+
+1. **Elle devient une ELLIPSE**, d'aspect calculé sur la place laissée aux
+   étoiles et non sur le cadre brut. *NAGA 0,20 → 0,696.*
+2. **L'axe de l'opposition suit la dimension LONGUE.** « En opposé » ne dit pas
+   « à l'horizontale » : haut/bas en est une aussi, et c'est la seule qui
+   remplisse un cadre étroit. *ULTIMA 0,55 → 0,718.*
+3. **Les noms longs vont aux positions verticales.** Un nom en position latérale
+   extrême déborde de toute sa demi-largeur, et c'est elle qui borne la caméra ;
+   le même nom en haut ne coûte qu'une ligne. *ADRAMELECH 0,337 → 0,608 — son cap
+   s'appelle « RAPPROCHEMENTS ».*
+4. **Lever le plancher de distance : RETIRÉ.** Je pensais que ce garde-fou
+   bridait la couronne (elle est plate, donc rien à traverser). Mesuré : 0,588 et
+   0,500 **avant comme après**. Diagnostic faux, modification retirée — *une
+   correction qui ne prouve rien ne reste pas dans le code.*
+
+**Deux défauts de ma main**, et le second explique le premier :
+- une étoile recouverte par le bandeau sur les **quatre** écrans à 3-4 caps. J'ai
+  accusé la couronne ; la cause était un remplacement de bloc fait **aux
+  indices**, qui avait supprimé `margesUtiles` en passant ;
+- **mon harnais n'éprouvait qu'`ultima.html`**, à 2 caps. Le critère central de
+  P2 était juste et regardait ailleurs. Il couvre désormais les **sept** coques,
+  aux deux tailles. *Un critère qui vaut pour une famille s'éprouve sur toute la
+  famille, et d'abord sur ses cas extrêmes.*
+
+## 15.5 ⚠️ CE QUI RESTE OUVERT — un rouge non élucidé, consigné et non contourné
+
+`smoke-alpha` échoue sur **une** assertion : « halo allumé au focus ».
+
+**Le produit est juste** — mesuré sur `alpha.html` : `:focus-visible` actif,
+opacité du halo **0,9**. Reproduit aussi la séquence survol → focus du harnais :
+`:focus-visible` reste vrai. Le rouge vient donc de l'enchaînement complet du
+fichier, et **je n'ai pas la cause**.
+
+Deux hypothèses éliminées par la mesure : (a) `:focus-visible` perdu après un
+clic souris — faux, la repro le garde ; (b) un `hover()` qui échouait
+silencieusement avant la couronne et réussit depuis — faux également.
+
+**Rien n'est fusionné dans `main` tant que ce point n'est pas élucidé**, et trois
+retouches du harnais l'ont déplacé sans l'expliquer : elles ont été **annulées**,
+le harnais est remis dans sa version d'origine. *Un test qu'on fait passer sans
+comprendre pourquoi il échouait ne prouve plus rien — cette session a déjà
+corrigé deux faux verts, on n'en fabrique pas un troisième.*
+
+**Piste pour la reprise** : instrumenter la modalité (`:focus-visible`) à chaque
+étape du fichier plutôt qu'à la fin, pour trouver *laquelle* la fait basculer.
