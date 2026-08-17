@@ -726,6 +726,10 @@
   <!-- Bundle UMD officiel npm 2.110.0, vendorisé (S1) : pas de CDN tiers pour le client Supabase. -->
   <script src="js/vendor/supabase-js-2.110.0.min.js"></script>
   <script src="js/config.js"></script>
+  <!-- LV5 — la couche de fond AVANT le moteur, qui la cherche en global au
+       moment du rendu. Son garde laisserait la page vivre SANS fond et sans rien
+       dire (défaut payé sur P1) : le harnais exige donc le canvas. -->
+  <script src="js/ciel-fond.js"></script>
   <script src="js/ciel.js"></script>
   <script src="js/leo-accueil.js"></script>
   <!-- Dictée vocale : composant partagé (micro par champ). -->

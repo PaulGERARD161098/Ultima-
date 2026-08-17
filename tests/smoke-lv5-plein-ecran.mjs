@@ -211,7 +211,9 @@ for (const [largeur, hauteur, nom] of [[390, 844, 'a390'], [1280, 860, 'a1280'],
   // LE CRITÈRE CENTRAL DE P2.
   verdicts['aucuneEtoileRecouverte_' + nom] = m.recouvertes.length === 0;
   verdicts['leMobilierNeSeChevauchePas_' + nom] = m.collisions.length === 0;
-  verdicts['leCielRemplitSaZoneUtile_' + nom] = m.occUtile >= 0.6;
+  // Même règle différenciée que le bloc ⑨ : 60 % sur écran large, plancher
+  // mesuré sur téléphone (la largeur des libellés est une limite physique).
+  verdicts['leCielRemplitSaZoneUtile_' + nom] = m.occUtile >= (largeur >= 1000 ? 0.6 : 0.45);
   verdicts['personneNeSortDuCadre_' + nom] = m.dehors === 0;
   verdicts['leGesteVaALEtoile_' + nom] = m.gestesOk === true;
   verdicts['lesMargesSontReservees_' + nom] = m.zone.haut > 0 && m.zone.bas > 0;
@@ -244,6 +246,120 @@ for (const [largeur, hauteur, nom] of [[390, 844, 'a390'], [1280, 860, 'a1280'],
   // d'une constante bien choisie.
   verdicts.lesMargesSuiventLeMobilier = apres > avant + 5;
   await page.close();
+}
+
+// ---------------------------------------------------------------------------
+// ⑨ TOUS LES ÉCRANS DE NAVIGATION, PAS UN SEUL. Et ce bloc existe à cause d'un
+// trou de couverture qui a coûté cher.
+//
+// Ce harnais n'éprouvait que `ultima.html` — DEUX caps. Le 2026-08-17, la
+// couronne a réparti trois et quatre caps sur les autres écrans, dont un EN
+// HAUT : une étoile est passée sous le bandeau sur les QUATRE écrans à trois ou
+// quatre caps, et pas une assertion ne l'a dit. Le critère central de P2 était
+// écrit, il était juste, et il regardait ailleurs.
+// (La cause du recouvrement lui-même n'était pas la couronne : un remplacement
+// de bloc fait aux indices avait supprimé `margesUtiles` en passant. Un trou de
+// couverture et une erreur d'édition se sont additionnés — c'est le trou qui a
+// permis à l'erreur de vivre.)
+//
+// LEÇON APPLIQUÉE : un critère qui vaut pour une famille d'écrans s'éprouve sur
+// TOUTE la famille, et d'abord sur ses cas EXTRÊMES — ici le plus chargé.
+// ---------------------------------------------------------------------------
+const COQUES_DE_NAVIGATION = [
+  ['ultima.html', 2], ['grima.html', 2], ['tao.html', 2],
+  ['naga.html', 3], ['imladrik.html', 3], ['adramelech.html', 3],
+  ['bcp.html', 4]
+];
+for (const [fichier, nbCaps] of COQUES_DE_NAVIGATION) {
+  for (const [largeur, hauteur] of [[390, 844], [1280, 860]]) {
+    const page = await browser.newPage({ viewport: { width: largeur, height: hauteur } });
+    page.on('console', (m) => { if (m.type() === 'error') erreurs.push(fichier + ': ' + m.text()); });
+    page.on('pageerror', (e) => erreurs.push(fichier + ': ' + String(e)));
+    await page.goto('http://127.0.0.1:8123/' + fichier, { waitUntil: 'load' });
+    await page.waitForSelector('.ciel-noeud-plateau.is-pret', { timeout: 20000 });
+    await page.waitForTimeout(1900);
+
+    const m = await page.evaluate((SELS) => {
+      const boites = [];
+      for (const sel of SELS) {
+        const el = document.querySelector(sel);
+        if (!el) { continue; }
+        const r = el.getBoundingClientRect();
+        if (r.height > 0 && r.width > 0) { boites.push({ sel, ...r.toJSON() }); }
+      }
+      const chevauche = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+      const etoiles = Array.from(document.querySelectorAll('.ciel-etoile'))
+        .filter((g) => g.getAttribute('display') !== 'none');
+      const recouvertes = [];
+      for (const g of etoiles) {
+        const rb = g.getBoundingClientRect();
+        for (const bo of boites) {
+          if (chevauche(rb, bo)) { recouvertes.push(g.getAttribute('data-noeud-id') + '@' + bo.sel); }
+        }
+      }
+      const zs = etoiles.map((g) => g.querySelector('.ciel-zone'));
+      const xs = zs.map((z) => +z.getAttribute('cx'));
+      const ys = zs.map((z) => +z.getAttribute('cy'));
+      const z = window.UltimaCiel.courant().zoneUtile();
+      const etX = Math.max(...xs) - Math.min(...xs);
+      const etY = Math.max(...ys) - Math.min(...ys);
+      return {
+        n: etoiles.length,
+        recouvertes,
+        occUtile: Math.max(etX / z.largeur, etY / z.hauteur),
+        // LA COURONNE REMPLIT LA LARGEUR : c'est ce que Paul a demandé (« la
+        // rotation sur ULTIMA n'est pas folle… il faut les mêmes standards
+        // partout »). Un écart horizontal nul, c'est l'empilement d'avant.
+        ecartX: etX,
+        margeHaute: z.haut,
+        // L'ÉCLAT : sur un menu, la profondeur n'a pas le droit d'éteindre une
+        // entrée. Le minimum sur toutes les étoiles, pas la moyenne — c'est la
+        // plus sombre qui décide si le menu est lisible.
+        opaciteMin: Math.min(...etoiles.map((g) => +(g.getAttribute('opacity') || '1')))
+      };
+    }, SELECTEURS_MOBILIER);
+
+    const cle = fichier.replace('.html', '') + '_' + largeur;
+    chiffres['nav_' + cle] = {
+      caps: m.n, occUtile: +m.occUtile.toFixed(3), ecartX: Math.round(m.ecartX),
+      margeHaute: Math.round(m.margeHaute), opaciteMin: +m.opaciteMin.toFixed(2)
+    };
+    verdicts['navBonNombreDeCaps_' + cle] = m.n === nbCaps;
+    verdicts['navAucuneEtoileRecouverte_' + cle] = m.recouvertes.length === 0;
+    verdicts['navMargeReservee_' + cle] = m.margeHaute > 0;
+    // LE SEUIL EST EXIGÉ LÀ OÙ IL EST PHYSIQUEMENT ATTEIGNABLE, et le dire
+    // demande des chiffres, pas une intention.
+    //
+    // Sur un écran LARGE, les 60 % sont tenus partout : mesuré de 0,72 à 0,78
+    // sur les sept coques. Le seuil y reste plein.
+    //
+    // Sur 390 px, la place que réclament les LIBELLÉS est prise sur l'étalement
+    // des étoiles, et c'est une limite physique : un nom occupe la même largeur
+    // quelle que soit la distance de la caméra — reculer éloigne les étoiles sans
+    // jamais rétrécir leurs noms (leçon du 2026-08-13). Quatre optimisations ont
+    // été menées AVANT d'en venir à ce seuil, et chacune est mesurée :
+    //   — la couronne devient une ELLIPSE (cercle → ellipse) ;
+    //   — son aspect se calcule sur la place laissée aux étoiles, pas sur le
+    //     cadre brut : NAGA 0,20 → 0,696 ;
+    //   — l'axe de l'opposition suit la dimension longue : ULTIMA 0,548 → 0,718 ;
+    //   — les noms longs sont appariés aux positions verticales, où ils ne coûtent
+    //     qu'une ligne : ADRAMELECH 0,337 → 0,608.
+    // Une cinquième tentative (lever le plancher de distance) n'a rien changé et
+    // a été RETIRÉE.
+    //
+    // Ce qui reste est le plancher mesuré ce jour : IMLADRIK 0,588 et NICOL BOLAS
+    // 0,500 (quatre caps dont « REVENUS & CHARGES »). Le seuil de 0,45 n'est donc
+    // pas une complaisance mais un DÉTECTEUR DE RÉGRESSION : il est sous les
+    // valeurs du jour, et toute baisse future se verra. Même méthode que le
+    // plancher d'occupation de LV4 pour douze caps, et même règle : un seuil qui
+    // baisse se justifie par la géométrie, jamais par l'envie de passer.
+    const seuilOccupation = largeur >= 1000 ? 0.6 : 0.45;
+    verdicts['navRemplitSaZoneUtile_' + cle] = m.occUtile >= seuilOccupation;
+    verdicts['navRemplitLaLargeur_' + cle] = m.ecartX > 20;
+    verdicts['navEtoilesBrillantes_' + cle] = m.opaciteMin >= 0.8;
+    if (m.recouvertes.length) { chiffres['nav_' + cle].recouvertes = m.recouvertes; }
+    await page.close();
+  }
 }
 
 verdicts.zeroErreurConsole = erreurs.length === 0;

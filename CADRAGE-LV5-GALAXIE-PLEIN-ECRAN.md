@@ -821,3 +821,199 @@ verdict rendu pendant qu'on change le code ne vaut rien.
 
 **Ouvrir P4 — la racine (`index.html`)**, le seul écran encore en boussole et
 celui que Paul juge. Elle passe en dernier, sur un module éprouvé huit fois.
+
+---
+
+# 15. La couronne, l'étoile affinée, le fond partout. 2026-08-17.
+
+## 15.1 « Il faut les mêmes standards partout »
+
+Paul, devant ULTIMA : « la rotation n'est pas folle, ça ne me paraît pas à la
+page par rapport à ce qui existe ailleurs ». **Réponse : les Gémeaux ne sont pas
+un cas spécial, c'est le cas n = 2 d'une COURONNE** qui range tous les écrans de
+navigation. La veille, j'avais réservé l'opposition aux caps *jumeaux* en
+arguant qu'opposer deux caps sans lien « affirmerait une symétrie que le registre
+ne déclare pas » ; c'était défendable et ça faisait une **exception**. Un outil
+qui range ses écrans de trois façons n'a pas de forme.
+
+| Écran | Avant (écart horizontal) | Après |
+|---|---|---|
+| ULTIMA (2 caps) | **0** | **905** |
+| NAGA (3), NICOL BOLAS (4) | amas de réseau | couronne, 0,75–0,78 d'occupation |
+
+## 15.2 L'étoile affinée
+
+« Peut-on affiner ? une étoile plus brillante et fine peut-être ? » Le coupable
+était la **corolle** : un disque de 1,7 rayon à 75 % d'opacité qui écrasait tout
+le reste — d'où la « pastille grise ». Réduite à un liseré (1,15) ; les branches
+deviennent des **rais** (4,6 rayons de long, base 4× plus fine) ; le cœur passe
+au blanc pur.
+
+Et surtout : **sur un menu, la profondeur n'a plus le droit d'éteindre une
+entrée.** Les caps sortaient à 0,49 / 0,66 / 0,69 d'opacité — la moitié de
+l'éclat perdue par un effet réglé pour RIVEN, où l'estompage porte une
+information (des centaines de fiches se chevauchent) et où il la garde. Sur un
+menu de deux à quatre caps, il n'informe de rien et fait hésiter à cliquer.
+Plancher à **0,82**.
+
+## 15.3 Le fond étoilé sur RIVEN aussi — mais pas la couronne
+
+« Mettre le fond aux étoiles partout. » Fait, y compris sur le ciel du réseau.
+**Le fond est un décor, la disposition est une donnée** : l'un se partage
+partout, l'autre non — chez RIVEN la position d'une étoile dit son métier.
+
+## 15.4 🔻 QUATRE CORRECTIONS MESURÉES, ET UNE RETIRÉE
+
+La couronne, à son premier jet, a **cassé le mobile** : elle étalait
+horizontalement là où la largeur est la dimension courte (ULTIMA 0,72 → 0,55).
+
+1. **Elle devient une ELLIPSE**, d'aspect calculé sur la place laissée aux
+   étoiles et non sur le cadre brut. *NAGA 0,20 → 0,696.*
+2. **L'axe de l'opposition suit la dimension LONGUE.** « En opposé » ne dit pas
+   « à l'horizontale » : haut/bas en est une aussi, et c'est la seule qui
+   remplisse un cadre étroit. *ULTIMA 0,55 → 0,718.*
+3. **Les noms longs vont aux positions verticales.** Un nom en position latérale
+   extrême déborde de toute sa demi-largeur, et c'est elle qui borne la caméra ;
+   le même nom en haut ne coûte qu'une ligne. *ADRAMELECH 0,337 → 0,608 — son cap
+   s'appelle « RAPPROCHEMENTS ».*
+4. **Lever le plancher de distance : RETIRÉ.** Je pensais que ce garde-fou
+   bridait la couronne (elle est plate, donc rien à traverser). Mesuré : 0,588 et
+   0,500 **avant comme après**. Diagnostic faux, modification retirée — *une
+   correction qui ne prouve rien ne reste pas dans le code.*
+
+**Deux défauts de ma main**, et le second explique le premier :
+- une étoile recouverte par le bandeau sur les **quatre** écrans à 3-4 caps. J'ai
+  accusé la couronne ; la cause était un remplacement de bloc fait **aux
+  indices**, qui avait supprimé `margesUtiles` en passant ;
+- **mon harnais n'éprouvait qu'`ultima.html`**, à 2 caps. Le critère central de
+  P2 était juste et regardait ailleurs. Il couvre désormais les **sept** coques,
+  aux deux tailles. *Un critère qui vaut pour une famille s'éprouve sur toute la
+  famille, et d'abord sur ses cas extrêmes.*
+
+## 15.5 ⚠️ CE QUI RESTE OUVERT — un rouge non élucidé, consigné et non contourné
+
+`smoke-alpha` échoue sur **une** assertion : « halo allumé au focus ».
+
+**Le produit est juste** — mesuré sur `alpha.html` : `:focus-visible` actif,
+opacité du halo **0,9**. Reproduit aussi la séquence survol → focus du harnais :
+`:focus-visible` reste vrai. Le rouge vient donc de l'enchaînement complet du
+fichier, et **je n'ai pas la cause**.
+
+Deux hypothèses éliminées par la mesure : (a) `:focus-visible` perdu après un
+clic souris — faux, la repro le garde ; (b) un `hover()` qui échouait
+silencieusement avant la couronne et réussit depuis — faux également.
+
+**Rien n'est fusionné dans `main` tant que ce point n'est pas élucidé**, et trois
+retouches du harnais l'ont déplacé sans l'expliquer : elles ont été **annulées**,
+le harnais est remis dans sa version d'origine. *Un test qu'on fait passer sans
+comprendre pourquoi il échouait ne prouve plus rien — cette session a déjà
+corrigé deux faux verts, on n'en fabrique pas un troisième.*
+
+**Piste pour la reprise** : instrumenter la modalité (`:focus-visible`) à chaque
+étape du fichier plutôt qu'à la fin, pour trouver *laquelle* la fait basculer.
+
+---
+
+# 16. CADRAGE P5/P6 — les pages de travail entrent au ciel
+
+> Demandé par Paul le 2026-08-17 : « **go embarque-les aussi et crée un affichage
+> cohérent en conséquence, en fonction des projets** ».
+> Format 6 points. **Cadrage : rien n'est écrit avant le gate du §16.7.**
+
+## 16.1 Le piège à éviter, nommé d'avance
+
+« Mettre le fond partout » sur seize pages, page par page, donnerait **seize
+décisions séparées** — c'est-à-dire aucune forme. Et une page de travail n'est
+pas un menu : elle porte des formulaires, des listes, des tableaux de chiffres,
+un registre détaillé. **Un ciel ne remplace pas un formulaire** (l'argument de
+LV4 §13.6 reste vrai ; ce qui a changé, c'est qu'on ne s'en sert plus pour
+refuser le chantier).
+
+## 16.2 ① Le but — le principe unificateur
+
+**Le fond étoilé devient le SOL COMMUN d'Ultima. Ce qui varie d'une page à
+l'autre, ce n'est pas le fond : c'est la densité du mobilier posé dessus.**
+
+C'est ça, « cohérent en fonction des projets » : une seule règle, trois
+applications, déduites de ce que la page **fait** — et non du quadrant auquel
+elle appartient, qui ne dit rien de son ergonomie.
+
+| Registre | Ce que la page fait | Le mobilier | Pages |
+|---|---|---|---|
+| **① Ciel** | on explore, on choisit | aucun : la galaxie EST la page | les 8 coques + RIVEN — **fait** |
+| **② Atelier** | on saisit, on relie, on écrit | cartouches de parchemin **posés sur** la nuit, le fond visible autour | VRANESH, DRAUKHAIN, MINETHNIR, ÉCRIRE, les archipels, les rapprochements |
+| **③ Instrument** | on lit des chiffres, on compare | le parchemin **domine**, la nuit n'est qu'une bordure | l'abaque, les impôts, l'échéancier, revenus-charges, ALTHEA |
+
+**La règle qui départage ②/③, et qui est mesurable** : si la page porte un
+tableau ou une série de chiffres à comparer, elle est un **instrument** — un fond
+mouvant derrière des colonnes de nombres nuit à la lecture, et aucune beauté ne
+rachète un chiffre mal lu. Sinon, c'est un **atelier**.
+
+## 16.3 ② Les étapes — une par registre, pas une par page
+
+1. **P5a — la couche de fond commune.** `css/ciel-fond-page.css` : le canvas en
+   fond fixe, `aria-hidden`, `pointer-events: none`, derrière tout contenu. Un
+   seul fichier, inclus par les pages des registres ② et ③. **Aucun contenu
+   déplacé.**
+2. **P5b — le registre ATELIER sur une page pilote : VRANESH.** C'est la plus
+   lourde (232 assertions, trois blocs de travail) et celle que Paul a nommée. Si
+   le registre tient sur VRANESH, il tient partout.
+3. **P5c — sa boussole interne devient un ciel** (« que je n'aie plus l'ancien
+   affichage de la boussole »). C'est l'arbitrage **C** du §3.3, que Paul avait
+   laissé ouvert et que cette demande tranche de fait.
+4. **P6a — les cinq autres ateliers**, sur le registre éprouvé.
+5. **P6b — le registre INSTRUMENT**, sur l'abaque d'abord (le plus chargé en
+   chiffres).
+6. **P6c — les quatre autres instruments.**
+
+## 16.4 ③ Les moyens
+
+| Créé | `css/ciel-fond-page.css` · `tests/smoke-lv5-pages.mjs` |
+|---|---|
+| **Modifié** | les `<head>` des pages concernées (deux lignes chacune) · `css/vranesh-boussole.css` (P5c) |
+| **Intouché** | **`css/boussole.css`** tant qu'une page y bâtit · le registre · les API · la base · les formulaires et leur logique — **on change le sol, pas le travail** |
+
+## 16.5 ④ Critères de réussite — mesurés
+
+1. **Aucun contenu ne bouge** : pour chaque page, la boîte de chaque bloc de
+   travail est comparée **avant/après**, tolérance 2 px. Le fond arrive derrière,
+   il ne pousse rien.
+2. **Aucun geste volé** : `elementFromPoint` sur chaque champ, chaque bouton,
+   chaque lien — c'est le canvas qui doit être transparent, pas la page.
+3. **Le contraste tient**, mesuré contre le **pire pixel réellement peint** sous
+   chaque bloc de texte (l'instrument de P2, réemployé).
+4. **Les instruments restent lisibles** : sur les pages du registre ③, la
+   luminance du fond sous un tableau ne dépasse pas un seuil mesuré — le fond y
+   est une bordure, pas une nappe.
+5. **Le budget d'image tient** aux deux tailles, dégradation comprise.
+6. **VRANESH INTACT** : `smoke-vranesh` (232 assertions) vert **avant la première
+   ligne et après la dernière**.
+7. **Patrimoine COMPLET vert.**
+
+## 16.6 ⑤ Ce qu'on ne fait PAS
+
+- **On ne touche à aucun formulaire, aucune liste, aucun calcul.** Le sol change,
+  le travail non.
+- **On ne met pas de ciel 3D sur une page de travail** : le fond est peint, il
+  n'est pas navigable. Deux ciels sur un écran, dont un décoratif, se
+  disputeraient le regard.
+- **On ne convertit pas seize pages d'un coup** : une page pilote par registre.
+- **On ne fusionne rien** tant que le rouge du §15.5 n'est pas élucidé.
+
+## 16.7 ⑥ Pre-mortem — et le gate
+
+| # | Le mode de défaillance | Ce qui le prévient |
+|---|---|---|
+| 1 | **Un fond mouvant derrière des chiffres** rend un tableau pénible à lire. | Le registre ③ : la nuit devient une bordure. Critère 4, mesuré. |
+| 2 | **Le canvas vole un clic** dans un formulaire — et on ne le voit qu'en essayant de saisir. | Critère 2, sur chaque champ. |
+| 3 | **Le fond pousse le contenu** et la page se met à défiler autrement. | Critère 1, avant/après à 2 px. |
+| 4 | **VRANESH se déshabille** : sa feuille bâtit sur `boussole.css`. | Critère 6, et `boussole.css` intouchée. |
+| 5 | **Seize pages, seize décisions.** | §16.2 : une règle, trois registres, une pilote par registre. |
+| 6 | **La batterie** : un canvas animé sur une page où l'on reste vingt minutes à écrire. | Le fond des pages de travail est **peint une fois**, sans boucle d'animation — il n'y a pas de caméra à suivre. À éprouver. |
+
+**Le gate.** Une seule question pour Paul, et elle décide du reste :
+**le classement ②/③ ci-dessus est-il le bon ?** Nommément : l'abaque, les impôts,
+l'échéancier, revenus-charges et ALTHEA en **instruments** (parchemin dominant,
+fond discret) ; VRANESH, DRAUKHAIN, MINETHNIR, écrire, archipels, rapprochements
+en **ateliers** (cartouches posés sur la nuit). Si ce partage est juste, le reste
+n'est que de l'exécution.
