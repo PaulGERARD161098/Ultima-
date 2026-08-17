@@ -911,3 +911,109 @@ corrigé deux faux verts, on n'en fabrique pas un troisième.*
 
 **Piste pour la reprise** : instrumenter la modalité (`:focus-visible`) à chaque
 étape du fichier plutôt qu'à la fin, pour trouver *laquelle* la fait basculer.
+
+---
+
+# 16. CADRAGE P5/P6 — les pages de travail entrent au ciel
+
+> Demandé par Paul le 2026-08-17 : « **go embarque-les aussi et crée un affichage
+> cohérent en conséquence, en fonction des projets** ».
+> Format 6 points. **Cadrage : rien n'est écrit avant le gate du §16.7.**
+
+## 16.1 Le piège à éviter, nommé d'avance
+
+« Mettre le fond partout » sur seize pages, page par page, donnerait **seize
+décisions séparées** — c'est-à-dire aucune forme. Et une page de travail n'est
+pas un menu : elle porte des formulaires, des listes, des tableaux de chiffres,
+un registre détaillé. **Un ciel ne remplace pas un formulaire** (l'argument de
+LV4 §13.6 reste vrai ; ce qui a changé, c'est qu'on ne s'en sert plus pour
+refuser le chantier).
+
+## 16.2 ① Le but — le principe unificateur
+
+**Le fond étoilé devient le SOL COMMUN d'Ultima. Ce qui varie d'une page à
+l'autre, ce n'est pas le fond : c'est la densité du mobilier posé dessus.**
+
+C'est ça, « cohérent en fonction des projets » : une seule règle, trois
+applications, déduites de ce que la page **fait** — et non du quadrant auquel
+elle appartient, qui ne dit rien de son ergonomie.
+
+| Registre | Ce que la page fait | Le mobilier | Pages |
+|---|---|---|---|
+| **① Ciel** | on explore, on choisit | aucun : la galaxie EST la page | les 8 coques + RIVEN — **fait** |
+| **② Atelier** | on saisit, on relie, on écrit | cartouches de parchemin **posés sur** la nuit, le fond visible autour | VRANESH, DRAUKHAIN, MINETHNIR, ÉCRIRE, les archipels, les rapprochements |
+| **③ Instrument** | on lit des chiffres, on compare | le parchemin **domine**, la nuit n'est qu'une bordure | l'abaque, les impôts, l'échéancier, revenus-charges, ALTHEA |
+
+**La règle qui départage ②/③, et qui est mesurable** : si la page porte un
+tableau ou une série de chiffres à comparer, elle est un **instrument** — un fond
+mouvant derrière des colonnes de nombres nuit à la lecture, et aucune beauté ne
+rachète un chiffre mal lu. Sinon, c'est un **atelier**.
+
+## 16.3 ② Les étapes — une par registre, pas une par page
+
+1. **P5a — la couche de fond commune.** `css/ciel-fond-page.css` : le canvas en
+   fond fixe, `aria-hidden`, `pointer-events: none`, derrière tout contenu. Un
+   seul fichier, inclus par les pages des registres ② et ③. **Aucun contenu
+   déplacé.**
+2. **P5b — le registre ATELIER sur une page pilote : VRANESH.** C'est la plus
+   lourde (232 assertions, trois blocs de travail) et celle que Paul a nommée. Si
+   le registre tient sur VRANESH, il tient partout.
+3. **P5c — sa boussole interne devient un ciel** (« que je n'aie plus l'ancien
+   affichage de la boussole »). C'est l'arbitrage **C** du §3.3, que Paul avait
+   laissé ouvert et que cette demande tranche de fait.
+4. **P6a — les cinq autres ateliers**, sur le registre éprouvé.
+5. **P6b — le registre INSTRUMENT**, sur l'abaque d'abord (le plus chargé en
+   chiffres).
+6. **P6c — les quatre autres instruments.**
+
+## 16.4 ③ Les moyens
+
+| Créé | `css/ciel-fond-page.css` · `tests/smoke-lv5-pages.mjs` |
+|---|---|
+| **Modifié** | les `<head>` des pages concernées (deux lignes chacune) · `css/vranesh-boussole.css` (P5c) |
+| **Intouché** | **`css/boussole.css`** tant qu'une page y bâtit · le registre · les API · la base · les formulaires et leur logique — **on change le sol, pas le travail** |
+
+## 16.5 ④ Critères de réussite — mesurés
+
+1. **Aucun contenu ne bouge** : pour chaque page, la boîte de chaque bloc de
+   travail est comparée **avant/après**, tolérance 2 px. Le fond arrive derrière,
+   il ne pousse rien.
+2. **Aucun geste volé** : `elementFromPoint` sur chaque champ, chaque bouton,
+   chaque lien — c'est le canvas qui doit être transparent, pas la page.
+3. **Le contraste tient**, mesuré contre le **pire pixel réellement peint** sous
+   chaque bloc de texte (l'instrument de P2, réemployé).
+4. **Les instruments restent lisibles** : sur les pages du registre ③, la
+   luminance du fond sous un tableau ne dépasse pas un seuil mesuré — le fond y
+   est une bordure, pas une nappe.
+5. **Le budget d'image tient** aux deux tailles, dégradation comprise.
+6. **VRANESH INTACT** : `smoke-vranesh` (232 assertions) vert **avant la première
+   ligne et après la dernière**.
+7. **Patrimoine COMPLET vert.**
+
+## 16.6 ⑤ Ce qu'on ne fait PAS
+
+- **On ne touche à aucun formulaire, aucune liste, aucun calcul.** Le sol change,
+  le travail non.
+- **On ne met pas de ciel 3D sur une page de travail** : le fond est peint, il
+  n'est pas navigable. Deux ciels sur un écran, dont un décoratif, se
+  disputeraient le regard.
+- **On ne convertit pas seize pages d'un coup** : une page pilote par registre.
+- **On ne fusionne rien** tant que le rouge du §15.5 n'est pas élucidé.
+
+## 16.7 ⑥ Pre-mortem — et le gate
+
+| # | Le mode de défaillance | Ce qui le prévient |
+|---|---|---|
+| 1 | **Un fond mouvant derrière des chiffres** rend un tableau pénible à lire. | Le registre ③ : la nuit devient une bordure. Critère 4, mesuré. |
+| 2 | **Le canvas vole un clic** dans un formulaire — et on ne le voit qu'en essayant de saisir. | Critère 2, sur chaque champ. |
+| 3 | **Le fond pousse le contenu** et la page se met à défiler autrement. | Critère 1, avant/après à 2 px. |
+| 4 | **VRANESH se déshabille** : sa feuille bâtit sur `boussole.css`. | Critère 6, et `boussole.css` intouchée. |
+| 5 | **Seize pages, seize décisions.** | §16.2 : une règle, trois registres, une pilote par registre. |
+| 6 | **La batterie** : un canvas animé sur une page où l'on reste vingt minutes à écrire. | Le fond des pages de travail est **peint une fois**, sans boucle d'animation — il n'y a pas de caméra à suivre. À éprouver. |
+
+**Le gate.** Une seule question pour Paul, et elle décide du reste :
+**le classement ②/③ ci-dessus est-il le bon ?** Nommément : l'abaque, les impôts,
+l'échéancier, revenus-charges et ALTHEA en **instruments** (parchemin dominant,
+fond discret) ; VRANESH, DRAUKHAIN, MINETHNIR, écrire, archipels, rapprochements
+en **ateliers** (cartouches posés sur la nuit). Si ce partage est juste, le reste
+n'est que de l'exécution.
