@@ -524,3 +524,61 @@ pend sous aucun autre nœud ; il a bien quitté l'étage d'ULTIMA).
 sur les previews de branche. Deux allers-retours perdus pour ça. Conséquence
 pratique : lui donner le lien de preview ne suffit pas, il faut soit fusionner
 tôt, soit dire explicitement que le domaine est différent du sien.
+
+## 2026-08-17 — session LV5 (galaxie plein écran → sol étoilé partout)
+
+**Confirmé, et c'est le fait le plus utile de la session** — *un harnais vert ne
+vaut rien tant qu'on n'a pas vu ce qui le fait rougir.* La sonde adversariale
+(réinjecter exprès la règle fautive) a été passée **deux fois** et a servi les
+deux fois : la première a validé l'instrument, la seconde — après que j'aie
+modifié l'instrument — a prouvé qu'il rougissait encore. Sans ce geste, la
+modification de densité aurait pu casser silencieusement le garde-fou.
+
+**Friction nouvelle, et grave — MON INSTRUMENT A LAISSÉ PASSER UN DÉFAUT, ET C'EST
+L'ŒIL QUI L'A RATTRAPÉ.** Le surtitre d'`idees` était à 4,30:1 ; le harnais l'a
+déclaré vert. Cause : à densité 1, un petit texte fin en petites capitales n'a
+**aucun pixel pleinement opaque**, donc aucun « coeur de lettre » à mesurer — le
+filtre l'écartait **en silence, dans les deux passes**. C'est une capture regardée
+qui a levé le doute.
+**Ce qu'il faut en retenir au-delà du contraste** : un filtre qui *exclut* des cas
+doit **compter et nommer ce qu'il exclut**. Un `continue` silencieux transforme un
+angle mort en verdict rassurant. Le harnais compte désormais les exclus et borne
+leur nombre par un verdict.
+
+**Friction nouvelle — J'AI ANNONCÉ UN ARBITRAGE À PAUL QUI ÉTAIT UN DÉFAUT DE
+DIAGNOSTIC.** J'avais écrit « l'abaque est de fait en atelier, à trancher avec
+Paul ». Faux : sa nappe venait de `body.abaque`, elle perdait son **support**, pas
+trois couleurs. Un geste (`.feuille`) l'a réglé et l'arbitrage s'est évaporé.
+**Avant de remonter une question à Paul, vérifier qu'elle n'est pas une enquête
+non terminée.** Un choix produit se pose quand deux options tiennent également
+debout ; ici une seule tenait.
+
+**Friction nouvelle — TROIS SONDES FAUSSES DANS UNE SEULE SESSION**, et le même
+signe d'alerte à chaque fois : *une réponse trop uniforme.* (a) Le premier
+instrument de contraste mesurait la boîte de l'élément → 5 faux échecs sur 7,
+dont un titre lisible. (b) La mesure de géométrie comparait les étoiles au
+`viewBox` d'un **blason** attrapé par un `querySelector('svg')` trop large → trois
+débordements annoncés, dont deux sur des noms non touchés. (c) La sonde du canvas
+répondait « blanc pur » à **toutes** les options, `eclat: 0` compris — parce qu'un
+canvas transparent a des pixels blancs à faible alpha.
+**Règle à tenir : avant de croire une mesure, se demander ce qu'elle répondrait
+sur un cas où la réponse est connue d'avance.** Les trois se seraient effondrées
+en une ligne sous ce test.
+
+**Confirmé** — la mesure tranche mieux que le raisonnement sur le classement des
+pages. J'ai converti les 7 pages en « atelier » **sans décider**, puis laissé le
+harnais désigner celles qui résistaient : 5 étaient bonnes du premier coup, une
+seule a demandé du travail. Débattre du registre de chaque page en amont aurait
+coûté plus cher et se serait trompé.
+
+**Confirmé** — un script de conversion qui **refuse** (2026-08-16) : il a recalé
+les deux pilotes déjà embarqués. Une page à demi convertie coûte plus cher qu'une
+page pas convertie, *parce qu'elle a l'air faite.*
+
+**À surveiller — LÉO NE PEUT PLUS VOIR LA PREVIEW.** Le proxy de l'environnement
+refuse l'hôte Vercel (403 au CONNECT). Toute vérification est locale (Chromium
+réel), ce qui est solide mais n'est pas la même chose que regarder la page
+déployée. **Le dire à chaque rapport** au lieu de laisser croire que la preview a
+été vue. Se combine avec la friction du 2026-08-14 (Paul juge sur la production) :
+il faut donc **fusionner tôt** et être explicite sur ce qui a été réellement
+regardé.
