@@ -2829,3 +2829,248 @@
 - **`css/boussole.css` et `js/boussole-noyau.mjs` INTOUCHÉS**, comme le cadrage
   l'exigeait : VRANESH bâtit sur la première, les huit coques restantes sur le
   second.
+
+## 2026-08-16 (soir) — LV5 cadré : la galaxie prend l'écran, et deux interdits de LV4 tombent
+
+**Cadrage seul, aucune ligne de code.** Paul : « on fait un gros cadrage ce
+soir, et demain on s'y met tranquillement. » Livré :
+`CADRAGE-LV5-GALAXIE-PLEIN-ECRAN.md`.
+
+- **QUATRE DEMANDES, PAS UNE.** Le plein écran (mise en page), la finesse
+  (moteur de rendu), le geste (déjà livré en LV4), la propagation aux pages de
+  travail (modèle de navigation). *Les confondre était le premier piège : ce
+  sont quatre chantiers de natures différentes, et un seul d'entre eux touche
+  le moteur.*
+- **DEUX INTERDITS DE LV4 TOMBENT, ET C'EST ÉCRIT.** `CADRAGE-LV4 §13.6` disait
+  mot pour mot « on ne passe pas VRANESH, DRAUKHAIN ni RIVEN au ciel ». Paul
+  demande l'inverse. Son droit le plus strict — mais l'argument de LV4 ne
+  devient pas faux pour autant : **un ciel ne remplace pas un formulaire**. Ce
+  qui passe au ciel, c'est la boussole INTERNE de la page, pas la page.
+- **LE « GROSSIER » A UNE CAUSE MESURABLE : 130 grains fixes, en SVG.** Un champ
+  stellaire crédible demande 3 000 à 8 000 points, des voiles et des filaments :
+  **hors budget SVG d'un ordre de grandeur**, et c'est le téléphone à 390 px qui
+  décide, pas l'écran de bureau. D'où le **ciel à deux couches** — canvas 2D
+  décoratif pour le fond, SVG inchangé pour tout ce qui se clique, se focalise
+  et se lit. **Règle dure : si une information n'existe que dans le canvas, elle
+  n'existe pas.**
+- **CANVAS 2D, PAS WEBGL, ET PAS DE BIBLIOTHÈQUE.** WebGL se justifie au-delà de
+  ~50 000 points ; on vise 5 000. `globalCompositeOperation = 'lighter'` donne
+  l'addition lumineuse — ce qui fait le cœur brillant d'un amas — sans shader à
+  maintenir ni 600 Ko sous une CSP `script-src 'self'`.
+- **LE VRAI RISQUE N'EST PAS LA PERFORMANCE, C'EST LA PHASE.** Deux repères
+  (`viewBox` SVG contre pixels canvas × `devicePixelRatio`) qui dérivent donnent
+  un fond qui glisse sous les étoiles. Parade structurelle : **la même fonction
+  `projeter()` pour les deux couches**, et un **point témoin** à 1 px près,
+  écrit AVANT le premier grain.
+- **UN CANVAS QUI N'A PAS PEINT EST NOIR — EXACTEMENT COMME UN BEAU CIEL.** Le
+  fond ne se teste donc pas à la luminance mais à la **variance** des pixels.
+  Encore un instrument qui aurait supposé ce qu'il mesure.
+- **LE CONTRASTE CHANGE DE NATURE EN PLEIN ÉCRAN.** Le texte ne se lit plus sur
+  un jeton CSS connu mais sur un **pixel qui varie**. L'instrument doit mesurer
+  contre le **pire pixel réellement peint** sous la boîte de texte. C'est un
+  harnais neuf, pas un réglage.
+- **`100vh` MENT SUR MOBILE**, et `viewport-fit=cover` est absent des trois
+  coques vérifiées : l'encoche iOS mangerait le bas du ciel. Trouvé en lisant
+  les `<meta>`, pas en supposant.
+- **SIX PALIERS DE SAUVEGARDE**, demandés par Paul. Un palier = un point où l'on
+  peut s'arrêter net, tout vert, tout fusionné, Ultima meilleur qu'avant. P4 (la
+  racine) tient à lui seul la demande prioritaire ; P5 et P6 sont la
+  propagation, et **aucune des 16 pages de travail n'est engagée** par ce
+  cadrage.
+- **LV4 N'EST PAS FINI, ET LV5 L'ABSORBE.** Sept coques ordinaires et la racine
+  attendaient encore (④b, ④c). Les traiter à part aurait fait repeindre deux
+  fois les mêmes huit écrans.
+- **TROIS MOTS DE LA DICTÉE SIGNALÉS AU LIEU D'ÊTRE DEVINÉS** : « surveillance »
+  = surbrillance (sans enjeu) ; « nébuleuses » là où LV4 dit galaxies (renommage
+  de libellés, pas de modèle) ; et surtout **« place des filands »** = « plein de
+  filaments », qui désigne une maquette que Paul a aimée et que je n'ai pas pu
+  identifier avec certitude — deux candidates. **Question bloquante avant P0 :
+  sans elle, je raffinerais à l'aveugle.**
+
+## 2026-08-16 (nuit) — P0 livrée : deux instruments de performance, et aucun ne suffisait seul
+
+Paul a tranché la question bloquante — la maquette de référence est le mode
+**Galaxie** de `preview-riven-galaxie.html` en charge dense — et a ajouté :
+« l'étape d'après, c'est le LV5 avec la 3D. Si tu peux faire une étape ce soir
+c'est bien aussi. » P0 est livrée.
+
+- **LA COMPARAISON A ÉTÉ VÉRIFIÉE AU `grep`, PAS À L'ŒIL.** La maquette que Paul
+  a aimée n'a **aucune** perspective (`FOCALE|projeter|yaw|pitch` → 0) ; le
+  moteur de production en a **26**. **La richesse était du côté de la 2D, la
+  profondeur du côté de la 3D, et personne n'avait les deux.** C'est ce constat,
+  et non une intuition esthétique, qui a défini le travail de la soirée.
+- **LE FOND N'A PAS DE CAMÉRA, ET C'EST TOUTE SA CONCEPTION.** Le risque n°1 du
+  cadrage était la dérive entre deux repères. Un module qui aurait sa propre
+  caméra et la synchroniserait serait à surveiller pour toujours ; celui-ci
+  reçoit `projeter` du moteur à chaque image. **Il ne peut pas diverger d'une
+  caméra qu'il n'a pas.** Mesuré : **0,00 px** d'écart, à trois orientations et
+  après redimensionnement. Un risque qu'on empêche coûte moins cher qu'un risque
+  qu'on mesure.
+- **MON PREMIER INSTRUMENT DE PERFORMANCE NE MESURAIT RIEN.** Il lisait
+  l'intervalle entre images et répondait **16,4 ms partout** — téléphone ou
+  bureau, 3 objets ou 40. C'était la cadence de l'écran. Il aurait dit « budget
+  tenu » jusqu'au jour où le ciel rame, et ce jour-là il aurait encore dit 16,4.
+  *Troisième fois cette semaine qu'un instrument sature ; celui-ci, je l'ai
+  attrapé parce que la valeur était trop ronde et trop stable pour être vraie.*
+- **ET LE SECOND NON PLUS, PAS TOUT SEUL.** Le remplaçant chronomètre l'intérieur
+  de la boucle et discrimine enfin (0,52 → 3,60 ms). Mais à 1670 × 900 et
+  quarante objets il annonçait **3,14 ms** pendant que la cadence réelle tombait
+  à **44,6 ms** : le coût est dans la **composition** du navigateur, invisible
+  au JavaScript. **Les deux instruments sont désormais gardés, et le harnais
+  exige les deux.** Un instrument qui remplace un instrument menteur peut être
+  menteur autrement.
+- **LA DÉGRADATION AUTOMATIQUE MANQUAIT** alors que le cadrage l'exigeait —
+  écrite d'après la mesure, pas par précaution, et **éprouvée** : au pire cas,
+  le fond prend 1 cran et rend de la place. Le critère sépare *là où le produit
+  vit* (le registre ne donne jamais plus de 4 caps à un écran) de *ce qui est
+  construit pour casser*. Même logique que le plancher d'occupation de LV4.
+- **TOUTES LES MESURES VERTES, ET ALTHEA ÉTAIT MOINS VISIBLE QU'UN GRAIN DE
+  POUSSIÈRE.** Vu sur capture, invisible dans les chiffres. Un décor qui
+  rivalise avec l'objet qu'on vient chercher n'est plus un décor. Corrigé par
+  l'éclat et la taille — et le grain était **laiteux** : son plateau central à
+  0,22 en faisait un flocon, à 0,10 c'est une étoile. **La différence entre
+  « fin » et « grossier » tenait dans un chiffre de gradient.**
+- **UN SEUIL DE PERCEPTION SE FIXE À LA PERCEPTION.** « Le fond reste-t-il
+  sombre ? » comptait les pixels au-dessus de 1/255 et trouvait 26,5 % d'allumé
+  sur un ciel que l'œil voit noir. Porté à 8/255, **une fois, avec sa raison
+  écrite** — et non remonté jusqu'à ce que la mesure passe.
+- **MON HARNAIS INTERROGEAIT UN POINT HORS CHAMP** et accusait le moteur : la
+  phase revenait `null` dès qu'on tournait le monde, parce que `projeter` rend
+  `null` pour ce qui est derrière la caméra — ce qu'on lui demande. *Encore une
+  conclusion tirée d'un instrument mal réglé.*
+- **CE QUI N'EST PAS RÉSOLU EST ÉCRIT** : sur 390 px, le mobilier **recouvre**
+  ULTIMA et ALPHA. Il ne vole aucun clic (le harnais le prouve), il les cache —
+  un défaut distinct que le critère ne voyait pas. La cause est structurelle :
+  le cadrage serré pousse les objets aux bords, là où le mobilier est posé. La
+  solution n'est pas de rétrécir le ciel mais d'apprendre au cadrage qu'une
+  partie du cadre est occupée. **C'est P2, pas une retouche de fin de soirée.**
+- **RIVEN ET LA COQUE LV4 INTACTS** : `smoke-ciel`, `smoke-lv4-ciel`,
+  `smoke-lv4-coque` verts avant la première ligne et après la dernière, sans une
+  retouche. L'option est inactive par défaut, comme les trois de LV4.
+
+## 2026-08-16 (nuit) — P1 : un garde qui protège d'une panne masque aussi un oubli
+
+Paul a rendu les deux arbitrages de forme sur la maquette — « **fond avec les
+étoiles génial** », « **charge ok** » — puis « **Go** ». L'éclat du décor (0,58)
+et la densité sont donc **fixés** et sortent des questions ouvertes. P1 allume
+la couche de fond sur `ultima.html`, la seule coque déjà au ciel.
+
+- **UN GARDE QUI PROTÈGE D'UNE PANNE MASQUE AUSSI UN OUBLI.** Premier essai :
+  option `fond: true` posée, **aucun canvas**, **zéro erreur console**, page
+  parfaitement fonctionnelle. La coque n'avait pas la balise `<script>`, et le
+  garde `options.fond && window.UltimaCielFond` avait fait exactement son
+  travail — laisser vivre une page sans le module. **Rien ne distinguait « pas
+  demandé » de « demandé et introuvable ».** Le harnais EXIGE désormais le
+  canvas sur cette coque au lieu de s'en remettre au garde ; sans cette
+  assertion, les huit coques de P3 auraient pu passer une à une avec une option
+  morte, et le fond n'aurait manqué à personne avant Paul.
+- **LE REPÈRE D'UNE MESURE DE POSITION DOIT ÊTRE CELUI DE L'OBJET MESURÉ, PAS
+  CELUI DE SON VOISIN.** La maquette annonçait **0,00 px** de phase, la coque de
+  production **1,60 px** — pour un code de projection *identique*. Le fond n'y
+  était pour rien : la scène de production porte une **bordure d'1 px**,
+  `getBoundingClientRect()` la compte (border box) et le canvas commence à
+  l'intérieur (padding box). Je mesurais depuis un bord, le fond dessinait
+  depuis l'autre. Depuis le repère du canvas : **0,21 px**. *Une bordure d'un
+  pixel suffit à faire mentir un instrument juste par ailleurs.*
+- **QUATRE INSTRUMENTS MENTEURS EN UNE SOIRÉE**, et c'est le vrai bilan de la
+  journée : un chronomètre qui lisait la cadence de l'écran ; son remplaçant
+  aveugle à la composition du navigateur ; un seuil de « perception » fixé sur du
+  bruit de quantification (1/255) ; un repère décalé d'une bordure. **Aucun
+  n'aurait été attrapé par la relecture** — seulement en croisant deux mesures
+  indépendantes, ou en regardant une capture. Ce qui a été durci ce soir, c'est
+  d'abord l'instrumentation, le rendu ensuite.
+- **CE QUE P1 NE DONNE PAS, ET C'EST DIT À PAUL** : sur la coque, le fond est
+  **discret** — 1 470 grains dans un plateau de 734 × 524, contre 4 234 en plein
+  écran, et le dégradé du plateau l'éclaircit. Le rendu qu'il a validé demande le
+  **plein écran** : c'est P2. Livrer P1 en laissant croire qu'elle donne le
+  résultat attendu aurait été un mensonge par omission.
+- **Patrimoine COMPLET vert, sortie 0** — dont `smoke-vranesh` (232 assertions),
+  `smoke-ciel` et `smoke-lv4-ciel`, tous **sans une retouche**.
+
+## 2026-08-17 — P2 : reculer sans décaler le centre, c'eût été reculer pour rien
+
+Paul : « alors on y va ?? » — P2 ouverte et livrée. `ultima.html` est en plein
+écran ; le plateau devient le fond de l'écran et le mobilier flotte dessus.
+
+- **LE POINT DUR N'ÉTAIT PAS LA CSS, C'ÉTAIT LE CADRAGE.** Retirer le
+  `max-width` n'aurait rien donné : les quatre enfants de la coque s'empilaient
+  dans le flux. Et surtout le cadrage remplissait 60 à 75 % du cadre ENTIER,
+  donc poussait les objets là où le mobilier est posé. D'où `margesUtiles` : une
+  zone où le ciel n'a pas le droit de peindre.
+- **ET IL FALLAIT DEUX EFFETS, PAS UN.** Reculer la caméra ET décaler le CENTRE
+  OPTIQUE. **Sans le second, on aurait reculé pour rien** — les objets seraient
+  restés centrés dans le cadre entier, simplement plus petits, et auraient
+  continué d'entrer sous le bandeau. C'est le genre de moitié de correctif qui
+  passe les tests de débord et ne règle rien.
+- **UNE MESURE PRISE UNE FOIS EST UNE CONSTANTE QUI A EU RAISON UN JOUR.** La
+  coque mesurait le mobilier et passait un objet ; le harnais l'a pris en défaut
+  en grossissant le titre (marge figée à 119 pendant que le bandeau doublait).
+  `margesUtiles` accepte désormais une **fonction**, rappelée par le moteur à
+  chaque redimensionnement : **c'est le moteur qui sait quand il a besoin de la
+  réponse**, pas l'appelant. Vérifié 119 → 315.
+- **ÊTRE CLIQUABLE ET ÊTRE VISIBLE SONT DEUX PROPRIÉTÉS DISTINCTES.** Le défaut
+  qui a motivé P2 était invisible aux assertions existantes : `elementFromPoint`
+  répondait « l'étoile reçoit le geste », et c'était vrai — elle était cachée
+  sous le bandeau. Il a fallu une SECONDE mesure, le chevauchement des boîtes
+  peintes. *Aucune assertion de captation ne dira jamais qu'un objet est masqué.*
+- **UNE ASSERTION REMPLACÉE, ET LE SEUIL N'A PAS BOUGÉ.** `smoke-lv4-coque`
+  exigeait 60 % du CADRE ; un quart du cadre est maintenant rendu au mobilier,
+  donc cela revenait à demander 83 % de la place restante. Le contrôle reste, son
+  **dénominateur** change : 71,8 % de la ZONE UTILE, dans la fourchette de LV4.
+  Baisser le seuil aurait masqué le fait que le ciel remplit très bien ce qu'on
+  lui laisse.
+- **CINQUIÈME INSTRUMENT FAUTIF DU CHANTIER, ET IL ÉTAIT DE MOI** : je comptais
+  l'étiquette de constellation comme un débord alors qu'elle est à `opacity: 0`
+  (le moteur la tait en cadrage serré, donc ne la positionne jamais et elle reste
+  à l'origine avec son texte). `smoke-lv4-ciel` filtrait déjà sur l'opacité —
+  **reprendre sa définition valait mieux que d'en écrire une seconde** : deux
+  harnais qui mesurent la même chose de deux façons finissent par se contredire.
+- **LE BANDEAU CHEVAUCHAIT LE RETOUR** à 390 px (sept pixels, vus sur capture) :
+  un bandeau centré ne cohabite pas avec un bouton d'angle sur un téléphone. Il
+  descend sous sa ligne — et la marge, étant mesurée, a suivi sans qu'on la
+  touche. C'est le bénéfice concret du choix « mesurer plutôt que déclarer ».
+- **CE QUI RESTE OUVERT A MAINTENANT UNE IMAGE** : sur 1670 × 900, deux objets en
+  colonne remplissent 69 % de la hauteur utile et laissent la largeur vide. Le
+  cadrage est juste ; c'est la FORME qui est en cause — question 3, un parti pris
+  visuel que je ne prends pas seul.
+
+## 2026-08-17 — P3 : une fonction déclarée portée sur un écran incapable de la contredire
+
+Paul : « continue à tourner en solo ». Les sept coques ordinaires sont au ciel ;
+`boussole-noyau.mjs` ne sert plus qu'à la racine.
+
+- **LE NOM GRAVÉ DE LA PASSERELLE ÉTAIT PERDU DEPUIS LV4**, et le cadrage disait
+  la fonction « portée ». Le trait l'était ; le nom, jamais — l'adaptateur
+  jetait `lienLibelle`. **La coque pilote ne pouvait pas le voir : elle n'a aucun
+  cap jumeau.** *Une fonction déclarée portée sur un écran incapable de la
+  contredire n'est pas portée, elle est non testée.* Même piège que le cap « à
+  venir » en LV4 — et la même parade : éprouver la fonction là où elle EXISTE.
+- **UN DÉFAUT DE PRODUIT ANTÉRIEUR À TOUT LE CHANTIER, démasqué par la reprise
+  des assertions** : le repli sans JavaScript d'IMLADRIK annonçait VRANESH et
+  DRAUKHAIN « à venir » et sans lien, alors qu'ils sont bâtis. Deux tiers du
+  quadrant inatteignables sans JS, invisibles parce qu'on ne regarde ce repli
+  qu'avec JS désactivé. Le harnais compare désormais le repli au REGISTRE sur les
+  sept coques.
+- **UN FAUX VERT QUE J'AVAIS ÉCRIT MOI-MÊME.** « Halo allumé au survol » passait
+  par chance de timing : la scène GLISSE sous le curseur immobile (caméra
+  asymptotique), donc le `:hover` s'active et se désactive et l'opacité lue
+  dépend de l'instant du déclic (0,146 ici, 0 là, pour un `:hover` actif dans les
+  deux cas). Mesuré au FOCUS, qui est stable. *Une assertion verte par chance est
+  plus dangereuse qu'une assertion rouge.*
+- **UN REGEX STRUCTUREL A MANGÉ LE DÉBUT DE DEUX HARNAIS.** Ma faute, et la
+  leçon est nette : un remplacement s'ancre sur du TEXTE EXACT, jamais sur une
+  structure devinée — surtout pas appliqué à plusieurs fichiers d'un coup.
+  Restaurés depuis git, réappliqués proprement.
+- **LES ASSERTIONS D'ORDRE SE SCINDENT, elles ne s'abandonnent pas en bloc** :
+  « les caps dans l'ordre du registre » portait DEUX garanties. Que le registre
+  déclare tel ordre ne dépend d'aucun support — conservé. Que le DOM le respecte,
+  non — abandonné (la géométrie range).
+- **UN SCRIPT DE CONVERSION QUI REFUSE L'À-PEU-PRÈS** valait mieux que sept
+  éditions à la main : il a refusé `imladrik.html` (un attribut de plus au
+  `<body>`) au lieu de la convertir à moitié.
+- **`hover()` VISE LE CENTRE D'UNE BOÎTE**, et celle d'un groupe englobe le nom
+  peint sous l'étoile : le centre tombe sur du vide. On survole la zone de
+  captation, faite pour ça.
+- **UN VERDICT RENDU PENDANT QU'ON MODIFIE LE CODE NE VAUT RIEN** : j'ai touché
+  `ciel.js` pendant un patrimoine en cours. Le run a été refait en entier, sans
+  édition, et c'est celui-là qui compte.

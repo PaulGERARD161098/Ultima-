@@ -76,7 +76,28 @@
 .ciel-scene::after {
   content: ""; position: absolute; inset: 7px; pointer-events: none;
   border: 1px solid rgba(169, 136, 74, .18);
+  /* Au-dessus des deux couches. Sans ce rang, le filet passerait DERRIÈRE le
+     SVG dès que celui-ci prend un z-index (règle suivante) — il est
+     aujourd'hui au-dessus de tout, et il doit le rester. */
+  z-index: 2;
 }
+
+/* ---- LV5 : la couche de fond, sous les étoiles ----
+   Le canvas est monté AVANT le SVG et positionné : sans contre-mesure, il
+   passerait au-dessus de lui (un élément positionné est peint après un
+   élément qui ne l'est pas, quel que soit l'ordre du document). Le SVG prend
+   donc son rang — mais SEULEMENT là où un fond existe, d'où le combinateur.
+   RIVEN n'a pas de fond : pas une de ces deux règles ne l'atteint, et son
+   empilement reste celui d'hier. */
+.ciel-fond {
+  position: absolute;
+  inset: 0;
+  display: block;
+  z-index: 0;
+  /* Un décor ne prend jamais un geste destiné à une étoile. */
+  pointer-events: none;
+}
+.ciel-fond ~ .ciel-svg { position: relative; z-index: 1; }
 /* `height: 100%` et non `auto` (correctif du 2026-08-12) : avec `auto`, la
    hauteur du SVG était dictée par la proportion du viewBox appliquée à la
    largeur rendue. Sur un écran large et court elle dépassait la scène, et

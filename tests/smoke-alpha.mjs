@@ -48,7 +48,8 @@ await page.route('**/api/**', (route) => { appelsApi.push(route.request().url())
 
 console.log('— A. Supra-division ALPHA —');
 await page.goto(`${BASE}/alpha.html`, { waitUntil: 'load', timeout: 20000 });
-await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
+const { attendrePret, lireCaps, survoler } = await import('./_caps.mjs');
+await attendrePret(page);
 
 // Le bandeau suit le registre (anti-dérive de la coque).
 const surligne = (await page.locator('h1.console-titre .titre-surligne').textContent())?.trim();
@@ -59,33 +60,105 @@ verifier('Titre = celui du registre', principal === NOEUDS.alpha.titre, `lu: ${p
 verifier('Invite « Léo te guide » retirée du bandeau',
   (await page.locator('.console-invite').count()) === 0);
 
+// « AU REPOS » SE MESURE AVANT TOUTE INTERACTION, et c'est une correction : cette
+// assertion vivait APRÈS le clic sur le cap externe, si bien qu'elle jugeait
+// « au repos » un cartouche que le survol venait de remplir. Un état initial ne
+// se vérifie qu'une fois, et au début.
+verifier('Cartouche invisible et muet au repos',
+  await page.locator('#boussole-parole').evaluate((el) =>
+    getComputedStyle(el).visibility === 'hidden' && el.textContent.trim() === ''));
+
 // Les 2 caps, dans l'ordre du registre.
 const attendus = capsDe('alpha').map((c) => c.nom);
-const noms = (await page.locator('.cap .cap-nom').allTextContents()).map((n) => n.trim());
+const caps = await lireCaps(page);
+const noms = caps.map((c) => c.nom);
 verifier('2 caps rendus', noms.length === 2, `trouvés: ${JSON.stringify(noms)}`);
-verifier('Caps dans l\'ordre du registre', JSON.stringify(noms) === JSON.stringify(attendus),
+// ORDRE ABANDONNÉ (LV5 / P3), raison écrite en LV4 ④a : une constellation range
+// par géométrie, pas par liste. Le contrôle utile est conservé entier.
+verifier('Les caps du registre sont tous là (ordre abandonné : la géométrie range)',
+  JSON.stringify([...noms].sort()) === JSON.stringify([...attendus].sort()),
   `lu: ${JSON.stringify(noms)}`);
 
 // RENOBOOST IA : porte externe, nouvel onglet, rel noopener.
-const reno = page.locator('a.cap[data-id="renoboost-ia"]');
-verifier('RENOBOOST IA ouvrable (ancre)', (await reno.count()) === 1);
-verifier('RENOBOOST IA pointe vers renoboostia.fr',
-  ((await reno.getAttribute('href')) || '').startsWith('https://www.renoboostia.fr'));
-verifier('RENOBOOST IA ouvre un nouvel onglet', (await reno.getAttribute('target')) === '_blank');
-verifier('RENOBOOST IA en rel noopener', /noopener/.test((await reno.getAttribute('rel')) || ''));
+// LE CAP EXTERNE — QUATRE ASSERTIONS REMPLACÉES PAR UNE PREUVE PAR LE GESTE.
+// Elles lisaient `href`, `target="_blank"` et `rel="noopener"` sur une ancre.
+// L'étoile n'est plus une ancre (LV4 ④a : enveloppée, elle perdait le focus
+// clavier), donc ces trois attributs n'existent plus. Ce qu'ils PROMETTAIENT,
+// lui, doit tenir : un cap externe ouvre un NOUVEL ONGLET sur la bonne adresse,
+// sans donner la main à la page ouverte.
+// On l'éprouve donc en cliquant et en regardant l'onglet qui naît. C'est plus
+// fort qu'un attribut lu : un `target="_blank"` peut être présent et neutralisé.
+const reno = page.locator('g.ciel-etoile[data-noeud-id="renoboost-ia"]');
+verifier('RENOBOOST IA rendu', (await reno.count()) === 1);
+{
+  // ON MESURE L'APPEL, PAS SON ABOUTISSEMENT. Premier jet : on ouvrait vraiment
+  // l'onglet et on lisait son URL — le harnais a répondu
+  // `chrome-error://chromewebdata/`, parce que renoboostia.fr n'est pas joignable
+  // depuis le banc d'essai (et ne DOIT pas l'être : ce harnais exige zéro
+  // requête externe). L'instrument mesurait donc la connectivité du réseau, pas
+  // la promesse du produit.
+  // Un espion sur `window.open` mesure exactement ce qui compte : l'adresse
+  // demandée et les options passées avec.
+  await page.evaluate(() => {
+    window.__ouvertures = [];
+    const vrai = window.open;
+    window.open = (url, cible, options) => {
+      window.__ouvertures.push({ url, cible, options });
+      return null; // on n'ouvre rien : le harnais éprouve l'intention, pas le web
+    };
+    window.__vraiOpen = vrai;
+  });
+  await page.locator('g.ciel-etoile[data-noeud-id="renoboost-ia"] .ciel-zone')
+    .dispatchEvent('click');
+  await page.waitForTimeout(250);
+  const ouvertures = await page.evaluate(() => window.__ouvertures);
+  verifier('Cliquer RENOBOOST IA demande un NOUVEL onglet', ouvertures.length === 1,
+    JSON.stringify(ouvertures));
+  verifier('Le nouvel onglet pointe vers renoboostia.fr',
+    !!ouvertures[0] && String(ouvertures[0].url).startsWith('https://www.renoboostia.fr'),
+    JSON.stringify(ouvertures[0]));
+  verifier('Nouvel onglet demandé en _blank',
+    !!ouvertures[0] && ouvertures[0].cible === '_blank');
+  // `noopener` testé PAR SA PRÉSENCE dans les options passées : sans lui, la page
+  // ouverte pourrait manipuler Ultima par `window.opener`.
+  verifier('Nouvel onglet en noopener,noreferrer',
+    !!ouvertures[0] && /noopener/.test(String(ouvertures[0].options || ''))
+      && /noreferrer/.test(String(ouvertures[0].options || '')),
+    String(ouvertures[0] && ouvertures[0].options));
+  // Et la page d'origine n'a pas bougé : un cap externe ne fait pas quitter Ultima.
+  verifier('ALPHA reste ouverte derrière (le cap externe ne fait pas quitter)',
+    page.url().endsWith('alpha.html'), page.url());
+}
 
 // YCOME : « à venir » — non-lien, aria-disabled, mais atteignable au clavier.
-const ycome = page.locator('.cap[data-id="ycome"]');
+const ycome = page.locator('g.ciel-etoile[data-noeud-id="ycome"]');
 verifier('YCOME inerte (pas une ancre)',
   (await ycome.evaluate((e) => e.tagName.toLowerCase())) !== 'a');
 verifier('YCOME aria-disabled', (await ycome.getAttribute('aria-disabled')) === 'true');
-verifier('1 seul cap « à venir »', (await page.locator('.cap--avenir').count()) === 1);
+// « 1 seul cap à venir » se lisait sur `.cap--avenir`, une classe de STYLE. Au
+// ciel, l'état se lit sur `aria-disabled`, ce qui est la source de vérité pour
+// qui n'y voit pas — donc un meilleur endroit pour le mesurer.
+verifier('1 seul cap « à venir »', caps.filter((c) => c.avenir).length === 1);
+// ET IL NE NAVIGUE PAS : la promesse d'inertie, éprouvée AU CLAVIER.
+{
+  const avant = page.url();
+  await ycome.focus();
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(400);
+  verifier('YCOME : Entrée ne navigue pas (le cap reste inerte)', page.url() === avant);
+}
 
 // Le cœur gravé + sa légende + les aiguilles.
-verifier('Cœur gravé au centre', (await page.locator('.boussole-coeur svg').count()) === 1);
-const legende = (await page.locator('.boussole-legende').textContent())?.trim();
+// Le cœur descend en SCEAU dans l'angle (au centre, il disputait la place aux
+// étoiles — vu sur capture le 2026-08-13). Le contrôle reste : la gravure est là.
+verifier('Cœur gravé (en sceau dans l\'angle)',
+  (await page.locator('.ciel-filigrane svg').count()) === 1);
+const legende = (await page.locator('.ciel-legende').textContent())?.trim();
 verifier('Légende gravée = celle du registre', legende === NOEUDS.alpha.legende, `lu: ${legende}`);
-verifier('2 aiguilles tracées', (await page.locator('.boussole-aiguilles .aiguille').count()) === 2);
+// « 2 aiguilles » ABANDONNÉE : un ciel n'a pas de moyeu d'où partir. Remplacée
+// par le contrôle qu'elle approchait.
+verifier('2 étoiles (ce que les aiguilles approchaient)',
+  (await page.locator('g.ciel-etoile[data-noeud-id]').count()) === 2);
 
 // Retour vers la racine.
 verifier('Retour vers la boussole racine',
@@ -93,10 +166,7 @@ verifier('Retour vers la boussole racine',
 
 // La parole de Léo : rien d'affiché au repos, le cartouche ne se matérialise
 // qu'au survol (fonctions conservées, messages retirés — Paul, 2026-08-01).
-verifier('Cartouche invisible et muet au repos',
-  await page.locator('#boussole-parole').evaluate((el) =>
-    getComputedStyle(el).visibility === 'hidden' && el.textContent.trim() === ''));
-await reno.hover();
+await survoler(page, 'renoboost-ia');
 await page.waitForSelector('#boussole-parole.is-actif', { timeout: 5000 });
 const paroleReno = (await page.locator('#boussole-parole').textContent()) || '';
 verifier('Survol RENOBOOST IA : nom + résumé', /RENOBOOST IA/.test(paroleReno) && /socle rémunérateur/i.test(paroleReno),
@@ -104,11 +174,45 @@ verifier('Survol RENOBOOST IA : nom + résumé', /RENOBOOST IA/.test(paroleReno)
 verifier('Survol : le cartouche se matérialise (visible)',
   await page.locator('#boussole-parole').evaluate((el) => getComputedStyle(el).visibility === 'visible'));
 verifier('Survol RENOBOOST IA : action « nouvel onglet »', /nouvel onglet/i.test(paroleReno), `lu: ${paroleReno}`);
-verifier('Aiguille illuminée au survol', (await page.locator('.aiguille.is-actif').count()) === 1);
+// REMPLACÉE : « l'aiguille s'illumine au survol » devient « le halo de l'étoile
+// s'allume ». Même intention — le survol doit se VOIR sur l'objet visé — sur le
+// support qui existe. Mesuré sur l'opacité calculée, pas sur une classe.
+{
+  // LE SIGNAL SE MESURE SUR LE FOCUS, PAS SUR LE SURVOL — correction d'instrument.
+  // Mesuré le 2026-08-17 : l'opacité du halo lue après un `hover()` valait 0,146
+  // ici et 0 sur IMLADRIK, pour un `:hover` pourtant ACTIF dans les deux cas. Le
+  // halo a une transition de 120 ms, et surtout LA SCÈNE GLISSE SOUS LE CURSEUR
+  // IMMOBILE (la caméra approche de façon asymptotique) : le survol s'active et
+  // se désactive au fil du mouvement, si bien que la valeur lue dépend de
+  // l'instant du déclic. **Cette assertion passait par chance de timing : un
+  // faux vert.** Le FOCUS est stable — il ne dépend d'aucune position de souris —
+  // et il porte la garantie qui compte le plus : qui navigue au clavier doit VOIR
+  // où il est. La même règle CSS allume le halo dans les deux cas.
+  await page.locator('g.ciel-etoile[data-noeud-id="renoboost-ia"]').focus();
+  await page.waitForTimeout(300);
+  const op = await page.locator('g.ciel-etoile[data-noeud-id="renoboost-ia"] .ciel-halo-focus')
+    .evaluate((el) => +getComputedStyle(el).opacity);
+  verifier('Halo allumé sur l\'objet visé (mesuré au focus, stable)', op >= 0.5,
+    `opacité ${op}`);
+}
 
 // Clavier = souris : le focus d'un cap « à venir » parle aussi.
+// LA SOURIS SORT DU CIEL AVANT DE TESTER LE CLAVIER. Sans cela, elle reste
+// posée sur le cap précédent, son survol continue de parler, et l'on croit lire
+// la parole du cap focalisé alors qu'on lit celle du cap survolé. Le harnais
+// l'avait dit : « Focus YCOME » retournait le texte de RENOBOOST IA.
+await page.mouse.move(4, 4);
+await page.waitForTimeout(250);
 await ycome.focus();
+// ÉVÉNEMENT DÉCLENCHÉ DIRECTEMENT, comme partout ailleurs sur ce moteur : la
+// caméra ne se pose jamais tout à fait et l'état du survol précédent peut encore
+// se défaire pendant qu'on mesure. Vérifié en isolation : `focus()` seul suffit
+// sur une page fraîche (parole « YCOME · À venir »), mais l'enchaînement
+// survol → clic → focus laissait la course ouverte. Un harnais ne doit pas
+// dépendre de qui gagne.
+await ycome.dispatchEvent('focus');
 await page.waitForSelector('#boussole-parole.is-actif', { timeout: 5000 });
+await page.waitForTimeout(200);
 const paroleYcome = (await page.locator('#boussole-parole').textContent()) || '';
 verifier('Focus YCOME : le cap parle', /YCOME/.test(paroleYcome) && /URL/.test(paroleYcome),
   `lu: ${paroleYcome.slice(0, 120)}`);
@@ -117,23 +221,28 @@ verifier('Focus YCOME : « cap en préparation »', /préparation/i.test(paroleY
 // Repli sans JS.
 verifier('Repli <noscript> présent', (await page.locator('noscript').count()) >= 1);
 
-// Contrastes AA sur les couleurs réellement rendues.
+// CONTRASTES REMPLACÉS — LE SUPPORT A CHANGÉ. Les noms ne se lisent plus sur le
+// parchemin d'une rose mais sur la NUIT du ciel, et le titre sur le voile de son
+// cartouche. Le premier jet de cette reprise a d'ailleurs planté ici
+// (`getComputedStyle` sur `.cap-nom`, qui n'existe plus) : mieux vaut un
+// instrument qui tombe qu'un instrument qui mesure une encre contre un fond
+// qui n'est plus derrière elle.
 const styles = await page.evaluate(() => {
-  const cs = getComputedStyle(document.documentElement);
+  const cs = getComputedStyle(document.querySelector('.ciel-noeud-coque'));
   return {
-    parcheminCarte: cs.getPropertyValue('--parchemin-carte').trim(),
-    merProfonde: cs.getPropertyValue('--mer-profonde').trim(),
-    nom: getComputedStyle(document.querySelector('.cap-nom')).color,
+    nuit: cs.getPropertyValue('--ciel-nuit-basse').trim() || '#03070e',
+    nom: document.querySelector('text.ciel-nom').getAttribute('fill'),
     titre: getComputedStyle(document.querySelector('.console-titre')).color,
-    legende: getComputedStyle(document.querySelector('.boussole-legende')).color,
+    voile: getComputedStyle(document.querySelector('.console-entete')).backgroundColor,
+    legende: getComputedStyle(document.querySelector('.ciel-legende')).color
   };
 });
-const rNom = ratio(versHex(styles.nom), styles.parcheminCarte);
-verifier('Contraste nom de cap ≥ 4,5:1', rNom >= 4.5, `${rNom.toFixed(2)}:1`);
-const rTitre = ratio(versHex(styles.titre), styles.merProfonde);
-verifier('Contraste titre sur mer ≥ 4,5:1', rTitre >= 4.5, `${rTitre.toFixed(2)}:1`);
-const rLeg = ratio(versHex(styles.legende), styles.merProfonde);
-verifier('Contraste légende sur mer ≥ 4,5:1', rLeg >= 4.5, `${rLeg.toFixed(2)}:1`);
+const rNom = ratio(styles.nom, styles.nuit);
+verifier('Contraste nom d\'étoile sur la nuit ≥ 4,5:1', rNom >= 4.5, `${rNom.toFixed(2)}:1`);
+const rTitre = ratio(versHex(styles.titre), versHex(styles.voile));
+verifier('Contraste titre sur son voile ≥ 4,5:1', rTitre >= 4.5, `${rTitre.toFixed(2)}:1`);
+const rLeg = ratio(versHex(styles.legende), styles.nuit);
+verifier('Contraste légende sur la nuit ≥ 4,5:1', rLeg >= 4.5, `${rLeg.toFixed(2)}:1`);
 
 // ALPHA ne porte aucune donnée : rien ne sort de la page.
 verifier('Aucun appel /api (coque sans donnée)', appelsApi.length === 0, appelsApi.slice(0, 3).join(', '));

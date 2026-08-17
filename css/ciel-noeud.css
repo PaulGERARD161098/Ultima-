@@ -32,37 +32,150 @@
    contenu. Mesuré — la coque tombait à 300 px sur un écran de 390. `console.css`
    et `boussole.css` neutralisent ce flex pour exactement la même raison ; on
    fait comme elles plutôt que d'inventer un contournement. */
+/* ═══════════════════════════════════════════════════════════════════════════
+   LV5 / P2 — LE PLEIN ÉCRAN. La galaxie EST la page.
+   ═══════════════════════════════════════════════════════════════════════════
+   Dicté par Paul le 2026-08-16 : « qu'on n'ait plus la boussole, qu'on soit
+   vraiment sur tout l'écran ». Ce n'était PAS un `max-width` à retirer : la
+   coque empilait, dans le flux, un retour, un bandeau, un plateau et un
+   cartouche — la scène n'avait que la place restante. Retirer la largeur
+   n'aurait donc rien donné d'autre qu'une colonne plus large.
+   Le plein écran est un changement de modèle : **le plateau devient le fond de
+   l'écran, et tout le reste flotte dessus.**
+
+   Ce qui a été fait AVANT cette feuille, et sans quoi elle serait inutile :
+   apprendre au cadrage qu'une partie de l'écran est occupée (`margesUtiles`
+   dans `js/ciel.js`). Sinon le ciel remplit 60 à 75 % de la plus petite
+   dimension du cadre ENTIER et pousse les galaxies sous le bandeau — c'est le
+   défaut mesuré sur la maquette à 390 px, où ULTIMA et ALPHA disparaissaient
+   sous le mobilier sans qu'aucun clic ne soit volé. */
+html, body.ciel-noeud {
+  height: 100%;
+  margin: 0;
+  /* Un plein écran qui défile n'est pas un plein écran. */
+  overflow: hidden;
+}
 body.ciel-noeud {
   display: block;
-  height: auto;
-  min-height: 100vh;
   color: var(--creme);
 }
 
+/* La coque ne met plus rien en page : ses quatre enfants se placent seuls,
+   l'un en fond, les trois autres en surcouche. Elle reste dans le document
+   parce qu'elle porte les JETONS DE NUIT de `css/ciel.css` (portés par une
+   classe et non par `:root` — piège du 2026-08-13 : sans elle, la page perd
+   tout le régime chromatique EN SILENCE). */
 .ciel-noeud-coque {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  gap: .7rem;
-  max-width: 760px;
-  margin: 0 auto;
-  min-height: 100svh;
-  padding: .8rem;
-  box-sizing: border-box;
+  position: static;
+  display: block;
+  max-width: none;
+  margin: 0;
+  padding: 0;
 }
 
 /* Le plateau : la scène, plus ce qui doit SURVIVRE au rendu. Le moteur vide son
    conteneur à chaque dessin ; le filigrane, la légende et le repli <noscript>
    vivent donc ici, à côté de la scène, jamais dedans. */
+/* LE PLATEAU EST LE FOND DE L'ÉCRAN. `dvh` et non `vh` : sur mobile, `100vh`
+   compte la barre d'URL rétractable, et le débordement serait INVISIBLE sur un
+   fond de nuit — on ne verrait que des étoiles coupées. */
 .ciel-noeud-plateau {
-  position: relative;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
   display: flex;
   flex-direction: column;
+  width: 100vw;
+  height: 100dvh;
+  min-height: 100vh; /* repli pour un navigateur sans dvh */
+}
+.ciel-noeud-plateau > .ciel-scene {
   flex: 1;
   min-height: 0;
+  /* Le cadre du plateau n'a plus lieu d'être : il n'y a plus de plateau à
+     encadrer. Le double filet doré, lui, RESTE — c'est l'idiome de la carte
+     savante ; il devient la bordure de l'écran au lieu de celle d'une
+     vignette. */
+  border: 0;
 }
-.ciel-noeud-plateau > .ciel-scene { flex: 1; min-height: 0; }
+.ciel-noeud-plateau > .ciel-scene::after {
+  inset: 10px;
+  border-color: rgba(169, 136, 74, .16);
+}
+
+/* ---- LE MOBILIER : une surcouche, jamais un bandeau qui pousse ----
+   RÈGLE ABSOLUE : un conteneur de surcouche ne reçoit AUCUN geste, seuls ses
+   contrôles en reçoivent. Sans cela, une bande transparente rend inerte tout
+   un pan de ciel — et ça ne se voit pas en regardant, ça se découvre en
+   cliquant à côté d'une étoile qui ne répond pas. */
+body.ciel-noeud > .ciel-noeud-coque > .console-retour,
+body.ciel-noeud > .ciel-noeud-coque > .console-entete,
+body.ciel-noeud > .ciel-noeud-coque > .boussole-parole {
+  position: fixed;
+  z-index: 3;
+  margin: 0;
+  pointer-events: none;
+}
+body.ciel-noeud > .ciel-noeud-coque > .console-retour a,
+body.ciel-noeud > .ciel-noeud-coque > .boussole-parole { pointer-events: auto; }
+
+/* Le retour : en haut à gauche, dans la zone sûre de l'encoche. */
+body.ciel-noeud > .ciel-noeud-coque > .console-retour {
+  top: calc(env(safe-area-inset-top, 0px) + 10px);
+  left: calc(env(safe-area-inset-left, 0px) + 12px);
+}
+
+/* Le bandeau : sceau et titre sur UNE ligne. En pleine page, le bandeau
+   vertical d'origine (sceau de 120 px au-dessus du titre) mangeait le quart
+   supérieur de l'écran — et cette place est celle du ciel, désormais. */
+body.ciel-noeud > .ciel-noeud-coque > .console-entete {
+  top: calc(env(safe-area-inset-top, 0px) + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  max-width: min(92vw, 640px);
+  padding: .45rem .9rem;
+  /* LE VOILE. Sur un ciel qui bouge, un texte ne se lit plus sur une couleur
+     connue mais sur un pixel qui varie : le contraste doit être RAMENÉ à une
+     valeur maîtrisée avant d'être mesuré. Ce voile est cette valeur. */
+  background: rgba(3, 7, 14, .82);
+  border: 1px solid rgba(169, 136, 74, .28);
+}
+body.ciel-noeud .console-entete .boussole-sceau {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  margin: 0;
+}
+body.ciel-noeud .console-entete .console-titre { margin: 0; text-align: left; }
+body.ciel-noeud .console-entete .titre-surligne { font-size: .66rem; }
+body.ciel-noeud .console-entete .titre-principal { font-size: clamp(1.1rem, 3.2vw, 1.6rem); }
+
+/* SUR ÉCRAN ÉTROIT, LE BANDEAU DESCEND SOUS LA LIGNE DU RETOUR.
+   Mesuré à 390 px : le retour occupait 12→115 px et le bandeau centré
+   commençait à 108 — ils se chevauchaient de sept pixels, et sur la capture le
+   bouton « Boussole » passait dessous. Un bandeau centré ne peut pas cohabiter
+   avec un bouton d'angle sur 390 px, c'est de l'arithmétique.
+   Le cadrage n'a pas besoin d'être prévenu : la marge haute est MESURÉE sur ces
+   boîtes, elle suit d'elle-même. */
+@media (max-width: 560px) {
+  body.ciel-noeud > .ciel-noeud-coque > .console-entete {
+    top: calc(env(safe-area-inset-top, 0px) + 46px);
+  }
+}
+
+/* La légende gravée : elle vivait sous le ciel, il n'y a plus de « sous ».
+   Elle passe en bas de l'écran, au-dessus du plateau. */
+.ciel-noeud-plateau > .ciel-legende {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 6px);
+  z-index: 2;
+  pointer-events: none;
+}
 
 /* ---- ③ Le filigrane : le cœur de la boussole, passé DERRIÈRE le ciel ----
    Sur la boussole, le médaillon siégeait au centre et les caps l'orbitaient.
@@ -140,17 +253,32 @@ body.ciel-noeud {
    On le remet donc dans la colonne, ici et seulement ici : la scène rend la
    place au lieu de la partager. `boussole.css` n'est pas touchée — VRANESH et
    les huit coques encore à la boussole gardent leur cartouche flottant. */
+/* ---- LE CARTOUCHE DE LÉO, EN SURCOUCHE BASSE (LV5 / P2) ----
+   En LV4 il était remis DANS LE FLUX : la scène rendait la place au lieu de la
+   partager. En plein écran il n'y a plus de flux à partager — il redevient
+   flottant, mais sa place est RÉSERVÉE dans le cadrage (`margesUtiles`), ce qui
+   est la différence avec la boussole : là, il flottait par-dessus le ciel et
+   pouvait le recouvrir ; ici, le ciel sait qu'il est là et n'y peint pas.
+   Sa hauteur est PLANCHÉE : sans cela, elle change au survol (le cartouche se
+   remplit), la marge réservée change avec elle, et le ciel se recadrerait sous
+   le curseur — un ciel qui bouge quand on approche une étoile est un ciel où
+   l'on rate sa cible. */
 body.ciel-noeud #boussole-parole {
-  position: static;
-  flex: 0 0 auto;
-  /* `boussole.css` centrait le cartouche FLOTTANT par `left: 50%` +
-     `translateX(-50%)` sous 700 px. Remis dans le flux, la translation
-     subsiste et le pousse à moitié hors de l'écran — vu sur capture. On la
-     neutralise avec le reste du positionnement : les deux vont ensemble. */
-  left: auto;
-  right: auto;
-  bottom: auto;
-  transform: none;
-  width: min(100%, 520px);
-  margin: 0 auto;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 26px);
+  left: 50%;
+  min-height: 3.1rem;
+  box-sizing: border-box;
+  background: rgba(3, 7, 14, .82);
+  border: 1px solid rgba(169, 136, 74, .28);
+  /* `boussole.css` centre le cartouche flottant par `left: 50%` +
+     `translateX(-50%)` sous 700 px seulement. En LV4 il fallait NEUTRALISER
+     cette translation (le cartouche revenait dans le flux et s'en trouvait
+     poussé à moitié hors de l'écran — vu sur capture). En plein écran il
+     redevient flottant : on la REPREND, et à toutes les largeurs, sinon il
+     part à droite au-delà de 700 px.
+     *La règle d'hier n'était pas fausse, elle appartenait à l'autre modèle de
+     mise en page — la remplacer valait mieux que l'empiler.* */
+  transform: translateX(-50%);
+  width: min(92vw, 520px);
+  margin: 0;
 }

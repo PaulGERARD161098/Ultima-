@@ -96,19 +96,42 @@ const cadre = await page.evaluate(() => {
   const zs = Array.from(svg.querySelectorAll('.ciel-zone'));
   const ys = zs.map((z) => +z.getAttribute('cy'));
   const xs = zs.map((z) => +z.getAttribute('cx'));
+  // LV5 / P2 — LA ZONE UTILE est désormais le dénominateur. Depuis le plein
+  // écran, une part du cadre est RÉSERVÉE au mobilier (bandeau, retour,
+  // cartouche, légende) et le ciel n'a plus le droit d'y peindre.
+  const z = window.UltimaCiel.courant().zoneUtile();
+  const etX = Math.max(...xs) - Math.min(...xs);
+  const etY = Math.max(...ys) - Math.min(...ys);
   return {
     dehors, debordMax,
-    occupation: Math.max((Math.max(...xs) - Math.min(...xs)) / vb[2],
-      (Math.max(...ys) - Math.min(...ys)) / vb[3])
+    occupation: Math.max(etX / vb[2], etY / vb[3]),
+    occupationUtile: Math.max(etX / z.largeur, etY / z.hauteur),
+    zone: { haut: Math.round(z.haut), bas: Math.round(z.bas) }
   };
 });
 chiffres.cadreTel = {
-  occupation: +(cadre.occupation * 100).toFixed(1), debordMax: +cadre.debordMax.toFixed(1)
+  occupation: +(cadre.occupation * 100).toFixed(1),
+  occupationUtile: +(cadre.occupationUtile * 100).toFixed(1),
+  margeHaute: cadre.zone.haut, margeBasse: cadre.zone.bas,
+  debordMax: +cadre.debordMax.toFixed(1)
 };
 verifier('Aucun objet hors cadre (boîte réelle, nom compris)', cadre.dehors === 0,
   `débord max: ${cadre.debordMax.toFixed(1)}`);
-verifier('Le ciel remplit le cadre (≥ 60 %)', cadre.occupation >= 0.6,
-  `${(cadre.occupation * 100).toFixed(1)} %`);
+// ---- ASSERTION REMPLACÉE le 2026-08-17 (LV5 / P2), pas abandonnée ----
+// Elle disait : « le ciel remplit LE CADRE à 60 % au moins ». Depuis le plein
+// écran, une part du cadre est RÉSERVÉE au mobilier — mesuré ici : 119 unités en
+// haut, 81 en bas sur 833. Exiger 60 % du cadre entier reviendrait donc à
+// demander au ciel 83 % de la place qui lui reste, ce que les marges de libellé
+// rendent impossible : l'assertion serait devenue arithmétiquement
+// intenable, et la « corriger » en baissant le seuil aurait masqué le fait que
+// le ciel remplit très bien ce qu'on lui laisse (51,7 % du cadre, **71,8 % de sa
+// zone utile** — la fourchette de LV4).
+// LE CONTRÔLE NE CHANGE PAS, SON DÉNOMINATEUR CHANGE. Un seuil qui baisse doit
+// se justifier par la géométrie et jamais par l'envie de passer : ici il ne
+// baisse pas, il se mesure au bon endroit.
+verifier('Le ciel remplit sa ZONE UTILE (≥ 60 %)', cadre.occupationUtile >= 0.6,
+  `${(cadre.occupationUtile * 100).toFixed(1)} % de la zone utile · `
+  + `${(cadre.occupation * 100).toFixed(1)} % du cadre entier`);
 
 // ---- ③ LE CŒUR ET SA LÉGENDE ont survécu au rendu ----
 // Le moteur vide son conteneur à chaque dessin : s'ils avaient été posés DANS

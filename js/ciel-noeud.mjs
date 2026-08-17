@@ -150,6 +150,48 @@ export function rendre(idNoeud, options = {}) {
   }
 
   // ---- Le dessin d'un étage ----------------------------------------------
+  // LV5 / P2 — LA PLACE QUE PREND LE MOBILIER SE MESURE, ELLE NE SE DÉCLARE PAS.
+  // Une constante ne peut pas la connaître : elle dépend de la police, de la
+  // longueur du titre, de la largeur de l'écran et de la zone sûre de
+  // l'encoche. C'est la même leçon que la demi-largeur des noms d'étoiles, qui
+  // avait coûté 93,7 unités de débord le 2026-08-13 pour avoir été supposée.
+  // On mesure donc les boîtes réelles, et on rend au moteur ce qu'il doit
+  // s'interdire de peindre.
+  function margesDuMobilier() {
+    const bas = [];
+    const haut = [];
+    const hauteurDe = (el) => {
+      if (!el) { return 0; }
+      const r = el.getBoundingClientRect();
+      return r.height > 0 ? r.height : 0;
+    };
+    // En haut : le bandeau et le retour cohabitent ; c'est le plus bas des deux
+    // qui commande, pas leur somme — ils sont côte à côte, pas empilés.
+    const entete = doc.querySelector('body.ciel-noeud .console-entete');
+    const retour = doc.querySelector('body.ciel-noeud .console-retour');
+    for (const el of [entete, retour]) {
+      if (!el) { continue; }
+      const r = el.getBoundingClientRect();
+      haut.push(r.bottom);
+    }
+    // En bas : le cartouche de Léo et la légende gravée.
+    const legende = doc.querySelector('.ciel-noeud-plateau > .ciel-legende');
+    for (const el of [parole, legende]) {
+      if (!el) { continue; }
+      const r = el.getBoundingClientRect();
+      if (r.height > 0) { bas.push(window.innerHeight - r.top); }
+    }
+    // Une provision de 8 px : une étoile qui affleure le bord d'un cartouche
+    // n'est pas recouverte, mais elle est illisible.
+    const marge = 8;
+    return {
+      haut: (haut.length ? Math.max(...haut) : 0) + marge,
+      bas: (bas.length ? Math.max(...bas) : 0) + marge,
+      gauche: 0,
+      droite: 0
+    };
+  }
+
   function dessiner() {
     const donnees = versCiel(idNoeud, registre, { deplie });
     if (!donnees) { return; }
@@ -164,11 +206,33 @@ export function rendre(idNoeud, options = {}) {
       // Les deux capacités de l'étape ②, activées ici et nulle part ailleurs.
       cadrerSurLesEtoiles: true,
       tousLesNoms: true,
+      // LV5 — LA COUCHE DE FOND (P1). Validée par Paul le 2026-08-16 sur la
+      // maquette : « fond avec les étoiles, génial ». Elle remplace les 130
+      // grains SVG fixes par un champ dont la densité suit la surface (1 266 à
+      // 5 200 grains), avec parallaxe, voiles et filaments.
+      // Elle n'est allumée QUE sur les coques de navigation. RIVEN ne l'active
+      // pas : son ciel montre un réseau de personnes, pas un menu, et son
+      // harnais doit continuer de passer sans une retouche.
+      fond: true,
+      // LV5 / P2 — la zone où le ciel n'a pas le droit de peindre. On passe LA
+      // FONCTION, pas son résultat : le moteur la rappelle à chaque
+      // redimensionnement, et la mesure ne peut donc pas se périmer. Passer une
+      // valeur revenait à figer une constante qui n'avait eu raison qu'une fois
+      // — pris en défaut par le harnais.
+      margesUtiles: margesDuMobilier,
       surClicNoeud: entrer
     });
     if (!vue) { return; }
     vue.derive(false); // un menu ne dérive pas : une cible qui bouge est une cible qu'on rate
     habiller();
+    // LE SIGNAL « C'EST PRÊT » (LV5 / P3). `boussole-noyau.mjs` posait
+    // `is-pret` sur son plateau, et TOUS les harnais de navigation l'attendent
+    // — onze points d'attente comptés. Le ciel doit donc le poser aussi, sur le
+    // plateau, au même moment logique : quand les caps sont rendus et habillés.
+    // C'est un contrat entre le produit et ses instruments : le changer aurait
+    // obligé à réécrire onze attentes pour un gain nul, et un harnais qui
+    // n'attend pas le bon signal mesure une page à moitié peinte.
+    plateau.classList.add('is-pret');
     // On rend le focus à l'étoile qui l'avait avant le re-dessin.
     if (focusARendre) {
       const revenue = scene.querySelector(

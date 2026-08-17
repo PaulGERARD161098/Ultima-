@@ -52,7 +52,16 @@ export function versCiel(idEcran, registre, options) {
     if (cap.lien) {
       relations.push({
         source_id: idCap, target_id: cap.lien,
-        type: 'chantier_commun', statut: 'actif'
+        type: 'chantier_commun', statut: 'actif',
+        // LE NOM GRAVÉ SUR L'ARC (LV5 / P3). Il était PERDU depuis le passage au
+        // ciel : la boussole gravait `lienLibelle` sur la passerelle entre deux
+        // caps jumeaux, l'adaptateur créait bien le lien mais jetait son nom.
+        // La fonction ④ de l'inventaire LV4 §13.1 n'était donc portée qu'à
+        // moitié — un trait sans son nom ne dit pas ce qu'il relie.
+        // Un seul écran en a aujourd'hui (TAO : reshiram ⇄ zekrom), et c'est
+        // précisément pourquoi la perte avait pu passer inaperçue sur la coque
+        // pilote, qui n'a aucun cap jumeau.
+        libelle: cap.lienLibelle || ''
       });
     }
   });
