@@ -93,6 +93,19 @@
     refuse l'hôte (403 au CONNECT). Toute vérification est donc **locale**
     (Chromium réel) — le dire à Paul à chaque rapport plutôt que de laisser croire
     que la preview a été regardée.
+  - 🔻 **LA FICHE NOTION N'A PAS PU ÊTRE SYNCHRONISÉE** (point 4 du protocole de
+    fin de session). L'écriture Notion demande une approbation d'outil qui n'a pas
+    été accordée, deux tentatives. **À reprendre au début de la prochaine
+    session**, et deux choses sont à savoir :
+    ① la fiche « 📦 Repo Ultima- — Fiche projet » (`392c68b1-1948-81b0-9efb-fa0bd7b7c2b7`)
+    **s'arrête au 2026-07-23** — les sessions du 24/07 au 14/08 (LV3, LV4, RIVEN
+    stellaire, IMLADRIK) n'y sont jamais remontées non plus ; le repo est donc la
+    **seule** source complète, et il l'est ;
+    ② l'entrée à y écrire n'est pas à réinventer : **c'est le contenu de cette
+    section §ÉTAT** (registres, 9 pages, recette d'embarquement, reste à faire,
+    règles payées, actions humaines), plus les blocs 🔒/⚡ du rapport de clôture
+    consignés dans `memoire/JOURNAL-DECISIONS.md` à la date du 2026-08-17.
+    *Rien n'est perdu — c'est une recopie à faire, pas un travail à refaire.*
 
 - 🌠 **SESSION 2026-08-13/14 (LV4 — Ultima devient un ciel qui se déplie), EN
   COURS — PR #163, brouillon, NON fusionnée.** Cadrage :
