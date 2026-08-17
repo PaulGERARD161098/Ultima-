@@ -474,7 +474,7 @@
     était du code qui ne s'exprimait jamais**. 🔻 *Une forme se juge sur le
     volume RÉEL qu'elle porte, pas sur celui qu'elle anticipe.*
   - ✅ **La voûte livrée (forme A, choisie par Paul sur maquette comparative)** :
-    les serments COEXISTENT enfin, les fils vers ZEKROM / VRANESH / MINETHNIR se
+    les serments COEXISTENT enfin, les fils vers ZEKROM / VRANESH / MAEDRETHNIR se
     voient. Chaque vue a désormais UN travail — la voûte l'ensemble, le foyer un
     serment, le registre l'écriture ; la rangée de boutons disparaît (c'était la
     troisième liste des mêmes noms). « Sceller un serment » passe **derrière** la
@@ -590,7 +590,7 @@
     porte, lequel attend, lequel a cassé et pourquoi) — sans cette donnée la
     greffe dessine trois branches en réserve et rien d'autre ; ② l'extraction du
     `<script>` des **5 maquettes antérieures** (registre du fil DRAUKHAIN) ;
-    ③ déposer une première page sur `/ecrire.html` (MINETHNIR, inchangé).
+    ③ déposer une première page sur `/ecrire.html` (MAEDRETHNIR, inchangé).
   - 🔶 **BOUCLE PRÉCÉDENTE, close par ce qui précède — l'image d'abord.** Dictée :
     « quand j'arrive sur VRANESH il faut m'afficher tout de suite LIANDRA et
     THORIOL […] réduire le texte au maximum, maximiser le visuel […] ensuite
@@ -617,7 +617,7 @@
     Paul maintenue après objection, donc suppression réelle, encadrée.
   - ✅ **DRAUKHAIN** : le **foyer** (forme A, champ lexical du feu), puis ses
     étiquettes **mesurées** au lieu d'être estimées (#135).
-  - ✅ **MINETHNIR** : boucle ① = diagnostic **sans une ligne de code** — le
+  - ✅ **MAEDRETHNIR** : boucle ① = diagnostic **sans une ligne de code** — le
     journal est vide **par distance**, pas par forme ni par contenu. Boucle ② =
     **`/ecrire.html`, la capture** (une seule chose à l'écran, pas de titre,
     brouillon local écrit **avant** tout appel réseau).
@@ -627,7 +627,7 @@
     contenu. *Rappel gagné : une variable d'env Vercel n'agit qu'après un
     redéploiement.*
   - ⏳ **Actions à la main de Paul** : ① **déposer une première page sur
-    `/ecrire.html`** — la boucle ③ de MINETHNIR (la forme de **lecture**) ne se
+    `/ecrire.html`** — la boucle ③ de MAEDRETHNIR (la forme de **lecture**) ne se
     cadre **qu'après**, sinon on refait l'erreur de la boucle ① ; ② cadrage
     dicté de **NICOL BOLAS** ; ③ sur VRANESH, un 6ᵉ futur a été demandé alors
     qu'« Autre chose » occupait déjà la 5ᵉ place — garder ou remplacer ? ; ④ le
@@ -769,7 +769,7 @@
   - ✅ **#114 — la voie jalonnée** (forme A, décidée par Paul sur maquette
     comparée à 2 autres) : un serment = une voie, sur `draukhain.html`.
     Jamais de ligne d'arrivée. `css/voie.css` au vocabulaire neutre, réutilisable
-    par VRANESH et MINETHNIR. Détail : `CADRAGE-IMLADRIK.md §9`.
+    par VRANESH et MAEDRETHNIR. Détail : `CADRAGE-IMLADRIK.md §9`.
   - ✅ **#118 — les mains de Léo** : 5 outils du quadrant `imladrik` (elle
     propose, Paul confirme, l'app écrit) + le **micro** partagé, **extrait** de
     `js/app.js` vers `js/dictee.js`. Détail : `§10`.
@@ -791,7 +791,7 @@
   tenu (07-25) : **passer du code à la DONNÉE** (« assez de code, il faut de la
   donnée », directive JL). Deux fils de travail ont avancé en parallèle ; les voici
   fusionnés au réel :
-  - **IMLADRIK complet et tissé** (MINETHNIR + DRAUKHAIN + VRANESH + passerelles
+  - **IMLADRIK complet et tissé** (MAEDRETHNIR + DRAUKHAIN + VRANESH + passerelles
     v2 autour de Kalamn-talaen ; Léo guide) — **code livré**, ⏳ **non activé** tant
     que les migrations ne sont pas appliquées (voir registre).
   - **Cockpit v2 — modèle unifié A→B→C** (`CADRAGE-CONSOLE §2bis.1`). ✅ **Palier A
@@ -823,7 +823,7 @@
   — **forme A**, **IMLADRIK seul**, **un serment = une voie**. Implantée sur
   **DRAUKHAIN** (la page où les serments vivent déjà derrière auth ; la carto
   `imladrik.html` reste muette, §5 tenue) : `css/voie.css` (vocabulaire neutre
-  `voie-*`/`borne-*`, réemployable par VRANESH et MINETHNIR) + `js/draukhain.js`
+  `voie-*`/`borne-*`, réemployable par VRANESH et MAEDRETHNIR) + `js/draukhain.js`
   (4 fonctions pures : jalons, points, tracé, queue ; SVG `aria-hidden`, toute
   l'information dans la liste des bornes) + `draukhain.html` (une feuille de
   style). **Jamais de ligne d'arrivée** : l'horizon reste devant, la route sort
@@ -846,7 +846,7 @@
   vérifie **fail-closed** côté serveur et `decrireEtat` le rend en bloc système
   déterministe, **hors cache** (le préfixe stable reste cacheable). §5 tenue :
   jamais un texte de flamme, un déroulé de scénario, un pourquoi/horizon ni un
-  identifiant ; MINETHNIR au régime le plus strict (comptes + date de la
+  identifiant ; MAEDRETHNIR au régime le plus strict (comptes + date de la
   dernière page). `etat` absent → appel inchangé (les autres quadrants ne
   bougent pas). **Patrimoine COMPLET vert (866)**. Détail : `§11`.
 
@@ -964,7 +964,7 @@
   - ✅ **IMLADRIK B0 — cadrage de la cartographie boussole (2026-07-24, GO
     SOLO)** : dicté Paul — le quadrant devient une **carto en mode boussole**
     (modèle boussole LV2, registre dév. perso) : le journal renommé
-    **MINETHNIR**, deux nouveaux caps **VRANESH** (les futurs potentiels —
+    **MAEDRETHNIR**, deux nouveaux caps **VRANESH** (les futurs potentiels —
     anticiper « dans un cas donné ») et **DRAUKHAIN** (la volonté au-delà du
     possible — objectifs, foi, rappels sans jugement), au centre la boussole
     **KALAMN-TALAEN** (épée + dragon) = **le guide, l'agent d'IMLADRIK**
@@ -979,15 +979,15 @@
     oui) ; ④ go B1 (implémentation carto).
   - ✅ **IMLADRIK B1 — la cartographie en prod (2026-07-24, GO SOLO, « ok pour
     tes recos, go b1 »)** : `imladrik.html` devient la **boussole Kalamn-talaen**
-    (3 caps — MINETHNIR ouvert, VRANESH + DRAUKHAIN à venir — autour du médaillon
+    (3 caps — MAEDRETHNIR ouvert, VRANESH + DRAUKHAIN à venir — autour du médaillon
     épée + dragon, légende gravée « Kalamn-talaen ») ; le journal migre vers
-    **`minethnir.html`**. **Renommage front seul** : `js/imladrik.js`, API
+    **`maedrethnir.html`**. **Renommage front seul** : `js/imladrik.js`, API
     `/api/imladrik*`, migrations `0012`/`0014`, RLS et harnais **inchangés** —
     zéro migration, zéro touche à l'auth/données. Réutilise `css/boussole.css`
     (langage caps/aiguilles/parole) ; nouveaux `js/imladrik-carto.js` (clone du
     cœur de `boussole.js`, sans cockpit — carto muette §5) + `css/imladrik-carto.css`
     (sceau + légende). Console : IMLADRIK « En chantier » → « Accéder ». Harnais :
-    `smoke-imladrik` reciblé sur MINETHNIR, **`smoke-imladrik-carto` créé**,
+    `smoke-imladrik` reciblé sur MAEDRETHNIR, **`smoke-imladrik-carto` créé**,
     `smoke-console` mis à jour ; **patrimoine COMPLET (21 harnais) vert**. Recos
     Paul validées (sigle épée au soleil conservé, DRAUKHAIN→VRANESH). **Prochaine
     boucle : B2 — DRAUKHAIN v1.**
@@ -1024,9 +1024,9 @@
     appliquer `0017` en prod + go.**
   - 🔶 **IMLADRIK B4 — Passerelles v2 (2026-07-25, GO SOLO)** : la mémoire
     inter-cap. Deux tables de liens à **cible XOR** + double scellement AD-4
-    (miroir 0011) : **`serment_liens`** (serment → idéal ZEKROM / page MINETHNIR)
+    (miroir 0011) : **`serment_liens`** (serment → idéal ZEKROM / page MAEDRETHNIR)
     et **`scenario_liens`** (scénario → serment DRAUKHAIN [rapport menace/sert] /
-    page MINETHNIR). Migration `0018_imladrik_passerelles.sql` (+ ancrages
+    page MAEDRETHNIR). Migration `0018_imladrik_passerelles.sql` (+ ancrages
     composites sur `imladrik_entrees`/`scenarios`) **ÉCRITE, NON APPLIQUÉE — gate
     §5, dépend de 0016+0017**. API `serment-liens`/`scenario-liens` ; liens
     repliés dans les GET (dégradation propre à `[]`). Front « Passerelles » sur

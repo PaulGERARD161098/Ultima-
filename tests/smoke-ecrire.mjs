@@ -1,4 +1,4 @@
-// LA CAPTURE (ecrire.html, boucle ② MINETHNIR, 2026-08-01) — au POUCE.
+// LA CAPTURE (ecrire.html, boucle ② MAEDRETHNIR, 2026-08-01) — au POUCE.
 // Diagnostic de la boucle ① : le journal est vide parce que le cap n'est pas
 // atteignable au moment où l'envie d'écrire arrive — elle surgit en marchant,
 // au pouce et à la voix. Cette page est la réponse ; ce harnais vérifie les

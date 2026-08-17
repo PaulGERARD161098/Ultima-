@@ -3129,3 +3129,42 @@ de méthode plutôt que de CSS.
   **Et il a été prouvé qu'il rougit** : la règle fautive réinjectée exprès l'a
   fait passer rouge en nommant les six textes cassés. Un harnais vert ne vaut
   rien tant qu'on n'a pas vu ce qui le fait rougir.
+
+## 2026-08-17 — MINETHNIR devient MAEDRETHNIR
+
+Dicté par Paul en cours de boucle : *« Minethnir doit être changé en MAEDRETHNIR
+partout »*. Second renommage de ce cap (il portait MINETHNIR depuis le
+2026-07-24). **171 occurrences, 36 fichiers, plus le nom du fichier lui-même.**
+
+- **CE QUI A DÉCIDÉ QUE C'ÉTAIT SANS RISQUE, ET IL FALLAIT LE PROUVER AVANT DE
+  TOUCHER.** Un nom présent dans `supabase/migrations/` et dans `api/` peut être
+  une **valeur stockée** — le renommer côté code casserait alors la prod en
+  silence. Vérifié ligne par ligne : dans le SQL comme dans l'API, MINETHNIR
+  n'apparaît qu'en **commentaires et en prose**. Aucun identifiant, aucune
+  contrainte, aucune valeur. Puis re-vérifié **sur le diff** après substitution :
+  la clé persistée des passerelles reste `'page'`, seul son libellé a changé.
+  *Un renommage se prouve front-seul sur le diff, pas sur une intuition.*
+- **LE RACCOURCI DE L'IPHONE EST UN APPELANT COMME UN AUTRE.** Le lexique notait
+  que Paul a posé `…/minethnir.html` sur son écran d'accueil. Renommer le fichier
+  sans plus le tuait. Deux redirections permanentes ajoutées à `vercel.json`, sur
+  **le modèle `traveler→riven` déjà présent** (capitaliser plutôt que réinventer).
+- **UNE ENTRÉE DATÉE DE JOURNAL NE SE RÉÉCRIT PAS.** « Partout » s'arrête au
+  produit : code, interface, nom de fichier, cadrages d'état courant, lexique.
+  Les 14 occurrences des entrées **passées** de ce journal restent — une entrée
+  datée est un procès-verbal, et la réécrire ferait perdre la mémoire de la
+  boucle qui l'avait produite. Le renommage est acté par CETTE entrée. Choix
+  délibéré, signalé à Paul.
+- **UN MOT PLUS LONG EST UNE GÉOMÉTRIE QUI CHANGE.** MAEDRETHNIR fait deux
+  caractères de plus et devient le nom le plus long de l'outil : sur le ciel, un
+  nom trop long déborde. Mesuré (`getBBox()` contre le `viewBox`) aux deux
+  largeurs : aucun débordement. **Et mon premier instrument était faux** — il
+  comparait les étoiles au `viewBox` d'un **blason** (72×72) attrapé par un
+  `querySelector('svg')` trop large, et annonçait trois débordements. Corrigé en
+  prenant `ownerSVGElement` de l'étoile. *Un sélecteur « le premier svg de la
+  page » n'est pas une mesure, c'est un pari.*
+- **Le lexique vocal reçoit les déformations du nouveau mot** — long et sans
+  appui français, la dictée le cassera en deux (« maître Denir », « Madre
+  Thnir »). L'ancien nom y reste, marqué comme ancien, pour que Paul puisse
+  encore le dicter sans être mal compris.
+
+Patrimoine COMPLET vert (84 sections) après renommage.

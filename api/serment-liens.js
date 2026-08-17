@@ -1,5 +1,5 @@
 // /api/serment-liens — passerelle v2 : un serment DRAUKHAIN relié à un idéal
-// ZEKROM XOR une page MINETHNIR (« un serment naît d'un idéal / se suit dans le journal »).
+// ZEKROM XOR une page MAEDRETHNIR (« un serment naît d'un idéal / se suit dans le journal »).
 //   POST   → crée un lien { serment_id, ideal_id? , entree_id? } (exactement une cible).
 //            owner_id imposé serveur ; double scellement (owner, source)/(owner, cible).
 //   DELETE → supprime un lien { id }.

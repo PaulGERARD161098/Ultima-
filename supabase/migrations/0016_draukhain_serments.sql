@@ -26,7 +26,7 @@
 --     ultérieure, manuelle. Le scellement (owner_id, id) posé ici sur `serments`
 --     servira de cible aux FK composites de cette liaison v2 (motif AD-4), donc
 --     elle s'ajoutera sans retoucher `serments`.
---   - liens vers les pages MINETHNIR (suivre un serment dans le journal) : v2.
+--   - liens vers les pages MAEDRETHNIR (suivre un serment dans le journal) : v2.
 --
 -- Données INTIMES (§5) : RLS dès la création, une policy PAR opération, WITH
 -- CHECK sur les écritures, owner_id = (select auth.uid()) (initplan, cf. 0003),

@@ -29,7 +29,7 @@ verdicts.boussolesOntAuMoinsDeuxCaps = Object.keys(NOEUDS)
   .filter((id) => Array.isArray(NOEUDS[id].enfants))
   .every((id) => estBoussole(id));
 verdicts.rivenEstUneFeuille = !estBoussole('riven') && NOEUDS.riven.cible === 'riven.html';
-verdicts.feuillesSansEnfants = ['minethnir', 'vranesh', 'draukhain', 'reshiram', 'zekrom', 'abaque']
+verdicts.feuillesSansEnfants = ['maedrethnir', 'vranesh', 'draukhain', 'reshiram', 'zekrom', 'abaque']
   .every((id) => !Array.isArray(NOEUDS[id].enfants));
 
 // ---------- 3. La structure dictée par Paul (2026-07-30) ----------
@@ -96,7 +96,7 @@ verdicts.surlignesSupraDivisions = NOEUDS['ultima-perso'].surligne === 'Supra-di
 // L'acquis IMLADRIK est intact (le noyau doit le rendre à l'identique).
 const capsImladrik = capsDe('imladrik');
 verdicts.imladrikTroisCaps = capsImladrik.length === 3
-  && capsImladrik.map((c) => c.nom).join(',') === 'MINETHNIR,VRANESH,DRAUKHAIN';
+  && capsImladrik.map((c) => c.nom).join(',') === 'MAEDRETHNIR,VRANESH,DRAUKHAIN';
 verdicts.imladrikTroisCiblesOuvertes = capsImladrik
   .every((c) => typeof c.cible === 'string' && c.cible.endsWith('.html'));
 verdicts.imladrikLegendeGravee = NOEUDS.imladrik.legende === 'Kalamn-talaen'
@@ -150,7 +150,7 @@ verdicts.cockpitEntiersSeulement = signalDe('riven', { riven: { relances_dues: '
   && signalDe('riven', { riven: { relances_dues: -7 } }) === null
   && signalDe('riven', { riven: { relances_dues: '4.9' } }) === '4 relances dues';
 verdicts.cockpitInconnuSilencieux = ligneVivante('imladrik', AGREGATS) === null
-  && signalDe('minethnir', AGREGATS) === null;
+  && signalDe('maedrethnir', AGREGATS) === null;
 
 // ---------- Verdict ----------
 let echecs = 0;

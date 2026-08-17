@@ -11,6 +11,16 @@
       "source": "/traveler.html",
       "destination": "/riven",
       "permanent": true
+    },
+    {
+      "source": "/minethnir",
+      "destination": "/maedrethnir",
+      "permanent": true
+    },
+    {
+      "source": "/minethnir.html",
+      "destination": "/maedrethnir",
+      "permanent": true
     }
   ]
 }

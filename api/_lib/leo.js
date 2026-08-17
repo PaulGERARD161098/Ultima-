@@ -53,7 +53,7 @@ const QUADRANTS = {
   imladrik: {
     nom: 'IMLADRIK',
     registre: 'réflexif',
-    sujet: 'le développement personnel de Paul, en 3 caps : MINETHNIR (le ' +
+    sujet: 'le développement personnel de Paul, en 3 caps : MAEDRETHNIR (le ' +
       'journal intime), DRAUKHAIN (les serments — la volonté au-delà du ' +
       'possible, ravivés par des flammes) et VRANESH (les situations et leurs ' +
       'futurs possibles). Registre intime : accompagne, ne juge jamais.'
@@ -127,7 +127,7 @@ const CATALOGUE = {
   // AUCUN outil de suppression (règle L2b inchangée).
   proposer_page_journal: {
     quadrant: 'imladrik',
-    description: "Proposer d'écrire une page au journal intime (cap MINETHNIR) " +
+    description: "Proposer d'écrire une page au journal intime (cap MAEDRETHNIR) " +
       "à partir de ce que Paul dicte. Rien n'est écrit avant sa confirmation.",
     args: {
       contenu: { max: 20000, requis: true, description: 'La page dictée, fidèle à la dictée.' },
@@ -330,7 +330,7 @@ export function reformulerProposition(proposition) {
         dateFrancaise(args.echeance) +
         (args.note ? ' — « ' + args.note + ' »' : '') + '.';
     case 'proposer_page_journal':
-      return 'Écrire une page au journal MINETHNIR' +
+      return 'Écrire une page au journal MAEDRETHNIR' +
         (args.titre ? ' — « ' + args.titre + ' »' : '') +
         ' : « ' + args.contenu + ' »';
     case 'proposer_serment':

@@ -1,6 +1,6 @@
 // Cartographie IMLADRIK (B1) : imladrik.html = la boussole interne du quadrant
 // (modèle LV2), MUETTE et sans donnée intime (§5). Prouve :
-//   A. La carto rend 3 caps (MINETHNIR ouvert → minethnir.html ; VRANESH +
+//   A. La carto rend 3 caps (MAEDRETHNIR ouvert → maedrethnir.html ; VRANESH +
 //      DRAUKHAIN à venir), le cœur Kalamn-talaen, la légende gravée, la parole
 //      par défaut ; le survol d'un cap dépose la parole de Léo ; zéro requête
 //      externe (aucun CDN, aucune donnée), zéro erreur console ; contrastes AA.
@@ -76,12 +76,12 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
   const caps = await lireCaps(page);
   verifier('3 caps rendus', caps.length === 3);
   const noms = caps.map((c) => c.nom);
-  for (const attendu of ['MINETHNIR', 'VRANESH', 'DRAUKHAIN']) {
+  for (const attendu of ['MAEDRETHNIR', 'VRANESH', 'DRAUKHAIN']) {
     verifier(`Cap ${attendu} présent`, noms.includes(attendu), noms.join(', '));
   }
 
   // 2. Les 3 caps sont ouvrables (liens internes) — le quadrant est complet.
-  const minethnir = page.locator('g.ciel-etoile[data-noeud-id="minethnir"]');
+  const maedrethnir = page.locator('g.ciel-etoile[data-noeud-id="maedrethnir"]');
   // SIX ASSERTIONS REMPLACÉES : « est un lien <a> » et « → cible » lisaient une
   // ancre et son `href`. L'étoile est un `<g role="button">` — l'ancre a été
   // retirée en LV4 ④a parce qu'enveloppée, l'étoile perdait le focus clavier, et
@@ -96,7 +96,7 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
     return Array.from((n?.textContent || '').matchAll(/href="([^"]+)"/g)).map((m) => m[1]);
   });
   for (const [id, cible] of [
-    ['minethnir', 'minethnir.html'],
+    ['maedrethnir', 'maedrethnir.html'],
     ['draukhain', 'draukhain.html'],
     ['vranesh', 'vranesh.html'],
   ]) {
@@ -121,12 +121,12 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
   verifier('Cartouche invisible et muet au repos',
     await page.locator('#boussole-parole').evaluate((el) =>
       getComputedStyle(el).visibility === 'hidden' && el.textContent.trim() === ''));
-  await survoler(page, 'minethnir');
+  await survoler(page, 'maedrethnir');
   await page.waitForSelector('#boussole-parole.is-actif', { timeout: 5000 });
   const parole = (await page.locator('#boussole-parole').textContent()) || '';
-  verifier('Survol MINETHNIR : nom dans la parole', /MINETHNIR/.test(parole));
-  verifier('Survol MINETHNIR : état « Ouvert »', /Ouvert/.test(parole));
-  verifier('Survol MINETHNIR : appel à entrer', /entrer/i.test(parole));
+  verifier('Survol MAEDRETHNIR : nom dans la parole', /MAEDRETHNIR/.test(parole));
+  verifier('Survol MAEDRETHNIR : état « Ouvert »', /Ouvert/.test(parole));
+  verifier('Survol MAEDRETHNIR : appel à entrer', /entrer/i.test(parole));
   // « L'aiguille s'illumine » ABANDONNÉE : un ciel n'a pas de moyeu d'où la faire
   // partir. Remplacée par ce qu'elle disait — l'objet visé se signale — et MESURÉE
   // AU FOCUS, pas au survol : la scène glisse sous le curseur immobile (caméra
@@ -140,11 +140,11 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
   // Une pression sur Tab rétablit la modalité clavier, et c'est aussi la
   // condition RÉELLE où ce halo compte : quelqu'un qui navigue au clavier.
   await page.keyboard.press('Tab');
-  await minethnir.focus();
+  await maedrethnir.focus();
   await page.waitForTimeout(300);
-  const opHalo = await page.locator('g.ciel-etoile[data-noeud-id="minethnir"] .ciel-halo-focus')
+  const opHalo = await page.locator('g.ciel-etoile[data-noeud-id="maedrethnir"] .ciel-halo-focus')
     .evaluate((el) => +getComputedStyle(el).opacity);
-  verifier('Halo MINETHNIR allumé (mesuré au focus, stable)', opHalo >= 0.5, `opacité ${opHalo}`);
+  verifier('Halo MAEDRETHNIR allumé (mesuré au focus, stable)', opHalo >= 0.5, `opacité ${opHalo}`);
 
   // 5. Survol VRANESH (ouvert) : parole « les futurs potentiels » + appel à entrer.
   await survoler(page, 'vranesh');

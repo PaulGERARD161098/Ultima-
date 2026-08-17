@@ -2,7 +2,7 @@
 //   GET    → { ok:true, data:{ serments:[…], flammes:[…], liens:[…], futurs:[…] } }
 //            serments = vue serments_etat (chaque serment porte nb_flammes + a_raviver) ;
 //            flammes = les flammes de l'utilisateur (rattachées côté front par serment_id) ;
-//            liens = passerelles sortantes (serment → idéal ZEKROM | page MINETHNIR) ;
+//            liens = passerelles sortantes (serment → idéal ZEKROM | page MAEDRETHNIR) ;
 //            futurs = passerelles ENTRANTES depuis VRANESH (un futur qui MENACE
 //                     ou qui SERT ce serment), déjà recousues côté serveur.
 //   POST   → crée un serment { intitule, pourquoi?, horizon? }. owner_id n'est
@@ -86,7 +86,7 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === 'GET') {
-      // liens = passerelles v2 (serment → idéal ZEKROM / page MINETHNIR, migration
+      // liens = passerelles v2 (serment → idéal ZEKROM / page MAEDRETHNIR, migration
       // 0018). Tant que 0018 n'est pas appliquée, la table n'existe pas → on
       // dégrade proprement à [] (les autres lectures restent servies).
       // futurs = LE RETOUR DE LA PASSERELLE (2026-08-04). `scenario_liens`

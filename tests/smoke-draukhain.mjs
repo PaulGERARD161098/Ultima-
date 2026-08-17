@@ -74,7 +74,7 @@ const FIXTURE = {
       { id: 'f2', serment_id: 's1', nature: 'victoire', texte: 'j’ai tenu bon tout l’hiver', survenu_le: '2026-07-15' },
       { id: 'f3', serment_id: 's1', nature: 'rappel', texte: 'ne pas perdre la foi' },
     ],
-    // Passerelles v2 : une vers un idéal ZEKROM, une vers une page MINETHNIR
+    // Passerelles v2 : une vers un idéal ZEKROM, une vers une page MAEDRETHNIR
     // (exactement une des deux cibles renseignée par lien).
     liens: [
       { id: 'l1', owner_id: 'o', serment_id: 's1', ideal_id: 'i1', entree_id: null, created_at: '2026-07-04T10:00:00Z' },
@@ -281,7 +281,7 @@ console.log('— B. draukhain.html fixture 200 → registre, à raviver, serment
   verifier('Bouton « retirer » sur chaque flamme',
     (await s1.locator('.zekrom-direction .zekrom-retro-detacher').count()) === 3);
 
-  // 4bis. Passerelles v2 : liens résolus en libellé (idéal ZEKROM / page MINETHNIR).
+  // 4bis. Passerelles v2 : liens résolus en libellé (idéal ZEKROM / page MAEDRETHNIR).
   const passerelles1 = s1.locator('.zekrom-retro');
   verifier('Section « Passerelles » sur AURORE', (await passerelles1.count()) === 1);
   verifier('En-tête « Passerelles » présent',
@@ -1057,8 +1057,8 @@ function mesurerVoute() {
 
   // ---- ② LES FILS : sortants ET entrant, sur la carte. ----
   const capsTexte = (await page.locator('#draukhain-voute-dessin').textContent()) || '';
-  verifier('Voûte : ZEKROM, VRANESH et MINETHNIR comptent chacun leur fil',
-    /ZEKROM/.test(capsTexte) && /VRANESH/.test(capsTexte) && /MINETHNIR/.test(capsTexte), capsTexte);
+  verifier('Voûte : ZEKROM, VRANESH et MAEDRETHNIR comptent chacun leur fil',
+    /ZEKROM/.test(capsTexte) && /VRANESH/.test(capsTexte) && /MAEDRETHNIR/.test(capsTexte), capsTexte);
   verifier('Voûte : trois fils tissés (2 sortants + 1 entrant)',
     (await page.locator('.voute-fil').count()) === 3,
     `${await page.locator('.voute-fil').count()}`);
@@ -1071,7 +1071,7 @@ function mesurerVoute() {
   // La langue se soigne comme le code (directive EL ④) : une énumération se dit
   // « A, B et C », jamais « A et B et C ».
   verifier('Survol : les caps s’énumèrent en français',
-    /relié à ZEKROM, VRANESH et MINETHNIR/.test(parole), parole);
+    /relié à ZEKROM, VRANESH et MAEDRETHNIR/.test(parole), parole);
   verifier('Survol : le futur qui MENACE le serment est dit sur la carte',
     /un futur menace ce serment/.test(parole), parole);
   verifier('Survol : le thème d’où vient ce futur est nommé, sans son sous-titre',

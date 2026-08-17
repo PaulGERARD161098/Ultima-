@@ -46,7 +46,8 @@
 | Janus | JANUS (ADR-008 — le pont générationnel ; dieu aux deux visages) |
 | Anselme | partenaire confirmé du pont générationnel JANUS (2026-07-22) |
 | Abaque | ABAQUE (simulateur de lancement d'entreprise, quadrant NICOL BOLAS ; confirmé Paul 2026-07-22) |
-| Minethnir, Minet nir, Minesnir, Minette-Nea | MINETHNIR (cap IMLADRIK : le journal intime — renommage dicté 2026-07-24) |
+| Maedrethnir, Médrethnir, Maedret nir, Mèdre Denir, Maître Denir, mes drets nir, Madre Thnir | **MAEDRETHNIR** (cap IMLADRIK : le journal intime — renommage dicté par Paul le 2026-08-17, *« Minethnir doit être changé en MAEDRETHNIR partout »*). Mot **long et sans appui français** : la dictée va le casser en deux, et le premier morceau (« maître », « Madre », « mes drets ») ne ressemble à rien du projet. Devant n'importe quel mot inconnu commençant par **mae-/mèd-/maî- dans un contexte IMLADRIK ou journal**, c'est ce cap. |
+| Minethnir, Minet nir, Minesnir, Minette-Nea | **ancien nom** de MAEDRETHNIR (porté du 2026-07-24 au 2026-08-17). Si Paul le dicte encore, comprendre MAEDRETHNIR — l'ancien nom ne désigne plus rien d'autre, et l'URL `…/minethnir.html` redirige. |
 | Vranesh, Vranèche, Vranaiche, Ramesh, vraie neige, Vranesh de vraie neige, votre ranache | VRANESH (cap IMLADRIK : les différents futurs potentiels — anticiper) |
 | Draukhain, Drokhain, Drau Kain, Drôle de Kain | DRAUKHAIN (cap IMLADRIK : la volonté au-delà du possible — objectifs, foi) |
 | Kalamn-talaen, Kalamntalaen, Calamne Talaën, Kalam Talent, Kalemn Talaen | KALAMN-TALAEN (le **nom gravé de la boussole centrale** épée+dragon d'IMLADRIK — un emblème, **pas un agent** ; corrigé Paul 2026-07-25 : l'agent unique reste **Léo**. Les mots restent sur la boussole) |
@@ -93,8 +94,11 @@ reformuler et demander — jamais deviner avant une action irréversible.
 - **Le domaine de production d'Ultima : `https://ultima-plum.vercel.app`**
   (relevé sur une capture d'écran de Paul le 2026-08-01 — il ne figurait nulle
   part dans le repo, Léo l'avait cherché en vain). Les deux entrées du cap
-  MINETHNIR : `…/ecrire.html` (**la capture**, celle à poser sur l'écran
-  d'accueil de l'iPhone) et `…/minethnir.html` (**l'atelier posé**).
+  **MAEDRETHNIR** : `…/ecrire.html` (**la capture**, celle à poser sur l'écran
+  d'accueil de l'iPhone) et `…/maedrethnir.html` (**l'atelier posé**).
+  ⚠️ *Le renommage du 2026-08-17 a changé cette seconde adresse
+  (`minethnir.html` → `maedrethnir.html`). L'ancienne redirige en permanent via
+  `vercel.json` — un raccourci déjà posé sur l'iPhone continue de fonctionner.*
 
 - **ALTHEA** (quadrant dicté par Paul le 2026-08-06) = le suivi **ludique** des
   performances physiques et psychiques — un **cadran**, pas une boussole.

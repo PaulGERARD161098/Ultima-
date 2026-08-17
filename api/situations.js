@@ -48,7 +48,7 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === 'GET') {
-      // liens = passerelles v2 (scénario → serment DRAUKHAIN / page MINETHNIR,
+      // liens = passerelles v2 (scénario → serment DRAUKHAIN / page MAEDRETHNIR,
       // migration 0018). Tant que 0018 n'est pas appliquée, la table n'existe pas
       // → dégradation propre à [] (les autres lectures restent servies).
       const [situationsRes, scenariosRes, liensRes] = await Promise.all([

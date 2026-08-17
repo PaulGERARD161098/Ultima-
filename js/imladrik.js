@@ -203,7 +203,7 @@
     await chargerJournal();
   }
 
-  // ---------- Léo sur MINETHNIR (boucle ④, 2026-07-30) ----------
+  // ---------- Léo sur MAEDRETHNIR (boucle ④, 2026-07-30) ----------
   // Le cartouche + les mains sur le journal : Paul dicte sa page, Léo la lui
   // propose, il confirme, l'écriture part vers /api/imladrik/entrees.
   // Fail-closed sans module ni session. §5 intime, tenu à la lettre : le
