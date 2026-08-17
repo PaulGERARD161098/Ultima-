@@ -3090,3 +3090,42 @@ permanentes), en renforcement de la règle « preview Vercel » du 2026-08-01.
 - **Corollaire** : quand une page n'est pas encore vérifiable (déploiement en
   cours, palier non poussé), le DIRE plutôt que de donner un lien qui ne montrera
   rien. Un lien qui ne prouve pas ce qu'il prétend est pire que pas de lien.
+
+## 2026-08-17 — P5a activé : l'encre s'hérite, elle ne s'énumère pas
+
+Le fond étoilé est **actif** sur VRANESH (atelier) et l'abaque (instrument).
+Patrimoine complet vert, 84 sections. Trois leçons, et les trois sont des leçons
+de méthode plutôt que de CSS.
+
+- **UN SÉLECTEUR QUI GAGNE CONTRE LE STYLE DE LA PAGE NE LA CORRIGE PAS, IL LA
+  REMPLACE EN AVEUGLE.** Pour donner l'encre du ciel à trois textes de VRANESH,
+  j'avais élargi la règle à une **liste** (`h1, h2, h3, p, li, label, small, a`
+  sous `body[data-fond-etoile]`). Spécificité (0,1,2) : elle écrasait
+  `.champ label` (0,1,1) et `.retour-ultima` (0,1,0) — des règles qui, elles,
+  savaient sur quel fond leur texte était posé. Résultat mesuré sur l'abaque :
+  **treize textes en échec**, six libellés à **1,10:1**. Le correctif fabriquait
+  plus de défauts qu'il n'en réparait.
+  **Règle tenue désormais** : l'encre de la nuit est posée UNE fois sur `body` et
+  se transmet par **héritage** ; chaque surface de parchemin déclare son encre sur
+  elle-même. Tout ce que la page colore explicitement garde sa couleur. On
+  n'énumère plus ; on ne nomme un sélecteur que si une MESURE a montré le défaut.
+- **UN DIAGNOSTIC QUI S'ARRÊTE À LA COULEUR RATE LE SUPPORT.** J'avais conclu que
+  l'abaque était « de fait en atelier » parce que ses titres passaient en sépia
+  sur la nuit. Faux : sa nappe de parchemin venait de `body.abaque`, que le
+  nouveau fichier remplace. La page ne perdait pas trois couleurs, elle perdait
+  **son support**. Rendre la nappe à `.feuille` (qui existait déjà) restaure d'un
+  seul geste TOUTES ses relations de couleur — douze correctifs remplacés par un.
+  L'arbitrage annoncé à Paul était donc un **défaut de diagnostic déguisé en choix
+  produit** : il est clos sans l'avoir dérangé.
+- **LE CONTRASTE SE MESURE SOUS LES LETTRES, PAS DANS LA BOÎTE.** Mon premier
+  instrument cherchait le pire pixel de la boîte de l'élément : il accusait des
+  bordures et des ornements qu'aucune lettre ne touche — 5 faux échecs sur 7
+  textes, dont un titre parfaitement lisible. *Un instrument qui condamne du
+  lisible ne mesure pas le contraste, il mesure la présence de décor.*
+  `tests/smoke-fond-contraste.mjs` peint la page deux fois (normale / texte
+  transparent), en tire **le masque des lettres**, et ne mesure que les coeurs de
+  lettre. Son verdict est **différentiel** — avec le fond ET sans — pour ne
+  rougir que sur un défaut NOUVEAU, ces pages portant des défauts antérieurs.
+  **Et il a été prouvé qu'il rougit** : la règle fautive réinjectée exprès l'a
+  fait passer rouge en nommant les six textes cassés. Un harnais vert ne vaut
+  rien tant qu'on n'a pas vu ce qui le fait rougir.

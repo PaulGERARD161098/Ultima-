@@ -41,13 +41,38 @@ body[data-fond-etoile] {
   color: var(--ciel-creme, #f2ead6);
 }
 
+/* ═══════ L'ENCRE SE TRANSMET, ELLE NE S'ÉNUMÈRE PAS ═══════
+   LA LEÇON LA PLUS CHÈRE DE P5a, et elle mérite d'être écrite avant les règles
+   qu'elle gouverne. Une première version de ce fichier donnait l'encre de la
+   nuit à une LISTE de sélecteurs — `h1, h2, h3, p, li, label, small, a` sous
+   `body[data-fond-etoile]`. L'intention était bonne : ne pas laisser d'encre
+   sépia sur la nuit. Le résultat, mesuré, était un désastre sur l'abaque :
+     · 6 libellés de champ en crème sur un parchemin clair — 1,10:1
+     · le chapeau « ← Ultima », qui porte SA PROPRE pastille de parchemin,
+       repeint en or sur clair — 1,38:1
+   La cause n'est pas une faute de frappe, c'est une faute de méthode : cette
+   liste avait une spécificité (0,1,2) qui écrasait les règles de page
+   légitimes comme `.champ label` (0,1,1) ou `.retour-ultima` (0,1,0). Un
+   sélecteur qui gagne contre le style de la page ne corrige pas la page : il la
+   remplace, sans savoir sur quel fond chaque mot est posé.
+   LA RÈGLE TENUE DÉSORMAIS : l'encre de la nuit est posée UNE SEULE FOIS, sur
+   `body`, et se transmet par HÉRITAGE. Toute surface de parchemin déclare sa
+   propre encre sur ELLE-MÊME, et son contenu en hérite. Conséquence voulue :
+   tout élément que la page colore explicitement GARDE sa couleur — parce que la
+   page, elle, sait sur quoi elle l'a posé. On n'énumère plus ; on n'ajoute un
+   sélecteur nommé que là où une MESURE a montré du sépia sur la nuit. */
+
 /* ═══════════════════ ② LE REGISTRE ATELIER ═══════════════════
    VRANESH, DRAUKHAIN, MINETHNIR, écrire, les archipels, les rapprochements.
    On y saisit, on y relie, on y écrit. Le parchemin reste le support du
    travail — on n'écrit pas sur une nuit — mais il devient une SUITE DE
    CARTOUCHES posés sur le ciel, au lieu d'une nappe qui couvre l'écran.
    C'est l'idiome de la carte savante, où les cartouches se posent sur la carte
-   sans la remplacer. */
+   sans la remplacer.
+   Ces pages portent la coque `body.console`, qui vivait DÉJÀ sur une mer sombre
+   avec son encre crème : leur texte n'a donc rien à réapprendre, et c'est
+   pourquoi aucune règle d'encre n'apparaît ici. Mesuré : 7 textes sur VRANESH,
+   zéro sous le seuil. Le seul geste utile est de faire DÉCOLLER les cartouches. */
 body[data-fond-etoile="atelier"] .cartouche-page,
 body[data-fond-etoile="atelier"] .zekrom-form,
 body[data-fond-etoile="atelier"] .adr-carte {
@@ -56,17 +81,6 @@ body[data-fond-etoile="atelier"] .adr-carte {
   box-shadow: 0 2px 18px rgba(0, 0, 0, .55);
   border: 1px solid rgba(169, 136, 74, .34);
 }
-/* Le titre de la page, lui, est SUR la nuit : il prend donc l'encre du ciel.
-   Laisser l'encre sépia du parchemin sur un fond de nuit donnerait un titre
-   illisible — le défaut exact mesuré sur la coque pilote le 2026-08-13. */
-body[data-fond-etoile="atelier"] > h1,
-body[data-fond-etoile="atelier"] .quadrant-page > h1,
-body[data-fond-etoile="atelier"] .console-titre {
-  color: var(--ciel-creme, #f2ead6);
-}
-body[data-fond-etoile="atelier"] .console-retour a {
-  color: var(--ciel-or-clair, #d8bd82);
-}
 
 /* ═══════════════════ ③ LE REGISTRE INSTRUMENT ═══════════════════
    L'abaque, les impôts, l'échéancier, revenus-charges, ALTHEA.
@@ -74,63 +88,32 @@ body[data-fond-etoile="atelier"] .console-retour a {
    le fond se voit autour de la zone de travail, jamais dessous.
    Ce n'est pas un compromis tiède, c'est le respect de ce que la page fait — un
    champ d'étoiles derrière un tableau de nombres se paie en erreurs de lecture,
-   et un chiffre mal lu coûte plus qu'un beau fond ne rapporte. */
+   et un chiffre mal lu coûte plus qu'un beau fond ne rapporte.
+
+   `.feuille` EST DANS CETTE LISTE, et c'est le correctif central de P5a.
+   L'abaque n'a pas de `main` : sa nappe de parchemin venait de `body.abaque`,
+   que ce fichier remplace par la nuit. Sans surface de remplacement, la page
+   perdait son support d'un coup et une douzaine de textes se retrouvaient sur
+   un fond pour lequel leur encre n'avait pas été choisie. Rendre la nappe à
+   `.feuille` — la feuille de l'abaque, qui existe déjà et enveloppe tout son
+   contenu — restaure d'un seul geste TOUTES les relations de couleur de la
+   page, là où les corriger une par une en demandait douze. */
 body[data-fond-etoile="instrument"] main,
-body[data-fond-etoile="instrument"] .quadrant-page {
+body[data-fond-etoile="instrument"] .quadrant-page,
+body[data-fond-etoile="instrument"] .feuille {
   /* La nappe de parchemin, opaque, qui porte les chiffres. */
   background: var(--parchemin, #f4ecd8);
+  /* L'encre est posée sur la NAPPE, pas sur ses descendants : tout ce qu'elle
+     contient en hérite, et tout ce que la page colore elle-même garde sa
+     couleur. C'est le principe énoncé en tête de section. */
   color: var(--encre, #2b2417);
   /* Elle ne touche pas les bords : c'est là que la nuit se voit. */
   margin: clamp(8px, 2vw, 28px) auto;
+  padding: clamp(10px, 2vw, 26px);
   border: 1px solid rgba(169, 136, 74, .45);
   box-shadow: 0 2px 22px rgba(0, 0, 0, .5);
   /* `border-radius` volontairement absent : le registre antique ne s'arrondit
      pas (parti pris du 2026-07-08, « antique et sérieux »). */
-}
-/* Hors de la nappe, le peu de texte qui reste vit sur la nuit. */
-body[data-fond-etoile="instrument"] > .console-retour a {
-  color: var(--ciel-or-clair, #d8bd82);
-}
-
-/* ---- TOUT TEXTE POSÉ SUR LA NUIT PREND L'ENCRE DE LA NUIT ----
-   Constaté sur capture, et c'est le défaut le plus banal de cette migration :
-   l'abaque n'a pas de conteneur `main`, donc la nappe de parchemin ci-dessus ne
-   l'a pas trouvée. Ses chiffres vivent déjà dans des cartouches de parchemin —
-   ils restent parfaitement lisibles — mais les TITRES DE SECTION, eux, se sont
-   retrouvés en encre sépia sur fond de nuit.
-   Une encre choisie pour du parchemin ne se lit pas sur une nuit : c'est le même
-   défaut que sur la coque pilote le 2026-08-13, et il se répétera sur chaque page
-   embarquée. La règle est donc posée ICI, une fois, pour les deux registres,
-   plutôt que page par page.
-   *Conséquence assumée : l'abaque est de fait en ATELIER, pas en instrument. Son
-   contenu s'y prête (des cartouches, pas une nappe) et le rendu est lisible ;
-   forcer une nappe demanderait de retoucher sa mise en page, ce que P5a s'est
-   interdit. À rouvrir avec Paul si le classement doit être tenu strictement.* */
-body[data-fond-etoile] h1,
-body[data-fond-etoile] h2,
-body[data-fond-etoile] > h3,
-body[data-fond-etoile] .abaque-colonne > h2,
-body[data-fond-etoile] .abaque-titre-section {
-  color: var(--ciel-creme, #f2ead6);
-}
-/* ---- UN CARTOUCHE DE PARCHEMIN REPREND L'ENCRE DU PARCHEMIN, EXPLICITEMENT ----
-   ET SURTOUT PAS `inherit`. Premier jet : j'avais écrit `color: inherit` pour
-   « rendre au cartouche sa couleur ». Mesuré : **1,55:1** sur le cartouche
-   d'authentification de VRANESH — car `inherit` remonte au `body`, que ce même
-   fichier vient de passer en CRÈME. C'était donc de la crème sur du parchemin,
-   c'est-à-dire un texte invisible.
-   Et le défaut ne touchait pas que les titres : la couleur du `body` se propage
-   à TOUT le texte des cartouches. Poser l'encre sur le cartouche entier, et non
-   sur ses seuls titres, est la seule forme correcte de cette règle.
-   *`inherit` n'est pas « la valeur d'avant » : c'est « la valeur du parent »,
-   et le parent venait de changer.* */
-body[data-fond-etoile] .cartouche-page,
-body[data-fond-etoile] .abaque-carte,
-body[data-fond-etoile] .zekrom-form,
-body[data-fond-etoile] .adr-carte,
-body[data-fond-etoile] main,
-body[data-fond-etoile] .quadrant-page {
-  color: var(--encre, #2b2417);
 }
 
 /* ---- `prefers-reduced-motion` : rien à faire, et c'est le point ----

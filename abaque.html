@@ -16,14 +16,7 @@
   <link rel="stylesheet" href="css/ciel.css">
   <link rel="stylesheet" href="css/ciel-fond-page.css">
 </head>
-<!-- LV5 / P5a — LE SOL ÉTOILÉ EST CHARGÉ MAIS PAS ENCORE DÉCLARÉ.
-     `data-fond-etoile` a été RETIRÉ le 2026-08-17 après mesure : passer le fond
-     en nuit laissait trois textes hors cartouche en encre sépia SUR la nuit —
-     1,37:1 et 2,12:1 de contraste, donc illisibles. Le critère du cadrage §16.5
-     exige WCAG AA ; on ne livre pas activé ce qui ne le tient pas.
-     Il suffit de rajouter `data-fond-etoile="atelier"` (ou "instrument") sur ce
-     `<body>` dès que ces trois textes auront pris l'encre du ciel. -->
-<body class="abaque ciel-noeud-coque">
+<body class="abaque ciel-noeud-coque" data-fond-etoile="instrument">
 
   <!-- Barre de retour vers la console Ultima. -->
   <nav class="barre-retour" aria-label="Retour à la console">
