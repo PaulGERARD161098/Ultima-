@@ -1,0 +1,140 @@
+/* LE SOL COMMUN D'ULTIMA — le fond étoilé des pages de travail (LV5 / P5a).
+   ---------------------------------------------------------------------------
+   Cadrage §16. Le principe : le fond étoilé est le sol de tout l'outil ; ce qui
+   varie d'une page à l'autre, ce n'est pas le fond mais LA DENSITÉ DU MOBILIER
+   POSÉ DESSUS. Trois registres, déduits de ce que la page FAIT — et non du
+   quadrant auquel elle appartient, qui ne dit rien de son ergonomie :
+
+     ① CIEL       on explore, on choisit  → la galaxie EST la page (les coques)
+     ② ATELIER    on saisit, on relie     → des cartouches posés sur la nuit
+     ③ INSTRUMENT on lit des chiffres     → le parchemin domine, la nuit borde
+
+   LA RÈGLE QUI DÉPARTAGE ②/③ EST MESURABLE, et c'est ce qui l'empêche de devenir
+   une affaire de goût : une page qui porte un TABLEAU ou une série de chiffres à
+   comparer est un instrument. Un fond mouvant derrière des colonnes de nombres
+   nuit à la lecture, et aucune beauté ne rachète un chiffre mal lu.
+
+   CE FICHIER NE DÉPLACE RIEN. Le canvas arrive DERRIÈRE le contenu (`z-index`
+   négatif) ; aucune règle ici ne touche à la position d'un bloc de travail. Le
+   critère ① du cadrage l'exige et le harnais le mesure : les boîtes de tous les
+   blocs sont comparées avant/après, à 2 px près. */
+
+/* Le canvas : derrière tout, muet, transparent aux gestes.
+   `pointer-events: none` n'est pas une précaution mais une nécessité : un décor
+   qui intercepte un clic dans un formulaire est un défaut qu'on ne découvre
+   qu'en essayant de saisir. */
+.ciel-fond-page {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  display: block;
+  pointer-events: none;
+}
+
+/* ---- LE SOL : la nuit d'Ultima, sous les deux registres ----
+   Les jetons de nuit viennent de `css/ciel.css`, qui les porte sur des CLASSES
+   et non sur `:root` — une page qui charge la feuille sans l'une d'elles perd
+   tout le régime EN SILENCE (piège mesuré le 2026-08-13). On rejoint donc la
+   liste au lieu de recopier les valeurs ailleurs. */
+body[data-fond-etoile] {
+  background: var(--ciel-nuit-basse, #03070e);
+  color: var(--ciel-creme, #f2ead6);
+}
+
+/* ═══════════════════ ② LE REGISTRE ATELIER ═══════════════════
+   VRANESH, DRAUKHAIN, MINETHNIR, écrire, les archipels, les rapprochements.
+   On y saisit, on y relie, on y écrit. Le parchemin reste le support du
+   travail — on n'écrit pas sur une nuit — mais il devient une SUITE DE
+   CARTOUCHES posés sur le ciel, au lieu d'une nappe qui couvre l'écran.
+   C'est l'idiome de la carte savante, où les cartouches se posent sur la carte
+   sans la remplacer. */
+body[data-fond-etoile="atelier"] .cartouche-page,
+body[data-fond-etoile="atelier"] .zekrom-form,
+body[data-fond-etoile="atelier"] .adr-carte {
+  /* Le cartouche se DÉTACHE de la nuit : sans ombre, un parchemin posé sur un
+     fond sombre paraît collé, et le relief est ce qui dit « posé sur ». */
+  box-shadow: 0 2px 18px rgba(0, 0, 0, .55);
+  border: 1px solid rgba(169, 136, 74, .34);
+}
+/* Le titre de la page, lui, est SUR la nuit : il prend donc l'encre du ciel.
+   Laisser l'encre sépia du parchemin sur un fond de nuit donnerait un titre
+   illisible — le défaut exact mesuré sur la coque pilote le 2026-08-13. */
+body[data-fond-etoile="atelier"] > h1,
+body[data-fond-etoile="atelier"] .quadrant-page > h1,
+body[data-fond-etoile="atelier"] .console-titre {
+  color: var(--ciel-creme, #f2ead6);
+}
+body[data-fond-etoile="atelier"] .console-retour a {
+  color: var(--ciel-or-clair, #d8bd82);
+}
+
+/* ═══════════════════ ③ LE REGISTRE INSTRUMENT ═══════════════════
+   L'abaque, les impôts, l'échéancier, revenus-charges, ALTHEA.
+   On y LIT DES CHIFFRES. Le parchemin domine, et la nuit n'est qu'une bordure :
+   le fond se voit autour de la zone de travail, jamais dessous.
+   Ce n'est pas un compromis tiède, c'est le respect de ce que la page fait — un
+   champ d'étoiles derrière un tableau de nombres se paie en erreurs de lecture,
+   et un chiffre mal lu coûte plus qu'un beau fond ne rapporte. */
+body[data-fond-etoile="instrument"] main,
+body[data-fond-etoile="instrument"] .quadrant-page {
+  /* La nappe de parchemin, opaque, qui porte les chiffres. */
+  background: var(--parchemin, #f4ecd8);
+  color: var(--encre, #2b2417);
+  /* Elle ne touche pas les bords : c'est là que la nuit se voit. */
+  margin: clamp(8px, 2vw, 28px) auto;
+  border: 1px solid rgba(169, 136, 74, .45);
+  box-shadow: 0 2px 22px rgba(0, 0, 0, .5);
+  /* `border-radius` volontairement absent : le registre antique ne s'arrondit
+     pas (parti pris du 2026-07-08, « antique et sérieux »). */
+}
+/* Hors de la nappe, le peu de texte qui reste vit sur la nuit. */
+body[data-fond-etoile="instrument"] > .console-retour a {
+  color: var(--ciel-or-clair, #d8bd82);
+}
+
+/* ---- TOUT TEXTE POSÉ SUR LA NUIT PREND L'ENCRE DE LA NUIT ----
+   Constaté sur capture, et c'est le défaut le plus banal de cette migration :
+   l'abaque n'a pas de conteneur `main`, donc la nappe de parchemin ci-dessus ne
+   l'a pas trouvée. Ses chiffres vivent déjà dans des cartouches de parchemin —
+   ils restent parfaitement lisibles — mais les TITRES DE SECTION, eux, se sont
+   retrouvés en encre sépia sur fond de nuit.
+   Une encre choisie pour du parchemin ne se lit pas sur une nuit : c'est le même
+   défaut que sur la coque pilote le 2026-08-13, et il se répétera sur chaque page
+   embarquée. La règle est donc posée ICI, une fois, pour les deux registres,
+   plutôt que page par page.
+   *Conséquence assumée : l'abaque est de fait en ATELIER, pas en instrument. Son
+   contenu s'y prête (des cartouches, pas une nappe) et le rendu est lisible ;
+   forcer une nappe demanderait de retoucher sa mise en page, ce que P5a s'est
+   interdit. À rouvrir avec Paul si le classement doit être tenu strictement.* */
+body[data-fond-etoile] h1,
+body[data-fond-etoile] h2,
+body[data-fond-etoile] > h3,
+body[data-fond-etoile] .abaque-colonne > h2,
+body[data-fond-etoile] .abaque-titre-section {
+  color: var(--ciel-creme, #f2ead6);
+}
+/* ---- UN CARTOUCHE DE PARCHEMIN REPREND L'ENCRE DU PARCHEMIN, EXPLICITEMENT ----
+   ET SURTOUT PAS `inherit`. Premier jet : j'avais écrit `color: inherit` pour
+   « rendre au cartouche sa couleur ». Mesuré : **1,55:1** sur le cartouche
+   d'authentification de VRANESH — car `inherit` remonte au `body`, que ce même
+   fichier vient de passer en CRÈME. C'était donc de la crème sur du parchemin,
+   c'est-à-dire un texte invisible.
+   Et le défaut ne touchait pas que les titres : la couleur du `body` se propage
+   à TOUT le texte des cartouches. Poser l'encre sur le cartouche entier, et non
+   sur ses seuls titres, est la seule forme correcte de cette règle.
+   *`inherit` n'est pas « la valeur d'avant » : c'est « la valeur du parent »,
+   et le parent venait de changer.* */
+body[data-fond-etoile] .cartouche-page,
+body[data-fond-etoile] .abaque-carte,
+body[data-fond-etoile] .zekrom-form,
+body[data-fond-etoile] .adr-carte,
+body[data-fond-etoile] main,
+body[data-fond-etoile] .quadrant-page {
+  color: var(--encre, #2b2417);
+}
+
+/* ---- `prefers-reduced-motion` : rien à faire, et c'est le point ----
+   Ce fond ne bouge PAS. Il est peint une fois puis au redimensionnement
+   seulement (voir `js/ciel-fond-page.js`) : il n'y a aucune animation à
+   désactiver, donc aucune règle ici. Une page où l'on écrit vingt minutes ne
+   doit pas faire tourner une boucle de rendu. */

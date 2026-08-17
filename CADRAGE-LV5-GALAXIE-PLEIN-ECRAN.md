@@ -1017,3 +1017,53 @@ l'échéancier, revenus-charges et ALTHEA en **instruments** (parchemin dominant
 fond discret) ; VRANESH, DRAUKHAIN, MINETHNIR, écrire, archipels, rapprochements
 en **ateliers** (cartouches posés sur la nuit). Si ce partage est juste, le reste
 n'est que de l'exécution.
+
+## 16.8 P5a — la couche livrée, l'activation reportée. 2026-08-17.
+
+**Livré et éprouvé** : `js/ciel-fond-page.js` + `css/ciel-fond-page.css` — le sol
+étoilé des pages de travail, et les deux registres en CSS.
+
+Mesuré sur VRANESH et l'abaque, fond activé : le canvas peint (variance 22,6),
+`z-index: -1`, `pointer-events: none`, `aria-hidden`, **zéro geste volé sur 64
+contrôles**, zéro erreur console, rien ne défile de plus qu'avant.
+
+**Trois différences avec le fond du ciel**, chacune justifiée : aucune boucle
+d'animation (on reste vingt minutes sur ces pages), une projection fixe (sans
+mouvement la perspective n'a rien à dire), et le canvas derrière tout.
+
+### 🔻 L'ACTIVATION EST RETIRÉE — et c'est la mesure qui l'a décidé
+
+Passer le fond en nuit laissait **trois textes hors cartouche en encre sépia SUR
+la nuit** : 1,37:1 et 2,12:1 de contraste. Illisibles. Le critère §16.5 exige
+WCAG AA : **on ne livre pas activé ce qui ne le tient pas.**
+
+`data-fond-etoile` a donc été retiré des deux pages. La couche reste chargée et
+inerte ; il suffira de remettre l'attribut quand ces textes auront pris l'encre
+du ciel. *Livrer inerte vaut mieux que livrer cassé, et vaut mieux aussi que ne
+rien livrer : le sol est écrit, mesuré, et prêt.*
+
+**Deux défauts trouvés au passage, dont un de conception :**
+
+1. **`inherit` n'est pas « la valeur d'avant », c'est « la valeur du parent » —
+   et le parent venait de changer.** J'avais écrit `color: inherit` sur les
+   titres de cartouche pour « leur rendre leur couleur » : mesuré **1,55:1**, car
+   `inherit` remontait au `body` que ce même fichier venait de passer en crème.
+   De la crème sur du parchemin. Et le défaut ne touchait pas que les titres : la
+   couleur du `body` se propage à **tout** le texte des cartouches. L'encre se
+   pose donc explicitement, et sur le cartouche entier.
+2. **La nappe « instrument » n'a pas trouvé son conteneur sur l'abaque** (pas de
+   `<main>`). Ses chiffres vivent déjà dans des cartouches de parchemin et
+   restent lisibles — elle est donc **de fait en atelier**. Forcer la nappe
+   demanderait de retoucher sa mise en page, ce que P5a s'était interdit.
+   **À trancher avec Paul** : tenir le classement strictement, ou accepter que
+   « instrument » ne concerne que les pages qui ont déjà une nappe.
+
+**Deux contrastes à 4,29:1 relevés sur l'abaque sont PRÉEXISTANTS** (encre or sur
+parchemin, libellés secondaires) : ils ne viennent pas de ce chantier, mais ils
+sont notés ici pour ne pas être découverts comme des régressions plus tard.
+
+### Prochaine action unique
+
+Donner l'encre du ciel aux trois textes hors cartouche de VRANESH, puis remettre
+`data-fond-etoile` — c'est un travail de vingt minutes, mesurable au même
+instrument.

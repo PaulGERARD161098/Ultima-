@@ -9,8 +9,21 @@
   <meta name="theme-color" content="#0e3a52">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%231e6fb8'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23ffffff'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/abaque.css">
+  <!-- LV5 / P5a — LE SOL COMMUN. L'abaque est un INSTRUMENT : elle porte des
+       chiffres à comparer, donc le parchemin domine et la nuit n'est qu'une
+       bordure. Un fond mouvant derrière des colonnes de nombres se paie en
+       erreurs de lecture. -->
+  <link rel="stylesheet" href="css/ciel.css">
+  <link rel="stylesheet" href="css/ciel-fond-page.css">
 </head>
-<body class="abaque">
+<!-- LV5 / P5a — LE SOL ÉTOILÉ EST CHARGÉ MAIS PAS ENCORE DÉCLARÉ.
+     `data-fond-etoile` a été RETIRÉ le 2026-08-17 après mesure : passer le fond
+     en nuit laissait trois textes hors cartouche en encre sépia SUR la nuit —
+     1,37:1 et 2,12:1 de contraste, donc illisibles. Le critère du cadrage §16.5
+     exige WCAG AA ; on ne livre pas activé ce qui ne le tient pas.
+     Il suffit de rajouter `data-fond-etoile="atelier"` (ou "instrument") sur ce
+     `<body>` dès que ces trois textes auront pris l'encre du ciel. -->
+<body class="abaque ciel-noeud-coque">
 
   <!-- Barre de retour vers la console Ultima. -->
   <nav class="barre-retour" aria-label="Retour à la console">
@@ -379,6 +392,10 @@
     </div>
   </div>
 
+  <!-- LV5 / P5a — le sol étoilé, peint une fois (aucune boucle d'animation :
+       on lit des chiffres, on ne regarde pas un ciel tourner). -->
+  <script src="js/ciel-fond.js"></script>
+  <script src="js/ciel-fond-page.js"></script>
   <script type="module" src="js/abaque-ui.js"></script>
 </body>
 </html>
