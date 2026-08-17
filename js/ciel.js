@@ -23,6 +23,11 @@
   var SVG_NS = 'http://www.w3.org/2000/svg';
 
   // ---- Géométrie du monde (unités de viewBox) ----
+  // L'orientation d'ouverture, nommée : « Tout voir » y revient. DÉCLARÉE ICI, au
+  // niveau du module, et non dans `rendre` : la disposition en Gémeaux se calcule
+  // avant que la caméra existe, et une `var` locale aurait valu `undefined` à cet
+  // instant (hoisting) — le placement se serait fait sur des NaN, en silence.
+  var YAW_OUVERTURE = 0.6, PITCH_OUVERTURE = -0.28;
   var RAYON_MONDE = 300;
   var ANGLE_OR = Math.PI * (3 - Math.sqrt(5));
   var FOCALE = 620;
@@ -233,6 +238,45 @@
   // majorer le rayon recule la caméra pour rien, et c'est précisément le défaut
   // qu'on corrige. Fonction pure au sens utile : elle ne touche ni au DOM ni au
   // réseau, et deux appels sur le même monde donnent le même résultat.
+  // LES GÉMEAUX — deux caps jumeaux posés EN OPPOSITION (LV5, dicté par Paul le
+  // 2026-08-17 : « pour TAO, mets plutôt Zekrom et Reshiram en opposé,
+  // visuellement, en mode constellation Castor et Pollux »).
+  //
+  // Le défaut : `construireMonde` range les étoiles d'un écran comme un amas de
+  // réseau, ce qui EMPILE deux caps l'un au-dessus de l'autre (vu sur capture).
+  // Or RESHIRAM et ZEKROM sont deux PÔLES — le réel et l'idéal —, reliés par le
+  // rétroplanning. Les empiler dit « une liste » ; les opposer dit ce qu'ils sont.
+  //
+  // POURQUOI CES COORDONNÉES, ET PAS SIMPLEMENT (±d, 0, 0). La caméra s'ouvre
+  // tournée (yaw = 0,6). Poser les étoiles sur l'axe X du MONDE les ferait donc
+  // apparaître de biais et rapprochées — l'opposition serait dans les données et
+  // pas à l'écran, ce qui ne sert à rien.
+  // La projection donne x1 = x·cos(yaw) + z·sin(yaw) et z1 = −x·sin(yaw) + z·cos(yaw).
+  // En posant x = ±d·cos(yaw) et z = ±d·sin(yaw), on obtient x1 = ±d et **z1 = 0** :
+  // les deux étoiles tombent exactement de part et d'autre du centre de l'écran,
+  // à la même profondeur. L'opposition est alors VUE, pas seulement calculée.
+  //
+  // L'INCLINAISON EST VOULUE. Parfaitement alignées, deux étoiles font un
+  // diagramme ; Castor et Pollux ne sont pas sur une horizontale. L'une monte,
+  // l'autre descend d'autant — c'est ce qui fait lire une constellation plutôt
+  // qu'un axe.
+  function disposerEnOpposition(monde, yaw, pitch) {
+    if (monde.etoiles.length !== 2) { return monde; }
+    var d = monde.rayon * 0.62;
+    var cy = Math.cos(yaw), sy = Math.sin(yaw);
+    // La hauteur est corrigée du tangage : sans `cos(pitch)`, l'inclinaison
+    // apparente changerait avec l'angle de la caméra et l'un des deux pôles
+    // paraîtrait plus haut que l'autre pour une raison qui n'est pas la sienne.
+    var h = d * 0.17 / Math.max(0.2, Math.cos(pitch));
+    [1, -1].forEach(function (signe, i) {
+      var e = monde.etoiles[i];
+      e.x = signe * d * cy;
+      e.z = signe * d * sy;
+      e.y = -signe * h;
+    });
+    return monde;
+  }
+
   function recentrerSurLesEtoiles(monde) {
     var n = monde.etoiles.length;
     if (!n) { monde.rayonReel = monde.rayon; return monde; }
@@ -306,6 +350,14 @@
     var cadrageSerre = !!options.cadrerSurLesEtoiles;
 
     var monde = construireMonde(noeuds);
+    // LES GÉMEAUX, avant le recentrage : deux caps jumeaux se posent en
+    // OPPOSITION plutôt qu'empilés. L'orientation d'ouverture est passée en
+    // argument parce que le placement en dépend (voir `disposerEnOpposition`) —
+    // et `cam` n'existe pas encore ici, ce qui est justement pourquoi les deux
+    // constantes sont déclarées avant elle.
+    if (options.opposition) {
+      disposerEnOpposition(monde, YAW_OUVERTURE, PITCH_OUVERTURE);
+    }
     if (cadrageSerre) { recentrerSurLesEtoiles(monde); }
     // Rayon de RÉFÉRENCE des effets de profondeur (opacité, seuil « proche »).
     // Hors cadrage serré c'est la constante d'hier, à l'identique : ces deux
@@ -508,8 +560,8 @@
     }
 
     dimensionner();
-    // L'orientation d'ouverture, nommée : « Tout voir » y revient.
-    var YAW_OUVERTURE = 0.6, PITCH_OUVERTURE = -0.28;
+    // (L'orientation d'ouverture est déclarée au niveau du module : le placement
+    // des Gémeaux en a besoin AVANT que `cam` existe.)
     var cam = {
       yaw: YAW_OUVERTURE, pitch: PITCH_OUVERTURE, distance: 0,
       cibleYaw: YAW_OUVERTURE, ciblePitch: PITCH_OUVERTURE, cibleDistance: 0
@@ -1138,10 +1190,21 @@
           return;
         }
         var ech = (a.echelle + b.echelle) / 2;
-        pn.el.setAttribute('x', mx.toFixed(1));
-        // 5 unités au-dessus du trait : posé DESSUS, le nom se fait barrer par
-        // lui — le trait passe pile à la hauteur des lettres.
-        pn.el.setAttribute('y', (my - 5).toFixed(1));
+        // LE DÉCALAGE EST PERPENDICULAIRE AU TRAIT, et c'est une correction vue
+        // sur capture. Premier jet : « 5 unités au-dessus ». Cela suffit pour un
+        // lien horizontal et échoue dès qu'il est INCLINÉ — et depuis que les
+        // Gémeaux opposent RESHIRAM et ZEKROM en diagonale, il l'est : le trait
+        // traversait « ⇄ rétroplanning » en plein milieu des lettres.
+        // La normale au segment, elle, s'éloigne du trait quelle que soit sa
+        // pente. Le signe est choisi pour que le nom monte : sur une carte, une
+        // légende se pose au-dessus de ce qu'elle nomme.
+        var dx = b.sx - a.sx, dy = b.sy - a.sy;
+        var lg = Math.max(1, Math.hypot(dx, dy));
+        var nx = -dy / lg, ny = dx / lg;
+        if (ny > 0) { nx = -nx; ny = -ny; }
+        var recul = 8;
+        pn.el.setAttribute('x', (mx + nx * recul).toFixed(1));
+        pn.el.setAttribute('y', (my + ny * recul).toFixed(1));
         pn.el.setAttribute('font-size', Math.max(7, Math.min(13, 9 * ech)).toFixed(1));
         pn.el.setAttribute('opacity',
           (0.8 * opaciteProfondeur((a.profondeur + b.profondeur) / 2)).toFixed(3));

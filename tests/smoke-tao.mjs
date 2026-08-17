@@ -162,6 +162,62 @@ const surLArc = await page.evaluate(() => {
 verifier('Le nom est posé au milieu de la passerelle (mesuré)',
   !!surLArc && surLArc.ecartX <= 12 && surLArc.ecartY <= 14,
   surLArc ? `écart ${surLArc.ecartX.toFixed(1)} / ${surLArc.ecartY.toFixed(1)}` : 'introuvable');
+// ---- LES GÉMEAUX : deux pôles EN OPPOSITION (Paul, 2026-08-17) ----
+// « Mets plutôt Zekrom et Reshiram en opposé, visuellement, en mode
+// constellation Castor et Pollux. » Avant, l'amas de réseau les EMPILAIT l'un
+// au-dessus de l'autre — ce qui disait « une liste » là où le registre dit
+// « deux pôles reliés ».
+// La mesure porte sur l'ÉCART HORIZONTAL rapporté à l'écart vertical : c'est ce
+// qui distingue une opposition d'un empilement, et aucune capture ne le dirait
+// avec un chiffre.
+const gemeaux = await page.evaluate(() => {
+  const gs = Array.from(document.querySelectorAll('.ciel-etoile'))
+    .filter((g) => g.getAttribute('display') !== 'none');
+  if (gs.length !== 2) { return null; }
+  const p = gs.map((g) => ({
+    id: g.getAttribute('data-noeud-id'),
+    x: +g.querySelector('.ciel-zone').getAttribute('cx'),
+    y: +g.querySelector('.ciel-zone').getAttribute('cy')
+  }));
+  const c = window.UltimaCiel.courant().zoneUtile();
+  return {
+    ecartX: Math.abs(p[0].x - p[1].x),
+    ecartY: Math.abs(p[0].y - p[1].y),
+    // De part et d'autre du centre optique : c'est la définition de « opposé ».
+    dePartEtDAutre: (p[0].x - c.centreX) * (p[1].x - c.centreX) < 0,
+    largeur: c.largeur
+  };
+});
+verifier('Les deux pôles sont OPPOSÉS, pas empilés (écart horizontal dominant)',
+  !!gemeaux && gemeaux.ecartX > gemeaux.ecartY * 2,
+  gemeaux ? `écart X ${gemeaux.ecartX.toFixed(0)} contre Y ${gemeaux.ecartY.toFixed(0)}` : 'introuvable');
+verifier('Un pôle de chaque côté du centre',
+  !!gemeaux && gemeaux.dePartEtDAutre === true);
+// L'INCLINAISON EST VOULUE : parfaitement alignées, deux étoiles font un
+// diagramme, pas une constellation. On exige donc qu'elles NE soient PAS sur la
+// même horizontale — un critère qui interdit autant l'empilement que l'alignement.
+verifier('Les pôles sont inclinés (une constellation, pas un axe)',
+  !!gemeaux && gemeaux.ecartY > 8,
+  gemeaux ? `écart Y ${gemeaux.ecartY.toFixed(0)}` : '');
+
+// LE NOM N'EST PAS BARRÉ PAR LE TRAIT — mesuré perpendiculairement.
+// Le premier jet décalait le nom « de 5 unités vers le haut », ce qui suffit
+// pour un lien horizontal et échoue dès qu'il est incliné : depuis les Gémeaux,
+// le trait traversait « ⇄ rétroplanning » au milieu des lettres (vu sur capture).
+const ecartAuTrait = await page.evaluate(() => {
+  const t = document.querySelector('text.ciel-nom-lien');
+  const l = document.querySelector('.ciel-liens line');
+  if (!t || !l) { return null; }
+  const x1 = +l.getAttribute('x1'); const y1 = +l.getAttribute('y1');
+  const x2 = +l.getAttribute('x2'); const y2 = +l.getAttribute('y2');
+  const tx = +t.getAttribute('x'); const ty = +t.getAttribute('y');
+  return Math.abs((y2 - y1) * tx - (x2 - x1) * ty + x2 * y1 - y2 * x1)
+    / Math.hypot(x2 - x1, y2 - y1);
+});
+verifier('Le nom de la passerelle n\'est pas barré par le trait (≥ 4 unités)',
+  ecartAuTrait !== null && ecartAuTrait >= 4,
+  ecartAuTrait === null ? 'introuvable' : `${ecartAuTrait.toFixed(2)} unités`);
+
 verifier('Le nom de la passerelle est LISIBLE (opacité utile)',
   +(await page.locator('text.ciel-nom-lien').getAttribute('opacity') || '1') >= 0.4);
 
