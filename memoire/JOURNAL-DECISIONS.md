@@ -3168,3 +3168,47 @@ partout »*. Second renommage de ce cap (il portait MINETHNIR depuis le
   encore le dicter sans être mal compris.
 
 Patrimoine COMPLET vert (84 sections) après renommage.
+
+## 2026-08-17 — P5b : le registre atelier au complet, et un angle mort d'instrument
+
+Sept pages embarquées sur le sol étoilé (neuf en tout). Patrimoine complet vert,
+84 sections. Cinq des sept n'ont demandé **aucune règle** : les coques `console`
+vivaient déjà sur une mer sombre — confirmation que le découpage en registres de
+P5a était le bon.
+
+- **SUR UN CIEL ÉTOILÉ, UNE ENCRE DE DEMI-TEINTE EST INTENABLE.** Le surtitre
+  d'`idees` était en `rgb(138,113,71)` : 4,30:1 contre la nuit pure, 1,90:1 contre
+  le pire pixel peint. La raison est structurelle — **un fond de nuit étoilée n'a
+  pas UNE luminance, il en a une plage** : une encre claire reste au-dessus de
+  toutes les étoiles, une demi-teinte finira par en croiser une. Corollaire de
+  design, désormais tenu : **un surtitre garde sa subordination par sa taille, son
+  interlettrage et ses petites capitales, jamais par son assombrissement.**
+- **MON INSTRUMENT AVAIT UN ANGLE MORT, ET IL A LAISSÉ PASSER UN DÉFAUT.** À
+  densité 1, un petit texte fin en petites capitales n'a aucun pixel pleinement
+  opaque : le filtre « coeur de lettre » l'écartait **en silence, dans les deux
+  passes**. Le surtitre a traversé le harnais sans être vu, et c'est l'œil sur une
+  capture qui l'a rattrapé. Corrigé en doublant la densité (plus aucun texte non
+  mesurable sur 9 pages) ET en **comptant et nommant** les textes non mesurables,
+  avec un verdict qui borne l'angle mort. *Le texte le plus fin est le plus à
+  risque : c'est celui qu'un instrument ne doit pas avoir le droit de sauter.*
+- **LIRE LE RGB BRUT D'UN CANVAS TRANSPARENT NE MESURE RIEN.** Pour trouver quelle
+  couche décorative éclairait trop le fond, j'ai sondé le canvas pixel par pixel :
+  il répondait « blanc pur » à TOUTES les options, `eclat: 0` compris. Le canvas
+  est transparent et ses pixels sont du blanc à faible alpha — seule la **capture
+  composée** dit ce que l'œil voit. La sonde était fausse, le harnais avait
+  raison ; et le premier signe était l'absurdité de `eclat: 0` répondant blanc.
+  *Une réponse identique pour toutes les entrées n'est pas un résultat, c'est une
+  panne d'instrument.*
+- **UNE OMBRE PORTÉE NE RACHÈTE PAS UN FOND TROP CLAIR** : le contraste se mesure
+  contre le fond, pas contre un halo. Quand éclaircir l'encre ne suffit plus, on
+  assombrit réellement le fond — plaque de nuit translucide (0,82) sous l'en-tête,
+  les étoiles se devinant encore au travers.
+- **UN HARNAIS DU PATRIMOINE A ATTRAPÉ CE QUE LE MIEN VALIDAIT.** `smoke-idees`
+  rougissait à 1,06:1 là où le mien donnait 7,48 : il comparait la devise au jeton
+  `--parchemin` écrit en dur — vrai avant, faux depuis que la page vit sur la nuit.
+  C'est la faute même que P5a avait inscrite en tête de son propre harnais. Leçon
+  de fond : **un test qui nomme une couleur supposée vieillit mal ; un test qui lit
+  ce qui est peint survit au changement de sol.**
+- **UN SCRIPT DE CONVERSION QUI REFUSE** : il a recalé les deux pilotes déjà
+  embarqués au lieu de les convertir deux fois. Une page à demi convertie coûte
+  plus cher qu'une page pas convertie, parce qu'elle a l'air faite.

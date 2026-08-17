@@ -82,6 +82,81 @@ body[data-fond-etoile="atelier"] .adr-carte {
   border: 1px solid rgba(169, 136, 74, .34);
 }
 
+/* ---- LES DEUX SEULS SÉLECTEURS NOMMÉS DE P5b, ET LA MESURE LES A DICTÉS ----
+   Sur les cinq coques `console` embarquées (DRAUKHAIN, MAEDRETHNIR, registre,
+   RESHIRAM, ZEKROM), le harnais n'a trouvé AUCUN défaut : elles vivaient déjà
+   sur une mer sombre. `idees.html` est la seule à avoir résisté, et pour les
+   deux faces du même principe — l'une et l'autre méritent d'être nommées, parce
+   qu'elles se reproduiront sur chaque page dont le parchemin venait du `body` :
+
+   ① UNE SURFACE DE PARCHEMIN QUI NE DÉCLARE PAS SON ENCRE HÉRITE DE LA NUIT.
+      `.carto-etat` porte `background: var(--ile)` sans `color` : son texte
+      héritait donc de la crème posée sur `body`. Mesuré 1,10:1 — « Archipel sous
+      scellés » en crème sur du parchemin clair. C'est le corollaire exact de la
+      règle d'héritage : qui pose un fond doit poser son encre.
+   ② UN TEXTE QUI VIVAIT SUR LE PARCHEMIN DU `BODY` SE RETROUVE SUR LA NUIT.
+      `.devise` est en `--encre-claire`, choisie pour du parchemin : mesurée
+      1,00:1 sur la nuit — littéralement invisible.
+      La règle est portée par le registre ATELIER et pas au-delà, et ce n'est pas
+      une précaution de style : `.devise` existe aussi sur l'abaque, où elle vit
+      DANS la nappe de parchemin et doit garder son encre sépia. Le registre est
+      ce qui les départage — la même classe, deux fonds, deux encres. */
+body[data-fond-etoile="atelier"] .carto-etat,
+body[data-fond-etoile="atelier"] .carto-etat h2,
+body[data-fond-etoile="atelier"] .carto-etat p {
+  color: var(--encre, #2b2417);
+}
+/* ---- SUR UN CIEL ÉTOILÉ, UNE ENCRE DE DEMI-TEINTE EST INTENABLE ----
+   C'est le principe le plus utile que cette étape a produit, et il a fallu une
+   mesure pour l'obtenir. Le surtitre d'`idees.html` était en `rgb(138,113,71)`
+   à 12,5 px : 4,30:1 contre la nuit PURE (sous le seuil de 4,5), et 1,90:1
+   contre le pire pixel réellement peint — parce qu'une étoile peut être plus
+   claire que lui.
+   LA RAISON EST STRUCTURELLE, PAS ANECDOTIQUE : un fond de nuit étoilée n'a pas
+   UNE luminance, il en a toute une plage. Une encre claire reste au-dessus de
+   toutes les étoiles ; une encre de demi-teinte finira par en croiser une, et
+   aucun réglage ne l'en protège.
+   CONSÉQUENCE SUR LA HIÉRARCHIE, et elle est assumée : un surtitre doit rester
+   subordonné à son titre, mais cela ne se joue plus sur l'assombrissement. Il
+   garde sa subordination par sa TAILLE, son INTERLETTRAGE et ses PETITES
+   CAPITALES — qu'il possède déjà. C'est la même hiérarchie, obtenue par la
+   forme au lieu de la luminosité.
+   Portée au registre ATELIER seulement : `.surtitre` et `.devise` existent aussi
+   sur l'abaque, où elles vivent DANS la nappe de parchemin et gardent leur encre
+   sépia. La même classe, deux fonds, deux encres — le registre les départage. */
+body[data-fond-etoile="atelier"] .devise,
+body[data-fond-etoile="atelier"] .surtitre {
+  color: var(--ciel-creme, #f2ead6);
+}
+
+/* ---- ET QUAND ÉCLAIRCIR L'ENCRE NE SUFFIT PAS, ON ASSOMBRIT LE FOND ----
+   La crème passée au surtitre a réglé le surtitre et déplacé le problème : la
+   devise, en crème elle aussi, tombait sur un point du champ à `rgb(116,128,144)`
+   — 3,35:1. Trois tentatives ont échoué à l'expliquer, et chacune a appris
+   quelque chose :
+     · réduire les VOILES de moitié n'a rien changé (3,23 → 3,35) : ce n'était
+       pas un voile ;
+     · la pile CSS sous la devise est transparente jusqu'à la nuit du `body` :
+       aucune règle de page n'était en cause ;
+     · sonder le canvas pixel par pixel a répondu « blanc pur » à TOUTES les
+       options, `eclat: 0` compris — parce que le canvas est TRANSPARENT et ses
+       pixels sont du blanc à faible alpha. *Lire le RGB brut d'un canvas
+       transparent ne mesure rien : seule la capture composée dit ce que l'œil
+       voit.* La sonde était fausse, le harnais avait raison.
+   UNE OMBRE PORTÉE NE RÉGLERAIT PAS DAVANTAGE : le contraste se mesure contre le
+   FOND, pas contre un halo. Un texte posé sur un champ lumineux demande un fond
+   réellement plus sombre — pas un artifice qui le fait paraître lisible.
+   L'en-tête reçoit donc la plaque de nuit que le registre atelier donne déjà à
+   ses cartouches, avec la même intention : dire « posé sur le ciel ». Elle reste
+   TRANSLUCIDE (0,82) — les étoiles se devinent encore au travers, ce qui était
+   tout l'intérêt du fond.
+   Portée : `header.cartouche` n'existe que sur `idees.html` et `abaque.html`, et
+   l'abaque est en registre instrument. Cette règle ne touche donc qu'`idees`,
+   sans rien changer aux cinq coques `console`, qui passent déjà à 6,43:1. */
+body[data-fond-etoile="atelier"] header.cartouche {
+  background: rgba(6, 11, 20, .82);
+}
+
 /* ═══════════════════ ③ LE REGISTRE INSTRUMENT ═══════════════════
    L'abaque, les impôts, l'échéancier, revenus-charges, ALTHEA.
    On y LIT DES CHIFFRES. Le parchemin domine, et la nuit n'est qu'une bordure :

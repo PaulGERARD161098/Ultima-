@@ -46,8 +46,25 @@
 // « Marge brute cible », tous à 1,10:1. La sonde a ensuite été retirée.
 import { chromium } from 'playwright';
 
+// Les pages embarquées, avec le registre qu'elles DÉCLARENT. Le harnais vérifie
+// que la déclaration est bien celle attendue : une page qui bascule de registre
+// sans qu'on l'ait voulu est un changement d'ergonomie silencieux.
 const CIBLES = [
+  // ② ATELIER — on saisit, on relie, on écrit. Cartouches posés sur la nuit.
   { page: 'vranesh.html', registre: 'atelier', largeurs: [1280, 390] },
+  { page: 'draukhain.html', registre: 'atelier', largeurs: [1280, 390] },
+  { page: 'maedrethnir.html', registre: 'atelier', largeurs: [1280, 390] },
+  { page: 'registre.html', registre: 'atelier', largeurs: [1280, 390] },
+  { page: 'reshiram.html', registre: 'atelier', largeurs: [1280, 390] },
+  { page: 'zekrom.html', registre: 'atelier', largeurs: [1280, 390] },
+  // `ecrire.html` est la CAPTURE : « une seule chose à l'écran », décidé par Paul
+  // le 2026-08-01. Sans session elle n'affiche qu'un état d'ouverture — un seul
+  // texte, et c'est voulu. Le minimum est donc DÉCLARÉ ICI plutôt que le seuil
+  // global abaissé : baisser le seuil pour une page le rendrait aveugle sur les
+  // huit autres, où « presque rien à mesurer » signifierait vraiment une panne.
+  { page: 'ecrire.html', registre: 'atelier', largeurs: [1280, 390], minTextes: 1 },
+  { page: 'idees.html', registre: 'atelier', largeurs: [1280, 390] },
+  // ③ INSTRUMENT — on lit des chiffres. Le parchemin domine, la nuit borde.
   { page: 'abaque.html', registre: 'instrument', largeurs: [1280, 390] }
 ];
 
@@ -62,7 +79,16 @@ const chiffres = {};
 const juge = await browser.newPage();
 
 async function mesurer(cible, largeur, avecFond) {
-  const page = await browser.newPage({ viewport: { width: largeur, height: 900 }, deviceScaleFactor: 1 });
+  // DENSITÉ DOUBLÉE, ET C'EST UNE CORRECTION PAYÉE PAR UN DÉFAUT MANQUÉ.
+  // À `deviceScaleFactor: 1`, un petit texte fin en petites capitales n'a AUCUN
+  // pixel pleinement opaque : tout son tracé est du lissage. Le filtre « coeur
+  // de lettre » l'écartait donc en silence, dans les deux passes — et le
+  // surtitre d'`idees.html` (4,30:1 pour un seuil de 4,5) a traversé le harnais
+  // sans être vu. À 2, le même glyphe reçoit quatre fois plus de pixels et
+  // retrouve un coeur. *Le texte le plus fin est le plus à risque : c'est
+  // exactement celui qu'un instrument ne doit pas avoir le droit de sauter.*
+  const DPR = 2;
+  const page = await browser.newPage({ viewport: { width: largeur, height: 900 }, deviceScaleFactor: DPR });
   page.on('console', (m) => { if (m.type() === 'error' && avecFond) { erreurs.push(cible.page + ' — ' + m.text()); } });
   await page.goto('http://127.0.0.1:8123/' + cible.page, { waitUntil: 'load' });
   if (!avecFond) { await page.evaluate(() => document.body.removeAttribute('data-fond-etoile')); }
@@ -113,7 +139,7 @@ async function mesurer(cible, largeur, avecFond) {
   const apres = (await page.screenshot()).toString('base64');
   await page.close();
 
-  const resultats = await juge.evaluate(async ([b1, b2, liste]) => {
+  const resultats = await juge.evaluate(async ([b1, b2, liste, dpr]) => {
     async function pixels(b64) {
       const img = new Image();
       img.src = 'data:image/png;base64,' + b64;
@@ -135,8 +161,10 @@ async function mesurer(cible, largeur, avecFond) {
       const tr = +m[1], tg = +m[2], tb = +m[3];
       const lt = lum(tr, tg, tb);
       let pire = Infinity, fond = null, coeurs = 0;
-      for (let y = Math.max(0, t.y); y < Math.min(t.y + t.h, A.h); y++) {
-        for (let x = Math.max(0, t.x); x < Math.min(t.x + t.w, A.w); x++) {
+      // Les boîtes sont en pixels CSS, l'image en pixels physiques.
+      const y0 = t.y * dpr, y1 = (t.y + t.h) * dpr, x0 = t.x * dpr, x1 = (t.x + t.w) * dpr;
+      for (let y = Math.max(0, y0); y < Math.min(y1, A.h); y++) {
+        for (let x = Math.max(0, x0); x < Math.min(x1, A.w); x++) {
           const i = (A.w * y + x) << 2;
           // Le pixel a-t-il bougé quand le texte a disparu ? Sinon, aucune
           // lettre ne l'occupe : il ne dit rien du contraste de ce texte.
@@ -148,13 +176,16 @@ async function mesurer(cible, largeur, avecFond) {
           if (r < pire) { pire = r; fond = [F.d[i], F.d[i + 1], F.d[i + 2]]; }
         }
       }
-      if (!coeurs) { continue; }
       // Le seuil AA dépend de la taille : 3:1 pour le grand texte, 4,5:1 sinon.
       const grand = t.taille >= 24 || (t.taille >= 18.66 && +t.gras >= 700);
-      out.push({ cle: t.cle, texte: t.texte, couleur: t.couleur, fond, taille: t.taille, ratio: Math.round(pire * 100) / 100, seuil: grand ? 3 : 4.5 });
+      // Sans coeur de lettre, le texte est RENDU (ratio null) au lieu d'être
+      // sauté : un texte non mesurable doit se voir dans le rapport, sinon
+      // l'angle mort de l'instrument devient un silence rassurant.
+      out.push({ cle: t.cle, texte: t.texte, couleur: t.couleur, fond, taille: t.taille,
+        ratio: coeurs ? Math.round(pire * 100) / 100 : null, seuil: grand ? 3 : 4.5 });
     }
-    return out.sort((a, b) => a.ratio - b.ratio);
-  }, [avant, apres, textes]);
+    return out.sort((a, b) => (a.ratio === null ? 999 : a.ratio) - (b.ratio === null ? 999 : b.ratio));
+  }, [avant, apres, textes, DPR]);
 
   return { resultats, couche };
 }
@@ -165,25 +196,33 @@ for (const cible of CIBLES) {
     const avec = await mesurer(cible, largeur, true);
     const sans = await mesurer(cible, largeur, false);
 
-    const echecsAvec = avec.resultats.filter((r) => r.ratio < r.seuil);
-    const echecsSans = sans.resultats.filter((r) => r.ratio < r.seuil);
+    const mesurables = (l) => l.filter((r) => r.ratio !== null);
+    const echecsAvec = mesurables(avec.resultats).filter((r) => r.ratio < r.seuil);
+    const echecsSans = mesurables(sans.resultats).filter((r) => r.ratio < r.seuil);
+    const muets = avec.resultats.filter((r) => r.ratio === null);
     const dejaLa = new Set(echecsSans.map((r) => r.cle));
     // Le coeur du verdict : un échec NOUVEAU est un échec causé par le fond.
     const nouveaux = echecsAvec.filter((r) => !dejaLa.has(r.cle));
 
     chiffres[nom] = {
-      textesMesures: avec.resultats.length,
+      textesMesures: mesurables(avec.resultats).length,
+      nonMesurables: muets.map((r) => r.texte),
       echecsAvecLeFond: echecsAvec.length,
       echecsSansLeFond: echecsSans.length,
-      pireRatio: avec.resultats.length ? avec.resultats[0].ratio : null,
+      pireRatio: mesurables(avec.resultats).length ? mesurables(avec.resultats)[0].ratio : null,
       heritesRappeles: echecsAvec.filter((r) => dejaLa.has(r.cle)).map((r) => r.ratio + ':1 ' + r.texte),
       nouveaux: nouveaux.map((r) => r.ratio + ':1 « ' + r.texte + ' » ' + r.couleur + ' sur rgb(' + r.fond + ')')
     };
 
     verdicts['leFondNIntroduitAucunDefaut_' + nom] = nouveaux.length === 0;
     // Une page dont on ne mesure rien passerait tous les tests : on exige que
-    // l'instrument ait bien trouvé du texte à mesurer.
-    verdicts['ilYAvaitDuTexteAMesurer_' + nom] = avec.resultats.length >= 5;
+    // l'instrument ait bien trouvé du texte à mesurer. Le minimum vaut 5 par
+    // défaut, et se déclare page par page quand la page est sobre par dessein.
+    verdicts['ilYAvaitDuTexteAMesurer_' + nom] = mesurables(avec.resultats).length >= (cible.minTextes || 5);
+    // L'ANGLE MORT EST BORNÉ. Un texte sans coeur de lettre échappe à la mesure ;
+    // en laisser passer un ou deux est le prix du lissage, en laisser passer la
+    // moitié voudrait dire que le harnais ne regarde plus la page.
+    verdicts['peuDeTexteEchappeALaMesure_' + nom] = muets.length <= Math.max(2, Math.round(avec.resultats.length * 0.15));
     // La couche est-elle réellement là ? Sans cette exigence, un `<script>`
     // oublié rendrait le harnais vert pour la pire des raisons.
     verdicts['laCoucheEstMontee_' + nom] = avec.couche.canvas === true;

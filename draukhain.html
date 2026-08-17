@@ -20,8 +20,13 @@
   <!-- La voûte des serments (forme A, 2026-08-04) : l'arrivée du cap — tous les
        serments à la fois, et les fils vers les caps voisins. -->
   <link rel="stylesheet" href="css/draukhain-voute.css">
+  <!-- LV5 / P5b — LE SOL COMMUN. `ciel.css` d'abord : elle porte les jetons
+       de nuit (sur des CLASSES, pas sur `:root`), et `ciel-fond-page.css` les
+       consomme. Le registre est déclaré sur le `<body>`. -->
+  <link rel="stylesheet" href="css/ciel.css">
+  <link rel="stylesheet" href="css/ciel-fond-page.css">
 </head>
-<body class="console page-quadrant" data-quadrant="draukhain">
+<body class="console page-quadrant ciel-noeud-coque" data-quadrant="draukhain" data-fond-etoile="atelier">
 
   <!-- Rose des vents décorative (registre carte savante), muette. -->
   <div class="console-decor" aria-hidden="true">
@@ -170,6 +175,10 @@
     </main>
   </div>
 
+  <!-- LV5 / P5b — le sol étoilé. AUCUNE boucle d'animation : peint une fois,
+       puis au redimensionnement seulement. On travaille longtemps sur ces pages. -->
+  <script src="js/ciel-fond.js"></script>
+  <script src="js/ciel-fond-page.js"></script>
   <script src="js/vendor/supabase-js-2.110.0.min.js"></script>
   <script src="js/config.js"></script>
   <!-- Léo : cartouche du majordome + ses mains sur le cap (boucle ④,
