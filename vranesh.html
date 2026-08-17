@@ -18,8 +18,14 @@
        fond de coque ne s'applique ici. -->
   <link rel="stylesheet" href="css/boussole.css">
   <link rel="stylesheet" href="css/vranesh-boussole.css">
+  <!-- LV5 / P5a — LE SOL COMMUN. `ciel.css` d'abord : elle porte les jetons de
+       nuit, et `ciel-fond-page.css` les consomme. VRANESH est un ATELIER (on y
+       saisit, on y relie) : ses cartouches restent en parchemin, posés sur le
+       ciel. -->
+  <link rel="stylesheet" href="css/ciel.css">
+  <link rel="stylesheet" href="css/ciel-fond-page.css">
 </head>
-<body class="console page-quadrant" data-quadrant="vranesh">
+<body class="console page-quadrant ciel-noeud-coque" data-quadrant="vranesh" data-fond-etoile="atelier">
 
   <!-- Rose des vents décorative (registre carte savante), muette. -->
   <div class="console-decor" aria-hidden="true">
@@ -166,6 +172,10 @@
   </div>
 
   <script src="js/vendor/supabase-js-2.110.0.min.js"></script>
+  <!-- LV5 / P5a — le sol étoilé. AUCUNE boucle d'animation : peint une fois,
+       puis au redimensionnement. On reste vingt minutes sur cette page. -->
+  <script src="js/ciel-fond.js"></script>
+  <script src="js/ciel-fond-page.js"></script>
   <script src="js/config.js"></script>
   <!-- Léo : cartouche du majordome + ses mains sur le cap (boucle ④,
        2026-07-30). Chargé AVANT le script du cap, qui l'appelle. -->

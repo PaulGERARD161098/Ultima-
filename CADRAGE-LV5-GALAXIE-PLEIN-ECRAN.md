@@ -1017,3 +1017,149 @@ l'échéancier, revenus-charges et ALTHEA en **instruments** (parchemin dominant
 fond discret) ; VRANESH, DRAUKHAIN, MINETHNIR, écrire, archipels, rapprochements
 en **ateliers** (cartouches posés sur la nuit). Si ce partage est juste, le reste
 n'est que de l'exécution.
+
+## 16.8 P5a — la couche livrée, l'activation reportée. 2026-08-17.
+
+**Livré et éprouvé** : `js/ciel-fond-page.js` + `css/ciel-fond-page.css` — le sol
+étoilé des pages de travail, et les deux registres en CSS.
+
+Mesuré sur VRANESH et l'abaque, fond activé : le canvas peint (variance 22,6),
+`z-index: -1`, `pointer-events: none`, `aria-hidden`, **zéro geste volé sur 64
+contrôles**, zéro erreur console, rien ne défile de plus qu'avant.
+
+**Trois différences avec le fond du ciel**, chacune justifiée : aucune boucle
+d'animation (on reste vingt minutes sur ces pages), une projection fixe (sans
+mouvement la perspective n'a rien à dire), et le canvas derrière tout.
+
+### 🔻 L'ACTIVATION EST RETIRÉE — et c'est la mesure qui l'a décidé
+
+Passer le fond en nuit laissait **trois textes hors cartouche en encre sépia SUR
+la nuit** : 1,37:1 et 2,12:1 de contraste. Illisibles. Le critère §16.5 exige
+WCAG AA : **on ne livre pas activé ce qui ne le tient pas.**
+
+`data-fond-etoile` a donc été retiré des deux pages. La couche reste chargée et
+inerte ; il suffira de remettre l'attribut quand ces textes auront pris l'encre
+du ciel. *Livrer inerte vaut mieux que livrer cassé, et vaut mieux aussi que ne
+rien livrer : le sol est écrit, mesuré, et prêt.*
+
+**Deux défauts trouvés au passage, dont un de conception :**
+
+1. **`inherit` n'est pas « la valeur d'avant », c'est « la valeur du parent » —
+   et le parent venait de changer.** J'avais écrit `color: inherit` sur les
+   titres de cartouche pour « leur rendre leur couleur » : mesuré **1,55:1**, car
+   `inherit` remontait au `body` que ce même fichier venait de passer en crème.
+   De la crème sur du parchemin. Et le défaut ne touchait pas que les titres : la
+   couleur du `body` se propage à **tout** le texte des cartouches. L'encre se
+   pose donc explicitement, et sur le cartouche entier.
+2. **La nappe « instrument » n'a pas trouvé son conteneur sur l'abaque** (pas de
+   `<main>`). Ses chiffres vivent déjà dans des cartouches de parchemin et
+   restent lisibles — elle est donc **de fait en atelier**. Forcer la nappe
+   demanderait de retoucher sa mise en page, ce que P5a s'était interdit.
+   **À trancher avec Paul** : tenir le classement strictement, ou accepter que
+   « instrument » ne concerne que les pages qui ont déjà une nappe.
+
+**Deux contrastes à 4,29:1 relevés sur l'abaque sont PRÉEXISTANTS** (encre or sur
+parchemin, libellés secondaires) : ils ne viennent pas de ce chantier, mais ils
+sont notés ici pour ne pas être découverts comme des régressions plus tard.
+
+### Prochaine action unique
+
+Donner l'encre du ciel aux trois textes hors cartouche de VRANESH, puis remettre
+`data-fond-etoile` — c'est un travail de vingt minutes, mesurable au même
+instrument.
+
+---
+
+## 16.9 P5a — ACTIVÉ. Et ce n'était pas vingt minutes. 2026-08-17.
+
+**État : le fond étoilé est ACTIF sur les deux pages pilotes**, `data-fond-etoile`
+remis, patrimoine complet vert (84 sections). Ce que le §16.8 annonçait comme un
+raccord de vingt minutes s'est révélé une **erreur de méthode**, et c'est la
+leçon la plus utile de ce palier.
+
+### L'instrument était faux avant que le correctif ne le soit
+
+Premier réflexe : élargir l'encre du ciel à une **liste** de sélecteurs
+(`h1, h2, h3, p, li, label, small, a` sous `body[data-fond-etoile]`). Les trois
+textes de VRANESH sont passés. Mesure sur l'abaque : **treize textes en échec**,
+dont six libellés de champ à **1,10:1** et le chapeau « ← Ultima » à **1,38:1**.
+
+Le correctif avait fabriqué plus de défauts qu'il n'en réparait, et la cause
+n'était pas une faute de frappe :
+
+> Cette liste avait une spécificité (0,1,2) qui **écrasait les règles de page
+> légitimes** — `.champ label` (0,1,1), `.retour-ultima` (0,1,0). Or ces règles,
+> elles, savaient sur quel fond leur texte était posé. Un sélecteur qui gagne
+> contre le style de la page ne corrige pas la page : **il la remplace, en
+> aveugle.**
+
+**La règle tenue désormais, et elle vaut au-delà de ce fichier : l'encre se
+transmet par héritage, elle ne s'énumère pas.** L'encre de la nuit est posée une
+seule fois sur `body` ; chaque surface de parchemin déclare son encre sur
+ELLE-MÊME et son contenu en hérite. Conséquence voulue : tout élément que la page
+colore explicitement **garde sa couleur**. On n'ajoute un sélecteur nommé que là
+où une mesure a montré du sépia sur la nuit — et il n'y en a eu aucun.
+
+### Le vrai défaut de l'abaque n'était pas son encre, c'était sa nappe
+
+Le §16.8 concluait que l'abaque était « de fait en atelier ». **C'était faux, et
+le diagnostic s'était arrêté trop tôt** : sa nappe de parchemin venait de
+`body.abaque`, que ce fichier remplace par la nuit. La page ne perdait pas trois
+couleurs, elle perdait **son support**.
+
+`.feuille` — qui existe déjà et enveloppe tout son contenu — reçoit donc la nappe
+du registre instrument. **Un geste rend d'un coup toutes les relations de couleur
+de la page**, là où les corriger une par une en demandait douze. L'abaque est
+bien un **instrument**, comme le §16.2 l'avait classée. L'arbitrage annoncé au
+§16.8 est donc **clos sans avoir à déranger Paul** : c'était un défaut de
+diagnostic, pas un choix produit.
+
+### Le contraste ne se mesure pas à la boîte, il se mesure sous les lettres
+
+L'instrument lui-même a dû être refait, et son premier état était trompeur : il
+cherchait le pire pixel de la **boîte** de chaque élément. Il accusait des
+bordures, des liserés et des ornements qu'**aucune lettre ne touche jamais** —
+5 faux échecs sur 7 textes de VRANESH, dont un titre parfaitement lisible à
+l'écran. *Un instrument qui condamne du lisible ne mesure pas le contraste : il
+mesure la présence de décor.*
+
+`tests/smoke-fond-contraste.mjs` peint donc la page **deux fois** — normale, puis
+tout le texte transparent — et la différence des deux images donne **le masque
+des lettres**. Le contraste est mesuré au pixel, sous les coeurs de lettre
+seulement (les bords sont lissés, et un bord lissé a une couleur que personne ne
+voit). **Le verdict est différentiel** : chaque page est mesurée avec ET sans le
+fond, et un échec n'est rouge que s'il est **nouveau**. C'est la seule
+formulation honnête ici, puisque ces pages portent des défauts antérieurs.
+
+**Et il a été prouvé qu'il sait rougir** : la règle énumérée fautive a été
+réinjectée exprès, le harnais est passé rouge et a nommé les six textes cassés un
+par un. *Un harnais vert ne vaut rien tant qu'on n'a pas vu ce qui le fait
+rougir.*
+
+### Ce qui est mesuré, activé
+
+| | VRANESH (atelier) | Abaque (instrument) |
+|---|---|---|
+| textes mesurés (1280 / 390) | 7 / 7 | 34 / 13 |
+| échecs **causés par le fond** | **0** | **0** |
+| échecs préexistants rappelés | 0 | 5 / 2 |
+| pire ratio avec le fond | 7,27:1 | 4,29:1 (préexistant) |
+
+VRANESH est **meilleure qu'avant** : « Les futurs potentiels… » était à 4,23:1 sur
+la mer de la console, elle est à 9,32:1 sur la nuit — le fond du ciel est plus
+sombre que celui qu'il remplace. Aucune console n'a eu besoin d'une règle d'encre :
+`body.console` vivait **déjà** sur une mer sombre avec son encre crème.
+
+### ⏳ Registre — action humaine, hors de cette boucle
+
+**Quatre textes à 4,29:1 et un à 4,46:1 sur l'abaque** (jeton `--encre-pale` sur
+parchemin, libellés secondaires type « euros », « mois (12 à 24) »). Préexistants,
+mesurés identiques sans le fond, et le harnais les rappelle à chaque passage.
+Les corriger revient à **assombrir un jeton global** qui sert partout : c'est une
+boucle à soi seule (EB — pas dix lièvres), à ouvrir explicitement.
+
+### Prochaine action unique
+
+P5b : embarquer le reste du registre atelier (DRAUKHAIN, MINETHNIR, écrire, les
+archipels, les rapprochements) au même instrument — le harnais accepte une
+nouvelle page en une ligne dans `CIBLES`.
