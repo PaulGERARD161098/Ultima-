@@ -6,7 +6,7 @@
 > sont livrés, la coque pilote est en production. LV5 pousse trois choses plus
 > loin et **renverse deux interdits de LV4**, écrits noir sur blanc au §2.
 >
-> **Statut au 2026-08-16, 23 h : P0 et P1 LIVRÉES** (§11 et §12). Le gate du
+> **Statut au 2026-08-17 : P0, P1 et P2 LIVRÉES** (§11, §12 et §13). Le gate du
 > §10 a été levé le soir même — Paul a tranché la question bloquante, puis les
 > deux arbitrages de forme (« fond avec les étoiles génial », « charge ok »).
 > Les paliers suivants restent fermés. *Cet en-tête annonçait « aucune ligne de
@@ -627,3 +627,105 @@ demande le plein écran** — c'est P2, et c'est là que la finesse paiera vraim
 **Ouvrir P2** — le plein écran sur `ultima.html`, avec le point dur déjà
 identifié et cadré : les **marges réservées** dans `distanceIdeale()`, pour que
 le cadrage sache qu'une partie du cadre est occupée par le mobilier.
+
+---
+
+# 13. P2 — le plein écran sur la coque de production. Livrée le 2026-08-17.
+
+`ultima.html` **est** la galaxie : plus de plateau encadré, plus de colonne de
+760 px. Le plateau devient le fond de l'écran, et tout le mobilier — retour,
+bandeau, cartouche de Léo, légende — flotte dessus.
+
+## 13.1 Le point dur n'était pas la CSS
+
+Retirer le `max-width` n'aurait rien donné : la coque empilait dans le flux un
+retour, un bandeau, un plateau et un cartouche ; la scène n'aurait eu que la
+place restante, simplement plus large. **Le vrai obstacle était que le cadrage
+ignore le mobilier** — il remplit 60 à 75 % de la plus petite dimension du cadre
+ENTIER, donc il pousse les objets jusqu'aux bords, précisément là où le mobilier
+est posé.
+
+D'où la capacité ajoutée au moteur : **`margesUtiles`**, une zone où le ciel n'a
+pas le droit de peindre. **Et elle demande DEUX choses, pas une** — c'est le
+piège de l'étape :
+
+1. la caméra **recule**, puisque la place utile est plus petite ;
+2. le **centre optique se décale**, puisque le milieu de la zone utile n'est plus
+   celui du viewBox. **Sans ②, on aurait reculé pour rien** : les objets
+   resteraient centrés dans le cadre entier et continueraient d'entrer sous le
+   mobilier, simplement plus petits.
+
+Inactive par défaut : sans marges déclarées, `centreX()` et `centreY()` rendent
+exactement le milieu du viewBox, et RIVEN comme la maquette ne voient aucune
+différence — vérifié avant d'aller plus loin.
+
+## 13.2 Les chiffres — mesurés
+
+| | 390 × 844 | 1280 × 860 | 1670 × 900 |
+|---|---|---|---|
+| Plein écran | 100 % × 100 % | 100 % × 100 % | 100 % × 100 % |
+| Débordement | 0 px | 0 px | 0 px |
+| **Étoiles recouvertes** | **0** | **0** | **0** |
+| Occupation de la **zone utile** | **71,8 %** | **72,2 %** | **69,4 %** |
+| Occupation du cadre entier | 51,7 % | 54,8 % | 53,5 % |
+| Marge réservée (haut / bas) | 153 / 84 | 119 / 81 | 91 / 62 |
+| Contraste du titre | **16,4:1** | **10,6:1** | **11,6:1** |
+| Grains | 1 266 | 4 234 | 5 200 |
+
+Le fond passe de **1 470 grains** (P1, dans un plateau de 734 × 524) à **4 234**
+en plein écran : c'est le rendu que Paul a validé sur la maquette.
+
+## 13.3 ⚠️ UNE ASSERTION REMPLACÉE — le dénominateur, pas le seuil
+
+`smoke-lv4-coque` a viré au rouge sur un seul point : « le ciel remplit le cadre
+(≥ 60 %) — 51,7 % ». **C'est une conséquence arithmétique, pas une régression** :
+un quart du cadre est désormais rendu au mobilier, donc exiger 60 % du cadre
+entier revient à demander au ciel **83 % de la place qui lui reste** — ce que les
+marges de libellé rendent impossible.
+
+L'assertion est **remplacée**, avec sa raison écrite dans le harnais : le
+contrôle ne change pas, **son dénominateur change**. Le ciel remplit sa **zone
+utile** à 71,8 %, dans la fourchette de LV4 (65–75 %). *Baisser le seuil aurait
+masqué le fait qu'il remplit très bien ce qu'on lui laisse ; un seuil qui baisse
+se justifie par la géométrie, jamais par l'envie de passer.*
+
+## 13.4 🔻 QUATRE DÉFAUTS TROUVÉS — deux dans le produit, deux dans mes instruments
+
+1. **LE BANDEAU CHEVAUCHAIT LE BOUTON DE RETOUR** à 390 px : le retour occupait
+   12→115 px, le bandeau centré commençait à 108. Sept pixels, vus sur capture.
+   Un bandeau centré ne peut pas cohabiter avec un bouton d'angle sur 390 px,
+   c'est de l'arithmétique : il descend sous la ligne du retour. Le cadrage n'a
+   pas eu besoin d'être prévenu — la marge étant **mesurée**, elle a suivi.
+2. **UNE MESURE PRISE UNE FOIS EST UNE CONSTANTE QUI A EU RAISON UN JOUR.**
+   Premier jet : la coque mesurait le mobilier et passait un **objet** au moteur.
+   Le harnais l'a pris en défaut en grossissant le titre — la marge haute restait
+   à 119 pendant que le bandeau doublait de hauteur. `margesUtiles` accepte
+   désormais une **fonction**, que le moteur rappelle à chaque redimensionnement :
+   **c'est lui qui sait quand il a besoin de la réponse.** Vérifié : 119 → 315.
+3. **MON INSTRUMENT COMPTAIT UN ÉLÉMENT INVISIBLE COMME UN DÉBORD.** Il déclarait
+   « hors cadre » à 1670 px : l'étiquette de constellation, à (−30, −10). En
+   cadrage serré, le moteur la **tait** (`opacity: 0`) et ne la positionne donc
+   jamais — elle reste à l'origine avec son texte. `smoke-lv4-ciel` filtrait déjà
+   sur l'opacité ; **reprendre sa définition valait mieux que d'en écrire une
+   seconde**, et c'est la leçon : deux harnais qui mesurent la même chose de deux
+   façons finissent par se contredire.
+4. **ÊTRE CLIQUABLE ET ÊTRE VISIBLE SONT DEUX PROPRIÉTÉS DISTINCTES.** Le défaut
+   qui a motivé P2 était invisible aux assertions existantes : `elementFromPoint`
+   disait « l'étoile reçoit le geste » et c'était **vrai** — elle était
+   simplement cachée sous le bandeau. Il fallait une **seconde** mesure, le
+   chevauchement des boîtes peintes. Une assertion de captation ne dira jamais
+   qu'un objet est masqué.
+
+## 13.5 Ce qui reste ouvert — et P2 lui donne une image
+
+**LA COLONNE EST CONFIRMÉE CREUSE.** Sur 1670 × 900, deux objets alignés
+verticalement remplissent 69 % de la hauteur utile et laissent la largeur
+presque vide. Verticalement le cadrage est juste ; c'est la **forme** qui est en
+cause, et c'est la **question 3** du §10 — un parti pris visuel (couronne, ligne,
+grille), pas une correction de cadrage. Je ne le prends pas seul.
+
+## 13.6 Prochaine action unique
+
+**Ouvrir P3** — les sept coques ordinaires, sur un module désormais éprouvé en
+plein écran. Le piège est connu et le harnais le tient déjà : chaque coque doit
+**exiger son canvas** au lieu de s'en remettre au garde du moteur.

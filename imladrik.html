@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
   <title>Ultima — IMLADRIK</title>
   <meta name="description" content="IMLADRIK — la cartographie du développement personnel : trois caps autour de la boussole Kalamn-talaen ; Léo guide. Le journal MINETHNIR reste privé, derrière authentification.">
@@ -12,11 +12,16 @@
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/console.css">
   <link rel="stylesheet" href="css/boussole.css">
+  <!-- LV5 — le ciel. `boussole.css` RESTE chargée : le retour, le bandeau, le
+       sceau et le cartouche de parole lui doivent leur habillage. -->
+  <link rel="stylesheet" href="css/ciel.css">
+  <link rel="stylesheet" href="css/ciel-noeud.css">
+  <link rel="stylesheet" href="css/stellaire.css">
   <link rel="stylesheet" href="css/imladrik-carto.css">
 </head>
-<body class="boussole page-imladrik-carto" data-quadrant="imladrik" data-noeud="imladrik">
+<body class="ciel-noeud page-imladrik-carto" data-quadrant="imladrik" data-noeud="imladrik">
 
-  <div class="boussole-scene">
+  <div class="ciel-noeud-coque">
 
     <!-- Retour à la console à 4 quadrants. -->
     <p class="console-retour boussole-retour"><a href="naga.html">↞ NAGA</a></p>
@@ -53,8 +58,12 @@
          `data-noeud="imladrik"` sur le body suffit à désigner le nœud.
          Muette et sans donnée (§5 : aucune data intime dans le HTML servi) ;
          le journal MINETHNIR vit derrière auth. ===== -->
-    <main class="boussole-plateau" id="boussole-plateau"
-          aria-label="Cartographie du quadrant IMLADRIK (développement personnel)">
+    <div class="ciel-noeud-plateau" id="ciel-noeud-plateau">
+      <main class="ciel-scene" id="ciel-noeud-scene"
+            aria-label="Cartographie du quadrant IMLADRIK (développement personnel)">
+      </main>
+      <!-- Le repli sans JavaScript vit DANS LE PLATEAU, à côté de la scène :
+           le moteur vide la scène à chaque dessin. -->
       <!-- Repli sans JavaScript : les caps restent atteignables. -->
       <noscript>
         <ul class="boussole-noscript">
@@ -63,7 +72,7 @@
           <li>DRAUKHAIN — la volonté au-delà du possible (à venir)</li>
         </ul>
       </noscript>
-    </main>
+    </div>
 
     <!-- Parole de Léo : l'essentiel du cap survolé (rempli par le JS). -->
     <aside class="boussole-parole" id="boussole-parole" role="status" aria-live="polite">
@@ -71,6 +80,10 @@
 
   </div>
 
-  <script type="module" src="js/boussole-noyau.mjs"></script>
+  <!-- LV5 — la couche de fond AVANT le moteur (son garde laisserait la page
+       vivre sans fond et sans rien dire — défaut payé sur P1). -->
+  <script src="js/ciel-fond.js"></script>
+  <script src="js/ciel.js"></script>
+  <script type="module" src="js/ciel-noeud.mjs"></script>
 </body>
 </html>

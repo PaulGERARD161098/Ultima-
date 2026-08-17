@@ -2,7 +2,10 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- `viewport-fit=cover` (LV5 / P2) : sans lui, les `env(safe-area-inset-*)`
+       valent zéro et la barre système d'iOS recouvre le bas du ciel. Il ne
+       manquait pas tant que le ciel vivait dans un plateau centré. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Ultima — ULTIMA (le personnel)</title>
   <meta name="description" content="ULTIMA, la supra-division personnelle : deux cadrans autour de la rose — GRIMA (ce qui est utile) et NAGA (ce qui fait grandir).">
   <meta name="theme-color" content="#070d18">

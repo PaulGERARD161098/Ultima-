@@ -357,6 +357,10 @@
       vbH = hauteurBoite > 120
         ? Math.max(200, Math.round(vbW * (hauteurBoite / largeurBoite)))
         : Math.round(vbW * (vbW < 600 ? 1.02 : 0.56));
+      // LV5 / P2 — les marges utiles se recalculent ICI, avec le viewBox dont
+      // elles dépendent : elles sont données en pixels CSS et le facteur de
+      // conversion change à chaque redimensionnement.
+      calculerMarges();
       // LV5 — le fond se pose sur la MÊME boîte et le MÊME viewBox, au même
       // instant. C'est le seul endroit du moteur qui connaît les deux, donc le
       // seul où la conversion peut être juste. (`fond` est hoistée : au premier
@@ -393,8 +397,69 @@
     var demiNoms = Object.create(null);
     var nomsMesures = false;
     var DEBORD_LIBELLE = 20;
+
+    // ---- LV5 / P2 — LA ZONE UTILE : le cadrage apprend que le cadre est
+    //      PARTIELLEMENT OCCUPÉ. -------------------------------------------
+    // Le défaut, mesuré sur la maquette plein écran à 390 px : le mobilier
+    // (bandeau, parole, retour) RECOUVRAIT deux galaxies. Il ne volait aucun
+    // clic — il les cachait, ce qui est un défaut distinct qu'aucune assertion
+    // de captation ne voit.
+    // La cause n'est pas la mise en page, c'est le cadrage : il remplit 60 à
+    // 75 % de la plus petite dimension du CADRE ENTIER, donc il pousse les
+    // objets jusqu'aux bords — précisément là où le mobilier est posé. Rétrécir
+    // le ciel serait renoncer à ce que Paul a demandé ; il faut lui dire où il
+    // a le droit de peindre.
+    //
+    // ET CELA DEMANDE DEUX CHOSES, PAS UNE — c'est le piège de cette étape :
+    //   ① la caméra RECULE, puisque la place utile est plus petite ;
+    //   ② le CENTRE OPTIQUE SE DÉCALE, puisque le milieu de la zone utile
+    //      n'est plus le milieu du viewBox. Sans ②, on aurait reculé pour rien :
+    //      les objets resteraient centrés dans le cadre entier et continueraient
+    //      d'entrer sous le mobilier, simplement plus petits.
+    //
+    // Les marges sont données en PIXELS CSS par l'appelant — c'est ce qu'une
+    // coque connaît de son mobilier — et converties ici en unités de viewBox.
+    // Faire porter la conversion à l'appelant serait lui demander de connaître
+    // le viewBox du moteur : la même erreur de repère que celle payée sur P1.
+    // `margesUtiles` accepte un OBJET ou une FONCTION, et la fonction est la
+    // forme juste — la seule qui reste vraie. Premier jet : un objet, mesuré une
+    // fois par l'appelant au montage. Le harnais l'a pris en défaut en
+    // grossissant le titre : la marge haute restait à 119 alors que le bandeau
+    // avait doublé de hauteur. Une mesure prise une fois est une constante qui a
+    // eu raison un jour.
+    // Le moteur DEMANDE donc la place à chaque fois qu'il redimensionne — c'est
+    // lui qui sait quand il en a besoin, et l'appelant n'a plus à s'abonner à
+    // quoi que ce soit.
+    var margesDemandees = options.margesUtiles || null;
+    var mUtile = { haut: 0, bas: 0, gauche: 0, droite: 0 };
+    function calculerMarges() {
+      if (!margesDemandees) { mUtile = { haut: 0, bas: 0, gauche: 0, droite: 0 }; return; }
+      var largeurCSS = conteneur.clientWidth || vbW;
+      var k = largeurCSS > 0 ? vbW / largeurCSS : 1;
+      var m = typeof margesDemandees === 'function' ? margesDemandees() : margesDemandees;
+      if (!m) { mUtile = { haut: 0, bas: 0, gauche: 0, droite: 0 }; return; }
+      // Plafond à 40 % par axe : au-delà, ce ne serait plus un ciel avec du
+      // mobilier, ce serait du mobilier avec un peu de ciel. Un garde-fou qui
+      // dit non valait mieux qu'une scène qui s'effondre sans le dire.
+      var maxV = vbH * 0.4, maxH = vbW * 0.4;
+      mUtile = {
+        haut: Math.max(0, Math.min(maxV, (m.haut || 0) * k)),
+        bas: Math.max(0, Math.min(maxV, (m.bas || 0) * k)),
+        gauche: Math.max(0, Math.min(maxH, (m.gauche || 0) * k)),
+        droite: Math.max(0, Math.min(maxH, (m.droite || 0) * k))
+      };
+    }
+    // Le centre OPTIQUE : le milieu de la zone utile. Sans marges, c'est
+    // exactement le milieu du viewBox — donc le comportement d'hier, au pixel.
+    function centreX() { return (mUtile.gauche + (vbW - mUtile.droite)) / 2; }
+    function centreY() { return (mUtile.haut + (vbH - mUtile.bas)) / 2; }
+
     function distanceIdeale() {
-      var cadre = Math.max(160, Math.min(vbW, vbH));
+      // La plus petite dimension de la ZONE UTILE, et non du cadre : sans
+      // marges, les deux sont identiques.
+      var largeurUtile = vbW - mUtile.gauche - mUtile.droite;
+      var hauteurUtile = vbH - mUtile.haut - mUtile.bas;
+      var cadre = Math.max(160, Math.min(largeurUtile, hauteurUtile));
       if (!cadrageSerre) {
         return ((monde.rayon + DEBORD_LIBELLE) * FOCALE * 2) / cadre * 1.06;
       }
@@ -419,7 +484,7 @@
       // n'est pas appelée par image en mode ordinaire. En cadrage serré elle
       // l'est — c'est le prix de la justesse quand on tourne le monde, et il se
       // compte en quelques dizaines d'opérations.
-      var utileY = Math.max(40, vbH / 2 - MARGE_CADRAGE);
+      var utileY = Math.max(40, hauteurUtile / 2 - MARGE_CADRAGE);
       var cy = Math.cos(cam.yaw), sy = Math.sin(cam.yaw);
       var cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch);
       var d = 0;
@@ -432,7 +497,7 @@
         // la largeur de son propre nom, mesurée sur le texte peint.
         var demiNom = demiNoms[e.noeud.id];
         if (demiNom === undefined) { demiNom = DEMI_NOM_INCONNU; }
-        var utileX = Math.max(40, vbW / 2 - MARGE_HALO - demiNom);
+        var utileX = Math.max(40, largeurUtile / 2 - MARGE_HALO - demiNom);
         var parX = (Math.abs(x1) * FOCALE) / utileX - z2;
         var parY = (Math.abs(y2) * FOCALE) / utileY - z2;
         if (parX > d) { d = parX; }
@@ -477,8 +542,8 @@
       if (plat) {
         var echellePlate = FOCALE / cam.distance;
         return {
-          sx: vbW / 2 + p.x * echellePlate,
-          sy: vbH / 2 + p.y * echellePlate,
+          sx: centreX() + p.x * echellePlate,
+          sy: centreY() + p.y * echellePlate,
           echelle: echellePlate,
           profondeur: cam.distance
         };
@@ -493,7 +558,10 @@
       if (profondeur < 60) { return null; } // derrière la caméra : rien à dessiner
       var echelle = FOCALE / profondeur;
       return {
-        sx: vbW / 2 + x1 * echelle, sy: vbH / 2 + y2 * echelle,
+        // Le centre OPTIQUE, pas le centre du cadre : c'est ce qui empêche les
+        // objets d'entrer sous le mobilier. Sans marges déclarées, les deux
+        // valeurs sont égales et rien ne change.
+        sx: centreX() + x1 * echelle, sy: centreY() + y2 * echelle,
         echelle: echelle, profondeur: profondeur
       };
     }
@@ -588,6 +656,40 @@
       piecesLien.push({ relation: r, el: ligne });
     });
     racine.appendChild(gLiens);
+
+    // LE NOM GRAVÉ SUR LA PASSERELLE (LV5 / P3) — la moitié manquante de la
+    // fonction ④ de l'inventaire LV4. Le trait existait, son nom avait disparu.
+    //
+    // DANS SON PROPRE GROUPE, ET CE N'EST PAS DE LA MISE EN PAGE : `gLiens` est
+    // `aria-hidden="true"` — un trait n'a rien à dire à un lecteur d'écran. Mais
+    // « ⇄ rétroplanning » est une INFORMATION sur la relation, et elle n'est
+    // portée par l'étiquette d'aucune des deux étoiles. Posé dans `gLiens`, le
+    // nom aurait été peint pour l'œil et muet pour tout le reste : une perte
+    // d'accessibilité déguisée en gain visuel.
+    // LA COULEUR ET LA POLICE SE POSENT SUR LE GROUPE, comme pour les noms de
+    // constellation. Sans elles, un `<text>` SVG est peint en NOIR et en
+    // sans-serif : invisible sur fond de nuit, et étranger au registre gravé.
+    // Trouvé en relisant la création des autres libellés avant de lancer la
+    // page — pas en la regardant, où l'on n'aurait rien vu du tout, ce qui est
+    // exactement le problème.
+    // `#d8bd82` est l'or clair DÉJÀ employé par le produit pour ce qui est
+    // gravé ; on n'invente aucune couleur (règle du 2026-08-13).
+    var gNomsLien = svg('g', {
+      'class': 'ciel-liens-noms',
+      'font-family': 'Georgia, "Times New Roman", serif',
+      fill: '#d8bd82'
+    });
+    var piecesNomLien = [];
+    piecesLien.forEach(function (pl) {
+      if (!pl.relation.libelle) { return; }
+      var t = texteSvg({
+        'class': 'ciel-nom-lien', 'font-size': '9', 'letter-spacing': '1.4',
+        'text-anchor': 'middle', opacity: '0'
+      }, pl.relation.libelle);
+      gNomsLien.appendChild(t);
+      piecesNomLien.push({ lien: pl, el: t });
+    });
+    if (piecesNomLien.length) { racine.appendChild(gNomsLien); }
 
     // Les personnes en orbite : la notion séparée du nœud le 2026-08-10.
     // Une personne rattachée à deux fiches orbite les deux — c'est ce qui
@@ -1022,6 +1124,29 @@
           (0.55 + 0.75 * ((a.echelle + b.echelle) / 2)).toFixed(2));
       });
 
+      // Le nom de la passerelle, au milieu de l'arc.
+      piecesNomLien.forEach(function (pn) {
+        var a = projetes[pn.lien.relation.source_id];
+        var b = projetes[pn.lien.relation.target_id];
+        if (!a || !b) { pn.el.setAttribute('opacity', '0'); return; }
+        var mx = (a.sx + b.sx) / 2, my = (a.sy + b.sy) / 2;
+        // Hors cadre, on se TAIT au lieu de peindre au bord : un nom coupé en
+        // deux se lit plus mal qu'un nom absent. Même règle que l'étiquette de
+        // constellation, et pour la même raison.
+        if (mx < 34 || mx > vbW - 34 || my < 16 || my > vbH - 16) {
+          pn.el.setAttribute('opacity', '0');
+          return;
+        }
+        var ech = (a.echelle + b.echelle) / 2;
+        pn.el.setAttribute('x', mx.toFixed(1));
+        // 5 unités au-dessus du trait : posé DESSUS, le nom se fait barrer par
+        // lui — le trait passe pile à la hauteur des lettres.
+        pn.el.setAttribute('y', (my - 5).toFixed(1));
+        pn.el.setAttribute('font-size', Math.max(7, Math.min(13, 9 * ech)).toFixed(1));
+        pn.el.setAttribute('opacity',
+          (0.8 * opaciteProfondeur((a.profondeur + b.profondeur) / 2)).toFixed(3));
+      });
+
       piecesOrbite.forEach(function (po) {
         var a = projetes[po.ancre];
         if (!a) {
@@ -1212,6 +1337,21 @@
       // les deux sans se fier à l'apparence.
       aUnFond: !!fond,
       nbGrains: function () { return fond ? fond.nbGrains() : 0; },
+      // LV5 / P2 — LA ZONE UTILE, en unités de viewBox. Exposée parce qu'un
+      // harnais qui veut juger le remplissage doit connaître le DÉNOMINATEUR :
+      // rapporter l'étendue des étoiles au cadre entier alors qu'un quart est
+      // rendu au mobilier revient à exiger 83 % de la place restante. Le
+      // critère des 60 % ne baisse pas, il se mesure sur la surface où le ciel
+      // a le droit de peindre.
+      zoneUtile: function () {
+        return {
+          gauche: mUtile.gauche, droite: mUtile.droite,
+          haut: mUtile.haut, bas: mUtile.bas,
+          largeur: vbW - mUtile.gauche - mUtile.droite,
+          hauteur: vbH - mUtile.haut - mUtile.bas,
+          centreX: centreX(), centreY: centreY()
+        };
+      },
       // Le coût moyen d'une image, en millisecondes de travail réel.
       coutImage: function () { return coutImage; },
       cadence: function () { return cadence; },

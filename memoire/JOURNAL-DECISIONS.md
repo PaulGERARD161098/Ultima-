@@ -2986,3 +2986,50 @@ la couche de fond sur `ultima.html`, la seule coque déjà au ciel.
   résultat attendu aurait été un mensonge par omission.
 - **Patrimoine COMPLET vert, sortie 0** — dont `smoke-vranesh` (232 assertions),
   `smoke-ciel` et `smoke-lv4-ciel`, tous **sans une retouche**.
+
+## 2026-08-17 — P2 : reculer sans décaler le centre, c'eût été reculer pour rien
+
+Paul : « alors on y va ?? » — P2 ouverte et livrée. `ultima.html` est en plein
+écran ; le plateau devient le fond de l'écran et le mobilier flotte dessus.
+
+- **LE POINT DUR N'ÉTAIT PAS LA CSS, C'ÉTAIT LE CADRAGE.** Retirer le
+  `max-width` n'aurait rien donné : les quatre enfants de la coque s'empilaient
+  dans le flux. Et surtout le cadrage remplissait 60 à 75 % du cadre ENTIER,
+  donc poussait les objets là où le mobilier est posé. D'où `margesUtiles` : une
+  zone où le ciel n'a pas le droit de peindre.
+- **ET IL FALLAIT DEUX EFFETS, PAS UN.** Reculer la caméra ET décaler le CENTRE
+  OPTIQUE. **Sans le second, on aurait reculé pour rien** — les objets seraient
+  restés centrés dans le cadre entier, simplement plus petits, et auraient
+  continué d'entrer sous le bandeau. C'est le genre de moitié de correctif qui
+  passe les tests de débord et ne règle rien.
+- **UNE MESURE PRISE UNE FOIS EST UNE CONSTANTE QUI A EU RAISON UN JOUR.** La
+  coque mesurait le mobilier et passait un objet ; le harnais l'a pris en défaut
+  en grossissant le titre (marge figée à 119 pendant que le bandeau doublait).
+  `margesUtiles` accepte désormais une **fonction**, rappelée par le moteur à
+  chaque redimensionnement : **c'est le moteur qui sait quand il a besoin de la
+  réponse**, pas l'appelant. Vérifié 119 → 315.
+- **ÊTRE CLIQUABLE ET ÊTRE VISIBLE SONT DEUX PROPRIÉTÉS DISTINCTES.** Le défaut
+  qui a motivé P2 était invisible aux assertions existantes : `elementFromPoint`
+  répondait « l'étoile reçoit le geste », et c'était vrai — elle était cachée
+  sous le bandeau. Il a fallu une SECONDE mesure, le chevauchement des boîtes
+  peintes. *Aucune assertion de captation ne dira jamais qu'un objet est masqué.*
+- **UNE ASSERTION REMPLACÉE, ET LE SEUIL N'A PAS BOUGÉ.** `smoke-lv4-coque`
+  exigeait 60 % du CADRE ; un quart du cadre est maintenant rendu au mobilier,
+  donc cela revenait à demander 83 % de la place restante. Le contrôle reste, son
+  **dénominateur** change : 71,8 % de la ZONE UTILE, dans la fourchette de LV4.
+  Baisser le seuil aurait masqué le fait que le ciel remplit très bien ce qu'on
+  lui laisse.
+- **CINQUIÈME INSTRUMENT FAUTIF DU CHANTIER, ET IL ÉTAIT DE MOI** : je comptais
+  l'étiquette de constellation comme un débord alors qu'elle est à `opacity: 0`
+  (le moteur la tait en cadrage serré, donc ne la positionne jamais et elle reste
+  à l'origine avec son texte). `smoke-lv4-ciel` filtrait déjà sur l'opacité —
+  **reprendre sa définition valait mieux que d'en écrire une seconde** : deux
+  harnais qui mesurent la même chose de deux façons finissent par se contredire.
+- **LE BANDEAU CHEVAUCHAIT LE RETOUR** à 390 px (sept pixels, vus sur capture) :
+  un bandeau centré ne cohabite pas avec un bouton d'angle sur un téléphone. Il
+  descend sous sa ligne — et la marge, étant mesurée, a suivi sans qu'on la
+  touche. C'est le bénéfice concret du choix « mesurer plutôt que déclarer ».
+- **CE QUI RESTE OUVERT A MAINTENANT UNE IMAGE** : sur 1670 × 900, deux objets en
+  colonne remplissent 69 % de la hauteur utile et laissent la largeur vide. Le
+  cadrage est juste ; c'est la FORME qui est en cause — question 3, un parti pris
+  visuel que je ne prends pas seul.

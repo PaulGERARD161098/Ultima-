@@ -1,0 +1,257 @@
+// LV5 / P2 — LE PLEIN ÉCRAN SUR LA COQUE DE PRODUCTION (`ultima.html`).
+//
+// Ce que ce harnais prouve, et pourquoi chaque point existe :
+//
+//   1. LA SCÈNE TIENT L'ÉCRAN, et rien ne défile. Un plein écran qui défile
+//      n'est pas un plein écran.
+//   2. AUCUNE ÉTOILE N'EST RECOUVERTE PAR LE MOBILIER. **C'est le critère
+//      central de P2.** Le défaut qui l'a motivé était invisible aux assertions
+//      existantes : à 390 px, le bandeau masquait deux galaxies sans voler
+//      aucun clic. `elementFromPoint` disait « l'étoile reçoit le geste » et
+//      c'était vrai — elle était simplement cachée. **Être cliquable et être
+//      visible sont deux propriétés distinctes, et il faut deux mesures.**
+//   3. LE MOBILIER NE SE CHEVAUCHE PAS LUI-MÊME. Mesuré à 390 px : le retour
+//      occupait 12→115 px et le bandeau centré commençait à 108. Sept pixels de
+//      recouvrement, vus sur capture.
+//   4. LE CIEL REMPLIT SA ZONE UTILE À 60 % AU MOINS — rapporté à la zone
+//      UTILE, et c'est un changement de dénominateur qu'il faut justifier au
+//      lieu de le glisser : réserver un quart du cadre au mobilier PUIS exiger
+//      60 % du cadre entier revient à demander 83 % de la place restante, ce
+//      que les marges de libellé rendent impossible. Le seuil ne baisse pas ; il
+//      se mesure sur la surface où le ciel a le droit de peindre. Mesuré :
+//      52 % du cadre, **72 % de la zone utile** — la fourchette de LV4.
+//   5. LES MARGES SONT MESURÉES, PAS DÉCLARÉES : elles doivent CHANGER quand le
+//      mobilier change de taille. Une constante passerait les points 2 et 4
+//      aujourd'hui et casserait au premier titre plus long.
+//   6. LE CONTRASTE SE MESURE CONTRE LE PIXEL RÉELLEMENT PEINT. Sur un ciel
+//      qui bouge, le texte ne se lit plus sur un jeton CSS : on prend le PIRE
+//      pixel du fond sous la boîte de texte, on le compose avec le voile, et on
+//      calcule le ratio. Vérifier la couleur déclarée ne prouverait rien.
+//   7. LE FOND NE VOLE AUCUN GESTE, le HUD non plus.
+//   8. Zéro erreur console.
+import { chromium } from 'playwright';
+
+const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+const erreurs = [];
+const verdicts = {};
+const chiffres = {};
+
+const HOTE = 'http://127.0.0.1:8123/ultima.html';
+const SELECTEURS_MOBILIER = ['.console-entete', '.console-retour', '#boussole-parole', '.ciel-legende'];
+
+async function ouvrir(largeur, hauteur) {
+  const page = await browser.newPage({ viewport: { width: largeur, height: hauteur } });
+  page.on('console', (m) => { if (m.type() === 'error') erreurs.push(m.text()); });
+  page.on('pageerror', (e) => erreurs.push(String(e)));
+  await page.goto(HOTE, { waitUntil: 'load' });
+  // La caméra ne se pose jamais tout à fait (approche asymptotique) : on laisse
+  // passer un temps borné, on ne guette pas un état stable.
+  await page.waitForTimeout(1900);
+  return page;
+}
+
+function mesurer(page, selecteurs) {
+  return page.evaluate((SELS) => {
+    const luminance = (r, v, bl) => {
+      const f = (c) => {
+        const s = c / 255;
+        return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+      };
+      return 0.2126 * f(r) + 0.7152 * f(v) + 0.0722 * f(bl);
+    };
+    const lireRgb = (txt) => {
+      const m = /rgba?\(([^)]+)\)/.exec(txt || '');
+      if (!m) { return null; }
+      const p = m[1].split(',').map((s) => parseFloat(s));
+      return { r: p[0], v: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 };
+    };
+
+    const vue = window.UltimaCiel.courant();
+    const zone = vue.zoneUtile();
+    const svg = document.querySelector('svg.ciel-svg');
+    const vb = svg.getAttribute('viewBox').split(' ').map(Number);
+    const plateau = document.getElementById('ciel-noeud-plateau');
+    const bp = plateau.getBoundingClientRect();
+
+    // Les boîtes du mobilier réellement peint.
+    const boites = [];
+    for (const sel of SELS) {
+      const el = document.querySelector(sel);
+      if (!el) { continue; }
+      const r = el.getBoundingClientRect();
+      if (r.height > 0 && r.width > 0) {
+        boites.push({ sel, top: r.top, bottom: r.bottom, left: r.left, right: r.right });
+      }
+    }
+    const chevauche = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+
+    // ③ Le mobilier contre lui-même.
+    const collisions = [];
+    for (let i = 0; i < boites.length; i += 1) {
+      for (let j = i + 1; j < boites.length; j += 1) {
+        if (chevauche(boites[i], boites[j])) { collisions.push(boites[i].sel + ' ∩ ' + boites[j].sel); }
+      }
+    }
+
+    // ② Les étoiles contre le mobilier — sur leur BOÎTE PEINTE, nom compris.
+    const etoiles = Array.from(document.querySelectorAll('.ciel-etoile'))
+      .filter((g) => g.getAttribute('display') !== 'none');
+    const recouvertes = [];
+    for (const g of etoiles) {
+      const rb = g.getBoundingClientRect();
+      for (const bo of boites) {
+        if (chevauche(rb, bo)) { recouvertes.push(g.getAttribute('data-noeud-id') + '@' + bo.sel); }
+      }
+    }
+
+    // ④ L'occupation, sur les centres des zones (définition de LV4), rapportée
+    //    à la zone utile ET au cadre entier — les deux sont rendues, pour que
+    //    le changement de dénominateur reste lisible dans les mesures.
+    const zs = etoiles.map((g) => g.querySelector('.ciel-zone'));
+    const xs = zs.map((z) => +z.getAttribute('cx'));
+    const ys = zs.map((z) => +z.getAttribute('cy'));
+    const etX = Math.max(...xs) - Math.min(...xs);
+    const etY = Math.max(...ys) - Math.min(...ys);
+    const occUtile = Math.max(etX / zone.largeur, etY / zone.hauteur);
+    const occCadre = Math.max(etX / vb[2], etY / vb[3]);
+
+    // ⑤ Personne ne sort du cadre — bbox contre viewBox, étiquettes comprises.
+    // L'ÉTIQUETTE DE CONSTELLATION SE FILTRE SUR SON OPACITÉ, et pas seulement
+    // sur `display` — c'est la définition qu'emploie déjà `smoke-lv4-ciel`, et
+    // la reprendre valait mieux que d'en écrire une seconde.
+    // Payé au premier essai : en cadrage serré, le moteur TAIT cette étiquette
+    // (`opacity: 0`) et ne la positionne donc jamais ; elle reste à l'origine du
+    // viewBox avec son texte. Mon filtre la comptait comme un débord de 30
+    // unités. Elle est invisible : ce qui ne se voit pas ne peut pas sortir du
+    // cadre.
+    const peints = Array.from(svg.querySelectorAll('.ciel-etoile'))
+      .filter((g) => g.getAttribute('display') !== 'none')
+      .concat(Array.from(svg.querySelectorAll('text.ciel-nom-amas'))
+        .filter((t) => +(t.getAttribute('opacity') || '1') > 0.02));
+    let dehors = 0;
+    for (const el of peints) {
+      const bb = el.getBBox();
+      if (bb.x < -0.5 || bb.y < -0.5 || bb.x + bb.width > vb[2] + 0.5 || bb.y + bb.height > vb[3] + 0.5) {
+        dehors += 1;
+      }
+    }
+
+    // ⑥ LE CONTRASTE CONTRE LE PIRE PIXEL PEINT.
+    const canvas = document.querySelector('canvas.ciel-fond');
+    let contraste = null;
+    const titre = document.querySelector('.console-entete .titre-principal');
+    const bloc = document.querySelector('.console-entete');
+    if (canvas && titre && bloc) {
+      const bt = titre.getBoundingClientRect();
+      const bc = canvas.getBoundingClientRect();
+      const ech = canvas.width / bc.width; // px device par px CSS
+      const x0 = Math.max(0, Math.round((bt.left - bc.left) * ech));
+      const y0 = Math.max(0, Math.round((bt.top - bc.top) * ech));
+      const w = Math.min(canvas.width - x0, Math.round(bt.width * ech));
+      const h = Math.min(canvas.height - y0, Math.round(bt.height * ech));
+      let pireL = 0;
+      if (w > 0 && h > 0) {
+        const d = canvas.getContext('2d').getImageData(x0, y0, w, h).data;
+        for (let i = 0; i < d.length; i += 4) {
+          const l = luminance(d[i], d[i + 1], d[i + 2]) * (d[i + 3] / 255);
+          if (l > pireL) { pireL = l; }
+        }
+      }
+      const st = getComputedStyle(bloc);
+      const voile = lireRgb(st.backgroundColor);
+      const encre = lireRgb(getComputedStyle(titre).color);
+      if (voile && encre) {
+        // Le fond effectif : le voile composé sur le pire pixel du ciel.
+        const lVoile = luminance(voile.r, voile.v, voile.b);
+        const lFond = voile.a * lVoile + (1 - voile.a) * pireL;
+        const lEncre = luminance(encre.r, encre.v, encre.b);
+        const clair = Math.max(lEncre, lFond); const sombre = Math.min(lEncre, lFond);
+        contraste = { ratio: (clair + 0.05) / (sombre + 0.05), pireL, alphaVoile: voile.a };
+      }
+    }
+
+    // ⑦ Le geste va-t-il à l'étoile ? (le fond ni le HUD ne doivent l'intercepter)
+    let gestesOk = true;
+    for (const g of etoiles) {
+      const z = g.querySelector('.ciel-zone').getBoundingClientRect();
+      const cible = document.elementFromPoint(z.left + z.width / 2, z.top + z.height / 2);
+      if (!cible || !cible.closest('.ciel-etoile')) { gestesOk = false; }
+    }
+
+    return {
+      partL: bp.width / window.innerWidth,
+      partH: bp.height / window.innerHeight,
+      deborde: document.documentElement.scrollHeight - window.innerHeight,
+      collisions, recouvertes, dehors, gestesOk,
+      occUtile, occCadre,
+      zone: { haut: zone.haut, bas: zone.bas, largeur: zone.largeur, hauteur: zone.hauteur },
+      contraste,
+      nbEtoiles: etoiles.length,
+      grains: vue.nbGrains()
+    };
+  }, selecteurs);
+}
+
+for (const [largeur, hauteur, nom] of [[390, 844, 'a390'], [1280, 860, 'a1280'], [1670, 900, 'a1670']]) {
+  const page = await ouvrir(largeur, hauteur);
+  const m = await mesurer(page, SELECTEURS_MOBILIER);
+
+  chiffres[nom] = {
+    partL: +m.partL.toFixed(3), partH: +m.partH.toFixed(3), deborde: m.deborde,
+    occUtile: +m.occUtile.toFixed(3), occCadre: +m.occCadre.toFixed(3),
+    zoneHaut: Math.round(m.zone.haut), zoneBas: Math.round(m.zone.bas),
+    zoneHauteur: Math.round(m.zone.hauteur),
+    contraste: m.contraste ? +m.contraste.ratio.toFixed(2) : null,
+    pireLuminanceDuCiel: m.contraste ? +m.contraste.pireL.toFixed(4) : null,
+    grains: m.grains
+  };
+
+  verdicts['pleinEcran_' + nom] = m.partL >= 0.98 && m.partH >= 0.98;
+  verdicts['rienNeDefile_' + nom] = m.deborde <= 1;
+  // LE CRITÈRE CENTRAL DE P2.
+  verdicts['aucuneEtoileRecouverte_' + nom] = m.recouvertes.length === 0;
+  verdicts['leMobilierNeSeChevauchePas_' + nom] = m.collisions.length === 0;
+  verdicts['leCielRemplitSaZoneUtile_' + nom] = m.occUtile >= 0.6;
+  verdicts['personneNeSortDuCadre_' + nom] = m.dehors === 0;
+  verdicts['leGesteVaALEtoile_' + nom] = m.gestesOk === true;
+  verdicts['lesMargesSontReservees_' + nom] = m.zone.haut > 0 && m.zone.bas > 0;
+  verdicts['contrasteAA_' + nom] = !!m.contraste && m.contraste.ratio >= 4.5;
+  if (m.recouvertes.length) { chiffres[nom].recouvertes = m.recouvertes; }
+  if (m.collisions.length) { chiffres[nom].collisions = m.collisions; }
+
+  await page.close();
+}
+
+// ---------------------------------------------------------------------------
+// ⑤ LES MARGES SUIVENT LE MOBILIER — la preuve qu'elles sont mesurées.
+// Une constante passerait tout ce qui précède et casserait au premier titre
+// plus long. On grossit donc le bandeau et on exige que la marge haute suive.
+// ---------------------------------------------------------------------------
+{
+  const page = await ouvrir(1280, 860);
+  const avant = await page.evaluate(() => window.UltimaCiel.courant().zoneUtile().haut);
+  await page.evaluate(() => {
+    const t = document.querySelector('.console-entete .titre-principal');
+    t.style.fontSize = '3.4rem';           // un titre bien plus haut
+    t.textContent = 'ULTIMA — TITRE TRÈS LONG POUR ÉPROUVER LA MESURE';
+    // On redéclenche le rendu comme le ferait un redimensionnement.
+    window.dispatchEvent(new Event('resize'));
+  });
+  await page.waitForTimeout(900);
+  const apres = await page.evaluate(() => window.UltimaCiel.courant().zoneUtile().haut);
+  chiffres.margesSuivent = { avant: Math.round(avant), apres: Math.round(apres) };
+  // La marge doit AVOIR AUGMENTÉ. C'est la seule façon de distinguer une mesure
+  // d'une constante bien choisie.
+  verdicts.lesMargesSuiventLeMobilier = apres > avant + 5;
+  await page.close();
+}
+
+verdicts.zeroErreurConsole = erreurs.length === 0;
+
+console.log(JSON.stringify(verdicts, null, 2));
+console.log('Mesures :', JSON.stringify(chiffres, null, 2));
+if (erreurs.length) { console.log('Erreurs :', erreurs.slice(0, 5)); }
+const ok = Object.values(verdicts).every((v) => v === true);
+console.log(ok ? 'SMOKE LV5-PLEIN-ECRAN VERT' : 'SMOKE LV5-PLEIN-ECRAN ROUGE');
+await browser.close();
+process.exit(ok ? 0 : 1);
