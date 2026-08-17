@@ -3074,3 +3074,19 @@ Paul : « continue à tourner en solo ». Les sept coques ordinaires sont au cie
 - **UN VERDICT RENDU PENDANT QU'ON MODIFIE LE CODE NE VAUT RIEN** : j'ai touché
   `ciel.js` pendant un patrimoine en cours. Le run a été refait en entier, sans
   édition, et c'est celui-là qui compte.
+
+## 2026-08-17 — « mets-moi toujours les liens des choses à vérifier »
+
+Demande de Paul, inscrite en **règle permanente** dans `CLAUDE.md` (§Règles
+permanentes), en renforcement de la règle « preview Vercel » du 2026-08-01.
+
+- **Ce que la règle exige désormais** : non plus *un* lien de preview en fin de
+  boucle, mais **la liste des liens cliquables page par page**, avec pour chacun
+  ce qui a changé et ce qui mérite l'œil de Paul. À **chaque** rapport, y compris
+  en cours de travail.
+- **Pourquoi c'est une faute de ne donner que la preview** : Paul doit alors
+  chercher lui-même ce que Léo vient de modifier. Le travail est rendu à moitié —
+  la vérification fait partie de la livraison, pas de la charge de Paul.
+- **Corollaire** : quand une page n'est pas encore vérifiable (déploiement en
+  cours, palier non poussé), le DIRE plutôt que de donner un lien qui ne montrera
+  rien. Un lien qui ne prouve pas ce qu'il prétend est pire que pas de lien.
