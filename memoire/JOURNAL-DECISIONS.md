@@ -3033,3 +3033,44 @@ Paul : « alors on y va ?? » — P2 ouverte et livrée. `ultima.html` est en pl
   colonne remplissent 69 % de la hauteur utile et laissent la largeur vide. Le
   cadrage est juste ; c'est la FORME qui est en cause — question 3, un parti pris
   visuel que je ne prends pas seul.
+
+## 2026-08-17 — P3 : une fonction déclarée portée sur un écran incapable de la contredire
+
+Paul : « continue à tourner en solo ». Les sept coques ordinaires sont au ciel ;
+`boussole-noyau.mjs` ne sert plus qu'à la racine.
+
+- **LE NOM GRAVÉ DE LA PASSERELLE ÉTAIT PERDU DEPUIS LV4**, et le cadrage disait
+  la fonction « portée ». Le trait l'était ; le nom, jamais — l'adaptateur
+  jetait `lienLibelle`. **La coque pilote ne pouvait pas le voir : elle n'a aucun
+  cap jumeau.** *Une fonction déclarée portée sur un écran incapable de la
+  contredire n'est pas portée, elle est non testée.* Même piège que le cap « à
+  venir » en LV4 — et la même parade : éprouver la fonction là où elle EXISTE.
+- **UN DÉFAUT DE PRODUIT ANTÉRIEUR À TOUT LE CHANTIER, démasqué par la reprise
+  des assertions** : le repli sans JavaScript d'IMLADRIK annonçait VRANESH et
+  DRAUKHAIN « à venir » et sans lien, alors qu'ils sont bâtis. Deux tiers du
+  quadrant inatteignables sans JS, invisibles parce qu'on ne regarde ce repli
+  qu'avec JS désactivé. Le harnais compare désormais le repli au REGISTRE sur les
+  sept coques.
+- **UN FAUX VERT QUE J'AVAIS ÉCRIT MOI-MÊME.** « Halo allumé au survol » passait
+  par chance de timing : la scène GLISSE sous le curseur immobile (caméra
+  asymptotique), donc le `:hover` s'active et se désactive et l'opacité lue
+  dépend de l'instant du déclic (0,146 ici, 0 là, pour un `:hover` actif dans les
+  deux cas). Mesuré au FOCUS, qui est stable. *Une assertion verte par chance est
+  plus dangereuse qu'une assertion rouge.*
+- **UN REGEX STRUCTUREL A MANGÉ LE DÉBUT DE DEUX HARNAIS.** Ma faute, et la
+  leçon est nette : un remplacement s'ancre sur du TEXTE EXACT, jamais sur une
+  structure devinée — surtout pas appliqué à plusieurs fichiers d'un coup.
+  Restaurés depuis git, réappliqués proprement.
+- **LES ASSERTIONS D'ORDRE SE SCINDENT, elles ne s'abandonnent pas en bloc** :
+  « les caps dans l'ordre du registre » portait DEUX garanties. Que le registre
+  déclare tel ordre ne dépend d'aucun support — conservé. Que le DOM le respecte,
+  non — abandonné (la géométrie range).
+- **UN SCRIPT DE CONVERSION QUI REFUSE L'À-PEU-PRÈS** valait mieux que sept
+  éditions à la main : il a refusé `imladrik.html` (un attribut de plus au
+  `<body>`) au lieu de la convertir à moitié.
+- **`hover()` VISE LE CENTRE D'UNE BOÎTE**, et celle d'un groupe englobe le nom
+  peint sous l'étoile : le centre tombe sur du vide. On survole la zone de
+  captation, faite pour ça.
+- **UN VERDICT RENDU PENDANT QU'ON MODIFIE LE CODE NE VAUT RIEN** : j'ai touché
+  `ciel.js` pendant un patrimoine en cours. Le run a été refait en entier, sans
+  édition, et c'est celui-là qui compte.

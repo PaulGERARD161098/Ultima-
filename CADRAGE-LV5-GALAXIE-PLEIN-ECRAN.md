@@ -729,3 +729,95 @@ grille), pas une correction de cadrage. Je ne le prends pas seul.
 **Ouvrir P3** — les sept coques ordinaires, sur un module désormais éprouvé en
 plein écran. Le piège est connu et le harnais le tient déjà : chaque coque doit
 **exiger son canvas** au lieu de s'en remettre au garde du moteur.
+
+---
+
+# 14. P3 — les sept coques ordinaires au ciel. Livrée le 2026-08-17.
+
+Les sept coques (`alpha`, `grima`, `naga`, `bcp`, `tao`, `imladrik`,
+`adramelech`) rendent leur nœud en ciel, en plein écran. **`js/boussole-noyau.mjs`
+ne sert plus qu'à `index.html`** — la racine, qui est P4.
+
+## 14.1 La conversion est faite par un script qui REFUSE d'à-peu-près
+
+Sept éditions à la main sur la même transformation, c'est sept occasions de
+diverger. Le script exige les six motifs et **échoue bruyamment** si l'un manque
+— ce qu'il a fait sur `imladrik.html`, dont le `<body>` porte un attribut de plus
+(`data-quadrant`). Traitée à part, en conservant cet attribut : il n'appartient
+pas à la boussole et rien ne dit qu'il ne sert pas ailleurs.
+
+## 14.2 Le nom gravé sur la passerelle — une fonction à moitié portée depuis LV4
+
+L'inventaire LV4 §13.1 listait comme fonction ④ « **la passerelle ET SON NOM
+GRAVÉ** ». Le trait avait été porté ; le nom, non — l'adaptateur créait la
+relation et **jetait `lienLibelle`**.
+
+**Et la coque pilote ne pouvait pas s'en apercevoir** : `ultima-perso` n'a aucun
+cap jumeau. La fonction avait donc été déclarée portée sur un écran *incapable de
+la contredire* — exactement le piège du cap « à venir » en LV4, et il se referme
+de la même façon : on éprouve une fonction là où elle EXISTE. Un seul écran en a,
+TAO (reshiram ⇄ zekrom), et c'est désormais lui qui la garde.
+
+Le nom vit dans son propre groupe, **pas** dans celui des traits : `gLiens` est
+`aria-hidden` — un trait n'a rien à dire à un lecteur d'écran, mais
+« ⇄ rétroplanning » est une information que l'étiquette d'aucune des deux étoiles
+ne porte. L'y laisser aurait été peindre pour l'œil et se taire pour tout le
+reste.
+
+## 14.3 ~200 assertions reprises, chacune classée
+
+`tests/_caps.mjs` — la lecture des caps, indépendante du support. Six harnais
+posaient la même question (« qu'est-ce qu'un cap, comment le lit-on ») ; six
+réécritures séparées, c'étaient six occasions de diverger. Il sert **les deux
+supports**, ce qui est sa raison d'être pendant une migration en cours : la
+racine reste en boussole jusqu'à P4.
+
+| Abandonnée | Sa raison, écrite dans le harnais |
+|---|---|
+| Passerelle en `<path>`, en arc, milieu hors du médaillon | L'arc **contournait le médaillon central**, qui n'existe plus (descendu en sceau). Le détour n'a plus d'objet. |
+| Le libellé suit le tracé (`textPath`) | Sur un segment qui tourne en volume, il s'écrirait **à l'envers** la moitié du temps. |
+| « n aiguilles tracées » | L'aiguille joignait un **moyeu** ; un ciel n'en a pas. Remplacée par « n étoiles ». |
+| « les caps dans l'ordre du registre » | Une constellation range par **géométrie**. |
+| « est un lien `<a>` », `href`, `target`, `rel` | L'étoile est un `<g role="button">` : enveloppée d'une ancre, elle **perdait le focus clavier**. Remplacées par le clic et le repli. |
+
+**Les assertions d'ordre sont SCINDÉES, pas abandonnées en bloc** : elles
+portaient deux garanties de natures différentes. Que le *registre* déclare
+GRIMA→[RIVEN, NICOL BOLAS] dans cet ordre ne dépend d'aucun support — c'est
+conservé. Que le *DOM* les rende dans le même ordre, non.
+
+## 14.4 🔻 CE QUE LA REPRISE A FAIT SORTIR
+
+1. **UN DÉFAUT DE PRODUIT, ANTÉRIEUR À TOUT CE CHANTIER.** Le repli
+   `<noscript>` d'IMLADRIK annonçait VRANESH et DRAUKHAIN « à venir » et **sans
+   lien**, alors qu'ils sont bâtis depuis. **Deux tiers du quadrant étaient
+   inatteignables sans JavaScript** — et personne ne pouvait le voir : on ne
+   regarde ce repli qu'avec JS désactivé. Même faute qu'ALTHEA le 2026-08-06.
+   Corrigé, et le harnais compare désormais **le repli au registre sur les sept
+   coques**, pour que la liste ne puisse plus se périmer en silence.
+2. **UN FAUX VERT DE MA MAIN.** « Halo allumé au survol » passait sur ALPHA par
+   chance de timing : le halo a une transition de 120 ms et surtout **la scène
+   glisse sous le curseur immobile** (approche asymptotique de la caméra), si
+   bien que le `:hover` s'active et se désactive et que la valeur lue dépend de
+   l'instant du déclic — 0,146 sur ALPHA, 0 sur IMLADRIK, pour un `:hover`
+   pourtant actif dans les deux cas. Mesuré désormais **au focus**, qui ne dépend
+   d'aucune position de souris et porte la garantie qui compte le plus.
+3. **UNE ERREUR DE MÉTHODE DE MA PART.** Pour remplacer ce bloc dans deux
+   harnais, j'ai appliqué un **regex structurel** — il a mangé le début des deux
+   fichiers. Restaurés depuis git, réappliqués par **ancrage sur du texte
+   exact**. *Un remplacement doit s'accrocher à ce qui est écrit, jamais à une
+   structure devinée.*
+4. **`hover()` VISE LE CENTRE D'UNE BOÎTE, PAS UNE SURFACE UTILE.** Celle du
+   groupe englobe le nom peint sous l'étoile : son centre tombe **entre les
+   deux**, sur du vide. On survole la zone de captation, faite pour le geste.
+
+## 14.5 Vérification
+
+**Patrimoine COMPLET vert, sortie 0** — dont `smoke-vranesh` (232 assertions),
+`smoke-ciel`, et les trois harnais LV5. Relancé **sans aucune édition en cours
+d'exécution** : le run précédent avait été pollué par mes modifications, et un
+verdict rendu pendant qu'on change le code ne vaut rien.
+
+## 14.6 Prochaine action unique
+
+**Ouvrir P4 — la racine (`index.html`)**, le seul écran encore en boussole et
+celui que Paul juge. Elle passe en dernier, sur un module éprouvé huit fois.
