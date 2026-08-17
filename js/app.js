@@ -1931,6 +1931,13 @@
       libellesType: LIBELLES_TYPE,
       libellesStatut: LIBELLES_STATUT,
       correspond: correspond,
+      // LE FOND ÉTOILÉ, ici aussi (Paul, 2026-08-17 : « mettre le fond aux
+      // étoiles partout »). RIVEN garde en revanche son AMAS DE RÉSEAU — pas de
+      // couronne : celle-ci range deux à quatre caps de menu, et RIVEN affiche
+      // des centaines de fiches groupées par métier, où la position PORTE de
+      // l'information. Le fond est un décor, la disposition est une donnée : l'un
+      // se partage partout, l'autre non.
+      fond: true,
       plat: cielPlatRetenu()
     });
 

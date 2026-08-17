@@ -238,41 +238,123 @@
   // majorer le rayon recule la caméra pour rien, et c'est précisément le défaut
   // qu'on corrige. Fonction pure au sens utile : elle ne touche ni au DOM ni au
   // réseau, et deux appels sur le même monde donnent le même résultat.
-  // LES GÉMEAUX — deux caps jumeaux posés EN OPPOSITION (LV5, dicté par Paul le
-  // 2026-08-17 : « pour TAO, mets plutôt Zekrom et Reshiram en opposé,
-  // visuellement, en mode constellation Castor et Pollux »).
+  // LA COURONNE — LA DISPOSITION DES ÉCRANS DE NAVIGATION (LV5).
+  // ---------------------------------------------------------------------------
+  // Dicté par Paul le 2026-08-17 : « la rotation sur ULTIMA n'est pas folle, ça ne
+  // me paraît pas à la page par rapport à ce qui existe ailleurs dans l'outil :
+  // IL FAUT LES MÊMES STANDARDS PARTOUT. »
   //
-  // Le défaut : `construireMonde` range les étoiles d'un écran comme un amas de
-  // réseau, ce qui EMPILE deux caps l'un au-dessus de l'autre (vu sur capture).
-  // Or RESHIRAM et ZEKROM sont deux PÔLES — le réel et l'idéal —, reliés par le
-  // rétroplanning. Les empiler dit « une liste » ; les opposer dit ce qu'ils sont.
+  // Ce qui a mené ici, et il faut le dire : la veille, j'avais posé les Gémeaux
+  // comme un cas SPÉCIAL, réservé à deux caps JUMEAUX, en argumentant qu'opposer
+  // deux caps sans lien « affirmerait une symétrie que le registre ne déclare
+  // pas ». Paul a tranché l'inverse, et il a raison sur le fond : un outil qui
+  // range ses écrans de trois façons différentes n'a pas de forme, il a des
+  // exceptions. **Les Gémeaux ne sont pas un cas spécial : c'est le cas n = 2 de
+  // la couronne.** Un seul mécanisme, tous les écrans.
   //
-  // POURQUOI CES COORDONNÉES, ET PAS SIMPLEMENT (±d, 0, 0). La caméra s'ouvre
-  // tournée (yaw = 0,6). Poser les étoiles sur l'axe X du MONDE les ferait donc
-  // apparaître de biais et rapprochées — l'opposition serait dans les données et
-  // pas à l'écran, ce qui ne sert à rien.
-  // La projection donne x1 = x·cos(yaw) + z·sin(yaw) et z1 = −x·sin(yaw) + z·cos(yaw).
-  // En posant x = ±d·cos(yaw) et z = ±d·sin(yaw), on obtient x1 = ±d et **z1 = 0** :
-  // les deux étoiles tombent exactement de part et d'autre du centre de l'écran,
-  // à la même profondeur. L'opposition est alors VUE, pas seulement calculée.
+  // Le défaut qu'elle corrige : `construireMonde` range les étoiles comme un amas
+  // de RÉSEAU — ce qui convient à RIVEN (des centaines de fiches sans ordre) et
+  // pas du tout à un MENU de deux à quatre caps, qu'il empile en colonne en
+  // laissant la largeur vide (mesuré : 0 unité d'écart horizontal sur ULTIMA).
   //
-  // L'INCLINAISON EST VOULUE. Parfaitement alignées, deux étoiles font un
-  // diagramme ; Castor et Pollux ne sont pas sur une horizontale. L'une monte,
-  // l'autre descend d'autant — c'est ce qui fait lire une constellation plutôt
-  // qu'un axe.
-  function disposerEnOpposition(monde, yaw, pitch) {
-    if (monde.etoiles.length !== 2) { return monde; }
-    var d = monde.rayon * 0.62;
+  // POURQUOI CES COORDONNÉES. La caméra s'ouvre tournée (yaw) et plongeante
+  // (pitch). Poser la couronne dans le plan XY du MONDE la montrerait de biais,
+  // écrasée — la forme serait dans les données et pas à l'écran, ce qui ne sert à
+  // rien. On part donc de la position VOULUE À L'ÉCRAN (u, v) et on remonte aux
+  // coordonnées du monde en annulant la rotation :
+  //     x1 = x·cos(yaw) + z·sin(yaw)   et   z1 = −x·sin(yaw) + z·cos(yaw)
+  //   → x = u·cos(yaw), z = u·sin(yaw) donne x1 = u ET z1 = 0 ;
+  //     y2 = y·cos(pitch) − z1·sin(pitch) = y·cos(pitch)
+  //   → y = v / cos(pitch) donne y2 = v.
+  // Toutes les étoiles tombent ainsi sur le cercle voulu, À LA MÊME PROFONDEUR.
+  //
+  // L'INCLINAISON ET L'IRRÉGULARITÉ SONT VOULUES. Une couronne parfaitement
+  // alignée et parfaitement régulière est un CADRAN — c'est précisément la
+  // boussole qu'on vient de quitter. Le léger basculement et la variation de
+  // rayon font lire une constellation. Elles sont déterministes : même écran,
+  // même ciel (règle du repo depuis le layout d'arbre).
+  var INCLINAISON = 0.17;      // ~10° : assez pour n'être pas un axe, trop peu pour bancaler
+  // LA COURONNE EST UNE ELLIPSE, ET ELLE ÉPOUSE LA ZONE UTILE.
+  // Un CERCLE ne peut pas remplir un cadre qui n'est pas carré : sur un
+  // téléphone (390 × 608 utiles), le cadrage recule la caméra jusqu'à ce que le
+  // cercle tienne en LARGEUR, et toute la hauteur reste vide. Mesuré avant
+  // correction : 0,557 d'occupation sur ULTIMA à 390 px, et **0,20 sur NICOL
+  // BOLAS** (quatre caps, quatre noms larges) — très loin des 60 % exigés, alors
+  // que le même écran remplit 75 % sur un ordinateur.
+  // En donnant au nuage le rapport d'aspect du cadre, le cadrage serré remplit
+  // les DEUX axes en même temps au lieu de buter sur le plus étroit.
+  // `aspect` vaut 1 par défaut : sans zone utile connue, la couronne reste un
+  // cercle et se comporte comme avant.
+  function disposerEnCouronne(monde, yaw, pitch, aspect) {
+    var n = monde.etoiles.length;
+    if (n < 2) { return monde; }
+    var R = monde.rayon * 0.62;
+    // Racine carrée : on répartit l'écart de forme entre les deux axes au lieu
+    // de tout mettre sur un seul, ce qui garde une ellipse et non un segment.
+    // La plage est large exprès : l'aspect utile réel va de ~0,35 (téléphone à
+    // quatre caps) à ~2,3 (écran large à deux caps). La borner trop serré
+    // reviendrait à refuser au nuage la forme du cadre — le défaut qu'on corrige.
+    var etirement = Math.sqrt(Math.max(0.2, Math.min(5, aspect || 1)));
+    var Rx = R * etirement;
+    var Ry = R / etirement;
+    // LE DÉPART DÉPEND DE n, et les deux cas se justifient :
+    //   — à DEUX, l'horizontale est la seule qui remplisse la largeur ; partir du
+    //     haut les empilerait, c'est-à-dire exactement le défaut qu'on corrige ;
+    //   — à TROIS et plus, on part du haut, ce qui reprend l'idiome de la boussole
+    //     (« premier cap plein Nord, puis sens horaire ») et garde au produit son
+    //     vocabulaire.
+    // L'AXE DE L'OPPOSITION SUIT LA DIMENSION LA PLUS LONGUE DE LA PLACE UTILE.
+    // À deux caps, opposer HORIZONTALEMENT est juste sur un écran large — c'est
+    // ce que Paul a validé sur TAO — et faux sur un téléphone, où la largeur est
+    // la dimension courte : mesuré 0,548 d'occupation contre 0,72 avant la
+    // couronne. **« En opposé » ne dit pas « à l'horizontale »** : haut/bas est
+    // une opposition tout autant, et c'est la seule qui remplisse un cadre
+    // étroit. Le standard ne change pas, il s'applique à la forme du cadre.
+    var horizontal = (aspect || 1) >= 1;
+    // À QUATRE, ON ÉVITE LES POSITIONS LATÉRALES EXTRÊMES. Un point pile sur
+    // l'axe horizontal pousse son nom au plus loin, et c'est le nom qui borne le
+    // cadrage. En partant à 45°, les quatre points se placent « en coins » :
+    // aucun n'atteint le maximum latéral, et le nuage respire.
+    var depart = (n === 2
+      ? (horizontal ? 0 : -Math.PI / 2)
+      : (n === 4 ? -Math.PI / 4 : -Math.PI / 2)) + INCLINAISON;
     var cy = Math.cos(yaw), sy = Math.sin(yaw);
-    // La hauteur est corrigée du tangage : sans `cos(pitch)`, l'inclinaison
-    // apparente changerait avec l'angle de la caméra et l'un des deux pôles
-    // paraîtrait plus haut que l'autre pour une raison qui n'est pas la sienne.
-    var h = d * 0.17 / Math.max(0.2, Math.cos(pitch));
-    [1, -1].forEach(function (signe, i) {
-      var e = monde.etoiles[i];
-      e.x = signe * d * cy;
-      e.z = signe * d * sy;
-      e.y = -signe * h;
+    var cp = Math.max(0.2, Math.cos(pitch));
+    // LES NOMS LONGS VONT AUX POSITIONS VERTICALES, et ce n'est pas un détail de
+    // rangement : c'est ce qui décide du cadrage.
+    // Un nom en position latérale extrême déborde de toute sa demi-largeur — et
+    // c'est cette demi-largeur qui borne la distance de la caméra, donc la taille
+    // de tout le ciel. Le MÊME nom placé en haut ou en bas ne coûte que la
+    // hauteur d'une ligne de texte.
+    // Mesuré sur ADRAMELECH à 390 px, dont un cap s'appelle « RAPPROCHEMENTS » :
+    // 0,337 d'occupation, contre 0,696 sur NAGA qui a trois caps aussi mais des
+    // noms courts. **La longueur d'un libellé décidait de la taille du ciel.**
+    // On apparie donc les noms les plus longs aux positions les moins latérales.
+    // La longueur en CARACTÈRES suffit ici : les demi-largeurs réelles ne sont
+    // mesurées qu'après la première image peinte, et attendre pour disposer
+    // ferait sauter le ciel sous les yeux.
+    var positions = [];
+    for (var k = 0; k < n; k++) {
+      var ak = depart + (k * 2 * Math.PI) / n;
+      positions.push({ a: ak, lateralite: Math.abs(Math.cos(ak)) });
+    }
+    positions.sort(function (p1, p2) { return p1.lateralite - p2.lateralite; });
+    var parLongueur = monde.etoiles.slice().sort(function (e1, e2) {
+      return (e2.noeud.nom || '').length - (e1.noeud.nom || '').length;
+    });
+    var placement = Object.create(null);
+    parLongueur.forEach(function (e, rang) { placement[e.noeud.id] = positions[rang].a; });
+
+    monde.etoiles.forEach(function (e, i) {
+      var a = placement[e.noeud.id];
+      if (a === undefined) { a = depart + (i * 2 * Math.PI) / n; }
+      // Rayon modulé, déterministe : une couronne au compas ferait un cadran.
+      var irregulier = 1 + 0.07 * Math.cos(i * 2.399);
+      var u = Math.cos(a) * Rx * irregulier;
+      var v = Math.sin(a) * Ry * irregulier;
+      e.x = u * cy;
+      e.z = u * sy;
+      e.y = v / cp;
     });
     return monde;
   }
@@ -355,9 +437,10 @@
     // argument parce que le placement en dépend (voir `disposerEnOpposition`) —
     // et `cam` n'existe pas encore ici, ce qui est justement pourquoi les deux
     // constantes sont déclarées avant elle.
-    if (options.opposition) {
-      disposerEnOpposition(monde, YAW_OUVERTURE, PITCH_OUVERTURE);
-    }
+    // (La couronne est posée dans `dimensionner()` : elle a besoin du viewBox et
+    // des marges, qui ne sont pas encore connus ici. Premier jet : elle était
+    // appelée à cet endroit, avec un viewBox encore à sa valeur par défaut de
+    // 900 × 560 — donc un rapport d'aspect faux sur tous les écrans.)
     if (cadrageSerre) { recentrerSurLesEtoiles(monde); }
     // Rayon de RÉFÉRENCE des effets de profondeur (opacité, seuil « proche »).
     // Hors cadrage serré c'est la constante d'hier, à l'identique : ces deux
@@ -423,6 +506,37 @@
         // celle que le viewBox implique, plutôt qu'un canvas de zéro pixel.
         var hCSS = hauteurBoite > 120 ? hauteurBoite : largeurBoite * (vbH / vbW);
         fond.poser(largeurBoite, hCSS, vbW, vbH);
+      }
+      // LA COURONNE SE RECALCULE ICI, et c'est le seul endroit possible : elle a
+      // besoin du viewBox ET des marges, et `dimensionner` est la seule fonction
+      // qui connaisse les deux au même instant. Bénéfice second, gratuit : la
+      // disposition suit la rotation du téléphone au lieu de rester celle du
+      // montage.
+      // `monde` est défini ici — le premier appel de `dimensionner` a lieu après
+      // sa construction. Le recentrage suit, sinon `rayonReel` décrirait le nuage
+      // d'AVANT la couronne et le cadrage serré viserait à côté.
+      if (options.couronne && monde && monde.etoiles) {
+        // L'ASPECT SE CALCULE SUR LA PLACE LAISSÉE AUX ÉTOILES, PAS SUR LE CADRE.
+        // Deuxième correction du même défaut, et la mesure a été formelle : avec
+        // l'aspect du cadre brut, l'ellipse ne changeait RIEN (0,555 contre 0,557
+        // sur ULTIMA à 390 px). La forme du nuage n'était pas la limite — les
+        // NOMS le sont. Un nom occupe la même largeur quelle que soit la distance
+        // de la caméra : reculer éloigne les étoiles sans jamais rétrécir leurs
+        // libellés (leçon du 2026-08-13, payée une seconde fois ici).
+        // Sur 390 px, `MARGE_HALO + DEMI_NOM` mange 112 unités de CHAQUE côté :
+        // il ne reste que 166 unités utiles en largeur contre 480 en hauteur.
+        // L'aspect réel est donc de 0,35 — la couronne doit y être franchement
+        // VERTICALE. Sur un 1240, le même calcul donne 2,0 et elle s'étale.
+        // C'est du responsive au sens propre : on empile sur un téléphone parce
+        // que c'est la seule forme qui remplisse, on étale sur un écran large
+        // parce qu'on peut.
+        var lU = vbW - mUtile.gauche - mUtile.droite;
+        var hU = vbH - mUtile.haut - mUtile.bas;
+        var placeLargeur = Math.max(30, lU - 2 * (MARGE_HALO + DEMI_NOM_INCONNU));
+        var placeHauteur = Math.max(30, hU - 2 * MARGE_CADRAGE);
+        disposerEnCouronne(monde, YAW_OUVERTURE, PITCH_OUVERTURE,
+          placeLargeur / placeHauteur);
+        if (cadrageSerre) { recentrerSurLesEtoiles(monde); }
       }
     }
     // La distance ne se choisit pas une fois pour toutes : elle se DÉDUIT du
@@ -556,6 +670,11 @@
         if (parY > d) { d = parY; }
       });
       // Plancher : la caméra ne traverse pas le nuage, quoi qu'il arrive.
+      // (J'ai cru un moment que ce plancher bridait la couronne — elle est plate,
+      // donc il n'y aurait rien à protéger. MESURÉ : le lever ne change RIEN
+      // (0,588 et 0,500 avant comme après). Le diagnostic était faux et la
+      // modification a été retirée : une correction qui ne prouve rien ne reste
+      // pas dans le code. La contrainte vient bien de la largeur des libellés.)
       return Math.max(d, monde.rayonReel * 1.35, 90);
     }
 
@@ -807,10 +926,21 @@
       g.appendChild(titre);
       var haloChoix = svg('circle', { 'class': 'ciel-halo-choix', fill: 'none', stroke: '#d8bd82', 'stroke-width': '1.2' });
       var haloFocus = svg('circle', { 'class': 'ciel-halo-focus', fill: 'none', stroke: '#fffaf0', 'stroke-width': '1' });
-      var lueur = svg('circle', { fill: couleur, opacity: '0.14' });
-      var branches = svg('path', { fill: couleur, opacity: '0.5' });
-      var corolle = svg('circle', { fill: couleur, opacity: '0.75' });
-      var coeur = svg('circle', { fill: '#fffaf0' });
+      // L'ÉTOILE AFFINÉE (LV5, demande de Paul le 2026-08-17 : « pour les
+      // symboles de mes projets, peut-on affiner ? une étoile plus brillante et
+      // fine peut-être ? »).
+      // Le diagnostic, fait sur le code et confirmé sur capture : la COROLLE
+      // (un disque de 1,7 rayon à 75 % d'opacité) écrasait tout le reste — d'où
+      // l'aspect « pastille grise » au lieu d'une étoile. Les branches, larges
+      // d'un demi-rayon à leur base, étaient trapues.
+      // Ce qui change : la lueur se resserre et gagne en intensité, les branches
+      // s'allongent et s'affinent en RAIS, la corolle se réduit à un simple
+      // liseré autour du cœur, et le cœur passe au blanc PUR. Un point vif et
+      // quatre rais fins — c'est ce qui fait lire « étoile » plutôt que « point ».
+      var lueur = svg('circle', { fill: couleur, opacity: '0.20' });
+      var branches = svg('path', { fill: couleur, opacity: '0.62' });
+      var corolle = svg('circle', { fill: couleur, opacity: '0.55' });
+      var coeur = svg('circle', { fill: '#ffffff' });
       var permanent = !!lourdes[noeud.id];
       var nom = texteSvg({
         'class': 'ciel-nom' + (permanent ? '' : ' ciel-nom--demande'),
@@ -976,9 +1106,20 @@
       relancer();
     }
 
+    // SUR UN MENU, LA PROFONDEUR N'A PAS LE DROIT D'ÉTEINDRE UNE ENTRÉE.
+    // Demande de Paul le 2026-08-17 : « une étoile plus brillante ». Mesuré sur
+    // les coques : les caps sortaient à 0,49 / 0,66 / 0,69 d'opacité — la moitié
+    // de l'éclat perdue par un effet de profondeur réglé pour RIVEN, où des
+    // centaines de fiches se chevauchent et où l'estompage PORTE de
+    // l'information. Sur un menu de deux à quatre caps, il n'informe de rien et
+    // fait juste hésiter à cliquer.
+    // Le plancher monte donc à 0,82 quand la couronne est active — la profondeur
+    // reste lisible (la taille et la lueur la disent encore) mais ne mange plus
+    // l'éclat. RIVEN garde son plancher d'origine, à la valeur près.
+    var PLANCHER_OPACITE = options.couronne ? 0.82 : 0.18;
     function opaciteProfondeur(profondeur) {
       var t = (profondeur - (cam.distance - rayonRef)) / (2 * rayonRef);
-      return Math.max(0.18, Math.min(1, 1.06 - t * 0.9));
+      return Math.max(PLANCHER_OPACITE, Math.min(1, 1.06 - t * 0.9));
     }
 
     var derive = 0, imagesDepuisTri = 99;
@@ -1081,17 +1222,29 @@
 
         var x = pr.sx, y = pr.sy;
         piece.coeur.setAttribute('cx', x); piece.coeur.setAttribute('cy', y);
-        piece.coeur.setAttribute('r', rayon.toFixed(2));
+        // LE CŒUR : plus petit et BLANC PUR. Une étoile brille par son centre,
+        // pas par sa surface.
+        piece.coeur.setAttribute('r', (rayon * 0.86).toFixed(2));
+        // LA COROLLE : un liseré, plus un disque. C'est le changement qui pèse le
+        // plus dans le rendu — à 1,7 rayon elle faisait la pastille.
         piece.corolle.setAttribute('cx', x); piece.corolle.setAttribute('cy', y);
-        piece.corolle.setAttribute('r', (rayon * 1.7).toFixed(2));
+        piece.corolle.setAttribute('r', (rayon * 1.15).toFixed(2));
+        // LA LUEUR : resserrée (2,8 au lieu de 3,6) et plus intense. Large et
+        // pâle, elle brouillait le contour ; serrée et franche, elle fait le halo.
         piece.lueur.setAttribute('cx', x); piece.lueur.setAttribute('cy', y);
-        piece.lueur.setAttribute('r', (rayon * 3.6).toFixed(2));
-        var p3 = rayon * 3.1;
+        piece.lueur.setAttribute('r', (rayon * 2.8).toFixed(2));
+        // LES BRANCHES : des RAIS. Plus longues (4,6 rayons contre 3,1) et
+        // quatre fois plus fines à la base (0,22 rayon contre 0,5) — c'est le
+        // rapport longueur/largeur qui fait lire une étoile plutôt qu'une croix.
+        // Elles restent sous le halo de choix (5,4 rayons), donc la marge de
+        // cadrage ne bouge pas : rien ne sort du cadre qui n'en sortait déjà.
+        var p3 = rayon * 4.6;
+        var e3 = rayon * 0.22;
         piece.branches.setAttribute('d',
-          'M' + x + ',' + (y - p3) + ' L' + (x + rayon * 0.5) + ',' + (y - rayon * 0.5) +
-          ' L' + (x + p3) + ',' + y + ' L' + (x + rayon * 0.5) + ',' + (y + rayon * 0.5) +
-          ' L' + x + ',' + (y + p3) + ' L' + (x - rayon * 0.5) + ',' + (y + rayon * 0.5) +
-          ' L' + (x - p3) + ',' + y + ' L' + (x - rayon * 0.5) + ',' + (y - rayon * 0.5) + ' Z');
+          'M' + x + ',' + (y - p3) + ' L' + (x + e3) + ',' + (y - e3) +
+          ' L' + (x + p3) + ',' + y + ' L' + (x + e3) + ',' + (y + e3) +
+          ' L' + x + ',' + (y + p3) + ' L' + (x - e3) + ',' + (y + e3) +
+          ' L' + (x - p3) + ',' + y + ' L' + (x - e3) + ',' + (y - e3) + ' Z');
         piece.haloFocus.setAttribute('cx', x); piece.haloFocus.setAttribute('cy', y);
         piece.haloFocus.setAttribute('r', (rayon * 4.4).toFixed(2));
         piece.haloChoix.setAttribute('cx', x); piece.haloChoix.setAttribute('cy', y);
