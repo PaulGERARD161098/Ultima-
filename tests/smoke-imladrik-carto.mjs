@@ -132,6 +132,14 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
   // AU FOCUS, pas au survol : la scène glisse sous le curseur immobile (caméra
   // asymptotique), donc le `:hover` s'active et se désactive, et l'opacité lue
   // dépend de l'instant du déclic. Le focus, lui, est stable.
+  // LA MODALITÉ CLAVIER DOIT ÊTRE ÉTABLIE AVANT DE MESURER `:focus-visible`.
+  // Ce pseudo-sélecteur ne dépend pas seulement du focus mais de la FAÇON dont il
+  // a été pris : après un clic souris, un `.focus()` programmatique ne le
+  // déclenche pas. D'où un test vert en isolation et rouge dans la séquence
+  // complète, où un clic le précède — le patrimoine l'a attrapé, pas moi.
+  // Une pression sur Tab rétablit la modalité clavier, et c'est aussi la
+  // condition RÉELLE où ce halo compte : quelqu'un qui navigue au clavier.
+  await page.keyboard.press('Tab');
   await minethnir.focus();
   await page.waitForTimeout(300);
   const opHalo = await page.locator('g.ciel-etoile[data-noeud-id="minethnir"] .ciel-halo-focus')
