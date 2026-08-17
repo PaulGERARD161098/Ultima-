@@ -5,9 +5,9 @@
 --
 -- Ce que relie cette migration (CADRAGE-IMLADRIK §5/§6, « les passerelles v2 ») :
 --   - un SERMENT (DRAUKHAIN) → un IDÉAL (ZEKROM 0010)   : « un serment naît d'un idéal ».
---   - un SERMENT (DRAUKHAIN) → une PAGE (MINETHNIR 0012): « se suivre dans le journal ».
+--   - un SERMENT (DRAUKHAIN) → une PAGE (MAEDRETHNIR 0012): « se suivre dans le journal ».
 --   - un SCÉNARIO (VRANESH)  → un SERMENT (DRAUKHAIN)   : ce que ce futur « menace » ou « sert ».
---   - un SCÉNARIO (VRANESH)  → une PAGE (MINETHNIR)     : « d'où vient la question ».
+--   - un SCÉNARIO (VRANESH)  → une PAGE (MAEDRETHNIR)     : « d'où vient la question ».
 -- Manuel (Paul crée/valide chaque lien), miroir de la passerelle R↔Z (0011).
 --
 -- Cible XOR : chaque lien pointe EXACTEMENT une cible parmi deux types (motif
@@ -39,7 +39,7 @@ alter table public.scenarios
 
 -- ---------------------------------------------------------------------------
 -- 1. serment_liens : un serment (DRAUKHAIN) relié à UN idéal (ZEKROM) XOR UNE
---    page (MINETHNIR). La source (serment) et la cible sont scellées au même owner.
+--    page (MAEDRETHNIR). La source (serment) et la cible sont scellées au même owner.
 -- ---------------------------------------------------------------------------
 create table public.serment_liens (
   id         uuid primary key default gen_random_uuid(),
@@ -87,7 +87,7 @@ create unique index serment_liens_entree_uniq
 
 -- ---------------------------------------------------------------------------
 -- 2. scenario_liens : un scénario (VRANESH) relié à UN serment (DRAUKHAIN) XOR
---    UNE page (MINETHNIR). rapport = le sens du lien vers un serment (ce que ce
+--    UNE page (MAEDRETHNIR). rapport = le sens du lien vers un serment (ce que ce
 --    futur « menace » ou « sert ») ; n'a de sens QUE pour une cible serment.
 -- ---------------------------------------------------------------------------
 create table public.scenario_liens (

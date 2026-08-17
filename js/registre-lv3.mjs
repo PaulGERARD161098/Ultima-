@@ -265,13 +265,13 @@ export const NOEUDS = {
     legende: 'Kalamn-talaen',
     legendeClasse: 'kalamn-legende',
     expose: 'UltimaImladrikCarto',
-    enfants: ['minethnir', 'vranesh', 'draukhain'],
+    enfants: ['maedrethnir', 'vranesh', 'draukhain'],
   },
-  minethnir: {
-    nom: 'MINETHNIR',
+  maedrethnir: {
+    nom: 'MAEDRETHNIR',
     etat: 'Ouvert',
     blason: 'plume',
-    cible: 'minethnir.html',
+    cible: 'maedrethnir.html',
     resume: 'Le journal intime. Tes pages, l’atelier d’écriture, la sauvegarde '
       + 'Drive — tout l’acquis, sous son vrai nom. Écris librement : rien ne se perd.',
   },

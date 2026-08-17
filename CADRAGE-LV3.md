@@ -37,7 +37,7 @@ même patron, gravé à l'identique, à tous les étages.
 │   ├── ADRAMELECH    la bibliothèque d'idées             → adramelech.html (boussole)
 │   │   └── LES ARCHIPELS — la carte des idées            → idees.html      (outil)
 │   ├── IMLADRIK      le développement personnel          → imladrik.html   (boussole ✅ acquise)
-│   │   ├── MINETHNIR  le journal intime                  → minethnir.html  (outil)
+│   │   ├── MAEDRETHNIR  le journal intime                  → maedrethnir.html  (outil)
 │   │   ├── VRANESH    les futurs potentiels              → vranesh.html    (outil)
 │   │   └── DRAUKHAIN  la volonté au-delà du possible     → draukhain.html  (outil)
 │   └── TAO           la voie — le réel et l'idéal        → tao.html        (boussole)
@@ -59,7 +59,7 @@ même patron, gravé à l'identique, à tous les étages.
 | `tao.html` | **arborescence** (tronc + 2 branches) | **boussole à 2 caps** + passerelle rétroplanning |
 | `bcp.html` / `adramelech.html` | antichambres en colonne | **boussoles** ✅ (+ `registre.html`, la vue liste déménagée) |
 | `imladrik.html` | **boussole** Kalamn-talaen | inchangée — c'est **le modèle** |
-| `traveler.html`, `abaque.html`, `idees.html`, `minethnir.html`, `vranesh.html`, `draukhain.html`, `reshiram.html`, `zekrom.html` | outils | **inchangés** (ce sont des feuilles, pas des nœuds) |
+| `traveler.html`, `abaque.html`, `idees.html`, `maedrethnir.html`, `vranesh.html`, `draukhain.html`, `reshiram.html`, `zekrom.html` | outils | **inchangés** (ce sont des feuilles, pas des nœuds) |
 
 ---
 

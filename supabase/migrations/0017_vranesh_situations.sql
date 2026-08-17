@@ -22,7 +22,7 @@
 --
 -- HORS v1 (différé, ne PAS modéliser ici) :
 --   - passerelles scénario → objectif DRAUKHAIN (ce qu'un futur menace/sert) ou
---     scénario → page MINETHNIR (d'où vient la question) : boucle ultérieure. Le
+--     scénario → page MAEDRETHNIR (d'où vient la question) : boucle ultérieure. Le
 --     scellement (owner_id, id) posé ici sur `situations` servira de cible aux FK
 --     composites de ces liaisons v2 (motif AD-4), sans retoucher `situations`.
 --   - édition d'un scénario : un scénario se crée ou se supprime en v1 (pas
@@ -55,7 +55,7 @@ create table public.situations (
   updated_at timestamptz not null default now(),
 
   -- Cible des FK composites (owner_id, id) : scellement AD-4 pour `scenarios`
-  -- (et, en v2, les passerelles vers DRAUKHAIN / MINETHNIR). id étant déjà PK, la
+  -- (et, en v2, les passerelles vers DRAUKHAIN / MAEDRETHNIR). id étant déjà PK, la
   -- paire est trivialement unique ; owner_id de tête sert aussi le filtrage RLS
   -- et le listing « mes situations ».
   constraint situations_owner_id_uniq unique (owner_id, id)

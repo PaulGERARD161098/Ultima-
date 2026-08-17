@@ -1,4 +1,4 @@
-// Ultima — LA CAPTURE (boucle ② MINETHNIR, dictée Paul 2026-08-01).
+// Ultima — LA CAPTURE (boucle ② MAEDRETHNIR, dictée Paul 2026-08-01).
 // ---------------------------------------------------------------------------
 // Diagnostic de la boucle ① : le journal est vide non parce que sa forme est
 // mauvaise ou son contenu absent, mais parce que le cap n'est pas ATTEIGNABLE
@@ -17,7 +17,7 @@
   // Le brouillon survit à la fermeture de l'onglet, à la perte de réseau et à
   // l'expiration de session. C'est la seule promesse qu'on doit à quelqu'un qui
   // vient de dicter trois phrases en marchant.
-  var CLE_BROUILLON = 'ultima-minethnir-brouillon';
+  var CLE_BROUILLON = 'ultima-maedrethnir-brouillon';
 
   var etat = { session: null, envoiEnCours: false };
 

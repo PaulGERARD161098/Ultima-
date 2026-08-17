@@ -941,7 +941,7 @@ elle appartient, qui ne dit rien de son ergonomie.
 | Registre | Ce que la page fait | Le mobilier | Pages |
 |---|---|---|---|
 | **① Ciel** | on explore, on choisit | aucun : la galaxie EST la page | les 8 coques + RIVEN — **fait** |
-| **② Atelier** | on saisit, on relie, on écrit | cartouches de parchemin **posés sur** la nuit, le fond visible autour | VRANESH, DRAUKHAIN, MINETHNIR, ÉCRIRE, les archipels, les rapprochements |
+| **② Atelier** | on saisit, on relie, on écrit | cartouches de parchemin **posés sur** la nuit, le fond visible autour | VRANESH, DRAUKHAIN, MAEDRETHNIR, ÉCRIRE, les archipels, les rapprochements |
 | **③ Instrument** | on lit des chiffres, on compare | le parchemin **domine**, la nuit n'est qu'une bordure | l'abaque, les impôts, l'échéancier, revenus-charges, ALTHEA |
 
 **La règle qui départage ②/③, et qui est mesurable** : si la page porte un
@@ -1014,7 +1014,7 @@ rachète un chiffre mal lu. Sinon, c'est un **atelier**.
 **Le gate.** Une seule question pour Paul, et elle décide du reste :
 **le classement ②/③ ci-dessus est-il le bon ?** Nommément : l'abaque, les impôts,
 l'échéancier, revenus-charges et ALTHEA en **instruments** (parchemin dominant,
-fond discret) ; VRANESH, DRAUKHAIN, MINETHNIR, écrire, archipels, rapprochements
+fond discret) ; VRANESH, DRAUKHAIN, MAEDRETHNIR, écrire, archipels, rapprochements
 en **ateliers** (cartouches posés sur la nuit). Si ce partage est juste, le reste
 n'est que de l'exécution.
 
@@ -1160,6 +1160,6 @@ boucle à soi seule (EB — pas dix lièvres), à ouvrir explicitement.
 
 ### Prochaine action unique
 
-P5b : embarquer le reste du registre atelier (DRAUKHAIN, MINETHNIR, écrire, les
+P5b : embarquer le reste du registre atelier (DRAUKHAIN, MAEDRETHNIR, écrire, les
 archipels, les rapprochements) au même instrument — le harnais accepte une
 nouvelle page en une ligne dans `CIBLES`.

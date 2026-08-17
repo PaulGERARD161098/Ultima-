@@ -12,7 +12,7 @@ import {
 const verdicts = {};
 const U1 = '11111111-1111-4111-8111-111111111111'; // serment / scénario (source)
 const U2 = '22222222-2222-4222-8222-222222222222'; // idéal / serment (cible)
-const U3 = '33333333-3333-4333-8333-333333333333'; // page MINETHNIR (cible)
+const U3 = '33333333-3333-4333-8333-333333333333'; // page MAEDRETHNIR (cible)
 
 // ===== serment_liens : serment → idéal XOR page =====
 {

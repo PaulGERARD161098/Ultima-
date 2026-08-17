@@ -27,7 +27,7 @@
     // Tables de résolution des cibles de passerelles (best-effort, dégradables).
     sermentsListe: [],   // [{ id, libelle }] pour le picker Objectif DRAUKHAIN
     sermentsParId: {},   // id → intitulé (résolution d'un lien)
-    pagesListe: [],      // [{ id, libelle }] pour le picker Page MINETHNIR
+    pagesListe: [],      // [{ id, libelle }] pour le picker Page MAEDRETHNIR
     pagesParId: {},      // id → libellé (titre sinon date lisible)
     vue: 'toutes'
   };
@@ -90,7 +90,7 @@
     }
   }
 
-  // Libellé d'une page MINETHNIR : son titre, sinon sa date lisible.
+  // Libellé d'une page MAEDRETHNIR : son titre, sinon sa date lisible.
   function libellePage(page) {
     var titre = (page && page.titre ? String(page.titre) : '').trim();
     if (titre) { return titre; }
@@ -157,7 +157,7 @@
       item.appendChild(construireFormQualif(scenario, situation));
     }
 
-    // Passerelles v2 : relier ce futur à un objectif DRAUKHAIN ou une page MINETHNIR.
+    // Passerelles v2 : relier ce futur à un objectif DRAUKHAIN ou une page MAEDRETHNIR.
     item.appendChild(rendrePasserelles(scenario));
     return item;
   }
@@ -260,7 +260,7 @@
   }
 
   // ---------- Passerelles v2 : relier un scénario à un objectif DRAUKHAIN
-  //            (rapport menace/sert) OU à une page MINETHNIR (§5 CADRAGE-IMLADRIK). ----------
+  //            (rapport menace/sert) OU à une page MAEDRETHNIR (§5 CADRAGE-IMLADRIK). ----------
 
   function rendrePasserelles(scenario) {
     var section = el('section', 'zekrom-retro');
@@ -302,11 +302,11 @@
     var form = el('form', 'zekrom-retro-form');
     form.dataset.scenarioId = scenario.id;
 
-    // 1. Type de cible : Objectif DRAUKHAIN ou Page MINETHNIR.
+    // 1. Type de cible : Objectif DRAUKHAIN ou Page MAEDRETHNIR.
     var typeSel = el('select', 'zekrom-retro-select');
     typeSel.name = 'cible-type';
     typeSel.setAttribute('aria-label', 'Type de passerelle à relier');
-    [['serment', 'Objectif DRAUKHAIN'], ['entree', 'Page MINETHNIR']].forEach(function (paire) {
+    [['serment', 'Objectif DRAUKHAIN'], ['entree', 'Page MAEDRETHNIR']].forEach(function (paire) {
       var opt = el('option', null, paire[1]);
       opt.value = paire[0];
       typeSel.appendChild(opt);
@@ -334,10 +334,10 @@
     });
     rapportSel.value = 'menace';
 
-    // 2c. Sélecteur de page MINETHNIR.
+    // 2c. Sélecteur de page MAEDRETHNIR.
     var pageSel = el('select', 'zekrom-retro-select');
     pageSel.name = 'entree';
-    pageSel.setAttribute('aria-label', 'Page MINETHNIR à relier');
+    pageSel.setAttribute('aria-label', 'Page MAEDRETHNIR à relier');
     etat.pagesListe.forEach(function (p) {
       var opt = el('option', null, p.libelle);
       opt.value = p.id;

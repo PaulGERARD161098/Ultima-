@@ -1,5 +1,5 @@
 // /api/scenario-liens — passerelle v2 : un scénario VRANESH relié à un serment
-// DRAUKHAIN XOR une page MINETHNIR (« ce futur menace/sert un objectif / vient d'une page »).
+// DRAUKHAIN XOR une page MAEDRETHNIR (« ce futur menace/sert un objectif / vient d'une page »).
 //   POST   → crée un lien { scenario_id, serment_id?, entree_id?, rapport? }.
 //            rapport ('menace'|'sert') réservé à la cible serment. owner_id imposé
 //            serveur ; double scellement (owner, source)/(owner, cible).

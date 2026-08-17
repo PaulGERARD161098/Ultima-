@@ -17,9 +17,9 @@ mécanique éprouvée : registre extensible (un cap = une entrée), survol/focus
 
 ## 2. Les noms (dictés par Paul, 2026-07-24 — univers des dragons d'Imladrik)
 
-- **MINETHNIR — le journal intime.** Renommage du journal existant. Tout
+- **MAEDRETHNIR — le journal intime.** Renommage du journal existant. Tout
   l'acquis de la boucle 1 (table `imladrik_entrees`, API, atelier d'écriture,
-  sauvegarde Drive) **devient le cap MINETHNIR** — rien n'est reconstruit,
+  sauvegarde Drive) **devient le cap MAEDRETHNIR** — rien n'est reconstruit,
   on renomme et on range (directive EB : capitaliser).
 - **VRANESH — les différents futurs potentiels.** Anticiper, prévoir ce qui
   peut se passer **dans un cas donné** : situations → scénarios
@@ -45,7 +45,7 @@ mécanique éprouvée : registre extensible (un cap = une entrée), survol/focus
   fait l'aiguille Nord) + dragon enroulé autour de la lame, gravure encre sur
   parchemin, cerne d'or. **Légende gravée sous le médaillon :
   « Kalamn-talaen »** (italique, registre carte savante).
-- **Caps v1 (3)** : MINETHNIR (**Ouvert** — le journal existant), VRANESH
+- **Caps v1 (3)** : MAEDRETHNIR (**Ouvert** — le journal existant), VRANESH
   (À venir), DRAUKHAIN (À venir). Aiguilles du centre vers chaque cap,
   rehaussées au survol — même patron que `js/boussole.js`.
 - **Parole** : cartouche sous la rose ; au repos « Survole un cap — Léo t'en
@@ -61,7 +61,7 @@ mécanique éprouvée : registre extensible (un cap = une entrée), survol/focus
 
 - **Pages (reco Léo, à trancher en B1)** : `imladrik.html` devient la
   cartographie (la porte du quadrant) ; le journal est déplacé tel quel vers
-  une page MINETHNIR. **Renommage front seul** : API `/api/imladrik*`,
+  une page MAEDRETHNIR. **Renommage front seul** : API `/api/imladrik*`,
   migrations `0012`/`0014`, RLS et harnais inchangés — aucune migration.
 - **Blason du quadrant** : l'« épée au soleil » (figée 2026-07-17) **reste**
   le sigle d'IMLADRIK sur la console `ultima.html`. La boussole épée+dragon
@@ -73,24 +73,24 @@ mécanique éprouvée : registre extensible (un cap = une entrée), survol/focus
   (compteurs, dernière page) n'apparaîtrait qu'après auth, motif cockpit
   LV2-⑤ (comptes seuls, jamais de contenu).
 
-## 4 bis. MINETHNIR — le diagnostic du 2026-08-01 (boucle ①, EL)
+## 4 bis. MAEDRETHNIR — le diagnostic du 2026-08-01 (boucle ①, EL)
 
 **Constat de départ** : le cap est complet — table `imladrik_entrees` (0012),
 API `/api/imladrik`, atelier d'écriture, sauvegarde Drive, Léo au régime §5 le
 plus strict — et pourtant **le journal est VIDE (0 page en base)**. Les
-passerelles scénario → page MINETHNIR (0018) restent à 0 lien, faute de pages.
+passerelles scénario → page MAEDRETHNIR (0018) restent à 0 lien, faute de pages.
 
 **Boucle ① menée en dictée** (zéro code, format 6 points, EL). Trois questions
 fermées à Paul, ses réponses :
 1. **Où écris-tu ?** « N'importe où, en déplacement, en train de marcher souvent. »
-2. **Qu'est-ce que l'app Claude te donne que MINETHNIR ne donne pas ?**
+2. **Qu'est-ce que l'app Claude te donne que MAEDRETHNIR ne donne pas ?**
    « Commande vocale, accès rapide, interface iPhone très simple, accessible en
    **2 clics du pouce**. »
 3. **Qu'est-ce qui déclenche une entrée ?** « Une sensation, un jalon, une
    petite victoire, une accumulation. »
 
 **LA CAUSE, NOMMÉE (critère de réussite de la boucle ①)** :
-> **MINETHNIR n'est pas atteignable au moment où l'envie d'écrire arrive.**
+> **MAEDRETHNIR n'est pas atteignable au moment où l'envie d'écrire arrive.**
 > Elle surgit **en marchant, au pouce et à la voix** ; le cap suppose un écran,
 > une session et quatre niveaux de navigation avant le premier mot.
 
@@ -99,7 +99,7 @@ fermées à Paul, ses réponses :
   problème de **DISTANCE**. Refaire l'affichage n'aurait rien changé — et
   l'aurait fait croire réglé.
 - Le journal restera vide tant que la distance ne sera pas réduite. Toute
-  boucle MINETHNIR passe donc **après** l'entrée en écriture au pouce.
+  boucle MAEDRETHNIR passe donc **après** l'entrée en écriture au pouce.
 - **La réponse 3 est un acquis pour plus tard** : les déclencheurs de Paul sont
   *une sensation · un jalon · une petite victoire · une accumulation*. C'est le
   vocabulaire naturel du cap — il servira la forme de lecture (boucle ③), pas
@@ -120,7 +120,7 @@ ordinaire — c'est elle qui porterait la voix.
 - **Posture** : anticipation sereine, pas anxiété — Kalamn-talaen aide à
   dérouler les embranchements puis à **revenir au présent**.
 - **Passerelles** ✅ **construites (v2, 2026-07-25)** : un scénario peut pointer
-  un objectif DRAUKHAIN (ce qu'il *menace* ou *sert*) ou une page MINETHNIR
+  un objectif DRAUKHAIN (ce qu'il *menace* ou *sert*) ou une page MAEDRETHNIR
   (d'où vient la question). Table `scenario_liens` (migration 0018), cible XOR.
 - **La boussole puis L'ARBRE** ✅ **livré et validé par Paul (2026-08-01)** —
   « les différents thèmes de futurs sous forme de boussole comme IMLADRIK, puis
@@ -207,7 +207,7 @@ ordinaire — c'est elle qui porterait la voix.
   passées consignées) ; *relecture* périodique de la volonté — rappel,
   jamais jugement.
 - **Passerelles** ✅ **construites (v2, 2026-07-25)** : un serment peut naître
-  d'un idéal ZEKROM (idéal → serment) et se suivre dans MINETHNIR (pages liées).
+  d'un idéal ZEKROM (idéal → serment) et se suivre dans MAEDRETHNIR (pages liées).
   Table `serment_liens` (migration 0018), cible XOR.
 - 🔶 **BOUCLE OUVERTE (2026-08-04) — la forme, pas le fond.** Paul : « j'aime
   bien l'outil, mais la forme n'est pas adaptée ; essayons quelque chose de plus
@@ -225,7 +225,7 @@ ordinaire — c'est elle qui porterait la voix.
   le même jour, l'un l'a écrit, l'autre l'a corrigé ; ⑥ le repli sans JS
   d'`imladrik.html` annonce encore « DRAUKHAIN —
   à venir ». Trois formes au choix : **A la voûte** (les serments coexistent, les
-  fils vers ZEKROM/VRANESH/MINETHNIR se voient — **reco**), **B le brasier**
+  fils vers ZEKROM/VRANESH/MAEDRETHNIR se voient — **reco**), **B le brasier**
   (la plus belle, aucune place pour les fils), **C la frise** (la plus solide en
   volume, mais une liste reste une liste). Chaque forme est **mesurée** aux trois
   volumes 1/5/12 : bbox contre viewBox **et croisement des étiquettes** — ce
@@ -263,13 +263,13 @@ ordinaire — c'est elle qui porterait la voix.
 - **✅ B0 (cadrage)** : cadrage + prototype statique. Zéro code produit.
 - **✅ B1 — la carto en prod (2026-07-24, go Paul « go b1 »)** : `imladrik.html`
   est devenue la cartographie boussole Kalamn-talaen (3 caps autour du médaillon
-  épée + dragon, légende gravée) ; le journal a migré vers `minethnir.html`
+  épée + dragon, légende gravée) ; le journal a migré vers `maedrethnir.html`
   (renommage front seul — `js/imladrik.js`, API `/api/imladrik*`, migrations
   `0012`/`0014`, RLS **inchangés**). Carto muette et sans donnée (§5) sur le
   langage de `css/boussole.css` (réutilisé) + `js/imladrik-carto.js` (clone du
   cœur de `boussole.js`, sans cockpit) + `css/imladrik-carto.css`. Console : état
   IMLADRIK « En chantier » → « Accéder ». Harnais : `smoke-imladrik` reciblé sur
-  MINETHNIR, `smoke-imladrik-carto` créé, `smoke-console` mis à jour ; patrimoine
+  MAEDRETHNIR, `smoke-imladrik-carto` créé, `smoke-console` mis à jour ; patrimoine
   COMPLET (21 harnais) vert.
 - **✅ B2 — DRAUKHAIN v1 (2026-07-25, go Paul « ok go »)** : la volonté au-delà
   du possible, miroir strict de ZEKROM. Modèle **serments** (le quoi + le
@@ -302,9 +302,9 @@ ordinaire — c'est elle qui porterait la voix.
 - **✅ B4 — Passerelles v2 (2026-07-25, « établis les passerelles v2, termine
   les boucles »)** : la mémoire inter-cap. Deux tables de liens à **cible XOR**,
   double scellement AD-4, miroir de la passerelle R↔Z (0011) :
-  **`serment_liens`** (serment → idéal ZEKROM *ou* page MINETHNIR) et
+  **`serment_liens`** (serment → idéal ZEKROM *ou* page MAEDRETHNIR) et
   **`scenario_liens`** (scénario → serment DRAUKHAIN, rapport *menace*/*sert*,
-  *ou* page MINETHNIR). Migration `0018_imladrik_passerelles.sql` (ancrages
+  *ou* page MAEDRETHNIR). Migration `0018_imladrik_passerelles.sql` (ancrages
   composites manquants sur `imladrik_entrees` + `scenarios`, puis 2 tables +
   RLS) **ÉCRITE, **APPLIQUÉE en prod (2026-07-26, solo)** — gate §5 (dépend de 0016 + 0017)**. API
   `api/serment-liens.js` + `api/scenario-liens.js` ; liens repliés dans les GET
@@ -315,7 +315,7 @@ ordinaire — c'est elle qui porterait la voix.
 
 ## 8. Décisions attendues de Paul
 
-1. **Les noms** tels qu'orthographiés — MINETHNIR / VRANESH / DRAUKHAIN /
+1. **Les noms** tels qu'orthographiés — MAEDRETHNIR / VRANESH / DRAUKHAIN /
    KALAMN-TALAEN — figés au lexique dès validation.
 2. **Le sigle** : l'épée au soleil reste le blason console d'IMLADRIK, la
    boussole épée+dragon restant interne au quadrant ? (reco : oui)
@@ -361,7 +361,7 @@ seulement, jamais de contenu** ; fail-closed, rien dans le HTML servi.
 les serments vivent déjà derrière auth (§5 tenue : la carto `imladrik.html`
 reste muette, aucune donnée intime dans un HTML servi).
 - `css/voie.css` : vocabulaire **neutre** (`voie-*`, `borne-*`), réemployable
-  tel quel par VRANESH et MINETHNIR quand leur tour viendra. Tokens de
+  tel quel par VRANESH et MAEDRETHNIR quand leur tour viendra. Tokens de
   `css/styles.css`, zéro valeur en dur. Repli en colonne sous 46 rem.
 - `js/draukhain.js` : trois fonctions **pures** — `jalonsVoie` (départ →
   flammes → « tu es ici » → horizon), `pointsVoie` (creux/crêtes alternés),
@@ -408,7 +408,7 @@ exactement ce que consomme la forme A du §9.
 **✅ BOUCLE ④ LIVRÉE (2026-07-30) — dicter dans IMLADRIK.** Le manque est
 comblé : `OUTILS_PAR_QUADRANT.imladrik` n'est plus vide.
 - **Serveur** (`api/_lib/leo.js`) : 5 outils — `proposer_page_journal`
-  (MINETHNIR), `proposer_serment` + `proposer_flamme` (DRAUKHAIN),
+  (MAEDRETHNIR), `proposer_serment` + `proposer_flamme` (DRAUKHAIN),
   `proposer_situation` + `proposer_scenario` (VRANESH). Écritures **pures**,
   aucun outil de suppression (principe L2b §0 intact). Ajout d'un support
   **`enum`** au catalogue (source unique) : il descend dans le schéma tool-use
@@ -418,7 +418,7 @@ comblé : `OUTILS_PAR_QUADRANT.imladrik` n'est plus vide.
 - **Front** : les 5 gabarits d'exécution dans `js/leo-accueil.js` (bornes
   alignées sur les validateurs serveur — `horizon` refusé au-delà de 200 plutôt
   que tronqué ; `serment_ref`/`situation_ref` résolus localement) ; le cartouche
-  de Léo monté sur `draukhain.html`, `vranesh.html` et `minethnir.html`.
+  de Léo monté sur `draukhain.html`, `vranesh.html` et `maedrethnir.html`.
 - **§5 intime, tenu à la lettre** : le cartouche ne restitue que des **comptes**
   (« 2 serments scellés, 1 attend d'être ravivé ») — jamais un intitulé, jamais
   une ligne de contenu ; fail-closed sans session.
@@ -452,7 +452,7 @@ du §10 : Léo savait **écrire** dans IMLADRIK, pas le **lire**.
 - **Règle de minimisation (§5), explicite** : des **comptes** et des
   **intitulés** — ceux que Paul nomme lui-même quand il dicte — et **rien
   d'autre**. Jamais le texte d'une flamme, le déroulé d'un scénario, le
-  `pourquoi`/`horizon` d'un serment, ni **aucun identifiant**. MINETHNIR est au
+  `pourquoi`/`horizon` d'un serment, ni **aucun identifiant**. MAEDRETHNIR est au
   régime le plus strict : **comptes + la date de la dernière page**, jamais un
   titre (un titre de page de journal est déjà de l'intime).
 - **Le prompt reste honnête** : le bloc d'état se termine par une consigne

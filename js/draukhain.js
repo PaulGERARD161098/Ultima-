@@ -21,10 +21,10 @@
     session: null,
     serments: [],
     flammes: [],
-    liens: [],          // passerelles v2 SORTANTES : serment → idéal ZEKROM | page MINETHNIR
+    liens: [],          // passerelles v2 SORTANTES : serment → idéal ZEKROM | page MAEDRETHNIR
     futurs: [],         // passerelles ENTRANTES : un futur VRANESH qui menace/sert ce serment
     ideauxListe: [],     // idéaux disponibles (picker « Idéal »)
-    pagesListe: [],      // pages MINETHNIR disponibles (picker « Page »)
+    pagesListe: [],      // pages MAEDRETHNIR disponibles (picker « Page »)
     ideaux: {},          // id idéal → intitulé (résolution du libellé)
     pages: {},           // id page → titre|date lisible (résolution du libellé)
     vue: 'tous'
@@ -37,7 +37,7 @@
     return element;
   }
 
-  // Date lisible et pure (repli quand une page MINETHNIR n'a pas de titre).
+  // Date lisible et pure (repli quand une page MAEDRETHNIR n'a pas de titre).
   function dateLisible(iso) {
     if (typeof iso !== 'string' || !iso) { return ''; }
     var d = new Date(iso);
@@ -96,7 +96,7 @@
       .sort(function (a, b) { return (b.advenu === true) - (a.advenu === true); });
   }
 
-  // Libellé d'un idéal MINETHNIR/ZEKROM depuis les tables de correspondance.
+  // Libellé d'un idéal MAEDRETHNIR/ZEKROM depuis les tables de correspondance.
   // Dégradation propre : si la cible n'a pas pu être résolue (idéaux/pages non
   // chargés, table absente…), on affiche un libellé neutre — jamais d'erreur.
   function libelleLien(lien) {
@@ -112,7 +112,7 @@
     return '';
   }
 
-  // Libellé d'une page MINETHNIR : son titre, sinon sa date lisible.
+  // Libellé d'une page MAEDRETHNIR : son titre, sinon sa date lisible.
   function libellePage(entree) {
     var titre = (entree && entree.titre) ? String(entree.titre).trim() : '';
     if (titre) { return titre; }
@@ -228,7 +228,7 @@
 
   // ---------- Passerelles (v2) : d'où naît le serment, où il se suit ----------
   //   « Un serment naît d'un idéal (ZEKROM) » et « se suit dans le journal
-  //   (MINETHNIR) ». Manuel : Paul relie et détache chaque passerelle.
+  //   (MAEDRETHNIR) ». Manuel : Paul relie et détache chaque passerelle.
 
   function optionsCibles(type) {
     if (type === 'ideal') {
@@ -249,7 +249,7 @@
     selType.name = 'type';
     selType.setAttribute('aria-label', 'Type de passerelle');
     [['ideal', 'Idéal (ZEKROM)'],
-     ['page', 'Page (MINETHNIR)']].forEach(function (paire) {
+     ['page', 'Page (MAEDRETHNIR)']].forEach(function (paire) {
       var opt = el('option', null, paire[1]);
       opt.value = paire[0];
       selType.appendChild(opt);
@@ -291,7 +291,7 @@
     var liens = liensDe(serment.id);
     if (liens.length === 0) {
       section.appendChild(el('p', 'zekrom-retro-vide',
-        'Aucune passerelle pour l’instant — relie un idéal ZEKROM ou une page MINETHNIR.'));
+        'Aucune passerelle pour l’instant — relie un idéal ZEKROM ou une page MAEDRETHNIR.'));
     } else {
       var liste = el('ul', 'zekrom-retro-liste');
       liens.forEach(function (lien) {
@@ -312,7 +312,7 @@
     // page chargés, on se contente d'une aide (dégradation propre, jamais bloquant).
     if (etat.ideauxListe.length === 0 && etat.pagesListe.length === 0) {
       section.appendChild(el('p', 'zekrom-retro-aide',
-        'Aucun idéal ni page à relier pour l’instant — capte un idéal dans ZEKROM ou écris une page dans MINETHNIR.'));
+        'Aucun idéal ni page à relier pour l’instant — capte un idéal dans ZEKROM ou écris une page dans MAEDRETHNIR.'));
     } else {
       section.appendChild(construireFormLien(serment));
     }
@@ -572,7 +572,7 @@
   var CAPS_VOUTE = [
     { cle: 'zekrom', nom: 'ZEKROM', role: 'l’idéal dont il naît', x: 74, y: 58 },
     { cle: 'vranesh', nom: 'VRANESH', role: 'ce qui le menace ou le sert', x: 566, y: 58 },
-    { cle: 'minethnir', nom: 'MINETHNIR', role: 'où il se suit', x: 74, y: 362 }
+    { cle: 'maedrethnir', nom: 'MAEDRETHNIR', role: 'où il se suit', x: 74, y: 362 }
   ];
 
   // Les caps auxquels ce serment est relié, sortants ET entrants confondus.
@@ -582,7 +582,7 @@
     var vus = {};
     liensDe(sermentId).forEach(function (lien) {
       if (lien.ideal_id) { vus.zekrom = true; }
-      if (lien.entree_id) { vus.minethnir = true; }
+      if (lien.entree_id) { vus.maedrethnir = true; }
     });
     if (futursDe(sermentId).length > 0) { vus.vranesh = true; }
     return CAPS_VOUTE.filter(function (c) { return vus[c.cle] === true; });
@@ -740,7 +740,7 @@
         var fil = svgEl('path', 'voute-fil');
         fil.setAttribute('d', 'M' + places[i].x + ' ' + places[i].y
           + ' Q ' + ((places[i].x + cap.x) / 2) + ' ' + ((places[i].y + cap.y) / 2 - 26)
-          + ' ' + cap.x + ' ' + (cap.y + (cap.cle === 'minethnir' ? -18 : 18)));
+          + ' ' + cap.x + ' ' + (cap.y + (cap.cle === 'maedrethnir' ? -18 : 18)));
         fil.dataset.serment = serment.id;
         cadre.appendChild(fil);
       });
@@ -1305,7 +1305,7 @@
     await rafraichir();
   }
 
-  // Relier une passerelle : exactement UNE cible (idéal ZEKROM OU page MINETHNIR).
+  // Relier une passerelle : exactement UNE cible (idéal ZEKROM OU page MAEDRETHNIR).
   async function soumettreLien(sermentId, type, cibleId) {
     if (!sermentId || !cibleId) { return; }
     var corps = { serment_id: sermentId };
@@ -1368,7 +1368,7 @@
     etat.liens = (contenu.data && contenu.data.liens) || [];
     etat.futurs = (contenu.data && contenu.data.futurs) || [];
 
-    // Cibles des passerelles (idéaux ZEKROM + pages MINETHNIR) : enrichissement
+    // Cibles des passerelles (idéaux ZEKROM + pages MAEDRETHNIR) : enrichissement
     // pour résoudre les libellés et peupler les pickers. Chargées APRÈS le check
     // 401 du registre : leur échec ne bloque jamais le rendu des serments.
     await chargerCibles();
@@ -1459,7 +1459,7 @@
     });
   }
 
-  // Lit /api/ideaux (ZEKROM) et /api/imladrik (MINETHNIR) en parallèle. Toute
+  // Lit /api/ideaux (ZEKROM) et /api/imladrik (MAEDRETHNIR) en parallèle. Toute
   // panne (table absente, erreur, réseau) → tables vides = libellés neutres et
   // pickers vides, sans jamais empêcher l'affichage des serments (§5, fail-soft).
   async function chargerCibles() {

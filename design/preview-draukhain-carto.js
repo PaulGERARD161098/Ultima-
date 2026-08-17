@@ -7,7 +7,7 @@
 
   // ---------------------------------------------------------------------
   // Jeu de maquette — INVENTÉ (§5). Douze serments, du plus nourri au plus nu.
-  // `f` = nombre de flammes ; `fils` = caps reliés (z=ZEKROM, v=VRANESH, m=MINETHNIR).
+  // `f` = nombre de flammes ; `fils` = caps reliés (z=ZEKROM, v=VRANESH, m=MAEDRETHNIR).
   // ---------------------------------------------------------------------
   var SERMENTS = [
     { nom: 'Tenir la parole donnée',   f: 3, fils: ['z'] },
@@ -27,7 +27,7 @@
   var CAPS = {
     z: { nom: 'ZEKROM',    role: 'l’idéal dont il naît', x: 74,  y: 58 },
     v: { nom: 'VRANESH',   role: 'ce qui le menace ou le sert', x: 566, y: 58 },
-    m: { nom: 'MINETHNIR', role: 'où il se suit', x: 74, y: 362 }
+    m: { nom: 'MAEDRETHNIR', role: 'où il se suit', x: 74, y: 362 }
   };
 
   var NS = 'http://www.w3.org/2000/svg';
