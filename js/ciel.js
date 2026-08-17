@@ -1209,10 +1209,31 @@
       pieces.forEach(function (piece) {
         var pr = projeter(piece.etoile);
         projetes[piece.etoile.noeud.id] = pr;
-        if (!pr || pr.sx < -40 || pr.sx > vbW + 40 || pr.sy < -40 || pr.sy > vbH + 40) {
+        // ON NE MASQUE JAMAIS L'ÉTOILE QUI A LE FOCUS. `display: none` retire
+        // l'élément de la séquence de tabulation, et le navigateur RENVOIE alors
+        // le focus sur `body` — sans que rien dans notre code n'ait appelé `blur`.
+        //
+        // Mesuré le 2026-08-17 : `display=none` puis `display=null` sur l'étoile
+        // qu'on venait d'atteindre au clavier, à 100 ms d'intervalle. La caméra
+        // glisse vers sa position (approche asymptotique) et une étoile passe
+        // FUGITIVEMENT au-delà de la bordure de 40 unités : une seule image
+        // masquée suffit à éjecter qui navigue au clavier.
+        // Un objet qu'on vient de choisir ne disparaît pas — et s'il sort
+        // vraiment du cadre, il vaut mieux le laisser peint à son bord que de
+        // faire perdre sa place à l'utilisateur.
+        //
+        // *Ce défaut a été trouvé par un harnais que j'ai d'abord cru fautif : il
+        // annonçait « halo éteint », et il désignait une éjection du focus au
+        // clavier. Trois fois j'ai retouché le test avant d'écouter ce qu'il
+        // disait.*
+        var aLeFocus = piece.g === document.activeElement
+          || (document.activeElement && piece.g.contains(document.activeElement));
+        if (!aLeFocus
+            && (!pr || pr.sx < -40 || pr.sx > vbW + 40 || pr.sy < -40 || pr.sy > vbH + 40)) {
           piece.g.setAttribute('display', 'none');
           return;
         }
+        if (!pr) { piece.g.removeAttribute('display'); return; }
         piece.g.removeAttribute('display');
         var rayon = Math.max(1.6, Math.min(9,
           (R_ETOILE_MIN + Math.min(3.2, (piece.mag / magMax) * 3.2)) * pr.echelle * 1.05));
@@ -1436,13 +1457,61 @@
       // détache l'élément du document et le réinsère, ce qui LUI ARRACHE LE
       // FOCUS — la touche Entrée n'ouvrait alors plus aucune fiche. Le tri est
       // cosmétique, le focus est fonctionnel : le focus gagne.
-      if (imagesDepuisTri > 6 && !gEtoiles.contains(document.activeElement)) {
+      // SUR UNE COURONNE, ON NE TRIE PAS — et c'est une correction
+      // d'ACCESSIBILITÉ, pas une optimisation.
+      //
+      // Le tri réordonne les étoiles par profondeur avec `appendChild`, qui
+      // DÉTACHE l'élément avant de le réinsérer : un élément détaché perd le
+      // focus. La garde `!gEtoiles.contains(document.activeElement)` protège le
+      // cas simple, mais pas la course entre la prise du focus et l'image
+      // suivante.
+      // Or la couronne pose toutes les étoiles dans le MÊME PLAN (z1 = 0) : leurs
+      // profondeurs ne diffèrent plus que d'un cheveu, et comme la caméra glisse
+      // sans fin (approche asymptotique), l'ordre du tri ALTERNE d'une fois sur
+      // l'autre. Le moteur réinsérait donc les étoiles en boucle, pour rien, et
+      // arrachait le focus à qui venait de le prendre — mesuré : focus sur
+      // l'étoile à t+0, retombé sur `body` à t+100 ms.
+      // Sur un plan, aucune étoile n'est devant une autre : il n'y a rien à
+      // trier. RIVEN, lui, est un vrai volume et garde son tri.
+      //
+      // *Trouvé par un harnais que j'ai d'abord cru fautif. Il criait « halo
+      // éteint » et désignait un défaut plus grave que celui qu'il mesurait :
+      // au clavier, on pouvait se faire éjecter de l'étoile qu'on venait
+      // d'atteindre.*
+      if (!options.couronne && imagesDepuisTri > 6
+          && !gEtoiles.contains(document.activeElement)) {
         imagesDepuisTri = 0;
-        pieces.slice().filter(function (p) { return projetes[p.etoile.noeud.id]; })
+        var ordonnees = pieces.slice()
+          .filter(function (p) { return projetes[p.etoile.noeud.id]; })
           .sort(function (a, b) {
             return projetes[b.etoile.noeud.id].profondeur - projetes[a.etoile.noeud.id].profondeur;
-          })
-          .forEach(function (p) { gEtoiles.appendChild(p.g); });
+          });
+        // ON NE RÉINSÈRE QUE SI L'ORDRE CHANGE VRAIMENT, et ce n'est pas une
+        // optimisation : c'est une correction d'ACCESSIBILITÉ.
+        //
+        // `appendChild` DÉTACHE l'élément du document avant de le réinsérer, et
+        // un élément détaché PERD LE FOCUS. La garde ci-dessus l'évite quand une
+        // étoile est déjà focalisée — mais elle ne peut rien contre la course :
+        // entre le moment où quelqu'un prend le focus et l'image suivante, le tri
+        // se déclenche sur l'état d'avant et arrache ce focus. Mesuré le
+        // 2026-08-17 : après un `focus()` sur une étoile, `document.activeElement`
+        // était retombé sur `body`.
+        //
+        // POURQUOI C'EST APPARU AVEC LA COURONNE : elle pose toutes les étoiles à
+        // la MÊME profondeur (z1 = 0, par construction). Le tri n'a donc plus
+        // rien à trier — mais il réinsérait quand même les huit éléments, à
+        // chaque fois, pour rien. Un travail inutile qui coûtait le focus.
+        //
+        // *C'est un harnais qui l'a trouvé : il criait « halo éteint » et j'ai
+        // d'abord cru qu'il se trompait. Il avait raison, et il désignait un
+        // défaut plus grave que celui qu'il mesurait.*
+        var change = false;
+        for (var t = 0; t < ordonnees.length; t++) {
+          if (gEtoiles.childNodes[t] !== ordonnees[t].g) { change = true; break; }
+        }
+        if (change) {
+          ordonnees.forEach(function (p) { gEtoiles.appendChild(p.g); });
+        }
       }
 
       // À plat, la boucle s'ARRÊTE dès que la caméra a fini de glisser : c'est
