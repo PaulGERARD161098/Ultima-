@@ -3212,3 +3212,36 @@ P5a était le bon.
 - **UN SCRIPT DE CONVERSION QUI REFUSE** : il a recalé les deux pilotes déjà
   embarqués au lieu de les convertir deux fois. Une page à demi convertie coûte
   plus cher qu'une page pas convertie, parce qu'elle a l'air faite.
+
+## 2026-08-17 — clôture de session LV5 : état de reprise
+
+Session fermée à la demande de Paul (« fin de session pour le moment / implante
+tout mémoire pour reprise »). **Rien en attente de commit**, `main` = `9130ab1`,
+patrimoine 84 sections vert.
+
+**Trois boucles fermées et fusionnées** dans cette portion de session :
+① **#167 — P5a activé** : le sol étoilé actif sur VRANESH (atelier) et l'abaque
+(instrument). L'encre s'hérite au lieu de s'énumérer ; la nappe du registre
+instrument rendue à `.feuille`.
+② **#168 — MINETHNIR → MAEDRETHNIR** : 171 occurrences, 36 fichiers, le fichier
+renommé, prouvé front-seul sur le diff, redirections permanentes pour ne pas tuer
+le raccourci iPhone de Paul. **Validé par Paul** (« je valide les 4 liens, c'est
+ok pour le changement »).
+③ **#169 — P5b** : sept pages embarquées, neuf en tout.
+
+**Où reprendre** : `CADRAGE-ULTIMA.md` §ÉTAT porte désormais l'entrée LV5 complète
+— registres, recette d'embarquement en quatre ajouts, reste à faire dans l'ordre
+(**P6** althea/althea-cadran, **P4** la racine `index.html`, **P5c** la boussole
+interne de VRANESH), et les règles payées cette session. Le détail vit dans
+`CADRAGE-LV5-GALAXIE-PLEIN-ECRAN.md` §§16.8 → 16.10.
+
+**Quatre règles remontées dans la charte** (§⚡ Optimisation), parce qu'elles
+dépassent LV5 : demander à une mesure ce qu'elle répond sur un cas connu ; compter
+et nommer ce qu'un filtre exclut ; ne remonter à Paul qu'un vrai choix, pas une
+enquête inachevée ; classer par la mesure plutôt que par le débat.
+
+**Ce qui n'a PAS été vu de mes yeux, et doit être dit tel quel** : aucune page
+déployée. Le proxy de l'environnement refuse l'hôte Vercel (403 au CONNECT) —
+toute la vérification est locale, sur Chromium réel, aux deux largeurs, plus 18
+mesures de contraste et le patrimoine complet. C'est solide, mais ce n'est pas
+avoir regardé la production.

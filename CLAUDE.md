@@ -219,6 +219,33 @@ l'accessibilité ni la sécurité.
   jour, qui sont un échantillon favorable. Leçon : le foyer débordait chez Paul
   alors qu'il avait été « validé » sur un rendu regardé. « Ça a l'air bien »
   n'est pas un critère de réussite au sens d'EL ④ : c'est l'absence de critère.
+- **AVANT DE CROIRE UNE MESURE, LUI DEMANDER CE QU'ELLE RÉPOND SUR UN CAS DONT
+  ON CONNAÎT DÉJÀ LA RÉPONSE** (2026-08-17 — trois sondes fausses dans une seule
+  session, et le même signe d'alerte chaque fois : *une réponse trop uniforme*).
+  Un instrument de contraste qui condamnait un titre parfaitement lisible ; une
+  mesure de géométrie qui comparait des étoiles au cadre d'un **blason** attrapé
+  par un `querySelector('svg')` trop large ; une sonde de canvas qui répondait
+  « blanc pur » à **toutes** les options, y compris `eclat: 0`. Les trois se
+  seraient effondrées en une ligne sous ce test. *Corollaire : « ça a l'air
+  cohérent » ne valide pas un instrument — seul un cas de référence le valide.*
+- **UN FILTRE QUI EXCLUT DES CAS DOIT COMPTER ET NOMMER CE QU'IL EXCLUT**
+  (2026-08-17). Un harnais de contraste écartait en silence les textes trop fins
+  pour avoir un pixel pleinement opaque — c'est-à-dire **exactement les plus à
+  risque** — et rendait un verdict vert. Un `continue` muet transforme un angle
+  mort en réponse rassurante. Tout cas écarté est compté, nommé au rapport, et
+  son nombre est **borné par un verdict**.
+- **UNE QUESTION REMONTÉE À PAUL DOIT ÊTRE UN CHOIX, PAS UNE ENQUÊTE NON
+  TERMINÉE** (2026-08-17). J'avais annoncé un arbitrage produit (« l'abaque est
+  de fait en atelier, à trancher ») ; c'était un diagnostic arrêté trop tôt — la
+  page perdait son **support**, pas trois couleurs, et un seul geste l'a réglé.
+  Un arbitrage se pose quand **deux options tiennent également debout** ; sinon
+  c'est du travail à finir, et le déléguer à Paul lui coûte une décision qui
+  n'existe pas.
+- **CLASSER PAR LA MESURE PLUTÔT QUE PAR LE DÉBAT** (2026-08-17). Pour embarquer
+  sept pages sur trois registres, ne pas décider en amont : appliquer le registre
+  probable aux sept, puis **laisser le harnais désigner celles qui résistent**.
+  Cinq étaient bonnes du premier coup, une seule a demandé du travail. Débattre
+  page par page aurait coûté plus cher — et se serait trompé.
 - **Une règle de confidentialité se teste par l'ABSENCE** (2026-07-30) : pour
   toute donnée sensible sortant vers un tiers (IA, log, page servie), le harnais
   cherche le contenu interdit dans ce qui part et exige de **ne pas l'y

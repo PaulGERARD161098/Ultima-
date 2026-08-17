@@ -6,6 +6,94 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🌌 **SESSION 2026-08-16/17 (LV5 — la galaxie plein écran, puis le sol étoilé
+  partout), TOUT FUSIONNÉ dans `main`.** Cadrage :
+  **`CADRAGE-LV5-GALAXIE-PLEIN-ECRAN.md`** — §§11 à 16.10, c'est LA source pour
+  reprendre. Six PR fusionnées : #164 (cadrage + P0→P3), #165 (TAO en Gémeaux +
+  règle des liens), #166 (couronne + étoile affinée + fond sur RIVEN + focus
+  clavier), #167 (P5a), #168 (renommage MAEDRETHNIR), #169 (P5b).
+  `main` = `9130ab1`. **Patrimoine : 84 sections, sortie 0.**
+
+  **CE QUI EST ACQUIS — le sol étoilé est le fond commun d'Ultima.**
+  Trois registres, déduits de ce que la page FAIT (§16.2) :
+  **① CIEL** (la galaxie EST la page) — 8 coques + RIVEN ;
+  **② ATELIER** (on saisit, on relie) — VRANESH, DRAUKHAIN, MAEDRETHNIR,
+  registre, RESHIRAM, ZEKROM, écrire, idées ;
+  **③ INSTRUMENT** (on lit des chiffres) — l'abaque.
+  Soit **9 pages embarquées** (`data-fond-etoile` sur le `<body>`), plus les
+  coques déjà sur le ciel.
+
+  **CE QUI RESTE, DANS L'ORDRE :**
+  - **P6** — `althea.html` et `althea-cadran.html`, registre instrument. Elles
+    n'ont **ni `main` ni `.feuille`** : très probablement le même défaut de
+    support que l'abaque (leur parchemin vient du `body`). Il faudra donc leur
+    trouver un conteneur pour porter la nappe, ou en déclarer un.
+  - **P4** — la racine **`index.html`**, le point dur annoncé dès le cadrage :
+    elle porte l'écran de connexion, et le plateau du ciel est
+    `position: fixed; inset: 0` — il le couvrirait.
+  - **P5c** — la « boussole des futurs » interne de VRANESH devient un ciel
+    (arbitrage C du cadrage).
+
+  **COMMENT EMBARQUER UNE PAGE (la recette, éprouvée sur 9)** : quatre ajouts —
+  `css/ciel.css` + `css/ciel-fond-page.css` en fin de `<head>`, la classe
+  `ciel-noeud-coque` et l'attribut `data-fond-etoile="<registre>"` sur le
+  `<body>`, `js/ciel-fond.js` + `js/ciel-fond-page.js` avant les autres scripts.
+  Puis **une ligne dans `CIBLES`** de `tests/smoke-fond-contraste.mjs`, et on
+  laisse la mesure trancher le registre.
+
+  **LES RÈGLES QUE CETTE SESSION A PAYÉES — à ne pas réapprendre :**
+  - **L'ENCRE S'HÉRITE, ELLE NE S'ÉNUMÈRE PAS.** Une liste de sélecteurs
+    (`h1, p, li, label, a` sous `body[data-fond-etoile]`) a une spécificité
+    (0,1,2) qui **écrase les règles de page légitimes** — lesquelles savent, elles,
+    sur quel fond leur texte est posé. Résultat mesuré : 13 textes cassés sur
+    l'abaque, 6 libellés à 1,10:1. L'encre de la nuit est posée **une fois sur
+    `body`** ; toute surface de parchemin déclare son encre **sur elle-même**.
+  - **QUI POSE UN FOND DOIT POSER SON ENCRE** (corollaire) : `.carto-etat` avait
+    un fond `--ile` sans `color` → son texte héritait de la crème. 1,10:1.
+  - **SUR UN CIEL ÉTOILÉ, UNE ENCRE DE DEMI-TEINTE EST INTENABLE.** Un fond de
+    nuit étoilée n'a pas UNE luminance, il en a une **plage** : une encre claire
+    reste au-dessus de toutes les étoiles, une demi-teinte finira par en croiser
+    une. **Un surtitre garde sa subordination par sa taille et son interlettrage,
+    jamais par son assombrissement.**
+  - **UNE OMBRE PORTÉE NE RACHÈTE PAS UN FOND TROP CLAIR** : le contraste se
+    mesure contre le fond, pas contre un halo.
+  - **UN DIAGNOSTIC QUI S'ARRÊTE À LA COULEUR RATE LE SUPPORT** : l'abaque ne
+    perdait pas trois couleurs, elle perdait sa **nappe** (venue de `body.abaque`).
+    Un geste (`.feuille`) a remplacé douze correctifs.
+  - **UN TEST QUI NOMME UNE COULEUR SUPPOSÉE VIEILLIT MAL** : `smoke-idees`
+    comparait la devise au jeton `--parchemin` écrit en dur — vrai avant le sol
+    étoilé, faux après. Un test qui **lit ce qui est peint** survit au changement
+    de sol.
+  - **LIRE LE RGB BRUT D'UN CANVAS TRANSPARENT NE MESURE RIEN** (ses pixels sont
+    du blanc à faible alpha) : seule la **capture composée** dit ce que l'œil voit.
+    Signe d'alerte générique : *une réponse identique pour toutes les entrées
+    n'est pas un résultat, c'est une panne d'instrument.*
+  - **LE TEXTE LE PLUS FIN EST LE PLUS À RISQUE, ET C'EST CELUI QU'UN INSTRUMENT
+    SAUTE** : à densité 1, un petit texte en petites capitales n'a aucun pixel
+    opaque, donc aucun « coeur de lettre » — il traversait le harnais en silence.
+    Le harnais mesure désormais à **densité 2** et **compte et nomme** les textes
+    non mesurables.
+
+  **L'INSTRUMENT DE RÉFÉRENCE** : `tests/smoke-fond-contraste.mjs`. Il peint
+  chaque page **deux fois** (normale / texte transparent), en tire **le masque des
+  lettres**, et mesure sous les coeurs de lettre. **Verdict différentiel** — avec
+  ET sans le fond — car ces pages portent des défauts antérieurs : n'est rouge que
+  ce qui est **nouveau**. Éprouvé rouge deux fois exprès.
+
+  **⏳ ACTIONS HUMAINES en attente (aucune ne bloque) :**
+  - **5 contrastes préexistants sur l'abaque** (jeton `--encre-pale` sur
+    parchemin : « euros », « mois (12 à 24) »… 4,29:1 et 4,46:1 pour un seuil de
+    4,5). Les corriger = **assombrir un jeton global** qui sert partout : une
+    boucle à soi seule, à ouvrir explicitement.
+  - **Légende `KALAMN-TALAEN` coupée au bord gauche** sur le ciel IMLADRIK en
+    390 px. Sans rapport avec LV5.
+  - **Opposition de TAO qui bascule en vertical à 390 px** : avis de Paul demandé,
+    jamais donné.
+  - **Léo ne peut pas voir la preview Vercel** : le proxy de l'environnement
+    refuse l'hôte (403 au CONNECT). Toute vérification est donc **locale**
+    (Chromium réel) — le dire à Paul à chaque rapport plutôt que de laisser croire
+    que la preview a été regardée.
+
 - 🌠 **SESSION 2026-08-13/14 (LV4 — Ultima devient un ciel qui se déplie), EN
   COURS — PR #163, brouillon, NON fusionnée.** Cadrage :
   `CADRAGE-LV4-CIEL-DEPLIE.md` (§§10 à 14). Quatre boucles fermées, une ouverte.
