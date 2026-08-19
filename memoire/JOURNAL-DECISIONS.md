@@ -3245,3 +3245,20 @@ déployée. Le proxy de l'environnement refuse l'hôte Vercel (403 au CONNECT) �
 toute la vérification est locale, sur Chromium réel, aux deux largeurs, plus 18
 mesures de contraste et le patrimoine complet. C'est solide, mais ce n'est pas
 avoir regardé la production.
+
+## 2026-08-19 — reprise : go de Paul sur le plan de la journée, boucle 0 soldée
+
+Paul donne le **go sur le cadrage de la journée** (boucles dans l'ordre :
+⓪ synchro Notion → ① P6 ALTHEA ×2 → ② P4 racine `index.html` → ③ P5c boussole
+interne de VRANESH ; réserve non ouverte : jeton `--encre-pale`).
+
+- **TAO tranché** : l'opposition qui bascule en vertical à 390 px est **validée
+  telle quelle** (« c'est ok pour TAO »). Sortie du registre ⏳ — rien à changer.
+- **Boucle 0 fermée** : la fiche Notion « 📦 Repo Ultima- — Fiche projet » est
+  synchronisée jusqu'au 2026-08-17 (entrée LV5 complète en tête + nota renvoyant
+  au repo pour les sessions 24/07→14/08, jamais remontées — choix assumé : un
+  renvoi, pas une réécriture d'historique). L'approbation d'outil Notion, qui
+  avait bloqué deux fois le 17/08, est passée cette fois.
+- **Toute la journée vit sur la branche `claude/reprise-travail-003t8b`** (branche
+  désignée de la session) : une seule PR portera les boucles du jour, un commit
+  atomique par boucle — signalé à Paul, la fusion reste sa gate.

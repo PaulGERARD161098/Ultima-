@@ -87,25 +87,18 @@
     boucle à soi seule, à ouvrir explicitement.
   - **Légende `KALAMN-TALAEN` coupée au bord gauche** sur le ciel IMLADRIK en
     390 px. Sans rapport avec LV5.
-  - **Opposition de TAO qui bascule en vertical à 390 px** : avis de Paul demandé,
-    jamais donné.
+  - ✅ **Opposition de TAO qui bascule en vertical à 390 px** : validée telle
+    quelle par Paul le 2026-08-19 (« c'est ok pour TAO »). Rien à changer.
   - **Léo ne peut pas voir la preview Vercel** : le proxy de l'environnement
     refuse l'hôte (403 au CONNECT). Toute vérification est donc **locale**
     (Chromium réel) — le dire à Paul à chaque rapport plutôt que de laisser croire
     que la preview a été regardée.
-  - 🔻 **LA FICHE NOTION N'A PAS PU ÊTRE SYNCHRONISÉE** (point 4 du protocole de
-    fin de session). L'écriture Notion demande une approbation d'outil qui n'a pas
-    été accordée, deux tentatives. **À reprendre au début de la prochaine
-    session**, et deux choses sont à savoir :
-    ① la fiche « 📦 Repo Ultima- — Fiche projet » (`392c68b1-1948-81b0-9efb-fa0bd7b7c2b7`)
-    **s'arrête au 2026-07-23** — les sessions du 24/07 au 14/08 (LV3, LV4, RIVEN
-    stellaire, IMLADRIK) n'y sont jamais remontées non plus ; le repo est donc la
-    **seule** source complète, et il l'est ;
-    ② l'entrée à y écrire n'est pas à réinventer : **c'est le contenu de cette
-    section §ÉTAT** (registres, 9 pages, recette d'embarquement, reste à faire,
-    règles payées, actions humaines), plus les blocs 🔒/⚡ du rapport de clôture
-    consignés dans `memoire/JOURNAL-DECISIONS.md` à la date du 2026-08-17.
-    *Rien n'est perdu — c'est une recopie à faire, pas un travail à refaire.*
+  - ✅ **FICHE NOTION SYNCHRONISÉE le 2026-08-19** (boucle 0 de la session de
+    reprise — la dette de clôture du 17/08 est soldée). L'entrée LV5 complète
+    (registres, 9 pages, recette, reste à faire, règles payées, blocs 🔒/⚡) est
+    en tête de la fiche « 📦 Repo Ultima- — Fiche projet »
+    (`392c68b1-1948-81b0-9efb-fa0bd7b7c2b7`), avec le nota qui renvoie au repo
+    pour le détail des sessions 24/07→14/08 — le repo reste la source complète.
 
 - 🌠 **SESSION 2026-08-13/14 (LV4 — Ultima devient un ciel qui se déplie), EN
   COURS — PR #163, brouillon, NON fusionnée.** Cadrage :
