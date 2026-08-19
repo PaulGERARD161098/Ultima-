@@ -3245,3 +3245,124 @@ déployée. Le proxy de l'environnement refuse l'hôte Vercel (403 au CONNECT) �
 toute la vérification est locale, sur Chromium réel, aux deux largeurs, plus 18
 mesures de contraste et le patrimoine complet. C'est solide, mais ce n'est pas
 avoir regardé la production.
+
+## 2026-08-19 — reprise : go de Paul sur le plan de la journée, boucle 0 soldée
+
+Paul donne le **go sur le cadrage de la journée** (boucles dans l'ordre :
+⓪ synchro Notion → ① P6 ALTHEA ×2 → ② P4 racine `index.html` → ③ P5c boussole
+interne de VRANESH ; réserve non ouverte : jeton `--encre-pale`).
+
+- **TAO tranché** : l'opposition qui bascule en vertical à 390 px est **validée
+  telle quelle** (« c'est ok pour TAO »). Sortie du registre ⏳ — rien à changer.
+- **Boucle 0 fermée** : la fiche Notion « 📦 Repo Ultima- — Fiche projet » est
+  synchronisée jusqu'au 2026-08-17 (entrée LV5 complète en tête + nota renvoyant
+  au repo pour les sessions 24/07→14/08, jamais remontées — choix assumé : un
+  renvoi, pas une réécriture d'historique). L'approbation d'outil Notion, qui
+  avait bloqué deux fois le 17/08, est passée cette fois.
+- **Toute la journée vit sur la branche `claude/reprise-travail-003t8b`** (branche
+  désignée de la session) : une seule PR portera les boucles du jour, un commit
+  atomique par boucle — signalé à Paul, la fusion reste sa gate.
+
+## 2026-08-19 — P6 : ALTHEA sur le sol étoilé, et l'instrument qui déclare son support
+
+Boucle 1 du plan du jour. `althea.html` + `althea-cadran.html` embarquées —
+**11 pages au total**. Patrimoine COMPLET vert.
+
+- **LE REGISTRE DIT CE QU'ON PROTÈGE, PAS DE QUOI C'EST FAIT.** ALTHEA lit des
+  chiffres → instrument. Mais son support n'est pas le parchemin : c'est
+  l'exception actée de Paul (« l'antique vu de nuit », CADRAGE-ALTHEA §10.3).
+  L'invariant de l'instrument — des chiffres jamais posés sur les étoiles — se
+  satisfait avec SES matériaux : les `.althea-bloc`, sans fond propre jusqu'ici
+  (la nuit unie du body suffisait), reçoivent leur plaque de nuit opaque. Le
+  harnais gagne un champ `nappe:` par cible, et exige que **TOUS** les supports
+  trouvés soient opaques — l'ancien contrôle ne regardait que le premier, un
+  seul bloc transparent lui aurait échappé. Éprouvé rouge en retirant la plaque
+  (4 verdicts rouges), puis revert.
+- **LA SURFACE DÉCLARE SON ENCRE, ÉPISODE 2.** `body[data-fond-etoile]` (0,1,1)
+  bat `.althea` (0,1,0) : sans un `color: var(--parch)` posé sur `.althea-page`,
+  tout le texte hérité d'ALTHEA passait en crème — contraste encore bon, donc
+  **le harnais ne l'aurait jamais dit** : c'est la règle de couleur actée
+  (or gagné / spectre annoncé / parchemin bleuté) qui aurait perdu son pilier,
+  pas un ratio. Une identité ne se mesure pas en contraste ; elle se protège
+  par une décision.
+- **Préexistant consigné, pas élargi** : « ↞ Ultima » (`--parch-bas`) à 4,36:1
+  en 1280, identique avec et sans le fond → registre ⏳, famille des
+  demi-teintes limites de l'abaque.
+
+## 2026-08-19 — P4 : la racine passe au ciel, la porte n'a pas bougé d'une ligne
+
+Boucle 2 du plan du jour — « l'écran que Paul juge » (LV4 ④c), pris en dernier
+comme le cadrage l'exigeait, sur un module éprouvé huit fois : **zéro erreur
+console au premier rendu, aux deux largeurs.** Patrimoine COMPLET vert.
+
+- **LE PONT ÉTAIT DÉJÀ CONSTRUIT, IL SUFFISAIT DE NE PAS LE REFAIRE.**
+  `ciel-noeud.mjs` répondait déjà au nom `window.UltimaBoussole` (« pour ne pas
+  avoir à modifier boussole-auth.js », écrit le 2026-08-13) et le registre
+  `racine` portait déjà titre, invite, cœur et cockpit. La seule couture
+  restante était le sélecteur `.boussole-scene` de l'inertie : la coque GARDE
+  cette classe à côté de `ciel-noeud-coque` — poignée d'auth conservée, layout
+  neutralisé par la feuille chargée après. **Résultat : la surface auth (sous
+  gate) n'a pas été touchée du tout.**
+- **UNE MIGRATION DE HARNAIS SE FAIT ASSERTION PAR ASSERTION.** `smoke-boussole`
+  section A reclassée : portées (bandeau, cartouche, noscript, zéro CDN),
+  remplacées avec la preuve équivalente ou plus forte (href lu → porte
+  FRANCHIE ; aiguilles → étoiles ; contrastes mesurés contre le fond qui porte
+  réellement l'encre), abandonnées avec raison écrite (l'illumination `is-actif`
+  du cap n'existe pas sur une étoile — le dépliage et le cartouche actif la
+  remplacent). Les sections verrou (C) et cockpit (D) passent SANS RETOUCHE de
+  leurs garanties : le clic Google appelle bien OAuth À TRAVERS le ciel — le
+  pre-mortem « le ciel mange les clics de la porte » est réfuté par l'épreuve.
+- **L'INVITE EST UNE SPÉCIFICITÉ DE LA RACINE.** Les coques ordinaires l'ont
+  retirée (smoke-console l'éprouve par l'absence) ; l'accueil la garde — c'est
+  l'écran qui pose « sur quoi est-ce qu'on travaille aujourd'hui ? ». Le
+  harnais racine l'éprouve par la présence. Deux tests opposés, deux écrans,
+  chacun a raison chez lui.
+- **CE QU'ON NE SUPPRIME PAS : `boussole-noyau.mjs`.** La règle de LV4 §13.4
+  (« seulement si plus aucune page ne l'appelle — vérifié par recherche, pas
+  supposé ») a payé : VRANESH l'appelle encore pour sa boussole des futurs.
+  Il tombera avec P5c, pas avant.
+- **CE QU'ON NE RENOMME PAS SEUL : « Boussole ».** Le title d'index.html et les
+  retours « ↞ Boussole » des coques nomment l'écran d'accueil dans le
+  vocabulaire de Paul. L'écran a changé de rendu, pas de rôle ; renommer serait
+  un choix produit → il reste, signalé à Paul.
+
+## 2026-08-19 — P5c : la dernière rose s'éteint, et une contre-passe qui a payé
+
+Boucle 3 du plan du jour, dernière de LV5. La « boussole des futurs » de VRANESH
+devient un ciel (arbitrage C). Spec déposée AVANT le code (EL ①), implémentée par
+`front-carto`, contre-passée par Léo. Patrimoine COMPLET vert.
+
+- **LA CONTRE-PASSE A ROUGI LÀ OÙ LA PASSE ÉTAIT VERTE, ET C'ÉTAIT MON PROPRE
+  TRAVAIL.** `smoke-boussole` (mon harnais P4, écrit deux heures plus tôt)
+  échouait sur « Cap sans data (ALPHA) : aucun badge » — une fois sur deux.
+  Cause : `mouseenter` arme `setTimeout(deplier, SURVOL_MS=140)`. Ma section D
+  survolait ULTIMA puis focalisait ALPHA **sans jamais quitter ULTIMA** ; le
+  minuteur se déclenchait pendant l'observation d'ALPHA, le re-dessin détruisait
+  l'étoile focalisée et `focusARendre` rendait le focus à ULTIMA — dont le badge
+  réapparaissait. J'attendais 150 ms après un minuteur de 140 : la course se
+  jouait à dix millisecondes. Corrigé par le `mouseleave` qui DÉSARME le
+  minuteur, puis prouvé par **trois passages consécutifs**, pas un seul.
+  *Un test qui dépend d'un minuteur qu'il n'a pas désarmé ne teste pas ce qu'il
+  croit — il teste la vitesse du jour. Et un vert unique ne prouve pas une
+  absence de course : seule la répétition le fait.*
+- **DEUX ÉCARTS DÉLIBÉRÉS AU MOTIF DES COQUES**, écrits dans la spec avant
+  l'implémentation : `fond: false` (la page porte DÉJÀ le sol étoilé de P5b —
+  deux ciels sur un écran se disputent le regard, interdit §16.6) et pas de
+  `margesUtiles` (le ciel vit dans un cadre borné du cartouche, pas derrière un
+  HUD plein écran). Réutiliser un motif, c'est aussi savoir où il ne s'applique
+  pas.
+- **UNE SECTION CACHÉE MESURE ZÉRO.** L'agent a dû déplacer
+  `montrer('vranesh-registre')` AVANT le rendu du ciel : le moteur mesure la
+  boîte réelle du plateau, et une section encore masquée lui donne une boîte
+  nulle. Écart signalé, raison écrite en commentaire. Même famille que
+  `ajusterCadre()` au retour de l'arbre.
+- **LE PIRE CAS SE CONSTRUIT, IL NE S'ATTEND PAS** (règle du 2026-08-01, tenue) :
+  la géométrie est éprouvée sur `couronne(12)` injecté par la fixture, pas sur
+  les deux thèmes du jour. Zéro débordement dans les quatre cas.
+- **L'INSTRUMENT A ÉTÉ VALIDÉ SUR UN CAS DE RÉFÉRENCE** (règle du 2026-08-17) :
+  `ownerSVGElement` désigne bien `ciel-svg` parmi les **4 SVG** de la page, et
+  une étoile poussée hors cadre par le mécanisme réel du moteur est vue. L'angle
+  mort restant est nommé au harnais : un débord par `transform` de groupe serait
+  invisible à `getBBox()` — sans objet, le moteur n'en pose jamais.
+- **`js/boussole-noyau.mjs` supprimé** après vérification par recherche (règle
+  LV4 §13.4) : plus aucun appelant. **Plus une seule rose dans Ultima.**

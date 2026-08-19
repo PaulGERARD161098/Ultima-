@@ -268,13 +268,25 @@ for (const [largeur, hauteur, nom] of [[390, 844, 'a390'], [1280, 860, 'a1280'],
 const COQUES_DE_NAVIGATION = [
   ['ultima.html', 2], ['grima.html', 2], ['tao.html', 2],
   ['naga.html', 3], ['imladrik.html', 3], ['adramelech.html', 3],
-  ['bcp.html', 4]
+  ['bcp.html', 4],
+  // LA RACINE (P4, 2026-08-19) : trois caps — ULTIMA, ALPHA, ALTHEA.
+  ['index.html', 3]
 ];
 for (const [fichier, nbCaps] of COQUES_DE_NAVIGATION) {
   for (const [largeur, hauteur] of [[390, 844], [1280, 860]]) {
     const page = await browser.newPage({ viewport: { width: largeur, height: hauteur } });
     page.on('console', (m) => { if (m.type() === 'error') erreurs.push(fichier + ': ' + m.text()); });
     page.on('pageerror', (e) => erreurs.push(fichier + ': ' + String(e)));
+    // La racine porte la porte de connexion (z-index 2000) : sans session,
+    // l'overlay couvrirait le mobilier et fausserait toutes les mesures. Le
+    // plein écran se juge sur l'écran CONNECTÉ — on neutralise la config
+    // (mode démo : porte cachée, ciel visible), comme smoke-boussole stube le
+    // client pour jouer ses scénarios.
+    if (fichier === 'index.html') {
+      await page.route('**/js/config.js', (route) => route.fulfill({
+        contentType: 'application/javascript', body: '// mode démo (harnais)',
+      }));
+    }
     await page.goto('http://127.0.0.1:8123/' + fichier, { waitUntil: 'load' });
     await page.waitForSelector('.ciel-noeud-plateau.is-pret', { timeout: 20000 });
     await page.waitForTimeout(1900);

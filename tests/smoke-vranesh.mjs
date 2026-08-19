@@ -41,6 +41,37 @@ function versHex(rgb) {
   return '#' + m.slice(0, 3).join('');
 }
 
+// ---- Lire et manipuler le CIEL des thèmes (P5c, 2026-08-19) ----
+// La rose est morte (arbitrage C, cadrage LV5 §3.3) : les thèmes sont des
+// étoiles du moteur commun (js/ciel.js). Deux différences d'instrumentation,
+// héritées de smoke-lv4-ciel.mjs :
+//   — hover()/click() Playwright EXPIRENT sur un ciel : la caméra glisse en
+//     permanence, l'« actionnabilité » n'est jamais stable — on dispatch donc
+//     les événements nous-mêmes, sur le groupe de l'étoile ;
+//   — l'ordre visuel est rangé par la GÉOMÉTRIE (couronne), pas par la
+//     fixture : les noms se comparent en ENSEMBLES, jamais en séquences.
+function lireNomsEtoiles(page) {
+  return page.evaluate(() => Array.from(
+    document.querySelectorAll('#vranesh-plateau g.ciel-etoile[data-noeud-id] text.ciel-nom'))
+    .map((t) => (t.textContent || '').trim()));
+}
+function agirSurEtoile(page, nom, evenement) {
+  return page.evaluate(([nom, evenement]) => {
+    const g = Array.from(
+      document.querySelectorAll('#vranesh-plateau g.ciel-etoile[data-noeud-id]'))
+      .find((e) => ((e.querySelector('text.ciel-nom') || {}).textContent || '').trim() === nom);
+    if (!g) { return false; }
+    // `click` doit BULLER (l'écouteur du moteur vit sur le SVG racine) ;
+    // mouseenter/mouseleave ne bullent pas, mais nos écouteurs vivent SUR le
+    // groupe — le dispatch direct suffit.
+    g.dispatchEvent(new MouseEvent(evenement, { bubbles: evenement === 'click' }));
+    return true;
+  }, [nom, evenement]);
+}
+const cliquerEtoile = (page, nom) => agirSurEtoile(page, nom, 'click');
+const survolerEtoile = (page, nom) => agirSurEtoile(page, nom, 'mouseenter');
+const quitterEtoile = (page, nom) => agirSurEtoile(page, nom, 'mouseleave');
+
 const REF_SUPABASE = 'leosfqyidgsaescjbfom';
 function scriptFausseSession() {
   return `try {
@@ -162,9 +193,11 @@ console.log('— A. vranesh.html SANS session (fail-closed) —');
   const hLien = await page.locator('#vranesh-auth .retour-console').evaluate((el) => el.getBoundingClientRect().height);
   verifier('Tap target lien connexion ≥ 44 px', hLien >= 44, `${hLien}px`);
 
-  // La boussole des futurs est DONNÉE : sans session, elle n'existe pas.
-  verifier('Boussole des futurs absente sans session',
-    (await page.locator('#vranesh-plateau .cap').count()) === 0);
+  // Le ciel des futurs est DONNÉE : sans session, il n'existe pas.
+  // P5c — REMPLACÉE (« aucun .cap ») : la rose est morte, un thème est une
+  // étoile du ciel. Le fond ne change pas : rien n'est monté sans session.
+  verifier('Ciel des futurs absent sans session (aucune étoile)',
+    (await page.locator('#vranesh-plateau g.ciel-etoile').count()) === 0);
   verifier('Aucune branche tracée sans session',
     (await page.locator('.vranesh-branche-trait').count()) === 0);
 
@@ -460,13 +493,16 @@ console.log('— C. vranesh.html fausse session → 401 fail-closed —');
   await page.close();
 }
 
-// ====== D. La boussole → l'arbre : affichage À LA DEMANDE (v2, 2026-08-01) ======
+// ====== D. Le ciel → l'arbre : affichage À LA DEMANDE (v2, 2026-08-01) ======
 // Constat de Paul sur la v1 : « c'est trop gros, trop général, il y a trop de
-// textes ». Forme retenue : ① la rose ne porte que les NOMS ; ② un CLIC ouvre
-// l'arbre du thème (tronc + branches) et efface la rose ; ③ le côté donne UNE
-// LIGNE au survol, TOUT au clic. Le registre détaillé est REPLIÉ.
+// textes ». Forme retenue : ① le premier étage ne porte que les NOMS ; ② un
+// CLIC ouvre l'arbre du thème (tronc + branches) et efface le premier étage ;
+// ③ le côté donne UNE LIGNE au survol, TOUT au clic. Registre détaillé REPLIÉ.
+// P5c (2026-08-19) : le premier étage n'est plus la rose mais un CIEL du
+// moteur commun — chaque assertion de la rose est ci-dessous PORTÉE,
+// REMPLACÉE ou ABANDONNÉE, avec sa raison écrite en marge.
 // Ce qui se prouve ici est autant ce qui s'affiche que ce qui NE s'affiche PAS.
-console.log('— D. vranesh.html → la rose (noms seuls), puis l’arbre au clic —');
+console.log('— D. vranesh.html → le ciel (noms seuls), puis l’arbre au clic —');
 {
   const { page, erreurs, externes } = await nouvellePage();
   await page.addInitScript(scriptFausseSession());
@@ -484,22 +520,57 @@ console.log('— D. vranesh.html → la rose (noms seuls), puis l’arbre au cli
     status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IMLADRIK) }));
 
   await page.goto(`${BASE}/vranesh.html`, { waitUntil: 'load', timeout: 20000 });
-  await page.waitForSelector('#vranesh-plateau .cap', { timeout: 20000 });
+  // P5c — l'attente passe par le CONTRAT is-pret, PORTÉ tel quel : le ciel le
+  // pose sur le plateau au même moment logique que la rose (cf. tests/_caps.mjs).
+  await page.waitForSelector('#vranesh-plateau.is-pret', { timeout: 20000 });
 
-  // ---- ① La rose : les noms, rien d'autre. ----
-  verifier('2 thèmes rendus en caps', (await page.locator('#vranesh-plateau .cap').count()) === 2);
-  const noms = await page.locator('#vranesh-plateau .cap-nom').allTextContents();
-  verifier('Le cap porte le NOM SEUL, pas l’intitulé complet',
-    noms.includes('TRAVERSÉE') && noms.includes('CARREFOUR'), JSON.stringify(noms));
-  verifier('ABSENCE — aucun sous-titre de thème sur la rose',
+  // ---- ① Le ciel : les noms, rien d'autre. ----
+  // P5c — REMPLACÉE (« 2 thèmes rendus en caps ») : un thème = une étoile.
+  verifier('2 thèmes rendus en étoiles',
+    (await page.locator('#vranesh-plateau g.ciel-etoile[data-noeud-id]').count()) === 2);
+  // P5c — REMPLACÉE (« Le cap porte le NOM SEUL ») : le nom vit dans
+  // text.ciel-nom, comparé en ENSEMBLE au CONTENU de la fixture. L'ordre est
+  // ABANDONNÉ : la géométrie (couronne) range, pas la donnée.
+  const noms = await lireNomsEtoiles(page);
+  verifier('L’étoile porte le NOM SEUL, pas l’intitulé complet',
+    noms.length === 2 && ['TRAVERSÉE', 'CARREFOUR'].every((n) => noms.includes(n)),
+    JSON.stringify(noms));
+  // P5c — PORTÉE : le plateau ne doit toujours porter aucun sous-titre.
+  verifier('ABSENCE — aucun sous-titre de thème sur le ciel',
     !/un départ à préparer|—\s*l/.test((await page.locator('#vranesh-plateau').textContent()) || ''));
   verifier('Aucune branche tant qu’aucun thème n’est ouvert',
     (await page.locator('.vranesh-branche').count()) === 0);
   verifier('L’arbre est fermé à l’arrivée',
     await page.locator('#vranesh-arbre').evaluate((el) => el.hidden));
-  verifier('Médaillon gravé au cœur', (await page.locator('#vranesh-plateau .boussole-coeur svg').count()) === 1);
-  verifier('CARREFOUR (0 scénario) porte l’état « à explorer »',
-    /à explorer/.test((await page.locator('#vranesh-plateau .cap', { hasText: 'CARREFOUR' }).textContent()) || ''));
+  // P5c — ABANDONNÉE (« Médaillon gravé au cœur ») : le médaillon siégeait au
+  // CENTRE DE LA ROSE ; un ciel n'a pas de centre gravé, et l'identité du
+  // quadrant est déjà portée par le blason du bandeau. Rien ne la remplace.
+  // P5c — REMPLACÉE (« CARREFOUR porte l’état à explorer ») : l'état a quitté
+  // le cap pour LA PAROLE — il se lit au survol/focus de l'étoile, dans le
+  // cartouche de côté. Le dispatch remplace hover() (voir l'instrument).
+  await survolerEtoile(page, 'CARREFOUR');
+  await page.waitForSelector('#vranesh-parole.is-actif', { timeout: 5000 });
+  const paroleSurvol = (await page.locator('#vranesh-parole').textContent()) || '';
+  verifier('Survol d’une étoile : la parole nomme le thème et son état « à explorer »',
+    /CARREFOUR/.test(paroleSurvol) && /à explorer/.test(paroleSurvol), paroleSurvol);
+  await quitterEtoile(page, 'CARREFOUR');
+  verifier('Sortie du survol : la parole revient au repos',
+    /Clique un thème/.test((await page.locator('#vranesh-parole').textContent()) || ''));
+  // P5c — AJOUT (contraste mesuré contre le fond RÉELLEMENT peint) : les noms
+  // d'étoiles se lisent sur la nuit de la fenêtre, plus sur le parchemin. On
+  // lit le fill réel et les DEUX bouts du dégradé réel — le pire des deux fait
+  // le verdict.
+  const nuit = await page.evaluate(() => {
+    const scene = document.querySelector('#vranesh-plateau .vranesh-ciel-scene');
+    const cs = getComputedStyle(scene);
+    return {
+      haute: cs.getPropertyValue('--ciel-nuit-haute').trim(),
+      basse: cs.getPropertyValue('--ciel-nuit-basse').trim(),
+      nom: document.querySelector('#vranesh-plateau text.ciel-nom').getAttribute('fill'),
+    };
+  });
+  const rNom = Math.min(ratio(nuit.nom, nuit.haute), ratio(nuit.nom, nuit.basse));
+  verifier('Contraste nom d’étoile sur la nuit ≥ 4,5:1', rNom >= 4.5, `${rNom.toFixed(2)}:1`);
 
   // ---- Le registre détaillé est REPLIÉ : plus de mur de texte à l'arrivée. ----
   const repli = page.locator('#vranesh-registre-detail');
@@ -544,14 +615,36 @@ console.log('— D. vranesh.html → la rose (noms seuls), puis l’arbre au cli
     motsArrivee.mots < 50, `${motsArrivee.mots} mots`);
   verifier('Aucun pavé à l’arrivée : le plus long bloc tient en 12 mots',
     motsArrivee.plusLongBloc <= 12, `${motsArrivee.plusLongBloc} mots dans le plus long`);
-  const nomsVus = await page.locator('#vranesh-plateau .cap-nom').allTextContents();
+  // P5c — REMPLACÉE (lecture .cap-nom → text.ciel-nom) : même fond, les deux
+  // thèmes sont visibles sans un geste.
+  const nomsVus = await lireNomsEtoiles(page);
   verifier('Les deux thèmes sont là, tout de suite, sans un clic',
     nomsVus.length === 2, JSON.stringify(nomsVus));
 
-  // ---- ② Le clic ouvre l'arbre et efface la rose. ----
-  await page.locator('#vranesh-plateau .cap', { hasText: 'TRAVERSÉE' }).click();
+  // ---- ①bis P5c — AJOUT (critère ④4 de la spec) : CLAVIER = SOURIS. ----
+  // Le focus dépose la parole, Entrée ouvre l'arbre (role="button" du moteur).
+  // Éprouvé AU CLAVIER, pas déduit de la souris (pre-mortem de la spec).
+  await page.evaluate(() => {
+    const g = Array.from(
+      document.querySelectorAll('#vranesh-plateau g.ciel-etoile[data-noeud-id]'))
+      .find((e) => ((e.querySelector('text.ciel-nom') || {}).textContent || '').trim() === 'TRAVERSÉE');
+    g.focus();
+  });
+  verifier('Focus clavier : la parole nomme le thème',
+    /TRAVERSÉE/.test((await page.locator('#vranesh-parole').textContent()) || ''));
+  await page.keyboard.press('Enter');
   await page.waitForSelector('#vranesh-arbre:not([hidden])', { timeout: 5000 });
-  verifier('La rose s’efface au profit de l’arbre',
+  verifier('Entrée au clavier ouvre l’arbre du thème focalisé',
+    (await page.locator('#vranesh-arbre-nom').textContent()) === 'TRAVERSÉE');
+  await page.locator('#vranesh-arbre-retour').click();
+  await page.waitForTimeout(120);
+
+  // ---- ② Le clic ouvre l'arbre et efface le ciel. ----
+  // P5c — REMPLACÉE (clic de cap → dispatch click sur l'étoile : hover()/
+  // click() Playwright expirent sur un ciel, voir l'instrument en tête).
+  await cliquerEtoile(page, 'TRAVERSÉE');
+  await page.waitForSelector('#vranesh-arbre:not([hidden])', { timeout: 5000 });
+  verifier('Le ciel s’efface au profit de l’arbre',
     await page.locator('#vranesh-plateau').evaluate((el) => el.hidden));
   verifier('Le tronc part de la base', (await page.locator('.vranesh-tronc').count()) === 1);
   verifier('3 branches — une par futur de ce thème',
@@ -644,15 +737,15 @@ console.log('— D. vranesh.html → la rose (noms seuls), puis l’arbre au cli
   await page.locator('.vranesh-bourgeon').first().click();
   await page.waitForTimeout(120);
 
-  // ---- Retour : on retrouve la rose intacte. ----
+  // ---- Retour : on retrouve le ciel intact. ----
   await page.locator('#vranesh-arbre-retour').click();
-  verifier('Retour : la rose revient',
+  verifier('Retour : le ciel revient',
     (await page.locator('#vranesh-plateau').evaluate((el) => el.hidden)) === false);
   verifier('Retour : l’arbre se referme',
     await page.locator('#vranesh-arbre').evaluate((el) => el.hidden));
 
   // ---- Un thème sans futur : une base qui attend, jamais un reproche. ----
-  await page.locator('#vranesh-plateau .cap', { hasText: 'CARREFOUR' }).click();
+  await cliquerEtoile(page, 'CARREFOUR'); // P5c — dispatch, comme plus haut
   await page.waitForSelector('#vranesh-arbre:not([hidden])', { timeout: 5000 });
   verifier('Thème nu : aucune branche', (await page.locator('.vranesh-branche').count()) === 0);
   const nu = (await page.locator('#vranesh-arbre-dessin').textContent()) || '';
@@ -698,10 +791,18 @@ console.log('— D. vranesh.html → la rose (noms seuls), puis l’arbre au cli
   verifier('charpente : 3 futurs → 3 branches alternées, toutes sur le tronc',
     pur.charpente3 === 3 && pur.alternance === '-1,1,-1' && pur.surTronc, JSON.stringify(pur));
 
-  // ---- Hygiène (de retour sur la rose : un cap n'a de taille que visible). ----
+  // ---- Hygiène (de retour sur le ciel : une zone n'a de taille que visible). ----
   await page.locator('#vranesh-arbre-retour').click();
-  const hCap = await page.locator('#vranesh-plateau .cap').first().evaluate((el) => el.getBoundingClientRect().height);
-  verifier('Tap target cap ≥ 44 px', hCap >= 44, `${hCap}px`);
+  // P5c — REMPLACÉE (« Tap target cap ≥ 44 px ») : l'étoile n'est pas un
+  // bouton HTML ; sa cible tactile est la zone de captation du moteur
+  // (.ciel-zone, plancher RAYON_CAPTATION_MIN), et le plancher tactile du
+  // ciel est 24 px (css/ciel.css — boutons ronds « comme les étoiles
+  // elles-mêmes »). On mesure la PLUS PETITE zone réellement rendue.
+  const zoneMin = await page.evaluate(() => Math.min(
+    ...Array.from(document.querySelectorAll('#vranesh-plateau .ciel-zone'))
+      .map((z) => z.getBoundingClientRect().width)));
+  verifier('Cible tactile d’étoile ≥ 24 px (plancher du ciel)',
+    zoneMin >= 24, `${zoneMin.toFixed(1)}px`);
   verifier('Zéro requête externe (arbre)', externes.length === 0, externes.slice(0, 3).join(', '));
   verifier('Zéro erreur console (arbre)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
   await page.screenshot({ path: `${CAPTURES}/vranesh-arbre.png`, fullPage: true });
@@ -884,14 +985,21 @@ console.log('— F. vranesh.html thème advenu → une seule branche, scellée �
     status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IMLADRIK) }));
 
   await page.goto(`${BASE}/vranesh.html`, { waitUntil: 'load', timeout: 20000 });
-  await page.waitForSelector('#vranesh-plateau .cap', { timeout: 20000 });
+  await page.waitForSelector('#vranesh-plateau.is-pret', { timeout: 20000 }); // P5c — contrat is-pret, porté
 
-  const capAdvenu = page.locator('#vranesh-plateau .cap', { hasText: 'TRAVERSÉE' });
-  verifier('Le cap porte l’état « advenu »', /advenu/.test((await capAdvenu.textContent()) || ''));
-  verifier('Le cap est marqué scellé', await capAdvenu.evaluate((el) => el.classList.contains('cap--advenu')));
+  // P5c — REMPLACÉE (« Le cap porte l’état advenu ») : l'état a quitté le cap
+  // pour LA PAROLE, au survol/focus de l'étoile.
+  await survolerEtoile(page, 'TRAVERSÉE');
+  await page.waitForSelector('#vranesh-parole.is-actif', { timeout: 5000 });
+  verifier('Survol du thème scellé : la parole porte l’état « advenu »',
+    /advenu/.test((await page.locator('#vranesh-parole').textContent()) || ''));
+  // P5c — ABANDONNÉE (« Le cap est marqué scellé », classe cap--advenu) : la
+  // classe d'habillage appartenait à la rose. L'état advenu reste prouvé
+  // ci-dessus (parole) et ci-dessous (branche advenue + sceau de l'arbre).
+  await quitterEtoile(page, 'TRAVERSÉE');
 
   // L'arbre du thème advenu : une seule branche, tracée comme telle.
-  await capAdvenu.click();
+  await cliquerEtoile(page, 'TRAVERSÉE'); // P5c — dispatch (voir l'instrument)
   await page.waitForSelector('#vranesh-arbre:not([hidden])', { timeout: 5000 });
   verifier('Une seule branche subsiste sur le thème advenu',
     (await page.locator('.vranesh-branche').count()) === 1);
@@ -976,8 +1084,8 @@ console.log('— G. vranesh.html → choisir la branche qui a poussé depuis l�
     status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IMLADRIK) }));
 
   await page.goto(`${BASE}/vranesh.html`, { waitUntil: 'load', timeout: 20000 });
-  await page.waitForSelector('#vranesh-plateau .cap', { timeout: 20000 });
-  await page.locator('#vranesh-plateau .cap', { hasText: 'TRAVERSÉE' }).click();
+  await page.waitForSelector('#vranesh-plateau.is-pret', { timeout: 20000 }); // P5c — contrat is-pret, porté
+  await cliquerEtoile(page, 'TRAVERSÉE'); // P5c — dispatch (voir l'instrument)
   await page.waitForSelector('#vranesh-arbre:not([hidden])', { timeout: 5000 });
 
   const cote = page.locator('#vranesh-parole');
@@ -1087,8 +1195,8 @@ console.log('— H. vranesh.html thème dénoué → le futur advenu occupe la p
     status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IMLADRIK) }));
 
   await page.goto(`${BASE}/vranesh.html`, { waitUntil: 'load', timeout: 20000 });
-  await page.waitForSelector('#vranesh-plateau .cap', { timeout: 20000 });
-  await page.locator('#vranesh-plateau .cap', { hasText: 'TRAVERSÉE' }).click();
+  await page.waitForSelector('#vranesh-plateau.is-pret', { timeout: 20000 }); // P5c — contrat is-pret, porté
+  await cliquerEtoile(page, 'TRAVERSÉE'); // P5c — dispatch (voir l'instrument)
   await page.waitForSelector('#vranesh-arbre:not([hidden])', { timeout: 5000 });
 
   const cote = page.locator('#vranesh-parole');
@@ -1194,8 +1302,8 @@ console.log('— I. vranesh.html arbre chargé → aucune étiquette hors cadre 
     status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IMLADRIK) }));
 
   await page.goto(`${BASE}/vranesh.html`, { waitUntil: 'load', timeout: 20000 });
-  await page.waitForSelector('#vranesh-plateau .cap', { timeout: 20000 });
-  await page.locator('#vranesh-plateau .cap', { hasText: 'PIRE CAS' }).click();
+  await page.waitForSelector('#vranesh-plateau.is-pret', { timeout: 20000 }); // P5c — contrat is-pret, porté
+  await cliquerEtoile(page, 'PIRE CAS'); // P5c — dispatch (voir l'instrument)
   await page.waitForSelector('#vranesh-arbre:not([hidden])', { timeout: 5000 });
 
   verifier('6 branches tracées', (await page.locator('.vranesh-branche').count()) === 6);
@@ -1302,8 +1410,8 @@ console.log('— J. vranesh.html → la greffe (thème « construction ») —')
     status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IMLADRIK) }));
 
   await page.goto(`${BASE}/vranesh.html`, { waitUntil: 'load', timeout: 20000 });
-  await page.waitForSelector('#vranesh-plateau .cap', { timeout: 20000 });
-  await page.locator('#vranesh-plateau .cap', { hasText: 'CHANTIER' }).click();
+  await page.waitForSelector('#vranesh-plateau.is-pret', { timeout: 20000 }); // P5c — contrat is-pret, porté
+  await cliquerEtoile(page, 'CHANTIER'); // P5c — dispatch (voir l'instrument)
   await page.waitForSelector('#vranesh-arbre:not([hidden])', { timeout: 5000 });
 
   // ---- La FORME SUIT LA NATURE : une greffe, pas un arbre. ----
@@ -1436,7 +1544,7 @@ console.log('— J. vranesh.html → la greffe (thème « construction ») —')
 
   // ---- Un thème « direction » n'est PAS touché : il garde son arbre. ----
   await page.locator('#vranesh-arbre-retour').click().catch(() => {});
-  await page.locator('#vranesh-plateau .cap', { hasText: 'CARREFOUR' }).click();
+  await cliquerEtoile(page, 'CARREFOUR'); // P5c — dispatch (voir l'instrument)
   await page.waitForSelector('#vranesh-arbre:not([hidden])', { timeout: 5000 });
   verifier('Un thème « direction » garde l’arbre, intact',
     (await page.locator('.vranesh-tronc').count()) === 1
@@ -1446,6 +1554,105 @@ console.log('— J. vranesh.html → la greffe (thème « construction ») —')
   verifier('Zéro erreur console (greffe)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
   await page.screenshot({ path: `${CAPTURES}/vranesh-greffe.png`, fullPage: true });
   await page.close();
+}
+
+// ====== K. P5c — LA GÉOMÉTRIE DU CIEL SE MESURE (390/1280 + couronne(12)) ======
+// Règles de charte : une géométrie se MESURE, elle ne se valide pas à l'œil
+// (2026-08-01) ; le pire cas est CONSTRUIT — 12 thèmes injectés par la
+// fixture, car les données du jour sont un échantillon favorable ; et le SVG
+// mesuré est celui DE LA SCÈNE, atteint par `ownerSVGElement` depuis une
+// étoile — JAMAIS querySelector('svg'), qui avait attrapé un blason 72×72 le
+// 2026-08-17 et comparé des étoiles au mauvais cadre.
+// L'INSTRUMENT A ÉTÉ VALIDÉ SUR UN CAS DE RÉFÉRENCE (règle 2026-08-17) avant
+// d'être cru : ownerSVGElement rend bien `ciel-svg` parmi les 4 SVG de la
+// page, et une étoile poussée hors cadre PAR LE MÉCANISME DU MOTEUR (attributs
+// cx/cy des enfants — le moteur ne pose jamais de transform sur les groupes)
+// est vue (dehors = 1). Nota : un débord par `transform` du groupe serait
+// invisible à getBBox() — angle mort sans objet ici, consigné pour le jour où
+// le moteur changerait de mécanisme.
+console.log('— K. vranesh.html → getBBox ⊂ viewBox, deux largeurs, couronne(12) —');
+{
+  const FIXTURE_COURONNE = {
+    ok: true,
+    data: {
+      situations: Array.from({ length: 12 }, (_, i) => ({
+        id: `t${i + 1}`, intitule: `THÈME ${String(i + 1).padStart(2, '0')}`,
+        nb_scenarios: 0, a_explorer: true, created_at: '2026-07-01T10:00:00Z',
+      })),
+      scenarios: [], liens: [],
+    },
+  };
+  for (const [largeur, hauteur] of [[390, 844], [1280, 900]]) {
+    for (const [nomJeu, jeu, attendu] of [['fixture(2)', FIXTURE, 2], ['couronne(12)', FIXTURE_COURONNE, 12]]) {
+      const { page, erreurs } = await nouvellePage({ viewport: { width: largeur, height: hauteur } });
+      await page.addInitScript(scriptFausseSession());
+      await page.route(`**://${REF_SUPABASE}.supabase.co/**`, (route) =>
+        route.fulfill({ status: 503, contentType: 'application/json', body: '{}' }));
+      await page.route('**/api/situations**', (route) => route.fulfill({
+        status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(jeu) }));
+      await page.route('**/api/serments**', (route) => route.fulfill({
+        status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_SERMENTS) }));
+      await page.route('**/api/imladrik**', (route) => route.fulfill({
+        status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IMLADRIK) }));
+      await page.goto(`${BASE}/vranesh.html`, { waitUntil: 'load', timeout: 20000 });
+      await page.waitForSelector('#vranesh-plateau.is-pret', { timeout: 20000 });
+      // La caméra glisse asymptotiquement : on mesure APRÈS son arrivée —
+      // attente MESURÉE (motif smoke-lv4-ciel : l'écart résiduel est sous le
+      // pour-cent à 1 400 ms), pas une « stabilité » qui n'arrive jamais.
+      await page.waitForTimeout(1400);
+      const m = await page.evaluate(() => {
+        const g0 = document.querySelector('#vranesh-plateau g.ciel-etoile[data-noeud-id]');
+        const svg = g0.ownerSVGElement; // LE SVG DE LA SCÈNE, pas un autre de la page
+        const vb = svg.viewBox.baseVal;
+        const gs = Array.from(svg.querySelectorAll('g.ciel-etoile[data-noeud-id]'));
+        // Tout ce qui est PEINT se mesure : les étoiles (halo et nom compris,
+        // via getBBox du groupe) ET les étiquettes d'amas si une parlait —
+        // leçon lv4 : un harnais qui ne regarde qu'une partie de ce qui est
+        // peint ne dit rien de ce qui est peint.
+        const peints = gs.concat(Array.from(svg.querySelectorAll('text.ciel-nom-amas'))
+          .filter((t) => +(t.getAttribute('opacity') || '1') > 0.02));
+        let dehors = 0; let debordMax = 0;
+        peints.forEach((g) => {
+          const b = g.getBBox();
+          const d = Math.max(vb.x - b.x, vb.y - b.y,
+            (b.x + b.width) - (vb.x + vb.width), (b.y + b.height) - (vb.y + vb.height));
+          if (d > 0.5) { dehors += 1; }
+          if (d > debordMax) { debordMax = d; }
+        });
+        const xs = []; const ys = [];
+        gs.forEach((g) => {
+          const z = g.querySelector('.ciel-zone');
+          xs.push(+z.getAttribute('cx')); ys.push(+z.getAttribute('cy'));
+        });
+        const occupation = Math.max(
+          (Math.max(...xs) - Math.min(...xs)) / vb.width,
+          (Math.max(...ys) - Math.min(...ys)) / vb.height);
+        return {
+          etoiles: gs.length, dehors,
+          debordMax: +debordMax.toFixed(1),
+          occupation: +(occupation * 100).toFixed(1),
+          viewBox: `${vb.width}×${vb.height}`,
+        };
+      });
+      verifier(`${largeur}px ${nomJeu} : ${attendu} étoiles rendues`,
+        m.etoiles === attendu, JSON.stringify(m));
+      verifier(`${largeur}px ${nomJeu} : personne ne sort du cadre (débordement 0)`,
+        m.dehors === 0, `débord max ${m.debordMax}`);
+      // Le plancher d'occupation n'est ASSERTÉ que sur couronne(12) : c'est le
+      // plancher MESURÉ du moteur pour 12 objets (smoke-lv4-ciel, 19 % — les
+      // noms ne rétrécissent pas quand la caméra recule). Pour 2 thèmes, aucun
+      // plancher n'a été établi par le moteur : le chiffre est CONSIGNÉ
+      // ci-dessous, le verdict de la spec (④5) est le non-débordement.
+      if (attendu === 12) {
+        verifier(`${largeur}px ${nomJeu} : le ciel remplit son cadre (occupation ≥ 19 %)`,
+          m.occupation >= 19, `${m.occupation} %`);
+      }
+      console.log(`    · ${largeur}px ${nomJeu} → viewBox ${m.viewBox}, occupation ${m.occupation} %, hors cadre ${m.dehors} (débord max ${m.debordMax})`);
+      verifier(`${largeur}px ${nomJeu} : zéro erreur console`,
+        erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
+      await page.close();
+    }
+  }
 }
 
 await navigateur.close();

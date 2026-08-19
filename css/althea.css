@@ -37,6 +37,12 @@
    contenu (mesuré : 292 px au lieu de 1180). Le cadran y devenait illisible —
    défaut trouvé par la mesure de la taille de rendu du texte, pas à l'œil. */
 .althea-page {
+  /* LV5 / P6 — LA SURFACE DÉCLARE SON ENCRE SUR ELLE-MÊME. Le sol commun pose
+     son encre crème sur `body[data-fond-etoile]` (spécificité 0,1,1), qui bat
+     `.althea` (0,1,0) : sans cette ligne, tout le texte hérité d'ALTHEA serait
+     repeint en crème et sa règle de couleur actée (parchemin bleuté / or gagné
+     / spectre annoncé) perdrait son troisième pilier en silence. */
+  color: var(--parch);
   width: 100%;
   flex: 1 1 auto;
   max-width: 1180px;
@@ -67,7 +73,19 @@
 }
 @media (max-width: 900px) { .althea-visuel { grid-template-columns: 1fr; } }
 
-.althea-bloc { border: 1px solid var(--trait); padding: 16px 18px 20px; }
+/* LV5 / P6 — QUI POSE DES CHIFFRES POSE LEUR SUPPORT. Avant le sol étoilé, ces
+   blocs vivaient sans fond propre : la nuit unie du body suffisait. Depuis que
+   le sol commun peint des étoiles derrière la page, un bloc transparent
+   laisserait les étoiles passer SOUS les rangs et les jauges — le défaut exact
+   que le registre instrument interdit (« un chiffre mal lu coûte plus qu'un
+   beau fond ne rapporte »). Le support d'ALTHEA n'est pas une nappe de
+   parchemin (exception actée : « l'antique vu de nuit ») : c'est sa propre
+   plaque de nuit, opaque, les étoiles restant visibles ENTRE les blocs. */
+.althea-bloc {
+  border: 1px solid var(--trait);
+  padding: 16px 18px 20px;
+  background: var(--nuit);
+}
 .althea-entete {
   margin: -16px -18px 14px;
   padding: 9px 18px;

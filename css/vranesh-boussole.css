@@ -1,13 +1,17 @@
-/* Ultima — VRANESH : LA BOUSSOLE PUIS L'ARBRE (habillage, v2 2026-08-01).
+/* Ultima — VRANESH : LE CIEL PUIS L'ARBRE (habillage, v2 2026-08-01 ;
+   ciel P5c 2026-08-19).
    ---------------------------------------------------------------------------
-   Complément de css/boussole.css, qui fournit déjà le plateau, les caps, les
-   aiguilles et le cartouche de parole.
+   Complément de css/boussole.css, qui fournit encore le plateau (contrat
+   is-pret) et le cartouche de parole. Depuis P5c (arbitrage C du cadrage LV5
+   §3.3), la ROSE (caps, aiguilles, cœur) n'est plus rendue ici : les thèmes
+   sont un CIEL du moteur commun (js/ciel.js), dans une fenêtre de nuit posée
+   sur le cartouche de parchemin — voir le bloc ① ci-dessous.
 
-   Constat de Paul sur la v1 : « c'est trop gros, c'est trop général et surtout
-   il y a trop de textes. » Forme retenue (Forme ① de
-   design/preview-vranesh-arbre.html) — AFFICHAGE À LA DEMANDE :
-     ① la rose ne porte que les NOMS des thèmes ;
-     ② un clic ouvre l'ARBRE de ce thème (un tronc, des branches) et efface la rose ;
+   Forme d'ensemble inchangée (Forme ① de design/preview-vranesh-arbre.html,
+   constat de Paul sur la v1 : « il y a trop de textes ») — AFFICHAGE À LA
+   DEMANDE :
+     ① le ciel ne porte que les NOMS des thèmes ;
+     ② un clic ouvre l'ARBRE de ce thème (un tronc, des branches) et efface le ciel ;
      ③ le côté donne UNE LIGNE au survol d'une branche, TOUT au clic.
 
    Registre antique : encre et or, gravure sèche, aucune ressource externe.
@@ -20,25 +24,33 @@
   .vranesh-scene { grid-template-columns: 1.3fr 1fr; align-items: start; }
 }
 
-/* ---------- ① La rose sur une page de quadrant ----------
-   Dictée Paul 2026-08-04 : à l'arrivée, « juste LIANDRA, THORIOL ». La notice
-   a disparu du HTML et la saisie s'est repliée ; la rose récupère la place et
-   ses caps grandissent d'autant — c'est le seul objet du premier écran. */
+/* ---------- ① Le ciel des thèmes : une fenêtre de nuit (P5c) ----------
+   Arbitrage C du cadrage LV5 §3.3 (Paul : « que je n'aie plus l'ancien
+   affichage de la boussole ») : le plateau devient une FENÊTRE DE NUIT dans le
+   cartouche de parchemin. Le régime chromatique vient de css/ciel.css — la
+   scène porte la CLASSE `ciel-scene` (jamais des valeurs recopiées ; les
+   jetons de nuit sont sur le body via `ciel-noeud-coque` depuis P5a). */
 .vranesh-boussole .boussole-plateau {
-  width: min(84vmin, 480px);
+  width: 100%;
+  /* Neutralise le cadran 1/1 de css/boussole.css (INTERDITE de retouche —
+     d'autres pages y bâtissent) : la fenêtre n'est pas un disque. */
+  aspect-ratio: auto;
   margin-block: 0.6rem 1rem;
 }
-/* Le cap porte le NOM SEUL : court, donc on le laisse sur une ligne. */
-.vranesh-boussole .cap {
-  width: auto;
-  min-width: 7.5rem;
-  max-width: 13rem;
-  font-family: inherit;
-  padding-block: 0.7rem;
+/* Les gravures de la rose (graduations en couronne, cercle de cadran) sont
+   les ::before/::after de boussole.css : on les éteint ICI — une fenêtre de
+   nuit n'a pas de cadran. */
+.vranesh-boussole .boussole-plateau::before,
+.vranesh-boussole .boussole-plateau::after { content: none; }
+/* La fenêtre elle-même : hauteur du même ordre que la rose d'hier (elle
+   faisait min(84vmin, 480px) de côté), bord gravé du registre antique — PAS
+   d'arrondi : les 3px de .ciel-scene sont ceux de l'onglet RIVEN, pas d'un
+   cartouche gravé. */
+.vranesh-boussole .vranesh-ciel-scene {
+  height: min(84vmin, 480px);
+  border-radius: 0;
+  border-color: var(--or-antique);
 }
-.vranesh-boussole .cap-nom { font-size: clamp(0.95rem, 2.6vmin, 1.2rem); }
-.vranesh-boussole .cap-nom { white-space: normal; }
-.vranesh-boussole .cap--advenu { border-color: var(--creme); }
 
 /* ---------- ② L'arbre du thème ouvert ---------- */
 .vranesh-arbre-cadre {

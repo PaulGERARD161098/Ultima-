@@ -65,7 +65,13 @@ const CIBLES = [
   { page: 'ecrire.html', registre: 'atelier', largeurs: [1280, 390], minTextes: 1 },
   { page: 'idees.html', registre: 'atelier', largeurs: [1280, 390] },
   // ③ INSTRUMENT — on lit des chiffres. Le parchemin domine, la nuit borde.
-  { page: 'abaque.html', registre: 'instrument', largeurs: [1280, 390] }
+  { page: 'abaque.html', registre: 'instrument', largeurs: [1280, 390] },
+  // ALTHEA (P6) : instrument aussi (rangs, jauges), mais son support n'est pas
+  // le parchemin — exception actée « l'antique vu de nuit » : ses blocs de nuit
+  // opaques portent les chiffres (css/althea.css). Sans session, la page montre
+  // ses libellés statiques et ses états vides — assez de texte pour mesurer.
+  { page: 'althea.html', registre: 'instrument', largeurs: [1280, 390], nappe: '.althea-bloc' },
+  { page: 'althea-cadran.html', registre: 'instrument', largeurs: [1280, 390], minTextes: 2, nappe: '.althea-bloc' }
 ];
 
 const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
@@ -119,19 +125,27 @@ async function mesurer(cible, largeur, avecFond) {
   // monté rendrait le contraste trivialement bon, et une mesure qui réussit
   // parce que rien n'a été fait est le pire des faux verts (leçon du
   // `<script>` manquant sur ultima.html, 2026-08-16).
-  const couche = await page.evaluate(() => ({
+  const couche = await page.evaluate((selNappe) => ({
     canvas: !!document.querySelector('canvas.ciel-fond-page'),
     registre: document.body.getAttribute('data-fond-etoile'),
-    // La nappe du registre instrument : elle doit être OPAQUE, sinon les
-    // chiffres se lisent sur les étoiles.
-    nappeOpaque: (() => {
-      const n = document.querySelector('.feuille, main.quadrant-page, main');
-      if (!n) { return null; }
-      const bg = getComputedStyle(n).backgroundColor;
-      const m = /rgba?\([^)]*?(?:,\s*([\d.]+))?\)$/.exec(bg);
-      return bg !== 'rgba(0, 0, 0, 0)' && (!m || !m[1] || +m[1] > 0.98);
-    })()
-  }));
+    // Le support du registre instrument : il doit être OPAQUE, sinon les
+    // chiffres se lisent sur les étoiles. Le sélecteur par défaut présume le
+    // parchemin (`.feuille`, `main`) ; une page dont le support est AUTRE
+    // le déclare dans sa cible (`nappe`) — ALTHEA porte ses chiffres sur ses
+    // propres blocs de nuit (« l'antique vu de nuit », exception actée).
+    // TOUS les supports trouvés doivent être opaques, pas seulement le
+    // premier : un seul bloc transparent suffit à poser un rang sur les
+    // étoiles, et un contrôle qui s'arrête au premier ne l'aurait jamais vu.
+    nappeOpaque: ((sel) => {
+      const ns = [...document.querySelectorAll(sel)];
+      if (!ns.length) { return null; }
+      return ns.every((n) => {
+        const bg = getComputedStyle(n).backgroundColor;
+        const m = /rgba?\([^)]*?(?:,\s*([\d.]+))?\)$/.exec(bg);
+        return bg !== 'rgba(0, 0, 0, 0)' && (!m || !m[1] || +m[1] > 0.98);
+      });
+    })(selNappe)
+  }), cible.nappe || '.feuille, main.quadrant-page, main');
 
   const avant = (await page.screenshot()).toString('base64');
   await page.addStyleTag({ content: '*,*::before,*::after{color:transparent!important;text-shadow:none!important;-webkit-text-fill-color:transparent!important;}' });

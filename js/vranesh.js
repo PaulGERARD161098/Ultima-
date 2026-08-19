@@ -589,27 +589,26 @@
     visibles.forEach(function (s) { conteneur.appendChild(rendreSituation(s)); });
   }
 
-  // ---------- LA BOUSSOLE DES FUTURS, PUIS L'ARBRE (v2, dictée Paul 2026-08-01) ----------
-  // Constat de Paul sur la v1 : « c'est trop gros, c'est trop général et surtout
-  // il y a trop de textes. L'affichage n'est vraiment pas très heureux. »
-  // Forme retenue (Forme ① de design/preview-vranesh-arbre.html) — AFFICHAGE À
-  // LA DEMANDE, en trois étages, jamais tout d'un coup :
-  //   ① la ROSE ne porte que les NOMS des thèmes (+ une pastille de compte) ;
-  //   ② un CLIC sur un thème remplace la rose par SON ARBRE : un tronc qui part
-  //      de la base, des branches qui s'en détachent, une étiquette de quelques
-  //      mots par branche ;
+  // ---------- LE CIEL DES FUTURS, PUIS L'ARBRE ----------
+  // v2 (dictée Paul 2026-08-01) : AFFICHAGE À LA DEMANDE, en trois étages,
+  // jamais tout d'un coup. P5c (2026-08-19, arbitrage C du cadrage LV5 §3.3,
+  // « que je n'aie plus l'ancien affichage de la boussole ») : la ROSE
+  // (aiguilles + cœur + caps) est remplacée par un CIEL du moteur commun —
+  // le reste des étages ne bouge pas :
+  //   ① le CIEL porte une étoile par thème, le NOM et rien d'autre (l'état se
+  //      dit dans la parole, au survol/focus) ;
+  //   ② un CLIC (ou Entrée) sur une étoile remplace le ciel par SON ARBRE :
+  //      un tronc qui part de la base, des branches qui s'en détachent, une
+  //      étiquette de quelques mots par branche ;
   //   ③ un SURVOL de branche l'illumine et donne UNE LIGNE sur le côté ; un CLIC
   //      déplie le détail (signaux, parade, passerelles).
   //   un THÈME = une SITUATION · une BRANCHE = un SCÉNARIO.
   //
-  // Les caps portent des intitulés dictés, donc de la donnée intime : tout est
-  // écrit en createElement/textContent, jamais en innerHTML, et rien n'est rendu
-  // avant que la session ait été validée (chargerRegistre est déjà fail-closed).
+  // Les étoiles portent des intitulés dictés, donc de la donnée intime : tout
+  // est écrit en createElement/textContent, jamais en innerHTML (le moteur du
+  // ciel écrit lui aussi les noms en textContent), et rien n'est rendu avant
+  // que la session ait été validée (chargerRegistre est déjà fail-closed).
 
-  var GEO = {
-    RAYON_CAP: 40,        // rayon des caps sur la rose (viewBox 0..100)
-    RAYON_AIGUILLE: 30    // longueur des aiguilles depuis le centre
-  };
   // L'arbre vit dans son propre repère (viewBox 0 0 300 196), tronc au milieu.
   // Le repère a été ÉLARGI de 240 à 300 le 2026-08-04 : à 240, les étiquettes
   // des branches de gauche sortaient du cadre chez Paul (constat en capture).
@@ -625,17 +624,13 @@
     ETIQ_MIN: 6             // en deçà, une étiquette ne reconnaît plus rien : on n'écrit pas
   };
   var NS_SVG = 'http://www.w3.org/2000/svg';
-  var boussoleEnAttente = false;   // un seul réveil armé à la fois
   var themeOuvert = null;          // id de la situation dont l'arbre est déplié
-
-  // La géométrie de la rose vient du NOYAU (window.UltimaBoussoleNoyau, posé par
-  // js/boussole-noyau.mjs) : on ne recopie pas sa trigonométrie, déjà couverte
-  // par tests/unit-registre-lv3.mjs.
-  function positionsCaps(n) {
-    var noyau = window.UltimaBoussoleNoyau;
-    if (!noyau || typeof noyau.positions !== 'function') { return null; }
-    return noyau.positions(n);
-  }
+  // La vue rendue par le moteur du ciel (P5c). Gardée pour UNE raison :
+  // `ajusterCadre()` — un re-rendu peut avoir lieu pendant que le plateau est
+  // caché (arbre ouvert), et le moteur mesure alors une boîte de zéro ; au
+  // retour, on lui redonne la mesure au lieu d'attendre un resize qui ne
+  // viendra peut-être jamais.
+  var cielVue = null;
 
   function svgEl(nom, classe) {
     var element = document.createElementNS(NS_SVG, nom);
@@ -702,39 +697,36 @@
     return { haut: haut, branches: out };
   }
 
-  function medaillon() {
-    var svg = svgEl('svg');
-    svg.setAttribute('viewBox', '0 0 72 72');
-    svg.setAttribute('aria-hidden', 'true');
-    svg.setAttribute('focusable', 'false');
-    var fond = svgEl('circle');
-    fond.setAttribute('cx', '36'); fond.setAttribute('cy', '36'); fond.setAttribute('r', '33');
-    fond.setAttribute('fill', '#f9f1dc');
-    fond.setAttribute('stroke', '#a9884a');
-    fond.setAttribute('stroke-width', '2.4');
-    svg.appendChild(fond);
-    var cerne = svgEl('circle');
-    cerne.setAttribute('cx', '36'); cerne.setAttribute('cy', '36'); cerne.setAttribute('r', '28.5');
-    cerne.setAttribute('fill', 'none');
-    cerne.setAttribute('stroke', '#5a4118');
-    cerne.setAttribute('stroke-width', '1');
-    svg.appendChild(cerne);
-    ['M36 56 V 40',
-     'M36 40 C 36 32, 28 30, 24 22',
-     'M36 40 C 36 30, 36 26, 36 20',
-     'M36 40 C 36 32, 44 30, 48 22'].forEach(function (d, i) {
-      var trait = svgEl('path');
-      trait.setAttribute('d', d);
-      trait.setAttribute('stroke', '#3b2f1c');
-      trait.setAttribute('stroke-width', i === 0 ? '2.6' : '2');
-      trait.setAttribute('fill', 'none');
-      trait.setAttribute('stroke-linecap', 'round');
-      svg.appendChild(trait);
-    });
-    return svg;
+  // ---- ③ Le cartouche de côté : une ligne au survol, tout au clic ----
+
+  // La parole au repos — UN SEUL exemplaire : trois chemins la déposent
+  // (retour de l'arbre, état vide, fin de rendu) et trois copies divergent.
+  var PAROLE_REPOS = 'Clique un thème — son arbre se déplie.';
+
+  // L'état d'un thème, en toutes lettres. La rose l'écrivait sous le nom de
+  // chaque cap ; le ciel ne porte que les noms (P5c), l'état se dit donc dans
+  // la parole, au survol comme au focus.
+  function etatTheme(situation) {
+    if (situation.advenue === true) { return 'advenu'; }
+    if (situation.a_explorer === true) { return 'à explorer'; }
+    return libelleCompte(scenariosDe(situation.id).length);
   }
 
-  // ---- ③ Le cartouche de côté : une ligne au survol, tout au clic ----
+  // Le survol/focus d'une étoile dépose la parole du thème — même balisage que
+  // le reste du cartouche (.parole-nom / .parole-etat / .parole-action), pour
+  // que les assertions existantes gardent un objet à surveiller. Tout en
+  // createElement/textContent : les intitulés sont des données intimes —
+  // contrairement à js/ciel-noeud.mjs, qui ne lit qu'un registre statique.
+  function coteTheme(situation) {
+    var cote = document.getElementById('vranesh-parole');
+    if (!cote || !situation) { return; }
+    cote.textContent = '';
+    cote.classList.add('is-actif');
+    cote.classList.remove('is-advenu');
+    cote.appendChild(el('p', 'parole-nom', nomCourt(situation.intitule)));
+    cote.appendChild(el('p', 'parole-etat', etatTheme(situation)));
+    cote.appendChild(el('p', 'parole-action', 'Clique — son arbre se déplie ↝'));
+  }
 
   function coteRepos(texte) {
     var cote = document.getElementById('vranesh-parole');
@@ -1298,95 +1290,110 @@
     var sceau = document.getElementById('vranesh-arbre-sceau');
     if (sceau) { sceau.hidden = true; }
     plateau.hidden = false;
-    coteRepos('Clique un thème — son arbre se déplie.');
+    // Le cadre du ciel suit la boîte RÉELLE : un re-rendu a pu avoir lieu
+    // pendant que le plateau était caché (boîte mesurée à zéro) — on redonne
+    // la mesure au moteur maintenant que le plateau est visible.
+    if (cielVue) { cielVue.ajusterCadre(); }
+    coteRepos(PAROLE_REPOS);
   }
 
-  // ---- ① La rose : les NOMS des thèmes, rien d'autre ----
+  // ---- ① Le ciel : une étoile par thème, les NOMS et rien d'autre (P5c) ----
 
   function rendreBoussole() {
     var section = document.getElementById('vranesh-boussole');
     var plateau = document.getElementById('vranesh-plateau');
-    var scene = document.getElementById('vranesh-arbre');
-    if (!section || !plateau || !scene) { return; }
+    var arbre = document.getElementById('vranesh-arbre');
+    if (!section || !plateau || !arbre) { return; }
 
     plateau.textContent = '';
+    cielVue = null;
     var themes = Array.isArray(etat.situations) ? etat.situations : [];
 
     if (themes.length === 0) {
+      // L'état vide vit sur le PLATEAU, jamais dans une scène du moteur :
+      // `UltimaCiel.rendre` VIDE son conteneur à chaque dessin (leçon
+      // ciel-noeud) — ici, aucun ciel n'est monté du tout.
       section.hidden = false;
       plateau.hidden = false;
-      scene.hidden = true;
+      arbre.hidden = true;
       plateau.appendChild(el('p', 'vranesh-boussole-vide',
         'Aucun thème de futurs pour l’instant — pose une première situation ci-dessous, '
         + 'elle deviendra un cap de ta boussole.'));
-      coteRepos('Clique un thème — son arbre se déplie.');
+      coteRepos(PAROLE_REPOS);
       return;
     }
 
-    var pts = positionsCaps(themes.length);
-    // Le noyau de géométrie est un MODULE, donc différé : le registre (une seule
-    // requête locale) peut être rendu avant qu'il ne soit évalué. On redessine
-    // alors à `load`, qui arrive toujours après l'exécution des modules.
-    if (!pts) {
-      section.hidden = true;
-      if (!boussoleEnAttente && document.readyState !== 'complete') {
-        boussoleEnAttente = true;
-        window.addEventListener('load', function () {
-          boussoleEnAttente = false;
-          rendreBoussole();
-        }, { once: true });
-      }
-      return;
-    }
+    // Le moteur est un script CLASSIQUE chargé avant celui-ci (vranesh.html) :
+    // il est là. S'il manquait (page dégradée), on cache la section proprement
+    // au lieu de casser la page — jamais d'erreur console.
+    if (!window.UltimaCiel) { section.hidden = true; return; }
     section.hidden = false;
 
-    var svg = svgEl('svg', 'vranesh-aiguilles');
-    svg.setAttribute('viewBox', '0 0 100 100');
-    svg.setAttribute('aria-hidden', 'true');
-    svg.setAttribute('focusable', 'false');
-    themes.forEach(function (t, i) {
-      var aiguille = svgEl('g', 'aiguille');
-      var trait = svgEl('line', 'aiguille-trait');
-      trait.setAttribute('x1', '50'); trait.setAttribute('y1', '50');
-      trait.setAttribute('x2', String(50 + GEO.RAYON_AIGUILLE * pts[i].cos));
-      trait.setAttribute('y2', String(50 + GEO.RAYON_AIGUILLE * pts[i].sin));
-      var pointe = svgEl('circle', 'aiguille-pointe');
-      pointe.setAttribute('cx', String(50 + GEO.RAYON_AIGUILLE * pts[i].cos));
-      pointe.setAttribute('cy', String(50 + GEO.RAYON_AIGUILLE * pts[i].sin));
-      pointe.setAttribute('r', '2.1');
-      aiguille.appendChild(trait); aiguille.appendChild(pointe);
-      svg.appendChild(aiguille);
+    // LA SCÈNE, à part sur le plateau : le moteur la VIDE à chaque rendu
+    // (`textContent = ''`). Tout ce qui doit survivre — l'état vide, le signal
+    // is-pret — vit sur le plateau, HORS de la scène (leçon ciel-noeud).
+    // `ciel-scene` : le régime de nuit de css/ciel.css — la classe, pas des
+    // valeurs recopiées (les jetons viennent du body, ciel-noeud-coque, P5a).
+    var sceneCiel = el('div', 'ciel-scene vranesh-ciel-scene');
+    plateau.appendChild(sceneCiel);
+
+    // Adaptateur local MINIMAL : un thème → une étoile, { id, nom } et RIEN
+    // d'autre. Les intitulés sont intimes : ils n'arrivent que de
+    // /api/situations après session (§5) — jamais du HTML servi — et rien de
+    // plus ne part vers le moteur (ni état ni compte : la parole les dit).
+    var donnees = {
+      noeuds: themes.map(function (t) {
+        return { id: t.id, nom: nomCourt(t.intitule) };
+      }),
+      personnes: [],
+      rattachements: [],
+      relations: []
+    };
+    var parId = {};
+    themes.forEach(function (t) { parId[t.id] = t; });
+
+    cielVue = window.UltimaCiel.rendre(sceneCiel, donnees, {
+      // Motif de js/ciel-noeud.mjs, avec DEUX écarts délibérés (spec P5c ②3) :
+      libellesType: { cap: '' },
+      libellesStatut: {},
+      cadrerSurLesEtoiles: true,
+      tousLesNoms: true,
+      couronne: true,
+      // Écart 1 — PAS de couche de fond : la page a DÉJÀ son sol étoilé
+      // (P5b). Deux fonds se disputeraient le regard (cadrage LV5 §16.6).
+      fond: false,
+      // Écart 2 — pas de margesUtiles : le ciel vit dans un cadre borné du
+      // cartouche, pas en plein écran derrière un HUD.
+      surClicNoeud: function (id) {
+        // Même chemin de code que le clic de cap d'hier : on ouvre l'arbre.
+        // Le clavier (Entrée/Espace) passe par ici aussi (role="button").
+        var situation = parId[id];
+        if (situation) { ouvrirArbre(situation); }
+      }
     });
-    plateau.appendChild(svg);
+    if (cielVue) {
+      cielVue.derive(false); // un menu ne dérive pas : une cible qui bouge est une cible qu'on rate
+    }
 
-    var coeur = el('div', 'boussole-coeur');
-    coeur.setAttribute('aria-hidden', 'true');
-    coeur.appendChild(medaillon());
-    plateau.appendChild(coeur);
+    // Survol/focus d'une étoile → la parole du thème ; sortie → le repos.
+    // Clavier = souris (motif ciel-noeud). Les gardes `themeOuvert` : ouvrir
+    // l'arbre CACHE le plateau et déplace le focus — le mouseleave/blur qui en
+    // découle ne doit pas effacer la parole que l'arbre vient de poser.
+    Array.prototype.forEach.call(
+      plateau.querySelectorAll('g.ciel-etoile[data-noeud-id]'),
+      function (g) {
+        var id = g.getAttribute('data-noeud-id');
+        var entrer = function () { if (!themeOuvert) { coteTheme(parId[id]); } };
+        var sortir = function () { if (!themeOuvert) { coteRepos(PAROLE_REPOS); } };
+        g.addEventListener('mouseenter', entrer);
+        g.addEventListener('mouseleave', sortir);
+        g.addEventListener('focus', entrer);
+        g.addEventListener('blur', sortir);
+      });
 
-    themes.forEach(function (situation, i) {
-      var scenarios = scenariosDe(situation.id);
-      var etatCap = situation.advenue === true
-        ? 'advenu'
-        : (situation.a_explorer === true ? 'à explorer' : libelleCompte(scenarios.length));
-      // Un cap OUVRE l'arbre : c'est un bouton, pas un lien vers le registre.
-      var cap = document.createElement('button');
-      cap.type = 'button';
-      cap.className = 'cap'
-        + (situation.a_explorer === true ? ' cap--avenir' : '')
-        + (situation.advenue === true ? ' cap--advenu' : '');
-      cap.style.left = (50 + GEO.RAYON_CAP * pts[i].cos) + '%';
-      cap.style.top = (50 + GEO.RAYON_CAP * pts[i].sin) + '%';
-      cap.setAttribute('aria-label', nomCourt(situation.intitule) + ' — ' + etatCap);
-
-      var corps = el('span', 'cap-corps');
-      corps.appendChild(el('span', 'cap-nom', nomCourt(situation.intitule)));
-      corps.appendChild(el('span', 'cap-etat', etatCap));
-      cap.appendChild(corps);
-      cap.addEventListener('click', function () { ouvrirArbre(situation); });
-      plateau.appendChild(cap);
-    });
-
+    // LE SIGNAL « C'EST PRÊT » — même contrat que la boussole et que
+    // js/ciel-noeud.mjs : posé sur le PLATEAU, au même moment logique (fin du
+    // premier rendu). tests/_caps.mjs et les harnais patrimoniaux l'attendent.
     plateau.classList.add('is-pret');
 
     // Rafraîchissement après écriture : si un arbre était ouvert, on le rouvre.
@@ -1396,8 +1403,8 @@
       themeOuvert = null;
     }
     plateau.hidden = false;
-    scene.hidden = true;
-    coteRepos('Clique un thème — son arbre se déplie.');
+    arbre.hidden = true;
+    coteRepos(PAROLE_REPOS);
   }
 
   // ---------- Bascule de vue ----------
@@ -1665,8 +1672,13 @@
     await chargerCibles();
 
     rendreSituations();
-    rendreBoussole();
     montrer('vranesh-registre');
+    // Le ciel APRÈS montrer(), et l'ordre n'est pas décoratif (P5c) : le
+    // moteur MESURE la boîte réelle du plateau (clientWidth/clientHeight).
+    // Rendu dans une section encore cachée, il mesurerait zéro et garderait
+    // un cadre de repli faux jusqu'au prochain redimensionnement. La rose
+    // d'hier plaçait ses caps en %, elle n'avait pas ce besoin.
+    rendreBoussole();
     accueillirLeo();
     return true;
   }

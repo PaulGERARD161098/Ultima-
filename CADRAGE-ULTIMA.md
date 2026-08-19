@@ -24,15 +24,49 @@
   coques déjà sur le ciel.
 
   **CE QUI RESTE, DANS L'ORDRE :**
-  - **P6** — `althea.html` et `althea-cadran.html`, registre instrument. Elles
-    n'ont **ni `main` ni `.feuille`** : très probablement le même défaut de
-    support que l'abaque (leur parchemin vient du `body`). Il faudra donc leur
-    trouver un conteneur pour porter la nappe, ou en déclarer un.
-  - **P4** — la racine **`index.html`**, le point dur annoncé dès le cadrage :
-    elle porte l'écran de connexion, et le plateau du ciel est
-    `position: fixed; inset: 0` — il le couvrirait.
-  - **P5c** — la « boussole des futurs » interne de VRANESH devient un ciel
-    (arbitrage C du cadrage).
+  - ✅ **P6 FAIT le 2026-08-19** (session de reprise, PR #172) — `althea.html`
+    et `althea-cadran.html` embarquées, **11 pages au total**. Registre
+    instrument, mais le support n'est PAS une nappe de parchemin : ALTHEA est
+    l'exception actée « l'antique vu de nuit » — ses `.althea-bloc` reçoivent
+    leur propre plaque de nuit opaque (`--nuit`), les étoiles restant visibles
+    ENTRE les blocs ; l'encre `--parch` est déclarée sur `.althea-page` (sinon
+    `body[data-fond-etoile]`, 0,1,1, repeignait tout en crème). Le harnais
+    apprend qu'un instrument peut **déclarer son support** (`nappe:` dans
+    `CIBLES`) et exige désormais que **TOUS** les supports soient opaques, pas
+    seulement le premier — éprouvé rouge en retirant la plaque.
+  - ✅ **P4 FAIT le 2026-08-19** (session de reprise, PR #172) — **la racine
+    `index.html` est passée au ciel** (étape ④c de LV4, la dernière coque, sur
+    le module éprouvé huit fois). La galaxie EST l'accueil : trois étoiles
+    (ULTIMA, ALPHA, ALTHEA), bandeau « Bienvenue » + invite en HUD (la racine
+    GARDE son invite, contrairement aux coques). **La porte n'a pas bougé d'une
+    ligne** : `#ecran-connexion` (z-index 2000) couvre le ciel tant qu'aucune
+    session n'est ouverte, `js/boussole-auth.js` est INTOUCHÉ — la coque garde
+    la classe `boussole-scene` (sa poignée d'inertie), neutralisée en layout
+    par `ciel-noeud.css`. `smoke-boussole` migré assertion par assertion
+    (portée / remplacée / abandonnée avec raison écrite), sections verrou et
+    cockpit intactes ; la racine ajoutée au harnais plein écran (6 verdicts × 2
+    largeurs verts). `js/boussole-noyau.mjs` N'EST PAS supprimé : VRANESH
+    l'appelle encore (boussole des futurs — P5c). Les libellés « Boussole »
+    (title, retours des coques) sont CONSERVÉS : c'est le nom de l'écran dans
+    le vocabulaire de Paul, le renommer serait un choix produit, pas un geste
+    technique.
+  - ✅ **P5c FAIT le 2026-08-19** (session de reprise, PR #172) — la « boussole
+    des futurs » de VRANESH est un **ciel** (arbitrage C), rendu par le moteur
+    commun dans une **fenêtre de nuit** ouverte au milieu du cartouche de
+    parchemin. Spec déposée AVANT le code (`design/spec-p5c-boussole-futurs-ciel.md`),
+    implémentée par `front-carto`, contre-passée par Léo. `smoke-vranesh` passe
+    de **234 à 250 verdicts** (11 portées, 7 remplacées, 2+4 abandonnées avec
+    raison écrite, 18 ajouts) ; géométrie mesurée `getBBox()` ⊂ `viewBox` via
+    `ownerSVGElement`, **zéro débordement** aux deux largeurs ET sur le pire cas
+    `couronne(12)`. Deux écarts délibérés au motif des coques : `fond: false`
+    (la page a déjà son sol étoilé P5b — deux ciels se disputeraient le regard)
+    et pas de `margesUtiles` (cadre borné, pas de HUD plein écran).
+    **`js/boussole-noyau.mjs` SUPPRIMÉ** : plus aucun appelant, vérifié par
+    recherche. **Plus une seule rose dans Ultima.**
+
+  **LES TROIS RESTES DE LV5 SONT FERMÉS.** Le sol étoilé couvre 11 pages, les
+  neuf écrans de navigation ET la racine sont au ciel, et la dernière boussole
+  interne a rejoint le moteur commun.
 
   **COMMENT EMBARQUER UNE PAGE (la recette, éprouvée sur 9)** : quatre ajouts —
   `css/ciel.css` + `css/ciel-fond-page.css` en fin de `<head>`, la classe
@@ -87,25 +121,22 @@
     boucle à soi seule, à ouvrir explicitement.
   - **Légende `KALAMN-TALAEN` coupée au bord gauche** sur le ciel IMLADRIK en
     390 px. Sans rapport avec LV5.
-  - **Opposition de TAO qui bascule en vertical à 390 px** : avis de Paul demandé,
-    jamais donné.
+  - **Lien « ↞ Ultima » d'ALTHEA à 4,36:1 en 1280** (jeton `--parch-bas` sur la
+    nuit ; 5,10:1 en 390). Préexistant — mesuré identique avec et sans le sol
+    étoilé (P6). Même famille que les 5 demi-teintes de l'abaque : à traiter
+    dans la boucle « demi-teintes limites », à ouvrir explicitement.
+  - ✅ **Opposition de TAO qui bascule en vertical à 390 px** : validée telle
+    quelle par Paul le 2026-08-19 (« c'est ok pour TAO »). Rien à changer.
   - **Léo ne peut pas voir la preview Vercel** : le proxy de l'environnement
     refuse l'hôte (403 au CONNECT). Toute vérification est donc **locale**
     (Chromium réel) — le dire à Paul à chaque rapport plutôt que de laisser croire
     que la preview a été regardée.
-  - 🔻 **LA FICHE NOTION N'A PAS PU ÊTRE SYNCHRONISÉE** (point 4 du protocole de
-    fin de session). L'écriture Notion demande une approbation d'outil qui n'a pas
-    été accordée, deux tentatives. **À reprendre au début de la prochaine
-    session**, et deux choses sont à savoir :
-    ① la fiche « 📦 Repo Ultima- — Fiche projet » (`392c68b1-1948-81b0-9efb-fa0bd7b7c2b7`)
-    **s'arrête au 2026-07-23** — les sessions du 24/07 au 14/08 (LV3, LV4, RIVEN
-    stellaire, IMLADRIK) n'y sont jamais remontées non plus ; le repo est donc la
-    **seule** source complète, et il l'est ;
-    ② l'entrée à y écrire n'est pas à réinventer : **c'est le contenu de cette
-    section §ÉTAT** (registres, 9 pages, recette d'embarquement, reste à faire,
-    règles payées, actions humaines), plus les blocs 🔒/⚡ du rapport de clôture
-    consignés dans `memoire/JOURNAL-DECISIONS.md` à la date du 2026-08-17.
-    *Rien n'est perdu — c'est une recopie à faire, pas un travail à refaire.*
+  - ✅ **FICHE NOTION SYNCHRONISÉE le 2026-08-19** (boucle 0 de la session de
+    reprise — la dette de clôture du 17/08 est soldée). L'entrée LV5 complète
+    (registres, 9 pages, recette, reste à faire, règles payées, blocs 🔒/⚡) est
+    en tête de la fiche « 📦 Repo Ultima- — Fiche projet »
+    (`392c68b1-1948-81b0-9efb-fa0bd7b7c2b7`), avec le nota qui renvoie au repo
+    pour le détail des sessions 24/07→14/08 — le repo reste la source complète.
 
 - 🌠 **SESSION 2026-08-13/14 (LV4 — Ultima devient un ciel qui se déplie), EN
   COURS — PR #163, brouillon, NON fusionnée.** Cadrage :

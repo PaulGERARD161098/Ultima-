@@ -1,5 +1,5 @@
-// Unitaires du registre Lv3 et du noyau de boussole (L1) — Node pur, zéro
-// réseau, zéro navigateur. Prouve les invariants de CADRAGE-LV3.md :
+// Unitaires du registre Lv3 et du cockpit — Node pur, zéro réseau, zéro
+// navigateur. Prouve les invariants de CADRAGE-LV3.md :
 //   1. L'arbre est cohérent : aucun orphelin, aucune cible morte, chaque cap a
 //      son blason / son état / sa parole, chaque boussole a son cœur et sa
 //      légende gravée, tout est atteignable depuis la racine.
@@ -7,14 +7,17 @@
 //      n'en a aucun (RIVEN reste une feuille tant qu'il n'a qu'une porte).
 //   3. La structure dictée par Paul : deux supra-divisions, TAO sous ULTIMA,
 //      YCOME et RENOBOOST IA sous ALPHA.
-//   4. La géométrie de la rose : premier cap plein Nord, répartition régulière.
+//   4. (Géométrie de la rose : ABANDONNÉE le 2026-08-19 — voir la section 4.)
 //   5. Le cockpit ne rend QUE des comptes entiers (jamais de contenu, jamais de
 //      PII) et se tait quand il n'y a rien à traiter.
 import {
   NOEUDS, RACINE, parentDe, chemin, estBoussole, capsDe, verifierRegistre,
 } from '../js/registre-lv3.mjs';
 import { BLASONS, COEURS } from '../js/blasons.mjs';
-import { positions, ligneVivante, signalDe } from '../js/boussole-noyau.mjs';
+// `ligneVivante`/`signalDe` vivent dans js/cockpit-parole.mjs depuis leur
+// extraction du noyau (2026-08-13) ; l'import passait encore par le ré-export
+// du noyau, supprimé en P5c — on importe désormais À LA SOURCE.
+import { ligneVivante, signalDe } from '../js/cockpit-parole.mjs';
 
 const verdicts = {};
 const detail = {};
@@ -115,16 +118,15 @@ verdicts.passerelleTao = NOEUDS.reshiram.lien === 'zekrom'
 const texteRegistre = JSON.stringify(NOEUDS);
 verdicts.zeroPii = !/@|\+33|\b0[1-9](\s?\d{2}){4}\b/.test(texteRegistre);
 
-// ---------- 4. Géométrie de la rose ----------
-const p3 = positions(3);
-verdicts.premierCapPleinNord = Math.abs(p3[0].cos) < 1e-12 && Math.abs(p3[0].sin + 1) < 1e-12;
-verdicts.repartitionReguliere = [2, 3, 4, 5].every((n) => {
-  const pts = positions(n);
-  if (pts.length !== n) return false;
-  // Tous les points sur le cercle unité, et le pas angulaire constant.
-  return pts.every((pt) => Math.abs(Math.hypot(pt.cos, pt.sin) - 1) < 1e-12);
-});
-verdicts.sensHoraire = positions(4)[1].cos > 0.99; // deuxième cap plein Est
+// ---------- 4. Géométrie de la rose — ABANDONNÉE (P5c, 2026-08-19) ----------
+// `positions()` vivait dans js/boussole-noyau.mjs, SUPPRIMÉ avec la dernière
+// rose : VRANESH, son ultime appelant, est passé au ciel (arbitrage C du
+// cadrage LV5 §3.3) — vérifié par grep avant suppression, plus aucune page ne
+// chargeait le noyau. La trigonométrie de la rose est morte avec elle : le
+// ciel a sa PROPRE géométrie, éprouvée par tests/smoke-lv4-ciel.mjs (cadrage
+// serré, couronne, débordements) et par le pire cas construit couronne(12) de
+// tests/smoke-vranesh.mjs §K. Verdicts retirés : premierCapPleinNord,
+// repartitionReguliere, sensHoraire.
 
 // ---------- 5. Cockpit : des comptes, rien d'autre ----------
 const AGREGATS = {
