@@ -1,12 +1,17 @@
-// Boussole RACINE (Ultima Lv3, boucle L2) : les DEUX supra-divisions
-// (index.html). Prouve : bandeau « Ultima Lv3 / Bienvenue » + invite, 2 caps
-// rendus autour de la rose (ULTIMA → ultima.html, ALPHA → alpha.html), le cœur
-// gravé + sa légende, 2 aiguilles, le résumé de Léo qui n'apparaît QU'au
-// survol/focus, illumination du cap actif, AUCUNE requête réseau externe (zéro
-// CDN), zéro erreur console, contraste AA sur les couleurs réellement rendues.
-// Puis navigation : clic ULTIMA → /ultima.html, la boussole des 2 macro-quadrants (GRIMA, NAGA) se rend.
-// Enfin le verrou d'accueil (déconnecté = boussole cachée) et le COCKPIT (les
-// agrégats derrière Bearer, jamais dans le HTML).
+// La RACINE (Ultima Lv3 — index.html), passée AU CIEL le 2026-08-19 (LV5 / P4,
+// étape ④c de CADRAGE-LV4 : la dernière coque, sur un module éprouvé huit
+// fois). Prouve : bandeau « Ultima Lv3 / Bienvenue » + invite (la racine GARDE
+// son invite — les coques ordinaires l'ont retirée, l'accueil est l'écran qui
+// pose la question du jour), les caps du registre rendus en étoiles (ULTIMA,
+// ALPHA, ALTHEA), le filigrane et sa légende, le résumé de Léo qui n'apparaît
+// QU'au survol/focus, AUCUNE requête réseau externe (zéro CDN), zéro erreur
+// console, contraste AA sur les couleurs réellement rendues.
+// Puis navigation : clic ULTIMA → /ultima.html (le ciel de la supra-division).
+// Enfin le verrou d'accueil (déconnecté = scène cachée et inerte) et le
+// COCKPIT (les agrégats derrière Bearer, jamais dans le HTML).
+// La MIGRATION BOUSSOLE → CIEL a repris chaque assertion UNE PAR UNE, classée
+// portée / remplacée / abandonnée avec sa raison — le détail est écrit en
+// marge de chacune, comme smoke-console.mjs l'avait fait pour la coque pilote.
 //
 // Le bandeau est comparé au REGISTRE (js/registre-lv3.mjs) : la coque HTML ne
 // peut pas dériver du registre sans que ce harnais le voie.
@@ -79,135 +84,176 @@ const COCKPIT = { ok: true, data: {
   riven: { relances_dues: 2 },
 } };
 
-// ===================== A. La boussole racine (index.html) =====================
-// Scénario CONNECTÉ : session présente → overlay masqué, boussole interactive.
-console.log('— A. Boussole racine : les deux supra-divisions —');
+// ===================== A. La racine au ciel (index.html) =====================
+// Scénario CONNECTÉ : session présente → overlay masqué, ciel interactif.
+console.log('— A. La racine au ciel : deux supra-divisions et ALTHEA —');
 await page.route('**/js/vendor/supabase-js-2.110.0.min.js',
   stubSupabase('{ user: { id: "u-test" }, access_token: "jeton-factice" }'));
-// Connecté → la boussole interroge /api/cockpit : on le stube (sinon 404 = bruit).
+// Connecté → le cockpit interroge /api/cockpit : on le stube (sinon 404 = bruit).
 await page.route('**/api/cockpit', (route) => route.fulfill({
   status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(COCKPIT),
 }));
 await page.goto(`${BASE}/`, { waitUntil: 'load', timeout: 20000 });
-await page.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
+// REMPLACÉE : on attendait la rose (`.boussole-plateau.is-pret`), on attend les
+// étoiles. Même garantie : l'écran est prêt avant la première assertion.
+await page.waitForSelector('.ciel-noeud-plateau.is-pret', { timeout: 20000 });
+await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
 
+// PORTÉES telles quelles : le bandeau appartient à la coque, pas au moteur.
 const surligne = (await page.locator('h1.console-titre .titre-surligne').textContent())?.trim();
 const principal = (await page.locator('h1.console-titre .titre-principal').textContent())?.trim();
 verifier('Titre ligne 1 « Ultima Lv3 »', surligne === 'Ultima Lv3', `lu: ${surligne}`);
 verifier('Titre ligne 2 = titre du registre', principal === NOEUDS.racine.titre, `lu: ${principal}`);
+// PORTÉE, et c'est une SPÉCIFICITÉ DE LA RACINE : les coques ordinaires ont
+// retiré l'invite (smoke-console l'éprouve par l'absence) ; l'accueil la garde
+// — « le bandeau et l'invite deviennent du HUD » (CADRAGE-LV5 §P4).
 const invite = (await page.locator('.console-invite').textContent())?.trim();
 verifier('Invite présente', /Sur quoi est-ce qu'on travaille aujourd'hui/.test(invite || ''), `lu: ${invite}`);
 
 // Les caps de la racine : les deux supra-divisions ET ALTHEA (Paul, 2026-08-07).
-// On compte d'après le REGISTRE, jamais d'après un nombre écrit à la main : cinq
-// assertions chiffrées en dur étaient tombées d'un coup à l'arrivée d'ALTHEA le
-// 2026-08-06, et celle-ci est retombée à son déplacement le lendemain.
+// On compte d'après le REGISTRE, jamais d'après un nombre écrit à la main.
+// REMPLACÉE : les noms se lisent sur les étoiles. L'ORDRE est abandonné avec sa
+// raison — une constellation range par géométrie, l'ordre du DOM y suit la
+// profondeur et non le registre. On compare des ensembles ; la garantie qui
+// comptait (les caps du registre, tous et rien qu'eux) est intacte.
 const attendus = NOEUDS.racine.enfants.map((id) => NOEUDS[id].nom);
-const noms = (await page.locator('.cap-nom').allTextContents()).map((n) => n.trim());
-verifier('autant de caps que le registre en déclare',
-  noms.length === attendus.length, `attendus ${attendus.length}, trouvés: ${JSON.stringify(noms)}`);
-for (const attendu of attendus) {
-  verifier(`Cap ${attendu} présent`, noms.includes(attendu));
-}
-// ALTHEA s'ouvre d'un seul geste depuis l'accueil — c'est la raison d'être de
-// sa place ici, et donc ce qu'il faut éprouver, pas seulement sa présence.
-verifier('ALTHEA s’ouvre en un geste depuis l’accueil',
-  (await page.locator('.cap[data-cap="althea"] a, a[href$="althea.html"]').count()) >= 1);
-// Les projets ne sont plus des caps de la racine : ils vivent sous leur supra-division.
+const noms = (await page.locator('#ciel-noeud-scene text.ciel-nom').allTextContents())
+  .map((n) => n.trim());
+verifier('les caps rendus = ceux du registre',
+  JSON.stringify(noms.slice().sort()) === JSON.stringify(attendus.slice().sort()),
+  `trouvés: ${JSON.stringify(noms)}`);
+// REMPLACÉE : « une aiguille par cap » vérifiait que la géométrie suit le
+// registre ; le ciel n'a pas d'aiguilles, l'étoile est ce que l'aiguille
+// approchait. LE COMPTE SE LIT SUR UN CIEL AU REPOS (un survol déplie).
+verifier('une étoile par cap, ni plus ni moins',
+  (await page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id]').count()) === attendus.length,
+  `${attendus.length} attendues`);
+// Les projets ne sont plus des caps de la racine : ils vivent sous leur
+// supra-division. PORTÉE, nouveau sélecteur, même preuve par l'ABSENCE.
 for (const parti of ['renoboost-ia', 'ycome', 'tao', 'reshiram', 'zekrom']) {
-  verifier(`Plus de cap ${parti} à la racine`, (await page.locator(`.cap[data-id="${parti}"]`).count()) === 0);
+  verifier(`Plus de cap ${parti} à la racine`,
+    (await page.locator(`#ciel-noeud-scene .ciel-etoile[data-noeud-id="${parti}"]`).count()) === 0);
 }
-
-// ULTIMA et ALPHA sont deux portes internes ouvertes.
-const capUltima = page.locator('a.cap[data-id="ultima-perso"]');
-verifier('Cap ULTIMA ouvrable (ancre)', (await capUltima.count()) === 1);
-verifier('Cap ULTIMA pointe vers ultima.html',
-  (await capUltima.getAttribute('href')) === 'ultima.html');
-const capAlpha = page.locator('a.cap[data-id="alpha"]');
-verifier('Cap ALPHA ouvrable (ancre)', (await capAlpha.count()) === 1);
-verifier('Cap ALPHA pointe vers alpha.html',
-  (await capAlpha.getAttribute('href')) === 'alpha.html');
-verifier('Aucun cap « à venir » à la racine', (await page.locator('.cap--avenir').count()) === 0);
+// PORTÉES : aucun cap « à venir » ni passerelle à la racine — sélecteurs du
+// ciel (aria-disabled pour l'inertie, `.ciel-liens line` pour les arcs).
+verifier('Aucun cap « à venir » à la racine',
+  (await page.locator('#ciel-noeud-scene .ciel-etoile[aria-disabled]').count()) === 0);
 verifier('Aucune passerelle à la racine',
-  (await page.locator('.boussole-aiguilles .passerelle').count()) === 0);
+  (await page.locator('#ciel-noeud-scene .ciel-liens line').count()) === 0);
 
-// Le cœur gravé + sa légende + les 2 aiguilles.
-verifier('Cœur gravé au centre', (await page.locator('.boussole-coeur svg').count()) === 1);
-const legende = (await page.locator('.boussole-legende').textContent())?.trim();
+// REMPLACÉES : le cœur gravé devient le filigrane du plateau, la légende garde
+// son mot du registre — mêmes garanties, sélecteurs du ciel.
+verifier('Cœur gravé (filigrane)', (await page.locator('.ciel-filigrane svg').count()) === 1);
+const legende = (await page.locator('.ciel-legende').textContent())?.trim();
 verifier('Légende gravée = celle du registre', legende === NOEUDS.racine.legende, `lu: ${legende}`);
-verifier('une aiguille par cap du registre',
-  (await page.locator('.boussole-aiguilles .aiguille').count()) === NOEUDS.racine.enfants.length);
 
-// Le résumé Léo n'apparaît QU'au survol : au repos, le cartouche est
-// invisible et muet (plus de messages affichés — Paul, 2026-08-01).
+// PORTÉES telles quelles : le cartouche de parole appartient à la coque.
 verifier('Cartouche invisible et muet au repos',
   await page.locator('#boussole-parole').evaluate((el) =>
     getComputedStyle(el).visibility === 'hidden' && el.textContent.trim() === ''));
 verifier('Aucun résumé de projet au repos',
   (await page.locator('#boussole-parole .parole-texte').count()) === 0);
 
-// Survol d'ULTIMA → cap illuminé + résumé déposé.
-await capUltima.hover();
+// Survol d'ULTIMA → résumé déposé. REMPLACÉE dans sa mécanique : `hover()`
+// expire sur le ciel (la caméra glisse de façon asymptotique, rien n'est
+// jamais « stable » au sens de Playwright) — on envoie l'événement, comme
+// partout ailleurs dans le patrimoine.
+const etoileUltima = page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="ultima-perso"]');
+await etoileUltima.dispatchEvent('mouseenter');
 await page.waitForSelector('#boussole-parole.is-actif', { timeout: 5000 });
-verifier('Cap ULTIMA illuminé au survol', await capUltima.evaluate((e) => e.classList.contains('is-actif')));
 const paroleNom = (await page.locator('#boussole-parole .parole-nom').textContent())?.trim();
 verifier('Résumé : nom du cap affiché', paroleNom === 'ULTIMA', `lu: ${paroleNom}`);
 const paroleTexte = (await page.locator('#boussole-parole .parole-texte').textContent())?.trim();
 verifier('Résumé : essentiel de Léo affiché', /supra-division personnelle/i.test(paroleTexte || ''), `lu: ${paroleTexte}`);
 verifier('Résumé : appel à l\'action', (await page.locator('#boussole-parole .parole-action').count()) === 1);
+// ABANDONNÉE avec sa raison : « cap illuminé au survol » lisait la classe
+// `is-actif` du cap de la boussole. Au ciel, l'approche d'une étoile se voit
+// par le DÉPLIAGE (ses enfants naissent) et le cartouche actif — deux effets
+// déjà éprouvés, ici et dans smoke-lv4-ciel. Une classe d'illumination n'existe
+// pas sur l'étoile, et en inventer une pour le test serait tester le test.
 
 // Sortie du survol → le cartouche s'efface entièrement (zéro surcharge).
-await page.locator('h1.console-titre').hover();
+// La sortie se dit à l'ÉTOILE (mouseleave) : au ciel, c'est elle qui écoute —
+// survoler un autre élément ne la quitte pas pour Playwright, qui n'anime pas
+// de vrai curseur quand on dispatch des événements.
+await etoileUltima.dispatchEvent('mouseleave');
 await page.waitForSelector('#boussole-parole:not(.is-actif)', { state: 'attached', timeout: 5000 });
 verifier('Sortie du survol → cartouche effacé',
   (await page.locator('#boussole-parole .parole-texte').count()) === 0
   && await page.locator('#boussole-parole').evaluate((el) => getComputedStyle(el).visibility === 'hidden'));
 
-// Accès clavier : le focus montre aussi le résumé (clavier = souris).
-// La souris se gare dans un coin neutre AVANT : le focus fait défiler la page
-// et un cap qui glisse sous un curseur immobile déclencherait un mouseenter
-// parasite qui réécrirait le cartouche après celui du focus.
+// PORTÉE : le focus vit sur le GROUPE de l'étoile (tabindex="0", nom
+// accessible, touche Entrée) — clavier = souris.
 await page.mouse.move(5, 5);
-await capAlpha.focus();
+const etoileAlpha = page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="alpha"]');
+await etoileAlpha.evaluate((el) => el.focus());
 await page.waitForSelector('#boussole-parole.is-actif', { timeout: 5000 });
 const nomAlpha = (await page.locator('#boussole-parole .parole-nom').textContent())?.trim();
 verifier('Focus clavier d\'un cap montre son résumé', nomAlpha === 'ALPHA', `lu: ${nomAlpha}`);
 
-// Repli sans JS présent dans le document.
+// PORTÉE : repli sans JS présent dans le document.
 verifier('Repli <noscript> présent', (await page.locator('noscript').count()) >= 1);
 
 // Contraste AA sur les couleurs réellement rendues.
+// REMPLACÉES : ces mesures lisaient des encres posées sur du parchemin et de
+// la mer. La racine est passée au ciel : le nom du cap est peint sur une
+// étoile, le titre et la légende sur la nuit. Les mêmes grandeurs sont donc
+// mesurées CONTRE LE FOND QUI LES PORTE RÉELLEMENT — changer d'étalon sans
+// changer de fond aurait donné un chiffre flatteur et faux. Le seuil ne bouge
+// pas : AA, 4,5:1.
 const styles = await page.evaluate(() => {
-  const cs = getComputedStyle(document.documentElement);
-  const nom = getComputedStyle(document.querySelector('.cap-nom'));
+  const plateau = getComputedStyle(document.getElementById('ciel-noeud-plateau'));
+  const nom = document.querySelector('#ciel-noeud-scene text.ciel-nom');
   const t = getComputedStyle(document.querySelector('.console-titre'));
-  const l = getComputedStyle(document.querySelector('.boussole-legende'));
+  const l = getComputedStyle(document.querySelector('.ciel-legende'));
   return {
-    parcheminCarte: cs.getPropertyValue('--parchemin-carte').trim(),
-    merProfonde: cs.getPropertyValue('--mer-profonde').trim(),
-    nom: nom.color, titre: t.color, legende: l.color,
+    nuit: plateau.getPropertyValue('--ciel-nuit-haute').trim(),
+    nom: nom ? getComputedStyle(nom).fill : null,
+    titre: t.color, legende: l.color,
   };
 });
-const rNom = ratio(versHex(styles.nom), styles.parcheminCarte);
+const rNom = ratio(versHex(styles.nom), styles.nuit);
 verifier('Contraste nom de cap ≥ 4,5:1', rNom >= 4.5, `${rNom.toFixed(2)}:1`);
-const rTitre = ratio(versHex(styles.titre), styles.merProfonde);
-verifier('Contraste titre sur fond mer ≥ 4,5:1', rTitre >= 4.5, `${rTitre.toFixed(2)}:1`);
-const rLeg = ratio(versHex(styles.legende), styles.merProfonde);
-verifier('Contraste légende sur mer ≥ 4,5:1', rLeg >= 4.5, `${rLeg.toFixed(2)}:1`);
+const rTitre = ratio(versHex(styles.titre), styles.nuit);
+verifier('Contraste titre sur fond de nuit ≥ 4,5:1', rTitre >= 4.5, `${rTitre.toFixed(2)}:1`);
+const rLeg = ratio(versHex(styles.legende), styles.nuit);
+verifier('Contraste légende sur la nuit ≥ 4,5:1', rLeg >= 4.5, `${rLeg.toFixed(2)}:1`);
 
 verifier('Zéro requête réseau externe (aucun CDN)', requetesExternes.length === 0,
   requetesExternes.slice(0, 3).join(', '));
-verifier('Zéro erreur console (boussole)', erreursConsole.length === 0, erreursConsole.slice(0, 3).join(' | '));
+verifier('Zéro erreur console (racine au ciel)', erreursConsole.length === 0, erreursConsole.slice(0, 3).join(' | '));
+
+// ALTHEA s'ouvre d'un seul geste depuis l'accueil — c'est la raison d'être de
+// sa place ici. REMPLACÉE par une preuve PLUS FORTE : la boussole exposait un
+// href qu'on lisait ; l'étoile est un `<g role="button">` (l'ancre SVG fait
+// perdre le focus clavier — mesuré sur la coque pilote), on prouve donc la
+// porte en la FRANCHISSANT. Ce qui est perdu : clic du milieu / nouvel onglet ;
+// ce qui le rattrape : le repli <noscript> liste toutes les portes.
+await page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="althea"]').dispatchEvent('click');
+await page.waitForURL('**/althea.html', { timeout: 8000 }).catch(() => {});
+verifier('ALTHEA s\'ouvre en un geste depuis l\'accueil',
+  /\/althea\.html$/.test(page.url()), page.url());
+await page.goto(`${BASE}/`, { waitUntil: 'load', timeout: 20000 });
+await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
+// REMPLACÉE (même raison) : ALPHA prouvé en cliquant, retour, puis ULTIMA — le
+// clic d'ULTIMA sert aussi d'ouverture à la section B.
+await page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="alpha"]').dispatchEvent('click');
+await page.waitForURL('**/alpha.html', { timeout: 8000 }).catch(() => {});
+verifier('Porte ALPHA ouverte (alpha.html)', /\/alpha\.html$/.test(page.url()), page.url());
+await page.goto(`${BASE}/`, { waitUntil: 'load', timeout: 20000 });
+await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
 
 // ============ B. Navigation racine → ULTIMA (supra-division) ============
 console.log('— B. ULTIMA → /ultima.html (la supra-division) —');
-await capUltima.click();
+// REMPLACÉE : le clic passe par l'étoile (le cap-ancre n'existe plus).
+await page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="ultima-perso"]')
+  .dispatchEvent('click');
 await page.waitForURL('**/ultima.html', { timeout: 20000 });
 verifier('Clic ULTIMA → URL ultima.html', /\/ultima\.html$/.test(page.url()), page.url());
 // ULTIMA EST PASSÉE AU CIEL le 2026-08-13 (étape ④a) : c'est la coque pilote.
 // Les assertions de cette section ont été reprises UNE PAR UNE et classées.
-//   — « Clic ULTIMA → URL ultima.html » : PORTÉE telle quelle (la racine, elle,
-//     est encore une boussole ; elle passera en dernier).
+//   — « Clic ULTIMA → URL ultima.html » : PORTÉE (la racine est passée au ciel
+//     à son tour le 2026-08-19 — P4, la dernière coque).
 //   — L'attente du plateau : REMPLACÉE — on attend les étoiles au lieu de la
 //     rose. Même garantie : l'écran est prêt.
 //   — « les cadrans du registre » : REMPLACÉE, et l'ORDRE est abandonné avec sa
@@ -277,7 +323,8 @@ await pageCo.route('**/api/cockpit', (route) => {
   return route.fulfill({ status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(COCKPIT) });
 });
 await pageCo.goto(`${BASE}/`, { waitUntil: 'load', timeout: 20000 });
-await pageCo.waitForSelector('.boussole-plateau.is-pret', { timeout: 20000 });
+await pageCo.waitForSelector('.ciel-noeud-plateau.is-pret', { timeout: 20000 });
+await pageCo.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
 verifier('Connecté : écran de connexion masqué', await pageCo.locator('#ecran-connexion').isHidden());
 verifier('Connecté : boussole non inerte', await pageCo.evaluate(() => {
   const scene = document.querySelector('.boussole-scene');
@@ -290,18 +337,21 @@ verifier('Cockpit : Bearer transmis à /api/cockpit', bearerCockpit === 'Bearer 
 
 // Le cap ULTIMA cumule ce que ses quadrants ont à traiter : RIVEN (2 relances
 // dues) + TAO (1 talent à étayer). a_orienter=0 → ce terme reste masqué.
-await pageCo.locator('.cap[data-id="ultima-perso"]').hover();
+await pageCo.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="ultima-perso"]')
+  .dispatchEvent('mouseenter');
 await pageCo.waitForSelector('.parole-signal', { timeout: 5000 }).catch(() => {});
 const signalU = (await pageCo.locator('.parole-signal').textContent()) || '';
 verifier('Badge ULTIMA « À traiter — 2 relances dues · 1 talent à étayer »',
   /À traiter/.test(signalU) && /2 relances dues/.test(signalU) && /1 talent à étayer/.test(signalU)
     && !/à orienter/.test(signalU), `lu: ${signalU}`);
 
-// Contraste AA du badge (encre rouge sobre sur parchemin ombré).
+// Contraste AA du badge. REMPLACÉ dans son étalon : le cartouche du ciel est
+// une plaque de nuit, plus un parchemin ombré — on mesure contre le fond qui
+// porte réellement l'encre (même règle que les contrastes de la section A).
 const cSig = await pageCo.evaluate(() => {
-  const cs = getComputedStyle(document.documentElement);
+  const plateau = getComputedStyle(document.getElementById('ciel-noeud-plateau'));
   return {
-    fond: cs.getPropertyValue('--parchemin-ombre').trim(),
+    fond: plateau.getPropertyValue('--ciel-nuit-haute').trim(),
     texte: getComputedStyle(document.querySelector('.parole-signal')).color,
   };
 });
@@ -309,7 +359,8 @@ verifier('Contraste badge signal ≥ 4,5:1', ratio(versHex(cSig.texte), cSig.fon
   `${ratio(versHex(cSig.texte), cSig.fond).toFixed(2)}:1`);
 
 // ALPHA n'a aucune donnée interne : ni ligne vivante, ni badge (texte figé seul).
-await pageCo.locator('.cap[data-id="alpha"]').focus();
+await pageCo.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="alpha"]')
+  .evaluate((el) => el.focus());
 await pageCo.waitForTimeout(150);
 verifier('Cap sans data (ALPHA) : aucune ligne vivante',
   (await pageCo.locator('.parole-cockpit').count()) === 0);

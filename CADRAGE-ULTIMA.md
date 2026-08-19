@@ -34,9 +34,22 @@
     apprend qu'un instrument peut **déclarer son support** (`nappe:` dans
     `CIBLES`) et exige désormais que **TOUS** les supports soient opaques, pas
     seulement le premier — éprouvé rouge en retirant la plaque.
-  - **P4** — la racine **`index.html`**, le point dur annoncé dès le cadrage :
-    elle porte l'écran de connexion, et le plateau du ciel est
-    `position: fixed; inset: 0` — il le couvrirait.
+  - ✅ **P4 FAIT le 2026-08-19** (session de reprise, PR #172) — **la racine
+    `index.html` est passée au ciel** (étape ④c de LV4, la dernière coque, sur
+    le module éprouvé huit fois). La galaxie EST l'accueil : trois étoiles
+    (ULTIMA, ALPHA, ALTHEA), bandeau « Bienvenue » + invite en HUD (la racine
+    GARDE son invite, contrairement aux coques). **La porte n'a pas bougé d'une
+    ligne** : `#ecran-connexion` (z-index 2000) couvre le ciel tant qu'aucune
+    session n'est ouverte, `js/boussole-auth.js` est INTOUCHÉ — la coque garde
+    la classe `boussole-scene` (sa poignée d'inertie), neutralisée en layout
+    par `ciel-noeud.css`. `smoke-boussole` migré assertion par assertion
+    (portée / remplacée / abandonnée avec raison écrite), sections verrou et
+    cockpit intactes ; la racine ajoutée au harnais plein écran (6 verdicts × 2
+    largeurs verts). `js/boussole-noyau.mjs` N'EST PAS supprimé : VRANESH
+    l'appelle encore (boussole des futurs — P5c). Les libellés « Boussole »
+    (title, retours des coques) sont CONSERVÉS : c'est le nom de l'écran dans
+    le vocabulaire de Paul, le renommer serait un choix produit, pas un geste
+    technique.
   - **P5c** — la « boussole des futurs » interne de VRANESH devient un ciel
     (arbitrage C du cadrage).
 

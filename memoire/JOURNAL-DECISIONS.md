@@ -3288,3 +3288,40 @@ Boucle 1 du plan du jour. `althea.html` + `althea-cadran.html` embarquées —
 - **Préexistant consigné, pas élargi** : « ↞ Ultima » (`--parch-bas`) à 4,36:1
   en 1280, identique avec et sans le fond → registre ⏳, famille des
   demi-teintes limites de l'abaque.
+
+## 2026-08-19 — P4 : la racine passe au ciel, la porte n'a pas bougé d'une ligne
+
+Boucle 2 du plan du jour — « l'écran que Paul juge » (LV4 ④c), pris en dernier
+comme le cadrage l'exigeait, sur un module éprouvé huit fois : **zéro erreur
+console au premier rendu, aux deux largeurs.** Patrimoine COMPLET vert.
+
+- **LE PONT ÉTAIT DÉJÀ CONSTRUIT, IL SUFFISAIT DE NE PAS LE REFAIRE.**
+  `ciel-noeud.mjs` répondait déjà au nom `window.UltimaBoussole` (« pour ne pas
+  avoir à modifier boussole-auth.js », écrit le 2026-08-13) et le registre
+  `racine` portait déjà titre, invite, cœur et cockpit. La seule couture
+  restante était le sélecteur `.boussole-scene` de l'inertie : la coque GARDE
+  cette classe à côté de `ciel-noeud-coque` — poignée d'auth conservée, layout
+  neutralisé par la feuille chargée après. **Résultat : la surface auth (sous
+  gate) n'a pas été touchée du tout.**
+- **UNE MIGRATION DE HARNAIS SE FAIT ASSERTION PAR ASSERTION.** `smoke-boussole`
+  section A reclassée : portées (bandeau, cartouche, noscript, zéro CDN),
+  remplacées avec la preuve équivalente ou plus forte (href lu → porte
+  FRANCHIE ; aiguilles → étoiles ; contrastes mesurés contre le fond qui porte
+  réellement l'encre), abandonnées avec raison écrite (l'illumination `is-actif`
+  du cap n'existe pas sur une étoile — le dépliage et le cartouche actif la
+  remplacent). Les sections verrou (C) et cockpit (D) passent SANS RETOUCHE de
+  leurs garanties : le clic Google appelle bien OAuth À TRAVERS le ciel — le
+  pre-mortem « le ciel mange les clics de la porte » est réfuté par l'épreuve.
+- **L'INVITE EST UNE SPÉCIFICITÉ DE LA RACINE.** Les coques ordinaires l'ont
+  retirée (smoke-console l'éprouve par l'absence) ; l'accueil la garde — c'est
+  l'écran qui pose « sur quoi est-ce qu'on travaille aujourd'hui ? ». Le
+  harnais racine l'éprouve par la présence. Deux tests opposés, deux écrans,
+  chacun a raison chez lui.
+- **CE QU'ON NE SUPPRIME PAS : `boussole-noyau.mjs`.** La règle de LV4 §13.4
+  (« seulement si plus aucune page ne l'appelle — vérifié par recherche, pas
+  supposé ») a payé : VRANESH l'appelle encore pour sa boussole des futurs.
+  Il tombera avec P5c, pas avant.
+- **CE QU'ON NE RENOMME PAS SEUL : « Boussole ».** Le title d'index.html et les
+  retours « ↞ Boussole » des coques nomment l'écran d'accueil dans le
+  vocabulaire de Paul. L'écran a changé de rendu, pas de rôle ; renommer serait
+  un choix produit → il reste, signalé à Paul.

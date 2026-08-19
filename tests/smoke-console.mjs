@@ -17,9 +17,9 @@ const PNG_1PX = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
   'base64');
 
-// LV5 / P3 — GRIMA et NAGA sont au ciel. index.html, la racine, reste en
-// boussole jusqu'à P4 : le module de lecture sert les deux supports, ce qui est
-// exactement sa raison d'être pendant une migration en cours.
+// LV5 / P3 — GRIMA et NAGA sont au ciel. P4 (2026-08-19) : la racine aussi —
+// plus aucune page de navigation en boussole. Le module de lecture double
+// support reste : VRANESH porte encore une boussole interne (P5c à venir).
 const { attendrePret, lireCaps, lireRepli, naviguerVers } = await import('./_caps.mjs');
 
 const BASE = 'http://127.0.0.1:8123';
