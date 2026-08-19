@@ -12,10 +12,12 @@
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/console.css">
   <link rel="stylesheet" href="css/quadrant.css">
-  <!-- La boussole des futurs réutilise l'habillage Lv3 (plateau, caps,
-       aiguilles, cartouche de parole) ; vranesh-boussole.css n'ajoute que les
-       ramifications. `body` n'a pas la classe `boussole`, donc aucune règle de
-       fond de coque ne s'applique ici. -->
+  <!-- boussole.css reste chargée pour le PLATEAU (contrat is-pret) et le
+       cartouche de parole (.boussole-parole) ; depuis P5c la rose (caps,
+       aiguilles, cœur) n'est plus rendue ici — le ciel du moteur commun l'a
+       remplacée, et vranesh-boussole.css éteint les gravures du cadran.
+       `body` n'a pas la classe `boussole`, donc aucune règle de fond de coque
+       ne s'applique ici. -->
   <link rel="stylesheet" href="css/boussole.css">
   <link rel="stylesheet" href="css/vranesh-boussole.css">
   <!-- LV5 / P5a — LE SOL COMMUN. `ciel.css` d'abord : elle porte les jetons de
@@ -104,11 +106,14 @@
           <h2 id="vranesh-titre-boussole">La boussole des futurs</h2>
 
           <div class="vranesh-scene">
-            <!-- ① La rose : les NOMS des thèmes, rien d'autre. Vide dans le HTML
-                 servi — les intitulés sont intimes et ne viennent que de
-                 /api/situations, après session validée (§5). -->
+            <!-- ① Le ciel (P5c — arbitrage C, LV5 §3.3) : une étoile par thème,
+                 les NOMS et rien d'autre, rendus par le moteur commun
+                 (js/ciel.js). Vide dans le HTML servi — les intitulés sont
+                 intimes et ne viennent que de /api/situations, après session
+                 validée (§5). La classe boussole-plateau reste : c'est le
+                 support du contrat is-pret qu'attendent les harnais. -->
             <div class="boussole-plateau" id="vranesh-plateau"
-                 aria-label="Boussole des thèmes de futurs"></div>
+                 aria-label="Ciel des thèmes de futurs"></div>
 
             <!-- ② L'arbre du thème ouvert : un tronc, des branches. -->
             <div id="vranesh-arbre" class="vranesh-arbre-cadre" hidden>
@@ -182,11 +187,11 @@
   <!-- Dictée vocale : composant partagé (micro par champ). -->
   <script src="js/dictee.js"></script>
   <script src="js/leo-accueil.js"></script>
+  <!-- P5c — le MOTEUR COMMUN du ciel, AVANT le script du quadrant qui
+       l'appelle (script classique : window.UltimaCiel existe dès la ligne
+       suivante). Il a remplacé la rose de la boussole des futurs ; le noyau
+       js/boussole-noyau.mjs, qui n'avait plus aucun appelant, est supprimé. -->
+  <script src="js/ciel.js"></script>
   <script src="js/vranesh.js"></script>
-  <!-- Le NOYAU de la boussole, uniquement pour sa géométrie (window.
-       UltimaBoussoleNoyau.positions) : on ne recopie pas sa trigonométrie.
-       Son démarrage automatique ne fait rien ici — il exige `data-noeud` sur
-       le body, que cette page ne porte pas. -->
-  <script type="module" src="js/boussole-noyau.mjs"></script>
 </body>
 </html>

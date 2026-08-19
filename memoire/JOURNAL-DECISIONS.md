@@ -3325,3 +3325,44 @@ console au premier rendu, aux deux largeurs.** Patrimoine COMPLET vert.
   retours « ↞ Boussole » des coques nomment l'écran d'accueil dans le
   vocabulaire de Paul. L'écran a changé de rendu, pas de rôle ; renommer serait
   un choix produit → il reste, signalé à Paul.
+
+## 2026-08-19 — P5c : la dernière rose s'éteint, et une contre-passe qui a payé
+
+Boucle 3 du plan du jour, dernière de LV5. La « boussole des futurs » de VRANESH
+devient un ciel (arbitrage C). Spec déposée AVANT le code (EL ①), implémentée par
+`front-carto`, contre-passée par Léo. Patrimoine COMPLET vert.
+
+- **LA CONTRE-PASSE A ROUGI LÀ OÙ LA PASSE ÉTAIT VERTE, ET C'ÉTAIT MON PROPRE
+  TRAVAIL.** `smoke-boussole` (mon harnais P4, écrit deux heures plus tôt)
+  échouait sur « Cap sans data (ALPHA) : aucun badge » — une fois sur deux.
+  Cause : `mouseenter` arme `setTimeout(deplier, SURVOL_MS=140)`. Ma section D
+  survolait ULTIMA puis focalisait ALPHA **sans jamais quitter ULTIMA** ; le
+  minuteur se déclenchait pendant l'observation d'ALPHA, le re-dessin détruisait
+  l'étoile focalisée et `focusARendre` rendait le focus à ULTIMA — dont le badge
+  réapparaissait. J'attendais 150 ms après un minuteur de 140 : la course se
+  jouait à dix millisecondes. Corrigé par le `mouseleave` qui DÉSARME le
+  minuteur, puis prouvé par **trois passages consécutifs**, pas un seul.
+  *Un test qui dépend d'un minuteur qu'il n'a pas désarmé ne teste pas ce qu'il
+  croit — il teste la vitesse du jour. Et un vert unique ne prouve pas une
+  absence de course : seule la répétition le fait.*
+- **DEUX ÉCARTS DÉLIBÉRÉS AU MOTIF DES COQUES**, écrits dans la spec avant
+  l'implémentation : `fond: false` (la page porte DÉJÀ le sol étoilé de P5b —
+  deux ciels sur un écran se disputent le regard, interdit §16.6) et pas de
+  `margesUtiles` (le ciel vit dans un cadre borné du cartouche, pas derrière un
+  HUD plein écran). Réutiliser un motif, c'est aussi savoir où il ne s'applique
+  pas.
+- **UNE SECTION CACHÉE MESURE ZÉRO.** L'agent a dû déplacer
+  `montrer('vranesh-registre')` AVANT le rendu du ciel : le moteur mesure la
+  boîte réelle du plateau, et une section encore masquée lui donne une boîte
+  nulle. Écart signalé, raison écrite en commentaire. Même famille que
+  `ajusterCadre()` au retour de l'arbre.
+- **LE PIRE CAS SE CONSTRUIT, IL NE S'ATTEND PAS** (règle du 2026-08-01, tenue) :
+  la géométrie est éprouvée sur `couronne(12)` injecté par la fixture, pas sur
+  les deux thèmes du jour. Zéro débordement dans les quatre cas.
+- **L'INSTRUMENT A ÉTÉ VALIDÉ SUR UN CAS DE RÉFÉRENCE** (règle du 2026-08-17) :
+  `ownerSVGElement` désigne bien `ciel-svg` parmi les **4 SVG** de la page, et
+  une étoile poussée hors cadre par le mécanisme réel du moteur est vue. L'angle
+  mort restant est nommé au harnais : un débord par `transform` de groupe serait
+  invisible à `getBBox()` — sans objet, le moteur n'en pose jamais.
+- **`js/boussole-noyau.mjs` supprimé** après vérification par recherche (règle
+  LV4 §13.4) : plus aucun appelant. **Plus une seule rose dans Ultima.**

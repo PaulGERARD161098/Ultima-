@@ -359,6 +359,17 @@ verifier('Contraste badge signal ≥ 4,5:1', ratio(versHex(cSig.texte), cSig.fon
   `${ratio(versHex(cSig.texte), cSig.fond).toFixed(2)}:1`);
 
 // ALPHA n'a aucune donnée interne : ni ligne vivante, ni badge (texte figé seul).
+// ON QUITTE D'ABORD ULTIMA, ET CE N'EST PAS DE LA POLITESSE — c'est ce qui
+// ANNULE SON MINUTEUR DE DÉPLIAGE. `mouseenter` arme `setTimeout(deplier)` :
+// sans `mouseleave`, ce minuteur se déclenche pendant qu'on regarde ALPHA, le
+// re-dessin détruit l'étoile focalisée, et `focusARendre` rend le focus à
+// ULTIMA — dont le badge réapparaît. Le verdict « aucun badge » tombait alors,
+// de façon INTERMITTENTE (la course dépend de la charge de la machine).
+// Trouvé par une contre-passe qui a rougi là où la passe précédente était
+// verte : *un test qui dépend d'un minuteur qu'il n'a pas désarmé ne teste pas
+// ce qu'il croit — il teste la vitesse du jour.*
+await pageCo.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="ultima-perso"]')
+  .dispatchEvent('mouseleave');
 await pageCo.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="alpha"]')
   .evaluate((el) => el.focus());
 await pageCo.waitForTimeout(150);

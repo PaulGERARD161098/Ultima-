@@ -50,8 +50,23 @@
     (title, retours des coques) sont CONSERVÉS : c'est le nom de l'écran dans
     le vocabulaire de Paul, le renommer serait un choix produit, pas un geste
     technique.
-  - **P5c** — la « boussole des futurs » interne de VRANESH devient un ciel
-    (arbitrage C du cadrage).
+  - ✅ **P5c FAIT le 2026-08-19** (session de reprise, PR #172) — la « boussole
+    des futurs » de VRANESH est un **ciel** (arbitrage C), rendu par le moteur
+    commun dans une **fenêtre de nuit** ouverte au milieu du cartouche de
+    parchemin. Spec déposée AVANT le code (`design/spec-p5c-boussole-futurs-ciel.md`),
+    implémentée par `front-carto`, contre-passée par Léo. `smoke-vranesh` passe
+    de **234 à 250 verdicts** (11 portées, 7 remplacées, 2+4 abandonnées avec
+    raison écrite, 18 ajouts) ; géométrie mesurée `getBBox()` ⊂ `viewBox` via
+    `ownerSVGElement`, **zéro débordement** aux deux largeurs ET sur le pire cas
+    `couronne(12)`. Deux écarts délibérés au motif des coques : `fond: false`
+    (la page a déjà son sol étoilé P5b — deux ciels se disputeraient le regard)
+    et pas de `margesUtiles` (cadre borné, pas de HUD plein écran).
+    **`js/boussole-noyau.mjs` SUPPRIMÉ** : plus aucun appelant, vérifié par
+    recherche. **Plus une seule rose dans Ultima.**
+
+  **LES TROIS RESTES DE LV5 SONT FERMÉS.** Le sol étoilé couvre 11 pages, les
+  neuf écrans de navigation ET la racine sont au ciel, et la dernière boussole
+  interne a rejoint le moteur commun.
 
   **COMMENT EMBARQUER UNE PAGE (la recette, éprouvée sur 9)** : quatre ajouts —
   `css/ciel.css` + `css/ciel-fond-page.css` en fin de `<head>`, la classe
