@@ -3262,3 +3262,29 @@ interne de VRANESH ; réserve non ouverte : jeton `--encre-pale`).
 - **Toute la journée vit sur la branche `claude/reprise-travail-003t8b`** (branche
   désignée de la session) : une seule PR portera les boucles du jour, un commit
   atomique par boucle — signalé à Paul, la fusion reste sa gate.
+
+## 2026-08-19 — P6 : ALTHEA sur le sol étoilé, et l'instrument qui déclare son support
+
+Boucle 1 du plan du jour. `althea.html` + `althea-cadran.html` embarquées —
+**11 pages au total**. Patrimoine COMPLET vert.
+
+- **LE REGISTRE DIT CE QU'ON PROTÈGE, PAS DE QUOI C'EST FAIT.** ALTHEA lit des
+  chiffres → instrument. Mais son support n'est pas le parchemin : c'est
+  l'exception actée de Paul (« l'antique vu de nuit », CADRAGE-ALTHEA §10.3).
+  L'invariant de l'instrument — des chiffres jamais posés sur les étoiles — se
+  satisfait avec SES matériaux : les `.althea-bloc`, sans fond propre jusqu'ici
+  (la nuit unie du body suffisait), reçoivent leur plaque de nuit opaque. Le
+  harnais gagne un champ `nappe:` par cible, et exige que **TOUS** les supports
+  trouvés soient opaques — l'ancien contrôle ne regardait que le premier, un
+  seul bloc transparent lui aurait échappé. Éprouvé rouge en retirant la plaque
+  (4 verdicts rouges), puis revert.
+- **LA SURFACE DÉCLARE SON ENCRE, ÉPISODE 2.** `body[data-fond-etoile]` (0,1,1)
+  bat `.althea` (0,1,0) : sans un `color: var(--parch)` posé sur `.althea-page`,
+  tout le texte hérité d'ALTHEA passait en crème — contraste encore bon, donc
+  **le harnais ne l'aurait jamais dit** : c'est la règle de couleur actée
+  (or gagné / spectre annoncé / parchemin bleuté) qui aurait perdu son pilier,
+  pas un ratio. Une identité ne se mesure pas en contraste ; elle se protège
+  par une décision.
+- **Préexistant consigné, pas élargi** : « ↞ Ultima » (`--parch-bas`) à 4,36:1
+  en 1280, identique avec et sans le fond → registre ⏳, famille des
+  demi-teintes limites de l'abaque.

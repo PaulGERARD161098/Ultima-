@@ -24,10 +24,16 @@
   coques déjà sur le ciel.
 
   **CE QUI RESTE, DANS L'ORDRE :**
-  - **P6** — `althea.html` et `althea-cadran.html`, registre instrument. Elles
-    n'ont **ni `main` ni `.feuille`** : très probablement le même défaut de
-    support que l'abaque (leur parchemin vient du `body`). Il faudra donc leur
-    trouver un conteneur pour porter la nappe, ou en déclarer un.
+  - ✅ **P6 FAIT le 2026-08-19** (session de reprise, PR #172) — `althea.html`
+    et `althea-cadran.html` embarquées, **11 pages au total**. Registre
+    instrument, mais le support n'est PAS une nappe de parchemin : ALTHEA est
+    l'exception actée « l'antique vu de nuit » — ses `.althea-bloc` reçoivent
+    leur propre plaque de nuit opaque (`--nuit`), les étoiles restant visibles
+    ENTRE les blocs ; l'encre `--parch` est déclarée sur `.althea-page` (sinon
+    `body[data-fond-etoile]`, 0,1,1, repeignait tout en crème). Le harnais
+    apprend qu'un instrument peut **déclarer son support** (`nappe:` dans
+    `CIBLES`) et exige désormais que **TOUS** les supports soient opaques, pas
+    seulement le premier — éprouvé rouge en retirant la plaque.
   - **P4** — la racine **`index.html`**, le point dur annoncé dès le cadrage :
     elle porte l'écran de connexion, et le plateau du ciel est
     `position: fixed; inset: 0` — il le couvrirait.
@@ -87,6 +93,10 @@
     boucle à soi seule, à ouvrir explicitement.
   - **Légende `KALAMN-TALAEN` coupée au bord gauche** sur le ciel IMLADRIK en
     390 px. Sans rapport avec LV5.
+  - **Lien « ↞ Ultima » d'ALTHEA à 4,36:1 en 1280** (jeton `--parch-bas` sur la
+    nuit ; 5,10:1 en 390). Préexistant — mesuré identique avec et sans le sol
+    étoilé (P6). Même famille que les 5 demi-teintes de l'abaque : à traiter
+    dans la boucle « demi-teintes limites », à ouvrir explicitement.
   - ✅ **Opposition de TAO qui bascule en vertical à 390 px** : validée telle
     quelle par Paul le 2026-08-19 (« c'est ok pour TAO »). Rien à changer.
   - **Léo ne peut pas voir la preview Vercel** : le proxy de l'environnement
