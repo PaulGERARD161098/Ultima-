@@ -582,3 +582,24 @@ déployée. **Le dire à chaque rapport** au lieu de laisser croire que la previ
 été vue. Se combine avec la friction du 2026-08-14 (Paul juge sur la production) :
 il faut donc **fusionner tôt** et être explicite sur ce qui a été réellement
 regardé.
+
+
+**Confirmé — LA MESURE D'ABORD, LA NOTE ENSUITE** (2026-08-20). Deux dettes
+rouvertes le même soir, deux descriptions fausses : « 5 textes sur 2 pages »
+en valait 7 sur 3, et « coupée en 390 px » l'était aux deux largeurs. Aucune
+des deux erreurs n'était grave — mais toutes deux auraient conduit à un travail
+incomplet livré comme complet. *Le registre dit où chercher, il ne dit pas ce
+qu'on trouvera.*
+
+**Confirmé — UN DÉFAUT SURVIT À L'ENDROIT PRÉCIS OÙ L'INSTRUMENT NE REGARDE
+PAS** (2026-08-20). Les deux défauts du soir avaient la même explication de
+fond : verdict différentiel qui pardonne l'hérité d'un côté, test de présence
+aveugle à la position de l'autre. Ni l'un ni l'autre n'était un bug du harnais —
+les deux mesuraient **fidèlement autre chose que ce qui était cassé**. Quand un
+défaut visible dure, la question n'est pas « pourquoi le test échoue-t-il à le
+voir » mais « **que teste-t-il en réalité** ».
+
+**À surveiller — SESSIONS PARALLÈLES, DEUXIÈME OCCURRENCE** (2026-08-20). `main`
+a avancé pendant la boucle (cadrage LV6, PR #175) et la fusion a été refusée
+pour conflit sur `JOURNAL-DECISIONS.md`. Résolu par concaténation, comme la règle
+l'exige. La règle du 2026-07-30 tient : **rebaser et fusionner sans délai**.
