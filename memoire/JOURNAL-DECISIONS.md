@@ -3423,3 +3423,19 @@ table datée et sourcée** — elles changent plus vite que le code.
 **Rien n'est lancé** : aucune ligne de build, aucun choix d'API arrêté. Les
 décisions ouvertes (nom, périmètre v1, place dans la séquence
 INTENDANT → MYCÉLIUM → PROTÉE) sont remontées à Paul dans le rapport.
+
+## 2026-08-20 — VITRUVE : le nom est acté, la suite ne l'est pas
+
+**Décision Paul** (dictée, en réponse au rapport ADR-009) : « **appelle le
+Vitruve** » → le nom de registre **VITRUVE** est **acté**, avec **GNOMON** pour
+le module solaire. « Réno Conception » redevient ce qu'il était : le libellé
+parlé de Paul, pas le nom de la fiche.
+
+**Et surtout, ce qui n'est PAS acté** : « on verra pour la suite ». Trois
+questions restent ouvertes et **aucune ne s'exécute d'ici là** — la grille des
+7 blocs, le périmètre v1 (fiche d'approche depuis l'adresse seule), l'entrée
+dans la séquence de build INTENDANT → MYCÉLIUM → PROTÉE. *Un go sur le nom
+n'est pas un go sur le chantier : la fiche dort complète, elle n'ouvre rien.*
+
+PR #173 laissée **en brouillon** — la fusion dans `main` reste une gate Paul
+(pas de mode solo déclaré cette session).

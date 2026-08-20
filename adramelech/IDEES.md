@@ -1346,7 +1346,9 @@ d'autre que l'ombre pour en déduire la course du soleil : le module « potentie
 solaire ».*
 
 - **Capturée le** : 2026-08-20 (dictée vocale de Paul)
-- **Libellé métier de Paul** : « Réno Conception »
+- **Nom** : ✅ **VITRUVE, acté par Paul le 2026-08-20** (« appelle-le VITRUVE ») —
+  le nom de registre est arrêté ; le module solaire reste **GNOMON**
+- **Libellé métier de Paul** : « Réno Conception » (usage parlé, hors registre)
 - **Type** : pro · business (bureau d'études embarqué du socle Renoboost IA)
 - **Thème** : bâtiment · rénovation énergétique · solaire · bureau d'études · commercial
 - **Partenaire envisagé** : — (outil propre du socle)
@@ -1518,7 +1520,10 @@ nom du client dans le payload sortant et exige de **ne pas les y trouver**.
 
 ### Analyse stratégique
 
-> **Différée** (2026-08-20), comme JANUS (ADR-008). La fiche est capturée,
+> **Différée** (2026-08-20), comme JANUS (ADR-008). ⏸ **Suite en attente** :
+> Paul a acté le nom et répondu « on verra pour la suite » — ni la grille, ni le
+> périmètre v1, ni l'entrée dans la séquence de build ne sont engagés. La fiche
+> dort ici, complète, jusqu'à son go. La fiche est capturée,
 > instruite techniquement et bornée par rapport à CHAMBRE CLAIRE ; la **grille
 > des 7 blocs** (`CADRAGE-ADRAMELECH.md` §8) et le benchmark chiffré face à
 > Renoboost IA sont la **boucle suivante** — ⏳ sur go de Paul. Intuition à
