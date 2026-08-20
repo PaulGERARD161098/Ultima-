@@ -63,15 +63,15 @@ const CIBLES = [
   // global abaissé : baisser le seuil pour une page le rendrait aveugle sur les
   // huit autres, où « presque rien à mesurer » signifierait vraiment une panne.
   { page: 'ecrire.html', registre: 'atelier', largeurs: [1280, 390], minTextes: 1 },
-  { page: 'idees.html', registre: 'atelier', largeurs: [1280, 390] },
+  { page: 'idees.html', registre: 'atelier', largeurs: [1280, 390], dettesSoldees: true },
   // ③ INSTRUMENT — on lit des chiffres. Le parchemin domine, la nuit borde.
-  { page: 'abaque.html', registre: 'instrument', largeurs: [1280, 390] },
+  { page: 'abaque.html', registre: 'instrument', largeurs: [1280, 390], dettesSoldees: true },
   // ALTHEA (P6) : instrument aussi (rangs, jauges), mais son support n'est pas
   // le parchemin — exception actée « l'antique vu de nuit » : ses blocs de nuit
   // opaques portent les chiffres (css/althea.css). Sans session, la page montre
   // ses libellés statiques et ses états vides — assez de texte pour mesurer.
-  { page: 'althea.html', registre: 'instrument', largeurs: [1280, 390], nappe: '.althea-bloc' },
-  { page: 'althea-cadran.html', registre: 'instrument', largeurs: [1280, 390], minTextes: 2, nappe: '.althea-bloc' }
+  { page: 'althea.html', registre: 'instrument', largeurs: [1280, 390], nappe: '.althea-bloc', dettesSoldees: true },
+  { page: 'althea-cadran.html', registre: 'instrument', largeurs: [1280, 390], minTextes: 2, nappe: '.althea-bloc', dettesSoldees: true }
 ];
 
 const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
@@ -229,6 +229,15 @@ for (const cible of CIBLES) {
     };
 
     verdicts['leFondNIntroduitAucunDefaut_' + nom] = nouveaux.length === 0;
+    // LE VERROU DES DEMI-TEINTES (boucle du 2026-08-20). Le verdict ci-dessus est
+    // DIFFÉRENTIEL : il pardonne un défaut hérité, par construction. C'est ce qui
+    // a laissé sept textes sous 4,5:1 dormir des semaines en étant « rappelés »
+    // dans un rapport vert. Les pages dont la dette est soldée le déclarent, et
+    // pour elles le seuil redevient ABSOLU : plus un seul échec, hérité compris.
+    // Une page ne rejoint cette liste qu'après avoir été mesurée à zéro.
+    if (cible.dettesSoldees) {
+      verdicts['plusAucuneDemiTeinteSousLeSeuil_' + nom] = echecsAvec.length === 0;
+    }
     // Une page dont on ne mesure rien passerait tous les tests : on exige que
     // l'instrument ait bien trouvé du texte à mesurer. Le minimum vaut 5 par
     // défaut, et se déclare page par page quand la page est sobre par dessein.

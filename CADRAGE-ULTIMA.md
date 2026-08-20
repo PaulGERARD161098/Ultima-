@@ -6,6 +6,52 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🎨 **SESSION 2026-08-20 (VITRUVE, puis la dette des demi-teintes), FUSIONNÉE
+  pour la première moitié.**
+  - ✅ **ADR-009 VITRUVE capturée** (PR #173, fusionnée) — bureau d'études
+    embarqué dicté par Paul (« Réno Conception »). Fiche complète dans
+    `adramelech/IDEES.md` : frontière avec CHAMBRE CLAIRE, les quatre étages de
+    captation du potentiel solaire, séquencement v1→v4, sécurité PII.
+    **Décisions Paul du soir** : le build vivra sur un **autre repo**, l'outil
+    sera **combiné à un élément non révélé**, « avec mon dpe.fr » consigné mot
+    pour mot (⏳ précision attendue). La fiche, elle, reste dans ADRAMELECH.
+  - ✅ **DETTE DES DEMI-TEINTES SOLDÉE** — les 7 textes sous 4,5:1 que LV5 avait
+    laissés en registre. **Trois jetons, sept textes, trois pages** :
+    `--encre-pale` #7c6338 → **#695430** (`css/abaque.css`), #8a7147 →
+    **#695430** (`css/idees.css` — les deux feuilles partageaient tous leurs
+    fonds et avaient divergé sur ce seul jeton : ré-harmonisées), et
+    `--parch-bas` #6d8299 → **#788fa8** (`css/althea.css`).
+    **Mesuré après : zéro échec, zéro hérité** — pire ratio 5,45 (abaque),
+    5,18 (althea-cadran), 7,48 (idees). Thème sombre déjà conforme (4,80
+    minimum), non touché.
+  - **CE QUE LA MESURE A CORRIGÉ DU REGISTRE** : le registre annonçait « 5 sur
+    l'abaque + 1 lien ALTHEA » et « assombrir un jeton ». Faux sur trois points.
+    ① Il y avait **7** textes sur **3** pages (`althea-cadran.html` « ↞ Le
+    Système » n'était pas listé). ② Sur ALTHEA il fallait **éclaircir**, pas
+    assombrir — texte clair sur fond sombre. ③ Le jeton n'était pas global :
+    il est **local à chaque feuille**, ce qui a rendu la boucle bien plus petite
+    que redouté.
+  - **UN FOND SUPPOSÉ EST UN FOND FAUX.** Mon calcul théorique donnait 5,12:1
+    pour le lien d'ALTHEA quand le harnais mesurait **4,36**. L'écart n'était pas
+    une erreur de calcul : le lien n'est pas posé sur la nuit d'ALTHEA mais sur
+    le **sol étoilé**, plus clair. Le fond réel a donc été **déduit du ratio
+    mesuré** au lieu d'être supposé — et le calculateur WCAG lui-même a été
+    validé d'abord sur quatre cas connus (21:1, 1:1, et le gris #767676 qui est
+    le premier à passer sur blanc).
+  - **LE VERROU** : `smoke-fond-contraste.mjs` est **différentiel** — il pardonne
+    un défaut hérité par construction, et c'est ce qui a laissé ces sept textes
+    dormir des semaines dans un rapport vert. Les pages soldées portent désormais
+    `dettesSoldees: true` : pour elles le seuil redevient **absolu**. Éprouvé
+    rouge (ancienne valeur réinjectée) puis vert.
+  - **ANGLE MORT NOMMÉ** : `idees.html` affichait 3,64:1 en calcul — pire que
+    l'abaque — et **zéro échec au harnais**, parce que ses textes en
+    `--encre-pale` ne sont pas rendus sans session. Un défaut qu'aucune mesure
+    ne voyait. Corrigé à la source par le jeton ; la couverture des pages
+    authentifiées reste, elle, un manque connu.
+  - **Patrimoine COMPLET vert** (84 sections, `bash tests/lancer.sh`).
+  - ⏭ **Boucle suivante, déjà validée par Paul** : la légende `KALAMN-TALAEN`
+    coupée au bord gauche du ciel IMLADRIK en 390 px.
+
 - 🌌 **SESSION 2026-08-16/17 (LV5 — la galaxie plein écran, puis le sol étoilé
   partout), TOUT FUSIONNÉ dans `main`.** Cadrage :
   **`CADRAGE-LV5-GALAXIE-PLEIN-ECRAN.md`** — §§11 à 16.10, c'est LA source pour
