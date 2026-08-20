@@ -1523,7 +1523,28 @@ nom du client dans le payload sortant et exige de **ne pas les y trouver**.
 > **Différée** (2026-08-20), comme JANUS (ADR-008). ⏸ **Suite en attente** :
 > Paul a acté le nom et répondu « on verra pour la suite » — ni la grille, ni le
 > périmètre v1, ni l'entrée dans la séquence de build ne sont engagés. La fiche
-> dort ici, complète, jusqu'à son go. La fiche est capturée,
+> dort ici, complète, jusqu'à son go.
+
+### Décisions Paul du 2026-08-20 (soir) — où VITRUVE sera construit
+
+- **VITRUVE ne sera PAS bâti dans Ultima** : « on branchera VITRUVE sur un autre
+  repo la prochaine fois ». Le build vit ailleurs ; **la fiche, elle, reste ici**
+  — ADRAMELECH garde l'idée, ses liens et son analyse, quel que soit le dépôt qui
+  porte le code.
+  *Réserve signalée une fois, non bloquante (Paul a tranché)* : la directive JL
+  veut que tout nouveau besoin soit une extension d'Ultima. La lecture qui les
+  réconcilie : **Ultima est l'interface de travail de Paul, VITRUVE est un outil
+  métier de Renoboost IA** — un produit de l'entreprise, pas un second poste de
+  pilotage. À rappeler au moment du cadrage : ce qui relève du **pilotage** de
+  Paul (fiches, chantiers, décisions) reste dans Ultima et s'y rebranche.
+- **VITRUVE sera combiné à autre chose** — élément non révélé (« tu verras »).
+  La fiche est donc **volontairement ouverte** : le périmètre v1 proposé (fiche
+  d'approche depuis l'adresse seule) n'est pas figé tant que la combinaison n'est
+  pas connue.
+- **« avec mon dpe.fr »** (dicté tel quel) : élément à verser au futur cadrage.
+  Non interprété — probablement un service ou un domaine que Paul a en main, à
+  préciser au moment du build. Consigné mot pour mot plutôt que deviné.
+  ⏳ **Précision attendue de Paul.** La fiche est capturée,
 > instruite techniquement et bornée par rapport à CHAMBRE CLAIRE ; la **grille
 > des 7 blocs** (`CADRAGE-ADRAMELECH.md` §8) et le benchmark chiffré face à
 > Renoboost IA sont la **boucle suivante** — ⏳ sur go de Paul. Intuition à

@@ -3439,3 +3439,32 @@ n'est pas un go sur le chantier : la fiche dort complète, elle n'ouvre rien.*
 
 PR #173 laissée **en brouillon** — la fusion dans `main` reste une gate Paul
 (pas de mode solo déclaré cette session).
+
+## 2026-08-20 (soir) — VITRUVE ira vivre ailleurs, et la fiche reste ici
+
+**Décisions Paul** (dictée) : ① **go de fusion** sur la PR #173 ; ② « on
+branchera VITRUVE sur un **autre repo** la prochaine fois » ; ③ « on **combinera
+VITRUVE avec autre chose**, tu verras » — élément non révélé ; ④ « avec **mon
+dpe.fr** » — consigné mot pour mot, **non interprété**.
+
+**Ce que ça change, et ce que ça ne change pas.** Le *build* de VITRUVE sort
+d'Ultima ; **la fiche ADR-009 reste dans ADRAMELECH**. C'est la distinction utile :
+la bibliothèque d'idées garde l'idée, ses liens inter-segments et son analyse,
+quel que soit le dépôt qui portera le code un jour. *Une idée ne déménage pas
+parce que son chantier déménage.*
+
+**Réserve signalée une fois à Paul, non bloquante — il a tranché.** La directive
+JL veut que tout nouveau besoin soit une extension d'Ultima, jamais un outil à
+côté. La lecture qui réconcilie les deux : **Ultima est l'interface de travail de
+Paul ; VITRUVE est un outil métier de Renoboost IA** — un produit de l'entreprise,
+pas un second poste de pilotage. À reposer au cadrage : ce qui relève du
+*pilotage* (fiches, chantiers, décisions) revient dans Ultima et s'y rebranche.
+
+**Conséquence sur la fiche : elle reste volontairement ouverte.** Le périmètre v1
+proposé (fiche d'approche depuis l'adresse seule) **n'est pas figé** tant que la
+combinaison annoncée n'est pas connue — cadrer un v1 contre une inconnue serait
+du cadrage à refaire.
+
+**PR #173 fusionnée** (squash) sur go explicite de Paul. Reprise de branche
+obligatoire ensuite : repartir de `origin/main` avant tout nouveau commit
+(règle du 2026-07-22).
