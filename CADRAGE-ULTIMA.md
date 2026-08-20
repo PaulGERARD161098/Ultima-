@@ -6,6 +6,23 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🌠 **SESSION 2026-08-20 (soir) — CADRAGE LV6 « LE CIEL VIVANT » DÉPOSÉ,
+  exécution GELÉE au top départ de Paul.** Demande dictée : « bien implanter
+  les constellations partout + rendre l'interface plus proactive (pousser à
+  l'usage et à l'amélioration continue) », avec consigne explicite : plan très
+  détaillé, **aucune exécution avant le top départ**. Livrable :
+  **`CADRAGE-LV6-CIEL-VIVANT.md`** (format 6 points) — 5 paliers :
+  P1 signaux cockpit élargis (fraîcheur, orphelines, élan ALTHEA) ·
+  P2 étoiles qui appellent (lueur + compte au survol, fail-closed) ·
+  P3 cartouche du matin (3 signaux, 1 action, module pur `leo-matin`) ·
+  P4 ciel des idées (maquette d'abord) · P5 TAO en double constellation
+  (à trancher après P4). **Aucune migration dans tout LV6 — on ne fait que
+  lire.** 5 arbitrages posés (§7), volet donnée en actions Paul (§8 :
+  contacts + relances au journal, preuves RESHIRAM, relevés ALTHEA).
+  État base mesuré en prod le 2026-08-20 : `journal` = 0 (les relances
+  tournent à vide), `personnes` = 0, `preuves` = 0, dernier relevé ALTHEA
+  2026-08-10 — chiffres à re-mesurer à l'ouverture de P1.
+
 - 🎨 **SESSION 2026-08-20 (VITRUVE, puis la dette des demi-teintes), FUSIONNÉE
   pour la première moitié.**
   - ✅ **ADR-009 VITRUVE capturée** (PR #173, fusionnée) — bureau d'études
