@@ -3528,3 +3528,46 @@ rapport. **Trois jetons, sept textes, trois pages. Zéro échec après.**
 **Patrimoine COMPLET vert** (84 sections). Thème sombre déjà conforme partout
 (4,80 minimum) : non touché — corriger ce qui va bien est une régression en
 puissance.
+
+## 2026-08-20 — KALAMN-TALAEN : un placement hérité d'un monde disparu
+
+Boucle 2 du soir, sur go de Paul. La légende gravée du ciel IMLADRIK sortait de
+l'écran par la gauche.
+
+- **LA CAUSE : UN VESTIGE DE LA BOUSSOLE.** `.kalamn-legende`
+  (`css/imladrik-carto.css`) portait encore le placement de la boussole —
+  `position:absolute; left:50%; top:68.5%; transform:translate(-50%,0)` — écrit
+  pour poser le nom sous le médaillon. La boussole a disparu le 2026-08-19
+  (« plus une seule rose dans Ultima ») et le ciel LV5 place désormais la légende
+  lui-même, **en pleine largeur** : `.ciel-noeud-plateau > .ciel-legende
+  { left:0; right:0; bottom:… }`. Les deux règles se cumulaient — le ciel donnait
+  au bloc toute la largeur, et le `translate(-50%)` survivant le décalait de **la
+  moitié de cette largeur**. *Un positionnement hérité d'un contexte disparu ne
+  devient pas inoffensif : il devient invisible, et il agit.*
+
+- **LE REGISTRE DISAIT « EN 390 PX » : C'ÉTAIT LES DEUX LARGEURS.** Mesuré
+  −640 px en 1280 et −195 px en 390 — le centre du mot tombait pile sur le bord
+  gauche, aux deux tailles. Deuxième note de registre prise en défaut par la
+  mesure dans la même session (après « 5 textes sur 2 pages » qui en faisait 7
+  sur 3). *Une dette décrite de mémoire se relit des semaines plus tard comme si
+  elle était exacte — elle ne l'est pas.*
+
+- **POURQUOI LE HARNAIS NE L'AVAIT PAS VU.** `smoke-imladrik-carto.mjs`
+  vérifiait que la légende **existe** (`textContent`) et son **contraste**.
+  Jamais sa position. *Un test qui vérifie qu'un texte est là ne dit rien de
+  l'endroit où il est.* Deux assertions ajoutées, aux **deux largeurs** : dans le
+  cadre, et centrée à 2 % près.
+
+- **ON MESURE LA BOÎTE DU TEXTE, PAS CELLE DU BLOC** (règle neuve, du même sang
+  que « une géométrie se mesure »). Le bloc de la légende fait toute la largeur
+  du plateau : il « tient » donc **toujours** dans le cadre, et une assertion
+  posée sur lui aurait été verte pendant que le mot était à moitié dehors. Un
+  `Range` sur le contenu donne la boîte réellement peinte. *Mesurer le conteneur
+  d'un texte, c'est mesurer l'endroit où il aurait pu être.*
+
+- **INSTRUMENT ÉPROUVÉ DANS LES DEUX SENS** : sonde validée d'abord sur un cas de
+  référence (l'entête, dont on sait qu'il tient), puis le harnais permanent rendu
+  **rouge** en réinjectant le `transform`, puis vert après retrait. La sonde
+  jetable a été supprimée : l'assertion vit dans le harnais du quadrant.
+
+**Patrimoine COMPLET vert** (84 sections, zéro ❌).
