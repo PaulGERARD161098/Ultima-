@@ -3528,3 +3528,40 @@ rapport. **Trois jetons, sept textes, trois pages. Zéro échec après.**
 **Patrimoine COMPLET vert** (84 sections). Thème sombre déjà conforme partout
 (4,80 minimum) : non touché — corriger ce qui va bien est une régression en
 puissance.
+
+## 2026-08-20 (soir) — LV6 cadré, pas exécuté : « le ciel vivant »
+
+Paul ouvre le chantier suivant à la dictée : les constellations partout, et
+une interface proactive « qui me pousse à l'usage et à l'amélioration
+continue ». Consigne ferme : **un gros cadrage détaillé pour exécution la
+semaine prochaine, aucune exécution avant son top départ.** La boucle du soir
+est donc un document, pas du code : `CADRAGE-LV6-CIEL-VIVANT.md`.
+
+- **« PARTOUT » A CHANGÉ DE SENS, ET LE MESURER L'A MONTRÉ.** La navigation
+  entière est déjà au ciel (LV4-LV5) : ce qui reste hors du ciel, ce sont les
+  **vues de données**. Deux candidates seulement — les idées d'ADRAMELECH
+  (nœuds + liens : le modèle du ciel est exactement le leur) et TAO en double
+  constellation (les Gémeaux existent déjà dans le moteur). ALTHEA, l'abaque
+  et les ateliers ne bougent pas : un formulaire ne devient pas un ciel.
+
+- **LA PROACTIVITÉ SE CADRE DÉTERMINISTE, PAS IA** : cockpit élargi (fraîcheur
+  par quadrant, orphelines, élan ALTHEA — que des comptes et des jours),
+  lueur d'appel sur les étoiles porteuses de signal, cartouche du matin
+  « 3 signaux, 1 action » en module pur unit-testable. Règle ③ d'ALTHEA
+  étendue à tout le produit : **Ultima compte, elle ne reproche pas** — liste
+  de mots interdits assertée au harnais.
+
+- **LE GOULOT RESTE LA DONNÉE, ET IL EST CHIFFRÉ** (prod, 2026-08-20) :
+  `journal` = 0 — la machinerie de relances tourne à vide ; `personnes` = 0 ;
+  `preuves` = 0 sur 3 talents ; dernier relevé ALTHEA le 2026-08-10. À la
+  question de Paul « les contacts c'est sûr, quoi d'autre ? », la réponse
+  tient en quatre gestes de saisie (cadrage §8) : contacts AVEC leur
+  `relance_at`, une preuve par talent, reprendre les relevés, les idées au
+  fil de l'eau. La proactivité sans donnée est un haut-parleur dans une
+  pièce vide.
+
+- **AUCUNE MIGRATION DANS TOUT LV6** : les cinq paliers ne font que lire la
+  base — pas une gate Supabase sur le chemin.
+
+Cinq arbitrages posés à Paul (§7 du cadrage) ; exécution palier par palier,
+une PR par palier, au top départ.
