@@ -3468,3 +3468,63 @@ du cadrage à refaire.
 **PR #173 fusionnée** (squash) sur go explicite de Paul. Reprise de branche
 obligatoire ensuite : repartir de `origin/main` avant tout nouveau commit
 (règle du 2026-07-22).
+
+## 2026-08-20 — la dette des demi-teintes soldée, et trois choses que la mesure a corrigées du registre
+
+Boucle ouverte sur go de Paul (« go là-dessus »), la plus ancienne dette laissée
+par LV5 : les textes sous le seuil de 4,5:1, rappelés en vert de rapport en
+rapport. **Trois jetons, sept textes, trois pages. Zéro échec après.**
+
+- **LE REGISTRE SE TROMPAIT SUR TROIS POINTS, ET SEULE LA MESURE L'A DIT.** Il
+  annonçait « 5 contrastes sur l'abaque + le lien ALTHEA », et « assombrir un
+  jeton global ». En réalité : ① **7** textes sur **3** pages — `althea-cadran`
+  (« ↞ Le Système », 4,36:1) n'avait jamais été listé ; ② sur ALTHEA il fallait
+  **éclaircir**, pas assombrir — texte clair sur fond sombre, l'inverse du
+  parchemin ; ③ le jeton n'est **pas global**, il est local à chaque feuille —
+  ce qui a rendu la boucle bien plus petite que la note ne le laissait craindre.
+  *Une dette décrite de mémoire vieillit comme un test qui nomme une couleur
+  supposée : on la relit des semaines plus tard en croyant savoir ce qu'elle
+  contient.*
+
+- **UN FOND SUPPOSÉ EST UN FOND FAUX.** Mon calculateur donnait 5,12:1 pour le
+  lien d'ALTHEA quand le harnais mesurait 4,36. L'écart n'était pas une erreur
+  d'arithmétique : le lien n'est pas posé sur la nuit d'ALTHEA (`--nuit`) mais
+  sur le **sol étoilé**, plus clair. J'ai donc **déduit le fond réel du ratio
+  mesuré** (L_fond = (L_texte + 0,05)/ratio − 0,05) au lieu de le supposer.
+  C'est exactement ce que le harnais lui-même explique en tête : *un jeton dit
+  ce que le fond DEVRAIT être.* Le corollaire vaut au-delà du contraste :
+  **quand un calcul et une mesure divergent, c'est l'hypothèse cachée du calcul
+  qu'il faut aller chercher — pas l'arithmétique.**
+
+- **L'INSTRUMENT A ÉTÉ VALIDÉ AVANT USAGE** (règle du 2026-08-17, tenue) : le
+  calculateur WCAG passe d'abord quatre cas connus — noir/blanc 21:1,
+  blanc/blanc 1:1, `#777777` sur blanc 4,48:1 et `#767676` 4,54:1, le premier
+  gris qui passe. Il a ensuite **concordé au centième** avec le harnais sur
+  l'abaque (4,46 sur le parchemin, 4,29 sur la nappe `--ile`) : deux instruments
+  indépendants qui tombent d'accord valent mieux qu'un seul qu'on croit.
+
+- **UN VERDICT DIFFÉRENTIEL PARDONNE PAR CONSTRUCTION — IL LUI FAUT UN VERROU.**
+  `smoke-fond-contraste.mjs` n'exige que « aucun défaut NOUVEAU » : c'est ce qui
+  a laissé sept textes sous le seuil dormir des semaines **dans un rapport
+  vert**, poliment listés sous `heritesRappeles`. Les pages soldées portent
+  désormais `dettesSoldees: true`, et pour elles le seuil redevient **absolu**.
+  Éprouvé rouge (ancienne valeur réinjectée exprès) puis vert. *Un rappel n'est
+  pas un garde-fou : tant que rien ne rougit, une dette listée est une dette
+  qui reste.*
+
+- **ANGLE MORT NOMMÉ, PAS ENTERRÉ** : `idees.html` était à **3,64:1** en calcul
+  — pire que l'abaque — et à **zéro échec** au harnais, parce que ses textes en
+  `--encre-pale` ne sont pas rendus sans session. Un défaut réel qu'aucune mesure
+  ne voyait. Corrigé à la source par le jeton ; la **couverture des pages
+  authentifiées** reste un manque connu du patrimoine, à nommer tant qu'il dure.
+
+- **RÉ-HARMONISATION AU PASSAGE** : `css/idees.css` et `css/abaque.css`
+  partagent tous leurs fonds et avaient divergé sur ce seul jeton (#8a7147 vs
+  #7c6338). Les deux reçoivent la même valeur **#695430** — ≥ 4,98:1 sur les
+  trois fonds parchemin (`--parchemin`, `--ile`, `--mer`), et toujours entre
+  `--encre` et `--encre-claire` : la hiérarchie à trois niveaux tient.
+  ALTHEA : `--parch-bas` #6d8299 → **#788fa8** (5,17:1 sur le ciel).
+
+**Patrimoine COMPLET vert** (84 sections). Thème sombre déjà conforme partout
+(4,80 minimum) : non touché — corriger ce qui va bien est une régression en
+puissance.
