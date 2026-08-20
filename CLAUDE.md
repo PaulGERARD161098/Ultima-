@@ -246,6 +246,27 @@ l'accessibilité ni la sécurité.
   probable aux sept, puis **laisser le harnais désigner celles qui résistent**.
   Cinq étaient bonnes du premier coup, une seule a demandé du travail. Débattre
   page par page aurait coûté plus cher — et se serait trompé.
+- **UNE DETTE DÉCRITE DE MÉMOIRE EST UN SOUVENIR, PAS UNE MESURE** (2026-08-20 —
+  deux notes de registre prises en défaut dans la même session). Le registre
+  annonçait « 5 textes sur 2 pages, assombrir un jeton global » : c'était **7
+  textes sur 3 pages**, un jeton **local**, et sur ALTHEA il fallait **éclaircir**.
+  Il annonçait la légende KALAMN-TALAEN coupée « en 390 px » : elle l'était aux
+  **deux** largeurs. *Rouvrir une dette commence donc par la RE-MESURER, jamais
+  par relire sa description* — une note vieillit exactement comme un test qui
+  nomme une couleur supposée.
+- **UN VERDICT DIFFÉRENTIEL PARDONNE PAR CONSTRUCTION — IL LUI FAUT UN VERROU**
+  (2026-08-20). `smoke-fond-contraste` n'exigeait « aucun défaut NOUVEAU » : sept
+  textes sous 4,5:1 ont dormi des semaines **dans un rapport vert**, poliment
+  listés sous `heritesRappeles`. Un rappel n'est pas un garde-fou. Toute page dont
+  la dette est soldée le **déclare** (`dettesSoldees: true`) et retrouve un seuil
+  **absolu**. Même famille : un test qui vérifie qu'un texte **existe** ne dit rien
+  de l'endroit où il est — et **on mesure la boîte du TEXTE (via un `Range`), pas
+  celle du bloc**, qu'un conteneur pleine largeur rend toujours verte.
+- **UN FOND SUPPOSÉ EST UN FOND FAUX** (2026-08-20) : quand un calcul et une mesure
+  divergent, c'est l'**hypothèse cachée du calcul** qu'il faut aller chercher, pas
+  l'arithmétique. Le contraste calculé du lien d'ALTHEA donnait 5,12:1 contre 4,36
+  mesuré — le lien n'est pas posé sur la nuit de la page mais sur le **sol
+  étoilé**. Le fond réel se **déduit du ratio mesuré**, il ne se suppose pas.
 - **Une règle de confidentialité se teste par l'ABSENCE** (2026-07-30) : pour
   toute donnée sensible sortant vers un tiers (IA, log, page servie), le harnais
   cherche le contenu interdit dans ce qui part et exige de **ne pas l'y

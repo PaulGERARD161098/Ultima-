@@ -23,6 +23,26 @@
   tournent à vide), `personnes` = 0, `preuves` = 0, dernier relevé ALTHEA
   2026-08-10 — chiffres à re-mesurer à l'ouverture de P1.
 
+- 🔚 **CLÔTURE DE LA SESSION 2026-08-20 (soir)** — `main` = `c5b26d1`, **zéro PR
+  ouverte, zéro travail non poussé**. Trois boucles fermées et fusionnées :
+  **#173** (ADR-009 VITRUVE capturée), **#174** (dette des demi-teintes soldée),
+  **#176** (KALAMN-TALAEN recadrée). Le fil parallèle a déposé **#175** (cadrage
+  LV6) ; conflit sur le journal résolu par concaténation.
+  - **LE REGISTRE DES DETTES LV5 EST VIDE.** Les trois restes cosmétiques
+    consignés le 2026-08-19 (5 contrastes de l'abaque, lien ALTHEA, légende
+    KALAMN-TALAEN) sont traités et verrouillés par des assertions.
+  - **⏳ CE QUI RESTE À LA MAIN DE PAUL** (inchangé, aucune nouvelle dette) :
+    advisors Supabase post-DDL, `ANTHROPIC_API_KEY` en env Vercel, l'URL d'YCOME,
+    la précision sur « mon dpe.fr » (VITRUVE), et le **top départ LV6**.
+  - **⏳ MANQUE CONNU DU PATRIMOINE, nommé le 2026-08-20** : les pages
+    **authentifiées** ne sont pas couvertes par les harnais — `idees.html`
+    portait un contraste à 3,64:1 que le harnais notait à zéro échec, parce que
+    ses textes ne sont pas rendus sans session. Ce n'est pas une régression,
+    c'est un angle mort à financer un jour (fixture de session).
+  - **Trois règles versées à la charte** (§⚡) : une dette décrite de mémoire
+    est un souvenir et se re-mesure ; un verdict différentiel a besoin d'un
+    verrou ; un fond supposé est un fond faux.
+
 - 🎨 **SESSION 2026-08-20 (VITRUVE, puis la dette des demi-teintes), FUSIONNÉE
   pour la première moitié.**
   - ✅ **ADR-009 VITRUVE capturée** (PR #173, fusionnée) — bureau d'études
