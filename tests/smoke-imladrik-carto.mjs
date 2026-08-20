@@ -116,6 +116,39 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
   const legende = (await page.locator('.kalamn-legende').textContent()) || '';
   verifier('Légende « Kalamn-talaen » gravée', /Kalamn-talaen/.test(legende), legende);
 
+  // ELLE EST GRAVÉE — MAIS OÙ ? Cette assertion manquait, et son absence a laissé
+  // la légende peinte À MOITIÉ HORS DE L'ÉCRAN pendant des semaines : un
+  // `transform: translate(-50%)` hérité de la boussole disparue décalait le bloc
+  // que le ciel pose désormais en pleine largeur (−640 px en 1280, −195 en 390).
+  // Un test qui vérifie qu'un texte EXISTE ne dit rien de l'endroit où il est.
+  //
+  // ON MESURE LA BOÎTE DU TEXTE, PAS CELLE DU BLOC : le bloc fait toute la
+  // largeur du plateau, il « tient » donc toujours dans le cadre et ne prouve
+  // rien. Un Range sur le contenu donne la boîte réellement peinte.
+  const mesurerLegende = () => page.evaluate(() => {
+    const e = document.querySelector('.ciel-noeud-plateau > .ciel-legende');
+    if (!e) { return null; }
+    const r = document.createRange(); r.selectNodeContents(e);
+    const b = r.getBoundingClientRect();
+    return { g: b.left, d: b.right, h: b.top, bas: b.bottom,
+             vp: window.innerWidth, vh: window.innerHeight };
+  });
+  // LES DEUX LARGEURS, parce que le défaut se lisait aux deux et que Paul est
+  // sur un téléphone : un cadrage prouvé sur un seul écran n'est pas prouvé.
+  for (const largeur of [1280, 390]) {
+    await page.setViewportSize({ width: largeur, height: 900 });
+    await page.waitForTimeout(300);
+    const m = await mesurerLegende();
+    verifier(`Légende DANS le cadre en ${largeur} px (boîte du texte, pas du bloc)`,
+      !!m && m.g >= 0 && m.d <= m.vp && m.h >= 0 && m.bas <= m.vh,
+      m ? `g=${Math.round(m.g)} d=${Math.round(m.d)} / ${m.vp}` : 'absente');
+    verifier(`Légende centrée en ${largeur} px`,
+      !!m && Math.abs((m.g + m.d) / 2 - m.vp / 2) <= m.vp * 0.02,
+      m ? `centre=${Math.round((m.g + m.d) / 2)} attendu≈${m.vp / 2}` : 'absente');
+  }
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.waitForTimeout(300);
+
   // 4. Au repos, plus AUCUN message affiché (Paul, 2026-08-01) ; la parole de
   //    Léo ne se matérialise qu'au survol d'un cap — test d'ABSENCE puis survol.
   verifier('Cartouche invisible et muet au repos',

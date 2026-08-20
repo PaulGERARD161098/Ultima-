@@ -66,8 +66,25 @@
     ne voyait. Corrigé à la source par le jeton ; la couverture des pages
     authentifiées reste, elle, un manque connu.
   - **Patrimoine COMPLET vert** (84 sections, `bash tests/lancer.sh`).
-  - ⏭ **Boucle suivante, déjà validée par Paul** : la légende `KALAMN-TALAEN`
-    coupée au bord gauche du ciel IMLADRIK en 390 px.
+  - ✅ **KALAMN-TALAEN RECADRÉE** (boucle 2, fusionnée à part) — la légende
+    gravée du ciel IMLADRIK sortait de l'écran. Cause : `.kalamn-legende`
+    (`css/imladrik-carto.css`) gardait le placement de la **boussole disparue**
+    — `position:absolute; left:50%; transform:translate(-50%,0)` — alors que le
+    ciel LV5 pose déjà la légende en pleine largeur
+    (`.ciel-noeud-plateau > .ciel-legende { left:0; right:0; bottom:… }`). Les
+    deux se cumulaient : bloc pleine largeur **translaté de la moitié de cette
+    largeur**. Mesuré **−640 px en 1280 et −195 px en 390** — le registre disait
+    « en 390 px », c'était **les deux**. Corrigé en ne laissant à la règle que
+    sa typographie ; aucune propriété de placement n'y revient.
+    *Un positionnement hérité d'un contexte disparu ne devient pas inoffensif :
+    il devient invisible, et il agit.*
+  - **POURQUOI ÇA A TENU SI LONGTEMPS** : `smoke-imladrik-carto.mjs` vérifiait
+    que la légende **existe** et son **contraste** — jamais sa **position**.
+    *Un test qui vérifie qu'un texte est là ne dit rien de l'endroit où il est.*
+    Deux assertions ajoutées, **aux deux largeurs** : dans le cadre, et centrée
+    (tolérance 2 %). Elles mesurent la **boîte du texte** (`Range`), pas celle du
+    bloc — un bloc pleine largeur « tient » toujours et ne prouve rien.
+    Éprouvées rouges (transform réinjecté) puis vertes.
 
 - 🌌 **SESSION 2026-08-16/17 (LV5 — la galaxie plein écran, puis le sol étoilé
   partout), TOUT FUSIONNÉ dans `main`.** Cadrage :

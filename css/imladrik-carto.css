@@ -11,27 +11,32 @@
   filter: drop-shadow(0 2px 6px rgba(0, 10, 20, 0.45));
 }
 
-/* Légende de la boussole : le nom du guide, gravé juste sous Kalamn-talaen,
-   centré entre les deux caps du bas. Muette (aria-hidden), n'intercepte rien. */
+/* Légende gravée : le nom du guide, « Kalamn-talaen ».
+   ---------------------------------------------------------------------------
+   CETTE RÈGLE N'HABILLE PLUS QUE LA TYPOGRAPHIE — ET C'EST UNE LEÇON PAYÉE.
+   Elle plaçait autrefois la légende sous le médaillon de la boussole :
+   `position: absolute; left: 50%; top: 68.5%; transform: translate(-50%, 0)`.
+   La boussole a disparu (LV5, 2026-08-19 — « plus une seule rose dans
+   Ultima ») et le ciel place lui-même la légende, en bas de l'écran :
+   `.ciel-noeud-plateau > .ciel-legende { left: 0; right: 0; bottom: … }`
+   (css/ciel-noeud.css). Les deux règles se cumulaient : le ciel donnait au
+   bloc TOUTE la largeur, et le `translate(-50%)` survivant le décalait de la
+   MOITIÉ DE CETTE LARGEUR vers la gauche. Mesuré : −640 px en 1280,
+   −195 px en 390 ; le centre du mot tombait pile sur le bord gauche.
+   *Un positionnement hérité d'un contexte disparu ne devient pas inoffensif :
+   il devient invisible, et il agit.*
+   Ne remettre ici AUCUNE propriété de placement : le ciel en a la charge. */
 .kalamn-legende {
-  position: absolute;
-  left: 50%;
-  top: 68.5%;
-  transform: translate(-50%, 0);
-  z-index: 4;
   margin: 0;
-  white-space: nowrap;
+  white-space: nowrap;            /* le nom ne se coupe pas en deux lignes */
   pointer-events: none;
   font-family: var(--police-ancienne);
   font-variant: small-caps;
   font-style: italic;
   letter-spacing: 0.16em;
   font-size: clamp(0.72rem, 2vmin, 0.92rem);
-  color: #f0dca0;                 /* or antique clair — lisible sur le parchemin */
+  color: #f0dca0;                 /* or antique clair — lisible sur la nuit */
   text-shadow: 0 1px 2px rgba(0, 10, 20, 0.6);
 }
 
-/* Petits écrans : la légende reste sous le médaillon resserré. */
-@media (max-width: 560px) {
-  .kalamn-legende { top: 69.5%; }
-}
+
