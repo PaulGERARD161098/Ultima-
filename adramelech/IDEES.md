@@ -1331,3 +1331,225 @@ mécénat descendant.
 > Anselme (partenaire confirmé) ; capturé et cadré, la grille des 7 blocs sera
 > passée quand Paul décidera de l'instruire.
 
+
+---
+
+## ADR-009 — VITRUVE
+
+*Nom : Vitruve (Vitruvius), l'architecte-ingénieur romain du De architectura —
+seul traité d'architecture antique conservé — qui prescrit d'orienter et de
+concevoir un bâtiment d'après la course du soleil, le climat et l'usage, avant
+d'en choisir les matériaux. C'est exactement le geste de l'outil : lire le
+bâtiment d'abord, prescrire le système ensuite. Son premier instrument porte un
+nom propre — **le GNOMON**, la tige du cadran solaire, qui ne mesure rien
+d'autre que l'ombre pour en déduire la course du soleil : le module « potentiel
+solaire ».*
+
+- **Capturée le** : 2026-08-20 (dictée vocale de Paul)
+- **Nom** : ✅ **VITRUVE, acté par Paul le 2026-08-20** (« appelle-le VITRUVE ») —
+  le nom de registre est arrêté ; le module solaire reste **GNOMON**
+- **Libellé métier de Paul** : « Réno Conception » (usage parlé, hors registre)
+- **Type** : pro · business (bureau d'études embarqué du socle Renoboost IA)
+- **Thème** : bâtiment · rénovation énergétique · solaire · bureau d'études · commercial
+- **Partenaire envisagé** : — (outil propre du socle)
+- **Statut** : à raffiner (capture instruite ; grille des 7 blocs différée — voir §Analyse)
+
+### L'idée
+
+Un **outil de bureau d'études embarqué** : quand Paul passe chez un client, il
+doit pouvoir déterminer **quel type de rénovation est possible sur cette
+habitation** et **quel est le meilleur système** — pas seulement le produit
+qu'il était venu vendre. **Élargir le spectre au moment où l'on est chez le
+client** : arriver pour une chose, repartir avec la carte complète de ce que le
+bâtiment permet.
+
+Les moyens évoqués à la capture : **vidéos**, **simulation 3D**, « je ne sais
+pas » — c'est-à-dire que le moyen est ouvert, le but ne l'est pas.
+
+**Premier terrain visé, dicté explicitement** : les **pavillons** et les
+**panneaux solaires**. D'où la question posée par Paul, qui est le vrai sujet
+technique de la fiche : **comment vient-on capter le potentiel solaire d'une
+habitation — ou de n'importe quel bâtiment ?**
+
+### La frontière avec CHAMBRE CLAIRE (ADR-005) — à ne pas confondre
+
+Les deux outils vivent au même moment (le rendez-vous chez le client) et se
+ressemblent de loin. Ils ne répondent pas à la même question :
+
+| | **CHAMBRE CLAIRE** (ADR-005) | **VITRUVE** (ADR-009) |
+|---|---|---|
+| Question | *Ce produit-là passe-t-il dans cette pièce ?* | *Que peut-on faire de ce bâtiment ?* |
+| Objet mesuré | une **pièce** (intérieur) | une **enveloppe** (toiture, murs, orientation, site) |
+| Référentiel | le catalogue **IceStream** | le **gisement** du bâtiment et le classement des gestes |
+| Sortie | verdict de faisabilité + estimation | **prescription** : quels gestes, dans quel ordre, pour quel gain |
+| Moment | on sait quoi vendre, on vérifie | on ne sait pas encore quoi vendre, on diagnostique |
+
+**VITRUVE est l'amont de CHAMBRE CLAIRE** : il dit *quoi* poser, elle dit *si
+ça passe*. Ce ne sont pas deux versions d'un même outil, et fusionner les deux
+serait l'erreur de conception n°1 (elle donnerait un outil qui mesure une pièce
+pour prescrire une toiture). Ils **partagent en revanche la fiche chantier
+RIVEN, la capture photo et la couche IA** — la mutualisation se fait là, pas
+dans le moteur.
+
+### Enrichissement — la question de Paul instruite : capter le potentiel solaire
+
+Réponse courte : **le potentiel solaire ne se capte pas chez le client, il s'y
+*vérifie*.** L'essentiel est calculable **avant de sonner à la porte**, à partir
+de l'adresse seule ; le déplacement sert à corriger ce que la donnée aérienne ne
+voit pas. C'est l'inverse de l'intuition « je filme, l'IA comprend » — et c'est
+ce qui rend l'outil faisable vite.
+
+Quatre étages, du moins cher au plus cher.
+
+**Étage 0 — l'adresse suffit à pré-qualifier (avant la visite).**
+- **BAN** (Base Adresse Nationale) : adresse → coordonnées.
+- **API Carto / cadastre IGN** : parcelle et emprise du bâtiment → surface au
+  sol, forme du toit vue du dessus.
+- **DPE ADEME** — le trésor sous-exploité : la base des DPE des logements
+  existants (depuis juillet 2021) est **ouverte, gratuite et interrogeable par
+  adresse** (~12 M de diagnostics, mise à jour mensuelle). Elle donne étiquette,
+  surface habitable, année de construction, énergie de chauffage, consommations
+  estimées et **recommandations de travaux déjà émises**.
+  *Effet : Paul arrive en sachant que la maison est en E, chauffée au fioul,
+  combles non isolés — au lieu de le découvrir.* C'est, à soi seul,
+  l'« élargissement du spectre » demandé.
+
+**Étage 1 — la toiture et le gisement, à distance.**
+- **PVGIS** (Commission européenne / JRC) : API publique **gratuite et sans
+  clé** (`https://re.jrc.ec.europa.eu/api/v5_3/…`, 30 requêtes/s). `PVcalc`
+  rend le **productible annuel et mensuel** (kWh/kWc) pour une position, une
+  inclinaison, un azimut et un jeu de pertes ; `seriescalc` rend les **séries
+  horaires** (indispensables pour calculer l'autoconsommation, pas seulement la
+  production) ; `printhorizon` rend le **profil d'horizon** (masques lointains,
+  relief). C'est la référence de calcul, et elle ne coûte rien.
+- **LiDAR HD de l'IGN** : nuage de points 3D national en **open data**
+  (licence Etalab 2.0), ~80 % du territoire couvert fin 2025, **couverture
+  complète attendue fin 2026**. C'est la matière qui permet de reconstruire les
+  **pans de toiture** (surface, pente, orientation) et de calculer les **ombres
+  portées par le voisinage**. C'est exactement ce que font les cadastres
+  solaires (projets soLidar, Cadsol UHD) : la brique est lourde à traiter, mais
+  la donnée est publique et gratuite.
+- **Google Solar API** (`buildingInsights`) : le **raccourci payant**. Elle rend
+  directement les segments de toit (surface, pente, azimut), l'ensoleillement et
+  des configurations de panneaux prêtes à l'emploi ; la France est couverte en
+  imagerie de qualité ; palier gratuit mensuel puis facturation à l'usage.
+  *Arbitrage à poser explicitement : elle achète plusieurs mois de développement
+  LiDAR contre un coût par requête et une dépendance externe. Tarif exact et
+  palier gratuit **[à vérifier au moment du build]** — ils bougent.*
+
+**Étage 2 — la visite, et seulement ce que la visite peut apporter.**
+Ce que ni PVGIS ni un cadastre solaire ne voient correctement :
+- **les masques proches** — l'arbre du voisin, la cheminée, le pignon mitoyen.
+  C'est le geste du **GNOMON** : un balayage panoramique depuis le toit ou le
+  jardin → profil d'horizon local, superposé à la course du soleil du lieu. Le
+  masque proche est *la* variable qui fait s'effondrer un productible théorique.
+- **l'état réel** : couverture (tuiles, ardoises, bac acier), charpente et
+  reprise de charge, âge, présence d'amiante, accès et sécurité, distance au
+  tableau électrique, place pour onduleur et batterie, point d'eau et local
+  technique pour une PAC / un ballon thermodynamique.
+- **le vécu du client** : factures, inconfort, projets, budget.
+La **vidéo** demandée par Paul trouve ici sa place exacte : elle sert
+d'**inventaire** (l'IA regarde et remplit la fiche), pas d'instrument de mesure.
+Point d'honnêteté technique à ne pas perdre : **le LiDAR d'un téléphone porte à
+quelques mètres** — il excelle en intérieur (c'est la v2 de CHAMBRE CLAIRE) et
+ne mesure pas une toiture. La 3D d'une toiture vient de la donnée aérienne, pas
+du téléphone. La « simulation 3D » évoquée est donc un **rendu** (poser les
+modules sur le pan de toit reconstruit) — un livrable de conviction, pas une
+source de mesure.
+
+**Étage 3 — du gisement à l'argument (le seul étage qui fait vendre).**
+- surface utile du pan → nombre de modules → kWc → PVGIS → **kWh/an** ;
+- croisé au **profil de consommation réel** du foyer (facture, ou courbe de
+  charge Enedis sur autorisation explicite du client — donnée personnelle,
+  cf. §Sécurité) → **taux d'autoconsommation**, économies €/an, surplus revendu ;
+- aides et fiscalité (MaPrimeRénov', CEE, prime à l'autoconsommation, TVA,
+  tarifs d'achat) : **volatiles — jamais en dur dans le code, toujours en table
+  datée et sourcée** [à instruire au build] ;
+- → temps de retour, **et surtout la comparaison des gestes entre eux**.
+
+**C'est là que se joue le « meilleur système » demandé.** Le cœur de VITRUVE
+n'est pas de calculer du photovoltaïque : c'est de **classer les gestes par
+€ investi / kWh économisé** (isolation des combles, murs, menuiseries,
+ventilation, PAC air/eau, ECS thermodynamique, PV, PV+batterie) et de rendre un
+**ordre de travaux**. Avec une règle métier non négociable, qui est aussi la
+crédibilité de l'outil : **l'enveloppe avant le générateur** — on n'installe pas
+une PAC sur une passoire, et un bureau d'études qui le propose se disqualifie.
+Un outil qui dit parfois « le solaire n'est pas votre priorité, isolez d'abord »
+vend **plus**, pas moins : il fait de Paul un conseil, pas un vendeur.
+
+**Séquencement proposé (boucler petit, discipline EB).**
+- **v1 — la fiche d'approche, zéro visite** : adresse → BAN + cadastre + DPE
+  ADEME + PVGIS ⇒ une page « ce que ce bâtiment permet » avant le rendez-vous.
+  Coût : aucune API payante, aucun modèle 3D. C'est déjà l'élargissement du
+  spectre.
+- **v2 — le GNOMON** : relevé terrain guidé (azimut/pente au téléphone, masques
+  proches, état de la couverture, photos) → correction du productible v1 et
+  fiche de gisement signée par la visite.
+- **v3 — la prescription** : moteur de classement des gestes + aides datées →
+  ordre de travaux chiffré, remis au client.
+- **v4 — le rendu 3D** (pose des modules sur le pan reconstruit) et/ou
+  bascule sur Google Solar API si la valeur commerciale le justifie. **Jamais
+  avant v3** : c'est le prémortem « dérive AR prématurée » de CHAMBRE CLAIRE,
+  déjà payé une fois.
+
+**Sécurité (surface relevée).** Adresse, DPE, factures, courbe de charge et
+photos d'un client sont de la **PII** : IDs en logs uniquement (règle
+permanente), consentement explicite pour toute donnée Enedis, photos traitées en
+éphémère, API derrière `requireUser`. Toute donnée sortant vers un modèle se
+teste **par l'absence** (règle 2026-07-30) : le harnais cherche l'adresse et le
+nom du client dans le payload sortant et exige de **ne pas les y trouver**.
+
+### Liens inter-segments
+
+- **CHAMBRE CLAIRE (ADR-005)** — l'aval direct : VITRUVE prescrit le système,
+  CHAMBRE CLAIRE vérifie que le produit passe. Même fiche chantier, même couche
+  IA, deux moteurs distincts.
+- **PROTÉE (ADR-002)** — VITRUVE est le **moteur d'élargissement** de PROTÉE :
+  il transforme mécaniquement un rendez-vous mono-produit en devis multi-gestes.
+- **INTENDANT (ADR-003)** — la prescription produit la liste des postes et des
+  pièces du chantier signé : elle alimente l'INTENDANT en amont.
+- **MYCÉLIUM (ADR-004)** — une fiche de gisement remise au client est un
+  **objet transmissible** entre voisins d'un même lotissement (pavillons de même
+  facture, même orientation) : matière première de la propagation.
+- **RIVEN** — la fiche d'approche s'accroche au lead/chantier existant ; le
+  gisement devient un attribut du bâtiment, réutilisable des années plus tard.
+- **NICOL BOLAS** — chaque prescription porte un chiffrage : devis, marge,
+  saisonnalité des aides.
+- **Renoboost IA** — VITRUVE ne concurrence pas le socle : il **élargit le
+  panier moyen** de chaque visite déjà payée par le socle.
+
+### Analyse stratégique
+
+> **Différée** (2026-08-20), comme JANUS (ADR-008). ⏸ **Suite en attente** :
+> Paul a acté le nom et répondu « on verra pour la suite » — ni la grille, ni le
+> périmètre v1, ni l'entrée dans la séquence de build ne sont engagés. La fiche
+> dort ici, complète, jusqu'à son go.
+
+### Décisions Paul du 2026-08-20 (soir) — où VITRUVE sera construit
+
+- **VITRUVE ne sera PAS bâti dans Ultima** : « on branchera VITRUVE sur un autre
+  repo la prochaine fois ». Le build vit ailleurs ; **la fiche, elle, reste ici**
+  — ADRAMELECH garde l'idée, ses liens et son analyse, quel que soit le dépôt qui
+  porte le code.
+  *Réserve signalée une fois, non bloquante (Paul a tranché)* : la directive JL
+  veut que tout nouveau besoin soit une extension d'Ultima. La lecture qui les
+  réconcilie : **Ultima est l'interface de travail de Paul, VITRUVE est un outil
+  métier de Renoboost IA** — un produit de l'entreprise, pas un second poste de
+  pilotage. À rappeler au moment du cadrage : ce qui relève du **pilotage** de
+  Paul (fiches, chantiers, décisions) reste dans Ultima et s'y rebranche.
+- **VITRUVE sera combiné à autre chose** — élément non révélé (« tu verras »).
+  La fiche est donc **volontairement ouverte** : le périmètre v1 proposé (fiche
+  d'approche depuis l'adresse seule) n'est pas figé tant que la combinaison n'est
+  pas connue.
+- **« avec mon dpe.fr »** (dicté tel quel) : élément à verser au futur cadrage.
+  Non interprété — probablement un service ou un domaine que Paul a en main, à
+  préciser au moment du build. Consigné mot pour mot plutôt que deviné.
+  ⏳ **Précision attendue de Paul.** La fiche est capturée,
+> instruite techniquement et bornée par rapport à CHAMBRE CLAIRE ; la **grille
+> des 7 blocs** (`CADRAGE-ADRAMELECH.md` §8) et le benchmark chiffré face à
+> Renoboost IA sont la **boucle suivante** — ⏳ sur go de Paul. Intuition à
+> vérifier par la grille, pas à croire d'avance : nature **enabler commercial**
+> comme CHAMBRE CLAIRE, avec un **Temps meilleur en v1** (aucune API payante,
+> aucun catalogue à structurer, données publiques gratuites) et un
+> **Rémunérateur potentiellement supérieur** (il ne dérisque pas une vente, il
+> en ajoute).

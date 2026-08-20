@@ -45,7 +45,7 @@ verdicts.regroupementCorrect = chaqueIdeeBienPlacee &&
 // Thème pour les quatre premières).
 const parLabel = Object.fromEntries(archipels.map((a) => [a.label, a.idees.map((i) => i.id)]));
 verdicts.archipelsAttendus =
-  JSON.stringify(parLabel['Bâtiment']) === JSON.stringify(['ADR-001', 'ADR-002', 'ADR-003', 'ADR-005']) &&
+  JSON.stringify(parLabel['Bâtiment']) === JSON.stringify(['ADR-001', 'ADR-002', 'ADR-003', 'ADR-005', 'ADR-009']) &&
   JSON.stringify(parLabel['Commercial']) === JSON.stringify(['ADR-004']);
 
 // ---------- 4. Idée sans thème → archipel « À classer » (fixture en mémoire) ----------
@@ -103,7 +103,7 @@ verdicts.bienFormeeOk = !echoue(fixtureSansTheme) && parseRegistre(md).length ==
 // ---------- 6. Ponts : synergies ADR↔ADR détectées (non orientées, dédupliquées) ----------
 const ponts = detecterPonts(idees);
 const cles = new Set(ponts.map((p) => `${p.a}|${p.b}`));
-verdicts.pontsDetectes = ponts.length === 16 &&
+verdicts.pontsDetectes = ponts.length === 21 &&
   cles.has('ADR-001|ADR-002') && cles.has('ADR-001|ADR-003') &&
   cles.has('ADR-002|ADR-004') && cles.has('ADR-003|ADR-004') &&
   cles.has('ADR-002|ADR-005') && cles.has('ADR-003|ADR-005') &&
@@ -112,7 +112,12 @@ verdicts.pontsDetectes = ponts.length === 16 &&
   cles.has('ADR-002|ADR-007') && cles.has('ADR-003|ADR-007') &&
   cles.has('ADR-004|ADR-007') && cles.has('ADR-007|ADR-008') &&
   cles.has('ADR-004|ADR-008') &&
-  cles.has('ADR-001|ADR-007') && cles.has('ADR-005|ADR-007');
+  cles.has('ADR-001|ADR-007') && cles.has('ADR-005|ADR-007') &&
+  // ADR-009 VITRUVE (2026-08-20) : amont de CHAMBRE CLAIRE, moteur d'élargissement
+  // de PROTÉE, alimente INTENDANT, propagé par MYCÉLIUM, analyse différée comme JANUS.
+  cles.has('ADR-002|ADR-009') && cles.has('ADR-003|ADR-009') &&
+  cles.has('ADR-004|ADR-009') && cles.has('ADR-005|ADR-009') &&
+  cles.has('ADR-008|ADR-009');
 
 // ---------- 7. Bilan chiffré (AD-2) : compteurs cohérents et zéro-perte ----------
 const bilan = calculerBilan(idees);
