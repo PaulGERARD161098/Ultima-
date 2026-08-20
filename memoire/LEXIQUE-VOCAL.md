@@ -33,7 +33,9 @@
 | directive EB, macro-directive | discipline : boucler avant d'avancer + capitaliser sur l'existant |
 | directive JL | l'horizon (Paul, 2026-07-18) : Ultima = unique interface de travail, toute la data, Léo seule interlocutrice, rien créé d'autre |
 | Balthazar Geld, Nicol Bolas, Nicole Bolas, BCP | NICOL BOLAS (quadrant financier ; chaîne : BCP → BALTHAZAR GELD 2026-07-19 → NICOL BOLAS 2026-07-21) |
-| Renault Boost, Renoboost | Renoboost IA (socle rémunérateur = chantiers + installations à domicile ; ligne de base du benchmark ADRAMELECH ; macro-projet boussole LV2 → console https://www.renoboostia.fr) |
+| Renault Boost, Renoboost, **Remo Boost** (2026-08-20) | Renoboost IA (socle rémunérateur = chantiers + installations à domicile ; ligne de base du benchmark ADRAMELECH ; macro-projet boussole LV2 → console https://www.renoboostia.fr) |
+| Réno Conception, Rénos conception | **VITRUVE** (ADR-009) — libellé métier de Paul pour le bureau d'études embarqué ; nom de registre = VITRUVE, module solaire = GNOMON (2026-08-20) |
+| « les premiers pavillons ou panneaux solaires » | entendu 2026-08-20 — compris **« les pavillons, et les panneaux solaires »** (premier terrain visé de VITRUVE). ⚠️ « premiers » possiblement parasite : à confirmer par Paul |
 | Ikom, Ycom | YCOME (macro-projet boussole LV2, plateforme externe — URL à fournir par Paul) |
 | Richardam, Reshiram | RESHIRAM (cap boussole LV2 : « le travail de la réalité » — talents & capacités concrets, data, lien RIVEN) |
 | Zekrom, Chrome | ZEKROM (cap boussole LV2 : « la quête de l'idéal » — volontés/idéaux, cap directionnel) — « Chrome » = déformation vocale observée 2026-07-23 |

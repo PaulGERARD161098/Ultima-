@@ -3366,3 +3366,60 @@ devient un ciel (arbitrage C). Spec déposée AVANT le code (EL ①), implément
   invisible à `getBBox()` — sans objet, le moteur n'en pose jamais.
 - **`js/boussole-noyau.mjs` supprimé** après vérification par recherche (règle
   LV4 §13.4) : plus aucun appelant. **Plus une seule rose dans Ultima.**
+
+## 2026-08-20 — ADR-009 VITRUVE : capter le potentiel solaire avant de sonner à la porte
+
+**Ce que Paul a dicté** : élargir le spectre du rendez-vous client vers un
+**bureau d'études embarqué** (« Réno Conception ») — savoir quel type de
+rénovation est possible chez le client et quel est le **meilleur système** ;
+moyens ouverts (vidéos, simulation 3D) ; premier terrain : **pavillons et
+panneaux solaires** ; question centrale : **comment capter le potentiel solaire
+d'une habitation ou d'un bâtiment**. Cadre : Renoboost IA.
+
+**Capturé** en fiche `adramelech/IDEES.md` → **ADR-009 VITRUVE** (l'architecte
+romain qui conçoit d'après la course du soleil ; module solaire = **GNOMON**,
+la tige qui lit l'ombre). Statut `à raffiner` — grille des 7 blocs différée,
+comme JANUS.
+
+**Trois choses tranchées dans la fiche, qui ne se re-décident pas :**
+
+- **LA FRONTIÈRE AVEC CHAMBRE CLAIRE (ADR-005) EST UNE FRONTIÈRE DE QUESTION,
+  PAS DE PÉRIMÈTRE.** CHAMBRE CLAIRE demande *« ce produit passe-t-il dans cette
+  pièce ? »* (une pièce, le catalogue IceStream, un verdict) ; VITRUVE demande
+  *« que peut-on faire de ce bâtiment ? »* (une enveloppe, un gisement, une
+  prescription). VITRUVE est **l'amont** : il dit quoi poser, elle dit si ça
+  passe. *Les fusionner donnerait un outil qui mesure une pièce pour prescrire
+  une toiture.* Ce qui se mutualise : fiche chantier RIVEN, capture photo,
+  couche IA — **jamais le moteur**.
+
+- **LE POTENTIEL SOLAIRE NE SE CAPTE PAS CHEZ LE CLIENT, IL S'Y *VÉRIFIE*.**
+  L'essentiel est calculable **depuis l'adresse seule**, avant la visite : DPE
+  ADEME ouvert (~12 M de diagnostics, gratuit, par adresse) + BAN/cadastre +
+  **PVGIS** (JRC, gratuit, sans clé : productible, séries horaires, profil
+  d'horizon) ; la toiture en 3D vient du **LiDAR HD IGN** (open data, couverture
+  nationale attendue fin 2026) ou, en raccourci payant, de la **Google Solar
+  API**. La visite n'apporte que ce que l'aérien ne voit pas : **masques
+  proches** (l'arbre du voisin), état de couverture et de charpente, accès,
+  vécu du client. *C'est l'inverse de l'intuition « je filme et l'IA comprend »
+  — et c'est ce qui rend la v1 faisable sans une seule API payante.*
+
+- **LE LIDAR D'UN TÉLÉPHONE NE MESURE PAS UNE TOITURE** (il porte à quelques
+  mètres — c'est un instrument d'intérieur, donc de CHAMBRE CLAIRE). La vidéo
+  demandée sert d'**inventaire** (l'IA regarde et remplit la fiche), pas
+  d'instrument ; la « simulation 3D » est un **rendu de conviction** posé sur un
+  pan reconstruit par la donnée aérienne, jamais une source de mesure. Rendu
+  classé **v4, après la prescription** — application directe du prémortem
+  « dérive AR prématurée » de CHAMBRE CLAIRE, déjà payé une fois.
+
+**Règle métier posée comme critère de crédibilité** : **l'enveloppe avant le
+générateur** — on ne prescrit pas une PAC sur une passoire. Le cœur de VITRUVE
+n'est pas de calculer du photovoltaïque mais de **classer les gestes par
+€/kWh économisé** et de rendre un ordre de travaux. *Un outil qui sait dire
+« isolez d'abord » vend plus, pas moins : il fait de Paul un conseil.*
+
+**Valeurs volatiles (aides, primes, tarifs d'achat) : jamais en dur, toujours en
+table datée et sourcée** — elles changent plus vite que le code.
+
+**Rien n'est lancé** : aucune ligne de build, aucun choix d'API arrêté. Les
+décisions ouvertes (nom, périmètre v1, place dans la séquence
+INTENDANT → MYCÉLIUM → PROTÉE) sont remontées à Paul dans le rapport.
