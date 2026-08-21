@@ -35,8 +35,8 @@ export default {
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "62765bb",
-        "tete_le": "2026-08-21T10:41:29+00:00",
+        "tete": "d6aee67",
+        "tete_le": "2026-08-21T10:43:42+00:00",
         "commits_depuis": 0
       },
       "jours_depuis_maj": 0,
@@ -73,8 +73,8 @@ export default {
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "65e7390",
-        "tete_le": "2026-08-21T10:42:08+00:00",
+        "tete": "815020e",
+        "tete_le": "2026-08-21T10:43:39+00:00",
         "commits_depuis": 0
       },
       "jours_depuis_maj": 0,
@@ -116,8 +116,8 @@ export default {
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "91cc24f",
-        "tete_le": "2026-08-21T10:41:31+00:00",
+        "tete": "59c3803",
+        "tete_le": "2026-08-21T10:43:44+00:00",
         "commits_depuis": 0
       },
       "jours_depuis_maj": 0,
@@ -153,8 +153,8 @@ export default {
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "c0a7612",
-        "tete_le": "2026-08-21T10:41:35+00:00",
+        "tete": "69607b5",
+        "tete_le": "2026-08-21T10:43:47+00:00",
         "commits_depuis": 0
       },
       "jours_depuis_maj": 0,
@@ -198,8 +198,8 @@ export default {
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "316f704",
-        "tete_le": "2026-08-21T10:41:27+00:00",
+        "tete": "b6766d5",
+        "tete_le": "2026-08-21T10:43:41+00:00",
         "commits_depuis": 0
       },
       "jours_depuis_maj": 0,
@@ -222,8 +222,8 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-08-21",
-          "quoi": "Finubar livré et poussé sur les 8 dépôts : moteur pur + harnais (éprouvé rouge puis vert), collecte avec mesure de dérive, rappel d'ouverture de séance, écran /finubar. Patrimoine complet vert (88 sections).",
-          "commit": "73ea8c3"
+          "quoi": "Finubar livré et poussé sur les 8 dépôts : moteur pur + harnais (éprouvé rouge puis vert), collecte avec mesure de dérive, rappel d'ouverture de séance, écran /finubar. Patrimoine complet vert (88 sections). Correctif de la mesure de dérive : elle ignore désormais tout fichier que Finubar écrit lui-même.",
+          "commit": "af282f6"
         },
         "prochaine_action": "Faire entrer les projets dans la constellation générale — arbitré par Paul le 21/08 (« à terme, tout projet d'ampleur doit y être ») et volontairement reporté : `versConstellation()` est déjà écrit et testé, il n'est branché sur aucune page.",
         "bloque_par": [
@@ -242,8 +242,8 @@ export default {
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "3d20b36",
-        "tete_le": "2026-08-21T10:42:28+00:00",
+        "tete": "af282f6",
+        "tete_le": "2026-08-21T10:43:50+00:00",
         "commits_depuis": 0
       },
       "jours_depuis_maj": 0,
@@ -286,8 +286,8 @@ export default {
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "b088b9e",
-        "tete_le": "2026-08-21T10:41:32+00:00",
+        "tete": "4fc4466",
+        "tete_le": "2026-08-21T10:43:45+00:00",
         "commits_depuis": 0
       },
       "jours_depuis_maj": 0,
@@ -322,8 +322,8 @@ export default {
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "1c98509",
-        "tete_le": "2026-08-21T10:41:36+00:00",
+        "tete": "aa03073",
+        "tete_le": "2026-08-21T10:43:48+00:00",
         "commits_depuis": 0
       },
       "jours_depuis_maj": 0,
