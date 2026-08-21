@@ -71,7 +71,15 @@ const CIBLES = [
   // opaques portent les chiffres (css/althea.css). Sans session, la page montre
   // ses libellés statiques et ses états vides — assez de texte pour mesurer.
   { page: 'althea.html', registre: 'instrument', largeurs: [1280, 390], nappe: '.althea-bloc', dettesSoldees: true },
-  { page: 'althea-cadran.html', registre: 'instrument', largeurs: [1280, 390], minTextes: 2, nappe: '.althea-bloc', dettesSoldees: true }
+  { page: 'althea-cadran.html', registre: 'instrument', largeurs: [1280, 390], minTextes: 2, nappe: '.althea-bloc', dettesSoldees: true },
+  // FINUBAR (2026-08-21) : instrument — on y lit des états pour décider.
+  // `dettesSoldees` dès l'origine : ses jetons sont ceux de l'abaque, valeur
+  // pour valeur, donc déjà mesurés AA le 2026-08-20 ; elle n'hérite d'aucune
+  // dette et il n'y a aucune raison de lui laisser un seuil différentiel.
+  // ⚠️ Sans session, cette page n'affiche que son chrome (titre, devise, note de
+  // provenance) : c'est l'angle mort nommé le 2026-08-20. Le contraste de ses
+  // textes DYNAMIQUES est mesuré à part, session stubée, par smoke-finubar.mjs.
+  { page: 'finubar.html', registre: 'instrument', largeurs: [1280, 390], minTextes: 3, dettesSoldees: true }
 ];
 
 const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });

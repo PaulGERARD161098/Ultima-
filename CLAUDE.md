@@ -272,6 +272,28 @@ l'accessibilité ni la sécurité.
   cherche le contenu interdit dans ce qui part et exige de **ne pas l'y
   trouver** — vérifier seulement la présence du permis ne prouve rien.
 
+## 🧭 FINUBAR — l'état des huit dépôts (posé le 2026-08-21)
+
+Paul travaille sur **huit dépôts** en parallèle. Finubar est l'**index** qui dit,
+pour chacun : *où on en est, où on s'est arrêté, par quoi on reprend, et vers quoi*.
+Ce n'est pas une roadmap de plus — les roadmaps restent où elles vivent, Finubar
+les pointe. Cadrage : `CADRAGE-FINUBAR.md` · mode d'emploi :
+`.claude/skills/finubar/SKILL.md` · moteur et collecte : `finubar/`.
+
+- **À l'ouverture d'une séance**, le hook `SessionStart` de chaque dépôt injecte
+  son grain tout seul (`.claude/finubar-rappel.mjs`). Rien à aller chercher.
+- **En fin de séance**, la séance qui a modifié un dépôt met à jour son
+  `FINUBAR.md` **dans le commit du travail** — dernier arrêt daté, **le commit
+  réellement poussé**, UNE prochaine action — puis `node finubar/collecter.mjs`.
+- **Si le rappel annonce une dérive** (« ce dépôt a avancé de N commits depuis
+  cette note »), on **vérifie avant de croire**, puis on corrige le grain.
+- **L'état d'ensemble** : `node finubar/collecter.mjs`, ou l'écran `/finubar`.
+
+⛔ **Trois choses à ne jamais défaire** — elles sont ce qui empêche Finubar de
+devenir huit fichiers périmés qu'on croit : le grain se tient **en fin** de
+séance ; `dernier_arret.commit` est renseigné (c'est lui qui rend la dérive
+mesurable) ; Finubar **indexe, il ne recopie pas**.
+
 ## ⚙️ Règles permanentes
 
 - **TOUJOURS LES LIENS DE CE QU'IL Y A À VÉRIFIER** (Paul, 2026-08-17 —

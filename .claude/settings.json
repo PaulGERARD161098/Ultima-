@@ -10,5 +10,17 @@
       "mcp__Supabase__get_project_url",
       "mcp__Supabase__list_extensions"
     ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/finubar-rappel.mjs"
+          }
+        ]
+      }
+    ]
   }
 }
