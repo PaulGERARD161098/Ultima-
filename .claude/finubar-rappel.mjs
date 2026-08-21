@@ -25,6 +25,18 @@ import { fileURLToPath } from 'node:url';
 const DEBUT = '<!-- finubar:debut -->';
 const FIN = '<!-- finubar:fin -->';
 
+// ⛔ LA MÊME BORNE QUE `agreger.mjs` (MAX_TEXTE = 400), et ce n'est pas un détail.
+// Deux lecteurs du même grain qui bornent différemment affichent deux vérités :
+// l'écran montrerait une phrase coupée et le rappel la phrase entière, ou
+// l'inverse. Et sans borne du tout, un `cap` de 5 000 caractères écrit un jour
+// de fatigue inonderait le contexte de CHAQUE ouverture de séance, dans les huit
+// dépôts. La valeur est dupliquée ici parce que ce fichier ne dépend de RIEN
+// (voir l'en-tête) — si elle change là-bas, elle change ici.
+// ⚠️ Nommée `borne` et non `b` : `b` est déjà le paramètre d'un `map` plus bas,
+// et l'y masquer aurait produit exactement le genre de bug qu'on ne voit pas.
+const MAX_TEXTE = 400;
+const borne = (v) => (typeof v === 'string' ? v.trim().slice(0, MAX_TEXTE) : '');
+
 try {
   // Le fichier se cherche par rapport au SCRIPT (.claude/rappel.mjs → ../), pas
   // par rapport au répertoire courant : un hook peut être lancé d'ailleurs.
@@ -55,7 +67,7 @@ try {
       // pas la déclarer périmée (voir le commentaire long dans collecter.mjs).
       const n = Number(git(['rev-list', '--count', `${g.dernier_arret.commit}..HEAD`,
         '--', ':(exclude)FINUBAR.md', ':(exclude).claude/finubar-rappel.mjs',
-        ':(exclude)finubar/macro.json', ':(exclude)finubar/macro.mjs']));
+        ':(exclude)finubar/macro.json', ':(exclude)api/_lib/finubar-macro.mjs']));
       if (Number.isFinite(n) && n > 0) {
         derive = `\n⚠️ Le dépôt a avancé de ${n} commit(s) depuis cette note (tête ${git(['log', '-1', '--format=%h'])}).`
           + ' Vérifier l\'état réel AVANT de la croire, puis la remettre à jour.';
@@ -64,25 +76,25 @@ try {
   } catch { /* git absent ou historique partiel : on se tait, on ne devine pas */ }
 
   const l = [];
-  l.push(`FINUBAR — ${g.projet} (${g.depot || '—'})`);
-  if (g.cap) l.push(`CAP (le pourquoi) : ${g.cap}`);
+  l.push(`FINUBAR — ${borne(g.projet)} (${borne(g.depot) || '—'})`);
+  if (borne(g.cap)) l.push(`CAP (le pourquoi) : ${borne(g.cap)}`);
   if (g.jalon && g.jalon.nom) {
-    l.push(`JALON EN COURS : ${g.jalon.nom}`
-      + (g.jalon.critere_de_sortie ? ` — sortie quand : ${g.jalon.critere_de_sortie}` : ''));
+    l.push(`JALON EN COURS : ${borne(g.jalon.nom)}`
+      + (borne(g.jalon.critere_de_sortie) ? ` — sortie quand : ${borne(g.jalon.critere_de_sortie)}` : ''));
   }
   if (g.dernier_arret && (g.dernier_arret.quoi || g.dernier_arret.le)) {
-    l.push(`ON S'EST ARRÊTÉ LE ${g.dernier_arret.le || '—'} SUR : ${g.dernier_arret.quoi || '—'}`
-      + (g.dernier_arret.commit ? ` (${g.dernier_arret.commit})` : ''));
+    l.push(`ON S'EST ARRÊTÉ LE ${borne(g.dernier_arret.le) || '—'} SUR : ${borne(g.dernier_arret.quoi) || '—'}`
+      + (borne(g.dernier_arret.commit) ? ` (${borne(g.dernier_arret.commit)})` : ''));
   }
-  if (g.prochaine_action) l.push(`▶ REPRENDRE PAR : ${g.prochaine_action}`);
+  if (borne(g.prochaine_action)) l.push(`▶ REPRENDRE PAR : ${borne(g.prochaine_action)}`);
   if (Array.isArray(g.bloque_par) && g.bloque_par.length) {
-    l.push(`EN ATTENTE D'UN GESTE DE PAUL : ${g.bloque_par.slice(0, 5).join(' · ')}`);
+    l.push(`EN ATTENTE D'UN GESTE DE PAUL : ${g.bloque_par.slice(0, 5).map(borne).join(' · ')}`);
   }
   if (Array.isArray(g.boucles_ouvertes) && g.boucles_ouvertes.length) {
-    l.push(`BOUCLES OUVERTES : ${g.boucles_ouvertes.slice(0, 5).map((b) => b.quoi).join(' · ')}`);
+    l.push(`BOUCLES OUVERTES : ${g.boucles_ouvertes.slice(0, 5).map((x) => borne(x && x.quoi)).join(' · ')}`);
   }
-  if (g.rattache_a) l.push(`ROADMAP DÉTAILLÉE : ${g.rattache_a}`);
-  l.push(`Note datée du ${g.maj || '—'}.${derive}`);
+  if (borne(g.rattache_a)) l.push(`ROADMAP DÉTAILLÉE : ${borne(g.rattache_a)}`);
+  l.push(`Note datée du ${borne(g.maj) || '—'}.${derive}`);
   l.push('⛔ En fin de séance : mettre à jour le bloc de FINUBAR.md (état, dernier arrêt, prochaine action) — c\'est lui qui sera lu à la prochaine ouverture.');
 
   process.stdout.write(JSON.stringify({

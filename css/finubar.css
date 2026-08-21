@@ -109,8 +109,12 @@ h1 { font-variant: small-caps; font-weight: 600; font-size: clamp(1.9rem, 4.5vw,
 .matin { border: 1px solid var(--encre-claire); outline: 1px solid var(--filet); outline-offset: 4px; padding: 1.3rem 1.6rem; }
 .matin-signaux { list-style: none; margin: 0 0 1.2rem; padding: 0; display: flex; flex-direction: column; gap: 0.7rem; }
 .matin-signaux li { display: flex; gap: 0.7rem; align-items: baseline; flex-wrap: wrap; }
-.signal-projet { font-variant: small-caps; letter-spacing: 0.1em; font-weight: 600; white-space: nowrap; }
-.signal-dit { color: var(--encre-claire); min-width: 0; }
+.signal-projet { font-variant: small-caps; letter-spacing: 0.1em; font-weight: 600; white-space: nowrap; flex: 0 0 auto; }
+/* `flex: 1 1 0` + `min-width: 0` : le texte du signal se replie DANS sa ligne au
+   lieu de pousser le nom du projet sur la ligne précédente. Sans ça, un signal
+   long (celui des stickers en fait 160 caractères) cassait l'alignement du bloc
+   le plus lu de la page — celui qu'on regarde en premier le matin. */
+.signal-dit { color: var(--encre-claire); flex: 1 1 0; min-width: 12rem; }
 .matin-action { border-top: 1px solid var(--filet); padding-top: 1rem; margin: 0; }
 .matin-action-titre { font-variant: small-caps; letter-spacing: 0.16em; color: var(--encre-pale); font-size: 0.8rem; margin: 0 0 0.3rem; }
 .matin-action-faire { font-size: 1.12rem; margin: 0; }

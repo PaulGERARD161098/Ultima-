@@ -9,13 +9,24 @@
 <dépôt>/FINUBAR.md ──┐
         × 8          │   collecter.mjs        agreger.mjs (PUR)
                      ├──► lit les 8 grains ──► ordre + cartouche ──► macro.json
-   git (mesuré) ─────┘    mesure la dérive     + constellation      macro.mjs
-                                                                        │
-                    ┌───────────────────────────────────────────────────┤
-                    ▼                                                   ▼
-    .claude/finubar-rappel.mjs                              api/finubar.js
-    (hook SessionStart, dans les 8 dépôts)                  → /finubar (Ultima)
+   git (mesuré) ─────┘    mesure la dérive     + constellation           │
+                          vérifie les copies                             │
+                                              ┌──────────────────────────┤
+                                              ▼                          ▼
+                              finubar/macro.json          api/_lib/finubar-macro.mjs
+                              (lisible, bloqué au public)  (importé par api/finubar.js)
+                                                                         │
+                    ┌────────────────────────────────────────────────────┤
+                    ▼                                                    ▼
+    .claude/finubar-rappel.mjs                               /finubar (derrière session)
+    (hook SessionStart, dans les 8 dépôts)
 ```
+
+⛔ **Rien de tout cela n'est servi en public.** Le middleware bloque `/finubar/`
+(préfixe privé) et tous les `*.md` ; seul le chemin exact `/finubar` passe, et
+cette page-là ne porte aucune donnée — tout vient de `/api/finubar`, authentifiée.
+Sans cette ligne dans `middleware.js`, `macro.json` serait en lecture libre :
+Vercel sert **tout** fichier commité en statique.
 
 ## Les trois usages
 
@@ -53,6 +64,7 @@ même tête côté appel.
 ## Vérifier
 
 ```bash
-node tests/unit-finubar.mjs   # le moteur (ordre, bornes, ton, cas de référence)
-node tests/smoke-finubar.mjs  # l'écran, session stubée (nécessite le serveur local)
+node tests/unit-finubar.mjs           # le moteur + la cohérence des deux formes servies
+node tests/smoke-finubar.mjs          # l'écran, session stubée (serveur local requis)
+node tests/unit-adramelech-guard.mjs  # le garde qui empêche /finubar/ d'être public
 ```

@@ -126,6 +126,17 @@ export function joursEntre(depuisIso, aujourdhuiIso) {
   return Math.round((b - a) / 86400000);
 }
 
+// Libellé d'ancienneté. Il existe pour UNE raison : `joursEntre` peut rendre un
+// NÉGATIF (une note datée de demain — faute de frappe, fuseau, copier-coller), et
+// « ouvert depuis -3 j » n'est pas une information, c'est un bug qui s'affiche.
+// Une date future est traitée pour ce qu'elle est : une incohérence à corriger,
+// dite comme telle. Ni masquée (elle se corrigerait jamais), ni affichée brute.
+export function libelleAnciennete(jours, forme) {
+  if (jours === null || jours === undefined) return '';
+  if (jours < 0) return ' — datée d\'une date à venir, à corriger';
+  return forme === 'note' ? ` — notée il y a ${jours} j` : ` — ouvert depuis ${jours} j`;
+}
+
 // ---------------------------------------------------------------- agrégat
 
 // Rang de priorité — le SEUL endroit où l'ordre d'affichage se décide.
@@ -216,8 +227,8 @@ export function cartoucheDuMatin(agregat) {
       // On dit l'ancienneté du GESTE si on la connaît, celle de la note sinon —
       // les deux sont des faits, mais la première est celle qui aide à choisir.
       const depuis = p.jours_en_attente !== null
-        ? ` — ouvert depuis ${p.jours_en_attente} j`
-        : (p.jours_depuis_maj === null ? '' : ` — noté il y a ${p.jours_depuis_maj} j`);
+        ? libelleAnciennete(p.jours_en_attente, 'geste')
+        : libelleAnciennete(p.jours_depuis_maj, 'note');
       signaux.push({ projet: g.projet, dit: `attend un geste : ${geste}${depuis}`, pourquoi: 'attente' });
     } else if (g.etat === 'en_cours') {
       signaux.push({

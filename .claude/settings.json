@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/finubar-rappel.mjs"
+            "command": "node \"${CLAUDE_PROJECT_DIR:-.}/.claude/finubar-rappel.mjs\" 2>/dev/null || true"
           }
         ]
       }

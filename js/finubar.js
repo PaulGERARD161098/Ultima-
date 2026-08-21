@@ -42,7 +42,14 @@ function ligne(hote, cle, valeur) {
 function rendreMatin(donnees) {
   const hote = document.getElementById('matin-corps');
   hote.replaceChildren();
-  const c = donnees.cartouche || { signaux: [], action: null };
+  // La réponse de l'API est une entrée EXTERNE du point de vue de la page, même
+  // si elle vient de nous : un `cartouche` présent mais sans `signaux` ferait
+  // lever `.length` et emporterait toute la page — état blanc, sans message.
+  // On vérifie donc la FORME, pas seulement la présence.
+  const brut = donnees.cartouche;
+  const c = (brut && Array.isArray(brut.signaux))
+    ? { signaux: brut.signaux, action: brut.action || null }
+    : { signaux: [], action: null };
 
   if (!c.signaux.length && !c.action) {
     hote.appendChild(el('p', 'matin-vide', 'Rien n’appelle : les huit dépôts sont à jour.'));
@@ -138,15 +145,17 @@ function rendre(donnees) {
   rendreMatin(donnees);
   const marche = document.getElementById('marche');
   marche.replaceChildren();
-  (donnees.projets || []).forEach((p) => marche.appendChild(rendreProjet(p)));
+  (Array.isArray(donnees.projets) ? donnees.projets : [])
+    .forEach((p) => marche.appendChild(rendreProjet(p)));
 
-  const m = donnees.macro || {};
+  const m = (donnees.macro && typeof donnees.macro === 'object') ? donnees.macro : {};
+  const n = (v) => (typeof v === 'number' ? v : 0);
   const prov = document.getElementById('provenance');
   prov.replaceChildren();
   prov.appendChild(document.createTextNode(
-    `État collecté le ${donnees.le} — ${m.total} dépôts : ${m.en_cours} en cours, `
-    + `${m.en_attente_de_paul} en attente d’un geste, ${m.au_repos} au repos, `
-    + `${m.boucles_ouvertes} boucle(s) ouverte(s). `));
+    `État collecté le ${donnees.le || '—'} — ${n(m.total)} dépôts : ${n(m.en_cours)} en cours, `
+    + `${n(m.en_attente_de_paul)} en attente d’un geste, ${n(m.au_repos)} au repos, `
+    + `${n(m.boucles_ouvertes)} boucle(s) ouverte(s). `));
   prov.appendChild(document.createTextNode(
     'Cet état est figé au dernier commit : la page ne va rien chercher en direct. Pour le rafraîchir : '));
   prov.appendChild(el('code', null, 'node finubar/collecter.mjs'));

@@ -29,7 +29,8 @@ Tout le dispositif tient à ça. Une séance qui a modifié un dépôt met à jo
 | `maj` | la date du jour | — |
 
 Puis, depuis Ultima : `node finubar/collecter.mjs` et commiter
-`finubar/macro.json` + `finubar/macro.mjs`.
+`finubar/macro.json` + `api/_lib/finubar-macro.mjs` (la collecte écrit les deux
+et les relit ; ni l'un ni l'autre ne s'édite à la main).
 
 ⛔ **`dernier_arret.commit` n'est pas décoratif.** La collecte et le rappel de
 séance comparent ce commit à la tête réelle du dépôt. S'ils divergent, Finubar
@@ -66,6 +67,21 @@ Puis restituer dans l'ordre rendu par le moteur — il n'est pas arbitraire :
 
 L'écran : `/finubar` sur Ultima (derrière session).
 
+## Ce que la collecte vérifie toute seule
+
+Elle ne fait pas que collecter — elle **crie** quand quelque chose cloche, et il
+faut lire sa sortie :
+
+| Message | Ce qu'il veut dire |
+|---|---|
+| `N projet(s) ont avancé depuis leur dernière note` | des grains sont périmés — les recaler |
+| `N projet(s) sans grain lisible` | un `FINUBAR.md` cassé ou absent |
+| `Rappel … ABSENT dans : …` | ce dépôt ne se présentera pas à l'ouverture |
+| `Rappel DIVERGENT de sa source dans : …` | quelqu'un a corrigé une copie sur place — re-copier depuis `finubar/rappel.mjs` |
+| `entrée ignorée dans depots.json` | un nom de dossier invalide (`..`, chemin) |
+
+Et elle **sort en erreur** si les deux formes de l'agrégat divergent.
+
 ## Les cinq règles qui font tenir le dispositif
 
 1. **Le grain se met à jour en FIN de séance, jamais au début.** Une note écrite
@@ -90,7 +106,8 @@ L'écran : `/finubar` sur Ultima (derrière session).
 | `<dépôt>/.claude/finubar-rappel.mjs` | le rappel d'ouverture de séance (copie ⚠️) |
 | `Ultima-/finubar/agreger.mjs` | le moteur PUR : lecture, ordre, cartouche, constellation |
 | `Ultima-/finubar/collecter.mjs` | la collecte : lit les 8, mesure git, écrit l'agrégat |
-| `Ultima-/finubar/macro.json` · `macro.mjs` | l'agrégat (généré — ne pas éditer) |
+| `Ultima-/finubar/macro.json` | l'agrégat, forme lisible (généré — ne pas éditer) |
+| `Ultima-/api/_lib/finubar-macro.mjs` | le même agrégat, importé par la route (généré) |
 | `Ultima-/finubar/depots.json` | la liste des dépôts suivis |
 | `Ultima-/api/finubar.js` · `finubar.html` · `js/finubar.js` | l'écran, derrière session |
 | `Ultima-/tests/unit-finubar.mjs` · `smoke-finubar.mjs` | les harnais |

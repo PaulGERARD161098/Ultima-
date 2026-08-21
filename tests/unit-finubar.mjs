@@ -11,7 +11,7 @@
 // au lieu de les écarter en silence ; §5 le vérifie.
 import {
   extraireBloc, lireGrain, joursEntre, agreger, cartoucheDuMatin,
-  versConstellation, MOTS_INTERDITS, BALISE_DEBUT, BALISE_FIN,
+  versConstellation, libelleAnciennete, MOTS_INTERDITS, BALISE_DEBUT, BALISE_FIN,
 } from '../finubar/agreger.mjs';
 
 let echecs = 0;
@@ -189,6 +189,36 @@ console.log('§6 — le cartouche du matin : ≤3 signaux, 1 action, aucun repro
     vide.signaux.length === 0 && vide.action === null);
 }
 
+// ---------------------------------------------------------------- §6bis dates
+console.log('§6bis — une date à venir ne s\'affiche jamais comme un nombre négatif');
+{
+  verifier('17 jours se dit « ouvert depuis 17 j »',
+    libelleAnciennete(17, 'geste') === ' — ouvert depuis 17 j', libelleAnciennete(17, 'geste'));
+  verifier('0 jour se dit « ouvert depuis 0 j », pas rien',
+    libelleAnciennete(0, 'geste') === ' — ouvert depuis 0 j', libelleAnciennete(0, 'geste'));
+  verifier('la forme « note » a son propre libellé',
+    libelleAnciennete(3, 'note') === ' — notée il y a 3 j', libelleAnciennete(3, 'note'));
+  verifier('une mesure absente ne dit rien du tout', libelleAnciennete(null) === '');
+  // ⛔ LE verdict de la section. Une note datée de demain (faute de frappe,
+  // copier-coller, fuseau) produisait « ouvert depuis -3 j » : un bug affiché
+  // comme une information. Il est désormais nommé pour ce qu'il est.
+  verifier('une date à venir est signalée, jamais rendue en négatif',
+    libelleAnciennete(-3, 'geste') === ' — datée d\'une date à venir, à corriger',
+    libelleAnciennete(-3, 'geste'));
+  verifier('aucun libellé ne contient de nombre négatif',
+    ![-1, -30, -400].some((j) => /-\d/.test(libelleAnciennete(j, 'geste'))));
+
+  // Et de bout en bout, à travers le cartouche.
+  const futur = lireGrain(JSON.stringify({
+    projet: 'Futur', etat: 'en_attente_de_paul', maj: '2026-08-21',
+    en_attente_depuis: '2026-09-15', bloque_par: ['un geste daté de demain'],
+    prochaine_action: 'corriger la date',
+  }), 'd/Futur');
+  const c = cartoucheDuMatin(agreger([futur], '2026-08-21'));
+  verifier('le cartouche ne rend aucun négatif', !/-\d+ j/.test(c.signaux[0].dit), c.signaux[0].dit);
+  verifier('il dit qu\'il y a une date à corriger', /à corriger/.test(c.signaux[0].dit), c.signaux[0].dit);
+}
+
 // ---------------------------------------------------------------- §7 constellation
 console.log('§7 — la sortie constellation (branchée sur rien, mais tenue en vie)');
 {
@@ -209,6 +239,37 @@ console.log('§7 — la sortie constellation (branchée sur rien, mais tenue en 
     !ciel.relations.some((r) => r.de === 'd/C' || r.vers === 'd/C'));
   verifier('le signal d\'appel ne s\'allume que sur ce qui appelle',
     ciel.noeuds.filter((n) => n.signal === 1).length === 1);
+}
+
+// ---------------------------------------------------------------- §8 livraison
+console.log('§8 — les deux formes de l\'agrégat disent la même chose, et la route importe la bonne');
+{
+  const { readFileSync } = await import('node:fs');
+  const ici = (p) => new URL('../' + p, import.meta.url).pathname;
+
+  // Le jumeau lisible et le module importé par la fonction sont écrits ensemble
+  // par la collecte. S'ils divergent, c'est qu'une main est passée sur l'un des
+  // deux — et l'écran servirait alors autre chose que ce que la revue a lu.
+  const json = JSON.parse(readFileSync(ici('finubar/macro.json'), 'utf8'));
+  const texteModule = readFileSync(ici('api/_lib/finubar-macro.mjs'), 'utf8');
+  const dedans = texteModule.slice(texteModule.indexOf('export default ') + 15, -2);
+  verifier('macro.json et le module servi disent exactement la même chose',
+    JSON.stringify(json) === JSON.stringify(JSON.parse(dedans)));
+  verifier('le module généré porte son avertissement « ne pas éditer »',
+    /GÉNÉRÉ/.test(texteModule.slice(0, 200)));
+
+  // ⛔ Le verdict qui protège le déploiement. Les dix autres routes du dépôt
+  // importent depuis `./_lib/` ; un import qui SORT de l'arbre `api/` passe la
+  // revue locale et peut rendre 500 en production, faute d'être embarqué par le
+  // traceur de fichiers. Aucun harnais local ne peut voir ce 500 — celui-ci
+  // vérifie donc la seule chose vérifiable : que le motif est le bon.
+  const route = readFileSync(ici('api/finubar.js'), 'utf8');
+  verifier('la route importe le module depuis ./_lib/ (motif éprouvé du dépôt)',
+    /from '\.\/_lib\/finubar-macro\.mjs'/.test(route));
+  verifier('la route n\'importe RIEN hors de l\'arbre api/',
+    !/from '\.\.\/(?!_lib)/.test(route), (route.match(/from '[^']+'/g) || []).join(' '));
+  verifier('la route reste derrière requireUser', /requireUser/.test(route));
+  verifier('la route n\'accepte que GET', /ALLOWED = \['GET'\]/.test(route));
 }
 
 console.log(echecs === 0 ? '\n=== unit-finubar : TOUT VERT ===' : `\n=== unit-finubar : ${echecs} ÉCHEC(S) ===`);

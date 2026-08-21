@@ -123,6 +123,31 @@ de dérive) **avant** l'écran.
 
 ---
 
+## 7 bis. Le diagnostic du 21/08 — dix écarts trouvés, dix corrigés
+
+Demande de Paul, le jour même de la pose : *« dry run + diag, pas de trou, pas de
+faille, pas de bug, pas de carence — implante les patchs au fur et à mesure. »*
+**Dry run : 19 parcours réels, 19 conformes.** Le diagnostic, lui, a trouvé ceci :
+
+| # | Nature | Écart | Correctif |
+|---|---|---|---|
+| **①** | 🔴 **Faille** | `finubar/macro.json` était **publiquement lisible** — Vercel sert tout fichier commité en statique, et `/finubar` n'était pas un préfixe privé. La feuille de route du business, en lecture libre, à côté d'une API soigneusement placée derrière `requireUser` | `/finubar` ajouté à `PREFIXES_PRIVES` **et** à `CHEMINS_ANTICHAMBRE` (le chemin exact reste public, tout ce qui vit dessous est 404). 12 verdicts dans `unit-adramelech-guard` |
+| **②** | 🟠 Bug | Le rappel de séance **n'avait aucune borne** alors que le moteur borne à 400 : deux lecteurs du même grain, deux vérités. Un `cap` de 5 000 caractères inondait le contexte des huit dépôts | même borne, sur 9 champs. Éprouvé avec un `cap` de 5 000 caractères |
+| **③** | 🟠 Carence | Le hook pouvait **faire échouer une ouverture de séance** si le répertoire courant n'était pas la racine du dépôt | `node "${CLAUDE_PROJECT_DIR:-.}/…" 2>/dev/null \|\| true` — éprouvé depuis `/tmp`, sans la variable, sans le fichier |
+| **④** | 🟠 Bug | La date par défaut était **UTC** : toute collecte entre minuit et 2 h en France rendait la veille, et tous les « ouvert depuis N j » étaient faux d'un jour, silencieusement | date **locale**, comme `dateLocaleIso()` ailleurs dans Ultima |
+| **⑤** | 🟠 Carence | Le mode d'emploi interdisait de corriger une copie du rappel — **rien ne le vérifiait**. Une règle que rien ne vérifie est un vœu | la collecte compare les 8 copies à leur source et nomme les divergentes et les absentes |
+| **⑥** | 🟡 Faille | `depots.json` s'édite à la main : un `dossier` valant `../..` faisait sortir la collecte de l'arborescence | nom de dossier validé, entrée rejetée **et nommée** |
+| **⑦** | 🟡 Bug | Une réponse d'API malformée (`cartouche` sans `signaux`) faisait lever `.length` et **emportait toute la page** — écran blanc, sans message | la forme est vérifiée, pas seulement la présence |
+| **⑧** | 🔴 **Carence** | `api/finubar.js` était le **seul import de tout `api/` à sortir de l'arbre `api/`**. Les dix autres routes importent depuis `./_lib/`. Un motif non éprouvé passe la revue locale et rend **500 en production** — et aucun harnais local ne peut voir ce 500 | le module généré vit désormais dans `api/_lib/finubar-macro.mjs`, motif éprouvé du dépôt. Deux verdicts le verrouillent |
+| **⑨** | 🟡 Carence | Rien ne garantissait que les deux formes de l'agrégat disent la même chose | verdict d'égalité, éprouvé rouge en éditant `macro.json` à la main |
+| **⑩** | 🟢 Rendu | Un signal long renvoyait le nom du projet à la ligne, dans le bloc le plus lu de la page | repli du texte dans sa ligne |
+
+**Ce que ce diagnostic dit de la méthode.** Les deux écarts rouges (① et ⑧) ont
+la même forme : *un contrôle qui a l'air structurel et ne l'est qu'à une requête
+près*. C'est exactement la leçon du 17/08 côté RénoDevis, où le prix d'achat du
+catalogue était protégé par un écran et pas par la donnée. Un garde-fou se
+vérifie du côté où il peut être contourné, pas du côté où il a été écrit.
+
 ## 8. Ce qui reste ouvert
 
 - **La constellation** (F-3) — reporté, décidé, prêt côté moteur.

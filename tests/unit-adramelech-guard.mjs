@@ -27,6 +27,21 @@ const privesAttendus = [
   '/CLAUDE.md.',                    // S1 : point parasite en fin
   '/adramelech%5ccarto-idees',      // S2 : backslash encodé comme séparateur
   '/js/..%2fadramelech%2fIDEES.md', // traversal encodé → doc privée
+  // FINUBAR (2026-08-21) — `finubar/` porte l'état agrégé des huit dépôts.
+  // Vercel sert tout fichier commité en statique : sans le préfixe privé, ces
+  // deux-là sont la feuille de route du business, en lecture libre.
+  '/finubar/macro.json',
+  '/finubar/macro.mjs',
+  '/finubar/depots.json',
+  '/finubar/agreger.mjs',
+  '/finubar/collecter.mjs',
+  '/finubar/rappel.mjs',
+  '/finubar/README.md',
+  '/FINUBAR.md',
+  '/CADRAGE-FINUBAR.md',
+  '/finubar%2fmacro.json',          // %2F encodé
+  '/Finubar/MACRO.JSON',            // casse mixte
+  '/finubar%5cmacro.json',          // backslash encodé comme séparateur
 ];
 verdicts.privesRefuses = privesAttendus.every((p) => estCheminPrive(p) === true);
 
@@ -53,6 +68,19 @@ verdicts.pasDeFauxPositif = estCheminPrive('/js/memoire-ui.js') === false &&
 // '/adramelech' (clean URL de la page racine adramelech.html, fail-closed
 // côté client) passe — mais UNIQUEMENT lui : tout ce qui vit SOUS
 // /adramelech/ reste bloqué, et /memoire reste entièrement fermé. ----------
+// La coque publique de FINUBAR passe, son contenu non — même mécanique
+// qu'`/adramelech`, et le même piège : ouvrir le chemin exact ne doit jamais
+// ouvrir ce qui vit dessous.
+verdicts.antichambreFinubar = estCheminPrive('/finubar') === false &&
+  estCheminPrive('/finubar.html') === false &&
+  estCheminPrive('/finubar/') === false &&
+  estCheminPrive('/Finubar') === false &&
+  estCheminPrive('/finubar/macro.json') === true &&
+  estCheminPrive('/finubar/macro.mjs') === true &&
+  estCheminPrive('/js/finubar.js') === false &&      // le module de page reste public
+  estCheminPrive('/css/finubar.css') === false &&    // sa feuille aussi
+  estCheminPrive('/api/finubar') === false;          // la route passe (elle a son auth)
+
 verdicts.antichambreServie = estCheminPrive('/adramelech') === false &&
   estCheminPrive('/adramelech.html') === false &&
   estCheminPrive('/adramelech/') === false &&        // normalisé → chemin exact

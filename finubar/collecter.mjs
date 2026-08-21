@@ -26,23 +26,54 @@ const RACINE_ULTIMA = resolve(ICI, '..');
 const FICHIER_DEPOTS = join(ICI, 'depots.json');
 const SORTIE = join(ICI, 'macro.json');
 // ⚠️ DEUX ÉCRITURES, UNE SEULE SOURCE. `macro.json` est la forme lisible (jq,
-// relecture, diff en revue) ; `macro.mjs` est la MÊME donnée en module ES,
-// parce que c'est le seul motif d'import que le traceur de fichiers de Vercel
-// suit à coup sûr pour embarquer un fichier dans une fonction serverless.
-// Les deux sont écrits dans le même souffle et RELUS avant de sortir : deux
-// fichiers écrits ensemble ne peuvent diverger que si quelqu'un en édite un à
-// la main — d'où l'avertissement en tête du module, et la relecture ci-dessous.
-const SORTIE_MODULE = join(ICI, 'macro.mjs');
+// relecture, diff en revue) ; le module ES est la MÊME donnée, importable par
+// la fonction serverless. Les deux sont écrits dans le même souffle et RELUS
+// avant de sortir : deux fichiers écrits ensemble ne peuvent diverger que si
+// quelqu'un en édite un à la main — d'où l'avertissement en tête du module.
+//
+// ⛔ ET IL VIT DANS `api/_lib/`, PAS DANS `finubar/`. Ce n'est pas un rangement,
+// c'est une question de déploiement. Le traceur de fichiers de Vercel embarque
+// ce qu'une fonction importe ; les dix autres routes de ce dépôt importent
+// toutes depuis `api/_lib/`, et ce motif est éprouvé en production. Un import
+// qui SORT de l'arbre `api/` ne l'était pas — il passe la revue locale et rend
+// 500 en production si le fichier n'est pas embarqué. On ne livre pas la seule
+// chose qu'on ne peut pas tester ici sur le seul motif non éprouvé du dépôt.
+// Bonus : `api/_lib/` n'est pas routé (préfixe `_`), donc pas servi non plus.
+const SORTIE_MODULE = resolve(RACINE_ULTIMA, 'api', '_lib', 'finubar-macro.mjs');
 
 // La date du jour est un ARGUMENT, jamais une lecture implicite : c'est ce qui
 // rend la collecte rejouable et le résultat comparable d'un jour à l'autre.
-const aujourdhui = (process.argv[2] || new Date().toISOString().slice(0, 10)).slice(0, 10);
+//
+// ⚠️ Et à défaut d'argument, elle est LOCALE, pas UTC. `toISOString()` aurait
+// rendu la veille pour toute collecte lancée entre minuit et 2 h en France
+// (UTC+2 l'été) : les « ouvert depuis N j » auraient été faux d'un jour, et
+// silencieusement — le pire genre de faux. Même règle que `dateLocaleIso()`
+// dans `js/app.js` et `js/leo-accueil.js`, et pour la même raison.
+function dateLocaleIso() {
+  const d = new Date();
+  return d.getFullYear() + '-'
+    + String(d.getMonth() + 1).padStart(2, '0') + '-'
+    + String(d.getDate()).padStart(2, '0');
+}
+const aujourdhui = (process.argv[2] || dateLocaleIso()).slice(0, 10);
 if (!/^\d{4}-\d{2}-\d{2}$/.test(aujourdhui)) {
   console.error('Date attendue au format AAAA-MM-JJ.');
   process.exit(2);
 }
 
-const depots = JSON.parse(readFileSync(FICHIER_DEPOTS, 'utf8'));
+// `depots.json` s'édite à la main, donc il est hostile par défaut (§8.2). Un
+// `dossier` valant « ../.. » ferait sortir la collecte de l'arborescence des
+// dépôts et lui ferait lire — puis publier dans macro.json — n'importe quel
+// FINUBAR.md de la machine. Le nom de dossier est donc un NOM, pas un chemin.
+const NOM_DOSSIER = /^[A-Za-z0-9._-]{1,64}$/;
+const depots = JSON.parse(readFileSync(FICHIER_DEPOTS, 'utf8'))
+  .filter((d) => {
+    if (d && typeof d.dossier === 'string' && NOM_DOSSIER.test(d.dossier) && d.dossier !== '..') return true;
+    // Un filtre qui écarte doit NOMMER ce qu'il écarte (règle du 2026-08-17) :
+    // une entrée rejetée en silence se lirait comme un dépôt sans problème.
+    console.error(`Finubar : entrée ignorée dans depots.json — nom de dossier invalide : ${JSON.stringify(d && d.dossier)}`);
+    return false;
+  });
 
 // Mesure git d'un dépôt. Toute anomalie rend `null` — une mesure absente se dit,
 // elle ne se remplace pas par une valeur par défaut qui aurait l'air d'un fait.
@@ -72,7 +103,7 @@ function mesurerGit(chemin, commitNote) {
         // lui-même s'ajoute ici — sinon l'outil se signale à lui-même.
         commitsDepuis = Number(git(['rev-list', '--count', `${commitNote}..HEAD`,
           '--', ':(exclude)FINUBAR.md', ':(exclude).claude/finubar-rappel.mjs',
-          ':(exclude)finubar/macro.json', ':(exclude)finubar/macro.mjs']));
+          ':(exclude)finubar/macro.json', ':(exclude)api/_lib/finubar-macro.mjs']));
       } catch {
         // Le commit noté n'existe pas dans ce clone (branche non récupérée,
         // historique réécrit) : on le DIT au lieu de compter 0.
@@ -101,6 +132,33 @@ const entrees = depots.map((d) => {
   return { ...entree, derive };
 });
 
+// ⑤ LES HUIT COPIES DU RAPPEL DOIVENT ÊTRE IDENTIQUES À LEUR SOURCE.
+// Le mode d'emploi le dit — « toute évolution se fait dans Ultima, puis se
+// re-copie » — mais une règle que rien ne vérifie n'est pas une règle, c'est un
+// vœu. Le jour où quelqu'un corrige une copie sur place, les huit dépôts se
+// mettent à dire des choses différentes à l'ouverture d'une séance, et le
+// symptôme (un rappel qui n'affiche pas la même chose selon le dépôt) est
+// beaucoup plus difficile à relier à sa cause que ce message-ci.
+// La collecte est le SEUL endroit où les huit dépôts sont ouverts ensemble :
+// c'est donc ici que ça se vérifie, et nulle part ailleurs.
+{
+  const source = readFileSync(join(ICI, 'rappel.mjs'), 'utf8');
+  const divergentes = [];
+  const absentes = [];
+  depots.forEach((d) => {
+    const copie = resolve(RACINE_ULTIMA, '..', d.dossier, '.claude', 'finubar-rappel.mjs');
+    if (!existsSync(copie)) { absentes.push(d.dossier); return; }
+    if (readFileSync(copie, 'utf8') !== source) divergentes.push(d.dossier);
+  });
+  if (absentes.length) {
+    console.error(`⚠️  Rappel d'ouverture de séance ABSENT dans : ${absentes.join(', ')} — ces dépôts ne se présenteront pas.`);
+  }
+  if (divergentes.length) {
+    console.error(`⚠️  Rappel DIVERGENT de sa source dans : ${divergentes.join(', ')}.`);
+    console.error('    La source unique est finubar/rappel.mjs. Re-copier depuis elle, ne jamais corriger une copie.');
+  }
+}
+
 const agregat = agreger(entrees, aujourdhui);
 const sortie = {
   ...agregat,
@@ -113,8 +171,9 @@ writeFileSync(SORTIE, texte + '\n', 'utf8');
 writeFileSync(SORTIE_MODULE,
   '// ⛔ FICHIER GÉNÉRÉ — ne pas éditer à la main.\n'
   + '// Source : `node finubar/collecter.mjs`. Jumeau lisible : `finubar/macro.json`.\n'
-  + '// Il existe parce que `api/finubar.js` doit l\'IMPORTER pour que Vercel\n'
-  + '// l\'embarque dans le paquet de la fonction (un readFileSync ne serait pas tracé).\n'
+  + '// Il vit ICI, et non dans `finubar/`, parce que `api/finubar.js` doit\n'
+  + '// l\'IMPORTER pour que Vercel l\'embarque dans le paquet de la fonction, et\n'
+  + '// que `api/_lib/` est le seul motif d\'import éprouvé en production ici.\n'
   + 'export default ' + texte + ';\n', 'utf8');
 
 // Relecture immédiate : une écriture qui échoue à moitié et une écriture réussie
