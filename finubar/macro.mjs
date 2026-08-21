@@ -8,6 +8,42 @@ export default {
     {
       "ok": true,
       "motif": "",
+      "depot": "paggerard-boop/ripair",
+      "grain": {
+        "projet": "ripair (dépôt d'origine)",
+        "depot": "paggerard-boop/ripair",
+        "cap": "À nommer ou à archiver. Ce dépôt est l'ancêtre Base44 de RénoPredict ; son rôle actuel n'est écrit nulle part.",
+        "rattache_a": "RenoPredict/docs/DECISION-2-repos.md",
+        "etat": "au_repos",
+        "jalon": {
+          "nom": "Trancher : archiver, ou nommer ce que ce dépôt porte encore",
+          "critere_de_sortie": "une décision écrite — dépôt archivé, ou rôle explicite dans son propre FINUBAR"
+        },
+        "dernier_arret": {
+          "le": "2026-07-12",
+          "quoi": "Mise à jour des paquets Base44, après la landing marketing et le retrait du contenu de démonstration",
+          "commit": "dbc2475"
+        },
+        "prochaine_action": "Décider avec Paul. Aucun commit depuis le 12/07/2026 — le jour même de la décision « 2 logiciels, 2 repos » qui a fait de RénoPredict le logiciel autonome.",
+        "bloque_par": [
+          "Une décision de Paul : ce dépôt est-il archivé, ou porte-t-il encore quelque chose que RénoPredict n'a pas repris ?"
+        ],
+        "en_attente_depuis": "2026-07-12",
+        "boucles_ouvertes": [],
+        "maj": "2026-08-21"
+      },
+      "derive": {
+        "tete": "1c98509",
+        "tete_le": "2026-08-21T10:41:36+00:00",
+        "commits_depuis": 1
+      },
+      "jours_depuis_maj": 0,
+      "jours_en_attente": 40,
+      "rang": 0
+    },
+    {
+      "ok": true,
+      "motif": "",
       "depot": "PaulGERARD161098/RenoAgenda",
       "grain": {
         "projet": "RénoAgenda",
@@ -35,13 +71,13 @@ export default {
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "cf2c439",
-        "tete_le": "2026-08-20T22:21:45+02:00",
-        "commits_depuis": 0
+        "tete": "62765bb",
+        "tete_le": "2026-08-21T10:41:29+00:00",
+        "commits_depuis": 1
       },
       "jours_depuis_maj": 0,
       "jours_en_attente": 37,
-      "rang": 1
+      "rang": 0
     },
     {
       "ok": true,
@@ -73,13 +109,13 @@ export default {
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "e54f659",
-        "tete_le": "2026-08-21T11:19:38+02:00",
-        "commits_depuis": 0
+        "tete": "65e7390",
+        "tete_le": "2026-08-21T10:42:08+00:00",
+        "commits_depuis": 1
       },
       "jours_depuis_maj": 0,
       "jours_en_attente": 17,
-      "rang": 1
+      "rang": 0
     },
     {
       "ok": true,
@@ -116,50 +152,13 @@ export default {
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "ee69b20",
-        "tete_le": "2026-08-21T11:21:49+02:00",
-        "commits_depuis": 0
+        "tete": "91cc24f",
+        "tete_le": "2026-08-21T10:41:31+00:00",
+        "commits_depuis": 1
       },
       "jours_depuis_maj": 0,
       "jours_en_attente": 17,
-      "rang": 1
-    },
-    {
-      "ok": true,
-      "motif": "",
-      "depot": "PaulGERARD161098/artisan-builder",
-      "grain": {
-        "projet": "artisan-builder",
-        "depot": "PaulGERARD161098/artisan-builder",
-        "cap": "Un artisan a son site vitrine en ligne en quelques minutes : wizard en 5 étapes, textes générés, template au choix.",
-        "rattache_a": "app/sites/solution-plomberie-chauffage/README.md (checklist de mise en ligne)",
-        "etat": "en_attente_de_paul",
-        "jalon": {
-          "nom": "Mettre en ligne le premier site client réel — SPC (Solution Plomberie Chauffage)",
-          "critere_de_sortie": "les quatre informations bloquantes de la checklist renseignées dans `content.ts`, puis le site publié"
-        },
-        "dernier_arret": {
-          "le": "2026-08-21",
-          "quoi": "Site SPC : page réalisations, espace Questions, formulaire enrichi, SEO technique (robots, sitemap, `NEXT_PUBLIC_SITE_URL`) et checklist de mise en ligne (PR #11)",
-          "commit": "46e2b62"
-        },
-        "prochaine_action": "Obtenir du client les quatre informations bloquantes de la checklist : téléphone/e-mail réels, ville et adresse complète, zone d'intervention, SIRET + forme juridique + assureur décennale.",
-        "bloque_par": [
-          "Les quatre informations bloquantes du client SPC — dont le SIRET et l'assurance décennale, qui sont une obligation légale avant toute mise en ligne publique",
-          "Les photos réelles des chantiers (les visuels actuels sont des illustrations provisoires)"
-        ],
-        "en_attente_depuis": "2026-08-21",
-        "boucles_ouvertes": [],
-        "maj": "2026-08-21"
-      },
-      "derive": {
-        "tete": "46e2b62",
-        "tete_le": "2026-08-21T11:17:00+02:00",
-        "commits_depuis": 0
-      },
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 0,
-      "rang": 1
+      "rang": 0
     },
     {
       "ok": true,
@@ -198,57 +197,50 @@ export default {
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "a593a8f",
-        "tete_le": "2026-08-21T11:16:13+02:00",
-        "commits_depuis": 0
+        "tete": "316f704",
+        "tete_le": "2026-08-21T10:41:27+00:00",
+        "commits_depuis": 1
       },
       "jours_depuis_maj": 0,
       "jours_en_attente": 4,
-      "rang": 2
+      "rang": 0
     },
     {
       "ok": true,
       "motif": "",
-      "depot": "PaulGERARD161098/Ultima-",
+      "depot": "PaulGERARD161098/artisan-builder",
       "grain": {
-        "projet": "Ultima",
-        "depot": "PaulGERARD161098/Ultima-",
-        "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-        "rattache_a": "CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-LV6-CIEL-VIVANT.md",
-        "etat": "en_cours",
+        "projet": "artisan-builder",
+        "depot": "PaulGERARD161098/artisan-builder",
+        "cap": "Un artisan a son site vitrine en ligne en quelques minutes : wizard en 5 étapes, textes générés, template au choix.",
+        "rattache_a": "app/sites/solution-plomberie-chauffage/README.md (checklist de mise en ligne)",
+        "etat": "en_attente_de_paul",
         "jalon": {
-          "nom": "FINUBAR — le pilotage des huit dépôts en un seul endroit",
-          "critere_de_sortie": "les 8 grains lus par la collecte, le rappel d'ouverture de séance actif dans les 8 dépôts, l'écran /finubar en ligne"
+          "nom": "Mettre en ligne le premier site client réel — SPC (Solution Plomberie Chauffage)",
+          "critere_de_sortie": "les quatre informations bloquantes de la checklist renseignées dans `content.ts`, puis le site publié"
         },
         "dernier_arret": {
           "le": "2026-08-21",
-          "quoi": "Finubar : moteur pur + harnais (éprouvé rouge puis vert), collecte, rappel de séance, les 8 grains semés",
-          "commit": "be6a59e"
+          "quoi": "Site SPC : page réalisations, espace Questions, formulaire enrichi, SEO technique (robots, sitemap, `NEXT_PUBLIC_SITE_URL`) et checklist de mise en ligne (PR #11)",
+          "commit": "46e2b62"
         },
-        "prochaine_action": "Faire entrer les projets dans la constellation générale — arbitré par Paul le 21/08 (« à terme, tout projet d'ampleur doit y être ») et volontairement reporté : `versConstellation()` est déjà écrit et testé, il n'est branché sur aucune page.",
+        "prochaine_action": "Obtenir du client les quatre informations bloquantes de la checklist : téléphone/e-mail réels, ville et adresse complète, zone d'intervention, SIRET + forme juridique + assureur décennale.",
         "bloque_par": [
-          "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
-          "`ANTHROPIC_API_KEY` en env Vercel",
-          "Les advisors Supabase post-DDL",
-          "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
+          "Les quatre informations bloquantes du client SPC — dont le SIRET et l'assurance décennale, qui sont une obligation légale avant toute mise en ligne publique",
+          "Les photos réelles des chantiers (les visuels actuels sont des illustrations provisoires)"
         ],
-        "en_attente_depuis": "2026-08-20",
-        "boucles_ouvertes": [
-          {
-            "quoi": "Angle mort connu du patrimoine : les pages AUTHENTIFIÉES ne sont pas couvertes par les harnais (fixture de session à financer)",
-            "depuis": "2026-08-20"
-          }
-        ],
+        "en_attente_depuis": "2026-08-21",
+        "boucles_ouvertes": [],
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "be6a59e",
-        "tete_le": "2026-08-20T22:57:32+02:00",
-        "commits_depuis": 0
+        "tete": "c0a7612",
+        "tete_le": "2026-08-21T10:41:35+00:00",
+        "commits_depuis": 1
       },
       "jours_depuis_maj": 0,
-      "jours_en_attente": 1,
-      "rang": 2
+      "jours_en_attente": 0,
+      "rang": 0
     },
     {
       "ok": true,
@@ -286,49 +278,57 @@ export default {
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "16c52ce",
-        "tete_le": "2026-08-21T11:15:51+02:00",
-        "commits_depuis": 0
+        "tete": "b088b9e",
+        "tete_le": "2026-08-21T10:41:32+00:00",
+        "commits_depuis": 1
       },
       "jours_depuis_maj": 0,
       "jours_en_attente": 0,
-      "rang": 2
+      "rang": 0
     },
     {
       "ok": true,
       "motif": "",
-      "depot": "paggerard-boop/ripair",
+      "depot": "PaulGERARD161098/Ultima-",
       "grain": {
-        "projet": "ripair (dépôt d'origine)",
-        "depot": "paggerard-boop/ripair",
-        "cap": "À nommer ou à archiver. Ce dépôt est l'ancêtre Base44 de RénoPredict ; son rôle actuel n'est écrit nulle part.",
-        "rattache_a": "RenoPredict/docs/DECISION-2-repos.md",
-        "etat": "au_repos",
+        "projet": "Ultima",
+        "depot": "PaulGERARD161098/Ultima-",
+        "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
+        "rattache_a": "CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-LV6-CIEL-VIVANT.md",
+        "etat": "en_cours",
         "jalon": {
-          "nom": "Trancher : archiver, ou nommer ce que ce dépôt porte encore",
-          "critere_de_sortie": "une décision écrite — dépôt archivé, ou rôle explicite dans son propre FINUBAR"
+          "nom": "FINUBAR — le pilotage des huit dépôts en un seul endroit",
+          "critere_de_sortie": "les 8 grains lus par la collecte, le rappel d'ouverture de séance actif dans les 8 dépôts, l'écran /finubar en ligne"
         },
         "dernier_arret": {
-          "le": "2026-07-12",
-          "quoi": "Mise à jour des paquets Base44, après la landing marketing et le retrait du contenu de démonstration",
-          "commit": "dbc2475"
+          "le": "2026-08-21",
+          "quoi": "Finubar livré et poussé sur les 8 dépôts : moteur pur + harnais (éprouvé rouge puis vert), collecte avec mesure de dérive, rappel d'ouverture de séance, écran /finubar. Patrimoine complet vert (88 sections).",
+          "commit": "73ea8c3"
         },
-        "prochaine_action": "Décider avec Paul. Aucun commit depuis le 12/07/2026 — le jour même de la décision « 2 logiciels, 2 repos » qui a fait de RénoPredict le logiciel autonome.",
+        "prochaine_action": "Faire entrer les projets dans la constellation générale — arbitré par Paul le 21/08 (« à terme, tout projet d'ampleur doit y être ») et volontairement reporté : `versConstellation()` est déjà écrit et testé, il n'est branché sur aucune page.",
         "bloque_par": [
-          "Une décision de Paul : ce dépôt est-il archivé, ou porte-t-il encore quelque chose que RénoPredict n'a pas repris ?"
+          "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
+          "`ANTHROPIC_API_KEY` en env Vercel",
+          "Les advisors Supabase post-DDL",
+          "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
         ],
-        "en_attente_depuis": "2026-07-12",
-        "boucles_ouvertes": [],
+        "en_attente_depuis": "2026-08-20",
+        "boucles_ouvertes": [
+          {
+            "quoi": "Angle mort connu du patrimoine : les pages AUTHENTIFIÉES ne sont pas couvertes par les harnais (fixture de session à financer)",
+            "depuis": "2026-08-20"
+          }
+        ],
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "dbc2475",
-        "tete_le": "2026-07-12T09:11:09+00:00",
+        "tete": "73ea8c3",
+        "tete_le": "2026-08-21T10:42:10+00:00",
         "commits_depuis": 0
       },
       "jours_depuis_maj": 0,
-      "jours_en_attente": 40,
-      "rang": 3
+      "jours_en_attente": 1,
+      "rang": 2
     }
   ],
   "macro": {
@@ -338,9 +338,13 @@ export default {
     "en_cours": 3,
     "en_attente_de_paul": 4,
     "au_repos": 1,
-    "derives": 0,
+    "derives": 7,
     "boucles_ouvertes": 5,
     "gestes_de_paul": [
+      {
+        "projet": "ripair (dépôt d'origine)",
+        "geste": "Une décision de Paul : ce dépôt est-il archivé, ou porte-t-il encore quelque chose que RénoPredict n'a pas repris ?"
+      },
       {
         "projet": "RénoAgenda",
         "geste": "Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux"
@@ -378,32 +382,16 @@ export default {
         "geste": "Embarquement Stripe côté RénoPredict — jamais commencé (0 profil sur 2)"
       },
       {
+        "projet": "RénoDevis",
+        "geste": "Embarquement Stripe de SOLA : `stripe_account_id` = 0, aucun artisan embarqué"
+      },
+      {
         "projet": "artisan-builder",
         "geste": "Les quatre informations bloquantes du client SPC — dont le SIRET et l'assurance décennale, qui sont une obligation légale avant toute mise en ligne publique"
       },
       {
         "projet": "artisan-builder",
         "geste": "Les photos réelles des chantiers (les visuels actuels sont des illustrations provisoires)"
-      },
-      {
-        "projet": "RénoDevis",
-        "geste": "Embarquement Stripe de SOLA : `stripe_account_id` = 0, aucun artisan embarqué"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "`ANTHROPIC_API_KEY` en env Vercel"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "Les advisors Supabase post-DDL"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
       },
       {
         "projet": "mon-dpe.fr",
@@ -422,39 +410,57 @@ export default {
         "geste": "Vérifier le statut du sitemap dans la Search Console (13 URLs)"
       },
       {
-        "projet": "ripair (dépôt d'origine)",
-        "geste": "Une décision de Paul : ce dépôt est-il archivé, ou porte-t-il encore quelque chose que RénoPredict n'a pas repris ?"
+        "projet": "Ultima",
+        "geste": "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "`ANTHROPIC_API_KEY` en env Vercel"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "Les advisors Supabase post-DDL"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
       }
     ]
   },
   "cartouche": {
     "signaux": [
       {
+        "projet": "ripair (dépôt d'origine)",
+        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
+        "pourquoi": "derive"
+      },
+      {
         "projet": "RénoAgenda",
-        "dit": "attend un geste : Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux — ouvert depuis 37 j",
-        "pourquoi": "attente"
+        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
+        "pourquoi": "derive"
       },
       {
         "projet": "RénoBoost",
-        "dit": "attend un geste : Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08 — ouvert depuis 17 j",
-        "pourquoi": "attente"
-      },
-      {
-        "projet": "RénoPredict",
-        "dit": "attend un geste : Générer et imprimer un lot de stickers QR — `stickers` = 0 depuis le 11/08. ⚠️ Ouvrir l'URL d'un QR AVANT d'imprimer : c'est la seule étape irréversible du programme — ouvert depuis 17 j",
-        "pourquoi": "attente"
+        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
+        "pourquoi": "derive"
       }
     ],
     "action": {
-      "projet": "RénoAgenda",
-      "nature": "geste",
-      "faire": "Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux",
-      "cap": "Marketplace particuliers ↔ artisans RGE : la demande arrive, se qualifie et se dispatche toute seule."
+      "projet": "ripair (dépôt d'origine)",
+      "nature": "code",
+      "faire": "Décider avec Paul. Aucun commit depuis le 12/07/2026 — le jour même de la décision « 2 logiciels, 2 repos » qui a fait de RénoPredict le logiciel autonome.",
+      "cap": "À nommer ou à archiver. Ce dépôt est l'ancêtre Base44 de RénoPredict ; son rôle actuel n'est écrit nulle part."
     },
     "illisibles": 0
   },
   "constellation": {
     "noeuds": [
+      {
+        "id": "paggerard-boop/ripair",
+        "libelle": "ripair (dépôt d'origine)",
+        "constellation": "au_repos",
+        "signal": 1
+      },
       {
         "id": "PaulGERARD161098/RenoAgenda",
         "libelle": "RénoAgenda",
@@ -474,33 +480,27 @@ export default {
         "signal": 1
       },
       {
+        "id": "PaulGERARD161098/RenoDevis",
+        "libelle": "RénoDevis",
+        "constellation": "en_cours",
+        "signal": 1
+      },
+      {
         "id": "PaulGERARD161098/artisan-builder",
         "libelle": "artisan-builder",
         "constellation": "en_attente_de_paul",
         "signal": 1
       },
       {
-        "id": "PaulGERARD161098/RenoDevis",
-        "libelle": "RénoDevis",
+        "id": "PaulGERARD161098/mon-dpe.fr",
+        "libelle": "mon-dpe.fr",
         "constellation": "en_cours",
-        "signal": 0
+        "signal": 1
       },
       {
         "id": "PaulGERARD161098/Ultima-",
         "libelle": "Ultima",
         "constellation": "en_cours",
-        "signal": 0
-      },
-      {
-        "id": "PaulGERARD161098/mon-dpe.fr",
-        "libelle": "mon-dpe.fr",
-        "constellation": "en_cours",
-        "signal": 0
-      },
-      {
-        "id": "paggerard-boop/ripair",
-        "libelle": "ripair (dépôt d'origine)",
-        "constellation": "au_repos",
         "signal": 0
       }
     ],
