@@ -6,6 +6,54 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🔚 **CLÔTURE DE LA SESSION 2026-08-21 — FINUBAR FUSIONNÉ SUR LES HUIT DÉPÔTS.**
+  Zéro travail non poussé. Reprise détaillée, roadmap et pre-mortem à 3 mois :
+  **`REPRISE-2026-08-21-finubar.md`**.
+  - ⛔ **DEUX VÉRIFICATIONS ATTENDENT LA PROCHAINE SÉANCE**, avant tout autre
+    travail — elles sont dans le grain, donc le rappel les présentera seul :
+    ① **recaler les 8 grains sur `main`** (fusion en SQUASH : chaque
+    `dernier_arret.commit` pointe dans le vide ; le rappel de chaque dépôt
+    l'annonce et donne la tête courante) · ② **vérifier en conditions RÉELLES**
+    que `/finubar/macro.json` et `/api/_lib/finubar-macro.mjs` refusent et que
+    `/finubar` répond — la seule vérification du lot jamais faite, l'egress du
+    bac à sable étant bloqué (403 du proxy).
+  - **14 écarts trouvés au diagnostic, 14 corrigés**, chacun éprouvé rouge avant
+    d'être cru. Quatre étaient rouges et partagent une forme : *un contrôle qui
+    a l'air structurel et ne l'est qu'à une requête près*.
+  - **Une règle versée à la charte** (§⚡) : un garde-fou se vérifie du côté où
+    il peut être contourné ; et quand on ne PEUT pas le vérifier de ce côté-là,
+    on retire l'hypothèse au lieu de la documenter.
+
+- 🧭 **SESSION 2026-08-21 — FINUBAR : les huit dépôts pilotés depuis un seul
+  endroit, livré.** Demande dictée par Paul : *« beaucoup de projets tournent,
+  j'ai un peu peur de m'y perdre »*. Cadrage complet, pre-mortem à 7 causes et
+  arbitrages : **`CADRAGE-FINUBAR.md`**.
+  - **Ce qui est en place** : un `FINUBAR.md` à la racine des **8 dépôts**
+    (grain semé depuis l'état RÉEL mesuré le jour même, pas de mémoire) · un
+    hook `SessionStart` dans les 8 qui injecte ce grain à l'ouverture de séance
+    (~250 tokens, zéro geste) · le moteur PUR `finubar/agreger.mjs` + la
+    collecte, qui **mesure la dérive git** de chaque note · l'écran `/finubar`
+    derrière session · le skill `.claude/skills/finubar/`.
+  - **Trois arbitrages de Paul** : périmètre = les 8 dépôts de code ·
+    rappel = **à l'ouverture de séance uniquement** (ni cron, ni push, ni
+    e-mail) · forme = **page + cartouche maintenant**, entrée dans la
+    constellation générale **plus tard** (« tout projet d'ampleur doit y être,
+    on en reparle »). D'où `versConstellation()` : écrit, testé, branché sur
+    rien — le jour venu, c'est un branchement, pas une réécriture.
+  - **L'ordre affiché a été corrigé en séance** : à rang égal il retombait sur
+    l'ALPHABET et plaçait `artisan-builder` devant RénoBoost, dont le geste
+    attend depuis le 04/08. Ce qui départage est désormais une **ancienneté**
+    (`en_attente_depuis`), jamais un nom. *Un ordre déterministe qui n'est pas
+    un ordre juste est pire qu'un ordre absent : on le suit.*
+  - **UNE PART DE L'ANGLE MORT DU 20/08 EST FERMÉE** : `smoke-finubar.mjs`
+    mesure le contraste des textes rendus **APRÈS authentification** (session
+    stubée) — exactement ce qui manquait à `idees.html` quand il portait un
+    3,64:1 que le harnais notait à zéro échec. La sonde a été éprouvée à
+    **1,76:1** sur une couleur volontairement mauvaise avant d'être crue.
+  - **Le harnais du moteur a été éprouvé ROUGE sur trois verrous** (une date
+    absente qui répondrait `0` au lieu de `null` · un mot de reproche dans le
+    cartouche · un grain illisible écarté en silence), puis vert.
+
 - 🌠 **SESSION 2026-08-20 (soir) — CADRAGE LV6 « LE CIEL VIVANT » DÉPOSÉ,
   exécution GELÉE au top départ de Paul.** Demande dictée : « bien implanter
   les constellations partout + rendre l'interface plus proactive (pousser à

@@ -50,7 +50,27 @@ const CSP = [
 // localStorage, jamais en cookie visible ici) : le seul contrôle fiable à ce
 // niveau est le refus. Correctif durable = servir ces données via une API
 // `requireUser` (gate — voir adramelech/CADRAGE-ADRAMELECH.md, AD-4).
-const PREFIXES_PRIVES = ['/adramelech', '/memoire'];
+// `/finubar` s'ajoute le 2026-08-21 pour une raison précise : le dossier
+// `finubar/` contient `macro.json`, c'est-à-dire l'état agrégé
+// des huit dépôts — jalons, blocages, ce qui n'a jamais tourné. Vercel sert TOUT
+// fichier commité en statique : sans cette ligne, `/finubar/macro.json` est
+// publiquement lisible, à côté d'une route `/api/finubar` soigneusement placée
+// derrière `requireUser`. Le contrôle n'aurait alors été qu'à une requête près
+// — exactement le défaut corrigé côté RénoDevis le 17/08 sur le prix d'achat du
+// catalogue. Le `.md` du grain, lui, était déjà couvert par la règle des `.md`.
+//
+// `/api/_lib` s'y ajoute aussi, et c'est un durcissement DÉFENSIF assumé.
+// Vercel ne route pas les fichiers préfixés `_` sous `api/` : `_lib` n'est donc
+// en principe pas atteignable par HTTP, et le dépôt vivait déjà sur cette
+// hypothèse (`_lib/supabase.js` est là depuis l'origine). Ce qui change le
+// 2026-08-21, c'est ce qu'on y met : `_lib/finubar-macro.mjs` n'est pas du code,
+// c'est la feuille de route des huit dépôts. Une convention de plateforme qu'on
+// ne peut pas tester d'ici — l'egress est bloqué dans le bac à sable — ne suffit
+// pas à protéger cette donnée-là. Aucune requête légitime ne demande jamais
+// `/api/_lib/…` : les fonctions l'IMPORTENT depuis le disque, elles ne vont pas
+// la chercher par le réseau. Refuser ce chemin ne coûte donc rien et retire une
+// hypothèse de la chaîne.
+const PREFIXES_PRIVES = ['/adramelech', '/memoire', '/finubar', '/api/_lib'];
 
 // Boussole publique du quadrant : la page RACINE adramelech.html est servie par
 // `cleanUrls` sur le chemin EXACT '/adramelech' (la visite de /adramelech.html y
@@ -60,7 +80,12 @@ const PREFIXES_PRIVES = ['/adramelech', '/memoire'];
 // ne viennent QUE de /api/idees authentifiée). Seul ce chemin exact passe : tout
 // ce qui vit SOUS /adramelech/ (IDEES.md, cadrages, scripts d'import) reste
 // bloqué, *.md compris.
-const CHEMINS_ANTICHAMBRE = ['/adramelech'];
+// `/finubar` y figure pour la même raison qu'`/adramelech` : `cleanUrls` sert
+// `finubar.html` sur le chemin EXACT `/finubar`, et cette page-là est publique
+// dans sa coque (elle ne porte AUCUNE donnée : tout vient de `/api/finubar`,
+// authentifiée, et sans session elle se tait). Seul ce chemin exact passe ; tout
+// ce qui vit SOUS `/finubar/` reste bloqué.
+const CHEMINS_ANTICHAMBRE = ['/adramelech', '/finubar'];
 
 export function estCheminPrive(pathname) {
   // Normalisation défensive : décodage répété (variantes %2F / double-encodage)

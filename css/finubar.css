@@ -1,0 +1,151 @@
+/* Ultima — FINUBAR : la table de marche des huit dépôts.
+   Registre ANTIQUE, sous-registre INSTRUMENT (§16.2 de LV5) : on lit des faits
+   pour décider, donc le parchemin domine et la nuit n'est qu'une bordure. Un
+   fond mouvant derrière une liste d'états se paie en erreurs de lecture.
+
+   ⛔ Les jetons ci-dessous sont ceux de css/abaque.css, VALEUR POUR VALEUR.
+   Le 2026-08-20, `css/idees.css` et `css/abaque.css` avaient divergé sur un
+   seul jeton (--encre-pale) et cette divergence a fait dormir des textes sous
+   4,5:1 pendant des semaines. On ne recrée pas cette dette : copie exacte,
+   et le contraste est donc celui, déjà mesuré, de l'abaque.
+   Zéro style inline (CSP), thèmes clair/sombre, aucune animation. */
+
+:root {
+  --parchemin: #efe3c8;
+  --mer: #e6d5ae;
+  --ile: #ecdfbe;
+  --encre: #3b2b14;
+  --encre-claire: #5a4118;
+  --encre-pale: #695430;
+  --cire: #8a3324;
+  --filet: #a98e5f;
+  --bleu: #0e3a52;
+  --bleu-clair: #1a5578;
+  --accent-focus: #1e6fb8;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --parchemin: #201a10;
+    --mer: #181307;
+    --ile: #262013;
+    --encre: #e6d7b4;
+    --encre-claire: #c8b184;
+    --encre-pale: #a4906a;
+    --cire: #d08060;
+    --filet: #6a5a3a;
+    --bleu: #a9d3e6;
+    --bleu-clair: #8fc2d4;
+    --accent-focus: #8fc2d4;
+  }
+}
+:root[data-theme="dark"] {
+  --parchemin: #201a10;
+  --mer: #181307;
+  --ile: #262013;
+  --encre: #e6d7b4;
+  --encre-claire: #c8b184;
+  --encre-pale: #a4906a;
+  --cire: #d08060;
+  --filet: #6a5a3a;
+  --bleu: #a9d3e6;
+  --bleu-clair: #8fc2d4;
+  --accent-focus: #8fc2d4;
+}
+:root[data-theme="light"] {
+  --parchemin: #efe3c8;
+  --mer: #e6d5ae;
+  --ile: #ecdfbe;
+  --encre: #3b2b14;
+  --encre-claire: #5a4118;
+  --encre-pale: #695430;
+  --cire: #8a3324;
+  --filet: #a98e5f;
+  --bleu: #0e3a52;
+  --bleu-clair: #1a5578;
+  --accent-focus: #1e6fb8;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body.finubar {
+  background: var(--parchemin);
+  color: var(--encre);
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino,
+    "Book Antiqua", Georgia, "Times New Roman", serif;
+  line-height: 1.55;
+  margin: 0;
+  padding: 1rem 1.25rem 3.5rem;
+}
+
+/* ——— Barre de retour (parité abaque) ——— */
+.barre-retour { max-width: 1180px; margin: 0 auto 1.4rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.retour-ultima {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 1rem;
+  color: var(--encre); text-decoration: none; font-variant: small-caps;
+  letter-spacing: 0.14em; border: 1px solid var(--encre-claire);
+  outline: 1px solid var(--filet); outline-offset: 3px; background: var(--ile);
+}
+.retour-ultima:hover { border-color: var(--encre); background: var(--parchemin); }
+.retour-ultima:focus-visible { outline: 3px solid var(--accent-focus); outline-offset: 3px; }
+
+.feuille { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem; }
+
+header.cartouche {
+  border: 1px solid var(--encre-claire); outline: 1px solid var(--filet);
+  outline-offset: 4px; padding: 1.5rem 2rem 1.3rem; text-align: center;
+}
+.entete-quadrant .blason-svg { width: clamp(60px, 13vw, 80px); height: auto; display: block; margin: 0 auto 0.6rem; }
+.surtitre { font-size: 0.78rem; letter-spacing: 0.32em; text-transform: uppercase; color: var(--encre-pale); margin: 0 0 0.5rem; }
+h1 { font-variant: small-caps; font-weight: 600; font-size: clamp(1.9rem, 4.5vw, 2.7rem); letter-spacing: 0.18em; margin: 0; text-wrap: balance; }
+.devise { font-style: italic; color: var(--encre-claire); margin: 0.5rem 0 0; font-size: 1.02rem; }
+
+.colonne-titre {
+  font-variant: small-caps; font-weight: 600; letter-spacing: 0.14em;
+  font-size: 1.25rem; margin: 0 0 1rem; padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--filet);
+}
+
+/* ——— Le cartouche du matin : trois signaux, une action ——— */
+.matin { border: 1px solid var(--encre-claire); outline: 1px solid var(--filet); outline-offset: 4px; padding: 1.3rem 1.6rem; }
+.matin-signaux { list-style: none; margin: 0 0 1.2rem; padding: 0; display: flex; flex-direction: column; gap: 0.7rem; }
+.matin-signaux li { display: flex; gap: 0.7rem; align-items: baseline; flex-wrap: wrap; }
+.signal-projet { font-variant: small-caps; letter-spacing: 0.1em; font-weight: 600; white-space: nowrap; flex: 0 0 auto; }
+/* `flex: 1 1 0` + `min-width: 0` : le texte du signal se replie DANS sa ligne au
+   lieu de pousser le nom du projet sur la ligne précédente. Sans ça, un signal
+   long (celui des stickers en fait 160 caractères) cassait l'alignement du bloc
+   le plus lu de la page — celui qu'on regarde en premier le matin. */
+.signal-dit { color: var(--encre-claire); flex: 1 1 0; min-width: 12rem; }
+.matin-action { border-top: 1px solid var(--filet); padding-top: 1rem; margin: 0; }
+.matin-action-titre { font-variant: small-caps; letter-spacing: 0.16em; color: var(--encre-pale); font-size: 0.8rem; margin: 0 0 0.3rem; }
+.matin-action-faire { font-size: 1.12rem; margin: 0; }
+.matin-action-cap { font-style: italic; color: var(--encre-claire); margin: 0.5rem 0 0; font-size: 0.95rem; }
+.matin-vide { font-style: italic; color: var(--encre-claire); margin: 0; }
+
+/* ——— La table de marche ——— */
+.marche { display: flex; flex-direction: column; gap: 1.1rem; list-style: none; margin: 0; padding: 0; }
+.projet { border: 1px solid var(--filet); background: var(--ile); padding: 1.1rem 1.3rem; }
+.projet.appelle { border-color: var(--cire); border-left-width: 5px; }
+.projet-tete { display: flex; gap: 0.8rem; align-items: baseline; flex-wrap: wrap; margin-bottom: 0.5rem; }
+.projet-nom { font-variant: small-caps; letter-spacing: 0.12em; font-size: 1.2rem; font-weight: 600; margin: 0; }
+.projet-etat {
+  font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+  border: 1px solid var(--encre-claire); padding: 0.15rem 0.55rem; color: var(--encre-claire); white-space: nowrap;
+}
+.projet-etat.attente { border-color: var(--cire); color: var(--cire); }
+.projet-depot { color: var(--encre-pale); font-size: 0.85rem; margin-left: auto; }
+.projet-cap { font-style: italic; color: var(--encre-claire); margin: 0 0 0.8rem; }
+.ligne { margin: 0 0 0.45rem; }
+.ligne-cle { font-variant: small-caps; letter-spacing: 0.12em; color: var(--encre-pale); margin-right: 0.4rem; }
+.projet-gestes { list-style: none; margin: 0.5rem 0 0; padding: 0 0 0 1rem; border-left: 2px solid var(--cire); }
+.projet-gestes li { margin: 0 0 0.3rem; }
+.derive { border: 1px dashed var(--cire); color: var(--cire); padding: 0.5rem 0.8rem; margin: 0 0 0.8rem; font-size: 0.95rem; }
+.projet-illisible { border-style: dashed; }
+
+/* ——— Pied : d'où vient ce qu'on lit ——— */
+.provenance { border: 1px dashed var(--filet); color: var(--encre-claire); font-size: 0.9rem; padding: 0.8rem 1.1rem; margin: 0; }
+.provenance code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.92em; }
+.etat-message { font-style: italic; color: var(--encre-claire); }
+
+@media (max-width: 560px) {
+  .projet-depot { margin-left: 0; width: 100%; }
+}

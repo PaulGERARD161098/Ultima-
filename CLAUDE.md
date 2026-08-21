@@ -272,7 +272,42 @@ l'accessibilité ni la sécurité.
   cherche le contenu interdit dans ce qui part et exige de **ne pas l'y
   trouver** — vérifier seulement la présence du permis ne prouve rien.
 
+## 🧭 FINUBAR — l'état des huit dépôts (posé le 2026-08-21)
+
+Paul travaille sur **huit dépôts** en parallèle. Finubar est l'**index** qui dit,
+pour chacun : *où on en est, où on s'est arrêté, par quoi on reprend, et vers quoi*.
+Ce n'est pas une roadmap de plus — les roadmaps restent où elles vivent, Finubar
+les pointe. Cadrage : `CADRAGE-FINUBAR.md` · mode d'emploi :
+`.claude/skills/finubar/SKILL.md` · moteur et collecte : `finubar/`.
+
+- **À l'ouverture d'une séance**, le hook `SessionStart` de chaque dépôt injecte
+  son grain tout seul (`.claude/finubar-rappel.mjs`). Rien à aller chercher.
+- **En fin de séance**, la séance qui a modifié un dépôt met à jour son
+  `FINUBAR.md` **dans le commit du travail** — dernier arrêt daté, **le commit
+  réellement poussé**, UNE prochaine action — puis `node finubar/collecter.mjs`.
+- **Si le rappel annonce une dérive** (« ce dépôt a avancé de N commits depuis
+  cette note »), on **vérifie avant de croire**, puis on corrige le grain.
+- **L'état d'ensemble** : `node finubar/collecter.mjs`, ou l'écran `/finubar`.
+
+⛔ **Trois choses à ne jamais défaire** — elles sont ce qui empêche Finubar de
+devenir huit fichiers périmés qu'on croit : le grain se tient **en fin** de
+séance ; `dernier_arret.commit` est renseigné (c'est lui qui rend la dérive
+mesurable) ; Finubar **indexe, il ne recopie pas**.
+
 ## ⚙️ Règles permanentes
+
+- **UN GARDE-FOU SE VÉRIFIE DU CÔTÉ OÙ IL PEUT ÊTRE CONTOURNÉ** (2026-08-21 —
+  quatre écarts de la même forme dans une seule séance). Une donnée protégée par
+  un écran et pas par la donnée ; un motif d'import supposé plutôt qu'éprouvé ;
+  une convention de plateforme prise pour une protection ; une liste de chemins
+  écrite à la main prise pour une couverture. Les quatre passaient la revue et
+  ne tenaient qu'à une requête près.
+  *Corollaire, et c'est lui qui coûte* : quand on ne PEUT pas vérifier de ce
+  côté-là — egress bloqué, convention de plateforme, comportement de
+  déploiement — on **retire l'hypothèse** au lieu de la documenter. Une
+  hypothèse documentée reste une hypothèse ; c'est le lecteur suivant qui la
+  paie. Et un garde-fou qui cesse de fonctionner doit le DIRE : son silence se
+  lit comme une bonne nouvelle.
 
 - **TOUJOURS LES LIENS DE CE QU'IL Y A À VÉRIFIER** (Paul, 2026-08-17 —
   renforce la règle du 2026-08-01) : dès qu'un travail est poussé, Léo donne

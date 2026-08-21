@@ -27,6 +27,21 @@ const privesAttendus = [
   '/CLAUDE.md.',                    // S1 : point parasite en fin
   '/adramelech%5ccarto-idees',      // S2 : backslash encodé comme séparateur
   '/js/..%2fadramelech%2fIDEES.md', // traversal encodé → doc privée
+  // FINUBAR (2026-08-21) — `finubar/` porte l'état agrégé des huit dépôts.
+  // Vercel sert tout fichier commité en statique : sans le préfixe privé, ces
+  // deux-là sont la feuille de route du business, en lecture libre.
+  '/finubar/macro.json',
+  '/finubar/macro.mjs',
+  '/finubar/depots.json',
+  '/finubar/agreger.mjs',
+  '/finubar/collecter.mjs',
+  '/finubar/rappel.mjs',
+  '/finubar/README.md',
+  '/FINUBAR.md',
+  '/CADRAGE-FINUBAR.md',
+  '/finubar%2fmacro.json',          // %2F encodé
+  '/Finubar/MACRO.JSON',            // casse mixte
+  '/finubar%5cmacro.json',          // backslash encodé comme séparateur
 ];
 verdicts.privesRefuses = privesAttendus.every((p) => estCheminPrive(p) === true);
 
@@ -53,6 +68,42 @@ verdicts.pasDeFauxPositif = estCheminPrive('/js/memoire-ui.js') === false &&
 // '/adramelech' (clean URL de la page racine adramelech.html, fail-closed
 // côté client) passe — mais UNIQUEMENT lui : tout ce qui vit SOUS
 // /adramelech/ reste bloqué, et /memoire reste entièrement fermé. ----------
+// La coque publique de FINUBAR passe, son contenu non — même mécanique
+// qu'`/adramelech`, et le même piège : ouvrir le chemin exact ne doit jamais
+// ouvrir ce qui vit dessous.
+// ⛔ ÉNUMÉRATION RÉELLE, ET NON UNE LISTE ÉCRITE À LA MAIN.
+// La liste ci-dessus vieillit : le jour où quelqu'un dépose `finubar/notes.json`,
+// aucun verdict ne le couvre et le fichier part en public sans que rien ne le
+// dise. On demande donc au SYSTÈME DE FICHIERS ce qui existe vraiment, et on
+// exige que le garde refuse chacun de ces chemins. Le test ne peut plus dater.
+{
+  const { readdirSync } = await import('node:fs');
+  const racine = new URL('../', import.meta.url).pathname;
+  const reels = readdirSync(racine + 'finubar').map((f) => '/finubar/' + f);
+  const passants = reels.filter((c) => estCheminPrive(c) === false);
+  verdicts.finubarEnumereReellement = reels.length > 0 && passants.length === 0;
+  if (passants.length) console.error('⚠️ servis en public :', passants.join(', '));
+  // Idem pour ce que la fonction serverless importe : ce n'est pas du code, c'est
+  // la donnée, et elle ne doit être atteignable par aucun chemin HTTP.
+  const libs = readdirSync(racine + 'api/_lib').map((f) => '/api/_lib/' + f);
+  const libsPassants = libs.filter((c) => estCheminPrive(c) === false);
+  verdicts.apiLibFerme = libs.length > 0 && libsPassants.length === 0;
+  if (libsPassants.length) console.error('⚠️ _lib servis en public :', libsPassants.join(', '));
+  // Et le garde-fou de non-régression : les VRAIES routes restent atteignables.
+  verdicts.routesApiIntactes = ['/api/finubar', '/api/cockpit', '/api/idees', '/api/leo']
+    .every((c) => estCheminPrive(c) === false);
+}
+
+verdicts.antichambreFinubar = estCheminPrive('/finubar') === false &&
+  estCheminPrive('/finubar.html') === false &&
+  estCheminPrive('/finubar/') === false &&
+  estCheminPrive('/Finubar') === false &&
+  estCheminPrive('/finubar/macro.json') === true &&
+  estCheminPrive('/finubar/macro.mjs') === true &&
+  estCheminPrive('/js/finubar.js') === false &&      // le module de page reste public
+  estCheminPrive('/css/finubar.css') === false &&    // sa feuille aussi
+  estCheminPrive('/api/finubar') === false;          // la route passe (elle a son auth)
+
 verdicts.antichambreServie = estCheminPrive('/adramelech') === false &&
   estCheminPrive('/adramelech.html') === false &&
   estCheminPrive('/adramelech/') === false &&        // normalisé → chemin exact
