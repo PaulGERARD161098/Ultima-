@@ -71,6 +71,29 @@ verdicts.pasDeFauxPositif = estCheminPrive('/js/memoire-ui.js') === false &&
 // La coque publique de FINUBAR passe, son contenu non — même mécanique
 // qu'`/adramelech`, et le même piège : ouvrir le chemin exact ne doit jamais
 // ouvrir ce qui vit dessous.
+// ⛔ ÉNUMÉRATION RÉELLE, ET NON UNE LISTE ÉCRITE À LA MAIN.
+// La liste ci-dessus vieillit : le jour où quelqu'un dépose `finubar/notes.json`,
+// aucun verdict ne le couvre et le fichier part en public sans que rien ne le
+// dise. On demande donc au SYSTÈME DE FICHIERS ce qui existe vraiment, et on
+// exige que le garde refuse chacun de ces chemins. Le test ne peut plus dater.
+{
+  const { readdirSync } = await import('node:fs');
+  const racine = new URL('../', import.meta.url).pathname;
+  const reels = readdirSync(racine + 'finubar').map((f) => '/finubar/' + f);
+  const passants = reels.filter((c) => estCheminPrive(c) === false);
+  verdicts.finubarEnumereReellement = reels.length > 0 && passants.length === 0;
+  if (passants.length) console.error('⚠️ servis en public :', passants.join(', '));
+  // Idem pour ce que la fonction serverless importe : ce n'est pas du code, c'est
+  // la donnée, et elle ne doit être atteignable par aucun chemin HTTP.
+  const libs = readdirSync(racine + 'api/_lib').map((f) => '/api/_lib/' + f);
+  const libsPassants = libs.filter((c) => estCheminPrive(c) === false);
+  verdicts.apiLibFerme = libs.length > 0 && libsPassants.length === 0;
+  if (libsPassants.length) console.error('⚠️ _lib servis en public :', libsPassants.join(', '));
+  // Et le garde-fou de non-régression : les VRAIES routes restent atteignables.
+  verdicts.routesApiIntactes = ['/api/finubar', '/api/cockpit', '/api/idees', '/api/leo']
+    .every((c) => estCheminPrive(c) === false);
+}
+
 verdicts.antichambreFinubar = estCheminPrive('/finubar') === false &&
   estCheminPrive('/finubar.html') === false &&
   estCheminPrive('/finubar/') === false &&

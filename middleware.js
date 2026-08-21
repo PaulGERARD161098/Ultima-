@@ -58,7 +58,19 @@ const CSP = [
 // derrière `requireUser`. Le contrôle n'aurait alors été qu'à une requête près
 // — exactement le défaut corrigé côté RénoDevis le 17/08 sur le prix d'achat du
 // catalogue. Le `.md` du grain, lui, était déjà couvert par la règle des `.md`.
-const PREFIXES_PRIVES = ['/adramelech', '/memoire', '/finubar'];
+//
+// `/api/_lib` s'y ajoute aussi, et c'est un durcissement DÉFENSIF assumé.
+// Vercel ne route pas les fichiers préfixés `_` sous `api/` : `_lib` n'est donc
+// en principe pas atteignable par HTTP, et le dépôt vivait déjà sur cette
+// hypothèse (`_lib/supabase.js` est là depuis l'origine). Ce qui change le
+// 2026-08-21, c'est ce qu'on y met : `_lib/finubar-macro.mjs` n'est pas du code,
+// c'est la feuille de route des huit dépôts. Une convention de plateforme qu'on
+// ne peut pas tester d'ici — l'egress est bloqué dans le bac à sable — ne suffit
+// pas à protéger cette donnée-là. Aucune requête légitime ne demande jamais
+// `/api/_lib/…` : les fonctions l'IMPORTENT depuis le disque, elles ne vont pas
+// la chercher par le réseau. Refuser ce chemin ne coûte donc rien et retire une
+// hypothèse de la chaîne.
+const PREFIXES_PRIVES = ['/adramelech', '/memoire', '/finubar', '/api/_lib'];
 
 // Boussole publique du quadrant : la page RACINE adramelech.html est servie par
 // `cleanUrls` sur le chemin EXACT '/adramelech' (la visite de /adramelech.html y

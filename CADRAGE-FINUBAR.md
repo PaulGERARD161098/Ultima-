@@ -142,11 +142,34 @@ faille, pas de bug, pas de carence — implante les patchs au fur et à mesure. 
 | **⑨** | 🟡 Carence | Rien ne garantissait que les deux formes de l'agrégat disent la même chose | verdict d'égalité, éprouvé rouge en éditant `macro.json` à la main |
 | **⑩** | 🟢 Rendu | Un signal long renvoyait le nom du projet à la ligne, dans le bloc le plus lu de la page | repli du texte dans sa ligne |
 
-**Ce que ce diagnostic dit de la méthode.** Les deux écarts rouges (① et ⑧) ont
+### Deux de plus, trouvés en essayant de vérifier les deux premiers
+
+Le diagnostic a voulu prouver ① **en conditions réelles** sur la preview Vercel,
+une fois le déploiement `Ready`. **L'egress du bac à sable est bloqué** (403 du
+proxy sur le domaine, confirmé au `curl` et au `WebFetch`) — c'est le constat
+déjà consigné dans `mon-dpe.fr/docs/JOURNAL.md`. La vérification live reste
+donc celle de Paul. Mais l'impossibilité de tester a fait regarder ailleurs :
+
+| # | Nature | Écart | Correctif |
+|---|---|---|---|
+| **⑫** | 🟠 Faille | `api/_lib/finubar-macro.mjs` n'était protégé que par une **convention de plateforme** — Vercel ne route pas les fichiers préfixés `_` sous `api/`. Le dépôt vivait déjà sur cette hypothèse pour `_lib/supabase.js`, mais ce qu'on y met a changé : ce n'est plus du code, c'est la feuille de route des huit dépôts. Et cette convention est précisément ce qu'on **ne peut pas tester d'ici** | `/api/_lib` rejoint `PREFIXES_PRIVES`. Aucune requête légitime ne demande ce chemin — les fonctions l'**importent** depuis le disque, elles ne vont pas la chercher par le réseau. Éprouvé rouge |
+| **⑬** | 🟠 Carence | Le garde était éprouvé sur une **liste de chemins écrite à la main**. Le jour où quelqu'un dépose `finubar/notes.json`, aucun verdict ne le couvre et le fichier part en public **sans que rien ne le dise** | le harnais **énumère le système de fichiers** et exige que chaque fichier réellement présent soit refusé. Éprouvé rouge : il nomme les cinq fichiers qui partiraient |
+
+⚠️ **Et la sonde ⑬ a elle-même été mise à l'épreuve**, parce qu'un test qui
+énumère peut répondre vert sur une liste **vide** — le piège nommé le 17/08
+(« un filtre qui exclut des cas doit compter ce qu'il exclut »). D'où la garde
+`reels.length > 0` : un dossier vide ne peut pas se déclarer sûr.
+
+**Ce que ce diagnostic dit de la méthode.** Quatre des écarts (①, ⑧, ⑫, ⑬) ont
 la même forme : *un contrôle qui a l'air structurel et ne l'est qu'à une requête
-près*. C'est exactement la leçon du 17/08 côté RénoDevis, où le prix d'achat du
-catalogue était protégé par un écran et pas par la donnée. Un garde-fou se
-vérifie du côté où il peut être contourné, pas du côté où il a été écrit.
+près* — une donnée protégée par un écran plutôt que par la donnée (①), un motif
+d'import supposé plutôt qu'éprouvé (⑧), une convention de plateforme prise pour
+un garde-fou (⑫), une liste écrite à la main prise pour une couverture (⑬).
+C'est exactement la leçon du 17/08 côté RénoDevis, où le prix d'achat du
+catalogue était protégé par un écran et pas par la donnée. **Un garde-fou se
+vérifie du côté où il peut être contourné, pas du côté où il a été écrit** — et
+quand on ne PEUT pas le vérifier de ce côté-là, on retire l'hypothèse au lieu de
+la documenter.
 
 ## 8. Ce qui reste ouvert
 
