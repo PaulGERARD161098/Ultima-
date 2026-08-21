@@ -33,7 +33,7 @@
   "dernier_arret": {
     "le": "2026-08-21",
     "quoi": "Finubar livré et poussé sur les 8 dépôts : moteur pur + harnais (éprouvé rouge puis vert), collecte avec mesure de dérive, rappel d'ouverture de séance, écran /finubar. Patrimoine complet vert (88 sections). Puis diagnostic complet : dix écarts corrigés, dont une lecture publique de macro.json et un import non éprouvé côté route. Dry run 19/19, patrimoine 88 sections.",
-    "commit": "7054a16"
+    "commit": "eaad5d5"
   },
   "prochaine_action": "Faire entrer les projets dans la constellation générale — arbitré par Paul le 21/08 (« à terme, tout projet d'ampleur doit y être ») et volontairement reporté : `versConstellation()` est déjà écrit et testé, il n'est branché sur aucune page.",
   "bloque_par": [

@@ -4,50 +4,6 @@
     {
       "ok": true,
       "motif": "",
-      "depot": "PaulGERARD161098/Ultima-",
-      "grain": {
-        "projet": "Ultima",
-        "depot": "PaulGERARD161098/Ultima-",
-        "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-        "rattache_a": "CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-LV6-CIEL-VIVANT.md",
-        "etat": "en_cours",
-        "jalon": {
-          "nom": "FINUBAR — le pilotage des huit dépôts en un seul endroit",
-          "critere_de_sortie": "les 8 grains lus par la collecte, le rappel d'ouverture de séance actif dans les 8 dépôts, l'écran /finubar en ligne"
-        },
-        "dernier_arret": {
-          "le": "2026-08-21",
-          "quoi": "Finubar livré et poussé sur les 8 dépôts : moteur pur + harnais (éprouvé rouge puis vert), collecte avec mesure de dérive, rappel d'ouverture de séance, écran /finubar. Patrimoine complet vert (88 sections). Puis diagnostic complet : dix écarts corrigés, dont une lecture publique de macro.json et un import non éprouvé côté route. Dry run 19/19, patrimoine 88 sections.",
-          "commit": "7054a16"
-        },
-        "prochaine_action": "Faire entrer les projets dans la constellation générale — arbitré par Paul le 21/08 (« à terme, tout projet d'ampleur doit y être ») et volontairement reporté : `versConstellation()` est déjà écrit et testé, il n'est branché sur aucune page.",
-        "bloque_par": [
-          "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
-          "`ANTHROPIC_API_KEY` en env Vercel",
-          "Les advisors Supabase post-DDL",
-          "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
-        ],
-        "en_attente_depuis": "2026-08-20",
-        "boucles_ouvertes": [
-          {
-            "quoi": "Angle mort connu du patrimoine : les pages AUTHENTIFIÉES ne sont pas couvertes par les harnais (fixture de session à financer)",
-            "depuis": "2026-08-20"
-          }
-        ],
-        "maj": "2026-08-21"
-      },
-      "derive": {
-        "tete": "91ba873",
-        "tete_le": "2026-08-21T11:15:10+00:00",
-        "commits_depuis": 1
-      },
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 1,
-      "rang": 0
-    },
-    {
-      "ok": true,
-      "motif": "",
       "depot": "PaulGERARD161098/RenoAgenda",
       "grain": {
         "projet": "RénoAgenda",
@@ -249,6 +205,50 @@
     {
       "ok": true,
       "motif": "",
+      "depot": "PaulGERARD161098/Ultima-",
+      "grain": {
+        "projet": "Ultima",
+        "depot": "PaulGERARD161098/Ultima-",
+        "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
+        "rattache_a": "CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-LV6-CIEL-VIVANT.md",
+        "etat": "en_cours",
+        "jalon": {
+          "nom": "FINUBAR — le pilotage des huit dépôts en un seul endroit",
+          "critere_de_sortie": "les 8 grains lus par la collecte, le rappel d'ouverture de séance actif dans les 8 dépôts, l'écran /finubar en ligne"
+        },
+        "dernier_arret": {
+          "le": "2026-08-21",
+          "quoi": "Finubar livré et poussé sur les 8 dépôts : moteur pur + harnais (éprouvé rouge puis vert), collecte avec mesure de dérive, rappel d'ouverture de séance, écran /finubar. Patrimoine complet vert (88 sections). Puis diagnostic complet : dix écarts corrigés, dont une lecture publique de macro.json et un import non éprouvé côté route. Dry run 19/19, patrimoine 88 sections.",
+          "commit": "eaad5d5"
+        },
+        "prochaine_action": "Faire entrer les projets dans la constellation générale — arbitré par Paul le 21/08 (« à terme, tout projet d'ampleur doit y être ») et volontairement reporté : `versConstellation()` est déjà écrit et testé, il n'est branché sur aucune page.",
+        "bloque_par": [
+          "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
+          "`ANTHROPIC_API_KEY` en env Vercel",
+          "Les advisors Supabase post-DDL",
+          "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
+        ],
+        "en_attente_depuis": "2026-08-20",
+        "boucles_ouvertes": [
+          {
+            "quoi": "Angle mort connu du patrimoine : les pages AUTHENTIFIÉES ne sont pas couvertes par les harnais (fixture de session à financer)",
+            "depuis": "2026-08-20"
+          }
+        ],
+        "maj": "2026-08-21"
+      },
+      "derive": {
+        "tete": null,
+        "tete_le": null,
+        "commits_depuis": 0
+      },
+      "jours_depuis_maj": 0,
+      "jours_en_attente": 1,
+      "rang": 2
+    },
+    {
+      "ok": true,
+      "motif": "",
       "depot": "PaulGERARD161098/mon-dpe.fr",
       "grain": {
         "projet": "mon-dpe.fr",
@@ -334,25 +334,9 @@
     "en_cours": 3,
     "en_attente_de_paul": 4,
     "au_repos": 1,
-    "derives": 1,
+    "derives": 0,
     "boucles_ouvertes": 5,
     "gestes_de_paul": [
-      {
-        "projet": "Ultima",
-        "geste": "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "`ANTHROPIC_API_KEY` en env Vercel"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "Les advisors Supabase post-DDL"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
-      },
       {
         "projet": "RénoAgenda",
         "geste": "Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux"
@@ -402,6 +386,22 @@
         "geste": "Embarquement Stripe de SOLA : `stripe_account_id` = 0, aucun artisan embarqué"
       },
       {
+        "projet": "Ultima",
+        "geste": "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "`ANTHROPIC_API_KEY` en env Vercel"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "Les advisors Supabase post-DDL"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
+      },
+      {
         "projet": "mon-dpe.fr",
         "geste": "Poser les secrets Vercel du pont audit-PAC, puis redéployer"
       },
@@ -426,11 +426,6 @@
   "cartouche": {
     "signaux": [
       {
-        "projet": "Ultima",
-        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
-        "pourquoi": "derive"
-      },
-      {
         "projet": "RénoAgenda",
         "dit": "attend un geste : Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux — ouvert depuis 37 j",
         "pourquoi": "attente"
@@ -439,24 +434,23 @@
         "projet": "RénoBoost",
         "dit": "attend un geste : Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08 — ouvert depuis 17 j",
         "pourquoi": "attente"
+      },
+      {
+        "projet": "RénoPredict",
+        "dit": "attend un geste : Générer et imprimer un lot de stickers QR — `stickers` = 0 depuis le 11/08. ⚠️ Ouvrir l'URL d'un QR AVANT d'imprimer : c'est la seule étape irréversible du programme — ouvert depuis 17 j",
+        "pourquoi": "attente"
       }
     ],
     "action": {
-      "projet": "Ultima",
-      "nature": "code",
-      "faire": "Faire entrer les projets dans la constellation générale — arbitré par Paul le 21/08 (« à terme, tout projet d'ampleur doit y être ») et volontairement reporté : `versConstellation()` est déjà écrit et testé, il n'est branché sur aucune page.",
-      "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima."
+      "projet": "RénoAgenda",
+      "nature": "geste",
+      "faire": "Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux",
+      "cap": "Marketplace particuliers ↔ artisans RGE : la demande arrive, se qualifie et se dispatche toute seule."
     },
     "illisibles": 0
   },
   "constellation": {
     "noeuds": [
-      {
-        "id": "PaulGERARD161098/Ultima-",
-        "libelle": "Ultima",
-        "constellation": "en_cours",
-        "signal": 1
-      },
       {
         "id": "PaulGERARD161098/RenoAgenda",
         "libelle": "RénoAgenda",
@@ -484,6 +478,12 @@
       {
         "id": "PaulGERARD161098/RenoDevis",
         "libelle": "RénoDevis",
+        "constellation": "en_cours",
+        "signal": 0
+      },
+      {
+        "id": "PaulGERARD161098/Ultima-",
+        "libelle": "Ultima",
         "constellation": "en_cours",
         "signal": 0
       },
