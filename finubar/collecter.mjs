@@ -110,6 +110,15 @@ function mesurerGit(chemin, commitNote) {
         commitsDepuis = null;
       }
     }
+    // ⚠️ La tête n'est CONSERVÉE que s'il y a quelque chose à dire.
+    // Sans ça, chaque commit change `tete` et `tete_le`, donc chaque collecte
+    // qui suit resalit `macro.json` — pour une information qui ne sert à rien
+    // quand l'écart est nul. Résultat : un fichier généré jamais propre après un
+    // push, qu'on finit par commiter sans le lire. Un bruit permanent finit
+    // toujours par masquer un signal ; ici on le supprime à la racine.
+    // Quand la dérive existe, en revanche, la tête est ce qui permet d'aller
+    // voir CE qui a bougé — elle est donc gardée exactement dans ce cas.
+    if (!commitsDepuis) return { tete: null, tete_le: null, commits_depuis: commitsDepuis };
     return { tete, tete_le: teteLe, commits_depuis: commitsDepuis };
   } catch {
     return null;

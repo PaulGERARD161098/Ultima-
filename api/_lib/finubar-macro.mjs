@@ -36,8 +36,8 @@ export default {
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "3941981",
-        "tete_le": "2026-08-21T11:13:26+00:00",
+        "tete": null,
+        "tete_le": null,
         "commits_depuis": 0
       },
       "jours_depuis_maj": 0,
@@ -74,8 +74,8 @@ export default {
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "a465ebf",
-        "tete_le": "2026-08-21T11:13:21+00:00",
+        "tete": null,
+        "tete_le": null,
         "commits_depuis": 0
       },
       "jours_depuis_maj": 0,
@@ -117,8 +117,8 @@ export default {
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "23b516d",
-        "tete_le": "2026-08-21T11:13:27+00:00",
+        "tete": null,
+        "tete_le": null,
         "commits_depuis": 0
       },
       "jours_depuis_maj": 0,
@@ -154,8 +154,8 @@ export default {
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "32f8624",
-        "tete_le": "2026-08-21T11:13:32+00:00",
+        "tete": null,
+        "tete_le": null,
         "commits_depuis": 0
       },
       "jours_depuis_maj": 0,
@@ -199,8 +199,8 @@ export default {
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "063afc4",
-        "tete_le": "2026-08-21T11:13:24+00:00",
+        "tete": null,
+        "tete_le": null,
         "commits_depuis": 0
       },
       "jours_depuis_maj": 0,
@@ -243,8 +243,8 @@ export default {
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "7054a16",
-        "tete_le": "2026-08-21T11:14:09+00:00",
+        "tete": null,
+        "tete_le": null,
         "commits_depuis": 0
       },
       "jours_depuis_maj": 0,
@@ -287,8 +287,8 @@ export default {
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "dfea80c",
-        "tete_le": "2026-08-21T11:13:29+00:00",
+        "tete": null,
+        "tete_le": null,
         "commits_depuis": 0
       },
       "jours_depuis_maj": 0,
@@ -323,8 +323,8 @@ export default {
         "maj": "2026-08-21"
       },
       "derive": {
-        "tete": "59138f0",
-        "tete_le": "2026-08-21T11:13:34+00:00",
+        "tete": null,
+        "tete_le": null,
         "commits_depuis": 0
       },
       "jours_depuis_maj": 0,

@@ -270,6 +270,16 @@ console.log('§8 — les deux formes de l\'agrégat disent la même chose, et la
     !/from '\.\.\/(?!_lib)/.test(route), (route.match(/from '[^']+'/g) || []).join(' '));
   verifier('la route reste derrière requireUser', /requireUser/.test(route));
   verifier('la route n\'accepte que GET', /ALLOWED = \['GET'\]/.test(route));
+
+  // Un fichier généré qui n'est jamais propre après un push finit par être
+  // commité sans être lu. Deux collectes de suite sur le même état doivent
+  // rendre exactement le même octet — sinon le bruit est permanent.
+  const collecte = readFileSync(ici('finubar/collecter.mjs'), 'utf8');
+  verifier('l\'empreinte de tête n\'est gardée que s\'il y a une dérive à expliquer',
+    /if \(!commitsDepuis\) return \{ tete: null/.test(collecte));
+  verifier('aucun projet sans dérive ne porte d\'empreinte de tête',
+    json.projets.filter((p) => p.derive && !p.derive.commits_depuis)
+      .every((p) => p.derive.tete === null));
 }
 
 console.log(echecs === 0 ? '\n=== unit-finubar : TOUT VERT ===' : `\n=== unit-finubar : ${echecs} ÉCHEC(S) ===`);
