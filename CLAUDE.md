@@ -296,6 +296,19 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
 
 ## ⚙️ Règles permanentes
 
+- **UN GARDE-FOU SE VÉRIFIE DU CÔTÉ OÙ IL PEUT ÊTRE CONTOURNÉ** (2026-08-21 —
+  quatre écarts de la même forme dans une seule séance). Une donnée protégée par
+  un écran et pas par la donnée ; un motif d'import supposé plutôt qu'éprouvé ;
+  une convention de plateforme prise pour une protection ; une liste de chemins
+  écrite à la main prise pour une couverture. Les quatre passaient la revue et
+  ne tenaient qu'à une requête près.
+  *Corollaire, et c'est lui qui coûte* : quand on ne PEUT pas vérifier de ce
+  côté-là — egress bloqué, convention de plateforme, comportement de
+  déploiement — on **retire l'hypothèse** au lieu de la documenter. Une
+  hypothèse documentée reste une hypothèse ; c'est le lecteur suivant qui la
+  paie. Et un garde-fou qui cesse de fonctionner doit le DIRE : son silence se
+  lit comme une bonne nouvelle.
+
 - **TOUJOURS LES LIENS DE CE QU'IL Y A À VÉRIFIER** (Paul, 2026-08-17 —
   renforce la règle du 2026-08-01) : dès qu'un travail est poussé, Léo donne
   **la liste des liens cliquables** de tout ce que Paul peut aller voir, **et ce

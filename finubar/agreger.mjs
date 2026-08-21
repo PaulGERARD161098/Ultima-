@@ -197,6 +197,10 @@ export function agreger(entrees, aujourdhuiIso) {
       en_attente_de_paul: lisibles.filter((p) => p.grain.etat === 'en_attente_de_paul').length,
       au_repos: lisibles.filter((p) => p.grain.etat === 'au_repos').length,
       derives: projets.filter((p) => p.derive && p.derive.commits_depuis > 0).length,
+      // Un grain dont le commit noté est introuvable n'est PAS un grain sain :
+      // sa fraîcheur n'est simplement plus mesurable. On le compte à part —
+      // ni avec les dérivés (on ne sait pas s'il a dérivé), ni avec les sains.
+      commits_inconnus: projets.filter((p) => p.derive && p.derive.commit_inconnu).length,
       boucles_ouvertes: lisibles.reduce((n, p) => n + p.grain.boucles_ouvertes.length, 0),
       gestes_de_paul: gestes,
     },
@@ -221,6 +225,12 @@ export function cartoucheDuMatin(agregat) {
         projet: g.projet,
         dit: `a avancé de ${p.derive.commits_depuis} commit(s) depuis sa dernière note`,
         pourquoi: 'derive',
+      });
+    } else if (p.derive && p.derive.commit_inconnu) {
+      signaux.push({
+        projet: g.projet,
+        dit: 'pointe un commit introuvable — sa fraîcheur n\'est plus mesurable, à recaler',
+        pourquoi: 'commit_inconnu',
       });
     } else if (g.etat === 'en_attente_de_paul') {
       const geste = g.bloque_par[0] || g.prochaine_action;

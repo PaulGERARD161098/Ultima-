@@ -219,6 +219,41 @@ console.log('§6bis — une date à venir ne s\'affiche jamais comme un nombre n
   verifier('il dit qu\'il y a une date à corriger', /à corriger/.test(c.signaux[0].dit), c.signaux[0].dit);
 }
 
+// ------------------------------------------------- §6ter commit introuvable
+console.log('§6ter — un commit noté introuvable se DIT, il ne se tait pas');
+{
+  const g = (projet, derive) => ({
+    ...lireGrain(JSON.stringify({
+      projet, etat: 'en_cours', maj: '2026-08-21', cap: 'cap',
+      prochaine_action: 'la suite', dernier_arret: { quoi: 'la chose', commit: 'deadbee' },
+    }), 'd/' + projet),
+    derive,
+  });
+  const a = agreger([
+    g('Squashe', { tete: 'aaa1111', tete_le: '', commits_depuis: null, commit_inconnu: true }),
+    g('Sain', { tete: null, tete_le: null, commits_depuis: 0, commit_inconnu: false }),
+  ], '2026-08-21');
+
+  verifier('un commit introuvable est compté À PART', a.macro.commits_inconnus === 1);
+  // ⛔ Le verdict qui compte : il ne doit PAS grossir le compte des dérivés.
+  // On ne sait pas si ce dépôt a dérivé — c'est justement le problème.
+  verifier('il n\'est PAS compté comme une dérive', a.macro.derives === 0);
+  verifier('un grain sain ne déclenche rien',
+    a.projets.find((p) => p.grain.projet === 'Sain').derive.commit_inconnu === false);
+
+  const c = cartoucheDuMatin(a);
+  const dit = c.signaux.map((s) => s.dit).join(' | ');
+  verifier('le cartouche le dit', /introuvable/.test(dit), dit);
+  verifier('et il dit quoi faire', /recaler/.test(dit), dit);
+  verifier('sans reprocher quoi que ce soit',
+    !MOTS_INTERDITS.some((m) => JSON.stringify(c).toLowerCase().includes(m)));
+  // Un cas où l'on ne sait rien du tout (pas de mesure git) reste muet : on ne
+  // fabrique pas un avertissement à partir d'une absence de mesure.
+  const sansMesure = cartoucheDuMatin(agreger([g('Aveugle', null)], '2026-08-21'));
+  verifier('aucune mesure git → aucun avertissement inventé',
+    !/introuvable/.test(JSON.stringify(sansMesure)));
+}
+
 // ---------------------------------------------------------------- §7 constellation
 console.log('§7 — la sortie constellation (branchée sur rien, mais tenue en vie)');
 {

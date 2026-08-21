@@ -81,6 +81,7 @@ function mesurerGit(chemin, commitNote) {
   const git = (args) => execFileSync('git', ['-C', chemin, ...args], {
     encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], timeout: 10_000,
   }).trim();
+  let commitInconnu = false;
   try {
     const tete = git(['log', '-1', '--format=%h']);
     const teteLe = git(['log', '-1', '--format=%aI']);
@@ -105,9 +106,19 @@ function mesurerGit(chemin, commitNote) {
           '--', ':(exclude)FINUBAR.md', ':(exclude).claude/finubar-rappel.mjs',
           ':(exclude)finubar/macro.json', ':(exclude)api/_lib/finubar-macro.mjs']));
       } catch {
-        // Le commit noté n'existe pas dans ce clone (branche non récupérée,
-        // historique réécrit) : on le DIT au lieu de compter 0.
+        // Le commit noté est introuvable : branche non récupérée, historique
+        // réécrit — et surtout **fusion en squash**, qui est le cas NORMAL ici.
+        // Quand une PR est fusionnée en squash, les commits de la branche
+        // disparaissent au profit d'un seul commit neuf : tous les grains
+        // pointent alors dans le vide, et la mesure de fraîcheur s'arrête.
+        //
+        // ⛔ Elle doit s'arrêter EN LE DISANT. Rendre `null` sans rien annoncer
+        // ferait taire le seul garde-fou contre une note périmée, au moment
+        // précis où il devient inopérant — et personne ne s'en apercevrait,
+        // puisque l'absence d'avertissement se lit « tout va bien ». C'est
+        // exactement la faute de forme qu'on traque depuis le début du lot.
         commitsDepuis = null;
+        commitInconnu = true;
       }
     }
     // ⚠️ La tête n'est CONSERVÉE que s'il y a quelque chose à dire.
@@ -118,8 +129,10 @@ function mesurerGit(chemin, commitNote) {
     // toujours par masquer un signal ; ici on le supprime à la racine.
     // Quand la dérive existe, en revanche, la tête est ce qui permet d'aller
     // voir CE qui a bougé — elle est donc gardée exactement dans ce cas.
-    if (!commitsDepuis) return { tete: null, tete_le: null, commits_depuis: commitsDepuis };
-    return { tete, tete_le: teteLe, commits_depuis: commitsDepuis };
+    // Un commit introuvable GARDE la tête : c'est elle qui sert à recaler.
+    if (commitInconnu) return { tete, tete_le: teteLe, commits_depuis: null, commit_inconnu: true };
+    if (!commitsDepuis) return { tete: null, tete_le: null, commits_depuis: commitsDepuis, commit_inconnu: false };
+    return { tete, tete_le: teteLe, commits_depuis: commitsDepuis, commit_inconnu: false };
   } catch {
     return null;
   }
@@ -201,6 +214,11 @@ writeFileSync(SORTIE_MODULE,
 const m = sortie.macro;
 console.log(`Finubar — ${m.total} projets · ${m.en_cours} en cours · ${m.en_attente_de_paul} en attente de Paul · ${m.au_repos} au repos`);
 if (m.derives) console.log(`⚠️  ${m.derives} projet(s) ont avancé depuis leur dernière note.`);
+if (m.commits_inconnus) {
+  const noms = sortie.projets.filter((p) => p.derive && p.derive.commit_inconnu).map((p) => p.depot);
+  console.log(`⚠️  ${m.commits_inconnus} grain(s) pointent un commit introuvable (fusion en squash ?) : ${noms.join(', ')}`);
+  console.log('    Leur fraîcheur n\'est plus mesurable tant qu\'ils ne sont pas recalés sur la tête courante.');
+}
 if (m.illisibles) console.log(`⚠️  ${m.illisibles} projet(s) sans grain lisible : ${sortie.projets.filter((p) => !p.ok).map((p) => `${p.depot} (${p.motif})`).join(', ')}`);
 sortie.cartouche.signaux.forEach((s) => console.log(`  • ${s.projet} — ${s.dit}`));
 if (sortie.cartouche.action) console.log(`  ▶ ${sortie.cartouche.action.projet} : ${sortie.cartouche.action.faire}`);

@@ -171,6 +171,16 @@ vérifie du côté où il peut être contourné, pas du côté où il a été é
 quand on ne PEUT pas le vérifier de ce côté-là, on retire l'hypothèse au lieu de
 la documenter.
 
+### Le quatorzième, et il naît de la fusion elle-même
+
+| # | Nature | Écart | Correctif |
+|---|---|---|---|
+| **⑭** | 🟠 Carence | Ces dépôts fusionnent en **squash** : les commits d'une branche disparaissent au profit d'un commit neuf. Tous les grains pointent alors dans le vide, et la mesure de fraîcheur **s'arrête — en silence**. Or l'absence d'avertissement se lit « tout va bien » : le seul garde-fou contre une note périmée devenait inopérant à l'instant précis de la fusion, sans que personne ne puisse le voir | le commit introuvable est **compté à part** (ni sain, ni dérivé : *non mesurable*), dit par le rappel de séance **avec la tête courante pour recaler**, et nommé par la collecte. 7 verdicts. Éprouvé sur un commit fabriqué |
+
+*C'est le même défaut de forme que les quatre autres, appliqué au temps : un
+garde-fou qui cesse de fonctionner doit le dire, sinon son silence se lit comme
+une bonne nouvelle.*
+
 ## 8. Ce qui reste ouvert
 
 - **La constellation** (F-3) — reporté, décidé, prêt côté moteur.

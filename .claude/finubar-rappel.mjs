@@ -73,7 +73,23 @@ try {
           + ' Vérifier l\'état réel AVANT de la croire, puis la remettre à jour.';
       }
     }
-  } catch { /* git absent ou historique partiel : on se tait, on ne devine pas */ }
+  } catch {
+    // ⛔ On ne se tait QUE si l'on ne sait rien du tout. Si le grain porte un
+    // commit bien formé et que git ne le trouve pas, c'est un fait à dire : le
+    // cas normal est une fusion en SQUASH, qui remplace les commits de la
+    // branche par un seul commit neuf. La note pointe alors dans le vide et la
+    // mesure de fraîcheur s'arrête — silencieusement si on ne l'annonce pas.
+    try {
+      if (g.dernier_arret && /^[0-9a-f]{7,40}$/i.test(g.dernier_arret.commit || '')) {
+        const tete = execFileSync('git', ['-C', racine, 'log', '-1', '--format=%h'], {
+          encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], timeout: 5000,
+        }).trim();
+        derive = `\n⚠️ Le commit noté (${borne(g.dernier_arret.commit)}) est introuvable dans l'historique`
+          + ` — fusion en squash, très probablement. La fraîcheur de cette note n'est donc PAS mesurable.`
+          + ` Tête courante : ${tete}. À recaler en fin de séance.`;
+      }
+    } catch { /* git absent : là, on ne sait vraiment rien, et on se tait */ }
+  }
 
   const l = [];
   l.push(`FINUBAR — ${borne(g.projet)} (${borne(g.depot) || '—'})`);

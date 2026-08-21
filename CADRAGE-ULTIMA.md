@@ -6,6 +6,24 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🔚 **CLÔTURE DE LA SESSION 2026-08-21 — FINUBAR FUSIONNÉ SUR LES HUIT DÉPÔTS.**
+  Zéro travail non poussé. Reprise détaillée, roadmap et pre-mortem à 3 mois :
+  **`REPRISE-2026-08-21-finubar.md`**.
+  - ⛔ **DEUX VÉRIFICATIONS ATTENDENT LA PROCHAINE SÉANCE**, avant tout autre
+    travail — elles sont dans le grain, donc le rappel les présentera seul :
+    ① **recaler les 8 grains sur `main`** (fusion en SQUASH : chaque
+    `dernier_arret.commit` pointe dans le vide ; le rappel de chaque dépôt
+    l'annonce et donne la tête courante) · ② **vérifier en conditions RÉELLES**
+    que `/finubar/macro.json` et `/api/_lib/finubar-macro.mjs` refusent et que
+    `/finubar` répond — la seule vérification du lot jamais faite, l'egress du
+    bac à sable étant bloqué (403 du proxy).
+  - **14 écarts trouvés au diagnostic, 14 corrigés**, chacun éprouvé rouge avant
+    d'être cru. Quatre étaient rouges et partagent une forme : *un contrôle qui
+    a l'air structurel et ne l'est qu'à une requête près*.
+  - **Une règle versée à la charte** (§⚡) : un garde-fou se vérifie du côté où
+    il peut être contourné ; et quand on ne PEUT pas le vérifier de ce côté-là,
+    on retire l'hypothèse au lieu de la documenter.
+
 - 🧭 **SESSION 2026-08-21 — FINUBAR : les huit dépôts pilotés depuis un seul
   endroit, livré.** Demande dictée par Paul : *« beaucoup de projets tournent,
   j'ai un peu peur de m'y perdre »*. Cadrage complet, pre-mortem à 7 causes et

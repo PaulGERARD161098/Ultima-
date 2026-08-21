@@ -33,7 +33,8 @@
       "derive": {
         "tete": null,
         "tete_le": null,
-        "commits_depuis": 0
+        "commits_depuis": 0,
+        "commit_inconnu": false
       },
       "jours_depuis_maj": 0,
       "jours_en_attente": 37,
@@ -71,7 +72,8 @@
       "derive": {
         "tete": null,
         "tete_le": null,
-        "commits_depuis": 0
+        "commits_depuis": 0,
+        "commit_inconnu": false
       },
       "jours_depuis_maj": 0,
       "jours_en_attente": 17,
@@ -114,7 +116,8 @@
       "derive": {
         "tete": null,
         "tete_le": null,
-        "commits_depuis": 0
+        "commits_depuis": 0,
+        "commit_inconnu": false
       },
       "jours_depuis_maj": 0,
       "jours_en_attente": 17,
@@ -151,7 +154,8 @@
       "derive": {
         "tete": null,
         "tete_le": null,
-        "commits_depuis": 0
+        "commits_depuis": 0,
+        "commit_inconnu": false
       },
       "jours_depuis_maj": 0,
       "jours_en_attente": 0,
@@ -196,7 +200,8 @@
       "derive": {
         "tete": null,
         "tete_le": null,
-        "commits_depuis": 0
+        "commits_depuis": 0,
+        "commit_inconnu": false
       },
       "jours_depuis_maj": 0,
       "jours_en_attente": 4,
@@ -221,7 +226,7 @@
           "quoi": "Finubar livré et poussé sur les 8 dépôts : moteur pur + harnais (éprouvé rouge puis vert), collecte avec mesure de dérive, rappel d'ouverture de séance, écran /finubar. Patrimoine complet vert (88 sections). Puis diagnostic complet : dix écarts corrigés, dont une lecture publique de macro.json et un import non éprouvé côté route. Dry run 19/19, patrimoine 88 sections.",
           "commit": "eaad5d5"
         },
-        "prochaine_action": "Faire entrer les projets dans la constellation générale — arbitré par Paul le 21/08 (« à terme, tout projet d'ampleur doit y être ») et volontairement reporté : `versConstellation()` est déjà écrit et testé, il n'est branché sur aucune page.",
+        "prochaine_action": "⛔ LES DEUX VÉRIFICATIONS DE LA FUSION, avant tout autre travail. (1) Recaler les 8 grains sur `main` : la fusion s'est faite en SQUASH, donc chaque `dernier_arret.commit` pointe dans le vide — le rappel de chaque dépôt le dira lui-même à l'ouverture. (2) Vérifier en conditions RÉELLES que `/finubar/macro.json` et `/api/_lib/finubar-macro.mjs` refusent bien, et que `/finubar` répond : c'est la seul",
         "bloque_par": [
           "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
           "`ANTHROPIC_API_KEY` en env Vercel",
@@ -233,6 +238,14 @@
           {
             "quoi": "Angle mort connu du patrimoine : les pages AUTHENTIFIÉES ne sont pas couvertes par les harnais (fixture de session à financer)",
             "depuis": "2026-08-20"
+          },
+          {
+            "quoi": "La constellation : faire entrer les projets dans le ciel — arbitré par Paul le 21/08 (« tout projet d'ampleur doit y être, on en reparle »), volontairement reporté. `versConstellation()` est écrit et testé, branché sur aucune page",
+            "depuis": "2026-08-21"
+          },
+          {
+            "quoi": "Le top départ de LV6 reste attendu — le cadrage est déposé, l'exécution gelée",
+            "depuis": "2026-08-20"
           }
         ],
         "maj": "2026-08-21"
@@ -240,7 +253,8 @@
       "derive": {
         "tete": null,
         "tete_le": null,
-        "commits_depuis": 0
+        "commits_depuis": 0,
+        "commit_inconnu": false
       },
       "jours_depuis_maj": 0,
       "jours_en_attente": 1,
@@ -284,7 +298,8 @@
       "derive": {
         "tete": null,
         "tete_le": null,
-        "commits_depuis": 0
+        "commits_depuis": 0,
+        "commit_inconnu": false
       },
       "jours_depuis_maj": 0,
       "jours_en_attente": 0,
@@ -320,7 +335,8 @@
       "derive": {
         "tete": null,
         "tete_le": null,
-        "commits_depuis": 0
+        "commits_depuis": 0,
+        "commit_inconnu": false
       },
       "jours_depuis_maj": 0,
       "jours_en_attente": 40,
@@ -335,7 +351,8 @@
     "en_attente_de_paul": 4,
     "au_repos": 1,
     "derives": 0,
-    "boucles_ouvertes": 5,
+    "commits_inconnus": 0,
+    "boucles_ouvertes": 7,
     "gestes_de_paul": [
       {
         "projet": "RénoAgenda",

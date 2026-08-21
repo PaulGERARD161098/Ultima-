@@ -7,8 +7,9 @@
 // vit en localStorage, invisible de l'edge). D'où : une route, `requireUser`,
 // et AUCUN fichier de Finubar servi en statique.
 //
-// La donnée est FIGÉE AU COMMIT : elle vient de `finubar/macro.mjs`, écrit par
-// `node finubar/collecter.mjs` et versionné. Aucune base, aucun secret, aucun
+// La donnée est FIGÉE AU COMMIT : elle vient de `api/_lib/finubar-macro.mjs`,
+// écrit par `node finubar/collecter.mjs` et versionné (jumeau lisible :
+// `finubar/macro.json`). Aucune base, aucun secret, aucun
 // appel sortant — donc rien à surveiller, rien à faire tourner, et un coût nul.
 // Le prix de ce choix est assumé et affiché à l'écran : la page dit la DATE de
 // la collecte. Un pilotage qui ne dit pas de quand il date est un piège.
