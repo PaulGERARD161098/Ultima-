@@ -64,8 +64,15 @@ function mesurerGit(chemin, commitNote) {
         // à l'ignorer, et il ne servira plus le jour où il aura raison.
         // Ce qui est mesuré est donc : « le dépôt a-t-il avancé sur du CONTENU
         // depuis cette note ? » — la seule question dont la réponse compte.
+        // Sont exclus : le grain, le rappel de séance, et les DEUX FICHIERS
+        // GÉNÉRÉS par la collecte. Les deux derniers ont été oubliés à la
+        // première écriture, et le défaut s'est vu tout de suite : le commit
+        // qui recalait le grain d'Ultima sur sa tête réelle le déclarait
+        // périmé dans la seconde qui suivait. Tout fichier que Finubar écrit
+        // lui-même s'ajoute ici — sinon l'outil se signale à lui-même.
         commitsDepuis = Number(git(['rev-list', '--count', `${commitNote}..HEAD`,
-          '--', ':(exclude)FINUBAR.md', ':(exclude).claude/finubar-rappel.mjs']));
+          '--', ':(exclude)FINUBAR.md', ':(exclude).claude/finubar-rappel.mjs',
+          ':(exclude)finubar/macro.json', ':(exclude)finubar/macro.mjs']));
       } catch {
         // Le commit noté n'existe pas dans ce clone (branche non récupérée,
         // historique réécrit) : on le DIT au lieu de compter 0.

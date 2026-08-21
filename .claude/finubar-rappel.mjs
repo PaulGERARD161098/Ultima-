@@ -54,7 +54,8 @@ try {
       // Exclusion des fichiers de Finubar : le commit qui pose la note ne doit
       // pas la déclarer périmée (voir le commentaire long dans collecter.mjs).
       const n = Number(git(['rev-list', '--count', `${g.dernier_arret.commit}..HEAD`,
-        '--', ':(exclude)FINUBAR.md', ':(exclude).claude/finubar-rappel.mjs']));
+        '--', ':(exclude)FINUBAR.md', ':(exclude).claude/finubar-rappel.mjs',
+        ':(exclude)finubar/macro.json', ':(exclude)finubar/macro.mjs']));
       if (Number.isFinite(n) && n > 0) {
         derive = `\n⚠️ Le dépôt a avancé de ${n} commit(s) depuis cette note (tête ${git(['log', '-1', '--format=%h'])}).`
           + ' Vérifier l\'état réel AVANT de la croire, puis la remettre à jour.';
