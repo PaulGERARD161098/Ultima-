@@ -31,11 +31,11 @@
     "critere_de_sortie": "les 8 grains lus par la collecte, le rappel d'ouverture de séance actif dans les 8 dépôts, l'écran /finubar en ligne"
   },
   "dernier_arret": {
-    "le": "2026-08-21",
-    "quoi": "Finubar livré et poussé sur les 8 dépôts : moteur pur + harnais (éprouvé rouge puis vert), collecte avec mesure de dérive, rappel d'ouverture de séance, écran /finubar. Patrimoine complet vert (88 sections). Puis diagnostic complet : dix écarts corrigés, dont une lecture publique de macro.json et un import non éprouvé côté route. Dry run 19/19, patrimoine 88 sections.",
-    "commit": "eaad5d5"
+    "le": "2026-08-28",
+    "quoi": "L'isolement du ciel, livré et poussé : cliquer un nœud qui CONTIENT quelque chose ne change plus de page — il éteint les frères, la caméra s'approche, et la scène est re-dessinée sur sa seule descendance, deux étages d'un coup (NAGA → ses 3 quadrants ET leurs 8 projets). Trois sorties (fil d'Ariane, Échap, clic dans le vide) et l'adresse suit (ultima.html#naga). Cinq assertions « clic → page » de trois harnais remplacées, jamais supprimées. Une mesure NEUVE au patrimoine — le recouvrement ciel ↔ mobilier — a trouvé une étoile sous le cartouche que le contrôle de cadre déclarait verte. Patrimoine complet vert : 88 sections, 1653 verdicts.",
+    "commit": "aff41f7"
   },
-  "prochaine_action": "⛔ LES DEUX VÉRIFICATIONS DE LA FUSION, avant tout autre travail. (1) Recaler les 8 grains sur `main` : la fusion s'est faite en SQUASH, donc chaque `dernier_arret.commit` pointe dans le vide — le rappel de chaque dépôt le dira lui-même à l'ouverture. (2) Vérifier en conditions RÉELLES que `/finubar/macro.json` et `/api/_lib/finubar-macro.mjs` refusent bien, et que `/finubar` répond : c'est la seule vérification du lot qui n'a jamais pu être faite (egress bloqué dans le bac à sable, 403 du proxy).",
+  "prochaine_action": "Le retour de Paul sur l'isolement (les liens page par page sont dans le rapport de séance) — il a annoncé « ensuite on verra pour corriger autre chose ». À défaut, reprendre les DEUX vérifications Finubar de la fusion du 21/08, qui n'ont PAS été faites (la demande produit est passée devant) : (1) recaler les grains des 7 autres dépôts sur `main`, (2) éprouver en conditions RÉELLES que /finubar/macro.json et /api/_lib/finubar-macro.mjs refusent et que /finubar répond.",
   "bloque_par": [
     "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
     "`ANTHROPIC_API_KEY` en env Vercel",
@@ -44,6 +44,10 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "Les huit coques de navigation (grima.html, naga.html…) ne sont plus le CHEMIN depuis l'isolement — elles restent des PORTES (repli <noscript>, lien direct, adresse). Leur sort — les garder telles quelles, les réduire, les retirer — n'est pas tranché : à voir avec Paul quand l'isolement aura vécu",
+      "depuis": "2026-08-28"
+    },
     {
       "quoi": "Angle mort connu du patrimoine : les pages AUTHENTIFIÉES ne sont pas couvertes par les harnais (fixture de session à financer)",
       "depuis": "2026-08-20"
@@ -57,7 +61,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-08-21"
+  "maj": "2026-08-28"
 }
 ```
 
@@ -68,6 +72,15 @@
 > Les séances, de la plus récente à la plus ancienne. Une entrée = une date, un
 > fait vérifié, une décision. La mémoire longue ; le bloc ci-dessus est la mémoire
 > courte, et c'est lui qui est lu automatiquement.
+
+### 2026-08-28 — Le ciel s'isole
+Demande dictée par Paul : « quand je clique sur une constellation, ça m'affiche
+uniquement cette constellation et plus les autres ». Le clic sur un nœud qui
+contient quelque chose n'ouvre plus sa page : il isole sa descendance sur place,
+sur deux étages. Trois sorties, l'adresse qui suit, et les huit coques qui
+passent du statut de chemin à celui de portes. Une mesure neuve — le
+recouvrement entre le ciel et le mobilier — a trouvé ce que le contrôle de cadre
+déclarait vert.
 
 ### 2026-08-21 — Finubar
 Demande de Paul : « beaucoup de projets tournent, j'ai peur de m'y perdre ».

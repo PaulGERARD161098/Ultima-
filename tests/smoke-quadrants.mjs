@@ -125,14 +125,33 @@ console.log('— A. ULTIMA : 2 cadrans, puis les 5 portes via GRIMA / NAGA —')
   // Les étoiles ne sont pas des ancres : l'ancre SVG a été essayée puis retirée
   // parce qu'elle faisait perdre le focus clavier (mesuré). On éprouve donc les
   // portes en CLIQUANT — une preuve plus forte qu'un attribut lu.
+  // ---- REPRISE le 2026-08-28 : L'ISOLEMENT ----
+  // Le clic sur un cadran n'ouvre plus sa page — il ISOLE sa descendance sur
+  // place (Paul : « ça m'affiche uniquement cette constellation »). La liste
+  // qu'on remplissait en cliquant se remplit donc en OUVRANT les portes par
+  // leur adresse : c'est exactement ce que fait un lecteur sans JavaScript
+  // depuis le repli <noscript>, et c'est la seule preuve de porte qui garde un
+  // sens maintenant. Ce que le clic fait, lui, est éprouvé juste en dessous —
+  // et en détail par `smoke-lv4-coque` §D.
   const hrefs = [];
+  for (const c of capsDe('ultima-perso')) {
+    await page.goto(`${BASE}/${c.cible}`, { waitUntil: 'load', timeout: 20000 });
+    if (page.url().endsWith(c.cible)) { hrefs.push(c.cible); }
+  }
+  // Et le geste, mesuré là où il se produit : chaque cadran montre sa
+  // descendance sans quitter l'accueil de la supra-division.
   for (const c of capsDe('ultima-perso')) {
     await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
     await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
     await page.locator(`#ciel-noeud-scene .ciel-etoile[data-noeud-id="${c.id}"]`)
       .dispatchEvent('click');
-    await page.waitForURL(`**/${c.cible}`, { timeout: 8000 }).catch(() => {});
-    if (page.url().endsWith(c.cible)) { hrefs.push(c.cible); }
+    await page.waitForTimeout(1400);
+    const peints = await page.$$eval('#ciel-noeud-scene .ciel-etoile[data-noeud-id]',
+      (gs) => gs.map((g) => g.getAttribute('data-noeud-id')));
+    verifier(`Clic ${c.nom} : isolement sur place, sans changer de page`,
+      (NOEUDS[c.id].enfants || []).every((id) => peints.includes(id))
+      && !peints.includes(c.id) && page.url().endsWith(`ultima.html#${c.id}`),
+      `${page.url()} — ${JSON.stringify(peints)}`);
   }
   await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
@@ -142,7 +161,7 @@ console.log('— A. ULTIMA : 2 cadrans, puis les 5 portes via GRIMA / NAGA —')
   // dictée de Paul — et la boucle ci-dessous, elle, était encore écrite à la
   // main sous un commentaire qui disait le contraire. Elle est tombée.
   const portesAttendues = capsDe('ultima-perso').map((c) => c.cible);
-  verifier('les cadrans ouvrables = ceux du registre',
+  verifier('les portes du registre s’ouvrent toutes',
     JSON.stringify(hrefs.slice().sort()) === JSON.stringify(portesAttendues.slice().sort()),
     JSON.stringify(hrefs));
   for (const attendu of portesAttendues) {

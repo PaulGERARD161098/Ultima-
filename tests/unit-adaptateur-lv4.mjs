@@ -16,7 +16,12 @@
 //      pas un garde-fou.
 //   5. LE CHEMIN : le fil d'Ariane se lit dans le registre, et un registre
 //      malade (boucle, nœud inconnu) ne fait pas tourner la page sans fin.
-import { versCiel, cheminVers } from '../js/adaptateur-lv4.mjs';
+//   6. L'ISOLEMENT (2026-08-28) : cliquer une constellation ne montre plus
+//      QU'ELLE — ses frères disparaissent, ses deux étages paraissent d'un
+//      coup, et le foyer lui-même n'est pas peint. Éprouvé sur le VRAI
+//      registre autant que sur un registre construit : c'est le produit que
+//      Paul regarde, pas un cas d'école.
+import { versCiel, cheminVers, descendDe } from '../js/adaptateur-lv4.mjs';
 import { NOEUDS } from '../js/registre-lv3.mjs';
 
 const verdicts = {};
@@ -105,6 +110,97 @@ dit('cheminSurviveALaBoucle', cheminVers('q', BOUCLE, 'jamais').length === 0);
 const ecransReels = Object.keys(NOEUDS).filter((id) => (NOEUDS[id].enfants || []).length > 0);
 dit('cheminExistePourTousLesEcransReels',
   ecransReels.every((id) => cheminVers(id, NOEUDS).length > 0));
+
+// ---------- 6. L'ISOLEMENT ----------
+// Le pire cas est ici le registre RÉEL : c'est lui qui porte les trois formes
+// que la règle de groupement doit distinguer — une tête pleine (NICOL BOLAS),
+// une tête vide (RIVEN), et des jumeaux reliés (RESHIRAM ⇄ ZEKROM).
+const plieUltima = versCiel('ultima-perso', NOEUDS);
+const naga = versCiel('ultima-perso', NOEUDS, { isole: 'naga' });
+const idsNaga = naga.noeuds.map((n) => n.id);
+const attenduNaga = ['imladrik', 'adramelech', 'tao']
+  .reduce((liste, id) => liste.concat([id], NOEUDS[id].enfants || []), []);
+
+// ① On ne montre QUE la descendance — et TOUTE la descendance à deux étages.
+dit('isoleMontreLesDeuxEtages',
+  attenduNaga.every((id) => idsNaga.includes(id)) && idsNaga.length === attenduNaga.length);
+// ② Les frères ont disparu : GRIMA n'est plus là, ni rien de ce qu'il porte.
+dit('isoleFaitDisparaitreLesFreres',
+  !idsNaga.includes('grima') && !idsNaga.includes('riven')
+  && !idsNaga.includes('nicol-bolas'));
+// ③ Le foyer lui-même n'est pas peint (« ça n'affiche pas forcément encore NAGA »).
+dit('isoleNePeintPasLeFoyer', !idsNaga.includes('naga'));
+
+// La règle de groupement, sur ses deux cas.
+const secteurDe = (jeu, id) => (jeu.noeuds.find((n) => n.id === id) || {}).secteur_activite;
+dit('isoleGroupeLesProjetsSousLeurTete',
+  secteurDe(naga, 'maedrethnir') === 'IMLADRIK'
+  && secteurDe(naga, 'imladrik') === 'IMLADRIK'
+  && secteurDe(naga, 'zekrom') === 'TAO');
+const grima = versCiel('ultima-perso', NOEUDS, { isole: 'grima' });
+dit('isoleRangeUneTeteVideSousLeFoyer',
+  secteurDe(grima, 'riven') === 'GRIMA'
+  && secteurDe(grima, 'nicol-bolas') === 'NICOL BOLAS'
+  && secteurDe(grima, 'abaque') === 'NICOL BOLAS');
+
+// Les traits : chaque projet est rattaché à sa tête…
+dit('isoleRattacheChaqueProjetASaTete',
+  naga.relations.filter((r) => r.type === 'apport_affaires').length
+  === ['imladrik', 'adramelech', 'tao']
+    .reduce((n, id) => n + (NOEUDS[id].enfants || []).length, 0));
+// …et la passerelle des jumeaux survit, MAIS SEULEMENT quand les deux bouts
+// sont peints. Éprouvée par la présence ET par l'absence — vérifier la seule
+// présence ne dirait rien du cas qui produirait un trait vers nulle part.
+const passerelle = (jeu) => jeu.relations.filter((r) => r.type === 'chantier_commun');
+dit('isoleGardeLaPasserelleDesJumeaux',
+  passerelle(naga).length === 1 && passerelle(naga)[0].source_id === 'reshiram'
+  && passerelle(naga)[0].target_id === 'zekrom'
+  && passerelle(naga)[0].libelle === NOEUDS.reshiram.lienLibelle);
+dit('isoleNInventePasDArcVersLInvisible',
+  passerelle(versCiel('ultima-perso', NOEUDS, { isole: 'imladrik' })).length === 0);
+
+// Ce qui peut encore se déplier, ce sont les TÊTES, et elles seules.
+dit('isoleAnnonceSesTetes',
+  naga.idsDuNiveau.join(',') === NOEUDS.naga.enfants.join(',')
+  && naga.isole === 'naga' && naga.deplie === null);
+dit('nonIsoleLeDitAussi', plieUltima.isole === null);
+
+// ---------- 6bis. LES GARDES DE L'ISOLEMENT ----------
+// Quatre refus, quatre raisons distinctes. Un seul cas oublié suffirait à
+// rendre un écran vide ou menteur : on les éprouve tous les quatre.
+const memeQuePlie = (jeu) =>
+  jeu.noeuds.map((n) => n.id).join(',') === plieUltima.noeuds.map((n) => n.id).join(',')
+  && jeu.isole === null;
+dit('gardeRefuseDIsolerLEcranLuiMeme',
+  memeQuePlie(versCiel('ultima-perso', NOEUDS, { isole: 'ultima-perso' })));
+dit('gardeRefuseDIsolerUneFeuille',
+  memeQuePlie(versCiel('ultima-perso', NOEUDS, { isole: 'riven' })));
+dit('gardeRefuseDIsolerLInconnu',
+  memeQuePlie(versCiel('ultima-perso', NOEUDS, { isole: 'jamais-vu' })));
+// Le cas qui vient de l'URL : `ultima.html#alpha`. ALPHA existe et a des
+// enfants, mais il ne relève PAS de cet écran — l'isoler ferait afficher, sous
+// le bandeau d'ULTIMA, le contenu d'ALPHA.
+dit('gardeRefuseUnNoeudEtrangerALEcran',
+  memeQuePlie(versCiel('ultima-perso', NOEUDS, { isole: 'alpha' })));
+
+// Le registre reste LU, jamais écrit — y compris par le chemin de l'isolement.
+const avantIsolement = JSON.stringify(NOEUDS);
+versCiel('ultima-perso', NOEUDS, { isole: 'naga' });
+dit('isolementNEcritPasDansLeRegistre', JSON.stringify(NOEUDS) === avantIsolement);
+// Aucune personne ne s'y glisse non plus (règle de l'ABSENCE, 2026-07-30).
+dit('isolementSansPersonne',
+  naga.personnes.length === 0 && naga.rattachements.length === 0);
+
+// ---------- 6ter. `descendDe` ----------
+dit('descendDeVoitUnPetitEnfant', descendDe('ultima-perso', 'maedrethnir', NOEUDS) === true);
+dit('descendDeVoitUnEnfantDirect', descendDe('naga', 'tao', NOEUDS) === true);
+dit('descendDeRefuseUnEtranger', descendDe('grima', 'imladrik', NOEUDS) === false);
+dit('descendDeRefuseSoiMeme', descendDe('naga', 'naga', NOEUDS) === false);
+dit('descendDeRefuseLInconnu', descendDe('naga', 'jamais-vu', NOEUDS) === false);
+// Un registre qui boucle ne doit pas faire tourner la page sans fin : la file
+// est bornée, et on l'éprouve au lieu de parier.
+dit('descendDeSurvitALaBoucle', descendDe('p', 'jamais-vu', BOUCLE) === false);
+
 
 console.log(JSON.stringify(verdicts, null, 2));
 console.log(`Écrans réels éprouvés : ${ecransReels.length}`);

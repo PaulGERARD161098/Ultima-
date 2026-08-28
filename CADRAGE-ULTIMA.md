@@ -6,6 +6,29 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🌌 **SESSION 2026-08-28 — LE CIEL S'ISOLE (livré).** Dicté par Paul : *« quand
+  je clique sur une constellation, ça m'affiche uniquement cette constellation et
+  plus les autres ; on zoome et on fait disparaître ce qui n'a pas été
+  sélectionné »*.
+  - **Le geste change de nature** : un nœud qui CONTIENT quelque chose ne
+    change plus de page, il **s'isole sur place** — extinction des frères,
+    approche de la caméra, re-dessin sur sa seule descendance, **deux étages
+    d'un coup** (NAGA → ses 3 quadrants ET leurs 8 projets). Le foyer lui-même
+    n'est plus peint. **Seules les feuilles ouvrent encore une page.**
+  - **Trois sorties** (fil d'Ariane, Échap, clic dans le vide) et **l'adresse
+    suit** (`ultima.html#naga`) : la flèche « précédent » remonte d'un cran, et
+    un ciel isolé se partage par un lien.
+  - **Les huit coques restent des PORTES**, elles cessent d'être le chemin :
+    repli `<noscript>`, lien direct, adresse. Cinq assertions « clic → page »
+    de trois harnais **remplacées, pas supprimées**, chacune scindée en deux.
+  - **Patrimoine complet vert** (88 sections) ; **+27 verdicts unitaires** sur
+    l'adaptateur, **+20 au navigateur**, dont le **pire cas construit à 24
+    étoiles** et une mesure neuve : le **recouvrement ciel ↔ mobilier**, qui a
+    trouvé un défaut que le contrôle de cadre déclarait vert.
+  - ⏳ **Reste au registre** : les deux vérifications Finubar de la fusion du
+    21/08 (recalage des grains, `/finubar` en conditions réelles) — la demande
+    de Paul est passée devant, elles n'ont pas été faites.
+
 - 🔚 **CLÔTURE DE LA SESSION 2026-08-21 — FINUBAR FUSIONNÉ SUR LES HUIT DÉPÔTS.**
   Zéro travail non poussé. Reprise détaillée, roadmap et pre-mortem à 3 mois :
   **`REPRISE-2026-08-21-finubar.md`**.

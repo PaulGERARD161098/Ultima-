@@ -282,3 +282,101 @@ body.ciel-noeud #boussole-parole {
   width: min(92vw, 520px);
   margin: 0;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   L'ISOLEMENT — cliquer une constellation ne montre plus qu'elle (2026-08-28)
+   ═══════════════════════════════════════════════════════════════════════════
+   Dicté par Paul : « dans le plan 3D, on zoome et on fait disparaître ce qui
+   n'a pas été sélectionné ». Trois pièces ici, et une seule d'entre elles est
+   du décor : l'extinction, l'apparition, et le fil d'Ariane — qui, lui, est un
+   CONTRÔLE : c'est par lui qu'on ressort. */
+
+/* ---- L'extinction : le ciel s'efface autour de ce qu'on a choisi ----
+   LA CLASSE EST SUR LA SCÈNE, PAS SUR CHAQUE ÉTOILE, et ce n'est pas un
+   raccourci d'écriture. Le moteur ré-écrit `opacity` sur chaque étoile à
+   CHAQUE IMAGE (attribut de présentation, `js/ciel.js` §dessiner) ; une règle
+   CSS — n'importe laquelle, la spécificité n'entre pas en jeu — l'emporte sur
+   un attribut de présentation. C'est ce qui permet d'éteindre un ciel qui
+   continue de se peindre, sans toucher au moteur.
+   La transition ne vit QUE dans cet état : posée sur `.ciel-etoile` en
+   permanence, elle lisserait les variations d'opacité de profondeur que le
+   moteur écrit à chaque image — le ciel entier se mettrait à traîner. */
+.ciel-scene--isolant .ciel-etoile:not(.ciel-etoile--gardee),
+.ciel-scene--isolant .ciel-nom-amas,
+.ciel-scene--isolant .ciel-liens {
+  opacity: 0;
+  transition: opacity .22s ease-out;
+}
+
+/* ---- L'apparition : le foyer se pose au lieu de surgir ---- */
+@keyframes ciel-apparition {
+  from { opacity: .05; }
+  to { opacity: 1; }
+}
+.ciel-scene--neuve .ciel-svg { animation: ciel-apparition .42s ease-out both; }
+
+/* Une préférence système n'est pas une option d'affichage : le module ne pose
+   déjà ni l'une ni l'autre des deux classes sous `prefers-reduced-motion`. La
+   règle qui suit est la ceinture — le jour où un autre appelant les poserait,
+   le mouvement ne repartirait pas pour autant. */
+@media (prefers-reduced-motion: reduce) {
+  .ciel-scene--isolant .ciel-etoile:not(.ciel-etoile--gardee),
+  .ciel-scene--isolant .ciel-nom-amas,
+  .ciel-scene--isolant .ciel-liens { transition: none; }
+  .ciel-scene--neuve .ciel-svg { animation: none; }
+}
+
+/* ---- LE FIL D'ARIANE — où l'on est, et par où l'on remonte ----
+   Sa position VERTICALE est posée par le module (`placerFil`), sous la boîte
+   réelle du mobilier haut : le bandeau descend sous la ligne du retour à
+   560 px, et une constante ne peut pas connaître sa hauteur. Le reste est ici.
+   Même règle que le reste du mobilier : le conteneur ne prend AUCUN geste,
+   seuls ses boutons en reçoivent — une bande transparente qui traverse le ciel
+   rendrait inerte tout ce qui passe dessous, et ça ne se voit pas, ça se
+   découvre en cliquant à côté d'une étoile qui ne répond plus. */
+body.ciel-noeud .ciel-fil {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .1rem .3rem;
+  max-width: min(94vw, 640px);
+  padding: .22rem .6rem;
+  background: rgba(3, 7, 14, .82);
+  border: 1px solid rgba(169, 136, 74, .28);
+  pointer-events: none;
+}
+body.ciel-noeud .ciel-fil[hidden] { display: none; }
+body.ciel-noeud .ciel-fil .ciel-fil-etape,
+body.ciel-noeud .ciel-fil .ciel-fil-ici,
+body.ciel-noeud .ciel-fil .ciel-fil-sep {
+  font-family: var(--police-titre, Georgia, serif);
+  font-size: .78rem;
+  letter-spacing: .1em;
+}
+body.ciel-noeud .ciel-fil .ciel-fil-sep { color: var(--or-doux, #d8bd82); opacity: .55; }
+/* L'étape courante : gravée, pas cliquable — on y est déjà. */
+body.ciel-noeud .ciel-fil .ciel-fil-ici { color: var(--creme, #f2ead6); }
+/* Les étapes franchissables : de VRAIS boutons (atteignables au clavier,
+   annoncés comme tels), habillés en gravure. La cible tactile tient les 24 px
+   du reste du produit — c'est `min-height` qui le garantit, pas la police. */
+body.ciel-noeud .ciel-fil .ciel-fil-etape {
+  pointer-events: auto;
+  min-height: 24px;
+  padding: 0 .18rem;
+  border: 0;
+  background: none;
+  color: var(--or-doux, #d8bd82);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+body.ciel-noeud .ciel-fil .ciel-fil-etape:hover { color: var(--creme, #f2ead6); }
+body.ciel-noeud .ciel-fil .ciel-fil-etape:focus-visible {
+  outline: 2px solid var(--or-doux, #d8bd82);
+  outline-offset: 2px;
+}

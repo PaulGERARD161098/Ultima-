@@ -133,13 +133,39 @@ verifier('ALTHEA n’est plus un cadran d’ULTIMA (il pend à la racine)',
 // qui est CONSERVÉ : le repli <noscript> liste toutes les portes, et chaque
 // étoile mène bien où le registre dit — ce qu'on ne lit plus dans un attribut,
 // on l'éprouve donc en CLIQUANT, ce qui est une preuve plus forte.
+// ---- REMPLACÉE UNE SECONDE FOIS le 2026-08-28 (l'isolement) ----
+// Depuis que ce qui CONTIENT s'isole au lieu d'ouvrir une page (Paul : « ça
+// m'affiche uniquement cette constellation »), GRIMA et NAGA ne naviguent plus.
+// La preuve se scinde donc en deux, et AUCUNE des deux moitiés n'est perdue :
+//   — ce que le clic fait maintenant : il montre la descendance SUR PLACE ;
+//   — ce que la porte devient : une adresse, servie par le repli <noscript>,
+//     qui reste la navigation le jour où le ciel ne se peint pas.
 for (const attendu of capsDe('ultima-perso')) {
   await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
   await page.locator(`#ciel-noeud-scene .ciel-etoile[data-noeud-id="${attendu.id}"]`)
     .dispatchEvent('click');
-  await page.waitForURL(`**/${attendu.cible}`, { timeout: 8000 }).catch(() => {});
-  verifier(`Porte ouverte vers ${attendu.cible}`, page.url().endsWith(attendu.cible), page.url());
+  await page.waitForTimeout(1400);
+  const peints = await page.$$eval('#ciel-noeud-scene .ciel-etoile[data-noeud-id]',
+    (gs) => gs.map((g) => g.getAttribute('data-noeud-id')));
+  const descendance = (NOEUDS[attendu.id].enfants || [])
+    .reduce((liste, id) => liste.concat([id], NOEUDS[id].enfants || []), []);
+  verifier(`Clic ${attendu.nom} : sa descendance paraît sur place`,
+    descendance.every((id) => peints.includes(id)) && peints.length === descendance.length,
+    JSON.stringify(peints));
+  // La moitié qui se prouve par l'ABSENCE : le frère a bien disparu.
+  const frere = capsDe('ultima-perso').find((c) => c.id !== attendu.id);
+  verifier(`Clic ${attendu.nom} : ${frere.nom} a disparu du ciel`,
+    !peints.includes(frere.id), JSON.stringify(peints));
+}
+{
+  await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
+  const portes = await lireRepli(page);
+  for (const attendu of capsDe('ultima-perso')) {
+    verifier(`Porte ${attendu.cible} servie par le repli <noscript>`,
+      portes.includes(attendu.cible), JSON.stringify(portes));
+  }
 }
 await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
 await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
@@ -267,9 +293,13 @@ verifier('Zéro erreur console (ULTIMA)', erreursConsole.length === 0, erreursCo
 
 // ============ B. Navigation ULTIMA → GRIMA → RIVEN (riven.html) ============
 console.log('— B. GRIMA → grima.html, puis RIVEN → riven.html (carte) —');
-await capGrima.click();
-await page.waitForURL('**/grima.html', { timeout: 20000 });
-verifier('Clic GRIMA → URL grima.html', /\/grima\.html$/.test(page.url()), page.url());
+// REMPLACÉE le 2026-08-28 : le clic sur GRIMA isole désormais sur place, et
+// c'est la section A qui l'éprouve. La coque `grima.html` s'ouvre par son
+// ADRESSE — celle que sert le repli <noscript>, éprouvé juste au-dessus. Ce que
+// la section B mesure n'a pas bougé d'un pouce : c'est la COQUE de GRIMA, et
+// elle est entière.
+await page.goto(`${BASE}/grima.html`, { waitUntil: 'load', timeout: 20000 });
+verifier('La coque GRIMA s’ouvre (grima.html)', /\/grima\.html$/.test(page.url()), page.url());
 await attendrePret(page);
 
 const surligneGrima = (await page.locator('h1.console-titre .titre-surligne').textContent())?.trim();
