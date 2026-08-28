@@ -33,7 +33,7 @@
   "dernier_arret": {
     "le": "2026-08-28",
     "quoi": "L'isolement du ciel, livré et poussé : cliquer un nœud qui CONTIENT quelque chose ne change plus de page — il éteint les frères, la caméra s'approche, et la scène est re-dessinée sur sa seule descendance, deux étages d'un coup (NAGA → ses 3 quadrants ET leurs 8 projets). Trois sorties (fil d'Ariane, Échap, clic dans le vide) et l'adresse suit (ultima.html#naga). Cinq assertions « clic → page » de trois harnais remplacées, jamais supprimées. Une mesure NEUVE au patrimoine — le recouvrement ciel ↔ mobilier — a trouvé une étoile sous le cartouche que le contrôle de cadre déclarait verte. Patrimoine complet vert : 88 sections, 1653 verdicts.",
-    "commit": "aff41f7"
+    "commit": "16392a3"
   },
   "prochaine_action": "Le retour de Paul sur l'isolement (les liens page par page sont dans le rapport de séance) — il a annoncé « ensuite on verra pour corriger autre chose ». À défaut, reprendre les DEUX vérifications Finubar de la fusion du 21/08, qui n'ont PAS été faites (la demande produit est passée devant) : (1) recaler les grains des 7 autres dépôts sur `main`, (2) éprouver en conditions RÉELLES que /finubar/macro.json et /api/_lib/finubar-macro.mjs refusent et que /finubar répond.",
   "bloque_par": [
