@@ -32,10 +32,10 @@
   },
   "dernier_arret": {
     "le": "2026-08-31",
-    "quoi": "L'isolement du ciel, resserré par Paul à UN SEUL ÉTAGE : isoler un nœud peint ses enfants DIRECTS et eux seuls (NAGA → IMLADRIK, ADRAMELECH, TAO), et cliquer l'un d'eux descend d'un cran de plus — la profondeur est contingente à ce qu'il y a dedans, le geste identique à tous les étages. Deux suites obligées : le groupement par tête retiré, la passerelle RESHIRAM ⇄ ZEKROM descendue sous TAO. Le pire cas construit a été RECALCULÉ (24 enfants directs) et non relancé : à un étage, l'ancien n'aurait peint que 4 étoiles sous un intitulé annonçant 24. Six verdicts éprouvés rouges avant d'être crus, dont un d'ABSENCE ; mesure neuve : la récursion dans le navigateur. Patrimoine complet : 18 harnais, zéro échec.",
-    "commit": "639c2d6"
+    "quoi": "Deux boucles fermées et FUSIONNÉES sur main. ① L'isolement du ciel resserré à UN SEUL ÉTAGE à la demande de Paul : isoler un nœud peint ses enfants DIRECTS et eux seuls (NAGA → IMLADRIK, ADRAMELECH, TAO), et cliquer l'un d'eux descend d'un cran — la profondeur est contingente à ce qu'il y a dedans, le geste identique à tous les étages (#179, 64bbb93). Le pire cas construit a été RECALCULÉ et non relancé : à un étage, l'ancien n'aurait peint que 4 étoiles sous un intitulé annonçant 24. ② En reprenant la vérification Finubar du 21/08, un trou trouvé : le refus de finubar/macro.json ne tenait qu'au middleware, .vercelignore ne couvrant pas finubar/ — hypothèse RETIRÉE plutôt que documentée, le dossier sort du déploiement, verrou posé et éprouvé rouge (#180, f7f27d1). Patrimoine complet vert aux deux boucles.",
+    "commit": "f7f27d1"
   },
-  "prochaine_action": "Le retour de Paul sur l'isolement à un étage (liens page par page dans le rapport de séance) et son go pour fusionner la PR #179 — la fusion est une gate. À défaut, reprendre les DEUX vérifications Finubar de la fusion du 21/08, qui n'ont TOUJOURS pas été faites : (1) recaler les grains des 7 autres dépôts sur `main`, (2) éprouver en conditions RÉELLES que /finubar/macro.json et /api/_lib/finubar-macro.mjs refusent et que /finubar répond.",
+  "prochaine_action": "La vérification Finubar ① reste la SEULE de la fusion du 21/08 encore ouverte : recaler les grains des 7 AUTRES dépôts, dont les `dernier_arret.commit` pointent dans le vide depuis le squash-merge. Elle exige d'attacher ces dépôts à la session — refusé par le contrôle de permissions le 31/08, donc à débloquer avec Paul. Elle vient d'être illustrée sur Ultima même : les deux fusions du jour étaient des squash, et le grain a dû être recalé de 639c2d6 (disparu) vers f7f27d1",
   "bloque_par": [
     "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
     "`ANTHROPIC_API_KEY` en env Vercel",
@@ -101,3 +101,14 @@ que ses **grands thèmes** — ses enfants directs — et cliquer l'un d'eux des
 d'un cran de plus. Le pire cas construit du patrimoine a dû être **recalculé**
 et non relancé : à un seul étage, l'ancien n'aurait peint que 4 étoiles sous un
 intitulé qui en annonçait 24. Commit `639c2d6`, PR #179 en attente du go de Paul.
+
+### 2026-08-31 (2) — Deux fusions, et un garde-fou qui ne tenait qu'à un fil
+`#179` (isolement à un étage) et `#180` (sécurité Finubar) fusionnées sur `main`.
+La seconde est née de la vérification laissée ouverte le 21/08 : impossible à
+faire depuis nos bacs à sable (403 du proxy sur le CONNECT), elle a été
+remplacée par un correctif qui **retire l'hypothèse** — `finubar/` ne part plus
+au déploiement — et par un verrou vérifiable **hors ligne**.
+**La dérive des grains s'est vérifiée en direct** : les deux fusions étant des
+squash, `dernier_arret.commit` pointait déjà dans le vide (`639c2d6` a disparu
+de `main`). C'est exactement ce que la vérification ① doit corriger sur les
+7 autres dépôts — encore ouverte, l'attachement de ces dépôts ayant été refusé.
