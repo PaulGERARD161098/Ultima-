@@ -235,21 +235,55 @@ verifier('ALTHEA s\'ouvre en un geste depuis l\'accueil',
   /\/althea\.html$/.test(page.url()), page.url());
 await page.goto(`${BASE}/`, { waitUntil: 'load', timeout: 20000 });
 await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
-// REMPLACÉE (même raison) : ALPHA prouvé en cliquant, retour, puis ULTIMA — le
-// clic d'ULTIMA sert aussi d'ouverture à la section B.
+// ---- ASSERTION REMPLACÉE le 2026-08-28 (l'isolement), pas abandonnée ----
+// Elle disait : « cliquer ALPHA ouvre alpha.html ». Depuis que ce qui CONTIENT
+// s'isole au lieu de changer de page (Paul : « ça m'affiche uniquement cette
+// constellation et plus les autres »), ce clic ne navigue plus — l'exiger
+// reviendrait à éprouver le geste d'hier sur le produit d'aujourd'hui.
+// CE QUI COMPTAIT EST TENU AUTREMENT : le clic donne accès au CONTENU d'ALPHA,
+// sur place ; et la porte `alpha.html` reste servie par le repli <noscript> —
+// qui est, le jour où le ciel ne se peint pas, la navigation elle-même.
 await page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="alpha"]').dispatchEvent('click');
-await page.waitForURL('**/alpha.html', { timeout: 8000 }).catch(() => {});
-verifier('Porte ALPHA ouverte (alpha.html)', /\/alpha\.html$/.test(page.url()), page.url());
+await page.waitForTimeout(1400);
+const dansAlpha = await page.$$eval('#ciel-noeud-scene .ciel-etoile[data-noeud-id]',
+  (gs) => gs.map((g) => g.getAttribute('data-noeud-id')));
+verifier('Clic ALPHA : son contenu paraît SUR PLACE (isolement)',
+  NOEUDS.alpha.enfants.every((id) => dansAlpha.includes(id)),
+  JSON.stringify(dansAlpha));
+// Éprouvé par l'ABSENCE, qui est la moitié de la demande : les frères ont
+// disparu. Vérifier seulement que le contenu d'ALPHA est là ne dirait rien de
+// ce qui devait s'éteindre.
+verifier('Clic ALPHA : les frères ont disparu du ciel',
+  !dansAlpha.includes('ultima-perso') && !dansAlpha.includes('althea'),
+  JSON.stringify(dansAlpha));
+verifier('Clic ALPHA : on n’a PAS changé de page', /\/#alpha$/.test(page.url()), page.url());
+verifier('La porte alpha.html reste servie par le repli <noscript>',
+  (await page.evaluate(() => {
+    const n = document.querySelector('#ciel-noeud-plateau noscript');
+    return n ? (n.textContent + ' ' + n.innerHTML).includes('alpha.html') : false;
+  })) === true);
 await page.goto(`${BASE}/`, { waitUntil: 'load', timeout: 20000 });
 await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
 
 // ============ B. Navigation racine → ULTIMA (supra-division) ============
 console.log('— B. ULTIMA → /ultima.html (la supra-division) —');
-// REMPLACÉE : le clic passe par l'étoile (le cap-ancre n'existe plus).
+// REMPLACÉE une première fois (le clic passe par l'étoile, le cap-ancre
+// n'existe plus), puis le 2026-08-28 : le clic ISOLE au lieu d'ouvrir la page.
+// Le geste est éprouvé pour ce qu'il fait maintenant — ULTIMA montre ses deux
+// cadrans sur place —, et la PORTE, elle, s'éprouve en l'ouvrant par son
+// adresse : c'est celle que sert le repli <noscript> et que porte tout lien
+// direct. Les deux moitiés de l'ancienne assertion sont donc tenues, chacune
+// là où elle a désormais un sens.
 await page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="ultima-perso"]')
   .dispatchEvent('click');
-await page.waitForURL('**/ultima.html', { timeout: 20000 });
-verifier('Clic ULTIMA → URL ultima.html', /\/ultima\.html$/.test(page.url()), page.url());
+await page.waitForTimeout(1400);
+const dansUltima = await page.$$eval('#ciel-noeud-scene .ciel-etoile[data-noeud-id]',
+  (gs) => gs.map((g) => g.getAttribute('data-noeud-id')));
+verifier('Clic ULTIMA : ses deux cadrans paraissent sur place',
+  NOEUDS['ultima-perso'].enfants.every((id) => dansUltima.includes(id))
+  && !dansUltima.includes('alpha'), JSON.stringify(dansUltima));
+await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
+verifier('La porte ULTIMA s’ouvre (ultima.html)', /\/ultima\.html$/.test(page.url()), page.url());
 // ULTIMA EST PASSÉE AU CIEL le 2026-08-13 (étape ④a) : c'est la coque pilote.
 // Les assertions de cette section ont été reprises UNE PAR UNE et classées.
 //   — « Clic ULTIMA → URL ultima.html » : PORTÉE (la racine est passée au ciel

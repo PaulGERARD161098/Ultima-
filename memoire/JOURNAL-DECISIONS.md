@@ -3607,3 +3607,97 @@ est donc un document, pas du code : `CADRAGE-LV6-CIEL-VIVANT.md`.
 
 Cinq arbitrages posés à Paul (§7 du cadrage) ; exécution palier par palier,
 une PR par palier, au top départ.
+
+## 2026-08-28 — LE CIEL S'ISOLE : cliquer une constellation n'ouvre plus une page
+
+**Dicté par Paul** : *« quand je clique sur une constellation, ça m'affiche
+uniquement cette constellation et plus les autres. Dans le plan 3D, on zoome et
+on fait disparaître ce qui n'a pas été sélectionné. […] Si je clique sur NAGA, je
+vois tous les projets de NAGA directement, et pareil pour GRIMA. »*
+
+**Trois mots que la dictée avait abîmés, signalés au lieu d'être devinés** :
+« suscription d'agace » → *la sous-division NAGA* ; « la Madrid » → *IMLADRIK*
+(il la nomme « sous-division », or MAEDRETHNIR est une feuille et IMLADRIK est
+un nœud — c'est le registre qui tranche, pas l'oreille) ; « est-ce qu'on garde la
+recherche actuelle dans notre vision » → *la hiérarchie actuelle*, la question
+que Paul pose lui-même et à laquelle sa phrase suivante répond.
+
+**Ce qui change, et c'est un renversement** : jusqu'ici, cliquer un cap qui
+contient quelque chose OUVRAIT SA PAGE (`grima.html`, `naga.html`…). Désormais
+**ce qui contient s'isole sur place** — les frères s'éteignent, la caméra
+s'approche, la scène est re-dessinée sur la seule descendance du foyer, **deux
+étages d'un coup** (« voir tout d'un coup »). **Seules les FEUILLES ouvrent
+encore une page** — ce sont les pages de travail, et c'est le seul endroit où
+« ouvrir » veut encore dire quelque chose.
+
+**Trois décisions prises dans la dictée, qui ne se déduisent pas l'une de
+l'autre** : ① on ne montre que la descendance (les frères disparaissent, ce
+n'est pas un filtre mais un jeu de données qui change) ; ② **le foyer lui-même
+n'est pas peint** (« ça n'affiche pas forcément encore NAGA même ») — son nom
+est porté par le fil d'Ariane ; ③ deux étages, pas un.
+
+**Trois sorties**, parce qu'un écran dont on ne sait pas ressortir est un piège :
+le fil d'Ariane, Échap, un clic dans le vide. **Et l'adresse suit**
+(`ultima.html#naga`) : la flèche « précédent » remonte d'un cran au lieu de
+quitter la page, et un ciel isolé se partage par un lien.
+
+**CE QUE LES HUIT COQUES DEVIENNENT** : elles ne disparaissent pas — elles
+cessent d'être le CHEMIN pour rester des PORTES (repli `<noscript>`, lien
+direct, adresse). Cinq assertions de trois harnais disaient « clic → page » :
+elles sont **remplacées, jamais supprimées**, et chacune scindée en deux — ce
+que le clic fait maintenant, et la porte, éprouvée là où elle a encore un sens.
+
+**LA CAPTURE A TROUVÉ CE QUE LE HARNAIS NE VOYAIT PAS.** Le contrôle « rien ne
+sort du cadre » était vert pendant que LES RAPPROCHEMENTS passait **sous le
+cartouche de Léo** : un contrôle de viewBox dit qu'une étoile est dans l'image,
+il ne dit rien de ce qui est posé PAR-DESSUS. Cause réelle : le mobilier était
+rempli APRÈS le dessin, donc le ciel cadrait sur un cartouche qui n'avait pas
+encore doublé de hauteur. *Une place se mesure une fois qu'elle est prise.* Le
+recouvrement est désormais **mesuré** (boîtes écran, ciel contre mobilier),
+éprouvé **rouge sur le défaut puis vert sur le correctif**, et l'instrument
+lui-même est vérifié sur un cas connu : il doit voir **quatre** boîtes de
+mobilier, sans quoi « aucune étoile recouverte » serait vrai par construction.
+
+
+## 2026-08-31 — L'ISOLEMENT SE RESSERRE À UN SEUL ÉTAGE
+
+**CE QUE PAUL A DIT**, l'écran ayant vécu trois jours : « quand il montre NAGA,
+j'aimerais que tu m'affiches non pas ce qu'il y a dedans — juste ADRAMELECH,
+IMLADRIK, les grands thèmes. Et ensuite, quand on clique dessus, la suivante
+s'applique ; la sous-vision est **contingente à ce qu'il y a dedans**. » C'est
+la réponse à l'arbitrage que j'avais laissé ouvert le 28/08 (deux étages ou un).
+
+**LA DÉCISION** : isoler un nœud ne peint plus que ses **enfants DIRECTS**. La
+profondeur cesse d'être un réglage — on descend d'un cran par clic, et chaque
+cran se lit d'un coup d'œil. Effet de bord voulu : le geste devient **identique
+à tous les étages**, ce qui rend l'écran prévisible où qu'on soit dans l'arbre.
+
+**DEUX CHOSES ONT DÛ SUIVRE, ET ELLES NE SE DÉDUISENT PAS DU CHANGEMENT.**
+① La règle de groupement par tête est **retirée** : sans petits-enfants, elle
+fabriquait autant d'amas d'UNE étoile que de thèmes, chacun étiqueté du nom de
+l'étoile qu'il contient. Une seule constellation demeure, au nom du foyer.
+② La passerelle RESHIRAM ⇄ ZEKROM a **changé d'étage** : les jumeaux vivent sous
+TAO, donc elle n'apparaît plus en isolant NAGA. La garde « les deux bouts
+peints » ne s'est pas contentée de tenir — c'est elle qui a rendu le
+déplacement sûr, et le test l'a suivie au lieu de rester au cran d'avant.
+
+**LE PIRE CAS CONSTRUIT A CHANGÉ DE FORME — et c'est la leçon de la boucle.**
+Il valait « quatre têtes de cinq projets, 24 étoiles ». À un seul étage, il
+n'aurait plus peint que **4** étoiles tout en s'annonçant « 24 » : un pire cas
+devenu un cas facile, sous un intitulé rassurant. Il est reconstruit en **24
+enfants directs** — la charge maximale RÉELLE d'un écran isolé désormais, la
+profondeur n'y entrant plus. *Corollaire à retenir : quand la règle change, un
+pire cas ne se relance pas, il se RECALCULE — sinon il mesure l'ancien monde
+sous le nom du nouveau, et il est vert pour cette raison-là.*
+
+**LES VERDICTS ONT ÉTÉ ÉPROUVÉS ROUGES AVANT D'ÊTRE CRUS** : les nouveaux tests
+lancés contre l'ancien adaptateur donnent **six** échecs (dont
+`isoleNeDescendPasAuDeuxiemeEtage`, qui mesure une ABSENCE — sans lui, un retour
+aux deux étages passerait vert, les enfants directs y étant aussi présents).
+Une mesure NEUVE entre au patrimoine : **la récursion dans le navigateur**
+(GRIMA isolé → clic NICOL BOLAS → ses quatre caps, fil d'Ariane à trois crans,
+adresse qui suit). L'adaptateur seul ne l'aurait pas prouvée : c'est la coque
+qui porte l'état d'isolement, et c'est elle qui aurait pu refuser un second clic
+sans que le module pur s'en aperçoive.
+
+**Patrimoine complet relancé en entier : 18 harnais, zéro échec.**

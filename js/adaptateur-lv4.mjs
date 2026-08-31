@@ -17,6 +17,110 @@
    `tests/unit-adaptateur-lv4.mjs` le tient, sans navigateur. */
 
 /**
+ * DESCEND-IL DE LUI ? — la garde de l'isolement, et elle est BORNÉE.
+ *
+ * On isole un nœud dans l'écran où il vit, jamais ailleurs : sans cette
+ * vérification, un identifiant venu de l'URL (`ultima.html#adramelech`)
+ * ferait afficher, dans la coque d'ULTIMA, le contenu d'un nœud qui n'en
+ * relève pas — un écran qui ment sur ce qu'il montre. La borne (`garde`) est
+ * là pour la même raison que celle de `cheminVers` : un registre qui boucle
+ * ne doit pas emporter la page avec lui.
+ */
+export function descendDe(idAncetre, id, registre) {
+  if (!registre[idAncetre] || !registre[id] || idAncetre === id) { return false; }
+  var file = (registre[idAncetre].enfants || []).slice();
+  var vus = Object.create(null);
+  var garde = Object.keys(registre).length + 1;
+  while (file.length && garde > 0) {
+    garde -= 1;
+    var courant = file.shift();
+    if (courant === id) { return true; }
+    if (vus[courant]) { continue; }
+    vus[courant] = true;
+    file = file.concat((registre[courant] || {}).enfants || []);
+  }
+  return false;
+}
+
+/**
+ * L'ISOLEMENT — dicté par Paul le 2026-08-28, resserré par lui le 2026-08-31.
+ *
+ * « Quand je clique sur une constellation, ça m'affiche uniquement cette
+ * constellation et plus les autres. » Puis, l'écran ayant vécu : « quand il
+ * montre NAGA, affiche-moi juste ADRAMELECH, IMLADRIK — les grands thèmes ; et
+ * ensuite, quand on clique dessus, la suivante s'applique. » Trois décisions,
+ * et elles ne se déduisent pas l'une de l'autre :
+ *
+ *   ① ON NE MONTRE QUE LA DESCENDANCE DU FOYER. Les frères disparaissent — ce
+ *      n'est pas un filtre d'affichage, c'est le jeu de données qui change.
+ *   ② LE FOYER LUI-MÊME N'EST PAS PEINT. « Ça n'affiche pas forcément encore
+ *      NAGA même » : son nom est porté par le fil d'Ariane, pas par une étoile
+ *      qui occuperait la place de ce qu'on vient chercher.
+ *   ③ UN SEUL ÉTAGE — les enfants DIRECTS, et eux seuls. La première version en
+ *      montrait deux (les têtes ET leurs projets) pour « voir tout d'un coup » ;
+ *      éprouvée par Paul, elle rendait l'écran de NAGA aussi chargé que le ciel
+ *      qu'on venait de quitter. La profondeur n'est plus un réglage : elle est
+ *      CONTINGENTE À CE QU'IL Y A DEDANS — on descend d'un cran par clic, et
+ *      chaque cran se lit d'un coup d'œil. C'est aussi ce qui rend le geste
+ *      identique à tous les étages : isoler montre toujours la même chose.
+ *
+ * Il n'y a donc plus qu'une constellation à l'écran, et elle porte le nom du
+ * FOYER. La règle de groupement de la première version — une tête pleine fait
+ * sa propre constellation, une tête vide se range sous le foyer — n'avait de
+ * sens que tant qu'un second étage était peint : sans petits-enfants, elle
+ * fabriquerait autant d'amas d'UNE étoile que de têtes, chacun étiqueté du nom
+ * de l'étoile qu'il contient. Elle est retirée, pas oubliée.
+ */
+function isolement(idFoyer, registre) {
+  var foyer = registre[idFoyer] || {};
+  var nomFoyer = foyer.nom || idFoyer;
+  var tetes = (foyer.enfants || []).slice();
+  var relations = [];
+  var affiches = Object.create(null);
+
+  var noeuds = tetes.map(function (idTete) {
+    var n = registre[idTete] || {};
+    affiches[idTete] = true;
+    return {
+      id: idTete,
+      nom: n.nom || idTete,
+      type: 'cap',
+      statut: n.etat || '',
+      secteur_activite: nomFoyer,
+      cible: n.cible || null
+    };
+  });
+
+  // ④ LES PASSERELLES SURVIVENT À L'ISOLEMENT — mais seulement quand les DEUX
+  // bouts sont peints. Un arc vers une étoile qu'on a fait disparaître serait
+  // un trait vers nulle part : c'est le même raisonnement que la garde de
+  // l'étage, appliqué aux liens. Cette garde compte DAVANTAGE depuis qu'on ne
+  // peint plus qu'un étage : reshiram ⇄ zekrom vivent sous TAO, donc leur
+  // passerelle n'apparaît qu'en isolant TAO — plus en isolant NAGA, où les
+  // deux jumeaux ne sont pas peints.
+  noeuds.forEach(function (n) {
+    var cap = registre[n.id] || {};
+    if (cap.lien && affiches[cap.lien]) {
+      relations.push({
+        source_id: n.id, target_id: cap.lien,
+        type: 'chantier_commun', statut: 'actif',
+        libelle: cap.lienLibelle || ''
+      });
+    }
+  });
+
+  return {
+    noeuds: noeuds, personnes: [], rattachements: [], relations: relations,
+    // CE QUI PEUT ENCORE SE DÉPLIER, ce sont les têtes. On s'en abstient quand
+    // même (js/ciel-noeud.mjs) : déplier au survol ferait revenir, une tête à
+    // la fois, exactement l'étage que Paul a demandé de ne plus voir — et
+    // re-dessiner détruirait le focus clavier. Descendre est un CLIC, pas un
+    // survol.
+    idsDuNiveau: tetes, deplie: null, isole: idFoyer
+  };
+}
+
+/**
  * Un écran de console devient UNE constellation : ses caps sont ses étoiles,
  * le nom de l'écran devient celui de la constellation (grouper() de ciel.js
  * s'en sert via `secteur_activite`).
@@ -33,6 +137,19 @@ export function versCiel(idEcran, registre, options) {
   var ecran = registre[idEcran];
   if (!ecran || !ecran.enfants) { return null; }
   options = options || {};
+
+  // ---- L'ISOLEMENT, avant tout le reste ----------------------------------
+  // La garde est TRIPLE, et chacune des trois a sa raison : on n'isole pas
+  // l'écran lui-même (ce serait sauter un étage sans le dire), ni un nœud
+  // étranger à cet écran (§ `descendDe`), ni un nœud VIDE — isoler une feuille
+  // donnerait un ciel sans étoiles, et un écran vide n'est pas une réponse.
+  var isole = options.isole
+    && options.isole !== idEcran
+    && registre[options.isole]
+    && (registre[options.isole].enfants || []).length
+    && descendDe(idEcran, options.isole, registre)
+    ? options.isole : null;
+  if (isole) { return isolement(isole, registre); }
 
   var noeuds = ecran.enfants.map(function (idCap) {
     var cap = registre[idCap] || {};
@@ -111,7 +228,7 @@ export function versCiel(idEcran, registre, options) {
     noeuds: noeuds, personnes: [], rattachements: [], relations: relations,
     // Rendus à l'appelant pour qu'il n'ait pas à les re-déduire — et surtout
     // pour qu'il n'ait pas à les re-déduire AUTREMENT.
-    idsDuNiveau: idsDuNiveau, deplie: deplie
+    idsDuNiveau: idsDuNiveau, deplie: deplie, isole: null
   };
 }
 

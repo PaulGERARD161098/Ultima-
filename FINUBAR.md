@@ -31,11 +31,11 @@
     "critere_de_sortie": "les 8 grains lus par la collecte, le rappel d'ouverture de séance actif dans les 8 dépôts, l'écran /finubar en ligne"
   },
   "dernier_arret": {
-    "le": "2026-08-21",
-    "quoi": "Finubar livré et poussé sur les 8 dépôts : moteur pur + harnais (éprouvé rouge puis vert), collecte avec mesure de dérive, rappel d'ouverture de séance, écran /finubar. Patrimoine complet vert (88 sections). Puis diagnostic complet : dix écarts corrigés, dont une lecture publique de macro.json et un import non éprouvé côté route. Dry run 19/19, patrimoine 88 sections.",
-    "commit": "eaad5d5"
+    "le": "2026-08-31",
+    "quoi": "L'isolement du ciel, resserré par Paul à UN SEUL ÉTAGE : isoler un nœud peint ses enfants DIRECTS et eux seuls (NAGA → IMLADRIK, ADRAMELECH, TAO), et cliquer l'un d'eux descend d'un cran de plus — la profondeur est contingente à ce qu'il y a dedans, le geste identique à tous les étages. Deux suites obligées : le groupement par tête retiré, la passerelle RESHIRAM ⇄ ZEKROM descendue sous TAO. Le pire cas construit a été RECALCULÉ (24 enfants directs) et non relancé : à un étage, l'ancien n'aurait peint que 4 étoiles sous un intitulé annonçant 24. Six verdicts éprouvés rouges avant d'être crus, dont un d'ABSENCE ; mesure neuve : la récursion dans le navigateur. Patrimoine complet : 18 harnais, zéro échec.",
+    "commit": "639c2d6"
   },
-  "prochaine_action": "⛔ LES DEUX VÉRIFICATIONS DE LA FUSION, avant tout autre travail. (1) Recaler les 8 grains sur `main` : la fusion s'est faite en SQUASH, donc chaque `dernier_arret.commit` pointe dans le vide — le rappel de chaque dépôt le dira lui-même à l'ouverture. (2) Vérifier en conditions RÉELLES que `/finubar/macro.json` et `/api/_lib/finubar-macro.mjs` refusent bien, et que `/finubar` répond : c'est la seule vérification du lot qui n'a jamais pu être faite (egress bloqué dans le bac à sable, 403 du proxy).",
+  "prochaine_action": "Le retour de Paul sur l'isolement à un étage (liens page par page dans le rapport de séance) et son go pour fusionner la PR #179 — la fusion est une gate. À défaut, reprendre les DEUX vérifications Finubar de la fusion du 21/08, qui n'ont TOUJOURS pas été faites : (1) recaler les grains des 7 autres dépôts sur `main`, (2) éprouver en conditions RÉELLES que /finubar/macro.json et /api/_lib/finubar-macro.mjs refusent et que /finubar répond.",
   "bloque_par": [
     "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
     "`ANTHROPIC_API_KEY` en env Vercel",
@@ -44,6 +44,10 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "Les huit coques de navigation (grima.html, naga.html…) ne sont plus le CHEMIN depuis l'isolement — elles restent des PORTES (repli <noscript>, lien direct, adresse). Leur sort — les garder telles quelles, les réduire, les retirer — n'est pas tranché : à voir avec Paul quand l'isolement aura vécu",
+      "depuis": "2026-08-28"
+    },
     {
       "quoi": "Angle mort connu du patrimoine : les pages AUTHENTIFIÉES ne sont pas couvertes par les harnais (fixture de session à financer)",
       "depuis": "2026-08-20"
@@ -57,7 +61,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-08-21"
+  "maj": "2026-08-31"
 }
 ```
 
@@ -68,6 +72,15 @@
 > Les séances, de la plus récente à la plus ancienne. Une entrée = une date, un
 > fait vérifié, une décision. La mémoire longue ; le bloc ci-dessus est la mémoire
 > courte, et c'est lui qui est lu automatiquement.
+
+### 2026-08-28 — Le ciel s'isole
+Demande dictée par Paul : « quand je clique sur une constellation, ça m'affiche
+uniquement cette constellation et plus les autres ». Le clic sur un nœud qui
+contient quelque chose n'ouvre plus sa page : il isole sa descendance sur place,
+sur deux étages. Trois sorties, l'adresse qui suit, et les huit coques qui
+passent du statut de chemin à celui de portes. Une mesure neuve — le
+recouvrement entre le ciel et le mobilier — a trouvé ce que le contrôle de cadre
+déclarait vert.
 
 ### 2026-08-21 — Finubar
 Demande de Paul : « beaucoup de projets tournent, j'ai peur de m'y perdre ».
@@ -81,3 +94,10 @@ maintenant, **entrée dans la constellation générale plus tard**.
 ### 2026-08-20 (soir) — Clôture, registre des dettes LV5 vide
 `main` = `c5b26d1`, zéro PR ouverte. Trois boucles fermées (#173, #174, #176) ;
 le fil parallèle a déposé le cadrage LV6 (#175), **gelé au top départ de Paul**.
+
+### 2026-08-31 — L'isolement se resserre à un étage
+Paul tranche l'arbitrage laissé ouvert le 28/08 : isoler un nœud ne montre plus
+que ses **grands thèmes** — ses enfants directs — et cliquer l'un d'eux descend
+d'un cran de plus. Le pire cas construit du patrimoine a dû être **recalculé**
+et non relancé : à un seul étage, l'ancien n'aurait peint que 4 étoiles sous un
+intitulé qui en annonçait 24. Commit `639c2d6`, PR #179 en attente du go de Paul.

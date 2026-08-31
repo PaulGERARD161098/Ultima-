@@ -19,6 +19,14 @@
 //      EST la navigation.
 //   + Aucune cible perdue (registre ↔ DOM), Léo parle, la géométrie tient,
 //     la navigation arrive, et le thème est lisible.
+//   ⑦ L'ISOLEMENT (2026-08-28) : cliquer ce qui CONTIENT n'ouvre plus une page,
+//      ça éteint le reste du ciel, ça s'approche, et ça re-dessine sur la seule
+//      descendance. Les trois temps sont mesurés SÉPARÉMENT — l'extinction sur
+//      l'opacité calculée pendant l'approche, l'approche sur la distance réelle
+//      de la caméra, le re-dessin sur ce qui est peint. Un seul chiffre pour
+//      les trois ne prouverait aucun des trois.
+//      Et les DEUX sorties sont éprouvées (Échap, fil d'Ariane), parce qu'un
+//      écran dont on ne sait pas ressortir est un piège.
 //
 // LE PIRE CAS ICI EST LE PLUS PETIT. `smoke-lv4-ciel` éprouve 3, 12 et 20
 // objets ; `ultima-perso` en a DEUX, et deux objets se rangent aux extrémités
@@ -324,18 +332,352 @@ verifier('① Aucune bribe de l’erreur serveur n’atteint la page',
   !/boom|secret|500|interne/i.test(sansSession.tout || ''));
 
 // ===========================================================================
-console.log('— D. La navigation arrive quelque part —');
+console.log('— D. ⑦ L\'isolement : ce qui CONTIENT s\'isole, ce qui ne contient rien s\'ouvre —');
+// ---- ASSERTION REMPLACÉE le 2026-08-28, pas abandonnée ----
+// Elle disait : « clic sur GRIMA → grima.html ». Le geste a changé sur demande
+// de Paul (« quand je clique sur une constellation, ça m'affiche uniquement
+// cette constellation et plus les autres ») : un nœud qui contient quelque
+// chose s'isole SUR PLACE. Exiger la navigation reviendrait à éprouver le
+// produit d'hier.
+// CE QUI EST PERDU, ET CE QUI LE RATTRAPE : le clic ne prouve plus qu'une page
+// s'ouvre. La preuve de la porte est reprise plus bas, sur une FEUILLE (RIVEN),
+// qui est désormais le seul cas où une page s'ouvre — donc le seul endroit où
+// cette preuve dit encore quelque chose.
 const pageNav = await navigateur.newPage({ viewport: { width: 390, height: 844 } });
 brancher(pageNav);
 await pageNav.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
+await pageNav.waitForTimeout(1500);
 
-await pageNav.waitForTimeout(1400);
-await pageNav.locator(`#ciel-noeud-scene .ciel-etoile[data-noeud-id="${CAPS[0]}"]`)
+// GRIMA est le cas le plus exigeant des deux : il porte une tête PLEINE
+// (NICOL BOLAS et ses quatre caps) et une tête VIDE (RIVEN), donc les deux
+// branches de la règle de groupement.
+// Depuis que l'isolement ne peint plus qu'UN étage (Paul, 2026-08-31), c'est
+// justement la tête pleine qui fait de GRIMA le bon cas : il EXISTE un second
+// étage sous lui, et il doit rester invisible. Un foyer sans petits-enfants
+// aurait passé le contrôle sans rien prouver.
+const FOYER = 'grima';
+const attenduIsole = (NOEUDS[FOYER].enfants || []).slice();
+// Ce qui vit un cran plus bas, et qu'on ne doit PAS voir.
+const secondEtage = (NOEUDS[FOYER].enfants || [])
+  .reduce((liste, id) => liste.concat(NOEUDS[id].enfants || []), []);
+
+const plongee = await pageNav.evaluate(async (foyer) => {
+  const scene = document.getElementById('ciel-noeud-scene');
+  const idsPeints = () => Array.from(scene.querySelectorAll('g.ciel-etoile[data-noeud-id]'))
+    .map((g) => g.getAttribute('data-noeud-id'));
+  const opacite = (id) => {
+    const g = scene.querySelector('g.ciel-etoile[data-noeud-id="' + id + '"]');
+    return g ? +getComputedStyle(g).opacity : null;
+  };
+  const avant = { ids: idsPeints(), distance: window.UltimaCiel.courant().distance() };
+  scene.querySelector('g.ciel-etoile[data-noeud-id="' + foyer + '"]')
+    .dispatchEvent(new MouseEvent('click', { bubbles: true }));
+  // ON MESURE PENDANT L'APPROCHE, ET C'EST LE SEUL MOMENT OÙ C'EST POSSIBLE :
+  // après le re-dessin, les étoiles éteintes n'existent plus — leur absence ne
+  // dirait plus si elles se sont EFFACÉES ou si elles ont simplement été
+  // remplacées. 190 ms : dans les 220 ms de l'approche, assez tard pour que la
+  // transition de 220 ms ait fait son chemin.
+  await new Promise((r) => setTimeout(r, 190));
+  const pendant = {
+    eteinte: opacite('naga'), gardee: opacite(foyer),
+    distance: window.UltimaCiel.courant().distance()
+  };
+  await new Promise((r) => setTimeout(r, 1500));
+  return {
+    avant, pendant, apres: idsPeints(), url: location.href,
+    fil: (document.querySelector('.ciel-fil') || {}).textContent || '',
+    filVisible: !(document.querySelector('.ciel-fil') || { hidden: true }).hidden,
+    paroleAuRepos: (document.querySelector('#boussole-parole .parole-nom') || {}).textContent || ''
+  };
+}, FOYER);
+chiffres.isolement = {
+  distanceAvant: +plongee.avant.distance.toFixed(1),
+  distancePendant: +plongee.pendant.distance.toFixed(1),
+  opaciteEteinte: +(plongee.pendant.eteinte || 0).toFixed(3),
+  opaciteGardee: +(plongee.pendant.gardee || 0).toFixed(3),
+  peints: plongee.apres.length
+};
+
+// ① CE QUI N'A PAS ÉTÉ CHOISI S'EFFACE — mesuré sur l'opacité CALCULÉE, la
+//    seule qui dise ce que l'écran montre : le moteur ré-écrit l'attribut
+//    `opacity` à chaque image, et le lire renverrait la valeur du moteur, pas
+//    celle que la règle CSS impose par-dessus.
+verifier('⑦ Le ciel s’éteint autour de ce qu’on a choisi',
+  plongee.pendant.eteinte !== null && plongee.pendant.eteinte < 0.25,
+  `NAGA à ${(plongee.pendant.eteinte || 0).toFixed(3)} pendant l’approche`);
+// …et l'élu, lui, ne s'éteint PAS. Sans cette moitié-là, un ciel entièrement
+// noir passerait le contrôle précédent.
+verifier('⑦ …et ce qu’on a choisi reste allumé',
+  plongee.pendant.gardee >= 0.5
+  && plongee.pendant.eteinte < plongee.pendant.gardee / 3,
+  `GRIMA à ${(plongee.pendant.gardee || 0).toFixed(3)}`);
+// ② LA CAMÉRA S'APPROCHE VRAIMENT. Mesurée sur sa distance réelle (le rayon de
+//    l'étoile SATURE — instrument écarté le 2026-08-13).
+verifier('⑦ La caméra plonge vers le foyer',
+  plongee.pendant.distance < plongee.avant.distance * 0.9,
+  `${plongee.avant.distance.toFixed(0)} → ${plongee.pendant.distance.toFixed(0)}`);
+// ③ LE RE-DESSIN : la descendance, toute la descendance, et rien qu'elle.
+// REMPLACE « Les deux étages du foyer sont peints d'un coup » (2026-08-28) :
+// Paul a resserré la règle le 31/08 — un seul étage, « juste les grands
+// thèmes ». L'exigence est INVERSÉE, pas retirée : ce que l'ancien verdict
+// réclamait, le suivant l'interdit.
+verifier('⑦ Seuls les enfants DIRECTS du foyer sont peints',
+  attenduIsole.every((id) => plongee.apres.includes(id))
+  && plongee.apres.length === attenduIsole.length,
+  JSON.stringify(plongee.apres));
+verifier('⑦ …et le second étage reste invisible (éprouvé par l’ABSENCE)',
+  secondEtage.length > 0 && secondEtage.every((id) => !plongee.apres.includes(id)),
+  JSON.stringify(secondEtage));
+verifier('⑦ Les frères ont disparu (éprouvé par l’ABSENCE)',
+  !plongee.apres.includes('naga') && !plongee.apres.includes('imladrik'));
+verifier('⑦ Le foyer lui-même n’est plus peint', !plongee.apres.includes(FOYER));
+verifier('⑦ On n’a PAS changé de page', /\/ultima\.html#grima$/.test(plongee.url),
+  plongee.url);
+// ④ ON SAIT OÙ L'ON EST, ET LÉO LE DIT.
+verifier('⑦ Le fil d’Ariane nomme le chemin', plongee.filVisible
+  && plongee.fil.includes(NOEUDS['ultima-perso'].nom) && plongee.fil.includes(NOEUDS[FOYER].nom),
+  `lu: « ${plongee.fil} »`);
+verifier('⑦ Léo nomme le foyer au repos', plongee.paroleAuRepos === NOEUDS[FOYER].nom,
+  `lu: « ${plongee.paroleAuRepos} »`);
+
+// ---- LA RÉCURSION — « ensuite, quand on clique dessus, la suivante
+//      s'applique » (Paul, 2026-08-31). Le geste doit être le MÊME à tous les
+//      étages : depuis GRIMA isolé, cliquer NICOL BOLAS descend d'un cran de
+//      plus. Mesuré dans le NAVIGATEUR et pas seulement sur l'adaptateur : la
+//      coque a son propre état (`isole`, le fil, l'adresse), et c'est lui qui
+//      pourrait refuser un second clic sans que le module pur s'en aperçoive.
+const DEUXIEME = 'nicol-bolas';
+const recursion = await pageNav.evaluate(async (cible) => {
+  const scene = document.getElementById('ciel-noeud-scene');
+  scene.querySelector('g.ciel-etoile[data-noeud-id="' + cible + '"]')
+    .dispatchEvent(new MouseEvent('click', { bubbles: true }));
+  await new Promise((r) => setTimeout(r, 1600));
+  const fil = document.querySelector('.ciel-fil');
+  return {
+    peints: Array.from(scene.querySelectorAll('g.ciel-etoile[data-noeud-id]'))
+      .map((el) => el.getAttribute('data-noeud-id')),
+    fil: fil ? fil.textContent.replace(/\s+/g, ' ').trim() : '',
+    url: location.href
+  };
+}, DEUXIEME);
+verifier('⑦ Un second clic descend encore d’un cran',
+  (NOEUDS[DEUXIEME].enfants || []).every((id) => recursion.peints.includes(id))
+  && recursion.peints.length === (NOEUDS[DEUXIEME].enfants || []).length,
+  JSON.stringify(recursion.peints));
+verifier('⑦ …et l’étage qu’on vient de quitter a disparu',
+  !recursion.peints.includes('riven') && !recursion.peints.includes(DEUXIEME),
+  JSON.stringify(recursion.peints));
+verifier('⑦ …le fil d’Ariane compte les trois crans',
+  recursion.fil.includes(NOEUDS['ultima-perso'].nom)
+  && recursion.fil.includes(NOEUDS[FOYER].nom)
+  && recursion.fil.includes(NOEUDS[DEUXIEME].nom),
+  `lu: « ${recursion.fil} »`);
+verifier('⑦ …et l’adresse suit la descente',
+  recursion.url.endsWith('/ultima.html#' + DEUXIEME), recursion.url);
+// On remonte d'un cran pour éprouver les sorties depuis l'état où elles ont été
+// conçues : les mesurer depuis DEUX crans serait un autre cas, pas celui-ci.
+await pageNav.keyboard.press('Escape');
+await pageNav.waitForTimeout(900);
+
+// ---- LES DEUX SORTIES. Un écran dont on ne sait pas ressortir est un piège :
+//      on les éprouve toutes les deux, séparément.
+await pageNav.keyboard.press('Escape');
+await pageNav.waitForTimeout(900);
+const apresEchap = await pageNav.$$eval('#ciel-noeud-scene .ciel-etoile[data-noeud-id]',
+  (gs) => gs.map((g) => g.getAttribute('data-noeud-id')));
+verifier('⑦ Échap remonte à l’étage',
+  CAPS.every((id) => apresEchap.includes(id)) && apresEchap.length === CAPS.length,
+  JSON.stringify(apresEchap));
+verifier('⑦ …et le fil se referme avec lui',
+  (await pageNav.locator('.ciel-fil').isVisible()) === false);
+// ---- AU CLAVIER, LE MÊME GESTE, ET LE FOCUS NE TOMBE PAS DANS LE VIDE ----
+// C'est là que ça casse : le re-dessin DÉTRUIT l'étoile qu'on vient d'activer,
+// et le focus retombe sur `body` — la tabulation repartirait du haut de la
+// page à chaque plongée. Éprouvé au clavier et pas à la souris, pour la même
+// raison que le cap « à venir » de la section B.
+const auClavier = await pageNav.evaluate(async (foyer) => {
+  const scene = document.getElementById('ciel-noeud-scene');
+  const g = scene.querySelector('g.ciel-etoile[data-noeud-id="' + foyer + '"]');
+  g.focus();
+  // Le focus DÉPLIE (aperçu du contenu) : on laisse ce re-dessin-là se faire,
+  // sinon on éprouverait l'isolement depuis un état que le clavier ne connaît
+  // jamais.
+  await new Promise((r) => setTimeout(r, 700));
+  const vise = scene.querySelector('g.ciel-etoile[data-noeud-id="' + foyer + '"]');
+  vise.focus();
+  vise.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await new Promise((r) => setTimeout(r, 1500));
+  const actif = document.activeElement;
+  return {
+    peints: Array.from(scene.querySelectorAll('g.ciel-etoile[data-noeud-id]'))
+      .map((el) => el.getAttribute('data-noeud-id')),
+    focusDansLeCiel: !!(actif && actif.hasAttribute && actif.hasAttribute('data-noeud-id')),
+    focusSur: actif && actif.getAttribute ? actif.getAttribute('data-noeud-id') : null
+  };
+}, FOYER);
+verifier('⑦ Entrée isole comme le clic',
+  attenduIsole.every((id) => auClavier.peints.includes(id))
+  && !auClavier.peints.includes('naga'), JSON.stringify(auClavier.peints));
+verifier('⑦ …et le focus reste DANS le ciel isolé',
+  auClavier.focusDansLeCiel && auClavier.peints.includes(auClavier.focusSur),
+  `focus: ${auClavier.focusSur}`);
+await pageNav.keyboard.press('Escape');
+await pageNav.waitForTimeout(900);
+
+// Le fil : on replonge, et on ressort par lui.
+await pageNav.locator(`#ciel-noeud-scene .ciel-etoile[data-noeud-id="${FOYER}"]`)
   .dispatchEvent('click');
-await pageNav.waitForURL(`**/${NOEUDS[CAPS[0]].cible}`, { timeout: 8000 }).catch(() => {});
-verifier(`Clic sur ${NOEUDS[CAPS[0]].nom} → ${NOEUDS[CAPS[0]].cible}`,
-  pageNav.url().endsWith(NOEUDS[CAPS[0]].cible), pageNav.url());
+await pageNav.waitForTimeout(1500);
+await pageNav.locator('.ciel-fil .ciel-fil-etape').first().click();
+await pageNav.waitForTimeout(900);
+const apresFil = await pageNav.$$eval('#ciel-noeud-scene .ciel-etoile[data-noeud-id]',
+  (gs) => gs.map((g) => g.getAttribute('data-noeud-id')));
+verifier('⑦ Le fil d’Ariane ramène à l’étage', apresFil.length === CAPS.length,
+  JSON.stringify(apresFil));
+
+// ---- LA PORTE, LÀ OÙ ELLE EXISTE ENCORE : une FEUILLE ouvre bien sa page ----
+// C'est ce que l'ancienne assertion garantissait, reprise à l'endroit où elle
+// dit maintenant quelque chose. RIVEN est une feuille : il n'a rien à isoler,
+// donc il s'ouvre.
+await pageNav.locator(`#ciel-noeud-scene .ciel-etoile[data-noeud-id="${FOYER}"]`)
+  .dispatchEvent('click');
+await pageNav.waitForTimeout(1500);
+await pageNav.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="riven"]')
+  .dispatchEvent('click');
+await pageNav.waitForURL('**/riven.html', { timeout: 8000 }).catch(() => {});
+verifier('⑦ Une FEUILLE ouvre toujours sa page (RIVEN → riven.html)',
+  pageNav.url().endsWith('riven.html'), pageNav.url());
 await pageNav.close();
+
+// ===========================================================================
+console.log('— E. ⑦ La géométrie SOUS isolement, et son pire cas construit —');
+// Isoler multiplie les étoiles par cinq (2 → 11 sur NAGA) : le contrôle « rien
+// ne sort du cadre » doit donc être REFAIT dans cet état, et sur un pire cas
+// qu'on CONSTRUIT au lieu de l'espérer (règle du 2026-08-01) — le registre du
+// jour est un échantillon favorable, et il grandira.
+const pageGeo = await navigateur.newPage({ viewport: { width: 390, height: 844 } });
+brancher(pageGeo);
+// Le lien direct : `ultima.html#naga` doit ouvrir DÉJÀ isolé. C'est ce qui
+// rend un ciel isolé partageable — et c'est aussi l'entrée par laquelle un
+// identifiant venu du dehors atteint le module (voir la garde ci-dessous).
+await pageGeo.goto(`${BASE}/ultima.html#naga`, { waitUntil: 'load', timeout: 20000 });
+await pageGeo.waitForTimeout(2200);
+const parLien = await pageGeo.$$eval('#ciel-noeud-scene .ciel-etoile[data-noeud-id]',
+  (gs) => gs.map((g) => g.getAttribute('data-noeud-id')));
+verifier('⑦ Un lien direct (#naga) ouvre déjà isolé',
+  NOEUDS.naga.enfants.every((id) => parLien.includes(id))
+  && !parLien.includes('grima') && !parLien.includes('maedrethnir'),
+  JSON.stringify(parLien));
+
+function mesurerCadre(page) {
+  return page.evaluate(() => {
+    const svg = document.querySelector('#ciel-noeud-scene .ciel-svg');
+    const vb = svg.getAttribute('viewBox').split(' ').map(Number);
+    const gs = Array.from(svg.querySelectorAll('g.ciel-etoile[data-noeud-id]'));
+    // Les étiquettes de constellation sont DEDANS : elles ne sont pas des
+    // étoiles, et c'est en les oubliant qu'un harnais avait déclaré « 0 hors
+    // cadre » pendant qu'une capture montrait un nom en travers du ciel.
+    const peints = gs.concat(Array.from(svg.querySelectorAll('text.ciel-nom-amas'))
+      .filter((t) => +(t.getAttribute('opacity') || '1') > 0.02));
+    let dehors = 0, debordMax = -1e9;
+    const coupables = [];
+    peints.forEach((g) => {
+      const b = g.getBBox();
+      const d = Math.max(-b.x, -b.y, (b.x + b.width) - vb[2], (b.y + b.height) - vb[3]);
+      if (d > 0.5) { dehors += 1; coupables.push(g.getAttribute('data-noeud-id') || g.textContent); }
+      if (d > debordMax) { debordMax = d; }
+    });
+    // ---- LE RECOUVREMENT, et il ne se déduit PAS du cadre ----
+    // Le contrôle du viewBox dit qu'une étoile est DANS l'image ; il ne dit
+    // rien de ce qui est posé PAR-DESSUS. Le défaut trouvé le 2026-08-28 est
+    // exactement là : sous isolement, le cartouche de Léo double de hauteur
+    // (il porte le foyer entier), et LES RAPPROCHEMENTS passait dessous — avec
+    // un « 0 hors cadre » parfaitement vert. On mesure donc les boîtes
+    // ÉCRAN (`getBoundingClientRect`), les seules où le ciel et le mobilier
+    // partagent un repère.
+    const mobilier = [];
+    for (const sel of ['#boussole-parole', '.ciel-fil', '.console-entete', '.console-retour']) {
+      const el = document.querySelector(sel);
+      if (el && !el.hidden) {
+        const r = el.getBoundingClientRect();
+        if (r.height > 0) { mobilier.push({ sel, r }); }
+      }
+    }
+    const recouvertes = [];
+    gs.forEach((g) => {
+      const b = g.getBoundingClientRect();
+      mobilier.forEach(({ sel, r }) => {
+        const ox = Math.min(b.right, r.right) - Math.max(b.left, r.left);
+        const oy = Math.min(b.bottom, r.bottom) - Math.max(b.top, r.top);
+        // 2 px de tolérance : un affleurement n'est pas un recouvrement.
+        if (ox > 2 && oy > 2) { recouvertes.push(g.getAttribute('data-noeud-id') + ' sous ' + sel); }
+      });
+    });
+    return { etoiles: gs.length, dehors, debordMax, coupables, recouvertes,
+      mobilierMesure: mobilier.length,
+      noms: Array.from(svg.querySelectorAll('text.ciel-nom'))
+        .filter((t) => +(t.getAttribute('opacity') || '1') >= 0.5).length };
+  });
+}
+const geoReelle = await mesurerCadre(pageGeo);
+chiffres.isolementReel = { etoiles: geoReelle.etoiles, noms: geoReelle.noms,
+  debordMax: +geoReelle.debordMax.toFixed(1) };
+verifier('⑦ Sous isolement, personne ne sort du cadre (NAGA, 11 étoiles)',
+  geoReelle.dehors === 0, JSON.stringify(geoReelle.coupables));
+verifier('⑦ Sous isolement, chaque étoile porte son nom',
+  geoReelle.noms === geoReelle.etoiles, `${geoReelle.noms}/${geoReelle.etoiles}`);
+// L'instrument se vérifie sur un cas dont on connaît la réponse (règle du
+// 2026-08-17) : sous isolement, le mobilier compte QUATRE boîtes — cartouche,
+// fil, bandeau, retour. S'il en comptait zéro, « aucune étoile recouverte »
+// serait vrai par construction et ne dirait rien.
+verifier('⑦ L’instrument de recouvrement voit bien tout le mobilier',
+  geoReelle.mobilierMesure === 4, `${geoReelle.mobilierMesure} boîtes mesurées`);
+verifier('⑦ Aucune étoile recouverte par le mobilier',
+  geoReelle.recouvertes.length === 0, JSON.stringify(geoReelle.recouvertes));
+
+// LE PIRE CAS CONSTRUIT : un nœud à VINGT-QUATRE enfants directs — plus du
+// double de ce que le registre porte aujourd'hui. Le pire cas a CHANGÉ DE FORME
+// avec la règle : tant qu'on peignait deux étages, c'était « quatre têtes de
+// cinq projets » ; à un seul étage, la charge maximale d'un écran isolé est le
+// nombre d'enfants DIRECTS, et un arbre profond ne l'aggrave plus. Garder
+// l'ancienne forme aurait mesuré 4 étoiles en croyant en mesurer 24. On le rend
+// par le VRAI module dans la VRAIE coque, comme la section B pour le cap à venir.
+const pire = await pageGeo.evaluate(async () => {
+  // Vingt-quatre caps nommés de vingt caractères en majuscules — les plus larges
+  // que le moteur accepte (il tronque à vingt). Chacun porte lui-même un enfant :
+  // c'est ce qui prouve que la profondeur n'entre PLUS dans la charge de l'écran.
+  const REG = { essai: { nom: 'ESSAI', enfants: ['gros', 'autre'], coeur: null, legende: null },
+    gros: { nom: 'GROS', etat: 'Ouvert', resume: 'r', cible: 'grima.html', enfants: [] },
+    autre: { nom: 'AUTRE', etat: 'Ouvert', resume: 'r', cible: 'grima.html' } };
+  for (let t = 1; t <= 24; t += 1) {
+    const idT = 'tete' + t;
+    REG.gros.enfants.push(idT);
+    REG[idT] = { nom: 'WWWWWWWWWWWWWWWWWWWW', etat: 'Ouvert', resume: 'r',
+      cible: 'grima.html', enfants: ['sous' + t] };
+    REG['sous' + t] = { nom: 'CACHE ' + t, etat: 'Ouvert', resume: 'r', cible: 'grima.html' };
+  }
+  window.UltimaCiel.arreter();
+  document.getElementById('ciel-noeud-scene').textContent = '';
+  // Le fil du rendu précédent est du mobilier orphelin : le laisser fausserait
+  // la place que le nouveau ciel croit avoir.
+  document.querySelectorAll('.ciel-fil').forEach((f) => f.remove());
+  window.UltimaCielNoeudNoyau.rendre('essai', { noeuds: REG });
+  await new Promise((r) => setTimeout(r, 700));
+  document.querySelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id="gros"]')
+    .dispatchEvent(new MouseEvent('click', { bubbles: true }));
+  await new Promise((r) => setTimeout(r, 1800));
+  return Array.from(document.querySelectorAll('#ciel-noeud-scene .ciel-etoile[data-noeud-id]')).length;
+});
+const geoPire = await mesurerCadre(pageGeo);
+chiffres.isolementPireCas = { etoiles: pire, dehors: geoPire.dehors,
+  debordMax: +geoPire.debordMax.toFixed(1) };
+verifier('⑦ Pire cas construit : 24 étoiles isolées, noms de 20 caractères', pire === 24,
+  `${pire} étoiles`);
+verifier('⑦ Pire cas construit : personne ne sort du cadre', geoPire.dehors === 0,
+  JSON.stringify(geoPire.coupables));
+verifier('⑦ Pire cas construit : personne sous le mobilier',
+  geoPire.recouvertes.length === 0, JSON.stringify(geoPire.recouvertes));
+await pageGeo.close();
 
 // LE 500 DU SCÉNARIO FAIL-CLOSED EST LE NÔTRE : c'est le harnais qui le
 // provoque pour prouver que la page n'en dit rien. Le compter comme un défaut

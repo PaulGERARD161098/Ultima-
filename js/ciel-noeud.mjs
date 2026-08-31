@@ -4,6 +4,28 @@
 // les étages : il rend n'importe quel nœud du registre en constellation, avec
 // le dépliage au survol, le zoom à l'entrée, et Léo qui parle à chaque étage.
 //
+// ---------------------------------------------------------------------------
+// L'ISOLEMENT (Paul, 2026-08-28) — LE CLIC NE CHANGE PLUS DE PAGE, IL PLONGE.
+// « Quand je clique sur une constellation, ça m'affiche uniquement cette
+// constellation et plus les autres : dans le plan 3D, on zoome et on fait
+// disparaître ce qui n'a pas été sélectionné. »
+//
+// Ce que ça déplace, et il faut le dire en toutes lettres : jusqu'ici, cliquer
+// un cap qui contient quelque chose OUVRAIT SA PAGE (grima.html, naga.html…).
+// Désormais un nœud qui a du contenu s'ISOLE SUR PLACE — les frères s'éteignent,
+// la caméra s'approche, et la scène est re-dessinée sur sa seule descendance,
+// DEUX ÉTAGES d'un coup. Seules les FEUILLES (les pages de travail : VRANESH,
+// ABAQUE, RIVEN…) ouvrent encore une page. Les huit coques ne disparaissent
+// pas pour autant : elles restent des points d'entrée valides — on y arrive par
+// le repli <noscript>, par un lien direct, ou par leur adresse.
+//
+// TROIS SORTIES, parce qu'un écran dont on ne sait pas ressortir est un piège :
+// le FIL D'ARIANE (chaque étape remonte à son étage), la touche ÉCHAP, et un
+// clic dans le vide. Et l'adresse suit (`ultima.html#naga`) : la flèche
+// « précédent » du navigateur remonte donc d'un cran au lieu de quitter la
+// page — c'est elle qu'on aurait perdue en isolant sans rien écrire dans
+// l'historique.
+//
 // CE MODULE NE REMPLACE PAS LA BOUSSOLE PARTOUT. Les coques passent au ciel une
 // par une (CADRAGE-LV4-CIEL-DEPLIE.md §13.3) ; `boussole-noyau.mjs` sert encore
 // toutes celles qui n'ont pas migré, et VRANESH bâtit sur `css/boussole.css`.
@@ -32,7 +54,7 @@
 
 import { NOEUDS } from './registre-lv3.mjs';
 import { BLASONS, COEURS } from './blasons.mjs';
-import { versCiel } from './adaptateur-lv4.mjs';
+import { versCiel, cheminVers, descendDe } from './adaptateur-lv4.mjs';
 import { ligneVivante, signalDe, chargerCockpit } from './cockpit-parole.mjs';
 
 // Le temps que dure l'approche avant que la page suivante s'ouvre. Paul l'a
@@ -68,9 +90,22 @@ export function rendre(idNoeud, options = {}) {
   if (!scene || !plateau || !parole) { return null; }
   if (!window.UltimaCiel) { return null; } // le moteur n'est pas chargé : on ne casse pas la page
 
-  const paroleDefaut = parole.innerHTML; // le repos, restauré quand on s'éloigne
+  const paroleDefaut = parole.innerHTML; // le repos de l'étage entier
+  // CE QUE LÉO DIT QUAND ON NE SURVOLE RIEN. À l'étage, c'est l'invite de la
+  // coque ; sous isolement, c'est le foyer où l'on se trouve et la façon d'en
+  // ressortir. Un écran isolé qui garderait l'invite de l'étage ne dirait ni
+  // où l'on est, ni comment revenir.
+  let paroleAuRepos = paroleDefaut;
   const cockpit = { data: null, actif: null };
   let deplie = null;
+  // LE FOYER ISOLÉ — null tant qu'on regarde l'étage entier. C'est le SEUL
+  // état de navigation de ce module : tout le reste (ce qui est peint, ce que
+  // dit le fil, ce que Léo raconte au repos) s'en déduit.
+  let isole = null;
+  // Le geste venait-il du clavier ? On ne peut pas le déduire après coup — au
+  // clic, Chromium donne AUSSI le focus à l'étoile. On le note donc au vol, en
+  // phase de CAPTURE, avant que le moteur n'ait déclenché l'entrée.
+  let viaClavier = false;
   let vue = null;
   let idsDuNiveau = [];
   let enRoute = false; // une entrée est engagée : on n'en engage pas une seconde
@@ -109,6 +144,77 @@ export function rendre(idNoeud, options = {}) {
     plateau.appendChild(legende);
   }
 
+  // ---- LE FIL D'ARIANE — où l'on est, et par où l'on remonte -------------
+  // IL VIT DANS LE PLATEAU, jamais dans la scène : le moteur vide son
+  // conteneur à chaque dessin, et le fil doit survivre à l'isolement qui vient
+  // justement de le remplir (même piège que le filigrane et le repli
+  // <noscript>, §« LE PLATEAU EST LE PARENT DE LA SCÈNE »).
+  const fil = doc.createElement('nav');
+  fil.className = 'ciel-fil';
+  fil.setAttribute('aria-label', 'Fil du ciel');
+  fil.hidden = true;
+  plateau.appendChild(fil);
+
+  // SA PLACE SE MESURE. Le bandeau descend sous la ligne du retour à 560 px, sa
+  // hauteur dépend de la police et de la longueur du titre : une constante ne
+  // peut pas la connaître (même leçon que `margesDuMobilier`). On le pose donc
+  // sous la boîte réelle du mobilier haut, et on recommence à chaque
+  // redimensionnement.
+  function placerFil() {
+    let bas = 0;
+    for (const sel of ['body.ciel-noeud .console-entete', 'body.ciel-noeud .console-retour']) {
+      const el = doc.querySelector(sel);
+      if (el) { bas = Math.max(bas, el.getBoundingClientRect().bottom); }
+    }
+    fil.style.top = Math.round(bas + 8) + 'px';
+  }
+
+  function majFil() {
+    fil.textContent = '';
+    if (!isole) {
+      fil.hidden = true;
+      placerFil();
+      return;
+    }
+    // Le chemin se LIT dans le registre (`cheminVers`), il ne s'accumule pas
+    // dans une pile : une pile et un registre finissent toujours par diverger,
+    // et c'est la pile qui a tort. Repli sur deux étapes si le chemin est vide
+    // — un fil incomplet vaut mieux qu'un fil absent le jour où le registre est
+    // malade.
+    const suite = cheminVers(isole, registre, idNoeud);
+    const etapes = suite.length ? suite : [idNoeud, isole];
+    etapes.forEach((id, rang) => {
+      if (rang) {
+        const sep = doc.createElement('span');
+        sep.className = 'ciel-fil-sep';
+        sep.setAttribute('aria-hidden', 'true');
+        sep.textContent = '›';
+        fil.appendChild(sep);
+      }
+      const n = registre[id] || {};
+      if (id === isole) {
+        const ici = doc.createElement('span');
+        ici.className = 'ciel-fil-ici';
+        ici.setAttribute('aria-current', 'true');
+        ici.textContent = n.nom || id;
+        fil.appendChild(ici);
+        return;
+      }
+      const bouton = doc.createElement('button');
+      bouton.type = 'button';
+      bouton.className = 'ciel-fil-etape';
+      bouton.textContent = n.nom || id;
+      // `textContent` et non `innerHTML` : le nom vient du registre, mais un
+      // bouton de navigation n'a aucune raison d'accepter du balisage.
+      bouton.addEventListener('click', () => {
+        poserFoyer(id === idNoeud ? null : id);
+      });
+      fil.appendChild(bouton);
+    });
+    fil.hidden = false;
+    placerFil();
+  }
+
   // ---- ⑤ LA PAROLE DE LÉO ------------------------------------------------
   // MÊME BALISAGE QUE LA BOUSSOLE, à la classe près. Ce n'est pas de la
   // paresse : c'est ce qui rend le portage AUDITABLE. Les assertions qui
@@ -145,8 +251,28 @@ export function rendre(idNoeud, options = {}) {
   }
   function reinitResume() {
     cockpit.actif = null;
-    parole.classList.remove('is-actif');
-    parole.innerHTML = paroleDefaut;
+    // Sous isolement, le cartouche n'est jamais « au repos vide » : il porte le
+    // foyer. Il garde donc son habillage plein, sinon il clignoterait d'un
+    // registre à l'autre chaque fois que le curseur quitte une étoile.
+    parole.classList.toggle('is-actif', !!isole);
+    parole.innerHTML = paroleAuRepos;
+  }
+
+  // Ce que Léo dit quand on ne survole rien — recalculé à chaque changement de
+  // foyer, jamais deviné à l'affichage.
+  function majParoleAuRepos() {
+    if (!isole) { paroleAuRepos = paroleDefaut; return; }
+    const foyer = registre[isole] || {};
+    // Même règle d'insertion que `afficherResume` : tout vient du REGISTRE
+    // (statique, aucune donnée utilisateur, jamais de PII). Rien d'autre
+    // n'entre ici, et surtout pas le fragment d'adresse — qui, lui, vient du
+    // dehors : il sert d'identifiant à chercher dans le registre, jamais de
+    // texte à peindre.
+    paroleAuRepos =
+      '<p class="parole-nom">' + (foyer.nom || isole) + '</p>'
+      + (foyer.etat ? '<p class="parole-etat">' + foyer.etat + '</p>' : '')
+      + '<p class="parole-texte">' + (foyer.resume || '') + '</p>'
+      + '<p class="parole-action">Échap — ou un clic dans le vide — pour remonter ↰</p>';
   }
 
   // ---- Le dessin d'un étage ----------------------------------------------
@@ -169,10 +295,15 @@ export function rendre(idNoeud, options = {}) {
     // qui commande, pas leur somme — ils sont côte à côte, pas empilés.
     const entete = doc.querySelector('body.ciel-noeud .console-entete');
     const retour = doc.querySelector('body.ciel-noeud .console-retour');
-    for (const el of [entete, retour]) {
+    // LE FIL COMPTE COMME LE RESTE DU MOBILIER. Il n'apparaît que sous
+    // isolement, donc il est nul la plupart du temps — mais le jour où il est
+    // là, une étoile posée dessous serait recouverte par lui, et ce serait
+    // exactement le défaut mesuré le 2026-08-17 quand `margesUtiles` avait été
+    // perdue. `hidden` rend sa boîte nulle : aucun cas particulier à écrire.
+    for (const el of [entete, retour, fil]) {
       if (!el) { continue; }
       const r = el.getBoundingClientRect();
-      haut.push(r.bottom);
+      if (r.height > 0) { haut.push(r.bottom); }
     }
     // En bas : le cartouche de Léo et la légende gravée.
     const legende = doc.querySelector('.ciel-noeud-plateau > .ciel-legende');
@@ -193,7 +324,7 @@ export function rendre(idNoeud, options = {}) {
   }
 
   function dessiner() {
-    const donnees = versCiel(idNoeud, registre, { deplie });
+    const donnees = versCiel(idNoeud, registre, { deplie, isole });
     if (!donnees) { return; }
     idsDuNiveau = donnees.idsDuNiveau;
 
@@ -293,14 +424,25 @@ export function rendre(idNoeud, options = {}) {
   // l'adaptateur (`idsDuNiveau`), pas ici — un garde-fou que chaque appelant
   // doit penser à installer n'en est pas un.
   function deplier(id) {
-    if (deplie === id || enRoute) { return; }
+    // SOUS ISOLEMENT, IL N'Y A PLUS RIEN À DÉPLIER : les enfants des têtes sont
+    // déjà peints. Re-dessiner pour n'ajouter aucune étoile coûterait le focus
+    // clavier à chaque survol (le re-dessin détruit l'élément focalisé) — un
+    // menu où la tabulation s'annule sous les doigts, précisément le défaut
+    // corrigé le 2026-08-13.
+    if (isole || deplie === id || enRoute) { return; }
     deplie = id;
     dessiner();
   }
 
-  // ---- L'entrée : on s'approche, puis la page s'ouvre ---------------------
+  // ---- L'entrée : on plonge, ou bien la page s'ouvre ----------------------
   function entrer(id) {
     const cap = registre[id] || {};
+    // LE PARTAGE, ET IL TIENT EN UNE LIGNE : ce qui CONTIENT s'isole, ce qui ne
+    // contient rien s'ouvre. Aucun autre critère — ni la présence d'une cible
+    // (GRIMA, NAGA, IMLADRIK en ont une et ne l'ouvrent plus), ni l'étage où
+    // l'on se trouve. Un partage qui dépendrait de l'étage rendrait le même
+    // clic imprévisible d'un écran à l'autre.
+    if ((cap.enfants || []).length) { isoler(id); return; }
     // ⑤ LE CAP « À VENIR » EST INERTE. Il montre ce qu'il est et ne navigue
     // pas — au doigt comme au clavier, où Entrée et Espace passent par ici.
     if (!cap.cible) { afficherResume(Object.assign({ id }, cap)); return; }
@@ -316,8 +458,178 @@ export function rendre(idNoeud, options = {}) {
     window.setTimeout(() => { window.location.href = cap.cible; }, APPROCHE_MS);
   }
 
+
+  // ---- L'ISOLEMENT : on éteint, on s'approche, on re-dessine --------------
+  // TROIS TEMPS, ET ILS SONT SÉPARÉS À DESSEIN. Éteindre d'abord (le ciel se
+  // vide autour de la cible), approcher ensuite (la caméra plonge), re-dessiner
+  // enfin. Faire les trois d'un coup donnerait un CHANGEMENT D'ÉCRAN — ce que
+  // Paul avait déjà, et qu'il ne veut plus : « on zoome et on fait disparaître
+  // ce qui n'a pas été sélectionné » décrit un mouvement, pas une bascule.
+  function isoler(id) {
+    if (enRoute || isole === id) { return; }
+    // `prefers-reduced-motion` garde la main, ici comme à l'entrée d'une page :
+    // une préférence système n'est pas une option d'affichage.
+    if (moinsDAnimation || !vue) { poserFoyer(id); return; }
+    enRoute = true;
+    eteindreSauf(id);
+    vue.zoomerVers(id);
+    window.setTimeout(() => { enRoute = false; poserFoyer(id); }, APPROCHE_MS);
+  }
+
+  // Ce qui n'a pas été choisi s'efface — et ce qui reste, c'est la cible ET ce
+  // qu'elle contient déjà à l'écran : sinon l'aperçu déplié disparaîtrait juste
+  // avant de reparaître, ce qui se lit comme un clignotement.
+  // La classe est posée sur la SCÈNE et non sur chaque étoile : le moteur
+  // ré-écrit `opacity` à chaque image (attribut de présentation), et une règle
+  // CSS — n'importe laquelle — l'emporte sur un attribut. C'est ce qui permet
+  // d'éteindre un ciel qui continue de se peindre.
+  function eteindreSauf(id) {
+    const gardees = [id].concat((registre[id] || {}).enfants || []);
+    scene.querySelectorAll('g.ciel-etoile[data-noeud-id]').forEach((g) => {
+      g.classList.toggle('ciel-etoile--gardee',
+        gardees.indexOf(g.getAttribute('data-noeud-id')) !== -1);
+    });
+    scene.classList.add('ciel-scene--isolant');
+  }
+
+  // LE SEUL POINT OÙ LE FOYER CHANGE. Tout ce qui dépend de lui est refait ici,
+  // dans le même geste : la scène, le fil, la parole au repos, l'adresse. En
+  // disperser une partie ailleurs, c'est se garantir qu'un jour l'un des quatre
+  // sera oublié — le fil qui annonce un étage que le ciel ne montre plus.
+  function poserFoyer(id, options) {
+    isole = id || null;
+    deplie = null;
+    scene.classList.remove('ciel-scene--isolant');
+    // LE MOBILIER SE REMPLIT AVANT QUE LE CIEL NE SE DESSINE, et l'ordre n'est
+    // pas un détail : `dessiner()` MESURE la place que le mobilier occupe
+    // (`margesUtiles`) pour s'interdire d'y peindre. Or le cartouche est
+    // beaucoup plus haut sous isolement — il porte le foyer entier au lieu
+    // d'une invite d'une ligne — et le fil n'existe qu'à ce moment-là.
+    // Dessiner d'abord revenait à cadrer le ciel sur un mobilier qui n'était
+    // pas encore là : mesuré sur capture, LES RAPPROCHEMENTS passait sous le
+    // cartouche. Une place se mesure une fois qu'elle est prise.
+    majParoleAuRepos();
+    reinitResume();
+    majFil();
+    dessiner();
+    if (!(options && options.sansHistorique)) { memoriser(); }
+    apparaitre();
+    // AU CLAVIER, LE FOCUS NE DOIT PAS TOMBER DANS LE VIDE. Le re-dessin
+    // détruit l'étoile qu'on venait d'activer et le focus retombe sur `body` :
+    // la tabulation repartirait du haut de la page à chaque plongée.
+    if (viaClavier) {
+      viaClavier = false;
+      const premiere = scene.querySelector('g.ciel-etoile[data-noeud-id]');
+      if (premiere && premiere.focus) { premiere.focus(); }
+    }
+  }
+
+  // Remonter d'un cran : le parent DANS CET ÉCRAN, ou l'étage entier.
+  //
+  // REMONTER DÉFAIT, IL N'AJOUTE PAS. Premier jet mesuré : Échap EMPILAIT une
+  // entrée d'historique, si bien qu'après être remonté de IMLADRIK à NAGA, la
+  // flèche « précédent » du navigateur RE-PLONGEAIT dans IMLADRIK. Une sortie
+  // qu'on annule en revenant en arrière n'est pas une sortie.
+  // On ne recule que si l'entrée courante est CELLE QU'ON A EMPILÉE (son état
+  // le dit) : sur un lien direct (`ultima.html#imladrik`), l'entrée d'avant
+  // appartient à quelqu'un d'autre et reculer quitterait la page — on remplace
+  // alors l'adresse sur place.
+  function remonter() {
+    if (!isole) { return false; }
+    const etat = window.history ? window.history.state : null;
+    if (etat && etat.cielFoyer === isole) { window.history.back(); return true; }
+    const suite = cheminVers(isole, registre, idNoeud);
+    const parent = suite.length >= 2 ? suite[suite.length - 2] : null;
+    poserFoyer(parent && parent !== idNoeud ? parent : null, { sansHistorique: true });
+    ecrireAdresse('replaceState');
+    return true;
+  }
+
+  function apparaitre() {
+    if (moinsDAnimation) { return; }
+    scene.classList.remove('ciel-scene--neuve');
+    // Une lecture forcée : sans elle, retirer puis remettre la classe dans le
+    // même tour de boucle ne relance pas l'animation (le navigateur ne voit
+    // aucun changement). Mesuré : la deuxième plongée n'apparaissait plus.
+    void scene.getBoundingClientRect().width;
+    scene.classList.add('ciel-scene--neuve');
+    window.setTimeout(() => scene.classList.remove('ciel-scene--neuve'), 460);
+  }
+
+  // ---- L'ADRESSE SUIT LE FOYER -------------------------------------------
+  // Sans cela, la flèche « précédent » du navigateur quitterait la page au lieu
+  // de remonter d'un cran, et un ciel isolé ne se partagerait pas. Le fragment
+  // n'est JAMAIS peint : il sert d'identifiant à chercher dans le registre, et
+  // tout ce qui n'y est pas est ignoré (garde en trois temps, doublée par celle
+  // de l'adaptateur — un garde-fou se vérifie du côté où il peut être
+  // contourné, règle du 2026-08-21).
+  function idDeLAdresse() {
+    const brut = (window.location.hash || '').replace(/^#/, '');
+    if (!brut || !Object.prototype.hasOwnProperty.call(registre, brut)) { return null; }
+    if (!((registre[brut] || {}).enfants || []).length) { return null; }
+    return descendDe(idNoeud, brut, registre) ? brut : null;
+  }
+
+  function ecrireAdresse(methode) {
+    if (!window.history || !window.history[methode]) { return; }
+    const url = isole
+      ? '#' + isole
+      : window.location.pathname + window.location.search;
+    try {
+      window.history[methode]({ cielFoyer: isole || null }, '', url);
+    } catch (err) { /* `file://` refuse l'écriture : le ciel marche quand même */ }
+  }
+  function memoriser() { ecrireAdresse('pushState'); }
+
+  window.addEventListener('popstate', () => {
+    const vise = idDeLAdresse();
+    if (vise === isole) { return; }
+    poserFoyer(vise, { sansHistorique: true });
+  });
+
+  // ---- LES DEUX AUTRES SORTIES : Échap, et le vide ------------------------
+  doc.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || !isole) { return; }
+    e.preventDefault();
+    remonter();
+  });
+
+  // Le clic dans le vide remonte — MAIS PAS UN GLISSEMENT. Le ciel se tourne au
+  // doigt : sans cette garde, chaque rotation se terminerait par une remontée.
+  // Le moteur a la sienne (`aGlisse`) et ne l'expose pas ; on mesure donc la
+  // nôtre, sur le même seuil de 4 px, plutôt que de supposer qu'il nous couvre.
+  let departPointeur = null;
+  scene.addEventListener('pointerdown', (e) => {
+    departPointeur = { x: e.clientX, y: e.clientY };
+  });
+  scene.addEventListener('click', (e) => {
+    if (!isole) { return; }
+    if (e.target && e.target.closest && e.target.closest('[data-noeud-id]')) { return; }
+    if (departPointeur
+      && Math.abs(e.clientX - departPointeur.x)
+        + Math.abs(e.clientY - departPointeur.y) > 4) { return; }
+    remonter();
+  });
+
+  // Le geste venait-il du clavier ? En CAPTURE, donc avant que le moteur (qui
+  // écoute sur le SVG, plus bas) n'ait déclenché l'entrée. Le lire après coup
+  // serait impossible : au clic aussi, l'étoile prend le focus.
+  scene.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') { viaClavier = true; }
+  }, true);
+
+  // Le fil se replace avec le mobilier : le bandeau change de hauteur d'une
+  // largeur à l'autre (il descend sous la ligne du retour à 560 px).
+  window.addEventListener('resize', placerFil);
+
   dessiner();
   if (!vue) { return null; }
+
+  // UN LIEN DIRECT OUVRE DÉJÀ ISOLÉ (`ultima.html#naga`). Sans historique : on
+  // ne double pas l'entrée courante, sinon la première flèche « précédent »
+  // ne ferait rien de visible.
+  const foyerInitial = idDeLAdresse();
+  if (foyerInitial) { poserFoyer(foyerInitial, { sansHistorique: true }); }
 
   // ---- ① LE COCKPIT — fail-closed, et c'est la règle qui compte -----------
   if (noeud.cockpit && typeof window !== 'undefined') {

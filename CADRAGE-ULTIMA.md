@@ -6,6 +6,49 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🔭 **SESSION 2026-08-31 — L'ISOLEMENT SE RESSERRE À UN SEUL ÉTAGE (livré).**
+  Paul tranche l'arbitrage laissé ouvert le 28/08 : *« quand il montre NAGA,
+  affiche-moi juste ADRAMELECH, IMLADRIK — les grands thèmes ; ensuite, quand on
+  clique dessus, la suivante s'applique »*.
+  - **Un seul étage** : isoler peint les enfants DIRECTS, et eux seuls. La
+    profondeur n'est plus un réglage, elle est **contingente à ce qu'il y a
+    dedans** — un cran par clic. Le geste devient identique à tous les étages.
+  - **Deux suites obligées** : la règle de groupement par tête est retirée (elle
+    ferait des amas d'une étoile étiquetés du nom de cette étoile) ; la
+    passerelle RESHIRAM ⇄ ZEKROM change d'étage (sous TAO, plus sous NAGA) — la
+    garde « les deux bouts peints » a rendu le déplacement sûr.
+  - **Le pire cas construit a été RECALCULÉ, pas relancé** : « 4 têtes × 5
+    projets » n'aurait plus peint que 4 étoiles sous l'intitulé « 24 ». Il vaut
+    désormais **24 enfants directs**. *Quand la règle change, un pire cas
+    recalculé — sinon il est vert parce qu'il mesure l'ancien monde.*
+  - **Six verdicts éprouvés ROUGES** sur l'ancien comportement avant d'être
+    crus, dont un qui mesure une **absence** ; une mesure neuve au patrimoine :
+    la **récursion dans le navigateur** (fil à trois crans, adresse qui suit).
+  - **Patrimoine complet vert** : 18 harnais, zéro échec.
+
+- 🌌 **SESSION 2026-08-28 — LE CIEL S'ISOLE (livré).** Dicté par Paul : *« quand
+  je clique sur une constellation, ça m'affiche uniquement cette constellation et
+  plus les autres ; on zoome et on fait disparaître ce qui n'a pas été
+  sélectionné »*.
+  - **Le geste change de nature** : un nœud qui CONTIENT quelque chose ne
+    change plus de page, il **s'isole sur place** — extinction des frères,
+    approche de la caméra, re-dessin sur sa seule descendance, **deux étages
+    d'un coup** (NAGA → ses 3 quadrants ET leurs 8 projets). Le foyer lui-même
+    n'est plus peint. **Seules les feuilles ouvrent encore une page.**
+  - **Trois sorties** (fil d'Ariane, Échap, clic dans le vide) et **l'adresse
+    suit** (`ultima.html#naga`) : la flèche « précédent » remonte d'un cran, et
+    un ciel isolé se partage par un lien.
+  - **Les huit coques restent des PORTES**, elles cessent d'être le chemin :
+    repli `<noscript>`, lien direct, adresse. Cinq assertions « clic → page »
+    de trois harnais **remplacées, pas supprimées**, chacune scindée en deux.
+  - **Patrimoine complet vert** (88 sections) ; **+27 verdicts unitaires** sur
+    l'adaptateur, **+20 au navigateur**, dont le **pire cas construit à 24
+    étoiles** et une mesure neuve : le **recouvrement ciel ↔ mobilier**, qui a
+    trouvé un défaut que le contrôle de cadre déclarait vert.
+  - ⏳ **Reste au registre** : les deux vérifications Finubar de la fusion du
+    21/08 (recalage des grains, `/finubar` en conditions réelles) — la demande
+    de Paul est passée devant, elles n'ont pas été faites.
+
 - 🔚 **CLÔTURE DE LA SESSION 2026-08-21 — FINUBAR FUSIONNÉ SUR LES HUIT DÉPÔTS.**
   Zéro travail non poussé. Reprise détaillée, roadmap et pre-mortem à 3 mois :
   **`REPRISE-2026-08-21-finubar.md`**.
