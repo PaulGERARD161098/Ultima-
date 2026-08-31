@@ -3701,3 +3701,50 @@ qui porte l'état d'isolement, et c'est elle qui aurait pu refuser un second cli
 sans que le module pur s'en aperçoive.
 
 **Patrimoine complet relancé en entier : 18 harnais, zéro échec.**
+
+## 2026-08-31 (2) — FINUBAR NE TENAIT QU'À UNE SEULE BARRIÈRE
+
+**Contexte** : PR #179 fusionnée (`64bbb93`) sur le go de Paul, branche repartie
+de `main`. J'enchaîne sur les deux vérifications de la fusion du 21/08, jamais
+faites. La seconde demandait d'éprouver « en conditions RÉELLES » que
+`/finubar/macro.json` et `/api/_lib/finubar-macro.mjs` refusent.
+
+**LA VÉRIFICATION EST IMPOSSIBLE D'ICI, ET ELLE LE RESTERA.** Re-mesuré
+aujourd'hui : le proxy du bac à sable refuse le CONNECT vers la production
+(**403 sur le tunnel**, pas un timeout — la cause est nommée, pas supposée).
+La reporter une troisième fois aurait été la reporter indéfiniment.
+
+**CE QUE J'AI TROUVÉ EN CHERCHANT SUR QUOI LE REFUS REPOSAIT.** Uniquement sur
+le middleware (`PREFIXES_PRIVES`). Or `finubar/macro.json` est un fichier
+**statique**, et `.vercelignore` — la seconde barrière, dont le commentaire dit
+mot pour mot « même si le garde tombait, ces données ne seraient pas sur le CDN
+public » — couvrait `memoire/` et `adramelech/` **mais pas `finubar/`**. L'état
+de pilotage des huit dépôts de Paul tenait donc à une barrière unique, adossée à
+une hypothèse invérifiable : *« le middleware intercepte bien les statiques »*.
+C'est **la forme exacte** de l'écart nommé le 21/08 — un contrôle qui a l'air
+structurel et ne l'est qu'à une requête près.
+
+**LA DÉCISION : RETIRER L'HYPOTHÈSE, PAS LA DOCUMENTER** (charte §⚡, 21/08).
+`finubar/` sort du déploiement. Ce qui n'est pas déployé n'a plus besoin d'être
+intercepté — et cela se vérifie **hors ligne**, là où la question posée le 21/08
+ne pouvait recevoir aucune réponse. Rien de servi n'en dépendait : la route
+`/api/finubar` lit son jumeau `api/_lib/finubar-macro.mjs`.
+
+**LE VERROU QUI MANQUAIT** (`smoke-finubar` §5) : tout préfixe déclaré privé par
+le middleware et correspondant à un dossier servable doit AUSSI être hors
+déploiement. Il tourne à chaque boucle, alors qu'un test visant la production
+n'aurait jamais tourné. Trois précautions, chacune pour une faute déjà payée :
+① l'unique exception — `api/_lib`, qui DOIT être déployé puisque la route
+l'importe — est **nommée dans le test**, et un verdict compte les cas écartés
+(règle du 17/08 : un filtre qui exclut compte et nomme) ; ② un **test de
+référence** exige que l'instrument sache dire non sur un cas connu (`js/` est
+public), sans quoi une liste vide ou un import raté rendrait tout vert par
+construction ; ③ le verdict a été **éprouvé rouge** en retirant le correctif.
+
+**UNE LIGNE DU MIDDLEWARE A CHANGÉ, ET ELLE EST SIGNALÉE** : `PREFIXES_PRIVES`
+est désormais exporté — pour être mesurable, et pour rien d'autre. Le lire par
+expression régulière depuis le test aurait fabriqué un instrument qui se tait le
+jour où la ligne change de forme. Aucun effet sur le comportement du garde ;
+signalé à Paul parce que le middleware est sa zone à gates.
+
+**Patrimoine complet : zéro échec.**

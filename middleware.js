@@ -70,7 +70,13 @@ const CSP = [
 // `/api/_lib/…` : les fonctions l'IMPORTENT depuis le disque, elles ne vont pas
 // la chercher par le réseau. Refuser ce chemin ne coûte donc rien et retire une
 // hypothèse de la chaîne.
-const PREFIXES_PRIVES = ['/adramelech', '/memoire', '/finubar', '/api/_lib'];
+// EXPORTÉ (2026-08-31) pour être MESURABLE, et pour rien d'autre : le harnais
+// `tests/smoke-finubar.mjs` §5 exige que tout préfixe déclaré privé ici soit
+// AUSSI hors déploiement (`.vercelignore`), sauf l'exception nommée `/api/_lib`.
+// Le lire par expression régulière depuis le test aurait fabriqué un instrument
+// qui se tait le jour où la ligne change de forme. Aucun effet sur le
+// comportement du garde.
+export const PREFIXES_PRIVES = ['/adramelech', '/memoire', '/finubar', '/api/_lib'];
 
 // Boussole publique du quadrant : la page RACINE adramelech.html est servie par
 // `cleanUrls` sur le chemin EXACT '/adramelech' (la visite de /adramelech.html y

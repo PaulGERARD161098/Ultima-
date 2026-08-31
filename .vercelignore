@@ -14,6 +14,19 @@ memoire/
 # Bibliothèque d'idées ADRAMELECH (idées = données personnelles).
 adramelech/
 
+# État agrégé de Finubar (2026-08-31). Le middleware déclare `/finubar` privé
+# depuis le 21/08, mais `finubar/macro.json` est un fichier STATIQUE : son refus
+# ne tenait qu'au garde, et « le middleware intercepte bien les statiques » est
+# une hypothèse que l'egress bloqué de nos bacs à sable ne permet PAS d'éprouver.
+# La charte tranche ce cas (§⚡, 2026-08-21) : quand on ne peut pas vérifier du
+# côté où le garde-fou serait contourné, on RETIRE l'hypothèse au lieu de la
+# documenter. Non déployé = plus rien à intercepter.
+# Rien de servi n'en dépend : la route `/api/finubar` lit son jumeau
+# `api/_lib/finubar-macro.mjs`, qui reste déployé (le code de la route
+# l'importe) et n'est donc protégé QUE par le middleware — c'est la seule
+# exception, elle est nommée ici plutôt que tue.
+finubar/
+
 # Divers non nécessaires au runtime public.
 tests/
 .env.example
