@@ -31,11 +31,11 @@
     "critere_de_sortie": "les 8 grains lus par la collecte, le rappel d'ouverture de séance actif dans les 8 dépôts, l'écran /finubar en ligne"
   },
   "dernier_arret": {
-    "le": "2026-08-28",
-    "quoi": "L'isolement du ciel, livré et poussé : cliquer un nœud qui CONTIENT quelque chose ne change plus de page — il éteint les frères, la caméra s'approche, et la scène est re-dessinée sur sa seule descendance, deux étages d'un coup (NAGA → ses 3 quadrants ET leurs 8 projets). Trois sorties (fil d'Ariane, Échap, clic dans le vide) et l'adresse suit (ultima.html#naga). Cinq assertions « clic → page » de trois harnais remplacées, jamais supprimées. Une mesure NEUVE au patrimoine — le recouvrement ciel ↔ mobilier — a trouvé une étoile sous le cartouche que le contrôle de cadre déclarait verte. Patrimoine complet vert : 88 sections, 1653 verdicts.",
-    "commit": "16392a3"
+    "le": "2026-08-31",
+    "quoi": "L'isolement du ciel, resserré par Paul à UN SEUL ÉTAGE : isoler un nœud peint ses enfants DIRECTS et eux seuls (NAGA → IMLADRIK, ADRAMELECH, TAO), et cliquer l'un d'eux descend d'un cran de plus — la profondeur est contingente à ce qu'il y a dedans, le geste identique à tous les étages. Deux suites obligées : le groupement par tête retiré, la passerelle RESHIRAM ⇄ ZEKROM descendue sous TAO. Le pire cas construit a été RECALCULÉ (24 enfants directs) et non relancé : à un étage, l'ancien n'aurait peint que 4 étoiles sous un intitulé annonçant 24. Six verdicts éprouvés rouges avant d'être crus, dont un d'ABSENCE ; mesure neuve : la récursion dans le navigateur. Patrimoine complet : 18 harnais, zéro échec.",
+    "commit": "639c2d6"
   },
-  "prochaine_action": "Le retour de Paul sur l'isolement (les liens page par page sont dans le rapport de séance) — il a annoncé « ensuite on verra pour corriger autre chose ». À défaut, reprendre les DEUX vérifications Finubar de la fusion du 21/08, qui n'ont PAS été faites (la demande produit est passée devant) : (1) recaler les grains des 7 autres dépôts sur `main`, (2) éprouver en conditions RÉELLES que /finubar/macro.json et /api/_lib/finubar-macro.mjs refusent et que /finubar répond.",
+  "prochaine_action": "Le retour de Paul sur l'isolement à un étage (liens page par page dans le rapport de séance) et son go pour fusionner la PR #179 — la fusion est une gate. À défaut, reprendre les DEUX vérifications Finubar de la fusion du 21/08, qui n'ont TOUJOURS pas été faites : (1) recaler les grains des 7 autres dépôts sur `main`, (2) éprouver en conditions RÉELLES que /finubar/macro.json et /api/_lib/finubar-macro.mjs refusent et que /finubar répond.",
   "bloque_par": [
     "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
     "`ANTHROPIC_API_KEY` en env Vercel",
@@ -61,7 +61,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-08-28"
+  "maj": "2026-08-31"
 }
 ```
 
@@ -94,3 +94,10 @@ maintenant, **entrée dans la constellation générale plus tard**.
 ### 2026-08-20 (soir) — Clôture, registre des dettes LV5 vide
 `main` = `c5b26d1`, zéro PR ouverte. Trois boucles fermées (#173, #174, #176) ;
 le fil parallèle a déposé le cadrage LV6 (#175), **gelé au top départ de Paul**.
+
+### 2026-08-31 — L'isolement se resserre à un étage
+Paul tranche l'arbitrage laissé ouvert le 28/08 : isoler un nœud ne montre plus
+que ses **grands thèmes** — ses enfants directs — et cliquer l'un d'eux descend
+d'un cran de plus. Le pire cas construit du patrimoine a dû être **recalculé**
+et non relancé : à un seul étage, l'ancien n'aurait peint que 4 étoiles sous un
+intitulé qui en annonçait 24. Commit `639c2d6`, PR #179 en attente du go de Paul.
