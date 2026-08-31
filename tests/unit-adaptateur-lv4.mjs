@@ -112,18 +112,28 @@ dit('cheminExistePourTousLesEcransReels',
   ecransReels.every((id) => cheminVers(id, NOEUDS).length > 0));
 
 // ---------- 6. L'ISOLEMENT ----------
-// Le pire cas est ici le registre RÉEL : c'est lui qui porte les trois formes
-// que la règle de groupement doit distinguer — une tête pleine (NICOL BOLAS),
-// une tête vide (RIVEN), et des jumeaux reliés (RESHIRAM ⇄ ZEKROM).
+// Le pire cas est ici le registre RÉEL : c'est lui qui porte les formes que la
+// règle doit distinguer — une tête pleine (NICOL BOLAS), une tête vide (RIVEN),
+// et des jumeaux reliés (RESHIRAM ⇄ ZEKROM) qui vivent DEUX étages plus bas.
 const plieUltima = versCiel('ultima-perso', NOEUDS);
 const naga = versCiel('ultima-perso', NOEUDS, { isole: 'naga' });
 const idsNaga = naga.noeuds.map((n) => n.id);
-const attenduNaga = ['imladrik', 'adramelech', 'tao']
-  .reduce((liste, id) => liste.concat([id], NOEUDS[id].enfants || []), []);
 
-// ① On ne montre QUE la descendance — et TOUTE la descendance à deux étages.
-dit('isoleMontreLesDeuxEtages',
-  attenduNaga.every((id) => idsNaga.includes(id)) && idsNaga.length === attenduNaga.length);
+// ① On ne montre QUE les enfants directs du foyer.
+// REMPLACE `isoleMontreLesDeuxEtages` (2026-08-28), qui exigeait les têtes ET
+// leurs projets. Paul a resserré la règle le 31/08 : « affiche-moi juste les
+// grands thèmes ». L'ancien verdict n'est pas abandonné, il est INVERSÉ — et
+// c'est son absence, ci-dessous, qui le remplace : un test qui exigeait une
+// présence doit devenir un test qui exige l'absence, sinon on ne mesure plus
+// rien du changement.
+dit('isoleNeMontreQueLesEnfantsDirects',
+  idsNaga.join(',') === NOEUDS.naga.enfants.join(','));
+// ①bis Et surtout : les PETITS-enfants ne sont pas peints. C'est ce verdict-là
+// qui garde la nouvelle règle ; sans lui, un retour au comportement d'avant
+// passerait vert (les enfants directs y étaient aussi).
+dit('isoleNeDescendPasAuDeuxiemeEtage',
+  ['maedrethnir', 'vranesh', 'draukhain', 'reshiram', 'zekrom']
+    .every((id) => !idsNaga.includes(id)));
 // ② Les frères ont disparu : GRIMA n'est plus là, ni rien de ce qu'il porte.
 dit('isoleFaitDisparaitreLesFreres',
   !idsNaga.includes('grima') && !idsNaga.includes('riven')
@@ -131,33 +141,46 @@ dit('isoleFaitDisparaitreLesFreres',
 // ③ Le foyer lui-même n'est pas peint (« ça n'affiche pas forcément encore NAGA »).
 dit('isoleNePeintPasLeFoyer', !idsNaga.includes('naga'));
 
-// La règle de groupement, sur ses deux cas.
-const secteurDe = (jeu, id) => (jeu.noeuds.find((n) => n.id === id) || {}).secteur_activite;
-dit('isoleGroupeLesProjetsSousLeurTete',
-  secteurDe(naga, 'maedrethnir') === 'IMLADRIK'
-  && secteurDe(naga, 'imladrik') === 'IMLADRIK'
-  && secteurDe(naga, 'zekrom') === 'TAO');
-const grima = versCiel('ultima-perso', NOEUDS, { isole: 'grima' });
-dit('isoleRangeUneTeteVideSousLeFoyer',
-  secteurDe(grima, 'riven') === 'GRIMA'
-  && secteurDe(grima, 'nicol-bolas') === 'NICOL BOLAS'
-  && secteurDe(grima, 'abaque') === 'NICOL BOLAS');
+// ④ LA RÉCURSION — le cœur de la demande du 31/08 : « ensuite, quand on clique
+// dessus, la suivante s'applique ». Le geste doit être IDENTIQUE à tous les
+// étages : isoler un thème montre ses enfants directs, et eux seuls. On
+// l'éprouve sur les deux étages du dessous plutôt que sur le seul cas du jour,
+// qui serait un échantillon favorable.
+const imladrik = versCiel('ultima-perso', NOEUDS, { isole: 'imladrik' });
+dit('isoleDescendDUnCranQuelQueSoitLEtage',
+  imladrik.noeuds.map((n) => n.id).join(',') === NOEUDS.imladrik.enfants.join(','));
+const tao = versCiel('ultima-perso', NOEUDS, { isole: 'tao' });
+dit('isoleSAppliquePareilDeuxEtagesPlusBas',
+  tao.noeuds.map((n) => n.id).join(',') === NOEUDS.tao.enfants.join(','));
 
-// Les traits : chaque projet est rattaché à sa tête…
-dit('isoleRattacheChaqueProjetASaTete',
-  naga.relations.filter((r) => r.type === 'apport_affaires').length
-  === ['imladrik', 'adramelech', 'tao']
-    .reduce((n, id) => n + (NOEUDS[id].enfants || []).length, 0));
-// …et la passerelle des jumeaux survit, MAIS SEULEMENT quand les deux bouts
-// sont peints. Éprouvée par la présence ET par l'absence — vérifier la seule
-// présence ne dirait rien du cas qui produirait un trait vers nulle part.
+// La règle de groupement : une seule constellation à l'écran, au nom du FOYER.
+// REMPLACE `isoleGroupeLesProjetsSousLeurTete` et `isoleRangeUneTeteVideSousLeFoyer`
+// (2026-08-28) : à un seul étage, grouper par tête fabriquerait autant d'amas
+// d'UNE étoile que de têtes, chacun étiqueté du nom de l'étoile qu'il contient.
+const secteurDe = (jeu, id) => (jeu.noeuds.find((n) => n.id === id) || {}).secteur_activite;
+dit('isoleGroupeToutSousLeNomDuFoyer',
+  naga.noeuds.every((n) => n.secteur_activite === 'NAGA'));
+const grima = versCiel('ultima-perso', NOEUDS, { isole: 'grima' });
+dit('isoleNommeLAmasDApresLeFoyerMemeAvecUneTeteVide',
+  secteurDe(grima, 'riven') === 'GRIMA' && secteurDe(grima, 'nicol-bolas') === 'GRIMA');
+
+// Les traits. REMPLACE `isoleRattacheChaqueProjetASaTete` (2026-08-28) : il
+// n'y a plus de projet à rattacher, donc plus un seul arc de rattachement —
+// et c'est cette ABSENCE qu'on mesure, un arc orphelin serait un trait vers
+// une étoile qui n'est pas là.
+dit('isoleNInventePlusDeRattachement',
+  naga.relations.filter((r) => r.type === 'apport_affaires').length === 0);
+// La passerelle des jumeaux survit à l'isolement, MAIS SEULEMENT quand les deux
+// bouts sont peints. Elle a changé d'étage avec la règle : RESHIRAM ⇄ ZEKROM
+// vivent sous TAO, donc elle apparaît en isolant TAO — et plus en isolant NAGA,
+// où aucun des deux n'est peint. Éprouvée par la présence ET par l'absence.
 const passerelle = (jeu) => jeu.relations.filter((r) => r.type === 'chantier_commun');
 dit('isoleGardeLaPasserelleDesJumeaux',
-  passerelle(naga).length === 1 && passerelle(naga)[0].source_id === 'reshiram'
-  && passerelle(naga)[0].target_id === 'zekrom'
-  && passerelle(naga)[0].libelle === NOEUDS.reshiram.lienLibelle);
+  passerelle(tao).length === 1 && passerelle(tao)[0].source_id === 'reshiram'
+  && passerelle(tao)[0].target_id === 'zekrom'
+  && passerelle(tao)[0].libelle === NOEUDS.reshiram.lienLibelle);
 dit('isoleNInventePasDArcVersLInvisible',
-  passerelle(versCiel('ultima-perso', NOEUDS, { isole: 'imladrik' })).length === 0);
+  passerelle(naga).length === 0 && passerelle(imladrik).length === 0);
 
 // Ce qui peut encore se déplier, ce sont les TÊTES, et elles seules.
 dit('isoleAnnonceSesTetes',

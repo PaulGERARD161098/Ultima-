@@ -148,11 +148,19 @@ for (const attendu of capsDe('ultima-perso')) {
   await page.waitForTimeout(1400);
   const peints = await page.$$eval('#ciel-noeud-scene .ciel-etoile[data-noeud-id]',
     (gs) => gs.map((g) => g.getAttribute('data-noeud-id')));
-  const descendance = (NOEUDS[attendu.id].enfants || [])
-    .reduce((liste, id) => liste.concat([id], NOEUDS[id].enfants || []), []);
-  verifier(`Clic ${attendu.nom} : sa descendance paraît sur place`,
-    descendance.every((id) => peints.includes(id)) && peints.length === descendance.length,
+  // ---- RESSERRÉE le 2026-08-31 : UN étage, pas deux ----
+  // Paul, l'écran ayant vécu : « affiche-moi juste ADRAMELECH, IMLADRIK — les
+  // grands thèmes ; ensuite, quand on clique dessus, la suivante s'applique ».
+  // Ce qui se prouve ici change donc de forme, sans rien perdre : les enfants
+  // DIRECTS sont peints, et ce qu'ils contiennent ne l'est pas — mesuré par
+  // l'absence, sans quoi un retour à deux étages passerait vert.
+  const themes = (NOEUDS[attendu.id].enfants || []);
+  const dedans = themes.reduce((liste, id) => liste.concat(NOEUDS[id].enfants || []), []);
+  verifier(`Clic ${attendu.nom} : ses grands thèmes paraissent sur place`,
+    themes.every((id) => peints.includes(id)) && peints.length === themes.length,
     JSON.stringify(peints));
+  verifier(`Clic ${attendu.nom} : ce qu’ils contiennent reste caché`,
+    dedans.every((id) => !peints.includes(id)), JSON.stringify(dedans));
   // La moitié qui se prouve par l'ABSENCE : le frère a bien disparu.
   const frere = capsDe('ultima-perso').find((c) => c.id !== attendu.id);
   verifier(`Clic ${attendu.nom} : ${frere.nom} a disparu du ciel`,

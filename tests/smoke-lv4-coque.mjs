@@ -351,9 +351,15 @@ await pageNav.waitForTimeout(1500);
 // GRIMA est le cas le plus exigeant des deux : il porte une tête PLEINE
 // (NICOL BOLAS et ses quatre caps) et une tête VIDE (RIVEN), donc les deux
 // branches de la règle de groupement.
+// Depuis que l'isolement ne peint plus qu'UN étage (Paul, 2026-08-31), c'est
+// justement la tête pleine qui fait de GRIMA le bon cas : il EXISTE un second
+// étage sous lui, et il doit rester invisible. Un foyer sans petits-enfants
+// aurait passé le contrôle sans rien prouver.
 const FOYER = 'grima';
-const attenduIsole = (NOEUDS[FOYER].enfants || [])
-  .reduce((liste, id) => liste.concat([id], NOEUDS[id].enfants || []), []);
+const attenduIsole = (NOEUDS[FOYER].enfants || []).slice();
+// Ce qui vit un cran plus bas, et qu'on ne doit PAS voir.
+const secondEtage = (NOEUDS[FOYER].enfants || [])
+  .reduce((liste, id) => liste.concat(NOEUDS[id].enfants || []), []);
 
 const plongee = await pageNav.evaluate(async (foyer) => {
   const scene = document.getElementById('ciel-noeud-scene');
@@ -411,10 +417,17 @@ verifier('⑦ La caméra plonge vers le foyer',
   plongee.pendant.distance < plongee.avant.distance * 0.9,
   `${plongee.avant.distance.toFixed(0)} → ${plongee.pendant.distance.toFixed(0)}`);
 // ③ LE RE-DESSIN : la descendance, toute la descendance, et rien qu'elle.
-verifier('⑦ Les deux étages du foyer sont peints d’un coup',
+// REMPLACE « Les deux étages du foyer sont peints d'un coup » (2026-08-28) :
+// Paul a resserré la règle le 31/08 — un seul étage, « juste les grands
+// thèmes ». L'exigence est INVERSÉE, pas retirée : ce que l'ancien verdict
+// réclamait, le suivant l'interdit.
+verifier('⑦ Seuls les enfants DIRECTS du foyer sont peints',
   attenduIsole.every((id) => plongee.apres.includes(id))
   && plongee.apres.length === attenduIsole.length,
   JSON.stringify(plongee.apres));
+verifier('⑦ …et le second étage reste invisible (éprouvé par l’ABSENCE)',
+  secondEtage.length > 0 && secondEtage.every((id) => !plongee.apres.includes(id)),
+  JSON.stringify(secondEtage));
 verifier('⑦ Les frères ont disparu (éprouvé par l’ABSENCE)',
   !plongee.apres.includes('naga') && !plongee.apres.includes('imladrik'));
 verifier('⑦ Le foyer lui-même n’est plus peint', !plongee.apres.includes(FOYER));
@@ -426,6 +439,45 @@ verifier('⑦ Le fil d’Ariane nomme le chemin', plongee.filVisible
   `lu: « ${plongee.fil} »`);
 verifier('⑦ Léo nomme le foyer au repos', plongee.paroleAuRepos === NOEUDS[FOYER].nom,
   `lu: « ${plongee.paroleAuRepos} »`);
+
+// ---- LA RÉCURSION — « ensuite, quand on clique dessus, la suivante
+//      s'applique » (Paul, 2026-08-31). Le geste doit être le MÊME à tous les
+//      étages : depuis GRIMA isolé, cliquer NICOL BOLAS descend d'un cran de
+//      plus. Mesuré dans le NAVIGATEUR et pas seulement sur l'adaptateur : la
+//      coque a son propre état (`isole`, le fil, l'adresse), et c'est lui qui
+//      pourrait refuser un second clic sans que le module pur s'en aperçoive.
+const DEUXIEME = 'nicol-bolas';
+const recursion = await pageNav.evaluate(async (cible) => {
+  const scene = document.getElementById('ciel-noeud-scene');
+  scene.querySelector('g.ciel-etoile[data-noeud-id="' + cible + '"]')
+    .dispatchEvent(new MouseEvent('click', { bubbles: true }));
+  await new Promise((r) => setTimeout(r, 1600));
+  const fil = document.querySelector('.ciel-fil');
+  return {
+    peints: Array.from(scene.querySelectorAll('g.ciel-etoile[data-noeud-id]'))
+      .map((el) => el.getAttribute('data-noeud-id')),
+    fil: fil ? fil.textContent.replace(/\s+/g, ' ').trim() : '',
+    url: location.href
+  };
+}, DEUXIEME);
+verifier('⑦ Un second clic descend encore d’un cran',
+  (NOEUDS[DEUXIEME].enfants || []).every((id) => recursion.peints.includes(id))
+  && recursion.peints.length === (NOEUDS[DEUXIEME].enfants || []).length,
+  JSON.stringify(recursion.peints));
+verifier('⑦ …et l’étage qu’on vient de quitter a disparu',
+  !recursion.peints.includes('riven') && !recursion.peints.includes(DEUXIEME),
+  JSON.stringify(recursion.peints));
+verifier('⑦ …le fil d’Ariane compte les trois crans',
+  recursion.fil.includes(NOEUDS['ultima-perso'].nom)
+  && recursion.fil.includes(NOEUDS[FOYER].nom)
+  && recursion.fil.includes(NOEUDS[DEUXIEME].nom),
+  `lu: « ${recursion.fil} »`);
+verifier('⑦ …et l’adresse suit la descente',
+  recursion.url.endsWith('/ultima.html#' + DEUXIEME), recursion.url);
+// On remonte d'un cran pour éprouver les sorties depuis l'état où elles ont été
+// conçues : les mesurer depuis DEUX crans serait un autre cas, pas celui-ci.
+await pageNav.keyboard.press('Escape');
+await pageNav.waitForTimeout(900);
 
 // ---- LES DEUX SORTIES. Un écran dont on ne sait pas ressortir est un piège :
 //      on les éprouve toutes les deux, séparément.
@@ -513,7 +565,9 @@ await pageGeo.waitForTimeout(2200);
 const parLien = await pageGeo.$$eval('#ciel-noeud-scene .ciel-etoile[data-noeud-id]',
   (gs) => gs.map((g) => g.getAttribute('data-noeud-id')));
 verifier('⑦ Un lien direct (#naga) ouvre déjà isolé',
-  parLien.includes('maedrethnir') && !parLien.includes('grima'), JSON.stringify(parLien));
+  NOEUDS.naga.enfants.every((id) => parLien.includes(id))
+  && !parLien.includes('grima') && !parLien.includes('maedrethnir'),
+  JSON.stringify(parLien));
 
 function mesurerCadre(page) {
   return page.evaluate(() => {
@@ -581,26 +635,26 @@ verifier('⑦ L’instrument de recouvrement voit bien tout le mobilier',
 verifier('⑦ Aucune étoile recouverte par le mobilier',
   geoReelle.recouvertes.length === 0, JSON.stringify(geoReelle.recouvertes));
 
-// LE PIRE CAS CONSTRUIT : quatre têtes de cinq projets, soit 24 étoiles — plus
-// du double de ce que le registre porte aujourd'hui. On le rend par le VRAI
-// module dans la VRAIE coque, comme la section B le fait pour le cap à venir.
+// LE PIRE CAS CONSTRUIT : un nœud à VINGT-QUATRE enfants directs — plus du
+// double de ce que le registre porte aujourd'hui. Le pire cas a CHANGÉ DE FORME
+// avec la règle : tant qu'on peignait deux étages, c'était « quatre têtes de
+// cinq projets » ; à un seul étage, la charge maximale d'un écran isolé est le
+// nombre d'enfants DIRECTS, et un arbre profond ne l'aggrave plus. Garder
+// l'ancienne forme aurait mesuré 4 étoiles en croyant en mesurer 24. On le rend
+// par le VRAI module dans la VRAIE coque, comme la section B pour le cap à venir.
 const pire = await pageGeo.evaluate(async () => {
-  // Un écran qui porte UN gros nœud : l'isoler doit peindre ses quatre têtes ET
-  // leurs vingt projets, tous nommés de vingt caractères en majuscules — les
-  // plus larges que le moteur accepte (il tronque à vingt).
+  // Vingt-quatre caps nommés de vingt caractères en majuscules — les plus larges
+  // que le moteur accepte (il tronque à vingt). Chacun porte lui-même un enfant :
+  // c'est ce qui prouve que la profondeur n'entre PLUS dans la charge de l'écran.
   const REG = { essai: { nom: 'ESSAI', enfants: ['gros', 'autre'], coeur: null, legende: null },
     gros: { nom: 'GROS', etat: 'Ouvert', resume: 'r', cible: 'grima.html', enfants: [] },
     autre: { nom: 'AUTRE', etat: 'Ouvert', resume: 'r', cible: 'grima.html' } };
-  for (let t = 1; t <= 4; t += 1) {
+  for (let t = 1; t <= 24; t += 1) {
     const idT = 'tete' + t;
     REG.gros.enfants.push(idT);
-    REG[idT] = { nom: 'TÊTE NUMÉRO ' + t, etat: 'Ouvert', resume: 'r',
-      cible: 'grima.html', enfants: [] };
-    for (let e = 1; e <= 5; e += 1) {
-      const idE = idT + '-' + e;
-      REG[idT].enfants.push(idE);
-      REG[idE] = { nom: 'WWWWWWWWWWWWWWWWWWWW', etat: 'Ouvert', resume: 'r', cible: 'grima.html' };
-    }
+    REG[idT] = { nom: 'WWWWWWWWWWWWWWWWWWWW', etat: 'Ouvert', resume: 'r',
+      cible: 'grima.html', enfants: ['sous' + t] };
+    REG['sous' + t] = { nom: 'CACHE ' + t, etat: 'Ouvert', resume: 'r', cible: 'grima.html' };
   }
   window.UltimaCiel.arreter();
   document.getElementById('ciel-noeud-scene').textContent = '';

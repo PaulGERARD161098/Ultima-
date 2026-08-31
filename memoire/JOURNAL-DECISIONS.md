@@ -3658,3 +3658,46 @@ recouvrement est désormais **mesuré** (boîtes écran, ciel contre mobilier),
 lui-même est vérifié sur un cas connu : il doit voir **quatre** boîtes de
 mobilier, sans quoi « aucune étoile recouverte » serait vrai par construction.
 
+
+## 2026-08-31 — L'ISOLEMENT SE RESSERRE À UN SEUL ÉTAGE
+
+**CE QUE PAUL A DIT**, l'écran ayant vécu trois jours : « quand il montre NAGA,
+j'aimerais que tu m'affiches non pas ce qu'il y a dedans — juste ADRAMELECH,
+IMLADRIK, les grands thèmes. Et ensuite, quand on clique dessus, la suivante
+s'applique ; la sous-vision est **contingente à ce qu'il y a dedans**. » C'est
+la réponse à l'arbitrage que j'avais laissé ouvert le 28/08 (deux étages ou un).
+
+**LA DÉCISION** : isoler un nœud ne peint plus que ses **enfants DIRECTS**. La
+profondeur cesse d'être un réglage — on descend d'un cran par clic, et chaque
+cran se lit d'un coup d'œil. Effet de bord voulu : le geste devient **identique
+à tous les étages**, ce qui rend l'écran prévisible où qu'on soit dans l'arbre.
+
+**DEUX CHOSES ONT DÛ SUIVRE, ET ELLES NE SE DÉDUISENT PAS DU CHANGEMENT.**
+① La règle de groupement par tête est **retirée** : sans petits-enfants, elle
+fabriquait autant d'amas d'UNE étoile que de thèmes, chacun étiqueté du nom de
+l'étoile qu'il contient. Une seule constellation demeure, au nom du foyer.
+② La passerelle RESHIRAM ⇄ ZEKROM a **changé d'étage** : les jumeaux vivent sous
+TAO, donc elle n'apparaît plus en isolant NAGA. La garde « les deux bouts
+peints » ne s'est pas contentée de tenir — c'est elle qui a rendu le
+déplacement sûr, et le test l'a suivie au lieu de rester au cran d'avant.
+
+**LE PIRE CAS CONSTRUIT A CHANGÉ DE FORME — et c'est la leçon de la boucle.**
+Il valait « quatre têtes de cinq projets, 24 étoiles ». À un seul étage, il
+n'aurait plus peint que **4** étoiles tout en s'annonçant « 24 » : un pire cas
+devenu un cas facile, sous un intitulé rassurant. Il est reconstruit en **24
+enfants directs** — la charge maximale RÉELLE d'un écran isolé désormais, la
+profondeur n'y entrant plus. *Corollaire à retenir : quand la règle change, un
+pire cas ne se relance pas, il se RECALCULE — sinon il mesure l'ancien monde
+sous le nom du nouveau, et il est vert pour cette raison-là.*
+
+**LES VERDICTS ONT ÉTÉ ÉPROUVÉS ROUGES AVANT D'ÊTRE CRUS** : les nouveaux tests
+lancés contre l'ancien adaptateur donnent **six** échecs (dont
+`isoleNeDescendPasAuDeuxiemeEtage`, qui mesure une ABSENCE — sans lui, un retour
+aux deux étages passerait vert, les enfants directs y étant aussi présents).
+Une mesure NEUVE entre au patrimoine : **la récursion dans le navigateur**
+(GRIMA isolé → clic NICOL BOLAS → ses quatre caps, fil d'Ariane à trois crans,
+adresse qui suit). L'adaptateur seul ne l'aurait pas prouvée : c'est la coque
+qui porte l'état d'isolement, et c'est elle qui aurait pu refuser un second clic
+sans que le module pur s'en aperçoive.
+
+**Patrimoine complet relancé en entier : 18 harnais, zéro échec.**

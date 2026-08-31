@@ -43,70 +43,61 @@ export function descendDe(idAncetre, id, registre) {
 }
 
 /**
- * L'ISOLEMENT — dicté par Paul le 2026-08-28.
+ * L'ISOLEMENT — dicté par Paul le 2026-08-28, resserré par lui le 2026-08-31.
  *
  * « Quand je clique sur une constellation, ça m'affiche uniquement cette
- * constellation et plus les autres […] si je clique sur NAGA, je vois tous les
- * projets de NAGA directement. » Trois décisions y sont contenues, et elles ne
- * se déduisent pas l'une de l'autre :
+ * constellation et plus les autres. » Puis, l'écran ayant vécu : « quand il
+ * montre NAGA, affiche-moi juste ADRAMELECH, IMLADRIK — les grands thèmes ; et
+ * ensuite, quand on clique dessus, la suivante s'applique. » Trois décisions,
+ * et elles ne se déduisent pas l'une de l'autre :
  *
  *   ① ON NE MONTRE QUE LA DESCENDANCE DU FOYER. Les frères disparaissent — ce
  *      n'est pas un filtre d'affichage, c'est le jeu de données qui change.
  *   ② LE FOYER LUI-MÊME N'EST PAS PEINT. « Ça n'affiche pas forcément encore
  *      NAGA même » : son nom est porté par le fil d'Ariane, pas par une étoile
  *      qui occuperait la place de ce qu'on vient chercher.
- *   ③ DEUX ÉTAGES D'UN COUP, pas un. « Voir tout d'un coup » : les têtes ET
- *      leurs enfants. C'est ce qui fait qu'on VOIT les projets au lieu d'avoir
- *      à les déplier un par un.
+ *   ③ UN SEUL ÉTAGE — les enfants DIRECTS, et eux seuls. La première version en
+ *      montrait deux (les têtes ET leurs projets) pour « voir tout d'un coup » ;
+ *      éprouvée par Paul, elle rendait l'écran de NAGA aussi chargé que le ciel
+ *      qu'on venait de quitter. La profondeur n'est plus un réglage : elle est
+ *      CONTINGENTE À CE QU'IL Y A DEDANS — on descend d'un cran par clic, et
+ *      chaque cran se lit d'un coup d'œil. C'est aussi ce qui rend le geste
+ *      identique à tous les étages : isoler montre toujours la même chose.
  *
- * La règle de groupement qui en découle : une tête qui CONTIENT quelque chose
- * est une constellation et lui donne son nom ; une tête vide se range sous le
- * nom du foyer. Sans cette règle, RIVEN — seul sous GRIMA — formerait une
- * « constellation RIVEN » d'une étoile, dont l'étiquette répéterait le nom de
- * l'étoile juste au-dessus d'elle.
+ * Il n'y a donc plus qu'une constellation à l'écran, et elle porte le nom du
+ * FOYER. La règle de groupement de la première version — une tête pleine fait
+ * sa propre constellation, une tête vide se range sous le foyer — n'avait de
+ * sens que tant qu'un second étage était peint : sans petits-enfants, elle
+ * fabriquerait autant d'amas d'UNE étoile que de têtes, chacun étiqueté du nom
+ * de l'étoile qu'il contient. Elle est retirée, pas oubliée.
  */
 function isolement(idFoyer, registre) {
   var foyer = registre[idFoyer] || {};
   var nomFoyer = foyer.nom || idFoyer;
   var tetes = (foyer.enfants || []).slice();
-  var noeuds = [];
   var relations = [];
   var affiches = Object.create(null);
 
-  function poser(id, secteur) {
-    var n = registre[id] || {};
-    affiches[id] = true;
-    noeuds.push({
-      id: id,
-      nom: n.nom || id,
+  var noeuds = tetes.map(function (idTete) {
+    var n = registre[idTete] || {};
+    affiches[idTete] = true;
+    return {
+      id: idTete,
+      nom: n.nom || idTete,
       type: 'cap',
       statut: n.etat || '',
-      secteur_activite: secteur,
+      secteur_activite: nomFoyer,
       cible: n.cible || null
-    });
-  }
-
-  tetes.forEach(function (idTete) {
-    var tete = registre[idTete] || {};
-    var enfants = tete.enfants || [];
-    var secteur = enfants.length ? (tete.nom || idTete) : nomFoyer;
-    poser(idTete, secteur);
-    enfants.forEach(function (idPetit) {
-      poser(idPetit, secteur);
-      // Le trait qui RATTACHE un projet à sa tête : sans lui, onze étoiles
-      // flottent sans qu'on sache laquelle relève de laquelle.
-      relations.push({
-        source_id: idTete, target_id: idPetit,
-        type: 'apport_affaires', statut: 'actif'
-      });
-    });
+    };
   });
 
   // ④ LES PASSERELLES SURVIVENT À L'ISOLEMENT — mais seulement quand les DEUX
   // bouts sont peints. Un arc vers une étoile qu'on a fait disparaître serait
   // un trait vers nulle part : c'est le même raisonnement que la garde de
-  // l'étage, appliqué aux liens. (Éprouvé sur TAO : reshiram ⇄ zekrom
-  // réapparaît quand on isole NAGA, et pas quand on isole IMLADRIK.)
+  // l'étage, appliqué aux liens. Cette garde compte DAVANTAGE depuis qu'on ne
+  // peint plus qu'un étage : reshiram ⇄ zekrom vivent sous TAO, donc leur
+  // passerelle n'apparaît qu'en isolant TAO — plus en isolant NAGA, où les
+  // deux jumeaux ne sont pas peints.
   noeuds.forEach(function (n) {
     var cap = registre[n.id] || {};
     if (cap.lien && affiches[cap.lien]) {
@@ -120,10 +111,11 @@ function isolement(idFoyer, registre) {
 
   return {
     noeuds: noeuds, personnes: [], rattachements: [], relations: relations,
-    // CE QUI PEUT ENCORE SE DÉPLIER, ce sont les têtes — et leurs enfants sont
-    // déjà là. Le dépliage est donc inerte sous isolement, et c'est l'appelant
-    // qui s'en abstient (js/ciel-noeud.mjs) : re-dessiner pour n'ajouter rien
-    // détruirait le focus clavier à chaque survol.
+    // CE QUI PEUT ENCORE SE DÉPLIER, ce sont les têtes. On s'en abstient quand
+    // même (js/ciel-noeud.mjs) : déplier au survol ferait revenir, une tête à
+    // la fois, exactement l'étage que Paul a demandé de ne plus voir — et
+    // re-dessiner détruirait le focus clavier. Descendre est un CLIC, pas un
+    // survol.
     idsDuNiveau: tetes, deplie: null, isole: idFoyer
   };
 }
