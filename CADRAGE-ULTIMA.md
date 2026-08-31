@@ -6,6 +6,26 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🔒 **SESSION 2026-08-31 (2) — FINUBAR NE TENAIT QU'À UNE SEULE BARRIÈRE.**
+  PR #179 **fusionnée** (`64bbb93`) sur le go de Paul. En enchaînant sur les deux
+  vérifications de la fusion du 21/08 :
+  - **La vérification « en conditions réelles » est impossible d'ici et le
+    restera** : le proxy refuse le CONNECT vers la production (403 sur le
+    tunnel, re-mesuré). La reporter une 3ᵉ fois, c'était la reporter toujours.
+  - **L'écart trouvé en cherchant sur quoi le refus reposait** : `.vercelignore`
+    couvrait `memoire/` et `adramelech/` mais **pas `finubar/`**. `macro.json`
+    est un fichier statique — l'état de pilotage des 8 dépôts ne tenait qu'au
+    middleware, sur l'hypothèse invérifiable qu'il intercepte les statiques.
+  - **Hypothèse RETIRÉE, pas documentée** (charte §⚡) : `finubar/` sort du
+    déploiement ; rien de servi n'en dépendait. **Verrou posé** : tout préfixe
+    privé du middleware doit être hors déploiement — vérifié **hors ligne**,
+    exception `api/_lib` **nommée** dans le test, instrument éprouvé sur un cas
+    connu, verdict **éprouvé rouge** sans le correctif.
+  - ⚠️ **Une ligne du middleware** : `PREFIXES_PRIVES` exporté pour être
+    mesurable, sans effet sur le comportement — signalé, zone à gates.
+  - ⏳ **Reste** : la vérification ① (recaler les grains des 7 autres dépôts sur
+    `main`) — elle exige d'attacher ces dépôts, non faite dans cette boucle.
+
 - 🔭 **SESSION 2026-08-31 — L'ISOLEMENT SE RESSERRE À UN SEUL ÉTAGE (livré).**
   Paul tranche l'arbitrage laissé ouvert le 28/08 : *« quand il montre NAGA,
   affiche-moi juste ADRAMELECH, IMLADRIK — les grands thèmes ; ensuite, quand on

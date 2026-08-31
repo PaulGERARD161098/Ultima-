@@ -253,6 +253,57 @@ console.log('§4 — 390 px : rien ne déborde');
   await p390.close();
 }
 
+// ------------------------- §5 le refus ne repose pas sur une seule barrière
+// POURQUOI CETTE SECTION EXISTE (2026-08-31). Le middleware déclare `/finubar`
+// privé depuis le 21/08. Mais `finubar/macro.json` est un fichier STATIQUE, et
+// « le middleware intercepte bien les statiques » est une hypothèse qu'on ne
+// peut PAS éprouver d'ici : l'egress de nos bacs à sable refuse le CONNECT vers
+// la production (403 du proxy, re-mesuré aujourd'hui). La charte tranche ce cas
+// — on retire l'hypothèse au lieu de la documenter : ce qui n'est pas déployé
+// n'a plus besoin d'être intercepté.
+// Ce qu'on mesure ici est donc la COHÉRENCE ENTRE LES DEUX GARDES, et c'est
+// vérifiable hors ligne : tout préfixe que le middleware déclare privé et qui
+// correspond à un dossier de fichiers servables doit AUSSI être hors
+// déploiement. Un test qui interrogerait la production ne tournerait jamais ;
+// celui-ci tourne à chaque boucle.
+console.log('§5 — les deux gardes couvrent les mêmes chemins');
+{
+  const { readFileSync } = await import('node:fs');
+  const { existsSync, statSync } = await import('node:fs');
+  const { PREFIXES_PRIVES } = await import('../middleware.js');
+  const ignore = readFileSync(new URL('../.vercelignore', import.meta.url), 'utf8')
+    .split('\n').map((l) => l.trim()).filter((l) => l && !l.startsWith('#'));
+  // L'EXCEPTION EST NOMMÉE, PAS TUE (règle du 2026-08-17 : un filtre qui écarte
+  // des cas les compte et les nomme). `api/_lib` DOIT être déployé — le code de
+  // `api/finubar.js` l'importe —, donc lui seul reste protégé par le seul
+  // middleware. Si un jour un second chemin devait être écarté, il faudrait
+  // l'ajouter ICI, sous les yeux du lecteur.
+  const DEPLOYES_A_DESSEIN = ['/api/_lib'];
+  const aVerifier = PREFIXES_PRIVES.filter((p) => !DEPLOYES_A_DESSEIN.includes(p));
+  verifier('le filtre n’écarte QUE l’exception connue',
+    PREFIXES_PRIVES.length - aVerifier.length === DEPLOYES_A_DESSEIN.length
+    && aVerifier.length > 0,
+    `écartés : ${DEPLOYES_A_DESSEIN.join(', ')} — vérifiés : ${aVerifier.join(', ')}`);
+  for (const prefixe of aVerifier) {
+    const dossier = prefixe.replace(/^\//, '');
+    const surDisque = existsSync(new URL('../' + dossier, import.meta.url));
+    // Un préfixe qui ne correspond à aucun dossier du repo n'a rien à exclure.
+    if (!surDisque) {
+      verifier(`${prefixe} : aucun dossier servable de ce nom`, true, '(rien à exclure)');
+      continue;
+    }
+    verifier(`${prefixe} est aussi HORS déploiement (.vercelignore)`,
+      ignore.includes(dossier + '/') || ignore.includes(dossier),
+      `.vercelignore : ${ignore.join(' · ')}`);
+  }
+  // Le test de référence : l'instrument doit être capable de dire NON. Une
+  // liste vide, un fichier illisible ou un import raté rendraient tout ce qui
+  // précède vert par construction — c'est précisément la faute de 2026-08-17.
+  verifier('l’instrument sait dire non (cas connu : un dossier public)',
+    !ignore.includes('js/') && !ignore.includes('js'),
+    'js/ est servi, il ne doit PAS être dans .vercelignore');
+}
+
 await navigateur.close();
 console.log(echecs === 0 ? '\n=== smoke-finubar : TOUT VERT ===' : `\n=== smoke-finubar : ${echecs} ÉCHEC(S) ===`);
 process.exit(echecs === 0 ? 0 : 1);
