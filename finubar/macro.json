@@ -188,15 +188,35 @@
         },
         "dernier_arret": {
           "le": "2026-09-01",
-          "quoi": "LOT A LIVRÉ, sur GO de Paul. L'UUID d'un devis ne vaut plus un droit de le signer : `sign_devis_public` refuse tout appelant `anon` sur un devis dont le drapeau `signature_uuid_ouverte` est faux — 17 devis sur 18. ⛔ Pas de coupure sèche : le seul devis dont le lien parti chez le client EST un UUID (RR-20260813-9006, jeton créé 4 jours après l'envoi) garde sa voie, sans quoi ce client tomberait sur",
-          "commit": "a6fb035"
+          "quoi": "DEUX LOTS SUR LA MÊME JOURNÉE, et cette entrée porte les deux — la branche relance a été fusionnée avec main qui portait le lot A. (A) LOT A, mergé sur main (PR #109) : l'UUID d'un devis ne vaut plus un droit de le signer. `sign_devis_public` refuse tout appelant `anon` sur un devis dont `signature_uuid_ouverte` est faux — 17 sur 18. Pas de coupure sèche : le seul devis dont le lien parti chez le ",
+          "commit": "e059c28"
         },
-        "prochaine_action": "⏳ L'OUTIL DE RELANCE — le rendre propre, clair, coloré et rapide d'utilisation. SOLA teste cette semaine. Restent ensuite T2 (identité : colonnes siret / adresse / tva_intra / rge / decennale + report automatique) et le chargement des 9 matrices en base. ⊕ Le lot A n'attend plus rien de nous : sa DERNIÈRE étape se déclenche sur un fait, pas sur une décision — quand la sonde « devis encore signable",
+        "prochaine_action": "✅ PR #110 FUSIONNÉE le 02/09 (squash, main = e059c28) : l'outil de relance est en production. ⛔ R0a — LA QUESTION À POSER À PAUL, et le chemin critique : pourquoi 10 devis sur 18 sont-ils entrés par la boîte mail plutôt que par l'app ? Mesuré en base le 01/09 à 19:12 UTC : le moteur de relance tourne À VIDE — 27 échéances au total, 0 `pending`. Sur les 11 devis « Envoyé » non signés, 10 portent `s",
         "bloque_par": [
           "Embarquement Stripe de SOLA : COMMENCÉ mais pas fini. ⚠️ Corrigé le 01/09 — cette ligne disait « stripe_account_id = 0, aucun artisan embarqué », c'est faux depuis un moment : SOLA GROUPE a bien un compte Stripe. Ce qui manque est `stripe_charges_enabled`, encore à false : le compte existe, il n'encaisse pas. DOKLES, lui, n'a toujours aucun compte. Mesuré en base ce jour."
         ],
         "en_attente_depuis": "2026-08-17",
         "boucles_ouvertes": [
+          {
+            "quoi": "📏 L'outil de RELANCE — première séance livrée le 01/09 (barre d'entrée, file en cartes, quatrième geste « J'ai rappelé », motif d'écart, versions nommées). Reste OUVERT sur deux points : la MESURE (L5), qui ne pourra rien mesurer tant que R0a n'est pas réglée, et les deux chantiers 🟡 non commencés — L3 l'aperçu du mail tel que le client le recevra, L4 l'historique des relances. ⚠️ Ne pas lancer ",
+            "depuis": "2026-09-01"
+          },
+          {
+            "quoi": "T2 — l'identité d'entreprise en colonnes (siret, adresse, tva_intra, rge, decennale) et son report automatique sur le devis ET la facture. Aujourd'hui RGE et décennale passent par le champ libre mentions_legales : de la saisie manuelle, donc une régression au sens de la Directive IA.",
+            "depuis": "2026-09-01"
+          },
+          {
+            "quoi": "Le logo de SOLA reste la seule pièce d'identité manquante — elle ne s'extrait d'aucun PDF, il faut le fichier.",
+            "depuis": "2026-09-01"
+          },
+          {
+            "quoi": "⛔ Le catalogue central ne porte AUCUN consommable (cuivre, pompe de relevage, câbles RO2V, disjoncteurs, gaines, plénums, grilles) : sur un gainable à 11 075 € HT ils pèsent 1 500 € et 11 lignes sur 18.",
+            "depuis": "2026-09-01"
+          },
+          {
+            "quoi": "🔴 R0a — PROMU CHEMIN CRITIQUE le 01/09 : pourquoi 10 devis sur 18 sont-ils entrés par la boîte mail ? Ce n'est plus une curiosité — c'est la question qui décide si l'outil de relance sert à quelque chose. Mesure : 0 échéance `pending` sur 27, un seul devis suivi et c'est la recette.",
+            "depuis": "2026-08-31"
+          },
           {
             "quoi": "✅ SIGNATURE fermée le 01/09 (garde `signature_uuid_ouverte` dans `sign_devis_public`, réduite à 1 devis sur 18). ⚠️ MAIS LA LECTURE RESTE OUVERTE : `get_devis_public` et `log_devis_open` sont toujours accessibles à `anon` sans condition — quiconque détient l'UUID d'un devis peut en lire le contenu (nom du client, montants, lignes). Divulgation, plus capacité d'écriture. Hors de ce lot À DESSEIN : ",
             "depuis": "2026-08-17"
@@ -325,7 +345,7 @@
     "au_repos": 0,
     "derives": 0,
     "commits_inconnus": 0,
-    "boucles_ouvertes": 19,
+    "boucles_ouvertes": 24,
     "gestes_de_paul": [
       {
         "projet": "RénoAgenda",
