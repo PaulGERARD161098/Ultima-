@@ -33,7 +33,7 @@
   "dernier_arret": {
     "le": "2026-09-02",
     "quoi": "CLÔTURE DE SÉANCE. L'accueil piloté par Finubar (jalon 0 + P1 + P2 + P3) et la porte d'entrée au ciel sont EN PRODUCTION — PR #185 (b4dc35c) et #186 (c9c4587) fusionnées sur go de Paul, patrimoine complet vert à chaque palier, zéro PR ouverte. Nettoyage de fin : la maquette portait encore ses copies de `greffer`/`signaux` après leur promotion en production — elle importe désormais le vrai module (deux versions de la même règle finissent par diverger, et c'est la copie oubliée qui diverge). Mémoire écrite : journal des 5 arbitrages, radar, et REPRISE-2026-09-02-accueil-finubar.md (roadmap J1→J5 + pre-mortem à 3 mois).",
-    "commit": "ea715f0"
+    "commit": "a4b5821"
   },
   "prochaine_action": "DEMANDER À PAUL CE QUE L'ACCUEIL LUI A FAIT — il ne l'a pas encore regardé en production, et c'est le seul juge de la question qui commandait la boucle : est-ce que la couleur oriente ? Les trois réponses possibles mènent à trois suites différentes (tableau du §2 de REPRISE-2026-09-02-accueil-finubar.md) ; ne pas les confondre, et surtout ne pas enchaîner sur P4 sans sa réponse",
   "bloque_par": [
