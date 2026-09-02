@@ -6,6 +6,16 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🎨 **SESSION 2026-09-02 — L'ACCUEIL EST PILOTÉ PAR FINUBAR, ET LA PORTE EST
+  PASSÉE AU CIEL.** PR #185 (`b4dc35c`) et #186 (`c9c4587`) **fusionnées** sur go
+  de Paul. Les 8 dépôts sont des astres de l'arbre, la lueur d'appel monte des
+  astres vers leurs constellations, le bandeau du bas porte ≤ 3 signaux et
+  l'action unique de Léo, et l'écran de connexion a quitté la mer pour le champ
+  d'étoiles commun. Cinq arbitrages rendus par Paul, tous tranchés.
+  **État détaillé, roadmap et pre-mortem à 3 mois : `REPRISE-2026-09-02-accueil-finubar.md`.**
+  Reste ouvert : **P4** (les signaux du cockpit sur le même ciel), après que P3
+  ait vécu — arbitré, pas oublié.
+
 - 🔒 **SESSION 2026-08-31 (2) — FINUBAR NE TENAIT QU'À UNE SEULE BARRIÈRE.**
   PR #179 **fusionnée** (`64bbb93`) sur le go de Paul. En enchaînant sur les deux
   vérifications de la fusion du 21/08 :

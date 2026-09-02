@@ -3,108 +3,25 @@
    réel se lit sur /finubar, derrière authentification.
 
    TROIS CHOSES, ET RIEN D'AUTRE :
-     ① le VRAI moteur (js/ciel.js) et le VRAI registre (js/registre-lv3.mjs) —
-        une maquette qui redessine le ciel qu'elle prétend montrer ne montre
-        plus rien (leçon preview-riven-stellaire, 2026-08-16) ;
+     ① le VRAI moteur (js/ciel.js), le VRAI registre (js/registre-lv3.mjs) ET
+        le VRAI adaptateur (js/adaptateur-finubar.mjs) — une maquette qui
+        redessine ce qu'elle prétend montrer ne montre plus rien (leçon
+        preview-riven-stellaire, 2026-08-16) ;
      ② la GREFFE : les projets de Finubar deviennent des astres de l'arbre ;
      ③ L'APPEL : la couleur monte des astres vers leurs constellations, et le
         bandeau du bas dit par quoi commencer.
 
-   Les deux fonctions pures ci-dessous (`greffer`, `signaux`) sont les
-   CANDIDATES à devenir `js/adaptateur-finubar.mjs` le jour du go — c'est le
-   chemin qu'a suivi `adaptateur-lv4.mjs`, qui a vécu ici avant d'être du code
-   de production. Elles sont écrites pour ça : aucune I/O, aucun DOM. */
+   ⛔ `greffer` ET `signaux` NE VIVENT PLUS ICI (2026-09-02, fin de séance).
+   Elles y ont été écrites, éprouvées, puis PROMUES dans `js/adaptateur-finubar.mjs`
+   au go de Paul — le chemin qu'avait suivi `adaptateur-lv4.mjs`. Les laisser
+   ici en double aurait fabriqué deux versions de la même règle, et c'est
+   toujours la copie oubliée qui diverge : la maquette aurait fini par montrer
+   un autre ciel que celui qui tourne. Un composant réclamé par un second
+   appelant se DÉPLACE, il ne se recopie pas (règle du 2026-07-30). */
 import { NOEUDS, chemin } from '../js/registre-lv3.mjs';
 import { versCiel, cheminVers } from '../js/adaptateur-lv4.mjs';
+import { greffer, signaux, libelleDegre } from '../js/adaptateur-finubar.mjs';
 import { AGREGAT } from './preview-accueil-finubar-fixture.mjs';
-
-// ---------------------------------------------------------------- pur ①
-
-/* LES TROIS DEGRÉS D'APPEL, et l'ordre compte : c'est lui qui gagne quand un
-   parent hérite de plusieurs enfants.
-
-   ⛔ AUCUN N'EST UN REPROCHE. Un projet au repos ne pâlit pas, ne rougit pas,
-   ne porte aucune marque : l'absence de couleur est un silence, pas un
-   jugement (règle ③ d'ALTHEA, étendue au produit — « Ultima compte, elle ne
-   reproche pas »). La couleur ne dit qu'une chose : *il y a quelque chose à
-   faire ici*. C'est un appel, jamais une note. */
-export const DEGRES = { appel: 3, recaler: 2, braise: 1 };
-
-/* `rang` vient de `finubar/agreger.mjs` (`rangDe`) et il est déjà l'ordre
-   d'appel : 0 dérive, 1 attend un geste de Paul, 2 en cours, 3 au repos, 9
-   illisible ou hors séance. On le TRADUIT, on ne le recalcule pas — deux
-   priorisations du même état finiraient par diverger. */
-export function degreDuRang(rang) {
-  if (rang === 0) return 'recaler';
-  if (rang === 1) return 'appel';
-  if (rang === 2) return 'braise';
-  return null;
-}
-
-/* LA GREFFE — le registre de navigation, augmenté des projets de Finubar.
-   Rend un NOUVEAU registre : on ne modifie jamais `NOEUDS` en place, sans quoi
-   deux rendus successifs ne partiraient pas du même arbre. */
-export function greffer(registre, agregat) {
-  const sortie = {};
-  Object.keys(registre).forEach((id) => { sortie[id] = { ...registre[id] }; });
-
-  (agregat.projets || []).filter((p) => p.ok).forEach((p) => {
-    // Un projet raccroché à la racine EST le ciel qu'on regarde (Ultima) : il
-    // n'a pas d'étoile à lui. Se peindre soi-même au milieu de sa propre carte
-    // ajoute un objet et n'ajoute aucune information.
-    const parent = p.ciel && p.ciel !== 'racine' ? p.ciel : (p.ciel === 'racine' ? null : 'alpha');
-    if (!parent || !sortie[parent]) return;
-    const id = 'depot:' + p.depot;
-    sortie[id] = {
-      nom: p.grain.projet,
-      etat: p.grain.etat === 'en_attente_de_paul' ? 'Attend un geste'
-        : p.grain.etat === 'en_cours' ? 'En cours' : 'Au repos',
-      blason: 'essor',
-      cible: null,
-      resume: p.grain.jalon.nom || p.grain.cap || '',
-    };
-    sortie[parent] = { ...sortie[parent], enfants: (sortie[parent].enfants || []).concat([id]) };
-  });
-
-  // Un nœud greffé peut faire d'une FEUILLE une boussole (RENOBOOST IA n'avait
-  // pas d'enfants). Il lui faut alors la parure d'un nœud-boussole, sinon le
-  // registre est incohérent — `verifierRegistre` le dirait, et le ciel
-  // afficherait un écran sans titre.
-  Object.keys(sortie).forEach((id) => {
-    const n = sortie[id];
-    if (!Array.isArray(n.enfants) || n.titre) return;
-    sortie[id] = { ...n, titre: n.nom, surligne: 'Ultima · ' + n.nom,
-      invite: 'Léo te guide — survole un cap.', coeur: 'anneau', legende: (n.nom || '').toLowerCase() };
-  });
-  return sortie;
-}
-
-// ---------------------------------------------------------------- pur ②
-
-/* LES SIGNAUX, PROPAGÉS VERS LE HAUT. Un astre qui appelle fait appeler toute
-   sa lignée — c'est ce qui permet de voir depuis la racine QUE quelque chose
-   attend, sans encore savoir quoi. Le compte, lui, ne s'additionne qu'une fois
-   par astre : un projet compté deux fois ferait un chiffre faux au premier
-   étage, et un chiffre faux dans un instrument de pilotage vaut moins que pas
-   de chiffre du tout. */
-export function signaux(registre, agregat) {
-  const parNoeud = {};
-  const poser = (id, degre, projet) => {
-    if (!degre || !registre[id]) return;
-    const e = parNoeud[id] || (parNoeud[id] = { degre: null, compte: 0, projets: [] });
-    if (!e.degre || DEGRES[degre] > DEGRES[e.degre]) e.degre = degre;
-    e.compte += 1;
-    if (e.projets.indexOf(projet) === -1) e.projets.push(projet);
-  };
-  (agregat.projets || []).filter((p) => p.ok).forEach((p) => {
-    const degre = degreDuRang(p.rang);
-    if (!degre) return;
-    const id = 'depot:' + p.depot;
-    if (!registre[id]) return;
-    chemin(id, registre).forEach((etape) => { if (etape !== 'racine') poser(etape, degre, p.grain.projet); });
-  });
-  return parNoeud;
-}
 
 // ---------------------------------------------------------------- la scène
 
@@ -114,7 +31,7 @@ const titre = document.getElementById('titre');
 const parole = document.getElementById('parole');
 const bandeau = document.getElementById('bandeau');
 const REGISTRE = greffer(NOEUDS, AGREGAT);
-const SIGNAUX = signaux(REGISTRE, AGREGAT);
+const SIGNAUX = signaux(REGISTRE, AGREGAT, chemin);
 
 let foyer = null;      // le nœud isolé, null = la racine
 let couleur = true;    // l'interrupteur de la maquette : avec / sans appel
@@ -126,12 +43,6 @@ let couleur = true;    // l'interrupteur de la maquette : avec / sans appel
 // rend le ciel moins lisible que sans elle.
 let ouvrir = false;    // le ciel s'ouvre-t-il de lui-même sur le chemin qui appelle ?
 let vue = null;
-
-function libelleDegre(degre) {
-  return degre === 'appel' ? 'attend un geste de toi'
-    : degre === 'recaler' ? 'a avancé depuis sa dernière note'
-      : 'en cours';
-}
 
 /* LE CHEMIN QUI APPELLE, DÉPLIÉ D'OFFICE — c'est la réponse à « le ciel
    m'oriente ». La racine ne montre que trois étoiles ; l'arborescence ne se
@@ -169,11 +80,11 @@ function rendre() {
     if (!s) { g.removeAttribute('data-appel'); return; }
     g.setAttribute('data-appel', s.degre);
     const t = g.querySelector('title');
-    if (t) t.textContent = t.textContent + ' — ' + s.compte + ' ' + libelleDegre(s.degre);
+    if (t) t.textContent = t.textContent + ' — ' + libelleDegre(s.degre, s.compte);
     // Le compte est DIT au lecteur d'écran, pas seulement peint : une
     // information portée par la seule couleur n'existe pas pour tout le monde.
     g.setAttribute('aria-label', (g.getAttribute('aria-label') || '') +
-      ', ' + s.compte + ' ' + libelleDegre(s.degre));
+      ', ' + libelleDegre(s.degre, s.compte));
   });
 
   // Le fil d'Ariane, LU dans le registre (jamais accumulé au fil des clics).

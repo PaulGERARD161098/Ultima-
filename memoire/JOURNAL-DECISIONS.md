@@ -3748,3 +3748,56 @@ jour où la ligne change de forme. Aucun effet sur le comportement du garde ;
 signalé à Paul parce que le middleware est sa zone à gates.
 
 **Patrimoine complet : zéro échec.**
+
+---
+
+## 2026-09-02 — L'ACCUEIL PILOTÉ PAR FINUBAR, ET LA PORTE AU CIEL
+
+**Cinq arbitrages rendus par Paul**, tous sur la recommandation, et ils sont
+tranchés — les reposer coûtera une séance :
+
+| # | Question | Réponse de Paul |
+|---|---|---|
+| 1 | L'accroche des dépôts dans le ciel | **Oui** : les 4 briques sous RENOBOOST IA (qui passe de porte à constellation), Ultima à la racine, le reste sous ALPHA |
+| 2 | Trois teintes d'appel (or / bleu pâle / braise) | **Oui, et jamais de rouge.** Rien ne pâlit : l'absence de couleur est un silence |
+| 3 | Le bandeau Finubar | **Permanent** en bas de l'accueil, pas un cartouche qui s'ouvre une fois par jour |
+| 4 | Le dépliage d'office de la branche qui appelle | **Non** — mesuré illisible (cinq étoiles tassées sur un axe à la racine) |
+| 5 | P4 (les signaux du cockpit sur le même ciel) | **Après P3**, jamais avant |
+
+**UN ÉCART AU CADRAGE, ASSUMÉ ET DOCUMENTÉ.** L'accroche devait vivre dans les
+huit `FINUBAR.md` ; elle vit dans `finubar/depots.json`. `renoboost-ia` est un
+identifiant du registre de navigation d'**ULTIMA** : l'écrire dans le grain de
+RenoDevis y ferait fuiter une notion étrangère, et il faudrait toucher quatre
+dépôts pour déplacer une étoile. `depots.json` est déjà la liste des huit, tenue
+par Ultima — y ajouter une colonne ne fabrique aucune seconde vérité.
+
+**QUATRE CHOSES TROUVÉES EN MANIPULANT ET EN REGARDANT, AUCUNE EN RELISANT.**
+① La **porte de RENOBOOST IA** se perdait : au ciel, un nœud qui CONTIENT isole
+au lieu d'ouvrir, donc lui greffer ses briques lui retirait en silence son lien
+vers renoboostia.fr. ② La **parole de Léo passait derrière le bandeau** — deux
+cartouches `fixed`, même `z-index` ; vu sur une capture, pas dans le code.
+③ Un **verdict qui ne pouvait pas devenir rouge** : la production déclare son
+mobilier au moteur (`margesUtiles`) là où la maquette rétrécissait son
+conteneur, donc le recouvrement ne s'y déclenche jamais — le verdict mesure
+désormais le MÉCANISME. ④ La **mer** de l'écran de connexion devait s'éprouver
+par l'ABSENCE : vérifier que le ciel est là ne prouve pas qu'elle est partie.
+
+⛔ **ET UNE ALERTE QUE J'AI RETIRÉE APRÈS VÉRIFICATION — c'est la leçon de la
+séance.** J'avais annoncé le matin que l'agrégat Finubar « mentait » sur la
+dérive (0 annoncée contre 2–3 commits d'écart). **Faux.** `collecter.mjs` exclut
+du décompte les fichiers que Finubar écrit lui-même ; sa mesure était juste,
+c'est mon `git rev-list` brut qui comptait mal. *Avant d'accuser une sonde, lui
+demander CE qu'elle compte* — c'est le pendant, vu de l'autre bout, de la règle
+du 2026-08-17 (« demander à une mesure ce qu'elle répond sur un cas dont on
+connaît la réponse »). Une accusation portée dans un fichier versionné aurait
+survécu à sa réfutation.
+
+**La porte d'entrée** est passée au ciel dans la foulée, sur une capture de Paul
+(« même cette page il faut la changer »). Elle était restée une mer — dégradé
+bleu, moirure d'eau et carte antique en SVG, dans `index.html` ET `riven.html`.
+Le champ d'étoiles est celui des huit coques ; il ne peint **qu'à la première
+ouverture de la porte** (le cas ordinaire est une session déjà ouverte, où
+l'écran ne paraît jamais) ; `boussole-auth.js` n'est pas touché.
+
+**Fusionné** : PR #185 (`b4dc35c`) puis #186 (`c9c4587`). Patrimoine complet
+vert à chaque palier. Zéro PR ouverte à la clôture.
