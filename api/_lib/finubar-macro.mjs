@@ -23,7 +23,7 @@ export default {
         "dernier_arret": {
           "le": "2026-09-01",
           "quoi": "SOIRÉE À DEUX SÉANCES SUR LA MÊME TABLE, et c'est le fait principal. Ma séance avait retiré `trg_artisans_protege_champs` comme redondant ; l'autre, qui corrigeait au même moment un vrai défaut de ce trigger (SECURITY DEFINER ⇒ `current_user` vaut le propriétaire, donc son échappement `= 'service_role'` n'est jamais vrai et l'Edge Function écrivait dans le vide), l'a constaté « disparu » et l'a re",
-          "commit": "4b672a7"
+          "commit": "45dc2bc"
         },
         "prochaine_action": "Brancher la mesure d'audience exemptée (`window.__audience`) — seul point de code restant après le retrait de GA. ⚠️ Ce n'est PAS une tâche sans dépendance : elle exige de choisir un fournisseur (Plausible, Matomo en mode exempté, analytics Vercel), ce qui engage un tiers et un traitement de données personnelles. Arbitrage de Paul. Le chemin, lui, est dé-risqué depuis le 01/09 : le branchement se ",
         "bloque_par": [
@@ -53,79 +53,6 @@ export default {
       },
       "jours_depuis_maj": 1,
       "jours_en_attente": 49,
-      "rang": 1
-    },
-    {
-      "ok": true,
-      "motif": "",
-      "depot": "PaulGERARD161098/RenoBoost",
-      "grain": {
-        "projet": "RénoBoost",
-        "depot": "PaulGERARD161098/RenoBoost",
-        "cap": "Un individu seul fait tourner le business entier, aidé par l'automatisation (Directive IA). RénoBoost est le hub : acquisition, rendez-vous, dashboard, et la roadmap maîtresse des quatre briques.",
-        "rattache_a": "ROADMAP-MASTER.md · REPRISE-2026-09-01-jalon-0.md · REPRISE-2026-09-01-fiche-client-acompte.md",
-        "etat": "en_attente_de_paul",
-        "jalon": {
-          "nom": "Jalon 0 — l'amorçage : trois gestes de Paul, zéro ligne de code",
-          "critere_de_sortie": "`stickers` > 0 · fiche Google visible publiquement · `stripe_charges_enabled` = true"
-        },
-        "dernier_arret": {
-          "le": "2026-09-01",
-          "quoi": "ACQ-2 MERGÉ (PR #313) et ACQ-1 complété côté RenoAgenda (PR #60, mergée aussi). Puis dry run sur `main`, pas sur les branches : 818 tests verts + lint propre côté RenoBoost, 19 tests côté RenoAgenda, 9 sondes vertes sur la base RenoAgenda. ⛔ LE DRY RUN A TROUVÉ UN VRAI ÉCART : `api/leads-artisan.mjs` était mergée et déployée alors qu'AUCUNE des 12 colonnes qu'elle écrit n'existait dans `artisan_le",
-          "commit": "acbee69"
-        },
-        "prochaine_action": "⚠️ LE JALON 0 EST REPORTÉ — décision de Paul le 01/09 au soir (« jalon 0 plus tard »), qui renverse la consigne de clôture prise plus tôt le même jour. Ne PLUS ouvrir une séance en exigeant les trois compteurs : ils restent à zéro et c'est assumé. ⛔ Mais ne pas les perdre de vue non plus — fiche Google à valider, lot de stickers à générer (le piège de l'URL est refermé depuis le 01/09, RénoPredict",
-        "bloque_par": [
-          "Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08",
-          "Générer un lot de stickers QR puis imprimer — ouvert depuis le 11/08 (`stickers` = 0). ✅ La vérification manuelle de l'URL n'est plus à faire : corrigée à la source le 01/09 côté RénoPredict (PR #60), les QR portent toujours l'origine de production et l'écran affiche la destination. Il ne reste que le geste physique.",
-          "Déployer `main` PUIS finir l'embarquement Stripe de SOLA — dans cet ordre, jamais l'inverse"
-        ],
-        "en_attente_depuis": "2026-08-04",
-        "boucles_ouvertes": [
-          {
-            "quoi": "PR #304 (brouillon) — le point de reprise du 31/08. ✅ DEV-A1 tranché et livré le 31/08 (« trois rendus »). ✅ ALT-A2 livré et mergé le 01/09 (PR #310). 🅿️ MKT-A4 SORTI DU PÉRIMÈTRE le 01/09 avec tous les contrats d'entretien. ⚠️ Mais il redevient le PREMIER geste le jour où ce chantier rouvre : il est gratuit tant que `contracts` est vide (0 aujourd'hui) et devient une renégociation après la premi",
-            "depuis": "2026-08-27"
-          },
-          {
-            "quoi": "⛔ Les QR des stickers portent l'URL de la page qui GÉNÈRE le PDF (`window.location.origin`, RenoPredict `src/components/stickers/PDFGenerator.jsx:56`) — aucun domaine de production n'est configuré. Générer un lot depuis un preview Vercel ou depuis localhost produit des QR morts, et l'erreur ne se découvre que chez le client, sur du papier déjà collé. Le CLAUDE.md demande de vérifier l'URL à la mai",
-            "depuis": "2026-09-01"
-          },
-          {
-            "quoi": "⚠️ Copie de PII entre comptes, constatée le 01/09 et NON corrigée : le keyspace kv_store de `henry.huvey@gmail.com` porte une copie du carnet de Paul — 110 fiches clients, 5 pros avec SIRET, téléphones et adresses. Cause : `data.js` filtre le write-through des `clients` (règle posée après l'incident du 03/08) mais RIEN ne filtre le `kv_store`, qu'un second admin repousse sous SON owner_id. La purg",
-            "depuis": "2026-09-01"
-          },
-          {
-            "quoi": "⚠️ Constat du 01/09, à ne pas reperdre : le backlog du CADRAGE-2026-08-19-audit-gemini.md AFFICHE plus de stock qu'il n'en reste. Vérifié lot par lot dans le code ce jour : lot 3 (récap), lot 4 (fiche pro + passerelle savoir_faire, dashboard.js:4687), lot 5 (frise des relances, produits/renorelance.html) et lot 7 (tarifs) sont LIVRÉS. Ne restent que 6 et 8, tous deux bloqués par une matière que se",
-            "depuis": "2026-09-01"
-          },
-          {
-            "quoi": "ACQ-2 (simulateur de zone) — arbitrages RENDUS le 01/09 : Paul a validé les cinq recos. G2 (paniers et marges) est LEVÉ, G3 (part de marché promise) est SUPPRIMÉ du calcul. ⛔ Reste G1, et lui seul : les volumes de recherche par département × métier, que seul Paul peut fournir (export Keyword Planner, ACTIONS-PAUL.md §5). Sans lui, `estimerMarche()` répond « indisponible » — c'est voulu. Restent à ",
-            "depuis": "2026-09-01"
-          },
-          {
-            "quoi": "⛔ ACQ-1 est écrit mais N'EST PAS ACTIF : trois gestes de Paul manquent, tous dans RenoAgenda. (1) Appliquer `supabase-artisan-verification-schema.sql` sur le projet poskdialgzwxmcfyklvk — il referme au passage une faille constatée le 01/09 : `has_column_privilege('authenticated','artisans','statut','UPDATE')` = true, donc un artisan connecté peut aujourd'hui écrire lui-même `statut = 'valide'` et ",
-            "depuis": "2026-09-01"
-          },
-          {
-            "quoi": "⛔ PANNE DE PRODUCTION dans RénoAgenda, trouvée le 01/09 en testant le garde d'ACQ-1 : six policies RLS reconnaissent l'admin par un SELECT sur `auth.users`, que ni `anon` ni `authenticated` n'ont le droit de lire. Une policy permissive qui LÈVE ne renvoie pas « faux » — elle fait échouer toute la requête. Mesuré en base (transaction annulée) : l'inscription artisan (`INSERT … RETURNING`) échoue, e",
-            "depuis": "2026-09-01"
-          },
-          {
-            "quoi": "ACQ-2c — l'écran du simulateur sur index.html. Tout l'amont est mergé et prouvé (moteur, référentiel sourcé, route de lead, colonnes en base). ⛔ Il ne reste QUE le gate G1 : les volumes de recherche par département × métier, que seul Paul peut fournir (export Keyword Planner, ACTIONS-PAUL.md §5). Sans lui, `estimerMarche()` répond « indisponible » — volontairement.",
-            "depuis": "2026-09-01"
-          }
-        ],
-        "maj": "2026-09-01"
-      },
-      "hors_seance": false,
-      "derive": {
-        "tete": null,
-        "tete_le": null,
-        "commits_depuis": 0,
-        "commit_inconnu": false
-      },
-      "jours_depuis_maj": 1,
-      "jours_en_attente": 29,
       "rang": 1
     },
     {
@@ -174,6 +101,79 @@ export default {
         "commit_inconnu": false
       },
       "jours_depuis_maj": 1,
+      "jours_en_attente": 29,
+      "rang": 1
+    },
+    {
+      "ok": true,
+      "motif": "",
+      "depot": "PaulGERARD161098/RenoBoost",
+      "grain": {
+        "projet": "RénoBoost",
+        "depot": "PaulGERARD161098/RenoBoost",
+        "cap": "Un individu seul fait tourner le business entier, aidé par l'automatisation (Directive IA). RénoBoost est le hub : acquisition, rendez-vous, dashboard, et la roadmap maîtresse des quatre briques.",
+        "rattache_a": "ROADMAP-MASTER.md · CADRAGE-2026-09-02-demain.md · REPRISE-2026-09-01-jalon-0.md · REPRISE-2026-09-01-fiche-client-acompte.md",
+        "etat": "en_attente_de_paul",
+        "jalon": {
+          "nom": "Jalon 0 — l'amorçage : trois gestes de Paul, zéro ligne de code",
+          "critere_de_sortie": "`stickers` > 0 · fiche Google visible publiquement · `stripe_charges_enabled` = true"
+        },
+        "dernier_arret": {
+          "le": "2026-09-01",
+          "quoi": "ACQ-2c EST EN LIGNE (PR #321 mergée le 02/09, prod `940a3bb`, déploiement READY). Paul a testé l'écran — non pas sur le preview Vercel, inaccessible pour lui après trois tentatives (SSO + jeton de partage), mais sur un BANC D'ESSAI publié en artifact : le vrai code du dépôt embarqué verbatim, réseau simulé. Il a validé, puis demandé que le simulateur passe EN BANDEAU D'OUVERTURE — il est désormais",
+          "commit": "2c07811"
+        },
+        "prochaine_action": "G1 — LES CSV KEYWORD PLANNER DE PAUL, et rien d'autre côté simulateur : le code est en ligne, le bloc marché dit « pas encore de relevé » tant que `benchmarks-zone.json` n'a pas de volumes, et il se remplira SANS une ligne de code (`node scripts/importer-volumes-zone.mjs <dossier> --ecrire`, 17 tests). ⚠️ ENSUITE, ET SANS BOUGER : LE JALON 0 — fiche Google validée, un lot de stickers imprimé, emba",
+        "bloque_par": [
+          "Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08",
+          "Générer un lot de stickers QR puis imprimer — ouvert depuis le 11/08 (`stickers` = 0). ✅ La vérification manuelle de l'URL n'est plus à faire : corrigée à la source le 01/09 côté RénoPredict (PR #60), les QR portent toujours l'origine de production et l'écran affiche la destination. Il ne reste que le geste physique.",
+          "Déployer `main` PUIS finir l'embarquement Stripe de SOLA — dans cet ordre, jamais l'inverse"
+        ],
+        "en_attente_depuis": "2026-08-04",
+        "boucles_ouvertes": [
+          {
+            "quoi": "PR #304 (brouillon) — le point de reprise du 31/08. ✅ DEV-A1 tranché et livré le 31/08 (« trois rendus »). ✅ ALT-A2 livré et mergé le 01/09 (PR #310). 🅿️ MKT-A4 SORTI DU PÉRIMÈTRE le 01/09 avec tous les contrats d'entretien. ⚠️ Mais il redevient le PREMIER geste le jour où ce chantier rouvre : il est gratuit tant que `contracts` est vide (0 aujourd'hui) et devient une renégociation après la premi",
+            "depuis": "2026-08-27"
+          },
+          {
+            "quoi": "⛔ Les QR des stickers portent l'URL de la page qui GÉNÈRE le PDF (`window.location.origin`, RenoPredict `src/components/stickers/PDFGenerator.jsx:56`) — aucun domaine de production n'est configuré. Générer un lot depuis un preview Vercel ou depuis localhost produit des QR morts, et l'erreur ne se découvre que chez le client, sur du papier déjà collé. Le CLAUDE.md demande de vérifier l'URL à la mai",
+            "depuis": "2026-09-01"
+          },
+          {
+            "quoi": "⚠️ Copie de PII entre comptes, constatée le 01/09 et NON corrigée : le keyspace kv_store de `henry.huvey@gmail.com` porte une copie du carnet de Paul — 110 fiches clients, 5 pros avec SIRET, téléphones et adresses. Cause : `data.js` filtre le write-through des `clients` (règle posée après l'incident du 03/08) mais RIEN ne filtre le `kv_store`, qu'un second admin repousse sous SON owner_id. La purg",
+            "depuis": "2026-09-01"
+          },
+          {
+            "quoi": "⚠️ Constat du 01/09, à ne pas reperdre : le backlog du CADRAGE-2026-08-19-audit-gemini.md AFFICHE plus de stock qu'il n'en reste. Vérifié lot par lot dans le code ce jour : lot 3 (récap), lot 4 (fiche pro + passerelle savoir_faire, dashboard.js:4687), lot 5 (frise des relances, produits/renorelance.html) et lot 7 (tarifs) sont LIVRÉS. Ne restent que 6 et 8, tous deux bloqués par une matière que se",
+            "depuis": "2026-09-01"
+          },
+          {
+            "quoi": "ACQ-2 (simulateur de zone) — arbitrages RENDUS le 01/09 : Paul a validé les cinq recos. G2 (paniers et marges) est LEVÉ, G3 (part de marché promise) est SUPPRIMÉ du calcul. ⛔ Reste G1, et lui seul : les volumes de recherche par département × métier, que seul Paul peut fournir (export Keyword Planner, ACTIONS-PAUL.md §5). Sans lui, `estimerMarche()` répond « indisponible » — c'est voulu. Restent à ",
+            "depuis": "2026-09-01"
+          },
+          {
+            "quoi": "⛔ ACQ-1 est écrit mais N'EST PAS ACTIF : trois gestes de Paul manquent, tous dans RenoAgenda. (1) Appliquer `supabase-artisan-verification-schema.sql` sur le projet poskdialgzwxmcfyklvk — il referme au passage une faille constatée le 01/09 : `has_column_privilege('authenticated','artisans','statut','UPDATE')` = true, donc un artisan connecté peut aujourd'hui écrire lui-même `statut = 'valide'` et ",
+            "depuis": "2026-09-01"
+          },
+          {
+            "quoi": "⛔ PANNE DE PRODUCTION dans RénoAgenda, trouvée le 01/09 en testant le garde d'ACQ-1 : six policies RLS reconnaissent l'admin par un SELECT sur `auth.users`, que ni `anon` ni `authenticated` n'ont le droit de lire. Une policy permissive qui LÈVE ne renvoie pas « faux » — elle fait échouer toute la requête. Mesuré en base (transaction annulée) : l'inscription artisan (`INSERT … RETURNING`) échoue, e",
+            "depuis": "2026-09-01"
+          },
+          {
+            "quoi": "✅ FERMÉE le 02/09 — ACQ-2c est en ligne. Ce qui reste n'est plus du code : les CSV Keyword Planner (G1).",
+            "depuis": "2026-09-01"
+          }
+        ],
+        "maj": "2026-09-02"
+      },
+      "hors_seance": false,
+      "derive": {
+        "tete": null,
+        "tete_le": null,
+        "commits_depuis": 0,
+        "commit_inconnu": false
+      },
+      "jours_depuis_maj": 0,
       "jours_en_attente": 29,
       "rang": 1
     },
@@ -241,9 +241,9 @@ export default {
         "dernier_arret": {
           "le": "2026-09-02",
           "quoi": "LA COLLECTE NE CONFOND PLUS « PAS LU » AVEC « ILLISIBLE », et c'est le fait principal. Elle lit le disque ; une séance ne clone que les dépôts qui lui sont attachés, et les autres tombaient dans la branche « FINUBAR.md absent » — un constat SUR LE DÉPÔT là où il n'y avait qu'un angle mort de l'observateur. Ce matin-là elle annonçait « 3 projets sans grain lisible » : les trois grains existaient, i",
-          "commit": "046e966"
+          "commit": "9a4ecd4"
         },
-        "prochaine_action": "Recaler les grains de `mon-dpe.fr` et `artisan-builder` : leurs `dernier_arret.commit` (b5c0a72, 1924e58) ne sont pas leurs têtes réelles (9f8f0b7, 3ee806d) — reliquat du squash-merge du 21/08, et ces deux dépôts n'ont pas bougé depuis. ⚠️ Les 5 dépôts attachés, eux, sont RECALÉS : mesuré le 02/09, `commits_depuis = 0` et commit retrouvé sur les cinq — cette moitié de la vérification du 21/08 est ",
+        "prochaine_action": "Recaler les grains de `mon-dpe.fr` et `artisan-builder` — DERNIER reliquat du squash-merge du 21/08 : leurs `dernier_arret.commit` (b5c0a72, 1924e58) ne sont pas leurs têtes réelles (9f8f0b7, 3ee806d), et ces deux dépôts n'ont pas bougé depuis. ⚠️ Il faut les ATTACHER à la séance pour le faire (`add_repo` les accepte : vérifié le 02/09, ils sont du même propriétaire). ✅ Les 5 dépôts attachés sont ",
         "bloque_par": [
           "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
           "`ANTHROPIC_API_KEY` en env Vercel",
@@ -345,18 +345,6 @@ export default {
         "geste": "Relecture juriste des CGU avant la première signature client"
       },
       {
-        "projet": "RénoBoost",
-        "geste": "Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08"
-      },
-      {
-        "projet": "RénoBoost",
-        "geste": "Générer un lot de stickers QR puis imprimer — ouvert depuis le 11/08 (`stickers` = 0). ✅ La vérification manuelle de l'URL n'est plus à faire : corrigée à la source le 01/09 côté RénoPredict (PR #60), les QR portent toujours l'origine de production et l'écran affiche la destination. Il ne reste que le geste physique."
-      },
-      {
-        "projet": "RénoBoost",
-        "geste": "Déployer `main` PUIS finir l'embarquement Stripe de SOLA — dans cet ordre, jamais l'inverse"
-      },
-      {
         "projet": "RénoPredict",
         "geste": "Générer et imprimer un lot de stickers QR — `stickers` = 0 depuis le 11/08. ✅ Le piège de l'URL est refermé le 01/09 (src/lib/qr-url.js : origine de production toujours, destination affichée à l'écran) — il ne reste que le geste physique"
       },
@@ -367,6 +355,18 @@ export default {
       {
         "projet": "RénoPredict",
         "geste": "Embarquement Stripe côté RénoPredict — jamais commencé (0 profil sur 2)"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Générer un lot de stickers QR puis imprimer — ouvert depuis le 11/08 (`stickers` = 0). ✅ La vérification manuelle de l'URL n'est plus à faire : corrigée à la source le 01/09 côté RénoPredict (PR #60), les QR portent toujours l'origine de production et l'écran affiche la destination. Il ne reste que le geste physique."
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Déployer `main` PUIS finir l'embarquement Stripe de SOLA — dans cet ordre, jamais l'inverse"
       },
       {
         "projet": "RénoDevis",
@@ -398,13 +398,13 @@ export default {
         "pourquoi": "attente"
       },
       {
-        "projet": "RénoBoost",
-        "dit": "attend un geste : Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08 — ouvert depuis 29 j",
+        "projet": "RénoPredict",
+        "dit": "attend un geste : Générer et imprimer un lot de stickers QR — `stickers` = 0 depuis le 11/08. ✅ Le piège de l'URL est refermé le 01/09 (src/lib/qr-url.js : origine de production toujours, destination affichée à l'écran) — il ne reste que le geste physique — ouvert depuis 29 j",
         "pourquoi": "attente"
       },
       {
-        "projet": "RénoPredict",
-        "dit": "attend un geste : Générer et imprimer un lot de stickers QR — `stickers` = 0 depuis le 11/08. ✅ Le piège de l'URL est refermé le 01/09 (src/lib/qr-url.js : origine de production toujours, destination affichée à l'écran) — il ne reste que le geste physique — ouvert depuis 29 j",
+        "projet": "RénoBoost",
+        "dit": "attend un geste : Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08 — ouvert depuis 29 j",
         "pourquoi": "attente"
       }
     ],
@@ -426,14 +426,14 @@ export default {
         "signal": 1
       },
       {
-        "id": "PaulGERARD161098/RenoBoost",
-        "libelle": "RénoBoost",
+        "id": "PaulGERARD161098/RenoPredict",
+        "libelle": "RénoPredict",
         "constellation": "en_attente_de_paul",
         "signal": 1
       },
       {
-        "id": "PaulGERARD161098/RenoPredict",
-        "libelle": "RénoPredict",
+        "id": "PaulGERARD161098/RenoBoost",
+        "libelle": "RénoBoost",
         "constellation": "en_attente_de_paul",
         "signal": 1
       },
