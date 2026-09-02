@@ -147,6 +147,48 @@ console.log('§5 — un projet illisible remonte AVEC son motif (jamais écarté
   verifier('il porte son motif et son dépôt', casse.motif === 'bloc illisible' && casse.depot === 'd/Casse');
 }
 
+// ------------------------------------------------------- §5bis dépôt hors séance
+// Le défaut du 02/09/2026 : la collecte lit le disque, une séance ne clone que
+// les dépôts qui lui sont attachés, et les autres ressortaient en « FINUBAR.md
+// absent » — un constat sur le dépôt là où il n'y avait qu'un angle mort de
+// l'observateur. Trois grains sains ont été annoncés manquants ce matin-là.
+//
+// Ce qui se vérifie ici tient en deux exigences OPPOSÉES, et c'est leur tension
+// qui fait la correction : le hors-séance sort du compte des illisibles (sinon
+// il noie les vraies alertes) SANS sortir de l'agrégat (sinon il se lit « rien
+// à signaler », ce que la règle ⑤ interdit).
+console.log('§5bis — un dépôt non attaché n\'est pas un grain cassé, et ne disparaît pas non plus');
+{
+  const a = agreger([
+    lireGrain('{"projet":"Bon","etat":"en_cours","maj":"2026-08-21"}', 'd/Bon'),
+    lireGrain('pas du json', 'd/Casse'),
+    { ok: false, hors_seance: true, motif: 'dépôt non attaché à cette séance', depot: 'd/Loin', grain: null, derive: null },
+  ], '2026-08-21');
+
+  verifier('les trois sont comptés', a.macro.total === 3);
+  verifier('le hors-séance N\'EST PAS compté illisible',
+    a.macro.illisibles === 1, `illisibles=${a.macro.illisibles}`);
+  verifier('il a son propre compteur', a.macro.hors_seance === 1);
+  verifier('les trois compteurs couvrent le total',
+    a.macro.lisibles + a.macro.illisibles + a.macro.hors_seance === a.macro.total);
+
+  // ⛔ LA LIGNE QUI TIENT LE LOT. Sortir du compte ne doit jamais valoir sortir
+  // de la liste : un dépôt qu'on n'a pas ouvert reste affiché, à sa place.
+  const loin = a.projets.find((p) => p.depot === 'd/Loin');
+  verifier('il RESTE dans la liste, avec son motif', Boolean(loin) && loin.motif === 'dépôt non attaché à cette séance');
+  verifier('le cartouche porte les deux comptes séparément',
+    cartoucheDuMatin(a).illisibles === 1 && cartoucheDuMatin(a).hors_seance === 1);
+
+  // Et le cas de référence (règle du 2026-08-17 : demander à la mesure ce
+  // qu'elle répond sur un cas dont on connaît déjà la réponse) — sans aucun
+  // hors-séance, le compteur vaut 0 et `illisibles` retrouve exactement sa
+  // valeur d'avant la correction. Une sonde qui répondrait pareil dans les deux
+  // situations ne mesurerait rien.
+  const b = agreger([lireGrain('pas du json', 'd/Casse')], '2026-08-21');
+  verifier('sans hors-séance, le compteur vaut 0 et illisibles est inchangé',
+    b.macro.hors_seance === 0 && b.macro.illisibles === 1);
+}
+
 // ---------------------------------------------------------------- §6 cartouche
 console.log('§6 — le cartouche du matin : ≤3 signaux, 1 action, aucun reproche');
 {
