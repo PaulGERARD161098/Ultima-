@@ -33,9 +33,9 @@
   "dernier_arret": {
     "le": "2026-09-02",
     "quoi": "LA COLLECTE NE CONFOND PLUS « PAS LU » AVEC « ILLISIBLE », et c'est le fait principal. Elle lit le disque ; une séance ne clone que les dépôts qui lui sont attachés, et les autres tombaient dans la branche « FINUBAR.md absent » — un constat SUR LE DÉPÔT là où il n'y avait qu'un angle mort de l'observateur. Ce matin-là elle annonçait « 3 projets sans grain lisible » : les trois grains existaient, intacts (mon-dpe.fr et artisan-builder relus sur GitHub, ripair non attachable en cross-tier), et deux de ces dépôts n'avaient même pas bougé depuis le 21/08. Deux compteurs séparés désormais (`illisibles` et `hors_seance`), un motif distinct, un libellé d'écran qui n'accuse plus le dépôt — et le hors-séance RESTE affiché, car sortir du compte ne doit jamais valoir sortir de la liste. C'est la tension que le harnais §5bis verrouille, avec son cas de référence sans hors-séance. Posé au passage : la routine « Finubar — récap du matin » (8 h, heure de Paris, push + e-mail), qui porte la même leçon dans son prompt.",
-    "commit": "046e966"
+    "commit": "9a4ecd4"
   },
-  "prochaine_action": "Recaler les grains de `mon-dpe.fr` et `artisan-builder` : leurs `dernier_arret.commit` (b5c0a72, 1924e58) ne sont pas leurs têtes réelles (9f8f0b7, 3ee806d) — reliquat du squash-merge du 21/08, et ces deux dépôts n'ont pas bougé depuis. ⚠️ Les 5 dépôts attachés, eux, sont RECALÉS : mesuré le 02/09, `commits_depuis = 0` et commit retrouvé sur les cinq — cette moitié de la vérification du 21/08 est close. `ripair` reste hors de portée (autre propriétaire, `add_repo` refuse le cross-tier), donc jamais mesurable depuis une séance RénoBoost",
+  "prochaine_action": "Recaler les grains de `mon-dpe.fr` et `artisan-builder` — DERNIER reliquat du squash-merge du 21/08 : leurs `dernier_arret.commit` (b5c0a72, 1924e58) ne sont pas leurs têtes réelles (9f8f0b7, 3ee806d), et ces deux dépôts n'ont pas bougé depuis. ⚠️ Il faut les ATTACHER à la séance pour le faire (`add_repo` les accepte : vérifié le 02/09, ils sont du même propriétaire). ✅ Les 5 dépôts attachés sont recalés — RenoBoost sur `2c07811` et RenoAgenda sur `45dc2bc` le 02/09, après leurs propres squash-merges ; les trois autres étaient déjà bons. `ripair` reste hors de portée : autre propriétaire, `add_repo` refuse le cross-tier, donc jamais mesurable depuis une séance RénoBoost — c'est une limite à connaître, pas un retard à rattraper",
   "bloque_par": [
     "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
     "`ANTHROPIC_API_KEY` en env Vercel",
@@ -103,6 +103,26 @@ ne mesure rien.
 Posé le même jour : la routine **« Finubar — récap du matin »** (8 h, heure de
 Paris, push + e-mail), dont le prompt porte la même leçon pour ne pas la reperdre
 dans une séance qui n'aurait pas ce fichier sous les yeux.
+
+**Et les boucles fermées derrière**, à la demande de Paul : les **trois** PR qui
+restaient ouvertes sur les cinq dépôts ont été fusionnées — Ultima #182 (ce lot),
+RenoBoost #324 (le cadrage du 02/09) et RenoAgenda #62 (`est_admin()` fige son
+`search_path`). Zéro PR ouverte à la clôture. Les deux dernières venaient d'un fil
+parallèle : leurs diffs ont été relus et leurs CI vérifiées avant fusion, pas
+fusionnées sur leur seule couleur.
+
+⚠️ Le conflit de #324 méritait mieux qu'un « prendre le leur » : deux séances
+avaient écrit `dernier_arret` à quatre heures d'écart. C'est un objet unique, il
+ne se concatène pas — la note de `main` a été gardée parce qu'elle est postérieure
+ET ancrée sur la tête réelle, et l'apport de la PR (le fichier de cadrage) est
+entré par `rattache_a`. **Ce qui n'a pas été arbitré**, délibérément : les deux
+priorisations divergentes (B→A→C contre « G1 puis jalon 0 ») — trancher là aurait
+été une décision produit déguisée en résolution de conflit.
+
+Et le garde-fou tout neuf a servi dans l'heure : la collecte a signalé « 1 projet
+a avancé » alors que c'était ma propre branche de travail dans RenoBoost. Une
+fausse dérive, qui allait être figée dans l'agrégat commité. Les trois grains ont
+été recalés sur les têtes réelles avant la dernière collecte.
 
 ### 2026-08-28 — Le ciel s'isole
 Demande dictée par Paul : « quand je clique sur une constellation, ça m'affiche
