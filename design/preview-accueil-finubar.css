@@ -1,0 +1,137 @@
+/* MAQUETTE — l'accueil piloté par FINUBAR.
+   Les jetons viennent de css/ciel.css et css/stellaire.css : cette feuille
+   n'invente aucune couleur de fond, elle n'ajoute que L'APPEL. */
+
+:root {
+  /* LES TROIS COULEURS D'APPEL. Elles sont TIRÉES de la palette existante, pas
+     choisies à côté : l'or antique (--ciel-or-clair) est déjà la couleur des
+     cartouches et des noms de constellation, le bleu est celui de la mer
+     (--mer-claire). Aucune n'est rouge : rien dans Ultima ne gronde. */
+  --appel: #e6c67d;        /* attend un geste de Paul — le plus fort */
+  --appel-recaler: #8fc2d4; /* a avancé depuis sa note — à recaler */
+  --appel-braise: #6f9fb5;  /* en cours — une braise, pas une alarme */
+}
+
+html, body { height: 100%; }
+body {
+  margin: 0; overflow: hidden;
+  background: #03070e;
+  color: #f2ead6;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+/* LA SCÈNE EST LA PAGE. Le mobilier est posé par-dessus, et ne reçoit le geste
+   que là où il y a quelque chose à toucher (`pointer-events`). */
+/* La bande basse est RÉSERVÉE au bandeau : le ciel s'arrête à sa lisière.
+   `--bas` est posée par le JS après mesure (voir `reserverLaBande`). La valeur
+   ici n'est qu'un repli pour le premier peignage. */
+:root { --bas: 190px; }
+#scene { position: fixed; inset: 0; bottom: var(--bas); }
+
+.hud { position: fixed; inset: 0; pointer-events: none; display: flex;
+       flex-direction: column; justify-content: space-between; }
+.hud > * { pointer-events: none; }
+.hud button, .hud a { pointer-events: auto; }
+
+.hud-haut { display: flex; justify-content: space-between; align-items: flex-start;
+            gap: 16px; padding: max(18px, env(safe-area-inset-top)) 20px 0; }
+.fil { margin: 0 0 4px; font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
+       color: #a9884a; }
+.titre { margin: 0; font-size: clamp(20px, 3.4vw, 30px); font-weight: 400; letter-spacing: .04em; }
+.parole { margin: 4px 0 0; font-size: 14px; color: #cdc3ad; font-style: italic; max-width: 46ch; }
+
+.outils { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.outils button {
+  pointer-events: auto; font: inherit; font-size: 12px; letter-spacing: .06em;
+  color: #f2ead6; background: rgba(14, 26, 43, .82);
+  border: 1px solid rgba(169, 136, 74, .5); border-radius: 3px;
+  padding: 8px 12px; cursor: pointer; min-height: 34px;
+}
+.outils button:hover { border-color: #d8bd82; }
+.outils button:focus-visible { outline: 2px solid #f2ead6; outline-offset: 2px; }
+
+/* ---------------------------------------------------------------- l'appel */
+
+/* Une CLASSE, pas une géométrie : `drop-shadow` suit l'étoile où qu'elle aille,
+   sans qu'on ait à connaître sa position (voir le commentaire du .js). */
+.ciel-etoile[data-appel] { filter: drop-shadow(0 0 5px var(--teinte)) drop-shadow(0 0 12px var(--teinte)); }
+.ciel-etoile[data-appel="appel"]   { --teinte: var(--appel); animation: respire 4.5s ease-in-out infinite; }
+.ciel-etoile[data-appel="recaler"] { --teinte: var(--appel-recaler); }
+.ciel-etoile[data-appel="braise"]  { --teinte: var(--appel-braise); opacity: .96; }
+.ciel-etoile[data-appel] .ciel-nom { fill: var(--teinte); }
+
+@keyframes respire { 0%, 100% { opacity: .82; } 50% { opacity: 1; } }
+/* Un halo qui bat sans arrêt est une gêne pour qui y est sensible : la couleur
+   reste, le mouvement part. */
+@media (prefers-reduced-motion: reduce) {
+  .ciel-etoile[data-appel="appel"] { animation: none; }
+}
+
+/* -------------------------------------------------------------- le bandeau */
+
+.bandeau {
+  pointer-events: auto;
+  margin: 0 max(10px, env(safe-area-inset-left)) max(10px, env(safe-area-inset-bottom));
+  display: grid; grid-template-columns: minmax(180px, 220px) 1fr minmax(230px, 300px);
+  gap: 0; align-items: stretch;
+  background: linear-gradient(180deg, rgba(10, 18, 32, .93), rgba(3, 7, 14, .96));
+  border: 1px solid rgba(169, 136, 74, .45);
+  border-radius: 4px;
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, .5);
+}
+
+.fb-entete { padding: 12px 16px; border-right: 1px solid rgba(169, 136, 74, .25); }
+.fb-nom { margin: 0; font-size: 13px; letter-spacing: .22em; color: #d8bd82; }
+.fb-compte { margin: 6px 0 0; font-size: 12px; line-height: 1.5; color: #cdc3ad; }
+
+.fb-signaux { list-style: none; margin: 0; padding: 8px 10px; display: flex;
+              flex-direction: column; gap: 4px; }
+.fb-signal { border-left: 3px solid transparent; }
+.fb-signal[data-appel="appel"]   { border-left-color: var(--appel); }
+.fb-signal[data-appel="recaler"] { border-left-color: var(--appel-recaler); }
+.fb-signal[data-appel="braise"]  { border-left-color: var(--appel-braise); }
+.fb-bouton {
+  display: block; width: 100%; text-align: left; font: inherit; cursor: pointer;
+  background: none; border: 0; color: inherit; padding: 5px 10px; min-height: 34px;
+  border-radius: 3px;
+}
+.fb-bouton:hover { background: rgba(216, 189, 130, .10); }
+.fb-bouton:focus-visible { outline: 2px solid #f2ead6; outline-offset: -2px; }
+.fb-projet { display: block; font-size: 13px; color: #f2ead6; letter-spacing: .04em; }
+.fb-dit { display: block; font-size: 12px; color: #cdc3ad; line-height: 1.45;
+          overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+
+.fb-action { padding: 12px 16px; border-left: 1px solid rgba(169, 136, 74, .25);
+             background: rgba(23, 80, 107, .16); }
+.fb-leo { margin: 0; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #d8bd82; }
+.fb-quoi { margin: 6px 0 0; font-size: 13px; line-height: 1.5; color: #f2ead6; }
+.fb-nature { margin: 6px 0 0; font-size: 11.5px; color: #cdc3ad; font-style: italic; }
+
+/* Sur téléphone le bandeau passe en colonne : il occupe alors le tiers bas de
+   l'écran, et le ciel garde les deux tiers hauts. C'est le partage que la
+   maquette met à l'épreuve — c'est aussi celui que Paul juge. */
+@media (max-width: 860px) {
+  .bandeau { grid-template-columns: 1fr; }
+  .fb-entete { border-right: 0; border-bottom: 1px solid rgba(169, 136, 74, .25); padding: 8px 14px; }
+  .fb-action { border-left: 0; border-top: 1px solid rgba(169, 136, 74, .25); padding: 9px 14px; }
+  /* UNE SEULE LIGNE PAR SIGNAL, et l'ordre du bandeau s'inverse : la
+     recommandation de Léo passe EN PREMIER. Mesuré à 390 × 844 : à deux lignes
+     par signal, le bandeau prenait 49 % de la hauteur — le ciel n'était plus
+     l'écran, il était la moitié qui reste. La liste garde son rang mais pas sa
+     place : ce qu'on lit d'abord sur un téléphone, c'est par quoi commencer. */
+  .fb-dit { -webkit-line-clamp: 1; font-size: 11.5px; }
+  .fb-signaux { padding: 4px 6px; gap: 0; }
+  .fb-bouton { padding: 4px 8px; }
+  .fb-projet { font-size: 12px; }
+  .fb-compte { font-size: 11px; }
+  .fb-action { order: -1; }
+  .fb-quoi { font-size: 12.5px; }
+  .fb-nature { display: none; }
+  .titre { font-size: 19px; }
+  .parole { display: none; }
+  .hud-haut { padding-top: max(12px, env(safe-area-inset-top)); }
+  .outils { flex-direction: column; align-items: flex-end; gap: 6px; }
+  .outils button { font-size: 11px; padding: 6px 9px; }
+}
+
+.mention { margin: 0; padding: 6px 16px 0; font-size: 11px; color: #8b8271; }

@@ -247,3 +247,75 @@ textarea:focus-visible { outline-color: var(--or-clair, #d8bd82); }
       SEULE rescapée de dix règles que j'avais écrites par anticipation : les
       neuf autres suivaient déjà les jetons. */
 .bandeau-demo { color: var(--retard); background: #2b1f08; border-color: rgba(226, 169, 79, .45); }
+
+/* ---------------------------------------------------------------------------
+   ⑨ L'APPEL DE FINUBAR — la couleur qui oriente (2026-09-02, arbitrage n° 2).
+   Une étoile dont la descendance a quelque chose à faire porte une lueur ; la
+   couleur monte des astres vers leurs constellations, si bien qu'on voit
+   depuis la racine OÙ ça appelle avant de savoir quoi.
+
+   ⛔ AUCUNE N'EST ROUGE, et aucune ne pâlit ce qui dort. Un thermomètre
+   permanent ferait des projets délaissés un reproche silencieux — c'est
+   exactement ce que la règle ③ d'ALTHEA interdit : Ultima compte, elle ne
+   reproche pas. L'absence de couleur est un silence.
+
+   Les trois teintes sont TIRÉES de la palette existante, pas choisies à côté :
+   l'or est déjà celui des cartouches et des noms de constellation
+   (--ciel-or-clair), le bleu celui de la mer. --------------------------------- */
+:root {
+  --appel: #e6c67d;          /* attend un geste de Paul — le plus fort */
+  --appel-recaler: #8fc2d4;  /* a avancé depuis sa dernière note */
+  --appel-braise: #6f9fb5;   /* en cours — une braise, pas une alarme */
+}
+
+/* La lueur n'a PAS de coordonnées : elle suit l'étoile sans rien savoir de sa
+   position, là où un halo dessiné serait faux dès l'image suivante (le moteur
+   repositionne ses cercles à chaque trame). */
+.ciel-etoile[data-appel] {
+  filter: drop-shadow(0 0 5px var(--teinte)) drop-shadow(0 0 12px var(--teinte));
+}
+.ciel-etoile[data-appel="appel"]   { --teinte: var(--appel); animation: appel-respire 4.5s ease-in-out infinite; }
+.ciel-etoile[data-appel="recaler"] { --teinte: var(--appel-recaler); }
+.ciel-etoile[data-appel="braise"]  { --teinte: var(--appel-braise); }
+.ciel-etoile[data-appel] .ciel-nom { fill: var(--teinte); }
+
+@keyframes appel-respire { 0%, 100% { opacity: .82; } 50% { opacity: 1; } }
+
+/* Un halo qui bat sans arrêt est une gêne pour qui y est sensible. La couleur
+   reste — c'est elle qui porte l'information — le mouvement part. */
+@media (prefers-reduced-motion: reduce) {
+  .ciel-etoile[data-appel="appel"] { animation: none; }
+}
+
+/* ---------------------------------------------------------------------------
+   ⑩ LA PORTE D'ENTRÉE PASSE AU CIEL (2026-09-02).
+   « Même cette page il faut la changer — thème stellaire aussi » (Paul).
+
+   L'écran de connexion était resté une MER : dégradé bleu, moirure d'eau, et
+   une carte antique dessinée en plein écran. C'était le registre de l'accueil
+   d'avant LV5 ; depuis, l'outil entier est un ciel. Une porte qui montre autre
+   chose que la maison est une porte qui ment, même joliment.
+
+   Le cartouche ULTIMA, lui, ne bouge pas : il est déjà passé à la nuit au §①.
+   Et le formulaire non plus — `--parchemin` / `--parchemin-carte` sont déjà
+   redéfinis en nuit plus haut, donc la plaque est nocturne sans une ligne de
+   plus. C'est ce qui reste : le fond, la moirure, et le décor. ---------------- */
+.ecran-connexion {
+  /* Les deux mêmes nappes que le ciel (`--ciel-nuit-haute` / `--ciel-nuit-basse`
+     de `css/ciel.css`), avec la lueur haute qui donne l'horizon. Aucune valeur
+     inventée ici : ce fond doit être RECONNU en arrivant sur la racine. */
+  background:
+    radial-gradient(ellipse at 50% 28%, rgba(120, 160, 210, .16), rgba(0, 0, 0, 0) 62%),
+    linear-gradient(var(--ciel-nuit-haute, #0a1220), var(--ciel-nuit-basse, #03070e) 72%);
+}
+
+/* La moirure de l'eau n'a plus d'eau à moirer. On l'éteint plutôt que de la
+   retirer de `styles.css` : cette feuille-ci est le THÈME, et une page qui la
+   chargerait sans le thème (il n'y en a pas aujourd'hui) garderait sa mer
+   entière plutôt qu'un fond à moitié défait. */
+.ecran-connexion::before { content: none; }
+
+/* Le décor est désormais un CANVAS peint par `js/ecran-connexion-ciel.js`, plus
+   un SVG dans le document. La boîte garde sa place et son silence ; sans
+   JavaScript elle reste simplement vide — et la porte, elle, reste entière. */
+.ecran-decor { padding: 0; }

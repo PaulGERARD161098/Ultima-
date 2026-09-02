@@ -21,6 +21,9 @@
   <link rel="stylesheet" href="css/ciel.css">
   <link rel="stylesheet" href="css/ciel-noeud.css">
   <link rel="stylesheet" href="css/stellaire.css">
+  <!-- P3 — le bandeau Finubar. Après `stellaire.css` : il lit ses jetons
+       d'appel (§⑨) et ne redéfinit rien. -->
+  <link rel="stylesheet" href="css/finubar-bandeau.css">
 </head>
 <!-- LA RACINE — l'écran que Paul juge (LV5 / P4). Dernière page à passer de
      la boussole au ciel : la galaxie EST désormais l'accueil, le bandeau
@@ -37,107 +40,17 @@
        #ecran-connexion / #form-connexion / #champ-email / #bouton-google,
        css/styles.css). Décor SVG inline, muet (aria-hidden). -->
   <div id="ecran-connexion" class="ecran-connexion" hidden>
-    <div class="ecran-decor" aria-hidden="true">
-      <svg viewBox="0 0 700 940" preserveAspectRatio="xMidYMid meet" role="img"
-           aria-label="Carte décorative d'un monde-anneau imaginaire" focusable="false">
-        <defs>
-          <filter id="conn-rough" x="-4%" y="-4%" width="108%" height="108%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="2" seed="11" result="n"/>
-            <feDisplacementMap in="SourceGraphic" in2="n" scale="5"/>
-          </filter>
-          <radialGradient id="conn-terre" cx="45%" cy="35%" r="80%">
-            <stop offset="0%"  stop-color="#e8d49a"/>
-            <stop offset="55%" stop-color="#d9bf82"/>
-            <stop offset="100%" stop-color="#c4a468"/>
-          </radialGradient>
-          <radialGradient id="conn-mer" cx="50%" cy="42%" r="70%">
-            <stop offset="0%"  stop-color="#1d5c7c"/>
-            <stop offset="70%" stop-color="#145070"/>
-            <stop offset="100%" stop-color="#0e3a52"/>
-          </radialGradient>
-        </defs>
-        <g stroke="#8fc2d4" stroke-width="0.7" opacity="0.15">
-          <path d="M140,0 V940 M280,0 V940 M420,0 V940 M560,0 V940"/>
-          <path d="M0,134 H700 M0,268 H700 M0,402 H700 M0,536 H700 M0,670 H700 M0,804 H700"/>
-        </g>
-        <g filter="url(#conn-rough)">
-          <path d="M640,470 C635,540 600,570 579,602 C550,660 560,700 500,730
-                   C455,752 395,742 350,740 C290,738 240,745 202,725
-                   C150,700 140,640 125,600 C95,555 60,520 50,470
-                   C42,415 90,370 116,335 C145,295 170,255 205,219
-                   C245,180 295,168 350,165 C405,162 445,215 482,240
-                   C525,268 585,285 605,322 C630,365 645,415 640,470 Z"
-                fill="none" stroke="#8fd2e0" stroke-width="11" opacity="0.22"/>
-        </g>
-        <g filter="url(#conn-rough)">
-          <path d="M640,470 C635,540 600,570 579,602 C550,660 560,700 500,730
-                   C455,752 395,742 350,740 C290,738 240,745 202,725
-                   C150,700 140,640 125,600 C95,555 60,520 50,470
-                   C42,415 90,370 116,335 C145,295 170,255 205,219
-                   C245,180 295,168 350,165 C405,162 445,215 482,240
-                   C525,268 585,285 605,322 C630,365 645,415 640,470 Z"
-                fill="url(#conn-terre)" stroke="#5a4118" stroke-width="2.6"/>
-        </g>
-        <g filter="url(#conn-rough)">
-          <path d="M490,470 C488,515 475,530 455,545 C425,572 390,600 350,600
-                   C305,600 270,578 245,555 C222,533 218,500 215,470
-                   C212,435 222,400 240,380 C268,350 310,345 350,345
-                   C395,345 435,368 460,395 C480,415 492,435 490,470 Z"
-                fill="none" stroke="#8fd2e0" stroke-width="10" opacity="0.20"/>
-          <path d="M490,470 C488,515 475,530 455,545 C425,572 390,600 350,600
-                   C305,600 270,578 245,555 C222,533 218,500 215,470
-                   C212,435 222,400 240,380 C268,350 310,345 350,345
-                   C395,345 435,368 460,395 C480,415 492,435 490,470 Z"
-                fill="url(#conn-mer)" stroke="#5a4118" stroke-width="2.2"/>
-        </g>
-        <g stroke="#8fc2d4" fill="none" stroke-width="1.1" opacity="0.35" stroke-linecap="round">
-          <path d="M290,430 q12,-8 24,0 M330,415 q12,-8 24,0 M380,440 q12,-8 24,0"/>
-          <path d="M300,520 q12,-8 24,0 M370,540 q12,-8 24,0 M420,500 q12,-8 24,0"/>
-        </g>
-        <g filter="url(#conn-rough)">
-          <path d="M330,468 Q334,452 352,450 Q372,449 376,464 Q378,478 360,483 Q338,486 330,468 Z"
-                fill="url(#conn-terre)" stroke="#5a4118" stroke-width="1.6"/>
-        </g>
-        <g stroke="#7a5a2c" stroke-width="1.6" fill="none" stroke-linecap="round">
-          <path d="M346,470 l6,-9 l6,9"/>
-        </g>
-        <g fill="#7d9a52" opacity="0.30" filter="url(#conn-rough)">
-          <ellipse cx="495" cy="595" rx="58" ry="34"/>
-          <ellipse cx="205" cy="565" rx="50" ry="32"/>
-          <ellipse cx="455" cy="255" rx="52" ry="30"/>
-          <ellipse cx="243" cy="272" rx="46" ry="28"/>
-          <ellipse cx="565" cy="430" rx="34" ry="46"/>
-          <ellipse cx="135" cy="455" rx="30" ry="44"/>
-        </g>
-        <g stroke="#7a5a2c" stroke-width="1.9" fill="none" stroke-linecap="round" opacity="0.9">
-          <path d="M343,262 l7,-13 l7,13 M320,276 l6,-10 l6,10 M366,276 l6,-10 l6,10"/>
-          <path d="M275,284 l7,-12 l7,12 M411,284 l7,-12 l7,12"/>
-          <path d="M214,319 l7,-12 l7,12 M472,319 l7,-12 l7,12"/>
-          <path d="M516,364 l7,-12 l7,12 M170,364 l7,-12 l7,12"/>
-          <path d="M540,432 l7,-13 l7,13 M146,432 l7,-13 l7,13"/>
-          <path d="M540,502 l7,-12 l7,12 M146,502 l7,-12 l7,12"/>
-          <path d="M511,568 l7,-12 l7,12 M175,568 l7,-12 l7,12"/>
-          <path d="M411,652 l7,-12 l7,12 M275,652 l7,-12 l7,12 M343,664 l7,-13 l7,13"/>
-        </g>
-        <g fill="none" stroke="#2e7d9a" stroke-width="1.6" opacity="0.7">
-          <path d="M350,285 Q345,315 350,343"/>
-          <path d="M162,470 Q190,474 214,468"/>
-          <path d="M350,648 Q356,624 350,602"/>
-          <path d="M528,440 Q510,452 492,458"/>
-        </g>
-        <g transform="translate(632,878)" opacity="0.95">
-          <circle r="26" fill="#0e3a52" stroke="#c9a659" stroke-width="1.6"/>
-          <circle r="20" fill="none" stroke="#c9a659" stroke-width="0.7"/>
-          <g fill="#e8cf8f" stroke="#c9a659" stroke-width="0.6">
-            <path d="M0,-24 L4,-5 L0,0 L-4,-5 Z"/>
-            <path d="M0,24 L4,5 L0,0 L-4,5 Z" fill="#0e3a52"/>
-            <path d="M-24,0 L-5,4 L0,0 L-5,-4 Z" fill="#0e3a52"/>
-            <path d="M24,0 L5,4 L0,0 L5,-4 Z" fill="#0e3a52"/>
-          </g>
-          <text y="-31" text-anchor="middle" font-size="11" fill="#e8cf8f" font-style="italic">N</text>
-        </g>
-      </svg>
-    </div>
+    <!-- LE DÉCOR EST LE CIEL (02/09/2026). Il portait une carte antique dessinée
+         — mer moirée, terres ocre, rose des vents — héritée de l'accueil d'avant
+         LV5. L'outil, lui, EST devenu le ciel : garder ici la mer d'une carte
+         que plus aucune page ne montre, c'était faire entrer Paul par une porte
+         qui ne donne pas sur la maison.
+         Vide dans le document : le champ d'étoiles y est monté par
+         `js/ecran-connexion-ciel.js`, avec le MÊME peintre que les huit coques
+         (`js/ciel-fond.js`). Un second champ écrit à côté aurait divergé du
+         premier au premier réglage. Sans JavaScript, il n'y a donc pas de
+         décor — et c'est le bon défaut : la porte, elle, reste entière. -->
+    <div class="ecran-decor" aria-hidden="true"></div>
 
     <header class="ecran-cartouche">
       <h1 class="ecran-titre">ULTIMA</h1>
@@ -230,6 +143,17 @@
     <aside class="boussole-parole" id="boussole-parole" role="status" aria-live="polite">
     </aside>
 
+    <!-- FINUBAR — l'état des huit dépôts, en bas de l'accueil (P3, 02/09/2026).
+         VIDE au chargement, et il le reste tant que la session n'a rien livré :
+         `js/ciel-noeud.mjs` le remplit quand `/api/finubar` a répondu, et
+         `.fb-bandeau:empty` le fait disparaître d'ici là. Un cadre vide qui
+         attend de la donnée dit qu'il manque quelque chose ; l'absence, non.
+         ⛔ Il est DÉCLARÉ au moteur du ciel (`margesUtiles`) : sans cela, une
+         étoile tombée dans le tiers bas serait peinte mais plus cliquable — le
+         clic atterrirait sur un bouton du bandeau, et l'écran RÉPONDRAIT en se
+         trompant. Défaut mesuré sur la maquette le 02/09. -->
+    <div class="fb-bandeau" id="finubar-bandeau" aria-label="Finubar — l'état des projets"></div>
+
   </div>
 
   <div id="toasts" class="toasts" aria-live="polite"></div>
@@ -238,6 +162,11 @@
        au moment du rendu (le garde `window.UltimaCielFond` laisserait la page
        fonctionner sans fond, SANS RIEN DIRE — leçon de P1). -->
   <script src="js/ciel-fond.js"></script>
+  <!-- Le champ d'étoiles de la porte d'entrée (02/09) : le peintre commun,
+       puis le module qui le monte dans l'écran de connexion à sa première
+       ouverture. Aucun effet sur les pages qui ne portent pas cet écran. -->
+  <script src="js/ciel-fond-page.js"></script>
+  <script src="js/ecran-connexion-ciel.js"></script>
   <script src="js/ciel.js"></script>
   <script src="js/vendor/supabase-js-2.110.0.min.js"></script>
   <script src="js/config.js"></script>

@@ -289,6 +289,16 @@ console.log('— C. ① Le cockpit : avec session, et SANS (fail-closed) —');
 async function cockpit(scenario) {
   const p = await navigateur.newPage({ viewport: { width: 390, height: 844 } });
   brancher(p);
+  // Depuis le 02/09, TOUTE coque au ciel demande aussi `/api/finubar` (la
+  // couleur d'appel des projets). Non stubée, la route rend 404 sur le serveur
+  // statique du banc, et ce 404 se présenterait comme une erreur console — donc
+  // comme un défaut du produit, alors que c'est un manque de l'instrument. On
+  // rend un agrégat VIDE : ce harnais-ci ne juge pas Finubar (c'est
+  // `smoke-accueil-finubar`), il exige seulement que sa présence ne change rien.
+  await p.route('**/api/finubar', (route) => route.fulfill({
+    status: 200, contentType: 'application/json',
+    body: JSON.stringify({ ok: true, data: { le: '2026-09-02', projets: [], macro: {}, cartouche: { signaux: [] } } }),
+  }));
   await p.route('**/api/cockpit', (route) => {
     if (scenario === 'ok') {
       return route.fulfill({

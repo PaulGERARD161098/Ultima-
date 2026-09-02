@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Maquette — l'accueil piloté par FINUBAR</title>
+<!--
+  MAQUETTE DE TRAVAIL — CADRAGE-ACCUEIL-FINUBAR.md, étape P0.
+  Dicté par Paul le 2026-09-02 : « un seul écran d'accueil, au bas duquel il y a
+  Finubar, piloté par Léo, qui m'oriente vers la priorité du jour avec une
+  coloration des sujets prioritaires ; l'arborescence reste la constellation ».
+
+  CE QU'ELLE SERT À TRANCHER — Paul tranche, la mesure ne tranche pas :
+    ① LA GREFFE : les projets de Finubar deviennent des astres de l'arbre
+      (sous ALPHA / RENOBOOST IA), ou restent sur un écran à part ?
+    ② L'APPEL : la couleur monte des astres vers leurs constellations. Est-ce
+      lisible, est-ce que ça oriente — ou est-ce que ça encombre ?
+    ③ LE BANDEAU : trois signaux + une action, en bas, tout le temps. Bonne
+      hauteur ? Bon partage avec le ciel sur téléphone ?
+
+  ⛔ LES TEXTES SONT INVENTÉS. `design/` est déployé en clair (vérifié le
+  2026-09-02, il n'est pas dans `.vercelignore`) et l'agrégat Finubar est une
+  donnée privée servie derrière `requireUser`. La forme est réelle, le contenu
+  ne l'est pas — voir preview-accueil-finubar-fixture.mjs.
+-->
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../css/styles.css">
+<link rel="stylesheet" href="../css/ciel.css">
+<link rel="stylesheet" href="../css/stellaire.css">
+<link rel="stylesheet" href="preview-accueil-finubar.css">
+</head>
+<body class="ciel-noeud-coque">
+
+<noscript>
+  <p>Le ciel a besoin de JavaScript. Les portes restent ouvertes :
+    <a href="../ultima.html">ULTIMA</a>, <a href="../alpha.html">ALPHA</a>,
+    <a href="../althea.html">ALTHEA</a>, <a href="../finubar.html">FINUBAR</a>.</p>
+</noscript>
+
+<div id="scene" class="ciel-scene"></div>
+
+<div class="hud">
+  <div class="hud-haut">
+    <div>
+      <p class="fil" id="fil">Ultima</p>
+      <h1 class="titre" id="titre">Bienvenue sur Ultima</h1>
+      <p class="parole" id="parole">Sur quoi est-ce qu’on travaille aujourd’hui ?</p>
+    </div>
+    <div class="outils">
+      <button type="button" id="b-couleur" aria-pressed="true">Appel : allumé</button>
+      <button type="button" id="b-ouvrir" aria-pressed="false">Chemin d’appel : fermé</button>
+      <button type="button" id="b-racine">Tout voir</button>
+    </div>
+  </div>
+
+  <div>
+    <div class="bandeau" id="bandeau" aria-label="Finubar — l'état des projets"></div>
+    <p class="mention">Maquette · textes inventés · l’état réel se lit sur /finubar, derrière authentification.</p>
+  </div>
+</div>
+
+<script src="../js/ciel-fond.js"></script>
+<script src="../js/ciel.js"></script>
+<script type="module" src="preview-accueil-finubar.js"></script>
+</body>
+</html>

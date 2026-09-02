@@ -39,16 +39,17 @@
         ],
         "maj": "2026-09-01"
       },
+      "ciel": "renoboost-ia",
       "hors_seance": false,
       "derive": {
-        "tete": null,
-        "tete_le": null,
-        "commits_depuis": 0,
+        "tete": "e2b7b96",
+        "tete_le": "2026-09-02T14:34:23+02:00",
+        "commits_depuis": 1,
         "commit_inconnu": false
       },
       "jours_depuis_maj": 1,
       "jours_en_attente": 49,
-      "rang": 1
+      "rang": 0
     },
     {
       "ok": true,
@@ -88,16 +89,17 @@
         ],
         "maj": "2026-09-01"
       },
+      "ciel": "renoboost-ia",
       "hors_seance": false,
       "derive": {
-        "tete": null,
-        "tete_le": null,
-        "commits_depuis": 0,
+        "tete": "fc330ba",
+        "tete_le": "2026-09-02T14:34:34+02:00",
+        "commits_depuis": 1,
         "commit_inconnu": false
       },
       "jours_depuis_maj": 1,
       "jours_en_attente": 29,
-      "rang": 1
+      "rang": 0
     },
     {
       "ok": true,
@@ -114,15 +116,16 @@
           "critere_de_sortie": "`stickers` > 0 · fiche Google visible publiquement · `stripe_charges_enabled` = true"
         },
         "dernier_arret": {
-          "le": "2026-09-01",
-          "quoi": "ACQ-2c EST EN LIGNE (PR #321 mergée le 02/09, prod `940a3bb`, déploiement READY). Paul a testé l'écran — non pas sur le preview Vercel, inaccessible pour lui après trois tentatives (SSO + jeton de partage), mais sur un BANC D'ESSAI publié en artifact : le vrai code du dépôt embarqué verbatim, réseau simulé. Il a validé, puis demandé que le simulateur passe EN BANDEAU D'OUVERTURE — il est désormais",
-          "commit": "2c07811"
+          "le": "2026-09-02",
+          "quoi": "LE SIMULATEUR EST FINI CÔTÉ CODE — #333, #335, #336 et #337 mergées, prod `c6f6c10`, déploiement READY, zéro PR ouverte sur les quatre dépôts. Ce qu'il montre : chaîne demande relevée → contacts → rendez-vous → CA, le 10 % portant sur des CONTACTS (jamais des chantiers : sur 2 000 demandes ça annoncerait 200 chantiers/mois à un artisan seul, il fermerait l'onglet) ; échelle par RENDEZ-VOUS et par ",
+          "commit": "86f27fc"
         },
-        "prochaine_action": "G1 — LES CSV KEYWORD PLANNER DE PAUL, et rien d'autre côté simulateur : le code est en ligne, le bloc marché dit « pas encore de relevé » tant que `benchmarks-zone.json` n'a pas de volumes, et il se remplira SANS une ligne de code (`node scripts/importer-volumes-zone.mjs <dossier> --ecrire`, 17 tests). ⚠️ ENSUITE, ET SANS BOUGER : LE JALON 0 — fiche Google validée, un lot de stickers imprimé, emba",
+        "prochaine_action": "⛔ AUCUNE DES QUATRE ACTIONS RESTANTES N'EST DU CODE. Mesuré le 02/09 : les trois compteurs du jalon 0 sont à zéro alors que le simulateur est fini et déployé. Ordre recommandé, du plus rentable au moins urgent : (1) LE LOT DE STICKERS — `/Stickers`, générer, imprimer. C'est la SEULE chose qui remplit le système toute seule, le code est mergé depuis le 11/08 et n'a jamais tourné une fois faute d'ob",
         "bloque_par": [
           "Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08",
           "Générer un lot de stickers QR puis imprimer — ouvert depuis le 11/08 (`stickers` = 0). ✅ La vérification manuelle de l'URL n'est plus à faire : corrigée à la source le 01/09 côté RénoPredict (PR #60), les QR portent toujours l'origine de production et l'écran affiche la destination. Il ne reste que le geste physique.",
-          "Déployer `main` PUIS finir l'embarquement Stripe de SOLA — dans cet ordre, jamais l'inverse"
+          "Embarquement Stripe de SOLA — ⚠️ CE BLOCAGE A QUASIMENT DISPARU le 02/09 (RenoDevis PR #114) : un cron quotidien crée les comptes manquants, complète les comptes de TEST par API et recopie l'état de Stripe. ✅ La clé Stripe est posée en PRODUCTION — confirmé par Paul le 02/09, ⛔ ne pas le lui redemander. Il ne reste QUE le cas où Stripe refuserait la complétion par API sur SOLA (son tunnel a été ou",
+          "Le jeton Google Ads — ouvert le 02/09, GO de Paul le jour même. C'est le SEUL blocage restant du simulateur ; tout le reste du lot est en production. ✅ FAIT VÉRIFIÉ CE JOUR-LÀ, et il change la solution : `googleads.googleapis.com/v22/…` répond 401 (auth manquante) et `oauth2.googleapis.com/token` répond 400 — l'API Google Ads est JOIGNABLE depuis une session Claude Code (v14→v21 renvoient 404, ret"
         ],
         "en_attente_depuis": "2026-08-04",
         "boucles_ouvertes": [
@@ -161,16 +164,17 @@
         ],
         "maj": "2026-09-02"
       },
+      "ciel": "renoboost-ia",
       "hors_seance": false,
       "derive": {
-        "tete": null,
-        "tete_le": null,
-        "commits_depuis": 0,
+        "tete": "1d9d206",
+        "tete_le": "2026-09-02T18:22:36+02:00",
+        "commits_depuis": 1,
         "commit_inconnu": false
       },
       "jours_depuis_maj": 0,
       "jours_en_attente": 29,
-      "rang": 1
+      "rang": 0
     },
     {
       "ok": true,
@@ -187,13 +191,13 @@
           "critere_de_sortie": "un `1` dans la table `paiements` (0 aujourd'hui)"
         },
         "dernier_arret": {
-          "le": "2026-09-01",
-          "quoi": "DEUX LOTS SUR LA MÊME JOURNÉE, et cette entrée porte les deux — la branche relance a été fusionnée avec main qui portait le lot A. (A) LOT A, mergé sur main (PR #109) : l'UUID d'un devis ne vaut plus un droit de le signer. `sign_devis_public` refuse tout appelant `anon` sur un devis dont `signature_uuid_ouverte` est faux — 17 sur 18. Pas de coupure sèche : le seul devis dont le lien parti chez le ",
-          "commit": "e059c28"
+          "le": "2026-09-02",
+          "quoi": "EMBARQUEMENT STRIPE AUTOMATIQUE — PR #114 FUSIONNÉE le 02/09 (squash, main = ccff0ee). Constat qui motive le lot, mesuré en base ce jour : SOLA GROUPE a un compte connecté depuis le 19/08 qui n'encaisse toujours pas (`charges_enabled = false`), DOKLES n'en a aucun. Le code de paiement était complet depuis le 12/08 — ce qui manquait, c'est que l'embarquement dépendait de quatre gestes de Paul (ouvr",
+          "commit": "ccff0ee"
         },
-        "prochaine_action": "✅ PR #110 FUSIONNÉE le 02/09 (squash, main = e059c28) : l'outil de relance est en production. ⛔ R0a — LA QUESTION À POSER À PAUL, et le chemin critique : pourquoi 10 devis sur 18 sont-ils entrés par la boîte mail plutôt que par l'app ? Mesuré en base le 01/09 à 19:12 UTC : le moteur de relance tourne À VIDE — 27 échéances au total, 0 `pending`. Sur les 11 devis « Envoyé » non signés, 10 portent `s",
+        "prochaine_action": "⏳ TOUT EST CADRÉ, RIEN N'EST À DÉCIDER — la reprise MESURE puis applique. Le cadrage complet vit dans `REPRISE-2026-09-02-embarquement-stripe.md` § CADRAGE DE LA REPRISE (Finubar indexe, il ne recopie pas) : ① objectif = un `1` dans `paiements` (0 aujourd'hui) ; ② règle de Paul, mot pour mot : « on finira Stripe si les automatismes ne sont pas corrects » ; ③ deux requêtes de mesure, à lancer AVANT",
         "bloque_par": [
-          "Embarquement Stripe de SOLA : COMMENCÉ mais pas fini. ⚠️ Corrigé le 01/09 — cette ligne disait « stripe_account_id = 0, aucun artisan embarqué », c'est faux depuis un moment : SOLA GROUPE a bien un compte Stripe. Ce qui manque est `stripe_charges_enabled`, encore à false : le compte existe, il n'encaisse pas. DOKLES, lui, n'a toujours aucun compte. Mesuré en base ce jour."
+          "Embarquement Stripe de SOLA : le compte de TEST existe (`acct_1U66eB…`, créé le 19/08) mais `stripe_charges_enabled` est encore false — il n'encaisse pas. DOKLES n'avait aucun compte au 02/09 ; le cron fusionné ce jour le crée seul au premier passage (06:30 UTC). ⛔ Ce qui ne se délègue PAS en Live : le KYC réel (pièce d'identité du dirigeant, bénéficiaires effectifs, IBAN) est fourni par l'artisan"
         ],
         "en_attente_depuis": "2026-08-17",
         "boucles_ouvertes": [
@@ -202,7 +206,7 @@
             "depuis": "2026-09-01"
           },
           {
-            "quoi": "T2 — l'identité d'entreprise en colonnes (siret, adresse, tva_intra, rge, decennale) et son report automatique sur le devis ET la facture. Aujourd'hui RGE et décennale passent par le champ libre mentions_legales : de la saisie manuelle, donc une régression au sens de la Directive IA.",
+            "quoi": "✅ T2 — LIVRÉ ET RENSEIGNÉ le 02/09 (PR #112). Les 5 colonnes existent sur artisans ET profiles, se reportent seules sur le devis et la facture, et SOLA est complète : `facture_conforme = true` sur ses 17 devis, vérifié en base. La TVA saisie (FR67931605737) est exactement celle que le code calcule depuis le SIRET — le calcul automatique a fonctionné sur un cas réel. ⏳ Reste T2-bis (auto-remplissag",
             "depuis": "2026-09-01"
           },
           {
@@ -214,7 +218,7 @@
             "depuis": "2026-09-01"
           },
           {
-            "quoi": "🔴 R0a — PROMU CHEMIN CRITIQUE le 01/09 : pourquoi 10 devis sur 18 sont-ils entrés par la boîte mail ? Ce n'est plus une curiosité — c'est la question qui décide si l'outil de relance sert à quelque chose. Mesure : 0 échéance `pending` sur 27, un seul devis suivi et c'est la recette.",
+            "quoi": "✅ R0a — FERMÉE le 02/09 par Paul : « c'est normal, c'est le client qui a envoyé le devis en direct ». Les 10 devis `source='email'` sont entrés par la synchro de la boîte mail parce qu'ils ont été émis HORS de l'app ; le trigger les ignore PAR CONCEPTION, pas par défaut. Rien à réparer. ⚠️ La conséquence, elle, reste vraie et oriente la suite : ces 10 devis ne seront JAMAIS relancés par le moteur,",
             "depuis": "2026-08-31"
           },
           {
@@ -226,18 +230,19 @@
             "depuis": "2026-08-31"
           }
         ],
-        "maj": "2026-09-01"
+        "maj": "2026-09-02"
       },
+      "ciel": "renoboost-ia",
       "hors_seance": false,
       "derive": {
-        "tete": null,
-        "tete_le": null,
-        "commits_depuis": 0,
+        "tete": "c34dd7b",
+        "tete_le": "2026-09-02T15:43:24+02:00",
+        "commits_depuis": 2,
         "commit_inconnu": false
       },
-      "jours_depuis_maj": 1,
+      "jours_depuis_maj": 0,
       "jours_en_attente": 16,
-      "rang": 2
+      "rang": 0
     },
     {
       "ok": true,
@@ -247,18 +252,18 @@
         "projet": "Ultima",
         "depot": "PaulGERARD161098/Ultima-",
         "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-        "rattache_a": "CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-LV6-CIEL-VIVANT.md",
+        "rattache_a": "CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-LV6-CIEL-VIVANT.md",
         "etat": "en_cours",
         "jalon": {
-          "nom": "FINUBAR — le pilotage des huit dépôts en un seul endroit",
-          "critere_de_sortie": "les 8 grains lus par la collecte, le rappel d'ouverture de séance actif dans les 8 dépôts, l'écran /finubar en ligne"
+          "nom": "L'accueil piloté par Finubar — la couleur oriente, Léo dit par quoi commencer",
+          "critere_de_sortie": "LIVRÉ le 02/09 (jalon 0 + P1 + P2 + P3) : les projets sont des astres de l'arbre, la lueur d'appel monte des astres vers leurs constellations, et le bandeau Finubar est en bas de l'accueil. Reste P4 (les signaux du cockpit sur le même ciel), à ouvrir après que P3 ait vécu"
         },
         "dernier_arret": {
           "le": "2026-09-02",
-          "quoi": "LA COLLECTE NE CONFOND PLUS « PAS LU » AVEC « ILLISIBLE », et c'est le fait principal. Elle lit le disque ; une séance ne clone que les dépôts qui lui sont attachés, et les autres tombaient dans la branche « FINUBAR.md absent » — un constat SUR LE DÉPÔT là où il n'y avait qu'un angle mort de l'observateur. Ce matin-là elle annonçait « 3 projets sans grain lisible » : les trois grains existaient, i",
-          "commit": "9a4ecd4"
+          "quoi": "L'ACCUEIL EST PILOTÉ PAR FINUBAR (jalon 0 + P1 + P2 + P3), PUIS LA PORTE D'ENTRÉE EST PASSÉE AU CIEL. Les 8 dépôts sont des astres de l'arbre, la couleur d'appel monte des astres vers leurs constellations, le bandeau du bas porte les ≤3 signaux + l'action unique de Léo. L'accroche vit dans finubar/depots.json et non dans les 8 grains — `renoboost-ia` est un identifiant de l'arbre d'ULTIMA, RenoDev",
+          "commit": "75a20dc"
         },
-        "prochaine_action": "Recaler les grains de `mon-dpe.fr` et `artisan-builder` — DERNIER reliquat du squash-merge du 21/08 : leurs `dernier_arret.commit` (b5c0a72, 1924e58) ne sont pas leurs têtes réelles (9f8f0b7, 3ee806d), et ces deux dépôts n'ont pas bougé depuis. ⚠️ Il faut les ATTACHER à la séance pour le faire (`add_repo` les accepte : vérifié le 02/09, ils sont du même propriétaire). ✅ Les 5 dépôts attachés sont ",
+        "prochaine_action": "Regarder le preview de la PR #185 — d'abord la PORTE (elle est au ciel), puis l'accueil une fois connecté : est-ce que la couleur oriente vraiment ? C'est le seul juge. Ensuite P4 : les signaux du cockpit (ALTHEA en sommeil, idées orphelines, relances dues) sur le MÊME ciel et la même couleur",
         "bloque_par": [
           "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
           "`ANTHROPIC_API_KEY` en env Vercel",
@@ -267,6 +272,18 @@
         ],
         "en_attente_depuis": "2026-08-20",
         "boucles_ouvertes": [
+          {
+            "quoi": "P4 est cadré et volontairement NON ouvert : les signaux du cockpit (quadrants personnels) sur le même ciel que ceux de Finubar (les dépôts). Arbitré par Paul le 02/09 — après P3, jamais avant. Une boucle à la fois",
+            "depuis": "2026-09-02"
+          },
+          {
+            "quoi": "⚠️ Trois dépôts (mon-dpe.fr, artisan-builder, ripair) n'ont PAS d'accroche vérifiée : ils tombent sous ALPHA par défaut dans finubar/depots.json. Les deux premiers sont attachables à une séance (add_repo les accepte) ; ripair est hors de portée (autre propriétaire). Leur place se tranchera quand ils seront lus",
+            "depuis": "2026-09-02"
+          },
+          {
+            "quoi": "⚠️ LA LEÇON DE LA SÉANCE, et elle a failli être écrite à l'envers : j'ai d'abord conclu que « l'agrégat ment » sur la foi d'un `git rev-list` brut qui comptait les commits de recalage de grain. `collecter.mjs` les exclut explicitement — la mesure était juste, l'instrument fautif était le mien. Avant d'accuser une sonde, lui demander CE qu'elle compte : c'est le pendant de la règle du 17/08 (« dema",
+            "depuis": "2026-09-02"
+          },
           {
             "quoi": "⚠️ LA LEÇON DU 02/09, à ne pas reperdre : une mesure qui ne peut PAS voir quelque chose doit le dire comme tel, jamais le rendre en constat. La collecte annonçait trois grains manquants qui existaient tous — et le message invitait à aller semer ce qui était déjà semé. Même famille que la règle du 2026-08-21 (« quand on ne PEUT pas vérifier de ce côté-là, on retire l'hypothèse au lieu de la documen",
             "depuis": "2026-09-02"
@@ -280,7 +297,7 @@
             "depuis": "2026-08-20"
           },
           {
-            "quoi": "La constellation : faire entrer les projets dans le ciel — arbitré par Paul le 21/08 (« tout projet d'ampleur doit y être, on en reparle »), volontairement reporté. `versConstellation()` est écrit et testé, branché sur aucune page",
+            "quoi": "La constellation : faire entrer les projets dans le ciel — CADRÉE le 02/09 (CADRAGE-ACCUEIL-FINUBAR.md), maquette éprouvée, en attente du go de Paul. `versConstellation()` reste écrite et branchée nulle part ; c'est `greffer()` + `signaux()` de la maquette qui la remplacent, parce qu'elles rendent l'arbre et pas une liste",
             "depuis": "2026-08-21"
           },
           {
@@ -290,6 +307,7 @@
         ],
         "maj": "2026-09-02"
       },
+      "ciel": "racine",
       "hors_seance": false,
       "derive": {
         "tete": null,
@@ -306,6 +324,7 @@
       "hors_seance": true,
       "motif": "dépôt non attaché à cette séance",
       "depot": "paggerard-boop/ripair",
+      "ciel": "alpha",
       "grain": null,
       "derive": null,
       "jours_depuis_maj": null,
@@ -317,6 +336,7 @@
       "hors_seance": true,
       "motif": "dépôt non attaché à cette séance",
       "depot": "PaulGERARD161098/artisan-builder",
+      "ciel": "alpha",
       "grain": null,
       "derive": null,
       "jours_depuis_maj": null,
@@ -328,6 +348,7 @@
       "hors_seance": true,
       "motif": "dépôt non attaché à cette séance",
       "depot": "PaulGERARD161098/mon-dpe.fr",
+      "ciel": "alpha",
       "grain": null,
       "derive": null,
       "jours_depuis_maj": null,
@@ -343,9 +364,9 @@
     "en_cours": 2,
     "en_attente_de_paul": 3,
     "au_repos": 0,
-    "derives": 0,
+    "derives": 4,
     "commits_inconnus": 0,
-    "boucles_ouvertes": 24,
+    "boucles_ouvertes": 27,
     "gestes_de_paul": [
       {
         "projet": "RénoAgenda",
@@ -381,11 +402,15 @@
       },
       {
         "projet": "RénoBoost",
-        "geste": "Déployer `main` PUIS finir l'embarquement Stripe de SOLA — dans cet ordre, jamais l'inverse"
+        "geste": "Embarquement Stripe de SOLA — ⚠️ CE BLOCAGE A QUASIMENT DISPARU le 02/09 (RenoDevis PR #114) : un cron quotidien crée les comptes manquants, complète les comptes de TEST par API et recopie l'état de Stripe. ✅ La clé Stripe est posée en PRODUCTION — confirmé par Paul le 02/09, ⛔ ne pas le lui redemander. Il ne reste QUE le cas où Stripe refuserait la complétion par API sur SOLA (son tunnel a été ou"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Le jeton Google Ads — ouvert le 02/09, GO de Paul le jour même. C'est le SEUL blocage restant du simulateur ; tout le reste du lot est en production. ✅ FAIT VÉRIFIÉ CE JOUR-LÀ, et il change la solution : `googleads.googleapis.com/v22/…` répond 401 (auth manquante) et `oauth2.googleapis.com/token` répond 400 — l'API Google Ads est JOIGNABLE depuis une session Claude Code (v14→v21 renvoient 404, ret"
       },
       {
         "projet": "RénoDevis",
-        "geste": "Embarquement Stripe de SOLA : COMMENCÉ mais pas fini. ⚠️ Corrigé le 01/09 — cette ligne disait « stripe_account_id = 0, aucun artisan embarqué », c'est faux depuis un moment : SOLA GROUPE a bien un compte Stripe. Ce qui manque est `stripe_charges_enabled`, encore à false : le compte existe, il n'encaisse pas. DOKLES, lui, n'a toujours aucun compte. Mesuré en base ce jour."
+        "geste": "Embarquement Stripe de SOLA : le compte de TEST existe (`acct_1U66eB…`, créé le 19/08) mais `stripe_charges_enabled` est encore false — il n'encaisse pas. DOKLES n'avait aucun compte au 02/09 ; le cron fusionné ce jour le crée seul au premier passage (06:30 UTC). ⛔ Ce qui ne se délègue PAS en Live : le KYC réel (pièce d'identité du dirigeant, bénéficiaires effectifs, IBAN) est fourni par l'artisan"
       },
       {
         "projet": "Ultima",
@@ -409,18 +434,18 @@
     "signaux": [
       {
         "projet": "RénoAgenda",
-        "dit": "attend un geste : Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux — ouvert depuis 49 j",
-        "pourquoi": "attente"
+        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
+        "pourquoi": "derive"
       },
       {
         "projet": "RénoPredict",
-        "dit": "attend un geste : Générer et imprimer un lot de stickers QR — `stickers` = 0 depuis le 11/08. ✅ Le piège de l'URL est refermé le 01/09 (src/lib/qr-url.js : origine de production toujours, destination affichée à l'écran) — il ne reste que le geste physique — ouvert depuis 29 j",
-        "pourquoi": "attente"
+        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
+        "pourquoi": "derive"
       },
       {
         "projet": "RénoBoost",
-        "dit": "attend un geste : Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08 — ouvert depuis 29 j",
-        "pourquoi": "attente"
+        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
+        "pourquoi": "derive"
       }
     ],
     "action": {
@@ -438,30 +463,35 @@
         "id": "PaulGERARD161098/RenoAgenda",
         "libelle": "RénoAgenda",
         "constellation": "en_attente_de_paul",
+        "ciel": "renoboost-ia",
         "signal": 1
       },
       {
         "id": "PaulGERARD161098/RenoPredict",
         "libelle": "RénoPredict",
         "constellation": "en_attente_de_paul",
+        "ciel": "renoboost-ia",
         "signal": 1
       },
       {
         "id": "PaulGERARD161098/RenoBoost",
         "libelle": "RénoBoost",
         "constellation": "en_attente_de_paul",
+        "ciel": "renoboost-ia",
         "signal": 1
       },
       {
         "id": "PaulGERARD161098/RenoDevis",
         "libelle": "RénoDevis",
         "constellation": "en_cours",
-        "signal": 0
+        "ciel": "renoboost-ia",
+        "signal": 1
       },
       {
         "id": "PaulGERARD161098/Ultima-",
         "libelle": "Ultima",
         "constellation": "en_cours",
+        "ciel": "racine",
         "signal": 0
       }
     ],

@@ -24,18 +24,18 @@
   "projet": "Ultima",
   "depot": "PaulGERARD161098/Ultima-",
   "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-  "rattache_a": "CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-LV6-CIEL-VIVANT.md",
+  "rattache_a": "CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-LV6-CIEL-VIVANT.md",
   "etat": "en_cours",
   "jalon": {
-    "nom": "FINUBAR — le pilotage des huit dépôts en un seul endroit",
-    "critere_de_sortie": "les 8 grains lus par la collecte, le rappel d'ouverture de séance actif dans les 8 dépôts, l'écran /finubar en ligne"
+    "nom": "L'accueil piloté par Finubar — la couleur oriente, Léo dit par quoi commencer",
+    "critere_de_sortie": "LIVRÉ le 02/09 (jalon 0 + P1 + P2 + P3) : les projets sont des astres de l'arbre, la lueur d'appel monte des astres vers leurs constellations, et le bandeau Finubar est en bas de l'accueil. Reste P4 (les signaux du cockpit sur le même ciel), à ouvrir après que P3 ait vécu"
   },
   "dernier_arret": {
     "le": "2026-09-02",
-    "quoi": "LA COLLECTE NE CONFOND PLUS « PAS LU » AVEC « ILLISIBLE », et c'est le fait principal. Elle lit le disque ; une séance ne clone que les dépôts qui lui sont attachés, et les autres tombaient dans la branche « FINUBAR.md absent » — un constat SUR LE DÉPÔT là où il n'y avait qu'un angle mort de l'observateur. Ce matin-là elle annonçait « 3 projets sans grain lisible » : les trois grains existaient, intacts (mon-dpe.fr et artisan-builder relus sur GitHub, ripair non attachable en cross-tier), et deux de ces dépôts n'avaient même pas bougé depuis le 21/08. Deux compteurs séparés désormais (`illisibles` et `hors_seance`), un motif distinct, un libellé d'écran qui n'accuse plus le dépôt — et le hors-séance RESTE affiché, car sortir du compte ne doit jamais valoir sortir de la liste. C'est la tension que le harnais §5bis verrouille, avec son cas de référence sans hors-séance. Posé au passage : la routine « Finubar — récap du matin » (8 h, heure de Paris, push + e-mail), qui porte la même leçon dans son prompt.",
-    "commit": "9a4ecd4"
+    "quoi": "L'ACCUEIL EST PILOTÉ PAR FINUBAR (jalon 0 + P1 + P2 + P3), PUIS LA PORTE D'ENTRÉE EST PASSÉE AU CIEL. Les 8 dépôts sont des astres de l'arbre, la couleur d'appel monte des astres vers leurs constellations, le bandeau du bas porte les ≤3 signaux + l'action unique de Léo. L'accroche vit dans finubar/depots.json et non dans les 8 grains — `renoboost-ia` est un identifiant de l'arbre d'ULTIMA, RenoDevis n'a pas à le connaître. Puis, sur demande de Paul, l'écran de connexion a quitté la mer (dégradé bleu, moirure, carte antique en SVG dans DEUX pages) pour le champ d'étoiles commun : une porte qui montre autre chose que la maison est une porte qui ment. Quatre choses trouvées en manipulant ou en regardant, aucune en relisant : la porte de RENOBOOST IA qui se perdait (un nœud qui contient ISOLE au lieu d'ouvrir), la parole de Léo passée derrière le bandeau (deux `fixed` au même z-index), un verdict de recouvrement qui ne pouvait pas devenir rouge, et la mer qu'il fallait éprouver par l'ABSENCE. Patrimoine complet vert à chaque palier.",
+    "commit": "75a20dc"
   },
-  "prochaine_action": "Recaler les grains de `mon-dpe.fr` et `artisan-builder` — DERNIER reliquat du squash-merge du 21/08 : leurs `dernier_arret.commit` (b5c0a72, 1924e58) ne sont pas leurs têtes réelles (9f8f0b7, 3ee806d), et ces deux dépôts n'ont pas bougé depuis. ⚠️ Il faut les ATTACHER à la séance pour le faire (`add_repo` les accepte : vérifié le 02/09, ils sont du même propriétaire). ✅ Les 5 dépôts attachés sont recalés — RenoBoost sur `2c07811` et RenoAgenda sur `45dc2bc` le 02/09, après leurs propres squash-merges ; les trois autres étaient déjà bons. `ripair` reste hors de portée : autre propriétaire, `add_repo` refuse le cross-tier, donc jamais mesurable depuis une séance RénoBoost — c'est une limite à connaître, pas un retard à rattraper",
+  "prochaine_action": "Regarder le preview de la PR #185 — d'abord la PORTE (elle est au ciel), puis l'accueil une fois connecté : est-ce que la couleur oriente vraiment ? C'est le seul juge. Ensuite P4 : les signaux du cockpit (ALTHEA en sommeil, idées orphelines, relances dues) sur le MÊME ciel et la même couleur",
   "bloque_par": [
     "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
     "`ANTHROPIC_API_KEY` en env Vercel",
@@ -44,6 +44,18 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "P4 est cadré et volontairement NON ouvert : les signaux du cockpit (quadrants personnels) sur le même ciel que ceux de Finubar (les dépôts). Arbitré par Paul le 02/09 — après P3, jamais avant. Une boucle à la fois",
+      "depuis": "2026-09-02"
+    },
+    {
+      "quoi": "⚠️ Trois dépôts (mon-dpe.fr, artisan-builder, ripair) n'ont PAS d'accroche vérifiée : ils tombent sous ALPHA par défaut dans finubar/depots.json. Les deux premiers sont attachables à une séance (add_repo les accepte) ; ripair est hors de portée (autre propriétaire). Leur place se tranchera quand ils seront lus",
+      "depuis": "2026-09-02"
+    },
+    {
+      "quoi": "⚠️ LA LEÇON DE LA SÉANCE, et elle a failli être écrite à l'envers : j'ai d'abord conclu que « l'agrégat ment » sur la foi d'un `git rev-list` brut qui comptait les commits de recalage de grain. `collecter.mjs` les exclut explicitement — la mesure était juste, l'instrument fautif était le mien. Avant d'accuser une sonde, lui demander CE qu'elle compte : c'est le pendant de la règle du 17/08 (« demander à une mesure ce qu'elle répond sur un cas dont on connaît la réponse »), vue depuis l'autre bout",
+      "depuis": "2026-09-02"
+    },
     {
       "quoi": "⚠️ LA LEÇON DU 02/09, à ne pas reperdre : une mesure qui ne peut PAS voir quelque chose doit le dire comme tel, jamais le rendre en constat. La collecte annonçait trois grains manquants qui existaient tous — et le message invitait à aller semer ce qui était déjà semé. Même famille que la règle du 2026-08-21 (« quand on ne PEUT pas vérifier de ce côté-là, on retire l'hypothèse au lieu de la documenter ») et que celle du 2026-08-17 (« un filtre qui exclut des cas doit compter et nommer ce qu'il exclut »). Toute nouvelle sonde de Finubar se relit à travers celle-ci",
       "depuis": "2026-09-02"
@@ -57,7 +69,7 @@
       "depuis": "2026-08-20"
     },
     {
-      "quoi": "La constellation : faire entrer les projets dans le ciel — arbitré par Paul le 21/08 (« tout projet d'ampleur doit y être, on en reparle »), volontairement reporté. `versConstellation()` est écrit et testé, branché sur aucune page",
+      "quoi": "La constellation : faire entrer les projets dans le ciel — CADRÉE le 02/09 (CADRAGE-ACCUEIL-FINUBAR.md), maquette éprouvée, en attente du go de Paul. `versConstellation()` reste écrite et branchée nulle part ; c'est `greffer()` + `signaux()` de la maquette qui la remplacent, parce qu'elles rendent l'arbre et pas une liste",
       "depuis": "2026-08-21"
     },
     {
@@ -76,6 +88,110 @@
 > Les séances, de la plus récente à la plus ancienne. Une entrée = une date, un
 > fait vérifié, une décision. La mémoire longue ; le bloc ci-dessus est la mémoire
 > courte, et c'est lui qui est lu automatiquement.
+
+### 2026-09-02 (4) — La porte d'entrée passe au ciel
+« Même cette page il faut la changer — thème stellaire aussi » (Paul, sur une
+capture de l'écran de connexion). Il était resté une **mer** : dégradé bleu,
+moirure d'eau, et une carte antique dessinée en plein écran — une centaine de
+lignes de SVG, dans `index.html` **et** dans `riven.html`. Registre de l'accueil
+d'avant LV5, alors que l'outil entier est devenu un ciel.
+
+Le champ d'étoiles est celui des huit coques (`js/ciel-fond.js` via
+`js/ciel-fond-page.js`), monté par un module de vingt lignes qui **ne touche pas
+à l'authentification** : `boussole-auth.js` reste seul à ouvrir la porte, c'est
+une surface sous gate, et un décor n'est pas une raison d'y entrer.
+
+⚡ Il ne peint **qu'à la première ouverture** de la porte : le cas ordinaire est
+Paul déjà connecté, et peindre pour un élément qui restera `hidden` toute la
+session serait du travail rendu à personne. Le `hidden` est **observé**, pas
+deviné — un minuteur aurait marché la plupart du temps, c'est-à-dire échoué le
+jour où le réseau est lent, sans rien dire.
+
+Le cartouche ULTIMA et la plaque du formulaire n'ont demandé aucune ligne : ils
+étaient déjà passés à la nuit. Assertions **reprises** : `decorSvg` devient
+`decorCiel` + `decorAPeint` (un canvas peut exister sans avoir rien peint — la
+VARIANCE tranche, jamais la luminance) et `plusDeMer`, éprouvé par l'ABSENCE et
+éprouvé rouge.
+
+### 2026-09-02 (3) — L'accueil est piloté par Finubar (jalon 0 · P1 · P2 · P3)
+Go de Paul sur les cinq arbitrages, tous sur la recommandation. Livré dans la
+foulée : les huit dépôts sont des **astres de l'arbre** (les 4 briques sous
+RENOBOOST IA, Ultima à la racine, le reste sous ALPHA), la **couleur d'appel**
+monte des astres vers leurs constellations, et le **bandeau Finubar** tient le
+bas de l'accueil avec les ≤ 3 signaux et l'action unique de Léo.
+
+**Un écart assumé au cadrage** : l'accroche au ciel ne vit pas dans les huit
+grains, mais dans `finubar/depots.json`. `renoboost-ia` est un identifiant du
+registre de navigation d'ULTIMA ; l'écrire dans le grain de RenoDevis y ferait
+fuiter une notion étrangère, et il faudrait toucher quatre dépôts pour déplacer
+une étoile. `depots.json` est déjà la liste des huit, tenue par Ultima.
+
+**Trois choses trouvées en manipulant et en regardant, aucune en relisant.**
+① La **porte de RENOBOOST IA** se perdait : au ciel, un nœud qui CONTIENT isole
+au lieu d'ouvrir — lui greffer ses briques lui retirait, en silence, son lien
+vers renoboostia.fr. La greffe lui rend sa cible en cap à part, en tête.
+② La **parole de Léo passait derrière le bandeau** : deux cartouches `fixed` au
+bas de l'écran, même `z-index`, le dernier arrivé gagne. Vu sur une capture,
+pas dans le code. La parole monte désormais d'une hauteur **mesurée**.
+③ Le **verdict de recouvrement ne pouvait pas devenir rouge** : la production
+déclare son mobilier au moteur (`margesUtiles`), là où la maquette réservait la
+place en rétrécissant son conteneur — le symptôme ne s'y déclenche jamais, même
+sans la déclaration (mesuré : 604 → 643 px sur un pire cas de 12 astres à
+390 px, pour un bandeau qui commence à 656). Il mesure maintenant le
+**mécanisme** : retirer le bandeau doit faire redescendre le ciel.
+
+⚠️ Et une **alerte retirée** : j'avais annoncé le matin que l'agrégat mentait
+sur la dérive. Faux — `collecter.mjs` exclut du décompte les fichiers que
+Finubar écrit lui-même ; c'est mon `git rev-list` brut qui comptait mal. *Avant
+d'accuser une sonde, lui demander CE qu'elle compte.*
+
+Patrimoine **complet** vert (78 sections). Deux harnais existants ont dû
+apprendre la nouvelle route (`smoke-boussole`, `smoke-lv4-coque`) : toute coque
+au ciel demande désormais `/api/finubar`, et un 404 non stubé se présenterait
+comme un défaut du produit alors que c'est un manque de l'instrument.
+
+### 2026-09-02 (2) — L'accueil piloté par Finubar : cadrage et maquette
+Demande dictée par Paul : *« un seul écran d'accueil, au bas duquel il y a
+Finubar, piloté par Léo, qui m'oriente vers la priorité du jour avec une
+coloration des sujets en priorité »*.
+
+Le travail a commencé par un constat, pas par du code : **les trois quarts
+existent**. Le ciel est l'accueil depuis LV5/P4, l'isolement constellations →
+astres est arbitré depuis le 31/08, `finubar/agreger.mjs` **classe déjà** les
+huit dépôts, et `versConstellation()` attend, écrite et testée, branchée nulle
+part depuis le 21/08. Ce qui manque est **un branchement et une couleur** — et
+c'est, mot pour mot, LV6 P2+P3 avec Finubar en source à la place du cockpit à
+étendre. La demande **ferme** la boucle du 21/08 au lieu d'en ouvrir une.
+
+Livré : `CADRAGE-ACCUEIL-FINUBAR.md` (6 points, pre-mortem à 10 modes, 5
+arbitrages) et la maquette `design/preview-accueil-finubar.html`, qui charge le
+**vrai** moteur et le **vrai** registre — une maquette qui redessine le ciel
+qu'elle prétend montrer ne montre plus rien.
+
+**Deux défauts trouvés en la MANIPULANT, aucun en la relisant.** ① Une étoile
+peinte sous le bandeau n'était plus cliquable : le clic atterrissait sur un
+bouton du bandeau, qui isolait un tout autre nœud. L'écran **répondait**, donc
+rien ne signalait la panne — le pire des cas. Le ciel s'arrête désormais à la
+lisière du bandeau, dont la hauteur est **mesurée** (une constante serait fausse
+au premier signal long). ② Déplier d'office la branche qui appelle tasse cinq
+étoiles sur un même axe et pose le nom de la branche sur son étoile :
+l'orientation rendait l'écran moins lisible que sans elle. Éteinte par défaut,
+l'interrupteur reste pour l'arbitrage.
+
+**Et une alerte que j'ai RETIRÉE après vérification, ce qui compte autant.**
+J'avais conclu que l'agrégat mentait — « 0 dérive » alors que les cinq grains
+pointaient 2 à 3 commits en arrière. Faux : `collecter.mjs` **exclut du
+décompte les fichiers que Finubar écrit lui-même**, donc un commit qui ne fait
+que recaler un grain ne se signale pas. Sa mesure est juste ; c'est mon
+`git rev-list` brut qui comptait mal. Le risque réel est ailleurs, et il naît
+de cette boucle : porté sur l'accueil et vu chaque matin, un instantané daté
+prend l'autorité du temps réel — d'où le jalon 0, qui tient en trois mots
+(« collecté le <date> »).
+
+🔒 Trouvé au passage : **`design/` n'est pas dans `.vercelignore`**, donc servi
+en clair. La fixture de la maquette a un contenu **inventé** — y embarquer le
+vrai agrégat aurait annulé en une ligne la sortie de `finubar/` du déploiement
+(31/08).
 
 ### 2026-09-02 — La collecte cesse de confondre « pas lu » et « illisible »
 Paul demandait deux choses : *« Finubar est-il à jour de tout ? »* et un récap le

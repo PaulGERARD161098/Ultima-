@@ -93,6 +93,16 @@ await page.route('**/js/vendor/supabase-js-2.110.0.min.js',
 await page.route('**/api/cockpit', (route) => route.fulfill({
   status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(COCKPIT),
 }));
+// … et depuis le 02/09, l'accueil interroge AUSSI /api/finubar (la couleur
+// d'appel + le bandeau). Même motif, même raison : un 404 non stubé se
+// présenterait ici comme une erreur console, c'est-à-dire comme un défaut du
+// produit alors que ce serait un manque du banc d'essai. On rend un agrégat
+// VIDE : ce harnais-ci ne juge pas Finubar (c'est smoke-accueil-finubar), il
+// exige seulement que sa présence ne casse rien.
+await page.route('**/api/finubar', (route) => route.fulfill({
+  status: 200, contentType: 'application/json; charset=utf-8',
+  body: JSON.stringify({ ok: true, data: { le: '2026-09-02', projets: [], macro: {}, cartouche: { signaux: [] } } }),
+}));
 await page.goto(`${BASE}/`, { waitUntil: 'load', timeout: 20000 });
 // REMPLACÉE : on attendait la rose (`.boussole-plateau.is-pret`), on attend les
 // étoiles. Même garantie : l'écran est prêt avant la première assertion.
@@ -351,6 +361,10 @@ pageCo.on('console', (msg) => { if (msg.type() === 'error') erreursCo.push(msg.t
 pageCo.on('pageerror', (err) => erreursCo.push(String(err)));
 await pageCo.route('**/js/vendor/supabase-js-2.110.0.min.js',
   stubSupabase('{ user: { id: "u-test" }, access_token: "jeton-factice" }'));
+await pageCo.route('**/api/finubar', (route) => route.fulfill({
+  status: 200, contentType: 'application/json; charset=utf-8',
+  body: JSON.stringify({ ok: true, data: { le: '2026-09-02', projets: [], macro: {}, cartouche: { signaux: [] } } }),
+}));
 let bearerCockpit = '';
 await pageCo.route('**/api/cockpit', (route) => {
   bearerCockpit = route.request().headers().authorization || '';
