@@ -262,7 +262,7 @@ export default {
         "dernier_arret": {
           "le": "2026-09-02",
           "quoi": "CADRAGE + MAQUETTE de l'accueil piloté par Finubar (aucun branchement en production). Le constat qui commande tout : ce n'est pas un chantier neuf — le ciel est déjà l'accueil, l'isolement constellations → astres est arbitré depuis le 31/08, Finubar CLASSE déjà (rangDe, cartoucheDuMatin), et versConstellation() attend, branchée nulle part, depuis le 21/08. La demande de Paul EST LV6 P2+P3, avec Fi",
-          "commit": "574ffae"
+          "commit": "299c6d4"
         },
         "prochaine_action": "Attendre le go de Paul sur les 5 arbitrages du §8 de CADRAGE-ACCUEIL-FINUBAR.md (l'accroche des dépôts, les trois teintes, le bandeau permanent, le dépliage, le rang de P4). Au go : jalon 0 d'abord — le bandeau porte « collecté le <date> » au premier plan, parce que l'accueil est vu tous les matins et qu'un pilotage qui ne dit pas de quand il date est un piège",
         "bloque_par": [

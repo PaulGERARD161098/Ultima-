@@ -33,7 +33,7 @@
   "dernier_arret": {
     "le": "2026-09-02",
     "quoi": "CADRAGE + MAQUETTE de l'accueil piloté par Finubar (aucun branchement en production). Le constat qui commande tout : ce n'est pas un chantier neuf — le ciel est déjà l'accueil, l'isolement constellations → astres est arbitré depuis le 31/08, Finubar CLASSE déjà (rangDe, cartoucheDuMatin), et versConstellation() attend, branchée nulle part, depuis le 21/08. La demande de Paul EST LV6 P2+P3, avec Finubar en source à la place du cockpit à étendre. Deux défauts trouvés en MANIPULANT la maquette : une étoile peinte sous le bandeau n'était plus cliquable (le clic isolait un autre nœud — l'écran répondait, donc rien ne le signalait) ; et le dépliage d'office tasse cinq étoiles sur un axe, donc éteint par défaut. ⚠️ Une troisième alerte a été RETIRÉE après vérification : « l'agrégat annonce 0 dérive » venait d'un `git rev-list` brut de ma part ; collecter.mjs exclut du décompte les fichiers que Finubar écrit lui-même, donc sa mesure est juste. Il n'y a rien à réparer — le risque réel est ailleurs, et il naît de cette boucle : porté sur l'accueil, un instantané daté prend l'autorité du temps réel.",
-    "commit": "574ffae"
+    "commit": "299c6d4"
   },
   "prochaine_action": "Attendre le go de Paul sur les 5 arbitrages du §8 de CADRAGE-ACCUEIL-FINUBAR.md (l'accroche des dépôts, les trois teintes, le bandeau permanent, le dépliage, le rang de P4). Au go : jalon 0 d'abord — le bandeau porte « collecté le <date> » au premier plan, parce que l'accueil est vu tous les matins et qu'un pilotage qui ne dit pas de quand il date est un piège",
   "bloque_par": [
