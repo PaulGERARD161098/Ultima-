@@ -32,10 +32,10 @@
   },
   "dernier_arret": {
     "le": "2026-09-02",
-    "quoi": "L'ACCUEIL EST PILOTÉ PAR FINUBAR (jalon 0 + P1 + P2 + P3), PUIS LA PORTE D'ENTRÉE EST PASSÉE AU CIEL. Les 8 dépôts sont des astres de l'arbre, la couleur d'appel monte des astres vers leurs constellations, le bandeau du bas porte les ≤3 signaux + l'action unique de Léo. L'accroche vit dans finubar/depots.json et non dans les 8 grains — `renoboost-ia` est un identifiant de l'arbre d'ULTIMA, RenoDevis n'a pas à le connaître. Puis, sur demande de Paul, l'écran de connexion a quitté la mer (dégradé bleu, moirure, carte antique en SVG dans DEUX pages) pour le champ d'étoiles commun : une porte qui montre autre chose que la maison est une porte qui ment. Quatre choses trouvées en manipulant ou en regardant, aucune en relisant : la porte de RENOBOOST IA qui se perdait (un nœud qui contient ISOLE au lieu d'ouvrir), la parole de Léo passée derrière le bandeau (deux `fixed` au même z-index), un verdict de recouvrement qui ne pouvait pas devenir rouge, et la mer qu'il fallait éprouver par l'ABSENCE. Patrimoine complet vert à chaque palier.",
-    "commit": "75a20dc"
+    "quoi": "FUSIONNÉ SUR MAIN (PR #185, squash → b4dc35c) sur go de Paul. L'accueil est piloté par Finubar (jalon 0 + P1 + P2 + P3) et la porte d'entrée est passée au ciel. Les 8 dépôts sont des astres de l'arbre, la couleur d'appel monte des astres vers leurs constellations, le bandeau du bas porte les ≤3 signaux + l'action unique de Léo, et l'écran de connexion a quitté la mer pour le champ d'étoiles commun. L'accroche vit dans finubar/depots.json et non dans les 8 grains. Quatre choses trouvées en manipulant ou en regardant, aucune en relisant : la porte de RENOBOOST IA qui se perdait, la parole de Léo passée derrière le bandeau, un verdict de recouvrement qui ne pouvait pas devenir rouge, et la mer qu'il fallait éprouver par l'ABSENCE. Patrimoine complet vert à chaque palier.",
+    "commit": "b4dc35c"
   },
-  "prochaine_action": "Regarder le preview de la PR #185 — d'abord la PORTE (elle est au ciel), puis l'accueil une fois connecté : est-ce que la couleur oriente vraiment ? C'est le seul juge. Ensuite P4 : les signaux du cockpit (ALTHEA en sommeil, idées orphelines, relances dues) sur le MÊME ciel et la même couleur",
+  "prochaine_action": "Regarder l'accueil EN PRODUCTION (la fusion est faite) : d'abord la porte, puis le ciel une fois connecté — est-ce que la couleur oriente vraiment ? C'est le seul juge, et rien ne le remplace. Ensuite P4 : les signaux du cockpit (ALTHEA en sommeil, idées orphelines, relances dues) sur le MÊME ciel et la même couleur, une fois que P3 aura vécu quelques jours",
   "bloque_par": [
     "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
     "`ANTHROPIC_API_KEY` en env Vercel",
@@ -88,6 +88,12 @@
 > Les séances, de la plus récente à la plus ancienne. Une entrée = une date, un
 > fait vérifié, une décision. La mémoire longue ; le bloc ci-dessus est la mémoire
 > courte, et c'est lui qui est lu automatiquement.
+
+### 2026-09-02 (5) — Fusion sur `main`
+PR #185 fusionnée en **squash** sur go de Paul → `main` = `b4dc35c`. Le grain
+est recalé dans la foulée : les six commits de la branche ont disparu au profit
+d'un seul, et `dernier_arret.commit` pointait donc dans le vide — c'est le geste
+d'après-squash, et il se fait tout de suite, pas à la séance suivante.
 
 ### 2026-09-02 (4) — La porte d'entrée passe au ciel
 « Même cette page il faut la changer — thème stellaire aussi » (Paul, sur une
