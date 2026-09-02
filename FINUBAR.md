@@ -33,7 +33,7 @@
   "dernier_arret": {
     "le": "2026-09-02",
     "quoi": "L'ACCUEIL EST PILOTÉ PAR FINUBAR — go de Paul sur les 5 arbitrages, jalon 0 + P1 + P2 + P3 livrés dans la foulée. Les 8 dépôts deviennent des astres de l'arbre (les 4 briques sous RENOBOOST IA, Ultima à la racine, le reste sous ALPHA), la couleur d'appel monte des astres vers leurs constellations, et le bandeau du bas porte les ≤3 signaux + l'action unique de Léo. ⚠️ L'accroche NE vit PAS dans les 8 grains comme le cadrage le disait, mais dans finubar/depots.json : `renoboost-ia` est un identifiant du registre de navigation d'ULTIMA, et RenoDevis n'a pas à connaître l'arbre d'Ultima. Trois choses trouvées en MANIPULANT et en REGARDANT, aucune en relisant : la porte de RENOBOOST IA (le lien vers renoboostia.fr) qui se perdait quand le nœud gagnait des enfants — un nœud qui contient ISOLE au lieu d'ouvrir ; la parole de Léo qui passait DERRIÈRE le bandeau (deux `fixed` au même z-index) ; et un verdict de recouvrement qui ne pouvait pas devenir rouge, remplacé par une mesure du MÉCANISME. Patrimoine complet vert (78 sections).",
-    "commit": "A-RECALER"
+    "commit": "600954c"
   },
   "prochaine_action": "Regarder l'accueil sur le preview de la PR #185 et dire si la couleur oriente vraiment (c'est le seul juge). Ensuite : P4 — les signaux du cockpit (ALTHEA en sommeil, idées orphelines, relances dues) sur le MÊME ciel et la même couleur, une fois que P3 aura vécu quelques jours",
   "bloque_par": [

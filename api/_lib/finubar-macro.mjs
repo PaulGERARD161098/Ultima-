@@ -261,14 +261,14 @@ export default {
         "etat": "en_cours",
         "jalon": {
           "nom": "L'accueil piloté par Finubar — la couleur oriente, Léo dit par quoi commencer",
-          "critere_de_sortie": "le ciel d'accueil porte les 8 dépôts en astres, la lueur d'appel monte des astres vers leurs constellations, et le bandeau Finubar est en bas de l'accueil en permanence"
+          "critere_de_sortie": "LIVRÉ le 02/09 (jalon 0 + P1 + P2 + P3) : les projets sont des astres de l'arbre, la lueur d'appel monte des astres vers leurs constellations, et le bandeau Finubar est en bas de l'accueil. Reste P4 (les signaux du cockpit sur le même ciel), à ouvrir après que P3 ait vécu"
         },
         "dernier_arret": {
           "le": "2026-09-02",
-          "quoi": "CADRAGE + MAQUETTE de l'accueil piloté par Finubar (aucun branchement en production). Le constat qui commande tout : ce n'est pas un chantier neuf — le ciel est déjà l'accueil, l'isolement constellations → astres est arbitré depuis le 31/08, Finubar CLASSE déjà (rangDe, cartoucheDuMatin), et versConstellation() attend, branchée nulle part, depuis le 21/08. La demande de Paul EST LV6 P2+P3, avec Fi",
-          "commit": "299c6d4"
+          "quoi": "L'ACCUEIL EST PILOTÉ PAR FINUBAR — go de Paul sur les 5 arbitrages, jalon 0 + P1 + P2 + P3 livrés dans la foulée. Les 8 dépôts deviennent des astres de l'arbre (les 4 briques sous RENOBOOST IA, Ultima à la racine, le reste sous ALPHA), la couleur d'appel monte des astres vers leurs constellations, et le bandeau du bas porte les ≤3 signaux + l'action unique de Léo. ⚠️ L'accroche NE vit PAS dans les",
+          "commit": "600954c"
         },
-        "prochaine_action": "Attendre le go de Paul sur les 5 arbitrages du §8 de CADRAGE-ACCUEIL-FINUBAR.md (l'accroche des dépôts, les trois teintes, le bandeau permanent, le dépliage, le rang de P4). Au go : jalon 0 d'abord — le bandeau porte « collecté le <date> » au premier plan, parce que l'accueil est vu tous les matins et qu'un pilotage qui ne dit pas de quand il date est un piège",
+        "prochaine_action": "Regarder l'accueil sur le preview de la PR #185 et dire si la couleur oriente vraiment (c'est le seul juge). Ensuite : P4 — les signaux du cockpit (ALTHEA en sommeil, idées orphelines, relances dues) sur le MÊME ciel et la même couleur, une fois que P3 aura vécu quelques jours",
         "bloque_par": [
           "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
           "`ANTHROPIC_API_KEY` en env Vercel",
@@ -277,6 +277,14 @@ export default {
         ],
         "en_attente_depuis": "2026-08-20",
         "boucles_ouvertes": [
+          {
+            "quoi": "P4 est cadré et volontairement NON ouvert : les signaux du cockpit (quadrants personnels) sur le même ciel que ceux de Finubar (les dépôts). Arbitré par Paul le 02/09 — après P3, jamais avant. Une boucle à la fois",
+            "depuis": "2026-09-02"
+          },
+          {
+            "quoi": "⚠️ Trois dépôts (mon-dpe.fr, artisan-builder, ripair) n'ont PAS d'accroche vérifiée : ils tombent sous ALPHA par défaut dans finubar/depots.json. Les deux premiers sont attachables à une séance (add_repo les accepte) ; ripair est hors de portée (autre propriétaire). Leur place se tranchera quand ils seront lus",
+            "depuis": "2026-09-02"
+          },
           {
             "quoi": "⚠️ LA LEÇON DE LA SÉANCE, et elle a failli être écrite à l'envers : j'ai d'abord conclu que « l'agrégat ment » sur la foi d'un `git rev-list` brut qui comptait les commits de recalage de grain. `collecter.mjs` les exclut explicitement — la mesure était juste, l'instrument fautif était le mien. Avant d'accuser une sonde, lui demander CE qu'elle compte : c'est le pendant de la règle du 17/08 (« dema",
             "depuis": "2026-09-02"
@@ -363,7 +371,7 @@ export default {
     "au_repos": 0,
     "derives": 4,
     "commits_inconnus": 0,
-    "boucles_ouvertes": 25,
+    "boucles_ouvertes": 27,
     "gestes_de_paul": [
       {
         "projet": "RénoAgenda",
