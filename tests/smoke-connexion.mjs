@@ -99,7 +99,36 @@ const requetesDeco = [];
 const deco = await ouvrir({ width: 390, height: 844 }, 'deconnecte', requetesDeco);
 verdicts.ecranVisible = await deco.locator('#ecran-connexion').isVisible();
 verdicts.cartouche = (await deco.locator('#ecran-connexion .ecran-titre').textContent())?.trim() === 'ULTIMA';
-verdicts.decorSvg = await deco.locator('#ecran-connexion .ecran-decor svg').count() === 1;
+// LE DÉCOR EST LE CIEL DEPUIS LE 2026-09-02 — il était une carte antique
+// dessinée (un `<svg>` de la mer et des terres), héritée de l'accueil d'avant
+// LV5. L'assertion est REPRISE, pas supprimée : ce qu'elle protégeait — « la
+// porte a un décor, et ce décor est muet » — vaut toujours, seul son support a
+// changé. Et elle mesure plus qu'avant : un canvas peut exister sans avoir rien
+// peint, ce qu'un `<svg>` présent dans le document ne pouvait pas être. C'est
+// la VARIANCE qui tranche, jamais la luminance — un champ éteint est noir,
+// exactement comme un beau ciel (leçon de LV5/P1).
+verdicts.decorCiel = await deco.locator('#ecran-connexion .ecran-decor canvas').count() === 1;
+verdicts.decorAPeint = await deco.evaluate(() => {
+  const c = document.querySelector('#ecran-connexion .ecran-decor canvas');
+  if (!c) return false;
+  const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+  let s = 0, s2 = 0, n = 0;
+  for (let i = 0; i < d.length; i += 4 * 97) {
+    const l = (d[i] * 0.2126 + d[i + 1] * 0.7152 + d[i + 2] * 0.0722) * (d[i + 3] / 255);
+    s += l; s2 += l * l; n += 1;
+  }
+  const m = s / n;
+  return (s2 / n - m * m) > 0.05;
+});
+// ⛔ ET LA MER NE DOIT PLUS ÊTRE LÀ. Éprouvé par l'ABSENCE : le dégradé bleu et
+// la moirure d'eau étaient posés par `styles.css` et ne sont ÉTEINTS que par le
+// thème. Vérifier la présence du ciel ne prouverait pas leur départ — les deux
+// peuvent coexister, et c'est exactement ce qu'on ne veut pas voir.
+verdicts.plusDeMer = await deco.evaluate(() => {
+  const cs = getComputedStyle(document.getElementById('ecran-connexion'));
+  const avant = getComputedStyle(document.getElementById('ecran-connexion'), '::before');
+  return !/23,\s*80,\s*107|17506b/i.test(cs.backgroundImage) && avant.content === 'none';
+});
 verdicts.decorMuet = await deco.locator('#ecran-connexion .ecran-decor').getAttribute('aria-hidden') === 'true';
 verdicts.formDansEcran = await deco.locator('#ecran-connexion #form-connexion').isVisible();
 // #champ-email focusable et effectivement focus.

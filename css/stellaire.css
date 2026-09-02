@@ -286,3 +286,36 @@ textarea:focus-visible { outline-color: var(--or-clair, #d8bd82); }
 @media (prefers-reduced-motion: reduce) {
   .ciel-etoile[data-appel="appel"] { animation: none; }
 }
+
+/* ---------------------------------------------------------------------------
+   ⑩ LA PORTE D'ENTRÉE PASSE AU CIEL (2026-09-02).
+   « Même cette page il faut la changer — thème stellaire aussi » (Paul).
+
+   L'écran de connexion était resté une MER : dégradé bleu, moirure d'eau, et
+   une carte antique dessinée en plein écran. C'était le registre de l'accueil
+   d'avant LV5 ; depuis, l'outil entier est un ciel. Une porte qui montre autre
+   chose que la maison est une porte qui ment, même joliment.
+
+   Le cartouche ULTIMA, lui, ne bouge pas : il est déjà passé à la nuit au §①.
+   Et le formulaire non plus — `--parchemin` / `--parchemin-carte` sont déjà
+   redéfinis en nuit plus haut, donc la plaque est nocturne sans une ligne de
+   plus. C'est ce qui reste : le fond, la moirure, et le décor. ---------------- */
+.ecran-connexion {
+  /* Les deux mêmes nappes que le ciel (`--ciel-nuit-haute` / `--ciel-nuit-basse`
+     de `css/ciel.css`), avec la lueur haute qui donne l'horizon. Aucune valeur
+     inventée ici : ce fond doit être RECONNU en arrivant sur la racine. */
+  background:
+    radial-gradient(ellipse at 50% 28%, rgba(120, 160, 210, .16), rgba(0, 0, 0, 0) 62%),
+    linear-gradient(var(--ciel-nuit-haute, #0a1220), var(--ciel-nuit-basse, #03070e) 72%);
+}
+
+/* La moirure de l'eau n'a plus d'eau à moirer. On l'éteint plutôt que de la
+   retirer de `styles.css` : cette feuille-ci est le THÈME, et une page qui la
+   chargerait sans le thème (il n'y en a pas aujourd'hui) garderait sa mer
+   entière plutôt qu'un fond à moitié défait. */
+.ecran-connexion::before { content: none; }
+
+/* Le décor est désormais un CANVAS peint par `js/ecran-connexion-ciel.js`, plus
+   un SVG dans le document. La boîte garde sa place et son silence ; sans
+   JavaScript elle reste simplement vide — et la porte, elle, reste entière. */
+.ecran-decor { padding: 0; }
