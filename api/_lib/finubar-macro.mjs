@@ -265,10 +265,10 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-09-02",
-          "quoi": "L'ACCUEIL EST PILOTÉ PAR FINUBAR — go de Paul sur les 5 arbitrages, jalon 0 + P1 + P2 + P3 livrés dans la foulée. Les 8 dépôts deviennent des astres de l'arbre (les 4 briques sous RENOBOOST IA, Ultima à la racine, le reste sous ALPHA), la couleur d'appel monte des astres vers leurs constellations, et le bandeau du bas porte les ≤3 signaux + l'action unique de Léo. ⚠️ L'accroche NE vit PAS dans les",
-          "commit": "600954c"
+          "quoi": "L'ACCUEIL EST PILOTÉ PAR FINUBAR (jalon 0 + P1 + P2 + P3), PUIS LA PORTE D'ENTRÉE EST PASSÉE AU CIEL. Les 8 dépôts sont des astres de l'arbre, la couleur d'appel monte des astres vers leurs constellations, le bandeau du bas porte les ≤3 signaux + l'action unique de Léo. L'accroche vit dans finubar/depots.json et non dans les 8 grains — `renoboost-ia` est un identifiant de l'arbre d'ULTIMA, RenoDev",
+          "commit": "75a20dc"
         },
-        "prochaine_action": "Regarder l'accueil sur le preview de la PR #185 et dire si la couleur oriente vraiment (c'est le seul juge). Ensuite : P4 — les signaux du cockpit (ALTHEA en sommeil, idées orphelines, relances dues) sur le MÊME ciel et la même couleur, une fois que P3 aura vécu quelques jours",
+        "prochaine_action": "Regarder le preview de la PR #185 — d'abord la PORTE (elle est au ciel), puis l'accueil une fois connecté : est-ce que la couleur oriente vraiment ? C'est le seul juge. Ensuite P4 : les signaux du cockpit (ALTHEA en sommeil, idées orphelines, relances dues) sur le MÊME ciel et la même couleur",
         "bloque_par": [
           "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
           "`ANTHROPIC_API_KEY` en env Vercel",

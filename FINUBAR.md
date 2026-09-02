@@ -32,10 +32,10 @@
   },
   "dernier_arret": {
     "le": "2026-09-02",
-    "quoi": "L'ACCUEIL EST PILOTÉ PAR FINUBAR — go de Paul sur les 5 arbitrages, jalon 0 + P1 + P2 + P3 livrés dans la foulée. Les 8 dépôts deviennent des astres de l'arbre (les 4 briques sous RENOBOOST IA, Ultima à la racine, le reste sous ALPHA), la couleur d'appel monte des astres vers leurs constellations, et le bandeau du bas porte les ≤3 signaux + l'action unique de Léo. ⚠️ L'accroche NE vit PAS dans les 8 grains comme le cadrage le disait, mais dans finubar/depots.json : `renoboost-ia` est un identifiant du registre de navigation d'ULTIMA, et RenoDevis n'a pas à connaître l'arbre d'Ultima. Trois choses trouvées en MANIPULANT et en REGARDANT, aucune en relisant : la porte de RENOBOOST IA (le lien vers renoboostia.fr) qui se perdait quand le nœud gagnait des enfants — un nœud qui contient ISOLE au lieu d'ouvrir ; la parole de Léo qui passait DERRIÈRE le bandeau (deux `fixed` au même z-index) ; et un verdict de recouvrement qui ne pouvait pas devenir rouge, remplacé par une mesure du MÉCANISME. Patrimoine complet vert (78 sections).",
-    "commit": "600954c"
+    "quoi": "L'ACCUEIL EST PILOTÉ PAR FINUBAR (jalon 0 + P1 + P2 + P3), PUIS LA PORTE D'ENTRÉE EST PASSÉE AU CIEL. Les 8 dépôts sont des astres de l'arbre, la couleur d'appel monte des astres vers leurs constellations, le bandeau du bas porte les ≤3 signaux + l'action unique de Léo. L'accroche vit dans finubar/depots.json et non dans les 8 grains — `renoboost-ia` est un identifiant de l'arbre d'ULTIMA, RenoDevis n'a pas à le connaître. Puis, sur demande de Paul, l'écran de connexion a quitté la mer (dégradé bleu, moirure, carte antique en SVG dans DEUX pages) pour le champ d'étoiles commun : une porte qui montre autre chose que la maison est une porte qui ment. Quatre choses trouvées en manipulant ou en regardant, aucune en relisant : la porte de RENOBOOST IA qui se perdait (un nœud qui contient ISOLE au lieu d'ouvrir), la parole de Léo passée derrière le bandeau (deux `fixed` au même z-index), un verdict de recouvrement qui ne pouvait pas devenir rouge, et la mer qu'il fallait éprouver par l'ABSENCE. Patrimoine complet vert à chaque palier.",
+    "commit": "75a20dc"
   },
-  "prochaine_action": "Regarder l'accueil sur le preview de la PR #185 et dire si la couleur oriente vraiment (c'est le seul juge). Ensuite : P4 — les signaux du cockpit (ALTHEA en sommeil, idées orphelines, relances dues) sur le MÊME ciel et la même couleur, une fois que P3 aura vécu quelques jours",
+  "prochaine_action": "Regarder le preview de la PR #185 — d'abord la PORTE (elle est au ciel), puis l'accueil une fois connecté : est-ce que la couleur oriente vraiment ? C'est le seul juge. Ensuite P4 : les signaux du cockpit (ALTHEA en sommeil, idées orphelines, relances dues) sur le MÊME ciel et la même couleur",
   "bloque_par": [
     "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
     "`ANTHROPIC_API_KEY` en env Vercel",
@@ -88,6 +88,30 @@
 > Les séances, de la plus récente à la plus ancienne. Une entrée = une date, un
 > fait vérifié, une décision. La mémoire longue ; le bloc ci-dessus est la mémoire
 > courte, et c'est lui qui est lu automatiquement.
+
+### 2026-09-02 (4) — La porte d'entrée passe au ciel
+« Même cette page il faut la changer — thème stellaire aussi » (Paul, sur une
+capture de l'écran de connexion). Il était resté une **mer** : dégradé bleu,
+moirure d'eau, et une carte antique dessinée en plein écran — une centaine de
+lignes de SVG, dans `index.html` **et** dans `riven.html`. Registre de l'accueil
+d'avant LV5, alors que l'outil entier est devenu un ciel.
+
+Le champ d'étoiles est celui des huit coques (`js/ciel-fond.js` via
+`js/ciel-fond-page.js`), monté par un module de vingt lignes qui **ne touche pas
+à l'authentification** : `boussole-auth.js` reste seul à ouvrir la porte, c'est
+une surface sous gate, et un décor n'est pas une raison d'y entrer.
+
+⚡ Il ne peint **qu'à la première ouverture** de la porte : le cas ordinaire est
+Paul déjà connecté, et peindre pour un élément qui restera `hidden` toute la
+session serait du travail rendu à personne. Le `hidden` est **observé**, pas
+deviné — un minuteur aurait marché la plupart du temps, c'est-à-dire échoué le
+jour où le réseau est lent, sans rien dire.
+
+Le cartouche ULTIMA et la plaque du formulaire n'ont demandé aucune ligne : ils
+étaient déjà passés à la nuit. Assertions **reprises** : `decorSvg` devient
+`decorCiel` + `decorAPeint` (un canvas peut exister sans avoir rien peint — la
+VARIANCE tranche, jamais la luminance) et `plusDeMer`, éprouvé par l'ABSENCE et
+éprouvé rouge.
 
 ### 2026-09-02 (3) — L'accueil est piloté par Finubar (jalon 0 · P1 · P2 · P3)
 Go de Paul sur les cinq arbitrages, tous sur la recommandation. Livré dans la
