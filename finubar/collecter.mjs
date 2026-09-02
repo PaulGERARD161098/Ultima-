@@ -66,6 +66,18 @@ if (!/^\d{4}-\d{2}-\d{2}$/.test(aujourdhui)) {
 // dépôts et lui ferait lire — puis publier dans macro.json — n'importe quel
 // FINUBAR.md de la machine. Le nom de dossier est donc un NOM, pas un chemin.
 const NOM_DOSSIER = /^[A-Za-z0-9._-]{1,64}$/;
+// ⛔ L'ACCROCHE AU CIEL VIT ICI, ET PAS DANS LES HUIT GRAINS — arbitrage n° 1 de
+// Paul, 2026-09-02, et le cadrage disait d'abord l'inverse. La raison de ce
+// changement tient en une phrase : `renoboost-ia` est un identifiant du
+// REGISTRE DE NAVIGATION D'ULTIMA (`js/registre-lv3.mjs`), et RenoDevis n'a
+// aucune raison de connaître l'arbre d'Ultima. Écrire l'accroche dans le grain
+// de chaque dépôt y ferait fuiter une notion étrangère, et il faudrait toucher
+// quatre dépôts pour déplacer une étoile. `depots.json` est déjà LA liste des
+// huit, tenue par Ultima : y ajouter une colonne n'invente aucune seconde
+// vérité, ça complète la seule qui existe.
+//
+// Le format est un identifiant nu, jamais un chemin : c'est une clé du registre.
+const ID_CIEL = /^[a-z0-9][a-z0-9-]{0,63}$/;
 const depots = JSON.parse(readFileSync(FICHIER_DEPOTS, 'utf8'))
   .filter((d) => {
     if (d && typeof d.dossier === 'string' && NOM_DOSSIER.test(d.dossier) && d.dossier !== '..') return true;
@@ -157,19 +169,31 @@ function mesurerGit(chemin, commitNote) {
 // ⚠️ Ce qu'on ne fait PAS : le faire disparaître. Il reste dans l'agrégat, à sa
 // place, avec son motif — règle ⑤ du mode d'emploi. Un dépôt qu'on n'a pas
 // regardé ne doit jamais se lire comme un dépôt sans problème.
+// L'accroche, résolue une fois pour toutes. Une valeur absente ou malformée
+// retombe sur ALPHA — un projet sans accroche doit apparaître QUELQUE PART,
+// jamais disparaître du ciel — mais le repli est ANNONCÉ plus bas : un défaut
+// silencieux se lirait comme un choix.
+const sansAccroche = [];
+function accrocheDe(d) {
+  if (typeof d.ciel === 'string' && ID_CIEL.test(d.ciel)) return d.ciel;
+  sansAccroche.push(d.depot + (d.ciel === undefined ? '' : ` (valeur refusée : ${JSON.stringify(d.ciel)})`));
+  return 'alpha';
+}
+
 const entrees = depots.map((d) => {
+  const ciel = accrocheDe(d);
   const chemin = resolve(RACINE_ULTIMA, '..', d.dossier);
   const fichier = join(chemin, 'FINUBAR.md');
   if (!existsSync(chemin)) {
     return {
       ok: false, hors_seance: true, motif: 'dépôt non attaché à cette séance',
-      depot: d.depot, grain: null, derive: null,
+      depot: d.depot, ciel, grain: null, derive: null,
     };
   }
   if (!existsSync(fichier)) {
     return {
       ok: false, hors_seance: false, motif: 'FINUBAR.md absent',
-      depot: d.depot, grain: null, derive: null,
+      depot: d.depot, ciel, grain: null, derive: null,
     };
   }
   let entree;
@@ -179,7 +203,7 @@ const entrees = depots.map((d) => {
     entree = { ok: false, motif: 'fichier illisible', depot: d.depot, grain: null };
   }
   const derive = mesurerGit(chemin, entree.ok ? entree.grain.dernier_arret.commit : '');
-  return { ...entree, hors_seance: false, derive };
+  return { ...entree, ciel, hors_seance: false, derive };
 });
 
 // ⑤ LES HUIT COPIES DU RAPPEL DOIVENT ÊTRE IDENTIQUES À LEUR SOURCE.
@@ -261,6 +285,14 @@ if (m.hors_seance) {
   const noms = sortie.projets.filter((p) => p.hors_seance).map((p) => p.depot);
   console.log(`ℹ️  ${m.hors_seance} dépôt(s) non attaché(s) à cette séance : ${noms.join(', ')}`);
   console.log('    Ni leur grain ni leur rappel n\'ont pu être lus ici — c\'est un angle mort de la collecte, pas un constat sur ces dépôts.');
+}
+// Le repli d'accroche est ANNONCÉ. Un projet rangé sous ALPHA faute de mieux
+// est indiscernable, à l'écran, d'un projet rangé sous ALPHA exprès — et c'est
+// exactement le genre de défaut qui ne se voit jamais parce qu'il ressemble à
+// un choix (même famille que le « pas lu / illisible » du 02/09).
+if (sansAccroche.length) {
+  console.log(`ℹ️  ${sansAccroche.length} dépôt(s) sans accroche au ciel, rangé(s) sous ALPHA par défaut : ${sansAccroche.join(', ')}`);
+  console.log('    L\'accroche se pose dans finubar/depots.json (champ « ciel » = un identifiant de js/registre-lv3.mjs).');
 }
 sortie.cartouche.signaux.forEach((s) => console.log(`  • ${s.projet} — ${s.dit}`));
 if (sortie.cartouche.action) console.log(`  ▶ ${sortie.cartouche.action.projet} : ${sortie.cartouche.action.faire}`);

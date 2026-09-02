@@ -89,10 +89,30 @@ export function signalDe(id, data) {
 // Reprise telle quelle de js/boussole-noyau.mjs, y compris ses silences.
 // `surDonnees` n'est appelé QUE sur un corps `{ ok: true }`.
 export async function chargerCockpit(token, surDonnees) {
+  return chargerAgregat('/api/cockpit', token, surDonnees);
+}
+
+// L'AGRÉGAT DE FINUBAR — l'état des huit dépôts, même route protégée, mêmes
+// silences (02/09/2026). Il alimente la couleur d'appel du ciel et le bandeau
+// de l'accueil.
+//
+// ⚠️ `surDonnees` n'est PAS appelé quand la route se tait. Le sans-jeton, lui,
+// appelle avec `null` — c'est ce qui permet à l'appelant de distinguer « pas
+// de session » de « la réponse n'est pas encore là », et de ne rien peindre
+// dans les deux cas.
+export async function chargerFinubar(token, surDonnees) {
+  return chargerAgregat('/api/finubar', token, surDonnees);
+}
+
+// LE CHEMIN COMMUN, écrit une fois. Deux copies de cette dégradation auraient
+// fini par diverger, et c'est la moitié silencieuse qui aurait divergé — celle
+// qu'aucun écran ne montre. Un composant réclamé par un second appelant se
+// DÉPLACE au lieu de se recopier (règle du 2026-07-30).
+async function chargerAgregat(chemin, token, surDonnees) {
   if (!token) { surDonnees(null); return; }
   let rep;
   try {
-    rep = await fetch('/api/cockpit', {
+    rep = await fetch(chemin, {
       method: 'GET',
       headers: { Accept: 'application/json', Authorization: 'Bearer ' + token },
     });

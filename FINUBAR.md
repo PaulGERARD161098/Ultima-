@@ -28,14 +28,14 @@
   "etat": "en_cours",
   "jalon": {
     "nom": "L'accueil piloté par Finubar — la couleur oriente, Léo dit par quoi commencer",
-    "critere_de_sortie": "le ciel d'accueil porte les 8 dépôts en astres, la lueur d'appel monte des astres vers leurs constellations, et le bandeau Finubar est en bas de l'accueil en permanence"
+    "critere_de_sortie": "LIVRÉ le 02/09 (jalon 0 + P1 + P2 + P3) : les projets sont des astres de l'arbre, la lueur d'appel monte des astres vers leurs constellations, et le bandeau Finubar est en bas de l'accueil. Reste P4 (les signaux du cockpit sur le même ciel), à ouvrir après que P3 ait vécu"
   },
   "dernier_arret": {
     "le": "2026-09-02",
-    "quoi": "CADRAGE + MAQUETTE de l'accueil piloté par Finubar (aucun branchement en production). Le constat qui commande tout : ce n'est pas un chantier neuf — le ciel est déjà l'accueil, l'isolement constellations → astres est arbitré depuis le 31/08, Finubar CLASSE déjà (rangDe, cartoucheDuMatin), et versConstellation() attend, branchée nulle part, depuis le 21/08. La demande de Paul EST LV6 P2+P3, avec Finubar en source à la place du cockpit à étendre. Deux défauts trouvés en MANIPULANT la maquette : une étoile peinte sous le bandeau n'était plus cliquable (le clic isolait un autre nœud — l'écran répondait, donc rien ne le signalait) ; et le dépliage d'office tasse cinq étoiles sur un axe, donc éteint par défaut. ⚠️ Une troisième alerte a été RETIRÉE après vérification : « l'agrégat annonce 0 dérive » venait d'un `git rev-list` brut de ma part ; collecter.mjs exclut du décompte les fichiers que Finubar écrit lui-même, donc sa mesure est juste. Il n'y a rien à réparer — le risque réel est ailleurs, et il naît de cette boucle : porté sur l'accueil, un instantané daté prend l'autorité du temps réel.",
-    "commit": "299c6d4"
+    "quoi": "L'ACCUEIL EST PILOTÉ PAR FINUBAR — go de Paul sur les 5 arbitrages, jalon 0 + P1 + P2 + P3 livrés dans la foulée. Les 8 dépôts deviennent des astres de l'arbre (les 4 briques sous RENOBOOST IA, Ultima à la racine, le reste sous ALPHA), la couleur d'appel monte des astres vers leurs constellations, et le bandeau du bas porte les ≤3 signaux + l'action unique de Léo. ⚠️ L'accroche NE vit PAS dans les 8 grains comme le cadrage le disait, mais dans finubar/depots.json : `renoboost-ia` est un identifiant du registre de navigation d'ULTIMA, et RenoDevis n'a pas à connaître l'arbre d'Ultima. Trois choses trouvées en MANIPULANT et en REGARDANT, aucune en relisant : la porte de RENOBOOST IA (le lien vers renoboostia.fr) qui se perdait quand le nœud gagnait des enfants — un nœud qui contient ISOLE au lieu d'ouvrir ; la parole de Léo qui passait DERRIÈRE le bandeau (deux `fixed` au même z-index) ; et un verdict de recouvrement qui ne pouvait pas devenir rouge, remplacé par une mesure du MÉCANISME. Patrimoine complet vert (78 sections).",
+    "commit": "A-RECALER"
   },
-  "prochaine_action": "Attendre le go de Paul sur les 5 arbitrages du §8 de CADRAGE-ACCUEIL-FINUBAR.md (l'accroche des dépôts, les trois teintes, le bandeau permanent, le dépliage, le rang de P4). Au go : jalon 0 d'abord — le bandeau porte « collecté le <date> » au premier plan, parce que l'accueil est vu tous les matins et qu'un pilotage qui ne dit pas de quand il date est un piège",
+  "prochaine_action": "Regarder l'accueil sur le preview de la PR #185 et dire si la couleur oriente vraiment (c'est le seul juge). Ensuite : P4 — les signaux du cockpit (ALTHEA en sommeil, idées orphelines, relances dues) sur le MÊME ciel et la même couleur, une fois que P3 aura vécu quelques jours",
   "bloque_par": [
     "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
     "`ANTHROPIC_API_KEY` en env Vercel",
@@ -44,6 +44,14 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "P4 est cadré et volontairement NON ouvert : les signaux du cockpit (quadrants personnels) sur le même ciel que ceux de Finubar (les dépôts). Arbitré par Paul le 02/09 — après P3, jamais avant. Une boucle à la fois",
+      "depuis": "2026-09-02"
+    },
+    {
+      "quoi": "⚠️ Trois dépôts (mon-dpe.fr, artisan-builder, ripair) n'ont PAS d'accroche vérifiée : ils tombent sous ALPHA par défaut dans finubar/depots.json. Les deux premiers sont attachables à une séance (add_repo les accepte) ; ripair est hors de portée (autre propriétaire). Leur place se tranchera quand ils seront lus",
+      "depuis": "2026-09-02"
+    },
     {
       "quoi": "⚠️ LA LEÇON DE LA SÉANCE, et elle a failli être écrite à l'envers : j'ai d'abord conclu que « l'agrégat ment » sur la foi d'un `git rev-list` brut qui comptait les commits de recalage de grain. `collecter.mjs` les exclut explicitement — la mesure était juste, l'instrument fautif était le mien. Avant d'accuser une sonde, lui demander CE qu'elle compte : c'est le pendant de la règle du 17/08 (« demander à une mesure ce qu'elle répond sur un cas dont on connaît la réponse »), vue depuis l'autre bout",
       "depuis": "2026-09-02"
@@ -80,6 +88,43 @@
 > Les séances, de la plus récente à la plus ancienne. Une entrée = une date, un
 > fait vérifié, une décision. La mémoire longue ; le bloc ci-dessus est la mémoire
 > courte, et c'est lui qui est lu automatiquement.
+
+### 2026-09-02 (3) — L'accueil est piloté par Finubar (jalon 0 · P1 · P2 · P3)
+Go de Paul sur les cinq arbitrages, tous sur la recommandation. Livré dans la
+foulée : les huit dépôts sont des **astres de l'arbre** (les 4 briques sous
+RENOBOOST IA, Ultima à la racine, le reste sous ALPHA), la **couleur d'appel**
+monte des astres vers leurs constellations, et le **bandeau Finubar** tient le
+bas de l'accueil avec les ≤ 3 signaux et l'action unique de Léo.
+
+**Un écart assumé au cadrage** : l'accroche au ciel ne vit pas dans les huit
+grains, mais dans `finubar/depots.json`. `renoboost-ia` est un identifiant du
+registre de navigation d'ULTIMA ; l'écrire dans le grain de RenoDevis y ferait
+fuiter une notion étrangère, et il faudrait toucher quatre dépôts pour déplacer
+une étoile. `depots.json` est déjà la liste des huit, tenue par Ultima.
+
+**Trois choses trouvées en manipulant et en regardant, aucune en relisant.**
+① La **porte de RENOBOOST IA** se perdait : au ciel, un nœud qui CONTIENT isole
+au lieu d'ouvrir — lui greffer ses briques lui retirait, en silence, son lien
+vers renoboostia.fr. La greffe lui rend sa cible en cap à part, en tête.
+② La **parole de Léo passait derrière le bandeau** : deux cartouches `fixed` au
+bas de l'écran, même `z-index`, le dernier arrivé gagne. Vu sur une capture,
+pas dans le code. La parole monte désormais d'une hauteur **mesurée**.
+③ Le **verdict de recouvrement ne pouvait pas devenir rouge** : la production
+déclare son mobilier au moteur (`margesUtiles`), là où la maquette réservait la
+place en rétrécissant son conteneur — le symptôme ne s'y déclenche jamais, même
+sans la déclaration (mesuré : 604 → 643 px sur un pire cas de 12 astres à
+390 px, pour un bandeau qui commence à 656). Il mesure maintenant le
+**mécanisme** : retirer le bandeau doit faire redescendre le ciel.
+
+⚠️ Et une **alerte retirée** : j'avais annoncé le matin que l'agrégat mentait
+sur la dérive. Faux — `collecter.mjs` exclut du décompte les fichiers que
+Finubar écrit lui-même ; c'est mon `git rev-list` brut qui comptait mal. *Avant
+d'accuser une sonde, lui demander CE qu'elle compte.*
+
+Patrimoine **complet** vert (78 sections). Deux harnais existants ont dû
+apprendre la nouvelle route (`smoke-boussole`, `smoke-lv4-coque`) : toute coque
+au ciel demande désormais `/api/finubar`, et un 404 non stubé se présenterait
+comme un défaut du produit alors que c'est un manque de l'instrument.
 
 ### 2026-09-02 (2) — L'accueil piloté par Finubar : cadrage et maquette
 Demande dictée par Paul : *« un seul écran d'accueil, au bas duquel il y a

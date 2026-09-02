@@ -52,10 +52,12 @@
 // (statique, aucune donnée utilisateur, jamais de PII) ; le cockpit ne rapatrie
 // que des COMPTES entiers et retombe en silence sur le texte figé.
 
-import { NOEUDS } from './registre-lv3.mjs';
+import { NOEUDS, chemin } from './registre-lv3.mjs';
 import { BLASONS, COEURS } from './blasons.mjs';
 import { versCiel, cheminVers, descendDe } from './adaptateur-lv4.mjs';
-import { ligneVivante, signalDe, chargerCockpit } from './cockpit-parole.mjs';
+import { ligneVivante, signalDe, chargerCockpit, chargerFinubar } from './cockpit-parole.mjs';
+import { greffer, signaux, libelleDegre } from './adaptateur-finubar.mjs';
+import { poser as poserFinubarBandeau } from './finubar-bandeau.mjs';
 
 // Le temps que dure l'approche avant que la page suivante s'ouvre. Paul l'a
 // dicté : « ça fait une sorte de zoom et ça affiche les projets » — on entre en
@@ -72,7 +74,12 @@ const SURVOL_MS = 140;
 export function rendre(idNoeud, options = {}) {
   const doc = options.document || (typeof document !== 'undefined' ? document : null);
   if (!doc) { return null; }
-  const registre = options.noeuds || NOEUDS;
+  // LE REGISTRE DE BASE, ET CELUI QU'ON PEINT. Ils diffèrent dès que Finubar
+  // a répondu : les projets deviennent alors des astres de l'arbre. La greffe
+  // repart TOUJOURS de la base — greffer sur le résultat de la greffe
+  // précédente porterait les astres en double au deuxième chargement.
+  const registreBase = options.noeuds || NOEUDS;
+  let registre = registreBase;
   const noeud = registre[idNoeud];
   if (!noeud) { return null; }
 
@@ -97,6 +104,12 @@ export function rendre(idNoeud, options = {}) {
   // où l'on est, ni comment revenir.
   let paroleAuRepos = paroleDefaut;
   const cockpit = { data: null, actif: null };
+  // FINUBAR — les signaux d'appel par nœud. Vide tant que la session n'a rien
+  // livré : sans jeton, sur erreur réseau ou sur réponse illisible, le ciel est
+  // STRICTEMENT celui d'hier. C'est la même règle fail-closed que le cockpit,
+  // et elle vaut ici davantage : un halo qui apparaît sur une donnée à moitié
+  // lue oriente vers le mauvais endroit, ce qui est pire que ne pas orienter.
+  let appels = Object.create(null);
   let deplie = null;
   // LE FOYER ISOLÉ — null tant qu'on regarde l'étage entier. C'est le SEUL
   // état de navigation de ce module : tout le reste (ce qui est peint, ce que
@@ -305,9 +318,14 @@ export function rendre(idNoeud, options = {}) {
       const r = el.getBoundingClientRect();
       if (r.height > 0) { haut.push(r.bottom); }
     }
-    // En bas : le cartouche de Léo et la légende gravée.
+    // En bas : le cartouche de Léo, la légende gravée — et le bandeau Finubar
+    // (P3). Le bandeau est la pièce de mobilier la plus HAUTE de l'écran : l'y
+    // oublier ferait exactement le défaut mesuré sur la maquette le 02/09 —
+    // une étoile peinte sous lui, donc plus cliquable, et un clic qui atterrit
+    // sur un bouton du bandeau. L'écran répond, et se trompe.
     const legende = doc.querySelector('.ciel-noeud-plateau > .ciel-legende');
-    for (const el of [parole, legende]) {
+    const bandeau = doc.getElementById('finubar-bandeau');
+    for (const el of [parole, legende, bandeau]) {
       if (!el) { continue; }
       const r = el.getBoundingClientRect();
       if (r.height > 0) { bas.push(window.innerHeight - r.top); }
@@ -396,6 +414,25 @@ export function rendre(idNoeud, options = {}) {
       // lesquelles n'emmènent nulle part. Sans cela, une promesse est faite à
       // qui n'y voit pas, et elle n'est pas tenue.
       if (!cap.cible) { g.setAttribute('aria-disabled', 'true'); }
+
+      // ⛔ L'APPEL EST POSÉ PAR UN ATTRIBUT, JAMAIS PAR UNE GÉOMÉTRIE À NOUS.
+      // Le moteur repositionne les cercles de chaque étoile à chaque image :
+      // un halo dessiné ici serait au bon endroit pendant une image et faux
+      // ensuite. `data-appel` + un `drop-shadow` en CSS n'ont pas de
+      // coordonnées — ils suivent l'étoile sans rien savoir d'elle. Et
+      // `js/ciel.js` n'est pas touché (jurisprudence LV4).
+      const appel = appels[id];
+      if (appel) {
+        g.setAttribute('data-appel', appel.degre);
+        // Le compte est DIT, pas seulement peint : une information portée par
+        // la seule couleur n'existe pas pour tout le monde.
+        const dit = libelleDegre(appel.degre, appel.compte);
+        g.setAttribute('aria-label', (g.getAttribute('aria-label') || '') + ', ' + dit);
+        const titre = g.querySelector('title');
+        if (titre) { titre.textContent = titre.textContent + ' — ' + dit; }
+      } else {
+        g.removeAttribute('data-appel');
+      }
 
       const montrer = () => afficherResume(Object.assign({ id }, cap));
       g.addEventListener('mouseenter', () => {
@@ -631,13 +668,61 @@ export function rendre(idNoeud, options = {}) {
   const foyerInitial = idDeLAdresse();
   if (foyerInitial) { poserFoyer(foyerInitial, { sansHistorique: true }); }
 
-  // ---- ① LE COCKPIT — fail-closed, et c'est la règle qui compte -----------
-  if (noeud.cockpit && typeof window !== 'undefined') {
+  // ---- LE BANDEAU DE L'ACCUEIL (P3) --------------------------------------
+  // Il n'existe que là où la coque en pose le conteneur — l'accueil aujourd'hui.
+  // Un clic sur un signal ISOLE la branche du projet : un signal qu'on ne peut
+  // pas suivre est une notification, et une notification ne fait rien avancer.
+  function poserBandeau(agregat) {
+    const conteneur = doc.getElementById('finubar-bandeau');
+    if (!conteneur) { return; }
+    const peint = poserFinubarBandeau(conteneur, agregat, (projet) => {
+      const idAstre = Object.keys(registre).find((k) => registre[k].nom === projet);
+      if (!idAstre) { return; }
+      // Le PARENT de l'astre : c'est lui qu'on isole, l'astre lui-même n'ayant
+      // pas d'enfants. Le chemin se LIT dans le registre, il ne se devine pas.
+      const suite = chemin(idAstre, registre);
+      const parent = suite.length > 1 ? suite[suite.length - 2] : null;
+      if (parent && parent !== idNoeud && descendDe(idNoeud, parent, registre)) { isoler(parent); }
+    });
+    // ⛔ LA PAROLE DE LÉO REMONTE AU-DESSUS DU BANDEAU. Les deux cartouches
+    // sont `position: fixed` au bas de l'écran, au même `z-index` : le dernier
+    // arrivé recouvre l'autre. Constaté en capture le 02/09 — le résumé du cap
+    // survolé passait DERRIÈRE le bandeau, à moitié lisible. La hauteur est
+    // MESURÉE et posée en variable : une constante serait fausse au premier
+    // signal long, et fausse deux fois entre le téléphone et l'écran large.
+    doc.body.classList.toggle('a-finubar', peint);
+    doc.documentElement.style.setProperty('--fb-hauteur',
+      Math.round(conteneur.getBoundingClientRect().height) + 'px');
+    // Les marges utiles du ciel dépendent elles aussi de cette hauteur ; elles
+    // sont relues au prochain dessin, qui suit immédiatement (voir l'appelant).
+  }
+
+  // ---- ① LE COCKPIT ET FINUBAR — fail-closed, et c'est la règle qui compte -
+  // ⚠️ LE PONT DE SESSION N'EST PLUS RÉSERVÉ AUX NŒUDS `cockpit` (02/09/2026).
+  // Il l'était parce que seuls eux avaient quelque chose à demander ; Finubar,
+  // lui, concerne des écrans qui ne lisent pas le cockpit — ALPHA le premier,
+  // c'est-à-dire précisément là où les projets s'accrochent. Le pont garde sa
+  // forme exacte (`poserSession`, `ligneVivante`, `signalDe`) : `boussole-auth`
+  // et les deux harnais qui s'en servent ne voient rien passer.
+  if (typeof window !== 'undefined') {
     window.UltimaCielNoeud = {
       poserSession(token) {
-        chargerCockpit(token, (data) => {
-          cockpit.data = data;
-          if (cockpit.actif) { afficherResume(cockpit.actif); }
+        if (noeud.cockpit) {
+          chargerCockpit(token, (data) => {
+            cockpit.data = data;
+            if (cockpit.actif) { afficherResume(cockpit.actif); }
+          });
+        }
+        chargerFinubar(token, (agregat) => {
+          if (!agregat) { return; }
+          // La greffe repart de la BASE (voir plus haut), puis la scène est
+          // repeinte : les astres neufs n'apparaissent pas tout seuls, et un
+          // écran qui aurait la donnée sans la montrer serait le pire des deux.
+          registre = greffer(registreBase, agregat);
+          appels = signaux(registre, agregat, chemin);
+          poserBandeau(agregat);
+          if (typeof options.surFinubar === 'function') { options.surFinubar(agregat); }
+          dessiner();
         });
       },
       ligneVivante,

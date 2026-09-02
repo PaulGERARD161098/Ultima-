@@ -44,6 +44,7 @@ export default {
         ],
         "maj": "2026-09-01"
       },
+      "ciel": "renoboost-ia",
       "hors_seance": false,
       "derive": {
         "tete": "e2b7b96",
@@ -93,6 +94,7 @@ export default {
         ],
         "maj": "2026-09-01"
       },
+      "ciel": "renoboost-ia",
       "hors_seance": false,
       "derive": {
         "tete": "fc330ba",
@@ -167,6 +169,7 @@ export default {
         ],
         "maj": "2026-09-02"
       },
+      "ciel": "renoboost-ia",
       "hors_seance": false,
       "derive": {
         "tete": "1d9d206",
@@ -234,6 +237,7 @@ export default {
         ],
         "maj": "2026-09-02"
       },
+      "ciel": "renoboost-ia",
       "hors_seance": false,
       "derive": {
         "tete": "c34dd7b",
@@ -300,6 +304,7 @@ export default {
         ],
         "maj": "2026-09-02"
       },
+      "ciel": "racine",
       "hors_seance": false,
       "derive": {
         "tete": null,
@@ -316,6 +321,7 @@ export default {
       "hors_seance": true,
       "motif": "dépôt non attaché à cette séance",
       "depot": "paggerard-boop/ripair",
+      "ciel": "alpha",
       "grain": null,
       "derive": null,
       "jours_depuis_maj": null,
@@ -327,6 +333,7 @@ export default {
       "hors_seance": true,
       "motif": "dépôt non attaché à cette séance",
       "depot": "PaulGERARD161098/artisan-builder",
+      "ciel": "alpha",
       "grain": null,
       "derive": null,
       "jours_depuis_maj": null,
@@ -338,6 +345,7 @@ export default {
       "hors_seance": true,
       "motif": "dépôt non attaché à cette séance",
       "depot": "PaulGERARD161098/mon-dpe.fr",
+      "ciel": "alpha",
       "grain": null,
       "derive": null,
       "jours_depuis_maj": null,
@@ -452,30 +460,35 @@ export default {
         "id": "PaulGERARD161098/RenoAgenda",
         "libelle": "RénoAgenda",
         "constellation": "en_attente_de_paul",
+        "ciel": "renoboost-ia",
         "signal": 1
       },
       {
         "id": "PaulGERARD161098/RenoPredict",
         "libelle": "RénoPredict",
         "constellation": "en_attente_de_paul",
+        "ciel": "renoboost-ia",
         "signal": 1
       },
       {
         "id": "PaulGERARD161098/RenoBoost",
         "libelle": "RénoBoost",
         "constellation": "en_attente_de_paul",
+        "ciel": "renoboost-ia",
         "signal": 1
       },
       {
         "id": "PaulGERARD161098/RenoDevis",
         "libelle": "RénoDevis",
         "constellation": "en_cours",
+        "ciel": "renoboost-ia",
         "signal": 1
       },
       {
         "id": "PaulGERARD161098/Ultima-",
         "libelle": "Ultima",
         "constellation": "en_cours",
+        "ciel": "racine",
         "signal": 0
       }
     ],

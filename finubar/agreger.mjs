@@ -291,6 +291,11 @@ export function versConstellation(agregat) {
     id: p.grain.depot || p.grain.projet,
     libelle: p.grain.projet,
     constellation: p.grain.etat,
+    // L'accroche dans l'arbre de navigation d'Ultima (`finubar/depots.json`,
+    // champ `ciel`). Elle n'est PAS déduite ici : la déduire d'un nom de dépôt
+    // marcherait tant que les dépôts s'appellent « Reno… », et se tromperait en
+    // silence au premier projet qui ne s'appelle pas comme sa place.
+    ciel: p.ciel || 'alpha',
     signal: p.rang <= 1 ? 1 : 0,
   }));
   const parCap = new Map();

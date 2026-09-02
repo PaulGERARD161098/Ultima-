@@ -98,21 +98,47 @@ les matins, ce chiffre daté prendra l'autorité du temps réel. → §6 n° 1.
 
 ## 2. ② Les étapes — quatre paliers, un palier = une boucle = une PR
 
+> ✅ **GO DE PAUL LE 02/09 SUR LES CINQ ARBITRAGES** (§8), tous sur la
+> recommandation. Jalon 0, P1, P2 et P3 sont **livrés le jour même** ; P4 reste
+> à sa place, après. Les annotations ✅ ci-dessous disent ce qui a été fait et,
+> quand le chemin a changé, pourquoi.
+
 ### Jalon 0 — l'écran ne fait jamais passer un instantané pour un direct ⛔ D'ABORD
+✅ **Fait.** `js/finubar-bandeau.mjs` pose « collecté le <date> » dans l'en-tête
+du bandeau, au même rang que les comptes. `smoke-accueil-finubar` ⑥ le lit.
 Trois mots dans le bandeau : **« collecté le <date> »**, au même rang que le
 reste, jamais en note de bas de page. Rien d'autre à changer dans `finubar/` :
 la mesure y est juste (§0.3). C'est l'ÉCRAN qui, en portant ce chiffre au
 premier plan, lui donnerait une fraîcheur qu'il n'a pas.
 
-### P1 — le grain déclare son accroche au ciel
+### P1 — l'accroche au ciel
+✅ **Fait — mais PAS où ce cadrage le disait, et l'écart est délibéré.**
+Le champ `ciel` devait vivre dans les huit `FINUBAR.md`. Il vit dans
+`finubar/depots.json`. Raison : `renoboost-ia` est un identifiant du **registre
+de navigation d'Ultima**, et RenoDevis n'a aucune raison de connaître l'arbre
+d'Ultima — l'écrire dans son grain y ferait fuiter une notion étrangère, et il
+faudrait toucher quatre dépôts pour déplacer une étoile. `depots.json` est déjà
+LA liste des huit, tenue par Ultima : y ajouter une colonne ne fabrique aucune
+seconde vérité, ça complète la seule qui existe. La collecte **nomme** tout
+dépôt sans accroche au lieu de le ranger sous ALPHA en silence.
+
+<details><summary>Ce que disait le cadrage initial</summary>
 Un champ **`ciel`** dans les huit `FINUBAR.md` : l'id du nœud de navigation
 auquel l'astre se rattache (`renoboost-ia`, `racine`, absent → `alpha`).
 **Le grain déclare, la carte ne devine pas** — une table de correspondance
 tenue à côté serait la deuxième vérité que Finubar s'interdit.
 Livrables : le champ lu par `lireGrain` (borné, hostile par défaut), les huit
 grains renseignés, l'assertion dans `unit-finubar.mjs`.
+</details>
 
 ### P2 — la greffe et l'appel (le cœur visuel)
+✅ **Fait.** `js/adaptateur-finubar.mjs` (pur, promu depuis la maquette) +
+`tests/unit-adaptateur-finubar.mjs` (30 verdicts, éprouvé rouge : une réponse
+uniforme en casse 7). `js/ciel-noeud.mjs` lit `/api/finubar`, greffe, propage et
+pose `data-appel` ; `css/stellaire.css` §⑨ en fait la lueur. `js/ciel.js`
+intouché. ⚠️ **Une porte a failli se perdre** : RENOBOOST IA ouvrait
+renoboostia.fr, et un nœud qui gagne des enfants ISOLE au lieu d'ouvrir. La
+greffe lui rend sa cible en cap à part (« LE SITE »), en tête de ses caps.
 `js/adaptateur-finubar.mjs` — module **pur**, promu depuis la maquette :
 `greffer(registre, agregat)` et `signaux(registre, agregat)`.
 `js/ciel-noeud.mjs` lit `/api/finubar` (le fetch qu'il fait déjà pour le
@@ -122,6 +148,9 @@ en fait la lueur. **`js/ciel.js` n'est pas touché** (jurisprudence LV4).
 strictement celui d'hier.
 
 ### P3 — le bandeau du bas
+✅ **Fait.** `js/finubar-bandeau.mjs` + `css/finubar-bandeau.css`, posé dans
+`index.html`, vide (donc invisible) tant que la session n'a rien livré. Il est
+**déclaré au moteur** (`margesUtiles`) : le ciel se cadre au-dessus de lui.
 Le rendu de `cartouche` (≤ 3 signaux + 1 action), en bas de l'accueil, tout le
 temps — pas un dialogue qui s'ouvre. Il **ne calcule rien** : deux règles de
 priorité feraient dire 3 à l'étoile et 2 au bandeau (pre-mortem LV6, n° 8).
@@ -173,7 +202,7 @@ ait vécu.**
 | # | Le mode de défaillance | Gravité | Ce qui le prévient |
 |---|---|---|---|
 | 1 | **L'accueil fait passer un instantané pour un direct** — l'agrégat est figé au dernier commit ; vu chaque matin en pleine page, il se lira comme l'état de l'instant, et un jour il aura trois jours de retard sans que rien ne le dise. | **haute** | **Jalon 0** : la date de collecte est dans le bandeau, pas en bas de page. (La mesure de dérive, elle, est juste — vérifiée dans `collecter.mjs`, §0.3.) |
-| 2 | **Une étoile peinte n'est plus cliquable** — le bandeau la recouvre, le clic atterrit ailleurs, l'écran répond **et se trompe**. | **fatale** (rien ne la signale) | **Trouvé et corrigé dans la maquette le 02/09** : le ciel s'arrête à la lisière du bandeau, dont la hauteur est **mesurée**, jamais devinée. Le harnais l'assertera. |
+| 2 | **Une étoile peinte n'est plus cliquable** — le bandeau la recouvre, le clic atterrit ailleurs, l'écran répond **et se trompe**. | **fatale** (rien ne la signale) | Trouvé et corrigé dans la maquette le 02/09. ⚠️ **Et il ne pouvait PAS se produire en production** — vérifié depuis : la production déclare son mobilier au moteur (`margesUtiles`), là où la maquette réservait la place en rétrécissant son conteneur. Mesuré : sans la déclaration du bandeau, l'étoile la plus basse d'un pire cas de 12 astres à 390 px passe de 604 à 643 px, le bandeau commençant à 656 — le symptôme ne se déclenche jamais. D'où un verdict qui mesure le **mécanisme** (retirer le bandeau doit faire redescendre le ciel) et pas seulement le symptôme : un verdict qui ne peut pas devenir rouge ne mesure rien. |
 | 3 | **La couleur devient un reproche** — les projets délaissés rougissent, Ultima gronde, Paul la fuit : l'effet inverse du but. | haute | Trois teintes tirées de la palette, **aucune rouge** ; l'absence de couleur est un silence, pas une note ; mots interdits assertés. |
 | 4 | **Le ciel devient un sapin** — tout appelle, donc plus rien n'appelle. | haute | La couleur ne vient QUE de `rangDe` (0 et 1 = appel, 2 = braise) ; le bandeau reste borné à **3 signaux + 1 action**. Si un jour tout est or, c'est un fait sur le portefeuille, pas un défaut d'écran. |
 | 5 | **Deux vérités** — l'étoile dit 3, le bandeau dit 2. | haute | **Un seul fetch**, un seul objet, `cartoucheDuMatin` seule juge. |
