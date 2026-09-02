@@ -181,6 +181,14 @@ export function agreger(entrees, aujourdhuiIso) {
   });
 
   const lisibles = projets.filter((p) => p.ok);
+  // ⛔ « PAS LU » ET « ILLISIBLE » SONT DEUX CHOSES, ET LES ADDITIONNER MENT.
+  // Un dépôt hors séance (non cloné, donc jamais ouvert) n'apprend rien sur son
+  // grain ; un grain cassé, si. Les compter ensemble noierait une alerte réelle
+  // dans le bruit d'un angle mort permanent — et c'est exactement ce qui s'est
+  // produit le 02/09/2026, où « 3 sans grain lisible » désignait trois grains
+  // parfaitement sains. Deux compteurs, donc, et `total` reste leur somme avec
+  // les lisibles : rien ne disparaît du compte.
+  const horsSeance = projets.filter((p) => !p.ok && p.hors_seance);
   const gestes = [];
   lisibles.forEach((p) => {
     p.grain.bloque_par.forEach((g) => gestes.push({ projet: p.grain.projet, geste: g }));
@@ -192,7 +200,8 @@ export function agreger(entrees, aujourdhuiIso) {
     macro: {
       total: projets.length,
       lisibles: lisibles.length,
-      illisibles: projets.length - lisibles.length,
+      illisibles: projets.length - lisibles.length - horsSeance.length,
+      hors_seance: horsSeance.length,
       en_cours: lisibles.filter((p) => p.grain.etat === 'en_cours').length,
       en_attente_de_paul: lisibles.filter((p) => p.grain.etat === 'en_attente_de_paul').length,
       au_repos: lisibles.filter((p) => p.grain.etat === 'au_repos').length,
@@ -267,7 +276,7 @@ export function cartoucheDuMatin(agregat) {
     };
   }
 
-  return { signaux, action, illisibles: agregat.macro.illisibles };
+  return { signaux, action, illisibles: agregat.macro.illisibles, hors_seance: agregat.macro.hors_seance };
 }
 
 // ---------------------------------------------------------------- constellation

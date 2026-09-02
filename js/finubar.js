@@ -83,12 +83,20 @@ function rendreProjet(p) {
   if (!p.ok) {
     // Un grain illisible s'affiche AVEC son motif. Le faire disparaître le
     // ferait lire comme « rien à signaler » — l'inverse de la vérité.
+    //
+    // ⚠️ Mais on ne dit pas la même chose dans les deux cas, et l'écart n'est
+    // pas cosmétique. « Finubar n'a pas pu LIRE ce dépôt » accuse le dépôt ;
+    // pour un dépôt simplement absent de la séance, c'est faux — son grain se
+    // porte peut-être très bien, personne n'est allé voir. Le premier libellé
+    // envoie corriger quelque chose, le second dit où porter le regard.
     li.classList.add('projet-illisible');
     const tete = el('div', 'projet-tete');
     tete.appendChild(el('h3', 'projet-nom', p.depot || 'dépôt inconnu'));
-    tete.appendChild(el('span', 'projet-etat attente', 'état illisible'));
+    tete.appendChild(el('span', 'projet-etat attente', p.hors_seance ? 'non collecté' : 'état illisible'));
     li.appendChild(tete);
-    li.appendChild(el('p', 'projet-cap', `Finubar n’a pas pu lire ce dépôt : ${p.motif}.`));
+    li.appendChild(el('p', 'projet-cap', p.hors_seance
+      ? 'Ce dépôt n’était pas attaché à la séance qui a produit cette collecte : son grain n’a pas été lu. Ce n’est pas un constat sur lui.'
+      : `Finubar n’a pas pu lire ce dépôt : ${p.motif}.`));
     return li;
   }
 

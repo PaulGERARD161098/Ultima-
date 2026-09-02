@@ -31,11 +31,11 @@
     "critere_de_sortie": "les 8 grains lus par la collecte, le rappel d'ouverture de séance actif dans les 8 dépôts, l'écran /finubar en ligne"
   },
   "dernier_arret": {
-    "le": "2026-08-31",
-    "quoi": "Deux boucles fermées et FUSIONNÉES sur main. ① L'isolement du ciel resserré à UN SEUL ÉTAGE à la demande de Paul : isoler un nœud peint ses enfants DIRECTS et eux seuls (NAGA → IMLADRIK, ADRAMELECH, TAO), et cliquer l'un d'eux descend d'un cran — la profondeur est contingente à ce qu'il y a dedans, le geste identique à tous les étages (#179, 64bbb93). Le pire cas construit a été RECALCULÉ et non relancé : à un étage, l'ancien n'aurait peint que 4 étoiles sous un intitulé annonçant 24. ② En reprenant la vérification Finubar du 21/08, un trou trouvé : le refus de finubar/macro.json ne tenait qu'au middleware, .vercelignore ne couvrant pas finubar/ — hypothèse RETIRÉE plutôt que documentée, le dossier sort du déploiement, verrou posé et éprouvé rouge (#180, f7f27d1). Patrimoine complet vert aux deux boucles.",
-    "commit": "f7f27d1"
+    "le": "2026-09-02",
+    "quoi": "LA COLLECTE NE CONFOND PLUS « PAS LU » AVEC « ILLISIBLE », et c'est le fait principal. Elle lit le disque ; une séance ne clone que les dépôts qui lui sont attachés, et les autres tombaient dans la branche « FINUBAR.md absent » — un constat SUR LE DÉPÔT là où il n'y avait qu'un angle mort de l'observateur. Ce matin-là elle annonçait « 3 projets sans grain lisible » : les trois grains existaient, intacts (mon-dpe.fr et artisan-builder relus sur GitHub, ripair non attachable en cross-tier), et deux de ces dépôts n'avaient même pas bougé depuis le 21/08. Deux compteurs séparés désormais (`illisibles` et `hors_seance`), un motif distinct, un libellé d'écran qui n'accuse plus le dépôt — et le hors-séance RESTE affiché, car sortir du compte ne doit jamais valoir sortir de la liste. C'est la tension que le harnais §5bis verrouille, avec son cas de référence sans hors-séance. Posé au passage : la routine « Finubar — récap du matin » (8 h, heure de Paris, push + e-mail), qui porte la même leçon dans son prompt.",
+    "commit": "046e966"
   },
-  "prochaine_action": "La vérification Finubar ① reste la SEULE de la fusion du 21/08 encore ouverte : recaler les grains des 7 AUTRES dépôts, dont les `dernier_arret.commit` pointent dans le vide depuis le squash-merge. Elle exige d'attacher ces dépôts à la session — refusé par le contrôle de permissions le 31/08, donc à débloquer avec Paul. Elle vient d'être illustrée sur Ultima même : les deux fusions du jour étaient des squash, et le grain a dû être recalé de 639c2d6 (disparu) vers f7f27d1",
+  "prochaine_action": "Recaler les grains de `mon-dpe.fr` et `artisan-builder` : leurs `dernier_arret.commit` (b5c0a72, 1924e58) ne sont pas leurs têtes réelles (9f8f0b7, 3ee806d) — reliquat du squash-merge du 21/08, et ces deux dépôts n'ont pas bougé depuis. ⚠️ Les 5 dépôts attachés, eux, sont RECALÉS : mesuré le 02/09, `commits_depuis = 0` et commit retrouvé sur les cinq — cette moitié de la vérification du 21/08 est close. `ripair` reste hors de portée (autre propriétaire, `add_repo` refuse le cross-tier), donc jamais mesurable depuis une séance RénoBoost",
   "bloque_par": [
     "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
     "`ANTHROPIC_API_KEY` en env Vercel",
@@ -44,6 +44,10 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "⚠️ LA LEÇON DU 02/09, à ne pas reperdre : une mesure qui ne peut PAS voir quelque chose doit le dire comme tel, jamais le rendre en constat. La collecte annonçait trois grains manquants qui existaient tous — et le message invitait à aller semer ce qui était déjà semé. Même famille que la règle du 2026-08-21 (« quand on ne PEUT pas vérifier de ce côté-là, on retire l'hypothèse au lieu de la documenter ») et que celle du 2026-08-17 (« un filtre qui exclut des cas doit compter et nommer ce qu'il exclut »). Toute nouvelle sonde de Finubar se relit à travers celle-ci",
+      "depuis": "2026-09-02"
+    },
     {
       "quoi": "Les huit coques de navigation (grima.html, naga.html…) ne sont plus le CHEMIN depuis l'isolement — elles restent des PORTES (repli <noscript>, lien direct, adresse). Leur sort — les garder telles quelles, les réduire, les retirer — n'est pas tranché : à voir avec Paul quand l'isolement aura vécu",
       "depuis": "2026-08-28"
@@ -61,7 +65,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-08-31"
+  "maj": "2026-09-02"
 }
 ```
 
@@ -72,6 +76,33 @@
 > Les séances, de la plus récente à la plus ancienne. Une entrée = une date, un
 > fait vérifié, une décision. La mémoire longue ; le bloc ci-dessus est la mémoire
 > courte, et c'est lui qui est lu automatiquement.
+
+### 2026-09-02 — La collecte cesse de confondre « pas lu » et « illisible »
+Paul demandait deux choses : *« Finubar est-il à jour de tout ? »* et un récap le
+matin. La première a trouvé le défaut. La collecte annonçait **« 3 projets sans
+grain lisible »** — `mon-dpe.fr`, `artisan-builder`, `ripair`. Les trois grains
+existaient : les deux premiers ont été relus sur GitHub, datés du 21/08, sur des
+dépôts qui n'avaient pas bougé depuis ; le troisième appartient à un autre compte
+et n'est pas attachable (`add_repo` refuse le cross-tier), donc simplement hors
+de portée. Le message envoyait semer ce qui était déjà semé.
+
+La cause : la collecte lit le **disque**, et une séance ne clone que les dépôts
+qui lui sont attachés. Les absents tombaient dans la branche « fichier manquant »
+et en ressortaient avec un constat **sur le dépôt**, alors qu'il n'y avait qu'un
+angle mort de l'observateur. Correction : deux issues distinctes, deux compteurs
+(`illisibles` et `hors_seance`), un libellé d'écran qui n'accuse plus, et le
+contrôle des copies du rappel qui n'inspecte plus ce qu'il ne voit pas.
+
+⛔ Ce qui n'a **pas** été fait, et c'est la moitié qui compte : le faire
+disparaître. Le hors-séance reste dans l'agrégat, à son rang, avec son motif —
+règle ⑤. `§5bis` du harnais tient les deux exigences ensemble, et son cas de
+référence (aucun hors-séance → `illisibles` retrouve exactement sa valeur d'hier)
+répond à la règle du 17/08 : une sonde qui répond pareil dans les deux situations
+ne mesure rien.
+
+Posé le même jour : la routine **« Finubar — récap du matin »** (8 h, heure de
+Paris, push + e-mail), dont le prompt porte la même leçon pour ne pas la reperdre
+dans une séance qui n'aurait pas ce fichier sous les yeux.
 
 ### 2026-08-28 — Le ciel s'isole
 Demande dictée par Paul : « quand je clique sur une constellation, ça m'affiche

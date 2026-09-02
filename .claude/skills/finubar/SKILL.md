@@ -75,7 +75,8 @@ faut lire sa sortie :
 | Message | Ce qu'il veut dire |
 |---|---|
 | `N projet(s) ont avancé depuis leur dernière note` | des grains sont périmés — les recaler |
-| `N projet(s) sans grain lisible` | un `FINUBAR.md` cassé ou absent |
+| `N projet(s) sans grain lisible` | un `FINUBAR.md` cassé ou absent — **du dépôt**, pas de la séance |
+| `ℹ️ N dépôt(s) non attaché(s) à cette séance` | la collecte ne les a pas ouverts : elle lit le disque, et une séance ne clone que les dépôts qui lui sont attachés. **Ce n'est pas un constat sur eux** — ni leur grain ni leur rappel n'ont été vus. Ne rien en conclure, ne rien aller « réparer » |
 | `Rappel … ABSENT dans : …` | ce dépôt ne se présentera pas à l'ouverture |
 | `Rappel DIVERGENT de sa source dans : …` | quelqu'un a corrigé une copie sur place — re-copier depuis `finubar/rappel.mjs` |
 | `entrée ignorée dans depots.json` | un nom de dossier invalide (`..`, chemin) |
@@ -97,6 +98,14 @@ Et elle **sort en erreur** si les deux formes de l'agrégat divergent.
    `tests/unit-finubar.mjs` — ne pas la contourner.
 5. **Un dépôt illisible reste affiché, avec son motif.** Le faire disparaître le
    ferait lire comme « rien à signaler ».
+6. **Ce que la collecte n'a pas regardé, elle le dit — et le dit AUTREMENT que
+   ce qu'elle a mal lu.** *(Défaut trouvé le 02/09/2026.)* Elle lit le disque ;
+   les dépôts non attachés à la séance tombaient dans la même case que « fichier
+   manquant » et ressortaient en « sans grain lisible ». Ce matin-là elle en
+   annonçait trois : les trois grains existaient, intacts, sur des dépôts qui
+   n'avaient même pas bougé. Deux compteurs séparés désormais (`illisibles` et
+   `hors_seance`), parce qu'un angle mort permanent qui se compte avec les
+   vraies alertes finit par les rendre inaudibles.
 
 ## Où vit quoi
 

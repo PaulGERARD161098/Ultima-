@@ -48,9 +48,14 @@ const DONNEES = {
       },
     },
     { ok: false, motif: 'bloc illisible', depot: 'x/Gamma', grain: null, derive: null, rang: 9, jours_depuis_maj: null, jours_en_attente: null },
+    // Le quatrième cas, posé le 02/09/2026 : un dépôt que la séance n'a pas
+    // cloné. Il ressemble à Gamma dans la donnée (`ok: false`) et doit se lire
+    // AUTREMENT à l'écran — « Finubar n'a pas pu lire ce dépôt » accuserait un
+    // grain qui se porte peut-être très bien.
+    { ok: false, hors_seance: true, motif: 'dépôt non attaché à cette séance', depot: 'x/Delta', grain: null, derive: null, rang: 9, jours_depuis_maj: null, jours_en_attente: null },
   ],
   macro: {
-    total: 3, lisibles: 2, illisibles: 1, en_cours: 1, en_attente_de_paul: 1,
+    total: 4, lisibles: 2, illisibles: 1, hors_seance: 1, en_cours: 1, en_attente_de_paul: 1,
     au_repos: 0, derives: 1, boucles_ouvertes: 1, gestes_de_paul: [{ projet: 'Beta', geste: 'le geste attendu' }],
   },
   cartouche: {
@@ -182,14 +187,25 @@ const { page, journal } = await ouvrir({ client: 'connecte', api: { status: 200,
   verifier('aucune requête externe', journal.externes.length === 0, journal.externes.join(' | '));
 
   const lignes = page.locator('#marche > li');
-  verifier('un bloc par projet, illisible COMPRIS', (await lignes.count()) === 3, String(await lignes.count()));
+  verifier('un bloc par projet, illisible ET non collecté COMPRIS', (await lignes.count()) === 4, String(await lignes.count()));
 
   const noms = await page.locator('.projet-nom').allTextContents();
   verifier('l\'ordre du moteur est respecté à l\'identique',
-    noms.join(' > ') === 'Alpha > Beta > x/Gamma', noms.join(' > '));
+    noms.join(' > ') === 'Alpha > Beta > x/Gamma > x/Delta', noms.join(' > '));
 
   const texte = await page.textContent('#marche');
   verifier('le grain illisible affiche son motif', /bloc illisible/.test(texte));
+
+  // §2bis — les deux absences ne se disent pas pareil (défaut du 02/09/2026).
+  // ⛔ La seconde assertion est celle qui compte : la page ne doit PAS accuser
+  // de ne pas savoir lire un dépôt qu'elle n'a simplement pas ouvert. Sans elle,
+  // le test passerait sur l'ancien libellé appliqué aux deux cas.
+  const delta = page.locator('#marche > li', { hasText: 'x/Delta' });
+  const texteDelta = (await delta.textContent()) || '';
+  verifier('le dépôt non collecté est étiqueté « non collecté »', /non collecté/.test(texteDelta), texteDelta.slice(0, 80));
+  verifier('⛔ et il n\'est PAS présenté comme illisible',
+    !/n’a pas pu lire|n'a pas pu lire/.test(texteDelta), texteDelta.slice(0, 120));
+  verifier('il dit que ce n\'est pas un constat sur le dépôt', /pas un constat/.test(texteDelta));
   verifier('la dérive est annoncée en clair', /avancé de 4 commit/.test(texte));
   verifier('la tête réelle du dépôt est citée', /abc1234/.test(texte));
   verifier('le geste attendu est rendu', /le geste attendu/.test(texte));
@@ -246,7 +262,12 @@ console.log('§4 — 390 px : rien ne déborde');
   const debord = await p390.evaluate(() =>
     document.documentElement.scrollWidth - document.documentElement.clientWidth);
   verifier('aucun scroll horizontal en 390 px', debord <= 0, `${debord} px`);
-  verifier('les projets sont tous rendus en mobile', (await p390.locator('#marche > li').count()) === 3);
+  // Le compte se DÉDUIT de la fixture, il ne se recopie pas : écrit en dur, il
+  // rougissait au premier projet ajouté (02/09) alors que rien n'était cassé —
+  // un test qui doit être retouché à chaque donnée nouvelle finit par être
+  // retouché sans être lu.
+  verifier('les projets sont tous rendus en mobile',
+    (await p390.locator('#marche > li').count()) === DONNEES.projets.length);
   // Cibles tactiles : le seul lien de la page doit rester atteignable au doigt.
   const h = await p390.locator('.retour-ultima').evaluate((n) => n.getBoundingClientRect().height);
   verifier('le retour vers Ultima fait au moins 24 px de haut', h >= 24, `${h} px`);
