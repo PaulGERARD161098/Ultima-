@@ -33,7 +33,7 @@
   "dernier_arret": {
     "le": "2026-09-02",
     "quoi": "LA COLLECTE NE CONFOND PLUS « PAS LU » AVEC « ILLISIBLE », et c'est le fait principal. Elle lit le disque ; une séance ne clone que les dépôts qui lui sont attachés, et les autres tombaient dans la branche « FINUBAR.md absent » — un constat SUR LE DÉPÔT là où il n'y avait qu'un angle mort de l'observateur. Ce matin-là elle annonçait « 3 projets sans grain lisible » : les trois grains existaient, intacts (mon-dpe.fr et artisan-builder relus sur GitHub, ripair non attachable en cross-tier), et deux de ces dépôts n'avaient même pas bougé depuis le 21/08. Deux compteurs séparés désormais (`illisibles` et `hors_seance`), un motif distinct, un libellé d'écran qui n'accuse plus le dépôt — et le hors-séance RESTE affiché, car sortir du compte ne doit jamais valoir sortir de la liste. C'est la tension que le harnais §5bis verrouille, avec son cas de référence sans hors-séance. Posé au passage : la routine « Finubar — récap du matin » (8 h, heure de Paris, push + e-mail), qui porte la même leçon dans son prompt.",
-    "commit": "à recaler à la fusion"
+    "commit": "046e966"
   },
   "prochaine_action": "Recaler les grains de `mon-dpe.fr` et `artisan-builder` : leurs `dernier_arret.commit` (b5c0a72, 1924e58) ne sont pas leurs têtes réelles (9f8f0b7, 3ee806d) — reliquat du squash-merge du 21/08, et ces deux dépôts n'ont pas bougé depuis. ⚠️ Les 5 dépôts attachés, eux, sont RECALÉS : mesuré le 02/09, `commits_depuis = 0` et commit retrouvé sur les cinq — cette moitié de la vérification du 21/08 est close. `ripair` reste hors de portée (autre propriétaire, `add_repo` refuse le cross-tier), donc jamais mesurable depuis une séance RénoBoost",
   "bloque_par": [

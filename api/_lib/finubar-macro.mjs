@@ -239,11 +239,11 @@ export default {
           "critere_de_sortie": "les 8 grains lus par la collecte, le rappel d'ouverture de séance actif dans les 8 dépôts, l'écran /finubar en ligne"
         },
         "dernier_arret": {
-          "le": "2026-08-31",
-          "quoi": "Deux boucles fermées et FUSIONNÉES sur main. ① L'isolement du ciel resserré à UN SEUL ÉTAGE à la demande de Paul : isoler un nœud peint ses enfants DIRECTS et eux seuls (NAGA → IMLADRIK, ADRAMELECH, TAO), et cliquer l'un d'eux descend d'un cran — la profondeur est contingente à ce qu'il y a dedans, le geste identique à tous les étages (#179, 64bbb93). Le pire cas construit a été RECALCULÉ et non r",
-          "commit": "f7f27d1"
+          "le": "2026-09-02",
+          "quoi": "LA COLLECTE NE CONFOND PLUS « PAS LU » AVEC « ILLISIBLE », et c'est le fait principal. Elle lit le disque ; une séance ne clone que les dépôts qui lui sont attachés, et les autres tombaient dans la branche « FINUBAR.md absent » — un constat SUR LE DÉPÔT là où il n'y avait qu'un angle mort de l'observateur. Ce matin-là elle annonçait « 3 projets sans grain lisible » : les trois grains existaient, i",
+          "commit": "046e966"
         },
-        "prochaine_action": "La vérification Finubar ① reste la SEULE de la fusion du 21/08 encore ouverte : recaler les grains des 7 AUTRES dépôts, dont les `dernier_arret.commit` pointent dans le vide depuis le squash-merge. Elle exige d'attacher ces dépôts à la session — refusé par le contrôle de permissions le 31/08, donc à débloquer avec Paul. Elle vient d'être illustrée sur Ultima même : les deux fusions du jour étaient",
+        "prochaine_action": "Recaler les grains de `mon-dpe.fr` et `artisan-builder` : leurs `dernier_arret.commit` (b5c0a72, 1924e58) ne sont pas leurs têtes réelles (9f8f0b7, 3ee806d) — reliquat du squash-merge du 21/08, et ces deux dépôts n'ont pas bougé depuis. ⚠️ Les 5 dépôts attachés, eux, sont RECALÉS : mesuré le 02/09, `commits_depuis = 0` et commit retrouvé sur les cinq — cette moitié de la vérification du 21/08 est ",
         "bloque_par": [
           "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
           "`ANTHROPIC_API_KEY` en env Vercel",
@@ -252,6 +252,10 @@ export default {
         ],
         "en_attente_depuis": "2026-08-20",
         "boucles_ouvertes": [
+          {
+            "quoi": "⚠️ LA LEÇON DU 02/09, à ne pas reperdre : une mesure qui ne peut PAS voir quelque chose doit le dire comme tel, jamais le rendre en constat. La collecte annonçait trois grains manquants qui existaient tous — et le message invitait à aller semer ce qui était déjà semé. Même famille que la règle du 2026-08-21 (« quand on ne PEUT pas vérifier de ce côté-là, on retire l'hypothèse au lieu de la documen",
+            "depuis": "2026-09-02"
+          },
           {
             "quoi": "Les huit coques de navigation (grima.html, naga.html…) ne sont plus le CHEMIN depuis l'isolement — elles restent des PORTES (repli <noscript>, lien direct, adresse). Leur sort — les garder telles quelles, les réduire, les retirer — n'est pas tranché : à voir avec Paul quand l'isolement aura vécu",
             "depuis": "2026-08-28"
@@ -269,7 +273,7 @@ export default {
             "depuis": "2026-08-20"
           }
         ],
-        "maj": "2026-08-31"
+        "maj": "2026-09-02"
       },
       "hors_seance": false,
       "derive": {
@@ -278,7 +282,7 @@ export default {
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "jours_depuis_maj": 2,
+      "jours_depuis_maj": 0,
       "jours_en_attente": 13,
       "rang": 2
     },
@@ -326,7 +330,7 @@ export default {
     "au_repos": 0,
     "derives": 0,
     "commits_inconnus": 0,
-    "boucles_ouvertes": 18,
+    "boucles_ouvertes": 19,
     "gestes_de_paul": [
       {
         "projet": "RénoAgenda",
