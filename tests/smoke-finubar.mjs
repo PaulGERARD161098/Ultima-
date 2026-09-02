@@ -262,7 +262,12 @@ console.log('§4 — 390 px : rien ne déborde');
   const debord = await p390.evaluate(() =>
     document.documentElement.scrollWidth - document.documentElement.clientWidth);
   verifier('aucun scroll horizontal en 390 px', debord <= 0, `${debord} px`);
-  verifier('les projets sont tous rendus en mobile', (await p390.locator('#marche > li').count()) === 3);
+  // Le compte se DÉDUIT de la fixture, il ne se recopie pas : écrit en dur, il
+  // rougissait au premier projet ajouté (02/09) alors que rien n'était cassé —
+  // un test qui doit être retouché à chaque donnée nouvelle finit par être
+  // retouché sans être lu.
+  verifier('les projets sont tous rendus en mobile',
+    (await p390.locator('#marche > li').count()) === DONNEES.projets.length);
   // Cibles tactiles : le seul lien de la page doit rester atteignable au doigt.
   const h = await p390.locator('.retour-ultima').evaluate((n) => n.getBoundingClientRect().height);
   verifier('le retour vers Ultima fait au moins 24 px de haut', h >= 24, `${h} px`);
