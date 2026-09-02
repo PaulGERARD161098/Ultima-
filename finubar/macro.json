@@ -252,18 +252,18 @@
         "projet": "Ultima",
         "depot": "PaulGERARD161098/Ultima-",
         "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-        "rattache_a": "CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-LV6-CIEL-VIVANT.md",
+        "rattache_a": "REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md",
         "etat": "en_cours",
         "jalon": {
-          "nom": "L'accueil piloté par Finubar — la couleur oriente, Léo dit par quoi commencer",
-          "critere_de_sortie": "LIVRÉ le 02/09 (jalon 0 + P1 + P2 + P3) : les projets sont des astres de l'arbre, la lueur d'appel monte des astres vers leurs constellations, et le bandeau Finubar est en bas de l'accueil. Reste P4 (les signaux du cockpit sur le même ciel), à ouvrir après que P3 ait vécu"
+          "nom": "J3 — le ciel porte aussi l'état PERSONNEL (P4 : les signaux du cockpit)",
+          "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
         },
         "dernier_arret": {
           "le": "2026-09-02",
-          "quoi": "FUSIONNÉ SUR MAIN (PR #185, squash → b4dc35c) sur go de Paul. L'accueil est piloté par Finubar (jalon 0 + P1 + P2 + P3) et la porte d'entrée est passée au ciel. Les 8 dépôts sont des astres de l'arbre, la couleur d'appel monte des astres vers leurs constellations, le bandeau du bas porte les ≤3 signaux + l'action unique de Léo, et l'écran de connexion a quitté la mer pour le champ d'étoiles commun",
-          "commit": "b4dc35c"
+          "quoi": "CLÔTURE DE SÉANCE. L'accueil piloté par Finubar (jalon 0 + P1 + P2 + P3) et la porte d'entrée au ciel sont EN PRODUCTION — PR #185 (b4dc35c) et #186 (c9c4587) fusionnées sur go de Paul, patrimoine complet vert à chaque palier, zéro PR ouverte. Nettoyage de fin : la maquette portait encore ses copies de `greffer`/`signaux` après leur promotion en production — elle importe désormais le vrai module (",
+          "commit": "ea715f0"
         },
-        "prochaine_action": "Regarder l'accueil EN PRODUCTION (la fusion est faite) : d'abord la porte, puis le ciel une fois connecté — est-ce que la couleur oriente vraiment ? C'est le seul juge, et rien ne le remplace. Ensuite P4 : les signaux du cockpit (ALTHEA en sommeil, idées orphelines, relances dues) sur le MÊME ciel et la même couleur, une fois que P3 aura vécu quelques jours",
+        "prochaine_action": "DEMANDER À PAUL CE QUE L'ACCUEIL LUI A FAIT — il ne l'a pas encore regardé en production, et c'est le seul juge de la question qui commandait la boucle : est-ce que la couleur oriente ? Les trois réponses possibles mènent à trois suites différentes (tableau du §2 de REPRISE-2026-09-02-accueil-finubar.md) ; ne pas les confondre, et surtout ne pas enchaîner sur P4 sans sa réponse",
         "bloque_par": [
           "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
           "`ANTHROPIC_API_KEY` en env Vercel",

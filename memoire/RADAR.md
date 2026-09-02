@@ -16,6 +16,34 @@
 4. **Champs d'affinité** — valeurs / état d'esprit devront être des données
    structurées (tags) pour que la carte suggère des passerelles.
 
+## Signaux de session (2026-09-02)
+
+- ✅ **CONFIRMÉ — Paul tranche vite quand la question est un CHOIX, pas une
+  enquête.** Cinq arbitrages posés en tableau avec une recommandation chacun :
+  réponse en une ligne (« 1 oui, 2 oui, 3 ta reco… »), et l'exécution des quatre
+  paliers a suivi dans la même séance. *La règle du 2026-08-17 se vérifie par
+  son endroit : une question se pose quand deux options tiennent également
+  debout, et elle se pose alors AVEC la reco.*
+
+- ✅ **CONFIRMÉ — il juge sur une CAPTURE, et il a raison.** Deux défauts de
+  cette séance ont été trouvés en regardant une image (la parole de Léo derrière
+  le bandeau ; la mer de l'écran de connexion, qu'il a signalée lui-même sur sa
+  propre capture). Aucun n'était visible dans le code. *Réflexe à garder :
+  produire une capture AVANT de dire qu'un écran est fini.*
+
+- 🔭 **À ANTICIPER — l'accueil vient de gagner un instrument de pilotage, donc
+  il va vieillir.** L'agrégat est figé au dernier commit : le jour où Paul
+  regarde l'accueil sans qu'aucune séance n'ait tourné depuis trois jours, la
+  date « collecté le … » est ce qui l'empêche de croire un état périmé. Si elle
+  se met à gêner (elle est petite, sous le nom), la réponse n'est pas de la
+  retirer — c'est de rendre la collecte automatique.
+
+- 🔭 **À ANTICIPER — les trois dépôts hors de portée.** `mon-dpe.fr` et
+  `artisan-builder` sont attachables à une séance, `ripair` non (autre
+  propriétaire). Ils sont rangés sous ALPHA par défaut et n'ont donc pas encore
+  de vraie place dans le ciel. Le jour où l'un d'eux redevient actif, il faudra
+  l'attacher, lire son grain et lui donner son accroche.
+
 ## Signaux de session (2026-07-30)
 
 - ✅ CONFIRMÉ — **Paul pense en MÉTHODES, pas en anecdotes**. Sollicité pour une
