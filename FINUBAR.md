@@ -33,7 +33,7 @@
   "dernier_arret": {
     "le": "2026-09-03",
     "quoi": "Finubar cesse d'être un journal : borne de récit à 180 caractères qui se DIT, boucles repliées à l'écran, et les cinq grains réécrits — le détail est descendu aux journaux.",
-    "commit": "facf89d"
+    "commit": "ef2d7fd"
   },
   "prochaine_action": "Poser `ANTHROPIC_API_KEY` en Production sur Vercel (geste de Paul, payant), puis brancher Léo sur `/finubar` : un quadrant `finubar` dans `api/_lib/leo.js` + le cartouche.",
   "bloque_par": [
