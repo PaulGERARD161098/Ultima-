@@ -32,7 +32,7 @@
   },
   "dernier_arret": {
     "le": "2026-09-03",
-    "quoi": "Léo est disponible sur les 22 pages (bouton, session requise, quadrant déclaré par la page + repli `ultima`), et FINUBAR lui donne des yeux : comptes, ce qui appelle, la table de marche, les gestes qui attendent Paul — ni SHA, ni jeton, prouvé par l'absence.",
+    "quoi": "Léo est disponible sur les 22 pages (bouton, session requise, quadrant déclaré par la page + repli `ultima`), et FINUBAR lui donne des yeux : comptes, ce qui appelle, la table de marche, les gestes qui attendent Paul — ni SHA, ni jeton, prouvé par l'absence. `naga` et `grima` rattachées à RIVEN sur arbitrage de Paul ; le bouton reste sur l'accueil.",
     "commit": "32a816b"
   },
   "prochaine_action": "Poser `ANTHROPIC_API_KEY` (+ `LEO_MODELE=claude-opus-5`) en Production sur Vercel, puis redéployer : la voix s'allume sur les 22 pages d'un coup. Geste de Paul, payant.",
@@ -44,10 +44,6 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
-    {
-      "quoi": "`naga` et `grima` ont deux liens retour chacune : laissées au repli `ultima` plutôt que rattachées au hasard. Une ligne quand Paul tranche",
-      "depuis": "2026-09-03"
-    },
     {
       "quoi": "P4 est cadré et volontairement NON ouvert : les signaux du cockpit sur le même ciel que ceux de Finubar. Arbitré par Paul le 02/09 — après P3, jamais avant",
       "depuis": "2026-09-02"

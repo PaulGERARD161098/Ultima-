@@ -3859,3 +3859,10 @@ Un harnais qui n'a jamais échoué ne prouve rien.
 **Ce qui reste** : la gate coût. Sans `ANTHROPIC_API_KEY` en env Vercel, le
 bouton s'affiche et la zone répond 503 « voix pas encore branchée ». Poser la
 clé allume les vingt-deux pages d'un coup.
+
+**Arbitrage de Paul, le même jour** : `naga` et `grima` → **RIVEN** (elles
+avaient deux liens retour chacune et étaient au repli), et **le bouton reste
+sur l'accueil** — c'est un bouton, pas la modale que « rien sur l'accueil »
+(2026-07-18) écartait. Les deux pages sont entrées au harnais : ce qui est
+vérifié est le quadrant qu'elles **envoient**, jamais la présence de leur
+attribut. C'est la leçon du matin, appliquée le jour même.

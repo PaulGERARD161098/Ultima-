@@ -129,8 +129,12 @@ Le pop-up touche à terme PII réseau + finance + intime (§5 CADRAGE-CONSOLE) :
     Absent → `ultima`, la Léo d'orientation, qui n'a aucune donnée sous les yeux
     et le dit. ⛔ **Aucun rattachement déduit** d'un nom de fichier : les treize
     pages déclarées le sont sur une source lue (homonymie de quadrant, script de
-    quadrant chargé, lien « retour » unique) ; les pages ambiguës — `naga` et
-    `grima`, deux liens retour chacune — restent volontairement au repli.
+    quadrant chargé, lien « retour » unique). `naga` et `grima` avaient DEUX
+    liens retour chacune et étaient restées au repli : **Paul les a rattachées
+    à RIVEN le 2026-09-03**, et le harnais vérifie le quadrant qu'elles
+    ENVOIENT, pas la présence de leur attribut. Le bouton est aussi sur
+    l'accueil, sur sa décision du même jour — c'est un bouton, pas la modale
+    que « rien sur l'accueil » (18/07) écartait.
   - **Deux quadrants neufs** dans `api/_lib/leo.js` : `finubar` (la table de
     marche des huit dépôts) et `ultima` (l'orientation). Ni l'un ni l'autre ne
     porte d'outil : depuis ces pages la voix **ne peut rien écrire**.
