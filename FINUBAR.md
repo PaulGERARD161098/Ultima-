@@ -31,11 +31,11 @@
     "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
   },
   "dernier_arret": {
-    "le": "2026-09-02",
-    "quoi": "CLÔTURE DE SÉANCE. L'accueil piloté par Finubar (jalon 0 + P1 + P2 + P3) et la porte d'entrée au ciel sont EN PRODUCTION — PR #185 (b4dc35c) et #186 (c9c4587) fusionnées sur go de Paul, patrimoine complet vert à chaque palier, zéro PR ouverte. Nettoyage de fin : la maquette portait encore ses copies de `greffer`/`signaux` après leur promotion en production — elle importe désormais le vrai module (deux versions de la même règle finissent par diverger, et c'est la copie oubliée qui diverge). Mémoire écrite : journal des 5 arbitrages, radar, et REPRISE-2026-09-02-accueil-finubar.md (roadmap J1→J5 + pre-mortem à 3 mois).",
+    "le": "2026-09-03",
+    "quoi": "Finubar cesse d'être un journal : borne de récit à 180 caractères qui se DIT, boucles repliées à l'écran, et les cinq grains réécrits — le détail est descendu aux journaux.",
     "commit": "facf89d"
   },
-  "prochaine_action": "DEMANDER À PAUL CE QUE L'ACCUEIL LUI A FAIT — il ne l'a pas encore regardé en production, et c'est le seul juge de la question qui commandait la boucle : est-ce que la couleur oriente ? Les trois réponses possibles mènent à trois suites différentes (tableau du §2 de REPRISE-2026-09-02-accueil-finubar.md) ; ne pas les confondre, et surtout ne pas enchaîner sur P4 sans sa réponse",
+  "prochaine_action": "Poser `ANTHROPIC_API_KEY` en Production sur Vercel (geste de Paul, payant), puis brancher Léo sur `/finubar` : un quadrant `finubar` dans `api/_lib/leo.js` + le cartouche.",
   "bloque_par": [
     "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
     "`ANTHROPIC_API_KEY` en env Vercel",
@@ -45,23 +45,15 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "P4 est cadré et volontairement NON ouvert : les signaux du cockpit (quadrants personnels) sur le même ciel que ceux de Finubar (les dépôts). Arbitré par Paul le 02/09 — après P3, jamais avant. Une boucle à la fois",
+      "quoi": "P4 est cadré et volontairement NON ouvert : les signaux du cockpit sur le même ciel que ceux de Finubar. Arbitré par Paul le 02/09 — après P3, jamais avant",
       "depuis": "2026-09-02"
     },
     {
-      "quoi": "⚠️ Trois dépôts (mon-dpe.fr, artisan-builder, ripair) n'ont PAS d'accroche vérifiée : ils tombent sous ALPHA par défaut dans finubar/depots.json. Les deux premiers sont attachables à une séance (add_repo les accepte) ; ripair est hors de portée (autre propriétaire). Leur place se tranchera quand ils seront lus",
+      "quoi": "Trois dépôts (mon-dpe.fr, artisan-builder, ripair) n'ont pas d'accroche vérifiée et tombent sous ALPHA par défaut. Leur place se tranchera quand ils seront lus",
       "depuis": "2026-09-02"
     },
     {
-      "quoi": "⚠️ LA LEÇON DE LA SÉANCE, et elle a failli être écrite à l'envers : j'ai d'abord conclu que « l'agrégat ment » sur la foi d'un `git rev-list` brut qui comptait les commits de recalage de grain. `collecter.mjs` les exclut explicitement — la mesure était juste, l'instrument fautif était le mien. Avant d'accuser une sonde, lui demander CE qu'elle compte : c'est le pendant de la règle du 17/08 (« demander à une mesure ce qu'elle répond sur un cas dont on connaît la réponse »), vue depuis l'autre bout",
-      "depuis": "2026-09-02"
-    },
-    {
-      "quoi": "⚠️ LA LEÇON DU 02/09, à ne pas reperdre : une mesure qui ne peut PAS voir quelque chose doit le dire comme tel, jamais le rendre en constat. La collecte annonçait trois grains manquants qui existaient tous — et le message invitait à aller semer ce qui était déjà semé. Même famille que la règle du 2026-08-21 (« quand on ne PEUT pas vérifier de ce côté-là, on retire l'hypothèse au lieu de la documenter ») et que celle du 2026-08-17 (« un filtre qui exclut des cas doit compter et nommer ce qu'il exclut »). Toute nouvelle sonde de Finubar se relit à travers celle-ci",
-      "depuis": "2026-09-02"
-    },
-    {
-      "quoi": "Les huit coques de navigation (grima.html, naga.html…) ne sont plus le CHEMIN depuis l'isolement — elles restent des PORTES (repli <noscript>, lien direct, adresse). Leur sort — les garder telles quelles, les réduire, les retirer — n'est pas tranché : à voir avec Paul quand l'isolement aura vécu",
+      "quoi": "Les huit coques de navigation restent des PORTES et non le chemin. Les garder, les réduire ou les retirer n'est pas tranché — à voir quand l'isolement aura vécu",
       "depuis": "2026-08-28"
     },
     {
@@ -69,7 +61,7 @@
       "depuis": "2026-08-20"
     },
     {
-      "quoi": "La constellation : faire entrer les projets dans le ciel — CADRÉE le 02/09 (CADRAGE-ACCUEIL-FINUBAR.md), maquette éprouvée, en attente du go de Paul. `versConstellation()` reste écrite et branchée nulle part ; c'est `greffer()` + `signaux()` de la maquette qui la remplacent, parce qu'elles rendent l'arbre et pas une liste",
+      "quoi": "Faire entrer les projets dans le ciel : cadré le 02/09, maquette éprouvée, en attente du go. `versConstellation()` reste écrite et branchée nulle part",
       "depuis": "2026-08-21"
     },
     {
@@ -77,7 +69,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-09-02"
+  "maj": "2026-09-03"
 }
 ```
 
@@ -88,6 +80,59 @@
 > Les séances, de la plus récente à la plus ancienne. Une entrée = une date, un
 > fait vérifié, une décision. La mémoire longue ; le bloc ci-dessus est la mémoire
 > courte, et c'est lui qui est lu automatiquement.
+
+### 2026-09-03 — Finubar cesse d'être un journal
+
+Constat de Paul en regardant l'écran : *« les éléments écrits sur Finubar sont
+très longs »*. Mesuré avant de toucher quoi que ce soit, et le chiffre tranche :
+`dernier_arret.quoi` valait **exactement 400** — la borne haute du moteur — sur
+les **cinq** grains lus. Autrement dit coupé au milieu d'une phrase sur les cinq,
+et rien ne le disait. En source, RénoBoost portait 2 075 caractères dans ce seul
+champ, 1 444 dans `prochaine_action` et ~4 000 dans `bloque_par` ; l'écran, lui,
+dépliait d'office huit boucles ouvertes, soit près de 3 000 caractères de plus.
+
+**La cause n'était pas l'affichage** : `boucles_ouvertes` était devenu le
+dépotoir des leçons de séance. C'est le mode de défaillance n° 2 du pre-mortem du
+cadrage — *« Finubar devient une 22ᵉ roadmap »* — et la borne à 400 ne l'a pas
+empêché : elle l'a rendu **invisible** en tronquant.
+
+**G1 — l'écran se resserre.** Les boucles ouvertes passent dans un `<details>`
+replié, résumé par leur compte. Elles ne sont pas retirées : une boucle ouverte
+qui disparaît se lit comme une boucle fermée (règle ⑤).
+
+**G2 — les grains rétrécissent.** `MAX_RECIT = 180` s'applique à
+`dernier_arret.quoi`, `prochaine_action`, `bloque_par[]` et
+`boucles_ouvertes[].quoi`. La coupe se fait **au mot** (une coupe au caractère se
+lit comme un fichier corrompu) et surtout elle **se nomme** : `lireGrain` rend la
+liste des champs coupés et la collecte les affiche, dépôt par dépôt. Sans ce cri,
+les grains regonfleraient et le moteur les rognerait en silence — exactement
+l'état trouvé ce matin. C'est la règle du 2026-08-17 appliquée à Finubar
+lui-même : *un filtre qui exclut des cas doit compter et nommer ce qu'il exclut*.
+
+Les cinq grains ont été réécrits, leur détail descendu dans le journal de chaque
+dépôt. Trois boucles ont été **fermées au passage, en les relisant** : les QR de
+RénoBoost (« l'URL vaut `window.location.origin` ») étaient corrigés depuis le
+01/09 — le grain le disait lui-même deux champs plus bas ; T2 et R0a de RénoDevis
+s'ouvraient sur un « ✅ ».
+
+⚠️ **Et la leçon de la séance porte sur le harnais, pas sur le produit.** Le test
+de la borne était **vert au premier jet**, y compris quand on portait `MAX_RECIT`
+à 99 999 et quand on remplaçait la coupe au mot par une coupe au caractère. Deux
+défauts, la même famille : ① les longueurs et le seuil attendus étaient **dérivés
+de la constante testée**, donc la sonde se recalibrait sur son objet ; ② le texte
+d'épreuve (« mot mot mot… », période 4) avait une frontière de mot pile à la
+180ᵉ position, si bien qu'une coupe brutale y tombait juste **par chance**. La
+valeur attendue est désormais écrite **en dur** (181) et le cas est **construit**
+pour que la 180ᵉ position tombe au milieu d'un mot — ce qu'une assertion vérifie
+avant de s'en servir. Les trois fautes injectées rougissent maintenant, chacune
+là où elle casse.
+
+**Les deux leçons qui encombraient `boucles_ouvertes` se rangent ici** — ce sont
+des règles de conduite, pas des boucles à fermer :
+
+> ⚠️ LA LEÇON DE LA SÉANCE, et elle a failli être écrite à l'envers : j'ai d'abord conclu que « l'agrégat ment » sur la foi d'un `git rev-list` brut qui comptait les commits de recalage de grain. `collecter.mjs` les exclut explicitement — la mesure était juste, l'instrument fautif était le mien. Avant d'accuser une sonde, lui demander CE qu'elle compte : c'est le pendant de la règle du 17/08 (« demander à une mesure ce qu'elle répond sur un cas dont on connaît la réponse »), vue depuis l'autre bout
+
+> ⚠️ LA LEÇON DU 02/09, à ne pas reperdre : une mesure qui ne peut PAS voir quelque chose doit le dire comme tel, jamais le rendre en constat. La collecte annonçait trois grains manquants qui existaient tous — et le message invitait à aller semer ce qui était déjà semé. Même famille que la règle du 2026-08-21 (« quand on ne PEUT pas vérifier de ce côté-là, on retire l'hypothèse au lieu de la documenter ») et que celle du 2026-08-17 (« un filtre qui exclut des cas doit compter et nommer ce qu'il exclut »). Toute nouvelle sonde de Finubar se relit à travers celle-ci
 
 ### 2026-09-02 (6) — Clôture
 Nettoyage : la maquette portait encore ses copies de `greffer` / `signaux` après

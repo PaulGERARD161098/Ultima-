@@ -19,7 +19,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { extraireBloc, lireGrain, agreger, cartoucheDuMatin, versConstellation } from './agreger.mjs';
+import { extraireBloc, lireGrain, agreger, cartoucheDuMatin, versConstellation, MAX_RECIT } from './agreger.mjs';
 
 const ICI = dirname(fileURLToPath(import.meta.url));
 const RACINE_ULTIMA = resolve(ICI, '..');
@@ -275,6 +275,16 @@ if (m.commits_inconnus) {
   const noms = sortie.projets.filter((p) => p.derive && p.derive.commit_inconnu).map((p) => p.depot);
   console.log(`⚠️  ${m.commits_inconnus} grain(s) pointent un commit introuvable (fusion en squash ?) : ${noms.join(', ')}`);
   console.log('    Leur fraîcheur n\'est plus mesurable tant qu\'ils ne sont pas recalés sur la tête courante.');
+}
+// La coupe des récits est DITE, nommément. Sans ce cri, un grain qui regonfle
+// se fait rogner en silence par le moteur, et l'écran affiche une phrase
+// coupée que personne ne rattache à sa cause — l'état trouvé le 2026-09-03,
+// où `dernier_arret.quoi` était à la borne sur les CINQ grains lus.
+const coupes = sortie.projets.filter((p) => (p.recits || []).length);
+if (coupes.length) {
+  console.log(`⚠️  ${coupes.length} grain(s) dont un texte dépasse ${MAX_RECIT} caractères et a été coupé :`);
+  coupes.forEach((p) => console.log(`    ${p.depot} — ${p.recits.join(', ')}`));
+  console.log('    Un grain INDEXE : la phrase longue va dans le fichier que pointe `rattache_a`, pas ici.');
 }
 if (m.illisibles) console.log(`⚠️  ${m.illisibles} projet(s) sans grain lisible : ${sortie.projets.filter((p) => !p.ok && !p.hors_seance).map((p) => `${p.depot} (${p.motif})`).join(', ')}`);
 // Dit sur le ton d'un fait, pas d'une alerte — parce que c'en est un : ces

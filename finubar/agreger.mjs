@@ -31,6 +31,16 @@ export const MOTS_INTERDITS = [
 const MAX_TEXTE = 400;
 const MAX_LISTE = 10;
 
+// Borne de RÉCIT — plus serrée que MAX_TEXTE, et ce n'est pas la même défense.
+// MAX_TEXTE protège le moteur d'une entrée hostile ; MAX_RECIT protège Finubar
+// de lui-même. Mesuré le 2026-09-03 : `dernier_arret.quoi` valait 400 sur les
+// CINQ grains — c'est-à-dire tronqué au milieu d'une phrase sur les cinq, et
+// personne ne le voyait. C'est le mode de défaillance n°2 du pre-mortem
+// (« Finubar devient une 22ᵉ roadmap ») : la borne haute ne l'a pas empêché,
+// elle l'a rendu invisible. Un grain est un index, pas un journal.
+export const MAX_RECIT = 180;
+export const CHAMPS_RECIT = ['dernier_arret.quoi', 'prochaine_action', 'bloque_par[]', 'boucles_ouvertes[].quoi'];
+
 // ---------------------------------------------------------------- lecture
 
 // Extrait le bloc balisé d'un FINUBAR.md. Retourne null si absent ou vide —
@@ -60,6 +70,24 @@ function listeBornee(valeur, transforme) {
   return valeur.slice(0, MAX_LISTE).map(transforme).filter(Boolean);
 }
 
+// Coupe un récit trop long AU MOT, avec une ellipse — une coupe au caractère
+// tranche au milieu d'un mot et se lit comme un fichier corrompu.
+// ⛔ Et elle ne se fait JAMAIS en silence : `recits` collecte le nom des champs
+// coupés, la collecte les nomme, le harnais l'exige. C'est la règle du
+// 2026-08-17 (« un filtre qui exclut des cas doit compter et nommer ce qu'il
+// exclut ») — sans ça, les grains regonflent et le moteur les rogne sans que
+// personne ne l'apprenne, ce qui est exactement l'état trouvé le 03/09.
+export function couperAuMot(valeur, max) {
+  const net = typeof valeur === 'string' ? valeur.trim() : '';
+  if (net.length <= max) return { texte: net, coupe: false };
+  const fenetre = net.slice(0, max);
+  const espace = fenetre.lastIndexOf(' ');
+  // Un texte sans aucune espace dans la fenêtre (identifiant, URL collée) n'a
+  // pas de mot où couper : on prend la fenêtre entière plutôt que de rendre ''.
+  const garde = espace > max * 0.6 ? fenetre.slice(0, espace) : fenetre;
+  return { texte: garde.replace(/[\s,;:—-]+$/, '') + '…', coupe: true };
+}
+
 // Valide et normalise un grain. Retourne TOUJOURS un objet { ok, grain, motif } :
 // un projet dont le fichier est illisible doit apparaître dans l'agrégat AVEC
 // son motif — un projet qui disparaît en silence est le pire résultat possible,
@@ -69,17 +97,25 @@ export function lireGrain(json, source) {
   let brut;
   if (typeof json === 'string') {
     try { brut = JSON.parse(json); }
-    catch { return { ok: false, motif: 'bloc illisible', depot, grain: null }; }
+    catch { return { ok: false, motif: 'bloc illisible', depot, grain: null, recits: [] }; }
   } else if (json && typeof json === 'object') {
     brut = json;
   } else {
-    return { ok: false, motif: 'bloc absent', depot, grain: null };
+    return { ok: false, motif: 'bloc absent', depot, grain: null, recits: [] };
   }
 
   const projet = texteBorne(brut.projet);
-  if (!projet) return { ok: false, motif: 'projet non nommé', depot, grain: null };
+  if (!projet) return { ok: false, motif: 'projet non nommé', depot, grain: null, recits: [] };
 
   const etat = ETATS.includes(brut.etat) ? brut.etat : 'au_repos';
+
+  // Les champs de récit passent par la borne serrée, et signalent leur coupe.
+  const recits = [];
+  const recit = (valeur, nom) => {
+    const { texte, coupe } = couperAuMot(valeur, MAX_RECIT);
+    if (coupe) recits.push(nom);
+    return texte;
+  };
 
   const grain = {
     projet,
@@ -93,23 +129,29 @@ export function lireGrain(json, source) {
     },
     dernier_arret: {
       le: texteBorne(brut.dernier_arret && brut.dernier_arret.le),
-      quoi: texteBorne(brut.dernier_arret && brut.dernier_arret.quoi),
+      quoi: recit(brut.dernier_arret && brut.dernier_arret.quoi, 'dernier_arret.quoi'),
       commit: texteBorne(brut.dernier_arret && brut.dernier_arret.commit),
     },
-    prochaine_action: texteBorne(brut.prochaine_action),
-    bloque_par: listeBornee(brut.bloque_par, texteBorne),
+    prochaine_action: recit(brut.prochaine_action, 'prochaine_action'),
+    // `bloque_par` est un RÉCIT lui aussi, et c'est le plus lu de tous : c'est
+    // la ligne que Paul cherche en premier. Mesuré le 03/09 sur RénoBoost :
+    // cinq gestes totalisant ~4 000 caractères, chacun devenu un dossier avec
+    // ses chemins, ses identifiants et son historique. Le GESTE tient sur une
+    // ligne ; son dossier vit dans le fichier que pointe `rattache_a`.
+    bloque_par: listeBornee(brut.bloque_par, (g) => recit(g, 'bloque_par[]')),
     // Date du PLUS ANCIEN geste en attente. C'est le seul champ de priorité, et
     // c'est un fait, pas une note d'importance : « ça attend depuis le 04/08 »
     // se vérifie, « c'est prioritaire » ne se vérifie pas et vieillit mal.
     en_attente_depuis: texteBorne(brut.en_attente_depuis),
     boucles_ouvertes: listeBornee(brut.boucles_ouvertes, (b) => {
-      const quoi = texteBorne(b && b.quoi);
+      const quoi = recit(b && b.quoi, 'boucles_ouvertes[].quoi');
       return quoi ? { quoi, depuis: texteBorne(b && b.depuis) } : null;
     }),
     maj: texteBorne(brut.maj),
   };
 
-  return { ok: true, motif: '', depot: grain.depot, grain };
+  // Dédoublonné : dix boucles trop longues sont UN défaut du grain, pas dix.
+  return { ok: true, motif: '', depot: grain.depot, grain, recits: [...new Set(recits)] };
 }
 
 // ---------------------------------------------------------------- mesures

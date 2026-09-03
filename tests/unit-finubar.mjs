@@ -12,6 +12,7 @@
 import {
   extraireBloc, lireGrain, joursEntre, agreger, cartoucheDuMatin,
   versConstellation, libelleAnciennete, MOTS_INTERDITS, BALISE_DEBUT, BALISE_FIN,
+  MAX_RECIT, CHAMPS_RECIT,
 } from '../finubar/agreger.mjs';
 
 let echecs = 0;
@@ -68,6 +69,79 @@ console.log('§2 — lecture d\'un grain, entrée hostile par défaut');
   verifier('une liste de 50 entrées est bornée à 10', debordant.grain.bloque_par.length === 10);
   verifier('des champs absents donnent des chaînes vides, jamais undefined',
     debordant.grain.dernier_arret.quoi === '' && debordant.grain.prochaine_action === '');
+}
+
+// ------------------------------------------------------- §2bis borne de récit
+// Posée le 2026-09-03, sur une MESURE : `dernier_arret.quoi` valait exactement
+// 400 — la borne haute — sur les CINQ grains lus ce jour-là. Autrement dit :
+// coupé au milieu d'une phrase sur les cinq, et rien ne le disait. Le grain
+// était devenu un journal, ce que le pre-mortem (mode n°2) annonçait.
+//
+// Deux exigences, et la seconde compte autant que la première : la coupe se
+// fait au MOT (une coupe au caractère se lit comme un fichier corrompu), et
+// elle se NOMME (règle du 2026-08-17 : un filtre qui exclut compte et nomme).
+console.log('§2bis — un récit trop long est coupé au mot, et la coupe se dit');
+{
+  const court = lireGrain(JSON.stringify({
+    projet: 'P', dernier_arret: { quoi: 'cron élargi aux quatre briques' },
+    prochaine_action: 'déployer',
+  }), 'x/P');
+  // Cas de référence n°1 : un grain bien tenu ne déclenche RIEN. Sans lui, une
+  // sonde qui crierait sur tout aurait l'air de marcher.
+  verifier('un récit court passe intact', court.grain.dernier_arret.quoi === 'cron élargi aux quatre briques');
+  verifier('et ne signale aucune coupe', court.recits.length === 0);
+
+  // ⛔ LA VALEUR ATTENDUE EST ÉCRITE EN DUR (181 = 180 + l'ellipse), elle n'est
+  // PAS dérivée de MAX_RECIT. Première version de ce test : longueurs et seuil
+  // tirés de la constante — il restait vert quand on portait la borne à 99 999,
+  // parce qu'il se recalibrait sur ce qu'il prétendait mesurer. Une sonde qui
+  // bouge avec son objet ne mesure rien (règle du 2026-08-17).
+  verifier('la borne de récit vaut bien 180', MAX_RECIT === 180, String(MAX_RECIT));
+
+  // ⛔ ET LE TEXTE EST CONSTRUIT POUR QUE LA POSITION 180 TOMBE AU MILIEU D'UN
+  // MOT — sinon une coupe au caractère passerait par chance. Deuxième version
+  // de ce test : « mot mot mot… », période 4, dont 180 est un multiple : la
+  // coupe brutale tombait pile sur une frontière et le test restait vert.
+  const phrase = 'alpha bravo charlie delta echo foxtrot golf hotel india juliett kilo lima '.repeat(6).trim();
+  verifier('cas construit : la 180ᵉ position tombe au milieu d’un mot',
+    phrase[179] !== ' ' && phrase[180] !== ' ', JSON.stringify(phrase.slice(174, 186)));
+
+  const long = lireGrain(JSON.stringify({
+    projet: 'P',
+    dernier_arret: { quoi: phrase },
+    prochaine_action: phrase,
+    bloque_par: [phrase],
+    boucles_ouvertes: [{ quoi: phrase, depuis: '2026-09-03' }],
+  }), 'x/P');
+  const coupe = long.grain.dernier_arret.quoi;
+  verifier('un récit long est ramené sous la borne', coupe.length <= 181, `${coupe.length} car.`);
+  verifier('la coupe se voit (ellipse finale)', coupe.endsWith('…'));
+  // Le verdict de « au mot » ne regarde pas le résultat : il regarde l'ORIGINAL
+  // à l'endroit de la coupe. Si le caractère suivant n'y est pas une espace,
+  // c'est qu'on a tranché dans un mot — quel que soit l'aspect du rendu.
+  const garde = coupe.slice(0, -1);
+  verifier('elle tombe sur un mot entier, jamais au milieu',
+    phrase.startsWith(garde) && phrase[garde.length] === ' ',
+    `coupé après « ${garde.slice(-14)} », suivi de « ${phrase[garde.length]} »`);
+  verifier('les QUATRE champs de récit sont nommés',
+    CHAMPS_RECIT.every((c) => long.recits.includes(c)), long.recits.join(', '));
+  verifier('dix boucles trop longues comptent pour UN défaut, pas dix',
+    long.recits.filter((c) => c === 'boucles_ouvertes[].quoi').length === 1);
+
+  // Cas de référence n°2 : un texte SANS espace (identifiant, URL collée) n'a
+  // aucun mot où couper. Il doit rester lisible, pas devenir une ellipse seule
+  // — c'est le cas qu'une coupe « au dernier espace » naïve rend vide.
+  const sansEspace = lireGrain(JSON.stringify({
+    projet: 'P', prochaine_action: 'a'.repeat(230),
+  }), 'x/P');
+  verifier('un texte sans espace reste substantiel (pas réduit à « … »)',
+    sansEspace.grain.prochaine_action.length > 160, String(sansEspace.grain.prochaine_action.length));
+
+  // Et le grain illisible garde la MÊME forme : sinon la collecte, qui lit
+  // `p.recits`, planterait sur les dépôts cassés — ceux-là mêmes qu'elle doit
+  // encore savoir afficher (règle ⑤).
+  const casse = lireGrain('{ pas du json', 'x/Y');
+  verifier('un grain illisible expose quand même recits: []', Array.isArray(casse.recits));
 }
 
 // ---------------------------------------------------------------- §3 jours
@@ -354,9 +428,20 @@ console.log('§8 — les deux formes de l\'agrégat disent la même chose, et la
   const collecte = readFileSync(ici('finubar/collecter.mjs'), 'utf8');
   verifier('l\'empreinte de tête n\'est gardée que s\'il y a une dérive à expliquer',
     /if \(!commitsDepuis\) return \{ tete: null/.test(collecte));
-  verifier('aucun projet sans dérive ne porte d\'empreinte de tête',
-    json.projets.filter((p) => p.derive && !p.derive.commits_depuis)
+  // ⚠️ `commits_depuis === 0` (aucune dérive) et `commits_depuis === null`
+  // (commit noté introuvable) sont DEUX états, et `!p.derive.commits_depuis`
+  // les confondait — le second se faisait condamner pour la règle du premier.
+  // Trouvé rouge le 2026-09-03 sur un état réel : le grain de RénoAgenda pointe
+  // un commit disparu dans un squash. La distinction n'est pas cosmétique, et
+  // la seconde assertion dit pourquoi : sans la tête, on n'aurait plus de quoi
+  // recaler le grain — c'est exactement le moment où on en a besoin (cf. §6ter,
+  // que cette ligne contredisait).
+  verifier('aucun projet SANS dérive ne porte d\'empreinte de tête',
+    json.projets.filter((p) => p.derive && p.derive.commits_depuis === 0)
       .every((p) => p.derive.tete === null));
+  verifier('un commit introuvable, LUI, garde sa tête (c\'est de quoi recaler)',
+    json.projets.filter((p) => p.derive && p.derive.commit_inconnu)
+      .every((p) => typeof p.derive.tete === 'string' && p.derive.tete.length > 0));
 }
 
 console.log(echecs === 0 ? '\n=== unit-finubar : TOUT VERT ===' : `\n=== unit-finubar : ${echecs} ÉCHEC(S) ===`);
