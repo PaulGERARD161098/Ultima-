@@ -4,7 +4,7 @@
 // l'IMPORTER pour que Vercel l'embarque dans le paquet de la fonction, et
 // que `api/_lib/` est le seul motif d'import éprouvé en production ici.
 export default {
-  "le": "2026-09-02",
+  "le": "2026-09-03",
   "projets": [
     {
       "ok": true,
@@ -21,11 +21,11 @@ export default {
           "critere_de_sortie": "au moins 1 artisan validé en base (0 aujourd'hui : les écrans pro tournent dans le vide)"
         },
         "dernier_arret": {
-          "le": "2026-09-01",
-          "quoi": "SOIRÉE À DEUX SÉANCES SUR LA MÊME TABLE, et c'est le fait principal. Ma séance avait retiré `trg_artisans_protege_champs` comme redondant ; l'autre, qui corrigeait au même moment un vrai défaut de ce trigger (SECURITY DEFINER ⇒ `current_user` vaut le propriétaire, donc son échappement `= 'service_role'` n'est jamais vrai et l'Edge Function écrivait dans le vide), l'a constaté « disparu » et l'a re",
-          "commit": "45dc2bc"
+          "le": "2026-09-03",
+          "quoi": "ENERGY_FACTS remis à jour à la main : le décret du 25/08 retire cinq des seize types de projets du parcours aidé, que Réno citait encore. Edge Function v16 + sonde de fraîcheur.",
+          "commit": "de270a0"
         },
-        "prochaine_action": "Brancher la mesure d'audience exemptée (`window.__audience`) — seul point de code restant après le retrait de GA. ⚠️ Ce n'est PAS une tâche sans dépendance : elle exige de choisir un fournisseur (Plausible, Matomo en mode exempté, analytics Vercel), ce qui engage un tiers et un traitement de données personnelles. Arbitrage de Paul. Le chemin, lui, est dé-risqué depuis le 01/09 : le branchement se ",
+        "prochaine_action": "Brancher la mesure d'audience exemptée (`window.__audience`) — dernier point de code après le retrait de GA. Exige d'abord que Paul choisisse un fournisseur : ça engage un tiers.",
         "bloque_par": [
           "Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux",
           "Mentions légales : des `[À compléter]` sont visibles ; à lever AU PREMIER EURO ENCAISSÉ, pas à une date",
@@ -34,77 +34,24 @@ export default {
         "en_attente_depuis": "2026-07-15",
         "boucles_ouvertes": [
           {
-            "quoi": "Le lot C ne vérifie QUE le RGE (annuaire ADEME). « L'entreprise existe-t-elle et est-elle active » reste à faire, et la matière est prête : `api/_lib/verif-entreprise.mjs` et ses 19 tests, livrés par la PR #60. À PLIER DANS l'Edge Function `verifier-siret`, pas à brancher à côté — une deuxième voie de vérification serait une deuxième vérité de plus sur ce dépôt, qui vient d'en payer trois.",
-            "depuis": "2026-09-01"
-          },
-          {
-            "quoi": "⚠️ LEÇON DU 01/09 AU SOIR, à ne pas reperdre : deux séances ont travaillé la même table le même soir et se sont mutuellement défait un trigger, chacune en toute bonne foi. Ni l'une ni l'autre n'aurait pu le voir dans les fichiers — seule la base le disait. Avant de toucher un trigger, une policy ou un droit sur `artisans`, RELIRE L'ÉTAT RÉEL (pg_trigger, pg_policies, pg_get_functiondef) et non le ",
+            "quoi": "Le lot C ne vérifie QUE le RGE. « L'entreprise existe-t-elle et est-elle active » reste à faire : `verif-entreprise.mjs` est prêt, à PLIER DANS l'Edge Function `verifier-siret`",
             "depuis": "2026-09-01"
           }
         ],
-        "maj": "2026-09-01"
+        "maj": "2026-09-03"
       },
+      "recits": [],
       "ciel": "renoboost-ia",
       "hors_seance": false,
       "derive": {
-        "tete": "e2b7b96",
-        "tete_le": "2026-09-02T14:34:23+02:00",
-        "commits_depuis": 1,
+        "tete": null,
+        "tete_le": null,
+        "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "jours_depuis_maj": 1,
-      "jours_en_attente": 49,
-      "rang": 0
-    },
-    {
-      "ok": true,
-      "motif": "",
-      "depot": "PaulGERARD161098/RenoPredict",
-      "grain": {
-        "projet": "RénoPredict",
-        "depot": "PaulGERARD161098/RenoPredict",
-        "cap": "Le fonds de commerce se remplit tout seul : sticker collé, flashé en partant, la date de pose existe, Foresight s'allume — zéro saisie.",
-        "rattache_a": "docs/ROADMAP.md · docs/CADRAGE-RIPAIR-OFFRE.md · RenoBoost/ROADMAP-MASTER.md (jalon 1, boucle B)",
-        "etat": "en_attente_de_paul",
-        "jalon": {
-          "nom": "Jalon 1 boucle B — le premier contrat Ripair",
-          "critere_de_sortie": "un `1` dans la table `contracts` (0 aujourd'hui)"
-        },
-        "dernier_arret": {
-          "le": "2026-09-01",
-          "quoi": "Le piège qui rendait le jalon des stickers IRRÉVERSIBLEMENT risqué est refermé, sur GO de Paul. L'URL gravée dans les QR valait `window.location.origin` — donc l'adresse de la page depuis laquelle le PDF était généré : un lot produit depuis un preview Vercel ou depuis localhost portait des QR morts, et l'erreur ne se découvrait qu'au premier flash, sur du papier déjà collé chez un client. Elle vie",
-          "commit": "ac5cc1c"
-        },
-        "prochaine_action": "Rien à coder avant le sticker. La chaîne est finie, testée, mergée — et elle n'a jamais tourné une seule fois, faute d'objet physique.",
-        "bloque_par": [
-          "Générer et imprimer un lot de stickers QR — `stickers` = 0 depuis le 11/08. ✅ Le piège de l'URL est refermé le 01/09 (src/lib/qr-url.js : origine de production toujours, destination affichée à l'écran) — il ne reste que le geste physique",
-          "Valider la fiche Google Business — sans elle, le cron d'avis J+7 produit des brouillons avec un marqueur à la place du lien",
-          "Embarquement Stripe côté RénoPredict — jamais commencé (0 profil sur 2)"
-        ],
-        "en_attente_depuis": "2026-08-04",
-        "boucles_ouvertes": [
-          {
-            "quoi": "⚖️ Cinq arbitrages MKT-Ax du cadrage marketplace (27/08), recommandations écrites, aucun validé. Celui qui presse est MKT-A4 — qui est partie au contrat d'entretien : son pre-mortem le classe en cause d'échec n°5 (« l'exit se prépare sur un actif qui n'appartient pas à RénoBoost, découvert en due diligence ») et pose la condition qui le rend gratuit : le trancher tant que `contracts` est vide. ✅ V",
-            "depuis": "2026-08-27"
-          },
-          {
-            "quoi": "Migre-t-on les données (interventions, entretien_produits, rp_digests, ~81 fiches GHL) de RenoBoost vers le projet renopredict ? Question posée le 12/07, revérifiée le 12/08, jamais tranchée",
-            "depuis": "2026-07-12"
-          }
-        ],
-        "maj": "2026-09-01"
-      },
-      "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "derive": {
-        "tete": "fc330ba",
-        "tete_le": "2026-09-02T14:34:34+02:00",
-        "commits_depuis": 1,
-        "commit_inconnu": false
-      },
-      "jours_depuis_maj": 1,
-      "jours_en_attente": 29,
-      "rang": 0
+      "jours_depuis_maj": 0,
+      "jours_en_attente": 50,
+      "rang": 1
     },
     {
       "ok": true,
@@ -121,65 +68,110 @@ export default {
           "critere_de_sortie": "`stickers` > 0 · fiche Google visible publiquement · `stripe_charges_enabled` = true"
         },
         "dernier_arret": {
-          "le": "2026-09-02",
-          "quoi": "LE SIMULATEUR EST FINI CÔTÉ CODE — #333, #335, #336 et #337 mergées, prod `c6f6c10`, déploiement READY, zéro PR ouverte sur les quatre dépôts. Ce qu'il montre : chaîne demande relevée → contacts → rendez-vous → CA, le 10 % portant sur des CONTACTS (jamais des chantiers : sur 2 000 demandes ça annoncerait 200 chantiers/mois à un artisan seul, il fermerait l'onglet) ; échelle par RENDEZ-VOUS et par ",
-          "commit": "86f27fc"
+          "le": "2026-09-03",
+          "quoi": "Simulateur : les deux métiers absents de la source ADEME sont désormais nommés à l'écran, marge par défaut à 10 % (PR #341). Dossier d'accès Google Ads Basic déposé (PR #342).",
+          "commit": "07a4a38"
         },
-        "prochaine_action": "⛔ AUCUNE DES QUATRE ACTIONS RESTANTES N'EST DU CODE. Mesuré le 02/09 : les trois compteurs du jalon 0 sont à zéro alors que le simulateur est fini et déployé. Ordre recommandé, du plus rentable au moins urgent : (1) LE LOT DE STICKERS — `/Stickers`, générer, imprimer. C'est la SEULE chose qui remplit le système toute seule, le code est mergé depuis le 11/08 et n'a jamais tourné une fois faute d'ob",
+        "prochaine_action": "Rien à coder sur G1 tant que Google n'a pas répondu sur l'accès Basic (demandé le 03/09) ; préparer d'ici là CLIENT_ID/SECRET et REFRESH_TOKEN. Détail : ACTIONS-PAUL.md §5.",
         "bloque_par": [
           "Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08",
-          "Générer un lot de stickers QR puis imprimer — ouvert depuis le 11/08 (`stickers` = 0). ✅ La vérification manuelle de l'URL n'est plus à faire : corrigée à la source le 01/09 côté RénoPredict (PR #60), les QR portent toujours l'origine de production et l'écran affiche la destination. Il ne reste que le geste physique.",
-          "Embarquement Stripe de SOLA — ⚠️ CE BLOCAGE A QUASIMENT DISPARU le 02/09 (RenoDevis PR #114) : un cron quotidien crée les comptes manquants, complète les comptes de TEST par API et recopie l'état de Stripe. ✅ La clé Stripe est posée en PRODUCTION — confirmé par Paul le 02/09, ⛔ ne pas le lui redemander. Il ne reste QUE le cas où Stripe refuserait la complétion par API sur SOLA (son tunnel a été ou",
-          "Le jeton Google Ads — ouvert le 02/09, GO de Paul le jour même. C'est le SEUL blocage restant du simulateur ; tout le reste du lot est en production. ✅ FAIT VÉRIFIÉ CE JOUR-LÀ, et il change la solution : `googleads.googleapis.com/v22/…` répond 401 (auth manquante) et `oauth2.googleapis.com/token` répond 400 — l'API Google Ads est JOIGNABLE depuis une session Claude Code (v14→v21 renvoient 404, ret"
+          "Générer un lot de stickers QR puis l'imprimer (`stickers` = 0). L'URL des QR est corrigée à la source depuis le 01/09 : il ne reste que le geste physique",
+          "Embarquement Stripe de SOLA : le cron du 02/09 fait le reste, la clé est posée. Ne resterait qu'un clic dans le tunnel de test si Stripe refusait la complétion par API",
+          "Jeton Google Ads : demande d'accès Basic déposée le 03/09, réponse de Google attendue. Chemin et 5 variables : ACTIONS-PAUL.md §5",
+          "Le récap de 20 h est aveugle depuis le 27/08. Les variables Vercel existent : c'est leur VALEUR qui est en cause (jeton expiré ?). Geste : ACTIONS-PAUL.md §3 bis"
         ],
         "en_attente_depuis": "2026-08-04",
         "boucles_ouvertes": [
           {
-            "quoi": "PR #304 (brouillon) — le point de reprise du 31/08. ✅ DEV-A1 tranché et livré le 31/08 (« trois rendus »). ✅ ALT-A2 livré et mergé le 01/09 (PR #310). 🅿️ MKT-A4 SORTI DU PÉRIMÈTRE le 01/09 avec tous les contrats d'entretien. ⚠️ Mais il redevient le PREMIER geste le jour où ce chantier rouvre : il est gratuit tant que `contracts` est vide (0 aujourd'hui) et devient une renégociation après la premi",
+            "quoi": "PR #304 (brouillon) : restent ALT-A1/ALT-A3 — qui reçoit quoi, et faut-il sortir Henri de la supervision technique. MKT-A4 est hors périmètre, à rouvrir avant la 1ʳᵉ signature",
             "depuis": "2026-08-27"
           },
           {
-            "quoi": "⛔ Les QR des stickers portent l'URL de la page qui GÉNÈRE le PDF (`window.location.origin`, RenoPredict `src/components/stickers/PDFGenerator.jsx:56`) — aucun domaine de production n'est configuré. Générer un lot depuis un preview Vercel ou depuis localhost produit des QR morts, et l'erreur ne se découvre que chez le client, sur du papier déjà collé. Le CLAUDE.md demande de vérifier l'URL à la mai",
+            "quoi": "Copie de PII entre comptes : le kv_store d'un second admin porte 110 fiches de Paul, rien ne le filtre. La purge est destructive — snapshot puis GO de Paul",
             "depuis": "2026-09-01"
           },
           {
-            "quoi": "⚠️ Copie de PII entre comptes, constatée le 01/09 et NON corrigée : le keyspace kv_store de `henry.huvey@gmail.com` porte une copie du carnet de Paul — 110 fiches clients, 5 pros avec SIRET, téléphones et adresses. Cause : `data.js` filtre le write-through des `clients` (règle posée après l'incident du 03/08) mais RIEN ne filtre le `kv_store`, qu'un second admin repousse sous SON owner_id. La purg",
+            "quoi": "Le backlog de CADRAGE-2026-08-19-audit-gemini.md affiche plus de stock qu'il n'en reste : seuls les lots 6 et 8 restent, tous deux tenus par une matière de Paul",
             "depuis": "2026-09-01"
           },
           {
-            "quoi": "⚠️ Constat du 01/09, à ne pas reperdre : le backlog du CADRAGE-2026-08-19-audit-gemini.md AFFICHE plus de stock qu'il n'en reste. Vérifié lot par lot dans le code ce jour : lot 3 (récap), lot 4 (fiche pro + passerelle savoir_faire, dashboard.js:4687), lot 5 (frise des relances, produits/renorelance.html) et lot 7 (tarifs) sont LIVRÉS. Ne restent que 6 et 8, tous deux bloqués par une matière que se",
+            "quoi": "ACQ-2 : G2 levé, G3 supprimé. Restent G1 (volumes Keyword Planner) et ACQ-2b, la route de lead B2B, qui ne dépend de rien",
             "depuis": "2026-09-01"
           },
           {
-            "quoi": "ACQ-2 (simulateur de zone) — arbitrages RENDUS le 01/09 : Paul a validé les cinq recos. G2 (paniers et marges) est LEVÉ, G3 (part de marché promise) est SUPPRIMÉ du calcul. ⛔ Reste G1, et lui seul : les volumes de recherche par département × métier, que seul Paul peut fournir (export Keyword Planner, ACTIONS-PAUL.md §5). Sans lui, `estimerMarche()` répond « indisponible » — c'est voulu. Restent à ",
+            "quoi": "ACQ-1 est écrit mais INACTIF : trois gestes dans RenoAgenda — appliquer la migration de vérification, poser AGENDA_SUPABASE_SERVICE_KEY, déployer",
             "depuis": "2026-09-01"
           },
           {
-            "quoi": "⛔ ACQ-1 est écrit mais N'EST PAS ACTIF : trois gestes de Paul manquent, tous dans RenoAgenda. (1) Appliquer `supabase-artisan-verification-schema.sql` sur le projet poskdialgzwxmcfyklvk — il referme au passage une faille constatée le 01/09 : `has_column_privilege('authenticated','artisans','statut','UPDATE')` = true, donc un artisan connecté peut aujourd'hui écrire lui-même `statut = 'valide'` et ",
-            "depuis": "2026-09-01"
-          },
-          {
-            "quoi": "⛔ PANNE DE PRODUCTION dans RénoAgenda, trouvée le 01/09 en testant le garde d'ACQ-1 : six policies RLS reconnaissent l'admin par un SELECT sur `auth.users`, que ni `anon` ni `authenticated` n'ont le droit de lire. Une policy permissive qui LÈVE ne renvoie pas « faux » — elle fait échouer toute la requête. Mesuré en base (transaction annulée) : l'inscription artisan (`INSERT … RETURNING`) échoue, e",
-            "depuis": "2026-09-01"
-          },
-          {
-            "quoi": "✅ FERMÉE le 02/09 — ACQ-2c est en ligne. Ce qui reste n'est plus du code : les CSV Keyword Planner (G1).",
+            "quoi": "Panne de production dans RénoAgenda : six policies RLS lisent `auth.users`, ce qui casse l'inscription artisan et les deux écrans d'admin. Correctif écrit, non appliqué",
             "depuis": "2026-09-01"
           }
         ],
-        "maj": "2026-09-02"
+        "maj": "2026-09-03"
       },
+      "recits": [],
       "ciel": "renoboost-ia",
       "hors_seance": false,
       "derive": {
-        "tete": "1d9d206",
-        "tete_le": "2026-09-02T18:22:36+02:00",
-        "commits_depuis": 1,
+        "tete": null,
+        "tete_le": null,
+        "commits_depuis": 0,
         "commit_inconnu": false
       },
       "jours_depuis_maj": 0,
-      "jours_en_attente": 29,
-      "rang": 0
+      "jours_en_attente": 30,
+      "rang": 1
+    },
+    {
+      "ok": true,
+      "motif": "",
+      "depot": "PaulGERARD161098/RenoPredict",
+      "grain": {
+        "projet": "RénoPredict",
+        "depot": "PaulGERARD161098/RenoPredict",
+        "cap": "Le fonds de commerce se remplit tout seul : sticker collé, flashé en partant, la date de pose existe, Foresight s'allume — zéro saisie.",
+        "rattache_a": "docs/ROADMAP.md · docs/CADRAGE-RIPAIR-OFFRE.md · RenoBoost/ROADMAP-MASTER.md (jalon 1, boucle B)",
+        "etat": "en_attente_de_paul",
+        "jalon": {
+          "nom": "Jalon 1 boucle B — le premier contrat Ripair",
+          "critere_de_sortie": "un `1` dans la table `contracts` (0 aujourd'hui)"
+        },
+        "dernier_arret": {
+          "le": "2026-09-03",
+          "quoi": "Les QR des stickers portent désormais toujours l'origine de production (`src/lib/qr-url.js`), et l'écran des lots affiche la destination. Le journal ci-dessous en donne le détail.",
+          "commit": "b842a46"
+        },
+        "prochaine_action": "Rien à coder avant le sticker. La chaîne est finie, testée, mergée — et elle n'a jamais tourné une seule fois, faute d'objet physique.",
+        "bloque_par": [
+          "Générer et imprimer un lot de stickers QR — `stickers` = 0 depuis le 11/08. Le piège de l'URL est refermé le 01/09 : il ne reste que le geste physique",
+          "Valider la fiche Google Business — sans elle, le cron d'avis J+7 produit des brouillons avec un marqueur à la place du lien",
+          "Embarquement Stripe côté RénoPredict — jamais commencé (0 profil sur 2)"
+        ],
+        "en_attente_depuis": "2026-08-04",
+        "boucles_ouvertes": [
+          {
+            "quoi": "Cinq arbitrages MKT-Ax du cadrage marketplace (27/08), recommandations écrites, aucun validé. MKT-A4 presse : il est gratuit tant que `contracts` est vide (0 au 01/09)",
+            "depuis": "2026-08-27"
+          },
+          {
+            "quoi": "Migre-t-on les données (interventions, entretien_produits, rp_digests, ~81 fiches GHL) de RenoBoost vers le projet renopredict ? Posée le 12/07, jamais tranchée",
+            "depuis": "2026-07-12"
+          }
+        ],
+        "maj": "2026-09-03"
+      },
+      "recits": [],
+      "ciel": "renoboost-ia",
+      "hors_seance": false,
+      "derive": {
+        "tete": null,
+        "tete_le": null,
+        "commits_depuis": 0,
+        "commit_inconnu": false
+      },
+      "jours_depuis_maj": 0,
+      "jours_en_attente": 30,
+      "rang": 1
     },
     {
       "ok": true,
@@ -196,58 +188,55 @@ export default {
           "critere_de_sortie": "un `1` dans la table `paiements` (0 aujourd'hui)"
         },
         "dernier_arret": {
-          "le": "2026-09-02",
-          "quoi": "EMBARQUEMENT STRIPE AUTOMATIQUE — PR #114 FUSIONNÉE le 02/09 (squash, main = ccff0ee). Constat qui motive le lot, mesuré en base ce jour : SOLA GROUPE a un compte connecté depuis le 19/08 qui n'encaisse toujours pas (`charges_enabled = false`), DOKLES n'en a aucun. Le code de paiement était complet depuis le 12/08 — ce qui manquait, c'est que l'embarquement dépendait de quatre gestes de Paul (ouvr",
-          "commit": "ccff0ee"
+          "le": "2026-09-03",
+          "quoi": "La feuille d'audit PAC est complète — PR #119 fusionnée (main = 8d77c99) : trois graphiques SVG rendus côté serveur, projection sur 14 ans, bloc aides daté. 256 tests verts.",
+          "commit": "a41ae46"
         },
-        "prochaine_action": "⏳ TOUT EST CADRÉ, RIEN N'EST À DÉCIDER — la reprise MESURE puis applique. Le cadrage complet vit dans `REPRISE-2026-09-02-embarquement-stripe.md` § CADRAGE DE LA REPRISE (Finubar indexe, il ne recopie pas) : ① objectif = un `1` dans `paiements` (0 aujourd'hui) ; ② règle de Paul, mot pour mot : « on finira Stripe si les automatismes ne sont pas corrects » ; ③ deux requêtes de mesure, à lancer AVANT",
+        "prochaine_action": "Jalon V0, et ce n'est pas du code : Paul calcule UN audit sur UN dossier réel (0 audit sur 6 relevés). Il éprouve d'un coup le secret, le pont, l'écran et la feuille.",
         "bloque_par": [
-          "Embarquement Stripe de SOLA : le compte de TEST existe (`acct_1U66eB…`, créé le 19/08) mais `stripe_charges_enabled` est encore false — il n'encaisse pas. DOKLES n'avait aucun compte au 02/09 ; le cron fusionné ce jour le crée seul au premier passage (06:30 UTC). ⛔ Ce qui ne se délègue PAS en Live : le KYC réel (pièce d'identité du dirigeant, bénéficiaires effectifs, IBAN) est fourni par l'artisan"
+          "Embarquement Stripe de SOLA : le compte de TEST existe depuis le 19/08 mais n'encaisse pas encore. Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul"
         ],
         "en_attente_depuis": "2026-08-17",
         "boucles_ouvertes": [
           {
-            "quoi": "📏 L'outil de RELANCE — première séance livrée le 01/09 (barre d'entrée, file en cartes, quatrième geste « J'ai rappelé », motif d'écart, versions nommées). Reste OUVERT sur deux points : la MESURE (L5), qui ne pourra rien mesurer tant que R0a n'est pas réglée, et les deux chantiers 🟡 non commencés — L3 l'aperçu du mail tel que le client le recevra, L4 l'historique des relances. ⚠️ Ne pas lancer ",
+            "quoi": "L'outil de relance : restent L3 (aperçu du mail tel que le client le recevra), L4 (historique) et la mesure L5 — qui attend un devis ÉMIS DEPUIS L'APP",
             "depuis": "2026-09-01"
           },
           {
-            "quoi": "✅ T2 — LIVRÉ ET RENSEIGNÉ le 02/09 (PR #112). Les 5 colonnes existent sur artisans ET profiles, se reportent seules sur le devis et la facture, et SOLA est complète : `facture_conforme = true` sur ses 17 devis, vérifié en base. La TVA saisie (FR67931605737) est exactement celle que le code calcule depuis le SIRET — le calcul automatique a fonctionné sur un cas réel. ⏳ Reste T2-bis (auto-remplissag",
+            "quoi": "Le logo de SOLA reste la seule pièce d'identité manquante — il ne s'extrait d'aucun PDF, il faut le fichier",
             "depuis": "2026-09-01"
           },
           {
-            "quoi": "Le logo de SOLA reste la seule pièce d'identité manquante — elle ne s'extrait d'aucun PDF, il faut le fichier.",
+            "quoi": "Le catalogue central ne porte AUCUN consommable : sur un gainable à 11 075 € HT ils pèsent 1 500 € et 11 lignes sur 18",
             "depuis": "2026-09-01"
           },
           {
-            "quoi": "⛔ Le catalogue central ne porte AUCUN consommable (cuivre, pompe de relevage, câbles RO2V, disjoncteurs, gaines, plénums, grilles) : sur un gainable à 11 075 € HT ils pèsent 1 500 € et 11 lignes sur 18.",
-            "depuis": "2026-09-01"
-          },
-          {
-            "quoi": "✅ R0a — FERMÉE le 02/09 par Paul : « c'est normal, c'est le client qui a envoyé le devis en direct ». Les 10 devis `source='email'` sont entrés par la synchro de la boîte mail parce qu'ils ont été émis HORS de l'app ; le trigger les ignore PAR CONCEPTION, pas par défaut. Rien à réparer. ⚠️ La conséquence, elle, reste vraie et oriente la suite : ces 10 devis ne seront JAMAIS relancés par le moteur,",
-            "depuis": "2026-08-31"
-          },
-          {
-            "quoi": "✅ SIGNATURE fermée le 01/09 (garde `signature_uuid_ouverte` dans `sign_devis_public`, réduite à 1 devis sur 18). ⚠️ MAIS LA LECTURE RESTE OUVERTE : `get_devis_public` et `log_devis_open` sont toujours accessibles à `anon` sans condition — quiconque détient l'UUID d'un devis peut en lire le contenu (nom du client, montants, lignes). Divulgation, plus capacité d'écriture. Hors de ce lot À DESSEIN : ",
+            "quoi": "La LECTURE par UUID reste ouverte : `get_devis_public` et `log_devis_open` sont accessibles à `anon`. Divulgation, pas écriture — à traiter avec la coupure finale",
             "depuis": "2026-08-17"
           },
           {
-            "quoi": "✅ PR #103 mergée. ⚠️ L'écart reste : la page devis publique de RénoBoost en chemin UUID ignore `extra.rendu` — un client qui y atterrit voit le détail ligne à ligne quel que soit le rendu choisi. Ne concerne plus qu'UN devis depuis le lot A, et disparaît avec la coupure finale.",
+            "quoi": "La page devis publique de RénoBoost en chemin UUID ignore `extra.rendu` : le client y voit le détail ligne à ligne. Ne concerne plus qu'UN devis, disparaît à la coupure finale",
             "depuis": "2026-08-31"
+          },
+          {
+            "quoi": "Trois arbitrages attendent Paul sur l'audit en visite : V-A1 (où l'appeler), V-A2 (sans réseau), V-A3 (la feuille part-elle chez le client, et par quel lien)",
+            "depuis": "2026-09-02"
           }
         ],
-        "maj": "2026-09-02"
+        "maj": "2026-09-03"
       },
+      "recits": [],
       "ciel": "renoboost-ia",
       "hors_seance": false,
       "derive": {
-        "tete": "c34dd7b",
-        "tete_le": "2026-09-02T15:43:24+02:00",
-        "commits_depuis": 2,
+        "tete": null,
+        "tete_le": null,
+        "commits_depuis": 0,
         "commit_inconnu": false
       },
       "jours_depuis_maj": 0,
-      "jours_en_attente": 16,
-      "rang": 0
+      "jours_en_attente": 17,
+      "rang": 2
     },
     {
       "ok": true,
@@ -264,11 +253,11 @@ export default {
           "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
         },
         "dernier_arret": {
-          "le": "2026-09-02",
-          "quoi": "CLÔTURE DE SÉANCE. L'accueil piloté par Finubar (jalon 0 + P1 + P2 + P3) et la porte d'entrée au ciel sont EN PRODUCTION — PR #185 (b4dc35c) et #186 (c9c4587) fusionnées sur go de Paul, patrimoine complet vert à chaque palier, zéro PR ouverte. Nettoyage de fin : la maquette portait encore ses copies de `greffer`/`signaux` après leur promotion en production — elle importe désormais le vrai module (",
-          "commit": "facf89d"
+          "le": "2026-09-03",
+          "quoi": "Finubar cesse d'être un journal : borne de récit à 180 caractères qui se DIT, boucles repliées à l'écran, et les cinq grains réécrits — le détail est descendu aux journaux.",
+          "commit": "ef2d7fd"
         },
-        "prochaine_action": "DEMANDER À PAUL CE QUE L'ACCUEIL LUI A FAIT — il ne l'a pas encore regardé en production, et c'est le seul juge de la question qui commandait la boucle : est-ce que la couleur oriente ? Les trois réponses possibles mènent à trois suites différentes (tableau du §2 de REPRISE-2026-09-02-accueil-finubar.md) ; ne pas les confondre, et surtout ne pas enchaîner sur P4 sans sa réponse",
+        "prochaine_action": "Poser `ANTHROPIC_API_KEY` en Production sur Vercel (geste de Paul, payant), puis brancher Léo sur `/finubar` : un quadrant `finubar` dans `api/_lib/leo.js` + le cartouche.",
         "bloque_par": [
           "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
           "`ANTHROPIC_API_KEY` en env Vercel",
@@ -278,23 +267,15 @@ export default {
         "en_attente_depuis": "2026-08-20",
         "boucles_ouvertes": [
           {
-            "quoi": "P4 est cadré et volontairement NON ouvert : les signaux du cockpit (quadrants personnels) sur le même ciel que ceux de Finubar (les dépôts). Arbitré par Paul le 02/09 — après P3, jamais avant. Une boucle à la fois",
+            "quoi": "P4 est cadré et volontairement NON ouvert : les signaux du cockpit sur le même ciel que ceux de Finubar. Arbitré par Paul le 02/09 — après P3, jamais avant",
             "depuis": "2026-09-02"
           },
           {
-            "quoi": "⚠️ Trois dépôts (mon-dpe.fr, artisan-builder, ripair) n'ont PAS d'accroche vérifiée : ils tombent sous ALPHA par défaut dans finubar/depots.json. Les deux premiers sont attachables à une séance (add_repo les accepte) ; ripair est hors de portée (autre propriétaire). Leur place se tranchera quand ils seront lus",
+            "quoi": "Trois dépôts (mon-dpe.fr, artisan-builder, ripair) n'ont pas d'accroche vérifiée et tombent sous ALPHA par défaut. Leur place se tranchera quand ils seront lus",
             "depuis": "2026-09-02"
           },
           {
-            "quoi": "⚠️ LA LEÇON DE LA SÉANCE, et elle a failli être écrite à l'envers : j'ai d'abord conclu que « l'agrégat ment » sur la foi d'un `git rev-list` brut qui comptait les commits de recalage de grain. `collecter.mjs` les exclut explicitement — la mesure était juste, l'instrument fautif était le mien. Avant d'accuser une sonde, lui demander CE qu'elle compte : c'est le pendant de la règle du 17/08 (« dema",
-            "depuis": "2026-09-02"
-          },
-          {
-            "quoi": "⚠️ LA LEÇON DU 02/09, à ne pas reperdre : une mesure qui ne peut PAS voir quelque chose doit le dire comme tel, jamais le rendre en constat. La collecte annonçait trois grains manquants qui existaient tous — et le message invitait à aller semer ce qui était déjà semé. Même famille que la règle du 2026-08-21 (« quand on ne PEUT pas vérifier de ce côté-là, on retire l'hypothèse au lieu de la documen",
-            "depuis": "2026-09-02"
-          },
-          {
-            "quoi": "Les huit coques de navigation (grima.html, naga.html…) ne sont plus le CHEMIN depuis l'isolement — elles restent des PORTES (repli <noscript>, lien direct, adresse). Leur sort — les garder telles quelles, les réduire, les retirer — n'est pas tranché : à voir avec Paul quand l'isolement aura vécu",
+            "quoi": "Les huit coques de navigation restent des PORTES et non le chemin. Les garder, les réduire ou les retirer n'est pas tranché — à voir quand l'isolement aura vécu",
             "depuis": "2026-08-28"
           },
           {
@@ -302,7 +283,7 @@ export default {
             "depuis": "2026-08-20"
           },
           {
-            "quoi": "La constellation : faire entrer les projets dans le ciel — CADRÉE le 02/09 (CADRAGE-ACCUEIL-FINUBAR.md), maquette éprouvée, en attente du go de Paul. `versConstellation()` reste écrite et branchée nulle part ; c'est `greffer()` + `signaux()` de la maquette qui la remplacent, parce qu'elles rendent l'arbre et pas une liste",
+            "quoi": "Faire entrer les projets dans le ciel : cadré le 02/09, maquette éprouvée, en attente du go. `versConstellation()` reste écrite et branchée nulle part",
             "depuis": "2026-08-21"
           },
           {
@@ -310,8 +291,9 @@ export default {
             "depuis": "2026-08-20"
           }
         ],
-        "maj": "2026-09-02"
+        "maj": "2026-09-03"
       },
+      "recits": [],
       "ciel": "racine",
       "hors_seance": false,
       "derive": {
@@ -321,7 +303,7 @@ export default {
         "commit_inconnu": false
       },
       "jours_depuis_maj": 0,
-      "jours_en_attente": 13,
+      "jours_en_attente": 14,
       "rang": 2
     },
     {
@@ -369,9 +351,9 @@ export default {
     "en_cours": 2,
     "en_attente_de_paul": 3,
     "au_repos": 0,
-    "derives": 4,
+    "derives": 0,
     "commits_inconnus": 0,
-    "boucles_ouvertes": 27,
+    "boucles_ouvertes": 21,
     "gestes_de_paul": [
       {
         "projet": "RénoAgenda",
@@ -386,8 +368,28 @@ export default {
         "geste": "Relecture juriste des CGU avant la première signature client"
       },
       {
+        "projet": "RénoBoost",
+        "geste": "Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Générer un lot de stickers QR puis l'imprimer (`stickers` = 0). L'URL des QR est corrigée à la source depuis le 01/09 : il ne reste que le geste physique"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Embarquement Stripe de SOLA : le cron du 02/09 fait le reste, la clé est posée. Ne resterait qu'un clic dans le tunnel de test si Stripe refusait la complétion par API"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Jeton Google Ads : demande d'accès Basic déposée le 03/09, réponse de Google attendue. Chemin et 5 variables : ACTIONS-PAUL.md §5"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Le récap de 20 h est aveugle depuis le 27/08. Les variables Vercel existent : c'est leur VALEUR qui est en cause (jeton expiré ?). Geste : ACTIONS-PAUL.md §3 bis"
+      },
+      {
         "projet": "RénoPredict",
-        "geste": "Générer et imprimer un lot de stickers QR — `stickers` = 0 depuis le 11/08. ✅ Le piège de l'URL est refermé le 01/09 (src/lib/qr-url.js : origine de production toujours, destination affichée à l'écran) — il ne reste que le geste physique"
+        "geste": "Générer et imprimer un lot de stickers QR — `stickers` = 0 depuis le 11/08. Le piège de l'URL est refermé le 01/09 : il ne reste que le geste physique"
       },
       {
         "projet": "RénoPredict",
@@ -398,24 +400,8 @@ export default {
         "geste": "Embarquement Stripe côté RénoPredict — jamais commencé (0 profil sur 2)"
       },
       {
-        "projet": "RénoBoost",
-        "geste": "Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08"
-      },
-      {
-        "projet": "RénoBoost",
-        "geste": "Générer un lot de stickers QR puis imprimer — ouvert depuis le 11/08 (`stickers` = 0). ✅ La vérification manuelle de l'URL n'est plus à faire : corrigée à la source le 01/09 côté RénoPredict (PR #60), les QR portent toujours l'origine de production et l'écran affiche la destination. Il ne reste que le geste physique."
-      },
-      {
-        "projet": "RénoBoost",
-        "geste": "Embarquement Stripe de SOLA — ⚠️ CE BLOCAGE A QUASIMENT DISPARU le 02/09 (RenoDevis PR #114) : un cron quotidien crée les comptes manquants, complète les comptes de TEST par API et recopie l'état de Stripe. ✅ La clé Stripe est posée en PRODUCTION — confirmé par Paul le 02/09, ⛔ ne pas le lui redemander. Il ne reste QUE le cas où Stripe refuserait la complétion par API sur SOLA (son tunnel a été ou"
-      },
-      {
-        "projet": "RénoBoost",
-        "geste": "Le jeton Google Ads — ouvert le 02/09, GO de Paul le jour même. C'est le SEUL blocage restant du simulateur ; tout le reste du lot est en production. ✅ FAIT VÉRIFIÉ CE JOUR-LÀ, et il change la solution : `googleads.googleapis.com/v22/…` répond 401 (auth manquante) et `oauth2.googleapis.com/token` répond 400 — l'API Google Ads est JOIGNABLE depuis une session Claude Code (v14→v21 renvoient 404, ret"
-      },
-      {
         "projet": "RénoDevis",
-        "geste": "Embarquement Stripe de SOLA : le compte de TEST existe (`acct_1U66eB…`, créé le 19/08) mais `stripe_charges_enabled` est encore false — il n'encaisse pas. DOKLES n'avait aucun compte au 02/09 ; le cron fusionné ce jour le crée seul au premier passage (06:30 UTC). ⛔ Ce qui ne se délègue PAS en Live : le KYC réel (pièce d'identité du dirigeant, bénéficiaires effectifs, IBAN) est fourni par l'artisan"
+        "geste": "Embarquement Stripe de SOLA : le compte de TEST existe depuis le 19/08 mais n'encaisse pas encore. Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul"
       },
       {
         "projet": "Ultima",
@@ -439,18 +425,18 @@ export default {
     "signaux": [
       {
         "projet": "RénoAgenda",
-        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
-        "pourquoi": "derive"
-      },
-      {
-        "projet": "RénoPredict",
-        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
-        "pourquoi": "derive"
+        "dit": "attend un geste : Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux — ouvert depuis 50 j",
+        "pourquoi": "attente"
       },
       {
         "projet": "RénoBoost",
-        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
-        "pourquoi": "derive"
+        "dit": "attend un geste : Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08 — ouvert depuis 30 j",
+        "pourquoi": "attente"
+      },
+      {
+        "projet": "RénoPredict",
+        "dit": "attend un geste : Générer et imprimer un lot de stickers QR — `stickers` = 0 depuis le 11/08. Le piège de l'URL est refermé le 01/09 : il ne reste que le geste physique — ouvert depuis 30 j",
+        "pourquoi": "attente"
       }
     ],
     "action": {
@@ -472,15 +458,15 @@ export default {
         "signal": 1
       },
       {
-        "id": "PaulGERARD161098/RenoPredict",
-        "libelle": "RénoPredict",
+        "id": "PaulGERARD161098/RenoBoost",
+        "libelle": "RénoBoost",
         "constellation": "en_attente_de_paul",
         "ciel": "renoboost-ia",
         "signal": 1
       },
       {
-        "id": "PaulGERARD161098/RenoBoost",
-        "libelle": "RénoBoost",
+        "id": "PaulGERARD161098/RenoPredict",
+        "libelle": "RénoPredict",
         "constellation": "en_attente_de_paul",
         "ciel": "renoboost-ia",
         "signal": 1
@@ -490,7 +476,7 @@ export default {
         "libelle": "RénoDevis",
         "constellation": "en_cours",
         "ciel": "renoboost-ia",
-        "signal": 1
+        "signal": 0
       },
       {
         "id": "PaulGERARD161098/Ultima-",

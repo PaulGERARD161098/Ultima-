@@ -138,6 +138,16 @@ h1 { font-variant: small-caps; font-weight: 600; font-size: clamp(1.9rem, 4.5vw,
 .ligne-cle { font-variant: small-caps; letter-spacing: 0.12em; color: var(--encre-pale); margin-right: 0.4rem; }
 .projet-gestes { list-style: none; margin: 0.5rem 0 0; padding: 0 0 0 1rem; border-left: 2px solid var(--cire); }
 .projet-gestes li { margin: 0 0 0.3rem; }
+/* Les boucles ouvertes se replient : présentes au compte, absentes du survol.
+   Le résumé garde la casse des autres clés de ligne (small-caps) pour se lire
+   comme une ligne de la fiche, pas comme un bouton étranger au registre. */
+.projet-boucles { margin: 0.45rem 0 0; }
+.projet-boucles > summary {
+  cursor: pointer; font-variant: small-caps; letter-spacing: 0.12em;
+  color: var(--encre-pale); list-style-position: outside;
+}
+.projet-boucles > summary:hover { color: var(--encre-claire); }
+.projet-boucles > summary:focus-visible { outline: 2px solid var(--cire); outline-offset: 2px; }
 .derive { border: 1px dashed var(--cire); color: var(--cire); padding: 0.5rem 0.8rem; margin: 0 0 0.8rem; font-size: 0.95rem; }
 .projet-illisible { border-style: dashed; }
 

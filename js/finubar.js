@@ -136,14 +136,21 @@ function rendreProjet(p) {
     li.appendChild(ul);
   }
 
+  // ⛔ REPLIÉES, et c'est le point de la boucle du 2026-09-03. Dépliées, elles
+  // pesaient à elles seules les trois quarts de la fiche (RénoBoost : 8 entrées,
+  // ~3 000 caractères) et noyaient les cinq lignes qu'on vient chercher — état,
+  // jalon, arrêt, reprise, geste en attente. Elles ne sont pas RETIRÉES pour
+  // autant : une boucle ouverte qui disparaît se lit comme une boucle fermée
+  // (règle ⑤ du dispositif). Le compte reste visible, le détail est à un clic.
   if (g.boucles_ouvertes.length) {
+    const n = g.boucles_ouvertes.length;
+    const repli = el('details', 'projet-boucles');
+    repli.appendChild(el('summary', null, `${n} boucle${n > 1 ? 's' : ''} ouverte${n > 1 ? 's' : ''}`));
     const ul = el('ul', 'projet-gestes');
     g.boucles_ouvertes.forEach((b) => ul.appendChild(
       el('li', null, b.depuis ? `${b.quoi} — ouverte depuis le ${b.depuis}` : b.quoi)));
-    const titre = el('p', 'ligne');
-    titre.appendChild(el('span', 'ligne-cle', 'Boucles ouvertes'));
-    li.appendChild(titre);
-    li.appendChild(ul);
+    repli.appendChild(ul);
+    li.appendChild(repli);
   }
 
   return li;
