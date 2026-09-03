@@ -385,35 +385,68 @@
   }
 }
 
-/* ---------- « Parler à Léo », le bouton d'appel (2026-09-03) ----------
+/* ---------- « Parler à Léo », le bouton d'appel (2026-09-03, REPRIS) ----------
    Posé par js/leo-partout.js sur toute page qui charge le module, et
-   UNIQUEMENT quand une session est ouverte. Discret par construction : il
-   accompagne la page, il ne la dispute pas. Même grammaire que les boutons
-   flottants existants (.ciel-ajouter-flottant) — aucun vocabulaire visuel neuf.
-   `env(safe-area-inset-*)` : sur iOS la barre système mangerait le bouton. */
+   UNIQUEMENT quand une session est ouverte.
+
+   PREMIERE VERSION REPRISE LE JOUR MEME, sur le constat de Paul en production.
+   J'avais copié la grammaire de `.ciel-ajouter-flottant` en me disant « aucun
+   vocabulaire visuel neuf » — mauvais voisin : ce bouton-là vit sur des pages
+   de NUIT, et le mien devait tenir sur le parchemin de FINUBAR, le fond le plus
+   clair du site. Un ovale bleu vif à ombre portée y était le vocabulaire d'une
+   app web moderne posé sur une gravure. « Reprendre un jeton existant » ne
+   suffit pas : encore faut-il reprendre celui du VOISINAGE.
+
+   Registre tenu ici : cartouche de parchemin, encre sépia, liseré or fin,
+   angles peu arrondis — la grammaire des médaillons et du cartouche de Léo
+   lui-même, dont ce bouton est la poignée. Il tient aussi sur les pages de
+   nuit : le cartouche y est déjà un rectangle clair posé sur le sombre. */
 .leo-appel {
   position: fixed;
   right: calc(0.9rem + env(safe-area-inset-right));
   bottom: calc(0.9rem + env(safe-area-inset-bottom));
   z-index: 900;                    /* sous le voile du cartouche (2050) et les toasts (2100) */
   min-height: 44px;                /* cible tactile */
-  padding: 0.6rem 1rem;
+  padding: 0.55rem 1rem;
   border: 1px solid var(--or-antique, #a9884a);
-  border-radius: 999px;
-  background: linear-gradient(#1a5b7a, #0e3a52);
-  color: #f6eed9;
+  border-radius: 6px;              /* un cadre, pas une pastille */
+  background: var(--parchemin-carte, #efe3c6);
+  color: var(--encre-sepia, #3b2f1c);
   font-family: var(--police-ancienne, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif);
   font-size: 0.9rem;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   cursor: pointer;
-  box-shadow: 0 2px 10px rgba(14, 58, 82, 0.35);
+  /* Ombre d'ENCRE, pas de relief matériel : elle détache du fond sans imiter
+     un objet posé. C'est ce qui lui permet de tenir sur le parchemin de
+     FINUBAR comme sur la nuit des coques, sans changer de registre. */
+  box-shadow: 0 1px 0 var(--or-antique, #a9884a), 0 2px 8px rgba(59, 47, 28, 0.22);
 }
 
-.leo-appel:hover { background: linear-gradient(#1f6787, #114560); }
+.leo-appel:hover {
+  background: var(--parchemin, #f6eed9);
+  border-color: var(--cerne-carte, #5a4118);
+}
+
 .leo-appel:focus-visible { outline: 3px solid var(--accent, #1e6fb8); outline-offset: 2px; }
 
-/* Sur petit écran le bouton se ramasse : il doit rester lisible sans couvrir
-   le contenu utile de la page (FINUBAR se lit à 390 px, c'est sa raison d'être). */
 @media (max-width: 640px) {
-  .leo-appel { right: 0.6rem; bottom: calc(0.6rem + env(safe-area-inset-bottom)); font-size: 0.85rem; }
+  .leo-appel {
+    right: 0.6rem;
+    bottom: calc(0.6rem + env(safe-area-inset-bottom));
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    padding: 0.5rem 0.8rem;
+  }
 }
+
+/* LA GOUTTIÈRE — c'est elle qui règle le VRAI défaut vu par Paul en production.
+   Un bouton `fixed` recouvre ce qui défile dessous : inévitable pendant le
+   scroll, INACCEPTABLE en bas de page, là où le lecteur s'arrête et où la
+   dernière ligne resterait masquée pour toujours. Chaque page qui porte le
+   bouton réserve donc, sous son contenu, la place que le bouton occupe.
+   ⛔ Le harnais le MESURE (smoke-leo-partout §7) : sans verdict, une gouttière
+   se fait manger au premier changement de gabarit et personne ne le voit. */
+:root { --leo-gouttiere: 5.5rem; }
+
+body:has(.leo-appel) { padding-bottom: var(--leo-gouttiere); }

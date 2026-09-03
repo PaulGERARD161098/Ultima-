@@ -35,6 +35,32 @@ const PAGES = [
   { fichier: 'grima.html', quadrant: 'riven' },
 ];
 
+// Le témoin de FINUBAR, partagé par §6 (ce qui part vers le modèle) et §7 (le
+// recouvrement) : une seule donnée d'essai, sinon les deux sections finissent
+// par mesurer deux pages différentes en croyant mesurer la même.
+const SHA_TEMOIN = 'ceb9af4de5cb9bc76181b8713754192e63658e86';
+const AGREGAT_TEMOIN = {
+  le: '2026-09-03',
+  macro: { total: 8, lisibles: 8, illisibles: 0, hors_seance: 0, en_cours: 3,
+    en_attente_de_paul: 2, au_repos: 3, derives: 0, boucles_ouvertes: 6, gestes_de_paul: [] },
+  cartouche: {
+    signaux: [{ projet: 'Ultima', dit: 'attend un geste depuis 3 j' }],
+    action: { projet: 'Ultima', faire: 'poser la clé', nature: 'geste', cap: 'brancher Léo' },
+  },
+  projets: [{
+    ok: true, motif: '', depot: 'x/Ultima', rang: 0, jours_depuis_maj: 0, jours_en_attente: 3,
+    derive: { tete: SHA_TEMOIN, tete_le: '2026-09-03T10:00:00Z', commits_depuis: 0 },
+    grain: {
+      projet: 'Ultima', depot: 'x/Ultima', cap: 'le cap', rattache_a: 'ROADMAP.md',
+      etat: 'en_attente_de_paul', jalon: { nom: 'J', critere_de_sortie: 'c' },
+      dernier_arret: { le: '2026-09-03', quoi: 'la fusion', commit: SHA_TEMOIN },
+      prochaine_action: 'brancher Léo sur finubar',
+      bloque_par: ['ANTHROPIC_API_KEY en env Vercel'],
+      en_attente_depuis: '2026-08-31', boucles_ouvertes: [], maj: '2026-09-03',
+    },
+  }],
+};
+
 async function ouvrir(navigateur, fichier, { connecte, finubar }) {
   const page = await navigateur.newPage();
   const journal = { erreurs: [], externes: [], corpsLeo: [], apiDeLaPage: new Set() };
@@ -194,28 +220,8 @@ console.log('\n§6 — FINUBAR : la voix voit la table de marche, et rien d’au
   // L'agrégat porte un SHA de commit et un chemin interne — ils ne doivent pas
   // franchir le pas vers le modèle. Test par l'absence, cette fois in vivo :
   // l'unitaire éprouve la fonction, celui-ci éprouve LE CHEMIN COMPLET.
-  const SHA = 'ceb9af4de5cb9bc76181b8713754192e63658e86';
-  const AGREGAT = {
-    le: '2026-09-03',
-    macro: { total: 8, lisibles: 8, illisibles: 0, hors_seance: 0, en_cours: 3,
-      en_attente_de_paul: 2, au_repos: 3, derives: 0, boucles_ouvertes: 6, gestes_de_paul: [] },
-    cartouche: {
-      signaux: [{ projet: 'Ultima', dit: 'attend un geste depuis 3 j' }],
-      action: { projet: 'Ultima', faire: 'poser la clé', nature: 'geste', cap: 'brancher Léo' },
-    },
-    projets: [{
-      ok: true, motif: '', depot: 'x/Ultima', rang: 0, jours_depuis_maj: 0, jours_en_attente: 3,
-      derive: { tete: SHA, tete_le: '2026-09-03T10:00:00Z', commits_depuis: 0 },
-      grain: {
-        projet: 'Ultima', depot: 'x/Ultima', cap: 'le cap', rattache_a: 'ROADMAP.md',
-        etat: 'en_attente_de_paul', jalon: { nom: 'J', critere_de_sortie: 'c' },
-        dernier_arret: { le: '2026-09-03', quoi: 'la fusion', commit: SHA },
-        prochaine_action: 'brancher Léo sur finubar',
-        bloque_par: ['ANTHROPIC_API_KEY en env Vercel'],
-        en_attente_depuis: '2026-08-31', boucles_ouvertes: [], maj: '2026-09-03',
-      },
-    }],
-  };
+  const SHA = SHA_TEMOIN;
+  const AGREGAT = AGREGAT_TEMOIN;
 
   const { page, journal } = await ouvrir(navigateur, 'finubar.html',
     { connecte: true, finubar: AGREGAT });
@@ -239,6 +245,78 @@ console.log('\n§6 — FINUBAR : la voix voit la table de marche, et rien d’au
   verifier('⛔ le SHA de commit ne franchit PAS le pas', !corps.includes(SHA));
   verifier('⛔ aucun jeton de session dans le corps', !corps.includes('jeton-factice'));
   await page.close();
+}
+
+console.log('\n§7 — le bouton ne mange aucun texte EN BAS DE PAGE, et se lit');
+{
+  // ⛔ LE VERDICT QUI MANQUAIT. §5 vérifiait le débordement horizontal et que
+  // le bouton reste dans le cadre : deux mesures qui restent VERTES pendant
+  // qu'il recouvre une phrase — c'est ce que Paul a vu en production, et que le
+  // harnais ne pouvait pas voir. Un verdict qui ne peut pas devenir rouge n'en
+  // est pas un (leçon du 2026-08-01).
+  //
+  // Le critère est le BAS DE PAGE, pas le cours du scroll : un bouton flottant
+  // passe forcément au-dessus du contenu qui défile, mais là où le lecteur
+  // s'arrête, rien ne doit rester masqué pour toujours.
+  //
+  // ⚠️ On mesure la boîte du TEXTE via un Range, pas celle du bloc : un
+  // conteneur pleine largeur croiserait le bouton sans qu'un seul mot soit
+  // caché, et le verdict crierait à tort (leçon du 2026-08-20).
+  const recouvrements = (page) => page.evaluate(() => {
+    const bouton = document.getElementById('leo-appel');
+    if (!bouton) return { erreur: 'bouton absent' };
+    const b = bouton.getBoundingClientRect();
+    const croise = (r) => !(r.right <= b.left || r.left >= b.right
+                         || r.bottom <= b.top || r.top >= b.bottom);
+    const coupables = [];
+    const noeuds = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    for (let n = noeuds.nextNode(); n; n = noeuds.nextNode()) {
+      if (!n.nodeValue || !n.nodeValue.trim()) continue;
+      if (bouton.contains(n)) continue;             // le libellé du bouton lui-même
+      const parent = n.parentElement;
+      if (!parent) continue;
+      const style = getComputedStyle(parent);
+      if (style.visibility === 'hidden' || style.display === 'none' || style.opacity === '0') continue;
+      const plage = document.createRange();
+      plage.selectNodeContents(n);
+      for (const r of plage.getClientRects()) {
+        if (r.width === 0 || r.height === 0) continue;
+        if (croise(r)) { coupables.push(n.nodeValue.trim().slice(0, 60)); break; }
+      }
+    }
+    return { coupables };
+  });
+
+  for (const fichier of ['finubar.html', 'zekrom.html']) {
+    const opts = fichier === 'finubar.html'
+      ? { connecte: true, finubar: AGREGAT_TEMOIN } : { connecte: true };
+    const { page } = await ouvrir(navigateur, fichier, opts);
+    for (const largeur of [1280, 390]) {
+      await page.setViewportSize({ width: largeur, height: 780 });
+      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+      await page.waitForTimeout(250);
+      const { coupables, erreur } = await recouvrements(page);
+      verifier(`${fichier} @${largeur} : aucun texte sous le bouton en bas de page`,
+        !erreur && coupables.length === 0,
+        erreur || (coupables[0] ? `« ${coupables[0]} »` : ''));
+    }
+
+    // Le contraste du libellé, MESURÉ sur le fond réellement peint — pas
+    // déduit du jeton : le bouton doit se lire sur le parchemin de FINUBAR
+    // comme sur la nuit des coques.
+    const ratio = await page.evaluate(() => {
+      const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+      const lum = (p) => 0.2126 * f(p[0]) + 0.7152 * f(p[1]) + 0.0722 * f(p[2]);
+      const lire = (c) => (c.match(/rgba?\(([^)]+)\)/) || [0, '0,0,0'])[1]
+        .split(',').map((x) => parseFloat(x));
+      const el = document.getElementById('leo-appel');
+      const a = lum(lire(getComputedStyle(el).color));
+      const b = lum(lire(getComputedStyle(el).backgroundColor));
+      return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+    });
+    verifier(`${fichier} : libellé du bouton ≥ 4,5:1`, ratio >= 4.5, `${ratio.toFixed(2)}:1`);
+    await page.close();
+  }
 }
 
 await navigateur.close();
