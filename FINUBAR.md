@@ -32,13 +32,13 @@
   },
   "dernier_arret": {
     "le": "2026-09-03",
-    "quoi": "Finubar cesse d'être un journal : borne de récit à 180 caractères qui se DIT, boucles repliées à l'écran, et les cinq grains réécrits — le détail est descendu aux journaux.",
-    "commit": "ef2d7fd"
+    "quoi": "Léo est disponible sur les 22 pages (bouton, session requise, quadrant déclaré par la page + repli `ultima`), et FINUBAR lui donne des yeux : comptes, ce qui appelle, la table de marche, les gestes qui attendent Paul — ni SHA, ni jeton, prouvé par l'absence. `naga` et `grima` rattachées à RIVEN sur arbitrage de Paul ; le bouton reste sur l'accueil.",
+    "commit": "32a816b"
   },
-  "prochaine_action": "Poser `ANTHROPIC_API_KEY` en Production sur Vercel (geste de Paul, payant), puis brancher Léo sur `/finubar` : un quadrant `finubar` dans `api/_lib/leo.js` + le cartouche.",
+  "prochaine_action": "Poser `ANTHROPIC_API_KEY` (+ `LEO_MODELE=claude-opus-5`) en Production sur Vercel, puis redéployer : la voix s'allume sur les 22 pages d'un coup. Geste de Paul, payant.",
   "bloque_par": [
+    "`ANTHROPIC_API_KEY` en env Vercel — la voix est CONSTRUITE partout, elle répond 503 tant que la clé n'est pas posée",
     "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
-    "`ANTHROPIC_API_KEY` en env Vercel",
     "Les advisors Supabase post-DDL",
     "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
   ],

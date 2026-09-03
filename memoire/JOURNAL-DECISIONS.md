@@ -3801,3 +3801,68 @@ l'écran ne paraît jamais) ; `boussole-auth.js` n'est pas touché.
 
 **Fusionné** : PR #185 (`b4dc35c`) puis #186 (`c9c4587`). Patrimoine complet
 vert à chaque palier. Zéro PR ouverte à la clôture.
+
+---
+
+## 2026-09-03 — Léo partout, et FINUBAR lui donne des yeux
+
+**Ordre de Paul, en deux temps** : d'abord « lance la boucle Léo sur finubar »,
+puis « je veux parler à Léo partout ». Le second élargit le premier — et c'est
+lui qui a demandé l'arbitrage de conception de la séance.
+
+**Le problème que « partout » posait.** La voix vivait sur **cinq** pages,
+montée à la main par le script de chaque quadrant, et Léo ne connaissait que
+**quatre** quadrants. Les dix-sept autres pages n'ont pas de quadrant évident :
+un rattachement deviné (par le nom du fichier, par un lien « retour ») donnerait
+une Léo qui parle du mauvais sujet **avec aplomb** — pire que pas de Léo.
+
+**La décision** : la page **déclare** son quadrant (`data-leo-quadrant`), et un
+quadrant de **repli** — `ultima`, la Léo d'orientation, qui n'a aucune donnée
+sous les yeux et le dit — accueille tout le reste. « Partout » devient vrai dès
+le premier palier, sans un seul rattachement supposé. Treize pages sont
+déclarées **sur une source lue** (homonymie, script de quadrant chargé, lien
+retour unique) ; `naga` et `grima`, qui ont chacune deux liens retour, restent
+au repli **exprès** : l'ambiguïté se laisse voir, elle ne se tranche pas au
+hasard (EL ②).
+
+**Un bouton, pas une modale.** L'accueil automatique n'a pas été étendu : la
+décision « rien sur l'accueil » (2026-07-18) tient, et vingt-deux modales
+auraient été une régression. Le bouton n'est posé **qu'après** vérification de
+la session — un bouton qui n'ouvre qu'un « connectez-vous » est un bouton qui
+ment. Il a fallu ouvrir `ouvrirCartouche` à une ouverture **forcée** : son
+verrou « une fois par session » aurait fait un bouton mort au deuxième clic.
+Le forçage n'écrit pas la marque, sinon le premier clic supprimerait
+silencieusement le cartouche d'accueil du quadrant.
+
+**Les yeux de FINUBAR.** `yeuxDeLeo` passe à Léo ce que l'écran montre déjà :
+comptes de la macro, ce qui appelle, la prochaine action, la table de marche,
+les gestes qui attendent Paul. Posée dans `js/adaptateur-finubar.mjs` — donc
+**pure et éprouvable sans navigateur** — et non dans le module de page. Aucun
+calcul neuf : recalculer un signal pour la voix créerait une seconde vérité, et
+Paul entendrait un état que la page ne montre pas.
+
+⛔ **DEUX DÉFAUTS TROUVÉS PAR LE HARNAIS, ET C'EST LA LEÇON DE LA SÉANCE.**
+① Mon script d'édition posait `data-leo-quadrant` sur la **première** occurrence
+de `<body …>` du fichier — qui, dans sept pages, est celle **citée dans un
+commentaire de tête**. Résultat : sept commentaires réécrits, et l'attribut
+jamais posé. Le smoke l'a vu parce qu'il vérifie **le quadrant réellement
+envoyé** à `/api/leo`, pas la présence de l'attribut. *Une édition de masse par
+motif se vérifie par son EFFET, jamais par son rapport d'exécution* — le mien
+annonçait fièrement « zekrom → riven ». ② Le stub d'API du harnais laissait
+passer trois 404 propres à la page ; ils sont désormais **comptés et nommés**
+au rapport (règle du 2026-08-17), pas filtrés en silence.
+
+**Éprouvés en rouge avant d'être crus** — miroir client désaligné, borne
+desserrée, fuite de SHA, attribut retiré : les quatre sondes virent au rouge.
+Un harnais qui n'a jamais échoué ne prouve rien.
+
+**Ce qui reste** : la gate coût. Sans `ANTHROPIC_API_KEY` en env Vercel, le
+bouton s'affiche et la zone répond 503 « voix pas encore branchée ». Poser la
+clé allume les vingt-deux pages d'un coup.
+
+**Arbitrage de Paul, le même jour** : `naga` et `grima` → **RIVEN** (elles
+avaient deux liens retour chacune et étaient au repli), et **le bouton reste
+sur l'accueil** — c'est un bouton, pas la modale que « rien sur l'accueil »
+(2026-07-18) écartait. Les deux pages sont entrées au harnais : ce qui est
+vérifié est le quadrant qu'elles **envoient**, jamais la présence de leur
+attribut. C'est la leçon du matin, appliquée le jour même.

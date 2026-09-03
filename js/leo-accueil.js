@@ -631,11 +631,19 @@
   function ouvrirCartouche(config) {
     config = config || {};
     if (!config.cleSession || !Array.isArray(config.sections)) { return; }
-    try {
-      if (window.sessionStorage.getItem(config.cleSession)) { return; }
-      window.sessionStorage.setItem(config.cleSession, '1');
-    } catch (e) {
-      return; // stockage indisponible (navigation privée stricte) : fail-closed
+    // `forcer` (2026-09-03) : ouverture À LA DEMANDE, sur clic de Paul.
+    // Le verrou sessionStorage ne borne QUE l'accueil automatique — un bouton
+    // « Parler à Léo » qui ne répondrait qu'une fois par onglet serait un
+    // bouton cassé. Il ne POSE pas non plus la marque : ouvrir la voix à la
+    // main ne doit pas consommer l'accueil du quadrant, sinon le premier clic
+    // supprime silencieusement le cartouche d'entrée.
+    if (!config.forcer) {
+      try {
+        if (window.sessionStorage.getItem(config.cleSession)) { return; }
+        window.sessionStorage.setItem(config.cleSession, '1');
+      } catch (e) {
+        return; // stockage indisponible (navigation privée stricte) : fail-closed
+      }
     }
 
     var focusAvant = document.activeElement;
@@ -712,6 +720,14 @@
 
     // Propositions (déterministes) : chacune ferme, puis mène à sa cible.
     var propositions = Array.isArray(config.propositions) ? config.propositions : [];
+    var posePropositions = true;
+    // Ouvert à la demande depuis un bouton, sans proposition à faire : la
+    // section entière se retire. Sinon Paul, qui a cliqué pour PARLER, lit
+    // « Rien d'urgent aujourd'hui » sur chacune des vingt-deux pages — du bruit
+    // qui prend la place de la seule chose qu'il est venu chercher.
+    if (config.sansPropositions === true && propositions.length === 0) {
+      posePropositions = false;
+    }
     var sectionPropositions = el('section', 'leo-section leo-section-propositions');
     sectionPropositions.appendChild(sousTitre('Propositions'));
     if (propositions.length === 0) {
@@ -732,7 +748,7 @@
       });
       sectionPropositions.appendChild(liste);
     }
-    cartouche.appendChild(sectionPropositions);
+    if (posePropositions) { cartouche.appendChild(sectionPropositions); }
 
     // Voix de Léo (L2, opt-in) : uniquement avec une session réelle.
     if (config.voix && typeof config.voix.quadrant === 'string' &&
@@ -1047,7 +1063,9 @@
       sections: Array.isArray(options.sections) ? options.sections : [],
       propositions: options.propositions,
       propositionsVide: options.propositionsVide,
-      voix: options.voix
+      voix: options.voix,
+      forcer: options.forcer === true,
+      sansPropositions: options.sansPropositions === true
     });
   }
 

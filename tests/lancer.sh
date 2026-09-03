@@ -73,6 +73,8 @@ echo "=== unit-finubar.mjs ==="
 node unit-finubar.mjs
 echo "=== unit-adaptateur-finubar.mjs ==="
 node unit-adaptateur-finubar.mjs
+echo "=== unit-leo-partout.mjs ==="
+node unit-leo-partout.mjs
 
 # 3. Serveur statique sur la racine du repo.
 (cd .. && python3 -m http.server 8123 >/dev/null 2>&1) &
@@ -81,7 +83,7 @@ trap 'kill $SERVEUR 2>/dev/null || true' EXIT
 sleep 1
 
 # 4. Les harnais navigateur (chacun sort en erreur si un verdict échoue).
-for h in smoke-ecrire.mjs smoke-boussole.mjs smoke-alpha.mjs smoke-tao.mjs smoke-console.mjs smoke-quadrants.mjs smoke-idees.mjs smoke-abaque.mjs smoke-reshiram.mjs smoke-zekrom.mjs smoke-imladrik.mjs smoke-imladrik-carto.mjs smoke-draukhain.mjs smoke-vranesh.mjs smoke-leo-accueil.mjs smoke-intendant.mjs smoke-flux-fiche.mjs smoke-accueil.mjs smoke-accueil-etats.mjs smoke-connexion.mjs smoke-contacts.mjs smoke-secteur.mjs smoke-dictee.mjs smoke-geocode.mjs smoke-antique.mjs smoke-csp.mjs smoke-ciel.mjs smoke-lv4-ciel.mjs smoke-lv4-coque.mjs smoke-lv5-fond.mjs smoke-lv5-plein-ecran.mjs smoke-lv5-passerelle.mjs smoke-fond-contraste.mjs smoke-stellaire.mjs smoke-serie.mjs smoke-pilotage.mjs smoke-althea.mjs smoke-finubar.mjs smoke-accueil-finubar.mjs; do
+for h in smoke-ecrire.mjs smoke-boussole.mjs smoke-alpha.mjs smoke-tao.mjs smoke-console.mjs smoke-quadrants.mjs smoke-idees.mjs smoke-abaque.mjs smoke-reshiram.mjs smoke-zekrom.mjs smoke-imladrik.mjs smoke-imladrik-carto.mjs smoke-draukhain.mjs smoke-vranesh.mjs smoke-leo-accueil.mjs smoke-intendant.mjs smoke-flux-fiche.mjs smoke-accueil.mjs smoke-accueil-etats.mjs smoke-connexion.mjs smoke-contacts.mjs smoke-secteur.mjs smoke-dictee.mjs smoke-geocode.mjs smoke-antique.mjs smoke-csp.mjs smoke-ciel.mjs smoke-lv4-ciel.mjs smoke-lv4-coque.mjs smoke-lv5-fond.mjs smoke-lv5-plein-ecran.mjs smoke-lv5-passerelle.mjs smoke-fond-contraste.mjs smoke-stellaire.mjs smoke-serie.mjs smoke-pilotage.mjs smoke-althea.mjs smoke-finubar.mjs smoke-accueil-finubar.mjs smoke-leo-partout.mjs; do
   echo "=== $h ==="
   node "$h"
 done

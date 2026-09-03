@@ -18,12 +18,13 @@
   <link rel="stylesheet" href="css/ciel.css">
   <link rel="stylesheet" href="css/ciel-noeud.css">
   <link rel="stylesheet" href="css/stellaire.css">
+  <link rel="stylesheet" href="css/leo.css">
 </head>
 <!-- NICOL BOLAS — le pilotage financier (Lv3, boucle L4). L'antichambre en
      colonne a laissé place à la FORME UNIQUE : la boussole. Coque pure — les
      caps, le cœur et la parole de Léo sont rendus par js/boussole-noyau.mjs
      à partir du registre (`data-noeud`). -->
-<body class="ciel-noeud" data-noeud="nicol-bolas">
+<body class="ciel-noeud" data-noeud="nicol-bolas" data-leo-quadrant="bcp">
 
   <div class="ciel-noeud-coque">
 
@@ -81,5 +82,9 @@
   <script src="js/ciel-fond.js"></script>
   <script src="js/ciel.js"></script>
   <script type="module" src="js/ciel-noeud.mjs"></script>
+  <script src="js/vendor/supabase-js-2.110.0.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/leo-accueil.js"></script>
+  <script src="js/leo-partout.js"></script>
 </body>
 </html>

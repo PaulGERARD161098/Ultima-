@@ -176,3 +176,102 @@ export function libelleDegre(degre, compte) {
   if (degre === 'braise') return n + ' projet' + pluriel + ' en cours';
   return '';
 }
+
+// ---------- FINUBAR vu par Léo (2026-09-03) ----------
+// Ces deux-là vivent ICI, et pas dans js/finubar.js, pour la raison qui vaut
+// pour tout cet adaptateur : ce sont des fonctions PURES, donc éprouvables
+// sous Node sans navigateur. `ETIQUETTES` les suit — l'écran et la voix
+// doivent nommer un état avec LE MÊME mot, sinon Paul lit « en cours » et
+// entend « au repos ».
+
+export const ETIQUETTES = {
+  en_cours: 'en cours',
+  en_attente_de_paul: 'attend un geste',
+  au_repos: 'au repos',
+};
+
+// ---------- Les yeux de Léo sur FINUBAR (2026-09-03) ----------
+// Ce que Léo VOIT quand Paul lui parle depuis cette page : les comptes de la
+// macro et les intitulés déjà affichés à l'écran — rien de plus.
+//
+// ⛔ Trois règles, et ce sont elles qui rendent la voix honnête ici :
+//   1. AUCUN calcul neuf. Tout ce qui part vient de l'agrégat déjà rendu par
+//      `rendre()`. Recalculer un signal pour Léo créerait une seconde vérité,
+//      et Paul entendrait un état que la page ne montre pas.
+//   2. AUCUN identifiant, aucun contenu de dépôt, aucun commit. Le nom d'un
+//      dépôt et une prochaine action suffisent à répondre « où on en est » ;
+//      le reste ne ferait qu'augmenter la surface pour rien.
+//   3. Bornes TENUES ICI, pas seulement côté serveur : 12 compteurs, 4 listes,
+//      40 entrées, 200 caractères. Le serveur rejette tout dépassement en bloc
+//      (400) — un état trop gros ne dégraderait pas la réponse, il la
+//      SUPPRIMERAIT, et la voix deviendrait muette sans dire pourquoi.
+const MAX_ENTREES = 40;
+const MAX_LIBELLE = 200;
+
+function borner(texte) {
+  const t = String(texte === undefined || texte === null ? '' : texte).trim();
+  return t.length > MAX_LIBELLE ? t.slice(0, MAX_LIBELLE) : t;
+}
+
+export function yeuxDeLeo(donnees) {
+  const m = (donnees.macro && typeof donnees.macro === 'object') ? donnees.macro : {};
+  const entier = (v) => (typeof v === 'number' && Number.isInteger(v) && v >= 0 ? v : 0);
+
+  const compteurs = {
+    depots: entier(m.total),
+    en_cours: entier(m.en_cours),
+    en_attente_de_paul: entier(m.en_attente_de_paul),
+    au_repos: entier(m.au_repos),
+    boucles_ouvertes: entier(m.boucles_ouvertes),
+  };
+
+  const listes = {};
+
+  // Ce qui appelle ce matin — exactement les signaux affichés en haut de page.
+  const brut = donnees.cartouche;
+  const signaux = (brut && Array.isArray(brut.signaux)) ? brut.signaux : [];
+  const dits = signaux
+    .map((s) => borner(`${s && s.projet ? s.projet : '?'} — ${s && s.dit ? s.dit : ''}`))
+    .filter((t) => t.length > 0)
+    .slice(0, MAX_ENTREES);
+  if (dits.length) listes.ce_qui_appelle = dits.map((libelle) => ({ libelle }));
+
+  // La prochaine action, et sa nature (un geste de Paul se distingue d'une
+  // tâche de code : c'est la seule chose que Léo ne doit pas confondre).
+  const action = brut && brut.action;
+  if (action && action.faire) {
+    listes.prochaine_action = [{
+      libelle: borner(`${action.projet || '?'} — ${action.faire}`),
+      marque: action.nature === 'geste' ? 'geste de Paul' : 'travail',
+    }];
+  }
+
+  // La table de marche : un dépôt, son état, sa prochaine action.
+  const projets = Array.isArray(donnees.projets) ? donnees.projets : [];
+  const marche = projets.slice(0, MAX_ENTREES).map((p) => {
+    const grain = (p && p.grain && typeof p.grain === 'object') ? p.grain : {};
+    const suite = grain.prochaine_action || (p && p.motif) || '';
+    const etat = ETIQUETTES[grain.etat] || (p && p.hors_seance ? 'hors séance' : '');
+    const item = { libelle: borner(`${(p && p.depot) || '?'} — ${suite}`) };
+    if (etat) item.marque = borner(etat).slice(0, 60);
+    return item;
+  }).filter((i) => i.libelle.length > 0);
+  if (marche.length) listes.table_de_marche = marche;
+
+  // Les gestes qui n'attendent que Paul — la question qu'il posera le plus
+  // souvent, et la seule à laquelle la page répond aujourd'hui en le faisant
+  // dérouler huit fiches. `bloque_par` est la source, telle quelle.
+  const gestes = [];
+  projets.forEach((p) => {
+    const grain = (p && p.grain && typeof p.grain === 'object') ? p.grain : null;
+    const bloques = (grain && Array.isArray(grain.bloque_par)) ? grain.bloque_par : [];
+    bloques.forEach((geste) => {
+      if (gestes.length >= MAX_ENTREES) return;
+      const libelle = borner(`${(p && p.depot) || '?'} — ${geste}`);
+      if (libelle) gestes.push({ libelle });
+    });
+  });
+  if (gestes.length) listes.gestes_en_attente = gestes;
+
+  return { compteurs, listes };
+}

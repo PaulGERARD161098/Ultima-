@@ -57,6 +57,37 @@ const QUADRANTS = {
       'journal intime), DRAUKHAIN (les serments — la volonté au-delà du ' +
       'possible, ravivés par des flammes) et VRANESH (les situations et leurs ' +
       'futurs possibles). Registre intime : accompagne, ne juge jamais.'
+  },
+  // FINUBAR (2026-09-03) — la table de marche des huit dépôts. Léo y répond
+  // « où on en est » à partir de l'ÉTAT que la page lui passe (comptes, gestes
+  // en attente, dérives) : elle ne lit ni le code, ni les commits, ni le
+  // contenu des grains. Le sujet le dit explicitement pour qu'elle refuse de
+  // combler ce qu'elle n'a pas — c'est la règle qui coûte le plus cher ici,
+  // un état de dépôt inventé se lisant exactement comme un état mesuré.
+  finubar: {
+    nom: 'FINUBAR',
+    registre: 'opérationnel',
+    sujet: 'la table de marche des huit dépôts de Paul : pour chacun, le cap, ' +
+      'le jalon en cours, le dernier arrêt daté, la prochaine action et les ' +
+      "gestes qui n'attendent que lui. Tu ne connais QUE ce que l'état joint " +
+      'te donne — jamais le code, jamais les commits, jamais le contenu des ' +
+      'dépôts. Priorités : ce qui bloque, ce qui dort, et par quoi reprendre.'
+  },
+  // ULTIMA (2026-09-03) — le quadrant de REPLI, sur ordre de Paul « je veux
+  // parler à Léo partout ». Toute page qui ne déclare pas un quadrant plus
+  // précis obtient celui-ci. ⛔ Il ne se substitue jamais à un quadrant connu :
+  // une page qui traite du réseau commercial déclare `riven`, pas `ultima` —
+  // sinon Léo perd le sujet qu'elle est censée tenir. Son sujet reste
+  // volontairement large et sans donnée : c'est une Léo d'orientation.
+  ultima: {
+    nom: 'ULTIMA',
+    registre: 'opérationnel',
+    sujet: "la plateforme personnelle de Paul dans son ensemble : ses quadrants " +
+      '(RIVEN le réseau commercial, NICOL BOLAS les finances, ADRAMELECH les ' +
+      'idées, IMLADRIK le développement personnel) et FINUBAR la table de ' +
+      "marche des dépôts. Tu orientes : tu dis où une chose se traite et par " +
+      "quoi commencer. Tu n'as AUCUNE donnée sous les yeux ici — si Paul te " +
+      'demande un chiffre ou un état, renvoie-le vers le quadrant qui le porte.'
   }
 };
 
