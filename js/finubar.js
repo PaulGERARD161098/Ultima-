@@ -17,12 +17,14 @@
 // moteur `finubar/agreger.mjs`, exécuté à la collecte et éprouvé par
 // `tests/unit-finubar.mjs`. Recalculer quoi que ce soit dans la page créerait
 // une seconde vérité — et c'est toujours la seconde qui finit par mentir.
+//
+// La VOIX de Léo est montée ici, à la main (2026-09-03) : elle attend l'agrégat,
+// puisqu'elle en est les yeux. Ce qu'elle voit est calculé par `yeuxDeLeo` —
+// pure, donc éprouvable sans navigateur — et n'est QUE ce que l'écran affiche
+// déjà. Les étiquettes d'état viennent du même module : l'écran et la voix
+// doivent nommer un état avec le même mot.
+import { ETIQUETTES, yeuxDeLeo } from './adaptateur-finubar.mjs';
 
-const ETIQUETTES = {
-  en_cours: 'en cours',
-  en_attente_de_paul: 'attend un geste',
-  au_repos: 'au repos',
-};
 
 function el(nom, classe, texte) {
   const n = document.createElement(nom);
@@ -177,6 +179,7 @@ function rendre(donnees) {
   prov.appendChild(document.createTextNode(', puis commiter.'));
 }
 
+
 function message(texte) {
   const hote = document.getElementById('matin-corps');
   hote.replaceChildren(el('p', 'etat-message', texte));
@@ -219,6 +222,17 @@ async function demarrer() {
       return;
     }
     rendre(charge.data);
+
+    // La voix, une fois l'écran rendu : Léo voit ce que Paul voit, jamais plus.
+    // Montée à la main (data-leo-manuel) parce qu'elle attend l'agrégat ; sans
+    // lui, elle parlerait de la table de marche sans l'avoir sous les yeux.
+    if (window.UltimaLeoPartout && typeof window.UltimaLeoPartout.monter === 'function') {
+      window.UltimaLeoPartout.monter({
+        quadrant: 'finubar',
+        etat: yeuxDeLeo(charge.data),
+        salutation: 'La table de marche est sous mes yeux. Que veux-tu savoir ?',
+      });
+    }
   } catch {
     // Aucun détail en console : ni URL interne, ni forme de la réponse.
     message('La table de marche est indisponible pour le moment.');

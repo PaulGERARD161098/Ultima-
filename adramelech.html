@@ -19,13 +19,14 @@
   <link rel="stylesheet" href="css/ciel.css">
   <link rel="stylesheet" href="css/ciel-noeud.css">
   <link rel="stylesheet" href="css/stellaire.css">
+  <link rel="stylesheet" href="css/leo.css">
 </head>
 <!-- ADRAMELECH — la bibliothèque d'idées (Lv3, boucle L4). L'antichambre qui
      portait le registre a laissé place à la FORME UNIQUE : la boussole. La vue
      registre (compteurs, idées, ponts) a déménagé TELLE QUELLE sur registre.html,
      son propre cap. Cette page ne porte donc plus AUCUNE donnée ni aucun appel
      réseau : elle est muette par construction (elle l'était déjà fail-closed). -->
-<body class="ciel-noeud" data-noeud="adramelech">
+<body class="ciel-noeud" data-noeud="adramelech" data-leo-quadrant="adramelech">
 
   <div class="ciel-noeud-coque">
 
@@ -95,5 +96,9 @@
   <script src="js/ciel-fond.js"></script>
   <script src="js/ciel.js"></script>
   <script type="module" src="js/ciel-noeud.mjs"></script>
+  <script src="js/vendor/supabase-js-2.110.0.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/leo-accueil.js"></script>
+  <script src="js/leo-partout.js"></script>
 </body>
 </html>

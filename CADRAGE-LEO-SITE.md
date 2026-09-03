@@ -117,6 +117,40 @@ Le pop-up touche à terme PII réseau + finance + intime (§5 CADRAGE-CONSOLE) :
   ne parle qu'une fois la clé posée par Paul en env Vercel (+ plafond de
   dépense côté console Anthropic). Antichambres NICOL BOLAS/IMLADRIK :
   muettes tant qu'elles n'ont pas d'auth (fail-closed voulu).
+- **L2c — « parler à Léo PARTOUT » ✅ LIVRÉE (2026-09-03, ordre de Paul)** :
+  jusque-là la voix n'existait que sur **cinq pages** (riven, registre,
+  maedrethnir, draukhain, vranesh), montée à la main par le script de chaque
+  quadrant. Elle est désormais disponible sur **les vingt-deux pages** via
+  `js/leo-partout.js` : un bouton « Parler à Léo », posé **uniquement quand une
+  session est ouverte** (fail-closed — un bouton qui n'ouvre qu'un message
+  « connectez-vous » est un bouton qui ment), et **aucun accueil automatique**
+  (la décision « rien sur l'accueil » du 2026-07-18 tient).
+  - **La page DÉCLARE son quadrant** : `<body data-leo-quadrant="riven">`.
+    Absent → `ultima`, la Léo d'orientation, qui n'a aucune donnée sous les yeux
+    et le dit. ⛔ **Aucun rattachement déduit** d'un nom de fichier : les treize
+    pages déclarées le sont sur une source lue (homonymie de quadrant, script de
+    quadrant chargé, lien « retour » unique) ; les pages ambiguës — `naga` et
+    `grima`, deux liens retour chacune — restent volontairement au repli.
+  - **Deux quadrants neufs** dans `api/_lib/leo.js` : `finubar` (la table de
+    marche des huit dépôts) et `ultima` (l'orientation). Ni l'un ni l'autre ne
+    porte d'outil : depuis ces pages la voix **ne peut rien écrire**.
+  - **FINUBAR a des YEUX** : `js/finubar.js` passe à Léo l'état déjà affiché
+    (comptes de la macro, ce qui appelle, la prochaine action, la table de
+    marche, les gestes qui attendent Paul) via `yeuxDeLeo` — fonction **pure**,
+    dans `js/adaptateur-finubar.mjs`, donc éprouvable sans navigateur.
+    ⛔ Ni SHA de commit, ni chemin interne, ni jeton : vérifié **par l'absence**,
+    et sur le chemin complet (`tests/smoke-leo-partout.mjs` §6).
+  - **Le cartouche a sa feuille de style propre** (`css/leo.css`, déplacée
+    depuis `styles.css`, chaque `var()` portant son repli) : trois pages
+    (`abaque`, `finubar`, `idees`) ne chargent pas `styles.css`, et un cartouche
+    non stylé y aurait été pire que pas de cartouche.
+  - Harnais : `tests/unit-leo-partout.mjs` (pire cas construit, bornes, absence)
+    + `tests/smoke-leo-partout.mjs` (six sections, deux pages + finubar).
+    Les deux ont été **éprouvés en rouge** avant d'être crus.
+  - ⏳ **La gate coût reste entière** : sans `ANTHROPIC_API_KEY` en env Vercel,
+    le bouton s'affiche et la zone de parole répond « voix pas encore branchée »
+    (503). Poser la clé allume les vingt-deux pages d'un coup.
+
 - **L2b — les mains (agir sur dictée)** : tool use branché sur les API du
   site (idées, INTENDANT, journal, relances), session de Paul uniquement,
   reformulation + confirmation avant toute écriture. C'est la marche qui
