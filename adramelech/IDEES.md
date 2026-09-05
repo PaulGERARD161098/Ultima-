@@ -66,8 +66,9 @@
 
 > Mise à jour 2026-09-05 : **VESTA (ADR-010)** capturée — la **reprise d'une
 > société existante** de climatisation / ventilation / travaux tous corps d'état
-> (discussion avec Julien Ramsé, société Fahrenheit ; les deux orthographes sont
-> ⚠️ à confirmer). Elle entre au tableau **sans rang et sans score**, et le refus
+> (discussion avec **Julien Laudy** — mentor des affaires de Paul, pro DOKLÈS —
+> autour de la société Fahrenheit ; orthographe et rôle exact de Fahrenheit ⚠️ à
+> confirmer). Elle entre au tableau **sans rang et sans score**, et le refus
 > de la scorer est motivé : sur une reprise, le prix, les comptes, l'effectif et
 > la part de récurrent **existent réellement chez le vendeur** — ils se demandent,
 > ils ne se posent pas en [hyp.]. Un score fabriqué sur ce vide aurait l'exacte
@@ -81,9 +82,11 @@
 > ne se devine pas**. Structurellement elle tient dans **VERTUMNE (ADR-007)** :
 > un premier métier *acquis* logé dans l'enveloppe-cadre, ce qui donne au
 > simulateur NICOL BOLAS d'ADR-007 (bloc G) une **seconde entrée : reprendre**,
-> à côté de créer. ⏳ **Deux décisions attendues de Paul** : acter (ou non) le nom
-> **VESTA**, et dire si le « Julien » partenaire de PROTÉE est **le même** Julien
-> Ramsé — auquel cas les deux fiches se lisent comme un seul dossier.
+> à côté de créer. ✅ **Confirmé par Paul le 2026-09-05 : le « Julien » partenaire
+> de PROTÉE EST Julien Laudy.** ADR-002 et ADR-010 sont donc **un seul dossier à
+> deux voies** — bâtir (PROTÉE) ou acheter (VESTA) — discuté avec le même
+> interlocuteur ; elles se lisent ensemble et s'arbitrent l'une contre l'autre.
+> ⏳ **Reste une décision attendue de Paul** : acter (ou non) le nom **VESTA**.
 > La séquence de build reste **INTENDANT → MYCÉLIUM → PROTÉE bridée**, inchangée :
 > rien n'est engagé sur VESTA.
 
@@ -1597,9 +1600,11 @@ son go (comme VITRUVE le 2026-08-20).
   par opposition à la création de zéro)
 - **Thème** : bâtiment · CVC (climatisation · ventilation) · reprise &
   transmission d'entreprise · croissance externe
-- **Partenaire envisagé** : **Julien Ramsé** *(orthographe à confirmer)* — c'est
-  une **discussion en cours**, pas un dossier abouti ni une intention de vendre
-  formalisée
+- **Partenaire envisagé** : **Julien Laudy** — le mentor des affaires de Paul
+  (c'est le « JL » de la directive JL), et **client-pro DOKLÈS** sur RénoBoost
+  (`julien-laudy`, cf. `RenoBoost/CADRAGE-2026-08-19-passerelle-pro-artisan.md`).
+  C'est une **discussion en cours**, pas un dossier abouti ni une intention de
+  vendre formalisée
 - **Statut** : à raffiner (capture cadrée ; analyse stratégique **non passée** —
   voir §Analyse : les données chiffrées manquent toutes)
 
@@ -1608,7 +1613,15 @@ son go (comme VITRUVE le 2026-08-20).
 **Reprendre une société existante** plutôt que d'en monter une : une entreprise
 déjà installée, spécialisée en **climatisation, ventilation et travaux de
 manière générale** (tous corps d'état). La piste est née d'une **discussion avec
-Julien Ramsé**, de la société **Fahrenheit**.
+Julien Laudy**, autour de la société **Fahrenheit**.
+
+> ✍️ **Correction de Paul, le jour même.** La dictée disait « discussion avec
+> Julien Ramsé de Fahrenheit ». Paul a corrigé : *« Julien, c'est Julien LAUDY,
+> mon mentor des affaires, qui est aussi mon client chez DOKLES »*. « Ramsé » est
+> donc une déformation vocale (consignée au lexique), pas un nom de famille. Ce
+> que cette correction laisse OUVERT : le **rôle exact de Fahrenheit** — la
+> société **à reprendre** (lecture la plus naturelle du « reprise d'une
+> société »), ou une société liée à Julien ? Non tranché, non déduit.
 
 Ce qui est dicté s'arrête là. Rien n'est connu du prix, des comptes, de
 l'effectif, du calendrier, ni même du fait que la société soit réellement à
@@ -1620,13 +1633,13 @@ vendre : c'est une **conversation**, et la fiche la capture comme telle.
    Le nom n'a été rapproché d'aucune entrée existante d'Ultima : aucune
    occurrence dans `memoire/`, ni dans le registre. À vérifier auprès de Paul
    (raison sociale exacte, SIREN) avant toute recherche externe.
-2. **⚠️ « Julien Ramsé »** — orthographe **à confirmer**. ⚠️ Et une question qui
-   change la lecture de tout le registre : le partenaire envisagé de **PROTÉE
-   (ADR-002)** est un « **Julien** », sans nom de famille. **S'agit-il de la même
-   personne ?** Si oui, ADR-002 et cette fiche décrivent **deux voies vers le
-   même but** discutées avec le même interlocuteur, et se lisent ensemble. Rien
-   dans le registre ne permet de trancher — c'est une **question à Paul**, pas
-   une hypothèse à retenir.
+2. ✅ **« Julien Ramsé » → Julien LAUDY** — tranché par Paul (2026-09-05), deux
+   fois : c'est **Julien Laudy**, son mentor des affaires et client-pro DOKLÈS,
+   et c'est **le même Julien que le partenaire envisagé de PROTÉE (ADR-002)**.
+   ADR-002 et cette fiche décrivent donc **deux voies vers le même but**
+   discutées avec le même interlocuteur, et se lisent ensemble — voir §Liens,
+   pont PROTÉE. Ce qui reste ⚠️ : le **rôle de Fahrenheit** vis-à-vis de Julien
+   (voir l'encadré de correction ci-dessus).
 3. **⚠️ « en tout temps France »** — segment dicté **non résolu**, et
    volontairement non interprété. Deux lectures possibles sans moyen de choisir :
    une **zone d'intervention nationale**, ou un **fragment de la raison sociale**
@@ -1692,8 +1705,8 @@ vendre : c'est une **conversation**, et la fiche la capture comme telle.
 ### Classification — la case retenue
 
 - **Quadrant Ultima** : **ADRAMELECH** (bibliothèque d'idées) pour la capture,
-  avec deux ancrages : **RIVEN** (Julien Ramsé et la société sont du réseau ;
-  la relation se tient là) et **NICOL BOLAS** (une acquisition est d'abord un
+  avec deux ancrages : **RIVEN** (Julien Laudy est déjà du réseau — pro DOKLÈS
+  sur RénoBoost — et la société pressentie s'y rattache ; la relation se tient là) et **NICOL BOLAS** (une acquisition est d'abord un
   acte financier : prix, financement, BFR, échéancier).
 - **Type** : **business** — croissance externe, pas outil interne.
 - **Thème d'archipel** : *bâtiment · CVC · reprise & transmission d'entreprise ·
@@ -1721,9 +1734,13 @@ vendre : c'est une **conversation**, et la fiche la capture comme telle.
   fait froid, équipes polyvalentes, aides captées proprement — **montée de zéro**.
   VESTA est la **même cible atteinte par rachat**. Les deux fiches ne sont donc
   pas deux idées mais **deux voies vers un même but**, et elles s'arbitrent
-  l'une contre l'autre (bâtir vs acheter). ⚠️ Le pont devient une **fusion
-  possible des deux fiches** si « Julien » (ADR-002) et « Julien Ramsé » sont la
-  même personne — à confirmer par Paul avant tout regroupement.
+  l'une contre l'autre (bâtir vs acheter). ✅ **Même interlocuteur, confirmé par
+  Paul le 2026-09-05** : les deux fiches forment **un seul dossier**. Elles ne
+  sont PAS fusionnées en une entrée — chaque voie garde sa fiche, son score et
+  ses risques propres (PROTÉE 6,3/10 instruite ; VESTA à instruire) — mais toute
+  décision sur l'une se prend en regardant l'autre. ⚠️ Conséquence directe : les
+  paramètres [hyp.] de PROTÉE (ETP, formation, capex) ont désormais une **source
+  réelle** — l'entreprise de Julien — et se **demandent** au lieu de se supposer.
 - **VERTUMNE (ADR-007) — l'enveloppe, et le pont tient.** VERTUMNE a été tranchée
   comme **structure-cadre souple qui contient le socle**, build différé. Une
   société reprise est précisément le genre de métier qu'elle contient. Et VESTA
@@ -1757,7 +1774,7 @@ vendre : c'est une **conversation**, et la fiche la capture comme telle.
 - **GLANEUR (ADR-001) — pont faible, signalé pour mémoire.** Les déposes d'un
   parc clim ancien sont un gisement de matière ; anecdotique face au reste.
 
-### Ce qu'il faut demander à Julien Ramsé (due diligence minimale)
+### Ce qu'il faut demander à Julien Laudy (due diligence minimale)
 
 > Ces questions sont **l'instruction manquante** : tant qu'elles n'ont pas de
 > réponse, aucun score n'est calculable et aucune décision n'est possible.
@@ -1799,10 +1816,12 @@ vendre : c'est une **conversation**, et la fiche la capture comme telle.
 
 **Prochaines actions concrètes**
 
-1. **Faire confirmer par Paul les trois zones marquées ⚠️** — orthographes,
-   « en tout temps France », et surtout : **est-ce le Julien de PROTÉE ?**
+1. **Faire confirmer par Paul ce qui reste marqué ⚠️** — l'orthographe de
+   « Fahrenheit », son rôle exact (société à reprendre ?), et « en tout temps
+   France ». ✅ L'identité de Julien est tranchée (2026-09-05) : Julien Laudy,
+   celui de PROTÉE.
 2. **Poser les trois questions décisives** lors du prochain échange avec Julien
-   Ramsé (aucun chiffre n'est nécessaire pour cela — ce sont des questions de
+   Laudy (aucun chiffre n'est nécessaire pour cela — ce sont des questions de
    nature, pas de valorisation).
 3. **Ne rien instruire de plus avant leurs réponses** (directive EB) : la fiche
    dort ici, complète, comme JANUS et VITRUVE. Elle n'entre ni au classement ni

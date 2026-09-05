@@ -35,7 +35,7 @@
     "quoi": "ADR-010 VESTA capturée dans ADRAMELECH : la reprise d'une société de clim/ventilation. Classée, ponts posés, score REFUSÉ faute de comptes — pas fabriqué en [hyp.].",
     "commit": "b500a42"
   },
-  "prochaine_action": "Faire acter le nom VESTA par Paul, et lui demander si le « Julien » de PROTÉE (ADR-002) est le même Julien Ramsé — si oui, les deux fiches sont un seul dossier.",
+  "prochaine_action": "Faire acter le nom VESTA par Paul. (Julien = celui de PROTÉE : confirmé le 05/09, ADR-002 et ADR-010 sont un seul dossier à deux voies.)",
   "bloque_par": [
     "`ANTHROPIC_API_KEY` en env Vercel — la voix est CONSTRUITE partout, elle répond 503 tant que la clé n'est pas posée",
     "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
@@ -45,7 +45,7 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "VESTA (ADR-010) dort hors classement : orthographes Fahrenheit / Julien Ramsé, « en tout temps France » non résolu, et les 3 questions décisives sans réponse",
+      "quoi": "VESTA (ADR-010) dort hors classement : nom à acter, orthographe et rôle de Fahrenheit, « en tout temps France » non résolu, et les 3 questions décisives sans réponse. Julien = Julien Laudy, celui de PROTÉE (confirmé 05/09)",
       "depuis": "2026-09-05"
     },
     {
@@ -89,7 +89,8 @@
 
 Dictée de Paul : la **reprise d'une société existante** de climatisation,
 ventilation et travaux tous corps d'état, née d'une discussion avec **Julien
-Ramsé**, société **Fahrenheit**. Capturée en **ADR-010**, nom de registre proposé
+Laudy** (mentor des affaires de Paul, pro DOKLÈS) autour de la société
+**Fahrenheit**. La dictée disait « Julien Ramsé » — corrigé par Paul le jour même. Capturée en **ADR-010**, nom de registre proposé
 **VESTA** — la déesse du foyer, dont les Vestales n'allumaient pas le feu mais
 l'entretenaient et se le transmettaient : le geste exact d'une reprise, et un
 registre thermique qui répond au métier. ⏳ Le nom reste **à acter par Paul**.
@@ -116,11 +117,12 @@ autres lignes du classement, et il aurait été **cru**. La ligne du tableau por
 donc « à instruire » et aucun rang. C'est la règle du registre appliquée à
 lui-même : *une preuve fausse coûte plus cher qu'une preuve absente.*
 
-⏳ **Deux choses attendent Paul**, et elles conditionnent la suite : acter le nom,
-et dire si le « Julien » partenaire de PROTÉE est le même Julien Ramsé — auquel
-cas ADR-002 et ADR-010 se lisent comme un seul dossier. Trois zones dictées
-restent marquées ⚠️ dans la fiche, non déduites : les deux orthographes, et le
-segment « en tout temps France », consigné mot pour mot comme l'avait été
+✅ **Paul a tranché dans la foulée : le « Julien » de PROTÉE est Julien Laudy.**
+ADR-002 et ADR-010 se lisent donc comme un seul dossier à deux voies (bâtir /
+acheter), chaque fiche gardant son score et ses risques propres. ⏳ **Reste à
+acter le nom VESTA.** Trois zones dictées
+restent marquées ⚠️ dans la fiche, non déduites : l'orthographe et le rôle de
+Fahrenheit, et le segment « en tout temps France », consigné mot pour mot comme l'avait été
 « avec mon dpe.fr » pour VITRUVE.
 
 ✅ **Les deux dettes de la passe sont soldées dans ce commit.**
