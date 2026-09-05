@@ -4,84 +4,6 @@
     {
       "ok": true,
       "motif": "",
-      "depot": "PaulGERARD161098/Ultima-",
-      "grain": {
-        "projet": "Ultima",
-        "depot": "PaulGERARD161098/Ultima-",
-        "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-        "rattache_a": "REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md",
-        "etat": "en_cours",
-        "jalon": {
-          "nom": "J3 — le ciel porte aussi l'état PERSONNEL (P4 : les signaux du cockpit)",
-          "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
-        },
-        "dernier_arret": {
-          "le": "2026-09-05",
-          "quoi": "ADR-010 VESTA et la table de marche sont mergées (#192). Étapes 1-4 exécutées sur GO de Paul : 5 PR fusionnées, #349 fermé sur mesure, 19 contrôles rejoués en base. Détail…",
-          "commit": "e4a53daa8afdc97c281ba1e6a6f4ddae4cb1c070"
-        },
-        "prochaine_action": "Faire acter le nom VESTA par Paul. (Julien = celui de PROTÉE : confirmé le 05/09, ADR-002 et ADR-010 sont un seul dossier à deux voies.)",
-        "bloque_par": [
-          "`ANTHROPIC_API_KEY` en env Vercel — la voix est CONSTRUITE partout, elle répond 503 tant que la clé n'est pas posée",
-          "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
-          "Les advisors Supabase post-DDL",
-          "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
-        ],
-        "en_attente_depuis": "2026-08-20",
-        "boucles_ouvertes": [
-          {
-            "quoi": "Table de marche de la semaine : étapes 1-3 faites, 4 faite. Reste l'étape 1 (16 branches, refusée en 403 depuis une session) — cf. PLAN-2026-09-05-boucler-la-semaine.md §3 bis",
-            "depuis": "2026-09-05"
-          },
-          {
-            "quoi": "VESTA (ADR-010) hors classement : nom à acter, rôle de Fahrenheit à confirmer, 3 questions à poser. Julien = Julien Laudy, celui de PROTÉE. Détail : adramelech/IDEES.md",
-            "depuis": "2026-09-05"
-          },
-          {
-            "quoi": "P4 est cadré et volontairement NON ouvert : les signaux du cockpit sur le même ciel que ceux de Finubar. Arbitré par Paul le 02/09 — après P3, jamais avant",
-            "depuis": "2026-09-02"
-          },
-          {
-            "quoi": "Trois dépôts (mon-dpe.fr, artisan-builder, ripair) n'ont pas d'accroche vérifiée et tombent sous ALPHA par défaut. Leur place se tranchera quand ils seront lus",
-            "depuis": "2026-09-02"
-          },
-          {
-            "quoi": "Les huit coques de navigation restent des PORTES et non le chemin. Les garder, les réduire ou les retirer n'est pas tranché — à voir quand l'isolement aura vécu",
-            "depuis": "2026-08-28"
-          },
-          {
-            "quoi": "Angle mort connu du patrimoine : les pages AUTHENTIFIÉES ne sont pas couvertes par les harnais (fixture de session à financer)",
-            "depuis": "2026-08-20"
-          },
-          {
-            "quoi": "Faire entrer les projets dans le ciel : cadré le 02/09, maquette éprouvée, en attente du go. `versConstellation()` reste écrite et branchée nulle part",
-            "depuis": "2026-08-21"
-          },
-          {
-            "quoi": "Le top départ de LV6 reste attendu — le cadrage est déposé, l'exécution gelée",
-            "depuis": "2026-08-20"
-          }
-        ],
-        "maj": "2026-09-05"
-      },
-      "recits": [
-        "dernier_arret.quoi"
-      ],
-      "ciel": "racine",
-      "hors_seance": false,
-      "derive": {
-        "tete": "dd3e57a",
-        "tete_le": "2026-09-05T15:24:57+02:00",
-        "commits_depuis": 1,
-        "commit_inconnu": false
-      },
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 16,
-      "rang": 0
-    },
-    {
-      "ok": true,
-      "motif": "",
       "depot": "PaulGERARD161098/RenoAgenda",
       "grain": {
         "projet": "RénoAgenda",
@@ -363,6 +285,82 @@
       "rang": 2
     },
     {
+      "ok": true,
+      "motif": "",
+      "depot": "PaulGERARD161098/Ultima-",
+      "grain": {
+        "projet": "Ultima",
+        "depot": "PaulGERARD161098/Ultima-",
+        "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
+        "rattache_a": "REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md",
+        "etat": "en_cours",
+        "jalon": {
+          "nom": "J3 — le ciel porte aussi l'état PERSONNEL (P4 : les signaux du cockpit)",
+          "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
+        },
+        "dernier_arret": {
+          "le": "2026-09-05",
+          "quoi": "Séance du 05/09 close : ADR-010 VESTA capturée, la semaine bouclée — 6 PR fusionnées, E1 corrigé sur mesure puis éprouvé. Détail : PLAN-2026-09-05-boucler-la-semaine.md",
+          "commit": "dd3e57a"
+        },
+        "prochaine_action": "Faire acter le nom VESTA par Paul. (Julien = celui de PROTÉE : confirmé le 05/09, ADR-002 et ADR-010 sont un seul dossier à deux voies.)",
+        "bloque_par": [
+          "`ANTHROPIC_API_KEY` en env Vercel — la voix est CONSTRUITE partout, elle répond 503 tant que la clé n'est pas posée",
+          "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
+          "Les advisors Supabase post-DDL",
+          "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
+        ],
+        "en_attente_depuis": "2026-08-20",
+        "boucles_ouvertes": [
+          {
+            "quoi": "Table de marche de la semaine : étapes 1-3 faites, 4 faite. Reste l'étape 1 (16 branches, refusée en 403 depuis une session) — cf. PLAN-2026-09-05-boucler-la-semaine.md §3 bis",
+            "depuis": "2026-09-05"
+          },
+          {
+            "quoi": "VESTA (ADR-010) hors classement : nom à acter, rôle de Fahrenheit à confirmer, 3 questions à poser. Julien = Julien Laudy, celui de PROTÉE. Détail : adramelech/IDEES.md",
+            "depuis": "2026-09-05"
+          },
+          {
+            "quoi": "P4 est cadré et volontairement NON ouvert : les signaux du cockpit sur le même ciel que ceux de Finubar. Arbitré par Paul le 02/09 — après P3, jamais avant",
+            "depuis": "2026-09-02"
+          },
+          {
+            "quoi": "Trois dépôts (mon-dpe.fr, artisan-builder, ripair) n'ont pas d'accroche vérifiée et tombent sous ALPHA par défaut. Leur place se tranchera quand ils seront lus",
+            "depuis": "2026-09-02"
+          },
+          {
+            "quoi": "Les huit coques de navigation restent des PORTES et non le chemin. Les garder, les réduire ou les retirer n'est pas tranché — à voir quand l'isolement aura vécu",
+            "depuis": "2026-08-28"
+          },
+          {
+            "quoi": "Angle mort connu du patrimoine : les pages AUTHENTIFIÉES ne sont pas couvertes par les harnais (fixture de session à financer)",
+            "depuis": "2026-08-20"
+          },
+          {
+            "quoi": "Faire entrer les projets dans le ciel : cadré le 02/09, maquette éprouvée, en attente du go. `versConstellation()` reste écrite et branchée nulle part",
+            "depuis": "2026-08-21"
+          },
+          {
+            "quoi": "Le top départ de LV6 reste attendu — le cadrage est déposé, l'exécution gelée",
+            "depuis": "2026-08-20"
+          }
+        ],
+        "maj": "2026-09-05"
+      },
+      "recits": [],
+      "ciel": "racine",
+      "hors_seance": false,
+      "derive": {
+        "tete": null,
+        "tete_le": null,
+        "commits_depuis": 0,
+        "commit_inconnu": false
+      },
+      "jours_depuis_maj": 0,
+      "jours_en_attente": 16,
+      "rang": 2
+    },
+    {
       "ok": false,
       "hors_seance": true,
       "motif": "dépôt non attaché à cette séance",
@@ -407,26 +405,10 @@
     "en_cours": 2,
     "en_attente_de_paul": 3,
     "au_repos": 0,
-    "derives": 1,
+    "derives": 0,
     "commits_inconnus": 0,
     "boucles_ouvertes": 33,
     "gestes_de_paul": [
-      {
-        "projet": "Ultima",
-        "geste": "`ANTHROPIC_API_KEY` en env Vercel — la voix est CONSTRUITE partout, elle répond 503 tant que la clé n'est pas posée"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "Les advisors Supabase post-DDL"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
-      },
       {
         "projet": "RénoAgenda",
         "geste": "Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux"
@@ -470,16 +452,27 @@
       {
         "projet": "RénoDevis",
         "geste": "Embarquement Stripe de SOLA : le compte de TEST existe depuis le 19/08 mais n'encaisse pas encore. Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "`ANTHROPIC_API_KEY` en env Vercel — la voix est CONSTRUITE partout, elle répond 503 tant que la clé n'est pas posée"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "Les advisors Supabase post-DDL"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
       }
     ]
   },
   "cartouche": {
     "signaux": [
-      {
-        "projet": "Ultima",
-        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
-        "pourquoi": "derive"
-      },
       {
         "projet": "RénoAgenda",
         "dit": "attend un geste : Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux — ouvert depuis 52 j",
@@ -489,26 +482,24 @@
         "projet": "RénoPredict",
         "dit": "attend un geste : Générer et imprimer un lot de stickers QR — `stickers` = 0 depuis le 11/08. Le piège de l'URL est refermé le 01/09 : il ne reste que le geste physique — ouvert depuis 32 j",
         "pourquoi": "attente"
+      },
+      {
+        "projet": "RénoBoost",
+        "dit": "attend un geste : Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08 — ouvert depuis 32 j",
+        "pourquoi": "attente"
       }
     ],
     "action": {
-      "projet": "Ultima",
-      "nature": "code",
-      "faire": "Faire acter le nom VESTA par Paul. (Julien = celui de PROTÉE : confirmé le 05/09, ADR-002 et ADR-010 sont un seul dossier à deux voies.)",
-      "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima."
+      "projet": "RénoAgenda",
+      "nature": "geste",
+      "faire": "Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux",
+      "cap": "Marketplace particuliers ↔ artisans RGE : la demande arrive, se qualifie et se dispatche toute seule."
     },
     "illisibles": 0,
     "hors_seance": 3
   },
   "constellation": {
     "noeuds": [
-      {
-        "id": "PaulGERARD161098/Ultima-",
-        "libelle": "Ultima",
-        "constellation": "en_cours",
-        "ciel": "racine",
-        "signal": 1
-      },
       {
         "id": "PaulGERARD161098/RenoAgenda",
         "libelle": "RénoAgenda",
@@ -535,6 +526,13 @@
         "libelle": "RénoDevis",
         "constellation": "en_cours",
         "ciel": "renoboost-ia",
+        "signal": 0
+      },
+      {
+        "id": "PaulGERARD161098/Ultima-",
+        "libelle": "Ultima",
+        "constellation": "en_cours",
+        "ciel": "racine",
         "signal": 0
       }
     ],
