@@ -21,13 +21,14 @@ saisit pas** (Directive IA). Le jalon qui compte n'est pas technique :
 
 ## 2. Ce que la séance a fermé
 
-**10 PR fusionnées · 1 fermée sur constat · 5 grains recalés · 13 champs de
-grain condensés · 0 PR ouverte à la clôture.**
+**14 PR fusionnées · 1 fermée sur constat · 7 grains recalés · 13 champs de
+grain condensés · 1 PR laissée ouverte, à toi (RenoAgenda #71).**
 
 | | |
 |---|---|
 | **Le seul code livré** | **E1** — `db.js` ne recopie plus dans `kv_store` la donnée d'un autre compte. Corrigé **deux fois**, éprouvé sur les 23 lignes réelles |
-| Fusions | RenoDevis #127 #128 #129 #130 · RenoAgenda #68 #69 #70 · RenoBoost #348 #351 #352 #353 · Ultima #192 #193 #194 #195 |
+| Fusions | RenoDevis #127 #128 #129 #130 · RenoAgenda #68 #69 #70 · RenoBoost #348 #351 #352 #353 #354 #356 · Ultima #192 #193 #194 #195 #196 #197 |
+| **Le lot forme** | **RenoBoost #354** — le hero passe de la nuit au papier. 23 `rgba(255,255,255,…)` en dur deviennent des tokens `--hero-*`, et `tests/hero-contraste.test.mjs` **calcule** le contraste au lieu de le regarder |
 | Fermée sans fusion | RenoBoost #349 — contenu déjà sur `main`, **mesuré** (diff vide après réconciliation) |
 | Capture | **ADR-010 VESTA** — la reprise de Fahrenheit, avec Julien Laudy |
 
@@ -44,6 +45,17 @@ Une note fausse coûte plus cher qu'une note absente : on la croit.
 4. **Mon propre correctif E1** poussait la liste filtrée : sur les données
    réelles, il aurait **écrasé 109 fiches par 11**, et le pull suivant aurait
    ramené la perte en local.
+
+⚠️ **Et deux dérives de grain, trouvées le soir par le garde-fou lui-même.**
+Ultima après le squash de #196, RénoBoost après celui de #354 — dans les deux
+cas `dernier_arret.commit` pointait sur un commit que le squash avait remplacé.
+Aucune n'a été vue en relisant : c'est `collecter.mjs` qui les a criées. Le
+recalage d'un grain ne recrée pas de dérive, les quatre fichiers de Finubar
+étant exclus du décompte (vérifié dans le code, pas sur la foi du journal).
+
+⛔ **La règle qui saute le plus souvent** : *toute séance qui modifie un dépôt
+met son `FINUBAR.md` à jour DANS le commit du travail*. Trois séances l'ont
+oubliée aujourd'hui, dont la mienne.
 
 ---
 
@@ -73,6 +85,7 @@ sont-elles là, et les 4 comptes sont-ils tous à Paul ?*
 | **17/08** | **Stripe en Live + KYC de SOLA** | le premier euro. Rien d'autre ne le remplace |
 | 01/09 | **Un devis SOLA réel** (le gainable) + le **logo** | le catalogue consommables · l'identité du devis |
 | 03/09 | **V0** — calculer UN audit PAC sur UN dossier réel | V1, V2, D4 — et **dégèle L3/L4** |
+| **05/09** | **La source de `-6h`, `<24h`, `+25%`** et du « 60+ professionnels » déjà en ligne | le lot **COPY** de la landing (tes arbitrages A5/A6). Sans elle, rien ne se publie |
 
 ### 🟠 Ce qui remplit le système tout seul
 

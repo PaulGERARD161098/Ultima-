@@ -127,8 +127,8 @@
         },
         "dernier_arret": {
           "le": "2026-09-05",
-          "quoi": "05/09 : le mail unique éprouvé de bout en bout, le radar BTP mergé (#346), le cadrage du site aussi (#348). Détail : REPRISE-2026-09-03-boucles-ete.md",
-          "commit": "b6158f1"
+          "quoi": "05/09 au soir : cadrage landing + lot forme mergés (#354) — le hero passe de la nuit au papier, contraste CALCULÉ par tests/hero-contraste.test.mjs",
+          "commit": "324d618"
         },
         "prochaine_action": "Les 3 gestes du jalon 0 : stickers, fiche Google, Stripe Live. Puis les 2 garde-fous et le 401 GHL — cf. REPRISE-2026-09-03-boucles-ete.md",
         "bloque_par": [
@@ -288,8 +288,8 @@
         },
         "dernier_arret": {
           "le": "2026-09-05",
-          "quoi": "Semaine bouclée en une séance : 10 PR fusionnées, 1 fermée sur constat, 4 notes fausses corrigées, E1 livré. Détail : REPRISE-2026-09-05-apres-la-semaine.md",
-          "commit": "f20eb24"
+          "quoi": "Semaine bouclée : 14 PR fusionnées, 4 notes fausses et 2 dérives de grain corrigées, E1 livré. Détail : REPRISE-2026-09-05-apres-la-semaine.md",
+          "commit": "01e6c4b"
         },
         "prochaine_action": "Ouvrir REPRISE-2026-09-05-apres-la-semaine.md §5 : la mesure d'abord (collecter.mjs + les 4 jalons en SQL), jamais la lecture du doc.",
         "bloque_par": [
