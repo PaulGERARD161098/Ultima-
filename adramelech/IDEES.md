@@ -38,6 +38,7 @@
 | 4 | PROTÉE (ADR-002) | 6,3/10 | montée en puissance | Extension disciplinée du socle |
 | 5 | GLANEUR (ADR-001) | 5,0/10 | satellite | Hors top — retenir le *service* (débarras chantier), ajourner l'*entreprise* |
 | 6 | VERTUMNE (ADR-007) | 4,9/10 | structure-cadre | Hors course build — l'**enveloppe souple qui *contient* le socle** ; build différé derrière lui (cf. ADR-007 bloc F) |
+| — | **VESTA** (ADR-010) | **à instruire** | multiplicateur par acquisition [prov.] | **Non classée** — capturée le 2026-09-05, grille non passée : le prix et les comptes n'existent pas encore (cf. ADR-010 §Analyse) |
 
 > Mise à jour 2026-07-20 : CHAMBRE CLAIRE scorée **6,9** s'intercale au rang 3.
 > Le moteur système s'enrichit : **CHAMBRE CLAIRE conclut la vente** →
@@ -62,6 +63,32 @@
 > lancement d'entreprise sur **NICOL BOLAS** (bloc G), à cadrer en boucle propre
 > du quadrant financier. La séquence de build reste **INTENDANT → MYCÉLIUM →
 > PROTÉE bridée**, inchangée.
+
+> Mise à jour 2026-09-05 : **VESTA (ADR-010)** capturée — la **reprise d'une
+> société existante** de climatisation / ventilation / travaux tous corps d'état
+> (discussion avec **Julien Laudy** — mentor des affaires de Paul, pro DOKLÈS —
+> autour de la société Fahrenheit ; orthographe et rôle exact de Fahrenheit ⚠️ à
+> confirmer). Elle entre au tableau **sans rang et sans score**, et le refus
+> de la scorer est motivé : sur une reprise, le prix, les comptes, l'effectif et
+> la part de récurrent **existent réellement chez le vendeur** — ils se demandent,
+> ils ne se posent pas en [hyp.]. Un score fabriqué sur ce vide aurait l'exacte
+> apparence des six autres, et serait cru.
+> Ce qui est acquis, c'est sa **nature** : VESTA n'est pas une idée de plus, c'est
+> **la voie d'exécution alternative de PROTÉE (ADR-002)** — même destination
+> (l'entreprise flexible clim/PAC), moyen opposé : **acheter au lieu de bâtir**.
+> Elle gagne le Temps (l'entreprise, ses équipes, ses agréments et son parc
+> existent) et perd le capex (une reprise se paie d'avance) — deux mouvements
+> contraires sur la pondération Temps ×2 / Rémunérateur ×2, donc **un score qui
+> ne se devine pas**. Structurellement elle tient dans **VERTUMNE (ADR-007)** :
+> un premier métier *acquis* logé dans l'enveloppe-cadre, ce qui donne au
+> simulateur NICOL BOLAS d'ADR-007 (bloc G) une **seconde entrée : reprendre**,
+> à côté de créer. ✅ **Confirmé par Paul le 2026-09-05 : le « Julien » partenaire
+> de PROTÉE EST Julien Laudy.** ADR-002 et ADR-010 sont donc **un seul dossier à
+> deux voies** — bâtir (PROTÉE) ou acheter (VESTA) — discuté avec le même
+> interlocuteur ; elles se lisent ensemble et s'arbitrent l'une contre l'autre.
+> ⏳ **Reste une décision attendue de Paul** : acter (ou non) le nom **VESTA**.
+> La séquence de build reste **INTENDANT → MYCÉLIUM → PROTÉE bridée**, inchangée :
+> rien n'est engagé sur VESTA.
 
 **Lecture système (l'essentiel).** Ce ne sont pas 4 paris indépendants mais **un
 moteur qui se renforce** : **PROTÉE** industrialise le socle → **INTENDANT**
@@ -1553,3 +1580,266 @@ nom du client dans le payload sortant et exige de **ne pas les y trouver**.
 > aucun catalogue à structurer, données publiques gratuites) et un
 > **Rémunérateur potentiellement supérieur** (il ne dérisque pas une vente, il
 > en ajoute).
+
+---
+
+## ADR-010 — VESTA
+
+*Nom : Vesta, déesse romaine du foyer, dont le feu public ne devait jamais
+s'éteindre — les Vestales ne l'allumaient pas, elles l'entretenaient et se le
+transmettaient. C'est exactement le geste d'une reprise : on n'allume pas
+l'entreprise, on **reprend un feu déjà brûlant** (clientèle, équipes, agréments,
+parc installé) et toute la difficulté est de ne pas le laisser mourir au moment
+du passage de main. Le registre thermique répond de surcroît au métier — clim,
+ventilation — et au nom même de la société pressentie.*
+⏳ **Nom à acter par Paul** — proposé, non validé ; il n'entre au registre qu'à
+son go (comme VITRUVE le 2026-08-20).
+
+- **Capturée le** : 2026-09-05 (dictée vocale de Paul)
+- **Type** : business (croissance externe — reprise d'une société existante,
+  par opposition à la création de zéro)
+- **Thème** : bâtiment · CVC (climatisation · ventilation) · reprise &
+  transmission d'entreprise · croissance externe
+- **Partenaire envisagé** : **Julien Laudy** — le mentor des affaires de Paul
+  (c'est le « JL » de la directive JL), et **client-pro DOKLÈS** sur RénoBoost
+  (`julien-laudy`, cf. `RenoBoost/CADRAGE-2026-08-19-passerelle-pro-artisan.md`).
+  C'est une **discussion en cours**, pas un dossier abouti ni une intention de
+  vendre formalisée
+- **Statut** : à raffiner (capture cadrée ; analyse stratégique **non passée** —
+  voir §Analyse : les données chiffrées manquent toutes)
+
+### L'idée
+
+**Reprendre une société existante** plutôt que d'en monter une : une entreprise
+déjà installée, spécialisée en **climatisation, ventilation et travaux de
+manière générale** (tous corps d'état). La piste est née d'une **discussion avec
+Julien Laudy**, autour de la société **Fahrenheit**.
+
+> ✍️ **Correction de Paul, le jour même.** La dictée disait « discussion avec
+> Julien Ramsé de Fahrenheit ». Paul a corrigé : *« Julien, c'est Julien LAUDY,
+> mon mentor des affaires, qui est aussi mon client chez DOKLES »*. « Ramsé » est
+> donc une déformation vocale (consignée au lexique), pas un nom de famille. Ce
+> que cette correction laisse OUVERT : le **rôle exact de Fahrenheit** — la
+> société **à reprendre** (lecture la plus naturelle du « reprise d'une
+> société »), ou une société liée à Julien ? Non tranché, non déduit.
+
+Ce qui est dicté s'arrête là. Rien n'est connu du prix, des comptes, de
+l'effectif, du calendrier, ni même du fait que la société soit réellement à
+vendre : c'est une **conversation**, et la fiche la capture comme telle.
+
+#### Les trois zones à confirmer — aucune n'est déduite
+
+1. **⚠️ « Fahrenheit »** — orthographe et identité de la société **à confirmer**.
+   Le nom n'a été rapproché d'aucune entrée existante d'Ultima : aucune
+   occurrence dans `memoire/`, ni dans le registre. À vérifier auprès de Paul
+   (raison sociale exacte, SIREN) avant toute recherche externe.
+2. ✅ **« Julien Ramsé » → Julien LAUDY** — tranché par Paul (2026-09-05), deux
+   fois : c'est **Julien Laudy**, son mentor des affaires et client-pro DOKLÈS,
+   et c'est **le même Julien que le partenaire envisagé de PROTÉE (ADR-002)**.
+   ADR-002 et cette fiche décrivent donc **deux voies vers le même but**
+   discutées avec le même interlocuteur, et se lisent ensemble — voir §Liens,
+   pont PROTÉE. Ce qui reste ⚠️ : le **rôle de Fahrenheit** vis-à-vis de Julien
+   (voir l'encadré de correction ci-dessus).
+3. **⚠️ « en tout temps France »** — segment dicté **non résolu**, et
+   volontairement non interprété. Deux lectures possibles sans moyen de choisir :
+   une **zone d'intervention nationale**, ou un **fragment de la raison sociale**
+   entendu de travers. Consigné mot pour mot, comme « avec mon dpe.fr » l'a été
+   pour VITRUVE.
+
+### Enrichissement (ce qu'une reprise apporterait — et ce qu'elle coûterait)
+
+> ⛔ Aucun chiffre ici : le registre n'en porte aucun et il n'en sera pas
+> fabriqué. Ce bloc dit **quelles natures d'actif et de risque** une reprise de
+> société CVC met en jeu — c'est la carte de la due diligence, pas son résultat.
+
+#### Ce que ça apporterait au socle Renoboost IA
+
+- **Le carnet de clients installé** — c'est l'actif principal, et le seul que le
+  socle ne peut pas fabriquer vite. Renoboost IA acquiert ses clients un par un ;
+  une reprise en livre un stock d'un coup, avec l'historique des installations.
+- **Le parc d'équipements posés = du récurrent, directement exploitable.** Une
+  société de clim/ventilation laisse derrière elle un **parc à entretenir**
+  (contrats de maintenance, visites annuelles, obligations d'étanchéité des
+  fluides frigorigènes). C'est **exactement la matière de Ripair** (book de
+  contrats d'entretien, MRR) **et de Foresight** (relances prédictives par
+  équipement et par saison) dans RénoPredict. Une reprise remplit ces deux
+  services **sans acquisition client**, là où ils tournent aujourd'hui à vide
+  faute de portefeuille.
+- **Les équipes et leur compétence.** PROTÉE (ADR-002) pose la polyvalence des
+  équipes comme cœur du projet, et le pont **frigoriste ↔ PAC** comme le plus
+  court. Une société de clim **détient déjà les frigoristes** — la compétence la
+  plus longue à recruter et à former.
+- **Les agréments et qualifications.** Attestation de capacité fluides
+  frigorigènes, qualifications RGE (QualiPAC…), assurance décennale avec
+  antériorité : ce sont des **conditions d'accès aux aides** et elles se
+  reprennent avec la structure. C'est le verrou que PROTÉE devait franchir en
+  plusieurs saisons.
+- **L'antériorité elle-même** — références, ancienneté, historique bancaire :
+  ce qui fait qu'une entreprise obtient un chantier et un crédit.
+
+#### Ce que ça coûterait — les cinq risques propres à une reprise
+
+- **Le capex d'acquisition.** Une reprise se paie d'avance, contrairement à une
+  création qui se finance au fil de l'eau. C'est le poste qui la disqualifie ou
+  non, et il est **inconnu**.
+- **Le BFR repris avec la structure.** On n'achète pas qu'un fonds : on hérite
+  d'un cycle d'exploitation en cours (créances clients, encours de chantiers,
+  stock, dettes fournisseurs). Une société rentable peut être **exsangue en
+  trésorerie** le jour de la reprise.
+- **La masse salariale, qui n'est pas ajustable.** Les contrats de travail sont
+  transférés de plein droit ; on reprend l'effectif **tel quel**, avec son
+  ancienneté et ses accords. C'est la charge fixe la plus lourde et la moins
+  réversible d'une reprise.
+- **Le passif — et il dépend du montage.** Reprise des **titres** = on hérite du
+  passé (fiscal, social, prud'homal, sinistres décennaux déjà courus, y compris
+  ceux qui ne sont pas encore déclarés). Reprise du **fonds de commerce** = on
+  prend l'activité sans le passé, mais on perd les contrats et parfois les
+  qualifications attachées à la personne morale. **Ce choix commande le prix, la
+  garantie d'actif et de passif, et le risque entier du dossier.**
+- **La dépendance à l'homme-clé.** C'est le risque dominant d'une TPE/PME du
+  bâtiment : si la clientèle, les prescripteurs et la conduite de chantier
+  tiennent au dirigeant, **ce qu'on achète part avec lui**. Le carnet de clients
+  ne se transfère pas, il se **présente** — et cela prend des mois
+  d'accompagnement.
+
+### Classification — la case retenue
+
+- **Quadrant Ultima** : **ADRAMELECH** (bibliothèque d'idées) pour la capture,
+  avec deux ancrages : **RIVEN** (Julien Laudy est déjà du réseau — pro DOKLÈS
+  sur RénoBoost — et la société pressentie s'y rattache ; la relation se tient là) et **NICOL BOLAS** (une acquisition est d'abord un
+  acte financier : prix, financement, BFR, échéancier).
+- **Type** : **business** — croissance externe, pas outil interne.
+- **Thème d'archipel** : *bâtiment · CVC · reprise & transmission d'entreprise ·
+  croissance externe*. Le thème le rapproche naturellement de PROTÉE et de
+  VERTUMNE dans la carto.
+- **Rôle vs socle Renoboost IA** : **multiplicateur par acquisition**, et non
+  concurrent. VESTA ne propose pas un autre métier que le socle — elle propose
+  **d'acheter d'un coup ce que le socle construit lentement** (clients, équipes,
+  agréments, parc). Formulé autrement : **c'est la voie d'exécution accélérée de
+  PROTÉE (ADR-002)** — même destination, moyen opposé (acheter au lieu de bâtir).
+  Structurellement, elle **tient dans VERTUMNE (ADR-007)** : une société reprise
+  est un **premier métier acquis** logé dans l'enveloppe-cadre.
+- **Rang provisoire** : **non classée — score « à instruire »**. La grille des
+  7 blocs n'est **pas** passée (voir §Analyse). Si l'instruction confirme, elle
+  se lira **au voisinage de PROTÉE (rang 4)**, dont elle partage le Rémunérateur
+  et à qui elle prend un **Temps bien meilleur** (l'entreprise existe déjà) au
+  prix d'un **capex bien pire** (elle se paie d'avance). Ces deux mouvements
+  jouent en sens contraire sur la pondération actée (Temps ×2, Rémunérateur ×2) :
+  **le score ne se devine pas, il se calcule sur le prix et les comptes.**
+
+### Liens inter-segments
+
+- **PROTÉE (ADR-002) — le pont le plus fort, et il est structurant.** PROTÉE
+  décrit *exactement* cette entreprise — clim quand il fait chaud, PAC quand il
+  fait froid, équipes polyvalentes, aides captées proprement — **montée de zéro**.
+  VESTA est la **même cible atteinte par rachat**. Les deux fiches ne sont donc
+  pas deux idées mais **deux voies vers un même but**, et elles s'arbitrent
+  l'une contre l'autre (bâtir vs acheter). ✅ **Même interlocuteur, confirmé par
+  Paul le 2026-09-05** : les deux fiches forment **un seul dossier**. Elles ne
+  sont PAS fusionnées en une entrée — chaque voie garde sa fiche, son score et
+  ses risques propres (PROTÉE 6,3/10 instruite ; VESTA à instruire) — mais toute
+  décision sur l'une se prend en regardant l'autre. ⚠️ Conséquence directe : les
+  paramètres [hyp.] de PROTÉE (ETP, formation, capex) ont désormais une **source
+  réelle** — l'entreprise de Julien — et se **demandent** au lieu de se supposer.
+- **VERTUMNE (ADR-007) — l'enveloppe, et le pont tient.** VERTUMNE a été tranchée
+  comme **structure-cadre souple qui contient le socle**, build différé. Une
+  société reprise est précisément le genre de métier qu'elle contient. Et VESTA
+  donne une **seconde branche au seul chantier court terme de VERTUMNE** : son
+  préalable de décision, le *simulateur de lancement d'entreprise sur NICOL
+  BOLAS* (ADR-007 bloc G), devient un simulateur à deux entrées — **créer** ou
+  **reprendre**. C'est le même outil, avec un jeu de paramètres de plus.
+- **INTENDANT (ADR-003) — pont réciproque, et c'est le plus immédiatement
+  rentable.** Une société reprise arrive avec ses équipes, son stock et ses
+  chantiers : c'est le **terrain d'adoption** que l'INTENDANT cherchait (son
+  risque n° 1 est de ne pas tenir la saisie ; une structure salariée l'impose là
+  où un indépendant l'oublie). Réciproquement, l'INTENDANT est un **levier de
+  marge post-reprise** : sur une société achetée, chaque manquant évité est de la
+  rentabilité gagnée sans un euro de plus.
+- **MYCÉLIUM (ADR-004) — le levier post-reprise le moins cher, et il tient.** Un
+  carnet de clients repris est un **gisement de propagation dormant** : des
+  chantiers déjà réussis, jamais exploités en recommandation. MYCÉLIUM se
+  déploie à capex ~0 sur une base qui existe déjà — c'est le premier geste à
+  faire le lendemain d'une reprise, et il ne coûte que de la discipline.
+- **VITRUVE (ADR-009) — pont réel, à un cran de distance.** Chaque client du
+  parc repris est une **visite déjà payée** où VITRUVE élargit le panier (lire le
+  bâtiment, prescrire au-delà de l'entretien venu faire). Réserve honnête : le
+  pont ne vaut que quand VITRUVE existe, et son build est hors Ultima, différé.
+- **RénoPredict (Ripair + Foresight) — hors registre ADRAMELECH, mais c'est le
+  pont le plus concret.** Le parc d'entretien récurrent repris **remplit
+  directement** le book de contrats (Ripair) et le moteur de relances
+  saisonnières (Foresight), tous deux prêts et sans portefeuille à faire tourner.
+- **HÉRAUT (ADR-006) — pont mineur mais net.** Une société CVC vit sous
+  qualifications et sous aides : la veille réglementaire sécurise la conformité
+  post-reprise (RGE, fluides frigorigènes) au lieu de la découvrir en retard.
+- **GLANEUR (ADR-001) — pont faible, signalé pour mémoire.** Les déposes d'un
+  parc clim ancien sont un gisement de matière ; anecdotique face au reste.
+
+### Ce qu'il faut demander à Julien Laudy (due diligence minimale)
+
+> Ces questions sont **l'instruction manquante** : tant qu'elles n'ont pas de
+> réponse, aucun score n'est calculable et aucune décision n'est possible.
+
+**Les trois décisives — dans cet ordre :**
+
+1. **Pourquoi vend-il, et que devient-il ensuite ?** Départ en retraite, lassitude,
+   difficulté, autre projet — le motif change tout. Et surtout : **reste-t-il, combien
+   de temps, et sous quelle forme** (accompagnement, salariat, tutorat) ? C'est la
+   question de l'homme-clé : si la clientèle et les prescripteurs tiennent à lui, ce
+   qu'on achète part avec lui le jour de la signature.
+2. **Que vend-il exactement : les titres, ou le fonds de commerce ?** Les titres
+   emportent le passé (fiscal, social, prud'homal, décennal) et gardent les contrats
+   et les qualifications ; le fonds prend l'activité sans le passé, mais peut faire
+   tomber contrats et agréments. **Ce seul choix commande le prix, la garantie
+   d'actif et de passif, et la nature entière du risque.**
+3. **De quoi vit réellement l'entreprise : quelle part de récurrent (contrats
+   d'entretien, maintenance du parc) contre chantier ponctuel, et quelle
+   concentration de clients ?** C'est ce qui distingue un **fonds de commerce**
+   (revenu qui survit à la reprise) d'un **carnet de commandes** (revenu qui
+   s'éteint avec le vendeur) — et c'est aussi ce qui dit si le parc alimente
+   vraiment Ripair et Foresight.
+
+**Les questions de second rang, à poser une fois les trois premières répondues :**
+
+- **Comptes** : les trois derniers exercices (bilans + comptes de résultat),
+  la trésorerie et l'endettement réels à date, le carnet de commandes signé.
+- **Prix et montage** : le prix demandé et sa méthode, ce qui est finançable, le
+  recours éventuel à un crédit-vendeur ou à un earn-out (qui aligne le vendeur
+  sur la survie du carnet de clients — c'est aussi une réponse à la question 1).
+- **Hommes** : effectif, ancienneté, contrats, qui détient les qualifications
+  nominatives, qui conduit les chantiers, qui parle aux clients.
+- **Qualifications et assurances** : attestation fluides frigorigènes, RGE et
+  échéances, décennale — **et leur transférabilité selon le montage retenu**.
+- **Passif et engagements** : litiges en cours, sinistres décennaux, redressements,
+  baux, crédits-bails véhicules et outillage, engagements de garantie clients.
+- **Clients** : concentration (le poids des trois premiers), part de marché public
+  ou de sous-traitance, contrats-cadres et leurs clauses de changement de contrôle.
+
+**Prochaines actions concrètes**
+
+1. **Faire confirmer par Paul ce qui reste marqué ⚠️** — l'orthographe de
+   « Fahrenheit », son rôle exact (société à reprendre ?), et « en tout temps
+   France ». ✅ L'identité de Julien est tranchée (2026-09-05) : Julien Laudy,
+   celui de PROTÉE.
+2. **Poser les trois questions décisives** lors du prochain échange avec Julien
+   Laudy (aucun chiffre n'est nécessaire pour cela — ce sont des questions de
+   nature, pas de valorisation).
+3. **Ne rien instruire de plus avant leurs réponses** (directive EB) : la fiche
+   dort ici, complète, comme JANUS et VITRUVE. Elle n'entre ni au classement ni
+   dans une séquence de build.
+
+### Analyse stratégique
+
+> **Non passée — et c'est un refus motivé, pas un oubli.** La grille des 7 blocs
+> (`CADRAGE-ADRAMELECH.md` §8) exige au bloc C un business model chiffré et au
+> bloc E un score sur *Simple · Efficace · Rémunérateur · Utile · Temps* avec
+> pondération Temps ×2 et Rémunérateur ×2. Or **tout le chiffre manque** : prix,
+> comptes, effectif, part de récurrent, trésorerie. Sur une **reprise**, ces
+> valeurs ne sont pas des hypothèses raisonnables à poser — elles **existent
+> réellement chez le vendeur** et se demandent. Fabriquer une fourchette [hyp.]
+> ici produirait un score d'apparence sérieuse sur du vide, et il serait
+> **cru** — c'est précisément le mode de défaillance que le registre s'interdit.
+>
+> **Score : à instruire.** La grille se passe le jour où les trois questions
+> décisives ont leurs réponses. D'ici là, ce qui est acquis est **la nature de
+> l'idée** (multiplicateur par acquisition, voie alternative de PROTÉE, contenue
+> par VERTUMNE) — pas son rang.
