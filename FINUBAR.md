@@ -45,6 +45,10 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
+      "quoi": "Table de marche de la semaine (PLAN-2026-09-05-boucler-la-semaine.md) : 8 étapes, 4 fusions + 12 branches mortes + 1 grain RenoBoost à réconcilier, puis les 8 gestes Paul et le bloc de décisions. Étapes 1-3 attendent un GO",
+      "depuis": "2026-09-05"
+    },
+    {
       "quoi": "VESTA (ADR-010) dort hors classement : nom à acter, orthographe et rôle de Fahrenheit, « en tout temps France » non résolu, et les 3 questions décisives sans réponse. Julien = Julien Laudy, celui de PROTÉE (confirmé 05/09)",
       "depuis": "2026-09-05"
     },
@@ -84,6 +88,25 @@
 > Les séances, de la plus récente à la plus ancienne. Une entrée = une date, un
 > fait vérifié, une décision. La mémoire longue ; le bloc ci-dessus est la mémoire
 > courte, et c'est lui qui est lu automatiquement.
+
+### 2026-09-05 (suite) — la semaine est inventoriée, et elle se ferme dans une seule séance
+
+Paul : *« beaucoup de sessions ouvertes sur ces mêmes repos… tout compiler pour
+avancer dans une seule session, étape par étape, ne rien perdre, boucler tout
+ce qui a été lancé depuis lundi »*. Inventaire fait **aux sources** (13 séances
+depuis le 31/08, PR ouvertes des 8 dépôts, diff réel de chaque branche vivante,
+grain JSON des 5 dépôts) et compilé dans
+**`PLAN-2026-09-05-boucler-la-semaine.md`** — une table de marche qui indexe
+les roadmaps, elle ne les recopie pas.
+
+Ce que l'inventaire a établi : **5 PR ouvertes nées cette semaine** (#127, #68,
+#348, #349, #192 — plus #15 sur artisan-builder dont la séance tourne encore),
+**12 branches mortes** dont le contenu est prouvé sur main, **un grain RenoBoost
+plus récent sur sa branche que sur main** (#349, à concaténer avec celui du
+radar #346 — mergé par Paul à 11:48 pendant l'inventaire), et **8 gestes qui
+n'attendent que Paul**, dont trois ouverts depuis août. Trois POV posés
+(adversaire, mainteneur, mentor), pre-mortem à six risques. Étapes 1 à 3
+gatées : GO de Paul.
 
 ### 2026-09-05 — ADRAMELECH capture une reprise d'entreprise, et refuse de la scorer
 
