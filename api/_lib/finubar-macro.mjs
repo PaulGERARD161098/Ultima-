@@ -132,8 +132,8 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-09-05",
-          "quoi": "05/09 au soir : cadrage landing + lot forme mergés (#354) — le hero passe de la nuit au papier, contraste CALCULÉ par tests/hero-contraste.test.mjs",
-          "commit": "324d618"
+          "quoi": "05/09 au soir : cadrage landing + lot forme (#354), puis #355 qui répare le titre de .methode — un aplat ne pardonne pas les fonds qu'on n'a pas ouverts",
+          "commit": "da8c5f9"
         },
         "prochaine_action": "Les 3 gestes du jalon 0 : stickers, fiche Google, Stripe Live. Puis les 2 garde-fous et le 401 GHL — cf. REPRISE-2026-09-03-boucles-ete.md",
         "bloque_par": [
