@@ -17,10 +17,10 @@
         },
         "dernier_arret": {
           "le": "2026-09-04",
-          "quoi": "RénoRDV — montage D « la ligne RDV » (§3ter) : second numéro dédié par artisan, appelé par les clients, toujours suivi d'un SMS du même numéro. Retire le risque n°1 (renvoi…",
+          "quoi": "RénoRDV — montage D « la ligne RDV » retenu : 2e numéro par artisan, SMS du même numéro. J0 réécrit 100 % Twilio, aucun code. CADRAGE-2026-09-03-rdv-omnicanal.md",
           "commit": "df7af5d12deed7319aecd0e9add3897106d10ed7"
         },
-        "prochaine_action": "J0 par Paul (§17, réécrit le 04/09) : compte Twilio, numéro FR avec Voice+SMS, Studio Flow renvoi→SMS, test en deux passes. Rapporter : SMS reçu ?, depuis quel expéditeur ?, quel…",
+        "prochaine_action": "J0 par Paul : compte Twilio, numéro FR voix+SMS, Studio Flow renvoi→SMS, test en 2 passes. Détail : CADRAGE-2026-09-03-rdv-omnicanal.md §17",
         "bloque_par": [
           "Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux",
           "Mentions légales : des `[À compléter]` sont visibles ; à lever AU PREMIER EURO ENCAISSÉ, pas à une date",
@@ -29,7 +29,7 @@
         "en_attente_depuis": "2026-07-15",
         "boucles_ouvertes": [
           {
-            "quoi": "RénoRDV — P0 non fait : prouver le SMS sur appel manqué (Twilio) sur UN artisan, à la main, avant tout dev. Bloqué par 2 gestes de Paul : compte Twilio + achat d'un numéro FR…",
+            "quoi": "RénoRDV — P0 non fait : prouver le SMS sur appel manqué sur UN artisan avant tout dev. Bloqué par 2 gestes de Paul (compte Twilio + numéro FR)",
             "depuis": "2026-09-03"
           },
           {
@@ -47,11 +47,7 @@
         ],
         "maj": "2026-09-03"
       },
-      "recits": [
-        "dernier_arret.quoi",
-        "prochaine_action",
-        "boucles_ouvertes[].quoi"
-      ],
+      "recits": [],
       "ciel": "renoboost-ia",
       "hors_seance": false,
       "derive": {
@@ -131,10 +127,10 @@
         },
         "dernier_arret": {
           "le": "2026-09-05",
-          "quoi": "Deux séances le 05/09. (a) Le dispositif du mail unique est éprouvé de bout en bout : la veille BTP est repartie (8 articles), 4 des 5 sources déposent réellement, la panne de…",
+          "quoi": "05/09 : le mail unique éprouvé de bout en bout, le radar BTP mergé (#346), le cadrage du site aussi (#348). Détail : REPRISE-2026-09-03-boucles-ete.md",
           "commit": "b6158f1"
         },
-        "prochaine_action": "Arbitrer les deux garde-fous proposés (interrupteur système en `sentinelle_etat` · `/api/digest` qui parle quand il se saute) et le 401 GHL sur les champs personnalisés. Puis les…",
+        "prochaine_action": "Les 3 gestes du jalon 0 : stickers, fiche Google, Stripe Live. Puis les 2 garde-fous et le 401 GHL — cf. REPRISE-2026-09-03-boucles-ete.md",
         "bloque_par": [
           "Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08",
           "Générer un lot de stickers QR puis l'imprimer (`stickers` = 0). L'URL des QR est corrigée à la source depuis le 01/09 : il ne reste que le geste physique",
@@ -144,11 +140,11 @@
         "en_attente_depuis": "2026-08-04",
         "boucles_ouvertes": [
           {
-            "quoi": "L'API GHL rend 401 sur les champs personnalisés à CHAQUE synchro (toutes les 15 min) depuis au moins le 03/09 : `ghl_custom_fields` reste vide. La synchro des contacts, elle…",
+            "quoi": "L'API GHL rend 401 sur les champs personnalisés à chaque synchro depuis le 03/09 : `ghl_custom_fields` vide. Les contacts passent — portée de jeton, pas panne",
             "depuis": "2026-09-05"
           },
           {
-            "quoi": "Radar de demande BTP : PR #346 MERGÉE le 05/09 (squash 1e074e5). Bouclé côté Léo. Attend Paul, 4 gestes sans code : CLIENT_ID/SECRET/REFRESH_TOKEN · retour sur le geste (variation…",
+            "quoi": "Radar BTP : code bouclé (#346 mergée). Attend Paul — 4 gestes sans code + le jeton Google Basic. Reprise : REPRISE-2026-09-04-radar.md",
             "depuis": "2026-09-03"
           },
           {
@@ -164,7 +160,7 @@
             "depuis": "2026-09-04"
           },
           {
-            "quoi": "E1 : cause fermée (#351 mergée). Dry run sur les 23 lignes réelles — 6 clés refusées, 242 items jamais recopiés, et la copie touche 3 entités, pas que les clients. Reste…",
+            "quoi": "E1 : cause fermée (#351), dry run passé sur les 23 lignes réelles. Reste le geste destructif : supprimer kv_store_snapshot_20260903 (GO de Paul)",
             "depuis": "2026-09-01"
           },
           {
@@ -186,11 +182,7 @@
         ],
         "maj": "2026-09-05"
       },
-      "recits": [
-        "dernier_arret.quoi",
-        "prochaine_action",
-        "boucles_ouvertes[].quoi"
-      ],
+      "recits": [],
       "ciel": "renoboost-ia",
       "hors_seance": false,
       "derive": {
@@ -219,10 +211,10 @@
         },
         "dernier_arret": {
           "le": "2026-09-03",
-          "quoi": "Deux séances dans la même journée. (1) Matrices SOLA : les 3 « écarts » étaient déjà corrigés dans le code, document remis d'aplomb (#125). (2) Lots A2 et B fusionnés (#122, #124…",
+          "quoi": "05/09 : matrices SOLA (#125), lots A2 et B fusionnés — l'audit se calcule sans prix, le relevé dimensionne la PAC. Détail : ROADMAP-2026-09-03-audit-pac.md",
           "commit": "da4b1fda4afefb9b0a7460321ef4cd2adc66be71"
         },
-        "prochaine_action": "Jalon V0 — Paul calcule UN audit sur UN dossier réel (0 audit calculé au 03/09 11:41 UTC). Il éprouve d'un coup le secret, le pont, l'écran, le dimensionnement et la feuille.…",
+        "prochaine_action": "Jalon V0 — Paul calcule UN audit sur UN dossier réel (0 au 03/09) : secret, pont, écran, dimensionnement, feuille d'un coup. ROADMAP-2026-09-03-audit-pac.md §7",
         "bloque_par": [
           "Embarquement Stripe de SOLA : le compte de TEST existe depuis le 19/08 mais n'encaisse pas encore. Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul"
         ],
@@ -237,15 +229,15 @@
             "depuis": "2026-09-01"
           },
           {
-            "quoi": "Le catalogue central ne porte AUCUN consommable : sur un gainable à 11 075 € HT ils pèsent 1 500 € et 11 lignes sur 18. Le déblocage est d'obtenir UN devis SOLA réel — celui du…",
+            "quoi": "Le catalogue central ne porte aucun consommable (11 lignes sur 18 d'un gainable). Débloqué par UN devis SOLA réel. Passé second derrière V0 le 03/09",
             "depuis": "2026-09-01"
           },
           {
-            "quoi": "⛔ La chaîne de bout en bout d'un dossier NÉ D'UN RELEVÉ n'a AUCUNE empreinte en base. L'unique `devis_events.reminded` porte sur RR-20260805-6053, créé le 05/08 — avant la fusion…",
+            "quoi": "⛔ La chaîne de bout en bout d'un dossier né d'un RELEVÉ n'a aucune empreinte en base. La preuve F6 du CLAUDE.md citait un devis inexistant",
             "depuis": "2026-09-03"
           },
           {
-            "quoi": "La coupure de la voie UUID est DÉBLOQUÉE : `devis encore signables par UUID` est tombé à 0 le 03/09. Le gate 4 dépôts est fait — seul RenoBoost/db.js:411 appelle sign_devis_public…",
+            "quoi": "Coupure de la voie UUID DÉBLOQUÉE : 0 devis signable par UUID depuis le 03/09, gate 4 dépôts fait. Reste à exécuter côté RenoBoost (db.js:411)",
             "depuis": "2026-09-03"
           },
           {
@@ -267,11 +259,7 @@
         ],
         "maj": "2026-09-03"
       },
-      "recits": [
-        "dernier_arret.quoi",
-        "prochaine_action",
-        "boucles_ouvertes[].quoi"
-      ],
+      "recits": [],
       "ciel": "renoboost-ia",
       "hors_seance": false,
       "derive": {
@@ -300,10 +288,10 @@
         },
         "dernier_arret": {
           "le": "2026-09-05",
-          "quoi": "Séance du 05/09 close : ADR-010 VESTA capturée, la semaine bouclée — 6 PR fusionnées, E1 corrigé sur mesure puis éprouvé. Détail : PLAN-2026-09-05-boucler-la-semaine.md",
-          "commit": "dd3e57a"
+          "quoi": "Semaine bouclée en une séance : 10 PR fusionnées, 1 fermée sur constat, 4 notes fausses corrigées, E1 livré. Détail : REPRISE-2026-09-05-apres-la-semaine.md",
+          "commit": "1f2b286"
         },
-        "prochaine_action": "Faire acter le nom VESTA par Paul. (Julien = celui de PROTÉE : confirmé le 05/09, ADR-002 et ADR-010 sont un seul dossier à deux voies.)",
+        "prochaine_action": "Ouvrir REPRISE-2026-09-05-apres-la-semaine.md §5 : la mesure d'abord (collecter.mjs + les 4 jalons en SQL), jamais la lecture du doc.",
         "bloque_par": [
           "`ANTHROPIC_API_KEY` en env Vercel — la voix est CONSTRUITE partout, elle répond 503 tant que la clé n'est pas posée",
           "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
@@ -313,7 +301,7 @@
         "en_attente_depuis": "2026-08-20",
         "boucles_ouvertes": [
           {
-            "quoi": "Table de marche de la semaine : étapes 1-3 faites, 4 faite. Reste l'étape 1 (16 branches, refusée en 403 depuis une session) — cf. PLAN-2026-09-05-boucler-la-semaine.md §3 bis",
+            "quoi": "238 fiches d'autres comptes dans kv_store : E1 rend le cas inoffensif mais ne l'explique pas. Origine à trouver — REPRISE-2026-09-05-apres-la-semaine.md §3",
             "depuis": "2026-09-05"
           },
           {
