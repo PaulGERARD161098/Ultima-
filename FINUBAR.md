@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-05",
-    "quoi": "ADR-010 VESTA capturée dans ADRAMELECH : la reprise d'une société de clim/ventilation. Classée, ponts posés, score REFUSÉ faute de comptes — pas fabriqué en [hyp.].",
-    "commit": "b500a42"
+    "quoi": "ADR-010 VESTA capturée et MERGÉE (PR #192) avec la table de marche PLAN-2026-09-05-boucler-la-semaine.md. Étapes 1-3 lancées sur GO de Paul : 4 PR doc-only fusionnées (RenoDevis #127 #128, RenoAgenda #68, RenoBoost #348), grain RenoBoost #349 réconcilié puis FERMÉ (son contenu était déjà sur main, mesuré). ⛔ Les suppressions de branches sont REFUSÉES depuis une session (403 sur push --delete) : l'étape 1 reste à faire par Paul.",
+    "commit": "e4a53daa8afdc97c281ba1e6a6f4ddae4cb1c070"
   },
   "prochaine_action": "Faire acter le nom VESTA par Paul. (Julien = celui de PROTÉE : confirmé le 05/09, ADR-002 et ADR-010 sont un seul dossier à deux voies.)",
   "bloque_par": [
