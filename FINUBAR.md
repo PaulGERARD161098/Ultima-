@@ -31,11 +31,11 @@
     "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
   },
   "dernier_arret": {
-    "le": "2026-09-03",
-    "quoi": "Léo est disponible sur les 22 pages (bouton, session requise, quadrant déclaré par la page + repli `ultima`), et FINUBAR lui donne des yeux : comptes, ce qui appelle, la table de marche, les gestes qui attendent Paul — ni SHA, ni jeton, prouvé par l'absence. `naga` et `grima` rattachées à RIVEN sur arbitrage de Paul ; le bouton reste sur l'accueil.",
-    "commit": "32a816b"
+    "le": "2026-09-05",
+    "quoi": "ADR-010 VESTA capturée dans ADRAMELECH : la reprise d'une société de clim/ventilation. Classée, ponts posés, score REFUSÉ faute de comptes — pas fabriqué en [hyp.].",
+    "commit": "b500a42"
   },
-  "prochaine_action": "Poser `ANTHROPIC_API_KEY` (+ `LEO_MODELE=claude-opus-5`) en Production sur Vercel, puis redéployer : la voix s'allume sur les 22 pages d'un coup. Geste de Paul, payant.",
+  "prochaine_action": "Faire acter le nom VESTA par Paul, et lui demander si le « Julien » de PROTÉE (ADR-002) est le même Julien Ramsé — si oui, les deux fiches sont un seul dossier.",
   "bloque_par": [
     "`ANTHROPIC_API_KEY` en env Vercel — la voix est CONSTRUITE partout, elle répond 503 tant que la clé n'est pas posée",
     "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
@@ -44,6 +44,10 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "VESTA (ADR-010) dort hors classement : orthographes Fahrenheit / Julien Ramsé, « en tout temps France » non résolu, et les 3 questions décisives sans réponse",
+      "depuis": "2026-09-05"
+    },
     {
       "quoi": "P4 est cadré et volontairement NON ouvert : les signaux du cockpit sur le même ciel que ceux de Finubar. Arbitré par Paul le 02/09 — après P3, jamais avant",
       "depuis": "2026-09-02"
@@ -69,7 +73,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-09-03"
+  "maj": "2026-09-05"
 }
 ```
 
@@ -80,6 +84,57 @@
 > Les séances, de la plus récente à la plus ancienne. Une entrée = une date, un
 > fait vérifié, une décision. La mémoire longue ; le bloc ci-dessus est la mémoire
 > courte, et c'est lui qui est lu automatiquement.
+
+### 2026-09-05 — ADRAMELECH capture une reprise d'entreprise, et refuse de la scorer
+
+Dictée de Paul : la **reprise d'une société existante** de climatisation,
+ventilation et travaux tous corps d'état, née d'une discussion avec **Julien
+Ramsé**, société **Fahrenheit**. Capturée en **ADR-010**, nom de registre proposé
+**VESTA** — la déesse du foyer, dont les Vestales n'allumaient pas le feu mais
+l'entretenaient et se le transmettaient : le geste exact d'une reprise, et un
+registre thermique qui répond au métier. ⏳ Le nom reste **à acter par Paul**.
+
+**Ce qui a été classé** : quadrant ADRAMELECH (capture), ancrages RIVEN (la
+relation) et NICOL BOLAS (une acquisition est un acte financier) ; type business,
+croissance externe ; rôle **multiplicateur par acquisition** — VESTA ne
+concurrence pas Renoboost IA, elle **achète d'un coup ce que le socle construit
+lentement** (clients, équipes, agréments, parc à entretenir).
+
+**Le pont qui structure la fiche** : VESTA est **la voie d'exécution alternative
+de PROTÉE (ADR-002)** — même destination, moyen opposé, bâtir contre acheter. Et
+elle donne au simulateur NICOL BOLAS de VERTUMNE (ADR-007, bloc G) une **seconde
+entrée : reprendre**, à côté de créer. Le parc d'entretien repris tombe
+directement dans **Ripair et Foresight** (RénoPredict), qui tournent aujourd'hui
+sans portefeuille.
+
+⛔ **Et ce qui n'a PAS été fait, délibérément : la grille des 7 blocs.** Elle
+demande un business model chiffré et un score pondéré. Sur une **reprise**, le
+prix, les comptes, l'effectif et la part de récurrent ne sont pas des hypothèses
+raisonnables à poser — ils **existent réellement chez le vendeur** et se
+demandent. Un score fabriqué sur ce vide aurait eu l'exacte apparence des six
+autres lignes du classement, et il aurait été **cru**. La ligne du tableau porte
+donc « à instruire » et aucun rang. C'est la règle du registre appliquée à
+lui-même : *une preuve fausse coûte plus cher qu'une preuve absente.*
+
+⏳ **Deux choses attendent Paul**, et elles conditionnent la suite : acter le nom,
+et dire si le « Julien » partenaire de PROTÉE est le même Julien Ramsé — auquel
+cas ADR-002 et ADR-010 se lisent comme un seul dossier. Trois zones dictées
+restent marquées ⚠️ dans la fiche, non déduites : les deux orthographes, et le
+segment « en tout temps France », consigné mot pour mot comme l'avait été
+« avec mon dpe.fr » pour VITRUVE.
+
+✅ **Les deux dettes de la passe sont soldées dans ce commit.**
+`dernier_arret.commit` portait `32a816b`, que `git cat-file` déclare *Not a valid
+object name* — un orphelin du squash de la PR #190, donc une empreinte qui ne
+recalait plus rien. Remplacé par **`b500a42`**, tête réelle de `main` (PR #191),
+vérifiée ancêtre de la branche. ⏳ Recalage habituel à faire après le squash de
+cette PR, comme aux #181, #183, #186 et #188.
+Et **`carto-idees.html` a été régénérée** (`node adramelech/generer-carto.mjs`) :
+*10 idées, 5 archipels, 28 ponts* — VESTA prend place dans l'archipel **Bâtiment**
+avec 7 ponts (001, 002, 003, 004, 006, 007, 009). `tests/unit-carto-generee.mjs`,
+qui fige les données de référence du registre, a été mis à jour en conséquence —
+et porte désormais un `!cles.has('ADR-005|ADR-010')` : la fiche ne cite pas
+CHAMBRE CLAIRE, et le test mesure le registre au lieu de supposer ses voisins.
 
 ### 2026-09-03 — Finubar cesse d'être un journal
 
