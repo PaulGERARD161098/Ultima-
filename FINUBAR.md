@@ -32,10 +32,10 @@
   },
   "dernier_arret": {
     "le": "2026-09-05",
-    "quoi": "Séance du 05/09 close : ADR-010 VESTA capturée, la semaine bouclée — 6 PR fusionnées, E1 corrigé sur mesure puis éprouvé. Détail : PLAN-2026-09-05-boucler-la-semaine.md",
-    "commit": "dd3e57a"
+    "quoi": "Semaine bouclée en une séance : 10 PR fusionnées, 1 fermée sur constat, 4 notes fausses corrigées, E1 livré. Détail : REPRISE-2026-09-05-apres-la-semaine.md",
+    "commit": "1f2b286"
   },
-  "prochaine_action": "Faire acter le nom VESTA par Paul. (Julien = celui de PROTÉE : confirmé le 05/09, ADR-002 et ADR-010 sont un seul dossier à deux voies.)",
+  "prochaine_action": "Ouvrir REPRISE-2026-09-05-apres-la-semaine.md §5 : la mesure d'abord (collecter.mjs + les 4 jalons en SQL), jamais la lecture du doc.",
   "bloque_par": [
     "`ANTHROPIC_API_KEY` en env Vercel — la voix est CONSTRUITE partout, elle répond 503 tant que la clé n'est pas posée",
     "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
@@ -45,7 +45,7 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "Table de marche de la semaine : étapes 1-3 faites, 4 faite. Reste l'étape 1 (16 branches, refusée en 403 depuis une session) — cf. PLAN-2026-09-05-boucler-la-semaine.md §3 bis",
+      "quoi": "238 fiches d'autres comptes dans kv_store : E1 rend le cas inoffensif mais ne l'explique pas. Origine à trouver — REPRISE-2026-09-05-apres-la-semaine.md §3",
       "depuis": "2026-09-05"
     },
     {
@@ -88,6 +88,50 @@
 > Les séances, de la plus récente à la plus ancienne. Une entrée = une date, un
 > fait vérifié, une décision. La mémoire longue ; le bloc ci-dessus est la mémoire
 > courte, et c'est lui qui est lu automatiquement.
+
+### 2026-09-05 (fin) — la semaine est fermée, et quatre notes fausses avec elle
+
+Table de marche exécutée jusqu'au bout : **10 PR fusionnées** (RenoDevis #127
+#128 #129 #130 · RenoAgenda #68 #69 #70 · RenoBoost #348 #351 #352 #353 · Ultima
+#192 #193 #194 #195), **une fermée sans fusion** (RenoBoost #349 — après
+réconciliation avec `main`, le diff était **vide** : `main` portait déjà les deux
+récits, mesuré et non supposé), **zéro PR ouverte à la clôture**, et
+`node finubar/collecter.mjs` qui ne signale plus **ni dérive ni troncature** sur
+les cinq dépôts attachés. Reprise déposée dans
+**`REPRISE-2026-09-05-apres-la-semaine.md`**.
+
+⛔ **Le vrai gain de la séance n'est pas le code livré — c'est quatre notes
+fausses trouvées et corrigées.** Une note fausse coûte plus cher qu'une note
+absente : on ne la rejoue pas, puisqu'on la croit.
+
+1. **ACQ-2b** annoncé « à faire » était **livré** depuis `4f4733f` — je l'aurais
+   réécrit.
+2. **L3 / L4** (RenoDevis) annoncés « restent » sont **gelés à dessein** jusqu'à
+   la mesure L5 — je les aurais codés contre la décision de Paul.
+3. **La panne RLS de RenoAgenda** annoncée « correctif non appliqué » était
+   **réparée** : 0 policy ne lit `auth.users`, sonde éprouvée d'abord sur un cas
+   dont on connaissait la réponse (22 policies, 13 citent `auth.uid`).
+4. **Mon propre correctif E1**, dans sa première version, poussait la liste
+   *filtrée* : sur les 23 lignes réelles de `kv_store` il aurait **écrasé 109
+   fiches par 11**, et le pull suivant aurait ramené la perte en local. Corrigé
+   en refus **total** de la clé — et ce défaut n'a été vu ni par la revue ni par
+   les tests unitaires, mais par le **dry run contre les données réelles**.
+
+⚠️ **Ce qui reste ouvert et n'est pas refermable ici.** Le `kv_store` central
+porte **249 fiches dont 238 appartiennent à d'autres comptes, et aucune à son
+propre propriétaire** — recouvrement nul, sur des `_owner_id` qui sont de vrais
+comptes `auth.users`. E1 rend le cas **inoffensif**, il ne l'**explique pas** :
+c'est la première question de la prochaine séance. Et les **16 branches mortes**
+restent : `git push --delete` rend **403** depuis une séance et **aucun outil de
+suppression de branche n'existe** (create / list / update, pas delete) — établi,
+mesuré, à faire sur la machine de Paul.
+
+⚠️ **Trois instruments pris en défaut le même jour**, tous de la même famille :
+un script de purge qui comparait **deux pointes** (`git diff origin/main
+<branche>`) et annonçait « 2576 suppressions » sur des branches qui ne portaient
+rien ; un « 168 caractères » annoncé sans être mesuré, qui en faisait **198** ;
+un fichier local pris pour la branche distante. *Corollaire, encore : une
+longueur s'assert avant d'être écrite, jamais après.*
 
 ### 2026-09-05 (suite) — la semaine est inventoriée, et elle se ferme dans une seule séance
 
