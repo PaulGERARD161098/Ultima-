@@ -289,7 +289,7 @@
         "dernier_arret": {
           "le": "2026-09-05",
           "quoi": "Semaine bouclée en une séance : 10 PR fusionnées, 1 fermée sur constat, 4 notes fausses corrigées, E1 livré. Détail : REPRISE-2026-09-05-apres-la-semaine.md",
-          "commit": "1f2b286"
+          "commit": "f20eb24"
         },
         "prochaine_action": "Ouvrir REPRISE-2026-09-05-apres-la-semaine.md §5 : la mesure d'abord (collecter.mjs + les 4 jalons en SQL), jamais la lecture du doc.",
         "bloque_par": [
