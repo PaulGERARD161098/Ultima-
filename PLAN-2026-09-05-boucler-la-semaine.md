@@ -140,6 +140,57 @@ geste Paul daté avec son lien · les décisions posées en un seul bloc.
 
 ---
 
+## 3 bis. Ce que l'exécution a donné (05/09, après le GO de Paul)
+
+| Étape | Résultat |
+|---|---|
+| **0** ✅ | Plan commité et pointé par le grain d'Ultima |
+| **1** ⛔ | **Impossible depuis une session** : `push --delete` → `HTTP 403`, `push origin :branche` → disconnect. **16 branches** prouvées supprimables (seul écart avec `main` : un grain FINUBAR périmé) ; le geste revient à Paul. ⚠️ `RenoDevis/matthieu-du-crest-solar-study` n'en fait PAS partie : elle porte 4 lignes que `main` n'a pas |
+| **2** ✅ | 5 PR fusionnées en squash : RenoDevis #127 #128 · RenoAgenda #68 · RenoBoost #348 · Ultima #192. Les 4 grains recalés sur la tête réelle de `main`, lue par `git rev-parse` |
+| **3** ✅ | #349 réconcilié **puis fermé sans fusion** : après `merge origin/main` et résolution du conflit de grain, le diff contre `main` est **vide**. La séance radar avait déjà concaténé les deux récits |
+| **4** ✅ | 19 contrôles rejoués en SELECT sur 3 bases — voir ci-dessous |
+| **5** ⏸ | SPC (#15) : séance encore RUNNING, non touchée, à dessein |
+| **6-7** ⏳ | Les gestes et les décisions de Paul, inchangés |
+
+### Ce que l'étape 4 a trouvé — et c'est elle qui a payé la séance
+
+**⛔ Le correctif E1 aurait détruit des données.** Mesuré sur la base centrale :
+4 comptes, 2 keyspaces `kv_store`, **249 fiches dont 238 appartiennent à
+d'autres comptes et aucune à son propre propriétaire** (recouvrement nul entre
+les `_owner_id` des fiches et les owners des keyspaces ; sonde éprouvée — ces
+`_owner_id` sont de vrais comptes `auth.users`). La première version d'E1
+poussait la liste **filtrée** : elle aurait écrasé la ligne cloud de 109 fiches
+par 11, et le pull suivant aurait ramené la perte en local. Corrigé : la clé
+n'est plus poussée **du tout** dès qu'une fiche étrangère est vue. *Un correctif
+anti-copie qui détruit des données est pire que la copie qu'il corrige.*
+
+**⛔ La panne RLS de RenoAgenda était réparée.** Le grain RenoBoost l'annonçait
+« correctif écrit, non appliqué » depuis le 01/09 ; mesure du jour : **0 policy**
+lit `auth.users`. Sonde éprouvée avant d'être crue (22 policies au total, 13
+citent `auth.uid`) — le zéro est un vrai zéro. Note corrigée.
+
+**Ce que la base confirme, sans surprise** : `stickers` = 0 · `paiements` = 0 ·
+0 artisan · 17 demandes en attente · devis signables par UUID = 0 · les deux
+battements de cron vivants, cron Stripe actif · le snapshot de PII
+`kv_store_snapshot_20260903` **toujours en base**.
+
+**⚠️ Ce que la mesure ne tranche pas** : pourquoi ces 238 fiches sont là, ni si
+les 4 comptes sont tous à Paul. Le correctif rend la situation inoffensive ; il
+ne l'explique pas. **C'est la première question de la prochaine séance.**
+
+### Une erreur de méthode, consignée parce qu'elle se reproduirait
+
+Le premier script de purge comparait deux **pointes** (`git diff origin/main
+<branche>`) — il comptait donc aussi tout ce que `main` a **en plus**, et
+annonçait « 2576 deletions » sur des branches qui n'apportent rien. La bonne
+mesure restreint le diff **aux fichiers que la branche touche**. Le sens de
+l'erreur était conservateur, et le garde-fou l'a arrêtée avant toute
+suppression — mais elle aurait pu masquer un vrai résidu. *Le plan disait
+d'éprouver une mesure sur un cas connu ; je ne l'ai pas fait pour mon propre
+script.*
+
+---
+
 ## 4. Pre-mortem — on est le 05/12/2026, la semaine n'a jamais été bouclée
 
 | Risque | Cause probable | Signal précoce | P × I | Mitigation | Reco |

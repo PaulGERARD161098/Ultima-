@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-05",
-    "quoi": "ADR-010 VESTA capturée dans ADRAMELECH : la reprise d'une société de clim/ventilation. Classée, ponts posés, score REFUSÉ faute de comptes — pas fabriqué en [hyp.].",
-    "commit": "b500a42"
+    "quoi": "ADR-010 VESTA et la table de marche sont mergées (#192). Étapes 1-4 exécutées sur GO de Paul : 5 PR fusionnées, #349 fermé sur mesure, 19 contrôles rejoués en base. Détail : PLAN-2026-09-05-boucler-la-semaine.md §3 bis",
+    "commit": "e4a53daa8afdc97c281ba1e6a6f4ddae4cb1c070"
   },
   "prochaine_action": "Faire acter le nom VESTA par Paul. (Julien = celui de PROTÉE : confirmé le 05/09, ADR-002 et ADR-010 sont un seul dossier à deux voies.)",
   "bloque_par": [
@@ -45,11 +45,11 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "Table de marche de la semaine (PLAN-2026-09-05-boucler-la-semaine.md) : 8 étapes, 4 fusions + 12 branches mortes + 1 grain RenoBoost à réconcilier, puis les 8 gestes Paul et le bloc de décisions. Étapes 1-3 attendent un GO",
+      "quoi": "Table de marche de la semaine : étapes 1-3 faites, 4 faite. Reste l'étape 1 (16 branches, refusée en 403 depuis une session) — cf. PLAN-2026-09-05-boucler-la-semaine.md §3 bis",
       "depuis": "2026-09-05"
     },
     {
-      "quoi": "VESTA (ADR-010) dort hors classement : nom à acter, orthographe et rôle de Fahrenheit, « en tout temps France » non résolu, et les 3 questions décisives sans réponse. Julien = Julien Laudy, celui de PROTÉE (confirmé 05/09)",
+      "quoi": "VESTA (ADR-010) hors classement : nom à acter, rôle de Fahrenheit à confirmer, 3 questions à poser. Julien = Julien Laudy, celui de PROTÉE. Détail : adramelech/IDEES.md",
       "depuis": "2026-09-05"
     },
     {
