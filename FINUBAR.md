@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-05",
-    "quoi": "ADR-010 VESTA et la table de marche sont mergées (#192). Étapes 1-4 exécutées sur GO de Paul : 5 PR fusionnées, #349 fermé sur mesure, 19 contrôles rejoués en base. Détail : PLAN-2026-09-05-boucler-la-semaine.md §3 bis",
-    "commit": "e4a53daa8afdc97c281ba1e6a6f4ddae4cb1c070"
+    "quoi": "Séance du 05/09 close : ADR-010 VESTA capturée, la semaine bouclée — 6 PR fusionnées, E1 corrigé sur mesure puis éprouvé. Détail : PLAN-2026-09-05-boucler-la-semaine.md",
+    "commit": "dd3e57a"
   },
   "prochaine_action": "Faire acter le nom VESTA par Paul. (Julien = celui de PROTÉE : confirmé le 05/09, ADR-002 et ADR-010 sont un seul dossier à deux voies.)",
   "bloque_par": [

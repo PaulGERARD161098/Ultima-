@@ -9,94 +9,6 @@ export default {
     {
       "ok": true,
       "motif": "",
-      "depot": "PaulGERARD161098/RenoBoost",
-      "grain": {
-        "projet": "RénoBoost",
-        "depot": "PaulGERARD161098/RenoBoost",
-        "cap": "Un individu seul fait tourner le business entier, aidé par l'automatisation (Directive IA). RénoBoost est le hub : acquisition, rendez-vous, dashboard, et la roadmap maîtresse des quatre briques.",
-        "rattache_a": "REPRISE-2026-09-03-boucles-ete.md · ROADMAP-MASTER.md · ACTIONS-PAUL.md",
-        "etat": "en_attente_de_paul",
-        "jalon": {
-          "nom": "Jalon 0 — l'amorçage : trois gestes de Paul, zéro ligne de code",
-          "critere_de_sortie": "`stickers` > 0 · fiche Google visible publiquement · `stripe_charges_enabled` = true"
-        },
-        "dernier_arret": {
-          "le": "2026-09-05",
-          "quoi": "Deux séances le 05/09. (a) Le dispositif du mail unique est éprouvé de bout en bout : la veille BTP est repartie (8 articles), 4 des 5 sources déposent réellement, la panne de…",
-          "commit": "b5f85eae0e9007fee3de39b5ce492218ce68bbc8"
-        },
-        "prochaine_action": "Arbitrer les deux garde-fous proposés (interrupteur système en `sentinelle_etat` · `/api/digest` qui parle quand il se saute) et le 401 GHL sur les champs personnalisés. Puis les…",
-        "bloque_par": [
-          "Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08",
-          "Générer un lot de stickers QR puis l'imprimer (`stickers` = 0). L'URL des QR est corrigée à la source depuis le 01/09 : il ne reste que le geste physique",
-          "Embarquement Stripe de SOLA : le cron du 02/09 fait le reste, la clé est posée. Ne resterait qu'un clic dans le tunnel de test si Stripe refusait la complétion par API",
-          "Jeton Google Ads : demande d'accès Basic déposée le 03/09, réponse de Google attendue. Chemin et 5 variables : ACTIONS-PAUL.md §5"
-        ],
-        "en_attente_depuis": "2026-08-04",
-        "boucles_ouvertes": [
-          {
-            "quoi": "L'API GHL rend 401 sur les champs personnalisés à CHAQUE synchro (toutes les 15 min) depuis au moins le 03/09 : `ghl_custom_fields` reste vide. La synchro des contacts, elle…",
-            "depuis": "2026-09-05"
-          },
-          {
-            "quoi": "Radar de demande BTP : PR #346 MERGÉE le 05/09 (squash 1e074e5). Bouclé côté Léo. Attend Paul, 4 gestes sans code : CLIENT_ID/SECRET/REFRESH_TOKEN · retour sur le geste (variation…",
-            "depuis": "2026-09-03"
-          },
-          {
-            "quoi": "PR #304 (brouillon) : restent ALT-A1/ALT-A3 — qui reçoit quoi, et faut-il sortir Henri de la supervision technique. MKT-A4 est hors périmètre, à rouvrir avant la 1ʳᵉ signature",
-            "depuis": "2026-08-27"
-          },
-          {
-            "quoi": "Un interrupteur système dans un `kv_store` par utilisateur, lu au `rows[0]` : il dépend du compte qui répond en premier et meurt avec lui. Sa place est `sentinelle_etat`",
-            "depuis": "2026-09-04"
-          },
-          {
-            "quoi": "`/api/digest` rend 200 sans battement ni log quand la veille est inactive : c'est ce silence qui a caché la panne. Un cron muet et un cron mort doivent se distinguer",
-            "depuis": "2026-09-04"
-          },
-          {
-            "quoi": "E1 : la cause est fermée (PR #351). Reste le geste destructif — supprimer kv_store_snapshot_20260903 — qui attend un GO de Paul",
-            "depuis": "2026-09-01"
-          },
-          {
-            "quoi": "PR #304 (brouillon) : restent ALT-A1/ALT-A3 — qui reçoit quoi, et faut-il sortir Henri de la supervision technique. MKT-A4 est hors périmètre, à rouvrir avant la 1ʳᵉ signature",
-            "depuis": "2026-08-27"
-          },
-          {
-            "quoi": "Le backlog de CADRAGE-2026-08-19-audit-gemini.md affiche plus de stock qu'il n'en reste : seuls les lots 6 et 8 restent, tous deux tenus par une matière de Paul",
-            "depuis": "2026-09-01"
-          },
-          {
-            "quoi": "ACQ-2 : G2 levé, G3 supprimé, ACQ-2b LIVRÉ (4f4733f, vérifié sur main le 05/09). Reste G1, les volumes Keyword Planner — geste de Paul",
-            "depuis": "2026-09-01"
-          },
-          {
-            "quoi": "ACQ-1 est écrit mais INACTIF : trois gestes dans RenoAgenda — appliquer la migration de vérification, poser AGENDA_SUPABASE_SERVICE_KEY, déployer",
-            "depuis": "2026-09-01"
-          }
-        ],
-        "maj": "2026-09-05"
-      },
-      "recits": [
-        "dernier_arret.quoi",
-        "prochaine_action",
-        "boucles_ouvertes[].quoi"
-      ],
-      "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "derive": {
-        "tete": "cc82ebd",
-        "tete_le": "2026-09-05T13:09:54+00:00",
-        "commits_depuis": 2,
-        "commit_inconnu": false
-      },
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 32,
-      "rang": 0
-    },
-    {
-      "ok": true,
-      "motif": "",
       "depot": "PaulGERARD161098/Ultima-",
       "grain": {
         "projet": "Ultima",
@@ -163,8 +75,8 @@ export default {
       "ciel": "racine",
       "hors_seance": false,
       "derive": {
-        "tete": "64d37a2",
-        "tete_le": "2026-09-05T13:10:51+00:00",
+        "tete": "dd3e57a",
+        "tete_le": "2026-09-05T15:24:57+02:00",
         "commits_depuis": 1,
         "commit_inconnu": false
       },
@@ -283,6 +195,94 @@ export default {
         "commit_inconnu": false
       },
       "jours_depuis_maj": 2,
+      "jours_en_attente": 32,
+      "rang": 1
+    },
+    {
+      "ok": true,
+      "motif": "",
+      "depot": "PaulGERARD161098/RenoBoost",
+      "grain": {
+        "projet": "RénoBoost",
+        "depot": "PaulGERARD161098/RenoBoost",
+        "cap": "Un individu seul fait tourner le business entier, aidé par l'automatisation (Directive IA). RénoBoost est le hub : acquisition, rendez-vous, dashboard, et la roadmap maîtresse des quatre briques.",
+        "rattache_a": "REPRISE-2026-09-03-boucles-ete.md · ROADMAP-MASTER.md · ACTIONS-PAUL.md",
+        "etat": "en_attente_de_paul",
+        "jalon": {
+          "nom": "Jalon 0 — l'amorçage : trois gestes de Paul, zéro ligne de code",
+          "critere_de_sortie": "`stickers` > 0 · fiche Google visible publiquement · `stripe_charges_enabled` = true"
+        },
+        "dernier_arret": {
+          "le": "2026-09-05",
+          "quoi": "Deux séances le 05/09. (a) Le dispositif du mail unique est éprouvé de bout en bout : la veille BTP est repartie (8 articles), 4 des 5 sources déposent réellement, la panne de…",
+          "commit": "b6158f1"
+        },
+        "prochaine_action": "Arbitrer les deux garde-fous proposés (interrupteur système en `sentinelle_etat` · `/api/digest` qui parle quand il se saute) et le 401 GHL sur les champs personnalisés. Puis les…",
+        "bloque_par": [
+          "Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08",
+          "Générer un lot de stickers QR puis l'imprimer (`stickers` = 0). L'URL des QR est corrigée à la source depuis le 01/09 : il ne reste que le geste physique",
+          "Embarquement Stripe de SOLA : le cron du 02/09 fait le reste, la clé est posée. Ne resterait qu'un clic dans le tunnel de test si Stripe refusait la complétion par API",
+          "Jeton Google Ads : demande d'accès Basic déposée le 03/09, réponse de Google attendue. Chemin et 5 variables : ACTIONS-PAUL.md §5"
+        ],
+        "en_attente_depuis": "2026-08-04",
+        "boucles_ouvertes": [
+          {
+            "quoi": "L'API GHL rend 401 sur les champs personnalisés à CHAQUE synchro (toutes les 15 min) depuis au moins le 03/09 : `ghl_custom_fields` reste vide. La synchro des contacts, elle…",
+            "depuis": "2026-09-05"
+          },
+          {
+            "quoi": "Radar de demande BTP : PR #346 MERGÉE le 05/09 (squash 1e074e5). Bouclé côté Léo. Attend Paul, 4 gestes sans code : CLIENT_ID/SECRET/REFRESH_TOKEN · retour sur le geste (variation…",
+            "depuis": "2026-09-03"
+          },
+          {
+            "quoi": "PR #304 (brouillon) : restent ALT-A1/ALT-A3 — qui reçoit quoi, et faut-il sortir Henri de la supervision technique. MKT-A4 est hors périmètre, à rouvrir avant la 1ʳᵉ signature",
+            "depuis": "2026-08-27"
+          },
+          {
+            "quoi": "Un interrupteur système dans un `kv_store` par utilisateur, lu au `rows[0]` : il dépend du compte qui répond en premier et meurt avec lui. Sa place est `sentinelle_etat`",
+            "depuis": "2026-09-04"
+          },
+          {
+            "quoi": "`/api/digest` rend 200 sans battement ni log quand la veille est inactive : c'est ce silence qui a caché la panne. Un cron muet et un cron mort doivent se distinguer",
+            "depuis": "2026-09-04"
+          },
+          {
+            "quoi": "E1 : cause fermée (#351 mergée). Dry run sur les 23 lignes réelles — 6 clés refusées, 242 items jamais recopiés, et la copie touche 3 entités, pas que les clients. Reste…",
+            "depuis": "2026-09-01"
+          },
+          {
+            "quoi": "PR #304 (brouillon) : restent ALT-A1/ALT-A3 — qui reçoit quoi, et faut-il sortir Henri de la supervision technique. MKT-A4 est hors périmètre, à rouvrir avant la 1ʳᵉ signature",
+            "depuis": "2026-08-27"
+          },
+          {
+            "quoi": "Le backlog de CADRAGE-2026-08-19-audit-gemini.md affiche plus de stock qu'il n'en reste : seuls les lots 6 et 8 restent, tous deux tenus par une matière de Paul",
+            "depuis": "2026-09-01"
+          },
+          {
+            "quoi": "ACQ-2 : G2 levé, G3 supprimé, ACQ-2b LIVRÉ (4f4733f, vérifié sur main le 05/09). Reste G1, les volumes Keyword Planner — geste de Paul",
+            "depuis": "2026-09-01"
+          },
+          {
+            "quoi": "ACQ-1 est écrit mais INACTIF : trois gestes dans RenoAgenda — appliquer la migration de vérification, poser AGENDA_SUPABASE_SERVICE_KEY, déployer",
+            "depuis": "2026-09-01"
+          }
+        ],
+        "maj": "2026-09-05"
+      },
+      "recits": [
+        "dernier_arret.quoi",
+        "prochaine_action",
+        "boucles_ouvertes[].quoi"
+      ],
+      "ciel": "renoboost-ia",
+      "hors_seance": false,
+      "derive": {
+        "tete": null,
+        "tete_le": null,
+        "commits_depuis": 0,
+        "commit_inconnu": false
+      },
+      "jours_depuis_maj": 0,
       "jours_en_attente": 32,
       "rang": 1
     },
@@ -412,26 +412,10 @@ export default {
     "en_cours": 2,
     "en_attente_de_paul": 3,
     "au_repos": 0,
-    "derives": 2,
+    "derives": 1,
     "commits_inconnus": 0,
     "boucles_ouvertes": 33,
     "gestes_de_paul": [
-      {
-        "projet": "RénoBoost",
-        "geste": "Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08"
-      },
-      {
-        "projet": "RénoBoost",
-        "geste": "Générer un lot de stickers QR puis l'imprimer (`stickers` = 0). L'URL des QR est corrigée à la source depuis le 01/09 : il ne reste que le geste physique"
-      },
-      {
-        "projet": "RénoBoost",
-        "geste": "Embarquement Stripe de SOLA : le cron du 02/09 fait le reste, la clé est posée. Ne resterait qu'un clic dans le tunnel de test si Stripe refusait la complétion par API"
-      },
-      {
-        "projet": "RénoBoost",
-        "geste": "Jeton Google Ads : demande d'accès Basic déposée le 03/09, réponse de Google attendue. Chemin et 5 variables : ACTIONS-PAUL.md §5"
-      },
       {
         "projet": "Ultima",
         "geste": "`ANTHROPIC_API_KEY` en env Vercel — la voix est CONSTRUITE partout, elle répond 503 tant que la clé n'est pas posée"
@@ -473,6 +457,22 @@ export default {
         "geste": "Embarquement Stripe côté RénoPredict — jamais commencé (0 profil sur 2)"
       },
       {
+        "projet": "RénoBoost",
+        "geste": "Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Générer un lot de stickers QR puis l'imprimer (`stickers` = 0). L'URL des QR est corrigée à la source depuis le 01/09 : il ne reste que le geste physique"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Embarquement Stripe de SOLA : le cron du 02/09 fait le reste, la clé est posée. Ne resterait qu'un clic dans le tunnel de test si Stripe refusait la complétion par API"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Jeton Google Ads : demande d'accès Basic déposée le 03/09, réponse de Google attendue. Chemin et 5 variables : ACTIONS-PAUL.md §5"
+      },
+      {
         "projet": "RénoDevis",
         "geste": "Embarquement Stripe de SOLA : le compte de TEST existe depuis le 19/08 mais n'encaisse pas encore. Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul"
       }
@@ -480,11 +480,6 @@ export default {
   },
   "cartouche": {
     "signaux": [
-      {
-        "projet": "RénoBoost",
-        "dit": "a avancé de 2 commit(s) depuis sa dernière note",
-        "pourquoi": "derive"
-      },
       {
         "projet": "Ultima",
         "dit": "a avancé de 1 commit(s) depuis sa dernière note",
@@ -494,26 +489,24 @@ export default {
         "projet": "RénoAgenda",
         "dit": "attend un geste : Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux — ouvert depuis 52 j",
         "pourquoi": "attente"
+      },
+      {
+        "projet": "RénoPredict",
+        "dit": "attend un geste : Générer et imprimer un lot de stickers QR — `stickers` = 0 depuis le 11/08. Le piège de l'URL est refermé le 01/09 : il ne reste que le geste physique — ouvert depuis 32 j",
+        "pourquoi": "attente"
       }
     ],
     "action": {
-      "projet": "RénoBoost",
-      "nature": "geste",
-      "faire": "Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08",
-      "cap": "Un individu seul fait tourner le business entier, aidé par l'automatisation (Directive IA). RénoBoost est le hub : acquisition, rendez-vous, dashboard, et la roadmap maîtresse des quatre briques."
+      "projet": "Ultima",
+      "nature": "code",
+      "faire": "Faire acter le nom VESTA par Paul. (Julien = celui de PROTÉE : confirmé le 05/09, ADR-002 et ADR-010 sont un seul dossier à deux voies.)",
+      "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima."
     },
     "illisibles": 0,
     "hors_seance": 3
   },
   "constellation": {
     "noeuds": [
-      {
-        "id": "PaulGERARD161098/RenoBoost",
-        "libelle": "RénoBoost",
-        "constellation": "en_attente_de_paul",
-        "ciel": "renoboost-ia",
-        "signal": 1
-      },
       {
         "id": "PaulGERARD161098/Ultima-",
         "libelle": "Ultima",
@@ -531,6 +524,13 @@ export default {
       {
         "id": "PaulGERARD161098/RenoPredict",
         "libelle": "RénoPredict",
+        "constellation": "en_attente_de_paul",
+        "ciel": "renoboost-ia",
+        "signal": 1
+      },
+      {
+        "id": "PaulGERARD161098/RenoBoost",
+        "libelle": "RénoBoost",
         "constellation": "en_attente_de_paul",
         "ciel": "renoboost-ia",
         "signal": 1
