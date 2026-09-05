@@ -33,7 +33,7 @@
   "dernier_arret": {
     "le": "2026-09-05",
     "quoi": "Semaine bouclée : 14 PR fusionnées, 4 notes fausses et 2 dérives de grain corrigées, E1 livré. Détail : REPRISE-2026-09-05-apres-la-semaine.md",
-    "commit": "01e6c4b"
+    "commit": "fdf8017"
   },
   "prochaine_action": "Ouvrir REPRISE-2026-09-05-apres-la-semaine.md §5 : la mesure d'abord (collecter.mjs + les 4 jalons en SQL), jamais la lecture du doc.",
   "bloque_par": [

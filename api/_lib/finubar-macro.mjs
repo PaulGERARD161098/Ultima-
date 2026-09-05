@@ -17,15 +17,15 @@ export default {
         "rattache_a": "CADRAGE-OFFRE.md · TODO-PAUL.md · RenoBoost/ROADMAP-MASTER.md (jalons 2.3, 3.2, 3.3) · CADRAGE-2026-09-03-rdv-omnicanal.md",
         "etat": "en_attente_de_paul",
         "jalon": {
-          "nom": "L'offre — recruter et valider les premiers artisans",
-          "critere_de_sortie": "au moins 1 artisan validé en base (0 aujourd'hui : les écrans pro tournent dans le vide)"
+          "nom": "Artilib — 20 artisans payants au 30/11/2026",
+          "critere_de_sortie": "20 abonnements actifs chez Stripe ; paliers 5 au 31/10, 12 au 15/11"
         },
         "dernier_arret": {
-          "le": "2026-09-04",
-          "quoi": "RénoRDV — montage D « la ligne RDV » retenu : 2e numéro par artisan, SMS du même numéro. J0 réécrit 100 % Twilio, aucun code. CADRAGE-2026-09-03-rdv-omnicanal.md",
-          "commit": "df7af5d12deed7319aecd0e9add3897106d10ed7"
+          "le": "2026-09-05",
+          "quoi": "L'avis d'Henri renverse 4 décisions (#71). Cible : 20 artisans payants au 30/11 ; le chemin critique est la VENTE, pas la technique. Aucun code.",
+          "commit": "5a9f536"
         },
-        "prochaine_action": "J0 par Paul : compte Twilio, numéro FR voix+SMS, Studio Flow renvoi→SMS, test en 2 passes. Détail : CADRAGE-2026-09-03-rdv-omnicanal.md §17",
+        "prochaine_action": "Ce week-end, 3 choses sans dependance : ecrire la liste des 30 artisans du reseau, verifier le domaine et la marque Artilib, preparer les 4 questions de l'appel Artisaner de lundi.",
         "bloque_par": [
           "Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux",
           "Mentions légales : des `[À compléter]` sont visibles ; à lever AU PREMIER EURO ENCAISSÉ, pas à une date",
@@ -294,7 +294,7 @@ export default {
         "dernier_arret": {
           "le": "2026-09-05",
           "quoi": "Semaine bouclée : 14 PR fusionnées, 4 notes fausses et 2 dérives de grain corrigées, E1 livré. Détail : REPRISE-2026-09-05-apres-la-semaine.md",
-          "commit": "01e6c4b"
+          "commit": "fdf8017"
         },
         "prochaine_action": "Ouvrir REPRISE-2026-09-05-apres-la-semaine.md §5 : la mesure d'abord (collecter.mjs + les 4 jalons en SQL), jamais la lecture du doc.",
         "bloque_par": [
