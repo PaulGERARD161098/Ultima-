@@ -3922,3 +3922,49 @@ dispositif.
 **Ce qui reste à Paul** : trois variables sur le projet Vercel `ultima`
 (`RESEND_API_KEY`, `FINUBAR_MAIL_A`, `CRON_SECRET`). Sans elles la route sort en
 503 sans rien envoyer — fail-closed, jamais un envoi à moitié configuré.
+
+---
+
+## 2026-09-06 — Directive DR : le dry run devient systématique
+
+**Décision de Paul, dictée en fin de séance** : instaurer une **quatrième
+directive maîtresse**, DR, aussi puissante qu'EB, JL et EL. Là où EL exige que
+le **comment** soit défini avant, DR exige que le **résultat** soit ré-éprouvé
+après. *Rien n'est réputé bon parce que c'était vert au moment où on l'a écrit.*
+
+**Trois déclenchements par jour** : dès qu'une séance dépasse 20 minutes de
+travail effectif, puis à 12 h et à 18 h (heure de Paris) en séance autonome.
+Routine `trig_0167KbEvowp7FXjpfXUVYQig`, cron `0 10,16 * * *` en UTC,
+notification push à Paul.
+
+**Ce qui l'a motivée, et c'est mesuré, pas théorique.** Le même jour, sur
+`artisan-builder`, un dry run de fin de séance a trouvé **quatre failles dans du
+code livré vert le matin même** :
+
+1. **La CI ne lançait pas les tests.** Trente cas unitaires n'avaient jamais
+   tourné en intégration continue ; le job faisait `tsc` puis `build`. Un check
+   vert se lisait comme « tout va bien » alors qu'aucune assertion n'avait été
+   exercée.
+2. **Un résolveur de modules dont la chaîne de repli était décorative.** Un
+   `try/catch` **synchrone** n'attrape pas le rejet de promesse que rend un
+   crochet de résolution Node. Il passait parce que la première extension
+   essayée était la seule dont les harnais avaient besoin : *il marchait par
+   accident, du seul côté qui n'était jamais exercé.*
+3. **Un champ FACULTATIF faisait exister une section de mentions légales** —
+   complète d'apparence, vide de toute obligation. Exactement le défaut corrigé
+   le matin sur un autre champ, laissé en place sur celui-là.
+4. **Rien ne verrouillait** le fait qu'aucune donnée légale (SIRET, adresse du
+   siège, n° de police) ne parte vers le modèle. C'était propre par
+   construction — et rien ne l'empêchait de cesser de l'être.
+
+**La leçon que DR met sous déclencheur** — elle recoupe des règles déjà écrites
+dans `CLAUDE.md`, ce qui est le signe qu'elles ne suffisaient pas sans horaire :
+un garde-fou s'éprouve **du côté où il peut être contourné** ; un instrument se
+valide **sur un cas dont on connaît déjà la réponse** ; toute recherche
+d'absence exige un **verrou de non-vacuité** ; et **on vérifie que les
+vérifications s'exécutent** — leur silence se lit comme une bonne nouvelle,
+c'est le pire des deux états.
+
+**Le rapport d'un dry run doit dire ce qui a RÉSISTÉ**, pas seulement ce qui a
+cédé : sans cette section, un dry run sans trouvaille ne se distingue pas d'un
+dry run non fait.
