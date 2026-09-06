@@ -3866,3 +3866,59 @@ sur l'accueil** — c'est un bouton, pas la modale que « rien sur l'accueil »
 (2026-07-18) écartait. Les deux pages sont entrées au harnais : ce qui est
 vérifié est le quadrant qu'elles **envoient**, jamais la présence de leur
 attribut. C'est la leçon du matin, appliquée le jour même.
+
+---
+
+## 2026-09-06 — Le mail du matin de FINUBAR
+
+**Demande de Paul** : « J'aurais bien mon mail de FINUBAR demain matin ? »
+
+**Premier constat, et il commandait la réponse** : ça n'existait pas. Aucun cron
+dans `vercel.json`, aucune brique d'envoi, aucune route. Le « morning-launch »
+du nom de branche était le nom d'une séance, pas une fonctionnalité. Répondre
+« oui » lui aurait fait ouvrir sa boîte pour rien le lendemain.
+
+**Rien n'a été inventé** : Resend est déjà en place et payé chez lui
+(`RESEND_API_KEY`, utilisé par RenoPredict et RenoBoost), RenoPredict fait déjà
+tourner trois crons de digest, et l'agrégat Finubar était déjà calculé et mis en
+forme. Le lot se réduit à une route, deux crons et une composition.
+
+⛔ **LE PIÈGE POSÉ AVANT, PAS APRÈS.** L'agrégat est FIGÉ AU COMMIT : un digest
+quotidien assis dessus annoncerait chaque matin un état vieux de plusieurs jours
+avec l'aplomb d'un état frais — précisément ce que Finubar existe pour empêcher.
+Le mail dit donc son âge **en tête**, et au-delà de deux jours cet âge devient un
+avertissement qui dit quoi faire (« relance `collecter.mjs` »). Un serverless ne
+peut pas collecter : il n'a ni les dépôts ni git. Ce n'est pas une limite à
+cacher, c'est un fait à afficher.
+
+⏰ **DEUX CRONS POUR UN SEUL MAIL, et c'est délibéré.** Les crons Vercel sont en
+UTC : `0 5 * * *` vaut 7 h à Paris l'été et 6 h l'hiver — le mail dériverait
+d'une heure deux fois par an, sans que personne ne s'en occupe. Donc deux
+réveils (5 h et 6 h UTC) et une garde qui n'envoie que si l'heure RÉELLE à Paris
+est 7. Le réveil qui tombe à côté est un no-op déclaré. Le harnais mesure
+qu'**exactement un** des deux ouvre la garde, en été comme en hiver : zéro
+signifierait aucun mail, deux signifieraient deux mails le même matin.
+
+⛔ **ET LA GARDE A FAILLI NE JAMAIS S'OUVRIR.** Écrite d'abord
+`Number(Intl.DateTimeFormat('fr-FR', …).format(d))` — or `fr-FR` rend « 22 h »,
+et `Number('22 h')` vaut **NaN**. La garde aurait refusé tous les envois, en
+silence et pour toujours : une garde muette et une garde qui marche ont la même
+tête en production. Trouvée en interrogeant la fonction sur un instant dont je
+connaissais la réponse, avant de l'avoir déployée. On lit désormais la PARTIE
+`hour`, on ne parse plus du texte formaté.
+
+**Une deuxième mesure prise en défaut, dans la même séance** : le test qui
+cherchait la chaîne `onerror=` dans le HTML criait sur
+`&lt;img src=x onerror=alert(1)&gt;` — du texte parfaitement inerte. C'était la
+MESURE qui était fausse, pas le code. Elle compte maintenant les **balises
+vivantes** issues du grain, qui est la vraie question.
+
+**Le mail est BORNÉ, comme l'écran l'a été le matin même** : cinq gestes
+énumérés, le reste compté (« … et 11 autres, sur la table de marche »). Au
+6 septembre il y en avait seize — seize lignes dans un mail du matin ne se
+lisent pas, elles se scrollent, et un mail qu'on ne lit pas fait tomber tout le
+dispositif.
+
+**Ce qui reste à Paul** : trois variables sur le projet Vercel `ultima`
+(`RESEND_API_KEY`, `FINUBAR_MAIL_A`, `CRON_SECRET`). Sans elles la route sort en
+503 sans rien envoyer — fail-closed, jamais un envoi à moitié configuré.

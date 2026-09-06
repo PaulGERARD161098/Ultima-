@@ -31,19 +31,23 @@
     "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
   },
   "dernier_arret": {
-    "le": "2026-09-05",
-    "quoi": "Semaine bouclée : 14 PR fusionnées, 4 notes fausses et 2 dérives de grain corrigées, E1 livré. Détail : REPRISE-2026-09-05-apres-la-semaine.md",
-    "commit": "fdf8017"
+    "le": "2026-09-06",
+    "quoi": "Clé posée par Paul : Léo répond sur les 22 pages, sa réponse vérifiée exacte (16 gestes). Bouton repris dans le registre. Mail du matin de 7 h construit et éprouvé.",
+    "commit": "à renseigner"
   },
-  "prochaine_action": "Ouvrir REPRISE-2026-09-05-apres-la-semaine.md §5 : la mesure d'abord (collecter.mjs + les 4 jalons en SQL), jamais la lecture du doc.",
+  "prochaine_action": "Poser `RESEND_API_KEY`, `FINUBAR_MAIL_A` et `CRON_SECRET` sur le projet Vercel `ultima` — le seul geste qui manque pour que le mail de 7 h parte.",
   "bloque_par": [
-    "`ANTHROPIC_API_KEY` en env Vercel — la voix est CONSTRUITE partout, elle répond 503 tant que la clé n'est pas posée",
+    "Les 3 variables du mail du matin (`RESEND_API_KEY`, `FINUBAR_MAIL_A`, `CRON_SECRET`) sur le projet Vercel `ultima` — sans elles le cron sort en 503 sans rien envoyer",
     "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
     "Les advisors Supabase post-DDL",
     "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "Direction posée le 05/09, toujours valable : Ouvrir REPRISE-2026-09-05-apres-la-semaine.md §5 : la mesure d'abord (collecter.mjs + les 4 jalons en SQL), jamais la lecture du doc.",
+      "depuis": "2026-09-05"
+    },
     {
       "quoi": "238 fiches d'autres comptes dans kv_store : E1 rend le cas inoffensif mais ne l'explique pas. Origine à trouver — REPRISE-2026-09-05-apres-la-semaine.md §3",
       "depuis": "2026-09-05"

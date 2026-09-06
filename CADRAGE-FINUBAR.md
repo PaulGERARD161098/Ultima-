@@ -181,6 +181,41 @@ la documenter.
 garde-fou qui cesse de fonctionner doit le dire, sinon son silence se lit comme
 une bonne nouvelle.*
 
+## 7 ter. Le mail du matin (posé le 06/09/2026)
+
+Finubar attendait qu'on ouvre `/finubar`. Il vient désormais à Paul : un mail à
+**7 h**, tous les jours, avec ce que l'écran lui montrerait.
+
+- **Route** : `api/finubar-matin.mjs` — garde `Bearer CRON_SECRET`, envoi Resend,
+  timeout 8 s. Composition PURE dans `api/_lib/finubar-matin-corps.mjs`, donc
+  éprouvable sans clé ni réseau (`tests/unit-finubar-matin.mjs`).
+- **Variables** (projet Vercel `ultima`) : `RESEND_API_KEY`, `FINUBAR_MAIL_A`
+  (le destinataire — aucune adresse dans le dépôt), `CRON_SECRET`. Optionnelles :
+  `FINUBAR_MAIL_DE`, `FINUBAR_URL`. Sans les trois premières → **503, aucun envoi**.
+
+⛔ **Trois choses à ne jamais défaire.**
+
+1. **Le mail DIT SON ÂGE.** L'agrégat est figé au commit ; un digest quotidien
+   posé dessus annoncerait chaque matin un état vieux de plusieurs jours avec
+   l'aplomb d'un état frais — ce que Finubar existe pour empêcher. Au-delà de
+   deux jours, l'âge devient un avertissement qui dit quoi faire. Un serverless
+   ne PEUT pas collecter (ni dépôts ni git) : c'est un fait à afficher, pas une
+   limite à cacher.
+2. **Les DEUX crons, et la garde d'heure.** Les crons Vercel sont en UTC :
+   `0 5 * * *` vaut 7 h l'été et 6 h l'hiver. Deux réveils (5 h et 6 h UTC) et
+   une garde sur l'heure réelle à Paris donnent un seul mail, à 7 h, toute
+   l'année. ⚠️ Retirer un cron = plus de mail la moitié de l'année ; retirer la
+   garde = deux mails par matin. Le harnais §5 mesure qu'exactement un des deux
+   ouvre la garde, par saison.
+3. **La borne du mail** : cinq gestes énumérés, le reste compté. Au 06/09 il y
+   en avait seize ; seize lignes dans un mail du matin ne se lisent pas, elles
+   se scrollent — et un mail qu'on ne lit pas fait tomber le dispositif entier.
+   Même règle que la borne de récit de l'écran, posée le matin même.
+
+⚠️ **La garde d'heure a failli ne jamais s'ouvrir** : écrite d'abord
+`Number(format())` en `fr-FR`, qui rend « 22 h » — donc `NaN`, donc aucun envoi,
+en silence et pour toujours. On lit la partie `hour`, jamais du texte formaté.
+
 ## 8. Ce qui reste ouvert
 
 - **La constellation** (F-3) — reporté, décidé, prêt côté moteur.
