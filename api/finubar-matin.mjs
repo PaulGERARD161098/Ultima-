@@ -120,8 +120,17 @@ export default async function handler(req, res) {
       signal: AbortSignal.timeout(8000),
     });
     if (!r.ok) {
-      console.error('[finubar-matin] Resend a refusé l’envoi :', r.status);
-      return json(res, 502, { ok: false, error: 'Envoi refusé' });
+      // ⛔ ON REND LE MOTIF, et ce n'est pas une fuite : cette route n'est
+      // atteignable qu'avec CRON_SECRET, donc son seul lecteur est son
+      // propriétaire. Un « Envoi refusé » muet a coûté une soirée d'essais à
+      // l'aveugle le 06/09 — domaine non vérifié, clé d'un autre compte,
+      // destinataire malformé se ressemblent tous quand on ne voit que 502.
+      // Un endpoint de service est discret avec les inconnus, pas avec celui
+      // qui détient son secret.
+      let motif = '';
+      try { motif = (await r.text()).slice(0, 400); } catch { motif = '(corps illisible)'; }
+      console.error('[finubar-matin] Resend a refusé l’envoi :', r.status, motif);
+      return json(res, 502, { ok: false, error: 'Envoi refusé', resend: { statut: r.status, motif } });
     }
   } catch (e) {
     console.error('[finubar-matin] envoi échoué :', e && e.name);
