@@ -32,18 +32,23 @@
   },
   "dernier_arret": {
     "le": "2026-09-06",
-    "quoi": "06/09 : cadrage transverse de la reprise (#203). 15 blocages sur les 5 dépôts lus, AUCUN n'est du code — 3 gestes de Paul en referment 8.",
-    "commit": "dd762b1"
+    "quoi": "Le mail du matin de FINUBAR est VIVANT : reçu en vrai le 06/09 au soir. Cron 5h+6h UTC + garde d'heure = 7 h à Paris toute l'année. Léo parle sur les 22 pages.",
+    "commit": "à renseigner"
   },
-  "prochaine_action": "Ouvrir sur les 3 gestes de Paul, puis le lot COPY de RenoBoost — le seul travail qui n'attend personne. Ici : faire acter VESTA. Détail : CADRAGE-2026-09-07-reprise-depots.md",
+  "prochaine_action": "Les Routines DR (12h/18h) ont `sources: []` : elles tourneront à vide comme le récap Finubar. Piste prouvée : session persistante (cf. Veille BTP).",
   "bloque_par": [
-    "Les 3 variables du mail du matin (`RESEND_API_KEY`, `FINUBAR_MAIL_A`, `CRON_SECRET`) sur le projet Vercel `ultima` — sans elles le cron sort en 503 sans rien envoyer",
+    "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
+    "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
     "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
     "Les advisors Supabase post-DDL",
     "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "Le mail du matin lit l'agrégat COMMITÉ : il vieillit les jours sans séance (il le dit). Le rendre frais tout seul = GitHub Action nocturne qui recollecte et commite",
+      "depuis": "2026-09-06"
+    },
     {
       "quoi": "Direction posée le 05/09, toujours valable : Ouvrir REPRISE-2026-09-05-apres-la-semaine.md §5 : la mesure d'abord (collecter.mjs + les 4 jalons en SQL), jamais la lecture du doc.",
       "depuis": "2026-09-05"

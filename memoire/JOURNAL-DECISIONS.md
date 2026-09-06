@@ -3968,3 +3968,50 @@ c'est le pire des deux états.
 **Le rapport d'un dry run doit dire ce qui a RÉSISTÉ**, pas seulement ce qui a
 cédé : sans cette section, un dry run sans trouvaille ne se distingue pas d'un
 dry run non fait.
+
+---
+
+## 2026-09-06 (nuit) — Le mail du matin est vivant, et ce qu'il a coûté
+
+**Reçu pour de vrai à 23 h 40.** Le cron partira demain à 7 h.
+
+⛔ **CINQ CAUSES SUCCESSIVES, ET UNE SEULE ÉTAIT DEVINABLE.** Dans l'ordre où
+elles sont tombées : le nom de la variable (`CRON_SERET` — un `C` manquant, que
+rien ne signalait) · le marqueur `COLLE_ICI_TON_SECRET` laissé littéralement ·
+le domaine `renoboostia.fr` non vérifié dans le compte Resend de cette clé · le
+destinataire, que le mode test de Resend restreint à l'adresse propriétaire.
+Plus une commande `bash` donnée à quelqu'un qui est sous **PowerShell**, et un
+terminal resté bloqué en continuation à cause d'un `\` qui n'a pas de sens là-bas.
+
+**LA LEÇON, ET ELLE VAUT POUR TOUT ENDPOINT DE SERVICE.** Les trois premières
+causes rendaient TOUTES le même `{"error":"Envoi refusé"}`. Ma route était
+discrète *avec son propre propriétaire* — alors qu'elle n'est atteignable
+qu'avec `CRON_SECRET`, donc son seul lecteur possible EST le propriétaire. Trois
+allers-retours à deviner, là où une phrase suffisait. Corrigé le soir même
+(PR #206) : la réponse porte le statut et le corps rendus par Resend. La cause
+réelle est apparue **au premier appel** après ce correctif.
+*Un silence poli envers son administrateur n'est pas de la sécurité.*
+
+⛔ **ET LA CAUSE QUE J'AI CHERCHÉE AU MAUVAIS ÉTAGE.** Paul avait déjà un récap
+Finubar du matin : une **Routine Claude**, invisible depuis le dépôt. J'ai
+vérifié le code (aucun cron, aucune brique d'envoi — c'était juste) et conclu
+« ça n'existe pas ». Puis j'ai réparé son *prompt*, deux fois, avant de mesurer
+que la session lancée par une Routine a `sources: []` et **ne dispose même pas
+de l'outil `add_repo`** (`ListConnectors` ne le liste pas). Aucun prompt ne
+rattrape un outil absent. *La première question n'était pas « que lui dire de
+faire », c'était « d'où cette session tient-elle ses dépôts ».*
+
+**Conséquence immédiate, à traiter :** les deux Routines **DR** créées le même
+jour portent la même `sources: []`. La directive DR tournerait à vide dès son
+premier passage. La piste est dans les routines de Paul elles-mêmes : « Veille
+BTP » utilise `persist_session: true` sur une session persistante, et ses runs
+réussissent — une session liée garde ses sources.
+
+**Ce qui a bien marché, et qui vient de DR** : chaque garde-fou de ce lot a été
+éprouvé EN ROUGE avant d'être cru — garde d'heure cassée (7 échecs), échappement
+retiré (3), cron unique (3), gouttière retirée (le vrai défaut, à 390 px
+seulement). Et deux mesures se sont révélées fausses en cours de route : la
+garde d'heure écrite `Number(format())` en `fr-FR` rendait **NaN** (elle aurait
+bloqué TOUS les envois, en silence), et un test cherchait la chaîne `onerror=`
+dans du HTML où elle était parfaitement inerte. Les deux ont été prises en
+défaut en les interrogeant sur un cas dont la réponse était connue.
