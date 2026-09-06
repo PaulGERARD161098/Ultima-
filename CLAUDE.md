@@ -332,3 +332,61 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
 - Sous-agents parallèles sur les axes indépendants ; économe en tokens.
 - Production défensive : validation d'entrées, erreurs génériques client /
   détaillées serveur, timeout sortant sur tout appel externe.
+
+---
+
+## 🎯 Directive DR (posée le 06/09/2026) — le dry run à la pendule
+
+> Aussi puissante que les trois directives maîtresses de ce dépôt. EB fixe le
+> **cap**, JL le **sens et le plan**, EL le **chemin** — DR fixe la
+> **cadence** : un dry run se déclenche sur une **horloge**, pas sur un
+> jugement.
+
+Paul, le 06/09 : *« toujours faire un dry run de test de ce qui a été fait quand
+la session dépasse les 20 min de travail, de vérif de conformité du code, et
+patcher les failles trouvées. Cela doit être systématique. »*
+
+### Les trois déclencheurs, et ils sont automatiques
+
+| Quand | Quoi | Mécanisme |
+|---|---|---|
+| **Session > 20 min de travail** | dry run de ce qui vient d'être fait | cette règle, lue à l'ouverture de séance |
+| **12h00** (heure de Paris) | dry run + patchs | Routine planifiée |
+| **18h00** (heure de Paris) | dry run + patchs | Routine planifiée |
+
+⇒ **Trois dry runs par jour au minimum**, dont deux qui ne dépendent d'aucune
+séance en cours.
+
+### Ce que fait un dry run — quatre gestes, aucun optionnel
+
+1. **OBSERVER** le code réellement en place — pas le diff qu'on croit avoir
+   écrit, ni le fichier de notes qui le décrit.
+2. **ÉPROUVER** : faire tourner les tests, le build, et un **essai réel** de
+   bout en bout quand il en existe un. Une CI verte prouve que rien n'est
+   cassé, pas que quelque chose marche.
+3. **DÉTECTER** : chercher activement les failles — conformité du code aux
+   règles de la maison (sécurité par défaut, tokens, validation d'entrées),
+   contrastes, cas limites, chemins jamais empruntés, code mort, chiffres qui
+   pourraient diverger.
+4. **PATCHER dans la foulée**, pas dans une liste. ⛔ Une faille notée et non
+   corrigée repart en production **avec en plus l'illusion d'être traitée**.
+
+### Ce qui n'est pas négociable
+
+- ⛔ **Le dry run n'est pas conditionné à un doute.** Il se déclenche sur la
+  pendule, précisément parce qu'une séance qui va bien est celle où l'on n'a
+  pas envie de s'arrêter — et donc celle où la dette s'accumule sans être vue.
+- ⛔ **Rendre compte** : ce qui a été observé, ce qui a été éprouvé **avec son
+  résultat**, ce qui a été trouvé, ce qui a été corrigé, et **ce qui reste
+  ouvert, nommément**. Sans ce dernier point, le geste 4 est cosmétique.
+- ⛔ **Un garde-fou se prouve en le cassant** avant d'être gardé. Un test qui
+  n'a jamais échoué ne garde rien.
+- ⛔ **Une mesure se vérifie avant d'être crue** : lui demander ce qu'elle
+  répond sur un cas dont on connaît déjà la réponse. *(Le 06/09, trois
+  instruments ont menti dans la même séance en répondant de façon plausible.)*
+
+### Pourquoi une horloge, et pas un jugement
+
+Un dry run décidé « quand ça semble utile » ne se fait pas : c'est précisément
+quand tout va bien qu'on n'a pas envie de s'arrêter. Une occasion se rate, une
+horloge non — d'où les trois déclencheurs chiffrés ci-dessus.
