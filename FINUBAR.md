@@ -32,10 +32,10 @@
   },
   "dernier_arret": {
     "le": "2026-09-06",
-    "quoi": "Clé posée par Paul : Léo répond sur les 22 pages, sa réponse vérifiée exacte (16 gestes). Bouton repris dans le registre. Mail du matin de 7 h construit et éprouvé.",
-    "commit": "à renseigner"
+    "quoi": "06/09 : cadrage transverse de la reprise (#203). 15 blocages sur les 5 dépôts lus, AUCUN n'est du code — 3 gestes de Paul en referment 8.",
+    "commit": "dd762b1"
   },
-  "prochaine_action": "Poser `RESEND_API_KEY`, `FINUBAR_MAIL_A` et `CRON_SECRET` sur le projet Vercel `ultima` — le seul geste qui manque pour que le mail de 7 h parte.",
+  "prochaine_action": "Ouvrir sur les 3 gestes de Paul, puis le lot COPY de RenoBoost — le seul travail qui n'attend personne. Ici : faire acter VESTA. Détail : CADRAGE-2026-09-07-reprise-depots.md",
   "bloque_par": [
     "Les 3 variables du mail du matin (`RESEND_API_KEY`, `FINUBAR_MAIL_A`, `CRON_SECRET`) sur le projet Vercel `ultima` — sans elles le cron sort en 503 sans rien envoyer",
     "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
