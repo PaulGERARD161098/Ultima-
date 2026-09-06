@@ -4015,3 +4015,43 @@ garde d'heure écrite `Number(format())` en `fr-FR` rendait **NaN** (elle aurait
 bloqué TOUS les envois, en silence), et un test cherchait la chaîne `onerror=`
 dans du HTML où elle était parfaitement inerte. Les deux ont été prises en
 défaut en les interrogeant sur un cas dont la réponse était connue.
+
+---
+
+## 2026-09-06 (nuit, solo) — Dry run du travail de la soirée, appliqué à moi-même
+
+Premier passage de la Directive DR sur du code que je venais d'écrire. **Trois
+trouvailles, et la troisième est la plus instructive.**
+
+**① UN BOUTON QUI MENT, entré par la porte que je ne surveillais pas.**
+`js/leo-partout.js` vérifiait la session avant de poser le bouton — et
+`window.UltimaLeo` seulement **au clic**. Si `js/leo-accueil.js` n'avait pas
+chargé (ordre des balises, erreur réseau, page qui l'oublie), le bouton
+s'affichait et ne faisait **rien**, en silence. C'est exactement le défaut que
+le bandeau de ce module interdit en toutes lettres — « un bouton qui ment » —
+et je l'avais laissé passer par l'autre porte. Les deux gardes tombent
+désormais AVANT le bouton. Verdict `smoke-leo-partout` §8, avec un **verrou de
+non-vacuité** : la session y est stubée OUVERTE, sinon l'absence de bouton
+viendrait du fail-closed de session et le test serait vert pour la mauvaise
+raison.
+
+**② LA GARDE LA PLUS SENSIBLE N'AVAIT AUCUN TEST.** La route du mail déclenche
+un ENVOI et n'est protégée que par `CRON_SECRET` — et tous les harnais du lot
+portaient sur la composition du message, c'est-à-dire le côté qu'on emprunte
+tous les jours. §6 de `unit-finubar-matin` appelle le handler pour de vrai :
+variable absente, en-tête absent, mauvais secret, secret sans préfixe, secret
+PRÉFIXE du bon, méthode refusée, et les URL approchantes (`?force=12`,
+`?xforce=1`, `?force=0`) qui ne doivent pas lever la garde d'heure.
+
+⛔ **③ ET MON PROPRE TEST ÉTAIT FAUX — l'épreuve en rouge n'a rien attrapé.**
+En rendant la garde permissive (`if (secret && …)`, le contournement classique),
+le harnais restait **VERT**. Raison : la route rend `503` dans DEUX cas
+distincts — « Service non configuré » (la garde refuse) et « Envoi non
+configuré » (Resend manque) — et je ne regardais que le code HTTP. Une garde
+grande ouverte passait donc mon test de garde. Corrigé : on exige le **motif**,
+et on pose `RESEND_API_KEY` pour que le second 503 ne puisse pas masquer le
+premier. Rejouée, l'épreuve vire au rouge.
+
+*C'est la démonstration la plus nette de la règle du 2026-08-17 : un harnais
+qu'on n'a pas vu échouer ne prouve rien — et ici, ce n'est pas le code qui
+mentait, c'est l'instrument.*

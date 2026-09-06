@@ -32,10 +32,10 @@
   },
   "dernier_arret": {
     "le": "2026-09-06",
-    "quoi": "Le mail du matin de FINUBAR est VIVANT : reçu en vrai le 06/09 au soir. Cron 5h+6h UTC + garde d'heure = 7 h à Paris toute l'année. Léo parle sur les 22 pages.",
+    "quoi": "Mail du matin vivant (reçu). Dry run de la soirée : bouton qui mentait sans leo-accueil, garde CRON_SECRET sans test, et mon propre test de garde confondait deux 503.",
     "commit": "à renseigner"
   },
-  "prochaine_action": "Les Routines DR (12h/18h) ont `sources: []` : elles tourneront à vide comme le récap Finubar. Piste prouvée : session persistante (cf. Veille BTP).",
+  "prochaine_action": "Au passage DR de 12 h : vérifier que l'atelier persistant s'est RÉVEILLÉ et a cloné les 7 dépôts. Sinon, GitHub Action par dépôt.",
   "bloque_par": [
     "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
@@ -45,6 +45,10 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "⚠️ Les Routines DR visent une session persistante AVEC ses dépôts, mais le tir d'essai du 06/09 ne l'a pas réveillée. À vérifier à 12 h ; sinon, GitHub Action par dépôt.",
+      "depuis": "2026-09-06"
+    },
     {
       "quoi": "Le mail du matin lit l'agrégat COMMITÉ : il vieillit les jours sans séance (il le dit). Le rendre frais tout seul = GitHub Action nocturne qui recollecte et commite",
       "depuis": "2026-09-06"

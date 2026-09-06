@@ -157,6 +157,103 @@ for (const [saison, jour] of [['été', '2026-09-03'], ['hiver', '2026-12-03']])
     `${ouvrants.length} — ${JSON.stringify(ouvrants)}`);
 }
 
+console.log('\n§6 — la GARDE de la route, attaquée du côté où elle peut être contournée');
+
+// ⛔ CETTE SECTION MANQUAIT. Le lot du 06/09 a livré une route qui DÉCLENCHE UN
+// ENVOI, protégée par un seul secret — et pas une ligne de test dessus. Les
+// harnais couvraient la composition du mail (le côté qu'on emprunte tous les
+// jours) et laissaient la porte sans surveillance.
+//
+// On appelle le handler pour de vrai, avec des `req`/`res` simulés. Aucun de
+// ces cas n'atteint l'appel sortant : ils sont tous refusés AVANT.
+const { default: handler } = await import('../api/finubar-matin.mjs');
+
+function fausseReponse() {
+  return {
+    statusCode: 0, entetes: {}, corps: null,
+    setHeader(k, v) { this.entetes[k] = v; },
+    end(c) { try { this.corps = JSON.parse(c); } catch { this.corps = c; } },
+  };
+}
+async function appeler({ methode = 'POST', autorisation, url = '/api/finubar-matin?force=1' } = {}) {
+  const res = fausseReponse();
+  const headers = autorisation === undefined ? {} : { authorization: autorisation };
+  await handler({ method: methode, headers, url }, res);
+  return res;
+}
+
+const envAvant = { ...process.env };
+function restaurer() {
+  for (const k of ['CRON_SECRET', 'RESEND_API_KEY', 'FINUBAR_MAIL_A']) {
+    if (envAvant[k] === undefined) delete process.env[k];
+    else process.env[k] = envAvant[k];
+  }
+}
+
+// ⛔ LE CAS QUI COMPTE LE PLUS : la variable absente. Un `if (secret && …)` mal
+// écrit laisserait la route GRANDE OUVERTE le jour où quelqu'un retire la
+// variable — c'est le contournement classique, et il ne se voit pas.
+//
+// ⚠️ ON VÉRIFIE LE MOTIF, PAS SEULEMENT LE CODE — corrigé le 06/09 au soir, après
+// que l'épreuve en rouge n'ait RIEN attrapé. La route rend 503 dans DEUX cas
+// distincts : « Service non configuré » (la garde refuse) et « Envoi non
+// configuré » (Resend manque). En ne regardant que le code, une garde rendue
+// permissive (`if (secret && …)`) laissait passer l'appel jusqu'au second 503 —
+// et le test restait VERT sur une route grande ouverte.
+// On pose donc `RESEND_API_KEY` et `FINUBAR_MAIL_A` pour que le second 503 ne
+// puisse pas masquer le premier, et on exige le motif exact.
+delete process.env.CRON_SECRET;
+process.env.RESEND_API_KEY = 'x';
+process.env.FINUBAR_MAIL_A = 'x@exemple.fr';
+let r = await appeler({ autorisation: 'Bearer nimporte-quoi' });
+verifier('⛔ CRON_SECRET absent → 503 « Service non configuré », jamais ouvert',
+  r.statusCode === 503 && r.corps && r.corps.error === 'Service non configuré',
+  `${r.statusCode} ${JSON.stringify(r.corps)}`);
+r = await appeler({ autorisation: undefined });
+verifier('⛔ CRON_SECRET absent + aucun en-tête → même refus',
+  r.statusCode === 503 && r.corps && r.corps.error === 'Service non configuré',
+  `${r.statusCode} ${JSON.stringify(r.corps)}`);
+
+process.env.CRON_SECRET = 'le-vrai-secret-de-test';
+r = await appeler({ autorisation: undefined });
+verifier('aucun en-tête → 401', r.statusCode === 401, `${r.statusCode}`);
+r = await appeler({ autorisation: 'Bearer mauvais' });
+verifier('mauvais secret → 401', r.statusCode === 401, `${r.statusCode}`);
+r = await appeler({ autorisation: 'le-vrai-secret-de-test' });
+verifier('secret sans le préfixe « Bearer » → 401', r.statusCode === 401, `${r.statusCode}`);
+r = await appeler({ autorisation: 'Bearer le-vrai-secret-de-test-ET-PLUS' });
+verifier('secret PRÉFIXE du bon → 401 (pas de comparaison partielle)',
+  r.statusCode === 401, `${r.statusCode}`);
+
+// Verrou de non-vacuité : sans lui, tout ce qui précède serait vert sur une
+// route qui refuse TOUT — y compris le cron — et le mail ne partirait jamais.
+delete process.env.RESEND_API_KEY;
+delete process.env.FINUBAR_MAIL_A;
+r = await appeler({ autorisation: 'Bearer le-vrai-secret-de-test' });
+verifier('verrou de non-vacuité : le BON secret franchit la porte',
+  r.statusCode !== 401, `${r.statusCode} — une garde qui refuse tout n'est pas une garde`);
+verifier('… et bute alors sur l’envoi non configuré (503)', r.statusCode === 503, `${r.statusCode}`);
+
+r = await appeler({ methode: 'DELETE', autorisation: 'Bearer le-vrai-secret-de-test' });
+verifier('méthode non autorisée → 405', r.statusCode === 405, `${r.statusCode}`);
+verifier('… avec l’en-tête Allow', /POST/.test(r.entetes.Allow || ''), r.entetes.Allow);
+
+// ⚠️ La garde d'heure ne se lève PAS sur une URL approchante.
+process.env.RESEND_API_KEY = 'x';
+process.env.FINUBAR_MAIL_A = 'x@exemple.fr';
+if (heureA('Europe/Paris') !== 7) {
+  for (const url of ['/api/finubar-matin?force=12', '/api/finubar-matin?xforce=1',
+                     '/api/finubar-matin?force=0', '/api/finubar-matin']) {
+    const rr = await appeler({ autorisation: 'Bearer le-vrai-secret-de-test', url });
+    verifier(`« ${url.replace('/api/finubar-matin', '') || '(sans paramètre)'} » ne lève PAS la garde d’heure`,
+      rr.statusCode === 200 && rr.corps && rr.corps.data && rr.corps.data.envoye === 0,
+      JSON.stringify(rr.corps));
+  }
+} else {
+  console.log('     (il est 7 h à Paris : la garde est ouverte, ces cas sont indistinguables — non joués)');
+}
+restaurer();
+
 console.log(echecs === 0
   ? '\n=== unit-finubar-matin : TOUT VERT ==='
   : `\n=== unit-finubar-matin : ${echecs} ÉCHEC(S) ===`);
