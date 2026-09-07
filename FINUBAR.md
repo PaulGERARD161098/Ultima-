@@ -32,10 +32,10 @@
   },
   "dernier_arret": {
     "le": "2026-09-07",
-    "quoi": "Dry run DR de 12 h mergé : 5 défauts, dont l'agrégat amputé qui visait le mail du matin. Et l'atelier persistant se réveille ET clone — add_repo puis git clone, mesuré.",
+    "quoi": "Boucle n°1 FERMÉE : un dépôt hors séance garde sa dernière mesure, DATÉE (reprise + mesure_le). La collecte de fin de séance est de nouveau possible.",
     "commit": "f927887"
   },
-  "prochaine_action": "Passage DR de 18 h : prendre RenoAgenda, RenoPredict et mon-dpe.fr — leurs commits du 07/09 n'ont été éprouvés par personne, et ils sont désormais clonables.",
+  "prochaine_action": "Passage DR de 18 h : RenoAgenda, RenoPredict et mon-dpe.fr — jamais dry-runnés, et clonables depuis add_repo.",
   "bloque_par": [
     "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
@@ -45,10 +45,6 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
-    {
-      "quoi": "COLLECTE — `collecter.mjs` VIDE le grain d'un dépôt hors séance au lieu de garder sa dernière mesure. Cran de sûreté posé le 07/09 (refus d'écrire) ; la FUSION reste à faire.",
-      "depuis": "2026-09-07"
-    },
     {
       "quoi": "Les six autres dépôts portent encore la copie FAUTIVE de `.claude/finubar-rappel.mjs` : leur prochaine séance doit recopier `Ultima-/finubar/rappel.mjs`. Tant qu'ils écrivent leurs boucles en objets, ils ne voient pas le défaut — c'est le jour où l'un d'eux écrira une chaîne qu'il perdra ses dettes en silence.",
       "depuis": "2026-09-07"

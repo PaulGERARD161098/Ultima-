@@ -58,15 +58,106 @@ export default {
       },
       "recits": [],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
+      "hors_seance": true,
       "derive": {
         "tete": "1c3a4cf",
         "tete_le": "2026-09-06T23:54:04+02:00",
         "commits_depuis": 2,
         "commit_inconnu": false
       },
+      "reprise": true,
+      "mesure_le": "2026-09-07",
       "jours_depuis_maj": 1,
       "jours_en_attente": 54,
+      "rang": 0
+    },
+    {
+      "ok": true,
+      "motif": "",
+      "depot": "PaulGERARD161098/Ultima-",
+      "grain": {
+        "projet": "Ultima",
+        "depot": "PaulGERARD161098/Ultima-",
+        "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
+        "rattache_a": "REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md",
+        "etat": "en_cours",
+        "jalon": {
+          "nom": "J3 — le ciel porte aussi l'état PERSONNEL (P4 : les signaux du cockpit)",
+          "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
+        },
+        "dernier_arret": {
+          "le": "2026-09-07",
+          "quoi": "Boucle n°1 FERMÉE : un dépôt hors séance garde sa dernière mesure, DATÉE (reprise + mesure_le). La collecte de fin de séance est de nouveau possible.",
+          "commit": "f927887"
+        },
+        "prochaine_action": "Passage DR de 18 h : RenoAgenda, RenoPredict et mon-dpe.fr — jamais dry-runnés, et clonables depuis add_repo.",
+        "bloque_par": [
+          "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
+          "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
+          "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
+          "Les advisors Supabase post-DDL",
+          "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
+        ],
+        "en_attente_depuis": "2026-08-20",
+        "boucles_ouvertes": [
+          {
+            "quoi": "Les six autres dépôts portent encore la copie FAUTIVE de `.claude/finubar-rappel.mjs` : leur prochaine séance doit recopier `Ultima-/finubar/rappel.mjs`. Tant qu'ils écrivent…",
+            "depuis": "2026-09-07"
+          },
+          {
+            "quoi": "Le mail du matin lit l'agrégat COMMITÉ : il vieillit les jours sans séance (il le dit). Le rendre frais tout seul = GitHub Action nocturne qui recollecte et commite",
+            "depuis": "2026-09-06"
+          },
+          {
+            "quoi": "Direction posée le 05/09, toujours valable : Ouvrir REPRISE-2026-09-05-apres-la-semaine.md §5 : la mesure d'abord (collecter.mjs + les 4 jalons en SQL), jamais la lecture du doc.",
+            "depuis": "2026-09-05"
+          },
+          {
+            "quoi": "238 fiches d'autres comptes dans kv_store : E1 rend le cas inoffensif mais ne l'explique pas. Origine à trouver — REPRISE-2026-09-05-apres-la-semaine.md §3",
+            "depuis": "2026-09-05"
+          },
+          {
+            "quoi": "VESTA (ADR-010) hors classement : nom à acter, rôle de Fahrenheit à confirmer, 3 questions à poser. Julien = Julien Laudy, celui de PROTÉE. Détail : adramelech/IDEES.md",
+            "depuis": "2026-09-05"
+          },
+          {
+            "quoi": "P4 est cadré et volontairement NON ouvert : les signaux du cockpit sur le même ciel que ceux de Finubar. Arbitré par Paul le 02/09 — après P3, jamais avant",
+            "depuis": "2026-09-02"
+          },
+          {
+            "quoi": "Trois dépôts (mon-dpe.fr, artisan-builder, ripair) n'ont pas d'accroche vérifiée et tombent sous ALPHA par défaut. Leur place se tranchera quand ils seront lus",
+            "depuis": "2026-09-02"
+          },
+          {
+            "quoi": "Les huit coques de navigation restent des PORTES et non le chemin. Les garder, les réduire ou les retirer n'est pas tranché — à voir quand l'isolement aura vécu",
+            "depuis": "2026-08-28"
+          },
+          {
+            "quoi": "Angle mort connu du patrimoine : les pages AUTHENTIFIÉES ne sont pas couvertes par les harnais (fixture de session à financer)",
+            "depuis": "2026-08-20"
+          },
+          {
+            "quoi": "Faire entrer les projets dans le ciel : cadré le 02/09, maquette éprouvée, en attente du go. `versConstellation()` reste écrite et branchée nulle part",
+            "depuis": "2026-08-21"
+          }
+        ],
+        "maj": "2026-09-07"
+      },
+      "recits": [
+        "boucles_ouvertes[].quoi"
+      ],
+      "ciel": "racine",
+      "hors_seance": false,
+      "reprise": false,
+      "derive": {
+        "tete": "3f5e013",
+        "tete_le": "2026-09-07T12:10:32+00:00",
+        "commits_depuis": 1,
+        "commit_inconnu": false
+      },
+      "mesure_le": "2026-09-07",
+      "jours_depuis_maj": 0,
+      "jours_en_attente": 18,
       "rang": 0
     },
     {
@@ -109,13 +200,15 @@ export default {
       },
       "recits": [],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
+      "hors_seance": true,
       "derive": {
         "tete": null,
         "tete_le": null,
         "commits_depuis": 0,
         "commit_inconnu": false
       },
+      "reprise": true,
+      "mesure_le": "2026-09-07",
       "jours_depuis_maj": 4,
       "jours_en_attente": 34,
       "rang": 1
@@ -193,13 +286,15 @@ export default {
       },
       "recits": [],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
+      "hors_seance": true,
       "derive": {
         "tete": null,
         "tete_le": null,
         "commits_depuis": 0,
         "commit_inconnu": false
       },
+      "reprise": true,
+      "mesure_le": "2026-09-07",
       "jours_depuis_maj": 2,
       "jours_en_attente": 34,
       "rang": 1
@@ -270,110 +365,29 @@ export default {
       },
       "recits": [],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
+      "hors_seance": true,
       "derive": {
         "tete": null,
         "tete_le": null,
         "commits_depuis": 0,
         "commit_inconnu": false
       },
+      "reprise": true,
+      "mesure_le": "2026-09-07",
       "jours_depuis_maj": 4,
       "jours_en_attente": 21,
       "rang": 2
     },
     {
-      "ok": true,
-      "motif": "",
-      "depot": "PaulGERARD161098/Ultima-",
-      "grain": {
-        "projet": "Ultima",
-        "depot": "PaulGERARD161098/Ultima-",
-        "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-        "rattache_a": "REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md",
-        "etat": "en_cours",
-        "jalon": {
-          "nom": "J3 — le ciel porte aussi l'état PERSONNEL (P4 : les signaux du cockpit)",
-          "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
-        },
-        "dernier_arret": {
-          "le": "2026-09-06",
-          "quoi": "Mail du matin vivant (reçu). Dry run de la soirée : bouton qui mentait sans leo-accueil, garde CRON_SECRET sans test, et mon propre test de garde confondait deux 503.",
-          "commit": "à renseigner"
-        },
-        "prochaine_action": "Au passage DR de 12 h : vérifier que l'atelier persistant s'est RÉVEILLÉ et a cloné les 7 dépôts. Sinon, GitHub Action par dépôt.",
-        "bloque_par": [
-          "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
-          "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
-          "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
-          "Les advisors Supabase post-DDL",
-          "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
-        ],
-        "en_attente_depuis": "2026-08-20",
-        "boucles_ouvertes": [
-          {
-            "quoi": "⚠️ Les Routines DR visent une session persistante AVEC ses dépôts, mais le tir d'essai du 06/09 ne l'a pas réveillée. À vérifier à 12 h ; sinon, GitHub Action par dépôt.",
-            "depuis": "2026-09-06"
-          },
-          {
-            "quoi": "Le mail du matin lit l'agrégat COMMITÉ : il vieillit les jours sans séance (il le dit). Le rendre frais tout seul = GitHub Action nocturne qui recollecte et commite",
-            "depuis": "2026-09-06"
-          },
-          {
-            "quoi": "Direction posée le 05/09, toujours valable : Ouvrir REPRISE-2026-09-05-apres-la-semaine.md §5 : la mesure d'abord (collecter.mjs + les 4 jalons en SQL), jamais la lecture du doc.",
-            "depuis": "2026-09-05"
-          },
-          {
-            "quoi": "238 fiches d'autres comptes dans kv_store : E1 rend le cas inoffensif mais ne l'explique pas. Origine à trouver — REPRISE-2026-09-05-apres-la-semaine.md §3",
-            "depuis": "2026-09-05"
-          },
-          {
-            "quoi": "VESTA (ADR-010) hors classement : nom à acter, rôle de Fahrenheit à confirmer, 3 questions à poser. Julien = Julien Laudy, celui de PROTÉE. Détail : adramelech/IDEES.md",
-            "depuis": "2026-09-05"
-          },
-          {
-            "quoi": "P4 est cadré et volontairement NON ouvert : les signaux du cockpit sur le même ciel que ceux de Finubar. Arbitré par Paul le 02/09 — après P3, jamais avant",
-            "depuis": "2026-09-02"
-          },
-          {
-            "quoi": "Trois dépôts (mon-dpe.fr, artisan-builder, ripair) n'ont pas d'accroche vérifiée et tombent sous ALPHA par défaut. Leur place se tranchera quand ils seront lus",
-            "depuis": "2026-09-02"
-          },
-          {
-            "quoi": "Les huit coques de navigation restent des PORTES et non le chemin. Les garder, les réduire ou les retirer n'est pas tranché — à voir quand l'isolement aura vécu",
-            "depuis": "2026-08-28"
-          },
-          {
-            "quoi": "Angle mort connu du patrimoine : les pages AUTHENTIFIÉES ne sont pas couvertes par les harnais (fixture de session à financer)",
-            "depuis": "2026-08-20"
-          },
-          {
-            "quoi": "Faire entrer les projets dans le ciel : cadré le 02/09, maquette éprouvée, en attente du go. `versConstellation()` reste écrite et branchée nulle part",
-            "depuis": "2026-08-21"
-          }
-        ],
-        "maj": "2026-09-05"
-      },
-      "recits": [],
-      "ciel": "racine",
-      "hors_seance": false,
-      "derive": {
-        "tete": null,
-        "tete_le": null,
-        "commits_depuis": null,
-        "commit_inconnu": false
-      },
-      "jours_depuis_maj": 2,
-      "jours_en_attente": 18,
-      "rang": 2
-    },
-    {
       "ok": false,
       "hors_seance": true,
+      "reprise": false,
       "motif": "dépôt non attaché à cette séance",
       "depot": "paggerard-boop/ripair",
       "ciel": "alpha",
       "grain": null,
       "derive": null,
+      "mesure_le": null,
       "jours_depuis_maj": null,
       "jours_en_attente": null,
       "rang": 9
@@ -381,11 +395,13 @@ export default {
     {
       "ok": false,
       "hors_seance": true,
+      "reprise": false,
       "motif": "dépôt non attaché à cette séance",
       "depot": "PaulGERARD161098/artisan-builder",
       "ciel": "alpha",
       "grain": null,
       "derive": null,
+      "mesure_le": null,
       "jours_depuis_maj": null,
       "jours_en_attente": null,
       "rang": 9
@@ -393,11 +409,13 @@ export default {
     {
       "ok": false,
       "hors_seance": true,
+      "reprise": false,
       "motif": "dépôt non attaché à cette séance",
       "depot": "PaulGERARD161098/mon-dpe.fr",
       "ciel": "alpha",
       "grain": null,
       "derive": null,
+      "mesure_le": null,
       "jours_depuis_maj": null,
       "jours_en_attente": null,
       "rang": 9
@@ -408,10 +426,11 @@ export default {
     "lisibles": 5,
     "illisibles": 0,
     "hors_seance": 3,
+    "repris": 4,
     "en_cours": 2,
     "en_attente_de_paul": 3,
     "au_repos": 0,
-    "derives": 1,
+    "derives": 2,
     "commits_inconnus": 0,
     "boucles_ouvertes": 36,
     "gestes_de_paul": [
@@ -426,6 +445,26 @@ export default {
       {
         "projet": "RénoAgenda",
         "geste": "Relecture juriste des CGU avant la première signature client"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "Les advisors Supabase post-DDL"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
       },
       {
         "projet": "RénoPredict",
@@ -458,26 +497,6 @@ export default {
       {
         "projet": "RénoDevis",
         "geste": "Embarquement Stripe de SOLA : le compte de TEST existe depuis le 19/08 mais n'encaisse pas encore. Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "Les advisors Supabase post-DDL"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
       }
     ]
   },
@@ -489,13 +508,13 @@ export default {
         "pourquoi": "derive"
       },
       {
-        "projet": "RénoPredict",
-        "dit": "attend un geste : Générer et imprimer un lot de stickers QR — `stickers` = 0 depuis le 11/08. Le piège de l'URL est refermé le 01/09 : il ne reste que le geste physique — ouvert depuis 34 j",
-        "pourquoi": "attente"
+        "projet": "Ultima",
+        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
+        "pourquoi": "derive"
       },
       {
-        "projet": "RénoBoost",
-        "dit": "attend un geste : Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08 — ouvert depuis 34 j",
+        "projet": "RénoPredict",
+        "dit": "attend un geste : Générer et imprimer un lot de stickers QR — `stickers` = 0 depuis le 11/08. Le piège de l'URL est refermé le 01/09 : il ne reste que le geste physique — ouvert depuis 34 j",
         "pourquoi": "attente"
       }
     ],
@@ -518,6 +537,13 @@ export default {
         "signal": 1
       },
       {
+        "id": "PaulGERARD161098/Ultima-",
+        "libelle": "Ultima",
+        "constellation": "en_cours",
+        "ciel": "racine",
+        "signal": 1
+      },
+      {
         "id": "PaulGERARD161098/RenoPredict",
         "libelle": "RénoPredict",
         "constellation": "en_attente_de_paul",
@@ -536,13 +562,6 @@ export default {
         "libelle": "RénoDevis",
         "constellation": "en_cours",
         "ciel": "renoboost-ia",
-        "signal": 0
-      },
-      {
-        "id": "PaulGERARD161098/Ultima-",
-        "libelle": "Ultima",
-        "constellation": "en_cours",
-        "ciel": "racine",
         "signal": 0
       }
     ],

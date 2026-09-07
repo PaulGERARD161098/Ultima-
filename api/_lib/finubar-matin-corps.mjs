@@ -83,6 +83,24 @@ export function composerMatin(agregat, options = {}) {
     : 'FINUBAR — rien ne bloque ce matin';
 
   const dateDite = phraseDate(a.le, jours);
+  // ⛔ « ÉTAT COLLECTÉ CE MATIN » NE VAUT PAS POUR TOUT LE MONDE. Depuis le
+  // 07/09, un dépôt absent du disque garde sa dernière mesure au lieu d'être
+  // effacé — c'est ce qui rend la collecte de fin de séance possible. Mais dire
+  // la seule date de collecte laisserait croire que les huit ont été rouverts
+  // ce matin, alors que la moitié peut dater d'avant.
+  //
+  // C'était la cause n°1 du pre-mortem de cette boucle : en réparant la perte
+  // de grains, on risquait de la remplacer par un mensonge tranquille — pire,
+  // parce qu'invisible. Le mail dit donc combien de dépôts n'ont pas été
+  // rouverts. Une phrase, et l'état cesse de se faire passer pour frais.
+  const repris = Number.isInteger(macro.repris) ? macro.repris : 0;
+  const ditRepris = repris > 0
+    // Apostrophe TYPOGRAPHIQUE, comme partout ailleurs dans ce fichier : un
+    // mail dont la ponctuation change d'un paragraphe à l'autre se lit comme un
+    // assemblage, pas comme une voix.
+    ? `${repris} dépôt${repris > 1 ? 's' : ''} n${repris > 1 ? '’ont' : '’a'} pas été rouvert${repris > 1 ? 's' : ''} : `
+      + `${repris > 1 ? 'leur état est celui de leur' : 'son état est celui de sa'} dernière mesure.`
+    : '';
   const avertissement = perime
     ? `⚠️ Cet état a ${jours} jours : il est figé au dernier commit de la collecte. `
       + 'Relance `node finubar/collecter.mjs` puis commite pour le rafraîchir.'
@@ -92,6 +110,7 @@ export function composerMatin(agregat, options = {}) {
   const lignes = [];
   lignes.push(sujet, '');
   lignes.push(dateDite);
+  if (ditRepris) lignes.push(ditRepris);
   if (avertissement) lignes.push('', avertissement);
   lignes.push('');
 
@@ -129,7 +148,8 @@ export function composerMatin(agregat, options = {}) {
 <div style="max-width:620px;margin:0 auto;font-family:Georgia,'Times New Roman',serif;color:#3b2f1c;background:#f6eed9;padding:24px">
   <p style="margin:0 0 4px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#6a5636">Ultima · Finubar</p>
   <h1 style="margin:0 0 14px;font-size:22px;font-weight:normal">${esc(sujet)}</h1>
-  <p style="margin:0 0 ${avertissement ? '6' : '18'}px;font-size:13px;color:#6a5636">${esc(dateDite)}</p>
+  <p style="margin:0 0 ${avertissement || ditRepris ? '6' : '18'}px;font-size:13px;color:#6a5636">${esc(dateDite)}</p>
+  ${ditRepris ? `<p style="margin:0 0 ${avertissement ? '6' : '18'}px;font-size:13px;color:#6a5636">${esc(ditRepris)}</p>` : ''}
   ${avertissement ? `<p style="margin:0 0 18px;padding:10px 12px;border-left:3px solid #8a3324;background:#efe3c6;font-size:13px">${esc(avertissement)}</p>` : ''}
   ${signaux.length ? `
   <h2 style="font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#6a5636;margin:0 0 8px">Ce qui appelle</h2>

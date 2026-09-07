@@ -10,7 +10,7 @@
 // ce qu'il exclut. `agreger` fait remonter les grains illisibles AVEC leur motif
 // au lieu de les écarter en silence ; §5 le vérifie.
 import {
-  extraireBloc, lireGrain, joursEntre, agreger, cartoucheDuMatin,
+  extraireBloc, lireGrain, joursEntre, agreger, cartoucheDuMatin, reprendreGrain,
   versConstellation, libelleAnciennete, MOTS_INTERDITS, BALISE_DEBUT, BALISE_FIN,
   MAX_RECIT, CHAMPS_RECIT,
 } from '../finubar/agreger.mjs';
@@ -467,6 +467,86 @@ console.log('§8 — les deux formes de l\'agrégat disent la même chose, et la
     json.projets.filter((p) => p.derive && p.derive.commit_inconnu)
       .every((p) => typeof p.derive.tete === 'string' && p.derive.tete.length > 0));
 }
+
+// ════════════════════════════════════════════════════════════════════════════
+// §8 — LA REPRISE D'UN GRAIN NON RELU (boucle n°1, fermée le 07/09).
+//
+// ⛔ CE QUE CE HARNAIS SURVEILLE, ET CE N'EST PAS « EST-CE QU'ON GARDE BIEN ».
+// Garder est le côté facile, et il marche du premier coup. Le danger est
+// l'autre : qu'un grain gardé se fasse passer pour une mesure du jour. On
+// remplacerait alors une perte franche — visible, donc corrigible — par un
+// mensonge tranquille. C'est la cause n°1 du pre-mortem de cette boucle, et
+// tout ce qui suit la vise.
+// ════════════════════════════════════════════════════════════════════════════
+
+console.log('\n§9 — un grain repris garde son âge, et le DIT');
+
+const grainType = {
+  projet: 'X', depot: 'o/x', cap: '', rattache_a: '', etat: 'en_cours',
+  jalon: { nom: '', critere_de_sortie: '' },
+  dernier_arret: { le: '2026-08-01', quoi: 'q', commit: 'abc1234' },
+  prochaine_action: 'a', bloque_par: [], en_attente_depuis: '',
+  boucles_ouvertes: [], maj: '2026-08-01',
+};
+const avantType = {
+  ok: true, motif: '', depot: 'o/x', grain: grainType, recits: [], ciel: 'alpha',
+  hors_seance: false, reprise: false, mesure_le: '2026-09-01',
+  derive: { tete: 'aaa1111', tete_le: '2026-09-01T10:00:00+02:00', commits_depuis: 0, commit_inconnu: false },
+  // les trois champs DÉRIVÉS, que la reprise doit jeter
+  jours_depuis_maj: 31, jours_en_attente: null, rang: 2,
+};
+
+const r = reprendreGrain(avantType, { depot: 'o/x', ciel: 'vranesh', precedentLe: '2026-09-06' });
+verifier('le grain est CONSERVÉ, pas vidé', r && r.ok === true && r.grain && r.grain.projet === 'X');
+verifier('⛔ il est marqué REPRIS — il n\'a pas été rouvert aujourd\'hui', r.reprise === true);
+verifier('⛔ et il porte la date de sa VRAIE mesure, pas celle du jour',
+  r.mesure_le === '2026-09-01', r.mesure_le);
+verifier('il reste hors_seance : le dépôt n\'était pas là', r.hors_seance === true);
+verifier('l\'accroche vient de depots.json, pas de l\'agrégat repris',
+  r.ciel === 'vranesh', `${r.ciel} — sinon déplacer une étoile n'aurait aucun effet ici`);
+// ⛔ Les champs dérivés doivent DISPARAÎTRE : c'est `agreger` qui les recalcule
+// à la date du jour, et c'est ce qui empêche le grain de rajeunir.
+verifier('⛔ les champs dérivés sont jetés (agreger les recalcule)',
+  r.jours_depuis_maj === undefined && r.jours_en_attente === undefined && r.rang === undefined);
+
+// ⛔ LE PIÈGE DU PRE-MORTEM, et il ne se voit qu'en rejouant DEUX fois. Une
+// reprise de reprise doit garder la PREMIÈRE date. Sinon une note vieille d'un
+// mois se redate à chaque collecte et paraît fraîche à perpétuité — la panne
+// est invisible le premier jour et totale au bout d'une semaine.
+const r2 = reprendreGrain(r, { depot: 'o/x', ciel: 'alpha', precedentLe: '2026-09-07' });
+verifier('⛔ une reprise de REPRISE ne redate pas : la mesure reste celle d\'origine',
+  r2.mesure_le === '2026-09-01', `${r2.mesure_le} — une note qui se redate seule ment tous les jours`);
+
+// Sans rien de fiable à reprendre, on ne fabrique pas un fait.
+verifier('rien à reprendre → null (jamais un grain inventé)',
+  reprendreGrain(null, {}) === null
+  && reprendreGrain({ ok: false, grain: null }, {}) === null
+  && reprendreGrain({ ok: true, grain: null }, {}) === null);
+
+// ⛔ VERROU DE NON-VACUITÉ. Sans lui, tout le §8 serait vert sur une fonction
+// qui rendrait `null` à tout — c'est-à-dire sur la panne d'origine, où chaque
+// dépôt hors séance ressortait vide.
+verifier('⛔ le test ne passe pas à vide : un grain reprenable EST repris',
+  reprendreGrain(avantType, { depot: 'o/x' }) !== null);
+
+// Les compteurs : un repris n'est pas un angle mort, et rien ne disparaît.
+const a8 = agreger([
+  { ...avantType, hors_seance: false, reprise: false },
+  reprendreGrain(avantType, { depot: 'o/y', ciel: 'alpha', precedentLe: '2026-09-06' }),
+  { ok: false, hors_seance: true, reprise: false, depot: 'o/z', grain: null, derive: null },
+  { ok: false, hors_seance: false, motif: 'FINUBAR.md absent', depot: 'o/w', grain: null, derive: null },
+], '2026-09-07');
+verifier('le repris est compté à part', a8.macro.repris === 1, String(a8.macro.repris));
+verifier('⛔ et PAS parmi les hors_seance — c\'est le compteur de l\'angle mort TOTAL',
+  a8.macro.hors_seance === 1, `${a8.macro.hors_seance} — les mélanger noierait le seul chiffre alarmant`);
+verifier('le repris compte comme lisible : son grain est là', a8.macro.lisibles === 2);
+verifier('rien ne disparaît du total',
+  a8.macro.lisibles + a8.macro.hors_seance + a8.macro.illisibles === a8.macro.total);
+// ⛔ Le grain repris NE RAJEUNIT PAS : son ancienneté se compte depuis `maj`.
+const repris8 = a8.projets.find((p) => p.reprise);
+verifier('⛔ son ancienneté se compte depuis le grain, pas depuis la collecte',
+  repris8.jours_depuis_maj === joursEntre('2026-08-01', '2026-09-07'),
+  `${repris8.jours_depuis_maj} — un grain repris qui rajeunit est pire qu'un grain perdu`);
 
 console.log(echecs === 0 ? '\n=== unit-finubar : TOUT VERT ===' : `\n=== unit-finubar : ${echecs} ÉCHEC(S) ===`);
 process.exit(echecs === 0 ? 0 : 1);
