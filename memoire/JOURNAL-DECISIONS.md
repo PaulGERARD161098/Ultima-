@@ -4055,3 +4055,91 @@ premier. Rejouée, l'épreuve vire au rouge.
 *C'est la démonstration la plus nette de la règle du 2026-08-17 : un harnais
 qu'on n'a pas vu échouer ne prouve rien — et ici, ce n'est pas le code qui
 mentait, c'est l'instrument.*
+
+---
+
+## 2026-09-07 — passage DR de 12 h : cinq défauts, et deux règles que la séance a payées
+
+Premier passage réel de la **Directive DR** (Routine de 12 h, session
+persistante). Cinq défauts trouvés dans le code de la veille, tous corrigés dans
+le même passage, plus la **boucle n°1 fermée** sur go de Paul. PR #215 fusionnée
+(`f927887`), PR #216 ouverte.
+
+### Ce que la séance a appris, et qui vaut au-delà d'elle
+
+**⛔ UNE HYPOTHÈSE NON RETESTÉE APRÈS QUE LE CONTEXTE A CHANGÉ EST UN FAIT
+FAUX EN SURSIS.** Le clone des dépôts voisins échouait — mesuré — *avant*
+`add_repo`. Je ne l'ai pas rejoué *après*, et j'ai écrit dans le rapport d'un dry
+run que « le clone direct échoue toujours ». Il fonctionne. Toute une conclusion
+opérationnelle en dépendait : trois dépôts déclarés inexaminables l'étaient.
+*Corollaire : quand une action change l'état du monde (attacher un dépôt,
+poser une variable, fusionner une PR), les mesures d'avant ne valent plus —
+elles se rejouent, elles ne se citent pas.*
+
+**⛔ UNE SONDE QUI RÉPOND TROP UNIFORMÉMENT MESURE LA MAUVAISE CHOSE.** Ma
+première sonde du grain annonçait « 2 champs hors borne » en appliquant `180` à
+tout champ texte. Faux : le moteur distingue deux régimes (`texteBorne` 400 /
+`recit` 180) et **déclare lui-même** la liste `CHAMPS_RECIT`. J'ai réécrit deux
+textes sans raison — et appauvri le `cap` d'Ultima au passage, qui a perdu
+« avec Léo pour seule interlocutrice ». Rendus à leur état d'origine.
+*La bonne version de la règle du 2026-08-17 : ne pas seulement valider
+l'instrument sur un cas connu, mais lui demander SUR QUOI il porte — et prendre
+cette liste dans le code qui l'applique, jamais dans sa propre tête.*
+
+### Les cinq défauts
+
+① Le motif de refus de Resend porte des adresses : celle de Paul partait dans
+les logs Vercel. Caviardée avant le log ET la réponse, et **avant** la coupe à
+400 (couper d'abord laisserait la moitié d'une adresse tranchée).
+
+② La porte du cron n'était éprouvée par aucun test. ⚠️ **Une session parallèle
+l'a trouvé le même matin (#210), et sa version était meilleure** — elle exigeait
+le *motif* du 503, là où la mienne ne regardait que le code. Le rebase a gardé la
+sienne, augmentée du seul apport propre de la mienne : le **comptage réel des
+envois**, qui transforme son « aucun de ces cas n'atteint l'appel sortant » —
+une hypothèse écrite — en mesure. Au cassage : le code dit « 200 », le compteur
+dit **2 envois par des anonymes**.
+
+③ La mesure de fraîcheur était **muette** sur un grain jamais rattaché
+(`commit: "à renseigner"`) : un `if` sans `else`, bâti pour le squash et pas
+pour l'absence. `mesurerGit` **extraite** — enfermée dans un CLI, elle n'était
+appelable par aucun harnais, et c'est pour ça que le défaut y a dormi.
+
+④ **La collecte écrasait l'agrégat des huit dépôts** (5 lus → 1), et c'est ce
+fichier que lit le mail du matin. #214 avait diagnostiqué le même défaut le matin
+même **sans le corriger**. Cran de sûreté d'abord (refus d'écrire), puis le
+correctif de fond sur go de Paul.
+
+⑤ Quatre notes du grain sont **coupées au mot** (927, 311, 228 contre 180), donc
+tronquées dans `/finubar` et dans le mail. ⛔ Le fait aggravant est un
+**enchaînement** : le seul mécanisme qui signale ces coupes est la collecte, que
+la boucle n°1 rendait impossible. *Garde-fou muet par construction.* Trois
+restent à arbitrer (raccourcir, ou relever `MAX_RECIT`).
+
+### La boucle n°1, et où se joue vraiment ce genre de correctif
+
+Garder les grains a marché du premier coup. **Le travail était ailleurs** :
+empêcher qu'un grain gardé se fasse passer pour une mesure du jour — sinon on
+remplace une perte franche, visible et corrigible, par un mensonge tranquille.
+D'où `mesure_le` qui ne se redate JAMAIS (éprouvé en rejouant deux fois : une
+note d'un mois qui se redate paraît fraîche à perpétuité — invisible le premier
+jour, totale au bout d'une semaine), les champs dérivés jetés, et **la mention
+portée jusque dans le mail** : le pre-mortem n'était couvert qu'à moitié tant
+qu'elle n'y était pas.
+
+### Deux défauts de mon propre travail, trouvés en l'exécutant
+
+Le rapport de collecte annonçait « 3 dépôts non attachés » puis en listait
+**sept** — le compteur excluait les repris, la liste non. *Un chiffre que sa
+propre liste dément apprend à ne croire ni l'un ni l'autre.* Et `--partiel`, que
+ma propre garde recommandait, **ne marchait pas** : lu comme la date, il sortait
+avant la garde. Attrapé par le verrou de non-vacuité — *une garde se valide
+aussi sur ce qu'elle LAISSE PASSER.*
+
+### Sur la Routine DR elle-même
+
+Trois limites annoncées dans sa consigne étaient fausses : les outils MCP sont
+présents, `add_repo` fonctionne, et le contrôle du jalon V0 était faisable — il
+a été fait (`audits_v0 = 1`, V0 **confirmé franchi** ; mais `audits_avec_aides =
+0`, le calcul mergé le matin n'a **aucune preuve d'usage**). *Une consigne qui
+énumère des limites se vérifie comme le reste.*
