@@ -111,7 +111,10 @@
     });
   }
 
-  window.UltimaLeoPartout = { monter: monter, quadrantDeLaPage: quadrantDeLaPage };
+  // Surface publique réduite à ce qui est RÉELLEMENT appelé : `js/finubar.js`
+  // n'utilise que `monter`. `quadrantDeLaPage` reste interne — un export que
+  // personne n'appelle est une promesse d'API qu'il faudra tenir sans raison.
+  window.UltimaLeoPartout = { monter: monter };
 
   // Auto-montage, sauf si la page s'en charge elle-même (elle a des yeux à
   // calculer d'abord : <body data-leo-manuel="1">).
