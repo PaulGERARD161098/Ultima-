@@ -91,6 +91,14 @@
   async function monter(config) {
     config = config || {};
     if (!document.body) { return null; }
+    // ⛔ DEUX conditions, et la seconde a été oubliée jusqu'au 06/09 au soir.
+    // `ouvrir()` vérifie bien `UltimaLeo` — mais au CLIC, trop tard : le bouton
+    // était déjà posé. Si `js/leo-accueil.js` n'a pas chargé (ordre des
+    // balises, erreur réseau, page qui l'oublie), Paul voyait un bouton qui ne
+    // faisait RIEN, en silence. C'est le défaut que ce module interdit dans son
+    // propre bandeau — « un bouton qui ment » — entré par l'autre porte.
+    // Les deux gardes doivent donc tomber AVANT le bouton, pas après.
+    if (!window.UltimaLeo || typeof window.UltimaLeo.accueillirQuadrant !== 'function') { return null; }
     var session = await sessionCourante();
     if (!session) { return null; }        // fail-closed : pas de session, pas de bouton
     return poserBouton({

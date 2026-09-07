@@ -319,6 +319,56 @@ console.log('\n§7 — le bouton ne mange aucun texte EN BAS DE PAGE, et se lit'
   }
 }
 
+console.log('\n§8 — sans le module de cartouche, PAS de bouton (le défaut du 06/09)');
+{
+  // ⛔ CE VERDICT MANQUAIT, et le défaut qu'il attrape est celui que ce module
+  // interdit dans son propre bandeau. `ouvrir()` vérifie bien `UltimaLeo` —
+  // mais au CLIC. Si `js/leo-accueil.js` n'a pas chargé, le bouton était posé
+  // quand même et ne faisait rien : un bouton qui ment, entré par l'autre porte
+  // que celle qu'on surveillait (la session).
+  //
+  // L'échec de chargement se simule en servant un fichier VIDE à sa place :
+  // c'est ce que produit une erreur réseau, un ordre de balises inversé, ou une
+  // page qui oublie le script.
+  const page = await navigateur.newPage();
+  const erreurs = [];
+  page.on('pageerror', (e) => erreurs.push(e.message));
+
+  await page.route('**/js/leo-accueil.js', (r) =>
+    r.fulfill({ status: 200, contentType: 'application/javascript', body: '/* absent */' }));
+  await page.route('**/api/**', (r) => r.fulfill({ status: 200,
+    contentType: 'application/json', body: JSON.stringify({ ok: true, data: [] }) }));
+  await page.route('**/js/vendor/supabase-js-2.110.0.min.js', (r) => r.fulfill({
+    contentType: 'application/javascript',
+    body: `window.supabase = { createClient: function () { return { auth: {
+      getSession: function () { return Promise.resolve({ data: { session:
+        { user: { id: "u-test" }, access_token: "jeton-factice" } } }); },
+      onAuthStateChange: function () {}
+    } }; } };`,
+  }));
+
+  await page.goto(`${BASE}/zekrom.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForTimeout(600);
+
+  // ⚠️ VERROU DE NON-VACUITÉ. Sans lui, ce §8 serait vert le jour où la session
+  // cesse d'être stubée : l'absence de bouton viendrait alors du fail-closed de
+  // session, pas de la garde qu'on prétend mesurer — un test vert pour la
+  // mauvaise raison est pire qu'un test absent.
+  const session = await page.evaluate(async () => {
+    const c = window.supabase.createClient('u', 'k');
+    const r = await c.auth.getSession();
+    return !!(r && r.data && r.data.session);
+  });
+  verifier('verrou de non-vacuité : la session EST ouverte', session === true,
+    'sinon §8 vire au vert pour la mauvaise raison');
+
+  verifier('⛔ UltimaLeo absent → AUCUN bouton posé',
+    (await page.locator('#leo-appel').count()) === 0,
+    'un bouton sans cartouche derrière est un bouton qui ment');
+  verifier('la page ne casse pas pour autant', erreurs.length === 0, erreurs[0]);
+  await page.close();
+}
+
 await navigateur.close();
 console.log(echecs === 0
   ? '\n=== smoke-leo-partout : TOUT VERT ==='

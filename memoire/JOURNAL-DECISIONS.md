@@ -3866,3 +3866,192 @@ sur l'accueil** — c'est un bouton, pas la modale que « rien sur l'accueil »
 (2026-07-18) écartait. Les deux pages sont entrées au harnais : ce qui est
 vérifié est le quadrant qu'elles **envoient**, jamais la présence de leur
 attribut. C'est la leçon du matin, appliquée le jour même.
+
+---
+
+## 2026-09-06 — Le mail du matin de FINUBAR
+
+**Demande de Paul** : « J'aurais bien mon mail de FINUBAR demain matin ? »
+
+**Premier constat, et il commandait la réponse** : ça n'existait pas. Aucun cron
+dans `vercel.json`, aucune brique d'envoi, aucune route. Le « morning-launch »
+du nom de branche était le nom d'une séance, pas une fonctionnalité. Répondre
+« oui » lui aurait fait ouvrir sa boîte pour rien le lendemain.
+
+**Rien n'a été inventé** : Resend est déjà en place et payé chez lui
+(`RESEND_API_KEY`, utilisé par RenoPredict et RenoBoost), RenoPredict fait déjà
+tourner trois crons de digest, et l'agrégat Finubar était déjà calculé et mis en
+forme. Le lot se réduit à une route, deux crons et une composition.
+
+⛔ **LE PIÈGE POSÉ AVANT, PAS APRÈS.** L'agrégat est FIGÉ AU COMMIT : un digest
+quotidien assis dessus annoncerait chaque matin un état vieux de plusieurs jours
+avec l'aplomb d'un état frais — précisément ce que Finubar existe pour empêcher.
+Le mail dit donc son âge **en tête**, et au-delà de deux jours cet âge devient un
+avertissement qui dit quoi faire (« relance `collecter.mjs` »). Un serverless ne
+peut pas collecter : il n'a ni les dépôts ni git. Ce n'est pas une limite à
+cacher, c'est un fait à afficher.
+
+⏰ **DEUX CRONS POUR UN SEUL MAIL, et c'est délibéré.** Les crons Vercel sont en
+UTC : `0 5 * * *` vaut 7 h à Paris l'été et 6 h l'hiver — le mail dériverait
+d'une heure deux fois par an, sans que personne ne s'en occupe. Donc deux
+réveils (5 h et 6 h UTC) et une garde qui n'envoie que si l'heure RÉELLE à Paris
+est 7. Le réveil qui tombe à côté est un no-op déclaré. Le harnais mesure
+qu'**exactement un** des deux ouvre la garde, en été comme en hiver : zéro
+signifierait aucun mail, deux signifieraient deux mails le même matin.
+
+⛔ **ET LA GARDE A FAILLI NE JAMAIS S'OUVRIR.** Écrite d'abord
+`Number(Intl.DateTimeFormat('fr-FR', …).format(d))` — or `fr-FR` rend « 22 h »,
+et `Number('22 h')` vaut **NaN**. La garde aurait refusé tous les envois, en
+silence et pour toujours : une garde muette et une garde qui marche ont la même
+tête en production. Trouvée en interrogeant la fonction sur un instant dont je
+connaissais la réponse, avant de l'avoir déployée. On lit désormais la PARTIE
+`hour`, on ne parse plus du texte formaté.
+
+**Une deuxième mesure prise en défaut, dans la même séance** : le test qui
+cherchait la chaîne `onerror=` dans le HTML criait sur
+`&lt;img src=x onerror=alert(1)&gt;` — du texte parfaitement inerte. C'était la
+MESURE qui était fausse, pas le code. Elle compte maintenant les **balises
+vivantes** issues du grain, qui est la vraie question.
+
+**Le mail est BORNÉ, comme l'écran l'a été le matin même** : cinq gestes
+énumérés, le reste compté (« … et 11 autres, sur la table de marche »). Au
+6 septembre il y en avait seize — seize lignes dans un mail du matin ne se
+lisent pas, elles se scrollent, et un mail qu'on ne lit pas fait tomber tout le
+dispositif.
+
+**Ce qui reste à Paul** : trois variables sur le projet Vercel `ultima`
+(`RESEND_API_KEY`, `FINUBAR_MAIL_A`, `CRON_SECRET`). Sans elles la route sort en
+503 sans rien envoyer — fail-closed, jamais un envoi à moitié configuré.
+
+---
+
+## 2026-09-06 — Directive DR : le dry run devient systématique
+
+**Décision de Paul, dictée en fin de séance** : instaurer une **quatrième
+directive maîtresse**, DR, aussi puissante qu'EB, JL et EL. Là où EL exige que
+le **comment** soit défini avant, DR exige que le **résultat** soit ré-éprouvé
+après. *Rien n'est réputé bon parce que c'était vert au moment où on l'a écrit.*
+
+**Trois déclenchements par jour** : dès qu'une séance dépasse 20 minutes de
+travail effectif, puis à 12 h et à 18 h (heure de Paris) en séance autonome.
+Routine `trig_0167KbEvowp7FXjpfXUVYQig`, cron `0 10,16 * * *` en UTC,
+notification push à Paul.
+
+**Ce qui l'a motivée, et c'est mesuré, pas théorique.** Le même jour, sur
+`artisan-builder`, un dry run de fin de séance a trouvé **quatre failles dans du
+code livré vert le matin même** :
+
+1. **La CI ne lançait pas les tests.** Trente cas unitaires n'avaient jamais
+   tourné en intégration continue ; le job faisait `tsc` puis `build`. Un check
+   vert se lisait comme « tout va bien » alors qu'aucune assertion n'avait été
+   exercée.
+2. **Un résolveur de modules dont la chaîne de repli était décorative.** Un
+   `try/catch` **synchrone** n'attrape pas le rejet de promesse que rend un
+   crochet de résolution Node. Il passait parce que la première extension
+   essayée était la seule dont les harnais avaient besoin : *il marchait par
+   accident, du seul côté qui n'était jamais exercé.*
+3. **Un champ FACULTATIF faisait exister une section de mentions légales** —
+   complète d'apparence, vide de toute obligation. Exactement le défaut corrigé
+   le matin sur un autre champ, laissé en place sur celui-là.
+4. **Rien ne verrouillait** le fait qu'aucune donnée légale (SIRET, adresse du
+   siège, n° de police) ne parte vers le modèle. C'était propre par
+   construction — et rien ne l'empêchait de cesser de l'être.
+
+**La leçon que DR met sous déclencheur** — elle recoupe des règles déjà écrites
+dans `CLAUDE.md`, ce qui est le signe qu'elles ne suffisaient pas sans horaire :
+un garde-fou s'éprouve **du côté où il peut être contourné** ; un instrument se
+valide **sur un cas dont on connaît déjà la réponse** ; toute recherche
+d'absence exige un **verrou de non-vacuité** ; et **on vérifie que les
+vérifications s'exécutent** — leur silence se lit comme une bonne nouvelle,
+c'est le pire des deux états.
+
+**Le rapport d'un dry run doit dire ce qui a RÉSISTÉ**, pas seulement ce qui a
+cédé : sans cette section, un dry run sans trouvaille ne se distingue pas d'un
+dry run non fait.
+
+---
+
+## 2026-09-06 (nuit) — Le mail du matin est vivant, et ce qu'il a coûté
+
+**Reçu pour de vrai à 23 h 40.** Le cron partira demain à 7 h.
+
+⛔ **CINQ CAUSES SUCCESSIVES, ET UNE SEULE ÉTAIT DEVINABLE.** Dans l'ordre où
+elles sont tombées : le nom de la variable (`CRON_SERET` — un `C` manquant, que
+rien ne signalait) · le marqueur `COLLE_ICI_TON_SECRET` laissé littéralement ·
+le domaine `renoboostia.fr` non vérifié dans le compte Resend de cette clé · le
+destinataire, que le mode test de Resend restreint à l'adresse propriétaire.
+Plus une commande `bash` donnée à quelqu'un qui est sous **PowerShell**, et un
+terminal resté bloqué en continuation à cause d'un `\` qui n'a pas de sens là-bas.
+
+**LA LEÇON, ET ELLE VAUT POUR TOUT ENDPOINT DE SERVICE.** Les trois premières
+causes rendaient TOUTES le même `{"error":"Envoi refusé"}`. Ma route était
+discrète *avec son propre propriétaire* — alors qu'elle n'est atteignable
+qu'avec `CRON_SECRET`, donc son seul lecteur possible EST le propriétaire. Trois
+allers-retours à deviner, là où une phrase suffisait. Corrigé le soir même
+(PR #206) : la réponse porte le statut et le corps rendus par Resend. La cause
+réelle est apparue **au premier appel** après ce correctif.
+*Un silence poli envers son administrateur n'est pas de la sécurité.*
+
+⛔ **ET LA CAUSE QUE J'AI CHERCHÉE AU MAUVAIS ÉTAGE.** Paul avait déjà un récap
+Finubar du matin : une **Routine Claude**, invisible depuis le dépôt. J'ai
+vérifié le code (aucun cron, aucune brique d'envoi — c'était juste) et conclu
+« ça n'existe pas ». Puis j'ai réparé son *prompt*, deux fois, avant de mesurer
+que la session lancée par une Routine a `sources: []` et **ne dispose même pas
+de l'outil `add_repo`** (`ListConnectors` ne le liste pas). Aucun prompt ne
+rattrape un outil absent. *La première question n'était pas « que lui dire de
+faire », c'était « d'où cette session tient-elle ses dépôts ».*
+
+**Conséquence immédiate, à traiter :** les deux Routines **DR** créées le même
+jour portent la même `sources: []`. La directive DR tournerait à vide dès son
+premier passage. La piste est dans les routines de Paul elles-mêmes : « Veille
+BTP » utilise `persist_session: true` sur une session persistante, et ses runs
+réussissent — une session liée garde ses sources.
+
+**Ce qui a bien marché, et qui vient de DR** : chaque garde-fou de ce lot a été
+éprouvé EN ROUGE avant d'être cru — garde d'heure cassée (7 échecs), échappement
+retiré (3), cron unique (3), gouttière retirée (le vrai défaut, à 390 px
+seulement). Et deux mesures se sont révélées fausses en cours de route : la
+garde d'heure écrite `Number(format())` en `fr-FR` rendait **NaN** (elle aurait
+bloqué TOUS les envois, en silence), et un test cherchait la chaîne `onerror=`
+dans du HTML où elle était parfaitement inerte. Les deux ont été prises en
+défaut en les interrogeant sur un cas dont la réponse était connue.
+
+---
+
+## 2026-09-06 (nuit, solo) — Dry run du travail de la soirée, appliqué à moi-même
+
+Premier passage de la Directive DR sur du code que je venais d'écrire. **Trois
+trouvailles, et la troisième est la plus instructive.**
+
+**① UN BOUTON QUI MENT, entré par la porte que je ne surveillais pas.**
+`js/leo-partout.js` vérifiait la session avant de poser le bouton — et
+`window.UltimaLeo` seulement **au clic**. Si `js/leo-accueil.js` n'avait pas
+chargé (ordre des balises, erreur réseau, page qui l'oublie), le bouton
+s'affichait et ne faisait **rien**, en silence. C'est exactement le défaut que
+le bandeau de ce module interdit en toutes lettres — « un bouton qui ment » —
+et je l'avais laissé passer par l'autre porte. Les deux gardes tombent
+désormais AVANT le bouton. Verdict `smoke-leo-partout` §8, avec un **verrou de
+non-vacuité** : la session y est stubée OUVERTE, sinon l'absence de bouton
+viendrait du fail-closed de session et le test serait vert pour la mauvaise
+raison.
+
+**② LA GARDE LA PLUS SENSIBLE N'AVAIT AUCUN TEST.** La route du mail déclenche
+un ENVOI et n'est protégée que par `CRON_SECRET` — et tous les harnais du lot
+portaient sur la composition du message, c'est-à-dire le côté qu'on emprunte
+tous les jours. §6 de `unit-finubar-matin` appelle le handler pour de vrai :
+variable absente, en-tête absent, mauvais secret, secret sans préfixe, secret
+PRÉFIXE du bon, méthode refusée, et les URL approchantes (`?force=12`,
+`?xforce=1`, `?force=0`) qui ne doivent pas lever la garde d'heure.
+
+⛔ **③ ET MON PROPRE TEST ÉTAIT FAUX — l'épreuve en rouge n'a rien attrapé.**
+En rendant la garde permissive (`if (secret && …)`, le contournement classique),
+le harnais restait **VERT**. Raison : la route rend `503` dans DEUX cas
+distincts — « Service non configuré » (la garde refuse) et « Envoi non
+configuré » (Resend manque) — et je ne regardais que le code HTTP. Une garde
+grande ouverte passait donc mon test de garde. Corrigé : on exige le **motif**,
+et on pose `RESEND_API_KEY` pour que le second 503 ne puisse pas masquer le
+premier. Rejouée, l'épreuve vire au rouge.
+
+*C'est la démonstration la plus nette de la règle du 2026-08-17 : un harnais
+qu'on n'a pas vu échouer ne prouve rien — et ici, ce n'est pas le code qui
+mentait, c'est l'instrument.*

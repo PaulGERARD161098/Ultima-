@@ -75,6 +75,8 @@ echo "=== unit-adaptateur-finubar.mjs ==="
 node unit-adaptateur-finubar.mjs
 echo "=== unit-leo-partout.mjs ==="
 node unit-leo-partout.mjs
+echo "=== unit-finubar-matin.mjs ==="
+node unit-finubar-matin.mjs
 
 # 3. Serveur statique sur la racine du repo.
 (cd .. && python3 -m http.server 8123 >/dev/null 2>&1) &

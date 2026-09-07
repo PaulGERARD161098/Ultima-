@@ -31,19 +31,32 @@
     "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
   },
   "dernier_arret": {
-    "le": "2026-09-05",
-    "quoi": "Semaine bouclée : 14 PR fusionnées, 4 notes fausses et 2 dérives de grain corrigées, E1 livré. Détail : REPRISE-2026-09-05-apres-la-semaine.md",
-    "commit": "fdf8017"
+    "le": "2026-09-06",
+    "quoi": "Mail du matin vivant (reçu). Dry run de la soirée : bouton qui mentait sans leo-accueil, garde CRON_SECRET sans test, et mon propre test de garde confondait deux 503.",
+    "commit": "à renseigner"
   },
-  "prochaine_action": "Ouvrir REPRISE-2026-09-05-apres-la-semaine.md §5 : la mesure d'abord (collecter.mjs + les 4 jalons en SQL), jamais la lecture du doc.",
+  "prochaine_action": "Au passage DR de 12 h : vérifier que l'atelier persistant s'est RÉVEILLÉ et a cloné les 7 dépôts. Sinon, GitHub Action par dépôt.",
   "bloque_par": [
-    "`ANTHROPIC_API_KEY` en env Vercel — la voix est CONSTRUITE partout, elle répond 503 tant que la clé n'est pas posée",
+    "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
+    "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
     "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
     "Les advisors Supabase post-DDL",
     "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "⚠️ Les Routines DR visent une session persistante AVEC ses dépôts, mais le tir d'essai du 06/09 ne l'a pas réveillée. À vérifier à 12 h ; sinon, GitHub Action par dépôt.",
+      "depuis": "2026-09-06"
+    },
+    {
+      "quoi": "Le mail du matin lit l'agrégat COMMITÉ : il vieillit les jours sans séance (il le dit). Le rendre frais tout seul = GitHub Action nocturne qui recollecte et commite",
+      "depuis": "2026-09-06"
+    },
+    {
+      "quoi": "Direction posée le 05/09, toujours valable : Ouvrir REPRISE-2026-09-05-apres-la-semaine.md §5 : la mesure d'abord (collecter.mjs + les 4 jalons en SQL), jamais la lecture du doc.",
+      "depuis": "2026-09-05"
+    },
     {
       "quoi": "238 fiches d'autres comptes dans kv_store : E1 rend le cas inoffensif mais ne l'explique pas. Origine à trouver — REPRISE-2026-09-05-apres-la-semaine.md §3",
       "depuis": "2026-09-05"

@@ -1,16 +1,18 @@
 # CLAUDE.md — Ultima (protocoles permanents de travail avec Paul)
 
-## 🧭 LES TROIS DIRECTIVES MAÎTRESSES — on commence toujours par elles
+## 🧭 LES QUATRE DIRECTIVES MAÎTRESSES — on commence toujours par elles
 
-Trois directives gouvernent tout le travail. **Aucune ne prime sur les autres :
-EB fixe le cap, JL le sens et le plan, EL verrouille le chemin.** Toute boucle
-se lit à travers les trois avant d'être ouverte.
+Quatre directives gouvernent tout le travail. **Aucune ne prime sur les autres :
+EB fixe le cap, JL le sens et le plan, EL verrouille le chemin, DR exige la
+preuve après coup.** Toute boucle se lit à travers les quatre avant d'être
+ouverte — et DR la rouvre, elle, une fois refermée.
 
 | | Nom | Ce qu'elle impose |
 |---|---|---|
 | **EB** | la discipline de route | **Pourquoi on avance** : une boucle à la fois, bouclée avant la suivante ; capitaliser sur l'existant. |
 | **JL** | la destination | **Vers quoi et selon quel plan** : Ultima, unique interface de travail ; rien d'autre ne sera créé. |
 | **EL** | Edouard Lebrun — le chemin | **Comment on y va** : le comment entièrement défini et assumé AVANT la première ligne de travail. |
+| **DR** | le dry run — la preuve | **Ce qui prouve qu'on y est** : ré-éprouver systématiquement ce qui a été livré, et patcher sur place ce que la ré-épreuve révèle. Trois fois par jour. |
 
 ### 🔒 Directive EL (Edouard Lebrun) — dictée par Paul le 2026-08-01
 
@@ -43,6 +45,41 @@ PAS dans cette boucle ; ⑥ le **pre-mortem** (« la boucle a échoué : pourquo
 (éprouvée le 2026-08-01 sur VRANESH et DRAUKHAIN) n'est plus une bonne pratique
 optionnelle — c'est l'application directe d'EL. De même le rappel « cadre bien
 avant tout » de Paul (2026-07-08).
+
+### 🔁 Directive DR (dry run) — dictée par Paul le 2026-09-06
+
+Aussi puissante qu'EB, JL et EL. Là où EL exige que le **comment** soit défini
+avant, DR exige que le **résultat** soit ré-éprouvé après. **Rien n'est réputé
+bon parce que c'était vert au moment où on l'a écrit.**
+
+**Trois déclenchements par jour, sans que Paul les demande :**
+1. **Dès qu'une séance dépasse 20 minutes de travail effectif** — au démarrage,
+   armer un rappel à +20 min (`send_later`) ; à son déclenchement, dry run de ce
+   qui a été produit depuis le début de la séance.
+2. **À 12 h** (heure de Paris) · 3. **À 18 h**. Les deux passages quotidiens
+   tournent en séance autonome (Routine `create_new_session_on_fire`).
+
+**Un dry run n'est PAS un relancement de tests verts.** Un test qui passait
+passe encore ; le relancer n'apprend rien. Il **attaque** ce qui vient d'être
+livré, selon les règles déjà écrites plus bas dans ce fichier et qui ont chacune
+coûté quelque chose :
+- **le garde-fou s'éprouve du côté où il peut être contourné**, pas du côté
+  qu'on emprunte tous les jours ;
+- **l'instrument se valide sur un cas dont on connaît déjà la réponse** — on
+  casse volontairement le code et on exige que le harnais vire au rouge ;
+- **toute recherche d'absence est précédée d'un verrou de non-vacuité** — « X
+  n'est pas là » est vert sur une chaîne vide, une page non chargée, un fichier
+  de 0 octet ;
+- **on vérifie que les vérifications s'exécutent** : un test absent de la CI,
+  un filtre qui écarte en silence, une garde jamais appelée — leur silence se
+  lit comme une bonne nouvelle, et c'est le pire des deux états ;
+- **on relit son propre diff en adversaire** : qu'est-ce qui marche par accident ?
+
+**Les failles trouvées se corrigent dans le même passage**, avec le harnais qui
+les aurait attrapées — jamais une note « à voir plus tard ». Le rapport dit ce
+qui a été sondé, ce qui a cédé, ce qui a été corrigé, **et ce qui a résisté** :
+sans cette dernière ligne, un dry run sans trouvaille ne se distingue pas d'un
+dry run non fait. Les gates et le protocole GO SOLO s'appliquent inchangés.
 
 ## 🎯 Objectif final — à ne JAMAIS oublier
 
