@@ -46,7 +46,7 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "COLLECTE — `collecter.mjs` VIDE le grain d'un dépôt non attaché à la séance (`grain: null`, « hors séance ») au lieu de garder sa dernière mesure connue. Conséquence mesurée le 2026-09-07 : l'agrégat porte 5 dépôts mesurés et 3 vides ; le relancer depuis une séance à 2 dépôts en aurait sauvé 1 et perdu 4. La collecte de fin de séance est donc IMPOSSIBLE sans dégrader l'écran /finubar et le mail du matin, sauf à attacher les huit dépôts. Correctif : fusionner avec le macro.json existant — un dépôt hors séance garde sa dernière entrée, datée.",
+      "quoi": "COLLECTE — `collecter.mjs` VIDE le grain d'un dépôt hors séance au lieu de garder sa dernière mesure. Cran de sûreté posé le 07/09 (refus d'écrire) ; la FUSION reste à faire.",
       "depuis": "2026-09-07"
     },
     {
