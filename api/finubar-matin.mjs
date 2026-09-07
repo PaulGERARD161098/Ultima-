@@ -20,7 +20,8 @@
  *  - Destinataire en variable (`FINUBAR_MAIL_A`) : aucune adresse dans le
  *    dépôt, et Paul en change sans redéploiement de code.
  *  - Appel sortant HTTPS borné (8 s), erreurs génériques, aucun log d'adresse
- *    ni de contenu.
+ *    ni de contenu — y compris dans le motif rendu par Resend, qui porte des
+ *    adresses et passe par `sansAdresse` avant le log comme avant la réponse.
  *
  * ⏰ L'HEURE, et pourquoi il y a DEUX crons pour un seul mail. Les crons Vercel
  * sont en UTC : `0 5 * * *` vaut 7 h à Paris en été et 6 h en hiver — le mail
@@ -64,6 +65,18 @@ export function dateA(fuseau, maintenant = new Date()) {
     timeZone: fuseau, year: 'numeric', month: '2-digit', day: '2-digit',
   }).format(maintenant);
 }
+
+// ⛔ LE MOTIF DE RESEND PORTE DES ADRESSES. Son refus le plus courant — celui
+// rencontré le 06/09, domaine non vérifié — répond « you can only send testing
+// emails to your own email address (…@…) ». Le rendre tel quel écrit l'adresse
+// de Paul dans les logs Vercel, et la règle du dépôt est sans exception :
+// jamais de PII en logs. Caviardé AVANT le log et AVANT la réponse.
+// ⛔ Le caviardage passe AVANT la coupe à 400 : couper d'abord laisserait
+// survivre la moitié d'une adresse tranchée par la borne — un caviardage qui
+// ne s'applique qu'au cas facile a exactement la tête d'un caviardage qui
+// marche. Rien n'est perdu pour le diagnostic : c'est le MOTIF qui dit pourquoi
+// Resend refuse, pas l'adresse.
+export const sansAdresse = (s) => String(s ?? '').replace(/[\w.+-]+@[\w-]+\.[\w.-]+/g, '[adresse]');
 
 function json(res, code, charge) {
   res.statusCode = code;
@@ -128,7 +141,7 @@ export default async function handler(req, res) {
       // Un endpoint de service est discret avec les inconnus, pas avec celui
       // qui détient son secret.
       let motif = '';
-      try { motif = (await r.text()).slice(0, 400); } catch { motif = '(corps illisible)'; }
+      try { motif = sansAdresse(await r.text()).slice(0, 400); } catch { motif = '(corps illisible)'; }
       console.error('[finubar-matin] Resend a refusé l’envoi :', r.status, motif);
       return json(res, 502, { ok: false, error: 'Envoi refusé', resend: { statut: r.status, motif } });
     }

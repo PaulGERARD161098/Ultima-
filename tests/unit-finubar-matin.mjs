@@ -7,13 +7,17 @@
 //   §2 l'ÂGE de l'état, et le seuil au-delà duquel il devient un avertissement.
 //   §3 le CONTENU : ce que Paul doit lire s'y trouve.
 //   §4 par l'ABSENCE : le HTML est échappé, et rien d'interne ne fuite.
+//   §6 la PORTE : le garde-fou du secret, éprouvé du côté où on le contourne.
+//   §7 par l'ABSENCE : aucune adresse ne part dans les logs ni dans la réponse.
 //   §5 les CRONS DÉCLARÉS encadrent bien les deux décalages — sinon la garde
 //      est juste et le mail ne part jamais.
 
 import { readFileSync } from 'node:fs';
 import { composerMatin, ageEnJours, phraseDate, JOURS_AVANT_ALERTE, GESTES_ENUMERES }
   from '../api/_lib/finubar-matin-corps.mjs';
-import { heureA, dateA } from '../api/finubar-matin.mjs';
+import { heureA, dateA, sansAdresse } from '../api/finubar-matin.mjs';
+// ⚠️ `handler` n'est PAS importé ici : le §6 le charge dynamiquement, et deux
+// déclarations du même nom font échouer le module au chargement.
 
 let echecs = 0;
 function verifier(nom, condition, detail = '') {
@@ -182,6 +186,16 @@ async function appeler({ methode = 'POST', autorisation, url = '/api/finubar-mat
   return res;
 }
 
+// ⛔ `fetch` EST REMPLACÉ ET LES ENVOIS SONT COMPTÉS pendant toute cette section.
+// Le commentaire d'origine affirmait « aucun de ces cas n'atteint l'appel
+// sortant : ils sont tous refusés AVANT ». C'était une hypothèse écrite, pas une
+// mesure — et c'est exactement le genre d'hypothèse qu'on retire au lieu de la
+// documenter (règle du 2026-08-21). Un 401 qui aurait DÉJÀ envoyé le mail serait
+// un refus pour rien, et le code rendu ne le dirait pas.
+let envoisTentes = 0;
+const fetchDOrigine = globalThis.fetch;
+globalThis.fetch = async () => { envoisTentes += 1; return { ok: true }; };
+
 const envAvant = { ...process.env };
 function restaurer() {
   for (const k of ['CRON_SECRET', 'RESEND_API_KEY', 'FINUBAR_MAIL_A']) {
@@ -252,6 +266,77 @@ if (heureA('Europe/Paris') !== 7) {
 } else {
   console.log('     (il est 7 h à Paris : la garde est ouverte, ces cas sont indistinguables — non joués)');
 }
+
+// ⛔ LE VERDICT QUE LE CODE RENDU NE DONNE PAS : rien n'est parti.
+verifier('⛔ aucun de ces refus n’a atteint l’appel sortant', envoisTentes === 0,
+  `${envoisTentes} envoi(s) déclenché(s) — un refus qui envoie quand même est un refus pour rien`);
+
+// ⛔ Et le compteur SAIT compter : sans ce cas, le verdict ci-dessus serait vert
+// sur un compteur mort, donc sur n'importe quoi.
+process.env.CRON_SECRET = 'le-vrai-secret-de-test';
+process.env.RESEND_API_KEY = 'x';
+process.env.FINUBAR_MAIL_A = 'x@exemple.fr';
+await appeler({ autorisation: 'Bearer le-vrai-secret-de-test' });
+verifier('⛔ le compteur n’est pas mort : la route légitime, elle, ENVOIE',
+  envoisTentes === 1, `${envoisTentes}`);
+
+globalThis.fetch = fetchDOrigine;
+restaurer();
+
+console.log('\n§7 — par l’absence : aucune adresse ne part dans les logs ni dans la réponse');
+
+// ⛔ CE QUE CETTE SECTION GARDE. La route rend le motif du refus de Resend, et
+// c'est voulu : un « Envoi refusé » muet a coûté une soirée d'essais à l'aveugle
+// le 06/09. Mais le motif de Resend PORTE des adresses — son refus le plus
+// courant, celui qui est en cours (domaine non vérifié), nomme l'adresse vers
+// laquelle il accepte encore d'envoyer. Rendu tel quel, il écrivait l'adresse de
+// Paul dans les logs Vercel. La règle du dépôt est sans exception : jamais de
+// PII en logs.
+//
+// On rejoue donc le refus RÉELLEMENT rencontré, et on cherche l'adresse dans ce
+// qui SORT — en exigeant de ne pas l'y trouver. Vérifier la présence du permis
+// ne prouverait rien (règle du 2026-07-30).
+const REFUS_REEL = JSON.stringify({
+  statusCode: 403, name: 'validation_error',
+  message: 'You can only send testing emails to your own email address '
+    + '(paul.gerard@renoboostia.fr). To send emails to other recipients, '
+    + 'please verify a domain at resend.com/domains',
+});
+
+const fetchAvant7 = globalThis.fetch;
+const errAvant7 = console.error;
+const journal7 = [];
+globalThis.fetch = async () => ({ ok: false, status: 403, text: async () => REFUS_REEL });
+console.error = (...a) => journal7.push(a.join(' '));
+process.env.CRON_SECRET = 'le-vrai-secret-de-test';
+process.env.RESEND_API_KEY = 'x';
+process.env.FINUBAR_MAIL_A = 'paul.gerard@renoboostia.fr';
+const refuse = await appeler({ autorisation: 'Bearer le-vrai-secret-de-test' });
+globalThis.fetch = fetchAvant7;
+console.error = errAvant7;
+
+const ADRESSE = /[\w.+-]+@[\w-]+\.[\w.-]+/g;
+const dansLogs = journal7.join('\n').match(ADRESSE) || [];
+const rendu = JSON.stringify(refuse.corps ?? '');
+const dansReponse = rendu.match(ADRESSE) || [];
+
+verifier('⛔ aucune adresse dans les logs Vercel (jamais de PII en logs)',
+  dansLogs.length === 0, `trouvé : ${dansLogs.join(', ')}`);
+verifier('⛔ aucune adresse dans la réponse rendue',
+  dansReponse.length === 0, `trouvé : ${dansReponse.join(', ')}`);
+// Le caviardage ne doit pas emporter le diagnostic avec l'adresse : c'est le
+// motif qui a manqué toute une soirée le 06/09.
+verifier('le motif reste diagnostique (le POURQUOI du refus survit)',
+  /verify a domain/.test(rendu) && /\[adresse\]/.test(rendu), rendu.slice(0, 160));
+// ⛔ Verrou de non-vacuité : sans lui, les deux verdicts ci-dessus seraient verts
+// sur une route qui n'aurait rien rendu du tout.
+verifier('⛔ le test ne passe pas à vide : le refus est bien arrivé jusqu’ici',
+  refuse.statusCode === 502 && /403/.test(rendu), `${refuse.statusCode}`);
+// La coupe à 400 ne doit pas pouvoir trancher une adresse en deux et en laisser
+// la moitié : le caviardage passe AVANT la coupe.
+const tardive = sansAdresse('x'.repeat(450) + ' tard@exemple.fr');
+verifier('une adresse au-delà de la borne des 400 est caviardée elle aussi',
+  !ADRESSE.test(tardive), tardive.slice(-40));
 restaurer();
 
 console.log(echecs === 0
