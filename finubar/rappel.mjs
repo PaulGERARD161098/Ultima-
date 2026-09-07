@@ -107,7 +107,14 @@ try {
     l.push(`EN ATTENTE D'UN GESTE DE PAUL : ${g.bloque_par.slice(0, 5).map(borne).join(' · ')}`);
   }
   if (Array.isArray(g.boucles_ouvertes) && g.boucles_ouvertes.length) {
-    l.push(`BOUCLES OUVERTES : ${g.boucles_ouvertes.slice(0, 5).map((x) => borne(x && x.quoi)).join(' · ')}`);
+    // Une boucle ouverte s'écrit en CHAÎNE dans le grain — c'est le cas dans les
+    // huit dépôts depuis que Finubar existe. Ne lire que `x.quoi` rendait
+    // « BOUCLES OUVERTES :  ·  ·  » : des séparateurs sans contenu, que le
+    // lecteur suivant prend pour « aucune boucle ouverte ». Le silence d'un
+    // rappel se lit comme une bonne nouvelle, et c'est le pire des deux états.
+    // ⚠️ Nommée `libelle` : `texte` est déjà le contenu du fichier lu plus haut.
+    const libelle = (x) => borne(typeof x === 'string' ? x : x && x.quoi);
+    l.push(`BOUCLES OUVERTES : ${g.boucles_ouvertes.slice(0, 5).map(libelle).filter(Boolean).join(' · ')}`);
   }
   if (borne(g.rattache_a)) l.push(`ROADMAP DÉTAILLÉE : ${borne(g.rattache_a)}`);
   l.push(`Note datée du ${borne(g.maj) || '—'}.${derive}`);
