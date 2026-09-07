@@ -46,6 +46,10 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
+      "quoi": "COLLECTE — `collecter.mjs` VIDE le grain d'un dépôt non attaché à la séance (`grain: null`, « hors séance ») au lieu de garder sa dernière mesure connue. Conséquence mesurée le 2026-09-07 : l'agrégat porte 5 dépôts mesurés et 3 vides ; le relancer depuis une séance à 2 dépôts en aurait sauvé 1 et perdu 4. La collecte de fin de séance est donc IMPOSSIBLE sans dégrader l'écran /finubar et le mail du matin, sauf à attacher les huit dépôts. Correctif : fusionner avec le macro.json existant — un dépôt hors séance garde sa dernière entrée, datée.",
+      "depuis": "2026-09-07"
+    },
+    {
       "quoi": "Les six autres dépôts portent encore la copie FAUTIVE de `.claude/finubar-rappel.mjs` : leur prochaine séance doit recopier `Ultima-/finubar/rappel.mjs`. Tant qu'ils écrivent leurs boucles en objets, ils ne voient pas le défaut — c'est le jour où l'un d'eux écrira une chaîne qu'il perdra ses dettes en silence.",
       "depuis": "2026-09-07"
     },
