@@ -31,11 +31,11 @@
     "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
   },
   "dernier_arret": {
-    "le": "2026-09-06",
-    "quoi": "Mail du matin vivant (reçu). Dry run de la soirée : bouton qui mentait sans leo-accueil, garde CRON_SECRET sans test, et mon propre test de garde confondait deux 503.",
-    "commit": "à renseigner"
+    "le": "2026-09-07",
+    "quoi": "Correctif du rappel Finubar, et une leçon SUR MOI-MÊME. Le rappel ne lisait que la forme `{quoi}` des boucles ouvertes : sur un grain qui les écrit en CHAÎNE (artisan-builder), il rendait « BOUCLES OUVERTES :  ·  ·  » — quatre dettes présentées comme inexistantes. Corrigé à la source, re-copié à l'identique, harnais `tests/unit-finubar-rappel.mjs` ajouté ET inscrit dans `tests/lancer.sh`, validé en réintroduisant le bug. MAIS j'ai annoncé à Paul que ce silence cachait AUSSI l'avertissement d'Ultima sur les Routines DR — c'était FAUX : le grain d'Ultima écrit ses boucles en objets, elles s'affichaient déjà. Je l'avais déduit après correctif, sans mesurer l'avant. Mesuré depuis, les deux formes coexistent et le rappel accepte les deux ; le commentaire du code qui prétendait « les huit grains écrivent en chaîne » est corrigé. Corollaire pour le prochain qui passe : la forme des six autres grains n'a PAS été observée.",
+    "commit": "9dd3581"
   },
-  "prochaine_action": "Au passage DR de 12 h : vérifier que l'atelier persistant s'est RÉVEILLÉ et a cloné les 7 dépôts. Sinon, GitHub Action par dépôt.",
+  "prochaine_action": "INCHANGÉE, et elle reste ouverte : vérifier au passage DR de 12 h que l'atelier persistant s'est RÉVEILLÉ et a cloné les 7 dépôts. Sinon, GitHub Action par dépôt. (Ce doute n'a jamais été caché par le rappel — il était affiché.)",
   "bloque_par": [
     "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
@@ -45,6 +45,10 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "Les six autres dépôts portent encore la copie FAUTIVE de `.claude/finubar-rappel.mjs` : leur prochaine séance doit recopier `Ultima-/finubar/rappel.mjs`. Tant qu'ils écrivent leurs boucles en objets, ils ne voient pas le défaut — c'est le jour où l'un d'eux écrira une chaîne qu'il perdra ses dettes en silence.",
+      "depuis": "2026-09-07"
+    },
     {
       "quoi": "⚠️ Les Routines DR visent une session persistante AVEC ses dépôts, mais le tir d'essai du 06/09 ne l'a pas réveillée. À vérifier à 12 h ; sinon, GitHub Action par dépôt.",
       "depuis": "2026-09-06"
@@ -90,7 +94,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-09-05"
+  "maj": "2026-09-07"
 }
 ```
 

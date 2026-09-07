@@ -107,8 +107,11 @@ try {
     l.push(`EN ATTENTE D'UN GESTE DE PAUL : ${g.bloque_par.slice(0, 5).map(borne).join(' · ')}`);
   }
   if (Array.isArray(g.boucles_ouvertes) && g.boucles_ouvertes.length) {
-    // Une boucle ouverte s'écrit en CHAÎNE dans le grain — c'est le cas dans les
-    // huit dépôts depuis que Finubar existe. Ne lire que `x.quoi` rendait
+    // LES DEUX FORMES COEXISTENT dans les grains, et il faut lire les deux :
+    // Ultima écrit `{quoi, depuis}`, artisan-builder écrit des CHAÎNES. Mesuré
+    // le 2026-09-07 sur ces deux dépôts ; les six autres n'ont pas été ouverts,
+    // donc on ne suppose rien de leur forme — on les accepte toutes les deux.
+    // Ne lire que `x.quoi` rendait, sur un grain à chaînes,
     // « BOUCLES OUVERTES :  ·  ·  » : des séparateurs sans contenu, que le
     // lecteur suivant prend pour « aucune boucle ouverte ». Le silence d'un
     // rappel se lit comme une bonne nouvelle, et c'est le pire des deux états.
