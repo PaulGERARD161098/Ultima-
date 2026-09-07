@@ -20,6 +20,8 @@ import { execFileSync } from 'node:child_process';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { extraireBloc, lireGrain, agreger, cartoucheDuMatin, versConstellation, MAX_RECIT } from './agreger.mjs';
+// La mesure de fraîcheur vit à part pour être ÉPROUVABLE — voir mesure-git.mjs.
+import { mesurerGit } from './mesure-git.mjs';
 
 const ICI = dirname(fileURLToPath(import.meta.url));
 const RACINE_ULTIMA = resolve(ICI, '..');
@@ -55,7 +57,14 @@ function dateLocaleIso() {
     + String(d.getMonth() + 1).padStart(2, '0') + '-'
     + String(d.getDate()).padStart(2, '0');
 }
-const aujourdhui = (process.argv[2] || dateLocaleIso()).slice(0, 10);
+// ⛔ LES OPTIONS SONT ÉCARTÉES AVANT DE LIRE LA DATE. `--partiel` en argv[2]
+// était pris pour une date, et la collecte sortait en 2 (« date attendue »)
+// sans jamais atteindre la garde — l'option que le message d'erreur de cette
+// même garde recommande ne marchait donc pas. Attrapé par le verrou de
+// non-vacuité du dry run du 07/09 : une garde ne se valide pas seulement en
+// vérifiant qu'elle REFUSE, mais aussi qu'elle LAISSE PASSER ce qu'elle doit.
+const arguments_ = process.argv.slice(2).filter((a) => !a.startsWith('--'));
+const aujourdhui = (arguments_[0] || dateLocaleIso()).slice(0, 10);
 if (!/^\d{4}-\d{2}-\d{2}$/.test(aujourdhui)) {
   console.error('Date attendue au format AAAA-MM-JJ.');
   process.exit(2);
@@ -87,68 +96,6 @@ const depots = JSON.parse(readFileSync(FICHIER_DEPOTS, 'utf8'))
     return false;
   });
 
-// Mesure git d'un dépôt. Toute anomalie rend `null` — une mesure absente se dit,
-// elle ne se remplace pas par une valeur par défaut qui aurait l'air d'un fait.
-function mesurerGit(chemin, commitNote) {
-  const git = (args) => execFileSync('git', ['-C', chemin, ...args], {
-    encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], timeout: 10_000,
-  }).trim();
-  let commitInconnu = false;
-  try {
-    const tete = git(['log', '-1', '--format=%h']);
-    const teteLe = git(['log', '-1', '--format=%aI']);
-    let commitsDepuis = null;
-    if (commitNote && /^[0-9a-f]{7,40}$/i.test(commitNote)) {
-      try {
-        // `A..B` = les commits atteignables depuis B et pas depuis A.
-        // ⛔ EN EXCLUANT LES FICHIERS DE FINUBAR LUI-MÊME. Sans cette exclusion,
-        // le commit qui CRÉE la note la déclarerait aussitôt périmée, et les huit
-        // dépôts s'afficheraient « dérivés » le jour de la pose. Un signal qui
-        // s'allume partout dès le premier jour n'est plus un signal : on apprend
-        // à l'ignorer, et il ne servira plus le jour où il aura raison.
-        // Ce qui est mesuré est donc : « le dépôt a-t-il avancé sur du CONTENU
-        // depuis cette note ? » — la seule question dont la réponse compte.
-        // Sont exclus : le grain, le rappel de séance, et les DEUX FICHIERS
-        // GÉNÉRÉS par la collecte. Les deux derniers ont été oubliés à la
-        // première écriture, et le défaut s'est vu tout de suite : le commit
-        // qui recalait le grain d'Ultima sur sa tête réelle le déclarait
-        // périmé dans la seconde qui suivait. Tout fichier que Finubar écrit
-        // lui-même s'ajoute ici — sinon l'outil se signale à lui-même.
-        commitsDepuis = Number(git(['rev-list', '--count', `${commitNote}..HEAD`,
-          '--', ':(exclude)FINUBAR.md', ':(exclude).claude/finubar-rappel.mjs',
-          ':(exclude)finubar/macro.json', ':(exclude)api/_lib/finubar-macro.mjs']));
-      } catch {
-        // Le commit noté est introuvable : branche non récupérée, historique
-        // réécrit — et surtout **fusion en squash**, qui est le cas NORMAL ici.
-        // Quand une PR est fusionnée en squash, les commits de la branche
-        // disparaissent au profit d'un seul commit neuf : tous les grains
-        // pointent alors dans le vide, et la mesure de fraîcheur s'arrête.
-        //
-        // ⛔ Elle doit s'arrêter EN LE DISANT. Rendre `null` sans rien annoncer
-        // ferait taire le seul garde-fou contre une note périmée, au moment
-        // précis où il devient inopérant — et personne ne s'en apercevrait,
-        // puisque l'absence d'avertissement se lit « tout va bien ». C'est
-        // exactement la faute de forme qu'on traque depuis le début du lot.
-        commitsDepuis = null;
-        commitInconnu = true;
-      }
-    }
-    // ⚠️ La tête n'est CONSERVÉE que s'il y a quelque chose à dire.
-    // Sans ça, chaque commit change `tete` et `tete_le`, donc chaque collecte
-    // qui suit resalit `macro.json` — pour une information qui ne sert à rien
-    // quand l'écart est nul. Résultat : un fichier généré jamais propre après un
-    // push, qu'on finit par commiter sans le lire. Un bruit permanent finit
-    // toujours par masquer un signal ; ici on le supprime à la racine.
-    // Quand la dérive existe, en revanche, la tête est ce qui permet d'aller
-    // voir CE qui a bougé — elle est donc gardée exactement dans ce cas.
-    // Un commit introuvable GARDE la tête : c'est elle qui sert à recaler.
-    if (commitInconnu) return { tete, tete_le: teteLe, commits_depuis: null, commit_inconnu: true };
-    if (!commitsDepuis) return { tete: null, tete_le: null, commits_depuis: commitsDepuis, commit_inconnu: false };
-    return { tete, tete_le: teteLe, commits_depuis: commitsDepuis, commit_inconnu: false };
-  } catch {
-    return null;
-  }
-}
 
 // ⛔ DEUX ABSENCES QUI NE VEULENT PAS DIRE LA MÊME CHOSE, ET LES CONFONDRE COÛTE.
 // La collecte lit le DISQUE. Or une séance Claude Code ne clone que les dépôts
@@ -245,6 +192,41 @@ const sortie = {
   constellation: versConstellation(agregat),
 };
 
+// ⛔ LA GARDE CONTRE L'AGRÉGAT AMPUTÉ — posée par le dry run DR du 07/09, qui
+// l'a déclenchée sur lui-même : une séance n'ayant qu'Ultima attaché a lancé
+// cette collecte et fait tomber l'agrégat de CINQ dépôts lus à UN. Les quatre
+// autres n'avaient pas régressé : ils n'étaient simplement pas sur le disque.
+//
+// ⛔ POURQUOI ÇA NE POUVAIT PAS RESTER UN AVERTISSEMENT À L'ÉCRAN. Le CLAUDE.md
+// PRESCRIT `node finubar/collecter.mjs` en fin de chaque séance, et une séance
+// Claude Code n'attache presque jamais les huit dépôts : le cas destructeur est
+// donc le cas ORDINAIRE. Et `api/_lib/finubar-macro.mjs` est ce que lit le mail
+// du matin — l'agrégat amputé serait parti à 7 h en annonçant un dépôt sur huit,
+// avec exactement l'aplomb d'un état complet. Un message dans un terminal que
+// personne ne relit ne protège pas un fichier commité.
+//
+// La règle du dépôt (2026-08-21) tranche le reste : quand on ne PEUT pas
+// vérifier de ce côté-là — ici, l'état des dépôts absents du disque — on RETIRE
+// l'hypothèse au lieu de la documenter. On n'écrit donc pas un agrégat qui
+// perdrait des dépôts, et on dit quoi faire.
+//
+// `--partiel` reste ouvert pour une séance qui sait ce qu'elle fait : la garde
+// empêche la perte silencieuse, elle n'interdit rien à qui la voit.
+const lus = (o) => (o && Array.isArray(o.projets) ? o.projets.filter((p) => p.ok).length : 0);
+const partielAssume = process.argv.includes('--partiel');
+if (existsSync(SORTIE) && !partielAssume) {
+  let avant = 0;
+  try { avant = lus(JSON.parse(readFileSync(SORTIE, 'utf8'))); } catch { avant = 0; }
+  const apres = lus(sortie);
+  if (apres < avant) {
+    console.error(`\n⛔ Collecte NON écrite : elle ferait passer l'agrégat de ${avant} à ${apres} dépôt(s) lus.`);
+    console.error('    Les dépôts manquants ne sont pas en panne — ils ne sont pas attachés à cette séance.');
+    console.error('    Écrire ici effacerait leur grain, et le mail du matin lit ce fichier.');
+    console.error('    → Attacher les dépôts manquants et relancer, ou assumer la perte avec --partiel.');
+    process.exit(3);
+  }
+}
+
 const texte = JSON.stringify(sortie, null, 2);
 writeFileSync(SORTIE, texte + '\n', 'utf8');
 writeFileSync(SORTIE_MODULE,
@@ -273,7 +255,8 @@ console.log(`Finubar — ${m.total} projets · ${m.en_cours} en cours · ${m.en_
 if (m.derives) console.log(`⚠️  ${m.derives} projet(s) ont avancé depuis leur dernière note.`);
 if (m.commits_inconnus) {
   const noms = sortie.projets.filter((p) => p.derive && p.derive.commit_inconnu).map((p) => p.depot);
-  console.log(`⚠️  ${m.commits_inconnus} grain(s) pointent un commit introuvable (fusion en squash ?) : ${noms.join(', ')}`);
+  console.log(`⚠️  ${m.commits_inconnus} grain(s) ne sont rattachés à aucun commit atteignable`
+    + ` (fusion en squash, ou champ jamais renseigné) : ${noms.join(', ')}`);
   console.log('    Leur fraîcheur n\'est plus mesurable tant qu\'ils ne sont pas recalés sur la tête courante.');
 }
 // La coupe des récits est DITE, nommément. Sans ce cri, un grain qui regonfle

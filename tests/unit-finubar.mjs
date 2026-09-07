@@ -359,7 +359,11 @@ console.log('§6ter — un commit noté introuvable se DIT, il ne se tait pas');
 
   const c = cartoucheDuMatin(a);
   const dit = c.signaux.map((s) => s.dit).join(' | ');
-  verifier('le cartouche le dit', /introuvable/.test(dit), dit);
+  // Le libellé ne dit plus « introuvable » : depuis le dry run du 07/09 il
+  // couvre AUSSI le grain jamais rattaché, où il n'y a pas de commit à ne pas
+  // trouver. Ce qui est vrai des deux, et donc ce qu'on mesure ici, c'est que
+  // la fraîcheur est annoncée comme non mesurable.
+  verifier('le cartouche le dit', /aucun commit atteignable/.test(dit) && /recaler/.test(dit), dit);
   verifier('et il dit quoi faire', /recaler/.test(dit), dit);
   verifier('sans reprocher quoi que ce soit',
     !MOTS_INTERDITS.some((m) => JSON.stringify(c).toLowerCase().includes(m)));
@@ -425,7 +429,27 @@ console.log('§8 — les deux formes de l\'agrégat disent la même chose, et la
   // Un fichier généré qui n'est jamais propre après un push finit par être
   // commité sans être lu. Deux collectes de suite sur le même état doivent
   // rendre exactement le même octet — sinon le bruit est permanent.
-  const collecte = readFileSync(ici('finubar/collecter.mjs'), 'utf8');
+  // ⚠️ Depuis le 07/09, `mesurerGit` vit dans son propre module : elle était
+  // enfermée dans un script CLI qu'aucun harnais ne pouvait importer, et un
+  // défaut y a dormi pour cette raison. Les deux verdicts ci-dessous lisent
+  // donc `mesure-git.mjs` — et le COMPORTEMENT qu'ils devinent dans le texte
+  // est désormais exercé pour de vrai par unit-finubar-mesure-git.mjs.
+  // ⛔ LA GARDE CONTRE L'AGRÉGAT AMPUTÉ (dry run du 07/09). Une séance qui
+  // n'a qu'un dépôt attaché avait fait tomber l'agrégat de 5 dépôts lus à 1,
+  // et `api/_lib/finubar-macro.mjs` est ce que lit le mail du matin : l'état
+  // amputé serait parti à 7 h avec l'aplomb d'un état complet. Éprouvée en
+  // vrai dans ce passage — refus en code 3, `--partiel` en 0, agrégat intact.
+  // Ce verdict-ci empêche seulement qu'on la retire sans le vouloir.
+  const cli = readFileSync(ici('finubar/collecter.mjs'), 'utf8');
+  verifier('la collecte REFUSE d\'écrire un agrégat qui perdrait des dépôts lus',
+    /if \(apres < avant\)/.test(cli) && /process\.exit\(3\)/.test(cli));
+  verifier('  \u21b3 et la perte reste possible, mais ASSUMÉE explicitement',
+    /--partiel/.test(cli));
+  verifier('  \u21b3 les options n\'usurpent pas la place de la date',
+    /filter\(\(a\) => !a\.startsWith\('--'\)\)/.test(cli),
+    '--partiel serait relu comme une date et sortirait en 2 avant la garde');
+
+  const collecte = readFileSync(ici('finubar/mesure-git.mjs'), 'utf8');
   verifier('l\'empreinte de tête n\'est gardée que s\'il y a une dérive à expliquer',
     /if \(!commitsDepuis\) return \{ tete: null/.test(collecte));
   // ⚠️ `commits_depuis === 0` (aucune dérive) et `commits_depuis === null`

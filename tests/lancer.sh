@@ -77,6 +77,9 @@ echo "=== unit-adaptateur-finubar.mjs ==="
 node unit-adaptateur-finubar.mjs
 echo "=== unit-leo-partout.mjs ==="
 node unit-leo-partout.mjs
+echo "=== unit-finubar-mesure-git.mjs ==="
+node unit-finubar-mesure-git.mjs
+
 echo "=== unit-finubar-matin.mjs ==="
 node unit-finubar-matin.mjs
 

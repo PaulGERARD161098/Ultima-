@@ -280,7 +280,11 @@ export function cartoucheDuMatin(agregat) {
     } else if (p.derive && p.derive.commit_inconnu) {
       signaux.push({
         projet: g.projet,
-        dit: 'pointe un commit introuvable — sa fraîcheur n\'est plus mesurable, à recaler',
+        // Deux causes, une seule conséquence : un SHA détruit par un squash et
+        // un champ jamais renseigné laissent tous deux la note sans ancrage.
+        // Le libellé dit ce qui est vrai des DEUX plutôt que de nommer la cause
+        // la plus fréquente et de mentir sur l'autre.
+        dit: 'n\'est rattaché à aucun commit atteignable — sa fraîcheur n\'est plus mesurable, à recaler',
         pourquoi: 'commit_inconnu',
       });
     } else if (g.etat === 'en_attente_de_paul') {
