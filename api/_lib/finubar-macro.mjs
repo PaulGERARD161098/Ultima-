@@ -4,7 +4,7 @@
 // l'IMPORTER pour que Vercel l'embarque dans le paquet de la fonction, et
 // que `api/_lib/` est le seul motif d'import éprouvé en production ici.
 export default {
-  "le": "2026-09-06",
+  "le": "2026-09-07",
   "projets": [
     {
       "ok": true,
@@ -49,8 +49,8 @@ export default {
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "jours_depuis_maj": 3,
-      "jours_en_attente": 53,
+      "jours_depuis_maj": 4,
+      "jours_en_attente": 54,
       "rang": 1
     },
     {
@@ -118,8 +118,8 @@ export default {
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "jours_depuis_maj": 3,
-      "jours_en_attente": 33,
+      "jours_depuis_maj": 4,
+      "jours_en_attente": 34,
       "rang": 1
     },
     {
@@ -169,8 +169,8 @@ export default {
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "jours_depuis_maj": 3,
-      "jours_en_attente": 33,
+      "jours_depuis_maj": 4,
+      "jours_en_attente": 34,
       "rang": 1
     },
     {
@@ -234,8 +234,8 @@ export default {
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "jours_depuis_maj": 3,
-      "jours_en_attente": 20,
+      "jours_depuis_maj": 4,
+      "jours_en_attente": 21,
       "rang": 2
     },
     {
@@ -246,7 +246,7 @@ export default {
         "projet": "Ultima",
         "depot": "PaulGERARD161098/Ultima-",
         "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-        "rattache_a": "REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md",
+        "rattache_a": "REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md",
         "etat": "en_cours",
         "jalon": {
           "nom": "J3 — le ciel porte aussi l'état PERSONNEL (P4 : les signaux du cockpit)",
@@ -319,8 +319,8 @@ export default {
         "commits_depuis": null,
         "commit_inconnu": false
       },
-      "jours_depuis_maj": 1,
-      "jours_en_attente": 17,
+      "jours_depuis_maj": 2,
+      "jours_en_attente": 18,
       "rang": 2
     },
     {
@@ -446,17 +446,17 @@ export default {
     "signaux": [
       {
         "projet": "RénoAgenda",
-        "dit": "attend un geste : Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux — ouvert depuis 53 j",
+        "dit": "attend un geste : Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux — ouvert depuis 54 j",
         "pourquoi": "attente"
       },
       {
         "projet": "RénoBoost",
-        "dit": "attend un geste : Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08 — ouvert depuis 33 j",
+        "dit": "attend un geste : Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08 — ouvert depuis 34 j",
         "pourquoi": "attente"
       },
       {
         "projet": "RénoPredict",
-        "dit": "attend un geste : Générer et imprimer un lot de stickers QR — `stickers` = 0 depuis le 11/08. Le piège de l'URL est refermé le 01/09 : il ne reste que le geste physique — ouvert depuis 33 j",
+        "dit": "attend un geste : Générer et imprimer un lot de stickers QR — `stickers` = 0 depuis le 11/08. Le piège de l'URL est refermé le 01/09 : il ne reste que le geste physique — ouvert depuis 34 j",
         "pourquoi": "attente"
       }
     ],
