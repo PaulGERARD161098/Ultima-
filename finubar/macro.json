@@ -1,5 +1,5 @@
 {
-  "le": "2026-09-06",
+  "le": "2026-09-07",
   "projets": [
     {
       "ok": true,
@@ -9,18 +9,18 @@
         "projet": "RénoAgenda",
         "depot": "PaulGERARD161098/RenoAgenda",
         "cap": "Marketplace particuliers ↔ artisans RGE : la demande arrive, se qualifie et se dispatche toute seule.",
-        "rattache_a": "ROADMAP-ARTILIB.md (dates, produit fini) · CADRAGE-2026-09-03-rdv-omnicanal.md (raisonnement) · CADRAGE-OFFRE.md · TODO-PAUL.md · RenoBoost/ROADMAP-MASTER.md",
+        "rattache_a": "ROADMAP-ARTIDISPO.md (dates, produit fini) · CADRAGE-2026-09-03-rdv-omnicanal.md (raisonnement) · CADRAGE-OFFRE.md · TODO-PAUL.md · RenoBoost/ROADMAP-MASTER.md",
         "etat": "en_attente_de_paul",
         "jalon": {
-          "nom": "Artilib — 20 artisans payants au 30/11/2026",
+          "nom": "Artidispo — 20 artisans payants au 30/11/2026",
           "critere_de_sortie": "20 abonnements actifs chez Stripe ; paliers 5 au 31/10, 12 au 15/11"
         },
         "dernier_arret": {
           "le": "2026-09-06",
-          "quoi": "Fin de séance : cadrage Artilib + ROADMAP-ARTILIB.md + 8 décisions fusionnés (#74, #75), mail envoyé à Henri, prompt de reprise en §9 de la roadmap. Aucun code.",
-          "commit": "79afa84"
+          "quoi": "Séance du 06/09 CLOSE. Cadrage Artidispo fusionné (#74→#79) : nom arrêté ARTIDISPO, 8 décisions, rétroplanning au 01/12. AUCUNE ligne de code — le gate du 15/09 n'est pas levé.",
+          "commit": "0e11680"
         },
-        "prochaine_action": "Paul auj. : artilib.fr + INPI (secours Artilib'). Lundi 07/09 : appel Artisaner (R1), liste des 30, 2 badges. 08/09 : Twilio + numéro FR. 10/09 : nom arrêté, dépôt, landing v0.",
+        "prochaine_action": "CE SOIR (Paul) : contrôle INPI d'ARTIDISPO + prévenir Henri du nom (son mail dit encore Artilib). Lundi 07/09 : 3 gestes humains, roadmap SS4. Ordre d'exécution : roadmap SS10.",
         "bloque_par": [
           "Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux",
           "Mentions légales : des `[À compléter]` sont visibles ; à lever AU PREMIER EURO ENCAISSÉ, pas à une date",
@@ -29,15 +29,15 @@
         "en_attente_depuis": "2026-07-15",
         "boucles_ouvertes": [
           {
+            "quoi": "⛔ Paul avant le 10/09 : contrôle INPI du nom ARTIDISPO (marques ET dénominations). Seul contrôle que la session n'a pas pu faire (proxy). Détail et pièges : roadmap SS4.",
+            "depuis": "2026-09-06"
+          },
+          {
             "quoi": "Salon Batimat/Interclima 28/09-01/10 : kit (landing v0, cartes QR, script, collecte, mail de relance au 02/10) à avoir le 27/09. Objectifs N cartes / M inscrits à fixer par Paul.",
             "depuis": "2026-09-06"
           },
           {
             "quoi": "RénoRDV — P0 non fait : prouver le SMS sur appel manqué sur UN artisan avant tout dev. Bloqué par 2 gestes de Paul (compte Twilio + numéro FR)",
-            "depuis": "2026-09-03"
-          },
-          {
-            "quoi": "Nom Artilib : domaine + INPI NON VÉRIFIÉS (registres bloqués depuis la séance). Chemin critique du kit salon : les cartes se commandent le 18/09 au plus tard.",
             "depuis": "2026-09-03"
           },
           {
@@ -55,13 +55,13 @@
       "ciel": "renoboost-ia",
       "hors_seance": false,
       "derive": {
-        "tete": "c346ed4",
-        "tete_le": "2026-09-06T12:50:06+02:00",
-        "commits_depuis": 1,
+        "tete": "1c3a4cf",
+        "tete_le": "2026-09-06T23:54:04+02:00",
+        "commits_depuis": 2,
         "commit_inconnu": false
       },
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 53,
+      "jours_depuis_maj": 1,
+      "jours_en_attente": 54,
       "rang": 0
     },
     {
@@ -111,8 +111,8 @@
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "jours_depuis_maj": 3,
-      "jours_en_attente": 33,
+      "jours_depuis_maj": 4,
+      "jours_en_attente": 34,
       "rang": 1
     },
     {
@@ -195,8 +195,8 @@
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "jours_depuis_maj": 1,
-      "jours_en_attente": 33,
+      "jours_depuis_maj": 2,
+      "jours_en_attente": 34,
       "rang": 1
     },
     {
@@ -272,8 +272,8 @@
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "jours_depuis_maj": 3,
-      "jours_en_attente": 20,
+      "jours_depuis_maj": 4,
+      "jours_en_attente": 21,
       "rang": 2
     },
     {
@@ -348,8 +348,8 @@
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "jours_depuis_maj": 1,
-      "jours_en_attente": 17,
+      "jours_depuis_maj": 2,
+      "jours_en_attente": 18,
       "rang": 2
     },
     {
@@ -467,17 +467,17 @@
     "signaux": [
       {
         "projet": "RénoAgenda",
-        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
+        "dit": "a avancé de 2 commit(s) depuis sa dernière note",
         "pourquoi": "derive"
       },
       {
         "projet": "RénoPredict",
-        "dit": "attend un geste : Générer et imprimer un lot de stickers QR — `stickers` = 0 depuis le 11/08. Le piège de l'URL est refermé le 01/09 : il ne reste que le geste physique — ouvert depuis 33 j",
+        "dit": "attend un geste : Générer et imprimer un lot de stickers QR — `stickers` = 0 depuis le 11/08. Le piège de l'URL est refermé le 01/09 : il ne reste que le geste physique — ouvert depuis 34 j",
         "pourquoi": "attente"
       },
       {
         "projet": "RénoBoost",
-        "dit": "attend un geste : Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08 — ouvert depuis 33 j",
+        "dit": "attend un geste : Valider la fiche Google Business « Rénoboost IA » — ouverte depuis le 04/08 — ouvert depuis 34 j",
         "pourquoi": "attente"
       }
     ],
