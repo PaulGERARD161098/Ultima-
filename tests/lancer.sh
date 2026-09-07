@@ -17,6 +17,8 @@ if [ ! -d ../node_modules/playwright ]; then
 fi
 
 # 2. Unitaires Node purs (zéro réseau, zéro navigateur).
+echo "=== unit-finubar-rappel.mjs ==="
+node unit-finubar-rappel.mjs
 echo "=== unit-geocode.mjs ==="
 node unit-geocode.mjs
 echo "=== unit-secteur.mjs ==="
