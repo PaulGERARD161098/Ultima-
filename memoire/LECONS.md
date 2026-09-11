@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v4 2026-09-11 sha256:6b9a4ec3f484 -->
+<!-- lecons:empreinte v5 2026-09-11 sha256:0a82950fed30 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -113,6 +113,26 @@ même séance : « 5 textes sur 2 pages, assombrir un jeton global » était en
 réalité 7 textes sur 3 pages, un jeton local, et sur une page il fallait
 **éclaircir**. Une dette décrite de mémoire est un souvenir, pas une mesure.
 
+**UN CAS À RÉPONSE CONNUE DOIT ÊTRE JOUÉ DANS L'ENVIRONNEMENT DE LA VRAIE
+LECTURE** *(2026-09-11)*. Après un squash, le grain Finubar d'artisan-builder
+pointait le commit de la branche, que la fusion avait fait disparaître de `main`.
+Le contrôle de dérive, lancé **dans le clone de travail**, répondait
+tranquillement « le dépôt a avancé de 2 commits » — parce qu'un clone qui a servi
+à la branche garde ses objets après la fusion, et que `rev-list` trouvait donc
+encore ce commit. Rejoué sur un **clone frais**, c'est-à-dire dans les conditions
+réelles de la prochaine séance, le même contrôle annonçait « commit introuvable,
+la fraîcheur de cette note n'est PAS mesurable ». *Le cas à réponse connue ne
+suffit pas : il doit être joué là où la lecture aura lieu. Un environnement qui a
+de la mémoire fait passer des contrôles qu'un environnement neuf recale.*
+
+**UN IDENTIFIANT TRONQUÉ NE SE COMPLÈTE JAMAIS DE MÉMOIRE** *(2026-09-11)*.
+Une fusion exigeait le sha complet de la tête ; je n'avais lu que sa forme
+courte, et j'ai passé à l'API douze caractères inventés derrière les sept connus.
+Refus immédiat, garde-fou tenu, coût faible — cette fois. La forme courte d'un
+sha, d'un identifiant de déploiement ou de ticket **est une troncature, pas un
+préfixe qu'on prolonge** : elle se relit à la source (`git rev-parse`) avant
+d'être passée à quoi que ce soit qui agit.
+
 ---
 
 ## 2. Les garde-fous, et leur silence
@@ -208,6 +228,18 @@ l'arbitrage. Vérifier factuellement, appliquer sa règle au constat, agir, rend
 compte du constat **et** de l'action. Lui renvoyer une question à choix multiples
 lui redemande ce qu'il vient de trancher. *Incident : deux PR à évaluer, une
 question posée au lieu de vérifier et agir ; Paul n'a pas répondu, temps perdu.*
+
+**UN LIEN REMIS À UN TIERS DOIT SURVIVRE À CE QU'ON S'APPRÊTE À FAIRE DU DÉPÔT**
+*(2026-09-11)*. Paul voulait envoyer le site SPC à un avis extérieur. Je lui ai
+donné l'**alias de branche** de la préversion Vercel — vérifié vert à l'instant
+où je le donnais, et condamné à mourir à la fusion de la PR, que Paul a demandée
+au message suivant. Rattrapé de moi-même avant l'envoi, mais de justesse : entre
+les deux messages, le lien pouvait déjà être parti chez son destinataire. Ce qui
+se remet est l'**URL immuable du déploiement**, qui ne dépend d'aucune branche ;
+l'alias de branche ne sert qu'en interne. *Un lien vert à l'instant du contrôle
+n'est pas un lien qui tiendra : ce qui s'éprouve, c'est sa durée de vie face aux
+gestes DÉJÀ PRÉVUS sur le dépôt — c'est la famille du garde-fou qu'on n'éprouve
+que du côté qu'on emprunte tous les jours.*
 
 ---
 
