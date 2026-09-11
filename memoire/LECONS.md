@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v5 2026-09-11 sha256:0a82950fed30 -->
+<!-- lecons:empreinte v6 2026-09-11 sha256:028d3cd3f3ff -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -368,3 +368,23 @@ tombé le jour même de sa validation.
 synthèses seulement dans le fil principal. Tiers de modèle économe par défaut ;
 escalade **signalée** uniquement sur les sujets à risque — droits d'accès en
 base, authentification, middleware, décision d'architecture.
+
+**ON NE RAPATRIE PAS UN FICHIER ENTIER POUR EN LIRE UNE LIGNE** *(2026-09-11)*.
+Mesurer l'état des huit copies de CE fichier demandait exactement **une ligne
+par dépôt** : le sceau, en tête. J'ai rapatrié **cinq fichiers entiers** par
+l'outil de lecture GitHub, qui ne sait pas tronquer — environ 110 Ko pour cinq
+lignes utiles, dans une séance où le reste du travail avait encore besoin de
+place. Le même constat s'obtenait pour rien :
+`git show origin/main:<chemin> | head -1` sur un clone déjà là, ou un clone
+superficiel là où il n'y en avait pas.
+⛔ **Le réflexe qui manquait est une question, pas un outil** : *quelle fraction
+du fichier répond à ma question ?* Si c'est une ligne, c'est `git` qui répond —
+jamais l'outil qui rend le document complet.
+
+⊕ **Et son corollaire, qui a bien tenu le même jour : ce qu'on DÉPLACE ne doit
+pas traverser le contexte.** La propagation du fichier aux sept dépôts s'est
+faite par clone, copie, commit, push — le contenu n'est jamais passé en
+paramètre d'outil. L'écrire par un outil d'écriture distante aurait fait
+transiter 22 Ko **sept fois**, pour un fichier qu'aucun de nous n'avait besoin
+de relire. *Un octet qui passe par le fil coûte ; un octet que `git` déplace de
+disque à disque ne coûte rien.*
