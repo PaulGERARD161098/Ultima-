@@ -163,7 +163,10 @@ aujourd'hui ? » + 4 quadrants. Un repo, mémoire inter-segment, sécurité rele
    ✅ fait+commit / ⏭ reporté+raison / ❌ non reproduit+preuve.
 3. Rafraîchir les roadmaps si le cap a bougé, et la `memoire/` (décisions
    actées, lexique enrichi, radar : confirmé/démenti, rétrospective des
-   frictions → amélioration de la charte si besoin).
+   frictions → amélioration de la charte si besoin). ⛔ **Et si une erreur a
+   coûté quelque chose dans la séance, elle devient une entrée de
+   `memoire/LECONS.md`**, avec l'incident qui l'a payée — c'est le seul moment
+   où une leçon s'écrit.
 4. Synchroniser la fiche Notion « 📦 Repo Ultima- — Fiche projet »
    (sauvegarde permanente du travail).
 5. Rapport final : fermé / restant / prochaine action + blocs
@@ -215,99 +218,22 @@ manuscrites ni de clins d'œil ludiques ; la désirabilité vient de la beauté
 du registre antique. Ce parti pris ne sacrifie jamais la lisibilité,
 l'accessibilité ni la sécurité.
 
-## ⚡ Optimisation — pratiques permanentes (implantées le 2026-07-06)
+## 📓 Les leçons — `memoire/LECONS.md` (posé le 2026-09-11)
 
-- **Vérification patrimoine** : les harnais navigateur vivent dans `tests/`
-  (`bash tests/lancer.sh` — fixtures npm en cache local, zéro CDN). Chaque
-  boucle front les fait tourner ET les enrichit ; jamais de harnais jetable.
-- **Conception et implémentation lourdes = agents** (contexte de Léo préservé
-  pour piloter) ; specs déposées en fichiers relus par l'implémenteur ;
-  contre-passe de vérification indépendante par Léo avant fusion.
-- **Réutiliser avant de refaire** : modèles déjà conçus (specs, migrations,
-  motifs de code), fixtures en cache, une seule fusion par boucle.
-- **Économie de contexte** : sous-agents pour les gros volumes de lecture,
-  synthèses seulement dans le fil principal.
-- **Patrimoine COMPLET avant fusion** (renfort 2026-07-22) : avant toute fusion
-  touchant le front, le routage ou un renommage large, lancer
-  `bash tests/lancer.sh` en **entier** — pas seulement les harnais du fichier
-  modifié. Leçon : un changement des liens « retour » en LV2-① a laissé
-  `smoke-quadrants` rouge, invisible car seuls boussole+console avaient été
-  relancés ; rattrapé bien plus tard.
-- **Reprise de branche après squash-merge** (2026-07-22) : après chaque fusion
-  **squash**, repartir la branche de `origin/main`
-  (`git fetch origin main && git checkout -B <branche> origin/main`) **avant**
-  tout nouveau commit — ne jamais empiler sur l'historique pré-squash (source
-  de conflits de merge récurrents ; résolus au `git rebase --onto origin/main`).
-- **Sessions parallèles sur le même repo** (2026-07-30) : quand un autre fil
-  pousse sur `main` (constat : 4 avancées de `main` en une session), **rebaser
-  puis fusionner sans délai** — une PR qui dort se fait doubler et le rebase est
-  à refaire. Un conflit sur `memoire/JOURNAL-DECISIONS.md` (deux sessions
-  écrivent le même jour, en fin de fichier) se résout **toujours par
-  concaténation** : garder les DEUX entrées, jamais arbitrer entre elles.
-- **Extraire plutôt que dupliquer, quand un harnais couvre** (2026-07-30) : un
-  composant réclamé par un second appelant se **déplace** vers son propre module
-  (ex. la dictée vocale : `js/app.js` → `js/dictee.js`), il ne se recopie pas.
-  Le harnais dédié rend l'opération sûre — il doit passer **sans retouche**,
-  c'est le critère de réussite de l'extraction.
-- **Une géométrie se MESURE, elle ne se valide pas à l'œil** (2026-08-01) : tout
-  élément placé dans un cadre borné (boussole, arbre VRANESH, foyer DRAUKHAIN)
-  voit sa `getBBox()` comparée au `viewBox` par le harnais, et s'éprouve sur un
-  **pire cas construit** (ex. `couronne(12)`) — jamais sur les seules données du
-  jour, qui sont un échantillon favorable. Leçon : le foyer débordait chez Paul
-  alors qu'il avait été « validé » sur un rendu regardé. « Ça a l'air bien »
-  n'est pas un critère de réussite au sens d'EL ④ : c'est l'absence de critère.
-- **AVANT DE CROIRE UNE MESURE, LUI DEMANDER CE QU'ELLE RÉPOND SUR UN CAS DONT
-  ON CONNAÎT DÉJÀ LA RÉPONSE** (2026-08-17 — trois sondes fausses dans une seule
-  session, et le même signe d'alerte chaque fois : *une réponse trop uniforme*).
-  Un instrument de contraste qui condamnait un titre parfaitement lisible ; une
-  mesure de géométrie qui comparait des étoiles au cadre d'un **blason** attrapé
-  par un `querySelector('svg')` trop large ; une sonde de canvas qui répondait
-  « blanc pur » à **toutes** les options, y compris `eclat: 0`. Les trois se
-  seraient effondrées en une ligne sous ce test. *Corollaire : « ça a l'air
-  cohérent » ne valide pas un instrument — seul un cas de référence le valide.*
-- **UN FILTRE QUI EXCLUT DES CAS DOIT COMPTER ET NOMMER CE QU'IL EXCLUT**
-  (2026-08-17). Un harnais de contraste écartait en silence les textes trop fins
-  pour avoir un pixel pleinement opaque — c'est-à-dire **exactement les plus à
-  risque** — et rendait un verdict vert. Un `continue` muet transforme un angle
-  mort en réponse rassurante. Tout cas écarté est compté, nommé au rapport, et
-  son nombre est **borné par un verdict**.
-- **UNE QUESTION REMONTÉE À PAUL DOIT ÊTRE UN CHOIX, PAS UNE ENQUÊTE NON
-  TERMINÉE** (2026-08-17). J'avais annoncé un arbitrage produit (« l'abaque est
-  de fait en atelier, à trancher ») ; c'était un diagnostic arrêté trop tôt — la
-  page perdait son **support**, pas trois couleurs, et un seul geste l'a réglé.
-  Un arbitrage se pose quand **deux options tiennent également debout** ; sinon
-  c'est du travail à finir, et le déléguer à Paul lui coûte une décision qui
-  n'existe pas.
-- **CLASSER PAR LA MESURE PLUTÔT QUE PAR LE DÉBAT** (2026-08-17). Pour embarquer
-  sept pages sur trois registres, ne pas décider en amont : appliquer le registre
-  probable aux sept, puis **laisser le harnais désigner celles qui résistent**.
-  Cinq étaient bonnes du premier coup, une seule a demandé du travail. Débattre
-  page par page aurait coûté plus cher — et se serait trompé.
-- **UNE DETTE DÉCRITE DE MÉMOIRE EST UN SOUVENIR, PAS UNE MESURE** (2026-08-20 —
-  deux notes de registre prises en défaut dans la même session). Le registre
-  annonçait « 5 textes sur 2 pages, assombrir un jeton global » : c'était **7
-  textes sur 3 pages**, un jeton **local**, et sur ALTHEA il fallait **éclaircir**.
-  Il annonçait la légende KALAMN-TALAEN coupée « en 390 px » : elle l'était aux
-  **deux** largeurs. *Rouvrir une dette commence donc par la RE-MESURER, jamais
-  par relire sa description* — une note vieillit exactement comme un test qui
-  nomme une couleur supposée.
-- **UN VERDICT DIFFÉRENTIEL PARDONNE PAR CONSTRUCTION — IL LUI FAUT UN VERROU**
-  (2026-08-20). `smoke-fond-contraste` n'exigeait « aucun défaut NOUVEAU » : sept
-  textes sous 4,5:1 ont dormi des semaines **dans un rapport vert**, poliment
-  listés sous `heritesRappeles`. Un rappel n'est pas un garde-fou. Toute page dont
-  la dette est soldée le **déclare** (`dettesSoldees: true`) et retrouve un seuil
-  **absolu**. Même famille : un test qui vérifie qu'un texte **existe** ne dit rien
-  de l'endroit où il est — et **on mesure la boîte du TEXTE (via un `Range`), pas
-  celle du bloc**, qu'un conteneur pleine largeur rend toujours verte.
-- **UN FOND SUPPOSÉ EST UN FOND FAUX** (2026-08-20) : quand un calcul et une mesure
-  divergent, c'est l'**hypothèse cachée du calcul** qu'il faut aller chercher, pas
-  l'arithmétique. Le contraste calculé du lien d'ALTHEA donnait 5,12:1 contre 4,36
-  mesuré — le lien n'est pas posé sur la nuit de la page mais sur le **sol
-  étoilé**. Le fond réel se **déduit du ratio mesuré**, il ne se suppose pas.
-- **Une règle de confidentialité se teste par l'ABSENCE** (2026-07-30) : pour
-  toute donnée sensible sortant vers un tiers (IA, log, page servie), le harnais
-  cherche le contenu interdit dans ce qui part et exige de **ne pas l'y
-  trouver** — vérifier seulement la présence du permis ne prouve rien.
+**Tout ce qu'une erreur nous a appris vit dans un seul fichier :
+`memoire/LECONS.md`.** Il est **injecté à l'ouverture de chaque séance** par le
+hook `SessionStart`, au même titre que le grain Finubar — il n'y a donc rien à
+aller chercher, et rien à recopier ici.
+
+Il est classé par famille — mesurer · les garde-fous · ce qu'on donne à Paul ·
+conduire une boucle · plusieurs dépôts · économie — et chaque entrée porte
+**l'incident qui l'a payée**. Les dix-neuf règles qui vivaient dans ce fichier
+jusqu'au 2026-09-11 y ont été **déplacées, pas recopiées** : ce `CLAUDE.md` ne
+doit plus en porter aucune, sinon deux sources divergent et on croit la
+mauvaise.
+
+⛔ **Une leçon s'ajoute quand elle est payée**, en fin de séance, dans le commit
+du travail qui l'a révélée — jamais par anticipation.
 
 ## 🧭 FINUBAR — l'état des huit dépôts (posé le 2026-08-21)
 
@@ -333,33 +259,8 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
 
 ## ⚙️ Règles permanentes
 
-- **UN GARDE-FOU SE VÉRIFIE DU CÔTÉ OÙ IL PEUT ÊTRE CONTOURNÉ** (2026-08-21 —
-  quatre écarts de la même forme dans une seule séance). Une donnée protégée par
-  un écran et pas par la donnée ; un motif d'import supposé plutôt qu'éprouvé ;
-  une convention de plateforme prise pour une protection ; une liste de chemins
-  écrite à la main prise pour une couverture. Les quatre passaient la revue et
-  ne tenaient qu'à une requête près.
-  *Corollaire, et c'est lui qui coûte* : quand on ne PEUT pas vérifier de ce
-  côté-là — egress bloqué, convention de plateforme, comportement de
-  déploiement — on **retire l'hypothèse** au lieu de la documenter. Une
-  hypothèse documentée reste une hypothèse ; c'est le lecteur suivant qui la
-  paie. Et un garde-fou qui cesse de fonctionner doit le DIRE : son silence se
-  lit comme une bonne nouvelle.
-
-- **TOUJOURS LES LIENS DE CE QU'IL Y A À VÉRIFIER** (Paul, 2026-08-17 —
-  renforce la règle du 2026-08-01) : dès qu'un travail est poussé, Léo donne
-  **la liste des liens cliquables** de tout ce que Paul peut aller voir, **et ce
-  qu'il faut regarder sur chacun**. Pas un lien générique vers la preview : un
-  lien **par page concernée**, avec en une ligne ce qui a changé dessus et ce
-  qui mérite son œil.
-  *La raison : une preview sans adresse précise oblige Paul à chercher lui-même
-  ce que Léo vient de modifier — c'est du travail rendu à moitié.*
-  S'applique à **chaque rapport**, pas seulement en fin de boucle, et y compris
-  quand le travail est en cours (liens de ce qui est déjà déployé). Le lien de
-  base de la preview vient du commentaire `vercel[bot]` sur la PR ; les pages
-  s'y ajoutent en suffixe.
-  Quand une page n'est PAS encore vérifiable (déploiement en cours, palier non
-  poussé), le dire au lieu de donner un lien qui ne montrera rien.
+> Les **leçons** (garde-fous, mesures, ce qu'on donne à Paul) ont leur fichier :
+> `memoire/LECONS.md`. Ne restent ici que les règles opérationnelles du dépôt.
 
 - Jamais de secret committé (env Vercel uniquement) ; jamais de PII en logs
   (le réseau commercial EST de la PII — IDs uniquement).
@@ -369,3 +270,6 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
 - Sous-agents parallèles sur les axes indépendants ; économe en tokens.
 - Production défensive : validation d'entrées, erreurs génériques client /
   détaillées serveur, timeout sortant sur tout appel externe.
+- **Vérification patrimoine** : les harnais navigateur vivent dans `tests/`
+  (`bash tests/lancer.sh` — fixtures npm en cache local, zéro CDN). Chaque
+  boucle front les fait tourner ET les enrichit ; jamais de harnais jetable.
