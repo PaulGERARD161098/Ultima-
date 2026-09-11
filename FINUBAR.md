@@ -31,11 +31,11 @@
     "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
   },
   "dernier_arret": {
-    "le": "2026-09-07",
-    "quoi": "Correctif du rappel Finubar, et une leçon SUR MOI-MÊME. Le rappel ne lisait que la forme `{quoi}` des boucles ouvertes : sur un grain qui les écrit en CHAÎNE (artisan-builder), il rendait « BOUCLES OUVERTES :  ·  ·  » — quatre dettes présentées comme inexistantes. Corrigé à la source, re-copié à l'identique, harnais `tests/unit-finubar-rappel.mjs` ajouté ET inscrit dans `tests/lancer.sh`, validé en réintroduisant le bug. MAIS j'ai annoncé à Paul que ce silence cachait AUSSI l'avertissement d'Ultima sur les Routines DR — c'était FAUX : le grain d'Ultima écrit ses boucles en objets, elles s'affichaient déjà. Je l'avais déduit après correctif, sans mesurer l'avant. Mesuré depuis, les deux formes coexistent et le rappel accepte les deux ; le commentaire du code qui prétendait « les huit grains écrivent en chaîne » est corrigé. Corollaire pour le prochain qui passe : la forme des six autres grains n'a PAS été observée.",
-    "commit": "9dd3581"
+    "le": "2026-09-11",
+    "quoi": "Leçons : sceau v3 — la leçon du jour est celle d'un conflit de merge mal résolu et poussé. Collecte de fin de séance rejouée.",
+    "commit": "a6a165b"
   },
-  "prochaine_action": "INCHANGÉE, et elle reste ouverte : vérifier au passage DR de 12 h que l'atelier persistant s'est RÉVEILLÉ et a cloné les 7 dépôts. Sinon, GitHub Action par dépôt. (Ce doute n'a jamais été caché par le rappel — il était affiché.)",
+  "prochaine_action": "Propager memoire/LECONS.md v3 dans les sept autres dépôts (diff vide = critère). Six copies du rappel Finubar divergent aussi.",
   "bloque_par": [
     "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",

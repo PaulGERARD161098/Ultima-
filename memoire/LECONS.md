@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v2 2026-09-11 sha256:3c0c21732e2a -->
+<!-- lecons:empreinte v3 2026-09-11 sha256:c3dc62d43554 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -274,6 +274,25 @@ sur `main` — constat : quatre avancées en une séance — rebaser puis fusion
 `memoire/JOURNAL-DECISIONS.md`, où deux séances écrivent le même jour en fin de
 fichier, se résout **toujours par concaténation** : garder les DEUX entrées,
 jamais arbitrer entre elles.
+
+**RÉSOUDRE UN CONFLIT NE SE VÉRIFIE PAS AVEC `git diff --check`** *(2026-09-11)*.
+Un merge peut porter PLUSIEURS zones de conflit dans le même fichier. J'en ai
+résolu une, committé, poussé — et les marqueurs de la seconde sont partis avec.
+`FINUBAR.md` n'était plus du JSON, et la suite est restée VERTE : aucun test ne
+lit ce fichier. Mesuré ce jour-là, et c'est le point qui compte :
+
+| Commande | Voit les marqueurs ? |
+|---|---|
+| `git diff --check` (après `git add`) | **non** — l'index les a absorbés |
+| `git diff --cached --check` | **oui**, ligne par ligne |
+| `git commit` | **non**, il passe sans rien dire |
+
+⛔ Donc : après un `git add` de résolution, c'est `git diff --cached --check` qui
+garde, et lui seul. Et quand le fichier résolu a une FORME (JSON, YAML), on la
+reparse avant de committer — `node -e "JSON.parse(…)"` coûte deux secondes.
+*Corollaire, de la même famille que « un garde-fou qui cesse de fonctionner doit
+le dire » : un fichier qu'aucun harnais ne lit n'a pas de garde-fou du tout, et
+sa corruption se présente comme une CI verte.*
 
 **UN PROJET RENOMMÉ LAISSE DES NOMS MORTS LÀ OÙ ILS COÛTENT LE PLUS CHER**
 *(2026-09-11)*. Paul a cherché « Artilib », le dossier vivait sous « Artidispo »,
