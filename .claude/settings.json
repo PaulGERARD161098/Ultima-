@@ -18,6 +18,10 @@
           {
             "type": "command",
             "command": "node \"${CLAUDE_PROJECT_DIR:-.}/.claude/finubar-rappel.mjs\" 2>/dev/null || true"
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR:-.}/.claude/lecons-rappel.mjs\" 2>/dev/null || true"
           }
         ]
       }
