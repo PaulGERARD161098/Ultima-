@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v3 2026-09-11 sha256:c3dc62d43554 -->
+<!-- lecons:empreinte v4 2026-09-11 sha256:6b9a4ec3f484 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -289,7 +289,20 @@ lit ce fichier. Mesuré ce jour-là, et c'est le point qui compte :
 
 ⛔ Donc : après un `git add` de résolution, c'est `git diff --cached --check` qui
 garde, et lui seul. Et quand le fichier résolu a une FORME (JSON, YAML), on la
-reparse avant de committer — `node -e "JSON.parse(…)"` coûte deux secondes.
+reparse avant de committer.
+
+⛔⛔ **ET LE REPARSE DOIT ARRÊTER LE COMMIT, PAS L'ACCOMPAGNER.** Une heure plus
+tard, même journée, la faute s'est rejouée **en pire** : `--cached --check`
+était vide, `JSON.parse` ÉCHOUAIT, et le commit est parti quand même — le parse
+tournait en bout d'enchaînement, dans un `node -e` dont le code de sortie ne
+gardait rien. *Un contrôle qui n'ARRÊTE pas n'est pas un garde-fou : c'est une
+ligne de sortie qu'on peut ne pas lire.* La forme qui garde :
+
+```
+node -e "JSON.parse(...)" && git add F && git diff --cached --check && git commit
+```
+
+Le parse en TÊTE du `&&`, avant `git add` : son échec empêche le commit.
 *Corollaire, de la même famille que « un garde-fou qui cesse de fonctionner doit
 le dire » : un fichier qu'aucun harnais ne lit n'a pas de garde-fou du tout, et
 sa corruption se présente comme une CI verte.*
