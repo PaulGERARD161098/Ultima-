@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v1 2026-09-11 sha256:8dfe0830cc79 -->
+<!-- lecons:empreinte v2 2026-09-11 sha256:3c0c21732e2a -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -157,6 +157,15 @@ trouver. Vérifier seulement la présence du permis ne prouve rien.
 construit son texte. Rien ne le signalait, et c'est Paul qui l'aurait découvert
 en cliquant. Corrigé par un harnais, `RenoAgenda/tests/unit/renvois-sections.test.mjs`.
 
+**UN MÉCANISME DE CONTRÔLE POSÉ APRÈS LA PREMIÈRE COPIE LAISSE CETTE COPIE
+DEHORS** *(2026-09-11)*. Ce fichier a été déposé dans RenoAgenda le matin ; le
+sceau qui permet de comparer les huit copies a été posé une heure plus tard. La
+première copie servie était donc déjà hors mécanisme, et son rappel d'ouverture
+annonçait « cette copie n'a PAS de sceau ». Il a fallu une PR de rattrapage pour
+un fichier vieux d'une heure. *Le contrôle se pose AVANT la première copie, pas
+après la dernière* — et ce qui a sauvé le coup ici, c'est que le mécanisme
+ANNONCE son absence : un sceau muet aurait laissé la copie passer pour à jour.
+
 **UN DOCUMENT DE DATES N'A AUCUN MÉCANISME DE PÉREMPTION** *(2026-09-11)*. Le
 rétroplanning d'Artidispo affichait deux jalons dépassés de trois jours
 exactement comme les jalons à venir. Un jalon en retard ne se signale pas tout
@@ -273,6 +282,13 @@ noms pour un produit sans une ligne de code. Ce qu'il faut chasser après un
 renommage, ce ne sont pas les occurrences, ce sont les **valeurs qu'un lecteur
 va exécuter** — nom de dépôt, domaine, URL. Les occurrences historiques peuvent
 rester : elles racontent la décision.
+
+**UNE SÉANCE NE PEUT PAS ATTACHER UN DÉPÔT D'UN AUTRE PROPRIÉTAIRE**
+*(2026-09-11)*. Sept dépôts sur huit ont reçu les leçons en une passe ; le
+huitième, `paggerard-boop/ripair`, a été refusé — une séance déjà ouverte sur
+des dépôts de `PaulGERARD161098` ne peut pas en attacher un d'un autre compte.
+Ce n'est pas contournable depuis la séance : il faut en ouvrir une sur ce dépôt.
+*À savoir AVANT d'annoncer « tous les dépôts », pas après.*
 
 **UNE ANTÉRIORITÉ SE CHERCHE SUR LE NOM, JAMAIS SUR LE MÉTIER** *(2026-09-06)*.
 Une mesure disait « aucune plateforme de rendez-vous nommée Artilib n'apparaît
