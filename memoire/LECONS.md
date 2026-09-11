@@ -14,6 +14,15 @@
 > consultable en cours de travail. La date reste sur chaque entrée : elle dit
 > quand la facture est tombée.
 
+⛔ **SA SOURCE UNIQUE EST `Ultima-/memoire/LECONS.md`.** Il est **copié à
+l'identique** dans les sept autres dépôts, parce qu'une séance ouverte sur
+RenoAgenda ou artisan-builder n'a pas Ultima sous la main. Toute évolution se
+fait **dans Ultima**, puis se re-copie : on ne corrige jamais une copie sur
+place, sinon les huit divergent et plus personne ne sait laquelle fait foi.
+*(Même motif, même raison que `finubar/rappel.mjs`. Les chemins cités dans les
+leçons portent donc leur dépôt en préfixe : ils doivent se lire depuis n'importe
+lequel des huit.)*
+
 **Comment il vit.**
 - **Une leçon s'ajoute quand elle est payée**, en fin de séance, dans le commit
   du travail qui l'a révélée. Jamais par anticipation : une règle qui n'a rien
