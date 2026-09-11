@@ -19,6 +19,8 @@ fi
 # 2. Unitaires Node purs (zéro réseau, zéro navigateur).
 echo "=== unit-finubar-rappel.mjs ==="
 node unit-finubar-rappel.mjs
+echo "=== unit-lecons-empreinte.mjs ==="
+node unit-lecons-empreinte.mjs
 echo "=== unit-geocode.mjs ==="
 node unit-geocode.mjs
 echo "=== unit-secteur.mjs ==="
