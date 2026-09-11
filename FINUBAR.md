@@ -31,11 +31,11 @@
     "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
   },
   "dernier_arret": {
-    "le": "2026-09-07",
-    "quoi": "Correctif du rappel Finubar, et une leçon SUR MOI-MÊME. Le rappel ne lisait que la forme `{quoi}` des boucles ouvertes : sur un grain qui les écrit en CHAÎNE (artisan-builder), il rendait « BOUCLES OUVERTES :  ·  ·  » — quatre dettes présentées comme inexistantes. Corrigé à la source, re-copié à l'identique, harnais `tests/unit-finubar-rappel.mjs` ajouté ET inscrit dans `tests/lancer.sh`, validé en réintroduisant le bug. MAIS j'ai annoncé à Paul que ce silence cachait AUSSI l'avertissement d'Ultima sur les Routines DR — c'était FAUX : le grain d'Ultima écrit ses boucles en objets, elles s'affichaient déjà. Je l'avais déduit après correctif, sans mesurer l'avant. Mesuré depuis, les deux formes coexistent et le rappel accepte les deux ; le commentaire du code qui prétendait « les huit grains écrivent en chaîne » est corrigé. Corollaire pour le prochain qui passe : la forme des six autres grains n'a PAS été observée.",
-    "commit": "9dd3581"
+    "le": "2026-09-11",
+    "quoi": "memoire/LECONS.md posé : la mémoire de méthode des huit dépôts, classée par famille, chaque entrée portant l'incident qui l'a payée. Les 19 règles du CLAUDE.md y sont DÉPLACÉES (371 → 274 lignes). Un SCEAU en tête (révision + sha256 du corps) rend une copie divergente visible sans réseau ; finubar/lecons-empreinte.mjs --verifier échoue si le fichier change sans être re-scellé, et tourne dans tests/lancer.sh. Le rappel d'ouverture annonce le sceau ET son absence. Propagé à 7 dépôts sur 8 (sceau v2 3c0c21732e2a) ; ripair refusé — une séance ne peut pas attacher un dépôt d'un autre propriétaire.",
+    "commit": "67e2c8b"
   },
-  "prochaine_action": "INCHANGÉE, et elle reste ouverte : vérifier au passage DR de 12 h que l'atelier persistant s'est RÉVEILLÉ et a cloné les 7 dépôts. Sinon, GitHub Action par dépôt. (Ce doute n'a jamais été caché par le rappel — il était affiché.)",
+  "prochaine_action": "Fusionner les 5 PR de recopie du rappel Finubar (RenoAgenda #90, RenoBoost #403, RenoDevis #147, RenoPredict #67, mon-dpe.fr #211) et celle qui porte ce grain. Puis, INCHANGÉE depuis le 07/09 : vérifier au passage DR de 12 h que l'atelier persistant s'est RÉVEILLÉ et a cloné les 7 dépôts ; sinon, GitHub Action par dépôt.",
   "bloque_par": [
     "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
@@ -50,8 +50,16 @@
       "depuis": "2026-09-07"
     },
     {
-      "quoi": "Les six autres dépôts portent encore la copie FAUTIVE de `.claude/finubar-rappel.mjs` : leur prochaine séance doit recopier `Ultima-/finubar/rappel.mjs`. Tant qu'ils écrivent leurs boucles en objets, ils ne voient pas le défaut — c'est le jour où l'un d'eux écrira une chaîne qu'il perdra ses dettes en silence.",
+      "quoi": "Recopie du rappel Finubar : MESURÉE le 11/09 — cinq dépôts en retard, pas six (artisan-builder était déjà à jour). Corrigée dans les cinq, 5 PR ouvertes à fusionner : RenoAgenda #90, RenoBoost #403, RenoDevis #147, RenoPredict #67, mon-dpe.fr #211.",
       "depuis": "2026-09-07"
+    },
+    {
+      "quoi": "ripair (paggerard-boop) n'a PAS reçu memoire/LECONS.md : une séance déjà ouverte sur des dépôts de PaulGERARD161098 ne peut pas attacher un dépôt d'un autre compte. Demande une séance ouverte sur ripair.",
+      "depuis": "2026-09-11"
+    },
+    {
+      "quoi": "Aucun contrôle croisé ne compare la copie des leçons d'un dépôt à la source : le sceau rend la divergence visible, il ne la détecte pas seul. Un contrôle automatique exigerait un jeton inter-dépôts, donc un secret — décision de Paul.",
+      "depuis": "2026-09-11"
     },
     {
       "quoi": "⚠️ Les Routines DR visent une session persistante AVEC ses dépôts, mais le tir d'essai du 06/09 ne l'a pas réveillée. À vérifier à 12 h ; sinon, GitHub Action par dépôt.",
