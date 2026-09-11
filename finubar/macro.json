@@ -1,6 +1,95 @@
 {
-  "le": "2026-09-07",
+  "le": "2026-09-11",
   "projets": [
+    {
+      "ok": true,
+      "motif": "",
+      "depot": "PaulGERARD161098/RenoBoost",
+      "grain": {
+        "projet": "RénoBoost",
+        "depot": "PaulGERARD161098/RenoBoost",
+        "cap": "Un individu seul fait tourner le business entier, aidé par l'automatisation (Directive IA). RénoBoost est le hub : acquisition, rendez-vous, dashboard, et la roadmap maîtresse des quatre briques.",
+        "rattache_a": "ROADMAP-SECURITE.md · REPRISE-2026-09-05-landing-forme.md · REPRISE-2026-09-03-boucles-ete.md · ROADMAP-MASTER.md · ACTIONS-PAUL.md",
+        "etat": "en_attente_de_paul",
+        "jalon": {
+          "nom": "Jalon 0 — l'amorçage : trois gestes de Paul, zéro ligne de code",
+          "critere_de_sortie": "`stickers` > 0 · fiche Google visible publiquement · `stripe_charges_enabled` = true"
+        },
+        "dernier_arret": {
+          "le": "2026-09-11",
+          "quoi": "Audit sécurité : 8 lots livrés, fusionnés, en production. Détail ROADMAP-SECURITE.md (S7, S8). Deux gestes de Paul restent ouverts.",
+          "commit": "1da0e80"
+        },
+        "prochaine_action": "Paul : appliquer la migration revoke (voie UUID) puis lire les rapports CSP. Détail en tête d'ACTIONS-PAUL.md.",
+        "bloque_par": [
+          "Migration revoke : la voie UUID des devis (ACTIONS-PAUL.md, en tête) — 11/09",
+          "Promouvoir la CSP Report-Only en enforce, après lecture des rapports (ACTIONS-PAUL.md) — 11/09",
+          "Rendre le ruleset de main ACTIF : il ne mord pas (ACTIONS-PAUL.md) — 11/09",
+          "Valider la fiche Google Business (ACTIONS-PAUL.md §1) — ouverte depuis le 04/08",
+          "Imprimer un lot de stickers QR (ACTIONS-PAUL.md §2) — reporté par Paul le 07/09",
+          "Embarquement Stripe de SOLA (ACTIONS-PAUL.md §3)",
+          "Accès Google Ads Basic (ACTIONS-PAUL.md §5) — relance le 03/10"
+        ],
+        "en_attente_depuis": "2026-08-04",
+        "boucles_ouvertes": [
+          {
+            "quoi": "⛔ LE RULESET DE main NE MORD PAS — mesuré deux fois le 11/09. Posé par Paul, il laisse merger une PR dont la CI échoue. Enforcement status à passer à « Active », contrôle requis…",
+            "depuis": "2026-09-11"
+          },
+          {
+            "quoi": "Travail multi-agents sans propriétaire de fichier : 2 séances sur RenoBoost le 11/09, toutes sous paggerard-boop, donc aucune revue croisée possible (GitHub interdit d'approuver…",
+            "depuis": "2026-09-11"
+          },
+          {
+            "quoi": "Audit sécurité : 8 lots en production, gardés par 6 harnais de comportement. Restent 2 gestes de Paul (ACTIONS-PAUL.md) et le backlog mesuré (ROADMAP-SECURITE.md).",
+            "depuis": "2026-09-11"
+          },
+          {
+            "quoi": "✅ FERMÉE le 07/09 — la cause n'était pas la CSS mais une injection HTML : les initiales d'avatar sortaient brutes d'un nom venu de GoHighLevel. La leçon qui reste : une donnée de…",
+            "depuis": "2026-09-07"
+          },
+          {
+            "quoi": "Landing : lot 1 « retenue » fait (07/09). Restent lot 2 (photo en hero, attend la séance photo) et lot 3 (sections R1 : centrage, cartes uniformes). Cadrage 2026-09-07. 08/09…",
+            "depuis": "2026-09-06"
+          },
+          {
+            "quoi": "L'API GHL rend 401 sur les champs personnalisés à chaque synchro depuis le 03/09 : `ghl_custom_fields` vide. Les contacts passent — portée de jeton, pas panne",
+            "depuis": "2026-09-05"
+          },
+          {
+            "quoi": "Radar BTP : R-1 à R-4 livrés, migration appliquée, R-3 l'ingesteur écrit et câblé. ⏳ NE RESTE QUE L'ACCÈS BASIC (17/09 inquiétude, 03/10 relance) — plus une seule ligne de code à…",
+            "depuis": "2026-09-03"
+          },
+          {
+            "quoi": "ALT-A1/ALT-A3 ouverts (qui reçoit quoi ; sortir Henri de la supervision technique). ⚠️ La PR #304 qui les portait est MERGÉE depuis le 31/08 — le doc vivant est…",
+            "depuis": "2026-08-27"
+          },
+          {
+            "quoi": "Un interrupteur système dans un `kv_store` par utilisateur, lu au `rows[0]` : il dépend du compte qui répond en premier et meurt avec lui. Sa place est `sentinelle_etat`",
+            "depuis": "2026-09-04"
+          },
+          {
+            "quoi": "`/api/digest` rend 200 sans battement ni log quand la veille est inactive : c'est ce silence qui a caché la panne. Un cron muet et un cron mort doivent se distinguer",
+            "depuis": "2026-09-04"
+          }
+        ],
+        "maj": "2026-09-07"
+      },
+      "recits": [
+        "boucles_ouvertes[].quoi"
+      ],
+      "ciel": "renoboost-ia",
+      "hors_seance": false,
+      "derive": {
+        "tete": "23e7b95",
+        "tete_le": "2026-09-11T15:48:55+02:00",
+        "commits_depuis": 1,
+        "commit_inconnu": false
+      },
+      "jours_depuis_maj": 4,
+      "jours_en_attente": 38,
+      "rang": 0
+    },
     {
       "ok": true,
       "motif": "",
@@ -16,11 +105,11 @@
           "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
         },
         "dernier_arret": {
-          "le": "2026-09-07",
-          "quoi": "Correctif du rappel Finubar, et une leçon SUR MOI-MÊME. Le rappel ne lisait que la forme `{quoi}` des boucles ouvertes : sur un grain qui les écrit en CHAÎNE (artisan-builder), il…",
-          "commit": "9dd3581"
+          "le": "2026-09-11",
+          "quoi": "Leçons : sceau v3 — la leçon du jour est celle d'un conflit de merge mal résolu et poussé. Collecte de fin de séance rejouée.",
+          "commit": "SERA_REMPLACE"
         },
-        "prochaine_action": "INCHANGÉE, et elle reste ouverte : vérifier au passage DR de 12 h que l'atelier persistant s'est RÉVEILLÉ et a cloné les 7 dépôts. Sinon, GitHub Action par dépôt. (Ce doute n'a…",
+        "prochaine_action": "Propager memoire/LECONS.md v3 dans les sept autres dépôts (diff vide = critère). Six copies du rappel Finubar divergent aussi.",
         "bloque_par": [
           "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
           "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
@@ -74,77 +163,37 @@
         "maj": "2026-09-07"
       },
       "recits": [
-        "dernier_arret.quoi",
-        "prochaine_action",
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "racine",
       "hors_seance": false,
       "derive": {
-        "tete": "f927887",
-        "tete_le": "2026-09-07T14:08:15+02:00",
-        "commits_depuis": 2,
-        "commit_inconnu": false
+        "tete": "67e2c8b",
+        "tete_le": "2026-09-11T15:41:06+02:00",
+        "commits_depuis": null,
+        "commit_inconnu": true
       },
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 18,
-      "rang": 0
-    },
-    {
-      "ok": true,
-      "motif": "",
-      "depot": "PaulGERARD161098/artisan-builder",
-      "grain": {
-        "projet": "artisan-builder",
-        "depot": "PaulGERARD161098/artisan-builder",
-        "cap": "Un artisan a son site vitrine en ligne en quelques minutes : wizard en 5 étapes, textes générés, template au choix.",
-        "rattache_a": "CADRAGE-REPRISE-07-09.md (l'état cadré du 2026-09-07 : ce qui bloque, de qui, et pourquoi on attend) · app/sites/solution-plomberie-chauffage/README.md (checklist de mise en ligne) · INVENTAIRE-PHOTOS.md (ce qui a été mesuré sur les photos réelles) · AUDIT-2026-09-04.md (registre des points de sécurité ouverts)",
-        "etat": "en_attente_de_paul",
-        "jalon": {
-          "nom": "Mettre en ligne le premier site client réel — SPC (Solution Plomberie Chauffage)",
-          "critere_de_sortie": "`npm run garde` rend 0 blocage, et le site répond sur le domaine réel du client. Au 2026-09-07 : 7 blocages, mesurés — 6 n'appartiennent qu'à Ezzedine, 1 exige un achat de domaine. AUCUNE ligne de code ne fait tomber l'un des sept. Relancer la garde, ne jamais recopier cette liste."
-        },
-        "dernier_arret": {
-          "le": "2026-09-07",
-          "quoi": "Le lint était mort depuis Next 16 (`next lint` disparu : la commande échouait, donc se lisait comme cassée et non comme absente). Rétabli en ESLint 9 + preset 16.2.4 pinné exact…",
-          "commit": "90408bb"
-        },
-        "prochaine_action": "ATTENDRE EZZEDINE — le message est parti le 2026-09-07 (Paul, en séance ; le grain disait encore le contraire). 6 des 7 blocages n'appartiennent qu'à lui : rien à écrire dans le…",
-        "bloque_par": [
-          "EZZEDINE — assureur décennale, numéro de police et couverture géographique. Obligations d'affichage, rien ne les remplace.",
-          "EZZEDINE — le téléphone réel de l'entreprise.",
-          "EZZEDINE — de vrais avis clients obtenus avec leur accord (`publication.avisReels`). Les avis en ligne sont des exemples fictifs : publier en l'état serait une pratique…",
-          "EZZEDINE — la relecture des textes de chantiers (`publication.textesConfirmes`) : « douche à l'italienne » quand la photo montre un receveur, et « 10 jours ».",
-          "EZZEDINE — le NOM du domaine. C'est son enseigne et son référencement : Paul ne l'achète pas à sa place. Disponibilité mesurée le 2026-09-07, voir CADRAGE-REPRISE-07-09.md.",
-          "PAUL — l'achat du domaine puis NEXT_PUBLIC_SITE_URL en variable d'environnement Vercel, APRÈS la réponse d'Ezzedine. Action payante ET credential : doublement bloquante. Et à ne…",
-          "RÉSERVE, pas un blocage : l'adresse du siège est une DOMICILIATION (SOFRADOM). Juste en mentions légales, mais elle alimente aussi « Basé à Le Raincy » sur la page d'accueil — à…"
-        ],
-        "en_attente_depuis": "2026-08-21",
-        "boucles_ouvertes": [],
-        "maj": "2026-09-07"
-      },
-      "recits": [
-        "dernier_arret.quoi",
-        "prochaine_action",
-        "bloque_par[]"
-      ],
-      "ciel": "alpha",
-      "hors_seance": false,
-      "derive": {
-        "tete": "d59902e",
-        "tete_le": "2026-09-07T14:21:57+00:00",
-        "commits_depuis": 1,
-        "commit_inconnu": false
-      },
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 17,
-      "rang": 0
+      "jours_depuis_maj": 4,
+      "jours_en_attente": 22,
+      "rang": 2
     },
     {
       "ok": false,
       "hors_seance": true,
       "motif": "dépôt non attaché à cette séance",
       "depot": "paggerard-boop/ripair",
+      "ciel": "alpha",
+      "grain": null,
+      "derive": null,
+      "jours_depuis_maj": null,
+      "jours_en_attente": null,
+      "rang": 9
+    },
+    {
+      "ok": false,
+      "hors_seance": true,
+      "motif": "dépôt non attaché à cette séance",
+      "depot": "PaulGERARD161098/artisan-builder",
       "ciel": "alpha",
       "grain": null,
       "derive": null,
@@ -169,18 +218,6 @@
       "hors_seance": true,
       "motif": "dépôt non attaché à cette séance",
       "depot": "PaulGERARD161098/RenoAgenda",
-      "ciel": "renoboost-ia",
-      "grain": null,
-      "derive": null,
-      "jours_depuis_maj": null,
-      "jours_en_attente": null,
-      "rang": 9
-    },
-    {
-      "ok": false,
-      "hors_seance": true,
-      "motif": "dépôt non attaché à cette séance",
-      "depot": "PaulGERARD161098/RenoBoost",
       "ciel": "renoboost-ia",
       "grain": null,
       "derive": null,
@@ -221,10 +258,38 @@
     "en_cours": 1,
     "en_attente_de_paul": 1,
     "au_repos": 0,
-    "derives": 2,
-    "commits_inconnus": 0,
-    "boucles_ouvertes": 10,
+    "derives": 1,
+    "commits_inconnus": 1,
+    "boucles_ouvertes": 20,
     "gestes_de_paul": [
+      {
+        "projet": "RénoBoost",
+        "geste": "Migration revoke : la voie UUID des devis (ACTIONS-PAUL.md, en tête) — 11/09"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Promouvoir la CSP Report-Only en enforce, après lecture des rapports (ACTIONS-PAUL.md) — 11/09"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Rendre le ruleset de main ACTIF : il ne mord pas (ACTIONS-PAUL.md) — 11/09"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Valider la fiche Google Business (ACTIONS-PAUL.md §1) — ouverte depuis le 04/08"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Imprimer un lot de stickers QR (ACTIONS-PAUL.md §2) — reporté par Paul le 07/09"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Embarquement Stripe de SOLA (ACTIONS-PAUL.md §3)"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Accès Google Ads Basic (ACTIONS-PAUL.md §5) — relance le 03/10"
+      },
       {
         "projet": "Ultima",
         "geste": "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr"
@@ -244,55 +309,27 @@
       {
         "projet": "Ultima",
         "geste": "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
-      },
-      {
-        "projet": "artisan-builder",
-        "geste": "EZZEDINE — assureur décennale, numéro de police et couverture géographique. Obligations d'affichage, rien ne les remplace."
-      },
-      {
-        "projet": "artisan-builder",
-        "geste": "EZZEDINE — le téléphone réel de l'entreprise."
-      },
-      {
-        "projet": "artisan-builder",
-        "geste": "EZZEDINE — de vrais avis clients obtenus avec leur accord (`publication.avisReels`). Les avis en ligne sont des exemples fictifs : publier en l'état serait une pratique…"
-      },
-      {
-        "projet": "artisan-builder",
-        "geste": "EZZEDINE — la relecture des textes de chantiers (`publication.textesConfirmes`) : « douche à l'italienne » quand la photo montre un receveur, et « 10 jours »."
-      },
-      {
-        "projet": "artisan-builder",
-        "geste": "EZZEDINE — le NOM du domaine. C'est son enseigne et son référencement : Paul ne l'achète pas à sa place. Disponibilité mesurée le 2026-09-07, voir CADRAGE-REPRISE-07-09.md."
-      },
-      {
-        "projet": "artisan-builder",
-        "geste": "PAUL — l'achat du domaine puis NEXT_PUBLIC_SITE_URL en variable d'environnement Vercel, APRÈS la réponse d'Ezzedine. Action payante ET credential : doublement bloquante. Et à ne…"
-      },
-      {
-        "projet": "artisan-builder",
-        "geste": "RÉSERVE, pas un blocage : l'adresse du siège est une DOMICILIATION (SOFRADOM). Juste en mentions légales, mais elle alimente aussi « Basé à Le Raincy » sur la page d'accueil — à…"
       }
     ]
   },
   "cartouche": {
     "signaux": [
       {
-        "projet": "Ultima",
-        "dit": "a avancé de 2 commit(s) depuis sa dernière note",
+        "projet": "RénoBoost",
+        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
         "pourquoi": "derive"
       },
       {
-        "projet": "artisan-builder",
-        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
-        "pourquoi": "derive"
+        "projet": "Ultima",
+        "dit": "n'est rattaché à aucun commit atteignable — sa fraîcheur n'est plus mesurable, à recaler",
+        "pourquoi": "commit_inconnu"
       }
     ],
     "action": {
-      "projet": "Ultima",
-      "nature": "code",
-      "faire": "INCHANGÉE, et elle reste ouverte : vérifier au passage DR de 12 h que l'atelier persistant s'est RÉVEILLÉ et a cloné les 7 dépôts. Sinon, GitHub Action par dépôt. (Ce doute n'a…",
-      "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima."
+      "projet": "RénoBoost",
+      "nature": "geste",
+      "faire": "Migration revoke : la voie UUID des devis (ACTIONS-PAUL.md, en tête) — 11/09",
+      "cap": "Un individu seul fait tourner le business entier, aidé par l'automatisation (Directive IA). RénoBoost est le hub : acquisition, rendez-vous, dashboard, et la roadmap maîtresse des quatre briques."
     },
     "illisibles": 0,
     "hors_seance": 6
@@ -300,18 +337,18 @@
   "constellation": {
     "noeuds": [
       {
+        "id": "PaulGERARD161098/RenoBoost",
+        "libelle": "RénoBoost",
+        "constellation": "en_attente_de_paul",
+        "ciel": "renoboost-ia",
+        "signal": 1
+      },
+      {
         "id": "PaulGERARD161098/Ultima-",
         "libelle": "Ultima",
         "constellation": "en_cours",
         "ciel": "racine",
-        "signal": 1
-      },
-      {
-        "id": "PaulGERARD161098/artisan-builder",
-        "libelle": "artisan-builder",
-        "constellation": "en_attente_de_paul",
-        "ciel": "alpha",
-        "signal": 1
+        "signal": 0
       }
     ],
     "relations": []

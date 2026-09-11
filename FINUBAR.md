@@ -32,10 +32,10 @@
   },
   "dernier_arret": {
     "le": "2026-09-11",
-    "quoi": "memoire/LECONS.md posé : la mémoire de méthode des huit dépôts, classée par famille, chaque entrée portant l'incident qui l'a payée. Les 19 règles du CLAUDE.md y sont DÉPLACÉES (371 → 274 lignes). Un SCEAU en tête (révision + sha256 du corps) rend une copie divergente visible sans réseau ; finubar/lecons-empreinte.mjs --verifier échoue si le fichier change sans être re-scellé, et tourne dans tests/lancer.sh. Le rappel d'ouverture annonce le sceau ET son absence. Propagé à 7 dépôts sur 8 (sceau v2 3c0c21732e2a) ; ripair refusé — une séance ne peut pas attacher un dépôt d'un autre propriétaire.",
-    "commit": "67e2c8b"
+    "quoi": "memoire/LECONS.md posé (19 règles déplacées du CLAUDE.md) puis scellé v3 : la leçon du jour est un conflit de merge mal résolu et poussé.",
+    "commit": "6a6dfd2"
   },
-  "prochaine_action": "Fusionner les 5 PR de recopie du rappel Finubar (RenoAgenda #90, RenoBoost #403, RenoDevis #147, RenoPredict #67, mon-dpe.fr #211) et celle qui porte ce grain. Puis, INCHANGÉE depuis le 07/09 : vérifier au passage DR de 12 h que l'atelier persistant s'est RÉVEILLÉ et a cloné les 7 dépôts ; sinon, GitHub Action par dépôt.",
+  "prochaine_action": "Fusionner les 5 PR de recopie du rappel (RenoAgenda #90, RenoBoost #403, RenoDevis #147, RenoPredict #67, mon-dpe.fr #211), puis propager LECONS.md v3 (diff vide = critère).",
   "bloque_par": [
     "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
