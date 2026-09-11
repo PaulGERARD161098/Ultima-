@@ -32,6 +32,15 @@ import { fileURLToPath } from 'node:url';
 // c'est que le fichier a besoin d'être élagué — pas la borne relevée.
 const MAX_OCTETS = 60_000;
 
+// ⛔ LE MOTIF DU SCEAU EST RECOPIÉ ICI, et c'est délibéré. Sa source est
+// `finubar/lecons-empreinte.mjs`, mais ce script-ci est copié dans le `.claude/`
+// de huit dépôts et ne doit dépendre de RIEN — un dépôt sans ses dépendances
+// installées doit quand même lire ses leçons. Un import vers `finubar/`, qui
+// n'existe que dans Ultima, casserait les sept autres.
+// Si le format du sceau change, il change aux DEUX endroits : c'est le prix
+// assumé de l'indépendance, et il est nommé plutôt que tu.
+const MOTIF_SCEAU = /^<!-- lecons:empreinte (v\d+ \d{4}-\d{2}-\d{2} sha256:[0-9a-f]{12}) -->$/m;
+
 try {
   const ICI = dirname(fileURLToPath(import.meta.url));
   // Deux emplacements, parce que ce script vit à deux endroits : dans Ultima il
@@ -46,8 +55,15 @@ try {
   const trop_long = Buffer.byteLength(brut, 'utf8') > MAX_OCTETS;
   const texte = trop_long ? brut.slice(0, MAX_OCTETS) : brut;
 
+  // Le sceau est ANNONCÉ, et son absence aussi. Sans lui, deux dépôts divergents
+  // affichent des leçons différentes sans que rien ne le signale — et le silence
+  // se lit comme une bonne nouvelle.
+  const sceau = brut.match(MOTIF_SCEAU)?.[1];
   const entete = [
     '════ LEÇONS À NE PAS OUBLIER — mémoire de méthode des huit dépôts ════',
+    sceau
+      ? `Empreinte de cette copie : ${sceau} — elle doit être la même dans les huit dépôts.`
+      : '⚠️ Cette copie n\'a PAS de sceau : impossible de dire si elle est à jour. La sceller dans Ultima.',
     'Chaque règle ci-dessous a été payée par une erreur réelle. Les relire ici',
     'coûte moins cher que de les repayer. Source : memoire/LECONS.md',
   ];

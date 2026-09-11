@@ -1,3 +1,4 @@
+<!-- lecons:empreinte v2 2026-09-11 sha256:3c0c21732e2a -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -22,6 +23,43 @@ place, sinon les huit divergent et plus personne ne sait laquelle fait foi.
 *(Même motif, même raison que `finubar/rappel.mjs`. Les chemins cités dans les
 leçons portent donc leur dépôt en préfixe : ils doivent se lire depuis n'importe
 lequel des huit.)*
+
+### ✍️ Le mettre à jour, depuis n'importe quel dépôt
+
+*Posé le 2026-09-11, sur demande de Paul : « il faut pouvoir le mettre à jour
+tout le temps sur tous les repos ». Huit copies d'un fichier qui bouge souvent,
+c'est huit vérités qui divergent — et la divergence ne se voit pas toute seule.*
+
+**La ligne de sceau en tête** (`<!-- lecons:empreinte v… -->`) porte une
+révision, une date et le sha256 du corps. Deux dépôts se comparent d'un coup
+d'œil, sans réseau : même sceau, mêmes leçons.
+
+**La marche à suivre, dans cet ordre, et elle ne se raccourcit pas :**
+
+1. **Écrire la leçon dans Ultima**, jamais dans une copie. Si la séance est
+   ouverte sur un autre dépôt, Ultima s'écrit quand même : `add_repo` puis
+   l'outil GitHub d'écriture de fichier — aucun clone n'est nécessaire.
+2. **Re-sceller** : `node finubar/lecons-empreinte.mjs --sceller`. Le sceau ne
+   bouge pas si le corps n'a pas changé, donc re-sceller sans raison ne
+   fabrique pas de fausse divergence.
+3. **Propager la copie** dans les sept autres dépôts, octet pour octet. Un
+   `diff` doit revenir vide : c'est le critère de réussite, pas « ça a l'air
+   pareil ».
+4. **Le dire dans le commit du travail** qui a révélé la leçon — pas dans un
+   commit séparé « docs » qu'on écrit un autre jour, et qu'on n'écrit donc pas.
+
+⛔ **Le sceau se vérifie, sinon il ment.** `node finubar/lecons-empreinte.mjs
+--verifier` échoue si le fichier a changé sans être re-scellé, et il tourne dans
+`tests/lancer.sh`. Une empreinte oubliée est **pire** que pas d'empreinte : elle
+affirme une identité fausse, et deux copies réellement différentes affichent
+alors le même sceau.
+
+⚠️ **Ce qui n'est PAS automatique, et doit être su** : rien ne compare
+aujourd'hui la copie d'un dépôt à la source. Le sceau rend la divergence
+**visible** au lecteur, il ne la **détecte** pas tout seul — un contrôle
+croisé exigerait un jeton d'accès inter-dépôts, c'est-à-dire un secret, donc
+une décision de Paul. En attendant, c'est l'étape 3 qui tient, et elle est
+humaine.
 
 **Comment il vit.**
 - **Une leçon s'ajoute quand elle est payée**, en fin de séance, dans le commit
@@ -118,6 +156,15 @@ trouver. Vérifier seulement la présence du permis ne prouve rien.
 **jamais écrite** : le script qui devait la poser avait échoué après avoir
 construit son texte. Rien ne le signalait, et c'est Paul qui l'aurait découvert
 en cliquant. Corrigé par un harnais, `RenoAgenda/tests/unit/renvois-sections.test.mjs`.
+
+**UN MÉCANISME DE CONTRÔLE POSÉ APRÈS LA PREMIÈRE COPIE LAISSE CETTE COPIE
+DEHORS** *(2026-09-11)*. Ce fichier a été déposé dans RenoAgenda le matin ; le
+sceau qui permet de comparer les huit copies a été posé une heure plus tard. La
+première copie servie était donc déjà hors mécanisme, et son rappel d'ouverture
+annonçait « cette copie n'a PAS de sceau ». Il a fallu une PR de rattrapage pour
+un fichier vieux d'une heure. *Le contrôle se pose AVANT la première copie, pas
+après la dernière* — et ce qui a sauvé le coup ici, c'est que le mécanisme
+ANNONCE son absence : un sceau muet aurait laissé la copie passer pour à jour.
 
 **UN DOCUMENT DE DATES N'A AUCUN MÉCANISME DE PÉREMPTION** *(2026-09-11)*. Le
 rétroplanning d'Artidispo affichait deux jalons dépassés de trois jours
@@ -235,6 +282,13 @@ noms pour un produit sans une ligne de code. Ce qu'il faut chasser après un
 renommage, ce ne sont pas les occurrences, ce sont les **valeurs qu'un lecteur
 va exécuter** — nom de dépôt, domaine, URL. Les occurrences historiques peuvent
 rester : elles racontent la décision.
+
+**UNE SÉANCE NE PEUT PAS ATTACHER UN DÉPÔT D'UN AUTRE PROPRIÉTAIRE**
+*(2026-09-11)*. Sept dépôts sur huit ont reçu les leçons en une passe ; le
+huitième, `paggerard-boop/ripair`, a été refusé — une séance déjà ouverte sur
+des dépôts de `PaulGERARD161098` ne peut pas en attacher un d'un autre compte.
+Ce n'est pas contournable depuis la séance : il faut en ouvrir une sur ce dépôt.
+*À savoir AVANT d'annoncer « tous les dépôts », pas après.*
 
 **UNE ANTÉRIORITÉ SE CHERCHE SUR LE NOM, JAMAIS SUR LE MÉTIER** *(2026-09-06)*.
 Une mesure disait « aucune plateforme de rendez-vous nommée Artilib n'apparaît
