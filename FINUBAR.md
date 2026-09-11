@@ -32,10 +32,10 @@
   },
   "dernier_arret": {
     "le": "2026-09-11",
-    "quoi": "Leçons : sceau v3 — la leçon du jour est celle d'un conflit de merge mal résolu et poussé. Collecte de fin de séance rejouée.",
-    "commit": "a6a165b"
+    "quoi,
+    "commit": "6a6dfd2"
   },
-  "prochaine_action": "Propager memoire/LECONS.md v3 dans les sept autres dépôts (diff vide = critère). Six copies du rappel Finubar divergent aussi.",
+  "prochaine_action": "Fusionner les 5 PR de recopie du rappel (RenoAgenda #90, RenoBoost #403, RenoDevis #147, RenoPredict #67, mon-dpe.fr #211), puis propager LECONS.md v3 (diff vide = critère).",
   "bloque_par": [
     "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
@@ -50,8 +50,16 @@
       "depuis": "2026-09-07"
     },
     {
-      "quoi": "Les six autres dépôts portent encore la copie FAUTIVE de `.claude/finubar-rappel.mjs` : leur prochaine séance doit recopier `Ultima-/finubar/rappel.mjs`. Tant qu'ils écrivent leurs boucles en objets, ils ne voient pas le défaut — c'est le jour où l'un d'eux écrira une chaîne qu'il perdra ses dettes en silence.",
+      "quoi": "Recopie du rappel Finubar : MESURÉE le 11/09 — cinq dépôts en retard, pas six (artisan-builder était déjà à jour). Corrigée dans les cinq, 5 PR ouvertes à fusionner : RenoAgenda #90, RenoBoost #403, RenoDevis #147, RenoPredict #67, mon-dpe.fr #211.",
       "depuis": "2026-09-07"
+    },
+    {
+      "quoi": "ripair (paggerard-boop) n'a PAS reçu memoire/LECONS.md : une séance déjà ouverte sur des dépôts de PaulGERARD161098 ne peut pas attacher un dépôt d'un autre compte. Demande une séance ouverte sur ripair.",
+      "depuis": "2026-09-11"
+    },
+    {
+      "quoi": "Aucun contrôle croisé ne compare la copie des leçons d'un dépôt à la source : le sceau rend la divergence visible, il ne la détecte pas seul. Un contrôle automatique exigerait un jeton inter-dépôts, donc un secret — décision de Paul.",
+      "depuis": "2026-09-11"
     },
     {
       "quoi": "⚠️ Les Routines DR visent une session persistante AVEC ses dépôts, mais le tir d'essai du 06/09 ne l'a pas réveillée. À vérifier à 12 h ; sinon, GitHub Action par dépôt.",
