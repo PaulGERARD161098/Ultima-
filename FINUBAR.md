@@ -32,7 +32,7 @@
   },
   "dernier_arret": {
     "le": "2026-09-11",
-    "quoi,
+    "quoi": "memoire/LECONS.md posé (19 règles déplacées du CLAUDE.md) puis scellé v3 : la leçon du jour est un conflit de merge mal résolu et poussé.",
     "commit": "6a6dfd2"
   },
   "prochaine_action": "Fusionner les 5 PR de recopie du rappel (RenoAgenda #90, RenoBoost #403, RenoDevis #147, RenoPredict #67, mon-dpe.fr #211), puis propager LECONS.md v3 (diff vide = critère).",
