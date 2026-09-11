@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v5 2026-09-11 sha256:0a82950fed30 -->
+<!-- lecons:empreinte v7 2026-09-11 sha256:18e7f05fde7a -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -300,6 +300,29 @@ subsistent. Un diff non vide veut dire qu'un travail non fusionné y dort : on l
 rebase, on ne force pas. *(Rejoué le 2026-09-11 : la leçon disait quoi faire du
 local et rien du distant, donc elle s'arrêtait juste avant le geste qui bloque.)*
 
+**UN CLONE SUPERFICIEL NE SUIT QUE `main`, ET `--force-with-lease` REFUSE ALORS
+TOUT** *(2026-09-11)*. `git clone --depth 1 -b main` écrit un refspec réduit :
+`+refs/heads/main:refs/remotes/origin/main`. Un `git fetch origin <branche>`
+ne crée donc **aucune** référence de suivi pour cette branche — et le bail de
+`--force-with-lease`, qui se compare à cette référence absente, échoue sur
+« stale info » **quelle que soit** la réalité du distant. Le réflexe dangereux
+est de tomber dans `--force` : il écraserait sans rien avoir vérifié. Les deux
+gestes justes, dans cet ordre :
+1. fetcher en NOMMANT la destination —
+   `git fetch origin <branche>:refs/remotes/origin/<branche>` ;
+2. ou mieux, **nommer le commit qu'on accepte de remplacer** —
+   `--force-with-lease=<branche>:<sha lu par git ls-remote>`. Le sha se lit à la
+   source, jamais de mémoire.
+
+⛔ **Et ce qui a failli passer, ce jour-là, vaut plus que la manœuvre** : ma
+garde disait « `git diff --stat origin/main origin/<branche>` est vide, donc
+rien à perdre » — alors que la commande **plantait** sur une référence
+inconnue, et que `wc -l` comptait ses zéro ligne de sortie. *Une recherche
+d'absence est verte sur une commande qui échoue.* Le verrou : exiger que la
+commande **réussisse** avant d'interpréter son silence, et lui adjoindre un
+témoin positif — ici, la même comparaison contre ma propre tête, qui doit,
+elle, rendre un écart non nul.
+
 **UNE PR QUI DORT SE FAIT DOUBLER** *(2026-07-30)*. Quand un autre fil pousse
 sur `main` — constat : quatre avancées en une séance — rebaser puis fusionner
 **sans délai**, sinon le rebase est à refaire. Un conflit sur
@@ -368,3 +391,23 @@ tombé le jour même de sa validation.
 synthèses seulement dans le fil principal. Tiers de modèle économe par défaut ;
 escalade **signalée** uniquement sur les sujets à risque — droits d'accès en
 base, authentification, middleware, décision d'architecture.
+
+**ON NE RAPATRIE PAS UN FICHIER ENTIER POUR EN LIRE UNE LIGNE** *(2026-09-11)*.
+Mesurer l'état des huit copies de CE fichier demandait exactement **une ligne
+par dépôt** : le sceau, en tête. J'ai rapatrié **cinq fichiers entiers** par
+l'outil de lecture GitHub, qui ne sait pas tronquer — environ 110 Ko pour cinq
+lignes utiles, dans une séance où le reste du travail avait encore besoin de
+place. Le même constat s'obtenait pour rien :
+`git show origin/main:<chemin> | head -1` sur un clone déjà là, ou un clone
+superficiel là où il n'y en avait pas.
+⛔ **Le réflexe qui manquait est une question, pas un outil** : *quelle fraction
+du fichier répond à ma question ?* Si c'est une ligne, c'est `git` qui répond —
+jamais l'outil qui rend le document complet.
+
+⊕ **Et son corollaire, qui a bien tenu le même jour : ce qu'on DÉPLACE ne doit
+pas traverser le contexte.** La propagation du fichier aux sept dépôts s'est
+faite par clone, copie, commit, push — le contenu n'est jamais passé en
+paramètre d'outil. L'écrire par un outil d'écriture distante aurait fait
+transiter 22 Ko **sept fois**, pour un fichier qu'aucun de nous n'avait besoin
+de relire. *Un octet qui passe par le fil coûte ; un octet que `git` déplace de
+disque à disque ne coûte rien.*
