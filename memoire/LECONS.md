@@ -208,9 +208,18 @@ un harnais rouge, invisible car seuls deux autres avaient été relancés ;
 rattrapé bien plus tard.
 
 **REPRENDRE LA BRANCHE DE `origin/main` APRÈS CHAQUE SQUASH-MERGE**
-*(2026-07-22)*. `git fetch origin main && git checkout -B <branche> origin/main`
-**avant** tout nouveau commit. Ne jamais empiler sur l'historique pré-squash :
-source de conflits de merge récurrents.
+*(2026-07-22, complétée le 2026-09-11)*.
+`git fetch origin main && git checkout -B <branche> origin/main` **avant** tout
+nouveau commit. Ne jamais empiler sur l'historique pré-squash : source de
+conflits de merge récurrents.
+⊕ **Et le distant, lui, porte encore l'ancienne tête** : le push suivant est
+refusé (« non-fast-forward »). Le geste est alors un `--force-with-lease`, mais
+**seulement après avoir prouvé qu'il ne détruit rien** :
+`git diff --stat origin/main origin/<branche>` doit être **vide** — le contenu
+de la branche distante est déjà dans `main`, seuls ses commits pré-squash
+subsistent. Un diff non vide veut dire qu'un travail non fusionné y dort : on le
+rebase, on ne force pas. *(Rejoué le 2026-09-11 : la leçon disait quoi faire du
+local et rien du distant, donc elle s'arrêtait juste avant le geste qui bloque.)*
 
 **UNE PR QUI DORT SE FAIT DOUBLER** *(2026-07-30)*. Quand un autre fil pousse
 sur `main` — constat : quatre avancées en une séance — rebaser puis fusionner
