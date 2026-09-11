@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v6 2026-09-11 sha256:028d3cd3f3ff -->
+<!-- lecons:empreinte v7 2026-09-11 sha256:18e7f05fde7a -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -299,6 +299,29 @@ de la branche distante est déjà dans `main`, seuls ses commits pré-squash
 subsistent. Un diff non vide veut dire qu'un travail non fusionné y dort : on le
 rebase, on ne force pas. *(Rejoué le 2026-09-11 : la leçon disait quoi faire du
 local et rien du distant, donc elle s'arrêtait juste avant le geste qui bloque.)*
+
+**UN CLONE SUPERFICIEL NE SUIT QUE `main`, ET `--force-with-lease` REFUSE ALORS
+TOUT** *(2026-09-11)*. `git clone --depth 1 -b main` écrit un refspec réduit :
+`+refs/heads/main:refs/remotes/origin/main`. Un `git fetch origin <branche>`
+ne crée donc **aucune** référence de suivi pour cette branche — et le bail de
+`--force-with-lease`, qui se compare à cette référence absente, échoue sur
+« stale info » **quelle que soit** la réalité du distant. Le réflexe dangereux
+est de tomber dans `--force` : il écraserait sans rien avoir vérifié. Les deux
+gestes justes, dans cet ordre :
+1. fetcher en NOMMANT la destination —
+   `git fetch origin <branche>:refs/remotes/origin/<branche>` ;
+2. ou mieux, **nommer le commit qu'on accepte de remplacer** —
+   `--force-with-lease=<branche>:<sha lu par git ls-remote>`. Le sha se lit à la
+   source, jamais de mémoire.
+
+⛔ **Et ce qui a failli passer, ce jour-là, vaut plus que la manœuvre** : ma
+garde disait « `git diff --stat origin/main origin/<branche>` est vide, donc
+rien à perdre » — alors que la commande **plantait** sur une référence
+inconnue, et que `wc -l` comptait ses zéro ligne de sortie. *Une recherche
+d'absence est verte sur une commande qui échoue.* Le verrou : exiger que la
+commande **réussisse** avant d'interpréter son silence, et lui adjoindre un
+témoin positif — ici, la même comparaison contre ma propre tête, qui doit,
+elle, rendre un écart non nul.
 
 **UNE PR QUI DORT SE FAIT DOUBLER** *(2026-07-30)*. Quand un autre fil pousse
 sur `main` — constat : quatre avancées en une séance — rebaser puis fusionner
