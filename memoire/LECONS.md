@@ -30,9 +30,11 @@ lequel des huit.)*
 - **Une leçon se relit avant d'être réutilisée.** Une note vieillit comme un
   test qui nomme une couleur supposée — voir *Rouvrir une dette commence par la
   re-mesurer*, ci-dessous, qui s'applique d'abord à ce fichier.
-- **Elle ne se recopie pas ailleurs.** Les `CLAUDE.md` des dépôts **pointent**
-  ce fichier, ils ne le dupliquent pas. Deux copies divergent, et on finit par
-  croire la mauvaise.
+- **Son contenu ne se redit nulle part ailleurs.** Les `CLAUDE.md` des dépôts
+  **pointent** ce fichier, ils n'en reprennent aucune ligne. *(À ne pas
+  confondre avec la copie du fichier entier dans les huit dépôts, ci-dessus :
+  copier un fichier tel quel se vérifie d'un `diff` ; en redire le contenu
+  ailleurs, non — et c'est cette seconde forme qui fabrique deux vérités.)*
 
 ---
 
