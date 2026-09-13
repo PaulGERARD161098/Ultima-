@@ -4143,3 +4143,46 @@ présents, `add_repo` fonctionne, et le contrôle du jalon V0 était faisable �
 a été fait (`audits_v0 = 1`, V0 **confirmé franchi** ; mais `audits_avec_aides =
 0`, le calcul mergé le matin n'a **aucune preuve d'usage**). *Une consigne qui
 énumère des limites se vérifie comme le reste.*
+
+---
+
+## 2026-09-13 — Le radar de recherches Google : DEUX outils, pas un
+
+**Tranché par Paul**, après avoir vu la console admin livrée le jour même :
+*« on part bien sûr 2 outils différents »*.
+
+### Ce que la décision sépare
+
+| | Pour qui | Où | Ce qu'il montre |
+|---|---|---|---|
+| **Le potentiel** | l'artisan prospect | page publique, dans le simulateur de zone existant | un **ordre de grandeur** de la demande exprimée dans SA zone, à côté du marché ADEME — jamais additionné avec |
+| **La boussole** | Paul seul | console admin `radar.html` | la **courbe mensuelle** : saisons, effets d'aubaine, pics d'actualité, veille calibrée par région |
+
+⛔ **Pourquoi deux et pas un.** Ils n'ont ni le même public, ni le même niveau
+d'accès, ni la même unité de lecture. Le premier doit sous-promettre devant
+quelqu'un qui connaît son métier mieux que nous ; le second doit tout montrer, y
+compris le bruit, parce que c'est dans le bruit que se voit une recherche qui
+monte avant d'avoir un nom. Un seul écran pour les deux aurait forcé un
+compromis qui aurait mal servi les deux.
+
+### La contrainte d'exécution qui en découle
+
+Les volumes Google **ne se versent pas** dans `volumes_par_departement` du
+référentiel public : ce champ porte des *foyers ayant fait un audit* (ADEME), pas
+des *recherches par mois*. Deux unités dans un même champ, que le moteur somme,
+produiraient un nombre qui ne veut rien dire. Google prend **son propre champ**.
+
+### Et la consultation, posée dans la foulée
+
+Paul : *« il faut une cohérence par zone et facile à obtenir et à consulter —
+mettons que les résultats s'affichent et peuvent se télécharger en 4 clics »*.
+Les quatre : **zone** (liste des zones RÉELLEMENT relevées, pas un champ libre)
+→ **métier** → **Regarder** → **Télécharger**. Le champ libre actuel laisse
+choisir une commune que Google connaît mais qu'on n'a jamais relevée : la liste
+supprime le défaut à la racine au lieu de l'expliquer après coup.
+
+### Ce que la même séance a payé
+
+Voir `memoire/LECONS.md` §4 — *la cohérence géographique se vérifie avant de
+mesurer*. Le premier import a porté sur l'Oise (0 client) alors que les clients
+sont dans le Rhône (106).
