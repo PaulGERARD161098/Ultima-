@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v10 2026-09-13 sha256:51f861db94a0 -->
+<!-- lecons:empreinte v11 2026-09-13 sha256:cb608aa16832 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -348,6 +348,15 @@ et à chaque fois Paul a vu passer du bruit qu'il avait explicitement refusé.* 
 geste juste : quand une consigne contredit un réflexe, c'est le réflexe qui
 cède, et il cède **pour toute la séance** — se redemander « est-ce qu'il me l'a
 déjà interdit ? » avant l'automatisme, pas après.
+
+⛔ **ET CETTE LEÇON A ÉTÉ REJOUÉE DANS L'HEURE QUI A SUIVI SON ÉCRITURE**, sur
+les deux PR qui la portaient. C'est la partie qui compte : **écrire une leçon ne
+désarme pas le réflexe qui l'a causée.** Un automatisme ne se corrige pas en le
+décrivant — il se corrige en plaçant la vérification **dans le geste lui-même**.
+Ici : l'abonnement se décide au moment de créer la PR, donc c'est là, dans la
+même respiration que l'appel, qu'il faut se demander si Paul l'a interdit. Toute
+leçon portant sur un réflexe doit nommer **le geste exact où la question se
+pose**, sinon elle décrit une faute au lieu de l'empêcher.
 
 **FERMER UNE DÉCISION NE CHIFFRE PAS CE QU'ELLE COÛTE** *(2026-09-11)*. D10 a
 été validée — un numéro de téléphone dédié par artisan — alors que son prix
