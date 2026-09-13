@@ -171,6 +171,44 @@ aujourd'hui ? » + 4 quadrants. Un repo, mémoire inter-segment, sécurité rele
    (sauvegarde permanente du travail).
 5. Rapport final : fermé / restant / prochaine action + blocs
    🔒 Retour sécurité et ⚡ Retour optimisation.
+6. **LE PROMPT DE REPRISE, EN FIN DE BLOC** *(demandé par Paul le 2026-09-13)*.
+   Toute fin de séance se termine par le prompt qui ouvrira la suivante —
+   posé en **dernier**, après le rapport, prêt à être copié tel quel.
+
+   ⛔ **Il se MESURE, il ne se résume pas.** Un prompt de reprise écrit de
+   mémoire est le pire des documents de ce dépôt : il se lit comme un état
+   vérifié et n'en est pas un. Chaque chiffre qu'il porte est relu à sa source
+   au moment de l'écrire — la base pour l'état du produit, `git log origin/main`
+   pour la tête réelle, l'API GitHub pour les PR ouvertes — et sa provenance
+   peut être citée. C'est la Directive EL appliquée au document que la séance
+   suivante croira sur parole.
+
+   ⛔ **IL SE REND EN UN SEUL BLOC, COPIABLE TEL QUEL** *(Paul, 2026-09-13 :
+   « mets-moi le prompt dans un bloc unique que je peux copier-coller seul »)*.
+   Un bloc de code d'un seul tenant, **rien au-dessus ni en dessous à retirer
+   à la main**, aucun lien ni tableau markdown à l'intérieur — Paul le copie,
+   il le colle, la séance suivante démarre. Un prompt éparpillé dans une
+   réponse formatée oblige à le reconstituer, donc à décider quoi garder : la
+   séance suivante repart alors d'une version amputée, et personne ne sait
+   laquelle. ⚠️ Le rapport de séance, lui, reste formaté et lisible — les deux
+   ne se confondent pas : le rapport se LIT, le prompt se COPIE.
+
+   **Ce qu'il contient, et rien de plus :** ① le cap et le jalon, avec son
+   critère de sortie chiffré ; ② l'état mesuré du jour, requête à l'appui ;
+   ③ la prochaine action UNIQUE ; ④ ce qui est bloqué et par qui ; ⑤ les gates
+   ouverts ; ⑥ les pièges nommés — ce qu'il ne faut PAS refaire, PAS rouvrir,
+   PAS croire sans revérifier.
+
+   ⚠️ **Il ne crée pas un document de plus.** Quand le dépôt porte déjà un
+   `ROADMAP-<date>-fin-de-session.md` ou un `REPRISE-*.md`, le prompt s'appuie
+   dessus et le POINTE — Directive EB, capitaliser sur l'existant. Deux prompts
+   de reprise concurrents, c'est deux vérités, et on croit la mauvaise.
+
+   ⛔ **Et il dit ce qui a PÉRIMÉ pendant la séance.** Une action encore listée
+   comme bloquante alors qu'elle vient d'être faite coûte plus cher qu'une liste
+   absente : on la rejoue. *Incident du 13/09 : « appliquer la migration qui
+   coupe la voie UUID » est resté en tête d'`ACTIONS-PAUL.md` et dans le
+   `bloque_par` de RenoBoost APRÈS avoir été appliquée et mesurée le jour même.*
 
 ## 🎤 Protocole dictée vocale (Paul dicte ses messages)
 
