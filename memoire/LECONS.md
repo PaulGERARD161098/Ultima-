@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v11 2026-09-13 sha256:cb608aa16832 -->
+<!-- lecons:empreinte v13 2026-09-13 sha256:1d21a534b45e -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -159,6 +159,41 @@ prescrite **ne passait pas** sur l'un des deux fonds du site (4,45:1 au lieu de
 en le croyant réglé, avec un constat coché pour le prouver. *Un audit dit où
 regarder. Ce qu'on y trouve, et ce qui le referme, se remesurent.*
 
+**UN COMPTEUR QUI BAISSE N'EST PAS UN PROGRÈS : C'EST UNE AFFIRMATION À VÉRIFIER**
+*(2026-09-13)*. La garde de publication d'artisan-builder contrôlait
+`site.telephone` et ignorait `site.telephoneHref`, un champ **parallèle,
+invisible à l'écran**, employé 22 fois dans le code — dont dix-neuf liens
+d'appel et les données structurées. Renseigner le premier faisait passer le
+compteur de 7 à 6 blocages **pendant que chaque bouton composait encore
+`+33600000000`**. Le défaut n'était pas l'absence de contrôle, c'était que le
+compteur BOUGEAIT : une garde qui vérifie un champ sur deux couplés est pire
+qu'aucune garde, parce qu'elle récompense le geste incomplet. Trouvé par une
+séance qui suivait la passation à la lettre, pas par un test. *Quand deux champs
+décrivent la même chose, la garde vérifie les deux ET leur cohérence.*
+
+**UN CHIFFRE SANS SA COMMANDE N'EST PAS UNE MESURE** *(2026-09-13)*. Le document
+de passation d'artisan-builder promettait en préambule que « chaque nombre porte
+la commande qui le rend », puis affirmait « 35 emplois de l'accent avant AB3 » —
+un relevé ponctuel sur un état du code qui n'existait plus. La séance d'épreuve a
+cherché la commande, ne l'a pas trouvée, et a eu raison de démentir le chiffre.
+*Un nombre historique se date et se rend à sa source ; il ne s'aligne pas dans le
+tableau des mesures du jour.*
+
+**MESURER CONTRE LA BONNE RÉFÉRENCE, ET DIRE LAQUELLE** *(2026-09-13)*. Le
+contraste typographique d'une page a d'abord été mesuré en comparant la pile
+d'affichage à `FAMILLES.corps` — une constante du module — au lieu de la police
+que la page emploie RÉELLEMENT pour son corps. Résultat : 445,2 px contre
+445,2 px, « aucun contraste », conclusion écrite puis corrigée. Contre la vraie
+police : 70 px. *Une mesure juste sur le mauvais objet est un faux, et elle a
+l'air d'une mesure.*
+
+**UN DOCUMENT QUI ANTICIPE EST PIRE QU'UN DOCUMENT ABSENT** *(2026-09-13)*. Le
+§1 de la passation annonçait AB4 « fusionné » en PR #58 au moment où il ne
+l'était pas encore — le lot a été fusionné vingt minutes plus tard, rendant vraie
+après coup une affirmation fausse à la lecture. Une séance d'épreuve l'a mesurée
+fausse et a eu raison. *Un état se mesure à la lecture, jamais à l'écriture : un
+tableau d'historique porte les commandes qui font foi CONTRE lui.*
+
 ---
 
 ## 2. Les garde-fous, et leur silence
@@ -229,6 +264,46 @@ sûreté ont bloqué deux modifications correctes, parce que le commentaire que 
 venais d'écrire citait le mot qu'elles interdisaient. Deux cycles perdus, et la
 tentation immédiate de désarmer l'assertion — c'est-à-dire de supprimer le
 garde-fou pour faire passer le correctif.*
+
+**UN ROUGE DE COMPILATION N'EST PAS UN ROUGE D'INSTRUMENT** *(2026-09-13)*. Deux
+sondes de dry run ont fait rougir un harnais navigateur — mais parce que le JSX
+saboté ne compilait plus, donc la page ne chargeait pas du tout. Le harnais
+sortait sur son verrou de non-vacuité, pas sur l'assertion qu'on prétendait
+éprouver. Les deux sondes ont été **refaites** en cassant la propriété sans
+casser la compilation (HTTP 200 vérifié avant de lire le verdict). *Une sonde
+valide ne casse qu'une chose, et on vérifie que le reste tient encore.*
+
+**UNE MAUVAISE SONDE N'EST PAS UN INSTRUMENT DÉFAILLANT — DISTINGUER LES DEUX EST
+LE TRAVAIL** *(2026-09-13)*. Trois sondes sont revenues vertes dans la même
+séance. Deux étaient de mauvaises sondes : elles ne cassaient pas la propriété
+affirmée (insérer un bloc avant le formulaire le laissait quand même remonté ;
+retirer le bouton d'appel de l'en-tête laissait neuf autres liens de contact).
+La troisième révélait un vrai défaut d'instrument. Compter les trois comme
+« l'instrument ne prouve rien » aurait fait réécrire deux gardes correctes ; les
+compter comme « rien à signaler » aurait laissé la troisième. *Avant de conclure,
+relire ce que la sonde a réellement cassé, et le comparer à ce que l'assertion
+affirme.*
+
+**UNE GARDE QUI NE PEUT PAS ÉCHOUER SE LIT COMME UNE BONNE NOUVELLE**
+*(2026-09-13)*. Un harnais vérifiait qu'« il reste un chemin vers le formulaire
+quelque part dans la page ». Aucune casse d'un seul composant ne pouvait la faire
+rougir : le produit porte une dizaine de tels chemins. Elle a été REMPLACÉE — pas
+renforcée — par une garde portant sur l'en-tête, qui n'en a qu'un, et qui rougit.
+*Une assertion dont on ne sait pas fabriquer l'échec n'est pas une assertion,
+c'est une phrase.*
+
+**UN CONTRÔLE SUR UN AUTRE PORT NE TOURNE JAMAIS** *(2026-09-13)*. Neuf harnais
+navigateur d'artisan-builder visaient `:3000`, le dixième `:3101`. Lancé de la
+façon documentée pour tous les autres, il sortait sur `ERR_CONNECTION_REFUSED`
+— qu'on lisait comme un harnais cassé, donc personne ne l'exécutait. Il était
+vert. *Un réglage qu'il faut connaître pour lancer un contrôle est un contrôle
+qui ne tourne pas.*
+
+**UN OUTIL DE BUILD PEUT TUER LE SERVEUR QUE LES CONTRÔLES INTERROGENT**
+*(2026-09-13)*. Après un `npx next build`, les dix harnais ont rendu dix
+`ERR_CONNECTION_REFUSED` d'affilée — dix régressions apparentes, zéro réelle : le
+build avait arrêté le `next dev` qu'ils interrogent. *Dix échecs identiques et
+simultanés désignent l'environnement, pas le code.*
 
 ---
 
@@ -316,6 +391,25 @@ n'est pas un lien qui tiendra : ce qui s'éprouve, c'est sa durée de vie face a
 gestes DÉJÀ PRÉVUS sur le dépôt — c'est la famille du garde-fou qu'on n'éprouve
 que du côté qu'on emprunte tous les jours.*
 
+**UNE AUTORITÉ QUI NOMME LE CHAMP SANS NOMMER LE FICHIER FAIT CHERCHER — ET ON
+TROUVE UN LEURRE** *(2026-09-13)*. La garde de publication d'artisan-builder
+nommait `legal.assureur` et les deux champs de décennale ; le document de
+passation la désignait comme l'autorité (« demandez à la garde, pas à un
+document ») ; et aucun des deux ne disait dans quel fichier les poser. Une séance
+d'épreuve a ouvert `mentions-legales/page.tsx` — réflexe naturel — qui AFFICHE
+les trois champs sans être l'endroit où on les écrit, puis a dû lancer un `grep`
+pour trouver `content.ts`. *Un diagnostic qui n'indique pas l'endroit n'est pas
+terminé, et le premier endroit qu'on ouvre est souvent celui qui affiche, pas
+celui qui définit.*
+
+**UNE LISTE DE « CE QU'IL RESTE À OBTENIR » SE PÉRIME ; UNE MESURE NON**
+*(2026-09-13)*. Le README de SPC réclamait sept champs légaux dont **quatre
+étaient déjà renseignés depuis six jours**, par un NB situé deux paragraphes plus
+haut dans le même fichier. Une séance qui la suivait s'est vue renvoyée collecter
+une information déjà collectée — exactement la dérive dont ce README se plaignait
+lui-même. *Remplacer la liste par la commande qui la rend, et dater ce qui reste
+écrit.*
+
 ---
 
 ## 4. Conduire une boucle
@@ -372,6 +466,32 @@ il ne se recopie pas. Le harnais dédié rend l'opération sûre : il doit passe
 **RÉUTILISER AVANT DE REFAIRE.** Modèles déjà conçus, fixtures en cache, une
 seule fusion par boucle. Conception et implémentation lourdes partent en agents,
 pour préserver le contexte du fil principal ; les synthèses seules remontent.
+
+**`git checkout --` NE RESTAURE PAS UN FICHIER NON SUIVI** *(2026-09-13)*. Une
+boucle de sondes de dry run annulait chaque sabotage par `git checkout -- <fichier>`.
+Sur les fichiers **non suivis** — ceux que la séance venait de créer — la commande
+échoue sans rien restaurer : trois sabotages sont restés en place, et le même
+`checkout` a par ailleurs **annulé du travail légitime** sur un fichier suivi
+qu'il fallait garder, qu'il a fallu réécrire entièrement. Coût : une dizaine de
+minutes et une réapplication complète. *Une sonde se restaure depuis une copie
+prise avant, jamais depuis git : git ne connaît pas ce qu'on vient d'écrire.*
+
+**UN CHAMP DONT LE REFUS EST VALIDÉ EN CONTINU ENFERME CELUI QUI SAISIT**
+*(2026-09-13)*. `renommerActivite` refusait un libellé vide — règle d'apparence
+saine. Le champ étant piloté par l'offre validée, la **dernière lettre devenait
+ineffaçable** : impossible de vider pour retaper. Le nom vide est un ÉTAT DE
+SAISIE ; c'est la validation d'étape qui refuse le passage, et le schéma qui reste
+le second verrou. Trouvé en relisant le diff en adversaire, pas par un clic.
+*Distinguer ce qui est interdit de ce qui est simplement pas encore fini.*
+
+**UNE RÈGLE ABSOLUE QUE LE DÉPÔT CONTREDIT DÉJÀ N'EST PAS UNE RÈGLE**
+*(2026-09-13)*. « Tout champ nouveau se pose avec `.optional()`, jamais
+`.default()` » — trois contre-exemples légitimes dans les fichiers que la règle
+désignait, dont un posé par le chantier même qui l'énonçait. Le critère réel est
+l'**omissibilité en entrée** : `.default()` est permis imbriqué dans un
+`.optional()`, ou sous un parent déjà obligatoire. Relevé par une séance
+d'épreuve. *Une règle qu'on ne peut pas appliquer sans exception non écrite
+n'apprend rien à qui ajoute un champ.*
 
 ---
 
@@ -479,6 +599,19 @@ Une mesure disait « aucune plateforme de rendez-vous nommée Artilib n'apparaî
 en recherche ». Exact, et sans valeur : l'homonyme n'était pas une plateforme de
 rendez-vous, c'était une société de logiciel du même département. Le nom est
 tombé le jour même de sa validation.
+
+**UN FICHIER PARTAGÉ SE RECONSTRUIT SUR LA BASE OÙ ON POUSSE, PAS SUR CELLE QU'ON A
+LUE** *(2026-09-13)*. `memoire/LECONS.md` a été lu au sceau **v9**, enrichi de
+quatorze entrées, scellé **v10** — et pendant ce temps une AUTRE séance avait
+fusionné sa propre leçon et scellé **v11**. Pousser le fichier tel quel aurait
+**effacé sa leçon**, silencieusement, dans le fichier même qui existe pour ne
+rien perdre. C'est la ligne d'empreinte en tête qui l'a montré, au moment du
+`git checkout` : v11 sur la base, v10 dans la main. Le geste juste a été de
+réappliquer les quatorze entrées SUR la v11, puis de re-sceller en v12 — et de
+vérifier par `grep` que les deux apports survivaient. *Sur tout fichier à copies
+multiples : relire la base juste avant de pousser, comparer les sceaux, et
+reconstruire — jamais écraser. Et la vérification se fait sur le CONTENU des deux
+apports, pas sur le fait que le sceau a changé.*
 
 ---
 
