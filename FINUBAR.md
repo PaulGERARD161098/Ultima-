@@ -31,11 +31,11 @@
     "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
   },
   "dernier_arret": {
-    "le": "2026-09-11",
-    "quoi": "memoire/LECONS.md posé (19 règles déplacées du CLAUDE.md) puis scellé v3 : la leçon du jour est un conflit de merge mal résolu et poussé.",
-    "commit": "6a6dfd2"
+    "le": "2026-09-13",
+    "quoi": "Leçons v8 propagées dans les sept dépôts atteignables, sceau vérifié sur main partout. Le rappel Finubar, lui, était DÉJÀ aligné : la note demandait de réparer ce qui l'était.",
+    "commit": "MAJ"
   },
-  "prochaine_action": "Fusionner les 5 PR de recopie du rappel (RenoAgenda #90, RenoBoost #403, RenoDevis #147, RenoPredict #67, mon-dpe.fr #211), puis propager LECONS.md v3 (diff vide = critère).",
+  "prochaine_action": "Plus aucune propagation en attente. Reprendre le jalon J3 du cockpit. Seul ripair reste en v7, et il est inatteignable depuis une séance ouverte sur les dépôts de PaulGERARD161098.",
   "bloque_par": [
     "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
@@ -46,15 +46,15 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
+      "quoi": "MESURÉ le 13/09 et démenti : la note annonçait des copies divergentes du rappel Finubar. Les sept fichiers ont la même empreinte, et la même que la source. Une note qui survit à son fait envoie réparer ce qui va bien.",
+      "depuis": "2026-09-13"
+    },
+    {
       "quoi": "COLLECTE — `collecter.mjs` VIDE le grain d'un dépôt hors séance au lieu de garder sa dernière mesure. Cran de sûreté posé le 07/09 (refus d'écrire) ; la FUSION reste à faire.",
       "depuis": "2026-09-07"
     },
     {
-      "quoi": "Recopie du rappel Finubar : MESURÉE le 11/09 — cinq dépôts en retard, pas six (artisan-builder était déjà à jour). Corrigée dans les cinq, 5 PR ouvertes à fusionner : RenoAgenda #90, RenoBoost #403, RenoDevis #147, RenoPredict #67, mon-dpe.fr #211.",
-      "depuis": "2026-09-07"
-    },
-    {
-      "quoi": "ripair (paggerard-boop) n'a PAS reçu memoire/LECONS.md : une séance déjà ouverte sur des dépôts de PaulGERARD161098 ne peut pas attacher un dépôt d'un autre compte. Demande une séance ouverte sur ripair.",
+      "quoi": "ripair (paggerard-boop) reste en LEÇONS v7 : une séance déjà ouverte sur des dépôts de PaulGERARD161098 ne peut pas l'attacher, refus re-mesuré le 13/09. Il faut une séance ouverte sur ce dépôt-là.",
       "depuis": "2026-09-11"
     },
     {
@@ -106,7 +106,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-09-07"
+  "maj": "2026-09-13"
 }
 ```
 
