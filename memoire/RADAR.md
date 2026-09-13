@@ -631,3 +631,38 @@ voir » mais « **que teste-t-il en réalité** ».
 a avancé pendant la boucle (cadrage LV6, PR #175) et la fusion a été refusée
 pour conflit sur `JOURNAL-DECISIONS.md`. Résolu par concaténation, comme la règle
 l'exige. La règle du 2026-07-30 tient : **rebaser et fusionner sans délai**.
+
+## 2026-09-13 — deux constats hors du dépôt où ils ont été trouvés
+
+Relevés pendant la séance qui a fermé le chantier multi-activité d'artisan-builder
+(lots AB0 → AB5, plus l'application de la migration `0004`). Ils sont consignés
+**ici** parce qu'ils n'appartiennent pas à artisan-builder : les écrire dans son
+grain les aurait rendus invisibles à qui travaille sur le dépôt concerné.
+
+**À TRAITER — RenoBoost, un advisor Supabase en ERROR.** Le projet
+`RenoboostIA` (`mwaryfscxgrulauwwque`) porte une vue `public.catalogue_vente`
+définie en `SECURITY DEFINER` : elle applique les permissions et la RLS de son
+créateur, pas de celui qui interroge. Signalée **ERROR** par le linter Supabase.
+S'y ajoutent, en WARN, quatre fonctions `SECURITY DEFINER` exécutables par `anon`
+ou `authenticated` via `/rest/v1/rpc/` — `get_devis_par_jeton`,
+`log_devis_open_par_jeton`, `sign_devis_par_jeton`, `is_admin`. Certaines sont
+sans doute voulues (l'accès par jeton d'un devis public), mais **aucune n'a été
+vérifiée** dans cette séance : elle n'avait pas RenoBoost sous la main, et
+toucher à l'authentification d'un autre dépôt sans pouvoir l'éprouver aurait été
+pire que de le signaler. `mcp__Supabase__get_advisors` les redonne en une requête.
+
+**À SURVEILLER — les leçons divergent sur six dépôts.** `memoire/LECONS.md` est
+passé au sceau **v13** le 2026-09-13 (quinze entrées neuves), propagé dans les
+deux seuls dépôts attachés à la séance : Ultima et artisan-builder. **Les six
+autres portent un sceau antérieur.** Ce n'est pas un oubli silencieux —
+`head -1 memoire/LECONS.md` le montre en une commande, et c'est exactement ce que
+la ligne d'empreinte existe pour rendre visible. La propagation demande une
+séance qui les attache.
+
+⛔ **Et une leçon de cette propagation, déjà écrite dans `LECONS.md` :** le
+fichier a été lu au sceau v9, enrichi, scellé v10 — pendant qu'une autre séance
+fusionnait sa propre leçon et scellait v11. Pousser tel quel aurait **effacé sa
+leçon**. Sur tout fichier à copies multiples : relire la base juste avant de
+pousser, comparer les sceaux, et **reconstruire** ses ajouts dessus — jamais
+écraser. La vérification se fait sur le CONTENU des deux apports, pas sur le fait
+que le sceau a changé.
