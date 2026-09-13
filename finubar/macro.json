@@ -4,97 +4,6 @@
     {
       "ok": true,
       "motif": "",
-      "depot": "PaulGERARD161098/RenoBoost",
-      "grain": {
-        "projet": "RénoBoost",
-        "depot": "PaulGERARD161098/RenoBoost",
-        "cap": "Un individu seul fait tourner le business entier, aidé par l'automatisation (Directive IA). RénoBoost est le hub : acquisition, rendez-vous, dashboard, et la roadmap maîtresse des quatre briques.",
-        "rattache_a": "ROADMAP-SECURITE.md · REPRISE-2026-09-05-landing-forme.md · REPRISE-2026-09-03-boucles-ete.md · ROADMAP-MASTER.md · ACTIONS-PAUL.md",
-        "etat": "en_attente_de_paul",
-        "jalon": {
-          "nom": "Jalon 0 — l'amorçage : trois gestes de Paul, zéro ligne de code",
-          "critere_de_sortie": "`stickers` > 0 · fiche Google visible publiquement · `stripe_charges_enabled` = true"
-        },
-        "dernier_arret": {
-          "le": "2026-09-11",
-          "quoi": "Audit sécurité : 8 lots livrés, fusionnés, en production. Détail ROADMAP-SECURITE.md (S7, S8). Deux gestes de Paul restent ouverts.",
-          "commit": "1da0e80"
-        },
-        "prochaine_action": "Paul : appliquer la migration revoke (voie UUID) puis lire les rapports CSP. Détail en tête d'ACTIONS-PAUL.md.",
-        "bloque_par": [
-          "Migration revoke : la voie UUID des devis (ACTIONS-PAUL.md, en tête) — 11/09",
-          "Promouvoir la CSP Report-Only en enforce, après lecture des rapports (ACTIONS-PAUL.md) — 11/09",
-          "Rendre le ruleset de main ACTIF : il ne mord pas (ACTIONS-PAUL.md) — 11/09",
-          "Valider la fiche Google Business (ACTIONS-PAUL.md §1) — ouverte depuis le 04/08",
-          "Imprimer un lot de stickers QR (ACTIONS-PAUL.md §2) — reporté par Paul le 07/09",
-          "Embarquement Stripe de SOLA (ACTIONS-PAUL.md §3)",
-          "Accès Google Ads Basic (ACTIONS-PAUL.md §5) — relance le 03/10"
-        ],
-        "en_attente_depuis": "2026-08-04",
-        "boucles_ouvertes": [
-          {
-            "quoi": "⛔ LE RULESET DE main NE MORD PAS — mesuré deux fois le 11/09. Posé par Paul, il laisse merger une PR dont la CI échoue. Enforcement status à passer à « Active », contrôle requis…",
-            "depuis": "2026-09-11"
-          },
-          {
-            "quoi": "Travail multi-agents sans propriétaire de fichier : 2 séances sur RenoBoost le 11/09, toutes sous paggerard-boop, donc aucune revue croisée possible (GitHub interdit d'approuver…",
-            "depuis": "2026-09-11"
-          },
-          {
-            "quoi": "Audit sécurité : 8 lots en production, gardés par 6 harnais de comportement. Restent 2 gestes de Paul (ACTIONS-PAUL.md) et le backlog mesuré (ROADMAP-SECURITE.md).",
-            "depuis": "2026-09-11"
-          },
-          {
-            "quoi": "✅ FERMÉE le 07/09 — la cause n'était pas la CSS mais une injection HTML : les initiales d'avatar sortaient brutes d'un nom venu de GoHighLevel. La leçon qui reste : une donnée de…",
-            "depuis": "2026-09-07"
-          },
-          {
-            "quoi": "Landing : lot 1 « retenue » fait (07/09). Restent lot 2 (photo en hero, attend la séance photo) et lot 3 (sections R1 : centrage, cartes uniformes). Cadrage 2026-09-07. 08/09…",
-            "depuis": "2026-09-06"
-          },
-          {
-            "quoi": "L'API GHL rend 401 sur les champs personnalisés à chaque synchro depuis le 03/09 : `ghl_custom_fields` vide. Les contacts passent — portée de jeton, pas panne",
-            "depuis": "2026-09-05"
-          },
-          {
-            "quoi": "Radar BTP : R-1 à R-4 livrés, migration appliquée, R-3 l'ingesteur écrit et câblé. ⏳ NE RESTE QUE L'ACCÈS BASIC (17/09 inquiétude, 03/10 relance) — plus une seule ligne de code à…",
-            "depuis": "2026-09-03"
-          },
-          {
-            "quoi": "ALT-A1/ALT-A3 ouverts (qui reçoit quoi ; sortir Henri de la supervision technique). ⚠️ La PR #304 qui les portait est MERGÉE depuis le 31/08 — le doc vivant est…",
-            "depuis": "2026-08-27"
-          },
-          {
-            "quoi": "Un interrupteur système dans un `kv_store` par utilisateur, lu au `rows[0]` : il dépend du compte qui répond en premier et meurt avec lui. Sa place est `sentinelle_etat`",
-            "depuis": "2026-09-04"
-          },
-          {
-            "quoi": "`/api/digest` rend 200 sans battement ni log quand la veille est inactive : c'est ce silence qui a caché la panne. Un cron muet et un cron mort doivent se distinguer",
-            "depuis": "2026-09-04"
-          }
-        ],
-        "maj": "2026-09-07"
-      },
-      "recits": [
-        "boucles_ouvertes[].quoi"
-      ],
-      "ciel": "renoboost-ia",
-      "hors_seance": true,
-      "derive": {
-        "tete": "23e7b95",
-        "tete_le": "2026-09-11T15:48:55+02:00",
-        "commits_depuis": 1,
-        "commit_inconnu": false
-      },
-      "reprise": true,
-      "mesure_le": "2026-09-11",
-      "jours_depuis_maj": 6,
-      "jours_en_attente": 40,
-      "rang": 0
-    },
-    {
-      "ok": true,
-      "motif": "",
       "depot": "PaulGERARD161098/artisan-builder",
       "grain": {
         "projet": "artisan-builder",
@@ -128,8 +37,8 @@
       },
       "recits": [],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "ba1e36b",
         "tete_le": "2026-09-13T16:28:28+00:00",
@@ -140,6 +49,95 @@
       "jours_depuis_maj": 0,
       "jours_en_attente": 23,
       "rang": 0
+    },
+    {
+      "ok": true,
+      "motif": "",
+      "depot": "PaulGERARD161098/RenoBoost",
+      "grain": {
+        "projet": "RénoBoost",
+        "depot": "PaulGERARD161098/RenoBoost",
+        "cap": "Un individu seul fait tourner le business entier, aidé par l'automatisation (Directive IA). RénoBoost est le hub : acquisition, rendez-vous, dashboard, et la roadmap maîtresse des quatre briques.",
+        "rattache_a": "ROADMAP-2026-09-13-soir-fin-de-session.md (§7 = le plus récent) · CADRAGE-2026-09-13-boussole.md · BOUSSOLE-recherches-google.pdf · ROADMAP-SECURITE.md · ROADMAP-MASTER.md · ACTIONS-PAUL.md",
+        "etat": "en_attente_de_paul",
+        "jalon": {
+          "nom": "Jalon 0 — l'amorçage : trois gestes de Paul, zéro ligne de code",
+          "critere_de_sortie": "`stickers` > 0 · fiche Google visible publiquement · `stripe_charges_enabled` = true"
+        },
+        "dernier_arret": {
+          "le": "2026-09-13",
+          "quoi": "Séance du 13/09 close. PDF complet de la boussole (14 p.) + son générateur, puis le prompt d'analyse adverse pour ChatGPT. Patrimoine vert, lint à zéro. Détail : ROADMAP §7.",
+          "commit": "77be4dd"
+        },
+        "prochaine_action": "⛔ NE RIEN CODER. Mesure d'ouverture : select count(*) from paiements. Goulot inchangé : 2 variables Vercel + KYC SOLA. Prompt de reprise complet : ROADMAP-2026-09-13-soir §7.6.",
+        "bloque_par": [
+          "Promouvoir la CSP Report-Only en enforce, après lecture des rapports (ACTIONS-PAUL.md) — 11/09",
+          "Rendre le ruleset de main ACTIF : il ne mord pas (ACTIONS-PAUL.md) — 11/09",
+          "Valider la fiche Google Business (ACTIONS-PAUL.md §1) — ouverte depuis le 04/08",
+          "Imprimer un lot de stickers QR (ACTIONS-PAUL.md §2) — reporté par Paul le 07/09",
+          "Embarquement Stripe de SOLA (ACTIONS-PAUL.md §3)"
+        ],
+        "en_attente_depuis": "2026-08-04",
+        "boucles_ouvertes": [
+          {
+            "quoi": "⏳ ATTEND PAUL — prompt d'analyse adverse du PDF boussole livré le 13/09. Il produit des faux positifs par construction : trier contre le code et la base. Cadre : ROADMAP §7.2.",
+            "depuis": "2026-09-13"
+          },
+          {
+            "quoi": "⚠️ LA BOUSSOLE EST CADRÉE, PAS COMMENCÉE — CADRAGE-2026-09-13-boussole.md. Son étape A ne produit AUCUN écran et passe pourtant devant tout : mesurer combien de mois Google peut…",
+            "depuis": "2026-09-13"
+          },
+          {
+            "quoi": "⚠️ GESTE DE SÉCURITÉ NON CONFIRMÉ — le refresh token Google Ads est apparu EN CLAIR sur une capture d'écran le 07/09 et n'a jamais été confirmé régénéré. Tant qu'il ne l'est pas…",
+            "depuis": "2026-09-07"
+          },
+          {
+            "quoi": "⛔ LEÇON DU 13/09 — UN REVOKE SUR LES RÔLES NOMMÉS NE RÉVOQUE RIEN. `revoke all on function ... from anon, authenticated` a rendu success:true et n'a rien fait : `create function`…",
+            "depuis": "2026-09-13"
+          },
+          {
+            "quoi": "⚠️ OUVERT, NOMMÉ, NON TRAITÉ — le bruit de fond de Google. 89,6 % des lignes de l'Oise valent 0 ou 10 par mois (134 372 à zéro, 167 839 à dix). La coupe au top-3000 les écarte de…",
+            "depuis": "2026-09-13"
+          },
+          {
+            "quoi": "⚠️ CE QUE LE « 0 » DU CONTRASTE NE COUVRE PAS, et qu'il ne faut pas lire comme « le dashboard est accessible » : 59 textes sur DÉGRADÉ sont hors de portée de la sonde par…",
+            "depuis": "2026-09-13"
+          },
+          {
+            "quoi": "⛔ LEÇON DU 13/09 SOIR — ÉLARGIR UN GARDE-FOU EST UN GESTE DANGEREUX EN SOI. La regex de langage-encres ne voyait pas color: var(--primary-dark) (sky-600, 4,10:1) : le suffixe lui…",
+            "depuis": "2026-09-13"
+          },
+          {
+            "quoi": "⛔ LEÇON DU 13/09 — UNE MESURE JUSTE N'EST PAS UNE CONCLUSION JUSTE. Mesuré que le repli d'A1 décidait de 100 % des dossiers (171 clients sur 171 sans origine) : exact. Conclu…",
+            "depuis": "2026-09-13"
+          },
+          {
+            "quoi": "⛔ LEÇON DU 13/09 — MES PROPRES SONDES ONT MENTI QUATRE FOIS DANS LA JOURNÉE : pages ouvertes en file:// alors que leurs feuilles sont en racine-relatif (9 verdicts verts sur des…",
+            "depuis": "2026-09-13"
+          },
+          {
+            "quoi": "⚠️ SIGNALÉ, NON SUPPRIMÉ — le token --lp-plat (style.css:1726) est déclaré, documenté dans DESIGN-LANGAGE.md et dans le skill livrer-une-page, employé NULLE PART : la landing…",
+            "depuis": "2026-09-13"
+          }
+        ],
+        "maj": "2026-09-13"
+      },
+      "recits": [
+        "boucles_ouvertes[].quoi"
+      ],
+      "ciel": "renoboost-ia",
+      "hors_seance": false,
+      "reprise": false,
+      "derive": {
+        "tete": null,
+        "tete_le": null,
+        "commits_depuis": 0,
+        "commit_inconnu": false
+      },
+      "mesure_le": "2026-09-13",
+      "jours_depuis_maj": 0,
+      "jours_en_attente": 40,
+      "rang": 1
     },
     {
       "ok": true,
@@ -157,8 +155,8 @@
         },
         "dernier_arret": {
           "le": "2026-09-13",
-          "quoi": "Leçons v8 propagées dans les sept dépôts atteignables, sceau vérifié sur main partout. Le rappel Finubar, lui, était DÉJÀ aligné : la note demandait de réparer ce qui l'était.",
-          "commit": "753d2fb"
+          "quoi": "Grain recalé : il dérivait de 4 commits et parlait des « leçons v8 », alors que le sceau est passé v15 le 13/09. Détail : memoire/LECONS.md et JOURNAL-DECISIONS.md.",
+          "commit": "c90b997"
         },
         "prochaine_action": "Plus aucune propagation en attente. Reprendre le jalon J3 du cockpit. Seul ripair reste en v7, et il est inatteignable depuis une séance ouverte sur les dépôts de PaulGERARD161098.",
         "bloque_par": [
@@ -308,38 +306,10 @@
     "en_cours": 2,
     "en_attente_de_paul": 1,
     "au_repos": 0,
-    "derives": 2,
+    "derives": 1,
     "commits_inconnus": 0,
     "boucles_ouvertes": 20,
     "gestes_de_paul": [
-      {
-        "projet": "RénoBoost",
-        "geste": "Migration revoke : la voie UUID des devis (ACTIONS-PAUL.md, en tête) — 11/09"
-      },
-      {
-        "projet": "RénoBoost",
-        "geste": "Promouvoir la CSP Report-Only en enforce, après lecture des rapports (ACTIONS-PAUL.md) — 11/09"
-      },
-      {
-        "projet": "RénoBoost",
-        "geste": "Rendre le ruleset de main ACTIF : il ne mord pas (ACTIONS-PAUL.md) — 11/09"
-      },
-      {
-        "projet": "RénoBoost",
-        "geste": "Valider la fiche Google Business (ACTIONS-PAUL.md §1) — ouverte depuis le 04/08"
-      },
-      {
-        "projet": "RénoBoost",
-        "geste": "Imprimer un lot de stickers QR (ACTIONS-PAUL.md §2) — reporté par Paul le 07/09"
-      },
-      {
-        "projet": "RénoBoost",
-        "geste": "Embarquement Stripe de SOLA (ACTIONS-PAUL.md §3)"
-      },
-      {
-        "projet": "RénoBoost",
-        "geste": "Accès Google Ads Basic (ACTIONS-PAUL.md §5) — relance le 03/10"
-      },
       {
         "projet": "artisan-builder",
         "geste": "EZZEDINE — assureur décennale, numéro de police, couverture géographique. Obligations d'affichage, rien ne les remplace."
@@ -373,6 +343,26 @@
         "geste": "RÉSERVE, pas un blocage : l'adresse du siège est une DOMICILIATION (SOFRADOM). Voir le README du site, §Ce qui bloque."
       },
       {
+        "projet": "RénoBoost",
+        "geste": "Promouvoir la CSP Report-Only en enforce, après lecture des rapports (ACTIONS-PAUL.md) — 11/09"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Rendre le ruleset de main ACTIF : il ne mord pas (ACTIONS-PAUL.md) — 11/09"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Valider la fiche Google Business (ACTIONS-PAUL.md §1) — ouverte depuis le 04/08"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Imprimer un lot de stickers QR (ACTIONS-PAUL.md §2) — reporté par Paul le 07/09"
+      },
+      {
+        "projet": "RénoBoost",
+        "geste": "Embarquement Stripe de SOLA (ACTIONS-PAUL.md §3)"
+      },
+      {
         "projet": "Ultima",
         "geste": "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr"
       },
@@ -397,26 +387,26 @@
   "cartouche": {
     "signaux": [
       {
-        "projet": "RénoBoost",
-        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
-        "pourquoi": "derive"
-      },
-      {
         "projet": "artisan-builder",
         "dit": "a avancé de 1 commit(s) depuis sa dernière note",
         "pourquoi": "derive"
       },
       {
+        "projet": "RénoBoost",
+        "dit": "attend un geste : Promouvoir la CSP Report-Only en enforce, après lecture des rapports (ACTIONS-PAUL.md) — 11/09 — ouvert depuis 40 j",
+        "pourquoi": "attente"
+      },
+      {
         "projet": "Ultima",
-        "dit": "arrêté sur : Leçons v8 propagées dans les sept dépôts atteignables, sceau vérifié sur main partout. Le rappel Finubar, lui, était DÉJÀ aligné : la note demandait de réparer ce qui l'était.",
+        "dit": "arrêté sur : Grain recalé : il dérivait de 4 commits et parlait des « leçons v8 », alors que le sceau est passé v15 le 13/09. Détail : memoire/LECONS.md et JOURNAL-DECISIONS.md.",
         "pourquoi": "en_cours"
       }
     ],
     "action": {
-      "projet": "RénoBoost",
-      "nature": "geste",
-      "faire": "Migration revoke : la voie UUID des devis (ACTIONS-PAUL.md, en tête) — 11/09",
-      "cap": "Un individu seul fait tourner le business entier, aidé par l'automatisation (Directive IA). RénoBoost est le hub : acquisition, rendez-vous, dashboard, et la roadmap maîtresse des quatre briques."
+      "projet": "artisan-builder",
+      "nature": "code",
+      "faire": "SI EZZEDINE NE RÉPOND PAS : seconde épreuve du document de passation par une séance neuve. Sa version corrigée n'a pas été suivie. Porter sur le §9.",
+      "cap": "Un artisan a son site vitrine en ligne en quelques minutes : il décrit son activité, les textes sont générés, les sections et le thème se règlent sans écrire de code. Depuis le 2026-09-11, la chaîne qui porte ce cap est le Studio (SiteSpec/blocks), pas le wizard."
     },
     "illisibles": 0,
     "hors_seance": 5
@@ -424,17 +414,17 @@
   "constellation": {
     "noeuds": [
       {
-        "id": "PaulGERARD161098/RenoBoost",
-        "libelle": "RénoBoost",
-        "constellation": "en_attente_de_paul",
-        "ciel": "renoboost-ia",
-        "signal": 1
-      },
-      {
         "id": "PaulGERARD161098/artisan-builder",
         "libelle": "artisan-builder",
         "constellation": "en_cours",
         "ciel": "alpha",
+        "signal": 1
+      },
+      {
+        "id": "PaulGERARD161098/RenoBoost",
+        "libelle": "RénoBoost",
+        "constellation": "en_attente_de_paul",
+        "ciel": "renoboost-ia",
         "signal": 1
       },
       {
