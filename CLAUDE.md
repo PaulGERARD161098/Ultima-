@@ -183,6 +183,16 @@ aujourd'hui ? » + 4 quadrants. Un repo, mémoire inter-segment, sécurité rele
    peut être citée. C'est la Directive EL appliquée au document que la séance
    suivante croira sur parole.
 
+   ⛔ **IL SE REND EN UN SEUL BLOC, COPIABLE TEL QUEL** *(Paul, 2026-09-13 :
+   « mets-moi le prompt dans un bloc unique que je peux copier-coller seul »)*.
+   Un bloc de code d'un seul tenant, **rien au-dessus ni en dessous à retirer
+   à la main**, aucun lien ni tableau markdown à l'intérieur — Paul le copie,
+   il le colle, la séance suivante démarre. Un prompt éparpillé dans une
+   réponse formatée oblige à le reconstituer, donc à décider quoi garder : la
+   séance suivante repart alors d'une version amputée, et personne ne sait
+   laquelle. ⚠️ Le rapport de séance, lui, reste formaté et lisible — les deux
+   ne se confondent pas : le rapport se LIT, le prompt se COPIE.
+
    **Ce qu'il contient, et rien de plus :** ① le cap et le jalon, avec son
    critère de sortie chiffré ; ② l'état mesuré du jour, requête à l'appui ;
    ③ la prochaine action UNIQUE ; ④ ce qui est bloqué et par qui ; ⑤ les gates
