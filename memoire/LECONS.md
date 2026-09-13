@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v15 2026-09-13 sha256:3db21eb4e5c4 -->
+<!-- lecons:empreinte v16 2026-09-13 sha256:4528d4b8af12 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -209,6 +209,37 @@ après coup une affirmation fausse à la lecture. Une séance d'épreuve l'a mes
 fausse et a eu raison. *Un état se mesure à la lecture, jamais à l'écriture : un
 tableau d'historique porte les commandes qui font foi CONTRE lui.*
 
+**UN RAPPORT ENTRE DEUX POINTS NON ADJACENTS N'EST PAS UN TAUX PAR INTERVALLE**
+*(2026-09-13, trouvé par une revue adverse externe, pas par moi)*. J'avais donné
+à Paul, dans un prompt d'analyse, « un pic de ×230 **en un mois** » sur la série
+`climatiseur mobile`. Mesure refaite : 74 000 / 320 = 231,25 porte d'**avril à
+juin** — deux intervalles. Avril→mai vaut 25,3, mai→juin 9,14. Le nombre était
+juste, son unité était fausse, et c'est l'unité qui portait tout le sens : ×230
+en un mois se raconte comme un raz-de-marée, ×9 puis ×25 se raconte comme une
+saison qui monte. *Un ratio ne dit rien tant qu'on n'a pas nommé sur combien
+d'intervalles il porte — et la division ne le rappelle jamais toute seule.*
+
+**QUAND UN TEXTE ET LE TABLEAU QUI L'ILLUSTRE DIVERGENT, C'EST LE TEXTE QUI A
+TORT — ET PERSONNE NE RELIT LE TABLEAU** *(2026-09-13)*. Le PDF de la boussole
+affirmait « 33 valeurs distinctes, avec un **rapport constant** d'un barreau au
+suivant », et imprimait **juste en dessous** la ligne des rapports mesurés :
+1,27 · 1,21 · 1,24 · 1,24 · 1,23 · 1,22 · 1,23 · 1,23 · 1,22 · 1,22. Le
+démenti était dans la même page, à deux centimètres de l'affirmation, pendant
+quatorze pages et une relecture complète. ⛔ *Une phrase de synthèse posée
+au-dessus d'un tableau se lit à la place du tableau. Elle doit donc être
+DÉRIVÉE de lui — « des rapports resserrés entre 1,21 et 1,27 » — jamais
+arrondie en une propriété qu'il ne montre pas.*
+
+**« DEUX CALCULS D'ACCORD » NE MESURE PAS L'EXACTITUDE** *(2026-09-13)*. J'avais
+annoncé « 0 désaccord sur 25 898 mots-clés » comme une preuve de justesse de
+l'agrégation. C'en est une — de **cohérence**, pas d'exactitude : deux calculs
+concordants partagent la même zone, le même import tronqué, les mêmes zéros
+fabriqués et la même absence de provenance. Ils se trompent ensemble sans jamais
+diverger. *Un test de concordance prouve que le moteur ne se contredit pas ; il
+ne dit rien de ce qui est entré dedans. Étiqueter séparément fidélité de
+transformation, cohérence de calcul et justesse de la source.* ⚠️ Et cette
+mesure-là n'avait été versionnée nulle part : citée trois fois, introuvable.
+
 ---
 
 ## 2. Les garde-fous, et leur silence
@@ -320,6 +351,30 @@ qui ne tourne pas.*
 build avait arrêté le `next dev` qu'ils interrogent. *Dix échecs identiques et
 simultanés désignent l'environnement, pas le code.*
 
+**BOUCHER UN TROU NOMMÉ N'EST PAS FERMER SA CLASSE — ET LA CORRECTION DONNE
+L'ILLUSION DU CONTRAIRE** *(2026-09-13, la même journée que la correction)*. Le
+matin, j'avais trouvé et corrigé le trou `Number(null) === 0` dans `formeSaine`,
+le validateur de réponse du radar. Je l'ai noté comme « le contrat est fermé ».
+Le soir, sept charges hostiles lui ont été présentées : **les sept sont
+passées** — `volume: null`, volume négatif, volume booléen, ligne sans mot-clé,
+ligne qui est une chaîne, et des totaux annonçant 9 999 mots-clés pour une seule
+ligne. Le validateur vérifiait l'**enveloppe** et s'arrêtait au bord du tableau.
+⛔ *Corriger un cas particulier crée le sentiment d'avoir traité le général, et
+ce sentiment est plus dangereux que le trou d'origine : il retire le sujet de la
+liste des choses à regarder.* La question à poser après chaque correction n'est
+pas « est-ce réparé ? » mais **« de quelle famille était ce défaut, et qui
+d'autre en est ? »** — puis on présente la famille entière au garde-fou.
+
+**UN INVARIANT VRAI ET NON GARDÉ SE CASSE EN SILENCE** *(2026-09-13)*. Deux
+invariants du radar étaient parfaitement respectés et **absolument pas testés** :
+la garde `requireAdmin` (correcte — elle interroge `is_admin` avec le JWT de
+l'utilisateur, et seul `true` passe) n'avait aucun test de 401/403 sur les routes
+du radar ; et la séparation entre le simulateur public et les routes privées
+tenait, sans qu'aucun harnais ne l'exige. *Un invariant qu'on a vérifié à l'œil
+est vrai aujourd'hui ; un invariant qu'un harnais exige est vrai demain. Entre
+les deux il n'y a pas une nuance de rigueur, il y a la personne qui modifiera
+le fichier dans six mois sans connaître la règle.*
+
 ---
 
 ## 3. Ce qu'on donne à Paul
@@ -424,6 +479,43 @@ haut dans le même fichier. Une séance qui la suivait s'est vue renvoyée colle
 une information déjà collectée — exactement la dérive dont ce README se plaignait
 lui-même. *Remplacer la liste par la commande qui la rend, et dater ce qui reste
 écrit.*
+
+**FAIRE RELIRE SON TRAVAIL PAR UNE IA ADVERSE MARCHE — À CONDITION DE RE-LOCALISER
+CHAQUE CONSTAT AVANT D'AGIR** *(2026-09-13, première fois que le dispositif est
+éprouvé)*. Paul a fait tourner chez ChatGPT le prompt adverse que j'avais écrit
+contre le PDF de la boussole. Le retour — 17 exigences ancrées page par page —
+a trouvé **quatre défauts réels que je n'avais pas vus**, dont deux dans du code
+en production : `Number(m.monthlySearches)` fabriquait un zéro depuis `null`, et
+`generateKeywordIdeas` n'était pas paginé (une page courte se lisait comme la
+fin d'une collecte). Il a aussi corrigé une arithmétique que je venais de
+publier. ⇒ **Le dispositif vaut d'être refait.**
+
+⛔ **Mais une revue qui n'a pas exécuté le code décrit le DOCUMENT, pas le
+SYSTÈME.** Sa toute première exigence demandait de « supprimer ce modèle
+×1,22 **dans le moteur** » : il n'y était pas — il ne vivait que dans le
+générateur du PDF et dans le cadrage. Appliquer le constat là où il le disait
+aurait fait chercher, puis modifier, du code qui n'existait pas. De même, cinq
+de ses dix-sept exigences portaient sur un outil **non encore écrit** : ce sont
+des spécifications, pas des correctifs, et les traiter comme des bugs aurait
+ouvert un chantier de plusieurs semaines sous l'étiquette « corriger ».
+
+*Le geste qui rend une revue externe exploitable tient en trois colonnes, et il
+se fait AVANT la première ligne de code :* **où est-ce vraiment** (grep, pas
+mémoire) · **est-ce un défaut actif, une spec, ou déjà résolu** · **qu'est-ce
+que ça casse concrètement**. Sans ce tri, on hérite du plan de quelqu'un qui
+n'a pas ouvert le dépôt. ⚠️ Et ce tri ne dévalue pas la revue : c'est parce
+qu'elle ignore le dépôt qu'elle attaque ce que l'auteur ne peut plus voir.
+
+**ON FAIT RELIRE CE QUI A ÉTÉ ÉCRIT AVEC INTENTION, PAS CE QU'ON DOUTE**
+*(2026-09-13, corollaire du précédent)*. Les trois cibles que j'avais moi-même
+désignées comme les plus faibles dans le prompt adverse (les fragments de
+dictée, l'ordre du pre-mortem, la veille indéfinie) ont donné des retours
+**justes mais attendus** — je les avais déjà nommées. Les quatre vraies
+trouvailles sont venues d'endroits que je n'avais pas signalés, parce que je les
+croyais bons. *Désigner ses points faibles à un relecteur oriente son attention
+vers ce qu'on sait déjà ; la valeur est dans ce qu'on ne pense pas à lui
+montrer. Le prochain prompt adverse ne nommera donc pas mes doutes : il exigera
+une passe exhaustive sur ce que j'affirme le plus tranquillement.*
 
 ---
 
