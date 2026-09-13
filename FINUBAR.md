@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-13",
-    "quoi": "Grain recalé : il dérivait de 4 commits et parlait des « leçons v8 », alors que le sceau est passé v15 le 13/09. Détail : memoire/LECONS.md et JOURNAL-DECISIONS.md.",
-    "commit": "c90b997"
+    "quoi": "LEÇONS v16 (sceau 4528d4b8af12) : 7 leçons de la première revue adverse externe. Détail : memoire/LECONS.md §1, §2, §3.",
+    "commit": "3f71e6a"
   },
   "prochaine_action": "Plus aucune propagation en attente. Reprendre le jalon J3 du cockpit. Seul ripair reste en v7, et il est inatteignable depuis une séance ouverte sur les dépôts de PaulGERARD161098.",
   "bloque_par": [

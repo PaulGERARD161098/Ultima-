@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v17 2026-09-13 sha256:7cc8470b024c -->
+<!-- lecons:empreinte v18 2026-09-13 sha256:048d085d59f7 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -229,6 +229,49 @@ quatorze pages et une relecture complète. ⛔ *Une phrase de synthèse posée
 au-dessus d'un tableau se lit à la place du tableau. Elle doit donc être
 DÉRIVÉE de lui — « des rapports resserrés entre 1,21 et 1,27 » — jamais
 arrondie en une propriété qu'il ne montre pas.*
+
+**UNE AFFIRMATION NE SE CORRIGE PAS AVEC UNE AUTRE AFFIRMATION TIRÉE DU MÊME
+EXTRAIT — ELLE SE RELIT À LA SOURCE** *(2026-09-13, la correction de la
+correction, dans la même soirée)*. Le PDF de la boussole affirmait une « échelle
+×1,22 ». Je l'ai retirée et remplacée par « rapports entre 1,21 et 1,27 »,
+mesure que je croyais honnête parce qu'elle venait du **tableau imprimé dans le
+document**. Elle était fausse aussi : ce tableau est un EXTRAIT — le milieu de
+l'échelle, sa seule partie régulière. Relue en base sur les 33 valeurs réelles,
+l'échelle va de **×1,14 à ×2,24**, avec un bas grossier (10 · 20 · 30 · 40 · 50 ·
+70 · 90) et un haut très grossier (12 100 · 22 200 · 33 100 · 74 000).
+
+⛔ **Et la première correction a créé une erreur NEUVE** : j'en avais déduit que
+« 10 → 20 ne fait pas un cran » (`log(2)/log(1,22) = 3,49`). Sur l'échelle
+réelle, 10 et 20 sont deux barreaux **voisins** : un calcul juste sur une
+prémisse fausse. *Corriger depuis la même source seconde reproduit son biais,
+avec en plus l'autorité de la correction.* Une rétractation se fait depuis la
+donnée, jamais depuis le document qu'on rétracte.
+
+⚠️ **Ce que la vraie mesure apprenait, et que le modèle cachait** : l'incertitude
+n'est pas uniforme — les GRANDS chiffres, ceux qu'on montre à un artisan, sont
+les MOINS précis. Le modèle ×1,22 disait l'inverse. *Une fausse régularité ne
+fait pas qu'être fausse : elle supprime le fait le plus utile.*
+
+**UN MOTIF DE RECHERCHE SE VÉRIFIE SUR LA CHAÎNE RÉELLE, SINON IL REND UN FAUX
+« ABSENT »** *(2026-09-13 — trois fois dans la même soirée)*. J'ai déclaré une
+affirmation retirée du code après un `grep "1\.22"` — le code écrit `1,22`, avec
+une **virgule**. Elle vivait encore dans SEPT fichiers, dont le texte affiché à
+Paul et l'en-tête du CSV qui circule seul, et **trois tests l'exigeaient**.
+Puis un test a cherché `/74 000/` là où `toLocaleString('fr-FR')` écrit une
+**espace fine insécable** (U+202F). Puis une sonde PDF a répondu « MANQUE » sur
+une phrase coupée par un saut de ligne. ⛔ *Les trois ont rendu « absent » avec
+la même assurance qu'un vrai absent.* Un motif qui cherche une absence se teste
+d'abord sur une chaîne dont on SAIT qu'elle contient la cible.
+
+**UN FAIT RECOPIÉ DANS SEPT FICHIERS DIVERGE ; UN FAIT EXPORTÉ NE PEUT PAS**
+*(2026-09-13)*. La même affirmation vivait dans deux commentaires, le texte de
+l'écran, l'en-tête du CSV, le cadrage, le générateur du PDF et trois tests.
+Retirée du document, elle est restée dans le code — c'est-à-dire dans la version
+que Paul VOIT et dans le fichier qu'il ENVOIE. *Un chiffre que plusieurs endroits
+doivent connaître se met dans une constante exportée et une fonction qui le met
+en phrase ; les autres l'importent.* Et le garde-fou qui manquait est celui qui
+cherche l'ancienne affirmation **là où elle sort** — écran et export — pas là où
+elle était écrite.
 
 **« DEUX CALCULS D'ACCORD » NE MESURE PAS L'EXACTITUDE** *(2026-09-13)*. J'avais
 annoncé « 0 désaccord sur 25 898 mots-clés » comme une preuve de justesse de
