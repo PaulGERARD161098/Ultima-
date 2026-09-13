@@ -33,7 +33,7 @@
   "dernier_arret": {
     "le": "2026-09-13",
     "quoi": "Leçons v8 propagées dans les sept dépôts atteignables, sceau vérifié sur main partout. Le rappel Finubar, lui, était DÉJÀ aligné : la note demandait de réparer ce qui l'était.",
-    "commit": "MAJ"
+    "commit": "753d2fb"
   },
   "prochaine_action": "Plus aucune propagation en attente. Reprendre le jalon J3 du cockpit. Seul ripair reste en v7, et il est inatteignable depuis une séance ouverte sur les dépôts de PaulGERARD161098.",
   "bloque_par": [
@@ -46,7 +46,7 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "MESURÉ le 13/09 et démenti : la note annonçait des copies divergentes du rappel Finubar. Les sept fichiers ont la même empreinte, et la même que la source. Une note qui survit à son fait envoie réparer ce qui va bien.",
+      "quoi": "MESURÉ le 13/09 et démenti : la note annonçait des copies divergentes du rappel Finubar. Les sept fichiers ont la même empreinte. Voir CADRAGE-FINUBAR.md.",
       "depuis": "2026-09-13"
     },
     {
@@ -54,11 +54,11 @@
       "depuis": "2026-09-07"
     },
     {
-      "quoi": "ripair (paggerard-boop) reste en LEÇONS v7 : une séance déjà ouverte sur des dépôts de PaulGERARD161098 ne peut pas l'attacher, refus re-mesuré le 13/09. Il faut une séance ouverte sur ce dépôt-là.",
+      "quoi": "ripair (paggerard-boop) reste en LEÇONS v7 : une séance ouverte sur les dépôts de PaulGERARD161098 ne peut pas l'atteindre. Angle mort connu, pas un oubli.",
       "depuis": "2026-09-11"
     },
     {
-      "quoi": "Aucun contrôle croisé ne compare la copie des leçons d'un dépôt à la source : le sceau rend la divergence visible, il ne la détecte pas seul. Un contrôle automatique exigerait un jeton inter-dépôts, donc un secret — décision de Paul.",
+      "quoi": "Aucun contrôle croisé ne compare la copie des leçons d'un dépôt à sa source : le sceau rend la divergence VISIBLE, il ne la corrige pas. `head -1` la montre.",
       "depuis": "2026-09-11"
     },
     {
