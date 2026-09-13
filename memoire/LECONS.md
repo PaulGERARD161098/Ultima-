@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v8 2026-09-13 sha256:85cca6330a86 -->
+<!-- lecons:empreinte v9 2026-09-13 sha256:b9bbba0a3d18 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -218,6 +218,18 @@ exactement comme les jalons à venir. Un jalon en retard ne se signale pas tout
 seul : il faut le lui faire dire, comme Finubar fait dire à un grain qu'il a
 vieilli.
 
+**UN GARDE-FOU QUI LIT DU TEXTE LIT AUSSI SA PROPRE DOCUMENTATION**
+*(2026-09-11)*. Une garde qui cherche un motif interdit dans un fichier trouve
+aussi le commentaire qui explique pourquoi ce motif est interdit. Elle se
+déclenche donc sur l'explication du correctif, pas sur le défaut. ⛔ Un contrôle
+de présence se fait sur le CODE (commentaires retirés) ou sur un COMPTE attendu
+— « exactement une occurrence, celle du repli voulu » — jamais sur la présence
+brute d'une chaîne dans un fichier commenté. *Incident : deux assertions de
+sûreté ont bloqué deux modifications correctes, parce que le commentaire que je
+venais d'écrire citait le mot qu'elles interdisaient. Deux cycles perdus, et la
+tentation immédiate de désarmer l'assertion — c'est-à-dire de supprimer le
+garde-fou pour faire passer le correctif.*
+
 ---
 
 ## 3. Ce qu'on donne à Paul
@@ -254,6 +266,43 @@ l'arbitrage. Vérifier factuellement, appliquer sa règle au constat, agir, rend
 compte du constat **et** de l'action. Lui renvoyer une question à choix multiples
 lui redemande ce qu'il vient de trancher. *Incident : deux PR à évaluer, une
 question posée au lieu de vérifier et agir ; Paul n'a pas répondu, temps perdu.*
+
+**UN OUTIL QUI RÉPOND « INTROUVABLE » NE PROUVE PAS QUE LA CHOSE N'EXISTE PAS**
+*(2026-09-11)*. « Je ne l'ai pas trouvé » et « ce n'est pas là » sont deux
+constats différents, et le second ne se déduit jamais du premier. Un droit
+manquant, un jeton à portée trop étroite, un proxy qui refuse : tous rendent le
+même silence qu'une absence réelle. ⛔ Rapporter une absence exige d'avoir
+éliminé l'aveuglement, sinon on livre un diagnostic inversé — et il se lit comme
+un fait. *Incident : l'identifiant du projet Vercel écrit dans la roadmap
+répondait 404 ; je l'ai rapporté en laissant entendre que le projet avait
+disparu. Le bot Vercel a donné la vérité une heure plus tard : le projet était
+vivant, avec exactement cet identifiant, dans exactement l'équipe interrogée —
+mon jeton n'avait pas de portée dessus. La roadmap avait raison depuis le début,
+et j'avais jeté le doute sur elle.* La formulation juste existe et ne coûte rien :
+« je ne peux pas le vérifier avec mes accès », avant la valeur.
+
+**UN CHEMIN CRITIQUE SE MESURE, IL NE SE RAISONNE PAS** *(2026-09-13)*. Dire à
+Paul « fais X d'abord » est un livrable au même titre qu'une URL ou un chiffre :
+c'est une valeur qu'il va **croire et exécuter**, donc elle se lit à la source.
+⛔ Un ordre de priorités déduit de ce qu'on vient de coder est un biais, pas une
+analyse — on met en tête ce qu'on a en tête. *Incident : j'ai donné deux fois
+« poser les variables Gmail » comme priorité n°1 du chemin critique, parce que
+le lot que je venais de livrer portait dessus. Une requête sur les 13 devis a
+montré l'inverse : les 10 devis de la voie email n'ont ni montant ni lien, donc
+Gmail alimente la RELANCE et pas l'ENCAISSEMENT ; le jalon « premier euro » ne
+tenait qu'à deux gestes Stripe, sur un devis déjà signé à 4 572,70 €. Paul
+n'avait pas encore agi — la facture aurait été un geste inutile posé en premier.*
+Le geste juste tient en une requête : **avant d'ordonner des priorités, demander
+à la base où est réellement le blocage.**
+
+**UNE AFFIRMATION SUR UNE CIBLE QUI BOUGE PÉRIME ENTRE L'ÉCRITURE ET LA LECTURE**
+*(2026-09-11)*. Écrire « CI verte » dans un corps de PR le rend vrai pour la tête
+de ce moment-là, pas pour celle que Paul lira. Le document survit à la mesure.
+⛔ Ce qui se dit d'un objet mouvant se DATE ou se rattache à son identifiant :
+« verte sur `50aa0a4` », pas « verte ». *Incident : la mention est restée exacte
+pour la tête de code et fausse deux minutes pour la tête courante, le temps d'un
+commit de documentation. Repéré et dit avant que Paul ne le lise — mais c'est le
+hasard du calendrier qui l'a permis, pas la méthode.*
 
 **UN LIEN REMIS À UN TIERS DOIT SURVIVRE À CE QU'ON S'APPRÊTE À FAIRE DU DÉPÔT**
 *(2026-09-11)*. Paul voulait envoyer le site SPC à un avis extérieur. Je lui ai
