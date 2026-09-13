@@ -31,11 +31,11 @@
     "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
   },
   "dernier_arret": {
-    "le": "2026-09-07",
-    "quoi": "Boucle n°1 FERMÉE : un dépôt hors séance garde sa dernière mesure, DATÉE (reprise + mesure_le). La collecte de fin de séance est de nouveau possible.",
-    "commit": "f927887"
+    "le": "2026-09-13",
+    "quoi": "Leçons v8 propagées dans les sept dépôts atteignables, sceau vérifié sur main partout. Le rappel Finubar, lui, était DÉJÀ aligné : la note demandait de réparer ce qui l'était.",
+    "commit": "MAJ"
   },
-  "prochaine_action": "Passage DR de 18 h : RenoAgenda, RenoPredict et mon-dpe.fr — jamais dry-runnés, et clonables depuis add_repo.",
+  "prochaine_action": "Plus aucune propagation en attente. Reprendre le jalon J3 du cockpit. Seul ripair reste en v7, et il est inatteignable depuis une séance ouverte sur les dépôts de PaulGERARD161098.",
   "bloque_par": [
     "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
@@ -46,8 +46,24 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "Les six autres dépôts portent encore la copie FAUTIVE de `.claude/finubar-rappel.mjs` : leur prochaine séance doit recopier `Ultima-/finubar/rappel.mjs`. Tant qu'ils écrivent leurs boucles en objets, ils ne voient pas le défaut — c'est le jour où l'un d'eux écrira une chaîne qu'il perdra ses dettes en silence.",
+      "quoi": "MESURÉ le 13/09 et démenti : la note annonçait des copies divergentes du rappel Finubar. Les sept fichiers ont la même empreinte, et la même que la source. Une note qui survit à son fait envoie réparer ce qui va bien.",
+      "depuis": "2026-09-13"
+    },
+    {
+      "quoi": "COLLECTE — `collecter.mjs` VIDE le grain d'un dépôt hors séance au lieu de garder sa dernière mesure. Cran de sûreté posé le 07/09 (refus d'écrire) ; la FUSION reste à faire.",
       "depuis": "2026-09-07"
+    },
+    {
+      "quoi": "ripair (paggerard-boop) reste en LEÇONS v7 : une séance déjà ouverte sur des dépôts de PaulGERARD161098 ne peut pas l'attacher, refus re-mesuré le 13/09. Il faut une séance ouverte sur ce dépôt-là.",
+      "depuis": "2026-09-11"
+    },
+    {
+      "quoi": "Aucun contrôle croisé ne compare la copie des leçons d'un dépôt à la source : le sceau rend la divergence visible, il ne la détecte pas seul. Un contrôle automatique exigerait un jeton inter-dépôts, donc un secret — décision de Paul.",
+      "depuis": "2026-09-11"
+    },
+    {
+      "quoi": "⚠️ Les Routines DR visent une session persistante AVEC ses dépôts, mais le tir d'essai du 06/09 ne l'a pas réveillée. À vérifier à 12 h ; sinon, GitHub Action par dépôt.",
+      "depuis": "2026-09-06"
     },
     {
       "quoi": "Le mail du matin lit l'agrégat COMMITÉ : il vieillit les jours sans séance (il le dit). Le rendre frais tout seul = GitHub Action nocturne qui recollecte et commite",
@@ -90,7 +106,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-09-07"
+  "maj": "2026-09-13"
 }
 ```
 
