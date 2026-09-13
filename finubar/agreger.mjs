@@ -198,6 +198,40 @@ export function rangDe(entree) {
   return 3;
 }
 
+// ⛔ LA REPRISE D'UN GRAIN NON RELU — et pourquoi elle vit ICI, pas dans le
+// script de collecte. `collecter.mjs` est un CLI qui lance tout dès qu'on
+// l'importe : ce qui y est enfermé n'est testable par rien. C'est exactement ce
+// qui a laissé dormir le défaut de `mesurerGit` jusqu'au dry run du 07/09. Une
+// règle qu'aucun harnais ne peut appeler n'est pas une règle, c'est une
+// intention.
+//
+// Rend l'entrée à réutiliser pour un dépôt absent du disque, ou `null` s'il n'y
+// a rien de fiable à reprendre. Le contrat tient en une phrase : on garde ce
+// qu'on savait, et on DIT que ça date.
+export function reprendreGrain(avant, { depot, ciel, precedentLe } = {}) {
+  if (!avant || !avant.ok || !avant.grain) return null;
+  // Les trois champs DÉRIVÉS sont jetés : `agreger` les recalcule à la date du
+  // jour. C'est ce qui empêche un grain repris de rajeunir — `jours_depuis_maj`
+  // se compte depuis `grain.maj`, qui n'a pas bougé d'un jour.
+  const { jours_depuis_maj, jours_en_attente, rang, ...garde } = avant;
+  return {
+    ...garde,
+    depot: depot || avant.depot,
+    // ⛔ L'accroche au ciel vient de `depots.json`, JAMAIS de l'agrégat repris :
+    // c'est la liste qui fait foi, sinon déplacer une étoile n'aurait aucun
+    // effet sur un dépôt non attaché ce jour-là.
+    ciel: ciel || avant.ciel,
+    hors_seance: true,
+    reprise: true,
+    // La date d'ORIGINE de la mesure, jamais celle d'aujourd'hui. Une reprise de
+    // reprise garde la première : sans ce `||` dans cet ordre, une note vieille
+    // d'un mois se redaterait à chaque collecte et paraîtrait fraîche à
+    // perpétuité — on aurait remplacé une perte franche par un mensonge
+    // tranquille, ce qui est pire.
+    mesure_le: avant.mesure_le || precedentLe || null,
+  };
+}
+
 // `entrees` : [{ ok, motif, grain, derive:{commits_depuis, tete} }]
 export function agreger(entrees, aujourdhuiIso) {
   const projets = (entrees || []).map((e) => ({
@@ -231,6 +265,15 @@ export function agreger(entrees, aujourdhuiIso) {
   // parfaitement sains. Deux compteurs, donc, et `total` reste leur somme avec
   // les lisibles : rien ne disparaît du compte.
   const horsSeance = projets.filter((p) => !p.ok && p.hors_seance);
+  // ⛔ ET UN TROISIÈME ÉTAT, depuis le 07/09 : le dépôt REPRIS. Il n'était pas
+  // sur le disque, mais on savait déjà quelque chose de lui, et on le garde au
+  // lieu de l'effacer. Il est donc `ok` — son grain est là et lisible — tout en
+  // restant `hors_seance`, parce qu'il n'a PAS été rouvert aujourd'hui.
+  //
+  // Il ne rejoint surtout pas `horsSeance` : ce compteur-là est celui de
+  // l'angle mort TOTAL, les dépôts dont on ne sait rien du tout. Les mélanger
+  // rendrait le seul chiffre alarmant du lot indistinct du cas ordinaire.
+  const repris = projets.filter((p) => p.ok && p.reprise);
   const gestes = [];
   lisibles.forEach((p) => {
     p.grain.bloque_par.forEach((g) => gestes.push({ projet: p.grain.projet, geste: g }));
@@ -244,6 +287,7 @@ export function agreger(entrees, aujourdhuiIso) {
       lisibles: lisibles.length,
       illisibles: projets.length - lisibles.length - horsSeance.length,
       hors_seance: horsSeance.length,
+      repris: repris.length,
       en_cours: lisibles.filter((p) => p.grain.etat === 'en_cours').length,
       en_attente_de_paul: lisibles.filter((p) => p.grain.etat === 'en_attente_de_paul').length,
       au_repos: lisibles.filter((p) => p.grain.etat === 'au_repos').length,

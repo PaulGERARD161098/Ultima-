@@ -118,6 +118,35 @@ verifier('aucun lien inventé quand il manque', !/https?:\/\//.test(vieux.texte)
 verifier('un agrégat VIDE ne casse pas la composition',
   typeof composerMatin({}, {}).texte === 'string');
 
+// ⛔ Les grains REPRIS se disent, sinon l'état se fait passer pour frais.
+// Depuis le 07/09 un dépôt absent du disque garde sa dernière mesure au lieu
+// d'être effacé. Sans cette mention, « État collecté ce matin » vaudrait pour
+// les huit alors que la moitié peut dater d'avant — on aurait remplacé la perte
+// de grains par un mensonge tranquille, ce qui est pire parce qu'invisible.
+const socleRepris = {
+  le: '2026-09-07',
+  macro: { total: 8, en_attente_de_paul: 0, gestes_de_paul: [] },
+  cartouche: { signaux: [], action: null },
+};
+const avecRepris = composerMatin({ ...socleRepris, macro: { ...socleRepris.macro, repris: 4 } },
+  { aujourdhui: '2026-09-07' });
+const unRepris = composerMatin({ ...socleRepris, macro: { ...socleRepris.macro, repris: 1 } },
+  { aujourdhui: '2026-09-07' });
+const sansRepris = composerMatin(socleRepris, { aujourdhui: '2026-09-07' });
+
+verifier('⛔ le mail DIT combien de dépôts n’ont pas été rouverts',
+  /4 dépôts n’ont pas été rouverts/.test(avecRepris.texte), avecRepris.texte.slice(0, 120));
+verifier('  ↳ et le HTML le porte aussi', /rouverts/.test(avecRepris.html));
+verifier('  ↳ au singulier quand il n’y en a qu’un',
+  /1 dépôt n’a pas été rouvert :/.test(unRepris.texte));
+// ⛔ VERROU DE NON-VACUITÉ, et il porte sur l'ABSENCE : sans lui, le test serait
+// vert sur un mail qui afficherait la phrase EN PERMANENCE, y compris un jour
+// où les huit dépôts ont bien été rouverts — ce qui userait la mention jusqu'à
+// ce que personne ne la lise.
+verifier('⛔ et il se TAIT quand tous les dépôts ont été rouverts',
+  !/rouvert/.test(sansRepris.texte) && !/rouvert/.test(sansRepris.html),
+  'une mention permanente ne se lit plus');
+
 console.log('\n§4 — par l’absence : le HTML est échappé, rien d’interne ne fuite');
 
 const hostile = composerMatin({

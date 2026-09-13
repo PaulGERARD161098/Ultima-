@@ -19,7 +19,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { extraireBloc, lireGrain, agreger, cartoucheDuMatin, versConstellation, MAX_RECIT } from './agreger.mjs';
+import { extraireBloc, lireGrain, agreger, cartoucheDuMatin, versConstellation, reprendreGrain, MAX_RECIT } from './agreger.mjs';
 // La mesure de fraîcheur vit à part pour être ÉPROUVABLE — voir mesure-git.mjs.
 import { mesurerGit } from './mesure-git.mjs';
 
@@ -127,14 +127,49 @@ function accrocheDe(d) {
   return 'alpha';
 }
 
+// ⛔ L'AGRÉGAT PRÉCÉDENT, ET POURQUOI ON LE RELIT. Une séance Claude Code
+// n'attache presque jamais les huit dépôts ; les autres n'ont pas de dossier du
+// tout. Jusqu'ici ils ressortaient VIDES (`grain: null`), et la collecte de fin
+// de séance — que le CLAUDE.md prescrit pourtant à chaque fois — effaçait donc
+// les grains qu'elle n'avait pas pu relire. Le 07/09 elle a fait tomber
+// l'agrégat de 5 dépôts lus à 1 ; `api/_lib/finubar-macro.mjs` étant ce que lit
+// le mail du matin, c'est ce mail qui l'aurait annoncé le lendemain.
+//
+// Un dépôt absent du disque n'apprend RIEN sur son grain : ni qu'il a changé,
+// ni qu'il va bien. La seule chose vraie qu'on puisse en dire est ce qu'on
+// savait la dernière fois — à condition de DIRE que ça date, sinon on remplace
+// une perte franche par un mensonge tranquille, ce qui est pire.
+//
+// D'où la reprise datée : `reprise: true` et `mesure_le`, la date de la
+// collecte qui a réellement OUVERT ce dépôt. Jamais rafraîchie au passage.
+const precedent = new Map();
+let precedentLe = '';
+let precedentIllisible = false;
+if (existsSync(SORTIE)) {
+  try {
+    const a = JSON.parse(readFileSync(SORTIE, 'utf8'));
+    precedentLe = typeof a.le === 'string' ? a.le : '';
+    for (const p of (Array.isArray(a.projets) ? a.projets : [])) {
+      if (p && typeof p.depot === 'string') precedent.set(p.depot, p);
+    }
+  } catch {
+    // Un agrégat illisible ne se remplace pas en silence par « rien à
+    // reprendre » : sans ce drapeau, la collecte suivante repartirait de zéro
+    // en ayant l'air normale. Il est annoncé au rapport.
+    precedentIllisible = true;
+  }
+}
+
 const entrees = depots.map((d) => {
   const ciel = accrocheDe(d);
   const chemin = resolve(RACINE_ULTIMA, '..', d.dossier);
   const fichier = join(chemin, 'FINUBAR.md');
   if (!existsSync(chemin)) {
+    const repris = reprendreGrain(precedent.get(d.depot), { depot: d.depot, ciel, precedentLe });
+    if (repris) return repris;
     return {
-      ok: false, hors_seance: true, motif: 'dépôt non attaché à cette séance',
-      depot: d.depot, ciel, grain: null, derive: null,
+      ok: false, hors_seance: true, reprise: false, motif: 'dépôt non attaché à cette séance',
+      depot: d.depot, ciel, grain: null, derive: null, mesure_le: null,
     };
   }
   if (!existsSync(fichier)) {
@@ -150,7 +185,7 @@ const entrees = depots.map((d) => {
     entree = { ok: false, motif: 'fichier illisible', depot: d.depot, grain: null };
   }
   const derive = mesurerGit(chemin, entree.ok ? entree.grain.dernier_arret.commit : '');
-  return { ...entree, ciel, hors_seance: false, derive };
+  return { ...entree, ciel, hors_seance: false, reprise: false, derive, mesure_le: aujourdhui };
 });
 
 // ⑤ LES HUIT COPIES DU RAPPEL DOIVENT ÊTRE IDENTIQUES À LEUR SOURCE.
@@ -274,8 +309,22 @@ if (m.illisibles) console.log(`⚠️  ${m.illisibles} projet(s) sans grain lisi
 // dépôts vont bien, on ne les a simplement pas ouverts. Mais il est DIT, et
 // nommément : un angle mort tu se lirait comme « rien à signaler » (règle du
 // 2026-08-17 — tout cas écarté est compté et nommé au rapport).
+if (precedentIllisible) {
+  console.error('⚠️  L’agrégat précédent est ILLISIBLE : aucun grain n’a pu être repris.');
+  console.error('    Les dépôts non attachés à cette séance ressortent donc vides — ce n’est pas un constat sur eux.');
+}
+if (m.repris) {
+  // Un grain repris qui ne DIT pas qu'il date se lit comme une mesure du jour.
+  const noms = sortie.projets.filter((p) => p.reprise)
+    .map((p) => `${p.depot} (mesuré le ${p.mesure_le || '?'})`);
+  console.log(`↺ ${m.repris} grain(s) REPRIS de la collecte précédente, faute d’être attachés ici : ${noms.join(', ')}`);
+  console.log('    Ils ne sont pas re-mesurés : leur date de mesure est celle indiquée, pas celle du jour.');
+}
 if (m.hors_seance) {
-  const noms = sortie.projets.filter((p) => p.hors_seance).map((p) => p.depot);
+  // ⛔ `!p.reprise` : sans lui, le compteur et la liste ne parlaient pas des
+  // mêmes dépôts — « 3 dépôt(s) non attaché(s) » suivi de SEPT noms. Un chiffre
+  // que sa propre liste dément apprend à ne croire ni l'un ni l'autre.
+  const noms = sortie.projets.filter((p) => p.hors_seance && !p.reprise).map((p) => p.depot);
   console.log(`ℹ️  ${m.hors_seance} dépôt(s) non attaché(s) à cette séance : ${noms.join(', ')}`);
   console.log('    Ni leur grain ni leur rappel n\'ont pu être lus ici — c\'est un angle mort de la collecte, pas un constat sur ces dépôts.');
 }
