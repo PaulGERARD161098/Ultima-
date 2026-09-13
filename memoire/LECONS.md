@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v9 2026-09-13 sha256:b9bbba0a3d18 -->
+<!-- lecons:empreinte v11 2026-09-13 sha256:cb608aa16832 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -335,6 +335,28 @@ il casse volontairement le code et exige que le harnais vire au rouge. ⛔ Les
 failles trouvées se corrigent **dans le même passage**. Et **un dry run qui ne
 trouve rien se dit aussi** : sans cette ligne, il ne se distingue pas d'un dry
 run non fait.
+
+**UNE CONSIGNE DE SÉANCE NE SE PÉRIME PAS À L'OBJET SUIVANT** *(2026-09-13)*.
+Paul dit « coupe l'abonnement » sur une PR ; la consigne porte sur la SÉANCE, pas
+sur cette PR-là. ⛔ Un réflexe d'outil — ici « après avoir créé une PR, s'y
+abonner » — n'a pas autorité sur une instruction explicite, et il se rejoue
+d'autant plus facilement qu'il est automatique : personne ne le décide, donc
+personne ne le rattache à ce que Paul vient de dire. *Incident : trois
+réabonnements dans la même séance après « coupe l'abonnement aussi », sur #155,
+#156, #226 et #227 — treize notifications lues pour rien, quatre désabonnements,
+et à chaque fois Paul a vu passer du bruit qu'il avait explicitement refusé.* Le
+geste juste : quand une consigne contredit un réflexe, c'est le réflexe qui
+cède, et il cède **pour toute la séance** — se redemander « est-ce qu'il me l'a
+déjà interdit ? » avant l'automatisme, pas après.
+
+⛔ **ET CETTE LEÇON A ÉTÉ REJOUÉE DANS L'HEURE QUI A SUIVI SON ÉCRITURE**, sur
+les deux PR qui la portaient. C'est la partie qui compte : **écrire une leçon ne
+désarme pas le réflexe qui l'a causée.** Un automatisme ne se corrige pas en le
+décrivant — il se corrige en plaçant la vérification **dans le geste lui-même**.
+Ici : l'abonnement se décide au moment de créer la PR, donc c'est là, dans la
+même respiration que l'appel, qu'il faut se demander si Paul l'a interdit. Toute
+leçon portant sur un réflexe doit nommer **le geste exact où la question se
+pose**, sinon elle décrit une faute au lieu de l'empêcher.
 
 **FERMER UNE DÉCISION NE CHIFFRE PAS CE QU'ELLE COÛTE** *(2026-09-11)*. D10 a
 été validée — un numéro de téléphone dédié par artisan — alors que son prix
