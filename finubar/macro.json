@@ -66,8 +66,8 @@
         },
         "dernier_arret": {
           "le": "2026-09-13",
-          "quoi": "Revue adverse de ChatGPT triée puis appliquée : 8 défauts actifs fermés, 5 « exigences » écartées comme specs. Détail : ROADMAP §7 et PR #432/#433.",
-          "commit": "8757733"
+          "quoi": "Revue adverse triée et appliquée : 8 défauts actifs fermés. ⛔ Et l'« échelle ×1,22 » n'a jamais existé — voir ROADMAP §7 et PR #432 à #435.",
+          "commit": "3f5c731"
         },
         "prochaine_action": "⛔ NE RIEN CODER. Mesure d'ouverture : select count(*) from paiements. Goulot inchangé : 2 variables Vercel + KYC SOLA. Reprise complète : ROADMAP-2026-09-13-soir §7.6.",
         "bloque_par": [
@@ -79,6 +79,10 @@
         ],
         "en_attente_depuis": "2026-08-04",
         "boucles_ouvertes": [
+          {
+            "quoi": "⛔ L'ÉCHELLE DES VOLUMES VIT DANS `ECHELLE_PALIERS` (radar-releves.mjs) : ×1,14 à ×2,24, NON constante. Ne jamais la retaper — elle a divergé dans 7 fichiers.",
+            "depuis": "2026-09-13"
+          },
           {
             "quoi": "⏳ ATTEND PAUL — 2 fragments de dictée non interprétés (« campagnes d'obligations », « quand on en ligne ne trouve pas »). Sans eux, aucune source ne bouge.",
             "depuis": "2026-09-13"
@@ -113,10 +117,6 @@
           },
           {
             "quoi": "⛔ LEÇON DU 13/09 — UNE MESURE JUSTE N'EST PAS UNE CONCLUSION JUSTE. Mesuré que le repli d'A1 décidait de 100 % des dossiers (171 clients sur 171 sans origine) : exact. Conclu…",
-            "depuis": "2026-09-13"
-          },
-          {
-            "quoi": "⛔ LEÇON DU 13/09 — MES PROPRES SONDES ONT MENTI QUATRE FOIS DANS LA JOURNÉE : pages ouvertes en file:// alors que leurs feuilles sont en racine-relatif (9 verdicts verts sur des…",
             "depuis": "2026-09-13"
           }
         ],
@@ -155,8 +155,8 @@
         },
         "dernier_arret": {
           "le": "2026-09-13",
-          "quoi": "LEÇONS v16 (sceau 4528d4b8af12) : 7 leçons de la première revue adverse externe. Détail : memoire/LECONS.md §1, §2, §3.",
-          "commit": "3f71e6a"
+          "quoi": "LEÇONS v18 : deux séances ont scellé « v17 » le même soir, les deux jeux concaténés. Détail : memoire/LECONS.md.",
+          "commit": "f3821f3"
         },
         "prochaine_action": "Plus aucune propagation en attente. Reprendre le jalon J3 du cockpit. Seul ripair reste en v7, et il est inatteignable depuis une séance ouverte sur les dépôts de PaulGERARD161098.",
         "bloque_par": [
@@ -398,7 +398,7 @@
       },
       {
         "projet": "Ultima",
-        "dit": "arrêté sur : LEÇONS v16 (sceau 4528d4b8af12) : 7 leçons de la première revue adverse externe. Détail : memoire/LECONS.md §1, §2, §3.",
+        "dit": "arrêté sur : LEÇONS v18 : deux séances ont scellé « v17 » le même soir, les deux jeux concaténés. Détail : memoire/LECONS.md.",
         "pourquoi": "en_cours"
       }
     ],

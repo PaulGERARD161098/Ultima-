@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-13",
-    "quoi": "LEÇONS v16 (sceau 4528d4b8af12) : 7 leçons de la première revue adverse externe. Détail : memoire/LECONS.md §1, §2, §3.",
-    "commit": "3f71e6a"
+    "quoi": "LEÇONS v18 : deux séances ont scellé « v17 » le même soir, les deux jeux concaténés. Détail : memoire/LECONS.md.",
+    "commit": "f3821f3"
   },
   "prochaine_action": "Plus aucune propagation en attente. Reprendre le jalon J3 du cockpit. Seul ripair reste en v7, et il est inatteignable depuis une séance ouverte sur les dépôts de PaulGERARD161098.",
   "bloque_par": [
