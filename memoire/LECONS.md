@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v16 2026-09-13 sha256:4528d4b8af12 -->
+<!-- lecons:empreinte v17 2026-09-13 sha256:7cc8470b024c -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -375,6 +375,25 @@ est vrai aujourd'hui ; un invariant qu'un harnais exige est vrai demain. Entre
 les deux il n'y a pas une nuance de rigueur, il y a la personne qui modifiera
 le fichier dans six mois sans connaître la règle.*
 
+**UN HARNAIS PEUT ÉCHOUER POUR UNE RAISON QUI N'EST PAS CELLE QU'IL ANNONCE**
+*(2026-09-13)*. La recette de forme SPC rendait `EncodingError: The source image
+cannot be decoded` sur le logo du pied de page — donc, à la lettre, « le fichier
+du client est illisible ». Le fichier était intact : son empreinte git était
+exacte, et la recette elle-même venait de l'affirmer six lignes plus haut. Le
+défaut était dans l'instrument : il appelait `image.decode()` juste après
+`scrollIntoViewIfNeeded()`, sur une image différée qui était encore **en vol**.
+Trois passages ont rendu le même rouge — donc pas un aléa, un faux positif
+**systématique**, celui qu'on croit le plus volontiers. Coût : une boucle
+complète de diagnostic sur un défaut qui n'existait pas. ⛔ *Un rouge se relit
+avant d'être cru : ce que le message NOMME (« image indécodable ») et ce que
+l'assertion PROUVE (« le logo est déformé ») sont deux choses, et seule la
+seconde accuse le code.* Et le correctif ne se paie pas en aveuglement : un
+contrôle qui dépend d'un chargement asynchrone **attend** l'état au lieu de le
+supposer — l'attente ne masque rien tant qu'elle expire, une image qui ne charge
+jamais fait toujours rougir la recette. Vérifié ici par deux sondes : logo
+délibérément déformé et activité prioritaire retirée virent toutes deux au
+rouge, et la recette repasse au vert une fois l'état restauré.
+
 ---
 
 ## 3. Ce qu'on donne à Paul
@@ -619,6 +638,32 @@ géographie. Un périmètre — zone, période, métier, population, échantillo
 hérité d'un exemple de documentation, d'une valeur par défaut ou de la première
 chose testable est un périmètre **non choisi**. Et rien ne le signale, parce que
 le résultat, lui, a l'air parfaitement propre.
+
+**CE QUI REND INTÉGRABLE UN PAQUET DE CODE ÉCRIT HORS DU DÉPÔT** *(2026-09-13,
+première fois que l'exercice ne coûte rien — à retenir pour le refaire)*. Paul a
+fait produire chez ChatGPT une passe de forme complète sur le site SPC : onze
+fichiers, appliqués ici **sans un seul conflit**, vérifiés et committés dans la
+foulée. Ce n'est pas de la chance, et les raisons se recopient :
+① **le commit de base est nommé** (`717a8a1`), pas « la dernière version » — un
+`git apply --check` répond alors oui ou non, au lieu d'une fusion à la main ;
+② **le patch ET les fichiers complets** sont livrés, avec la consigne de n'en
+utiliser **qu'un seul** : les copies servent à comparer, jamais à écraser ;
+③ **un manifeste d'empreintes** base + résultat pour chaque fichier — l'intégration
+se prouve d'un `sha256sum`, elle ne s'affirme pas ;
+④ **les limites sont écrites d'avance** : ce qui n'a pas été exécuté (une recette
+sans sa fixture), ce qui n'est pas mesuré (« une amélioration visuelle n'est pas
+une preuve de conversion »), ce qui reste interdit (schéma, registre, garde,
+migrations). Une livraison qui liste ce qu'elle ne prouve PAS est la seule qu'on
+puisse croire sur ce qu'elle prouve ;
+⑤ **la publication reste distincte de l'intégration** : le paquet dit lui-même
+que la garde affiche toujours ses huit blocages et qu'un retour 0 hors production
+n'autorise rien.
+⛔ *Ce qu'il faut quand même faire soi-même, et qui n'est pas facultatif* : relire
+le diff en adversaire et **rejouer tout le harnais dans SON environnement**. Ici
+c'est ce geste qui a trouvé le faux positif ci-dessus (§2), un logo d'en-tête qui
+pointait sur le lien d'évitement au lieu de l'accueil, et une donnée devenue
+morte qui portait un engagement jamais validé par le client. *Un paquet qui
+s'applique proprement n'est pas un paquet vérifié.*
 
 ---
 
