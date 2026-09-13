@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v13 2026-09-13 sha256:1d21a534b45e -->
+<!-- lecons:empreinte v14 2026-09-13 sha256:d314dc8c563f -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -132,6 +132,21 @@ Refus immédiat, garde-fou tenu, coût faible — cette fois. La forme courte d'
 sha, d'un identifiant de déploiement ou de ticket **est une troncature, pas un
 préfixe qu'on prolonge** : elle se relit à la source (`git rev-parse`) avant
 d'être passée à quoi que ce soit qui agit.
+
+⛔ **ET ELLE A ÉTÉ ENFREINTE DEUX FOIS LE 13/09, APRÈS AVOIR ÉTÉ ÉCRITE ICI** —
+deux `409` sur deux fusions, à deux heures d'intervalle, dans la même séance, et
+la seconde après que la première eut été racontée en toutes lettres dans un
+compte rendu. C'est cette récidive qui compte, pas la faute : **un paragraphe de
+rapport ne s'exécute pas**, et une leçon rangée dans un fichier ne désarme pas
+le réflexe qui l'a causée. Ce qui change quelque chose est la forme
+opérationnelle, tenue dans le geste : **la valeur est copiée d'une commande qui
+vient de l'imprimer**, jamais d'un affichage antérieur de la conversation —
+et l'abréger pour la relire est déjà une reconstruction.
+
+⚠️ **Le garde-fou était DISTANT les deux fois** : c'est le serveur qui a refusé,
+pas moi. Quand un contrôle distant est ce qui rattrape une déduction, c'est que
+le contrôle local manquait — et un garde-fou qu'on n'a pas coûte le jour où
+l'API en face n'en a pas non plus.
 
 **UN INSTRUMENT QUI MESURE UNE PROPRIÉTÉ DÉRIVÉE MESURE TOUT CE QUI LA PRODUIT**
 *(2026-09-13)*. Pour prouver qu'un hero ne noyait plus sa photo sous deux voiles,
