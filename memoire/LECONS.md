@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v14 2026-09-13 sha256:d314dc8c563f -->
+<!-- lecons:empreinte v15 2026-09-13 sha256:3db21eb4e5c4 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -507,6 +507,26 @@ l'**omissibilité en entrée** : `.default()` est permis imbriqué dans un
 `.optional()`, ou sous un parent déjà obligatoire. Relevé par une séance
 d'épreuve. *Une règle qu'on ne peut pas appliquer sans exception non écrite
 n'apprend rien à qui ajoute un champ.*
+
+**LA COHÉRENCE GÉOGRAPHIQUE SE VÉRIFIE AVANT DE MESURER, PAS APRÈS** *(Paul,
+2026-09-13 : « toujours avoir une cohérence géographique dans nos travaux — et
+une cohérence générale aussi bien sûr »)*. Tout relevé, tout référentiel, tout
+chiffre montré porte un **territoire**, et ce territoire doit être celui où la
+valeur se trouve — pas celui qui était à portée de main. La question se pose
+**avant** de choisir le périmètre, et elle se lit **en base**, jamais de
+mémoire : *où sont les clients, les données, la valeur ?*
+
+*Incident : le premier import Google Ads a relevé l'**Oise** — 337 284 lignes,
+12 mois, une journée de travail, six défauts trouvés et fermés — alors que les
+clients de Paul sont **106 dans le Rhône**, 15 dans l'Ain, 11 en Isère… et
+**0 dans l'Oise**. La mesure était juste, l'outil solide, et il ne servait
+personne. Le contrôle coûtait une requête de trente secondes, posée après coup.*
+
+⛔ **Corollaire, et c'est lui qui porte** : la cohérence ne vaut pas que pour la
+géographie. Un périmètre — zone, période, métier, population, échantillon —
+hérité d'un exemple de documentation, d'une valeur par défaut ou de la première
+chose testable est un périmètre **non choisi**. Et rien ne le signale, parce que
+le résultat, lui, a l'air parfaitement propre.
 
 ---
 
