@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v7 2026-09-11 sha256:18e7f05fde7a -->
+<!-- lecons:empreinte v8 2026-09-13 sha256:85cca6330a86 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -132,6 +132,32 @@ Refus immédiat, garde-fou tenu, coût faible — cette fois. La forme courte d'
 sha, d'un identifiant de déploiement ou de ticket **est une troncature, pas un
 préfixe qu'on prolonge** : elle se relit à la source (`git rev-parse`) avant
 d'être passée à quoi que ce soit qui agit.
+
+**UN INSTRUMENT QUI MESURE UNE PROPRIÉTÉ DÉRIVÉE MESURE TOUT CE QUI LA PRODUIT**
+*(2026-09-13)*. Pour prouver qu'un hero ne noyait plus sa photo sous deux voiles,
+le harnais mesurait la **variance des pixels** du haut de la section : une image
+noyée tend vers l'aplat, donc vers une variance basse. Sauf que la bande mesurée
+englobait le **cartouche blanc du logo**, dont le blanc suffisait à faire
+exploser la variance. L'instrument affichait vert sur le hero à deux voiles,
+celui-là même qu'il existait pour prendre en défaut. Remplacé par la mesure de la
+**cause** : la bande est photographiée avec les voiles, puis sans — ils portent
+un attribut qui les désigne — et le rapport des luminances donne le voile réel,
+79-82 % avant, 32-34 % après. *Une grandeur dérivée agrège tout ce qui entre dans
+le cadre. Mesurer la cause coûte un second relevé ; c'est le prix pour que le
+vert veuille dire quelque chose.* Avec son corollaire, éprouvé dans la même
+séance : **le correctif qui retire le défaut doit aussi retirer le moyen de le
+mesurer** — sans les éléments marqués, les deux clichés sont identiques et
+l'instrument annonce 0 % de voile, le meilleur résultat possible pour la pire
+raison. D'où un verrou de non-vacuité sur leur présence.
+
+**UNE RECOMMANDATION D'AUDIT N'EST PAS UNE MESURE** *(2026-09-13)*. Un audit
+design nommait trois textes sous le seuil de contraste et prescrivait la couleur
+qui les corrigeait. La mesure a donné **six** familles de textes fautifs, dont
+une que la lecture du code ne pouvait pas voir — et surtout, la couleur
+prescrite **ne passait pas** sur l'un des deux fonds du site (4,45:1 au lieu de
+4,5). Appliquer la recommandation telle quelle aurait laissé le défaut en place
+en le croyant réglé, avec un constat coché pour le prouver. *Un audit dit où
+regarder. Ce qu'on y trouve, et ce qui le referme, se remesurent.*
 
 ---
 
