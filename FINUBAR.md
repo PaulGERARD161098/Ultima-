@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-13",
-    "quoi": "Leçons v8 propagées dans les sept dépôts atteignables, sceau vérifié sur main partout. Le rappel Finubar, lui, était DÉJÀ aligné : la note demandait de réparer ce qui l'était.",
-    "commit": "753d2fb"
+    "quoi": "Grain recalé : il dérivait de 4 commits et parlait des « leçons v8 », alors que le sceau est passé v15 le 13/09. Détail : memoire/LECONS.md et JOURNAL-DECISIONS.md.",
+    "commit": "c90b997"
   },
   "prochaine_action": "Plus aucune propagation en attente. Reprendre le jalon J3 du cockpit. Seul ripair reste en v7, et il est inatteignable depuis une séance ouverte sur les dépôts de PaulGERARD161098.",
   "bloque_par": [
