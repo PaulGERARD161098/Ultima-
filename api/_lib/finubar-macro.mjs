@@ -4,7 +4,7 @@
 // l'IMPORTER pour que Vercel l'embarque dans le paquet de la fonction, et
 // que `api/_lib/` est le seul motif d'import éprouvé en production ici.
 export default {
-  "le": "2026-09-13",
+  "le": "2026-09-14",
   "projets": [
     {
       "ok": true,
@@ -51,8 +51,8 @@ export default {
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-13",
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 23,
+      "jours_depuis_maj": 1,
+      "jours_en_attente": 24,
       "rang": 0
     },
     {
@@ -131,6 +131,92 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
+      "hors_seance": true,
+      "reprise": true,
+      "derive": {
+        "tete": null,
+        "tete_le": null,
+        "commits_depuis": 0,
+        "commit_inconnu": false
+      },
+      "mesure_le": "2026-09-13",
+      "jours_depuis_maj": 1,
+      "jours_en_attente": 41,
+      "rang": 1
+    },
+    {
+      "ok": true,
+      "motif": "",
+      "depot": "PaulGERARD161098/RenoDevis",
+      "grain": {
+        "projet": "RénoDevis",
+        "depot": "PaulGERARD161098/RenoDevis",
+        "cap": "Le devis part, se relance tout seul tant qu'il n'est pas signé, se signe et s'encaisse — sans que Paul y touche.",
+        "rattache_a": "ROADMAP-2026-09-03-audit-pac.md (l'audit PAC, et la procédure de V0) · ROADMAP-RENORELANCE.md · RenoBoost/ROADMAP-MASTER.md (jalon 1, boucle A)",
+        "etat": "en_cours",
+        "jalon": {
+          "nom": "Jalon 1 boucle A — le premier euro encaissé",
+          "critere_de_sortie": "un `1` dans la table `paiements` (0 aujourd'hui)"
+        },
+        "dernier_arret": {
+          "le": "2026-09-14",
+          "quoi": "PR #160 fusionnée (squash 87b76a6) : cockpit aligné sur les specs RenoBoost, arrondis 87 → 0, quatre textes repassés au-dessus d'AA. 447 tests verts. Détail : DESIGN-COCKPIT.md",
+          "commit": "87b76a6"
+        },
+        "prochaine_action": "⛔ PAUL — deux gestes, aucun du code, re-mesurés le 14/09 : (1) KYC Stripe de SOLA, charges_enabled = 0/2 ; (2) la clé sk_live_ en prod, le battement dit encore test:true",
+        "bloque_par": [
+          "Le verdict de Paul sur la DENSITÉ du cockpit (PR #160). Les tests prouvent la conformité et l'accessibilité ; aucun ne dit si la liste est lisible en usage",
+          "Embarquement Stripe de SOLA : le compte de TEST existe depuis le 19/08 mais n'encaisse pas encore. Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul"
+        ],
+        "en_attente_depuis": "2026-08-17",
+        "boucles_ouvertes": [
+          {
+            "quoi": "✅ Cockpit aligné sur les specs RenoBoost (PR #160, 14/09). ⏳ Reste le verdict densité de Paul. ⚠️ Dette déclarée : plafond d'ombres = 3 dans lib/langageCockpit.test.ts",
+            "depuis": "2026-09-14"
+          },
+          {
+            "quoi": "✅ RELECTURE EXTERNE ENTIÈREMENT FERMÉE, CODE ET BASE : #146 fusionnée le 11/09, ses RETOURS fusionnés le 13/09 (#150, squash 4e11495), et la MIGRATION RR-10 APPLIQUÉE le 13/09 sur…",
+            "depuis": "2026-09-11"
+          },
+          {
+            "quoi": "⛔ LE CATALOGUE DES LEÇONS A DIVERGÉ SOUS UN SCEAU IDENTIQUE, réparé le 13/09. Les copies Ultima et RenoDevis annonçaient toutes deux `v8 85cca6330a86` ; le corps réel de RenoDevis…",
+            "depuis": "2026-09-13"
+          },
+          {
+            "quoi": "⛔ LEÇON DU 13/09, LA PLUS CHÈRE DE LA SÉANCE — UNE MESURE JUSTE N'EST PAS UNE CONCLUSION JUSTE. J'ai mesuré que le repli d'A1 décidait de 100 % des dossiers (171 clients sur 171…",
+            "depuis": "2026-09-13"
+          },
+          {
+            "quoi": "⛔ ET LE GESTE QUI AURAIT ÉVITÉ L'ALLER-RETOUR : vérifier d'abord si le système ne satisfait pas DÉJÀ la demande. Paul voulait « contrôler les flux pour prendre mon cut sans devoir…",
+            "depuis": "2026-09-13"
+          },
+          {
+            "quoi": "⛔ A5 TIENT, ET C'EST LA LIGNE À NE PAS FRANCHIR. « J'encaisse puis je reverse » ne se code pas littéralement : Stripe ventile à l'instant du paiement, les fonds ne s'arrêtent…",
+            "depuis": "2026-09-13"
+          },
+          {
+            "quoi": "Dossier de relecture de la chaîne de relance remis à Paul le 11/09 (8 538 lignes, 4 parties, généré par `scripts/doc-relecture.mjs`, neutralisé et barré). ⚠️ Les RETOURS de la…",
+            "depuis": "2026-09-11"
+          },
+          {
+            "quoi": "VOIE C INERTE : le devis part « au nom de » l'artisan depuis notre domaine (voie A). L'envoi DEPUIS le domaine de l'artisan attend un RDV DNS avec Matthieu — mail envoyé à Henry…",
+            "depuis": "2026-09-11"
+          },
+          {
+            "quoi": "⛔ LE GOULOT, INCHANGÉ DEPUIS LE 01/09 : 2 devis chiffrés, RE-MESURÉS LE 11/09 sur 13 devis (et non « sur 19 » : 7 relevés ont été supprimés le 08/09, le dénominateur a bougé, pas…",
+            "depuis": "2026-09-01"
+          },
+          {
+            "quoi": "Dette mesurée le 07/09, NON traitée à dessein : 42 `.update()` sans `.select()` (chantier, pas une boucle) · ESLint absent (retiré du package.json plutôt qu'installé) ·…",
+            "depuis": "2026-09-07"
+          }
+        ],
+        "maj": "2026-09-14"
+      },
+      "recits": [
+        "boucles_ouvertes[].quoi"
+      ],
+      "ciel": "renoboost-ia",
       "hors_seance": false,
       "reprise": false,
       "derive": {
@@ -139,10 +225,10 @@ export default {
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-09-13",
+      "mesure_le": "2026-09-14",
       "jours_depuis_maj": 0,
-      "jours_en_attente": 40,
-      "rang": 1
+      "jours_en_attente": 28,
+      "rang": 2
     },
     {
       "ok": true,
@@ -159,9 +245,9 @@ export default {
           "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
         },
         "dernier_arret": {
-          "le": "2026-09-13",
-          "quoi": "LEÇONS v18 : deux séances ont scellé « v17 » le même soir, les deux jeux concaténés. Détail : memoire/LECONS.md.",
-          "commit": "f3821f3"
+          "le": "2026-09-14",
+          "quoi": "LEÇONS v19 puis v20 reçues (#238, #239), grain recalé sur la fusion v18 (#237). Collecte Finubar rejouée le 14/09. Détail : memoire/LECONS.md",
+          "commit": "3811b12"
         },
         "prochaine_action": "Plus aucune propagation en attente. Reprendre le jalon J3 du cockpit. Seul ripair reste en v7, et il est inatteignable depuis une séance ouverte sur les dépôts de PaulGERARD161098.",
         "bloque_par": [
@@ -214,7 +300,7 @@ export default {
             "depuis": "2026-09-02"
           }
         ],
-        "maj": "2026-09-13"
+        "maj": "2026-09-14"
       },
       "recits": [],
       "ciel": "racine",
@@ -226,9 +312,9 @@ export default {
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-09-13",
+      "mesure_le": "2026-09-14",
       "jours_depuis_maj": 0,
-      "jours_en_attente": 24,
+      "jours_en_attente": 25,
       "rang": 2
     },
     {
@@ -278,20 +364,6 @@ export default {
       "hors_seance": true,
       "reprise": false,
       "motif": "dépôt non attaché à cette séance",
-      "depot": "PaulGERARD161098/RenoDevis",
-      "ciel": "renoboost-ia",
-      "grain": null,
-      "derive": null,
-      "mesure_le": null,
-      "jours_depuis_maj": null,
-      "jours_en_attente": null,
-      "rang": 9
-    },
-    {
-      "ok": false,
-      "hors_seance": true,
-      "reprise": false,
-      "motif": "dépôt non attaché à cette séance",
       "depot": "PaulGERARD161098/RenoPredict",
       "ciel": "renoboost-ia",
       "grain": null,
@@ -304,16 +376,16 @@ export default {
   ],
   "macro": {
     "total": 8,
-    "lisibles": 3,
+    "lisibles": 4,
     "illisibles": 0,
-    "hors_seance": 5,
-    "repris": 1,
-    "en_cours": 2,
+    "hors_seance": 4,
+    "repris": 2,
+    "en_cours": 3,
     "en_attente_de_paul": 1,
     "au_repos": 0,
     "derives": 1,
     "commits_inconnus": 0,
-    "boucles_ouvertes": 20,
+    "boucles_ouvertes": 30,
     "gestes_de_paul": [
       {
         "projet": "artisan-builder",
@@ -368,6 +440,14 @@ export default {
         "geste": "Embarquement Stripe de SOLA (ACTIONS-PAUL.md §3)"
       },
       {
+        "projet": "RénoDevis",
+        "geste": "Le verdict de Paul sur la DENSITÉ du cockpit (PR #160). Les tests prouvent la conformité et l'accessibilité ; aucun ne dit si la liste est lisible en usage"
+      },
+      {
+        "projet": "RénoDevis",
+        "geste": "Embarquement Stripe de SOLA : le compte de TEST existe depuis le 19/08 mais n'encaisse pas encore. Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul"
+      },
+      {
         "projet": "Ultima",
         "geste": "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr"
       },
@@ -398,12 +478,12 @@ export default {
       },
       {
         "projet": "RénoBoost",
-        "dit": "attend un geste : Promouvoir la CSP Report-Only en enforce, après lecture des rapports (ACTIONS-PAUL.md) — 11/09 — ouvert depuis 40 j",
+        "dit": "attend un geste : Promouvoir la CSP Report-Only en enforce, après lecture des rapports (ACTIONS-PAUL.md) — 11/09 — ouvert depuis 41 j",
         "pourquoi": "attente"
       },
       {
-        "projet": "Ultima",
-        "dit": "arrêté sur : LEÇONS v18 : deux séances ont scellé « v17 » le même soir, les deux jeux concaténés. Détail : memoire/LECONS.md.",
+        "projet": "RénoDevis",
+        "dit": "arrêté sur : PR #160 fusionnée (squash 87b76a6) : cockpit aligné sur les specs RenoBoost, arrondis 87 → 0, quatre textes repassés au-dessus d'AA. 447 tests verts. Détail : DESIGN-COCKPIT.md",
         "pourquoi": "en_cours"
       }
     ],
@@ -414,7 +494,7 @@ export default {
       "cap": "Un artisan a son site vitrine en ligne en quelques minutes : il décrit son activité, les textes sont générés, les sections et le thème se règlent sans écrire de code. Depuis le 2026-09-11, la chaîne qui porte ce cap est le Studio (SiteSpec/blocks), pas le wizard."
     },
     "illisibles": 0,
-    "hors_seance": 5
+    "hors_seance": 4
   },
   "constellation": {
     "noeuds": [
@@ -431,6 +511,13 @@ export default {
         "constellation": "en_attente_de_paul",
         "ciel": "renoboost-ia",
         "signal": 1
+      },
+      {
+        "id": "PaulGERARD161098/RenoDevis",
+        "libelle": "RénoDevis",
+        "constellation": "en_cours",
+        "ciel": "renoboost-ia",
+        "signal": 0
       },
       {
         "id": "PaulGERARD161098/Ultima-",

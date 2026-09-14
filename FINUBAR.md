@@ -31,9 +31,9 @@
     "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
   },
   "dernier_arret": {
-    "le": "2026-09-13",
-    "quoi": "LEÇONS v18 : deux séances ont scellé « v17 » le même soir, les deux jeux concaténés. Détail : memoire/LECONS.md.",
-    "commit": "f3821f3"
+    "le": "2026-09-14",
+    "quoi": "LEÇONS v19 puis v20 reçues (#238, #239), grain recalé sur la fusion v18 (#237). Collecte Finubar rejouée le 14/09. Détail : memoire/LECONS.md",
+    "commit": "3811b12"
   },
   "prochaine_action": "Plus aucune propagation en attente. Reprendre le jalon J3 du cockpit. Seul ripair reste en v7, et il est inatteignable depuis une séance ouverte sur les dépôts de PaulGERARD161098.",
   "bloque_par": [
@@ -106,7 +106,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-09-13"
+  "maj": "2026-09-14"
 }
 ```
 
