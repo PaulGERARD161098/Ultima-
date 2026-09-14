@@ -1,3 +1,4 @@
+import { readAll } from './_lib/read-all.js';
 // GET /api/intendant → { ok:true, data:{ chantiers, besoins, alertes_j2 } }.
 // Le dossier complet d'approvisionnement de l'owner (RLS via jeton) : chantiers
 // pilotés + besoins (avec l'état généré `etat`) + alertes J-2 calculées côté
@@ -18,8 +19,8 @@ export default async function handler(req, res) {
 
   try {
     const [chantiersRes, besoinsRes] = await Promise.all([
-      client.from('intendant_chantiers').select('*').order('created_at', { ascending: true }),
-      client.from('intendant_besoins').select('*').order('created_at', { ascending: true }),
+      readAll(() => client.from('intendant_chantiers').select('*').order('created_at', { ascending: true })),
+      readAll(() => client.from('intendant_besoins').select('*').order('created_at', { ascending: true })),
     ]);
 
     const error = chantiersRes.error || besoinsRes.error;

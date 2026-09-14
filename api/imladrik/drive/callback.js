@@ -18,6 +18,8 @@ function redirect(res, dest, cookies) {
   if (cookies) res.setHeader('Set-Cookie', cookies);
   res.statusCode = 302;
   res.setHeader('Location', dest);
+  res.setHeader('Cache-Control', 'private, no-store');
+  res.setHeader('Referrer-Policy', 'no-referrer');
   res.end();
 }
 
@@ -25,20 +27,21 @@ export default async function handler(req, res) {
   if (req.method !== 'GET') return methodNotAllowed(res, ['GET']);
 
   const cfg = driveConfig();
-  const erreur = () => redirect(res, '/imladrik.html?drive=error', [clearCookie(COOKIE_OAUTH)]);
+  const erreur = () => redirect(res, '/imladrik.html?drive=error', [clearCookie(COOKIE_OAUTH), clearCookie(COOKIE_EXCHANGE)]);
   if (!cfg.ok) return erreur();
 
   const q = req.query || {};
   // Google a refusé / erreur amont.
-  if (q.error || !q.code || !q.state) return erreur();
+  if (q.error || typeof q.code !== 'string' || !q.code || q.code.length > 2048 ||
+      typeof q.state !== 'string' || !q.state) return erreur();
 
   const cookies = parseCookies(req.headers?.cookie);
   const etat = verifyState(cookies[COOKIE_OAUTH], cfg.stateSecret, 600_000);
   // Anti-CSRF : le nonce du cookie signé DOIT correspondre au state renvoyé.
-  if (!etat || etat.state !== q.state) return erreur();
+  if (!etat || etat.state !== q.state || typeof etat.owner_id !== 'string' || !etat.owner_id) return erreur();
 
   // Relais signé vers le front (durée courte). Le code Google est à usage unique.
-  const relais = signState({ code: String(q.code), verifier: etat.verifier }, cfg.stateSecret);
+  const relais = signState({ code: q.code, verifier: etat.verifier, owner_id: etat.owner_id }, cfg.stateSecret);
   return redirect(res, '/imladrik.html?drive=callback', [
     clearCookie(COOKIE_OAUTH),
     serializeCookie(COOKIE_EXCHANGE, relais, { maxAge: 300 }),

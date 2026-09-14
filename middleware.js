@@ -76,7 +76,7 @@ const CSP = [
 // Le lire par expression régulière depuis le test aurait fabriqué un instrument
 // qui se tait le jour où la ligne change de forme. Aucun effet sur le
 // comportement du garde.
-export const PREFIXES_PRIVES = ['/adramelech', '/memoire', '/finubar', '/api/_lib'];
+export const PREFIXES_PRIVES = ['/adramelech', '/memoire', '/finubar', '/api/_lib', '/supabase', '/design', '/tests'];
 
 // Boussole publique du quadrant : la page RACINE adramelech.html est servie par
 // `cleanUrls` sur le chemin EXACT '/adramelech' (la visite de /adramelech.html y
@@ -107,10 +107,22 @@ export function estCheminPrive(pathname) {
     if (decode === p) break;
     p = decode;
   }
+  // Encodage encore présent après trois passes : ambigu, donc refusé.
+  if (p.includes('%')) return true;
   p = p.toLowerCase();
   // Durcissement S2 : backslash (même encodé %5c) ≡ séparateur (parité new URL).
   // String.fromCharCode(92) = « \ », sans littéral d'échappement dans la source.
   p = p.split(String.fromCharCode(92)).join('/');
+  if (p.endsWith('//')) return true;
+  // Résoudre aussi les séparateurs et segments apparus APRÈS décodage.
+  const segments = [];
+  for (const segment of p.split('/')) {
+    if (!segment || segment === '.') continue;
+    if (segment === '..') { segments.pop(); continue; }
+    if (segment.startsWith('.')) return true;
+    segments.push(segment);
+  }
+  p = '/' + segments.join('/');
   // Durcissement S1 : retire les octets parasites de fin (espace, point, octets
   // de contrôle : `.md%20`, `.md.`, `.md%00`) qui défairaient le test de suffixe.
   while (p.length > 1) {
@@ -150,13 +162,14 @@ function isRateLimited(ip) {
   const now = Date.now();
 
   // Éviction simple des entrées expirées quand la table grossit.
-  if (hits.size > 5000) {
+  if (hits.size >= 5000) {
     for (const [key, entry] of hits) {
       if (entry.reset <= now) hits.delete(key);
     }
   }
 
   const entry = hits.get(ip);
+  if (!entry && hits.size >= 5000) return true;
   if (!entry || entry.reset <= now) {
     hits.set(ip, { count: 1, reset: now + WINDOW_MS });
     return false;
@@ -182,6 +195,7 @@ export default function middleware(request) {
     const headers = new Headers({
       'Content-Type': 'application/json; charset=utf-8',
       'Retry-After': '60',
+      'Cache-Control': 'private, no-store',
     });
     applySecurityHeaders(headers);
     return new Response(JSON.stringify({ ok: false, error: 'Trop de requêtes' }), {
@@ -192,6 +206,7 @@ export default function middleware(request) {
 
   // Poursuite vers la route + injection des en-têtes de sécurité.
   const headers = new Headers({ 'x-middleware-next': '1' });
+  if (pathname.startsWith('/api/')) headers.set('Cache-Control', 'private, no-store');
   applySecurityHeaders(headers);
   return new Response(null, { headers });
 }

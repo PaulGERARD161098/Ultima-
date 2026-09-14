@@ -57,6 +57,8 @@ export function mapNominatimResults(brut) {
     if (!entree || typeof entree !== 'object') continue;
     const label = typeof entree.display_name === 'string' ? entree.display_name : '';
     if (!label) continue;
+    if (![entree.lat, entree.lon].every((v) =>
+      (typeof v === 'number') || (typeof v === 'string' && v.trim() !== ''))) continue;
     const lat = Number(entree.lat);
     const lon = Number(entree.lon);
     if (!Number.isFinite(lat) || lat < -90 || lat > 90) continue;

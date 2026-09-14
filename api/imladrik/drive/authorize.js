@@ -27,7 +27,7 @@ export default async function handler(req, res) {
     const state = b64url(crypto.randomBytes(16));
     // Cookie signé (HMAC) : le callback Google (GET top-level sans Bearer) le
     // relira pour prouver l'origine de la requête et récupérer le verifier PKCE.
-    const cookie = signState({ state, verifier }, cfg.stateSecret);
+    const cookie = signState({ state, verifier, owner_id: result.user.id }, cfg.stateSecret);
     res.setHeader('Set-Cookie', serializeCookie(COOKIE_OAUTH, cookie, { maxAge: 600 }));
     return ok(res, { url: buildAuthUrl(cfg, { state, challenge }) });
   } catch (err) {

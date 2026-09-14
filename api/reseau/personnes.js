@@ -74,7 +74,8 @@ export default async function handler(req, res) {
 
     // DELETE — retire la personne ET ses rattachements (ON DELETE CASCADE de
     // 0024). Aucune fiche RIVEN n'est touchée : le lien disparaît, pas le nœud.
-    const body = await readJsonBody(req).catch(() => ({}));
+    const body = await readJsonBody(req);
+    if (body === null || body === 'too_large') return bodyFail(res, body);
     const id = resolveId(req, body && typeof body === 'object' ? body : {});
     if (!isUuid(id)) return fail(res, 400, 'Identifiant invalide');
 
