@@ -1,3 +1,4 @@
+import { readAll } from './_lib/read-all.js';
 // GET /api/reseau → { ok:true, data:{ nodes, edges, journal, personnes,
 // rattachements } } de l'utilisateur (RLS via jeton).
 // Les personnes (0024) sont chargées en entier comme le reste : le front filtre
@@ -18,17 +19,17 @@ export default async function handler(req, res) {
 
   try {
     const [nodesRes, edgesRes, journalRes, personnesRes, rattachementsRes] = await Promise.all([
-      client.from('network_nodes').select('*').order('created_at', { ascending: true }),
-      client.from('network_edges').select('*').order('created_at', { ascending: true }),
+      readAll(() => client.from('network_nodes').select('*').order('created_at', { ascending: true })),
+      readAll(() => client.from('network_edges').select('*').order('created_at', { ascending: true })),
       // Journal : entrées les plus récentes d'abord (affichage fiche).
-      client
+      readAll(() => client
         .from('journal')
         .select('*')
         .order('date_entree', { ascending: false })
-        .order('created_at', { ascending: false }),
+        .order('created_at', { ascending: false })),
       // Personnes (0024) : triées par nom, l'ordre du registre.
-      client.from('personnes').select('*').order('nom', { ascending: true }),
-      client.from('personne_noeuds').select('*').order('created_at', { ascending: true }),
+      readAll(() => client.from('personnes').select('*').order('nom', { ascending: true })),
+      readAll(() => client.from('personne_noeuds').select('*').order('created_at', { ascending: true })),
     ]);
 
     const error = nodesRes.error || edgesRes.error || journalRes.error

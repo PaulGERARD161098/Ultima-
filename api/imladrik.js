@@ -1,3 +1,4 @@
+import { readAll } from './_lib/read-all.js';
 // GET /api/imladrik → { ok:true, data:{ entrees } } de l'utilisateur (RLS via jeton).
 // Quadrant IMLADRIK (v1) : le journal intime en base, privé par owner. Page la
 // plus récente en tête (order created_at desc). Données intimes (§5) : jamais de
@@ -16,10 +17,10 @@ export default async function handler(req, res) {
   const { client } = result;
 
   try {
-    const { data, error } = await client
+    const { data, error } = await readAll(() => client
       .from('imladrik_entrees')
       .select('*')
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false }));
 
     if (error) {
       if (isAuthError(error)) return fail(res, 401, 'Authentification requise');

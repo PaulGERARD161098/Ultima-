@@ -1,3 +1,4 @@
+import { readAll } from './_lib/read-all.js';
 // /api/talents — la carte des talents RESHIRAM (v1), derrière auth (RLS via jeton).
 //   GET    → { ok:true, data:{ talents:[…], preuves:[…] } }
 //            talents = vue talents_etat (chaque talent porte nb_preuves + a_etayer) ;
@@ -46,8 +47,8 @@ export default async function handler(req, res) {
   try {
     if (req.method === 'GET') {
       const [talentsRes, preuvesRes] = await Promise.all([
-        client.from('talents_etat').select('*').order('created_at', { ascending: true }),
-        client.from('preuves').select('*').order('created_at', { ascending: true }),
+        readAll(() => client.from('talents_etat').select('*').order('created_at', { ascending: true })),
+        readAll(() => client.from('preuves').select('*').order('created_at', { ascending: true })),
       ]);
       const error = talentsRes.error || preuvesRes.error;
       if (error) {
@@ -77,7 +78,8 @@ export default async function handler(req, res) {
     }
 
     // DELETE
-    const body = await readJsonBody(req).catch(() => ({}));
+    const body = await readJsonBody(req);
+    if (body === null || body === 'too_large') return bodyFail(res, body);
     const id = resolveId(req, body && typeof body === 'object' ? body : {});
     if (!isUuid(id)) return fail(res, 400, 'Identifiant invalide');
 

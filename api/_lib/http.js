@@ -4,6 +4,7 @@
 export function sendJson(res, status, payload) {
   res.statusCode = status;
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Cache-Control', 'private, no-store');
   res.end(JSON.stringify(payload));
 }
 
@@ -34,26 +35,33 @@ const BODY_MAX_BYTES = 100_000;
 // Récupère le corps JSON de la requête (Vercel le parse en général déjà).
 // Renvoie null si invalide, 'too_large' si le plafond est dépassé.
 export async function readJsonBody(req) {
-  if (req.body && typeof req.body === 'object') return req.body;
-  if (typeof req.body === 'string' && req.body.length) {
-    if (Buffer.byteLength(req.body, 'utf8') > BODY_MAX_BYTES) return 'too_large';
-    try {
-      return JSON.parse(req.body);
-    } catch {
-      return null;
-    }
-  }
-  const chunks = [];
-  let total = 0;
-  for await (const chunk of req) {
-    total += chunk.length;
-    if (total > BODY_MAX_BYTES) return 'too_large';
-    chunks.push(chunk);
-  }
-  if (!chunks.length) return {};
   try {
-    return JSON.parse(Buffer.concat(chunks).toString('utf8'));
+    let value;
+    if (req.body !== undefined && !Buffer.isBuffer(req.body)) {
+      if (typeof req.body === 'string') {
+        if (Buffer.byteLength(req.body, 'utf8') > BODY_MAX_BYTES) return 'too_large';
+        value = req.body.length ? JSON.parse(req.body) : {};
+      } else {
+        // Vercel livre généralement un objet DÉJÀ parsé : même plafond ici.
+        const encoded = JSON.stringify(req.body);
+        if (encoded && Buffer.byteLength(encoded, 'utf8') > BODY_MAX_BYTES) return 'too_large';
+        value = req.body;
+      }
+    } else {
+      const chunks = [];
+      let total = 0;
+      const source = Buffer.isBuffer(req.body) ? [req.body] : req;
+      for await (const chunk of source) {
+        const bytes = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+        total += bytes.length;
+        if (total > BODY_MAX_BYTES) return 'too_large';
+        chunks.push(bytes);
+      }
+      value = total ? JSON.parse(Buffer.concat(chunks).toString('utf8')) : {};
+    }
+    return value && typeof value === 'object' && !Array.isArray(value) ? value : null;
   } catch {
+    // Corps interrompu/malformé : jamais transformé en suppression autorisée.
     return null;
   }
 }

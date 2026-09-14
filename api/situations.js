@@ -1,3 +1,4 @@
+import { readAll } from './_lib/read-all.js';
 // /api/situations — la carte des situations VRANESH (v1), derrière auth (RLS via jeton).
 //   GET    → { ok:true, data:{ situations:[…], scenarios:[…] } }
 //            situations = vue situations_etat (chaque situation porte nb_scenarios + a_explorer) ;
@@ -48,15 +49,13 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === 'GET') {
-      // liens = passerelles v2 (scénario → serment DRAUKHAIN / page MAEDRETHNIR,
-      // migration 0018). Tant que 0018 n'est pas appliquée, la table n'existe pas
-      // → dégradation propre à [] (les autres lectures restent servies).
+      // Toute lecture en erreur doit rester visible : jamais une liste vide trompeuse.
       const [situationsRes, scenariosRes, liensRes] = await Promise.all([
-        client.from('situations_etat').select('*').order('created_at', { ascending: true }),
-        client.from('scenarios').select('*').order('created_at', { ascending: true }),
-        client.from('scenario_liens').select('*').order('created_at', { ascending: true }),
+        readAll(() => client.from('situations_etat').select('*').order('created_at', { ascending: true })),
+        readAll(() => client.from('scenarios').select('*').order('created_at', { ascending: true })),
+        readAll(() => client.from('scenario_liens').select('*').order('created_at', { ascending: true })),
       ]);
-      const error = situationsRes.error || scenariosRes.error;
+      const error = situationsRes.error || scenariosRes.error || liensRes.error;
       if (error) {
         if (isAuthError(error)) return fail(res, 401, 'Authentification requise');
         logError('situations:get', error.code);
@@ -65,7 +64,7 @@ export default async function handler(req, res) {
       return ok(res, {
         situations: situationsRes.data || [],
         scenarios: scenariosRes.data || [],
-        liens: liensRes.error ? [] : (liensRes.data || []),
+        liens: liensRes.data || [],
       });
     }
 
@@ -114,49 +113,22 @@ export default async function handler(req, res) {
       const { value, error } = validateDenouement(body);
       if (error) return fail(res, 400, error);
 
-      // ORDRE VOLONTAIRE — la branche retenue est protégée AVANT que les autres
-      // ne soient coupées. La FK du triplet (owner_id, situation_id, id) rejette
-      // ici tout scénario qui n'appartiendrait pas à CETTE situation ou à un
-      // autre owner : si l'écriture passe, la cible est certaine. Un échec après
-      // ce point laisse la situation dénouée mais complète — jamais l'inverse.
-      const advenu = value.scenario_advenu_id;
-      const { data, error: dbError } = await client
-        .from('situations')
-        .update({
-          scenario_advenu_id: advenu,
-          // La date vient du serveur, jamais du client.
-          advenu_le: advenu === null ? null : new Date().toISOString(),
-        })
-        .eq('id', value.id)
-        .select()
-        .maybeSingle();
-      if (dbError) return dbFail(res, dbError, 'situations:patch');
-      if (!data) return fail(res, 404, 'Situation introuvable');
-
-      // Rouvrir une situation ne supprime rien : on s'arrête là.
-      if (advenu === null) return ok(res, { id: data.id, scenario_advenu_id: null, coupees: 0 });
-
-      // Le futur a tranché : les autres branches potentielles sont supprimées
-      // (décision Paul). RLS + le filtre situation_id bornent la coupe à cette
-      // situation ; la branche retenue en est exclue explicitement.
-      const { data: coupees, error: coupeError } = await client
-        .from('scenarios')
-        .delete()
-        .eq('situation_id', value.id)
-        .neq('id', advenu)
-        .select('id');
-      if (coupeError) return dbFail(res, coupeError, 'situations:patch:coupe');
-
-      return ok(res, {
-        id: data.id,
-        scenario_advenu_id: advenu,
-        advenu_le: data.advenu_le,
-        coupees: (coupees || []).length,
+      // Choix + coupe atomiques, sous RLS : aucun succès partiel possible.
+      const { data, error: dbError } = await client.rpc('denouer_situation', {
+        p_situation: value.id, p_scenario: value.scenario_advenu_id,
       });
+      if (dbError) {
+        if (dbError.code === 'PGRST202') return fail(res, 503, 'Dénouement temporairement indisponible');
+        if (dbError.code === '23503') return fail(res, 400, 'Scénario référencé introuvable');
+        return dbFail(res, dbError, 'situations:patch');
+      }
+      if (!data) return fail(res, 404, 'Situation introuvable');
+      return ok(res, data);
     }
 
     // DELETE
-    const body = await readJsonBody(req).catch(() => ({}));
+    const body = await readJsonBody(req);
+    if (body === null || body === 'too_large') return bodyFail(res, body);
     const id = resolveId(req, body && typeof body === 'object' ? body : {});
     if (!isUuid(id)) return fail(res, 400, 'Identifiant invalide');
 

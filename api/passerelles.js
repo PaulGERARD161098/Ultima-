@@ -1,3 +1,4 @@
+import { readAll } from './_lib/read-all.js';
 // /api/passerelles — la passerelle R↔Z (LV2-③), derrière auth (RLS via jeton).
 //   GET    → { ok:true, data:{ passerelles:[…], retroplanning:[…] } }
 //            passerelles = les liens idéal↔talent de l'utilisateur ;
@@ -51,8 +52,8 @@ export default async function handler(req, res) {
   try {
     if (req.method === 'GET') {
       const [liensRes, retroRes] = await Promise.all([
-        client.from('passerelles').select('*').order('created_at', { ascending: true }),
-        client.from('ideaux_retroplanning').select('*'),
+        readAll(() => client.from('passerelles').select('*').order('created_at', { ascending: true })),
+        readAll(() => client.from('ideaux_retroplanning').select('*')),
       ]);
       const error = liensRes.error || retroRes.error;
       if (error) {
@@ -104,7 +105,8 @@ export default async function handler(req, res) {
     }
 
     // DELETE
-    const body = await readJsonBody(req).catch(() => ({}));
+    const body = await readJsonBody(req);
+    if (body === null || body === 'too_large') return bodyFail(res, body);
     const id = resolveId(req, body && typeof body === 'object' ? body : {});
     if (!isUuid(id)) return fail(res, 400, 'Identifiant invalide');
 
