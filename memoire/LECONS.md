@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v20 2026-09-14 sha256:32cea8e4746b -->
+<!-- lecons:empreinte v21 2026-09-14 sha256:eb9373234221 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -311,6 +311,23 @@ tenaient qu'à une requête près. *Corollaire, et c'est lui qui coûte* : quand
 ne **peut pas** vérifier de ce côté-là, on **retire l'hypothèse** au lieu de la
 documenter. Une hypothèse documentée reste une hypothèse, et c'est le lecteur
 suivant qui la paie.
+
+**UN HARNAIS QUI N'EST PAS LE CLIENT DU PRODUIT NE PROUVE RIEN DE CE QUE LE
+PRODUIT VIT** *(2026-09-14)*. La connexion d'`artisan-builder` était impossible
+en production — pour tout le monde, pendant des heures — alors que
+`artisan-builder/tests/verif-workspace-http.mjs` était vert sur cette même
+garde. Il appelait `/api/session` en `fetch`, **en posant lui-même l'en-tête
+`Origin`**. Or un navigateur ne pose pas cet en-tête : il le **calcule**, et sur
+une page servie avec `Referrer-Policy: no-referrer` — ce que sont toutes les
+pages privées du dépôt — il envoie « null ». Le harnais décrivait donc une
+requête que le produit n'émet jamais, et il le faisait avec l'autorité d'un
+contrôle vert. *Ce que ça a coûté* : deux correctifs livrés d'affilée sur une
+cause **déduite** de sondes `curl`, dont un qui a fait tourner un secret pour
+rien — là où un vrai navigateur a montré la cause en une sonde. *Règle* : quand
+la panne vit dans ce que le client **calcule** — en-têtes de navigateur,
+politique de cookie ou de referrer, CORS, rendu — le harnais **est** ce
+client-là, pas son imitation. Un `fetch` éprouve un contrat HTTP ; il ne dit
+rien de ce qu'un navigateur fera de ce contrat.
 
 **UN GARDE-FOU QUI CESSE DE FONCTIONNER DOIT LE DIRE** *(2026-08-21)*. Un test
 absent de la chaîne d'intégration, un filtre qui écarte en silence, une garde
