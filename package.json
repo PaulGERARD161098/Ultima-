@@ -3,9 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Ultima — carte interactive du réseau commercial (P0 fondations).",
+  "description": "Ultima — espace personnel de travail, réseau, idées et journal.",
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.112.3",
-    "@supabase/supabase-js": "^2"
+    "@anthropic-ai/sdk": "0.112.3",
+    "@supabase/supabase-js": "2.110.0"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.8",
+    "playwright": "1.56.1"
+  },
+  "scripts": {
+    "test": "node tests/run-unit.mjs",
+    "test:browser": "bash tests/lancer.sh"
   }
 }
