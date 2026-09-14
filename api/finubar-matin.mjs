@@ -81,6 +81,7 @@ export const sansAdresse = (s) => String(s ?? '').replace(/[\w.+-]+@[\w-]+\.[\w.
 function json(res, code, charge) {
   res.statusCode = code;
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Cache-Control', 'private, no-store');
   res.end(JSON.stringify(charge));
 }
 
@@ -128,7 +129,12 @@ export default async function handler(req, res) {
   try {
     const r = await fetch('https://api.resend.com/emails', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${cle}`, 'Content-Type': 'application/json' },
+      headers: {
+        Authorization: `Bearer ${cle}`, 'Content-Type': 'application/json',
+        // Une relance du cron ou un timeout de réponse ne renvoie pas le mail.
+        // Les essais explicitement forcés restent indépendants.
+        ...(!forcer ? { 'Idempotency-Key': `finubar-matin/${aujourdhui}` } : {}),
+      },
       body: JSON.stringify({ from: expediteur, to: destinataire, subject: sujet, text: texte, html }),
       signal: AbortSignal.timeout(8000),
     });
