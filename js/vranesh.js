@@ -1252,6 +1252,23 @@
     });
   }
 
+  // La largeur d'un signe varie avec la police et sa graisse. Le budget de
+  // caractères prépare le libellé ; sa boîte SVG tranche une fois visible.
+  function ajusterEtiquettes(racine) {
+    Array.prototype.forEach.call(racine.querySelectorAll('.vranesh-etiquette, .vranesh-etiquette-cause'), function (t) {
+      var graisse = t.style.fontWeight;
+      t.style.fontWeight = '700'; // prévoir aussi le survol de la branche
+      var signes = Array.from(t.textContent.replace(/…$/, ''));
+      while (t.textContent) {
+        var boite = t.getBBox();
+        if (boite.x >= ARBRE.MARGE && boite.x + boite.width <= ARBRE.L - ARBRE.MARGE) { break; }
+        signes.pop();
+        t.textContent = signes.length ? signes.join('').trimEnd() + '…' : '';
+      }
+      t.style.fontWeight = graisse;
+    });
+  }
+
   function ouvrirArbre(situation) {
     var plateau = document.getElementById('vranesh-plateau');
     var scene = document.getElementById('vranesh-arbre');
@@ -1267,6 +1284,7 @@
     var advenu = scenarioAdvenu(situation);
     var sceau = document.getElementById('vranesh-arbre-sceau');
     scene.classList.toggle('is-advenu', Boolean(advenu));
+    ajusterEtiquettes(scene);
     if (sceau) { sceau.hidden = !advenu; }
     if (advenu) {
       coteBranche(situation, advenu, 1, scenariosDe(situation.id).length, true);
