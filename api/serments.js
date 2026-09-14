@@ -1,3 +1,4 @@
+import { readAll } from './_lib/read-all.js';
 // /api/serments — la carte des serments DRAUKHAIN (v1), derrière auth (RLS via jeton).
 //   GET    → { ok:true, data:{ serments:[…], flammes:[…], liens:[…], futurs:[…] } }
 //            serments = vue serments_etat (chaque serment porte nb_flammes + a_raviver) ;
@@ -86,25 +87,18 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === 'GET') {
-      // liens = passerelles v2 (serment → idéal ZEKROM / page MAEDRETHNIR, migration
-      // 0018). Tant que 0018 n'est pas appliquée, la table n'existe pas → on
-      // dégrade proprement à [] (les autres lectures restent servies).
-      // futurs = LE RETOUR DE LA PASSERELLE (2026-08-04). `scenario_liens`
-      // (migration 0018) reliait déjà un futur VRANESH à un serment — mais
-      // seul VRANESH le lisait : depuis DRAUKHAIN, un serment ne savait rien
-      // des futurs qui le MENACENT ou le SERVENT. Le pont était à sens unique.
-      // Les trois lectures dégradent à [] : tant que 0017/0018 ne sont pas
-      // appliquées, DRAUKHAIN reste servi comme avant.
+      // Les passerelles sont requises : une panne ne devient pas « aucun lien ».
       const [sermentsRes, flammesRes, liensRes, scLiensRes, scenariosRes, situationsRes] =
         await Promise.all([
-          client.from('serments_etat').select('*').order('created_at', { ascending: true }),
-          client.from('flammes').select('*').order('created_at', { ascending: true }),
-          client.from('serment_liens').select('*').order('created_at', { ascending: true }),
-          client.from('scenario_liens').select('*').order('created_at', { ascending: true }),
-          client.from('scenarios').select('id, situation_id, deroule'),
-          client.from('situations').select('id, intitule, scenario_advenu_id'),
+          readAll(() => client.from('serments_etat').select('*').order('created_at', { ascending: true })),
+          readAll(() => client.from('flammes').select('*').order('created_at', { ascending: true })),
+          readAll(() => client.from('serment_liens').select('*').order('created_at', { ascending: true })),
+          readAll(() => client.from('scenario_liens').select('*').order('created_at', { ascending: true })),
+          readAll(() => client.from('scenarios').select('id, situation_id, deroule')),
+          readAll(() => client.from('situations').select('id, intitule, scenario_advenu_id')),
         ]);
-      const error = sermentsRes.error || flammesRes.error;
+      const error = sermentsRes.error || flammesRes.error || liensRes.error
+        || scLiensRes.error || scenariosRes.error || situationsRes.error;
       if (error) {
         if (isAuthError(error)) return fail(res, 401, 'Authentification requise');
         logError('serments:get', error.code);
@@ -113,7 +107,7 @@ export default async function handler(req, res) {
       return ok(res, {
         serments: sermentsRes.data || [],
         flammes: flammesRes.data || [],
-        liens: liensRes.error ? [] : (liensRes.data || []),
+        liens: liensRes.data || [],
         // Jointure faite ICI, pas au front : DRAUKHAIN n'a pas à recevoir toute
         // la carte des futurs pour en afficher trois lignes (§5 — on n'envoie
         // que ce qui sera montré).
@@ -137,7 +131,8 @@ export default async function handler(req, res) {
     }
 
     // DELETE
-    const body = await readJsonBody(req).catch(() => ({}));
+    const body = await readJsonBody(req);
+    if (body === null || body === 'too_large') return bodyFail(res, body);
     const id = resolveId(req, body && typeof body === 'object' ? body : {});
     if (!isUuid(id)) return fail(res, 400, 'Identifiant invalide');
 

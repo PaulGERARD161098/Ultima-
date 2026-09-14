@@ -104,7 +104,7 @@ console.log('— B. ecrire.html avec session → le champ prêt, l’envoi en un
   await page.route(`**://${REF_SUPABASE}.supabase.co/**`, (route) =>
     route.fulfill({ status: 503, contentType: 'application/json', body: '{}' }));
   const posts = [];
-  await page.route('**/api/imladrik**', (route) => {
+  await page.route('**/api/imladrik/entrees', (route) => {
     const req = route.request();
     if (req.method() === 'POST') { posts.push({ headers: req.headers(), body: req.postData() }); }
     return route.fulfill({
@@ -149,7 +149,7 @@ console.log('— B. ecrire.html avec session → le champ prêt, l’envoi en un
   await page.waitForFunction(() => /Déposé/.test(
     document.getElementById('ecrire-message').textContent || ''), null, { timeout: 5000 });
 
-  verifier('Un POST /api/imladrik émis', posts.length === 1, `${posts.length}`);
+  verifier('Un POST /api/imladrik/entrees émis', posts.length === 1, `${posts.length}`);
   const corps = JSON.parse((posts[0] || {}).body || '{}');
   verifier('Corps : le contenu seul, AUCUN titre',
     corps.contenu === 'une petite victoire, en marchant' && !('titre' in corps),
@@ -200,7 +200,7 @@ console.log('— C. ecrire.html → le brouillon survit au réseau, à la sessio
   // 1. Réseau coupé : l'envoi échoue, le texte reste.
   let coupe = true;
   const posts = [];
-  await page.route('**/api/imladrik**', (route) => {
+  await page.route('**/api/imladrik/entrees', (route) => {
     if (coupe) { return route.abort(); }
     posts.push(route.request().postData());
     return route.fulfill({
@@ -254,7 +254,7 @@ console.log('— D. ecrire.html → session expirée : le texte est gardé avant
   await page.addInitScript(scriptFausseSession());
   await page.route(`**://${REF_SUPABASE}.supabase.co/**`, (route) =>
     route.fulfill({ status: 503, contentType: 'application/json', body: '{}' }));
-  await page.route('**/api/imladrik**', (route) => route.fulfill({
+  await page.route('**/api/imladrik/entrees', (route) => route.fulfill({
     status: 401, contentType: 'application/json; charset=utf-8',
     body: JSON.stringify({ ok: false, error: 'Authentification requise' }),
   }));
@@ -299,7 +299,7 @@ console.log('— E. ecrire.html → la dictée parle, en écoute comme en échec
   });
   await page.route(`**://${REF_SUPABASE}.supabase.co/**`, (route) =>
     route.fulfill({ status: 503, contentType: 'application/json', body: '{}' }));
-  await page.route('**/api/imladrik**', (route) => route.fulfill({
+  await page.route('**/api/imladrik/entrees', (route) => route.fulfill({
     status: 200, contentType: 'application/json; charset=utf-8',
     body: JSON.stringify({ ok: true, data: { id: 'p1' } }),
   }));

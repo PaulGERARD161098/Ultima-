@@ -29,4 +29,8 @@ finubar/
 
 # Divers non nécessaires au runtime public.
 tests/
+supabase/
+design/
+.claude/
+.github/
 .env.example

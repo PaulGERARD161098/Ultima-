@@ -1,3 +1,4 @@
+import { readAll } from './_lib/read-all.js';
 // /api/ideaux — la carte des idéaux ZEKROM (v1), derrière auth (RLS via jeton).
 //   GET    → { ok:true, data:{ ideaux:[…], directions:[…] } }
 //            ideaux = vue ideaux_etat (chaque idéal porte nb_directions + a_orienter) ;
@@ -46,8 +47,8 @@ export default async function handler(req, res) {
   try {
     if (req.method === 'GET') {
       const [ideauxRes, directionsRes] = await Promise.all([
-        client.from('ideaux_etat').select('*').order('created_at', { ascending: true }),
-        client.from('directions').select('*').order('created_at', { ascending: true }),
+        readAll(() => client.from('ideaux_etat').select('*').order('created_at', { ascending: true })),
+        readAll(() => client.from('directions').select('*').order('created_at', { ascending: true })),
       ]);
       const error = ideauxRes.error || directionsRes.error;
       if (error) {
@@ -77,7 +78,8 @@ export default async function handler(req, res) {
     }
 
     // DELETE
-    const body = await readJsonBody(req).catch(() => ({}));
+    const body = await readJsonBody(req);
+    if (body === null || body === 'too_large') return bodyFail(res, body);
     const id = resolveId(req, body && typeof body === 'object' ? body : {});
     if (!isUuid(id)) return fail(res, 400, 'Identifiant invalide');
 

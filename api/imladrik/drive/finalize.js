@@ -29,7 +29,8 @@ export default async function handler(req, res) {
   // Cookie d'échange signé (code Google + verifier PKCE), posé par /callback.
   const cookies = parseCookies(req.headers?.cookie);
   const relais = verifyState(cookies[COOKIE_EXCHANGE], cfg.stateSecret, 300_000);
-  if (!relais || !relais.code || !relais.verifier) {
+  if (!relais || !relais.code || !relais.verifier || relais.owner_id !== user.id) {
+    res.setHeader('Set-Cookie', clearCookie(COOKIE_EXCHANGE));
     return fail(res, 400, 'Session de connexion expirée. Réessaie.');
   }
 

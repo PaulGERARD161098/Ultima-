@@ -16,3 +16,6 @@ npm-debug.log*
 
 # Cache des harnais de test (fixtures npm, captures)
 tests/.cache/
+
+# Métadonnées locales du CLI Supabase
+supabase/.temp/

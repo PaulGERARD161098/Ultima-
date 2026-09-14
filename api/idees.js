@@ -1,3 +1,4 @@
+import { readAll } from './_lib/read-all.js';
 // GET /api/idees → { ok:true, data:{ idees, liens } } de l'utilisateur (RLS via jeton).
 // Quadrant ADRAMELECH (AD-4) : la bibliothèque d'idées en base, privée par owner.
 
@@ -15,8 +16,8 @@ export default async function handler(req, res) {
 
   try {
     const [ideesRes, liensRes] = await Promise.all([
-      client.from('idees').select('*').order('adr_num', { ascending: true }),
-      client.from('idees_liens').select('*').order('created_at', { ascending: true }),
+      readAll(() => client.from('idees').select('*').order('adr_num', { ascending: true })),
+      readAll(() => client.from('idees_liens').select('*').order('created_at', { ascending: true })),
     ]);
 
     const error = ideesRes.error || liensRes.error;

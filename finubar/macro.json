@@ -4,6 +4,92 @@
     {
       "ok": true,
       "motif": "",
+      "depot": "PaulGERARD161098/RenoDevis",
+      "grain": {
+        "projet": "RénoDevis",
+        "depot": "PaulGERARD161098/RenoDevis",
+        "cap": "Le devis part, se relance tout seul tant qu'il n'est pas signé, se signe et s'encaisse — sans que Paul y touche.",
+        "rattache_a": "ROADMAP-2026-09-03-audit-pac.md (l'audit PAC, et la procédure de V0) · ROADMAP-RENORELANCE.md · RenoBoost/ROADMAP-MASTER.md (jalon 1, boucle A)",
+        "etat": "en_cours",
+        "jalon": {
+          "nom": "Jalon 1 boucle A — le premier euro encaissé",
+          "critere_de_sortie": "un `1` dans la table `paiements` (0 aujourd'hui)"
+        },
+        "dernier_arret": {
+          "le": "2026-09-14",
+          "quoi": "PR #160 fusionnée (squash 87b76a6) : cockpit aligné sur les specs RenoBoost, arrondis 87 → 0, quatre textes repassés au-dessus d'AA. 447 tests verts. Détail : DESIGN-COCKPIT.md",
+          "commit": "87b76a6"
+        },
+        "prochaine_action": "⛔ PAUL — deux gestes, aucun du code, re-mesurés le 14/09 : (1) KYC Stripe de SOLA, charges_enabled = 0/2 ; (2) la clé sk_live_ en prod, le battement dit encore test:true",
+        "bloque_par": [
+          "Le verdict de Paul sur la DENSITÉ du cockpit (PR #160). Les tests prouvent la conformité et l'accessibilité ; aucun ne dit si la liste est lisible en usage",
+          "Embarquement Stripe de SOLA : le compte de TEST existe depuis le 19/08 mais n'encaisse pas encore. Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul"
+        ],
+        "en_attente_depuis": "2026-08-17",
+        "boucles_ouvertes": [
+          {
+            "quoi": "✅ Cockpit aligné sur les specs RenoBoost (PR #160, 14/09). ⏳ Reste le verdict densité de Paul. ⚠️ Dette déclarée : plafond d'ombres = 3 dans lib/langageCockpit.test.ts",
+            "depuis": "2026-09-14"
+          },
+          {
+            "quoi": "✅ RELECTURE EXTERNE ENTIÈREMENT FERMÉE, CODE ET BASE : #146 fusionnée le 11/09, ses RETOURS fusionnés le 13/09 (#150, squash 4e11495), et la MIGRATION RR-10 APPLIQUÉE le 13/09 sur…",
+            "depuis": "2026-09-11"
+          },
+          {
+            "quoi": "⛔ LE CATALOGUE DES LEÇONS A DIVERGÉ SOUS UN SCEAU IDENTIQUE, réparé le 13/09. Les copies Ultima et RenoDevis annonçaient toutes deux `v8 85cca6330a86` ; le corps réel de RenoDevis…",
+            "depuis": "2026-09-13"
+          },
+          {
+            "quoi": "⛔ LEÇON DU 13/09, LA PLUS CHÈRE DE LA SÉANCE — UNE MESURE JUSTE N'EST PAS UNE CONCLUSION JUSTE. J'ai mesuré que le repli d'A1 décidait de 100 % des dossiers (171 clients sur 171…",
+            "depuis": "2026-09-13"
+          },
+          {
+            "quoi": "⛔ ET LE GESTE QUI AURAIT ÉVITÉ L'ALLER-RETOUR : vérifier d'abord si le système ne satisfait pas DÉJÀ la demande. Paul voulait « contrôler les flux pour prendre mon cut sans devoir…",
+            "depuis": "2026-09-13"
+          },
+          {
+            "quoi": "⛔ A5 TIENT, ET C'EST LA LIGNE À NE PAS FRANCHIR. « J'encaisse puis je reverse » ne se code pas littéralement : Stripe ventile à l'instant du paiement, les fonds ne s'arrêtent…",
+            "depuis": "2026-09-13"
+          },
+          {
+            "quoi": "Dossier de relecture de la chaîne de relance remis à Paul le 11/09 (8 538 lignes, 4 parties, généré par `scripts/doc-relecture.mjs`, neutralisé et barré). ⚠️ Les RETOURS de la…",
+            "depuis": "2026-09-11"
+          },
+          {
+            "quoi": "VOIE C INERTE : le devis part « au nom de » l'artisan depuis notre domaine (voie A). L'envoi DEPUIS le domaine de l'artisan attend un RDV DNS avec Matthieu — mail envoyé à Henry…",
+            "depuis": "2026-09-11"
+          },
+          {
+            "quoi": "⛔ LE GOULOT, INCHANGÉ DEPUIS LE 01/09 : 2 devis chiffrés, RE-MESURÉS LE 11/09 sur 13 devis (et non « sur 19 » : 7 relevés ont été supprimés le 08/09, le dénominateur a bougé, pas…",
+            "depuis": "2026-09-01"
+          },
+          {
+            "quoi": "Dette mesurée le 07/09, NON traitée à dessein : 42 `.update()` sans `.select()` (chantier, pas une boucle) · ESLint absent (retiré du package.json plutôt qu'installé) ·…",
+            "depuis": "2026-09-07"
+          }
+        ],
+        "maj": "2026-09-14"
+      },
+      "recits": [
+        "boucles_ouvertes[].quoi"
+      ],
+      "ciel": "renoboost-ia",
+      "hors_seance": false,
+      "reprise": false,
+      "derive": {
+        "tete": "8f57fbc",
+        "tete_le": "2026-09-14T15:41:15+00:00",
+        "commits_depuis": 1,
+        "commit_inconnu": false
+      },
+      "mesure_le": "2026-09-14",
+      "jours_depuis_maj": 0,
+      "jours_en_attente": 28,
+      "rang": 0
+    },
+    {
+      "ok": true,
+      "motif": "",
       "depot": "PaulGERARD161098/artisan-builder",
       "grain": {
         "projet": "artisan-builder",
@@ -142,98 +228,12 @@
     {
       "ok": true,
       "motif": "",
-      "depot": "PaulGERARD161098/RenoDevis",
-      "grain": {
-        "projet": "RénoDevis",
-        "depot": "PaulGERARD161098/RenoDevis",
-        "cap": "Le devis part, se relance tout seul tant qu'il n'est pas signé, se signe et s'encaisse — sans que Paul y touche.",
-        "rattache_a": "ROADMAP-2026-09-03-audit-pac.md (l'audit PAC, et la procédure de V0) · ROADMAP-RENORELANCE.md · RenoBoost/ROADMAP-MASTER.md (jalon 1, boucle A)",
-        "etat": "en_cours",
-        "jalon": {
-          "nom": "Jalon 1 boucle A — le premier euro encaissé",
-          "critere_de_sortie": "un `1` dans la table `paiements` (0 aujourd'hui)"
-        },
-        "dernier_arret": {
-          "le": "2026-09-14",
-          "quoi": "PR #160 fusionnée (squash 87b76a6) : cockpit aligné sur les specs RenoBoost, arrondis 87 → 0, quatre textes repassés au-dessus d'AA. 447 tests verts. Détail : DESIGN-COCKPIT.md",
-          "commit": "87b76a6"
-        },
-        "prochaine_action": "⛔ PAUL — deux gestes, aucun du code, re-mesurés le 14/09 : (1) KYC Stripe de SOLA, charges_enabled = 0/2 ; (2) la clé sk_live_ en prod, le battement dit encore test:true",
-        "bloque_par": [
-          "Le verdict de Paul sur la DENSITÉ du cockpit (PR #160). Les tests prouvent la conformité et l'accessibilité ; aucun ne dit si la liste est lisible en usage",
-          "Embarquement Stripe de SOLA : le compte de TEST existe depuis le 19/08 mais n'encaisse pas encore. Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul"
-        ],
-        "en_attente_depuis": "2026-08-17",
-        "boucles_ouvertes": [
-          {
-            "quoi": "✅ Cockpit aligné sur les specs RenoBoost (PR #160, 14/09). ⏳ Reste le verdict densité de Paul. ⚠️ Dette déclarée : plafond d'ombres = 3 dans lib/langageCockpit.test.ts",
-            "depuis": "2026-09-14"
-          },
-          {
-            "quoi": "✅ RELECTURE EXTERNE ENTIÈREMENT FERMÉE, CODE ET BASE : #146 fusionnée le 11/09, ses RETOURS fusionnés le 13/09 (#150, squash 4e11495), et la MIGRATION RR-10 APPLIQUÉE le 13/09 sur…",
-            "depuis": "2026-09-11"
-          },
-          {
-            "quoi": "⛔ LE CATALOGUE DES LEÇONS A DIVERGÉ SOUS UN SCEAU IDENTIQUE, réparé le 13/09. Les copies Ultima et RenoDevis annonçaient toutes deux `v8 85cca6330a86` ; le corps réel de RenoDevis…",
-            "depuis": "2026-09-13"
-          },
-          {
-            "quoi": "⛔ LEÇON DU 13/09, LA PLUS CHÈRE DE LA SÉANCE — UNE MESURE JUSTE N'EST PAS UNE CONCLUSION JUSTE. J'ai mesuré que le repli d'A1 décidait de 100 % des dossiers (171 clients sur 171…",
-            "depuis": "2026-09-13"
-          },
-          {
-            "quoi": "⛔ ET LE GESTE QUI AURAIT ÉVITÉ L'ALLER-RETOUR : vérifier d'abord si le système ne satisfait pas DÉJÀ la demande. Paul voulait « contrôler les flux pour prendre mon cut sans devoir…",
-            "depuis": "2026-09-13"
-          },
-          {
-            "quoi": "⛔ A5 TIENT, ET C'EST LA LIGNE À NE PAS FRANCHIR. « J'encaisse puis je reverse » ne se code pas littéralement : Stripe ventile à l'instant du paiement, les fonds ne s'arrêtent…",
-            "depuis": "2026-09-13"
-          },
-          {
-            "quoi": "Dossier de relecture de la chaîne de relance remis à Paul le 11/09 (8 538 lignes, 4 parties, généré par `scripts/doc-relecture.mjs`, neutralisé et barré). ⚠️ Les RETOURS de la…",
-            "depuis": "2026-09-11"
-          },
-          {
-            "quoi": "VOIE C INERTE : le devis part « au nom de » l'artisan depuis notre domaine (voie A). L'envoi DEPUIS le domaine de l'artisan attend un RDV DNS avec Matthieu — mail envoyé à Henry…",
-            "depuis": "2026-09-11"
-          },
-          {
-            "quoi": "⛔ LE GOULOT, INCHANGÉ DEPUIS LE 01/09 : 2 devis chiffrés, RE-MESURÉS LE 11/09 sur 13 devis (et non « sur 19 » : 7 relevés ont été supprimés le 08/09, le dénominateur a bougé, pas…",
-            "depuis": "2026-09-01"
-          },
-          {
-            "quoi": "Dette mesurée le 07/09, NON traitée à dessein : 42 `.update()` sans `.select()` (chantier, pas une boucle) · ESLint absent (retiré du package.json plutôt qu'installé) ·…",
-            "depuis": "2026-09-07"
-          }
-        ],
-        "maj": "2026-09-14"
-      },
-      "recits": [
-        "boucles_ouvertes[].quoi"
-      ],
-      "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
-      "derive": {
-        "tete": null,
-        "tete_le": null,
-        "commits_depuis": 0,
-        "commit_inconnu": false
-      },
-      "mesure_le": "2026-09-14",
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 28,
-      "rang": 2
-    },
-    {
-      "ok": true,
-      "motif": "",
       "depot": "PaulGERARD161098/Ultima-",
       "grain": {
         "projet": "Ultima",
         "depot": "PaulGERARD161098/Ultima-",
         "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-        "rattache_a": "REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md",
+        "rattache_a": "AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md",
         "etat": "en_cours",
         "jalon": {
           "nom": "J3 — le ciel porte aussi l'état PERSONNEL (P4 : les signaux du cockpit)",
@@ -241,15 +241,14 @@
         },
         "dernier_arret": {
           "le": "2026-09-14",
-          "quoi": "LEÇONS v19 puis v20 reçues (#238, #239), grain recalé sur la fusion v18 (#237). Collecte Finubar rejouée le 14/09. Détail : memoire/LECONS.md",
-          "commit": "3811b12"
+          "quoi": "Audit livré sur go de Paul : PR #242 fusionnée, migration Supabase 20260914152259 appliquée, CI verte, déploiement OK. Collecte Finubar rejouée. Preuves : AUDIT-2026-09-14.md",
+          "commit": "2f3325a"
         },
-        "prochaine_action": "Plus aucune propagation en attente. Reprendre le jalon J3 du cockpit. Seul ripair reste en v7, et il est inatteignable depuis une séance ouverte sur les dépôts de PaulGERARD161098.",
+        "prochaine_action": "Reprendre le jalon J3/P4 selon l’arbitrage existant, après le retour de Paul sur P3. La migration et la fusion de l’audit sont terminées ; ne pas les rejouer.",
         "bloque_par": [
           "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
           "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
           "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
-          "Les advisors Supabase post-DDL",
           "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
         ],
         "en_attente_depuis": "2026-08-20",
@@ -378,10 +377,18 @@
     "en_cours": 3,
     "en_attente_de_paul": 1,
     "au_repos": 0,
-    "derives": 1,
+    "derives": 2,
     "commits_inconnus": 0,
     "boucles_ouvertes": 30,
     "gestes_de_paul": [
+      {
+        "projet": "RénoDevis",
+        "geste": "Le verdict de Paul sur la DENSITÉ du cockpit (PR #160). Les tests prouvent la conformité et l'accessibilité ; aucun ne dit si la liste est lisible en usage"
+      },
+      {
+        "projet": "RénoDevis",
+        "geste": "Embarquement Stripe de SOLA : le compte de TEST existe depuis le 19/08 mais n'encaisse pas encore. Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul"
+      },
       {
         "projet": "artisan-builder",
         "geste": "EZZEDINE — assureur décennale, numéro de police, couverture géographique. Obligations d'affichage, rien ne les remplace."
@@ -435,14 +442,6 @@
         "geste": "Embarquement Stripe de SOLA (ACTIONS-PAUL.md §3)"
       },
       {
-        "projet": "RénoDevis",
-        "geste": "Le verdict de Paul sur la DENSITÉ du cockpit (PR #160). Les tests prouvent la conformité et l'accessibilité ; aucun ne dit si la liste est lisible en usage"
-      },
-      {
-        "projet": "RénoDevis",
-        "geste": "Embarquement Stripe de SOLA : le compte de TEST existe depuis le 19/08 mais n'encaisse pas encore. Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul"
-      },
-      {
         "projet": "Ultima",
         "geste": "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr"
       },
@@ -456,16 +455,17 @@
       },
       {
         "projet": "Ultima",
-        "geste": "Les advisors Supabase post-DDL"
-      },
-      {
-        "projet": "Ultima",
         "geste": "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
       }
     ]
   },
   "cartouche": {
     "signaux": [
+      {
+        "projet": "RénoDevis",
+        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
+        "pourquoi": "derive"
+      },
       {
         "projet": "artisan-builder",
         "dit": "a avancé de 1 commit(s) depuis sa dernière note",
@@ -475,24 +475,26 @@
         "projet": "RénoBoost",
         "dit": "attend un geste : Promouvoir la CSP Report-Only en enforce, après lecture des rapports (ACTIONS-PAUL.md) — 11/09 — ouvert depuis 41 j",
         "pourquoi": "attente"
-      },
-      {
-        "projet": "RénoDevis",
-        "dit": "arrêté sur : PR #160 fusionnée (squash 87b76a6) : cockpit aligné sur les specs RenoBoost, arrondis 87 → 0, quatre textes repassés au-dessus d'AA. 447 tests verts. Détail : DESIGN-COCKPIT.md",
-        "pourquoi": "en_cours"
       }
     ],
     "action": {
-      "projet": "artisan-builder",
+      "projet": "RénoDevis",
       "nature": "code",
-      "faire": "SI EZZEDINE NE RÉPOND PAS : seconde épreuve du document de passation par une séance neuve. Sa version corrigée n'a pas été suivie. Porter sur le §9.",
-      "cap": "Un artisan a son site vitrine en ligne en quelques minutes : il décrit son activité, les textes sont générés, les sections et le thème se règlent sans écrire de code. Depuis le 2026-09-11, la chaîne qui porte ce cap est le Studio (SiteSpec/blocks), pas le wizard."
+      "faire": "⛔ PAUL — deux gestes, aucun du code, re-mesurés le 14/09 : (1) KYC Stripe de SOLA, charges_enabled = 0/2 ; (2) la clé sk_live_ en prod, le battement dit encore test:true",
+      "cap": "Le devis part, se relance tout seul tant qu'il n'est pas signé, se signe et s'encaisse — sans que Paul y touche."
     },
     "illisibles": 0,
     "hors_seance": 4
   },
   "constellation": {
     "noeuds": [
+      {
+        "id": "PaulGERARD161098/RenoDevis",
+        "libelle": "RénoDevis",
+        "constellation": "en_cours",
+        "ciel": "renoboost-ia",
+        "signal": 1
+      },
       {
         "id": "PaulGERARD161098/artisan-builder",
         "libelle": "artisan-builder",
@@ -506,13 +508,6 @@
         "constellation": "en_attente_de_paul",
         "ciel": "renoboost-ia",
         "signal": 1
-      },
-      {
-        "id": "PaulGERARD161098/RenoDevis",
-        "libelle": "RénoDevis",
-        "constellation": "en_cours",
-        "ciel": "renoboost-ia",
-        "signal": 0
       },
       {
         "id": "PaulGERARD161098/Ultima-",

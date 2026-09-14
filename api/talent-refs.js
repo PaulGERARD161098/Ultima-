@@ -1,3 +1,4 @@
+import { readAll } from './_lib/read-all.js';
 // /api/talent-refs — RESHIRAM → RIVEN (boucle ④), derrière auth (RLS via jeton).
 //   GET    → { ok:true, data:{ refs:[…], capital:[…], reseau:[…] } }
 //            refs    = les liens talent↔fiche RIVEN de l'utilisateur (talent_refs_reseau) ;
@@ -59,9 +60,9 @@ export default async function handler(req, res) {
   try {
     if (req.method === 'GET') {
       const [refsRes, capitalRes, reseauRes] = await Promise.all([
-        client.from('talent_refs_reseau').select('*').order('created_at', { ascending: true }),
-        client.from('talents_capital_reseau').select('*'),
-        client.from('network_nodes').select(RESEAU_PROJECTION).order('nom', { ascending: true }),
+        readAll(() => client.from('talent_refs_reseau').select('*').order('created_at', { ascending: true })),
+        readAll(() => client.from('talents_capital_reseau').select('*'), 'talent_id'),
+        readAll(() => client.from('network_nodes').select(RESEAU_PROJECTION).order('nom', { ascending: true })),
       ]);
       const error = refsRes.error || capitalRes.error || reseauRes.error;
       if (error) {
@@ -92,7 +93,8 @@ export default async function handler(req, res) {
     }
 
     // DELETE
-    const body = await readJsonBody(req).catch(() => ({}));
+    const body = await readJsonBody(req);
+    if (body === null || body === 'too_large') return bodyFail(res, body);
     const id = resolveId(req, body && typeof body === 'object' ? body : {});
     if (!isUuid(id)) return fail(res, 400, 'Identifiant invalide');
 

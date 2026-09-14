@@ -255,7 +255,10 @@
 
   // ---------- Chargement des données ----------
 
+  var generationChargement = 0;
   async function chargerDonnees() {
+    var generation = ++generationChargement;
+    var sessionChargee = etat.session;
     if (etat.modeDemo) {
       var demo = donneesDemo();
       etat.noeuds = demo.noeuds;
@@ -287,16 +290,19 @@
     var promesseIntendant = appelApi('/api/intendant').catch(function () { return null; });
     try {
       var data = await appelApi('/api/reseau');
+      if (generation !== generationChargement || etat.session !== sessionChargee) { return; }
       etat.noeuds = (data && data.nodes) || [];
       etat.relations = (data && data.edges) || [];
       etat.journal = (data && data.journal) || [];
       etat.personnes = (data && data.personnes) || [];
       etat.rattachements = (data && data.rattachements) || [];
     } catch (e) {
+      if (generation !== generationChargement || etat.session !== sessionChargee) { return; }
       toast('Chargement du réseau impossible.', 'erreur');
       return;
     }
     var dataIntendant = await promesseIntendant;
+    if (generation !== generationChargement || etat.session !== sessionChargee) { return; }
     if (dataIntendant) {
       etat.intendant.chantiers = dataIntendant.chantiers || [];
       etat.intendant.besoins = dataIntendant.besoins || [];
@@ -4047,7 +4053,8 @@
   async function seDeconnecter() {
     if (!etat.client) { return; }
     try {
-      await etat.client.auth.signOut();
+      var resultat = await etat.client.auth.signOut();
+      if (resultat && resultat.error) { throw resultat.error; }
       toast('Déconnecté.');
     } catch (e) {
       toast('Déconnexion impossible.', 'erreur');

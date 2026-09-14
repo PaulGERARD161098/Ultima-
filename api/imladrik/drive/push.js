@@ -1,3 +1,4 @@
+import { readAll } from '../../_lib/read-all.js';
 // POST /api/imladrik/drive/push — sauvegarde le journal vers le Drive de l'owner
 // (sous-boucle ②, UN SEUL SENS Ultima → Drive, à la demande). Un Google Doc par
 // page dans le dossier dédié ; idempotent (saute les pages inchangées via un hash
@@ -20,7 +21,7 @@ export default async function handler(req, res) {
   const result = await requireUser(req);
   if (result.status === 'unconfigured') return fail(res, 503, 'Service non configuré');
   if (result.status === 'unauthenticated') return fail(res, 401, 'Authentification requise');
-  const { client } = result;
+  const { client, user } = result;
 
   const cfg = driveConfig();
   if (!cfg.ok) return fail(res, 503, 'Connexion Drive non configurée');
@@ -51,22 +52,25 @@ export default async function handler(req, res) {
     let folderId = tok.drive_folder_id;
     if (!folderId) {
       folderId = await createDriveFolder(accessToken, NOM_DOSSIER);
-      await client.from('imladrik_drive_tokens').update({ drive_folder_id: folderId }).not('owner_id', 'is', null);
+      const { error: folderError } = await client.from('imladrik_drive_tokens')
+        .update({ drive_folder_id: folderId }).eq('owner_id', user.id);
+      if (folderError) { logError('imladrik:drive:push:folder', folderError.code); return fail(res, 500, 'Erreur interne'); }
     }
 
     // 4. Pages du journal (RLS → les siennes).
-    const { data: entrees, error: entErr } = await client
+    const { data: entrees, error: entErr } = await readAll(() => client
       .from('imladrik_entrees')
       .select('id, titre, contenu, created_at, drive_file_id, drive_content_hash')
-      .order('created_at', { ascending: true });
+      .order('created_at', { ascending: true }));
     if (entErr) {
       if (isAuthError(entErr)) return fail(res, 401, 'Authentification requise');
       logError('imladrik:drive:push:list', entErr.code);
       return fail(res, 500, 'Erreur interne');
     }
 
-    const liste = (entrees || []).slice(0, MAX_PAR_RUN);
-    const tronque = (entrees || []).length > MAX_PAR_RUN;
+    const liste = entrees || [];
+    let tronque = false, traites = 0;
+    const debut = Date.now();
     let pousses = 0, inchanges = 0, echoues = 0;
 
     // 5. Séquentiel (respect du quota / pas de course). Un échec n'arrête pas le run.
@@ -74,6 +78,8 @@ export default async function handler(req, res) {
       const texte = renderEntryText(e);
       const hash = contentHash(texte);
       if (e.drive_file_id && e.drive_content_hash === hash) { inchanges += 1; continue; }
+      if (traites >= MAX_PAR_RUN || Date.now() - debut >= 20000) { tronque = true; continue; }
+      traites += 1;
       try {
         let fileId = e.drive_file_id;
         if (fileId) {

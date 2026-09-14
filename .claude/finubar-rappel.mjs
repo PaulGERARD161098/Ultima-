@@ -37,6 +37,29 @@ const FIN = '<!-- finubar:fin -->';
 const MAX_TEXTE = 400;
 const borne = (v) => (typeof v === 'string' ? v.trim().slice(0, MAX_TEXTE) : '');
 
+// ⛔ UN GRAIN CASSÉ DOIT PARLER. Le script ne fait jamais échouer une séance
+// (voir l'en-tête) — mais « ne pas échouer » n'est pas « se taire ». Tant que
+// toute anomalie sortait en silence, une séance ouverte sur un FINUBAR.md au
+// JSON cassé ne se distinguait pas d'une séance ouverte sur un dépôt SANS grain :
+// rien ne s'affichait, et le silence d'un rappel se lit comme une bonne
+// nouvelle. C'est le pire des deux états. Désormais un fichier PRÉSENT mais
+// illisible le DIT, toujours avec le code 0. Un fichier ABSENT, lui, reste
+// silencieux : il n'a rien à dire, et la collecte d'Ultima le signale déjà.
+// (Faille trouvée par le dry run du 2026-09-14, en semant le grain d'Artidispo.)
+const crier = (quoi) => {
+  process.stdout.write(JSON.stringify({
+    hookSpecificOutput: {
+      hookEventName: 'SessionStart',
+      additionalContext: 'FINUBAR — ⚠️ le grain de ce dépôt est ILLISIBLE : ' + quoi + '.\n'
+        + 'Ce dépôt ne peut donc PAS se présenter, et son absence de rappel ne veut '
+        + 'pas dire que tout va bien. Réparer le bloc JSON de FINUBAR.md entre ses '
+        + 'marqueurs <!-- finubar:debut --> et <!-- finubar:fin --> AVANT de se fier '
+        + 'à quoi que ce soit de ce dépôt.',
+    },
+  }));
+  process.exit(0);
+};
+
 try {
   // Le fichier se cherche par rapport au SCRIPT (.claude/rappel.mjs → ../), pas
   // par rapport au répertoire courant : un hook peut être lancé d'ailleurs.
@@ -47,14 +70,14 @@ try {
   const texte = readFileSync(fichier, 'utf8');
   const i = texte.indexOf(DEBUT);
   const j = i === -1 ? -1 : texte.indexOf(FIN, i);
-  if (i === -1 || j === -1) process.exit(0);
+  if (i === -1 || j === -1) crier('les marqueurs finubar:debut / finubar:fin sont absents ou dans le désordre');
   const json = texte.slice(i + DEBUT.length, j)
     .replace(/^\s*```(?:json)?/, '').replace(/```\s*$/, '').trim();
-  if (!json) process.exit(0);
+  if (!json) crier('le bloc entre les marqueurs est vide');
 
   let g;
-  try { g = JSON.parse(json); } catch { process.exit(0); }
-  if (!g || typeof g !== 'object' || !g.projet) process.exit(0);
+  try { g = JSON.parse(json); } catch (e) { crier('le JSON ne se parse pas (' + String(e.message).slice(0, 120) + ')'); }
+  if (!g || typeof g !== 'object' || !g.projet) crier('le champ obligatoire \"projet\" manque');
 
   // La mesure qui empêche la note de mentir : le dépôt a-t-il avancé depuis ?
   let derive = '';

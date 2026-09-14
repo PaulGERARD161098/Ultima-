@@ -1,3 +1,4 @@
+import { readAll } from './_lib/read-all.js';
 // /api/althea — le Système d'ALTHEA (B1), derrière auth (RLS via jeton).
 //
 //   GET    → { ok:true, data:{ avatar, stats:[…], skills:[…], conditions:[…],
@@ -71,23 +72,20 @@ export default async function handler(req, res) {
     if (req.method === 'GET') {
       const [avatarRes, statsRes, skillsRes, conditionsRes, relevesRes] = await Promise.all([
         client.from('althea_avatar').select('*').maybeSingle(),
-        client.from('althea_stats').select('*').order('created_at', { ascending: true }),
-        client.from('althea_skills').select('*').order('rang_affichage', { ascending: true }),
-        client.from('althea_conditions').select('*').order('rang_affichage', { ascending: true }),
-        client.from('althea_releves').select('*').order('jour', { ascending: true }),
+        readAll(() => client.from('althea_stats').select('*').order('created_at', { ascending: true })),
+        readAll(() => client.from('althea_skills').select('*').order('rang_affichage', { ascending: true })),
+        readAll(() => client.from('althea_conditions').select('*').order('rang_affichage', { ascending: true })),
+        readAll(() => client.from('althea_releves').select('*').order('jour', { ascending: true })),
       ]);
 
-      // Tant que 0022 n'est pas appliquée, les tables n'existent pas. On dégrade
-      // à vide plutôt que de rendre une erreur : la page doit pouvoir s'ouvrir
-      // et dire « rien encore » — c'est la différence entre un quadrant neuf et
-      // un quadrant cassé.
-      const erreurAuth = [avatarRes, statsRes, skillsRes, conditionsRes, relevesRes]
-        .map((r) => r.error).find((e) => e && isAuthError(e));
+      const erreurs = [avatarRes, statsRes, skillsRes, conditionsRes, relevesRes]
+        .map((r) => r.error).filter(Boolean);
+      const erreurAuth = erreurs.find(isAuthError);
       if (erreurAuth) return fail(res, 401, 'Authentification requise');
-
-      const liste = (r) => (r.error ? [] : (r.data || []));
+      if (erreurs.length) return dbFail(res, erreurs[0], 'althea:get');
+      const liste = (r) => r.data || [];
       return ok(res, {
-        avatar: avatarRes.error ? null : (avatarRes.data || null),
+        avatar: avatarRes.data || null,
         stats: liste(statsRes),
         skills: liste(skillsRes),
         conditions: liste(conditionsRes),
@@ -116,7 +114,8 @@ export default async function handler(req, res) {
     }
 
     // DELETE — revenir à « non renseigné ».
-    const body = await readJsonBody(req).catch(() => ({}));
+    const body = await readJsonBody(req);
+    if (body === null || body === 'too_large') return bodyFail(res, body);
     const id = resolveId(req, body && typeof body === 'object' ? body : {});
     if (!isUuid(id)) return fail(res, 400, 'Identifiant invalide');
 
