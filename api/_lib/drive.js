@@ -12,6 +12,7 @@
 //   - scope MINIMAL drive.file (l'app ne voit que les fichiers qu'elle crée).
 
 import crypto from 'node:crypto';
+import { fetchWithTimeout as boundedFetch } from './fetch.js';
 
 // Scope minimal : accès par-fichier (dossier dédié), jamais le Drive entier.
 export const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
@@ -170,9 +171,7 @@ export const GOOGLE_REVOKE_ENDPOINT = 'https://oauth2.googleapis.com/revoke';
 export const DRIVE_FILES_ENDPOINT = 'https://www.googleapis.com/drive/v3/files';
 
 function fetchWithTimeout(url, options = {}) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
-  return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
+  return boundedFetch(url, options, TIMEOUT_MS);
 }
 
 // Échange le code d'autorisation contre les jetons (Authorization Code + PKCE).
@@ -199,8 +198,9 @@ export async function exchangeCodeForTokens(cfg, { code, verifier }) {
 // Révoque un jeton côté Google (best-effort : on n'échoue pas la déconnexion).
 export async function revokeToken(token) {
   try {
-    await fetchWithTimeout(`${GOOGLE_REVOKE_ENDPOINT}?token=${encodeURIComponent(token)}`, {
+    await fetchWithTimeout(GOOGLE_REVOKE_ENDPOINT, {
       method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ token }).toString(),
     });
   } catch { /* silencieux : la purge en base reste la source de vérité */ }
 }

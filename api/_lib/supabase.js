@@ -2,17 +2,7 @@
 // l'utilisateur (jeton Bearer) pour que la RLS s'applique. Jamais de service role.
 
 import { createClient } from '@supabase/supabase-js';
-
-const TIMEOUT_MS = 5000;
-
-// Fetch avec timeout sortant réel (5 s) via AbortController.
-function fetchWithTimeout(url, options = {}) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
-  return fetch(url, { ...options, signal: controller.signal }).finally(() =>
-    clearTimeout(timer)
-  );
-}
+import { fetchWithTimeout } from './fetch.js';
 
 // Extrait le jeton d'un header Authorization: Bearer <jeton>.
 export function getBearerToken(req) {
@@ -58,7 +48,9 @@ export function createUserClient(req) {
 // base). Le client Auth hérite du fetch à timeout (global.fetch), donc l'appel
 // getUser est borné à 5 s. `makeClient` est injectable pour les tests unitaires.
 export async function requireUser(req, makeClient = createUserClient) {
-  const base = makeClient(req);
+  let base;
+  try { base = makeClient(req); }
+  catch { return { status: 'unconfigured' }; }
   if (base.status !== 'ok') return base; // unconfigured | unauthenticated
 
   const { client } = base;
@@ -67,7 +59,7 @@ export async function requireUser(req, makeClient = createUserClient) {
   try {
     const { data, error } = await client.auth.getUser(token);
     // Fail-closed : jeton invalide/expiré/révoqué → 401, jamais le détail Auth.
-    if (error || !data?.user) return { status: 'unauthenticated' };
+    if (error || !data?.user?.id || data.user.is_anonymous === true) return { status: 'unauthenticated' };
     return { status: 'ok', client, user: data.user };
   } catch {
     // Timeout (AbortError) ou panne réseau vers Auth : on NE sert pas (401),

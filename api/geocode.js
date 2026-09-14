@@ -12,20 +12,10 @@ import {
   creerGardeDebit,
 } from './_lib/geocode.js';
 
-const TIMEOUT_MS = 5000;
+import { fetchWithTimeout } from './_lib/fetch.js';
 
-// User-Agent identifiant l'app auprès de Nominatim (obligatoire, politique
-// d'usage) : env Vercel prioritaire, repli publiable — l'app marche sans env.
-const USER_AGENT_DEFAUT = 'Ultima/1.0 (carte reseau commercial; contact: pag.gerard@gmail.com)';
-
-// Fetch avec timeout sortant réel (5 s) — même motif que api/_lib/supabase.js.
-function fetchWithTimeout(url, options = {}) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
-  return fetch(url, { ...options, signal: controller.signal }).finally(() =>
-    clearTimeout(timer)
-  );
-}
+// Identifiant de service public, sans adresse personnelle.
+const USER_AGENT_DEFAUT = 'Ultima/1.0 (+https://github.com/PaulGERARD161098/Ultima-)';
 
 // Paramètres de query : req.query (Vercel), repli sur l'URL brute.
 function queryParams(req) {
