@@ -3,6 +3,22 @@
 > Une décision consignée n'est jamais redemandée ni re-litigée.
 > Format : date — décision — conséquence.
 
+- **2026-09-14 (SPC — le premier écran, Paul regarde la preview)** — Paul renverse
+  le constat 2 de la critique design (« H1 = métier + ville, marque au-dessus »).
+  **Décision : le NOM d'abord, en grand.** Message central dicté mot pour mot :
+  *« SPC, votre expert Plomberie, chauffage et rénovation de salle de bain en
+  Ile de France »*. La ligne « Solution Plomberie Chauffage » entre le logo et le
+  titre est supprimée (« supprime la barre du milieu »), le CTA secondaire
+  devient **« Prendre RDV »** — appliqué aux QUATRE endroits où ce libellé vit,
+  puis aux quatre liens qui menaient à `#contact` sous trois noms différents —
+  et ce bouton reçoit un **contour doré**, l'appel restant en or plein : c'est le
+  remplissage qui hiérarchise, pas la teinte. **Ce qui n'est pas perdu** : le
+  mot-clé local « plombier-chauffagiste Le Raincy » passe dans le `<title>`,
+  reste dans l'en-tête sous la marque, et sous le H1 (« Basés à Le Raincy (93) »).
+  **Coordonnées réelles posées le même jour** : 06 22 52 64 11 (deux champs
+  cohérents) et proprn@outlook.fr — la garde passe de 8 à **6 blocages**.
+  Fusions #68, #69, #70, #71.
+
 - **2026-09-14 (SPC — le registre éditorial du site d'Ezzedine, dictée)** — Paul
   tranche : **« c'est un artisan, pas un dépanneur »**. Conséquence de
   formulation, dictée mot pour mot : *« possible de le contacter pour une
