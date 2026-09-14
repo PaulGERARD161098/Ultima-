@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v18 2026-09-13 sha256:048d085d59f7 -->
+<!-- lecons:empreinte v19 2026-09-14 sha256:0f09117008c8 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -437,6 +437,21 @@ jamais fait toujours rougir la recette. Vérifié ici par deux sondes : logo
 délibérément déformé et activité prioritaire retirée virent toutes deux au
 rouge, et la recette repasse au vert une fois l'état restauré.
 
+**UN GARDE-FOU ÉCRIT CONTRE DES MOTS REND ROUGE LA CORRECTION ELLE-MÊME**
+*(2026-09-14)*. Après avoir retiré du site SPC toutes les promesses d'astreinte,
+le harnais chargé de les empêcher de revenir a failli interdire le substrat
+« dépannage » et « astreinte ». Or le texte CORRIGÉ dit, en toutes lettres,
+« SPC n'est pas un service de dépannage d'urgence » et « nous n'assurons pas
+d'astreinte » : la règle aurait rougi sur la phrase juste, et la séance suivante
+aurait retiré **la mise au point plutôt que la promesse** — exactement l'inverse
+de ce qu'on voulait. Il interdit donc des MOTIFS d'engagement (`7j/7`,
+`intervenir dans la journée`, `traité en priorité`), pas un vocabulaire.
+⛔ *Un contrôle d'absence se relit contre le texte corrigé, pas seulement contre
+le texte fautif : s'il rougit sur la bonne version, il enseigne à supprimer la
+bonne version.* Et il se double d'un contrôle POSITIF — ici « la réponse doit
+toujours dire que SPC n'en est pas un » — sinon on satisfait l'absence en
+effaçant aussi ce qui renseigne le visiteur.
+
 ---
 
 ## 3. Ce qu'on donne à Paul
@@ -707,6 +722,24 @@ c'est ce geste qui a trouvé le faux positif ci-dessus (§2), un logo d'en-tête
 pointait sur le lien d'évitement au lieu de l'accueil, et une donnée devenue
 morte qui portait un engagement jamais validé par le client. *Un paquet qui
 s'applique proprement n'est pas un paquet vérifié.*
+
+**LE CHAMP QUE PAUL DÉSIGNE N'EST PRESQUE JAMAIS LE SEUL** *(2026-09-14)*. Il
+pointait une ligne — `site.horaires` promettait « dépannage urgent 7j/7 » sur le
+site d'Ezzedine — et il a tranché : « c'est un artisan, pas un dépanneur,
+enlève ». Corriger ce champ prenait une minute, et **aurait été faux** : le
+balayage a rendu **neuf** endroits. La FAQ d'accueil (« nous faisons le maximum
+pour intervenir dans la journée »), trois pages métier (« traité en priorité »),
+une réponse qui disait **« Oui »** à « intervenez-vous en urgence le week-end ? »,
+un bandeau, une fiche prestation, et un bloc entier « En cas d'urgence
+plomberie » devenu mort sans que personne le remarque. J'aurais rendu compte de
+« c'est enlevé » pendant que quatre pages continuaient de promettre une
+astreinte — et c'est le rapport, pas le site, qui aurait menti.
+⛔ *Une consigne de Paul nomme le symptôme qu'il a VU : il lit une page, il ne
+lance pas un `grep`. Le geste juste tient en quatre temps — balayer la famille
+entière AVANT de corriger, appliquer SA règle à chaque trouvaille, agir, puis
+lui rendre le constat ET l'action.* C'est « boucher un trou nommé n'est pas
+fermer sa classe » (§2) vu de l'autre bout : ici la classe est nommée par
+l'utilisateur, et c'est justement pour ça qu'on la croit petite.
 
 ---
 

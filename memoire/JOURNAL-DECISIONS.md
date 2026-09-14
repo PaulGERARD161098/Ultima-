@@ -3,6 +3,24 @@
 > Une décision consignée n'est jamais redemandée ni re-litigée.
 > Format : date — décision — conséquence.
 
+- **2026-09-14 (SPC — le registre éditorial du site d'Ezzedine, dictée)** — Paul
+  tranche : **« c'est un artisan, pas un dépanneur »**. Conséquence de
+  formulation, dictée mot pour mot : *« possible de le contacter pour une
+  demande, mais ce n'est pas un dépanneur »* — le site peut inviter à prendre
+  contact, il ne peut promettre **aucune disponibilité**. **Décision appliquée
+  le jour même à neuf endroits** (elle ne portait à l'écrit que sur
+  `site.horaires`, « dépannage urgent 7j/7 ») : FAQ d'accueil, pages Plomberie,
+  Chauffage et Électricité, bandeau de confiance, fiche prestation, RC Pro,
+  article « Dégât des eaux », et le bloc `export const urgence` supprimé.
+  **Ce qui reste autorisé** : dire ce que SPC répare et quand on peut le
+  joindre. **Ce qui est interdit** : une astreinte, un délai d'intervention, une
+  priorité. Verrouillé par `tests/spc-pas-depanneur.test.mjs` — il interdit les
+  **promesses**, pas les mots, parce que le site dit désormais explicitement
+  qu'il n'est pas un service de dépannage. Fusionné en `9a0fb06`.
+  ⚠️ **Portée à confirmer** : cette décision vaut pour SPC. Reste ouverte la
+  question de savoir si elle devient une règle du générateur — un artisan qui
+  EST dépanneur doit pouvoir le dire.
+
 - **2026-07-30 (RESHIRAM — premier peuplement réel, dictée)** — Paul ouvre le cap
   **donnée concrète** en commençant par RESHIRAM. **Décision de formulation** :
   ce qu'il propose n'est PAS « résoudre les problèmes » (trop large) mais
