@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-14",
-    "quoi": "Audit livré sur go de Paul : PR #242 fusionnée, migration appliquée (version Supabase 20260914152259), CI verte et déploiement Vercel réussi. Contrôles HTTP publics effectués ; limites et preuves dans AUDIT-2026-09-14.md.",
-    "commit": "fc2aafc6128567e63ae729607cfe9aabc96380f2"
+    "quoi": "Audit livré sur go de Paul : PR #242 fusionnée, migration Supabase 20260914152259 appliquée, CI verte, déploiement OK. Collecte Finubar rejouée. Preuves : AUDIT-2026-09-14.md",
+    "commit": "2f3325a"
   },
   "prochaine_action": "Reprendre le jalon J3/P4 selon l’arbitrage existant, après le retour de Paul sur P3. La migration et la fusion de l’audit sont terminées ; ne pas les rejouer.",
   "bloque_par": [
