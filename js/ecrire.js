@@ -9,7 +9,7 @@
 //   - un BROUILLON LOCAL écrit AVANT tout appel réseau : ce qui a été dicté en
 //     marchant ne se perd jamais, même sans réseau, même si la session a
 //     expiré. Il repart tout seul au retour du réseau ou à la prochaine venue.
-// Écriture via l'API existante POST /api/imladrik (aucune API nouvelle).
+// Écriture via l'API existante POST /api/imladrik/entrees (aucune API nouvelle).
 // Injection DOM : createElement/textContent uniquement (CSP — jamais innerHTML).
 (function () {
   'use strict';
@@ -19,7 +19,12 @@
   // vient de dicter trois phrases en marchant.
   var CLE_BROUILLON = 'ultima-maedrethnir-brouillon';
 
-  var etat = { session: null, envoiEnCours: false };
+  var etat = { session: null, envoiEnCours: false, generation: 0 };
+
+  function cleBrouillon() {
+    var owner = etat.session && etat.session.user && etat.session.user.id;
+    return owner ? CLE_BROUILLON + ':' + owner : null;
+  }
 
   function $(id) { return document.getElementById(id); }
 
@@ -41,12 +46,15 @@
   // ---------- Le brouillon local ----------
 
   function lireBrouillon() {
-    try { return window.localStorage.getItem(CLE_BROUILLON) || ''; } catch (e) { return ''; }
+    var cle = cleBrouillon();
+    try { return cle ? window.localStorage.getItem(cle) || '' : ''; } catch (e) { return ''; }
   }
   function poserBrouillon(texte) {
+    var cle = cleBrouillon();
+    if (!cle) { return; }
     try {
-      if (texte) { window.localStorage.setItem(CLE_BROUILLON, texte); }
-      else { window.localStorage.removeItem(CLE_BROUILLON); }
+      if (texte) { window.localStorage.setItem(cle, texte); }
+      else { window.localStorage.removeItem(cle); }
     } catch (e) { /* stockage indisponible : on continue sans filet, sans bruit */ }
   }
 
@@ -62,7 +70,7 @@
     if (!etat.session || !etat.session.access_token) { return 'session'; }
     var reponse;
     try {
-      reponse = await fetch('/api/imladrik', {
+      reponse = await fetch('/api/imladrik/entrees', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -71,7 +79,8 @@
         },
         // Pas de titre : décision de Paul. Une capture au pouce ne demande rien
         // avant le premier mot ; le titre vit dans l'atelier posé.
-        body: JSON.stringify({ contenu: contenu })
+        body: JSON.stringify({ contenu: contenu }),
+        signal: AbortSignal.timeout(15000)
       });
     } catch (e) {
       return 'garde';   // hors réseau : le brouillon reste, il repartira
@@ -84,7 +93,8 @@
   }
 
   async function soumettre() {
-    if (etat.envoiEnCours) { return; }
+    if (etat.envoiEnCours || !etat.session) { return; }
+    var generation = etat.generation;
     var champ = $('ecrire-contenu');
     if (!champ) { return; }
     var contenu = (champ.value || '').trim();
@@ -104,13 +114,17 @@
     message('Dépôt…');
 
     var issue = await deposer(contenu);
+    if (generation !== etat.generation) { return; }
 
     etat.envoiEnCours = false;
     if (bouton) { bouton.disabled = false; }
 
     if (issue === 'depose') {
-      poserBrouillon('');
-      champ.value = '';
+      // Ne pas effacer les mots saisis pendant l'envoi du texte précédent.
+      if ((champ.value || '').trim() === contenu) {
+        poserBrouillon('');
+        champ.value = '';
+      } else { poserBrouillon(champ.value); }
       message('Déposé. Continue si tu veux.');
       champ.focus();
       return;
@@ -127,19 +141,34 @@
   // Le brouillon en attente repart dès que le réseau revient, sans rien
   // demander. Silencieux si ça échoue encore : le texte reste au chaud.
   async function reprendreBrouillon() {
+    if (etat.envoiEnCours) { return; }
     var champ = $('ecrire-contenu');
     var enAttente = lireBrouillon();
     if (!champ || !enAttente) { return; }
-    // On ne repart que si le champ est vide OU s'il ne contient QUE le brouillon
-    // restauré : sinon on écraserait une saisie en cours. Comparer au brouillon
-    // (et pas seulement « champ vide ») est indispensable — après un
-    // rechargement, le champ affiche justement ce qui attend d'être envoyé.
     var saisie = (champ.value || '').trim();
     if (saisie && saisie !== enAttente.trim()) { return; }
-    var issue = await deposer(enAttente);
-    if (issue === 'depose') {
-      poserBrouillon('');
-      message('Ce que tu avais dicté hors réseau est parti.');
+    if (!saisie) { champ.value = enAttente; }
+    // Même verrou et même traitement du résultat que le bouton : les retours
+    // réseau rapprochés ne doivent pas produire plusieurs pages identiques.
+    await soumettre();
+  }
+
+  function changerSession(session) {
+    if (!session || !session.access_token || !session.user || !session.user.id || session.user.is_anonymous) { session = null; }
+    var ancien = cleBrouillon();
+    etat.session = session;
+    if (ancien === cleBrouillon() && session) { return; } // simple renouvellement du jeton
+    etat.generation += 1;
+    etat.envoiEnCours = false;
+    var champ = $('ecrire-contenu');
+    if (champ) { champ.value = ''; }
+    var bouton = $('ecrire-envoyer');
+    if (bouton) { bouton.disabled = false; }
+    message('');
+    montrer(session ? 'ecrire-form' : 'ecrire-auth');
+    if (session) {
+      if (champ) { champ.value = lireBrouillon(); }
+      reprendreBrouillon();
     }
   }
 
@@ -178,12 +207,11 @@
     } catch (e) {
       session = null;
     }
-    if (!session || !session.access_token) {
-      montrer('ecrire-auth');
-      return;
+    changerSession(session);
+    if (client && client.auth.onAuthStateChange) {
+      client.auth.onAuthStateChange(function (_event, prochaine) { changerSession(prochaine); });
     }
-    etat.session = session;
-    montrer('ecrire-form');
+    if (!etat.session) { return; }
 
     var champ = $('ecrire-contenu');
     if (champ) {
@@ -209,11 +237,13 @@
       }
       try { champ.focus(); } catch (e) { /* focus refusé : sans conséquence */ }
     }
-    reprendreBrouillon();
   }
 
   // Fonctions exposées pour les harnais (aucune donnée réelle).
-  window.UltimaEcrire = { CLE_BROUILLON: CLE_BROUILLON };
+  // La clé historique sans owner reste intacte : sa provenance est inconnue,
+  // donc aucune restauration ni aucun envoi automatique vers un compte.
+  window.UltimaEcrire = {};
+  Object.defineProperty(window.UltimaEcrire, 'CLE_BROUILLON', { get: cleBrouillon });
 
   demarrer().catch(function () { montrer('ecrire-auth'); });
 })();
