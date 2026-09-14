@@ -6,7 +6,18 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
-- 🔒 **SESSION 2026-09-14 — AUDIT CORRECTIF, LIVRAISON EN ATTENTE DU GO.**
+- ✅ **LIVRAISON 2026-09-14 — GO REÇU, AUDIT DÉPLOYÉ.** PR #242 fusionnée
+  au commit `fc2aafc6128567e63ae729607cfe9aabc96380f2` ; CI unitaire et
+  navigateur verte. Migration appliquée sous la version Supabase
+  `20260914152259` (fichier `20260914142755`), droits et contraintes vérifiés.
+  Vercel confirme le déploiement à 15:24:57 UTC. Accueil et API sans session
+  contrôlés ; trois fichiers JS de production identiques au code testé.
+  **Les gates SQL et fusion sont levés et exécutés : ne pas rejouer ces étapes.**
+  Les limites d’accès au connecteur Vercel, aux sondes privées et aux parcours
+  avec compte réel figurent dans `AUDIT-2026-09-14.md` §Livraison. Le cap J3/P4
+  reste inchangé ; la note de préparation suivante est historique.
+
+- 🔒 **SESSION 2026-09-14 — PRÉPARATION DE L’AUDIT (ÉTAT AVANT LE GO).**
   Code et tests poussés sur `fix/audit-2026-09-14`, commit
   `a7280bbf2c256658b75bc6db9d5f42f8ac1a814b` ; **36/36 suites unitaires et
   41/41 harnais navigateur verts localement**. Capture du journal, brouillons

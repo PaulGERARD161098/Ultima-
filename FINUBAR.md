@@ -32,12 +32,11 @@
   },
   "dernier_arret": {
     "le": "2026-09-14",
-    "quoi": "Audit correctif : capture, brouillons par compte, accès, pagination, OAuth Drive et intégrité SQL corrigés sur fix/audit-2026-09-14. 36 suites unitaires et 41 harnais navigateur verts localement. Migration et fusion en attente du go ; détail dans AUDIT-2026-09-14.md.",
-    "commit": "a7280bbf2c256658b75bc6db9d5f42f8ac1a814b"
+    "quoi": "Audit livré sur go de Paul : PR #242 fusionnée, migration appliquée (version Supabase 20260914152259), CI verte et déploiement Vercel réussi. Contrôles HTTP publics effectués ; limites et preuves dans AUDIT-2026-09-14.md.",
+    "commit": "fc2aafc6128567e63ae729607cfe9aabc96380f2"
   },
-  "prochaine_action": "Faire valider et livrer la PR d’audit du 14/09 : migration 20260914142755 avant le code, puis vérification du déploiement. Le jalon J3/P4 reste inchangé.",
+  "prochaine_action": "Reprendre le jalon J3/P4 selon l’arbitrage existant, après le retour de Paul sur P3. La migration et la fusion de l’audit sont terminées ; ne pas les rejouer.",
   "bloque_par": [
-    "Accord Paul requis par CLAUDE.md pour appliquer la migration corrective 20260914142755 en production et fusionner la PR d’audit ; advisors à relire après ce DDL.",
     "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
     "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
@@ -117,6 +116,15 @@
 > Les séances, de la plus récente à la plus ancienne. Une entrée = une date, un
 > fait vérifié, une décision. La mémoire longue ; le bloc ci-dessus est la mémoire
 > courte, et c'est lui qui est lu automatiquement.
+
+### 2026-09-14 — livraison de l’audit terminée
+
+Go de Paul reçu. PR #242 fusionnée au commit `fc2aafc6128567e63ae729607cfe9aabc96380f2`.
+Migration enregistrée par Supabase sous `20260914152259`, contrôles post-DDL
+validés, CI GitHub verte et déploiement Vercel réussi. Les trois fichiers JS
+corrigés contrôlés en production correspondent aux fichiers testés. La migration
+et la fusion ne sont plus bloquantes. Détail, sondes HTTP et limites :
+**`AUDIT-2026-09-14.md` §Livraison**. Le jalon J3/P4 reste celui de Paul.
 
 ### 2026-09-14 — audit correctif prêt à livrer
 
