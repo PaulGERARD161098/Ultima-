@@ -1,10 +1,23 @@
 # CADRAGE-ULTIMA — audit → patch → améliorations, adapté au réel du projet
 
-## ÉTAT (2026-07-06, après arbitrage)
+## ÉTAT (mise à jour du 2026-09-14 ; historique conservé)
 
 > **Deux sessions ont tourné en parallèle le 2026-08-01** (fil affichage Lv3
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
+
+- 🔒 **SESSION 2026-09-14 — AUDIT CORRECTIF, LIVRAISON EN ATTENTE DU GO.**
+  Code et tests poussés sur `fix/audit-2026-09-14`, commit
+  `a7280bbf2c256658b75bc6db9d5f42f8ac1a814b` ; **36/36 suites unitaires et
+  41/41 harnais navigateur verts localement**. Capture du journal, brouillons
+  par compte, réponses tardives, protection des fichiers internes, OAuth,
+  pagination et intégrité SQL corrigés. **Rapport : `AUDIT-2026-09-14.md`.**
+  Les 28 tables réelles ont la RLS et les 10 vues sont invoker ; aucun DDL ou
+  changement de données de production n’a été exécuté. **Prochaine action :
+  valider et livrer la PR, migration `20260914142755` avant le code.** Gates
+  SQL et fusion de `CLAUDE.md` ouverts. Les FK RIVEN 0025 sont déjà présentes
+  dans la base réelle : les anciennes notes « migration à appliquer » sont
+  périmées sur ce point. Le cap produit J3/P4 reste celui acté précédemment.
 
 - 🎨 **SESSION 2026-09-02 — L'ACCUEIL EST PILOTÉ PAR FINUBAR, ET LA PORTE EST
   PASSÉE AU CIEL.** PR #185 (`b4dc35c`) et #186 (`c9c4587`) **fusionnées** sur go

@@ -24,23 +24,23 @@
   "projet": "Ultima",
   "depot": "PaulGERARD161098/Ultima-",
   "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-  "rattache_a": "REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md",
+  "rattache_a": "AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md",
   "etat": "en_cours",
   "jalon": {
     "nom": "J3 — le ciel porte aussi l'état PERSONNEL (P4 : les signaux du cockpit)",
     "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
   },
   "dernier_arret": {
-    "le": "2026-09-13",
-    "quoi": "LEÇONS v18 : deux séances ont scellé « v17 » le même soir, les deux jeux concaténés. Détail : memoire/LECONS.md.",
-    "commit": "f3821f3"
+    "le": "2026-09-14",
+    "quoi": "Audit correctif : capture, brouillons par compte, accès, pagination, OAuth Drive et intégrité SQL corrigés sur fix/audit-2026-09-14. 36 suites unitaires et 41 harnais navigateur verts localement. Migration et fusion en attente du go ; détail dans AUDIT-2026-09-14.md.",
+    "commit": "a7280bbf2c256658b75bc6db9d5f42f8ac1a814b"
   },
-  "prochaine_action": "Plus aucune propagation en attente. Reprendre le jalon J3 du cockpit. Seul ripair reste en v7, et il est inatteignable depuis une séance ouverte sur les dépôts de PaulGERARD161098.",
+  "prochaine_action": "Faire valider et livrer la PR d’audit du 14/09 : migration 20260914142755 avant le code, puis vérification du déploiement. Le jalon J3/P4 reste inchangé.",
   "bloque_par": [
+    "Accord Paul requis par CLAUDE.md pour appliquer la migration corrective 20260914142755 en production et fusionner la PR d’audit ; advisors à relire après ce DDL.",
     "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
     "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
-    "Les advisors Supabase post-DDL",
     "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
   ],
   "en_attente_depuis": "2026-08-20",
@@ -94,7 +94,7 @@
       "depuis": "2026-08-28"
     },
     {
-      "quoi": "Angle mort connu du patrimoine : les pages AUTHENTIFIÉES ne sont pas couvertes par les harnais (fixture de session à financer)",
+      "quoi": "Audit 14/09 : les parcours authentifiés simulés sont couverts, notamment capture et changements de compte. Le parcours avec un vrai compte sur le déploiement reste à éprouver après livraison ; voir AUDIT-2026-09-14.md.",
       "depuis": "2026-08-20"
     },
     {
@@ -106,7 +106,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-09-13"
+  "maj": "2026-09-14"
 }
 ```
 
@@ -117,6 +117,16 @@
 > Les séances, de la plus récente à la plus ancienne. Une entrée = une date, un
 > fait vérifié, une décision. La mémoire longue ; le bloc ci-dessus est la mémoire
 > courte, et c'est lui qui est lu automatiquement.
+
+### 2026-09-14 — audit correctif prêt à livrer
+
+Code et tests poussés dans `fix/audit-2026-09-14`, commit
+`a7280bbf2c256658b75bc6db9d5f42f8ac1a814b`. Les 36 suites unitaires et les
+41 harnais navigateur passent localement. Les constats, preuves, réserves et
+l’ordre de migration sont dans **`AUDIT-2026-09-14.md`**. La base réelle a été
+consultée en lecture seule ; les FK RIVEN 0025 sont déjà appliquées. Ne pas
+rejouer cette ancienne action. Le go SQL/fusion reste requis ; aucun jalon
+produit n’a été rouvert. Les autres dépôts et Notion n’ont pas été synchronisés.
 
 ### 2026-09-05 (fin) — la semaine est fermée, et quatre notes fausses avec elle
 
