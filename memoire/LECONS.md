@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v19 2026-09-14 sha256:0f09117008c8 -->
+<!-- lecons:empreinte v20 2026-09-14 sha256:32cea8e4746b -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -283,6 +283,21 @@ ne dit rien de ce qui est entré dedans. Étiqueter séparément fidélité de
 transformation, cohérence de calcul et justesse de la source.* ⚠️ Et cette
 mesure-là n'avait été versionnée nulle part : citée trois fois, introuvable.
 
+**UN SIGNAL AUTOMATIQUE QU'ON RÉFUTE DEUX FOIS SE LIT À LA SOURCE** *(2026-09-14)*.
+Le hook de fin de tour a annoncé « 1 commit non poussé » après chaque fusion en
+squash. Quatre fois j'ai re-mesuré, constaté que tout était sur `main`, et
+répondu « fausse alerte » — quatre fois le même tour, quatre fois le même coût.
+La cinquième, j'ai ouvert le script : il fait `git rev-list
+"origin/$branche..HEAD" --count` **sans fetch préalable**, donc il compare à sa
+copie locale de la branche distante. Une fusion en squash ne déplace pas la
+branche : elle reste sur le commit d'avant pendant qu'on rebase la copie locale
+sur `origin/main`. Le compte de 1 est EXACT, c'est sa conclusion qui ne l'est
+pas. ⛔ *Re-réfuter la conclusion d'un automate ne fait rien avancer ; lire ce
+qu'il mesure prend deux minutes et remplace n dénégations par une explication —
+et par le réglage qui le fait taire.* La règle vaut pour un hook comme pour un
+harnais, un compteur ou un advisor : **son verdict est une opinion, sa requête
+est un fait.**
+
 ---
 
 ## 2. Les garde-fous, et leur silence
@@ -451,6 +466,22 @@ le texte fautif : s'il rougit sur la bonne version, il enseigne à supprimer la
 bonne version.* Et il se double d'un contrôle POSITIF — ici « la réponse doit
 toujours dire que SPC n'en est pas un » — sinon on satisfait l'absence en
 effaçant aussi ce qui renseigne le visiteur.
+
+**UN CONTRÔLE QUI REGARDE PAR LA SEULE FENÊTRE OÙ LE DÉFAUT N'EXISTE PAS EST
+PIRE QU'ABSENT** *(2026-09-14)*. Le H1 de SPC est composé d'un `<span
+class="block">SPC</span>` suivi du reste de la phrase. À l'œil : deux lignes.
+Dans le flux de texte : **rien ne les séparait** — `textContent` rendait
+« SPCvotre expert plomberie… », ce que lisent un lecteur d'écran et un robot
+d'indexation. Le harnais était VERT : il lisait `innerText`, qui **fabrique** un
+saut de ligne pour un enfant `block` et donc voyait « SPC\nvotre expert… ».
+Il regardait la seule projection du DOM où le défaut est invisible.
+⛔ *Un contrôle a toujours une fenêtre — une propriété, une API, une vue. Quand
+la propriété qu'il interroge NORMALISE ce qu'on veut vérifier, il ne prouve pas
+« c'est bon », il prouve « je n'ai pas regardé ».* Et le défaut n'a pas été
+trouvé dans le code ni par le harnais, mais en relisant **la page réellement
+servie** après la fusion : un octet de séparation manquant ne se voit ni dans
+le diff, ni dans une capture, ni dans un test qui normalise. La sonde qui
+corrige la classe entière : retirer le séparateur DOIT faire rougir — vérifié.
 
 ---
 
