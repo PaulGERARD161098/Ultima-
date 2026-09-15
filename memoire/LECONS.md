@@ -319,6 +319,18 @@ et par le réglage qui le fait taire.* La règle vaut pour un hook comme pour un
 harnais, un compteur ou un advisor : **son verdict est une opinion, sa requête
 est un fait.**
 
+**UNE ESTIMATION DE GAIN QUI N'A PAS ÉTÉ MESURÉE EST UNE OPINION** *(2026-09-15)*.
+Paul trouve la maquette de la vitrine trop longue. J'annonce quatre coupes
+chiffrées « de tête » : retirer une photo de la galerie, ~250 px. Mesure au
+navigateur : **zéro pixel**. En mobile, la galerie est un carrousel HORIZONTAL —
+retirer une figure ne change rien à la hauteur. Trois autres estimations
+s'écartaient du réel d'un facteur deux à cinq. ⛔ *Un gain proposé à Paul se
+mesure avant d'être annoncé, surtout quand il paraît évident : c'est justement
+l'évidence qui empêche de vérifier.* Et le même passage a démenti la prémisse :
+la page n'était pas longue en TEXTE (514 mots contre 2483 pour l'accueil), elle
+empilait sept sections aérées — **on allait couper ce qui n'était pas le
+problème**.
+
 ---
 
 ## 2. Les garde-fous, et leur silence
@@ -540,6 +552,21 @@ trouvé dans le code ni par le harnais, mais en relisant **la page réellement
 servie** après la fusion : un octet de séparation manquant ne se voit ni dans
 le diff, ni dans une capture, ni dans un test qui normalise. La sonde qui
 corrige la classe entière : retirer le séparateur DOIT faire rougir — vérifié.
+
+**UN TEST QUI LIT UNE CONFIGURATION ATTESTE UNE INTENTION, JAMAIS UN EFFET**
+*(2026-09-15)*. `tests/preview-vitrine.test.mjs` s'appelait « la future vitrine
+devient la page racine » et vérifiait qu'un rewrite `/` → `/preview-vitrine.html`
+figurait bien dans `vercel.json`. Vert depuis la veille. Et pendant ce temps,
+`www.renoboostia.fr/` servait toujours l'ancienne page : **sur Vercel, un
+fichier statique est servi AVANT les rewrites**, et `index.html` occupe la
+racine — le rewrite n'était jamais atteint. Le défaut n'a été vu que parce que
+Paul a demandé « est-ce que ça a bien été mis à jour ? » et que la réponse est
+allée voir l'URL publique, pas le dépôt. ⛔ *Entre la ligne de configuration et
+le comportement, il y a un moteur qu'on n'a pas lu. Un garde-fou qui s'arrête à
+la configuration occupe la place de celui qui aurait vu le problème — et il
+rend le silence rassurant.* Le remplaçant mesure les deux : l'URL existe, ET
+personne ne peut re-tenter la bascule par un rewrite tant qu'`index.html` est
+là.
 
 ---
 
@@ -830,6 +857,17 @@ lui rendre le constat ET l'action.* C'est « boucher un trou nommé n'est pas
 fermer sa classe » (§2) vu de l'autre bout : ici la classe est nommée par
 l'utilisateur, et c'est justement pour ça qu'on la croit petite.
 
+**LE SECOND APPELANT RAMÈNE LA DIVERGENCE PAR LA PORTE DE SERVICE**
+*(2026-09-15)*. Deux écrans importaient des devis et n'écrivaient pas au même
+endroit ; la correction consistait à faire DÉMÉNAGER la logique dans un rail
+unique. Fait — puis, trois fonctions plus bas, le versement des anciens devis
+appelait `saveDevisCloud` directement. La divergence qu'on venait de supprimer
+revenait dans le même commit, écrite par la même main. Elle a été attrapée par
+un test d'assemblage qui interdit à tout écran d'enregistrer un devis lui-même.
+⛔ *Quand on unifie deux chemins, le test qui compte n'est pas « le rail
+marche » mais « personne n'écrit à côté du rail » — et il se pose dans le même
+commit, sinon la deuxième porte s'ouvre pendant qu'on admire la première.*
+
 ---
 
 ## 5. Plusieurs dépôts, plusieurs séances
@@ -954,6 +992,15 @@ apports, pas sur le fait que le sceau a changé.*
 
 ## 6. Économie
 
+
+**UN OUTIL LANCÉ PAR `npx` SANS INSTALLATION N'EST PAS L'OUTIL DU PROJET**
+*(2026-09-15)*. `npx eslint .` a rendu « rien à signaler » deux fois avant que
+je remarque l'absence de `node_modules` : npx téléchargeait une autre version,
+qui plantait sur la configuration du dépôt (`Cannot find package 'globals'`) et
+dont je ne lisais que la dernière ligne. Un lint qui ne prouve rien coûte plus
+cher qu'un lint absent : il rassure. ⛔ *Avant de citer le résultat d'un outil
+de projet, vérifier qu'on a lancé CELUI du projet — `npm install` d'abord, et
+lire la sortie entière, pas son `tail`.*
 **ÉCONOMIE DE CONTEXTE.** Sous-agents pour les gros volumes de lecture,
 synthèses seulement dans le fil principal. Tiers de modèle économe par défaut ;
 escalade **signalée** uniquement sur les sujets à risque — droits d'accès en
