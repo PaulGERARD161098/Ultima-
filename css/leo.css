@@ -460,6 +460,8 @@ body:has(.leo-appel) { padding-bottom: var(--leo-gouttiere); }
   background: linear-gradient(180deg, rgba(12, 22, 38, .97), rgba(3, 7, 14, .98));
   color: #f2ead6; border: 1px solid rgba(216, 189, 130, .58); border-radius: 5px;
   box-shadow: 0 12px 36px rgba(0,0,0,.48); font-family: Georgia, "Times New Roman", serif;
+  contain: layout paint; will-change: transform;
+  transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
 }
 .leo-dock-identite { color: #d8bd82; letter-spacing: .2em; font-size: .72rem; font-weight: 700; }
 .leo-dock-contexte { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #e7dfcd; font-size: .88rem; }
@@ -471,6 +473,7 @@ body:has(.leo-appel) { padding-bottom: var(--leo-gouttiere); }
 .leo-dock-action:hover, .leo-dock-parler:hover { border-color: #d8bd82; background-color: rgba(216,189,130,.1); }
 .leo-dock-action:focus-visible, .leo-dock-parler:focus-visible { outline: 3px solid #66b4d6; outline-offset: 2px; }
 .leo-dock-action:disabled { opacity: .42; cursor: default; }
+.leo-dock--proactif { border-color: rgba(216,189,130,.88); box-shadow: 0 12px 42px rgba(0,0,0,.55), 0 0 24px rgba(216,189,130,.08); }
 body:has(.leo-dock) > .leo-appel { position: static; inset: auto; box-shadow: none; text-transform: none; letter-spacing: 0; }
 body:has(.leo-dock) { padding-bottom: 5.5rem; }
 /* Sur l'accueil, Finubar reste en place pendant le prototype : le dock se
@@ -502,6 +505,30 @@ body[data-ciel-mode="appels"] .ciel-etoile:not([data-appel]),
 body[data-ciel-mode="en-cours"] .ciel-etoile:not([data-appel]) { opacity: .2 !important; }
 body[data-ciel-mode="appels"] .ciel-etoile[data-appel],
 body[data-ciel-mode="en-cours"] .ciel-etoile[data-appel] { filter: brightness(1.22) saturate(1.15); }
+
+/* ---------- Finitions : plus fin sans perdre l'identité ---------- */
+html { text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body { font-kerning: normal; font-variant-ligatures: common-ligatures; }
+:where(button, input, select, textarea) { font: inherit; }
+:where(.badge, .badge-etat, .badge-echeance, .badge-compteur, .pastille,
+  .adr-idee-statut, .arb-reco-badge) {
+  border-radius: 999px;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .72rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: .025em;
+  padding: .22rem .52rem;
+  box-shadow: none;
+}
+:where(.carte, .cartouche, .panneau, .leo-nav-resultat, .leo-nav-mode) {
+  transition: border-color .16s ease, background-color .16s ease, box-shadow .16s ease, transform .16s ease;
+}
+.leo-nav-resultat:active, .leo-nav-mode:active, .leo-dock-action:active, .leo-dock-parler:active { transform: translateY(1px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .leo-dock, :where(.carte, .cartouche, .panneau, .leo-nav-resultat, .leo-nav-mode) { transition: none; }
+}
 
 @media (max-width: 640px) {
   .leo-dock { grid-template-columns: auto minmax(0,1fr) auto auto; min-height: 68px; bottom: max(.5rem,env(safe-area-inset-bottom)); }

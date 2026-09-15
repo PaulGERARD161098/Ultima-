@@ -34,6 +34,9 @@
       bouton: document.getElementById('leo-appel'),
       ouvrirLeo: () => alert('Dans Ultima, ce bouton ouvre la conversation contextuelle de Léo.')
     });
+    setTimeout(() => document.dispatchEvent(new CustomEvent('ultima:finubar', { detail: {
+      le: '15 septembre', cartouche: { action: { projet: 'RIVEN', faire: 'reprendre la relation prioritaire' } }
+    } })), 700);
   </script>
 </body>
 </html>

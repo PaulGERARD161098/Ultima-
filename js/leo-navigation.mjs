@@ -29,6 +29,19 @@ export function filtrerDestinations(requete, liste = destinations()) {
     .join(' ').toLocaleLowerCase('fr').includes(q)).slice(0, 8);
 }
 
+export function recommandationDepuisFinubar(agregat, liste = destinations()) {
+  const action = agregat && agregat.cartouche && agregat.cartouche.action;
+  if (!action || !texte(action.projet) || !texte(action.faire)) { return null; }
+  const destination = liste.find((d) => d.nom.toLocaleLowerCase('fr')
+    === texte(action.projet).toLocaleLowerCase('fr')) || null;
+  return {
+    projet: texte(action.projet),
+    faire: texte(action.faire),
+    le: texte(agregat.le),
+    destination,
+  };
+}
+
 function lireRecents(storage) {
   try {
     const lus = JSON.parse(storage.getItem(CLE_RECENTS) || '[]');
@@ -75,16 +88,17 @@ export function monterNavigationLeo({ bouton, ouvrirLeo, doc = document } = {}) 
   dock.setAttribute('aria-label', 'Léo, copilote de navigation');
   const identite = element(doc, 'span', 'leo-dock-identite', 'LÉO');
   const contexte = element(doc, 'span', 'leo-dock-contexte', page
-    ? `${page.nom} · ${page.sens || 'je vois cette page'}`
+    ? `${page.nom} · ${page.resume || page.sens || 'je vois cette page'}`
     : 'Je vois Ultima · où allons-nous ?');
   bouton.className = 'leo-dock-parler';
   bouton.textContent = 'Parler';
   bouton.setAttribute('aria-label', 'Parler à Léo dans le contexte actuel');
+  let actionRapide = recents[1] || null;
   const reprendre = element(doc, 'button', 'leo-dock-action', 'Reprendre');
   reprendre.type = 'button';
   reprendre.disabled = !recents[1];
   reprendre.title = recents[1] ? `Reprendre ${recents[1].nom}` : 'Aucun autre contexte récent';
-  reprendre.addEventListener('click', () => aller(recents[1]));
+  reprendre.addEventListener('click', () => aller(actionRapide));
   const chercher = element(doc, 'button', 'leo-dock-action leo-dock-action--primaire', 'Aller à…');
   chercher.type = 'button';
 
@@ -150,6 +164,26 @@ export function monterNavigationLeo({ bouton, ouvrirLeo, doc = document } = {}) 
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); ouvrirPanneau(); }
     else if (e.key === 'Escape' && !voile.hidden) { e.preventDefault(); fermerPanneau(); }
   });
+  // Finubar reste la seule source de priorité. Quand son agrégat arrive, Léo
+  // transforme le résumé en invitation située ; aucun second calcul ici.
+  function appliquerFinubar(agregat) {
+    const recommandation = recommandationDepuisFinubar(agregat, liste);
+    if (!recommandation) { return; }
+    contexte.textContent = `Je te propose : ${recommandation.projet} · ${recommandation.faire}`;
+    dock.classList.add('leo-dock--proactif');
+    if (recommandation.destination) {
+      actionRapide = recommandation.destination;
+      reprendre.disabled = false;
+      reprendre.textContent = 'Commencer';
+      reprendre.title = recommandation.le
+        ? `Priorité issue de Finubar, collectée le ${recommandation.le}`
+        : 'Commencer la priorité proposée par Léo';
+    }
+  }
+  doc.addEventListener('ultima:finubar', (e) => appliquerFinubar(e.detail));
+  // Le dock et l'agrégat sont tous deux asynchrones : ce repli évite de perdre
+  // l'événement si Finubar a fini de charger une fraction de seconde avant Léo.
+  appliquerFinubar(window.UltimaFinubarAgregat);
   if (typeof ouvrirLeo === 'function') { bouton.addEventListener('click', ouvrirLeo); }
   return { dock, ouvrir: ouvrirPanneau };
 }

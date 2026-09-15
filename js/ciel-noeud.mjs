@@ -721,6 +721,10 @@ export function rendre(idNoeud, options = {}) {
           registre = greffer(registreBase, agregat);
           appels = signaux(registre, agregat, chemin);
           poserBandeau(agregat);
+          // Une seule donnée, deux lectures : Finubar peint le portefeuille et
+          // le dock de Léo en reprend l'action sans la recalculer.
+          window.UltimaFinubarAgregat = agregat;
+          doc.dispatchEvent(new CustomEvent('ultima:finubar', { detail: agregat }));
           if (typeof options.surFinubar === 'function') { options.surFinubar(agregat); }
           dessiner();
         });
