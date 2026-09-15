@@ -31,9 +31,9 @@
     "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
   },
   "dernier_arret": {
-    "le": "2026-09-14",
+    "le": "2026-09-15",
     "quoi": "Audit livré sur go de Paul : PR #242 fusionnée, migration Supabase 20260914152259 appliquée, CI verte, déploiement OK. Collecte Finubar rejouée. Preuves : AUDIT-2026-09-14.md",
-    "commit": "2f3325a"
+    "commit": "0cd086cbb3fc32c1d1f5d1d935c203de1e691fcb"
   },
   "prochaine_action": "Reprendre le jalon J3/P4 selon l’arbitrage existant, après le retour de Paul sur P3. La migration et la fusion de l’audit sont terminées ; ne pas les rejouer.",
   "bloque_par": [
@@ -105,7 +105,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-09-14"
+  "maj": "2026-09-15"
 }
 ```
 
