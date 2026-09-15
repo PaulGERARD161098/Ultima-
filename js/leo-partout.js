@@ -78,11 +78,20 @@
     var bouton = document.createElement('button');
     bouton.id = 'leo-appel';
     bouton.type = 'button';
-    bouton.className = 'leo-appel';
+    bouton.className = 'leo-appel'; // repli si le module de navigation échoue
     bouton.textContent = 'Parler à Léo';
     bouton.setAttribute('aria-label', 'Parler à Léo');
-    bouton.addEventListener('click', function () { ouvrir(options); });
     document.body.appendChild(bouton);
+    // Le dock est une amélioration progressive : l'ancien bouton reste
+    // fonctionnel si le module ne charge pas, sans jamais perdre la voix.
+    import('./leo-navigation.mjs').then(function (navigation) {
+      navigation.monterNavigationLeo({
+        bouton: bouton,
+        ouvrirLeo: function () { ouvrir(options); }
+      });
+    }).catch(function () {
+      bouton.addEventListener('click', function () { ouvrir(options); });
+    });
     return bouton;
   }
 

@@ -450,3 +450,64 @@
 :root { --leo-gouttiere: 5.5rem; }
 
 body:has(.leo-appel) { padding-bottom: var(--leo-gouttiere); }
+
+/* ---------- Dock Léo — navigation, contexte, voix ---------- */
+.leo-dock {
+  position: fixed; z-index: 900; left: 50%; bottom: max(.75rem, env(safe-area-inset-bottom));
+  transform: translateX(-50%); width: min(760px, calc(100vw - 1.5rem)); min-height: 58px;
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto auto; align-items: center; gap: .55rem;
+  padding: .5rem .55rem .5rem .8rem; box-sizing: border-box;
+  background: linear-gradient(180deg, rgba(12, 22, 38, .97), rgba(3, 7, 14, .98));
+  color: #f2ead6; border: 1px solid rgba(216, 189, 130, .58); border-radius: 5px;
+  box-shadow: 0 12px 36px rgba(0,0,0,.48); font-family: Georgia, "Times New Roman", serif;
+}
+.leo-dock-identite { color: #d8bd82; letter-spacing: .2em; font-size: .72rem; font-weight: 700; }
+.leo-dock-contexte { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #e7dfcd; font-size: .88rem; }
+.leo-dock-action, .leo-dock-parler {
+  min-height: 40px; padding: .45rem .7rem; border: 1px solid rgba(216,189,130,.38); border-radius: 3px;
+  background: transparent; color: #f2ead6; font: inherit; cursor: pointer;
+}
+.leo-dock-action--primaire { background: #1a5a78; border-color: #4388a7; font-weight: 700; }
+.leo-dock-action:hover, .leo-dock-parler:hover { border-color: #d8bd82; background-color: rgba(216,189,130,.1); }
+.leo-dock-action:focus-visible, .leo-dock-parler:focus-visible { outline: 3px solid #66b4d6; outline-offset: 2px; }
+.leo-dock-action:disabled { opacity: .42; cursor: default; }
+body:has(.leo-dock) > .leo-appel { position: static; inset: auto; box-shadow: none; text-transform: none; letter-spacing: 0; }
+body:has(.leo-dock) { padding-bottom: 5.5rem; }
+/* Sur l'accueil, Finubar reste en place pendant le prototype : le dock se
+   pose au-dessus de sa hauteur mesurée au lieu de lui prendre ses gestes. */
+body.a-finubar .leo-dock {
+  bottom: calc(max(.75rem, env(safe-area-inset-bottom)) + var(--fb-hauteur, 0px) + 12px);
+}
+
+.leo-nav-voile { position: fixed; inset: 0; z-index: 2040; padding: max(5vh, 1rem); background: rgba(1,4,9,.78); }
+.leo-nav-voile[hidden] { display: none; }
+.leo-nav-panneau { width: min(680px, 100%); max-height: min(760px, 90vh); overflow: auto; margin: 0 auto; padding: 1rem;
+  box-sizing: border-box; background: #f4ecd8; color: #2b2417; border: 1px solid #a9884a; box-shadow: 0 18px 60px #000; }
+.leo-nav-entete { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.leo-nav-entete h2 { margin: 0; font: 400 clamp(1.3rem,4vw,1.8rem) Georgia,serif; }
+.leo-nav-fermer { border: 0; background: transparent; color: #5d4c30; text-decoration: underline; cursor: pointer; }
+.leo-nav-recherche { width: 100%; min-height: 48px; margin: 1rem 0 .7rem; padding: .65rem .8rem; box-sizing: border-box;
+  border: 1px solid #9d8354; background: #fffaf0; color: #2b2417; font: 1rem system-ui,sans-serif; }
+.leo-nav-onglets { display: flex; gap: .35rem; overflow-x: auto; border-bottom: 1px solid rgba(90,65,24,.24); }
+.leo-nav-onglets button { min-height: 40px; border: 0; border-bottom: 3px solid transparent; background: transparent; color: #5d4c30; cursor: pointer; }
+.leo-nav-onglets button.is-actif { border-bottom-color: #1a5a78; color: #173f54; font-weight: 700; }
+.leo-nav-resultats { display: grid; gap: .35rem; padding-top: .7rem; }
+.leo-nav-resultat, .leo-nav-mode { display: flex; flex-direction: column; align-items: flex-start; gap: .2rem; width: 100%; min-height: 52px;
+  padding: .65rem .75rem; text-align: left; border: 1px solid rgba(90,65,24,.22); background: rgba(255,250,240,.5); color: #2b2417; cursor: pointer; }
+.leo-nav-resultat:hover, .leo-nav-mode:hover { border-color: #1a5a78; background: #fffaf0; }
+.leo-nav-resultat span { color: #6a5636; font-size: .82rem; }
+.leo-nav-explication, .leo-nav-vide { margin: .35rem 0; color: #6a5636; }
+
+body[data-ciel-mode="appels"] .ciel-etoile:not([data-appel]),
+body[data-ciel-mode="en-cours"] .ciel-etoile:not([data-appel]) { opacity: .2 !important; }
+body[data-ciel-mode="appels"] .ciel-etoile[data-appel],
+body[data-ciel-mode="en-cours"] .ciel-etoile[data-appel] { filter: brightness(1.22) saturate(1.15); }
+
+@media (max-width: 640px) {
+  .leo-dock { grid-template-columns: auto minmax(0,1fr) auto auto; min-height: 68px; bottom: max(.5rem,env(safe-area-inset-bottom)); }
+  .leo-dock-contexte { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-size: .78rem; }
+  .leo-dock-action:not(.leo-dock-action--primaire) { display: none; }
+  .leo-dock-parler { padding-inline: .55rem; }
+  .leo-nav-voile { padding: 0; }
+  .leo-nav-panneau { width: 100%; max-height: none; min-height: 100dvh; }
+}
