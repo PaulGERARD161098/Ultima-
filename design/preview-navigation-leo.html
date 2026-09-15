@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Preview — naviguer avec Léo</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/ciel.css">
+  <link rel="stylesheet" href="../css/ciel-noeud.css">
+  <link rel="stylesheet" href="../css/stellaire.css">
+  <link rel="stylesheet" href="../css/leo.css">
+  <style>
+    body { min-height: 100dvh; overflow: hidden; background: radial-gradient(circle at 50% 35%,#132845,#03070e 65%); color:#f2ead6; }
+    .preview-ciel { position:fixed; inset:0; display:grid; place-items:center; pointer-events:none; }
+    .preview-orbite { width:min(68vw,680px); aspect-ratio:1; border:1px solid rgba(169,136,74,.22); border-radius:50%; position:relative; }
+    .preview-astre { position:absolute; display:grid; place-items:center; width:86px; height:86px; border-radius:50%;
+      color:#f2ead6; border:1px solid #d8bd82; background:radial-gradient(circle,#316685 0 6%,#0a1727 45%,transparent 70%);
+      box-shadow:0 0 30px rgba(87,161,194,.25); font:700 12px Georgia,serif; letter-spacing:.08em; }
+    .preview-astre:nth-child(1){left:42%;top:-7%}.preview-astre:nth-child(2){right:-2%;top:48%}.preview-astre:nth-child(3){left:2%;bottom:4%}
+    .preview-titre { position:fixed; top:24px; left:50%; transform:translateX(-50%); text-align:center; }
+    .preview-titre p { margin:.3rem 0;color:#cdc3ad;font:italic 14px Georgia,serif }.preview-titre h1{margin:0;font:400 28px Georgia,serif}
+  </style>
+</head>
+<body class="ciel-noeud">
+  <header class="preview-titre"><h1>Bienvenue sur Ultima</h1><p>Le ciel pour explorer, Léo pour avancer.</p></header>
+  <main class="preview-ciel" aria-label="Aperçu décoratif du ciel">
+    <div class="preview-orbite" aria-hidden="true"><span class="preview-astre">ULTIMA</span><span class="preview-astre">ALPHA</span><span class="preview-astre">ALTHEA</span></div>
+  </main>
+  <button id="leo-appel" type="button">Parler à Léo</button>
+  <script type="module">
+    import { monterNavigationLeo } from '../js/leo-navigation.mjs';
+    monterNavigationLeo({
+      bouton: document.getElementById('leo-appel'),
+      ouvrirLeo: () => alert('Dans Ultima, ce bouton ouvre la conversation contextuelle de Léo.')
+    });
+  </script>
+</body>
+</html>
