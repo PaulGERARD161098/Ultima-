@@ -197,8 +197,8 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-09-15",
-          "quoi": "Audit livré sur go de Paul : PR #242 fusionnée, migration Supabase 20260914152259 appliquée, CI verte, déploiement OK. Collecte Finubar rejouée. Preuves : AUDIT-2026-09-14.md",
-          "commit": "0cd086cbb3fc32c1d1f5d1d935c203de1e691fcb"
+          "quoi": "Séance sur artisan-builder : Ultima n'a reçu que les LEÇONS v22 (quatre leçons payées le 15/09), scellées et propagées à l'octet près. Aucun code Ultima touché.",
+          "commit": "360b535d91662c49181c715307d4281e5233fa0b"
         },
         "prochaine_action": "Reprendre le jalon J3/P4 selon l’arbitrage existant, après le retour de Paul sur P3. La migration et la fusion de l’audit sont terminées ; ne pas les rejouer.",
         "bloque_par": [
@@ -275,7 +275,7 @@ export default {
         "projet": "artisan-builder",
         "depot": "PaulGERARD161098/artisan-builder",
         "cap": "Un artisan a son site vitrine en ligne en quelques minutes : il décrit son activité, les textes sont générés, les sections et le thème se règlent sans écrire de code. Depuis le 2026-09-11, la chaîne qui porte ce cap est le Studio (SiteSpec/blocks), pas le wizard.",
-        "rattache_a": "CADRAGE-AUTH-SUPABASE.md (le chantier de la reprise : connexion par compte Supabase, cadré le 14/09 au format 6 points, NON commencé) · PROMPT-REPRISE-AB2-AB5.md (le prompt de reprise du jour, à jour au 2026-09-13) · CADRAGE-AB-MULTIACTIVITE-2026-09-11.md (la carte du dépôt et le plan AB1→AB5 du chantier multi-activité) · CADRAGE-REPRISE-AB1-STUDIO.md (la reprise cadrée : décisions actées, AB1 au ",
+        "rattache_a": "CADRAGE-AUTH-SUPABASE.md (connexion par compte Supabase : cadré le 14/09, LIVRÉ et prouvé en production le 15/09 — le lire comme un compte rendu, pas comme un chantier à ouvrir) · PROMPT-REPRISE-AB2-AB5.md (prompt de reprise daté du 2026-09-13 : PÉRIMÉ sur l'auth, encore juste sur AB2→AB5) · CADRAGE-AB-MULTIACTIVITE-2026-09-11.md (la carte du dépôt et le plan AB1→AB5 du chantier multi-activité) · ",
         "etat": "en_cours",
         "jalon": {
           "nom": "Faire du Studio la base du générateur : plusieurs activités, intentions explicites, contexte conservé jusqu'à la demande (dossier 1)",
@@ -283,10 +283,10 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-09-15",
-          "quoi": "Connexion reparee en production et verifiee (Paul est connecte). Puis cloture : grain recale, chantier auth cadre, lecons v21, et le rappel Finubar de ce depot remis sur sa source.",
-          "commit": "a94c2879d0c52de32477a1909b1eb479bf472885"
+          "quoi": "Connexion par COMPTE Supabase livree et prouvee en production. Escalade de privileges fermee en base. Parcours d'usage eprouve : deux defauts trouves.",
+          "commit": "f0cb8f7361f8f3623a46b713afd0c6ef10f688a6"
         },
-        "prochaine_action": "Brancher la connexion sur les comptes Supabase : CADRAGE-AUTH-SUPABASE.md. Premier geste impose : auditer les policies RLS de public.profiles avant toute ligne de code.",
+        "prochaine_action": "Fusionner la PR #83 (verte), puis RETIRER la cle Studio : elle impose d'introduire une cle de signature dediee, car STUDIO_TOKEN signe encore la session.",
         "bloque_par": [
           "EZZEDINE — assureur décennale, numéro de police, couverture géographique. Obligations d'affichage, rien ne les remplace.",
           "EZZEDINE — de vrais avis obtenus avec accord (`publication.avisReels`). Les avis en ligne sont fictifs : publier serait trompeur.",
@@ -468,7 +468,7 @@ export default {
       },
       {
         "projet": "Ultima",
-        "dit": "arrêté sur : Audit livré sur go de Paul : PR #242 fusionnée, migration Supabase 20260914152259 appliquée, CI verte, déploiement OK. Collecte Finubar rejouée. Preuves : AUDIT-2026-09-14.md",
+        "dit": "arrêté sur : Séance sur artisan-builder : Ultima n'a reçu que les LEÇONS v22 (quatre leçons payées le 15/09), scellées et propagées à l'octet près. Aucun code Ultima touché.",
         "pourquoi": "en_cours"
       }
     ],

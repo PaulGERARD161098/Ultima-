@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v21 2026-09-14 sha256:eb9373234221 -->
+<!-- lecons:empreinte v22 2026-09-15 sha256:d87a516972c0 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -77,6 +77,27 @@ humaine.
 ---
 
 ## 1. Mesurer, et croire ce qu'on mesure
+
+**UNE VARIABLE QU'ON NE PEUT PAS LIRE NE SE DÉCLARE PAS PRÉSENTE** *(2026-09-15)*.
+« `SUPABASE_URL` est déjà défini pour les leads, il sert ici aussi » — affirmé
+parce que le code la LIT, jamais parce que je l'avais VUE. Elle était absente de
+la production : la capture des leads retombe en silence sur `mailto:` quand elle
+manque, donc son absence n'avait jamais fait de bruit. Coût : deux allers-retours
+avec Paul, une variable ajoutée pour rien, un redéploiement de plus. *Règle* :
+quand aucun outil ne permet de lire une valeur, on ne la suppose pas — on le DIT,
+et on fabrique de quoi la mesurer. Ici, deux lignes de journal ont tranché ce que
+trois hypothèses n'avaient pas tranché.
+
+**UN REFUS QUI COUVRE PLUSIEURS CAUSES N'EN DÉSIGNE AUCUNE** *(2026-09-15)*. Un
+écran « l'accès doit être configuré » recouvrait TROIS causes distinctes, dont
+deux ne journalisaient rien. Le symptôme était identique, la correction non. Et
+c'est le même défaut que « Origine refusée », corrigé L'AVANT-VEILLE au même
+endroit du code, réintroduit ailleurs le lendemain — une leçon apprise à un
+endroit ne se propage pas toute seule aux autres. *Règle* : tout refus nomme sa
+cause CÔTÉ SERVEUR — le visiteur garde un message unique, on ne lui décrit pas la
+configuration ; le journal, lui, dit laquelle des causes a parlé. Les noms de
+variables ne sont pas des secrets, leurs valeurs si : on journalise la présence,
+jamais le contenu.
 
 **AVANT DE CROIRE UNE MESURE, LUI DEMANDER CE QU'ELLE RÉPOND SUR UN CAS DONT ON
 CONNAÎT DÉJÀ LA RÉPONSE** *(2026-08-17)*. Trois sondes fausses dans une seule
@@ -328,6 +349,26 @@ la panne vit dans ce que le client **calcule** — en-têtes de navigateur,
 politique de cookie ou de referrer, CORS, rendu — le harnais **est** ce
 client-là, pas son imitation. Un `fetch` éprouve un contrat HTTP ; il ne dit
 rien de ce qu'un navigateur fera de ce contrat.
+
+**UN CONTRÔLE PEUT ÊTRE VERT PAR ACCIDENT, ET SEUL L'ESSAI DE LE CASSER LE
+DIT** *(2026-09-15)*. Un harnais de parcours vérifiait l'identité de chaque écran
+en cherchant un motif dans le TEXTE ENTIER de la page. Il passait — mais pour la
+mauvaise raison : la navigation commune nomme TOUS les écrans, donc « /studio
+contient le mot Bibliothèque » est vrai. Le contrôle aurait laissé passer un
+Studio qui rendrait l'accueil. Découvert en substituant volontairement un écran
+attendu faux, et en constatant que rien ne virait au rouge. *Règle* : un contrôle
+neuf se casse AVANT d'être cru — pas relu, cassé. Et un motif d'identité se
+cherche dans ce qui identifie (le titre), jamais dans ce qui est partagé.
+
+**IL N'Y A PAS DE BONNE VUE DU DOM, IL Y A LA VUE QUI RÉPOND À LA QUESTION
+POSÉE** *(2026-09-15, complète la v21)*. `body.textContent` INCLUT le contenu des
+`<script>` : le payload RSC de Next y écrit « $undefined » par dizaines, et un
+contrôle « la page n'affiche rien d'inachevé » posé dessus invente un défaut qui
+n'existe nulle part à l'écran. `innerText`, lui, cache de vrais défauts — c'est
+ce que la v21 a payé. Aucune des deux n'est « la bonne » : pour « ce qu'une
+personne lit », on lit les éléments RENDUS, scripts et styles retirés ; pour « ce
+qu'un lecteur d'écran reçoit », c'est `textContent` du contenu seul. La question
+décide de la vue, jamais l'habitude.
 
 **UN GARDE-FOU QUI CESSE DE FONCTIONNER DOIT LE DIRE** *(2026-08-21)*. Un test
 absent de la chaîne d'intégration, un filtre qui écarte en silence, une garde
