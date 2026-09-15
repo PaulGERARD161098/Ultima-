@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-15",
-    "quoi": "Audit livré sur go de Paul : PR #242 fusionnée, migration Supabase 20260914152259 appliquée, CI verte, déploiement OK. Collecte Finubar rejouée. Preuves : AUDIT-2026-09-14.md",
-    "commit": "0cd086cbb3fc32c1d1f5d1d935c203de1e691fcb"
+    "quoi": "Séance sur artisan-builder : Ultima n'a reçu que les LEÇONS v22 (quatre leçons payées le 15/09), scellées et propagées à l'octet près. Aucun code Ultima touché.",
+    "commit": "08684b7"
   },
   "prochaine_action": "Reprendre le jalon J3/P4 selon l’arbitrage existant, après le retour de Paul sur P3. La migration et la fusion de l’audit sont terminées ; ne pas les rejouer.",
   "bloque_par": [
