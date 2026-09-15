@@ -33,7 +33,7 @@
   "dernier_arret": {
     "le": "2026-09-15",
     "quoi": "Séance sur artisan-builder : Ultima n'a reçu que les LEÇONS v22 (quatre leçons payées le 15/09), scellées et propagées à l'octet près. Aucun code Ultima touché.",
-    "commit": "360b535d91662c49181c715307d4281e5233fa0b"
+    "commit": "08684b7"
   },
   "prochaine_action": "Reprendre le jalon J3/P4 selon l’arbitrage existant, après le retour de Paul sur P3. La migration et la fusion de l’audit sont terminées ; ne pas les rejouer.",
   "bloque_par": [

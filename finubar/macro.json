@@ -193,7 +193,7 @@
         "dernier_arret": {
           "le": "2026-09-15",
           "quoi": "Séance sur artisan-builder : Ultima n'a reçu que les LEÇONS v22 (quatre leçons payées le 15/09), scellées et propagées à l'octet près. Aucun code Ultima touché.",
-          "commit": "360b535d91662c49181c715307d4281e5233fa0b"
+          "commit": "08684b7"
         },
         "prochaine_action": "Reprendre le jalon J3/P4 selon l’arbitrage existant, après le retour de Paul sur P3. La migration et la fusion de l’audit sont terminées ; ne pas les rejouer.",
         "bloque_par": [
@@ -278,10 +278,10 @@
         },
         "dernier_arret": {
           "le": "2026-09-15",
-          "quoi": "Connexion par COMPTE Supabase livree et prouvee en production. Escalade de privileges fermee en base. Parcours d'usage eprouve : deux defauts trouves.",
-          "commit": "f0cb8f7361f8f3623a46b713afd0c6ef10f688a6"
+          "quoi": "Etat vide de /studio tranche (option A) et livre ; le harnais du parcours l'exige et mesure enfin apres hydratation.",
+          "commit": "9ab0b08"
         },
-        "prochaine_action": "Fusionner la PR #83 (verte), puis RETIRER la cle Studio : elle impose d'introduire une cle de signature dediee, car STUDIO_TOKEN signe encore la session.",
+        "prochaine_action": "Ouvrir AB1 sur CADRAGE-AB-MULTIACTIVITE-2026-09-11.md (multi-activite dans le dossier artisan et la SiteSpec), au format 6 points avant toute ligne de code.",
         "bloque_par": [
           "EZZEDINE — assureur décennale, numéro de police, couverture géographique. Obligations d'affichage, rien ne les remplace.",
           "EZZEDINE — de vrais avis obtenus avec accord (`publication.avisReels`). Les avis en ligne sont fictifs : publier serait trompeur.",
