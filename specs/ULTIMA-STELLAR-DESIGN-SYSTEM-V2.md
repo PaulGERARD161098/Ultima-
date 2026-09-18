@@ -74,3 +74,20 @@ P4 — instruments et ateliers, écran par écran, sans transformer les formulai
 ## Critère de bascule
 
 Aucune page de production ne charge `stellar-v2-preview.css`. La bascule exige : capture validée, tests existants verts, AA, reduced-motion, aucune perte de cible/clavier, et comparaison de performance avec LV5 actuelle.
+
+
+## V2.6 — Contrat des instruments
+
+Un **instrument** porte des données à lire exactement : formulaire, chiffres, jauges, commandes, panneau d'inspection. Il reçoit donc une plaque nocturne stable et quasi opaque. Le ciel reste visible **entre** les instruments, jamais sous une valeur critique.
+
+Règles :
+- fond instrument ≈ 94 % opaque ; pas de blur nécessaire ;
+- entête plus sombre que le corps, hairline froide ;
+- or = acquis/structure/valeur patrimoniale ; glace = système/interaction ;
+- chiffres en tabular lining nums ;
+- pas d'ombre portée lourde, pas de grosse carte flottante ;
+- rayon 6–8 px, double filet intérieur uniquement très faible ;
+- focus clavier glace 2 px ;
+- sur mobile, l'instrument peut prendre la largeur disponible mais ne devient jamais un modal plein écran par défaut.
+
+ALTHEA est le cas de référence : son invariant existant « qui pose des chiffres pose leur support » est conservé. Stellar V2 ne rend jamais ses blocs transparents.
