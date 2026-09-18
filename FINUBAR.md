@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-18",
-    "quoi": "Bibliothèque de specs posée (#252) : `specs/` indexe 85 specs des huit dépôts, état dérivé de git. Deux garde-fous en cascade réparés (#253). Leçons v24.",
-    "commit": "2cb104b"
+    "quoi": "Bibliothèque de specs posée (#252, 85 specs indexées), deux garde-fous en cascade réparés (#253), grain et collectes régénérés (#254). Leçons v25.",
+    "commit": "0daa656"
   },
   "prochaine_action": "Reprendre le jalon J3/P4 selon l’arbitrage existant, après le retour de Paul sur P3. La migration et la fusion de l’audit sont terminées ; ne pas les rejouer.",
   "bloque_par": [

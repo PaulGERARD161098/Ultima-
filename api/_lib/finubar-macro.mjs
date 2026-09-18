@@ -108,10 +108,10 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-09-18",
-          "quoi": "`SPECS.md` pointe la bibliothèque d'Ultima (46 specs d'ici recensées, aucune recopiée). `DESIGN-LANGAGE.md` porte l'arbitrage A1 : il ne mord qu'à la bascule de la vitrine (#486).",
-          "commit": "b0e164c"
+          "quoi": "Les 8 harnais navigateur tournent enfin en CI : 5 défauts tombés d'un coup. Le TrustTicker est en production (variante B, 5 items). La FAQ est maquettée, pas posée.",
+          "commit": "efc3dc9"
         },
-        "prochaine_action": "EXERCER EN VRAI les trois gestes, toujours pas faits : (1) déposer un devis PDF réel depuis une fiche client ; (2) en déposer un depuis l'onglet Devis avec rattachement ; (3)…",
+        "prochaine_action": "EXERCER EN VRAI les 3 gestes, toujours pas faits : un devis PDF depuis une fiche client, un devis depuis l'onglet Devis avec rattachement, une écriture demandée à Réno.",
         "bloque_par": [
           "Promouvoir la CSP Report-Only en enforce, après lecture des rapports (ACTIONS-PAUL.md) — 11/09",
           "Rendre le ruleset de main ACTIF : il ne mord pas (ACTIONS-PAUL.md) — 11/09",
@@ -121,6 +121,18 @@ export default {
         ],
         "en_attente_depuis": "2026-08-04",
         "boucles_ouvertes": [
+          {
+            "quoi": "⛔ DÉMENTI LE 18/09 — « le mapping ne demande que 4 ajouts, pas 15 » était FAUX. Dit d'après les NOMS des sections, jamais d'après le code. Lecture réelle : 7 patterns présents sur…",
+            "depuis": "2026-09-18"
+          },
+          {
+            "quoi": "📐 SPECS HOPUS — pas 0 à 2 faits (#488, efc3dc9). RESTE, dans l'ordre cadré : pas 3 ProductShowcase (BLOQUÉ — demande des captures RÉELLES de la console, aucune n'existe), 4…",
+            "depuis": "2026-09-18"
+          },
+          {
+            "quoi": "⛔ ARBITRÉ LE 18/09 — LA FAQ NE PEUT PAS PROMETTRE LE RAIL DE PAIEMENT. Mesuré : `charges_enabled` = false sur tous les comptes, table `paiements` vide — aucun euro n'a jamais été…",
+            "depuis": "2026-09-18"
+          },
           {
             "quoi": "Console lot 1 — PR #459 : indicateurs et raccourcis fiabilisés (le bilan serveur lisait un cache de 140 clients contre 169 fiches ; 7 devis « en attente » incluaient 2 Perdus).…",
             "depuis": "2026-09-14"
@@ -148,24 +160,11 @@ export default {
           {
             "quoi": "⛔ LEÇON DU 15/09 — RÉPARER UN DÉCLENCHEUR SANS LIRE CE QU'IL DÉCLENCHE. `/api/rp-digest` DÉDUISAIT son mode : le passer en quotidien sans rien d'autre aurait envoyé un digest du…",
             "depuis": "2026-09-15"
-          },
-          {
-            "quoi": "⏳ ATTEND PAUL — les 3 gestes du rail mail (Resend, Vercel, filtre Gmail), et le post LinkedIn de la semaine qui n'a jamais été généré : à publier à la main, le correctif ne vaut…",
-            "depuis": "2026-09-15"
-          },
-          {
-            "quoi": "⛔ LEÇON DU 15/09 — UN GARDE-FOU QUI NE PEUT PAS ÊTRE CASSÉ N'EN EST PAS UN. J'avais posé cinq lignes de validation d'entrée sur `estJourDePublication` ; en les supprimant, les…",
-            "depuis": "2026-09-15"
-          },
-          {
-            "quoi": "⛔ LEÇON DU 15/09 — RÉPARER UN DÉCLENCHEUR SANS LIRE CE QU'IL DÉCLENCHE PEUT COÛTER PLUS CHER QUE LA PANNE. `/api/rp-digest` DÉDUISAIT son mode (`day === 5 ? 'vendredi' : 'lundi'`)…",
-            "depuis": "2026-09-15"
           }
         ],
         "maj": "2026-09-18"
       },
       "recits": [
-        "prochaine_action",
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
@@ -198,8 +197,8 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-09-18",
-          "quoi": "Bibliothèque de specs posée (#252) : `specs/` indexe 85 specs des huit dépôts, état dérivé de git. Deux garde-fous en cascade réparés (#253). Leçons v24.",
-          "commit": "2cb104b"
+          "quoi": "Bibliothèque de specs posée (#252, 85 specs indexées), deux garde-fous en cascade réparés (#253), grain et collectes régénérés (#254). Leçons v25.",
+          "commit": "0daa656"
         },
         "prochaine_action": "Reprendre le jalon J3/P4 selon l’arbitrage existant, après le retour de Paul sur P3. La migration et la fusion de l’audit sont terminées ; ne pas les rejouer.",
         "bloque_par": [
@@ -464,12 +463,12 @@ export default {
       },
       {
         "projet": "RénoBoost",
-        "dit": "arrêté sur : `SPECS.md` pointe la bibliothèque d'Ultima (46 specs d'ici recensées, aucune recopiée). `DESIGN-LANGAGE.md` porte l'arbitrage A1 : il ne mord qu'à la bascule de la vitrine (#486).",
+        "dit": "arrêté sur : Les 8 harnais navigateur tournent enfin en CI : 5 défauts tombés d'un coup. Le TrustTicker est en production (variante B, 5 items). La FAQ est maquettée, pas posée.",
         "pourquoi": "en_cours"
       },
       {
         "projet": "Ultima",
-        "dit": "arrêté sur : Bibliothèque de specs posée (#252) : `specs/` indexe 85 specs des huit dépôts, état dérivé de git. Deux garde-fous en cascade réparés (#253). Leçons v24.",
+        "dit": "arrêté sur : Bibliothèque de specs posée (#252, 85 specs indexées), deux garde-fous en cascade réparés (#253), grain et collectes régénérés (#254). Leçons v25.",
         "pourquoi": "en_cours"
       }
     ],
