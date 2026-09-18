@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v26 2026-09-18 sha256:f83cedb5a0af -->
+<!-- lecons:empreinte v27 2026-09-18 sha256:2f61887f3773 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -77,6 +77,25 @@ humaine.
 ---
 
 ## 1. Mesurer, et croire ce qu'on mesure
+
+**UN COMMIT « HORS MAIN » N'EST PAS UN TRAVAIL HORS MAIN — ON COMPARE LES
+CONTENUS, PAS LES SHA** *(2026-09-18)*. Vu RenoBoost sur une branche à sept
+commits que `git rev-list origin/main..HEAD` disait absents de `main`, sans PR
+ouverte, j'en ai conclu « du travail non intégré » et je l'ai rapporté à Paul
+comme tel. Il a donné son GO sur ce constat. **Le travail était sur `main`
+depuis trois jours** — PR #459, fusionnée en **squash** : les commits de branche
+ne sont ancêtres de rien, leur contenu est pourtant là. `git diff origin/main..HEAD`
+rendait **zéro ligne dans les deux sens**. Coût : un merge sans objet, un GO
+obtenu sur un constat faux, et un `git push` qui a **recréé une branche distante
+supprimée** — que le proxy m'empêche ensuite d'effacer. ⛔ Le dépôt portait DÉJÀ
+la leçon du squash, écrite le 15/09, et je l'avais appliquée correctement à
+RenoDevis **le matin même** : une leçon retenue sur le dépôt qui l'a payée ne se
+transporte pas toute seule sur celui qu'on n'a pas travaillé. *Règle* : sur tout
+dépôt qu'on n'a pas soi-même poussé, le premier geste est `git diff origin/main..HEAD`
+— l'absence de diff prouve l'intégration, l'absence d'ancêtre ne prouve rien.
+Et une référence `origin/<branche>` locale peut désigner une branche **supprimée
+depuis** : un `push` la ressuscite au lieu de la mettre à jour.
+
 
 **UNE VARIABLE QU'ON NE PEUT PAS LIRE NE SE DÉCLARE PAS PRÉSENTE** *(2026-09-15)*.
 « `SUPABASE_URL` est déjà défini pour les leads, il sert ici aussi » — affirmé
