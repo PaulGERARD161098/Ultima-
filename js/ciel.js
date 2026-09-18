@@ -431,7 +431,12 @@
     // rien changer à ce qu'il faisait hier.
     var cadrageSerre = !!options.cadrerSurLesEtoiles;
     // Preview-only atmospheric controls are opt-in. Existing callers are unchanged.
-    var atmosphere = options.atmosphere || null;
+    var atmosphere = options.atmosphere || (options.stellarV2 ? {
+      eclat: 0.94,
+      eclatVoiles: 0.82,
+      eclatFilaments: 0.72,
+      contrasteProfondeur: 1
+    } : null);
 
     var monde = construireMonde(noeuds);
     // LES GÉMEAUX, avant le recentrage : deux caps jumeaux se posent en
