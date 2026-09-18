@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v23 2026-09-18 sha256:2aaab5987d46 -->
+<!-- lecons:empreinte v24 2026-09-18 sha256:8b3c40ef7785 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -333,6 +333,26 @@ problème**.
 
 ---
 
+**UNE GÉOMÉTRIE N'EST PAS CE QUI EST VU** *(2026-09-18)*. Un harnais déclarait
+qu'un bouton flottant recouvrait une phrase, et il avait tort depuis trois jours.
+Il mesurait le texte par `Range.getClientRects()`, qui rend la géométrie du texte
+**tel qu'il serait s'il n'était pas coupé** : le rognage d'un ancêtre en
+`overflow:hidden` lui est invisible. Le contexte mesurait 147 caractères dans une
+colonne de 430 px, s'arrêtait donc à x=743 sous son ellipsis — et son Range allait
+à x=1155, croisant un bouton posé à 948. `elementFromPoint` au centre du prétendu
+chevauchement rendait le bouton lui-même : **il n'y avait aucun texte là**.
+
+⚠️ La passe précédente avait déjà corrigé ce contrôle, et avait remplacé un biais
+par l'autre : la boîte du bloc était trop large, le Range est trop long. **Entre
+deux mesures fausses en sens inverse, la bonne n'est aucune des deux** — c'est
+leur intersection avec ce qui rogne au-dessus.
+
+⛔ **Et le verdict dépendait d'une longueur de phrase.** L'autre page testée
+passait pour la seule raison que son texte faisait 33 caractères et tenait dans
+la colonne. Un contrôle dont le résultat bascule selon le contenu, et non selon
+le défaut qu'il traque, ne mesure pas ce qu'il croit mesurer — il attend juste
+qu'une phrase grandisse.
+
 ## 2. Les garde-fous, et leur silence
 
 **UN GARDE-FOU SE VÉRIFIE DU CÔTÉ OÙ IL PEUT ÊTRE CONTOURNÉ** *(2026-08-21)*.
@@ -569,6 +589,31 @@ personne ne peut re-tenter la bascule par un rewrite tant qu'`index.html` est
 là.
 
 ---
+
+**UN HARNAIS QUI S'ARRÊTE AU PREMIER ROUGE REND AVEUGLE TOUT CE QUI SUIT**
+*(2026-09-18)*. `tests/lancer.sh` passe les unitaires, puis les smoke navigateur.
+Le 15/09, `unit-lecons-empreinte` est passé au rouge — le sceau de ce fichier
+mentait, la PR #251 y ayant ajouté 47 lignes sans le recalculer. À partir de cette
+minute, le job `browser` **mourait avant d'ouvrir un seul navigateur**. Les
+soixante contrôles de `smoke-leo-partout` n'ont plus tourné pendant trois jours,
+et le Dock Léo (#247, #250) est entré dans `main` sans que son propre harnais
+l'ait jamais vu.
+
+⛔ **Une panne en cache toutes les suivantes, et la CI continue de dire « rouge ».**
+C'est le piège : un dépôt à la CI rouge n'a pas l'air d'un dépôt aveugle, il a
+l'air d'un dépôt qu'on sait cassé. Le rouge du 15/09 et le rouge du 18/09 se
+ressemblaient — le premier masquait deux défauts que le second a révélés d'un
+coup, dont un faux positif qui aurait bloqué la première PR venue.
+
+⚠️ **Le signe qu'il fallait lire** : personne n'était allé voir POURQUOI la CI
+était rouge depuis trois jours. **Un rouge permanent cesse d'être une
+information** — il ne se distingue plus d'un rouge nouveau, et c'est exactement
+ce qu'on attend d'un garde-fou qu'il fasse.
+
+**Ce que ça change dans le geste** : quand un harnais séquentiel tombe, la
+question n'est jamais seulement « qu'est-ce qui a échoué ? » mais **« qu'est-ce
+qui n'a pas été exécuté à cause de ça ? »**. Un échec en tête de chaîne se traite
+en priorité, non pour le vert, mais pour **récupérer la vue**.
 
 ## 3. Ce qu'on donne à Paul
 

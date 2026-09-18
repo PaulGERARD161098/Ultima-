@@ -1,5 +1,5 @@
 {
-  "le": "2026-09-15",
+  "le": "2026-09-18",
   "projets": [
     {
       "ok": true,
@@ -83,8 +83,8 @@
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-14",
-      "jours_depuis_maj": 1,
-      "jours_en_attente": 29,
+      "jours_depuis_maj": 4,
+      "jours_en_attente": 32,
       "rang": 0
     },
     {
@@ -95,18 +95,18 @@
         "projet": "RénoBoost",
         "depot": "PaulGERARD161098/RenoBoost",
         "cap": "Un individu seul fait tourner le business entier, aidé par l'automatisation (Directive IA). RénoBoost est le hub : acquisition, rendez-vous, dashboard, et la roadmap maîtresse des quatre briques.",
-        "rattache_a": "ROADMAP-2026-09-13-soir-fin-de-session.md (§7 = le plus récent) · CADRAGE-2026-09-13-boussole.md · BOUSSOLE-recherches-google.pdf · ROADMAP-SECURITE.md · ROADMAP-MASTER.md · ACTIONS-PAUL.md",
-        "etat": "en_attente_de_paul",
+        "rattache_a": "SPECS.md · Ultima-/specs/ARBITRAGES.md · ROADMAP-2026-09-15-fin-de-session.md (le plus récent) · ROADMAP-2026-09-13-soir-fin-de-session.md · CADRAGE-2026-09-13-boussole.md · BOUSSOLE-recherches-google.pdf · ROADMAP-SECURITE.md · ROADMAP-MASTER.md · ACTIONS-PAUL.md · docs/CADRAGE-UX-CONSOLE-2026-09-14.md · docs/REGISTRE-INDICATEURS-CONSOLE-2026-09-14.md",
+        "etat": "en_cours",
         "jalon": {
           "nom": "Jalon 0 — l'amorçage : trois gestes de Paul, zéro ligne de code",
           "critere_de_sortie": "`stickers` > 0 · fiche Google visible publiquement · `stripe_charges_enabled` = true"
         },
         "dernier_arret": {
-          "le": "2026-09-13",
-          "quoi": "Revue adverse triée et appliquée : 8 défauts actifs fermés. ⛔ Et l'« échelle ×1,22 » n'a jamais existé — voir ROADMAP §7 et PR #432 à #435.",
-          "commit": "3f5c731"
+          "le": "2026-09-18",
+          "quoi": "`SPECS.md` pointe la bibliothèque d'Ultima (46 specs d'ici recensées, aucune recopiée). `DESIGN-LANGAGE.md` porte l'arbitrage A1 : il ne mord qu'à la bascule de la vitrine (#486).",
+          "commit": "b0e164c"
         },
-        "prochaine_action": "⛔ NE RIEN CODER. Mesure d'ouverture : select count(*) from paiements. Goulot inchangé : 2 variables Vercel + KYC SOLA. Reprise complète : ROADMAP-2026-09-13-soir §7.6.",
+        "prochaine_action": "EXERCER EN VRAI les trois gestes, toujours pas faits : (1) déposer un devis PDF réel depuis une fiche client ; (2) en déposer un depuis l'onglet Devis avec rattachement ; (3)…",
         "bloque_par": [
           "Promouvoir la CSP Report-Only en enforce, après lecture des rapports (ACTIONS-PAUL.md) — 11/09",
           "Rendre le ruleset de main ACTIF : il ne mord pas (ACTIONS-PAUL.md) — 11/09",
@@ -117,64 +117,65 @@
         "en_attente_depuis": "2026-08-04",
         "boucles_ouvertes": [
           {
-            "quoi": "⛔ L'ÉCHELLE DES VOLUMES VIT DANS `ECHELLE_PALIERS` (radar-releves.mjs) : ×1,14 à ×2,24, NON constante. Ne jamais la retaper — elle a divergé dans 7 fichiers.",
-            "depuis": "2026-09-13"
+            "quoi": "Console lot 1 — PR #459 : indicateurs et raccourcis fiabilisés (le bilan serveur lisait un cache de 140 clients contre 169 fiches ; 7 devis « en attente » incluaient 2 Perdus).…",
+            "depuis": "2026-09-14"
           },
           {
-            "quoi": "⏳ ATTEND PAUL — 2 fragments de dictée non interprétés (« campagnes d'obligations », « quand on en ligne ne trouve pas »). Sans eux, aucune source ne bouge.",
-            "depuis": "2026-09-13"
+            "quoi": "Console — PR #454 : corrections de mise en page, filtre Refusés, budgets et détails de RDV, testées (59 contrôles, jobs GitHub verts). ⚠️ LE CONTRÔLE VISUEL CONNECTÉ N'A JAMAIS…",
+            "depuis": "2026-09-14"
           },
           {
-            "quoi": "📋 LA BOUSSOLE RESTE CADRÉE, PAS COMMENCÉE. Veille, calendrier daté, plancher, annotations = des SPECS, pas des correctifs. CADRAGE-2026-09-13-boussole.md.",
-            "depuis": "2026-09-13"
+            "quoi": "Reprise radar : relancer l'import du 69 (« Rhone,… · département 69 ») — la mesure directe ET l'écart d'un couple douteux sont en ligne (#451). Ensuite : décider du ré-import de…",
+            "depuis": "2026-09-14"
           },
           {
-            "quoi": "⚠️ LA BOUSSOLE EST CADRÉE, PAS COMMENCÉE — CADRAGE-2026-09-13-boussole.md. Son étape A ne produit AUCUN écran et passe pourtant devant tout : mesurer combien de mois Google peut…",
-            "depuis": "2026-09-13"
+            "quoi": "⚠️ AUCUNE PREUVE QUE LES CRONS PARTENT — le correctif du 15/09 est fusionné et déployé, mais rien ne prouve encore qu'il fonctionne. Mesure armée : `/api/linkedin` le 16/09 08:00…",
+            "depuis": "2026-09-15"
           },
           {
-            "quoi": "⚠️ GESTE DE SÉCURITÉ NON CONFIRMÉ — le refresh token Google Ads est apparu EN CLAIR sur une capture d'écran le 07/09 et n'a jamais été confirmé régénéré. Tant qu'il ne l'est pas…",
-            "depuis": "2026-09-07"
+            "quoi": "⛔ LEÇON DU 15/09 — LA CLÉ SERVICE PASSE OUTRE LA RLS, LE PÉRIMÈTRE SE POSE À LA MAIN. Trouvé par l'audit de fin de séance, APRÈS la fusion de #467 : `kv_store` a pour clé primaire…",
+            "depuis": "2026-09-15"
           },
           {
-            "quoi": "⛔ LEÇON DU 13/09 — UN REVOKE SUR LES RÔLES NOMMÉS NE RÉVOQUE RIEN. `revoke all on function ... from anon, authenticated` a rendu success:true et n'a rien fait : `create function`…",
-            "depuis": "2026-09-13"
+            "quoi": "⛔ LEÇON DU 15/09 — UN GARDE-FOU QU'ON NE PEUT PAS CASSER N'EN EST PAS UN. Trois fois dans la même journée : cinq lignes de validation d'entrée dont la suppression laissait les…",
+            "depuis": "2026-09-15"
           },
           {
-            "quoi": "⚠️ OUVERT, NOMMÉ, NON TRAITÉ — le bruit de fond de Google. 89,6 % des lignes de l'Oise valent 0 ou 10 par mois (134 372 à zéro, 167 839 à dix). La coupe au top-3000 les écarte de…",
-            "depuis": "2026-09-13"
+            "quoi": "⛔ LEÇON DU 15/09 — RÉPARER UN DÉCLENCHEUR SANS LIRE CE QU'IL DÉCLENCHE. `/api/rp-digest` DÉDUISAIT son mode : le passer en quotidien sans rien d'autre aurait envoyé un digest du…",
+            "depuis": "2026-09-15"
           },
           {
-            "quoi": "⚠️ CE QUE LE « 0 » DU CONTRASTE NE COUVRE PAS, et qu'il ne faut pas lire comme « le dashboard est accessible » : 59 textes sur DÉGRADÉ sont hors de portée de la sonde par…",
-            "depuis": "2026-09-13"
+            "quoi": "⏳ ATTEND PAUL — les 3 gestes du rail mail (Resend, Vercel, filtre Gmail), et le post LinkedIn de la semaine qui n'a jamais été généré : à publier à la main, le correctif ne vaut…",
+            "depuis": "2026-09-15"
           },
           {
-            "quoi": "⛔ LEÇON DU 13/09 SOIR — ÉLARGIR UN GARDE-FOU EST UN GESTE DANGEREUX EN SOI. La regex de langage-encres ne voyait pas color: var(--primary-dark) (sky-600, 4,10:1) : le suffixe lui…",
-            "depuis": "2026-09-13"
+            "quoi": "⛔ LEÇON DU 15/09 — UN GARDE-FOU QUI NE PEUT PAS ÊTRE CASSÉ N'EN EST PAS UN. J'avais posé cinq lignes de validation d'entrée sur `estJourDePublication` ; en les supprimant, les…",
+            "depuis": "2026-09-15"
           },
           {
-            "quoi": "⛔ LEÇON DU 13/09 — UNE MESURE JUSTE N'EST PAS UNE CONCLUSION JUSTE. Mesuré que le repli d'A1 décidait de 100 % des dossiers (171 clients sur 171 sans origine) : exact. Conclu…",
-            "depuis": "2026-09-13"
+            "quoi": "⛔ LEÇON DU 15/09 — RÉPARER UN DÉCLENCHEUR SANS LIRE CE QU'IL DÉCLENCHE PEUT COÛTER PLUS CHER QUE LA PANNE. `/api/rp-digest` DÉDUISAIT son mode (`day === 5 ? 'vendredi' : 'lundi'`)…",
+            "depuis": "2026-09-15"
           }
         ],
-        "maj": "2026-09-13"
+        "maj": "2026-09-18"
       },
       "recits": [
+        "prochaine_action",
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": true,
-      "reprise": true,
+      "hors_seance": false,
+      "reprise": false,
       "derive": {
         "tete": null,
         "tete_le": null,
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-09-13",
-      "jours_depuis_maj": 2,
-      "jours_en_attente": 42,
-      "rang": 1
+      "mesure_le": "2026-09-18",
+      "jours_depuis_maj": 0,
+      "jours_en_attente": 45,
+      "rang": 2
     },
     {
       "ok": true,
@@ -184,16 +185,16 @@
         "projet": "Ultima",
         "depot": "PaulGERARD161098/Ultima-",
         "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-        "rattache_a": "AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md",
+        "rattache_a": "specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md",
         "etat": "en_cours",
         "jalon": {
           "nom": "J3 — le ciel porte aussi l'état PERSONNEL (P4 : les signaux du cockpit)",
           "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
         },
         "dernier_arret": {
-          "le": "2026-09-15",
-          "quoi": "Séance sur artisan-builder : Ultima n'a reçu que les LEÇONS v22 (quatre leçons payées le 15/09), scellées et propagées à l'octet près. Aucun code Ultima touché.",
-          "commit": "08684b7"
+          "le": "2026-09-18",
+          "quoi": "Bibliothèque de specs posée (#252) : `specs/` indexe 85 specs des huit dépôts, état dérivé de git. Deux garde-fous en cascade réparés (#253). Leçons v24.",
+          "commit": "2cb104b"
         },
         "prochaine_action": "Reprendre le jalon J3/P4 selon l’arbitrage existant, après le retour de Paul sur P3. La migration et la fusion de l’audit sont terminées ; ne pas les rejouer.",
         "bloque_par": [
@@ -204,6 +205,10 @@
         ],
         "en_attente_depuis": "2026-08-20",
         "boucles_ouvertes": [
+          {
+            "quoi": "LEÇONS v24 sur Ultima et RénoBoost (empreinte 8b3c40ef7785, identique à l'octet). Les SIX autres dépôts restent en arrière — leur écart est visible, c'est le rôle du sceau.",
+            "depuis": "2026-09-18"
+          },
           {
             "quoi": "MESURÉ le 13/09 et démenti : la note annonçait des copies divergentes du rappel Finubar. Les sept fichiers ont la même empreinte. Voir CADRAGE-FINUBAR.md.",
             "depuis": "2026-09-13"
@@ -239,13 +244,9 @@
           {
             "quoi": "VESTA (ADR-010) hors classement : nom à acter, rôle de Fahrenheit à confirmer, 3 questions à poser. Julien = Julien Laudy, celui de PROTÉE. Détail : adramelech/IDEES.md",
             "depuis": "2026-09-05"
-          },
-          {
-            "quoi": "P4 est cadré et volontairement NON ouvert : les signaux du cockpit sur le même ciel que ceux de Finubar. Arbitré par Paul le 02/09 — après P3, jamais avant",
-            "depuis": "2026-09-02"
           }
         ],
-        "maj": "2026-09-15"
+        "maj": "2026-09-18"
       },
       "recits": [],
       "ciel": "racine",
@@ -257,9 +258,9 @@
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-09-15",
+      "mesure_le": "2026-09-18",
       "jours_depuis_maj": 0,
-      "jours_en_attente": 26,
+      "jours_en_attente": 29,
       "rang": 2
     },
     {
@@ -299,14 +300,14 @@
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": null,
-        "tete_le": null,
-        "commits_depuis": 0,
-        "commit_inconnu": false
+        "tete": "33532b5",
+        "tete_le": "2026-09-15T17:08:43+02:00",
+        "commits_depuis": null,
+        "commit_inconnu": true
       },
-      "mesure_le": "2026-09-15",
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 25,
+      "mesure_le": "2026-09-18",
+      "jours_depuis_maj": 3,
+      "jours_en_attente": 28,
       "rang": 2
     },
     {
@@ -371,12 +372,12 @@
     "lisibles": 4,
     "illisibles": 0,
     "hors_seance": 4,
-    "repris": 2,
-    "en_cours": 3,
-    "en_attente_de_paul": 1,
+    "repris": 1,
+    "en_cours": 4,
+    "en_attente_de_paul": 0,
     "au_repos": 0,
     "derives": 1,
-    "commits_inconnus": 0,
+    "commits_inconnus": 1,
     "boucles_ouvertes": 30,
     "gestes_de_paul": [
       {
@@ -458,12 +459,12 @@
       },
       {
         "projet": "RénoBoost",
-        "dit": "attend un geste : Promouvoir la CSP Report-Only en enforce, après lecture des rapports (ACTIONS-PAUL.md) — 11/09 — ouvert depuis 42 j",
-        "pourquoi": "attente"
+        "dit": "arrêté sur : `SPECS.md` pointe la bibliothèque d'Ultima (46 specs d'ici recensées, aucune recopiée). `DESIGN-LANGAGE.md` porte l'arbitrage A1 : il ne mord qu'à la bascule de la vitrine (#486).",
+        "pourquoi": "en_cours"
       },
       {
         "projet": "Ultima",
-        "dit": "arrêté sur : Séance sur artisan-builder : Ultima n'a reçu que les LEÇONS v22 (quatre leçons payées le 15/09), scellées et propagées à l'octet près. Aucun code Ultima touché.",
+        "dit": "arrêté sur : Bibliothèque de specs posée (#252) : `specs/` indexe 85 specs des huit dépôts, état dérivé de git. Deux garde-fous en cascade réparés (#253). Leçons v24.",
         "pourquoi": "en_cours"
       }
     ],
@@ -488,9 +489,9 @@
       {
         "id": "PaulGERARD161098/RenoBoost",
         "libelle": "RénoBoost",
-        "constellation": "en_attente_de_paul",
+        "constellation": "en_cours",
         "ciel": "renoboost-ia",
-        "signal": 1
+        "signal": 0
       },
       {
         "id": "PaulGERARD161098/Ultima-",

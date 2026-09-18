@@ -11,7 +11,7 @@
       "depot": "PaulGERARD161098/Ultima-",
       "mesure": true,
       "superficiel": false,
-      "vus": 58,
+      "vus": 59,
       "retenues": [
         {
           "chemin": "CADRAGE-2026-09-07-reprise-depots.md",
@@ -280,7 +280,7 @@
       ],
       "ecartees": {
         "audit daté": 5,
-        "fichier de dépôt": 4,
+        "fichier de dépôt": 5,
         "dry run daté": 1,
         "hors famille normative": 10,
         "journal de reprise": 4,
@@ -292,7 +292,7 @@
       "depot": "PaulGERARD161098/RenoBoost",
       "mesure": true,
       "superficiel": false,
-      "vus": 121,
+      "vus": 122,
       "retenues": [
         {
           "chemin": "ARCHI-MACRO-PLATEFORME.md",
@@ -465,10 +465,10 @@
         {
           "chemin": "DESIGN-LANGAGE.md",
           "famille": "design",
-          "derniere_touche": "2026-09-16",
-          "age_jours": 2,
+          "derniere_touche": "2026-09-18",
+          "age_jours": 0,
           "etat": "vivante",
-          "lignes": 272
+          "lignes": 294
         },
         {
           "chemin": "PLAN-CHAT-RENO-CROSS-BRIQUES.md",
@@ -666,7 +666,7 @@
       "ecartees": {
         "registre vivant": 4,
         "audit daté": 3,
-        "fichier de dépôt": 3,
+        "fichier de dépôt": 4,
         "note de séance": 8,
         "journal de reprise": 36,
         "hors famille normative": 7,
