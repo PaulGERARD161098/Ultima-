@@ -171,3 +171,44 @@ body.stellar-v2-preview::before{
   .stellar-v2-preview .ciel-nom{letter-spacing:.02em}
   .stellar-v2-preview .ciel-nom-amas{letter-spacing:2.5px}
 }
+
+
+/* V2.4 — spatial focus states.
+   Selection changes hierarchy, never geometry: the chosen star advances while
+   unrelated objects recede. Hover/focus stays transient and keyboard-equivalent. */
+.stellar-v2-preview .ciel-svg:has(.ciel-etoile--choisie) .ciel-etoile:not(.ciel-etoile--choisie){
+  opacity:.46;
+}
+.stellar-v2-preview .ciel-svg:has(.ciel-etoile--choisie) .ciel-liens line{
+  opacity:.035;
+}
+.stellar-v2-preview .ciel-etoile--choisie{
+  opacity:1;
+  filter:drop-shadow(0 0 4px rgba(216,189,130,.44)) drop-shadow(0 0 10px rgba(159,201,223,.16));
+}
+.stellar-v2-preview .ciel-etoile--choisie .ciel-nom{
+  opacity:1!important;
+  fill:var(--sv2-ink);
+  font-weight:600;
+}
+.stellar-v2-preview .ciel-etoile--choisie .ciel-halo-choix{
+  opacity:.92;
+}
+.stellar-v2-preview .ciel--concentre .ciel-etoile:not(:hover):not(:focus-visible):not(.ciel-etoile--choisie){
+  opacity:.58;
+}
+.stellar-v2-preview .ciel-etoile:hover .ciel-nom,
+.stellar-v2-preview .ciel-etoile:focus-visible .ciel-nom{
+  fill:var(--sv2-ink);
+}
+@supports not selector(:has(*)){
+  /* Progressive enhancement only: old browsers retain V2.3 hierarchy. */
+  .stellar-v2-preview .ciel-etoile--choisie{opacity:1}
+}
+@media(prefers-reduced-motion:no-preference){
+  .stellar-v2-preview .ciel-etoile,
+  .stellar-v2-preview .ciel-liens line,
+  .stellar-v2-preview .ciel-nom{
+    transition:opacity 180ms cubic-bezier(.16,.84,.32,1),filter 180ms cubic-bezier(.16,.84,.32,1),fill 140ms ease;
+  }
+}
