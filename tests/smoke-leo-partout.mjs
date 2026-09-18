@@ -262,12 +262,46 @@ console.log('\n§7 — le bouton ne mange aucun texte EN BAS DE PAGE, et se lit'
   // ⚠️ On mesure la boîte du TEXTE via un Range, pas celle du bloc : un
   // conteneur pleine largeur croiserait le bouton sans qu'un seul mot soit
   // caché, et le verdict crierait à tort (leçon du 2026-08-20).
+  //
+  // ⛔ ET LE RANGE SEUL NE SUFFIT PAS — corrigé le 2026-09-18, après un rouge.
+  // `Range.getClientRects()` rend la géométrie du texte tel qu'il serait s'il
+  // n'était pas coupé : il IGNORE le rognage d'un ancêtre en `overflow:hidden`.
+  // Mesuré sur zekrom.html à 1280 px : le contexte du dock porte 147 caractères
+  // dans une colonne de 430 px (scrollWidth 841), donc il est tronqué par
+  // l'ellipsis et s'arrête à x=743 — mais son Range allait jusqu'à x=1155 et
+  // croisait le bouton (948→1010). `elementFromPoint` au centre du prétendu
+  // chevauchement rendait `button#leo-appel` : il n'y avait AUCUN texte là.
+  // Le verdict criait sur un texte que personne ne pouvait voir.
+  //
+  // La correction du 20/08 avait remplacé un biais par l'autre : la boîte du
+  // bloc était trop large, le Range est trop long. Ce qui est vu à l'écran est
+  // l'INTERSECTION du Range avec toutes les fenêtres de rognage au-dessus de
+  // lui — c'est cela qu'on mesure désormais, et rien d'autre.
   const recouvrements = (page) => page.evaluate(() => {
     const bouton = document.getElementById('leo-appel');
     if (!bouton) return { erreur: 'bouton absent' };
     const b = bouton.getBoundingClientRect();
     const croise = (r) => !(r.right <= b.left || r.left >= b.right
                          || r.bottom <= b.top || r.top >= b.bottom);
+
+    // La part du rectangle qui survit au rognage des ancêtres. `null` = plus
+    // rien n'est visible. On remonte jusqu'à la racine : un seul conteneur en
+    // `overflow:hidden`, n'importe où au-dessus, suffit à couper le texte.
+    const partVisible = (r, depuis) => {
+      let boite = { left: r.left, right: r.right, top: r.top, bottom: r.bottom };
+      for (let e = depuis; e && e !== document.documentElement; e = e.parentElement) {
+        const s = getComputedStyle(e);
+        const rogneX = s.overflowX !== 'visible';
+        const rogneY = s.overflowY !== 'visible';
+        if (!rogneX && !rogneY) continue;
+        const c = e.getBoundingClientRect();
+        if (rogneX) { boite.left = Math.max(boite.left, c.left); boite.right = Math.min(boite.right, c.right); }
+        if (rogneY) { boite.top = Math.max(boite.top, c.top); boite.bottom = Math.min(boite.bottom, c.bottom); }
+        if (boite.right <= boite.left || boite.bottom <= boite.top) return null;
+      }
+      return boite;
+    };
+
     const coupables = [];
     const noeuds = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
     for (let n = noeuds.nextNode(); n; n = noeuds.nextNode()) {
@@ -281,7 +315,8 @@ console.log('\n§7 — le bouton ne mange aucun texte EN BAS DE PAGE, et se lit'
       plage.selectNodeContents(n);
       for (const r of plage.getClientRects()) {
         if (r.width === 0 || r.height === 0) continue;
-        if (croise(r)) { coupables.push(n.nodeValue.trim().slice(0, 60)); break; }
+        const vu = partVisible(r, parent);
+        if (vu && croise(vu)) { coupables.push(n.nodeValue.trim().slice(0, 60)); break; }
       }
     }
     return { coupables };
@@ -300,6 +335,29 @@ console.log('\n§7 — le bouton ne mange aucun texte EN BAS DE PAGE, et se lit'
         !erreur && coupables.length === 0,
         erreur || (coupables[0] ? `« ${coupables[0]} »` : ''));
     }
+
+    // ⛔ LE VERROU DE NON-VACUITÉ DU CONTRÔLE CI-DESSUS, posé le 2026-09-18 en
+    // même temps que le rognage. Depuis qu'on retire du décompte ce qui est
+    // coupé à l'écran, « aucun coupable » pourrait aussi bien vouloir dire
+    // « je ne vois plus rien du tout » — et les deux ont la même tête au
+    // rapport. On pose donc un texte RÉELLEMENT masqué par le bouton et on
+    // exige que le contrôle le trouve. Un verdict qui ne peut plus devenir
+    // rouge n'en est pas un (leçon du 2026-08-01, que ce §7 porte déjà).
+    await page.setViewportSize({ width: 1280, height: 780 });
+    await page.evaluate(() => {
+      const b = document.getElementById('leo-appel').getBoundingClientRect();
+      const leurre = document.createElement('div');
+      leurre.id = 'leurre-recouvrement';
+      leurre.textContent = 'TEXTE RECOUVERT POUR DE VRAI';
+      leurre.style.cssText = `position:fixed;left:${b.left + 4}px;top:${b.top + 4}px;`
+        + 'z-index:1;font-size:10px;line-height:12px;white-space:nowrap;color:#000';
+      document.body.appendChild(leurre);
+    });
+    const piege = await recouvrements(page);
+    await page.evaluate(() => document.getElementById('leurre-recouvrement')?.remove());
+    verifier(`${fichier} : ⛔ le contrôle voit encore un VRAI recouvrement`,
+      piege.coupables.some((t) => t.includes('RECOUVERT POUR DE VRAI')),
+      `coupables rendus : ${JSON.stringify(piege.coupables)}`);
 
     // Le contraste du libellé, MESURÉ sur le fond réellement peint — pas
     // déduit du jeton : le bouton doit se lire sur le parchemin de FINUBAR
