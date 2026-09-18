@@ -430,6 +430,8 @@
     // LV4 — les trois options, toutes fausses par défaut : RIVEN passe ici sans
     // rien changer à ce qu'il faisait hier.
     var cadrageSerre = !!options.cadrerSurLesEtoiles;
+    // Preview-only atmospheric controls are opt-in. Existing callers are unchanged.
+    var atmosphere = options.atmosphere || null;
 
     var monde = construireMonde(noeuds);
     // LES GÉMEAUX, avant le recentrage : deux caps jumeaux se posent en
@@ -1188,7 +1190,7 @@
       // la fonction que les étoiles utilisent à la ligne suivante — pas une
       // copie, pas une caméra parallèle. Les deux couches ne peuvent pas se
       // déphaser parce qu'elles ne font qu'une seule projection.
-      if (fond) { fond.peindre(projeter, { eclat: 1 }); }
+      if (fond) { fond.peindre(projeter, atmosphere || { eclat: 1 }); }
 
       poussiere.forEach(function (p) {
         var d = RAYON_MONDE * 3.1 * p.r;
