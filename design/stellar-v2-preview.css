@@ -55,3 +55,64 @@ body.stellar-v2-preview::before{
 .sv2-legend .signal{color:var(--sv2-gold)}
 @media(max-width:640px){.sv2-legend{display:none}.stellar-v2-preview .lv5-haut{gap:.45rem}.stellar-v2-preview .lv5-bloc{max-width:72vw}}
 @media(prefers-reduced-motion:reduce){.stellar-v2-preview *{scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+
+/* V2.1 — mobile composition pass. The sky stays primary; HUD recedes. */
+@media (max-width: 640px) {
+  .stellar-v2-preview .lv5-hud {
+    padding:
+      calc(env(safe-area-inset-top, 0px) + 10px)
+      calc(env(safe-area-inset-right, 0px) + 10px)
+      calc(env(safe-area-inset-bottom, 0px) + 10px)
+      calc(env(safe-area-inset-left, 0px) + 10px);
+  }
+  .stellar-v2-preview .lv5-haut {
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:start;
+  }
+  .stellar-v2-preview .lv5-bloc {
+    max-width:min(76vw, 360px);
+    padding:.48rem .62rem;
+    background:linear-gradient(180deg,rgba(12,22,36,.66),rgba(3,7,14,.72));
+    -webkit-backdrop-filter:blur(9px);
+    backdrop-filter:blur(9px);
+  }
+  .stellar-v2-preview .lv5-fil { font-size:.61rem; letter-spacing:.18em; }
+  .stellar-v2-preview .lv5-titre {
+    font-size:clamp(1rem,5.2vw,1.32rem);
+    line-height:1.12;
+    letter-spacing:.02em;
+  }
+  .stellar-v2-preview .lv5-parole {
+    margin-top:.18rem;
+    font-size:.74rem;
+    line-height:1.35;
+    color:var(--sv2-ink-soft);
+  }
+  .stellar-v2-preview .lv5-outils {
+    display:grid;
+    grid-template-columns:1fr;
+    gap:5px;
+  }
+  .stellar-v2-preview .lv5-outils button {
+    min-width:44px;
+    width:44px;
+    min-height:44px;
+    overflow:hidden;
+    padding:0 6px;
+    font-size:0;
+  }
+  .stellar-v2-preview #lv5-fond::after { content:"✦"; font-size:16px; }
+  .stellar-v2-preview #lv5-charge::after { content:"3D"; font:600 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.04em; }
+  .stellar-v2-preview #lv5-mesurer::after { content:"◎"; font-size:16px; }
+  .stellar-v2-preview .lv5-mesure {
+    max-width:calc(100vw - 20px);
+    font-size:.62rem;
+    background:rgba(3,7,14,.86);
+  }
+  .stellar-v2-preview .lv5-scene.ciel-scene::after {
+    inset:7px;
+    border-color:rgba(216,189,130,.13);
+  }
+}
