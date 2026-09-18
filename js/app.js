@@ -1944,6 +1944,9 @@
       // l'information. Le fond est un décor, la disposition est une donnée : l'un
       // se partage partout, l'autre non.
       fond: true,
+      // T2 Stellar V2 : profil atmosphérique explicite sur RIVEN uniquement.
+      // Les autres consommateurs du moteur gardent leur comportement historique.
+      stellarV2: true,
       plat: cielPlatRetenu()
     });
 
