@@ -58,7 +58,8 @@ function rendre() {
     // Les trois capacités de LV4, plus celle de LV5.
     cadrerSurLesEtoiles: true,
     tousLesNoms: true,
-    fond: avecFond
+    fond: avecFond,
+    atmosphere: { eclat: 0.94, eclatVoiles: 0.82, eclatFilaments: 0.72, contrasteProfondeur: 1 }
   });
   bFond.setAttribute('aria-pressed', String(avecFond));
   bCharge.textContent = 'Charge : ' + CHARGES[iCharge];
