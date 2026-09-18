@@ -177,3 +177,118 @@
 @media (prefers-reduced-motion: reduce) {
   .ciel-aide { transition: none; }
 }
+
+
+/* ============================================================================
+   STELLAR V2 — T2 : hiérarchie du ciel et interactions.
+   Les valeurs viennent des rôles sémantiques de stellaire.css, avec repli sur
+   la palette historique pour les pages qui chargent ciel.css sans stellaire.css.
+   Aucune géométrie, cible, projection ni donnée n'est modifiée ici.
+   ========================================================================== */
+.ciel-liens line {
+  stroke: rgba(223, 235, 244, .72);
+  stroke-width: .72;
+}
+.ciel--concentre .ciel-liens line { opacity: .025; }
+.ciel--concentre .ciel-liens line.ciel-lien--vif {
+  opacity: .88;
+  stroke: var(--stellar-accent-ice, #9fc9df);
+  stroke-width: 1.25;
+}
+.ciel-etoile:hover,
+.ciel-etoile:focus-visible {
+  filter: drop-shadow(0 0 3px rgba(183, 220, 237, .52));
+}
+.ciel-halo-focus {
+  stroke: var(--stellar-focus, #b7dced);
+  stroke-width: .8;
+}
+.ciel-halo-choix {
+  stroke: var(--stellar-accent-gold, #d8bd82);
+  stroke-width: 1;
+  filter: drop-shadow(0 0 3px rgba(216, 189, 130, .36));
+}
+.ciel-nom {
+  fill: var(--stellar-text-secondary, #c8c5bd);
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: .04em;
+  paint-order: stroke;
+  stroke: rgba(2, 5, 11, .72);
+  stroke-width: 2.2px;
+  stroke-linejoin: round;
+}
+.ciel-nom-amas {
+  fill: rgba(216, 189, 130, .62);
+  font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 4.2px;
+  text-transform: uppercase;
+  filter: drop-shadow(0 0 5px rgba(216, 189, 130, .10));
+}
+.ciel-liens-noms { opacity: .78; }
+.ciel-nom-lien {
+  fill: rgba(216, 189, 130, .66);
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 8px;
+  letter-spacing: 1.15px;
+}
+.ciel-personne { opacity: .82; }
+.ciel-personne:hover,
+.ciel-personne:focus-visible { opacity: 1; }
+
+.ciel-svg:has(.ciel-etoile--choisie) .ciel-etoile:not(.ciel-etoile--choisie) { opacity: .46; }
+.ciel-svg:has(.ciel-etoile--choisie) .ciel-liens line { opacity: .035; }
+.ciel-etoile--choisie {
+  opacity: 1;
+  filter:
+    drop-shadow(0 0 4px rgba(216, 189, 130, .44))
+    drop-shadow(0 0 10px rgba(159, 201, 223, .16));
+}
+.ciel-etoile--choisie .ciel-nom {
+  opacity: 1 !important;
+  fill: var(--stellar-text-primary, #f2ead6);
+  font-weight: 600;
+  stroke: rgba(2, 5, 11, .88);
+  stroke-width: 2.8px;
+}
+.ciel-etoile--choisie .ciel-halo-choix { opacity: .92; }
+.ciel--concentre .ciel-etoile:not(:hover):not(:focus-visible):not(.ciel-etoile--choisie) { opacity: .58; }
+.ciel-etoile:hover .ciel-nom,
+.ciel-etoile:focus-visible .ciel-nom { fill: var(--stellar-text-primary, #f2ead6); }
+.ciel--concentre .ciel-nom-amas { opacity: .34; }
+.ciel--concentre .ciel-liens-noms { opacity: .22; }
+
+@supports not selector(:has(*)) {
+  .ciel-etoile--choisie { opacity: 1; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ciel-etoile,
+  .ciel-liens line,
+  .ciel-nom {
+    transition:
+      opacity 180ms cubic-bezier(.16, .84, .32, 1),
+      filter 180ms cubic-bezier(.16, .84, .32, 1),
+      fill 140ms ease;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ciel-etoile,
+  .ciel-liens line,
+  .ciel-nom {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+@media (forced-colors: active) {
+  .ciel-nom,
+  .ciel-nom-amas,
+  .ciel-nom-lien { fill: CanvasText; stroke: Canvas; }
+  .ciel-halo-focus,
+  .ciel-halo-choix { stroke: Highlight; }
+}
+@media (max-width: 640px) {
+  .ciel-liens line { stroke-width: .62; }
+  .ciel-nom { letter-spacing: .02em; stroke-width: 2.6px; }
+  .ciel-nom-amas { font-size: 9px; letter-spacing: 3px; }
+}
