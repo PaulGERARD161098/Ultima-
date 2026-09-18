@@ -292,7 +292,7 @@
       "depot": "PaulGERARD161098/RenoBoost",
       "mesure": true,
       "superficiel": false,
-      "vus": 122,
+      "vus": 123,
       "retenues": [
         {
           "chemin": "ARCHI-MACRO-PLATEFORME.md",
@@ -670,7 +670,7 @@
         "note de séance": 8,
         "journal de reprise": 36,
         "hors famille normative": 7,
-        "roadmap de fin de séance": 14
+        "roadmap de fin de séance": 15
       }
     },
     {
