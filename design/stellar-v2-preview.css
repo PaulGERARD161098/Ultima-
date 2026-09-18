@@ -1,0 +1,57 @@
+/* ULTIMA — Stellar Design System V2 — preview-only layer
+   Reference lock: Ultima's antique celestial identity remains primary.
+   Borrowed: Oxide's tonal depth/hairlines, Active Theory's luminous void,
+   Railway's serif/sans contrast, Memotron's graph-first restraint.
+   No production page imports this file yet. */
+:root{
+  --sv2-void:#02050b;--sv2-deep:#060b14;--sv2-surface:rgba(12,22,36,.72);
+  --sv2-raised:rgba(18,35,58,.66);--sv2-line:rgba(216,189,130,.20);
+  --sv2-line-cool:rgba(143,194,212,.16);--sv2-ink:#f2ead6;
+  --sv2-ink-soft:#c8c5bd;--sv2-ink-quiet:#8f99a8;--sv2-gold:#d8bd82;
+  --sv2-ice:#9fc9df;--sv2-focus:#b7dced;--sv2-radius:8px;
+  --sv2-glass-blur:12px;--sv2-fast:140ms;--sv2-slow:420ms;
+}
+body.stellar-v2-preview{background:var(--sv2-void);color:var(--sv2-ink)}
+body.stellar-v2-preview::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse at 18% 18%,rgba(43,83,126,.16),transparent 42%),
+    radial-gradient(ellipse at 78% 66%,rgba(92,76,126,.09),transparent 38%),
+    linear-gradient(180deg,var(--sv2-deep),var(--sv2-void) 72%);
+}
+.stellar-v2-preview .lv5-scene{background:transparent}
+.stellar-v2-preview .lv5-scene.ciel-scene::after{
+  inset:12px;border:1px solid var(--sv2-line);box-shadow:inset 0 0 48px rgba(2,5,11,.32)
+}
+.stellar-v2-preview .lv5-bloc,.stellar-v2-preview .sv2-panel{
+  background:linear-gradient(180deg,rgba(18,35,58,.62),rgba(6,11,20,.74));
+  border:1px solid var(--sv2-line);border-radius:var(--sv2-radius);
+  box-shadow:inset 0 1px rgba(255,255,255,.035);
+  -webkit-backdrop-filter:blur(var(--sv2-glass-blur));backdrop-filter:blur(var(--sv2-glass-blur));
+}
+.stellar-v2-preview .lv5-fil{color:var(--sv2-gold);font-size:.68rem;letter-spacing:.22em}
+.stellar-v2-preview .lv5-titre{
+  color:var(--sv2-ink);font-family:Georgia,"Iowan Old Style","Times New Roman",serif;
+  font-weight:400;letter-spacing:.035em;text-wrap:balance
+}
+.stellar-v2-preview .lv5-parole{color:var(--sv2-ink-soft);font-style:normal;letter-spacing:.015em}
+.stellar-v2-preview .lv5-outils button{
+  border-color:var(--sv2-line);border-radius:6px;background:rgba(6,11,20,.58);
+  color:var(--sv2-ink-soft);transition:background var(--sv2-fast),border-color var(--sv2-fast),color var(--sv2-fast),transform var(--sv2-fast)
+}
+.stellar-v2-preview .lv5-outils button:hover{
+  background:rgba(18,35,58,.82);border-color:rgba(216,189,130,.48);color:var(--sv2-ink);transform:translateY(-1px)
+}
+.stellar-v2-preview .lv5-outils button:focus-visible{outline:2px solid var(--sv2-focus);outline-offset:3px}
+.stellar-v2-preview .lv5-outils button[aria-pressed="true"]{
+  color:var(--sv2-gold);background:rgba(216,189,130,.09);border-color:rgba(216,189,130,.42)
+}
+.sv2-legend{
+  position:fixed;right:14px;bottom:14px;z-index:4;pointer-events:none;
+  max-width:290px;padding:10px 12px;font:11px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;
+  color:var(--sv2-ink-quiet)
+}
+.sv2-legend strong{color:var(--sv2-ink);font-weight:500}
+.sv2-legend .signal{color:var(--sv2-gold)}
+@media(max-width:640px){.sv2-legend{display:none}.stellar-v2-preview .lv5-haut{gap:.45rem}.stellar-v2-preview .lv5-bloc{max-width:72vw}}
+@media(prefers-reduced-motion:reduce){.stellar-v2-preview *{scroll-behavior:auto!important;transition-duration:.01ms!important}}
