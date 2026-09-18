@@ -91,3 +91,26 @@ Règles :
 - sur mobile, l'instrument peut prendre la largeur disponible mais ne devient jamais un modal plein écran par défaut.
 
 ALTHEA est le cas de référence : son invariant existant « qui pose des chiffres pose leur support » est conservé. Stellar V2 ne rend jamais ses blocs transparents.
+
+
+## V2.7 — Freeze candidat
+
+La couche de preview est désormais consolidée. Les doublons de cascade mobile ont été retirés et les états reduced-motion / forced-colors ont un repli explicite.
+
+### Gates avant transplantation
+1. **Visuel** : validation humaine sur 390×844 et écran large.
+2. **Interaction** : hover, focus clavier et sélection restent distincts.
+3. **Accessibilité** : AA, focus visible, 44 px mobile, forced-colors exploitable.
+4. **Mouvement** : reduced-motion coupe transitions et déplacements décoratifs d'interface.
+5. **Performance** : le profil atmosphérique V2 doit rester sous le budget LV5.
+6. **Isolation** : aucune page production ne doit importer `design/stellar-v2-preview.css`.
+7. **CI** : unit + browser doivent réellement démarrer et passer ; un job sans runner ne vaut pas verdict produit.
+
+### Ordre de transplantation
+- T1 tokens sémantiques vers `css/stellaire.css` ;
+- T2 ciel et états d'interaction ;
+- T3 HUD/navigation ;
+- T4 ALTHEA comme premier instrument réel ;
+- T5 autres instruments/ateliers écran par écran.
+
+Aucune étape Tn ne doit embarquer automatiquement Tn+1.
