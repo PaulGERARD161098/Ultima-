@@ -53,7 +53,7 @@ body.stellar-v2-preview::before{
 }
 .sv2-legend strong{color:var(--sv2-ink);font-weight:500}
 .sv2-legend .signal{color:var(--sv2-gold)}
-@media(max-width:640px){.sv2-legend{display:none}.stellar-v2-preview .lv5-haut{gap:.45rem}.stellar-v2-preview .lv5-bloc{max-width:72vw}}
+@media(max-width:640px){.sv2-legend{display:none}}
 @media(prefers-reduced-motion:reduce){.stellar-v2-preview *{scroll-behavior:auto!important;transition-duration:.01ms!important}}
 
 
@@ -125,14 +125,12 @@ body.stellar-v2-preview::before{
 .stellar-v2-preview .ciel-liens line {
   stroke:rgba(223,235,244,.72);
   stroke-width:.72;
-  transition:opacity var(--sv2-fast),stroke-width var(--sv2-fast);
 }
 .stellar-v2-preview .ciel--concentre .ciel-liens line { opacity:.025; }
 .stellar-v2-preview .ciel--concentre .ciel-liens line.ciel-lien--vif {
   opacity:.88;stroke:var(--sv2-ice);stroke-width:1.25;
 }
 .stellar-v2-preview .ciel-etoile {
-  transition:opacity var(--sv2-fast),filter var(--sv2-fast);
 }
 .stellar-v2-preview .ciel-etoile:hover,
 .stellar-v2-preview .ciel-etoile:focus-visible,
@@ -169,7 +167,6 @@ body.stellar-v2-preview::before{
 @media(max-width:640px){
   .stellar-v2-preview .ciel-liens line{stroke-width:.62}
   .stellar-v2-preview .ciel-nom{letter-spacing:.02em}
-  .stellar-v2-preview .ciel-nom-amas{letter-spacing:2.5px}
 }
 
 
@@ -350,4 +347,27 @@ body.stellar-v2-preview::before{
 .stellar-v2-preview .althea-skill,
 .stellar-v2-preview .althea-geste{
   border-color:var(--sv2-instrument-line);
+}
+
+
+/* V2.7 — consolidation gates */
+@media(prefers-reduced-motion:reduce){
+  .stellar-v2-preview .ciel-etoile,
+  .stellar-v2-preview .ciel-liens line,
+  .stellar-v2-preview .ciel-nom,
+  .stellar-v2-preview .lv5-outils button{
+    transition:none!important;
+    animation:none!important;
+  }
+  .stellar-v2-preview .lv5-outils button:hover{transform:none}
+}
+@media(forced-colors:active){
+  .stellar-v2-preview .lv5-bloc,
+  .stellar-v2-preview .sv2-panel,
+  .sv2-instrument{border:1px solid CanvasText;background:Canvas}
+  .stellar-v2-preview .ciel-nom,
+  .stellar-v2-preview .ciel-nom-amas,
+  .stellar-v2-preview .ciel-nom-lien{fill:CanvasText;stroke:Canvas}
+  .stellar-v2-preview .ciel-halo-focus,
+  .stellar-v2-preview .ciel-halo-choix{stroke:Highlight}
 }
