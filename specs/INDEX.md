@@ -46,7 +46,7 @@
 | 🟡 | `design/spec-r1-graphisme.md` | spec | 2026-07-07 (73 j) | 381 |
 | 🟡 | `design/spec-registre-antique-serieux.md` | spec | 2026-07-11 (69 j) | 225 |
 
-*33 retenues · 25 écartées sur 58 fichiers lus — 10 hors famille normative, 5 audit daté, 4 fichier de dépôt, 4 journal de reprise, 1 dry run daté, 1 registre vivant.*
+*33 retenues · 26 écartées sur 59 fichiers lus — 10 hors famille normative, 5 audit daté, 5 fichier de dépôt, 4 journal de reprise, 1 dry run daté, 1 registre vivant.*
 
 ## RenoBoost — `PaulGERARD161098/RenoBoost`
 
@@ -73,7 +73,7 @@
 | 🟢 | `docs/CADRAGE-UX-CONSOLE-2026-09-14.md` | cadrage | 2026-09-15 (3 j) | 146 |
 | 🟡 | `standards/NAV-CONTRAT.md` | contrat | 2026-08-13 (36 j) | 224 |
 | 🟢 | `standards/TOKENS-CONTRAT.md` | contrat | 2026-09-11 (7 j) | 111 |
-| 🟢 | `DESIGN-LANGAGE.md` | design | 2026-09-16 (2 j) | 272 |
+| 🟢 | `DESIGN-LANGAGE.md` | design | 2026-09-18 (0 j) | 294 |
 | 🟡 | `PLAN-CHAT-RENO-CROSS-BRIQUES.md` | plan | 2026-07-16 (64 j) | 133 |
 | 🟡 | `PLAN-MODULARISATION-P4.md` | plan | 2026-07-07 (73 j) | 49 |
 | 🟡 | `PLAN-RENO-OMNIPRESENT.md` | plan | 2026-07-18 (62 j) | 95 |
@@ -99,7 +99,7 @@
 | 🟢 | `docs/RENOBOOST_UI_SPEC_CLAUDE.md` | spec | 2026-09-11 (7 j) | 419 |
 | 🟡 | `standards/CLAUDE-STANDARD.md` | standard | 2026-07-24 (56 j) | 57 |
 
-*46 retenues · 75 écartées sur 121 fichiers lus — 36 journal de reprise, 14 roadmap de fin de séance, 8 note de séance, 7 hors famille normative, 4 registre vivant, 3 audit daté, 3 fichier de dépôt.*
+*46 retenues · 76 écartées sur 122 fichiers lus — 36 journal de reprise, 14 roadmap de fin de séance, 8 note de séance, 7 hors famille normative, 4 registre vivant, 4 fichier de dépôt, 3 audit daté.*
 
 ## RenoDevis — `PaulGERARD161098/RenoDevis`
 
