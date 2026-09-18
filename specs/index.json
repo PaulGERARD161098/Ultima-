@@ -1,0 +1,770 @@
+{
+  "le": "2026-09-18",
+  "seuils": {
+    "vivante": 30,
+    "dormante": 120
+  },
+  "total": 85,
+  "projets": [
+    {
+      "dossier": "Ultima-",
+      "depot": "PaulGERARD161098/Ultima-",
+      "mesure": true,
+      "superficiel": false,
+      "vus": 58,
+      "retenues": [
+        {
+          "chemin": "CADRAGE-2026-09-07-reprise-depots.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-09-06",
+          "age_jours": 12,
+          "etat": "vivante",
+          "lignes": 171
+        },
+        {
+          "chemin": "CADRAGE-ACCUEIL-FINUBAR.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-09-02",
+          "age_jours": 16,
+          "etat": "vivante",
+          "lignes": 238
+        },
+        {
+          "chemin": "CADRAGE-ALTHEA.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-08-10",
+          "age_jours": 39,
+          "etat": "dormante",
+          "lignes": 1383
+        },
+        {
+          "chemin": "CADRAGE-CIEL-CADRAGE.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-08-12",
+          "age_jours": 37,
+          "etat": "dormante",
+          "lignes": 149
+        },
+        {
+          "chemin": "CADRAGE-CONSOLE.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-07-30",
+          "age_jours": 50,
+          "etat": "dormante",
+          "lignes": 445
+        },
+        {
+          "chemin": "CADRAGE-FINUBAR.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-09-06",
+          "age_jours": 12,
+          "etat": "vivante",
+          "lignes": 229
+        },
+        {
+          "chemin": "CADRAGE-IMLADRIK.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-08-17",
+          "age_jours": 32,
+          "etat": "dormante",
+          "lignes": 471
+        },
+        {
+          "chemin": "CADRAGE-LEO-SITE.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-09-03",
+          "age_jours": 15,
+          "etat": "vivante",
+          "lignes": 186
+        },
+        {
+          "chemin": "CADRAGE-LV3.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-08-17",
+          "age_jours": 32,
+          "etat": "dormante",
+          "lignes": 368
+        },
+        {
+          "chemin": "CADRAGE-LV4-CIEL-DEPLIE.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-08-14",
+          "age_jours": 35,
+          "etat": "dormante",
+          "lignes": 681
+        },
+        {
+          "chemin": "CADRAGE-LV4-CONSTELLATIONS.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-08-14",
+          "age_jours": 35,
+          "etat": "dormante",
+          "lignes": 223
+        },
+        {
+          "chemin": "CADRAGE-LV5-GALAXIE-PLEIN-ECRAN.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-08-17",
+          "age_jours": 32,
+          "etat": "dormante",
+          "lignes": 1248
+        },
+        {
+          "chemin": "CADRAGE-LV6-CIEL-VIVANT.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-08-20",
+          "age_jours": 29,
+          "etat": "vivante",
+          "lignes": 243
+        },
+        {
+          "chemin": "CADRAGE-NICOL-BOLAS.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-07-23",
+          "age_jours": 57,
+          "etat": "dormante",
+          "lignes": 249
+        },
+        {
+          "chemin": "CADRAGE-RESHIRAM-ZEKROM.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-07-30",
+          "age_jours": 50,
+          "etat": "dormante",
+          "lignes": 419
+        },
+        {
+          "chemin": "CADRAGE-RIVEN-DETAIL.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-08-10",
+          "age_jours": 39,
+          "etat": "dormante",
+          "lignes": 168
+        },
+        {
+          "chemin": "CADRAGE-RIVEN-PILOTAGE.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-08-12",
+          "age_jours": 37,
+          "etat": "dormante",
+          "lignes": 175
+        },
+        {
+          "chemin": "CADRAGE-RIVEN-SAISIE.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-08-12",
+          "age_jours": 37,
+          "etat": "dormante",
+          "lignes": 187
+        },
+        {
+          "chemin": "CADRAGE-RIVEN-STELLAIRE.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-08-13",
+          "age_jours": 36,
+          "etat": "dormante",
+          "lignes": 601
+        },
+        {
+          "chemin": "CADRAGE-ULTIMA.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-09-14",
+          "age_jours": 4,
+          "etat": "vivante",
+          "lignes": 1966
+        },
+        {
+          "chemin": "PLAN-2026-09-05-boucler-la-semaine.md",
+          "famille": "plan",
+          "derniere_touche": "2026-09-05",
+          "age_jours": 13,
+          "etat": "vivante",
+          "lignes": 217
+        },
+        {
+          "chemin": "ROADMAP-SECURITE.md",
+          "famille": "roadmap",
+          "derniere_touche": "2026-08-12",
+          "age_jours": 37,
+          "etat": "dormante",
+          "lignes": 67
+        },
+        {
+          "chemin": "ROADMAP-SITE.md",
+          "famille": "roadmap",
+          "derniere_touche": "2026-07-11",
+          "age_jours": 69,
+          "etat": "dormante",
+          "lignes": 115
+        },
+        {
+          "chemin": "design/spec-a1-connexion.md",
+          "famille": "spec",
+          "derniere_touche": "2026-07-09",
+          "age_jours": 71,
+          "etat": "dormante",
+          "lignes": 84
+        },
+        {
+          "chemin": "design/spec-a2-secteur.md",
+          "famille": "spec",
+          "derniere_touche": "2026-07-09",
+          "age_jours": 71,
+          "etat": "dormante",
+          "lignes": 205
+        },
+        {
+          "chemin": "design/spec-a3-arbre.md",
+          "famille": "spec",
+          "derniere_touche": "2026-07-09",
+          "age_jours": 71,
+          "etat": "dormante",
+          "lignes": 126
+        },
+        {
+          "chemin": "design/spec-ad4c-front.md",
+          "famille": "spec",
+          "derniere_touche": "2026-07-22",
+          "age_jours": 58,
+          "etat": "dormante",
+          "lignes": 75
+        },
+        {
+          "chemin": "design/spec-arbre-responsive.md",
+          "famille": "spec",
+          "derniere_touche": "2026-07-11",
+          "age_jours": 69,
+          "etat": "dormante",
+          "lignes": 288
+        },
+        {
+          "chemin": "design/spec-durcissement-auth.md",
+          "famille": "spec",
+          "derniere_touche": "2026-07-11",
+          "age_jours": 69,
+          "etat": "dormante",
+          "lignes": 222
+        },
+        {
+          "chemin": "design/spec-l2b-mains.md",
+          "famille": "spec",
+          "derniere_touche": "2026-07-22",
+          "age_jours": 58,
+          "etat": "dormante",
+          "lignes": 152
+        },
+        {
+          "chemin": "design/spec-p5c-boussole-futurs-ciel.md",
+          "famille": "spec",
+          "derniere_touche": "2026-08-19",
+          "age_jours": 30,
+          "etat": "vivante",
+          "lignes": 127
+        },
+        {
+          "chemin": "design/spec-r1-graphisme.md",
+          "famille": "spec",
+          "derniere_touche": "2026-07-07",
+          "age_jours": 73,
+          "etat": "dormante",
+          "lignes": 381
+        },
+        {
+          "chemin": "design/spec-registre-antique-serieux.md",
+          "famille": "spec",
+          "derniere_touche": "2026-07-11",
+          "age_jours": 69,
+          "etat": "dormante",
+          "lignes": 225
+        }
+      ],
+      "ecartees": {
+        "audit daté": 5,
+        "fichier de dépôt": 4,
+        "dry run daté": 1,
+        "hors famille normative": 10,
+        "journal de reprise": 4,
+        "registre vivant": 1
+      }
+    },
+    {
+      "dossier": "RenoBoost",
+      "depot": "PaulGERARD161098/RenoBoost",
+      "mesure": true,
+      "superficiel": false,
+      "vus": 121,
+      "retenues": [
+        {
+          "chemin": "ARCHI-MACRO-PLATEFORME.md",
+          "famille": "architecture",
+          "derniere_touche": "2026-07-14",
+          "age_jours": 66,
+          "etat": "dormante",
+          "lignes": 107
+        },
+        {
+          "chemin": "ARCHI-P3-DEVIS-CLOUD.md",
+          "famille": "architecture",
+          "derniere_touche": "2026-06-17",
+          "age_jours": 93,
+          "etat": "dormante",
+          "lignes": 77
+        },
+        {
+          "chemin": "ARCHI-RENO.md",
+          "famille": "architecture",
+          "derniere_touche": "2026-08-05",
+          "age_jours": 44,
+          "etat": "dormante",
+          "lignes": 172
+        },
+        {
+          "chemin": "ARCHI-RENORELANCE.md",
+          "famille": "architecture",
+          "derniere_touche": "2026-07-14",
+          "age_jours": 66,
+          "etat": "dormante",
+          "lignes": 155
+        },
+        {
+          "chemin": "CADRAGE-2026-08-16-fiche-client-data.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-08-19",
+          "age_jours": 30,
+          "etat": "vivante",
+          "lignes": 995
+        },
+        {
+          "chemin": "CADRAGE-2026-08-19-audit-gemini.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-09-01",
+          "age_jours": 17,
+          "etat": "vivante",
+          "lignes": 79
+        },
+        {
+          "chemin": "CADRAGE-2026-08-19-passerelle-pro-artisan.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-08-19",
+          "age_jours": 30,
+          "etat": "vivante",
+          "lignes": 83
+        },
+        {
+          "chemin": "CADRAGE-2026-08-21-acquisition.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-08-21",
+          "age_jours": 28,
+          "etat": "vivante",
+          "lignes": 217
+        },
+        {
+          "chemin": "CADRAGE-2026-09-01-simulateur-zone.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-09-01",
+          "age_jours": 17,
+          "etat": "vivante",
+          "lignes": 357
+        },
+        {
+          "chemin": "CADRAGE-2026-09-01-suite.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-09-11",
+          "age_jours": 7,
+          "etat": "vivante",
+          "lignes": 348
+        },
+        {
+          "chemin": "CADRAGE-2026-09-02-demain.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-09-02",
+          "age_jours": 16,
+          "etat": "vivante",
+          "lignes": 230
+        },
+        {
+          "chemin": "CADRAGE-2026-09-03-radar-demande.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-09-05",
+          "age_jours": 13,
+          "etat": "vivante",
+          "lignes": 303
+        },
+        {
+          "chemin": "CADRAGE-2026-09-03-site-forme-stats.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-09-05",
+          "age_jours": 13,
+          "etat": "vivante",
+          "lignes": 195
+        },
+        {
+          "chemin": "CADRAGE-2026-09-05-landing-capture.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-09-05",
+          "age_jours": 13,
+          "etat": "vivante",
+          "lignes": 265
+        },
+        {
+          "chemin": "CADRAGE-2026-09-07-landing-lot1-retenue.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-09-07",
+          "age_jours": 11,
+          "etat": "vivante",
+          "lignes": 160
+        },
+        {
+          "chemin": "CADRAGE-2026-09-11-landing-premium-audit.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-09-11",
+          "age_jours": 7,
+          "etat": "vivante",
+          "lignes": 303
+        },
+        {
+          "chemin": "CADRAGE-2026-09-11-langage-fiche.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-09-11",
+          "age_jours": 7,
+          "etat": "vivante",
+          "lignes": 310
+        },
+        {
+          "chemin": "CADRAGE-2026-09-13-boussole.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-09-14",
+          "age_jours": 4,
+          "etat": "vivante",
+          "lignes": 195
+        },
+        {
+          "chemin": "docs/CADRAGE-UX-CONSOLE-2026-09-14.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-09-15",
+          "age_jours": 3,
+          "etat": "vivante",
+          "lignes": 146
+        },
+        {
+          "chemin": "standards/NAV-CONTRAT.md",
+          "famille": "contrat",
+          "derniere_touche": "2026-08-13",
+          "age_jours": 36,
+          "etat": "dormante",
+          "lignes": 224
+        },
+        {
+          "chemin": "standards/TOKENS-CONTRAT.md",
+          "famille": "contrat",
+          "derniere_touche": "2026-09-11",
+          "age_jours": 7,
+          "etat": "vivante",
+          "lignes": 111
+        },
+        {
+          "chemin": "DESIGN-LANGAGE.md",
+          "famille": "design",
+          "derniere_touche": "2026-09-16",
+          "age_jours": 2,
+          "etat": "vivante",
+          "lignes": 272
+        },
+        {
+          "chemin": "PLAN-CHAT-RENO-CROSS-BRIQUES.md",
+          "famille": "plan",
+          "derniere_touche": "2026-07-16",
+          "age_jours": 64,
+          "etat": "dormante",
+          "lignes": 133
+        },
+        {
+          "chemin": "PLAN-MODULARISATION-P4.md",
+          "famille": "plan",
+          "derniere_touche": "2026-07-07",
+          "age_jours": 73,
+          "etat": "dormante",
+          "lignes": 49
+        },
+        {
+          "chemin": "PLAN-RENO-OMNIPRESENT.md",
+          "famille": "plan",
+          "derniere_touche": "2026-07-18",
+          "age_jours": 62,
+          "etat": "dormante",
+          "lignes": 95
+        },
+        {
+          "chemin": "PLAN-SIGNATURE-ARTISAN-RELANCE.md",
+          "famille": "plan",
+          "derniere_touche": "2026-07-30",
+          "age_jours": 50,
+          "etat": "dormante",
+          "lignes": 168
+        },
+        {
+          "chemin": "PLAN-SITE-V2-CATALOGUE.md",
+          "famille": "plan",
+          "derniere_touche": "2026-08-04",
+          "age_jours": 45,
+          "etat": "dormante",
+          "lignes": 546
+        },
+        {
+          "chemin": "PLAN-SSO-MEMOIRE-CROSS-BRIQUES.md",
+          "famille": "plan",
+          "derniere_touche": "2026-07-16",
+          "age_jours": 64,
+          "etat": "dormante",
+          "lignes": 194
+        },
+        {
+          "chemin": "standards/PLAN-RENO-PRODUIT-4.md",
+          "famille": "plan",
+          "derniere_touche": "2026-07-24",
+          "age_jours": 56,
+          "etat": "dormante",
+          "lignes": 69
+        },
+        {
+          "chemin": "RECETTE-SIMULATEUR-ZONE.md",
+          "famille": "recette",
+          "derniere_touche": "2026-09-02",
+          "age_jours": 16,
+          "etat": "vivante",
+          "lignes": 95
+        },
+        {
+          "chemin": "ROADMAP-ALIGNEMENT-4-PROJETS.md",
+          "famille": "roadmap",
+          "derniere_touche": "2026-07-24",
+          "age_jours": 56,
+          "etat": "dormante",
+          "lignes": 108
+        },
+        {
+          "chemin": "ROADMAP-CATALOGUE.md",
+          "famille": "roadmap",
+          "derniere_touche": "2026-07-21",
+          "age_jours": 59,
+          "etat": "dormante",
+          "lignes": 105
+        },
+        {
+          "chemin": "ROADMAP-DASHBOARD.md",
+          "famille": "roadmap",
+          "derniere_touche": "2026-08-05",
+          "age_jours": 44,
+          "etat": "dormante",
+          "lignes": 394
+        },
+        {
+          "chemin": "ROADMAP-ESPACES-PRO.md",
+          "famille": "roadmap",
+          "derniere_touche": "2026-07-07",
+          "age_jours": 73,
+          "etat": "dormante",
+          "lignes": 151
+        },
+        {
+          "chemin": "ROADMAP-GHL.md",
+          "famille": "roadmap",
+          "derniere_touche": "2026-08-19",
+          "age_jours": 30,
+          "etat": "vivante",
+          "lignes": 594
+        },
+        {
+          "chemin": "ROADMAP-LINKEDIN.md",
+          "famille": "roadmap",
+          "derniere_touche": "2026-09-01",
+          "age_jours": 17,
+          "etat": "vivante",
+          "lignes": 192
+        },
+        {
+          "chemin": "ROADMAP-MASTER.md",
+          "famille": "roadmap",
+          "derniere_touche": "2026-09-02",
+          "age_jours": 16,
+          "etat": "vivante",
+          "lignes": 276
+        },
+        {
+          "chemin": "ROADMAP-REFLEXIVE.md",
+          "famille": "roadmap",
+          "derniere_touche": "2026-07-07",
+          "age_jours": 73,
+          "etat": "dormante",
+          "lignes": 99
+        },
+        {
+          "chemin": "ROADMAP-RENO-AGENT.md",
+          "famille": "roadmap",
+          "derniere_touche": "2026-08-01",
+          "age_jours": 48,
+          "etat": "dormante",
+          "lignes": 141
+        },
+        {
+          "chemin": "ROADMAP-RETOURS.md",
+          "famille": "roadmap",
+          "derniere_touche": "2026-07-30",
+          "age_jours": 50,
+          "etat": "dormante",
+          "lignes": 150
+        },
+        {
+          "chemin": "ROADMAP-SECURITE.md",
+          "famille": "roadmap",
+          "derniere_touche": "2026-09-11",
+          "age_jours": 7,
+          "etat": "vivante",
+          "lignes": 285
+        },
+        {
+          "chemin": "ROADMAP-SENTINELLE.md",
+          "famille": "roadmap",
+          "derniere_touche": "2026-08-10",
+          "age_jours": 39,
+          "etat": "dormante",
+          "lignes": 652
+        },
+        {
+          "chemin": "ROADMAP-SITE.md",
+          "famille": "roadmap",
+          "derniere_touche": "2026-08-05",
+          "age_jours": 44,
+          "etat": "dormante",
+          "lignes": 89
+        },
+        {
+          "chemin": "ROADMAP-VEILLE-BTP.md",
+          "famille": "roadmap",
+          "derniere_touche": "2026-08-12",
+          "age_jours": 37,
+          "etat": "dormante",
+          "lignes": 480
+        },
+        {
+          "chemin": "docs/RENOBOOST_UI_SPEC_CLAUDE.md",
+          "famille": "spec",
+          "derniere_touche": "2026-09-11",
+          "age_jours": 7,
+          "etat": "vivante",
+          "lignes": 419
+        },
+        {
+          "chemin": "standards/CLAUDE-STANDARD.md",
+          "famille": "standard",
+          "derniere_touche": "2026-07-24",
+          "age_jours": 56,
+          "etat": "dormante",
+          "lignes": 57
+        }
+      ],
+      "ecartees": {
+        "registre vivant": 4,
+        "audit daté": 3,
+        "fichier de dépôt": 3,
+        "note de séance": 8,
+        "journal de reprise": 36,
+        "hors famille normative": 7,
+        "roadmap de fin de séance": 14
+      }
+    },
+    {
+      "dossier": "RenoDevis",
+      "depot": "PaulGERARD161098/RenoDevis",
+      "mesure": false,
+      "motif": "dépôt absent du voisinage de cette séance"
+    },
+    {
+      "dossier": "RenoAgenda",
+      "depot": "PaulGERARD161098/RenoAgenda",
+      "mesure": false,
+      "motif": "dépôt absent du voisinage de cette séance"
+    },
+    {
+      "dossier": "RenoPredict",
+      "depot": "PaulGERARD161098/RenoPredict",
+      "mesure": false,
+      "motif": "dépôt absent du voisinage de cette séance"
+    },
+    {
+      "dossier": "mon-dpe.fr",
+      "depot": "PaulGERARD161098/mon-dpe.fr",
+      "mesure": false,
+      "motif": "dépôt absent du voisinage de cette séance"
+    },
+    {
+      "dossier": "artisan-builder",
+      "depot": "PaulGERARD161098/artisan-builder",
+      "mesure": true,
+      "superficiel": false,
+      "vus": 13,
+      "retenues": [
+        {
+          "chemin": "CADRAGE-AB-MULTIACTIVITE-2026-09-11.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-09-13",
+          "age_jours": 5,
+          "etat": "vivante",
+          "lignes": 241
+        },
+        {
+          "chemin": "CADRAGE-AUTH-SUPABASE.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-09-15",
+          "age_jours": 3,
+          "etat": "vivante",
+          "lignes": 115
+        },
+        {
+          "chemin": "CADRAGE-MENTIONS-LEGALES.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-09-06",
+          "age_jours": 12,
+          "etat": "vivante",
+          "lignes": 170
+        },
+        {
+          "chemin": "CADRAGE-REPRISE-07-09.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-09-07",
+          "age_jours": 11,
+          "etat": "vivante",
+          "lignes": 343
+        },
+        {
+          "chemin": "CADRAGE-REPRISE-AB1-STUDIO.md",
+          "famille": "cadrage",
+          "derniere_touche": "2026-09-13",
+          "age_jours": 5,
+          "etat": "vivante",
+          "lignes": 282
+        },
+        {
+          "chemin": "CRITIQUE-DESIGN-SPC-2026-09-11.md",
+          "famille": "design",
+          "derniere_touche": "2026-09-14",
+          "age_jours": 4,
+          "etat": "vivante",
+          "lignes": 178
+        }
+      ],
+      "ecartees": {
+        "audit daté": 1,
+        "fichier de dépôt": 4,
+        "hors famille normative": 1,
+        "registre vivant": 1
+      }
+    },
+    {
+      "dossier": "ripair",
+      "depot": "paggerard-boop/ripair",
+      "mesure": false,
+      "motif": "dépôt absent du voisinage de cette séance"
+    }
+  ]
+}
