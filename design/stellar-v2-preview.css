@@ -278,3 +278,76 @@ body.stellar-v2-preview::before{
     background:radial-gradient(ellipse at center,transparent 42%,rgba(2,5,11,.12) 72%,rgba(2,5,11,.32) 100%);
   }
 }
+
+
+/* V2.6 — instruments in the sky.
+   An instrument is not glass decoration: dense/critical information receives
+   a stable night plate; atmosphere remains visible only around it. */
+.stellar-v2-preview{
+  --sv2-instrument:rgba(5,10,18,.94);
+  --sv2-instrument-head:rgba(10,18,29,.98);
+  --sv2-instrument-line:rgba(159,201,223,.18);
+  --sv2-instrument-line-strong:rgba(216,189,130,.34);
+  --sv2-signal-system:#9fc9df;
+  --sv2-value:#e0c98f;
+}
+.sv2-instrument{
+  position:relative;
+  isolation:isolate;
+  background:var(--sv2-instrument);
+  border:1px solid var(--sv2-instrument-line);
+  border-radius:var(--sv2-radius);
+  color:var(--sv2-ink-soft);
+  box-shadow:inset 0 1px rgba(255,255,255,.025);
+}
+.sv2-instrument::before{
+  content:"";position:absolute;inset:5px;pointer-events:none;
+  border:1px solid rgba(216,189,130,.08);border-radius:5px;
+}
+.sv2-instrument__head{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  min-height:38px;padding:8px 12px;
+  background:var(--sv2-instrument-head);
+  border-bottom:1px solid var(--sv2-instrument-line);
+  color:var(--sv2-gold);
+  font:500 10px/1.2 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  letter-spacing:.18em;text-transform:uppercase;
+}
+.sv2-instrument__body{padding:14px 16px}
+.sv2-instrument__value{
+  color:var(--sv2-value);
+  font-variant-numeric:tabular-nums lining-nums;
+}
+.sv2-instrument__system{color:var(--sv2-signal-system)}
+.sv2-instrument__meta{color:var(--sv2-ink-quiet);font-size:.78em}
+.sv2-instrument input,.sv2-instrument select,.sv2-instrument textarea{
+  color:var(--sv2-ink);background:rgba(2,5,11,.82);
+  border:1px solid var(--sv2-instrument-line);border-radius:6px;
+}
+.sv2-instrument input:focus-visible,.sv2-instrument select:focus-visible,
+.sv2-instrument textarea:focus-visible,.sv2-instrument button:focus-visible{
+  outline:2px solid var(--sv2-focus);outline-offset:2px;
+}
+.sv2-instrument hr{border:0;border-top:1px solid var(--sv2-instrument-line)}
+@media(max-width:640px){
+  .sv2-instrument{border-radius:6px}
+  .sv2-instrument__body{padding:12px}
+}
+
+/* ALTHEA bridge preview: only active when an ancestor opts into Stellar V2. */
+.stellar-v2-preview .althea-bloc{
+  background:var(--sv2-instrument);
+  border-color:var(--sv2-instrument-line);
+  border-radius:var(--sv2-radius);
+  box-shadow:inset 0 1px rgba(255,255,255,.025);
+}
+.stellar-v2-preview .althea-entete{
+  background:var(--sv2-instrument-head);
+  border-color:var(--sv2-instrument-line);
+  color:var(--sv2-gold);
+}
+.stellar-v2-preview .althea-st,
+.stellar-v2-preview .althea-skill,
+.stellar-v2-preview .althea-geste{
+  border-color:var(--sv2-instrument-line);
+}
