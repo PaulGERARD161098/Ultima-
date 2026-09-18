@@ -114,3 +114,18 @@ La couche de preview est désormais consolidée. Les doublons de cascade mobile 
 - T5 autres instruments/ateliers écran par écran.
 
 Aucune étape Tn ne doit embarquer automatiquement Tn+1.
+
+
+## T1 — Mapping production implanté
+
+T1 est implanté dans `css/stellaire.css` sous forme de tokens sémantiques `--stellar-*`. Les noms historiques ne sont pas supprimés : ils restent l'API de compatibilité des écrans existants et peuvent pointer progressivement vers les rôles V2.
+
+Mapping initial :
+- `--stellar-text-primary` → `--encre`, `--creme`
+- `--stellar-space-void/deep` → nouvelles profondeurs V2, sans forcer encore `--fond` ni les tokens de `ciel.css`
+- `--stellar-accent-gold` / `--stellar-accent-ice` → rôles futurs structure/interactions
+- `--stellar-line-gold/cool` → hairlines patrimoniales/techniques
+- `--stellar-focus` → focus V2
+- rayon, blur et timings deviennent des contrats nommés.
+
+Ce choix évite une bascule visuelle globale pendant T1. La migration des composants appartient à T2/T3/T4, pas aux tokens.
