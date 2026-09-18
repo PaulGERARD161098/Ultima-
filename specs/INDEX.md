@@ -99,7 +99,7 @@
 | 🟢 | `docs/RENOBOOST_UI_SPEC_CLAUDE.md` | spec | 2026-09-11 (7 j) | 419 |
 | 🟡 | `standards/CLAUDE-STANDARD.md` | standard | 2026-07-24 (56 j) | 57 |
 
-*46 retenues · 76 écartées sur 122 fichiers lus — 36 journal de reprise, 14 roadmap de fin de séance, 8 note de séance, 7 hors famille normative, 4 registre vivant, 4 fichier de dépôt, 3 audit daté.*
+*46 retenues · 77 écartées sur 123 fichiers lus — 36 journal de reprise, 15 roadmap de fin de séance, 8 note de séance, 7 hors famille normative, 4 registre vivant, 4 fichier de dépôt, 3 audit daté.*
 
 ## RenoDevis — `PaulGERARD161098/RenoDevis`
 

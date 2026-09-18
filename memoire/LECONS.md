@@ -1,4 +1,5 @@
-<!-- lecons:empreinte v24 2026-09-18 sha256:8b3c40ef7785 -->
+<!-- lecons:empreinte v25 2026-09-18 sha256:a69eccb1134a -->
+<!-- lecons:empreinte v25 2026-09-18 sha256:0000000000 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -614,6 +615,54 @@ ce qu'on attend d'un garde-fou qu'il fasse.
 question n'est jamais seulement « qu'est-ce qui a échoué ? » mais **« qu'est-ce
 qui n'a pas été exécuté à cause de ça ? »**. Un échec en tête de chaîne se traite
 en priorité, non pour le vert, mais pour **récupérer la vue**.
+
+---
+
+**UN HARNAIS QUI N'A JAMAIS TOURNÉ AILLEURS QUE SUR LA MACHINE QUI L'A ÉCRIT NE
+GARDE RIEN** *(2026-09-18)*. RenoBoost portait **huit** harnais
+`*.navigateur.mjs` — contraste, rendu, géométrie, tout ce qui ne se vérifie
+qu'en ouvrant une page. Aucun n'avait jamais tourné en intégration : `node
+--test` ne découvre que les `*.test.mjs`, et six d'entre eux codaient en dur le
+chemin d'un binaire Chromium propre au poste de développement. La CI était
+verte, et ne regardait aucune page. Le jour où ils ont tourné, **cinq défauts
+sont tombés d'un coup**, dont un que seule la machine d'intégration pouvait
+voir : un `const ROOT = '/home/user/RenoBoost'` — vrai ici, faux partout
+ailleurs. ⛔ *Un harnais qu'on ne lance jamais et un harnais qui n'existe pas se
+valent exactement — à ceci près que le premier occupe la place du second et
+rassure.* **Règle** : un harnais entre dans le dépôt **avec son exécution en
+intégration, dans le même commit**. Pas de « on le branchera » : c'est
+précisément ce qui ne s'écrit pas.
+
+⊕ **Et l'instrument qui devait les lancer a menti le premier.** Le lanceur que
+j'ai écrit ce jour-là annonçait `sortie 0` sur un harnais qui échouait : `bash`
+réinitialise `$?` en entrant dans le `else`, et je lisais le code APRÈS le test
+au lieu de le **capturer avant**. Trois lignes, et le garde-fou tout neuf
+validait tout. ⚠️ **Le même harnais, sous mutation, a PLANTÉ** au lieu de rendre
+un verdict — `getComputedStyle(null)` sur un élément que la mutation venait de
+retirer : la section suivante n'a jamais tourné, et une trace d'erreur ne se lit
+pas comme un échec de contrôle. *Un garde-fou se prouve en le cassant, et la
+preuve ne vaut que si le rouge attendu est bien **le rouge du contrôle**, pas une
+pile d'appels.*
+
+---
+
+**UN CRITÈRE VRAI MAIS INSUFFISANT EST VERT EXACTEMENT QUAND IL COMPTE**
+*(2026-09-18)*. Le harnais du bandeau défilant vérifiait que **la piste déborde
+de l'écran**. C'est vrai, c'est mesurable, et ça ne garde rien : la propriété qui
+compte est que **les séries restantes couvrent encore l'écran** une fois la
+première sortie — `(N-1) × largeur_de_série ≥ largeur_d'écran`. Les deux
+coïncidaient tant que le bandeau portait six items. Paul en a retiré un ; sur un
+écran large, un trou pouvait s'ouvrir dans le défilé **sans que le contrôle
+bouge**. ⛔ *Le défaut n'a pas été révélé par un test, mais par une décision
+produit* — c'est-à-dire par hasard, et après coup.
+
+⚠️ **Le signe à reconnaître** : un critère qui mesure une **conséquence** de la
+bonne propriété au lieu de la propriété elle-même. Il passe les cas nominaux, il
+est facile à écrire, et il cède exactement dans le cas limite pour lequel on
+l'avait mis. **Le geste qui manquait tient en une question** : *qu'est-ce qui
+rendrait ce contrôle vert alors que l'écran est faux ?* Si la réponse existe, on
+ne mesure pas la bonne chose. Ici, elle s'énonçait en une ligne — et le contrôle
+réécrit se vérifie désormais à six largeurs d'écran, de 390 à 2560.
 
 ## 3. Ce qu'on donne à Paul
 
