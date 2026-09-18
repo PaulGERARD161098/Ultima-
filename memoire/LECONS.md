@@ -1,5 +1,4 @@
-<!-- lecons:empreinte v25 2026-09-18 sha256:a69eccb1134a -->
-<!-- lecons:empreinte v25 2026-09-18 sha256:0000000000 -->
+<!-- lecons:empreinte v26 2026-09-18 sha256:f83cedb5a0af -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -860,6 +859,55 @@ il ne se recopie pas. Le harnais dédié rend l'opération sûre : il doit passe
 **RÉUTILISER AVANT DE REFAIRE.** Modèles déjà conçus, fixtures en cache, une
 seule fusion par boucle. Conception et implémentation lourdes partent en agents,
 pour préserver le contexte du fil principal ; les synthèses seules remontent.
+
+**ON COMMITE AVANT DE MUTER — TROISIÈME FOIS PAYÉE** *(2026-09-18)*. La passe
+de dry run casse volontairement le code puis restaure par `git checkout -- .`.
+Cette commande **écrase tout ce qui n'est pas commité**, y compris le travail
+légitime de la demi-heure précédente. Le `CLAUDE.md` d'Artidispo le disait déjà,
+payé deux fois le 18/09 au matin — dont une en perdant la réécriture complète
+des CGV. Le soir même, j'ai lancé une passe de sept mutations sur un état non
+commité : le voile du plan, le placement des libellés, le cadre calculé et le
+contrôle multi-largeurs sont partis ensemble, et tout a dû être réécrit de
+mémoire. ⛔ *La séquence n'est pas « écrire → tester → muter » mais
+**écrire → tester → COMMITER → muter → restaurer**. Une règle qu'on a déjà lue
+deux fois et qu'on enfreint quand même n'est pas oubliée : elle n'est pas
+outillée. Le geste de muter doit commencer par refuser de tourner si
+`git status` n'est pas propre.*
+
+**UN CONTRÔLE QUI MESURE LA MAUVAISE GRANDEUR EST VERT SUR LE DÉFAUT QU'IL
+GARDE** *(2026-09-18)*. Un garde-fou sur des pastilles SVG a été écrit trois
+fois avant de voir quoi que ce soit. V1 comparait `getBoundingClientRect()` à la
+bande : aveugle, un élément rogné par le cadre garde un rectangle plausible qui
+tombe toujours dedans. V2 comparait `getBBox()` au `viewBox` : aveugle aussi, et
+plus subtilement — en `preserveAspectRatio="slice"`, la zone **réellement
+dessinée** n'est qu'un SOUS-ENSEMBLE du `viewBox`, donc « être dans le viewBox »
+ne veut pas dire « être dessiné ». V3 passe par `getScreenCTM()`, la
+transformation exacte qu'applique le navigateur. ⛔ *Trois mutations réelles ont
+survécu aux deux premières versions en restant vertes. Quand une sonde ne
+trouve rien, la question n'est pas « le code est-il sain ? » mais **« cette
+sonde peut-elle seulement voir ce que je crois qu'elle garde ? »** — et la seule
+réponse acceptable est une mutation qui la fait virer au rouge.*
+
+**UNE CONSTANTE GÉOMÉTRIQUE QUI DÉCRIT UN RENDU FINIT PAR LE DÉCRIRE FAUX**
+*(2026-09-18)*. Deux cadrages écrits à la main — l'emprise d'une tournée, puis
+le `viewBox` « sûr » d'un plan — ont chacun rogné un libellé le jour où autre
+chose a bougé : le premier quand le placeur a déplacé une étiquette, le second
+dès que la fenêtre a dépassé ~1900 px de large. Les deux paraissaient
+inoffensifs et étaient justes le jour où ils ont été écrits. ⛔ *Ce qui décrit
+une géométrie rendue se MESURE sur le rendu (`getBBox()`, le rapport réel de
+l'élément) ; une valeur en dur n'est légitime qu'en REPLI, quand la mesure est
+indisponible — et elle doit le dire.*
+
+**LE DOMAINE SE GARDE À SES DEUX BORDS, PAS AU MILIEU** *(2026-09-18)*. Le même
+harnais mesurait 390 / 768 / 1280 / 1600 px et déclarait une page saine.
+Ajouter **1000 px** a révélé un texte qui recouvrait la carte ; ajouter
+**2200 px** en a révélé un second, de cause inverse — la colonne de contenu
+reste centrée quand l'écran grandit, donc elle dérive par-dessus le dessin.
+Trois défauts réels vivaient exactement entre les largeurs testées. ⛔ *Une
+liste de cas choisie par habitude (« mobile, tablette, portable, grand écran »)
+couvre les valeurs courantes, pas les TRANSITIONS. Chercher où le comportement
+CHANGE — un seuil de media query, un rapport de forme qui bascule — et mesurer
+de part et d'autre.*
 
 **`git checkout --` NE RESTAURE PAS UN FICHIER NON SUIVI** *(2026-09-13)*. Une
 boucle de sondes de dry run annulait chaque sabotage par `git checkout -- <fichier>`.
