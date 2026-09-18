@@ -130,8 +130,6 @@ body.stellar-v2-preview::before{
 .stellar-v2-preview .ciel--concentre .ciel-liens line.ciel-lien--vif {
   opacity:.88;stroke:var(--sv2-ice);stroke-width:1.25;
 }
-.stellar-v2-preview .ciel-etoile {
-}
 .stellar-v2-preview .ciel-etoile:hover,
 .stellar-v2-preview .ciel-etoile:focus-visible,
 .stellar-v2-preview .ciel-etoile--choisie {
