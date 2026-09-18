@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<!-- `viewport-fit=cover` — ABSENT de toutes les pages d'Ultima aujourd'hui
+     (vérifié le 2026-08-16 sur index, ultima et vranesh). Tant que le ciel
+     vivait dans un plateau centré, il ne manquait pas. En plein écran, sans
+     lui, les `env(safe-area-inset-*)` valent zéro et la barre système d'iOS
+     recouvre le bas de la scène. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Maquette — LV5 : la galaxie prend l'écran</title>
+<!--
+  MAQUETTE DE TRAVAIL — étape P0 de CADRAGE-LV5-GALAXIE-PLEIN-ECRAN.md.
+  Vrai registre (js/registre-lv3.mjs), vrai moteur (js/ciel.js), vraie couche
+  de fond (js/ciel-fond.js). Aucune donnée personnelle : le registre ne porte
+  que des noms d'écrans et des cibles.
+
+  CE QU'ELLE SERT À TRANCHER — et c'est Paul qui tranche, pas la mesure :
+    ① LE PLEIN ÉCRAN : la galaxie EST la page. Plus de plateau, plus de
+      colonne de 760 px, le mobilier posé en surcouche.
+    ② LA FINESSE : la densité de la maquette de référence (le mode « Galaxie »
+      de preview-riven-galaxie.html, désigné par Paul le 2026-08-16) portée
+      dans le moteur 3D — poussière par milliers, voiles, filaments, parallaxe.
+    ③ LA DISPOSITION sur écran large : la colonne validée en LV4 l'avait été
+      dans un cadre de 760 px. En plein écran, elle se rejuge.
+
+  CE QU'ELLE NE FAIT PAS, ET C'EST DÉLIBÉRÉ : elle ne rejoue pas la navigation
+  de LV4 (survol qui déplie, clic qui descend, fil d'Ariane). Cette maquette-là
+  existe déjà, elle a été arbitrée, et la rejouer ici la ferait diverger.
+  Celle-ci ne juge que la FORME.
+-->
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="/css/ciel.css">
+<link rel="stylesheet" href="/css/stellaire.css">
+<link rel="stylesheet" href="/design/preview-lv5-galaxie.css">\n<link rel="stylesheet" href="/design/stellar-v2-preview.css">
+</head>
+<body class="lv5 stellar-v2-preview">
+
+<!-- LE REPLI SANS JAVASCRIPT — d'abord dans le document, recouvert ensuite.
+     En plein écran il n'y a plus de « sous la scène » où le ranger. Le ciel
+     étant entièrement dessiné en JavaScript, cette liste EST la navigation le
+     jour où il ne se peint pas. -->
+<noscript>
+  <div class="lv5-repli">
+    <h1>Ultima</h1>
+    <p>Le ciel a besoin de JavaScript. Voici les portes :</p>
+    <ul>
+      <li><a href="../ultima.html">ULTIMA — le personnel</a></li>
+      <li><a href="../alpha.html">ALPHA — les projets</a></li>
+      <li><a href="../althea.html">ALTHEA</a></li>
+    </ul>
+  </div>
+</noscript>
+
+<!-- LA SCÈNE : le fond de l'écran. `ciel-noeud-coque` n'est pas décoratif —
+     c'est la classe qui porte les jetons de nuit de `css/ciel.css`. -->
+<div id="lv5-scene" class="ciel-scene lv5-scene ciel-noeud-coque"></div>
+
+<!-- LE MOBILIER : une surcouche. Les conteneurs ne reçoivent aucun geste. -->
+<div class="lv5-hud">
+  <div class="lv5-haut">
+    <div class="lv5-bloc">
+      <p class="lv5-fil" id="lv5-fil">Ultima</p>
+      <h1 class="lv5-titre" id="lv5-titre">Bienvenue sur Ultima</h1>
+      <p class="lv5-parole" id="lv5-parole">Sur quoi est-ce qu’on travaille aujourd’hui ?</p>
+    </div>
+    <div class="lv5-outils">
+      <button type="button" id="lv5-fond" aria-pressed="true">Fond</button>
+      <button type="button" id="lv5-charge">Charge : 3</button>
+      <button type="button" id="lv5-mesurer">Mesurer</button>
+    </div>
+  </div>
+
+  <div class="lv5-bas">
+    <div class="lv5-bloc lv5-mesure" id="lv5-mesure" role="status" aria-live="polite">
+      Mesure — appuyez sur « Mesurer ».
+    </div>
+  </div>
+</div>
+
+<script src="/js/ciel-fond.js"></script>
+<script src="/js/ciel.js"></script>
+<script type="module" src="/design/preview-lv5-galaxie.js"></script>
+<aside class="sv2-panel sv2-legend" aria-hidden="true"><strong>STELLAR V2 / P0</strong><br><span class="signal">or</span> = structure & appel · glace = interaction<br>Preview isolée — aucune page production modifiée.</aside>\n</body>
+</html>
