@@ -4,95 +4,6 @@
     {
       "ok": true,
       "motif": "",
-      "depot": "PaulGERARD161098/RenoBoost",
-      "grain": {
-        "projet": "RénoBoost",
-        "depot": "PaulGERARD161098/RenoBoost",
-        "cap": "Un individu seul fait tourner le business entier, aidé par l'automatisation (Directive IA). RénoBoost est le hub : acquisition, rendez-vous, dashboard, et la roadmap maîtresse des quatre briques.",
-        "rattache_a": "ROADMAP-2026-09-19-specs-hopus.md (le plus récent) · ROADMAP-2026-09-18-fin-de-session.md (le plus récent) · SPECS.md · Ultima-/specs/ARBITRAGES.md · ROADMAP-2026-09-15-fin-de-session.md (le plus récent) · ROADMAP-2026-09-13-soir-fin-de-session.md · CADRAGE-2026-09-13-boussole.md · BOUSSOLE-recherches-google.pdf · ROADMAP-SECURITE.md · ROADMAP-MASTER.md · ACTIONS-PAUL.md · docs/CADRAGE-UX-CONSOLE-",
-        "etat": "en_cours",
-        "jalon": {
-          "nom": "Jalon 0 — l'amorçage : trois gestes de Paul, zéro ligne de code",
-          "critere_de_sortie": "`stickers` > 0 · fiche Google visible publiquement · `stripe_charges_enabled` = true"
-        },
-        "dernier_arret": {
-          "le": "2026-09-19",
-          "quoi": "La FAQ est en production (pas 2, 6 accordéons natifs). 8 patterns sur 15 posés. Le contour de focus passe de 2,02:1 à 3,42:1.",
-          "commit": "63780c4"
-        },
-        "prochaine_action": "EXERCER EN VRAI les 3 gestes : un devis PDF depuis une fiche client, un devis depuis l'onglet Devis avec rattachement, une écriture demandée à Réno.",
-        "bloque_par": [
-          "Promouvoir la CSP Report-Only en enforce, après lecture des rapports (ACTIONS-PAUL.md) — 11/09",
-          "Rendre le ruleset de main ACTIF : il ne mord pas (ACTIONS-PAUL.md) — 11/09",
-          "Valider la fiche Google Business (ACTIONS-PAUL.md §1) — ouverte depuis le 04/08",
-          "Imprimer un lot de stickers QR (ACTIONS-PAUL.md §2) — reporté par Paul le 07/09",
-          "Embarquement Stripe de SOLA (ACTIONS-PAUL.md §3)"
-        ],
-        "en_attente_depuis": "2026-08-04",
-        "boucles_ouvertes": [
-          {
-            "quoi": "🔴 GITHUB ACTIONS À L'ARRÊT — plafonds atteints (confirmé par Paul le 19/09). Aucun job ne démarre, les crons métier sont morts en silence. ROADMAP-2026-09-19 §4.",
-            "depuis": "2026-09-19"
-          },
-          {
-            "quoi": "📐 SPECS HOPUS — 8 patterns sur 15 posés au 19/09 (mesuré, pas de mémoire). Détail et blocages : ROADMAP-2026-09-19-specs-hopus.md §1.",
-            "depuis": "2026-09-19"
-          },
-          {
-            "quoi": "📐 SPECS HOPUS — pas 0,1,2 faits. Restent 7 patterns, le ProductShowcase bloqué faute de captures réelles. Ordre : ROADMAP-2026-09-19-specs-hopus.md §1.",
-            "depuis": "2026-09-18"
-          },
-          {
-            "quoi": "⛔ LA FAQ NE PROMET PAS LE RAIL DE PAIEMENT (mesuré : 0 € encaissé). Maquettée, PAS posée : 3 réponses dues par Paul — ROADMAP-2026-09-18-fin-de-session.md §4.",
-            "depuis": "2026-09-18"
-          },
-          {
-            "quoi": "Console lot 1 — PR #459 : indicateurs et raccourcis fiabilisés (le bilan serveur lisait un cache de 140 clients contre 169 fiches ; 7 devis « en attente » incluaient 2 Perdus).…",
-            "depuis": "2026-09-14"
-          },
-          {
-            "quoi": "Console — PR #454 : corrections de mise en page, filtre Refusés, budgets et détails de RDV, testées (59 contrôles, jobs GitHub verts). ⚠️ LE CONTRÔLE VISUEL CONNECTÉ N'A JAMAIS…",
-            "depuis": "2026-09-14"
-          },
-          {
-            "quoi": "Reprise radar : relancer l'import du 69 (« Rhone,… · département 69 ») — la mesure directe ET l'écart d'un couple douteux sont en ligne (#451). Ensuite : décider du ré-import de…",
-            "depuis": "2026-09-14"
-          },
-          {
-            "quoi": "⚠️ AUCUNE PREUVE QUE LES CRONS PARTENT — le correctif du 15/09 est fusionné et déployé, mais rien ne prouve encore qu'il fonctionne. Mesure armée : `/api/linkedin` le 16/09 08:00…",
-            "depuis": "2026-09-15"
-          },
-          {
-            "quoi": "⛔ LEÇON DU 15/09 — LA CLÉ SERVICE PASSE OUTRE LA RLS, LE PÉRIMÈTRE SE POSE À LA MAIN. Trouvé par l'audit de fin de séance, APRÈS la fusion de #467 : `kv_store` a pour clé primaire…",
-            "depuis": "2026-09-15"
-          },
-          {
-            "quoi": "⛔ LEÇON DU 15/09 — UN GARDE-FOU QU'ON NE PEUT PAS CASSER N'EN EST PAS UN. Trois fois dans la même journée : cinq lignes de validation d'entrée dont la suppression laissait les…",
-            "depuis": "2026-09-15"
-          }
-        ],
-        "maj": "2026-09-19"
-      },
-      "recits": [
-        "boucles_ouvertes[].quoi"
-      ],
-      "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
-      "derive": {
-        "tete": "621c6d2",
-        "tete_le": "2026-09-19T16:46:27+00:00",
-        "commits_depuis": 1,
-        "commit_inconnu": false
-      },
-      "mesure_le": "2026-09-19",
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 46,
-      "rang": 0
-    },
-    {
-      "ok": true,
-      "motif": "",
       "depot": "PaulGERARD161098/RenoDevis",
       "grain": {
         "projet": "RénoDevis",
@@ -179,6 +90,97 @@
     {
       "ok": true,
       "motif": "",
+      "depot": "PaulGERARD161098/RenoBoost",
+      "grain": {
+        "projet": "RénoBoost",
+        "depot": "PaulGERARD161098/RenoBoost",
+        "cap": "Un individu seul fait tourner le business entier, aidé par l'automatisation (Directive IA). RénoBoost est le hub : acquisition, rendez-vous, dashboard, et la roadmap maîtresse des quatre briques.",
+        "rattache_a": "ROADMAP-2026-09-19-nuit-fin-de-session.md (LA source de la reprise du 20/09) · ROADMAP-2026-09-19-specs-hopus.md (le détail des specs) · ROADMAP-2026-09-18-fin-de-session.md (le plus récent) · SPECS.md · Ultima-/specs/ARBITRAGES.md · ROADMAP-2026-09-15-fin-de-session.md (le plus récent) · ROADMAP-2026-09-13-soir-fin-de-session.md · CADRAGE-2026-09-13-boussole.md · BOUSSOLE-recherches-google.pdf · ",
+        "etat": "en_cours",
+        "jalon": {
+          "nom": "Jalon 0 — l'amorçage : trois gestes de Paul, zéro ligne de code",
+          "critere_de_sortie": "`stickers` > 0 · fiche Google visible publiquement · `stripe_charges_enabled` = true"
+        },
+        "dernier_arret": {
+          "le": "2026-09-19",
+          "quoi": "Deux PR fusionnées. #498 : ProductShowcase (#console) et MobileShowcase (#terrain) posés — leur blocage était une LECTURE, pas un manque (l'interdit n°1 défend la donnée d'exemple…",
+          "commit": "1cb54a4"
+        },
+        "prochaine_action": "⛔ LE SIMULATEUR DE ZONE A DISPARU DU SITE PUBLIC, et aucun document ne le disait : index.html ne porte plus ni id=simulateur ni simulateur-zone.mjs, la section ne vit que dans…",
+        "bloque_par": [
+          "Promouvoir la CSP Report-Only en enforce, après lecture des rapports (ACTIONS-PAUL.md) — 11/09",
+          "Rendre le ruleset de main ACTIF : il ne mord pas (ACTIONS-PAUL.md) — 11/09",
+          "Valider la fiche Google Business (ACTIONS-PAUL.md §1) — ouverte depuis le 04/08",
+          "Imprimer un lot de stickers QR (ACTIONS-PAUL.md §2) — reporté par Paul le 07/09",
+          "Embarquement Stripe de SOLA (ACTIONS-PAUL.md §3)"
+        ],
+        "en_attente_depuis": "2026-08-04",
+        "boucles_ouvertes": [
+          {
+            "quoi": "📐 SPECS HOPUS — 13 patterns sur 15 posés (re-mesuré dans index.html le 19/09 au soir). Les 2 restants attendent Paul, nommément : BentoBenefits attend la bascule de la vitrine…",
+            "depuis": "2026-09-19"
+          },
+          {
+            "quoi": "⚖️ DEUX RÈGLES D'ARGENT DIVERGENT — la part fixe s'ajoute-t-elle à la commission (landing-core.js, testé) ou s'en déduit-elle (index.html §modele, arbitrage du 13/09) ? 900 €…",
+            "depuis": "2026-09-19"
+          },
+          {
+            "quoi": "🔴 GITHUB ACTIONS À L'ARRÊT — cause INCONNUE, et « plafonds atteints » est RÉFUTÉ : Paul a relevé le plafond le 19/09 vers 16h30, aucun effet. Ce qui est établi est la SIGNATURE…",
+            "depuis": "2026-09-19"
+          },
+          {
+            "quoi": "Console lot 1 — PR #459 : indicateurs et raccourcis fiabilisés (le bilan serveur lisait un cache de 140 clients contre 169 fiches ; 7 devis « en attente » incluaient 2 Perdus).…",
+            "depuis": "2026-09-14"
+          },
+          {
+            "quoi": "Console — PR #454 : corrections de mise en page, filtre Refusés, budgets et détails de RDV, testées (59 contrôles, jobs GitHub verts). ⚠️ LE CONTRÔLE VISUEL CONNECTÉ N'A JAMAIS…",
+            "depuis": "2026-09-14"
+          },
+          {
+            "quoi": "Reprise radar : relancer l'import du 69 (« Rhone,… · département 69 ») — la mesure directe ET l'écart d'un couple douteux sont en ligne (#451). Ensuite : décider du ré-import de…",
+            "depuis": "2026-09-14"
+          },
+          {
+            "quoi": "⚠️ AUCUNE PREUVE QUE LES CRONS PARTENT — le correctif du 15/09 est fusionné et déployé, mais rien ne prouve encore qu'il fonctionne. Mesure armée : `/api/linkedin` le 16/09 08:00…",
+            "depuis": "2026-09-15"
+          },
+          {
+            "quoi": "⛔ LEÇON DU 15/09 — LA CLÉ SERVICE PASSE OUTRE LA RLS, LE PÉRIMÈTRE SE POSE À LA MAIN. Trouvé par l'audit de fin de séance, APRÈS la fusion de #467 : `kv_store` a pour clé primaire…",
+            "depuis": "2026-09-15"
+          },
+          {
+            "quoi": "⛔ LEÇON DU 15/09 — UN GARDE-FOU QU'ON NE PEUT PAS CASSER N'EN EST PAS UN. Trois fois dans la même journée : cinq lignes de validation d'entrée dont la suppression laissait les…",
+            "depuis": "2026-09-15"
+          },
+          {
+            "quoi": "⛔ LEÇON DU 15/09 — RÉPARER UN DÉCLENCHEUR SANS LIRE CE QU'IL DÉCLENCHE. `/api/rp-digest` DÉDUISAIT son mode : le passer en quotidien sans rien d'autre aurait envoyé un digest du…",
+            "depuis": "2026-09-15"
+          }
+        ],
+        "maj": "2026-09-19"
+      },
+      "recits": [
+        "dernier_arret.quoi",
+        "prochaine_action",
+        "boucles_ouvertes[].quoi"
+      ],
+      "ciel": "renoboost-ia",
+      "hors_seance": false,
+      "reprise": false,
+      "derive": {
+        "tete": null,
+        "tete_le": null,
+        "commits_depuis": 0,
+        "commit_inconnu": false
+      },
+      "mesure_le": "2026-09-19",
+      "jours_depuis_maj": 0,
+      "jours_en_attente": 46,
+      "rang": 2
+    },
+    {
+      "ok": true,
+      "motif": "",
       "depot": "PaulGERARD161098/Ultima-",
       "grain": {
         "projet": "Ultima",
@@ -191,11 +193,11 @@
           "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
         },
         "dernier_arret": {
-          "le": "2026-09-18",
-          "quoi": "Bibliothèque de specs posée (#252, 85 specs indexées), deux garde-fous en cascade réparés (#253), grain et collectes régénérés (#254). Leçons v25.",
-          "commit": "0daa656"
+          "le": "2026-09-19",
+          "quoi": "#265 : l'arbitrage A1 était EN RETARD D'UN LOT sur le dépôt qu'il gouverne — il écrivait encore que les captures de la console « n'existent pas », alors que RenoBoost 0fb50a3 les…",
+          "commit": "0de6656"
         },
-        "prochaine_action": "Reprendre le jalon J3/P4 selon l’arbitrage existant, après le retour de Paul sur P3. La migration et la fusion de l’audit sont terminées ; ne pas les rejouer.",
+        "prochaine_action": "Reprendre le jalon J3/P4 selon l’arbitrage existant, après le retour de Paul sur P3. La migration et la fusion de l’audit sont terminées ; ne pas les rejouer. ⚠️ Toujours dû, et…",
         "bloque_par": [
           "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
           "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
@@ -245,22 +247,25 @@
             "depuis": "2026-09-05"
           }
         ],
-        "maj": "2026-09-18"
+        "maj": "2026-09-19"
       },
-      "recits": [],
+      "recits": [
+        "dernier_arret.quoi",
+        "prochaine_action"
+      ],
       "ciel": "racine",
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "718e178",
-        "tete_le": "2026-09-19T18:49:04+02:00",
-        "commits_depuis": 4,
+        "tete": null,
+        "tete_le": null,
+        "commits_depuis": 0,
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-19",
-      "jours_depuis_maj": 1,
+      "jours_depuis_maj": 0,
       "jours_en_attente": 30,
-      "rang": 0
+      "rang": 2
     },
     {
       "ok": true,
@@ -301,8 +306,8 @@
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "38fa4a1",
         "tete_le": "2026-09-19T16:46:13+00:00",
@@ -348,8 +353,8 @@
       },
       "recits": [],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "dcf8dc5",
         "tete_le": "2026-09-19T16:46:14+00:00",
@@ -409,14 +414,22 @@
     "lisibles": 5,
     "illisibles": 0,
     "hors_seance": 3,
-    "repris": 1,
+    "repris": 3,
     "en_cours": 5,
     "en_attente_de_paul": 0,
     "au_repos": 0,
-    "derives": 3,
+    "derives": 1,
     "commits_inconnus": 2,
     "boucles_ouvertes": 31,
     "gestes_de_paul": [
+      {
+        "projet": "RénoDevis",
+        "geste": "Le verdict de Paul sur la DENSITÉ du cockpit (PR #160). Les tests prouvent la conformité et l'accessibilité ; aucun ne dit si la liste est lisible en usage"
+      },
+      {
+        "projet": "RénoDevis",
+        "geste": "Embarquement Stripe de SOLA : le compte de TEST existe depuis le 19/08 mais n'encaisse pas encore. Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul"
+      },
       {
         "projet": "RénoBoost",
         "geste": "Promouvoir la CSP Report-Only en enforce, après lecture des rapports (ACTIONS-PAUL.md) — 11/09"
@@ -436,14 +449,6 @@
       {
         "projet": "RénoBoost",
         "geste": "Embarquement Stripe de SOLA (ACTIONS-PAUL.md §3)"
-      },
-      {
-        "projet": "RénoDevis",
-        "geste": "Le verdict de Paul sur la DENSITÉ du cockpit (PR #160). Les tests prouvent la conformité et l'accessibilité ; aucun ne dit si la liste est lisible en usage"
-      },
-      {
-        "projet": "RénoDevis",
-        "geste": "Embarquement Stripe de SOLA : le compte de TEST existe depuis le 19/08 mais n'encaisse pas encore. Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul"
       },
       {
         "projet": "Ultima",
@@ -506,39 +511,32 @@
   "cartouche": {
     "signaux": [
       {
-        "projet": "RénoBoost",
-        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
-        "pourquoi": "derive"
-      },
-      {
         "projet": "RénoDevis",
         "dit": "a avancé de 1 commit(s) depuis sa dernière note",
         "pourquoi": "derive"
       },
       {
+        "projet": "RénoBoost",
+        "dit": "arrêté sur : Deux PR fusionnées. #498 : ProductShowcase (#console) et MobileShowcase (#terrain) posés — leur blocage était une LECTURE, pas un manque (l'interdit n°1 défend la donnée d'exemple…",
+        "pourquoi": "en_cours"
+      },
+      {
         "projet": "Ultima",
-        "dit": "a avancé de 4 commit(s) depuis sa dernière note",
-        "pourquoi": "derive"
+        "dit": "arrêté sur : #265 : l'arbitrage A1 était EN RETARD D'UN LOT sur le dépôt qu'il gouverne — il écrivait encore que les captures de la console « n'existent pas », alors que RenoBoost 0fb50a3 les…",
+        "pourquoi": "en_cours"
       }
     ],
     "action": {
-      "projet": "RénoBoost",
+      "projet": "RénoDevis",
       "nature": "code",
-      "faire": "EXERCER EN VRAI les 3 gestes : un devis PDF depuis une fiche client, un devis depuis l'onglet Devis avec rattachement, une écriture demandée à Réno.",
-      "cap": "Un individu seul fait tourner le business entier, aidé par l'automatisation (Directive IA). RénoBoost est le hub : acquisition, rendez-vous, dashboard, et la roadmap maîtresse des quatre briques."
+      "faire": "⛔ PAUL — deux gestes, aucun du code, re-mesurés le 14/09 : (1) KYC Stripe de SOLA, charges_enabled = 0/2 ; (2) la clé sk_live_ en prod, le battement dit encore test:true",
+      "cap": "Le devis part, se relance tout seul tant qu'il n'est pas signé, se signe et s'encaisse — sans que Paul y touche."
     },
     "illisibles": 0,
     "hors_seance": 3
   },
   "constellation": {
     "noeuds": [
-      {
-        "id": "PaulGERARD161098/RenoBoost",
-        "libelle": "RénoBoost",
-        "constellation": "en_cours",
-        "ciel": "renoboost-ia",
-        "signal": 1
-      },
       {
         "id": "PaulGERARD161098/RenoDevis",
         "libelle": "RénoDevis",
@@ -547,11 +545,18 @@
         "signal": 1
       },
       {
+        "id": "PaulGERARD161098/RenoBoost",
+        "libelle": "RénoBoost",
+        "constellation": "en_cours",
+        "ciel": "renoboost-ia",
+        "signal": 0
+      },
+      {
         "id": "PaulGERARD161098/Ultima-",
         "libelle": "Ultima",
         "constellation": "en_cours",
         "ciel": "racine",
-        "signal": 1
+        "signal": 0
       },
       {
         "id": "PaulGERARD161098/mon-dpe.fr",
