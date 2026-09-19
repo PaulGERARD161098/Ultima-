@@ -119,9 +119,26 @@ body.stellar-v2-preview::before{
 
 
 /* V2.2 — stellar object hierarchy. CSS-only: no geometry or data semantics changed. */
-.stellar-v2-preview .ciel-svg {
-  filter:saturate(.90) contrast(1.03);
-}
+/* ⛔ LE FILTRE PLEIN-ÉCRAN A ÉTÉ RETIRÉ LE 19/09/2026, ET C'EST UNE MESURE.
+   Cette règle posait `filter:saturate(.90) contrast(1.03)` sur `.ciel-svg` — la
+   couche ANIMÉE du ciel. Un filtre CSS sur une surface qui se repeint à chaque
+   image force un recomposite de toute la surface à chaque image.
+
+   Ce que ça coûtait, mesuré par `tests/smoke-lv5-fond.mjs` :
+     à  390 px : 1266 grains  → 1266  (inchangé)
+     à 1670 px : 5200 grains  → 3120  (−40 %)
+   Le moteur ne plante pas : il ENCAISSE, en allégeant le ciel pour tenir son
+   budget d'image. Le rapport de densité tombait de 4,11 à 2,46, sous le
+   plancher de 2,5 du garde-fou `laDensiteSuitLaSurface`. Retirer cette seule
+   règle rend les 5200 grains et le vert — vérifié en la retirant, puis en la
+   remettant.
+
+   ⚠️ C'est la gate n°5 de la spec, mot pour mot : « V2 n'achète aucune beauté
+   par une régression de cadence ». Dix pour cent de saturation en moins ne
+   valent pas quarante pour cent du ciel.
+
+   ⛔ SI L'AJUSTEMENT TONAL EST VOULU, il se cuit dans les VALEURS des jetons —
+   une fois, au chargement — jamais en filtre appliqué à chaque image. */
 .stellar-v2-preview .ciel-liens line {
   stroke:rgba(223,235,244,.72);
   stroke-width:.72;

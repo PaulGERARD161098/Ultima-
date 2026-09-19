@@ -81,7 +81,19 @@ Aucune page de production ne charge `stellar-v2-preview.css`. La bascule exige :
 Un **instrument** porte des données à lire exactement : formulaire, chiffres, jauges, commandes, panneau d'inspection. Il reçoit donc une plaque nocturne stable et quasi opaque. Le ciel reste visible **entre** les instruments, jamais sous une valeur critique.
 
 Règles :
-- fond instrument ≈ 94 % opaque ; pas de blur nécessaire ;
+- fond instrument **pleinement opaque** ; pas de blur nécessaire ;
+  > ⛔ **Corrigé le 19/09/2026 — ce point disait « ≈ 94 % opaque », et ce chiffre
+  > a produit une régression.** Appliqué tel quel à ALTHEA (T4), il a fait virer
+  > `tests/smoke-fond-contraste.mjs` au ROUGE sur quatre écrans
+  > (`laNappeEstOpaque_althea*`), là où `main` était vert : ce harnais exige une
+  > opacité **> 0,98** sur le support du registre instrument, parce qu'en dessous
+  > les étoiles transparaissent sous les rangs et les jauges.
+  >
+  > ⚠️ **La règle voulait déjà dire cela** — « le ciel reste visible entre les
+  > instruments, jamais sous une valeur critique », deux lignes plus haut, et
+  > « Stellar V2 ne rend jamais ses blocs transparents » au § T4. C'est le
+  > CHIFFRE qui trahissait l'intention, pas l'intention. Un « ≈ » dans un
+  > document normatif se lit comme une licence : celui-ci en a coûté une.
 - entête plus sombre que le corps, hairline froide ;
 - or = acquis/structure/valeur patrimoniale ; glace = système/interaction ;
 - chiffres en tabular lining nums ;
@@ -142,6 +154,13 @@ Invariants préservés :
 - aucune étoile ne traverse les chiffres ;
 - focus V2 et safe areas mobile sont appliqués ;
 - les valeurs numériques utilisent `tabular-nums lining-nums`.
+
+⛔ **Et l'un d'eux a été ENFREINT par T4 lui-même, jusqu'au 19/09.** « Les données
+chiffrées restent sur des plaques nocturnes quasi opaques » était écrit ici
+pendant que `--instrument-fond` valait `rgba(5, 10, 18, .96)` — quatre pour cent
+de transparence là où `main` n'en avait aucune (`--nuit: #04060b`). Un invariant
+écrit n'est pas un invariant tenu : seul le harnais l'a vu, et il ne tournait
+pas, faute de runner. Les plaques sont désormais opaques.
 
 T4 ne modifie aucune logique métier ALTHEA. La prochaine étape est une QA croisée RIVEN + ALTHEA avant toute propagation T5.
 

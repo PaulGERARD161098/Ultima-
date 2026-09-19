@@ -229,7 +229,16 @@
 .ciel-liens-noms { opacity: .78; }
 .ciel-nom-lien {
   fill: rgba(216, 189, 130, .66);
-  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* ⛔ SERIF, ET C'EST UN GARDE-FOU, PAS UN GOÛT. Posé en `ui-sans-serif` par
+     T2, ce nom faisait virer `tests/smoke-lv5-passerelle.mjs` au rouge sur le
+     verdict `leNomEstGrave` — vert sur `main`, où il héritait de Georgia.
+     Le mot du verdict dit l'intention : un nom de passerelle est GRAVÉ dans le
+     ciel, il appartient au registre patrimonial de la carte savante, pas au
+     chrome d'interface. La spec V2 garde d'ailleurs la serif pour « titres,
+     caps, cartouches », et `.ciel-nom-amas` juste au-dessus l'a conservée.
+     ⚠️ `.ciel-nom` (les noms d'étoiles, nombreux et petits) reste en sans : la
+     distinction est voulue, c'est la densité qui la justifie. */
+  font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
   font-size: 8px;
   letter-spacing: 1.15px;
 }

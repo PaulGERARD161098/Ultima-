@@ -309,8 +309,26 @@
    entre les instruments, jamais sous les chiffres.
    ========================================================================== */
 .althea {
-  --instrument-fond: rgba(5, 10, 18, .96);
-  --instrument-entete: rgba(10, 18, 29, .98);
+  /* ⛔ CES DEUX PLAQUES SONT OPAQUES, ET C'EST UN INVARIANT, PAS UN GOÛT.
+     Mesuré le 19/09/2026 : posées à `rgba(5,10,18,.96)` et `rgba(10,18,29,.98)`,
+     elles faisaient virer `tests/smoke-fond-contraste.mjs` au ROUGE sur les
+     quatre écrans ALTHEA (`laNappeEstOpaque_althea*`), là où `main` était vert.
+     Ce harnais exige une opacité > 0,98 sur le support du registre INSTRUMENT,
+     et il a raison : sous ce seuil, les étoiles du ciel transparaissent sous les
+     rangs et les jauges. `main` posait `--nuit: #04060b`, pleinement opaque ;
+     T4 avait donc introduit 4 % de transparence là où il n'y en avait aucune.
+
+     ⚠️ C'est l'invariant que la spec V2 jure elle-même de préserver — « Stellar
+     V2 ne rend jamais ses blocs transparents » (§ V2.6, § T4). L'intention était
+     bonne ; c'est le chiffre qui l'a trahie. Le « ≈ 94 % opaque » du § V2.6 a
+     été corrigé dans le même commit, avec cette raison.
+
+     ⛔ ET LA DÉTENTE N'EST PAS D'ABAISSER LE SEUIL DU HARNAIS à 0,96. Un
+     garde-fou qu'on desserre pour obtenir du vert ne garde plus rien, et
+     celui-ci a été payé par un défaut réel. Le ciel reste visible ENTRE les
+     instruments — jamais sous une valeur qui se lit. */
+  --instrument-fond: #050a12;
+  --instrument-entete: #0a121d;
   --instrument-trait: var(--stellar-line-cool, rgba(143, 194, 212, .16));
   --instrument-trait-fort: var(--stellar-line-gold, rgba(216, 189, 130, .20));
   --instrument-texte: var(--stellar-text-primary, #f2ead6);

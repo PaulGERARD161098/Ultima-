@@ -340,7 +340,8 @@
         if (e.py < -taille || e.py > etat.hauteurCSS + taille) { return; }
         var modulationVoile = 1;
         if (opts.contrasteProfondeur) {
-          // Cooler/dimmer distant haze, preserving the semantic gold minority.
+          // Les voiles lointains refroidissent et s'atténuent ; l'or, minoritaire
+          // et porteur de sens, est le seul à remonter légèrement.
           modulationVoile = v.teinte === 0 ? 1.08 : (v.teinte === 1 ? 0.88 : 0.72);
         }
         g.globalAlpha = Math.max(0, Math.min(1, v.eclat * ECLAT_VOILES * (opts.eclatVoiles || 1) * modulationVoile));
