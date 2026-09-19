@@ -1,0 +1,388 @@
+/* ULTIMA — Stellar Design System V2 — preview-only layer
+   Reference lock: Ultima's antique celestial identity remains primary.
+   Borrowed: Oxide's tonal depth/hairlines, Active Theory's luminous void,
+   Railway's serif/sans contrast, Memotron's graph-first restraint.
+   No production page imports this file yet. */
+:root{
+  --sv2-void:#02050b;--sv2-deep:#060b14;--sv2-surface:rgba(12,22,36,.72);
+  --sv2-raised:rgba(18,35,58,.66);--sv2-line:rgba(216,189,130,.20);
+  --sv2-line-cool:rgba(143,194,212,.16);--sv2-ink:#f2ead6;
+  --sv2-ink-soft:#c8c5bd;--sv2-ink-quiet:#8f99a8;--sv2-gold:#d8bd82;
+  --sv2-ice:#9fc9df;--sv2-focus:#b7dced;--sv2-radius:8px;
+  --sv2-glass-blur:12px;--sv2-fast:140ms;--sv2-slow:420ms;
+}
+body.stellar-v2-preview{background:var(--sv2-void);color:var(--sv2-ink)}
+body.stellar-v2-preview::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse at 18% 18%,rgba(43,83,126,.16),transparent 42%),
+    radial-gradient(ellipse at 78% 66%,rgba(92,76,126,.09),transparent 38%),
+    linear-gradient(180deg,var(--sv2-deep),var(--sv2-void) 72%);
+}
+.stellar-v2-preview .lv5-scene{background:transparent}
+.stellar-v2-preview .lv5-scene.ciel-scene::after{
+  inset:12px;border:1px solid var(--sv2-line);box-shadow:inset 0 0 48px rgba(2,5,11,.32)
+}
+.stellar-v2-preview .lv5-bloc,.stellar-v2-preview .sv2-panel{
+  background:linear-gradient(180deg,rgba(18,35,58,.62),rgba(6,11,20,.74));
+  border:1px solid var(--sv2-line);border-radius:var(--sv2-radius);
+  box-shadow:inset 0 1px rgba(255,255,255,.035);
+  -webkit-backdrop-filter:blur(var(--sv2-glass-blur));backdrop-filter:blur(var(--sv2-glass-blur));
+}
+.stellar-v2-preview .lv5-fil{color:var(--sv2-gold);font-size:.68rem;letter-spacing:.22em}
+.stellar-v2-preview .lv5-titre{
+  color:var(--sv2-ink);font-family:Georgia,"Iowan Old Style","Times New Roman",serif;
+  font-weight:400;letter-spacing:.035em;text-wrap:balance
+}
+.stellar-v2-preview .lv5-parole{color:var(--sv2-ink-soft);font-style:normal;letter-spacing:.015em}
+.stellar-v2-preview .lv5-outils button{
+  border-color:var(--sv2-line);border-radius:6px;background:rgba(6,11,20,.58);
+  color:var(--sv2-ink-soft);transition:background var(--sv2-fast),border-color var(--sv2-fast),color var(--sv2-fast),transform var(--sv2-fast)
+}
+.stellar-v2-preview .lv5-outils button:hover{
+  background:rgba(18,35,58,.82);border-color:rgba(216,189,130,.48);color:var(--sv2-ink);transform:translateY(-1px)
+}
+.stellar-v2-preview .lv5-outils button:focus-visible{outline:2px solid var(--sv2-focus);outline-offset:3px}
+.stellar-v2-preview .lv5-outils button[aria-pressed="true"]{
+  color:var(--sv2-gold);background:rgba(216,189,130,.09);border-color:rgba(216,189,130,.42)
+}
+.sv2-legend{
+  position:fixed;right:14px;bottom:14px;z-index:4;pointer-events:none;
+  max-width:290px;padding:10px 12px;font:11px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;
+  color:var(--sv2-ink-quiet)
+}
+.sv2-legend strong{color:var(--sv2-ink);font-weight:500}
+.sv2-legend .signal{color:var(--sv2-gold)}
+@media(max-width:640px){.sv2-legend{display:none}}
+@media(prefers-reduced-motion:reduce){.stellar-v2-preview *{scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+
+/* V2.1 — mobile composition pass. The sky stays primary; HUD recedes. */
+@media (max-width: 640px) {
+  .stellar-v2-preview .lv5-hud {
+    padding:
+      calc(env(safe-area-inset-top, 0px) + 10px)
+      calc(env(safe-area-inset-right, 0px) + 10px)
+      calc(env(safe-area-inset-bottom, 0px) + 10px)
+      calc(env(safe-area-inset-left, 0px) + 10px);
+  }
+  .stellar-v2-preview .lv5-haut {
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:start;
+  }
+  .stellar-v2-preview .lv5-bloc {
+    max-width:min(76vw, 360px);
+    padding:.48rem .62rem;
+    background:linear-gradient(180deg,rgba(12,22,36,.66),rgba(3,7,14,.72));
+    -webkit-backdrop-filter:blur(9px);
+    backdrop-filter:blur(9px);
+  }
+  .stellar-v2-preview .lv5-fil { font-size:.61rem; letter-spacing:.18em; }
+  .stellar-v2-preview .lv5-titre {
+    font-size:clamp(1rem,5.2vw,1.32rem);
+    line-height:1.12;
+    letter-spacing:.02em;
+  }
+  .stellar-v2-preview .lv5-parole {
+    margin-top:.18rem;
+    font-size:.74rem;
+    line-height:1.35;
+    color:var(--sv2-ink-soft);
+  }
+  .stellar-v2-preview .lv5-outils {
+    display:grid;
+    grid-template-columns:1fr;
+    gap:5px;
+  }
+  .stellar-v2-preview .lv5-outils button {
+    min-width:44px;
+    width:44px;
+    min-height:44px;
+    overflow:hidden;
+    padding:0 6px;
+    font-size:0;
+  }
+  .stellar-v2-preview #lv5-fond::after { content:"✦"; font-size:16px; }
+  .stellar-v2-preview #lv5-charge::after { content:"3D"; font:600 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.04em; }
+  .stellar-v2-preview #lv5-mesurer::after { content:"◎"; font-size:16px; }
+  .stellar-v2-preview .lv5-mesure {
+    max-width:calc(100vw - 20px);
+    font-size:.62rem;
+    background:rgba(3,7,14,.86);
+  }
+  .stellar-v2-preview .lv5-scene.ciel-scene::after {
+    inset:7px;
+    border-color:rgba(216,189,130,.13);
+  }
+}
+
+
+/* V2.2 — stellar object hierarchy. CSS-only: no geometry or data semantics changed. */
+/* ⛔ LE FILTRE PLEIN-ÉCRAN A ÉTÉ RETIRÉ LE 19/09/2026, ET C'EST UNE MESURE.
+   Cette règle posait `filter:saturate(.90) contrast(1.03)` sur `.ciel-svg` — la
+   couche ANIMÉE du ciel. Un filtre CSS sur une surface qui se repeint à chaque
+   image force un recomposite de toute la surface à chaque image.
+
+   Ce que ça coûtait, mesuré par `tests/smoke-lv5-fond.mjs` :
+     à  390 px : 1266 grains  → 1266  (inchangé)
+     à 1670 px : 5200 grains  → 3120  (−40 %)
+   Le moteur ne plante pas : il ENCAISSE, en allégeant le ciel pour tenir son
+   budget d'image. Le rapport de densité tombait de 4,11 à 2,46, sous le
+   plancher de 2,5 du garde-fou `laDensiteSuitLaSurface`. Retirer cette seule
+   règle rend les 5200 grains et le vert — vérifié en la retirant, puis en la
+   remettant.
+
+   ⚠️ C'est la gate n°5 de la spec, mot pour mot : « V2 n'achète aucune beauté
+   par une régression de cadence ». Dix pour cent de saturation en moins ne
+   valent pas quarante pour cent du ciel.
+
+   ⛔ SI L'AJUSTEMENT TONAL EST VOULU, il se cuit dans les VALEURS des jetons —
+   une fois, au chargement — jamais en filtre appliqué à chaque image. */
+.stellar-v2-preview .ciel-liens line {
+  stroke:rgba(223,235,244,.72);
+  stroke-width:.72;
+}
+.stellar-v2-preview .ciel--concentre .ciel-liens line { opacity:.025; }
+.stellar-v2-preview .ciel--concentre .ciel-liens line.ciel-lien--vif {
+  opacity:.88;stroke:var(--sv2-ice);stroke-width:1.25;
+}
+.stellar-v2-preview .ciel-etoile:hover,
+.stellar-v2-preview .ciel-etoile:focus-visible,
+.stellar-v2-preview .ciel-etoile--choisie {
+  filter:drop-shadow(0 0 3px rgba(183,220,237,.52));
+}
+.stellar-v2-preview .ciel-halo-focus {
+  stroke:var(--sv2-focus);
+  stroke-width:.8;
+}
+.stellar-v2-preview .ciel-halo-choix {
+  stroke:var(--sv2-gold);
+  stroke-width:1;
+  filter:drop-shadow(0 0 3px rgba(216,189,130,.36));
+}
+.stellar-v2-preview .ciel-nom {
+  fill:var(--sv2-ink-soft);
+  font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  letter-spacing:.04em;
+}
+.stellar-v2-preview .ciel-nom-amas {
+  fill:rgba(216,189,130,.72);
+  letter-spacing:3.4px;
+}
+.stellar-v2-preview .ciel-nom-lien {
+  fill:rgba(216,189,130,.66);
+}
+.stellar-v2-preview .ciel-personne {
+  opacity:.82;
+}
+.stellar-v2-preview .ciel-personne:hover,
+.stellar-v2-preview .ciel-personne:focus-visible { opacity:1; }
+
+@media(max-width:640px){
+  .stellar-v2-preview .ciel-liens line{stroke-width:.62}
+  .stellar-v2-preview .ciel-nom{letter-spacing:.02em}
+}
+
+
+/* V2.4 — spatial focus states.
+   Selection changes hierarchy, never geometry: the chosen star advances while
+   unrelated objects recede. Hover/focus stays transient and keyboard-equivalent. */
+.stellar-v2-preview .ciel-svg:has(.ciel-etoile--choisie) .ciel-etoile:not(.ciel-etoile--choisie){
+  opacity:.46;
+}
+.stellar-v2-preview .ciel-svg:has(.ciel-etoile--choisie) .ciel-liens line{
+  opacity:.035;
+}
+.stellar-v2-preview .ciel-etoile--choisie{
+  opacity:1;
+  filter:drop-shadow(0 0 4px rgba(216,189,130,.44)) drop-shadow(0 0 10px rgba(159,201,223,.16));
+}
+.stellar-v2-preview .ciel-etoile--choisie .ciel-nom{
+  opacity:1!important;
+  fill:var(--sv2-ink);
+  font-weight:600;
+}
+.stellar-v2-preview .ciel-etoile--choisie .ciel-halo-choix{
+  opacity:.92;
+}
+.stellar-v2-preview .ciel--concentre .ciel-etoile:not(:hover):not(:focus-visible):not(.ciel-etoile--choisie){
+  opacity:.58;
+}
+.stellar-v2-preview .ciel-etoile:hover .ciel-nom,
+.stellar-v2-preview .ciel-etoile:focus-visible .ciel-nom{
+  fill:var(--sv2-ink);
+}
+@supports not selector(:has(*)){
+  /* Progressive enhancement only: old browsers retain V2.3 hierarchy. */
+  .stellar-v2-preview .ciel-etoile--choisie{opacity:1}
+}
+@media(prefers-reduced-motion:no-preference){
+  .stellar-v2-preview .ciel-etoile,
+  .stellar-v2-preview .ciel-liens line,
+  .stellar-v2-preview .ciel-nom{
+    transition:opacity 180ms cubic-bezier(.16,.84,.32,1),filter 180ms cubic-bezier(.16,.84,.32,1),fill 140ms ease;
+  }
+}
+
+
+/* V2.5 — Galaxie → Constellation → Étoile.
+   Scale is expressed through typography, atmospheric grouping and signal
+   strength; never through extra cards or fake navigation chrome. */
+.stellar-v2-preview .ciel-nom-amas{
+  font-family:Georgia,"Iowan Old Style","Times New Roman",serif;
+  font-size:10px;
+  font-weight:400;
+  fill:rgba(216,189,130,.62);
+  letter-spacing:4.2px;
+  text-transform:uppercase;
+  filter:drop-shadow(0 0 5px rgba(216,189,130,.10));
+}
+.stellar-v2-preview .ciel-liens-noms{
+  opacity:.78;
+}
+.stellar-v2-preview .ciel-nom-lien{
+  font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:8px;
+  letter-spacing:1.15px;
+}
+.stellar-v2-preview .ciel-nom{
+  paint-order:stroke;
+  stroke:rgba(2,5,11,.72);
+  stroke-width:2.2px;
+  stroke-linejoin:round;
+}
+.stellar-v2-preview .ciel-etoile--choisie .ciel-nom{
+  stroke:rgba(2,5,11,.88);
+  stroke-width:2.8px;
+}
+.stellar-v2-preview .ciel-decor{
+  opacity:.78;
+}
+.stellar-v2-preview .ciel--concentre .ciel-nom-amas{
+  opacity:.34;
+}
+.stellar-v2-preview .ciel--concentre .ciel-liens-noms{
+  opacity:.22;
+}
+
+/* A faint optical vignette keeps hierarchy legible at viewport edges while
+   leaving the center open for the constellation itself. */
+.stellar-v2-preview .lv5-scene::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at center,transparent 48%,rgba(2,5,11,.10) 74%,rgba(2,5,11,.28) 100%);
+  mix-blend-mode:multiply;
+}
+@media(max-width:640px){
+  .stellar-v2-preview .ciel-nom-amas{
+    font-size:9px;
+    letter-spacing:3px;
+  }
+  .stellar-v2-preview .ciel-nom{
+    stroke-width:2.6px;
+  }
+  .stellar-v2-preview .lv5-scene::before{
+    background:radial-gradient(ellipse at center,transparent 42%,rgba(2,5,11,.12) 72%,rgba(2,5,11,.32) 100%);
+  }
+}
+
+
+/* V2.6 — instruments in the sky.
+   An instrument is not glass decoration: dense/critical information receives
+   a stable night plate; atmosphere remains visible only around it. */
+.stellar-v2-preview{
+  --sv2-instrument:rgba(5,10,18,.94);
+  --sv2-instrument-head:rgba(10,18,29,.98);
+  --sv2-instrument-line:rgba(159,201,223,.18);
+  --sv2-instrument-line-strong:rgba(216,189,130,.34);
+  --sv2-signal-system:#9fc9df;
+  --sv2-value:#e0c98f;
+}
+.sv2-instrument{
+  position:relative;
+  isolation:isolate;
+  background:var(--sv2-instrument);
+  border:1px solid var(--sv2-instrument-line);
+  border-radius:var(--sv2-radius);
+  color:var(--sv2-ink-soft);
+  box-shadow:inset 0 1px rgba(255,255,255,.025);
+}
+.sv2-instrument::before{
+  content:"";position:absolute;inset:5px;pointer-events:none;
+  border:1px solid rgba(216,189,130,.08);border-radius:5px;
+}
+.sv2-instrument__head{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  min-height:38px;padding:8px 12px;
+  background:var(--sv2-instrument-head);
+  border-bottom:1px solid var(--sv2-instrument-line);
+  color:var(--sv2-gold);
+  font:500 10px/1.2 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  letter-spacing:.18em;text-transform:uppercase;
+}
+.sv2-instrument__body{padding:14px 16px}
+.sv2-instrument__value{
+  color:var(--sv2-value);
+  font-variant-numeric:tabular-nums lining-nums;
+}
+.sv2-instrument__system{color:var(--sv2-signal-system)}
+.sv2-instrument__meta{color:var(--sv2-ink-quiet);font-size:.78em}
+.sv2-instrument input,.sv2-instrument select,.sv2-instrument textarea{
+  color:var(--sv2-ink);background:rgba(2,5,11,.82);
+  border:1px solid var(--sv2-instrument-line);border-radius:6px;
+}
+.sv2-instrument input:focus-visible,.sv2-instrument select:focus-visible,
+.sv2-instrument textarea:focus-visible,.sv2-instrument button:focus-visible{
+  outline:2px solid var(--sv2-focus);outline-offset:2px;
+}
+.sv2-instrument hr{border:0;border-top:1px solid var(--sv2-instrument-line)}
+@media(max-width:640px){
+  .sv2-instrument{border-radius:6px}
+  .sv2-instrument__body{padding:12px}
+}
+
+/* ALTHEA bridge preview: only active when an ancestor opts into Stellar V2. */
+.stellar-v2-preview .althea-bloc{
+  background:var(--sv2-instrument);
+  border-color:var(--sv2-instrument-line);
+  border-radius:var(--sv2-radius);
+  box-shadow:inset 0 1px rgba(255,255,255,.025);
+}
+.stellar-v2-preview .althea-entete{
+  background:var(--sv2-instrument-head);
+  border-color:var(--sv2-instrument-line);
+  color:var(--sv2-gold);
+}
+.stellar-v2-preview .althea-st,
+.stellar-v2-preview .althea-skill,
+.stellar-v2-preview .althea-geste{
+  border-color:var(--sv2-instrument-line);
+}
+
+
+/* V2.7 — consolidation gates */
+@media(prefers-reduced-motion:reduce){
+  .stellar-v2-preview .ciel-etoile,
+  .stellar-v2-preview .ciel-liens line,
+  .stellar-v2-preview .ciel-nom,
+  .stellar-v2-preview .lv5-outils button{
+    transition:none!important;
+    animation:none!important;
+  }
+  .stellar-v2-preview .lv5-outils button:hover{transform:none}
+}
+@media(forced-colors:active){
+  .stellar-v2-preview .lv5-bloc,
+  .stellar-v2-preview .sv2-panel,
+  .sv2-instrument{border:1px solid CanvasText;background:Canvas}
+  .stellar-v2-preview .ciel-nom,
+  .stellar-v2-preview .ciel-nom-amas,
+  .stellar-v2-preview .ciel-nom-lien{fill:CanvasText;stroke:Canvas}
+  .stellar-v2-preview .ciel-halo-focus,
+  .stellar-v2-preview .ciel-halo-choix{stroke:Highlight}
+}

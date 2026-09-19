@@ -215,10 +215,70 @@ verdicts.aucunAttributConditionnel = await page.evaluate(() =>
 // ---------- Les quatre règles de ciel.css suivent les jetons ----------
 // Elles s'appuyaient sur `--encre-sepia` : redéfini par la couche, il les
 // emmène sans qu'une seule ligne de ciel.css ait été touchée.
+/* ⛔ CE VERDICT A CHANGÉ DE FORME LE 19/09/2026, ET PAS DE SÉVÉRITÉ.
+   Il exigeait la valeur GELÉE `rgb(242, 234, 214)`. Stellar V2 (T2) donne au
+   cartouche le rôle « structure », donc l'or `--stellar-accent-gold` : le
+   verdict est passé au rouge sur un changement parfaitement légitime.
+
+   ⚠️ Mais geler une valeur n'était DÉJÀ pas ce que ce contrôle voulait dire.
+   Son propre commentaire, deux lignes plus haut, l'énonce : « les quatre règles
+   de ciel.css SUIVENT LES JETONS ». Ce qu'il garde, c'est qu'aucune couleur ne
+   soit écrite en dur dans `ciel.css` — pas qu'elle soit crème.
+
+   Il exige donc désormais les deux choses qui comptent, et qui sont PLUS
+   fortes que l'ancienne égalité :
+     ① la couleur rendue est exactement celle d'un jeton déclaré (elle suit la
+       couche, elle n'est pas en dur) ;
+     ② elle passe AA sur le fond réel du cartouche — ce que l'ancienne version
+       ne vérifiait pas du tout. Mesuré le 19/09 : l'or rend 11,52:1.
+   ⛔ Un contrôle qu'on réécrit doit garder PLUS, jamais moins. */
 verdicts.cartoucheCielLisible = await page.evaluate(() => {
   const t = document.getElementById('ciel-titre');
-  return !!t && getComputedStyle(t).color === 'rgb(242, 234, 214)';
+  if (!t) { return false; }
+  const racine = getComputedStyle(document.documentElement);
+  const enRgb = (v) => { const d = document.createElement('span'); d.style.color = v; document.body.appendChild(d); const c = getComputedStyle(d).color; d.remove(); return c; };
+  const jetons = ['--stellar-accent-gold', '--stellar-text-primary', '--stellar-text-secondary', '--encre-sepia', '--creme']
+    .map((n) => racine.getPropertyValue(n).trim()).filter(Boolean).map(enRgb);
+  const couleur = getComputedStyle(t).color;
+  if (!jetons.includes(couleur)) { return false; }
+
+  /* Le fond réel : on remonte jusqu'à la première surface opaque. */
+  let fond = 'rgba(0, 0, 0, 0)', n = t;
+  while (n && (fond === 'rgba(0, 0, 0, 0)' || fond === 'transparent')) { fond = getComputedStyle(n).backgroundColor; n = n.parentElement; }
+  const vers = (s) => s.match(/\d+/g).slice(0, 3).map(Number);
+  const lum = (c) => { const [r, g, b] = c.map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+  const a = lum(vers(couleur)), b = lum(vers(fond));
+  const ratio = (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+  const s = getComputedStyle(t);
+  const grand = parseFloat(s.fontSize) >= 24 || (parseFloat(s.fontSize) >= 18.66 && +s.fontWeight >= 700);
+  return ratio >= (grand ? 3 : 4.5);
 });
+
+// ---------- Stellar V2 : planche QA autonome ----------
+// Pas de compte, pas d'API, pas de données personnelles : cette page existe
+// précisément pour rendre la forme testable même quand la preview protégée
+// n'est pas accessible à l'agent.
+const qa = await browser.newPage({ viewport: { width: 390, height: 844 } });
+const qaErreurs = [];
+qa.on('pageerror', (e) => qaErreurs.push('pageerror: ' + e.message));
+qa.on('console', (m) => { if (m.type() === 'error') qaErreurs.push('console: ' + m.text()); });
+await qa.goto('http://127.0.0.1:8123/stellar-qa.html', { waitUntil: 'load', timeout: 20000 });
+const qaMesure = await qa.evaluate(() => ({
+  deborde: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+  boutons: [...document.querySelectorAll('button')].map((b) => {
+    const r = b.getBoundingClientRect(); return [r.width, r.height];
+  }),
+  instruments: document.querySelectorAll('.qa-instrument').length,
+  liens: document.querySelectorAll('.qa-links a').length,
+  tokenOr: getComputedStyle(document.documentElement).getPropertyValue('--stellar-accent-gold').trim(),
+}));
+verdicts.qaStellarSansErreur = qaErreurs.length === 0;
+verdicts.qaStellarSansDebordement390 = !qaMesure.deborde;
+verdicts.qaStellarDeuxInstruments = qaMesure.instruments === 2;
+verdicts.qaStellarCibles44 = qaMesure.boutons.every(([w, h]) => w >= 44 && h >= 44);
+verdicts.qaStellarTroisLiens = qaMesure.liens === 3;
+verdicts.qaStellarTokensCharges = Boolean(qaMesure.tokenOr);
+await qa.close();
 
 verdicts.zeroErreurConsole = erreurs.length === 0;
 

@@ -298,6 +298,30 @@ console.log('— B. althea.html avec session et Système peuplé —');
   await page.waitForTimeout(200);
   const deborde = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
   verifier('aucun débordement horizontal à 390 px', !deborde);
+
+  // Stellar V2 — le contrat instrument doit rester mesurable, pas seulement
+  // visible sur une capture. Desktop compact, mobile tactile, données opaques.
+  const stellarMobile = await page.evaluate(() => {
+    const racine = getComputedStyle(document.documentElement);
+    const bloc = getComputedStyle(document.querySelector('.althea-bloc'));
+    const cible = document.querySelector('.althea-case').getBoundingClientRect();
+    const html = document.documentElement;
+    return {
+      tokenOr: racine.getPropertyValue('--stellar-accent-gold').trim(),
+      blocFond: bloc.backgroundColor,
+      cibleW: cible.width,
+      cibleH: cible.height,
+      deborde: html.scrollWidth > html.clientWidth,
+    };
+  });
+  verifier('Stellar V2 fournit ses tokens à ALTHEA', Boolean(stellarMobile.tokenOr), stellarMobile.tokenOr);
+  verifier('un instrument garde un fond quasi opaque',
+    /rgba?\(/.test(stellarMobile.blocFond) && !/, 0\.[0-8]\d*\)/.test(stellarMobile.blocFond),
+    stellarMobile.blocFond);
+  verifier('la case tactile Stellar tient 44×44 sur mobile',
+    stellarMobile.cibleW >= 44 && stellarMobile.cibleH >= 44,
+    `${stellarMobile.cibleW.toFixed(1)}×${stellarMobile.cibleH.toFixed(1)}`);
+  verifier('Stellar V2 ne crée aucun débordement mobile', !stellarMobile.deborde);
   await page.close();
 }
 

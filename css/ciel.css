@@ -177,3 +177,262 @@
 @media (prefers-reduced-motion: reduce) {
   .ciel-aide { transition: none; }
 }
+
+
+/* ============================================================================
+   STELLAR V2 — T2 : hiérarchie du ciel et interactions.
+   Les valeurs viennent des rôles sémantiques de stellaire.css, avec repli sur
+   la palette historique pour les pages qui chargent ciel.css sans stellaire.css.
+   Aucune géométrie, cible, projection ni donnée n'est modifiée ici.
+   ========================================================================== */
+.ciel-liens line {
+  stroke: rgba(223, 235, 244, .72);
+  stroke-width: .72;
+}
+.ciel--concentre .ciel-liens line { opacity: .025; }
+.ciel--concentre .ciel-liens line.ciel-lien--vif {
+  opacity: .88;
+  stroke: var(--stellar-accent-ice, #9fc9df);
+  stroke-width: 1.25;
+}
+.ciel-etoile:hover,
+.ciel-etoile:focus-visible {
+  filter: drop-shadow(0 0 3px rgba(183, 220, 237, .52));
+}
+.ciel-halo-focus {
+  stroke: var(--stellar-focus, #b7dced);
+  stroke-width: .8;
+}
+.ciel-halo-choix {
+  stroke: var(--stellar-accent-gold, #d8bd82);
+  stroke-width: 1;
+  filter: drop-shadow(0 0 3px rgba(216, 189, 130, .36));
+}
+.ciel-nom {
+  fill: var(--stellar-text-secondary, #c8c5bd);
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: .04em;
+  paint-order: stroke;
+  stroke: rgba(2, 5, 11, .72);
+  stroke-width: 2.2px;
+  stroke-linejoin: round;
+}
+.ciel-nom-amas {
+  fill: rgba(216, 189, 130, .62);
+  font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 4.2px;
+  text-transform: uppercase;
+  filter: drop-shadow(0 0 5px rgba(216, 189, 130, .10));
+}
+.ciel-liens-noms { opacity: .78; }
+.ciel-nom-lien {
+  fill: rgba(216, 189, 130, .66);
+  /* ⛔ SERIF, ET C'EST UN GARDE-FOU, PAS UN GOÛT. Posé en `ui-sans-serif` par
+     T2, ce nom faisait virer `tests/smoke-lv5-passerelle.mjs` au rouge sur le
+     verdict `leNomEstGrave` — vert sur `main`, où il héritait de Georgia.
+     Le mot du verdict dit l'intention : un nom de passerelle est GRAVÉ dans le
+     ciel, il appartient au registre patrimonial de la carte savante, pas au
+     chrome d'interface. La spec V2 garde d'ailleurs la serif pour « titres,
+     caps, cartouches », et `.ciel-nom-amas` juste au-dessus l'a conservée.
+     ⚠️ `.ciel-nom` (les noms d'étoiles, nombreux et petits) reste en sans : la
+     distinction est voulue, c'est la densité qui la justifie. */
+  font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  font-size: 8px;
+  letter-spacing: 1.15px;
+}
+.ciel-personne { opacity: .82; }
+.ciel-personne:hover,
+.ciel-personne:focus-visible { opacity: 1; }
+
+.ciel-svg:has(.ciel-etoile--choisie) .ciel-etoile:not(.ciel-etoile--choisie) { opacity: .46; }
+.ciel-svg:has(.ciel-etoile--choisie) .ciel-liens line { opacity: .035; }
+.ciel-etoile--choisie {
+  opacity: 1;
+  filter:
+    drop-shadow(0 0 4px rgba(216, 189, 130, .44))
+    drop-shadow(0 0 10px rgba(159, 201, 223, .16));
+}
+.ciel-etoile--choisie .ciel-nom {
+  opacity: 1 !important;
+  fill: var(--stellar-text-primary, #f2ead6);
+  font-weight: 600;
+  stroke: rgba(2, 5, 11, .88);
+  stroke-width: 2.8px;
+}
+.ciel-etoile--choisie .ciel-halo-choix { opacity: .92; }
+.ciel--concentre .ciel-etoile:not(:hover):not(:focus-visible):not(.ciel-etoile--choisie) { opacity: .58; }
+.ciel-etoile:hover .ciel-nom,
+.ciel-etoile:focus-visible .ciel-nom { fill: var(--stellar-text-primary, #f2ead6); }
+.ciel--concentre .ciel-nom-amas { opacity: .34; }
+.ciel--concentre .ciel-liens-noms { opacity: .22; }
+
+@supports not selector(:has(*)) {
+  .ciel-etoile--choisie { opacity: 1; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ciel-etoile,
+  .ciel-liens line,
+  .ciel-nom {
+    transition:
+      opacity 180ms cubic-bezier(.16, .84, .32, 1),
+      filter 180ms cubic-bezier(.16, .84, .32, 1),
+      fill 140ms ease;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ciel-etoile,
+  .ciel-liens line,
+  .ciel-nom {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+@media (forced-colors: active) {
+  .ciel-nom,
+  .ciel-nom-amas,
+  .ciel-nom-lien { fill: CanvasText; stroke: Canvas; }
+  .ciel-halo-focus,
+  .ciel-halo-choix { stroke: Highlight; }
+}
+@media (max-width: 640px) {
+  .ciel-liens line { stroke-width: .62; }
+  .ciel-nom { letter-spacing: .02em; stroke-width: 2.6px; }
+  .ciel-nom-amas { font-size: 9px; letter-spacing: 3px; }
+}
+
+
+/* ============================================================================
+   STELLAR V2 — T3 : HUD / navigation de RIVEN.
+   Le mobilier flotte au-dessus du ciel sans posséder la surface transparente
+   qui l'entoure. Seuls les contrôles reçoivent des gestes.
+   ========================================================================== */
+.espace-ciel {
+  position: relative;
+  min-height: 0;
+}
+.ciel-cartouche,
+.ciel-outils {
+  position: relative;
+  z-index: 3;
+  /* Le conteneur transparent ne doit jamais créer une zone morte au-dessus
+     du ciel. Les descendants interactifs reprennent explicitement les gestes. */
+  pointer-events: none;
+}
+.ciel-cartouche *,
+.ciel-outils input,
+.ciel-outils button,
+.ciel-outils label {
+  pointer-events: auto;
+}
+.ciel-cartouche {
+  padding:
+    calc(env(safe-area-inset-top, 0px) + .2rem)
+    calc(env(safe-area-inset-right, 0px) + .35rem)
+    0
+    calc(env(safe-area-inset-left, 0px) + .35rem);
+}
+.ciel-outils {
+  padding:
+    0
+    calc(env(safe-area-inset-right, 0px) + .35rem)
+    0
+    calc(env(safe-area-inset-left, 0px) + .35rem);
+}
+.ciel-cartouche h2 {
+  color: var(--stellar-accent-gold, #d8bd82);
+}
+.ciel-cartouche .ciel-sous {
+  color: var(--stellar-text-secondary, #c8c5bd);
+}
+.ciel-outils .champ-recherche-ciel,
+.ciel-outils .ciel-zoom,
+.ciel-outils .ciel-bascule,
+.ciel-outils .ciel-message {
+  position: relative;
+  z-index: 1;
+}
+.champ-recherche-ciel {
+  background: var(--stellar-surface-glass, rgba(12,22,36,.72));
+  border: 1px solid var(--stellar-line-cool, rgba(143,194,212,.16));
+  border-radius: var(--stellar-radius, 8px);
+  -webkit-backdrop-filter: blur(min(var(--stellar-glass-blur, 12px), 10px));
+  backdrop-filter: blur(min(var(--stellar-glass-blur, 12px), 10px));
+}
+.ciel-bouton-rond,
+.ciel-tout-voir {
+  border-color: var(--stellar-line-gold, rgba(216,189,130,.20));
+  background: rgba(6, 11, 20, .72);
+  color: var(--stellar-text-secondary, #c8c5bd);
+}
+.ciel-bouton-rond:hover,
+.ciel-tout-voir:hover {
+  border-color: rgba(216,189,130,.48);
+  background: var(--stellar-surface-raised, rgba(18,35,58,.66));
+  color: var(--stellar-text-primary, #f2ead6);
+}
+.ciel-bouton-rond:focus-visible,
+.ciel-tout-voir:focus-visible,
+.ciel-bascule input:focus-visible,
+.ciel-recherche:focus-visible {
+  outline: 2px solid var(--stellar-focus, #b7dced);
+  outline-offset: 3px;
+}
+.ciel-tout-voir[aria-pressed="true"] {
+  color: var(--stellar-accent-gold, #d8bd82);
+  border-color: rgba(216,189,130,.42);
+  background: rgba(216,189,130,.09);
+}
+.ciel-aide {
+  bottom: calc(env(safe-area-inset-bottom, 0px) + .6rem);
+  color: var(--stellar-text-quiet, #8f99a8);
+  background: rgba(3,7,14,.78);
+  border: 1px solid var(--stellar-line-cool, rgba(143,194,212,.16));
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+@media (max-width: 640px) {
+  .ciel-cartouche {
+    gap: .2rem .55rem;
+  }
+  .ciel-cartouche h2 {
+    font-size: .9rem;
+    letter-spacing: .18em;
+  }
+  .ciel-cartouche .ciel-sous {
+    font-size: .7rem;
+  }
+  .ciel-outils {
+    gap: .42rem .55rem;
+  }
+  .champ-recherche-ciel {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+  .ciel-zoom {
+    gap: 5px;
+  }
+  .ciel-bouton-rond,
+  .ciel-tout-voir {
+    min-width: 44px;
+    min-height: 44px;
+    height: 44px;
+  }
+  .ciel-bouton-rond {
+    width: 44px;
+  }
+  .ciel-tout-voir {
+    padding: 0 .72rem;
+  }
+  .ciel-bascule {
+    min-height: 44px;
+  }
+  .ciel-aide {
+    max-width: calc(100% - 20px);
+    font-size: .68rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ciel-aide { transition: none; }
+}

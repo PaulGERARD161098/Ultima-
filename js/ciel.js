@@ -430,6 +430,19 @@
     // LV4 — les trois options, toutes fausses par défaut : RIVEN passe ici sans
     // rien changer à ce qu'il faisait hier.
     var cadrageSerre = !!options.cadrerSurLesEtoiles;
+    // ⛔ CES CONTRÔLES ATMOSPHÉRIQUES NE SONT PAS « PREVIEW ONLY », malgré ce
+    // que disait ce commentaire jusqu'au 19/09 : `js/app.js` pose `stellarV2: true`
+    // sur RIVEN, en PRODUCTION. Un commentaire qui dément le code d'à côté est
+    // pire qu'une absence de commentaire — il fait croire à une isolation qui
+    // n'existe pas, et c'est précisément ce qu'on vérifie avant une bascule.
+    // Ce qui reste vrai : l'option est OPT-IN. Tout appelant qui ne passe ni
+    // `atmosphere` ni `stellarV2` garde exactement le rendu d'hier.
+    var atmosphere = options.atmosphere || (options.stellarV2 ? {
+      eclat: 0.94,
+      eclatVoiles: 0.82,
+      eclatFilaments: 0.72,
+      contrasteProfondeur: 1
+    } : null);
 
     var monde = construireMonde(noeuds);
     // LES GÉMEAUX, avant le recentrage : deux caps jumeaux se posent en
@@ -1188,7 +1201,7 @@
       // la fonction que les étoiles utilisent à la ligne suivante — pas une
       // copie, pas une caméra parallèle. Les deux couches ne peuvent pas se
       // déphaser parce qu'elles ne font qu'une seule projection.
-      if (fond) { fond.peindre(projeter, { eclat: 1 }); }
+      if (fond) { fond.peindre(projeter, atmosphere || { eclat: 1 }); }
 
       poussiere.forEach(function (p) {
         var d = RAYON_MONDE * 3.1 * p.r;

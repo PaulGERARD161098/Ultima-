@@ -338,7 +338,13 @@
         if (taille < 8) { return; }
         if (e.px < -taille || e.px > etat.largeurCSS + taille) { return; }
         if (e.py < -taille || e.py > etat.hauteurCSS + taille) { return; }
-        g.globalAlpha = Math.max(0, Math.min(1, v.eclat * ECLAT_VOILES * (opts.eclatVoiles || 1)));
+        var modulationVoile = 1;
+        if (opts.contrasteProfondeur) {
+          // Les voiles lointains refroidissent et s'atténuent ; l'or, minoritaire
+          // et porteur de sens, est le seul à remonter légèrement.
+          modulationVoile = v.teinte === 0 ? 1.08 : (v.teinte === 1 ? 0.88 : 0.72);
+        }
+        g.globalAlpha = Math.max(0, Math.min(1, v.eclat * ECLAT_VOILES * (opts.eclatVoiles || 1) * modulationVoile));
         g.drawImage(spritesVoile[v.teinte], e.px - taille / 2, e.py - taille / 2, taille, taille);
         peints++;
       });
@@ -383,7 +389,11 @@
         var taille = grain.taille * pr.echelle * etat.k * 2.6;
         if (taille < 0.5) { continue; }
         if (taille > 6) { taille = 6; }
-        g.globalAlpha = Math.max(0, Math.min(1, grain.eclat * ECLAT_DECOR * (opts.eclat || 1)));
+        var profondeur = 1;
+        if (opts.contrasteProfondeur) {
+          profondeur = grain.nappe === 1 ? 1.16 : (grain.nappe === 2 ? 0.92 : 0.68);
+        }
+        g.globalAlpha = Math.max(0, Math.min(1, grain.eclat * ECLAT_DECOR * (opts.eclat || 1) * profondeur));
         g.drawImage(sprites[grain.teinte], px - taille / 2, py - taille / 2, taille, taille);
         peints++;
       }

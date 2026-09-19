@@ -29,15 +29,36 @@
    ========================================================================== */
 
 :root {
+  /* ---- Stellar V2 — rôles sémantiques.
+     Ces jetons ne remplacent pas encore les noms historiques : ils nomment le
+     RÔLE, puis les variables existantes ci-dessous s'y raccordent. T1 est donc
+     une migration de vocabulaire sans changement fonctionnel du moteur. ---- */
+  --stellar-space-void: #02050b;
+  --stellar-space-deep: #060b14;
+  --stellar-surface-glass: rgba(12, 22, 36, .72);
+  --stellar-surface-raised: rgba(18, 35, 58, .66);
+  --stellar-line-gold: rgba(216, 189, 130, .20);
+  --stellar-line-cool: rgba(143, 194, 212, .16);
+  --stellar-text-primary: #f2ead6;
+  --stellar-text-secondary: #c8c5bd;
+  --stellar-text-quiet: #8f99a8;
+  --stellar-accent-gold: #d8bd82;
+  --stellar-accent-ice: #9fc9df;
+  --stellar-focus: #b7dced;
+  --stellar-radius: 8px;
+  --stellar-glass-blur: 12px;
+  --stellar-motion-fast: 140ms;
+  --stellar-motion-slow: 420ms;
+
   /* ---- Les fonds : trois profondeurs, aucune noire ---- */
   --nuit-haute: #0a1220;
   --nuit-basse: #03070e;
   --nuit-relief: #142640;
 
   /* ---- Les jetons de styles.css, redéfinis ---- */
-  --encre: #f2ead6;
+  --encre: var(--stellar-text-primary);
   --encre-douce: #cdc3ad;
-  --fond: #0a1220;
+  --fond: #0a1220; /* compat historique ciel.css ; V2 void/deep restent distincts */
   /* `--blanc` portait DEUX rôles dans styles.css : le fond des surfaces
      (12 règles) et la couleur du texte posé sur `--accent` (3 règles). Il
      devient la surface ; les trois textes sont repris plus bas, nommément. */
@@ -66,7 +87,7 @@
   --encre-sepia: #f2ead6;
   --encre-sepia-douce: #cdc3ad;
   --encre-deco: #a9884a;
-  --creme: #f2ead6;
+  --creme: var(--stellar-text-primary);
   --retard: #e2a94f;
   --danger-parchemin: #e4796a;
 
