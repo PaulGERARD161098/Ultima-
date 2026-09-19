@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v28 2026-09-19 sha256:2b32b7565936 -->
+<!-- lecons:empreinte v29 2026-09-19 sha256:9ec65c54080d -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -371,6 +371,46 @@ passait pour la seule raison que son texte faisait 33 caractères et tenait dans
 la colonne. Un contrôle dont le résultat bascule selon le contenu, et non selon
 le défaut qu'il traque, ne mesure pas ce qu'il croit mesurer — il attend juste
 qu'une phrase grandisse.
+
+---
+
+**UNE CLÉ JSON PRÉSENTE N'EST PAS UNE VALEUR PRÉSENTE** *(2026-09-19)*. Le prompt
+de reprise du matin annonçait « devis avec `extra.pdf_path` = 3 ». Mesuré le soir :
+**un seul**. Les trois lignes portent bien la clé — `extra ? 'pdf_path'` rend 3 —
+mais deux d'entre elles contiennent `null`, et `extra->>'pdf_path' is not null`
+rend 1. Les deux comptes sont exacts ; ils ne comptent pas la même chose.
+⛔ *En JSON, l'existence d'une clé et l'existence de sa valeur sont deux faits
+distincts, et c'est toujours le second qui intéresse.* La conséquence dépassait
+le chiffre : on croyait trois PDF déposés là où il y en a un, donc les trois
+gestes réels étaient encore moins faits qu'annoncé. ⚠️ Un compte qui dépasse la
+réalité rassure, et c'est pour ça qu'il ne se remet pas en cause tout seul :
+**quand une mesure arrange, la vérifier coûte une requête de plus.**
+
+---
+
+**UNE CAUSE TRANSMISE N'EST PAS UNE CAUSE MESURÉE** *(2026-09-19)*. La séance du
+matin avait écrit « plafonds GitHub Actions atteints ». Je l'ai répété pendant
+**quatre heures** — dans deux PR, trois commentaires et un rapport — sans le
+vérifier une seule fois. Or le démenti était déjà sous mes yeux : **Paul avait
+relevé le plafond, et rien n'avait changé**. Ce qui était établi, c'était la
+SIGNATURE (job mort en 2-3 s, zéro étape, logs en 404, `main` rouge à
+l'identique) — pas sa cause. Quand j'ai enfin cherché : workflow valide, check
+run sans titre ni résumé, et `rerun` refusé en **403**. Je n'avais donc ni la
+cause ni le moyen de la lever, et je l'aurais su en dix minutes.
+⛔ *Un diagnostic hérité se relit comme un fait parce qu'il est écrit au même
+endroit que les mesures. Il se re-mesure à la première occasion, et
+immédiatement dès qu'un remède appliqué ne produit aucun effet* — un remède
+sans effet réfute le diagnostic, il ne prouve pas que le mal est tenace.
+
+---
+
+**CE QU'ON N'A PAS PU VOIR SE DIT, SURTOUT QUAND LE RESTE EST VERT** *(2026-09-19)*.
+QA complète de Stellar V2 : 38/38 unitaires, 41/41 navigateur, quatre régressions
+trouvées et corrigées, captures livrées. Et **RIVEN connecté n'a jamais été vu** :
+sans session, la page ne rend que son écran de connexion. ⚠️ *Un rapport dense en
+verts donne à un trou la texture du reste* — le lecteur en déduit une couverture
+qu'il n'a pas. L'angle mort se nomme **à côté du vert**, pas en note de bas de
+page, sinon les quarante et un harnais se lisent comme quarante-deux.
 
 ## 2. Les garde-fous, et leur silence
 
