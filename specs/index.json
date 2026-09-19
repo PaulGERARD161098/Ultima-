@@ -1,10 +1,10 @@
 {
-  "le": "2026-09-18",
+  "le": "2026-09-19",
   "seuils": {
     "vivante": 30,
     "dormante": 120
   },
-  "total": 85,
+  "total": 86,
   "projets": [
     {
       "dossier": "Ultima-",
@@ -17,7 +17,7 @@
           "chemin": "CADRAGE-2026-09-07-reprise-depots.md",
           "famille": "cadrage",
           "derniere_touche": "2026-09-06",
-          "age_jours": 12,
+          "age_jours": 13,
           "etat": "vivante",
           "lignes": 171
         },
@@ -25,7 +25,7 @@
           "chemin": "CADRAGE-ACCUEIL-FINUBAR.md",
           "famille": "cadrage",
           "derniere_touche": "2026-09-02",
-          "age_jours": 16,
+          "age_jours": 17,
           "etat": "vivante",
           "lignes": 238
         },
@@ -33,7 +33,7 @@
           "chemin": "CADRAGE-ALTHEA.md",
           "famille": "cadrage",
           "derniere_touche": "2026-08-10",
-          "age_jours": 39,
+          "age_jours": 40,
           "etat": "dormante",
           "lignes": 1383
         },
@@ -41,7 +41,7 @@
           "chemin": "CADRAGE-CIEL-CADRAGE.md",
           "famille": "cadrage",
           "derniere_touche": "2026-08-12",
-          "age_jours": 37,
+          "age_jours": 38,
           "etat": "dormante",
           "lignes": 149
         },
@@ -49,7 +49,7 @@
           "chemin": "CADRAGE-CONSOLE.md",
           "famille": "cadrage",
           "derniere_touche": "2026-07-30",
-          "age_jours": 50,
+          "age_jours": 51,
           "etat": "dormante",
           "lignes": 445
         },
@@ -57,7 +57,7 @@
           "chemin": "CADRAGE-FINUBAR.md",
           "famille": "cadrage",
           "derniere_touche": "2026-09-06",
-          "age_jours": 12,
+          "age_jours": 13,
           "etat": "vivante",
           "lignes": 229
         },
@@ -65,7 +65,7 @@
           "chemin": "CADRAGE-IMLADRIK.md",
           "famille": "cadrage",
           "derniere_touche": "2026-08-17",
-          "age_jours": 32,
+          "age_jours": 33,
           "etat": "dormante",
           "lignes": 471
         },
@@ -73,7 +73,7 @@
           "chemin": "CADRAGE-LEO-SITE.md",
           "famille": "cadrage",
           "derniere_touche": "2026-09-03",
-          "age_jours": 15,
+          "age_jours": 16,
           "etat": "vivante",
           "lignes": 186
         },
@@ -81,7 +81,7 @@
           "chemin": "CADRAGE-LV3.md",
           "famille": "cadrage",
           "derniere_touche": "2026-08-17",
-          "age_jours": 32,
+          "age_jours": 33,
           "etat": "dormante",
           "lignes": 368
         },
@@ -89,7 +89,7 @@
           "chemin": "CADRAGE-LV4-CIEL-DEPLIE.md",
           "famille": "cadrage",
           "derniere_touche": "2026-08-14",
-          "age_jours": 35,
+          "age_jours": 36,
           "etat": "dormante",
           "lignes": 681
         },
@@ -97,7 +97,7 @@
           "chemin": "CADRAGE-LV4-CONSTELLATIONS.md",
           "famille": "cadrage",
           "derniere_touche": "2026-08-14",
-          "age_jours": 35,
+          "age_jours": 36,
           "etat": "dormante",
           "lignes": 223
         },
@@ -105,7 +105,7 @@
           "chemin": "CADRAGE-LV5-GALAXIE-PLEIN-ECRAN.md",
           "famille": "cadrage",
           "derniere_touche": "2026-08-17",
-          "age_jours": 32,
+          "age_jours": 33,
           "etat": "dormante",
           "lignes": 1248
         },
@@ -113,7 +113,7 @@
           "chemin": "CADRAGE-LV6-CIEL-VIVANT.md",
           "famille": "cadrage",
           "derniere_touche": "2026-08-20",
-          "age_jours": 29,
+          "age_jours": 30,
           "etat": "vivante",
           "lignes": 243
         },
@@ -121,7 +121,7 @@
           "chemin": "CADRAGE-NICOL-BOLAS.md",
           "famille": "cadrage",
           "derniere_touche": "2026-07-23",
-          "age_jours": 57,
+          "age_jours": 58,
           "etat": "dormante",
           "lignes": 249
         },
@@ -129,7 +129,7 @@
           "chemin": "CADRAGE-RESHIRAM-ZEKROM.md",
           "famille": "cadrage",
           "derniere_touche": "2026-07-30",
-          "age_jours": 50,
+          "age_jours": 51,
           "etat": "dormante",
           "lignes": 419
         },
@@ -137,7 +137,7 @@
           "chemin": "CADRAGE-RIVEN-DETAIL.md",
           "famille": "cadrage",
           "derniere_touche": "2026-08-10",
-          "age_jours": 39,
+          "age_jours": 40,
           "etat": "dormante",
           "lignes": 168
         },
@@ -145,7 +145,7 @@
           "chemin": "CADRAGE-RIVEN-PILOTAGE.md",
           "famille": "cadrage",
           "derniere_touche": "2026-08-12",
-          "age_jours": 37,
+          "age_jours": 38,
           "etat": "dormante",
           "lignes": 175
         },
@@ -153,7 +153,7 @@
           "chemin": "CADRAGE-RIVEN-SAISIE.md",
           "famille": "cadrage",
           "derniere_touche": "2026-08-12",
-          "age_jours": 37,
+          "age_jours": 38,
           "etat": "dormante",
           "lignes": 187
         },
@@ -161,7 +161,7 @@
           "chemin": "CADRAGE-RIVEN-STELLAIRE.md",
           "famille": "cadrage",
           "derniere_touche": "2026-08-13",
-          "age_jours": 36,
+          "age_jours": 37,
           "etat": "dormante",
           "lignes": 601
         },
@@ -169,7 +169,7 @@
           "chemin": "CADRAGE-ULTIMA.md",
           "famille": "cadrage",
           "derniere_touche": "2026-09-14",
-          "age_jours": 4,
+          "age_jours": 5,
           "etat": "vivante",
           "lignes": 1966
         },
@@ -177,7 +177,7 @@
           "chemin": "PLAN-2026-09-05-boucler-la-semaine.md",
           "famille": "plan",
           "derniere_touche": "2026-09-05",
-          "age_jours": 13,
+          "age_jours": 14,
           "etat": "vivante",
           "lignes": 217
         },
@@ -185,7 +185,7 @@
           "chemin": "ROADMAP-SECURITE.md",
           "famille": "roadmap",
           "derniere_touche": "2026-08-12",
-          "age_jours": 37,
+          "age_jours": 38,
           "etat": "dormante",
           "lignes": 67
         },
@@ -193,7 +193,7 @@
           "chemin": "ROADMAP-SITE.md",
           "famille": "roadmap",
           "derniere_touche": "2026-07-11",
-          "age_jours": 69,
+          "age_jours": 70,
           "etat": "dormante",
           "lignes": 115
         },
@@ -201,7 +201,7 @@
           "chemin": "design/spec-a1-connexion.md",
           "famille": "spec",
           "derniere_touche": "2026-07-09",
-          "age_jours": 71,
+          "age_jours": 72,
           "etat": "dormante",
           "lignes": 84
         },
@@ -209,7 +209,7 @@
           "chemin": "design/spec-a2-secteur.md",
           "famille": "spec",
           "derniere_touche": "2026-07-09",
-          "age_jours": 71,
+          "age_jours": 72,
           "etat": "dormante",
           "lignes": 205
         },
@@ -217,7 +217,7 @@
           "chemin": "design/spec-a3-arbre.md",
           "famille": "spec",
           "derniere_touche": "2026-07-09",
-          "age_jours": 71,
+          "age_jours": 72,
           "etat": "dormante",
           "lignes": 126
         },
@@ -225,7 +225,7 @@
           "chemin": "design/spec-ad4c-front.md",
           "famille": "spec",
           "derniere_touche": "2026-07-22",
-          "age_jours": 58,
+          "age_jours": 59,
           "etat": "dormante",
           "lignes": 75
         },
@@ -233,7 +233,7 @@
           "chemin": "design/spec-arbre-responsive.md",
           "famille": "spec",
           "derniere_touche": "2026-07-11",
-          "age_jours": 69,
+          "age_jours": 70,
           "etat": "dormante",
           "lignes": 288
         },
@@ -241,7 +241,7 @@
           "chemin": "design/spec-durcissement-auth.md",
           "famille": "spec",
           "derniere_touche": "2026-07-11",
-          "age_jours": 69,
+          "age_jours": 70,
           "etat": "dormante",
           "lignes": 222
         },
@@ -249,7 +249,7 @@
           "chemin": "design/spec-l2b-mains.md",
           "famille": "spec",
           "derniere_touche": "2026-07-22",
-          "age_jours": 58,
+          "age_jours": 59,
           "etat": "dormante",
           "lignes": 152
         },
@@ -257,15 +257,15 @@
           "chemin": "design/spec-p5c-boussole-futurs-ciel.md",
           "famille": "spec",
           "derniere_touche": "2026-08-19",
-          "age_jours": 30,
-          "etat": "vivante",
+          "age_jours": 31,
+          "etat": "dormante",
           "lignes": 127
         },
         {
           "chemin": "design/spec-r1-graphisme.md",
           "famille": "spec",
           "derniere_touche": "2026-07-07",
-          "age_jours": 73,
+          "age_jours": 74,
           "etat": "dormante",
           "lignes": 381
         },
@@ -273,7 +273,7 @@
           "chemin": "design/spec-registre-antique-serieux.md",
           "famille": "spec",
           "derniere_touche": "2026-07-11",
-          "age_jours": 69,
+          "age_jours": 70,
           "etat": "dormante",
           "lignes": 225
         }
@@ -292,13 +292,13 @@
       "depot": "PaulGERARD161098/RenoBoost",
       "mesure": true,
       "superficiel": false,
-      "vus": 123,
+      "vus": 124,
       "retenues": [
         {
           "chemin": "ARCHI-MACRO-PLATEFORME.md",
           "famille": "architecture",
           "derniere_touche": "2026-07-14",
-          "age_jours": 66,
+          "age_jours": 67,
           "etat": "dormante",
           "lignes": 107
         },
@@ -306,7 +306,7 @@
           "chemin": "ARCHI-P3-DEVIS-CLOUD.md",
           "famille": "architecture",
           "derniere_touche": "2026-06-17",
-          "age_jours": 93,
+          "age_jours": 94,
           "etat": "dormante",
           "lignes": 77
         },
@@ -314,7 +314,7 @@
           "chemin": "ARCHI-RENO.md",
           "famille": "architecture",
           "derniere_touche": "2026-08-05",
-          "age_jours": 44,
+          "age_jours": 45,
           "etat": "dormante",
           "lignes": 172
         },
@@ -322,7 +322,7 @@
           "chemin": "ARCHI-RENORELANCE.md",
           "famille": "architecture",
           "derniere_touche": "2026-07-14",
-          "age_jours": 66,
+          "age_jours": 67,
           "etat": "dormante",
           "lignes": 155
         },
@@ -330,15 +330,15 @@
           "chemin": "CADRAGE-2026-08-16-fiche-client-data.md",
           "famille": "cadrage",
           "derniere_touche": "2026-08-19",
-          "age_jours": 30,
-          "etat": "vivante",
+          "age_jours": 31,
+          "etat": "dormante",
           "lignes": 995
         },
         {
           "chemin": "CADRAGE-2026-08-19-audit-gemini.md",
           "famille": "cadrage",
           "derniere_touche": "2026-09-01",
-          "age_jours": 17,
+          "age_jours": 18,
           "etat": "vivante",
           "lignes": 79
         },
@@ -346,15 +346,15 @@
           "chemin": "CADRAGE-2026-08-19-passerelle-pro-artisan.md",
           "famille": "cadrage",
           "derniere_touche": "2026-08-19",
-          "age_jours": 30,
-          "etat": "vivante",
+          "age_jours": 31,
+          "etat": "dormante",
           "lignes": 83
         },
         {
           "chemin": "CADRAGE-2026-08-21-acquisition.md",
           "famille": "cadrage",
           "derniere_touche": "2026-08-21",
-          "age_jours": 28,
+          "age_jours": 29,
           "etat": "vivante",
           "lignes": 217
         },
@@ -362,7 +362,7 @@
           "chemin": "CADRAGE-2026-09-01-simulateur-zone.md",
           "famille": "cadrage",
           "derniere_touche": "2026-09-01",
-          "age_jours": 17,
+          "age_jours": 18,
           "etat": "vivante",
           "lignes": 357
         },
@@ -370,7 +370,7 @@
           "chemin": "CADRAGE-2026-09-01-suite.md",
           "famille": "cadrage",
           "derniere_touche": "2026-09-11",
-          "age_jours": 7,
+          "age_jours": 8,
           "etat": "vivante",
           "lignes": 348
         },
@@ -378,7 +378,7 @@
           "chemin": "CADRAGE-2026-09-02-demain.md",
           "famille": "cadrage",
           "derniere_touche": "2026-09-02",
-          "age_jours": 16,
+          "age_jours": 17,
           "etat": "vivante",
           "lignes": 230
         },
@@ -386,7 +386,7 @@
           "chemin": "CADRAGE-2026-09-03-radar-demande.md",
           "famille": "cadrage",
           "derniere_touche": "2026-09-05",
-          "age_jours": 13,
+          "age_jours": 14,
           "etat": "vivante",
           "lignes": 303
         },
@@ -394,7 +394,7 @@
           "chemin": "CADRAGE-2026-09-03-site-forme-stats.md",
           "famille": "cadrage",
           "derniere_touche": "2026-09-05",
-          "age_jours": 13,
+          "age_jours": 14,
           "etat": "vivante",
           "lignes": 195
         },
@@ -402,7 +402,7 @@
           "chemin": "CADRAGE-2026-09-05-landing-capture.md",
           "famille": "cadrage",
           "derniere_touche": "2026-09-05",
-          "age_jours": 13,
+          "age_jours": 14,
           "etat": "vivante",
           "lignes": 265
         },
@@ -410,7 +410,7 @@
           "chemin": "CADRAGE-2026-09-07-landing-lot1-retenue.md",
           "famille": "cadrage",
           "derniere_touche": "2026-09-07",
-          "age_jours": 11,
+          "age_jours": 12,
           "etat": "vivante",
           "lignes": 160
         },
@@ -418,7 +418,7 @@
           "chemin": "CADRAGE-2026-09-11-landing-premium-audit.md",
           "famille": "cadrage",
           "derniere_touche": "2026-09-11",
-          "age_jours": 7,
+          "age_jours": 8,
           "etat": "vivante",
           "lignes": 303
         },
@@ -426,7 +426,7 @@
           "chemin": "CADRAGE-2026-09-11-langage-fiche.md",
           "famille": "cadrage",
           "derniere_touche": "2026-09-11",
-          "age_jours": 7,
+          "age_jours": 8,
           "etat": "vivante",
           "lignes": 310
         },
@@ -434,7 +434,7 @@
           "chemin": "CADRAGE-2026-09-13-boussole.md",
           "famille": "cadrage",
           "derniere_touche": "2026-09-14",
-          "age_jours": 4,
+          "age_jours": 5,
           "etat": "vivante",
           "lignes": 195
         },
@@ -442,7 +442,7 @@
           "chemin": "docs/CADRAGE-UX-CONSOLE-2026-09-14.md",
           "famille": "cadrage",
           "derniere_touche": "2026-09-15",
-          "age_jours": 3,
+          "age_jours": 4,
           "etat": "vivante",
           "lignes": 146
         },
@@ -450,7 +450,7 @@
           "chemin": "standards/NAV-CONTRAT.md",
           "famille": "contrat",
           "derniere_touche": "2026-08-13",
-          "age_jours": 36,
+          "age_jours": 37,
           "etat": "dormante",
           "lignes": 224
         },
@@ -458,7 +458,7 @@
           "chemin": "standards/TOKENS-CONTRAT.md",
           "famille": "contrat",
           "derniere_touche": "2026-09-11",
-          "age_jours": 7,
+          "age_jours": 8,
           "etat": "vivante",
           "lignes": 111
         },
@@ -466,7 +466,7 @@
           "chemin": "DESIGN-LANGAGE.md",
           "famille": "design",
           "derniere_touche": "2026-09-18",
-          "age_jours": 0,
+          "age_jours": 1,
           "etat": "vivante",
           "lignes": 294
         },
@@ -474,7 +474,7 @@
           "chemin": "PLAN-CHAT-RENO-CROSS-BRIQUES.md",
           "famille": "plan",
           "derniere_touche": "2026-07-16",
-          "age_jours": 64,
+          "age_jours": 65,
           "etat": "dormante",
           "lignes": 133
         },
@@ -482,7 +482,7 @@
           "chemin": "PLAN-MODULARISATION-P4.md",
           "famille": "plan",
           "derniere_touche": "2026-07-07",
-          "age_jours": 73,
+          "age_jours": 74,
           "etat": "dormante",
           "lignes": 49
         },
@@ -490,7 +490,7 @@
           "chemin": "PLAN-RENO-OMNIPRESENT.md",
           "famille": "plan",
           "derniere_touche": "2026-07-18",
-          "age_jours": 62,
+          "age_jours": 63,
           "etat": "dormante",
           "lignes": 95
         },
@@ -498,7 +498,7 @@
           "chemin": "PLAN-SIGNATURE-ARTISAN-RELANCE.md",
           "famille": "plan",
           "derniere_touche": "2026-07-30",
-          "age_jours": 50,
+          "age_jours": 51,
           "etat": "dormante",
           "lignes": 168
         },
@@ -506,7 +506,7 @@
           "chemin": "PLAN-SITE-V2-CATALOGUE.md",
           "famille": "plan",
           "derniere_touche": "2026-08-04",
-          "age_jours": 45,
+          "age_jours": 46,
           "etat": "dormante",
           "lignes": 546
         },
@@ -514,7 +514,7 @@
           "chemin": "PLAN-SSO-MEMOIRE-CROSS-BRIQUES.md",
           "famille": "plan",
           "derniere_touche": "2026-07-16",
-          "age_jours": 64,
+          "age_jours": 65,
           "etat": "dormante",
           "lignes": 194
         },
@@ -522,7 +522,7 @@
           "chemin": "standards/PLAN-RENO-PRODUIT-4.md",
           "famille": "plan",
           "derniere_touche": "2026-07-24",
-          "age_jours": 56,
+          "age_jours": 57,
           "etat": "dormante",
           "lignes": 69
         },
@@ -530,7 +530,7 @@
           "chemin": "RECETTE-SIMULATEUR-ZONE.md",
           "famille": "recette",
           "derniere_touche": "2026-09-02",
-          "age_jours": 16,
+          "age_jours": 17,
           "etat": "vivante",
           "lignes": 95
         },
@@ -538,7 +538,7 @@
           "chemin": "ROADMAP-ALIGNEMENT-4-PROJETS.md",
           "famille": "roadmap",
           "derniere_touche": "2026-07-24",
-          "age_jours": 56,
+          "age_jours": 57,
           "etat": "dormante",
           "lignes": 108
         },
@@ -546,7 +546,7 @@
           "chemin": "ROADMAP-CATALOGUE.md",
           "famille": "roadmap",
           "derniere_touche": "2026-07-21",
-          "age_jours": 59,
+          "age_jours": 60,
           "etat": "dormante",
           "lignes": 105
         },
@@ -554,7 +554,7 @@
           "chemin": "ROADMAP-DASHBOARD.md",
           "famille": "roadmap",
           "derniere_touche": "2026-08-05",
-          "age_jours": 44,
+          "age_jours": 45,
           "etat": "dormante",
           "lignes": 394
         },
@@ -562,7 +562,7 @@
           "chemin": "ROADMAP-ESPACES-PRO.md",
           "famille": "roadmap",
           "derniere_touche": "2026-07-07",
-          "age_jours": 73,
+          "age_jours": 74,
           "etat": "dormante",
           "lignes": 151
         },
@@ -570,15 +570,15 @@
           "chemin": "ROADMAP-GHL.md",
           "famille": "roadmap",
           "derniere_touche": "2026-08-19",
-          "age_jours": 30,
-          "etat": "vivante",
+          "age_jours": 31,
+          "etat": "dormante",
           "lignes": 594
         },
         {
           "chemin": "ROADMAP-LINKEDIN.md",
           "famille": "roadmap",
           "derniere_touche": "2026-09-01",
-          "age_jours": 17,
+          "age_jours": 18,
           "etat": "vivante",
           "lignes": 192
         },
@@ -586,7 +586,7 @@
           "chemin": "ROADMAP-MASTER.md",
           "famille": "roadmap",
           "derniere_touche": "2026-09-02",
-          "age_jours": 16,
+          "age_jours": 17,
           "etat": "vivante",
           "lignes": 276
         },
@@ -594,7 +594,7 @@
           "chemin": "ROADMAP-REFLEXIVE.md",
           "famille": "roadmap",
           "derniere_touche": "2026-07-07",
-          "age_jours": 73,
+          "age_jours": 74,
           "etat": "dormante",
           "lignes": 99
         },
@@ -602,7 +602,7 @@
           "chemin": "ROADMAP-RENO-AGENT.md",
           "famille": "roadmap",
           "derniere_touche": "2026-08-01",
-          "age_jours": 48,
+          "age_jours": 49,
           "etat": "dormante",
           "lignes": 141
         },
@@ -610,7 +610,7 @@
           "chemin": "ROADMAP-RETOURS.md",
           "famille": "roadmap",
           "derniere_touche": "2026-07-30",
-          "age_jours": 50,
+          "age_jours": 51,
           "etat": "dormante",
           "lignes": 150
         },
@@ -618,7 +618,7 @@
           "chemin": "ROADMAP-SECURITE.md",
           "famille": "roadmap",
           "derniere_touche": "2026-09-11",
-          "age_jours": 7,
+          "age_jours": 8,
           "etat": "vivante",
           "lignes": 285
         },
@@ -626,7 +626,7 @@
           "chemin": "ROADMAP-SENTINELLE.md",
           "famille": "roadmap",
           "derniere_touche": "2026-08-10",
-          "age_jours": 39,
+          "age_jours": 40,
           "etat": "dormante",
           "lignes": 652
         },
@@ -634,7 +634,7 @@
           "chemin": "ROADMAP-SITE.md",
           "famille": "roadmap",
           "derniere_touche": "2026-08-05",
-          "age_jours": 44,
+          "age_jours": 45,
           "etat": "dormante",
           "lignes": 89
         },
@@ -642,7 +642,7 @@
           "chemin": "ROADMAP-VEILLE-BTP.md",
           "famille": "roadmap",
           "derniere_touche": "2026-08-12",
-          "age_jours": 37,
+          "age_jours": 38,
           "etat": "dormante",
           "lignes": 480
         },
@@ -650,7 +650,7 @@
           "chemin": "docs/RENOBOOST_UI_SPEC_CLAUDE.md",
           "famille": "spec",
           "derniere_touche": "2026-09-11",
-          "age_jours": 7,
+          "age_jours": 8,
           "etat": "vivante",
           "lignes": 419
         },
@@ -658,7 +658,7 @@
           "chemin": "standards/CLAUDE-STANDARD.md",
           "famille": "standard",
           "derniere_touche": "2026-07-24",
-          "age_jours": 56,
+          "age_jours": 57,
           "etat": "dormante",
           "lignes": 57
         }
@@ -670,7 +670,7 @@
         "note de séance": 8,
         "journal de reprise": 36,
         "hors famille normative": 7,
-        "roadmap de fin de séance": 15
+        "roadmap de fin de séance": 16
       }
     },
     {
@@ -694,8 +694,24 @@
     {
       "dossier": "mon-dpe.fr",
       "depot": "PaulGERARD161098/mon-dpe.fr",
-      "mesure": false,
-      "motif": "dépôt absent du voisinage de cette séance"
+      "mesure": true,
+      "superficiel": true,
+      "vus": 12,
+      "retenues": [
+        {
+          "chemin": "CADRAGE-2026-08-21-audit-pac.md",
+          "famille": "cadrage",
+          "derniere_touche": null,
+          "age_jours": null,
+          "etat": "non daté (clone superficiel)",
+          "lignes": 300
+        }
+      ],
+      "ecartees": {
+        "hors famille normative": 7,
+        "fichier de dépôt": 3,
+        "registre vivant": 1
+      }
     },
     {
       "dossier": "artisan-builder",
@@ -708,7 +724,7 @@
           "chemin": "CADRAGE-AB-MULTIACTIVITE-2026-09-11.md",
           "famille": "cadrage",
           "derniere_touche": "2026-09-13",
-          "age_jours": 5,
+          "age_jours": 6,
           "etat": "vivante",
           "lignes": 241
         },
@@ -716,7 +732,7 @@
           "chemin": "CADRAGE-AUTH-SUPABASE.md",
           "famille": "cadrage",
           "derniere_touche": "2026-09-15",
-          "age_jours": 3,
+          "age_jours": 4,
           "etat": "vivante",
           "lignes": 115
         },
@@ -724,7 +740,7 @@
           "chemin": "CADRAGE-MENTIONS-LEGALES.md",
           "famille": "cadrage",
           "derniere_touche": "2026-09-06",
-          "age_jours": 12,
+          "age_jours": 13,
           "etat": "vivante",
           "lignes": 170
         },
@@ -732,7 +748,7 @@
           "chemin": "CADRAGE-REPRISE-07-09.md",
           "famille": "cadrage",
           "derniere_touche": "2026-09-07",
-          "age_jours": 11,
+          "age_jours": 12,
           "etat": "vivante",
           "lignes": 343
         },
@@ -740,7 +756,7 @@
           "chemin": "CADRAGE-REPRISE-AB1-STUDIO.md",
           "famille": "cadrage",
           "derniere_touche": "2026-09-13",
-          "age_jours": 5,
+          "age_jours": 6,
           "etat": "vivante",
           "lignes": 282
         },
@@ -748,7 +764,7 @@
           "chemin": "CRITIQUE-DESIGN-SPC-2026-09-11.md",
           "famille": "design",
           "derniere_touche": "2026-09-14",
-          "age_jours": 4,
+          "age_jours": 5,
           "etat": "vivante",
           "lignes": 178
         }
