@@ -32,7 +32,7 @@
   },
   "dernier_arret": {
     "le": "2026-09-19",
-    "quoi": "Arbitrage A1 précisé : il ne bloque QU'UN pattern sur quinze (BentoBenefits). Éprouvé le 19/09 au soir — trois patterns posés sur la vitrine RenoBoost sous le registre ancien (PR #495), 11 sur 15 désormais.",
+    "quoi": "Stellar V2 FUSIONNÉ (#258) après QA navigateur réelle : quatre régressions trouvées et corrigées — plaque ALTHEA à 96 % d'opacité sous les chiffres, filtre plein-écran coûtant 40 % des grains du ciel, nom de passerelle dégravé, cartouche. Plus #262 (bombe à retardement de calendrier qui bloquait TOUT le lanceur) et #261 (arbitrage A1 précisé). 38/38 unit, 41/41 navigateur sur main.",
     "commit": "4a11a18"
   },
   "prochaine_action": "Reprendre le jalon J3/P4 selon l’arbitrage existant, après le retour de Paul sur P3. La migration et la fusion de l’audit sont terminées ; ne pas les rejouer.",
