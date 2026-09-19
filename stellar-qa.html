@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#02050b">
+<title>Ultima — QA Stellar V2</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="/css/stellaire.css">
+<link rel="stylesheet" href="/design/stellar-v2-preview.css">
+<style>
+html,body{margin:0;min-height:100%;background:var(--stellar-space-void,#02050b);color:var(--stellar-text-primary,#f2ead6)}
+.qa{max-width:1120px;margin:auto;padding:calc(env(safe-area-inset-top,0px) + 24px) calc(env(safe-area-inset-right,0px) + 18px) calc(env(safe-area-inset-bottom,0px) + 36px) calc(env(safe-area-inset-left,0px) + 18px)}
+.qa h1{font:400 clamp(1.5rem,4vw,2.6rem)/1.1 Georgia,serif;color:var(--stellar-accent-gold,#d8bd82);margin:.2rem 0}
+.qa-intro{color:var(--stellar-text-secondary,#c8c5bd);max-width:72ch}
+.qa-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-top:22px}
+.qa-sky{min-height:420px;position:relative;overflow:hidden;border:1px solid var(--stellar-line-gold);border-radius:8px;background:radial-gradient(circle at 55% 42%,rgba(30,60,100,.28),transparent 34%),linear-gradient(#060b14,#02050b)}
+.qa-stars{position:absolute;inset:0;pointer-events:none}
+.qa-star{position:absolute;width:7px;height:7px;border-radius:50%;background:#f2ead6;box-shadow:0 0 10px rgba(159,201,223,.45)}
+.qa-star.a{left:24%;top:32%}.qa-star.b{left:51%;top:20%}.qa-star.c{left:70%;top:48%}.qa-star.d{left:38%;top:68%}
+.qa-line{position:absolute;height:1px;background:rgba(223,235,244,.42);transform-origin:left center}
+.qa-line.one{left:25%;top:33%;width:30%;transform:rotate(-16deg)}.qa-line.two{left:52%;top:22%;width:27%;transform:rotate(47deg)}.qa-line.three{left:39%;top:68%;width:35%;transform:rotate(-32deg)}
+.qa-hud{position:absolute;inset:12px 12px auto;display:flex;justify-content:space-between;gap:12px;pointer-events:none}
+.qa-hud>*{pointer-events:auto}
+.qa-chip{padding:8px 10px;border:1px solid var(--stellar-line-cool);border-radius:8px;background:var(--stellar-surface-glass);backdrop-filter:blur(10px);font-size:.78rem}
+.qa-controls{display:flex;gap:6px}.qa-controls button{min-width:44px;min-height:44px;border:1px solid var(--stellar-line-gold);background:rgba(6,11,20,.78);color:var(--stellar-text-primary);border-radius:8px}
+.qa-stack{display:grid;gap:14px}.qa-instrument{position:relative;background:rgba(5,10,18,.96);border:1px solid var(--stellar-line-cool);border-radius:8px;padding:0 14px 14px}.qa-instrument h2{margin:0 -14px 12px;padding:10px 14px;background:rgba(10,18,29,.98);border-bottom:1px solid var(--stellar-line-cool);font:500 .68rem/1.2 system-ui;letter-spacing:.18em;text-transform:uppercase;color:var(--stellar-accent-gold)}
+.qa-value{font:600 2rem/1 system-ui;font-variant-numeric:tabular-nums;color:#e0c98f}.qa-system{color:var(--stellar-accent-ice)}.qa-meta{color:var(--stellar-text-quiet);font-size:.8rem}.qa-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:9px 0;border-top:1px solid var(--stellar-line-cool)}.qa-check{width:44px;height:44px;border:1px dashed var(--stellar-line-gold);background:#060b14;color:var(--stellar-text-primary);border-radius:6px}
+.qa-links{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}.qa-links a{color:var(--stellar-accent-ice);min-height:44px;display:inline-flex;align-items:center}
+@media(max-width:720px){.qa{padding-left:10px;padding-right:10px}.qa-grid{grid-template-columns:1fr}.qa-sky{min-height:360px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
+</head>
+<body class="stellar-v2-preview">
+<main class="qa">
+<p class="qa-meta">ULTIMA / STELLAR V2 / QA SANS DONNÉES</p>
+<h1>Ciel + instruments</h1>
+<p class="qa-intro">Planche autonome de validation : aucun compte, aucune donnée personnelle, aucune API. Elle vérifie seulement le langage visuel et les cibles tactiles avant propagation T5.</p>
+<section class="qa-grid">
+<div class="qa-sky" aria-label="Échantillon de ciel Stellar">
+<div class="qa-stars" aria-hidden="true"><i class="qa-line one"></i><i class="qa-line two"></i><i class="qa-line three"></i><i class="qa-star a"></i><i class="qa-star b"></i><i class="qa-star c"></i><i class="qa-star d"></i></div>
+<div class="qa-hud"><div class="qa-chip"><strong>RIVEN</strong><br><span class="qa-meta">constellation active</span></div><div class="qa-controls"><button aria-label="Approcher">+</button><button aria-label="Reculer">−</button></div></div>
+</div>
+<div class="qa-stack">
+<article class="qa-instrument"><h2>Instrument / acquis</h2><div class="qa-value">41</div><p class="qa-meta">niveau consolidé · valeur gagnée</p><div class="qa-row"><span>Force</span><strong class="qa-value" style="font-size:1rem">55</strong></div><div class="qa-row"><span>Intelligence</span><strong class="qa-value" style="font-size:1rem">62</strong></div></article>
+<article class="qa-instrument"><h2 class="qa-system">Système / annoncé</h2><p class="qa-system">Signal du Système — information, jamais récompense.</p><div class="qa-row"><span>Geste quotidien</span><button class="qa-check" aria-pressed="false">✓</button></div><p class="qa-meta">Or = acquis / structure · glace = système / interaction.</p></article>
+</div>
+</section>
+<nav class="qa-links" aria-label="Previews Stellar"><a href="/stellar-v2">Ouvrir le ciel LV5</a><a href="/riven.html">RIVEN</a><a href="/althea.html">ALTHEA</a></nav>
+</main>
+</body></html>
