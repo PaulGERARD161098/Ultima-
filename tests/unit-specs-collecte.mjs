@@ -24,8 +24,31 @@ function verifier(nom, condition, detail = '') {
 }
 
 function git(dossier, ...arguments_) {
-  execFileSync('git', ['-C', dossier, ...arguments_], { stdio: 'ignore' });
+  execFileSync('git', ['-C', dossier, ...arguments_], { stdio: 'ignore', env: { ...process.env, ...HORLOGE } });
 }
+
+/* ⛔ LA FIXTURE A SA PROPRE HORLOGE, ET C'EST LA CORRECTION DU 19/09/2026.
+   Ce harnais gelait « aujourd'hui » au 2026-09-18 (les cinq appels à `lancer`
+   ci-dessous) pendant que son dépôt factice, lui, se commitait à la date réelle
+   de la machine. Tant que la machine était au 18, tout concordait. Le 19, la
+   collecte a rendu `2026-09-19 (-1 j)` — un âge NÉGATIF — et le contrôle
+   « la date est mesurée, pas supposée », qui attend `\d+ j`, est passé au rouge.
+
+   ⚠️ AUCUNE LIGNE DE CODE N'AVAIT BOUGÉ. Le test s'est cassé tout seul en
+   changeant de jour, et il aurait été lu comme une régression du collecteur par
+   la première séance qui l'aurait vu rouge. Une bombe à retardement de calendrier
+   est pire qu'un test absent : elle accuse le code au moment où elle explose.
+
+   ⛔ ET LA DÉTENTE N'EST PAS DE RELÂCHER LE MOTIF en acceptant `-?\d+`. L'âge
+   négatif n'est pas un format à tolérer, c'est un non-sens : il dit qu'un fichier
+   a été touché APRÈS la date de référence. Le contrôle a raison de le refuser.
+   Ce qui avait tort, c'est la fixture, qui n'était pas maîtresse de son temps.
+
+   Le commit est donc anchoré la veille de la date de référence : âge = 1 jour,
+   état « vivante », et le harnais rend le même verdict dans dix ans. */
+const REFERENCE = '2026-09-18';
+const VEILLE = '2026-09-17T12:00:00Z';
+const HORLOGE = { GIT_AUTHOR_DATE: VEILLE, GIT_COMMITTER_DATE: VEILLE };
 
 // Un dépôt git réel et minuscule : la collecte dérive ses dates de `git log`,
 // un faux dossier sans `.git` ne prouverait donc rien de ce qui compte.
@@ -77,7 +100,7 @@ try {
       'docs/SPEC-machin.md': '# spec\n',
     });
     const ultima = faireUltima(racine, [{ dossier: 'Projet', depot: 'x/Projet' }]);
-    const r = lancer(ultima, '2026-09-18');
+    const r = lancer(ultima, REFERENCE);
     const index = existsSync(join(ultima, 'specs', 'INDEX.md')) ? readFileSync(join(ultima, 'specs', 'INDEX.md'), 'utf8') : '';
     verifier('un dépôt normal sort en 0', r.code === 0, `code ${r.code} ${r.erreur}`);
     verifier('la spec retenue figure dans l\'index', index.includes('CADRAGE-truc.md') && index.includes('docs/SPEC-machin.md'));
@@ -95,7 +118,7 @@ try {
     const racine = join(bac, 'vide');
     mkdirSync(racine, { recursive: true });
     const ultima = faireUltima(racine, [{ dossier: 'Absent', depot: 'x/Absent' }]);
-    const r = lancer(ultima, '2026-09-18');
+    const r = lancer(ultima, REFERENCE);
     verifier('aucun dépôt lisible → sortie 3', r.code === 3, `code ${r.code}`);
     verifier('aucun dépôt lisible → aucun index écrit', !existsSync(join(ultima, 'specs', 'INDEX.md')));
   }
@@ -108,7 +131,7 @@ try {
     mkdirSync(racine, { recursive: true });
     depotFactice(racine, 'Projet', { 'REPRISE-2026-01-01.md': '# journal\n', 'README.md': '# rien\n' });
     const ultima = faireUltima(racine, [{ dossier: 'Projet', depot: 'x/Projet' }]);
-    const r = lancer(ultima, '2026-09-18');
+    const r = lancer(ultima, REFERENCE);
     verifier('dépôt lu mais zéro spec → sortie 4', r.code === 4, `code ${r.code}`);
     verifier('dépôt lu mais zéro spec → aucun index écrit', !existsSync(join(ultima, 'specs', 'INDEX.md')));
   }
@@ -122,7 +145,7 @@ try {
       { dossier: 'Present', depot: 'x/Present' },
       { dossier: 'Jamais', depot: 'x/Jamais' },
     ]);
-    const r = lancer(ultima, '2026-09-18');
+    const r = lancer(ultima, REFERENCE);
     const index = readFileSync(join(ultima, 'specs', 'INDEX.md'), 'utf8');
     const bloc = index.slice(index.indexOf('## Jamais'));
     verifier('VERROU non-vacuité — le dépôt absent a bien un bloc', bloc.startsWith('## Jamais') && bloc.length > 50);
@@ -141,7 +164,7 @@ try {
     const cible = join(racine, 'Projet');
     execFileSync('git', ['clone', '--quiet', '--depth', '1', `file://${source}`, cible], { stdio: 'ignore' });
     const ultima = faireUltima(racine, [{ dossier: 'Projet', depot: 'x/Projet' }]);
-    lancer(ultima, '2026-09-18');
+    lancer(ultima, REFERENCE);
     const index = readFileSync(join(ultima, 'specs', 'INDEX.md'), 'utf8');
     // ⛔ On lit le BLOC DU DÉPÔT, pas l'index entier : l'en-tête porte la
     // légende des états, donc « 🟢 » y figure toujours. Cherché sur l'index
