@@ -57,6 +57,30 @@ et reste la règle de toute retouche de la vitrine. Il ne devient faux qu'au
 commit qui bascule — et c'est ce commit-là qui le réécrit, comme le document
 l'exige lui-même.
 
+### ✅ Éprouvé le 19/09 au soir — A1 ne bloque QU'UN pattern, et il faut le dire
+
+*Trois patterns ont été posés sur la vitrine ce soir-là — `ReasonCards`,
+`ComparisonMatrix`, `InteractiveCalculator` (RenoBoost PR #495) — **sous le
+registre ancien**, sans arrondi, sans ombre, sans icône décorative. Ils passent.*
+
+⛔ **Donc A1 n'est pas un verrou sur la bibliothèque entière.** La lecture
+paresseuse de cet arbitrage — « le registre est gelé jusqu'à la bascule, donc
+on ne pose plus rien » — est fausse, et elle coûterait des semaines. Sur les
+quinze patterns, **un seul** exige réellement ce que la règle 1 interdit :
+
+| Pattern | A1 le bloque&nbsp;? | Pourquoi |
+|---|---|---|
+| `BentoBenefits` | **oui** | une grille bento EST une grille de blocs arrondis et ombrés ; sans A1 en vigueur, elle n'a pas de forme |
+| `ProductShowcase` · `MobileShowcase` | **non** | ils attendent des **captures réelles** du produit, qui n'existent pas. Rien à voir avec le registre |
+| `LeadMagnet` | **non** | il attend un **contenu à offrir**, qui n'est pas écrit, et la gate G1 de RenoBoost |
+| les onze autres | **non** | posés, ou posables tels quels |
+
+⚠️ **Et la règle de décision qui généralise le cas** : un arbitrage qui « ne
+mord pas encore » n'interdit pas d'avancer — il interdit d'avancer **avec les
+moyens qu'il n'a pas encore autorisés**. La question à se poser devant chaque
+pattern n'est pas « l'arbitrage est-il actif&nbsp;? » mais « **ce pattern a-t-il
+besoin de ce que l'arbitrage rouvre&nbsp;?** ». Onze fois sur quinze, non.
+
 ⚠️ **Ne pas réécrire `DESIGN-LANGAGE.md` avant.** Un document normatif qui
 décrirait un site qui n'existe pas encore ferait deux vérités concurrentes sur
 la même page — et la prochaine séance croirait la mauvaise.
