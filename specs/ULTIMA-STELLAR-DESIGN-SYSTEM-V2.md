@@ -144,3 +144,15 @@ Invariants préservés :
 - les valeurs numériques utilisent `tabular-nums lining-nums`.
 
 T4 ne modifie aucune logique métier ALTHEA. La prochaine étape est une QA croisée RIVEN + ALTHEA avant toute propagation T5.
+
+
+## QA — préflight code T1–T4
+
+Relecture statique effectuée avant T5. Trois corrections ont été appliquées :
+- ALTHEA : les cases restent compactes (21 px) sur desktop et passent à 44 px uniquement sur mobile ;
+- RIVEN : les conteneurs HUD transparents sont `pointer-events:none`, seuls les contrôles reprennent les gestes ;
+- moteur fond : suppression de `V2_DEFAULTS`, variable morte de prototypage.
+
+État CI au HEAD `a854925` : workflow GitHub Actions #66 déclenché, mais jobs `unit` et `browser` terminés en échec avec **0 étape exécutée**. Aucun checkout, npm ci, test unitaire ou Playwright n'a tourné. Ce signal reste un incident de provisioning runner et ne constitue pas un résultat de test produit.
+
+T5 reste bloqué jusqu'à QA navigateur réelle de RIVEN + ALTHEA et mesure LV5.
