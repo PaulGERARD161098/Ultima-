@@ -71,8 +71,8 @@ quinze patterns, **un seul** exige réellement ce que la règle 1 interdit :
 | Pattern | A1 le bloque&nbsp;? | Pourquoi |
 |---|---|---|
 | `BentoBenefits` | **oui** | une grille bento EST une grille de blocs arrondis et ombrés ; sans A1 en vigueur, elle n'a pas de forme |
-| `ProductShowcase` · `MobileShowcase` | **non** | ils attendent des **captures réelles** du produit, qui n'existent pas. Rien à voir avec le registre |
-| `LeadMagnet` | **non** | il attend un **contenu à offrir**, qui n'est pas écrit, et la gate G1 de RenoBoost |
+| ~~`ProductShowcase` · `MobileShowcase`~~ | **non** | ✅ **POSÉS le 19/09 au soir** (RenoBoost `0fb50a3`). ⛔ Et le motif écrit ici — « des captures réelles du produit, qui n'existent pas » — était une **lecture fausse de l'interdit n°1 du contrat 02**, qui défend la donnée d'exemple MUETTE et non la donnée d'exemple. Les captures existent : `assets/produit/console-clients.png` et `console-mobile.png`, photographiées sur le vrai `dashboard.html` par `scripts/capturer-console.mjs` |
+| `LeadMagnet` | **non** | il attend un **contenu à offrir**, qui n'est pas écrit. ⚠️ La gate G1 était aussi citée : elle portait sur l'absence de volumes par département, et `radar_releves` en porte 674 820 — le motif est périmé, à re-vérifier avant d'être cité |
 | les onze autres | **non** | posés, ou posables tels quels |
 
 ⚠️ **Et la règle de décision qui généralise le cas** : un arbitrage qui « ne
