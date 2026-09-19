@@ -33,7 +33,7 @@
   "dernier_arret": {
     "le": "2026-09-19",
     "quoi": "Arbitrage A1 précisé : il ne bloque QU'UN pattern sur quinze (BentoBenefits). Éprouvé le 19/09 au soir — trois patterns posés sur la vitrine RenoBoost sous le registre ancien (PR #495), 11 sur 15 désormais.",
-    "commit": "REMPLACER"
+    "commit": "4a11a18"
   },
   "prochaine_action": "Reprendre le jalon J3/P4 selon l’arbitrage existant, après le retour de Paul sur P3. La migration et la fusion de l’audit sont terminées ; ne pas les rejouer.",
   "bloque_par": [
