@@ -31,9 +31,9 @@
     "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
   },
   "dernier_arret": {
-    "le": "2026-09-18",
-    "quoi": "Bibliothèque de specs posée (#252, 85 specs indexées), deux garde-fous en cascade réparés (#253), grain et collectes régénérés (#254). Leçons v25.",
-    "commit": "0daa656"
+    "le": "2026-09-19",
+    "quoi": "Leçons v28 : un blocage annoncé à tort déplace le travail vers Paul. Propagé aux 6 autres dépôts, un seul sceau partout.",
+    "commit": "718e178"
   },
   "prochaine_action": "Reprendre le jalon J3/P4 selon l’arbitrage existant, après le retour de Paul sur P3. La migration et la fusion de l’audit sont terminées ; ne pas les rejouer.",
   "bloque_par": [
@@ -109,7 +109,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-09-18"
+  "maj": "2026-09-19"
 }
 ```
 

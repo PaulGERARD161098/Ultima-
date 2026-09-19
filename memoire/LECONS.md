@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v27 2026-09-18 sha256:2f61887f3773 -->
+<!-- lecons:empreinte v28 2026-09-19 sha256:2b32b7565936 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -823,6 +823,29 @@ montrer. Le prochain prompt adverse ne nommera donc pas mes doutes : il exigera
 une passe exhaustive sur ce que j'affirme le plus tranquillement.*
 
 ---
+
+---
+
+**« BLOQUÉ SUR UNE RÉPONSE DE PAUL » SE RE-MESURE AVANT D'ÊTRE ANNONCÉ**
+*(2026-09-19)*. J'ai écrit trois fois, sur deux séances, que la FAQ de la vitrine
+« attendait trois réponses de Paul » — la granularité de zone, le mécanisme du
+no-show, la liste des métiers. C'était **faux**. La maquette avait absorbé les
+trois arbitrages le jour où ils avaient été pris : la zone « se définit ensemble
+au premier rendez-vous », la question du no-show avait été réécrite pour promettre
+le rappel et non une compensation, et « un seul partenaire par métier » ne demande
+aucune liste. Trente secondes de lecture du fichier l'établissaient.
+
+⛔ **Le coût n'est pas l'erreur, c'est ce qu'elle fait faire à Paul.** Sur la foi
+de cette note, je lui ai posé une question d'arbitrage qu'il n'avait pas à
+trancher — il avait déjà tout tranché. Un blocage annoncé à tort ne se paie pas
+en secondes : il déplace un travail vers la seule personne qui ne peut pas le
+déléguer, et il peut faire reporter un lot entier.
+
+⚠️ **La forme du piège** : une note de blocage est écrite au moment de la
+DISCUSSION d'arbitrage, donc avant que le travail ne l'absorbe. Elle est vraie
+quand on l'écrit et périmée quand on la relit — comme une couleur fixe, comme un
+grain Finubar. *Règle* : avant d'annoncer qu'une chose attend Paul, on ouvre le
+fichier qui la porte. « Ça attendait hier » n'est pas une mesure.
 
 ## 4. Conduire une boucle
 
