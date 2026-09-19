@@ -204,6 +204,26 @@ verdicts.moletteLaissePasserLeDefilement = molette.sansCtrl === false;
 verdicts.ctrlMoletteZoomeEtRetientLevenement = molette.avecCtrl === true;
 verdicts.sceneLaisseDefilerAuDoigt =
   (await page.evaluate(() => getComputedStyle(document.getElementById('ciel-scene')).touchAction)) === 'pan-y';
+
+// Stellar V2 — le HUD transparent ne doit jamais devenir une plaque invisible
+// qui intercepte le ciel ; les contrôles, eux, doivent rester cliquables.
+const hudStellar = await page.evaluate(() => {
+  const outils = getComputedStyle(document.getElementById('ciel-outils'));
+  const recherche = getComputedStyle(document.getElementById('ciel-recherche'));
+  const plus = document.getElementById('ciel-approcher').getBoundingClientRect();
+  const racine = getComputedStyle(document.documentElement);
+  return {
+    outilsPointer: outils.pointerEvents,
+    recherchePointer: recherche.pointerEvents,
+    cibleW: plus.width,
+    cibleH: plus.height,
+    tokenGlace: racine.getPropertyValue('--stellar-accent-ice').trim(),
+  };
+});
+verdicts.hudStellarTraverseLeCiel = hudStellar.outilsPointer === 'none';
+verdicts.controlesHudRestentInteractifs = hudStellar.recherchePointer === 'auto';
+verdicts.controleZoomTactile44 = hudStellar.cibleW >= 44 && hudStellar.cibleH >= 44;
+verdicts.tokensStellarDisponiblesDansRiven = Boolean(hudStellar.tokenGlace);
 await page.evaluate(() => window.scrollTo(0, 0));
 
 // ---------- 9. Quitter le ciel ARRÊTE la boucle ----------
