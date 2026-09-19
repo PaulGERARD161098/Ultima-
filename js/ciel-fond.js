@@ -85,10 +85,6 @@
   var ECLAT_DECOR = 0.58;
   var ECLAT_VOILES = 0.72;
 
-  // Stellar V2 preview can tune atmosphere without forking the renderer.
-  // Production keeps the historical defaults unless an explicit option is passed.
-  var V2_DEFAULTS = { contrasteProfondeur: 0, voileSecondaire: 0 };
-
   // Générateur déterministe : même graine, même ciel, à chaque ouverture.
   // C'est la règle du repo depuis le layout d'arbre (A3) — un décor qui change
   // à chaque rafraîchissement n'est pas un décor, c'est du bruit, et aucun
