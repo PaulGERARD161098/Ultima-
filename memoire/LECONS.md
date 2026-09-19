@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v29 2026-09-19 sha256:9ec65c54080d -->
+<!-- lecons:empreinte v30 2026-09-19 sha256:018c29b03ae4 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -412,6 +412,42 @@ verts donne à un trou la texture du reste* — le lecteur en déduit une couver
 qu'il n'a pas. L'angle mort se nomme **à côté du vert**, pas en note de bas de
 page, sinon les quarante et un harnais se lisent comme quarante-deux.
 
+**UN BLOCAGE HÉRITÉ SE RELIT À SA SOURCE — LA PHRASE QUI LE FONDE SE CITE, PAS
+SE RÉSUME** *(2026-09-19)*. Deux séances ont déclaré `ProductShowcase` et
+`MobileShowcase` bloqués « faute de captures réelles de la console — et on n'en
+fabrique pas, interdit n°1 du contrat 02 ». Le prompt de reprise du soir allait
+plus loin : « ⛔ NE PAS EN FABRIQUER », et ouvrait la séance suivante sur
+*« demander à Paul lequel des trois verrous il lève »*. **L'interdit dit le
+contraire de ce qu'on lui faisait dire** : *« Aucune donnée fictive présentée
+comme RÉELLE. Un chiffre d'exemple porte sa mention à l'écran. »* Ce n'est pas
+la donnée d'exemple qui est interdite, c'est la donnée d'exemple **muette**. Il
+ne fallait pas de vraies données : il fallait la vraie **interface**, et une
+mention lisible à côté. Et l'interface était atteignable depuis six jours — un
+harnais du dépôt ouvrait déjà `dashboard.html` dans Chromium et y mesurait 1491
+éléments. *Ce que ça a coûté* : deux patterns gelés sur deux séances, une
+question posée à Paul qui n'avait pas lieu d'être, et un arbitrage de la
+bibliothèque (`Ultima-/specs/ARBITRAGES.md` §A1) qui a recopié le motif faux et
+l'a rendu officiel. *Règle* : un blocage qu'on n'a pas établi soi-même se rouvre
+en **lisant le texte qui le fonde**, mot pour mot, avant d'être transmis. Un
+motif résumé de séance en séance devient une loi que plus personne ne relit —
+et il est d'autant plus solide qu'il a l'air prudent.
+
+**UN COMMENTAIRE QUI AFFIRME PLUS QUE LA MESURE EST UNE FAUSSE PREUVE**
+*(2026-09-19)*. En posant `minmax(0,1fr)` sur une grille portant une capture de
+1280 px, j'ai écrit dans la feuille : *« `1fr` déborderait à 390 px »*, avec
+l'aplomb d'un fait mesuré. L'épreuve par la casse l'a démenti dans la minute :
+grille repassée en `1fr`, **aucun débordement** — la règle globale
+`img{width:100%}` résout la largeur en pourcentage, et une image en pourcentage
+ne contribue rien au min-content de sa piste. Le `minmax(0,…)` reste bon, mais
+comme **ceinture**, pas comme correctif d'un défaut constaté. *Ce que ça a
+coûté* : rien cette fois, parce que le garde-fou a été éprouvé ; tout, si la
+séance s'était arrêtée au vert. ⛔ Un commentaire est un livrable **lu**, et
+celui-là aurait enseigné une règle fausse à chaque relecture, avec l'autorité
+d'un commentaire qui cite une mesure. *Règle* : ce qu'un commentaire affirme se
+mesure comme le code qu'il décrit. Quand la mesure dit autre chose que
+l'intuition, **c'est le commentaire qu'on réécrit dans le même passage** — et il
+dit alors exactement ce qu'il vaut : « éprouvé, et voici ce que ça a donné ».
+
 ## 2. Les garde-fous, et leur silence
 
 **UN GARDE-FOU SE VÉRIFIE DU CÔTÉ OÙ IL PEUT ÊTRE CONTOURNÉ** *(2026-08-21)*.
@@ -722,6 +758,36 @@ rendrait ce contrôle vert alors que l'écran est faux ?* Si la réponse existe,
 ne mesure pas la bonne chose. Ici, elle s'énonçait en une ligne — et le contrôle
 réécrit se vérifie désormais à six largeurs d'écran, de 390 à 2560.
 
+**UN HARNAIS QUI CRIE SUR DU SAIN FINIT ÉTEINT** *(2026-09-19)*. Le harnais neuf
+qui mesure la console à 390 px a rendu **douze défauts à sa première
+exécution — douze faux** : des tuiles Leaflet, qui débordent de leur cadre par
+construction puisque c'est le principe d'un plan qu'on fait glisser, et les
+entrées du menu rangé hors-champ à gauche, qui se superposent entre elles là où
+personne ne les voit. Les deux vrais défauts étaient noyés dedans. *Ce que ça
+aurait coûté* : un harnais qui hurle sur du sain n'est pas corrigé, il est
+contourné — puis débranché, et il ne garde plus rien tout en ayant l'air d'un
+garde-fou. *Règle* : le **hors-jeu** d'un contrôle fait partie du contrôle. Il
+s'écrit dans le fichier, avec sa raison, au moment où on le pose — et un
+premier passage qui trouve beaucoup se lit d'abord comme un défaut du contrôle,
+pas comme une découverte.
+
+**PHOTOGRAPHIER UN ÉCRAN TROUVE CE QU'AUCUN TEST NE REGARDE** *(2026-09-19)*. En
+tirant des captures de la console pour la vitrine, deux défauts réels du produit
+sont sortis, que **1465 tests unitaires et dix harnais navigateur ne voyaient
+pas** : à 390 px, la grille du mois perdait **samedi et dimanche** — sept
+colonnes en `minmax(52px,1fr)` réclamaient 388 px, le conteneur en recevait 276,
+et l'`overflow-x:auto` absorbait l'écart **en silence**, le week-end n'étant plus
+atteignable que par un glissement que rien n'annonce ; et le bouton
+« Aujourd'hui », centré en `position:absolute`, se posait **sur** la pastille
+voisine dès que la barre passait à trois lignes, 1618 px² de recouvrement, une
+commande recevant les clics de l'autre. Un artisan travaille le samedi. *Ce que
+ça a coûté* : rien ce jour-là, parce qu'une tâche de vitrine a obligé à REGARDER
+l'écran. ⛔ C'est l'inverse qui est la leçon : sans cette tâche, les deux défauts
+tenaient indéfiniment, verts. *Règle* : rendre un écran et le regarder est une
+**mesure**, pas une illustration. Un `overflow` qui avale, un absolu qui passe
+au-dessus, un texte tronqué — aucun ne lève d'exception, aucun ne rougit une CI,
+et tous se voient en une seconde sur une image.
+
 ## 3. Ce qu'on donne à Paul
 
 **RIEN DE CE QUI EST DONNÉ À PAUL N'EST DÉDUIT** *(2026-09-02, directive EL)*.
@@ -886,6 +952,24 @@ DISCUSSION d'arbitrage, donc avant que le travail ne l'absorbe. Elle est vraie
 quand on l'écrit et périmée quand on la relit — comme une couleur fixe, comme un
 grain Finubar. *Règle* : avant d'annoncer qu'une chose attend Paul, on ouvre le
 fichier qui la porte. « Ça attendait hier » n'est pas une mesure.
+
+**UNE LIGNE QUI SURVIT À SA RÉSOLUTION COÛTE PLUS CHER QUE PAS DE REGISTRE —
+TROISIÈME FOIS** *(2026-09-19)*. `RenoBoost/ACTIONS-PAUL.md` porte sa propre
+règle en tête : *« une ligne disparaît quand elle est faite, pas avant »*. Un
+balayage a trouvé **quatre lignes** qui y survivaient — dont §3 bis, « le récap
+ne voit rien », ouvert le 21/08 et **résolu depuis dix-sept jours** : le
+battement en base disait `envoye: true`, `briquesEnErreur: 0`. Pendant dix-sept
+jours, le fichier a réclamé à Paul un geste de deux minutes qui n'avait plus
+lieu d'être, et listait trois causes probables toutes fausses. Même chose pour
+une déduplication d'alertes écrite, testée et **en production**, encore
+annoncée « non fait ». ⛔ **C'est la troisième fois que ce défaut est trouvé
+dans ce fichier** — les deux premières le même jour, le 13/09. Une règle qu'on
+réécrit sans changer le geste ne tient pas. *Règle* : un registre ne se croit
+pas, il se **mesure**, et le moment où on le mesure est le moment où le fait
+tombe — pas la relecture d'après. Corollaire pratique : quand on ouvre un
+registre pour y chercher du travail, le premier geste est de vérifier que ce
+qu'il annonce est encore vrai ; sinon on travaille sur l'état d'avant, et on le
+fait en croyant être à jour.
 
 ## 4. Conduire une boucle
 

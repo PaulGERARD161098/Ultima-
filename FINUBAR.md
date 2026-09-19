@@ -32,10 +32,10 @@
   },
   "dernier_arret": {
     "le": "2026-09-19",
-    "quoi": "Stellar V2 FUSIONNÉ (#258) après QA navigateur réelle : quatre régressions trouvées et corrigées — plaque ALTHEA à 96 % d'opacité sous les chiffres, filtre plein-écran coûtant 40 % des grains du ciel, nom de passerelle dégravé, cartouche. Plus #262 (bombe à retardement de calendrier qui bloquait TOUT le lanceur) et #261 (arbitrage A1 précisé). 38/38 unit, 41/41 navigateur sur main.",
-    "commit": "4a11a18"
+    "quoi": "#265 : l'arbitrage A1 était EN RETARD D'UN LOT sur le dépôt qu'il gouverne — il écrivait encore que les captures de la console « n'existent pas », alors que RenoBoost 0fb50a3 les a posées. ⛔ Et son motif était faux avant d'être périmé : « on n'en fabrique pas » lisait l'interdit n°1 du contrat 02 comme s'il défendait la donnée d'exemple, alors qu'il défend la donnée d'exemple MUETTE. Cette lecture a gelé deux patterns pendant deux séances. La gate G1, citée comme second blocage de LeadMagnet, est signalée périmée (radar_releves = 674 820). Leçons v30, sceau 018c29b03ae4, propagé à RenoBoost octet pour octet (diff vide). Avant : Stellar V2 fusionné (#258), #262, #261. 38/38 suites vertes en local.",
+    "commit": "0de6656"
   },
-  "prochaine_action": "Reprendre le jalon J3/P4 selon l’arbitrage existant, après le retour de Paul sur P3. La migration et la fusion de l’audit sont terminées ; ne pas les rejouer.",
+  "prochaine_action": "Reprendre le jalon J3/P4 selon l’arbitrage existant, après le retour de Paul sur P3. La migration et la fusion de l’audit sont terminées ; ne pas les rejouer. ⚠️ Toujours dû, et jamais donné : la VALIDATION VISUELLE de Stellar V2 par Paul. ⛔ Et un constat de la séance du 19/09 au soir qui vaut pour la bibliothèque : les contrats 00 (fondations), 01 (composants) et 03 (compositions) n'ont JAMAIS été appliqués à la vitrine RenoBoost — sur leurs 13 critères de conformité, 4 sont couverts et 9 ne sont mesurés par RIEN. Les patterns (contrat 02) sont, eux, bien gardés. Détail : RenoBoost/ROADMAP-2026-09-19-nuit-fin-de-session.md §6.",
   "bloque_par": [
     "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
