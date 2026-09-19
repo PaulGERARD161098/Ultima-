@@ -129,3 +129,18 @@ Mapping initial :
 - rayon, blur et timings deviennent des contrats nommés.
 
 Ce choix évite une bascule visuelle globale pendant T1. La migration des composants appartient à T2/T3/T4, pas aux tokens.
+
+
+## T4 — ALTHEA implanté
+
+ALTHEA charge désormais `css/stellaire.css` avant sa feuille dédiée afin de consommer les tokens sémantiques V2 sans perdre son registre propre.
+
+Invariants préservés :
+- `--or` reste « gagné » ;
+- `--spectre` reste « annoncé par le Système » ;
+- les données chiffrées restent sur des plaques nocturnes quasi opaques ;
+- aucune étoile ne traverse les chiffres ;
+- focus V2 et safe areas mobile sont appliqués ;
+- les valeurs numériques utilisent `tabular-nums lining-nums`.
+
+T4 ne modifie aucune logique métier ALTHEA. La prochaine étape est une QA croisée RIVEN + ALTHEA avant toute propagation T5.
