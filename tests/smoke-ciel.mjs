@@ -222,6 +222,8 @@ const hudStellar = await page.evaluate(() => {
 });
 verdicts.hudStellarTraverseLeCiel = hudStellar.outilsPointer === 'none';
 verdicts.controlesHudRestentInteractifs = hudStellar.recherchePointer === 'auto';
+// WCAG 2.2 impose 24 px minimum pour la cible ; le contrat Stellar vise 44 px
+// sur mobile. Ici RIVEN est explicitement migré à 44 px : on verrouille ce cap.
 verdicts.controleZoomTactile44 = hudStellar.cibleW >= 44 && hudStellar.cibleH >= 44;
 verdicts.tokensStellarDisponiblesDansRiven = Boolean(hudStellar.tokenGlace);
 await page.evaluate(() => window.scrollTo(0, 0));
