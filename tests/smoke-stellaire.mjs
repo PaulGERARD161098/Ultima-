@@ -220,6 +220,32 @@ verdicts.cartoucheCielLisible = await page.evaluate(() => {
   return !!t && getComputedStyle(t).color === 'rgb(242, 234, 214)';
 });
 
+// ---------- Stellar V2 : planche QA autonome ----------
+// Pas de compte, pas d'API, pas de données personnelles : cette page existe
+// précisément pour rendre la forme testable même quand la preview protégée
+// n'est pas accessible à l'agent.
+const qa = await browser.newPage({ viewport: { width: 390, height: 844 } });
+const qaErreurs = [];
+qa.on('pageerror', (e) => qaErreurs.push('pageerror: ' + e.message));
+qa.on('console', (m) => { if (m.type() === 'error') qaErreurs.push('console: ' + m.text()); });
+await qa.goto('http://127.0.0.1:8123/stellar-qa.html', { waitUntil: 'load', timeout: 20000 });
+const qaMesure = await qa.evaluate(() => ({
+  deborde: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+  boutons: [...document.querySelectorAll('button')].map((b) => {
+    const r = b.getBoundingClientRect(); return [r.width, r.height];
+  }),
+  instruments: document.querySelectorAll('.qa-instrument').length,
+  liens: document.querySelectorAll('.qa-links a').length,
+  tokenOr: getComputedStyle(document.documentElement).getPropertyValue('--stellar-accent-gold').trim(),
+}));
+verdicts.qaStellarSansErreur = qaErreurs.length === 0;
+verdicts.qaStellarSansDebordement390 = !qaMesure.deborde;
+verdicts.qaStellarDeuxInstruments = qaMesure.instruments === 2;
+verdicts.qaStellarCibles44 = qaMesure.boutons.every(([w, h]) => w >= 44 && h >= 44);
+verdicts.qaStellarTroisLiens = qaMesure.liens === 3;
+verdicts.qaStellarTokensCharges = Boolean(qaMesure.tokenOr);
+await qa.close();
+
 verdicts.zeroErreurConsole = erreurs.length === 0;
 
 console.log(JSON.stringify(verdicts, null, 2));
