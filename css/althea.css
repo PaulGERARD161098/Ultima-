@@ -301,3 +301,123 @@
   fill: var(--parch); font-size: 9.5px; letter-spacing: 1.4px;
   text-anchor: middle; font-family: Georgia, serif;
 }
+
+
+/* ============================================================================
+   STELLAR V2 — T4 : ALTHEA comme premier instrument réel.
+   Invariants conservés : --or = gagné ; --spectre = annoncé. Le ciel reste
+   entre les instruments, jamais sous les chiffres.
+   ========================================================================== */
+.althea {
+  --instrument-fond: rgba(5, 10, 18, .96);
+  --instrument-entete: rgba(10, 18, 29, .98);
+  --instrument-trait: var(--stellar-line-cool, rgba(143, 194, 212, .16));
+  --instrument-trait-fort: var(--stellar-line-gold, rgba(216, 189, 130, .20));
+  --instrument-texte: var(--stellar-text-primary, #f2ead6);
+  --instrument-texte-doux: var(--stellar-text-secondary, #c8c5bd);
+  --instrument-texte-calme: var(--stellar-text-quiet, #8f99a8);
+}
+.althea-page {
+  padding-top: calc(env(safe-area-inset-top, 0px) + 22px);
+  padding-right: calc(env(safe-area-inset-right, 0px) + 18px);
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 64px);
+  padding-left: calc(env(safe-area-inset-left, 0px) + 18px);
+}
+.althea-bloc {
+  position: relative;
+  isolation: isolate;
+  background: var(--instrument-fond);
+  border-color: var(--instrument-trait);
+  border-radius: var(--stellar-radius, 8px);
+  box-shadow: inset 0 1px rgba(255, 255, 255, .025);
+}
+.althea-bloc::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  z-index: -1;
+  pointer-events: none;
+  border: 1px solid rgba(216, 189, 130, .07);
+  border-radius: 5px;
+}
+.althea-entete {
+  background: var(--instrument-entete);
+  border-bottom-color: var(--instrument-trait);
+  color: var(--or);
+}
+.althea-fiche,
+.althea-st,
+.althea-skill,
+.althea-geste {
+  border-color: var(--instrument-trait);
+}
+.althea-nom,
+.althea-skill .nom { color: var(--instrument-texte); }
+.althea-cle-titre,
+.althea-chiffre .cle,
+.althea-st .cle,
+.althea-sous-titre,
+.althea-note,
+.althea-skill .dit { color: var(--instrument-texte-calme); }
+.althea-chiffre .val,
+.althea-st .val,
+.althea-skill .rang {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.althea-st .barre,
+.althea-skill .barre {
+  background: rgba(143, 194, 212, .13);
+}
+.althea a:focus-visible,
+.althea button:focus-visible,
+.althea input:focus-visible,
+.althea select:focus-visible,
+.althea textarea:focus-visible {
+  outline: 2px solid var(--stellar-focus, #b7dced);
+  outline-offset: 3px;
+}
+.althea-case {
+  min-width: 44px;
+  min-height: 44px;
+  border-color: var(--instrument-trait-fort);
+}
+.althea .retour-althea {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+@media (max-width: 640px) {
+  .althea-page {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 12px);
+    padding-right: calc(env(safe-area-inset-right, 0px) + 10px);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 48px);
+    padding-left: calc(env(safe-area-inset-left, 0px) + 10px);
+  }
+  .althea-visuel { gap: 12px; }
+  .althea-bloc {
+    padding: 14px 12px 16px;
+    border-radius: 6px;
+  }
+  .althea-entete {
+    margin: -14px -12px 12px;
+    padding: 9px 12px;
+  }
+  .althea-fiche {
+    grid-template-columns: 76px minmax(0, 1fr);
+    gap: 12px;
+  }
+  .althea-sceau { width: 76px; height: 76px; }
+  .althea-chiffres { gap: 12px; }
+  .althea-st {
+    grid-template-columns: minmax(72px, 92px) 30px minmax(0, 1fr);
+    gap: 8px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .althea * { scroll-behavior: auto !important; }
+}
+@media (forced-colors: active) {
+  .althea-bloc { background: Canvas; border-color: CanvasText; }
+  .althea-entete { background: Canvas; border-color: CanvasText; }
+  .althea-case { border-color: ButtonText; }
+}
