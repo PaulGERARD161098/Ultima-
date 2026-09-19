@@ -377,8 +377,6 @@
   outline-offset: 3px;
 }
 .althea-case {
-  min-width: 44px;
-  min-height: 44px;
   border-color: var(--instrument-trait-fort);
 }
 .althea .retour-althea {
@@ -394,6 +392,11 @@
     padding-left: calc(env(safe-area-inset-left, 0px) + 10px);
   }
   .althea-visuel { gap: 12px; }
+  .althea-case {
+    width: 44px;
+    height: 44px;
+    flex-basis: 44px;
+  }
   .althea-bloc {
     padding: 14px 12px 16px;
     border-radius: 6px;
