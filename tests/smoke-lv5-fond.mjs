@@ -181,17 +181,50 @@ function statistiques(page) {
 // ④ LA DENSITÉ SUIT LA SURFACE — le correctif du « grossier ».
 // ---------------------------------------------------------------------------
 {
+  // ⛔ LE COMPTE BRUT NE RÉPOND PAS À LA QUESTION POSÉE. `nbGrains()` rend le
+  // champ RÉEL, crans d'allègement compris : sous charge, le fond coupe 40 %
+  // par cran (deux au plus, `js/ciel-fond.js` → `alleger`). Or ce verdict
+  // porte sur une règle de CONCEPTION — la densité voulue suit la surface —
+  // et non sur ce que la machine a eu les moyens de peindre à cet instant.
+  // ⚠️ Trouvé le 20/09 : isolé, ce harnais mesurait 5200 grains à 1670 px et
+  // passait trois fois de suite ; enchaîné derrière les autres il mesurait
+  // 3120 — soit 5200 × 0,6, un cran exactement — et virait au rouge. Le
+  // produit n'avait rien de cassé ; c'est l'instrument qui lisait une échelle
+  // pour une autre. Un test qui dépend de la charge de la machine ne garde
+  // rien : il dit « rouge » les jours où le runner est lent.
+  const densiteNominale = (grains, crans) => {
+    let n = grains;
+    for (let c = 0; c < crans; c++) { n = n / 0.6; }
+    return Math.round(n);
+  };
+
   const petite = await ouvrir(390, 844);
-  const grainsPetite = await petite.evaluate(() => window.LV5.vue().nbGrains());
+  const brutPetite = await petite.evaluate(() => window.LV5.vue().nbGrains());
+  const cransPetite = await petite.evaluate(() => window.LV5.vue().cransDeFond());
   const statPetite = await statistiques(petite);
   await petite.close();
 
   const grande = await ouvrir(1670, 900);
-  const grainsGrande = await grande.evaluate(() => window.LV5.vue().nbGrains());
+  const brutGrande = await grande.evaluate(() => window.LV5.vue().nbGrains());
+  const cransGrande = await grande.evaluate(() => window.LV5.vue().cransDeFond());
   await grande.close();
 
-  chiffres.grains = { a390: grainsPetite, a1670: grainsGrande, rapport: +(grainsGrande / grainsPetite).toFixed(2) };
+  const grainsPetite = densiteNominale(brutPetite, cransPetite);
+  const grainsGrande = densiteNominale(brutGrande, cransGrande);
+
+  chiffres.grains = {
+    a390: grainsPetite, a1670: grainsGrande,
+    rapport: +(grainsGrande / grainsPetite).toFixed(2),
+    // On garde le brut ET les crans sous les yeux : sans eux, une correction
+    // silencieuse ressemblerait à une mesure directe.
+    brut: { a390: brutPetite, a1670: brutGrande },
+    crans: { a390: cransPetite, a1670: cransGrande },
+  };
   verdicts.laDensiteSuitLaSurface = grainsGrande / grainsPetite >= 2.5;
+  // ⚠️ Le garde-fou reste un garde-fou : la correction annule les crans, elle
+  // ne relève pas le seuil. Une densité qui cesserait de suivre la surface
+  // donnerait toujours un rapport de 1,00 et un rouge — vérifié en cassant
+  // `PIXELS_PAR_GRAIN` le 20/09 (voir le journal de la PR).
   // Une constante aurait donné un rapport de 1,00 : le test échouerait, et
   // c'est exactement ce qu'on lui demande de savoir faire.
   verdicts.leFondAPeintAussiSurLeTelephone = !!statPetite && statPetite.variance > 0.05;

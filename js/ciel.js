@@ -1656,6 +1656,13 @@
       imagesMesurees: function () { return imagesMesurees; },
       // Combien de crans le fond a rendus pour tenir la cadence. 0 = il n'a
       // jamais eu besoin de reculer.
+      // ⛔ ET CE QUE `cransDeFond` PERMET DE NE PAS CROIRE. `nbGrains()` rend le
+      // champ RÉEL, crans compris : sous charge, le fond coupe 40 % par cran
+      // (deux au plus). Un harnais qui compare le remplissage de deux fenêtres
+      // sans lire ceci compare deux échelles différentes sans le savoir.
+      // Mesuré le 20/09 : 5200 grains à 1670 px isolément, 3120 — exactement
+      // 5200 × 0,6, un cran — en exécution enchaînée, et « la densité suit la
+      // surface » virait au rouge alors que la règle était tenue.
       cransDeFond: function () { return fond ? fond.crans() : 0; },
       // LE POINT TÉMOIN, et il est NON CIRCULAIRE. Il rend la position écran
       // qu'un point du MONDE occupe selon la couche de fond. Le harnais la
