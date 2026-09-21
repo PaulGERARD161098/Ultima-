@@ -78,8 +78,8 @@
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "ac82fd0",
         "tete_le": "2026-09-20T10:44:30+00:00",
@@ -192,11 +192,11 @@
           "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
         },
         "dernier_arret": {
-          "le": "2026-09-19",
-          "quoi": "#265 : l'arbitrage A1 était EN RETARD D'UN LOT sur le dépôt qu'il gouverne — il écrivait encore que les captures de la console « n'existent pas », alors que RenoBoost 0fb50a3 les…",
-          "commit": "0de6656"
+          "le": "2026-09-20",
+          "quoi": "20/09 : PR #267 fusionnee (collecte Finubar). Avant, le 19/09 : #265, l arbitrage A1 etait en retard d un lot sur le depot qu il gouverne. 38/38 suites vertes.",
+          "commit": "ddad675"
         },
-        "prochaine_action": "Reprendre le jalon J3/P4 selon l’arbitrage existant, après le retour de Paul sur P3. La migration et la fusion de l’audit sont terminées ; ne pas les rejouer. ⚠️ Toujours dû, et…",
+        "prochaine_action": "Reprendre J3/P4 apres le retour de Paul sur P3 ; la migration et l audit sont faits, ne pas les rejouer. Du a Paul : la validation visuelle de Stellar V2.",
         "bloque_par": [
           "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
           "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
@@ -246,25 +246,22 @@
             "depuis": "2026-09-05"
           }
         ],
-        "maj": "2026-09-19"
+        "maj": "2026-09-20"
       },
-      "recits": [
-        "dernier_arret.quoi",
-        "prochaine_action"
-      ],
+      "recits": [],
       "ciel": "racine",
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "96d7dab",
-        "tete_le": "2026-09-19T23:31:35+02:00",
-        "commits_depuis": 1,
+        "tete": null,
+        "tete_le": null,
+        "commits_depuis": 0,
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-20",
-      "jours_depuis_maj": 1,
+      "jours_depuis_maj": 0,
       "jours_en_attente": 31,
-      "rang": 0
+      "rang": 2
     },
     {
       "ok": true,
@@ -413,11 +410,11 @@
     "lisibles": 5,
     "illisibles": 0,
     "hors_seance": 3,
-    "repris": 3,
+    "repris": 4,
     "en_cours": 5,
     "en_attente_de_paul": 0,
     "au_repos": 0,
-    "derives": 3,
+    "derives": 2,
     "commits_inconnus": 2,
     "boucles_ouvertes": 31,
     "gestes_de_paul": [
@@ -521,8 +518,8 @@
       },
       {
         "projet": "Ultima",
-        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
-        "pourquoi": "derive"
+        "dit": "arrêté sur : 20/09 : PR #267 fusionnee (collecte Finubar). Avant, le 19/09 : #265, l arbitrage A1 etait en retard d un lot sur le depot qu il gouverne. 38/38 suites vertes.",
+        "pourquoi": "en_cours"
       }
     ],
     "action": {
@@ -555,7 +552,7 @@
         "libelle": "Ultima",
         "constellation": "en_cours",
         "ciel": "racine",
-        "signal": 1
+        "signal": 0
       },
       {
         "id": "PaulGERARD161098/mon-dpe.fr",

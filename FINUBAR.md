@@ -31,11 +31,11 @@
     "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
   },
   "dernier_arret": {
-    "le": "2026-09-19",
-    "quoi": "#265 : l'arbitrage A1 était EN RETARD D'UN LOT sur le dépôt qu'il gouverne — il écrivait encore que les captures de la console « n'existent pas », alors que RenoBoost 0fb50a3 les a posées. ⛔ Et son motif était faux avant d'être périmé : « on n'en fabrique pas » lisait l'interdit n°1 du contrat 02 comme s'il défendait la donnée d'exemple, alors qu'il défend la donnée d'exemple MUETTE. Cette lecture a gelé deux patterns pendant deux séances. La gate G1, citée comme second blocage de LeadMagnet, est signalée périmée (radar_releves = 674 820). Leçons v30, sceau 018c29b03ae4, propagé à RenoBoost octet pour octet (diff vide). Avant : Stellar V2 fusionné (#258), #262, #261. 38/38 suites vertes en local.",
-    "commit": "0de6656"
+    "le": "2026-09-20",
+    "quoi": "20/09 : PR #267 fusionnee (collecte Finubar). Avant, le 19/09 : #265, l arbitrage A1 etait en retard d un lot sur le depot qu il gouverne. 38/38 suites vertes.",
+    "commit": "ddad675"
   },
-  "prochaine_action": "Reprendre le jalon J3/P4 selon l’arbitrage existant, après le retour de Paul sur P3. La migration et la fusion de l’audit sont terminées ; ne pas les rejouer. ⚠️ Toujours dû, et jamais donné : la VALIDATION VISUELLE de Stellar V2 par Paul. ⛔ Et un constat de la séance du 19/09 au soir qui vaut pour la bibliothèque : les contrats 00 (fondations), 01 (composants) et 03 (compositions) n'ont JAMAIS été appliqués à la vitrine RenoBoost — sur leurs 13 critères de conformité, 4 sont couverts et 9 ne sont mesurés par RIEN. Les patterns (contrat 02) sont, eux, bien gardés. Détail : RenoBoost/ROADMAP-2026-09-19-nuit-fin-de-session.md §6.",
+  "prochaine_action": "Reprendre J3/P4 apres le retour de Paul sur P3 ; la migration et l audit sont faits, ne pas les rejouer. Du a Paul : la validation visuelle de Stellar V2.",
   "bloque_par": [
     "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
@@ -109,7 +109,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-09-19"
+  "maj": "2026-09-20"
 }
 ```
 
