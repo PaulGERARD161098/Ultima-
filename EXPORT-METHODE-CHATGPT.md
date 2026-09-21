@@ -364,7 +364,8 @@ au moment de l'écrire. Deux gestes, et le doute est levé :
 | savoir ce que ChatGPT a vraiment en tête | lui demander : « quelle est ta ligne PARAMETRAGE ? », et comparer |
 
 ⚠️ **Le contrôle est éprouvé par le côté où il se contourne**
-(`tests/unit-export-chatgpt.mjs`, dix contrôles). Le plus important d'entre eux
+(`tests/unit-export-chatgpt.mjs`, **11 contrôles — mesurés le 21/09**, pas
+déduits : c'est ce que sa dernière ligne imprime). Le plus important d'entre eux
 n'est pas celui qui vérifie l'accord : c'est le **verrou de non-vacuité**. Ce
 contrôle cherche une section par son titre ; le jour où le titre est reformulé,
 l'extraction rendrait une chaîne vide — et *le sha256 d'une chaîne vide est
@@ -376,9 +377,16 @@ pour toujours. Il refuse donc de rendre un verdict si la section fait moins de
 crierait « périmé » à chaque commit touchant le reste de `CLAUDE.md`, et on
 finirait par ne plus la croire — ce qui est le pire des deux états.
 
+⚠️ **Et il a été vu AGIR sur le vrai dépôt, pas seulement en bac à sable** : une
+directive de `CLAUDE.md` réécrite d'un mot, et `tests/run-unit.mjs` sort en
+code 1 — donc la CI échoue. Restauré, il repasse à 0, `git status` vide. Sans
+cette épreuve-là, on saurait que le contrôle sait dire non, pas qu'il est
+branché sur quoi que ce soit.
+
 ⛔ **Ce que l'empreinte ne fait PAS** : elle ne prouve pas que la *traduction*
 est fidèle, seulement que la *source* n'a pas bougé depuis qu'on l'a écrite. La
-fidélité, aucune machine ne la vérifiera — elle se relit.
+fidélité, aucune machine ne la vérifiera — elle se relit. Elle ne prouve pas non
+plus que ChatGPT **applique** ce qu'on lui a collé : ça, seul Paul le constate.
 
 ---
 
