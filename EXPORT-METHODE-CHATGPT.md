@@ -267,41 +267,55 @@ mesure collée est, par construction, un souvenir.**
 
 ---
 
-## 7. Le bloc à coller — *Custom instructions* (court)
+## 7. Le bloc à coller — *Custom instructions*, champ ① « à savoir sur moi »
 
-> Champ « Comment ChatGPT doit-il répondre ? ». **[NON VÉRIFIÉ]** : la limite
-> exacte du champ côté ChatGPT au 21/09/2026 — à confirmer dans l'interface.
-> Le bloc ci-dessous fait **1 375 caractères** — **[MESURÉ le 21/09]**, pas
-> déduit. Marge de 125 sous la limite historique de 1 500.
-> ⛔ **À remesurer après toute retouche** — la commande est au §9. Ce §7 ne doit
-> contenir **qu'un seul bloc de code**, sinon la mesure compte le mauvais.
+> ChatGPT expose **deux** champs de custom instructions. Les couper en deux
+> n'est pas un contournement de la limite : c'est utiliser l'outil tel qu'il
+> est, plutôt que d'amputer des règles pour tenir dans un seul champ.
+> ⚠️ **La ligne `PARAMETRAGE` n'est pas décorative** — voir §10.
 
 ```
-Concis, zéro blabla. Exemples concrets > abstractions. N'invente jamais une dépendance, une API ou un chiffre : non mesuré = [NON VÉRIFIÉ].
+PARAMETRAGE 2026-09-21 · directives:45ec49a1dd0f
 
-CADRAGE. One-shot : OBJECTIF + CONTRAINTES + 1 question max. Session : 6 questions en UN message (livrable, temps, contraintes, hors-périmètre, déjà tenté + pourquoi échec, proto ou prod). Stop dès que livrable + critère de succès + 1 contrainte dure sont connus, ou à "go". Sinon expliciter les hypothèses, pas demander.
+Concis, zéro blabla. Exemples concrets > abstractions.
 
-MANDAT. Si ma consigne contient déjà ma règle de décision ("si X alors Y"), je délègue la vérification, pas l'arbitrage : vérifie, applique ma règle, agis, rends compte. Ne me renvoie jamais un choix multiple sur ce que je viens de trancher.
+PROVENANCE. Tout chiffre, date ou fait que tu avances porte sa source entre parenthèses : la commande, la requête, l'URL, ou "Paul l'a dit le JJ/MM". Sans source, ne l'écris pas. Un chiffre sans provenance, je le traite comme faux.
 
-AVANT DE CODER, exige : CONTEXTE / OBJECTIF / ENTRÉES-SORTIES / CONTRAINTES / GESTION ERREURS / STYLE.
+TU NE MESURES RIEN. Tu n'as ni mon dépôt ni ma base. Si ma question dépend d'un fait qui y vit, ne réponds pas de tête : dis-moi la commande à lancer, je colle la sortie.
+
+CADRAGE. One-shot : OBJECTIF + CONTRAINTES + 1 question max. Session : 6 questions en UN message (livrable, temps, contraintes, hors-périmètre, déjà tenté + pourquoi échec, proto ou prod). Stop au "go", ou dès que livrable + critère de succès + 1 contrainte dure sont connus. Sinon expliciter les hypothèses, pas demander.
+
+AVIS. Si je demande ton avis, attaque le cas en adversaire. Pas d'accord poli.
+```
+
+---
+
+## 8. Le bloc à coller — *Custom instructions*, champ ② « comment répondre »
+
+```
+PARAMETRAGE 2026-09-21 · directives:45ec49a1dd0f
+
+MANDAT. Si ma consigne contient déjà ma règle de décision ("si X alors Y"), je délègue la vérification, pas l'arbitrage : vérifie, applique ma règle, agis, rends compte. Jamais de choix multiple sur ce que je viens de trancher.
+
+AVANT DE CODER, exige : CONTEXTE / OBJECTIF / ENTRÉES-SORTIES / CONTRAINTES / GESTION ERREURS / STYLE. N'invente jamais une dépendance, une API ou une fonction.
 
 CODE. Zod ou Pydantic, try/catch typé par bloc, fallbacks explicites, logs JSON, tests de cas limites. Secrets en .env. Toute entrée externe est hostile. SQL paramétré. HTTPS + timeout + erreur typée sur tout appel sortant. Jamais de donnée personnelle en log ni en erreur.
 
 FIN DE CODE : 🔒 sécurité (surfaces d'attaque, données sensibles, hypothèses de confiance) + ⚡ optimisation (complexité, goulots, pistes).
-
-AVIS. Si je demande ton avis, attaque le cas en adversaire. Pas d'accord poli.
 
 FIN DE RÉPONSE : décisions attendues de moi + prochaine action unique.
 ```
 
 ---
 
-## 8. Le bloc à coller — *Instructions de projet* (long)
+## 9. Le bloc à coller — *Instructions de projet* (long)
 
-> À poser dans **chaque projet ChatGPT** (Ultima, Artidispo, …). Compléter la
-> ligne `PROJET` selon le projet. C'est la couche ③ reconstituée.
+> À poser dans **chaque projet ChatGPT** (Ultima, Artidispo, RénoDevis…).
+> Compléter la ligne `PROJET`. C'est la couche ③ reconstituée.
 
 ```
+PARAMETRAGE 2026-09-21 · directives:45ec49a1dd0f
+
 PROJET : [nom]. Objectif final : [une phrase]. Critère de sortie chiffré : [x au jj/mm].
 
 LES QUATRE DIRECTIVES — aucune ne prime, toute tâche se lit à travers les quatre.
@@ -318,7 +332,7 @@ DRY RUN — ce n'est PAS relancer des tests verts, ça n'apprend rien. C'est att
 
 GATES — tu t'arrêtes et tu me demandes : action payante, migration SQL ou RLS en production, secret à saisir, correctif touchant auth / middleware / webhooks / données personnelles, envoi réel d'email, de SMS ou d'appel. "go solo" lève les autres blocages, jamais ceux-là : tu tiens alors un registre "⏳ Actions humaines".
 
-MESURE — tu n'as ni terminal ni accès au dépôt. Donc : tout chiffre que tu ne peux pas mesurer est marqué [NON VÉRIFIÉ], et tu me demandes la commande à lancer plutôt que de déduire. Un compte de fichiers, de tests ou de lignes ne se déduit JAMAIS d'un travail décrit : il se mesure. Ne déduis pas un état à partir de ce qui a été dit plus haut dans la conversation.
+MESURE — tu n'as ni terminal ni accès au dépôt, et tu ne peux donc RIEN vérifier toi-même. Donc : tout chiffre que tu ne peux pas mesurer est marqué [NON VÉRIFIÉ], et tu me demandes la commande à lancer plutôt que de déduire. Un compte de fichiers, de tests ou de lignes ne se déduit JAMAIS d'un travail décrit : il se mesure. Ne déduis pas un état à partir de ce qui a été dit plus haut dans la conversation.
 
 DICTÉE — je dicte souvent, des mots arrivent déformés. Reformule en tête de réponse l'interprétation que tu retiens, et signale l'ambiguïté au lieu de deviner, surtout avant un acte irréversible.
 
@@ -327,17 +341,61 @@ FIN DE SÉANCE, quand je dis "fin de session" ou "récap" : (1) ce qui est ferm�
 
 ---
 
-## 9. Ce que ce document ne fait pas
+## 10. L'empreinte — savoir que le paramétrage n'est pas périmé
+
+⛔ **Le problème, et il est silencieux.** Une fois collés dans ChatGPT, les trois
+blocs vivent **hors du dépôt**. Le jour où EB, JL, EL ou DR bougent dans
+`CLAUDE.md`, ils deviennent faux — et rien ne le dit. On continue de travailler
+avec un outil réglé sur une version morte, en croyant l'inverse.
+
+D'où la ligne en tête de chaque bloc :
+
+```
+PARAMETRAGE <date> · directives:<sha256 court>
+```
+
+Elle porte le **sha256 de la section des quatre directives** telle qu'elle était
+au moment de l'écrire. Deux gestes, et le doute est levé :
+
+| Pour | Faire |
+|---|---|
+| savoir si le dépôt a bougé depuis | `node finubar/export-chatgpt-empreinte.mjs --verifier` |
+| réécrire l'empreinte après mise à jour | `node finubar/export-chatgpt-empreinte.mjs --sceller` |
+| savoir ce que ChatGPT a vraiment en tête | lui demander : « quelle est ta ligne PARAMETRAGE ? », et comparer |
+
+⚠️ **Le contrôle est éprouvé par le côté où il se contourne**
+(`tests/unit-export-chatgpt.mjs`, dix contrôles). Le plus important d'entre eux
+n'est pas celui qui vérifie l'accord : c'est le **verrou de non-vacuité**. Ce
+contrôle cherche une section par son titre ; le jour où le titre est reformulé,
+l'extraction rendrait une chaîne vide — et *le sha256 d'une chaîne vide est
+parfaitement stable*. Le contrôle passerait au vert en ne mesurant plus rien,
+pour toujours. Il refuse donc de rendre un verdict si la section fait moins de
+500 caractères ou ne nomme pas les quatre sigles.
+
+⚠️ **Et l'empreinte ignore ce qui suit la section** des directives. Sinon elle
+crierait « périmé » à chaque commit touchant le reste de `CLAUDE.md`, et on
+finirait par ne plus la croire — ce qui est le pire des deux états.
+
+⛔ **Ce que l'empreinte ne fait PAS** : elle ne prouve pas que la *traduction*
+est fidèle, seulement que la *source* n'a pas bougé depuis qu'on l'a écrite. La
+fidélité, aucune machine ne la vérifiera — elle se relit.
+
+---
+
+## 11. Ce que ce document ne fait pas
 
 - Il ne remplace pas `CLAUDE.md` ni `memoire/LECONS.md` — il les traduit.
 - Il ne décrit pas les **skills** ni les **sous-agents** en détail : ils ne se
   transposent pas, et les documenter ici créerait la deuxième vérité qu'EB
   interdit. Ils vivent dans `.claude/`.
-- Il n'est **pas auto-maintenu**. Toute évolution des directives dans
-  `CLAUDE.md` le périme. ⛔ **Le relire et le redater à chaque modification des
-  quatre directives** — sinon on paramètre ChatGPT sur une version morte.
+- Il n'est **pas auto-maintenu** — mais il n'est plus muet sur sa péremption :
+  l'empreinte du §10 la rend mesurable. ⛔ **Après toute modification des quatre
+  directives : relire ce document, puis `--sceller`.** Le sceller sans le relire
+  fabriquerait une fausse fraîcheur, ce qui est pire que le laisser périmé.
+- Il ne prouve pas que ChatGPT **obéit**. Aucune des règles collées n'est
+  exécutable ; leur respect se constate à la lecture, pas à l'exécution.
 
-### Remesurer les deux blocs à coller
+### Remesurer les trois blocs à coller
 
 ⛔ **Le compte de caractères ne se déduit pas d'une retouche, il se mesure.**
 `wc -m` compte des **octets** en locale C — un accent en pèse deux, donc il
@@ -346,7 +404,7 @@ surestime. D'où Python :
 ```bash
 python3 - <<'EOF'
 t = open('EXPORT-METHODE-CHATGPT.md', encoding='utf-8').read()
-for s in (7, 8):
+for s in (7, 8, 9):
     blk = t.split(f'\n## {s}.')[1].split(f'\n## {s+1}.')[0].split('```')[1]
     print(f"§{s} : {len(blk.strip())} caractères")
 EOF
@@ -356,4 +414,5 @@ EOF
 une commande de remesure posée dans le §7 est devenue le premier bloc du §7 et
 s'est mesurée elle-même — 189 au lieu de 1 375. Un instrument qui se mesure
 lui-même rend un nombre vert et faux.* C'est pourquoi la commande vit ici, hors
-des sections qu'elle mesure.
+des sections qu'elle mesure — et pourquoi le §10, qui porte lui aussi un bloc de
+code, n'est PAS dans la liste mesurée.
