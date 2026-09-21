@@ -31,11 +31,11 @@
     "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
   },
   "dernier_arret": {
-    "le": "2026-09-20",
-    "quoi": "20/09 : PR #267 fusionnee (collecte Finubar). Avant, le 19/09 : #265, l arbitrage A1 etait en retard d un lot sur le depot qu il gouverne. 38/38 suites vertes.",
-    "commit": "ddad675"
+    "le": "2026-09-21",
+    "quoi": "Séance de fusion. EXPORT-METHODE-CHATGPT.md livré (#269) puis la capture ADRAMELECH/VRANESH du réseau en cercles et du rachat (#270), et la collecte Finubar de clôture (#268). ⛔ VRANESH ANTICIPE, IL N'EXÉCUTE PAS — rangement corrigé après lecture de sa migration.",
+    "commit": "fa867e7"
   },
-  "prochaine_action": "Reprendre J3/P4 apres le retour de Paul sur P3 ; la migration et l audit sont faits, ne pas les rejouer. Du a Paul : la validation visuelle de Stellar V2.",
+  "prochaine_action": "Saisir en base les deux idées ADRAMELECH (ADR-005 Le Cercle, ADR-006 Le Rachat) et la situation VRANESH + ses 3 scénarios, depuis CADRAGE-RESEAU-CERCLES.md — ⛔ par Paul, RLS mono-utilisateur, jamais en service_role. Remesurer max(adr_num) avant (4 au 21/09).",
   "bloque_par": [
     "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
@@ -109,7 +109,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-09-20"
+  "maj": "2026-09-21"
 }
 ```
 
