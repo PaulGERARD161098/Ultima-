@@ -173,9 +173,9 @@ export default {
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "4679df3",
-        "tete_le": "2026-09-22T13:32:31+00:00",
-        "commits_depuis": 1,
+        "tete": "9746f05",
+        "tete_le": "2026-09-22T15:42:57+02:00",
+        "commits_depuis": 3,
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-22",
@@ -612,19 +612,18 @@ export default {
         "rattache_a": "Ultima-/CADRAGE-2026-09-22-leo-pilote-tout.md §0bis (les mesures) et §3 (la règle des aides) · DATARENO-/CLAUDE.md (les garde-fous conformité applicables au conseil au particulier)",
         "etat": "en_cours",
         "jalon": {
-          "nom": "J2b — brancher le moteur officiel : l'écran REDONNE un montant, sourcé et daté",
-          "critere_de_sortie": "Un appel serveur à mesaides.france-renov.gouv.fr qui rend un montant portant la version du modèle et la date · le SimulateurNonBranche remplacé"
+          "nom": "J3 — l'écran des aides devient un outil de conseil (contexte logement, gestes, restitution client)",
+          "critere_de_sortie": "Paul conseille un dossier de bout en bout sans quitter la console ni ressaisir une donnée"
         },
         "dernier_arret": {
           "le": "2026-09-22",
-          "quoi": "La console parle la langue de la vitrine : tokens, Manrope/DM Sans, 195 remplacements. Mesuré au navigateur, 7 états : 0 texte sous AA (1 à 3,74:1 avant). PR #4",
-          "commit": "d47e4cc7da7c2787fdc3d0a182e4c622b9ca9493"
+          "quoi": "J2b FERMÉ : l'API officielle des aides est branchée, repli local daté, 0 barème ici. Provenance vérifiée GRISE en preview par Paul. PR #6",
+          "commit": "c50c198fa656c3d9df203dfafd1856ceda0204d6"
         },
-        "prochaine_action": "Appeler le moteur officiel (mesaides.france-renov.gouv.fr/api-doc) — impossible depuis une séance au proxy fermé, à faire depuis un réseau ouvert.",
+        "prochaine_action": "Enrichir la situation envoyée au moteur (gestes de travaux, logement) : aujourd'hui plusieurs aides rendent « infos à recueillir » faute de contexte.",
         "bloque_par": [
-          "⛔ LE PRÉALABLE DE J2b : lire l'API officielle (mesaides.france-renov.gouv.fr/api-doc). Le proxy des séances bloque tout .gouv.fr — cette séance a lu le MODÈLE cloné, pas l'API",
-          "⚠️ La source officielle déclare elle-même les CEE NON À JOUR — or les CEE sont le cœur du montage. [À REVÉRIFIER hors proxy]",
-          "⚠️ L'écran ne donne plus AUCUN montant depuis le 22/09 — c'est voulu (C3 prime sur C4) mais c'est une perte de service jusqu'à J2b",
+          "⚠️ Le modèle officiel est FIGÉ : betagouv/reno arrêté au 18/12/2025, repris par l'ANAH. github.com/anahgouv pas encore ouvert — à surveiller.",
+          "⚠️ Le repli embarqué (npm 2.3.1, 08/04/2025) porte des barèmes du guide Anah 2024. Il dépanne, il ne fait pas autorité.",
           "GEMINI_API_KEY en variable d'environnement : action de Paul"
         ],
         "en_attente_depuis": "2026-09-10",
@@ -822,15 +821,11 @@ export default {
       },
       {
         "projet": "RénoBoost Console",
-        "geste": "⛔ LE PRÉALABLE DE J2b : lire l'API officielle (mesaides.france-renov.gouv.fr/api-doc). Le proxy des séances bloque tout .gouv.fr — cette séance a lu le MODÈLE cloné, pas l'API"
+        "geste": "⚠️ Le modèle officiel est FIGÉ : betagouv/reno arrêté au 18/12/2025, repris par l'ANAH. github.com/anahgouv pas encore ouvert — à surveiller."
       },
       {
         "projet": "RénoBoost Console",
-        "geste": "⚠️ La source officielle déclare elle-même les CEE NON À JOUR — or les CEE sont le cœur du montage. [À REVÉRIFIER hors proxy]"
-      },
-      {
-        "projet": "RénoBoost Console",
-        "geste": "⚠️ L'écran ne donne plus AUCUN montant depuis le 22/09 — c'est voulu (C3 prime sur C4) mais c'est une perte de service jusqu'à J2b"
+        "geste": "⚠️ Le repli embarqué (npm 2.3.1, 08/04/2025) porte des barèmes du guide Anah 2024. Il dépanne, il ne fait pas autorité."
       },
       {
         "projet": "RénoBoost Console",
@@ -847,7 +842,7 @@ export default {
       },
       {
         "projet": "Ultima",
-        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
+        "dit": "a avancé de 3 commit(s) depuis sa dernière note",
         "pourquoi": "derive"
       },
       {
