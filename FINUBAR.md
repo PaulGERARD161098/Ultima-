@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-22",
-    "commit": "070ac91ff4080b86a3992e7a2fad73f4ca3e2a0c",
-    "quoi": "Fusion de #283 : deux leçons du 22/09 dans memoire/LECONS.md (sceau v36) — un état se met à jour là où l'instrument lit ; un outil de qualité que la CI n'appelle pas n'est pas un contrôle."
+    "quoi": "Leçon v37 (une capture du produit périme à la refonte de son écran), recopiée dans RenoBoost et RenoAgenda ; collecte relancée après #539.",
+    "commit": "2fc2762"
   },
   "prochaine_action": "Saisir en base les deux idées ADRAMELECH (ADR-005 Le Cercle, ADR-006 Le Rachat) et la situation VRANESH + ses 3 scénarios, depuis CADRAGE-RESEAU-CERCLES.md — ⛔ par Paul, RLS mono-utilisateur, jamais en service_role. Remesurer max(adr_num) avant (4 au 21/09).",
   "bloque_par": [
