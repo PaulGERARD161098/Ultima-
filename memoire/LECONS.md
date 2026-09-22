@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v31 2026-09-22 sha256:36323d22a858 -->
+<!-- lecons:empreinte v33 2026-09-22 sha256:761ab48cbefb -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -1332,6 +1332,34 @@ PR qui a attendu, `git fetch` puis fusionner `main` DANS la branche — et lire 
 `--stat` du diff contre `main` : **toute suppression qu'on n'a pas décidée est
 un retard, pas un travail**. Quand la branche est trop en retard, la refaire
 depuis `main` coûte moins cher que la réconcilier.
+
+**UNE BRANCHE FUSIONNÉE QUI SURVIT À DISTANCE EST UNE MINE À RETARDEMENT**
+*(2026-09-22)*. Le 21/09, une branche partie d'un `main` dépassé aurait supprimé
+410 lignes du travail d'un autre. Le 22/09 au matin, **la même faute s'est
+représentée** — `claude/specs-hopus-update-xp9z1l` existait encore sur Ultima,
+à `61babd4`, et poussée telle quelle elle effaçait **1 011 lignes** :
+`EXPORT-METHODE-CHATGPT.md`, `CADRAGE-RESEAU-CERCLES.md`, les leçons v31.
+
+⛔ **Ce n'est pas la même leçon deux fois : c'est la leçon, puis sa CAUSE.**
+Se souvenir de vérifier ne suffit pas — la vérification est un geste humain, et
+un geste s'oublie. Ce qui rend la faute POSSIBLE, c'est qu'une branche fusionnée
+reste là et vieillit pendant que `main` avance. RenoBoost ne l'a jamais posé le
+problème : le dépôt a « automatically delete head branches » activé, GitHub
+supprime la branche à la fusion. Ultima ne l'a pas.
+
+⇒ Deux gestes, dans cet ordre : **(1)** activer la suppression automatique sur
+tout dépôt qui ne l'a pas — c'est le réglage qui supprime la classe d'erreur, pas
+l'attention ; **(2)** tant qu'il manque, ne JAMAIS récupérer une branche
+distante portant le nom qu'on veut : `git checkout -B <branche> origin/main`,
+toujours, et `git diff --stat origin/main HEAD` relu avant chaque push.
+
+⚠️ **Et une contrainte mesurée le même jour** : depuis une séance Claude Code
+web, `git push origin --delete <branche>` répond « Everything up-to-date » et
+**ne supprime rien** — le proxy refuse la refspec de suppression, en silence.
+Trois tentatives, même résultat. Il n'y a pas non plus d'outil GitHub de
+suppression de branche exposé. ⇒ Le ménage des branches est une action de Paul
+dans l'interface, ou le réglage du dépôt. Ne pas y passer du temps depuis la
+séance : ça ne marche pas, et l'échec est muet.
 
 **UN DOCUMENT ÉCRIT POUR UN TIERS VIEILLIT PENDANT QU'ON L'ÉCRIT** *(2026-09-21)*.
 Un rapport d'état des specs, demandé par Paul pour être confronté à Codex, livré
