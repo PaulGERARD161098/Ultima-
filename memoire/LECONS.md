@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v33 2026-09-22 sha256:761ab48cbefb -->
+<!-- lecons:empreinte v34 2026-09-22 sha256:7ffae00f882b -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -468,6 +468,39 @@ recherche elle-même — « ce fichier existe-t-il, fait-il plus de zéro ligne 
 coûte une seconde et sauve l'annonce.
 
 ## 2. Les garde-fous, et leur silence
+
+**UN PLAFOND QUI MESURE LA PAGE REPLIÉE NE GARDE RIEN** *(2026-09-22)*. La
+vitrine portait un seuil de hauteur de 12 400 px sur mobile, abaissé et prouvé
+en le cassant le 19/09. Le 22/09, la page mesurait **11 837 px** au chargement :
+vert, plafond tenu. Sauf que **neuf `<details>` étaient fermés** — la refonte
+était passée de 6 à 15 replis, et **4 237 px de contenu avaient été déplacés
+derrière des clics, pas retirés**. Déplié, le visiteur voit **16 074 px**, soit
+**3 674 px au-dessus du plafond que le harnais prétendait garder**.
+
+⛔ **Le harnais ne mentait pas : il mesurait autre chose que ce qu'on croyait.**
+C'est pire qu'une absence de mesure, parce que le vert se lit comme une preuve.
+Replier est un choix de design légitime ; ce qui ne l'est pas, c'est qu'un seuil
+posé pour borner ce qu'une page pèse devienne indifférent à ce qu'elle contient.
+
+⇒ **Tout plafond sur une page se mesure AUSSI dans l'état déplié** — `<details>`
+ouverts, onglets parcourus, « voir plus » cliqués. Et la mesure dépliée exige
+son propre verrou de non-vacuité : « déplié = replié » est exactement ce que
+rend une page sans aucun repli, et ce serait vert.
+
+⚠️ **Un seuil constaté n'est pas un seuil décidé.** Le second seuil a été posé à
+16 200 px — la mesure du jour arrondie au-dessus — et nommé **cliquet** dans le
+code : il empêche de grossir, il ne dit pas ce que la page a le droit de peser.
+Confondre les deux, c'est transformer un constat en norme sans que personne
+l'ait tranché.
+
+**UN ÉLÉMENT DANS UN `<details>` FERMÉ A UNE HAUTEUR DE ZÉRO** *(2026-09-22)*.
+Quatrième faux négatif de la même journée, après la casse et les accents. Un
+critère « image en portrait de plus de 200 px » a rendu ABSENT un
+`MobileShowcase` bel et bien présent : il vivait dans un repli fermé, donc sans
+géométrie. Le verrou de non-vacuité et le témoin avaient tenu — **c'est le
+CRITÈRE qui était faux, pas l'instrument**. ⇒ Toute mesure géométrique sur une
+page commence par déplier ; et une absence se confirme sur le source avant
+d'être annoncée.
 
 **UN GARDE-FOU SE VÉRIFIE DU CÔTÉ OÙ IL PEUT ÊTRE CONTOURNÉ** *(2026-08-21)*.
 Quatre écarts de la même forme dans une séance : une donnée protégée par un
