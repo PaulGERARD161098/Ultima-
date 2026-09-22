@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v34 2026-09-22 sha256:7ffae00f882b -->
+<!-- lecons:empreinte v35 2026-09-22 sha256:ec4edee5e065 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -860,6 +860,21 @@ concernée, pas un lien générique vers la prévisualisation. *Une prévisualis
 sans adresse précise l'oblige à chercher lui-même ce qu'on vient de modifier :
 c'est du travail rendu à moitié.* Quand une page n'est pas encore vérifiable, le
 dire au lieu de donner un lien qui ne montrera rien.
+
+**UNE MODIFICATION VISUELLE SE DONNE EN PREVIEW, PAS EN DESCRIPTION**
+*(2026-09-22)*. Dès qu'un travail touche à ce qui se VOIT — page publique,
+galerie, thème, maquette — Paul reçoit **l'adresse de la prévisualisation
+déployée**, spontanément, dans le message qui annonce le travail. Et cela vaut
+aussi **avant** : une modification visuelle seulement PRÉVUE se **montre** avant
+d'être débattue — une option décrite en trois paragraphes se juge mal, la même
+option affichée se juge en trois secondes. ⚠️ Les captures ne remplacent pas la
+preview : elles figent une largeur, un thème et un état, et c'est l'état figé
+qu'on croit. Elles la complètent. ⛔ Et le lien se **vérifie avant d'être donné**
+(règle ci-dessus) : sur ces environnements, `curl` vers un domaine `*.vercel.app`
+est refusé par le proxy sortant — la lecture passe par l'outil Vercel
+`web_fetch_vercel_url`. *Incident : dix photos publiées dans une galerie, deux
+captures envoyées, trois lots proposés à l'arbitrage — et Paul a dû réclamer
+« préview stp ».*
 
 **UNE QUESTION REMONTÉE À PAUL DOIT ÊTRE UN CHOIX, PAS UNE ENQUÊTE NON TERMINÉE**
 *(2026-08-17)*. Un arbitrage produit avait été annoncé ; c'était un diagnostic
