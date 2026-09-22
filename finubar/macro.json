@@ -273,16 +273,16 @@
         "projet": "RénoBoost",
         "depot": "PaulGERARD161098/RenoBoost",
         "cap": "Un individu seul fait tourner le business entier, aidé par l'automatisation (Directive IA). RénoBoost est le hub : acquisition, rendez-vous, dashboard, et la roadmap maîtresse des quatre briques.",
-        "rattache_a": "REPRISE-COHERENCE-PALIER1-2026-09-21.md · ROADMAP-2026-09-19-nuit-fin-de-session.md (LA source de la reprise du 20/09) · ROADMAP-2026-09-19-specs-hopus.md (le détail des specs) · ROADMAP-2026-09-18-fin-de-session.md (le plus récent) · SPECS.md · Ultima-/specs/ARBITRAGES.md · ROADMAP-2026-09-15-fin-de-session.md (le plus récent) · ROADMAP-2026-09-13-soir-fin-de-session.md · CADRAGE-2026-09-13-bouss",
+        "rattache_a": "ROADMAP-2026-09-21-fin-de-session.md (LA source de la reprise) · ROADMAP-2026-09-20-fin-de-session.md · REPRISE-COHERENCE-PALIER1-2026-09-21.md · ROADMAP-2026-09-19-nuit-fin-de-session.md (LA source de la reprise du 20/09) · ROADMAP-2026-09-19-specs-hopus.md (le détail des specs) · ROADMAP-2026-09-18-fin-de-session.md (le plus récent) · SPECS.md · Ultima-/specs/ARBITRAGES.md · ROADMAP-2026-09-15-f",
         "etat": "en_cours",
         "jalon": {
           "nom": "Jalon 0 — l'amorçage : trois gestes de Paul, zéro ligne de code",
           "critere_de_sortie": "`stickers` > 0 · fiche Google visible publiquement · `stripe_charges_enabled` = true"
         },
         "dernier_arret": {
-          "le": "2026-09-21",
-          "quoi": "#515 fusionnée (l'extracteur lit les photos et rend l'e-mail du client — media_type n'est plus figé à application/pdf), puis #504 (registres Hopus) et #521 (consolidation…",
-          "commit": "ec41f82"
+          "le": "2026-09-22",
+          "quoi": "#528 : DESIGN-LANGAGE abroge « la console garde ses thèmes ». Un défaut de la vitrine y est nommé : --line borde les champs à 1,32:1 (WCAG exige 3:1).",
+          "commit": "366302d1382c0ed09af5c511e9f6f8fe875be1dc"
         },
         "prochaine_action": "Valider les paliers 1 et 2 en preview après CI verte, puis poursuivre le shell commun et les vues métier. Le sujet antérieur du simulateur de zone reste dans…",
         "bloque_par": [
@@ -295,7 +295,7 @@
         "en_attente_depuis": "2026-08-04",
         "boucles_ouvertes": [
           {
-            "quoi": "📐 SPECS HOPUS — 13 patterns sur 15 posés (re-mesuré dans index.html le 19/09 au soir). Les 2 restants attendent Paul, nommément : BentoBenefits attend la bascule de la vitrine…",
+            "quoi": "⚠️ HOPUS CLOS à 13/15 par Paul le 20/09 — puis la vitrine REFONDUE (326064e). Patterns NON re-mesurés depuis. Détail : ROADMAP-2026-09-20-fin-de-session.md",
             "depuis": "2026-09-19"
           },
           {
@@ -303,7 +303,7 @@
             "depuis": "2026-09-19"
           },
           {
-            "quoi": "🔴 GITHUB ACTIONS À L'ARRÊT — cause INCONNUE, et « plafonds atteints » est RÉFUTÉ : Paul a relevé le plafond le 19/09 vers 16h30, aucun effet. Ce qui est établi est la SIGNATURE…",
+            "quoi": "✅ FERMÉE — la CI est REVENUE le 21/09 22h12 après 3,5 jours. Cause inconnue. Un rouge est de nouveau un VRAI rouge. Détail : ROADMAP-2026-09-21-fin-de-session.md §1",
             "depuis": "2026-09-19"
           },
           {
@@ -335,10 +335,9 @@
             "depuis": "2026-09-15"
           }
         ],
-        "maj": "2026-09-21"
+        "maj": "2026-09-22"
       },
       "recits": [
-        "dernier_arret.quoi",
         "prochaine_action",
         "boucles_ouvertes[].quoi"
       ],
@@ -352,7 +351,7 @@
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-22",
-      "jours_depuis_maj": 1,
+      "jours_depuis_maj": 0,
       "jours_en_attente": 49,
       "rang": 2
     },
@@ -613,14 +612,13 @@
         },
         "dernier_arret": {
           "le": "2026-09-22",
-          "quoi": "Build réparé après 12 j de panne, et J2a : les 4 jeux de barèmes non sourcés retirés, simulateur débranché, CI build+test posée. Détail : PR #1",
-          "commit": "3f4ed0cb7b5ed9c517d3bab561e345abcdad798b"
+          "quoi": "La console parle la langue de la vitrine : tokens, Manrope/DM Sans, 195 remplacements. Mesuré au navigateur, 7 états : 0 texte sous AA (1 à 3,74:1 avant). PR #4",
+          "commit": "d47e4cc7da7c2787fdc3d0a182e4c622b9ca9493"
         },
         "prochaine_action": "Appeler le moteur officiel (mesaides.france-renov.gouv.fr/api-doc) — impossible depuis une séance au proxy fermé, à faire depuis un réseau ouvert.",
         "bloque_par": [
           "⛔ LE PRÉALABLE DE J2b : lire l'API officielle (mesaides.france-renov.gouv.fr/api-doc). Le proxy des séances bloque tout .gouv.fr — cette séance a lu le MODÈLE cloné, pas l'API",
           "⚠️ La source officielle déclare elle-même les CEE NON À JOUR — or les CEE sont le cœur du montage. [À REVÉRIFIER hors proxy]",
-          "⚠️ Les ENTREPRISES (tertiaire, BAT-TH) ne sont pas couvertes par le moteur officiel. Arbitrage Paul 22/09 : Léo ORIENTE sans chiffrer. Garde-fou pas encore écrit",
           "⚠️ L'écran ne donne plus AUCUN montant depuis le 22/09 — c'est voulu (C3 prime sur C4) mais c'est une perte de service jusqu'à J2b",
           "GEMINI_API_KEY en variable d'environnement : action de Paul"
         ],
@@ -824,10 +822,6 @@
       {
         "projet": "RénoBoost Console",
         "geste": "⚠️ La source officielle déclare elle-même les CEE NON À JOUR — or les CEE sont le cœur du montage. [À REVÉRIFIER hors proxy]"
-      },
-      {
-        "projet": "RénoBoost Console",
-        "geste": "⚠️ Les ENTREPRISES (tertiaire, BAT-TH) ne sont pas couvertes par le moteur officiel. Arbitrage Paul 22/09 : Léo ORIENTE sans chiffrer. Garde-fou pas encore écrit"
       },
       {
         "projet": "RénoBoost Console",
