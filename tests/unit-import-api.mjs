@@ -3,7 +3,7 @@
 // zéro réseau ; il enregistre ce qui aurait été écrit, pour prouver
 // « rien n'est écrit » sur les refus structurels.
 import { readFileSync } from 'node:fs';
-import { importerPersonnes, LOT_MAX } from '../api/_lib/import-personnes.js';
+import { importerPersonnes, LOT_MAX, RATTACHES_MAX, BUDGET_MS } from '../api/_lib/import-personnes.js';
 
 const N_A = '11111111-2222-4333-8444-555555555555';
 const N_AUTRUI = 'aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee';
@@ -97,6 +97,35 @@ for (const [cas, corps, opts] of [
 {
   const r = await importerPersonnes(clientFactice({ echecInsert: true }), { personnes: [{ nom: 'A' }] });
   verdicts.echecBase500 = r.status === 500 && r.error === 'Erreur interne' && r.dbError.code === '23514';
+}
+
+
+// --- Fermetures de l'audit du 22/09 ---
+// M2 : plus de 25 lignes rattachées → refus structurel, rien d'écrit.
+{
+  const c = clientFactice();
+  const lignes = Array.from({ length: RATTACHES_MAX + 1 }, (_, i) => ({ nom: `R${i}`, node_id: N_A }));
+  const r = await importerPersonnes(c, { personnes: lignes });
+  verdicts.m2PlafondRattaches = r.status === 400 && c.ecrits.personnes.length === 0;
+}
+// M2 : budget de temps dépassé → arrêt propre, lignes non traitées NOMMÉES par index.
+{
+  const c = clientFactice();
+  let t = 0;
+  const horloge = () => { t += BUDGET_MS / 2; return t; }; // chaque lecture avance d'un demi-budget
+  const lignes = [{ nom: 'S' }, ...Array.from({ length: 4 }, (_, i) => ({ nom: `R${i}`, node_id: N_A }))];
+  const r = await importerPersonnes(c, { personnes: lignes }, horloge);
+  const d = r.data;
+  const couvertes = d.creees + d.refusees.length + d.nonTraitees.length;
+  verdicts.m2BudgetNonTraitees = r.status === 200 && d.nonTraitees.length > 0 && couvertes === lignes.length &&
+    c.ecrits.personnes.length === d.creees;
+}
+// F2 : NUL ou demi-paire → la LIGNE est refusée, le lot passe (plus de 500).
+{
+  const c = clientFactice();
+  const r = await importerPersonnes(c, { personnes: [{ nom: 'A\u0000' }, { nom: 'B\ud83d' }, { nom: 'C 😀' }] });
+  verdicts.f2LigneRefuseePasLeLot = r.status === 200 && r.data.creees === 1 &&
+    r.data.refusees.map((x) => x.index).join() === '0,1' && r.data.refusees.every((x) => x.raison === 'Caractères invalides');
 }
 
 // C8 : le handler ne logue qu'un contexte et un code, jamais une ligne.

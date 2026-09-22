@@ -16,13 +16,22 @@
 import { validatePersonne, isUuid } from './validate.js';
 
 export const LOT_MAX = 100;
+// Chaque ligne rattachée coûte 2 appels base, en série (audit 22/09, M2) :
+// plafond par lot, et budget de temps au-delà duquel on s'arrête PROPREMENT
+// en disant quelles lignes n'ont pas été traitées — plutôt que d'être tué par
+// la plateforme au milieu de la boucle sans que le client sache ce qui est écrit.
+export const RATTACHES_MAX = 25;
+export const BUDGET_MS = 6000;
+// NUL et demi-paires UTF-16 isolées : Postgres les refuse, et un seul de ces
+// caractères faisait tomber l'INSERT groupé entier (audit 22/09, F2).
+const TEXTE_INVALIDE = /\u0000|[\ud800-\udbff](?![\udc00-\udfff])|(?<![\ud800-\udbff])[\udc00-\udfff]/;
 const CHAMPS_LIGNE = ['nom', 'fonction', 'telephone', 'email', 'notes', 'node_id'];
 
 function structure(message) {
   return { status: 400, error: message };
 }
 
-export async function importerPersonnes(client, body) {
+export async function importerPersonnes(client, body, maintenant = Date.now) {
   if (!body || typeof body !== 'object' || Array.isArray(body)) return structure('Corps de requête invalide');
   const cles = Object.keys(body);
   if (cles.length !== 1 || cles[0] !== 'personnes') return structure('Corps de requête invalide');
@@ -42,11 +51,17 @@ export async function importerPersonnes(client, body) {
     const { node_id: nodeId, ...champs } = ligne;
     if (nodeId !== undefined && !isUuid(nodeId)) return structure('Identifiant de fiche invalide');
 
+    if (Object.values(champs).some((v) => typeof v === 'string' && TEXTE_INVALIDE.test(v))) {
+      refusees.push({ index, raison: 'Caractères invalides' });
+      continue;
+    }
     const { value, error } = validatePersonne(champs, 'create');
     if (error) { refusees.push({ index, raison: error }); continue; }
     if (nodeId === undefined) simples.push({ index, value });
     else aRattacher.push({ index, value, node_id: nodeId });
   }
+
+  if (aRattacher.length > RATTACHES_MAX) return structure('Trop de rattachements dans ce lot');
 
   // Les fiches visées doivent TOUTES appartenir à l'utilisateur. Sous RLS, une
   // fiche d'autrui est simplement invisible : elle manque au résultat.
@@ -72,7 +87,10 @@ export async function importerPersonnes(client, body) {
   // fiche porte exactement le nom de l'organisation).
   let rattachees = 0;
   const rattachementsEchoues = [];
+  const nonTraitees = [];
+  const debut = maintenant();
   for (const r of aRattacher) {
+    if (maintenant() - debut > BUDGET_MS) { nonTraitees.push(r.index); continue; }
     const { data, error } = await client.from('personnes').insert(r.value).select('id').single();
     if (error || !data?.id) { refusees.push({ index: r.index, raison: 'Enregistrement impossible' }); continue; }
     creees += 1;
@@ -82,5 +100,5 @@ export async function importerPersonnes(client, body) {
   }
 
   refusees.sort((a, b) => a.index - b.index);
-  return { status: 200, data: { creees, rattachees, refusees, rattachementsEchoues } };
+  return { status: 200, data: { creees, rattachees, refusees, rattachementsEchoues, nonTraitees } };
 }

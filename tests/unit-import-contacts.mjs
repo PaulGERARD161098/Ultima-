@@ -136,6 +136,63 @@ verdicts.telVide = I.normaliserTelephone('—') === null && I.normaliserTelephon
 // --- Lots ---
 verdicts.lots = I.enLots(Array.from({ length: 212 }, (_, i) => i), 50).map((l) => l.length).join(',') === '50,50,50,50,12';
 
+
+// --- Fermetures de l'audit du 22/09 (chacune a d'abord été vue ROUGE) ---
+// M1 : 40 000 continuations QUOTED-PRINTABLE, lecture linéaire.
+{
+  const texte = 'BEGIN:VCARD\nFN;ENCODING=QUOTED-PRINTABLE:' + 'xxxxxxxxxxxxxxxxxxxx=\n'.repeat(40000) + 'fin\nEND:VCARD';
+  const t0 = performance.now();
+  const r = I.lireVcard(texte);
+  const duree = performance.now() - t0;
+  verdicts.m1QpLineaire = duree < 300 && r.cartes === 1;
+  const qp = I.lireVcard('BEGIN:VCARD\nFN;CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE:=C3=89tienne V=\nasseur\nEND:VCARD');
+  verdicts.m1QpInchange = qp.contacts[0].nom === 'Étienne Vasseur';
+}
+// F1 : UTF-8 invalide massif en QP → jamais d'exception.
+{
+  let leve = false;
+  try { I.lireVcard('BEGIN:VCARD\nFN;ENCODING=QUOTED-PRINTABLE:' + '=FF'.repeat(200000) + '\nEND:VCARD'); } catch { leve = true; }
+  verdicts.f1PasDException = !leve;
+}
+// F2 : troncature et demi-paires UTF-16.
+{
+  const c = I.lireVcard(carte('FN:' + 'a'.repeat(198) + '😀b')).contacts[0];
+  const isolee = /[\ud800-\udbff](?![\udc00-\udfff])|(^|[^\ud800-\udbff])[\udc00-\udfff]/;
+  verdicts.f2PasDeDemiPaire = !isolee.test(c.nom) && c.nom.length <= 200;
+  const d = I.lireVcard(carte('FN:Nom\ud83d cassé')).contacts[0];
+  verdicts.f2DemiPaireNettoyee = !isolee.test(d.nom) && d.nom === 'Nom cassé';
+}
+// F3 : une ORG hostile ne fabrique pas de fiche fantôme.
+{
+  const lu = I.lireVcard(carte('FN:A', 'ORG:constructor') + '\n' + carte('FN:B', 'ORG:__proto__') + '\n' + carte('FN:C', 'ORG:toString'));
+  const g = I.regrouper(lu.contacts, [], [{ id: 'n1', nom: 'Vraie' }]);
+  verdicts.f3PasDeFicheFantome = g.length === 3 && g.every((c) => c.fiche === null);
+}
+// M3 : les lots sont bornés en octets ; les rattachés partent à part, 25 au plus.
+{
+  const lourdes = Array.from({ length: 50 }, (_, i) => ({ nom: '漢'.repeat(200), fonction: '字'.repeat(120), notes: 'Entreprise : ' + '語'.repeat(200) + i }));
+  const lots = I.enLots(lourdes, 50);
+  const tailles = lots.map((l) => new TextEncoder().encode(JSON.stringify({ personnes: l })).length);
+  verdicts.m3LotsBornesEnOctets = lots.length >= 2 && tailles.every((t) => t < 100000) &&
+    lots.reduce((n, l) => n + l.length, 0) === 50;
+  const melange = Array.from({ length: 60 }, (_, i) => (i % 2 ? { nom: 'R' + i, node_id: 'x' } : { nom: 'S' + i }));
+  const l2 = I.enLots(melange, 50);
+  verdicts.m2RattachesAPart = l2.every((l) => l.every((x) => x.node_id) || l.every((x) => !x.node_id)) &&
+    l2.filter((l) => l[0].node_id).every((l) => l.length <= 25) && l2.reduce((n, l) => n + l.length, 0) === 60;
+}
+// M2 : sans téléphone ni e-mail, le même nom en base est SIGNALÉ, pas verrouillé.
+{
+  const g = I.regrouper(I.lireVcard(carte('FN:Godefroy  Aubert')).contacts, [{ id: 'p', nom: 'godefroy aubert' }], []);
+  verdicts.m2NomSignale = g[0].nomDejaEnBase === true && g[0].dejaEnBase === false;
+  const app = readFileSync(new URL('../js/app.js', import.meta.url), 'utf8');
+  verdicts.m2PlusDePromesseDeRelanceSure = !/sera reconnu/.test(app) && /vérifiez le registre/.test(app);
+}
+// Une propriété démesurée est ignorée ET dite (règle ③ : rien en silence).
+{
+  const c = I.lireVcard(carte('FN:Long', 'TITLE:' + 'x'.repeat(70000))).contacts[0];
+  verdicts.proprieteTropLongueDite = c.fonction === '' && c.alertes.includes('champ trop long ignoré');
+}
+
 let rouge = false;
 for (const [nom, ok] of Object.entries(verdicts)) {
   console.log(`${ok ? '✅' : '❌'} ${nom}`);

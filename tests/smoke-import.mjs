@@ -146,8 +146,11 @@ await page.locator('#import-etape-bilan').waitFor({ state: 'visible', timeout: 1
 
 // --- Ce qui est parti ---
 const lignes = envois.flatMap((e) => e.corps.personnes || []);
-verdicts.unSeulLotAuthentifie = envois.length === 1 && envois[0].auth === 'Bearer jeton-test' &&
-  JSON.stringify(Object.keys(envois[0].corps)) === '["personnes"]';
+// Deux lots : les lignes simples, puis les lignes rattachées à part (audit
+// 22/09, M2 — chaque rattachement coûte 2 appels base, plafonnés à 25 par lot).
+verdicts.deuxLotsAuthentifies = envois.length === 2 &&
+  envois.every((e) => e.auth === 'Bearer jeton-test' && JSON.stringify(Object.keys(e.corps)) === '["personnes"]') &&
+  envois[0].corps.personnes.every((l) => !l.node_id) && envois[1].corps.personnes.every((l) => l.node_id);
 verdicts.seulementLesCoches = lignes.length === 4;
 const CHAMPS = ['nom', 'fonction', 'telephone', 'email', 'notes', 'node_id'];
 verdicts.champsAutorisesSeuls = lignes.every((l) => Object.keys(l).every((k) => CHAMPS.includes(k)));

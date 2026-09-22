@@ -17,13 +17,16 @@
   var LIMITES = {
     octets: 50 * 1024 * 1024, // un export iCloud avec photos pèse ~20 Mo pour 500 contacts
     cartes: 5000,
+    ligne: 64 * 1024, // une propriété lue (hors PHOTO ignorée) ne dépasse jamais ça légitimement
+    octetsLot: 80000, // sous le plafond de 100 ko du corps (api/_lib/http.js)
     nom: 200,
     fonction: 120,
     telephone: 30,
     email: 200,
     notes: 2000,
     lotServeur: 100, // miroir de api/_lib/import-personnes.js
-    lotClient: 50    // ~50 × 400 o, très en deçà du plafond de 100 ko du corps
+    lotClient: 50,   // et jamais plus de octetsLot par envoi
+    rattachesParLot: 25 // miroir de api/_lib/import-personnes.js
   };
 
   // Même forme que api/_lib/validate.js (EMAIL_RE) : ce que le serveur refuse,
@@ -38,6 +41,7 @@
   function nettoyer(texte) {
     return String(texte)
       .replace(/[\u0000-\u0008\u000B-\u001F\u007F]/g, '')
+      .replace(/[\ud800-\udbff](?![\udc00-\udfff])|(^|[^\ud800-\udbff])[\udc00-\udfff]/g, '$1')
       .replace(/\s+/g, ' ')
       .trim();
   }
@@ -78,7 +82,9 @@
     try {
       return new TextDecoder('utf-8', { fatal: true }).decode(new Uint8Array(octets));
     } catch (e) {
-      return String.fromCharCode.apply(null, octets); // latin-1 de secours
+      // latin-1 de secours — jamais fromCharCode.apply, qui lève au-delà de
+      // ~130 000 arguments (audit 22/09, F1).
+      return new TextDecoder('latin1').decode(new Uint8Array(octets));
     }
   }
 
@@ -114,7 +120,7 @@
   // Déplie le texte en lignes logiques : pliage RFC 6350 (CRLF + espace/tab)
   // et, pour le QUOTED-PRINTABLE 2.1, les lignes terminées par « = ».
   function lignesLogiques(texte) {
-    var brutes = texte.replace(/^﻿/, '').split(/\r\n|\r|\n/);
+    var brutes = texte.replace(/^\uFEFF/, '').split(/\r\n|\r|\n/);
     var sortie = [];
     for (var i = 0; i < brutes.length; i++) {
       var l = brutes[i];
@@ -125,11 +131,22 @@
       sortie.push(l);
     }
     // Recoller les continuations QP (« …=\n suite »).
+    // Linéaire : on accumule des morceaux et on ne joint qu'une fois (audit
+    // 22/09, M1 — l'ancienne boucle refaisait split+slice sur une ligne qui
+    // grossissait : 40 000 continuations = 7 s d'onglet figé).
     var fusion = [];
     for (var k = 0; k < sortie.length; k++) {
       var ligne = sortie[k];
-      while (/QUOTED-PRINTABLE/i.test(ligne.split(':')[0]) && /=$/.test(ligne) && k + 1 < sortie.length) {
-        ligne = ligne.slice(0, -1) + sortie[++k];
+      var deuxPoints = ligne.indexOf(':');
+      if (deuxPoints > 0 && /QUOTED-PRINTABLE/i.test(ligne.slice(0, deuxPoints))) {
+        var morceaux = [ligne];
+        var taille = ligne.length;
+        while (morceaux[morceaux.length - 1].slice(-1) === '=' && k + 1 < sortie.length && taille <= LIMITES.ligne) {
+          morceaux[morceaux.length - 1] = morceaux[morceaux.length - 1].slice(0, -1);
+          morceaux.push(sortie[++k]);
+          taille += sortie[k].length;
+        }
+        ligne = morceaux.join('');
       }
       fusion.push(ligne);
     }
@@ -169,8 +186,13 @@
     return liste.length ? liste[0].valeur : '';
   }
 
+  // Jamais de demi-paire UTF-16 : la base refuserait le texte et le lot entier
+  // tomberait (audit 22/09, F2).
   function tronquer(texte, max) {
-    return texte.length > max ? texte.slice(0, max - 1) + '…' : texte;
+    if (texte.length <= max) { return texte; }
+    var coupe = texte.slice(0, max - 1);
+    if (/[\ud800-\udbff]$/.test(coupe)) { coupe = coupe.slice(0, -1); }
+    return coupe + '…';
   }
 
   // Normalisation téléphone : chiffres seuls, « 00 » → « + », national
@@ -209,6 +231,7 @@
       var index = resultat.cartes;
       if (resultat.cartes > LIMITES.cartes) { resultat.tropDeCartes = true; courante = null; return; }
       var c = carteVersContact(courante);
+      var tropLongue = !!courante.trop;
       courante = null;
       var nom = c.fn || c.n || c.org;
       if (!nom) { resultat.rejets.push({ carte: index, raison: 'sans nom' }); return; }
@@ -221,6 +244,7 @@
       var mailBrut = choisir(c.emails, ['work', 'pref']);
       var mail = mailBrut ? normaliserEmail(mailBrut) : null;
       if (mailBrut && !mail) { alertes.push('e-mail invalide'); }
+      if (tropLongue) { alertes.push('champ trop long ignoré'); }
       resultat.contacts.push({
         carte: index,
         nom: tronquer(nom, LIMITES.nom),
@@ -241,7 +265,8 @@
       }
       if (/^END:VCARD$/i.test(l)) { clore(); continue; }
       if (!courante) { continue; }
-      var p = lireLigne(lignes[i]);
+      if (lignes[i].length > LIMITES.ligne && !/^PHOTO/i.test(lignes[i])) { courante.trop = true; continue; }
+      var p = lignes[i].length > LIMITES.ligne ? null : lireLigne(lignes[i]);
       if (p && CHAMPS_LUS[p.nom]) { courante.push(p); }
       if (resultat.tropDeCartes) { break; }
     }
@@ -266,7 +291,7 @@
     function racineDe(i) { while (parent[i] !== i) { parent[i] = parent[parent[i]]; i = parent[i]; } return i; }
     function unir(a, b) { a = racineDe(a); b = racineDe(b); if (a !== b) { parent[Math.max(a, b)] = Math.min(a, b); } }
 
-    var vus = {};
+    var vus = Object.create(null); // « constructor », « __proto__ » : des clés comme les autres (F3)
     contacts.forEach(function (c, i) {
       [c.telephone && 't:' + c.telephone, c.email && 'e:' + c.email].forEach(function (cle) {
         if (!cle) { return; }
@@ -274,7 +299,7 @@
       });
     });
 
-    var groupes = {};
+    var groupes = Object.create(null);
     var ordre = [];
     contacts.forEach(function (c, i) {
       var r = racineDe(i);
@@ -282,14 +307,15 @@
       groupes[r].push(c);
     });
 
-    var enBase = {};
+    var enBase = Object.create(null);
     (existants || []).forEach(function (p) {
       var t = normaliserTelephone(p && p.telephone);
       var e = normaliserEmail(p && p.email);
       if (t) { enBase['t:' + t] = true; }
       if (e) { enBase['e:' + e] = true; }
+      if (p && p.nom) { enBase['n:' + cleNom(p.nom)] = true; }
     });
-    var fichesParNom = {};
+    var fichesParNom = Object.create(null);
     (fiches || []).forEach(function (f) {
       if (f && f.id && f.nom) { fichesParNom[cleNom(f.nom)] = { id: f.id, nom: f.nom }; }
     });
@@ -311,6 +337,10 @@
       });
       fusion.dejaEnBase = !!((fusion.telephone && enBase['t:' + fusion.telephone]) ||
                              (fusion.email && enBase['e:' + fusion.email]));
+      // Sans téléphone ni e-mail, seul le nom peut trahir un doublon avec le
+      // registre : on le SIGNALE, sans verrouiller (deux homonymes existent).
+      fusion.nomDejaEnBase = !fusion.dejaEnBase && !fusion.telephone && !fusion.email &&
+                             !!enBase['n:' + cleNom(fusion.nom)];
       fusion.fiche = fusion.organisation ? (fichesParNom[cleNom(fusion.organisation)] || null) : null;
       return fusion;
     });
@@ -330,9 +360,28 @@
     return ligne;
   }
 
+  function octets(valeur) {
+    return new TextEncoder().encode(JSON.stringify(valeur)).length;
+  }
+
+  // Lots bornés en LIGNES et en OCTETS (audit 22/09, M3 : 50 noms longs en
+  // écriture non latine dépassaient 100 ko → 413). Les lignes à rattacher
+  // partent dans des lots à part, de 25 au plus (M2 : 2 appels base par ligne).
   function enLots(lignes, taille) {
     var lots = [];
-    for (var i = 0; i < lignes.length; i += taille) { lots.push(lignes.slice(i, i + taille)); }
+    function remplir(liste, max) {
+      var courant = [];
+      liste.forEach(function (l) {
+        if (courant.length && (courant.length >= max || octets(courant.concat([l])) > LIMITES.octetsLot)) {
+          lots.push(courant);
+          courant = [];
+        }
+        courant.push(l);
+      });
+      if (courant.length) { lots.push(courant); }
+    }
+    remplir(lignes.filter(function (l) { return !l.node_id; }), taille);
+    remplir(lignes.filter(function (l) { return l.node_id; }), Math.min(taille, LIMITES.rattachesParLot));
     return lots;
   }
 

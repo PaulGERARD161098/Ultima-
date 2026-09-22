@@ -191,6 +191,39 @@ vécu sur le vrai fichier de Paul :
    quatre tables, API `reseau/*`, front), une fois que RIVEN porte le vrai
    réseau de Paul : c'est à ce moment que la PII y entre en volume.
 
+## 7 bis. Audit adverse du 2026-09-22 — ce qui a cédé, ce qui a résisté
+
+Audit en lecture (`securite-auditeur`) sur le premier jet. **Aucun constat
+critique ni élevé.** Chaque constat corrigé porte un test de fermeture, **vu
+rouge sur l'ancien code avant d'être vu vert** :
+
+| # | Constat | Correctif |
+|---|---|---|
+| M1 | Continuations QUOTED-PRINTABLE en temps quadratique : un `.vcf` piégé figeait l'onglet (7 s pour 900 ko) | boucle linéaire + une propriété lue ne dépasse pas 64 ko (au-delà : ignorée ET signalée) |
+| M2 | Un lot de rattachements pouvait dépasser la durée de la fonction ; le bilan promettait « une relance est sûre » alors que le résultat était inconnu | ≤ 25 rattachés par lot (lots séparés) ; budget de 6 s côté serveur → `nonTraitees` explicites ; bilan « résultat inconnu : vérifiez avant de relancer » ; homonyme sans téléphone ni e-mail signalé |
+| M3 | Lots comptés en lignes, pas en octets → 413 possible sur des noms non latins | lots bornés à 80 ko |
+| F1 | `fromCharCode.apply` levait sur un gros QP invalide | `TextDecoder('latin1')` |
+| F2 | Troncature en plein emoji / NUL → l'INSERT groupé tombait en 500 | troncature sûre ; ligne refusée seule (« Caractères invalides ») |
+| F3 | `ORG:constructor` fabriquait une « fiche existante » fantôme | dictionnaires `Object.create(null)` |
+| F4 | Deux imports pouvaient tourner en même temps | verrou de module |
+
+**A résisté** : écriture chez autrui (liste blanche, `node_id` vérifié sous RLS
+avant écriture, FK composites), fuite de PII (logs = code seul), XSS (tout en
+`textContent`), bombes de cartes et de pliage, minimisation.
+
+**Reste à la main de Paul** (registre ⏳, jamais exécuté seul) :
+1. **Région Vercel `cdg1`** (`"regions": ["cdg1"]` dans `vercel.json`) : les
+   fonctions tournent a priori à Washington, la base à Paris — ~85 ms par appel
+   base. Touche le déploiement de tout Ultima → gate.
+2. **Fermer les inscriptions Supabase** (« Allow new signups ») si ce n'est pas
+   fait : un compte ouvert par un tiers pourrait remplir le quota avec cette route
+   (F5). État non vérifiable depuis le dépôt.
+
+**Reporté à la boucle « Sécuriser RIVEN »** (§7) : le NUL et les demi-paires
+passent encore par `POST /api/reseau/personnes` (saisie une à une → 500 sur
+une seule ligne, pas de perte de lot) ; une RPC transactionnelle
+personnes + liens (gate SQL) rendrait l'import atomique.
+
 ## 8. Gates et modèle
 
 - **Pas de migration** → pas de gate SQL.

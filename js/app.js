@@ -2052,6 +2052,9 @@
   // /api/reseau/import. Rien n'est coché par défaut (pre-mortem n°1).
 
   var importEtat = null;
+  // Un seul import en vol à la fois (audit 22/09, F4) : rouvrir l'import
+  // pendant un envoi remettait le verrou à zéro et doublait les créations.
+  var importEnVol = false;
 
   function importReinitialiser() {
     importEtat = {
@@ -2072,6 +2075,10 @@
   }
 
   function ouvrirImport() {
+    if (importEnVol) {
+      toast('Un import est déjà en cours.', 'erreur');
+      return;
+    }
     if (!etat.modeDemo && !etat.session) {
       toast('Connectez-vous pour importer des contacts.', 'erreur');
       return;
@@ -2158,6 +2165,7 @@
       etiquette.appendChild(importElement('span', 'import-nom', c.nom));
       if (c.cartes > 1) { etiquette.appendChild(importElement('span', 'import-marque doublon', c.cartes + ' cartes fusionnées')); }
       if (c.dejaEnBase) { etiquette.appendChild(importElement('span', 'import-marque base', 'déjà dans RIVEN')); }
+      if (c.nomDejaEnBase) { etiquette.appendChild(importElement('span', 'import-marque base', 'même nom dans RIVEN ?')); }
       if (c.fiche) { etiquette.appendChild(importElement('span', 'import-marque fiche', 'fiche existante')); }
       bloc.appendChild(etiquette);
       var detail = [c.fonction, c.organisation, c.telephone, c.email].filter(Boolean).join(' · ');
@@ -2199,31 +2207,34 @@
     var n = choisis.length;
     if (!window.confirm('Importer ' + n + ' personne' + (n > 1 ? 's' : '') + ' dans RIVEN ?')) { return; }
     importEtat.envoiEnCours = true;
+    importEnVol = true;
     importCompter();
     var lignes = choisis.map(function (c) {
       return window.UltimaImport.versPersonne(c, importEtat.rattacher.has(c.id));
     });
-    var bilan = { creees: 0, rattachees: 0, refusees: [], rattachementsEchoues: 0, lotsEchoues: 0, nonEnvoyees: 0 };
+    var bilan = { creees: 0, rattachees: 0, refusees: [], rattachementsEchoues: 0,
+                  nonTraitees: [], echecs: [] };
     var lots = window.UltimaImport.enLots(lignes, window.UltimaImport.LIMITES.lotClient);
     for (var k = 0; k < lots.length; k++) {
       $('#import-statut').textContent = 'Envoi ' + (k + 1) + ' / ' + lots.length + '…';
-      var decalage = k * window.UltimaImport.LIMITES.lotClient;
       try {
         var r = await importEnvoyerLot(lots[k]);
         bilan.creees += r.creees;
         bilan.rattachees += r.rattachees;
         bilan.rattachementsEchoues += (r.rattachementsEchoues || []).length;
         (r.refusees || []).forEach(function (x) {
-          bilan.refusees.push({ ligne: decalage + x.index + 1, raison: x.raison });
+          bilan.refusees.push({ nom: lots[k][x.index] && lots[k][x.index].nom, raison: x.raison });
         });
+        (r.nonTraitees || []).forEach(function (i) { if (lots[k][i]) { bilan.nonTraitees.push(lots[k][i].nom); } });
       } catch (e) {
-        // Lot indépendant : les suivants partent quand même. Un second essai
-        // est sûr — ce qui est déjà entré sera marqué « déjà dans RIVEN ».
-        bilan.lotsEchoues += 1;
-        bilan.nonEnvoyees += lots[k].length;
+        // Lot indépendant : les suivants partent quand même. Mais le résultat
+        // de CE lot est INCONNU (le serveur a pu écrire avant de répondre) :
+        // on ne promet pas qu'une relance est sûre (audit 22/09, M2).
+        bilan.echecs.push({ n: lots[k].length, raison: (e && e.message) || 'erreur réseau' });
       }
     }
     importEtat.envoiEnCours = false;
+    importEnVol = false;
     if (!etat.modeDemo) {
       try { await chargerDonnees(); } catch (e) { /* le bilan reste juste */ }
     }
@@ -2263,12 +2274,18 @@
     if (bilan.rattachementsEchoues) {
       lignes.push(['Rattachements non posés', bilan.rattachementsEchoues + ' (la personne est créée ; à rattacher depuis sa fiche)']);
     }
+    // Les noms s'affichent à Paul, sur SON écran — ils ne partent nulle part.
     lignes.push(['Refusées', bilan.refusees.length
-      ? bilan.refusees.map(function (x) { return 'ligne ' + x.ligne + ' : ' + x.raison; }).join(' · ')
+      ? bilan.refusees.map(function (x) { return (x.nom || '?') + ' : ' + x.raison; }).join(' · ')
       : '0']);
-    if (bilan.lotsEchoues) {
-      lignes.push(['Non envoyées', bilan.nonEnvoyees + ' (coupure réseau) — relancez l’import : ce qui est déjà entré sera reconnu']);
+    if (bilan.nonTraitees.length) {
+      lignes.push(['Non traitées (délai du serveur)', bilan.nonTraitees.length +
+        ' — rien n’a été écrit pour elles, vous pouvez les réimporter : ' + bilan.nonTraitees.join(', ')]);
     }
+    bilan.echecs.forEach(function (x) {
+      lignes.push(['Résultat inconnu', x.n + ' contacts (' + x.raison +
+        ') — vérifiez le registre des personnes avant de relancer']);
+    });
     lignes.push(['Non importés', nonCoches + ' contacts non cochés — rien n’a été envoyé pour eux']);
     lignes.forEach(function (paire) {
       dl.appendChild(importElement('dt', '', paire[0]));
@@ -2314,6 +2331,7 @@
     $('#import-envoyer').addEventListener('click', function () {
       importEnvoyer().catch(function () {
         importEtat.envoiEnCours = false;
+        importEnVol = false;
         importCompter();
         toast('Import interrompu.', 'erreur');
       });
