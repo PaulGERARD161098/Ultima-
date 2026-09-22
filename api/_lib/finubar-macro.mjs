@@ -351,8 +351,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": null,
         "tete_le": null,
@@ -372,7 +372,7 @@ export default {
         "projet": "Ultima",
         "depot": "PaulGERARD161098/Ultima-",
         "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-        "rattache_a": "specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md",
+        "rattache_a": "specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md",
         "etat": "en_cours",
         "jalon": {
           "nom": "J3 — le ciel porte aussi l'état PERSONNEL (P4 : les signaux du cockpit)",
@@ -380,15 +380,17 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-09-22",
-          "quoi": "Fusion de #283 : deux leçons du 22/09 dans memoire/LECONS.md (sceau v36) — un état se met à jour là où l'instrument lit ; un outil de qualité que la CI n'appelle pas n'est pas un…",
-          "commit": "070ac91ff4080b86a3992e7a2fad73f4ca3e2a0c"
+          "quoi": "Import des contacts iPhone dans RIVEN livré (#285) : vCard lue dans le navigateur → registre `personnes`, tri sans case pré-cochée, doublons fusionnés, route POST…",
+          "commit": "13da5d6ca2a826ec7a2af33060bdc16c79424384"
         },
-        "prochaine_action": "Saisir en base les deux idées ADRAMELECH (ADR-005 Le Cercle, ADR-006 Le Rachat) et la situation VRANESH + ses 3 scénarios, depuis CADRAGE-RESEAU-CERCLES.md — ⛔ par Paul, RLS…",
+        "prochaine_action": "Paul importe son vrai export iCloud (.vcf) dans RIVEN : Contacts → Personnes → « Importer des contacts ». Puis ouvrir la boucle « revue contact par contact »…",
         "bloque_par": [
           "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
           "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
           "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
-          "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
+          "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)",
+          "Région Vercel `cdg1` pour les fonctions (base à Paris, fonctions a priori à Washington — ~85 ms par appel base) : gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis",
+          "Vérifier que les inscriptions Supabase sont FERMÉES (« Allow new signups ») — un compte tiers pourrait remplir le quota par la route d'import"
         ],
         "en_attente_depuis": "2026-08-20",
         "boucles_ouvertes": [
@@ -656,7 +658,7 @@ export default {
     "lisibles": 10,
     "illisibles": 0,
     "hors_seance": 0,
-    "repris": 8,
+    "repris": 9,
     "en_cours": 7,
     "en_attente_de_paul": 3,
     "au_repos": 0,
@@ -755,6 +757,14 @@ export default {
       {
         "projet": "Ultima",
         "geste": "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "Région Vercel `cdg1` pour les fonctions (base à Paris, fonctions a priori à Washington — ~85 ms par appel base) : gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "Vérifier que les inscriptions Supabase sont FERMÉES (« Allow new signups ») — un compte tiers pourrait remplir le quota par la route d'import"
       },
       {
         "projet": "mon-dpe.fr",
