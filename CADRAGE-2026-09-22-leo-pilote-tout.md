@@ -543,14 +543,26 @@ parallèles — le chemin critique en impose **un à la fois**.
 | **2** | Le périmètre | **Tout le monde est piloté ou pilotable par Léo** | Aucun gel. Les dix entrent, DATARENO- et renoboost-console compris. ⚠️ Le POV n° 6 (« fuite en avant ») est donc **assumé**, pas écarté : la discipline se tient par le chemin critique — un jalon à la fois |
 | **3** | Les aides | **Calculées automatiquement** | La table tenue à la main est écartée. ✅ Et la mesure a trouvé mieux : **le moteur officiel de l'État** (§0 bis). Le chantier J2 **rétrécit** : plus aucun barème à écrire, à tenir ni à relire |
 
-### ⏳ Ce qui reste à arbitrer
+### ✅ Rendus par Paul le 22/09 — deuxième série
 
-| # | Question | Ce qui en dépend |
-|---|---|---|
-| **4** | **Le 3 clics : catalogue ou croisement ?** Un simulateur d'aides générique — que `mesaides.france-renov.gouv.fr` fait déjà, gratuitement et avec l'autorité de l'État — ou *« pour CE client, avec CE devis, dans CE dossier »* ? ⚠️ Depuis que la source officielle est identifiée, **la question n'est plus ouverte de la même façon** : reproduire le simulateur public n'apporte rien. La valeur est dans le croisement avec le parc | La nature de J4 |
-| **4bis** | ⛔ **Les ENTREPRISES** — le moteur officiel ne couvre que le logement. Trois options : (a) on **dit** que le tertiaire n'est pas couvert et on s'arrête au particulier + copropriété ; (b) on ajoute une source tertiaire (fiches `BAT-TH-*`), qui est un chantier à part entière ; (c) pour ce public, Léo **oriente** au lieu de chiffrer | Le périmètre réel du « conseiller en 3 clics ». ⛔ Aucune option n'autorise un prompt à inventer des montants |
-| **5** | **Quelle Léo ?** Les droits d'écriture visent Léo-**produit** (`api/leo.js`). Confirmé ? | Léo-séance écrit déjà ; seuls les gates la bornent |
-| **6** | **L'anneau vert** (§2) te convient-il tel quel ? | Le contenu de J3 |
+| # | Question | Réponse | Effet sur le chantier |
+|---|---|---|---|
+| **4** | Le 3 clics : catalogue ou croisement ? | **Croisement avec le parc** | ⛔ On ne reproduit PAS le simulateur public. J4 devient : **Léo pré-remplit la situation depuis le dossier** (client, devis, DPE, artisan) et n'appelle le moteur que pour le calcul. ✅ C'est la Directive IA servie à la lettre — le client ne saisit presque rien, il **valide**. ⚠️ Conséquence à assumer : **le « 3 clics » n'existe que s'il y a un dossier**. J4 dépend donc de la qualité de la donnée client, pas seulement du moteur |
+| **4bis** | Les entreprises (tertiaire) | **Léo oriente, sans chiffrer** | Pour un public tertiaire, Léo nomme les dispositifs (CEE `BAT-TH-*`), pointe les interlocuteurs, et **dit explicitement qu'elle ne chiffre pas** faute de source officielle ouverte. ⛔ **Garde-fou éprouvable, et il est obligatoire** : un contrôle vérifie qu'**aucun montant n'est produit** sur un dossier tertiaire — éprouvé en le cassant, sinon il ne garde rien |
+| **5** | Quelle Léo ? | **Léo-produit (`api/leo.js`)** | J3 porte sur l'interface d'Ultima. ⚠️ Les gates de Léo-séance restent **inchangés** : ce chantier ne les desserre pas |
+| **6** | L'anneau vert | **Tel que défini au §2** | Grains Finubar, notes, journaux, idées, statuts internes, brouillons non envoyés, fichiers de pilotage. Réversible et journalisé |
+
+⛔ **LES SEPT ARBITRAGES SONT RENDUS. Le gate d'entrée EL est LEVÉ** — le cadrage
+est suffisant, l'exécution peut commencer au go de Paul.
+
+⚠️ **Ce que la décision 4bis ajoute au pre-mortem, et qui n'y était pas** : un
+public pour lequel l'outil **refuse** de chiffrer est un chemin que personne
+n'emprunte volontiers, donc **un chemin jamais vérifié**. C'est précisément le mode
+de panne que la Directive DR nomme : *le garde-fou s'éprouve du côté où il peut
+être contourné*. Le contrôle ne se contente donc pas de vérifier qu'un dossier
+tertiaire ne produit pas de montant — il vérifie aussi qu'un dossier **logement**
+en produit bien un, sinon « aucun montant » serait vert par vacuité sur un outil
+entièrement cassé.
 
 ### ⚠️ Ce que la décision 2 change au pre-mortem
 
@@ -572,17 +584,24 @@ C'est ce que le grain `etat` porte déjà. ⛔ Ne pas confondre couverture et ch
 
 ## §9 — La prochaine action, unique
 
-**Décision 4 / 4bis** — le 3 clics est-il un **croisement** avec le parc, et que
-fait-on des **entreprises** ? C'est la seule question qui reste sur le chemin
-critique : J1 et J2 sont désormais cadrés et débloqués.
+**J1 — le parc complet et surveillé.** Plus rien n'en dépend : les sept arbitrages
+sont rendus, la source des aides est identifiée et lue.
 
-⚠️ **Et ce qui n'attend plus personne** : les décisions 1, 2 et 3 sont rendues, et
-la source des aides est identifiée et lue. **J1 peut partir dès le go** —
-`depots.json` remis au réel à dix entrées (Ripair retiré, Artidispo déclaré), les
-deux grains manquants semés depuis l'état réel, la collecte lue par l'API GitHub,
-et le témoin de registre éprouvé en le cassant.
+Ce que J1 fait, et rien d'autre :
+1. `depots.json` remis au réel — **dix entrées mesurées** : `ripair` retiré
+   (c'est un service de RenoPredict), **Artidispo déclaré**, DATARENO- et
+   renoboost-console ajoutés.
+2. Les **deux grains manquants semés** depuis l'état réel — `git log` + doc de
+   reprise, commit vérifié par `merge-base --is-ancestor`. ⛔ Jamais de mémoire.
+3. La collecte lit les grains par l'**API GitHub** quand le dossier n'est pas sur
+   disque — repli, jamais remplacement : le disque reste prioritaire.
+4. Le **témoin de registre**, comparé aux dépôts **portant un `FINUBAR.md`** (pas
+   au compte GitHub), **éprouvé en le cassant**.
 
-⛔ **Ce qui doit être revérifié hors proxy avant J2**, nommément : l'URL de base et
-les routes de l'API (`mesaides.france-renov.gouv.fr/api-doc`), l'avertissement CEE,
-et la disponibilité réelle du service. Cette séance a lu **le modèle** (code cloné,
-`mesaidesreno` v2.3.1) — elle n'a pas pu appeler **l'API**.
+**Critère de sortie** : `node finubar/collecter.mjs` → **10 projets,
+`hors_seance: 0`**, depuis une séance sans dépôt attaché · et le témoin rougit en
+nommant le dépôt quand on retire une ligne du registre.
+
+⛔ **Ce qui reste à faire hors proxy avant J2**, nommément : appeler l'API
+(`mesaides.france-renov.gouv.fr/api-doc`), vérifier l'avertissement CEE et la
+disponibilité réelle du service. Cette séance a lu **le modèle**, pas **l'API**.
