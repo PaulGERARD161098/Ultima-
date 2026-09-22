@@ -169,9 +169,9 @@
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "9129e7a",
-        "tete_le": "2026-09-22T10:30:29+00:00",
-        "commits_depuis": 3,
+        "tete": "1070e44",
+        "tete_le": "2026-09-22T10:35:55+00:00",
+        "commits_depuis": 4,
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-22",
@@ -327,7 +327,7 @@
         },
         "dernier_arret": {
           "le": "2026-09-19",
-          "quoi": "Gate 1 FRANCHI — page de désinscription en ligne (Netlify Drop, après 4 échecs Vercel), réécrite pour un lectorat de particuliers (PR #31). Session B4 tenue, mails v2 appliqués…",
+          "quoi": "Gate 1 FRANCHI — page de désinscription en ligne. Mails v2, point de reprise à jour (PR #31 #32 #33), 235 tests verts. Détail : REPRISE.md",
           "commit": "4b897c7c2fc55977b1052ae6e5e640e10cf1962b"
         },
         "prochaine_action": "Poser le mot de passe SMTP — c'est le SEUL blocage restant avant le premier envoi réel (REPRISE.md, section blocages).",
@@ -339,9 +339,7 @@
         "boucles_ouvertes": [],
         "maj": "2026-09-22"
       },
-      "recits": [
-        "dernier_arret.quoi"
-      ],
+      "recits": [],
       "ciel": "alpha",
       "hors_seance": false,
       "reprise": false,
@@ -616,30 +614,27 @@
         },
         "dernier_arret": {
           "le": "2026-09-10",
-          "quoi": "Refonte de page.tsx (SidebarPanel, SimulatorCard), intégration Gemini dans core_engine.py, onglet Veille Stratégique (MonitoringDashboard, JORF + concurrents). Aucun travail…",
+          "quoi": "Refonte de page.tsx, Gemini dans core_engine.py, onglet Veille Stratégique (JORF). Aucun travail depuis.",
           "commit": "d751368c7b0b05d76c52313cde63a4055740f7a5"
         },
         "prochaine_action": "Retirer les cinq sources d'aides et brancher le moteur officiel — voir le cadrage §3, les dix points.",
         "bloque_par": [
-          "⛔ TROIS TAUX D'ÉCRÊTEMENT SUR QUATRE SONT FAUX dans le prompt de core_engine.py, mesurés le 22/09 contre ampleur.publicodes (modèle officiel mesaidesreno v2.3.1) : modeste 90 % et…",
-          "⛔ DEUX DES CINQ SOURCES D'AIDES POINTENT VERS DES DOMAINES QUI NE RÉSOLVENT PAS : citoyens.gouv.fr et api.maprimerenov.gouv.fr (mesuré au DNS le 22/09, avec témoin de…",
-          "⛔ LES CINQ catch DE lib/aidsApi.ts RENDENT [] EN SILENCE : une source morte et une absence d'aide donnent le même écran.",
-          "⛔ 50 000 € (plafond éco-PTZ) EST ÉCRIT À DEUX ENDROITS : le prompt et src/app/page.tsx:61. Et c'est une valeur par DÉFAUT au bout de variations, pas une règle : page.tsx applique…",
-          "⛔ DEUX core_engine.py DIVERGENTS : racine (genai.Client, gemini-2.5-flash) et lib/ (genai.configure, API précédente).",
-          "⛔ LE PERSONA EST CALIBRÉ POUR L'ARTISAN, PAS POUR LE PARTICULIER : « chef d'entreprise RGE agressif », « maximiser la marge nette ». Il contredit frontalement les garde-fous…",
-          "⚠️ LA SOURCE OFFICIELLE DÉCLARE ELLE-MÊME LES CEE NON À JOUR (« en attente d'une mise à jour du simulateur ») — or les CEE sont le cœur du montage. [À REVÉRIFIER hors proxy]",
-          "⚠️ LES ENTREPRISES (tertiaire, fiches BAT-TH-*) NE SONT PAS COUVERTES par le moteur officiel, qui porte sur le logement. Arbitrage de Paul du 22/09 : Léo ORIENTE sans chiffrer.",
-          "⚠️ AUCUN TEST, AUCUNE CI dans ce dépôt. Le garde-fou « aucun montant sur un dossier tertiaire » exigé par l'arbitrage 4bis n'a donc nulle part où vivre aujourd'hui.",
-          "GEMINI_API_KEY : saisie en variable d'environnement = action de Paul."
+          "⛔ 3 TAUX D'ÉCRÊTEMENT SUR 4 SONT FAUX dans le prompt (modeste 90 et non 80, intermédiaire 80 et non 60, supérieur 50 et non 40). Ils SOUS-ESTIMENT l'aide. Cadrage §0bis",
+          "⛔ 2 des 5 sources d'aides pointent vers des domaines qui NE RÉSOLVENT PAS (citoyens.gouv.fr, api.maprimerenov.gouv.fr). Les 3 autres : NON VÉRIFIÉ, proxy fermé",
+          "⛔ Les 5 catch de lib/aidsApi.ts rendent [] EN SILENCE : source morte et absence d'aide donnent le même écran",
+          "⛔ 50 000 € écrit à DEUX endroits (prompt + page.tsx:61), et c'est une valeur par défaut au bout de variations, pas une règle",
+          "⛔ DEUX core_engine.py divergents : racine (genai.Client) et lib/ (genai.configure)",
+          "⛔ Le persona « RGE agressif, maximiser la marge » contredit les garde-fous conformité de DATARENO-/CLAUDE.md, applicables au conseil au particulier",
+          "⚠️ La source officielle déclare elle-même les CEE NON À JOUR — or les CEE sont le cœur du montage. [À REVÉRIFIER hors proxy]",
+          "⚠️ Les ENTREPRISES (tertiaire, BAT-TH) ne sont pas couvertes par le moteur officiel. Arbitrage Paul 22/09 : Léo ORIENTE sans chiffrer",
+          "⚠️ AUCUN test, AUCUNE CI : le garde-fou « zéro montant sur un dossier tertiaire » n'a nulle part où vivre",
+          "GEMINI_API_KEY en variable d'environnement : action de Paul"
         ],
         "en_attente_depuis": "2026-09-10",
         "boucles_ouvertes": [],
         "maj": "2026-09-22"
       },
-      "recits": [
-        "dernier_arret.quoi",
-        "bloque_par[]"
-      ],
+      "recits": [],
       "ciel": "renoboost-ia",
       "hors_seance": false,
       "reprise": false,
@@ -830,43 +825,43 @@
       },
       {
         "projet": "RénoBoost Console",
-        "geste": "⛔ TROIS TAUX D'ÉCRÊTEMENT SUR QUATRE SONT FAUX dans le prompt de core_engine.py, mesurés le 22/09 contre ampleur.publicodes (modèle officiel mesaidesreno v2.3.1) : modeste 90 % et…"
+        "geste": "⛔ 3 TAUX D'ÉCRÊTEMENT SUR 4 SONT FAUX dans le prompt (modeste 90 et non 80, intermédiaire 80 et non 60, supérieur 50 et non 40). Ils SOUS-ESTIMENT l'aide. Cadrage §0bis"
       },
       {
         "projet": "RénoBoost Console",
-        "geste": "⛔ DEUX DES CINQ SOURCES D'AIDES POINTENT VERS DES DOMAINES QUI NE RÉSOLVENT PAS : citoyens.gouv.fr et api.maprimerenov.gouv.fr (mesuré au DNS le 22/09, avec témoin de…"
+        "geste": "⛔ 2 des 5 sources d'aides pointent vers des domaines qui NE RÉSOLVENT PAS (citoyens.gouv.fr, api.maprimerenov.gouv.fr). Les 3 autres : NON VÉRIFIÉ, proxy fermé"
       },
       {
         "projet": "RénoBoost Console",
-        "geste": "⛔ LES CINQ catch DE lib/aidsApi.ts RENDENT [] EN SILENCE : une source morte et une absence d'aide donnent le même écran."
+        "geste": "⛔ Les 5 catch de lib/aidsApi.ts rendent [] EN SILENCE : source morte et absence d'aide donnent le même écran"
       },
       {
         "projet": "RénoBoost Console",
-        "geste": "⛔ 50 000 € (plafond éco-PTZ) EST ÉCRIT À DEUX ENDROITS : le prompt et src/app/page.tsx:61. Et c'est une valeur par DÉFAUT au bout de variations, pas une règle : page.tsx applique…"
+        "geste": "⛔ 50 000 € écrit à DEUX endroits (prompt + page.tsx:61), et c'est une valeur par défaut au bout de variations, pas une règle"
       },
       {
         "projet": "RénoBoost Console",
-        "geste": "⛔ DEUX core_engine.py DIVERGENTS : racine (genai.Client, gemini-2.5-flash) et lib/ (genai.configure, API précédente)."
+        "geste": "⛔ DEUX core_engine.py divergents : racine (genai.Client) et lib/ (genai.configure)"
       },
       {
         "projet": "RénoBoost Console",
-        "geste": "⛔ LE PERSONA EST CALIBRÉ POUR L'ARTISAN, PAS POUR LE PARTICULIER : « chef d'entreprise RGE agressif », « maximiser la marge nette ». Il contredit frontalement les garde-fous…"
+        "geste": "⛔ Le persona « RGE agressif, maximiser la marge » contredit les garde-fous conformité de DATARENO-/CLAUDE.md, applicables au conseil au particulier"
       },
       {
         "projet": "RénoBoost Console",
-        "geste": "⚠️ LA SOURCE OFFICIELLE DÉCLARE ELLE-MÊME LES CEE NON À JOUR (« en attente d'une mise à jour du simulateur ») — or les CEE sont le cœur du montage. [À REVÉRIFIER hors proxy]"
+        "geste": "⚠️ La source officielle déclare elle-même les CEE NON À JOUR — or les CEE sont le cœur du montage. [À REVÉRIFIER hors proxy]"
       },
       {
         "projet": "RénoBoost Console",
-        "geste": "⚠️ LES ENTREPRISES (tertiaire, fiches BAT-TH-*) NE SONT PAS COUVERTES par le moteur officiel, qui porte sur le logement. Arbitrage de Paul du 22/09 : Léo ORIENTE sans chiffrer."
+        "geste": "⚠️ Les ENTREPRISES (tertiaire, BAT-TH) ne sont pas couvertes par le moteur officiel. Arbitrage Paul 22/09 : Léo ORIENTE sans chiffrer"
       },
       {
         "projet": "RénoBoost Console",
-        "geste": "⚠️ AUCUN TEST, AUCUNE CI dans ce dépôt. Le garde-fou « aucun montant sur un dossier tertiaire » exigé par l'arbitrage 4bis n'a donc nulle part où vivre aujourd'hui."
+        "geste": "⚠️ AUCUN test, AUCUNE CI : le garde-fou « zéro montant sur un dossier tertiaire » n'a nulle part où vivre"
       },
       {
         "projet": "RénoBoost Console",
-        "geste": "GEMINI_API_KEY : saisie en variable d'environnement = action de Paul."
+        "geste": "GEMINI_API_KEY en variable d'environnement : action de Paul"
       }
     ]
   },
@@ -879,7 +874,7 @@
       },
       {
         "projet": "Ultima",
-        "dit": "a avancé de 3 commit(s) depuis sa dernière note",
+        "dit": "a avancé de 4 commit(s) depuis sa dernière note",
         "pourquoi": "derive"
       },
       {
