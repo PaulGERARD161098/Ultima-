@@ -24,7 +24,7 @@
   "projet": "Ultima",
   "depot": "PaulGERARD161098/Ultima-",
   "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-  "rattache_a": "specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md (boucle suivante)",
+  "rattache_a": "specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md",
   "etat": "en_cours",
   "jalon": {
     "nom": "J3 — le ciel porte aussi l'état PERSONNEL (P4 : les signaux du cockpit)",
@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-22",
-    "commit": "aca4fd2d76e6f1419371366da2ba29dccd42713c",
-    "quoi": "Cadrage de l'import des contacts iPhone dans RIVEN (vCard → registre personnes, ~500 contacts) : CADRAGE-RIVEN-IMPORT.md + maquette design/preview-riven-import.html. Boucle SUIVANTE, validée par Paul ; aucune ligne de code produit, aucune migration."
+    "commit": "070ac91ff4080b86a3992e7a2fad73f4ca3e2a0c",
+    "quoi": "Fusion de #283 : deux leçons du 22/09 dans memoire/LECONS.md (sceau v36) — un état se met à jour là où l'instrument lit ; un outil de qualité que la CI n'appelle pas n'est pas un contrôle."
   },
   "prochaine_action": "Saisir en base les deux idées ADRAMELECH (ADR-005 Le Cercle, ADR-006 Le Rachat) et la situation VRANESH + ses 3 scénarios, depuis CADRAGE-RESEAU-CERCLES.md — ⛔ par Paul, RLS mono-utilisateur, jamais en service_role. Remesurer max(adr_num) avant (4 au 21/09).",
   "bloque_par": [
