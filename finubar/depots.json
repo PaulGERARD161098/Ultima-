@@ -1,10 +1,12 @@
 [
-  { "dossier": "Ultima-",         "depot": "PaulGERARD161098/Ultima-",         "ciel": "racine" },
-  { "dossier": "RenoBoost",       "depot": "PaulGERARD161098/RenoBoost",       "ciel": "renoboost-ia" },
-  { "dossier": "RenoDevis",       "depot": "PaulGERARD161098/RenoDevis",       "ciel": "renoboost-ia" },
-  { "dossier": "RenoAgenda",      "depot": "PaulGERARD161098/RenoAgenda",      "ciel": "renoboost-ia" },
-  { "dossier": "RenoPredict",     "depot": "PaulGERARD161098/RenoPredict",     "ciel": "renoboost-ia" },
-  { "dossier": "mon-dpe.fr",      "depot": "PaulGERARD161098/mon-dpe.fr",      "ciel": "alpha" },
-  { "dossier": "artisan-builder", "depot": "PaulGERARD161098/artisan-builder", "ciel": "alpha" },
-  { "dossier": "ripair",          "depot": "paggerard-boop/ripair",            "ciel": "alpha" }
+  { "dossier": "Ultima-",            "depot": "PaulGERARD161098/Ultima-",            "ciel": "racine" },
+  { "dossier": "RenoBoost",          "depot": "PaulGERARD161098/RenoBoost",          "ciel": "renoboost-ia" },
+  { "dossier": "RenoDevis",          "depot": "PaulGERARD161098/RenoDevis",          "ciel": "renoboost-ia" },
+  { "dossier": "RenoAgenda",         "depot": "PaulGERARD161098/RenoAgenda",         "ciel": "renoboost-ia" },
+  { "dossier": "RenoPredict",        "depot": "PaulGERARD161098/RenoPredict",        "ciel": "renoboost-ia" },
+  { "dossier": "renoboost-console",  "depot": "PaulGERARD161098/renoboost-console",  "ciel": "renoboost-ia" },
+  { "dossier": "mon-dpe.fr",         "depot": "PaulGERARD161098/mon-dpe.fr",         "ciel": "alpha" },
+  { "dossier": "artisan-builder",    "depot": "PaulGERARD161098/artisan-builder",    "ciel": "alpha" },
+  { "dossier": "Artidispo",          "depot": "paggerard-boop/Artidispo",            "ciel": "alpha" },
+  { "dossier": "DATARENO-",          "depot": "PaulGERARD161098/DATARENO-",          "ciel": "alpha" }
 ]

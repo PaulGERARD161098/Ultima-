@@ -15,7 +15,7 @@
 // Aucune écriture ailleurs que dans `finubar/macro.json`. Aucun réseau.
 // `git` est appelé par execFileSync en tableau d'arguments (jamais de shell).
 
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -217,6 +217,41 @@ const entrees = depots.map((d) => {
   if (divergentes.length) {
     console.error(`⚠️  Rappel DIVERGENT de sa source dans : ${divergentes.join(', ')}.`);
     console.error('    La source unique est finubar/rappel.mjs. Re-copier depuis elle, ne jamais corriger une copie.');
+  }
+}
+
+// ⑥ LE TÉMOIN DU REGISTRE — un dépôt SEMÉ mais NON DÉCLARÉ est invisible.
+// Posé le 2026-09-22, après une mesure : Artidispo portait son grain ET son
+// rappel depuis le 14/09 (gestes 1 et 2 du mode d'emploi) sans jamais figurer
+// dans `depots.json` (geste 3). Il n'est donc jamais entré dans une collecte.
+//
+// ⛔ ET L'OMISSION ÉTAIT STRUCTURELLEMENT MUETTE : cette collecte ITÈRE sur
+// `depots.json`. Elle ne peut pas voir ce qui n'y figure pas — un dépôt oublié
+// et un dépôt inexistant rendaient exactement le même écran. Les deux premiers
+// gestes laissent une trace dans le dépôt qu'on sème ; le troisième vit ici, et
+// son absence ne produisait rien.
+//
+// ⚠️ IL COMPARE AUX DOSSIERS PORTANT UN `FINUBAR.md`, JAMAIS AU COMPTE GITHUB.
+// Lister les dépôts du compte ferait crier ce témoin sur des forks, des
+// archives et des essais : il finirait désarmé par lassitude, et un témoin
+// qu'on désarme est pire qu'un témoin absent. Un dépôt SEMÉ et non déclaré est
+// une incohérence CERTAINE ; un dépôt sans grain n'est simplement pas suivi, et
+// c'est un état légitime sur lequel on se tait.
+{
+  const declares = new Set(depots.map((d) => d.dossier));
+  const semesNonDeclares = [];
+  let voisins = [];
+  try { voisins = readdirSync(resolve(RACINE_ULTIMA, '..'), { withFileTypes: true }); } catch { voisins = []; }
+  voisins.forEach((e) => {
+    if (!e.isDirectory() || declares.has(e.name) || !NOM_DOSSIER.test(e.name)) return;
+    if (existsSync(join(resolve(RACINE_ULTIMA, '..'), e.name, 'FINUBAR.md'))) semesNonDeclares.push(e.name);
+  });
+  if (semesNonDeclares.length) {
+    console.error(`\n⛔ ${semesNonDeclares.length} dépôt(s) SEMÉ(S) mais NON DÉCLARÉ(S) dans depots.json : ${semesNonDeclares.join(', ')}`);
+    console.error('    Ils portent un FINUBAR.md et n\'entrent dans AUCUNE collecte — donc ils sont invisibles,');
+    console.error('    et leur absence de l\'écran se lit comme un dépôt sans problème.');
+    console.error('    → Ajouter leur ligne à finubar/depots.json (geste 3 du mode d\'emploi), puis recollecter.');
+    process.exit(4);
   }
 }
 
