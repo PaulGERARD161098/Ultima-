@@ -1683,6 +1683,7 @@
       compteur.textContent = '';
       outils.hidden = true;
       boutonAjouter.hidden = true;
+      $('#contacts-importer').hidden = true;
       registres.hidden = true;
       conteneur.appendChild(blocEtatContacts(
         'Connectez-vous pour retrouver votre réseau.',
@@ -1695,6 +1696,7 @@
       return;
     }
     boutonAjouter.hidden = false;
+    $('#contacts-importer').hidden = etat.registreContacts !== 'personnes';
     registres.hidden = false;
 
     // Registre PERSONNES (0024) : les gens, qui n'ont besoin d'aucun nœud.
@@ -2044,6 +2046,284 @@
     $('#panneau-titre').focus();
   }
 
+  // ---------- Import iPhone (CADRAGE-RIVEN-IMPORT.md) ----------
+  // Le fichier est lu ICI, dans le navigateur (FileReader) : il ne part vers
+  // aucun service. Seules les lignes COCHÉES partent, par lots, à
+  // /api/reseau/import. Rien n'est coché par défaut (pre-mortem n°1).
+
+  var importEtat = null;
+
+  function importReinitialiser() {
+    importEtat = {
+      contacts: [], coches: new Set(), rattacher: new Set(),
+      filtreOrg: false, filtreDbl: false, envoiEnCours: false
+    };
+    $('#import-fichier').value = '';
+    $('#import-filtre').value = '';
+    $('#import-f-org').setAttribute('aria-pressed', 'false');
+    $('#import-f-dbl').setAttribute('aria-pressed', 'false');
+    $('#import-statut').textContent = '';
+  }
+
+  function importEtape(nom) {
+    $('#import-etape-fichier').hidden = nom !== 'fichier';
+    $('#import-etape-tri').hidden = nom !== 'tri';
+    $('#import-etape-bilan').hidden = nom !== 'bilan';
+  }
+
+  function ouvrirImport() {
+    if (!etat.modeDemo && !etat.session) {
+      toast('Connectez-vous pour importer des contacts.', 'erreur');
+      return;
+    }
+    importReinitialiser();
+    importEtape('fichier');
+    ouvrirPanneau('import', 'Importer des contacts');
+    $('#panneau-titre').focus();
+  }
+
+  function importLireFichier(fichier) {
+    if (!fichier) { return; }
+    var L = window.UltimaImport.LIMITES;
+    if (fichier.size > L.octets) {
+      toast('Fichier trop volumineux (50 Mo au plus).', 'erreur');
+      return;
+    }
+    if (!/\.vcf$/i.test(fichier.name || '') && !/vcard/i.test(fichier.type || '')) {
+      toast('Ce fichier n’est pas une vCard (.vcf).', 'erreur');
+      return;
+    }
+    var lecteur = new FileReader();
+    lecteur.onerror = function () { toast('Lecture du fichier impossible.', 'erreur'); };
+    lecteur.onload = function () {
+      var lu = window.UltimaImport.lireVcard(String(lecteur.result || ''));
+      if (lu.tropDeCartes) {
+        toast('Fichier trop long (' + L.cartes + ' contacts au plus).', 'erreur');
+        return;
+      }
+      if (!lu.contacts.length) {
+        toast('Aucun contact lisible dans ce fichier.', 'erreur');
+        return;
+      }
+      importEtat.contacts = window.UltimaImport.regrouper(lu.contacts, etat.personnes || [], etat.noeuds || []);
+      var fusionnes = importEtat.contacts.filter(function (c) { return c.cartes > 1; }).length;
+      var enBase = importEtat.contacts.filter(function (c) { return c.dejaEnBase; }).length;
+      var parties = [lu.cartes + ' cartes lues', importEtat.contacts.length + ' contacts'];
+      if (fusionnes) { parties.push(fusionnes + ' doublons fusionnés'); }
+      if (lu.rejets.length) { parties.push(lu.rejets.length + ' illisibles (sans nom), écartées'); }
+      if (enBase) { parties.push(enBase + ' déjà dans RIVEN'); }
+      $('#import-lu').textContent = parties.join(' · ');
+      importEtape('tri');
+      importRendre();
+      importCompter();
+      $('#import-filtre').focus();
+    };
+    lecteur.readAsText(fichier, 'utf-8');
+  }
+
+  function importVisibles() {
+    var q = $('#import-filtre').value.trim().toLowerCase();
+    return importEtat.contacts.filter(function (c) {
+      if (q && [c.nom, c.organisation, c.fonction].join(' ').toLowerCase().indexOf(q) === -1) { return false; }
+      if (importEtat.filtreOrg && !c.organisation) { return false; }
+      if (importEtat.filtreDbl && c.cartes < 2) { return false; }
+      return true;
+    });
+  }
+
+  function importElement(tag, classe, texte) {
+    var e = document.createElement(tag);
+    if (classe) { e.className = classe; }
+    if (texte !== undefined) { e.textContent = texte; } // jamais innerHTML : le fichier est hostile
+    return e;
+  }
+
+  function importRendre() {
+    var liste = $('#import-liste');
+    liste.textContent = '';
+    importVisibles().forEach(function (c) {
+      var li = importElement('li');
+      var case_ = importElement('input');
+      case_.type = 'checkbox';
+      case_.id = 'import-' + c.id;
+      case_.checked = importEtat.coches.has(c.id);
+      case_.disabled = c.dejaEnBase;
+      case_.addEventListener('change', function () {
+        if (case_.checked) { importEtat.coches.add(c.id); } else { importEtat.coches.delete(c.id); }
+        importCompter();
+      });
+      var bloc = importElement('div');
+      var etiquette = importElement('label');
+      etiquette.htmlFor = case_.id;
+      etiquette.appendChild(importElement('span', 'import-nom', c.nom));
+      if (c.cartes > 1) { etiquette.appendChild(importElement('span', 'import-marque doublon', c.cartes + ' cartes fusionnées')); }
+      if (c.dejaEnBase) { etiquette.appendChild(importElement('span', 'import-marque base', 'déjà dans RIVEN')); }
+      if (c.fiche) { etiquette.appendChild(importElement('span', 'import-marque fiche', 'fiche existante')); }
+      bloc.appendChild(etiquette);
+      var detail = [c.fonction, c.organisation, c.telephone, c.email].filter(Boolean).join(' · ');
+      if (c.alertes.length) { detail += (detail ? ' · ' : '') + c.alertes.join(', '); }
+      if (detail) { bloc.appendChild(importElement('div', 'import-detail', detail)); }
+      if (c.fiche && !c.dejaEnBase) {
+        var ratt = importElement('label', 'import-ratt');
+        var caseRatt = importElement('input');
+        caseRatt.type = 'checkbox';
+        caseRatt.checked = importEtat.rattacher.has(c.id);
+        caseRatt.addEventListener('change', function () {
+          if (caseRatt.checked) { importEtat.rattacher.add(c.id); } else { importEtat.rattacher.delete(c.id); }
+        });
+        ratt.appendChild(caseRatt);
+        ratt.appendChild(document.createTextNode(' Rattacher à la fiche « ' + c.fiche.nom + ' »'));
+        bloc.appendChild(ratt);
+      }
+      li.appendChild(case_);
+      li.appendChild(bloc);
+      liste.appendChild(li);
+    });
+  }
+
+  function importCompter() {
+    var n = importEtat.coches.size;
+    var vus = new Set(importVisibles().map(function (c) { return c.id; }));
+    var caches = 0;
+    importEtat.coches.forEach(function (id) { if (!vus.has(id)) { caches += 1; } });
+    // Un contact coché puis masqué par le filtre ne part pas à l'insu de Paul.
+    $('#import-compte').textContent = n + (n > 1 ? ' contacts cochés' : ' contact coché') +
+      ' sur ' + importEtat.contacts.length +
+      (caches ? ' — dont ' + caches + ' masqué' + (caches > 1 ? 's' : '') + ' par le filtre' : '');
+    $('#import-envoyer').disabled = n === 0 || importEtat.envoiEnCours;
+  }
+
+  async function importEnvoyer() {
+    var choisis = importEtat.contacts.filter(function (c) { return importEtat.coches.has(c.id) && !c.dejaEnBase; });
+    if (!choisis.length || importEtat.envoiEnCours) { return; }
+    var n = choisis.length;
+    if (!window.confirm('Importer ' + n + ' personne' + (n > 1 ? 's' : '') + ' dans RIVEN ?')) { return; }
+    importEtat.envoiEnCours = true;
+    importCompter();
+    var lignes = choisis.map(function (c) {
+      return window.UltimaImport.versPersonne(c, importEtat.rattacher.has(c.id));
+    });
+    var bilan = { creees: 0, rattachees: 0, refusees: [], rattachementsEchoues: 0, lotsEchoues: 0, nonEnvoyees: 0 };
+    var lots = window.UltimaImport.enLots(lignes, window.UltimaImport.LIMITES.lotClient);
+    for (var k = 0; k < lots.length; k++) {
+      $('#import-statut').textContent = 'Envoi ' + (k + 1) + ' / ' + lots.length + '…';
+      var decalage = k * window.UltimaImport.LIMITES.lotClient;
+      try {
+        var r = await importEnvoyerLot(lots[k]);
+        bilan.creees += r.creees;
+        bilan.rattachees += r.rattachees;
+        bilan.rattachementsEchoues += (r.rattachementsEchoues || []).length;
+        (r.refusees || []).forEach(function (x) {
+          bilan.refusees.push({ ligne: decalage + x.index + 1, raison: x.raison });
+        });
+      } catch (e) {
+        // Lot indépendant : les suivants partent quand même. Un second essai
+        // est sûr — ce qui est déjà entré sera marqué « déjà dans RIVEN ».
+        bilan.lotsEchoues += 1;
+        bilan.nonEnvoyees += lots[k].length;
+      }
+    }
+    importEtat.envoiEnCours = false;
+    if (!etat.modeDemo) {
+      try { await chargerDonnees(); } catch (e) { /* le bilan reste juste */ }
+    }
+    rafraichir();
+    importAfficherBilan(bilan, importEtat.contacts.length - n);
+  }
+
+  async function importEnvoyerLot(lignes) {
+    if (etat.modeDemo) {
+      var creees = 0;
+      var rattachees = 0;
+      lignes.forEach(function (l) {
+        var p = { id: idLocal() };
+        ['nom', 'fonction', 'telephone', 'email', 'notes'].forEach(function (ch) { if (l[ch]) { p[ch] = l[ch]; } });
+        etat.personnes.push(p);
+        creees += 1;
+        if (l.node_id) {
+          etat.rattachements.push({ id: idLocal(), personne_id: p.id, node_id: l.node_id, role: null });
+          rattachees += 1;
+        }
+      });
+      return { creees: creees, rattachees: rattachees, refusees: [], rattachementsEchoues: [] };
+    }
+    return appelApi('/api/reseau/import', {
+      method: 'POST',
+      body: JSON.stringify({ personnes: lignes })
+    });
+  }
+
+  function importAfficherBilan(bilan, nonCoches) {
+    var dl = $('#import-bilan');
+    dl.textContent = '';
+    var lignes = [
+      ['Personnes créées', String(bilan.creees)],
+      ['Rattachées à une fiche', String(bilan.rattachees)]
+    ];
+    if (bilan.rattachementsEchoues) {
+      lignes.push(['Rattachements non posés', bilan.rattachementsEchoues + ' (la personne est créée ; à rattacher depuis sa fiche)']);
+    }
+    lignes.push(['Refusées', bilan.refusees.length
+      ? bilan.refusees.map(function (x) { return 'ligne ' + x.ligne + ' : ' + x.raison; }).join(' · ')
+      : '0']);
+    if (bilan.lotsEchoues) {
+      lignes.push(['Non envoyées', bilan.nonEnvoyees + ' (coupure réseau) — relancez l’import : ce qui est déjà entré sera reconnu']);
+    }
+    lignes.push(['Non importés', nonCoches + ' contacts non cochés — rien n’a été envoyé pour eux']);
+    lignes.forEach(function (paire) {
+      dl.appendChild(importElement('dt', '', paire[0]));
+      dl.appendChild(importElement('dd', '', paire[1]));
+    });
+    importEtape('bilan');
+    $('#import-statut').textContent = 'Import terminé : ' + bilan.creees + ' personne' + (bilan.creees > 1 ? 's' : '') + ' créée' + (bilan.creees > 1 ? 's' : '') + '.';
+  }
+
+  function brancherImport() {
+    $('#contacts-importer').addEventListener('click', ouvrirImport);
+    $('#import-choisir').addEventListener('click', function () { $('#import-fichier').click(); });
+    $('#import-fichier').addEventListener('change', function (e) {
+      importLireFichier(e.target.files && e.target.files[0]);
+    });
+    var depot = $('#import-depot');
+    depot.addEventListener('dragover', function (e) { e.preventDefault(); depot.classList.add('survol'); });
+    depot.addEventListener('dragleave', function () { depot.classList.remove('survol'); });
+    depot.addEventListener('drop', function (e) {
+      e.preventDefault();
+      depot.classList.remove('survol');
+      importLireFichier(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]);
+    });
+    $('#import-filtre').addEventListener('input', function () { importRendre(); importCompter(); });
+    $('#import-f-org').addEventListener('click', function (e) {
+      importEtat.filtreOrg = !importEtat.filtreOrg;
+      e.currentTarget.setAttribute('aria-pressed', String(importEtat.filtreOrg));
+      importRendre(); importCompter();
+    });
+    $('#import-f-dbl').addEventListener('click', function (e) {
+      importEtat.filtreDbl = !importEtat.filtreDbl;
+      e.currentTarget.setAttribute('aria-pressed', String(importEtat.filtreDbl));
+      importRendre(); importCompter();
+    });
+    $('#import-tout').addEventListener('click', function () {
+      importVisibles().forEach(function (c) { if (!c.dejaEnBase) { importEtat.coches.add(c.id); } });
+      importRendre(); importCompter();
+    });
+    $('#import-rien').addEventListener('click', function () {
+      importEtat.coches.clear();
+      importRendre(); importCompter();
+    });
+    $('#import-envoyer').addEventListener('click', function () {
+      importEnvoyer().catch(function () {
+        importEtat.envoiEnCours = false;
+        importCompter();
+        toast('Import interrompu.', 'erreur');
+      });
+    });
+    $('#import-recommencer').addEventListener('click', function () {
+      importReinitialiser();
+      importEtape('fichier');
+    });
+  }
+
   // ---------- Panneau latéral ----------
 
   function ouvrirPanneau(vue, titre) {
@@ -2054,6 +2334,7 @@
     $('#form-relation').hidden = vue !== 'relation';
     $('#form-personne').hidden = vue !== 'personne';
     $('#form-rattachement').hidden = vue !== 'rattachement';
+    $('#vue-import').hidden = vue !== 'import';
   }
 
   function fermerPanneau() {
@@ -4072,6 +4353,8 @@
         activerOnglet(bouton.getAttribute('data-onglet'));
       });
     });
+
+    brancherImport();
 
     $('#contacts-ajouter').addEventListener('click', function () {
       if (!etat.modeDemo && !etat.session) {

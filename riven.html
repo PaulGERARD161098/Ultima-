@@ -429,6 +429,55 @@
           </div>
         </form>
 
+        <!-- ===== L'IMPORT iPhone (CADRAGE-RIVEN-IMPORT.md) =====
+             ① le fichier, lu DANS le navigateur ; ② le tri, rien de coché par
+             défaut ; ③ le bilan. Seules les lignes cochées partent à l'API. -->
+        <section id="vue-import" class="panneau-corps import" hidden>
+          <div id="import-etape-fichier">
+            <p><strong>Exporter depuis l'iPhone</strong> (une fois, depuis un ordinateur) :</p>
+            <ol class="import-mode">
+              <li>Ouvrir <em>icloud.com</em>, puis <em>Contacts</em>.</li>
+              <li>Tout sélectionner (⌘A ou Ctrl+A).</li>
+              <li>Menu ⋯ → <em>Exporter la vCard</em>.</li>
+              <li>Déposer ici le fichier <code>.vcf</code> obtenu.</li>
+            </ol>
+            <div id="import-depot" class="import-depot">
+              <p>Glissez le fichier ici, ou</p>
+              <button id="import-choisir" type="button" class="bouton bouton-primaire">Choisir le fichier</button>
+              <input id="import-fichier" type="file" accept=".vcf,text/vcard,text/x-vcard" hidden>
+              <p class="import-note">Le fichier est lu dans votre navigateur. Rien ne part tant que vous n'avez rien coché.</p>
+            </div>
+            <p class="import-note">Photos, adresses, anniversaires et notes du téléphone ne sont pas importés.</p>
+          </div>
+
+          <div id="import-etape-tri" hidden>
+            <p id="import-lu" class="import-note"></p>
+            <div class="import-outils">
+              <input id="import-filtre" type="search" placeholder="Filtrer : nom, entreprise, fonction…"
+                     aria-label="Filtrer les contacts lus" autocomplete="off">
+              <button id="import-f-org" type="button" class="import-puce" aria-pressed="false">A une entreprise</button>
+              <button id="import-f-dbl" type="button" class="import-puce" aria-pressed="false">Doublons</button>
+            </div>
+            <div class="import-outils">
+              <button id="import-tout" type="button" class="bouton bouton-secondaire">Cocher les contacts affichés</button>
+              <button id="import-rien" type="button" class="bouton bouton-secondaire">Tout décocher</button>
+            </div>
+            <ul id="import-liste" class="import-liste" aria-label="Contacts lus"></ul>
+            <div class="import-barre">
+              <span id="import-compte" role="status" aria-live="polite">0 contact coché</span>
+              <button id="import-envoyer" type="button" class="bouton bouton-primaire" disabled>Importer</button>
+            </div>
+          </div>
+
+          <div id="import-etape-bilan" hidden>
+            <dl id="import-bilan" class="import-bilan"></dl>
+            <div class="actions-formulaire">
+              <button id="import-recommencer" type="button" class="bouton bouton-secondaire">Importer un autre fichier</button>
+            </div>
+          </div>
+          <p id="import-statut" class="serie-compteur" role="status" aria-live="polite"></p>
+        </section>
+
         <!-- ===== La PERSONNE (0024) — elle n'a besoin d'aucun nœud =====
              Enregistrer une personne ne crée AUCUNE fiche au réseau : elle ne
              paraît pas dans le ciel. C'est la demande de Paul du
@@ -518,7 +567,12 @@
             <h2 id="contacts-titre" class="contacts-titre">Contacts</h2>
             <p id="contacts-compteur" class="contacts-compteur"></p>
           </div>
-          <button id="contacts-ajouter" type="button" class="bouton bouton-primaire">+ Ajouter un contact</button>
+          <div class="contacts-actions">
+            <!-- Import iPhone (CADRAGE-RIVEN-IMPORT.md) : visible dans le
+                 registre des PERSONNES seulement — une vCard décrit une personne. -->
+            <button id="contacts-importer" type="button" class="bouton bouton-secondaire" hidden>Importer des contacts</button>
+            <button id="contacts-ajouter" type="button" class="bouton bouton-primaire">+ Ajouter un contact</button>
+          </div>
         </header>
         <!-- Deux registres (0024) : les FICHES (les nœuds — les étoiles) et
              les PERSONNES (les gens, qui n'ont besoin d'aucun nœud). Le premier
@@ -582,6 +636,7 @@
   <script src="js/leo-accueil.js"></script>
   <!-- Dictée vocale : composant partagé (micro par champ). -->
   <script src="js/dictee.js"></script>
+  <script src="js/import-contacts.js"></script>
   <script src="js/app.js"></script>
   <script src="js/leo-partout.js"></script>
 </body>

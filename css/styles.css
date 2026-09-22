@@ -2186,3 +2186,88 @@ textarea:focus-visible {
   flex-wrap: wrap;
   margin-bottom: 1rem;
 }
+
+/* ===== Import iPhone (CADRAGE-RIVEN-IMPORT.md) ===== */
+.contacts-actions {
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.contacts-actions .bouton-primaire { margin-left: 0; }
+.import-mode { padding-left: 1.3rem; line-height: 1.6; margin: 0.4rem 0 0; }
+.import-depot {
+  margin: 1rem 0 0.6rem;
+  padding: 1.2rem 0.8rem;
+  text-align: center;
+  border: 2px dashed var(--or-antique);
+  border-radius: 6px;
+}
+.import-depot.survol { background: var(--parchemin-ombre); }
+.import-note { font-size: 0.88rem; color: var(--encre-douce); margin: 0.4rem 0; }
+.import-outils { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-bottom: 0.6rem; }
+.import-outils input[type="search"] {
+  flex: 1 1 12rem;
+  min-height: 44px;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--bordure);
+  border-radius: 8px;
+  font: inherit;
+}
+.import-puce {
+  min-height: 44px;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--cerne-carte);
+  border-radius: 999px;
+  background: var(--blanc);
+  color: var(--encre);
+  font: inherit;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+.import-puce[aria-pressed="true"] { background: var(--parchemin-ombre); }
+.import-liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 55vh;
+  overflow-y: auto;
+  border-top: 1px solid var(--bordure);
+}
+.import-liste li {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  padding: 0.5rem 0.2rem;
+  border-bottom: 1px solid var(--bordure);
+}
+.import-liste input[type="checkbox"] { margin-top: 0.25rem; width: 1.15rem; height: 1.15rem; flex: none; }
+.import-nom { font-weight: 700; }
+.import-detail { font-size: 0.85rem; color: var(--encre-douce); overflow-wrap: anywhere; }
+.import-marque {
+  display: inline-block;
+  margin-left: 0.3rem;
+  padding: 0 0.4rem;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+.import-marque.doublon { color: var(--danger-parchemin); }
+.import-marque.fiche { color: var(--succes); }
+.import-marque.base { color: var(--encre-douce); }
+.import-ratt { display: block; font-size: 0.85rem; margin-top: 0.2rem; }
+.import-barre {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+  padding: 0.6rem 0 0.2rem;
+  background: var(--blanc);
+  border-top: 1px solid var(--or-antique);
+}
+.import-bilan dt { font-weight: 700; margin-top: 0.6rem; }
+.import-bilan dd { margin: 0.1rem 0 0 1rem; }

@@ -9,10 +9,9 @@
 > au vivier depuis juillet. **Ce cadrage le remplace** : l'iPhone exporte en
 > vCard, pas en CSV (§0).
 >
-> ⛔ **Statut : BOUCLE SUIVANTE, pas la boucle en cours.** Elle s'ouvre quand
-> la saisie ADRAMELECH (ADR-005, ADR-006) et VRANESH est faite (Directive EB).
-> Ce qui est livré ici, c'est le cadrage et la maquette. Aucune ligne de code
-> produit n'est écrite avant.
+> **Statut : boucle OUVERTE le 2026-09-22** — Paul : *« ok maquette, fusion auto
+> des doublons, go boucle import »*. La maquette est validée ; les doublons du
+> fichier sont fusionnés automatiquement (§1.3, tranché par Paul).
 
 ---
 
@@ -86,24 +85,30 @@ seuls ceux qu'il a choisis entrent.**
 
 0. **Maquette validée par Paul** : `design/preview-riven-import.html` (livrée avec
    ce cadrage). On ne code pas avant son « c'est ça ».
-1. **`js/vcard.js`, le lecteur**, pur et sans DOM : il déplie les lignes (RFC
+1. **`js/import-contacts.js`, le lecteur** *(à l'exécution, lecteur et
+   dédoublonnage ont été réunis dans ce seul fichier pur : ils partagent la
+   normalisation, et riven.html charge des scripts classiques — un fichier de
+   moins à charger, une seule surface à tester)*, pur et sans DOM : il déplie les lignes (RFC
    6350 §3.2), désespace (`\,` `\;` `\n`), décode le `QUOTED-PRINTABLE` des vieux
    exports 2.1, et **saute `PHOTO` sans la stocker**. Il renvoie
    `{ contacts, rejets }` et ne lève jamais d'exception sur un fichier mal formé.
-2. **`js/import-dedoublon.js`** : normalise le téléphone et l'e-mail, puis
-   regroupe les doublons (fichier + registre).
+2. **Dédoublonnage** (dans le même fichier) : normalise le téléphone et
+   l'e-mail, puis regroupe les doublons (fichier + registre).
 3. **`api/reseau/import.js`** : un `POST` par lots de **100 personnes au plus**,
    chaque ligne passée par le **`validatePersonne` existant**. Le client est
    celui de l'utilisateur (`requireUser`, RLS), **jamais `service_role`**.
-   L'insertion se fait par lot, plus les rattachements demandés (validés par
-   `validateRattachement`, sur des `node_id` appartenant à Paul). La réponse
+   L'insertion se fait par lot, plus les rattachements demandés (`node_id` au
+   format UUID, et dont l'appartenance à Paul est vérifiée par une lecture sous
+   RLS avant toute écriture ; sinon 400 et rien n'est écrit). La réponse
    donne les comptes et les index refusés.
    *Pourquoi une route et pas 500 appels à `/api/reseau/personnes` : 500 allers-
    retours donnent un import de plusieurs minutes, fragile à la moindre coupure,
-   et impossible à annoncer proprement.*
+   et impossible à annoncer proprement. Et surtout : le middleware limite à
+   **60 requêtes/minute/IP** — 500 appels seraient coupés net au 61ᵉ. Par lots
+   de 50 côté client, 500 contacts = 10 appels.*
 4. **`riven.html` + `js/app.js`** : le bouton, le sélecteur de fichier et l'écran
    de tri, dans le registre existant (formulaires de `CADRAGE-RIVEN-SAISIE.md`).
-5. **Harnais** : `tests/unit-vcard.mjs` (lecteur), `tests/unit-import-api.mjs`
+5. **Harnais** : `tests/unit-import-contacts.mjs` (lecteur), `tests/unit-import-api.mjs`
    (route) et `tests/smoke-import.mjs` (le vrai geste dans Chromium), branchés
    dans `tests/lancer.sh`. Le patrimoine **complet** doit tourner.
 6. **Dry run adverse** (Directive DR), puis `/securite-max`, parce que la route
@@ -115,11 +120,10 @@ seuls ceux qu'il a choisis entrent.**
 
 | Fichier | Nature |
 |---|---|
-| `js/vcard.js` | neuf (lecteur pur) |
-| `js/import-dedoublon.js` | neuf (normalisation + regroupement) |
-| `api/reseau/import.js` | neuf (route par lots) — **touche aux données → escalade signalée** |
+| `js/import-contacts.js` | neuf (lecteur + normalisation + regroupement, pur) |
+| `api/reseau/import.js` + `api/_lib/import-personnes.js` | neufs (handler mince + logique testable avec un client factice) — **touche aux données → escalade signalée** |
 | `riven.html`, `js/app.js`, `css/` | bouton + écran de tri |
-| `tests/unit-vcard.mjs`, `tests/unit-import-api.mjs`, `tests/smoke-import.mjs` + `tests/fixtures/*.vcf` | neufs, fixtures **inventées** |
+| `tests/unit-import-contacts.mjs`, `tests/unit-import-api.mjs`, `tests/smoke-import.mjs` | neufs ; cartes **inventées**, écrites ou générées dans le harnais (aucun fichier `.vcf` versionné) |
 | `supabase/migrations/` | **rien** |
 
 Les fixtures `.vcf` sont écrites à la main, avec des noms inventés. **Le fichier
@@ -133,7 +137,7 @@ lui-même dans son navigateur.
 | # | Critère | Comment on le prouve |
 |---|---|---|
 | C1 | Un export iCloud réel de 500 contacts (≈ 20 Mo avec photos) est lu en **< 2 s** | smoke avec une fixture générée de 500 cartes + photos factices |
-| C2 | Les pièges vCard sont lus juste : ligne pliée, `\,`, `QUOTED-PRINTABLE`, `item1.TEL`, carte sans `FN`, `END` manquant | un cas de `unit-vcard.mjs` par piège |
+| C2 | Les pièges vCard sont lus juste : ligne pliée, `\,`, `QUOTED-PRINTABLE`, `item1.TEL`, carte sans `FN`, `END` manquant | un cas de `unit-import-contacts.mjs` par piège |
 | C3 | **Rien n'est coché par défaut** ; rien n'est envoyé sans clic sur « Importer » | smoke : zéro requête réseau avant le clic |
 | C4 | Deux cartes avec le même mobile écrit différemment (`06 12…` / `+33 6 12…`) forment **une** personne | unit + smoke |
 | C5 | Une ligne invalide ne fait pas tomber le lot : les 99 autres entrent, la ligne est rapportée | `unit-import-api.mjs` |
@@ -170,7 +174,24 @@ lui-même dans son navigateur.
 
 ---
 
-## 7. Gates et modèle
+## 7. Les boucles qui suivent — demandées par Paul le 2026-09-22
+
+*« Ensuite il faudra faire une étude contact par contact pour que je dise ce
+qu'il en est de chacun, et bien les renseigner dans RIVEN. Il faudra ensuite
+bien sécuriser RIVEN. »* — deux boucles, dans cet ordre, chacune cadrée en
+6 points à son ouverture (Directive EL), aucune ouverte avant que l'import ait
+vécu sur le vrai fichier de Paul :
+
+1. **La revue contact par contact.** Pour chaque personne importée, Paul dit
+   ce qu'elle est (rôle, fiche de rattachement, statut, ce qu'on en attend) et
+   Léo le renseigne dans RIVEN. Le registre est aujourd'hui vide ; après
+   l'import, c'est ~200 à 500 revues — le geste doit tenir au pouce, une
+   personne à l'écran, et reprendre là où on s'est arrêté.
+2. **Sécuriser RIVEN.** Passage `/securite-max` dédié au quadrant (RLS des
+   quatre tables, API `reseau/*`, front), une fois que RIVEN porte le vrai
+   réseau de Paul : c'est à ce moment que la PII y entre en volume.
+
+## 8. Gates et modèle
 
 - **Pas de migration** → pas de gate SQL.
 - `api/reseau/import.js` **écrit en base** → escalade modèle signalée sur cette
