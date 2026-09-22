@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-22",
-    "quoi": "#272 fusionnée : leçons v31 (sceau 36323d22a858), quatre erreurs payées les 21-22/09, propagées à l'identique dans RenoBoost. #267 (harnais LV5) fusionnée la veille.",
-    "commit": "43da205"
+    "commit": "d9f8f66d87888d1b29ad55b3831a7ccf482171ba",
+    "quoi": "Cadrage « Léo pilote tout », 7 arbitrages rendus, J1 fermé : registre à 10 dépôts, témoin de registre éprouvé. Détail : PR #273"
   },
   "prochaine_action": "Saisir en base les deux idées ADRAMELECH (ADR-005 Le Cercle, ADR-006 Le Rachat) et la situation VRANESH + ses 3 scénarios, depuis CADRAGE-RESEAU-CERCLES.md — ⛔ par Paul, RLS mono-utilisateur, jamais en service_role. Remesurer max(adr_num) avant (4 au 21/09).",
   "bloque_par": [
@@ -109,7 +109,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-09-21"
+  "maj": "2026-09-22"
 }
 ```
 
