@@ -679,6 +679,49 @@ complète — c'est la faute qui a coûté le plus cher aujourd'hui.
 - Aucun instrument de cette séance ne mesure le **preview Vercel** : le proxy
   refuse `*.vercel.app`. Les mesures sont locales, sur le même commit.
 
+### §10bis — L'APRÈS-MIDI : J2b est fermé (ajouté en fin de séance)
+
+⛔ **Le §10 ci-dessus disait « J2b bloqué par le proxy ». C'est PÉRIMÉ depuis
+16 h.** Il reste tel quel — c'était vrai quand il a été écrit — mais ce qui suit
+le corrige, et c'est ce paragraphe-ci qui fait foi.
+
+**Ce qui a débloqué** : le dépôt `betagouv/reno` a été **cloné et lu**. Le proxy
+bloque `.gouv.fr`, pas GitHub — la distinction n'avait pas été faite.
+
+| Lot | Preuve |
+|---|---|
+| **J2b — l'API officielle des aides** | PR #6 → `c50c198` · provenance vérifiée **grise** en preview par Paul |
+| **Sécurité — la dépendance retirée** | PR #8 → `df377a2` · **35 vulnérabilités → 0** |
+
+**Trois horloges, et elles ne donnent pas la même heure** — c'est le cœur de
+l'arbitrage :
+
+| Source | S'arrête à |
+|---|---|
+| paquet npm `mesaidesreno` | 08/04/2025 |
+| dépôt `betagouv/reno` | 18/12/2025 (+634 règles vs npm) |
+| **API en ligne** | **maintenue par l'ANAH** |
+
+⛔ **D'où l'ordre : l'API d'abord, le modèle embarqué en repli DATÉ.** Embarquer
+par défaut, c'était prendre la responsabilité fiscale pour économiser un appel
+réseau. Le README du projet officiel le dit lui-même : *« il est de votre
+responsabilité de le maintenir à jour »*.
+
+### Ce que cette demi-journée a appris, et qui vaut au-delà
+
+1. ⛔ **Un test vert par le mauvais chemin est pire qu'un test absent.** Sur sept
+   sabotages, un ne rougissait pas : le contrôle passait par un `catch` qui
+   rendait `null` en dur, sans jamais atteindre la ligne testée. Il cochait la
+   case sans rien garder — et personne ne rouvre une case cochée.
+2. ⛔ **Une dépendance ne se juge pas à ce qu'on en importe.** Un fichier JSON de
+   241 Ko a tiré 600 paquets et 4 vulnérabilités critiques, dans du code
+   qu'aucune ligne n'exécute.
+3. ⛔ **« On commite avant de muter » — rejoué, et payé une troisième fois.**
+   Éprouver un garde-fou sur un fichier non encore suivi : `git checkout --` ne
+   restaure rien. Il a fallu retélécharger le paquet officiel.
+4. ⚠️ **Le proxy bloque `.gouv.fr`, pas GitHub.** Un blocage réputé total ne
+   l'était pas : la source était lisible depuis le début.
+
 ### Pre-mortem à trois mois — « on est en décembre, ce lot a échoué : pourquoi ? »
 
 | Cause probable | Signal précoce | Mitigation en place | Reste à faire |
