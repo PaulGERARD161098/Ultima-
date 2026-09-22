@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v31 2026-09-22 sha256:36323d22a858 -->
+<!-- lecons:empreinte v34 2026-09-22 sha256:7ffae00f882b -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -468,6 +468,39 @@ recherche elle-même — « ce fichier existe-t-il, fait-il plus de zéro ligne 
 coûte une seconde et sauve l'annonce.
 
 ## 2. Les garde-fous, et leur silence
+
+**UN PLAFOND QUI MESURE LA PAGE REPLIÉE NE GARDE RIEN** *(2026-09-22)*. La
+vitrine portait un seuil de hauteur de 12 400 px sur mobile, abaissé et prouvé
+en le cassant le 19/09. Le 22/09, la page mesurait **11 837 px** au chargement :
+vert, plafond tenu. Sauf que **neuf `<details>` étaient fermés** — la refonte
+était passée de 6 à 15 replis, et **4 237 px de contenu avaient été déplacés
+derrière des clics, pas retirés**. Déplié, le visiteur voit **16 074 px**, soit
+**3 674 px au-dessus du plafond que le harnais prétendait garder**.
+
+⛔ **Le harnais ne mentait pas : il mesurait autre chose que ce qu'on croyait.**
+C'est pire qu'une absence de mesure, parce que le vert se lit comme une preuve.
+Replier est un choix de design légitime ; ce qui ne l'est pas, c'est qu'un seuil
+posé pour borner ce qu'une page pèse devienne indifférent à ce qu'elle contient.
+
+⇒ **Tout plafond sur une page se mesure AUSSI dans l'état déplié** — `<details>`
+ouverts, onglets parcourus, « voir plus » cliqués. Et la mesure dépliée exige
+son propre verrou de non-vacuité : « déplié = replié » est exactement ce que
+rend une page sans aucun repli, et ce serait vert.
+
+⚠️ **Un seuil constaté n'est pas un seuil décidé.** Le second seuil a été posé à
+16 200 px — la mesure du jour arrondie au-dessus — et nommé **cliquet** dans le
+code : il empêche de grossir, il ne dit pas ce que la page a le droit de peser.
+Confondre les deux, c'est transformer un constat en norme sans que personne
+l'ait tranché.
+
+**UN ÉLÉMENT DANS UN `<details>` FERMÉ A UNE HAUTEUR DE ZÉRO** *(2026-09-22)*.
+Quatrième faux négatif de la même journée, après la casse et les accents. Un
+critère « image en portrait de plus de 200 px » a rendu ABSENT un
+`MobileShowcase` bel et bien présent : il vivait dans un repli fermé, donc sans
+géométrie. Le verrou de non-vacuité et le témoin avaient tenu — **c'est le
+CRITÈRE qui était faux, pas l'instrument**. ⇒ Toute mesure géométrique sur une
+page commence par déplier ; et une absence se confirme sur le source avant
+d'être annoncée.
 
 **UN GARDE-FOU SE VÉRIFIE DU CÔTÉ OÙ IL PEUT ÊTRE CONTOURNÉ** *(2026-08-21)*.
 Quatre écarts de la même forme dans une séance : une donnée protégée par un
@@ -1332,6 +1365,34 @@ PR qui a attendu, `git fetch` puis fusionner `main` DANS la branche — et lire 
 `--stat` du diff contre `main` : **toute suppression qu'on n'a pas décidée est
 un retard, pas un travail**. Quand la branche est trop en retard, la refaire
 depuis `main` coûte moins cher que la réconcilier.
+
+**UNE BRANCHE FUSIONNÉE QUI SURVIT À DISTANCE EST UNE MINE À RETARDEMENT**
+*(2026-09-22)*. Le 21/09, une branche partie d'un `main` dépassé aurait supprimé
+410 lignes du travail d'un autre. Le 22/09 au matin, **la même faute s'est
+représentée** — `claude/specs-hopus-update-xp9z1l` existait encore sur Ultima,
+à `61babd4`, et poussée telle quelle elle effaçait **1 011 lignes** :
+`EXPORT-METHODE-CHATGPT.md`, `CADRAGE-RESEAU-CERCLES.md`, les leçons v31.
+
+⛔ **Ce n'est pas la même leçon deux fois : c'est la leçon, puis sa CAUSE.**
+Se souvenir de vérifier ne suffit pas — la vérification est un geste humain, et
+un geste s'oublie. Ce qui rend la faute POSSIBLE, c'est qu'une branche fusionnée
+reste là et vieillit pendant que `main` avance. RenoBoost ne l'a jamais posé le
+problème : le dépôt a « automatically delete head branches » activé, GitHub
+supprime la branche à la fusion. Ultima ne l'a pas.
+
+⇒ Deux gestes, dans cet ordre : **(1)** activer la suppression automatique sur
+tout dépôt qui ne l'a pas — c'est le réglage qui supprime la classe d'erreur, pas
+l'attention ; **(2)** tant qu'il manque, ne JAMAIS récupérer une branche
+distante portant le nom qu'on veut : `git checkout -B <branche> origin/main`,
+toujours, et `git diff --stat origin/main HEAD` relu avant chaque push.
+
+⚠️ **Et une contrainte mesurée le même jour** : depuis une séance Claude Code
+web, `git push origin --delete <branche>` répond « Everything up-to-date » et
+**ne supprime rien** — le proxy refuse la refspec de suppression, en silence.
+Trois tentatives, même résultat. Il n'y a pas non plus d'outil GitHub de
+suppression de branche exposé. ⇒ Le ménage des branches est une action de Paul
+dans l'interface, ou le réglage du dépôt. Ne pas y passer du temps depuis la
+séance : ça ne marche pas, et l'échec est muet.
 
 **UN DOCUMENT ÉCRIT POUR UN TIERS VIEILLIT PENDANT QU'ON L'ÉCRIT** *(2026-09-21)*.
 Un rapport d'état des specs, demandé par Paul pour être confronté à Codex, livré
