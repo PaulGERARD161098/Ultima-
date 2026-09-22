@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v35 2026-09-22 sha256:ec4edee5e065 -->
+<!-- lecons:empreinte v36 2026-09-22 sha256:89824bcb5f37 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -1246,6 +1246,40 @@ commit, sinon la deuxième porte s'ouvre pendant qu'on admire la première.*
 ---
 
 ## 5. Plusieurs dépôts, plusieurs séances
+
+**METTRE À JOUR UN ÉTAT, C'EST METTRE À JOUR CE QUE L'INSTRUMENT LIT**
+*(2026-09-22)*. Un fichier d'état qui porte À LA FOIS de la prose pour l'humain
+et un bloc structuré pour la machine a **deux vérités**, et c'est toujours celle
+de la machine qui compte. ⛔ Écrire la prose et croire l'état recalé est le
+geste qui produit une note juste ET fausse en même temps : elle se relit bien,
+elle ne mesure rien. La seule preuve est de **relancer l'instrument** et de lire
+ce qu'il répond — pas de relire son propre texte.
+*Incident : trois « recalages » du grain Finubar de RenoBoost dans la même
+séance, tous dans le récit en tête de `FINUBAR.md` ; `node finubar/collecter.mjs`
+lit le bloc JSON plus bas, jamais touché. La collecte l'a dit d'elle-même
+(« RénoBoost a avancé de 2 commits depuis sa dernière note ») — et Paul avait
+entre-temps reçu trois comptes rendus affirmant le grain recalé. La
+`prochaine_action` du JSON datait encore de la veille et demandait « valider en
+preview après CI verte », c'est-à-dire exactement ce que la panne du jour
+rendait impossible.*
+⊕ **Corollaire pour toute écriture structurée** : revalider après écriture
+(`json.loads`, relecture par l'outil), jamais à l'œil. Une écriture qui casse le
+format et une écriture réussie ont la même tête dans l'éditeur.
+
+**UN CONTRÔLE QUE LA CI NE LANCE PAS N'EST PAS UN CONTRÔLE** *(2026-09-22)*.
+La règle « on vérifie que les vérifications s'exécutent » a un cas particulier
+qui se paie cher : l'outil **existe**, il est **configuré**, il **dit vrai** —
+et rien ne l'appelle. Il est alors pire qu'absent, parce que sa présence dans le
+dépôt se lit comme une garantie.
+*Incident : `accueil.js` levait un `ReferenceError` sur `isRecent` — un `const`
+lu depuis une fonction SŒUR — dans la branche qui se déclenche dès qu'un lead a
+moins de sept jours, donc exactement quand l'écran sert. ESLint le signalait en
+toutes lettres depuis une date que personne ne sait situer. La CI n'exécute que
+`test` et `navigateur`. Le correctif qui compte n'est pas la ligne corrigée,
+c'est `tests/lint.test.mjs` : le lint entre dans le harnais qui, lui, tourne à
+chaque commit.*
+⊕ Le geste généralisable : pour chaque outil de qualité présent dans un dépôt,
+demander **qui l'appelle**. S'il n'y a pas de réponse, il ne garde rien.
 
 **LE PATRIMOINE COMPLET AVANT FUSION** *(2026-07-22)*. Avant toute fusion
 touchant le front, le routage ou un renommage large, lancer les harnais **en
