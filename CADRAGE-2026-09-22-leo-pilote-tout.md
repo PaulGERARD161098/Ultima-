@@ -627,3 +627,64 @@ nommant le dépôt quand on retire une ligne du registre.
 ⛔ **Ce qui reste à faire hors proxy avant J2**, nommément : appeler l'API
 (`mesaides.france-renov.gouv.fr/api-doc`), vérifier l'avertissement CEE et la
 disponibilité réelle du service. Cette séance a lu **le modèle**, pas **l'API**.
+
+---
+
+## §10 — Journal de la séance du 22/09 (fin de séance, mesuré)
+
+⚠️ **Ce paragraphe s'ajoute au cadrage plutôt que de fonder un fichier de plus**
+— Directive EB : capitaliser, jamais un doc parallèle. Les chiffres ci-dessous
+ont été **mesurés à leur source au moment de l'écrire**, pas résumés de mémoire.
+
+### Ce qui est fermé
+
+| Lot | Preuve |
+|---|---|
+| **J1 — Finubar couvre tout** | `node finubar/collecter.mjs` → **10 projets · 7 en cours · 3 en attente** |
+| **J2a — plus aucun barème non sourcé** | 4 jeux retirés · `tests/baremes.test.mjs` · 4 sabotages rouges |
+| **Garde-fou tertiaire** | `src/lib/public.ts` · 8 contrôles · 7 sabotages · PR #3 fusionnée |
+| **La console parle la langue de la vitrine** | PR #4 fusionnée → `d47e4cc` · **0 texte sous AA** sur 417 nœuds × 7 états × 3 largeurs |
+| **DESIGN-LANGAGE abrogé et motivé** | PR #528 fusionnée → `366302d` |
+
+### Ce qui reste ouvert, nommément
+
+1. ⛔ **J2b — le moteur officiel des aides.** Bloqué : le proxy des séances
+   refuse tout `.gouv.fr`. **L'écran ne rend AUCUN montant depuis le 22/09** —
+   c'est voulu (conseiller juste avant conseiller vite), et c'est une perte de
+   service jusqu'à J2b.
+2. ⚠️ **`--line` borde les champs de la VITRINE à 1,32:1** quand WCAG 1.4.11 en
+   exige 3. Trouvé en mesurant pour la console, **nommé et non corrigé** : autre
+   boucle. La console, elle, a `--color-trait-fort` (5,34).
+3. ⚠️ **La CI de `renoboost-console` n'a pas tourné** sur les commits de
+   l'après-midi — aucun run déclenché depuis 12:53, et le dispatch manuel est
+   refusé à l'intégration (403). `workflow_dispatch` a été ajouté ; il ne sera
+   utilisable qu'une fois sur `main`. **À vérifier en ouverture de séance.**
+4. ⚠️ **Le harnais navigateur n'a jamais tourné sur un runner GitHub.** Chromium
+   y est installé pour la première fois par ce lot.
+5. ⚠️ **`src/app/favicon.ico` est encore celui du gabarit** — gardé parce qu'il
+   sert, à remplacer par une vraie icône.
+6. ⚠️ **Cinq grains Finubar ne sont rattachés à aucun commit atteignable**
+   (RenoAgenda, RenoPredict, mon-dpe.fr, artisan-builder, Artidispo) et
+   **RenoDevis a dérivé de 7 commits**. Aucun ne vient de cette séance.
+
+### Ce que les instruments de cette séance NE voient pas
+
+⛔ Écrit ici parce qu'un périmètre non écrit se lit comme une couverture
+complète — c'est la faute qui a coûté le plus cher aujourd'hui.
+
+- `tests/contraste.test.mjs` ne survole **jamais** (`:hover` non mesuré) et
+  n'exerce **aucun état d'erreur de formulaire**.
+- Il ne mesure qu'en **thème clair** — il n'y en a plus qu'un, mais si un thème
+  sombre revient, l'instrument le déclarera sain sans l'avoir regardé.
+- Aucun instrument de cette séance ne mesure le **preview Vercel** : le proxy
+  refuse `*.vercel.app`. Les mesures sont locales, sur le même commit.
+
+### Pre-mortem à trois mois — « on est en décembre, ce lot a échoué : pourquoi ? »
+
+| Cause probable | Signal précoce | Mitigation en place | Reste à faire |
+|---|---|---|---|
+| **J2b n'a jamais été branché** ; l'écran ne rend toujours aucun montant, et Paul a repris ses calculs à la main | la console n'est plus ouverte pour conseiller | le débranchement est explicite à l'écran, pas silencieux | **une séance hors proxy**, c'est le seul verrou |
+| Les **tokens ont dérivé** : quelqu'un a reposé une couleur en dur « juste pour un cas » | une classe `bg-slate-…` en revue | `tests/tokens.test.mjs`, éprouvé par 5 sabotages | qu'il **tourne** : voir la CI ci-dessus |
+| Le **harnais de contraste a été retiré** parce qu'il rend `npm test` lent (≈ 25 s) | une PR qui le désactive « temporairement » | son coût est écrit dans son en-tête | rien — c'est un arbitrage humain |
+| La CI **n'a jamais été réparée** et tout le monde s'est habitué à des PR non vérifiées | des PR fusionnées sans run | le point 3 ci-dessus | **le vérifier en ouverture** |
+| Le **défaut `--line` de la vitrine** est oublié parce qu'il n'a pas de test | un audit d'accessibilité le retrouve | il est écrit dans DESIGN-LANGAGE **et** ici | lui donner un test le jour où on l'ouvre |

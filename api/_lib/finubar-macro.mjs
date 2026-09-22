@@ -98,6 +98,94 @@ export default {
     {
       "ok": true,
       "motif": "",
+      "depot": "PaulGERARD161098/Ultima-",
+      "grain": {
+        "projet": "Ultima",
+        "depot": "PaulGERARD161098/Ultima-",
+        "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
+        "rattache_a": "specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md",
+        "etat": "en_cours",
+        "jalon": {
+          "nom": "J3 — le ciel porte aussi l'état PERSONNEL (P4 : les signaux du cockpit)",
+          "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
+        },
+        "dernier_arret": {
+          "le": "2026-09-22",
+          "quoi": "Cadrage « Léo pilote tout », 7 arbitrages rendus, J1 fermé : registre à 10 dépôts, témoin de registre éprouvé. Détail : PR #273",
+          "commit": "d9f8f66d87888d1b29ad55b3831a7ccf482171ba"
+        },
+        "prochaine_action": "Saisir en base les deux idées ADRAMELECH (ADR-005 Le Cercle, ADR-006 Le Rachat) et la situation VRANESH + ses 3 scénarios, depuis CADRAGE-RESEAU-CERCLES.md — ⛔ par Paul, RLS…",
+        "bloque_par": [
+          "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
+          "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
+          "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
+          "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
+        ],
+        "en_attente_depuis": "2026-08-20",
+        "boucles_ouvertes": [
+          {
+            "quoi": "LEÇONS v24 sur Ultima et RénoBoost (empreinte 8b3c40ef7785, identique à l'octet). Les SIX autres dépôts restent en arrière — leur écart est visible, c'est le rôle du sceau.",
+            "depuis": "2026-09-18"
+          },
+          {
+            "quoi": "MESURÉ le 13/09 et démenti : la note annonçait des copies divergentes du rappel Finubar. Les sept fichiers ont la même empreinte. Voir CADRAGE-FINUBAR.md.",
+            "depuis": "2026-09-13"
+          },
+          {
+            "quoi": "COLLECTE — `collecter.mjs` VIDE le grain d'un dépôt hors séance au lieu de garder sa dernière mesure. Cran de sûreté posé le 07/09 (refus d'écrire) ; la FUSION reste à faire.",
+            "depuis": "2026-09-07"
+          },
+          {
+            "quoi": "ripair (paggerard-boop) reste en LEÇONS v7 : une séance ouverte sur les dépôts de PaulGERARD161098 ne peut pas l'atteindre. Angle mort connu, pas un oubli.",
+            "depuis": "2026-09-11"
+          },
+          {
+            "quoi": "Aucun contrôle croisé ne compare la copie des leçons d'un dépôt à sa source : le sceau rend la divergence VISIBLE, il ne la corrige pas. `head -1` la montre.",
+            "depuis": "2026-09-11"
+          },
+          {
+            "quoi": "⚠️ Les Routines DR visent une session persistante AVEC ses dépôts, mais le tir d'essai du 06/09 ne l'a pas réveillée. À vérifier à 12 h ; sinon, GitHub Action par dépôt.",
+            "depuis": "2026-09-06"
+          },
+          {
+            "quoi": "Le mail du matin lit l'agrégat COMMITÉ : il vieillit les jours sans séance (il le dit). Le rendre frais tout seul = GitHub Action nocturne qui recollecte et commite",
+            "depuis": "2026-09-06"
+          },
+          {
+            "quoi": "Direction posée le 05/09, toujours valable : Ouvrir REPRISE-2026-09-05-apres-la-semaine.md §5 : la mesure d'abord (collecter.mjs + les 4 jalons en SQL), jamais la lecture du doc.",
+            "depuis": "2026-09-05"
+          },
+          {
+            "quoi": "238 fiches d'autres comptes dans kv_store : E1 rend le cas inoffensif mais ne l'explique pas. Origine à trouver — REPRISE-2026-09-05-apres-la-semaine.md §3",
+            "depuis": "2026-09-05"
+          },
+          {
+            "quoi": "VESTA (ADR-010) hors classement : nom à acter, rôle de Fahrenheit à confirmer, 3 questions à poser. Julien = Julien Laudy, celui de PROTÉE. Détail : adramelech/IDEES.md",
+            "depuis": "2026-09-05"
+          }
+        ],
+        "maj": "2026-09-22"
+      },
+      "recits": [
+        "prochaine_action"
+      ],
+      "ciel": "racine",
+      "hors_seance": false,
+      "reprise": false,
+      "derive": {
+        "tete": "4679df3",
+        "tete_le": "2026-09-22T13:32:31+00:00",
+        "commits_depuis": 1,
+        "commit_inconnu": false
+      },
+      "mesure_le": "2026-09-22",
+      "jours_depuis_maj": 0,
+      "jours_en_attente": 33,
+      "rang": 0
+    },
+    {
+      "ok": true,
+      "motif": "",
       "depot": "PaulGERARD161098/RenoAgenda",
       "grain": {
         "projet": "RénoAgenda",
@@ -278,16 +366,16 @@ export default {
         "projet": "RénoBoost",
         "depot": "PaulGERARD161098/RenoBoost",
         "cap": "Un individu seul fait tourner le business entier, aidé par l'automatisation (Directive IA). RénoBoost est le hub : acquisition, rendez-vous, dashboard, et la roadmap maîtresse des quatre briques.",
-        "rattache_a": "REPRISE-COHERENCE-PALIER1-2026-09-21.md · ROADMAP-2026-09-19-nuit-fin-de-session.md (LA source de la reprise du 20/09) · ROADMAP-2026-09-19-specs-hopus.md (le détail des specs) · ROADMAP-2026-09-18-fin-de-session.md (le plus récent) · SPECS.md · Ultima-/specs/ARBITRAGES.md · ROADMAP-2026-09-15-fin-de-session.md (le plus récent) · ROADMAP-2026-09-13-soir-fin-de-session.md · CADRAGE-2026-09-13-bouss",
+        "rattache_a": "ROADMAP-2026-09-21-fin-de-session.md (LA source de la reprise) · ROADMAP-2026-09-20-fin-de-session.md · REPRISE-COHERENCE-PALIER1-2026-09-21.md · ROADMAP-2026-09-19-nuit-fin-de-session.md (LA source de la reprise du 20/09) · ROADMAP-2026-09-19-specs-hopus.md (le détail des specs) · ROADMAP-2026-09-18-fin-de-session.md (le plus récent) · SPECS.md · Ultima-/specs/ARBITRAGES.md · ROADMAP-2026-09-15-f",
         "etat": "en_cours",
         "jalon": {
           "nom": "Jalon 0 — l'amorçage : trois gestes de Paul, zéro ligne de code",
           "critere_de_sortie": "`stickers` > 0 · fiche Google visible publiquement · `stripe_charges_enabled` = true"
         },
         "dernier_arret": {
-          "le": "2026-09-21",
-          "quoi": "#515 fusionnée (l'extracteur lit les photos et rend l'e-mail du client — media_type n'est plus figé à application/pdf), puis #504 (registres Hopus) et #521 (consolidation…",
-          "commit": "ec41f82"
+          "le": "2026-09-22",
+          "quoi": "#528 : DESIGN-LANGAGE abroge « la console garde ses thèmes ». Un défaut de la vitrine y est nommé : --line borde les champs à 1,32:1 (WCAG exige 3:1).",
+          "commit": "366302d1382c0ed09af5c511e9f6f8fe875be1dc"
         },
         "prochaine_action": "Valider les paliers 1 et 2 en preview après CI verte, puis poursuivre le shell commun et les vues métier. Le sujet antérieur du simulateur de zone reste dans…",
         "bloque_par": [
@@ -300,7 +388,7 @@ export default {
         "en_attente_depuis": "2026-08-04",
         "boucles_ouvertes": [
           {
-            "quoi": "📐 SPECS HOPUS — 13 patterns sur 15 posés (re-mesuré dans index.html le 19/09 au soir). Les 2 restants attendent Paul, nommément : BentoBenefits attend la bascule de la vitrine…",
+            "quoi": "⚠️ HOPUS CLOS à 13/15 par Paul le 20/09 — puis la vitrine REFONDUE (326064e). Patterns NON re-mesurés depuis. Détail : ROADMAP-2026-09-20-fin-de-session.md",
             "depuis": "2026-09-19"
           },
           {
@@ -308,7 +396,7 @@ export default {
             "depuis": "2026-09-19"
           },
           {
-            "quoi": "🔴 GITHUB ACTIONS À L'ARRÊT — cause INCONNUE, et « plafonds atteints » est RÉFUTÉ : Paul a relevé le plafond le 19/09 vers 16h30, aucun effet. Ce qui est établi est la SIGNATURE…",
+            "quoi": "✅ FERMÉE — la CI est REVENUE le 21/09 22h12 après 3,5 jours. Cause inconnue. Un rouge est de nouveau un VRAI rouge. Détail : ROADMAP-2026-09-21-fin-de-session.md §1",
             "depuis": "2026-09-19"
           },
           {
@@ -340,10 +428,9 @@ export default {
             "depuis": "2026-09-15"
           }
         ],
-        "maj": "2026-09-21"
+        "maj": "2026-09-22"
       },
       "recits": [
-        "dernier_arret.quoi",
         "prochaine_action",
         "boucles_ouvertes[].quoi"
       ],
@@ -357,96 +444,8 @@ export default {
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-22",
-      "jours_depuis_maj": 1,
-      "jours_en_attente": 49,
-      "rang": 2
-    },
-    {
-      "ok": true,
-      "motif": "",
-      "depot": "PaulGERARD161098/Ultima-",
-      "grain": {
-        "projet": "Ultima",
-        "depot": "PaulGERARD161098/Ultima-",
-        "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-        "rattache_a": "specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md",
-        "etat": "en_cours",
-        "jalon": {
-          "nom": "J3 — le ciel porte aussi l'état PERSONNEL (P4 : les signaux du cockpit)",
-          "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
-        },
-        "dernier_arret": {
-          "le": "2026-09-22",
-          "quoi": "Cadrage « Léo pilote tout », 7 arbitrages rendus, J1 fermé : registre à 10 dépôts, témoin de registre éprouvé. Détail : PR #273",
-          "commit": "d9f8f66d87888d1b29ad55b3831a7ccf482171ba"
-        },
-        "prochaine_action": "Saisir en base les deux idées ADRAMELECH (ADR-005 Le Cercle, ADR-006 Le Rachat) et la situation VRANESH + ses 3 scénarios, depuis CADRAGE-RESEAU-CERCLES.md — ⛔ par Paul, RLS…",
-        "bloque_par": [
-          "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
-          "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
-          "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
-          "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
-        ],
-        "en_attente_depuis": "2026-08-20",
-        "boucles_ouvertes": [
-          {
-            "quoi": "LEÇONS v24 sur Ultima et RénoBoost (empreinte 8b3c40ef7785, identique à l'octet). Les SIX autres dépôts restent en arrière — leur écart est visible, c'est le rôle du sceau.",
-            "depuis": "2026-09-18"
-          },
-          {
-            "quoi": "MESURÉ le 13/09 et démenti : la note annonçait des copies divergentes du rappel Finubar. Les sept fichiers ont la même empreinte. Voir CADRAGE-FINUBAR.md.",
-            "depuis": "2026-09-13"
-          },
-          {
-            "quoi": "COLLECTE — `collecter.mjs` VIDE le grain d'un dépôt hors séance au lieu de garder sa dernière mesure. Cran de sûreté posé le 07/09 (refus d'écrire) ; la FUSION reste à faire.",
-            "depuis": "2026-09-07"
-          },
-          {
-            "quoi": "ripair (paggerard-boop) reste en LEÇONS v7 : une séance ouverte sur les dépôts de PaulGERARD161098 ne peut pas l'atteindre. Angle mort connu, pas un oubli.",
-            "depuis": "2026-09-11"
-          },
-          {
-            "quoi": "Aucun contrôle croisé ne compare la copie des leçons d'un dépôt à sa source : le sceau rend la divergence VISIBLE, il ne la corrige pas. `head -1` la montre.",
-            "depuis": "2026-09-11"
-          },
-          {
-            "quoi": "⚠️ Les Routines DR visent une session persistante AVEC ses dépôts, mais le tir d'essai du 06/09 ne l'a pas réveillée. À vérifier à 12 h ; sinon, GitHub Action par dépôt.",
-            "depuis": "2026-09-06"
-          },
-          {
-            "quoi": "Le mail du matin lit l'agrégat COMMITÉ : il vieillit les jours sans séance (il le dit). Le rendre frais tout seul = GitHub Action nocturne qui recollecte et commite",
-            "depuis": "2026-09-06"
-          },
-          {
-            "quoi": "Direction posée le 05/09, toujours valable : Ouvrir REPRISE-2026-09-05-apres-la-semaine.md §5 : la mesure d'abord (collecter.mjs + les 4 jalons en SQL), jamais la lecture du doc.",
-            "depuis": "2026-09-05"
-          },
-          {
-            "quoi": "238 fiches d'autres comptes dans kv_store : E1 rend le cas inoffensif mais ne l'explique pas. Origine à trouver — REPRISE-2026-09-05-apres-la-semaine.md §3",
-            "depuis": "2026-09-05"
-          },
-          {
-            "quoi": "VESTA (ADR-010) hors classement : nom à acter, rôle de Fahrenheit à confirmer, 3 questions à poser. Julien = Julien Laudy, celui de PROTÉE. Détail : adramelech/IDEES.md",
-            "depuis": "2026-09-05"
-          }
-        ],
-        "maj": "2026-09-22"
-      },
-      "recits": [
-        "prochaine_action"
-      ],
-      "ciel": "racine",
-      "hors_seance": false,
-      "reprise": false,
-      "derive": {
-        "tete": null,
-        "tete_le": null,
-        "commits_depuis": 0,
-        "commit_inconnu": false
-      },
-      "mesure_le": "2026-09-22",
       "jours_depuis_maj": 0,
-      "jours_en_attente": 33,
+      "jours_en_attente": 49,
       "rang": 2
     },
     {
@@ -618,14 +617,13 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-09-22",
-          "quoi": "Build réparé après 12 j de panne, et J2a : les 4 jeux de barèmes non sourcés retirés, simulateur débranché, CI build+test posée. Détail : PR #1",
-          "commit": "3f4ed0cb7b5ed9c517d3bab561e345abcdad798b"
+          "quoi": "La console parle la langue de la vitrine : tokens, Manrope/DM Sans, 195 remplacements. Mesuré au navigateur, 7 états : 0 texte sous AA (1 à 3,74:1 avant). PR #4",
+          "commit": "d47e4cc7da7c2787fdc3d0a182e4c622b9ca9493"
         },
         "prochaine_action": "Appeler le moteur officiel (mesaides.france-renov.gouv.fr/api-doc) — impossible depuis une séance au proxy fermé, à faire depuis un réseau ouvert.",
         "bloque_par": [
           "⛔ LE PRÉALABLE DE J2b : lire l'API officielle (mesaides.france-renov.gouv.fr/api-doc). Le proxy des séances bloque tout .gouv.fr — cette séance a lu le MODÈLE cloné, pas l'API",
           "⚠️ La source officielle déclare elle-même les CEE NON À JOUR — or les CEE sont le cœur du montage. [À REVÉRIFIER hors proxy]",
-          "⚠️ Les ENTREPRISES (tertiaire, BAT-TH) ne sont pas couvertes par le moteur officiel. Arbitrage Paul 22/09 : Léo ORIENTE sans chiffrer. Garde-fou pas encore écrit",
           "⚠️ L'écran ne donne plus AUCUN montant depuis le 22/09 — c'est voulu (C3 prime sur C4) mais c'est une perte de service jusqu'à J2b",
           "GEMINI_API_KEY en variable d'environnement : action de Paul"
         ],
@@ -658,7 +656,7 @@ export default {
     "en_cours": 7,
     "en_attente_de_paul": 3,
     "au_repos": 0,
-    "derives": 1,
+    "derives": 2,
     "commits_inconnus": 5,
     "boucles_ouvertes": 40,
     "gestes_de_paul": [
@@ -673,6 +671,22 @@ export default {
       {
         "projet": "RénoDevis",
         "geste": "Le verdict de Paul sur la DENSITÉ du cockpit (PR #160) : les tests prouvent la conformité, aucun ne dit si la liste est lisible en usage"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
       },
       {
         "projet": "RénoAgenda",
@@ -725,22 +739,6 @@ export default {
       {
         "projet": "RénoBoost",
         "geste": "Embarquement Stripe de SOLA (ACTIONS-PAUL.md §3)"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
       },
       {
         "projet": "mon-dpe.fr",
@@ -832,10 +830,6 @@ export default {
       },
       {
         "projet": "RénoBoost Console",
-        "geste": "⚠️ Les ENTREPRISES (tertiaire, BAT-TH) ne sont pas couvertes par le moteur officiel. Arbitrage Paul 22/09 : Léo ORIENTE sans chiffrer. Garde-fou pas encore écrit"
-      },
-      {
-        "projet": "RénoBoost Console",
         "geste": "⚠️ L'écran ne donne plus AUCUN montant depuis le 22/09 — c'est voulu (C3 prime sur C4) mais c'est une perte de service jusqu'à J2b"
       },
       {
@@ -852,12 +846,12 @@ export default {
         "pourquoi": "derive"
       },
       {
-        "projet": "RénoAgenda",
-        "dit": "n'est rattaché à aucun commit atteignable — sa fraîcheur n'est plus mesurable, à recaler",
-        "pourquoi": "commit_inconnu"
+        "projet": "Ultima",
+        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
+        "pourquoi": "derive"
       },
       {
-        "projet": "RénoPredict",
+        "projet": "RénoAgenda",
         "dit": "n'est rattaché à aucun commit atteignable — sa fraîcheur n'est plus mesurable, à recaler",
         "pourquoi": "commit_inconnu"
       }
@@ -878,6 +872,13 @@ export default {
         "libelle": "RénoDevis",
         "constellation": "en_cours",
         "ciel": "renoboost-ia",
+        "signal": 1
+      },
+      {
+        "id": "PaulGERARD161098/Ultima-",
+        "libelle": "Ultima",
+        "constellation": "en_cours",
+        "ciel": "racine",
         "signal": 1
       },
       {
@@ -906,13 +907,6 @@ export default {
         "libelle": "RénoBoost",
         "constellation": "en_cours",
         "ciel": "renoboost-ia",
-        "signal": 0
-      },
-      {
-        "id": "PaulGERARD161098/Ultima-",
-        "libelle": "Ultima",
-        "constellation": "en_cours",
-        "ciel": "racine",
         "signal": 0
       },
       {
