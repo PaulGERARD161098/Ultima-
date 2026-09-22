@@ -24,7 +24,7 @@
   "projet": "Ultima",
   "depot": "PaulGERARD161098/Ultima-",
   "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-  "rattache_a": "specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md",
+  "rattache_a": "specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md",
   "etat": "en_cours",
   "jalon": {
     "nom": "J3 — le ciel porte aussi l'état PERSONNEL (P4 : les signaux du cockpit)",
@@ -32,15 +32,17 @@
   },
   "dernier_arret": {
     "le": "2026-09-22",
-    "quoi": "Leçon v37 (une capture du produit périme à la refonte de son écran), recopiée dans RenoBoost et RenoAgenda ; collecte relancée après #539.",
-    "commit": "2fc2762"
+    "commit": "13da5d6ca2a826ec7a2af33060bdc16c79424384",
+    "quoi": "Import des contacts iPhone dans RIVEN livré (#285) : vCard lue dans le navigateur → registre `personnes`, tri sans case pré-cochée, doublons fusionnés, route POST /api/reseau/import par lots. Audit adverse : 0 critique/élevé, M1-M3 + F1-F4 fermés, tests vus rouges puis verts. Aucune migration."
   },
-  "prochaine_action": "Saisir en base les deux idées ADRAMELECH (ADR-005 Le Cercle, ADR-006 Le Rachat) et la situation VRANESH + ses 3 scénarios, depuis CADRAGE-RESEAU-CERCLES.md — ⛔ par Paul, RLS mono-utilisateur, jamais en service_role. Remesurer max(adr_num) avant (4 au 21/09).",
+  "prochaine_action": "Paul importe son vrai export iCloud (.vcf) dans RIVEN : Contacts → Personnes → « Importer des contacts ». Puis ouvrir la boucle « revue contact par contact » (CADRAGE-RIVEN-IMPORT.md §7), cadrée en 6 points à l'ouverture. ⛔ Remesurer `select count(*) from personnes` avant (0 au 22/09) : c'est lui qui dit si l'import a eu lieu.",
   "bloque_par": [
     "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
     "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
-    "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
+    "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)",
+    "Région Vercel `cdg1` pour les fonctions (base à Paris, fonctions a priori à Washington — ~85 ms par appel base) : gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis",
+    "Vérifier que les inscriptions Supabase sont FERMÉES (« Allow new signups ») — un compte tiers pourrait remplir le quota par la route d'import"
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [

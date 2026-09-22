@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v37 2026-09-22 sha256:09ac60a9abb6 -->
+<!-- lecons:empreinte v38 2026-09-22 sha256:cbdac23a0db7 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -1279,6 +1279,30 @@ rendait impossible.*
 ⊕ **Corollaire pour toute écriture structurée** : revalider après écriture
 (`json.loads`, relecture par l'outil), jamais à l'œil. Une écriture qui casse le
 format et une écriture réussie ont la même tête dans l'éditeur.
+
+**UNE PANNE EXTERNE EXPLIQUE LE ROUGE JUSQU'À CE QU'ELLE CESSE — ET ON NE LE
+VOIT PAS TOUT SEUL** *(2026-09-22, le même soir, deux heures après les deux
+leçons ci-dessous)*. Dès qu'un échec a reçu une cause extérieure crédible, il
+cesse d'être regardé : chaque rouge suivant est classé sans être lu. ⛔ Le
+danger n'est pas l'erreur d'attribution initiale — elle était juste — c'est
+qu'**elle survit à la panne**. Quand les runners reviennent, le rouge change de
+nature sans changer d'apparence, et le nôtre se cache derrière celui qu'on a
+déjà expliqué.
+*Incident : la CI du compte RenoBoost n'allouait plus de runners (échecs en
+2 s, `runner_id: 0`, `main` rouge aussi) — constat mesuré, commenté sur la PR,
+re-vérifié à 20 h : inchangé. Les runners sont revenus vers 20 h 25, et les
+exécutions suivantes ont duré quatre minutes : de vraies exécutions, de vrais
+échecs. C'était `tests/lint.test.mjs`, ajouté deux heures plus tôt : il appelle
+`npx eslint`, et le job `test` ne faisait pas `npm ci` — tous les tests
+antérieurs étaient sans dépendance, donc la lacune n'avait jamais mordu. J'ai
+rendu compte à Paul d'une CI à l'arrêt alors que `main` était rouge de mon
+fait. Une autre séance l'a corrigé (#539, `npm ci` ajouté au job).*
+⊕ Deux gestes, pas un : **(1)** re-vérifier la NATURE d'un échec à chaque
+réveil, pas seulement sa présence — une durée de 2 s et une durée de 4 min ne
+racontent pas la même histoire ; **(2)** un test qui appelle un binaire ou une
+dépendance se valide **dans l'environnement que la CI fournit**, pas seulement
+en local où `node_modules` existe déjà. Lire le workflow avant d'ajouter le
+test : ce qu'il installe est la seule chose sur laquelle le test peut compter.
 
 **UN CONTRÔLE QUE LA CI NE LANCE PAS N'EST PAS UN CONTRÔLE** *(2026-09-22)*.
 La règle « on vérifie que les vérifications s'exécutent » a un cas particulier

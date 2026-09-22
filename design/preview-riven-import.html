@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Preview — RIVEN : importer les contacts de l'iPhone</title>
+<!--
+  PREVIEW DE TRAVAIL — CADRAGE-RIVEN-IMPORT.md, étape 0.
+  Aucune donnée réelle : les contacts ci-dessous sont inventés.
+  Le bouton « Choisir le fichier » ne lit rien : il charge la démo.
+
+  Trois écrans, dans l'ordre du geste :
+    ① ACCUEIL — comment exporter depuis l'iPhone + dépôt du fichier.
+    ② TRI     — rien de coché ; filtres ; doublons fusionnés ; rattachement proposé.
+    ③ BILAN   — ce qui est entré, ce qui a été refusé, et pourquoi.
+  Zéro ressource externe, zéro CDN.
+-->
+<style>
+:root {
+  --or-antique: #a9884a; --cerne: #5a4118;
+  --parchemin: #f6eed9; --parchemin-ombre: #e3d3ab;
+  --encre: #3b2f1c; --encre-douce: #6a5636;
+  --rouge-sceau: #8b2e1f; --vert-sauge: #4d6b3c;
+  --police: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 1.2rem 1rem 3rem; color: var(--encre);
+  font-family: var(--police); background: #e9dcbc; min-height: 100vh;
+}
+.page {
+  max-width: 46rem; margin: 0 auto; background: var(--parchemin);
+  border: 1px solid var(--cerne); box-shadow: 0 0 0 4px var(--parchemin), 0 0 0 5px var(--or-antique);
+  padding: 1.4rem 1.2rem 1.6rem;
+}
+h1 { margin: 0; font-size: 1.3rem; letter-spacing: .14em; font-variant: small-caps; text-align: center; }
+.sous { text-align: center; font-style: italic; color: var(--encre-douce); margin: .3rem 0 1.2rem; }
+.etapes { display: flex; gap: .4rem; justify-content: center; margin-bottom: 1.2rem; font-size: .85rem; }
+.etapes span { padding: .15rem .6rem; border: 1px solid var(--parchemin-ombre); border-radius: 1rem; color: var(--encre-douce); }
+.etapes span[aria-current="step"] { border-color: var(--cerne); color: var(--encre); background: var(--parchemin-ombre); }
+section[hidden] { display: none; }
+ol.mode { padding-left: 1.3rem; line-height: 1.6; }
+.depot {
+  margin: 1.2rem 0 .6rem; padding: 1.6rem 1rem; text-align: center;
+  border: 2px dashed var(--or-antique); border-radius: .3rem;
+}
+.note { font-size: .85rem; color: var(--encre-douce); }
+button {
+  font: inherit; cursor: pointer; padding: .45rem 1rem; border-radius: .2rem;
+  border: 1px solid var(--cerne); background: var(--parchemin); color: var(--encre);
+}
+button.principal { background: var(--cerne); color: var(--parchemin); }
+button:disabled { opacity: .45; cursor: not-allowed; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--or-antique); outline-offset: 2px; }
+.outils { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-bottom: .6rem; }
+.outils input[type="search"] {
+  flex: 1 1 12rem; font: inherit; padding: .4rem .6rem;
+  border: 1px solid var(--or-antique); background: #fffaf0; color: var(--encre);
+}
+.puce { font-size: .85rem; padding: .25rem .6rem; border-radius: 1rem; }
+.puce[aria-pressed="true"] { background: var(--parchemin-ombre); }
+.lu { font-size: .85rem; color: var(--encre-douce); margin: .2rem 0 .6rem; }
+ul.contacts { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--parchemin-ombre); max-height: 26rem; overflow-y: auto; }
+ul.contacts li { display: flex; gap: .7rem; align-items: flex-start; padding: .55rem .2rem; border-bottom: 1px solid var(--parchemin-ombre); }
+ul.contacts input[type="checkbox"] { margin-top: .3rem; width: 1.1rem; height: 1.1rem; accent-color: var(--cerne); }
+.nom { font-weight: 700; }
+.detail { font-size: .85rem; color: var(--encre-douce); }
+.marque { display: inline-block; font-size: .72rem; padding: 0 .45rem; margin-left: .3rem; border-radius: .2rem; border: 1px solid; vertical-align: 1px; }
+.marque.doublon { color: var(--rouge-sceau); }
+.marque.fiche { color: var(--vert-sauge); }
+.ratt { font-size: .85rem; margin-top: .2rem; }
+.barre {
+  position: sticky; bottom: 0; margin-top: .8rem; padding: .7rem .2rem 0;
+  display: flex; justify-content: space-between; align-items: center; gap: .6rem;
+  background: var(--parchemin); border-top: 1px solid var(--or-antique);
+}
+.bilan dt { font-weight: 700; margin-top: .6rem; }
+.bilan dd { margin: .1rem 0 0 1rem; }
+.statut { min-height: 1.2em; }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Importer des contacts</h1>
+  <p class="sous">De l'iPhone au registre de RIVEN. Seuls les contacts que vous cochez y entrent.</p>
+  <div class="etapes" aria-label="Étapes">
+    <span id="e1" aria-current="step">① Fichier</span>
+    <span id="e2">② Tri</span>
+    <span id="e3">③ Bilan</span>
+  </div>
+
+  <!-- ① ACCUEIL -->
+  <section id="s1">
+    <p><strong>Exporter depuis l'iPhone</strong> (une fois, depuis un ordinateur) :</p>
+    <ol class="mode">
+      <li>Ouvrir <em>icloud.com</em>, puis <em>Contacts</em>.</li>
+      <li>Tout sélectionner (⌘A ou Ctrl+A).</li>
+      <li>Menu ⋯ → <em>Exporter la vCard</em>.</li>
+      <li>Déposer ici le fichier <code>.vcf</code> obtenu.</li>
+    </ol>
+    <div class="depot">
+      <p>Glissez le fichier ici, ou</p>
+      <button class="principal" id="choisir" type="button">Choisir le fichier</button>
+      <p class="note">Le fichier est lu dans votre navigateur. Il ne part nulle part tant que vous n'avez rien coché.</p>
+    </div>
+    <p class="note">Photos, adresses, anniversaires et notes du téléphone ne sont pas importés.</p>
+  </section>
+
+  <!-- ② TRI -->
+  <section id="s2" hidden>
+    <p class="lu" id="lu"></p>
+    <div class="outils">
+      <input type="search" id="filtre" placeholder="Filtrer : nom, entreprise, fonction…" aria-label="Filtrer les contacts">
+      <button type="button" class="puce" id="f-org" aria-pressed="false">A une entreprise</button>
+      <button type="button" class="puce" id="f-dbl" aria-pressed="false">Doublons</button>
+    </div>
+    <div class="outils">
+      <button type="button" id="tout">Cocher les contacts affichés</button>
+      <button type="button" id="rien">Tout décocher</button>
+    </div>
+    <ul class="contacts" id="liste" aria-label="Contacts lus"></ul>
+    <div class="barre">
+      <span id="compte" role="status" aria-live="polite">0 contact coché</span>
+      <button class="principal" id="importer" type="button" disabled>Importer</button>
+    </div>
+  </section>
+
+  <!-- ③ BILAN -->
+  <section id="s3" hidden>
+    <dl class="bilan" id="bilan"></dl>
+    <p><button type="button" id="recommencer">Importer un autre fichier</button></p>
+  </section>
+  <p class="statut" id="statut" role="status" aria-live="polite"></p>
+</main>
+
+<script>
+'use strict';
+// Démo : contacts INVENTÉS. « dbl » = fusion de N cartes du fichier ;
+// « fiche » = une fiche RIVEN porte exactement ce nom d'entreprise.
+const DEMO = [
+  { nom: 'Aubin Ferrand', org: 'Toitures Ferrand', fonction: 'Gérant', tel: '+33 6 12 34 56 01', dbl: 2, fiche: 'Toitures Ferrand' },
+  { nom: 'Bérénice Lacombe', org: '', fonction: '', tel: '+33 6 22 10 44 90' },
+  { nom: 'Cyprien Maury', org: 'Maury Électricité', fonction: 'Électricien', tel: '+33 6 40 11 22 33', mail: 'c.maury@exemple.fr' },
+  { nom: 'Delphine Rouvière', org: 'Cabinet Rouvière', fonction: 'Architecte DPLG', mail: 'contact@exemple.fr', fiche: 'Cabinet Rouvière' },
+  { nom: 'Maman', org: '', fonction: '', tel: '+33 6 00 00 00 11' },
+  { nom: 'Étienne Vasseur', org: 'Vasseur Plomberie', fonction: '', tel: '+33 7 55 12 98 00', dbl: 3 },
+  { nom: 'Faustine Géraud', org: '', fonction: 'Coach sportive', tel: '+33 6 71 71 71 00' },
+  { nom: 'Gaspard Leclerc', org: 'Isol’Sud', fonction: 'Commercial', tel: '+33 6 98 45 00 12', mail: 'g.leclerc@exemple.fr' },
+  { nom: 'Pizzeria du Port', org: '', fonction: '', tel: '+33 4 91 00 00 00' },
+  { nom: 'Hortense Blanchard', org: 'Blanchard Menuiserie', fonction: 'Co-gérante', tel: '+33 6 33 21 09 87' },
+];
+const TOTAL_CARTES = 512, ILLISIBLES = 4;
+
+const $ = (id) => document.getElementById(id);
+const coches = new Set();
+const rattacher = new Set();
+let filtreOrg = false, filtreDbl = false;
+
+function etape(n) {
+  for (const i of [1, 2, 3]) {
+    $('s' + i).hidden = i !== n;
+    if (i === n) $('e' + i).setAttribute('aria-current', 'step'); else $('e' + i).removeAttribute('aria-current');
+  }
+}
+
+function visibles() {
+  const q = $('filtre').value.trim().toLowerCase();
+  return DEMO.map((c, i) => ({ c, i })).filter(({ c }) =>
+    (!q || [c.nom, c.org, c.fonction].join(' ').toLowerCase().includes(q)) &&
+    (!filtreOrg || c.org) && (!filtreDbl || c.dbl));
+}
+
+function el(tag, cls, texte) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (texte !== undefined) e.textContent = texte;
+  return e;
+}
+
+function rendre() {
+  const ul = $('liste');
+  ul.replaceChildren();
+  for (const { c, i } of visibles()) {
+    const li = el('li');
+    const cb = el('input');
+    cb.type = 'checkbox'; cb.id = 'c' + i; cb.checked = coches.has(i);
+    cb.addEventListener('change', () => { cb.checked ? coches.add(i) : coches.delete(i); compter(); });
+    const bloc = el('div');
+    const lab = el('label'); lab.htmlFor = cb.id;
+    lab.append(el('span', 'nom', c.nom));
+    if (c.dbl) lab.append(el('span', 'marque doublon', c.dbl + ' cartes fusionnées'));
+    if (c.fiche) lab.append(el('span', 'marque fiche', 'fiche existante'));
+    bloc.append(lab);
+    const d = [c.fonction, c.org, c.tel, c.mail].filter(Boolean).join(' · ');
+    if (d) bloc.append(el('div', 'detail', d));
+    if (c.fiche) {
+      const r = el('label', 'ratt');
+      const rb = el('input'); rb.type = 'checkbox'; rb.checked = rattacher.has(i);
+      rb.addEventListener('change', () => { rb.checked ? rattacher.add(i) : rattacher.delete(i); });
+      r.append(rb, document.createTextNode(' Rattacher à la fiche « ' + c.fiche + ' »'));
+      bloc.append(r);
+    }
+    li.append(cb, bloc);
+    ul.append(li);
+  }
+}
+
+function compter() {
+  const n = coches.size;
+  // Pre-mortem n°1 : un contact coché puis masqué par le filtre ne doit pas
+  // partir à l'insu de Paul — le compteur le dit.
+  const vus = new Set(visibles().map(({ i }) => i));
+  const caches = [...coches].filter((i) => !vus.has(i)).length;
+  $('compte').textContent = n + (n > 1 ? ' contacts cochés' : ' contact coché') + ' sur ' + DEMO.length + ' (démo)' +
+    (caches ? ' — dont ' + caches + ' masqué' + (caches > 1 ? 's' : '') + ' par le filtre' : '');
+  $('importer').disabled = n === 0;
+}
+
+$('choisir').addEventListener('click', () => {
+  $('lu').textContent = TOTAL_CARTES + ' cartes lues · ' + ILLISIBLES +
+    ' illisibles (écartées, voir le détail) · doublons fusionnés · démo : 10 affichées';
+  etape(2); rendre(); compter(); $('filtre').focus();
+});
+$('filtre').addEventListener('input', () => { rendre(); compter(); });
+$('f-org').addEventListener('click', (e) => { filtreOrg = !filtreOrg; e.currentTarget.setAttribute('aria-pressed', filtreOrg); rendre(); compter(); });
+$('f-dbl').addEventListener('click', (e) => { filtreDbl = !filtreDbl; e.currentTarget.setAttribute('aria-pressed', filtreDbl); rendre(); compter(); });
+$('tout').addEventListener('click', () => { for (const { i } of visibles()) coches.add(i); rendre(); compter(); });
+$('rien').addEventListener('click', () => { coches.clear(); rendre(); compter(); });
+$('importer').addEventListener('click', () => {
+  const n = coches.size;
+  if (!window.confirm('Importer ' + n + ' personne' + (n > 1 ? 's' : '') + ' dans RIVEN ?')) return;
+  const ratt = [...rattacher].filter((i) => coches.has(i)).length;
+  const dl = $('bilan'); dl.replaceChildren();
+  for (const [t, v] of [
+    ['Personnes créées', String(n)],
+    ['Rattachées à une fiche', String(ratt)],
+    ['Refusées', '0 (une ligne refusée afficherait son numéro et la raison, jamais son contenu)'],
+    ['Non importées', (DEMO.length - n) + ' contacts non cochés — rien n’a été envoyé pour eux'],
+  ]) { dl.append(el('dt', '', t), el('dd', '', v)); }
+  etape(3);
+  $('statut').textContent = 'Import terminé (démo : rien n’a été écrit).';
+});
+$('recommencer').addEventListener('click', () => {
+  coches.clear(); rattacher.clear(); $('statut').textContent = ''; etape(1);
+});
+</script>
+</body>
+</html>
