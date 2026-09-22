@@ -71,11 +71,33 @@ lui, répond. Donc : **les deux non-résolutions sont un fait**, et les trois ch
 ⚠️ `ecologique-solidaire.gouv.fr` est l'ancien nom du domaine du ministère ; le
 suivre est un signal d'âge, pas une preuve de panne — **[NON VÉRIFIÉ]**.
 
-**② Une source morte et une source sans aide rendent le même résultat.** Les cinq
-`catch` de `lib/aidsApi.ts` (l.75, 112, 149, 190, 227) renvoient `[]` après un
-`console.error` **côté serveur**. L'écran ne distingue donc pas « aucune aide » de
-« la source n'existe pas ». C'est exactement le mode de panne que ce parc a déjà
-payé ailleurs : un silence qui se lit comme une bonne nouvelle.
+**② ⛔ CE POINT A ÉTÉ CORRIGÉ LE 22/09 DANS L'APRÈS-MIDI — il disait faux.**
+Il affirmait : « les cinq `catch` de `lib/aidsApi.ts` renvoient `[]` en silence,
+donc l'écran ne distingue pas *aucune aide* de *la source n'existe pas* ».
+
+**Il n'y a pas d'écran.** Mesuré en reproduisant le build, après un déploiement
+Vercel en erreur sur une PR qui ne contenait que du markdown :
+
+```
+$ npm run build → Module not found: Can't resolve '@/components/SimulatorCard'
+$ find . -name "aids.ts"        → vide  (types/aids.ts n'existe NULLE PART)
+$ grep -rn "aidsApi" --include=*.ts*  → personne ne l'importe
+```
+
+⛔ **LE DÉPÔT NE BUILD PAS DEPUIS LE 10/09** — douze jours. `tsconfig.json` fait
+pointer `@/*` vers `./src/*`, et les composants vivent à la **racine** ;
+`src/components/` n'existe pas. Et `lib/aidsApi.ts` importe un type absent, sans
+que personne ne l'importe lui-même : **c'est du code mort**. Les cinq sources
+d'aides ne sont donc **pas branchées**.
+
+⚠️ **Ce qui reste VIVANT, et c'est ce qui compte** : les trois taux d'écrêtement
+faux du prompt. `core_engine.py` est du **Python exécuté à part** — il ne dépend
+pas du build Next, et il produit de vrais chiffres.
+
+⛔ **La leçon, et elle est du dépôt** : *une note qui décrit un état faux coûte
+plus cher qu'une note absente — on la croit.* Ce paragraphe avait été écrit le
+matin même, à partir d'une lecture du code et non d'une exécution. Lire un
+`catch` ne dit pas si la fonction est appelée.
 
 **③ Les vrais barèmes vivent dans un PROMPT, pas dans une table.**
 `core_engine.py` porte en dur, dans `SYSTEM_INSTRUCTION` : écrêtement *Bleu
