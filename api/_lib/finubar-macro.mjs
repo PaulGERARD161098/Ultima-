@@ -173,8 +173,8 @@ export default {
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "9746f05",
-        "tete_le": "2026-09-22T15:42:57+02:00",
+        "tete": "0a3aed5",
+        "tete_le": "2026-09-22T18:18:23+02:00",
         "commits_depuis": 3,
         "commit_inconnu": false
       },
@@ -617,13 +617,13 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-09-22",
-          "quoi": "J2b FERMÉ : l'API officielle des aides est branchée, repli local daté, 0 barème ici. Provenance vérifiée GRISE en preview par Paul. PR #6",
-          "commit": "c50c198fa656c3d9df203dfafd1856ceda0204d6"
+          "quoi": "J2b livré et sécurisé : API officielle des aides branchée, modèle de repli sorti des dépendances npm (35 vulnérabilités → 0). PR #6, #8",
+          "commit": "df377a2508a403a8d870c8958f2167f0fd13d8c1"
         },
         "prochaine_action": "Enrichir la situation envoyée au moteur (gestes de travaux, logement) : aujourd'hui plusieurs aides rendent « infos à recueillir » faute de contexte.",
         "bloque_par": [
           "⚠️ Le modèle officiel est FIGÉ : betagouv/reno arrêté au 18/12/2025, repris par l'ANAH. github.com/anahgouv pas encore ouvert — à surveiller.",
-          "⚠️ Le repli embarqué (npm 2.3.1, 08/04/2025) porte des barèmes du guide Anah 2024. Il dépanne, il ne fait pas autorité.",
+          "⚠️ Le repli embarqué (v2.3.1, 08/04/2025) porte des barèmes du guide Anah 2024. Il dépanne, il ne fait pas autorité. Empreinte SHA-256 gardée par test.",
           "GEMINI_API_KEY en variable d'environnement : action de Paul"
         ],
         "en_attente_depuis": "2026-09-10",
@@ -825,7 +825,7 @@ export default {
       },
       {
         "projet": "RénoBoost Console",
-        "geste": "⚠️ Le repli embarqué (npm 2.3.1, 08/04/2025) porte des barèmes du guide Anah 2024. Il dépanne, il ne fait pas autorité."
+        "geste": "⚠️ Le repli embarqué (v2.3.1, 08/04/2025) porte des barèmes du guide Anah 2024. Il dépanne, il ne fait pas autorité. Empreinte SHA-256 gardée par test."
       },
       {
         "projet": "RénoBoost Console",
