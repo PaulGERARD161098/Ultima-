@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-22",
-    "commit": "d9f8f66d87888d1b29ad55b3831a7ccf482171ba",
-    "quoi": "Cadrage « Léo pilote tout », 7 arbitrages rendus, J1 fermé : registre à 10 dépôts, témoin de registre éprouvé. Détail : PR #273"
+    "commit": "c7f4a4f8f5a54aa5db0b874c0c0b6d8305838227",
+    "quoi": "Fusion de #281 : une modification visuelle se donne en PREVIEW, pas en description — leçon posée dans memoire/LECONS.md §3, sceau v35. La CI a attrapé l'empreinte oubliée au passage ; la copie de RenoBoost est propagée octet pour octet."
   },
   "prochaine_action": "Saisir en base les deux idées ADRAMELECH (ADR-005 Le Cercle, ADR-006 Le Rachat) et la situation VRANESH + ses 3 scénarios, depuis CADRAGE-RESEAU-CERCLES.md — ⛔ par Paul, RLS mono-utilisateur, jamais en service_role. Remesurer max(adr_num) avant (4 au 21/09).",
   "bloque_par": [
