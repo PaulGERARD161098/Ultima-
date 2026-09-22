@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-22",
-    "commit": "c7f4a4f8f5a54aa5db0b874c0c0b6d8305838227",
-    "quoi": "Fusion de #281 : une modification visuelle se donne en PREVIEW, pas en description — leçon posée dans memoire/LECONS.md §3, sceau v35. La CI a attrapé l'empreinte oubliée au passage ; la copie de RenoBoost est propagée octet pour octet."
+    "commit": "070ac91ff4080b86a3992e7a2fad73f4ca3e2a0c",
+    "quoi": "Fusion de #283 : deux leçons du 22/09 dans memoire/LECONS.md (sceau v36) — un état se met à jour là où l'instrument lit ; un outil de qualité que la CI n'appelle pas n'est pas un contrôle."
   },
   "prochaine_action": "Saisir en base les deux idées ADRAMELECH (ADR-005 Le Cercle, ADR-006 Le Rachat) et la situation VRANESH + ses 3 scénarios, depuis CADRAGE-RESEAU-CERCLES.md — ⛔ par Paul, RLS mono-utilisateur, jamais en service_role. Remesurer max(adr_num) avant (4 au 21/09).",
   "bloque_par": [
