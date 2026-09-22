@@ -169,14 +169,108 @@
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "1070e44",
-        "tete_le": "2026-09-22T10:35:55+00:00",
+        "tete": "340c0e0",
+        "tete_le": "2026-09-22T10:37:03+00:00",
         "commits_depuis": 4,
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-22",
       "jours_depuis_maj": 1,
       "jours_en_attente": 33,
+      "rang": 0
+    },
+    {
+      "ok": true,
+      "motif": "",
+      "depot": "PaulGERARD161098/renoboost-console",
+      "grain": {
+        "projet": "RénoBoost Console",
+        "depot": "PaulGERARD161098/renoboost-console",
+        "cap": "La console des AIDES DE L'ÉTAT : être toujours à jour sur les dispositifs et leurs tunnels, et conseiller juste en trois clics — particuliers, pros, entreprises. Règle d'or posée le 22/09 : la console n'implémente AUCUN barème, elle appelle le moteur officiel et cite sa source.",
+        "rattache_a": "Ultima-/CADRAGE-2026-09-22-leo-pilote-tout.md §0bis (les mesures) et §3 (la règle des aides) · DATARENO-/CLAUDE.md (les garde-fous conformité applicables au conseil au particulier)",
+        "etat": "en_cours",
+        "jalon": {
+          "nom": "J2 — les aides sont qualifiées : zéro chiffre affiché sans source ni date d'effet",
+          "critere_de_sortie": "Les cinq URL fantômes retirées · les barèmes sortis du prompt et de page.tsx · un appel au moteur officiel (mesaides.france-renov.gouv.fr) qui porte sa version et sa date · un contrôle qui refuse tout montant non tracé"
+        },
+        "dernier_arret": {
+          "le": "2026-09-10",
+          "quoi": "Refonte de page.tsx, Gemini dans core_engine.py, onglet Veille Stratégique (JORF). Aucun travail depuis.",
+          "commit": "d751368c7b0b05d76c52313cde63a4055740f7a5"
+        },
+        "prochaine_action": "Retirer les cinq sources d'aides et brancher le moteur officiel — voir le cadrage §3, les dix points.",
+        "bloque_par": [
+          "⛔ 3 TAUX D'ÉCRÊTEMENT SUR 4 SONT FAUX dans le prompt (modeste 90 et non 80, intermédiaire 80 et non 60, supérieur 50 et non 40). Ils SOUS-ESTIMENT l'aide. Cadrage §0bis",
+          "⛔ 2 des 5 sources d'aides pointent vers des domaines qui NE RÉSOLVENT PAS (citoyens.gouv.fr, api.maprimerenov.gouv.fr). Les 3 autres : NON VÉRIFIÉ, proxy fermé",
+          "⛔ Les 5 catch de lib/aidsApi.ts rendent [] EN SILENCE : source morte et absence d'aide donnent le même écran",
+          "⛔ 50 000 € écrit à DEUX endroits (prompt + page.tsx:61), et c'est une valeur par défaut au bout de variations, pas une règle",
+          "⛔ DEUX core_engine.py divergents : racine (genai.Client) et lib/ (genai.configure)",
+          "⛔ Le persona « RGE agressif, maximiser la marge » contredit les garde-fous conformité de DATARENO-/CLAUDE.md, applicables au conseil au particulier",
+          "⚠️ La source officielle déclare elle-même les CEE NON À JOUR — or les CEE sont le cœur du montage. [À REVÉRIFIER hors proxy]",
+          "⚠️ Les ENTREPRISES (tertiaire, BAT-TH) ne sont pas couvertes par le moteur officiel. Arbitrage Paul 22/09 : Léo ORIENTE sans chiffrer",
+          "⚠️ AUCUN test, AUCUNE CI : le garde-fou « zéro montant sur un dossier tertiaire » n'a nulle part où vivre",
+          "GEMINI_API_KEY en variable d'environnement : action de Paul"
+        ],
+        "en_attente_depuis": "2026-09-10",
+        "boucles_ouvertes": [],
+        "maj": "2026-09-22"
+      },
+      "recits": [],
+      "ciel": "renoboost-ia",
+      "hors_seance": false,
+      "reprise": false,
+      "derive": {
+        "tete": "73e5c48",
+        "tete_le": "2026-09-22T10:36:52+00:00",
+        "commits_depuis": 1,
+        "commit_inconnu": false
+      },
+      "mesure_le": "2026-09-22",
+      "jours_depuis_maj": 0,
+      "jours_en_attente": 12,
+      "rang": 0
+    },
+    {
+      "ok": true,
+      "motif": "",
+      "depot": "PaulGERARD161098/DATARENO-",
+      "grain": {
+        "projet": "DATA RÉNO",
+        "depot": "PaulGERARD161098/DATARENO-",
+        "cap": "Transformer une base acquise de 12 554 contacts réno (consentement client) en RDV qualifiés PAC, par cold outreach EMAIL segmenté par méthode de chauffage. Le plus automatique possible : clic humain uniquement pour envoyer et pour booker. Autonome, hors stack RénoBoost.",
+        "rattache_a": "REPRISE.md (LE point de reprise, tenu en fin de chaque séance) · ROADMAP.md · TASKS.md (séquencement des phases) · SPEC.md (contrat de build figé) · PREMORTEM.md · GUIDE.md · LAUNCH.md · DEPLOY.md",
+        "etat": "en_attente_de_paul",
+        "jalon": {
+          "nom": "Gate 2 — le premier envoi réel : la chaîne brouillon → envoi → réponse tourne de bout en bout",
+          "critere_de_sortie": "Mot de passe SMTP posé · un lot de brouillons généré, relu par Paul et ENVOYÉ · au moins une réponse reçue et tracée. Détail et preuves : REPRISE.md"
+        },
+        "dernier_arret": {
+          "le": "2026-09-19",
+          "quoi": "Gate 1 FRANCHI — page de désinscription en ligne. Mails v2, point de reprise à jour (PR #31 #32 #33), 235 tests verts. Détail : REPRISE.md",
+          "commit": "4b897c7c2fc55977b1052ae6e5e640e10cf1962b"
+        },
+        "prochaine_action": "Poser le mot de passe SMTP — c'est le SEUL blocage restant avant le premier envoi réel (REPRISE.md, section blocages).",
+        "bloque_par": [
+          "⛔ MOT DE PASSE SMTP — action de Paul, seul blocage du gate 2 (constaté le 19/09)",
+          "⚠️ La page de désinscription réécrite (PR #31) est À REDÉPOSER sur Netlify Drop : la version en ligne n'est pas encore celle du dépôt"
+        ],
+        "en_attente_depuis": "2026-09-19",
+        "boucles_ouvertes": [],
+        "maj": "2026-09-22"
+      },
+      "recits": [],
+      "ciel": "alpha",
+      "hors_seance": false,
+      "reprise": false,
+      "derive": {
+        "tete": "80ed532",
+        "tete_le": "2026-09-22T10:36:52+00:00",
+        "commits_depuis": 1,
+        "commit_inconnu": false
+      },
+      "mesure_le": "2026-09-22",
+      "jours_depuis_maj": 0,
+      "jours_en_attente": 3,
       "rang": 0
     },
     {
@@ -246,8 +340,8 @@
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "5d6962b",
-        "tete_le": "2026-09-21T18:38:26+02:00",
+        "tete": "ec20a1f",
+        "tete_le": "2026-09-22T10:36:52+00:00",
         "commits_depuis": null,
         "commit_inconnu": true
       },
@@ -301,57 +395,14 @@
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "4e7b016",
-        "tete_le": "2026-09-21T18:38:05+02:00",
+        "tete": "ded8b3a",
+        "tete_le": "2026-09-22T10:36:52+00:00",
         "commits_depuis": null,
         "commit_inconnu": true
       },
       "mesure_le": "2026-09-22",
       "jours_depuis_maj": 19,
       "jours_en_attente": 49,
-      "rang": 1
-    },
-    {
-      "ok": true,
-      "motif": "",
-      "depot": "PaulGERARD161098/DATARENO-",
-      "grain": {
-        "projet": "DATA RÉNO",
-        "depot": "PaulGERARD161098/DATARENO-",
-        "cap": "Transformer une base acquise de 12 554 contacts réno (consentement client) en RDV qualifiés PAC, par cold outreach EMAIL segmenté par méthode de chauffage. Le plus automatique possible : clic humain uniquement pour envoyer et pour booker. Autonome, hors stack RénoBoost.",
-        "rattache_a": "REPRISE.md (LE point de reprise, tenu en fin de chaque séance) · ROADMAP.md · TASKS.md (séquencement des phases) · SPEC.md (contrat de build figé) · PREMORTEM.md · GUIDE.md · LAUNCH.md · DEPLOY.md",
-        "etat": "en_attente_de_paul",
-        "jalon": {
-          "nom": "Gate 2 — le premier envoi réel : la chaîne brouillon → envoi → réponse tourne de bout en bout",
-          "critere_de_sortie": "Mot de passe SMTP posé · un lot de brouillons généré, relu par Paul et ENVOYÉ · au moins une réponse reçue et tracée. Détail et preuves : REPRISE.md"
-        },
-        "dernier_arret": {
-          "le": "2026-09-19",
-          "quoi": "Gate 1 FRANCHI — page de désinscription en ligne. Mails v2, point de reprise à jour (PR #31 #32 #33), 235 tests verts. Détail : REPRISE.md",
-          "commit": "4b897c7c2fc55977b1052ae6e5e640e10cf1962b"
-        },
-        "prochaine_action": "Poser le mot de passe SMTP — c'est le SEUL blocage restant avant le premier envoi réel (REPRISE.md, section blocages).",
-        "bloque_par": [
-          "⛔ MOT DE PASSE SMTP — action de Paul, seul blocage du gate 2 (constaté le 19/09)",
-          "⚠️ La page de désinscription réécrite (PR #31) est À REDÉPOSER sur Netlify Drop : la version en ligne n'est pas encore celle du dépôt"
-        ],
-        "en_attente_depuis": "2026-09-19",
-        "boucles_ouvertes": [],
-        "maj": "2026-09-22"
-      },
-      "recits": [],
-      "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
-      "derive": {
-        "tete": null,
-        "tete_le": null,
-        "commits_depuis": 0,
-        "commit_inconnu": false
-      },
-      "mesure_le": "2026-09-22",
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 3,
       "rang": 1
     },
     {
@@ -597,57 +648,6 @@
       "jours_depuis_maj": 0,
       "jours_en_attente": 14,
       "rang": 2
-    },
-    {
-      "ok": true,
-      "motif": "",
-      "depot": "PaulGERARD161098/renoboost-console",
-      "grain": {
-        "projet": "RénoBoost Console",
-        "depot": "PaulGERARD161098/renoboost-console",
-        "cap": "La console des AIDES DE L'ÉTAT : être toujours à jour sur les dispositifs et leurs tunnels, et conseiller juste en trois clics — particuliers, pros, entreprises. Règle d'or posée le 22/09 : la console n'implémente AUCUN barème, elle appelle le moteur officiel et cite sa source.",
-        "rattache_a": "Ultima-/CADRAGE-2026-09-22-leo-pilote-tout.md §0bis (les mesures) et §3 (la règle des aides) · DATARENO-/CLAUDE.md (les garde-fous conformité applicables au conseil au particulier)",
-        "etat": "en_cours",
-        "jalon": {
-          "nom": "J2 — les aides sont qualifiées : zéro chiffre affiché sans source ni date d'effet",
-          "critere_de_sortie": "Les cinq URL fantômes retirées · les barèmes sortis du prompt et de page.tsx · un appel au moteur officiel (mesaides.france-renov.gouv.fr) qui porte sa version et sa date · un contrôle qui refuse tout montant non tracé"
-        },
-        "dernier_arret": {
-          "le": "2026-09-10",
-          "quoi": "Refonte de page.tsx, Gemini dans core_engine.py, onglet Veille Stratégique (JORF). Aucun travail depuis.",
-          "commit": "d751368c7b0b05d76c52313cde63a4055740f7a5"
-        },
-        "prochaine_action": "Retirer les cinq sources d'aides et brancher le moteur officiel — voir le cadrage §3, les dix points.",
-        "bloque_par": [
-          "⛔ 3 TAUX D'ÉCRÊTEMENT SUR 4 SONT FAUX dans le prompt (modeste 90 et non 80, intermédiaire 80 et non 60, supérieur 50 et non 40). Ils SOUS-ESTIMENT l'aide. Cadrage §0bis",
-          "⛔ 2 des 5 sources d'aides pointent vers des domaines qui NE RÉSOLVENT PAS (citoyens.gouv.fr, api.maprimerenov.gouv.fr). Les 3 autres : NON VÉRIFIÉ, proxy fermé",
-          "⛔ Les 5 catch de lib/aidsApi.ts rendent [] EN SILENCE : source morte et absence d'aide donnent le même écran",
-          "⛔ 50 000 € écrit à DEUX endroits (prompt + page.tsx:61), et c'est une valeur par défaut au bout de variations, pas une règle",
-          "⛔ DEUX core_engine.py divergents : racine (genai.Client) et lib/ (genai.configure)",
-          "⛔ Le persona « RGE agressif, maximiser la marge » contredit les garde-fous conformité de DATARENO-/CLAUDE.md, applicables au conseil au particulier",
-          "⚠️ La source officielle déclare elle-même les CEE NON À JOUR — or les CEE sont le cœur du montage. [À REVÉRIFIER hors proxy]",
-          "⚠️ Les ENTREPRISES (tertiaire, BAT-TH) ne sont pas couvertes par le moteur officiel. Arbitrage Paul 22/09 : Léo ORIENTE sans chiffrer",
-          "⚠️ AUCUN test, AUCUNE CI : le garde-fou « zéro montant sur un dossier tertiaire » n'a nulle part où vivre",
-          "GEMINI_API_KEY en variable d'environnement : action de Paul"
-        ],
-        "en_attente_depuis": "2026-09-10",
-        "boucles_ouvertes": [],
-        "maj": "2026-09-22"
-      },
-      "recits": [],
-      "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
-      "derive": {
-        "tete": null,
-        "tete_le": null,
-        "commits_depuis": 0,
-        "commit_inconnu": false
-      },
-      "mesure_le": "2026-09-22",
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 12,
-      "rang": 2
     }
   ],
   "macro": {
@@ -659,7 +659,7 @@
     "en_cours": 7,
     "en_attente_de_paul": 3,
     "au_repos": 0,
-    "derives": 2,
+    "derives": 4,
     "commits_inconnus": 5,
     "boucles_ouvertes": 40,
     "gestes_de_paul": [
@@ -692,6 +692,54 @@
         "geste": "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)"
       },
       {
+        "projet": "RénoBoost Console",
+        "geste": "⛔ 3 TAUX D'ÉCRÊTEMENT SUR 4 SONT FAUX dans le prompt (modeste 90 et non 80, intermédiaire 80 et non 60, supérieur 50 et non 40). Ils SOUS-ESTIMENT l'aide. Cadrage §0bis"
+      },
+      {
+        "projet": "RénoBoost Console",
+        "geste": "⛔ 2 des 5 sources d'aides pointent vers des domaines qui NE RÉSOLVENT PAS (citoyens.gouv.fr, api.maprimerenov.gouv.fr). Les 3 autres : NON VÉRIFIÉ, proxy fermé"
+      },
+      {
+        "projet": "RénoBoost Console",
+        "geste": "⛔ Les 5 catch de lib/aidsApi.ts rendent [] EN SILENCE : source morte et absence d'aide donnent le même écran"
+      },
+      {
+        "projet": "RénoBoost Console",
+        "geste": "⛔ 50 000 € écrit à DEUX endroits (prompt + page.tsx:61), et c'est une valeur par défaut au bout de variations, pas une règle"
+      },
+      {
+        "projet": "RénoBoost Console",
+        "geste": "⛔ DEUX core_engine.py divergents : racine (genai.Client) et lib/ (genai.configure)"
+      },
+      {
+        "projet": "RénoBoost Console",
+        "geste": "⛔ Le persona « RGE agressif, maximiser la marge » contredit les garde-fous conformité de DATARENO-/CLAUDE.md, applicables au conseil au particulier"
+      },
+      {
+        "projet": "RénoBoost Console",
+        "geste": "⚠️ La source officielle déclare elle-même les CEE NON À JOUR — or les CEE sont le cœur du montage. [À REVÉRIFIER hors proxy]"
+      },
+      {
+        "projet": "RénoBoost Console",
+        "geste": "⚠️ Les ENTREPRISES (tertiaire, BAT-TH) ne sont pas couvertes par le moteur officiel. Arbitrage Paul 22/09 : Léo ORIENTE sans chiffrer"
+      },
+      {
+        "projet": "RénoBoost Console",
+        "geste": "⚠️ AUCUN test, AUCUNE CI : le garde-fou « zéro montant sur un dossier tertiaire » n'a nulle part où vivre"
+      },
+      {
+        "projet": "RénoBoost Console",
+        "geste": "GEMINI_API_KEY en variable d'environnement : action de Paul"
+      },
+      {
+        "projet": "DATA RÉNO",
+        "geste": "⛔ MOT DE PASSE SMTP — action de Paul, seul blocage du gate 2 (constaté le 19/09)"
+      },
+      {
+        "projet": "DATA RÉNO",
+        "geste": "⚠️ La page de désinscription réécrite (PR #31) est À REDÉPOSER sur Netlify Drop : la version en ligne n'est pas encore celle du dépôt"
+      },
+      {
         "projet": "RénoAgenda",
         "geste": "Recruter et valider des artisans — le dispatch et le dashboard pilotage pointent dans le vide sans eux"
       },
@@ -714,14 +762,6 @@
       {
         "projet": "RénoPredict",
         "geste": "Embarquement Stripe côté RénoPredict — jamais commencé (0 profil sur 2)"
-      },
-      {
-        "projet": "DATA RÉNO",
-        "geste": "⛔ MOT DE PASSE SMTP — action de Paul, seul blocage du gate 2 (constaté le 19/09)"
-      },
-      {
-        "projet": "DATA RÉNO",
-        "geste": "⚠️ La page de désinscription réécrite (PR #31) est À REDÉPOSER sur Netlify Drop : la version en ligne n'est pas encore celle du dépôt"
       },
       {
         "projet": "RénoBoost",
@@ -822,46 +862,6 @@
       {
         "projet": "Artidispo",
         "geste": "⚠️ TROIS CLIENTS STRIPE ORPHELINS crees par les clics de recette : create-checkout appelle customers.create AVANT l appel qui echoue. Sans gravite en test, a nettoyer avant le…"
-      },
-      {
-        "projet": "RénoBoost Console",
-        "geste": "⛔ 3 TAUX D'ÉCRÊTEMENT SUR 4 SONT FAUX dans le prompt (modeste 90 et non 80, intermédiaire 80 et non 60, supérieur 50 et non 40). Ils SOUS-ESTIMENT l'aide. Cadrage §0bis"
-      },
-      {
-        "projet": "RénoBoost Console",
-        "geste": "⛔ 2 des 5 sources d'aides pointent vers des domaines qui NE RÉSOLVENT PAS (citoyens.gouv.fr, api.maprimerenov.gouv.fr). Les 3 autres : NON VÉRIFIÉ, proxy fermé"
-      },
-      {
-        "projet": "RénoBoost Console",
-        "geste": "⛔ Les 5 catch de lib/aidsApi.ts rendent [] EN SILENCE : source morte et absence d'aide donnent le même écran"
-      },
-      {
-        "projet": "RénoBoost Console",
-        "geste": "⛔ 50 000 € écrit à DEUX endroits (prompt + page.tsx:61), et c'est une valeur par défaut au bout de variations, pas une règle"
-      },
-      {
-        "projet": "RénoBoost Console",
-        "geste": "⛔ DEUX core_engine.py divergents : racine (genai.Client) et lib/ (genai.configure)"
-      },
-      {
-        "projet": "RénoBoost Console",
-        "geste": "⛔ Le persona « RGE agressif, maximiser la marge » contredit les garde-fous conformité de DATARENO-/CLAUDE.md, applicables au conseil au particulier"
-      },
-      {
-        "projet": "RénoBoost Console",
-        "geste": "⚠️ La source officielle déclare elle-même les CEE NON À JOUR — or les CEE sont le cœur du montage. [À REVÉRIFIER hors proxy]"
-      },
-      {
-        "projet": "RénoBoost Console",
-        "geste": "⚠️ Les ENTREPRISES (tertiaire, BAT-TH) ne sont pas couvertes par le moteur officiel. Arbitrage Paul 22/09 : Léo ORIENTE sans chiffrer"
-      },
-      {
-        "projet": "RénoBoost Console",
-        "geste": "⚠️ AUCUN test, AUCUNE CI : le garde-fou « zéro montant sur un dossier tertiaire » n'a nulle part où vivre"
-      },
-      {
-        "projet": "RénoBoost Console",
-        "geste": "GEMINI_API_KEY en variable d'environnement : action de Paul"
       }
     ]
   },
@@ -878,9 +878,9 @@
         "pourquoi": "derive"
       },
       {
-        "projet": "RénoAgenda",
-        "dit": "n'est rattaché à aucun commit atteignable — sa fraîcheur n'est plus mesurable, à recaler",
-        "pourquoi": "commit_inconnu"
+        "projet": "RénoBoost Console",
+        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
+        "pourquoi": "derive"
       }
     ],
     "action": {
@@ -909,6 +909,20 @@
         "signal": 1
       },
       {
+        "id": "PaulGERARD161098/renoboost-console",
+        "libelle": "RénoBoost Console",
+        "constellation": "en_cours",
+        "ciel": "renoboost-ia",
+        "signal": 1
+      },
+      {
+        "id": "PaulGERARD161098/DATARENO-",
+        "libelle": "DATA RÉNO",
+        "constellation": "en_attente_de_paul",
+        "ciel": "alpha",
+        "signal": 1
+      },
+      {
         "id": "PaulGERARD161098/RenoAgenda",
         "libelle": "RénoAgenda",
         "constellation": "en_attente_de_paul",
@@ -920,13 +934,6 @@
         "libelle": "RénoPredict",
         "constellation": "en_attente_de_paul",
         "ciel": "renoboost-ia",
-        "signal": 1
-      },
-      {
-        "id": "PaulGERARD161098/DATARENO-",
-        "libelle": "DATA RÉNO",
-        "constellation": "en_attente_de_paul",
-        "ciel": "alpha",
         "signal": 1
       },
       {
@@ -955,13 +962,6 @@
         "libelle": "Artidispo",
         "constellation": "en_cours",
         "ciel": "alpha",
-        "signal": 0
-      },
-      {
-        "id": "PaulGERARD161098/renoboost-console",
-        "libelle": "RénoBoost Console",
-        "constellation": "en_cours",
-        "ciel": "renoboost-ia",
         "signal": 0
       }
     ],
