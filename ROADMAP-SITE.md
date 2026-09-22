@@ -79,7 +79,10 @@ jamais supprimée). Boucles ordonnées :
    remplacement. PR en attente de fusion (go Paul). U18 au vivier (→ R2).
 4. Fiche relation complète (intérêt qualitatif, efforts 1..5 — déjà en base/API).
 5. Regroupement de marqueurs (clustering) au-delà de ~100 nœuds.
-6. Import CSV de contacts existants (mapping colonnes → contrat).
+6. Import des contacts de l'iPhone (vCard `.vcf` → registre `personnes`) —
+   cadré le 2026-09-22 : `CADRAGE-RIVEN-IMPORT.md` + maquette
+   `design/preview-riven-import.html`. Boucle SUIVANTE (après ADR-005/006 +
+   VRANESH). L'import CSV reste au vivier.
 7. Filtrage par zone dessinée (préparation de tournée).
 8. Vue liste synchronisée à côté de la carte (survol croisé — motif
    systeme-commercial).
