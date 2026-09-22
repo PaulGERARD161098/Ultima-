@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v30 2026-09-19 sha256:018c29b03ae4 -->
+<!-- lecons:empreinte v31 2026-09-22 sha256:36323d22a858 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -447,6 +447,25 @@ d'un commentaire qui cite une mesure. *Règle* : ce qu'un commentaire affirme se
 mesure comme le code qu'il décrit. Quand la mesure dit autre chose que
 l'intuition, **c'est le commentaire qu'on réécrit dans le même passage** — et il
 dit alors exactement ce qu'il vaut : « éprouvé, et voici ce que ça a donné ».
+
+**UN CONTRÔLE QUI RÉPOND « ABSENT » SE REVÉRIFIE AVANT D'ÊTRE CRU** *(2026-09-21,
+deux fois dans la même journée)*. Le matin : `grep -c "padding-block:52px"` rend
+**0** sur un CSS qui portait `padding-block: 52px` — avec l'espace. J'ai failli
+conclure qu'un travail n'était pas dans `main`. Le soir, bien pire : le harnais
+`tests/specs-patterns.navigateur.mjs` passe de 414 à 61 lignes après une refonte,
+`grep PLAFOND` rend **0**, et j'ai commencé à écrire à Paul que **le plafond de
+hauteur avait disparu**. Il était là, ligne 30, écrit en dur :
+`ok(geometry.height<=12400, …)` — la valeur exacte abaissée et prouvée la veille.
+*Ce que ça a coûté* : rien, parce que j'ai ouvert le fichier avant d'envoyer ;
+tout, sinon — une alerte fausse sur un garde-fou de sécurité fait rouvrir un
+chantier clos et détruit la confiance dans les alertes suivantes.
+⛔ **Un « 0 » de `grep` n'est pas une absence, c'est une non-correspondance de
+motif.** Chercher le NOM d'une constante trouve la constante, pas la règle : une
+valeur peut être inlinée, renommée, déplacée, écrite avec un espace. *Règle* :
+avant d'annoncer qu'une chose a disparu, **ouvrir le fichier** et chercher ce que
+la chose FAIT, pas comment elle s'appelait. Et un verrou de non-vacuité sur la
+recherche elle-même — « ce fichier existe-t-il, fait-il plus de zéro ligne ? » —
+coûte une seconde et sauve l'annonce.
 
 ## 2. Les garde-fous, et leur silence
 
@@ -1297,6 +1316,48 @@ reconstruire — jamais écraser. Et la vérification se fait sur le CONTENU des
 apports, pas sur le fait que le sceau a changé.*
 
 ---
+
+**UNE BRANCHE PARTIE D'UN `main` DÉPASSÉ DÉTRUIT LE TRAVAIL DES AUTRES**
+*(2026-09-21)*. Une PR ouverte le matin, fusionnée le soir par Paul pendant que
+Codex refondait la vitrine : 47 commits sur `main` entre les deux. J'ai résolu
+son conflit **sur ma copie locale**, vieille de sept heures. Le diff proposé
+aurait **supprimé 410 lignes** du travail fusionné entre-temps —
+`leads-workspace`, `documents-workspace`, une migration SQL. *Ce que ça a
+coûté* : rien, parce que j'ai lancé `git diff --stat origin/main HEAD` avant de
+proposer et que les suppressions m'ont sauté aux yeux ; une régression massive
+sinon, et invisible en revue puisqu'une PR « de deux fichiers Markdown » ne se
+lit pas ligne à ligne. ⛔ **Sur un dépôt où plusieurs agents travaillent en
+parallèle, une branche vieillit en HEURES.** *Règle* : avant tout push sur une
+PR qui a attendu, `git fetch` puis fusionner `main` DANS la branche — et lire le
+`--stat` du diff contre `main` : **toute suppression qu'on n'a pas décidée est
+un retard, pas un travail**. Quand la branche est trop en retard, la refaire
+depuis `main` coûte moins cher que la réconcilier.
+
+**UN DOCUMENT ÉCRIT POUR UN TIERS VIEILLIT PENDANT QU'ON L'ÉCRIT** *(2026-09-21)*.
+Un rapport d'état des specs, demandé par Paul pour être confronté à Codex, livré
+à 15 h. À 23 h le même jour, Codex avait refondu la page qu'il décrivait : sa
+table « pattern → section » et ses numéros de ligne étaient caducs, mais rien
+dans le document ne le disait — il se lisait comme un état courant. *Ce que ça a
+coûté* : une relecture de Codex sur une carte périmée, évitée de justesse. ⛔ Le
+réflexe de le RÉÉCRIRE est le mauvais : ses cinq écarts et leurs motifs étaient
+la seule trace de ce qui avait été décidé et pourquoi. *Règle* : un document
+d'état porte **sa date et son commit en tête**, et quand le monde a bougé on lui
+ajoute un avertissement qui dit ce qui a changé et ce qui reste valable — on ne
+le réécrit pas, on ne le supprime pas. Un instantané daté est utile ; un
+instantané qui se croit courant est un piège.
+
+**UNE CONSIGNE PÉRIMÉE DANS UN RAPPEL AUTOMATIQUE EST PIRE QUE PAS DE RAPPEL**
+*(2026-09-22)*. Pendant trois jours et demi, chaque check-in que je me
+reprogrammais portait : « les jobs GitHub meurent en 1-3 s, une CI rouge ne dit
+rien du code — vérifier en local ». C'était vrai, mesuré, et ça a évité de
+fausses chasses. La CI est revenue le 21/09 à 22h12 ; la phrase, elle, serait
+repartie telle quelle dans le rappel suivant. *Ce que ça aurait coûté* : la
+première vraie CI rouge après la panne, écartée d'un revers de main par une
+séance qui suit sa propre note. *Règle* : un rappel qu'on se transmet d'un
+passage à l'autre se RELIT à chaque fois comme on relirait celui d'un autre, et
+toute consigne que la mesure du jour dément s'y retire **explicitement**, en
+disant qu'elle est périmée et depuis quand — pas en disparaissant, sinon la
+séance suivante la réinvente.
 
 ## 6. Économie
 
