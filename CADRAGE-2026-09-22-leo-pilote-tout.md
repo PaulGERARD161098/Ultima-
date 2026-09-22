@@ -9,8 +9,16 @@
 > finaux, les particuliers, les pros et les entreprises. »*
 >
 > ⛔ **Ce document CADRE. Il n'exécute rien.** Directive EL, gate d'entrée : le
-> comment est défini et assumé AVANT la première ligne. Aucun code n'est écrit
-> tant que les arbitrages du §8 ne sont pas rendus.
+> comment est défini et assumé AVANT la première ligne.
+>
+> ✅ **TROIS ARBITRAGES RENDUS PAR PAUL LE 22/09, intégrés ci-dessous :**
+> ① **Ripair est un SERVICE de RenoPredict**, pas un dépôt → `paggerard-boop/ripair`
+> sort du registre. **Le parc est de DIX dépôts**, pas onze.
+> ② **Tout le monde est piloté ou pilotable par Léo** → aucun gel, aucune mise à
+> l'écart. Les dix entrent.
+> ③ **Les aides doivent être CALCULÉES AUTOMATIQUEMENT** → la table tenue à la
+> main est écartée. ✅ Et la mesure du 22/09 a trouvé mieux : **le moteur officiel
+> de l'État existe, il est ouvert, versionné, et il calcule** (§0 bis).
 
 ---
 
@@ -131,10 +139,116 @@ elle sait déjà en parler.
 
 ---
 
+## §0 bis — LA SOURCE OFFICIELLE EXISTE, et trois des quatre taux du prompt sont FAUX
+
+*(mesuré le 22/09 — c'est la trouvaille qui change le chantier)*
+
+### Ce qui a pu être mesuré, et ce qui ne l'a pas été
+
+⛔ **Le réseau sortant de la séance est fermé par POLITIQUE, pas par erreur de
+configuration** — le diagnostic a été revérifié :
+
+```
+curl -sS "$HTTPS_PROXY/__agentproxy/status"
+  → connect_rejected · "gateway answered 403 to CONNECT (policy denial)"
+    citoyens.gouv.fr · api.maprimerenov.gouv.fr · www.anah.gouv.fr · …
+```
+
+`www.anah.gouv.fr` est refusé **comme les autres**, alors qu'il existe : aucune
+route HTTP n'est testable d'ici, et `WebFetch` est bloqué sur tout `.gouv.fr`.
+**[NON VÉRIFIÉ]** donc, et pour de bon depuis cette séance : les chemins
+`/api/aides`, `/api/eco-ptz`, `/aides-renovation-thermique`.
+
+⚠️ **Ce qui a été mesuré autrement**, et qui suffit à trancher : la recherche web
+(canal distinct, autorisé) et surtout **le code source du moteur officiel, cloné
+et lu** — `github.com/betagouv/reno`, tête `25bae95`, paquet `mesaidesreno`
+**v2.3.1**.
+
+### La source : Mes Aides Réno — le moteur officiel de l'État
+
+| | |
+|---|---|
+| **Quoi** | `mesaides.france-renov.gouv.fr` — le simulateur officiel de France Rénov' |
+| **Qui** | l'**ANAH**, après incubation beta.gouv / DINUM ; déployé nationalement |
+| **Comment** | moteur **Publicodes** — le modèle de calcul est entièrement exposé (paramètre `fields`) |
+| **API** | `mesaides.france-renov.gouv.fr/api-doc` — **conversationnelle** : elle rend les questions qui MANQUENT quand la situation est incomplète |
+| **Code** | ouvert, versionné sémantiquement, avec un `CHANGELOG` du modèle |
+| **Couvre** | MaPrimeRénov' (geste + accompagné), CEE, éco-PTZ, PAR, aides locales, copropriété, Denormandie, taxe foncière, outre-mer |
+
+⚠️ **L'API conversationnelle EST le pattern de `lib/tva.ts`** — elle distingue « la
+réponse est non » de « la question n'a pas été posée », et rend la liste des
+manquants. Ce n'était pas cherché : les deux dispositifs ont convergé sur la même
+forme parce que c'est la bonne.
+
+### ⛔ Trois des quatre taux d'écrêtement du prompt sont FAUX
+
+`ampleur.publicodes` → `ampleur . pourcent d'écrêtement`, *« Taux maximum toutes
+aides sur enveloppe TTC »* :
+
+| classe de revenu | couleur ANAH | **officiel** | prompt `core_engine.py` | écart |
+|---|---|---|---|---|
+| très modeste | Bleu | **100 %** | « 90-100 % » | flou, englobe |
+| modeste | Jaune | **90 %** | « 80 % » | ❌ **−10 pts** |
+| intermédiaire | Violet | **80 %** | « 60 % » | ❌ **−20 pts** |
+| supérieur | Rose | **50 %** | « 40 % » | ❌ **−10 pts** |
+
+⛔ **Les trois erreurs vont dans le même sens : elles SOUS-ESTIMENT l'aide.** Sur
+un chantier de 40 000 € TTC pour un ménage intermédiaire, le prompt plafonne les
+aides à 24 000 € au lieu de **32 000 €** — **8 000 € annoncés en moins** au
+client, donc un reste à charge gonflé de 8 000 €.
+
+⚠️ **Ce n'est pas un risque juridique, c'est une perte sèche.** Le pre-mortem PM-2
+redoutait un chiffre trop généreux (promesse non tenue) ; le défaut réel est
+l'inverse et **coûte des chantiers**. Paul annonce à ses clients un reste à charge
+plus élevé que la réalité, sur trois classes de revenu sur quatre.
+
+⚠️ La note du modèle signale pour la classe *modeste* une évolution « à date du
+11 décembre 2024 vers 90 %, en attente des textes d'application »
+([source ANAH citée dans le modèle](https://www.anah.gouv.fr/document/panorama-des-aides-2025)).
+Le modèle implémente 90 % et le dit. C'est exactement la traçabilité qu'on veut :
+la valeur, sa date, sa source, et son incertitude.
+
+### ✅ Les deux autres vérifications
+
+- **Éco-PTZ 50 000 € / 20 ans : CONFIRMÉ** (`PTZ.publicodes` — `par défaut: 50000 €`,
+  `par défaut: 20 ans`). ⚠️ Mais **ce sont des valeurs par DÉFAUT au bout de
+  variations** : la durée tombe à `15 ans` dans un cas, et le plafond dépend des
+  travaux (7 000 / 15 000 / 25 000 / 30 000 / 50 000 €). Donc
+  `page.tsx:61 → Math.min(legalRest, 50000)` applique **le cas le plus favorable à
+  tous les dossiers**. Un plafond codé en dur n'est pas une règle, c'est une branche.
+- **Les fiches CEE sont référencées AVEC leur version et leur date d'effet** :
+  `BAR-EN-102`, lien officiel, *« vA65-4 à compter du 01-01-2025 »*
+  (`gestes/isolation.yaml`). C'est la forme que doit prendre tout barème chez nous.
+
+### ⛔ TROIS LIMITES À CONNAÎTRE AVANT DE BRANCHER
+
+1. **Le dépôt GitHub est FIGÉ.** Dernier commit du modèle : **2025-12-18**, il y a
+   neuf mois. Le projet « n'est plus en développement actif » et a été repris par
+   l'administration. ⛔ **Donc on n'embarque PAS le modèle — on appelle l'API
+   hébergée**, qui est la version vivante. Recopier le modèle échangerait un
+   barème périmé contre un autre barème périmé, avec en prime l'illusion d'avoir
+   traité le sujet. C'est **exactement** la règle déjà écrite pour l'audit PAC :
+   *le moteur se calcule ailleurs, il ne se recopie jamais*.
+2. ⚠️ **La source officielle déclare elle-même un trou sur les CEE** : *« il y a
+   actuellement un problème avec le dispositif de financement CEE, les
+   informations et simulations pour cette aide ne sont plus à jour, en attente
+   d'une mise à jour du simulateur »*. Or les CEE sont le cœur du montage de Paul.
+   ⛔ Donc **même la bonne source doit être lue sur ce qu'elle dit d'elle-même**,
+   et l'écran doit pouvoir afficher « cette aide est en cours de mise à jour à la
+   source ». **[À REVÉRIFIER hors proxy]** — l'avertissement vient d'une recherche
+   web, pas d'une lecture directe de la page.
+3. ⛔ **Les ENTREPRISES ne sont pas couvertes.** Le modèle porte sur le
+   **logement** — résidence principale, particuliers, copropriétés. Le tertiaire
+   (fiches `BAT-TH-*`) n'y est pas. Paul demande particuliers **+ pros +
+   entreprises** : le troisième public **n'a pas de source officielle ouverte
+   identifiée à ce jour**, et c'est un trou nommé, pas un oubli.
+
+---
+
 ## §1 — L'objectif final, et le critère qui dit qu'on y est
 
 **Le cap (JL)** : Ultima est l'unique interface de travail de Paul, Léo son unique
-interlocutrice. Piloter 11 dépôts n'est pas le but — c'est le moyen.
+interlocutrice. Piloter dix dépôts n'est pas le but — c'est le moyen.
 
 **Le but réel, en clair** : Paul ouvre Ultima, et en trois clics il conseille
 juste un particulier, un pro ou une entreprise sur les aides auxquelles il a
@@ -144,7 +258,7 @@ droit, **avec des chiffres dont Léo peut citer la source et la date**.
 
 | | Critère | Comment on le prouve |
 |---|---|---|
-| **C1** | Finubar voit **11/11** dépôts, `hors_seance: 0`, depuis une séance sans dépôt attaché | `node finubar/collecter.mjs` |
+| **C1** | Finubar voit **10/10** dépôts, `hors_seance: 0`, depuis une séance sans dépôt attaché | `node finubar/collecter.mjs` |
 | **C2** | Un dépôt semé et non déclaré **fait rougir** un contrôle | on retire une ligne de `depots.json` → le contrôle nomme le dépôt absent |
 | **C3** | **Zéro** chiffre d'aide affiché sans source ni date d'effet | un contrôle refuse tout montant non tracé |
 | **C4** | Les 3 profils (particulier · pro · entreprise) aboutissent à un conseil en **≤ 3 clics** | parcours joué au navigateur, mesuré |
@@ -203,48 +317,59 @@ les invente pas : il les rend **exécutables par la machine** au lieu de les lai
 
 ---
 
-## §3 — Les aides d'État : la règle, et le patron qui existe déjà
+## §3 — Les aides : on n'implémente AUCUN barème, on appelle le moteur officiel
 
 ⛔ **RÈGLE D'OR, non négociable** : **Léo ne conseille jamais sur un chiffre dont
-elle ne peut pas citer la SOURCE et la DATE D'EFFET.** Directive EL appliquée au
-produit — et ici la valeur n'est pas seulement crue par Paul : elle est répétée à
-un client final qui va décider de travaux dessus.
+elle ne peut pas citer la SOURCE et la DATE.** Ici la valeur n'est pas seulement
+crue par Paul : elle est répétée à un client qui va engager des travaux dessus.
 
-**Le patron existe dans la maison, on ne le réinvente pas** :
-`RenoDevis/lib/tva.ts`. Il résout exactement ce problème pour la TVA et a été
-éprouvé en le cassant. Ce qu'on en reprend, ligne à ligne :
+✅ **L'arbitrage de Paul — « les aides doivent être calculées automatiquement » —
+est non seulement tenable, il est MIEUX servi que par une table à la main :**
+l'État publie le moteur (§0 bis). La conséquence est nette, et elle simplifie le
+chantier au lieu de l'alourdir :
 
-| Ce que `lib/tva.ts` fait | Transposé aux aides |
-|---|---|
-| une table `REGLES` **datée et sourcée** | un barème par aide, avec date d'effet et référence du texte |
-| `dateDevis` **obligatoire, sans défaut** | la date du conseil est obligatoire — un dossier de juin rouvert en octobre garde SON barème |
-| ⛔ **le repli va vers le HAUT** | condition inconnue → **l'aide la moins favorable**, jamais la plus généreuse « au cas où ». Se tromper en annonçant moins coûte une déception ; se tromper en annonçant plus coûte un client qui a engagé des travaux sur une aide qu'il n'aura pas |
-| `null ≠ false` | une question non posée se répare ; un « non » constaté ne se répare pas. Seuls les `null` sont listés comme manquants |
-| la table ne se modifie **que dans une PR** | idem — anneau rouge |
-| la péremption **signale**, elle ne casse pas la CI | un barème non relu depuis N jours s'affiche « à revérifier », il ne fait pas tomber le build un lundi matin |
+> ⛔ **RenoBoost n'écrit aucune règle d'aide. Il POSE UNE QUESTION et AFFICHE UNE
+> RÉPONSE SOURCÉE.** Zéro barème dans le code, zéro barème dans un prompt.
 
-**Ce que ça impose à renoboost-console, avant tout branchement :**
+**Le patron est déjà dans la maison, deux fois :**
 
-1. **Qualifier les cinq sources.** Hors proxy : lesquelles répondent, sous quel
-   contrat, avec quelle fraîcheur ? Une source qui ne résout pas sort de la liste
-   — elle ne reste pas « au cas où ».
-2. **Une source morte doit se voir.** `return []` devient un état typé et affiché :
-   *source injoignable, dernière réponse le …*. ⛔ Ne jamais retomber en silence.
-3. **Sortir les barèmes du prompt** vers une table datée et sourcée, à l'image de
-   `lib/tva.ts`. Le prompt les **lit**, il ne les **porte** plus.
-4. **Un seul endroit par chiffre.** `page.tsx:61` cesse de porter 50 000 €.
-5. **Deux personas séparés.** Le conseil à un particulier et le montage financier
-   d'un artisan ne peuvent pas sortir du même prompt « agressif ». Les garde-fous
-   de `DATARENO-/CLAUDE.md` s'appliquent au premier, mot pour mot.
-6. **Fusionner les deux `core_engine.py`.**
+| Précédent | Ce qu'il dit | Application ici |
+|---|---|---|
+| `RenoDevis/CLAUDE.md` — l'audit PAC | *« le moteur se calcule ailleurs (`mon-dpe.fr`), ne jamais recopier »* — parce que deux copies divergent et que deux chiffres différents partent chez le même client | ⛔ Identique : **on appelle**, on ne recopie pas |
+| `RenoDevis/lib/tva.ts` | table datée et sourcée · date obligatoire sans défaut · `null ≠ false` · péremption signalée | L'API officielle **fait déjà tout cela** — y compris rendre les questions manquantes |
 
-⚠️ **Et si aucune source publique fiable n'existe** — c'est une issue possible, pas
-un échec : alors les barèmes sont **saisis à la main dans une table versionnée**,
-avec leur source et leur date, et relus périodiquement. C'est moins brillant qu'une
-API, c'est vrai, et ça reste conforme à C3. ⛔ Une API inventée est pire qu'une
-table tenue à la main.
+**Ce que ça impose concrètement :**
 
----
+1. **Une seule fonction appelle le moteur**, côté serveur, HTTPS + timeout borné.
+   L'écran ET Léo l'appellent. ⛔ Deux formules du même chiffre divergent toujours.
+2. **La réponse porte sa provenance** : version du modèle, date d'appel, et le lien
+   vers la règle. Affiché, pas enfoui en commentaire.
+3. **Les manquants sont rendus, pas devinés.** L'API dit quelles questions poser :
+   c'est **exactement** le « 3 clics » de Paul — trois questions qui comptent,
+   choisies par le moteur, plutôt qu'un formulaire de vingt champs.
+4. **Une source injoignable est un ÉTAT AFFICHÉ**, jamais un `[]` silencieux.
+   Le dernier résultat connu est **mis en cache et daté**, et l'écran dit son âge —
+   la règle déjà tenue par le mail Finubar du matin.
+5. ⚠️ **Ce que la source déclare périmé chez elle, l'écran le déclare aussi** —
+   à ce jour, les CEE.
+6. **Les cinq URL actuelles sont RETIRÉES**, y compris les trois dont le domaine
+   résout : aucune n'est documentée comme API publique, et deux ne résolvent pas.
+   ⛔ Ne pas en garder « au cas où » : une source fantôme qui rend `[]` est
+   indiscernable d'une absence d'aide.
+7. **Les barèmes sortent du prompt.** `core_engine.py` cesse de porter l'écrêtement,
+   l'éco-PTZ et la TVA — il les **reçoit** de l'appel. Le prompt garde le métier
+   (expliquer, monter un plan de financement), il perd le droit de dire les chiffres.
+8. **`page.tsx:61` cesse de porter `50000`.**
+9. **Deux personas séparés.** Le conseil au particulier et le montage financier de
+   l'artisan ne sortent pas du même prompt « agressif » : les garde-fous de
+   `DATARENO-/CLAUDE.md` (zéro claim, zéro chiffre non sourcé, risque DGCCRF)
+   s'appliquent au premier, mot pour mot.
+10. **Fusionner les deux `core_engine.py`.**
+
+⛔ **ET LE TROU EST NOMMÉ : les ENTREPRISES.** Le moteur officiel couvre le
+logement. Pour le tertiaire, aucune source ouverte équivalente n'est identifiée.
+Trois conduites possibles, à arbitrer (§8 décision 4bis) — et **aucune ne consiste
+à laisser un prompt inventer des chiffres pour ce public.**
 
 ## §4 — Le plan : quatre jalons, chemin critique explicite
 
@@ -276,8 +401,8 @@ tient.
 | **Grains semés de mémoire** pour DATARENO- et renoboost-console → deux mensonges de plus au tableau | grain sans commit vérifiable | ⬆️⬆️ | Grain rempli depuis l'état réel (`git log` + doc de reprise), commit vérifié par `merge-base --is-ancestor`. DATARENO- a déjà `REPRISE.md` et `ROADMAP.md` : le grain les **pointe**, il ne les recopie pas |
 | **Token GitHub absent** → la collecte affiche un état complet et faux | premier run sans secret | ⬇️⬆️ | Réutiliser le mécanisme existant (`ok:false` + `motif`). ⛔ Ne pas inventer un second mécanisme de « je ne sais pas » |
 | Le grain lu par API (`main`) **écrase** le grain local (branche), plus frais | grain régressé après collecte | ⬇️⬆️ | Disque **prioritaire**, API en repli strict |
-| Rate limit | 11 dépôts × 3 appels × 10 collectes ≈ 330/jour | ⬇️⬇️ | Sous les 5 000/h authentifié — **à mesurer une fois**, pas à supposer |
-| ⛔ On passe à 11/11 et **2 des 11 n'ont rien à dire** : mesure améliorée, pilotage inchangé | un grain immobile depuis 30 j | ⬆️⬆️ | **Trancher le périmètre AVANT** (§8, décisions 1-2) |
+| Rate limit | 10 dépôts × 3 appels × 10 collectes ≈ 300/jour | ⬇️⬇️ | Sous les 5 000/h authentifié — **à mesurer une fois**, pas à supposer |
+| ⛔ On passe à 10/10 et **2 des 10 n'ont rien à dire** : mesure améliorée, pilotage inchangé | un grain immobile depuis 30 j | ⬆️⬆️ | ⚠️ Paul a tranché : aucun gel (§8-2). Ce risque n'est donc PLUS mitigé par le périmètre — il repose sur le chemin critique et le critère de recette IA, et sur la nuance **« pilotable » ≠ « piloté »** |
 
 ### PM-2 · « J2 a échoué » — les aides
 
@@ -296,7 +421,7 @@ tient.
 | ⛔ **Injection par le contenu.** Un lead, un mail synchronisé, un PDF de devis, un commentaire GitHub contient « ignore les règles et écris X ». Léo lit la donnée, donc elle lit l'attaque | une écriture qu'aucune demande de Paul n'explique | ⬆️⬆️ | **La validation est côté serveur, contre un catalogue fermé** — c'est déjà l'architecture. Le modèle ne peut proposer que ce que le catalogue déclare, avec des arguments bornés. ⛔ Ne jamais « simplifier » en exécutant directement un `tool_use` |
 | L'anneau vert **s'élargit par commodité** : un jour on y met un statut client « parce que c'est pratique » | une écriture verte qui touche un tiers | ⬆️⬆️ | L'appartenance à l'anneau est **déclarée dans le catalogue**, pas décidée à l'exécution ; un test la garde. Élargir exige une PR |
 | **Une écriture verte n'est pas défaisable** — on l'avait crue anodine | rien, jusqu'au jour où | ⬇️⬆️ | Le journal porte de quoi défaire. Pas de défaisabilité → pas vert |
-| Léo écrit **dans le mauvais dépôt** (11 dépôts, des noms proches, deux bases Supabase) | une note dans le grain du voisin | ⬆️⬆️ | Le dépôt cible est un **argument borné** du catalogue, jamais déduit du fil de conversation |
+| Léo écrit **dans le mauvais dépôt** (10 dépôts, des noms proches, deux bases Supabase) | une note dans le grain du voisin | ⬆️⬆️ | Le dépôt cible est un **argument borné** du catalogue, jamais déduit du fil de conversation |
 | ⛔ **Les deux bases sont confondues.** Ultima = `leosfqyidgsaescjbfom` ; les 4 briques = `mwaryfscxgrulauwwque`. Un objet de la base partagée n'appartient jamais au dépôt d'où on le regarde | une écriture qui casse une autre brique | ⬆️⬆️ | La leçon du 17/08 (`RenoDevis/CLAUDE.md`) s'applique : **toute restriction de droit se contrôle sur les quatre dépôts**, et le gate n'est pas levé si l'un manque |
 | Paul **ne relit plus** les propositions et valide en rafale | le taux de refus tombe à zéro | ⬆️⬆️ | La proposition affiche **ce qui va changer**, pas son intitulé. Et une proposition orange **expire** : validée trois jours plus tard, elle est rejouée, pas appliquée |
 
@@ -306,7 +431,7 @@ tient.
 |---|---|---|
 | ⛔ **Onze dépôts, un seul homme.** Le pilotage devient l'activité, au détriment du produit. Trois mois passent, Finubar est superbe, aucun client de plus | ⬆️⬆️ | **Le critère de recette est la Directive IA** : la livraison a-t-elle réduit ce que Paul fait à la main ? Un jalon qui n'enlève pas de travail est une régression. Et §8 décision 2 : **fermer ou geler** ce qui ne sert plus |
 | Le conseil « 3 clics » donne un mauvais chiffre à un vrai client | ⬆️⬆️ | C3 prime sur C4, et l'écran sait dire « je ne sais pas » |
-| Léo devient un **point de compromission unique** : un agent, onze dépôts, deux bases, droits d'écriture | ⬇️⬆️ | Les trois anneaux + catalogue fermé + journal. ⛔ « Un seul agent » est une règle d'**ergonomie** (un interlocuteur pour Paul), jamais une règle de **privilèges** : Léo délègue à des agents aux droits étroits, elle ne cumule pas les leurs |
+| Léo devient un **point de compromission unique** : un agent, dix dépôts, deux bases, droits d'écriture | ⬇️⬆️ | Les trois anneaux + catalogue fermé + journal. ⛔ « Un seul agent » est une règle d'**ergonomie** (un interlocuteur pour Paul), jamais une règle de **privilèges** : Léo délègue à des agents aux droits étroits, elle ne cumule pas les leurs |
 | Le dispositif **dérive sans qu'on le voie** : grains périmés, barèmes vieux, sondes désarmées | ⬆️⬆️ | Directive DR : trois dry runs par jour, déjà en place. On leur ajoute les sondes de ce cadrage |
 | Paul est **le seul à savoir** comment tout ça tient | ⬇️⬆️ | Le cadrage est versionné, les règles vivent dans les `CLAUDE.md`, les sondes sont exécutables |
 
@@ -408,26 +533,56 @@ parallèles — le chemin critique en impose **un à la fois**.
 
 ---
 
-## §8 — Les arbitrages de Paul — rien ne se code avant
+## §8 — Les arbitrages : trois rendus, ce qui reste
+
+### ✅ Rendus par Paul le 22/09
+
+| # | Question | Réponse | Effet sur le chantier |
+|---|---|---|---|
+| **1** | Ripair : dépôt ou service ? | **Service de RenoPredict** | `paggerard-boop/ripair` **sort** de `depots.json`. Le parc est de **DIX**. Le critère C1 devient **10/10** |
+| **2** | Le périmètre | **Tout le monde est piloté ou pilotable par Léo** | Aucun gel. Les dix entrent, DATARENO- et renoboost-console compris. ⚠️ Le POV n° 6 (« fuite en avant ») est donc **assumé**, pas écarté : la discipline se tient par le chemin critique — un jalon à la fois |
+| **3** | Les aides | **Calculées automatiquement** | La table tenue à la main est écartée. ✅ Et la mesure a trouvé mieux : **le moteur officiel de l'État** (§0 bis). Le chantier J2 **rétrécit** : plus aucun barème à écrire, à tenir ni à relire |
+
+### ⏳ Ce qui reste à arbitrer
 
 | # | Question | Ce qui en dépend |
 |---|---|---|
-| **1** | **Ripair** : dépôt distinct `paggerard-boop/ripair` à attacher, ou service déjà couvert par le grain de **RenoPredict** ? Le registre le déclare, la séance ne le voit pas | Le parc est à 10 ou 11. Change J1 |
-| **2** | **Le périmètre franc.** Les 11 sont-ils tous pilotés, ou certains sont-ils **gelés** (artisan-builder ? DATARENO- ?) ? Un gel assumé est une réponse, pas un renoncement | Volume de J1 × 2. C'est la réponse au POV n° 6 |
-| **3** | **Les aides : qui fait foi ?** Si aucune API publique n'est exploitable, accepte-t-on une **table versionnée tenue à la main**, relue périodiquement ? | Débloque J2, donc tout le reste |
-| **4** | **Le conseil en 3 clics : catalogue ou croisement ?** Un simulateur d'aides générique (que France Rénov' fait déjà), ou *« pour CE client, avec CE devis, dans CE dossier »* ? | Change la nature de J4 — et c'est la réponse au POV n° 5 |
-| **5** | **Quelle Léo ?** Les droits d'écriture visent Léo-**produit** (`api/leo.js`, celle de l'interface). Confirmé ? | Léo-séance écrit déjà ; seuls les gates la bornent |
-| **6** | **L'anneau vert te convient-il tel qu'il est défini** (§2), ou veux-tu y ajouter / retirer quelque chose ? | Détermine J3 |
+| **4** | **Le 3 clics : catalogue ou croisement ?** Un simulateur d'aides générique — que `mesaides.france-renov.gouv.fr` fait déjà, gratuitement et avec l'autorité de l'État — ou *« pour CE client, avec CE devis, dans CE dossier »* ? ⚠️ Depuis que la source officielle est identifiée, **la question n'est plus ouverte de la même façon** : reproduire le simulateur public n'apporte rien. La valeur est dans le croisement avec le parc | La nature de J4 |
+| **4bis** | ⛔ **Les ENTREPRISES** — le moteur officiel ne couvre que le logement. Trois options : (a) on **dit** que le tertiaire n'est pas couvert et on s'arrête au particulier + copropriété ; (b) on ajoute une source tertiaire (fiches `BAT-TH-*`), qui est un chantier à part entière ; (c) pour ce public, Léo **oriente** au lieu de chiffrer | Le périmètre réel du « conseiller en 3 clics ». ⛔ Aucune option n'autorise un prompt à inventer des montants |
+| **5** | **Quelle Léo ?** Les droits d'écriture visent Léo-**produit** (`api/leo.js`). Confirmé ? | Léo-séance écrit déjà ; seuls les gates la bornent |
+| **6** | **L'anneau vert** (§2) te convient-il tel quel ? | Le contenu de J3 |
 
----
+### ⚠️ Ce que la décision 2 change au pre-mortem
+
+« Tout le monde est piloté » **retire** la mitigation qui était prévue pour le
+risque le plus probable de PM-4 (*« dix dépôts, un seul homme — le pilotage
+devient l'activité »*). Ce risque n'est donc plus mitigé par la réduction du
+périmètre. **Il est reporté sur deux garde-fous, et eux seuls :**
+
+1. **Le chemin critique** — un jalon à la fois, jamais quatre chantiers parallèles.
+2. ⛔ **Le critère de recette de la Directive IA** — *une livraison qui ajoute de
+   la saisie manuelle obligatoire est une régression, même si elle marche*. Un
+   dépôt branché à Finubar qui n'enlève aucun travail à Paul n'est pas un progrès.
+
+⚠️ **« Pilotable » n'est pas « piloté ».** Paul a dit *« piloté OU pilotable »* :
+un dépôt peut être **branché** (Léo le voit, il entre dans la collecte) sans être
+**actif** (personne n'y travaille cette semaine). Cette nuance **sauve** le
+dispositif du risque ci-dessus : on branche les dix, on n'en travaille qu'un.
+C'est ce que le grain `etat` porte déjà. ⛔ Ne pas confondre couverture et charge.
 
 ## §9 — La prochaine action, unique
 
-**L'arbitrage du §8.** Les décisions 1, 2 et 3 changent le volume du chantier d'un
-facteur trois et son ordre d'exécution. Le pre-mortem PM-1 les désigne comme
-dé-risquantes : tant qu'elles ne sont pas rendues, toute ligne écrite risque
-d'être écrite pour rien — Directive EB, ne pas travailler pour travailler.
+**Décision 4 / 4bis** — le 3 clics est-il un **croisement** avec le parc, et que
+fait-on des **entreprises** ? C'est la seule question qui reste sur le chemin
+critique : J1 et J2 sont désormais cadrés et débloqués.
 
-⚠️ **Une chose ne dépend d'aucun arbitrage et peut partir dès le go** : tester les
-cinq sources d'aides **hors proxy**. C'est la mesure qui conditionne J2, elle ne
-coûte rien, et elle tranche la décision 3 au lieu de la faire deviner.
+⚠️ **Et ce qui n'attend plus personne** : les décisions 1, 2 et 3 sont rendues, et
+la source des aides est identifiée et lue. **J1 peut partir dès le go** —
+`depots.json` remis au réel à dix entrées (Ripair retiré, Artidispo déclaré), les
+deux grains manquants semés depuis l'état réel, la collecte lue par l'API GitHub,
+et le témoin de registre éprouvé en le cassant.
+
+⛔ **Ce qui doit être revérifié hors proxy avant J2**, nommément : l'URL de base et
+les routes de l'API (`mesaides.france-renov.gouv.fr/api-doc`), l'avertissement CEE,
+et la disponibilité réelle du service. Cette séance a lu **le modèle** (code cloné,
+`mesaidesreno` v2.3.1) — elle n'a pas pu appeler **l'API**.
