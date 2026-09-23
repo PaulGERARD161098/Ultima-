@@ -3,6 +3,24 @@
 > Une décision consignée n'est jamais redemandée ni re-litigée.
 > Format : date — décision — conséquence.
 
+- **2026-09-22 (RIVEN — importer les contacts de l'iPhone, dictée)** — Paul :
+  *« est-ce que je peux importer des contacts de mon iPhone dans Ultima pour
+  Riven ? »*, puis *« oui, en boucle suivante, j'ai environ 500 contacts »*,
+  *« ok maquette, fusion auto des doublons, go boucle import »* et *« go fusion
+  dès que c'est vert »*. **Décisions** : ① l'import passe par la **vCard**
+  (export iCloud), pas par un CSV ; il remplit le registre **`personnes`**, jamais
+  les fiches (une fiche exige un type) ; ② **rien n'est coché par défaut** ; ③ les
+  **doublons du fichier sont fusionnés automatiquement** (même téléphone normalisé
+  ou même e-mail, sans écraser) ; ④ la maquette `design/preview-riven-import.html`
+  est validée. Livré et fusionné le même soir (#285, `bce6101`), aucune migration.
+  **Ordre des boucles suivantes, fixé par Paul** : *« ensuite il faudra faire une
+  étude contact par contact pour que je dise ce qu'il en est de chacun, et bien
+  les renseigner dans RIVEN ; il faudra ensuite bien sécuriser RIVEN »* —
+  **① revue contact par contact, ② sécuriser RIVEN**, dans cet ordre, chacune
+  cadrée en 6 points à son ouverture (`CADRAGE-RIVEN-IMPORT.md` §7).
+  **Restent à Paul** : importer son vrai fichier ; région Vercel `cdg1` ;
+  vérifier que les inscriptions Supabase sont fermées.
+
 - **2026-09-14 (SPC — le premier écran, Paul regarde la preview)** — Paul renverse
   le constat 2 de la critique design (« H1 = métier + ville, marque au-dessus »).
   **Décision : le NOM d'abord, en grand.** Message central dicté mot pour mot :

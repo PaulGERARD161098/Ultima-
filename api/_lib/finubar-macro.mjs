@@ -4,7 +4,7 @@
 // l'IMPORTER pour que Vercel l'embarque dans le paquet de la fonction, et
 // que `api/_lib/` est le seul motif d'import éprouvé en production ici.
 export default {
-  "le": "2026-09-22",
+  "le": "2026-09-23",
   "projets": [
     {
       "ok": true,
@@ -72,8 +72,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "02b5e27",
         "tete_le": "2026-09-22T21:08:33+00:00",
@@ -81,8 +81,8 @@ export default {
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-22",
-      "jours_depuis_maj": 15,
-      "jours_en_attente": 69,
+      "jours_depuis_maj": 16,
+      "jours_en_attente": 70,
       "rang": 0
     },
     {
@@ -163,8 +163,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "3a59922",
         "tete_le": "2026-09-22T21:08:17+00:00",
@@ -172,8 +172,8 @@ export default {
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-22",
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 49,
+      "jours_depuis_maj": 1,
+      "jours_en_attente": 50,
       "rang": 0
     },
     {
@@ -261,8 +261,8 @@ export default {
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-22",
-      "jours_depuis_maj": 1,
-      "jours_en_attente": 36,
+      "jours_depuis_maj": 2,
+      "jours_en_attente": 37,
       "rang": 0
     },
     {
@@ -281,8 +281,8 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-09-22",
-          "quoi": "Import des contacts iPhone dans RIVEN livré (#285) : vCard lue dans le navigateur → registre `personnes`, tri sans case pré-cochée, doublons fusionnés, route POST…",
-          "commit": "13da5d6ca2a826ec7a2af33060bdc16c79424384"
+          "quoi": "Import des contacts iPhone dans RIVEN fusionné dans main (#285, bce6101) : vCard lue dans le navigateur → registre `personnes`, tri sans case pré-cochée, doublons fusionnés, route…",
+          "commit": "bce61010788bf365dd136fb3809f450a14118bf2"
         },
         "prochaine_action": "Paul importe son vrai export iCloud (.vcf) dans RIVEN : Contacts → Personnes → « Importer des contacts ». Puis ouvrir la boucle « revue contact par contact »…",
         "bloque_par": [
@@ -346,14 +346,14 @@ export default {
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "e8b83ce",
-        "tete_le": "2026-09-22T21:09:15+00:00",
+        "tete": "5dc854f",
+        "tete_le": "2026-09-23T12:48:52+00:00",
         "commits_depuis": 1,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-09-22",
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 33,
+      "mesure_le": "2026-09-23",
+      "jours_depuis_maj": 1,
+      "jours_en_attente": 34,
       "rang": 0
     },
     {
@@ -407,8 +407,8 @@ export default {
         "commit_inconnu": true
       },
       "mesure_le": "2026-09-22",
-      "jours_depuis_maj": 19,
-      "jours_en_attente": 49,
+      "jours_depuis_maj": 20,
+      "jours_en_attente": 50,
       "rang": 1
     },
     {
@@ -450,8 +450,8 @@ export default {
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-22",
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 3,
+      "jours_depuis_maj": 1,
+      "jours_en_attente": 4,
       "rang": 1
     },
     {
@@ -502,8 +502,8 @@ export default {
         "commit_inconnu": true
       },
       "mesure_le": "2026-09-22",
-      "jours_depuis_maj": 32,
-      "jours_en_attente": 32,
+      "jours_depuis_maj": 33,
+      "jours_en_attente": 33,
       "rang": 2
     },
     {
@@ -549,8 +549,8 @@ export default {
         "commit_inconnu": true
       },
       "mesure_le": "2026-09-22",
-      "jours_depuis_maj": 7,
-      "jours_en_attente": 32,
+      "jours_depuis_maj": 8,
+      "jours_en_attente": 33,
       "rang": 2
     },
     {
@@ -603,8 +603,8 @@ export default {
         "commit_inconnu": true
       },
       "mesure_le": "2026-09-22",
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 14,
+      "jours_depuis_maj": 1,
+      "jours_en_attente": 15,
       "rang": 2
     },
     {
@@ -647,8 +647,8 @@ export default {
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-22",
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 12,
+      "jours_depuis_maj": 1,
+      "jours_en_attente": 13,
       "rang": 2
     }
   ],
@@ -657,7 +657,7 @@ export default {
     "lisibles": 10,
     "illisibles": 0,
     "hors_seance": 0,
-    "repris": 7,
+    "repris": 9,
     "en_cours": 7,
     "en_attente_de_paul": 3,
     "au_repos": 0,

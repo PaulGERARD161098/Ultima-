@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-22",
-    "commit": "13da5d6ca2a826ec7a2af33060bdc16c79424384",
-    "quoi": "Import des contacts iPhone dans RIVEN livré (#285) : vCard lue dans le navigateur → registre `personnes`, tri sans case pré-cochée, doublons fusionnés, route POST /api/reseau/import par lots. Audit adverse : 0 critique/élevé, M1-M3 + F1-F4 fermés, tests vus rouges puis verts. Aucune migration."
+    "commit": "bce61010788bf365dd136fb3809f450a14118bf2",
+    "quoi": "Import des contacts iPhone dans RIVEN fusionné dans main (#285, bce6101) : vCard lue dans le navigateur → registre `personnes`, tri sans case pré-cochée, doublons fusionnés, route POST /api/reseau/import par lots. Audit adverse : 0 critique/élevé, M1-M3 + F1-F4 fermés, tests vus rouges puis verts. Aucune migration."
   },
   "prochaine_action": "Paul importe son vrai export iCloud (.vcf) dans RIVEN : Contacts → Personnes → « Importer des contacts ». Puis ouvrir la boucle « revue contact par contact » (CADRAGE-RIVEN-IMPORT.md §7), cadrée en 6 points à l'ouverture. ⛔ Remesurer `select count(*) from personnes` avant (0 au 22/09) : c'est lui qui dit si l'import a eu lieu.",
   "bloque_par": [
