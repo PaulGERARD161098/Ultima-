@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v37 2026-09-22 sha256:ebe8b327b0ca -->
+<!-- lecons:empreinte v38 2026-09-22 sha256:cbdac23a0db7 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -839,6 +839,20 @@ tenaient indéfiniment, verts. *Règle* : rendre un écran et le regarder est un
 **mesure**, pas une illustration. Un `overflow` qui avale, un absolu qui passe
 au-dessus, un texte tronqué — aucun ne lève d'exception, aucun ne rougit une CI,
 et tous se voient en une seconde sur une image.
+
+**UNE CAPTURE DU PRODUIT PÉRIME À LA PREMIÈRE REFONTE DE L'ÉCRAN QU'ELLE MONTRE**
+*(2026-09-22)*. Les deux captures de la section « Tout votre suivi » de l'accueil
+RenoBoost (`RenoBoost/assets/produit/`) ont été tirées le 19/09 par
+`RenoBoost/scripts/capturer-console.mjs`. Le 21/09, quatre paliers ont refondu le
+dashboard qu'elles montrent — navigation, palette, fiches clients. Personne n'a
+relancé le script : l'accueil en production a affiché **l'interface d'avant**
+pendant un jour et demi, sous la mention « Le produit réel ». *Ce que ça a coûté* :
+Paul l'a vu lui-même, capture à l'appui — « je croyais qu'on avait corrigé
+cela ». Aucun test ne pouvait le voir : une image périmée est une image valide.
+*Règle* : **toute boucle qui change un écran photographié relance l'atelier de
+capture dans le même lot**, et le dit dans son commit. Le script existait
+précisément pour ça (« le jour où la console change, on relance ») ; ce qu'il
+manquait, c'est le geste attaché à la boucle, pas l'outil.
 
 ## 3. Ce qu'on donne à Paul
 
