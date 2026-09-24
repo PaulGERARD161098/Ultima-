@@ -680,7 +680,7 @@ que le sceau a changé.
   Schéma d'accompagnement très simple, pas de data impossible à absorber.
 - Prix : voir la décision commission du même jour (JOURNAL-DECISIONS).
 
-**MDH — My Daily Home (deux dirigeants).**
+**MDH — MyDeliHome (deux dirigeants).**
 - Très intéressés par le **pilotage de données** → traitement et restitution
   des données à soigner.
 - Intérêt pour **RénoDevis** et pour la **récurrence** de **RénoPrédict**
