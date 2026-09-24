@@ -293,10 +293,10 @@
   0 fichier = alerte rouge) ; ③ le stop-hook « unverified committer » est un
   symptôme de branche/config — le traiter, pas l'ignorer.
 - 2026-07-09 (pivot A1→A4, solo) — ① Un agent front a committé un **octet NUL**
-  dans une chaîne source (sentinelle `' a-classer'`) → git a classé le
+  dans une chaîne source (sentinelle `'\0a-classer'`) → git a classé le
   module comme BINAIRE, diffs invisibles en revue. Attrapé par la contre-passe
   sécu (constat S1), pas par les harnais (qui restaient verts). Règle : se
-  méfier des ` `/caractères invisibles dans les littéraux d'agents ; un
+  méfier des `\0`/caractères invisibles dans les littéraux d'agents ; un
   `Bin x -> y bytes` sur un fichier source = alerte. ② Le stop-hook exige un
   commit à chaque fin de tour : en solo j'ai committé PENDANT que les
   contre-passes tournaient (elles lisent, ne modifient pas → pas de course),
