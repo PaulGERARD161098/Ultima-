@@ -297,6 +297,19 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
 
 ## ⚙️ Règles permanentes
 
+- **UNE PR PAR SÉANCE, EN FIN DE SÉANCE — pas une par boucle** *(Paul,
+  2026-09-24 : « on fait PR après PR, ce n'est ni rentable ni économe »)*. On
+  committe et on pousse la branche de travail à chaque boucle : Vercel en tire
+  une **preview**, qui est ce que Paul regarde. La PR s'ouvre **une fois**, à
+  la fin, avec tout le travail de la séance, puis se fusionne sur son go.
+  ⛔ La CI ne remplace pas les tests locaux entre-temps : chaque boucle fait
+  tourner `npm test` et les harnais **en local** avant de pousser.
+  ⚠️ Mesuré le 24/09 sur RenoBoost : `tests.yml` se déclenche sur `push` de
+  **toutes** les branches ET sur `pull_request` — chaque commit poussé sur une
+  branche qui a une PR ouverte lance **deux fois** la CI (dont ~4 min de job
+  navigateur). C'est là que partent les minutes GitHub Actions, pas dans la PR
+  elle-même.
+
 > Les **leçons** (garde-fous, mesures, ce qu'on donne à Paul) ont leur fichier :
 > `memoire/LECONS.md`. Ne restent ici que les règles opérationnelles du dépôt.
 

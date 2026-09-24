@@ -666,3 +666,26 @@ leçon**. Sur tout fichier à copies multiples : relire la base juste avant de
 pousser, comparer les sceaux, et **reconstruire** ses ajouts dessus — jamais
 écraser. La vérification se fait sur le CONTENU des deux apports, pas sur le fait
 que le sceau a changé.
+
+## Signaux terrain (2026-09-24) — deux rendez-vous prospects
+
+**SPC (entreprise d'artisan, rendez-vous avec la personne qui tient le back-office).**
+- ✅ Ce qui a porté : l'offre **simple et clé en main** — « on prend tout en
+  charge, vous nous transmettez vos demandes ». Résumé par la prospecte :
+  *« vous êtes un petit Leroy Merlin en termes de service »*.
+- Le bon interlocuteur est **celle ou celui qui tient le back-office** (souvent
+  le conjoint), pas forcément le poseur : c'est lui/elle qui suit à la main ce
+  qui est payé ou non.
+- ⛔ Ne pas surestimer l'aisance numérique : un système de plus les lasse vite.
+  Schéma d'accompagnement très simple, pas de data impossible à absorber.
+- Prix : voir la décision commission du même jour (JOURNAL-DECISIONS).
+
+**MDH — My Daily Home (deux dirigeants).**
+- Très intéressés par le **pilotage de données** → traitement et restitution
+  des données à soigner.
+- Intérêt pour **RénoDevis** et pour la **récurrence** de **RénoPrédict**
+  (entretien, dépannage — « Repair », à préciser par Paul).
+- ⛔ **L'interface de devis doit encore se simplifier** (Paul l'a retestée le
+  24/09) : bibliothèque + création de devis plus sommaire, plus rapide, plus
+  instinctive — aujourd'hui « encore un peu obscur ». Chantier à ouvrir dans
+  RenoDevis, **pas encore cadré**.
