@@ -309,6 +309,9 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
   branche qui a une PR ouverte lance **deux fois** la CI (dont ~4 min de job
   navigateur). C'est là que partent les minutes GitHub Actions, pas dans la PR
   elle-même.
+  ✅ Corrigé le 24/09 dans RenoBoost (`tests.yml` : `push` sur `main` seulement,
+  + `pull_request` + lancement manuel). À répliquer dans les autres dépôts qui
+  portent le même déclencheur.
 
 > Les **leçons** (garde-fous, mesures, ce qu'on donne à Paul) ont leur fichier :
 > `memoire/LECONS.md`. Ne restent ici que les règles opérationnelles du dépôt.
