@@ -4238,3 +4238,17 @@ supprime le défaut à la racine au lieu de l'expliquer après coup.
 Voir `memoire/LECONS.md` §4 — *la cohérence géographique se vérifie avant de
 mesurer*. Le premier import a porté sur l'Oise (0 client) alors que les clients
 sont dans le Rhône (106).
+
+## 2026-09-24 — Méthode : une PR par séance, en fin de séance
+
+Paul : *« on bosse, on bosse, et la PR ne passe qu'à la fin ; plus de previews »*.
+Décision consignée dans `CLAUDE.md` §Règles permanentes. Pendant la séance :
+commit + push de la branche → preview Vercel ; tests en local. En fin de
+séance : une PR, fusionnée sur go de Paul.
+
+## 2026-09-24 — RenoBoost : commission 5 % seulement dès 10 000 € HT
+
+Grille inchangée (300 / 600 / 950 € HT/mois). Commission de 5 % du devis HT
+uniquement sur les chantiers signés ≥ 10 000 € HT, seuil inclus, jugé chantier
+par chantier. Fusionné dans RenoBoost (#544, `26cc92c`) ; règle dans
+`RenoBoost/CLAUDE.md` §12.6.
