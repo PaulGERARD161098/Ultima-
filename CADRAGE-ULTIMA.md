@@ -6,6 +6,14 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🗺️ **SESSION 2026-09-25 — LA CARTE CÉLESTE EST CADRÉE, RIEN N'EST CODÉ** (demande de Paul :
+  « cadrons »). `CADRAGE-2026-09-25-carte-celeste.md` : mesuré ce soir, **le clic sur NAGA
+  échoue dans 4 gestes sur 5** — le dépliage au survol redessine la scène et déplace l'étoile
+  de 119 px sous le curseur (témoin : 0 px et clic exact sous isolement) ; aucune constellation
+  n'a de figure (0 trait) ; les 10 dépôts sont bien au ciel, deux crans sous la racine, avec
+  session. Quatre lots (init impeccable · clic exact · figure · dépôts partout), six arbitrages
+  **A1-A6** attendus de Paul. Léo-écrit reste le J3 du 22/09, non re-cadré.
+
 - ✅ **LIVRAISON 2026-09-14 — GO REÇU, AUDIT DÉPLOYÉ.** PR #242 fusionnée
   au commit `fc2aafc6128567e63ae729607cfe9aabc96380f2` ; CI unitaire et
   navigateur verte. Migration appliquée sous la version Supabase
