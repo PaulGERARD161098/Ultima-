@@ -24,18 +24,18 @@
   "projet": "Ultima",
   "depot": "PaulGERARD161098/Ultima-",
   "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-  "rattache_a": "specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md",
+  "rattache_a": "CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md",
   "etat": "en_cours",
   "jalon": {
     "nom": "J3 — le ciel porte aussi l'état PERSONNEL (P4 : les signaux du cockpit)",
     "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
   },
   "dernier_arret": {
-    "le": "2026-09-24",
-    "commit": "bc04715f608350513a796c38056a89095f7a9359",
-    "quoi": "Séance 24/09 (méthode + mémoire, aucun code produit) : règle « une PR par séance, en fin de séance » dans CLAUDE.md ; décisions et signaux terrain SPC/MDH dans memoire/ ; RADAR.md débarrassé de 2 octets NUL. État produit précédent : Import des contacts iPhone dans RIVEN fusionné dans main (#285, bce6101) : vCard lue dans le navigateur → registre `personnes`, tri sans case pré-cochée, doublons fusionnés, route POST /api/reseau/import par lots. Audit adverse : 0 critique/élevé, M1-M3 + F1-F4 fermés, tests vus rouges puis verts. Aucune migration."
+    "le": "2026-09-25",
+    "commit": "71cee4bb8d3db7035d5739cf33bdb24e53e07db1",
+    "quoi": "Séance 25/09 (cadrage, aucun code) : CADRAGE-2026-09-25-carte-celeste.md — clic sur NAGA raté 4 gestes sur 5 (survol → re-dessin → 119 px), figure absente, 10 dépôts au ciel."
   },
-  "prochaine_action": "Paul importe son vrai export iCloud (.vcf) dans RIVEN : Contacts → Personnes → « Importer des contacts ». Puis ouvrir la boucle « revue contact par contact » (CADRAGE-RIVEN-IMPORT.md §7), cadrée en 6 points à l'ouverture. ⛔ Remesurer `select count(*) from personnes` avant (0 au 22/09) : c'est lui qui dit si l'import a eu lieu.",
+  "prochaine_action": "GO EXPLICITE de Paul sur le lot 1 précisé (carte-celeste §11 : retrait du dépliage au survol, harnais smoke-clic-exact vu rouge 4/5 d’abord). A1 et A6 rendus ; A2-A5 ouverts.",
   "bloque_par": [
     "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
@@ -46,6 +46,10 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "Carte céleste cadrée le 25/09 : A1 (dépliage au survol retiré) et A6 (rien sans go explicite) rendus ; lot 1 précisé §11, non ouvert. Impeccable exige PRODUCT.md (lot 0).",
+      "depuis": "2026-09-25"
+    },
     {
       "quoi": "LEÇONS v24 sur Ultima et RénoBoost (empreinte 8b3c40ef7785, identique à l'octet). Les SIX autres dépôts restent en arrière — leur écart est visible, c'est le rôle du sceau.",
       "depuis": "2026-09-18"
@@ -111,7 +115,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-09-22"
+  "maj": "2026-09-25"
 }
 ```
 

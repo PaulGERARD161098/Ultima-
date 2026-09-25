@@ -4252,3 +4252,12 @@ Grille inchangée (300 / 600 / 950 € HT/mois). Commission de 5 % du devis HT
 uniquement sur les chantiers signés ≥ 10 000 € HT, seuil inclus, jugé chantier
 par chantier. Fusionné dans RenoBoost (#544, `26cc92c`) ; règle dans
 `RenoBoost/CLAUDE.md` §12.6.
+
+## 2026-09-25 — Carte céleste : A1 et A6 rendus, rien ne se code sans go explicite
+
+Paul, sur `CADRAGE-2026-09-25-carte-celeste.md` §8 : **A1 « go reco »** → le
+dépliage au survol est retiré de la racine des coques (cause mesurée du clic
+raté sur NAGA : 4 gestes sur 5, l'étoile part de 119 px sous le curseur).
+**A6** : *« cadrage d'abord et précision du travail, pas de travail sans mon go
+explicite »* → le lot 1 est précisé à la ligne (§11), et **aucune ligne de code
+ne s'écrit sans un go explicite**, lot par lot. A2 à A5 restent ouverts.
