@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v38 2026-09-22 sha256:cbdac23a0db7 -->
+<!-- lecons:empreinte v39 2026-09-25 sha256:43a6c6629b39 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -889,6 +889,18 @@ est refusé par le proxy sortant — la lecture passe par l'outil Vercel
 `web_fetch_vercel_url`. *Incident : dix photos publiées dans une galerie, deux
 captures envoyées, trois lots proposés à l'arbitrage — et Paul a dû réclamer
 « préview stp ».*
+⊕ **ET LE LIEN SE POSE EN FIN DE MESSAGE, SEUL, CLIQUABLE** *(2026-09-25, demandé
+par Paul)*. La preview était donnée — mais au milieu du rapport, dans une
+parenthèse, avec la PR à côté. Paul : *« j'aimerais bien qu'en fin du message
+tu me mettes le lien, je clique directement dessus […] j'en ai marre de devoir
+scroller ou de récupérer des choses un peu plus loin »*. ⛔ Un lien qu'il faut
+chercher est un lien qu'on ne clique pas : le geste attendu de Paul est un
+clic, pas une lecture. *Règle* : dès qu'un message appelle un regard sur une
+preview, une PR ou un écran, **sa dernière ligne est l'URL nue** — rien après,
+rien autour, une par message quand une seule suffit. Le rapport se lit
+au-dessus ; l'adresse se clique en bas. Même logique que le prompt de reprise
+(un bloc copiable en dernier) : ce que Paul doit *prendre* se met là où sa main
+arrive, pas là où le récit en parle.
 
 **UNE QUESTION REMONTÉE À PAUL DOIT ÊTRE UN CHOIX, PAS UNE ENQUÊTE NON TERMINÉE**
 *(2026-08-17)*. Un arbitrage produit avait été annoncé ; c'était un diagnostic
@@ -1506,6 +1518,20 @@ passage à l'autre se RELIT à chaque fois comme on relirait celui d'un autre, e
 toute consigne que la mesure du jour dément s'y retire **explicitement**, en
 disant qu'elle est périmée et depuis quand — pas en disparaissant, sinon la
 séance suivante la réinvente.
+
+**UN DOC DE DESIGN ADAPTÉ D'UN AUTRE DÉPÔT PORTE LA DATE DE SA SOURCE, ET SE
+RELIT QUAND ELLE BOUGE** *(2026-09-25)*. `DESIGN-COCKPIT.md` (14/09) adaptait
+les dix règles de `RenoBoost/DESIGN-LANGAGE.md` (11/09) — et interdisait les
+arrondis. La source a été **refondue le 20/09** (cadres arrondis, Hopus), la
+console l'a suivie le 22/09, les polices ont changé le 24/09 : trois jalons,
+aucun n'a fait relire l'adaptation. C'est **Paul** qui l'a vu, devant l'écran :
+« j'ai pas l'impression qu'on ait mis à jour avec les specs de la vitrine ».
+⛔ Un document qui dit « adapté de X » est périmé le jour où X change, et rien
+ne le signale — il se lit exactement comme un document à jour. Le réflexe :
+avant toute passe visuelle, `git log` de la source amont depuis la date écrite
+en tête de l'adaptation ; si elle a bougé, on relit AVANT de polir. *Le garde-fou
+mécanique (plafond d'arrondis à zéro) protégeait la règle du 14/09 contre les
+écrans, pas contre le temps.*
 
 ## 6. Économie
 
