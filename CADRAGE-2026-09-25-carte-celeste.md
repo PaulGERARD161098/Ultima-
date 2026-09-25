@@ -35,7 +35,7 @@
 
 | Acquis | Livré | Preuve |
 |---|---|---|
-| Un seul moteur de ciel, 3D en SVG sans bibliothèque | 2026-08-11 → LV4/LV5 | `js/ciel.js` (1 693 l.), `smoke-ciel` (54 assertions) |
+| Un seul moteur de ciel, 3D en SVG sans bibliothèque | 2026-08-11 → LV4/LV5 | `js/ciel.js` (1 693 l.), `smoke-ciel` (**71 verdicts** mesurés le 25/09 — 54 à sa naissance, le chiffre des docs) |
 | **L'isolement au clic** : ce qui CONTIENT s'isole sur place, un étage par clic ; trois sorties ; l'adresse suit (`#naga`) | 28/08, resserré le 31/08 | `js/ciel-noeud.mjs` §`isoler`, `smoke-lv5-plein-ecran` |
 | **L'étoile affinée** (cœur blanc, quatre rais, lueur resserrée) | 17/08 (LV5) | `js/ciel.js` l. 940-960 |
 | **Les dépôts sont des astres** : 10 dans l'agrégat du 24/09 — Ultima à la racine, 5 sous RENOBOOST IA, 4 sous ALPHA — avec la couleur d'appel Finubar | 02/09 + J1 du 22/09 | `finubar/macro.json`, `js/adaptateur-finubar.mjs` |
@@ -88,7 +88,9 @@ Capture après survol de NAGA : les 5 étoiles s'alignent sur une **verticale**,
 cartouche** de Léo. C'est le constat déjà écrit le 02/09 pour l'accueil (« tasse
 cinq étoiles sur un même axe ») — il vaut ici aussi. Sur les écrans **isolés**
 (NAGA : 3 étoiles, GRIMA : 2, ALPHA avec session : 6), **0 chevauchement de
-zone** et 0 libellé masqué, aux deux largeurs. C'est donc le **dépliage** qui
+zone** et 0 libellé masqué, aux deux largeurs — ALPHA re-mesuré au dry run de
+21:13 : 6 étoiles, 6 noms visibles, 0 chevauchement de zone ni de nom, 0 hors
+écran, à 1280 × 860 et 390 × 844. C'est donc le **dépliage** qui
 fait « le bazar », pas l'isolement.
 
 ### M3 · Les cibles de clic ne sont pas en cause
@@ -182,7 +184,7 @@ tourner. → arbitrage **A3** (PRODUCT.md remplace PRODUIT.md).
 4. Le code : ce qui peut vivre dans `js/adaptateur-lv4.mjs` (les traits sont des
    `relations`, le moteur les dessine déjà) y vit ; ce qui exige le moteur
    (l'éclat par rang) entre par une **option par défaut inactive**,
-   `smoke-ciel` 54/54 avant et après — jurisprudence LV4 §7 voie A.
+   `smoke-ciel` 71/71 avant et après — jurisprudence LV4 §7 voie A.
 
 **Lot 3 — les dépôts partout.** `#<dépôt>` isole après greffe (M5) ; les astres
 d'un dépôt portent dans leur libellé au survol l'anneau de Léo (« lecture ·
@@ -195,7 +197,7 @@ propre cadrage — ce lot lui donne un écran, il n'écrit rien à sa place.
 |---|---|
 | **Créé** | `PRODUCT.md` (lot 0) · `tests/smoke-clic-exact.mjs` · `design/preview-carte-celeste.html` (+ `.js`, `.css`) · `tests/smoke-carte-celeste.mjs` |
 | **Modifié** | `js/ciel-noeud.mjs` (dépliage) · `js/adaptateur-lv4.mjs` (traits, rang) · `css/stellaire.css` · `js/ciel.js` **seulement** par option inactive par défaut · `smoke-lv4-ciel`, `smoke-lv5-plein-ecran` (reprise une à une) · `tests/lancer.sh` (enrôlement) |
-| **Intouché** | `js/registre-lv3.mjs` (21 nœuds, aucun renommage) · `finubar/` et `/api/finubar` · RIVEN (`riven.html`, ses 54 assertions sont le garde-fou) · auth / middleware · **la base : aucune migration, aucune lecture nouvelle** |
+| **Intouché** | `js/registre-lv3.mjs` (21 nœuds, aucun renommage) · `finubar/` et `/api/finubar` · RIVEN (`riven.html`, ses 71 verdicts sont le garde-fou) · auth / middleware · **la base : aucune migration, aucune lecture nouvelle** |
 | **Outils** | skill `impeccable` (`context` fait ; `init` → `shape` → `critique` → `polish` → `detect`) · Chromium local, `bash tests/lancer.sh` · aucune bibliothèque nouvelle |
 
 **Aucune gate Supabase dans tout ce cadrage** : pas une ligne de SQL.
@@ -208,7 +210,7 @@ propre cadrage — ce lot lui donne un écran, il n'écrit rien à sa place.
    0 chevauchement entre libellés et entre zones, `getBBox()` ⊂ `viewBox` à
    390 × 844 et 1670 × 900, AA sur tous les textes, cibles ≥ 24 px, traits
    d'astérisme = nombre d'étoiles − 1 par constellation (un arbre, pas un
-   graphe), `smoke-ciel` 54/54.
+   graphe), `smoke-ciel` 71/71.
 3. **Lot 3** — `alpha.html#renoboost-ia` peint 5 astres + la porte, et rien
    d'autre ; sans session : **strictement** le ciel d'aujourd'hui (diff DOM).
 4. **Chaque lot** — patrimoine **complet** vert (`bash tests/lancer.sh`,
@@ -237,7 +239,7 @@ propre cadrage — ce lot lui donne un écran, il n'écrit rien à sa place.
 | 2 | **Le survol retiré, Paul perd l'aperçu** qu'il avait au 13/08 et le vit comme une régression. | A1 est un arbitrage de Paul, pas le mien ; l'option « ne recentre plus » reste sur la table avec son coût. |
 | 3 | **Les traits d'astérisme deviennent un plat de nouilles** à 24 étoiles. | Un **arbre** (n − 1 traits), le pire cas construit dans la maquette ET dans le harnais. |
 | 4 | **La hiérarchie d'éclat devient un thermomètre** : le quadrant délaissé pâlit — un reproche silencieux. | Règle ③ d'ALTHEA : le repos est sans marque ; seul le signal Finubar colore (déjà arbitré le 20/08, LV6 §7 q.4). |
-| 5 | **On touche `ciel.js` « juste un peu » et RIVEN casse.** | Option par défaut inactive, `smoke-ciel` 54/54 avant/après — trois écrans partagent le moteur. |
+| 5 | **On touche `ciel.js` « juste un peu » et RIVEN casse.** | Option par défaut inactive, `smoke-ciel` 71/71 avant/après — trois écrans partagent le moteur. |
 | 6 | **La maquette redessine son propre ciel** et fait juger une régression que personne n'a décidée (12/08). | Elle importe le vrai moteur et le vrai registre ; un contrôle vérifie que ses classes existent mot pour mot dans la production. |
 | 7 | **Le dépliage retiré à la racine casse une assertion de `smoke-lv4-ciel`** qui parlait de navigation, pas de survol. | Reprise une à une (méthode de l'arbre, sept sauvées sur 55). |
 | 8 | **`impeccable init` écrit une vérité produit inventée** parce que Paul n'était pas là. | Init ne tourne qu'en entretien ; jusqu'au lot 0, aucun `shape`. |
@@ -249,7 +251,7 @@ propre cadrage — ce lot lui donne un écran, il n'écrit rien à sa place.
 ## 7. Test POV — trois regards, Paul arbitre lesquels creuser
 
 1. 🗡️ **L'adversaire** — *« votre clic exact, je le casse en glissant »*. Le
-   seuil de glissement est de 4 px (`ciel.js` l. 1071) : un doigt qui tremble
+   seuil de glissement est de 4 px (`ciel.js` l. 1070) : un doigt qui tremble
    sur un tap ne déclenche rien, et rien ne le dit. Objection : et si le
    survol retiré, le **glissement** devient la prochaine « sélection pas
    bonne » ? → le harnais du lot 1 doit rejouer un tap de 6 px.
@@ -324,7 +326,7 @@ séance, une PR.
 | 345 | `versCiel(idNoeud, registre, { deplie, isole })` | `versCiel(idNoeud, registre, { isole })` |
 
 **Ce qui ne bouge PAS, et pourquoi** : `js/adaptateur-lv4.mjs` garde son option
-`deplie` (l. 198-231) — elle est **pure, testée par 13 verdicts** de
+`deplie` (l. 198-231) — elle est **pure, tenue par **6 verdicts** (sur 49) de
 `tests/unit-adaptateur-lv4.mjs`, et la maquette `design/preview-lv4-ciel-deplie.html`
 (harnais `smoke-lv4-ciel`) s'en sert encore. La retirer serait un second lot,
 avec sa propre reprise d'assertions. ⚠️ Elle devient une option **sans appelant
@@ -368,3 +370,32 @@ Chromium simule le toucher, il ne le remplace pas ; c'est Paul qui recette.
 
 **Ce que le lot 1 ne fait pas** : aucun trait, aucun éclat, aucune option moteur
 (lot 2) ; `alpha.html#renoboost-ia` (lot 3) ; `PRODUIT.md` (lot 0).
+
+---
+
+## 12. Dry run DR — 21:13 UTC, sur ce document (palier 20 min)
+
+**Sondé** : les 22 numéros de ligne cités (`ciel-noeud.mjs`, `adaptateur-lv4.mjs`,
+`ciel.js`, `smoke-lv4-coque.mjs`), les comptes de verdicts, le chevauchement
+d'ALPHA avec session, le déclencheur du job `browser` de la CI.
+
+**Cédé, et corrigé sur place :**
+1. ⛔ **« 13 verdicts »** sur l'option `deplie` de l'adaptateur était un compte de
+   LIGNES contenant « depli » (`grep -c`), pas de verdicts. Mesuré : **6 `dit(`
+   sur 49**. Une preuve fausse coûte plus qu'une preuve absente — corrigé.
+2. ⚠️ **« `smoke-ciel` 54 assertions »** était recopié des cadrages LV4/LV6
+   (chiffre du 11/08). Mesuré aujourd'hui : **71 verdicts**. Le garde-fou est
+   plus large qu'écrit ; toutes les occurrences portent maintenant 71.
+3. ⚠️ **« 0 chevauchement … ALPHA avec session »** n'avait PAS été mesuré :
+   la mesure de chevauchement ne tournait que sur l'agrégat vide. Re-mesuré
+   avec l'agrégat réel et une session, aux deux largeurs : l'affirmation
+   tient (0 / 0 / 0), et elle porte désormais sa mesure.
+4. Le seuil de glissement est à la ligne **1070**, pas 1071 (1071 est l'effet).
+
+**Résisté** : les 22 lignes citées désignent bien ce qu'elles disent ; `lancer.sh`
+enrôle tout `smoke-*.mjs` par sa présence ; la CI `browser` lance
+`npm run test:browser` après `playwright install`, donc un harnais neuf y
+tourne sans réglage ; `smoke-lv5-plein-ecran` ne parle pas du dépliage.
+
+**Ce que ce dry run ne voit pas** : le preview Vercel (proxy), le tap sur un
+vrai téléphone.
