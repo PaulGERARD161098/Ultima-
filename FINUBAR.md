@@ -35,7 +35,7 @@
     "commit": "71cee4bb8d3db7035d5739cf33bdb24e53e07db1",
     "quoi": "Séance 25/09 (cadrage, aucun code) : CADRAGE-2026-09-25-carte-celeste.md — clic sur NAGA raté 4 gestes sur 5 (survol → re-dessin → 119 px), figure absente, 10 dépôts au ciel."
   },
-  "prochaine_action": "Paul rend A1 (dépliage au survol retiré ?) et A6 (lot 1 seul d’abord ?) — carte-celeste §8. Au go : lot 1, harnais smoke-clic-exact vu rouge 4/5 AVANT le correctif.",
+  "prochaine_action": "GO EXPLICITE de Paul sur le lot 1 précisé (carte-celeste §11 : retrait du dépliage au survol, harnais smoke-clic-exact vu rouge 4/5 d’abord). A1 et A6 rendus ; A2-A5 ouverts.",
   "bloque_par": [
     "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
@@ -47,7 +47,7 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "Carte céleste cadrée le 25/09 (4 lots, 6 arbitrages A1-A6), aucun lot ouvert. Impeccable exige PRODUCT.md (lot 0) ; PRODUIT.md est périmé (carte RIVEN de juillet).",
+      "quoi": "Carte céleste cadrée le 25/09 : A1 (dépliage au survol retiré) et A6 (rien sans go explicite) rendus ; lot 1 précisé §11, non ouvert. Impeccable exige PRODUCT.md (lot 0).",
       "depuis": "2026-09-25"
     },
     {

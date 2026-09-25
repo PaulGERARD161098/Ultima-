@@ -302,3 +302,69 @@ séance, une PR.
 - **Interaction** — survol = cartouche seulement ; clic = plonger ou ouvrir ;
   Échap / clic dans le vide / fil = remonter ; l'adresse suit.
 - **Contraintes et choix à ne pas inventer** — A1 à A6 ci-dessus.
+
+---
+
+## 11. Arbitrages rendus par Paul le 25/09 (soir) — et le lot 1 précisé à la ligne
+
+| # | Décision de Paul | Effet |
+|---|---|---|
+| **A1** | « go reco » → **le dépliage au survol est retiré** de la racine des coques, comme il l'est déjà sous isolement depuis le 31/08. | Le survol ne montre plus que le cartouche de Léo ; le clic plonge. |
+| **A6** | « cadrage d'abord et précision du travail, **pas de travail sans mon go explicite** ». | ⛔ **Gate absolu** : ce paragraphe précise le lot 1 ; **aucune ligne de code ne s'écrit avant un go explicite de Paul**, ni sur ce lot ni sur les suivants. A2 à A5 restent ouverts. |
+
+### Lot 1 — le travail, précisé (lu dans le code le 25/09, rien de déduit)
+
+**Ce qui se retire** — `js/ciel-noeud.mjs`, et lui seul :
+
+| Ligne | Aujourd'hui | Après |
+|---|---|---|
+| 443 | `mouseenter` → `minuteur = setTimeout(() => deplier(id), SURVOL_MS)` | le `mouseenter` ne fait plus que `montrer()` |
+| 452 | `focus` → `focusARendre = id; deplier(id)` | le `focus` ne fait plus que `montrer()` — clavier = souris, dans les deux sens |
+| 72 · 113 · 463-472 | `SURVOL_MS`, `let deplie`, `minuteur`, `focusARendre`, `function deplier` | **retirés** : un dépliage qui n'est plus appelé est du code mort, et le code mort se lit comme une capacité |
+| 345 | `versCiel(idNoeud, registre, { deplie, isole })` | `versCiel(idNoeud, registre, { isole })` |
+
+**Ce qui ne bouge PAS, et pourquoi** : `js/adaptateur-lv4.mjs` garde son option
+`deplie` (l. 198-231) — elle est **pure, testée par 13 verdicts** de
+`tests/unit-adaptateur-lv4.mjs`, et la maquette `design/preview-lv4-ciel-deplie.html`
+(harnais `smoke-lv4-ciel`) s'en sert encore. La retirer serait un second lot,
+avec sa propre reprise d'assertions. ⚠️ Elle devient une option **sans appelant
+en production** : c'est écrit ici pour qu'on ne la croie pas active.
+
+**Le harnais, écrit AVANT le correctif** — `tests/smoke-clic-exact.mjs`, enrôlé
+dans `tests/lancer.sh` par sa seule présence (`smoke-*.mjs`) :
+
+| Verdict | Attendu AVANT (rouge) | Attendu APRÈS (vert) |
+|---|---|---|
+| Clic instantané au centre de NAGA → `#naga`, 3 étoiles | ✗ | ✓ |
+| Survol 400 ms puis clic à la position **d'avant** le survol | ✗ | ✓ |
+| Appui 150 ms (clic humain) | ✗ | ✓ |
+| `locator.click` sur `g[data-noeud-id="naga"]` | ✗ | ✓ |
+| Même série sur **GRIMA** | ✗ | ✓ |
+| **Déplacement de l'étoile survolée = 0 px** (mesuré à 16, 100, 250, 500 ms) | ✗ (119 px) | ✓ |
+| **Tap tactile** (`hasTouch`, `page.tap`) → isole | à mesurer | ✓ |
+| Tap **glissé de 6 px** (POV adversaire) → **rien**, et un libellé le dit ? | à mesurer | verdict écrit après mesure |
+| **Témoin** : sur `#naga`, survol de TAO = 0 px, clic → `#tao` | ✓ | ✓ (doit rester vert : un harnais qui ne sait que rougir ne prouve rien) |
+| Focus clavier sur NAGA puis Entrée → `#naga`, le focus retombe sur la 1ʳᵉ étoile | à mesurer | ✓ |
+
+⛔ **Le rouge se constate d'abord, il ne se suppose pas** : le harnais tourne une
+fois sur `main` et son décompte (attendu **4 gestes sur 5** sur NAGA) est écrit
+dans le rapport avant la première ligne du correctif.
+
+**Les assertions à reprendre une à une** (jamais supprimées en bloc) :
+
+| Harnais | Ligne | Assertion | Sort |
+|---|---|---|---|
+| `tests/smoke-lv4-coque.mjs` | 181-186 | « Le survol déplie ce que le cap contient » | **inversée** : le survol ne déplie plus, le compte d'objets reste `CAPS.length` |
+| `tests/smoke-lv4-coque.mjs` | 187-188 | les caps restent présents après survol | **gardée** telle quelle |
+| `tests/smoke-lv4-coque.mjs` | 163-180 | Léo nomme le cap survolé / au focus | **gardée** — c'est ce que le survol fait encore |
+| `tests/smoke-lv4-ciel.mjs` | — | tourne sur la **maquette**, pas sur la coque | **intouché** |
+| `tests/smoke-lv5-plein-ecran.mjs` | — | 0 occurrence de « dépli » | **intouché** |
+
+**Critère de sortie du lot 1** : `smoke-clic-exact` 100 % vert · `smoke-lv4-coque`
+vert avec son assertion inversée · patrimoine complet (`bash tests/lancer.sh`)
+sortie 0 · preview Vercel donné à Paul avec le geste à faire (« clique NAGA sans
+attendre »). ⚠️ Ce qu'il ne prouvera pas : le tap sur un **vrai** téléphone —
+Chromium simule le toucher, il ne le remplace pas ; c'est Paul qui recette.
+
+**Ce que le lot 1 ne fait pas** : aucun trait, aucun éclat, aucune option moteur
+(lot 2) ; `alpha.html#renoboost-ia` (lot 3) ; `PRODUIT.md` (lot 0).
