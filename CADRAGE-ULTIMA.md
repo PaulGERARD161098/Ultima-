@@ -6,6 +6,14 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🎯 **SESSION 2026-09-25 (soir) — LOT 1 « LE CLIC EXACT » LIVRÉ, sur go explicite de
+  Paul.** Cadrage fusionné (#291 → `8698739`). Harnais `smoke-clic-exact` écrit EN
+  PREMIER et vu rouge sur `main` (15/21, tap compris) ; dépliage au survol retiré de
+  `js/ciel-noeud.mjs` (A1) ; **écart au plan** : une garde `:focus-visible` dans
+  `js/ciel.js` — l'appui de 150 ms faisait viser la caméra dès le `mousedown` (176 →
+  630 px) — soumise à Paul à la fusion. 21/21, patrimoine 41 + 46 vert. Détail :
+  `CADRAGE-2026-09-25-carte-celeste.md` §13. Reste : recette de Paul sur le preview.
+
 - 🗺️ **SESSION 2026-09-25 — LA CARTE CÉLESTE EST CADRÉE, RIEN N'EST CODÉ** (demande de Paul :
   « cadrons »). `CADRAGE-2026-09-25-carte-celeste.md` : mesuré ce soir, **le clic sur NAGA
   échoue dans 4 gestes sur 5** — le dépliage au survol redessine la scène et déplace l'étoile

@@ -2,7 +2,15 @@
 // ---------------------------------------------------------------------------
 // L'équivalent de `js/boussole-noyau.mjs`, côté ciel. Un seul module pour tous
 // les étages : il rend n'importe quel nœud du registre en constellation, avec
-// le dépliage au survol, le zoom à l'entrée, et Léo qui parle à chaque étage.
+// l'isolement au clic, le zoom à l'entrée, et Léo qui parle à chaque étage.
+//
+// ⛔ LE DÉPLIAGE AU SURVOL A ÉTÉ RETIRÉ (Paul, 2026-09-25, arbitrage A1 de
+// CADRAGE-2026-09-25-carte-celeste.md). Il redessinait la scène sous le
+// curseur : NAGA partait de 119 px, GRIMA de 965 px, et le clic tombait dans
+// le vide — 4 gestes sur 5, tap compris. Mesuré, pas supposé, par
+// `tests/smoke-clic-exact.mjs`, vu rouge sur l'ancien code (15 verdicts sur
+// 21). Le survol ne fait plus que parler (le cartouche de Léo) ; on plonge au
+// CLIC — c'est déjà ce que faisait l'écran isolé depuis le 2026-08-31.
 //
 // ---------------------------------------------------------------------------
 // L'ISOLEMENT (Paul, 2026-08-28) — LE CLIC NE CHANGE PLUS DE PAGE, IL PLONGE.
@@ -67,10 +75,6 @@ import { poser as poserFinubarBandeau } from './finubar-bandeau.mjs';
 // suite : une préférence système n'est pas une option d'affichage.
 const APPROCHE_MS = 220;
 
-// Délai avant qu'un survol déplie. Il ne s'agit pas de confort : sans lui, un
-// curseur qui TRAVERSE le ciel déplie tout ce qu'il frôle.
-const SURVOL_MS = 140;
-
 export function rendre(idNoeud, options = {}) {
   const doc = options.document || (typeof document !== 'undefined' ? document : null);
   if (!doc) { return null; }
@@ -110,7 +114,6 @@ export function rendre(idNoeud, options = {}) {
   // et elle vaut ici davantage : un halo qui apparaît sur une donnée à moitié
   // lue oriente vers le mauvais endroit, ce qui est pire que ne pas orienter.
   let appels = Object.create(null);
-  let deplie = null;
   // LE FOYER ISOLÉ — null tant qu'on regarde l'étage entier. C'est le SEUL
   // état de navigation de ce module : tout le reste (ce qui est peint, ce que
   // dit le fil, ce que Léo raconte au repos) s'en déduit.
@@ -120,15 +123,7 @@ export function rendre(idNoeud, options = {}) {
   // phase de CAPTURE, avant que le moteur n'ait déclenché l'entrée.
   let viaClavier = false;
   let vue = null;
-  let idsDuNiveau = [];
   let enRoute = false; // une entrée est engagée : on n'en engage pas une seconde
-  // L'étoile à re-focaliser après un re-dessin. DÉPLIER RECONSTRUIT LA SCÈNE :
-  // l'élément qui avait le focus est détruit, et le focus retombe sur `body`.
-  // Mesuré le 2026-08-13 — au clavier, atteindre un cap qui a du contenu le
-  // faisait disparaître sous les doigts. Un menu où la tabulation s'annule
-  // elle-même n'est pas navigable au clavier.
-  let focusARendre = null;
-
   const moinsDAnimation = window.matchMedia
     && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -342,9 +337,8 @@ export function rendre(idNoeud, options = {}) {
   }
 
   function dessiner() {
-    const donnees = versCiel(idNoeud, registre, { deplie, isole });
+    const donnees = versCiel(idNoeud, registre, { isole });
     if (!donnees) { return; }
-    idsDuNiveau = donnees.idsDuNiveau;
 
     vue = window.UltimaCiel.rendre(scene, donnees, {
       // Le type ne s'annonce pas : sur un menu, tous les objets sont des caps,
@@ -393,18 +387,10 @@ export function rendre(idNoeud, options = {}) {
     // obligé à réécrire onze attentes pour un gain nul, et un harnais qui
     // n'attend pas le bon signal mesure une page à moitié peinte.
     plateau.classList.add('is-pret');
-    // On rend le focus à l'étoile qui l'avait avant le re-dessin.
-    if (focusARendre) {
-      const revenue = scene.querySelector(
-        'g.ciel-etoile[data-noeud-id="' + focusARendre + '"]');
-      focusARendre = null;
-      if (revenue) { revenue.focus(); }
-    }
   }
 
-  // ---- ⑤ LE CAP « À VENIR », et le survol qui déplie ----------------------
+  // ---- ⑤ LE CAP « À VENIR », et le survol qui PARLE (sans redessiner) ------
   function habiller() {
-    let minuteur = null;
     scene.querySelectorAll('g.ciel-etoile[data-noeud-id]').forEach((g) => {
       const id = g.getAttribute('data-noeud-id');
       const cap = registre[id] || {};
@@ -434,41 +420,17 @@ export function rendre(idNoeud, options = {}) {
         g.removeAttribute('data-appel');
       }
 
+      // LE SURVOL PARLE, IL NE REDESSINE PAS. Tout ce qui redessinerait ici
+      // ferait bouger l'étoile sous le curseur — et c'est le clic qui paierait.
       const montrer = () => afficherResume(Object.assign({ id }, cap));
-      g.addEventListener('mouseenter', () => {
-        montrer();
-        if (idsDuNiveau.indexOf(id) === -1) { return; }
-        if (!(cap.enfants || []).length) { return; }
-        clearTimeout(minuteur);
-        minuteur = setTimeout(() => deplier(id), SURVOL_MS);
-      });
-      g.addEventListener('mouseleave', () => { clearTimeout(minuteur); reinitResume(); });
+      g.addEventListener('mouseenter', montrer);
+      g.addEventListener('mouseleave', reinitResume);
       // Clavier = souris. Un cap qu'on atteint à la tabulation doit dire la
-      // même chose qu'un cap qu'on survole.
-      g.addEventListener('focus', () => {
-        montrer();
-        if (idsDuNiveau.indexOf(id) !== -1 && (cap.enfants || []).length) {
-          focusARendre = id; // le re-dessin détruirait le focus : on le lui rend
-          deplier(id);
-        }
-      });
+      // même chose qu'un cap qu'on survole — et, comme lui, ne rien redessiner :
+      // le re-dessin détruirait l'élément focalisé (défaut du 2026-08-13).
+      g.addEventListener('focus', montrer);
       g.addEventListener('blur', reinitResume);
     });
-  }
-
-  // Déplier : montrer ce qu'un cap contient SANS y entrer. Le re-dessin fait
-  // naître de nouvelles étoiles ; la garde qui empêche l'emballement vit dans
-  // l'adaptateur (`idsDuNiveau`), pas ici — un garde-fou que chaque appelant
-  // doit penser à installer n'en est pas un.
-  function deplier(id) {
-    // SOUS ISOLEMENT, IL N'Y A PLUS RIEN À DÉPLIER : les enfants des têtes sont
-    // déjà peints. Re-dessiner pour n'ajouter aucune étoile coûterait le focus
-    // clavier à chaque survol (le re-dessin détruit l'élément focalisé) — un
-    // menu où la tabulation s'annule sous les doigts, précisément le défaut
-    // corrigé le 2026-08-13.
-    if (isole || deplie === id || enRoute) { return; }
-    deplie = id;
-    dessiner();
   }
 
   // ---- L'entrée : on plonge, ou bien la page s'ouvre ----------------------
@@ -514,8 +476,9 @@ export function rendre(idNoeud, options = {}) {
   }
 
   // Ce qui n'a pas été choisi s'efface — et ce qui reste, c'est la cible ET ce
-  // qu'elle contient déjà à l'écran : sinon l'aperçu déplié disparaîtrait juste
-  // avant de reparaître, ce qui se lit comme un clignotement.
+  // qu'elle contient. Depuis le retrait du dépliage (2026-09-25), ses enfants ne
+  // sont jamais à l'écran avant la plongée : les garder dans la liste est juste
+  // et sans effet, et ce sera encore juste le jour où un aperçu reviendrait.
   // La classe est posée sur la SCÈNE et non sur chaque étoile : le moteur
   // ré-écrit `opacity` à chaque image (attribut de présentation), et une règle
   // CSS — n'importe laquelle — l'emporte sur un attribut. C'est ce qui permet
@@ -535,7 +498,6 @@ export function rendre(idNoeud, options = {}) {
   // sera oublié — le fil qui annonce un étage que le ciel ne montre plus.
   function poserFoyer(id, options) {
     isole = id || null;
-    deplie = null;
     scene.classList.remove('ciel-scene--isolant');
     // LE MOBILIER SE REMPLIT AVANT QUE LE CIEL NE SE DESSINE, et l'ordre n'est
     // pas un détail : `dessiner()` MESURE la place que le mobilier occupe
