@@ -399,3 +399,59 @@ tourne sans réglage ; `smoke-lv5-plein-ecran` ne parle pas du dépliage.
 
 **Ce que ce dry run ne voit pas** : le preview Vercel (proxy), le tap sur un
 vrai téléphone.
+
+---
+
+## 13. Lot 1 — LIVRÉ le 25/09 au soir, sur go explicite de Paul (mesuré)
+
+**Le harnais d'abord, vu rouge.** `tests/smoke-clic-exact.mjs` a tourné sur
+`main` (`8698739`) AVANT la première ligne du correctif : **15 verdicts rouges
+sur 21**. Pas 4 sur 5 : le tap tactile échouait aussi (le tap émet les
+événements souris de compatibilité, donc le survol, donc le re-dessin), et le
+focus clavier redessinait le ciel. GRIMA se déplaçait de **965 px** après
+survol, NAGA de 118. Le témoin (`#naga`, TAO : 0 px, clic exact) était vert —
+il l'est resté après.
+
+**Le correctif, en deux temps — et le second n'était PAS dans le §11.**
+
+| Temps | Fichier | Ce qui change | Résultat |
+|---|---|---|---|
+| 1 | `js/ciel-noeud.mjs` | `SURVOL_MS`, `deplie`, `minuteur`, `focusARendre`, `deplier()` retirés ; `mouseenter` et `focus` ne font plus que `montrer()` ; `versCiel(…, { isole })` | 15 rouges → **2** |
+| 2 | `js/ciel.js` l. 1025 | `focusin` ne **vise** l'étoile que si `g.matches(':focus-visible')` | 2 rouges → **0** |
+
+⛔ **L'écart au §11, dit en toutes lettres** : le §11 promettait « `js/ciel.js`
+intouché au lot 1 ». Les deux rouges restants étaient l'**appui de 150 ms** —
+un clic humain. Mesuré : au `mousedown`, Chromium donne le focus à l'étoile ;
+le moteur `viser()` la recentrait ; NAGA partait de **176 → 630 px en 300 ms**
+et le relâchement tombait dans le vide. Un clic instantané passait, un clic
+réel non — « parfois », disait Paul. La garde `:focus-visible` (faux sur un
+focus donné par un pointeur, vrai sur un focus donné par Tab) est la
+discrimination que le navigateur fournit lui-même ; elle tient en une
+condition, et le clavier garde sa visée. **Ce choix est soumis à Paul au moment
+de la fusion, pas glissé.** `smoke-ciel` (RIVEN, même moteur) : **71/71 avant
+et après** — une seule assertion reprise, pas supprimée (le focus programmatique
+du harnais est précédé d'une touche neutre, pour être un focus *clavier*).
+
+**Les assertions reprises une à une** : `smoke-lv4-coque` « le survol déplie »
+→ **inversée** (« le survol ne déplie plus : le ciel garde ses seuls caps »),
+deux voisines gardées ; `smoke-ciel` § clavier : une ligne ajoutée. Aucune
+assertion supprimée.
+
+**Mesures de sortie** : `smoke-clic-exact` **21/21** · déplacement après survol
+**0 px** à 16, 100, 250 et 500 ms · tap → isolé · tap glissé de 6 px → rien
+(rotation, seuil 4 px — le POV adversaire du §7 est couvert, par événements
+synthétiques et non par un vrai doigt) · patrimoine complet **41 suites
+unitaires + 46 harnais navigateur, sortie 0**.
+
+**Dry run DR (22:06)** — sondé : le diff en adversaire, l'enrôlement du harnais,
+le témoin. Cédé et corrigé : `idsDuNiveau` était devenu une variable **assignée
+et jamais lue** (le garde qu'elle servait a disparu avec `deplier`) ; un
+commentaire d'`eteindreSauf` parlait encore d'un « aperçu déplié ». Résisté :
+`lancer.sh` enrôle `smoke-clic-exact` par sa seule présence (vu dans le log),
+le témoin reste vert, `adaptateur-lv4` garde son option `deplie` intacte
+(6 verdicts) avec un commentaire qui explique pourquoi on ne déplie pas au
+survol — toujours juste.
+
+**Ce que ce lot ne prouve pas** : le tap sur un vrai téléphone (Chromium simule
+le toucher). C'est Paul qui recette, sur le preview : *clique NAGA sans
+attendre, puis GRIMA — chaque clic doit plonger, du premier coup.*

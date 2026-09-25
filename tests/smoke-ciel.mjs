@@ -147,6 +147,13 @@ const excentree = await page.evaluate(() => {
 });
 // focus() de Playwright, et non element.focus() dans la page : sur un <g> SVG
 // le focus programmatique ne prend pas toujours.
+// ⚠️ ET LE FOCUS DOIT VENIR DU CLAVIER (2026-09-25) : le moteur ne vise plus
+// que le focus `:focus-visible` — un focus donné par la souris (dès l'appui)
+// recentrait l'étoile sous le doigt et faisait rater le clic. Chromium ne
+// déclare `:focus-visible` sur un focus programmatique que si la DERNIÈRE
+// interaction fut le clavier : une touche neutre suffit à le dire. Sans elle,
+// ce verdict mesurerait un focus souris — et rougirait sur un moteur sain.
+await page.keyboard.press('Shift');
 await page.locator(`g.ciel-etoile[data-noeud-id="${excentree.id}"]`).focus();
 verdicts.focusEffectif = await page.evaluate((id) =>
   document.activeElement && document.activeElement.getAttribute('data-noeud-id') === id,

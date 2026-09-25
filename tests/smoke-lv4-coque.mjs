@@ -175,18 +175,21 @@ await page.waitForTimeout(120);
 verifier('La parole revient au repos quand on s’éloigne',
   (await page.locator('#boussole-parole .parole-nom').count()) === 0);
 
-// ---- LE DÉPLIAGE : voir ce qu'un cap contient sans y entrer ----
+// ---- LE SURVOL NE DÉPLIE PLUS (2026-09-25, arbitrage A1) ----
+// Cette assertion disait l'inverse : « le survol déplie ce que le cap
+// contient ». Le dépliage redessinait la scène sous le curseur et faisait
+// rater le clic (4 gestes sur 5, `smoke-clic-exact`). Inversée, pas
+// supprimée : le survol doit maintenant laisser le ciel EXACTEMENT tel quel.
 await premier.dispatchEvent('mouseenter');
 await page.waitForTimeout(700);
-const apresDepliage = await page.$$eval('#ciel-noeud-scene .ciel-etoile[data-noeud-id]',
+const apresSurvol = await page.$$eval('#ciel-noeud-scene .ciel-etoile[data-noeud-id]',
   (gs) => gs.map((g) => g.getAttribute('data-noeud-id')));
-const attendusDeplies = CAPS.length + (NOEUDS[CAPS[0]].enfants || []).length;
-verifier('Le survol déplie ce que le cap contient',
-  apresDepliage.length === attendusDeplies,
-  `${apresDepliage.length} objets, attendu ${attendusDeplies}`);
-verifier('Le dépliage ne quitte PAS l’étage',
-  CAPS.every((id) => apresDepliage.includes(id)));
-verifier('On n’a pas changé de page en dépliant', /\/ultima\.html$/.test(page.url()));
+verifier('Le survol ne déplie plus : le ciel garde ses seuls caps',
+  apresSurvol.length === CAPS.length,
+  `${apresSurvol.length} objets, attendu ${CAPS.length}`);
+verifier('Le survol ne quitte PAS l’étage',
+  CAPS.every((id) => apresSurvol.includes(id)));
+verifier('On n’a pas changé de page en survolant', /\/ultima\.html$/.test(page.url()));
 
 // ---- Lisibilité : le thème stellaire tient sur cette coque ----
 const lisibilite = await page.evaluate(() => {

@@ -1025,7 +1025,15 @@
     racine.addEventListener('focusin', function (e) {
       allumer(e.target);
       var g = e.target.closest ? e.target.closest('[data-noeud-id]') : null;
-      if (g && parId[g.getAttribute('data-noeud-id')]) {
+      // ON NE VISE QUE LE FOCUS CLAVIER (2026-09-25, lot 1 de la carte céleste).
+      // Un clic donne AUSSI le focus à l'étoile, dès l'appui : viser alors
+      // recentrait la caméra sur elle, et elle partait de sous le doigt avant
+      // le relâchement — mesuré : 176 → 630 px en 300 ms, et le `click`
+      // n'atteignait plus aucune étoile. `:focus-visible` est faux sur un focus
+      // donné par un pointeur, vrai sur un focus donné par Tab — c'est le
+      // navigateur qui le dit, pas une minuterie.
+      if (g && parId[g.getAttribute('data-noeud-id')]
+          && (!g.matches || g.matches(':focus-visible'))) {
         viser(parId[g.getAttribute('data-noeud-id')]);
       }
     });
