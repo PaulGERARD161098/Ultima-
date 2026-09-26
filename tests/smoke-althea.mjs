@@ -1,7 +1,7 @@
 // Quadrant ALTHEA (B1) : le Système — le profil, les skills, les stats, le jour.
 // DERRIÈRE AUTH. Miroir de smoke-draukhain.mjs. Prouve :
 //   A. althea.html SANS session (config vide) : FAIL-CLOSED — aucune donnée au
-//      DOM, la page le dit, retour vers ultima.html, zéro requête externe,
+//      DOM, la page le dit, retour vers la racine (index.html, parent du registre), zéro requête externe,
 //      zéro erreur console.
 //   B. althea.html avec FAUSSE session + /api/althea STUBÉE 200 (fixture
 //      NEUTRE inventée — jamais les gestes réels de Paul) : profil rendu,
@@ -15,6 +15,7 @@
 // la donnée de santé (§9). Un harnais est lu, relu et parfois publié — il
 // n'héberge pas les gestes de Paul.
 import { chromium } from 'playwright';
+import { NOEUDS, chemin } from '../js/registre-lv3.mjs';
 
 const BASE = 'http://127.0.0.1:8123';
 
@@ -129,8 +130,14 @@ console.log('— A. althea.html SANS session (fail-closed) —');
     (await page.textContent('#althea-niveau')) === '—');
   verifier('aucun skill rendu',
     (await page.locator('.althea-skill').count()) === 0);
-  verifier('retour vers ULTIMA',
-    (await page.getAttribute('.retour-althea', 'href')) === 'ultima.html');
+  // Le retour mène au PARENT DU REGISTRE : ALTHEA est une étoile de la RACINE
+  // (Paul, 07/08 : « je veux althea ici »), donc `index.html`. Ce contrôle
+  // exigeait `ultima.html` depuis le 14/09 — la supra-division ULTIMA, une
+  // constellation SŒUR : le piège des deux « Ultima » que le journal du 07/08
+  // décrit mot pour mot. Lu dans le registre, il ne peut plus diverger de lui.
+  const parentAlthea = chemin('althea', NOEUDS).slice(-2, -1)[0];
+  verifier('retour vers le parent du registre (la racine → index.html)',
+    parentAlthea === 'racine' && (await page.getAttribute('.retour-althea', 'href')) === 'index.html');
   // Un écran qui dit « ouvre ta session » DOIT donner la porte : constater sans
   // proposer le geste, c'est obliger Paul à le chercher (leçon VRANESH).
   verifier('la porte de connexion est offerte, pas seulement nommée',
