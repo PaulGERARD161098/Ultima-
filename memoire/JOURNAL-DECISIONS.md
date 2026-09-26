@@ -4261,3 +4261,18 @@ raté sur NAGA : 4 gestes sur 5, l'étoile part de 119 px sous le curseur).
 **A6** : *« cadrage d'abord et précision du travail, pas de travail sans mon go
 explicite »* → le lot 1 est précisé à la ligne (§11), et **aucune ligne de code
 ne s'écrit sans un go explicite**, lot par lot. A2 à A5 restent ouverts.
+
+## 2026-09-26 — Carte céleste : A2 à A5 rendus sur la recommandation
+
+Paul : *« A2 reco, A3 reco, A4 reco, A5 reco — cadre »*. **A2** la figure est un
+arbre calculé · **A3** `PRODUCT.md` remplace `PRODUIT.md` pour la vérité
+produit · **A4** pas de vue à plat des dépôts · **A5** l'éclat dit le rang et le
+signal, jamais la fraîcheur. A6 tient : rien ne se code sans go explicite.
+Lots 0, 2, 3 précisés dans `CADRAGE-2026-09-25-carte-celeste.md` §14.
+
+⚠️ **A3 précisée, pas renversée** : `PRODUIT.md` porte aussi le modèle de
+données, le contrat d'API et les conventions du front, que quatre agents
+déclarent obligatoires. Ils y restent ; seule la vérité produit déménage.
+Deux arbitrages nouveaux : **A7** (retirer du lot 3 l'« anneau de Léo » au
+survol, qu'aucune donnée ne porte — reco oui) et **A8** (couronne ou figure,
+sur capture de la maquette).

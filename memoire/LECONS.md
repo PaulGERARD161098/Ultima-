@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v39 2026-09-25 sha256:43a6c6629b39 -->
+<!-- lecons:empreinte v40 2026-09-26 sha256:e39f91fc1c3e -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -468,6 +468,25 @@ recherche elle-même — « ce fichier existe-t-il, fait-il plus de zéro ligne 
 coûte une seconde et sauve l'annonce.
 
 ## 2. Les garde-fous, et leur silence
+
+**UN CLIC DE HARNAIS TOMBE TOUJOURS SUR L'ÉLÉMENT QU'ON LUI NOMME** *(2026-09-25)*.
+Paul signalait depuis des semaines que cliquer NAGA ou GRIMA « ne sélectionne
+pas toujours ». `smoke-lv4-coque` était vert : il cliquait par
+`dispatchEvent('click')`, qui atteint l'élément désigné quoi qu'il y ait sous
+le curseur. Rejoué avec de **vrais gestes** (`mouse.move`, appui de 150 ms, tap),
+le clic ratait **15 fois sur 21** : le survol redessinait le ciel et l'étoile
+partait de 118 px (NAGA) à 965 px (GRIMA), puis, une fois ce défaut retiré, le
+focus donné à l'appui la faisait encore viser par la caméra, 176 → 630 px avant
+le relâchement.
+
+⛔ **Un harnais qui nomme sa cible ne peut pas voir une cible qui bouge.** Il
+prouve que le gestionnaire de clic répond, jamais que le clic arrive.
+
+⇒ **Tout harnais d'un geste pointeur rejoue le geste réel** : déplacement,
+appui, durée, relâchement, et le toucher à part — avec un **témoin** vert dans
+les deux états (ici l'écran isolé, où rien ne bougeait) et une mesure du
+**déplacement** de la cible à plusieurs paliers de temps, parce que « ça marche
+si on clique vite » est exactement la forme que prend ce défaut.
 
 **UN PLAFOND QUI MESURE LA PAGE REPLIÉE NE GARDE RIEN** *(2026-09-22)*. La
 vitrine portait un seuil de hauteur de 12 400 px sur mobile, abaissé et prouvé

@@ -6,6 +6,13 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🗺️ **SESSION 2026-09-26 — A2 À A5 RENDUS, LOTS 0/2/3 CADRÉS À LA LIGNE, aucun code.**
+  `CADRAGE-2026-09-25-carte-celeste.md` §14. Trois constats lus dans le code : les
+  étoiles de navigation sont sur une **couronne** (l'arbre y donnerait un arc → A8,
+  sur capture) ; la taille d'étoile vient du **nombre de liens** (les traits restent
+  hors `relations`) ; `PRODUIT.md` porte les **contrats** de quatre agents (A3 précisée :
+  il se réduit à eux). A7 (reco : retirer l'« anneau de Léo » du lot 3) ouvert.
+
 - 🎯 **SESSION 2026-09-25 (soir) — LOT 1 « LE CLIC EXACT » LIVRÉ, sur go explicite de
   Paul.** Cadrage fusionné (#291 → `8698739`). Harnais `smoke-clic-exact` écrit EN
   PREMIER et vu rouge sur `main` (15/21, tap compris) ; dépliage au survol retiré de

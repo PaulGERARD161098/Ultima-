@@ -455,3 +455,178 @@ survol — toujours juste.
 **Ce que ce lot ne prouve pas** : le tap sur un vrai téléphone (Chromium simule
 le toucher). C'est Paul qui recette, sur le preview : *clique NAGA sans
 attendre, puis GRIMA — chaque clic doit plonger, du premier coup.*
+
+---
+
+## 14. A2 à A5 rendus (26/09) — et les lots 0, 2, 3 précisés à la ligne
+
+| # | Décision de Paul (26/09, « reco ») | Ce qu'elle engage |
+|---|---|---|
+| **A2** | La figure est un **arbre calculé** (n − 1 traits par constellation). | Lot 2 |
+| **A3** | `PRODUCT.md` **remplace** `PRODUIT.md` pour la vérité produit. | Lot 0 — précisé ci-dessous : les contrats techniques ne disparaissent pas |
+| **A4** | **Pas** de vue à plat de tous les dépôts dans ce cadrage. | Rouvert le jour où un ciel dépasse 8 astres |
+| **A5** | L'éclat dit **le rang et le signal**, jamais la fraîcheur. | Lot 2 |
+
+⛔ **A6 tient toujours** : ce paragraphe précise, il n'ouvre rien. Chaque lot
+attend un go explicite. Ordre recommandé : **0 → 2 → 3** (le lot 0 est un
+entretien de vingt minutes, et impeccable refuse `shape`/`critique` sans lui).
+
+### 14.0 Trois constats lus ce matin dans le code, qui corrigent le plan
+
+1. **Les étoiles de navigation sont posées sur une COURONNE**, pas en figure.
+   `couronne: true` (`js/ciel-noeud.mjs`, options du moteur) appelle
+   `disposerEnCouronne` (`js/ciel.js` l. 288) : n points sur une ellipse,
+   répartis à angles égaux, les noms longs aux positions verticales. C'est un
+   standard **tranché par Paul le 17/08** (« les mêmes standards partout ») pour
+   de bonnes raisons mesurées — l'occupation du cadre et la largeur des noms.
+   ⇒ Un arbre calculé sur une couronne donne **un arc** : l'anneau moins son plus
+   long côté. C'est une figure, mais c'est encore un anneau. Ce que Paul appelle
+   « constellations brutes » est, pour une bonne part, **la couronne elle-même**.
+   D'où l'arbitrage **A8** (§14.2) — et il se tranche sur capture, pas avant.
+2. **La taille d'une étoile vient de son nombre de liens** (`magnitudes`, l. 387 ;
+   rayon l. 1259-1260 : `R_ETOILE_MIN + (mag / magMax) × 3,2`). Aujourd'hui les
+   écrans de navigation n'ont aucun lien : toutes les étoiles ont la même taille.
+   ⛔ **Si les traits d'astérisme passaient par `relations`, l'étoile au milieu
+   d'une chaîne grossirait par accident** — un éclat qui ne dirait rien, sinon la
+   forme de l'arbre. Les traits vivent donc **hors** de `relations`, et le rang
+   entre par un champ **explicite**.
+3. **`PRODUIT.md` n'est pas qu'une vision périmée.** Il porte aussi le **modèle de
+   données** (l. 34), le **contrat d'API** (l. 118) et les **conventions du front**
+   (l. 134) — et **quatre agents** le déclarent « contexte obligatoire »
+   (`graphisme`, `interface-ux`, `front-carto`, `leo`). Le supprimer effacerait
+   leur contrat. ⇒ A3 se précise sans se renverser : **la vérité produit va dans
+   `PRODUCT.md`, les contrats techniques restent dans `PRODUIT.md`**, réduit à eux.
+
+### 14.1 Lot 0 — `impeccable init` : `PRODUCT.md` (un entretien, une séance courte)
+
+**Ce qui se fait, dans l'ordre :**
+
+1. `impeccable context --target ultima.html` (skill dans
+   `artisan-builder/.claude/skills/impeccable`, cwd `Ultima-`), puis
+   `reference/init.md`.
+2. **Un seul tour de trois questions**, posé avec l'outil de questions, chacune
+   **pré-remplie** d'une inférence tirée du dépôt, à confirmer ou corriger — init
+   interdit d'écrire `PRODUCT.md` sans une vraie réponse :
+
+   | Question d'init | Inférence proposée (source) |
+   |---|---|
+   | Qui, dans quelle situation, pour quel travail ? | Paul seul, mono-utilisateur (`PRODUIT.md` §Personas, 03/07), plusieurs fois par jour, souvent au téléphone le soir ; il vient **s'orienter et agir** sur sa data pro et perso. |
+   | Ce que le produit rend possible, que rien d'autre ne peut prétendre ? | **L'unique interface de travail**, qui absorbe toute la data et la dispatche, avec **un seul interlocuteur**, Léo ; rien d'autre ne sera créé (Directive JL, `CLAUDE.md`). |
+   | Ce qui doit durer ? | Registre **antique et sérieux** (acté 08/07) · sécurité relevée, finance + intime (`CADRAGE-CONSOLE.md` §5) · « Ultima compte, elle ne reproche pas » (règle ③ d'ALTHEA) · le ciel est la navigation (LV4-LV6). |
+
+3. **Écrire `PRODUCT.md`** au gabarit d'init : `Platform: web` (PWA —
+   `manifest.webmanifest`) ; **pas** de section `Stack` (le code existant répond) ;
+   `Evidence on Hand` dit aussi ce qui **n'existe pas** et ne doit pas s'inventer.
+4. **Réduire `PRODUIT.md`** à ses trois sections techniques, sous un en-tête qui
+   renvoie la vérité produit à `PRODUCT.md`. Vision, personas, user stories,
+   « Interface v3 » (boussole, 06/07) et hors-périmètre P0 en sortent — ils
+   restent lisibles dans l'historique git.
+5. **Mettre à jour les renvois vivants**, et eux seuls : `CLAUDE.md` l. 116 et
+   les quatre agents pointent `PRODUCT.md` pour le produit, `PRODUIT.md` pour les
+   contrats ; `ROADMAP-SITE.md` l. 25 idem. ⛔ **Les archives datées ne se
+   réécrivent pas** (`REFONTE-ACCUEIL.md`, `AUDIT-2026-08-13.md`,
+   `design/spec-registre-antique-serieux.md`) : elles ne valent que par leur
+   exactitude au jour où elles ont été écrites.
+
+**Ce qui ne se fait pas** : aucun `DESIGN.md` (init l'interdit ; `document` est
+une autre commande, offerte après), aucune direction visuelle, aucun code.
+
+**Critère de sortie** : `impeccable context` ne rend plus `NO_PRODUCT_MD` ; chaque
+fait de `PRODUCT.md` cite sa source ou la réponse de Paul ; `grep -rn PRODUIT.md`
+ne trouve plus de renvoi vivant vers une section qui a quitté le fichier.
+
+### 14.2 Lot 2 — la figure (la maquette d'abord, le code ensuite)
+
+**Où vit chaque règle — une seule fois chacune :**
+
+| Règle | Fichier | Forme |
+|---|---|---|
+| Le **rang** (A5) : un cap qui CONTIENT est une tête, les autres des feuilles | `js/adaptateur-lv4.mjs` (`versCiel` et `isolement`) | un champ `poids` par nœud : `1` s'il a des enfants, `0` sinon — lu dans le registre, jamais deviné |
+| L'**éclat par le rang** | `js/ciel.js`, rayon l. 1259 | option `eclatParPoids`, **inactive par défaut** : la taille lit `poids` au lieu du nombre de liens ; amplitude réglée sur la maquette |
+| L'**arbre** (A2) | `js/ciel.js` | fonction **pure** `asterisme(points)` — arbre couvrant minimal (Prim, n ≤ 24), calculé **par constellation** sur les coordonnées **planes** de la disposition, donc sans croisement ; exposée sur `window.UltimaCiel` pour être testée sans DOM |
+| Le **tracé** des traits | `js/ciel.js` | option `asterisme`, **inactive par défaut** : un groupe `ciel-asterisme` à part, `aria-hidden`, or pâle `#d8bd82` déjà employé, ~0,6 px, opacité ~0,35 ; **hors de `relations`** (constat 2) et **non allumé au survol** |
+| La **disposition** (A8) | `js/ciel.js` | la couronne reste ; une variante `disposition: 'figure'`, déterministe (graine = id), n'existe que si A8 la retient |
+| Qui active | `js/ciel-noeud.mjs` | les options, sur les coques de navigation seulement — **RIVEN ne change pas** |
+
+**Ce que le rang change vraiment, mesuré aujourd'hui dans le registre :**
+
+| Écran | Caps (enfants) | Effet du rang |
+|---|---|---|
+| ULTIMA | GRIMA (2) · NAGA (3) | **aucun** — deux têtes |
+| NAGA isolé | IMLADRIK (3) · ADRAMELECH (3) · TAO (2) | **aucun** — trois têtes |
+| GRIMA isolé | RIVEN (0) · NICOL BOLAS (4) | NICOL BOLAS plus vif |
+| ALPHA, avec session | RENOBOOST IA (5 après greffe) · YCOME (0) · 4 astres (0) | RENOBOOST IA plus vif ; les astres portent déjà leur couleur Finubar |
+| Racine | ULTIMA (2) · ALPHA (2) · ALTHEA (0) | ALTHEA moins vive |
+
+⚠️ **Sur NAGA — l'écran cité par Paul — le rang ne change rien** : ses trois
+caps contiennent tous quelque chose. La figure y viendra de l'arbre et de la
+disposition, pas de l'éclat. Le dire maintenant évite d'attendre de A5 ce
+qu'elle ne peut pas donner.
+
+**Les étapes :**
+
+1. **Harnais pur d'abord** : `tests/unit-asterisme.mjs` — n − 1 arêtes, connexe,
+   déterministe, **aucun croisement**, cas n = 0, 1, 2 et 24 ; vu rouge sur une
+   fonction volontairement fausse avant d'être cru.
+2. **La maquette** `design/preview-carte-celeste.html` : elle charge le **vrai**
+   `js/ciel.js` et le **vrai** registre, et montre **côte à côte deux variantes**
+   sur les six écrans réels et le pire cas à 24 :
+   **V1** couronne + arbre + éclat · **V2** figure + arbre + éclat.
+   Bandeau de mesure : occupation du cadre, noms qui se chevauchent, noms hors
+   cadre, contraste AA, cibles ≥ 24 px — **les mêmes critères qui ont fondé la
+   couronne le 17/08**, pour que V2 soit jugée sur ce que V1 garantit déjà.
+3. **Passe impeccable** sur la maquette : `critique` (deux sous-agents isolés +
+   `impeccable detect`), puis `polish`. Monde **établi** : on l'étend
+   (`new-work.md`, « extend an existing surface ») — aucun tournoi de directions.
+   `craft-floor.md` est relu avant la première retouche d'interface.
+4. **→ Arbitrage A8 de Paul, sur capture** (voir plus bas).
+5. Le code de la variante retenue, les options activées sur les coques,
+   `tests/smoke-carte-celeste.mjs` (DOM : n − 1 traits par écran, aucun trait
+   vers une étoile absente, rien de nouveau en `reduced-motion` qui bouge).
+
+**Critères de sortie** : `unit-asterisme` et `smoke-carte-celeste` verts, vus
+rouges d'abord ; **`smoke-ciel` 71/71 avant et après** (RIVEN, options
+inactives) ; `smoke-clic-exact` 21/21 (la figure ne doit pas faire revenir un
+re-dessin sous le curseur) ; patrimoine complet sortie 0 ; preview donné à Paul.
+
+**A8 — la disposition** (nouvel arbitrage, **sur capture**, jamais avant) :
+
+| Variante | Ce qu'elle garde | Ce qu'elle coûte |
+|---|---|---|
+| **V1 — couronne + arbre** | tout ce que le 17/08 a mesuré | reste un anneau ; c'est peut-être le « brut » |
+| **V2 — figure + arbre** | l'arbre, l'éclat, les noms | rouvre un standard tranché ; doit **égaler** l'occupation et les noms de V1 |
+
+Recommandation **suspendue** : elle se forme en regardant les deux captures, et
+V2 n'est retenue que si elle égale V1 sur les critères mesurés.
+
+### 14.3 Lot 3 — les dépôts partout
+
+**Ce qui se fait :**
+
+1. **`alpha.html#renoboost-ia` isole après la greffe.** L'adresse est lue une
+   fois (`js/ciel-noeud.mjs` l. 630), **avant** que `/api/finubar` n'ait greffé
+   les astres (l. 683) : RENOBOOST IA n'a alors pas d'enfants, `idDeLAdresse`
+   (l. 565) répond `null`, et le lien s'ouvre sur ALPHA entier. Correctif : juste
+   après la greffe, si aucun foyer n'est posé, relire l'adresse et poser le foyer
+   (`sansHistorique`). `idDeLAdresse` garde sa triple garde telle quelle.
+2. **Le harnais** : stub `/api/finubar` **retardé de 800 ms** + session ; attendu
+   `#renoboost-ia` → 5 astres + LE SITE, et rien d'autre. Vu rouge d'abord.
+3. **Mesurer « chaque dépôt en ≤ 2 clics »** depuis la racine, avec l'agrégat
+   réel — une ligne du harnais, pas une impression.
+
+**A7 — ce que le lot 3 ne fait PLUS** (nouvel arbitrage, recommandation ferme) :
+le §2 promettait que l'étoile d'un dépôt « dit ce que Léo peut y faire ».
+⛔ **Aucune donnée ne le porte.** Les anneaux de droits (vert / orange / rouge)
+sont un **cadrage** du 22/09, pas un état du système — J3 « Léo écrit » n'est pas
+construit, et un astre a `cible: null` (« un astre est un état, pas une porte »,
+`js/adaptateur-finubar.mjs`). Afficher « écriture verte » au survol, ce serait
+annoncer une capacité qui n'existe pas. **Recommandation : retirer ce point du
+lot 3** ; il revient avec J3, lu dans la donnée que J3 produira.
+
+### 14.4 Registre des arbitrages ouverts
+
+| # | Question | Quand | Reco |
+|---|---|---|---|
+| **A7** | Retirer du lot 3 « l'anneau de Léo au survol » ? | maintenant | **oui** — il reviendra avec J3 |
+| **A8** | Couronne + arbre, ou figure + arbre ? | **sur capture** de la maquette (lot 2) | suspendue |
+| — | Go du **lot 0** (entretien impeccable init) | maintenant | ouvrir en premier |

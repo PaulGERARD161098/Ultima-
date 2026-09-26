@@ -31,11 +31,11 @@
     "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
   },
   "dernier_arret": {
-    "le": "2026-09-25",
-    "commit": "86987392953544cbd6e4320b9fa49b96b031361f",
-    "quoi": "Séance 25/09 : cadrage carte céleste fusionné (#291) ; lot 1 « clic exact » livré sur go de Paul — dépliage au survol retiré, garde :focus-visible, smoke-clic-exact 21/21."
+    "le": "2026-09-26",
+    "commit": "76776ca1d4639e3e7eff1ac2068500cafdb82de5",
+    "quoi": "Séance 26/09 (cadrage, aucun code) : A2-A5 rendus ; lots 0/2/3 précisés à la ligne (carte-celeste §14) ; leçon « un clic de harnais tombe toujours sur sa cible » (v40)."
   },
-  "prochaine_action": "Paul recette le lot 1 sur le preview (clic NAGA puis GRIMA, du premier coup) et ratifie l’écart §13 (garde dans ciel.js) → fusion. Puis A2-A5 et impeccable init (lot 0).",
+  "prochaine_action": "Go de Paul sur le lot 0 (entretien impeccable init → PRODUCT.md, PRODUIT.md réduit aux contrats) et A7. Puis lot 2 : maquette V1/V2, A8 sur capture.",
   "bloque_par": [
     "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
@@ -47,12 +47,12 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "Carte céleste : lot 1 livré (PR en attente de fusion), lots 0/2/3 non ouverts. A2-A5 ouverts. Impeccable exige PRODUCT.md (lot 0) ; PRODUIT.md périmé.",
+      "quoi": "Carte céleste : lot 1 livré (#292) ; lots 0/2/3 cadrés §14, non ouverts. A7 (reco oui) et A8 (sur capture) ouverts.",
       "depuis": "2026-09-25"
     },
     {
-      "quoi": "LEÇONS v24 sur Ultima et RénoBoost (empreinte 8b3c40ef7785, identique à l'octet). Les SIX autres dépôts restent en arrière — leur écart est visible, c'est le rôle du sceau.",
-      "depuis": "2026-09-18"
+      "quoi": "LEÇONS v40 (e39f91fc1c3e) sur Ultima seul, mesuré le 26/09 : RenoAgenda v38, RenoDevis/RenoPredict/mon-dpe/artisan-builder v28, trois dépôts sans copie. Propagation non faite.",
+      "depuis": "2026-09-26"
     },
     {
       "quoi": "MESURÉ le 13/09 et démenti : la note annonçait des copies divergentes du rappel Finubar. Les sept fichiers ont la même empreinte. Voir CADRAGE-FINUBAR.md.",
@@ -115,7 +115,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-09-25"
+  "maj": "2026-09-26"
 }
 ```
 
