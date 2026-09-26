@@ -1442,6 +1442,17 @@
           rayon = Math.max(1.6, Math.min(9, (R_ETOILE_MIN + surcroit) * pr.echelle * 1.05));
         }
         pr.rayon = rayon;
+        // ⛔ LE RANG CHANGE L'ÉCLAT, JAMAIS LA CIBLE DU DOIGT (lot 2b, 26/09).
+        // La zone de captation se calcule sur le rayon qu'aurait l'étoile SANS
+        // le rang (la règle d'avant, nombre de liens et perspective), ou sur le
+        // rayon réel s'il est plus grand. Premier jet : elle suivait le rayon
+        // réel, et une feuille rapetissée devenait plus dure à toucher — les deux
+        // étoiles de TAO passées de 45 à 30 px au bureau (`smoke-tao`).
+        var rayonCible = rayon;
+        if (eclatParPoids) {
+          rayonCible = Math.max(rayon, Math.max(1.6, Math.min(9,
+            (R_ETOILE_MIN + Math.min(3.2, (piece.mag / magMax) * 3.2)) * pr.echelle * 1.05)));
+        }
         var op = opaciteProfondeur(pr.profondeur);
         var attenue = correspond && !correspond(piece.etoile.noeud);
         piece.g.setAttribute('opacity', (attenue ? op * 0.14 : op).toFixed(3));
@@ -1478,7 +1489,7 @@
         // La zone qui reçoit le doigt ne rétrécit PAS autant que l'étoile :
         // sans ce plancher, la moitié du réseau devient intouchable.
         piece.zone.setAttribute('cx', x); piece.zone.setAttribute('cy', y);
-        piece.zone.setAttribute('r', Math.max(RAYON_CAPTATION_MIN, rayon * 2.4).toFixed(2));
+        piece.zone.setAttribute('r', Math.max(RAYON_CAPTATION_MIN, rayonCible * 2.4).toFixed(2));
 
         var proche = pr.profondeur < cam.distance - rayonRef * 0.25;
         piece.nom.setAttribute('x', x);

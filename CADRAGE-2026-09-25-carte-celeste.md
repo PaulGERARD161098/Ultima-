@@ -1249,3 +1249,87 @@ une chose à la fois — et revient au repli. `smoke-socle` le tient (73 verdict
 durci à 30 dans chaque sens, il a rougi (19 et 15 sorties) avant d'être vert.
 
 **Patrimoine** : `npm test` **43/43** ; `bash tests/lancer.sh` sortie 0, **48/48** harnais (+ `smoke-bandeaux`).
+
+---
+
+## 25. Lot 2b — LIVRÉ le 26/09 au soir, sur go de Paul (« tutoiement, go lot 2b »)
+
+### Ce qui a été fait
+
+| Pièce | Où | Garde-fou |
+|---|---|---|
+| **La figure** (`asterisme: true`) et **le rang** (`eclatParPoids: true`) activés sur les coques de navigation — et nulle part ailleurs | `js/ciel-noeud.mjs` | `tests/smoke-carte-celeste.mjs` (neuf) |
+| **La figure s'éteint quand le ciel s'efface** autour d'un choix — sinon ses traits pendaient vers des étoiles éteintes | `css/ciel-noeud.css` (règle de l'état isolant, et sa ceinture `reduced-motion`) | idem ; **sabotage** : la règle retirée → 5 rouges |
+| `disposerEnFigure` et `hacher` | `js/ciel.js` | **déjà retirés au lot 2a** (§19) — rien à faire, vérifié au `grep` |
+
+### ⚠️ Une régression, trouvée par le patrimoine et corrigée dans le passage
+
+Premier jet vert sur son propre harnais (129/129)… et **`smoke-tao` rouge** : les
+deux étoiles de TAO se touchaient à **45 px** au bureau, **30 px** après. La zone
+qui reçoit le doigt suivait le rayon de l'étoile ; le rang rapetissant les
+feuilles, il rapetissait aussi leur cible. **Le rang doit changer l'éclat, jamais
+la cible.** Corrigé dans `js/ciel.js` : la zone se calcule sur le rayon qu'aurait
+l'étoile sans le rang (ou le rayon réel s'il est plus grand) — TAO revient à 45.
+`smoke-carte-celeste` porte désormais la cible, sur les sept écrans ; **sabotage**
+(la zone rebranchée sur le rayon réel) → 1 rouge, TAO à 30 px.
+
+⚠️ **Et ce que le témoin a appris en passant, qui n'est pas de ce lot** : mesuré sur
+le code d'AVANT le lot, les étoiles des coques se touchent à **25 px au téléphone**,
+partout, et 26 à 31 px au bureau sauf TAO et NAGA. C'est le plancher que le moteur
+promet (`RAYON_CAPTATION_MIN`, 24 px — WCAG 2.5.8), pas les 44 px que le reste du
+socle tient depuis le §24. Non corrigé ici : agrandir les zones peut les faire se
+recouvrir entre étoiles proches, et `smoke-clic-exact` (le clic exact, lot 1) en
+dépend — c'est un lot à part, avec sa mesure. **Consigné pour Paul.**
+
+### A9-3 — mesuré avant de construire, et il n'y avait rien à construire (EB)
+
+La question du §18.3 : les noms de constellation reviennent-ils une fois le foyer
+posé ? **Non, et c'est voulu** : sur un menu, le moteur les tait (`amasMuet`,
+`js/ciel.js`) parce que le titre et le fil les disent mieux. Mesuré sur les six
+écrans : **0 nom de constellation peint**, et la figure est nommée **par le fil**
+(NAGA, GRIMA, ALPHA isolé) **ou par le titre** à la racine d'une page (ULTIMA,
+ALPHA). Un cartouche de plus aurait été un troisième nom pour la même chose. Le
+harnais tient les deux faits.
+
+### Mesures — `smoke-carte-celeste`, 390 et 1280 px, caméra posée
+
+| Écran | Étoiles | Traits (visibles/attendus) | Rang (tête / feuille) |
+|---|---|---|---|
+| Racine | 3 | 2/2 | 4,05 / 2,82 · 7,74 / 5,38 |
+| TAO | 2 | 1/1 | un seul rang (deux feuilles) |
+| ULTIMA | 2 | 1/1 | un seul rang |
+| NAGA | 3 | 2/2 | un seul rang (§14.2 : trois têtes) |
+| GRIMA | 2 | 1/1 | 2,99 / 2,08 · 7,14 / 4,97 |
+| ALPHA sans session | 2 | 1/1 | un seul rang (RENOBOOST IA n'a de dépôts qu'après la greffe) |
+| ALPHA, session ouverte | 2 | 1/1 | 2,04 / 1,42 · 5,39 / 3,75 |
+
+Partout : **aucun trait vers une étoile absente, aucun trait à travers un nom**,
+encre parchemin `#cdc3ad`, groupe `aria-hidden`, figure éteinte sous l'état
+isolant, **rien ne bouge en `reduced-motion`** (NAGA et ALPHA, 1,5 s).
+
+**Vu rouge d'abord** : sur la tête d'avant, **91 rouges sur 129** (avant l'ajout de TAO et de la cible ; 162 verdicts au final). Le seuil du
+rang est exigeant à dessein — **tête ≥ 1,3 × feuille** : sans l'option, le nombre
+de liens donnait déjà un écart (2,25 contre 1,91 sur GRIMA, 18 %) qu'un simple
+« plus grand » aurait compté comme un rang. Avec : **44 %**, partout.
+
+### Et le tutoiement de la porte (même go)
+
+Paul tranche le point laissé ouvert au §24 : **l'écran de connexion tutoie**, comme
+Léo. « ton interface unique », « tu reçois un lien de connexion par e-mail »,
+« Regarde ta boîte mail » — dans `index.html`, `riven.html`, `js/boussole-auth.js`
+et `js/app.js`. `tests/unit-connexion-tutoiement.mjs` le tient (4 rouges avant).
+⚠️ Hors de ce qui a été tranché, et donc pas touché : **le reste de RIVEN vouvoie
+encore** (`js/app.js`, `js/dictee.js`), et le mail du lien est rédigé côté Supabase.
+
+### Limites, nommément
+
+- **ALPHA session ouverte n'a que 2 étoiles** au ciel (RENOBOOST IA et YCOME) :
+  les dépôts vivent un cran plus bas. Le pire cas à 24 étoiles reste celui de la
+  maquette (§17), où la figure s'efface d'elle-même — aucun écran réel n'en
+  approche.
+- Le **tap sur un vrai téléphone** n'est toujours pas prouvé par un harnais.
+- RIVEN n'active rien : son témoin reste `smoke-ciel`.
+
+**Patrimoine** : `npm test` **44/44** (+ `unit-connexion-tutoiement`) ; `bash tests/lancer.sh`
+sortie 0, **49/49** harnais (+ `smoke-carte-celeste`, 162 verdicts), `smoke-tao` et
+`smoke-ciel` (RIVEN) verts sans retouche.

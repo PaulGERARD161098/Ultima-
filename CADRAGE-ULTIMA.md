@@ -6,6 +6,14 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- ✴️ **SESSION 2026-09-26 (nuit) — #294 ET #295 FUSIONNÉES (`b0f092c`, `50d1e84`) ; LOT 2b LIVRÉ SUR LA BRANCHE.**
+  Les coques de navigation portent la **figure** (n − 1 traits, encre parchemin) et le
+  **rang** (une tête 44 % plus vive qu'une feuille) ; la figure s'éteint quand le ciel
+  s'efface. A9-3 mesuré : **rien à construire** — le fil ou le titre nomme déjà la figure.
+  L'**écran de connexion tutoie** (décision Paul). `smoke-carte-celeste` 91 rouges → 0/129 ;
+  `unit-connexion-tutoiement` 4 → 0. ⛔ « Prochaine action : lot 2b » ci-dessous est
+  PÉRIMÉE. Détail : carte-celeste §25. Prochaine action : lot 3 (les dépôts partout) ou
+  cadrage DOKLĚS / SYMPHO, au choix de Paul.
 - 📱 **SESSION 2026-09-26 (soir) — #293 FUSIONNÉE (`4244999`) : S1 fermée en production.**
   Puis, sur capture iPhone de Paul : au téléphone le bandeau Finubar s'ouvre **replié**
   (ciel 179 → 290 px à 390 × 664, la hauteur réelle de Safari) ; **RIVEN n'est plus une

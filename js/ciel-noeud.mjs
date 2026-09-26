@@ -375,6 +375,14 @@ export function rendre(idNoeud, options = {}) {
       // Le plancher du moteur (7,5) est en unités du viewBox : mesuré, il
       // rendait 7,5 px à 360 et 390 px de large. `tests/smoke-noms-lisibles`.
       plancherNomPx: 11,
+      // Lot 2b (26/09, A8 rendu par Paul : « V1 ») — LA FIGURE ET LE RANG.
+      // Chaque constellation porte son arbre de n − 1 traits, à l'encre
+      // parchemin, muet au lecteur d'écran ; et un cap qui CONTIENT est plus
+      // vif qu'un cap qui ouvre une page (`rang()`, `js/adaptateur-lv4.mjs`).
+      // La couronne ne bouge pas. RIVEN n'active ni l'un ni l'autre.
+      // `tests/smoke-carte-celeste.mjs`.
+      asterisme: true,
+      eclatParPoids: true,
       // LV5 — LA COUCHE DE FOND (P1). Validée par Paul le 2026-08-16 sur la
       // maquette : « fond avec les étoiles, génial ». Elle remplace les 130
       // grains SVG fixes par un champ dont la densité suit la surface (1 266 à

@@ -373,7 +373,10 @@ body.ciel-noeud #boussole-parole .parole-blason {
    moteur écrit à chaque image — le ciel entier se mettrait à traîner. */
 .ciel-scene--isolant .ciel-etoile:not(.ciel-etoile--gardee),
 .ciel-scene--isolant .ciel-nom-amas,
-.ciel-scene--isolant .ciel-liens {
+.ciel-scene--isolant .ciel-liens,
+/* La figure (lot 2b) s'éteint avec les étoiles qu'elle relie : laissée
+   allumée, elle pendrait vers des étoiles déjà effacées. */
+.ciel-scene--isolant .ciel-asterisme {
   opacity: 0;
   transition: opacity .22s ease-out;
 }
@@ -392,7 +395,8 @@ body.ciel-noeud #boussole-parole .parole-blason {
 @media (prefers-reduced-motion: reduce) {
   .ciel-scene--isolant .ciel-etoile:not(.ciel-etoile--gardee),
   .ciel-scene--isolant .ciel-nom-amas,
-  .ciel-scene--isolant .ciel-liens { transition: none; }
+  .ciel-scene--isolant .ciel-liens,
+  .ciel-scene--isolant .ciel-asterisme { transition: none; }
   .ciel-scene--neuve .ciel-svg { animation: none; }
 }
 
