@@ -1154,3 +1154,28 @@ désormais dans le registre** : elle ne peut plus diverger de lui.
 - Le repli du bandeau n'est pas mémorisé : il se rouvre replié à chaque visite. Voulu
   (le ciel d'abord) ; à reconsidérer si Paul l'ouvre à chaque fois.
 - Aucune preuve sur un **vrai** iPhone : Chromium en émulation tactile.
+
+---
+
+## 23. Deux étoiles à venir : DOKLĚS et SYMPHO — À CADRER, rien n'est construit (26/09)
+
+**Paul :** *« On va devoir ajouter 2 étoiles : DOKLĚS et SYMPHO. Deux nouveaux
+projets, on va cadrer ça ensuite. »*
+
+Consigné pour ne pas être oublié, **pas** pour être fait : aucune ligne du
+registre, aucune étoile, aucun dépôt Finubar n'est touché tant que le cadrage
+n'a pas eu lieu (A6). Les noms s'écrivent tels que Paul les a donnés — **DOKLĚS**,
+avec le **Ě** (e caron) : il devra passer tel quel dans le registre, les noms
+d'étoiles (capitales Georgia du lot 2a) et le fil d'Ariane, sans être « simplifié »
+en DOKLES.
+
+**Ce que le cadrage devra trancher** (questions, pas réponses) :
+1. **Où** chaque étoile s'accroche : sous quelle constellation (ALPHA le
+   professionnel ? NAGA ? la racine ?) — c'est ce qui fixe le chemin, le fil et le
+   retour d'une feuille (§22 : toute feuille doit mener à son parent).
+2. **Ce qu'elle est** : une porte vers une page (une `cible`), une coque avec des
+   caps, ou un **astre Finubar** (un dépôt suivi, `ciel` déclaré dans son grain) ?
+3. **Quel dépôt** porte chaque projet, s'il y en a un — et s'il doit entrer dans
+   `finubar/depots.json`.
+4. Ce que chacune **dit** au survol : `etat` et `resume`, lus à leur source, jamais
+   inventés (Principe 3 de `PRODUCT.md`).
