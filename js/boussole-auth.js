@@ -78,7 +78,7 @@
         options: { emailRedirectTo: window.location.origin, shouldCreateUser: false }
       });
       if (resultat.error) { throw resultat.error; }
-      toast('Lien de connexion envoyé. Vérifiez votre boîte mail.');
+      toast('Lien de connexion envoyé. Regarde ta boîte mail.');
     } catch (e) {
       toast('Envoi du lien impossible.', 'erreur');
     }
