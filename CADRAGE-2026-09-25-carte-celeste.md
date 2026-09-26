@@ -787,3 +787,107 @@ embarqué dans un commit **jamais poussé**. Retiré de l'historique local,
 
 **Cédé** : rien de neuf — les failles de ce lot étaient celles de la critique,
 déjà corrigées au §17.
+
+---
+
+## 18. A8 et A9 rendus (26/09, 12:10 UTC) — deux lots courts, précisés à la ligne
+
+**Paul : « A8 reco, A9 reco ».** Consigné :
+
+| # | Décision |
+|---|---|
+| **A8** | **V1 — couronne + arbre + éclat par le rang.** `disposerEnFigure` et `hacher` (`js/ciel.js` l. 429–446) sont **retirés** à l'activation : une variante que personne n'active est du code mort qu'on croira un jour disponible. |
+| **A9** | **1 et 2 dans un lot court, AVANT l'activation** (lot 2a) ; **3 avec l'activation** (lot 2b) ; **4 non** — la caméra 3D reste. |
+
+⛔ **Une décision n'est pas un go** (A6). Les deux lots ci-dessous attendent chacun
+le sien.
+
+### 18.1 Ce qui a été MESURÉ avant d'écrire le lot 2a (maquette, V1, 2 s de pose)
+
+Taille réellement rendue des noms visibles, en **pixels CSS** (attribut
+`font-size` × `getScreenCTM().a`) :
+
+| Écran | 390 px : taille rendue | 390 px : nom le plus large / cadre | 1280 px |
+|---|---|---|---|
+| ULTIMA | 6,7 – 6,9 | 24 / 356 | 19,1 |
+| NAGA | 7,2 – 8,8 | 52 / 356 | 19,1 |
+| GRIMA | 6,5 – 6,7 | 46 / 356 | 19,1 |
+| Racine | 7,9 – 9,7 | 36 / 356 | 19,1 |
+| ALPHA | 6,5 – 6,7 | 53 / 356 | 19,1 |
+| RENOBOOST IA | 6,7 – 8,2 | 53 / 356 | 19,1 |
+| Pire cas (24) | 6,5 | 82 / 356 | 18,0 – 19,1 |
+
+**Ce que ça dit, et ça corrige A9-1 tel que la revue l'avait posé :**
+- le plancher `7.5` (l. 1509, 1559, 1595) est en **unités du viewBox**, pas en
+  pixels : au téléphone le viewBox est plus large que l'écran (échelle ≈ 0,87),
+  et le « plancher de lisibilité » rend **6,5 px** ;
+- ce n'est **pas la place** qui tasse les noms : le plus large occupe 53 px sur
+  356. C'est `10 * pr.echelle` (la perspective) qui les tire vers le plancher ;
+- la police vue est **sans-serif** : `.ciel-nom` (`css/ciel.css` l. 211–219)
+  l'emporte sur le Georgia posé sur le groupe (`js/ciel.js` l. 1082).
+
+### 18.2 Lot 2a — les noms se lisent au téléphone (A9-1 et A9-2)
+
+**① Le but** : sur les écrans de navigation, aucun nom visible sous **11 px CSS**,
+à toute largeur ; les noms de caps en Georgia, capitales espacées ; RIVEN inchangé.
+
+**② Les étapes**
+1. **Harnais d'abord**, vu rouge sur `main` : `tests/smoke-noms-lisibles.mjs` —
+   sur les six écrans réels à 390 et 1280 px, taille rendue ≥ 11 px CSS, police
+   de la famille serif, zéro chevauchement de noms **ajouté** (témoin : le même
+   écran avant le lot), zéro nom hors cadre. Verrou de non-vacuité : ≥ 2 noms
+   mesurés par écran.
+2. `js/ciel.js` : option `plancherNomPx` (**inactive par défaut**). Le plancher
+   devient `max(7.5, plancherNomPx / échelleÉcran)`, l'échelle lue sur
+   `getScreenCTM()` au cadrage (déjà relu à chaque redimensionnement). Les trois
+   endroits qui écrivent `7.5` passent par **une** fonction — trois copies d'un
+   seuil finissent par diverger.
+3. `css/ciel-noeud.css` : sur les coques seulement, `.ciel-nom` en
+   `Georgia, "Iowan Old Style", serif`, capitales, `letter-spacing` réglé sur la
+   maquette. RIVEN (`css/ciel.css`) ne bouge pas.
+4. `js/ciel-noeud.mjs` : `plancherNomPx: 11` dans les options des coques.
+5. Maquette : les mêmes mesures, pire cas compris, **avant de pousser**.
+
+**③ Les moyens** : `js/ciel.js`, `js/ciel-noeud.mjs`, `css/ciel-noeud.css`, un
+harnais neuf, la maquette. Aucune donnée, aucune route, aucun secret.
+
+**④ Critères de sortie** : `smoke-noms-lisibles` rouge sur `main`, vert après ;
+`smoke-ciel` (RIVEN) **inchangé** ; `smoke-clic-exact` vert (les noms sont
+`pointer-events: none`, il le prouve) ; patrimoine complet sortie 0 ; preview
+donné, avec une capture 390 px de NAGA avant / après.
+
+**⑤ Ce qu'on ne fait PAS** : ni traits, ni éclat, ni cartouche (lot 2b) ; ni
+les noms de RIVEN ; ni les noms de constellation (`.ciel-nom-amas`, déjà en
+Georgia) ; ni la caméra (A9-4).
+
+**⑥ Pre-mortem**
+- *Les noms grossis se chevauchent sur la couronne* → le harnais compte les
+  chevauchements contre le témoin ; si le pire cas (24 × 20 caractères) cède,
+  il cède déjà aujourd'hui (§17) — on le **dit**, on ne relève pas le plancher
+  pour lui seul.
+- *Les capitales élargissent un nom au-delà du cadre* → le repli de la l. 1559
+  reste, mais **ne descend plus sous le plancher en px** ; s'il le faudrait, le
+  nom se tronque (`tronquer`, déjà là) plutôt que de redevenir illisible.
+- *Le seuil est juste à 1280 et faux à 390* (la leçon du « bon fond ») → le
+  harnais mesure aux deux largeurs, et à 360 px.
+- *Un sélecteur trop large touche RIVEN* → `smoke-ciel` inchangé est le témoin.
+
+### 18.3 Lot 2b — l'activation de V1 (A8, A9-3)
+
+1. `js/ciel-noeud.mjs` : `asterisme: true, eclatParPoids: true` sur les coques.
+2. `js/ciel.js` : retrait de `disposerEnFigure` et `hacher`.
+3. **A9-3, mesuré avant d'être construit** : les noms de constellation
+   (`ciel-nom-amas`, Georgia, or pâle) existent déjà ; l'état isolant les éteint
+   (`css/ciel-noeud.css` l. 305). On mesure s'ils **reviennent** une fois le foyer
+   posé. S'ils nomment déjà la figure, **il n'y a rien à construire** (EB) ;
+   sinon, un cartouche, et un seul.
+4. `tests/smoke-carte-celeste.mjs` (§14.2 étape 5) : n − 1 traits par écran,
+   aucun trait vers une étoile absente, rang visible, rien qui bouge en
+   `reduced-motion` ; vu rouge sur la tête du lot 2a.
+
+Critères : ceux du §14.2, plus la maquette et la production en accord sur les
+mesures du §17.
+
+### 18.4 Lot 3 — inchangé (§14.3), après 2b.
+
+**La prochaine action, unique** : le go de Paul sur le **lot 2a**.
