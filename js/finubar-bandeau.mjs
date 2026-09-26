@@ -31,6 +31,24 @@ function bloc(parent, classe, texte, balise = 'p') {
 }
 
 /**
+ * L'âge d'une date `AAAA-MM-JJ`, en jours de calendrier locaux : « aujourd’hui »,
+ * « hier », « il y a N jours ». Rien (chaîne vide) pour une date illisible ou
+ * dans le futur — on ne devine pas un âge qu'on ne sait pas lire.
+ */
+export function ageDe(le, maintenant = new Date()) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(le || ''));
+  if (!m) { return ''; }
+  const jour = new Date(+m[1], +m[2] - 1, +m[3]);
+  if (jour.getMonth() !== +m[2] - 1) { return ''; }
+  const aujourdhui = new Date(maintenant.getFullYear(), maintenant.getMonth(), maintenant.getDate());
+  const n = Math.round((aujourdhui - jour) / 86400000);
+  if (n < 0) { return ''; }
+  if (n === 0) { return 'aujourd’hui'; }
+  if (n === 1) { return 'hier'; }
+  return 'il y a ' + n + ' jours';
+}
+
+/**
  * Peint le bandeau. `surSignal(projet)` est appelé au clic d'un signal — un
  * signal qu'on ne peut pas suivre est une notification, et une notification ne
  * fait rien avancer.
@@ -41,18 +59,28 @@ export function poser(conteneur, agregat, surSignal) {
   const macro = agregat.macro || {};
   const cartouche = agregat.cartouche || {};
   conteneur.textContent = '';
+  // Un `aria-label` sur un `div` sans rôle n'est lu par personne : le nom du
+  // bandeau n'apparaissait pas dans l'arbre d'accessibilité (mesuré, 26/09).
+  conteneur.setAttribute('role', 'region');
 
   // ---- ce qu'on regarde, et DE QUAND il date -------------------------------
   const entete = doc.createElement('div');
   entete.className = 'fb-entete';
   conteneur.appendChild(entete);
-  bloc(entete, 'fb-nom', 'FINUBAR · ce matin');
+  // « ce matin » était écrit en dur au-dessus d'une date qui pouvait avoir des
+  // jours (critique impeccable du 26/09 : le 26, l'agrégat datait du 24). Le
+  // nom ne prétend plus rien : c'est la date, et son âge, qui parlent.
+  bloc(entete, 'fb-nom', 'FINUBAR');
   // ⛔ LA DATE EST AU PREMIER PLAN, PAS EN NOTE DE BAS DE PAGE (jalon 0).
   // L'agrégat est figé au dernier commit ; vu chaque matin en pleine page, il
   // se lirait comme l'état de l'instant, et un jour il aurait trois jours de
   // retard sans que rien ne le dise. Un pilotage qui ne dit pas de quand il
   // date est un piège.
-  bloc(entete, 'fb-date', 'collecté le ' + (agregat.le || '—'));
+  // La date reste écrite TELLE QU'ELLE EST LUE (le harnais le tient) ; son
+  // âge s'y ajoute, compté par rapport à aujourd'hui, pour qu'un agrégat de
+  // trois jours ne se lise jamais comme l'état de l'instant.
+  const age = ageDe(agregat.le);
+  bloc(entete, 'fb-date', 'collecté le ' + (agregat.le || '—') + (age ? ' · ' + age : ''));
   const compte = [
     (macro.lisibles || 0) + ' projets lus',
     (macro.en_attente_de_paul || 0) + ' attendent un geste',
@@ -82,6 +110,11 @@ export function poser(conteneur, agregat, surSignal) {
   deplier.addEventListener('click', () => {
     const ouvert = conteneur.classList.toggle('fb-bandeau--replie') === false;
     deplier.setAttribute('aria-expanded', String(ouvert));
+    // Au téléphone, les signaux dépliés et le dock de Léo ne tiennent pas
+    // ensemble au-dessus du ciel : mesuré le 26/09, une étoile passait sous le
+    // dock. On fait une chose à la fois — `css/leo.css` met le dock de côté
+    // tant que les signaux sont ouverts, « Replier » le ramène.
+    doc.body.classList.toggle('fb-deplie', ouvert);
     deplier.textContent = ouvert ? 'Replier' : 'Voir les signaux';
   });
   entete.appendChild(deplier);
@@ -96,7 +129,7 @@ export function poser(conteneur, agregat, surSignal) {
     const li = doc.createElement('li');
     li.className = 'fb-signal fb-signal--calme';
     liste.appendChild(li);
-    bloc(li, 'fb-dit', 'Rien n’appelle ce matin.');
+    bloc(li, 'fb-dit', 'Rien n’appelle en ce moment.');
   }
   signaux.forEach((s) => {
     const li = doc.createElement('li');
