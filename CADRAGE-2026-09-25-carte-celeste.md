@@ -1037,3 +1037,45 @@ cartouche du survol sans recouvrement.
   téléphone, sur l'accueil, où la parole se retire, **le résumé n'est plus dit du
   tout**. Assumé pour ce lot (le fil nomme le foyer, l'étoile se nomme elle-même),
   mais c'est une perte, et elle est écrite ici plutôt que tue.
+
+---
+
+## 21. Sauvegarde de palier (26/09, fin d'après-midi) — dry run, audit de sécurité, consolidation
+
+**Paul : « sauvegarde de palier — on fait une pause ici ; consolide le code,
+audit de sécu, dry run ».** Rien de neuf côté produit : ce passage attaque ce qui
+a été livré depuis ce matin, corrige ce qui cède, et laisse la branche propre.
+
+### Dry run — ce qui a été sondé
+
+| Sonde | Résultat |
+|---|---|
+| Le socle sur une coque **sans** bandeau Finubar (NAGA, dock monté), puis 1280 → 390 → 1280 | **a tenu** — mais **aucun harnais ne le couvrait** : ajouté à `smoke-socle` ; la règle retirée → 3 rouges |
+| Le cartouche compact au survol, blason compris (ADRAMELECH, IMLADRIK, TAO) à 1280 et 390 | **a tenu** — 102 px constants, aucun élément ne déborde |
+| Le décompte des verdicts de `smoke-socle` | **a cédé** : deux passages à 1280 portaient le même nom, le second ÉCRASAIT le premier — un rouge à l'aller effacé par un vert au retour (« 3 lignes ❌, 2 rouges »). Noms rendus uniques, et un garde qui **lève une erreur** sur tout verdict en double — posé aussi dans `smoke-clic-exact`, `smoke-lv4-coque`, `smoke-noms-lisibles` (aucun doublon caché trouvé chez eux) |
+
+### Audit de sécurité — un agent `securite-auditeur` isolé, constats VÉRIFIÉS avant d'être corrigés
+
+| # | Constat | Vérification | Suite |
+|---|---|---|---|
+| **S1** · moyen · **antérieur à la branche** | Les noms et jalons des astres Finubar (texte écrit dans les FINUBAR.md de huit dépôts) entraient **en `innerHTML` brut** dans le cartouche de parole. La règle « rien n'entre en innerHTML qui ne vienne du registre statique » était devenue fausse le 02/09, avec la greffe | **Prouvé au navigateur** : un `<img>` et un `<a href>` injectés dans le cartouche (`smoke-parole-echappement`, 4 rouges sur 7). La CSP bloque le script, pas un lien de hameçonnage | **Corrigé** : `echapper()` sur tout texte du cartouche (`js/ciel-noeud.mjs`), commentaires de sécurité réécrits → 0 rouge sur 7 |
+| **S3** · faible | Le plancher des noms n'avait pas de borne haute : scène écrasée → police de **896,5** unités (mesuré) | contrôle ajouté à `smoke-noms-lisibles`, vu rouge | **Corrigé** : plancher borné par `PLAFOND_NOM` → 20 |
+| **S2** · faible | Le jeton local du serveur impeccable (incident du §17) survivait dans un objet git **local**, jamais poussé | `git cat-file -e 6f07b0e` → présent | **Nettoyé** : reflog expiré, `gc` → l'objet n'existe plus |
+| **S4** · info | La maquette affirmait « `design/` est servi en clair » — faux (`.vercelignore` + `PREFIXES_PRIVES`) | lu dans `middleware.js` l. 79 | **Corrigé**, et la fixture datée (vrai le 02/09, faux aujourd'hui) |
+
+**Vérifié sans rien trouver** (par l'agent, relu) : les chemins neufs posent du texte par `textContent` ou des nombres ; aucun style ni script inline (CSP `'self'` respectée) ; l'événement `ultima:mobilier` est borné à un recadrage par image, sans boucle ; aucun secret ni PII dans les lignes ajoutées.
+
+### Consolidation
+
+- **La variante « figure » est retirée** du moteur (`disposerEnFigure`, `hacher`, l'option `disposition`) et de la maquette : A8 a retenu la couronne ; un code qu'aucune page n'active est un code qu'on croira un jour disponible. Le §18.3 la retirait au lot 2b ; c'est fait dès maintenant.
+- Aucun reste de sabotage, de `console.log` hors harnais, ni de `TODO` dans le diff de la séance (grep).
+
+### Patrimoine après le palier
+
+`npm test` **42/42** ; `bash tests/lancer.sh` sortie 0, **46/46** harnais (les 45
+d'avant + `smoke-parole-echappement`).
+
+### Leçons à écrire en fin de séance (pas avant — règle de `memoire/LECONS.md`)
+
+1. *Un objet de verdicts indexé par nom avale les doublons* — le rouge disparaît sans bruit.
+2. *Une règle de sécurité écrite en commentaire périme avec la donnée* : « le registre est statique » était vrai jusqu'à la greffe Finubar.

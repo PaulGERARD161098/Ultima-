@@ -10,12 +10,13 @@
   Vrai moteur (js/ciel.js), vrai registre (js/registre-lv3.mjs), vrai adaptateur
   (js/adaptateur-lv4.mjs), vraie greffe (js/adaptateur-finubar.mjs). Les dépôts
   viennent d'une FIXTURE INVENTÉE (preview-accueil-finubar-fixture.mjs) : design/
-  est servi en clair, le vrai agrégat n'y entre jamais.
+  n'est ni déployé (.vercelignore) ni servi (/design dans PREFIXES_PRIVES,
+  middleware.js) ; la fixture reste inventée PAR PRINCIPE — deux gardes peuvent
+  tomber, une donnée qui n'est pas là ne fuit pas.
 
-  Elle sert à trancher A8, et c'est Paul qui tranche, sur capture :
-    V1 — la couronne (le standard du 17/08) + l'arbre + l'éclat par le rang ;
-    V2 — la figure irrégulière + l'arbre + l'éclat par le rang.
-  V2 n'est retenue que si elle égale V1 sur les critères mesurés ici.
+  Elle a servi à trancher A8 sur capture ; Paul a retenu V1 (26/09) — la
+  couronne (le standard du 17/08) + l'arbre + l'éclat par le rang. La variante
+  V2 (figure irrégulière) a été retirée du moteur et d'ici.
 -->
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="../css/styles.css">
@@ -39,7 +40,6 @@
   <div class="mq-groupe" role="group" aria-label="Variante">
     <button type="button" class="mq-bouton" data-variante="v0">Aujourd’hui</button>
     <button type="button" class="mq-bouton" data-variante="v1">V1 couronne</button>
-    <button type="button" class="mq-bouton" data-variante="v2">V2 figure</button>
   </div>
 </header>
 <main class="mq-scene-cadre">

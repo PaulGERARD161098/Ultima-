@@ -6,6 +6,16 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 💾 **SESSION 2026-09-26 (fin d'après-midi) — PALIER SAUVEGARDÉ, PR #293 NON FUSIONNÉE.**
+  A8 = V1 (couronne) et A9 rendus ; **lot 2a livré** (noms ≥ 11 px d'écran, Georgia) ;
+  **le socle** livré sur capture de Paul (bandeau, dock, parole empilés sans recouvrement ;
+  recommandation de Léo dite une fois ; ciel au téléphone 166 → 301 px). Palier : dry run +
+  audit de sécurité — **S1 corrigé sur la branche** (noms Finubar en `innerHTML` brut dans le
+  cartouche, prouvé au navigateur) ⚠️ **toujours en production tant que #293 n'est pas
+  fusionnée** ; variante « figure » retirée. ⛔ La ligne ci-dessous (« A8 et A9 attendent
+  Paul ») est PÉRIMÉE : ils sont rendus. Prochaine action : go de Paul sur la fusion de #293,
+  puis lot 2b (activation V1). Détail : carte-celeste §18 à §21.
+
 - ✴️ **SESSION 2026-09-26 (après-midi) — LOT 2 : LA FIGURE EST PRÊTE, RIEN N'EST ACTIVÉ.**
   Astérisme (arbre couvrant minimal) et éclat par le rang dans `js/ciel.js`, options
   inactives ; maquette `design/preview-carte-celeste.html` critiquée (impeccable, deux

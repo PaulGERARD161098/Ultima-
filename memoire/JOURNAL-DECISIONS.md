@@ -4301,3 +4301,9 @@ caméra 3D. Détail : `CADRAGE-2026-09-25-carte-celeste.md` §17.
 (noms ≥ 11 px CSS et en Georgia sur les coques) **avant** le lot 2b
 (activation) ; caméra 3D conservée. Mesure qui corrige A9-1 : le plancher 7,5
 est en unités de viewBox et rend 6,5 px au téléphone. Détail : §18.
+
+**26/09 (fin d'après-midi) — « sauvegarde de palier ».** Lot 2a et socle livrés sur
+la branche. Audit : S1 (noms Finubar injectés en HTML dans le cartouche) corrigé par
+`echapper()` — **reste exposé en production jusqu'à la fusion de #293**. Choix fait
+seul sur mandat (« résous ça ») : au téléphone, sur l'accueil, la parole se retire ;
+le résumé n'y est plus dit. Variante « figure » retirée (A8). Détail : §20–§21.

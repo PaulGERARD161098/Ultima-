@@ -33,7 +33,6 @@ const ECRANS = {
 const VARIANTES = {
   v0: { nom: 'aujourd’hui', options: {} },
   v1: { nom: 'V1 couronne', options: { asterisme: true, eclatParPoids: true } },
-  v2: { nom: 'V2 figure', options: { asterisme: true, eclatParPoids: true, disposition: 'figure' } },
 };
 
 const params = new URLSearchParams(location.search);
@@ -137,7 +136,7 @@ async function toutMesurer() {
   const lignes = [];
   // « Aujourd'hui » est le TÉMOIN : ce qui rougit déjà sans la figure n'est pas
   // imputable à la figure.
-  for (const e of Object.keys(ECRANS)) for (const v of ['v0', 'v1', 'v2']) {
+  for (const e of Object.keys(ECRANS)) for (const v of ['v0', 'v1']) {
     ecran = e; variante = v; peindre(); await attendre(POSE_MS); lignes.push(mesurer());
   }
   [ecran, variante] = garde; await montrer();
