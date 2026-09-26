@@ -64,9 +64,32 @@ export function poser(conteneur, agregat, surSignal) {
   if (macro.illisibles) { compte.push(macro.illisibles + ' sans grain lisible'); }
   bloc(entete, 'fb-compte', compte.join(' · '));
 
+  // ---- AU TÉLÉPHONE, LE BANDEAU SE REPLIE (26/09, capture de Paul) ---------
+  // À la hauteur réelle de Safari (~664 px), le bandeau déplié en prenait 200
+  // et le ciel n'en gardait que ~180 : l'écran était devenu un tableau de bord
+  // avec une bande de ciel. Replié, il garde ce qui ne se cache jamais — le
+  // nom, la DATE, le compte (dont « hors de portée ») — et les signaux
+  // s'ouvrent d'un toucher. Le bouton n'existe à l'écran qu'au téléphone
+  // (`css/finubar-bandeau.css`) : sur ordinateur, la liste reste ouverte.
+  // Le ciel suit tout seul : `js/ciel-noeud.mjs` observe la taille du bandeau.
+  conteneur.classList.add('fb-bandeau--replie');
+  const deplier = doc.createElement('button');
+  deplier.type = 'button';
+  deplier.className = 'fb-deplier';
+  deplier.setAttribute('aria-controls', 'fb-signaux');
+  deplier.setAttribute('aria-expanded', 'false');
+  deplier.textContent = 'Voir les signaux';
+  deplier.addEventListener('click', () => {
+    const ouvert = conteneur.classList.toggle('fb-bandeau--replie') === false;
+    deplier.setAttribute('aria-expanded', String(ouvert));
+    deplier.textContent = ouvert ? 'Replier' : 'Voir les signaux';
+  });
+  entete.appendChild(deplier);
+
   // ---- les signaux ---------------------------------------------------------
   const liste = doc.createElement('ul');
   liste.className = 'fb-signaux';
+  liste.id = 'fb-signaux';
   conteneur.appendChild(liste);
   const signaux = Array.isArray(cartouche.signaux) ? cartouche.signaux : [];
   if (!signaux.length) {
