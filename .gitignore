@@ -19,3 +19,7 @@ tests/.cache/
 
 # Métadonnées locales du CLI Supabase
 supabase/.temp/
+
+# Serveur « live » d’impeccable : fichiers d’exécution locaux (pid, port, JETON).
+# Embarqué par erreur le 26/09 dans un commit jamais poussé, retiré avant push.
+.impeccable/live/

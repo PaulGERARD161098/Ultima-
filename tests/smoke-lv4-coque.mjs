@@ -43,6 +43,7 @@ const erreurs = [];
 const verdicts = {};
 const chiffres = {};
 function verifier(nom, condition, detail = '') {
+  if (Object.prototype.hasOwnProperty.call(verdicts, nom)) { throw new Error('verdict en double : ' + nom); }
   verdicts[nom] = condition === true;
   console.log(`  ${condition === true ? '✅' : '❌'} ${nom}${detail ? ' — ' + detail : ''}`);
 }

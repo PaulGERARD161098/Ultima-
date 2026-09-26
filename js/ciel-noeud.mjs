@@ -55,15 +55,28 @@
 //      simplement jamais l'effacer. Le ciel est en JavaScript pur : sans lui,
 //      cette liste EST la navigation. Voir la note en bas de fichier.
 //
-// SÉCURITÉ — mêmes règles que le noyau de la boussole, sans exception : rien
-// n'entre en innerHTML qui ne vienne du registre ou du catalogue de gravures
-// (statique, aucune donnée utilisateur, jamais de PII) ; le cockpit ne rapatrie
-// que des COMPTES entiers et retombe en silence sur le texte figé.
+// SÉCURITÉ — tout TEXTE qui entre dans le cartouche passe par `echapper()`.
+// ⛔ La règle d'avant disait « rien n'entre en innerHTML qui ne vienne du
+// registre (statique) » — elle est devenue FAUSSE le 02/09, le jour où la greffe
+// Finubar a fait entrer dans le registre des noms et des jalons écrits dans les
+// FINUBAR.md de huit dépôts. Mesuré le 26/09 (audit S1, `smoke-parole-
+// echappement`) : un nom de projet en balisage devenait un lien dans le
+// cartouche. Seul le catalogue de gravures (`BLASONS`, statique) entre brut.
+// Le cockpit ne rapatrie que des COMPTES entiers, échappés eux aussi.
 
 import { NOEUDS, chemin } from './registre-lv3.mjs';
 import { BLASONS, COEURS } from './blasons.mjs';
 import { versCiel, cheminVers, descendDe } from './adaptateur-lv4.mjs';
 import { ligneVivante, signalDe, chargerCockpit, chargerFinubar } from './cockpit-parole.mjs';
+
+// Le texte devient du texte, quelle que soit sa source. Le registre n'est plus
+// entièrement statique (greffe Finubar) : on n'essaie pas de deviner quel champ
+// est sûr, on les échappe tous.
+function echapper(valeur) {
+  return String(valeur == null ? '' : valeur).replace(/[&<>"']/g, (c) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[c]);
+}
 import { greffer, signaux, libelleDegre } from './adaptateur-finubar.mjs';
 import { poser as poserFinubarBandeau } from './finubar-bandeau.mjs';
 
@@ -246,11 +259,11 @@ export function rendre(idNoeud, options = {}) {
     const blason = cap.blason && BLASONS[cap.blason] ? BLASONS[cap.blason] : '';
     parole.innerHTML =
       (blason ? '<span class="parole-blason">' + blason + '</span>' : '')
-      + '<p class="parole-nom">' + cap.nom + '</p>'
-      + '<p class="parole-etat">' + (cap.etat || '') + '</p>'
-      + (signal ? '<p class="parole-signal">À traiter — ' + signal + '</p>' : '')
-      + (vivante ? '<p class="parole-cockpit">En cours — ' + vivante + '</p>' : '')
-      + '<p class="parole-texte">' + (cap.resume || '') + '</p>'
+      + '<p class="parole-nom">' + echapper(cap.nom) + '</p>'
+      + '<p class="parole-etat">' + echapper(cap.etat) + '</p>'
+      + (signal ? '<p class="parole-signal">À traiter — ' + echapper(signal) + '</p>' : '')
+      + (vivante ? '<p class="parole-cockpit">En cours — ' + echapper(vivante) + '</p>' : '')
+      + '<p class="parole-texte">' + echapper(cap.resume) + '</p>'
       + '<p class="parole-action">'
       + (cap.cible
         ? (cap.externe ? 'Clique pour ouvrir (nouvel onglet) ↗' : 'Clique pour entrer ↝')
@@ -271,15 +284,15 @@ export function rendre(idNoeud, options = {}) {
   function majParoleAuRepos() {
     if (!isole) { paroleAuRepos = paroleDefaut; return; }
     const foyer = registre[isole] || {};
-    // Même règle d'insertion que `afficherResume` : tout vient du REGISTRE
-    // (statique, aucune donnée utilisateur, jamais de PII). Rien d'autre
-    // n'entre ici, et surtout pas le fragment d'adresse — qui, lui, vient du
-    // dehors : il sert d'identifiant à chercher dans le registre, jamais de
-    // texte à peindre.
+    // Même règle d'insertion que `afficherResume` : tout texte est ÉCHAPPÉ —
+    // le registre porte des astres greffés depuis Finubar, il n'est plus
+    // statique. Le fragment d'adresse, lui, vient du dehors : il ne sert que
+    // d'identifiant à chercher dans le registre (`idDeLAdresse`, triple garde),
+    // et même le repli `isole` passe par `echapper()`.
     paroleAuRepos =
-      '<p class="parole-nom">' + (foyer.nom || isole) + '</p>'
-      + (foyer.etat ? '<p class="parole-etat">' + foyer.etat + '</p>' : '')
-      + '<p class="parole-texte">' + (foyer.resume || '') + '</p>'
+      '<p class="parole-nom">' + echapper(foyer.nom || isole) + '</p>'
+      + (foyer.etat ? '<p class="parole-etat">' + echapper(foyer.etat) + '</p>' : '')
+      + '<p class="parole-texte">' + echapper(foyer.resume) + '</p>'
       + '<p class="parole-action">Échap — ou un clic dans le vide — pour remonter ↰</p>';
   }
 
@@ -320,7 +333,11 @@ export function rendre(idNoeud, options = {}) {
     // sur un bouton du bandeau. L'écran répond, et se trompe.
     const legende = doc.querySelector('.ciel-noeud-plateau > .ciel-legende');
     const bandeau = doc.getElementById('finubar-bandeau');
-    for (const el of [parole, legende, bandeau]) {
+    // LE DOCK DE LÉO AUSSI (26/09). Il est arrivé après ce calcul, et le calcul
+    // ne le connaissait pas : sur la capture de Paul, une étoile était peinte
+    // sous le cartouche, lui-même posé sous le dock. Le socle se lit en entier.
+    const dock = doc.getElementById('leo-dock');
+    for (const el of [parole, legende, bandeau, dock]) {
       if (!el) { continue; }
       const r = el.getBoundingClientRect();
       if (r.height > 0) { bas.push(window.innerHeight - r.top); }
@@ -349,6 +366,10 @@ export function rendre(idNoeud, options = {}) {
       // Les deux capacités de l'étape ②, activées ici et nulle part ailleurs.
       cadrerSurLesEtoiles: true,
       tousLesNoms: true,
+      // Lot 2a (26/09) — le nom d'un cap ne descend pas sous 11 px D'ÉCRAN.
+      // Le plancher du moteur (7,5) est en unités du viewBox : mesuré, il
+      // rendait 7,5 px à 360 et 390 px de large. `tests/smoke-noms-lisibles`.
+      plancherNomPx: 11,
       // LV5 — LA COUCHE DE FOND (P1). Validée par Paul le 2026-08-16 sur la
       // maquette : « fond avec les étoiles, génial ». Elle remplace les 130
       // grains SVG fixes par un champ dont la densité suit la surface (1 266 à
@@ -634,6 +655,37 @@ export function rendre(idNoeud, options = {}) {
   // Il n'existe que là où la coque en pose le conteneur — l'accueil aujourd'hui.
   // Un clic sur un signal ISOLE la branche du projet : un signal qu'on ne peut
   // pas suivre est une notification, et une notification ne fait rien avancer.
+  // ---- LE SOCLE BOUGE : on remesure, et le ciel recadre (26/09) ----
+  // Le bandeau change de hauteur APRÈS sa pose (le dock retire sa colonne
+  // « Léo » en double), et le dock arrive quand la session est là. Les deux
+  // sont des pièces du socle : quand l'une change de taille, la hauteur posée
+  // en variable doit suivre, et le ciel doit rendre la place.
+  // ⛔ LA PAROLE N'EST PAS OBSERVÉE, À DESSEIN. Son contenu change au survol ;
+  // recadrer à ce moment déplacerait l'étoile sous le curseur — exactement le
+  // clic raté du lot 1. Sa hauteur est FIXE (`css/leo.css`), sa place est donc
+  // réservée une fois pour toutes.
+  function mesurerBandeau() {
+    const conteneur = doc.getElementById('finubar-bandeau');
+    if (!conteneur) { return; }
+    doc.documentElement.style.setProperty('--fb-hauteur',
+      Math.round(conteneur.getBoundingClientRect().height) + 'px');
+  }
+  let recadrageDemande = false;
+  function socleABouge() {
+    if (recadrageDemande) { return; }
+    recadrageDemande = true;
+    window.requestAnimationFrame(() => {
+      recadrageDemande = false;
+      mesurerBandeau();
+      if (vue && typeof vue.ajusterCadre === 'function') { vue.ajusterCadre(); }
+    });
+  }
+  doc.addEventListener('ultima:mobilier', socleABouge);
+  const bandeauObserve = doc.getElementById('finubar-bandeau');
+  if (bandeauObserve && typeof ResizeObserver === 'function') {
+    new ResizeObserver(socleABouge).observe(bandeauObserve);
+  }
+
   function poserBandeau(agregat) {
     const conteneur = doc.getElementById('finubar-bandeau');
     if (!conteneur) { return; }
@@ -653,8 +705,7 @@ export function rendre(idNoeud, options = {}) {
     // MESURÉE et posée en variable : une constante serait fausse au premier
     // signal long, et fausse deux fois entre le téléphone et l'écran large.
     doc.body.classList.toggle('a-finubar', peint);
-    doc.documentElement.style.setProperty('--fb-hauteur',
-      Math.round(conteneur.getBoundingClientRect().height) + 'px');
+    mesurerBandeau();
     // Les marges utiles du ciel dépendent elles aussi de cette hauteur ; elles
     // sont relues au prochain dessin, qui suit immédiatement (voir l'appelant).
   }

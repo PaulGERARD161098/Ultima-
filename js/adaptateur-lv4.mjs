@@ -42,6 +42,16 @@ export function descendDe(idAncetre, id, registre) {
   return false;
 }
 
+// LE RANG (lot 2 de la carte céleste, arbitrage A5 de Paul, 26/09).
+// Un cap qui CONTIENT quelque chose est une tête — on y plonge ; les autres sont
+// des feuilles — elles ouvrent une page ou disent un état. C'est une lecture du
+// registre, jamais une déduction : 1 ou 0, rien d'intermédiaire. Graduer par le
+// nombre d'enfants ferait dire à l'éclat « plus gros », ce qu'il ne doit pas
+// dire. Le moteur ne s'en sert que sous l'option `eclatParPoids`.
+export function rang(noeud) {
+  return ((noeud && noeud.enfants) || []).length ? 1 : 0;
+}
+
 /**
  * L'ISOLEMENT — dicté par Paul le 2026-08-28, resserré par lui le 2026-08-31.
  *
@@ -87,7 +97,8 @@ function isolement(idFoyer, registre) {
       type: 'cap',
       statut: n.etat || '',
       secteur_activite: nomFoyer,
-      cible: n.cible || null
+      cible: n.cible || null,
+      poids: rang(n)
     };
   });
 
@@ -159,7 +170,8 @@ export function versCiel(idEcran, registre, options) {
       type: 'cap',
       statut: cap.etat || '',
       secteur_activite: ecran.nom || idEcran,
-      cible: cap.cible || null
+      cible: cap.cible || null,
+      poids: rang(cap)
     };
   });
 
@@ -213,7 +225,8 @@ export function versCiel(idEcran, registre, options) {
         type: 'cap',
         statut: e.etat || '',
         secteur_activite: nomParent,
-        cible: e.cible || null
+        cible: e.cible || null,
+        poids: rang(e)
       });
       // Le trait qui RATTACHE l'aperçu à ce qu'on survole : sans lui, les
       // nouveaux venus flottent sans qu'on sache d'où ils sortent.

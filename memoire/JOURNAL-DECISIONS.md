@@ -4261,3 +4261,49 @@ raté sur NAGA : 4 gestes sur 5, l'étoile part de 119 px sous le curseur).
 **A6** : *« cadrage d'abord et précision du travail, pas de travail sans mon go
 explicite »* → le lot 1 est précisé à la ligne (§11), et **aucune ligne de code
 ne s'écrit sans un go explicite**, lot par lot. A2 à A5 restent ouverts.
+
+## 2026-09-26 — Carte céleste : A2 à A5 rendus sur la recommandation
+
+Paul : *« A2 reco, A3 reco, A4 reco, A5 reco — cadre »*. **A2** la figure est un
+arbre calculé · **A3** `PRODUCT.md` remplace `PRODUIT.md` pour la vérité
+produit · **A4** pas de vue à plat des dépôts · **A5** l'éclat dit le rang et le
+signal, jamais la fraîcheur. A6 tient : rien ne se code sans go explicite.
+Lots 0, 2, 3 précisés dans `CADRAGE-2026-09-25-carte-celeste.md` §14.
+
+⚠️ **A3 précisée, pas renversée** : `PRODUIT.md` porte aussi le modèle de
+données, le contrat d'API et les conventions du front, que quatre agents
+déclarent obligatoires. Ils y restent ; seule la vérité produit déménage.
+Deux arbitrages nouveaux : **A7** (retirer du lot 3 l'« anneau de Léo » au
+survol, qu'aucune donnée ne porte — reco oui) et **A8** (couronne ou figure,
+sur capture de la maquette).
+
+## 2026-09-26 — Lot 0 livré : PRODUCT.md, et A7 rendu
+
+Paul, « ok » sur le go du lot 0 et sur A7. **A7** : l'« anneau de Léo » au
+survol d'un dépôt sort du lot 3 — aucune donnée ne porte ces droits ; il
+reviendra avec J3. **Entretien d'init** : les trois inférences confirmées telles
+quelles (Paul seul · l'interface unique avec Léo · quatre engagements : antique
+et sérieux, sécurité relevée, compter sans reprocher, le ciel est la
+navigation). `PRODUCT.md` écrit ; `PRODUIT.md` réduit à ses contrats techniques.
+
+## 2026-09-26 — Lot 2 : la figure est prête, A8 et A9 attendent Paul
+
+Go de Paul, « go lot 2 ». Moteur prêt en options inactives, maquette V0/V1/V2
+critiquée par impeccable (deux évaluations isolées, constats vérifiés par la
+mesure avant correction). **Corrigé en production au passage** : le clavier
+faisait pivoter la caméra et couchait la constellation (877 px → 0). **A8 :
+recommandation V1**, V2 n'égalant pas V1 sur les critères mesurés. **A9 ouvert** :
+lisibilité des noms au téléphone (7,5 px), noms en Georgia, cartouche de figure,
+caméra 3D. Détail : `CADRAGE-2026-09-25-carte-celeste.md` §17.
+
+**26/09 — A8 et A9 rendus : « A8 reco, A9 reco ».** V1 (couronne + arbre +
+éclat par le rang) ; la variante figure sera retirée à l'activation. Lot 2a
+(noms ≥ 11 px CSS et en Georgia sur les coques) **avant** le lot 2b
+(activation) ; caméra 3D conservée. Mesure qui corrige A9-1 : le plancher 7,5
+est en unités de viewBox et rend 6,5 px au téléphone. Détail : §18.
+
+**26/09 (fin d'après-midi) — « sauvegarde de palier ».** Lot 2a et socle livrés sur
+la branche. Audit : S1 (noms Finubar injectés en HTML dans le cartouche) corrigé par
+`echapper()` — **reste exposé en production jusqu'à la fusion de #293**. Choix fait
+seul sur mandat (« résous ça ») : au téléphone, sur l'accueil, la parole se retire ;
+le résumé n'y est plus dit. Variante « figure » retirée (A8). Détail : §20–§21.

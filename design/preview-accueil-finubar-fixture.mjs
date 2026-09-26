@@ -8,6 +8,11 @@
    derrière `requireUser` (`/api/finubar`). La recopier dans une maquette
    publique annulerait ce travail en une ligne.
 
+   ⚠️ Relu le 26/09 : c'est devenu faux dans le bon sens — `design/` est
+   désormais dans `.vercelignore` ET `/design` dans `PREFIXES_PRIVES`
+   (`middleware.js`). La règle ci-dessous tient quand même : deux gardes
+   peuvent tomber, une donnée absente ne fuit pas.
+
    Donc : la FORME est celle de `/api/finubar` (mêmes clés, mêmes longueurs de
    texte, mêmes ordres de grandeur), le CONTENU est inventé. Ce qu'on juge ici
    est un rendu, pas un état — l'état se regarde sur la page authentifiée.

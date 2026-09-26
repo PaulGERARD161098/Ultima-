@@ -22,7 +22,7 @@
 - Journal « où j'en suis » dans la fiche : entrées datées sur le nœud ou une
   relation, prochaine étape, date de relance, case « relance faite ».
 
-## Prochaines étapes — cap Interface v3 (cadrage dicté 2026-07-06, voir PRODUIT.md)
+## Prochaines étapes — cap Interface v3 (cadrage dicté 2026-07-06 — historique ; vérité produit : PRODUCT.md)
 
 1. ✅ 2026-07-06 — **Accueil « Bienvenue, Paul »** livré : carte de livre
    d'enfance (parchemin/encre/Caveat auto-hébergée), relances dues en panneaux

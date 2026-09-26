@@ -32,6 +32,10 @@
   var ANGLE_OR = Math.PI * (3 - Math.sqrt(5));
   var FOCALE = 620;
   var R_ETOILE_MIN = 3.2;
+  // Lot 2 (26/09) : ce qu'une tête gagne sur une feuille, et l'intensité d'un
+  // trait de figure. Réglés sur la maquette, pas au jugé.
+  var AMPLITUDE_RANG = 1.4;
+  var OPACITE_FIGURE = 0.38;
   var ESPACE_MIN = 34;
   // Plancher de la zone qui reçoit le doigt. Calibré par la mesure, pas au
   // jugé : sous cette valeur la cible tactile passe sous les 24 px du plancher
@@ -283,6 +287,53 @@
   // que le même écran remplit 75 % sur un ordinateur.
   // En donnant au nuage le rapport d'aspect du cadre, le cadrage serré remplit
   // les DEUX axes en même temps au lieu de buter sur le plus étroit.
+  // ---- L'ASTÉRISME (lot 2 de la carte céleste, arbitrage A2 de Paul, 26/09) --
+  // La FIGURE d'une constellation : l'arbre couvrant minimal de ses étoiles, sur
+  // leurs coordonnées PLANES. n − 1 traits, tout relié, aucune boucle — et, parce
+  // qu'un arbre de longueur minimale dans le plan ne se croise jamais lui-même,
+  // aucun trait qui en coupe un autre. C'est ce qui le rend lisible comme une
+  // figure plutôt que comme un graphe.
+  // PURE et DÉTERMINISTE : les points sont triés par id avant tout, et les
+  // égalités de distance se départagent par id — la même constellation dessine
+  // donc la même figure, dans quelque ordre que ses étoiles arrivent.
+  // Prim en O(n²) : n ne dépasse pas deux douzaines sur un écran de navigation.
+  // Testée sans navigateur : `tests/unit-asterisme.mjs`.
+  function asterisme(points) {
+    var pts = (points || []).slice().sort(function (a, b) {
+      return a.id < b.id ? -1 : (a.id > b.id ? 1 : 0);
+    });
+    var n = pts.length;
+    if (n < 2) { return []; }
+    function d(i, j) { return Math.hypot(pts[i].u - pts[j].u, pts[i].v - pts[j].v); }
+    // On part de la première étoile (le plus petit id) : `meilleure[k]` est la
+    // plus courte distance de k à l'arbre déjà tracé, `depuis[k]` l'étoile qui
+    // la réalise.
+    var dans = [], meilleure = [], depuis = [];
+    for (var k = 0; k < n; k++) {
+      dans.push(k === 0);
+      meilleure.push(k === 0 ? 0 : d(0, k));
+      depuis.push(0);
+    }
+    var aretes = [];
+    for (var pas = 1; pas < n; pas++) {
+      var choix = -1;
+      for (var j = 0; j < n; j++) {
+        if (dans[j]) { continue; }
+        // À distance égale, le plus petit id gagne : j croît, donc « strictement
+        // plus petit » suffit à garder le premier rencontré.
+        if (choix === -1 || meilleure[j] < meilleure[choix]) { choix = j; }
+      }
+      dans[choix] = true;
+      aretes.push([pts[depuis[choix]].id, pts[choix].id]);
+      for (var m = 0; m < n; m++) {
+        if (dans[m]) { continue; }
+        var dm = d(choix, m);
+        if (dm < meilleure[m]) { meilleure[m] = dm; depuis[m] = choix; }
+      }
+    }
+    return aretes;
+  }
+
   // `aspect` vaut 1 par défaut : sans zone utile connue, la couronne reste un
   // cercle et se comporte comme avant.
   function disposerEnCouronne(monde, yaw, pitch, aspect) {
@@ -297,6 +348,8 @@
     var etirement = Math.sqrt(Math.max(0.2, Math.min(5, aspect || 1)));
     var Rx = R * etirement;
     var Ry = R / etirement;
+    // Exposés pour la variante « figure », qui se décale DANS cette ellipse.
+    monde.ellipse = { Rx: Rx, Ry: Ry };
     // LE DÉPART DÉPEND DE n, et les deux cas se justifient :
     //   — à DEUX, l'horizontale est la seule qui remplisse la largeur ; partir du
     //     haut les empilerait, c'est-à-dire exactement le défaut qu'on corrige ;
@@ -352,12 +405,23 @@
       var irregulier = 1 + 0.07 * Math.cos(i * 2.399);
       var u = Math.cos(a) * Rx * irregulier;
       var v = Math.sin(a) * Ry * irregulier;
+      // Le PLAN de la disposition : c'est sur lui que l'astérisme se calcule. Le
+      // monde 3D en est une rotation, et un arbre calculé en 3D puis projeté
+      // pourrait se croiser à l'écran.
+      e.plan = { u: u, v: v };
       e.x = u * cy;
       e.z = u * sy;
       e.y = v / cp;
     });
     return monde;
   }
+
+  // ---- LA FIGURE IRRÉGULIÈRE A ÉTÉ RETIRÉE (A8, 26/09) ------------------------
+  // Une variante `disposition: 'figure'` a existé le temps que Paul tranche A8
+  // sur capture. Il a retenu la couronne (V1) : la figure n'égalait pas la
+  // couronne sur les critères mesurés (occupation plus basse, un chevauchement
+  // de noms ajouté — CADRAGE-2026-09-25-carte-celeste.md §17). Code qu'aucune
+  // page n'active = code qu'on croira un jour disponible ; il est parti.
 
   function recentrerSurLesEtoiles(monde) {
     var n = monde.etoiles.length;
@@ -430,6 +494,14 @@
     // LV4 — les trois options, toutes fausses par défaut : RIVEN passe ici sans
     // rien changer à ce qu'il faisait hier.
     var cadrageSerre = !!options.cadrerSurLesEtoiles;
+    // LOT 2 DE LA CARTE CÉLESTE (26/09) — deux options, INACTIVES PAR DÉFAUT :
+    // RIVEN n'en active aucune, et son harnais le vérifie (71 verdicts).
+    //   · `asterisme`     : la figure, n − 1 traits par constellation ;
+    //   · `eclatParPoids` : la taille d'une étoile dit son RANG (`noeud.poids`,
+    //                       posé par l'adaptateur), plus son nombre de liens.
+    // (Une troisième, `disposition: 'figure'`, a été retirée après A8.)
+    var avecAsterisme = !!options.asterisme;
+    var eclatParPoids = !!options.eclatParPoids;
     // ⛔ CES CONTRÔLES ATMOSPHÉRIQUES NE SONT PAS « PREVIEW ONLY », malgré ce
     // que disait ce commentaire jusqu'au 19/09 : `js/app.js` pose `stellarV2: true`
     // sur RIVEN, en PRODUCTION. Un commentaire qui dément le code d'à côté est
@@ -547,9 +619,10 @@
         var hU = vbH - mUtile.haut - mUtile.bas;
         var placeLargeur = Math.max(30, lU - 2 * (MARGE_HALO + DEMI_NOM_INCONNU));
         var placeHauteur = Math.max(30, hU - 2 * MARGE_CADRAGE);
-        disposerEnCouronne(monde, YAW_OUVERTURE, PITCH_OUVERTURE,
-          placeLargeur / placeHauteur);
+        disposerEnCouronne(monde, YAW_OUVERTURE, PITCH_OUVERTURE, placeLargeur / placeHauteur);
         if (cadrageSerre) { recentrerSurLesEtoiles(monde); }
+        // La disposition vient de changer : la figure se recalcule sur elle.
+        if (gAsterisme) { calculerAsterisme(); }
       }
     }
     // La distance ne se choisit pas une fois pour toutes : elle se DÉDUIT du
@@ -719,6 +792,34 @@
     // Sans cadrage serré : aucun plafond, donc la ligne du nom se calcule
     // exactement comme hier (`Math.min(Infinity, …)` ne retire rien).
     var plafondNom = cadrageSerre ? PLAFOND_NOM : Infinity;
+    // LE PLANCHER DE LISIBILITÉ EST UNE TAILLE D'ÉCRAN — lot 2a (26/09).
+    // `7.5` est en unités du viewBox : il ne vaut 7,5 px que tant que le
+    // viewBox vaut l'écran. Mesuré en production : 7,5 px à 360 et 390 px de
+    // large, quand la revue demandait des noms qu'on lise le soir. L'option
+    // `plancherNomPx` exprime le plancher en pixels CSS et le convertit par
+    // l'échelle RÉELLE du SVG (`getScreenCTM`), relue à chaque redimensionnement.
+    // Inactive par défaut : RIVEN et tout autre appelant gardent 7,5 au pixel.
+    // ⛔ UNE seule fonction pour les trois endroits qui lisent le plancher (la
+    // pose du nom, le repli de largeur, le retrait des traits) : trois copies
+    // d'un seuil finissent par diverger.
+    var plancherNomPx = +options.plancherNomPx > 0 ? +options.plancherNomPx : 0;
+    var plancherCourant = null;
+    function plancherNom() {
+      if (!plancherNomPx) { return 7.5; }
+      if (plancherCourant !== null) { return plancherCourant; }
+      var ctm = null;
+      try { ctm = racine.getScreenCTM(); } catch (e) { ctm = null; }
+      // Pas encore dans le document (première image avant la mise en page) :
+      // on répond à l'échelle 1 SANS la retenir — figer 1 ici laisserait le
+      // plancher faux jusqu'au prochain redimensionnement.
+      if (!ctm || !isFinite(ctm.a) || ctm.a <= 0) { return Math.max(7.5, plancherNomPx); }
+      // Borné par le PLAFOND : une scène presque effondrée (échelle ~0,01)
+      // donnait un plancher de ~900 unités — mesuré (audit S3, 26/09). Un
+      // plancher de lisibilité ne doit jamais faire grossir un nom au-delà de
+      // ce que le cadrage le plus serré autorise.
+      plancherCourant = Math.min(PLAFOND_NOM, Math.max(7.5, plancherNomPx / ctm.a));
+      return plancherCourant;
+    }
 
     function projeter(p) {
       // À plat : ni rotation ni perspective. Une échelle unique, les
@@ -823,6 +924,45 @@
     // Les liens : BLANCS et fins (demande de Paul). Le MOTIF dit le type,
     // l'ÉCLAT dit l'avancement — le double codage de la carte est conservé,
     // sans quoi le blanc uniforme perdrait l'information du type.
+    // LA FIGURE — HORS DE `relations`, et c'est tout l'enjeu : la taille d'une
+    // étoile se calcule sur son nombre de liens (`magnitudes`). Un trait
+    // d'astérisme compté comme un lien ferait grossir l'étoile au milieu d'une
+    // chaîne — un éclat qui ne dirait rien que la forme de l'arbre. Il vit donc
+    // dans son propre groupe, muet pour le lecteur d'écran (un trait n'a rien à
+    // dire), et il ne s'allume pas au survol : ce n'est pas une relation.
+    // Sa couleur est une encre du produit, jamais l'or de l'appel (voir plus bas).
+    var gAsterisme = null, piecesAsterisme = [];
+    function calculerAsterisme() {
+      while (gAsterisme.firstChild) { gAsterisme.removeChild(gAsterisme.firstChild); }
+      piecesAsterisme = [];
+      monde.groupes.forEach(function (grp) {
+        var points = grp.noeuds.map(function (n) {
+          var e = parId[n.id];
+          var p = e && e.plan ? e.plan : { u: e.x, v: e.y };
+          return { id: n.id, u: p.u, v: p.v };
+        });
+        asterisme(points).forEach(function (paire) {
+          var trait = svg('line', { 'class': 'ciel-trait-figure' });
+          trait.setAttribute('data-a', paire[0]);
+          trait.setAttribute('data-b', paire[1]);
+          gAsterisme.appendChild(trait);
+          piecesAsterisme.push({ a: paire[0], b: paire[1], el: trait });
+        });
+      });
+    }
+    if (avecAsterisme) {
+      gAsterisme = svg('g', {
+        // L'ENCRE PARCHEMIN `#cdc3ad` (`--encre-douce`, déjà au produit), PAS
+        // L'OR : l'or `#e6c67d` dit « il y a quelque chose à faire ici »
+        // (engagement 3 de PRODUCT.md). Des traits or convergeant vers une étoile
+        // qui appelle se liraient comme un chemin vers elle — critique du lot 2.
+        'class': 'ciel-asterisme', 'aria-hidden': 'true', stroke: '#cdc3ad',
+        'stroke-linecap': 'round', fill: 'none'
+      });
+      calculerAsterisme();
+      racine.appendChild(gAsterisme);
+    }
+
     var gLiens = svg('g', {
       'class': 'ciel-liens', 'aria-hidden': 'true', stroke: '#ffffff',
       'stroke-width': '0.9', 'stroke-linecap': 'round', fill: 'none'
@@ -1032,7 +1172,13 @@
       // n'atteignait plus aucune étoile. `:focus-visible` est faux sur un focus
       // donné par un pointeur, vrai sur un focus donné par Tab — c'est le
       // navigateur qui le dit, pas une minuterie.
-      if (g && parId[g.getAttribute('data-noeud-id')]
+      // ⛔ ET PAS SUR UNE COURONNE (critique impeccable du lot 2, 26/09). Viser
+      // fait pivoter la caméra vers l'étoile : sur un réseau en volume (RIVEN),
+      // c'est ce qui ramène une étoile de derrière. Sur une couronne, toutes les
+      // étoiles font déjà face au spectateur — et pivoter les couchait de
+      // profil : mesuré, 877 px d'étendue → 0 sur NAGA, toutes les étoiles sur
+      // une même verticale. La figure n'existait que pour la souris.
+      if (g && parId[g.getAttribute('data-noeud-id')] && !options.couronne
           && (!g.matches || g.matches(':focus-visible'))) {
         viser(parId[g.getAttribute('data-noeud-id')]);
       }
@@ -1227,8 +1373,22 @@
         p.el.setAttribute('cy', pr.sy.toFixed(1));
       });
 
+      // L'ÉCHELLE COMMUNE de l'éclat par le rang : la moyenne des échelles de
+      // l'image. Calculée AVANT la boucle des étoiles, qui en a besoin pour la
+      // première ; les projections faites ici sont reprises telles quelles.
+      var echelleCommune = 1;
+      if (eclatParPoids && pieces.length) {
+        var sommeEchelles = 0, nbEchelles = 0;
+        pieces.forEach(function (piece) {
+          var prc = projeter(piece.etoile);
+          projetes[piece.etoile.noeud.id] = prc;
+          if (prc) { sommeEchelles += prc.echelle; nbEchelles++; }
+        });
+        if (nbEchelles) { echelleCommune = sommeEchelles / nbEchelles; }
+      }
+
       pieces.forEach(function (piece) {
-        var pr = projeter(piece.etoile);
+        var pr = projetes[piece.etoile.noeud.id] || projeter(piece.etoile);
         projetes[piece.etoile.noeud.id] = pr;
         // ON NE MASQUE JAMAIS L'ÉTOILE QUI A LE FOCUS. `display: none` retire
         // l'élément de la séquence de tabulation, et le navigateur RENVOIE alors
@@ -1256,8 +1416,32 @@
         }
         if (!pr) { piece.g.removeAttribute('display'); return; }
         piece.g.removeAttribute('display');
-        var rayon = Math.max(1.6, Math.min(9,
-          (R_ETOILE_MIN + Math.min(3.2, (piece.mag / magMax) * 3.2)) * pr.echelle * 1.05));
+        // L'ÉCLAT : par défaut le nombre de liens (RIVEN) ; sous `eclatParPoids`,
+        // le RANG — une tête, qui contient quelque chose, plus vive qu'une
+        // feuille. Jamais la fraîcheur : un délaissé qui pâlit est un reproche.
+        var surcroit = eclatParPoids
+          ? (piece.etoile.noeud.poids ? AMPLITUDE_RANG : 0)
+          : Math.min(3.2, (piece.mag / magMax) * 3.2);
+        // ⚠️ SOUS `eclatParPoids`, LA PROFONDEUR NE TOUCHE PLUS LA TAILLE.
+        // Mesuré par la critique du lot 2 : la perspective faisait varier une
+        // étoile de 6,3 à 7,7 à elle seule — une feuille au premier plan
+        // dépassait une tête au fond, et le rang devenait illisible. L'échelle
+        // est donc celle, commune, de l'image ; la profondeur reste portée par
+        // l'opacité.
+        var rayon;
+        if (eclatParPoids) {
+          // LE RANG EST UN RAPPORT, APPLIQUÉ SOUS LE PLAFOND. Premier jet :
+          // `(R_ETOILE_MIN + surcroît) × échelle`, borné à 9 — caméra proche,
+          // têtes ET feuilles atteignaient la borne et le rang disparaissait
+          // (mesuré : trois rayons à 7,74 sur la racine). Le plafond s'applique
+          // donc à la feuille, et la tête garde toujours son surcroît relatif.
+          var rapportRang = 1 + AMPLITUDE_RANG / R_ETOILE_MIN;
+          var baseRang = Math.max(1.6, Math.min(9 / rapportRang, R_ETOILE_MIN * echelleCommune * 1.05));
+          rayon = baseRang * (piece.etoile.noeud.poids ? rapportRang : 1);
+        } else {
+          rayon = Math.max(1.6, Math.min(9, (R_ETOILE_MIN + surcroit) * pr.echelle * 1.05));
+        }
+        pr.rayon = rayon;
         var op = opaciteProfondeur(pr.profondeur);
         var attenue = correspond && !correspond(piece.etoile.noeud);
         piece.g.setAttribute('opacity', (attenue ? op * 0.14 : op).toFixed(3));
@@ -1300,7 +1484,7 @@
         piece.nom.setAttribute('x', x);
         piece.nom.setAttribute('y', (y + rayon * 3.6 + 9).toFixed(1));
         piece.nom.setAttribute('font-size',
-          Math.max(7.5, Math.min(plafondNom, 10 * pr.echelle)).toFixed(1));
+          Math.max(plancherNom(), Math.min(plafondNom, 10 * pr.echelle)).toFixed(1));
         if (!piece.nom.classList.contains('ciel-nom--demande')) {
           // SUR UN MENU, la profondeur n'a pas le droit d'éteindre un nom.
           // Mesuré le 2026-08-13 : rendre les douze noms « permanents » n'en
@@ -1350,7 +1534,9 @@
         // lisibilité de 7,5.
         var dispo = Math.max(60, vbW - 2 * MARGE_HALO);
         if (plusLarge > dispo) {
-          var facteur = Math.max(7.5 / plafondNom, dispo / plusLarge);
+          // Plafonné à 1 : sur un écran où le plancher dépasserait le plafond,
+          // ce repli ne doit pas GROSSIR les noms qu'il est là pour réduire.
+          var facteur = Math.min(1, Math.max(plancherNom() / plafondNom, dispo / plusLarge));
           plafondNom = plafondNom * facteur;
           brut.forEach(function (b) { b.largeur = b.largeur * facteur; });
         }
@@ -1369,6 +1555,47 @@
           (opBase * opaciteProfondeur((a.profondeur + b.profondeur) / 2)).toFixed(3));
         pl.el.setAttribute('stroke-width',
           (0.55 + 0.75 * ((a.echelle + b.echelle) / 2)).toFixed(2));
+      });
+
+      // LE TRAIT S'ARRÊTE AVANT L'ÉTOILE — la convention de gravure des cartes
+      // célestes, et le correctif d'un défaut mesuré par la critique du lot 2 :
+      // tout trait qui descendait d'une étoile traversait le nom posé sous elle
+      // (2 à 3 traversées par écran). On retire à chaque bout le halo, et, quand
+      // le trait part vers le bas, la hauteur du nom.
+      // Le retrait, c'est la SORTIE du trait hors du rectangle du nom, ou le
+      // halo si le trait ne passe pas par le nom. Premier jet : « s'il descend,
+      // la hauteur du nom » — faux pour un trait en diagonale, qui ressort par
+      // le CÔTÉ d'un nom large (ADRAMELECH, mesuré). Le rectangle suit la pose
+      // réelle du nom : centré sur l'étoile, ligne de base à `rayon × 3,6 + 9`,
+      // demi-largeur mesurée (`demiNoms`, au plafond de police : une borne
+      // haute, donc on retire un peu trop plutôt que pas assez).
+      function retrait(p, id, ux, uy) {
+        var r = p.rayon || R_ETOILE_MIN;
+        var halo = r * 2.6;
+        var fs = Math.max(plancherNom(), Math.min(plafondNom, 10 * p.echelle));
+        var base = r * 3.6 + 9;
+        var hw = demiNoms[id] || 40;
+        var bx0 = -hw, bx1 = hw, by0 = base - fs * 0.8, by1 = base + fs * 0.3;
+        var tmin = -Infinity, tmax = Infinity;
+        if (Math.abs(ux) < 1e-9) { if (bx0 > 0 || bx1 < 0) { return halo; } }
+        else { var a1 = bx0 / ux, a2 = bx1 / ux; tmin = Math.max(tmin, Math.min(a1, a2)); tmax = Math.min(tmax, Math.max(a1, a2)); }
+        if (Math.abs(uy) < 1e-9) { if (by0 > 0 || by1 < 0) { return halo; } }
+        else { var b1 = by0 / uy, b2 = by1 / uy; tmin = Math.max(tmin, Math.min(b1, b2)); tmax = Math.min(tmax, Math.max(b1, b2)); }
+        return tmax > Math.max(tmin, 0) ? Math.max(halo, tmax + 3) : halo;
+      }
+      piecesAsterisme.forEach(function (pa) {
+        var a = projetes[pa.a], b = projetes[pa.b];
+        if (!a || !b) { pa.el.setAttribute('display', 'none'); return; }
+        var dx = b.sx - a.sx, dy = b.sy - a.sy, lg = Math.hypot(dx, dy) || 1;
+        var ux = dx / lg, uy = dy / lg;
+        var ra = retrait(a, pa.a, ux, uy), rb = retrait(b, pa.b, -ux, -uy);
+        if (lg - ra - rb < 8) { pa.el.setAttribute('display', 'none'); return; }
+        pa.el.removeAttribute('display');
+        pa.el.setAttribute('x1', (a.sx + ux * ra).toFixed(1)); pa.el.setAttribute('y1', (a.sy + uy * ra).toFixed(1));
+        pa.el.setAttribute('x2', (b.sx - ux * rb).toFixed(1)); pa.el.setAttribute('y2', (b.sy - uy * rb).toFixed(1));
+        pa.el.setAttribute('opacity',
+          (OPACITE_FIGURE * opaciteProfondeur((a.profondeur + b.profondeur) / 2)).toFixed(3));
+        pa.el.setAttribute('stroke-width', (0.45 + 0.3 * ((a.echelle + b.echelle) / 2)).toFixed(2));
       });
 
       // Le nom de la passerelle, au milieu de l'arc.
@@ -1575,6 +1802,9 @@
       if (vbW !== avant || vbH !== avantH) {
         racine.setAttribute('viewBox', '0 0 ' + vbW + ' ' + vbH);
       }
+      // L'échelle écran a pu changer même à viewBox égal (le SVG se pose en
+      // `meet` dans une boîte qui a bougé) : le plancher se relit.
+      plancherCourant = null;
       cam.cibleDistance = distanceIdeale() * zoom;
       relancer(); // à plat, la boucle dort : un cadre qui change la réveille
     }
@@ -1691,6 +1921,7 @@
     rendre: rendre,
     arreter: arreter,
     construireMonde: construireMonde,
+    asterisme: asterisme,
     recentrerSurLesEtoiles: recentrerSurLesEtoiles,
     grouper: grouper,
     magnitudes: magnitudes,

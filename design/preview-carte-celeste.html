@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Carte céleste — maquette</title>
+<!--
+  MAQUETTE DE TRAVAIL — lot 2 de CADRAGE-2026-09-25-carte-celeste.md (§14.2).
+  Vrai moteur (js/ciel.js), vrai registre (js/registre-lv3.mjs), vrai adaptateur
+  (js/adaptateur-lv4.mjs), vraie greffe (js/adaptateur-finubar.mjs). Les dépôts
+  viennent d'une FIXTURE INVENTÉE (preview-accueil-finubar-fixture.mjs) : design/
+  n'est ni déployé (.vercelignore) ni servi (/design dans PREFIXES_PRIVES,
+  middleware.js) ; la fixture reste inventée PAR PRINCIPE — deux gardes peuvent
+  tomber, une donnée qui n'est pas là ne fuit pas.
+
+  Elle a servi à trancher A8 sur capture ; Paul a retenu V1 (26/09) — la
+  couronne (le standard du 17/08) + l'arbre + l'éclat par le rang. La variante
+  V2 (figure irrégulière) a été retirée du moteur et d'ici.
+-->
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../css/styles.css">
+<link rel="stylesheet" href="../css/ciel.css">
+<link rel="stylesheet" href="../css/stellaire.css">
+<link rel="stylesheet" href="../css/ciel-noeud.css">
+<link rel="stylesheet" href="preview-carte-celeste.css">
+</head>
+<body>
+<header class="mq-barre">
+  <h1 class="mq-titre">Carte céleste</h1>
+  <nav class="mq-groupe" aria-label="Écran">
+    <button type="button" class="mq-bouton" data-ecran="ultima">ULTIMA</button>
+    <button type="button" class="mq-bouton" data-ecran="naga">NAGA</button>
+    <button type="button" class="mq-bouton" data-ecran="grima">GRIMA</button>
+    <button type="button" class="mq-bouton" data-ecran="racine">Racine</button>
+    <button type="button" class="mq-bouton" data-ecran="alpha">ALPHA</button>
+    <button type="button" class="mq-bouton" data-ecran="renoboost">RENOBOOST IA</button>
+    <button type="button" class="mq-bouton" data-ecran="pire">Pire cas · 24</button>
+  </nav>
+  <div class="mq-groupe" role="group" aria-label="Variante">
+    <button type="button" class="mq-bouton" data-variante="v0">Aujourd’hui</button>
+    <button type="button" class="mq-bouton" data-variante="v1">V1 couronne</button>
+  </div>
+</header>
+<main class="mq-scene-cadre">
+  <p id="mq-legende" class="mq-legende"></p>
+  <!-- Le VRAI plateau des coques, pour que la règle des noms (css/ciel-noeud.css,
+       lot 2a) s'applique telle qu'en production — jamais recopiée ici. -->
+  <div class="ciel-noeud-plateau mq-plateau">
+    <div id="ciel-scene" class="ciel-scene mq-scene"></div>
+  </div>
+</main>
+<footer class="mq-mesure">
+  <p id="mq-mesure" aria-live="polite"></p>
+  <button type="button" id="mq-tout" class="mq-bouton">Mesurer tous les écrans</button>
+  <table id="mq-table" hidden></table>
+</footer>
+<script src="../js/ciel-fond.js"></script>
+<script src="../js/ciel.js"></script>
+<script type="module" src="preview-carte-celeste.js"></script>
+</body>
+</html>

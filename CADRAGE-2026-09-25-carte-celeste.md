@@ -441,7 +441,9 @@ assertion supprimée.
 **0 px** à 16, 100, 250 et 500 ms · tap → isolé · tap glissé de 6 px → rien
 (rotation, seuil 4 px — le POV adversaire du §7 est couvert, par événements
 synthétiques et non par un vrai doigt) · patrimoine complet **41 suites
-unitaires + 46 harnais navigateur, sortie 0**.
+unitaires + 43 harnais navigateur, sortie 0** *(corrigé le 26/09 : « 46 »
+comptait trois lignes de verdict comme des harnais — `ls tests/smoke-*.mjs` en
+donne 43)*.
 
 **Dry run DR (22:06)** — sondé : le diff en adversaire, l'enrôlement du harnais,
 le témoin. Cédé et corrigé : `idsDuNiveau` était devenu une variable **assignée
@@ -455,3 +457,625 @@ survol — toujours juste.
 **Ce que ce lot ne prouve pas** : le tap sur un vrai téléphone (Chromium simule
 le toucher). C'est Paul qui recette, sur le preview : *clique NAGA sans
 attendre, puis GRIMA — chaque clic doit plonger, du premier coup.*
+
+---
+
+## 14. A2 à A5 rendus (26/09) — et les lots 0, 2, 3 précisés à la ligne
+
+| # | Décision de Paul (26/09, « reco ») | Ce qu'elle engage |
+|---|---|---|
+| **A2** | La figure est un **arbre calculé** (n − 1 traits par constellation). | Lot 2 |
+| **A3** | `PRODUCT.md` **remplace** `PRODUIT.md` pour la vérité produit. | Lot 0 — précisé ci-dessous : les contrats techniques ne disparaissent pas |
+| **A4** | **Pas** de vue à plat de tous les dépôts dans ce cadrage. | Rouvert le jour où un ciel dépasse 8 astres |
+| **A5** | L'éclat dit **le rang et le signal**, jamais la fraîcheur. | Lot 2 |
+
+⛔ **A6 tient toujours** : ce paragraphe précise, il n'ouvre rien. Chaque lot
+attend un go explicite. Ordre recommandé : **0 → 2 → 3** (le lot 0 est un
+entretien de vingt minutes, et impeccable refuse `shape`/`critique` sans lui).
+
+### 14.0 Trois constats lus ce matin dans le code, qui corrigent le plan
+
+1. **Les étoiles de navigation sont posées sur une COURONNE**, pas en figure.
+   `couronne: true` (`js/ciel-noeud.mjs`, options du moteur) appelle
+   `disposerEnCouronne` (`js/ciel.js`, l. 288 au commit `76776ca`) : n points sur une ellipse,
+   répartis à angles égaux, les noms longs aux positions verticales. C'est un
+   standard **tranché par Paul le 17/08** (« les mêmes standards partout ») pour
+   de bonnes raisons mesurées — l'occupation du cadre et la largeur des noms.
+   ⇒ Un arbre calculé sur une couronne donne **un arc** : l'anneau moins son plus
+   long côté. C'est une figure, mais c'est encore un anneau. Ce que Paul appelle
+   « constellations brutes » est, pour une bonne part, **la couronne elle-même**.
+   D'où l'arbitrage **A8** (§14.2) — et il se tranche sur capture, pas avant.
+2. **La taille d'une étoile vient de son nombre de liens** (`magnitudes`, l. 387 ;
+   rayon l. 1259-1260, au commit `76776ca` : `R_ETOILE_MIN + (mag / magMax) × 3,2`). Aujourd'hui les
+   écrans de navigation n'ont aucun lien : toutes les étoiles ont la même taille.
+   ⛔ **Si les traits d'astérisme passaient par `relations`, l'étoile au milieu
+   d'une chaîne grossirait par accident** — un éclat qui ne dirait rien, sinon la
+   forme de l'arbre. Les traits vivent donc **hors** de `relations`, et le rang
+   entre par un champ **explicite**.
+3. **`PRODUIT.md` n'est pas qu'une vision périmée.** Il porte aussi le **modèle de
+   données** (l. 34), le **contrat d'API** (l. 118) et les **conventions du front**
+   (l. 134 — lignes d'avant le lot 0, qui a réduit le fichier) — et **quatre agents** le déclarent « contexte obligatoire »
+   (`graphisme`, `interface-ux`, `front-carto`, `leo`). Le supprimer effacerait
+   leur contrat. ⇒ A3 se précise sans se renverser : **la vérité produit va dans
+   `PRODUCT.md`, les contrats techniques restent dans `PRODUIT.md`**, réduit à eux.
+
+### 14.1 Lot 0 — `impeccable init` : `PRODUCT.md` (un entretien, une séance courte)
+
+**Ce qui se fait, dans l'ordre :**
+
+1. `impeccable context --target ultima.html` (skill dans
+   `artisan-builder/.claude/skills/impeccable`, cwd `Ultima-`), puis
+   `reference/init.md`.
+2. **Un seul tour de trois questions**, posé avec l'outil de questions, chacune
+   **pré-remplie** d'une inférence tirée du dépôt, à confirmer ou corriger — init
+   interdit d'écrire `PRODUCT.md` sans une vraie réponse :
+
+   | Question d'init | Inférence proposée (source) |
+   |---|---|
+   | Qui, dans quelle situation, pour quel travail ? | Paul seul, mono-utilisateur (`PRODUIT.md` §Personas, 03/07), plusieurs fois par jour, souvent au téléphone le soir ; il vient **s'orienter et agir** sur sa data pro et perso. |
+   | Ce que le produit rend possible, que rien d'autre ne peut prétendre ? | **L'unique interface de travail**, qui absorbe toute la data et la dispatche, avec **un seul interlocuteur**, Léo ; rien d'autre ne sera créé (Directive JL, `CLAUDE.md`). |
+   | Ce qui doit durer ? | Registre **antique et sérieux** (acté 08/07) · sécurité relevée, finance + intime (`CADRAGE-CONSOLE.md` §5) · « Ultima compte, elle ne reproche pas » (règle ③ d'ALTHEA) · le ciel est la navigation (LV4-LV6). |
+
+3. **Écrire `PRODUCT.md`** au gabarit d'init : `Platform: web` (PWA —
+   `manifest.webmanifest`) ; **pas** de section `Stack` (le code existant répond) ;
+   `Evidence on Hand` dit aussi ce qui **n'existe pas** et ne doit pas s'inventer.
+4. **Réduire `PRODUIT.md`** à ses trois sections techniques, sous un en-tête qui
+   renvoie la vérité produit à `PRODUCT.md`. Vision, personas, user stories,
+   « Interface v3 » (boussole, 06/07) et hors-périmètre P0 en sortent — ils
+   restent lisibles dans l'historique git.
+5. **Mettre à jour les renvois vivants**, et eux seuls : `CLAUDE.md` l. 116 et
+   les quatre agents pointent `PRODUCT.md` pour le produit, `PRODUIT.md` pour les
+   contrats ; `ROADMAP-SITE.md` l. 25 idem. ⛔ **Les archives datées ne se
+   réécrivent pas** (`REFONTE-ACCUEIL.md`, `AUDIT-2026-08-13.md`,
+   `design/spec-registre-antique-serieux.md`) : elles ne valent que par leur
+   exactitude au jour où elles ont été écrites.
+
+**Ce qui ne se fait pas** : aucun `DESIGN.md` (init l'interdit ; `document` est
+une autre commande, offerte après), aucune direction visuelle, aucun code.
+
+**Critère de sortie** : `impeccable context` ne rend plus `NO_PRODUCT_MD` ; chaque
+fait de `PRODUCT.md` cite sa source ou la réponse de Paul ; `grep -rn PRODUIT.md`
+ne trouve plus de renvoi vivant vers une section qui a quitté le fichier.
+
+### 14.2 Lot 2 — la figure (la maquette d'abord, le code ensuite)
+
+**Où vit chaque règle — une seule fois chacune :**
+
+| Règle | Fichier | Forme |
+|---|---|---|
+| Le **rang** (A5) : un cap qui CONTIENT est une tête, les autres des feuilles | `js/adaptateur-lv4.mjs` (`versCiel` et `isolement`) | un champ `poids` par nœud : `1` s'il a des enfants, `0` sinon — lu dans le registre, jamais deviné |
+| L'**éclat par le rang** | `js/ciel.js`, calcul du `rayon` des étoiles | option `eclatParPoids`, **inactive par défaut** : la taille lit `poids` au lieu du nombre de liens ; amplitude réglée sur la maquette |
+| L'**arbre** (A2) | `js/ciel.js` | fonction **pure** `asterisme(points)` — arbre couvrant minimal (Prim, n ≤ 24), calculé **par constellation** sur les coordonnées **planes** de la disposition, donc sans croisement ; exposée sur `window.UltimaCiel` pour être testée sans DOM |
+| Le **tracé** des traits | `js/ciel.js` | option `asterisme`, **inactive par défaut** : un groupe `ciel-asterisme` à part, `aria-hidden`, or pâle `#d8bd82` déjà employé, ~0,6 px, opacité ~0,35 ; **hors de `relations`** (constat 2) et **non allumé au survol** |
+| La **disposition** (A8) | `js/ciel.js` | la couronne reste ; une variante `disposition: 'figure'`, déterministe (graine = id), n'existe que si A8 la retient |
+| Qui active | `js/ciel-noeud.mjs` | les options, sur les coques de navigation seulement — **RIVEN ne change pas** |
+
+**Ce que le rang change vraiment, mesuré aujourd'hui dans le registre :**
+
+| Écran | Caps (enfants) | Effet du rang |
+|---|---|---|
+| ULTIMA | GRIMA (2) · NAGA (3) | **aucun** — deux têtes |
+| NAGA isolé | IMLADRIK (3) · ADRAMELECH (3) · TAO (2) | **aucun** — trois têtes |
+| GRIMA isolé | RIVEN (0) · NICOL BOLAS (4) | NICOL BOLAS plus vif |
+| ALPHA, avec session | RENOBOOST IA (5 après greffe) · YCOME (0) · 4 astres (0) | RENOBOOST IA plus vif ; les astres portent déjà leur couleur Finubar |
+| Racine | ULTIMA (2) · ALPHA (2) · ALTHEA (0) | ALTHEA moins vive |
+
+⚠️ **Sur NAGA — l'écran cité par Paul — le rang ne change rien** : ses trois
+caps contiennent tous quelque chose. La figure y viendra de l'arbre et de la
+disposition, pas de l'éclat. Le dire maintenant évite d'attendre de A5 ce
+qu'elle ne peut pas donner.
+
+**Les étapes :**
+
+1. **Harnais pur d'abord** : `tests/unit-asterisme.mjs` — n − 1 arêtes, connexe,
+   déterministe, **aucun croisement**, cas n = 0, 1, 2 et 24 ; vu rouge sur une
+   fonction volontairement fausse avant d'être cru.
+2. **La maquette** `design/preview-carte-celeste.html` : elle charge le **vrai**
+   `js/ciel.js` et le **vrai** registre, et montre **côte à côte deux variantes**
+   sur les six écrans réels et le pire cas à 24 :
+   **V1** couronne + arbre + éclat · **V2** figure + arbre + éclat.
+   Bandeau de mesure : occupation du cadre, noms qui se chevauchent, noms hors
+   cadre, contraste AA, cibles ≥ 24 px — **les mêmes critères qui ont fondé la
+   couronne le 17/08**, pour que V2 soit jugée sur ce que V1 garantit déjà.
+3. **Passe impeccable** sur la maquette : `critique` (deux sous-agents isolés +
+   `impeccable detect`), puis `polish`. Monde **établi** : on l'étend
+   (`new-work.md`, « extend an existing surface ») — aucun tournoi de directions.
+   `craft-floor.md` est relu avant la première retouche d'interface.
+4. **→ Arbitrage A8 de Paul, sur capture** (voir plus bas).
+5. Le code de la variante retenue, les options activées sur les coques,
+   `tests/smoke-carte-celeste.mjs` (DOM : n − 1 traits par écran, aucun trait
+   vers une étoile absente, rien de nouveau en `reduced-motion` qui bouge).
+
+**Critères de sortie** : `unit-asterisme` et `smoke-carte-celeste` verts, vus
+rouges d'abord ; **`smoke-ciel` 71/71 avant et après** (RIVEN, options
+inactives) ; `smoke-clic-exact` 21/21 (la figure ne doit pas faire revenir un
+re-dessin sous le curseur) ; patrimoine complet sortie 0 ; preview donné à Paul.
+
+**A8 — la disposition** (nouvel arbitrage, **sur capture**, jamais avant) :
+
+| Variante | Ce qu'elle garde | Ce qu'elle coûte |
+|---|---|---|
+| **V1 — couronne + arbre** | tout ce que le 17/08 a mesuré | reste un anneau ; c'est peut-être le « brut » |
+| **V2 — figure + arbre** | l'arbre, l'éclat, les noms | rouvre un standard tranché ; doit **égaler** l'occupation et les noms de V1 |
+
+Recommandation **suspendue** : elle se forme en regardant les deux captures, et
+V2 n'est retenue que si elle égale V1 sur les critères mesurés.
+
+### 14.3 Lot 3 — les dépôts partout
+
+**Ce qui se fait :**
+
+1. **`alpha.html#renoboost-ia` isole après la greffe.** L'adresse est lue une
+   fois (`js/ciel-noeud.mjs` l. 630), **avant** que `/api/finubar` n'ait greffé
+   les astres (l. 683) : RENOBOOST IA n'a alors pas d'enfants, `idDeLAdresse`
+   (l. 565) répond `null`, et le lien s'ouvre sur ALPHA entier. Correctif : juste
+   après la greffe, si aucun foyer n'est posé, relire l'adresse et poser le foyer
+   (`sansHistorique`). `idDeLAdresse` garde sa triple garde telle quelle.
+2. **Le harnais** : stub `/api/finubar` **retardé de 800 ms** + session ; attendu
+   `#renoboost-ia` → 5 astres + LE SITE, et rien d'autre. Vu rouge d'abord.
+3. **Mesurer « chaque dépôt en ≤ 2 clics »** depuis la racine, avec l'agrégat
+   réel — une ligne du harnais, pas une impression.
+
+**A7 — ce que le lot 3 ne fait PLUS** (nouvel arbitrage, recommandation ferme) :
+le §2 promettait que l'étoile d'un dépôt « dit ce que Léo peut y faire ».
+⛔ **Aucune donnée ne le porte.** Les anneaux de droits (vert / orange / rouge)
+sont un **cadrage** du 22/09, pas un état du système — J3 « Léo écrit » n'est pas
+construit, et un astre a `cible: null` (« un astre est un état, pas une porte »,
+`js/adaptateur-finubar.mjs`). Afficher « écriture verte » au survol, ce serait
+annoncer une capacité qui n'existe pas. **Recommandation : retirer ce point du
+lot 3** ; il revient avec J3, lu dans la donnée que J3 produira.
+
+### 14.4 Registre des arbitrages ouverts
+
+| # | Question | Quand | Reco |
+|---|---|---|---|
+| **A7** | Retirer du lot 3 « l'anneau de Léo au survol » ? | ✅ **rendu le 26/09 : oui** | il reviendra avec J3 |
+| **A8** | Couronne + arbre, ou figure + arbre ? | **sur capture** de la maquette (lot 2) | suspendue |
+| — | Go du **lot 0** (entretien impeccable init) | ✅ **rendu le 26/09** | livré — §15 |
+
+---
+
+## 15. Lot 0 — LIVRÉ le 26/09, sur go de Paul (« ok »)
+
+**L'entretien d'init** : un tour de trois questions, posé avec l'outil de
+questions, chacune pré-remplie d'une inférence du dépôt. **Les trois ont été
+confirmées telles quelles** — Paul seul ; l'interface unique avec Léo pour seule
+interlocutrice ; les quatre engagements (antique et sérieux, sécurité relevée,
+compter sans reprocher, le ciel est la navigation).
+
+| Fait | Fichier |
+|---|---|
+| Vérité produit écrite au gabarit d'init (schéma 1), `Platform: web`, sans section `Stack` | `PRODUCT.md` |
+| Réduit de 144 à 58 lignes : modèle de données, contrat d'API, front — avec un en-tête qui dit ce qui est parti et où | `PRODUIT.md` |
+| Renvois vivants mis à jour | `CLAUDE.md` · `ROADMAP-SITE.md` · agents `interface-ux`, `front-carto`, `graphisme`, `leo` |
+| Archives datées **non** réécrites | `REFONTE-ACCUEIL.md` · `AUDIT-2026-08-13.md` · `design/spec-registre-antique-serieux.md` |
+
+**Ce qui n'a pas été fait, et pourquoi** : aucun `DESIGN.md` (init l'interdit ;
+`impeccable document` reste à offrir) ; aucun `buildPath` enregistré — la séance
+n'a pas d'outil natif de génération d'image, donc le chemin est **code d'abord**,
+et il n'est pas stocké (init : « une valeur tirée du silence est un défaut que
+personne n'a posé »). **A7 rendu** : l'« anneau de Léo » sort du lot 3.
+
+**Critère de sortie, mesuré** : `impeccable context` ne rend plus
+`NO_PRODUCT_MD` (voir le commit) ; aucun renvoi vivant ne cite une section qui a
+quitté `PRODUIT.md`.
+
+**Suite** : lot 2 (la figure), au go de Paul — harnais pur d'abord, puis la
+maquette V1 / V2, puis A8 sur capture.
+
+---
+
+## 16. Dry run DR — 11:21 UTC le 26/09, sur le §14 (palier 20 min)
+
+**Sondé** : chaque « l. N » du §14 remesuré contre la tête de la branche ; les
+chiffres du tableau « ce que le rang change » relus dans le registre ; les
+promesses du §14 confrontées à ce que le code porte.
+
+**Cédé, et corrigé sur place** : ⚠️ **les numéros de ligne du §14 avaient
+périmé dans la journée**, parce que le lot 2 a ajouté ~180 lignes à `js/ciel.js`
+(la couronne est passée de l. 288 à 339, `magnitudes` de 387 à 500, le rayon de
+1259 à 1424) et que le lot 0 a réduit `PRODUIT.md` (ses trois sections sont
+passées aux l. 14, 37, 53). Un renvoi « l. 288 » juste le matin désignait autre
+chose l'après-midi. Les citations portent désormais **le commit où elles ont été
+lues** (`76776ca`), et le tableau du §14.2 cite la **fonction**, pas la ligne.
+⇒ Dans un cadrage qui précède un lot de code, une ligne citée se date par son
+commit, sinon le lot qu'elle annonce la rend fausse.
+
+**Résisté** : les renvois de `js/ciel-noeud.mjs` (l. 565, 630, 683) — ce fichier
+n'a pas été touché, ils désignent toujours ce qu'ils disent ; `CLAUDE.md` l. 116
+et `ROADMAP-SITE.md` l. 25 ; le tableau du rang (relu : GRIMA 2, NAGA 3,
+NICOL BOLAS 4, RIVEN 0, ALTHEA 0) ; A7 — aucune donnée ne porte les anneaux de
+droits, vérifié (`cible: null` des astres dans `js/adaptateur-finubar.mjs`).
+
+---
+
+## 17. Lot 2 — la figure : moteur prêt, maquette critiquée, A8 attend Paul (26/09)
+
+**Go de Paul : « go lot 2 ».** Livré jusqu'à l'arbitrage A8, pas au-delà : rien
+n'est activé sur les coques — la production n'affiche ni traits ni éclat par le
+rang. Un seul défaut de production est corrigé en passant (le clavier,
+ci-dessous) : il existait déjà, la figure l'a rendu visible.
+
+### Ce qui a été construit
+
+| Pièce | Où | Garde-fou |
+|---|---|---|
+| `asterisme(points)` — arbre couvrant minimal, pur | `js/ciel.js` | `tests/unit-asterisme.mjs`, écrit **avant**, vu rouge ; l'instrument refuse d'abord deux fausses figures ; deux sabotages rougissent |
+| Options `asterisme`, `eclatParPoids`, `disposition: 'figure'` — **inactives par défaut** | `js/ciel.js` | `smoke-ciel` (RIVEN) vert, options non activées |
+| `rang(noeud)` — 1 si le cap contient, 0 sinon | `js/adaptateur-lv4.mjs` | `unit-adaptateur-lv4` vert |
+| La maquette V0 / V1 / V2 : vraie greffe, fixture inventée, couche d'appel | `design/preview-carte-celeste.*` | mesure embarquée, témoin « aujourd'hui » |
+
+### La critique impeccable — deux évaluations isolées, puis vérifiées
+
+Deux sous-agents isolés (A : revue de design ; B : détecteur + navigateur).
+Détecteur : **0 constat** sur la maquette, en CLI comme dans le navigateur (le
+témoin `ultima.html` en porte 3, préexistants). Revue de design : **20/36**,
+« acceptable » — le monde est propre au produit, la figure l'était moins.
+
+⛔ **Les constats lourds de la revue ont été VÉRIFIÉS par la mesure avant d'être
+corrigés** — un rapport de sous-agent se vérifie, il ne se croit pas :
+
+| Constat | Mesure avant | Correctif | Mesure après |
+|---|---|---|---|
+| **Le clavier couche la constellation** (Tab fait pivoter la caméra) | étendue **877 px → 0** sur NAGA — **en production** | `focusin` ne vise plus sur une couronne | 877 → 877 ; contrôle ajouté à `smoke-clic-exact`, **vu rouge d'abord** |
+| **Le rang ne se voit pas** (la perspective l'emporte) | une feuille à 7,74 dépassait une tête à 6,88 | échelle commune ; puis le rang devient un **rapport sous le plafond** — le plafond à 9 écrasait têtes et feuilles (trois rayons à 7,74 sur la racine) | rang visible sur **tous** les écrans à deux rangs, aux deux largeurs |
+| **Les traits traversent les noms** | 2 · 2 · 3 · 1 traversées | le trait s'arrête à la **sortie du rectangle du nom** (premier jet « s'il descend » : faux en diagonale, ADRAMELECH le montrait) | **0** sur tous les écrans réels |
+| Traits en or, comme l'appel | — | encre parchemin `#cdc3ad`, déjà au produit ; l'or reste à « il y a quelque chose à faire » | vu sur capture, couche d'appel branchée |
+
+**Et deux fautes d'instrument, trouvées en regardant les captures** : la mesure
+écartait les noms pâles (0,25) et disait « 0 chevauchement » sur un pire cas où
+deux noms se couvraient ; elle mesurait à 0,9 s, avant que la caméra ne se pose.
+Corrigées dans la maquette, avec leur raison en commentaire.
+
+### Ce que disent les mesures pour A8
+
+| | V1 — couronne + arbre | V2 — figure + arbre |
+|---|---|---|
+| Occupation (écrans réels) | **égale à aujourd'hui** | plus basse sur 6 mesures sur 14 |
+| Noms qui se chevauchent | **aucun ajouté** | **1 ajouté** (RENOBOOST IA au téléphone) |
+| Traits n − 1, traits × noms, rang | tous tenus | tous tenus |
+| Identité de la forme | NAGA et la racine dessinent le même chevron (revue A) | chaque constellation a sa silhouette |
+
+**Selon la règle du §14.2, V2 ne se qualifie pas** : elle n'égale pas V1 sur les
+critères mesurés. **Recommandation : V1**, et chercher l'identité ailleurs que
+dans le déplacement des étoiles (A9, point 3). **C'est à Paul, sur capture.**
+
+### Limites, nommément
+
+- **Pire cas construit (24 étoiles)** : 16 à 21 traits sur 23 deviennent trop
+  courts une fois retirés du halo et des noms, et sont masqués — la figure y
+  disparaît. Aucun écran réel ne dépasse 6 étoiles aujourd'hui.
+- Le pire cas porte **2 à 3 chevauchements de noms qui existaient déjà**
+  (témoin « aujourd'hui »), non imputables au lot.
+- Le **tap sur un vrai téléphone** n'est toujours pas prouvé.
+
+### A9 — ce que la revue a trouvé hors de ce lot
+
+1. **Les noms font 7,5 px au téléphone** (plancher de `ciel.js`) : illisibles le
+   soir, alors que `PRODUCT.md` s'engage sur la lisibilité. Préexistant.
+2. **Les noms d'étoiles sont en sans-serif gris**, quand ce sont les noms propres
+   du produit ; la revue propose Georgia en capitales espacées, sur les écrans
+   de navigation seulement (RIVEN garde le sien).
+3. **Un cartouche qui nomme la figure** : l'identité d'une constellation sans
+   déplacer ses étoiles.
+4. **La question de la revue**, posée telle quelle : un ciel de navigation
+   a-t-il besoin d'une caméra 3D, qui brouillait le rang et la figure ?
+
+Recommandation : **1 et 2 dans un lot court, avant l'activation** (la
+lisibilité d'abord) ; **3 avec l'activation de V1** ; **4 non**, tant que la
+couronne protège (le clavier ne pivote plus, le rang ignore la profondeur).
+
+### ⚠️ Un incident, rattrapé avant de coûter
+
+Le serveur « live » d'impeccable, lancé par l'évaluation B, a écrit
+`.impeccable/live/server.json` — un **jeton local** — et un `git add -A` l'a
+embarqué dans un commit **jamais poussé**. Retiré de l'historique local,
+`.impeccable/live/` ajouté au `.gitignore`. Rien n'a quitté le conteneur.
+
+### Dry run DR du lot 2 (déclenché à 11:37, fait à 12:00)
+
+**Sondé, et résisté** :
+- `unit-asterisme` vu rouge sur une fonction absente, puis sur deux sabotages ;
+- `smoke-ciel` (RIVEN) et `smoke-clic-exact` verts dans le patrimoine complet ;
+- la maquette charge le vrai moteur (`../js/ciel.js`) ;
+- **les traits sont bien hors de `relations`** — éprouvé du côté où ça pouvait
+  céder : NAGA rendu sans puis avec l'astérisme, comptes de liens identiques (0),
+  et rayons identiques **au chiffre près** entre la seconde mesure sans traits et
+  la mesure avec. Le **témoin** (deux mesures sans traits) diffère, lui, de la
+  même quantité : l'écart vient de la dérive lente du ciel, pas des traits.
+  Sans ce témoin, on aurait conclu à tort que les traits changeaient la taille.
+
+**Cédé** : rien de neuf — les failles de ce lot étaient celles de la critique,
+déjà corrigées au §17.
+
+---
+
+## 18. A8 et A9 rendus (26/09, 12:10 UTC) — deux lots courts, précisés à la ligne
+
+**Paul : « A8 reco, A9 reco ».** Consigné :
+
+| # | Décision |
+|---|---|
+| **A8** | **V1 — couronne + arbre + éclat par le rang.** `disposerEnFigure` et `hacher` (`js/ciel.js` l. 429–446) sont **retirés** à l'activation : une variante que personne n'active est du code mort qu'on croira un jour disponible. |
+| **A9** | **1 et 2 dans un lot court, AVANT l'activation** (lot 2a) ; **3 avec l'activation** (lot 2b) ; **4 non** — la caméra 3D reste. |
+
+⛔ **Une décision n'est pas un go** (A6). Les deux lots ci-dessous attendent chacun
+le sien.
+
+### 18.1 Ce qui a été MESURÉ avant d'écrire le lot 2a (maquette, V1, 2 s de pose)
+
+Taille réellement rendue des noms visibles, en **pixels CSS** (attribut
+`font-size` × `getScreenCTM().a`) :
+
+| Écran | 390 px : taille rendue | 390 px : nom le plus large / cadre | 1280 px |
+|---|---|---|---|
+| ULTIMA | 6,7 – 6,9 | 24 / 356 | 19,1 |
+| NAGA | 7,2 – 8,8 | 52 / 356 | 19,1 |
+| GRIMA | 6,5 – 6,7 | 46 / 356 | 19,1 |
+| Racine | 7,9 – 9,7 | 36 / 356 | 19,1 |
+| ALPHA | 6,5 – 6,7 | 53 / 356 | 19,1 |
+| RENOBOOST IA | 6,7 – 8,2 | 53 / 356 | 19,1 |
+| Pire cas (24) | 6,5 | 82 / 356 | 18,0 – 19,1 |
+
+**Ce que ça dit, et ça corrige A9-1 tel que la revue l'avait posé :**
+- le plancher `7.5` (l. 1509, 1559, 1595) est en **unités du viewBox**, pas en
+  pixels : au téléphone le viewBox est plus large que l'écran (échelle ≈ 0,87),
+  et le « plancher de lisibilité » rend **6,5 px** ;
+- ce n'est **pas la place** qui tasse les noms : le plus large occupe 53 px sur
+  356. C'est `10 * pr.echelle` (la perspective) qui les tire vers le plancher ;
+- la police vue est **sans-serif** : `.ciel-nom` (`css/ciel.css` l. 211–219)
+  l'emporte sur le Georgia posé sur le groupe (`js/ciel.js` l. 1082).
+
+### 18.2 Lot 2a — les noms se lisent au téléphone (A9-1 et A9-2)
+
+**① Le but** : sur les écrans de navigation, aucun nom visible sous **11 px CSS**,
+à toute largeur ; les noms de caps en Georgia, capitales espacées ; RIVEN inchangé.
+
+**② Les étapes**
+1. **Harnais d'abord**, vu rouge sur `main` : `tests/smoke-noms-lisibles.mjs` —
+   sur les six écrans réels à 390 et 1280 px, taille rendue ≥ 11 px CSS, police
+   de la famille serif, zéro chevauchement de noms **ajouté** (témoin : le même
+   écran avant le lot), zéro nom hors cadre. Verrou de non-vacuité : ≥ 2 noms
+   mesurés par écran.
+2. `js/ciel.js` : option `plancherNomPx` (**inactive par défaut**). Le plancher
+   devient `max(7.5, plancherNomPx / échelleÉcran)`, l'échelle lue sur
+   `getScreenCTM()` au cadrage (déjà relu à chaque redimensionnement). Les trois
+   endroits qui écrivent `7.5` passent par **une** fonction — trois copies d'un
+   seuil finissent par diverger.
+3. `css/ciel-noeud.css` : sur les coques seulement, `.ciel-nom` en
+   `Georgia, "Iowan Old Style", serif`, capitales, `letter-spacing` réglé sur la
+   maquette. RIVEN (`css/ciel.css`) ne bouge pas.
+4. `js/ciel-noeud.mjs` : `plancherNomPx: 11` dans les options des coques.
+5. Maquette : les mêmes mesures, pire cas compris, **avant de pousser**.
+
+**③ Les moyens** : `js/ciel.js`, `js/ciel-noeud.mjs`, `css/ciel-noeud.css`, un
+harnais neuf, la maquette. Aucune donnée, aucune route, aucun secret.
+
+**④ Critères de sortie** : `smoke-noms-lisibles` rouge sur `main`, vert après ;
+`smoke-ciel` (RIVEN) **inchangé** ; `smoke-clic-exact` vert (les noms sont
+`pointer-events: none`, il le prouve) ; patrimoine complet sortie 0 ; preview
+donné, avec une capture 390 px de NAGA avant / après.
+
+**⑤ Ce qu'on ne fait PAS** : ni traits, ni éclat, ni cartouche (lot 2b) ; ni
+les noms de RIVEN ; ni les noms de constellation (`.ciel-nom-amas`, déjà en
+Georgia) ; ni la caméra (A9-4).
+
+**⑥ Pre-mortem**
+- *Les noms grossis se chevauchent sur la couronne* → le harnais compte les
+  chevauchements contre le témoin ; si le pire cas (24 × 20 caractères) cède,
+  il cède déjà aujourd'hui (§17) — on le **dit**, on ne relève pas le plancher
+  pour lui seul.
+- *Les capitales élargissent un nom au-delà du cadre* → le repli de la l. 1559
+  reste, mais **ne descend plus sous le plancher en px** ; s'il le faudrait, le
+  nom se tronque (`tronquer`, déjà là) plutôt que de redevenir illisible.
+- *Le seuil est juste à 1280 et faux à 390* (la leçon du « bon fond ») → le
+  harnais mesure aux deux largeurs, et à 360 px.
+- *Un sélecteur trop large touche RIVEN* → `smoke-ciel` inchangé est le témoin.
+
+### 18.3 Lot 2b — l'activation de V1 (A8, A9-3)
+
+1. `js/ciel-noeud.mjs` : `asterisme: true, eclatParPoids: true` sur les coques.
+2. `js/ciel.js` : retrait de `disposerEnFigure` et `hacher`.
+3. **A9-3, mesuré avant d'être construit** : les noms de constellation
+   (`ciel-nom-amas`, Georgia, or pâle) existent déjà ; l'état isolant les éteint
+   (`css/ciel-noeud.css` l. 305). On mesure s'ils **reviennent** une fois le foyer
+   posé. S'ils nomment déjà la figure, **il n'y a rien à construire** (EB) ;
+   sinon, un cartouche, et un seul.
+4. `tests/smoke-carte-celeste.mjs` (§14.2 étape 5) : n − 1 traits par écran,
+   aucun trait vers une étoile absente, rang visible, rien qui bouge en
+   `reduced-motion` ; vu rouge sur la tête du lot 2a.
+
+Critères : ceux du §14.2, plus la maquette et la production en accord sur les
+mesures du §17.
+
+### 18.4 Lot 3 — inchangé (§14.3), après 2b.
+
+**La prochaine action, unique** : le go de Paul sur le **lot 2a**.
+
+---
+
+## 19. Lot 2a — LIVRÉ le 26/09, sur go de Paul (« go lot 2a »)
+
+### Une correction du §18.1, d'abord
+
+Le §18.1 écrivait « au téléphone le viewBox est plus large que l'écran
+(échelle ≈ 0,87) ». **C'était vrai de la maquette, pas de la production** : en
+production à 390 px, `getScreenCTM().a` vaut **1**, et les noms rendaient
+**7,5 à 9,2 px**. L'échelle de 0,87 venait du cadre de la maquette. La conclusion
+ne change pas (le plancher était trop bas et n'était pas exprimé en pixels) ; la
+cause citée, si. Mesuré en ouvrant `ultima.html#naga` à 390 × 844.
+
+### Ce qui a été fait
+
+| Pièce | Où | Ce qu'elle fait |
+|---|---|---|
+| `plancherNom()` — **une** fonction pour les trois lecteurs du plancher | `js/ciel.js` | `max(7.5, plancherNomPx / échelle écran)` ; échelle lue sur `getScreenCTM`, mise en cache, relue à chaque redimensionnement ; **non retenue** tant que le SVG n'est pas dans le document |
+| Le repli de largeur plafonné à 1 | `js/ciel.js` | il ne peut plus **grossir** un nom sur un écran où le plancher dépasserait le plafond |
+| `plancherNomPx: 11` | `js/ciel-noeud.mjs` | sur les coques seulement ; RIVEN garde 7,5 |
+| Noms gravés : Georgia, capitales, `.12em` | `css/ciel-noeud.css` | `.ciel-noeud-plateau .ciel-nom` ; ni la taille ni la couleur ne changent ici |
+| Le harnais | `tests/smoke-noms-lisibles.mjs` | 5 écrans × 360 / 390 / 1280 : taille **rendue** ≥ 11 px, Georgia, capitales, zéro chevauchement, zéro hors cadre, verrou ≥ 2 noms |
+| La maquette | `design/preview-carte-celeste.*` | porte le **vrai** plateau (`css/ciel-noeud.css`) au lieu d'une copie de la règle |
+
+### Mesures
+
+**Le harnais, vu rouge puis vert** : **40 rouges sur 91** avant le lot (7,5 px,
+sans-serif, casse normale — chevauchements et hors cadre déjà verts : ce sont les
+témoins) → **0 rouge sur 91** après. Minimum rendu : **11,0 px** à 360 et 390 ;
+16,7 à 19,7 px à 1280 (inchangé : le plancher ne mord qu'au téléphone).
+
+**La maquette, V0 et V1, 390 et 1280** : sur les six écrans réels, **0
+chevauchement, 0 hors cadre, 0 trait × nom**, rang visible là où il y a deux
+rangs ; occupation égale à V0 à 1280, et à ±0,03 à 390.
+
+⚠️ **Le pire cas construit (24 étoiles × 20 caractères) cède un peu plus** :
+**4 chevauchements**, contre 2 à 3 au §17. Des noms plus grands dans le même
+anneau. Aucun écran réel n'en approche (6 étoiles au plus) ; le §18.2 disait
+qu'on ne relèverait pas le plancher pour lui seul, et on ne le fait pas.
+
+**Le patrimoine** : `npm test` **42/42** ; `bash tests/lancer.sh` sortie 0,
+**44/44** harnais (les 43 d'hier + `smoke-noms-lisibles`) — dont `smoke-ciel`
+(RIVEN, options non activées) et `smoke-clic-exact` 23/23 : les noms sont
+`pointer-events: none`, le clic n'a pas bougé.
+
+### Limites, nommément
+
+- **L'échelle écran est mise en cache** : elle se relit au redimensionnement et à
+  chaque nouveau rendu, pas quand la scène change de taille sans prévenir. C'est
+  le contrat existant du moteur (le viewBox lui-même suit la même règle). Vu dans
+  la maquette seulement : son tableau de mesure, en apparaissant, décale la scène
+  de quelques pixels, et un nom y lit **10,9 px**. Aucune coque ne le fait.
+- Le tap et la lecture sur un **vrai téléphone** ne sont pas prouvés : la session
+  n'a qu'un Chromium.
+
+### Dry run DR du lot 2a (palier 20 min, 12:32 → fait à 12:50)
+
+**Cédé, et corrigé dans le passage** : le harnais ne mesurait qu'à 360, 390 et
+1280 px. Or au-dessus de 320 px le viewBox vaut l'écran (échelle 1) : un moteur
+qui **ignorerait** l'échelle y rend 11 px quand même. Sabotage joué (conversion
+retirée) : **vert partout** sur trois largeurs. Ajouté 300 px, où le viewBox est
+borné à 320 et l'échelle tombe à ~0,94 : le même sabotage donne **5 rouges**
+(10,3 px). Un garde-fou s'éprouve du côté où il se contourne.
+
+**Ajouté aussi** : ouvert à 1280 puis rétréci à 300 px, le plancher suit.
+Sabotage (remise à zéro du cache retirée) : **1 rouge** (10,0 px).
+
+**Résisté** : le harnais est découvert tout seul par `tests/lancer.sh` (CI
+comprise) ; RIVEN (`smoke-ciel`) inchangé ; le clic exact 23/23.
+Harnais final : **122 verdicts, 0 rouge**.
+
+---
+
+## 20. Le socle — plus rien ne se recouvre au bas de l'écran (26/09, capture de Paul)
+
+**Paul, capture à l'appui (RENOBOOST IA isolé, session ouverte) :** *« beaucoup
+de chevauchements, je ne suis pas fan — résous ça pour que ce soit clair, organisé
+et ergonomique ; une fois fait, tu me montres. »*
+
+### Ce qui était cassé — lu dans le code, puis mesuré
+
+| Constat | Source |
+|---|---|
+| Le cartouche de parole se pose à « bandeau + 12 px »… et le dock de Léo **au même endroit** : ils se recouvrent **par construction** | `css/finubar-bandeau.css` l. 77 · `css/leo.css` l. 481 |
+| Le cadrage du ciel ne connaissait pas le dock (arrivé après lui) | `margesDuMobilier`, `js/ciel-noeud.mjs` |
+| La parole grandit avec son texte (139 px sur RENOBOOST IA) : le ciel réservait la hauteur du moment, un cap plus bavard recouvrait une étoile | `css/ciel-noeud.css` (`min-height` seul) |
+| La recommandation de Léo était dite **deux fois** : dans le dock et dans la colonne « Léo — commençons par ça » du bandeau | `js/leo-navigation.mjs` · `js/finubar-bandeau.mjs` |
+| Au téléphone, sur l'accueil, le ciel n'avait plus que **166 px sur 844**, et trois étoiles sous la parole | mesuré |
+
+### Le parti pris — un SOCLE, une voix
+
+1. **De bas en haut, sans recouvrement** : le bandeau Finubar, le dock de Léo, le
+   cartouche de parole. Les deux hauteurs sont mesurées (`--fb-hauteur`,
+   `--leo-dock-hauteur`), jamais supposées.
+2. **Le ciel réserve tout le socle**, et recadre quand le bandeau ou le dock
+   changent de taille — **jamais au survol** : la parole n'est pas observée, sa
+   hauteur est fixe. Sinon l'étoile partirait sous le curseur (le clic raté du lot 1).
+3. **Le cartouche de parole est compact et de hauteur fixe** (6,4 rem) : nom et
+   état sur une ligne, résumé sur deux au plus, consigne épinglée en bas, et
+   relisible (elle était en encre de parchemin sur la nuit).
+4. **Une voix, une fois** : quand le dock porte la recommandation, le bandeau
+   retire sa colonne « Léo » et rend la place aux signaux.
+5. **Au téléphone, sur l'accueil seulement**, la parole se retire : un téléphone ne
+   survole pas, et elle n'y redisait que le foyer, que le fil d'Ariane nomme déjà.
+   Ailleurs (pas de bandeau), elle garde sa place au-dessus du dock.
+
+### Mesures — `tests/smoke-socle.mjs` (écran de Paul reproduit : index, session, 6 dépôts sous RENOBOOST IA, dock monté)
+
+**Rouge d'abord : 19 rouges sur 44** (parole × dock à toutes les tailles, étoiles
+sous la parole à 390 px, recommandation dite deux fois partout) → **0 sur 44**.
+
+| Écran | Hauteur de ciel libre avant | après |
+|---|---|---|
+| RENOBOOST IA · 1872 × 850 | 338 px, **avec** recouvrements | 309 px, sans |
+| RENOBOOST IA · 1280 × 800 | 288 px, **avec** recouvrements | 259 px, sans |
+| RENOBOOST IA · 390 × 844 | **166 px**, 2 étoiles sous la parole | **301 px** |
+
+Le bureau rend ~30 px : c'est le prix d'un étage qui ne recouvre plus rien. Le
+téléphone en gagne 135.
+
+**Éprouvé du côté où ça cède** : la règle d'empilement retirée → **6 rouges** ;
+le dock retiré du cadrage → **3 rouges**, dont une étoile sous le dock que le clic
+n'atteint plus — exactement le symptôme de la capture.
+
+**Et le survol ne déplace rien** (bureau, 1872 et 1280) : 0 étoile déplacée,
+cartouche du survol sans recouvrement.
+
+**Le patrimoine** : `npm test` **42/42** ; `bash tests/lancer.sh` sortie 0,
+**45/45** harnais (les 44 d'avant + `smoke-socle`), dont `smoke-lv4-coque`,
+`smoke-accueil-finubar`, `smoke-leo-partout` et `smoke-clic-exact` inchangés.
+
+### Limites, nommément
+
+- Le dock est **monté par le harnais** : `js/leo-partout.js` ne le pose qu'avec une
+  vraie session Supabase, que le bac à sable n'a pas. Ce qui est prouvé est la mise
+  en page, pas la condition de montage.
+- À 1280 × 800, le nom le plus bas (RENOBOOST-CONSOLE) finit **8 px** au-dessus du
+  cartouche : la marge prévue, tenue, mais serrée.
+- Le cartouche compact tronque un résumé de plus de deux lignes (points de
+  suspension) ; le texte entier reste dans le DOM du cartouche et dans le registre.
+  ⚠️ **L'étiquette accessible d'une étoile ne porte PAS le résumé** — son nom, son
+  type, son état et ses liens seulement (`js/ciel.js` l. 1118, lu). Donc au
+  téléphone, sur l'accueil, où la parole se retire, **le résumé n'est plus dit du
+  tout**. Assumé pour ce lot (le fil nomme le foyer, l'étoile se nomme elle-même),
+  mais c'est une perte, et elle est écrite ici plutôt que tue.
+
+---
+
+## 21. Sauvegarde de palier (26/09, fin d'après-midi) — dry run, audit de sécurité, consolidation
+
+**Paul : « sauvegarde de palier — on fait une pause ici ; consolide le code,
+audit de sécu, dry run ».** Rien de neuf côté produit : ce passage attaque ce qui
+a été livré depuis ce matin, corrige ce qui cède, et laisse la branche propre.
+
+### Dry run — ce qui a été sondé
+
+| Sonde | Résultat |
+|---|---|
+| Le socle sur une coque **sans** bandeau Finubar (NAGA, dock monté), puis 1280 → 390 → 1280 | **a tenu** — mais **aucun harnais ne le couvrait** : ajouté à `smoke-socle` ; la règle retirée → 3 rouges |
+| Le cartouche compact au survol, blason compris (ADRAMELECH, IMLADRIK, TAO) à 1280 et 390 | **a tenu** — 102 px constants, aucun élément ne déborde |
+| Le décompte des verdicts de `smoke-socle` | **a cédé** : deux passages à 1280 portaient le même nom, le second ÉCRASAIT le premier — un rouge à l'aller effacé par un vert au retour (« 3 lignes ❌, 2 rouges »). Noms rendus uniques, et un garde qui **lève une erreur** sur tout verdict en double — posé aussi dans `smoke-clic-exact`, `smoke-lv4-coque`, `smoke-noms-lisibles` (aucun doublon caché trouvé chez eux) |
+
+### Audit de sécurité — un agent `securite-auditeur` isolé, constats VÉRIFIÉS avant d'être corrigés
+
+| # | Constat | Vérification | Suite |
+|---|---|---|---|
+| **S1** · moyen · **antérieur à la branche** | Les noms et jalons des astres Finubar (texte écrit dans les FINUBAR.md de huit dépôts) entraient **en `innerHTML` brut** dans le cartouche de parole. La règle « rien n'entre en innerHTML qui ne vienne du registre statique » était devenue fausse le 02/09, avec la greffe | **Prouvé au navigateur** : un `<img>` et un `<a href>` injectés dans le cartouche (`smoke-parole-echappement`, 4 rouges sur 7). La CSP bloque le script, pas un lien de hameçonnage | **Corrigé** : `echapper()` sur tout texte du cartouche (`js/ciel-noeud.mjs`), commentaires de sécurité réécrits → 0 rouge sur 7 |
+| **S3** · faible | Le plancher des noms n'avait pas de borne haute : scène écrasée → police de **896,5** unités (mesuré) | contrôle ajouté à `smoke-noms-lisibles`, vu rouge | **Corrigé** : plancher borné par `PLAFOND_NOM` → 20 |
+| **S2** · faible | Le jeton local du serveur impeccable (incident du §17) survivait dans un objet git **local**, jamais poussé | `git cat-file -e 6f07b0e` → présent | **Nettoyé** : reflog expiré, `gc` → l'objet n'existe plus |
+| **S4** · info | La maquette affirmait « `design/` est servi en clair » — faux (`.vercelignore` + `PREFIXES_PRIVES`) | lu dans `middleware.js` l. 79 | **Corrigé**, et la fixture datée (vrai le 02/09, faux aujourd'hui) |
+
+**Vérifié sans rien trouver** (par l'agent, relu) : les chemins neufs posent du texte par `textContent` ou des nombres ; aucun style ni script inline (CSP `'self'` respectée) ; l'événement `ultima:mobilier` est borné à un recadrage par image, sans boucle ; aucun secret ni PII dans les lignes ajoutées.
+
+### Consolidation
+
+- **La variante « figure » est retirée** du moteur (`disposerEnFigure`, `hacher`, l'option `disposition`) et de la maquette : A8 a retenu la couronne ; un code qu'aucune page n'active est un code qu'on croira un jour disponible. Le §18.3 la retirait au lot 2b ; c'est fait dès maintenant.
+- Aucun reste de sabotage, de `console.log` hors harnais, ni de `TODO` dans le diff de la séance (grep).
+
+### Patrimoine après le palier
+
+`npm test` **42/42** ; `bash tests/lancer.sh` sortie 0, **46/46** harnais (les 45
+d'avant + `smoke-parole-echappement`).
+
+### Leçons à écrire en fin de séance (pas avant — règle de `memoire/LECONS.md`)
+
+1. *Un objet de verdicts indexé par nom avale les doublons* — le rouge disparaît sans bruit.
+2. *Une règle de sécurité écrite en commentaire périme avec la donnée* : « le registre est statique » était vrai jusqu'à la greffe Finubar.

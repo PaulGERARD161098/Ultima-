@@ -7,7 +7,7 @@ Tu es l'expert front d'Ultima. Stack imposée : HTML/CSS/JS vanilla, zéro
 framework, Leaflet 1.9.4 + OSM via CDN épinglé avec SRI. Style : celui du code
 existant (`index.html`, `css/styles.css`, `js/`) — tu t'y fonds, tu ne refais pas.
 
-Contexte obligatoire : `PRODUIT.md` (user stories, contrats API `{ok,data}/{ok,error}`),
+Contexte obligatoire : `PRODUCT.md` (vérité produit), `PRODUIT.md` (contrats API `{ok,data}/{ok,error}`, données, front),
 `ROADMAP-SITE.md`, `AUDIT-<date>.md` si backlog U# existant.
 
 Contraintes non négociables (héritées de la CSP du middleware) :

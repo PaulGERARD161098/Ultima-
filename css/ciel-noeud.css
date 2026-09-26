@@ -212,6 +212,21 @@ body.ciel-noeud .console-entete .titre-principal { font-size: clamp(1.1rem, 3.2v
     linear-gradient(180deg, var(--ciel-nuit-haute), var(--ciel-nuit-basse) 78%);
 }
 
+/* ---- Lot 2a (26/09) — le nom d'un cap est un NOM PROPRE, il se grave ----
+   Sur les écrans de navigation seulement : RIVEN (`css/ciel.css`) garde son
+   sans-serif, parce que ses étoiles sont des personnes, pas des caps. Le moteur
+   pose déjà Georgia sur le groupe des étoiles ; c'est `.ciel-nom` de
+   `css/ciel.css` qui le remplaçait par un sans-serif — d'où la règle ici, plus
+   spécifique, plutôt qu'une retouche de la feuille de RIVEN.
+   La taille ne se règle PAS ici : le moteur la réécrit à chaque image
+   (`plancherNomPx`, `js/ciel-noeud.mjs`). La couleur non plus : elle reste
+   celle de `css/ciel.css`, dont le contraste est déjà mesuré. */
+.ciel-noeud-plateau .ciel-nom {
+  font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+}
+
 /* ---- ③ La légende gravée, sous le ciel ---- */
 .ciel-legende {
   margin: .35rem 0 0;
@@ -281,6 +296,54 @@ body.ciel-noeud #boussole-parole {
   transform: translateX(-50%);
   width: min(92vw, 520px);
   margin: 0;
+}
+
+/* ---- LE CARTOUCHE EST COMPACT ET SA HAUTEUR EST FIXE (26/09) ----
+   Deux raisons, mesurées sur la capture de Paul et dans `smoke-socle` :
+   ① sa hauteur suivait son texte (139 px sur RENOBOOST IA, trois lignes de
+      résumé et une consigne) — le ciel réservait la hauteur du moment, et le
+      cartouche d'un autre cap, plus long, recouvrait une étoile ;
+   ② il est désormais le TROISIÈME étage du socle (bandeau, dock, parole) :
+      chaque ligne qu'il prend est une ligne de ciel en moins.
+   D'où une hauteur FIXE — la place réservée est exacte, quoi qu'il dise — et un
+   contenu tenu : nom et état sur une ligne, résumé sur deux au plus, la
+   consigne épinglée en bas. Rien n'est retiré du DOM (`.parole-nom`,
+   `.parole-signal`, `.parole-action` restent lus par les harnais) : seule leur
+   disposition change. */
+body.ciel-noeud #boussole-parole {
+  height: 6.4rem;
+  min-height: 0;
+  overflow: hidden;
+  padding: .5rem .9rem 1.55rem;
+}
+body.ciel-noeud #boussole-parole .parole-nom,
+body.ciel-noeud #boussole-parole .parole-etat { display: inline; margin: 0; }
+body.ciel-noeud #boussole-parole .parole-etat { margin-left: .6em; }
+body.ciel-noeud #boussole-parole .parole-texte {
+  margin: .2rem 0 0;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
+}
+body.ciel-noeud #boussole-parole .parole-signal,
+body.ciel-noeud #boussole-parole .parole-cockpit {
+  margin: .2rem 0 0; padding: .1rem .45rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+/* Une ligne d'alerte prend la place d'une ligne de résumé, deux la prennent
+   toutes : la hauteur ne bouge pas, c'est le résumé qui cède. */
+body.ciel-noeud #boussole-parole:has(.parole-signal) .parole-texte,
+body.ciel-noeud #boussole-parole:has(.parole-cockpit) .parole-texte { -webkit-line-clamp: 1; }
+body.ciel-noeud #boussole-parole:has(.parole-signal):has(.parole-cockpit) .parole-texte { display: none; }
+body.ciel-noeud #boussole-parole .parole-action {
+  position: absolute; left: .9rem; right: .9rem; bottom: .45rem; margin: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  /* `--accent-fonce` est une encre de PARCHEMIN : sur le voile de nuit de la
+     coque, la consigne ne se lisait plus (visible sur la capture de Paul). */
+  color: rgba(205, 195, 173, .78);
+}
+/* Le blason, vignette à gauche, hors du flux : il ne pousse plus les lignes. */
+body.ciel-noeud #boussole-parole:has(.parole-blason) { padding-left: 3.6rem; }
+body.ciel-noeud #boussole-parole .parole-blason {
+  position: absolute; left: .7rem; top: .6rem; width: 2.4rem; margin: 0; float: none;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
