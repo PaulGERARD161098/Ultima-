@@ -77,3 +77,13 @@
 body.a-finubar #boussole-parole {
   bottom: calc(1rem + env(safe-area-inset-bottom) + var(--fb-hauteur, 0px) + 12px);
 }
+
+/* UNE VOIX, UNE FOIS (26/09). Quand le dock de Léo porte la recommandation de
+   Finubar (`body.a-leo-propose`, posée par `js/leo-navigation.mjs`), la colonne
+   « Léo — commençons par ça » la répétait mot pour mot, trente pixels plus bas.
+   Le dock la garde — il a le bouton « Commencer » ; le bandeau rend sa colonne
+   aux signaux. Sans dock (pas de session Léo), rien ne change. */
+body.a-leo-propose .fb-action { display: none; }
+@media (min-width: 861px) {
+  body.a-leo-propose .fb-bandeau { grid-template-columns: minmax(180px, 230px) 1fr; }
+}

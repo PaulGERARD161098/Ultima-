@@ -962,3 +962,78 @@ Sabotage (remise à zéro du cache retirée) : **1 rouge** (10,0 px).
 **Résisté** : le harnais est découvert tout seul par `tests/lancer.sh` (CI
 comprise) ; RIVEN (`smoke-ciel`) inchangé ; le clic exact 23/23.
 Harnais final : **122 verdicts, 0 rouge**.
+
+---
+
+## 20. Le socle — plus rien ne se recouvre au bas de l'écran (26/09, capture de Paul)
+
+**Paul, capture à l'appui (RENOBOOST IA isolé, session ouverte) :** *« beaucoup
+de chevauchements, je ne suis pas fan — résous ça pour que ce soit clair, organisé
+et ergonomique ; une fois fait, tu me montres. »*
+
+### Ce qui était cassé — lu dans le code, puis mesuré
+
+| Constat | Source |
+|---|---|
+| Le cartouche de parole se pose à « bandeau + 12 px »… et le dock de Léo **au même endroit** : ils se recouvrent **par construction** | `css/finubar-bandeau.css` l. 77 · `css/leo.css` l. 481 |
+| Le cadrage du ciel ne connaissait pas le dock (arrivé après lui) | `margesDuMobilier`, `js/ciel-noeud.mjs` |
+| La parole grandit avec son texte (139 px sur RENOBOOST IA) : le ciel réservait la hauteur du moment, un cap plus bavard recouvrait une étoile | `css/ciel-noeud.css` (`min-height` seul) |
+| La recommandation de Léo était dite **deux fois** : dans le dock et dans la colonne « Léo — commençons par ça » du bandeau | `js/leo-navigation.mjs` · `js/finubar-bandeau.mjs` |
+| Au téléphone, sur l'accueil, le ciel n'avait plus que **166 px sur 844**, et trois étoiles sous la parole | mesuré |
+
+### Le parti pris — un SOCLE, une voix
+
+1. **De bas en haut, sans recouvrement** : le bandeau Finubar, le dock de Léo, le
+   cartouche de parole. Les deux hauteurs sont mesurées (`--fb-hauteur`,
+   `--leo-dock-hauteur`), jamais supposées.
+2. **Le ciel réserve tout le socle**, et recadre quand le bandeau ou le dock
+   changent de taille — **jamais au survol** : la parole n'est pas observée, sa
+   hauteur est fixe. Sinon l'étoile partirait sous le curseur (le clic raté du lot 1).
+3. **Le cartouche de parole est compact et de hauteur fixe** (6,4 rem) : nom et
+   état sur une ligne, résumé sur deux au plus, consigne épinglée en bas, et
+   relisible (elle était en encre de parchemin sur la nuit).
+4. **Une voix, une fois** : quand le dock porte la recommandation, le bandeau
+   retire sa colonne « Léo » et rend la place aux signaux.
+5. **Au téléphone, sur l'accueil seulement**, la parole se retire : un téléphone ne
+   survole pas, et elle n'y redisait que le foyer, que le fil d'Ariane nomme déjà.
+   Ailleurs (pas de bandeau), elle garde sa place au-dessus du dock.
+
+### Mesures — `tests/smoke-socle.mjs` (écran de Paul reproduit : index, session, 6 dépôts sous RENOBOOST IA, dock monté)
+
+**Rouge d'abord : 19 rouges sur 44** (parole × dock à toutes les tailles, étoiles
+sous la parole à 390 px, recommandation dite deux fois partout) → **0 sur 44**.
+
+| Écran | Hauteur de ciel libre avant | après |
+|---|---|---|
+| RENOBOOST IA · 1872 × 850 | 338 px, **avec** recouvrements | 309 px, sans |
+| RENOBOOST IA · 1280 × 800 | 288 px, **avec** recouvrements | 259 px, sans |
+| RENOBOOST IA · 390 × 844 | **166 px**, 2 étoiles sous la parole | **301 px** |
+
+Le bureau rend ~30 px : c'est le prix d'un étage qui ne recouvre plus rien. Le
+téléphone en gagne 135.
+
+**Éprouvé du côté où ça cède** : la règle d'empilement retirée → **6 rouges** ;
+le dock retiré du cadrage → **3 rouges**, dont une étoile sous le dock que le clic
+n'atteint plus — exactement le symptôme de la capture.
+
+**Et le survol ne déplace rien** (bureau, 1872 et 1280) : 0 étoile déplacée,
+cartouche du survol sans recouvrement.
+
+**Le patrimoine** : `npm test` **42/42** ; `bash tests/lancer.sh` sortie 0,
+**45/45** harnais (les 44 d'avant + `smoke-socle`), dont `smoke-lv4-coque`,
+`smoke-accueil-finubar`, `smoke-leo-partout` et `smoke-clic-exact` inchangés.
+
+### Limites, nommément
+
+- Le dock est **monté par le harnais** : `js/leo-partout.js` ne le pose qu'avec une
+  vraie session Supabase, que le bac à sable n'a pas. Ce qui est prouvé est la mise
+  en page, pas la condition de montage.
+- À 1280 × 800, le nom le plus bas (RENOBOOST-CONSOLE) finit **8 px** au-dessus du
+  cartouche : la marge prévue, tenue, mais serrée.
+- Le cartouche compact tronque un résumé de plus de deux lignes (points de
+  suspension) ; le texte entier reste dans le DOM du cartouche et dans le registre.
+  ⚠️ **L'étiquette accessible d'une étoile ne porte PAS le résumé** — son nom, son
+  type, son état et ses liens seulement (`js/ciel.js` l. 1118, lu). Donc au
+  téléphone, sur l'accueil, où la parole se retire, **le résumé n'est plus dit du
+  tout**. Assumé pour ce lot (le fil nomme le foyer, l'étoile se nomme elle-même),
+  mais c'est une perte, et elle est écrite ici plutôt que tue.

@@ -320,7 +320,11 @@ export function rendre(idNoeud, options = {}) {
     // sur un bouton du bandeau. L'écran répond, et se trompe.
     const legende = doc.querySelector('.ciel-noeud-plateau > .ciel-legende');
     const bandeau = doc.getElementById('finubar-bandeau');
-    for (const el of [parole, legende, bandeau]) {
+    // LE DOCK DE LÉO AUSSI (26/09). Il est arrivé après ce calcul, et le calcul
+    // ne le connaissait pas : sur la capture de Paul, une étoile était peinte
+    // sous le cartouche, lui-même posé sous le dock. Le socle se lit en entier.
+    const dock = doc.getElementById('leo-dock');
+    for (const el of [parole, legende, bandeau, dock]) {
       if (!el) { continue; }
       const r = el.getBoundingClientRect();
       if (r.height > 0) { bas.push(window.innerHeight - r.top); }
@@ -638,6 +642,37 @@ export function rendre(idNoeud, options = {}) {
   // Il n'existe que là où la coque en pose le conteneur — l'accueil aujourd'hui.
   // Un clic sur un signal ISOLE la branche du projet : un signal qu'on ne peut
   // pas suivre est une notification, et une notification ne fait rien avancer.
+  // ---- LE SOCLE BOUGE : on remesure, et le ciel recadre (26/09) ----
+  // Le bandeau change de hauteur APRÈS sa pose (le dock retire sa colonne
+  // « Léo » en double), et le dock arrive quand la session est là. Les deux
+  // sont des pièces du socle : quand l'une change de taille, la hauteur posée
+  // en variable doit suivre, et le ciel doit rendre la place.
+  // ⛔ LA PAROLE N'EST PAS OBSERVÉE, À DESSEIN. Son contenu change au survol ;
+  // recadrer à ce moment déplacerait l'étoile sous le curseur — exactement le
+  // clic raté du lot 1. Sa hauteur est FIXE (`css/leo.css`), sa place est donc
+  // réservée une fois pour toutes.
+  function mesurerBandeau() {
+    const conteneur = doc.getElementById('finubar-bandeau');
+    if (!conteneur) { return; }
+    doc.documentElement.style.setProperty('--fb-hauteur',
+      Math.round(conteneur.getBoundingClientRect().height) + 'px');
+  }
+  let recadrageDemande = false;
+  function socleABouge() {
+    if (recadrageDemande) { return; }
+    recadrageDemande = true;
+    window.requestAnimationFrame(() => {
+      recadrageDemande = false;
+      mesurerBandeau();
+      if (vue && typeof vue.ajusterCadre === 'function') { vue.ajusterCadre(); }
+    });
+  }
+  doc.addEventListener('ultima:mobilier', socleABouge);
+  const bandeauObserve = doc.getElementById('finubar-bandeau');
+  if (bandeauObserve && typeof ResizeObserver === 'function') {
+    new ResizeObserver(socleABouge).observe(bandeauObserve);
+  }
+
   function poserBandeau(agregat) {
     const conteneur = doc.getElementById('finubar-bandeau');
     if (!conteneur) { return; }
@@ -657,8 +692,7 @@ export function rendre(idNoeud, options = {}) {
     // MESURÉE et posée en variable : une constante serait fausse au premier
     // signal long, et fausse deux fois entre le téléphone et l'écran large.
     doc.body.classList.toggle('a-finubar', peint);
-    doc.documentElement.style.setProperty('--fb-hauteur',
-      Math.round(conteneur.getBoundingClientRect().height) + 'px');
+    mesurerBandeau();
     // Les marges utiles du ciel dépendent elles aussi de cette hauteur ; elles
     // sont relues au prochain dessin, qui suit immédiatement (voir l'appelant).
   }

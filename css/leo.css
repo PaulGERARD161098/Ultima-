@@ -481,6 +481,29 @@ body:has(.leo-dock) { padding-bottom: 5.5rem; }
 body.a-finubar .leo-dock {
   bottom: calc(max(.75rem, env(safe-area-inset-bottom)) + var(--fb-hauteur, 0px) + 12px);
 }
+/* LE SOCLE, DANS CET ORDRE ET SANS RECOUVREMENT (26/09, capture de Paul).
+   De bas en haut : le bandeau Finubar, le dock de Léo, le cartouche de parole.
+   Jusqu'ici la parole se posait à « bandeau + 12 px »… c'est-à-dire sur le dock,
+   arrivé après elle. Les deux hauteurs sont MESURÉES (`--fb-hauteur` par
+   `js/ciel-noeud.mjs`, `--leo-dock-hauteur` par `js/leo-navigation.mjs`).
+   `html` en tête : ces règles doivent l'emporter sur `body.ciel-noeud
+   #boussole-parole` et `body.a-finubar #boussole-parole`, de même poids, quel
+   que soit l'ordre de chargement des feuilles. */
+html body.a-leo-dock #boussole-parole {
+  bottom: calc(max(.75rem, env(safe-area-inset-bottom)) + var(--leo-dock-hauteur, 58px) + 12px);
+}
+html body.a-leo-dock.a-finubar #boussole-parole {
+  bottom: calc(max(.75rem, env(safe-area-inset-bottom)) + var(--fb-hauteur, 0px) + 12px
+    + var(--leo-dock-hauteur, 58px) + 12px);
+}
+/* Au téléphone, sur l'accueil, le socle porte déjà le bandeau ET le dock : un
+   troisième étage laissait au ciel 166 px sur 844 (mesuré). Un téléphone ne
+   survole pas ; la parole n'y servait qu'à redire le foyer, que le fil
+   d'Ariane nomme déjà en haut. Elle se retire donc — là seulement : sans
+   bandeau, elle garde sa place au-dessus du dock. */
+@media (max-width: 700px) {
+  html body.a-leo-dock.a-finubar #boussole-parole { display: none; }
+}
 
 .leo-nav-voile { position: fixed; inset: 0; z-index: 2040; padding: max(5vh, 1rem); background: rgba(1,4,9,.78); }
 .leo-nav-voile[hidden] { display: none; }

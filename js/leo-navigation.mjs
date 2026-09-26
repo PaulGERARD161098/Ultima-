@@ -104,6 +104,20 @@ export function monterNavigationLeo({ bouton, ouvrirLeo, doc = document } = {}) 
 
   dock.append(identite, contexte, reprendre, chercher, bouton);
   doc.body.appendChild(dock);
+  // LE DOCK DIT OÙ IL EST (26/09). Il se pose au bas de l'écran, là où vivent
+  // déjà le cartouche de parole et le bandeau Finubar : sans cette annonce, la
+  // parole se posait EXACTEMENT sur lui (capture de Paul) et le ciel peignait
+  // des étoiles dessous. La hauteur est MESURÉE (elle change avec la largeur),
+  // posée en variable pour la feuille, et l'événement dit au ciel de recadrer.
+  // Ni l'un ni l'autre ne bouge au survol : le dock ne change pas de taille.
+  doc.body.classList.add('a-leo-dock');
+  function annoncer() {
+    const h = Math.round(dock.getBoundingClientRect().height);
+    doc.documentElement.style.setProperty('--leo-dock-hauteur', h + 'px');
+    doc.dispatchEvent(new CustomEvent('ultima:mobilier'));
+  }
+  annoncer();
+  if (typeof ResizeObserver === 'function') { new ResizeObserver(annoncer).observe(dock); }
 
   const voile = element(doc, 'div', 'leo-nav-voile');
   voile.hidden = true;
@@ -171,6 +185,12 @@ export function monterNavigationLeo({ bouton, ouvrirLeo, doc = document } = {}) 
     if (!recommandation) { return; }
     contexte.textContent = `Je te propose : ${recommandation.projet} · ${recommandation.faire}`;
     dock.classList.add('leo-dock--proactif');
+    // UNE VOIX, UNE FOIS. Le bandeau Finubar porte la même recommandation dans
+    // sa colonne « Léo — commençons par ça » : la dire deux fois à l'écran,
+    // c'est demander à Paul laquelle lire. Le dock la porte avec son bouton
+    // « Commencer » ; la classe permet au bandeau de retirer son double.
+    doc.body.classList.add('a-leo-propose');
+    doc.dispatchEvent(new CustomEvent('ultima:mobilier'));
     if (recommandation.destination) {
       actionRapide = recommandation.destination;
       reprendre.disabled = false;
