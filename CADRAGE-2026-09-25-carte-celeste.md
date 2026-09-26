@@ -475,7 +475,7 @@ entretien de vingt minutes, et impeccable refuse `shape`/`critique` sans lui).
 
 1. **Les étoiles de navigation sont posées sur une COURONNE**, pas en figure.
    `couronne: true` (`js/ciel-noeud.mjs`, options du moteur) appelle
-   `disposerEnCouronne` (`js/ciel.js` l. 288) : n points sur une ellipse,
+   `disposerEnCouronne` (`js/ciel.js`, l. 288 au commit `76776ca`) : n points sur une ellipse,
    répartis à angles égaux, les noms longs aux positions verticales. C'est un
    standard **tranché par Paul le 17/08** (« les mêmes standards partout ») pour
    de bonnes raisons mesurées — l'occupation du cadre et la largeur des noms.
@@ -484,7 +484,7 @@ entretien de vingt minutes, et impeccable refuse `shape`/`critique` sans lui).
    « constellations brutes » est, pour une bonne part, **la couronne elle-même**.
    D'où l'arbitrage **A8** (§14.2) — et il se tranche sur capture, pas avant.
 2. **La taille d'une étoile vient de son nombre de liens** (`magnitudes`, l. 387 ;
-   rayon l. 1259-1260 : `R_ETOILE_MIN + (mag / magMax) × 3,2`). Aujourd'hui les
+   rayon l. 1259-1260, au commit `76776ca` : `R_ETOILE_MIN + (mag / magMax) × 3,2`). Aujourd'hui les
    écrans de navigation n'ont aucun lien : toutes les étoiles ont la même taille.
    ⛔ **Si les traits d'astérisme passaient par `relations`, l'étoile au milieu
    d'une chaîne grossirait par accident** — un éclat qui ne dirait rien, sinon la
@@ -492,7 +492,7 @@ entretien de vingt minutes, et impeccable refuse `shape`/`critique` sans lui).
    entre par un champ **explicite**.
 3. **`PRODUIT.md` n'est pas qu'une vision périmée.** Il porte aussi le **modèle de
    données** (l. 34), le **contrat d'API** (l. 118) et les **conventions du front**
-   (l. 134) — et **quatre agents** le déclarent « contexte obligatoire »
+   (l. 134 — lignes d'avant le lot 0, qui a réduit le fichier) — et **quatre agents** le déclarent « contexte obligatoire »
    (`graphisme`, `interface-ux`, `front-carto`, `leo`). Le supprimer effacerait
    leur contrat. ⇒ A3 se précise sans se renverser : **la vérité produit va dans
    `PRODUCT.md`, les contrats techniques restent dans `PRODUIT.md`**, réduit à eux.
@@ -542,7 +542,7 @@ ne trouve plus de renvoi vivant vers une section qui a quitté le fichier.
 | Règle | Fichier | Forme |
 |---|---|---|
 | Le **rang** (A5) : un cap qui CONTIENT est une tête, les autres des feuilles | `js/adaptateur-lv4.mjs` (`versCiel` et `isolement`) | un champ `poids` par nœud : `1` s'il a des enfants, `0` sinon — lu dans le registre, jamais deviné |
-| L'**éclat par le rang** | `js/ciel.js`, rayon l. 1259 | option `eclatParPoids`, **inactive par défaut** : la taille lit `poids` au lieu du nombre de liens ; amplitude réglée sur la maquette |
+| L'**éclat par le rang** | `js/ciel.js`, calcul du `rayon` des étoiles | option `eclatParPoids`, **inactive par défaut** : la taille lit `poids` au lieu du nombre de liens ; amplitude réglée sur la maquette |
 | L'**arbre** (A2) | `js/ciel.js` | fonction **pure** `asterisme(points)` — arbre couvrant minimal (Prim, n ≤ 24), calculé **par constellation** sur les coordonnées **planes** de la disposition, donc sans croisement ; exposée sur `window.UltimaCiel` pour être testée sans DOM |
 | Le **tracé** des traits | `js/ciel.js` | option `asterisme`, **inactive par défaut** : un groupe `ciel-asterisme` à part, `aria-hidden`, or pâle `#d8bd82` déjà employé, ~0,6 px, opacité ~0,35 ; **hors de `relations`** (constat 2) et **non allumé au survol** |
 | La **disposition** (A8) | `js/ciel.js` | la couronne reste ; une variante `disposition: 'figure'`, déterministe (graine = id), n'existe que si A8 la retient |
@@ -660,3 +660,27 @@ quitté `PRODUIT.md`.
 
 **Suite** : lot 2 (la figure), au go de Paul — harnais pur d'abord, puis la
 maquette V1 / V2, puis A8 sur capture.
+
+---
+
+## 16. Dry run DR — 11:21 UTC le 26/09, sur le §14 (palier 20 min)
+
+**Sondé** : chaque « l. N » du §14 remesuré contre la tête de la branche ; les
+chiffres du tableau « ce que le rang change » relus dans le registre ; les
+promesses du §14 confrontées à ce que le code porte.
+
+**Cédé, et corrigé sur place** : ⚠️ **les numéros de ligne du §14 avaient
+périmé dans la journée**, parce que le lot 2 a ajouté ~180 lignes à `js/ciel.js`
+(la couronne est passée de l. 288 à 339, `magnitudes` de 387 à 500, le rayon de
+1259 à 1424) et que le lot 0 a réduit `PRODUIT.md` (ses trois sections sont
+passées aux l. 14, 37, 53). Un renvoi « l. 288 » juste le matin désignait autre
+chose l'après-midi. Les citations portent désormais **le commit où elles ont été
+lues** (`76776ca`), et le tableau du §14.2 cite la **fonction**, pas la ligne.
+⇒ Dans un cadrage qui précède un lot de code, une ligne citée se date par son
+commit, sinon le lot qu'elle annonce la rend fausse.
+
+**Résisté** : les renvois de `js/ciel-noeud.mjs` (l. 565, 630, 683) — ce fichier
+n'a pas été touché, ils désignent toujours ce qu'ils disent ; `CLAUDE.md` l. 116
+et `ROADMAP-SITE.md` l. 25 ; le tableau du rang (relu : GRIMA 2, NAGA 3,
+NICOL BOLAS 4, RIVEN 0, ALTHEA 0) ; A7 — aucune donnée ne porte les anneaux de
+droits, vérifié (`cible: null` des astres dans `js/adaptateur-finubar.mjs`).
