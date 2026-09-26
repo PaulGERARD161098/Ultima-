@@ -224,7 +224,12 @@ export function rendre(idNoeud, options = {}) {
       const bouton = doc.createElement('button');
       bouton.type = 'button';
       bouton.className = 'ciel-fil-etape';
-      bouton.textContent = n.nom || id;
+      // LA RACINE S'APPELLE « Accueil » DANS LE FIL (critique impeccable, 26/09).
+      // Au registre, la racine et la supra-division personnelle portent le même
+      // nom, ULTIMA — le piège des deux « Ultima » du 07/08 : le fil pouvait lire
+      // « ULTIMA › ULTIMA › NAGA ». Seul le fil change ; le registre, les
+      // étoiles et le titre « Ultima Lv3 » gardent leurs noms.
+      bouton.textContent = id === 'racine' ? 'Accueil' : (n.nom || id);
       // `textContent` et non `innerHTML` : le nom vient du registre, mais un
       // bouton de navigation n'a aucune raison d'accepter du balisage.
       bouton.addEventListener('click', () => {
@@ -686,18 +691,24 @@ export function rendre(idNoeud, options = {}) {
     new ResizeObserver(socleABouge).observe(bandeauObserve);
   }
 
+  // ALLER AU PROJET — le clic d'un signal du bandeau ET le « Y aller » du dock
+  // de Léo passent par ici, et par ici seulement : deux chemins vers le même
+  // geste finiraient par diverger. Rend `true` si le ciel a bougé.
+  function allerAuProjet(projet) {
+    const idAstre = Object.keys(registre).find((k) => registre[k].nom === projet);
+    if (!idAstre) { return false; }
+    // Le PARENT de l'astre : c'est lui qu'on isole, l'astre lui-même n'ayant
+    // pas d'enfants. Le chemin se LIT dans le registre, il ne se devine pas.
+    const suite = chemin(idAstre, registre);
+    const parent = suite.length > 1 ? suite[suite.length - 2] : null;
+    if (parent && parent !== idNoeud && descendDe(idNoeud, parent, registre)) { isoler(parent); return true; }
+    return false;
+  }
+
   function poserBandeau(agregat) {
     const conteneur = doc.getElementById('finubar-bandeau');
     if (!conteneur) { return; }
-    const peint = poserFinubarBandeau(conteneur, agregat, (projet) => {
-      const idAstre = Object.keys(registre).find((k) => registre[k].nom === projet);
-      if (!idAstre) { return; }
-      // Le PARENT de l'astre : c'est lui qu'on isole, l'astre lui-même n'ayant
-      // pas d'enfants. Le chemin se LIT dans le registre, il ne se devine pas.
-      const suite = chemin(idAstre, registre);
-      const parent = suite.length > 1 ? suite[suite.length - 2] : null;
-      if (parent && parent !== idNoeud && descendDe(idNoeud, parent, registre)) { isoler(parent); }
-    });
+    const peint = poserFinubarBandeau(conteneur, agregat, allerAuProjet);
     // ⛔ LA PAROLE DE LÉO REMONTE AU-DESSUS DU BANDEAU. Les deux cartouches
     // sont `position: fixed` au bas de l'écran, au même `z-index` : le dernier
     // arrivé recouvre l'autre. Constaté en capture le 02/09 — le résumé du cap
@@ -743,7 +754,10 @@ export function rendre(idNoeud, options = {}) {
         });
       },
       ligneVivante,
-      signalDe
+      signalDe,
+      // Pour le dock de Léo (`js/leo-navigation.mjs`) : suivre la recommandation
+      // de Finubar quand elle vise un projet greffé, absent du registre statique.
+      allerAuProjet
     };
     // Le pont de session (js/boussole-auth.js) appelle `UltimaBoussole` : on
     // répond au même nom pour ne pas avoir à le modifier. Une coque au ciel et
