@@ -21,6 +21,7 @@
 <link rel="stylesheet" href="../css/styles.css">
 <link rel="stylesheet" href="../css/ciel.css">
 <link rel="stylesheet" href="../css/stellaire.css">
+<link rel="stylesheet" href="../css/ciel-noeud.css">
 <link rel="stylesheet" href="preview-carte-celeste.css">
 </head>
 <body>
@@ -43,7 +44,11 @@
 </header>
 <main class="mq-scene-cadre">
   <p id="mq-legende" class="mq-legende"></p>
-  <div id="ciel-scene" class="ciel-scene mq-scene"></div>
+  <!-- Le VRAI plateau des coques, pour que la règle des noms (css/ciel-noeud.css,
+       lot 2a) s'applique telle qu'en production — jamais recopiée ici. -->
+  <div class="ciel-noeud-plateau mq-plateau">
+    <div id="ciel-scene" class="ciel-scene mq-scene"></div>
+  </div>
 </main>
 <footer class="mq-mesure">
   <p id="mq-mesure" aria-live="polite"></p>

@@ -891,3 +891,58 @@ mesures du §17.
 ### 18.4 Lot 3 — inchangé (§14.3), après 2b.
 
 **La prochaine action, unique** : le go de Paul sur le **lot 2a**.
+
+---
+
+## 19. Lot 2a — LIVRÉ le 26/09, sur go de Paul (« go lot 2a »)
+
+### Une correction du §18.1, d'abord
+
+Le §18.1 écrivait « au téléphone le viewBox est plus large que l'écran
+(échelle ≈ 0,87) ». **C'était vrai de la maquette, pas de la production** : en
+production à 390 px, `getScreenCTM().a` vaut **1**, et les noms rendaient
+**7,5 à 9,2 px**. L'échelle de 0,87 venait du cadre de la maquette. La conclusion
+ne change pas (le plancher était trop bas et n'était pas exprimé en pixels) ; la
+cause citée, si. Mesuré en ouvrant `ultima.html#naga` à 390 × 844.
+
+### Ce qui a été fait
+
+| Pièce | Où | Ce qu'elle fait |
+|---|---|---|
+| `plancherNom()` — **une** fonction pour les trois lecteurs du plancher | `js/ciel.js` | `max(7.5, plancherNomPx / échelle écran)` ; échelle lue sur `getScreenCTM`, mise en cache, relue à chaque redimensionnement ; **non retenue** tant que le SVG n'est pas dans le document |
+| Le repli de largeur plafonné à 1 | `js/ciel.js` | il ne peut plus **grossir** un nom sur un écran où le plancher dépasserait le plafond |
+| `plancherNomPx: 11` | `js/ciel-noeud.mjs` | sur les coques seulement ; RIVEN garde 7,5 |
+| Noms gravés : Georgia, capitales, `.12em` | `css/ciel-noeud.css` | `.ciel-noeud-plateau .ciel-nom` ; ni la taille ni la couleur ne changent ici |
+| Le harnais | `tests/smoke-noms-lisibles.mjs` | 5 écrans × 360 / 390 / 1280 : taille **rendue** ≥ 11 px, Georgia, capitales, zéro chevauchement, zéro hors cadre, verrou ≥ 2 noms |
+| La maquette | `design/preview-carte-celeste.*` | porte le **vrai** plateau (`css/ciel-noeud.css`) au lieu d'une copie de la règle |
+
+### Mesures
+
+**Le harnais, vu rouge puis vert** : **40 rouges sur 91** avant le lot (7,5 px,
+sans-serif, casse normale — chevauchements et hors cadre déjà verts : ce sont les
+témoins) → **0 rouge sur 91** après. Minimum rendu : **11,0 px** à 360 et 390 ;
+16,7 à 19,7 px à 1280 (inchangé : le plancher ne mord qu'au téléphone).
+
+**La maquette, V0 et V1, 390 et 1280** : sur les six écrans réels, **0
+chevauchement, 0 hors cadre, 0 trait × nom**, rang visible là où il y a deux
+rangs ; occupation égale à V0 à 1280, et à ±0,03 à 390.
+
+⚠️ **Le pire cas construit (24 étoiles × 20 caractères) cède un peu plus** :
+**4 chevauchements**, contre 2 à 3 au §17. Des noms plus grands dans le même
+anneau. Aucun écran réel n'en approche (6 étoiles au plus) ; le §18.2 disait
+qu'on ne relèverait pas le plancher pour lui seul, et on ne le fait pas.
+
+**Le patrimoine** : `npm test` **42/42** ; `bash tests/lancer.sh` sortie 0,
+**44/44** harnais (les 43 d'hier + `smoke-noms-lisibles`) — dont `smoke-ciel`
+(RIVEN, options non activées) et `smoke-clic-exact` 23/23 : les noms sont
+`pointer-events: none`, le clic n'a pas bougé.
+
+### Limites, nommément
+
+- **L'échelle écran est mise en cache** : elle se relit au redimensionnement et à
+  chaque nouveau rendu, pas quand la scène change de taille sans prévenir. C'est
+  le contrat existant du moteur (le viewBox lui-même suit la même règle). Vu dans
+  la maquette seulement : son tableau de mesure, en apparaissant, décale la scène
+  de quelques pixels, et un nom y lit **10,9 px**. Aucune coque ne le fait.
+- Le tap et la lecture sur un **vrai téléphone** ne sont pas prouvés : la session
+  n'a qu'un Chromium.

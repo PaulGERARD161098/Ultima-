@@ -842,6 +842,30 @@
     // Sans cadrage serré : aucun plafond, donc la ligne du nom se calcule
     // exactement comme hier (`Math.min(Infinity, …)` ne retire rien).
     var plafondNom = cadrageSerre ? PLAFOND_NOM : Infinity;
+    // LE PLANCHER DE LISIBILITÉ EST UNE TAILLE D'ÉCRAN — lot 2a (26/09).
+    // `7.5` est en unités du viewBox : il ne vaut 7,5 px que tant que le
+    // viewBox vaut l'écran. Mesuré en production : 7,5 px à 360 et 390 px de
+    // large, quand la revue demandait des noms qu'on lise le soir. L'option
+    // `plancherNomPx` exprime le plancher en pixels CSS et le convertit par
+    // l'échelle RÉELLE du SVG (`getScreenCTM`), relue à chaque redimensionnement.
+    // Inactive par défaut : RIVEN et tout autre appelant gardent 7,5 au pixel.
+    // ⛔ UNE seule fonction pour les trois endroits qui lisent le plancher (la
+    // pose du nom, le repli de largeur, le retrait des traits) : trois copies
+    // d'un seuil finissent par diverger.
+    var plancherNomPx = +options.plancherNomPx > 0 ? +options.plancherNomPx : 0;
+    var plancherCourant = null;
+    function plancherNom() {
+      if (!plancherNomPx) { return 7.5; }
+      if (plancherCourant !== null) { return plancherCourant; }
+      var ctm = null;
+      try { ctm = racine.getScreenCTM(); } catch (e) { ctm = null; }
+      // Pas encore dans le document (première image avant la mise en page) :
+      // on répond à l'échelle 1 SANS la retenir — figer 1 ici laisserait le
+      // plancher faux jusqu'au prochain redimensionnement.
+      if (!ctm || !isFinite(ctm.a) || ctm.a <= 0) { return Math.max(7.5, plancherNomPx); }
+      plancherCourant = Math.max(7.5, plancherNomPx / ctm.a);
+      return plancherCourant;
+    }
 
     function projeter(p) {
       // À plat : ni rotation ni perspective. Une échelle unique, les
@@ -1506,7 +1530,7 @@
         piece.nom.setAttribute('x', x);
         piece.nom.setAttribute('y', (y + rayon * 3.6 + 9).toFixed(1));
         piece.nom.setAttribute('font-size',
-          Math.max(7.5, Math.min(plafondNom, 10 * pr.echelle)).toFixed(1));
+          Math.max(plancherNom(), Math.min(plafondNom, 10 * pr.echelle)).toFixed(1));
         if (!piece.nom.classList.contains('ciel-nom--demande')) {
           // SUR UN MENU, la profondeur n'a pas le droit d'éteindre un nom.
           // Mesuré le 2026-08-13 : rendre les douze noms « permanents » n'en
@@ -1556,7 +1580,9 @@
         // lisibilité de 7,5.
         var dispo = Math.max(60, vbW - 2 * MARGE_HALO);
         if (plusLarge > dispo) {
-          var facteur = Math.max(7.5 / plafondNom, dispo / plusLarge);
+          // Plafonné à 1 : sur un écran où le plancher dépasserait le plafond,
+          // ce repli ne doit pas GROSSIR les noms qu'il est là pour réduire.
+          var facteur = Math.min(1, Math.max(plancherNom() / plafondNom, dispo / plusLarge));
           plafondNom = plafondNom * facteur;
           brut.forEach(function (b) { b.largeur = b.largeur * facteur; });
         }
@@ -1592,7 +1618,7 @@
       function retrait(p, id, ux, uy) {
         var r = p.rayon || R_ETOILE_MIN;
         var halo = r * 2.6;
-        var fs = Math.max(7.5, Math.min(plafondNom, 10 * p.echelle));
+        var fs = Math.max(plancherNom(), Math.min(plafondNom, 10 * p.echelle));
         var base = r * 3.6 + 9;
         var hw = demiNoms[id] || 40;
         var bx0 = -hw, bx1 = hw, by0 = base - fs * 0.8, by1 = base + fs * 0.3;
@@ -1822,6 +1848,9 @@
       if (vbW !== avant || vbH !== avantH) {
         racine.setAttribute('viewBox', '0 0 ' + vbW + ' ' + vbH);
       }
+      // L'échelle écran a pu changer même à viewBox égal (le SVG se pose en
+      // `meet` dans une boîte qui a bougé) : le plancher se relit.
+      plancherCourant = null;
       cam.cibleDistance = distanceIdeale() * zoom;
       relancer(); // à plat, la boucle dort : un cadre qui change la réveille
     }

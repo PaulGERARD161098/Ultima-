@@ -349,6 +349,10 @@ export function rendre(idNoeud, options = {}) {
       // Les deux capacités de l'étape ②, activées ici et nulle part ailleurs.
       cadrerSurLesEtoiles: true,
       tousLesNoms: true,
+      // Lot 2a (26/09) — le nom d'un cap ne descend pas sous 11 px D'ÉCRAN.
+      // Le plancher du moteur (7,5) est en unités du viewBox : mesuré, il
+      // rendait 7,5 px à 360 et 390 px de large. `tests/smoke-noms-lisibles`.
+      plancherNomPx: 11,
       // LV5 — LA COUCHE DE FOND (P1). Validée par Paul le 2026-08-16 sur la
       // maquette : « fond avec les étoiles, génial ». Elle remplace les 130
       // grains SVG fixes par un champ dont la densité suit la surface (1 266 à

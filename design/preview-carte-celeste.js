@@ -47,7 +47,7 @@ function peindre() {
   window.UltimaCiel.rendre(scene, donnees, Object.assign({
     // Les options de la production (`js/ciel-noeud.mjs`), telles quelles.
     libellesType: { cap: '' }, libellesStatut: {},
-    cadrerSurLesEtoiles: true, tousLesNoms: true, fond: true, couronne: true,
+    cadrerSurLesEtoiles: true, tousLesNoms: true, fond: true, couronne: true, plancherNomPx: 11,
   }, VARIANTES[variante].options));
   scene.querySelectorAll('g.ciel-etoile[data-noeud-id]').forEach((g) => {
     const a = e.reg === GREFFE && APPELS[g.dataset.noeudId];
