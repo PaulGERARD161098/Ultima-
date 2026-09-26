@@ -6,6 +6,13 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- ✴️ **SESSION 2026-09-26 (après-midi) — LOT 2 : LA FIGURE EST PRÊTE, RIEN N'EST ACTIVÉ.**
+  Astérisme (arbre couvrant minimal) et éclat par le rang dans `js/ciel.js`, options
+  inactives ; maquette `design/preview-carte-celeste.html` critiquée (impeccable, deux
+  évaluations isolées ; constats vérifiés puis corrigés). Corrigé en production : le
+  clavier couchait la constellation (877 px → 0). A8 (reco V1) et A9 (lisibilité des
+  noms) attendent Paul. Patrimoine 42 + 43 vert. Détail : carte-celeste §17.
+
 - 📜 **SESSION 2026-09-26 (suite) — LOT 0 LIVRÉ : `PRODUCT.md` existe.** Entretien
   `impeccable init` (trois inférences, toutes confirmées) ; `PRODUIT.md` réduit à ses
   contrats techniques (144 → 58 lignes) ; renvois vivants à jour (CLAUDE.md, ROADMAP-SITE,
@@ -23,7 +30,7 @@
   PREMIER et vu rouge sur `main` (15/21, tap compris) ; dépliage au survol retiré de
   `js/ciel-noeud.mjs` (A1) ; **écart au plan** : une garde `:focus-visible` dans
   `js/ciel.js` — l'appui de 150 ms faisait viser la caméra dès le `mousedown` (176 →
-  630 px) — soumise à Paul à la fusion. 21/21, patrimoine 41 + 46 vert. Détail :
+  630 px) — soumise à Paul à la fusion. 21/21, patrimoine 41 + 43 vert (« 46 » annoncé à tort le 25/09, corrigé le 26/09). Détail :
   `CADRAGE-2026-09-25-carte-celeste.md` §13. Reste : recette de Paul sur le preview.
 
 - 🗺️ **SESSION 2026-09-25 — LA CARTE CÉLESTE EST CADRÉE, RIEN N'EST CODÉ** (demande de Paul :

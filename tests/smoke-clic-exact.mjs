@@ -223,6 +223,36 @@ console.log('— Le clavier : Tab jusqu\'à NAGA, Entrée —');
   await contexte.close();
 }
 
+// ===========================================================================
+console.log('— Le clavier ne couche pas la constellation (critique impeccable, 26/09) —');
+// Mesuré par la revue de design du lot 2 : une tabulation faisait VISER
+// l'étoile, la caméra pivotait, et sur une couronne toutes les étoiles
+// tombaient sur la même verticale (étendue 799 px → 0 sur RENOBOOST IA).
+// La figure n'existait que pour la souris. Ici : ULTIMA isolé sur NAGA, puis
+// Tab jusqu'à une étoile — l'étendue horizontale ne doit pas s'effondrer.
+{
+  const { page, contexte } = await ouvrir({ fragment: '#naga' });
+  const etendue = () => page.evaluate(() => {
+    const xs = [...document.querySelectorAll('#ciel-noeud-scene .ciel-etoile[data-noeud-id] .ciel-zone')]
+      .map((z) => { const r = z.getBoundingClientRect(); return r.x + r.width / 2; });
+    return xs.length ? Math.max(...xs) - Math.min(...xs) : 0;
+  });
+  const avant = await etendue();
+  let atteinte = false;
+  for (let i = 0; i < 15 && !atteinte; i++) {
+    await page.keyboard.press('Tab');
+    atteinte = await page.evaluate(() => !!(document.activeElement
+      && document.activeElement.closest && document.activeElement.closest('#ciel-noeud-scene .ciel-etoile')));
+  }
+  await page.waitForTimeout(1500);
+  const apres = await etendue();
+  chiffres.etendueAvantTab = Math.round(avant); chiffres.etendueApresTab = Math.round(apres);
+  verifier('Verrou : la tabulation atteint bien une étoile', atteinte);
+  verifier('Tab garde la figure : l\'étendue ne perd pas plus de 5 %', avant > 50 && apres >= avant * 0.95,
+    `${Math.round(avant)} px → ${Math.round(apres)} px`);
+  await contexte.close();
+}
+
 verifier('Zéro erreur console', erreurs.length === 0, JSON.stringify(erreurs.slice(0, 3)));
 console.log('Mesures :', JSON.stringify(chiffres, null, 2));
 const ok = Object.values(verdicts).every((v) => v === true);

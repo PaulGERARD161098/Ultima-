@@ -952,8 +952,7 @@
     // chaîne — un éclat qui ne dirait rien que la forme de l'arbre. Il vit donc
     // dans son propre groupe, muet pour le lecteur d'écran (un trait n'a rien à
     // dire), et il ne s'allume pas au survol : ce n'est pas une relation.
-    // L'or pâle `#d8bd82` est celui que le produit emploie déjà pour ce qui est
-    // gravé ; aucune couleur n'est inventée.
+    // Sa couleur est une encre du produit, jamais l'or de l'appel (voir plus bas).
     var gAsterisme = null, piecesAsterisme = [];
     function calculerAsterisme() {
       while (gAsterisme.firstChild) { gAsterisme.removeChild(gAsterisme.firstChild); }
@@ -975,7 +974,11 @@
     }
     if (avecAsterisme) {
       gAsterisme = svg('g', {
-        'class': 'ciel-asterisme', 'aria-hidden': 'true', stroke: '#d8bd82',
+        // L'ENCRE PARCHEMIN `#cdc3ad` (`--encre-douce`, déjà au produit), PAS
+        // L'OR : l'or `#e6c67d` dit « il y a quelque chose à faire ici »
+        // (engagement 3 de PRODUCT.md). Des traits or convergeant vers une étoile
+        // qui appelle se liraient comme un chemin vers elle — critique du lot 2.
+        'class': 'ciel-asterisme', 'aria-hidden': 'true', stroke: '#cdc3ad',
         'stroke-linecap': 'round', fill: 'none'
       });
       calculerAsterisme();
@@ -1191,7 +1194,13 @@
       // n'atteignait plus aucune étoile. `:focus-visible` est faux sur un focus
       // donné par un pointeur, vrai sur un focus donné par Tab — c'est le
       // navigateur qui le dit, pas une minuterie.
-      if (g && parId[g.getAttribute('data-noeud-id')]
+      // ⛔ ET PAS SUR UNE COURONNE (critique impeccable du lot 2, 26/09). Viser
+      // fait pivoter la caméra vers l'étoile : sur un réseau en volume (RIVEN),
+      // c'est ce qui ramène une étoile de derrière. Sur une couronne, toutes les
+      // étoiles font déjà face au spectateur — et pivoter les couchait de
+      // profil : mesuré, 877 px d'étendue → 0 sur NAGA, toutes les étoiles sur
+      // une même verticale. La figure n'existait que pour la souris.
+      if (g && parId[g.getAttribute('data-noeud-id')] && !options.couronne
           && (!g.matches || g.matches(':focus-visible'))) {
         viser(parId[g.getAttribute('data-noeud-id')]);
       }
@@ -1386,8 +1395,22 @@
         p.el.setAttribute('cy', pr.sy.toFixed(1));
       });
 
+      // L'ÉCHELLE COMMUNE de l'éclat par le rang : la moyenne des échelles de
+      // l'image. Calculée AVANT la boucle des étoiles, qui en a besoin pour la
+      // première ; les projections faites ici sont reprises telles quelles.
+      var echelleCommune = 1;
+      if (eclatParPoids && pieces.length) {
+        var sommeEchelles = 0, nbEchelles = 0;
+        pieces.forEach(function (piece) {
+          var prc = projeter(piece.etoile);
+          projetes[piece.etoile.noeud.id] = prc;
+          if (prc) { sommeEchelles += prc.echelle; nbEchelles++; }
+        });
+        if (nbEchelles) { echelleCommune = sommeEchelles / nbEchelles; }
+      }
+
       pieces.forEach(function (piece) {
-        var pr = projeter(piece.etoile);
+        var pr = projetes[piece.etoile.noeud.id] || projeter(piece.etoile);
         projetes[piece.etoile.noeud.id] = pr;
         // ON NE MASQUE JAMAIS L'ÉTOILE QUI A LE FOCUS. `display: none` retire
         // l'élément de la séquence de tabulation, et le navigateur RENVOIE alors
@@ -1421,8 +1444,26 @@
         var surcroit = eclatParPoids
           ? (piece.etoile.noeud.poids ? AMPLITUDE_RANG : 0)
           : Math.min(3.2, (piece.mag / magMax) * 3.2);
-        var rayon = Math.max(1.6, Math.min(9,
-          (R_ETOILE_MIN + surcroit) * pr.echelle * 1.05));
+        // ⚠️ SOUS `eclatParPoids`, LA PROFONDEUR NE TOUCHE PLUS LA TAILLE.
+        // Mesuré par la critique du lot 2 : la perspective faisait varier une
+        // étoile de 6,3 à 7,7 à elle seule — une feuille au premier plan
+        // dépassait une tête au fond, et le rang devenait illisible. L'échelle
+        // est donc celle, commune, de l'image ; la profondeur reste portée par
+        // l'opacité.
+        var rayon;
+        if (eclatParPoids) {
+          // LE RANG EST UN RAPPORT, APPLIQUÉ SOUS LE PLAFOND. Premier jet :
+          // `(R_ETOILE_MIN + surcroît) × échelle`, borné à 9 — caméra proche,
+          // têtes ET feuilles atteignaient la borne et le rang disparaissait
+          // (mesuré : trois rayons à 7,74 sur la racine). Le plafond s'applique
+          // donc à la feuille, et la tête garde toujours son surcroît relatif.
+          var rapportRang = 1 + AMPLITUDE_RANG / R_ETOILE_MIN;
+          var baseRang = Math.max(1.6, Math.min(9 / rapportRang, R_ETOILE_MIN * echelleCommune * 1.05));
+          rayon = baseRang * (piece.etoile.noeud.poids ? rapportRang : 1);
+        } else {
+          rayon = Math.max(1.6, Math.min(9, (R_ETOILE_MIN + surcroit) * pr.echelle * 1.05));
+        }
+        pr.rayon = rayon;
         var op = opaciteProfondeur(pr.profondeur);
         var attenue = correspond && !correspond(piece.etoile.noeud);
         piece.g.setAttribute('opacity', (attenue ? op * 0.14 : op).toFixed(3));
@@ -1536,12 +1577,42 @@
           (0.55 + 0.75 * ((a.echelle + b.echelle) / 2)).toFixed(2));
       });
 
+      // LE TRAIT S'ARRÊTE AVANT L'ÉTOILE — la convention de gravure des cartes
+      // célestes, et le correctif d'un défaut mesuré par la critique du lot 2 :
+      // tout trait qui descendait d'une étoile traversait le nom posé sous elle
+      // (2 à 3 traversées par écran). On retire à chaque bout le halo, et, quand
+      // le trait part vers le bas, la hauteur du nom.
+      // Le retrait, c'est la SORTIE du trait hors du rectangle du nom, ou le
+      // halo si le trait ne passe pas par le nom. Premier jet : « s'il descend,
+      // la hauteur du nom » — faux pour un trait en diagonale, qui ressort par
+      // le CÔTÉ d'un nom large (ADRAMELECH, mesuré). Le rectangle suit la pose
+      // réelle du nom : centré sur l'étoile, ligne de base à `rayon × 3,6 + 9`,
+      // demi-largeur mesurée (`demiNoms`, au plafond de police : une borne
+      // haute, donc on retire un peu trop plutôt que pas assez).
+      function retrait(p, id, ux, uy) {
+        var r = p.rayon || R_ETOILE_MIN;
+        var halo = r * 2.6;
+        var fs = Math.max(7.5, Math.min(plafondNom, 10 * p.echelle));
+        var base = r * 3.6 + 9;
+        var hw = demiNoms[id] || 40;
+        var bx0 = -hw, bx1 = hw, by0 = base - fs * 0.8, by1 = base + fs * 0.3;
+        var tmin = -Infinity, tmax = Infinity;
+        if (Math.abs(ux) < 1e-9) { if (bx0 > 0 || bx1 < 0) { return halo; } }
+        else { var a1 = bx0 / ux, a2 = bx1 / ux; tmin = Math.max(tmin, Math.min(a1, a2)); tmax = Math.min(tmax, Math.max(a1, a2)); }
+        if (Math.abs(uy) < 1e-9) { if (by0 > 0 || by1 < 0) { return halo; } }
+        else { var b1 = by0 / uy, b2 = by1 / uy; tmin = Math.max(tmin, Math.min(b1, b2)); tmax = Math.min(tmax, Math.max(b1, b2)); }
+        return tmax > Math.max(tmin, 0) ? Math.max(halo, tmax + 3) : halo;
+      }
       piecesAsterisme.forEach(function (pa) {
         var a = projetes[pa.a], b = projetes[pa.b];
         if (!a || !b) { pa.el.setAttribute('display', 'none'); return; }
+        var dx = b.sx - a.sx, dy = b.sy - a.sy, lg = Math.hypot(dx, dy) || 1;
+        var ux = dx / lg, uy = dy / lg;
+        var ra = retrait(a, pa.a, ux, uy), rb = retrait(b, pa.b, -ux, -uy);
+        if (lg - ra - rb < 8) { pa.el.setAttribute('display', 'none'); return; }
         pa.el.removeAttribute('display');
-        pa.el.setAttribute('x1', a.sx.toFixed(1)); pa.el.setAttribute('y1', a.sy.toFixed(1));
-        pa.el.setAttribute('x2', b.sx.toFixed(1)); pa.el.setAttribute('y2', b.sy.toFixed(1));
+        pa.el.setAttribute('x1', (a.sx + ux * ra).toFixed(1)); pa.el.setAttribute('y1', (a.sy + uy * ra).toFixed(1));
+        pa.el.setAttribute('x2', (b.sx - ux * rb).toFixed(1)); pa.el.setAttribute('y2', (b.sy - uy * rb).toFixed(1));
         pa.el.setAttribute('opacity',
           (OPACITE_FIGURE * opaciteProfondeur((a.profondeur + b.profondeur) / 2)).toFixed(3));
         pa.el.setAttribute('stroke-width', (0.45 + 0.3 * ((a.echelle + b.echelle) / 2)).toFixed(2));

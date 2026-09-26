@@ -33,9 +33,9 @@
   "dernier_arret": {
     "le": "2026-09-26",
     "commit": "76776ca1d4639e3e7eff1ac2068500cafdb82de5",
-    "quoi": "Séance 26/09 : A2-A5 et A7 rendus ; lots 0/2/3 cadrés (carte-celeste §14) ; lot 0 livré — PRODUCT.md écrit après entretien impeccable init, PRODUIT.md réduit aux contrats."
+    "quoi": "Séance 26/09 : lots 0 et 2 livrés — PRODUCT.md ; figure des constellations prête (options inactives), maquette critiquée ; clavier qui couchait le ciel corrigé."
   },
-  "prochaine_action": "Go de Paul sur le lot 2 (la figure) : harnais unit-asterisme d’abord, puis maquette V1 couronne / V2 figure, puis A8 sur capture. Carte-celeste §14.2.",
+  "prochaine_action": "Paul tranche A8 sur capture (reco V1 couronne + arbre) et A9 (noms lisibles au téléphone). Puis activation sur les coques + smoke-carte-celeste. Carte-celeste §17.",
   "bloque_par": [
     "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
@@ -47,7 +47,7 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "Carte céleste : lots 1 et 0 livrés ; lots 2 et 3 cadrés §14, non ouverts. A8 (couronne ou figure) se tranche sur capture.",
+      "quoi": "Carte céleste : lots 0, 1, 2 livrés (lot 2 jusqu’à A8) ; lot 3 cadré. A8 et A9 attendent Paul, sur capture.",
       "depuis": "2026-09-25"
     },
     {

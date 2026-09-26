@@ -4285,3 +4285,13 @@ reviendra avec J3. **Entretien d'init** : les trois inférences confirmées tell
 quelles (Paul seul · l'interface unique avec Léo · quatre engagements : antique
 et sérieux, sécurité relevée, compter sans reprocher, le ciel est la
 navigation). `PRODUCT.md` écrit ; `PRODUIT.md` réduit à ses contrats techniques.
+
+## 2026-09-26 — Lot 2 : la figure est prête, A8 et A9 attendent Paul
+
+Go de Paul, « go lot 2 ». Moteur prêt en options inactives, maquette V0/V1/V2
+critiquée par impeccable (deux évaluations isolées, constats vérifiés par la
+mesure avant correction). **Corrigé en production au passage** : le clavier
+faisait pivoter la caméra et couchait la constellation (877 px → 0). **A8 :
+recommandation V1**, V2 n'égalant pas V1 sur les critères mesurés. **A9 ouvert** :
+lisibilité des noms au téléphone (7,5 px), noms en Georgia, cartouche de figure,
+caméra 3D. Détail : `CADRAGE-2026-09-25-carte-celeste.md` §17.

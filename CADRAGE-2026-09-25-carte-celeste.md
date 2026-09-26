@@ -441,7 +441,9 @@ assertion supprimée.
 **0 px** à 16, 100, 250 et 500 ms · tap → isolé · tap glissé de 6 px → rien
 (rotation, seuil 4 px — le POV adversaire du §7 est couvert, par événements
 synthétiques et non par un vrai doigt) · patrimoine complet **41 suites
-unitaires + 46 harnais navigateur, sortie 0**.
+unitaires + 43 harnais navigateur, sortie 0** *(corrigé le 26/09 : « 46 »
+comptait trois lignes de verdict comme des harnais — `ls tests/smoke-*.mjs` en
+donne 43)*.
 
 **Dry run DR (22:06)** — sondé : le diff en adversaire, l'enrôlement du harnais,
 le témoin. Cédé et corrigé : `idsDuNiveau` était devenu une variable **assignée
@@ -684,3 +686,88 @@ n'a pas été touché, ils désignent toujours ce qu'ils disent ; `CLAUDE.md` l.
 et `ROADMAP-SITE.md` l. 25 ; le tableau du rang (relu : GRIMA 2, NAGA 3,
 NICOL BOLAS 4, RIVEN 0, ALTHEA 0) ; A7 — aucune donnée ne porte les anneaux de
 droits, vérifié (`cible: null` des astres dans `js/adaptateur-finubar.mjs`).
+
+---
+
+## 17. Lot 2 — la figure : moteur prêt, maquette critiquée, A8 attend Paul (26/09)
+
+**Go de Paul : « go lot 2 ».** Livré jusqu'à l'arbitrage A8, pas au-delà : rien
+n'est activé sur les coques — la production n'affiche ni traits ni éclat par le
+rang. Un seul défaut de production est corrigé en passant (le clavier,
+ci-dessous) : il existait déjà, la figure l'a rendu visible.
+
+### Ce qui a été construit
+
+| Pièce | Où | Garde-fou |
+|---|---|---|
+| `asterisme(points)` — arbre couvrant minimal, pur | `js/ciel.js` | `tests/unit-asterisme.mjs`, écrit **avant**, vu rouge ; l'instrument refuse d'abord deux fausses figures ; deux sabotages rougissent |
+| Options `asterisme`, `eclatParPoids`, `disposition: 'figure'` — **inactives par défaut** | `js/ciel.js` | `smoke-ciel` (RIVEN) vert, options non activées |
+| `rang(noeud)` — 1 si le cap contient, 0 sinon | `js/adaptateur-lv4.mjs` | `unit-adaptateur-lv4` vert |
+| La maquette V0 / V1 / V2 : vraie greffe, fixture inventée, couche d'appel | `design/preview-carte-celeste.*` | mesure embarquée, témoin « aujourd'hui » |
+
+### La critique impeccable — deux évaluations isolées, puis vérifiées
+
+Deux sous-agents isolés (A : revue de design ; B : détecteur + navigateur).
+Détecteur : **0 constat** sur la maquette, en CLI comme dans le navigateur (le
+témoin `ultima.html` en porte 3, préexistants). Revue de design : **20/36**,
+« acceptable » — le monde est propre au produit, la figure l'était moins.
+
+⛔ **Les constats lourds de la revue ont été VÉRIFIÉS par la mesure avant d'être
+corrigés** — un rapport de sous-agent se vérifie, il ne se croit pas :
+
+| Constat | Mesure avant | Correctif | Mesure après |
+|---|---|---|---|
+| **Le clavier couche la constellation** (Tab fait pivoter la caméra) | étendue **877 px → 0** sur NAGA — **en production** | `focusin` ne vise plus sur une couronne | 877 → 877 ; contrôle ajouté à `smoke-clic-exact`, **vu rouge d'abord** |
+| **Le rang ne se voit pas** (la perspective l'emporte) | une feuille à 7,74 dépassait une tête à 6,88 | échelle commune ; puis le rang devient un **rapport sous le plafond** — le plafond à 9 écrasait têtes et feuilles (trois rayons à 7,74 sur la racine) | rang visible sur **tous** les écrans à deux rangs, aux deux largeurs |
+| **Les traits traversent les noms** | 2 · 2 · 3 · 1 traversées | le trait s'arrête à la **sortie du rectangle du nom** (premier jet « s'il descend » : faux en diagonale, ADRAMELECH le montrait) | **0** sur tous les écrans réels |
+| Traits en or, comme l'appel | — | encre parchemin `#cdc3ad`, déjà au produit ; l'or reste à « il y a quelque chose à faire » | vu sur capture, couche d'appel branchée |
+
+**Et deux fautes d'instrument, trouvées en regardant les captures** : la mesure
+écartait les noms pâles (0,25) et disait « 0 chevauchement » sur un pire cas où
+deux noms se couvraient ; elle mesurait à 0,9 s, avant que la caméra ne se pose.
+Corrigées dans la maquette, avec leur raison en commentaire.
+
+### Ce que disent les mesures pour A8
+
+| | V1 — couronne + arbre | V2 — figure + arbre |
+|---|---|---|
+| Occupation (écrans réels) | **égale à aujourd'hui** | plus basse sur 6 mesures sur 14 |
+| Noms qui se chevauchent | **aucun ajouté** | **1 ajouté** (RENOBOOST IA au téléphone) |
+| Traits n − 1, traits × noms, rang | tous tenus | tous tenus |
+| Identité de la forme | NAGA et la racine dessinent le même chevron (revue A) | chaque constellation a sa silhouette |
+
+**Selon la règle du §14.2, V2 ne se qualifie pas** : elle n'égale pas V1 sur les
+critères mesurés. **Recommandation : V1**, et chercher l'identité ailleurs que
+dans le déplacement des étoiles (A9, point 3). **C'est à Paul, sur capture.**
+
+### Limites, nommément
+
+- **Pire cas construit (24 étoiles)** : 16 à 21 traits sur 23 deviennent trop
+  courts une fois retirés du halo et des noms, et sont masqués — la figure y
+  disparaît. Aucun écran réel ne dépasse 6 étoiles aujourd'hui.
+- Le pire cas porte **2 à 3 chevauchements de noms qui existaient déjà**
+  (témoin « aujourd'hui »), non imputables au lot.
+- Le **tap sur un vrai téléphone** n'est toujours pas prouvé.
+
+### A9 — ce que la revue a trouvé hors de ce lot
+
+1. **Les noms font 7,5 px au téléphone** (plancher de `ciel.js`) : illisibles le
+   soir, alors que `PRODUCT.md` s'engage sur la lisibilité. Préexistant.
+2. **Les noms d'étoiles sont en sans-serif gris**, quand ce sont les noms propres
+   du produit ; la revue propose Georgia en capitales espacées, sur les écrans
+   de navigation seulement (RIVEN garde le sien).
+3. **Un cartouche qui nomme la figure** : l'identité d'une constellation sans
+   déplacer ses étoiles.
+4. **La question de la revue**, posée telle quelle : un ciel de navigation
+   a-t-il besoin d'une caméra 3D, qui brouillait le rang et la figure ?
+
+Recommandation : **1 et 2 dans un lot court, avant l'activation** (la
+lisibilité d'abord) ; **3 avec l'activation de V1** ; **4 non**, tant que la
+couronne protège (le clavier ne pivote plus, le rang ignore la profondeur).
+
+### ⚠️ Un incident, rattrapé avant de coûter
+
+Le serveur « live » d'impeccable, lancé par l'évaluation B, a écrit
+`.impeccable/live/server.json` — un **jeton local** — et un `git add -A` l'a
+embarqué dans un commit **jamais poussé**. Retiré de l'historique local,
+`.impeccable/live/` ajouté au `.gitignore`. Rien n'a quitté le conteneur.
