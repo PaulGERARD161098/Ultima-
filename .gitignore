@@ -23,3 +23,6 @@ supabase/.temp/
 # Serveur « live » d’impeccable : fichiers d’exécution locaux (pid, port, JETON).
 # Embarqué par erreur le 26/09 dans un commit jamais poussé, retiré avant push.
 .impeccable/live/
+# Archives de critique d'impeccable : locales ; la trace versionnée est le
+# cadrage (CADRAGE-2026-09-25-carte-celeste.md §24), pas un second document.
+.impeccable/critique/

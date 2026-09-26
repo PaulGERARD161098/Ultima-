@@ -70,6 +70,14 @@ function element(doc, tag, classe, contenu) {
 
 function aller(destination) {
   if (!destination) { return; }
+  // Un projet Finubar n'a pas de page : il vit au ciel, sous son parent. Le
+  // ciel sait y aller (`allerAuProjet`, le même chemin que les signaux du
+  // bandeau) ; ce module ne recalcule rien.
+  if (destination.projet) {
+    const ciel = window.UltimaCielNoeud;
+    if (ciel && typeof ciel.allerAuProjet === 'function') { ciel.allerAuProjet(destination.projet); }
+    return;
+  }
   if (destination.externe) { window.open(destination.cible, '_blank', 'noopener,noreferrer'); }
   else { window.location.href = destination.cible; }
 }
@@ -98,9 +106,21 @@ export function monterNavigationLeo({ bouton, ouvrirLeo, doc = document } = {}) 
   reprendre.type = 'button';
   reprendre.disabled = !recents[1];
   reprendre.title = recents[1] ? `Reprendre ${recents[1].nom}` : 'Aucun autre contexte récent';
-  reprendre.addEventListener('click', () => aller(actionRapide));
+  reprendre.addEventListener('click', () => {
+    // Un bouton ne répond jamais par le silence : si le projet recommandé
+    // n'est pas au ciel de cette page, on ouvre la recherche au lieu de rien.
+    if (actionRapide && actionRapide.projet) {
+      const ciel = window.UltimaCielNoeud;
+      const bouge = ciel && typeof ciel.allerAuProjet === 'function' && ciel.allerAuProjet(actionRapide.projet);
+      if (!bouge) { ouvrirPanneau(); }
+      return;
+    }
+    aller(actionRapide);
+  });
   const chercher = element(doc, 'button', 'leo-dock-action leo-dock-action--primaire', 'Aller à…');
   chercher.type = 'button';
+  // Le nom reste lu quand, au téléphone, le bouton se replie en loupe.
+  chercher.setAttribute('aria-label', 'Aller à… — chercher une destination');
 
   dock.append(identite, contexte, reprendre, chercher, bouton);
   doc.body.appendChild(dock);
@@ -166,6 +186,23 @@ export function monterNavigationLeo({ bouton, ouvrirLeo, doc = document } = {}) 
     });
   }
   function ouvrirPanneau() { voile.hidden = false; rendre(); saisie.focus(); }
+  // LE FOCUS RESTE DANS LA BOÎTE (critique impeccable, 26/09). Le panneau se
+  // déclare `aria-modal` ; sans piège, la 12ᵉ tabulation en sortait vers les
+  // étoiles cachées derrière le voile (mesuré). Tab et Maj+Tab bouclent sur
+  // ce qui est focalisable DANS le panneau, relu à chaque frappe : la liste
+  // des résultats change à chaque lettre tapée.
+  panneau.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') { return; }
+    const focalisables = [...panneau.querySelectorAll('button, input, [href], [tabindex]:not([tabindex="-1"])')]
+      .filter((el) => !el.disabled && el.getClientRects().length);
+    if (!focalisables.length) { return; }
+    const premier = focalisables[0], dernier = focalisables[focalisables.length - 1];
+    if (e.shiftKey && (doc.activeElement === premier || !panneau.contains(doc.activeElement))) {
+      e.preventDefault(); dernier.focus();
+    } else if (!e.shiftKey && doc.activeElement === dernier) {
+      e.preventDefault(); premier.focus();
+    }
+  });
   function fermerPanneau() { voile.hidden = true; chercher.focus(); }
   chercher.addEventListener('click', ouvrirPanneau);
   fermer.addEventListener('click', fermerPanneau);
@@ -183,7 +220,12 @@ export function monterNavigationLeo({ bouton, ouvrirLeo, doc = document } = {}) 
   function appliquerFinubar(agregat) {
     const recommandation = recommandationDepuisFinubar(agregat, liste);
     if (!recommandation) { return; }
-    contexte.textContent = `Je te propose : ${recommandation.projet} · ${recommandation.faire}`;
+    // Espace INSÉCABLE avant « : » (typographie française) : sans elle, la
+    // ligne pouvait se couper entre « propose » et ses deux-points.
+    contexte.textContent = `Je te propose\u00a0: ${recommandation.projet} · ${recommandation.faire}`;
+    // Le texte est souvent tronqué (points de suspension) : il reste entier au
+    // survol, et entier pour le lecteur d'écran.
+    contexte.title = contexte.textContent;
     dock.classList.add('leo-dock--proactif');
     // UNE VOIX, UNE FOIS. Le bandeau Finubar porte la même recommandation dans
     // sa colonne « Léo — commençons par ça » : la dire deux fois à l'écran,
@@ -191,10 +233,19 @@ export function monterNavigationLeo({ bouton, ouvrirLeo, doc = document } = {}) 
     // « Commencer » ; la classe permet au bandeau de retirer son double.
     doc.body.classList.add('a-leo-propose');
     doc.dispatchEvent(new CustomEvent('ultima:mobilier'));
-    if (recommandation.destination) {
-      actionRapide = recommandation.destination;
+    // LA RECOMMANDATION SE LANCE (critique impeccable, 26/09). Elle vise le
+    // plus souvent un projet Finubar — greffé au ciel, absent du registre
+    // statique : `destination` y est nulle, et Léo proposait une action
+    // qu'aucun bouton ne lançait (« Reprendre » restait grisé). Quand le ciel
+    // de la page sait aller au projet, le bouton devient « Y aller ».
+    const ciel = window.UltimaCielNoeud;
+    const auCiel = !recommandation.destination && ciel && typeof ciel.allerAuProjet === 'function';
+    if (recommandation.destination || auCiel) {
+      actionRapide = recommandation.destination || { projet: recommandation.projet };
       reprendre.disabled = false;
-      reprendre.textContent = 'Commencer';
+      reprendre.textContent = recommandation.destination ? 'Commencer' : 'Y aller';
+      reprendre.classList.add('leo-dock-action--propose');
+      dock.classList.add('leo-dock--propose');
       reprendre.title = recommandation.le
         ? `Priorité issue de Finubar, collectée le ${recommandation.le}`
         : 'Commencer la priorité proposée par Léo';
