@@ -1333,3 +1333,22 @@ encore** (`js/app.js`, `js/dictee.js`), et le mail du lien est rédigé côté S
 **Patrimoine** : `npm test` **44/44** (+ `unit-connexion-tutoiement`) ; `bash tests/lancer.sh`
 sortie 0, **49/49** harnais (+ `smoke-carte-celeste`, 162 verdicts), `smoke-tao` et
 `smoke-ciel` (RIVEN) verts sans retouche.
+
+### Dry run DR (palier 20 min, déclenché à 19:19, fait à 19:50)
+
+**Cédé — et corrigé dans le passage** : le contrôle « rien ne bouge en
+`reduced-motion` » relevait les traits à 1,5 s d'écart et concluait « immobile ».
+Rejoué **sans** la préférence : immobiles aussi, la caméra une fois posée. **Il ne
+pouvait pas échouer.** Remplacé par un contrôle APPARIÉ sur le seul mouvement que
+le lot ajoute, l'extinction de la figure : 0,22 s sans la préférence (témoin),
+0 s avec. **Sabotage** (ceinture `reduced-motion` retirée) → 2 rouges.
+
+**Sondé, et résisté** :
+- `unit-connexion-tutoiement` : « Consultez votre boîte mail » glissé dans
+  `js/boussole-auth.js` → rouge ; « vous recevez » dans `riven.html` → rouge ;
+- les deux harnais neufs sont bien exécutés : `run-unit.mjs` et `lancer.sh`
+  découvrent `unit-*` et `smoke-*` d'eux-mêmes, et la CI appelle ces deux scripts
+  (`npm test`, `npm run test:browser`) — ⚠️ sur PR et sur `main` seulement, pas sur
+  un simple push de branche ; d'où le patrimoine local avant chaque push ;
+- RIVEN : le correctif de la cible ne s'exerce que sous `eclatParPoids`
+  (`rayonCible = rayon` sinon) — `smoke-ciel` vert sans retouche.

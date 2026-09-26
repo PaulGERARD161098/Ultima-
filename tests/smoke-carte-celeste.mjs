@@ -15,7 +15,7 @@
 //     là où l'écran a deux rangs ;
 //   · l'extinction : quand le ciel s'efface autour d'un choix, la figure
 //     s'efface avec lui — sinon des traits pendraient vers des étoiles éteintes ;
-//   · `reduced-motion` : rien de ce que le lot ajoute ne bouge.
+//   · `reduced-motion` : rien de ce que le lot ajoute ne s'anime (témoin apparié).
 //
 // ⛔ VU ROUGE SUR LA TÊTE D'AVANT (options inactives). Chaque recherche
 // d'absence (« aucun trait vers une étoile absente », « aucun trait à travers
@@ -259,20 +259,37 @@ for (const ecran of ECRANS) {
   }
 }
 
-// ---- REDUCED-MOTION : rien de ce que le lot ajoute ne bouge ----
-// Deux relevés à 1,5 s d'écart des extrémités de chaque trait. Verrou : des
-// traits existent, sinon « rien ne bouge » serait vrai de rien.
-for (const ecran of [ECRANS[2], ECRANS[4]]) {
+// ---- REDUCED-MOTION : rien de ce que le lot ajoute ne s'anime ----
+// ⛔ PREMIER JET, VERT POUR RIEN (trouvé au dry run DR du 26/09) : il relevait
+// les extrémités des traits à 1,5 s d'écart et concluait « immobile » — mais
+// elles le sont AUSSI sans la préférence, la caméra une fois posée. Le contrôle
+// ne pouvait pas échouer. Le seul mouvement que le lot ajoute est l'EXTINCTION
+// de la figure (0,22 s) ; on la lit donc sous les DEUX préférences, et le
+// témoin sans préférence doit voir la transition — sinon l'instrument est aveugle.
+for (const ecran of [ECRANS[2], ECRANS[5]]) {
+  const lu = {};
+  for (const rm of ['no-preference', 'reduce']) {
+    const { page, contexte } = await ouvrir(ecran, [390, 844], { reducedMotion: rm });
+    lu[rm] = await page.evaluate(async () => {
+      const scene = document.getElementById('ciel-noeud-scene');
+      const g = scene && scene.querySelector('.ciel-asterisme');
+      if (!g) { return null; }
+      scene.classList.add('ciel-scene--isolant');
+      const cs = getComputedStyle(g);
+      const r = { transition: cs.transitionDuration, animation: cs.animationName,
+        traits: [...g.querySelectorAll('line')].map((l) => getComputedStyle(l).animationName) };
+      scene.classList.remove('ciel-scene--isolant');
+      return r;
+    });
+    await contexte.close();
+  }
   const cle = `${ecran.nom} reduced-motion`;
-  const { page, contexte } = await ouvrir(ecran, [390, 844], { reducedMotion: 'reduce' });
-  const releve = () => page.evaluate(() => [...document.querySelectorAll('#ciel-noeud-scene .ciel-asterisme line')]
-    .map((l) => ['x1', 'y1', 'x2', 'y2'].map((k) => l.getAttribute(k)).join(',')).join('|'));
-  const avant = await releve();
-  await page.waitForTimeout(1500);
-  const apres = await releve();
-  await contexte.close();
-  verifier(`${cle} : verrou — des traits sont peints`, avant.length > 0, `${avant.split('|').filter(Boolean).length}`);
-  verifier(`${cle} : aucun trait ne bouge`, avant.length > 0 && avant === apres);
+  const t = lu['no-preference'], r = lu.reduce;
+  verifier(`${cle} : témoin — sans la préférence, l'extinction s'anime`, !!t && t.transition !== '0s', t ? t.transition : 'aucune figure');
+  verifier(`${cle} : avec la préférence, elle ne s'anime plus`, !!r && r.transition === '0s', r ? r.transition : 'aucune figure');
+  verifier(`${cle} : aucune animation sur la figure ni ses traits`,
+    !!r && r.traits.length >= 1 && r.animation === 'none' && r.traits.every((a) => a === 'none'),
+    r ? `${r.animation} · ${r.traits.join(',')}` : 'aucune figure');
 }
 
 verifier('Zéro erreur console', erreurs.length === 0, JSON.stringify(erreurs.slice(0, 3)));
