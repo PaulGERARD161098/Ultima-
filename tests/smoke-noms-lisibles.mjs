@@ -41,7 +41,13 @@ const ECRANS = [
   { nom: 'GRIMA', page: 'ultima.html#grima' },
   { nom: 'ALPHA', page: 'alpha.html' },
 ];
-const LARGEURS = [[360, 780], [390, 844], [1280, 800]];
+// ⚠️ 300 px N'EST PAS UN LUXE, C'EST LE CÔTÉ OÙ LE PLANCHER SE CONTOURNE.
+// Au-dessus de 320 px le viewBox vaut l'écran (échelle 1) : un moteur qui
+// IGNORERAIT l'échelle y rendrait 11 px quand même, et le harnais serait vert
+// sur une conversion jamais faite. Sous 320, le viewBox est borné à 320 et
+// l'échelle tombe à ~0,94 : c'est là seulement que la conversion se prouve.
+// Éprouvé le 26/09 : conversion sabotée → 5 rouges à 300 px, 0 ailleurs.
+const LARGEURS = [[300, 640], [360, 780], [390, 844], [1280, 800]];
 
 async function ouvrir(ecran, [largeur, hauteur]) {
   const contexte = await navigateur.newContext({ viewport: { width: largeur, height: hauteur } });
@@ -123,6 +129,21 @@ for (const ecran of ECRANS) {
     verifier(`${cle} : aucun nom n'en chevauche un autre`, m.n >= 2 && m.chevauchements === 0, `${m.chevauchements}`);
     verifier(`${cle} : aucun nom hors cadre`, m.n >= 2 && m.hors === 0, `${m.hors}`);
   }
+}
+
+// ---- LE CACHE DE L'ÉCHELLE SE RELIT AU REDIMENSIONNEMENT ----
+// L'échelle est mise en cache ; retenue pour toujours, elle garderait celle de
+// l'écran d'ouverture. Ouvert large puis rétréci sous 320 px : le plancher doit
+// suivre. Éprouvé le 26/09 en retirant la remise à zéro du cache.
+{
+  const { page, contexte } = await ouvrir(ECRANS[2], [1280, 800]);
+  await page.setViewportSize({ width: 300, height: 640 });
+  await page.waitForTimeout(2000);
+  const m = await mesurer(page);
+  await contexte.close();
+  chiffres['NAGA 1280→300'] = m ? +m.pxMin.toFixed(1) : null;
+  verifier('Rétréci de 1280 à 300 px : aucun nom sous 11 px', !!m && m.n >= 2 && m.pxMin >= PLANCHER_PX - 0.05,
+    m ? `min ${m.pxMin.toFixed(1)} px` : 'scène absente');
 }
 
 verifier('Zéro erreur console', erreurs.length === 0, JSON.stringify(erreurs.slice(0, 3)));

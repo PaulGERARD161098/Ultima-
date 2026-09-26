@@ -946,3 +946,19 @@ qu'on ne relèverait pas le plancher pour lui seul, et on ne le fait pas.
   de quelques pixels, et un nom y lit **10,9 px**. Aucune coque ne le fait.
 - Le tap et la lecture sur un **vrai téléphone** ne sont pas prouvés : la session
   n'a qu'un Chromium.
+
+### Dry run DR du lot 2a (palier 20 min, 12:32 → fait à 12:50)
+
+**Cédé, et corrigé dans le passage** : le harnais ne mesurait qu'à 360, 390 et
+1280 px. Or au-dessus de 320 px le viewBox vaut l'écran (échelle 1) : un moteur
+qui **ignorerait** l'échelle y rend 11 px quand même. Sabotage joué (conversion
+retirée) : **vert partout** sur trois largeurs. Ajouté 300 px, où le viewBox est
+borné à 320 et l'échelle tombe à ~0,94 : le même sabotage donne **5 rouges**
+(10,3 px). Un garde-fou s'éprouve du côté où il se contourne.
+
+**Ajouté aussi** : ouvert à 1280 puis rétréci à 300 px, le plancher suit.
+Sabotage (remise à zéro du cache retirée) : **1 rouge** (10,0 px).
+
+**Résisté** : le harnais est découvert tout seul par `tests/lancer.sh` (CI
+comprise) ; RIVEN (`smoke-ciel`) inchangé ; le clic exact 23/23.
+Harnais final : **122 verdicts, 0 rouge**.
