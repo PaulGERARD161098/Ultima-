@@ -771,3 +771,19 @@ Le serveur « live » d'impeccable, lancé par l'évaluation B, a écrit
 `.impeccable/live/server.json` — un **jeton local** — et un `git add -A` l'a
 embarqué dans un commit **jamais poussé**. Retiré de l'historique local,
 `.impeccable/live/` ajouté au `.gitignore`. Rien n'a quitté le conteneur.
+
+### Dry run DR du lot 2 (déclenché à 11:37, fait à 12:00)
+
+**Sondé, et résisté** :
+- `unit-asterisme` vu rouge sur une fonction absente, puis sur deux sabotages ;
+- `smoke-ciel` (RIVEN) et `smoke-clic-exact` verts dans le patrimoine complet ;
+- la maquette charge le vrai moteur (`../js/ciel.js`) ;
+- **les traits sont bien hors de `relations`** — éprouvé du côté où ça pouvait
+  céder : NAGA rendu sans puis avec l'astérisme, comptes de liens identiques (0),
+  et rayons identiques **au chiffre près** entre la seconde mesure sans traits et
+  la mesure avec. Le **témoin** (deux mesures sans traits) diffère, lui, de la
+  même quantité : l'écart vient de la dérive lente du ciel, pas des traits.
+  Sans ce témoin, on aurait conclu à tort que les traits changeaient la taille.
+
+**Cédé** : rien de neuf — les failles de ce lot étaient celles de la critique,
+déjà corrigées au §17.
