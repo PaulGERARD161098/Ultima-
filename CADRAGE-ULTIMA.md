@@ -6,6 +6,14 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 📱 **SESSION 2026-09-26 (soir) — #293 FUSIONNÉE (`4244999`) : S1 fermée en production.**
+  Puis, sur capture iPhone de Paul : au téléphone le bandeau Finubar s'ouvre **replié**
+  (ciel 179 → 290 px à 390 × 664, la hauteur réelle de Safari) ; **RIVEN n'est plus une
+  impasse** en application installée (« ↞ GRIMA », son parent) ; le retour d'ALTHEA mène
+  à la racine. `smoke-retour-feuilles` contrôle toute feuille du registre. ⛔ La ligne
+  ci-dessous (« #293 non fusionnée », « S1 toujours en production ») est PÉRIMÉE.
+  Détail : carte-celeste §22. Prochaine action : lot 2b (activation V1), sur go.
+
 - 💾 **SESSION 2026-09-26 (fin d'après-midi) — PALIER SAUVEGARDÉ, PR #293 NON FUSIONNÉE.**
   A8 = V1 (couronne) et A9 rendus ; **lot 2a livré** (noms ≥ 11 px d'écran, Georgia) ;
   **le socle** livré sur capture de Paul (bandeau, dock, parole empilés sans recouvrement ;

@@ -53,7 +53,8 @@ agregat.projets = NOMS.map((nom, i) => {
 agregat.cartouche.action.projet = NOMS[0];
 
 async function ouvrir([largeur, hauteur]) {
-  const contexte = await navigateur.newContext({ viewport: { width: largeur, height: hauteur } });
+  const telephone = largeur < 700;
+  const contexte = await navigateur.newContext({ viewport: { width: largeur, height: hauteur }, hasTouch: telephone, isMobile: telephone });
   const page = await contexte.newPage();
   page.on('pageerror', (e) => erreurs.push(`${largeur} pageerror: ${e.message}`));
   page.on('console', (m) => { if (m.type() === 'error') { erreurs.push(`${largeur} console: ${m.text()}`); } });
@@ -208,6 +209,63 @@ for (const taille of TAILLES) {
       m.entre.length === 0 && m.sous.length === 0, [...m.entre, ...m.sous].join(' ') || '0');
   }
   await contexte.close();
+}
+
+// ⑥ LE TÉLÉPHONE À LA HAUTEUR RÉELLE DE SAFARI (capture de Paul, 26/09, 16:19).
+// 844 px est la hauteur de l'ÉCRAN, pas de la page : barres de Safari
+// déduites, il en reste ~664 (667 sur un petit iPhone). À cette hauteur, le
+// bandeau Finubar déplié prenait 200 px et le ciel n'en gardait que ~180.
+// Au téléphone, le bandeau se REPLIE donc sur son en-tête (nom, date,
+// compte) : les signaux s'ouvrent d'un toucher, et le ciel reprend sa place.
+// Sur ordinateur, rien ne change — la liste reste ouverte, sans bouton.
+for (const taille of [[390, 664], [375, 667]]) {
+  const { page, contexte } = await ouvrir(taille);
+  const cle = `téléphone ${taille[0]}×${taille[1]}`;
+  const etat = () => page.evaluate(() => {
+    const b = document.querySelector('#finubar-bandeau .fb-deplier');
+    const l = document.querySelector('#finubar-bandeau .fb-signaux');
+    const vu = (el) => !!el && getComputedStyle(el).display !== 'none' && el.getBoundingClientRect().height > 0;
+    return {
+      bouton: vu(b), attendu: b ? b.getAttribute('aria-expanded') : null,
+      controle: b ? b.getAttribute('aria-controls') : null, idListe: l ? l.id : null,
+      cible: b ? Math.round(b.getBoundingClientRect().height) : 0,
+      liste: vu(l), bandeau: Math.round(document.getElementById('finubar-bandeau').getBoundingClientRect().height),
+    };
+  });
+  const replie = await etat();
+  const m1 = await mesurer(page);
+  chiffres[cle] = { replie: replie.bandeau, ciel: m1.ciel };
+  verifier(`${cle} : verrou — bandeau, dock et ≥ 3 étoiles`, m1.pieces.includes('bandeau') && m1.pieces.includes('dock') && m1.etoiles >= 3,
+    `${m1.pieces.join(',')} · ${m1.etoiles}`);
+  verifier(`${cle} : le bandeau s'ouvre REPLIÉ (bouton visible, liste cachée)`,
+    replie.bouton && replie.attendu === 'false' && !replie.liste, JSON.stringify(replie));
+  verifier(`${cle} : le bouton dit ce qu'il ouvre (aria-controls = la liste)`,
+    !!replie.controle && replie.controle === replie.idListe, `${replie.controle} / ${replie.idListe}`);
+  verifier(`${cle} : cible tactile ≥ 40 px`, replie.cible >= 40, `${replie.cible}`);
+  verifier(`${cle} : le ciel garde au moins 260 px`, m1.ciel >= 260, `${m1.ciel} px`);
+  verifier(`${cle} : replié, rien ne se recouvre`, m1.entre.length === 0 && m1.sous.length === 0, [...m1.entre, ...m1.sous].join(' ') || '0');
+  await page.locator('#finubar-bandeau .fb-deplier').tap();
+  await page.waitForTimeout(1200);
+  const deplie = await etat();
+  const m2 = await mesurer(page);
+  verifier(`${cle} : un toucher déplie les signaux`, deplie.attendu === 'true' && deplie.liste, JSON.stringify(deplie));
+  verifier(`${cle} : déplié, rien ne se recouvre`, m2.entre.length === 0 && m2.sous.length === 0, [...m2.entre, ...m2.sous].join(' ') || '0');
+  await page.locator('#finubar-bandeau .fb-deplier').tap();
+  await page.waitForTimeout(800);
+  const rereplie = await etat();
+  verifier(`${cle} : un second toucher replie`, rereplie.attendu === 'false' && !rereplie.liste, JSON.stringify(rereplie));
+  await contexte.close();
+}
+// Et l'ordinateur, témoin : la liste ouverte, aucun bouton.
+{
+  const { page, contexte } = await ouvrir([1280, 800]);
+  const r = await page.evaluate(() => {
+    const b = document.querySelector('#finubar-bandeau .fb-deplier');
+    const l = document.querySelector('#finubar-bandeau .fb-signaux');
+    return { bouton: !!b && getComputedStyle(b).display !== 'none', liste: !!l && getComputedStyle(l).display !== 'none' };
+  });
+  await contexte.close();
+  verifier('ordinateur : la liste reste ouverte et le bouton n\'existe pas à l\'écran', r.liste && !r.bouton, JSON.stringify(r));
 }
 
 verifier('Zéro erreur console', erreurs.length === 0, JSON.stringify(erreurs.slice(0, 3)));

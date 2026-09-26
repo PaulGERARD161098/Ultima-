@@ -147,6 +147,25 @@ body {
 
 .zone-auth { margin-left: auto; }
 
+/* Le retour d'une page en bout de chaîne (RIVEN, 26/09) : le PREMIER élément
+   de l'en-tête, DANS le flux. Premier jet en position absolue : au téléphone,
+   l'en-tête aligne le cartouche à gauche, et le cartouche le recouvrait — une
+   boîte parfaite que le doigt n'atteignait pas (vu sur capture). Même registre
+   que le « ↞ Boussole » des coques (`css/console.css`), et une cible tactile
+   de 40 px — c'est la seule sortie en application installée. */
+.entete > .retour-parent {
+  flex: 0 0 auto;
+  display: inline-flex; align-items: center; min-height: 40px;
+  padding: 0 0.75rem; border-radius: 999px;
+  border: 1px solid var(--or-antique);
+  background: rgba(3, 7, 14, 0.45);
+  color: var(--creme, #f2ead6); text-decoration: none;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.85rem; font-variant: small-caps; letter-spacing: 0.06em;
+}
+.entete > .retour-parent:hover { background: rgba(3, 7, 14, 0.7); }
+.entete > .retour-parent:focus-visible { outline: 3px solid var(--accent-focus, #66b4d6); outline-offset: 3px; }
+
 /* ---------- Écran de connexion plein écran (A1) ----------
    Habillage antique : mer de fond, monde-anneau décor, cartouche doré, le
    formulaire lien-magique dans un cartouche parchemin. Piloté par [hidden]

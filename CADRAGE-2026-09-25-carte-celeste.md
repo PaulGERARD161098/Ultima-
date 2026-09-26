@@ -1079,3 +1079,78 @@ d'avant + `smoke-parole-echappement`).
 
 1. *Un objet de verdicts indexé par nom avale les doublons* — le rouge disparaît sans bruit.
 2. *Une règle de sécurité écrite en commentaire périme avec la donnée* : « le registre est statique » était vrai jusqu'à la greffe Finubar.
+
+---
+
+## 22. Sur l'iPhone de Paul (26/09, 16:19) — le téléphone respire, RIVEN n'est plus une impasse
+
+**Paul, capture iPhone à l'appui :** *« Go merge tout. Attention chevauchement sur
+mobile, c'est vraiment pas pratique, corrige. Aussi il n'y a pas de possibilité de
+retour en arrière sur un projet en bout de chaîne : j'étais sur RIVEN, impossible
+de faire un retour arrière. »* — PR #293 fusionnée d'abord (`4244999`), la faille
+S1 avec elle.
+
+### Le téléphone — à la hauteur RÉELLE de Safari, pas à celle de l'écran
+
+La capture datait d'avant la fusion (colonne « Léo » en double, ULTIMA absente).
+Remesuré sur le code fusionné à **390 × 664** — la page qui reste une fois les
+barres de Safari déduites, pas les 844 px de l'écran : plus de recouvrement, mais
+le bandeau Finubar prenait **200 px** et le ciel n'en gardait que **179**.
+
+**Correctif** : au téléphone, le bandeau s'ouvre **replié** sur son en-tête — nom,
+**date de collecte**, compte (« hors de portée » compris : rien de ce qui ne se cache
+jamais n'est caché) — avec un bouton « Voir les signaux » (`aria-expanded`,
+`aria-controls`, 40 px). Un toucher déplie, un autre replie ; le ciel suit (le
+bandeau est observé). Sur ordinateur, rien ne change.
+
+| 390 × 664 | avant | après |
+|---|---|---|
+| bandeau | 201 px | **90 px** replié |
+| ciel libre | **179 px** | **290 px** |
+
+`smoke-socle` : **69 verdicts**, rouge d'abord (pas de bouton, ciel 179), vert après ;
+aussi à 375 × 667 ; déplié puis replié, **rien ne se recouvre** ; ordinateur témoin.
+
+### RIVEN — la cause est l'application installée
+
+`manifest.webmanifest` déclare `display: standalone` : sur l'écran d'accueil de
+l'iPhone, **il n'y a pas de bouton retour du navigateur**. Une page sans son propre
+retour est une impasse. RIVEN était la seule page du registre dans ce cas.
+
+**Correctif** : « ↞ GRIMA » en tête de l'en-tête de RIVEN — son **parent exact** dans
+le registre, 40 px, même registre visuel que le « ↞ Boussole » des coques.
+
+**Le harnais lit le registre** (`tests/smoke-retour-feuilles.mjs`) : chaque feuille
+(une cible, aucun enfant) doit offrir au téléphone un lien **que le doigt atteint**
+vers un de ses ancêtres. Une feuille ajoutée demain est contrôlée sans une ligne de
+plus. Rouge d'abord (RIVEN : 3 rouges), vert après ; deux sabotages rougissent.
+
+**Ce qu'il a trouvé en plus** : le retour d'**ALTHEA** menait à `ultima.html`, une
+constellation **sœur** — ALTHEA est une étoile de la racine. Il mène désormais à
+`index.html`. ⚠️ `smoke-althea` exigeait `ultima.html` depuis le 14/09 — il
+encodait le piège des deux « Ultima » (le produit = l'accueil, la supra-division =
+`ultima.html`) que le journal du 07/08 décrit mot pour mot, cinq semaines après
+qu'ALTHEA a été remontée à la racine sur demande de Paul. Son attente se **lit
+désormais dans le registre** : elle ne peut plus diverger de lui.
+
+### Deux fautes d'instrument, trouvées et corrigées dans le même passage
+
+1. **Une boîte n'est pas un doigt.** Le premier jet du retour de RIVEN était en
+   position absolue : au téléphone, le cartouche ULTIMA le **recouvrait** — la boîte
+   était parfaite, le harnais vert, la capture montrait l'inverse. Le harnais
+   demande maintenant au navigateur ce qu'il y a au centre du lien
+   (`elementFromPoint`) ; le lien est remis dans le flux.
+2. **Masquer l'écran de connexion ne connecte pas.** `js/app.js` rend l'en-tête
+   `inert` tant que l'écran de connexion est visible ; le harnais levait l'écran sans
+   lever l'inertie, et mesurait une page qui n'existe pour personne.
+
+**Patrimoine** : `bash tests/lancer.sh` sortie 0, **47/47** harnais (+ `smoke-retour-feuilles`) ; `npm test` 42/42.
+
+### Limites, nommément
+
+- **Sans session**, l'écran de connexion de RIVEN couvre tout, retour compris : un
+  visiteur non connecté y reste bloqué en application installée. Ce n'était pas le
+  cas de Paul (connecté) ; à traiter avec l'écran de connexion, pas ici.
+- Le repli du bandeau n'est pas mémorisé : il se rouvre replié à chaque visite. Voulu
+  (le ciel d'abord) ; à reconsidérer si Paul l'ouvre à chaque fois.
+- Aucune preuve sur un **vrai** iPhone : Chromium en émulation tactile.

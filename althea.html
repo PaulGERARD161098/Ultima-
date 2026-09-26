@@ -27,7 +27,11 @@
 <body class="althea ciel-noeud-coque" data-quadrant="althea" data-fond-etoile="instrument">
   <div class="althea-page">
 
-    <p><a class="retour-althea" href="ultima.html">↞ Ultima</a></p>
+    <!-- Le retour mène au PARENT du registre : ALTHEA est une étoile de la
+         racine (`index.html`), pas de la supra-division ULTIMA. Il menait à
+         `ultima.html` — une constellation sœur, pas l'endroit d'où l'on vient
+         (trouvé par `tests/smoke-retour-feuilles`, 26/09). -->
+    <p><a class="retour-althea" href="index.html">↞ Ultima</a></p>
 
     <div class="althea-visuel">
 
