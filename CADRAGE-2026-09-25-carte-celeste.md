@@ -627,6 +627,36 @@ lot 3** ; il revient avec J3, lu dans la donnée que J3 produira.
 
 | # | Question | Quand | Reco |
 |---|---|---|---|
-| **A7** | Retirer du lot 3 « l'anneau de Léo au survol » ? | maintenant | **oui** — il reviendra avec J3 |
+| **A7** | Retirer du lot 3 « l'anneau de Léo au survol » ? | ✅ **rendu le 26/09 : oui** | il reviendra avec J3 |
 | **A8** | Couronne + arbre, ou figure + arbre ? | **sur capture** de la maquette (lot 2) | suspendue |
-| — | Go du **lot 0** (entretien impeccable init) | maintenant | ouvrir en premier |
+| — | Go du **lot 0** (entretien impeccable init) | ✅ **rendu le 26/09** | livré — §15 |
+
+---
+
+## 15. Lot 0 — LIVRÉ le 26/09, sur go de Paul (« ok »)
+
+**L'entretien d'init** : un tour de trois questions, posé avec l'outil de
+questions, chacune pré-remplie d'une inférence du dépôt. **Les trois ont été
+confirmées telles quelles** — Paul seul ; l'interface unique avec Léo pour seule
+interlocutrice ; les quatre engagements (antique et sérieux, sécurité relevée,
+compter sans reprocher, le ciel est la navigation).
+
+| Fait | Fichier |
+|---|---|
+| Vérité produit écrite au gabarit d'init (schéma 1), `Platform: web`, sans section `Stack` | `PRODUCT.md` |
+| Réduit de 144 à 58 lignes : modèle de données, contrat d'API, front — avec un en-tête qui dit ce qui est parti et où | `PRODUIT.md` |
+| Renvois vivants mis à jour | `CLAUDE.md` · `ROADMAP-SITE.md` · agents `interface-ux`, `front-carto`, `graphisme`, `leo` |
+| Archives datées **non** réécrites | `REFONTE-ACCUEIL.md` · `AUDIT-2026-08-13.md` · `design/spec-registre-antique-serieux.md` |
+
+**Ce qui n'a pas été fait, et pourquoi** : aucun `DESIGN.md` (init l'interdit ;
+`impeccable document` reste à offrir) ; aucun `buildPath` enregistré — la séance
+n'a pas d'outil natif de génération d'image, donc le chemin est **code d'abord**,
+et il n'est pas stocké (init : « une valeur tirée du silence est un défaut que
+personne n'a posé »). **A7 rendu** : l'« anneau de Léo » sort du lot 3.
+
+**Critère de sortie, mesuré** : `impeccable context` ne rend plus
+`NO_PRODUCT_MD` (voir le commit) ; aucun renvoi vivant ne cite une section qui a
+quitté `PRODUIT.md`.
+
+**Suite** : lot 2 (la figure), au go de Paul — harnais pur d'abord, puis la
+maquette V1 / V2, puis A8 sur capture.

@@ -4276,3 +4276,12 @@ déclarent obligatoires. Ils y restent ; seule la vérité produit déménage.
 Deux arbitrages nouveaux : **A7** (retirer du lot 3 l'« anneau de Léo » au
 survol, qu'aucune donnée ne porte — reco oui) et **A8** (couronne ou figure,
 sur capture de la maquette).
+
+## 2026-09-26 — Lot 0 livré : PRODUCT.md, et A7 rendu
+
+Paul, « ok » sur le go du lot 0 et sur A7. **A7** : l'« anneau de Léo » au
+survol d'un dépôt sort du lot 3 — aucune donnée ne porte ces droits ; il
+reviendra avec J3. **Entretien d'init** : les trois inférences confirmées telles
+quelles (Paul seul · l'interface unique avec Léo · quatre engagements : antique
+et sérieux, sécurité relevée, compter sans reprocher, le ciel est la
+navigation). `PRODUCT.md` écrit ; `PRODUIT.md` réduit à ses contrats techniques.

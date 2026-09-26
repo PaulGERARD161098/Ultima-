@@ -8,8 +8,8 @@ accomplir chaque tâche (retrouver une relation, noter où il en est, créer un
 lien) en un minimum de gestes, sans jamais se demander « où suis-je ? » ni
 « que faire maintenant ? ».
 
-Contexte obligatoire : `PRODUIT.md` (objectifs finaux : cartographier /
-centraliser / journal / lien — et user stories), `ROADMAP-SITE.md`,
+Contexte obligatoire : `PRODUCT.md` (qui, pour quoi, engagements qui durent),
+`PRODUIT.md` (contrats techniques), `ROADMAP-SITE.md`,
 `AUDIT-<date>.md` (backlog U# : ne re-signale pas un constat indexé).
 
 Tes axes d'exigence, dans l'ordre :

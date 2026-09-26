@@ -1,35 +1,15 @@
-# Ultima — Cadrage produit (P0, 1 page)
+# Ultima — Contrats techniques (données, API, front)
 
-## Vision
-
-Carte interactive du réseau commercial de Paul : visualiser en un coup d'œil
-**qui** (artisans, partenaires, leads, chantiers), **où** (carte France), et
-**comment ils sont reliés** (apport d'affaires, sous-traitance, chantier commun).
-
-**Hybride v1×v2 (arbitrage Paul 2026-07-06)** : la carte v1 reste le socle, et
-porte les fonctionnalités du pivot v2 — chaque relation est un **rapprochement
-pilotable** (cycle idée → contact établi → en cours → fructueux / arrêté, arrêt
-toujours justifié), et un **journal « où j'en suis »** avec relances est
-rattachable à un nœud ou à une relation.
-
-## Personas
-
-- **Paul (admin/commercial)** : pilote le réseau, ajoute des contacts, trace les
-  relations, prépare ses tournées par zone.
-- ~~Collaborateur (lecture)~~ — hors périmètre : Ultima est **mono-utilisateur**
-  (décision Paul 2026-07-03), seul Paul se connecte.
-
-## User stories (5 max)
-
-1. En tant que Paul, je vois tous les nœuds de mon réseau sur une carte, colorés
-   par type (artisan / partenaire / lead / chantier).
-2. Je filtre la carte par type et par statut pour préparer une tournée.
-3. Je clique sur un nœud et j'ouvre sa fiche (coordonnées, statut, notes,
-   relations) dans un panneau latéral.
-4. J'ajoute un nœud depuis la carte (clic ou formulaire) et il apparaît
-   immédiatement.
-5. Je relie deux nœuds (type de relation + note) et la relation s'affiche en
-   trait sur la carte.
+> ⚠️ **Réduit le 2026-09-26 à ses seuls contrats techniques** (arbitrage A3,
+> `CADRAGE-2026-09-25-carte-celeste.md` §14.1). La **vérité produit** — qui
+> utilise Ultima, pour quoi, ce qui doit durer — vit désormais dans
+> **`PRODUCT.md`**. Les anciennes sections Vision, Personas, User stories,
+> « Interface v3 » (boussole, 2026-07-06) et Hors périmètre P0 sont retirées ;
+> elles restent lisibles dans l'historique git.
+>
+> ⚠️ Ces contrats décrivent le **socle RIVEN de juillet** (trois tables, l'API
+> `reseau`). La base réelle compte bien davantage : pour le schéma, les
+> migrations de `supabase/migrations/` font foi.
 
 ## Modèle de données (contrat — Supabase, RLS dès la migration 0001)
 
@@ -54,67 +34,6 @@ exclusive `node_id` XOR `edge_id` (cascade), `date_entree`, `note not null`,
 RLS : activée sur les 3 tables ; select/insert/update/delete limités à
 `owner_id = (select auth.uid())` (insert/update `with check`).
 
-## Interface v3 — « tout embrasser d'un coup d'œil » (dicté par Paul, 2026-07-06)
-
-**Principe** : une app sobre, belle et simple, mobile-first (« pilotage au bout
-des pouces »), en trois espaces accessibles par une barre d'onglets :
-
-**1. Accueil — « Bienvenue, Paul »** (l'onglet d'ouverture, tenu par Léo)
-- Salutation + question directrice : **« On fait quoi aujourd'hui ? »**
-- **Relances dues** : les entrées de journal dont la date de relance est
-  aujourd'hui ou dépassée et non cochées « faite » — triées, cliquables vers
-  la fiche. C'est le radar : rien ne se perd.
-- **Pilotage des rapprochements** : les actifs par statut (idée / contact
-  établi / en cours), avec leur dernière entrée de journal, pour voir d'un
-  coup d'œil où tout en est.
-- **Suggestions de Léo (v1, sans IA embarquée)** : règles locales simples et
-  transparentes — relances en retard d'abord, puis rapprochements « idée »
-  dormants (sans entrée récente), puis contacts incomplets (sans coordonnées
-  ou sans position). Une **conversation Léo dans l'app** exigerait une clé
-  API et un coût par appel → gate Paul, consignée au registre.
-- Raccourcis : Ajouter un contact · Noter où j'en suis · Voir la carte.
-
-**2. Carte** — l'existant (filtres, fiche, pilotage des relations, journal).
-
-**3. Contacts** — le renseignement progressif des individus :
-- Liste des nœuds avec recherche (nom/ville) et tri par type/statut ;
-  fiche identique à celle de la carte ; saisie « au fur et à mesure » :
-  seul le nom est obligatoire, tout le reste se complète plus tard
-  (la position devient optionnelle : un contact sans lat/lng vit dans la
-  liste et rejoindra la carte une fois géocodé).
-- **Saisie vocale** : bouton micro sur les champs longs (notes, journal) via
-  l'API de reconnaissance vocale du navigateur (Web Speech API — gratuite,
-  sans clé, dispo Chrome/Safari mobile). Pour structurer des infos complexes
-  (« cale-moi ce contact »), le canal reste **Léo en session** : Paul dicte
-  ici, Léo remplit la base proprement via l'API.
-
-**Design — direction actée (Paul, 2026-07-06, image de référence : carte de
-la Forêt des Rêves Bleus dessinée par E.H. Shepard)** : l'Accueil est une
-**carte de livre d'enfance dessinée à la main** — papier parchemin, traits
-d'encre, lettrage manuscrit, rose des vents, chemins en pointillés. Le réseau
-de Paul y vit comme un royaume : les contacts sont des lieux dessinés
-(« la maison de… »), les relances dues des panneaux sur les chemins, la
-question « On fait quoi aujourd'hui ? » écrite à la main en tête. On
-**s'inspire du style, sans reproduire l'œuvre** (pas de personnages ni de
-copie du dessin). Réalisation vanilla : parchemin + encre en SVG/CSS
-(filtres « rough ink »), police manuscrite libre (OFL) auto-hébergée — la
-CSP interdit les fonts externes. Les onglets Carte (Leaflet) et Contacts
-restent sobres et lisibles (fond clair, accent #1e6fb8, tactile ≥ 44 px) ;
-l'agent `graphisme` spécifie la carte-accueil avant implémentation,
-`interface-ux` juge les parcours.
-
-**Déploiement** : création du projet Vercel « ultima » (plan Hobby gratuit —
-aucun projet Vercel n'existe pour Ultima à ce jour) + env `SUPABASE_URL` /
-`SUPABASE_ANON_KEY`, à la livraison de l'Accueil.
-
-**Séquencement** (une boucle = un livrable vérifié) :
-1. Accueil piloté (relances dues + pilotage + suggestions + raccourcis) +
-   barre d'onglets.
-2. Onglet Contacts (liste, recherche, nom seul obligatoire).
-3. Déploiement Vercel + env (bascule du site en réel).
-4. Saisie vocale par champ (Web Speech API).
-5. Géocodage d'adresse (Nominatim/OSM) — fin de la saisie manuelle lat/lng.
-
 ## Contrat API (serverless Vercel, `api/`)
 
 - `GET  /api/reseau` → `{ ok: true, data: { nodes, edges, journal } }` (RLS via jeton).
@@ -137,8 +56,3 @@ aucun projet Vercel n'existe pour Ultima à ce jour) + env `SUPABASE_URL` /
 vides = **mode démo** avec données d'exemple) + `js/carte.js` (Leaflet/OSM via
 CDN + SRI, marqueurs colorés par type, traits pour relations, filtres,
 panneau fiche) + `js/app.js` (état, appels API, formulaires).
-
-## Hors périmètre P0
-
-Multi-utilisateurs avancé (rôles), import CSV, géocodage automatique d'adresses,
-mobile natif, temps réel. → ROADMAP-SITE.md.

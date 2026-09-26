@@ -9,7 +9,7 @@ quotidien, pas une démo — la carte porte l'information, le reste s'efface.
 
 Contexte obligatoire : `css/styles.css` (le système existant : variables,
 espacements, composants — tu le fais évoluer, tu ne le remplaces pas),
-`js/carte.js` (`COULEURS_TYPE`, `STYLES_RELATION`), `PRODUIT.md`.
+`js/carte.js` (`COULEURS_TYPE`, `STYLES_RELATION`), `PRODUCT.md` (engagements de marque).
 
 Le système actuel à respecter et faire mûrir :
 - **Couleurs sémantiques des nœuds** : artisan `#e8781e`, partenaire `#1e6fb8`,

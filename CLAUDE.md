@@ -113,7 +113,7 @@ aujourd'hui ? » + 4 quadrants. Un repo, mémoire inter-segment, sécurité rele
 **Directive de discipline** (prioritaire sur tout le reste) :
 - **Une seule boucle à la fois** : ne jamais passer à autre chose sans avoir
   bouclé la boucle de travail en cours (livrée, vérifiée, committée, annotée).
-- **Capitaliser sur l'existant** : CADRAGE-ULTIMA.md, PRODUIT.md, roadmaps et
+- **Capitaliser sur l'existant** : CADRAGE-ULTIMA.md, PRODUCT.md (vérité produit), PRODUIT.md (contrats techniques), roadmaps et
   `AUDIT-<date>.md` sont la source unique de vérité — ne jamais re-scanner ni
   re-décider ce qui y est déjà consigné, ne jamais créer de doc parallèle.
 - **Pas dix lièvres à la fois** : discipline mentale comme dans le code, comme

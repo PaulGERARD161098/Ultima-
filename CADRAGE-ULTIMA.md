@@ -6,6 +6,11 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 📜 **SESSION 2026-09-26 (suite) — LOT 0 LIVRÉ : `PRODUCT.md` existe.** Entretien
+  `impeccable init` (trois inférences, toutes confirmées) ; `PRODUIT.md` réduit à ses
+  contrats techniques (144 → 58 lignes) ; renvois vivants à jour (CLAUDE.md, ROADMAP-SITE,
+  quatre agents), archives datées intactes. A7 rendu (oui). Suite : lot 2, au go.
+
 - 🗺️ **SESSION 2026-09-26 — A2 À A5 RENDUS, LOTS 0/2/3 CADRÉS À LA LIGNE, aucun code.**
   `CADRAGE-2026-09-25-carte-celeste.md` §14. Trois constats lus dans le code : les
   étoiles de navigation sont sur une **couronne** (l'arbre y donnerait un arc → A8,
