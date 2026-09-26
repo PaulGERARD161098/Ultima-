@@ -4307,3 +4307,8 @@ la branche. Audit : S1 (noms Finubar injectés en HTML dans le cartouche) corrig
 `echapper()` — **reste exposé en production jusqu'à la fusion de #293**. Choix fait
 seul sur mandat (« résous ça ») : au téléphone, sur l'accueil, la parole se retire ;
 le résumé n'y est plus dit. Variante « figure » retirée (A8). Détail : §20–§21.
+
+**26/09 (soir) — « Go merge tout ».** #293 fusionnée en squash (`4244999`) : S1 fermée
+en production. Correctifs demandés sur iPhone : bandeau Finubar replié au téléphone
+(la date et le compte restent lus), retour « ↞ GRIMA » sur RIVEN (application
+installée = pas de bouton retour), retour d'ALTHEA vers la racine. Détail : §22.
