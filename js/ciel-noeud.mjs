@@ -55,15 +55,28 @@
 //      simplement jamais l'effacer. Le ciel est en JavaScript pur : sans lui,
 //      cette liste EST la navigation. Voir la note en bas de fichier.
 //
-// SÉCURITÉ — mêmes règles que le noyau de la boussole, sans exception : rien
-// n'entre en innerHTML qui ne vienne du registre ou du catalogue de gravures
-// (statique, aucune donnée utilisateur, jamais de PII) ; le cockpit ne rapatrie
-// que des COMPTES entiers et retombe en silence sur le texte figé.
+// SÉCURITÉ — tout TEXTE qui entre dans le cartouche passe par `echapper()`.
+// ⛔ La règle d'avant disait « rien n'entre en innerHTML qui ne vienne du
+// registre (statique) » — elle est devenue FAUSSE le 02/09, le jour où la greffe
+// Finubar a fait entrer dans le registre des noms et des jalons écrits dans les
+// FINUBAR.md de huit dépôts. Mesuré le 26/09 (audit S1, `smoke-parole-
+// echappement`) : un nom de projet en balisage devenait un lien dans le
+// cartouche. Seul le catalogue de gravures (`BLASONS`, statique) entre brut.
+// Le cockpit ne rapatrie que des COMPTES entiers, échappés eux aussi.
 
 import { NOEUDS, chemin } from './registre-lv3.mjs';
 import { BLASONS, COEURS } from './blasons.mjs';
 import { versCiel, cheminVers, descendDe } from './adaptateur-lv4.mjs';
 import { ligneVivante, signalDe, chargerCockpit, chargerFinubar } from './cockpit-parole.mjs';
+
+// Le texte devient du texte, quelle que soit sa source. Le registre n'est plus
+// entièrement statique (greffe Finubar) : on n'essaie pas de deviner quel champ
+// est sûr, on les échappe tous.
+function echapper(valeur) {
+  return String(valeur == null ? '' : valeur).replace(/[&<>"']/g, (c) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[c]);
+}
 import { greffer, signaux, libelleDegre } from './adaptateur-finubar.mjs';
 import { poser as poserFinubarBandeau } from './finubar-bandeau.mjs';
 
@@ -246,11 +259,11 @@ export function rendre(idNoeud, options = {}) {
     const blason = cap.blason && BLASONS[cap.blason] ? BLASONS[cap.blason] : '';
     parole.innerHTML =
       (blason ? '<span class="parole-blason">' + blason + '</span>' : '')
-      + '<p class="parole-nom">' + cap.nom + '</p>'
-      + '<p class="parole-etat">' + (cap.etat || '') + '</p>'
-      + (signal ? '<p class="parole-signal">À traiter — ' + signal + '</p>' : '')
-      + (vivante ? '<p class="parole-cockpit">En cours — ' + vivante + '</p>' : '')
-      + '<p class="parole-texte">' + (cap.resume || '') + '</p>'
+      + '<p class="parole-nom">' + echapper(cap.nom) + '</p>'
+      + '<p class="parole-etat">' + echapper(cap.etat) + '</p>'
+      + (signal ? '<p class="parole-signal">À traiter — ' + echapper(signal) + '</p>' : '')
+      + (vivante ? '<p class="parole-cockpit">En cours — ' + echapper(vivante) + '</p>' : '')
+      + '<p class="parole-texte">' + echapper(cap.resume) + '</p>'
       + '<p class="parole-action">'
       + (cap.cible
         ? (cap.externe ? 'Clique pour ouvrir (nouvel onglet) ↗' : 'Clique pour entrer ↝')
@@ -271,15 +284,15 @@ export function rendre(idNoeud, options = {}) {
   function majParoleAuRepos() {
     if (!isole) { paroleAuRepos = paroleDefaut; return; }
     const foyer = registre[isole] || {};
-    // Même règle d'insertion que `afficherResume` : tout vient du REGISTRE
-    // (statique, aucune donnée utilisateur, jamais de PII). Rien d'autre
-    // n'entre ici, et surtout pas le fragment d'adresse — qui, lui, vient du
-    // dehors : il sert d'identifiant à chercher dans le registre, jamais de
-    // texte à peindre.
+    // Même règle d'insertion que `afficherResume` : tout texte est ÉCHAPPÉ —
+    // le registre porte des astres greffés depuis Finubar, il n'est plus
+    // statique. Le fragment d'adresse, lui, vient du dehors : il ne sert que
+    // d'identifiant à chercher dans le registre (`idDeLAdresse`, triple garde),
+    // et même le repli `isole` passe par `echapper()`.
     paroleAuRepos =
-      '<p class="parole-nom">' + (foyer.nom || isole) + '</p>'
-      + (foyer.etat ? '<p class="parole-etat">' + foyer.etat + '</p>' : '')
-      + '<p class="parole-texte">' + (foyer.resume || '') + '</p>'
+      '<p class="parole-nom">' + echapper(foyer.nom || isole) + '</p>'
+      + (foyer.etat ? '<p class="parole-etat">' + echapper(foyer.etat) + '</p>' : '')
+      + '<p class="parole-texte">' + echapper(foyer.resume) + '</p>'
       + '<p class="parole-action">Échap — ou un clic dans le vide — pour remonter ↰</p>';
   }
 
