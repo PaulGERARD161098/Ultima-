@@ -1179,3 +1179,73 @@ en DOKLES.
    `finubar/depots.json`.
 4. Ce que chacune **dit** au survol : `etat` et `resume`, lus à leur source, jamais
    inventés (Principe 3 de `PRODUCT.md`).
+
+---
+
+## 24. Les bandeaux et les messages — critique impeccable, puis correctifs (26/09, soir)
+
+**Paul :** *« Utilise le skill /impeccable pour corriger les bandeaux et les messages,
+pas le fond de carte stellaire ou les étoiles. »*
+
+**La critique** : deux évaluations isolées (A revue de design, B détecteur + mesures
+au navigateur). **21/40**. Chaque constat a été **vérifié avant d'être retenu** — un
+rapport d'agent se vérifie, il ne se croit pas.
+
+| Retenu (vérifié) | Preuve | Correctif |
+|---|---|---|
+| **La recommandation de Léo ne se lance d'aucun bouton** : elle vise un projet Finubar, greffé au ciel mais absent de `NOEUDS` → `destination` nulle, « Reprendre » grisé, et masqué au téléphone | `js/leo-navigation.mjs` `recommandationDepuisFinubar` | bouton **« Y aller »** qui isole le projet au ciel (même chemin que le clic d'un signal du bandeau) ; au téléphone il est visible, « Aller à… » devient une loupe de 44 px |
+| **« FINUBAR · ce matin »** sur un agrégat de l'avant-veille | `js/finubar-bandeau.mjs` | « FINUBAR », et la date **suivie de son âge** (« · il y a 2 jours ») ; « Rien n'appelle en ce moment. » |
+| **L'accueil s'appelle « ULTIMA »** dans le fil — « ULTIMA › ULTIMA › NAGA » est possible — et « ↞ Boussole » sur deux coques | registre `racine.nom`, `alpha.html`, `ultima.html` | le fil dit **« Accueil »** pour la racine ; « ↞ Accueil » |
+| **Cibles tactiles** : « Fermer » 21 px, fil 24, retour 28, dock/onglets/signaux 40 | mesuré (B) | **≥ 44 px** au doigt (`pointer: coarse`) |
+| **Placeholder du panneau à 1,36:1** | mesuré (B), `stellaire.css:134` | encre de parchemin sur le parchemin |
+| **Panneau au téléphone** : 704 px pour 664, dernier résultat hors d'atteinte ; **le focus s'échappe** d'un `aria-modal` | mesuré (B) | hauteur = l'écran, défilement interne ; Tab et Maj+Tab restent dans le panneau |
+| **Bandeau** : `aria-label` sur un `div` sans rôle, nom perdu | arbre d'accessibilité (B) | `role="region"` |
+| **Légende gravée sous le bandeau et le dock** | `elementsFromPoint` (B) | retirée quand le socle est là (elle est décorative, `aria-hidden`) |
+| **Textes sous 12 px** : surligne 10,6, date/compte 11, « LÉO » 11,5, état 10,9 | mesuré (B) | plancher 12 px |
+| **Le socle parle « application »** : bouton bleu plein `#1a5a78`, halos et ombres larges (détecteur : thin-border + wide-shadow, dark-glow) | détecteur (B), relu | l'or gravé du produit ; ombres resserrées |
+
+| Écarté | Pourquoi |
+|---|---|
+| Dire une panne de Finubar dans le bandeau | **décision testée** : fail-closed, rien ne transparaît sur erreur (`smoke-accueil-finubar` ①) |
+| Renommer « Ultima Lv3 » | le titre de Paul, protégé par `smoke-boussole` |
+| Masquer l'état « Ouvert » | il distingue une porte ouverte d'une porte « À venir » |
+| « hors de portée » → autre chose | vocabulaire posé le 17/08, à dessein |
+| « survole un cap » au téléphone | **faux constat** : cette invite n'est affichée nulle part (les coques ont retiré la leur) |
+| dark-glow / rayures de `.boussole-plateau` | **faux positifs** : classe absente des pages scannées |
+| Tutoiement de l'écran de connexion | un choix de ton — à Paul, pas fait |
+
+**Critères** : un harnais neuf (`tests/smoke-bandeaux.mjs`), **rouge d'abord**, vert
+après ; patrimoine complet vert ; captures bureau + téléphone.
+**Pre-mortem** : « Y aller » qui isole le mauvais parent (→ le harnais clique et lit
+l'adresse) ; une cible agrandie qui déborde et recouvre (→ `smoke-socle` rejoué) ; le
+piège de focus qui bloque Échap (→ contrôlé).
+
+### Livré (même soir)
+
+- **« Y aller »** : la proposition de Léo se lance, au bureau comme au téléphone
+  (un seul chemin partagé avec les signaux du bandeau : `allerAuProjet`, dans
+  `js/ciel-noeud.mjs`). Si le projet n'est pas au ciel de la page, le bouton ouvre la
+  recherche plutôt que de ne rien faire.
+- **Le bandeau** : « FINUBAR », puis « collecté le 2026-09-02 · il y a 24 jours » ;
+  `role="region"` ; « Rien n'appelle en ce moment. ». `ageDe` a son test unitaire
+  (`tests/unit-finubar-age.mjs`, changement d'heure compris).
+- **Le fil** dit « Accueil » ; les coques disent « ↞ Accueil ».
+- **44 px au doigt** partout dans le périmètre ; **12 px** au plus petit ;
+  placeholder à ~6,9:1 ; panneau à la hauteur de l'écran, focus piégé (Tab et
+  Maj+Tab), Échap le ferme toujours.
+- **L'or gravé** à la place du bleu d'application ; halo sans décalage retiré ;
+  ombres resserrées. La loupe est un **SVG dessiné** (pas un glyphe).
+- Détecteur : **14 → 13** constats — celui du périmètre (bandeau) a disparu ; les
+  13 restants sont les faux positifs du cadran et l'espacement des capitales
+  (connexion, surligne), assumé.
+
+⚠️ **Régression trouvée par le patrimoine, et corrigée** : les signaux passés à
+44 px allongeaient le bandeau déplié (217 → 236 px) et, au téléphone, l'étoile
+ULTIMA passait sous le dock. Signaux dépliés, le dock se met désormais de côté —
+une chose à la fois — et revient au repli. `smoke-socle` le tient (73 verdicts).
+
+**Harnais** : `smoke-bandeaux` **32 rouges → 0/45** ; le piège de focus a d'abord
+été mal éprouvé (16 tabulations en alternance, vert sur un panneau qui fuyait) —
+durci à 30 dans chaque sens, il a rougi (19 et 15 sorties) avant d'être vert.
+
+**Patrimoine** : `npm test` **43/43** ; `bash tests/lancer.sh` sortie 0, **48/48** harnais (+ `smoke-bandeaux`).
