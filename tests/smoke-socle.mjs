@@ -250,10 +250,16 @@ for (const taille of [[390, 664], [375, 667]]) {
   const m2 = await mesurer(page);
   verifier(`${cle} : un toucher déplie les signaux`, deplie.attendu === 'true' && deplie.liste, JSON.stringify(deplie));
   verifier(`${cle} : déplié, rien ne se recouvre`, m2.entre.length === 0 && m2.sous.length === 0, [...m2.entre, ...m2.sous].join(' ') || '0');
+  // Une chose à la fois : les signaux ouverts mettent le dock de côté — mesuré
+  // le 26/09, avec les deux, une étoile passait sous le dock (signaux à 44 px).
+  verifier(`${cle} : déplié, le dock se met de côté`, !m2.pieces.includes('dock'), m2.pieces.join(','));
   await page.locator('#finubar-bandeau .fb-deplier').tap();
   await page.waitForTimeout(800);
   const rereplie = await etat();
   verifier(`${cle} : un second toucher replie`, rereplie.attendu === 'false' && !rereplie.liste, JSON.stringify(rereplie));
+  const m3 = await mesurer(page);
+  verifier(`${cle} : replié, le dock revient et rien ne se recouvre`,
+    m3.pieces.includes('dock') && m3.entre.length === 0 && m3.sous.length === 0, `${m3.pieces.join(',')} ${[...m3.entre, ...m3.sous].join(' ')}`);
   await contexte.close();
 }
 // Et l'ordinateur, témoin : la liste ouverte, aucun bouton.

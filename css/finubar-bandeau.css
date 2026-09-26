@@ -13,7 +13,7 @@
   background: linear-gradient(180deg, rgba(10, 18, 32, .93), rgba(3, 7, 14, .96));
   border: 1px solid rgba(169, 136, 74, .45);
   border-radius: 4px;
-  box-shadow: 0 -8px 30px rgba(0, 0, 0, .5);
+  box-shadow: 0 -4px 14px rgba(0, 0, 0, .45); /* resserrée (26/09) : une ombre, pas un halo */
   font-family: Georgia, "Times New Roman", serif;
 }
 /* Tant que Finubar n'a rien livré, le bandeau n'existe pas à l'écran : pas de
@@ -60,11 +60,11 @@
   .fb-bandeau { grid-template-columns: 1fr; }
   .fb-entete { border-right: 0; border-bottom: 1px solid rgba(169, 136, 74, .25); padding: 8px 14px; }
   .fb-action { border-left: 0; border-top: 1px solid rgba(169, 136, 74, .25); padding: 9px 14px; order: -1; }
-  .fb-date, .fb-compte { font-size: 11px; }
+  .fb-date, .fb-compte { font-size: 12px; } /* plancher 12 px (critique du 26/09) */
   .fb-signaux { padding: 4px 6px; gap: 0; }
   .fb-bouton { padding: 4px 8px; }
   .fb-projet { font-size: 12px; }
-  .fb-dit { -webkit-line-clamp: 1; font-size: 11.5px; }
+  .fb-dit { -webkit-line-clamp: 1; font-size: 12px; }
   .fb-nature { display: none; }
   /* Replié (26/09) : l'en-tête seul, et le bouton qui ouvre les signaux.
      Le bouton se pose à droite du nom ; la date et le compte restent lus. */
@@ -102,4 +102,9 @@ body.a-finubar #boussole-parole {
 body.a-leo-propose .fb-action { display: none; }
 @media (min-width: 861px) {
   body.a-leo-propose .fb-bandeau { grid-template-columns: minmax(180px, 230px) 1fr; }
+}
+
+/* Au doigt, 44 px : les signaux et le bouton du repli en mesuraient 40. */
+@media (pointer: coarse) {
+  .fb-bouton, .fb-bandeau .fb-deplier { min-height: 44px; }
 }

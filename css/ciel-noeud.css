@@ -150,7 +150,7 @@ body.ciel-noeud .console-entete .boussole-sceau {
   margin: 0;
 }
 body.ciel-noeud .console-entete .console-titre { margin: 0; text-align: left; }
-body.ciel-noeud .console-entete .titre-surligne { font-size: .66rem; }
+body.ciel-noeud .console-entete .titre-surligne { font-size: .75rem; } /* 10,6 px mesurés → 12 */
 body.ciel-noeud .console-entete .titre-principal { font-size: clamp(1.1rem, 3.2vw, 1.6rem); }
 
 /* SUR ÉCRAN ÉTROIT, LE BANDEAU DESCEND SOUS LA LIGNE DU RETOUR.
@@ -168,6 +168,13 @@ body.ciel-noeud .console-entete .titre-principal { font-size: clamp(1.1rem, 3.2v
 
 /* La légende gravée : elle vivait sous le ciel, il n'y a plus de « sous ».
    Elle passe en bas de l'écran, au-dessus du plateau. */
+/* LA LÉGENDE SE RETIRE QUAND LE SOCLE EST LÀ (critique impeccable, 26/09).
+   Posée à 6 px du bas, elle passait SOUS le bandeau (« Ultima », 0 pixel de
+   glyphe visible) et sous le dock (« le professionnel », à moitié couvert).
+   Elle est décorative (`aria-hidden`) : on ne la déplace pas dans un socle
+   déjà plein, on ne la peint pas là où personne ne la voit. */
+body.a-finubar .ciel-noeud-plateau > .ciel-legende,
+body.a-leo-dock .ciel-noeud-plateau > .ciel-legende { display: none; }
 .ciel-noeud-plateau > .ciel-legende {
   position: absolute;
   left: 0;
@@ -318,7 +325,7 @@ body.ciel-noeud #boussole-parole {
 }
 body.ciel-noeud #boussole-parole .parole-nom,
 body.ciel-noeud #boussole-parole .parole-etat { display: inline; margin: 0; }
-body.ciel-noeud #boussole-parole .parole-etat { margin-left: .6em; }
+body.ciel-noeud #boussole-parole .parole-etat { margin-left: .6em; font-size: .75rem; } /* 10,9 px mesurés au téléphone → 12 */
 body.ciel-noeud #boussole-parole .parole-texte {
   margin: .2rem 0 0;
   display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
@@ -437,6 +444,12 @@ body.ciel-noeud .ciel-fil .ciel-fil-etape {
   text-decoration: underline;
   text-underline-offset: 3px;
   cursor: pointer;
+}
+/* Au DOIGT, 44 px (critique impeccable, 26/09) : au téléphone, le fil est la
+   seule sortie d'un isolement — ses étapes mesuraient 24 px de haut. */
+@media (pointer: coarse) {
+  body.ciel-noeud .ciel-fil .ciel-fil-etape { min-height: 44px; padding: 0 .5rem; }
+  body.ciel-noeud > .ciel-noeud-coque > .console-retour a { min-height: 44px; }
 }
 body.ciel-noeud .ciel-fil .ciel-fil-etape:hover { color: var(--creme, #f2ead6); }
 body.ciel-noeud .ciel-fil .ciel-fil-etape:focus-visible {

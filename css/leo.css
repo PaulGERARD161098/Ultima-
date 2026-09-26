@@ -459,21 +459,31 @@ body:has(.leo-appel) { padding-bottom: var(--leo-gouttiere); }
   padding: .5rem .55rem .5rem .8rem; box-sizing: border-box;
   background: linear-gradient(180deg, rgba(12, 22, 38, .97), rgba(3, 7, 14, .98));
   color: #f2ead6; border: 1px solid rgba(216, 189, 130, .58); border-radius: 5px;
-  box-shadow: 0 12px 36px rgba(0,0,0,.48); font-family: Georgia, "Times New Roman", serif;
+  box-shadow: 0 6px 18px rgba(0,0,0,.45); font-family: Georgia, "Times New Roman", serif;
   contain: layout paint; will-change: transform;
   transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
 }
-.leo-dock-identite { color: #d8bd82; letter-spacing: .2em; font-size: .72rem; font-weight: 700; }
+.leo-dock-identite { color: #d8bd82; letter-spacing: .2em; font-size: .75rem; font-weight: 700; }
 .leo-dock-contexte { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #e7dfcd; font-size: .88rem; }
 .leo-dock-action, .leo-dock-parler {
   min-height: 40px; padding: .45rem .7rem; border: 1px solid rgba(216,189,130,.38); border-radius: 3px;
   background: transparent; color: #f2ead6; font: inherit; cursor: pointer;
 }
-.leo-dock-action--primaire { background: #1a5a78; border-color: #4388a7; font-weight: 700; }
+/* L'OR GRAVÉ, PAS LE BLEU D'APPLICATION (critique impeccable, 26/09). Le bouton
+   plein bleu `#1a5a78` était la pièce la plus « SaaS » de l'écran — et la plus
+   forte, alors qu'il ne sert qu'à CHERCHER. La hiérarchie suit l'intention :
+   la proposition de Léo (« Y aller ») porte l'or plein ; chercher, l'or au trait. */
+.leo-dock-action--primaire { background: rgba(216,189,130,.12); border-color: #d8bd82; font-weight: 700; }
+.leo-dock-action--propose { background: #d8bd82; border-color: #d8bd82; color: #1b1407; font-weight: 700; }
+.leo-dock-action--propose:hover { background: #e6cf9c; border-color: #e6cf9c; color: #1b1407; }
+/* Un bouton sans effet ne s'affiche pas grisé à côté d'une proposition : à
+   42 % d'opacité, « Reprendre » se lisait comme « impossible ». */
+.leo-dock-action:disabled { display: none; }
 .leo-dock-action:hover, .leo-dock-parler:hover { border-color: #d8bd82; background-color: rgba(216,189,130,.1); }
 .leo-dock-action:focus-visible, .leo-dock-parler:focus-visible { outline: 3px solid #66b4d6; outline-offset: 2px; }
 .leo-dock-action:disabled { opacity: .42; cursor: default; }
-.leo-dock--proactif { border-color: rgba(216,189,130,.88); box-shadow: 0 12px 42px rgba(0,0,0,.55), 0 0 24px rgba(216,189,130,.08); }
+/* Le halo or sans décalage (`0 0 24px`) est retiré : une ombre porte un décalage. */
+.leo-dock--proactif { border-color: rgba(216,189,130,.88); box-shadow: 0 6px 18px rgba(0,0,0,.5); }
 body:has(.leo-dock) > .leo-appel { position: static; inset: auto; box-shadow: none; text-transform: none; letter-spacing: 0; }
 body:has(.leo-dock) { padding-bottom: 5.5rem; }
 /* Sur l'accueil, Finubar reste en place pendant le prototype : le dock se
@@ -511,7 +521,8 @@ html body.a-leo-dock.a-finubar #boussole-parole {
   box-sizing: border-box; background: #f4ecd8; color: #2b2417; border: 1px solid #a9884a; box-shadow: 0 18px 60px #000; }
 .leo-nav-entete { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 .leo-nav-entete h2 { margin: 0; font: 400 clamp(1.3rem,4vw,1.8rem) Georgia,serif; }
-.leo-nav-fermer { border: 0; background: transparent; color: #5d4c30; text-decoration: underline; cursor: pointer; }
+.leo-nav-fermer { border: 0; background: transparent; color: #5d4c30; text-decoration: underline; cursor: pointer;
+  min-height: 44px; padding: 0 .6rem; } /* 21 px mesurés : la seule sortie tactile du panneau */
 .leo-nav-recherche { width: 100%; min-height: 48px; margin: 1rem 0 .7rem; padding: .65rem .8rem; box-sizing: border-box;
   border: 1px solid #9d8354; background: #fffaf0; color: #2b2417; font: 1rem system-ui,sans-serif; }
 .leo-nav-onglets { display: flex; gap: .35rem; overflow-x: auto; border-bottom: 1px solid rgba(90,65,24,.24); }
@@ -522,6 +533,11 @@ html body.a-leo-dock.a-finubar #boussole-parole {
   padding: .65rem .75rem; text-align: left; border: 1px solid rgba(90,65,24,.22); background: rgba(255,250,240,.5); color: #2b2417; cursor: pointer; }
 .leo-nav-resultat:hover, .leo-nav-mode:hover { border-color: #1a5a78; background: #fffaf0; }
 .leo-nav-resultat span { color: #6a5636; font-size: .82rem; }
+.leo-nav-resultat strong { font-family: Georgia, "Times New Roman", serif; font-weight: 700; letter-spacing: .02em; }
+/* 1,36:1 mesurés : `stellaire.css` pose un placeholder crème, pensé pour la
+   nuit, sur le parchemin du panneau. Ici, l'encre de parchemin (≈ 6,9:1). */
+.leo-nav-recherche::placeholder { color: #6a5636; opacity: 1; }
+.leo-nav-onglets button { min-height: 44px; }
 .leo-nav-explication, .leo-nav-vide { margin: .35rem 0; color: #6a5636; }
 
 body[data-ciel-mode="appels"] .ciel-etoile:not([data-appel]),
@@ -559,5 +575,26 @@ body { font-kerning: normal; font-variant-ligatures: common-ligatures; }
   .leo-dock-action:not(.leo-dock-action--primaire) { display: none; }
   .leo-dock-parler { padding-inline: .55rem; }
   .leo-nav-voile { padding: 0; }
-  .leo-nav-panneau { width: 100%; max-height: none; min-height: 100dvh; }
+  /* LA HAUTEUR DE L'ÉCRAN, PAS PLUS (26/09) : `min-height: 100dvh` + marges
+     donnaient 704 px pour 664, et le dernier résultat restait hors d'atteinte,
+     sans défilement possible (mesuré). Le panneau fait l'écran et défile
+     dedans. */
+  .leo-nav-panneau { width: 100%; height: 100dvh; min-height: 0; max-height: 100dvh; overflow-y: auto; }
+  /* LA PROPOSITION DE LÉO SE LANCE AUSSI AU TÉLÉPHONE. Elle était masquée avec
+     tout bouton secondaire : il ne restait que « Aller à… » et « Parler ». Elle
+     reprend sa place ; « Aller à… » se replie en loupe (SVG dessiné, 44 px),
+     son nom restant porté par `aria-label`. */
+  .leo-dock--propose { grid-template-columns: auto minmax(0,1fr) auto auto auto; }
+  /* Signaux Finubar dépliés : le dock se met de côté (une chose à la fois ;
+     `js/finubar-bandeau.mjs`). Le ciel recadre de lui-même — le dock est observé. */
+  body.fb-deplie .leo-dock { display: none; }
+  .leo-dock--propose .leo-dock-action--propose { display: inline-flex; align-items: center; }
+  .leo-dock--propose .leo-dock-action--primaire {
+    width: 44px; padding: 0; font-size: 0; color: transparent;
+    background: rgba(216,189,130,.12) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d8bd82' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6'/%3E%3Cpath d='M15 15l5 5'/%3E%3C/svg%3E") center / 20px no-repeat;
+  }
+}
+/* Au doigt, 44 px : le plancher des cibles tactiles (40 mesurés sur le dock). */
+@media (pointer: coarse) {
+  .leo-dock-action, .leo-dock-parler { min-height: 44px; }
 }
