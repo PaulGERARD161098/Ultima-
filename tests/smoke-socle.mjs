@@ -34,6 +34,8 @@ const erreurs = [];
 const verdicts = {};
 const chiffres = {};
 function verifier(nom, condition, detail = '') {
+  // Un nom déjà pris est une faute du HARNAIS : il écraserait un verdict.
+  if (Object.prototype.hasOwnProperty.call(verdicts, nom)) { throw new Error('verdict en double : ' + nom); }
   verdicts[nom] = condition === true;
   console.log(`  ${condition === true ? '✅' : '❌'} ${nom}${detail ? ' — ' + detail : ''}`);
 }
@@ -166,6 +168,44 @@ for (const taille of TAILLES) {
     verifier(`survol@${taille[0]} : survoler ${id} ne déplace aucune étoile`, bouge === 0, `${bouge} déplacée(s)`);
     verifier(`survol@${taille[0]} : le cartouche du survol ne recouvre rien`,
       apres.entre.length === 0 && apres.sous.length === 0, [...apres.entre, ...apres.sous].join(' ') || '0');
+  }
+  await contexte.close();
+}
+
+// ⑤ UNE COQUE SANS BANDEAU, et un redimensionnement (dry run du 26/09).
+// Le socle n'a pas toujours trois étages : hors de l'accueil, pas de bandeau
+// Finubar, et la parole doit alors se poser au-dessus du dock SEUL. Ce cas ne
+// passait par aucun contrôle — il tenait, mais personne ne le savait.
+// Puis 1280 → 390 → 1280 : la hauteur du dock change (58 → 68 px mesurés),
+// sa variable doit suivre, et la parole avec elle.
+{
+  const contexte = await navigateur.newContext({ viewport: { width: 1280, height: 800 } });
+  const page = await contexte.newPage();
+  page.on('pageerror', (e) => erreurs.push(`naga pageerror: ${e.message}`));
+  await page.route('**/api/**', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, data: {} }) }));
+  await page.goto(`${BASE}/ultima.html#naga`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForSelector('.ciel-noeud-plateau.is-pret', { timeout: 20000 });
+  await page.evaluate(async () => {
+    const m = await import('/js/leo-navigation.mjs');
+    const b = document.createElement('button');
+    document.body.appendChild(b);
+    m.monterNavigationLeo({ bouton: b });
+  });
+  // ⚠️ L'ÉTAPE EST DANS LE NOM, et c'est un garde-fou : les verdicts vivent
+  // dans un objet indexé par leur nom. Deux passages à 1280 sous le même nom,
+  // et le second ÉCRASAIT le premier — un rouge à l'aller effacé par un vert
+  // au retour. Trouvé au dry run du 26/09 : 3 lignes ❌, « 2 rouges ».
+  const etapes = [[1280, 800], [390, 844], [1280, 800]];
+  for (const [rang, [largeur, hauteur]] of etapes.entries()) {
+    await page.setViewportSize({ width: largeur, height: hauteur });
+    await page.waitForTimeout(1500);
+    const m = await mesurer(page);
+    const cle = `NAGA sans bandeau, étape ${rang + 1} @${largeur}`;
+    verifier(`${cle} : verrou — parole et dock présents, pas de bandeau`,
+      m.pieces.includes('parole') && m.pieces.includes('dock') && !m.pieces.includes('bandeau') && m.etoiles >= 2,
+      m.pieces.join(','));
+    verifier(`${cle} : rien ne se recouvre, aucune étoile sous le socle`,
+      m.entre.length === 0 && m.sous.length === 0, [...m.entre, ...m.sous].join(' ') || '0');
   }
   await contexte.close();
 }
