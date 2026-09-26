@@ -4295,3 +4295,9 @@ faisait pivoter la caméra et couchait la constellation (877 px → 0). **A8 :
 recommandation V1**, V2 n'égalant pas V1 sur les critères mesurés. **A9 ouvert** :
 lisibilité des noms au téléphone (7,5 px), noms en Georgia, cartouche de figure,
 caméra 3D. Détail : `CADRAGE-2026-09-25-carte-celeste.md` §17.
+
+**26/09 — A8 et A9 rendus : « A8 reco, A9 reco ».** V1 (couronne + arbre +
+éclat par le rang) ; la variante figure sera retirée à l'activation. Lot 2a
+(noms ≥ 11 px CSS et en Georgia sur les coques) **avant** le lot 2b
+(activation) ; caméra 3D conservée. Mesure qui corrige A9-1 : le plancher 7,5
+est en unités de viewBox et rend 6,5 px au téléphone. Détail : §18.
