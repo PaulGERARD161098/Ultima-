@@ -30,6 +30,7 @@ const erreurs = [];
 const verdicts = {};
 const chiffres = {};
 function verifier(nom, condition, detail = '') {
+  if (Object.prototype.hasOwnProperty.call(verdicts, nom)) { throw new Error('verdict en double : ' + nom); }
   verdicts[nom] = condition === true;
   console.log(`  ${condition === true ? '✅' : '❌'} ${nom}${detail ? ' — ' + detail : ''}`);
 }
@@ -144,6 +145,28 @@ for (const ecran of ECRANS) {
   chiffres['NAGA 1280→300'] = m ? +m.pxMin.toFixed(1) : null;
   verifier('Rétréci de 1280 à 300 px : aucun nom sous 11 px', !!m && m.n >= 2 && m.pxMin >= PLANCHER_PX - 0.05,
     m ? `min ${m.pxMin.toFixed(1)} px` : 'scène absente');
+}
+
+// ---- LE PLANCHER A UNE BORNE HAUTE (audit S3, 26/09) ----
+// Le plancher se convertit par l'échelle écran : 11 / échelle. Une scène
+// presque effondrée (quelques pixels de large, le viewBox reste à 320) donne
+// une échelle de ~0,01 — et un plancher de ~900 unités. Aucun tiers ne peut le
+// déclencher, mais un panneau qui s'ouvre et écrase la scène le peut : des noms
+// de 900 unités, et `getComputedTextLength` sur des textes géants.
+// Le plancher ne dépasse donc jamais le plafond des noms (`PLAFOND_NOM`, 20).
+{
+  const { page, contexte } = await ouvrir(ECRANS[2], [1280, 800]);
+  await page.evaluate(() => {
+    const s = document.getElementById('ciel-noeud-scene');
+    s.style.width = '4px'; s.style.flex = '0 0 4px';
+    window.dispatchEvent(new Event('resize'));
+  });
+  await page.waitForTimeout(1500);
+  const max = await page.evaluate(() => Math.max(0, ...[...document.querySelectorAll('#ciel-noeud-scene text.ciel-nom')]
+    .map((t) => +t.getAttribute('font-size') || 0)));
+  await contexte.close();
+  chiffres['scène écrasée : police max'] = max;
+  verifier('Scène écrasée à 4 px : aucun nom au-delà du plafond (20)', max > 0 && max <= 20.05, `${max}`);
 }
 
 verifier('Zéro erreur console', erreurs.length === 0, JSON.stringify(erreurs.slice(0, 3)));

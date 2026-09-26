@@ -416,61 +416,12 @@
     return monde;
   }
 
-  // ---- LA FIGURE (variante V2 de la maquette, arbitrage A8 en attente) --------
-  // ⚠️ CANDIDATE, PAS STANDARD. La couronne reste la disposition des écrans de
-  // navigation (Paul, 17/08). Cette fonction n'existe que pour que la maquette
-  // montre, AVEC LE VRAI MOTEUR, à quoi ressemblerait une constellation
-  // irrégulière. Si A8 retient la couronne, elle se retire.
-  // Elle PART de la couronne — donc garde son placement des noms longs aux
-  // positions verticales, qui décide de la taille du ciel — puis décale chaque
-  // étoile d'un angle et d'un rayon tirés de son id : la même constellation a
-  // toujours la même figure. Une relaxation écarte ensuite les étoiles trop
-  // proches, pour que l'irrégularité ne fabrique pas de chevauchement.
-  function hacher(texte) {
-    var h = 2166136261;
-    for (var i = 0; i < texte.length; i++) { h ^= texte.charCodeAt(i); h = Math.imul(h, 16777619); }
-    return (h >>> 0) / 4294967296;
-  }
-  function disposerEnFigure(monde, yaw, pitch, aspect) {
-    disposerEnCouronne(monde, yaw, pitch, aspect);
-    var n = monde.etoiles.length;
-    if (n < 3) { return monde; }
-    var pas = (2 * Math.PI) / n;
-    var Rx = monde.ellipse.Rx, Ry = monde.ellipse.Ry;
-    monde.etoiles.forEach(function (e) {
-      // Coordonnées NORMALISÉES de l'ellipse : l'étoile y est sur le cercle
-      // unité (au modulé près). On y décale l'angle et le rayon, puis on
-      // revient à l'ellipse — la figure garde ainsi la forme du cadre.
-      var un = e.plan.u / Rx, vn = e.plan.v / Ry;
-      var a = Math.atan2(vn, un) + (hacher(e.noeud.id + ':a') - 0.5) * 0.7 * pas;
-      var r = Math.hypot(un, vn) * (0.62 + 0.38 * hacher(e.noeud.id + ':r'));
-      e.plan = { u: Math.cos(a) * r * Rx, v: Math.sin(a) * r * Ry };
-    });
-    // Relaxation : aucune paire plus proche que 55 % de la corde de la
-    // couronne sur son petit axe — l'irrégularité ne doit pas fabriquer de
-    // chevauchement.
-    var mini = 0.55 * Math.min(Rx, Ry) * pas;
-    for (var it = 0; it < 40; it++) {
-      var bouge = false;
-      for (var i = 0; i < n; i++) {
-        for (var j = i + 1; j < n; j++) {
-          var pi = monde.etoiles[i].plan, pj = monde.etoiles[j].plan;
-          var du = pj.u - pi.u, dv = pj.v - pi.v, dd = Math.hypot(du, dv) || 1e-6;
-          if (dd >= mini) { continue; }
-          var pousse = (mini - dd) / 2;
-          pi.u -= (du / dd) * pousse; pi.v -= (dv / dd) * pousse;
-          pj.u += (du / dd) * pousse; pj.v += (dv / dd) * pousse;
-          bouge = true;
-        }
-      }
-      if (!bouge) { break; }
-    }
-    var cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.max(0.2, Math.cos(pitch));
-    monde.etoiles.forEach(function (e) {
-      e.x = e.plan.u * cy; e.z = e.plan.u * sy; e.y = e.plan.v / cp;
-    });
-    return monde;
-  }
+  // ---- LA FIGURE IRRÉGULIÈRE A ÉTÉ RETIRÉE (A8, 26/09) ------------------------
+  // Une variante `disposition: 'figure'` a existé le temps que Paul tranche A8
+  // sur capture. Il a retenu la couronne (V1) : la figure n'égalait pas la
+  // couronne sur les critères mesurés (occupation plus basse, un chevauchement
+  // de noms ajouté — CADRAGE-2026-09-25-carte-celeste.md §17). Code qu'aucune
+  // page n'active = code qu'on croira un jour disponible ; il est parti.
 
   function recentrerSurLesEtoiles(monde) {
     var n = monde.etoiles.length;
@@ -543,12 +494,12 @@
     // LV4 — les trois options, toutes fausses par défaut : RIVEN passe ici sans
     // rien changer à ce qu'il faisait hier.
     var cadrageSerre = !!options.cadrerSurLesEtoiles;
-    // LOT 2 DE LA CARTE CÉLESTE (26/09) — trois options, INACTIVES PAR DÉFAUT :
+    // LOT 2 DE LA CARTE CÉLESTE (26/09) — deux options, INACTIVES PAR DÉFAUT :
     // RIVEN n'en active aucune, et son harnais le vérifie (71 verdicts).
     //   · `asterisme`     : la figure, n − 1 traits par constellation ;
     //   · `eclatParPoids` : la taille d'une étoile dit son RANG (`noeud.poids`,
-    //                       posé par l'adaptateur), plus son nombre de liens ;
-    //   · `disposition`   : 'figure' pour la variante V2 de la maquette.
+    //                       posé par l'adaptateur), plus son nombre de liens.
+    // (Une troisième, `disposition: 'figure'`, a été retirée après A8.)
     var avecAsterisme = !!options.asterisme;
     var eclatParPoids = !!options.eclatParPoids;
     // ⛔ CES CONTRÔLES ATMOSPHÉRIQUES NE SONT PAS « PREVIEW ONLY », malgré ce
@@ -668,8 +619,7 @@
         var hU = vbH - mUtile.haut - mUtile.bas;
         var placeLargeur = Math.max(30, lU - 2 * (MARGE_HALO + DEMI_NOM_INCONNU));
         var placeHauteur = Math.max(30, hU - 2 * MARGE_CADRAGE);
-        (options.disposition === 'figure' ? disposerEnFigure : disposerEnCouronne)(
-          monde, YAW_OUVERTURE, PITCH_OUVERTURE, placeLargeur / placeHauteur);
+        disposerEnCouronne(monde, YAW_OUVERTURE, PITCH_OUVERTURE, placeLargeur / placeHauteur);
         if (cadrageSerre) { recentrerSurLesEtoiles(monde); }
         // La disposition vient de changer : la figure se recalcule sur elle.
         if (gAsterisme) { calculerAsterisme(); }
@@ -863,7 +813,11 @@
       // on répond à l'échelle 1 SANS la retenir — figer 1 ici laisserait le
       // plancher faux jusqu'au prochain redimensionnement.
       if (!ctm || !isFinite(ctm.a) || ctm.a <= 0) { return Math.max(7.5, plancherNomPx); }
-      plancherCourant = Math.max(7.5, plancherNomPx / ctm.a);
+      // Borné par le PLAFOND : une scène presque effondrée (échelle ~0,01)
+      // donnait un plancher de ~900 unités — mesuré (audit S3, 26/09). Un
+      // plancher de lisibilité ne doit jamais faire grossir un nom au-delà de
+      // ce que le cadrage le plus serré autorise.
+      plancherCourant = Math.min(PLAFOND_NOM, Math.max(7.5, plancherNomPx / ctm.a));
       return plancherCourant;
     }
 
