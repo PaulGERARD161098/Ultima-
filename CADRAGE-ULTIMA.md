@@ -6,6 +6,13 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🔗 **SESSION 2026-09-27 (soir) — LOT 3 LIVRÉ SUR LA BRANCHE : un lien vers un dépôt s'ouvre sur lui.**
+  `alpha.html#renoboost-ia` s'ouvrait sur ALPHA entier (l'adresse était lue avant la
+  greffe Finubar) ; elle est relue après la greffe, sans historique. Mesuré sur
+  l'agrégat réel : les 9 dépôts peints en ≤ 2 clics depuis l'accueil (Ultima, rangé à
+  la racine, est le ciel lui-même). Fail-closed intact. `smoke-depots-partout` 6 rouges
+  → 0/24. La carte céleste (lots 0 à 3) est bouclée. Détail : carte-celeste §27.
+  Prochaine action : cadrage DOKLĚS / SYMPHO, puis PR de séance sur go.
 - 📱 **SESSION 2026-09-27 — AU TÉLÉPHONE, LE CIEL RESPIRE ET CHAQUE ÉTOILE SE TOUCHE (branche).**
   Diagnostic : sur RENOBOOST IA (six dépôts, 390 × 664, dock), le ciel n'avait que 205 px
   et deux voisins 29 px ; des noms se croisaient. Au téléphone, l'accueil se replie sous

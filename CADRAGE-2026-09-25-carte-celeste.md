@@ -1424,3 +1424,41 @@ prouve (échelle < 1, cibles à 44 sur la racine) ; `smoke-clic-exact` et `smoke
 
 **Patrimoine** : `npm test` **44/44** ; `bash tests/lancer.sh` sortie 0, **50/50** harnais
 (+ `smoke-cibles-telephone`, 160 verdicts ; `smoke-carte-celeste` 178).
+
+---
+
+## 27. Lot 3 — LIVRÉ le 27/09, sur go de Paul (« go lot 3 »)
+
+A7 était rendu (l'anneau de Léo au survol reviendra avec J3) : le lot se réduisait
+au §14.3, et c'est ce qui a été fait.
+
+### Ce qui a été fait
+
+| Pièce | Où |
+|---|---|
+| **Un lien vers un dépôt s'ouvre sur lui.** Juste après la greffe Finubar, si aucun foyer n'est posé, l'adresse est relue et le foyer posé — sans historique, comme un lien direct. `idDeLAdresse` garde sa triple garde, relue sur le registre greffé ; un choix déjà fait ne se fait pas voler | `js/ciel-noeud.mjs` (rappel de `chargerFinubar`) |
+| **Le harnais** `tests/smoke-depots-partout.mjs` (neuf) — l'agrégat RÉEL (`api/_lib/finubar-macro.mjs`), servi avec 800 ms de retard | `tests/` |
+
+### Mesures
+
+| Contrôle | Avant | Après |
+|---|---|---|
+| `alpha.html#renoboost-ia`, Finubar retardé de 800 ms | ALPHA entier (4 dépôts d'ALPHA, RENOBOOST IA, YCOME) | **RENOBOOST IA isolé** : ses 5 dépôts + LE SITE, rien d'autre |
+| Le même, Finubar sans retard | ALPHA entier | **RENOBOOST IA isolé** |
+| Entrées d'historique ajoutées | — | **0** (2 → 2) |
+| Sans session | aucun astre | aucun astre, aucun isolement — **fail-closed intact** |
+| `#__proto__`, `#constructor`, `#inexistant`, `ultima.html#renoboost-ia` | ignorées | ignorées, greffe comprise |
+| Dépôts réels depuis l'accueil | — | **9/9 en ≤ 2 clics** : 4 à un clic (sous ALPHA), 5 à deux (sous RENOBOOST IA) |
+
+**Vu rouge d'abord** : 6 rouges sur la tête d'avant (la course et sa variante sans
+retard). Verrou de la course : aucun dépôt au ciel avant la réponse retardée — le
+harnais prouve que l'ordre fautif se produit bien.
+
+⚠️ **Une faute d'instrument, trouvée par la mesure ④** : le premier jet cherchait
+*dix* dépôts au ciel et déclarait Ultima manquant. Or le dépôt rangé à la racine
+**n'a pas d'étoile, à dessein** — « le projet EST le ciel qu'on regarde »
+(`js/adaptateur-finubar.mjs`, `greffer`). Il s'atteint en zéro clic. Le harnais
+lit désormais cette règle au lieu de la contredire.
+
+**Patrimoine** : `npm test` **44/44** ; `bash tests/lancer.sh` sortie 0, **51/51** harnais
+(+ `smoke-depots-partout`, 24 verdicts).

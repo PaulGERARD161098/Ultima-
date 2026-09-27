@@ -769,6 +769,20 @@ export function rendre(idNoeud, options = {}) {
           window.UltimaFinubarAgregat = agregat;
           doc.dispatchEvent(new CustomEvent('ultima:finubar', { detail: agregat }));
           if (typeof options.surFinubar === 'function') { options.surFinubar(agregat); }
+          // UN LIEN VERS UN DÉPÔT S'OUVRE SUR LUI (lot 3, 27/09). L'adresse est
+          // lue au chargement, AVANT cette greffe : `alpha.html#renoboost-ia`
+          // trouvait alors un RENOBOOST IA sans enfants, la garde répondait
+          // « rien à isoler », et le lien partagé s'ouvrait sur ALPHA entier.
+          // On la relit donc ICI, une fois les astres greffés — seulement si
+          // aucun foyer n'est posé : un choix déjà fait ne se fait pas voler.
+          // Sans historique, comme le lien direct : l'entrée existe déjà.
+          // `idDeLAdresse` garde sa triple garde, relue sur le registre greffé.
+          // `tests/smoke-depots-partout.mjs`.
+          const vise = isole ? null : idDeLAdresse();
+          if (vise) {
+            poserFoyer(vise, { sansHistorique: true });
+            return;
+          }
           dessiner();
         });
       },
