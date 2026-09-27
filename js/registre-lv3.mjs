@@ -110,13 +110,14 @@ export const NOEUDS = {
     blason: 'alpha',
     cible: 'alpha.html',
     resume: 'La supra-division professionnelle. Les projets qui te font vivre : '
-      + 'Renoboost IA aujourd’hui, YCOME dès que tu me donnes son adresse.',
+      + 'Renoboost IA aujourd’hui, YCOME dès que tu me donnes son adresse, et '
+      + 'deux caps à cadrer — DOKLĚS (la marque ECL by DOKLES) et SYMPHO.',
     titre: 'ALPHA',
     surligne: 'Supra-division Alpha',
     invite: 'Léo te guide — survole un cap.',
     coeur: 'alpha',
     legende: 'le professionnel',
-    enfants: ['renoboost-ia', 'ycome'],
+    enfants: ['renoboost-ia', 'ycome', 'dokles', 'sympho'],
   },
 
   // ---- Les caps d'ALPHA (feuilles : plateformes de travail) ----
@@ -137,6 +138,30 @@ export const NOEUDS = {
     externe: true,
     resume: 'Projet YCOME, plateforme externe. Le cap est prêt : transmets-moi '
       + 'son URL et je le branche.',
+  },
+
+  // DOKLĚS et SYMPHO — deux ÉTOILES D'ATTENTE (Paul, 27/09 ; cadrage
+  // carte-celeste §28). Même forme que YCOME : un nom, un état, une phrase, et
+  // AUCUNE cible — donc `aria-disabled`, donc aucune page promise. Elles
+  // grandiront quand leur projet aura une page ou un dépôt.
+  // ⛔ LE NOM S'ÉCRIT « DOKLĚS », AVEC LE Ě (e caron), tel que Paul l'a donné.
+  // L'identifiant, lui, reste ASCII (`dokles`) : il sert d'adresse (#dokles)
+  // et de clé ; le NOM est ce qu'on lit, et on ne le « simplifie » pas.
+  // Les phrases sont celles validées par Paul le 27/09 — rien d'autre n'est dit,
+  // parce que rien d'autre n'est su (Principe 3 de PRODUCT.md).
+  dokles: {
+    nom: 'DOKLĚS',
+    etat: 'À venir',
+    blason: 'portail',
+    cible: null,
+    resume: 'La marque ECL by DOKLES. Le cap est prêt : dis-moi ce qu’on y met.',
+  },
+  sympho: {
+    nom: 'SYMPHO',
+    etat: 'À venir',
+    blason: 'portail',
+    cible: null,
+    resume: 'Projet professionnel, à cadrer. Le cap est prêt.',
   },
 
   // ALTHEA — le 3ᵉ cadran d'ULTIMA Lv3 (Paul, 2026-08-06 ; place corrigée le

@@ -1,5 +1,5 @@
 // Supra-division ALPHA (Ultima Lv3, boucle L2) : alpha.html.
-// Prouve : bandeau conforme au REGISTRE, 2 caps rendus (RENOBOOST IA ouvert en
+// Prouve : bandeau conforme au REGISTRE, les caps du registre rendus (RENOBOOST IA ouvert en
 // nouvel onglet + rel noopener ; YCOME « à venir », inerte mais parlant), le
 // cœur gravé + sa légende, le retour vers la racine, la parole de Léo au
 // survol ET au focus clavier, le repli noscript, les contrastes AA, et —
@@ -68,11 +68,17 @@ verifier('Cartouche invisible et muet au repos',
   await page.locator('#boussole-parole').evaluate((el) =>
     getComputedStyle(el).visibility === 'hidden' && el.textContent.trim() === ''));
 
-// Les 2 caps, dans l'ordre du registre.
+// Les caps, tels que le registre les porte.
 const attendus = capsDe('alpha').map((c) => c.nom);
 const caps = await lireCaps(page);
 const noms = caps.map((c) => c.nom);
-verifier('2 caps rendus', noms.length === 2, `trouvés: ${JSON.stringify(noms)}`);
+// ⛔ CE NOMBRE SE LIT AU REGISTRE, il ne se recopie pas (27/09). Le harnais
+// écrivait « 2 caps », « 1 seul à venir », « 2 étoiles » : vrai jusqu'à ce
+// qu'ALPHA gagne DOKLĚS et SYMPHO — trois rouges sur un écran sain. Même piège
+// que `smoke-althea` au §22 du cadrage carte-celeste : un chiffre recopié
+// décrit le registre d'un jour. Verrou : ALPHA porte au moins deux caps.
+verifier('Verrou : ALPHA porte au moins deux caps au registre', attendus.length >= 2, `${attendus.length}`);
+verifier(`${attendus.length} caps rendus (autant qu'au registre)`, noms.length === attendus.length, `trouvés: ${JSON.stringify(noms)}`);
 // ORDRE ABANDONNÉ (LV5 / P3), raison écrite en LV4 ④a : une constellation range
 // par géométrie, pas par liste. Le contrôle utile est conservé entier.
 verifier('Les caps du registre sont tous là (ordre abandonné : la géométrie range)',
@@ -138,7 +144,9 @@ verifier('YCOME aria-disabled', (await ycome.getAttribute('aria-disabled')) === 
 // « 1 seul cap à venir » se lisait sur `.cap--avenir`, une classe de STYLE. Au
 // ciel, l'état se lit sur `aria-disabled`, ce qui est la source de vérité pour
 // qui n'y voit pas — donc un meilleur endroit pour le mesurer.
-verifier('1 seul cap « à venir »', caps.filter((c) => c.avenir).length === 1);
+const aVenir = capsDe('alpha').filter((c) => !c.cible).length;
+verifier(`${aVenir} caps « à venir » (ceux sans page au registre)`, aVenir >= 1 && caps.filter((c) => c.avenir).length === aVenir,
+  `${caps.filter((c) => c.avenir).length} lus`);
 // ET IL NE NAVIGUE PAS : la promesse d'inertie, éprouvée AU CLAVIER.
 {
   const avant = page.url();
@@ -157,8 +165,8 @@ const legende = (await page.locator('.ciel-legende').textContent())?.trim();
 verifier('Légende gravée = celle du registre', legende === NOEUDS.alpha.legende, `lu: ${legende}`);
 // « 2 aiguilles » ABANDONNÉE : un ciel n'a pas de moyeu d'où partir. Remplacée
 // par le contrôle qu'elle approchait.
-verifier('2 étoiles (ce que les aiguilles approchaient)',
-  (await page.locator('g.ciel-etoile[data-noeud-id]').count()) === 2);
+verifier(`${attendus.length} étoiles (ce que les aiguilles approchaient)`,
+  (await page.locator('g.ciel-etoile[data-noeud-id]').count()) === attendus.length);
 
 // Retour vers la racine.
 verifier('Retour vers la boussole racine',
