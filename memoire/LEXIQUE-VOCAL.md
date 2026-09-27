@@ -66,7 +66,7 @@
 | Torrio, Toriole | THORIOL (déformations observées 2026-08-04) |
 | Lyendra, le Lyendra | LIANDRA (déformations observées 2026-08-04) |
 | méga affichage | l'affichage majeur d'un élément choisi — il occupe la place au lieu de rester une ligne parmi d'autres (dicté 2026-08-04 pour le futur advenu de VRANESH) |
-| Julien Ramsé | Julien **Laudy** (mentor des affaires, pro DOKLÈS — corrigé par Paul le 2026-09-05, ADR-010) |
+| Julien Ramsé | Julien **Laudy** (mentor des affaires, pro DOKLĚS — corrigé par Paul le 2026-09-05, ADR-010 ; graphie **DOKLĚS**, e caron, donnée par Paul le 2026-09-27 — jamais « DOKLÈS » ni « DOKLES » dans un nom affiché) |
 
 Règle : en cas de doute sur un mot qui change le sens d'une instruction,
 reformuler et demander — jamais deviner avant une action irréversible.

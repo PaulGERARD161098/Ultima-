@@ -31,11 +31,11 @@
     "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
   },
   "dernier_arret": {
-    "le": "2026-09-26",
-    "commit": "76776ca1d4639e3e7eff1ac2068500cafdb82de5",
-    "quoi": "Séance 26/09 : lots 0 et 2 livrés — PRODUCT.md ; figure des constellations prête (options inactives), maquette critiquée ; clavier qui couchait le ciel corrigé."
+    "le": "2026-09-27",
+    "commit": "6b08583b299c2a97e20a937f8f3893cf15220996",
+    "quoi": "Séance 26-27/09 : carte céleste bouclée (figure et rang, 44 px au doigt, liens vers les dépôts) ; porte qui tutoie ; DOKLĚS et SYMPHO sous ALPHA."
   },
-  "prochaine_action": "Paul tranche A8 sur capture (reco V1 couronne + arbre) et A9 (noms lisibles au téléphone). Puis activation sur les coques + smoke-carte-celeste. Carte-celeste §17.",
+  "prochaine_action": "Choisir avec Paul le prochain chantier : la carte céleste est bouclée (carte-celeste §25 à §28). En tête du registre : propager LEÇONS v41 aux sept dépôts.",
   "bloque_par": [
     "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
@@ -47,12 +47,12 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "Carte céleste : lots 0, 1, 2 livrés (lot 2 jusqu’à A8) ; lot 3 cadré. A8 et A9 attendent Paul, sur capture.",
-      "depuis": "2026-09-25"
+      "quoi": "LEÇONS v41 (44334f0e2ecd) sur Ultima seul ; les copies mesurées le 26/09 étaient en v38 et v28, trois dépôts sans copie. Propagation non faite.",
+      "depuis": "2026-09-26"
     },
     {
-      "quoi": "LEÇONS v40 (e39f91fc1c3e) sur Ultima seul, mesuré le 26/09 : RenoAgenda v38, RenoDevis/RenoPredict/mon-dpe/artisan-builder v28, trois dépôts sans copie. Propagation non faite.",
-      "depuis": "2026-09-26"
+      "quoi": "Étiquettes vocales des caps : chacune finit par « 0 lien » sur les menus, du bruit pour un lecteur d'écran. Préexistant, relevé au dry run du 27/09 (carte-celeste §28).",
+      "depuis": "2026-09-27"
     },
     {
       "quoi": "MESURÉ le 13/09 et démenti : la note annonçait des copies divergentes du rappel Finubar. Les sept fichiers ont la même empreinte. Voir CADRAGE-FINUBAR.md.",
@@ -115,7 +115,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-09-26"
+  "maj": "2026-09-27"
 }
 ```
 

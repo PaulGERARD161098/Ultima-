@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v40 2026-09-26 sha256:e39f91fc1c3e -->
+<!-- lecons:empreinte v41 2026-09-27 sha256:44334f0e2ecd -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -468,6 +468,61 @@ recherche elle-même — « ce fichier existe-t-il, fait-il plus de zéro ligne 
 coûte une seconde et sauve l'annonce.
 
 ## 2. Les garde-fous, et leur silence
+
+**UN CONTRÔLE QUI NE PEUT PAS ÉCHOUER SE DÉMASQUE PAR UN TÉMOIN QUI DOIT BOUGER** *(2026-09-27)*.
+`smoke-carte-celeste` affirmait « rien ne bouge en `reduced-motion` » : il relevait
+les traits à 1,5 s d'écart et trouvait les mêmes coordonnées. Rejoué **sans** la
+préférence, au dry run : mêmes coordonnées aussi — la caméra une fois posée, rien
+ne bouge de toute façon. Le contrôle était vert par construction. Le même jour,
+un second : des touchers pris au hasard au bord des cibles ne tombaient sur un
+trait de la figure qu'au gré de la caméra — le défaut (les traits captaient le
+doigt, 5 touchers sur 12 perdus) passait un run sur deux.
+⛔ **Un contrôle d'absence n'a de valeur que si son témoin, dans l'autre état,
+montre la présence** ; et un défaut déterministe se tient par un point
+déterministe (le milieu de chaque trait), jamais par un tirage.
+⇒ Tout contrôle « rien ne X » s'écrit APPARIÉ : l'état où X doit se produire est
+mesuré dans le même harnais, et il doit être vu. *(Ici : la transition
+d'extinction vaut 0,22 s sans la préférence, 0 s avec.)*
+
+**UN GARDE-FOU QUI ROGNE EN SILENCE LAISSE PASSER CE QU'IL DEVAIT EMPÊCHER** *(2026-09-27)*.
+Le moteur du ciel plafonnait la marge du mobilier à 40 % de la hauteur — « au-delà,
+ce serait du mobilier avec un peu de ciel ». Au bureau, le socle complet (parole,
+dock, bandeau) en prenait 45 % : la marge était rognée, et une étoile se peignait
+39 px SOUS la parole, sans un avertissement. Invisible à deux étoiles sur ALPHA ;
+à quatre (DOKLĚS, SYMPHO), `smoke-socle` l'a vu.
+⛔ **Un plafond qui tronque ne protège de rien s'il tronque sans le dire** : il
+échange un ciel trop petit contre un ciel qui passe sous les boutons.
+⇒ Un garde-fou qui borne une mesure s'éprouve avec le mobilier RÉEL au complet,
+et le jour où le produit grandit (le dock est arrivé le 26/09), sa borne se
+remesure — elle avait été posée avant qu'il existe.
+
+**UN NOMBRE RECOPIÉ DU REGISTRE DÉCRIT LE REGISTRE D'UN JOUR** *(2026-09-26 et 27)*.
+`smoke-althea` encodait une page périmée, puis `smoke-alpha` écrivait « 2 caps »,
+« 1 seul à venir », « 2 étoiles » : trois rouges sur un écran sain le jour où ALPHA
+a gagné deux étoiles. Le même jour, un seuil INVENTÉ (« le ciel a au moins
+300 px ») a rougi à 296 px sur un écran sain.
+⛔ **Un harnais qui recopie une valeur au lieu de la lire la fige** ; un seuil qui
+ne se dérive d'aucune définition teste la mémoire de son auteur.
+⇒ Les comptes se LISENT au registre (`capsDe`, `NOEUDS`) avec un verrou de
+non-vacuité ; les seuils se DÉRIVENT (deux cibles de 44 px ne se recouvrent pas si
+leurs centres sont à ≥ 44 px — pas « le ciel fait 300 px »).
+
+**UN OBJET DE VERDICTS INDEXÉ PAR NOM AVALE LES DOUBLONS** *(2026-09-26)*. Les
+harnais notent `verdicts[nom] = ok`. Deux contrôles portant le même nom — une
+boucle sur des tailles qui oublie la taille dans le libellé — et le second
+**écrase** le premier : un rouge devient vert sans un bruit. Trouvé sur
+`smoke-clic-exact`, `smoke-lv4-coque`, `smoke-noms-lisibles`, `smoke-socle`.
+⇒ `verifier()` **lève une erreur** sur un nom déjà pris. Un harnais qui plante
+vaut mieux qu'un harnais qui ment.
+
+**UNE RÈGLE DE SÉCURITÉ ÉCRITE EN COMMENTAIRE PÉRIME AVEC LA DONNÉE** *(2026-09-26)*.
+`js/ciel-noeud.mjs` insérait le texte de la parole par `innerHTML`, sous un
+commentaire « le registre est statique, écrit par nous ». Vrai jusqu'au 02/09 : la
+greffe Finubar y verse depuis des noms venus des grains des dépôts. La faille (S1)
+a vécu trois semaines derrière une phrase juste le jour où elle fut écrite.
+⇒ Une hypothèse de confiance ne se consigne pas en commentaire : elle se CODE
+(`echapper()` à chaque insertion) et se teste (`smoke-parole-echappement`), pour ne
+pas dépendre de ce que la donnée sera demain.
 
 **UN CLIC DE HARNAIS TOMBE TOUJOURS SUR L'ÉLÉMENT QU'ON LUI NOMME** *(2026-09-25)*.
 Paul signalait depuis des semaines que cliquer NAGA ou GRIMA « ne sélectionne
