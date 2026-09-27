@@ -191,6 +191,13 @@ export function rendre(idNoeud, options = {}) {
   }
 
   function majFil() {
+    // SOUS ISOLEMENT, L'ACCUEIL SE REPLIE AU TÉLÉPHONE (27/09). « Bienvenue /
+    // Sur quoi est-ce qu'on travaille aujourd'hui ? » est le propos de la
+    // racine ; un cran plus bas, c'est le fil qui dit où l'on est, et l'accueil
+    // prenait ~140 px au ciel — 205 px restaient sur RENOBOOST IA à 390 × 664.
+    // La règle vit dans `css/ciel-noeud.css` (≤ 560 px) ; la classe se pose
+    // AVANT `placerFil` et avant `dessiner()`, qui MESURENT l'en-tête.
+    doc.body.classList.toggle('ciel-profond', !!isole);
     fil.textContent = '';
     if (!isole) {
       fil.hidden = true;
@@ -375,6 +382,18 @@ export function rendre(idNoeud, options = {}) {
       // Le plancher du moteur (7,5) est en unités du viewBox : mesuré, il
       // rendait 7,5 px à 360 et 390 px de large. `tests/smoke-noms-lisibles`.
       plancherNomPx: 11,
+      // Lot 2b (26/09, A8 rendu par Paul : « V1 ») — LA FIGURE ET LE RANG.
+      // Chaque constellation porte son arbre de n − 1 traits, à l'encre
+      // parchemin, muet au lecteur d'écran ; et un cap qui CONTIENT est plus
+      // vif qu'un cap qui ouvre une page (`rang()`, `js/adaptateur-lv4.mjs`).
+      // La couronne ne bouge pas. RIVEN n'active ni l'un ni l'autre.
+      // `tests/smoke-carte-celeste.mjs`.
+      asterisme: true,
+      eclatParPoids: true,
+      // 27/09 — AU DOIGT, UNE ÉTOILE SE TOUCHE À 44 PX, comme tout le reste du
+      // socle. Au pointeur précis (souris), le plancher d'hier suffit et le
+      // survol ne doit pas s'allumer à distance. `smoke-cibles-telephone`.
+      cibleDoigtPx: (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) ? 44 : 0,
       // LV5 — LA COUCHE DE FOND (P1). Validée par Paul le 2026-08-16 sur la
       // maquette : « fond avec les étoiles, génial ». Elle remplace les 130
       // grains SVG fixes par un champ dont la densité suit la surface (1 266 à
@@ -750,6 +769,20 @@ export function rendre(idNoeud, options = {}) {
           window.UltimaFinubarAgregat = agregat;
           doc.dispatchEvent(new CustomEvent('ultima:finubar', { detail: agregat }));
           if (typeof options.surFinubar === 'function') { options.surFinubar(agregat); }
+          // UN LIEN VERS UN DÉPÔT S'OUVRE SUR LUI (lot 3, 27/09). L'adresse est
+          // lue au chargement, AVANT cette greffe : `alpha.html#renoboost-ia`
+          // trouvait alors un RENOBOOST IA sans enfants, la garde répondait
+          // « rien à isoler », et le lien partagé s'ouvrait sur ALPHA entier.
+          // On la relit donc ICI, une fois les astres greffés — seulement si
+          // aucun foyer n'est posé : un choix déjà fait ne se fait pas voler.
+          // Sans historique, comme le lien direct : l'entrée existe déjà.
+          // `idDeLAdresse` garde sa triple garde, relue sur le registre greffé.
+          // `tests/smoke-depots-partout.mjs`.
+          const vise = isole ? null : idDeLAdresse();
+          if (vise) {
+            poserFoyer(vise, { sansHistorique: true });
+            return;
+          }
           dessiner();
         });
       },

@@ -91,6 +91,9 @@
   // de 30 px. 20 px = échelle 2,0 ; RIVEN plafonne à 1,65 même zoom à fond
   // (ZOOM_MIN 0,55), donc ce plafond ne peut pas le toucher.
   var PLAFOND_NOM = 20;
+  // Plafond de la cible du doigt, en unités : 44 px sur une scène à l'échelle
+  // 0,5 donnent 44 — au-delà, c'est une scène effondrée, pas un téléphone.
+  var PLAFOND_CIBLE = 44;
 
   var MOTIFS_RELATION = {
     apport_affaires: null, sous_traitance: '7 5', chantier_commun: '1.5 5'
@@ -821,6 +824,28 @@
       return plancherCourant;
     }
 
+    // LA CIBLE DU DOIGT, EN PIXELS D'ÉCRAN (27/09). Même conversion que le
+    // plancher des noms, même piège : `RAYON_CAPTATION_MIN` est en unités du
+    // viewBox, et rendait 25 px au téléphone — sous les 44 px que tout le reste
+    // de l'écran tient au doigt. `cibleDoigtPx` est le DIAMÈTRE visé ; le moteur
+    // le borne par la moitié de la distance à l'étoile voisine (plus bas), si
+    // bien qu'aucune zone n'en recouvre jamais une autre. Inactive par défaut :
+    // RIVEN ne la demande pas.
+    var cibleDoigtPx = +options.cibleDoigtPx > 0 ? +options.cibleDoigtPx : 0;
+    var cibleCourante = null;
+    function rayonCibleDoigt() {
+      if (!cibleDoigtPx) { return 0; }
+      if (cibleCourante !== null) { return cibleCourante; }
+      var ctm = null;
+      try { ctm = racine.getScreenCTM(); } catch (e) { ctm = null; }
+      // Hors du document : pas d'agrandissement, et rien de retenu.
+      if (!ctm || !isFinite(ctm.a) || ctm.a <= 0) { return 0; }
+      // Borné comme le plancher des noms (audit S3) : une scène effondrée ne
+      // doit pas donner des zones de plusieurs centaines d'unités.
+      cibleCourante = Math.min(PLAFOND_CIBLE, (cibleDoigtPx / 2) / ctm.a);
+      return cibleCourante;
+    }
+
     function projeter(p) {
       // À plat : ni rotation ni perspective. Une échelle unique, les
       // coordonnées du monde telles quelles — la carte du ciel, pas le ciel.
@@ -957,7 +982,14 @@
         // (engagement 3 de PRODUCT.md). Des traits or convergeant vers une étoile
         // qui appelle se liraient comme un chemin vers elle — critique du lot 2.
         'class': 'ciel-asterisme', 'aria-hidden': 'true', stroke: '#cdc3ad',
-        'stroke-linecap': 'round', fill: 'none'
+        'stroke-linecap': 'round', fill: 'none',
+        // ⛔ UN TRAIT NE PREND PAS LE DOIGT (dry run DR du 27/09). Sans cette
+        // ligne, un toucher qui tombait sur un trait, à côté d'une étoile,
+        // n'atteignait RIEN : le trait est au-dessus des zones de captation.
+        // Mesuré sur RENOBOOST IA à 390 × 664 : 5 touchers sur 12 perdus. Posé
+        // ICI, sur le groupe, et non dans une feuille de style : la figure ne
+        // dépend d'aucune règle qu'une page pourrait oublier de charger.
+        'pointer-events': 'none'
       });
       calculerAsterisme();
       racine.appendChild(gAsterisme);
@@ -1387,6 +1419,29 @@
         if (nbEchelles) { echelleCommune = sommeEchelles / nbEchelles; }
       }
 
+      // LA DEMI-DISTANCE AU VOISIN, pour borner la cible du doigt. Seules
+      // comptent les étoiles PEINTES (dans le cadre, à la même règle que le
+      // masquage plus bas) : une étoile hors champ ne se touche pas.
+      var demiVoisin = null;
+      if (cibleDoigtPx && pieces.length) {
+        demiVoisin = Object.create(null);
+        var peintes = [];
+        pieces.forEach(function (piece) {
+          var prv = projetes[piece.etoile.noeud.id] || projeter(piece.etoile);
+          projetes[piece.etoile.noeud.id] = prv;
+          if (prv && prv.sx >= -40 && prv.sx <= vbW + 40 && prv.sy >= -40 && prv.sy <= vbH + 40) {
+            peintes.push({ id: piece.etoile.noeud.id, x: prv.sx, y: prv.sy });
+          }
+        });
+        peintes.forEach(function (a) {
+          var d = Infinity;
+          peintes.forEach(function (b) {
+            if (b !== a) { d = Math.min(d, Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y))); }
+          });
+          demiVoisin[a.id] = d / 2;
+        });
+      }
+
       pieces.forEach(function (piece) {
         var pr = projetes[piece.etoile.noeud.id] || projeter(piece.etoile);
         projetes[piece.etoile.noeud.id] = pr;
@@ -1442,6 +1497,17 @@
           rayon = Math.max(1.6, Math.min(9, (R_ETOILE_MIN + surcroit) * pr.echelle * 1.05));
         }
         pr.rayon = rayon;
+        // ⛔ LE RANG CHANGE L'ÉCLAT, JAMAIS LA CIBLE DU DOIGT (lot 2b, 26/09).
+        // La zone de captation se calcule sur le rayon qu'aurait l'étoile SANS
+        // le rang (la règle d'avant, nombre de liens et perspective), ou sur le
+        // rayon réel s'il est plus grand. Premier jet : elle suivait le rayon
+        // réel, et une feuille rapetissée devenait plus dure à toucher — les deux
+        // étoiles de TAO passées de 45 à 30 px au bureau (`smoke-tao`).
+        var rayonCible = rayon;
+        if (eclatParPoids) {
+          rayonCible = Math.max(rayon, Math.max(1.6, Math.min(9,
+            (R_ETOILE_MIN + Math.min(3.2, (piece.mag / magMax) * 3.2)) * pr.echelle * 1.05)));
+        }
         var op = opaciteProfondeur(pr.profondeur);
         var attenue = correspond && !correspond(piece.etoile.noeud);
         piece.g.setAttribute('opacity', (attenue ? op * 0.14 : op).toFixed(3));
@@ -1478,7 +1544,20 @@
         // La zone qui reçoit le doigt ne rétrécit PAS autant que l'étoile :
         // sans ce plancher, la moitié du réseau devient intouchable.
         piece.zone.setAttribute('cx', x); piece.zone.setAttribute('cy', y);
-        piece.zone.setAttribute('r', Math.max(RAYON_CAPTATION_MIN, rayon * 2.4).toFixed(2));
+        var rayonZone = Math.max(RAYON_CAPTATION_MIN, rayonCible * 2.4);
+        // AU DOIGT, LA ZONE S'ARRÊTE À MI-CHEMIN DE LA VOISINE : le toucher va
+        // toujours à l'étoile la plus PROCHE, jamais à celle qui est dessinée
+        // par-dessus. La cible de 44 px s'ajoute au plancher, et les deux sont
+        // bornés par cette demi-distance — y compris le plancher : mesuré le
+        // 27/09 sur RENOBOOST IA à 320 px, six dépôts à 16 px les uns des autres,
+        // et des zones de 25 px qui se recouvraient déjà. Un toucher entre deux
+        // étoiles tombait sur celle du dessus. Sans l'option (RIVEN, souris),
+        // rien ne change.
+        if (demiVoisin) {
+          var demi = demiVoisin[piece.etoile.noeud.id];
+          rayonZone = Math.min(Math.max(rayonZone, rayonCibleDoigt()), isFinite(demi) ? demi : Infinity);
+        }
+        piece.zone.setAttribute('r', rayonZone.toFixed(2));
 
         var proche = pr.profondeur < cam.distance - rayonRef * 0.25;
         piece.nom.setAttribute('x', x);
@@ -1805,6 +1884,7 @@
       // L'échelle écran a pu changer même à viewBox égal (le SVG se pose en
       // `meet` dans une boîte qui a bougé) : le plancher se relit.
       plancherCourant = null;
+      cibleCourante = null;
       cam.cibleDistance = distanceIdeale() * zoom;
       relancer(); // à plat, la boucle dort : un cadre qui change la réveille
     }

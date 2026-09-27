@@ -1249,3 +1249,234 @@ une chose à la fois — et revient au repli. `smoke-socle` le tient (73 verdict
 durci à 30 dans chaque sens, il a rougi (19 et 15 sorties) avant d'être vert.
 
 **Patrimoine** : `npm test` **43/43** ; `bash tests/lancer.sh` sortie 0, **48/48** harnais (+ `smoke-bandeaux`).
+
+---
+
+## 25. Lot 2b — LIVRÉ le 26/09 au soir, sur go de Paul (« tutoiement, go lot 2b »)
+
+### Ce qui a été fait
+
+| Pièce | Où | Garde-fou |
+|---|---|---|
+| **La figure** (`asterisme: true`) et **le rang** (`eclatParPoids: true`) activés sur les coques de navigation — et nulle part ailleurs | `js/ciel-noeud.mjs` | `tests/smoke-carte-celeste.mjs` (neuf) |
+| **La figure s'éteint quand le ciel s'efface** autour d'un choix — sinon ses traits pendaient vers des étoiles éteintes | `css/ciel-noeud.css` (règle de l'état isolant, et sa ceinture `reduced-motion`) | idem ; **sabotage** : la règle retirée → 5 rouges |
+| `disposerEnFigure` et `hacher` | `js/ciel.js` | **déjà retirés au lot 2a** (§19) — rien à faire, vérifié au `grep` |
+
+### ⚠️ Une régression, trouvée par le patrimoine et corrigée dans le passage
+
+Premier jet vert sur son propre harnais (129/129)… et **`smoke-tao` rouge** : les
+deux étoiles de TAO se touchaient à **45 px** au bureau, **30 px** après. La zone
+qui reçoit le doigt suivait le rayon de l'étoile ; le rang rapetissant les
+feuilles, il rapetissait aussi leur cible. **Le rang doit changer l'éclat, jamais
+la cible.** Corrigé dans `js/ciel.js` : la zone se calcule sur le rayon qu'aurait
+l'étoile sans le rang (ou le rayon réel s'il est plus grand) — TAO revient à 45.
+`smoke-carte-celeste` porte désormais la cible, sur les sept écrans ; **sabotage**
+(la zone rebranchée sur le rayon réel) → 1 rouge, TAO à 30 px.
+
+⚠️ **Et ce que le témoin a appris en passant, qui n'est pas de ce lot** : mesuré sur
+le code d'AVANT le lot, les étoiles des coques se touchent à **25 px au téléphone**,
+partout, et 26 à 31 px au bureau sauf TAO et NAGA. C'est le plancher que le moteur
+promet (`RAYON_CAPTATION_MIN`, 24 px — WCAG 2.5.8), pas les 44 px que le reste du
+socle tient depuis le §24. Non corrigé ici : agrandir les zones peut les faire se
+recouvrir entre étoiles proches, et `smoke-clic-exact` (le clic exact, lot 1) en
+dépend — c'est un lot à part, avec sa mesure. **Consigné pour Paul.**
+
+### A9-3 — mesuré avant de construire, et il n'y avait rien à construire (EB)
+
+La question du §18.3 : les noms de constellation reviennent-ils une fois le foyer
+posé ? **Non, et c'est voulu** : sur un menu, le moteur les tait (`amasMuet`,
+`js/ciel.js`) parce que le titre et le fil les disent mieux. Mesuré sur les six
+écrans : **0 nom de constellation peint**, et la figure est nommée **par le fil**
+(NAGA, GRIMA, ALPHA isolé) **ou par le titre** à la racine d'une page (ULTIMA,
+ALPHA). Un cartouche de plus aurait été un troisième nom pour la même chose. Le
+harnais tient les deux faits.
+
+### Mesures — `smoke-carte-celeste`, 390 et 1280 px, caméra posée
+
+| Écran | Étoiles | Traits (visibles/attendus) | Rang (tête / feuille) |
+|---|---|---|---|
+| Racine | 3 | 2/2 | 4,05 / 2,82 · 7,74 / 5,38 |
+| TAO | 2 | 1/1 | un seul rang (deux feuilles) |
+| ULTIMA | 2 | 1/1 | un seul rang |
+| NAGA | 3 | 2/2 | un seul rang (§14.2 : trois têtes) |
+| GRIMA | 2 | 1/1 | 2,99 / 2,08 · 7,14 / 4,97 |
+| ALPHA sans session | 2 | 1/1 | un seul rang (RENOBOOST IA n'a de dépôts qu'après la greffe) |
+| ALPHA, session ouverte | 2 | 1/1 | 2,04 / 1,42 · 5,39 / 3,75 |
+
+Partout : **aucun trait vers une étoile absente, aucun trait à travers un nom**,
+encre parchemin `#cdc3ad`, groupe `aria-hidden`, figure éteinte sous l'état
+isolant, **rien ne bouge en `reduced-motion`** (NAGA et ALPHA, 1,5 s).
+
+**Vu rouge d'abord** : sur la tête d'avant, **91 rouges sur 129** (avant l'ajout de TAO et de la cible ; 162 verdicts au final). Le seuil du
+rang est exigeant à dessein — **tête ≥ 1,3 × feuille** : sans l'option, le nombre
+de liens donnait déjà un écart (2,25 contre 1,91 sur GRIMA, 18 %) qu'un simple
+« plus grand » aurait compté comme un rang. Avec : **44 %**, partout.
+
+### Et le tutoiement de la porte (même go)
+
+Paul tranche le point laissé ouvert au §24 : **l'écran de connexion tutoie**, comme
+Léo. « ton interface unique », « tu reçois un lien de connexion par e-mail »,
+« Regarde ta boîte mail » — dans `index.html`, `riven.html`, `js/boussole-auth.js`
+et `js/app.js`. `tests/unit-connexion-tutoiement.mjs` le tient (4 rouges avant).
+⚠️ Hors de ce qui a été tranché, et donc pas touché : **le reste de RIVEN vouvoie
+encore** (`js/app.js`, `js/dictee.js`), et le mail du lien est rédigé côté Supabase.
+
+### Limites, nommément
+
+- **ALPHA session ouverte n'a que 2 étoiles** au ciel (RENOBOOST IA et YCOME) :
+  les dépôts vivent un cran plus bas. Le pire cas à 24 étoiles reste celui de la
+  maquette (§17), où la figure s'efface d'elle-même — aucun écran réel n'en
+  approche.
+- Le **tap sur un vrai téléphone** n'est toujours pas prouvé par un harnais.
+- RIVEN n'active rien : son témoin reste `smoke-ciel`.
+
+**Patrimoine** : `npm test` **44/44** (+ `unit-connexion-tutoiement`) ; `bash tests/lancer.sh`
+sortie 0, **49/49** harnais (+ `smoke-carte-celeste`, 162 verdicts), `smoke-tao` et
+`smoke-ciel` (RIVEN) verts sans retouche.
+
+### Dry run DR (palier 20 min, déclenché à 19:19, fait à 19:50)
+
+**Cédé — et corrigé dans le passage** : le contrôle « rien ne bouge en
+`reduced-motion` » relevait les traits à 1,5 s d'écart et concluait « immobile ».
+Rejoué **sans** la préférence : immobiles aussi, la caméra une fois posée. **Il ne
+pouvait pas échouer.** Remplacé par un contrôle APPARIÉ sur le seul mouvement que
+le lot ajoute, l'extinction de la figure : 0,22 s sans la préférence (témoin),
+0 s avec. **Sabotage** (ceinture `reduced-motion` retirée) → 2 rouges.
+
+**Sondé, et résisté** :
+- `unit-connexion-tutoiement` : « Consultez votre boîte mail » glissé dans
+  `js/boussole-auth.js` → rouge ; « vous recevez » dans `riven.html` → rouge ;
+- les deux harnais neufs sont bien exécutés : `run-unit.mjs` et `lancer.sh`
+  découvrent `unit-*` et `smoke-*` d'eux-mêmes, et la CI appelle ces deux scripts
+  (`npm test`, `npm run test:browser`) — ⚠️ sur PR et sur `main` seulement, pas sur
+  un simple push de branche ; d'où le patrimoine local avant chaque push ;
+- RIVEN : le correctif de la cible ne s'exerce que sous `eclatParPoids`
+  (`rayonCible = rayon` sinon) — `smoke-ciel` vert sans retouche.
+
+---
+
+## 26. Au téléphone, le ciel respire en profondeur et chaque étoile se touche (27/09, « diagnostic puis go la suite »)
+
+### Le diagnostic — la cible n'était pas le vrai problème
+
+Parti du constat du §25 (étoiles à 25 px au doigt), mesuré sur l'écran le plus
+dense du produit, **RENOBOOST IA isolé, six dépôts, session ouverte, dock monté,
+à la hauteur réelle de Safari** (390 × 664) :
+
+| | Avant |
+|---|---|
+| Ciel utile | **205 px** — dont ~140 pris par « Bienvenue / Sur quoi est-ce qu'on travaille aujourd'hui ? », que le fil rend redondant un cran plus bas |
+| Voisins les plus proches | **29 px** — des cibles de 44 px s'y seraient recouvertes (2 paires, 8 noms voisins couverts) |
+| Noms | PROJET PREDICT et PROJET AGENDA **se croisaient** — et aucun harnais ne le voyait : `smoke-noms-lisibles` ne monte pas la session à 664 px |
+| À 320 px | voisins à **16 px**, zones de 25 px qui **se recouvraient déjà** : un toucher entre deux étoiles allait à celle du dessus |
+
+### Ce qui a été fait
+
+| Pièce | Où |
+|---|---|
+| **(A) L'accueil se replie sous isolement**, au téléphone (≤ 560 px) : titre masqué à l'œil mais **lu par le lecteur d'écran**, invite retirée ; à la racine et au bureau, rien ne change | `js/ciel-noeud.mjs` (classe `ciel-profond`, posée avant la mesure du mobilier), `css/ciel-noeud.css` |
+| **(B) La cible du doigt : 44 px**, option `cibleDoigtPx` convertie par l'échelle écran (comme `plancherNomPx`), **bornée par la demi-distance à la voisine** — plancher compris : le toucher va toujours à l'étoile la plus proche. Seulement au pointeur grossier, sur les coques ; RIVEN et la souris ne changent pas | `js/ciel.js`, `js/ciel-noeud.mjs` |
+| **(C) Les traits de la figure ne prennent plus le doigt** — trouvé au dry run (ci-dessous) | `js/ciel.js` (`pointer-events: none` sur le groupe) |
+
+### Mesures — `tests/smoke-cibles-telephone.mjs` (neuf), dock monté
+
+| RENOBOOST IA | Ciel | Voisins | Cible | Recouvrements | Noms croisés |
+|---|---|---|---|---|---|
+| 390 × 664 | 205 → **296 px** | 29 → **58 px** | 25 → **44 px** | 0 | 1 → **0** |
+| 375 × 667 | 208 → **299 px** | 28 → **54 px** | 25 → **44 px** | 0 | 2 → **0** |
+| 320 × 568 | — | 16 px | **16 px** (toute la demi-distance) | 2 → **0** | — |
+
+**Vu rouge d'abord** : 26 rouges sur la tête d'avant. **Sabotages** : borne retirée →
+9 et 8 recouvrements à 320 et 300 px ; noms croisés → rouge sur l'ancien code.
+Un **seuil inventé** a été retiré en route (« ciel ≥ 300 px », rouge à 296 sur un
+écran sain) : remplacé par la valeur qui se dérive — deux voisins à ≥ 44 px pour
+que deux cibles pleines ne se recouvrent pas.
+
+### Dry run DR (déclenché à 11:29, fait à 11:45)
+
+**Cédé — et corrigé dans le passage** : « ce que le doigt atteint » (le navigateur
+interrogé au bord de chaque cible) a trouvé que **les traits de la figure, livrés
+au lot 2b, captaient le toucher** : 5 touchers sur 12 perdus à 390 × 664. Le groupe
+n'avait pas `pointer-events: none`, contrairement aux liens et au décor. Corrigé
+dans le moteur. Le contrôle aléatoire ne suffisait pas à le tenir (il ne tombe
+sur un trait qu'au gré de la caméra) : un contrôle **déterministe** — le milieu de
+chaque trait ne répond jamais « le trait » — vit dans `smoke-carte-celeste` ;
+**sabotage → 14 rouges**.
+
+**Et une faute d'instrument** : le point « vers la voisine » était pris à 45 % du
+chemin sans borne, donc hors de la cible quand la voisine est loin — le ciel vide
+y répondait, à raison. Borné à 21 px.
+
+**Sondé, et résisté** : la conversion px → unités se relit au redimensionnement
+(ouvert à 390, rétréci à 300 : 44 px, 0 recouvrement) ; à 300 px la conversion se
+prouve (échelle < 1, cibles à 44 sur la racine) ; `smoke-clic-exact` et `smoke-ciel`
+(RIVEN) verts.
+
+### Limites, nommément
+
+- **Sous 360 px, l'écran à six dépôts n'a pas la place de 24 px par étoile** : chaque
+  étoile y reçoit sa demi-distance entière (16 px à 320). La cible est juste — le
+  plus proche gagne — mais petite. Le remède serait de la place (moins de mobilier
+  ou un ciel qui défile), pas une cible plus grande.
+- Le **téléphone couché** (plus large que 560 px, peu haut) garde l'accueil déplié.
+- Le **tap sur un vrai téléphone** n'est toujours pas prouvé autrement que par
+  `elementFromPoint` sous émulation tactile.
+
+**Patrimoine** : `npm test` **44/44** ; `bash tests/lancer.sh` sortie 0, **50/50** harnais
+(+ `smoke-cibles-telephone`, 160 verdicts ; `smoke-carte-celeste` 178).
+
+---
+
+## 27. Lot 3 — LIVRÉ le 27/09, sur go de Paul (« go lot 3 »)
+
+A7 était rendu (l'anneau de Léo au survol reviendra avec J3) : le lot se réduisait
+au §14.3, et c'est ce qui a été fait.
+
+### Ce qui a été fait
+
+| Pièce | Où |
+|---|---|
+| **Un lien vers un dépôt s'ouvre sur lui.** Juste après la greffe Finubar, si aucun foyer n'est posé, l'adresse est relue et le foyer posé — sans historique, comme un lien direct. `idDeLAdresse` garde sa triple garde, relue sur le registre greffé ; un choix déjà fait ne se fait pas voler | `js/ciel-noeud.mjs` (rappel de `chargerFinubar`) |
+| **Le harnais** `tests/smoke-depots-partout.mjs` (neuf) — l'agrégat RÉEL (`api/_lib/finubar-macro.mjs`), servi avec 800 ms de retard | `tests/` |
+
+### Mesures
+
+| Contrôle | Avant | Après |
+|---|---|---|
+| `alpha.html#renoboost-ia`, Finubar retardé de 800 ms | ALPHA entier (4 dépôts d'ALPHA, RENOBOOST IA, YCOME) | **RENOBOOST IA isolé** : ses 5 dépôts + LE SITE, rien d'autre |
+| Le même, Finubar sans retard | ALPHA entier | **RENOBOOST IA isolé** |
+| Entrées d'historique ajoutées | — | **0** (2 → 2) |
+| Sans session | aucun astre | aucun astre, aucun isolement — **fail-closed intact** |
+| `#__proto__`, `#constructor`, `#inexistant`, `ultima.html#renoboost-ia` | ignorées | ignorées, greffe comprise |
+| Dépôts réels depuis l'accueil | — | **9/9 en ≤ 2 clics** : 4 à un clic (sous ALPHA), 5 à deux (sous RENOBOOST IA) |
+
+**Vu rouge d'abord** : 6 rouges sur la tête d'avant (la course et sa variante sans
+retard). Verrou de la course : aucun dépôt au ciel avant la réponse retardée — le
+harnais prouve que l'ordre fautif se produit bien.
+
+⚠️ **Une faute d'instrument, trouvée par la mesure ④** : le premier jet cherchait
+*dix* dépôts au ciel et déclarait Ultima manquant. Or le dépôt rangé à la racine
+**n'a pas d'étoile, à dessein** — « le projet EST le ciel qu'on regarde »
+(`js/adaptateur-finubar.mjs`, `greffer`). Il s'atteint en zéro clic. Le harnais
+lit désormais cette règle au lieu de la contredire.
+
+**Patrimoine** : `npm test` **44/44** ; `bash tests/lancer.sh` sortie 0, **51/51** harnais
+(+ `smoke-depots-partout`, 24 verdicts, 26 après le dry run).
+
+### Dry run DR (palier 20 min, fait à 19:23)
+
+**Sondé, et résisté** :
+- **Une seconde greffe ne ramène pas de force.** La session se rafraîchit seule
+  (`TOKEN_REFRESHED`) et relance la greffe : isolé sur RENOBOOST IA par le lien,
+  remonté d'un cran par le fil, on reste sur ALPHA. Contrôle ajouté (① ter) ;
+  **sabotage** (la remontée garde le fragment `#renoboost-ia`) → rouge : la greffe
+  suivante ramenait sur RENOBOOST IA.
+- La greffe qui arrive AVANT l'adresse (① bis), les adresses forgées dont
+  `#__proto__` (③), l'historique (2 → 2), le fail-closed sans session (②).
+
+**Non éprouvable par l'écran, nommément** : la garde « un choix déjà fait ne se fait
+pas voler » (`isole ? null : …`). Avant la greffe, ALPHA n'a aucun cap qui
+s'isole ; et quand on isole ailleurs, l'adresse suit le choix — la relire donne le
+même foyer. La garde est défensive ; aucun parcours ne la distingue aujourd'hui.
+
+**Cédé** : rien.
