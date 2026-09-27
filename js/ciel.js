@@ -693,10 +693,18 @@
       var k = largeurCSS > 0 ? vbW / largeurCSS : 1;
       var m = typeof margesDemandees === 'function' ? margesDemandees() : margesDemandees;
       if (!m) { mUtile = { haut: 0, bas: 0, gauche: 0, droite: 0 }; return; }
-      // Plafond à 40 % par axe : au-delà, ce ne serait plus un ciel avec du
-      // mobilier, ce serait du mobilier avec un peu de ciel. Un garde-fou qui
+      // Plafond par axe (50 % en hauteur, 40 % en largeur) : au-delà, ce ne
+      // serait plus un ciel avec du mobilier, ce serait du mobilier avec un peu
+      // de ciel. Un garde-fou qui
       // dit non valait mieux qu'une scène qui s'effondre sans le dire.
-      var maxV = vbH * 0.4, maxH = vbW * 0.4;
+      // ⚠️ RELEVÉ À 50 % LE 27/09, et mesuré. Au bureau, le socle complet
+      // (parole + dock de Léo + bandeau Finubar, empilés depuis le 26/09) prend
+      // 45 % des 800 px de haut. Plafonné à 40 %, le moteur rognait la marge et
+      // laissait le ciel peindre 39 px SOUS la parole — sans le dire, ce qui est
+      // exactement ce que ce garde-fou devait empêcher. Invisible à deux étoiles
+      // sur ALPHA ; à quatre (DOKLĚS, SYMPHO), RENOBOOST IA y tombait
+      // (`smoke-socle`). À 50 %, le ciel garde encore 233 unités de haut.
+      var maxV = vbH * 0.5, maxH = vbW * 0.4;
       mUtile = {
         haut: Math.max(0, Math.min(maxV, (m.haut || 0) * k)),
         bas: Math.max(0, Math.min(maxV, (m.bas || 0) * k)),
@@ -1623,6 +1631,55 @@
         cam.cibleDistance = distanceIdeale() * zoom;
       }
 
+      // LES NOMS NE SE CROISENT PAS (27/09, lot DOKLĚS / SYMPHO). Un nom se pose
+      // SOUS son étoile ; mais au téléphone l'ellipse de la couronne est haute
+      // et étroite, et à huit étoiles le sommet et sa voisine en diagonale ne
+      // sont plus qu'à 14 px de hauteur l'un de l'autre : mesuré sur ALPHA à
+      // 390 × 664, ARTIDISPO et RENOBOOST IA se chevauchaient.
+      // LA RÈGLE, celle des cartes gravées : un nom qui en croiserait un autre
+      // passe AU-DESSUS de son étoile — l'étoile la plus haute des deux, donc
+      // côté extérieur de la couronne. Trois gardes : la place au-dessus doit
+      // rester dans la ZONE UTILE (jamais sous le fil ni l'en-tête), n'y croiser
+      // aucun autre nom, et le passage ne vaut que sur un menu où tous les noms
+      // sont permanents (RIVEN ne change pas). Sinon rien ne bouge — un nom
+      // croisé vaut mieux qu'un nom poussé sous le mobilier.
+      // Le retrait des traits de la figure suit (`retrait`, plus bas).
+      var nomDessus = Object.create(null);
+      if (cadrageSerre && tousLesNoms && pieces.length > 1) {
+        var boitesNoms = [];
+        pieces.forEach(function (piece) {
+          var idN = piece.etoile.noeud.id, prN = projetes[idN];
+          if (!prN || piece.g.getAttribute('display') === 'none' || demiNoms[idN] === undefined) { return; }
+          var fsN = parseFloat(piece.nom.getAttribute('font-size')) || 10;
+          var rN = prN.rayon || R_ETOILE_MIN;
+          boitesNoms.push({
+            id: idN, nom: piece.nom, x: prN.sx, sy: prN.sy, fs: fsN,
+            // `demiNoms` est mesuré au PLAFOND de police : ramené ici à la
+            // police réellement peinte.
+            hw: demiNoms[idN] * (fsN / plafondNom),
+            yBas: prN.sy + rN * 3.6 + 9, yHaut: prN.sy - rN * 2.6 - 3
+          });
+        });
+        boitesNoms.forEach(function (b) { b.y = b.yBas; });
+        var boiteNom = function (b, y) {
+          return { x0: b.x - b.hw, x1: b.x + b.hw, y0: y - b.fs * 0.8, y1: y + b.fs * 0.3 };
+        };
+        var seCroisent = function (u, v) { return u.x0 < v.x1 && v.x0 < u.x1 && u.y0 < v.y1 && v.y0 < u.y1; };
+        boitesNoms.sort(function (u, v) { return u.sy - v.sy; });
+        boitesNoms.forEach(function (a) {
+          var enBas = boiteNom(a, a.yBas);
+          var gene = boitesNoms.some(function (b) { return b !== a && seCroisent(enBas, boiteNom(b, b.y)); });
+          if (!gene) { return; }
+          var enHaut = boiteNom(a, a.yHaut);
+          if (enHaut.y0 < mUtile.haut + 2) { return; }
+          var libre = boitesNoms.every(function (b) { return b === a || !seCroisent(enHaut, boiteNom(b, b.y)); });
+          if (!libre) { return; }
+          a.y = a.yHaut;
+          nomDessus[a.id] = true;
+          a.nom.setAttribute('y', a.yHaut.toFixed(1));
+        });
+      }
+
       piecesLien.forEach(function (pl) {
         var a = projetes[pl.relation.source_id], b = projetes[pl.relation.target_id];
         if (!a || !b) { pl.el.setAttribute('display', 'none'); return; }
@@ -1652,7 +1709,9 @@
         var r = p.rayon || R_ETOILE_MIN;
         var halo = r * 2.6;
         var fs = Math.max(plancherNom(), Math.min(plafondNom, 10 * p.echelle));
-        var base = r * 3.6 + 9;
+        // Le nom est SOUS l'étoile, sauf s'il est passé au-dessus pour ne pas en
+        // croiser un autre (plus haut) : le rectangle suit la pose réelle.
+        var base = nomDessus[id] ? -(r * 2.6 + 3) : r * 3.6 + 9;
         var hw = demiNoms[id] || 40;
         var bx0 = -hw, bx1 = hw, by0 = base - fs * 0.8, by1 = base + fs * 0.3;
         var tmin = -Infinity, tmax = Infinity;

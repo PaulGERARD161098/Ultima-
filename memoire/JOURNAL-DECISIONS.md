@@ -4312,3 +4312,21 @@ le résumé n'y est plus dit. Variante « figure » retirée (A8). Détail : §2
 en production. Correctifs demandés sur iPhone : bandeau Finubar replié au téléphone
 (la date et le compte restent lus), retour « ↞ GRIMA » sur RIVEN (application
 installée = pas de bouton retour), retour d'ALTHEA vers la racine. Détail : §22.
+
+## 2026-09-27 — La carte céleste bouclée ; DOKLĚS et SYMPHO sous ALPHA
+
+**Décisions de Paul, dans l'ordre** : « tutoiement » (l'écran de connexion tutoie,
+comme Léo) · « go lot 2b » (V1 activée : figure et rang sur les coques) ·
+« diagnostic puis go la suite » (au téléphone, l'accueil se replie un cran plus bas
+et chaque étoile se touche à 44 px, bornée à mi-chemin de sa voisine) · « go lot 3 »
+(un lien vers un dépôt s'ouvre sur lui) · « go PR et merge » (#296, `6b08583`).
+
+**Cadrage DOKLĚS / SYMPHO, rendu sur quatre questions** : DOKLĚS = la marque « ECL by
+DOKLES » ; SYMPHO = un projet pro ; les deux **sous ALPHA**, en **étoiles d'attente**
+(nom, « À venir », une phrase, aucune page) ; phrases proposées acceptées ; résumé
+d'ALPHA complété. Graphie **DOKLĚS** (e caron) — identifiant `dokles`.
+
+**Choix faits seuls, sur mandat, et à savoir** : un nom qui en croiserait un autre
+passe au-dessus de son étoile (menus seulement) ; la marge basse du ciel est
+plafonnée à 50 % de la hauteur au lieu de 40 % (le socle complet en prend 45 % au
+bureau). Détail : `CADRAGE-2026-09-25-carte-celeste.md` §25 à §28.
