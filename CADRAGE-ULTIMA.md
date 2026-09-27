@@ -6,6 +6,14 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- ✴️ **SESSION 2026-09-27 (nuit) — #296 FUSIONNÉE (`6b08583`) ; DOKLĚS ET SYMPHO SOUS ALPHA (branche).**
+  Deux étoiles d'attente (nom, « À venir », une phrase, aucune page) : DOKLĚS (la
+  marque ECL by DOKLES, Ě conservé) et SYMPHO (projet pro) ; le résumé d'ALPHA les
+  nomme. À huit étoiles, un nom qui en croiserait un autre passe au-dessus de son étoile.
+  Défaut ancien corrigé en route : la marge du bas plafonnée à 40 % laissait le ciel
+  peindre sous la parole au bureau (relevée à 50 %). `smoke-dokles-sympho` 0/43,
+  patrimoine 52/52. ⛔ Les mentions « lot 3 sur la branche » ci-dessous sont fusionnées.
+  Détail : carte-celeste §28.
 - 🔗 **SESSION 2026-09-27 (soir) — LOT 3 LIVRÉ SUR LA BRANCHE : un lien vers un dépôt s'ouvre sur lui.**
   `alpha.html#renoboost-ia` s'ouvrait sur ALPHA entier (l'adresse était lue avant la
   greffe Finubar) ; elle est relue après la greffe, sans historique. Mesuré sur

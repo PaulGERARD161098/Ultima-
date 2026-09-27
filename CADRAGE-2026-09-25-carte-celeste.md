@@ -1480,3 +1480,91 @@ s'isole ; et quand on isole ailleurs, l'adresse suit le choix — la relire donn
 même foyer. La garde est défensive ; aucun parcours ne la distingue aujourd'hui.
 
 **Cédé** : rien.
+
+---
+
+## 28. DOKLĚS et SYMPHO — cadrés puis livrés le 27/09 (« go lot DOKLĚS SYMPHO, phrases ok, complète ALPHA »)
+
+### Le cadrage — rendu par Paul, sur quatre questions
+
+Lu à la source avant de demander : **DOKLES** existe déjà — entreprise cliente
+(Julien Laudy, fondateur associé ; fiche artisan de RenoDevis créée le 05/08), marque
+« ECL by DOKLES » des envois manuels du 23/09 (DATA RÉNO). **SYMPHO** n'apparaît
+nulle part. **Aucun dépôt** ne porte l'un ou l'autre nom.
+
+| # | Question | Réponse de Paul |
+|---|---|---|
+| 1 | Qu'est-ce que DOKLĚS ? | **La marque ECL by DOKLES** |
+| 2 | Qu'est-ce que SYMPHO ? | **Un projet pro** |
+| 3 | Où s'accrochent-elles ? | **Les deux sous ALPHA** (reco) |
+| 4 | Que font-elles au toucher ? | **Étoile d'attente** (reco) — nom, état, une phrase, aucune page |
+| — | Les phrases proposées | **ok** |
+| — | Le résumé d'ALPHA | **à compléter** |
+
+**Hors périmètre, nommément** : pas de dépôt, pas de Finubar, pas de page, pas de lien
+avec la fiche artisan DOKLES de RenoDevis ni avec RIVEN.
+
+**Pre-mortem, mesuré avant de coder** (prototype hors dépôt) : à huit étoiles
+connecté, ARTIDISPO et RENOBOOST IA se **croisaient** à 390 et 375 px — aucun
+croisement à six étoiles aujourd'hui. Le lot devait le régler, ou échouer.
+
+### Ce qui a été fait
+
+| Pièce | Où |
+|---|---|
+| **Deux étoiles d'attente** sur le modèle de YCOME : `nom: 'DOKLĚS'` (Ě conservé, identifiant ASCII `dokles`) et `'SYMPHO'`, `etat: 'À venir'`, `cible: null`, les phrases validées | `js/registre-lv3.mjs` |
+| **Le résumé d'ALPHA** les nomme | idem |
+| **Les noms ne se croisent plus.** Un nom qui en croiserait un autre passe AU-DESSUS de son étoile (la plus haute des deux, côté extérieur de la couronne) — si la place y est dans la zone utile et n'y croise rien ; seulement sur les menus. Le retrait des traits suit la pose réelle | `js/ciel.js` |
+
+Ni la recherche de Léo ni le fil ne changent : une étoile d'attente n'est pas une
+destination (`destinations` ne liste que ce qui a une `cible`, comme pour YCOME).
+
+### Mesures — `tests/smoke-dokles-sympho.mjs` (neuf), agrégat réel
+
+| | Avant | Après |
+|---|---|---|
+| Registre, peinture, Ě, `aria-disabled`, toucher sans navigation ni onglet | 11 rouges | vert |
+| Noms croisés sur ALPHA connecté (8 étoiles), 390 × 664 et 375 × 667 | 1 (ARTIDISPO × RENOBOOST IA) | **0** |
+| 360 × 740 · 390 × 844 · 1280 × 800 | 0 | 0 |
+| À 320 × 568 (hors critère, témoin : 2 à six étoiles) | 4 au prototype | **2** |
+
+**Sabotage** : le passage au-dessus neutralisé → 2 rouges (les deux croisements
+reviennent). Gardes tenues par le harnais : aucun nom hors cadre, aucun nom sous le
+fil ou l'en-tête.
+
+### ⚠️ Deux harnais ont parlé dans le patrimoine — et l'un désignait un défaut ancien
+
+1. **`smoke-alpha` recopiait ALPHA à la main** (« 2 caps », « 1 seul à venir »,
+   « 2 étoiles ») : trois rouges sur un écran sain. Réécrit pour **lire le
+   registre** (`capsDe('alpha')`), avec un verrou (≥ 2 caps) — le même piège que
+   `smoke-althea` au §22.
+2. **`smoke-socle`, au bureau (1280 × 800), sur ALPHA** : RENOBOOST IA peint sous
+   la parole. Pas le passage au-dessus (le rouge tenait sans lui). La cause est dans
+   le moteur, et elle est **antérieure au lot** : la marge du bas était **plafonnée à
+   40 %** de la hauteur. Or le socle complet (parole + dock + bandeau, empilés depuis
+   le 26/09) en prend **45 %** : le moteur rognait la marge et laissait le ciel
+   peindre 39 px sous la parole, sans le dire. À deux étoiles, aucune n'y tombait ;
+   à quatre, si. **Plafond relevé à 50 % en hauteur** (40 % en largeur, inchangé) : le
+   ciel garde 233 unités de haut. Le rouge sous l'ancien plafond fait office de
+   sabotage.
+
+### Dry run DR (déclenché à 19:55, fait à 20:15)
+
+**Sondé, et résisté** :
+- le **Ě dans l'étiquette** lue par un lecteur d'écran (« DOKLĚS, cap, secteur ALPHA,
+  À venir… »), pas seulement dans le texte peint ;
+- **Entrée au clavier** sur DOKLĚS : aucune navigation (le toucher était déjà
+  éprouvé : ni navigation, ni onglet) ;
+- **le passage au-dessus s'exerce vraiment** — verrou ajouté : 1 nom au-dessus à
+  390 × 664 et 375 × 667, **0 ailleurs** (il ne bouge que là où il sert) ;
+- la recherche de Léo et le fil n'ont rien à dire d'une étoile d'attente
+  (`destinations` ne liste que ce qui a une page, comme YCOME) — pas une omission.
+
+**Relevé, hors lot et non corrigé** : l'étiquette de chaque cap se termine par
+« 0 lien » sur les menus — du bruit pour un lecteur d'écran. Préexistant, sur tous
+les caps ; à traiter avec l'accessibilité des étiquettes, pas ici.
+
+**Cédé** : rien de neuf après les deux rouges ci-dessus.
+
+**Patrimoine** : `npm test` **44/44** ; `bash tests/lancer.sh` sortie 0, **52/52** harnais
+(+ `smoke-dokles-sympho`, 43 verdicts).
