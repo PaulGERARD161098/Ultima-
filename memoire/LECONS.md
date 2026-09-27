@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v41 2026-09-27 sha256:44334f0e2ecd -->
+<!-- lecons:empreinte v42 2026-09-27 sha256:6f4274254933 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -468,6 +468,51 @@ recherche elle-même — « ce fichier existe-t-il, fait-il plus de zéro ligne 
 coûte une seconde et sauve l'annonce.
 
 ## 2. Les garde-fous, et leur silence
+
+**UN FAUX SCHÉMA QUI NE PORTE PAS LES DÉCLENCHEURS DE LA PROD REND VERT CE QUE LA PROD REFUSE** *(2026-09-27, Artidispo)*.
+En production Supabase, `storage.objects` porte `protect_objects_delete` : **tout**
+`delete from storage.objects` en SQL lève `42501`, même sur zéro ligne. La purge
+RGPD des comptes supprimés en faisait un depuis la migration 15. Son harnais était
+vert — le stub `storage` n'avait pas le déclencheur — et son cron aussi, **parce
+qu'aucun compte n'attendait sa purge**. Au premier compte supprimé, la purge
+entière aurait levé et été annulée : plus d'anonymisation, en silence.
+
+⛔ **Un stub prouve ce qu'il reproduit, rien d'autre.** Les contraintes que la
+plateforme ajoute d'elle-même (déclencheurs, rôles, verrous) sont précisément
+celles qu'on oublie d'y mettre.
+
+⇒ **Avant d'écrire du SQL qui touche un schéma fourni par la plateforme, lister
+ses déclencheurs en prod** (`pg_trigger` sur la table) et les reproduire dans le
+stub ; puis **valider l'instrument sur la réponse connue** — l'ancien code doit
+rougir dans le harnais corrigé *(il a rougi, exactement sur la purge RGPD)*.
+
+**UN OUTIL « COMME LA CI » DOIT LIRE LA CI, PAS LA RECOPIER** *(2026-09-27, Artidispo)*.
+`rejouer-local.mjs` lisait l'ordre des harnais dans `ci.yml` mais portait **en
+dur** sa liste de stubs — dont `01_cron_stub.sql`, que la CI ne chargeait pas. La
+migration 27 (qui planifie un cron) était **verte en local, rouge en CI** :
+« schema cron does not exist ». Un cycle de CI perdu, et une confiance fausse
+dans le rejeu local, qui se présentait comme fidèle.
+
+⇒ **Chaque paramètre d'un outil qui prétend imiter la CI se lit dans la CI** — et
+se prouve en retirant l'étape de `ci.yml` : l'outil local doit alors rougir comme
+elle *(il a rougi)*.
+
+**UN PLAFOND COMPTÉ DANS UNE POLICY NE TIENT PAS SOUS CONCURRENCE** *(2026-09-27, Artidispo)*.
+Le dépôt de photos d'un dossier client était plafonné à 5 par `count(*) < 5` dans
+la policy d'insertion. Chaque harnais séquentiel le confirmait (« la 6e est
+refusée »). Le dry run de nuit a lancé **dix dépôts simultanés** sur un vrai
+Postgres : **dix sur dix passés**. En `READ COMMITTED`, chaque transaction ne voit
+que les objets déjà commités. La faille était en production depuis trois heures
+(jamais exploitée : 0 dépôt).
+
+⛔ **Un garde-fou éprouvé en séquence n'a pas été éprouvé du côté où il cède.**
+Un moteur embarqué à connexion unique (pglite) ne peut même pas le montrer.
+
+⇒ **Tout quota se réserve par une écriture qui verrouille** (`update … set n = n + 1
+where … and n < max`, qui attend le verrou puis re-vérifie la condition sur la
+version commitée) — et se prouve par **N sessions parallèles sur un vrai
+Postgres** : l'ancien code doit laisser passer plus que le plafond *(10/10)*, le
+nouveau exactement le plafond *(5/10)*.
 
 **UN CONTRÔLE QUI NE PEUT PAS ÉCHOUER SE DÉMASQUE PAR UN TÉMOIN QUI DOIT BOUGER** *(2026-09-27)*.
 `smoke-carte-celeste` affirmait « rien ne bouge en `reduced-motion` » : il relevait
