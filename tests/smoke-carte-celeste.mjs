@@ -26,7 +26,7 @@
 import { chromium } from 'playwright';
 import { AGREGAT } from '../design/preview-accueil-finubar-fixture.mjs';
 
-const BASE = 'http://127.0.0.1:8123';
+const BASE = process.env.BASE_ULTIMA || 'http://127.0.0.1:8123';
 const ENCRE = '#cdc3ad';
 const navigateur = await chromium.launch({
   executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
@@ -95,6 +95,18 @@ function mesurer(page, tetesImposees = null) {
     const visibles = lignes.filter((l) => l.getAttribute('display') !== 'none');
     const orphelins = lignes.filter((l) => !ids.has(l.dataset.a) || !ids.has(l.dataset.b)).length;
     const amas = [...svg.querySelectorAll('text.ciel-nom-amas')];
+    // UN TRAIT NE PREND PAS LE DOIGT : au MILIEU de chaque trait visible, le
+    // navigateur ne doit jamais répondre « le trait » (dry run DR du 27/09 —
+    // les traits captaient les touchers posés à côté d'une étoile).
+    let traitsPrenants = 0, traitsSondes = 0;
+    for (const l of visibles) {
+      const b = l.getBoundingClientRect();
+      const x = b.left + b.width / 2, y = b.top + b.height / 2;
+      if (x <= 0 || y <= 0 || x >= innerWidth || y >= innerHeight) { continue; }
+      traitsSondes += 1;
+      const el = document.elementFromPoint(x, y);
+      if (el && el.closest('.ciel-asterisme')) { traitsPrenants += 1; }
+    }
     // TRAITS × NOMS : la mesure de la maquette (§17), sur les noms PEINTS.
     const noms = etoiles.map((g) => g.querySelector('.ciel-nom'))
       .filter((n) => n && +(n.getAttribute('opacity') || getComputedStyle(n).opacity) > 0.05)
@@ -132,7 +144,7 @@ function mesurer(page, tetesImposees = null) {
     }).map((t) => t.textContent);
     return {
       etoiles: etoiles.length, groupes: amas.length, traits: lignes.length, visibles: visibles.length,
-      orphelins, traitsNoms,
+      orphelins, traitsNoms, traitsPrenants, traitsSondes,
       encre: groupe ? (groupe.getAttribute('stroke') || '').toLowerCase() : '',
       muet: groupe ? groupe.getAttribute('aria-hidden') : '',
       tetes: tetes.length, feuilles: feuilles.length,
@@ -155,6 +167,8 @@ function juger(cle, m, ecran) {
   verifier(`${cle} : au moins un trait visible`, m.visibles >= 1, `${m.visibles}`);
   verifier(`${cle} : aucun trait vers une étoile absente`, m.traits >= 1 && m.orphelins === 0, `${m.orphelins}`);
   verifier(`${cle} : aucun trait à travers un nom`, m.visibles >= 1 && m.traitsNoms === 0, `${m.traitsNoms}`);
+  verifier(`${cle} : aucun trait ne prend le doigt`, m.traitsSondes >= 1 && m.traitsPrenants === 0,
+    `${m.traitsPrenants} sur ${m.traitsSondes} sondés`);
   verifier(`${cle} : encre parchemin, pas l'or`, m.encre === ENCRE, m.encre || 'aucun groupe');
   verifier(`${cle} : la figure est muette au lecteur d'écran`, m.muet === 'true', String(m.muet));
   // ⛔ LE RANG CHANGE L'ÉCLAT, JAMAIS LA CIBLE DU DOIGT. Premier jet : la zone

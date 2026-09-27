@@ -1352,3 +1352,75 @@ le lot ajoute, l'extinction de la figure : 0,22 s sans la préférence (témoin)
   un simple push de branche ; d'où le patrimoine local avant chaque push ;
 - RIVEN : le correctif de la cible ne s'exerce que sous `eclatParPoids`
   (`rayonCible = rayon` sinon) — `smoke-ciel` vert sans retouche.
+
+---
+
+## 26. Au téléphone, le ciel respire en profondeur et chaque étoile se touche (27/09, « diagnostic puis go la suite »)
+
+### Le diagnostic — la cible n'était pas le vrai problème
+
+Parti du constat du §25 (étoiles à 25 px au doigt), mesuré sur l'écran le plus
+dense du produit, **RENOBOOST IA isolé, six dépôts, session ouverte, dock monté,
+à la hauteur réelle de Safari** (390 × 664) :
+
+| | Avant |
+|---|---|
+| Ciel utile | **205 px** — dont ~140 pris par « Bienvenue / Sur quoi est-ce qu'on travaille aujourd'hui ? », que le fil rend redondant un cran plus bas |
+| Voisins les plus proches | **29 px** — des cibles de 44 px s'y seraient recouvertes (2 paires, 8 noms voisins couverts) |
+| Noms | PROJET PREDICT et PROJET AGENDA **se croisaient** — et aucun harnais ne le voyait : `smoke-noms-lisibles` ne monte pas la session à 664 px |
+| À 320 px | voisins à **16 px**, zones de 25 px qui **se recouvraient déjà** : un toucher entre deux étoiles allait à celle du dessus |
+
+### Ce qui a été fait
+
+| Pièce | Où |
+|---|---|
+| **(A) L'accueil se replie sous isolement**, au téléphone (≤ 560 px) : titre masqué à l'œil mais **lu par le lecteur d'écran**, invite retirée ; à la racine et au bureau, rien ne change | `js/ciel-noeud.mjs` (classe `ciel-profond`, posée avant la mesure du mobilier), `css/ciel-noeud.css` |
+| **(B) La cible du doigt : 44 px**, option `cibleDoigtPx` convertie par l'échelle écran (comme `plancherNomPx`), **bornée par la demi-distance à la voisine** — plancher compris : le toucher va toujours à l'étoile la plus proche. Seulement au pointeur grossier, sur les coques ; RIVEN et la souris ne changent pas | `js/ciel.js`, `js/ciel-noeud.mjs` |
+| **(C) Les traits de la figure ne prennent plus le doigt** — trouvé au dry run (ci-dessous) | `js/ciel.js` (`pointer-events: none` sur le groupe) |
+
+### Mesures — `tests/smoke-cibles-telephone.mjs` (neuf), dock monté
+
+| RENOBOOST IA | Ciel | Voisins | Cible | Recouvrements | Noms croisés |
+|---|---|---|---|---|---|
+| 390 × 664 | 205 → **296 px** | 29 → **58 px** | 25 → **44 px** | 0 | 1 → **0** |
+| 375 × 667 | 208 → **299 px** | 28 → **54 px** | 25 → **44 px** | 0 | 2 → **0** |
+| 320 × 568 | — | 16 px | **16 px** (toute la demi-distance) | 2 → **0** | — |
+
+**Vu rouge d'abord** : 26 rouges sur la tête d'avant. **Sabotages** : borne retirée →
+9 et 8 recouvrements à 320 et 300 px ; noms croisés → rouge sur l'ancien code.
+Un **seuil inventé** a été retiré en route (« ciel ≥ 300 px », rouge à 296 sur un
+écran sain) : remplacé par la valeur qui se dérive — deux voisins à ≥ 44 px pour
+que deux cibles pleines ne se recouvrent pas.
+
+### Dry run DR (déclenché à 11:29, fait à 11:45)
+
+**Cédé — et corrigé dans le passage** : « ce que le doigt atteint » (le navigateur
+interrogé au bord de chaque cible) a trouvé que **les traits de la figure, livrés
+au lot 2b, captaient le toucher** : 5 touchers sur 12 perdus à 390 × 664. Le groupe
+n'avait pas `pointer-events: none`, contrairement aux liens et au décor. Corrigé
+dans le moteur. Le contrôle aléatoire ne suffisait pas à le tenir (il ne tombe
+sur un trait qu'au gré de la caméra) : un contrôle **déterministe** — le milieu de
+chaque trait ne répond jamais « le trait » — vit dans `smoke-carte-celeste` ;
+**sabotage → 14 rouges**.
+
+**Et une faute d'instrument** : le point « vers la voisine » était pris à 45 % du
+chemin sans borne, donc hors de la cible quand la voisine est loin — le ciel vide
+y répondait, à raison. Borné à 21 px.
+
+**Sondé, et résisté** : la conversion px → unités se relit au redimensionnement
+(ouvert à 390, rétréci à 300 : 44 px, 0 recouvrement) ; à 300 px la conversion se
+prouve (échelle < 1, cibles à 44 sur la racine) ; `smoke-clic-exact` et `smoke-ciel`
+(RIVEN) verts.
+
+### Limites, nommément
+
+- **Sous 360 px, l'écran à six dépôts n'a pas la place de 24 px par étoile** : chaque
+  étoile y reçoit sa demi-distance entière (16 px à 320). La cible est juste — le
+  plus proche gagne — mais petite. Le remède serait de la place (moins de mobilier
+  ou un ciel qui défile), pas une cible plus grande.
+- Le **téléphone couché** (plus large que 560 px, peu haut) garde l'accueil déplié.
+- Le **tap sur un vrai téléphone** n'est toujours pas prouvé autrement que par
+  `elementFromPoint` sous émulation tactile.
+
+**Patrimoine** : `npm test` **44/44** ; `bash tests/lancer.sh` sortie 0, **50/50** harnais
+(+ `smoke-cibles-telephone`, 160 verdicts ; `smoke-carte-celeste` 178).

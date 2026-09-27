@@ -191,6 +191,13 @@ export function rendre(idNoeud, options = {}) {
   }
 
   function majFil() {
+    // SOUS ISOLEMENT, L'ACCUEIL SE REPLIE AU TÉLÉPHONE (27/09). « Bienvenue /
+    // Sur quoi est-ce qu'on travaille aujourd'hui ? » est le propos de la
+    // racine ; un cran plus bas, c'est le fil qui dit où l'on est, et l'accueil
+    // prenait ~140 px au ciel — 205 px restaient sur RENOBOOST IA à 390 × 664.
+    // La règle vit dans `css/ciel-noeud.css` (≤ 560 px) ; la classe se pose
+    // AVANT `placerFil` et avant `dessiner()`, qui MESURENT l'en-tête.
+    doc.body.classList.toggle('ciel-profond', !!isole);
     fil.textContent = '';
     if (!isole) {
       fil.hidden = true;
@@ -383,6 +390,10 @@ export function rendre(idNoeud, options = {}) {
       // `tests/smoke-carte-celeste.mjs`.
       asterisme: true,
       eclatParPoids: true,
+      // 27/09 — AU DOIGT, UNE ÉTOILE SE TOUCHE À 44 PX, comme tout le reste du
+      // socle. Au pointeur précis (souris), le plancher d'hier suffit et le
+      // survol ne doit pas s'allumer à distance. `smoke-cibles-telephone`.
+      cibleDoigtPx: (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) ? 44 : 0,
       // LV5 — LA COUCHE DE FOND (P1). Validée par Paul le 2026-08-16 sur la
       // maquette : « fond avec les étoiles, génial ». Elle remplace les 130
       // grains SVG fixes par un champ dont la densité suit la surface (1 266 à

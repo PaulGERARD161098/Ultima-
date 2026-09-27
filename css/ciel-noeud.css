@@ -164,6 +164,17 @@ body.ciel-noeud .console-entete .titre-principal { font-size: clamp(1.1rem, 3.2v
   body.ciel-noeud > .ciel-noeud-coque > .console-entete {
     top: calc(env(safe-area-inset-top, 0px) + 46px);
   }
+  /* SOUS ISOLEMENT, L'ACCUEIL SE REPLIE (27/09) — le fil dit où l'on est.
+     Le titre est masqué À L'ŒIL SEULEMENT : il reste le titre de la page pour
+     un lecteur d'écran (`display: none` l'aurait retiré). L'invite, elle, est
+     une question de bienvenue : elle se retire. `smoke-cibles-telephone`. */
+  body.ciel-noeud.ciel-profond > .ciel-noeud-coque > .console-entete .console-titre {
+    position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+    overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+  }
+  body.ciel-noeud.ciel-profond > .ciel-noeud-coque > .console-entete .console-invite {
+    display: none;
+  }
 }
 
 /* La légende gravée : elle vivait sous le ciel, il n'y a plus de « sous ».
