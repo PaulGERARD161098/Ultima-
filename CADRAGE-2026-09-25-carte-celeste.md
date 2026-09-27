@@ -1461,4 +1461,22 @@ harnais prouve que l'ordre fautif se produit bien.
 lit désormais cette règle au lieu de la contredire.
 
 **Patrimoine** : `npm test` **44/44** ; `bash tests/lancer.sh` sortie 0, **51/51** harnais
-(+ `smoke-depots-partout`, 24 verdicts).
+(+ `smoke-depots-partout`, 24 verdicts, 26 après le dry run).
+
+### Dry run DR (palier 20 min, fait à 19:23)
+
+**Sondé, et résisté** :
+- **Une seconde greffe ne ramène pas de force.** La session se rafraîchit seule
+  (`TOKEN_REFRESHED`) et relance la greffe : isolé sur RENOBOOST IA par le lien,
+  remonté d'un cran par le fil, on reste sur ALPHA. Contrôle ajouté (① ter) ;
+  **sabotage** (la remontée garde le fragment `#renoboost-ia`) → rouge : la greffe
+  suivante ramenait sur RENOBOOST IA.
+- La greffe qui arrive AVANT l'adresse (① bis), les adresses forgées dont
+  `#__proto__` (③), l'historique (2 → 2), le fail-closed sans session (②).
+
+**Non éprouvable par l'écran, nommément** : la garde « un choix déjà fait ne se fait
+pas voler » (`isole ? null : …`). Avant la greffe, ALPHA n'a aucun cap qui
+s'isole ; et quand on isole ailleurs, l'adresse suit le choix — la relire donne le
+même foyer. La garde est défensive ; aucun parcours ne la distingue aujourd'hui.
+
+**Cédé** : rien.

@@ -110,6 +110,27 @@ function etat(page) {
   verifier('① bis sans retard : le lien isole aussi RENOBOOST IA', m.ici === 'RENOBOOST IA', `« ${m.ici} »`);
 }
 
+// ---- ① ter : UNE SECONDE GREFFE NE RAMÈNE PAS DE FORCE (dry run DR, 27/09) ----
+// La session se rafraîchit seule (`TOKEN_REFRESHED`, `js/boussole-auth.js`) et
+// chaque rafraîchissement relance la greffe. Remonté d'un cran par le fil, on
+// ne doit PAS être renvoyé sur RENOBOOST IA par la greffe suivante.
+{
+  const { page, contexte } = await ouvrir('alpha.html#renoboost-ia');
+  await page.waitForTimeout(2200);
+  const isole = await etat(page);
+  await page.locator('.ciel-fil .ciel-fil-etape').last().click();
+  await page.waitForTimeout(1500);
+  const remonte = await etat(page);
+  await page.evaluate(() => window.UltimaBoussole.poserSession('jeton-rafraichi'));
+  await page.waitForTimeout(2200);
+  const apres = await etat(page);
+  await contexte.close();
+  verifier('① ter verrou — isolé, puis remonté par le fil', isole.ici === 'RENOBOOST IA' && remonte.ici === '',
+    `« ${isole.ici} » → « ${remonte.ici} » (${remonte.hash || 'sans fragment'})`);
+  verifier('① ter la greffe suivante ne ramène pas sur RENOBOOST IA', apres.ici === '' && apres.hash === '',
+    `« ${apres.ici} » ${apres.hash}`);
+}
+
 // ---- ② FAIL-CLOSED : sans session, rien ----
 {
   const { page, contexte } = await ouvrir('alpha.html#renoboost-ia', { session: false });
