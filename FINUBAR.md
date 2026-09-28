@@ -32,10 +32,10 @@
   },
   "dernier_arret": {
     "le": "2026-09-28",
-    "commit": "0922329eff3108106138b7072817581cc9b5c5b0",
-    "quoi": "Séance 28/09 : LEÇONS v43 sur les 10 dépôts (2 leçons RenoBoost absorbées) ; YCOME retiré d'Ultima ; région Vercel mesurée."
+    "commit": "3d34b0422851db21c8254dd36bedb85a06a3ed24",
+    "quoi": "Séance 28/09 (2e) : INTEGRATION-LEO-CHATGPT.md posé (bloc d'instructions de Léo 6 478 car., pack de 16 fichiers, recette T1-T6) ; prompt macro-agent v1 remis à Paul, pas encore joué. Avant : LEÇONS v43 sur les 10 dépôts ; YCOME retiré ; région Vercel mesurée."
   },
-  "prochaine_action": "Choisir avec Paul le prochain chantier. Gestes de Paul en attente : archiver Ycome (GitHub), supprimer le projet Vercel ycome, décider la région cdg1.",
+  "prochaine_action": "Paul crée le GPT Léo, y colle le bloc §4 d'INTEGRATION-LEO-CHATGPT.md, passe T1-T6 et rapporte T2/T3/T4 + l'inventaire de capacités (étape 0 du prompt macro). Ensuite seulement : choisir le prochain chantier. Gestes de Paul en attente : archiver Ycome (GitHub), supprimer le projet Vercel ycome, décider la région cdg1.",
   "bloque_par": [
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
     "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
@@ -45,6 +45,10 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "ChatGPT : `export-chatgpt-empreinte.mjs --verifier` ne couvre PAS INTEGRATION-LEO-CHATGPT.md (bloc PARAMETRAGE-LEO comparé à la main, test T6). Et `EXPORT-METHODE-CHATGPT (1).md` est suivi par git, diffère de l'original (18 862 vs 26 364 octets) : fusionner ou archiver — décision Paul, non supprimé.",
+      "depuis": "2026-09-28"
+    },
     {
       "quoi": "Étiquettes vocales des caps : chacune finit par « 0 lien » sur les menus, du bruit pour un lecteur d'écran. Préexistant, relevé au dry run du 27/09 (carte-celeste §28).",
       "depuis": "2026-09-27"
