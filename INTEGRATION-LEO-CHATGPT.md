@@ -48,7 +48,7 @@ Tous à la racine du dépôt `PaulGERARD161098/Ultima-`. Tailles **mesurées** l
 
 | # | Fichier | Octets | Rôle |
 |---|---|---|---|
-| 1 | `EXPORT-METHODE-CHATGPT.md` | 26 364 | La méthode de Paul traduite (déjà en place) |
+| 1 | `EXPORT-METHODE-CHATGPT.md` | 32 706 | La méthode de Paul traduite, **+ §12 Codex fusionné le 28/09** |
 | 2 | `CLAUDE.md` | 20 492 | Directives EB/JL/EL/DR, gates, protocoles — **la source** |
 | 3 | `.claude/agents/leo.md` | 12 186 | La charte de Léo — **la source de sa personne** |
 | 4 | `memoire/PROFIL-PAUL.md` | 3 713 | Comment Paul pense et décide |
@@ -179,7 +179,7 @@ le chiffre doit alors apparaître, sinon T3 ne prouvait rien (il refusait tout).
 
 ## 9. Ce qui a été tranché, et ce qui reste
 
-1. ✅ **Archivé le 28/09 sur ordre de Paul** : `EXPORT-METHODE-CHATGPT (1).md` (v2 « Work / Codex », 18 862 octets, deuxième vérité au sens EB) est déplacé vers `archives/EXPORT-METHODE-CHATGPT-v2-work-codex-2026-09-28.md`, historique git conservé. Il n'entre pas dans le pack. Son apport (installation Codex, « compétence Méthode Paul ») reste **à fusionner dans l'original si Paul le veut** — non fait.
+1. ✅ **Archivé le 28/09 sur ordre de Paul** : `EXPORT-METHODE-CHATGPT (1).md` (v2 « Work / Codex », 18 862 octets, deuxième vérité au sens EB) est déplacé vers `archives/EXPORT-METHODE-CHATGPT-v2-work-codex-2026-09-28.md`, historique git conservé. Il n'entre pas dans le pack. ✅ Son apport Codex (installation, bloc `AGENTS.md`) est **fusionné le 28/09** dans `EXPORT-METHODE-CHATGPT.md` §12, sur ordre de Paul ; ses assouplissements de directives sont **écartés** (§12.4) — dont un point à trancher par Paul : JL s'applique-t-il aux autres dépôts ?
 2. **Périmètre d'écriture** : ce guide installe Léo-ChatGPT en **lecture +
    conseil + brouillon**. Lui donner un accès en écriture (connecteur GitHub,
    Notion, Gmail) est une décision de droits (anneaux §2) — **non prise ici**.

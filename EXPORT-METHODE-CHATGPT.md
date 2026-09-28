@@ -13,7 +13,7 @@
 >
 > Établi le 2026-09-21.
 >
-> **VERSION DOCUMENT : 2026-09-28.1**
+> **VERSION DOCUMENT : 2026-09-28.2**
 > **EMPREINTE DIRECTIVES : 45ec49a1dd0f**
 
 ---
@@ -350,8 +350,8 @@ FIN DE SÉANCE, quand je dis "fin de session" ou "récap" : (1) ce qui est ferm�
 
 ## 10. L'empreinte — savoir que le paramétrage n'est pas périmé
 
-⛔ **Le problème, et il est silencieux.** Une fois collés dans ChatGPT, les trois
-blocs vivent **hors du dépôt**. Le jour où EB, JL, EL ou DR bougent dans
+⛔ **Le problème, et il est silencieux.** Une fois collés dans ChatGPT (ou posés dans un
+`AGENTS.md`, §12), les blocs vivent **hors du dépôt**. Le jour où EB, JL, EL ou DR bougent dans
 `CLAUDE.md`, ils deviennent faux — et rien ne le dit. On continue de travailler
 avec un outil réglé sur une version morte, en croyant l'inverse.
 
@@ -437,3 +437,81 @@ s'est mesurée elle-même — 189 au lieu de 1 375. Un instrument qui se mesure
 lui-même rend un nombre vert et faux.* C'est pourquoi la commande vit ici, hors
 des sections qu'elle mesure — et pourquoi le §10, qui porte lui aussi un bloc de
 code, n'est PAS dans la liste mesurée.
+
+---
+
+## 12. Codex — poser la méthode dans un dépôt (`AGENTS.md`)
+
+> Fusionné le 2026-09-28 depuis `archives/EXPORT-METHODE-CHATGPT-v2-work-codex-2026-09-28.md`
+> (version « Work / Codex » de ChatGPT), **sur ordre de Paul**. Ce qui a été
+> repris : l'installation Codex, le bloc `AGENTS.md`, et les garde-fous propres à
+> un agent qui exécute (mutation isolée, relecture ≠ revue indépendante). Ce qui
+> a été **écarté** : §12.4.
+
+### 12.1 Installation
+
+1. **Dans un dépôt** : placer ce fichier à la **racine** et intégrer le bloc
+   §12.2 dans l'`AGENTS.md` du dépôt. ⛔ **Ne jamais écraser un `AGENTS.md`
+   existant** : on y ajoute le bloc, on ne le remplace pas.
+2. **Préférences globales de Codex** : intégrer le bloc à l'`AGENTS.md` global.
+   **[NON VÉRIFIÉ ici : l'emplacement exact du fichier global]** — la doc citée par
+   la version archivée est `learn.chatgpt.com/docs/agent-configuration/agents-md`.
+3. **Projet ChatGPT** : le bloc §9 reste la référence ; ce fichier est ajouté aux
+   sources du projet. Une pièce jointe à une conversation n'est pas une
+   installation.
+4. La « compétence Méthode Paul » citée par la version archivée est un réglage du
+   **compte** de Paul : **son existence n'est pas vérifiable depuis ce dépôt**.
+   Pas de dépendance à elle : le bloc §12.2 se suffit.
+
+### 12.2 Le bloc à coller — `AGENTS.md`
+
+```
+PARAMETRAGE 2026-09-28 · directives:45ec49a1dd0f
+
+# Méthode Paul — point d'entrée Codex
+
+Les instructions système/développeur et le mandat actuel priment sur ce fichier. La source canonique de la méthode est Ultima-/CLAUDE.md : ne suppose pas que ce chemin existe dans ce dépôt ; si tu peux le lire, signale toute divergence avec ce qui suit. Si le fichier EXPORT-METHODE-CHATGPT.md est à la racine, lis-le à l'ouverture ; s'il manque, dis-le, n'invente pas ses règles.
+
+EB : une boucle à la fois, bouclée avant la suivante ; réutilise l'existant, jamais un document ou un outil parallèle. JL : tout nouveau besoin devient une extension de l'existant ; la destination propre à ce dépôt se lit dans son cadrage. EL : le comment AVANT la première ligne (but, étapes, moyens, critères vérifiables, hors-périmètre, pre-mortem) ; cadrage insuffisant = tu cadres, tu ne commences pas. DR : attaque ce que tu viens de livrer, ne relance pas des tests verts.
+
+MESURE. Utilise tes accès réels (terminal, fichiers, connecteurs). Un terminal ne prouve pas l'accès au dépôt ou à la base : vérifie. Tout chiffre, date ou état porte sa source ; sans source : [NON VÉRIFIÉ] et la commande qui le lèverait. Ne déduis jamais un nombre de tests, de fichiers ou d'erreurs d'un travail décrit. N'annonce jamais un test, un push ou un déploiement non effectué.
+
+MANDAT. Si Paul donne « si X, fais Y » : vérifie X, applique, agis, rends compte, sans lui redemander l'arbitrage.
+
+GATES : tu t'arrêtes et tu demandes pour une action payante ; une migration SQL ou RLS en production ; un secret à saisir (jamais dans le chat) ; un correctif touchant auth, middleware, webhooks ou données personnelles ; un envoi réel d'email, SMS ou appel ; un merge dans main. « go solo » lève le reste, jamais ceux-là ; tiens alors un registre « ⏳ Actions humaines ».
+
+DRY RUN. Verrou de non-vacuité avant toute conclusion d'absence. Vérifie que les contrôles s'exécutent. Éprouve le garde-fou du côté où il se contourne. Casse volontairement le code et exige que le test vire au rouge, mais SEULEMENT dans une copie ou un worktree isolé, jamais sur l'arbre de travail de Paul. Relis ton diff en adversaire dans une passe distincte : c'est une relecture, pas une revue indépendante.
+
+CODE. Préserve les changements d'autrui ; vérifie l'état avant toute restauration. Commits atomiques. Secrets en variables d'environnement. Toute entrée externe est hostile. SQL paramétré. HTTPS + timeout. Aucune donnée personnelle en log. Termine par 🔒 sécurité + ⚡ optimisation.
+
+CLÔTURE. Zéro travail non poussé. Mets à jour la source de suivi du dépôt. Une leçon n'entre dans LECONS.md que si une erreur l'a payée. Fin de réponse : décisions attendues + prochaine action UNIQUE. Sur « fin de session » : fermé / restant, puis EN DERNIER le prompt de reprise en UN seul bloc copiable.
+```
+
+### 12.3 Ce que Codex a de plus, et que le reste du fichier ne dit pas
+
+- **Il exécute.** Donc les règles de mesure du §6 s'appliquent *pleinement* — mais
+  la casse volontaire (DR) s'y fait **en copie isolée**, sinon l'épreuve détruit
+  ce qu'elle protège.
+- **Il écrit dans un dépôt partagé.** Donc « préserver les changements d'autrui »
+  et « vérifier l'état avant toute restauration » passent de conseil à règle.
+- **Il peut se relire, pas se contre-expertiser.** Le même agent qui écrit puis
+  relit fait une *relecture* ; une *revue indépendante* exige une autre session.
+
+### 12.4 Ce qui n'a PAS été fusionné — et pourquoi
+
+La version archivée listait des « changements par rapport à l'export », dont
+plusieurs **assouplissent des règles de `CLAUDE.md`**. Une traduction ne
+peut pas relâcher sa source : la corriger ici créerait une deuxième vérité
+(Directive EB). **Écartés** :
+
+| Changement proposé par la v2 | Pourquoi écarté | Si Paul le veut |
+|---|---|---|
+| 3 POV et format 6 points « proportionnés », plus de systématisme | contredit EL (gate d'entrée) et « TEST POV SYSTÉMATIQUE » | le décider **dans `CLAUDE.md`**, puis re-traduire |
+| Correctif auth / middleware / données « préparé sans arrêt automatique » | contredit le §Gates de `CLAUDE.md` (déclenche aussi l'escalade) | idem |
+| Suppression du 📋 Retour méthode à chaque réponse | c'est une préférence de Paul, pas une règle de dépôt | à trancher dans ses préférences |
+| JL limité « au périmètre concerné » | JL dit que rien d'autre ne sera créé ; l'étendre ou non aux autres dépôts est une décision produit | **à trancher par Paul** |
+
+⚠️ La v2 précisait elle-même que le contrôle d'empreinte « n'avait pas été
+inspecté » : c'est fait ici — `--verifier` reste vert avec le §12 présent, et
+le §12.2 porte la même ligne `PARAMETRAGE` que les blocs §7 à §9, donc il est
+couvert par elle.

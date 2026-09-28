@@ -46,7 +46,7 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "ChatGPT : `export-chatgpt-empreinte.mjs --verifier` ne couvre PAS INTEGRATION-LEO-CHATGPT.md (bloc PARAMETRAGE-LEO comparé à la main, test T6). Le doublon `EXPORT-METHODE-CHATGPT (1).md` est ARCHIVÉ (archives/, 28/09) ; reste à décider si son apport Codex est fusionné dans l'original.",
+      "quoi": "ChatGPT : `export-chatgpt-empreinte.mjs --verifier` ne couvre PAS INTEGRATION-LEO-CHATGPT.md (bloc PARAMETRAGE-LEO comparé à la main, test T6). Le doublon `EXPORT-METHODE-CHATGPT (1).md` est ARCHIVÉ (archives/, 28/09) ; son apport Codex est FUSIONNÉ dans EXPORT-METHODE-CHATGPT.md §12 (28/09) ; reste à trancher par Paul : JL s'applique-t-il aux autres dépôts, et les assouplissements de la v2 (§12.4, écartés) ?",
       "depuis": "2026-09-28"
     },
     {
