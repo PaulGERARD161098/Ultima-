@@ -33,9 +33,9 @@
   "dernier_arret": {
     "le": "2026-09-28",
     "commit": "76a70a7f99e284fb0d689ff1885b3bd643c07bdf",
-    "quoi": "Séance 28/09 : LEÇONS v42 sur 8 dépôts ; YCOME retiré d'Ultima (garanties d'étoile d'attente reportées sur DOKLĚS) ; région Vercel mesurée."
+    "quoi": "Séance 28/09 : LEÇONS v43 sur les 10 dépôts (2 leçons RenoBoost absorbées) ; YCOME retiré d'Ultima ; région Vercel mesurée."
   },
-  "prochaine_action": "Paul : archiver le dépôt GitHub Ycome et supprimer le projet Vercel ycome. Puis absorber dans Ultima (v43) les 2 leçons propres à RenoBoost, et propager.",
+  "prochaine_action": "Choisir avec Paul le prochain chantier. Gestes de Paul en attente : archiver Ycome (GitHub), supprimer le projet Vercel ycome, décider la région cdg1.",
   "bloque_par": [
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
     "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
@@ -45,10 +45,6 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
-    {
-      "quoi": "LEÇONS v42 fusionnée le 28/09 sur 8 dépôts. RenoBoost retenu : sa copie v38 porte 2 leçons absentes de v42 (Calendly 27/09, « quatrième fois » 25/09) — à absorber (v43).",
-      "depuis": "2026-09-28"
-    },
     {
       "quoi": "Étiquettes vocales des caps : chacune finit par « 0 lien » sur les menus, du bruit pour un lecteur d'écran. Préexistant, relevé au dry run du 27/09 (carte-celeste §28).",
       "depuis": "2026-09-27"
@@ -66,7 +62,7 @@
       "depuis": "2026-09-11"
     },
     {
-      "quoi": "Aucun contrôle croisé ne compare la copie des leçons d'un dépôt à sa source : le sceau rend la divergence VISIBLE, il ne la corrige pas. `head -1` la montre.",
+      "quoi": "Aucun contrôle croisé ne compare la copie des leçons d'un dépôt à sa source. Payé le 28/09 : RenoBoost portait 2 leçons absentes de la source, vues au diff avant écrasement.",
       "depuis": "2026-09-11"
     },
     {
