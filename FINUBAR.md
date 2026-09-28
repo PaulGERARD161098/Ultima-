@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-28",
-    "commit": "3d34b0422851db21c8254dd36bedb85a06a3ed24",
-    "quoi": "Séance 28/09 (2e) : INTEGRATION-LEO-CHATGPT.md posé (bloc d'instructions de Léo 6 478 car., pack de 16 fichiers, recette T1-T6) ; prompt macro-agent v1 remis à Paul, pas encore joué. Avant : LEÇONS v43 sur les 10 dépôts ; YCOME retiré ; région Vercel mesurée."
+    "commit": "29ccb689cb2522141fde611c645c6414b4bce369",
+    "quoi": "Séance 28/09 (2e) : INTEGRATION-LEO-CHATGPT.md posé (bloc d'instructions de Léo 6 478 car., pack de 16 fichiers, recette T1-T6) ; prompt macro-agent v1 remis à Paul, pas encore joué ; doublon « (1) » archivé (archives/) et son apport Codex fusionné dans EXPORT-METHODE-CHATGPT.md §12 (v2026-09-28.2). Avant : LEÇONS v43 sur les 10 dépôts ; YCOME retiré ; région Vercel mesurée."
   },
   "prochaine_action": "Paul crée le GPT Léo, y colle le bloc §4 d'INTEGRATION-LEO-CHATGPT.md, passe T1-T6 et rapporte T2/T3/T4 + l'inventaire de capacités (étape 0 du prompt macro). Ensuite seulement : choisir le prochain chantier. Gestes de Paul en attente : archiver Ycome (GitHub), supprimer le projet Vercel ycome, décider la région cdg1.",
   "bloque_par": [
