@@ -30,7 +30,7 @@
 //   node finubar/export-chatgpt-empreinte.mjs --sceller   → réécrit l'empreinte
 
 import { readFileSync, writeFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 // Le hachage est REPRIS du sceau des leçons, pas réécrit : il normalise déjà
 // les fins de ligne (un clone Windows ne doit pas paraître divergent) et il est
@@ -108,7 +108,7 @@ export function etat(cheminClaudeMd = CLAUDE_MD, cheminExport = EXPORT_MD) {
     return { reelle, inscrites, accord: false, motif: `Les blocs à coller portent des empreintes DIFFÉRENTES (${distinctes.join(', ')}) — deux vérités dans un même document` };
   }
   if (distinctes[0] !== reelle) {
-    return { reelle, inscrites, accord: false, motif: `Les directives de CLAUDE.md ont changé depuis l'écriture de l'export (inscrit ${distinctes[0]}, réel ${reelle}). Le paramétrage de ChatGPT est PÉRIMÉ.` };
+    return { reelle, inscrites, accord: false, motif: `Les directives de CLAUDE.md ont changé depuis l'écriture de l'export (inscrit ${distinctes[0]}, réel ${reelle}). Le paramétrage issu de ${basename(cheminExport)} est PÉRIMÉ.` };
   }
   return { reelle, inscrites, accord: true, motif: '' };
 }
