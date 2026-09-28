@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v42 2026-09-27 sha256:6f4274254933 -->
+<!-- lecons:empreinte v43 2026-09-28 sha256:a5d10eb36b49 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -468,6 +468,21 @@ recherche elle-même — « ce fichier existe-t-il, fait-il plus de zéro ligne 
 coûte une seconde et sauve l'annonce.
 
 ## 2. Les garde-fous, et leur silence
+
+**UN TEST QUI PINCE UNE ADRESSE NE DIT RIEN DE CE QU'ELLE SERT** *(2026-09-27, RenoBoost)*.
+`tests/accueil-v3.test.mjs` exigeait le lien Calendly exact du hero, et il est
+resté vert du 23 au 27/09 pendant que ce lien renvoyait « This Calendly URL is
+not valid » : le plan gratuit de Paul n'autorise qu'un événement actif, et en
+créer un nouveau avait désactivé celui du site. **Quatre jours sans aucun
+rendez-vous possible**, trouvés par Paul sur une capture, pas par un garde-fou.
+Puis le correctif a remplacé l'adresse dans les cinq fichiers repérés à la
+main — et en a oublié deux (l'encart de la démo du tableau de bord, la démo
+RénoDevis), retrouvés au contrôle de fin de séance. ⛔ *Deux gestes, pas un :
+(1) l'état d'un service externe se LIT à sa source (l'API Calendly, champ
+`active`), jamais se déduit de ce qu'on a écrit ; (2) une valeur dispersée
+dans le dépôt se tient par un test qui la cherche PARTOUT
+(`tests/calendly-lien.test.mjs`), pas par la liste des fichiers dont on se
+souvient.*
 
 **UN FAUX SCHÉMA QUI NE PORTE PAS LES DÉCLENCHEURS DE LA PROD REND VERT CE QUE LA PROD REFUSE** *(2026-09-27, Artidispo)*.
 En production Supabase, `storage.objects` porte `protect_objects_delete` : **tout**
@@ -1251,6 +1266,13 @@ mémoire. ⛔ *La séquence n'est pas « écrire → tester → muter » mais
 deux fois et qu'on enfreint quand même n'est pas oubliée : elle n'est pas
 outillée. Le geste de muter doit commencer par refuser de tourner si
 `git status` n'est pas propre.*
+⚠️ **Quatrième fois, le 25/09** — et la variante est instructive : la règle
+avait été TENUE pour la première passe (commit `d6e3318`, puis trois
+mutations), et enfreinte sur le correctif de CI qui a suivi. Un fix d'une ligne
+non commité, une mutation pour le prouver, `git checkout --` pour restaurer :
+le fix est reparti avec la mutation, réécrit une minute plus tard. *Le
+correctif qui arrive APRÈS la passe de dry run est un nouveau cycle, avec son
+propre commit avant sa propre mutation — pas une queue du cycle précédent.*
 
 **UN CONTRÔLE QUI MESURE LA MAUVAISE GRANDEUR EST VERT SUR LE DÉFAUT QU'IL
 GARDE** *(2026-09-18)*. Un garde-fou sur des pastilles SVG a été écrit trois

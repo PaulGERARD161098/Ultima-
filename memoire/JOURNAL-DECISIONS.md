@@ -4354,3 +4354,9 @@ phrase de Léo, repli `noscript`, étiquette du blason `portail` (gardé : DOKL�
 et SYMPHO le portent). Les garanties d'étoile d'attente sont **reciblées** sur
 DOKLĚS (SYMPHO en témoin), pas supprimées. Lexique et radar marqués
 « abandonné », pas effacés. Dépôt GitHub et projet Vercel : gestes de Paul.
+
+**28/09 (soir) — « go v43 ».** Les deux leçons propres à RenoBoost (lien Calendly,
+27/09 ; « quatrième fois », 25/09) absorbées dans la source, avec leur provenance ;
+re-scellé v43 (`a5d10eb36b49`) et propagé octet à octet aux neuf autres dépôts,
+RenoBoost compris. Avant d'écraser, chaque copie cible a été comparée à v42 :
+toutes identiques, aucune leçon locale perdue.
