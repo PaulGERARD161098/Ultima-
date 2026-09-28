@@ -215,6 +215,10 @@ avant écriture, FK composites), fuite de PII (logs = code seul), XSS (tout en
 1. **Région Vercel `cdg1`** (`"regions": ["cdg1"]` dans `vercel.json`) : les
    fonctions tournent a priori à Washington, la base à Paris — ~85 ms par appel
    base. Touche le déploiement de tout Ultima → gate.
+   ✅ **Mesuré le 28/09** (le « a priori » est levé) : le déploiement de
+   production `dpl_EgAMUyvFTWB6eFchaMxFVW9RuSqt` (main `76a70a7`) porte
+   `regions: ["iad1"]` — Washington ; le projet Supabase Ultima est en
+   `eu-west-3` — Paris. Les ~85 ms restent une estimation, pas une mesure.
 2. **Fermer les inscriptions Supabase** (« Allow new signups ») si ce n'est pas
    fait : un compte ouvert par un tiers pourrait remplir le quota avec cette route
    (F5). État non vérifiable depuis le dépôt.

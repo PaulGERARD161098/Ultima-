@@ -4330,3 +4330,21 @@ d'ALPHA complété. Graphie **DOKLĚS** (e caron) — identifiant `dokles`.
 passe au-dessus de son étoile (menus seulement) ; la marge basse du ciel est
 plafonnée à 50 % de la hauteur au lieu de 40 % (le socle complet en prend 45 % au
 bureau). Détail : `CADRAGE-2026-09-25-carte-celeste.md` §25 à §28.
+
+## 2026-09-28 — Leçons v42 partout ; YCOME abandonné ; LV6 conditionné
+
+**Décisions de Paul** : « go propagation LEÇONS v42 » · « le domaine est déjà
+vérifié » (`renoboostia.fr` chez Resend — retiré des bloqueurs) · « abandonné YCOME
+[…] je ne travaille plus pour lui — cadre cette possibilité » · « on ne passe à LV6
+que quand tout est propre ».
+
+**Fait** : v42 fusionnée sur huit dépôts, identique octet à octet à la source
+(RenoDevis #207, RenoAgenda #103, RenoPredict #79, renoboost-console #10,
+mon-dpe.fr #219, artisan-builder #89, Artidispo #95, DATARENO- #40).
+**RenoBoost retenu** : sa copie v38 porte deux leçons qui ne sont pas dans v42 ;
+l'écraser les aurait perdues. **ripair** exclu : hors de `depots.json`, fork
+partagé avec un tiers.
+
+**YCOME** : retrait cadré, non exécuté — `CADRAGE-2026-09-28-retrait-ycome.md`.
+**Région Vercel** : mesurée, production en `iad1` (Washington), base en
+`eu-west-3` (Paris) ; le passage en `cdg1` reste un gate.

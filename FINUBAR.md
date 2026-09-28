@@ -31,24 +31,23 @@
     "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
   },
   "dernier_arret": {
-    "le": "2026-09-27",
-    "commit": "6b08583b299c2a97e20a937f8f3893cf15220996",
-    "quoi": "Séance 26-27/09 : carte céleste bouclée (figure et rang, 44 px au doigt, liens vers les dépôts) ; porte qui tutoie ; DOKLĚS et SYMPHO sous ALPHA."
+    "le": "2026-09-28",
+    "commit": "76a70a7f99e284fb0d689ff1885b3bd643c07bdf",
+    "quoi": "Séance 28/09 : LEÇONS v42 propagée et fusionnée sur 8 dépôts (identique octet à octet) ; RenoBoost retenu ; retrait d'YCOME cadré ; région Vercel mesurée (iad1)."
   },
-  "prochaine_action": "Choisir avec Paul le prochain chantier : la carte céleste est bouclée (carte-celeste §25 à §28). En tête du registre : propager LEÇONS v41 aux sept dépôts.",
+  "prochaine_action": "Go de Paul sur le retrait d'YCOME (CADRAGE-2026-09-28-retrait-ycome.md). Puis absorber dans Ultima (v43) les 2 leçons propres à RenoBoost, et propager.",
   "bloque_par": [
-    "Vérifier `renoboostia.fr` sur resend.com/domains — sans ça le mail du matin ne peut partir QU'à paul.gerard@renoboostia.fr",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
-    "Le top départ de LV6 (le cadrage est déposé, l'exécution est gelée à la demande de Paul)",
-    "L'URL d'YCOME et la précision sur « mon dpe.fr » (VITRUVE)",
-    "Région Vercel `cdg1` pour les fonctions (base à Paris, fonctions a priori à Washington — ~85 ms par appel base) : gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis",
+    "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
+    "La précision sur « mon dpe.fr » (VITRUVE)",
+    "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis",
     "Vérifier que les inscriptions Supabase sont FERMÉES (« Allow new signups ») — un compte tiers pourrait remplir le quota par la route d'import"
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "LEÇONS v41 (44334f0e2ecd) sur Ultima seul ; les copies mesurées le 26/09 étaient en v38 et v28, trois dépôts sans copie. Propagation non faite.",
-      "depuis": "2026-09-26"
+      "quoi": "LEÇONS v42 fusionnée le 28/09 sur 8 dépôts. RenoBoost retenu : sa copie v38 porte 2 leçons absentes de v42 (Calendly 27/09, « quatrième fois » 25/09) — à absorber (v43).",
+      "depuis": "2026-09-28"
     },
     {
       "quoi": "Étiquettes vocales des caps : chacune finit par « 0 lien » sur les menus, du bruit pour un lecteur d'écran. Préexistant, relevé au dry run du 27/09 (carte-celeste §28).",
@@ -63,7 +62,7 @@
       "depuis": "2026-09-07"
     },
     {
-      "quoi": "ripair (paggerard-boop) reste en LEÇONS v7 : une séance ouverte sur les dépôts de PaulGERARD161098 ne peut pas l'atteindre. Angle mort connu, pas un oubli.",
+      "quoi": "ripair (paggerard-boop) reste en LEÇONS v7 : hors de depots.json et fork partagé avec un tiers — exclu à dessein le 28/09. À trancher par Paul.",
       "depuis": "2026-09-11"
     },
     {
