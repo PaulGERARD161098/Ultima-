@@ -37,7 +37,7 @@
 | Réno Conception, Rénos conception | **VITRUVE** (ADR-009) — libellé métier de Paul pour le bureau d'études embarqué ; nom de registre = **VITRUVE, acté par Paul le 2026-08-20**, module solaire = GNOMON |
 | « les premiers pavillons ou panneaux solaires » | entendu 2026-08-20 — compris **« les pavillons, et les panneaux solaires »** (premier terrain visé de VITRUVE). ⚠️ « premiers » possiblement parasite : à confirmer par Paul |
 | « avec mon dpe.fr » | entendu 2026-08-20 — **non interprété**, consigné mot pour mot (élément à verser au cadrage VITRUVE ; probablement un service ou un domaine que Paul a en main). ⏳ précision attendue |
-| Ikom, Ycom | YCOME (macro-projet boussole LV2, plateforme externe — URL à fournir par Paul) |
+| Ikom, Ycom | YCOME — ⛔ **abandonné le 28/09** (Paul ne travaille plus pour lui) ; retiré du ciel d'ALPHA. Une dictée qui le nomme parle d'un projet clos |
 | Richardam, Reshiram | RESHIRAM (cap boussole LV2 : « le travail de la réalité » — talents & capacités concrets, data, lien RIVEN) |
 | Zekrom, Chrome | ZEKROM (cap boussole LV2 : « la quête de l'idéal » — volontés/idéaux, cap directionnel) — « Chrome » = déformation vocale observée 2026-07-23 |
 | capteur (contexte curseur) | curseur (souris) qu'on glisse sur un cap de la boussole |
@@ -54,7 +54,7 @@
 | Vranesh, Vranèche, Vranaiche, Ramesh, vraie neige, Vranesh de vraie neige, votre ranache | VRANESH (cap IMLADRIK : les différents futurs potentiels — anticiper) |
 | Draukhain, Drokhain, Drau Kain, Drôle de Kain | DRAUKHAIN (cap IMLADRIK : la volonté au-delà du possible — objectifs, foi) |
 | Kalamn-talaen, Kalamntalaen, Calamne Talaën, Kalam Talent, Kalemn Talaen | KALAMN-TALAEN (le **nom gravé de la boussole centrale** épée+dragon d'IMLADRIK — un emblème, **pas un agent** ; corrigé Paul 2026-07-25 : l'agent unique reste **Léo**. Les mots restent sur la boussole) |
-| i comme moi-même, y comme moi | YCOME (cap professionnel d'ALPHA) |
+| i comme moi-même, y comme moi | YCOME — ⛔ abandonné le 28/09 (voir « Ikom, Ycom ») |
 | cent dix neuf (et autres nombres dictés) | le numéro de la PR (#119) |
 | Liandra | LIANDRA (situation VRANESH dictée 2026-07-31 : la relation amour ↔ devoir — nom choisi par Paul, cohérent avec la nomenclature des caps d'IMLADRIK) |
 | Madrid (contexte cadran) | [sous-]cadran (déformation observée 2026-07-31 : « il y a un sous-cadran ») |

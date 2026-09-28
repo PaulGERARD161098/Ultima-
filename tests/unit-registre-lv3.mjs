@@ -6,7 +6,7 @@
 //   2. La règle nœud / feuille (§2.1) : une boussole a ≥ 2 caps ; une feuille
 //      n'en a aucun (RIVEN reste une feuille tant qu'il n'a qu'une porte).
 //   3. La structure dictée par Paul : deux supra-divisions, TAO sous ULTIMA,
-//      YCOME et RENOBOOST IA sous ALPHA.
+//      RENOBOOST IA, DOKLĚS et SYMPHO sous ALPHA (YCOME retiré le 28/09).
 //   4. (Géométrie de la rose : ABANDONNÉE le 2026-08-19 — voir la section 4.)
 //   5. Le cockpit ne rend QUE des comptes entiers (jamais de contenu, jamais de
 //      PII) et se tait quand il n'y a rien à traiter.
@@ -43,7 +43,13 @@ verdicts.racineDeuxSupraPlusAlthea = JSON.stringify(NOEUDS[RACINE].enfants)
   === JSON.stringify(['ultima-perso', 'alpha', 'althea']);
 verdicts.taoSousNaga = parentDe('tao') === 'naga'
   && chemin('tao')[1] === 'ultima-perso'; // TAO reste sous ULTIMA, via NAGA
-verdicts.ycomeSousAlpha = parentDe('ycome') === 'alpha';
+// YCOME RETIRÉ (Paul, 28/09 : « je ne travaille plus pour lui ») — cadrage
+// CADRAGE-2026-09-28-retrait-ycome.md. Le nœud disparaît, ALPHA garde trois
+// caps, et plus aucune phrase de Léo n'en parle.
+verdicts.ycomeRetire = !('ycome' in NOEUDS) && !NOEUDS.alpha.enfants.includes('ycome');
+verdicts.alphaTroisCaps = JSON.stringify(NOEUDS.alpha.enfants)
+  === JSON.stringify(['renoboost-ia', 'dokles', 'sympho']);
+verdicts.alphaNeParlePlusDYcome = !/ycome/i.test(JSON.stringify(NOEUDS));
 verdicts.renoboostSousAlpha = parentDe('renoboost-ia') === 'alpha';
 verdicts.cheminTaoComplet = JSON.stringify(chemin('reshiram'))
   === JSON.stringify(['racine', 'ultima-perso', 'naga', 'tao', 'reshiram']);
@@ -108,7 +114,10 @@ verdicts.imladrikLegendeGravee = NOEUDS.imladrik.legende === 'Kalamn-talaen'
 // Les caps externes déclarent leur ouverture en nouvel onglet.
 verdicts.renoboostExterne = NOEUDS['renoboost-ia'].externe === true
   && NOEUDS['renoboost-ia'].cible.startsWith('https://');
-verdicts.ycomeSansCible = NOEUDS.ycome.cible === null && NOEUDS.ycome.etat === 'À venir';
+// Les ÉTOILES D'ATTENTE (sans page) : la garantie portée jadis par YCOME est
+// reportée sur DOKLĚS et SYMPHO — elle ne part pas avec lui.
+verdicts.etoilesDAttenteSansCible = ['dokles', 'sympho']
+  .every((id) => NOEUDS[id] && NOEUDS[id].cible === null && NOEUDS[id].etat === 'À venir');
 
 // Passerelle TAO : RESHIRAM ⇄ ZEKROM, dans le même nœud.
 verdicts.passerelleTao = NOEUDS.reshiram.lien === 'zekrom'

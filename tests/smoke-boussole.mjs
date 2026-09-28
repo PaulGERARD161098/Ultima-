@@ -140,7 +140,7 @@ verifier('une étoile par cap, ni plus ni moins',
   `${attendus.length} attendues`);
 // Les projets ne sont plus des caps de la racine : ils vivent sous leur
 // supra-division. PORTÉE, nouveau sélecteur, même preuve par l'ABSENCE.
-for (const parti of ['renoboost-ia', 'ycome', 'tao', 'reshiram', 'zekrom']) {
+for (const parti of ['renoboost-ia', 'dokles', 'sympho', 'ycome', 'tao', 'reshiram', 'zekrom']) {
   verifier(`Plus de cap ${parti} à la racine`,
     (await page.locator(`#ciel-noeud-scene .ciel-etoile[data-noeud-id="${parti}"]`).count()) === 0);
 }

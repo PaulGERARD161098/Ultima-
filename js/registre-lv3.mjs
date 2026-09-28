@@ -110,14 +110,14 @@ export const NOEUDS = {
     blason: 'alpha',
     cible: 'alpha.html',
     resume: 'La supra-division professionnelle. Les projets qui te font vivre : '
-      + 'Renoboost IA aujourd’hui, YCOME dès que tu me donnes son adresse, et '
-      + 'deux caps à cadrer — DOKLĚS (la marque ECL by DOKLES) et SYMPHO.',
+      + 'Renoboost IA aujourd’hui, et deux caps à cadrer — DOKLĚS (la marque '
+      + 'ECL by DOKLES) et SYMPHO.',
     titre: 'ALPHA',
     surligne: 'Supra-division Alpha',
     invite: 'Léo te guide — survole un cap.',
     coeur: 'alpha',
     legende: 'le professionnel',
-    enfants: ['renoboost-ia', 'ycome', 'dokles', 'sympho'],
+    enfants: ['renoboost-ia', 'dokles', 'sympho'],
   },
 
   // ---- Les caps d'ALPHA (feuilles : plateformes de travail) ----
@@ -130,18 +130,12 @@ export const NOEUDS = {
     resume: 'Console Renoboost IA — le socle rémunérateur (chantiers + '
       + 'installations à domicile). S’ouvre dans un nouvel onglet.',
   },
-  ycome: {
-    nom: 'YCOME',
-    etat: 'À venir',
-    blason: 'portail',
-    cible: null,
-    externe: true,
-    resume: 'Projet YCOME, plateforme externe. Le cap est prêt : transmets-moi '
-      + 'son URL et je le branche.',
-  },
+  // YCOME — RETIRÉ le 28/09 (Paul : « je ne travaille plus pour lui »).
+  // Cadrage : CADRAGE-2026-09-28-retrait-ycome.md. Ses garanties d'étoile
+  // d'attente sont portées par DOKLĚS et SYMPHO (tests/smoke-alpha.mjs).
 
   // DOKLĚS et SYMPHO — deux ÉTOILES D'ATTENTE (Paul, 27/09 ; cadrage
-  // carte-celeste §28). Même forme que YCOME : un nom, un état, une phrase, et
+  // carte-celeste §28). Un nom, un état, une phrase, et
   // AUCUNE cible — donc `aria-disabled`, donc aucune page promise. Elles
   // grandiront quand leur projet aura une page ou un dépôt.
   // ⛔ LE NOM S'ÉCRIT « DOKLĚS », AVEC LE Ě (e caron), tel que Paul l'a donné.
