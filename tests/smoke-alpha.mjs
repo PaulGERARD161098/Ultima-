@@ -1,6 +1,6 @@
 // Supra-division ALPHA (Ultima Lv3, boucle L2) : alpha.html.
 // Prouve : bandeau conforme au REGISTRE, les caps du registre rendus (RENOBOOST IA ouvert en
-// nouvel onglet + rel noopener ; YCOME « à venir », inerte mais parlant), le
+// nouvel onglet + rel noopener ; DOKLĚS « à venir », inerte mais parlant), le
 // cœur gravé + sa légende, le retour vers la racine, la parole de Léo au
 // survol ET au focus clavier, le repli noscript, les contrastes AA, et —
 // puisque ALPHA n'héberge aucune donnée — AUCUNE requête réseau (ni CDN, ni
@@ -136,11 +136,19 @@ verifier('RENOBOOST IA rendu', (await reno.count()) === 1);
     page.url().endsWith('alpha.html'), page.url());
 }
 
-// YCOME : « à venir » — non-lien, aria-disabled, mais atteignable au clavier.
-const ycome = page.locator('g.ciel-etoile[data-noeud-id="ycome"]');
-verifier('YCOME inerte (pas une ancre)',
-  (await ycome.evaluate((e) => e.tagName.toLowerCase())) !== 'a');
-verifier('YCOME aria-disabled', (await ycome.getAttribute('aria-disabled')) === 'true');
+// L'ÉTOILE D'ATTENTE : « à venir » — non-lien, aria-disabled, mais atteignable
+// au clavier. Ces garanties étaient écrites sur YCOME, retiré le 28/09 ; elles
+// sont REPORTÉES sur DOKLĚS (SYMPHO en témoin), jamais supprimées avec lui —
+// sinon une étoile sans page pourrait redevenir cliquable sans qu'un test rougisse.
+const attente = page.locator('g.ciel-etoile[data-noeud-id="dokles"]');
+verifier('Verrou : l\'étoile DOKLĚS est rendue', (await attente.count()) === 1);
+verifier('YCOME retiré : aucune étoile ycome sur ALPHA',
+  (await page.locator('g.ciel-etoile[data-noeud-id="ycome"]').count()) === 0);
+verifier('DOKLĚS inerte (pas une ancre)',
+  (await attente.evaluate((e) => e.tagName.toLowerCase())) !== 'a');
+verifier('DOKLĚS aria-disabled', (await attente.getAttribute('aria-disabled')) === 'true');
+verifier('SYMPHO aria-disabled (témoin)',
+  (await page.locator('g.ciel-etoile[data-noeud-id="sympho"]').getAttribute('aria-disabled')) === 'true');
 // « 1 seul cap à venir » se lisait sur `.cap--avenir`, une classe de STYLE. Au
 // ciel, l'état se lit sur `aria-disabled`, ce qui est la source de vérité pour
 // qui n'y voit pas — donc un meilleur endroit pour le mesurer.
@@ -150,10 +158,10 @@ verifier(`${aVenir} caps « à venir » (ceux sans page au registre)`, aVenir >=
 // ET IL NE NAVIGUE PAS : la promesse d'inertie, éprouvée AU CLAVIER.
 {
   const avant = page.url();
-  await ycome.focus();
+  await attente.focus();
   await page.keyboard.press('Enter');
   await page.waitForTimeout(400);
-  verifier('YCOME : Entrée ne navigue pas (le cap reste inerte)', page.url() === avant);
+  verifier('DOKLĚS : Entrée ne navigue pas (le cap reste inerte)', page.url() === avant);
 }
 
 // Le cœur gravé + sa légende + les aiguilles.
@@ -208,23 +216,25 @@ verifier('Survol RENOBOOST IA : action « nouvel onglet »', /nouvel onglet/i.te
 // LA SOURIS SORT DU CIEL AVANT DE TESTER LE CLAVIER. Sans cela, elle reste
 // posée sur le cap précédent, son survol continue de parler, et l'on croit lire
 // la parole du cap focalisé alors qu'on lit celle du cap survolé. Le harnais
-// l'avait dit : « Focus YCOME » retournait le texte de RENOBOOST IA.
+// l'avait dit : « Focus YCOME » retournait le texte de RENOBOOST IA (le cap
+// d'attente d'alors ; DOKLĚS a pris sa place le 28/09).
 await page.mouse.move(4, 4);
 await page.waitForTimeout(250);
-await ycome.focus();
+await attente.focus();
 // ÉVÉNEMENT DÉCLENCHÉ DIRECTEMENT, comme partout ailleurs sur ce moteur : la
 // caméra ne se pose jamais tout à fait et l'état du survol précédent peut encore
 // se défaire pendant qu'on mesure. Vérifié en isolation : `focus()` seul suffit
-// sur une page fraîche (parole « YCOME · À venir »), mais l'enchaînement
+// sur une page fraîche (parole « <cap> · À venir »), mais l'enchaînement
 // survol → clic → focus laissait la course ouverte. Un harnais ne doit pas
 // dépendre de qui gagne.
-await ycome.dispatchEvent('focus');
+await attente.dispatchEvent('focus');
 await page.waitForSelector('#boussole-parole.is-actif', { timeout: 5000 });
 await page.waitForTimeout(200);
-const paroleYcome = (await page.locator('#boussole-parole').textContent()) || '';
-verifier('Focus YCOME : le cap parle', /YCOME/.test(paroleYcome) && /URL/.test(paroleYcome),
-  `lu: ${paroleYcome.slice(0, 120)}`);
-verifier('Focus YCOME : « cap en préparation »', /préparation/i.test(paroleYcome), `lu: ${paroleYcome}`);
+const paroleAttente = (await page.locator('#boussole-parole').textContent()) || '';
+// SA propre parole, pas celle du cap survolé avant : le nom ET sa phrase.
+verifier('Focus DOKLĚS : le cap parle de lui', /DOKLĚS/.test(paroleAttente) && /ECL by DOKLES/.test(paroleAttente)
+  && !/RENOBOOST/.test(paroleAttente), `lu: ${paroleAttente.slice(0, 120)}`);
+verifier('Focus DOKLĚS : « cap en préparation »', /préparation/i.test(paroleAttente), `lu: ${paroleAttente}`);
 
 // Repli sans JS.
 verifier('Repli <noscript> présent', (await page.locator('noscript').count()) >= 1);

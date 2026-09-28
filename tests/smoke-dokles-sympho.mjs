@@ -2,7 +2,7 @@
 //
 // Cadrage : CADRAGE-2026-09-25-carte-celeste.md §28. DOKLĚS est la marque
 // « ECL by DOKLES », SYMPHO un projet professionnel ; les deux s'accrochent sous
-// ALPHA, au rang de YCOME, en ÉTOILES D'ATTENTE — un nom, un état, une phrase,
+// ALPHA, au rang de RENOBOOST IA, en ÉTOILES D'ATTENTE — un nom, un état, une phrase,
 // et aucune page promise.
 //
 // Ce harnais tient :
@@ -12,15 +12,17 @@
 //     marquées `aria-disabled` ;
 //   ③ LE TOUCHER N'OUVRE RIEN : ni navigation, ni onglet — la parole dit
 //     l'état et la phrase ;
-//   ④ LA DENSITÉ : ALPHA porte HUIT étoiles une fois connecté (l'agrégat réel) ;
+//   ④ LA DENSITÉ : ALPHA porte, une fois connecté, les étoiles du REGISTRE GREFFÉ
+//     de l'agrégat réel (huit le 27/09, sept depuis le retrait d'YCOME le 28/09) ;
 //     aucun nom ne doit en croiser un autre de 360 à 390 px — mesuré avant le
 //     lot sur un prototype : ARTIDISPO et RENOBOOST IA se croisaient.
 //
-// ⛔ VU ROUGE SUR LE CODE D'AVANT. Verrous : huit étoiles réellement peintes,
+// ⛔ VU ROUGE SUR LE CODE D'AVANT. Verrous : les étoiles attendues réellement peintes,
 // au moins deux noms lus avant de chercher un croisement.
 import { chromium } from 'playwright';
 import { NOEUDS } from '../js/registre-lv3.mjs';
 import MACRO from '../api/_lib/finubar-macro.mjs';
+import { greffer } from '../js/adaptateur-finubar.mjs';
 
 const BASE = process.env.BASE_ULTIMA || 'http://127.0.0.1:8123';
 const navigateur = await chromium.launch({
@@ -152,7 +154,17 @@ function mesurer(page) {
   await contexte.close();
 }
 
-// ---- ④ LA DENSITÉ : huit étoiles, connecté ----
+// ---- ④ LA DENSITÉ : les étoiles attendues, connecté ----
+// ⛔ LE COMPTE SE DÉRIVE, IL NE SE RECOPIE PAS (28/09). Ce verrou disait « huit » :
+// vrai le 27/09, faux le lendemain quand YCOME est parti — cinq rouges sur un
+// écran sain, le piège déjà payé par smoke-alpha la veille. Le nombre attendu
+// est celui que le produit calcule lui-même : le registre GREFFÉ de l'agrégat
+// servi au navigateur (`greffer`, la fonction de la coque). Plancher : les
+// trois caps d'ALPHA au registre, pour qu'un agrégat vide ne rende pas ce
+// verrou vacant.
+const ETOILES_ALPHA = (greffer(NOEUDS, MACRO).alpha.enfants || []).length;
+verifier('④ verrou : le compte attendu couvre au moins les caps du registre',
+  ETOILES_ALPHA >= NOEUDS.alpha.enfants.length && NOEUDS.alpha.enfants.length >= 3, `${ETOILES_ALPHA}`);
 for (const taille of [[390, 664], [375, 667], [360, 740], [390, 844], [1280, 800]]) {
   const cle = `${taille[0]}×${taille[1]}`;
   const { page, contexte } = await ouvrir(taille);
@@ -165,7 +177,7 @@ for (const taille of [[390, 664], [375, 667], [360, 740], [390, 844], [1280, 800
     // serait vert par une autre voie que celle qu'on croit avoir construite.
     verifier(`④ ${cle} : verrou — au moins un nom passé au-dessus de son étoile`, m.nomsDessus >= 1, `${m.nomsDessus}`);
   }
-  verifier(`④ ${cle} : verrou — huit étoiles au ciel d'ALPHA`, m.etoiles === 8, `${m.etoiles}`);
+  verifier(`④ ${cle} : verrou — ${ETOILES_ALPHA} étoiles au ciel d'ALPHA (registre greffé)`, m.etoiles === ETOILES_ALPHA, `${m.etoiles}`);
   verifier(`④ ${cle} : verrou — au moins deux noms lus`, m.noms >= 2, `${m.noms}`);
   verifier(`④ ${cle} : aucun nom n'en croise un autre`, m.noms >= 2 && m.croises.length === 0, m.croises.join(', ') || '0');
   verifier(`④ ${cle} : aucun nom hors cadre`, m.noms >= 2 && m.hors === 0, `${m.hors}`);

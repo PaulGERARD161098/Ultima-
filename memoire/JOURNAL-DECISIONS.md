@@ -4348,3 +4348,9 @@ partagé avec un tiers.
 **YCOME** : retrait cadré, non exécuté — `CADRAGE-2026-09-28-retrait-ycome.md`.
 **Région Vercel** : mesurée, production en `iad1` (Washington), base en
 `eu-west-3` (Paris) ; le passage en `cdg1` reste un gate.
+
+**28/09 (après-midi) — « Go » : YCOME retiré d'Ultima.** Nœud, lien d'ALPHA,
+phrase de Léo, repli `noscript`, étiquette du blason `portail` (gardé : DOKLĚS
+et SYMPHO le portent). Les garanties d'étoile d'attente sont **reciblées** sur
+DOKLĚS (SYMPHO en témoin), pas supprimées. Lexique et radar marqués
+« abandonné », pas effacés. Dépôt GitHub et projet Vercel : gestes de Paul.

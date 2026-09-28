@@ -221,7 +221,7 @@ export const BLASONS = {
     '<path d="M23 51 V37 a13 13 0 0 1 26 0 V51" fill="none" stroke="#3b2f1c" stroke-width="2.4"/>'
     + '<path d="M20 51 H52" stroke="#3b2f1c" stroke-width="2.4" stroke-linecap="round"/>'
     + '<path d="M31 40 h10 m0 0 l-3.6 -3.6 m3.6 3.6 l-3.6 3.6" fill="none" stroke="#a9884a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
-    'le portail d’YCOME'),
+    'le portail d’un cap à venir'),
 
   // — Les caps de NICOL BOLAS.
   abaque: disque(

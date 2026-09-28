@@ -6,6 +6,9 @@
 >
 > ⛔ **Cadrage seulement.** Rien n'est retiré avant le go de Paul. Les gestes
 > destructifs hors dépôt (dépôt GitHub, projet Vercel) sont les siens.
+>
+> ✅ **Go de Paul le 28/09 — étapes 1 à 6 exécutées** dans Ultima. Restent à
+> Paul : §7 points 2 et 3 (dépôt GitHub, projet Vercel).
 
 ## 0. L'inventaire — mesuré le 28/09, pas supposé
 
@@ -93,8 +96,12 @@ Fichiers des sections A et B, plus `memoire/JOURNAL-DECISIONS.md` et
 
 ## 4. Les critères de réussite (vérifiables)
 
-- `grep -ril ycome js/ alpha.html api/ finubar/ FINUBAR.md tests/` → **vide**,
-  précédé de son verrou de non-vacuité (le même `grep` trouve `dokles`).
+- Aucune référence **vivante** à YCOME dans `js/`, `alpha.html`, le registre
+  ou Finubar ; précédé de son verrou de non-vacuité (le même `grep` trouve
+  `dokles`). ⚠️ Corrigé à l'exécution : « `grep` vide » était faux comme
+  critère — les harnais DOIVENT nommer `ycome` pour prouver son absence
+  (`ycomeRetire`, « aucune étoile ycome sur ALPHA »), et les commentaires qui
+  disent pourquoi le nœud est parti sont de l'histoire, pas du produit.
 - `smoke-alpha` : les verdicts d'étoile d'attente passent **sur DOKLĚS** ; et
   virent au **rouge** si on donne une `cible` à DOKLĚS (sabotage joué).
 - `unit-registre-lv3` : rouge avant le retrait, vert après.

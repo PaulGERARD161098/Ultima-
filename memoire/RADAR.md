@@ -82,7 +82,7 @@
   un go explicite « voie B ».
 - 🕒 À surveiller (vu en pilotant sa boîte, non consigné en détail — PII) :
   échéance **Google Cloud** (essai gratuit ~fin juillet) qui porte le client Drive
-  d'IMLADRIK ; relance YCOME en attente. À reproposer si le sujet revient.
+  d'IMLADRIK ; ~~relance YCOME en attente~~ — YCOME abandonné le 28/09, sans objet. À reproposer si le sujet revient.
 
 ## Signaux de session (2026-08-12)
 
