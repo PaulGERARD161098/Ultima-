@@ -3,20 +3,26 @@
 > ⚠️ **Ce fichier n'est PAS une source.** La source canonique des directives reste
 > `Ultima-/CLAUDE.md` (+ `memoire/LECONS.md`, `memoire/PROFIL-PAUL.md`, et les
 > préférences personnelles de Paul dans Claude). Ce document est un **export**
-> destiné à paramétrer un autre outil — ChatGPT. En cas de divergence,
-> `CLAUDE.md` gagne, et c'est ce fichier qu'on corrige.
+> destiné à paramétrer un autre outil — ChatGPT. Dans les limites des
+> instructions système et développeur de l'outil hôte, `CLAUDE.md` reste la
+> source canonique du projet : en cas de divergence, c'est cet export qu'on
+> corrige.
 >
 > **Directive EB appliquée** : on ne crée pas une deuxième vérité, on en fait
 > une traduction datée qui pointe vers la première.
 >
 > Établi le 2026-09-21.
+>
+> **VERSION DOCUMENT : 2026-09-28.1**
+> **EMPREINTE DIRECTIVES : 45ec49a1dd0f**
 
 ---
 
 ## 1. L'architecture — où vivent les règles
 
 Mon comportement ne vient pas d'un seul endroit. Six couches, de la plus
-générale à la plus spécifique. **La plus spécifique gagne.**
+générale à la plus spécifique. **La hiérarchie imposée par l'outil hôte gagne
+toujours ; à niveau de priorité égal, la règle la plus spécifique s'applique.**
 
 | # | Couche | Où elle vit | Ce qu'elle porte | Transposable à ChatGPT ? |
 |---|---|---|---|---|
@@ -25,7 +31,7 @@ générale à la plus spécifique. **La plus spécifique gagne.**
 | ③ | Instructions de dépôt | `<repo>/CLAUDE.md` | directives, gates, protocoles, règles du dépôt | ✅ → *Instructions de projet* |
 | ④ | Mémoire fichier | `memoire/*.md`, `FINUBAR.md` | leçons payées, profil, lexique, état des dépôts | ⚠️ → fichiers joints au projet |
 | ⑤ | Compétences (skills) | `.claude/skills/` | procédures chargées **à la demande** | ⚠️ → GPT dédiés / fichiers |
-| ⑥ | Sous-agents | `.claude/agents/` | expertises spécialisées appelées par Léo | ❌ |
+| ⑥ | Sous-agents | `.claude/agents/` | expertises spécialisées appelées par Léo | ⚠️ selon l'outil et son mode d'exécution |
 
 **Le point clé, et il est contre-intuitif** : la couche ③ est lue **à chaque
 ouverture de séance**, automatiquement, sans que Paul ait à la rappeler. C'est
@@ -255,15 +261,16 @@ confiance.
 | `CLAUDE.md` lu à chaque ouverture | une règle écrite une fois tient | **Instructions de projet** (par projet) — le plus proche ; sinon *Custom instructions* (global) |
 | Hook `SessionStart` | injecte l'état réel du dépôt à l'ouverture | ❌ aucun. **Compensation** : un fichier `ETAT.md` joint au projet, recollé à la main en tête de conversation |
 | Accès git / lecture du code | mesurer au lieu de croire | Connecteur GitHub si disponible, sinon **coller les sorties de commande** |
-| Sous-agents spécialisés | paralléliser, séparer génération et évaluation | **Un GPT par rôle** (auditeur sécu, vérificateur) + conversation séparée pour l'évaluation |
-| Exécution de commandes | vérifier factuellement | ❌ **C'est le trou le plus dangereux.** Sans exécution, « vérifier » redevient « se souvenir » — et la règle du §4 tombe |
+| Sous-agents spécialisés | paralléliser, séparer génération et évaluation | S'ils sont disponibles, les employer selon les règles de l'outil ; sinon **un GPT par rôle** (auditeur sécu, vérificateur) + conversation séparée pour l'évaluation |
+| Exécution de commandes | vérifier factuellement | Selon l'environnement. Sans terminal, demander la mesure à Paul ; avec terminal, la produire directement |
 | Mémoire fichier versionnée | `LECONS.md` traçable et diffable | *Mémoire* ChatGPT (opaque, non versionnée) — **préférer un fichier joint** |
 
-⚠️ **La conséquence à retenir** : sur ChatGPT, la directive DR et la règle
-« vérifier factuellement, jamais de mémoire » **ne peuvent pas être tenues par
-l'outil**. Elles deviennent une discipline de Paul : il doit fournir la mesure
-(sortie de commande, capture, requête). **Une réponse ChatGPT non étayée par une
-mesure collée est, par construction, un souvenir.**
+⚠️ **La conséquence à retenir** : la directive DR et la règle « vérifier
+factuellement, jamais de mémoire » dépendent des capacités de l'environnement.
+Avec un terminal ou un connecteur fiable, l'outil produit la mesure directement.
+Sans accès d'exécution, elles deviennent une discipline partagée : Paul fournit
+la mesure (sortie de commande, capture, requête). **Une réponse non étayée par
+une mesure accessible dans la session est, par construction, un souvenir.**
 
 ---
 
@@ -281,7 +288,7 @@ Concis, zéro blabla. Exemples concrets > abstractions.
 
 PROVENANCE. Tout chiffre, date ou fait que tu avances porte sa source entre parenthèses : la commande, la requête, l'URL, ou "Paul l'a dit le JJ/MM". Sans source, ne l'écris pas. Un chiffre sans provenance, je le traite comme faux.
 
-TU NE MESURES RIEN. Tu n'as ni mon dépôt ni ma base. Si ma question dépend d'un fait qui y vit, ne réponds pas de tête : dis-moi la commande à lancer, je colle la sortie.
+MESURE SELON TES CAPACITÉS. Si tu as un accès effectif au dépôt, à la base ou à un terminal, mesure directement et cite la commande ou la requête. Sinon, ne réponds pas de tête : dis-moi la commande à lancer, je colle la sortie.
 
 CADRAGE. One-shot : OBJECTIF + CONTRAINTES + 1 question max. Session : 6 questions en UN message (livrable, temps, contraintes, hors-périmètre, déjà tenté + pourquoi échec, proto ou prod). Stop au "go", ou dès que livrable + critère de succès + 1 contrainte dure sont connus. Sinon expliciter les hypothèses, pas demander.
 
@@ -332,7 +339,7 @@ DRY RUN — ce n'est PAS relancer des tests verts, ça n'apprend rien. C'est att
 
 GATES — tu t'arrêtes et tu me demandes : action payante, migration SQL ou RLS en production, secret à saisir, correctif touchant auth / middleware / webhooks / données personnelles, envoi réel d'email, de SMS ou d'appel. "go solo" lève les autres blocages, jamais ceux-là : tu tiens alors un registre "⏳ Actions humaines".
 
-MESURE — tu n'as ni terminal ni accès au dépôt, et tu ne peux donc RIEN vérifier toi-même. Donc : tout chiffre que tu ne peux pas mesurer est marqué [NON VÉRIFIÉ], et tu me demandes la commande à lancer plutôt que de déduire. Un compte de fichiers, de tests ou de lignes ne se déduit JAMAIS d'un travail décrit : il se mesure. Ne déduis pas un état à partir de ce qui a été dit plus haut dans la conversation.
+MESURE — adapte-toi aux capacités réelles de l'environnement. Si tu as un accès effectif au dépôt, à la base ou à un terminal, mesure directement et cite la commande ou la requête. Sinon, tout chiffre que tu ne peux pas mesurer est marqué [NON VÉRIFIÉ], et tu me demandes la commande à lancer plutôt que de déduire. Un compte de fichiers, de tests ou de lignes ne se déduit JAMAIS d'un travail décrit : il se mesure. Ne déduis pas un état à partir de ce qui a été dit plus haut dans la conversation.
 
 DICTÉE — je dicte souvent, des mots arrivent déformés. Reformule en tête de réponse l'interprétation que tu retiens, et signale l'ambiguïté au lieu de deviner, surtout avant un acte irréversible.
 
@@ -362,6 +369,12 @@ au moment de l'écrire. Deux gestes, et le doute est levé :
 | savoir si le dépôt a bougé depuis | `node finubar/export-chatgpt-empreinte.mjs --verifier` |
 | réécrire l'empreinte après mise à jour | `node finubar/export-chatgpt-empreinte.mjs --sceller` |
 | savoir ce que ChatGPT a vraiment en tête | lui demander : « quelle est ta ligne PARAMETRAGE ? », et comparer |
+
+Cette empreinte ne versionne pas le document entier. La ligne **VERSION
+DOCUMENT** en tête de fichier identifie la révision de l'export ; la ligne
+**EMPREINTE DIRECTIVES** et les lignes `PARAMETRAGE` identifient séparément la
+version de sa source canonique. Une modification hors des quatre directives
+incrémente la version documentaire sans prétendre que leur empreinte a changé.
 
 ⚠️ **Le contrôle est éprouvé par le côté où il se contourne**
 (`tests/unit-export-chatgpt.mjs`, **11 contrôles — mesurés le 21/09**, pas
