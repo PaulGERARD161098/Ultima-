@@ -32,7 +32,7 @@
   },
   "dernier_arret": {
     "le": "2026-09-28",
-    "commit": "76a70a7f99e284fb0d689ff1885b3bd643c07bdf",
+    "commit": "0922329eff3108106138b7072817581cc9b5c5b0",
     "quoi": "Séance 28/09 : LEÇONS v43 sur les 10 dépôts (2 leçons RenoBoost absorbées) ; YCOME retiré d'Ultima ; région Vercel mesurée."
   },
   "prochaine_action": "Choisir avec Paul le prochain chantier. Gestes de Paul en attente : archiver Ycome (GitHub), supprimer le projet Vercel ycome, décider la région cdg1.",

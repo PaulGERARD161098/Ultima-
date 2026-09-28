@@ -1,11 +1,19 @@
 # CADRAGE-ULTIMA — audit → patch → améliorations, adapté au réel du projet
 
-## ÉTAT (mise à jour du 2026-09-14 ; historique conservé)
+## ÉTAT (mise à jour du 2026-09-28 ; historique conservé)
 
 > **Deux sessions ont tourné en parallèle le 2026-08-01** (fil affichage Lv3
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🧹 **SESSION 2026-09-28 — #299 · #300 · #301 FUSIONNÉES (`main` = `0922329`) ; YCOME RETIRÉ, LEÇONS v43 PARTOUT.**
+  YCOME abandonné par Paul : nœud, lien d'ALPHA et phrase de Léo retirés — ALPHA compte
+  trois caps ; les garanties d'étoile d'attente sont reciblées sur DOKLĚS (SYMPHO en
+  témoin), pas supprimées. Leçons v43 (`sha256:a5d10eb36b49`) identiques à l'octet
+  sur les dix dépôts ; RenoBoost #554 fusionnée (rappel mesuré arrivé, pas en vol).
+  Région mesurée : production `iad1`, base `eu-west-3`. ⏳ Paul : archiver le dépôt
+  Ycome, supprimer le projet Vercel ycome, trancher `cdg1`. LV6 gelé tant que tout
+  n'est pas propre. Détail : `CADRAGE-2026-09-28-retrait-ycome.md`.
 - ✴️ **SESSION 2026-09-27 (nuit) — #296 FUSIONNÉE (`6b08583`) ; DOKLĚS ET SYMPHO SOUS ALPHA (branche).**
   Deux étoiles d'attente (nom, « À venir », une phrase, aucune page) : DOKLĚS (la
   marque ECL by DOKLES, Ě conservé) et SYMPHO (projet pro) ; le résumé d'ALPHA les
