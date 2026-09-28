@@ -32,10 +32,10 @@
   },
   "dernier_arret": {
     "le": "2026-09-28",
-    "commit": "76a70a7f99e284fb0d689ff1885b3bd643c07bdf",
-    "quoi": "Séance 28/09 : LEÇONS v42 sur 8 dépôts ; YCOME retiré d'Ultima (garanties d'étoile d'attente reportées sur DOKLĚS) ; région Vercel mesurée."
+    "quoi": "Le Cercle est CONCENTRIQUE (décision Paul) : gate EL ouvert, six points écrits. EXPORT-METHODE-GEMINI.md posé — il POINTE les §1-§6 du doc ChatGPT, il ne les recopie pas. Harnais d'empreinte étendu aux DEUX exports + verrou de non-vacuité de la liste (13 contrôles).",
+    "commit": "0922329"
   },
-  "prochaine_action": "Paul : archiver le dépôt GitHub Ycome et supprimer le projet Vercel ycome. Puis absorber dans Ultima (v43) les 2 leçons propres à RenoBoost, et propager.",
+  "prochaine_action": "Nommer les cercles du Cercle — nombre, cadence, coût (étape 1 du §11 de CADRAGE-RESEAU-CERCLES.md). Elle bloque les quatre suivantes : la règle 3 « contrainte et coût ne décroissent jamais vers le centre » n'est pas applicable sans ces valeurs. ⛔ Décision Paul, zéro ligne de code.",
   "bloque_par": [
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
     "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
@@ -114,7 +114,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-09-27"
+  "maj": "2026-09-28"
 }
 ```
 

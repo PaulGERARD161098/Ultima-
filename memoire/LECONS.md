@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v42 2026-09-27 sha256:6f4274254933 -->
+<!-- lecons:empreinte v43 2026-09-28 sha256:dfa6f10d782e -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -77,6 +77,24 @@ humaine.
 ---
 
 ## 1. Mesurer, et croire ce qu'on mesure
+
+**UNE SORTIE REDIRIGÉE VERS `/dev/null` EST UNE MESURE QU'ON NE FERA JAMAIS** *(2026-09-21, Ultima + RenoDevis)*.
+Payé **deux fois dans la même journée**, ce qui en fait un motif et pas un accident.
+① Un `npx eslint … && echo "lint OK"` : ESLint avait échoué sur
+`ERR_MODULE_NOT_FOUND`, le `&&` a masqué le code de sortie, et « lint OK » est
+parti à Paul. ② Un `git merge … >/dev/null 2>&1` pour éprouver une PR : la fusion
+a été **refusée** (« refusing to merge unrelated histories »), l'arbre est resté
+sur `main`, et j'ai annoncé « 594/594, build OK, elle est saine » — je mesurais
+`main` seul. La PR a ensuite été refusée par GitHub, ce qui a révélé l'écart.
+
+⛔ **Le silence d'une commande ne se distingue pas de son succès.** Et le pire
+n'est pas de rater la mesure : c'est de croire en avoir une, puis de la donner.
+
+⇒ **Ne jamais rediriger ni chaîner en `&&` la sortie d'une commande dont on va
+croire le résultat.** Si le bruit gêne, filtrer *après* avoir relu le code de
+sortie (`; echo "code=$?"`), jamais à la place. Et sur une fusion d'essai,
+vérifier d'abord qu'un ancêtre commun existe : `git merge-base A B`.
+
 
 **UN COMMIT « HORS MAIN » N'EST PAS UN TRAVAIL HORS MAIN — ON COMPARE LES
 CONTENUS, PAS LES SHA** *(2026-09-18)*. Vu RenoBoost sur une branche à sept
@@ -468,6 +486,26 @@ recherche elle-même — « ce fichier existe-t-il, fait-il plus de zéro ligne 
 coûte une seconde et sauve l'annonce.
 
 ## 2. Les garde-fous, et leur silence
+
+**UN GARDE-FOU PEUT ATTRAPER LA BONNE PANNE ET LA NOMMER FAUX** *(2026-09-28, Ultima)*.
+Le contrôle d'empreinte des exports de méthode a été étendu au nouveau doc
+Gemini. Éprouvé en corrompant son empreinte : il rougit — mais son message disait
+« Le paramétrage de **ChatGPT** est PÉRIMÉ ». Le motif était écrit en dur du temps
+où il n'existait qu'un export ; depuis, il y en a deux. Un ChatGPT parfaitement
+réglé aurait été re-paramétré pendant que Gemini restait faux.
+
+⛔ **Et le harnais était vert sur ce défaut : 13/13 avant comme après la
+correction.** Il vérifiait l'accord, pas le **libellé du désaccord** — or c'est le
+libellé que l'humain lit et suit. Même famille que « Ce devis a déjà été envoyé »
+sur un devis jamais envoyé *(RenoDevis, 21/09)* : un message qui décrit un état
+inexistant envoie chercher ailleurs, et coûte plus cher qu'une erreur muette.
+
+⇒ **Quand on étend un contrôle à une seconde cible, lire le message d'erreur des
+DEUX côtés, pas seulement la couleur.** Un motif qui nomme une cible en dur est
+un bug dès qu'il y en a deux ; le faire dériver de la cible
+(`basename(chemin)`) — et vérifier que la correction n'introduit pas un import
+manquant, sinon elle jette au lieu d'informer, ce qui est pire.
+
 
 **UN FAUX SCHÉMA QUI NE PORTE PAS LES DÉCLENCHEURS DE LA PROD REND VERT CE QUE LA PROD REFUSE** *(2026-09-27, Artidispo)*.
 En production Supabase, `storage.objects` porte `protect_objects_delete` : **tout**
