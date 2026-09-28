@@ -32,17 +32,10 @@
   },
   "dernier_arret": {
     "le": "2026-09-28",
-<<<<<<< HEAD
-    "quoi": "Le Cercle est CONCENTRIQUE (décision Paul) : gate EL ouvert, six points écrits. EXPORT-METHODE-GEMINI.md posé — il POINTE les §1-§6 du doc ChatGPT, il ne les recopie pas. Harnais d'empreinte étendu aux DEUX exports + verrou de non-vacuité de la liste (13 contrôles).",
+    "quoi": "Le Cercle est CONCENTRIQUE (décision Paul) : gate EL ouvert, six points écrits. EXPORT-METHODE-GEMINI.md posé — il POINTE les §1-§6 du doc ChatGPT, il ne les recopie pas. Harnais d'empreinte étendu aux DEUX exports + verrou de non-vacuité de la liste (13 contrôles). ⚠️ MÊME JOUR, AUTRE SÉANCE, absorbé ici pour ne pas le perdre : Séance 28/09 : LEÇONS v43 sur les 10 dépôts (2 leçons RenoBoost absorbées) ; YCOME retiré d'Ultima ; région Vercel mesurée.",
     "commit": "0922329"
   },
-  "prochaine_action": "Nommer les cercles du Cercle — nombre, cadence, coût (étape 1 du §11 de CADRAGE-RESEAU-CERCLES.md). Elle bloque les quatre suivantes : la règle 3 « contrainte et coût ne décroissent jamais vers le centre » n'est pas applicable sans ces valeurs. ⛔ Décision Paul, zéro ligne de code.",
-=======
-    "commit": "76a70a7f99e284fb0d689ff1885b3bd643c07bdf",
-    "quoi": "Séance 28/09 : LEÇONS v43 sur les 10 dépôts (2 leçons RenoBoost absorbées) ; YCOME retiré d'Ultima ; région Vercel mesurée."
-  },
-  "prochaine_action": "Choisir avec Paul le prochain chantier. Gestes de Paul en attente : archiver Ycome (GitHub), supprimer le projet Vercel ycome, décider la région cdg1.",
->>>>>>> origin/main
+  "prochaine_action": "Nommer les cercles du Cercle — nombre, cadence, coût (étape 1 du §11 de CADRAGE-RESEAU-CERCLES.md). Elle bloque les quatre suivantes : la règle 3 « contrainte et coût ne décroissent jamais vers le centre » n'est pas applicable sans ces valeurs. ⛔ Décision Paul, zéro ligne de code. ⏳ GESTES DE PAUL EN ATTENTE, repris de la séance parallèle du 28/09 pour ne pas les perdre : archiver Ycome sur GitHub, supprimer le projet Vercel ycome.",
   "bloque_par": [
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
     "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
