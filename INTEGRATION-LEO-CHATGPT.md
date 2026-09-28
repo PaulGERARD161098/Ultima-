@@ -66,7 +66,7 @@ Tous à la racine du dépôt `PaulGERARD161098/Ultima-`. Tailles **mesurées** l
 | 16 | `memoire/JOURNAL-DECISIONS.md` | 312 773 | Décisions **actées** : ce qu'on ne re-litige pas |
 
 **Volontairement exclus** (bruit ou double vérité) : `AUDIT-*`, `REPRISE-*`,
-`ROADMAP-*`, `memoire/RADAR.md`, et `EXPORT-METHODE-CHATGPT (1).md` (voir §9).
+`ROADMAP-*`, `memoire/RADAR.md`, et `archives/EXPORT-METHODE-CHATGPT-v2-work-codex-2026-09-28.md` (archivé, voir §9).
 Un GPT à qui on donne tout ne sait plus rien : 16 fichiers, 4 réservés.
 
 Un zip de ces 16 fichiers + ce guide est fourni avec — **instantané du
@@ -177,14 +177,9 @@ le chiffre doit alors apparaître, sinon T3 ne prouvait rien (il refusait tout).
 | Bloc périmé après un changement de directive | Empreinte + T6 ; limite reconnue §7 |
 | Elle dit « fait » sans preuve | Format de réponse « avec preuve » ; à contrôler à la lecture — **aucune règle collée n'est exécutable** |
 
-## 9. Deux choses à trancher, relevées en lisant le dépôt
+## 9. Ce qui a été tranché, et ce qui reste
 
-1. **`EXPORT-METHODE-CHATGPT (1).md`** est **suivi par git** et diffère de
-   `EXPORT-METHODE-CHATGPT.md` (18 862 vs 26 364 octets ; « v2 — adaptation ChatGPT
-   Work / Codex »). C'est **une deuxième vérité** au sens EB. Il ne porte pas
-   l'empreinte contrôlée et ne doit pas entrer dans le pack. **Non supprimé** —
-   à toi de dire : fusionner ce qu'il apporte (installation Codex, « compétence
-   Méthode Paul ») dans l'original, ou l'archiver.
+1. ✅ **Archivé le 28/09 sur ordre de Paul** : `EXPORT-METHODE-CHATGPT (1).md` (v2 « Work / Codex », 18 862 octets, deuxième vérité au sens EB) est déplacé vers `archives/EXPORT-METHODE-CHATGPT-v2-work-codex-2026-09-28.md`, historique git conservé. Il n'entre pas dans le pack. Son apport (installation Codex, « compétence Méthode Paul ») reste **à fusionner dans l'original si Paul le veut** — non fait.
 2. **Périmètre d'écriture** : ce guide installe Léo-ChatGPT en **lecture +
    conseil + brouillon**. Lui donner un accès en écriture (connecteur GitHub,
    Notion, Gmail) est une décision de droits (anneaux §2) — **non prise ici**.
