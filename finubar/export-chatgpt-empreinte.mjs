@@ -41,6 +41,13 @@ import { hacher } from './lecons-empreinte.mjs';
 const ICI = dirname(fileURLToPath(import.meta.url));
 export const CLAUDE_MD = resolve(ICI, '..', 'CLAUDE.md');
 export const EXPORT_MD = resolve(ICI, '..', 'EXPORT-METHODE-CHATGPT.md');
+// ⛔ LE SECOND EXPORT DOIT ÊTRE NOMMÉ ICI, sinon son empreinte ne garde rien.
+// Le doc Gemini (posé le 2026-09-28) porte les MÊMES lignes PARAMETRAGE ; sans
+// cette constante et le contrôle qui la consomme, il pourrait rester périmé
+// indéfiniment en ayant l'air réglé — le mode de panne décrit au §10 du doc
+// ChatGPT, appliqué au fichier même qui le cite.
+export const EXPORT_GEMINI_MD = resolve(ICI, '..', 'EXPORT-METHODE-GEMINI.md');
+export const TOUS_LES_EXPORTS = [EXPORT_MD, EXPORT_GEMINI_MD];
 
 // Les bornes de la section gouvernée. Elles sont volontairement larges : c'est
 // le CORPS des directives qui compte, pas la ponctuation des titres.
