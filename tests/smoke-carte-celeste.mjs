@@ -41,13 +41,18 @@ function verifier(nom, condition, detail = '') {
 }
 
 // `deuxRangs` : ce que le registre dit de l'écran (§14.2, « Ce que le rang
-// change vraiment ») — ULTIMA et NAGA n'ont que des têtes, le rang n'y change
-// rien, et exiger qu'il s'y voie serait exiger l'impossible.
+// change vraiment ») — un écran qui n'a que des têtes, ou que des feuilles, n'a
+// pas de rang à montrer, et exiger qu'il s'y voie serait exiger l'impossible.
+// 2026-09-29 : GRIMA et NAGA sont supprimés. OMEGA porte RIVEN (feuille) +
+// NICOL BOLAS et IMLADRIK (têtes) ; IMLADRIK isolé porte MAEDRETHNIR, VRANESH,
+// DRAUKHAIN (feuilles) + ADRAMELECH, TAO (têtes) ; NICOL BOLAS isolé n'a que
+// des feuilles (ABAQUE + trois caps à venir). Le drapeau est DÉRIVÉ du
+// registre plus bas (verrou de cohérence), pas seulement déclaré ici.
 const ECRANS = [
   { nom: 'racine', page: 'index.html', porte: true, deuxRangs: true },
-  { nom: 'ULTIMA', fil: 'ULTIMA', page: 'ultima.html', deuxRangs: false },
-  { nom: 'NAGA', fil: 'NAGA', page: 'ultima.html#naga', deuxRangs: false },
-  { nom: 'GRIMA', fil: 'GRIMA', page: 'ultima.html#grima', deuxRangs: true },
+  { nom: 'OMEGA', fil: 'OMEGA', page: 'omega.html', deuxRangs: true },
+  { nom: 'IMLADRIK', fil: 'IMLADRIK', page: 'omega.html#imladrik', deuxRangs: true },
+  { nom: 'NICOL BOLAS', fil: 'NICOL BOLAS', page: 'omega.html#nicol-bolas', deuxRangs: false },
   // TAO : les Gémeaux, deux feuilles. C'est là que le premier jet du lot a
   // CÉDÉ — `smoke-tao` l'a vu, pas ce harnais (voir « la cible du doigt »).
   { nom: 'TAO', fil: 'LA VOIE', page: 'tao.html', deuxRangs: false },
@@ -56,6 +61,19 @@ const ECRANS = [
   { nom: 'ALPHA', fil: 'ALPHA', page: 'alpha.html', deuxRangs: false },
 ];
 const TAILLES = [[390, 844], [1280, 800]];
+// VERROU DE COHÉRENCE : `deuxRangs` se lit dans le registre, il ne se croit pas.
+// Un écran déclaré à deux rangs qui n'en aurait qu'un ferait passer à vide (ou
+// échouer à tort) l'assertion « le rang se voit ».
+{
+  const { NOEUDS } = await import('../js/registre-lv3.mjs');
+  const FOYER = { OMEGA: 'omega', IMLADRIK: 'imladrik', 'NICOL BOLAS': 'nicol-bolas' };
+  for (const e of ECRANS.filter((x) => FOYER[x.nom])) {
+    const caps = NOEUDS[FOYER[e.nom]].enfants;
+    const tetes = caps.filter((id) => (NOEUDS[id].enfants || []).length > 0).length;
+    verifier(`${e.nom} : deuxRangs déclaré = deux rangs dans le registre`,
+      e.deuxRangs === (tetes >= 1 && caps.length - tetes >= 1), `${tetes} tête(s) sur ${caps.length}`);
+  }
+}
 
 async function ouvrir(ecran, [largeur, hauteur], options = {}) {
   const contexte = await navigateur.newContext({ viewport: { width: largeur, height: hauteur }, ...options });

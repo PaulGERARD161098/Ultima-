@@ -82,8 +82,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "806867f",
         "tete_le": "2026-09-22T09:16:37+02:00",
@@ -159,8 +159,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "ec20a1f",
         "tete_le": "2026-09-22T10:36:52+00:00",
@@ -214,8 +214,8 @@ export default {
         "bloque_par[]"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "ded8b3a",
         "tete_le": "2026-09-22T10:36:52+00:00",
@@ -257,8 +257,8 @@ export default {
       },
       "recits": [],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": null,
         "tete_le": null,
@@ -347,8 +347,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": null,
         "tete_le": null,
@@ -376,8 +376,8 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-09-29",
-          "quoi": "Cadrage §11 (Léo agit, 2 POV creusés) + B1 ①② : l'anneau est un champ du catalogue, 3 verts, 19 contrôles éprouvés par 6 sabotages.",
-          "commit": "7e779e673e864a0293d955df9f4d1e4620e9a82b"
+          "quoi": "OMEGA : Ultima→Omega, Grima/Naga supprimés, Imladrik macro-projet (+Adramelech +Tao), PR #310 ; IFULVIN cadré sans code (CADRAGE-IFULVIN.md). Mesuré : 45/45 unit, 51/52 smokes…",
+          "commit": "bf432be"
         },
         "prochaine_action": "B1 étape ③ — le journal des écritures. ⛔ Il commence par le gate : créer la table `leo_ecritures`. On n'écrit pas le module avant la table.",
         "bloque_par": [
@@ -434,7 +434,9 @@ export default {
         ],
         "maj": "2026-09-29"
       },
-      "recits": [],
+      "recits": [
+        "dernier_arret.quoi"
+      ],
       "ciel": "racine",
       "hors_seance": false,
       "reprise": false,
@@ -488,8 +490,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "078de67",
         "tete_le": "2026-09-19T18:50:58+02:00",
@@ -535,8 +537,8 @@ export default {
       },
       "recits": [],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "12af06d",
         "tete_le": "2026-09-19T18:49:35+02:00",
@@ -589,8 +591,8 @@ export default {
         "bloque_par[]"
       ],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "ca445fb",
         "tete_le": "2026-09-22T10:26:49+02:00",
@@ -633,8 +635,8 @@ export default {
       },
       "recits": [],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": null,
         "tete_le": null,
@@ -652,7 +654,7 @@ export default {
     "lisibles": 10,
     "illisibles": 0,
     "hors_seance": 0,
-    "repris": 0,
+    "repris": 9,
     "en_cours": 7,
     "en_attente_de_paul": 3,
     "au_repos": 0,

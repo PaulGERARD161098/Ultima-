@@ -1,7 +1,7 @@
 // Cartographie IMLADRIK (B1) : imladrik.html = la boussole interne du quadrant
 // (modèle LV2), MUETTE et sans donnée intime (§5). Prouve :
-//   A. La carto rend 3 caps (MAEDRETHNIR ouvert → maedrethnir.html ; VRANESH +
-//      DRAUKHAIN à venir), le cœur Kalamn-talaen, la légende gravée, la parole
+//   A. La carto rend 5 caps (MAEDRETHNIR, VRANESH, DRAUKHAIN, puis ADRAMELECH
+//      et TAO, montés sous IMLADRIK le 2026-09-29 avec la suppression de NAGA), le cœur Kalamn-talaen, la légende gravée, la parole
 //      par défaut ; le survol d'un cap dépose la parole de Léo ; zéro requête
 //      externe (aucun CDN, aucune donnée), zéro erreur console ; contrastes AA.
 //   B. Fail-safe : la carto ne porte AUCUNE donnée (aucun appel réseau du tout),
@@ -9,6 +9,7 @@
 // Miroir léger de smoke-boussole.mjs, sans le cockpit/auth (carto muette).
 import { chromium } from 'playwright';
 import { mkdirSync } from 'node:fs';
+import { NOEUDS } from '../js/registre-lv3.mjs';
 
 // LV5 / P3 — IMLADRIK est au ciel. `legendeClasse` (kalamn-legende) et `expose`
 // (UltimaImladrikCarto) sont portés par `js/ciel-noeud.mjs` : vérifié dans le
@@ -72,15 +73,16 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
   await page.goto(`${BASE}/imladrik.html`, { waitUntil: 'load', timeout: 20000 });
   await attendrePret(page);
 
-  // 1. Les trois caps.
+  // 1. Les cinq caps (le compte se lit dans le registre, plus en dur).
   const caps = await lireCaps(page);
-  verifier('3 caps rendus', caps.length === 3);
+  verifier('5 caps rendus (= ceux du registre)',
+    caps.length === 5 && caps.length === NOEUDS.imladrik.enfants.length);
   const noms = caps.map((c) => c.nom);
-  for (const attendu of ['MAEDRETHNIR', 'VRANESH', 'DRAUKHAIN']) {
+  for (const attendu of ['MAEDRETHNIR', 'VRANESH', 'DRAUKHAIN', 'ADRAMELECH', 'TAO']) {
     verifier(`Cap ${attendu} présent`, noms.includes(attendu), noms.join(', '));
   }
 
-  // 2. Les 3 caps sont ouvrables (liens internes) — le quadrant est complet.
+  // 2. Les 5 caps sont ouvrables (liens internes) — le quadrant est complet.
   const maedrethnir = page.locator('g.ciel-etoile[data-noeud-id="maedrethnir"]');
   // SIX ASSERTIONS REMPLACÉES : « est un lien <a> » et « → cible » lisaient une
   // ancre et son `href`. L'étoile est un `<g role="button">` — l'ancre a été
@@ -99,6 +101,8 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
     ['maedrethnir', 'maedrethnir.html'],
     ['draukhain', 'draukhain.html'],
     ['vranesh', 'vranesh.html'],
+    ['adramelech', 'adramelech.html'],
+    ['tao', 'tao.html'],
   ]) {
     verifier(`${id} rendu au ciel`,
       (await page.locator(`g.ciel-etoile[data-noeud-id="${id}"]`).count()) === 1);
@@ -187,8 +191,9 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
   verifier('Survol VRANESH : appel à entrer', /entrer/i.test(pv));
 
   // 6. Retour à la console + repli noscript présents.
-  verifier('Retour vers naga.html (IMLADRIK vit sous le macro-quadrant NAGA)',
-    (await page.locator('.console-retour a[href="naga.html"]').count()) === 1);
+  verifier('Retour vers omega.html (IMLADRIK vit sous la supra-division OMEGA ; naga.html n\'existe plus)',
+    (await page.locator('.console-retour a[href="omega.html"]').count()) === 1
+    && (await page.locator('.console-retour a[href="naga.html"]').count()) === 0);
 
   // 7. Contrastes AA sur les couleurs réellement rendues.
   const cr = await page.evaluate(() => {
@@ -216,7 +221,8 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
 
   // 8. Registre exposé pour introspection (donnée statique, aucune PII).
   const exposes = await page.evaluate(() => (window.UltimaImladrikCarto || {}).noms || []);
-  verifier('Registre exposé (3 noms)', exposes.length === 3, exposes.join(', '));
+  verifier('Registre exposé (5 noms, ADRAMELECH et TAO compris)',
+    exposes.length === 5 && exposes.includes('ADRAMELECH') && exposes.includes('TAO'), exposes.join(', '));
 
   // 9. Muette : AUCUNE requête externe, zéro erreur console.
   verifier('Zéro requête externe (carto muette, aucun CDN)', externes.length === 0, externes.slice(0, 3).join(', '));
@@ -235,8 +241,8 @@ console.log('— B. imladrik.html config vide : carto identique, zéro appel —
   await page.goto(`${BASE}/imladrik.html`, { waitUntil: 'load', timeout: 20000 });
   await attendrePret(page);
 
-  verifier('3 caps rendus (config vide)',
-    (await page.locator('g.ciel-etoile[data-noeud-id]').count()) === 3);
+  verifier('5 caps rendus (config vide)',
+    (await page.locator('g.ciel-etoile[data-noeud-id]').count()) === 5);
   verifier('Aucun appel /api (carto sans donnée)', appelsApi.length === 0, appelsApi.slice(0, 3).join(', '));
   verifier('Zéro requête externe (config vide)', externes.length === 0, externes.slice(0, 3).join(', '));
   verifier('Zéro erreur console (config vide)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));

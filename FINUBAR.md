@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-29",
-    "commit": "7e779e673e864a0293d955df9f4d1e4620e9a82b",
-    "quoi": "Cadrage §11 (Léo agit, 2 POV creusés) + B1 ①② : l'anneau est un champ du catalogue, 3 verts, 19 contrôles éprouvés par 6 sabotages."
+    "commit": "bf432be",
+    "quoi": "OMEGA : Ultima→Omega, Grima/Naga supprimés, Imladrik macro-projet (+Adramelech +Tao), PR #310 ; IFULVIN cadré sans code (CADRAGE-IFULVIN.md). Mesuré : 45/45 unit, 51/52 smokes (rouge connu : cadenceTenue, antérieur)."
   },
   "prochaine_action": "B1 étape ③ — le journal des écritures. ⛔ Il commence par le gate : créer la table `leo_ecritures`. On n'écrit pas le module avant la table.",
   "bloque_par": [
