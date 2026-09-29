@@ -102,3 +102,18 @@ avec la cible `fb7daac613a0828d4135333fbd27a47102323211`.
 
 Ces résultats remplacent le statut « pas d’exécution distante » du bilan initial ;
 le blocage local demeure. Ils ne reçoivent ni R23 en entier ni LV1.
+
+## Reprise du 29/09 à 12 h 52 Paris
+
+Le commit `df2a64713e84e6c021cef56e3df72625ea0b6c1c` a obtenu 47/47 suites
+unitaires (run 36538966423, job 109309552854) et 6/6 suites ciblées plus la
+sonde enfant (run 36538966438, job 109309552407). Le job navigateur 109309552557
+a été interrompu à sa limite de 15 minutes pendant smoke-pilotage.mjs.
+Les scénarios Léo et Finubar sont passés auparavant ; cela ne valide pas la
+suite entière. Les répertoires XDG et le cache de captures sont désormais réglés.
+
+Correction du banc : deux jobs navigateur indépendants, chacun conservant
+l'isolation et une limite de 15 minutes. Répartition modulo déterministe des
+52 fichiers : 26 + 26, sans doublon ni omission ; les deux jobs sont requis,
+aucun test écarté. Leur nouveau résultat reste à lire avant de clôturer le lot.
+Le statut courant et les liens de preuve sont tenus dans la PR #306.

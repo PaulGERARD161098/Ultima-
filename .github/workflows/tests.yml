@@ -35,6 +35,10 @@ jobs:
   browser:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        groupe: [0, 1]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -56,6 +60,7 @@ jobs:
             --user 65534:65534 --tmpfs /tmp:rw,nosuid,size=512m \
             --tmpfs /travail/tests/.cache:rw,nosuid,noexec,size=256m,uid=65534,gid=65534,mode=0700 \
             --env XDG_CONFIG_HOME=/tmp/lv1-config --env XDG_CACHE_HOME=/tmp/lv1-cache \
+            --env SMOKE_SHARD_INDEX=${{ matrix.groupe }} --env SMOKE_SHARD_COUNT=2 \
             --mount "type=bind,src=$GITHUB_WORKSPACE,dst=/travail,readonly" \
             --tmpfs /travail/.git:ro,nosuid,size=1m \
             --mount "type=bind,src=$RUNNER_TEMP/lv1-memoire,dst=/travail/memoire,readonly" \
