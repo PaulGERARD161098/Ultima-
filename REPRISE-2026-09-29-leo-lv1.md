@@ -50,7 +50,7 @@ un prompt pour une barrière de sécurité ou une branche pour une publication.
   une modification hostile de ces fichiers sur l'hôte contournerait le dispositif.
   Ils ne constituent pas encore un contrôleur indépendant immuable. Le runner LV1
   ne monte que api/js/tests/finubar/package.json ; les suites complètes lisent aussi
-  la documentation du dépôt, mais les montages .git et memoire y sont masqués.
+  la documentation du dépôt, mais .git est masqué et memoire ne contient que LECONS.md, nécessaire au contrôle d’empreinte.
   Les logs CI restent réservés au dépôt privé. La sonde ne prouve pas l'ensemble
   de R23 ni l'absence de tous les canaux de fuite.
 
@@ -74,7 +74,7 @@ celles du contrat canonique ; aucune ligne n'est déclarée réussie par intenti
    lié aux versions, vérification et reprise dans une session neuve ; présenter
    ensuite les preuves R01–R28 à Paul pour décision de réception.
 
-Prochaine action technique : lire les résultats réels de la CI de ce lot. Si le
+Prochaine action technique : lire les résultats de la seconde CI après correction du montage de LECONS.md. Si le
 runner reste indisponible, fournir un hôte Docker autorisé pour exécuter
 `LV1_NODE_IMAGE=sha256:<ID local> npm run test:lv1`. Ne pas annoncer les tests verts
 ni demander la fusion tant que les preuves critiques restent manquantes.
@@ -83,3 +83,22 @@ La branche `codex/leo-lv1-20260929` désactive son déploiement automatique Verc
 dans `vercel.json` dès son premier commit. Cela ne désactive pas les autres branches
 et ne constitue aucune autorisation de déploiement manuel. Le merge reste soumis
 au contrat et pourrait déclencher la production ; il n'est pas demandé ici.
+
+## Première exécution distante — preuve au 29/09, 07:43 UTC
+
+Sur le commit source `b6f33119684edb8f301f523708983d8736c91a0a`, la CI a
+réellement éprouvé l’intégration `034c3c08836b1ea0855c822f5e008e49e96bee5c`
+avec la cible `fb7daac613a0828d4135333fbd27a47102323211`.
+
+- Run `36538258817`, job `109307270663` : **6/6 suites LV1 réussies** ;
+  sonde enfant réseau/écriture réussie. Image ID
+  `sha256:88f8ba583a884279252779bbe221bf1ff2c61cf236cc973f8ca97676ae6d07f0`.
+- Run `36538258739` : **46/47 suites générales réussies** dans les deux jobs ;
+  l’unique échec est LECONS.md rendu absent par le masquage intégral de mémoire.
+  Le navigateur n’a pas encore été éprouvé car le harnais s’arrête à cet échec.
+- Correction : monter en lecture seule uniquement LECONS.md pour son contrôle
+  d’empreinte, en gardant le reste de la mémoire et .git hors de portée. Aucun
+  test supprimé ou ignoré. La seconde CI doit valider ce changement.
+
+Ces résultats remplacent le statut « pas d’exécution distante » du bilan initial ;
+le blocage local demeure. Ils ne reçoivent ni R23 en entier ni LV1.

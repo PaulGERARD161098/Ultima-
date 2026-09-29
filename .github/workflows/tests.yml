@@ -20,6 +20,8 @@ jobs:
       - run: npm ci --ignore-scripts
       - name: Tests unitaires isolés
         run: |
+          mkdir -p "$RUNNER_TEMP/lv1-memoire"
+          cp memoire/LECONS.md "$RUNNER_TEMP/lv1-memoire/LECONS.md"
           docker pull node:22-bookworm
           image=$(docker image inspect --format '{{.Id}}' node:22-bookworm)
           echo "Image utilisée : $image"
@@ -27,7 +29,8 @@ jobs:
             --security-opt no-new-privileges --pids-limit 128 --memory 2g --cpus 2 \
             --user 65534:65534 --tmpfs /tmp:rw,nosuid,size=512m \
             --mount "type=bind,src=$GITHUB_WORKSPACE,dst=/travail,readonly" \
-            --tmpfs /travail/.git:ro,nosuid,size=1m --tmpfs /travail/memoire:ro,nosuid,size=1m \
+            --tmpfs /travail/.git:ro,nosuid,size=1m \
+            --mount "type=bind,src=$RUNNER_TEMP/lv1-memoire,dst=/travail/memoire,readonly" \
             --workdir /travail "$image" sh -c 'node tests/lv1-isolation.mjs && npm test'
   browser:
     runs-on: ubuntu-latest
@@ -43,7 +46,8 @@ jobs:
       - run: npm ci --ignore-scripts
       - name: Harnais navigateur isolé
         run: |
-          mkdir -p tests/.cache
+          mkdir -p tests/.cache "$RUNNER_TEMP/lv1-memoire"
+          cp memoire/LECONS.md "$RUNNER_TEMP/lv1-memoire/LECONS.md"
           docker pull mcr.microsoft.com/playwright:v1.56.1-noble
           image=$(docker image inspect --format '{{.Id}}' mcr.microsoft.com/playwright:v1.56.1-noble)
           echo "Image utilisée : $image"
@@ -52,5 +56,6 @@ jobs:
             --user 65534:65534 --tmpfs /tmp:rw,nosuid,size=512m \
             --tmpfs /travail/tests/.cache:rw,nosuid,size=256m \
             --mount "type=bind,src=$GITHUB_WORKSPACE,dst=/travail,readonly" \
-            --tmpfs /travail/.git:ro,nosuid,size=1m --tmpfs /travail/memoire:ro,nosuid,size=1m \
+            --tmpfs /travail/.git:ro,nosuid,size=1m \
+            --mount "type=bind,src=$RUNNER_TEMP/lv1-memoire,dst=/travail/memoire,readonly" \
             --workdir /travail "$image" sh -c 'node tests/lv1-isolation.mjs && npm run test:browser'
