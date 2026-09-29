@@ -963,10 +963,42 @@ le catalogue, la validation côté serveur, la mémoire, le droit d'écrire.
 ⇒ C'est une confirmation de plus que **Léo-agent est un runtime, pas un
 document**, et que B1 est le premier morceau qui existe vraiment.
 
-### §11.5 — La prochaine action, unique
+### §11.5 — ✅ B1 ①② est LIVRÉ (29/09, go solo) — la prochaine action a bougé
 
-**B1, étapes ① et ② seulement** : l'`anneau` devient un champ du catalogue, et
-l'anneau vert est taillé au double critère sur les trois candidats nommés.
-Aucune écriture, aucune migration, aucune exécution — **la garde avant le
-geste**. Critère de sortie : **B1-b et B1-c passent**, c'est-à-dire que le
-mécanisme sait **refuser** avant de savoir agir.
+**Ce qui était écrit ici** : « B1, étapes ① et ② seulement — l'`anneau` devient
+un champ du catalogue, l'anneau vert est taillé au double critère. Critère de
+sortie : B1-b et B1-c passent. » **C'est fait, et mesuré** (commit `1eba0e9`).
+
+| preuve | constat |
+|---|---|
+| `anneau` sur les dix entrées, explicite | 10/10 |
+| les verts | **3** — `proposer_idee`, `proposer_enrichissement_idee`, `proposer_page_journal` |
+| **B1-b** — un orange refuse, la proposition étant valide par ailleurs | ✅ `validation de Paul requise` |
+| **B1-c** — anneau absent / inconnu / mauvaise casse → orange | ✅ 11 formes éprouvées |
+| `tests/unit-leo-anneau.mjs` | **19 contrôles**, 2 verrous de non-vacuité |
+
+⛔ **Le harnais a été éprouvé EN LE CASSANT — six fois, six rouges**, chacun sur
+le contrôle attendu : un quatrième vert · `normaliserAnneau` laxiste · la garde
+qui ignore l'anneau · la garde qui **croit son appelant** · un champ `anneau`
+retiré · une **seconde liste** posée dans `js/`. Un harnais qui ne sait pas
+échouer ne prouve rien.
+
+⚠️ **Ce qui n'est PAS acquis, nommément** : Léo n'écrit toujours rien.
+`autoriserEcriture` n'a **aucun appelant** — l'exécution est l'étape ④. C'est
+écrit dans le code lui-même, parce qu'un outil que personne n'appelle se lit
+comme un outil qui marche.
+
+### §11.6 — La prochaine action, unique — et elle ouvre sur un GATE
+
+**B1 étape ③ — le journal des écritures.** Il précède ④ : sans lui, une
+exécution verte serait une écriture sans trace, et A4 dit que le journal
+s'écrit **avant** l'acte.
+
+⛔ **Il commence par une action de Paul, pas par du code** : la table
+`leo_ecritures` est une **migration SQL sur une base de production**, donc un
+gate — et le mode solo ne le lève pas (il n'autorise que les migrations
+**correctives non destructives** ; créer une table n'en est pas une).
+
+⚠️ **Et on n'écrit pas le module avant la table.** `autoriserEcriture` est déjà
+sans appelant ; empiler une seconde couche inerte par-dessus, c'est fabriquer
+du code qui a l'air de marcher. ③ commence quand le gate est levé.
