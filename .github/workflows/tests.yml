@@ -55,7 +55,8 @@ jobs:
             --security-opt no-new-privileges --pids-limit 256 --memory 3g --cpus 2 \
             --user 65534:65534 --tmpfs /tmp:rw,nosuid,size=512m \
             --tmpfs /travail/tests/.cache:rw,nosuid,size=256m \
+            --env XDG_CONFIG_HOME=/tmp/lv1-config --env XDG_CACHE_HOME=/tmp/lv1-cache \
             --mount "type=bind,src=$GITHUB_WORKSPACE,dst=/travail,readonly" \
             --tmpfs /travail/.git:ro,nosuid,size=1m \
             --mount "type=bind,src=$RUNNER_TEMP/lv1-memoire,dst=/travail/memoire,readonly" \
-            --workdir /travail "$image" sh -c 'node tests/lv1-isolation.mjs && npm run test:browser'
+            --workdir /travail "$image" sh -c 'mkdir -p /tmp/lv1-config /tmp/lv1-cache && node tests/lv1-isolation.mjs && npm run test:browser'
