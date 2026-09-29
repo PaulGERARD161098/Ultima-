@@ -50,10 +50,26 @@ const ok = construireEntreeJournal(base);
 verdicts.entreeNominale = ok.ok === true &&
   ok.entree.trace_id === UUID && ok.entree.outil === 'proposer_idee' &&
   ok.entree.phase === 'tentee' && ok.entree.cible_id === null && ok.entree.motif === null;
-// ⛔ L'anneau est LU dans le catalogue, jamais reçu : le journal ne peut pas
-// mentir sur le régime sous lequel l'écriture a été faite.
-verdicts.anneauLuPasRecu = ok.entree.anneau === 'vert' &&
-  construireEntreeJournal({ ...base, anneau: 'orange' }).ok === false;
+// ⛔ L'ANNEAU EST DÉRIVÉ DU CATALOGUE — et ce contrôle a été REFAIT le 29/09
+// parce que le premier ne prouvait pas ce qu'il annonçait. Il disait « lu, pas
+// reçu » en vérifiant qu'une clé `anneau` fait refuser l'entrée : or ça, c'est
+// `clesFermees` qui le tient. Un sabotage rendant l'anneau RECEVABLE
+// (`brut.anneau || anneauDe(outil)`) laissait donc le harnais VERT — il était
+// neutre, la clé étant refusée en amont, mais le contrôle prétendait plus
+// qu'il ne prouvait. Un test vert par le mauvais chemin est pire qu'un test
+// absent : on le cite en revue en croyant qu'il garde.
+//
+// Ce qui le prouve vraiment : l'anneau SUIT l'outil, y compris pour un outil
+// que le catalogue ne connaît pas (défaut orange).
+verdicts.anneauSuitLOutil = ok.entree.anneau === 'vert' &&
+  construireEntreeJournal({ ...base, outil: 'proposer_inconnu' }).entree.anneau === 'orange';
+// ⛔ ET LE GARDE-FOU RÉEL : `anneau` ne doit JAMAIS entrer dans les clés
+// acceptées. C'est la seule porte par laquelle un appelant pourrait dicter le
+// régime, et c'est elle qu'il faut fermer — pas commenter.
+verdicts.anneauHorsDesClesAcceptees =
+  construireEntreeJournal({ ...base, anneau: 'orange' }).ok === false &&
+  !readFileSync(new URL('../api/_lib/leo-journal.js', import.meta.url), 'utf8')
+    .match(/const CLES = \[[^\]]*'anneau'/);
 
 // ---------- 3. ⛔ AUCUN CONTENU DICTÉ NE PEUT ENTRER ----------
 // La liste fermée des clés est ce qui empêche un `texte` de se glisser ici le
