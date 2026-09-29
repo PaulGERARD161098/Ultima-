@@ -4360,3 +4360,16 @@ DOKLĚS (SYMPHO en témoin), pas supprimées. Lexique et radar marqués
 re-scellé v43 (`a5d10eb36b49`) et propagé octet à octet aux neuf autres dépôts,
 RenoBoost compris. Avant d'écraser, chaque copie cible a été comparée à v42 :
 toutes identiques, aucune leçon locale perdue.
+
+**29/09 — Restructuration OMEGA.** Paul (dictée) : « Ultima, c'est le nom du
+projet, pas de la subdivision ». L'écran « Ultima » devient **OMEGA** ; ALPHA
+(pro) reste, placé **avant** OMEGA à l'accueil. **GRIMA et NAGA supprimés** : OMEGA
+est une carte unique (RIVEN, NICOL BOLAS, IMLADRIK). **IMLADRIK devient
+macro-projet** de développement et de gestion des projets personnels : il porte
+désormais MAEDRETHNIR, VRANESH, DRAUKHAIN **+ ADRAMELECH + TAO** (arbitrage Paul).
+Redirections : /ultima, /grima → /omega ; /naga → /imladrik. Mesuré : 45/45
+unitaires, 51 smokes/52 (seul rouge : `cadenceTenue_a1670_charge3`, rouge AVANT
+toute modification, cadence chronométrée propre au conteneur).
+**IFULVIN** dicté le même jour : constellation des ARMES (IFULVIN, réseau en
+cercles concentriques, « Magnum Opus ») + constellation des DRAGONS (les 3 caps).
+Cadré, non codé : `CADRAGE-IFULVIN.md`. Graphie **IFULVIN** — « Ifu » n'existe pas.
