@@ -17,11 +17,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PROJECT_DIR:-.}/.claude/finubar-rappel.mjs\" 2>/dev/null || true"
+            "command": "node \"${CLAUDE_PROJECT_DIR:-.}/.claude/finubar-rappel.mjs\""
           },
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PROJECT_DIR:-.}/.claude/lecons-rappel.mjs\" 2>/dev/null || true"
+            "command": "node \"${CLAUDE_PROJECT_DIR:-.}/.claude/lecons-rappel.mjs\""
           }
         ]
       }

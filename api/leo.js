@@ -13,7 +13,7 @@
 //    d'identifiant, ni le contenu d'une page, d'une flamme ou d'un scénario.
 //  - Timeout sortant borné, une seule relance ; erreurs génériques client,
 //    détail (statut/nom d'erreur seulement, jamais le contenu) en logs serveur.
-//  - Plafond de coût par appel : MAX_TOKENS_REPONSE + bornes d'historique.
+//  - Bornes par appel, pas de budget global partagé.
 
 import Anthropic from '@anthropic-ai/sdk';
 import { ok, fail, methodNotAllowed, logError, readJsonBody, bodyFail } from './_lib/http.js';
@@ -31,7 +31,7 @@ import {
   validerProposition,
   reformulerProposition,
   validerEtatQuadrant,
-  decrireEtat
+  joindreEtatConversation
 } from './_lib/leo.js';
 
 const TIMEOUT_MS = 30_000; // appel IA sortant borné (au-dessus : 502 générique)
@@ -74,23 +74,20 @@ export default async function handler(req, res) {
   // rattrapage silencieux. Absent → l'appel repart exactement comme avant.
   const verdictEtat = validerEtatQuadrant(corps.etat);
   if (!verdictEtat.ok) return fail(res, 400, 'État de quadrant invalide');
-  const texteEtat = decrireEtat(verdictEtat.etat);
+  const messages = joindreEtatConversation(conversation.messages, verdictEtat.etat);
 
   const client = new Anthropic({ apiKey: cle, timeout: TIMEOUT_MS, maxRetries: 1 });
   try {
     const reponse = await client.messages.create({
       model: process.env.LEO_MODELE || LEO_MODELE,
       max_tokens: MAX_TOKENS_REPONSE,
-      // Le système est stable par quadrant : cacheable (≈ -90 % sur le préfixe).
-      // L'état, lui, change à chaque tour : second bloc, HORS cache, pour ne
-      // pas invalider le préfixe stable.
+      // Seules les règles écrites côté serveur ont autorité système.
       system: [
-        { type: 'text', text: systeme, cache_control: { type: 'ephemeral' } },
-        ...(texteEtat ? [{ type: 'text', text: texteEtat }] : [])
+        { type: 'text', text: systeme, cache_control: { type: 'ephemeral' } }
       ],
       // Spread conditionnel : pas de champ tools quand le catalogue est vide.
       ...(outils ? { tools: outils } : {}),
-      messages: conversation.messages
+      messages
     });
     const texte = extraireTexte(reponse.content);
     // L2b : un tool_use devient une PROPOSITION validée + reformulée côté

@@ -1,0 +1,29 @@
+name: Léo LV1 — fixtures isolées
+on:
+  pull_request:
+    paths:
+      - 'api/**'
+      - 'js/**'
+      - 'finubar/**'
+      - 'tests/**'
+      - '.github/workflows/leo-lv1.yml'
+      - 'package.json'
+permissions:
+  contents: read
+jobs:
+  lv1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Préparer le moteur hors du bac à sable
+        run: |
+          docker pull node:22-bookworm-slim
+          docker image inspect --format '{{.Id}}' node:22-bookworm-slim > /tmp/lv1-image-id
+      - name: Éprouver les fixtures sans réseau ni secrets
+        run: |
+          export LV1_NODE_IMAGE="$(cat /tmp/lv1-image-id)"
+          echo "Image utilisée : $LV1_NODE_IMAGE"
+          bash tests/lancer-lv1-isole.sh

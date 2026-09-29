@@ -276,6 +276,17 @@
     });
   }
 
+  function messageEchecEcriture(resultat) {
+    if (resultat && resultat.statut === 409) {
+      return '[Action en conflit avec les données existantes. Rechargez la cible et réconciliez les ajouts avant une nouvelle confirmation.]';
+    }
+    if (resultat && resultat.statut >= 400 && resultat.statut < 500 &&
+        resultat.corps && resultat.corps.ok === false) {
+      return '[Action refusée par le serveur. Vérifiez les données et les droits avant une nouvelle proposition.]';
+    }
+    return '[Résultat de l’action inconnu : elle a peut-être été enregistrée. Vérifiez la cible avant toute nouvelle tentative ; si le doute persiste, ne rejouez pas l’action.]';
+  }
+
   // Gabarits d'exécution (L2b) : traduit une proposition confirmable en appel
   // EXACT vers l'API d'écriture existante (contrats /api/idees/items,
   // /api/intendant/besoins, /api/reseau/journal). PUR : aucun réseau ici.
@@ -312,12 +323,16 @@
       if (typeof args.ajout !== 'string' || !args.ajout) { return { ok: false, raison: 'invalide' }; }
       // ENRICHIR = ajouter à l'essence existante, jamais l'écraser (le
       // catalogue L2b n'a aucun outil destructeur, l'écrasement en serait un).
-      var existante = typeof idee.candidat.essence === 'string' ? idee.candidat.essence.trim() : '';
+      var attendue = idee.candidat.essence;
+      if (attendue !== null && typeof attendue !== 'string') {
+        return { ok: false, raison: 'invalide' };
+      }
+      var existante = attendue === null ? '' : attendue;
       var essence = existante ? existante + '\n\n' + args.ajout : args.ajout;
       if (essence.length > 2000) { return { ok: false, raison: 'invalide' }; }
       return {
         ok: true, url: '/api/idees/items', methode: 'PATCH',
-        corps: { id: idee.candidat.id, essence: essence },
+        corps: { id: idee.candidat.id, essence: essence, essence_attendue: attendue },
         cible: idee.candidat.libelle
       };
     }
@@ -904,7 +919,7 @@
             body: JSON.stringify(plan.corps)
           }).then(function (reponse) {
             return reponse.json().then(function (corps) {
-              return { httpOk: reponse.ok, corps: corps };
+              return { httpOk: reponse.ok, statut: reponse.status, corps: corps };
             }, function () {
               return { httpOk: false, corps: null };
             });
@@ -915,11 +930,11 @@
               }
               clore('[Action exécutée : ' + proposition.reformulation + ']');
             } else {
-              // Erreur générique : jamais de détail technique dans le fil.
-              clore('[Action échouée, à reprendre]');
+              // Un refus explicite se distingue d'une réponse perdue après écriture.
+              clore(messageEchecEcriture(resultat));
             }
           }, function () {
-            clore('[Action échouée, à reprendre]');
+            clore(messageEchecEcriture(null));
           });
         });
         boutons.appendChild(confirmer);
@@ -1076,6 +1091,7 @@
     // L2b (pures, testables) : résolution des références dictées + gabarits
     // d'exécution vers les API existantes.
     resoudreRef: resoudreRef,
-    construirePlanExecution: construirePlanExecution
+    construirePlanExecution: construirePlanExecution,
+    messageEchecEcriture: messageEchecEcriture
   };
 })();
