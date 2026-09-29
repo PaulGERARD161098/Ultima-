@@ -13,6 +13,7 @@ import {
   ANNEAU_PAR_DEFAUT,
   normaliserAnneau,
   anneauDe,
+  decisionAnneau,
   autoriserEcriture,
   validerProposition,
   OUTILS_PAR_QUADRANT
@@ -37,19 +38,25 @@ verdicts.anneauExplicitePartout = tousLesOutils.length ===
 verdicts.anneauReconnuPartout = tousLesOutils.every((n) => ANNEAUX.includes(anneauDe(n)));
 
 // ---------- 2. LA TAILLE DU VERT, mesurée et nommée ----------
-// ⛔ La liste attendue est écrite ici EXPRÈS : c'est le seul endroit où une
-// extension de l'anneau vert doit passer par une main humaine. Un test qui se
-// contenterait de compter laisserait un quatrième vert entrer en silence.
+// ⛔ La liste attendue est écrite ici EXPRÈS, nom par nom : c'est le seul
+// endroit où une extension de l'anneau vert doit passer par une main humaine.
+// Un test qui se contenterait de compter laisserait un onzième vert entrer en
+// silence — et c'est précisément ce que le critère de Paul rend possible,
+// puisque le périmètre par défaut est large.
 const verts = tousLesOutils.filter((n) => anneauDe(n) === 'vert').sort();
-verdicts.troisVerts = verts.join(',') ===
-  'proposer_enrichissement_idee,proposer_idee,proposer_page_journal';
+verdicts.lesDixVerts = verts.join(',') === [
+  'proposer_besoin', 'proposer_enrichissement_idee', 'proposer_flamme',
+  'proposer_idee', 'proposer_journal', 'proposer_page_journal',
+  'proposer_relance', 'proposer_scenario', 'proposer_serment',
+  'proposer_situation'
+].join(',');
 
-// Le critère « visible » et le critère « client », tenus par construction :
-// aucun vert dans RIVEN (un client est au bout), aucun dans NICOL BOLAS (une
-// erreur de montant ne se voit pas).
-verdicts.aucunVertDansRiven =
-  OUTILS_PAR_QUADRANT.riven.every((o) => anneauDe(o.name) === 'orange');
-verdicts.aucunVertDansBcp = OUTILS_PAR_QUADRANT.bcp.length === 0;
+// NICOL BOLAS reste sans outil — non par interdit d'anneau, mais parce
+// qu'aucune API de données ne lui est branchée. Un vert y serait une écriture
+// financière, et une erreur de montant ne se VOIT pas : elle se découvre au
+// tiers provisionnel. Le jour où le quadrant reçoit des outils, ils
+// s'instruisent un par un.
+verdicts.aucunOutilDansBcp = OUTILS_PAR_QUADRANT.bcp.length === 0;
 
 // ---------- 3. B1-c · sans anneau reconnu → ORANGE ----------
 verdicts.defautEstOrange = ANNEAU_PAR_DEFAUT === 'orange' &&
@@ -76,25 +83,37 @@ verdicts.inconnuEstOrange = anneauDe('proposer_nimporte_quoi') === 'orange' &&
 // ---------- 4. L'anneau voyage AVEC le verdict (chemin vivant) ----------
 const vertValide = validerProposition('proposer_idee',
   { titre: 'Une idée dictée' }, 'adramelech');
-const orangeValide = validerProposition('proposer_journal',
+const autreValide = validerProposition('proposer_journal',
   { cible_ref: 'SOLA', texte: 'Rappelé ce matin.' }, 'riven');
 verdicts.verdictPorteLAnneau = vertValide.ok && vertValide.anneau === 'vert' &&
-  orangeValide.ok && orangeValide.anneau === 'orange';
+  autreValide.ok && autreValide.anneau === 'vert';
 // ⚠️ Et il ne se glisse pas dans la proposition : c'est elle que la route
 // recopie vers le client, et l'anneau est une affaire de serveur.
 verdicts.anneauResteServeur =
   Object.keys(vertValide.proposition).sort().join(',') === 'args,outil';
 
-// ---------- 5. B1-b · un ORANGE refuse, même appelé comme un vert ----------
-const refusOrange = autoriserEcriture('proposer_journal',
-  { cible_ref: 'SOLA', texte: 'Rappelé ce matin.' }, 'riven');
+// ---------- 5. B1-b · un ORANGE refuse ----------
+// ⛔ DEPUIS LE 29/09, AUCUN OUTIL DU CATALOGUE N'EST ORANGE. Éprouver ce
+// contrôle sur un outil du catalogue serait donc VERT PAR VACUITÉ — la façon
+// exacte dont un garde-fou cesse de garder sans que personne ne le voie.
+// C'est pour ça que la décision est une fonction PURE : elle reste éprouvable
+// quand plus aucune donnée ne l'exerce.
+const refusOrange = decisionAnneau('orange');
 verdicts.orangeRefuse = refusOrange.ok === false &&
   refusOrange.anneau === 'orange' &&
   refusOrange.motif === 'validation de Paul requise';
-// La proposition était PARFAITE par ailleurs : c'est bien l'anneau qui a
-// refusé, pas la validation. Sans cette ligne, le refus pourrait venir d'un
-// argument mal formé et le test passerait pour la mauvaise raison.
-verdicts.orangeEtaitValide = orangeValide.ok === true;
+// Et l'accord, du même côté pur — les deux branches, pas une seule.
+verdicts.vertAutorisePur = decisionAnneau('vert').ok === true &&
+  decisionAnneau('vert').anneau === 'vert';
+// ⛔ Le fail-closed de la décision : tout ce qui n'est pas RECONNU refuse.
+verdicts.decisionFailClosed = [undefined, null, 'VERT', ' vert', 'rouge', 0, {}]
+  .every((v) => decisionAnneau(v).ok === false && decisionAnneau(v).anneau === 'orange');
+// ⚠️ LE VERROU DE NON-VACUITÉ DU BLOC : si un outil orange réapparaît un jour
+// au catalogue, il DOIT être refusé par la vraie porte, pas seulement par la
+// fonction pure. Tant qu'il n'y en a pas, on le dit au lieu de se taire.
+const oranges = tousLesOutils.filter((n) => anneauDe(n) === 'orange');
+verdicts.orangeParLaVraiePorte = oranges.length === 0 ||
+  oranges.every((n) => autoriserEcriture(n, {}, 'riven').ok === false);
 
 const accordVert = autoriserEcriture('proposer_idee',
   { titre: 'Une idée dictée', resume: 'Son résumé.' }, 'adramelech');
@@ -148,6 +167,34 @@ verdicts.controleListeNonVide = fichiersLus > 20;
 // Et la SEULE déclaration de ce genre, dans le catalogue, est bien la nôtre.
 verdicts.uneSeuleDeclaration =
   (source.match(/export const ANNEAUX\s*=\s*\[/g) || []).length === 1;
+
+// ---------- 8. LE CRITÈRE DE PAUL, tenu par le CODE et pas par une note ----
+// ⛔ « Toute action destructrice ou de régression doit être approuvée par
+// moi » (Paul, 29/09). Les dix outils sont verts parce qu'aucun ne détruit —
+// c'est une MESURE, pas une opinion, et elle doit rester vraie demain.
+// Ce contrôle est ce qui empêche un futur outil destructeur d'être vert.
+const planSource = readFileSync(new URL('../js/leo-accueil.js', import.meta.url), 'utf8');
+const methodes = (planSource.match(/methode: '[A-Z]+'/g) || [])
+  .map((m) => m.slice(10, -1));
+
+// ⛔ VERROU DE NON-VACUITÉ, et il se lit AVANT la ligne suivante : sur zéro
+// occurrence, « aucune méthode destructrice » est vrai et ne prouve rien.
+// Au 29/09 : 10 (9 POST + 1 PATCH), un par outil.
+verdicts.planNonVide = methodes.length >= 10;
+verdicts.aucuneMethodeDestructrice =
+  methodes.every((m) => m === 'POST' || m === 'PATCH');
+
+// ⚠️ Le MIROIR, qui compte autant : un outil vert dont aucun plan n'exécute
+// rien serait vert sur du vide. Chaque vert doit être nommé dans le plan.
+verdicts.chaqueVertAUnPlan = verts.every((n) => planSource.includes(n));
+
+// ⛔ Et le principe fondateur qui rend tout cela possible : AUCUN outil de
+// suppression, jamais. Il est déjà tenu par unit-leo-mains ; il est rappelé
+// ici parce qu'il n'est plus une précaution parmi d'autres — il est la RAISON
+// pour laquelle les dix peuvent être verts. Le jour où il tombe, l'anneau
+// vert entier est à réinstruire.
+verdicts.zeroOutilDeSuppression = tousLesOutils
+  .every((n) => !/suppr|delete|retir|efface|remplac/i.test(n));
 
 // ---------- Bilan ----------
 console.log(JSON.stringify(verdicts, null, 2));
