@@ -12,6 +12,58 @@ on:
 permissions:
   contents: read
 jobs:
+  registre-postgres:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Préparer Postgres 17 hors du bac à sable
+        run: |
+          docker pull postgres:17-bookworm
+          docker image inspect --format '{{.Id}}' postgres:17-bookworm > /tmp/lv1-postgres-image-id
+      - name: Éprouver la concurrence entre connexions Postgres fictives
+        run: |
+          LV1_POSTGRES_IMAGE="$(cat /tmp/lv1-postgres-image-id)"
+          echo "Image utilisée : $LV1_POSTGRES_IMAGE"
+          docker run --rm --read-only --network none \
+            --cap-drop ALL --security-opt no-new-privileges \
+            --user 999:999 --memory 512m --cpus 1 --pids-limit 128 \
+            --tmpfs /tmp:rw,nosuid,nodev,noexec,size=256m,mode=1777 \
+            --mount type=bind,src="$GITHUB_WORKSPACE/leo",dst=/workspace/leo,readonly \
+            --mount type=bind,src="$GITHUB_WORKSPACE/tests",dst=/workspace/tests,readonly \
+            --workdir /workspace --env LV1_PG_ISOLATED=1 \
+            --entrypoint bash "$LV1_POSTGRES_IMAGE" tests/leo-registre-postgres.sh
+  registre:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Préparer le moteur SQL fictif
+        run: |
+          docker pull node:22-bookworm
+          docker image inspect --format '{{.Id}}' node:22-bookworm > /tmp/lv1-registre-image-id
+      - name: Éprouver API et Postgres fictif sans réseau ni secrets
+        run: |
+          LV1_REGISTRE_IMAGE="$(cat /tmp/lv1-registre-image-id)"
+          echo "Image utilisée : $LV1_REGISTRE_IMAGE"
+          docker run --rm --read-only --network none \
+            --cap-drop ALL --security-opt no-new-privileges \
+            --user 65534:65534 --memory 1g --cpus 1 --pids-limit 128 \
+            --tmpfs /tmp:rw,nosuid,nodev,noexec,size=256m,mode=1777 \
+            --mount type=bind,src="$GITHUB_WORKSPACE",dst=/travail,readonly \
+            --tmpfs /travail/.git:ro,nosuid,nodev,noexec,size=1m \
+            --tmpfs /travail/memoire:ro,nosuid,nodev,noexec,size=1m \
+            --workdir /travail "$LV1_REGISTRE_IMAGE" \
+            sh -eu -c 'node tests/lv1-isolation.mjs; node tests/unit-leo-registre-api.mjs; node tests/unit-leo-registre-sql.mjs'
   lv1:
     runs-on: ubuntu-latest
     timeout-minutes: 8

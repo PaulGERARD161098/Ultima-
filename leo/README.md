@@ -79,6 +79,17 @@ pas accord de Paul, revue indépendante réelle ni réception complète R21.
 
 ## Activation encore nécessaire
 
+**Décision actualisée : réutiliser Vercel et Supabase d'Ultima.** La proposition
+`proposals/registre-postgres.sql` et `api/leo-registre.js` préparent la mémoire
+transactionnelle du produit. Voir [ACTIVATION.md](ACTIVATION.md) : préflight réel
+en lecture seule, périmètre, changement exact et autorisations restantes.
+Le Python/SQLite ci-dessus reste un banc d'épreuve ; aucune deuxième mémoire
+active n'est prévue. L'API proposée doit encore passer ses tests isolés.
+
+L'hypothèse ci-dessous d'un hôte Python dédié est donc historique et remplacée
+pour la mémoire/budget par ce raccord aux services existants. L'orchestration
+des effets externes et du moteur CI reste à raccorder et à recevoir.
+
 Il reste à choisir et installer l'hôte persistant authentifié, raccorder son
 interface à Ultima, intégrer un exécuteur isolé à cet hôte, vérifier les preuves
 réelles et l'adaptateur de fusion réel, puis exécuter la recette produit complète.
