@@ -121,6 +121,8 @@ class Broker:
         canonical = self.store.read_mission(self.mandate.mission, principal)
         if canonical['mandat'] != mandate_record(self.mandate):
             raise Refusal('canonical_mandate_mismatch')
+        if principal not in {canonical['owner'], *canonical['writers']}:
+            raise Refusal('writer_required')
         operation = self.store.get_operation(self.mandate.mission, principal, operation_id)
         if operation is None or operation['payload'].get('action') != 'merge_fixture' or not self.adapter:
             raise Refusal('operation_unavailable')

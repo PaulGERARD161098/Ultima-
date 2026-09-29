@@ -3,12 +3,16 @@ import json
 import subprocess
 import sys
 from pathlib import Path
-from test_fixture_git import AtomicGitTests
+import unittest
+import test_fixture_git
 from leo.runtime.broker import Broker, mandate_record
 from leo.runtime.policy import Approval, Evidence, Mandate, Refusal
 
 
-class CycleTests(AtomicGitTests):
+class CycleTests(unittest.TestCase):
+    setUp = test_fixture_git.AtomicGitTests.setUp
+    tearDown = test_fixture_git.AtomicGitTests.tearDown
+    commit = test_fixture_git.AtomicGitTests.commit
     def test_cycle_with_real_patch_lost_response_and_fresh_process(self):
         def check(commit):
             source = self.adapter.git('show', commit + ':fixture.py')
