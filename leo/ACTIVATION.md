@@ -46,6 +46,27 @@ Ces absences doivent être revérifiées juste avant toute installation.
 
 ## Activation réelle — pas encore autorisée
 
+### Version concrète proposée après épreuves
+
+SQL proposé : `proposals/registre-postgres.sql` au commit
+`1ac34512cd72f8d22b9f6e3bbbaee7529cd4fe22` ; SHA-256 du fichier
+`c3931ae2bb84621469a68805e707d1375e48e33172f5bf8db8dd5cce893b0df3`.
+Le périmètre d'accord demandé est l'installation de ce SQL seulement sur
+`leosfqyidgsaescjbfom` : deux tables nouvelles, leurs index/RLS/grants, un schéma
+privé avec deux fonctions internes et trois fonctions RPC publiques. Aucune
+table métier existante n'est altérée ; aucune mission ni donnée métier n'est
+créée par ce script. Ce n'est pas un accord de publication ou de fusion.
+
+Épreuves reçues le 29/09/2026 à 13 h 56 Paris : run `36564708408`, source
+`1ac34512cd72f8d22b9f6e3bbbaee7529cd4fe22`, cible
+`fb7daac613a0828d4135333fbd27a47102323211`, intégration
+`49f3b31c085db635e2356e3c9431305544df69d3`. Job `109393704339` : API et
+PGlite verts ; job `109393704397` : deux connexions PostgreSQL 17 concurrentes,
+un succès/un conflit, un seul effet et reprise sans doublon. Job `109393704277` :
+55 tests Python verts. Revue indépendante statique sans bloqueur identifié
+après correction de la cohérence du statut. Ces épreuves isolées ne prononcent
+pas la réception globale du produit ni l'activation de ses effets externes.
+
 Le contrat canonique LV1 §7 et la compétence Léo LV1 classent une application
 SQL/RLS sur la base métier réelle comme rouge. « Finir V1 » autorise la préparation
 et ses tests, mais ne révise pas explicitement cet interdit. Avant application,

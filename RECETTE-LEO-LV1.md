@@ -117,6 +117,15 @@ critique supplémentaire suit leur enjeu, jamais la commodité de clôture.
 
 ### Tranche Postgres proposée, non activée
 
+**Mise à jour mesurée à 13 h 56 Paris : tests réussis.** Le run
+[36564708408](https://github.com/PaulGERARD161098/Ultima-/actions/runs/36564708408)
+sur `1ac34512cd72f8d22b9f6e3bbbaee7529cd4fe22` contient le même SQL/API que
+`7dee198…` et uniquement des documents supplémentaires. Intégration
+`49f3b31c085db635e2356e3c9431305544df69d3`, cible `fb7daac…` : job
+`109393704339` API/PGlite et job `109393704397` concurrence PostgreSQL réels
+réussis ; 55 tests Python réussis également. Cela remplace l'attente de CI
+historique ci-dessous. Installation réelle et parcours intégré restent ouverts.
+
 La source `7dee1984798ae9743c31ed8bf7561650e2bc4317` ajoute une API authentifiée
 et un registre Postgres transactionnel proposé dans les services existants.
 Voir [ACTIVATION](leo/ACTIVATION.md). Revue indépendante statique sans bloqueur

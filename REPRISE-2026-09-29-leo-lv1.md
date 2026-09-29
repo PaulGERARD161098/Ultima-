@@ -215,3 +215,20 @@ nouveau commit. La référence de branche renvoie `7dee198…`, mais la fiche PR
 renvoie encore `c7be5e…`, même après mise à jour de sa description. Cet écart
 observé ne permet pas d'annoncer les nouveaux tests en cours ni réussis. Ne pas
 relancer les anciens jobs en les prenant pour une preuve du nouveau code.
+
+## Résolution de l'attente CI — 13 h 56 Paris
+
+La CI s'est déclenchée sur `1ac34512cd72f8d22b9f6e3bbbaee7529cd4fe22`,
+qui conserve exactement le SQL/API de `7dee198…`. Run `36564708408` entièrement
+vert : LV1, 55 tests runtime, API/PGlite, concurrence PostgreSQL 17. Logs relus.
+Intégration `49f3b31c085db635e2356e3c9431305544df69d3` avec `fb7daac…`.
+Deux clients PostgreSQL mesurés en attente de verrous : un succès, un conflit
+40001 ; une opération, un appel, une unité ; reprise du reçu sans double effet.
+
+Le changement exact est maintenant présenté dans `leo/ACTIVATION.md`, avec
+son empreinte SQL et sa cible. Prochaine étape nécessitant l'accord manquant :
+installation de ce registre neuf dans Supabase réel, sans publication, fusion,
+mission créée ni dépense fournisseur. La compétence Léo LV1 et le contrat §7
+réservent cette application SQL/RLS réelle à une révision explicite du mandat.
+La réception intégrale R01–R28, en particulier les effets externes et R21, n'est
+pas prononcée par cette réussite technique.
