@@ -295,3 +295,36 @@ refuse le clic intercepté ; l'ancien harnais cibles-telephone détecte cinq éc
 Correctif : déplacer le bouton hors de l'en-tête mesuré, dans la zone supérieure
 de commandes, position fixe et pointer-events:auto. Aucune modification du
 moteur de carte ni de ses seuils ; aucun test affaibli. Repreuve CI nécessaire.
+
+## Go solo suivant — transport contrôlé et préparation R21
+
+Reprise distante relue : source `45185d01e900e17e27b6071ecab882318314c1d9`,
+cible `fb7daac613a0828d4135333fbd27a47102323211`. Le correctif concurrent
+permettant d'abandonner un brouillon après GET refusé est conservé. Les sept
+jobs verts du lot précédent `55d8075…` restent une preuve historique distincte.
+
+But : rendre l'épreuve R21 concrète et reprenable. Étapes : contrôler une
+transmission fictive, préparer défaut/correctif/oracle/dossier, revue adverse,
+CI isolée et conservation du paquet. Moyens : composants Python existants,
+nouveaux dispatch/transport/trial et workflow runtime. Réussite attendue :
+refus sans transmission, contexte minimal, arrêt/concurrence/réponse perdue,
+rouge avant correctif puis vert, reprise sans effet et gate de fusion fermé.
+Hors périmètre : données métier, dépense, publication et accord de fusion déduit.
+Pré-mortem : fuite via paquet exporté, config Git hostile, doublon après perte
+de réponse, simulation prise pour réception. Préventions intégrées au lanceur,
+au transport fermé et aux épreuves adverses.
+
+Avant : fonctions de contrôle de délégation sans consommateur de transport,
+cycle R21 entièrement créé dans un test avec accord fictif. Après préparé :
+DispatchBroker devant un inspecteur déterministe, dossier R21 exportable,
+deux transmissions contrôlées et refus de fusion sans accord. Même registre
+SQLite d'épreuve/budget partagé, aucune dépendance produit ni service ajouté.
+Coût Work/fournisseur non mesuré ; unités fictives seulement. Ce raccord ne
+contrôle pas les outils Work ni une délégation externe en production.
+
+Revue indépendante statique : défauts d'export via montage inscriptible, lecture
+de configuration Git hostile et requête de test hors schéma corrigés. Export
+par sortie bornée, validation sans extraction, inspection isolée et diff externe
+désactivé. Syntaxes vérifiées ; aucun test applicatif local lancé. Les résultats
+de la CI et l'artefact exact seront rattachés à la PR après exécution, sans
+transposer les preuves du commit antérieur à ce nouveau code.

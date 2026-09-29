@@ -35,6 +35,12 @@ Les tests CI montent uniquement `leo/` et `tests/runtime/`, sans données métie
   écritures mémoire et fusion fictive ; aucun adaptateur de production disponible.
 - `runtime/fixture_git.py` : transaction Git vérifiant source et cible pour une
   intégration exacte, dans un dépôt nu fictif sans remote ni hooks.
+- `runtime/dispatch.py` : contrôle de mandat, source, ACL et habilitations avant
+  réservation commune et transmission. Le dernier verrou sérialise l'admission
+  avec l'arrêt ; un résultat inconnu ne donne jamais une nouvelle permission d'envoi.
+- `runtime/fixture_transport.py` : inspecteur déterministe fermé, local et borné,
+  avec reçus durables minimaux. Sans réseau, processus enfant ni callback fourni
+  par le modèle. Son résultat n'est pas une revue indépendante.
 
 Le budget utilise des unités abstraites de travail : 1 par écriture mémoire,
 2 par fusion fictive. Aucun tarif fournisseur, appel payant ou coût Work n'est
@@ -76,6 +82,31 @@ Le cycle fictif injecte un défaut réel dans `fixture.py`, vérifie que le test
 volontairement la réponse et retrouve son résultat dans un nouveau processus.
 L'accord et la preuve de revue de ce scénario sont **simulés** ; ils ne valent
 pas accord de Paul, revue indépendante réelle ni réception complète R21.
+
+### Dossier R21 à reprendre
+
+`python -m leo.trial prepare` construit désormais un dossier concret dans le
+conteneur CI : dépôt nu avec défaut connu, correctif lisible, oracle rouge puis
+vert, intégration verte, deux inspections fictives via le transport contrôlé,
+mandat, budget partagé et registre. La tentative de fusion sans accord doit
+être refusée avant toute réservation supplémentaire. La commande `inspect`
+relit le dossier dans un nouveau processus sans renvoyer une opération.
+
+Le job `runtime` produit l'artefact privé `leo-r21-<SHA source Ultima>` :
+`trial.tar.gz`, conservé sept jours. Il contient `manifest.json`, `proofs.json`,
+`controlled-inspection.json`, `change.patch`, l'oracle, le dépôt Git fictif et
+le registre. Source/cible/intégration d'Ultima sont distinguées des trois commits
+de fixture. Le lanceur exporte seulement une sortie bornée depuis un tmpfs ;
+il valide l'archive sans l'extraire ni exécuter son contenu sur l'hôte.
+
+Pour reprendre, vérifier la provenance du run et l'empreinte de l'artefact,
+restaurer uniquement dans un environnement isolé, puis utiliser `inspect`.
+Le dossier n'importe jamais ses propres permissions. Aucun import JSON d'accord
+ni commande de fusion n'est exposé. L'hôte authentifié devra fournir l'accord
+exact et la vraie revue au broker existant ; une relocalisation change le contexte
+du dépôt et impose sa revalidation. L'expiration du mandat est de 24 heures.
+La revue réelle du dossier, la décision de Paul, la fusion fictive autorisée et
+la reprise dans une session Work neuve restent nécessaires pour R21.
 
 ## Raccordement produit à Ultima
 

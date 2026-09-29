@@ -122,7 +122,29 @@ critique supplémentaire suit leur enjeu, jamais la commodité de clôture.
 
 ## Travaux nécessaires avant décision de réception
 
-### Tranche Postgres proposée, non activée
+### État actualisé le 29/09 — registre installé, réception globale ouverte
+
+Le SQL a été installé avec l'accord exact de Paul : migration
+`20260929125105`, preuves dans `leo/ACTIVATION.md`. Ne pas rejouer cette
+installation. La mention « jamais modifiée » ci-dessous décrit le préflight
+historique de 13 h 54, pas l'état actuel.
+
+Le parcours Mission Léo est construit et éprouvé sur source
+`55d8075e34c7def7b4dc3b8b406848e08f58fabf`, intégration
+`34bc224443152ead69e598a2a70127b9b2078c95`, cible `fb7daac…` : runs
+`36584885312` (unit et 53 harnais navigateur) et `36584885279` (quatre jobs LV1)
+réussis. Identité/transport fictifs, API et SQL composés ; aucune mission réelle
+créée ni API publiée. Le correctif concurrent `45185d01e900e17e27b6071ecab882318314c1d9`
+préserve la sortie d'un brouillon après GET refusé ; ses preuves restent distinctes.
+
+La nouvelle tranche ajoute `leo/runtime/dispatch.py` et `leo/trial.py` :
+transmission contrôlée vers un inspecteur déterministe fictif, dossier R21
+conservé pour revue et reprise. Résultats à relever dans la CI du commit qui
+les contient. Ce raccord d'épreuve ne commande ni les spécialistes Work ni
+un fournisseur externe. R21 reste ouvert jusqu'à revue du dossier exact,
+accord réel, fusion fictive autorisée et reprise vérifiée dans une session neuve.
+
+### Historique du préflight et des premiers tests Postgres
 
 **Mise à jour mesurée à 13 h 56 Paris : tests réussis.** Le run
 [36564708408](https://github.com/PaulGERARD161098/Ultima-/actions/runs/36564708408)
@@ -131,7 +153,7 @@ sur `1ac34512cd72f8d22b9f6e3bbbaee7529cd4fe22` contient le même SQL/API que
 `49f3b31c085db635e2356e3c9431305544df69d3`, cible `fb7daac…` : job
 `109393704339` API/PGlite et job `109393704397` concurrence PostgreSQL réels
 réussis ; 55 tests Python réussis également. Cela remplace l'attente de CI
-historique ci-dessous. Installation réelle et parcours intégré restent ouverts.
+historique ci-dessous. Installation et parcours étaient alors encore ouverts.
 
 La source `7dee1984798ae9743c31ed8bf7561650e2bc4317` ajoute une API authentifiée
 et un registre Postgres transactionnel proposé dans les services existants.

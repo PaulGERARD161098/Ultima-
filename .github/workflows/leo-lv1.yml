@@ -106,3 +106,60 @@ jobs:
             --env GIT_CONFIG_GLOBAL=/dev/null --env GIT_CONFIG_NOSYSTEM=1 \
             "$LV1_PYTHON_IMAGE" \
             sh -eu -c 'git --version; python -m unittest discover -s tests/runtime -p "test_*.py" -v'
+      - name: Préparer le dossier R21 sans fusion ni accord simulé
+        env:
+          LV1_SOURCE_SHA: ${{ github.event.pull_request.head.sha }}
+          LV1_TARGET_SHA: ${{ github.event.pull_request.base.sha }}
+          LV1_INTEGRATION_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          LV1_PYTHON_IMAGE="$(cat /tmp/lv1-python-image-id)"
+          LV1_TRIAL_OUTPUT="$(mktemp -d "$RUNNER_TEMP/leo-r21.XXXXXX")"
+          echo "LV1_TRIAL_OUTPUT=$LV1_TRIAL_OUTPUT" >> "$GITHUB_ENV"
+          docker run --rm --read-only --network none \
+            --cap-drop ALL --security-opt no-new-privileges \
+            --user 65534:65534 --memory 512m --cpus 1 --pids-limit 128 \
+            --tmpfs /tmp:rw,nosuid,nodev,noexec,size=128m,mode=1777 \
+            --mount type=bind,src="$GITHUB_WORKSPACE/leo",dst=/workspace/leo,readonly \
+            --tmpfs /trial-output:rw,nosuid,nodev,noexec,size=128m,mode=1777 \
+            --workdir /workspace \
+            --env LV1_ISOLATED=1 --env PYTHONDONTWRITEBYTECODE=1 \
+            --env LV1_SOURCE_SHA --env LV1_TARGET_SHA --env LV1_INTEGRATION_SHA \
+            --env GIT_CONFIG_GLOBAL=/dev/null --env GIT_CONFIG_NOSYSTEM=1 \
+            "$LV1_PYTHON_IMAGE" \
+            sh -eu -c 'python -m leo.trial prepare --output /trial-output/trial --source-sha "$LV1_SOURCE_SHA" --target-sha "$LV1_TARGET_SHA" --integration-sha "$LV1_INTEGRATION_SHA" >&2; python -m leo.trial inspect /trial-output/trial >&2; python -c "import base64,pathlib,sys; sys.stdout.buffer.write(base64.b64encode(pathlib.Path(\"/trial-output/trial.tar.gz\").read_bytes()))"' \
+            | head -c 2097153 > "$LV1_TRIAL_OUTPUT/encoded"
+          # Lanceur de confiance : aucune extraction ni exécution du paquet sur l'hôte.
+          python3 - "$LV1_TRIAL_OUTPUT" <<'PYTHON'
+          import base64, gzip, io, pathlib, tarfile
+          root = pathlib.Path(__import__('sys').argv[1])
+          encoded = (root / 'encoded').read_bytes()
+          if not 0 < len(encoded) <= 2097152:
+              raise SystemExit('R21 output limit')
+          archive = base64.b64decode(encoded, validate=True)
+          with gzip.GzipFile(fileobj=io.BytesIO(archive)) as stream:
+              unpacked = stream.read(16777217)
+          if len(unpacked) > 16777216:
+              raise SystemExit('R21 decompression limit')
+          with tarfile.open(fileobj=io.BytesIO(unpacked), mode='r:') as package:
+              count = total = 0
+              for member in package:
+                  path = pathlib.PurePosixPath(member.name)
+                  count += 1
+                  total += member.size
+                  if (count > 512 or total > 16777216 or path.is_absolute()
+                      or '..' in path.parts or not path.parts or path.parts[0] != 'trial'
+                      or not (member.isfile() or member.isdir())):
+                      raise SystemExit('R21 archive entry denied')
+              if count < 5:
+                  raise SystemExit('R21 empty package')
+          (root / 'trial.tar.gz').write_bytes(archive)
+          print('R21 archive validated:', len(archive), 'bytes;', count, 'entries')
+          PYTHON
+      - name: Conserver le dossier privé pour revue et reprise
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: leo-r21-${{ github.event.pull_request.head.sha }}
+          path: ${{ env.LV1_TRIAL_OUTPUT }}/trial.tar.gz
+          if-no-files-found: error
+          retention-days: 7
