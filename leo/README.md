@@ -1,7 +1,27 @@
 # Léo LV1 — contrôleur d'épreuve
 
+**Évolution concurrente conservée :** `1cfc66f5184390817abb4d8dea2e84861bde3b40`
+ajoute l'arrêt HTTP authentifié et ses épreuves. Les preuves cc03cb8 ci-dessous
+ne valident pas automatiquement ce nouveau code ; résultats propres à relever
+dans PR306. La présente mise à jour ne modifie aucun fichier exécutable.
+
 Référence métier unique : `CADRAGE-2026-09-22-leo-pilote-tout.md`, §11,
 contrat 1.1. Compétence Work attendue : `leo-lv1` 1.0.
+
+## État de réception au 29/09 après 23 h 35 Paris
+
+Le lot cc03cb8 est éprouvé : 91 tests runtime, 53 suites unitaires,
+53 harnais navigateur, Auth réel sur comptes fictifs, huit jobs réussis.
+La [matrice de réception](../RECETTE-LEO-LV1.md) porte les références exactes
+et remplace les prochains pas historiques ci-dessous.
+
+**Blocage précis R21 :** canal d'accord exact non utilisable depuis cette
+session Work, dossier relu non exécuté sous accord réel, reprise en session
+Work neuve non réalisée. La préparation ne réclame ni serveur permanent
+(hors périmètre initial), ni mise en production, ni fournisseur payant.
+Le budget simulé est suffisant pour l'épreuve R27 ; il ne mesure pas les frais Work.
+Le prochain travail utile est ce transfert opérationnel, pas une nouvelle
+simulation du même parcours ou une nouvelle répétition des tests verts.
 
 ## Présentation de Léo LV1
 
@@ -20,7 +40,7 @@ service permanent et ne lui donne pas de droits supplémentaires.
 | Usage | État démontré au 29/09/2026 |
 |---|---|
 | Examiner une PR, trouver un défaut, préparer un correctif, faire relire et vérifier | Réalisé par les deux sessions sur PR306 ; code, corrections et journaux consultables |
-| Consulter une mission, modifier son mémo, traiter un conflit, arrêter et retrouver un reçu | Parcours mémoire et Auth réelle éprouvés en CI sur comptes fictifs à b4a1c65 ; publication et recette de production ouvertes |
+| Consulter une mission, modifier son mémo, traiter un conflit, arrêter et retrouver un reçu | Parcours mémoire et Auth réelle éprouvés en CI sur comptes fictifs à cc03cb8 ; publication et recette de production ouvertes |
 | Imposer droits, budget et arrêt avant transmission | Contrôle éprouvé vers l'inspecteur fictif fermé ; outils Work et délégation produit non raccordés à ce contrôleur |
 | Conduire une fusion protégée et reprendre après interruption | Mécanismes éprouvés sur fixtures ; dossier R21 réel préparé et relu, accord/fusion/reprise complète encore ouverts |
 | Superviser en permanence ou engager une dépense | Non activé |

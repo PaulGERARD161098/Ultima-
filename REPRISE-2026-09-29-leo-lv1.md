@@ -1,3 +1,79 @@
+## Clôture du lot et transfert R21 — 29/09 après 23 h 35 Paris
+
+**Évolution concurrente conservée :** `1cfc66f5184390817abb4d8dea2e84861bde3b40`
+ajoute l'arrêt HTTP authentifié et ses épreuves. Les preuves cc03cb8 ci-dessous
+ne valident pas automatiquement ce nouveau code ; résultats propres à relever
+dans PR306. La présente mise à jour ne modifie aucun fichier exécutable.
+
+Source technique relue cc03cb8674ea6a5c44e1018b84e26f4d88d371d4,
+main 2e4f655fbaa3ced4024c7d417ef257e8432d337b ; PR306 ouverte,
+brouillon, non fusionnée. CI source cc03cb8 : huit jobs réussis,
+91 tests runtime, 53 suites unitaires et 53 harnais navigateur.
+Runs Tests 36630912935, LV1 36630912719, Auth 36630912766.
+Intégration e3463fa3ed51ae97dd169b539e65e8db04f5f628,
+arbre d4918cf3493d131df683206362ba9de484f56f3f identique à la source.
+Les journaux runtime et Auth et les conclusions des trois runs ont été relus
+pendant cette clôture ; mesures originales du 29/09, 21:05–21:16 UTC.
+
+Correction documentaire nécessaire : les attentes de réépreuve writer_required
+et CI du raccord hôte étaient périmées. La matrice est actualisée, sans
+changement du contrat ou du code exécutable. Revue indépendante : ne pas
+imposer un hébergement permanent (hors périmètre initial), un fournisseur
+payant ou la maîtrise des frais internes Work pour recevoir LV1/R27.
+Le budget simulé et les témoins CI sont qualifiés dans leur périmètre exact.
+
+**Dossier R21 historique effectivement relu, distinct de la nouvelle fixture :**
+
+- Artefact 11045864094, run 36597170079 ; revue indépendante antérieure
+  rattachée à ce paquet, pas accord de Paul.
+- ZIP SHA-256 : 74b6001be078215daa9fa979164aff62f3541f7a43789dc989dd74ddbd2f806a.
+- TAR SHA-256 : 9c0aaa2d718d3fcc4084efdaf998edd2ee0480c67c3c892cbbaf2c69f29869de.
+- Provenance Ultima : source 220fb9515291c9e62c076d06e4fa3dc608166db7,
+  cible fb7daac613a0828d4135333fbd27a47102323211,
+  intégration 2c8b70638c73949eb8e5485b0f2280627f5526b3.
+- Contexte fixture relu par la CI cc03 : dépôt /trial-output/trial/fixture.git,
+  compte fixture-account, environnement fixture ;
+  source refs/heads/patch @ 778c50707af054e3385bee06976b2ce0ee70b9d5,
+  cible refs/heads/main @ 59ad2653221e8549b63fdaa6636adce8824f5260,
+  intégration 3448ac3ff1fe3ed2746c9436893368e2ba809184,
+  mode integration_commit.
+- Mission r21-two-items, version attendue 2, opération r21-merge-1,
+  effet limité à update_fixture_ref ; aucune publication.
+- Expiration du mandat candidat : 30/09/2026 à 16:22:32 UTC
+  (18:22:32 Paris), issue du expires_at 1790785352.3481658.
+  Métadonnées relues via l'outil des artefacts du run : expired:false,
+  digest ZIP concordant ; expiration de conservation 06/10/2026 à 16:22:33 UTC.
+  La validité du mandat expire avant celle du fichier. Disponibilité à relire
+  avant transfert ; aucune disponibilité future n'est promise.
+- La dernière reprise vérifiée reste ready_for_review, merge_available:false,
+  global_v1_accepted:false. Le paquet ne confère aucune autorité.
+
+Ce bloc décrit une proposition d'épreuve, **pas un accord ni une commande à
+exécuter**. Le chemin local ci-dessus est celui de la CI, pas un chemin présent
+dans Work. Relocalisation, évolution de preuve/code ou renouvellement du mandat :
+vérifier leur effet sur le contexte et présenter un nouveau dossier exact.
+Le paquet récent 11061493630 de cc03cb8 n'hérite ni de cette revue ni d'un accord.
+
+**Blocage technique mesuré :** le terminal a été rétabli après une panne
+exec-server transport disconnected. Docker et Podman sont absents ;
+`unshare --user --map-root-user --net --mount /bin/true` échoue sur uid_map,
+`bwrap --unshare-all ... /bin/true` échoue sur NETLINK_ROUTE, tous deux avec
+Operation not permitted. Aucun code applicatif n'a été exécuté hors isolation.
+Le catalogue accessible ne fournit pas de commande pour appeler l'hôte R21
+authentifié, lui transmettre une approbation utilisateur vérifiée ou imposer
+un contrôle global des outils Work. GitHub permet toujours la préparation
+versionnée. Aucun service permanent, plugin ou route d'accord n'est installé.
+
+**Prochaine action unique :** établir un canal temporaire de confiance
+effectivement utilisable pour ce dossier d'épreuve, avec identité et accord
+fournis hors modèle ; puis présenter l'accord exact et reprendre le reçu dans
+une nouvelle session Work. Une session neuve seule ne résout pas le canal absent.
+Ne pas demander de nouvel accord générique, ni rejouer les simulations vertes.
+Aucune fusion PR306, publication, migration réelle ou dépense ne fait partie
+de cette clôture. Les entrées suivantes restent historiques.
+
+---
+
 # Léo LV1 — construction du 29 septembre 2026
 
 **État : lot préparé, réception LV1 ouverte.** Aucun merge ni déploiement autorisé
