@@ -180,3 +180,38 @@ mais pas hébergement direct du moteur Python/Git isolé préparé ici ; aucune
 création de site ou nouvelle base effectuée. Les prochains travaux dépendent
 du raccordement de l'exécuteur puis de la recette intégrée, pas d'une répétition
 des tests unitaires déjà verts.
+
+## Raccordement aux services existants — état du 29/09, 13 h 51 Paris
+
+L'analyse complémentaire remplace le besoin supposé d'un nouvel hôte pour le
+registre : Vercel et Supabase d'Ultima suffisent à préparer la mémoire/budget.
+Le moteur Python reste un banc d'épreuve, sans deuxième registre actif.
+
+Commit distant `7dee1984798ae9743c31ed8bf7561650e2bc4317` : API
+`api/leo-registre.js`, proposition `leo/proposals/registre-postgres.sql`,
+tests API/PGlite et concurrence réelle entre deux connexions PostgreSQL 17.
+Les nouveaux tests sont écrits, vérifiés syntaxiquement, mais leur résultat CI
+n'est pas encore disponible à ce point de reprise. La branche distante a été
+relue et pointe bien ce commit ; ne pas réutiliser les résultats du contrôleur
+Python comme preuve SQL/API.
+
+Revue distincte sans bloqueur statique restant après correction du statut en
+une requête SQL cohérente. Droits, CAS, budget, résultat et idempotence sont
+regroupés transactionnellement ; les tests doivent confirmer ces propriétés.
+La portée de SELECT direct pour les lecteurs habilités est documentée.
+
+Préflight Supabase réel en lecture seule : PostgreSQL 17.6, aucun objet du
+registre proposé encore présent. Aucune installation effectuée. Lire
+`leo/ACTIVATION.md` pour la cible, le périmètre et le changement à approuver
+une fois vérifié. Le contrat LV1 exige une révision explicite avant application
+SQL/RLS réelle ; la fusion/publication nécessite son propre accord précis.
+
+Prochaine action : obtenir et lire la CI du nouveau commit, corriger tout échec,
+puis proposer l'installation exacte du registre. La réception V1 reste ouverte,
+notamment le raccord des effets externes et le parcours complet R21.
+
+À 13 h 54 Paris : plusieurs lectures ne montrent encore aucun run pour le
+nouveau commit. La référence de branche renvoie `7dee198…`, mais la fiche PR
+renvoie encore `c7be5e…`, même après mise à jour de sa description. Cet écart
+observé ne permet pas d'annoncer les nouveaux tests en cours ni réussis. Ne pas
+relancer les anciens jobs en les prenant pour une preuve du nouveau code.

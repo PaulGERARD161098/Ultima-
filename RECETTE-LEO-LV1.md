@@ -115,6 +115,16 @@ critique supplémentaire suit leur enjeu, jamais la commodité de clôture.
 
 ## Travaux nécessaires avant décision de réception
 
+### Tranche Postgres proposée, non activée
+
+La source `7dee1984798ae9743c31ed8bf7561650e2bc4317` ajoute une API authentifiée
+et un registre Postgres transactionnel proposé dans les services existants.
+Voir [ACTIVATION](leo/ACTIVATION.md). Revue indépendante statique sans bloqueur
+identifié après correction du snapshot de statut ; tests API/PGlite/connexions
+PostgreSQL concurrentes préparés. À 13 h 54 Paris, aucun résultat CI de cette
+source n'est disponible ; les preuves Python précédentes ne la valident pas.
+La base Supabase a uniquement été lue pour le préflight, jamais modifiée.
+
 1. **Rééprouver l’oracle final.** Les 55 tests uniques et le correctif des droits
    lecteur passent sur la version courante ci-dessus. Lire la prochaine CI de
    l’assertion précise `writer_required`, sans transposer un résultat à un test
