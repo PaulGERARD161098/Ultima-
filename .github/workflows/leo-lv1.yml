@@ -5,6 +5,7 @@ on:
       - 'api/**'
       - 'js/**'
       - 'finubar/**'
+      - 'leo/**'
       - 'tests/**'
       - '.github/workflows/leo-lv1.yml'
       - 'package.json'
@@ -27,3 +28,29 @@ jobs:
           export LV1_NODE_IMAGE="$(cat /tmp/lv1-image-id)"
           echo "Image utilisée : $LV1_NODE_IMAGE"
           bash tests/lancer-lv1-isole.sh
+  runtime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Préparer Python et Git hors du bac à sable
+        run: |
+          docker pull python:3.12-bookworm
+          docker image inspect --format '{{.Id}}' python:3.12-bookworm > /tmp/lv1-python-image-id
+      - name: Éprouver le runtime et ses processus enfants sans réseau ni secrets
+        run: |
+          LV1_PYTHON_IMAGE="$(cat /tmp/lv1-python-image-id)"
+          echo "Image utilisée : $LV1_PYTHON_IMAGE"
+          docker run --rm --read-only --network none \
+            --cap-drop ALL --security-opt no-new-privileges \
+            --user 65534:65534 --memory 512m --cpus 1 --pids-limit 128 \
+            --tmpfs /tmp:rw,nosuid,nodev,noexec,size=128m,mode=1777 \
+            --mount type=bind,src="$GITHUB_WORKSPACE/leo",dst=/workspace/leo,readonly \
+            --mount type=bind,src="$GITHUB_WORKSPACE/tests/runtime",dst=/workspace/tests/runtime,readonly \
+            --workdir /workspace \
+            --env LV1_ISOLATED=1 --env PYTHONDONTWRITEBYTECODE=1 \
+            --env GIT_CONFIG_GLOBAL=/dev/null --env GIT_CONFIG_NOSYSTEM=1 \
+            "$LV1_PYTHON_IMAGE" \
+            sh -eu -c 'git --version; python -m unittest discover -s tests/runtime -p "test_*.py" -v'
