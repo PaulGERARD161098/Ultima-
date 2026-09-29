@@ -403,3 +403,23 @@ Le SQL PT409 préparé précédemment n'est pas appliqué à la base réelle.
 Résultats de cette intégration à relever dans PR306, sans transposer les huit
 succès b4a1c65/fb7daac à la nouvelle cible main.
 
+# Raccord de l'arrêt authentifié — reprise du 29/09 après 23 h 35 Paris
+
+Source de départ relue : `cc03cb8674ea6a5c44e1018b84e26f4d88d371d4`,
+cible `2e4f655fbaa3ced4024c7d417ef257e8432d337b`. Le raccord hôte/Auth
+de l'autre session est conservé. Défaut constaté : le client exposait exécution
+et réconciliation mais aucune commande d'arrêt ; la recette arrêtait directement
+le registre depuis le lanceur de test. Ce n'était pas un arrêt utilisateur.
+
+Boucle : réutiliser le canal HTTP/GoTrue et le verrou SQLite existants pour
+rendre l'arrêt accessible à une identité habilitée. Refus sans mutation avant
+initialisation inscriptible ; revalidation sous verrou ; conservation du travail
+engagé. Épreuves attendues : vrais comptes fictifs, arrêt puis refus de départ
+avec accord simulé valide, reprise sur nouvel hôte/client, faux arrêt détecté
+par un mutant. Aucune donnée métier, migration réelle, fusion de PR ou
+publication. Résultats à rattacher au commit effectivement exécuté dans PR306.
+
+R21 n'est pas reçu par ce raccord : l'identité réelle de Paul et son accord
+exact restent à fournir par un canal de confiance. Le serveur fermé d'épreuve
+ne constitue pas un hébergement permanent ni un contrôle des outils Work.
+

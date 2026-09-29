@@ -19,7 +19,6 @@ from urllib.request import Request, build_opener, ProxyHandler
 from leo import trial
 from leo.trial_host import Binding, GoTrueIdentity, TrialHost, server
 from leo.trial_client import call
-from leo.runtime.budget import BudgetLedger
 from leo.runtime.policy import Approval, Context, Evidence, Mandate
 
 
@@ -70,6 +69,22 @@ def main():
         if '--mutant' in sys.argv:
             identity.authenticate = lambda authorization: subject
         host = TrialHost(identity, {subject: binding})
+        if '--mutant-stop' in sys.argv:
+            original_call = host.call
+            def false_stop(authorization, proposal):
+                if proposal == {'command': 'stop'}:
+                    # Identité et ACL restent contrôlées ; seule la persistance
+                    # de l'arrêt est volontairement neutralisée dans ce mutant.
+                    original_call(authorization, {'command': 'status'})
+                    if host.bindings[subject].principal != trial.ACTOR:
+                        from leo.runtime.policy import Refusal
+                        raise Refusal('access_denied')
+                    return {'mission_id': trial.MISSION, 'stopped': True,
+                        'reserved_units': 0, 'pending_operations': [],
+                        'environment': 'fixture', 'publication': False,
+                        'global_v1_accepted': False}
+                return original_call(authorization, proposal)
+            host.call = false_stop
         http = server(host)
         worker = threading.Thread(target=http.serve_forever, daemon=True)
         worker.start()
@@ -87,6 +102,40 @@ def main():
             assert call(url, 'execute', token) == (409, {'error': 'approval_missing_or_stale'})
             assert hashlib.sha256((root / 'canonical.sqlite').read_bytes()).hexdigest() == before
             print('PASS identité réelle et refus sans autorité : aucune mutation SQLite', flush=True)
+
+            # Arrêt par le même canal authentifié, sur une fixture distincte.
+            # Même un accord fictif valide ne doit permettre un départ ensuite.
+            stop_root = Path(temporary) / 'stop-trial'
+            stop_prepared = trial.prepare(stop_root, {key: os.environ['LV1_' + key.upper() + '_SHA']
+                                         for key in ('source', 'target', 'integration')})
+            stop_context = Context(**stop_prepared['fixture_context'])
+            stop_expiry = json.loads((stop_root / 'manifest.json').read_text())['mandate_expires_at']
+            stop_mandate = replace(mandate, repositories=frozenset({stop_context.repository}), expires_at=stop_expiry)
+            stop_binding = Binding(stop_root, trial.ACTOR, stop_mandate, stop_context,
+                tuple(replace(item, context=stop_context) for item in evidence),
+                Approval(stop_context, trial.OWNER, 1, stop_expiry))
+            host.bindings = {subject: stop_binding}
+            stop_before = hashlib.sha256((stop_root / 'canonical.sqlite').read_bytes()).hexdigest()
+            assert call(url, 'stop', 'invalid-token')[0] == 401
+            assert call(url, 'stop', stranger['access_token'])[0] == 403
+            host.bindings = {subject: replace(stop_binding, principal='inspector')}
+            assert call(url, 'stop', token)[0] == 403
+            assert hashlib.sha256((stop_root / 'canonical.sqlite').read_bytes()).hexdigest() == stop_before
+            host.bindings = {subject: stop_binding}
+            code, stopped = call(url, 'stop', token)
+            assert code == 200 and stopped['stopped'] is True
+            assert call(url, 'stop', token) == (200, stopped)
+            assert call(url, 'status', token)[1]['budget']['stopped'] is True, 'HOST_STOP_REQUIRED'
+            assert call(url, 'execute', token) == (409, {'error': 'mission_stopped'})
+            # Constructeur writable peut toucher l'en-tête ; mesurer les effets réels.
+            observed = trial.inspect(stop_root)
+            assert observed['state'] == 'ready_for_review' and observed['version'] == 2
+            assert len(observed['operations']) == 2
+            assert call(url, 'status', token)[1]['budget'] == {'calls': 2, 'used_units': 2, 'stopped': True}
+            assert subprocess.check_output(['git', '--git-dir', str(stop_root / 'fixture.git'),
+                'rev-parse', 'refs/heads/main'], text=True).strip() == stop_context.target
+            print('PASS arrêt HTTP authentifié : refus sans mutation, idempotence et zéro départ avec accord valide', flush=True)
+            host.bindings = {subject: binding}
 
             # L'accord de cette recette est explicitement FICTIF, créé par son hôte.
             approval = Approval(context, trial.OWNER, 1, expires)
@@ -121,6 +170,7 @@ def main():
             status, observed = call(url, 'status', token)
             assert status == 200 and observed['state'] == 'merged' and observed['version'] == 3
             assert observed['budget'] == {'calls': 3, 'used_units': 4, 'stopped': False}
+            assert call(url, 'stop', token)[0] == 200
             print('PASS accord exact, effet fixture confirmé, réponse perdue explicitement inconnue, budget partagé', flush=True)
         finally:
             http.shutdown()
@@ -128,7 +178,6 @@ def main():
             worker.join(timeout=5)
 
         # Nouvel hôte sans accord : seule réconciliation, après arrêt canonique.
-        BudgetLedger(root / 'canonical.sqlite').stop(trial.MISSION, 'fixture-host-stop', authority=True)
         http = server(TrialHost(identity, {subject: binding}))
         worker = threading.Thread(target=http.serve_forever, daemon=True)
         worker.start()
@@ -144,6 +193,10 @@ def main():
             status, observed = call(url, 'status', token)
             assert status == 200 and observed['budget'] == {'calls': 3, 'used_units': 4, 'stopped': True}
             assert observed['global_v1_accepted'] is False
+            child_stop = subprocess.run([sys.executable, '-m', 'leo.trial_client', 'stop', '--host', url],
+                input=token + '\n', text=True, capture_output=True, timeout=60)
+            assert child_stop.returncode == 0 and json.loads(child_stop.stdout)['stopped'] is True
+            assert token not in child_stop.stdout + child_stop.stderr
             print('PASS nouvel hôte + nouveau processus client : reçu réconcilié après arrêt, sans doublon', flush=True)
             print('R21 HOST AUTH PASS — fixture et accords simulés ; réception globale ouverte', flush=True)
         finally:

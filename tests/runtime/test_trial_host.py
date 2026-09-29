@@ -4,6 +4,7 @@ import hashlib
 import io
 import json
 from pathlib import Path
+import sqlite3
 import tempfile
 import threading
 import unittest
@@ -13,7 +14,8 @@ from urllib.request import Request, urlopen
 
 from leo import trial
 from leo.trial_host import Binding, GoTrueIdentity, TrialHost, server, loopback_url
-from leo.trial_client import call
+from leo.trial_client import call, main, valid_success
+from leo.runtime.budget import BudgetLedger, BudgetError
 from leo.runtime.policy import Context, Mandate, Refusal
 
 
@@ -62,6 +64,93 @@ class HostTests(unittest.TestCase):
                 with self.assertRaisesRegex(Refusal, 'authentication_required'):
                     self.host.call('Bearer fixture', {'command': 'execute'})
                 canonical.assert_not_called()
+
+    def test_stop_denials_leave_database_bytes_unchanged(self):
+        for principal, subject, expected in [('inspector', 'owner', 'access_denied'),
+                                             (trial.ACTOR, 'other', 'access_denied')]:
+            host = TrialHost(self.identity, {'owner': replace(self.binding, principal=principal)})
+            with patch.object(self.identity, 'authenticate', return_value=subject), \
+                    patch('leo.trial_host.BudgetLedger') as writable:
+                with self.assertRaisesRegex(Refusal, expected):
+                    host.call('Bearer fixture', {'command': 'stop'})
+                writable.assert_not_called()
+        host = TrialHost(self.identity, {'owner': replace(self.binding,
+            context=replace(self.context, integration='d' * 40))})
+        with patch.object(self.identity, 'authenticate', return_value='owner'), \
+                patch('leo.trial_host.BudgetLedger') as writable:
+            with self.assertRaisesRegex(Refusal, 'trial_authority_mismatch'):
+                host.call('Bearer fixture', {'command': 'stop'})
+            writable.assert_not_called()
+        with patch.object(self.identity, 'authenticate', side_effect=Refusal('authentication_required')), \
+                patch('leo.trial_resume._canonical') as canonical:
+            with self.assertRaisesRegex(Refusal, 'authentication_required'):
+                self.host.call('Bearer fixture', {'command': 'stop'})
+            canonical.assert_not_called()
+
+    def test_stop_persists_preserves_reservations_and_is_idempotent_after_expiry(self):
+        path = self.root / 'canonical.sqlite'
+        ledger = BudgetLedger(path)
+        ledger.reserve(trial.MISSION, 'r21-merge-1', trial.ACTOR, 2)
+        def preserved():
+            with sqlite3.connect(path) as db:
+                return tuple(db.execute('SELECT * FROM ' + table).fetchall()
+                             for table in ('missions', 'operations', 'budget_operations'))
+        before = preserved()
+        host = TrialHost(self.identity, {'owner': self.binding},
+                         clock=lambda: self.binding.mandate.expires_at + 1)
+        expected = {'mission_id': trial.MISSION, 'stopped': True,
+            'pending_operations': ['r21-merge-1'], 'reserved_units': 2,
+            'environment': 'fixture', 'publication': False, 'global_v1_accepted': False}
+        with patch.object(self.identity, 'authenticate', return_value='owner'):
+            self.assertEqual(host.call('Bearer fixture', {'command': 'stop'}), expected)
+            fresh = TrialHost(self.identity, {'owner': self.binding}, clock=host.clock)
+            self.assertEqual(fresh.call('Bearer fixture', {'command': 'stop'}), expected)
+        self.assertEqual(preserved(), before)
+        with sqlite3.connect(path) as db:
+            self.assertEqual(db.execute('SELECT stopped,reason FROM budget_missions').fetchone(),
+                             (1, 'authenticated_stop'))
+        with self.assertRaisesRegex(BudgetError, 'mission_stopped'):
+            ledger.reserve(trial.MISSION, 'never-dispatched', trial.ACTOR, 0)
+        self.digest = hashlib.sha256(path.read_bytes()).hexdigest()
+
+    def test_stop_revalidates_canonical_authority_under_write_lock(self):
+        path = self.root / 'canonical.sqlite'
+        def changed_before_lock(*args, **kwargs):
+            ledger = BudgetLedger(*args, **kwargs)
+            with sqlite3.connect(path) as db:
+                db.execute("UPDATE missions SET writers='[]'")
+            return ledger
+        with patch.object(self.identity, 'authenticate', return_value='owner'), \
+                patch('leo.trial_host.BudgetLedger', side_effect=changed_before_lock):
+            with self.assertRaisesRegex(Refusal, 'trial_authority_mismatch'):
+                self.host.call('Bearer fixture', {'command': 'stop'})
+        with sqlite3.connect(path) as db:
+            self.assertEqual(db.execute('SELECT stopped,reason FROM budget_missions').fetchone(), (0, None))
+        self.digest = hashlib.sha256(path.read_bytes()).hexdigest()
+
+    def test_client_stop_rejects_false_success_and_cli_only_accepts_closed_shape(self):
+        good = {'mission_id': trial.MISSION, 'stopped': True, 'pending_operations': [],
+                'reserved_units': 0, 'environment': 'fixture', 'publication': False,
+                'global_v1_accepted': False}
+        self.assertTrue(valid_success('stop', good))
+        bad = [{}, {**good, 'stopped': 1}, {**good, 'reserved_units': True},
+               {**good, 'pending_operations': ['same', 'same']},
+               {**good, 'pending_operations': [{}]}, {**good, 'publication': True},
+               {**good, 'mission_id': 'foreign'}, {**good, 'extra': True}]
+        for value in bad:
+            with self.subTest(value=value):
+                self.assertFalse(valid_success('stop', value))
+                response = io.BytesIO(json.dumps(value).encode())
+                response.status = 200
+                with patch('leo.trial_client.build_opener') as opener:
+                    opener.return_value.open.return_value = response
+                    self.assertEqual(call('http://127.0.0.1:9998', 'stop', 'fixture')[0], 503)
+                    self.assertEqual(opener.return_value.open.call_count, 1)
+        for value, exit_code in [(good, 0), ({**good, 'stopped': False}, 1)]:
+            with patch('sys.argv', ['client', 'stop', '--host', 'http://127.0.0.1:9998']), \
+                    patch('sys.stdin', io.StringIO('fixture\n')), patch('sys.stdout', io.StringIO()), \
+                    patch('leo.trial_client.call', return_value=(200, value)):
+                self.assertEqual(main(), exit_code)
 
     def test_endpoint_fixed_and_no_secret_in_error(self):
         for url in ('https://example.com', 'http://localhost:9999', 'http://127.0.0.1:9999@other:80',

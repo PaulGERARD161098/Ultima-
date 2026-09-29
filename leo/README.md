@@ -165,9 +165,17 @@ même accord. Les résultats de cette reprise sont à lire dans sa propre CI.
 `trial_host.py` est le consommateur HTTP du contrôleur existant :
 GoTrue vérifie le Bearer, puis l'hôte résout le sujet vers un `Binding`
 fourni hors requête (dossier, acteur, mandat, contexte, preuves et accord).
-Le corps HTTP contient uniquement `command` : `status`, `execute` ou
-`reconcile`. Un chemin, un acteur ou `approved:true` n'accordent rien.
+Le corps HTTP contient uniquement `command` : `status`, `execute`,
+`reconcile` ou `stop`. Un chemin, un acteur ou `approved:true` n'accordent rien.
 Le statut vérifie aussi les ACL du registre canonique.
+
+`stop` vérifie l'identité et les droits de rédaction, puis inscrit l'arrêt
+sous le même verrou que l'admission d'un effet. Il fonctionne sans accord de
+fusion, même après expiration du mandat. Il conserve les reçus, réservations,
+état et version métier ; la réponse indique les opérations encore réservées.
+L'arrêt interdit les nouveaux départs, sans réactiver la mission par rejeu.
+Le serveur HTTP est séquentiel : un arrêt attend la fin du traitement déjà
+engagé et ne promet pas de l'annuler. La réconciliation reste disponible.
 
 `trial_client.py` consomme cette interface ; la CLI reçoit le jeton sur stdin,
 jamais en argument ni dans sa sortie. Aucune relance automatique. Une réponse

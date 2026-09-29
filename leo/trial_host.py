@@ -17,11 +17,12 @@ from urllib.parse import urlsplit
 from urllib.request import Request, build_opener, ProxyHandler, HTTPRedirectHandler
 
 from . import trial, trial_resume
+from .runtime.budget import BudgetError, BudgetLedger
 from .runtime.policy import Approval, Context, Evidence, Mandate, Policy, Refusal
 
 MAX_BODY = 256
 MAX_AUTH = 65536
-COMMANDS = frozenset({'status', 'execute', 'reconcile'})
+COMMANDS = frozenset({'status', 'execute', 'reconcile', 'stop'})
 
 
 class NoRedirect(HTTPRedirectHandler):
@@ -99,6 +100,30 @@ class TrialHost:
         b = binding
         Policy().authorize(b.mandate, b.principal, 'status', b.context.repository,
                            self.clock(), effects=frozenset({'read_scoped_memory'}))
+        if proposal['command'] == 'stop':
+            # L'arrêt est une réduction de droits, encore possible après expiration.
+            # Aucun constructeur writable avant cohérence et habilitation d'écriture.
+            def authorized():
+                canonical = trial_resume._canonical(b.root, b.mandate, b.context, initial=False)
+                if b.principal not in {canonical['owner'], *json.loads(canonical['writers'])}:
+                    raise Refusal('access_denied')
+            authorized()
+            if trial.inspect(b.root)['fixture_context'] != asdict(b.context):
+                raise Refusal('trial_context_mismatch')
+            ledger = BudgetLedger(Path(b.root) / 'canonical.sqlite', clock=self.clock)
+            with ledger._transaction() as db:
+                # Le même verrou que l'admission empêche stop/exécution de se doubler.
+                # La lecture séparée voit l'état engagé avant ce verrou d'écriture.
+                authorized()
+                Policy().authorize(b.mandate, b.principal, 'status', b.context.repository,
+                                   self.clock(), effects=frozenset({'read_scoped_memory'}))
+                db.execute('UPDATE budget_missions SET stopped=1, reason=COALESCE(reason,?) '
+                           'WHERE mission=?', ('authenticated_stop', b.mandate.mission))
+                state = ledger._status(db, b.mandate.mission)
+            return {'mission_id': b.mandate.mission, 'stopped': True,
+                    'pending_operations': sorted(state['pending_operations']),
+                    'reserved_units': state['reserved_units'], 'environment': 'fixture',
+                    'publication': False, 'global_v1_accepted': False}
         if proposal['command'] == 'status':
             # Même contrôle de cohérence canonique que la reprise, en lecture seule.
             canonical = trial_resume._canonical(b.root, b.mandate, b.context, initial=False)
@@ -175,6 +200,10 @@ ni cookies, ni autorité importée. bind reste exclusivement sur loopback.
             except Refusal as error:
                 status = 401 if error.code == 'authentication_required' else 403 if error.code == 'access_denied' else 400 if error.code == 'invalid_command' else 409
                 return self.reply(status, {'error': error.code})
+            except BudgetError as error:
+                if error.code in ('mission_stopped', 'mission_expired'):
+                    return self.reply(409, {'error': error.code})
+                return self.reply(503, {'error': 'result_unknown_reconcile_required'})
             except Exception:
                 # Échec possiblement après effet : le client doit réconcilier,
                 # jamais rejouer automatiquement une exécution.

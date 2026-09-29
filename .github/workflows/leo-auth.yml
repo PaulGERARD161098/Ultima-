@@ -160,4 +160,13 @@ jobs:
             exit 1
           fi
           echo 'ROUGE attendu : hôte sans Auth détecté par HOST_AUTH_REQUIRED'
+          if run_host --mutant-stop > "$LV1_HOST_MUTANT_LOG" 2>&1; then
+            echo 'ÉCHEC : le témoin faux arrêt est passé'
+            exit 1
+          fi
+          if ! grep -q 'HOST_STOP_REQUIRED' "$LV1_HOST_MUTANT_LOG"; then
+            tail -60 "$LV1_HOST_MUTANT_LOG"
+            exit 1
+          fi
+          echo 'ROUGE attendu : faux arrêt détecté par HOST_STOP_REQUIRED'
           run_host

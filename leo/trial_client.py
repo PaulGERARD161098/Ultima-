@@ -19,6 +19,17 @@ from .trial_resume import PROPOSAL
 def valid_success(command, value):
     if 'error' in value:
         return False
+    if command == 'stop':
+        pending = value.get('pending_operations')
+        return (set(value) == {'mission_id', 'stopped', 'pending_operations', 'reserved_units',
+                              'environment', 'publication', 'global_v1_accepted'}
+            and value.get('mission_id') == MISSION and value.get('stopped') is True
+            and isinstance(pending, list)
+            and all(type(item) is str and 0 < len(item) <= 200 for item in pending)
+            and len(set(pending)) == len(pending)
+            and type(value.get('reserved_units')) is int and 0 <= value['reserved_units'] <= 4
+            and value.get('environment') == 'fixture' and value.get('publication') is False
+            and value.get('global_v1_accepted') is False)
     if command == 'status':
         budget = value.get('budget')
         return (isinstance(value.get('state'), str) and bool(value['state'])
@@ -81,7 +92,8 @@ def main():
     except (ValueError, OSError):
         status, value = 400, {'error': 'invalid_client_request'}
     print(json.dumps(value, ensure_ascii=False, sort_keys=True))
-    return 0 if status == 200 and (args.command == 'status' or value.get('status') == 'completed') else 1
+    return 0 if status == 200 and valid_success(args.command, value) and (
+        args.command in ('status', 'stop') or value.get('status') == 'completed') else 1
 
 
 if __name__ == '__main__':
