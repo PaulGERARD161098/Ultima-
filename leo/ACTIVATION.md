@@ -1,5 +1,37 @@
 # Raccordement LV1 à Ultima — proposition d'activation
 
+## Installation autorisée et réalisée — 29/09/2026
+
+Paul a autorisé explicitement l'installation du SQL présenté le 29/09 à
+14 h 50 Paris (« Oui j'autorise »). La migration
+`20260929125105_leo_lv1_registre_transactionnel` a ensuite été appliquée avec
+succès sur `leosfqyidgsaescjbfom`, via le connecteur Supabase, après préflight
+sans collision. Le fichier approuvé conserve son SHA-256
+`c3931ae2bb84621469a68805e707d1375e48e33172f5bf8db8dd5cce893b0df3`.
+La copie dans `supabase/migrations/20260929125105_leo_lv1_registre_transactionnel.sql`
+reconstitue exactement cette migration déjà appliquée, avec le numéro réellement
+retourné par son historique ; ce n'est pas une seconde application. Son commentaire
+initial de brouillon est conservé comme partie de l'exemplaire approuvé.
+
+Vérification sur la base réelle : deux tables présentes avec RLS active ; aucune
+lecture anonyme, aucune écriture directe par authenticated, aucun privilège
+service_role sur ces tables ; trois wrappers publics invoker et deux fonctions
+internes definer, search_path vide et EXECUTE refusé à anon. Les deux politiques
+SELECT correspondent aux ACL de mission. Un appel de statut sans identité a
+été refusé dans une transaction READ ONLY terminée par ROLLBACK. Comptages :
+zéro mission, zéro opération. Aucun parcours avec des données réelles n'a été lancé.
+
+Le contrôle Security Advisors ne signale aucun défaut de ces nouveaux objets.
+Il signale la protection des mots de passe compromis désactivée au niveau Auth,
+hors modification de ce lot :
+https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection
+Aucun paramètre Auth n'a été changé.
+
+Le registre est installé ; l'API demeure sur la branche de préparation. Cet accord
+ne couvre ni fusion, ni publication, ni création de mission, ni nouveau budget
+fournisseur. La réception complète LV1 et son parcours intégré restent ouverts.
+Les sections suivantes conservent le dossier préparatoire ayant fondé cet accord.
+
 ## Décision d'architecture
 
 Réutiliser Vercel, `requireUser` et le Supabase existant. Le contrôleur Python

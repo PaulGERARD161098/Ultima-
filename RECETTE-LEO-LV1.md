@@ -5,6 +5,13 @@ indexe les preuves et les lacunes ; elle ne remplace pas le contrat canonique
 [CADRAGE-2026-09-22-leo-pilote-tout.md, §11](CADRAGE-2026-09-22-leo-pilote-tout.md).
 Le suivi de séance reste [REPRISE-2026-09-29-leo-lv1.md](REPRISE-2026-09-29-leo-lv1.md).
 
+**État actualisé après accord de Paul à 14 h 50 Paris :** le registre Postgres
+est installé sur Supabase d'Ultima, migration `20260929125105` confirmée.
+RLS, privilèges et refus sans identité vérifiés sur la base réelle ; tables
+vides. Cela remplace les mentions historiques « non activé » concernant le SQL
+seul. L'API reste sur la branche de préparation ; le parcours intégré et la
+réception globale ne sont pas reçus. Détail : [ACTIVATION](leo/ACTIVATION.md).
+
 ## Périmètre et qualification des preuves
 
 Le premier lot JavaScript et le runtime Python ont désormais des résultats CI

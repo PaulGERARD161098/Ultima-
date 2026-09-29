@@ -232,3 +232,18 @@ mission créée ni dépense fournisseur. La compétence Léo LV1 et le contrat �
 réservent cette application SQL/RLS réelle à une révision explicite du mandat.
 La réception intégrale R01–R28, en particulier les effets externes et R21, n'est
 pas prononcée par cette réussite technique.
+
+## Installation SQL — accord du 29/09 à 14 h 50 Paris exécuté
+
+Paul a autorisé le SQL précisément présenté. Après vérification d'empreinte et
+préflight sans collision, le connecteur Supabase a confirmé l'application de
+`20260929125105_leo_lv1_registre_transactionnel` au projet `leosfqyidgsaescjbfom`.
+La migration locale restitue l'exemplaire exact approuvé, numéro issu de l'historique
+réel, sans seconde application. Voir `leo/ACTIVATION.md` pour toutes les preuves.
+
+RLS/grants/fonctions vérifiés après installation ; accès anonyme et mutation
+directe fermés. Test de refus sans identité en READ ONLY réussi, zéro mission
+et zéro opération. Aucun défaut du registre dans Security Advisors ; avertissement
+Auth sur protection des mots de passe compromis consigné, sans modification.
+L'API n'est pas publiée et aucun merge n'est réalisé. Prochain travail : raccorder
+et éprouver le parcours utilisateur sous les autorisations de livraison requises.
