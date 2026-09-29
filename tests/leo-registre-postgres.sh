@@ -113,7 +113,7 @@ else
   echo "Concurrence invalide : codes psql $a_status/$b_status (attendu 0/3)." >&2
   exit 1
 fi
-grep -Eq '40001: +version_conflict' "$loser_log" || { echo 'Conflit SQLSTATE 40001 absent.' >&2; exit 1; }
+grep -Eq 'PT409: +version_conflict' "$loser_log" || { echo 'Conflit SQLSTATE PT409 absent.' >&2; exit 1; }
 assert_final() {
   admin <<'SQL'
 DO $$ BEGIN
@@ -138,4 +138,4 @@ SQL
 )"
 [[ "$replayed" == true ]] || { echo 'Reçu idempotent absent.' >&2; exit 1; }
 assert_final
-echo 'PostgreSQL 17 : deux clients authentifiés en attente mesurés ; un succès, un conflit 40001 ; version 2, une opération, un appel, une unité ; reprise sans doublon.'
+echo 'PostgreSQL 17 : deux clients authentifiés en attente mesurés ; un succès, un conflit PT409 ; version 2, une opération, un appel, une unité ; reprise sans doublon.'
