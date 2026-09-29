@@ -20,7 +20,7 @@ service permanent et ne lui donne pas de droits supplémentaires.
 | Usage | État démontré au 29/09/2026 |
 |---|---|
 | Examiner une PR, trouver un défaut, préparer un correctif, faire relire et vérifier | Réalisé par les deux sessions sur PR306 ; code, corrections et journaux consultables |
-| Consulter une mission, modifier son mémo, traiter un conflit, arrêter et retrouver un reçu | Parcours construit et testé avec identité/transport fictifs ; publication et usage authentifié réel ouverts |
+| Consulter une mission, modifier son mémo, traiter un conflit, arrêter et retrouver un reçu | Parcours mémoire et Auth réelle éprouvés en CI sur comptes fictifs à b4a1c65 ; publication et recette de production ouvertes |
 | Imposer droits, budget et arrêt avant transmission | Contrôle éprouvé vers l'inspecteur fictif fermé ; outils Work et délégation produit non raccordés à ce contrôleur |
 | Conduire une fusion protégée et reprendre après interruption | Mécanismes éprouvés sur fixtures ; dossier R21 réel préparé et relu, accord/fusion/reprise complète encore ouverts |
 | Superviser en permanence ou engager une dépense | Non activé |
@@ -159,6 +159,38 @@ ponctuelle limitée à la branche LV1. Elle dépend d'un artefact conservé sept
 jours et d'un mandat de 24 heures ; remplacer ou retirer cette étape à la clôture
 de la branche. Une preuve expirée n'est pas régénérée silencieusement sous le
 même accord. Les résultats de cette reprise sont à lire dans sa propre CI.
+
+## Hôte privé du dossier R21
+
+`trial_host.py` est le consommateur HTTP du contrôleur existant :
+GoTrue vérifie le Bearer, puis l'hôte résout le sujet vers un `Binding`
+fourni hors requête (dossier, acteur, mandat, contexte, preuves et accord).
+Le corps HTTP contient uniquement `command` : `status`, `execute` ou
+`reconcile`. Un chemin, un acteur ou `approved:true` n'accordent rien.
+Le statut vérifie aussi les ACL du registre canonique.
+
+`trial_client.py` consomme cette interface ; la CLI reçoit le jeton sur stdin,
+jamais en argument ni dans sa sortie. Aucune relance automatique. Une réponse
+illisible après transmission reste une issue inconnue à réconcilier.
+Exemple de forme, avec session déjà obtenue par l'hôte autorisé :
+`fournisseur-de-session | python -m leo.trial_client status --host URL`.
+
+Le service ne démarre qu'en confinement vérifié : UID65534, aucune capacité,
+NoNewPrivs, racine en lecture seule, interface loopback seule. Les endpoints
+sont limités à HTTP127.0.0.1 ; ce choix est propre au réseau privé de l'épreuve.
+Ce n'est pas un endpoint Internet, un service permanent, un raccord au chatbot
+Vercel ou un contrôle des outils Work. SQLite reste exclusivement le registre
+de la fixture ; Supabase reste le registre produit. Aucun second stockage
+métier, fournisseur payant ou adaptateur de production n'est ajouté.
+
+La recette `tests/leo-host-auth.py` réutilise les vrais comptes fictifs GoTrue
+du workflow Auth. Elle demande le refus sans accord, l'effet sur un nouveau
+dépôt fictif avec accord/revue explicitement simulés, la perte de réponse après
+effet, puis un nouvel hôte et un nouveau processus client pour réconcilier.
+Un témoin sans authentification doit échouer avant le nominal. Le paquet R21
+historique relu n'est pas exécuté. Ces épreuves ne remplacent pas l'accord réel
+de Paul ni la reprise du dossier dans une nouvelle session Work.
+Les résultats sont attachés au commit exécuté dans PR306.
 
 ## Raccordement produit à Ultima
 

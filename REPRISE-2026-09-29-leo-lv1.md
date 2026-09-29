@@ -368,3 +368,38 @@ stricte conservée. Le contrôle final sous verrou reste en place. La passe adve
 ajoute la capitalisation après effet confirmé : état merged par CAS, sans écraser
 une édition concurrente ni rejouer une fusion si cette dernière écriture échoue.
 Repreuve nécessaire sur le correctif ; aucune réussite transposée du premier run.
+
+## Réconciliation du 29/09 après 22 h 50 Paris et raccord hôte
+
+Le statut PR indiquait encore la cible fb7daac… : la lecture directe de
+git/ref/heads/main a révélé 2e4f655fbaa3ced4024c7d417ef257e8432d337b,
+après les squash #307/#308. Comparaison : 2 commits côté main, 23 côté PR,
+base commune fb7daac… . Le conflit a été reproduit par merge-file sur le
+cadrage : deux ajouts différents au §11. La combinaison du code leo.js
+est propre ; les tests des anneaux et les données Finubar de main sont conservés.
+
+Le contrat LV1 garde le §11 ; B1 est déplacé au §12 avec ses références.
+L'anneau du catalogue reste une condition d'éligibilité, pas un mandat ni une
+preuve d'identité, de budget ou de défaire. La permission historique de migrations
+correctives n'est pas applicable au mandat LV1. Préparation isolée possible,
+production toujours fermée. Comparer leo_ecritures au registre leo_operations
+avant tout nouveau journal produit : aucune deuxième autorité implicite.
+
+But de cette tranche : rendre le consommateur du contrôleur réellement appelable
+par un client authentifié dans le bac à sable. Moyens : trial_host/trial_client,
+GoTrue réel existant et CI privée ; catalogue status/execute/reconcile seulement.
+Critère : mauvais compte, requête injectée, accord absent/inadéquat refusés ;
+opération fictive exacte, réponse perdue, reprise depuis un nouveau client sans
+double effet ni dépense. Hors périmètre : hébergement permanent, production,
+paquet historique fusionné, publication et réception globale. Pré-mortem :
+autorité importée depuis HTTP, lecture hors ACL, faux échec après effet,
+double registre ; contrôles et tests ciblés.
+
+Revue indépendante : droit ACL du statut renforcé et réponse illisible après
+dispatch traitée comme résultat inconnu, jamais comme simple entrée invalide.
+Le nouvel hôte reste propre à la fixture et ne pilote pas les connecteurs Work.
+Les accords/revues de sa recette sont simulés et explicitement signalés.
+Le SQL PT409 préparé précédemment n'est pas appliqué à la base réelle.
+Résultats de cette intégration à relever dans PR306, sans transposer les huit
+succès b4a1c65/fb7daac à la nouvelle cible main.
+

@@ -27,16 +27,18 @@
   "rattache_a": "CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md",
   "etat": "en_cours",
   "jalon": {
-    "nom": "J3 — le ciel porte aussi l'état PERSONNEL (P4 : les signaux du cockpit)",
-    "critere_de_sortie": "ALTHEA en sommeil, idées orphelines et relances dues appellent sur le MÊME ciel et avec la MÊME couleur que les dépôts — un seul fetch, une seule règle de priorité. ⛔ N'ouvre qu'après que P3 ait vécu et que Paul ait dit ce que l'accueil lui fait"
+    "nom": "B1 — Léo AGIT dans l'anneau vert (cadrage §12)",
+    "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①② faits ; ③ ouvre sur un gate"
   },
   "dernier_arret": {
-    "le": "2026-09-28",
-    "commit": "0922329eff3108106138b7072817581cc9b5c5b0",
-    "quoi": "Séance 28/09 : LEÇONS v43 sur les 10 dépôts (2 leçons RenoBoost absorbées) ; YCOME retiré d'Ultima ; région Vercel mesurée."
+    "le": "2026-09-29",
+    "commit": "7e779e673e864a0293d955df9f4d1e4620e9a82b",
+    "quoi": "Cadrage §12 (Léo agit, 2 POV creusés) + B1 ①② : l'anneau est un champ du catalogue, 3 verts, 19 contrôles éprouvés par 6 sabotages."
   },
-  "prochaine_action": "Choisir avec Paul le prochain chantier. Gestes de Paul en attente : archiver Ycome (GitHub), supprimer le projet Vercel ycome, décider la région cdg1.",
+  "prochaine_action": "B1 étape ③ — le journal des écritures. ⛔ Il commence par le gate : créer la table `leo_ecritures`. On n'écrit pas le module avant la table.",
   "bloque_par": [
+    "Gestes Ycome en attente depuis le 28/09 : archiver le dépôt sur GitHub, supprimer le projet Vercel ycome",
+    "Créer la table `leo_ecritures` (journal des écritures de Léo) : migration SQL en production — gate, que le mode solo ne lève pas. Elle ouvre B1 ③",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
     "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
     "La précision sur « mon dpe.fr » (VITRUVE)",
@@ -110,7 +112,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-09-27"
+  "maj": "2026-09-29"
 }
 ```
 

@@ -12,6 +12,25 @@ vides. Cela remplace les mentions historiques « non activé » concernant le SQ
 seul. L'API reste sur la branche de préparation ; le parcours intégré et la
 réception globale ne sont pas reçus. Détail : [ACTIVATION](leo/ACTIVATION.md).
 
+## Tranche de clôture en préparation — 29/09 après 22 h 50 Paris
+
+Dernière recette terminée : source b4a1c65, cible fb7daac…, intégration
+0fab9439df09104c0f272ce68e18af4c1536a1e0 ; huit jobs verts dans PR306 :
+Auth réel 36605919420, LV1 36605919396, Tests 36605919423.
+Auth/REST/Postgres réels, comptes fictifs ; 85 tests runtime, 52 suites unitaires,
+53 harnais navigateur. PT409 corrige les conflits métier sans rejeu REST.
+Ces preuves ne couvrent pas automatiquement main 2e4f655… ajouté depuis.
+
+Le raccord privé trial_host/trial_client est préparé sur ce nouveau contexte :
+identité GoTrue, associations hôte, droits de lecture, accord/preuves exacts,
+opération fixture puis reprise après réponse perdue. Les nouveaux résultats
+doivent être lus dans leur propre CI avant validation technique.
+R21 reste **partiel** : accords/revues de recette simulés, paquet historique
+non fusionné, absence de session Work neuve et d'hôte permanent actif.
+R24/R27 ne deviennent pas des contrôles des spécialistes Work ou des frais
+fournisseurs. La préparation préserve B1 désormais au §12 du cadrage ; elle
+n'active aucune écriture produit verte ni migration.
+
 ## Périmètre et qualification des preuves
 
 Le premier lot JavaScript et le runtime Python ont désormais des résultats CI

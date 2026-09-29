@@ -3,10 +3,12 @@ on:
   pull_request:
     paths:
       - 'api/**'
+      - 'leo/**/*.py'
       - 'leo/proposals/registre-postgres.sql'
       - 'leo/proposals/registre-conflicts-pt409.sql'
       - 'tests/leo-auth-*'
       - 'tests/leo-registre-auth.mjs'
+      - 'tests/leo-host-auth.py'
       - '.github/workflows/leo-auth.yml'
       - 'package.json'
       - 'package-lock.json'
@@ -32,7 +34,8 @@ jobs:
           docker pull supabase/gotrue:v2.196.0
           docker pull postgrest/postgrest:v14.17
           docker pull node:22-bookworm
-          for image in postgres:17-bookworm supabase/gotrue:v2.196.0 postgrest/postgrest:v14.17 node:22-bookworm; do
+          docker pull python:3.12-bookworm
+          for image in postgres:17-bookworm supabase/gotrue:v2.196.0 postgrest/postgrest:v14.17 node:22-bookworm python:3.12-bookworm; do
             docker image inspect --format '{{.RepoTags}} {{.Id}}' "$image"
           done
       - name: Éprouver HTTP, Auth et RLS dans un espace réseau sans interface extérieure
@@ -47,6 +50,7 @@ jobs:
           LV1_AUTH="$(docker image inspect --format '{{.Id}}' supabase/gotrue:v2.196.0)"
           LV1_REST="$(docker image inspect --format '{{.Id}}' postgrest/postgrest:v14.17)"
           LV1_NODE="$(docker image inspect --format '{{.Id}}' node:22-bookworm)"
+          LV1_PYTHON="$(docker image inspect --format '{{.Id}}' python:3.12-bookworm)"
           # Noms fixes dans un runner jetable exclusif au job. Aucun port publié,
           # socket Docker monté, volume métier, credential de runner ou secret CI.
           cleanup() {
@@ -58,7 +62,7 @@ jobs:
               done
               docker exec lv1-auth-db tail -60 /tmp/postgres.log 2>/dev/null || true
             fi
-            docker rm -f lv1-auth-node lv1-auth-rest lv1-auth-gotrue lv1-auth-db >/dev/null 2>&1 || true
+            docker rm -f lv1-auth-host lv1-auth-node lv1-auth-rest lv1-auth-gotrue lv1-auth-db >/dev/null 2>&1 || true
             exit "$LV1_EXIT"
           }
           trap cleanup EXIT
@@ -133,3 +137,27 @@ jobs:
           fi
           echo 'ROUGE attendu : contournement Auth détecté par AUTH_GETUSER_REQUIRED'
           run_node test
+          # Le même GoTrue authentifie le client du contrôleur R21. Registre et
+          # dépôt sont fictifs dans /tmp, aucun paquet historique n'est fusionné.
+          run_host() {
+          docker run --rm --name lv1-auth-host --pull never --network container:lv1-auth-db --read-only \
+            --cap-drop ALL --security-opt no-new-privileges --user 65534:65534 \
+            --memory 512m --cpus 1 --pids-limit 128 --tmpfs /tmp:rw,nosuid,nodev,noexec,size=256m,mode=1777 \
+            --mount "type=bind,src=$GITHUB_WORKSPACE/leo,dst=/travail/leo,readonly" \
+            --mount "type=bind,src=$GITHUB_WORKSPACE/tests,dst=/travail/tests,readonly" \
+            --workdir /travail --env PYTHONPATH=/travail --env PYTHONDONTWRITEBYTECODE=1 \
+            --env LV1_ISOLATED=1 --env LV1_AUTH_ISOLATED=1 \
+            --env LV1_SOURCE_SHA --env LV1_TARGET_SHA --env LV1_INTEGRATION_SHA \
+            "$LV1_PYTHON" python tests/leo-host-auth.py "$@"
+          }
+          LV1_HOST_MUTANT_LOG="$(mktemp)"
+          if run_host --mutant > "$LV1_HOST_MUTANT_LOG" 2>&1; then
+            echo 'ÉCHEC : le témoin hôte sans Auth est passé'
+            exit 1
+          fi
+          if ! grep -q 'HOST_AUTH_REQUIRED' "$LV1_HOST_MUTANT_LOG"; then
+            tail -60 "$LV1_HOST_MUTANT_LOG"
+            exit 1
+          fi
+          echo 'ROUGE attendu : hôte sans Auth détecté par HOST_AUTH_REQUIRED'
+          run_host
