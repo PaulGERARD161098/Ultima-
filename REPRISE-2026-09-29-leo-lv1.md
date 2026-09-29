@@ -162,3 +162,21 @@ persistant isolé pour héberger ce contrôleur ; la CI prouve son exécution en
 conteneur, pas un service actif. Ne pas créer une base SQLite éphémère dans une
 fonction Vercel en prétendant fournir une mémoire durable. Aucun budget externe,
 hébergement payant, migration réelle, merge de production ou publication activé.
+
+### Dernière vérification du contrôleur — 11 h 17 UTC
+
+L'oracle précis `writer_required` a également réussi : source
+`a2c5ee774bd3dd7f11c230a03e157e41509b8524`, intégration
+`e898925a472fb0be6b8d435e93b88034da693789`, même cible. Run 36560818204,
+job 109380975084 : 55/55 tests à 11:17:59 UTC, même image Python. Le job
+JavaScript LV1 de ce run est vert. Les documents ajoutés ensuite ne modifient
+pas ce contrôleur, ses tests ou ses lanceurs.
+
+Sept scénarios comportementaux et le témoin financier positif R13 sont désormais
+consignés dans `leo/RECETTE-COMPETENCE.md` et `leo/RECETTE-R13.md`, avec
+relecture distincte et sources pour R13. Ils ne valent pas parcours intégré.
+La possibilité Sites MCP a été vérifiée : endpoint privé et D1 disponibles,
+mais pas hébergement direct du moteur Python/Git isolé préparé ici ; aucune
+création de site ou nouvelle base effectuée. Les prochains travaux dépendent
+du raccordement de l'exécuteur puis de la recette intégrée, pas d'une répétition
+des tests unitaires déjà verts.

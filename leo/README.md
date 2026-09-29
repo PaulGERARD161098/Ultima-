@@ -84,3 +84,11 @@ interface à Ultima, intégrer un exécuteur isolé à cet hôte, vérifier les 
 réelles et l'adaptateur de fusion réel, puis exécuter la recette produit complète.
 Une fusion qui publie Ultima et toute activation facturée restent hors du mandat
 LV1 actuel. Les livrables sont préparés sur une branche privée sans activation.
+
+La capacité Sites MCP de Work a été examinée le 29/09 : elle fournit un endpoint
+HTTP authentifié et un stockage D1/R2 sous Worker ESM. Elle ne constitue pas un
+hébergement direct de ce contrôleur Python avec processus Git et conteneurs de
+test. L'utiliser exigerait un portage du registre et un exécuteur distinct avec
+les mêmes garanties ; aucun site ni second stockage n'a été créé pour contourner
+cette limite. Un service privé avec processus isolés et volume durable reste
+à raccorder, ou une architecture équivalente doit être construite et éprouvée.
