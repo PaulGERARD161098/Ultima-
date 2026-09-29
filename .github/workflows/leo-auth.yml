@@ -4,6 +4,7 @@ on:
     paths:
       - 'api/**'
       - 'leo/proposals/registre-postgres.sql'
+      - 'leo/proposals/registre-conflicts-pt409.sql'
       - 'tests/leo-auth-*'
       - 'tests/leo-registre-auth.mjs'
       - '.github/workflows/leo-auth.yml'
@@ -106,7 +107,11 @@ jobs:
               "$LV1_NODE" node tests/leo-registre-auth.mjs "$1"
           }
           run_node setup
-          docker exec lv1-auth-db psql -h /tmp -U postgres -v ON_ERROR_STOP=1 -f /proposals/registre-postgres.sql
+          # Reconstituer les anciens codes métier seulement dans la base fictive,
+          # puis éprouver la proposition de mise à jour distincte.
+          docker exec lv1-auth-db bash -c "sed 's/PT409/40001/g' /proposals/registre-postgres.sql > /tmp/registre-legacy.sql"
+          docker exec lv1-auth-db psql -h /tmp -U postgres -v ON_ERROR_STOP=1 -f /tmp/registre-legacy.sql
+          docker exec lv1-auth-db psql -h /tmp -U postgres -v ON_ERROR_STOP=1 -f /proposals/registre-conflicts-pt409.sql
           docker exec lv1-auth-db psql -h /tmp -U postgres -v ON_ERROR_STOP=1 -f /tests/leo-auth-seed.sql
           docker run -d --name lv1-auth-rest --pull never --network container:lv1-auth-db --read-only \
             --cap-drop ALL --security-opt no-new-privileges --user 65534:65534 \

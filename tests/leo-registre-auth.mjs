@@ -181,6 +181,8 @@ try {
     assert.equal((await request(sessions.stranger, null, receiptQuery)).json.data.operation, null);
     assert.equal((await request(sessions.owner, { ...write, operation_id: 'stale' })).status, 409);
     assert.deepEqual(await get(), after);
+    assert.equal((await request(sessions.owner, { ...write, patch: { next_action: 'Divergence interdite' } })).status, 409);
+    assert.deepEqual(await get(), after, 'conflit de reçu : aucun effet ni budget supplémentaire');
     assert.equal((await request(sessions.owner, { action: 'stop', mission })).status, 200);
     const stopped = await get(); assert.equal(stopped.mission.stopped, true);
     assert.equal((await request(sessions.owner, { ...write, operation_id: 'after-stop', expected_version: 3 })).status, 409);

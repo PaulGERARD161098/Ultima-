@@ -55,7 +55,7 @@ for (const auth of ['unauthenticated', 'unconfigured']) {
   const result = await invoke(request, { auth });
   assert.equal(result.response.status, auth === 'unconfigured' ? 503 : 401); assert.equal(result.calls.length, 0);
 }
-for (const [code, expected] of [['42501', 403], ['22023', 400], ['40001', 409], ['P0001', 409],
+for (const [code, expected] of [['42501', 403], ['22023', 400], ['PT409', 409], ['40001', 409], ['P0001', 409],
   ['PGRST202', 503], ['PGRST301', 401], ['unexpected', 503]]) {
   const result = await invoke(request, { result: { error: { code, message: 'secret fixture' } } });
   assert.equal(result.response.status, expected); assert.equal(result.calls.length, 1);

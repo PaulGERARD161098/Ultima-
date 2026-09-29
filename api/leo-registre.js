@@ -17,7 +17,7 @@ function databaseFailure(res, error) {
   if (isAuthError(error)) return fail(res, 401, 'Authentification requise');
   if (error?.code === '42501') return fail(res, 403, 'Mission indisponible pour cet accès');
   if (error?.code === '22023') return fail(res, 400, 'Commande invalide');
-  if (error?.code === '40001') return fail(res, 409, 'Version ou opération divergente : relisez le registre');
+  if (['PT409', '40001'].includes(error?.code)) return fail(res, 409, 'Version ou opération divergente : relisez le registre');
   if (error?.code === 'P0001') return fail(res, 409, 'Action refusée par le mandat ou le budget');
   if (['PGRST202', '42P01', '42883'].includes(error?.code))
     return fail(res, 503, 'Registre non activé');

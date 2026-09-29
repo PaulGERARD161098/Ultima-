@@ -25,7 +25,7 @@
 -- 42501 authentication_required | mission_unavailable | writer_required | owner_required
 -- 22023 invalid_request | invalid_operation_id | invalid_expected_version |
 --       invalid_patch | invalid_state | invalid_next_action
--- 40001 version_conflict | operation_conflict
+-- PT409 version_conflict | operation_conflict (conflits métier, sans rejeu REST)
 -- P0001 version_scope_denied | operation_unresolved | mission_stopped |
 --       mission_expired | budget_exhausted | version_exhausted
 -- Aucune tentative refusee ne modifie compteurs/resultat/version. Une nouvelle
@@ -210,7 +210,7 @@ begin
     where mission_id = p_mission and operation_id = p_operation;
   if found then
     if v_previous.payload <> v_payload then
-      raise exception using errcode = '40001', message = 'operation_conflict';
+      raise exception using errcode = 'PT409', message = 'operation_conflict';
     end if;
     if v_previous.status <> 'completed' then
       raise exception using errcode = 'P0001', message = 'operation_unresolved';
@@ -225,7 +225,7 @@ begin
     raise exception using errcode = 'P0001', message = 'mission_expired';
   end if;
   if v_m.version <> p_expected_version then
-    raise exception using errcode = '40001', message = 'version_conflict';
+    raise exception using errcode = 'PT409', message = 'version_conflict';
   end if;
   if v_m.version >= 9007199254740991 then
     raise exception using errcode = 'P0001', message = 'version_exhausted';

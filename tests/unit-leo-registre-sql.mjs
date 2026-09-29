@@ -54,8 +54,8 @@ try {
   assert.equal(first.result.mission_version, 2);
   const again = await write(); // réponse perdue : même identifiant et contenu.
   assert.equal(again.replayed, true); assert.deepEqual(again.result, first.result);
-  await rejects(() => write('op-1', 1, { state: 'closed' }), '40001', 'operation_conflict');
-  await rejects(() => write('stale', 1), '40001', 'version_conflict');
+  await rejects(() => write('op-1', 1, { state: 'closed' }), 'PT409', 'operation_conflict');
+  await rejects(() => write('stale', 1), 'PT409', 'version_conflict');
   let observed = await status();
   assert.equal(observed.budget.calls, 1); assert.equal(observed.operations.length, 1);
   assert.equal(observed.mission.version, observed.operations[0].result.mission_version);
