@@ -6,6 +6,7 @@ import { chromium } from 'playwright';
 
 const BASE = 'http://127.0.0.1:8123';
 const MISSION = '11111111-1111-4111-8111-111111111111';
+const OTHER_MISSION = '44444444-4444-4444-8444-444444444444';
 const TOKEN = 'registre-token-factice';
 const browser = await chromium.launch({
   executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
@@ -56,8 +57,14 @@ await page.route('**/api/leo-registre*', async route => {
   const request = route.request();
   assert.equal(request.headers().authorization, `Bearer ${TOKEN}`, 'identité issue de la session');
   if (request.method() === 'GET') {
-    assert.equal(new URL(request.url()).searchParams.get('mission'), MISSION);
+    const mission = new URL(request.url()).searchParams.get('mission');
+    assert.ok([MISSION, OTHER_MISSION].includes(mission));
     reads.push(request.url());
+    if (mode === 'read-denied' || mode === 'read-unavailable')
+      return json(route, mode === 'read-denied' ? 403 : 503, { ok: false, error: 'Lecture refusée — fixture' });
+    if (mission === OTHER_MISSION) return json(route, 200, { ok: true, data: {
+      ...registry, mission: { ...registry.mission, id: OTHER_MISSION, next_action: 'Autre mission' },
+    } });
     return json(route, 200, { ok: true, data: registry });
   }
   assert.equal(request.method(), 'POST');
@@ -122,6 +129,27 @@ try {
   assert.equal(await field('action').inputValue(), 'Préparer la recette');
   assert.equal(reads.length, 1);
   console.log('✅ Entrée accueil authentifiée → consultation de mission');
+
+  for (const failure of ['read-denied', 'read-unavailable']) {
+    await field('action').fill('Brouillon avant échec de lecture');
+    mode = failure;
+    await refresh(failure === 'read-denied' ? /pas autorisée/ : /Registre indisponible/);
+    assert.equal(await field('detail').isVisible(), false, 'données refusées masquées');
+    assert.equal(await field('abandonner').isVisible(), true, 'abandon accessible sans détail');
+    assert.equal(await field('abandonner').isEnabled(), true);
+    await field('abandonner').click();
+    mode = 'success';
+    await field('id').fill(OTHER_MISSION);
+    await field('consulter').click();
+    await messageMatches(/Mission consultée/); await ready();
+    assert.equal(await field('action').inputValue(), 'Autre mission');
+    assert.equal(await field('enregistrer').isEnabled(), false);
+    assert.equal(writes.length, 0, 'sortie de blocage sans POST');
+    await field('id').fill(MISSION);
+    await field('consulter').click();
+    await messageMatches(/Mission consultée/); await ready();
+  }
+  console.log('✅ Échec GET 403/503 : abandon accessible, changement de mission sans écriture');
 
   await field('action').fill('Recette préparée');
   await field('enregistrer').click();

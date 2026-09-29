@@ -184,11 +184,11 @@
           <select id="leo-mission-etat"><option value="proposed">Proposée</option><option value="authorized">Autorisée</option><option value="in_progress">En cours</option><option value="ready_for_review">À relire</option><option value="approved_for_merge">Fusion approuvée</option><option value="merged">Fusionnée</option><option value="closed">Terminée</option><option value="blocked">Bloquée</option><option value="suspended">Suspendue</option><option value="abandoned">Abandonnée</option></select>
           <label for="leo-mission-action">Prochaine action</label><textarea id="leo-mission-action" maxlength="4000" autocomplete="off"></textarea>
           <p id="leo-mission-brouillon"></p>
-          <div class="leo-mission-actions"><button id="leo-mission-enregistrer" type="submit">Enregistrer le mémo</button><button id="leo-mission-abandonner" type="button">Abandonner le brouillon</button></div>
+          <div class="leo-mission-actions"><button id="leo-mission-enregistrer" type="submit">Enregistrer le mémo</button></div>
         </fieldset>
       </form>
     </section>
-    <div class="leo-mission-actions"><button id="leo-mission-relire" type="button">Relire le registre</button><button id="leo-mission-arreter" type="button">Arrêter la mission</button></div>
+    <div class="leo-mission-actions"><button id="leo-mission-relire" type="button">Relire le registre</button><button id="leo-mission-arreter" type="button">Arrêter la mission</button><button id="leo-mission-abandonner" type="button" disabled>Abandonner le brouillon</button></div>
     <p>L’arrêt bloque les nouvelles écritures de cette mission. Les actions externes et délégations ne sont pas activées par cet écran.</p>
     <p>La reprise d’une réponse perdue est suivie dans cet onglet. Avant de travailler ailleurs, confirme ici le résultat de la dernière demande.</p>
   </dialog>

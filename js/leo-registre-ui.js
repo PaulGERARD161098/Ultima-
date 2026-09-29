@@ -16,6 +16,7 @@
     el('arreter').disabled = !s.canStop;
     el('dialog').setAttribute('aria-busy', s.busy ? 'true' : 'false');
     el('edition').disabled = !m || !!s.busy;
+    el('abandonner').disabled = !dirty || !!s.busy;
     if (!m) { el('courant').textContent = ''; el('budget').textContent = ''; return; }
     el('courant').textContent = (m.stopped ? 'Arrêtée' : (labels[m.state] || m.state)) + ' · Version ' + m.version;
     el('prochaine').textContent = m.next_action || 'Aucune prochaine action renseignée.';
