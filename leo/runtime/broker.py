@@ -81,9 +81,27 @@ class Broker:
             self.budget.settle(self.mandate.mission, operation_id, units)
             return result
         operation = self.store.begin_operation(self.mandate.mission, principal, operation_id, payload, version)
-        try:
-            result = self.adapter.merge(self.context)
-        except Exception:
+        failed = False
+        # Dernière admission sous le même verrou que BudgetLedger.stop : un
+        # arrêt déjà committé interdit le départ, une admission gagnante engage
+        # l'effet. L'adaptateur Git hôte est borné et ne rappelle pas cette DB.
+        with self.store._transaction() as db:
+            row = self.store._authorized(db, self.mandate.mission, principal, write=True)
+            current = self.store._mission(row)
+            self.store._assert_version(row, version)
+            if current['mandat'] != mandate_record(self.mandate) or current['source'].get('repository') != self.repository:
+                raise Refusal('canonical_mandate_or_source_mismatch')
+            state = self.budget._status(db, self.mandate.mission)
+            if state['stopped'] or state['expired']:
+                raise Refusal('merge_stopped_or_expired')
+            self.policy.authorize(self.mandate, principal, action, self.repository, self.clock(),
+                                  effects=effects, context=self.context, evidence=self.evidence,
+                                  approval=self.approval, atomic_adapter=bool(self.adapter and self.adapter.atomic))
+            try:
+                result = self.adapter.merge(self.context)
+            except Exception:
+                failed = True
+        if failed:
             self.store.mark_unknown(self.mandate.mission, principal, operation_id,
                                     'adapter_result_unknown', expected_operation_version=operation['version'])
             # La réserve reste engagée ; même une réponse perdue ne déclenche pas de retry.

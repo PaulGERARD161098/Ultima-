@@ -3,6 +3,38 @@
 Référence métier unique : `CADRAGE-2026-09-22-leo-pilote-tout.md`, §11,
 contrat 1.1. Compétence Work attendue : `leo-lv1` 1.0.
 
+## Présentation de Léo LV1
+
+Léo est l'interlocutrice de Paul pour conduire ses projets : comprendre le but,
+vérifier les sources, proposer un chemin concret, préparer le travail autorisé,
+mobiliser une revue indépendante et rendre un résultat avec ses preuves.
+Elle applique Méthode Paul : cap, discipline, cadrage et vérification.
+
+**Pour l'appeler dans Work :** « Utilise Léo LV1 et Méthode Paul. Mission :
+[résultat attendu]. Sources : [projet/dépôt/documents]. Go solo dans le périmètre
+autorisé ; rapporte ce qui fonctionne, ce qui reste et les décisions nécessaires. »
+La compétence est le point d'entrée ; les spécialistes sont des agents qu'elle
+mobilise lorsqu'ils sont disponibles. La présence du skill n'installe pas un
+service permanent et ne lui donne pas de droits supplémentaires.
+
+| Usage | État démontré au 29/09/2026 |
+|---|---|
+| Examiner une PR, trouver un défaut, préparer un correctif, faire relire et vérifier | Réalisé par les deux sessions sur PR306 ; code, corrections et journaux consultables |
+| Consulter une mission, modifier son mémo, traiter un conflit, arrêter et retrouver un reçu | Parcours construit et testé avec identité/transport fictifs ; publication et usage authentifié réel ouverts |
+| Imposer droits, budget et arrêt avant transmission | Contrôle éprouvé vers l'inspecteur fictif fermé ; outils Work et délégation produit non raccordés à ce contrôleur |
+| Conduire une fusion protégée et reprendre après interruption | Mécanismes éprouvés sur fixtures ; dossier R21 réel préparé et relu, accord/fusion/reprise complète encore ouverts |
+| Superviser en permanence ou engager une dépense | Non activé |
+
+Le bilan commun des deux sessions porte sur `220fb951…` : sept jobs réussis,
+52 suites unitaires, 53 harnais navigateur et 73 tests Python. Les deux défauts
+de reprise démontrés ont été corrigés. Ce sont des preuves de capacités précises,
+pas la réception globale du contrat. La V1 complète exige encore la boucle R21
+et les gardes R01–R28 applicables ; Paul prononce la réception après revue.
+
+**Présentation honnête aujourd'hui :** une compétence opérationnelle de travail,
+un parcours de mission construit et des contrôles testés ; une version candidate
+d'Ultima dont l'orchestration complète et la livraison restent à recevoir.
+
 Ce composant construit les mécanismes de contrôle manquants et les éprouve dans
 un conteneur sans réseau. Il n'est pas raccordé au chatbot Ultima ni à un service
 permanent. Il ne contrôle pas les outils propres de Work. L'état de réception
@@ -107,6 +139,26 @@ exact et la vraie revue au broker existant ; une relocalisation change le contex
 du dépôt et impose sa revalidation. L'expiration du mandat est de 24 heures.
 La revue réelle du dossier, la décision de Paul, la fusion fictive autorisée et
 la reprise dans une session Work neuve restent nécessaires pour R21.
+
+`trial_resume.py` ajoute la reprise du paquet effectivement téléchargé :
+empreinte et provenance imposées par l'hôte, extraction bornée dans un conteneur
+vide, contrôle des références et du registre canonique. La CLI expose seulement
+`verify`. Elle produit la proposition exacte et signale l'accord manquant.
+L'API Python `execute` est réservée à l'hôte authentifié : mandat, contexte,
+preuves et accord typés doivent lui être fournis extérieurement. Aucun champ du
+paquet ne devient une autorisation. Les tests d'exécution utilisent des accords
+fictifs explicitement signalés ; ils ne fusionnent pas le paquet réel relu.
+
+Le broker sérialise désormais le dernier contrôle d'arrêt avec l'admission de
+la fusion fictive : arrêt déjà committé, aucun départ ; opération déjà engagée,
+résultat à réconcilier. Le transport Git borné ne doit pas rappeler le registre
+pendant ce verrou. La réserve reste visible si l'admission est refusée.
+
+La lecture du paquet historique `11045864094` dans le workflow est une épreuve
+ponctuelle limitée à la branche LV1. Elle dépend d'un artefact conservé sept
+jours et d'un mandat de 24 heures ; remplacer ou retirer cette étape à la clôture
+de la branche. Une preuve expirée n'est pas régénérée silencieusement sous le
+même accord. Les résultats de cette reprise sont à lire dans sa propre CI.
 
 ## Raccordement produit à Ultima
 

@@ -82,5 +82,32 @@ class BrokerTests(unittest.TestCase):
         with self.assertRaises(BudgetError): self.b.execute('leo', {**req, 'operation_id': 'other'})
         self.assertTrue(self.b.execute('leo', {'action': 'status'})['budget']['stopped'])
 
+    def test_stop_after_reservation_prevents_merge_admission(self):
+        context = Context('fixture/repo', 'a' * 40, 'b' * 40, 'c' * 40,
+                          'fixture', 'fixture-account')
+        calls = []
+        class Adapter:
+            effects = frozenset({'update_fixture_ref'})
+            atomic = True
+            def merge(self, supplied):
+                calls.append(supplied)
+                return {'commit': supplied.integration, 'environment': 'fixture', 'publication': False}
+        self.b.adapter, self.b.context = Adapter(), context
+        self.b.approval = Approval(context, 'paul-fixture', 1, 900)
+        self.b.evidence = tuple(Evidence(context, kind, True, 'fixture/log',
+                                       '2026-09-29', 'simulated host evidence')
+                                for kind in ('tests', 'review'))
+        reserve = self.b.budget.reserve
+        def stop_before_admission(*args):
+            receipt = reserve(*args)
+            self.b.budget.stop('mission', 'operator_stop', authority=True)
+            return receipt
+        self.b.budget.reserve = stop_before_admission
+        with self.assertRaisesRegex(Refusal, 'merge_stopped_or_expired'):
+            self.b.execute('leo', dict(action='merge_fixture', operation_id='race-stop', expected_version=1))
+        self.assertEqual(calls, [], 'un arrêt gagné interdit réellement le départ de l’adaptateur')
+        self.assertEqual(self.b.store.get_operation('mission', 'leo', 'race-stop')['status'], 'pending')
+        self.assertEqual(self.b.budget.status('mission')['reserved_units'], 2)
+
 
 if __name__ == '__main__': unittest.main()

@@ -83,6 +83,9 @@ jobs:
   runtime:
     runs-on: ubuntu-latest
     timeout-minutes: 8
+    permissions:
+      contents: read
+      actions: read
     steps:
       - uses: actions/checkout@v4
         with:
@@ -163,3 +166,33 @@ jobs:
           path: ${{ env.LV1_TRIAL_OUTPUT }}/trial.tar.gz
           if-no-files-found: error
           retention-days: 7
+      - name: Lire le paquet R21 exact de la revue croisée
+        if: github.head_ref == 'codex/leo-lv1-20260929'
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: leo-r21-220fb9515291c9e62c076d06e4fa3dc608166db7
+          run-id: 36597170079
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/leo-r21-reviewed
+      - name: Rééprouver la reprise du paquet revu sans fusion
+        if: github.head_ref == 'codex/leo-lv1-20260929'
+        run: |
+          set -euo pipefail
+          LV1_PYTHON_IMAGE="$(cat /tmp/lv1-python-image-id)"
+          docker run --rm --read-only --network none \
+            --cap-drop ALL --security-opt no-new-privileges \
+            --user 65534:65534 --memory 512m --cpus 1 --pids-limit 128 \
+            --tmpfs /tmp:rw,nosuid,nodev,noexec,size=128m,mode=1777 \
+            --tmpfs /trial-output:rw,nosuid,nodev,noexec,size=128m,mode=1777 \
+            --mount type=bind,src="$GITHUB_WORKSPACE/leo",dst=/workspace/leo,readonly \
+            --mount type=bind,src="$RUNNER_TEMP/leo-r21-reviewed/trial.tar.gz",dst=/reviewed.tar.gz,readonly \
+            --workdir /workspace \
+            --env LV1_ISOLATED=1 --env PYTHONDONTWRITEBYTECODE=1 \
+            --env GIT_CONFIG_GLOBAL=/dev/null --env GIT_CONFIG_NOSYSTEM=1 \
+            "$LV1_PYTHON_IMAGE" \
+            python -m leo.trial_resume verify /reviewed.tar.gz \
+              --sha256 9c0aaa2d718d3fcc4084efdaf998edd2ee0480c67c3c892cbbaf2c69f29869de \
+              --destination /trial-output/trial \
+              --source-sha 220fb9515291c9e62c076d06e4fa3dc608166db7 \
+              --target-sha fb7daac613a0828d4135333fbd27a47102323211 \
+              --integration-sha 2c8b70638c73949eb8e5485b0f2280627f5526b3

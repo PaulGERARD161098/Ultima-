@@ -21,7 +21,29 @@ persistant authentifié, et ne contrôle pas les outils de Work. Voir
 [leo/README.md](leo/README.md). Aucune opération de production, migration réelle,
 dépense fournisseur ou publication ne sert de preuve ici.
 
-**Dernière preuve runtime : 2026-09-29T11:17:59.654Z.**
+**Confrontation des deux sessions, 29/09 après 18 h 58 Paris.** Source commune
+`220fb9515291c9e62c076d06e4fa3dc608166db7`, cible `fb7daac…`, intégration
+`2c8b70638c73949eb8e5485b0f2280627f5526b3`. Sept jobs relus directement :
+[Tests 36597169815](https://github.com/PaulGERARD161098/Ultima-/actions/runs/36597169815)
+(52 suites unitaires, 53 harnais navigateur) et
+[LV1 36597170079](https://github.com/PaulGERARD161098/Ultima-/actions/runs/36597170079)
+(73 tests runtime, fixtures, registre et concurrence Postgres). Le job registre
+`109504956002` prouve également la reprise d'un reçu sorti des 100 derniers :
+101 écritures fictives, deux GET de reprise, aucun doublon ; ACL et arrêt éprouvés.
+
+Le dossier R21 de cette source, artefact `11045864094`, possède une revue
+indépendante réelle, extérieure à l'archive et rattachée à son empreinte ZIP
+`74b6001be078215daa9fa979164aff62f3541f7a43789dc989dd74ddbd2f806a`.
+Son indicateur historique de revue en attente n'annule pas cette revue postérieure.
+L'accord de Paul et la fusion du dossier demeurent absents. Le cycle automatisé
+historique P09 ci-dessous conserve, lui, ses objets d'accord/revue simulés.
+
+Ces résultats remplacent le statut « dernière preuve » de 55 tests ci-dessous,
+sans recevoir automatiquement les lignes R sur tout le produit. Les raccords
+Work/produit, la reprise inter-environnements et la boucle R21 restent ouverts.
+Le prochain code de reprise doit être testé sur sa propre version avant usage.
+
+**Historique runtime : 2026-09-29T11:17:59.654Z.**
 [Run 36560818204, job 109380975084](https://github.com/PaulGERARD161098/Ultima-/actions/runs/36560818204/job/109380975084) :
 `success`, **55 tests uniques réussis**, résultats et logs relus par la coordinatrice.
 Source `a2c5ee774bd3dd7f11c230a03e157e41509b8524`, cible

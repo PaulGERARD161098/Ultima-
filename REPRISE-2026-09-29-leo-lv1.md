@@ -328,3 +328,33 @@ par sortie bornée, validation sans extraction, inspection isolée et diff exter
 désactivé. Syntaxes vérifiées ; aucun test applicatif local lancé. Les résultats
 de la CI et l'artefact exact seront rattachés à la PR après exécution, sans
 transposer les preuves du commit antérieur à ce nouveau code.
+
+## Confrontation avec « Revue PR306 » — après 18 h 58 Paris
+
+Les traces de l'autre session sont conservées dans la PR. Source commune relue
+`220fb9515291c9e62c076d06e4fa3dc608166db7`, cible `fb7daac…`, intégration
+`2c8b70638c73949eb8e5485b0f2280627f5526b3`. Sept jobs relus directement,
+52 suites unitaires, 53 harnais navigateur et 73 tests runtime. Le journal
+registre confirme 101 écritures fictives et une reprise ciblée sans doublon.
+Le contenu vivant de l'autre conversation n'est pas accessible directement :
+confrontation sur code, bilan PR, CI et paquet conservé, sans prétendre un échange
+inter-session. La recherche de conversation n'a retourné aucun résultat utile.
+
+Le paquet courant `11045864094` est téléchargé et son empreinte vérifiée.
+ZIP SHA256 `74b6001be078215daa9fa979164aff62f3541f7a43789dc989dd74ddbd2f806a`,
+TAR SHA256 `9c0aaa2d718d3fcc4084efdaf998edd2ee0480c67c3c892cbbaf2c69f29869de`.
+La revue indépendante réelle rattachée à ce paquet ne constitue pas l'accord.
+
+Prochaine fermeture concrète préparée : reprise du paquet exact dans la CI
+existante, vérification de son registre et du contexte, API hôte de fusion avec
+accord externe uniquement. La CLI ne propose aucune commande d'approbation.
+La revue adverse a trouvé et fait corriger le mauvais acteur d'inspection,
+la reprise indûment bloquée après arrêt, puis une course héritée arrêt/fusion.
+Le dernier contrôle et l'admission sont maintenant sérialisés ; test dédié.
+Bornes d'archive renforcées avant décompression/analyse. Aucune fusion réelle,
+activation, publication ou exécution applicative locale. Résultats du nouveau
+lot à rattacher à son commit testé dans la PR.
+
+La présentation utilisable de Léo est intégrée à `leo/README.md` : invocation,
+capacités démontrées et limites. Elle présente une version candidate, sans
+transformer le souhait de terminer ce soir en réception acquise.
