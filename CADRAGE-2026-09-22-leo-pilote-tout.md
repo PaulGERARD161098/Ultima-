@@ -298,6 +298,13 @@ qualifier » plutôt que celui qui répond en trois clics avec un chiffre invent
 
 ## §2 — Le modèle de droits : trois anneaux, par RÉVERSIBILITÉ
 
+> ⛔ **LE CRITÈRE DE CETTE SECTION A ÉTÉ REMPLACÉ — voir §12 (Paul, 29/09).**
+> Ce §2 taille les anneaux sur la RÉVERSIBILITÉ de l'objet touché. Paul les
+> taille sur **ce que le geste DÉTRUIT ou fait RÉGRESSER**, avec un périmètre
+> par défaut large (tout ce qu'il peut faire lui-même). Les trois anneaux
+> restent justes dans leur principe et leur vocabulaire ; **la répartition
+> ci-dessous ne l'est plus**. Gardé pour le raisonnement, pas comme consigne.
+
 ⛔ **Le critère n'est pas « quel dépôt » mais « qu'est-ce que ça coûte si c'est
 faux ».** C'est la règle du repli déjà écrite dans RenoDevis (arbitrage A1,
 13/09) : *un repli se choisit sur ce qu'il coûte quand il se trompe, jamais sur ce
@@ -822,6 +829,10 @@ tout B1 : **un outil vert ne doit rien pouvoir faire qu'une injection rendrait
 grave.** On ne durcit pas le modèle — on taille le catalogue.
 
 **A2 · ⛔ Réversible ne suffit pas : il faut réversible ET VISIBLE.**
+*(⚠️ Reformulée au §12.2 : sous le critère de Paul, une erreur invisible EST
+une régression — simplement une régression qu'on ne découvre pas. Le fond
+tient, le classement change : elle entre dans l'exception par la régression,
+pas par « c'est une écriture ».)*
 Le §2 taille l'anneau vert sur la seule réversibilité. Contre-exemple immédiat :
 un montant faux dans NICOL BOLAS **se défait d'un clic** — et personne ne le
 voit. Il alimente une prévision d'impôts, et l'erreur se découvre au tiers
@@ -831,7 +842,13 @@ qu'elle est là. ⇒ **Le critère de l'anneau vert devient DOUBLE — réversib
 *et* visible.** Conséquence directe : NICOL BOLAS ne reçoit aucun outil vert
 dans B1, et son catalogue vide cesse d'être un manque.
 
-**A3 · ⛔ Un vert qui SORT de la machine est une publication.**
+**A3 · ⛔ FAUSSE — CORRIGÉE AU §12.2 LE 29/09. Ne pas l'appliquer.**
+Elle interdisait à Léo tout ce qui « sort de la machine ». Or **Paul pousse des
+branches et ouvre des PR**, et ni l'une ni l'autre ne détruit : une branche se
+supprime, une PR se ferme. Ce qui engage, c'est **la fusion dans `main` et le
+déploiement**. Le raisonnement d'origine, gardé pour mémoire :
+
+~~**Un vert qui SORT de la machine est une publication.**~~
 Le §2 range « les grains `FINUBAR.md` » et « les fichiers de pilotage » en vert.
 Or un grain se **commite et se pousse** : historique, dépôt, lecteurs. Une
 écriture qui quitte la machine ne se *défait* pas — elle se **rattrape par un
@@ -988,7 +1005,7 @@ retiré · une **seconde liste** posée dans `js/`. Un harnais qui ne sait pas
 écrit dans le code lui-même, parce qu'un outil que personne n'appelle se lit
 comme un outil qui marche.
 
-### §11.6 — La prochaine action, unique — et elle ouvre sur un GATE
+### §11.6 — La prochaine action — ⚠️ toujours valable, mais SON SENS A GRANDI (voir §12.6)
 
 **B1 étape ③ — le journal des écritures.** Il précède ④ : sans lui, une
 exécution verte serait une écriture sans trace, et A4 dit que le journal
@@ -1002,3 +1019,121 @@ gate — et le mode solo ne le lève pas (il n'autorise que les migrations
 ⚠️ **Et on n'écrit pas le module avant la table.** `autoriserEcriture` est déjà
 sans appelant ; empiler une seconde couche inerte par-dessus, c'est fabriquer
 du code qui a l'air de marcher. ③ commence quand le gate est levé.
+
+---
+
+## §12 — L'OBJECTIF FINAL, scellé par Paul le 29/09/2026
+
+> *« Léo a une capacité de lecture, d'écriture et de modification de projet au
+> même niveau que les miennes, mais toute action destructrice ou de régression
+> doit être approuvée par moi. Elle travaille, elle propose, elle synthétise,
+> elle prend tout en compte, elle cadre, elle joue le cadrage — comme ce qu'on
+> fait nous. Au moment de passer à l'action, on me demande. »*
+
+⛔ **CE §12 PRIME SUR LE §2 ET SUR LE §11.1.** Ils ne sont pas supprimés — ils
+portent le raisonnement qui a mené ici — mais **le critère qui fait foi est
+celui-ci**, et les deux sections ci-dessus renvoient désormais à celle-là.
+
+### §12.1 — Le critère, et ce qu'il déplace
+
+| | Ce que je proposais (§2, §11.1) | Ce que Paul tranche |
+|---|---|---|
+| **la question** | « qu'est-ce que ça touche ? » (une idée, un montant, un client) | **« qu'est-ce que ça casse si c'est faux ? »** |
+| **le défaut** | rien n'est permis, on ouvre outil par outil | **tout ce que Paul peut faire lui-même** |
+| **l'exception** | longue, à réécrire à chaque outil | **courte et nommée** : détruire, écraser, envoyer, dépenser, fusionner, déployer, migrer |
+
+⚠️ **Pourquoi sa version tient mieux, et ce n'est pas une politesse** : la
+mienne se périme à chaque outil ajouté — il faut rouvrir le cadrage pour
+décider du onzième. La sienne ne bouge pas : un outil nouveau est vert s'il ne
+casse rien, et le défaut `orange` attrape celui qu'on n'a pas instruit.
+
+### §12.2 — ⛔ Ce que son arbitrage RÉVÈLE de faux dans le mien
+
+**A3 était fausse.** J'avais écrit : *« aucun outil vert n'écrit dans une
+surface qui sort de la machine »*, au motif qu'un commit poussé ne se défait
+pas. **Paul pousse des branches et ouvre des PR** — ni l'une ni l'autre ne
+détruit : une branche se supprime, une PR se ferme. Ce qui engage vraiment,
+c'est **la fusion dans `main` et ce qu'elle déploie**. A3 se resserre donc sur
+la fusion et le déploiement, pas sur « quitter le disque ».
+
+**A2 survit, mais reformulée — et elle SERT son critère au lieu de le
+concurrencer.** Je disais « réversible ne suffit pas, il faut visible ». Sous
+son critère c'est plus juste encore : **une erreur invisible EST une
+régression**, simplement une régression qu'on ne découvre pas. Un montant faux
+se défait d'un clic et se paie au tiers provisionnel. Elle reste donc dans
+l'exception — non parce que c'est une écriture, mais parce que c'est une
+régression silencieuse.
+
+**Et l'ambiguïté de sa phrase a été levée, pas devinée.** « Toute action
+destructrice doit être approuvée » et « au moment de passer à l'action, on me
+demande » ne tracent pas la même ligne. Lecture retenue, proposée et validée :
+**Léo écrit librement ce qui est additif et réversible ; elle demande pour le
+destructeur et le régressif.** ⚠️ L'autre lecture — toute écriture passe par
+Paul — ferait de lui un **valideur de clics** : cinquante approbations par
+jour, et au bout d'une semaine il ne lirait plus ce qu'il approuve. *Un tampon
+n'est pas un contrôle* — c'est le POV « Paul fatigué » du §11.
+
+### §12.3 — Le retaillage : les DIX outils sont verts, et c'est MESURÉ
+
+```
+$ grep -oE "methode: '[A-Z]+'" js/leo-accueil.js | sort | uniq -c
+      1 methode: 'PATCH'      ← et il CONCATÈNE : existante + '\n\n' + ajout
+      9 methode: 'POST'
+$ grep -rn "relance_at" api/ js/ | grep -v node_modules
+  → api/cockpit.js uniquement : AFFICHER les relances échues. Aucun cron.
+$ grep -rniE "commande|achat|fournisseur|mail|sms|envoi" api/intendant.js
+  → (vide)
+```
+
+Zéro DELETE, zéro PUT, zéro appel sortant, zéro paiement. ⛔ **Et la raison
+de fond n'est pas l'anneau, c'est le principe fondateur du catalogue : AUCUN
+outil de suppression, jamais** — tenu par un test depuis la boucle L2b. C'est
+lui qui rend les dix verts ; **le jour où il tombe, l'anneau vert entier est à
+réinstruire.**
+
+⚠️ **Les sept anneaux ont été retournés UN PAR UN, avec leur constat.** Un
+remplacement global a été refusé — et il devait l'être : *une commande qui
+desserre sept gardes d'un coup est exactement ce que ce dépôt interdit.*
+Le plus instructif est `proposer_relance` : **le seul dont le nom faisait
+peur, et la peur était infondée.** Il ne relance personne — il pose un rappel
+sur l'écran de Paul.
+
+### §12.4 — ⚠️ Les deux conséquences du retaillage, traitées dans le même lot
+
+**① Un contrôle allait devenir vert par vacuité.** Plus aucun outil n'étant
+orange, « un orange refuse » n'avait plus rien à exercer — la façon exacte
+dont un garde-fou cesse de garder sans qu'on le voie. La décision est donc
+extraite en fonction **pure** (`decisionAnneau`), éprouvable quand plus aucune
+donnée ne l'exerce. ⛔ Elle reste l'**unique** endroit où l'anneau décide.
+
+**② Le plafond de VOLUME devient la garde principale.** L'anneau ne borne plus
+rien sur ces dix : dix mille idées versées dans ADRAMELECH noient les vraies,
+**sans qu'aucun droit particulier n'ait été obtenu**. Ce qui était une
+précaution (A5) est désormais ce qui tient le dispositif — avec le journal.
+
+⚠️ **Et la PII entre dans l'anneau vert.** `proposer_journal` et
+`proposer_relance` écrivent dans le réseau commercial ; `proposer_page_journal`
+dans le journal intime. Ce n'est ni destructeur ni régressif, donc vert — mais
+ce n'est plus l'anneau qui les garde : ce sont le plafond de volume, l'absence
+de contenu dicté dans les logs, et la RLS mono-utilisateur.
+
+### §12.5 — Ce qui exige Paul, et rien d'autre
+
+| | Le geste | Pourquoi |
+|---|---|---|
+| 🔴 | **fusionner** dans `main`, **déployer** | ça engage ce qui tourne |
+| 🔴 | **envoyer** (mail, SMS, appel) hors bac à sable | ça sort et ne revient pas |
+| 🔴 | **dépenser**, créer une ressource facturée | irréversible par nature |
+| 🔴 | **supprimer**, **écraser** une valeur saisie à la main | la valeur d'avant est perdue |
+| 🔴 | **migration SQL**, changement RLS, `revoke` | régression possible sur tout le système |
+| 🔴 | **secret** ou variable d'environnement | ne se relit pas, ne se teste pas |
+| 🔴 | **barème**, règle métier, taux | une régression silencieuse chez un client |
+| 🟠 | l'outil **non instruit** — le onzième | `ANNEAU_PAR_DEFAUT` le tient |
+
+### §12.6 — La prochaine action, unique
+
+Inchangée dans son ordre, mais **son sens a grandi** : l'étape ③, le **journal
+des écritures**, devient le garde-fou principal et non plus une traçabilité de
+confort. ⛔ Elle commence toujours par le gate : créer la table
+`leo_ecritures`. Et le plafond de volume entre dans le même lot — ils gardent
+désormais la même chose.
