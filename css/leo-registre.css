@@ -1,0 +1,22 @@
+/* Cible : jetons Ultima stellaire ; formulaires lisibles, sans nouvelle palette. */
+.leo-mission-entree { min-height: 44px; padding: .55rem 1rem; margin-top: .75rem; color: var(--stellar-text-primary); background: var(--nuit-relief); border: 1px solid var(--stellar-line-gold); border-radius: var(--stellar-radius); cursor: pointer; }
+.leo-mission-dialog { box-sizing: border-box; width: min(40rem, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem); padding: 1.25rem; background: var(--nuit-haute); color: var(--stellar-text-primary); border: 1px solid var(--stellar-accent-gold); border-radius: var(--stellar-radius); overscroll-behavior: contain; overflow-y: auto; font: 1rem/1.5 system-ui, sans-serif; }
+.leo-mission-dialog::backdrop { background: rgba(3, 7, 14, .8); }
+.leo-mission-dialog header, .leo-mission-actions { display: flex; align-items: center; justify-content: space-between; gap: .75rem; flex-wrap: wrap; }
+.leo-mission-dialog h2 { margin: 0; color: var(--stellar-accent-gold); font-size: 1.4rem; }
+.leo-mission-dialog h3 { font-size: 1.05rem; margin: .5rem 0; }
+.leo-mission-dialog p { margin: .75rem 0; overflow-wrap: anywhere; }
+.leo-mission-dialog label { display: block; margin: .7rem 0 .25rem; }
+.leo-mission-dialog input, .leo-mission-dialog textarea, .leo-mission-dialog select { width: 100%; box-sizing: border-box; background: var(--nuit-relief); color: var(--stellar-text-primary); border: 1px solid var(--stellar-line-gold); padding: .6rem; border-radius: 4px; font: inherit; }
+.leo-mission-dialog textarea { min-height: 7rem; resize: vertical; }
+.leo-mission-dialog button { min-height: 44px; padding: .55rem .85rem; background: var(--nuit-relief); color: var(--stellar-text-primary); border: 1px solid var(--stellar-line-gold); border-radius: var(--stellar-radius); font: inherit; cursor: pointer; touch-action: manipulation; }
+.leo-mission-dialog button[type=submit] { background: var(--accent); }
+.leo-mission-dialog button:disabled, .leo-mission-entree:disabled { opacity: .5; cursor: default; }
+.leo-mission-dialog :focus-visible, .leo-mission-entree:focus-visible { outline: 2px solid var(--stellar-focus); outline-offset: 3px; }
+.leo-mission-dialog fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.leo-mission-dialog section { margin: 1rem 0; border-top: 1px solid var(--stellar-line-gold); padding-top: .75rem; }
+.leo-mission-actions { justify-content: flex-start; margin-top: .75rem; }
+#leo-mission-message { border-left: 3px solid var(--stellar-accent-ice); padding: .6rem .75rem; }
+#leo-mission-prochaine { white-space: pre-wrap; }
+#leo-mission-arreter { color: var(--danger); }
+#leo-mission-brouillon, #leo-mission-budget { color: var(--stellar-text-secondary); font-size: .9rem; }

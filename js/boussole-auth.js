@@ -49,6 +49,7 @@
   // tire les résumés vivants. Fail-closed : token null → la boussole garde le
   // texte figé. Le hook peut ne pas être encore prêt (ordre de scripts) → garde.
   function livrerCockpit() {
+    if (window.UltimaLeoRegistreUI) { window.UltimaLeoRegistreUI.poserSession(etat.session); }
     if (!window.UltimaBoussole || typeof window.UltimaBoussole.poserSession !== 'function') { return; }
     var token = (etat.session && etat.session.access_token) || null;
     window.UltimaBoussole.poserSession(token);
@@ -118,10 +119,7 @@
 
     etat.client.auth.onAuthStateChange(function (evenement, session) {
       etat.session = session;
-      if (evenement === 'SIGNED_IN' || evenement === 'SIGNED_OUT' ||
-          evenement === 'TOKEN_REFRESHED') {
-        majAuthUi();
-      }
+      majAuthUi();
     });
 
     var form = $('#form-connexion');

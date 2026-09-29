@@ -77,29 +77,44 @@ volontairement la réponse et retrouve son résultat dans un nouveau processus.
 L'accord et la preuve de revue de ce scénario sont **simulés** ; ils ne valent
 pas accord de Paul, revue indépendante réelle ni réception complète R21.
 
-## Activation encore nécessaire
+## Raccordement produit à Ultima
 
-**Décision actualisée : réutiliser Vercel et Supabase d'Ultima.** La proposition
-`proposals/registre-postgres.sql` et `api/leo-registre.js` préparent la mémoire
-transactionnelle du produit. Voir [ACTIVATION.md](ACTIVATION.md) : préflight réel
-en lecture seule, périmètre, changement exact et autorisations restantes.
-Le Python/SQLite ci-dessus reste un banc d'épreuve ; aucune deuxième mémoire
-active n'est prévue. L'API proposée doit encore passer ses tests isolés.
+Le registre produit réutilise Vercel et Supabase d'Ultima. Le SQL a été installé
+avec l'accord de Paul le 29/09/2026, migration `20260929125105` ; contrôles de
+privilèges et RLS consignés dans [ACTIVATION.md](ACTIVATION.md). Les tests API,
+PGlite et concurrence PostgreSQL 17 ont réussi avant cette installation.
+Python/SQLite reste uniquement le banc de conformité décrit ci-dessus.
 
-L'hypothèse ci-dessous d'un hôte Python dédié est donc historique et remplacée
-pour la mémoire/budget par ce raccord aux services existants. L'orchestration
-des effets externes et du moteur CI reste à raccorder et à recevoir.
+La tranche suivante ajoute l'entrée « Mission Léo » dans l'accueil existant :
+consultation, état déclaré, prochaine action, arrêt, conflit et reprise. Elle
+réutilise `api/leo-registre.js`, sans appel au modèle ni nouvel effet externe.
+Le serveur authentifie chaque requête et le SQL reste l'autorité pour les droits,
+versions et budgets ; les boutons du navigateur ne constituent pas une permission.
+Un état déclaré « validé pour fusion » ne vaut aucun accord de fusion.
 
-Il reste à choisir et installer l'hôte persistant authentifié, raccorder son
-interface à Ultima, intégrer un exécuteur isolé à cet hôte, vérifier les preuves
-réelles et l'adaptateur de fusion réel, puis exécuter la recette produit complète.
-Une fusion qui publie Ultima et toute activation facturée restent hors du mandat
-LV1 actuel. Les livrables sont préparés sur une branche privée sans activation.
+Avant un POST, le client journalise dans sessionStorage seulement la mission,
+l'identifiant d'opération, sa nature, la version attendue et la demande d'arrêt.
+Le journal est séparé par utilisateur ; il ne contient ni texte métier ni jeton.
+Son indisponibilité empêche le POST. Une réponse perdue survit au rechargement
+du même onglet : relecture obligatoire, reçu identifié, aucun renvoi automatique.
+L'absence du reçu parmi les 100 derniers ne prouve jamais une absence d'effet.
+La fermeture définitive de l'onglet, un autre onglet ou appareil ne conservent
+pas ce marqueur : le contrôle de reprise inter-environnements reste à recevoir.
+Les résultats enregistrés restent consultables dans le registre serveur.
 
-La capacité Sites MCP de Work a été examinée le 29/09 : elle fournit un endpoint
-HTTP authentifié et un stockage D1/R2 sous Worker ESM. Elle ne constitue pas un
-hébergement direct de ce contrôleur Python avec processus Git et conteneurs de
-test. L'utiliser exigerait un portage du registre et un exécuteur distinct avec
-les mêmes garanties ; aucun site ni second stockage n'a été créé pour contourner
-cette limite. Un service privé avec processus isolés et volume durable reste
-à raccorder, ou une architecture équivalente doit être construite et éprouvée.
+Les tests de parcours composent le client, la route réelle et le SQL dans PGlite,
+avec identité et transport fictifs. Le harnais navigateur couvre l'entrée réelle
+dans l'accueil. Leurs résultats doivent être relevés sur le commit courant avant
+de recevoir cette tranche ; leur présence ne prouve pas leur réussite.
+
+La création d'une mission reste administrative et n'a pas été exécutée. Le
+parcours de mémoire ne raccorde ni l'exécution de code, ni la délégation, ni la
+fusion. Ces actions demeurent absentes du catalogue de l'API. La réception R21
+et les autres gardes produit restent suivies dans `RECETTE-LEO-LV1.md`.
+
+La publication reste distincte de la préparation : le connecteur GitHub expose
+une condition sur le SHA source, sans condition sur le SHA cible ; la lecture
+des protections de main est refusée. La garantie de fusion source/cible requise
+n'est pas établie. Vercel montre des déploiements de production issus de main ;
+ne pas supposer qu'une fusion reste sans publication. Aucun nouvel hôte ni
+stockage parallèle n'est nécessaire pour ce parcours de mémoire.

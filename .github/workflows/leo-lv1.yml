@@ -63,7 +63,7 @@ jobs:
             --tmpfs /travail/.git:ro,nosuid,nodev,noexec,size=1m \
             --tmpfs /travail/memoire:ro,nosuid,nodev,noexec,size=1m \
             --workdir /travail "$LV1_REGISTRE_IMAGE" \
-            sh -eu -c 'node tests/lv1-isolation.mjs; node tests/unit-leo-registre-api.mjs; node tests/unit-leo-registre-sql.mjs'
+            sh -eu -c 'node tests/lv1-isolation.mjs; node tests/unit-leo-registre-api.mjs; node tests/unit-leo-registre-sql.mjs; node tests/unit-leo-registre-parcours.mjs'
   lv1:
     runs-on: ubuntu-latest
     timeout-minutes: 8

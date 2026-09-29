@@ -247,3 +247,36 @@ et zéro opération. Aucun défaut du registre dans Security Advisors ; avertiss
 Auth sur protection des mots de passe compromis consigné, sans modification.
 L'API n'est pas publiée et aucun merge n'est réalisé. Prochain travail : raccorder
 et éprouver le parcours utilisateur sous les autorisations de livraison requises.
+
+
+## Go solo du 29/09 après 16 h 27 Paris — parcours mémoire construit
+
+Point de départ distant relu : PR306 source e35ac9085da34c53d969e14040c63a778aafa1cf,
+cible fb7daac613a0828d4135333fbd27a47102323211. Travail local propre au départ.
+
+L'entrée Mission Léo est ajoutée à l'accueil existant, avec client déterministe
+vers la route de registre : lecture, état/prochaine action, arrêt, conflit et
+réconciliation par reçu. Le journal minimal de l'onglet est écrit avant POST,
+séparé par utilisateur, sans contenu métier ni token. Rechargement du même
+onglet couvert par la conception ; fermeture définitive/autre appareil non reçus.
+Le changement de compte détruit client et contenu affiché ; aucune action externe
+ni délégation n'est ajoutée. Création de mission réelle non exécutée.
+
+Revue indépendante ciblée terminée, sans bloqueur connu restant avant CI.
+Corrections issues des passes : entrée initialement dans écran connexion
+(déplacée dans accueil), brouillon confirmé pouvant inviter un second envoi,
+arrêt inaccessible pendant réconciliation, puis perte du verrou lors d'un arrêt
+perdu ou d'une tentative d'arrêt refusée. Le contrôle conserve maintenant la
+preuve attendue d'écriture ET d'arrêt lorsque nécessaire.
+
+Épreuves ajoutées : tests/unit-leo-registre-parcours.mjs compose client, route
+et SQL PGlite réels avec identité/HTTP fictifs ; tests/smoke-leo-registre.mjs
+parcourt index.html sur mobile390px, avec interception des accès. CI registre
+branche le nouveau parcours ; navigateur découvert par le runner existant.
+Syntaxe et diff vérifiés localement ; aucune exécution applicative locale.
+Résultats CI de ce nouveau lot à relever avant toute conclusion de réussite.
+
+Avant/après : aucun accès UI au registre auparavant ; parcours de mémo intégré
+maintenant préparé. Même hébergement/auth/SQL, aucune dépendance nouvelle,
+aucun appel modèle. Gain de temps et coût non mesurés. Activation API, mandat
+de mission réelle et recette globale demeurent distincts.
