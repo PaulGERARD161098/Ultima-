@@ -1,5 +1,5 @@
 /* Cible : jetons Ultima stellaire ; formulaires lisibles, sans nouvelle palette. */
-.leo-mission-entree { min-height: 44px; padding: .55rem 1rem; margin-top: .75rem; color: var(--stellar-text-primary); background: var(--nuit-relief); border: 1px solid var(--stellar-line-gold); border-radius: var(--stellar-radius); cursor: pointer; }
+.leo-mission-entree { position: fixed; top: calc(env(safe-area-inset-top, 0px) + 8px); right: calc(env(safe-area-inset-right, 0px) + 12px); z-index: 4; pointer-events: auto; min-height: 44px; padding: .55rem .75rem; margin: 0; color: var(--stellar-text-primary); background: var(--nuit-relief); border: 1px solid var(--stellar-line-gold); border-radius: var(--stellar-radius); cursor: pointer; }
 .leo-mission-dialog { box-sizing: border-box; width: min(40rem, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem); padding: 1.25rem; background: var(--nuit-haute); color: var(--stellar-text-primary); border: 1px solid var(--stellar-accent-gold); border-radius: var(--stellar-radius); overscroll-behavior: contain; overflow-y: auto; font: 1rem/1.5 system-ui, sans-serif; }
 .leo-mission-dialog::backdrop { background: rgba(3, 7, 14, .8); }
 .leo-mission-dialog header, .leo-mission-actions { display: flex; align-items: center; justify-content: space-between; gap: .75rem; flex-wrap: wrap; }

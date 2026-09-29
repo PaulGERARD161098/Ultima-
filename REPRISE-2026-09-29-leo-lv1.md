@@ -280,3 +280,18 @@ Avant/après : aucun accès UI au registre auparavant ; parcours de mémo intég
 maintenant préparé. Même hébergement/auth/SQL, aucune dépendance nouvelle,
 aucun appel modèle. Gain de temps et coût non mesurés. Activation API, mandat
 de mission réelle et recette globale demeurent distincts.
+
+### Première exécution de cette tranche
+
+Source `1a45948f008ec6a60bfb6d2a2d526ca65d535e5c`, intégration
+`b8379c41dfec0585908cdd50f1deaf1fedc09a05`, cible `fb7daac…`.
+Run LV1 `36584032243` réussi, log job `109459423347` relu : parcours composé
+client→route→SQL réellement exécuté avec succès à 16 h 38 Paris. Unit général
+réussi. Les deux groupes navigateur du run `36584032205` ont trouvé un défaut
+d'intégration de l'entrée : dans l'en-tête, elle augmente sa hauteur, réduit les
+cibles tactiles de la carte et hérite de pointer-events:none. Le nouveau test
+refuse le clic intercepté ; l'ancien harnais cibles-telephone détecte cinq écarts.
+
+Correctif : déplacer le bouton hors de l'en-tête mesuré, dans la zone supérieure
+de commandes, position fixe et pointer-events:auto. Aucune modification du
+moteur de carte ni de ses seuils ; aucun test affaibli. Repreuve CI nécessaire.
