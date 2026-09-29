@@ -9,7 +9,8 @@
 // main : chaque FEUILLE (une cible, aucun enfant, pas externe) doit porter, au
 // téléphone, un lien VISIBLE vers un de ses ancêtres. Une feuille ajoutée
 // demain est contrôlée sans une ligne de plus ici.
-// Et pour RIVEN, plus strict : le lien mène à son parent EXACT, GRIMA, et se
+// Et pour RIVEN, plus strict : le lien mène à son parent EXACT, OMEGA (GRIMA, son ancien parent, est supprimé
+// depuis le 2026-09-29), et se
 // touche du doigt (≥ 40 px).
 //
 // ⛔ Vu rouge sur le code d'avant (RIVEN). Verrou de non-vacuité : au moins
@@ -35,17 +36,14 @@ const feuilles = Object.entries(NOEUDS)
   .map(([id, n]) => ({ id, cible: n.cible }));
 verifier('Verrou : au moins cinq feuilles lues dans le registre', feuilles.length >= 5, `${feuilles.length}`);
 
-for (const f of feuilles) {
-  // Les cibles des ancêtres (sans la feuille elle-même). La racine n'a pas de
-  // cible dans le registre : elle vit à `index.html`.
-  const ancetres = chemin(f.id, NOEUDS).slice(0, -1)
-    .map((id) => (NOEUDS[id] || {}).cible || (id === 'racine' ? 'index.html' : null))
-    .filter(Boolean);
+// Ouvre `cible` au téléphone, lève la porte de connexion et son inertie, et
+// rend les liens de la page avec ce que le doigt y atteint réellement.
+async function sonder(id, cible) {
   const contexte = await navigateur.newContext({ viewport: { width: 390, height: 664 }, isMobile: true, hasTouch: true });
   const page = await contexte.newPage();
-  page.on('pageerror', (e) => erreurs.push(`${f.id} pageerror: ${e.message}`));
+  page.on('pageerror', (e) => erreurs.push(`${id} pageerror: ${e.message}`));
   await page.route('**/api/**', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, data: [] }) }));
-  await page.goto(`${BASE}/${f.cible}`, { waitUntil: 'load', timeout: 20000 });
+  await page.goto(`${BASE}/${cible}`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForTimeout(1200);
   // L'écran de connexion couvre certaines pages sans session : on mesure la
   // page qu'on atteint une fois connecté, pas la porte.
@@ -74,16 +72,62 @@ for (const f of feuilles) {
       && !!dessus && (dessus === a || a.contains(dessus));
     return { href: new URL(a.getAttribute('href'), location.href).pathname.replace(/^\//, ''), vu, h: Math.round(r.height), texte: a.textContent.trim().slice(0, 24) };
   }));
+  await contexte.close();
+  return liens;
+}
+
+for (const f of feuilles) {
+  // Les cibles des ancêtres (sans la feuille elle-même). La racine n'a pas de
+  // cible dans le registre : elle vit à `index.html`.
+  const ancetres = chemin(f.id, NOEUDS).slice(0, -1)
+    .map((id) => (NOEUDS[id] || {}).cible || (id === 'racine' ? 'index.html' : null))
+    .filter(Boolean);
+  const liens = await sonder(f.id, f.cible);
   const retours = liens.filter((l) => l.vu && ancetres.includes(l.href));
   verifier(`${f.id} (${f.cible}) : un retour visible vers un ancêtre`, retours.length > 0,
     retours.length ? retours.map((l) => `${l.texte} → ${l.href}`).join(' · ') : `aucun parmi ${ancetres.join(', ')}`);
   if (f.id === 'riven') {
     const parent = ancetres[ancetres.length - 1];
     const auParent = retours.filter((l) => l.href === parent);
-    verifier('riven : le retour mène au parent EXACT (GRIMA)', parent === 'grima.html' && auParent.length > 0, parent);
+    verifier('riven : le retour mène au parent EXACT (OMEGA)', parent === 'omega.html' && auParent.length > 0, parent);
     verifier('riven : le retour se touche du doigt (≥ 40 px)', auParent.some((l) => l.h >= 40), auParent.map((l) => l.h).join(','));
   }
-  await contexte.close();
+}
+
+// ---------------------------------------------------------------------------
+// 2026-09-29 — LES RETOURS APRÈS LA RESTRUCTURATION OMEGA / IMLADRIK.
+// Cette table n'est PAS lue dans le registre : elle dit ce que Paul a décidé
+// que chaque page ouvre en « retour », et c'est ce que la restructuration
+// pouvait casser en silence (une page qui pointe encore vers naga.html ou
+// grima.html est une impasse — 404). Le registre ne suffit pas à le dire :
+// IDEES, ABAQUE et FINUBAR reviennent à OMEGA, pas à leur parent d'arbre.
+// Chaque page doit porter un lien VISIBLE (touchable) vers le bon parent, et
+// AUCUN lien vers une page qui n'existe plus.
+const RETOURS_ATTENDUS = [
+  ['riven', 'riven.html', 'omega.html'],
+  ['nicol-bolas', 'bcp.html', 'omega.html'],
+  ['imladrik', 'imladrik.html', 'omega.html'],
+  ['adramelech', 'adramelech.html', 'imladrik.html'],
+  ['tao', 'tao.html', 'imladrik.html'],
+  ['idees', 'idees.html', 'omega.html'],
+  ['abaque', 'abaque.html', 'omega.html'],
+  ['finubar', 'finubar.html', 'omega.html'],
+];
+verifier('Verrou : huit pages à retour explicite', RETOURS_ATTENDUS.length === 8);
+for (const [id, fichier, parent] of RETOURS_ATTENDUS) {
+  const liens = await sonder(id, fichier);
+  const versLeParent = liens.filter((l) => l.vu && l.href === parent);
+  verifier(`${fichier} : retour visible vers ${parent}`, versLeParent.length > 0,
+    liens.filter((l) => l.vu).map((l) => `${l.texte} → ${l.href}`).join(' · ').slice(0, 200));
+  verifier(`${fichier} : aucun lien vers une page disparue (grima / naga / ultima)`,
+    liens.length > 0 && !liens.some((l) => /^(grima|naga|ultima)\.html$/.test(l.href)),
+    liens.filter((l) => /^(grima|naga|ultima)\.html$/.test(l.href)).map((l) => l.href).join(','));
+}
+// Le parent attendu existe bel et bien (un retour vers une page absente serait
+// vert sur le seul texte du lien).
+for (const parent of new Set(RETOURS_ATTENDUS.map((r) => r[2]))) {
+  const rep = await fetch(`${BASE}/${parent}`);
+  verifier(`${parent} : la page répond 200`, rep.status === 200, String(rep.status));
 }
 
 verifier('Zéro erreur de page', erreurs.length === 0, JSON.stringify(erreurs.slice(0, 3)));

@@ -143,7 +143,7 @@ function etat(page) {
 }
 
 // ---- ③ LES ADRESSES FORGÉES ----
-for (const chemin of ['alpha.html#__proto__', 'alpha.html#constructor', 'alpha.html#inexistant', 'ultima.html#renoboost-ia']) {
+for (const chemin of ['alpha.html#__proto__', 'alpha.html#constructor', 'alpha.html#inexistant', 'omega.html#renoboost-ia']) {
   const { page, contexte } = await ouvrir(chemin, { retard: RETARD_MS });
   await page.waitForTimeout(RETARD_MS + 1800);
   const m = await etat(page);

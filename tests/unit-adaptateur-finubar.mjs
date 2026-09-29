@@ -111,7 +111,7 @@ console.log('§2 — les signaux, propagés vers le haut');
   verifier('la racine n\'est jamais peinte (elle n\'a pas d\'étoile)',
     S.racine === undefined);
   verifier('une branche sans projet reste éteinte',
-    S['ultima-perso'] === undefined && S.naga === undefined && S.grima === undefined,
+    S.omega === undefined && S.imladrik === undefined && S.naga === undefined && S.grima === undefined,
     'sinon tout s\'allume, et plus rien n\'appelle');
 
   // Le cas de référence qui interdit la réponse uniforme : sans projet en

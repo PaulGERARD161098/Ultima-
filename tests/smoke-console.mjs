@@ -1,12 +1,13 @@
-// Supra-division ULTIMA (Ultima Lv3) : ultima.html et ses MACRO-QUADRANTS.
-// Depuis la dictée du 2026-08-01, ULTIMA ne montre plus que DEUX cadrans
-// cliquables — GRIMA « Ce qui est utile » (RIVEN, NICOL BOLAS) et NAGA « Ce qui
-// fait grandir » (IMLADRIK, ADRAMELECH, TAO) — chacun ouvrant sa propre
-// boussole. Prouve : bandeau conforme au REGISTRE, 2 caps GRIMA/NAGA avec leur
-// devise en badge, navigation ULTIMA → GRIMA → RIVEN → riven.html (carte
-// Leaflet intacte), boussole NAGA complète avec retour vers ULTIMA, AUCUNE
-// requête réseau externe (zéro CDN), zéro erreur console, contraste AA calculé
-// sur les couleurs réellement rendues.
+// Supra-division OMEGA (Ultima Lv3) : omega.html, ses trois caps, et IMLADRIK.
+// 2026-09-29 : ex-ULTIMA (ultima.html) → OMEGA (omega.html) ; les MACRO-
+// QUADRANTS GRIMA et NAGA sont SUPPRIMÉS (grima.html, naga.html n'existent
+// plus, vercel.json les redirige). OMEGA porte RIVEN, NICOL BOLAS et IMLADRIK ;
+// IMLADRIK porte MAEDRETHNIR, VRANESH, DRAUKHAIN, ADRAMELECH et TAO.
+// Prouve : bandeau conforme au REGISTRE, 3 caps, navigation OMEGA → RIVEN →
+// riven.html (Ciel intact, zéro Leaflet), coque IMLADRIK complète (cinq caps)
+// avec retour vers OMEGA, ABSENCE de GRIMA/NAGA, AUCUNE requête réseau externe
+// (zéro CDN), zéro erreur console, contraste AA calculé sur les couleurs
+// réellement rendues.
 // Mode démo forcé, Leaflet/OSM stubés (pour riven.html), zéro erreur tolérée.
 import { chromium } from 'playwright';
 import { readFileSync } from 'node:fs';
@@ -17,7 +18,7 @@ const PNG_1PX = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
   'base64');
 
-// LV5 / P3 — GRIMA et NAGA sont au ciel. P4 (2026-08-19) : la racine aussi —
+// LV5 / P3 — les coques sont au ciel (GRIMA et NAGA, supprimés depuis, l'étaient). P4 (2026-08-19) : la racine aussi —
 // plus aucune page de navigation en boussole. Le module de lecture double
 // support reste : VRANESH porte encore une boussole interne (P5c à venir).
 const { attendrePret, lireCaps, lireRepli, naviguerVers } = await import('./_caps.mjs');
@@ -76,10 +77,10 @@ page.on('request', (req) => {
 
 await preparerRoutes(page);
 
-// ============ A. La boussole ULTIMA (ultima.html) : deux macro-quadrants ============
-console.log('— A. Supra-division ULTIMA : GRIMA + NAGA —');
-await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
-// ULTIMA EST PASSÉE AU CIEL (étape ④a). Chaque assertion de cette section a
+// ============ A. Le ciel OMEGA (omega.html) : RIVEN, NICOL BOLAS, IMLADRIK ============
+console.log('— A. Supra-division OMEGA : RIVEN + NICOL BOLAS + IMLADRIK —');
+await page.goto(`${BASE}/omega.html`, { waitUntil: 'load', timeout: 20000 });
+// OMEGA (ex-ULTIMA) EST AU CIEL (étape ④a). Chaque assertion de cette section a
 // été reprise et CLASSÉE — portée, remplacée, ou abandonnée avec sa raison.
 // Le bandeau, le retour, le cartouche et le repli ne bougent pas : ils
 // appartiennent à la coque, pas au moteur.
@@ -88,8 +89,8 @@ await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { ti
 // Le bandeau ne peut pas dériver du registre sans que ce harnais le voie.
 const surligne = (await page.locator('h1.console-titre .titre-surligne').textContent())?.trim();
 const principal = (await page.locator('h1.console-titre .titre-principal').textContent())?.trim();
-verifier('Surligne = celle du registre', surligne === NOEUDS['ultima-perso'].surligne, `lu: ${surligne}`);
-verifier('Titre = celui du registre', principal === NOEUDS['ultima-perso'].titre, `lu: ${principal}`);
+verifier('Surligne = celle du registre', surligne === NOEUDS.omega.surligne, `lu: ${surligne}`);
+verifier('Titre = celui du registre', principal === NOEUDS.omega.titre, `lu: ${principal}`);
 // Plus de message de Léo affiché au repos (Paul, 2026-08-01) — tests d'ABSENCE.
 verifier('Invite « Léo te guide » retirée du bandeau',
   (await page.locator('.console-invite').count()) === 0);
@@ -97,14 +98,15 @@ verifier('Cartouche invisible et muet au repos',
   await page.locator('#boussole-parole').evaluate((el) =>
     getComputedStyle(el).visibility === 'hidden' && el.textContent.trim() === ''));
 
-// Les cadrans d'ULTIMA, dans l'ordre du registre.
-//   2026-08-01 : GRIMA « ce qui est utile » et NAGA « ce qui fait grandir ».
+// Les caps d'OMEGA, dans l'ordre du registre.
+//   2026-08-01 : deux macro-quadrants (GRIMA, NAGA) — supprimés le 2026-09-29 :
+//   OMEGA porte maintenant RIVEN, NICOL BOLAS et IMLADRIK.
 //   2026-08-06 : ALTHEA en TROISIÈME, hors des deux devises — Paul l'a voulu
 //   « tout seul, c'est un autre système ». Le nombre n'est donc plus figé à
 //   deux : ce qu'on vérifie, c'est que le rendu SUIT le registre, quel que
 //   soit le nombre de cadrans. Un test qui compte en dur se refait à chaque
 //   dictée ; un test qui compare à la source de vérité tient.
-const attendus = capsDe('ultima-perso').map((c) => c.nom);
+const attendus = capsDe('omega').map((c) => c.nom);
 // REMPLACÉE : les noms se lisent sur les étoiles. L'ORDRE est abandonné avec
 // sa raison — une constellation range par géométrie, l'ordre du DOM y suit la
 // profondeur et non le registre. On compare des ensembles ; la garantie qui
@@ -118,8 +120,13 @@ verifier('les cadrans rendus = ceux du registre',
 // juste en dessous, exactement ce que le commentaire ci-dessus interdit. Elle
 // est tombée au déplacement d'ALTHEA (2026-08-07). Corrigée : ALTHEA a quitté
 // cet étage, on l'éprouve donc par l'ABSENCE.
-verifier('ALTHEA n’est plus un cadran d’ULTIMA (il pend à la racine)',
+verifier('ALTHEA n’est plus un cadran d’OMEGA (il pend à la racine)',
   !attendus.includes('ALTHEA'), `lu: ${JSON.stringify(attendus)}`);
+// Éprouvé par l'ABSENCE, sur le RENDU (pas seulement sur le registre) : les
+// macro-quadrants supprimés n'ont ni étoile ni nom peint sur cet étage.
+verifier('OMEGA : trois caps, ni GRIMA ni NAGA, ni l\'ancien nom ULTIMA',
+  noms.length === 3 && !noms.some((n) => /^(GRIMA|NAGA|ULTIMA)$/.test(n)),
+  JSON.stringify(noms));
 
 // Chaque cadran est cliquable et ouvre sa porte — celles du registre, pas une
 // liste recopiée à la main.
@@ -135,13 +142,18 @@ verifier('ALTHEA n’est plus un cadran d’ULTIMA (il pend à la racine)',
 // on l'éprouve donc en CLIQUANT, ce qui est une preuve plus forte.
 // ---- REMPLACÉE UNE SECONDE FOIS le 2026-08-28 (l'isolement) ----
 // Depuis que ce qui CONTIENT s'isole au lieu d'ouvrir une page (Paul : « ça
-// m'affiche uniquement cette constellation »), GRIMA et NAGA ne naviguent plus.
+// m'affiche uniquement cette constellation »), les têtes (NICOL BOLAS, IMLADRIK)
+// ne naviguent plus ; seule la FEUILLE (RIVEN) ouvre sa page — section B.
 // La preuve se scinde donc en deux, et AUCUNE des deux moitiés n'est perdue :
 //   — ce que le clic fait maintenant : il montre la descendance SUR PLACE ;
 //   — ce que la porte devient : une adresse, servie par le repli <noscript>,
 //     qui reste la navigation le jour où le ciel ne se peint pas.
-for (const attendu of capsDe('ultima-perso')) {
-  await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
+const tetesOmega = capsDe('omega').filter((c) => (c.enfants || []).length > 0);
+verifier('OMEGA : deux têtes à isoler (NICOL BOLAS, IMLADRIK) et une feuille (RIVEN)',
+  tetesOmega.map((c) => c.id).join(',') === 'nicol-bolas,imladrik'
+  && !(NOEUDS.riven.enfants || []).length);
+for (const attendu of tetesOmega) {
+  await page.goto(`${BASE}/omega.html`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
   await page.locator(`#ciel-noeud-scene .ciel-etoile[data-noeud-id="${attendu.id}"]`)
     .dispatchEvent('click');
@@ -162,20 +174,21 @@ for (const attendu of capsDe('ultima-perso')) {
   verifier(`Clic ${attendu.nom} : ce qu’ils contiennent reste caché`,
     dedans.every((id) => !peints.includes(id)), JSON.stringify(dedans));
   // La moitié qui se prouve par l'ABSENCE : le frère a bien disparu.
-  const frere = capsDe('ultima-perso').find((c) => c.id !== attendu.id);
-  verifier(`Clic ${attendu.nom} : ${frere.nom} a disparu du ciel`,
-    !peints.includes(frere.id), JSON.stringify(peints));
+  for (const frere of capsDe('omega').filter((c) => c.id !== attendu.id)) {
+    verifier(`Clic ${attendu.nom} : ${frere.nom} a disparu du ciel`,
+      !peints.includes(frere.id), JSON.stringify(peints));
+  }
 }
 {
-  await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.goto(`${BASE}/omega.html`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
   const portes = await lireRepli(page);
-  for (const attendu of capsDe('ultima-perso')) {
+  for (const attendu of capsDe('omega')) {
     verifier(`Porte ${attendu.cible} servie par le repli <noscript>`,
       portes.includes(attendu.cible), JSON.stringify(portes));
   }
 }
-await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
+await page.goto(`${BASE}/omega.html`, { waitUntil: 'load', timeout: 20000 });
 await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
 verifier('Aucun cap inerte (aria-disabled / à venir)',
   (await page.locator('#ciel-noeud-scene .ciel-etoile[aria-disabled]').count()) === 0);
@@ -183,7 +196,7 @@ verifier('Aucun cap inerte (aria-disabled / à venir)',
 // ciel, « externe » n'est plus un attribut du DOM mais une branche du code
 // (`window.open`), donc c'est la source qui fait foi.
 verifier('Aucun cap externe à cet étage (tout est interne)',
-  capsDe('ultima-perso').every((c) => !c.externe));
+  capsDe('omega').every((c) => !c.externe));
 
 // La devise de chaque cadran tient lieu de badge (dictée : le sous-titre).
 // REMPLACÉE : la devise était un badge peint en permanence sous le cap ; au
@@ -195,8 +208,14 @@ async function etatDe(id) {
   await page.waitForTimeout(150);
   return (await page.locator('#boussole-parole .parole-etat').textContent())?.trim();
 }
-verifier('GRIMA — badge « Ce qui est utile »', (await etatDe('grima')) === 'Ce qui est utile');
-verifier('NAGA — badge « Ce qui fait grandir »', (await etatDe('naga')) === 'Ce qui fait grandir');
+// 2026-09-29 : les devises « Ce qui est utile » / « Ce qui fait grandir »
+// allaient avec GRIMA et NAGA — elles disparaissent avec eux. Chaque cap dit
+// désormais l'état de son registre, et aucune ancienne devise ne subsiste.
+for (const c of capsDe('omega')) {
+  verifier(`${c.nom} — badge = état du registre (« ${c.etat} »)`, (await etatDe(c.id)) === c.etat);
+}
+verifier('Aucune ancienne devise de macro-quadrant dans le registre',
+  !/Ce qui est utile|Ce qui fait grandir/.test(JSON.stringify(NOEUDS)));
 
 // Le cœur gravé + sa légende (pièce ④ du patron).
 // REMPLACÉE : le cœur n'est plus au centre du plateau — le centre, au ciel,
@@ -204,7 +223,7 @@ verifier('NAGA — badge « Ce qui fait grandir »', (await etatDe('naga')) === 
 // (l'identité gravée du nœud est présente) est tenue, sa place change.
 verifier('Cœur gravé au centre', (await page.locator('.ciel-filigrane svg').count()) === 1);
 const legende = (await page.locator('.ciel-legende').textContent())?.trim();
-verifier('Légende gravée = celle du registre', legende === NOEUDS['ultima-perso'].legende, `lu: ${legende}`);
+verifier('Légende gravée = celle du registre', legende === NOEUDS.omega.legende, `lu: ${legende}`);
 // ABANDONNÉE, ET VOICI POURQUOI. L'aiguille joignait le CENTRE de la rose à
 // chaque cap : elle disait « ceci part d'ici ». Un ciel n'a pas de centre d'où
 // partir — les étoiles ne rayonnent pas d'un moyeu, elles occupent un volume.
@@ -216,7 +235,7 @@ verifier('Légende gravée = celle du registre', legende === NOEUDS['ultima-pers
 // fait naître ses enfants : compter après avoir survolé, c'est compter deux
 // étages. On repart donc d'une page neuve — trouvé en voyant ce contrôle
 // tomber juste après les contrôles de devise, qui survolent.
-await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
+await page.goto(`${BASE}/omega.html`, { waitUntil: 'load', timeout: 20000 });
 await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
 verifier('une étoile par cadran, ni plus ni moins',
   (await page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id]').count()) === attendus.length,
@@ -230,12 +249,12 @@ verifier('Retour vers la boussole racine',
 // `hover()` EXPIRE sur le ciel : la caméra glisse de façon asymptotique, donc
 // aucun élément n'est jamais « stable » au sens de Playwright. On envoie
 // l'événement, comme partout ailleurs dans le patrimoine.
-const capGrima = page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="grima"]');
-await capGrima.dispatchEvent('mouseenter');
+const capNicol = page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="nicol-bolas"]');
+await capNicol.dispatchEvent('mouseenter');
 await page.waitForSelector('#boussole-parole.is-actif', { timeout: 5000 });
 const parole = (await page.locator('#boussole-parole').textContent()) || '';
-verifier('Survol GRIMA : la parole de Léo se dépose',
-  /GRIMA/.test(parole) && /réseau commercial/i.test(parole) && /pilotage/i.test(parole),
+verifier('Survol NICOL BOLAS : la parole de Léo se dépose',
+  /NICOL BOLAS/.test(parole) && /pilotage financier/i.test(parole) && /échéancier/i.test(parole),
   `lu: ${parole.slice(0, 120)}`);
 
 // REMPLACÉE : le blason était peint en permanence sur chaque cap ; au ciel il
@@ -244,7 +263,7 @@ verifier('Survol GRIMA : la parole de Léo se dépose',
 // La garantie tenue est la même et se vérifie cap par cap : CHACUN a sa
 // gravure, et chacune est étiquetée pour le lecteur d'écran.
 const blasons = [];
-for (const c of capsDe('ultima-perso')) {
+for (const c of capsDe('omega')) {
   await page.locator(`#ciel-noeud-scene .ciel-etoile[data-noeud-id="${c.id}"]`)
     .dispatchEvent('mouseenter');
   await page.waitForTimeout(150);
@@ -259,12 +278,12 @@ verifier('un blason étiqueté par cadran',
 // `tabindex="0"`, le nom accessible et la touche Entrée. L'ancre qui l'enveloppe
 // est en `tabindex="-1"` exprès — sans quoi la tabulation s'arrêterait deux
 // fois sur le même cadran.
-await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
+await page.goto(`${BASE}/omega.html`, { waitUntil: 'load', timeout: 20000 });
 await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
-const etoileGrima = page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="grima"]');
-await etoileGrima.evaluate((el) => el.focus());
+const etoileImladrik = page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="imladrik"]');
+await etoileImladrik.evaluate((el) => el.focus());
 verifier('Cadran focusable au clavier',
-  await etoileGrima.evaluate((el) => el === document.activeElement));
+  await etoileImladrik.evaluate((el) => el === document.activeElement));
 
 // Contraste AA sur les couleurs réellement rendues.
 // REMPLACÉ : ce bloc lisait `.cap-nom` et `.cap-etat` sur du PARCHEMIN. La
@@ -297,45 +316,48 @@ verifier('Contraste titre sur fond de nuit ≥ 4,5:1', rTitre >= 4.5, `${rTitre.
 
 verifier('Zéro requête réseau externe (aucun CDN)', requetesExternes.length === 0,
   requetesExternes.slice(0, 3).join(', '));
-verifier('Zéro erreur console (ULTIMA)', erreursConsole.length === 0, erreursConsole.slice(0, 3).join(' | '));
+verifier('Zéro erreur console (OMEGA)', erreursConsole.length === 0, erreursConsole.slice(0, 3).join(' | '));
 
-// ============ B. Navigation ULTIMA → GRIMA → RIVEN (riven.html) ============
-console.log('— B. GRIMA → grima.html, puis RIVEN → riven.html (carte) —');
-// REMPLACÉE le 2026-08-28 : le clic sur GRIMA isole désormais sur place, et
-// c'est la section A qui l'éprouve. La coque `grima.html` s'ouvre par son
-// ADRESSE — celle que sert le repli <noscript>, éprouvé juste au-dessus. Ce que
-// la section B mesure n'a pas bougé d'un pouce : c'est la COQUE de GRIMA, et
-// elle est entière.
-await page.goto(`${BASE}/grima.html`, { waitUntil: 'load', timeout: 20000 });
-verifier('La coque GRIMA s’ouvre (grima.html)', /\/grima\.html$/.test(page.url()), page.url());
+// ============ B. Navigation OMEGA → RIVEN (riven.html) ============
+console.log('— B. La coque OMEGA, puis RIVEN → riven.html (carte) —');
+// REMPLACÉE le 2026-09-29 : la coque `grima.html` n'existe plus. RIVEN, qui en
+// était le premier cap, est désormais un cap direct d'OMEGA : c'est depuis
+// `omega.html` que son clic est éprouvé. La coque est rouverte par son ADRESSE
+// (celle que sert le repli <noscript>), pour un état neuf.
+await page.goto(`${BASE}/omega.html`, { waitUntil: 'load', timeout: 20000 });
+verifier('La coque OMEGA s’ouvre (omega.html)', /\/omega\.html$/.test(page.url()), page.url());
 await attendrePret(page);
 
-const surligneGrima = (await page.locator('h1.console-titre .titre-surligne').textContent())?.trim();
-const titreGrima = (await page.locator('h1.console-titre .titre-principal').textContent())?.trim();
-verifier('GRIMA : surligne = celle du registre', surligneGrima === NOEUDS.grima.surligne, `lu: ${surligneGrima}`);
-verifier('GRIMA : titre = celui du registre', titreGrima === NOEUDS.grima.titre, `lu: ${titreGrima}`);
+const surligneOmega = (await page.locator('h1.console-titre .titre-surligne').textContent())?.trim();
+const titreOmega = (await page.locator('h1.console-titre .titre-principal').textContent())?.trim();
+verifier('OMEGA : surligne = celle du registre (« Supra-division Omega »)',
+  surligneOmega === NOEUDS.omega.surligne && surligneOmega === 'Supra-division Omega', `lu: ${surligneOmega}`);
+verifier('OMEGA : titre = celui du registre', titreOmega === NOEUDS.omega.titre, `lu: ${titreOmega}`);
 
-const attendusGrima = capsDe('grima').map((c) => c.nom);
-const capsGrima = await lireCaps(page);
-const nomsGrima = capsGrima.map((c) => c.nom);
-// Même scission que pour NAGA plus bas : la déclaration du registre est
+const attendusOmega = capsDe('omega').map((c) => c.nom);
+const capsOmega = await lireCaps(page);
+const nomsOmega = capsOmega.map((c) => c.nom);
+// Même scission que pour IMLADRIK plus bas : la déclaration du registre est
 // conservée, l'ordre du DOM est abandonné (la géométrie range).
-verifier('GRIMA : le registre déclare RIVEN + NICOL BOLAS dans cet ordre',
-  JSON.stringify(attendusGrima) === JSON.stringify(['RIVEN', 'NICOL BOLAS']),
-  `registre: ${JSON.stringify(attendusGrima)}`);
-verifier('GRIMA : les deux cadrans sont rendus (ordre abandonné)',
-  JSON.stringify([...nomsGrima].sort()) === JSON.stringify([...attendusGrima].sort()),
-  `lu: ${JSON.stringify(nomsGrima)}`);
+verifier('OMEGA : le registre déclare RIVEN + NICOL BOLAS + IMLADRIK dans cet ordre',
+  JSON.stringify(attendusOmega) === JSON.stringify(['RIVEN', 'NICOL BOLAS', 'IMLADRIK']),
+  `registre: ${JSON.stringify(attendusOmega)}`);
+verifier('OMEGA : les trois caps sont rendus (ordre abandonné)',
+  JSON.stringify([...nomsOmega].sort()) === JSON.stringify([...attendusOmega].sort()),
+  `lu: ${JSON.stringify(nomsOmega)}`);
 // Les portes se lisent dans le repli <noscript> : au ciel, l'étoile n'est pas
 // une ancre et c'est là que les `href` vivent désormais.
-const hrefsGrima = await lireRepli(page);
-for (const attendu of ['riven.html', 'bcp.html']) {
-  verifier(`GRIMA : porte ouverte vers ${attendu}`, hrefsGrima.includes(attendu), JSON.stringify(hrefsGrima));
+const hrefsOmega = await lireRepli(page);
+for (const attendu of ['riven.html', 'bcp.html', 'imladrik.html']) {
+  verifier(`OMEGA : porte ouverte vers ${attendu}`, hrefsOmega.includes(attendu), JSON.stringify(hrefsOmega));
 }
-const legendeGrima = (await page.locator('.ciel-legende').textContent())?.trim();
-verifier('GRIMA : légende gravée « ce qui est utile »', legendeGrima === NOEUDS.grima.legende, `lu: ${legendeGrima}`);
-verifier('GRIMA : retour « ↞ ULTIMA »',
-  (await page.locator('.console-retour a[href="ultima.html"]').count()) === 1);
+verifier('OMEGA : aucune porte vers une page disparue (grima / naga / ultima)',
+  hrefsOmega.length > 0 && !hrefsOmega.some((h) => /^(grima|naga|ultima)\.html/.test(h)),
+  JSON.stringify(hrefsOmega));
+const legendeOmega = (await page.locator('.ciel-legende').textContent())?.trim();
+verifier('OMEGA : légende gravée « le personnel »', legendeOmega === NOEUDS.omega.legende && legendeOmega === 'le personnel', `lu: ${legendeOmega}`);
+verifier('OMEGA : retour vers la racine (« ↞ » vers /)',
+  (await page.locator('.console-retour a[href="/"]').count()) === 1);
 
 // RIVEN navigue toujours vers la carte : zéro régression sur l'acquis.
 const erreursRiven = [];
@@ -345,9 +367,9 @@ await naviguerVers(page, 'riven');
 await page.waitForURL('**/riven.html', { timeout: 20000 });
 verifier('Clic RIVEN → URL riven.html', /\/riven\.html$/.test(page.url()), page.url());
 
-// L'app démarre : cartouche ULTIMA visible.
+// L'app démarre : cartouche Ultima visible (classe CSS du produit, inchangée).
 await page.waitForSelector('.cartouche-ultima', { timeout: 20000 });
-verifier('App bootée (cartouche ULTIMA)', await page.locator('.cartouche-ultima').isVisible());
+verifier('App bootée (cartouche Ultima)', await page.locator('.cartouche-ultima').isVisible());
 
 // LA CARTE EST SUPPRIMÉE (2026-08-13) : ce qui s'ouvrait ici était l'onglet
 // Carte et sa Leaflet. Le CIEL est la seule forme du réseau — c'est lui qui
@@ -361,63 +383,65 @@ verifier('Plus aucune Leaflet dans la page',
   await page.evaluate(() => typeof window.L === 'undefined'));
 verifier('Zéro erreur console (riven.html)', erreursRiven.length === 0, erreursRiven.slice(0, 3).join(' | '));
 
-// ============ C. La boussole NAGA (naga.html) ============
-console.log('— C. NAGA → naga.html (ce qui fait grandir) —');
-const erreursNaga = [];
-const pageNaga = await contexte.newPage();
-pageNaga.on('console', (msg) => { if (msg.type() === 'error') erreursNaga.push(msg.text()); });
-pageNaga.on('pageerror', (err) => erreursNaga.push(String(err)));
-await preparerRoutes(pageNaga);
-await pageNaga.goto(`${BASE}/naga.html`, { waitUntil: 'load', timeout: 20000 });
-await attendrePret(pageNaga);
+// ============ C. La coque IMLADRIK (imladrik.html) — cinq caps ============
+console.log('— C. IMLADRIK → imladrik.html (cinq caps, dont ADRAMELECH et TAO) —');
+const erreursImladrik = [];
+const pageImladrik = await contexte.newPage();
+pageImladrik.on('console', (msg) => { if (msg.type() === 'error') erreursImladrik.push(msg.text()); });
+pageImladrik.on('pageerror', (err) => erreursImladrik.push(String(err)));
+await preparerRoutes(pageImladrik);
+await pageImladrik.goto(`${BASE}/imladrik.html`, { waitUntil: 'load', timeout: 20000 });
+await attendrePret(pageImladrik);
 
-const surligneNaga = (await pageNaga.locator('h1.console-titre .titre-surligne').textContent())?.trim();
-const titreNaga = (await pageNaga.locator('h1.console-titre .titre-principal').textContent())?.trim();
-verifier('NAGA : surligne = celle du registre', surligneNaga === NOEUDS.naga.surligne, `lu: ${surligneNaga}`);
-verifier('NAGA : titre = celui du registre', titreNaga === NOEUDS.naga.titre, `lu: ${titreNaga}`);
+const surligneImladrik = (await pageImladrik.locator('h1.console-titre .titre-surligne').textContent())?.trim();
+const titreImladrik = (await pageImladrik.locator('h1.console-titre .titre-principal').textContent())?.trim();
+verifier('IMLADRIK : surligne = celle du registre', surligneImladrik === NOEUDS.imladrik.surligne, `lu: ${surligneImladrik}`);
+verifier('IMLADRIK : titre = celui du registre', titreImladrik === NOEUDS.imladrik.titre, `lu: ${titreImladrik}`);
 
-const attendusNaga = capsDe('naga').map((c) => c.nom);
-const capsNaga = await lireCaps(pageNaga);
-const nomsNaga = capsNaga.map((c) => c.nom);
+const attendusImladrik = capsDe('imladrik').map((c) => c.nom);
+const capsImladrik = await lireCaps(pageImladrik);
+const nomsImladrik = capsImladrik.map((c) => c.nom);
 // ASSERTION SCINDÉE (LV5 / P3), et c'est plus juste que de l'abandonner en bloc :
 // elle portait DEUX garanties de natures différentes.
-//   ① Le REGISTRE déclare bien ces trois cadrans, dans cet ordre. Cela ne dépend
+//   ① Le REGISTRE déclare bien ces cinq caps, dans cet ordre. Cela ne dépend
 //      d'aucun support de rendu : la garantie reste entière et elle protège
 //      contre une modification involontaire du registre. **Conservée.**
 //   ② Le DOM les rend dans le même ordre. Au ciel, l'ordre est celui de la
 //      GÉOMÉTRIE, pas celui de la liste (abandon acté en LV4 ④a). **Abandonnée**,
 //      remplacée par « tous présents, aucun de plus ».
-verifier('NAGA : le registre déclare IMLADRIK + ADRAMELECH + TAO dans cet ordre',
-  JSON.stringify(attendusNaga) === JSON.stringify(['IMLADRIK', 'ADRAMELECH', 'TAO']),
-  `registre: ${JSON.stringify(attendusNaga)}`);
-verifier('NAGA : les trois cadrans sont rendus (ordre abandonné : la géométrie range)',
-  JSON.stringify([...nomsNaga].sort()) === JSON.stringify([...attendusNaga].sort()),
-  `lu: ${JSON.stringify(nomsNaga)}`);
-const hrefsNaga = await lireRepli(pageNaga);
-for (const attendu of ['imladrik.html', 'adramelech.html', 'tao.html']) {
-  verifier(`NAGA : porte ouverte vers ${attendu}`, hrefsNaga.includes(attendu), JSON.stringify(hrefsNaga));
+verifier('IMLADRIK : le registre déclare MAEDRETHNIR + VRANESH + DRAUKHAIN + ADRAMELECH + TAO dans cet ordre',
+  JSON.stringify(attendusImladrik) === JSON.stringify(['MAEDRETHNIR', 'VRANESH', 'DRAUKHAIN', 'ADRAMELECH', 'TAO']),
+  `registre: ${JSON.stringify(attendusImladrik)}`);
+verifier('IMLADRIK : les cinq caps sont rendus (ordre abandonné : la géométrie range)',
+  JSON.stringify([...nomsImladrik].sort()) === JSON.stringify([...attendusImladrik].sort()),
+  `lu: ${JSON.stringify(nomsImladrik)}`);
+const hrefsImladrik = await lireRepli(pageImladrik);
+for (const attendu of ['maedrethnir.html', 'vranesh.html', 'draukhain.html', 'adramelech.html', 'tao.html']) {
+  verifier(`IMLADRIK : porte ouverte vers ${attendu}`, hrefsImladrik.includes(attendu), JSON.stringify(hrefsImladrik));
 }
-// « 3 aiguilles » ABANDONNÉE — un ciel n'a pas de moyeu (même abandon qu'en LV4
-// ④a et qu'au §169 de ce fichier). Remplacée par ce qu'elle approchait.
-verifier('NAGA : 3 étoiles (ce que les aiguilles approchaient)',
-  (await pageNaga.locator('g.ciel-etoile[data-noeud-id]').count()) === 3);
-const legendeNaga = (await pageNaga.locator('.ciel-legende').textContent())?.trim();
-verifier('NAGA : légende gravée « ce qui fait grandir »', legendeNaga === NOEUDS.naga.legende, `lu: ${legendeNaga}`);
-verifier('NAGA : retour « ↞ ULTIMA »',
-  (await pageNaga.locator('.console-retour a[href="ultima.html"]').count()) === 1);
+// « aiguilles » ABANDONNÉES — un ciel n'a pas de moyeu (même abandon qu'en LV4
+// ④a). Remplacées par ce qu'elles approchaient : une étoile par cap.
+verifier('IMLADRIK : 5 étoiles (ce que les aiguilles approchaient)',
+  (await pageImladrik.locator('g.ciel-etoile[data-noeud-id]').count()) === 5);
+const legendeImladrik = (await pageImladrik.locator('.ciel-legende').textContent())?.trim();
+verifier('IMLADRIK : légende gravée « Kalamn-talaen »', legendeImladrik === NOEUDS.imladrik.legende, `lu: ${legendeImladrik}`);
+verifier('IMLADRIK : retour « ↞ OMEGA » vers omega.html',
+  (await pageImladrik.locator('.console-retour a[href="omega.html"]').count()) === 1);
+verifier('IMLADRIK : plus aucun retour vers naga.html ni ultima.html',
+  (await pageImladrik.locator('a[href="naga.html"], a[href="ultima.html"], a[href="grima.html"]').count()) === 0);
 
 // ADRAMELECH garde son état « Privé » sur son nouveau cadran.
-verifier('NAGA : ADRAMELECH marqué « Privé »',
+verifier('IMLADRIK : ADRAMELECH marqué « Privé »',
   // L'ÉTAT NE S'ÉCRIT PLUS SOUS LE CAP : au ciel, il vit dans l'étiquette
   // accessible de l'étoile (`aria-label`), qui est la source de vérité pour qui
   // n'y voit pas. C'est un meilleur endroit pour le mesurer qu'un `<span>` de
   // style — et le seul qui existe encore.
-  /priv/i.test((await pageNaga.locator('g.ciel-etoile[data-noeud-id="adramelech"]')
+  /priv/i.test((await pageImladrik.locator('g.ciel-etoile[data-noeud-id="adramelech"]')
     .getAttribute('aria-label')) || ''));
 
-verifier('Zéro erreur console (NAGA)', erreursNaga.length === 0, erreursNaga.slice(0, 3).join(' | '));
+verifier('Zéro erreur console (IMLADRIK)', erreursImladrik.length === 0, erreursImladrik.slice(0, 3).join(' | '));
 
 await navigateur.close();
 
-console.log(echecs === 0 ? '\n=== SMOKE ULTIMA (SUPRA-DIVISION) VERT ===' : `\n=== ${echecs} VERDICT(S) EN ÉCHEC ===`);
+console.log(echecs === 0 ? '\n=== SMOKE OMEGA (SUPRA-DIVISION) VERT ===' : `\n=== ${echecs} VERDICT(S) EN ÉCHEC ===`);
 process.exit(echecs === 0 ? 0 : 1);

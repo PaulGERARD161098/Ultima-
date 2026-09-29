@@ -1,4 +1,5 @@
-// LV5 / P3 — LE NOM GRAVÉ SUR LA PASSERELLE, et les sept coques au ciel.
+// LV5 / P3 — LE NOM GRAVÉ SUR LA PASSERELLE, et les coques ordinaires au ciel (sept jusqu'au 2026-09-29, six depuis
+// la suppression de GRIMA et NAGA).
 //
 // LA PERTE QUE CE HARNAIS FERME. L'inventaire LV4 §13.1 listait cinq fonctions
 // que la boussole portait et qu'il fallait porter avec : la ④ était « la
@@ -6,7 +7,7 @@
 // trait a bien été porté ; le nom, non. L'adaptateur créait la relation et
 // jetait son libellé.
 //
-// ET LA COQUE PILOTE NE POUVAIT PAS LE VOIR : `ultima-perso` n'a aucun cap
+// ET LA COQUE PILOTE NE POUVAIT PAS LE VOIR : `omega` (ex-`ultima-perso`) n'a aucun cap
 // jumeau. La fonction avait donc été déclarée « portée » sur un écran incapable
 // de la contredire. C'est le même piège que le cap « à venir » en LV4 — déclaré
 // porté sur un écran qui n'en a pas — et il se referme de la même façon : on
@@ -121,7 +122,9 @@ chiffres.passerelleAttendue = attendu;
 // ---------------------------------------------------------------------------
 // ⑤ LES SEPT COQUES ORDINAIRES AU CIEL.
 // ---------------------------------------------------------------------------
-const COQUES = ['alpha', 'grima', 'naga', 'bcp', 'tao', 'imladrik', 'adramelech'];
+// 2026-09-29 : GRIMA et NAGA sont supprimés, OMEGA (ex-ULTIMA) les remplace :
+// six coques ordinaires, plus sept.
+const COQUES = ['alpha', 'omega', 'bcp', 'tao', 'imladrik', 'adramelech'];
 for (const nom of COQUES) {
   const page = await browser.newPage({ viewport: { width: 1280, height: 860 } });
   page.on('console', (m) => { if (m.type() === 'error') erreurs.push(nom + ': ' + m.text()); });
@@ -185,6 +188,13 @@ for (const nom of COQUES) {
       attendu: r.ciblesDuRegistre, trouve: r.cellesDuRepli
     };
   }
+  // Verrou de non-vacuité : « aucune cible perdue » est vert sur une liste vide.
+  // OMEGA, IMLADRIK, ALPHA et TAO portent des caps ; ils doivent en compter.
+  if (['alpha', 'omega', 'tao', 'imladrik', 'adramelech'].includes(nom)) {
+    verdicts['coqueNonVide_' + nom] = r.attendus >= 2;
+  }
+  if (nom === 'omega') { verdicts.omegaTroisCaps = r.attendus === 3; }
+  if (nom === 'imladrik') { verdicts.imladrikCinqCaps = r.attendus === 5; }
   verdicts['plusDeBoussole_' + nom] = r.plusDeBoussole === true;
   if (r.manquants.length) { chiffres['coque_' + nom].manquants = r.manquants; }
 

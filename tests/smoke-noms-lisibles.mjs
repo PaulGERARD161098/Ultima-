@@ -37,9 +37,12 @@ function verifier(nom, condition, detail = '') {
 
 const ECRANS = [
   { nom: 'racine', page: 'index.html', porte: true },
-  { nom: 'ULTIMA', page: 'ultima.html' },
-  { nom: 'NAGA', page: 'ultima.html#naga' },
-  { nom: 'GRIMA', page: 'ultima.html#grima' },
+  // 2026-09-29 : ULTIMA → OMEGA ; NAGA et GRIMA supprimés. IMLADRIK isolé
+  // (cinq caps aux noms longs : MAEDRETHNIR, ADRAMELECH) est le pire cas de
+  // lisibilité ; NICOL BOLAS isolé (quatre caps) remplace GRIMA.
+  { nom: 'OMEGA', page: 'omega.html' },
+  { nom: 'IMLADRIK', page: 'omega.html#imladrik' },
+  { nom: 'NICOL BOLAS', page: 'omega.html#nicol-bolas' },
   { nom: 'ALPHA', page: 'alpha.html' },
 ];
 // ⚠️ 300 px N'EST PAS UN LUXE, C'EST LE CÔTÉ OÙ LE PLANCHER SE CONTOURNE.
@@ -142,7 +145,7 @@ for (const ecran of ECRANS) {
   await page.waitForTimeout(2000);
   const m = await mesurer(page);
   await contexte.close();
-  chiffres['NAGA 1280→300'] = m ? +m.pxMin.toFixed(1) : null;
+  chiffres['IMLADRIK 1280→300'] = m ? +m.pxMin.toFixed(1) : null;
   verifier('Rétréci de 1280 à 300 px : aucun nom sous 11 px', !!m && m.n >= 2 && m.pxMin >= PLANCHER_PX - 0.05,
     m ? `min ${m.pxMin.toFixed(1)} px` : 'scène absente');
 }
