@@ -54,7 +54,7 @@ jobs:
           docker run --rm --pull never --network none --read-only --cap-drop ALL \
             --security-opt no-new-privileges --pids-limit 256 --memory 3g --cpus 2 \
             --user 65534:65534 --tmpfs /tmp:rw,nosuid,size=512m \
-            --tmpfs /travail/tests/.cache:rw,nosuid,size=256m \
+            --tmpfs /travail/tests/.cache:rw,nosuid,noexec,size=256m,uid=65534,gid=65534,mode=0700 \
             --env XDG_CONFIG_HOME=/tmp/lv1-config --env XDG_CACHE_HOME=/tmp/lv1-cache \
             --mount "type=bind,src=$GITHUB_WORKSPACE,dst=/travail,readonly" \
             --tmpfs /travail/.git:ro,nosuid,size=1m \
