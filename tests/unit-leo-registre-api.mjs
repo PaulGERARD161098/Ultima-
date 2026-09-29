@@ -13,6 +13,12 @@ async function invoke(req, options = {}) {
       calls.push({ name, args });
       if (options.throw) throw new Error('fixture transport');
       return options.result || { data: { status: 'completed' }, error: null };
+    }, from: table => {
+      const query = { table, filters: [] };
+      const builder = { select: columns => { query.columns = columns; return builder; },
+        eq: (key, value) => { query.filters.push([key, value]); return builder; },
+        maybeSingle: async () => { calls.push(query); return options.result || { data: null, error: null }; } };
+      return builder;
     } } }),
     ok: (_, data) => ({ status: 200, data }),
     fail: (_, status, message) => ({ status, message }),
@@ -58,4 +64,28 @@ for (const [code, expected] of [['42501', 403], ['22023', 400], ['40001', 409], 
 const lost = await invoke(request, { throw: true });
 assert.equal(lost.response.status, 503); assert.equal(lost.calls.length, 1);
 assert.match(lost.response.message, /incertain/);
+const receiptRequest = { method: 'GET', query: { mission, operation_id: 'old-op' } };
+const receipt = { operation_id: 'old-op', status: 'completed', result: { mission_version: 2 },
+  payload: { private: 'ne pas transmettre' }, owner: 'ne pas transmettre' };
+const targeted = await invoke(receiptRequest, { result: { data: receipt, error: null } });
+assert.deepEqual(targeted.calls, [{ table: 'leo_operations', columns: 'operation_id,status,result',
+  filters: [['mission_id', mission], ['operation_id', 'old-op']] }]);
+assert.deepEqual(targeted.response, { status: 200, data: { mission_id: mission,
+  operation: { operation_id: receipt.operation_id, status: receipt.status, result: receipt.result } } });
+assert.deepEqual((await invoke(receiptRequest)).response.data, { mission_id: mission, operation: null });
+for (const query of [{ mission, operation_id: '' }, { mission, operation_id: ['old-op'] },
+  { mission, operation_id: 'x'.repeat(129) }, { mission: 'invalid', operation_id: 'old-op' },
+  { mission, operation_id: 'old-op', owner: 'foreign' }]) {
+  const result = await invoke({ method: 'GET', query });
+  assert.equal(result.response.status, 400); assert.equal(result.calls.length, 0);
+}
+for (const auth of ['unauthenticated', 'unconfigured']) {
+  const result = await invoke(receiptRequest, { auth });
+  assert.equal(result.response.status, auth === 'unconfigured' ? 503 : 401);
+  assert.equal(result.calls.length, 0);
+}
+const deniedReceipt = await invoke(receiptRequest, { result: { error: { code: '42501' } } });
+assert.equal(deniedReceipt.response.status, 403);
+assert.equal((await invoke(receiptRequest, { result: { data: [], error: null } })).response.status, 503);
 console.log('Registre API : authentification, commandes fermées, RPC unique et issue inconnue vérifiées sur fixtures.');
+console.log('Reçu ciblé : projection minimale, filtres exacts, absence neutre, auth et entrées refusées.');

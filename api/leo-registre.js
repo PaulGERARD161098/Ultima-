@@ -10,6 +10,8 @@ const plain = value => value !== null && typeof value === 'object' && !Array.isA
   && [Object.prototype, null].includes(Object.getPrototypeOf(value));
 const exact = (value, keys) => plain(value) && Object.keys(value).length === keys.length
   && keys.every(key => Object.hasOwn(value, key));
+const operationIdValid = value => typeof value === 'string'
+  && /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$/.test(value);
 
 function databaseFailure(res, error) {
   if (isAuthError(error)) return fail(res, 401, 'Authentification requise');
@@ -31,6 +33,18 @@ export default async function handler(req, res) {
   try {
     let name, args;
     if (req.method === 'GET') {
+      if (exact(req.query, ['mission', 'operation_id']) && isUuid(req.query.mission)
+        && operationIdValid(req.query.operation_id)) {
+        // Lecture exacte sous l'identité vérifiée : SELECT + RLS existants.
+        // Pas de payload, ACL ou recherche globale ; null n'autorise aucun rejeu.
+        const { data, error } = await auth.client.from('leo_operations')
+          .select('operation_id,status,result').eq('mission_id', req.query.mission)
+          .eq('operation_id', req.query.operation_id).maybeSingle();
+        if (error) return databaseFailure(res, error);
+        if (data !== null && !plain(data)) return fail(res, 503, 'Reçu inexploitable');
+        return ok(res, { mission_id: req.query.mission, operation: data === null ? null
+          : { operation_id: data.operation_id, status: data.status, result: data.result } });
+      }
       if (!exact(req.query, ['mission']) || !isUuid(req.query.mission))
         return fail(res, 400, 'Mission invalide');
       name = 'leo_status'; args = { p_mission: req.query.mission };
@@ -41,8 +55,7 @@ export default async function handler(req, res) {
         name = 'leo_stop'; args = { p_mission: body.mission };
       } else if (body.action === 'write_memory'
         && exact(body, ['action', 'mission', 'operation_id', 'expected_version', 'patch'])
-        && isUuid(body.mission) && typeof body.operation_id === 'string'
-        && /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$/.test(body.operation_id)
+        && isUuid(body.mission) && operationIdValid(body.operation_id)
         && Number.isSafeInteger(body.expected_version) && body.expected_version > 0
         && plain(body.patch) && Object.keys(body.patch).length > 0
         && Object.keys(body.patch).every(key => ['state', 'next_action'].includes(key))

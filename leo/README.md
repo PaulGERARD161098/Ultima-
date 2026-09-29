@@ -129,6 +129,12 @@ Le journal est séparé par utilisateur ; il ne contient ni texte métier ni jet
 Son indisponibilité empêche le POST. Une réponse perdue survit au rechargement
 du même onglet : relecture obligatoire, reçu identifié, aucun renvoi automatique.
 L'absence du reçu parmi les 100 derniers ne prouve jamais une absence d'effet.
+Dans ce cas, la relecture recherche l'identifiant exact par
+`GET /api/leo-registre?mission=<uuid>&operation_id=<id>` sous la même identité
+et les RLS existantes. Seuls l'identifiant, le statut et le résultat du reçu
+sont exposés. Un reçu absent, incohérent ou en attente maintient le verrou ;
+un reçu ancien confirmé ne remplace pas l'état courant et ne rejoue rien.
+Une demande d'arrêt exige aussi un statut de mission arrêté.
 La fermeture définitive de l'onglet, un autre onglet ou appareil ne conservent
 pas ce marqueur : le contrôle de reprise inter-environnements reste à recevoir.
 Les résultats enregistrés restent consultables dans le registre serveur.

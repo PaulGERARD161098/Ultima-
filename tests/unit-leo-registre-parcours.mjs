@@ -45,6 +45,29 @@ function rpc(uid, name, args) {
 const deps = { ...http, isUuid, logError: () => {}, isAuthError: () => false,
   requireUser: async req => ({ status: 'ok', client: {
     rpc: (name, args) => rpc(req.fixtureUser, name, args),
+    from: table => {
+      assert.equal(table, 'leo_operations');
+      const filters = {};
+      const builder = {
+        select: columns => { assert.equal(columns, 'operation_id,status,result'); return builder; },
+        eq: (key, value) => { assert.ok(['mission_id', 'operation_id'].includes(key)); filters[key] = value; return builder; },
+        maybeSingle: () => {
+          const task = serial.then(async () => {
+            await db.exec('reset role; set role authenticated');
+            await db.query("select set_config('request.jwt.claim.sub',$1,false)", [req.fixtureUser]);
+            try {
+              // SELECT sous le vrai rôle : les policies SQL du registre s'appliquent.
+              const result = await db.query(`select operation_id,status,result from public.leo_operations
+                where mission_id=$1 and operation_id=$2`, [filters.mission_id, filters.operation_id]);
+              assert.ok(result.rows.length <= 1);
+              return { data: result.rows[0] || null, error: null };
+            } catch (error) { return { data: null, error }; }
+          });
+          serial = task.catch(() => {}); return task;
+        },
+      };
+      return builder;
+    },
   } }),
 };
 const route = new Function(...Object.keys(deps), routeSource)(...Object.values(deps));
@@ -304,6 +327,53 @@ try {
   assert.equal(loneStopConfirmed.data.operations.length, 0);
   assert.equal(loneStopConfirmed.data.budget.calls, 0);
   assert.equal(saved.has('fixture-lone-stop'), false);
+  // R25 : reçu perdu sorti des 100 derniers, retrouvé sans aucune réécriture.
+  const archiveMission = id(14), archiveOptions = { recoveryStore, recoveryKey: 'fixture-archive' };
+  await db.exec('reset role');
+  await db.query(`insert into public.leo_missions(id,owner,readers,expires_at,max_units,max_calls)
+    values($1,$2,array[$3::uuid],clock_timestamp()+interval '1 day',1000,1000)`, [archiveMission, owner, reader]);
+  const archived = client(owner, archiveOptions);
+  await archived.api.load(archiveMission); archived.wire.loseNextWrite = true;
+  await assert.rejects(() => archived.api.write({ next_action: 'Écriture ancienne' }), { code: 'uncertain' });
+  const archiveMarker = saved.get('fixture-archive'), archiveOp = JSON.parse(archiveMarker).operation_id;
+  archived.api.destroy();
+  for (let i = 0; i < 100; i++) {
+    const result = await rpc(owner, 'leo_write_memory', { p_mission: archiveMission,
+      p_operation: 'later-' + i, p_expected_version: i + 2, p_patch: { next_action: 'Courante ' + i } });
+    assert.equal(result.error, null);
+  }
+  const archiveStatus = (await rpc(owner, 'leo_status', { p_mission: archiveMission })).data;
+  assert.equal(archiveStatus.operations.length, 100); assert.equal(archiveStatus.operations_truncated, true);
+  assert.equal(archiveStatus.operations.some(o => o.operation_id === archiveOp), false, 'reçu réellement évincé');
+  const resumeArchive = client(owner, archiveOptions), recoveredArchive = await resumeArchive.api.reconcile();
+  assert.equal(recoveredArchive.uncertain, null); assert.equal(saved.has('fixture-archive'), false);
+  assert.equal(recoveredArchive.data.mission.version, 102);
+  assert.equal(recoveredArchive.data.mission.next_action, 'Courante 99');
+  assert.equal(recoveredArchive.data.budget.calls, 101);
+  assert.equal(resumeArchive.wire.requests.length, 2, 'statut puis reçu ciblé');
+  assert.ok(resumeArchive.wire.requests.every(r => r.method === 'GET'));
+  assert.deepEqual((await rpc(owner, 'leo_status', { p_mission: archiveMission })).data, archiveStatus,
+    'reprise sans effet, nouveau budget ou version');
+  for (const [uid, expected] of [[owner, true], [reader, true], [stranger, false]]) {
+    const wire = transport(uid);
+    const reply = await wire.fetch('/api/leo-registre?mission=' + archiveMission + '&operation_id=' + archiveOp,
+      { method: 'GET' });
+    assert.equal(reply.status, 200);
+    const found = (await reply.json()).data.operation;
+    assert.equal(found !== null, expected, 'RLS du reçu selon identité');
+    if (found) assert.deepEqual(Object.keys(found).sort(), ['operation_id', 'result', 'status']);
+  }
+  const wrongMission = await transport(owner).fetch('/api/leo-registre?mission=' + mission + '&operation_id=' + archiveOp,
+    { method: 'GET' });
+  assert.equal((await wrongMission.json()).data.operation, null, 'aucun reçu inter-missions');
+  // Un arrêt demandé ne se solde pas avec la seule preuve d'écriture ancienne.
+  saved.set('fixture-archive', JSON.stringify({ ...JSON.parse(archiveMarker), stopRequested: true }));
+  const archiveStop = client(owner, archiveOptions);
+  assert.ok((await archiveStop.api.reconcile()).uncertain);
+  await rpc(owner, 'leo_stop', { p_mission: archiveMission });
+  assert.equal((await archiveStop.api.reconcile()).uncertain, null);
+  assert.ok(archiveStop.wire.requests.every(r => r.method === 'GET'));
+  console.log('Reçu ancien : 101 écritures SQL, reprise ciblée sans doublon, ACL/inter-missions et arrêt éprouvés.');
   for (const api of clients) api.destroy();
   console.log('Parcours composé client→route→PostgreSQL : écriture, CAS, refus, réponse perdue, reçu, reprise et arrêt vérifiés ; auth/HTTP fictifs.');
 } finally { await db.close(); }

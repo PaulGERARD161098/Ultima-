@@ -14,6 +14,10 @@
   const resultValid = value => plain(value) && version(value.mission_version)
     && STATES.includes(value.state) && typeof value.next_action === 'string'
     && value.next_action.length <= 4000;
+  const operationValid = o => plain(o) && typeof o.operation_id === 'string'
+    && /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$/.test(o.operation_id)
+    && ['completed', 'pending', 'unknown'].includes(o.status)
+    && (o.status === 'completed' ? resultValid(o.result) : o.result === null);
   function error(code, message) { return Object.assign(new Error(message), { code }); }
   function statusValid(data, missionId) {
     const m = data?.mission, b = data?.budget;
@@ -27,10 +31,7 @@
       && b.used_units <= b.max_units && b.calls <= b.max_calls
       && Array.isArray(data.operations) && data.operations.length <= 100
       && typeof data.operations_truncated === 'boolean'
-      && data.operations.every(o => plain(o) && typeof o.operation_id === 'string'
-        && /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$/.test(o.operation_id)
-        && ['completed', 'pending', 'unknown'].includes(o.status)
-        && (o.status === 'completed' ? resultValid(o.result) : o.result === null));
+      && data.operations.every(operationValid);
   }
   function create(options) {
     if (!options || typeof options.getToken !== 'function') throw error('invalid', 'Session requise');
@@ -95,7 +96,7 @@
       } finally { busy = false; }
       return snapshot();
     }
-    async function request(body, onDispatch) {
+    async function request(body, onDispatch, operationId) {
       const controller = new AbortController();
       activeController = controller;
       let timer, expired = false;
@@ -113,7 +114,8 @@
           if (typeof token !== 'string' || !token) throw error('auth', 'Authentification requise');
           if (onDispatch) onDispatch();
           const response = await fetcher(body ? '/api/leo-registre'
-            : '/api/leo-registre?mission=' + encodeURIComponent(missionId), {
+            : '/api/leo-registre?mission=' + encodeURIComponent(missionId)
+              + (operationId ? '&operation_id=' + encodeURIComponent(operationId) : ''), {
             method: body ? 'POST' : 'GET', headers: { Authorization: 'Bearer ' + token,
               ...(body ? { 'Content-Type': 'application/json' } : {}) },
             ...(body ? { body: JSON.stringify(body) } : {}),
@@ -138,14 +140,15 @@
         })()]);
       } finally { clearTimeout(timer); activeController = null; }
     }
-    function reconcileProof() {
+    function reconcileProof(receipt) {
       if (!uncertain) return;
       if (uncertain.action === 'stop') {
         if (data.mission.stopped) clearUncertain();
         return;
       }
-      const op = data.operations.find(o => o.operation_id === uncertain.operation_id);
+      const op = receipt || data.operations.find(o => o.operation_id === uncertain.operation_id);
       if (op?.status === 'completed' && op.result.mission_version === uncertain.expected_version + 1
+        && op.result.mission_version <= data.mission.version
         && (!uncertain.stopRequested || data.mission.stopped)
         && (!uncertain.patch || Object.keys(uncertain.patch).every(k => op.result[k] === uncertain.patch[k])))
         clearUncertain();
@@ -157,7 +160,18 @@
         const fresh = await request();
         if (disposed) throw error('auth', 'Session fermée');
         if (!statusValid(fresh, missionId)) throw error('unavailable', 'Registre inexploitable');
-        data = fresh; needsRefresh = false; reconcileProof();
+        let receipt;
+        if (uncertain?.action === 'write_memory'
+          && !fresh.operations.some(o => o.operation_id === uncertain.operation_id)) {
+          const found = await request(null, null, uncertain.operation_id);
+          if (disposed) throw error('auth', 'Session fermée');
+          if (!plain(found) || found.mission_id !== missionId
+            || (found.operation !== null && (!operationValid(found.operation)
+              || found.operation.operation_id !== uncertain.operation_id)))
+            throw error('unavailable', 'Reçu inexploitable ; relisez le registre');
+          receipt = found.operation;
+        }
+        data = fresh; needsRefresh = false; reconcileProof(receipt);
       } catch (e) { data = null; throw e; }
     }
     function requireMutation() {
