@@ -141,9 +141,13 @@ n'écrit jamais rien. »* Et l.96-98 : un `tool_use` devient une **proposition
 validée puis reformulée côté serveur**, et *« on ne renvoie JAMAIS de tool_result
 au modèle »*.
 
-Le catalogue compte **trois outils, tous préfixés `proposer_`** :
-`proposer_situation`, `proposer_scenario`, `proposer_relance`. Le nommage EST la
-doctrine.
+⛔ **CE PARAGRAPHE ÉTAIT FAUX — corrigé le 29/09, voir §11.0.** Il annonçait
+« **trois outils**, tous préfixés `proposer_` : `proposer_situation`,
+`proposer_scenario`, `proposer_relance` ». Le catalogue en compte **DIX**, et les
+dix étaient en place le **11/09** — donc onze jours avant que cette ligne ne soit
+écrite. Les trois cités sont ceux d'un **seul quadrant**, pris pour le tout.
+Ce qui reste vrai, et qui était le fond du propos : **le nommage EST la
+doctrine** — tous préfixés `proposer_`, aucun n'exécute.
 
 ✅ **Ce que ça change pour la demande de Paul** : « donner des droits d'écriture à
 Léo » ne demande **pas** de bâtir un mécanisme. Le chemin
@@ -606,6 +610,17 @@ C'est ce que le grain `etat` porte déjà. ⛔ Ne pas confondre couverture et ch
 
 ## §9 — La prochaine action, unique
 
+> ⛔ **PÉRIMÉ — J1 EST ATTEINT. Mesuré le 29/09, la prochaine action est au §11.5.**
+> Son critère de sortie est rempli : `node finubar/collecter.mjs` rend
+> `total: 10 · lisibles: 10 · hors_seance: 0` (`finubar/macro.json`, `le:
+> 2026-09-29`). Laisser ce §9 en tête aurait fait **rejouer un jalon fait** —
+> exactement l'incident du 13/09 que le `CLAUDE.md` nomme. Ce qui suit est gardé
+> pour ce qu'il a coûté, pas comme consigne.
+> ⚠️ **Ce que la même mesure signale et qui, lui, reste ouvert** : 2 dépôts ont
+> dérivé depuis leur note, 5 grains ne sont rattachés à aucun commit atteignable
+> (fusions en squash), 6 portent un texte au-delà des 180 caractères. Ce n'est
+> pas J1 qui rouvre — c'est l'entretien du registre.
+
 **J1 — le parc complet et surveillé.** Plus rien n'en dépend : les sept arbitrages
 sont rendus, la source des aides est identifiée et lue.
 
@@ -731,3 +746,259 @@ responsabilité de le maintenir à jour »*.
 | Le **harnais de contraste a été retiré** parce qu'il rend `npm test` lent (≈ 25 s) | une PR qui le désactive « temporairement » | son coût est écrit dans son en-tête | rien — c'est un arbitrage humain |
 | La CI **n'a jamais été réparée** et tout le monde s'est habitué à des PR non vérifiées | des PR fusionnées sans run | le point 3 ci-dessus | **le vérifier en ouverture** |
 | Le **défaut `--line` de la vitrine** est oublié parce qu'il n'a pas de test | un audit d'accessibilité le retrouve | il est écrit dans DESIGN-LANGAGE **et** ici | lui donner un test le jour où on l'ouvre |
+
+---
+
+## §11 — B1 · Léo AGIT : l'anneau vert, et les deux POV creusés (29/09/2026)
+
+Paul, le 29/09, a validé les trois recommandations : **(a)** le Jarvis vit dans
+**Ultima** — Léo-produit prend ses droits anneau par anneau, Léo-séance sert
+d'échafaudage ; **(b)** les POV creusés sont l'**attaquant** puis le
+**mainteneur futur** ; **(c)** on reste au **cadrage** — aucune ligne de code
+dans cette séance.
+
+⛔ **Et la demande initiale est refermée avant d'aller plus loin** : Paul voulait
+« faire de Léo un véritable agent ». Elle en est un depuis le 16/07 — sa charte
+fait 12 110 octets, son principe d'architecture est verrouillé, sept spécialistes
+sont ses sous-agents. Ce qui manque n'est pas un fichier, c'est un **runtime** :
+le droit d'agir (B1), une mémoire unique (B2), des bras (B3), une boucle qui
+tourne sans lui (B4). **Écrire un `.claude/agents/leo.md` de plus serait même une
+régression** — dans Claude Code, un sous-agent ne peut être ni le fil principal
+ni un orchestrateur.
+
+### §11.0 — ⛔ « Trois outils » : non, DIX. La correction d'abord
+
+Le §0 de ce cadrage affirme : *« Le catalogue compte trois outils, tous préfixés
+`proposer_` »*. **C'est faux, et ça l'était déjà le 22/09 au moment de l'écrire.**
+
+```
+$ node -e "import('./api/_lib/leo.js').then(m=>{for(const[q,l]of
+  Object.entries(m.OUTILS_PAR_QUADRANT))console.log(q,l.length,
+  l.map(o=>o.name).join(' · '))})"
+riven       3  proposer_besoin · proposer_journal · proposer_relance
+bcp         0
+adramelech  2  proposer_idee · proposer_enrichissement_idee
+imladrik    5  proposer_page_journal · proposer_serment · proposer_flamme
+               · proposer_situation · proposer_scenario
+
+$ git log -S'proposer_flamme' --format='%h %ad' --date=short -- api/_lib/leo.js | tail -1
+6bac2ef 2026-09-11
+```
+
+Les dix étaient en place **onze jours avant** ce cadrage. Ce qui a été décrit,
+c'étaient les trois outils **d'un seul quadrant**, pris pour le catalogue entier.
+
+⚠️ **Ce que ça change** : B1 est **plus petit** qu'annoncé. Le chemin
+*intention → proposition → validation* ne couvre pas un quadrant, il en couvre
+**trois sur quatre**, avec dix gestes déjà décrits, bornés et validés côté
+serveur. Il ne reste vraiment qu'un tiers du trajet : **l'exécution**.
+
+⛔ **Et ce que ça révèle compte davantage : NICOL BOLAS n'a AUCUN outil.** Le
+quadrant financier est le seul muet — Léo ne peut rien y proposer. Ce n'est pas
+un manque à réparer dans B1 : le double critère du §11.1 l'en exclut de toute
+façon, et le §11.2 dit pourquoi c'est une bonne nouvelle.
+
+⛔ **La leçon, et elle dépasse le chiffre.** Ce cadrage écrit partout « mesuré,
+requête à l'appui » — et il portait une valeur comptée à l'œil, qui a survécu une
+semaine et a été **répétée** le 29/09 dans la réponse faite à Paul. *Un compte
+qui tient dans une phrase se mesure quand même* : c'est exactement la leçon
+d'Artidispo du 18/09 (« 28 fichiers » écrit avant que quiconque compte, il y en
+avait 27), payée une seconde fois ici.
+
+### §11.1 — 🗡️ L'attaquant : « je n'ai pas besoin de vos identifiants »
+
+Son scénario n'est pas de voler une clé. C'est d'**écrire un texte que Léo va
+lire** — un mail, un formulaire de lead, un intitulé de contact importé — et qui
+la pilote. Le jour où Léo écrit, ce texte devient une commande.
+
+**A1 · La ligne de défense est déjà la bonne, et il faut savoir pourquoi.**
+Le modèle n'exécute **rien** : il émet un `tool_use`, que le serveur valide
+contre un **catalogue fermé** (`validerProposition`, `api/_lib/leo.js` l.301),
+puis **reformule** côté serveur. Une injection ne peut pas inventer un outil,
+ni élargir un argument — les schémas sont en `additionalProperties: false` avec
+`maxLength` et `enum`. ⇒ **Le danger n'est donc jamais « Léo désobéit ». Il est
+exactement égal à ce que le catalogue autorise.** D'où la règle qui gouverne
+tout B1 : **un outil vert ne doit rien pouvoir faire qu'une injection rendrait
+grave.** On ne durcit pas le modèle — on taille le catalogue.
+
+**A2 · ⛔ Réversible ne suffit pas : il faut réversible ET VISIBLE.**
+Le §2 taille l'anneau vert sur la seule réversibilité. Contre-exemple immédiat :
+un montant faux dans NICOL BOLAS **se défait d'un clic** — et personne ne le
+voit. Il alimente une prévision d'impôts, et l'erreur se découvre au tiers
+provisionnel. **Une erreur réversible mais silencieuse coûte plus cher qu'une
+erreur bruyante et durable**, parce qu'on ne la défait jamais : on ne sait pas
+qu'elle est là. ⇒ **Le critère de l'anneau vert devient DOUBLE — réversible
+*et* visible.** Conséquence directe : NICOL BOLAS ne reçoit aucun outil vert
+dans B1, et son catalogue vide cesse d'être un manque.
+
+**A3 · ⛔ Un vert qui SORT de la machine est une publication.**
+Le §2 range « les grains `FINUBAR.md` » et « les fichiers de pilotage » en vert.
+Or un grain se **commite et se pousse** : historique, dépôt, lecteurs. Une
+écriture qui quitte la machine ne se *défait* pas — elle se **rattrape par un
+second commit**, ce qui n'est pas la même chose. ⇒ **Aucun outil vert de
+Léo-produit n'écrit dans une surface qui sort de la machine.** Les grains restent
+écrits par **Léo-séance**, qui passe par une PR et un œil humain. C'est un
+resserrement du §2, assumé.
+
+**A4 · Le journal est une cible, donc il s'écrit AVANT l'acte.**
+Journalisé *après*, une interruption entre l'écriture et sa trace laisse une
+action sans preuve — et **le silence d'une garde se lit comme une bonne
+nouvelle**, ce qui est le pire des deux états. ⇒ Le journal enregistre
+l'**intention** avant exécution, puis se complète par l'issue (`réussi` /
+`échoué`). ⛔ Et **aucune entrée du catalogue n'écrit dans le journal** : il est
+hors de la surface que Léo peut toucher, en ajout seul.
+
+**A5 · Le plafond de VOLUME, qui n'est pas le plafond de COÛT.**
+`creerGardeVoix` borne déjà les appels à la route — **un par utilisateur toutes
+les 3 s** (`api/leo.js` l.39). C'est un plafond de **coût**. Il ne borne pas le
+nombre d'**écritures** : dix mille idées versées dans ADRAMELECH noient les
+vraies, sans qu'aucun droit particulier n'ait été obtenu — un déni de service sur
+la mémoire de Paul. ⇒ Plafond d'écritures vertes **par séance**, et **un vert
+ajoute, il n'écrase jamais** : écraser détruit la valeur d'avant, donc n'est pas
+défaisable, donc n'est pas vert.
+
+### §11.2 — 🔧 Paul en janvier : « elle a écrit 400 fois, comment je vérifie ? »
+
+**M1 · L'anneau est un CHAMP du catalogue, jamais une seconde liste.**
+`CATALOGUE` (`api/_lib/leo.js` l.109) est déjà la source unique : `outilsPour`,
+`validerProposition` et `reformulerProposition` en dérivent tous. Poser ailleurs
+une liste « ce qui est vert » créerait **deux vérités sur le même outil**, et le
+jour où elles divergent on croit la mauvaise. ⇒ `anneau: 'vert' | 'orange'` sur
+chaque entrée, lu par `validerProposition`. ⛔ **Un outil sans anneau est
+orange** — le repli va vers le plus contraint (règle du repli, RenoDevis A1 du
+13/09 : un repli se choisit sur ce qu'il coûte quand il se **trompe**).
+
+**M2 · Le journal se PRÉSENTE, il ne s'ouvre pas.**
+Un journal qu'il faut penser à consulter n'est pas consulté — et l'anneau vert
+devient alors un trou, pas une délégation. ⇒ « Ce que Léo a fait depuis hier »
+arrive **dans le grain du matin**, sans demande. Le porteur existe déjà :
+`api/finubar-matin.mjs`. ⛔ Ne pas en créer un second.
+
+**M3 · Le « défaire » se prouve en le jouant.**
+Un défaire jamais joué n'est pas un défaire, c'est un bouton. ⇒ Il est éprouvé
+sur **chaque type** d'écriture verte, et un contrôle rougit si un type de
+l'anneau vert n'a pas le sien. Un type d'écriture sans défaire éprouvé **n'entre
+pas dans l'anneau vert**, quelle que soit son innocuité apparente.
+
+**M4 · La dérive se MESURE : le taux de défaites.**
+Si Paul défait souvent, l'anneau est mal taillé. C'est un **chiffre**, pas une
+impression — et c'est le seul signal qui dise « retirer cet outil du vert ».
+⛔ **Le seuil ne se pose pas maintenant.** Il se pose après la première semaine
+de mesure : inventer un seuil aujourd'hui, c'est l'**étalon inventé** du 21/09
+(RenoDevis — un instrument a déclaré sept écrans sains invalides parce que sa
+valeur attendue venait d'un souvenir).
+
+**M5 · Une ligne par écriture, ou le journal ne sera pas lu.**
+Contrainte de conception, pas de confort : **verbe + objet + heure + défaire**,
+une ligne. Un journal de trois écrans ne se lit pas, donc ne contrôle rien — et
+un contrôle qu'on ne fait pas est pire qu'un contrôle absent, parce qu'on croit
+l'avoir.
+
+### §11.3 — B1 en six points (format EL)
+
+**① Le but — ce qui sera vrai à la fin.** Léo-produit **écrit sans demander**
+dans l'anneau vert, et rien au-delà ; chaque écriture est **journalisée avant
+d'être faite** et **défaisable d'un clic** ; Paul voit au matin ce qu'elle a
+fait, en une ligne par geste.
+
+**② Les étapes, dans l'ordre du dé-risquage.**
+1. `anneau` devient un **champ du catalogue** ; défaut = `orange` ; lu par
+   `validerProposition` (M1).
+2. **Tailler l'anneau vert au double critère** (A2) : réversible ET visible, et
+   qui ne sort pas de la machine (A3). Candidats à instruire :
+   `proposer_idee`, `proposer_enrichissement_idee`, `proposer_page_journal`.
+   ⛔ **Aucun outil de RIVEN** (`proposer_relance` touche un client) ni de
+   NICOL BOLAS.
+3. Le **journal** : table en ajout seul, écrite **avant** l'acte (A4),
+   RLS mono-user, **aucun contenu dicté** — verbe, objet, horodatage, issue.
+4. L'**exécution** des verts — aujourd'hui la route n'écrit jamais
+   (`api/leo.js` l.60). C'est le seul vrai morceau neuf.
+5. L'écran **« ce que Léo a fait »** + le défaire, posé dans le grain du matin
+   (M2, M5).
+6. Les gardes **éprouvées en les contournant** : un orange appelé comme un vert,
+   un outil sans anneau, un défaire manquant, le plafond de volume.
+
+**③ Les moyens.** `api/_lib/leo.js` (CATALOGUE, `validerProposition`),
+`api/leo.js`, `api/finubar-matin.mjs`, une table Supabase `leo_ecritures`.
+⚠️ **La migration SQL est un gate Paul** — le SQL vit dans `supabase/migrations/`,
+jamais appliqué seul.
+
+**④ Les critères de réussite, vérifiables.** Ils déclinent **C5** du §1.
+
+| | Critère | La preuve |
+|---|---|---|
+| **B1-a** | Un outil vert écrit **sans validation** | l'écriture est en base, aucun clic |
+| **B1-b** | Un outil orange **refuse** d'écrire même appelé comme un vert | la garde est contournée exprès, elle tient |
+| **B1-c** | Un outil **sans anneau** est traité en orange | on en fabrique un, il ne passe pas |
+| **B1-d** | **Chaque** type vert a son défaire, **joué** | l'état d'avant est restauré, mesuré |
+| **B1-e** | Le journal contient **zéro contenu dicté** | une sonde le cherche et ne trouve rien |
+| **B1-f** | Le plafond de volume **mord** | N+1 écritures : la N+1 est refusée |
+
+⛔ **B1-b prime sur B1-a.** Une Léo qui n'écrit pas encore est un chantier en
+cours ; une Léo qui écrit hors de son anneau est un incident.
+
+**⑤ Ce qu'on ne fait PAS dans B1.** L'anneau orange (il marche déjà, en
+proposition) · l'anneau rouge (jamais) · NICOL BOLAS (A2) · les grains FINUBAR
+depuis le produit (A3) · Gmail, Calendar, tout bras extérieur (c'est B3) · la
+boucle autonome (B4) · le seuil de dérive (M4).
+
+**⑥ Le pre-mortem — « B1 a échoué : pourquoi ? »**
+
+| Cause probable | Signal précoce | Ce qui la prévient |
+|---|---|---|
+| L'anneau vert a été taillé **large** « pour que ça serve à quelque chose », et une écriture silencieuse est passée | un outil de NICOL BOLAS ou de RIVEN apparaît en vert dans une PR | le double critère A2 est écrit **dans le catalogue**, pas dans un document |
+| Le journal existe et **personne ne le lit** | Paul ne parle jamais d'une écriture de Léo | M2 (il se présente) + M5 (une ligne) |
+| Le **défaire** est un bouton non joué ; le jour où il sert, il échoue | aucun test ne restaure un état | B1-d, un contrôle par type |
+| Une **deuxième liste d'anneaux** apparaît pour « aller plus vite » | une constante `VERTS = [...]` quelque part | M1 — l'anneau est un champ, le contrôle le vérifie |
+| B1 **n'est jamais commencé** parce que le parc réclame ailleurs | le cadrage grossit, le code ne bouge pas | ⚠️ c'est le risque **réel** : dix dépôts en vol. B1 se fait en **une** séance dédiée, ou pas |
+| Le journal se met à porter du **contenu dicté** « pour le contexte » | une colonne `texte` dans la migration | B1-e, sonde de PII — la migration passe par un gate |
+
+### §11.4 — Ce que la semaine écoulée confirme
+
+L'export de la méthode vers ChatGPT (`EXPORT-METHODE-CHATGPT-v2.md`, #304-305 du
+28/09) porte les quatre directives, le cadrage, la mesure, la clôture — **la
+méthode**. Elle voyage, et elle a voyagé. **L'agent, lui, n'a pas suivi** : ce
+qui ne se duplique pas d'un outil à l'autre, c'est précisément le runtime —
+le catalogue, la validation côté serveur, la mémoire, le droit d'écrire.
+⇒ C'est une confirmation de plus que **Léo-agent est un runtime, pas un
+document**, et que B1 est le premier morceau qui existe vraiment.
+
+### §11.5 — ✅ B1 ①② est LIVRÉ (29/09, go solo) — la prochaine action a bougé
+
+**Ce qui était écrit ici** : « B1, étapes ① et ② seulement — l'`anneau` devient
+un champ du catalogue, l'anneau vert est taillé au double critère. Critère de
+sortie : B1-b et B1-c passent. » **C'est fait, et mesuré** (commit `1eba0e9`).
+
+| preuve | constat |
+|---|---|
+| `anneau` sur les dix entrées, explicite | 10/10 |
+| les verts | **3** — `proposer_idee`, `proposer_enrichissement_idee`, `proposer_page_journal` |
+| **B1-b** — un orange refuse, la proposition étant valide par ailleurs | ✅ `validation de Paul requise` |
+| **B1-c** — anneau absent / inconnu / mauvaise casse → orange | ✅ 11 formes éprouvées |
+| `tests/unit-leo-anneau.mjs` | **19 contrôles**, 2 verrous de non-vacuité |
+
+⛔ **Le harnais a été éprouvé EN LE CASSANT — six fois, six rouges**, chacun sur
+le contrôle attendu : un quatrième vert · `normaliserAnneau` laxiste · la garde
+qui ignore l'anneau · la garde qui **croit son appelant** · un champ `anneau`
+retiré · une **seconde liste** posée dans `js/`. Un harnais qui ne sait pas
+échouer ne prouve rien.
+
+⚠️ **Ce qui n'est PAS acquis, nommément** : Léo n'écrit toujours rien.
+`autoriserEcriture` n'a **aucun appelant** — l'exécution est l'étape ④. C'est
+écrit dans le code lui-même, parce qu'un outil que personne n'appelle se lit
+comme un outil qui marche.
+
+### §11.6 — La prochaine action, unique — et elle ouvre sur un GATE
+
+**B1 étape ③ — le journal des écritures.** Il précède ④ : sans lui, une
+exécution verte serait une écriture sans trace, et A4 dit que le journal
+s'écrit **avant** l'acte.
+
+⛔ **Il commence par une action de Paul, pas par du code** : la table
+`leo_ecritures` est une **migration SQL sur une base de production**, donc un
+gate — et le mode solo ne le lève pas (il n'autorise que les migrations
+**correctives non destructives** ; créer une table n'en est pas une).
+
+⚠️ **Et on n'écrit pas le module avant la table.** `autoriserEcriture` est déjà
+sans appelant ; empiler une seconde couche inerte par-dessus, c'est fabriquer
+du code qui a l'air de marcher. ③ commence quand le gate est levé.
