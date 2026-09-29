@@ -358,3 +358,13 @@ lot à rattacher à son commit testé dans la PR.
 La présentation utilisable de Léo est intégrée à `leo/README.md` : invocation,
 capacités démontrées et limites. Elle présente une version candidate, sans
 transformer le souhait de terminer ce soir en réception acquise.
+
+Première CI de la reprise : source `60b1f56a6c04d5be6616b0829d966dc296ab3318`,
+intégration `30c3459a3be22647b966f77f7b3695220a17ba84`, run LV1 `36602773934`,
+job runtime `109524048888`. 81 tests sur 82 passent ; l'assertion d'empreinte DB
+détecte une écriture technique du constructeur avant refus d'accord. Correction :
+ACL et politique vérifiées en lecture seule avant ouverture du broker ; assertion
+stricte conservée. Le contrôle final sous verrou reste en place. La passe adverse
+ajoute la capitalisation après effet confirmé : état merged par CAS, sans écraser
+une édition concurrente ni rejouer une fusion si cette dernière écriture échoue.
+Repreuve nécessaire sur le correctif ; aucune réussite transposée du premier run.

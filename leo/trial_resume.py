@@ -23,7 +23,8 @@ import zipfile
 from . import trial
 from .runtime.broker import Broker, mandate_record
 from .runtime.fixture_git import FixtureGit
-from .runtime.policy import Approval, Context, Evidence, Mandate, Refusal
+from .runtime.memoire import Conflict
+from .runtime.policy import Approval, Context, Evidence, Mandate, Policy, Refusal
 
 MAX_BYTES = 8 * 1024 * 1024
 MAX_FILES = 256
@@ -190,13 +191,43 @@ def execute(root, *, mandate, context, evidence, approval, principal, reconcile=
     observed = trial.inspect(root)
     if observed['fixture_context'] != asdict(context):
         raise Refusal('trial_context_mismatch')
-    _canonical(root, mandate, context, initial=False)
+    canonical = _canonical(root, mandate, context, initial=False)
+    if principal not in mandate.actors or context.repository not in mandate.repositories:
+        raise Refusal('scope_denied')
+    if principal not in {canonical['owner'], *json.loads(canonical['writers'])}:
+        raise Refusal('writer_required')
+    # Refuser avant les constructeurs SQLite : leur initialisation PRAGMA peut
+    # modifier l'en-tête, même sans opération. Broker répète ensuite le contrôle
+    # et son admission atomique ; ce précontrôle ne remplace aucun verrou.
+    if not reconcile:
+        Policy().authorize(mandate, principal, 'merge_fixture', context.repository, clock(),
+            context=context, evidence=evidence, approval=approval,
+            effects=FixtureGit.effects, atomic_adapter=FixtureGit.atomic)
     broker = Broker(root / 'canonical.sqlite', mandate, context.repository, clock=clock,
         fixture_adapter=FixtureGit(root, root / 'fixture.git'), context=context,
         evidence=evidence, approval=approval)
-    if reconcile:
-        return broker.reconcile_fixture(principal, PROPOSAL['operation_id'])
-    return broker.execute(principal, dict(PROPOSAL))
+    receipt = (broker.reconcile_fixture(principal, PROPOSAL['operation_id']) if reconcile
+               else broker.execute(principal, dict(PROPOSAL)))
+    if receipt['status'] == 'completed':
+        expected = {'commit': context.integration, 'environment': 'fixture', 'publication': False}
+        observed = broker.adapter.lookup(context)
+        if receipt['result'] != expected or observed != {'status': 'completed', 'commit': context.integration}:
+            raise Refusal('trial_completed_effect_diverged')
+        # Le reçu durable précède cette capitalisation : une interruption ici
+        # reprend la même opération. CAS 2 seulement, sans écraser une édition
+        # concurrente ni incrémenter la version à chaque relecture.
+        summary = {
+            'state': 'merged',
+            'next_action': 'Resume this verified fixture in a fresh Work session; global V1 acceptance remains open.'}
+        try:
+            broker.store.update_mission(trial.MISSION, principal, PROPOSAL['expected_version'], summary)
+        except Conflict:
+            current = broker.store.read_mission(trial.MISSION, principal)
+            if any(current[key] != value for key, value in summary.items()):
+                # L'effet a son reçu completed, mais une autre décision doit
+                # être rapprochée explicitement ; aucun écrasement silencieux.
+                raise Refusal('trial_bookkeeping_conflict_effect_completed') from None
+    return receipt
 
 
 def main():

@@ -18,6 +18,7 @@ from leo import trial
 from leo.trial_resume import verify, execute, _unpack, PROPOSAL, MAX_BYTES
 from leo.runtime.fixture_git import FixtureGit
 from leo.runtime.budget import BudgetLedger
+from leo.runtime.memoire import MissionStore
 from leo.runtime.policy import Approval, Context, Evidence, Mandate, Refusal
 
 
@@ -73,6 +74,10 @@ class TrialResumeTests(unittest.TestCase):
         observed = json.loads(child.stdout)
         self.assertEqual(observed['target_observed'], self.context.integration)
         self.assertEqual(len(observed['operations']), 3)
+        self.assertEqual(observed['state'], 'merged')
+        self.assertEqual(observed['version'], 3)
+        self.assertIn('fresh Work session', observed['next_action'])
+        self.assertFalse(observed['global_v1_accepted'])
         with sqlite3.connect(self.root / 'canonical.sqlite') as db:
             self.assertEqual(db.execute('SELECT SUM(used_units),COUNT(*) FROM budget_operations').fetchone(), (4, 3))
 
@@ -90,15 +95,56 @@ class TrialResumeTests(unittest.TestCase):
             self.assertEqual(self.call(reconcile=True, approval=None)['status'], 'completed')
             self.assertEqual(self.call(reconcile=True, approval=None)['status'], 'completed')
 
+    def test_receipt_survives_interrupted_state_update_and_recovery(self):
+        with patch.object(MissionStore, 'update_mission', side_effect=TimeoutError('simulated crash before CAS')):
+            with self.assertRaises(TimeoutError):
+                self.call()
+        self.assertEqual(trial.inspect(self.root)['state'], 'ready_for_review')
+        with patch.object(FixtureGit, 'merge', side_effect=AssertionError('must not replay')):
+            receipt = self.call(reconcile=True, approval=None)
+            self.assertEqual(self.call(reconcile=True, approval=None), receipt)
+        observed = trial.inspect(self.root)
+        self.assertEqual((observed['state'], observed['version']), ('merged', 3))
+
+    def test_concurrent_mission_edit_preserved_after_confirmed_receipt(self):
+        original = MissionStore.update_mission
+        def concurrent(store, mission, principal, version, patch_value):
+            original(store, mission, principal, version, {'state': 'suspended', 'next_action': 'Concurrent owner decision'})
+            return original(store, mission, principal, version, patch_value)
+        with patch.object(MissionStore, 'update_mission', concurrent):
+            with self.assertRaisesRegex(Refusal, 'trial_bookkeeping_conflict_effect_completed'):
+                self.call()
+        receipt = MissionStore(self.root / 'canonical.sqlite').get_operation(trial.MISSION, trial.ACTOR, PROPOSAL['operation_id'])
+        self.assertEqual(receipt['status'], 'completed')
+        with patch.object(FixtureGit, 'merge', side_effect=AssertionError('must not replay')):
+            with self.assertRaisesRegex(Refusal, 'trial_bookkeeping_conflict_effect_completed'):
+                self.call()
+        observed = trial.inspect(self.root)
+        self.assertEqual((observed['state'], observed['version']), ('suspended', 3))
+        self.assertEqual(observed['next_action'], 'Concurrent owner decision')
+        self.assertEqual(observed['target_observed'], self.context.integration)
+
+    def test_completed_receipt_requires_current_exact_git_result(self):
+        with patch.object(FixtureGit, 'lookup', return_value={'status': 'unknown', 'commit': self.context.target}):
+            with self.assertRaisesRegex(Refusal, 'trial_completed_effect_diverged'):
+                self.call()
+        self.assertEqual(trial.inspect(self.root)['state'], 'ready_for_review')
+        self.assertEqual(self.call(reconcile=True, approval=None)['status'], 'completed')
+        self.assertEqual(trial.inspect(self.root)['state'], 'merged')
+
     def test_authority_json_changed_context_missing_review_and_expiry_refused(self):
         for changes, expected in [
             ({'approval': {'approved': True}}, 'typed_host_authority_required'),
+            ({'principal': 'intruder'}, 'scope_denied'),
+            ({'principal': 'inspector'}, 'writer_required'),
             ({'mandate': replace(self.mandate, owner='intruder')}, 'trial_authority_mismatch'),
             ({'context': replace(self.context, source='d' * 40)}, 'trial_context_mismatch'),
             ({'evidence': self.evidence[:1]}, 'proof_missing_or_inapplicable'),
             ({'clock': lambda: self.mandate.expires_at + 1}, 'expired')]:
+            before = hashlib.sha256((self.root / 'canonical.sqlite').read_bytes()).hexdigest()
             with self.subTest(expected=expected), self.assertRaisesRegex(Refusal, expected):
                 self.call(**changes)
+            self.assertEqual(before, hashlib.sha256((self.root / 'canonical.sqlite').read_bytes()).hexdigest())
 
     def test_hash_provenance_canonical_corruption_and_relocation(self):
         destination = self.base / 'restored'
