@@ -102,13 +102,42 @@ const QUADRANTS = {
 
 const DATE_MOTIF = /^\d{4}-\d{2}-\d{2}$/;
 
-// Source unique du catalogue : quadrant, description orientée dictée vocale,
-// arguments bornés ({ max, requis?, date?, description }). Les schémas
+// Source unique du catalogue : quadrant, ANNEAU, description orientée dictée
+// vocale, arguments bornés ({ max, requis?, date?, description }). Les schémas
 // tool-use Anthropic (OUTILS_PAR_QUADRANT) et la validation
 // (validerProposition) en dérivent tous deux — jamais de double vérité.
+//
+// ---- L'ANNEAU (B1 ①②, cadrage §11, 2026-09-29) -----------------------------
+// `anneau` dit ce que Léo a le droit de faire de cette proposition :
+//   'vert'   → elle pourra l'écrire SANS demander (l'exécution est l'étape ④) ;
+//   'orange' → elle la PROPOSE, Paul valide d'un clic. C'est l'existant.
+//
+// ⛔ L'ANNEAU EST UN CHAMP DU CATALOGUE, JAMAIS UNE SECONDE LISTE. Poser
+// ailleurs un tableau « ce qui est vert » ferait deux vérités sur le même
+// outil, et le jour où elles divergent on croit la mauvaise. Un outil dont
+// l'anneau manque ou ne se reconnaît pas est ORANGE : un repli se choisit sur
+// ce qu'il coûte quand il SE TROMPE (RenoDevis A1, 13/09).
+//
+// ⛔ LE CRITÈRE DU VERT EST DOUBLE — réversible ET visible — et il exclut ce
+// qui sort de la machine :
+//   · réversible : Paul défait d'un clic, la valeur d'avant n'est pas perdue
+//     (un vert AJOUTE, il n'écrase jamais) ;
+//   · visible : l'erreur se VOIT. Un montant faux se défait d'un clic et ne se
+//     voit jamais — il se découvre au tiers provisionnel. C'est pour cela que
+//     NICOL BOLAS (`bcp`) n'a aucun outil, et n'en recevra pas de vert ;
+//   · qui ne sort pas de la machine : une écriture poussée dans un dépôt ne se
+//     DÉFAIT pas, elle se RATTRAPE par un second commit — ce n'est pas la même
+//     chose. Les grains restent écrits par la séance, sous PR.
+//
+// Trois verts, et ils ont été instruits un par un : proposer_idee (crée),
+// proposer_enrichissement_idee (AJOUTE à une idée existante — vérifié dans sa
+// description, il n'écrase pas), proposer_page_journal (crée une page). Tout
+// le reste est orange : RIVEN touche un client, DRAUKHAIN scelle un
+// engagement, VRANESH ouvre une exploration que Paul seul décide d'ouvrir.
 const CATALOGUE = {
   proposer_idee: {
     quadrant: 'adramelech',
+    anneau: 'vert',
     description: "Proposer la capture d'une idée nouvelle dictée par Paul " +
       "dans l'archipel (bibliothèque d'idées). Rien n'est créé avant sa confirmation.",
     args: {
@@ -121,6 +150,7 @@ const CATALOGUE = {
   },
   proposer_enrichissement_idee: {
     quadrant: 'adramelech',
+    anneau: 'vert',
     description: "Proposer d'enrichir une idée EXISTANTE de l'archipel avec " +
       "un ajout dicté par Paul. Rien n'est écrit avant sa confirmation.",
     args: {
@@ -133,6 +163,7 @@ const CATALOGUE = {
   },
   proposer_besoin: {
     quadrant: 'riven',
+    anneau: 'orange',
     description: "Proposer l'ajout d'une ligne de besoin (matériel, fourniture) " +
       "à l'intendance d'un chantier. Rien n'est créé avant confirmation de Paul.",
     args: {
@@ -144,6 +175,7 @@ const CATALOGUE = {
   },
   proposer_journal: {
     quadrant: 'riven',
+    anneau: 'orange',
     description: "Proposer une note au journal d'un contact ou chantier du " +
       "réseau. Rien n'est écrit avant confirmation de Paul.",
     args: {
@@ -158,6 +190,7 @@ const CATALOGUE = {
   // AUCUN outil de suppression (règle L2b inchangée).
   proposer_page_journal: {
     quadrant: 'imladrik',
+    anneau: 'vert',
     description: "Proposer d'écrire une page au journal intime (cap MAEDRETHNIR) " +
       "à partir de ce que Paul dicte. Rien n'est écrit avant sa confirmation.",
     args: {
@@ -167,6 +200,7 @@ const CATALOGUE = {
   },
   proposer_serment: {
     quadrant: 'imladrik',
+    anneau: 'orange',
     description: 'Proposer de sceller un serment (cap DRAUKHAIN) : le vœu que ' +
       "Paul tient. Rien n'est scellé avant sa confirmation.",
     args: {
@@ -177,6 +211,7 @@ const CATALOGUE = {
   },
   proposer_flamme: {
     quadrant: 'imladrik',
+    anneau: 'orange',
     description: "Proposer de raviver un serment EXISTANT (cap DRAUKHAIN) d'une " +
       "flamme dictée par Paul : une citation, une victoire ou un rappel. " +
       "Rien n'est écrit avant sa confirmation.",
@@ -194,6 +229,7 @@ const CATALOGUE = {
   },
   proposer_situation: {
     quadrant: 'imladrik',
+    anneau: 'orange',
     description: 'Proposer d’ouvrir une situation à explorer (cap VRANESH) : ' +
       "un cas donné dont Paul veut anticiper les futurs. Rien n'est ouvert " +
       'avant sa confirmation.',
@@ -204,6 +240,7 @@ const CATALOGUE = {
   },
   proposer_scenario: {
     quadrant: 'imladrik',
+    anneau: 'orange',
     description: 'Proposer d’ajouter un futur possible à une situation EXISTANTE ' +
       "(cap VRANESH) : le déroulé dicté par Paul. Rien n'est écrit avant sa " +
       'confirmation.',
@@ -224,6 +261,7 @@ const CATALOGUE = {
 
   proposer_relance: {
     quadrant: 'riven',
+    anneau: 'orange',
     description: 'Proposer de programmer une relance datée sur un contact du ' +
       "réseau. Rien n'est programmé avant confirmation de Paul.",
     args: {
@@ -298,6 +336,50 @@ function dateReelle(valeur) {
 // trim, dates réelles, champs surnuméraires REJETÉS (un outil qui invente un
 // champ est suspect — on ne strippe pas, on refuse tout).
 // → { ok: true, proposition: { outil, args } } (args nettoyés) | { ok: false }
+// Les deux seuls anneaux qu'un outil peut porter. ROUGE n'y est pas, et c'est
+// délibéré : un geste rouge n'a pas d'outil du tout — il ne se refuse pas au
+// moment de l'appel, il n'existe pas dans le catalogue.
+export const ANNEAUX = ['vert', 'orange'];
+export const ANNEAU_PAR_DEFAUT = 'orange';
+
+// Une valeur d'anneau → l'anneau réel. Tout ce qui n'est pas RECONNU retombe
+// sur orange : une casse différente ('VERT'), une valeur inventée ('rouge'),
+// un champ absent. ⛔ Aucune correction silencieuse — même règle que les enums
+// d'arguments : on ne devine pas ce que l'auteur voulait dire.
+export function normaliserAnneau(valeur) {
+  return ANNEAUX.includes(valeur) ? valeur : ANNEAU_PAR_DEFAUT;
+}
+
+// L'anneau d'un outil, lu dans le catalogue. Outil inconnu → orange.
+// Lecture par hasOwnProperty : 'constructor' n'est pas un outil [S-L2b-2].
+export function anneauDe(nomOutil) {
+  const outil = typeof nomOutil === 'string' &&
+    Object.prototype.hasOwnProperty.call(CATALOGUE, nomOutil)
+    ? CATALOGUE[nomOutil] : undefined;
+  return outil ? normaliserAnneau(outil.anneau) : ANNEAU_PAR_DEFAUT;
+}
+
+// LA GARDE, et elle vient AVANT le geste. Elle répond à une seule question :
+// « cette proposition peut-elle être écrite sans que Paul la valide ? »
+//
+// ⚠️ ELLE N'A ENCORE AUCUN APPELANT, ET C'EST VOULU — l'exécution est l'étape
+// ④ de B1, elle n'est pas écrite. Le dire ici plutôt que de le laisser
+// deviner : un outil que personne n'appelle se lit comme un outil qui marche
+// (leçon du 22/09). Ce qui est acquis aujourd'hui, c'est que le mécanisme
+// SAIT REFUSER avant de savoir agir — et qu'il n'y a qu'une porte.
+//
+// Elle refait le chemin complet (validerProposition) plutôt que de se fier à
+// un verdict qu'on lui tendrait : une garde qui croit son appelant ne garde
+// rien.
+export function autoriserEcriture(nomOutil, args, quadrant) {
+  const verdict = validerProposition(nomOutil, args, quadrant);
+  if (!verdict.ok) return { ok: false, motif: 'proposition invalide' };
+  if (verdict.anneau !== 'vert') {
+    return { ok: false, motif: 'validation de Paul requise', anneau: verdict.anneau };
+  }
+  return { ok: true, anneau: 'vert', proposition: verdict.proposition };
+}
+
 export function validerProposition(nomOutil, args, quadrant) {
   const outil = typeof nomOutil === 'string'
     ? (Object.prototype.hasOwnProperty.call(CATALOGUE, nomOutil) ? CATALOGUE[nomOutil] : undefined)
@@ -326,7 +408,14 @@ export function validerProposition(nomOutil, args, quadrant) {
   for (const cle of Object.keys(outil.args)) {
     if (outil.args[cle].requis && !propres[cle]) return { ok: false };
   }
-  return { ok: true, proposition: { outil: nomOutil, args: propres } };
+  // L'anneau voyage AVEC le verdict : c'est le chemin que `api/leo.js`
+  // emprunte déjà, donc l'information est sur la voie vivante, pas dans une
+  // fonction que l'on penserait à appeler.
+  return {
+    ok: true,
+    anneau: normaliserAnneau(outil.anneau),
+    proposition: { outil: nomOutil, args: propres }
+  };
 }
 
 // 'AAAA-MM-JJ' → 'JJ/MM/AAAA' (même forme lisible que le front).
