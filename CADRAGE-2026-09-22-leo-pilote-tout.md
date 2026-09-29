@@ -1130,10 +1130,59 @@ de contenu dicté dans les logs, et la RLS mono-utilisateur.
 | 🔴 | **barème**, règle métier, taux | une régression silencieuse chez un client |
 | 🟠 | l'outil **non instruit** — le onzième | `ANNEAU_PAR_DEFAUT` le tient |
 
-### §12.6 — La prochaine action, unique
+### §12.6 — ✅ B1 ③ est écrit — ce qui reste est le GATE, puis ④
 
-Inchangée dans son ordre, mais **son sens a grandi** : l'étape ③, le **journal
-des écritures**, devient le garde-fou principal et non plus une traçabilité de
-confort. ⛔ Elle commence toujours par le gate : créer la table
-`leo_ecritures`. Et le plafond de volume entre dans le même lot — ils gardent
-désormais la même chose.
+L'étape ③ devait commencer par le gate. **Elle a pu commencer avant**, et c'est
+le `CLAUDE.md` qui le dit : *« le SQL vit dans `supabase/migrations/`, jamais
+appliqué seul »*. **Écrire** la migration n'est pas un gate — seule son
+**application** l'est. Ce qui est livré le 29/09 :
+
+| | livré | preuve |
+|---|---|---|
+| la migration | `supabase/migrations/20260929220000_leo_ecritures.sql` | **écrite, NON appliquée** |
+| les décisions | `api/_lib/leo-journal.js` — fonctions **pures** | 22 contrôles, sans base |
+| le plafond | `creerPlafondEcritures` | éprouvé des deux côtés |
+
+⛔ **APPEND-ONLY STRICT, et c'est ce qui résout la contradiction d'A4.** Le
+journal doit s'écrire AVANT l'acte ; mais « écrire puis compléter » demanderait
+une policy UPDATE, donc de quoi réécrire une ligne posée. On pose donc
+plusieurs lignes reliées par `trace_id` — `tentee` → `reussie` | `echouee` →
+`defaite` — et aucune ne se modifie. ⚠️ **Une `tentee` restée SEULE est
+elle-même une information** : l'écriture s'est interrompue en vol. Une table
+modifiable l'aurait effacée. Aucune policy UPDATE ni DELETE, plus un `revoke`
+au niveau table : une policy ajoutée par inadvertance ne rouvrirait pas la porte.
+
+⛔ **Aucun contenu dicté ne PEUT entrer** — tenu par la forme, pas par la
+discipline : liste de clés **fermée** (un `texte` fait refuser l'entrée), cible
+vérifiée comme **UUID** (« Racheter le local » est refusé), et un `motif` qui
+**se refuse** au-delà de 200 caractères au lieu de se tronquer — tronquer
+laisserait entrer les 200 premiers caractères d'une page de journal intime. La
+borne est une sonde, et une sonde ne rattrape pas.
+
+⛔ **L'anneau est DÉRIVÉ du catalogue, jamais reçu.** Le laisser passer par
+l'appelant permettrait de journaliser « vert » une écriture faite sous un autre
+régime : le journal mentirait, ce qu'il n'a pas le droit de faire.
+
+⚠️ **UN CONTRÔLE DE CE LOT NE PROUVAIT PAS CE QU'IL ANNONÇAIT**, et il a été
+trouvé en cassant, dans le passage même qui l'a écrit. Il s'appelait
+`anneauLuPasRecu` et ne testait que ce que la liste fermée tient déjà : un
+sabotage rendant l'anneau recevable laissait le harnais **vert**. Le sabotage
+était neutre — il n'y avait pas de faille — mais *un test vert par le mauvais
+chemin est pire qu'un test absent*, parce qu'on le cite en revue. Remplacé par
+deux contrôles qui mordent, dont l'un vérifie dans la source qu'`anneau` n'est
+pas une clé acceptée.
+
+⚠️ **Le plafond est à 40 écritures par heure, et c'est une valeur de DÉPART.**
+L'ordre de grandeur se justifie (un seul outil par tour, et Paul dicte) ; le
+chiffre exact non. Il se re-règle sur une semaine de journal. ⛔ Ne pas le
+durcir avant : un seuil posé au jugé bloque du travail réel et finit désarmé.
+
+### §12.7 — La prochaine action, unique
+
+⏳ **LE GATE, et il est le seul reste non franchissable seul** : appliquer
+`20260929220000_leo_ecritures.sql`. Rien d'autre ne l'attend — la migration est
+écrite, relisible, et ses garde-fous sont déjà éprouvés par le harnais.
+
+Puis **④ — l'exécution** : brancher `autoriserEcriture` (qui n'a toujours aucun
+appelant, à dessein) sur une écriture réelle, avec l'entrée de journal posée
+AVANT l'acte et le plafond consulté. C'est là, et seulement là, que Léo écrira.

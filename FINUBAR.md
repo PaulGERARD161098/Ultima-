@@ -33,12 +33,12 @@
   "dernier_arret": {
     "le": "2026-09-29",
     "commit": "7e779e673e864a0293d955df9f4d1e4620e9a82b",
-    "quoi": "Cadrage §11 (Léo agit, 2 POV creusés) + B1 ①② : l'anneau est un champ du catalogue, 3 verts, 19 contrôles éprouvés par 6 sabotages."
+    "quoi": "§12 : l'objectif final scellé par Paul (destructeur/régressif). Anneau retaillé — les 10 outils verts. B1 ③ : journal append-only + plafond, écrits."
   },
-  "prochaine_action": "B1 étape ③ — le journal des écritures. ⛔ Il commence par le gate : créer la table `leo_ecritures`. On n'écrit pas le module avant la table.",
+  "prochaine_action": "⏳ GATE : appliquer `20260929220000_leo_ecritures.sql`. Puis ④ — brancher l'exécution sur les écritures vertes, journal posé AVANT l'acte.",
   "bloque_par": [
     "Gestes Ycome en attente depuis le 28/09 : archiver le dépôt sur GitHub, supprimer le projet Vercel ycome",
-    "Créer la table `leo_ecritures` (journal des écritures de Léo) : migration SQL en production — gate, que le mode solo ne lève pas. Elle ouvre B1 ③",
+    "Appliquer `supabase/migrations/20260929220000_leo_ecritures.sql` : migration SQL en production — gate. Elle est ÉCRITE et éprouvée ; il ne manque que son application",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
     "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
     "La précision sur « mon dpe.fr » (VITRUVE)",
