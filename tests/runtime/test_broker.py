@@ -63,7 +63,9 @@ class BrokerTests(unittest.TestCase):
         reopened = Broker(self.db, self.m, 'fixture/repo', clock=lambda: 10)
         self.assertEqual(reopened.budget.status('mission')['reserved_units'], 1)
         with self.assertRaises(Refusal): reopened.reconcile_completed('reader', 'crash')
-        with self.assertRaises(Refusal): reopened.reconcile_fixture('reader', 'crash')
+        with self.assertRaises(Refusal) as denied:
+            reopened.reconcile_fixture('reader', 'crash')
+        self.assertEqual(denied.exception.code, 'writer_required')
         self.assertEqual(reopened.budget.status('mission')['reserved_units'], 1)
         self.assertEqual(reopened.execute('leo', request)['status'], 'completed')
         self.assertEqual(reopened.budget.status('mission')['reserved_units'], 0)

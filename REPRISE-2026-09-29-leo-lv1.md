@@ -117,3 +117,48 @@ l'isolation et une limite de 15 minutes. Répartition modulo déterministe des
 52 fichiers : 26 + 26, sans doublon ni omission ; les deux jobs sont requis,
 aucun test écarté. Leur nouveau résultat reste à lire avant de clôturer le lot.
 Le statut courant et les liens de preuve sont tenus dans la PR #306.
+
+## État courant — 29/09, contrôleur éprouvé à 11 h 15 UTC
+
+Ce point remplace les prochaines actions historiques ci-dessus. Paul a demandé
+de terminer la V1 complète ; celle-ci n'est pas encore reçue. La matrice
+`RECETTE-LEO-LV1.md` relie les 28 exigences aux preuves et aux écarts restants.
+
+Le premier lot au commit distant `591ca521a29c63a7050507109c6abe2707ae933f`
+est vert : run Tests 36558482709, jobs unit 109373314761 et browser 109373315139 /
+109373315896. Les 52 harnais sont répartis en deux groupes sans omission.
+Run LV1 36558482874 vert également. Les défauts de montages Docker observés
+plus tôt sont corrigés ; les échecs anciens restent dans l'historique.
+
+Le contrôleur `leo/runtime` est maintenant construit et exécuté en CI isolée :
+droits hors proposition du modèle, budget SQLite partagé, mémoire avec ACL et
+versions, registre d'opérations et réconciliation, fusion Git locale atomique.
+Le code ne possède ni adaptateur métier de production ni connexion à Ultima.
+Lire `leo/README.md` pour les limites et le choix du registre technique unique.
+
+Preuve : source `5d75b9922c134ff28d92ae2070a399f678e36ebc`, cible
+`fb7daac613a0828d4135333fbd27a47102323211`, intégration testée
+`04c9c5b3613523cbd90bf68bc15ae951dfec9c83`. Run 36560513064, job
+109379983478 : **55 tests Python uniques réussis** à 11:15:01 UTC,
+Git 2.39.5, image Python
+`sha256:bb31e660647633ecd0a394013306057121b4fd091e2bf214010558249c5e1eb9`.
+Le run initial 36560319735 comportait 71 passages dont 16 doublons dus à
+l'héritage de classes de test ; ces doublons ont été supprimés sans perte de cas.
+
+La revue indépendante a fait corriger délégation après arrêt/expiration,
+références Git symboliques, règlement après interruption et réconciliation par
+un lecteur. Aucun autre blocage identifié dans ce périmètre statique ; cela
+n'est pas une revue positive des chemins métier non intégrés. Le test de refus
+du lecteur est encore renforcé pour vérifier le motif exact `writer_required`.
+
+Le cycle de test modifie réellement un fichier fictif, observe l'échec avant
+correctif puis la réussite, fusionne localement et retrouve le résultat depuis
+un nouveau processus après réponse perdue. L'accord et la revue de ce scénario
+restent simulés. Les essais réseau/écriture interdite parent et enfant passent.
+
+Prochaine action : achever les parcours de réception et choisir le raccord
+exécutable au produit. L'environnement Work présent n'offre pas de service
+persistant isolé pour héberger ce contrôleur ; la CI prouve son exécution en
+conteneur, pas un service actif. Ne pas créer une base SQLite éphémère dans une
+fonction Vercel en prétendant fournir une mémoire durable. Aucun budget externe,
+hébergement payant, migration réelle, merge de production ou publication activé.
