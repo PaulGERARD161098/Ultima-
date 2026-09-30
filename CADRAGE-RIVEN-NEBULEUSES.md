@@ -15,9 +15,11 @@
 
 ## 0. Ce qui existe — mesuré le 30/09, pas supposé
 
-**La base** (lecture seule, projet Ultima) : **50 fiches**, **37 secteurs
-distincts**, **4 fiches sans secteur**, **1 relation**, **1 rattachement**
-(Henry Huvey → RénoBoost IA), 39 personnes.
+**La base** (lecture seule, projet Ultima, remesurée le 30/09 après l'ajout
+des 4 cartes du salon BATIMAT) : **54 fiches**, **39 secteurs distincts**,
+**5 fiches sans secteur**, **1 relation**, **1 rattachement** (Henry Huvey →
+RénoBoost IA), 43 personnes. La maquette, elle, a été construite sur les
+50 fiches d'avant ce dernier ajout.
 
 **Le Ciel actuel de RIVEN** : `js/ciel.js` (2 071 lignes). Chaque secteur
 distinct y devient un amas sur une sphère 3D (`grouper` → `construireMonde`).
@@ -89,14 +91,14 @@ recouvre un autre.**
 | Nébuleuse | Étoiles | Domaines regroupés (secteurs saisis) |
 |---|---|---|
 | Conseil & services aux entreprises | 11 | Conseil, Conseil - …, Audit, Recouvrement, Recrutement, Services - finances |
-| BTP & rénovation | 10 | BTP - …, Tuyautiste, Isolation - …, CVC, Rénovation - IA |
+| BTP & rénovation | 11 | BTP - …, Tuyautiste, Isolation - …, CVC, Ventilation - …, Rénovation - IA |
 | Industrie & technologie | 6 | Aéronautique…, Holding industrielle, Ingénierie, Logiciel, Technologie |
 | Institutions & associatif | 5 | Politique, Études, Associatif, Médico-social |
-| Médias & édition | 4 | Médias…, Édition |
+| Médias & édition | 6 | Médias…, Édition |
 | Énergie & environnement | 4 | Énergie…, Environnement |
 | Finance & banque | 3 | Banque…, Finance - … |
 | Commerce, luxe & arts | 3 | Retail, Luxe, Art |
-| À classer | 4 | fiches sans secteur, et tout secteur que la table ne reconnaît pas |
+| À classer | 5 | fiches sans secteur, et tout secteur que la table ne reconnaît pas |
 
 La correspondance se fait sur **le début du secteur saisi**, sans casse ni
 espaces superflus : « Conseil - direction financière » va dans Conseil. Un
@@ -118,7 +120,7 @@ et compté**.
    noms de longueur réelle. C'est elle que les harnais ouvrent.
 2. **La logique pure, testée seule.** La table des neuf nébuleuses, les
    règles secteur → nébuleuse et le placement des étoiles vivent dans une
-   fonction sans DOM : `tests/unit-riven-nebuleuses.mjs`. Les 37 secteurs du
+   fonction sans DOM : `tests/unit-riven-nebuleuses.mjs`. Les 39 secteurs du
    30/09 tombent chacun dans la nébuleuse attendue ; le vide et l'inconnu dans
    « À classer ».
 3. **Le module de rendu** : `js/ciel-nebuleuses.js`, exposé en global comme
@@ -165,7 +167,7 @@ tout de bout en bout.
 
 | # | Critère | Comment on le sait |
 |---|---|---|
-| C1 | Les 37 secteurs du 30/09 tombent dans leur nébuleuse ; seules les 4 fiches sans secteur sont « À classer » | test unitaire |
+| C1 | Les 39 secteurs du 30/09 tombent dans leur nébuleuse ; seules les 5 fiches sans secteur sont « À classer » | test unitaire |
 | C2 | Vue d'ensemble : 0 titre de nébuleuse recouvert, à 390 et à 1 280 px | harnais, mesure des boîtes réellement peintes |
 | C3 | Chaque nébuleuse approchée : **0 nom recouvert**, à 390 et à 1 280 px | harnais — et le **sabotage** du placement le fait virer au rouge |
 | C4 | Une étoile touchée ouvre sa fiche ; une personne du panneau ouvre la sienne | harnais |
@@ -183,7 +185,7 @@ tout de bout en bout.
 - **Reclasser un secteur depuis l'interface**, ou ranger la table en base. La
   table vit dans le code pour cette boucle. Si Paul veut un jour reclasser
   lui-même, ce sera une boucle à part, avec migration, donc un gate.
-- **Les 39 personnes non rattachées** comme étoiles à part : elles sont
+- **Les 42 personnes non rattachées** comme étoiles à part : elles sont
   représentées par leurs fiches, et restent dans Contacts → Personnes.
 - **La recherche sur les notes** (trouver « Concorde ») : petite évolution
   distincte, déjà signalée à Paul.
@@ -199,7 +201,7 @@ tout de bout en bout.
 | **Les harnais du Ciel 3D virent au rouge**, et on découvre la taille réelle en cours de route | Inventaire à l'étape 0, avant le code ; réécriture dans la même boucle, jamais de test sauté. |
 | **Un réseau plus grand** (l'import iPhone prévoit ~500 contacts) : à 100 étoiles dans une nébuleuse, « 0 chevauchement » devient impossible à 12 px | Règle posée dès maintenant : **un nom ne se superpose jamais. S'il n'a pas de place, il se cache, et le panneau le donne.** Le harnais tourne aussi sur une série fictive de 300 fiches. |
 | **Les brumes font saccader l'approche sur téléphone** : le filtre de turbulence recalculé à chaque image | Brumes peintes une fois, puis déplacées comme une image pendant le mouvement ; mesuré (C7). |
-| **Un secteur nouveau disparaît en silence** | Il tombe dans « À classer », visible et compté ; le test unitaire fige les 37 secteurs du jour. |
+| **Un secteur nouveau disparaît en silence** | Il tombe dans « À classer », visible et compté ; le test unitaire fige les 39 secteurs du jour. |
 | **On perd ce que le Ciel montre aujourd'hui** | La relation reste un trait, les personnes rattachées restent dans le panneau (§1, point 6). |
 | **« Gardons ce format » mal lu** (à plat ou en 3D) | Première chose que le go de Paul confirme (§0). |
 | **Une donnée réelle entre au dépôt** par la maquette ou une fixture | Maquette et fixtures fictives ; la maquette aux vraies données reste hors dépôt. |
