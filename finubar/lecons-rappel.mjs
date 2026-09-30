@@ -76,8 +76,57 @@ try {
   }
 
   const brut = readFileSync(FICHIER, 'utf8');
-  const trop_long = Buffer.byteLength(brut, 'utf8') > MAX_OCTETS;
-  const texte = trop_long ? brut.slice(0, MAX_OCTETS) : brut;
+
+  // ⛔ LA COUPE TOMBE SUR UNE FRONTIÈRE D'ENTRÉE, ET ELLE DIT CE QU'ELLE
+  // LAISSE DEHORS — corrigé le 30/09. Avant, `brut.slice(0, MAX_OCTETS)`
+  // coupait AU MILIEU D'UN MOT : mesuré ce jour-là, à la ligne 861 sur 1908.
+  // Quatre familles entières — « Ce qu'on donne à Paul », « Conduire une
+  // boucle », « Plusieurs dépôts », « Économie », soit 54 leçons sur 141 —
+  // n'atteignaient AUCUNE séance, sur AUCUN des dix dépôts. Le rappel
+  // annonçait « TRONQUÉ » sans dire quoi : on savait qu'il manquait quelque
+  // chose, jamais lequel.
+  //
+  // ⚠️ POURQUOI SUR UNE ENTRÉE ET NON SUR UNE FAMILLE. La première version de
+  // ce correctif coupait à la dernière FAMILLE entière : elle servait 35 Ko au
+  // lieu de 63, parce que la famille 2 pèse 42 Ko et ne tenait pas. Plus
+  // honnête, mais elle échangeait 26 Ko de leçons réellement délivrées contre
+  // de la franchise. Couper sur une entrée garde le volume ET nomme le manque.
+  //
+  // ⚠️ Ça ne rend pas la place perdue — c'est le fichier qu'il faut élaguer,
+  // pas la borne qu'il faut lever. Mais un manque NOMMÉ se va chercher, et un
+  // manque anonyme se prend pour une absence de leçon.
+  const familles = [...brut.matchAll(/^## .+$/gm)].map((m) => ({
+    titre: m[0].slice(3).trim(), debut: m.index,
+  }));
+  const entrees = [...brut.matchAll(/\n\n\*\*[^*\n]/g)].map((m) => m.index + 2);
+  let texte = brut;
+  let coupe = brut.length;
+  const dehors = [];
+  let partielle = null;
+  if (Buffer.byteLength(brut, 'utf8') > MAX_OCTETS) {
+    // La dernière entrée qui tient ENTIÈREMENT. À défaut d'entrée, coupe brute
+    // plutôt que rien servi.
+    for (const i of entrees) {
+      if (Buffer.byteLength(brut.slice(0, i), 'utf8') <= MAX_OCTETS) coupe = i;
+    }
+    if (coupe === brut.length) coupe = MAX_OCTETS;
+    texte = brut.slice(0, coupe);
+    for (const f of familles) if (f.debut >= coupe) dehors.push(f.titre);
+    // La famille qui contient la coupe est servie À MOITIÉ : on la nomme, avec
+    // le compte d'entrées servies sur son total. Sans ça, une famille amputée
+    // se lit comme une famille complète — le pire des deux états.
+    const dedans = familles.filter((f) => f.debut < coupe);
+    const courante = dedans[dedans.length - 1];
+    if (courante) {
+      const finFam = familles.find((f) => f.debut > courante.debut)?.debut ?? brut.length;
+      if (finFam > coupe) {
+        const compte = (bout) =>
+          (brut.slice(courante.debut, bout).match(/\n\n\*\*[^*\n]/g) || []).length;
+        partielle = { titre: courante.titre, servies: compte(coupe), total: compte(finFam) };
+      }
+    }
+  }
+  const trop_long = dehors.length > 0 || partielle !== null;
 
   // Le sceau est ANNONCÉ, et son absence aussi. Sans lui, deux dépôts divergents
   // affichent des leçons différentes sans que rien ne le signale — et le silence
@@ -91,9 +140,18 @@ try {
     'Chaque règle ci-dessous a été payée par une erreur réelle. Les relire ici',
     'coûte moins cher que de les repayer. Source : memoire/LECONS.md',
   ];
-  const pied = trop_long
-    ? [`⚠️ TRONQUÉ à ${MAX_OCTETS} octets — la fin manque, lire memoire/LECONS.md en entier.`]
-    : [];
+  const pied = !trop_long ? [] : [
+    '',
+    `⛔ CE RAPPEL EST INCOMPLET — il s'arrête à ${MAX_OCTETS} octets, sur une`,
+    '   frontière de leçon (jamais au milieu de l\'une d\'elles).',
+    ...(partielle
+      ? [`   · ${partielle.titre} — ${partielle.servies} leçons sur ${partielle.total} servies`]
+      : []),
+    ...dehors.map((t) => `   · ${t} — AUCUNE leçon servie`),
+    '   Ce qui manque est dans memoire/LECONS.md, en entier : le lire avant de',
+    "   travailler sur ce que ces familles couvrent. ⚠️ Et c'est le FICHIER qui",
+    '   doit être élagué, jamais cette borne qui doit être levée.',
+  ];
   const rappel = [
     '⛔ En fin de séance : si une erreur a coûté quelque chose, elle devient une',
     "   leçon dans memoire/LECONS.md, avec l'incident qui l'a payée.",

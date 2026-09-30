@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v49 2026-09-30 sha256:9531be9f11db -->
+<!-- lecons:empreinte v50 2026-09-30 sha256:05473b44ce66 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -20,88 +20,10 @@ l'identique** dans les neuf autres dépôts, parce qu'une séance ouverte sur
 RenoAgenda ou artisan-builder n'a pas Ultima sous la main. Toute évolution se
 fait **dans Ultima**, puis se re-copie : on ne corrige jamais une copie sur
 place, sinon les dix divergent et plus personne ne sait laquelle fait foi.
-*(Même motif, même raison que `finubar/rappel.mjs`. Les chemins cités dans les
-leçons portent donc leur dépôt en préfixe : ils doivent se lire depuis n'importe
-lequel des huit.)*
-
-### ✍️ Le mettre à jour, depuis n'importe quel dépôt
-
-*Posé le 2026-09-11, sur demande de Paul : « il faut pouvoir le mettre à jour
-tout le temps sur tous les repos ». Huit copies d'un fichier qui bouge souvent,
-c'est huit vérités qui divergent — et la divergence ne se voit pas toute seule.*
-
-**La ligne de sceau en tête** (`<!-- lecons:empreinte v… -->`) porte une
-révision, une date et le sha256 du corps. Deux dépôts se comparent d'un coup
-d'œil, sans réseau : même sceau, mêmes leçons.
-
-**La marche à suivre, dans cet ordre, et elle ne se raccourcit pas :**
-
-1. **Écrire la leçon dans Ultima**, jamais dans une copie. Si la séance est
-   ouverte sur un autre dépôt, Ultima s'écrit quand même : `add_repo` puis
-   l'outil GitHub d'écriture de fichier — aucun clone n'est nécessaire.
-2. **Re-sceller** : `node finubar/lecons-empreinte.mjs --sceller`. Le sceau ne
-   bouge pas si le corps n'a pas changé, donc re-sceller sans raison ne
-   fabrique pas de fausse divergence.
-3. **Propager la copie** dans les neuf autres dépôts, octet pour octet. Un
-   `diff` doit revenir vide : c'est le critère de réussite, pas « ça a l'air
-   pareil ».
-4. **Le dire dans le commit du travail** qui a révélé la leçon — pas dans un
-   commit séparé « docs » qu'on écrit un autre jour, et qu'on n'écrit donc pas.
-
-⛔ **Le sceau se vérifie, sinon il ment.** `node finubar/lecons-empreinte.mjs
---verifier` échoue si le fichier a changé sans être re-scellé, et il tourne dans
-`tests/lancer.sh`. Une empreinte oubliée est **pire** que pas d'empreinte : elle
-affirme une identité fausse, et deux copies réellement différentes affichent
-alors le même sceau.
-
-⚠️ **Ce qui n'est PAS automatique, et doit être su** : aucun contrôle **en
-CI** ne compare la copie d'un dépôt à la source. Le sceau rend la divergence
-**visible** au lecteur, il ne la **détecte** pas tout seul — un contrôle croisé
-automatisé exigerait un jeton d'accès inter-dépôts, c'est-à-dire un secret,
-donc une décision de Paul.
-
-⛔ **MAIS « PERSONNE NE PEUT COMPARER » EST FAUX, ET LA NUANCE COÛTE CHER**
-*(précisé le 2026-09-30)*. Le paragraphe ci-dessus disait « rien ne compare »
-sans dire « en CI », et se lisait donc comme « la comparaison est hors de
-portée tant que Paul n'a pas donné un secret ». C'est inexact : **une séance
-qui a les dépôts attachés les compare sans aucun secret nouveau**, d'un `diff`
-sur le disque. C'est ce `diff` qui autorise l'étape 3, et il se refait à chaque
-propagation : **on ne présume pas qu'une copie est pure, on le vérifie avant
-d'écraser.**
-
-⛔ **ET LE `diff` SE FAIT SUR `origin/main`, JAMAIS SUR LE CLONE LOCAL**
-*(payé le 2026-09-30)*. Ce jour-là, j'ai mesuré les dix copies **sur le
-disque** et conclu que trois dépôts n'avaient pas le fichier. Faux : deux
-l'avaient reçu quatre heures plus tôt, par une autre séance, et mes clones
-datant de l'ouverture ne le savaient pas. **Un clone est une photo, pas un
-état.** Toute mesure inter-dépôts se lit avec `git show origin/main:<fichier>`
-après un `fetch`.
-
-⛔ **ET DEUX SÉANCES QUI SCELLENT PRODUISENT DEUX RÉVISIONS DU MÊME NUMÉRO**
-*(payé le 2026-09-30, le même jour)*. Une autre séance a porté la source de
-v44 à v47 pendant que je travaillais ; j'ai re-scellé depuis v44 et fabriqué
-une **seconde v45**, `sha256:5949d1888628` là où la sienne portait
-`8fc13b32c497`. Le numéro de révision est un compteur local, pas un
-identifiant : **c'est le sha256 qui identifie, jamais le `v<n>`.** Avant de
-sceller, relire le sceau sur `origin/main` — et si une autre séance est en vol
-sur ce fichier, la propagation attend qu'elle ait atterri.
-
-En attendant le contrôle en CI, c'est l'étape 3 qui tient, et elle est humaine.
-
-⛔ **ET LA PROPAGATION N'EST PAS UN FICHIER, C'EST TROIS PIÈCES**
-*(mesuré le 2026-09-30)*. Un `memoire/LECONS.md` déposé seul dans un dépôt est
-un fichier que **personne n'ouvre** : ce qui le fait lire à l'ouverture de
-séance, c'est `.claude/lecons-rappel.mjs` **et** son enregistrement en
-`SessionStart` dans `.claude/settings.json`. Les trois vont ensemble. Ce
-jour-là, trois dépôts (`renoboost-console`, `Artidispo`, `DATARENO-`) portaient
-le fichier **sans** le hook — n'en poser qu'une pièce donne l'apparence d'une
-copie à jour sans qu'une seule leçon n'atteigne jamais une séance.
-
-⚠️ **Et la cible se LIT dans `finubar/depots.json`, elle ne se compte pas de
-mémoire.** Ce fichier a annoncé « les huit dépôts » et « les sept autres »
-jusqu'au 30/09, alors que la liste en portait **dix** : deux dépôts manquaient
-à sa propre consigne de propagation. `ripair` reste dehors, et pour une raison
-écrite — hors de `depots.json`, fork partagé avec un tiers.
+*(Les chemins cités portent leur dépôt en préfixe : ils doivent se lire depuis
+n'importe lequel des dix.)* ⇒ **Comment le sceller et le propager :
+`memoire/LECONS-PROCEDURE.md`** — sorti d'ici le 30/09 pour ne pas occuper, dans
+un fichier que dix dépôts injectent en entier, la place d'une leçon.
 
 **Comment il vit.**
 - **Une leçon s'ajoute quand elle est payée**, en fin de séance, dans le commit
@@ -137,52 +59,35 @@ croire le résultat.** Si le bruit gêne, filtrer *après* avoir relu le code de
 sortie (`; echo "code=$?"`), jamais à la place. Et sur une fusion d'essai,
 vérifier d'abord qu'un ancêtre commun existe : `git merge-base A B`.
 
-**UN SHA NE SE COMPLÈTE PAS DE MÉMOIRE — MÊME QUAND ON VIENT DE LE LIRE EN
-COURT** *(2026-09-30)*. Pour fusionner la PR #309, il fallait le SHA complet de
-la tête. Je l'avais sous les yeux en abrégé (`a1dbd12`, affiché par
-`git log --oneline`) et j'ai écrit les trente-trois caractères suivants de
-mémoire : `a1dbd126e7a5fa3a7b1a1ba5b9b0c39f5c0d3a8e`. Le vrai était
-`a1dbd12e25c576fbdd26f872efa00fe8aaf51ff4` — **sept caractères justes, le reste
-inventé**. GitHub a refusé : `409 Head branch was modified`.
+**UN IDENTIFIANT ABRÉGÉ N'EST PAS L'IDENTIFIANT — ET IL NE SE COMPLÈTE JAMAIS
+DE MÉMOIRE** *(2026-09-11, 09-13 ×2, 09-30 ×2 — cinq fois payée)*. Les sept
+premiers caractères d'un SHA suffisent à le *reconnaître*, jamais à le
+*reconstituer*. Vrai d'un SHA, d'un UUID, d'un identifiant de déploiement ou de
+ticket. **11/09** : douze caractères inventés derrière les sept lus, refus
+immédiat. **13/09** : deux `409` à deux heures d'intervalle, la seconde après
+que la première eut été racontée en toutes lettres dans un compte rendu.
+**30/09** : `a1dbd126e7a5…` passé à la place de `a1dbd12e25c5…` — sept justes,
+trente-trois inventés ; puis, **trois heures après avoir écrit cette leçon
+ici**, `bb50a0fb1a3c…` à la place de `bb50a0fb344f…`, huit justes sur quarante.
 
-⚠️ **Le message d'erreur désignait la mauvaise cause, et c'est ce qui rend cette
-leçon utile** : « la branche a été modifiée » invite à croire qu'une autre séance
-a poussé — hypothèse crédible ce jour-là, main ayant bougé deux fois dans
-l'heure. J'ai vérifié au lieu de le croire : `git rev-parse` des deux côtés, SHA
-identiques, la branche n'avait pas bougé d'un octet. **Sans cette vérification
-j'aurais cherché un conflit qui n'existait pas.**
+⛔ **C'est la récidive qui enseigne, pas la faute** : une règle qui dépend de la
+vigilance de celui qui tape sera violée **par celui qui l'a rédigée**. Un
+paragraphe de rapport ne s'exécute pas. Il faut un mécanisme, et il y en a deux,
+gratuits : **ne jamais TAPER un identifiant** — substitution de commande
+(`VRAI=$(git rev-parse origin/main)`), la main qui recopie est le point de
+défaillance, on la retire du chemin ; et **un garde-fou aval qui sache refuser**
+— `finubar/collecter.mjs` annonce « grain non rattaché », `expectedHeadSha` est
+un *lease* qui a refusé la valeur fabriquée. Sans lui la fusion réussissait, par
+chance, sur un lot que personne n'aurait su non vérifié.
 
-⛔ **Ce que ça enseigne, au-delà des SHA** : un identifiant abrégé n'est pas
-l'identifiant. Les sept premiers caractères d'un SHA suffisent à le *reconnaître*
-et jamais à le *reconstituer* — c'est vrai d'un SHA, d'un UUID, d'un identifiant
-Stripe, d'une référence de devis. La forme complète se lit à sa source
-(`git rev-parse HEAD`), toujours.
+⚠️ **Deux angles morts, chacun payé une fois.** Le garde-fou était **distant**
+les deux fois du 13/09 : quand c'est le serveur d'en face qui rattrape, le
+contrôle local manquait — et il coûtera le jour où l'API n'en a pas non plus.
+Et le 30/09, **le message d'erreur désignait la mauvaise cause** : `409 Head
+branch was modified` invite à croire qu'une autre séance a poussé, hypothèse
+crédible ce jour-là. Vérifié au lieu d'être cru (`git rev-parse` des deux côtés,
+SHA identiques) : la branche n'avait pas bougé d'un octet.
 
-✅ **Et le garde-fou a fait exactement son travail** : `expectedHeadSha` est un
-*lease*, et il a refusé une valeur fabriquée. Sans lui la fusion aurait réussi —
-par chance, sur un lot que personne n'aurait su non vérifié. ⇒ **Ne jamais
-omettre le lease pour « éviter un aller-retour »** : c'est lui qui transforme une
-invention en refus plutôt qu'en réussite muette.
-
-⛔ **ET LA LEÇON ÉCRITE N'A RIEN EMPÊCHÉ — RECHUTE LE MÊME JOUR, TROIS HEURES
-PLUS TARD** *(2026-09-30, second incident)*. En recalant ce grain sur la tête de
-`main`, j'ai tapé `bb50a0fb1a3cf2a22b1b13e4b0bd4b1c06a57f8e` : **huit
-caractères justes** (`bb50a0fb`, lus dans `git log --oneline`), les trente-deux
-suivants inventés. La leçon ci-dessus était dans ce fichier depuis le matin, et
-je venais de l'écrire moi-même.
-
-⚠️ **C'est ça qui compte, pas la faute** : une règle qui dépend de la vigilance
-de celui qui tape sera violée par celui qui l'a rédigée. Il faut un
-**mécanisme**, et il y en a deux, tous les deux gratuits :
-- **ne jamais TAPER un identifiant** — substitution de commande
-  (`VRAI=$(git rev-parse origin/main)`), variable, copie ; la main qui recopie
-  est le point de défaillance, on la retire du chemin ;
-- **laisser un garde-fou aval le dire** — ici `finubar/collecter.mjs` compare le
-  commit du grain à l'historique et annonce « grain non rattaché ». Le faux SHA
-  y serait apparu au passage suivant, mais **après** avoir été cru.
-
-⇒ Tout champ qui porte un identifiant complet se renseigne par substitution, et
-se relit par le contrôle qui sait le refuser.
 
 **UN COMMIT « HORS MAIN » N'EST PAS UN TRAVAIL HORS MAIN — ON COMPARE LES
 CONTENUS, PAS LES SHA** *(2026-09-18)*. Vu RenoBoost sur une branche à sept
@@ -228,6 +133,23 @@ jamais le contenu.
 **UN CLIENT QUI COUPE AVANT LE SERVEUR S'AVEUGLE** *(2026-09-14, RenoBoost)*.
 Notre délai valait 8 s, comme le `statement_timeout` du rôle `authenticator` : notre `AbortController` gagnait la course, et l'écran ne recevait qu'un `status: 0`, un silence sans cause. Passé au-dessus, Postgres a répondu `57014` — et c'est CE motif qui a désigné la vraie correction.
 ⇒ *Règle* : le délai client se pose AU-DESSUS du plafond serveur. Sinon il masque le motif que le serveur aurait donné.
+
+**UN SEUIL OU UN MOTIF SE RÈGLE CONTRE LE CORPUS, JAMAIS CONTRE L'IDÉE QU'ON
+S'EN FAIT** *(2026-09-30, quatre fois dans la même heure)*. En élaguant ce
+fichier, il fallait compter ses entrées — l'invariant qui garantit qu'aucune
+leçon ne disparaît. Le compteur s'est trompé **quatre fois de suite**, toujours
+en rendant un nombre plausible : une classe de caractères écartait les titres à
+apostrophe ou à accent grave ; une recherche ligne à ligne manquait les titres
+à cheval sur deux lignes ; un taux de capitales à 0,8 écartait
+`UN CLONE SUPERFICIEL NE SUIT QUE \`main\`` parce que le code entre backticks
+est en minuscules. Comptes successifs : 147, 113, 137, **144**.
+
+⛔ **Le danger n'est pas l'erreur, c'est qu'un compteur faux sert d'invariant.**
+Si j'avais élagué sur le compte de 137, sept leçons pouvaient disparaître sans
+que rien ne le dise. Les quatre pannes ont été trouvées en **soumettant au
+compteur des titres dont je connaissais la réponse** — jamais en le relisant.
+⇒ Un instrument qui mesure un corpus se livre avec son jeu d'épreuve, et le jeu
+contient un cas de chaque forme réelle, pas un cas type.
 
 **AVANT DE CROIRE UNE MESURE, LUI DEMANDER CE QU'ELLE RÉPOND SUR UN CAS DONT ON
 CONNAÎT DÉJÀ LA RÉPONSE** *(2026-08-17)*. Trois sondes fausses dans une seule
@@ -280,29 +202,6 @@ réelles de la prochaine séance, le même contrôle annonçait « commit introu
 la fraîcheur de cette note n'est PAS mesurable ». *Le cas à réponse connue ne
 suffit pas : il doit être joué là où la lecture aura lieu. Un environnement qui a
 de la mémoire fait passer des contrôles qu'un environnement neuf recale.*
-
-**UN IDENTIFIANT TRONQUÉ NE SE COMPLÈTE JAMAIS DE MÉMOIRE** *(2026-09-11)*.
-Une fusion exigeait le sha complet de la tête ; je n'avais lu que sa forme
-courte, et j'ai passé à l'API douze caractères inventés derrière les sept connus.
-Refus immédiat, garde-fou tenu, coût faible — cette fois. La forme courte d'un
-sha, d'un identifiant de déploiement ou de ticket **est une troncature, pas un
-préfixe qu'on prolonge** : elle se relit à la source (`git rev-parse`) avant
-d'être passée à quoi que ce soit qui agit.
-
-⛔ **ET ELLE A ÉTÉ ENFREINTE DEUX FOIS LE 13/09, APRÈS AVOIR ÉTÉ ÉCRITE ICI** —
-deux `409` sur deux fusions, à deux heures d'intervalle, dans la même séance, et
-la seconde après que la première eut été racontée en toutes lettres dans un
-compte rendu. C'est cette récidive qui compte, pas la faute : **un paragraphe de
-rapport ne s'exécute pas**, et une leçon rangée dans un fichier ne désarme pas
-le réflexe qui l'a causée. Ce qui change quelque chose est la forme
-opérationnelle, tenue dans le geste : **la valeur est copiée d'une commande qui
-vient de l'imprimer**, jamais d'un affichage antérieur de la conversation —
-et l'abréger pour la relire est déjà une reconstruction.
-
-⚠️ **Le garde-fou était DISTANT les deux fois** : c'est le serveur qui a refusé,
-pas moi. Quand un contrôle distant est ce qui rattrape une déduction, c'est que
-le contrôle local manquait — et un garde-fou qu'on n'a pas coûte le jour où
-l'API en face n'en a pas non plus.
 
 **UN INSTRUMENT QUI MESURE UNE PROPRIÉTÉ DÉRIVÉE MESURE TOUT CE QUI LA PRODUIT**
 *(2026-09-13)*. Pour prouver qu'un hero ne noyait plus sa photo sous deux voiles,
@@ -1869,6 +1768,47 @@ avant toute passe visuelle, `git log` de la source amont depuis la date écrite
 en tête de l'adaptation ; si elle a bougé, on relit AVANT de polir. *Le garde-fou
 mécanique (plafond d'arrondis à zéro) protégeait la règle du 14/09 contre les
 écrans, pas contre le temps.*
+
+**LE `diff` INTER-DÉPÔTS N'EST PAS HORS DE PORTÉE : IL N'EST PAS EN CI**
+*(2026-09-30)*. Le paragraphe ci-dessus disait « rien ne compare »
+sans dire « en CI », et se lisait donc comme « la comparaison est hors de
+portée tant que Paul n'a pas donné un secret ». C'est inexact : **une séance
+qui a les dépôts attachés les compare sans aucun secret nouveau**, d'un `diff`
+sur le disque. C'est ce `diff` qui autorise l'étape 3, et il se refait à chaque
+propagation : **on ne présume pas qu'une copie est pure, on le vérifie avant
+d'écraser.**
+
+**UN CLONE EST UNE PHOTO, PAS UN ÉTAT — LE `diff` SE FAIT SUR `origin/main`**
+*(2026-09-30)*. Ce jour-là, j'ai mesuré les dix copies **sur le
+disque** et conclu que trois dépôts n'avaient pas le fichier. Faux : deux
+l'avaient reçu quatre heures plus tôt, par une autre séance, et mes clones
+datant de l'ouverture ne le savaient pas. **Un clone est une photo, pas un
+état.** Toute mesure inter-dépôts se lit avec `git show origin/main:<fichier>`
+après un `fetch`.
+
+**DEUX SÉANCES QUI SCELLENT PRODUISENT DEUX RÉVISIONS DU MÊME NUMÉRO**
+*(2026-09-30)*. Une autre séance a porté la source de
+v44 à v47 pendant que je travaillais ; j'ai re-scellé depuis v44 et fabriqué
+une **seconde v45**, `sha256:5949d1888628` là où la sienne portait
+`8fc13b32c497`. Le numéro de révision est un compteur local, pas un
+identifiant : **c'est le sha256 qui identifie, jamais le `v<n>`.** Avant de
+sceller, relire le sceau sur `origin/main` — et si une autre séance est en vol
+sur ce fichier, la propagation attend qu'elle ait atterri.
+
+**PROPAGER UN FICHIER LU PAR UN HOOK, C'EST TROIS PIÈCES, PAS UNE**
+*(2026-09-30)*. Un `memoire/LECONS.md` déposé seul dans un dépôt est
+un fichier que **personne n'ouvre** : ce qui le fait lire à l'ouverture de
+séance, c'est `.claude/lecons-rappel.mjs` **et** son enregistrement en
+`SessionStart` dans `.claude/settings.json`. Les trois vont ensemble. Ce
+jour-là, trois dépôts (`renoboost-console`, `Artidispo`, `DATARENO-`) portaient
+le fichier **sans** le hook — n'en poser qu'une pièce donne l'apparence d'une
+copie à jour sans qu'une seule leçon n'atteigne jamais une séance.
+
+**LA CIBLE D'UNE PROPAGATION SE LIT DANS SA LISTE, ELLE NE SE COMPTE PAS DE MÉMOIRE**
+*(2026-09-30)*. Ce fichier a annoncé « les huit dépôts » et « les sept autres »
+jusqu'au 30/09, alors que la liste en portait **dix** : deux dépôts manquaient
+à sa propre consigne de propagation. `ripair` reste dehors, et pour une raison
+écrite — hors de `depots.json`, fork partagé avec un tiers.
 
 ## 6. Économie
 
