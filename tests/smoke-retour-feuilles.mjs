@@ -234,7 +234,9 @@ for (const [id, fichier] of DRAGONS) {
 
 // Le parent attendu existe bel et bien (un retour vers une page absente serait
 // vert sur le seul texte du lien).
-for (const parent of new Set(RETOURS_ATTENDUS.map((r) => r[2]))) {
+// (`imladrik.html`, cible des six retours DRAGONS, s'y ajoute explicitement : sa
+// seule mention dans RETOURS_ATTENDUS était celle d'ADRAMELECH et de TAO.)
+for (const parent of new Set([...RETOURS_ATTENDUS.map((r) => r[2]), 'imladrik.html'])) {
   const rep = await fetch(`${BASE}/${parent}`);
   verifier(`${parent} : la page répond 200`, rep.status === 200, String(rep.status));
 }
