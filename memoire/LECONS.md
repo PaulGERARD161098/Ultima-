@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v51 2026-09-30 sha256:12b9b28c6af7 -->
+<!-- lecons:empreinte v52 2026-09-30 sha256:b756757f986e -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1076,6 +1076,46 @@ cela ». Aucun test ne pouvait le voir : une image périmée est une image valid
 capture dans le même lot**, et le dit dans son commit. Le script existait
 précisément pour ça (« le jour où la console change, on relance ») ; ce qu'il
 manquait, c'est le geste attaché à la boucle, pas l'outil.
+
+**LA PORTÉE D'UNE GARDE FAIT PARTIE DE LA GARDE — UN MÉCANISME QUI TIENT UNE
+INSTANCE NE TIENT PAS LA RÈGLE** *(2026-09-30)*. Paul demande d'élaguer ce
+fichier. Le plan : archiver toute leçon qu'un mécanisme **vérifié** tient déjà —
+une règle rendue mécanique n'a plus besoin d'occuper l'attention de chaque
+ouverture de séance. Mesuré sur les 145 entrées : **73** citent un mécanisme
+(harnais, sonde, contrainte, garde-fou) · **14** en **nomment** un · **2** ont
+leur règle tenue par une garde nommée et prouvée en la cassant · **0** sont
+archivables. Les deux survivantes portent **plus loin que leur garde** : l'une
+est tenue sur les quinze feuilles d'un seul dépôt, l'autre sur deux documents
+d'un autre, tandis que leurs règles — « une couleur se juge relativement à son
+fond » et « un renvoi mort se lit comme un renvoi valide » — valent partout. Les
+retirer perdrait une règle générale pour se protéger d'un défaut local.
+
+⛔ **Le proxy « la leçon cite un harnais » est faux dans les DEUX sens**, et
+c'est ce qui rendait la passe nécessaire plutôt que déductible. Faux positif :
+la plupart citent un harnais en **racontant la panne** (« le harnais restait
+vert »), pas en nommant une garde qui la retient. Faux négatif : une règle peut
+être tenue par une contrainte SQL qui n'emploie jamais le mot « test ». Et les
+**59** qui disent « corrigé par un harnais » sans dire lequel sont
+**invérifiables par construction** — donc inarchivables, quoi qu'elles tiennent.
+
+⚠️ **Ce que la passe a coûté, et qui n'était pas dans son périmètre.** Le pied
+du rappel d'ouverture — la première chose que lit une séance décidée à régler le
+problème — prescrivait : « c'est le FICHIER qui doit être élagué, jamais cette
+borne qui doit être levée ». La route qu'il désigne a été parcourue : elle rend
+0. Pendant ce temps la borne mordait, et **78 leçons sur 145 n'atteignaient
+aucune séance sur aucun des dix dépôts** — dont « le lien se pose en fin de
+message », que Paul a dû redemander le 25/09 **puis** le 30/09. Une instruction
+périmée dans le fichier qu'on lit en premier coûte plus cher qu'une instruction
+absente : on la croit, et on refait le trajet. Borne levée à 200 000 le 30/09
+sur décision de Paul, avec sa mesure inscrite au-dessus.
+
+⊕ **ET UN FAIT HISTORIQUE NE SE DÉRIVE PAS D'UNE VARIABLE VIVANTE** — trouvé en
+sabotant, dans le correctif lui-même. La ligne qui annonce la levée était
+écrite `` `60 000 → ${MAX_OCTETS}` `` : sous une borne volontairement abaissée
+pour éprouver la coupe, elle affichait « 60 000 → 40000 », un **abaissement
+présenté comme une levée**. L'état courant se dérive ; une date et un chiffre
+passés s'écrivent. ⚠️ Le défaut n'était visible que du côté où la garde devait
+mordre — jamais dans le cas nominal.
 
 ## 3. Ce qu'on donne à Paul
 
