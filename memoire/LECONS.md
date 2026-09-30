@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v55 2026-09-30 sha256:5116d2f65529 -->
+<!-- lecons:empreinte v56 2026-09-30 sha256:9771ce523225 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1897,7 +1897,7 @@ copie à jour sans qu'une seule leçon n'atteigne jamais une séance.
 *(2026-09-30)*. Ce fichier a annoncé « les huit dépôts » et « les sept autres »
 jusqu'au 30/09, alors que la liste en portait **dix** : deux dépôts manquaient
 à sa propre consigne de propagation. `ripair` reste dehors, et pour une raison
-écrite — hors de `Ultima-/depots.json`, fork partagé avec un tiers.
+écrite — hors de `Ultima-/finubar/depots.json`, fork partagé avec un tiers.
 
 ## 6. Économie
 
