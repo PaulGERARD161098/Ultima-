@@ -106,7 +106,11 @@ export default async function handler(req, res) {
           proposition: {
             outil: verdict.proposition.outil,
             args: verdict.proposition.args,
-            reformulation: reformulerProposition(verdict.proposition)
+            reformulation: reformulerProposition(verdict.proposition),
+            // B1 ④ : information d'INTERFACE (carte ou exécution directe),
+            // jamais une autorité — /api/leo/ecritures re-décide depuis le
+            // catalogue avant de rendre la moindre trace.
+            anneau: verdict.anneau
           }
         });
       }

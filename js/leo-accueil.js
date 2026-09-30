@@ -30,6 +30,9 @@
 
   var CLE_SESSION = 'ultima-leo-accueil-vu'; // RIVEN — clé historique, gardée
   var SVG_NS = 'http://www.w3.org/2000/svg';
+  // B1 ④ : forme d'une trace et d'une cible de journal (mêmes motifs que
+  // api/_lib/leo-journal.js — le serveur re-vérifie, ceci n'est qu'un tri).
+  var UUID_MOTIF = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
   // ---------- Fonctions PURES (testables via window.UltimaLeo) ----------
 
@@ -931,6 +934,83 @@
       (plan.ok ? boutons.firstChild : annuler).focus();
     }
 
+    // Appel JSON authentifié → { httpOk, statut, corps } ; rejette sur panne réseau.
+    function appelJson(url, methode, corps) {
+      return fetch(url, {
+        method: methode,
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Authorization: 'Bearer ' + voix.jeton
+        },
+        body: JSON.stringify(corps)
+      }).then(function (reponse) {
+        return reponse.json().then(function (c) {
+          return { httpOk: reponse.ok, statut: reponse.status, corps: c };
+        }, function () {
+          return { httpOk: false, statut: reponse.status, corps: null };
+        });
+      });
+    }
+
+    // B1 ④ (cadrage §13) : une proposition VERTE s'exécute sans clic — mais
+    // seulement DERRIÈRE une trace que le serveur a posée ('tentee') après
+    // avoir re-jugé l'outil et consulté le plafond. ⛔ Tout refus (outil
+    // re-jugé orange, plafond atteint, journal indisponible, cible non
+    // résolue) retombe sur la carte : Paul décide, jamais une écriture sans
+    // trace. L'acte n'existe que dans la suite d'un `ouvrir` réussi.
+    function executerSansDemander(proposition) {
+      var plan = construirePlanExecution(proposition, voix.candidats);
+      if (!plan.ok) { afficherCarte(proposition); return; }
+
+      appelJson('/api/leo/ecritures', 'POST', {
+        etape: 'ouvrir',
+        outil: proposition.outil,
+        args: proposition.args,
+        quadrant: voix.quadrant
+      }).then(function (ouverture) {
+        var data = ouverture.httpOk && ouverture.corps && ouverture.corps.ok === true
+          ? ouverture.corps.data : null;
+        var traceId = data && typeof data.traceId === 'string' && UUID_MOTIF.test(data.traceId)
+          ? data.traceId : null;
+        if (!traceId) { afficherCarte(proposition); return; }
+
+        // Clôture : issue posée APRÈS l'acte. Son échec laisse la 'tentee'
+        // seule — « issue inconnue », ce qui est VRAI du point de vue du
+        // journal. Jamais de seconde tentative d'acte.
+        function issue(reussie, cibleId, motif) {
+          var cloture = { etape: 'clore', traceId: traceId, issue: reussie ? 'reussie' : 'echouee' };
+          if (reussie && typeof cibleId === 'string' && UUID_MOTIF.test(cibleId)) { cloture.cibleId = cibleId; }
+          if (!reussie) { cloture.motif = motif; }
+          appelJson('/api/leo/ecritures', 'POST', cloture).then(null, function () { /* fail-soft */ });
+          var message = reussie
+            ? '[Fait sans demander : ' + proposition.reformulation + ']'
+            : '[Action échouée, à reprendre]';
+          if (reussie && typeof voix.notifier === 'function') {
+            try { voix.notifier('Léo a agi sans demander.'); } catch (e) { /* fail-soft */ }
+          }
+          historique.push({ role: 'user', content: message });
+          bulle('issue', message);
+          rearmer();
+        }
+
+        appelJson(plan.url, plan.methode, plan.corps).then(function (acte) {
+          var reussie = acte.httpOk && acte.corps && acte.corps.ok === true;
+          // La cible : l'objet modifié (PATCH) ou créé (POST). Un identifiant,
+          // jamais un libellé — le journal ne porte aucun contenu dicté.
+          var cible = plan.methode === 'PATCH'
+            ? plan.corps && plan.corps.id
+            : acte.corps && acte.corps.data && acte.corps.data.id;
+          issue(reussie, cible, reussie ? null
+            : (acte.statut >= 100 && acte.statut <= 599 ? 'statut ' + acte.statut : 'reponse illisible'));
+        }, function () {
+          issue(false, null, 'reseau');
+        });
+      }, function () {
+        afficherCarte(proposition);
+      });
+    }
+
     formulaire.addEventListener('submit', function (evenement) {
       evenement.preventDefault();
       var texte = champ.value.trim();
@@ -976,7 +1056,13 @@
         }
         if (proposition) {
           // La saisie reste coupée tant que la carte attend Paul (pas de rearmer).
-          afficherCarte(proposition);
+          // B1 ④ : un vert tente l'exécution directe, qui retombe elle-même
+          // sur la carte au moindre refus.
+          if (proposition.anneau === 'vert') {
+            executerSansDemander(proposition);
+          } else {
+            afficherCarte(proposition);
+          }
           return;
         }
         if (typeof texteLeo === 'string' && texteLeo) {

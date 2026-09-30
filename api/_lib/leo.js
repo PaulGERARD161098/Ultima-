@@ -94,8 +94,9 @@ const QUADRANTS = {
 // ---------- Les mains de Léo (boucle L2b) : catalogue d'outils ----------
 // Principe fondateur (spec L2b §0) : l'IA ne fait que PROPOSER, elle
 // n'exécute JAMAIS. Le tool use produit une proposition structurée que le
-// FRONT exécutera après confirmation explicite de Paul, via les API
-// d'écriture existantes (Bearer de session → RLS). Catalogue d'écritures
+// FRONT exécute via les API d'écriture existantes (Bearer de session → RLS) :
+// après confirmation de Paul, ou — anneau vert, B1 ④ — derrière une trace
+// posée par /api/leo/ecritures (cadrage §13). Catalogue d'écritures
 // pures : AUCUN outil de suppression. Les *_ref sont du texte dicté — la
 // résolution vers un id se fait côté front, jamais ici (minimisation :
 // le modèle ne voit ni id ni dump de données).
@@ -152,7 +153,7 @@ const CATALOGUE = {
     quadrant: 'adramelech',
     anneau: 'vert',
     description: "Proposer la capture d'une idée nouvelle dictée par Paul " +
-      "dans l'archipel (bibliothèque d'idées). Rien n'est créé avant sa confirmation.",
+      "dans l'archipel (bibliothèque d'idées).",
     args: {
       // 119 = borne `nom` de l'API idées (120) moins la marge de sûreté :
       // le titre confirmé est EXACTEMENT le titre stocké, jamais tronqué [S-L2b-3].
@@ -165,7 +166,7 @@ const CATALOGUE = {
     quadrant: 'adramelech',
     anneau: 'vert',
     description: "Proposer d'enrichir une idée EXISTANTE de l'archipel avec " +
-      "un ajout dicté par Paul. Rien n'est écrit avant sa confirmation.",
+      "un ajout dicté par Paul.",
     args: {
       idee_ref: {
         max: 160, requis: true,
@@ -181,7 +182,7 @@ const CATALOGUE = {
     // envoi (cherché nommément le 29/09). Rien n'est acheté, rien ne part.
     anneau: 'vert',
     description: "Proposer l'ajout d'une ligne de besoin (matériel, fourniture) " +
-      "à l'intendance d'un chantier. Rien n'est créé avant confirmation de Paul.",
+      "à l'intendance d'un chantier.",
     args: {
       chantier_ref: { max: 160, requis: true, description: 'Le chantier visé, tel que dicté (son nom).' },
       libelle: { max: 300, requis: true, description: 'Le besoin dicté (désignation).' },
@@ -197,7 +198,7 @@ const CATALOGUE = {
     // garde, c'est le plafond de VOLUME (§12, A5) et l'absence de logs.
     anneau: 'vert',
     description: "Proposer une note au journal d'un contact ou chantier du " +
-      "réseau. Rien n'est écrit avant confirmation de Paul.",
+      "réseau.",
     args: {
       cible_ref: { max: 160, requis: true, description: 'Le contact ou chantier visé, tel que dicté (son nom).' },
       texte: { max: 2000, requis: true, description: 'La note dictée, fidèle à la dictée.' }
@@ -205,14 +206,14 @@ const CATALOGUE = {
   },
   // ---- IMLADRIK (boucle ④, dictée Paul 2026-07-30) : « ouvre tel cap et
   // renseigne cela ». Les 3 caps du quadrant, un outil de création par objet
-  // + un outil d'enrichissement par objet fils. Données INTIMES (§5) : rien
-  // n'est écrit avant confirmation de Paul, aucun contenu dicté en logs, et
-  // AUCUN outil de suppression (règle L2b inchangée).
+  // + un outil d'enrichissement par objet fils. Données INTIMES (§5) : aucun
+  // contenu dicté en logs ni au journal des écritures (B1 ④), et AUCUN outil
+  // de suppression (règle L2b inchangée).
   proposer_page_journal: {
     quadrant: 'imladrik',
     anneau: 'vert',
     description: "Proposer d'écrire une page au journal intime (cap MAEDRETHNIR) " +
-      "à partir de ce que Paul dicte. Rien n'est écrit avant sa confirmation.",
+      "à partir de ce que Paul dicte.",
     args: {
       contenu: { max: 20000, requis: true, description: 'La page dictée, fidèle à la dictée.' },
       titre: { max: 200, description: 'Titre de la page (optionnel).' }
@@ -224,7 +225,7 @@ const CATALOGUE = {
     // n'est scellé au sens irréversible : le cap se relit et se retire.
     anneau: 'vert',
     description: 'Proposer de sceller un serment (cap DRAUKHAIN) : le vœu que ' +
-      "Paul tient. Rien n'est scellé avant sa confirmation.",
+      "Paul tient.",
     args: {
       intitule: { max: 200, requis: true, description: 'Le serment dicté, fidèle à la dictée.' },
       pourquoi: { max: 2000, description: 'Le sens profond du serment (optionnel).' },
@@ -237,8 +238,7 @@ const CATALOGUE = {
     // serment existant, elle n'en modifie aucun champ.
     anneau: 'vert',
     description: "Proposer de raviver un serment EXISTANT (cap DRAUKHAIN) d'une " +
-      "flamme dictée par Paul : une citation, une victoire ou un rappel. " +
-      "Rien n'est écrit avant sa confirmation.",
+      "flamme dictée par Paul : une citation, une victoire ou un rappel.",
     args: {
       serment_ref: {
         max: 200, requis: true,
@@ -257,8 +257,7 @@ const CATALOGUE = {
     // n'engage rien. C'est Paul qui décidera quoi en faire.
     anneau: 'vert',
     description: 'Proposer d’ouvrir une situation à explorer (cap VRANESH) : ' +
-      "un cas donné dont Paul veut anticiper les futurs. Rien n'est ouvert " +
-      'avant sa confirmation.',
+      "un cas donné dont Paul veut anticiper les futurs.",
     args: {
       intitule: { max: 200, requis: true, description: 'La situation dictée, fidèle à la dictée.' },
       contexte: { max: 2000, description: 'Le contexte dicté (optionnel).' }
@@ -270,8 +269,7 @@ const CATALOGUE = {
     // sur une situation existante.
     anneau: 'vert',
     description: 'Proposer d’ajouter un futur possible à une situation EXISTANTE ' +
-      "(cap VRANESH) : le déroulé dicté par Paul. Rien n'est écrit avant sa " +
-      'confirmation.',
+      "(cap VRANESH) : le déroulé dicté par Paul.",
     args: {
       situation_ref: {
         max: 200, requis: true,
@@ -299,7 +297,7 @@ const CATALOGUE = {
     // commentaire est ce qui permettra de s'en souvenir.
     anneau: 'vert',
     description: 'Proposer de programmer une relance datée sur un contact du ' +
-      "réseau. Rien n'est programmé avant confirmation de Paul.",
+      "réseau.",
     args: {
       cible_ref: { max: 160, requis: true, description: 'Le contact visé, tel que dicté (son nom).' },
       echeance: { max: 10, requis: true, date: true, description: 'La date de relance au format AAAA-MM-JJ.' },
@@ -398,11 +396,10 @@ export function anneauDe(nomOutil) {
 // LA GARDE, et elle vient AVANT le geste. Elle répond à une seule question :
 // « cette proposition peut-elle être écrite sans que Paul la valide ? »
 //
-// ⚠️ ELLE N'A ENCORE AUCUN APPELANT, ET C'EST VOULU — l'exécution est l'étape
-// ④ de B1, elle n'est pas écrite. Le dire ici plutôt que de le laisser
-// deviner : un outil que personne n'appelle se lit comme un outil qui marche
-// (leçon du 22/09). Ce qui est acquis aujourd'hui, c'est que le mécanisme
-// SAIT REFUSER avant de savoir agir — et qu'il n'y a qu'une porte.
+// ✅ SON APPELANT, DEPUIS LE 30/09 (B1 ④) : `ouvrirEcriture`
+// (`api/_lib/leo-execution.js`), derrière POST /api/leo/ecritures. Aucune
+// trace n'est rendue — donc aucune écriture sans clic n'a lieu — sans
+// qu'elle ait dit oui. C'est toujours la seule porte.
 //
 // Elle refait le chemin complet (validerProposition) plutôt que de se fier à
 // un verdict qu'on lui tendrait : une garde qui croit son appelant ne garde
@@ -638,8 +635,9 @@ export function construireSysteme(quadrant, avecOutils) {
     ? [
         '- Quand Paul te dicte une action couverte par un de tes outils, ' +
           "appelle l'outil avec des arguments FIDÈLES à la dictée — sans rien " +
-          "inventer ni compléter. L'action ne s'exécutera qu'après confirmation " +
-          'de Paul : annonce-la simplement.',
+          "inventer ni compléter. Selon le cas, l'action s'exécute aussitôt — " +
+          'journalisée, et Paul la voit dans le fil — ou attend sa confirmation : ' +
+          "annonce-la simplement, sans affirmer qu'elle est faite.",
         '- Un seul outil par tour. Si la dictée est ambiguë (cible, date, ' +
           "contenu), pose la question au lieu d'appeler l'outil."
       ]
