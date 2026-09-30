@@ -38,6 +38,9 @@
   l'ordinateur ensuite. Idéal exprimé : une application.
 - **Interaction** : dictée vocale (lexique → `LEXIQUE-VOCAL.md`) ; réponses
   reformulées en tête ; une recommandation ferme plutôt qu'un catalogue.
+- **Le lien en dernier** (25/09, redemandé le 30/09) : dès qu'une réponse
+  annonce une preview, une PR ou un écran, sa dernière ligne est l'URL nue,
+  cliquable, vérifiée avant d'être donnée — jamais au milieu du rapport.
 
 ## Ce qu'il valide toujours lui-même (gates, inchangées)
 
