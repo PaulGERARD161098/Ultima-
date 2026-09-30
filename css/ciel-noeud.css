@@ -177,6 +177,18 @@ body.ciel-noeud .console-entete .titre-principal { font-size: clamp(1.1rem, 3.2v
   }
 }
 
+/* SOUS ISOLEMENT, LE BANDEAU SE FAIT DISCRET À TOUTES LES LARGEURS (Paul,
+   30/09 : « affichage minimisé pour ne pas gêner la vue »). Le sceau rétrécit,
+   le titre descend d'un cran : le fil et le bandeau disent où l'on est, le
+   ciel garde la place. */
+body.ciel-noeud.ciel-profond > .ciel-noeud-coque > .console-entete .boussole-sceau,
+body.ciel-noeud.ciel-profond > .ciel-noeud-coque > .console-entete .imladrik-carto-sceau {
+  width: 32px; height: 32px;
+}
+body.ciel-noeud.ciel-profond > .ciel-noeud-coque > .console-entete .titre-principal {
+  font-size: clamp(1rem, 2.4vw, 1.25rem);
+}
+
 /* La légende gravée : elle vivait sous le ciel, il n'y a plus de « sous ».
    Elle passe en bas de l'écran, au-dessus du plateau. */
 /* LA LÉGENDE SE RETIRE QUAND LE SOCLE EST LÀ (critique impeccable, 26/09).
