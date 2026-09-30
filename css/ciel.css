@@ -436,3 +436,65 @@
 @media (prefers-reduced-motion: reduce) {
   .ciel-aide { transition: none; }
 }
+
+/* ---- La carte des nébuleuses : la vue À PLAT de RIVEN (2026-09-30) ----
+   js/ciel-nebuleuses.js, CADRAGE-RIVEN-NEBULEUSES.md. La carte à gauche, le
+   panneau à droite ; sous 700 px, le panneau passe dessous. La carte garde la
+   classe `ciel-svg` : elle remplit sa case comme le volume remplit la scène. */
+.neb-cadre {
+  position: absolute; inset: 0;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(200px, 280px);
+}
+.neb-svg { touch-action: manipulation; }
+.neb-nebuleuse { cursor: pointer; }
+.neb-nebuleuse:focus-visible { outline: none; }
+.neb-focus { stroke: var(--ciel-or-clair); stroke-width: 2; stroke-dasharray: 6 6; opacity: 0; }
+.neb-nebuleuse:focus-visible .neb-focus { opacity: .85; }
+.neb-etoile:focus-visible .ciel-zone { stroke: var(--ciel-or-clair); stroke-width: 1.5; }
+.neb-titre {
+  fill: var(--ciel-or-clair); letter-spacing: .07em;
+  font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+}
+.neb-compte { fill: #9aa3ad; font-style: italic; font-family: Georgia, "Iowan Old Style", "Times New Roman", serif; }
+.neb-nom {
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  fill: var(--ciel-creme); paint-order: stroke; stroke: rgba(3, 7, 14, .85); stroke-linejoin: round;
+  pointer-events: none;
+}
+.neb-eteinte { opacity: .18; }
+.neb-lien { stroke: rgba(242, 234, 214, .35); stroke-width: 1.2; }
+
+.neb-panneau {
+  /* Le bas laisse la place au bouton flottant « + Ajouter un contact ». */
+  overflow-y: auto; padding: .7rem .85rem 4.6rem;
+  border-left: 1px solid rgba(169, 136, 74, .35);
+  background: rgba(3, 7, 14, .38);
+  color: var(--ciel-creme); font-size: .85rem; line-height: 1.45;
+}
+.neb-panneau-titre {
+  margin: .1rem 0 .5rem; font-size: .95rem; font-weight: normal; letter-spacing: .05em;
+  color: var(--ciel-or-clair); font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+}
+.neb-liste { list-style: none; margin: 0; padding: 0; }
+.neb-liste li { margin: 0 0 .55rem; }
+.neb-pastille { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+.neb-domaines { color: #9aa3ad; font-size: .78rem; font-style: italic; }
+.neb-panneau button {
+  font: inherit; color: inherit; background: none; border: 0; padding: .15rem 0;
+  min-height: 24px; cursor: pointer; text-align: left;
+}
+.neb-panneau button:hover { color: var(--ciel-or-clair); }
+.neb-panneau button:focus-visible { outline: 2px solid var(--ciel-or-clair); outline-offset: 2px; }
+.neb-entree { display: flex; align-items: baseline; gap: .1rem; }
+.neb-entree .neb-pastille { flex: none; }
+.neb-fiche { display: block; }
+.neb-personne { display: block; padding-left: .8rem !important; color: #c9c2b0; font-size: .8rem; }
+.neb-retour { color: var(--ciel-or-clair); margin-bottom: .45rem; }
+.neb-note { color: #9aa3ad; font-size: .78rem; font-style: italic; }
+
+@media (max-width: 700px) {
+  .neb-cadre { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) minmax(0, 40%); }
+  .neb-panneau { border-left: 0; border-top: 1px solid rgba(169, 136, 74, .35); }
+  /* Sur un téléphone, l'aide se poserait sur le panneau, qui dit déjà quoi faire. */
+  .neb-cadre ~ .ciel-aide { display: none; }
+}

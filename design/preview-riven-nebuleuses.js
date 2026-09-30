@@ -1,0 +1,76 @@
+// Maquette RIVEN en nébuleuses — données FICTIVES (voir l'en-tête du .html).
+(function () {
+  'use strict';
+
+  // Les secteurs saisis en base le 2026-09-30, avec leur effectif : la carte
+  // fictive a la même forme que la vraie. Le vide compte quatre fiches.
+  var SECTEURS = [
+    ['Conseil', 4], ['Conseil - direction financière', 1], ['Conseil - stratégie et relations publiques', 2],
+    ['Audit - conseil', 1], ['Recouvrement de créances - gestion du poste client', 1],
+    ['Recrutement - service RH externalisé', 1], ['Services - finances - comptabilité', 1],
+    ['Banque - financement et investissement', 1], ['Banque privée', 1], ['Finance - capital-investissement', 1],
+    ['Médias', 1], ['Médias - presse', 2], ['Médias - presse professionnelle', 2], ['Édition', 1],
+    ['Aéronautique', 1], ['Aéronautique - défense', 1], ['Holding industrielle - équipement automobile', 1],
+    ['Ingénierie - services numériques', 1], ['Logiciel - téléphonie cloud', 1],
+    ['Technologie - étiquettes électroniques pour le commerce', 1],
+    ['BTP - fédération professionnelle', 1], ["BTP - tout corps d'état", 3], ['BTP - logiciel de vérification avant chantier', 1],
+    ['Tuyautiste', 1], ['Isolation - PAC - Climaticien', 1], ['Isolation - tuyautiste - climaticien', 1],
+    ['CVC - Relationnel', 1], ['Ventilation - association professionnelle', 1], ['Rénovation - IA', 2],
+    ['Énergie', 1], ['Énergie - électrotechnique', 1], ['Énergie - régulation', 1], ['Environnement - eau et déchets', 1],
+    ['Politique - institutions publiques', 2], ['Études - immigration et démographie', 1],
+    ['Associatif - collectivité locale', 1], ['Médico-social - handicap (associatif)', 1],
+    ['Retail', 1], ['Luxe - cristallerie', 1], ['Art - peinture', 1], ['', 4]
+  ];
+  // Des noms inventés, de longueurs réelles (jusqu'à trente caractères).
+  var PRENOMS = ['Aurèle', 'Bérénice', 'Clovis', 'Domitille', 'Éloi', 'Faustine', 'Gauthier', 'Hortense', 'Isaure',
+    'Jean-Baptiste', 'Kilian', 'Léontine', 'Mathurin', 'Nausicaa', 'Octave', 'Pétronille', 'Quentin', 'Roseline',
+    'Sixtine', 'Tancrède', 'Ursule', 'Valérien', 'Wandrille', 'Xavière', 'Yolande', 'Zénobe', 'Anne-Sophie', 'Pierre-Marie'];
+  var NOMS = ['Vauquelin', 'de Montmirail-Val', 'Cassagnes', 'Lefébure', 'de Rochemaure', 'Brunetière', 'Aubriot',
+    'de Kerguelen-Saint-Aubin', 'Pellerin', 'Delafosse', 'Marbeuf', 'Castelbajac-Neuvic', 'Orsini', 'Thévenot',
+    'de La Tour-Maubourg', 'Villeneuve', 'Quenet', 'Grandsire', 'Hautecloque', 'Esquerré'];
+  var BTP = /^(btp|tuyaut|isolation|cvc|ventilation|rénovation)/i;
+
+  // Au plus trente caractères, comme le plus long nom réel (vingt-huit).
+  function nomFictif(i) {
+    for (var d = 0; d < NOMS.length; d++) {
+      var nom = PRENOMS[i % PRENOMS.length] + ' ' + NOMS[(i * 7 + d) % NOMS.length];
+      if (nom.length <= 30) { return nom; }
+    }
+    return PRENOMS[i % PRENOMS.length];
+  }
+
+  var params = new URLSearchParams(window.location.search);
+  var cible = Math.max(1, Math.min(600, parseInt(params.get('n') || '54', 10) || 54));
+  var liste = [];
+  SECTEURS.forEach(function (s) { for (var i = 0; i < s[1]; i++) { liste.push(s[0]); } });
+  var graine = 7;
+  function alea() { graine = (graine * 16807) % 2147483647; return (graine - 1) / 2147483646; }
+  var noeuds = [];
+  for (var i = 0; i < cible; i++) {
+    var secteur = i < liste.length ? liste[i] : liste[Math.floor(alea() * liste.length)];
+    noeuds.push({
+      id: 'fictif-' + (i + 1),
+      nom: nomFictif(i),
+      type: BTP.test(secteur) && i % 3 === 0 ? 'artisan' : 'partenaire',
+      secteur_activite: secteur,
+      statut: 'prospect'
+    });
+  }
+  var donnees = {
+    noeuds: noeuds,
+    personnes: [{ id: 'fictif-p1', nom: 'Honorine Delacroix-Vallon' }],
+    rattachements: [{ personne_id: 'fictif-p1', node_id: 'fictif-1', role: 'Associée' }],
+    relations: [{ source_id: 'fictif-1', target_id: 'fictif-24' }, { source_id: 'fictif-12', target_id: 'fictif-30' }]
+  };
+  document.getElementById('apercu-neb-note').textContent =
+    noeuds.length + ' fiches fictives. Touchez une nébuleuse pour vous en approcher, une étoile pour « ouvrir » sa fiche.';
+  var ouvert = document.getElementById('apercu-neb-ouvert');
+  window.UltimaNebuleuses.rendre(document.getElementById('ciel-scene'), donnees, {
+    surClicNoeud: function (id) {
+      var n = noeuds.filter(function (x) { return x.id === id; })[0];
+      ouvert.textContent = 'Fiche ouverte : ' + (n ? n.nom : id);
+    },
+    surClicPersonne: function (id) { ouvert.textContent = 'Personne ouverte : ' + id; },
+    libellesType: { artisan: 'Artisan', partenaire: 'Partenaire', lead: 'Lead', chantier: 'Chantier' }
+  });
+})();

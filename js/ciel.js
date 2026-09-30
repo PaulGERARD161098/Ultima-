@@ -147,14 +147,27 @@
 
   // ---- Regroupement par métier principal : mêmes règles que l'arbre (la
   //      première graphie fait l'étiquette, les sans-secteur vont ensemble). ----
-  function grouper(noeuds) {
+  // `regrouper` (option, RIVEN lot 2 du 2026-09-30) : une fonction noeud →
+  // { cle, label } qui remplace le regroupement par secteur — RIVEN y range ses
+  // fiches par NÉBULEUSE (js/nebuleuses-riven.js). ABSENTE, le chemin est celui
+  // d'hier à l'octet près : les autres pages qui chargent ce moteur ne la
+  // passent pas.
+  function grouper(noeuds, regrouper) {
     var index = Object.create(null);
     var ordre = [];
     (noeuds || []).forEach(function (n) {
-      var brut = (n.secteur_activite || '').trim();
-      var cle = brut ? normaliser(brut) : CLE_A_CLASSER;
+      var cle, label;
+      var choix = regrouper ? regrouper(n) : null;
+      if (choix && choix.cle) {
+        cle = choix.cle;
+        label = choix.label || LABEL_A_CLASSER;
+      } else {
+        var brut = (n.secteur_activite || '').trim();
+        cle = brut ? normaliser(brut) : CLE_A_CLASSER;
+        label = brut || LABEL_A_CLASSER;
+      }
       if (!index[cle]) {
-        index[cle] = { cle: cle, label: brut || LABEL_A_CLASSER, noeuds: [] };
+        index[cle] = { cle: cle, label: label, noeuds: [], parNebuleuse: !!(choix && choix.cle) };
         ordre.push(cle);
       }
       index[cle].noeuds.push(n);
@@ -178,8 +191,8 @@
 
   // ---- Construction du monde : PURE (aucun DOM), donc testable seule.
   //      Deux appels sur les mêmes données produisent les mêmes coordonnées. ----
-  function construireMonde(noeuds) {
-    var groupes = grouper(noeuds);
+  function construireMonde(noeuds, regrouper) {
+    var groupes = grouper(noeuds, regrouper);
     var etoiles = [];
     groupes.forEach(function (g, ig) {
       var dir = pointSphere(groupes.length, ig);
@@ -524,7 +537,7 @@
       contrasteProfondeur: 1
     } : null);
 
-    var monde = construireMonde(noeuds);
+    var monde = construireMonde(noeuds, typeof options.regrouper === 'function' ? options.regrouper : null);
     // LES GÉMEAUX, avant le recentrage : deux caps jumeaux se posent en
     // OPPOSITION plutôt qu'empilés. L'orientation d'ouverture est passée en
     // argument parce que le placement en dépend (voir `disposerEnOpposition`) —
@@ -1152,7 +1165,8 @@
         'class': 'ciel-etoile', tabindex: '0', role: 'button',
         'data-noeud-id': noeud.id,
         'aria-label': nomComplet + ', ' + libelleType +
-          (e.groupe.cle === CLE_A_CLASSER ? ', sans secteur' : ', secteur ' + e.groupe.label) +
+          (e.groupe.cle === CLE_A_CLASSER ? ', sans secteur'
+            : (e.groupe.parNebuleuse ? ', nébuleuse ' : ', secteur ') + e.groupe.label) +
           (libelleStatut ? ', ' + libelleStatut : '') +
           ', ' + mag + ' lien' + (mag > 1 ? 's' : '')
       });

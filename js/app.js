@@ -879,10 +879,13 @@
     });
     if (nom === 'ciel') {
       rendreCiel();
-    } else if (window.UltimaCiel) {
-      // Quitter le ciel arrête sa boucle d'animation. Sans cela elle
-      // continuerait de tourner sous un onglet caché, pour rien.
-      window.UltimaCiel.arreter();
+    } else {
+      // Quitter le ciel arrête sa boucle d'animation (et libère les écouteurs
+      // de la carte). Sans cela elle continuerait de tourner sous un onglet
+      // caché, pour rien.
+      if (window.UltimaCiel) { window.UltimaCiel.arreter(); }
+      if (window.UltimaNebuleuses) { window.UltimaNebuleuses.arreter(); }
+      cielCourant = null;
     }
     if (nom === 'accueil') { rendreAccueil(); }
     if (nom === 'contacts') { rendreContacts(); }
@@ -1858,15 +1861,42 @@
 
   // ---------- Ciel : la SEULE forme du réseau (2026-08-13) ----------
 
-  // La vue à plat est un RÉGLAGE, pas un état d'écran : elle survit au
-  // rechargement. `localStorage` et non `sessionStorage` — un appareil qui
-  // peine le fait à chaque ouverture, pas seulement dans l'onglet du jour.
-  var CLE_CIEL_PLAT = 'ultima-ciel-plat';
+  // La VUE du ciel est un RÉGLAGE, pas un état d'écran : elle survit au
+  // rechargement. `localStorage` et non `sessionStorage` — le choix vaut pour
+  // l'appareil, pas seulement pour l'onglet du jour.
+  //
+  // Depuis le 2026-09-30 (CADRAGE-RIVEN-NEBULEUSES.md), « à plat » n'est plus le
+  // volume figé : c'est la CARTE DES NÉBULEUSES (js/ciel-nebuleuses.js), et elle
+  // s'ouvre par défaut. Le volume (js/ciel.js) est à un bouton. Clé nouvelle, à
+  // dessein : l'ancienne (`ultima-ciel-plat`) enregistrait « figer le volume »,
+  // un autre choix que celui-ci — la relire ferait mentir le réglage.
+  var CLE_CIEL_VUE = 'ultima-ciel-vue';
   function cielPlatRetenu() {
-    try { return window.localStorage.getItem(CLE_CIEL_PLAT) === '1'; } catch (e) { return false; }
+    try { return window.localStorage.getItem(CLE_CIEL_VUE) !== 'volume'; } catch (e) { return true; }
   }
   function retenirCielPlat(actif) {
-    try { window.localStorage.setItem(CLE_CIEL_PLAT, actif ? '1' : '0'); } catch (e) { /* navigation privée */ }
+    try { window.localStorage.setItem(CLE_CIEL_VUE, actif ? 'plat' : 'volume'); } catch (e) { /* navigation privée */ }
+  }
+  // Sous `prefers-reduced-motion`, le volume ne s'ouvre pas : la carte s'impose.
+  function mouvementReduit() {
+    return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+  // L'instance affichée, quelle que soit la vue : les commandes du ciel
+  // (approcher, reculer, tout voir, dérive) s'adressent à elle.
+  var cielCourant = null;
+  // Les nébuleuses du volume (lot 2) : la même table que la carte à plat, pour
+  // qu'une étoile soit dans la même nébuleuse dans les deux vues.
+  function regrouperParNebuleuse(noeud) {
+    var n = window.UltimaNebuleusesRiven.nebuleuseDe(noeud && noeud.secteur_activite);
+    return { cle: n.cle === window.UltimaNebuleusesRiven.CLE_A_CLASSER ? window.UltimaCiel.CLE_A_CLASSER : 'neb-' + n.cle, label: n.nom };
+  }
+  function brumesDesNebuleuses(noeuds) {
+    return window.UltimaNebuleusesRiven.repartir(noeuds).map(function (g) {
+      return {
+        ids: g.noeuds.map(function (n) { return n.id; }),
+        teinte: window.UltimaNebuleusesRiven.teinte(g.nebuleuse)
+      };
+    });
   }
 
   // Ouverture d'une fiche depuis une étoile : la fiche est un overlay global,
@@ -1895,6 +1925,8 @@
     var boutonAjouter = $('#ciel-ajouter');
     var message = $('#ciel-message');
     if (window.UltimaCiel) { window.UltimaCiel.arreter(); }
+    if (window.UltimaNebuleuses) { window.UltimaNebuleuses.arreter(); }
+    cielCourant = null;
     scene.textContent = '';
     if (message) { message.textContent = ''; }
 
@@ -1928,43 +1960,69 @@
       return !terme || correspondAuTerme(noeud, terme);
     };
 
-    var instance = window.UltimaCiel.rendre(scene, {
+    var donneesCiel = {
       noeuds: etat.noeuds,
       personnes: etat.personnes,
       rattachements: etat.rattachements,
       relations: etat.relations
-    }, {
-      surClicNoeud: ouvrirFicheDepuisEtoile,
-      surClicPersonne: ouvrirFichePersonneDepuisCiel,
-      libellesType: LIBELLES_TYPE,
-      libellesStatut: LIBELLES_STATUT,
-      correspond: correspond,
-      // LE FOND ÉTOILÉ, ici aussi (Paul, 2026-08-17 : « mettre le fond aux
-      // étoiles partout »). RIVEN garde en revanche son AMAS DE RÉSEAU — pas de
-      // couronne : celle-ci range deux à quatre caps de menu, et RIVEN affiche
-      // des centaines de fiches groupées par métier, où la position PORTE de
-      // l'information. Le fond est un décor, la disposition est une donnée : l'un
-      // se partage partout, l'autre non.
-      fond: true,
-      // T2 Stellar V2 : profil atmosphérique explicite sur RIVEN uniquement.
-      // Les autres consommateurs du moteur gardent leur comportement historique.
-      stellarV2: true,
-      plat: cielPlatRetenu()
-    });
+    };
+    var tableNebuleuses = !!window.UltimaNebuleusesRiven;
+    var aPlat = (cielPlatRetenu() || mouvementReduit()) && !!window.UltimaNebuleuses && tableNebuleuses;
+    var instance;
+    if (aPlat) {
+      // La carte des nébuleuses (lot 1) : à plat, sans mouvement, noms jamais
+      // superposés.
+      instance = window.UltimaNebuleuses.rendre(scene, donneesCiel, {
+        surClicNoeud: ouvrirFicheDepuisEtoile,
+        surClicPersonne: ouvrirFichePersonneDepuisCiel,
+        libellesType: LIBELLES_TYPE,
+        correspond: correspond
+      });
+    } else {
+      instance = window.UltimaCiel.rendre(scene, donneesCiel, {
+        surClicNoeud: ouvrirFicheDepuisEtoile,
+        surClicPersonne: ouvrirFichePersonneDepuisCiel,
+        libellesType: LIBELLES_TYPE,
+        libellesStatut: LIBELLES_STATUT,
+        correspond: correspond,
+        // LE FOND ÉTOILÉ, ici aussi (Paul, 2026-08-17 : « mettre le fond aux
+        // étoiles partout »). RIVEN garde en revanche son AMAS DE RÉSEAU — pas de
+        // couronne : celle-ci range deux à quatre caps de menu, et RIVEN affiche
+        // des centaines de fiches groupées, où la position PORTE de
+        // l'information. Le fond est un décor, la disposition est une donnée : l'un
+        // se partage partout, l'autre non.
+        fond: true,
+        // T2 Stellar V2 : profil atmosphérique explicite sur RIVEN uniquement.
+        // Les autres consommateurs du moteur gardent leur comportement historique.
+        stellarV2: true,
+        // Lot 2 (2026-09-30) : les amas du volume sont les NÉBULEUSES, pas les
+        // secteurs — neuf amas au lieu de quarante et un, chacun dans sa brume.
+        regrouper: tableNebuleuses ? regrouperParNebuleuse : undefined,
+        nebuleuses: tableNebuleuses ? brumesDesNebuleuses(etat.noeuds) : undefined,
+        // Repli seulement : sans la carte des nébuleuses, le volume se fige.
+        plat: mouvementReduit()
+      });
+    }
+    cielCourant = instance;
 
     // L'aide de navigation revit à chaque rendu, et s'efface au premier geste.
     var aide = document.createElement('p');
     aide.id = 'ciel-aide';
     aide.className = 'ciel-aide';
-    aide.textContent = 'Faites glisser pour tourner autour du réseau · ' +
-      '+ et − pour approcher · Tab pour passer d’une étoile à l’autre';
+    aide.textContent = aPlat
+      ? 'Touchez une nébuleuse pour vous en approcher · Entrée au clavier · Échap pour revenir'
+      : 'Faites glisser pour tourner autour du réseau · ' +
+        '+ et − pour approcher · Tab pour passer d’une étoile à l’autre';
     scene.appendChild(aide);
     scene.addEventListener('pointerdown', function () {
       aide.classList.add('est-effacee');
     }, { once: true });
+    // La dérive n'a d'objet qu'en volume.
+    var etiquetteDerive = $('#ciel-derive') ? $('#ciel-derive').closest('label') : null;
+    if (etiquetteDerive) { etiquetteDerive.hidden = aPlat; }
 
     if (instance) {
-      instance.derive($('#ciel-derive') && $('#ciel-derive').checked);
+      if (!aPlat) { instance.derive($('#ciel-derive') && $('#ciel-derive').checked); }
       if (etat.noeudCourant) { instance.choisir(etat.noeudCourant); }
       // Le bouton dit ce que le MOTEUR fait, pas ce que le réglage demande :
       // sous `prefers-reduced-motion`, le ciel s'impose à plat et le bouton
@@ -2016,8 +2074,8 @@
     bouton.setAttribute('aria-pressed', actif ? 'true' : 'false');
     bouton.textContent = actif ? 'En volume' : 'À plat';
     bouton.setAttribute('aria-label', actif
-      ? 'Revenir au ciel en volume'
-      : 'Vue à plat : figer le ciel, sans relief ni mouvement');
+      ? 'Passer au ciel en volume'
+      : 'Vue à plat : la carte des nébuleuses, sans relief ni mouvement');
   }
 
   // État vide du ciel : sans bouton — le
@@ -4413,38 +4471,34 @@
     // Le zoom par boutons : la seule voie sur un téléphone, où il n'y a pas de
     // molette — et celle-ci fait défiler la page (elle ne zoome qu'avec Ctrl).
     $('#ciel-approcher').addEventListener('click', function () {
-      var vue = window.UltimaCiel && window.UltimaCiel.courant();
-      if (vue) { vue.zoomer(-0.18); }
+      if (cielCourant) { cielCourant.zoomer(-0.18); }
     });
     $('#ciel-reculer').addEventListener('click', function () {
-      var vue = window.UltimaCiel && window.UltimaCiel.courant();
-      if (vue) { vue.zoomer(0.18); }
+      if (cielCourant) { cielCourant.zoomer(0.18); }
     });
     // « Tout voir » : la sortie de secours du volume. On peut s'être approché
     // d'une constellation et avoir perdu les autres de vue — un geste ramène au
     // cadrage MESURÉ, celui qui fait tenir tout le réseau dans l'écran.
     $('#ciel-tout-voir').addEventListener('click', function () {
-      var vue = window.UltimaCiel && window.UltimaCiel.courant();
-      if (vue) { vue.toutVoir(); }
+      if (cielCourant) { cielCourant.toutVoir(); }
     });
+    // À plat ⇄ en volume : deux modules, un seul bouton. Le choix se retient,
+    // puis le ciel se redessine dans la vue choisie.
     $('#ciel-plat').addEventListener('click', function () {
-      var vue = window.UltimaCiel && window.UltimaCiel.courant();
-      if (!vue) { return; }
-      var versPlat = !vue.estPlat();
-      vue.plat(versPlat);
-      // On retient l'état RÉEL : si le système impose le mode réduit, le clic
-      // n'a pas basculé et il ne faut pas mémoriser le contraire.
-      var reel = vue.estPlat();
-      retenirCielPlat(reel);
-      majBoutonPlat(reel);
-      if (reel !== versPlat) {
+      if (!cielCourant) { return; }
+      var versPlat = !cielCourant.estPlat();
+      // Le système impose le mode réduit : le clic ne bascule pas, et on ne
+      // mémorise pas le contraire de ce qui s'affiche.
+      if (!versPlat && mouvementReduit()) {
         toast('Votre appareil demande moins de mouvement : le ciel reste à plat.');
+        return;
       }
+      retenirCielPlat(versPlat);
+      rendreCiel();
     });
 
     $('#ciel-derive').addEventListener('change', function (e) {
-      var vue = window.UltimaCiel && window.UltimaCiel.courant();
-      if (vue) { vue.derive(e.target.checked); }
+      if (cielCourant) { cielCourant.derive(e.target.checked); }
     });
 
 
