@@ -1402,3 +1402,84 @@ deux se branchent à l'étape ④.
 appelant, à dessein) sur une écriture réelle : entrée de journal posée AVANT
 l'acte, plafond consulté, issue posée après. C'est là, et seulement là, que Léo
 écrira. **Plus aucun gate ne l'attend.**
+
+---
+
+## §13 — B1 ④ · L'EXÉCUTION (30/09, séance du soir)
+
+### §13.0 — ⛔ La prémisse de « garde les deux avec la clé » ne tient pas CÔTÉ PRODUIT
+
+Mesuré en base **avant** d'écrire une ligne (catalogue Postgres, pas le relevé) :
+
+| | constat |
+|---|---|
+| droits d'`authenticated` sur `leo_operations` · `leo_missions` | **SELECT seulement** (`relacl` : `authenticated=r`) |
+| seule voie d'écriture de `leo_operations` | `leo_private.write_memory_impl` (SECURITY DEFINER), via `public.leo_write_memory` |
+| ce qu'elle accepte d'écrire | un patch de la **mission elle-même** — clés `state` et `next_action` **seulement**, `scope = 'memory'` |
+| une fonction qui CRÉE une mission | **aucune** · missions en base : **0** |
+
+⇒ **Le produit ne peut ni obtenir une `mission_id`, ni poser une opération qui
+décrive « Léo a créé l'idée X ».** `leo_operations` est le registre des états de
+MISSION, pas un registre d'écritures. La règle « une écriture passe par
+`leo_operations` pour être autorisée et dédoublonnée » est donc **irréalisable
+sans migration** — un gate.
+
+⚠️ **Et le §12.8 quater l'avait « mesurée »** : un INSERT réel des deux côtés,
+jointure à 2. Il était fait **en superutilisateur, par le MCP** — il prouvait
+que le FORMAT de la clé passe, pas que le CHEMIN du produit existe. *Le
+garde-fou éprouvé du côté qu'on emprunte, pas du côté qui compte.*
+
+**Recommandation, et ce qui est fait ici** : ④ s'exécute sur `leo_ecritures`
+seul ; la clé reste fabriquée par `ouvrirTrace()` — elle est donc prête pour le
+jour où `leo_operations` sera inscriptible. ⏳ **À Paul** : écrire une RPC
+SECURITY DEFINER dédiée (`leo_ouvrir_operation`) = migration, gate. ⛔ La sonde
+« aucune écriture d'un seul côté » **n'est pas armée** : elle serait rouge sur
+chaque ligne, par construction, tant que ce gate n'est pas levé.
+
+### §13.1 — ④ en six points (format EL)
+
+**① Le but.** Une proposition **verte** de Léo s'exécute **sans clic**, précédée
+d'une ligne `tentee` posée **par le serveur**, bornée par le plafond, suivie de
+son issue. **Toute autre voie** — outil orange, plafond atteint, journal
+indisponible — **retombe sur la carte de confirmation** : jamais sur une
+écriture sans trace.
+
+**② Les étapes.**
+1. `api/_lib/leo-execution.js` — `ouvrirEcriture` : la garde (`autoriserEcriture`,
+   son premier appelant), `ouvrirTrace()`, le plafond lu sur les `tentee` de
+   l'heure, l'insertion `tentee`. `cloreEcriture` : relit la trace ; outil et
+   quadrant **recopiés de la `tentee`**, jamais reçus ; une seule issue.
+2. `api/leo/ecritures.js` — handler mince (auth, corps, verdict → HTTP).
+3. `/api/leo` renvoie l'anneau avec la proposition — **information d'interface,
+   jamais d'autorité** : la route d'écriture re-décide depuis le catalogue.
+4. `js/leo-accueil.js` — vert : ouvrir → acte → clore ; tout refus → la carte.
+5. Harnais : unitaire (client factice) + navigateur (ordre des requêtes).
+
+**③ Les moyens.** Les quatre fichiers ci-dessus, `leo_ecritures` (existe, RLS
+propriétaire, INSERT/SELECT seuls). **Aucune migration.**
+
+**④ Les critères, vérifiables.**
+
+| | critère | la preuve |
+|---|---|---|
+| B1-a | un vert écrit sans clic, `tentee` AVANT l'acte, issue APRÈS | ordre des requêtes relevé par le harnais navigateur |
+| B1-b | un outil hors catalogue / hors quadrant est refusé, **rien** n'est écrit | client factice : zéro insertion |
+| B1-e | zéro contenu dicté dans les lignes posées | sonde sur les insertions, verrou : les arguments sont non vides |
+| B1-f | le plafond mord : la 41ᵉ est refusée, **rien** n'est posé | client factice + retour carte côté front |
+| fail-closed | journal en panne → aucune trace rendue → **aucun acte automatique** | les deux côtés |
+| clore | trace inconnue, double issue, `outil` glissé dans le corps → refusés | client factice |
+
+**⑤ Ce qu'on ne fait PAS.** Le défaire (étape 5 du §11.3) · l'écran « ce que
+Léo a fait » et le grain du matin · `leo_operations` (gate §13.0) · le journal
+des écritures orange confirmées par Paul · le re-réglage du plafond.
+
+**⑥ Le pre-mortem.**
+
+| cause | ce qui la prévient |
+|---|---|
+| le front écrit sans journal (bug, refacto) | l'acte n'existe que dans la suite d'un `ouvrir` qui a rendu une trace ; le harnais coupe le journal et exige **zéro** requête d'écriture |
+| l'anneau renvoyé au front devient une autorité | la route re-décide depuis le catalogue ; un outil refusé par la garde ne reçoit jamais de trace |
+| le plafond échoue à se lire → porte ouverte | lecture en échec = **refus** (repli vers le plus contraint) |
+| un `motif` porte du contenu | liste fermée de motifs techniques côté serveur, en plus de la borne de 200 |
+| l'acte réussit, la clôture échoue | la `tentee` reste seule = « issue inconnue » : c'est VRAI du point de vue du journal, et c'est documenté |
+| Paul ne voit pas ce que Léo a fait | la bulle d'issue dit « fait sans demander », dans le fil, sous `aria-live` |
