@@ -33,7 +33,7 @@
   "dernier_arret": {
     "le": "2026-09-30",
     "quoi": "B1 ④ livré : un vert s'exécute sans clic derrière une trace (ouvrir → acte → clore, plafond, fail-closed vers la carte). Revue adversariale : 1 bloquant (S1) + 5 corrigés ; journal durci en base (migration appliquée, éprouvée en rôle authenticated). ⑤ cadré (§14), pas codé. Même jour, séances parallèles : RIVEN en 9 nébuleuses (#322), leçons v54 + /leo (#323, #326), chaîne Rénoboost + leçons v56 (#321).",
-    "commit": "a460fa8880100ca3567c84968015332c05bc0e27"
+    "commit": "99212ab32d31ae6b66c04a4727dc91a5214b6641"
   },
   "prochaine_action": "⑤ — trancher les DEUX choix du cadrage §14.2 (enrichissement : repasser orange ? · bouton défaire : cartouche + écran), puis coder le défaire joué par type vert, refusé si la cible a des dépendances (§14.0).",
   "bloque_par": [
