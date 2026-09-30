@@ -538,8 +538,8 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-09-30",
-          "quoi": "IMLADRIK = ARMES (IFULVIN) + DRAGONS (6 étoiles, nébuleuses), TAO supprimé (#313, #316). Avant : leçons v48 propagées (#317).",
-          "commit": "4b8e2de030a50308c54e50f3f30efd0a4ef950ed"
+          "quoi": "Un bandeau par constellation, minimisé sous isolement ; IFULVIN remplace « Le Cercle » (#320). Avant : IMLADRIK = ARMES + DRAGONS, TAO supprimé (#313, #316).",
+          "commit": "548c439fde2c6a8c707da3bd16efb73daad22f08"
         },
         "prochaine_action": "④ — l'exécution : `ouvrirTrace()`, journal 'tentee' AVANT l'acte, plafond, issue après. Frontière arbitrée — cadrage §12.8 quater.",
         "bloque_par": [
