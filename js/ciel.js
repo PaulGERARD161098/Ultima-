@@ -1362,7 +1362,9 @@
         gZonesNeb.appendChild(z);
         piecesZonesNeb.push({ groupe: g, el: z });
       });
-      racine.appendChild(gZonesNeb);
+      // SOUS les personnes rattachées aussi, pas seulement sous les étoiles :
+      // posées après elles, les zones volaient leur clic (relecture Codex, 30/09).
+      racine.insertBefore(gZonesNeb, gOrbites);
     }
     racine.appendChild(gEtoiles);
 
@@ -1611,12 +1613,27 @@
       var celluleEcran = monde.nebuleuses.pasX * (FOCALE / Math.max(1, cam.cibleDistance || cam.distance));
       return Math.max(8 / 11, Math.min(1, (celluleEcran * 0.9) / plusLong));
     }
+    // Un titre effacé n'est ni une étape de tabulation (relecture du 30/09 :
+    // 8 focus sur 8 hors écran pendant l'approche) ni une cible : rogné par le
+    // bord, sa part encore dans l'écran volait le clic d'une étoile (relecture
+    // Codex). `visibility` fait les deux ; le titre qui a le focus reste.
+    function effacerTitre(pa, efface) {
+      var cache = efface && document.activeElement !== pa.el;
+      var tab = cache ? '-1' : '0';
+      if (pa.el.getAttribute('tabindex') !== tab) { pa.el.setAttribute('tabindex', tab); }
+      if (cache) {
+        if (pa.el.getAttribute('visibility') !== 'hidden') { pa.el.setAttribute('visibility', 'hidden'); }
+      } else if (pa.el.hasAttribute('visibility')) { pa.el.removeAttribute('visibility'); }
+    }
     function poserNebuleuses(projetes) {
       piecesAmas.forEach(function (pa, i) {
         var pr = projeter(pa.groupe.centre);
         var zone = piecesZonesNeb[i];
         if (!pr) {
+          // Derrière la caméra (on a tourné autour d'une nébuleuse) : effacé,
+          // donc ni tabulable ni cliquable (relecture Codex, 30/09).
           pa.el.setAttribute('opacity', '0');
+          effacerTitre(pa, true);
           if (zone) { zone.el.setAttribute('display', 'none'); }
           return;
         }
@@ -1634,10 +1651,7 @@
           if (pr.sx - demiL < 0 || pr.sx + demiL > vbW || pr.sy < 16 || pr.sy > vbH) { op = 0; }
         }
         pa.el.setAttribute('opacity', op.toFixed(2));
-        // Un titre effacé n'est pas une étape de tabulation (relecture du 30/09 :
-        // 8 focus sur 8 hors écran pendant l'approche) — sauf s'il a le focus.
-        var tab = op > 0 || document.activeElement === pa.el ? '0' : '-1';
-        if (pa.el.getAttribute('tabindex') !== tab) { pa.el.setAttribute('tabindex', tab); }
+        effacerTitre(pa, op === 0);
         if (zone) {
           if (dedans) { zone.el.setAttribute('display', 'none'); return; }
           zone.el.removeAttribute('display');
@@ -1953,6 +1967,9 @@
         var op = opaciteProfondeur(pr.profondeur);
         var attenue = correspond && !correspond(piece.etoile.noeud);
         piece.g.setAttribute('opacity', (attenue ? op * 0.14 : op).toFixed(3));
+        // Lot 3 : la pâleur des AUTRES nébuleuses est posée en CSS ; la recherche
+        // y garde son contraste par cette classe (relecture Codex, 30/09).
+        if (modeNebuleuses) { piece.g.classList.toggle('ciel-etoile--attenuee', !!attenue); }
 
         var x = pr.sx, y = pr.sy;
         piece.coeur.setAttribute('cx', x); piece.coeur.setAttribute('cy', y);

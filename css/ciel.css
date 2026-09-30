@@ -528,3 +528,6 @@
    nébuleuses restent pâles (relecture du 30/09 — un survol les remontait à
    0,58). Plus spécifique que les règles de concentration et de choix. */
 .ciel-svg.ciel--approche .ciel-etoile:not(.ciel-etoile--approchee):not(:focus-visible) { opacity: .2; }
+/* …et la recherche y garde son contraste : une étoile qui ne répond pas à la
+   recherche pâlit davantage qu'une qui y répond (relecture Codex, 30/09). */
+.ciel-svg.ciel--approche .ciel-etoile.ciel-etoile--attenuee:not(.ciel-etoile--approchee):not(:focus-visible) { opacity: .05; }

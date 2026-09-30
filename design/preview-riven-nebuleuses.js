@@ -86,7 +86,7 @@
     // sous un moteur déjà mesuré, et la brume glissait sous ses étoiles.
     var bouton = document.getElementById('apercu-neb-tout-voir');
     bouton.hidden = false;
-    var vue = window.UltimaCiel.rendre(document.getElementById('ciel-scene'), donnees, {
+    var reglages = {
       surClicNoeud: surClicNoeud,
       libellesType: libellesType,
       fond: true,
@@ -96,8 +96,12 @@
         return { cle: n.cle === T.CLE_A_CLASSER ? window.UltimaCiel.CLE_A_CLASSER : 'neb-' + n.cle, label: n.nom, court: n.court };
       },
       nebuleuses: brumes
-    });
-    bouton.addEventListener('click', function () { vue.toutVoir(); });
+    };
+    var vue = window.UltimaCiel.rendre(document.getElementById('ciel-scene'), donnees, reglages);
+    // Pour le harnais : rejouer le même ciel avec un réglage de plus (une
+    // recherche), comme le fait RIVEN à chaque frappe.
+    window.__apercu = { donnees: donnees, reglages: reglages };
+    bouton.addEventListener('click', function () { (window.UltimaCiel.courant() || vue).toutVoir(); });
     return;
   }
   window.UltimaNebuleuses.rendre(document.getElementById('ciel-scene'), donnees, {

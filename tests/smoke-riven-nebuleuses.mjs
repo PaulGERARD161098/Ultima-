@@ -515,6 +515,16 @@ for (const vp of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
     const t = await mesurer(page, '.ciel-titres-nebuleuses .ciel-nom-amas', '#ciel-scene');
     details[`lot3_${L}_demo_titres`] = t;
     verdicts[`lot3_${L}_demo_titresSansChevauchement`] = t.visibles === 3 && t.chevauchements === 0 && t.dehors === 0;
+    // Relecture Codex : à l'ensemble, une zone de nébuleuse ne vole pas le clic
+    // d'une personne rattachée (elle était peinte au-dessus d'elles).
+    const personnes = await page.evaluate(() => [...document.querySelectorAll('#ciel-scene g.ciel-personne')]
+      .filter((g) => g.getAttribute('display') !== 'none').map((g) => {
+        const z = (g.querySelector('.ciel-zone') || g).getBoundingClientRect();
+        const el = document.elementFromPoint(z.left + z.width / 2, z.top + z.height / 2);
+        return !!(el && el.closest('[data-nebuleuse]'));
+      }));
+    details[`lot3_${L}_demo_personnes`] = personnes;
+    verdicts[`lot3_${L}_demo_personnesCliquablesALEnsemble`] = personnes.length > 0 && personnes.every((vole) => !vole);
     // L'arbre d'accessibilité : trois boutons nommés « Nébuleuse … ».
     const cdp = await page.context().newCDPSession(page);
     const { nodes } = await cdp.send('Accessibility.getFullAXTree');
@@ -538,7 +548,8 @@ for (const vp of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
       const autres = [...sc.querySelectorAll('g.ciel-etoile[data-noeud-id]:not(.ciel-etoile--approchee)')].map((g) => parseFloat(getComputedStyle(g).opacity));
       const personnes = [...sc.querySelectorAll('g.ciel-personne.ciel-etoile--approchee')].map((g) => parseFloat(getComputedStyle(g).opacity));
       return {
-        titresEffacesTabulables: titres.filter((t) => t.getAttribute('opacity') === '0.00' && t.getAttribute('tabindex') === '0' && t !== document.activeElement).length,
+        titresEffacesTabulables: titres.filter((t) => (t.getAttribute('opacity') === '0.00' || t.getAttribute('opacity') === '0') && t !== document.activeElement &&
+          (t.getAttribute('tabindex') === '0' || getComputedStyle(t).visibility !== 'hidden')).length,
         autresMax: autres.length ? Math.max(...autres) : null, autres: autres.length,
         personnes: personnes.length, personnesMin: personnes.length ? Math.min(...personnes) : null
       };
@@ -548,6 +559,23 @@ for (const vp of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
     verdicts[`lot3_${L}_demo_survolNeRallumePas`] = pendant.autres > 0 && pendant.autresMax <= 0.25;
     verdicts[`lot3_${L}_demo_personnesSuiventLeurEtoile`] = pendant.personnes > 0 && pendant.personnesMin > 0.5;
     await page.mouse.move(2, 2);
+    // Relecture Codex : un demi-tour autour de la nébuleuse approchée met des
+    // voisines derrière la caméra — leur titre effacé n'est ni tabulable ni
+    // cliquable. Verrou : au moins un titre effacé.
+    const sb = await page.locator('#ciel-scene').boundingBox();
+    await page.mouse.move(sb.x + sb.width * 0.1, sb.y + sb.height * 0.5);
+    await page.mouse.down();
+    await page.mouse.move(sb.x + sb.width * 0.1 + 520, sb.y + sb.height * 0.5, { steps: 12 });
+    await page.mouse.up();
+    await page.mouse.move(2, 2);
+    await page.waitForTimeout(1500);
+    const demiTour = await page.evaluate(() => {
+      const titres = [...document.querySelectorAll('#ciel-scene .ciel-nom-amas[data-nebuleuse]')];
+      const effaces = titres.filter((t) => (t.getAttribute('opacity') === '0' || t.getAttribute('opacity') === '0.00') && t !== document.activeElement);
+      return { effaces: effaces.length, fautifs: effaces.filter((t) => t.getAttribute('tabindex') === '0' || getComputedStyle(t).visibility !== 'hidden').length };
+    });
+    details[`lot3_${L}_demo_demiTour`] = demiTour;
+    verdicts[`lot3_${L}_demo_titresEffacesNiTabulablesNiCliquables`] = demiTour.effaces > 0 && demiTour.fautifs === 0;
     // Échap : retour à l'ensemble, le focus revient au titre quitté.
     await page.keyboard.press('Escape');
     await page.waitForTimeout(300);
@@ -618,6 +646,34 @@ for (const vp of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
     const app = await etatApproche(page);
     details[`lot3_${L}_${n}_approche`] = app;
     verdicts[`lot3_${L}_${n}_approche`] = approcheSaine(app, 'neb-btp');
+    if (n === 54 && L < 1000) {
+      // Relecture Codex : pendant l'approche, la recherche garde son contraste
+      // chez les voisines ENCORE À L'ÉCRAN. On rejoue le ciel comme RIVEN à
+      // chaque frappe, avec une recherche qui répond pour UNE étoile voisine
+      // visible, puis on revient dans BTP ; seules les étoiles affichées comptent.
+      const contraste = await page.evaluate(async () => {
+        const visibles = () => [...document.querySelectorAll('#ciel-scene g.ciel-etoile[data-noeud-id]:not(.ciel-etoile--approchee)')]
+          .filter((g) => g.getAttribute('display') !== 'none');
+        const cible = visibles()[0];
+        if (!cible) { return { cible: null }; }
+        const id = cible.getAttribute('data-noeud-id');
+        const A = window.__apercu;
+        const v = window.UltimaCiel.rendre(document.getElementById('ciel-scene'), A.donnees,
+          Object.assign({}, A.reglages, { correspond: (noeud) => noeud.id === id }));
+        v.approcher('neb-btp', { immediat: true });
+        await new Promise((r) => setTimeout(r, 600));
+        const op = (g) => parseFloat(getComputedStyle(g).opacity);
+        const vis = visibles();
+        return {
+          cible: id,
+          repond: vis.filter((g) => g.getAttribute('data-noeud-id') === id).map(op),
+          tait: vis.filter((g) => g.getAttribute('data-noeud-id') !== id).map(op)
+        };
+      });
+      details[`lot3_${L}_${n}_contrasteRecherche`] = contraste;
+      verdicts[`lot3_${L}_${n}_rechercheGardeSonContraste`] = !!contraste.cible && contraste.repond.length === 1 &&
+        contraste.tait.length > 0 && Math.max(...contraste.tait) < contraste.repond[0];
+    }
     verdicts[`lot3_${L}_${n}_zeroErreur`] = erreurs.length === 0;
     await page.close();
   }
