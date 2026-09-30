@@ -20,8 +20,8 @@
 
 **La base** (lecture seule, projet Ultima, remesurée le 30/09 après l'ajout
 des 4 cartes du salon BATIMAT) : **54 fiches**, **40 secteurs distincts**,
-**4 fiches sans secteur**, **1 relation**, **1 rattachement** (Henry Huvey →
-RénoBoost IA), 43 personnes. La maquette, elle, a été construite sur les
+**4 fiches sans secteur**, **1 relation**, **1 rattachement** (une personne
+rattachée à une fiche), 43 personnes. La maquette, elle, a été construite sur les
 50 fiches d'avant ce dernier ajout.
 
 **Le Ciel actuel de RIVEN** : `js/ciel.js` (2 071 lignes). Chaque secteur
@@ -283,5 +283,25 @@ les deux nébuleuses les plus denses (11 et 12 fiches) : un nom de 26
 caractères en 12 px ne tient pas au bord d'un écran de 364 px. Ils sont dans le
 panneau, et le harnais le vérifie. Aller plus bas demanderait de passer sous
 les 12 px (C5) ou de déplacer les étoiles à l'approche : ni l'un ni l'autre
-n'a été fait. Les deux sabotages (évitement des noms, regroupement 3D) font
-virer le harnais au rouge.
+n'a été fait. Deux sabotages intégrés au harnais (évitement des noms coupé ;
+cœurs rendus à leur taille de carte) le font virer au rouge.
+
+**Relecture adverse indépendante** (même jour, avant la PR) : quatorze constats
+— focus perdu au retour d'une nébuleuse, étoiles doublement exposées au lecteur
+d'écran, Échap qui fermait aussi la fiche, cibles tactiles, recherche relancée
+à chaque frappe… Tous corrigés, chacun avec le verdict qui l'aurait attrapé.
+
+**Ce que les anciens harnais ont révélé** (`smoke-ciel.mjs`, rouge après le
+lot 2) :
+- **Un défaut du moteur 3D, antérieur à la boucle** : la visée au clavier
+  recentrait l'étoile à l'horizontale mais sous-corrigeait à la verticale
+  (`atan2(p.y, z1 + distance)` au lieu de `atan2(p.y, z1)`). Invisible tant que
+  les amas restaient près de l'équateur ; les trois nébuleuses de la démo en
+  posent une en hauteur — l'étoile visée restait à 127 unités du centre, 46
+  après correction (la borne de 1,15 rad du glissement retient le reste). Les
+  dix pages qui partagent le moteur en profitent.
+- **Les boutons du ciel visent l'instance vivante du moteur**, plus une
+  référence gardée par RIVEN : un rendu direct du moteur (le « pire cas » du
+  harnais) la laissait pointer sur une instance arrêtée, et « approcher » ne
+  faisait plus rien.
+- **Six constellations → trois** dans la démo : attendu, c'est le lot 2.
