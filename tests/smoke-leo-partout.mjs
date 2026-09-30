@@ -21,11 +21,13 @@ function verifier(nom, condition, detail = '') {
   else { console.log(`  ❌ ${nom}${detail ? ' — ' + detail : ''}`); echecs += 1; }
 }
 
-// Deux pages, deux cas. `zekrom` déclare `riven` (lien retour unique vers
-// riven.html) ; `tao` ne déclare rien et doit retomber sur `ultima`.
+// Deux cas de base. `zekrom` déclare `riven` (lien retour unique vers riven.html) ;
+// une page qui ne déclare rien doit retomber sur `ultima` — c'était `tao.html`
+// jusqu'au 30/09 (page supprimée) ; le cas du repli est porté, sans perte, par
+// `omega.html` plus bas (il ne déclare rien non plus). Verrou ci-dessous : la liste
+// garde AU MOINS une page à repli, sinon le cas ne serait plus éprouvé du tout.
 const PAGES = [
   { fichier: 'zekrom.html', quadrant: 'riven' },
-  { fichier: 'tao.html', quadrant: 'ultima' },
   // Tranchées par Paul le 2026-09-03 : naga.html et grima.html avaient DEUX
   // liens retour chacune et étaient restées au repli. Elles ont été SUPPRIMÉES
   // le 2026-09-29 (OMEGA, IMLADRIK) ; leurs remplaçantes sont éprouvées pour la

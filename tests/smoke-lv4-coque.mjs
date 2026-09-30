@@ -367,9 +367,11 @@ brancher(pageNav);
 await pageNav.goto(`${BASE}/omega.html`, { waitUntil: 'load', timeout: 20000 });
 await pageNav.waitForTimeout(1500);
 
-// IMLADRIK est le foyer le plus exigeant : il porte des têtes PLEINES
-// (ADRAMELECH, TAO) et des têtes VIDES (MAEDRETHNIR, VRANESH, DRAUKHAIN), donc
-// les deux branches de la règle de groupement.
+// IMLADRIK est le foyer le plus exigeant : ses deux entrées sont des têtes PLEINES
+// (les constellations ARMES et DRAGONS) et le second étage qu'elles portent est
+// fait de feuilles (IFULVIN, MAEDRETHNIR, VRANESH, DRAUKHAIN, RESHIRAM, ZEKROM) et
+// d'une tête pleine, ADRAMELECH — donc les deux branches de la règle de groupement.
+// (30/09 : TAO n'existe plus ; ADRAMELECH est descendu d'un cran.)
 // Depuis que l'isolement ne peint plus qu'UN étage (Paul, 2026-08-31), c'est
 // justement la tête pleine qui fait d'IMLADRIK le bon cas : il EXISTE un second
 // étage sous lui, et il doit rester invisible. Un foyer sans petits-enfants
