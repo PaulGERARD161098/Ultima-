@@ -277,9 +277,15 @@ export function rendre(idNoeud, options = {}) {
       + (vivante ? '<p class="parole-cockpit">En cours — ' + echapper(vivante) + '</p>' : '')
       + '<p class="parole-texte">' + echapper(cap.resume) + '</p>'
       + '<p class="parole-action">'
-      + (cap.cible
-        ? (cap.externe ? 'Clique pour ouvrir (nouvel onglet) ↗' : 'Clique pour entrer ↝')
-        : 'Cap en préparation')
+      // MÊME PARTAGE QU'`entrer()` ET QU'`aria-disabled` (30/09) : ce qui
+      // CONTIENT s'entre, page ou pas. Une constellation sans page disait « Cap
+      // en préparation » alors que le clic y plongeait — la parole contredisait
+      // le geste. Les mêmes mots qu'IMLADRIK sur OMEGA : même action.
+      + ((cap.enfants || []).length && !cap.externe
+        ? 'Clique pour entrer ↝'
+        : cap.cible
+          ? (cap.externe ? 'Clique pour ouvrir (nouvel onglet) ↗' : 'Clique pour entrer ↝')
+          : 'Cap en préparation')
       + '</p>';
   }
   function reinitResume() {
@@ -444,7 +450,11 @@ export function rendre(idNoeud, options = {}) {
       // pose `role="button"` sur toutes les étoiles ; c'est ici qu'on dit
       // lesquelles n'emmènent nulle part. Sans cela, une promesse est faite à
       // qui n'y voit pas, et elle n'est pas tenue.
-      if (!cap.cible) { g.setAttribute('aria-disabled', 'true'); }
+      // ⛔ MÊME PARTAGE QU'`entrer()` : ce qui CONTIENT n'est jamais inerte, page
+      // ou pas. Les constellations d'IMLADRIK (30/09) n'ont pas de page et
+      // s'isolent au clic : les marquer `aria-disabled` les annonçait mortes au
+      // lecteur d'écran et les grisait, alors que le clic y plongeait.
+      if (!cap.cible && !(cap.enfants || []).length) { g.setAttribute('aria-disabled', 'true'); }
 
       // ⛔ L'APPEL EST POSÉ PAR UN ATTRIBUT, JAMAIS PAR UNE GÉOMÉTRIE À NOUS.
       // Le moteur repositionne les cercles de chaque étoile à chaque image :

@@ -267,19 +267,29 @@ for (const [largeur, hauteur, nom] of [[390, 844, 'a390'], [1280, 860, 'a1280'],
 // TOUTE la famille, et d'abord sur ses cas EXTRÊMES — ici le plus chargé.
 // ---------------------------------------------------------------------------
 // 2026-09-29 : GRIMA et NAGA sont supprimés ; le nombre de caps de chaque écran
-// est LU dans le registre (le pire cas — IMLADRIK, cinq caps — ne se fige plus
-// à la main), puis verrouillé ci-dessous par des valeurs explicites.
+// est LU dans le registre, puis verrouillé ci-dessous par des valeurs explicites.
+// 2026-09-30 : IMLADRIK n'a plus QUE QUATRE entrées (deux constellations,
+// ADRAMELECH, TAO), et la famille GAGNE deux écrans : les constellations isolées
+// (`imladrik.html#constellation-dragons`, trois étoiles ; `#constellation-armes`,
+// UNE étoile). Un critère qui vaut pour une famille d'écrans s'éprouve sur toute
+// la famille — et la famille a grandi : DRAGONS et surtout ARMES (une seule
+// étoile, IFULVIN, inerte) ne doivent être ni recouvertes par le bandeau ni
+// éteintes.
 const NOEUD_DE = { 'omega.html': 'omega', 'tao.html': 'tao', 'imladrik.html': 'imladrik',
-  'adramelech.html': 'adramelech', 'bcp.html': 'nicol-bolas', 'index.html': 'racine' };
+  'adramelech.html': 'adramelech', 'bcp.html': 'nicol-bolas', 'index.html': 'racine',
+  'imladrik.html#constellation-dragons': 'constellation-dragons',
+  'imladrik.html#constellation-armes': 'constellation-armes' };
 const COQUES_DE_NAVIGATION = Object.keys(NOEUD_DE)
   .map((fichier) => [fichier, NOEUDS[NOEUD_DE[fichier]].enfants.length]);
 // Verrou : le registre ne dérive pas sans que ce harnais le voie, et la liste
 // est bien la famille attendue (jamais vide, jamais réduite en silence).
 verdicts.familleDesCoques = JSON.stringify(COQUES_DE_NAVIGATION) === JSON.stringify([
-  ['omega.html', 3], ['tao.html', 2], ['imladrik.html', 5],
+  ['omega.html', 3], ['tao.html', 2], ['imladrik.html', 4],
   ['adramelech.html', 3], ['bcp.html', 4],
   // LA RACINE (P4, 2026-08-19) : trois caps — ALPHA, OMEGA, ALTHEA.
-  ['index.html', 3]]);
+  ['index.html', 3],
+  // LES CONSTELLATIONS ISOLÉES (30/09) : trois dragons ; IFULVIN seul.
+  ['imladrik.html#constellation-dragons', 3], ['imladrik.html#constellation-armes', 1]]);
 for (const [fichier, nbCaps] of COQUES_DE_NAVIGATION) {
   for (const [largeur, hauteur] of [[390, 844], [1280, 860]]) {
     const page = await browser.newPage({ viewport: { width: largeur, height: hauteur } });
@@ -321,10 +331,19 @@ for (const [fichier, nbCaps] of COQUES_DE_NAVIGATION) {
       const xs = zs.map((z) => +z.getAttribute('cx'));
       const ys = zs.map((z) => +z.getAttribute('cy'));
       const z = window.UltimaCiel.courant().zoneUtile();
+      // La zone de captation de la PREMIÈRE étoile, en px de fenêtre : toute
+      // dans la fenêtre. (Pas de comparaison avec `zoneUtile()` : elle est en
+      // unités de viewBox, pas en pixels — mélanger les deux fabriquerait un
+      // verdict sans sens. « Pas sous le mobilier » est déjà mesuré en px par
+      // `recouvertes`, contre les vraies boîtes du bandeau et du retour.)
+      const bz = zs.length ? zs[0].getBoundingClientRect() : null;
+      const seuleDansLaFenetre = !!bz && bz.width > 0
+        && bz.left >= 0 && bz.right <= innerWidth && bz.top >= 0 && bz.bottom <= innerHeight;
       const etX = Math.max(...xs) - Math.min(...xs);
       const etY = Math.max(...ys) - Math.min(...ys);
       return {
         n: etoiles.length,
+        seuleDansLaFenetre,
         recouvertes,
         occUtile: Math.max(etX / z.largeur, etY / z.hauteur),
         // LA COURONNE REMPLIT LA LARGEUR : c'est ce que Paul a demandé (« la
@@ -340,6 +359,11 @@ for (const [fichier, nbCaps] of COQUES_DE_NAVIGATION) {
     }, SELECTEURS_MOBILIER);
 
     const cle = fichier.replace('.html', '') + '_' + largeur;
+    // UNE SEULE ÉTOILE (ARMES → IFULVIN) n'a pas d'étalement à mesurer : « remplit
+    // sa zone utile » et « remplit la largeur » exigeraient l'impossible. Ce qui
+    // reste exigé d'elle est ce qui a un sens — bon nombre, non recouverte, marge
+    // réservée, brillante — et qu'elle soit DANS la fenêtre (voir plus bas).
+    const uneSeuleEtoile = nbCaps === 1;
     chiffres['nav_' + cle] = {
       caps: m.n, occUtile: +m.occUtile.toFixed(3), ecartX: Math.round(m.ecartX),
       margeHaute: Math.round(m.margeHaute), opaciteMin: +m.opaciteMin.toFixed(2)
@@ -367,6 +391,8 @@ for (const [fichier, nbCaps] of COQUES_DE_NAVIGATION) {
     // Une cinquième tentative (lever le plancher de distance) n'a rien changé et
     // a été RETIRÉE.
     //
+    // (30/09 : IMLADRIK à QUATRE entrées mesure 0,684 à 390 px et 0,689 au bureau ;
+    // DRAGONS isolée 0,632 et 0,706 — au-dessus du seuil, donc rien à relâcher.)
     // Ce qui reste est le plancher mesuré ce jour : IMLADRIK 0,588 et NICOL BOLAS
     // 0,500 (quatre caps dont « REVENUS & CHARGES »). Le seuil de 0,45 n'est donc
     // pas une complaisance mais un DÉTECTEUR DE RÉGRESSION : il est sous les
@@ -374,8 +400,14 @@ for (const [fichier, nbCaps] of COQUES_DE_NAVIGATION) {
     // plancher d'occupation de LV4 pour douze caps, et même règle : un seuil qui
     // baisse se justifie par la géométrie, jamais par l'envie de passer.
     const seuilOccupation = largeur >= 1000 ? 0.6 : 0.45;
-    verdicts['navRemplitSaZoneUtile_' + cle] = m.occUtile >= seuilOccupation;
-    verdicts['navRemplitLaLargeur_' + cle] = m.ecartX > 20;
+    if (!uneSeuleEtoile) {
+      verdicts['navRemplitSaZoneUtile_' + cle] = m.occUtile >= seuilOccupation;
+      verdicts['navRemplitLaLargeur_' + cle] = m.ecartX > 20;
+    } else {
+      // Une étoile seule : elle doit se tenir DANS la fenêtre (et hors du mobilier,
+      // ce que `navAucuneEtoileRecouverte` mesure) — mesuré, pas supposé.
+      verdicts['navEtoileSeuleDansLaFenetre_' + cle] = m.n === 1 && m.seuleDansLaFenetre === true;
+    }
     verdicts['navEtoilesBrillantes_' + cle] = m.opaciteMin >= 0.8;
     if (m.recouvertes.length) { chiffres['nav_' + cle].recouvertes = m.recouvertes; }
     await page.close();

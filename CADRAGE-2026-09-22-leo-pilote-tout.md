@@ -298,6 +298,13 @@ qualifier » plutôt que celui qui répond en trois clics avec un chiffre invent
 
 ## §2 — Le modèle de droits : trois anneaux, par RÉVERSIBILITÉ
 
+> ⛔ **LE CRITÈRE DE CETTE SECTION A ÉTÉ REMPLACÉ — voir §12 (Paul, 29/09).**
+> Ce §2 taille les anneaux sur la RÉVERSIBILITÉ de l'objet touché. Paul les
+> taille sur **ce que le geste DÉTRUIT ou fait RÉGRESSER**, avec un périmètre
+> par défaut large (tout ce qu'il peut faire lui-même). Les trois anneaux
+> restent justes dans leur principe et leur vocabulaire ; **la répartition
+> ci-dessous ne l'est plus**. Gardé pour le raisonnement, pas comme consigne.
+
 ⛔ **Le critère n'est pas « quel dépôt » mais « qu'est-ce que ça coûte si c'est
 faux ».** C'est la règle du repli déjà écrite dans RenoDevis (arbitrage A1,
 13/09) : *un repli se choisit sur ce qu'il coûte quand il se trompe, jamais sur ce
@@ -822,6 +829,10 @@ tout B1 : **un outil vert ne doit rien pouvoir faire qu'une injection rendrait
 grave.** On ne durcit pas le modèle — on taille le catalogue.
 
 **A2 · ⛔ Réversible ne suffit pas : il faut réversible ET VISIBLE.**
+*(⚠️ Reformulée au §12.2 : sous le critère de Paul, une erreur invisible EST
+une régression — simplement une régression qu'on ne découvre pas. Le fond
+tient, le classement change : elle entre dans l'exception par la régression,
+pas par « c'est une écriture ».)*
 Le §2 taille l'anneau vert sur la seule réversibilité. Contre-exemple immédiat :
 un montant faux dans NICOL BOLAS **se défait d'un clic** — et personne ne le
 voit. Il alimente une prévision d'impôts, et l'erreur se découvre au tiers
@@ -831,7 +842,13 @@ qu'elle est là. ⇒ **Le critère de l'anneau vert devient DOUBLE — réversib
 *et* visible.** Conséquence directe : NICOL BOLAS ne reçoit aucun outil vert
 dans B1, et son catalogue vide cesse d'être un manque.
 
-**A3 · ⛔ Un vert qui SORT de la machine est une publication.**
+**A3 · ⛔ FAUSSE — CORRIGÉE AU §12.2 LE 29/09. Ne pas l'appliquer.**
+Elle interdisait à Léo tout ce qui « sort de la machine ». Or **Paul pousse des
+branches et ouvre des PR**, et ni l'une ni l'autre ne détruit : une branche se
+supprime, une PR se ferme. Ce qui engage, c'est **la fusion dans `main` et le
+déploiement**. Le raisonnement d'origine, gardé pour mémoire :
+
+~~**Un vert qui SORT de la machine est une publication.**~~
 Le §2 range « les grains `FINUBAR.md` » et « les fichiers de pilotage » en vert.
 Or un grain se **commite et se pousse** : historique, dépôt, lecteurs. Une
 écriture qui quitte la machine ne se *défait* pas — elle se **rattrape par un
@@ -988,7 +1005,7 @@ retiré · une **seconde liste** posée dans `js/`. Un harnais qui ne sait pas
 écrit dans le code lui-même, parce qu'un outil que personne n'appelle se lit
 comme un outil qui marche.
 
-### §11.6 — La prochaine action, unique — et elle ouvre sur un GATE
+### §11.6 — La prochaine action — ⚠️ toujours valable, mais SON SENS A GRANDI (voir §12.6)
 
 **B1 étape ③ — le journal des écritures.** Il précède ④ : sans lui, une
 exécution verte serait une écriture sans trace, et A4 dit que le journal
@@ -1002,3 +1019,292 @@ gate — et le mode solo ne le lève pas (il n'autorise que les migrations
 ⚠️ **Et on n'écrit pas le module avant la table.** `autoriserEcriture` est déjà
 sans appelant ; empiler une seconde couche inerte par-dessus, c'est fabriquer
 du code qui a l'air de marcher. ③ commence quand le gate est levé.
+
+---
+
+## §12 — L'OBJECTIF FINAL, scellé par Paul le 29/09/2026
+
+> *« Léo a une capacité de lecture, d'écriture et de modification de projet au
+> même niveau que les miennes, mais toute action destructrice ou de régression
+> doit être approuvée par moi. Elle travaille, elle propose, elle synthétise,
+> elle prend tout en compte, elle cadre, elle joue le cadrage — comme ce qu'on
+> fait nous. Au moment de passer à l'action, on me demande. »*
+
+⛔ **CE §12 PRIME SUR LE §2 ET SUR LE §11.1.** Ils ne sont pas supprimés — ils
+portent le raisonnement qui a mené ici — mais **le critère qui fait foi est
+celui-ci**, et les deux sections ci-dessus renvoient désormais à celle-là.
+
+### §12.1 — Le critère, et ce qu'il déplace
+
+| | Ce que je proposais (§2, §11.1) | Ce que Paul tranche |
+|---|---|---|
+| **la question** | « qu'est-ce que ça touche ? » (une idée, un montant, un client) | **« qu'est-ce que ça casse si c'est faux ? »** |
+| **le défaut** | rien n'est permis, on ouvre outil par outil | **tout ce que Paul peut faire lui-même** |
+| **l'exception** | longue, à réécrire à chaque outil | **courte et nommée** : détruire, écraser, envoyer, dépenser, fusionner, déployer, migrer |
+
+⚠️ **Pourquoi sa version tient mieux, et ce n'est pas une politesse** : la
+mienne se périme à chaque outil ajouté — il faut rouvrir le cadrage pour
+décider du onzième. La sienne ne bouge pas : un outil nouveau est vert s'il ne
+casse rien, et le défaut `orange` attrape celui qu'on n'a pas instruit.
+
+### §12.2 — ⛔ Ce que son arbitrage RÉVÈLE de faux dans le mien
+
+**A3 était fausse.** J'avais écrit : *« aucun outil vert n'écrit dans une
+surface qui sort de la machine »*, au motif qu'un commit poussé ne se défait
+pas. **Paul pousse des branches et ouvre des PR** — ni l'une ni l'autre ne
+détruit : une branche se supprime, une PR se ferme. Ce qui engage vraiment,
+c'est **la fusion dans `main` et ce qu'elle déploie**. A3 se resserre donc sur
+la fusion et le déploiement, pas sur « quitter le disque ».
+
+**A2 survit, mais reformulée — et elle SERT son critère au lieu de le
+concurrencer.** Je disais « réversible ne suffit pas, il faut visible ». Sous
+son critère c'est plus juste encore : **une erreur invisible EST une
+régression**, simplement une régression qu'on ne découvre pas. Un montant faux
+se défait d'un clic et se paie au tiers provisionnel. Elle reste donc dans
+l'exception — non parce que c'est une écriture, mais parce que c'est une
+régression silencieuse.
+
+**Et l'ambiguïté de sa phrase a été levée, pas devinée.** « Toute action
+destructrice doit être approuvée » et « au moment de passer à l'action, on me
+demande » ne tracent pas la même ligne. Lecture retenue, proposée et validée :
+**Léo écrit librement ce qui est additif et réversible ; elle demande pour le
+destructeur et le régressif.** ⚠️ L'autre lecture — toute écriture passe par
+Paul — ferait de lui un **valideur de clics** : cinquante approbations par
+jour, et au bout d'une semaine il ne lirait plus ce qu'il approuve. *Un tampon
+n'est pas un contrôle* — c'est le POV « Paul fatigué » du §11.
+
+### §12.3 — Le retaillage : les DIX outils sont verts, et c'est MESURÉ
+
+```
+$ grep -oE "methode: '[A-Z]+'" js/leo-accueil.js | sort | uniq -c
+      1 methode: 'PATCH'      ← et il CONCATÈNE : existante + '\n\n' + ajout
+      9 methode: 'POST'
+$ grep -rn "relance_at" api/ js/ | grep -v node_modules
+  → api/cockpit.js uniquement : AFFICHER les relances échues. Aucun cron.
+$ grep -rniE "commande|achat|fournisseur|mail|sms|envoi" api/intendant.js
+  → (vide)
+```
+
+Zéro DELETE, zéro PUT, zéro appel sortant, zéro paiement. ⛔ **Et la raison
+de fond n'est pas l'anneau, c'est le principe fondateur du catalogue : AUCUN
+outil de suppression, jamais** — tenu par un test depuis la boucle L2b. C'est
+lui qui rend les dix verts ; **le jour où il tombe, l'anneau vert entier est à
+réinstruire.**
+
+⚠️ **Les sept anneaux ont été retournés UN PAR UN, avec leur constat.** Un
+remplacement global a été refusé — et il devait l'être : *une commande qui
+desserre sept gardes d'un coup est exactement ce que ce dépôt interdit.*
+Le plus instructif est `proposer_relance` : **le seul dont le nom faisait
+peur, et la peur était infondée.** Il ne relance personne — il pose un rappel
+sur l'écran de Paul.
+
+### §12.4 — ⚠️ Les deux conséquences du retaillage, traitées dans le même lot
+
+**① Un contrôle allait devenir vert par vacuité.** Plus aucun outil n'étant
+orange, « un orange refuse » n'avait plus rien à exercer — la façon exacte
+dont un garde-fou cesse de garder sans qu'on le voie. La décision est donc
+extraite en fonction **pure** (`decisionAnneau`), éprouvable quand plus aucune
+donnée ne l'exerce. ⛔ Elle reste l'**unique** endroit où l'anneau décide.
+
+**② Le plafond de VOLUME devient la garde principale.** L'anneau ne borne plus
+rien sur ces dix : dix mille idées versées dans ADRAMELECH noient les vraies,
+**sans qu'aucun droit particulier n'ait été obtenu**. Ce qui était une
+précaution (A5) est désormais ce qui tient le dispositif — avec le journal.
+
+⚠️ **Et la PII entre dans l'anneau vert.** `proposer_journal` et
+`proposer_relance` écrivent dans le réseau commercial ; `proposer_page_journal`
+dans le journal intime. Ce n'est ni destructeur ni régressif, donc vert — mais
+ce n'est plus l'anneau qui les garde : ce sont le plafond de volume, l'absence
+de contenu dicté dans les logs, et la RLS mono-utilisateur.
+
+### §12.5 — Ce qui exige Paul, et rien d'autre
+
+| | Le geste | Pourquoi |
+|---|---|---|
+| 🔴 | **fusionner** dans `main`, **déployer** | ça engage ce qui tourne |
+| 🔴 | **envoyer** (mail, SMS, appel) hors bac à sable | ça sort et ne revient pas |
+| 🔴 | **dépenser**, créer une ressource facturée | irréversible par nature |
+| 🔴 | **supprimer**, **écraser** une valeur saisie à la main | la valeur d'avant est perdue |
+| 🔴 | **migration SQL**, changement RLS, `revoke` | régression possible sur tout le système |
+| 🔴 | **secret** ou variable d'environnement | ne se relit pas, ne se teste pas |
+| 🔴 | **barème**, règle métier, taux | une régression silencieuse chez un client |
+| 🟠 | l'outil **non instruit** — le onzième | `ANNEAU_PAR_DEFAUT` le tient |
+
+### §12.6 — ✅ B1 ③ est écrit — ce qui reste est le GATE, puis ④
+
+L'étape ③ devait commencer par le gate. **Elle a pu commencer avant**, et c'est
+le `CLAUDE.md` qui le dit : *« le SQL vit dans `supabase/migrations/`, jamais
+appliqué seul »*. **Écrire** la migration n'est pas un gate — seule son
+**application** l'est. Ce qui est livré le 29/09 :
+
+| | livré | preuve |
+|---|---|---|
+| la migration | `supabase/migrations/20260929220000_leo_ecritures.sql` | **écrite, NON appliquée** |
+| les décisions | `api/_lib/leo-journal.js` — fonctions **pures** | 22 contrôles, sans base |
+| le plafond | `creerPlafondEcritures` | éprouvé des deux côtés |
+
+⛔ **APPEND-ONLY STRICT, et c'est ce qui résout la contradiction d'A4.** Le
+journal doit s'écrire AVANT l'acte ; mais « écrire puis compléter » demanderait
+une policy UPDATE, donc de quoi réécrire une ligne posée. On pose donc
+plusieurs lignes reliées par `trace_id` — `tentee` → `reussie` | `echouee` →
+`defaite` — et aucune ne se modifie. ⚠️ **Une `tentee` restée SEULE est
+elle-même une information** : l'écriture s'est interrompue en vol. Une table
+modifiable l'aurait effacée. Aucune policy UPDATE ni DELETE, plus un `revoke`
+au niveau table : une policy ajoutée par inadvertance ne rouvrirait pas la porte.
+
+⛔ **Aucun contenu dicté ne PEUT entrer** — tenu par la forme, pas par la
+discipline : liste de clés **fermée** (un `texte` fait refuser l'entrée), cible
+vérifiée comme **UUID** (« Racheter le local » est refusé), et un `motif` qui
+**se refuse** au-delà de 200 caractères au lieu de se tronquer — tronquer
+laisserait entrer les 200 premiers caractères d'une page de journal intime. La
+borne est une sonde, et une sonde ne rattrape pas.
+
+⛔ **L'anneau est DÉRIVÉ du catalogue, jamais reçu.** Le laisser passer par
+l'appelant permettrait de journaliser « vert » une écriture faite sous un autre
+régime : le journal mentirait, ce qu'il n'a pas le droit de faire.
+
+⚠️ **UN CONTRÔLE DE CE LOT NE PROUVAIT PAS CE QU'IL ANNONÇAIT**, et il a été
+trouvé en cassant, dans le passage même qui l'a écrit. Il s'appelait
+`anneauLuPasRecu` et ne testait que ce que la liste fermée tient déjà : un
+sabotage rendant l'anneau recevable laissait le harnais **vert**. Le sabotage
+était neutre — il n'y avait pas de faille — mais *un test vert par le mauvais
+chemin est pire qu'un test absent*, parce qu'on le cite en revue. Remplacé par
+deux contrôles qui mordent, dont l'un vérifie dans la source qu'`anneau` n'est
+pas une clé acceptée.
+
+⚠️ **Le plafond est à 40 écritures par heure, et c'est une valeur de DÉPART.**
+L'ordre de grandeur se justifie (un seul outil par tour, et Paul dicte) ; le
+chiffre exact non. Il se re-règle sur une semaine de journal. ⛔ Ne pas le
+durcir avant : un seuil posé au jugé bloque du travail réel et finit désarmé.
+
+### §12.7 — ✅ LE GATE EST FRANCHI — la table existe (30/09, GO de Paul)
+
+`20260929220000_leo_ecritures.sql` est **appliquée** sur le projet Ultima
+(`leosfqyidgsaescjbfom`, eu-west-3 — sa base PROPRE, pas la base partagée des
+quatre briques : vérifié avant, la leçon du 17/08 ne s'applique pas ici).
+
+**Éprouvée du côté où le garde-fou peut être contourné**, pas du côté qu'on
+emprunte :
+
+| sonde | constat |
+|---|---|
+| `anon` INSERT | **refusé** — `42501 violates row-level security policy` |
+| `authenticated` UPDATE / DELETE | privilège **absent** |
+| phase inventée | **refusée** — `23514 leo_ecritures_phase_check` |
+| **miroir** : la voie serveur écrit | **2 lignes**, un seul `trace_id` |
+| RLS · policies · index | active · **2** (aucune UPDATE/DELETE) · 3 |
+
+⚠️ **Le dry run a trouvé quelque chose** : `anon` gardait le privilège INSERT
+(défaut Supabase sur `public`). **Ce n'était pas une faille** — la RLS refusait
+déjà, et le dire importe autant que le corriger. Mais un droit accordé sans
+usage est un droit qu'une policy mal réécrite un jour suffirait à rendre
+exploitable : retiré par `20260930080500_leo_ecritures_ferme_anon.sql`. Deux
+barrières, pas une.
+
+⚠️ **Et un contrôle que j'avais écrit était CREUX** : « phase inventée refusée »
+passait par un `case when` qui rendait toujours « refusée ». Refait en tentant
+l'insert pour de vrai. *C'est le même défaut que celui trouvé la veille sur
+l'anneau, deux fois dans la même séance* — un contrôle qui ne peut pas échouer
+se lit exactement comme un contrôle qui a réussi.
+
+### §12.8 — ⛔ DEUX TABLES ORPHELINES, trouvées en appliquant
+
+En vérifiant l'état de la base avant d'écrire, deux tables sont apparues —
+**`leo_missions` (18 colonnes) et `leo_operations` (7)** — qui portent un
+dispositif très proche de celui qu'on vient de concevoir : `state` à
+`'proposed'`, `max_calls` / `max_units` / `used_units` / `calls` (un plafond),
+`stopped` (un coupe-circuit), `scope`, `readers` / `writers`, `version` (un
+verrou de concurrence), et un journal à `operation_id` / `base_version` /
+`status` / `result`.
+
+**Mesuré le 30/09 :**
+
+| | constat |
+|---|---|
+| lignes | **0** dans les deux |
+| référencées dans ce dépôt (`.js`, `.mjs`, `.ts`, `.sql`, `.md`) | **aucune** |
+| migration correspondante dans `supabase/migrations/` | **aucune** |
+
+⛔ **CETTE PHRASE ÉTAIT FAUSSE — corrigée le 30/09.** Elle disait : « elles
+ont été posées par autre chose que ce dépôt ». Le registre des migrations le
+démentait, et il suffisait de le lire :
+
+```sql
+select version, name from supabase_migrations.schema_migrations;
+-- → 20260929125105 · leo_lv1_registre_transactionnel
+```
+
+Appliquée le **29/09 à 12:51 UTC — pendant notre séance**. « LV1 » est le
+vocabulaire d'Ultima (LV2 à LV6 courent dans tous les cadrages). ⇒ Ce n'est
+pas « autre chose », c'est **un chantier Ultima mené dans une séance
+parallèle**, dont la migration n'a jamais été commitée.
+
+⚠️ **Et c'est le vrai problème, plus grave que deux tables inconnues : LE DÉPÔT
+NE DÉCRIT PLUS LA BASE.** Une séance qui lit `supabase/migrations/` pour savoir
+ce qui existe conclut que ces tables n'existent pas — c'est exactement l'erreur
+que j'ai commise le 29/09 en concevant `leo_ecritures` sans les voir. Relevé
+rapatrié dans `20260929125105_leo_lv1_registre_transactionnel.RELEVE.sql`
+(un CONSTAT, pas l'original — le suffixe le dit).
+
+### §12.8 bis — ⛔ ET LE RELEVÉ A TROUVÉ UNE FAILLE RÉELLE
+
+`leo_operations_read` ne vérifiait **que l'existence** de la mission, jamais son
+propriétaire :
+
+```sql
+EXISTS (SELECT 1 FROM leo_missions m WHERE m.id = leo_operations.mission_id)
+```
+
+Tout compte authentifié pouvait lire les `payload` et `result` (16 Ko de jsonb
+chacun) des opérations de **n'importe quelle** mission. Sa policy sœur,
+`leo_missions_read`, faisait le contrôle correctement — **l'écart entre les deux
+est ce qui l'a rendue visible** : une table cloisonnée, sa fille ouverte.
+
+⚠️ **Portée mesurée avant de corriger** : 1 seul compte, 0 ligne dans les deux
+tables. **Rien ne fuyait à cet instant.** Mais `readers`/`writers` existent par
+conception : c'était une bombe à retardement, pas un détail théorique.
+
+✅ **Corrigé et éprouvé des deux côtés sur un cas FABRIQUÉ** — les tables étant
+vides, « rien ne fuit » aurait été vrai par vacuité :
+
+| sonde | constat |
+|---|---|
+| verrou de non-vacuité (la ligne existe) | **1** |
+| intrus authentifié → opérations · missions | **0 · 0** |
+| propriétaire → opérations · missions | **1 · 1** |
+
+⛔ Le miroir compte autant que le refus : sans lui, un cloisonnement parfait et
+une table illisible rendraient le même zéro.
+
+⛔ **POURQUOI `leo_ecritures` A QUAND MÊME ÉTÉ CRÉÉE**, et ce n'est pas un
+passage en force : `leo_operations.payload` est un **jsonb libre**. Il PEUT
+donc porter du contenu dicté — précisément ce que `leo_ecritures` interdit par
+construction. Il dépend en plus d'une `mission_id`, alors qu'on journalise une
+écriture, pas une mission ; et il n'a ni `owner_id`, ni outil, ni quadrant, ni
+anneau. Voisin conceptuellement, incompatible structurellement.
+
+⏳ **CE QUI RESTE À PAUL — une décision, pas une action.** Ma recommandation a
+CHANGÉ avec la mesure : je disais « les supprimer », croyant qu'elles venaient
+d'ailleurs. Elles viennent d'Ultima et portent le moteur de l'étape ④.
+⇒ **Les GARDER**, et écrire la frontière entre les deux journaux :
+
+| | son rôle | ce qu'il porte |
+|---|---|---|
+| `leo_operations` | le **registre du moteur** | idempotence, quotas, verrou de version, `payload` libre |
+| `leo_ecritures` | le **journal lisible par Paul** | outil · quadrant · anneau · phase, **zéro contenu dicté** |
+
+⚠️ **Deux journaux restent deux vérités** — le risque que ce cadrage dénonce
+depuis le début. La frontière ci-dessus est ma proposition, pas un arbitrage :
+c'est un choix produit, donc il revient à Paul. ⛔ Les tables ne sont PAS
+touchées.
+
+### §12.9 — La prochaine action, unique
+
+**④ — l'exécution.** Brancher `autoriserEcriture` (qui n'a toujours aucun
+appelant, à dessein) sur une écriture réelle : entrée de journal posée AVANT
+l'acte, plafond consulté, issue posée après. C'est là, et seulement là, que Léo
+écrira. **Plus aucun gate ne l'attend.**
+
+Puis **④ — l'exécution** : brancher `autoriserEcriture` (qui n'a toujours aucun
+appelant, à dessein) sur une écriture réelle, avec l'entrée de journal posée
+AVANT l'acte et le plafond consulté. C'est là, et seulement là, que Léo écrira.
