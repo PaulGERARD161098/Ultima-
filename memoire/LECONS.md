@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v44 2026-09-28 sha256:777907ef76a5 -->
+<!-- lecons:empreinte v45 2026-09-30 sha256:8fc13b32c497 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -136,6 +136,11 @@ configuration ; le journal, lui, dit laquelle des causes a parlé. Les noms de
 variables ne sont pas des secrets, leurs valeurs si : on journalise la présence,
 jamais le contenu.
 
+
+**UN CLIENT QUI COUPE AVANT LE SERVEUR S'AVEUGLE** *(2026-09-14, RenoBoost)*.
+Notre délai valait 8 s, comme le `statement_timeout` du rôle `authenticator` : notre `AbortController` gagnait la course, et l'écran ne recevait qu'un `status: 0`, un silence sans cause. Passé au-dessus, Postgres a répondu `57014` — et c'est CE motif qui a désigné la vraie correction.
+⇒ *Règle* : le délai client se pose AU-DESSUS du plafond serveur. Sinon il masque le motif que le serveur aurait donné.
+
 **AVANT DE CROIRE UNE MESURE, LUI DEMANDER CE QU'ELLE RÉPOND SUR UN CAS DONT ON
 CONNAÎT DÉJÀ LA RÉPONSE** *(2026-08-17)*. Trois sondes fausses dans une seule
 séance, avec le même signe d'alerte chaque fois : **une réponse trop uniforme**.
@@ -158,6 +163,11 @@ mesure divergent, c'est **l'hypothèse cachée du calcul** qu'il faut aller
 chercher, pas l'arithmétique. Le contraste calculé d'un lien donnait 5,12:1
 contre 4,36 mesuré : le lien n'était pas posé sur la nuit de la page mais sur le
 sol étoilé.
+
+
+**UNE COULEUR FIXE N'EST JAMAIS FAUSSE QUAND ON L'ÉCRIT : ELLE LE DEVIENT QUAND SON FOND CHANGE** *(2026-09-11, RenoBoost)*.
+Trois occurrences dans la même journée — le logo, le bandeau B2B, le menu mobile —, chacune sous une raison qui avait été bonne au moment de l'écrire. Et un token d'ENCRE employé comme FOND a donné 2,14:1 en production pendant trois heures.
+⇒ *Règle* : une couleur se juge relativement à son fond, jamais dans l'absolu. Les deux règles (couleur fixe sur fond qui bouge ; token d'encre employé comme fond) sont désormais MÉCANIQUES : `RenoBoost/tests/langage-encres.test.mjs`.
 
 **CLASSER PAR LA MESURE PLUTÔT QUE PAR LE DÉBAT** *(2026-08-17)*. Pour embarquer
 sept pages sur trois registres, ne pas décider en amont : appliquer le registre
@@ -341,6 +351,11 @@ ne dit rien de ce qui est entré dedans. Étiqueter séparément fidélité de
 transformation, cohérence de calcul et justesse de la source.* ⚠️ Et cette
 mesure-là n'avait été versionnée nulle part : citée trois fois, introuvable.
 
+
+**UNE MESURE JUSTE N'EST PAS UNE CONCLUSION JUSTE** *(2026-09-13, RenoDevis + RenoBoost)*.
+La leçon la plus chère de la séance. J'ai mesuré que le repli d'A1 décidait de 100 % des dossiers (171 clients sur 171 sans origine) : exact, et ça reste exact. J'en ai conclu qu'il fallait le retourner : faux, il décidait dans le BON sens. La bascule aurait fait de RIA l'entrepreneur principal — CA des travaux à son bilan, autoliquidation de TVA, responsabilité des chantiers — et rien de tout cela n'était visible dans le diff, qui change un opérateur de comparaison. Paul : « non surtout pas ».
+⇒ *Règle* : un repli se choisit sur ce qu'il coûte quand il SE TROMPE, jamais sur ce qu'il rapporte quand il a raison. Un chiffre exact ne dit rien du sens de ce qu'on en fait.
+
 **UN SIGNAL AUTOMATIQUE QU'ON RÉFUTE DEUX FOIS SE LIT À LA SOURCE** *(2026-09-14)*.
 Le hook de fin de tour a annoncé « 1 commit non poussé » après chaque fusion en
 squash. Quatre fois j'ai re-mesuré, constaté que tout était sur `main`, et
@@ -485,6 +500,16 @@ la chose FAIT, pas comment elle s'appelait. Et un verrou de non-vacuité sur la
 recherche elle-même — « ce fichier existe-t-il, fait-il plus de zéro ligne ? » —
 coûte une seconde et sauve l'annonce.
 
+
+**UNE MESURE UNIQUE SUR UNE BASE PARTAGÉE NE MESURE QUE L'INSTANT** *(2026-09-14, RenoBoost)*.
+J'ai annoncé « 708 ms, 6,4 fois moins » sur UN `explain analyze` pris juste après un `ANALYZE`, tout en cache, et j'ai fait redescendre un délai sur cette foi. Réessais : 1 547 · 4 411 · 7 905 · 9 094 ms, même plan, mêmes tampons.
+⇒ *Règle* : un seuil se décide sur la PIRE mesure, jamais sur la première.
+
+
+**DOUZE CAS CONCORDANTS NE FONT PAS UNE LOI** *(2026-09-15, RenoDevis ; portée aussi dans RenoBoost, PR #464)*.
+« L'acompte SOLA est TOUJOURS de 40 % » tenait sur 12 devis. À 27, DEV00000139 est à 50 % : un client professionnel, et le mail de l'artisan le dit mot pour mot. Aucun code n'était à toucher — le taux vit déjà sur la fiche du pro, aucun 40 en dur. Ce qui était faux, c'était le MOT.
+⇒ *Règle* : une régularité observée se note comme une observation datée AVEC SON EFFECTIF, jamais comme une règle.
+
 ## 2. Les garde-fous, et leur silence
 
 **UN GARDE-FOU PEUT ATTRAPER LA BONNE PANNE ET LA NOMMER FAUX** *(2026-09-28, Ultima)*.
@@ -621,6 +646,11 @@ a vécu trois semaines derrière une phrase juste le jour où elle fut écrite.
 (`echapper()` à chaque insertion) et se teste (`smoke-parole-echappement`), pour ne
 pas dépendre de ce que la donnée sera demain.
 
+
+**UNE DONNÉE DE CRM TIERS EST UNE ENTRÉE HOSTILE, MÊME QUAND ON N'EN GARDE QUE DEUX CARACTÈRES** *(2026-09-07, RenoBoost)*.
+La cause, d'abord cherchée dans la CSS, était une injection HTML : les initiales d'avatar sortaient brutes d'un nom venu de GoHighLevel.
+⇒ *Règle* : ce qui vient d'un CRM tiers se traite en entrée hostile — échappé à la sortie — quelle que soit la part qu'on en affiche.
+
 **UN CLIC DE HARNAIS TOMBE TOUJOURS SUR L'ÉLÉMENT QU'ON LUI NOMME** *(2026-09-25)*.
 Paul signalait depuis des semaines que cliquer NAGA ou GRIMA « ne sélectionne
 pas toujours ». `smoke-lv4-coque` était vert : il cliquait par
@@ -683,6 +713,18 @@ ne **peut pas** vérifier de ce côté-là, on **retire l'hypothèse** au lieu d
 documenter. Une hypothèse documentée reste une hypothèse, et c'est le lecteur
 suivant qui la paie.
 
+*Rechute du 2026-09-13 (RenoBoost)* : les tests d'encre du 11/09 ne lisaient que `style.css` ; `dashboard.css` portait 64 textes sous 4,5:1, sept fois la dette de la landing, dans l'outil ouvert tous les jours. Étendus aux 6 feuilles, avec un verrou de couverture qui balaie le dépôt — une liste de fichiers écrite à la main est une couverture supposée. Les 64 ne sont pas soldés : ils sont bornés et ne peuvent que descendre.
+
+
+**UN REVOKE SUR LES RÔLES NOMMÉS NE RÉVOQUE RIEN** *(2026-09-13, RenoBoost)*.
+`revoke all on function ... from anon, authenticated` a rendu `success:true` et n'a rien fait : `create function` accorde EXECUTE à PUBLIC, dont anon hérite. Mesuré : `has_function_privilege('anon', ...)` = true APRÈS le revoke. Corrigé par `from public` d'abord.
+⇒ *Règle* : un droit se vérifie du côté où il peut être contourné (`has_function_privilege`, pas le retour de la migration), et `success:true` n'est pas une mesure.
+
+
+**LA CLÉ SERVICE PASSE OUTRE LA RLS : LE PÉRIMÈTRE SE POSE À LA MAIN** *(2026-09-15, RenoBoost)*.
+Trouvé par l'audit de fin de séance, APRÈS la fusion de #467. `kv_store` a pour clé primaire `(owner_id, key)` ; le rail lisait sur la seule `key`, en service role. Or `rb_clients_v2` existe pour plusieurs propriétaires : le rail pouvait lire, puis RÉÉCRIRE, le fichier clients de quelqu'un d'autre. Corrigé, gardé par quatre sabotages.
+⇒ *Règle* : en service role, la RLS ne protège plus rien. Chaque lecture et chaque écriture pose elle-même son périmètre (ici `owner_id`), et ce périmètre se prouve en le sabotant.
+
 **UN HARNAIS QUI N'EST PAS LE CLIENT DU PRODUIT NE PROUVE RIEN DE CE QUE LE
 PRODUIT VIT** *(2026-09-14)*. La connexion d'`artisan-builder` était impossible
 en production — pour tout le monde, pendant des heures — alors que
@@ -709,6 +751,8 @@ Studio qui rendrait l'accueil. Découvert en substituant volontairement un écra
 attendu faux, et en constatant que rien ne virait au rouge. *Règle* : un contrôle
 neuf se casse AVANT d'être cru — pas relu, cassé. Et un motif d'identité se
 cherche dans ce qui identifie (le titre), jamais dans ce qui est partagé.
+
+*Rechute du 2026-09-15 (RenoBoost), trois fois dans la journée* : cinq lignes de validation d'entrée sur `estJourDePublication` dont la suppression laissait les tests verts — le refus tenait à la comparaison stricte (`getUTCDay()` ne rend que 0-6, `NaN === 1` est faux). Retirées : du décor défensif se lit comme une protection testée. Même journée, un test de fenêtre de conversation qui ne pouvait pas échouer (réécrit) et une comparaison de signature tronquée à 8 caractères qui ne cassait rien (test ajouté).
 
 **IL N'Y A PAS DE BONNE VUE DU DOM, IL Y A LA VUE QUI RÉPOND À LA QUESTION
 POSÉE** *(2026-09-15, complète la v21)*. `body.textContent` INCLUT le contenu des
@@ -743,6 +787,8 @@ renforcé 2026-09-07)*. « X n'est pas là » est vert sur une chaîne vide, une
 non chargée, un fichier de zéro octet. Une règle de confidentialité se teste
 ainsi : chercher le contenu interdit dans ce qui part, et exiger de ne pas l'y
 trouver. Vérifier seulement la présence du permis ne prouve rien.
+
+*Rechute du 2026-09-13 (RenoBoost)* : un harnais ouvrait les pages produit en `file://` alors qu'elles référencent leurs feuilles en racine-relatif (`href="/produit.css"`) — rien ne chargeait, 9 verdicts verts sur des pages NUES. Une page sans CSS n'a effectivement pas d'ombre : le harnais avait raison sur le fond, et c'est ce qui rend l'erreur dangereuse. Corrigé par un serveur HTTP et un verrou de non-vacuité (`.pp-btn` fait au moins 44px), 18/18 verts ensuite (`RenoBoost/tests/pages-produit.navigateur.mjs`). Trois autres sondes ont menti le même jour : un token hex comparé à un style calculé en rgb (0 défaut sur 1669 éléments), un fond translucide lu comme opaque, une sonde qui ne cherchait plus les bons tokens après conversion.
 
 **UN RENVOI MORT SE LIT EXACTEMENT COMME UN RENVOI VALIDE** *(2026-09-07)*. Un
 « §11.8 » était cité cinq fois dans les documents d'Artidispo pour une section
@@ -874,6 +920,16 @@ le texte fautif : s'il rougit sur la bonne version, il enseigne à supprimer la
 bonne version.* Et il se double d'un contrôle POSITIF — ici « la réponse doit
 toujours dire que SPC n'en est pas un » — sinon on satisfait l'absence en
 effaçant aussi ce qui renseigne le visiteur.
+
+
+**ÉLARGIR UN GARDE-FOU EST UN GESTE DANGEREUX EN SOI** *(2026-09-13, RenoBoost)*.
+La regex de `RenoBoost/tests/langage-encres.test.mjs` ne voyait pas `color: var(--primary-dark)` (sky-600, 4,10:1) : le suffixe lui échappait. Ma première correction, un `[-a-z]*` générique, a attrapé `--color-primary-solide-encre`, `--color-primary-contrast` et `--color-accent-solide-encre` — les tokens FAITS pour porter du texte — et aurait exigé de remonter TROIS plafonds pour passer, l'anti-pattern exact que ce test interdit.
+⇒ *Règle* : on ne liste que les cas qu'on veut attraper (`-dark`, `-light`), au lieu d'ouvrir la porte et de filtrer après. Et un garde-fou élargi se prouve en le cassant : défaut réintroduit, `style.css` passe de 9 à 10 (rouge) ; restauré, vert.
+
+
+**UN BLOCKLIST NE GARANTIT RIEN, IL NETTOIE** *(2026-09-15, RenoDevis)*.
+Le garde-fou PII a attrapé 12 patronymes, puis en a laissé passer un : le nom de fichier l'orthographiait autrement que la fiche client, et un détecteur par jetons ne retire que les noms qu'il CONNAÎT. Un champ de texte libre écrit par un tiers n'est pas bornable.
+⇒ *Règle* : ce qu'on ne peut pas borner ne traverse pas la frontière, et ce qui la traverse se CONSTRUIT. Ici ni le nom de fichier ni le libellé de l'artisan ne passent plus ; `reference_chantier` se construit depuis un vocabulaire fermé. Signe que le remède tient : neutraliser le nettoyeur ne change plus rien à la sortie.
 
 **UN CONTRÔLE QUI REGARDE PAR LA SEULE FENÊTRE OÙ LE DÉFAUT N'EXISTE PAS EST
 PIRE QU'ABSENT** *(2026-09-14)*. Le H1 de SPC est composé d'un `<span
@@ -1447,6 +1503,11 @@ un test d'assemblage qui interdit à tout écran d'enregistrer un devis lui-mêm
 marche » mais « personne n'écrit à côté du rail » — et il se pose dans le même
 commit, sinon la deuxième porte s'ouvre pendant qu'on admire la première.*
 
+
+**RÉPARER UN DÉCLENCHEUR SANS LIRE CE QU'IL DÉCLENCHE PEUT COÛTER PLUS CHER QUE LA PANNE** *(2026-09-15, RenoBoost)*.
+La route `/api/rp-digest` DÉDUISAIT son mode (`day === 5 ? 'vendredi' : 'lundi'`). La passer en quotidien sans rien d'autre aurait produit un digest du lundi CHAQUE MATIN — écrit en base et envoyé par mail — plus un second digest du vendredi à 05:00.
+⇒ *Règle* : nommer plutôt que déduire. Le mode se NOMME dans le chemin planifié (`?mode=`). Avant de toucher à la cadence d'un déclencheur, lire ce qu'il déclenche.
+
 ---
 
 ## 5. Plusieurs dépôts, plusieurs séances
@@ -1624,6 +1685,11 @@ vérifier par `grep` que les deux apports survivaient. *Sur tout fichier à copi
 multiples : relire la base juste avant de pousser, comparer les sceaux, et
 reconstruire — jamais écraser. Et la vérification se fait sur le CONTENU des deux
 apports, pas sur le fait que le sceau a changé.*
+
+
+**UNE LEÇON ÉCRITE DANS UNE COPIE DONNE DEUX CORPS SOUS UN MÊME SCEAU** *(2026-09-13 et 2026-09-28, Ultima + RenoDevis + RenoBoost)*.
+Le 13/09, les copies d'Ultima et de RenoDevis annonçaient toutes deux `v8 85cca6330a86` ; le corps réel de RenoDevis valait 9814804030dd (474 lignes contre 439). Cause : les 3 leçons du 11/09 avaient été écrites DANS la copie au lieu de la source, sans re-sceller. Portées dans `Ultima-/memoire/LECONS.md` (diff de 35 ajouts, 0 suppression, vérifié avant recopie), re-scellées v9 puis v10 (`51f861db94a0`), propagées à RenoDevis à chaque fois. La propagation, elle, est restée partielle : six dépôts à deux révisions de retard (v8), dont trois non attachés à la séance. Le 28/09, même faute : RenoBoost portait 2 leçons absentes de la source, vues au diff avant écrasement. Aucun contrôle croisé ne compare une copie à sa source.
+⇒ *Règle* : avant d'écraser une copie par la source, la comparer (`diff`) : un ajout présent dans la copie seule est une leçon à porter dans Ultima d'abord, pas à effacer. Et une propagation partielle se DIT, dépôts nommés : non dite, elle recrée la divergence qu'on vient de réparer.
 
 ---
 
