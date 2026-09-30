@@ -32,7 +32,7 @@
   },
   "dernier_arret": {
     "le": "2026-09-30",
-    "commit": "À RECALER APRÈS FUSION",
+    "commit": "5a025b5c8567c155600bff40a265ed201f4b4497",
     "quoi": "§12 scellé, 10 outils verts, `leo_ecritures` APPLIQUÉE et éprouvée (anon 42501) + faille RLS leo_operations corrigée. Avant : OMEGA fusionné (#310)."
   },
   "prochaine_action": "④ — brancher l'exécution : entrée de journal AVANT l'acte, plafond consulté, issue après. ⚠️ Deux moteurs candidats, voir cadrage §12.8.",

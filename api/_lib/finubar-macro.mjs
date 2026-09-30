@@ -377,7 +377,7 @@ export default {
         "dernier_arret": {
           "le": "2026-09-30",
           "quoi": "§12 scellé, 10 outils verts, `leo_ecritures` APPLIQUÉE et éprouvée (anon 42501) + faille RLS leo_operations corrigée. Avant : OMEGA fusionné (#310).",
-          "commit": "À RECALER APRÈS FUSION"
+          "commit": "5a025b5c8567c155600bff40a265ed201f4b4497"
         },
         "prochaine_action": "④ — brancher l'exécution : entrée de journal AVANT l'acte, plafond consulté, issue après. ⚠️ Deux moteurs candidats, voir cadrage §12.8.",
         "bloque_par": [
@@ -439,10 +439,10 @@ export default {
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "8fc805f",
-        "tete_le": "2026-09-30T08:43:03+00:00",
-        "commits_depuis": null,
-        "commit_inconnu": true
+        "tete": null,
+        "tete_le": null,
+        "commits_depuis": 0,
+        "commit_inconnu": false
       },
       "mesure_le": "2026-09-30",
       "jours_depuis_maj": 1,
@@ -657,7 +657,7 @@ export default {
     "en_attente_de_paul": 3,
     "au_repos": 0,
     "derives": 1,
-    "commits_inconnus": 6,
+    "commits_inconnus": 5,
     "boucles_ouvertes": 40,
     "gestes_de_paul": [
       {
