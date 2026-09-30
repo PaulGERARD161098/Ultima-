@@ -173,7 +173,7 @@ et compté**.
    pas d'un pixel** : c'est ce qui protège les dix pages qui chargent
    `ciel.js`. Les brumes viennent de l'option `nebuleuses` apportée par #315,
    alimentée par la table commune.
-10. **Harnais 3D** : neuf amas au lieu de quarante ; même nébuleuse pour chaque
+10. **Harnais 3D** : neuf amas au lieu de quarante et un ; même nébuleuse pour chaque
     étoile dans les deux vues ; les autres consommateurs de `ciel.js` inchangés.
 11. **Vérification** : comme l'étape 7, puis la preview, que Paul regarde.
 
