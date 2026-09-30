@@ -148,13 +148,7 @@ export const BLASONS = {
 
   imladrik: disque(EPEE_SOLEIL, 'une épée dressée devant un soleil'),
 
-  // — TAO et ses deux pôles.
-  tao: disque(
-    '<circle cx="36" cy="36" r="24" fill="#efe3c4" stroke="#5a4118" stroke-width="1"/>'
-    + '<path d="M36 12 A24 24 0 0 1 36 60 A12 12 0 0 1 36 36 A12 12 0 0 0 36 12 Z" fill="#3b2f1c"/>'
-    + '<circle cx="36" cy="24" r="4.5" fill="#efe3c4"/>'
-    + '<circle cx="36" cy="48" r="4.5" fill="#3b2f1c"/>',
-    'le yin-yang du TAO'),
+  // — RESHIRAM et ZEKROM (ex-TAO, supprimé le 30/09 : ils vivent chez les DRAGONS).
   aileBlanche: disque(aile('#ffffff'), 'l’aile blanche de RESHIRAM'),
   aileNoire: disque('<g transform="translate(72,0) scale(-1,1)">' + aile('#241c12') + '</g>',
     'l’aile noire de ZEKROM'),
@@ -281,6 +275,17 @@ export const BLASONS = {
 
 // ---------- Cœurs de boussole (médaillons) ----------
 
+// LES NÉBULEUSES — le pigment de chaque constellation (boucle B d'IFULVIN,
+// 30/09, spéc. `graphisme`). Deux pigments de carte savante, jamais néon :
+//   armes   — vermillon éteint, le cinabre de la lame et de la forge ;
+//   dragons — vert-de-gris, l'écaille.
+// L'identité reste portée par le NOM et la position : le voile est un décor
+// `aria-hidden`, la teinte ne dit rien qu'on ne lise ailleurs.
+export const NEBULEUSES = {
+  armes: 'rgb(176,72,60)',
+  dragons: 'rgb(64,138,106)',
+};
+
 export const COEURS = {
   // Racine : le monde-anneau rayonnant (sceau d'Ultima).
   anneau: medaillon('anneau',
@@ -341,13 +346,6 @@ export const COEURS = {
     + '<path d="M52 35 C 54 31, 59 29, 64 32 L 69 34 L 65 36 L 68 39 L 61 39.5'
     + ' C 56 40, 53 38, 52 35 Z" fill="#3b2f1c"/>'
     + '<circle cx="57" cy="34.5" r="1.5" fill="#e0c48a"/>'),
-
-  // TAO : le yin-yang.
-  tao: medaillon('tao',
-    '<circle cx="60" cy="60" r="34" fill="#efe3c4" stroke="#5a4118" stroke-width="1.4"/>'
-    + '<path d="M60 26 A34 34 0 0 1 60 94 A17 17 0 0 1 60 60 A17 17 0 0 0 60 26 Z" fill="#3b2f1c"/>'
-    + '<circle cx="60" cy="43" r="6.4" fill="#efe3c4"/>'
-    + '<circle cx="60" cy="77" r="6.4" fill="#3b2f1c"/>'),
 
   // IMLADRIK : Kalamn-talaen — l'épée enlacée du dragon. C'est le NOM GRAVÉ de
   // la boussole du quadrant, pas un agent : l'agent unique d'Ultima reste Léo.

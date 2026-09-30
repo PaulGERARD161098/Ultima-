@@ -237,13 +237,22 @@ body.a-leo-dock .ciel-noeud-plateau > .ciel-legende { display: none; }
    `css/ciel.css` qui le remplaçait par un sans-serif — d'où la règle ici, plus
    spécifique, plutôt qu'une retouche de la feuille de RIVEN.
    La taille ne se règle PAS ici : le moteur la réécrit à chaque image
-   (`plancherNomPx`, `js/ciel-noeud.mjs`). La couleur non plus : elle reste
-   celle de `css/ciel.css`, dont le contraste est déjà mesuré. */
+   (`plancherNomPx`, `js/ciel-noeud.mjs`).
+   LA COULEUR, ELLE, SE RÈGLE ICI DEPUIS LE 30/09 — et c'est une mesure qui l'a
+   imposé, pas un goût. Au gris `#c8c5bd` de RIVEN, les noms des menus lisaient
+   à 390 px : ZEKROM 4,53:1 en local sur les DRAGONS, 4,23:1 en CI sur l'ex-TAO
+   (polices de la CI plus fines, ~0,5 de moins). Un nom de menu est une
+   commande : il passe à la crème `--stellar-text-primary` (≈ +40 % de
+   contraste), et le survol monte au blanc pour rester distinct. RIVEN garde
+   son gris (`css/ciel.css`). `tests/smoke-nebuleuses.mjs` (seuil local 5,0). */
 .ciel-noeud-plateau .ciel-nom {
   font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
   text-transform: uppercase;
   letter-spacing: .12em;
+  fill: var(--stellar-text-primary, #f2ead6);
 }
+.ciel-noeud-plateau .ciel-etoile:hover .ciel-nom,
+.ciel-noeud-plateau .ciel-etoile:focus-visible .ciel-nom { fill: #ffffff; }
 
 /* ---- ③ La légende gravée, sous le ciel ---- */
 .ciel-legende {
