@@ -33,7 +33,7 @@
   "dernier_arret": {
     "le": "2026-09-29",
     "commit": "0e60dbedd13347cc4faf088702ce4430f4129980",
-    "quoi": "OMEGA : Ultima→Omega, Grima/Naga supprimés, Imladrik macro-projet (+Adramelech +Tao), PR #310 fusionnée (0e60dbe) ; IFULVIN cadré sans code (CADRAGE-IFULVIN.md). Mesuré : 45/45 unit, 51/52 smokes (rouge connu : cadenceTenue, antérieur)."
+    "quoi": "OMEGA fusionné (#310) : Ultima→Omega, Grima/Naga supprimés, Imladrik macro-projet. IFULVIN cadré sans code — voir CADRAGE-IFULVIN.md."
   },
   "prochaine_action": "B1 étape ③ — le journal des écritures. ⛔ Il commence par le gate : créer la table `leo_ecritures`. On n'écrit pas le module avant la table.",
   "bloque_par": [
