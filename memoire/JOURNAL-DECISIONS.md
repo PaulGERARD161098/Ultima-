@@ -4436,3 +4436,7 @@ pour ne pas gêner la vue.* Mis en œuvre : sous isolement, le bandeau prend le
 surligne et le titre du foyer quand le registre les porte (sinon celui de la
 page), et se réduit (sceau 32 px, titre d'un cran). ② Les trois arbitrages
 IFULVIN (CADRAGE-IFULVIN.md §⑤) ont été redonnés à Paul : en attente.
+**30/09 (suite) — IFULVIN remplace « Le Cercle ».** Arbitrage ① rendu (« oui
+remplace ») ; ② entrée dans un cercle et ③ noms des niveaux : « on verra ». Le
+numéro ADR-005 de la capture du 21/09 collisionnait avec CHAMBRE CLAIRE : il
+n'est plus à saisir.
