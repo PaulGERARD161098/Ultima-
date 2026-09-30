@@ -143,6 +143,10 @@ aujourd'hui ? » + 4 quadrants. Un repo, mémoire inter-segment, sécurité rele
   explicite, jamais à son initiative).
 - Toute réponse de Léo se termine par : décisions attendues de Paul +
   prochaine action unique.
+- **On l'appelle par `/leo` ou `/léo`** (`.claude/commands/leo.md`, et son
+  alias accentué). La commande ne recopie pas sa charte, elle la POINTE : sans
+  argument elle rend l'état et ce qu'elle sait faire, avec un argument elle
+  prend la demande et la mène, gates comprises.
 
 ## 🟢 Protocole DÉBUT de session
 
