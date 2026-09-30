@@ -180,6 +180,12 @@ export async function cloreEcriture(client, userId, corps, { maintenant = Date.n
   if (!entree.ok) return refus(400, 'Demande invalide');
 
   const insertion = await client.from('leo_ecritures').insert(entree.entree);
-  if (insertion.error) return refus(503, 'Journal indisponible');
+  // S5 (revue du 30/09) : lire puis insérer n'est pas atomique — deux
+  // clôtures concurrentes passeraient toutes deux la lecture. L'index unique
+  // `leo_ecritures_une_issue` tranche en base ; son refus est un 409, pas une panne.
+  if (insertion.error) {
+    return insertion.error.code === '23505'
+      ? refus(409, 'Issue déjà posée') : refus(503, 'Journal indisponible');
+  }
   return { status: 200, data: { traceId: trace.traceId, issue: corps.issue } };
 }

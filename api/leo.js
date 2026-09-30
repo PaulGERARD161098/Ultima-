@@ -31,7 +31,8 @@ import {
   validerProposition,
   reformulerProposition,
   validerEtatQuadrant,
-  decrireEtat
+  decrireEtat,
+  anneauInterface
 } from './_lib/leo.js';
 
 const TIMEOUT_MS = 30_000; // appel IA sortant borné (au-dessus : 502 générique)
@@ -109,8 +110,10 @@ export default async function handler(req, res) {
             reformulation: reformulerProposition(verdict.proposition),
             // B1 ④ : information d'INTERFACE (carte ou exécution directe),
             // jamais une autorité — /api/leo/ecritures re-décide depuis le
-            // catalogue avant de rendre la moindre trace.
-            anneau: verdict.anneau
+            // catalogue avant de rendre la moindre trace. Orange dès qu'une
+            // cible n'a pas été nommée par Paul lui-même (S2).
+            anneau: anneauInterface(verdict.anneau, verdict.proposition,
+              conversation.messages[conversation.messages.length - 1].content)
           }
         });
       }

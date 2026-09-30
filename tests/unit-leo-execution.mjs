@@ -10,7 +10,7 @@ import {
   MOTIF_TECHNIQUE
 } from '../api/_lib/leo-execution.js';
 import { PLAFOND_PAR_DEFAUT } from '../api/_lib/leo-journal.js';
-import { validerProposition, decisionAnneau } from '../api/_lib/leo.js';
+import { validerProposition, decisionAnneau, anneauInterface } from '../api/_lib/leo.js';
 
 const PAUL = '11111111-2222-4333-8444-555555555555';
 const AUTRUI = 'aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee';
@@ -18,7 +18,9 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const MAINTENANT = Date.parse('2026-09-30T18:00:00Z');
 const IL_Y_A = (ms) => new Date(MAINTENANT - ms).toISOString();
 
-function clientFactice({ lignes = [], echecLecture = false, echecInsert = false } = {}) {
+function clientFactice({ lignes = [], echecLecture = false, echecInsert = false,
+  // Au-delà de N insertions réussies, la base refuse avec `codeRefus`.
+  refusApres = Infinity, codeRefus = '23505' } = {}) {
   const table = lignes.map((l) => ({ ...l }));
   const inserts = [];
   const tablesTouchees = new Set();
@@ -48,6 +50,7 @@ function clientFactice({ lignes = [], echecLecture = false, echecInsert = false 
         select() { return requete(); },
         insert(ligne) {
           if (echecInsert) return Promise.resolve({ error: { code: '42501' } });
+          if (inserts.length >= refusApres) return Promise.resolve({ error: { code: codeRefus } });
           inserts.push(ligne);
           // owner_id et le : défauts de la base (auth.uid(), now()), jamais
           // fournis par le code — le factice les pose comme elle.
@@ -229,6 +232,58 @@ const verdicts = {};
   const libelle = await cloreEcriture(c7, PAUL,
     { etape: 'clore', traceId: o7.data.traceId, issue: 'reussie', cibleId: TITRE }, opts);
   verdicts.cibleLibelleRefusee = libelle.status === 400 && c7.inserts.length === 1;
+}
+
+// ---------- S2 : l'anneau d'INTERFACE exige que Paul ait nommé la cible ----------
+{
+  const note = { outil: 'proposer_journal', args: { cible_ref: 'Sophie Durand', texte: 'Devis validé.' } };
+  verdicts.cibleNonNommeeOrange =
+    anneauInterface('vert', note, 'note que le chantier avance') === 'orange';
+  // Le miroir : sans lui, « orange » pourrait vouloir dire « toujours orange ».
+  verdicts.cibleNommeeVert =
+    anneauInterface('vert', note, 'Note au journal de Sophie Durand : devis validé.') === 'vert' &&
+    anneauInterface('vert', note, 'note au journal de sophie   durand') === 'vert';
+  verdicts.creationSansCibleVert =
+    anneauInterface('vert', { outil: 'proposer_idee', args: { titre: 'X' } }, 'capture une idée') === 'vert';
+  verdicts.orangeResteOrange = anneauInterface('orange', note, 'Sophie Durand') === 'orange' &&
+    anneauInterface('VERT', note, 'Sophie Durand') === 'orange' &&
+    anneauInterface(undefined, note, 'Sophie Durand') === 'orange';
+  verdicts.refVideOrange =
+    anneauInterface('vert', { outil: 'proposer_journal', args: { cible_ref: '  ' } }, 'note') === 'orange';
+}
+
+// ---------- S5 : la base tranche la course entre deux clôtures ----------
+{
+  // La tentative passe (1 insertion), la clôture heurte l'index unique :
+  // c'est ce que voit la SECONDE de deux clôtures concurrentes.
+  const c = clientFactice({ refusApres: 1, codeRefus: '23505' });
+  const o = await ouvrirEcriture(c, PAUL, IDEE, opts);
+  const r = await cloreEcriture(c, PAUL, { etape: 'clore', traceId: o.data.traceId, issue: 'reussie' }, opts);
+  verdicts.doublonEnBaseEst409 = o.status === 200 && r.status === 409;
+  // Le miroir : une autre erreur de base reste une panne (503), pas un doublon.
+  const c2 = clientFactice({ refusApres: 1, codeRefus: '08006' });
+  const o2 = await ouvrirEcriture(c2, PAUL, IDEE, opts);
+  const r2 = await cloreEcriture(c2, PAUL, { etape: 'clore', traceId: o2.data.traceId, issue: 'reussie' }, opts);
+  verdicts.autrePanneEst503 = r2.status === 503;
+}
+
+// ---------- S6 : la migration de durcissement dit ce que le code dit ----------
+{
+  const migration = readFileSync(new URL(
+    '../supabase/migrations/20260930190000_leo_ecritures_durcissement.sql', import.meta.url), 'utf8');
+  const motifSql = (migration.match(/motif ~ '([^']+)'/) || [, ''])[1];
+  // ⛔ Verrou de non-vacuité : sur une regex qui ne matche pas, « coïncident » serait vrai à vide.
+  verdicts.motifSqlLu = motifSql.length > 10;
+  verdicts.motifSqlCoincide = motifSql === MOTIF_TECHNIQUE.source;
+  verdicts.uneSeuleIssueEnBase = /create unique index leo_ecritures_une_issue[\s\S]*where phase in \('reussie', 'echouee'\)/.test(migration);
+  // Les colonnes accordées sont EXACTEMENT celles que la route pose.
+  const accordees = ((migration.match(/grant insert \(([^)]+)\)/) || [, ''])[1])
+    .split(',').map((x) => x.trim()).filter(Boolean).sort().join(',');
+  const c = clientFactice();
+  await ouvrirEcriture(c, PAUL, IDEE, opts);
+  const posees = Object.keys(c.inserts[0] || {}).sort().join(',');
+  verdicts.colonnesAccordees = accordees.length > 0 && accordees === posees &&
+    !/\b(le|owner_id|id)\b/.test(accordees);
 }
 
 // ---------- La route est mince, et elle n'écrit pas elle-même ----------
