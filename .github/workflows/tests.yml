@@ -5,9 +5,16 @@ on:
     branches: [main]
 permissions:
   contents: read
+# Un nouveau push sur une PR annule le passage précédent de CETTE PR : il
+# testait une tête déjà dépassée (30/09 : 20 min perdues sur #321). Jamais sur
+# main, où chaque fusion est vérifiée jusqu'au bout (groupe = le commit).
+concurrency:
+  group: tests-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
   unit:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -16,8 +23,17 @@ jobs:
           cache: npm
       - run: npm ci --ignore-scripts
       - run: npm test
+  # 54 harnais joués l'un après l'autre prenaient 20 min (mesuré le 30/09).
+  # Découpés en 4 lots parallèles ; `tests/unit-lots.mjs` vérifie que la
+  # matrice couvre les lots 1 à N et que chaque harnais tombe dans un seul.
   browser:
+    name: browser (${{ matrix.lot }}/4)
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        lot: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -27,3 +43,5 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
+        env:
+          LOT: ${{ matrix.lot }}/4
