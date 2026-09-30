@@ -36,11 +36,7 @@
     "quoi": "§12 scellé, 10 outils verts, `leo_ecritures` APPLIQUÉE et éprouvée (anon 42501) + faille RLS leo_operations corrigée. Avant : OMEGA fusionné (#310)."
   },
   "prochaine_action": "④ — brancher l'exécution : entrée de journal AVANT l'acte, plafond consulté, issue après. ⚠️ Deux moteurs candidats, voir cadrage §12.8.",
-  "bloque_par": [
-    "Gestes Ycome en attente depuis le 28/09 : archiver le dépôt sur GitHub, supprimer le projet Vercel ycome",
-    "DÉCISION : deux journaux coexistent (leo_operations = moteur, leo_ecritures = lisible). Frontière proposée au cadrage §12.8, à trancher — choix produit.",
-    "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
-    "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
+  "bloque_par": [    "DÉCISION : deux journaux coexistent (leo_operations = moteur, leo_ecritures = lisible). Frontière proposée au cadrage §12.8, à trancher — choix produit.",    "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
     "La précision sur « mon dpe.fr » (VITRUVE)",
     "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis",
     "Vérifier que les inscriptions Supabase sont FERMÉES (« Allow new signups ») — un compte tiers pourrait remplir le quota par la route d'import"

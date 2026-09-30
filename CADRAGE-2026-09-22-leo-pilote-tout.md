@@ -1293,10 +1293,48 @@ d'ailleurs. Elles viennent d'Ultima et portent le moteur de l'étape ④.
 | `leo_operations` | le **registre du moteur** | idempotence, quotas, verrou de version, `payload` libre |
 | `leo_ecritures` | le **journal lisible par Paul** | outil · quadrant · anneau · phase, **zéro contenu dicté** |
 
-⚠️ **Deux journaux restent deux vérités** — le risque que ce cadrage dénonce
-depuis le début. La frontière ci-dessus est ma proposition, pas un arbitrage :
-c'est un choix produit, donc il revient à Paul. ⛔ Les tables ne sont PAS
-touchées.
+### §12.8 ter — La frontière, expliquée (Paul, 30/09 : « explique »)
+
+⛔ **CE NE SONT PAS DEUX JOURNAUX CONCURRENTS — CE SONT DEUX FONCTIONS.** L'un
+**régule** (il empêche), l'autre **rend compte** (il montre). Le risque de
+« deux vérités » n'existe que si les deux prétendent répondre à la MÊME
+question ; il suffit donc de leur en assigner une chacune.
+
+| | ce qu'il sait faire | ce qu'il ne sait PAS faire |
+|---|---|---|
+| **`leo_operations`** | **empêcher un doublon** (PK `mission_id, operation_id`) · **refuser sur état périmé** (`base_version`) · **compter les quotas** et **couper** (`max_calls`, `stopped`, `expires_at`) | dire quel **outil**, quel **quadrant**, sous quel **anneau**. Il ne connaît que des missions et des `payload` |
+| **`leo_ecritures`** | dire **quoi**, **où**, **sous quel régime**, **avec quelle issue** · garantir **zéro contenu dicté** par la forme des colonnes · distinguer une écriture **interrompue en vol** d'une écriture aboutie | empêcher un doublon · verrouiller la concurrence · compter un quota. **Il raconte, il ne régule pas** |
+
+⚠️ **Et leur défaut respectif est exactement la force de l'autre.** Le `payload`
+de `leo_operations` est un jsonb libre de 16 Ko : c'est ce qui le rend générique,
+et c'est ce qui l'empêche de promettre l'absence de PII. Les colonnes de
+`leo_ecritures` sont fermées : c'est ce qui tient la promesse, et c'est ce qui
+l'empêche de servir de registre générique.
+
+**La règle proposée** — un seul chemin, deux enregistrements :
+
+> Une écriture passe par **`leo_operations`** pour être **autorisée et
+> dédoublonnée**, et laisse sa trace lisible dans **`leo_ecritures`**.
+> · « cette opération a-t-elle déjà été faite ? » → `leo_operations`
+> · « qu'est-ce que Léo a fait hier ? » → `leo_ecritures`
+
+⛔ **ET LE GARDE-FOU QUI EMPÊCHE LA DIVERGENCE, qui est le vrai sujet :**
+`leo_ecritures.trace_id` **=** `leo_operations.operation_id`. Alors une ligne de
+l'un se retrouve dans l'autre, et un contrôle peut exiger qu'**aucune écriture
+n'existe d'un seul côté**. *Sans cette clé partagée, la frontière ne tient que
+par une bonne intention — et une bonne intention n'est pas un garde-fou.*
+⚠️ `operation_id` est un `text` borné par un motif, `trace_id` un `uuid` : la
+forme d'`operation_id` accepte un UUID, donc le lien se fait sans toucher au
+schéma de la séance parallèle.
+
+**L'alternative écartée — fusionner** : ajouter outil/quadrant/anneau/phase à
+`leo_operations` et supprimer `leo_ecritures`. Deux raisons de ne pas le faire :
+le `payload` resterait libre, donc la promesse « zéro contenu dicté » tomberait ;
+et il faudrait modifier la table d'un chantier mené ailleurs — c'est précisément
+ce qui a coûté la journée.
+
+⚠️ **Ceci reste une PROPOSITION, pas un arbitrage** : c'est un choix produit,
+donc il revient à Paul. ⛔ Les tables ne sont PAS touchées.
 
 ### §12.9 — La prochaine action, unique
 
