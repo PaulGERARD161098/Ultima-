@@ -463,11 +463,16 @@ verifier('⑦ Léo nomme le foyer au repos', plongee.paroleAuRepos === NOEUDS[FO
 
 // ---- LA RÉCURSION — « ensuite, quand on clique dessus, la suivante
 //      s'applique » (Paul, 2026-08-31). Le geste doit être le MÊME à tous les
-//      étages : depuis IMLADRIK isolé, cliquer ADRAMELECH descend d'un cran de
+//      étages : depuis IMLADRIK isolé, cliquer une tête descend d'un cran de
 //      plus. Mesuré dans le NAVIGATEUR et pas seulement sur l'adaptateur : la
 //      coque a son propre état (`isole`, le fil, l'adresse), et c'est lui qui
 //      pourrait refuser un second clic sans que le module pur s'en aperçoive.
-const DEUXIEME = 'adramelech';
+// TRANSPOSÉ (30/09) : la tête cliquée depuis IMLADRIK n'est plus ADRAMELECH (descendu
+// sous DRAGONS) mais la constellation DRAGONS — six étoiles. ADRAMELECH n'est pas
+// perdu : il devient le TROISIÈME cran (OMEGA › IMLADRIK › DRAGONS › ADRAMELECH), ce
+// qui éprouve la récursion une marche plus bas qu'avant, sur le même geste.
+const DEUXIEME = 'constellation-dragons';
+const TROISIEME = 'adramelech';
 const recursion = await pageNav.evaluate(async (cible) => {
   const scene = document.getElementById('ciel-noeud-scene');
   scene.querySelector('g.ciel-etoile[data-noeud-id="' + cible + '"]')
@@ -485,8 +490,11 @@ verifier('⑦ Un second clic descend encore d’un cran',
   (NOEUDS[DEUXIEME].enfants || []).every((id) => recursion.peints.includes(id))
   && recursion.peints.length === (NOEUDS[DEUXIEME].enfants || []).length,
   JSON.stringify(recursion.peints));
+// L'étage qu'on quitte, ce sont les deux ENTRÉES d'IMLADRIK (avant : MAEDRETHNIR, tête
+// vide de ce niveau) — leur absence, sous le verrou des six étoiles peintes.
 verifier('⑦ …et l’étage qu’on vient de quitter a disparu',
-  !recursion.peints.includes('maedrethnir') && !recursion.peints.includes(DEUXIEME),
+  recursion.peints.length === 6
+  && !recursion.peints.includes('constellation-armes') && !recursion.peints.includes(DEUXIEME),
   JSON.stringify(recursion.peints));
 verifier('⑦ …le fil d’Ariane compte les trois crans',
   recursion.fil.includes(NOEUDS.omega.nom)
@@ -495,8 +503,36 @@ verifier('⑦ …le fil d’Ariane compte les trois crans',
   `lu: « ${recursion.fil} »`);
 verifier('⑦ …et l’adresse suit la descente',
   recursion.url.endsWith('/omega.html#' + DEUXIEME), recursion.url);
-// On remonte d'un cran pour éprouver les sorties depuis l'état où elles ont été
+// LE TROISIÈME CRAN (30/09) : ADRAMELECH, sous DRAGONS, porte encore trois caps — le
+// même geste descend encore. Ce que « second clic » ne prouvait que sur un étage.
+const troisieme = await pageNav.evaluate(async (cible) => {
+  const scene = document.getElementById('ciel-noeud-scene');
+  const g = scene.querySelector('g.ciel-etoile[data-noeud-id="' + cible + '"]');
+  if (!g) { return null; }
+  g.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+  await new Promise((r) => setTimeout(r, 1600));
+  const fil = document.querySelector('.ciel-fil');
+  return {
+    peints: Array.from(scene.querySelectorAll('g.ciel-etoile[data-noeud-id]'))
+      .map((el) => el.getAttribute('data-noeud-id')),
+    fil: fil ? fil.textContent.replace(/\s+/g, ' ').trim() : '',
+    url: location.href
+  };
+}, TROISIEME);
+verifier('⑦ Un troisième clic descend encore (ADRAMELECH sous DRAGONS : ses trois caps)',
+  !!troisieme
+  && (NOEUDS[TROISIEME].enfants || []).length === 3
+  && (NOEUDS[TROISIEME].enfants || []).every((id) => troisieme.peints.includes(id))
+  && troisieme.peints.length === 3
+  && !troisieme.peints.includes('maedrethnir') && !troisieme.peints.includes('reshiram')
+  && troisieme.fil.includes(NOEUDS[TROISIEME].nom)
+  && troisieme.url.endsWith('/omega.html#' + TROISIEME),
+  JSON.stringify(troisieme));
+// On remonte d'UN cran (vers DRAGONS) pour l'Échap du troisième, puis d'un cran
+// (vers IMLADRIK) pour éprouver les sorties depuis l'état où elles ont été
 // conçues : les mesurer depuis DEUX crans serait un autre cas, pas celui-ci.
+await pageNav.keyboard.press('Escape');
+await pageNav.waitForTimeout(900);
 await pageNav.keyboard.press('Escape');
 await pageNav.waitForTimeout(900);
 

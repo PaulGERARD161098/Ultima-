@@ -205,12 +205,11 @@ const dist = (p, q) => Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]);
     && new Set(vues.map((n) => n.teinte)).size === 2;
   const armes = await teinteAutour(page, 'constellation-armes');
   const dragons = await teinteAutour(page, 'constellation-dragons');
-  const adra = await teinteAutour(page, 'adramelech');
   const temoinPage = await ouvrir('imladrik.html', { temoin: true });
   const vuesTemoin = await temoinPage.evaluate(() => window.__nebuleusesVues);
   const armesT = await teinteAutour(temoinPage, 'constellation-armes');
   const dragonsT = await teinteAutour(temoinPage, 'constellation-dragons');
-  detail.teintes = { armes, dragons, adramelech: adra, armesTemoin: armesT, dragonsTemoin: dragonsT };
+  detail.teintes = { armes, dragons, armesTemoin: armesT, dragonsTemoin: dragonsT };
   verdicts.temoinSansNebuleuse = Array.isArray(vuesTemoin) && vuesTemoin.length === 0;
   verdicts.armesSeVoitContreLeTemoin = !!(armes && armesT) && dist(armes, armesT) >= 6;
   verdicts.dragonsSeVoitContreLeTemoin = !!(dragons && dragonsT) && dist(dragons, dragonsT) >= 6;
@@ -218,19 +217,34 @@ const dist = (p, q) => Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]);
   // les deux est la preuve qu'on n'a pas peint deux fois la même nébuleuse.
   verdicts.armesTireAuRouge = !!armes && (armes[0] - armesT[0]) > (armes[1] - armesT[1]);
   verdicts.dragonsTireAuVert = !!dragons && (dragons[1] - dragonsT[1]) > (dragons[0] - dragonsT[0]);
-  // Une étoile sans constellation n'est pas teintée plus que son témoin.
-  const adraT = await teinteAutour(temoinPage, 'adramelech');
-  verdicts.adramelechSansNebuleuse = !!(adra && adraT) && dist(adra, adraT) < 3;
+  // « Une étoile sans constellation n'est pas teintée plus que son témoin » —
+  // `adramelechSansNebuleuse`, qui lisait ADRAMELECH au premier niveau d'IMLADRIK.
+  // INVERSÉ (30/09) : ADRAMELECH n'est plus au premier niveau, il est UNE DES SIX
+  // ÉTOILES DES DRAGONS — donc DANS la nébuleuse verte. La garantie a deux moitiés
+  // qui survivent, chacune éprouvée là où elle peut encore mentir :
+  //   · l'étoile est bien absente de ce ciel (verrou : sans elle, « teinte null »
+  //     se lirait comme « pas teintée ») ;
+  //   · chez les DRAGONS (plus bas, § isolement), ADRAMELECH SE VOIT contre le
+  //     témoin ET tire au vert — la nébuleuse enveloppe toutes les étoiles de
+  //     l'écran, pas seulement les trois d'hier.
+  verdicts.adramelechAbsentDuPremierNiveau = (await teinteAutour(page, 'adramelech')) === null
+    && (await page.locator('g.ciel-etoile[data-noeud-id="adramelech"]').count()) === 0
+    && (await page.locator('g.ciel-etoile[data-noeud-id]').count()) === 2;
   const c = await pireContraste(page);
   detail.contrasteImladrik = c.tous;
-  verdicts.imladrikNomsLisibles = c.nb >= 4 && c.pire.ratio >= 4.5;
+  // TRANSPOSÉ : « au moins quatre noms » → EXACTEMENT deux (ARMES, DRAGONS), les
+  // seules étoiles du premier niveau — le compte suit le registre, sans jeu.
+  verdicts.imladrikNomsLisibles = c.nb === 2 && c.pire.ratio >= 4.5;
   await page.close(); await temoinPage.close();
 }
 
 // ---------------------------------------------------------------------------
 // ① ④ LES DEUX ISOLEMENTS : la nébuleuse enveloppe les étoiles de l'écran.
 // ---------------------------------------------------------------------------
-for (const [foyer, attendus] of [['constellation-dragons', 3], ['constellation-armes', 1]]) {
+// TRANSPOSÉ (30/09) : DRAGONS enveloppe SIX étoiles (les trois dragons, ADRAMELECH,
+// RESHIRAM, ZEKROM), plus trois : la nébuleuse, elle, reste UNE, et TOUS les noms
+// se lisent dessus (`nb === attendus` : le compte des noms mesurés est verrouillé).
+for (const [foyer, attendus] of [['constellation-dragons', 6], ['constellation-armes', 1]]) {
   for (const largeur of [390, 1280]) {
     const page = await ouvrir('imladrik.html#' + foyer, { largeur, hauteur: largeur === 390 ? 844 : 860 });
     const vues = await page.evaluate(() => window.__nebuleusesVues);
@@ -241,18 +255,48 @@ for (const [foyer, attendus] of [['constellation-dragons', 3], ['constellation-a
     await page.close();
   }
 }
+// ADRAMELECH DANS LA NÉBULEUSE DES DRAGONS (inversion de `adramelechSansNebuleuse`,
+// voir plus haut) : sur l'écran isolé, sa teinte se distingue du témoin (pigments
+// retirés) et tire au VERT — comme celle des dragons d'origine, pas comme un
+// hors-constellation. On lit aussi MAEDRETHNIR : l'étalon dont on connaît la réponse.
+{
+  const page = await ouvrir('imladrik.html#constellation-dragons');
+  const temoinPage = await ouvrir('imladrik.html#constellation-dragons', { temoin: true });
+  const lu = {};
+  for (const id of ['adramelech', 'maedrethnir', 'reshiram', 'zekrom']) {
+    lu[id] = { avec: await teinteAutour(page, id), sans: await teinteAutour(temoinPage, id) };
+  }
+  detail.teintesDragons = lu;
+  const vuesT = await temoinPage.evaluate(() => window.__nebuleusesVues);
+  verdicts.dragonsTemoinSansNebuleuse = Array.isArray(vuesT) && vuesT.length === 0;
+  for (const id of Object.keys(lu)) {
+    const { avec, sans } = lu[id];
+    verdicts[`dragons_${id}_seVoitContreLeTemoin`] = !!(avec && sans) && dist(avec, sans) >= 6;
+    verdicts[`dragons_${id}_tireAuVert`] = !!(avec && sans)
+      && (avec[1] - sans[1]) > (avec[0] - sans[0]);
+  }
+  await page.close(); await temoinPage.close();
+}
 
 // ---------------------------------------------------------------------------
-// ④ bis LES NOMS DES MENUS À 390 PX, SANS NÉBULEUSE. Trouvé en mesurant ce
-// harnais : à l'opacité 0,85, NICOL BOLAS (OMEGA) lisait 3,86:1 et ZEKROM (TAO)
-// 3,72:1 — défaut antérieur aux nébuleuses. Corrigé dans le moteur (nom de menu
-// à pleine opacité) ; ce contrôle empêche le retour.
+// ④ bis LES NOMS DES MENUS À 390 PX. Trouvé en mesurant ce harnais : à l'opacité
+// 0,85, NICOL BOLAS (OMEGA) lisait 3,86:1 et ZEKROM (TAO) 3,72:1 — défaut
+// antérieur aux nébuleuses. Corrigé dans le moteur (nom de menu à pleine
+// opacité) ; ce contrôle empêche le retour.
+// TRANSPOSÉ (30/09) : `tao.html` n'existe plus ; ZEKROM et RESHIRAM — les noms qui
+// avaient fait rougir ce contrôle, et qui rougissent EN CI (polices plus fines :
+// ZEKROM 4,23:1 contre 4,83 en local) — vivent sur `imladrik.html#constellation-
+// dragons`, et c'est CET écran qui les remplace ici. ⚠️ Ce n'est plus « sans
+// nébuleuse » : les DRAGONS ont la leur, et le nom se lit dessus — c'est une
+// mesure plus dure que celle de TAO, pas plus douce. `c.nb >= 6` : les SIX noms
+// sont mesurés (pas seulement deux), sinon un nom illisible pourrait se cacher
+// parmi ceux qu'on n'a pas lus.
 // ---------------------------------------------------------------------------
-for (const url of ['omega.html', 'tao.html']) {
+for (const [url, minNoms] of [['omega.html', 2], ['imladrik.html#constellation-dragons', 6]]) {
   const page = await ouvrir(url, { largeur: 390, hauteur: 844 });
   const c = await pireContraste(page);
   detail['contraste390_' + url] = c.tous;
-  verdicts['nomsLisibles390_' + url] = c.nb >= 2 && c.pire.ratio >= 4.5;
+  verdicts['nomsLisibles390_' + url] = c.nb >= minNoms && c.pire.ratio >= 4.5;
   await page.close();
 }
 
@@ -260,7 +304,10 @@ for (const url of ['omega.html', 'tao.html']) {
 // ③ AUCUN DÉBORDEMENT. Verrou de non-vacuité : l'espion A VU des nébuleuses
 // sur IMLADRIK (ci-dessus) ; ici il doit voir une liste vide.
 // ---------------------------------------------------------------------------
-for (const url of ['index.html', 'omega.html', 'alpha.html', 'tao.html', 'adramelech.html', 'bcp.html']) {
+// (`tao.html` sort de la liste : la page n'existe plus, `ouvrir` y attendrait un
+// plateau qui ne viendra jamais. `adramelech.html`, sa propre page, y reste : la
+// nébuleuse des DRAGONS n'y déborde pas.)
+for (const url of ['index.html', 'omega.html', 'alpha.html', 'adramelech.html', 'bcp.html']) {
   const page = await ouvrir(url);
   const vues = await page.evaluate(() => window.__nebuleusesVues);
   verdicts['aucuneNebuleuse_' + url] = Array.isArray(vues) && vues.length === 0

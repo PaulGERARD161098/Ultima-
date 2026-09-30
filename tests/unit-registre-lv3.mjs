@@ -16,7 +16,7 @@
 //   4. (Géométrie de la rose : ABANDONNÉE le 2026-08-19 — voir la section 4.)
 //   5. Le cockpit ne rend QUE des comptes entiers (jamais de contenu, jamais de
 //      PII) et se tait quand il n'y a rien à traiter.
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import {
   NOEUDS, RACINE, parentDe, chemin, estBoussole, estConstellation, capsDe, verifierRegistre,
 } from '../js/registre-lv3.mjs';
@@ -160,7 +160,7 @@ verdicts.pagesGrimaNagaUltimaSupprimees = ['grima.html', 'naga.html', 'ultima.ht
 // cibles locales existent : l'aiguillage des cartes ne mène à aucun 404).
 const cibles = Object.values(NOEUDS).map((n) => n.cible).filter((c) => typeof c === 'string');
 verdicts.cibleNePointePasVersUnePageDisparue = cibles.length > 0
-  && cibles.every((c) => !/^(grima|naga|ultima)\.html$/.test(c));
+  && cibles.every((c) => !/^(grima|naga|ultima|tao)\.html$/.test(c)); // + tao.html (supprimé le 30/09)
 const ciblesLocalesManquantes = cibles
   .filter((c) => /\.html$/.test(c) && !c.startsWith('http') && !existsSync(RACINE_REPO + c));
 verdicts.ciblesLocalesExistent = cibles.length > 0 && ciblesLocalesManquantes.length === 0;
@@ -248,7 +248,43 @@ verdicts.taoAbsentDuRegistre = Object.keys(NOEUDS).length > 20 // non-vacuité :
 verdicts.pageTaoSupprimee = !existsSync(RACINE_REPO + 'tao.html')
   && existsSync(RACINE_REPO + 'imladrik.html') && existsSync(RACINE_REPO + 'reshiram.html')
   && existsSync(RACINE_REPO + 'zekrom.html'); // les deux pages qu'elle reliait, elles, restent
-// Aucune cible du registre ne mène à tao.html (`ciblesLocalesExistent`, plus bas,
+// AUCUNE PAGE SERVIE NE LIE ENCORE VERS TAO. Le registre ne suffit pas à le dire :
+// une page peut porter son propre lien de retour (reshiram.html, zekrom.html et
+// adramelech.html pointaient vers `tao.html` ou `imladrik.html` en dur). On balaye
+// donc le HTML servi — tous les `*.html` de la racine — à la recherche de
+// `href="tao.html"` (et de ses variantes : apostrophes, sans guillemets, `/tao`,
+// sans extension). Le détecteur est ÉPROUVÉ d'abord sur des cas dont on connaît la
+// réponse (positifs ET négatifs), puis le balayage est placé sous VERROU de
+// non-vacuité : au moins 20 fichiers lus, dont les cinq pages qui liaient TAO ou
+// l'auraient pu — « aucun lien » est vert sur zéro fichier lu.
+const LIEN_VERS_TAO = /href\s*=\s*["']?\s*\/?(?:\.\/)?tao(?:\.html)?(?=["'\s>#?]|$)/i;
+verdicts.detecteurLienTaoEprouve = [
+  '<a href="tao.html">', '<a href=\'tao.html\'>', '<a href=tao.html>', '<a  href = "/tao">',
+  '<a href="tao.html#x">', '<a class="r" href="./tao.html">', '<A HREF="TAO.HTML">',
+].every((t) => LIEN_VERS_TAO.test(t))
+  && [
+    '<a href="imladrik.html">', '<a href="tao-x.html">', '<a href="ultima.html#tao">',
+    '<a href="autao.html">', '<p>tao.html</p>', '<a href="imladrik.html#constellation-dragons">',
+  ].every((t) => !LIEN_VERS_TAO.test(t));
+{
+  const pagesRacine = readdirSync(RACINE_REPO).filter((f) => /\.html$/.test(f));
+  const lues = pagesRacine.map((f) => [f, readFileSync(RACINE_REPO + f, 'utf8')]);
+  const fautives = lues.filter(([, html]) => LIEN_VERS_TAO.test(html)).map(([f]) => f);
+  verdicts.aucunePageServieNeLieTao = lues.length >= 20
+    && ['index.html', 'omega.html', 'imladrik.html', 'reshiram.html', 'zekrom.html', 'adramelech.html']
+      .every((f) => lues.some(([n]) => n === f))
+    && lues.every(([, html]) => html.length > 200) // aucun fichier vide ou tronqué
+    && fautives.length === 0;
+  detail.aucunePageServieNeLieTao = `${lues.length} fichiers lus ; fautifs : ${fautives.join(',') || 'aucun'}`;
+  // Et la version « sabotée » du balayage voit bien un lien réintroduit : le même
+  // balayage, sur les mêmes fichiers avec un `href="tao.html"` glissé dans l'un d'eux.
+  const sabote = lues.map(([f, html]) => [f, f === 'reshiram.html'
+    ? html.replace('</body>', '<a href="tao.html">↞ TAO</a></body>') : html]);
+  verdicts.balayageTaoVoitUnLienReintroduit = sabote.filter(([, html]) => LIEN_VERS_TAO.test(html))
+    .map(([f]) => f).join() === 'reshiram.html'
+    && sabote.find(([f]) => f === 'reshiram.html')[1].includes('href="tao.html"');
+}
+// Aucune cible du registre ne mène à tao.html (`ciblesLocalesExistent`, plus haut,
 // le dirait déjà — ici on nomme la cause). Non-vacuité : des cibles, il y en a.
 {
   const ciblesReg = Object.values(NOEUDS).map((n) => n.cible).filter((c) => typeof c === 'string');

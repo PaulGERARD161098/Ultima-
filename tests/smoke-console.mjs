@@ -2,11 +2,13 @@
 // 2026-09-29 : ex-ULTIMA (ultima.html) → OMEGA (omega.html) ; les MACRO-
 // QUADRANTS GRIMA et NAGA sont SUPPRIMÉS (grima.html, naga.html n'existent
 // plus, vercel.json les redirige). OMEGA porte RIVEN, NICOL BOLAS et IMLADRIK ;
-// IMLADRIK porte QUATRE entrées depuis le 2026-09-30 : deux CONSTELLATIONS
-// (ARMES, DRAGONS) puis ADRAMELECH et TAO ; MAEDRETHNIR, VRANESH et DRAUKHAIN
-// vivent sous DRAGONS, IFULVIN (étoile d'attente) sous ARMES.
+// IMLADRIK ne porte que DEUX entrées depuis le 2026-09-30 : les CONSTELLATIONS
+// (ARMES, DRAGONS). ADRAMELECH et TAO étaient d'abord à côté ; TAO est supprimé
+// et ADRAMELECH est descendu sous DRAGONS avec RESHIRAM et ZEKROM (même jour) ;
+// MAEDRETHNIR, VRANESH et DRAUKHAIN vivent sous DRAGONS, IFULVIN (étoile
+// d'attente) sous ARMES.
 // Prouve : bandeau conforme au REGISTRE, 3 caps, navigation OMEGA → RIVEN →
-// riven.html (Ciel intact, zéro Leaflet), coque IMLADRIK complète (quatre entrées)
+// riven.html (Ciel intact, zéro Leaflet), coque IMLADRIK complète (deux entrées)
 // avec retour vers OMEGA, ABSENCE de GRIMA/NAGA, AUCUNE requête réseau externe
 // (zéro CDN), zéro erreur console, contraste AA calculé sur les couleurs
 // réellement rendues.
@@ -385,8 +387,8 @@ verifier('Plus aucune Leaflet dans la page',
   await page.evaluate(() => typeof window.L === 'undefined'));
 verifier('Zéro erreur console (riven.html)', erreursRiven.length === 0, erreursRiven.slice(0, 3).join(' | '));
 
-// ============ C. La coque IMLADRIK (imladrik.html) — quatre entrées ============
-console.log('— C. IMLADRIK → imladrik.html (quatre entrées : ARMES, DRAGONS, ADRAMELECH, TAO) —');
+// ============ C. La coque IMLADRIK (imladrik.html) — deux entrées ============
+console.log('— C. IMLADRIK → imladrik.html (deux entrées : ARMES, DRAGONS) —');
 const erreursImladrik = [];
 const pageImladrik = await contexte.newPage();
 pageImladrik.on('console', (msg) => { if (msg.type() === 'error') erreursImladrik.push(msg.text()); });
@@ -405,32 +407,39 @@ const capsImladrik = await lireCaps(pageImladrik);
 const nomsImladrik = capsImladrik.map((c) => c.nom);
 // ASSERTION SCINDÉE (LV5 / P3), et c'est plus juste que de l'abandonner en bloc :
 // elle portait DEUX garanties de natures différentes.
-//   ① Le REGISTRE déclare bien ces quatre entrées, dans cet ordre. Cela ne dépend
+//   ① Le REGISTRE déclare bien ces deux entrées, dans cet ordre. Cela ne dépend
 //      d'aucun support de rendu : la garantie reste entière et elle protège
 //      contre une modification involontaire du registre. **Conservée.**
 //   ② Le DOM les rend dans le même ordre. Au ciel, l'ordre est celui de la
 //      GÉOMÉTRIE, pas celui de la liste (abandon acté en LV4 ④a). **Abandonnée**,
 //      remplacée par « tous présents, aucun de plus ».
 // 2026-09-30 : cinq caps à plat → QUATRE entrées (deux constellations sans page,
-// ADRAMELECH, TAO). Les trois dragons n'ont pas disparu : ils sont exigés plus bas,
-// sous la constellation DRAGONS.
-verifier('IMLADRIK : le registre déclare ARMES + DRAGONS + ADRAMELECH + TAO dans cet ordre',
-  JSON.stringify(attendusImladrik) === JSON.stringify(['ARMES', 'DRAGONS', 'ADRAMELECH', 'TAO']),
+// ADRAMELECH, TAO) → DEUX entrées le même jour (les constellations ARMES et
+// DRAGONS ; TAO supprimé, ADRAMELECH descendu sous DRAGONS avec RESHIRAM et
+// ZEKROM). Les trois dragons n'ont pas disparu : ils sont exigés plus bas, sous la
+// constellation DRAGONS.
+verifier('IMLADRIK : le registre déclare ARMES + DRAGONS dans cet ordre, et rien d\'autre',
+  JSON.stringify(attendusImladrik) === JSON.stringify(['ARMES', 'DRAGONS']),
   `registre: ${JSON.stringify(attendusImladrik)}`);
-verifier('IMLADRIK : les quatre entrées sont rendues (ordre abandonné : la géométrie range)',
+verifier('IMLADRIK : les deux entrées sont rendues (ordre abandonné : la géométrie range)',
   JSON.stringify([...nomsImladrik].sort()) === JSON.stringify([...attendusImladrik].sort())
-  && nomsImladrik.length === 4,
+  && nomsImladrik.length === 2,
   `lu: ${JSON.stringify(nomsImladrik)}`);
 const hrefsImladrik = await lireRepli(pageImladrik);
-// Le repli sans JavaScript porte TOUJOURS les cinq pages : les trois dragons y
-// sont dans une sous-liste, mais ils y sont.
-for (const attendu of ['maedrethnir.html', 'vranesh.html', 'draukhain.html', 'adramelech.html', 'tao.html']) {
+// Le repli sans JavaScript porte TOUJOURS les pages — SIX désormais : les dragons y
+// sont dans une sous-liste, mais ils y sont (les trois historiques, ADRAMELECH, et
+// les deux pôles de l'ex-TAO). TAO, lui, n'y est plus : son ABSENCE est exigée sous
+// le verrou de ces six lectures.
+for (const attendu of ['maedrethnir.html', 'vranesh.html', 'draukhain.html', 'adramelech.html',
+  'reshiram.html', 'zekrom.html']) {
   verifier(`IMLADRIK : porte ouverte vers ${attendu}`, hrefsImladrik.includes(attendu), JSON.stringify(hrefsImladrik));
 }
+verifier('IMLADRIK : plus aucune porte vers tao.html (sous verrou : six portes lues)',
+  hrefsImladrik.length === 6 && !hrefsImladrik.some((h) => /tao/i.test(h)), JSON.stringify(hrefsImladrik));
 // « aiguilles » ABANDONNÉES — un ciel n'a pas de moyeu (même abandon qu'en LV4
 // ④a). Remplacées par ce qu'elles approchaient : une étoile par entrée.
-verifier('IMLADRIK : 4 étoiles (ce que les aiguilles approchaient)',
-  (await pageImladrik.locator('g.ciel-etoile[data-noeud-id]').count()) === 4);
+verifier('IMLADRIK : 2 étoiles (ce que les aiguilles approchaient)',
+  (await pageImladrik.locator('g.ciel-etoile[data-noeud-id]').count()) === 2);
 const legendeImladrik = (await pageImladrik.locator('.ciel-legende').textContent())?.trim();
 verifier('IMLADRIK : légende gravée « Kalamn-talaen »', legendeImladrik === NOEUDS.imladrik.legende, `lu: ${legendeImladrik}`);
 verifier('IMLADRIK : retour « ↞ OMEGA » vers omega.html',
@@ -438,28 +447,30 @@ verifier('IMLADRIK : retour « ↞ OMEGA » vers omega.html',
 verifier('IMLADRIK : plus aucun retour vers naga.html ni ultima.html',
   (await pageImladrik.locator('a[href="naga.html"], a[href="ultima.html"], a[href="grima.html"]').count()) === 0);
 
-// ADRAMELECH garde son état « Privé » sur son nouveau cadran.
-verifier('IMLADRIK : ADRAMELECH marqué « Privé »',
+// LES SIX ÉTOILES DES DRAGONS, SOUS LEUR CONSTELLATION. Ils ne sont plus des
+// enfants directs d'IMLADRIK : on les exige là où ils vivent —
+// `imladrik.html#constellation-dragons`, l'adresse même que leurs pages reprennent
+// en « retour ».
+await pageImladrik.goto(`${BASE}/imladrik.html#constellation-dragons`, { waitUntil: 'load', timeout: 20000 });
+await attendrePret(pageImladrik);
+await pageImladrik.waitForTimeout(1200);
+const capsDragons = await lireCaps(pageImladrik);
+verifier('IMLADRIK#constellation-dragons : MAEDRETHNIR, VRANESH, DRAUKHAIN, ADRAMELECH, RESHIRAM, ZEKROM paraissent (et eux seuls)',
+  JSON.stringify(capsDragons.map((c) => c.nom).sort())
+    === JSON.stringify(['ADRAMELECH', 'DRAUKHAIN', 'MAEDRETHNIR', 'RESHIRAM', 'VRANESH', 'ZEKROM'])
+  && capsDragons.length === NOEUDS['constellation-dragons'].enfants.length,
+  JSON.stringify(capsDragons.map((c) => c.nom)));
+verifier('IMLADRIK#constellation-dragons : 6 étoiles au ciel',
+  (await pageImladrik.locator('g.ciel-etoile[data-noeud-id]').count()) === 6);
+// ADRAMELECH garde son état « Privé » sur son nouveau cadran (déplacé du premier
+// niveau d'IMLADRIK, où il vivait, vers les DRAGONS — la garantie suit l'étoile).
+verifier('IMLADRIK#constellation-dragons : ADRAMELECH marqué « Privé »',
   // L'ÉTAT NE S'ÉCRIT PLUS SOUS LE CAP : au ciel, il vit dans l'étiquette
   // accessible de l'étoile (`aria-label`), qui est la source de vérité pour qui
   // n'y voit pas. C'est un meilleur endroit pour le mesurer qu'un `<span>` de
   // style — et le seul qui existe encore.
   /priv/i.test((await pageImladrik.locator('g.ciel-etoile[data-noeud-id="adramelech"]')
     .getAttribute('aria-label')) || ''));
-
-// LES TROIS DRAGONS, SOUS LEUR CONSTELLATION. Ils ne sont plus des enfants directs
-// d'IMLADRIK : on les exige là où ils vivent — `imladrik.html#constellation-dragons`,
-// l'adresse même que leurs pages reprennent en « retour ».
-await pageImladrik.goto(`${BASE}/imladrik.html#constellation-dragons`, { waitUntil: 'load', timeout: 20000 });
-await attendrePret(pageImladrik);
-await pageImladrik.waitForTimeout(1200);
-const capsDragons = await lireCaps(pageImladrik);
-verifier('IMLADRIK#constellation-dragons : MAEDRETHNIR, VRANESH, DRAUKHAIN paraissent (et eux seuls)',
-  JSON.stringify(capsDragons.map((c) => c.nom).sort()) === JSON.stringify(['DRAUKHAIN', 'MAEDRETHNIR', 'VRANESH'])
-  && capsDragons.length === NOEUDS['constellation-dragons'].enfants.length,
-  JSON.stringify(capsDragons.map((c) => c.nom)));
-verifier('IMLADRIK#constellation-dragons : 3 étoiles au ciel',
-  (await pageImladrik.locator('g.ciel-etoile[data-noeud-id]').count()) === 3);
 
 verifier('Zéro erreur console (IMLADRIK)', erreursImladrik.length === 0, erreursImladrik.slice(0, 3).join(' | '));
 

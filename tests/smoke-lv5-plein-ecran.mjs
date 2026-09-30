@@ -395,8 +395,12 @@ for (const [fichier, nbCaps] of COQUES_DE_NAVIGATION) {
     // Une cinquième tentative (lever le plancher de distance) n'a rien changé et
     // a été RETIRÉE.
     //
-    // (30/09 : IMLADRIK à QUATRE entrées mesure 0,684 à 390 px et 0,689 au bureau ;
-    // DRAGONS isolée 0,632 et 0,706 — au-dessus du seuil, donc rien à relâcher.)
+    // (30/09, relevé à la transposition TAO → DRAGONS : IMLADRIK à DEUX entrées
+    // mesure 0,702 à 390 px et 0,739 au bureau — avec un écart horizontal de 25 px
+    // seulement à 390, contre le seuil de 20 de `navRemplitLaLargeur` : deux étoiles
+    // presque l'une sur l'autre ; DRAGONS isolée, SIX étoiles, 0,717 et 0,706. Les
+    // valeurs d'avant (IMLADRIK à quatre entrées 0,684 / 0,689 ; DRAGONS à trois
+    // étoiles 0,632 / 0,706) sont dépassées, au-dessus du seuil : rien à relâcher.)
     // Ce qui reste est le plancher mesuré ce jour : IMLADRIK 0,588 et NICOL BOLAS
     // 0,500 (quatre caps dont « REVENUS & CHARGES »). Le seuil de 0,45 n'est donc
     // pas une complaisance mais un DÉTECTEUR DE RÉGRESSION : il est sous les

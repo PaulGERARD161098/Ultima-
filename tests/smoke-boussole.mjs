@@ -390,7 +390,8 @@ await pageCo.waitForResponse('**/api/cockpit', { timeout: 10000 }).catch(() => {
 verifier('Cockpit : Bearer transmis à /api/cockpit', bearerCockpit === 'Bearer jeton-factice', `lu: ${bearerCockpit}`);
 
 // Le cap OMEGA cumule ce que ses quadrants ont à traiter : RIVEN (2 relances
-// dues) + TAO (1 talent à étayer). a_orienter=0 → ce terme reste masqué.
+// dues) + les DRAGONS (RESHIRAM : 1 talent à étayer ; TAO, qui les portait, est
+// supprimé depuis le 30/09). a_orienter=0 → ce terme reste masqué.
 await pageCo.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="omega"]')
   .dispatchEvent('mouseenter');
 await pageCo.waitForSelector('.parole-signal', { timeout: 5000 }).catch(() => {});
@@ -432,43 +433,56 @@ verifier('Cap sans data (ALPHA) : aucune ligne vivante',
 verifier('Cap sans data (ALPHA) : aucun badge',
   (await pageCo.locator('.parole-signal').count()) === 0);
 
-// Fonctions pures exposées (aucune donnée réelle) — le cap TAO agrège
-// RESHIRAM + ZEKROM ; les branches restent pures et testables ici aussi.
+// Fonctions pures exposées (aucune donnée réelle) — le cap DRAGONS agrège
+// RESHIRAM + ZEKROM (c'était TAO, supprimé le 30/09 : ce que `tao` rendait, la
+// constellation le rend à l'identique) ; les branches restent pures et testables
+// ici aussi. `tao`, lui, ne rend plus RIEN — éprouvé sur les MÊMES données, celles
+// où les DRAGONS rendent du texte (sinon « null » serait vrai d'une donnée vide).
 const pur = await pageCo.evaluate((d) => ({
+  dragons: window.UltimaBoussole.ligneVivante('constellation-dragons', d),
   tao: window.UltimaBoussole.ligneVivante('tao', d),
   r: window.UltimaBoussole.ligneVivante('reshiram', d),
   z: window.UltimaBoussole.ligneVivante('zekrom', d),
   vide: window.UltimaBoussole.ligneVivante('alpha', d),
-  sansData: window.UltimaBoussole.ligneVivante('tao', null),
+  sansData: window.UltimaBoussole.ligneVivante('constellation-dragons', null),
+  taoSansData: window.UltimaBoussole.ligneVivante('tao', null),
 }), COCKPIT.data);
-verifier('ligneVivante pure : TAO agrège R+Z',
-  /3 talents réels · 1 à étayer — 3 idéaux · 0 à orienter\./.test(pur.tao || ''), `lu: ${pur.tao}`);
+verifier('ligneVivante pure : DRAGONS agrège R+Z (ce que rendait TAO)',
+  /3 talents réels · 1 à étayer — 3 idéaux · 0 à orienter\./.test(pur.dragons || ''), `lu: ${pur.dragons}`);
+verifier('ligneVivante pure : TAO (supprimé) → null, là où DRAGONS rend du texte',
+  !!pur.dragons && pur.tao === null && pur.taoSansData === null, `lu: ${pur.tao}`);
 verifier('ligneVivante pure : RESHIRAM', /3 talents réels · 1 à étayer\./.test(pur.r || ''), `lu: ${pur.r}`);
 verifier('ligneVivante pure : ZEKROM', /3 idéaux · 0 à orienter · 2 talents reliés \(acquis\), 1 à construire\./.test(pur.z || ''), `lu: ${pur.z}`);
-verifier('ligneVivante pure : cap sans data → null', pur.vide === null && pur.sansData === null);
+verifier('ligneVivante pure : cap sans data → null (DRAGONS sans donnée compris)', pur.vide === null && pur.sansData === null);
 
 const sig = await pageCo.evaluate((d) => ({
   supra: window.UltimaBoussole.signalDe('omega', d),
   riven: window.UltimaBoussole.signalDe('riven', d),
   imladrik: window.UltimaBoussole.signalDe('imladrik', d),
   grima: window.UltimaBoussole.signalDe('grima', d),
-  tao: window.UltimaBoussole.signalDe('tao', d),           // a_etayer=1, a_orienter=0
+  dragons: window.UltimaBoussole.signalDe('constellation-dragons', d),           // a_etayer=1, a_orienter=0
+  dragonsDouble: window.UltimaBoussole.signalDe('constellation-dragons', { reshiram: { a_etayer: 2 }, zekrom: { a_orienter: 3 } }),
+  dragonsZero: window.UltimaBoussole.signalDe('constellation-dragons', { reshiram: { a_etayer: 0 }, zekrom: { a_orienter: 0 } }),
+  tao: window.UltimaBoussole.signalDe('tao', d),
   taoDouble: window.UltimaBoussole.signalDe('tao', { reshiram: { a_etayer: 2 }, zekrom: { a_orienter: 3 } }),
-  taoZero: window.UltimaBoussole.signalDe('tao', { reshiram: { a_etayer: 0 }, zekrom: { a_orienter: 0 } }),
   alpha: window.UltimaBoussole.signalDe('alpha', d),        // pas de signal défini
-  sansData: window.UltimaBoussole.signalDe('tao', null),
+  sansData: window.UltimaBoussole.signalDe('constellation-dragons', null),
+  taoSansData: window.UltimaBoussole.signalDe('tao', null),
 }), COCKPIT.data);
-verifier('signalDe pur : OMEGA cumule RIVEN + TAO',
+verifier('signalDe pur : OMEGA cumule RIVEN + les DRAGONS (RESHIRAM, ZEKROM)',
   sig.supra === '2 relances dues · 1 talent à étayer', `lu: ${sig.supra}`);
-verifier('signalDe pur : IMLADRIK ne cumule que TAO (pas les relances de RIVEN)',
+verifier('signalDe pur : IMLADRIK ne cumule que les DRAGONS (pas les relances de RIVEN)',
   sig.imladrik === '1 talent à étayer', `lu: ${sig.imladrik}`);
 verifier('signalDe pur : GRIMA (supprimé) → null', sig.grima === null);
 verifier('signalDe pur : RIVEN seul → « 2 relances dues »', sig.riven === '2 relances dues', `lu: ${sig.riven}`);
-verifier('signalDe pur : TAO (1 à étayer, 0 à orienter) → « 1 talent à étayer »',
-  sig.tao === '1 talent à étayer', `lu: ${sig.tao}`);
-verifier('signalDe pur : TAO (2 à étayer · 3 à orienter) → cumul des deux termes',
-  sig.taoDouble === '2 talents à étayer · 3 idéaux à orienter', `lu: ${sig.taoDouble}`);
-verifier('signalDe pur : TAO (cumul 0) → null', sig.taoZero === null);
+verifier('signalDe pur : DRAGONS (1 à étayer, 0 à orienter) → « 1 talent à étayer »',
+  sig.dragons === '1 talent à étayer', `lu: ${sig.dragons}`);
+verifier('signalDe pur : DRAGONS (2 à étayer · 3 à orienter) → cumul des deux termes',
+  sig.dragonsDouble === '2 talents à étayer · 3 idéaux à orienter', `lu: ${sig.dragonsDouble}`);
+verifier('signalDe pur : DRAGONS (cumul 0) → null', sig.dragonsZero === null);
+verifier('signalDe pur : TAO (supprimé) → null, sur les mêmes données que celles où DRAGONS signale',
+  sig.dragons === '1 talent à étayer' && sig.dragonsDouble !== null
+  && sig.tao === null && sig.taoDouble === null && sig.taoSansData === null);
 verifier('signalDe pur : cap sans signal / sans data → null', sig.alpha === null && sig.sansData === null);
 
 verifier('Zéro erreur console (accueil connecté + cockpit)', erreursCo.length === 0, erreursCo.slice(0, 3).join(' | '));

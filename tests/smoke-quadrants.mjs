@@ -432,7 +432,10 @@ console.log('— D. registre.html fixture 200 → registre + cartouche Léo réf
 // parole au survol, zéro requête réseau, zéro erreur console.
 for (const noeud of [
   { id: 'nicol-bolas', fichier: 'bcp.html', ouvertes: ['abaque.html'], avenir: 3, retour: 'omega.html' },
-  { id: 'adramelech', fichier: 'adramelech.html', ouvertes: ['registre.html', 'idees.html'], avenir: 1, retour: 'imladrik.html' },
+  // 30/09 : ADRAMELECH vit sous la constellation DRAGONS — son retour n'est plus
+  // `imladrik.html` nu mais l'écran isolé où il est une étoile, « ↞ DRAGONS ».
+  { id: 'adramelech', fichier: 'adramelech.html', ouvertes: ['registre.html', 'idees.html'], avenir: 1,
+    retour: 'imladrik.html#constellation-dragons', libelleRetour: '↞ DRAGONS' },
 ]) {
   console.log(`— ${NOEUDS[noeud.id].nom} en boussole (${noeud.fichier}) —`);
   const { page, erreurs, externes } = await nouvellePage({ configVide: true });
@@ -481,6 +484,14 @@ for (const noeud of [
   // Retour vers le macro-quadrant parent (pièce ① du patron, arbre 2026-08-01).
   verifier(`Retour vers ${noeud.retour}`,
     (await page.locator(`.console-retour a[href="${noeud.retour}"]`).count()) === 1);
+  if (noeud.libelleRetour) {
+    // Le libellé se lit avec son lien (le lien seul pourrait porter un mauvais mot) ;
+    // et l'ancien retour, `imladrik.html` NU, n'existe plus (éprouvé par l'absence,
+    // sous le verrou du nouveau retour ci-dessus).
+    verifier(`Retour libellé « ${noeud.libelleRetour} », et plus de retour vers imladrik.html nu`,
+      ((await page.locator(`.console-retour a[href="${noeud.retour}"]`).textContent()) || '').trim() === noeud.libelleRetour
+      && (await page.locator('.console-retour a[href="imladrik.html"]').count()) === 0);
+  }
 
   // Léo parle au survol du premier cap.
   // Le survol d'un cap fait parler Léo. « LE PREMIER » n'a plus de sens quand
