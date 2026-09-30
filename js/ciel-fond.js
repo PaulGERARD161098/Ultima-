@@ -141,6 +141,36 @@
     return c;
   }
 
+  // LES NÉBULEUSES (boucle B d'IFULVIN, 30/09 — spéc. `graphisme`). Un voile
+  // par CONSTELLATION, ancré sur ses étoiles, d'un pigment qui lui est propre.
+  // La queue du dégradé tombe à ZÉRO : sans elle, le voile se lit comme un
+  // disque posé sur le ciel, et non comme une lumière diffuse.
+  // L'éclat d'un lobe (0,50) et du cœur (0,30), sur un sprite à 0,20 au
+  // centre : les recouvrements s'additionnent, et le plafond se MESURE sur
+  // les noms (`tests/smoke-nebuleuses.mjs`, ≥ 4,5:1), il ne se suppose pas.
+  var ECLAT_HALO = 0.50;
+  var ECLAT_COEUR = 0.30;
+  function spriteNebuleuse(rgb) {
+    var c = document.createElement('canvas');
+    c.width = c.height = TAILLE_VOILE;
+    var x = c.getContext('2d');
+    var r = TAILLE_VOILE / 2;
+    var d = x.createRadialGradient(r, r, 0, r, r, r);
+    var base = rgb.replace(/^rgb\(/, 'rgba(').replace(/\)$/, ',');
+    d.addColorStop(0, base + '0.20)');
+    d.addColorStop(0.25, base + '0.14)');
+    d.addColorStop(0.50, base + '0.05)');
+    d.addColorStop(0.75, base + '0.01)');
+    d.addColorStop(1, base + '0)');
+    x.fillStyle = d;
+    x.fillRect(0, 0, TAILLE_VOILE, TAILLE_VOILE);
+    return c;
+  }
+  // Une teinte ne passe que si elle est un `rgb(r,g,b)` littéral : ce module ne
+  // reçoit rien de l'extérieur, mais un garde-fou se pose du côté où il peut
+  // être contourné.
+  var RGB_VALIDE = /^rgb\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*\)$/;
+
   // ------------------------------------------------------------------
   // Le peuplement du monde. Les grains vivent en COORDONNÉES MONDE, en 3D,
   // exactement comme les étoiles — et c'est ce qui donne la parallaxe
@@ -270,6 +300,8 @@
       cransPris: 0,
       voiles: voiles(rayonMonde, 977),
       filaments: filaments(rayonMonde, 401),
+      // Un sprite par pigment de nébuleuse, rendu à la première demande.
+      spritesNebuleuse: Object.create(null),
       rayonMonde: rayonMonde
     };
 
@@ -348,6 +380,69 @@
         g.drawImage(spritesVoile[v.teinte], e.px - taille / 2, e.py - taille / 2, taille, taille);
         peints++;
       });
+
+      // ①bis LES NÉBULEUSES — après les voiles (derrière tout le reste), avant
+      // les filaments et les grains. Une nébuleuse est un NUAGE DE LOBES, pas
+      // un disque : un lobe par étoile, un lobe entre chaque étoile et le
+      // barycentre (c'est ce qui relie la constellation en un seul nuage), et,
+      // pour une étoile seule, trois lobes satellites qui rompent le cercle.
+      // Tout passe par `projeter` : la nébuleuse ne peut pas glisser sous ses
+      // étoiles. Premier jet (une seule ellipse de la taille du groupe) : sur
+      // l'écran isolé des DRAGONS, elle était étalée sur 1 500 px et
+      // invisible — vu sur capture, pas sur les chiffres.
+      // Ce qui a été RÉELLEMENT peint, relu par les harnais (`nebuleusesPeintes`)
+      // — même principe que `temoin` pour les grains : la phase se vérifie sur
+      // les coordonnées de dessin, jamais sur une seconde version du calcul.
+      var peintes = [];
+      (opts.nebuleuses || []).forEach(function (neb) {
+        if (!neb || !RGB_VALIDE.test(neb.teinte || '') || !(neb.membres || []).length) { return; }
+        var sprite = etat.spritesNebuleuse[neb.teinte]
+          || (etat.spritesNebuleuse[neb.teinte] = spriteNebuleuse(neb.teinte));
+        var prB = projeter(neb.barycentre);
+        var eB = versEcran(prB);
+        if (!eB) { return; }
+        var cote = Math.min(etat.largeurCSS, etat.hauteurCSS);
+        // ρ : rayon d'un lobe. ε est une distance MONDE (au plus proche
+        // voisin) : mesurée en pixels, deux étoiles alignées sur l'axe de vue
+        // feraient s'effondrer le nuage.
+        var rho = Math.min(0.30 * cote, Math.max(56, 0.62 * neb.epsilon * prB.echelle * etat.k));
+        var lobes = [];
+        var etoiles = [];
+        neb.membres.forEach(function (m) {
+          var e = versEcran(projeter(m));
+          if (!e) { return; }
+          etoiles.push(e);
+          lobes.push({ px: e.px, py: e.py, r: rho });
+          if (neb.membres.length > 1) {
+            lobes.push({ px: (e.px + eB.px) / 2, py: (e.py + eB.py) / 2, r: rho * 0.9 });
+          }
+        });
+        if (neb.membres.length === 1) {
+          // Trois satellites à angles fixes, décalés par la graine de la
+          // teinte : même nébuleuse, même forme, à chaque ouverture.
+          var graine = neb.teinte.length * 0.7;
+          for (var t = 0; t < 3; t++) {
+            var ang = graine + t * 2.2;
+            lobes.push({ px: eB.px + Math.cos(ang) * rho * 0.55, py: eB.py + Math.sin(ang) * rho * 0.42, r: rho * 0.8 });
+          }
+        }
+        g.globalAlpha = ECLAT_HALO;
+        lobes.forEach(function (l) {
+          g.drawImage(sprite, l.px - l.r, l.py - l.r, l.r * 2, l.r * 2);
+          peints++;
+        });
+        // Le cœur : l'étoile est ANCRÉE dans son nuage, pas posée devant.
+        g.globalAlpha = ECLAT_COEUR;
+        var coeurs = [];
+        etoiles.forEach(function (e) {
+          var rc = Math.max(24, rho * 0.42);
+          g.drawImage(sprite, e.px - rc, e.py - rc, rc * 2, rc * 2);
+          coeurs.push({ px: e.px, py: e.py });
+          peints++;
+        });
+        peintes.push({ teinte: neb.teinte, coeurs: coeurs, lobes: lobes.length });
+      });
+      etat.derniereNebuleuses = peintes;
 
       // ② Les filaments : la structure, très pâle.
       g.lineCap = 'round';
@@ -430,6 +525,7 @@
     // Pour le harnais : la position écran d'un point du monde, selon ce module.
     etat.temoin = function (point, projeter) { return versEcran(projeter(point)); };
     etat.nbGrains = function () { return etat.grains.length; };
+    etat.nebuleusesPeintes = function () { return etat.derniereNebuleuses || []; };
     return etat;
   }
 

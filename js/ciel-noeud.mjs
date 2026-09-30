@@ -65,7 +65,7 @@
 // Le cockpit ne rapatrie que des COMPTES entiers, échappés eux aussi.
 
 import { NOEUDS, chemin } from './registre-lv3.mjs';
-import { BLASONS, COEURS } from './blasons.mjs';
+import { BLASONS, COEURS, NEBULEUSES } from './blasons.mjs';
 import { versCiel, cheminVers, descendDe } from './adaptateur-lv4.mjs';
 import { ligneVivante, signalDe, chargerCockpit, chargerFinubar } from './cockpit-parole.mjs';
 
@@ -190,7 +190,26 @@ export function rendre(idNoeud, options = {}) {
     fil.style.top = Math.round(bas + 8) + 'px';
   }
 
+  // LE BANDEAU SUIT CE QU'ON REGARDE (Paul, 30/09 : « bandeau par
+  // constellation — cohérent avec l'affichage et les données »). Sous
+  // isolement, le surligne et le titre deviennent ceux du foyer quand le
+  // registre les porte ; au retour, ceux de la page. `textContent` : le texte
+  // vient du registre, le bandeau n'a aucune raison d'accepter du balisage.
+  const bandeauSurligne = doc.querySelector('body.ciel-noeud .console-entete .titre-surligne');
+  const bandeauTitre = doc.querySelector('body.ciel-noeud .console-entete .titre-principal');
+  const bandeauOrigine = {
+    surligne: bandeauSurligne ? bandeauSurligne.textContent : '',
+    titre: bandeauTitre ? bandeauTitre.textContent : '',
+  };
+  function majBandeau() {
+    const foyer = isole && registre[isole];
+    const avecSien = Boolean(foyer && foyer.titre);
+    if (bandeauSurligne) { bandeauSurligne.textContent = avecSien ? (foyer.surligne || foyer.nom || '') : bandeauOrigine.surligne; }
+    if (bandeauTitre) { bandeauTitre.textContent = avecSien ? foyer.titre : bandeauOrigine.titre; }
+  }
+
   function majFil() {
+    majBandeau();
     // SOUS ISOLEMENT, L'ACCUEIL SE REPLIE AU TÉLÉPHONE (27/09). « Bienvenue /
     // Sur quoi est-ce qu'on travaille aujourd'hui ? » est le propos de la
     // racine ; un cran plus bas, c'est le fil qui dit où l'on est, et l'accueil
@@ -371,11 +390,30 @@ export function rendre(idNoeud, options = {}) {
     };
   }
 
+  // LES NÉBULEUSES DE L'ÉCRAN. Deux cas, et seulement deux :
+  //  - on a plongé DANS une constellation → sa nébuleuse enveloppe toutes les
+  //    étoiles de l'écran (ce sont les siennes) ;
+  //  - sinon, chaque étoile qui EST une constellation porte la sienne.
+  // Un pigment absent du catalogue n'est pas peint (jamais de couleur libre).
+  function nebuleusesDe(donnees) {
+    const ids = (donnees.noeuds || []).map((n) => n.id);
+    const foyer = isole && registre[isole];
+    if (foyer && NEBULEUSES[foyer.nebuleuse]) {
+      return [{ ids, teinte: NEBULEUSES[foyer.nebuleuse] }];
+    }
+    return ids.filter((id) => registre[id] && NEBULEUSES[registre[id].nebuleuse])
+      .map((id) => ({ ids: [id], teinte: NEBULEUSES[registre[id].nebuleuse] }));
+  }
+
   function dessiner() {
     const donnees = versCiel(idNoeud, registre, { isole });
     if (!donnees) { return; }
 
     vue = window.UltimaCiel.rendre(scene, donnees, {
+      // Boucle B d'IFULVIN — les nébuleuses, déduites du registre (voir
+      // `nebuleusesDe`). Liste vide ⇒ rien n'est peint : les écrans sans
+      // constellation restent strictement ceux d'hier.
+      nebuleuses: nebuleusesDe(donnees),
       // Le type ne s'annonce pas : sur un menu, tous les objets sont des caps,
       // et le dire à chaque étiquette serait du bruit. L'état, lui, est porté
       // par `statut` et reste dans l'étiquette accessible.
@@ -394,7 +432,11 @@ export function rendre(idNoeud, options = {}) {
       // vif qu'un cap qui ouvre une page (`rang()`, `js/adaptateur-lv4.mjs`).
       // La couronne ne bouge pas. RIVEN n'active ni l'un ni l'autre.
       // `tests/smoke-carte-celeste.mjs`.
-      asterisme: true,
+      // EXCEPTION NOMMÉE (30/09) : un écran dont le registre dit
+      // `asterisme: false` n'a pas de traits de figure — ses étoiles sont
+      // indépendantes (les DRAGONS). Les passerelles du registre, elles,
+      // restent tracées : RESHIRAM ⇄ ZEKROM.
+      asterisme: (registre[isole || idNoeud] || {}).asterisme !== false,
       eclatParPoids: true,
       // 27/09 — AU DOIGT, UNE ÉTOILE SE TOUCHE À 44 PX, comme tout le reste du
       // socle. Au pointeur précis (souris), le plancher d'hier suffit et le

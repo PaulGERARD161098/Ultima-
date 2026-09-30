@@ -211,7 +211,7 @@ export const NOEUDS = {
     resume: 'La bibliothèque d’idées : capturer, classer, rapprocher, enrichir. '
       + 'Privée — derrière authentification.',
     titre: 'La bibliothèque d’idées',
-    surligne: 'Imladrik — Adramelech',
+    surligne: 'Imladrik — Dragons — Adramelech',
     invite: 'Léo te guide — survole un cap.',
     coeur: 'ouroboros',
     legende: 'le cycle',
@@ -248,8 +248,8 @@ export const NOEUDS = {
     blason: 'imladrik',
     cible: 'imladrik.html',
     resume: 'Macro-projet de développement et de gestion des projets '
-      + 'personnels : le journal, les futurs, la volonté, la bibliothèque '
-      + 'd’idées et la voie. Cinq caps autour de Kalamn-talaen.',
+      + 'personnels : deux constellations autour de Kalamn-talaen — les ARMES '
+      + 'et les DRAGONS.',
     titre: 'La cartographie',
     surligne: 'IMLADRIK',
     invite: 'Léo te guide — survole un cap.',
@@ -257,9 +257,12 @@ export const NOEUDS = {
     legende: 'Kalamn-talaen',
     legendeClasse: 'kalamn-legende',
     expose: 'UltimaImladrikCarto',
-    // Quatre entrées : deux CONSTELLATIONS (dictées le 2026-09-29) et deux caps
-    // qui restent directement sous IMLADRIK (arbitrage Paul).
-    enfants: ['constellation-armes', 'constellation-dragons', 'adramelech', 'tao'],
+    // Deux CONSTELLATIONS, et rien d'autre (Paul, 2026-09-30 : ADRAMELECH et
+    // les pôles de l'ex-TAO rejoignent les DRAGONS).
+    // COCKPIT (30/09) : il était porté par TAO, qui affichait les comptes de
+    // RESHIRAM et ZEKROM au survol. Il passe ici, où les deux vivent désormais.
+    cockpit: true,
+    enfants: ['constellation-armes', 'constellation-dragons'],
   },
   // ---- Les deux CONSTELLATIONS d'IMLADRIK (Paul, 2026-09-29) --------------
   // Des nœuds sans page : on y plonge (le moteur isole ce qui contient). Leur
@@ -272,6 +275,7 @@ export const NOEUDS = {
     blason: 'imladrik',
     cible: null,
     constellation: true,
+    nebuleuse: 'armes',
     resume: 'La constellation des ARMES : ce dont tu te sers pour te '
       + 'développer et développer tes projets. IFULVIN en est la première.',
     titre: 'La constellation des armes',
@@ -287,14 +291,19 @@ export const NOEUDS = {
     blason: 'flamme',
     cible: null,
     constellation: true,
-    resume: 'La constellation des DRAGONS : le journal, les futurs et la '
-      + 'volonté — MAEDRETHNIR, VRANESH et DRAUKHAIN.',
+    nebuleuse: 'dragons',
+    resume: 'La constellation des DRAGONS : le journal, les futurs, la '
+      + 'volonté, la bibliothèque d’idées, et le couple RESHIRAM ⇄ ZEKROM.',
     titre: 'La constellation des dragons',
     surligne: 'Imladrik — les dragons',
     invite: 'Léo te guide — survole un cap.',
     coeur: 'kalamn',
     legende: 'les dragons',
-    enfants: ['maedrethnir', 'vranesh', 'draukhain'],
+    // DES ÉTOILES INDÉPENDANTES (Paul, 30/09 : « pas obligé de relier les
+    // étoiles entre elles, sauf RESHIRAM et ZEKROM »). Aucun trait de figure
+    // sur cet écran ; seule la passerelle du registre relie les deux jumeaux.
+    asterisme: false,
+    enfants: ['maedrethnir', 'vranesh', 'draukhain', 'adramelech', 'reshiram', 'zekrom'],
   },
   // IFULVIN — ÉTOILE D'ATTENTE (Paul, 2026-09-29). Nom, état, une phrase, AUCUNE
   // cible : aucune page promise. ⛔ LE NOM S'ÉCRIT « IFULVIN » — jamais abrégé.
@@ -335,22 +344,10 @@ export const NOEUDS = {
       + 'pas perdre la foi. Des rappels, pas du jugement.',
   },
 
-  tao: {
-    nom: 'TAO',
-    etat: 'Ouvert',
-    blason: 'tao',
-    cible: 'tao.html',
-    resume: '« La voie » — le réel et l’idéal réunis. RESHIRAM (tes talents réels) '
-      + 'et ZEKROM (tes idéaux) : deux pôles complémentaires, reliés par le '
-      + 'rétroplanning.',
-    titre: 'La voie',
-    surligne: 'Imladrik — Tao',
-    invite: 'Léo te guide — survole un cap.',
-    coeur: 'tao',
-    legende: 'la voie',
-    cockpit: true,
-    enfants: ['reshiram', 'zekrom'],
-  },
+  // TAO — SUPPRIMÉ le 2026-09-30 (Paul : « supprime TAO partout »). C'était
+  // une coquille de navigation sans donnée ; ses deux pôles, RESHIRAM et
+  // ZEKROM, siègent désormais dans la constellation des DRAGONS, reliés par
+  // leur passerelle (« ⇄ rétroplanning »). `/tao` redirige vers les DRAGONS.
   reshiram: {
     nom: 'RESHIRAM',
     etat: 'Ouvert',
@@ -471,6 +468,10 @@ export function verifierRegistre(noeuds = NOEUDS, blasons = null, coeurs = null)
     // Le drapeau d'exception ne s'accroche qu'à un nœud qui contient quelque chose.
     if (n.constellation !== undefined && n.constellation !== true) {
       anomalies.push(`${id} : « constellation » ne vaut que true (ou est absent)`);
+    }
+    // `asterisme` ne sert qu'à RETIRER les traits d'un écran : false ou absent.
+    if (n.asterisme !== undefined && n.asterisme !== false) {
+      anomalies.push(`${id} : « asterisme » ne vaut que false (ou est absent)`);
     }
     if (n.constellation === true && !(Array.isArray(n.enfants) && n.enfants.length >= 1)) {
       anomalies.push(`${id} : constellation sans aucun cap`);

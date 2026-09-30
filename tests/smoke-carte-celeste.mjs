@@ -46,16 +46,24 @@ function verifier(nom, condition, detail = '') {
 // 2026-09-29 : GRIMA et NAGA sont supprimés. OMEGA porte RIVEN (feuille) +
 // NICOL BOLAS et IMLADRIK (têtes) ; NICOL BOLAS isolé n'a que des feuilles
 // (ABAQUE + trois caps à venir).
-// 2026-09-30 : IMLADRIK isolé N'A PLUS DEUX RANGS. Il porte quatre entrées, TOUTES
-// des têtes (ARMES et DRAGONS, deux constellations qui contiennent ; ADRAMELECH et
-// TAO, qui contiennent) et AUCUNE feuille : les trois dragons sont descendus sous
-// DRAGONS. Exiger « la tête plus vive que la feuille » sur un écran sans feuille
-// serait exiger l'impossible — l'assertion du rang n'est donc PAS relâchée, elle
-// reste portée par les écrans qui ont réellement deux rangs : la RACINE (ALPHA,
-// OMEGA + ALTHEA, feuille), OMEGA (RIVEN, feuille, + deux têtes) et ALPHA session.
-// IMLADRIK reçoit à la place un VERROU qui constate qu'il est à UN seul rang — le
-// jour où une feuille y reviendra, ce verrou virera et rendra le rang exigible.
-// La constellation DRAGONS isolée est un écran de plus : trois FEUILLES, un rang.
+// 2026-09-30 : IMLADRIK isolé N'A PLUS DEUX RANGS. Il porte DEUX entrées, TOUTES
+// des têtes (ARMES et DRAGONS, deux constellations qui contiennent) et AUCUNE
+// feuille : les trois dragons, ADRAMELECH, RESHIRAM et ZEKROM sont descendus sous
+// DRAGONS, et TAO est supprimé. Exiger « la tête plus vive que la feuille » sur un
+// écran sans feuille serait exiger l'impossible — l'assertion du rang n'est donc PAS
+// relâchée, elle reste portée par les écrans qui ont réellement deux rangs : la
+// RACINE (ALPHA, OMEGA + ALTHEA, feuille), OMEGA (RIVEN, feuille, + deux têtes) et
+// ALPHA session. IMLADRIK reçoit à la place un VERROU qui constate qu'il est à UN
+// seul rang — le jour où une feuille y reviendra, ce verrou virera et rendra le rang
+// exigible.
+// La constellation DRAGONS isolée est un écran de plus, et PAS un écran comme les
+// autres : ses six étoiles sont INDÉPENDANTES (`asterisme: false` — Paul, 30/09,
+// « pas obligé de relier les étoiles entre elles, sauf RESHIRAM et ZEKROM »). Elle
+// n'a donc AUCUN trait de figure, et c'est son ABSENCE qu'on lui exige
+// (`sansFigure: true`, ci-dessous), sous le verrou d'un témoin : les autres écrans,
+// mesurés avec le MÊME instrument dans le même passage, en ont. Elle a en
+// revanche DEUX RANGS — cinq feuilles et une tête (ADRAMELECH, qui porte ses trois
+// caps) : le rang s'y exige, et se lit dans le registre.
 // Le drapeau est DÉRIVÉ du registre plus bas (verrou de cohérence), pas seulement
 // déclaré ici.
 const ECRANS = [
@@ -63,16 +71,18 @@ const ECRANS = [
   { nom: 'OMEGA', fil: 'OMEGA', page: 'omega.html', deuxRangs: true },
   { nom: 'IMLADRIK', fil: 'IMLADRIK', page: 'omega.html#imladrik', deuxRangs: false },
   { nom: 'NICOL BOLAS', fil: 'NICOL BOLAS', page: 'omega.html#nicol-bolas', deuxRangs: false },
-  // TAO : les Gémeaux, deux feuilles. C'est là que le premier jet du lot a
-  // CÉDÉ — `smoke-tao` l'a vu, pas ce harnais (voir « la cible du doigt »).
-  { nom: 'TAO', fil: 'LA VOIE', page: 'tao.html', deuxRangs: false },
+  // (TAO — les Gémeaux, deux feuilles, où le premier jet du lot avait CÉDÉ sur la
+  // cible du doigt — est SUPPRIMÉ le 30/09 ; la page n'existe plus, ses deux pôles
+  // sont mesurés avec les DRAGONS ci-dessous.)
   // ⚠️ SANS SESSION, ALPHA n'a qu'UN rang : RENOBOOST IA ne contient ses dépôts
   // qu'après la greffe Finubar. Son rang se prouve plus bas, session ouverte.
   { nom: 'ALPHA', fil: 'ALPHA', page: 'alpha.html', deuxRangs: false },
-  // LA CONSTELLATION DES DRAGONS, isolée (30/09) : MAEDRETHNIR, VRANESH,
-  // DRAUKHAIN — trois feuilles. (ARMES, isolée, n'a qu'IFULVIN : une étoile ne
-  // porte ni figure ni rang, elle est mesurée par smoke-lv5-plein-ecran.)
-  { nom: 'DRAGONS', fil: 'DRAGONS', page: 'imladrik.html#constellation-dragons', deuxRangs: false },
+  // LA CONSTELLATION DES DRAGONS, isolée (30/09) : MAEDRETHNIR, VRANESH, DRAUKHAIN,
+  // RESHIRAM, ZEKROM — cinq feuilles — et ADRAMELECH, une tête. SANS FIGURE (voir
+  // plus haut). (ARMES, isolée, n'a qu'IFULVIN : une étoile ne porte ni figure ni
+  // rang, elle est mesurée par smoke-lv5-plein-ecran.)
+  { nom: 'DRAGONS', fil: 'DRAGONS', page: 'imladrik.html#constellation-dragons',
+    deuxRangs: true, sansFigure: true },
 ];
 const TAILLES = [[390, 844], [1280, 800]];
 // VERROU DE COHÉRENCE : `deuxRangs` se lit dans le registre, il ne se croit pas.
@@ -92,20 +102,31 @@ const TAILLES = [[390, 844], [1280, 800]];
   // que l'ancienne déclaration `deuxRangs: true` aurait contredit en silence.
   const capsImladrik = NOEUDS.imladrik.enfants;
   const tetesImladrik = capsImladrik.filter((id) => (NOEUDS[id].enfants || []).length > 0);
-  verifier('IMLADRIK : un seul rang — quatre têtes, aucune feuille',
-    capsImladrik.length === 4 && tetesImladrik.length === 4,
+  verifier('IMLADRIK : un seul rang — deux têtes, aucune feuille',
+    capsImladrik.length === 2 && tetesImladrik.length === 2,
     `${tetesImladrik.length} tête(s) sur ${capsImladrik.length}`);
-  // DRAGONS : trois feuilles, aucune tête.
+  // DRAGONS : DEUX rangs — cinq feuilles, UNE tête (ADRAMELECH). TRANSPOSÉ : c'était
+  // « un seul rang — trois feuilles, aucune tête » ; ADRAMELECH, arrivé chez les
+  // DRAGONS avec ses trois caps, est la tête, et le rang s'y exige désormais.
   const capsDragons = NOEUDS['constellation-dragons'].enfants;
-  verifier('DRAGONS : un seul rang — trois feuilles, aucune tête',
-    capsDragons.length === 3 && capsDragons.every((id) => !(NOEUDS[id].enfants || []).length));
+  const tetesDragons = capsDragons.filter((id) => (NOEUDS[id].enfants || []).length > 0);
+  verifier('DRAGONS : deux rangs — cinq feuilles, une tête (ADRAMELECH)',
+    capsDragons.length === 6 && tetesDragons.join() === 'adramelech',
+    `${tetesDragons.join()} sur ${capsDragons.length}`);
   // NON-VACUITÉ DE CE QUI RESTE : l'assertion du rang n'a pas disparu, elle a
   // changé d'écrans. Il en reste au moins deux (racine, OMEGA) qui l'exigent, et
   // aucun d'eux n'est IMLADRIK.
   const exigeantLeRang = ECRANS.filter((x) => x.deuxRangs).map((x) => x.nom);
-  verifier('Le rang reste exigé sur au moins deux écrans (racine, OMEGA), pas sur IMLADRIK',
-    exigeantLeRang.length >= 2 && exigeantLeRang.includes('racine') && exigeantLeRang.includes('OMEGA')
-    && !exigeantLeRang.includes('IMLADRIK'), exigeantLeRang.join(','));
+  verifier('Le rang reste exigé sur au moins trois écrans (racine, OMEGA, DRAGONS), pas sur IMLADRIK',
+    exigeantLeRang.length >= 3 && exigeantLeRang.includes('racine') && exigeantLeRang.includes('OMEGA')
+    && exigeantLeRang.includes('DRAGONS') && !exigeantLeRang.includes('IMLADRIK'), exigeantLeRang.join(','));
+  // La figure, elle, n'est retirée qu'aux DRAGONS — lu dans le registre, pas
+  // seulement déclaré : un `sansFigure` sur un écran dont le registre garde
+  // l'astérisme ferait passer « aucun trait » à vide.
+  const sansFigure = ECRANS.filter((x) => x.sansFigure).map((x) => x.nom);
+  verifier('Seul l\'écran DRAGONS est déclaré sans figure, et le registre le dit (asterisme === false)',
+    sansFigure.join() === 'DRAGONS' && NOEUDS['constellation-dragons'].asterisme === false
+    && Object.keys(NOEUDS).filter((id) => NOEUDS[id].asterisme === false).join() === 'constellation-dragons');
 }
 
 async function ouvrir(ecran, [largeur, hauteur], options = {}) {
@@ -195,6 +216,7 @@ function mesurer(page, tetesImposees = null) {
     }).map((t) => t.textContent);
     return {
       etoiles: etoiles.length, groupes: amas.length, traits: lignes.length, visibles: visibles.length,
+      groupeFigure: !!groupe, traitsFigure: svg.querySelectorAll('.ciel-trait-figure').length,
       orphelins, traitsNoms, traitsPrenants, traitsSondes,
       encre: groupe ? (groupe.getAttribute('stroke') || '').toLowerCase() : '',
       muet: groupe ? groupe.getAttribute('aria-hidden') : '',
@@ -211,29 +233,55 @@ function mesurer(page, tetesImposees = null) {
   }, tetesImposees);
 }
 
+// LE TÉMOIN DE L'ABSENCE DE FIGURE. « Aucun trait sur DRAGONS » ne vaut que si
+// l'instrument qui compte les traits en voit AILLEURS : on garde, écran après
+// écran, le plus grand nombre de traits de figure lu (`temoinTraits`). DRAGONS est le
+// dernier de la liste : tous les autres ont été mesurés avant lui, avec la même
+// fonction `mesurer`, dans le même passage.
+let temoinTraits = 0;
 function juger(cle, m, ecran) {
   verifier(`${cle} : verrou — au moins deux étoiles`, m.etoiles >= 2, `${m.etoiles}`);
-  verifier(`${cle} : la figure existe (n − constellations traits)`,
-    m.etoiles >= 2 && m.traits === m.etoiles - m.groupes && m.traits >= 1, `${m.traits} pour ${m.etoiles} étoiles, ${m.groupes} constellation(s)`);
-  verifier(`${cle} : au moins un trait visible`, m.visibles >= 1, `${m.visibles}`);
-  verifier(`${cle} : aucun trait vers une étoile absente`, m.traits >= 1 && m.orphelins === 0, `${m.orphelins}`);
-  verifier(`${cle} : aucun trait à travers un nom`, m.visibles >= 1 && m.traitsNoms === 0, `${m.traitsNoms}`);
-  verifier(`${cle} : aucun trait ne prend le doigt`, m.traitsSondes >= 1 && m.traitsPrenants === 0,
-    `${m.traitsPrenants} sur ${m.traitsSondes} sondés`);
-  verifier(`${cle} : encre parchemin, pas l'or`, m.encre === ENCRE, m.encre || 'aucun groupe');
-  verifier(`${cle} : la figure est muette au lecteur d'écran`, m.muet === 'true', String(m.muet));
+  if (ecran.sansFigure) {
+    // ÉCRAN SANS FIGURE : les six assertions de la figure (elle existe, un trait
+    // visible, aucun vers l'absent, aucun à travers un nom, aucun ne prend le doigt,
+    // encre, muette) sont INVERSÉES EN BLOC en une seule exigence, l'absence — et
+    // celle-ci est éprouvée des deux côtés, sur le groupe ET sur les traits.
+    verifier(`${cle} : verrou — l'instrument voit des traits de figure sur les autres écrans`,
+      temoinTraits >= 3, `${temoinTraits} au plus, ailleurs`);
+    verifier(`${cle} : AUCUN trait de figure (asterisme: false), ni groupe de figure`,
+      m.etoiles >= 2 && m.traits === 0 && m.traitsFigure === 0 && m.groupeFigure === false,
+      `${m.traits} trait(s), ${m.traitsFigure} .ciel-trait-figure, groupe ${m.groupeFigure}`);
+  } else {
+    temoinTraits = Math.max(temoinTraits, m.traits);
+    verifier(`${cle} : la figure existe (n − constellations traits)`,
+      m.etoiles >= 2 && m.traits === m.etoiles - m.groupes && m.traits >= 1, `${m.traits} pour ${m.etoiles} étoiles, ${m.groupes} constellation(s)`);
+    verifier(`${cle} : au moins un trait visible`, m.visibles >= 1, `${m.visibles}`);
+    verifier(`${cle} : aucun trait vers une étoile absente`, m.traits >= 1 && m.orphelins === 0, `${m.orphelins}`);
+    verifier(`${cle} : aucun trait à travers un nom`, m.visibles >= 1 && m.traitsNoms === 0, `${m.traitsNoms}`);
+    verifier(`${cle} : aucun trait ne prend le doigt`, m.traitsSondes >= 1 && m.traitsPrenants === 0,
+      `${m.traitsPrenants} sur ${m.traitsSondes} sondés`);
+    verifier(`${cle} : encre parchemin, pas l'or`, m.encre === ENCRE, m.encre || 'aucun groupe');
+    verifier(`${cle} : la figure est muette au lecteur d'écran`, m.muet === 'true', String(m.muet));
+  }
   // ⛔ LE RANG CHANGE L'ÉCLAT, JAMAIS LA CIBLE DU DOIGT. Premier jet : la zone
   // de captation suivait le rayon, donc une feuille rapetissée devenait plus
   // dure à toucher — TAO passé de 45 à 30 px au bureau. Trouvé par `smoke-tao`
-  // dans le patrimoine, pas par ce harnais ; il le tient désormais ici.
+  // dans le patrimoine, pas par ce harnais ; il le tenait ici aussi.
+  // (30/09 : TAO et son `smoke-tao` sont supprimés. Le plancher de 44 px sur les
+  // DEUX PÔLES au bureau est repris par `smoke-imladrik-carto` (RESHIRAM et ZEKROM
+  // sur `imladrik.html#constellation-dragons`), là où il se mesure étoile par
+  // étoile — ici, `cibleMin` est le MINIMUM de l'écran, et sur six étoiles c'est
+  // VRANESH ou DRAUKHAIN qui le fixent, pas les jumeaux.)
   // Deux seuils, chacun lu à sa source, aucun inventé :
   //   · 24 px partout — le plancher que le moteur PROMET (`RAYON_CAPTATION_MIN`,
   //     WCAG 2.5.8). ⚠️ Mesuré sur le TÉMOIN d'avant le lot : 25 à 31 px sur
   //     presque tous les écrans. 44 px n'est donc PAS tenu aujourd'hui par les
   //     étoiles, et ce lot ne prétend pas le tenir (constat consigné au §25) ;
-  //   · 44 px sur TAO au bureau — ce que `smoke-tao` exige, et ce que le témoin
-  //     y mesurait (45).
-  const plancher = ecran.nom === 'TAO' && cle.endsWith('@1280') ? 44 : 24;
+  //   · (44 px sur TAO au bureau — ce que `smoke-tao` exigeait, et ce que le témoin
+  //     y mesurait (45) — n'a plus d'écran ici : voir la note ci-dessus. Le seuil
+  //     de 44 px n'est donc plus exigé DANS ce harnais, et n'est pas perdu : il est
+  //     exigé, sur RESHIRAM et ZEKROM, dans `smoke-imladrik-carto`.)
+  const plancher = 24;
   verifier(`${cle} : chaque étoile se touche du doigt (≥ ${plancher} px)`, m.etoiles >= 2 && m.cibleMin >= plancher, `${m.cibleMin.toFixed(0)} px`);
   if (ecran.deuxRangs) {
     verifier(`${cle} : verrou — l'écran a deux rangs`, m.tetes >= 1 && m.feuilles >= 1, `${m.tetes} tête(s), ${m.feuilles} feuille(s)`);
@@ -278,7 +326,15 @@ for (const ecran of ECRANS) {
         scene.classList.remove('ciel-scene--isolant');
         return o;
       });
-      verifier(`${cle} : la figure s'éteint quand le ciel s'efface`, op === 0, String(op));
+      if (ecran.sansFigure) {
+        // Pas de figure, donc rien à éteindre : `op === null` (aucun groupe). Le
+        // témoin de l'instrument est la même branche sur les écrans à figure, où
+        // `op` vaut 0 — un `null` ne se lit comme « absent » que parce qu'ailleurs
+        // le groupe existe et s'éteint.
+        verifier(`${cle} : aucune figure à éteindre (le groupe n'existe pas)`, op === null, String(op));
+      } else {
+        verifier(`${cle} : la figure s'éteint quand le ciel s'efface`, op === 0, String(op));
+      }
     }
     await contexte.close();
   }

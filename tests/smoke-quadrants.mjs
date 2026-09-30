@@ -107,12 +107,14 @@ async function nouvellePage(options = {}) {
   return { page, erreurs, externes };
 }
 
-// ============ A. OMEGA : ses 3 caps, puis les 5 portes historiques ============
+// ============ A. OMEGA : ses 3 caps, puis les portes historiques ============
 // 2026-09-29 : les macro-quadrants GRIMA et NAGA sont SUPPRIMÉS. OMEGA (ex-
-// ULTIMA) ouvre directement RIVEN, NICOL BOLAS et IMLADRIK ; IMLADRIK porte
-// ADRAMELECH et TAO. Les cinq portes historiques (riven, bcp, imladrik,
-// adramelech, tao) restent toutes atteignables, réparties sur DEUX boussoles.
-console.log('— A. OMEGA : 3 caps, puis les 5 portes via OMEGA / IMLADRIK —');
+// ULTIMA) ouvre directement RIVEN, NICOL BOLAS et IMLADRIK ; IMLADRIK porte deux
+// constellations (ARMES, DRAGONS). 2026-09-30 : TAO est SUPPRIMÉ ; ADRAMELECH,
+// RESHIRAM et ZEKROM (les deux pôles de l'ex-TAO) vivent sous DRAGONS. Les portes
+// historiques (riven, bcp, imladrik, adramelech) restent atteignables, réparties
+// sur DEUX boussoles, et les deux pôles de TAO gardent chacun leur porte.
+console.log('— A. OMEGA : 3 caps, puis les portes via OMEGA / IMLADRIK —');
 {
   const { page, erreurs, externes } = await nouvellePage({ configVide: true });
   await page.goto(`${BASE}/omega.html`, { waitUntil: 'load', timeout: 20000 });
@@ -220,15 +222,23 @@ console.log('— A. OMEGA : 3 caps, puis les 5 portes via OMEGA / IMLADRIK —')
     await page.screenshot({ path: `${CAPTURES}/${cadran.replace('.html', '')}-portes.png`, fullPage: true });
   }
   const toutes = [...portes['omega.html'], ...portes['imladrik.html']];
-  for (const attendu of ['riven.html', 'bcp.html', 'adramelech.html', 'imladrik.html', 'tao.html']) {
+  // TRANSPOSÉ (30/09) : `tao.html` sort de la liste (la page n'existe plus) ;
+  // ses deux pôles y entrent — leurs portes ne doivent pas avoir disparu avec lui.
+  for (const attendu of ['riven.html', 'bcp.html', 'adramelech.html', 'imladrik.html',
+    'reshiram.html', 'zekrom.html']) {
     verifier(`Porte ${attendu} (via OMEGA ou IMLADRIK)`, toutes.includes(attendu), JSON.stringify(toutes));
   }
+  // INVERSÉ : `Porte tao.html` exigeait sa présence ; c'est son ABSENCE, sous le
+  // verrou des six portes lues ci-dessus.
+  verifier('Aucune porte vers tao.html (page supprimée)',
+    toutes.length >= 6 && !toutes.some((h) => /^tao\.html/.test(h)), JSON.stringify(toutes));
   verifier('OMEGA porte le personnel (RIVEN + NICOL BOLAS + IMLADRIK)',
     JSON.stringify(portes['omega.html']) === JSON.stringify(['riven.html', 'bcp.html', 'imladrik.html']),
     JSON.stringify(portes['omega.html']));
-  verifier('IMLADRIK porte ses cinq caps (dont ADRAMELECH + TAO)',
+  verifier('IMLADRIK porte ses six pages (les trois dragons, ADRAMELECH, RESHIRAM, ZEKROM ; plus TAO)',
     JSON.stringify(portes['imladrik.html']) === JSON.stringify(
-      ['maedrethnir.html', 'vranesh.html', 'draukhain.html', 'adramelech.html', 'tao.html']),
+      ['maedrethnir.html', 'vranesh.html', 'draukhain.html', 'adramelech.html',
+        'reshiram.html', 'zekrom.html']),
     JSON.stringify(portes['imladrik.html']));
   // Éprouvé par l'ABSENCE : aucun repli ne mène plus à une page supprimée.
   verifier('Aucune porte vers grima.html / naga.html / ultima.html',
@@ -422,7 +432,10 @@ console.log('— D. registre.html fixture 200 → registre + cartouche Léo réf
 // parole au survol, zéro requête réseau, zéro erreur console.
 for (const noeud of [
   { id: 'nicol-bolas', fichier: 'bcp.html', ouvertes: ['abaque.html'], avenir: 3, retour: 'omega.html' },
-  { id: 'adramelech', fichier: 'adramelech.html', ouvertes: ['registre.html', 'idees.html'], avenir: 1, retour: 'imladrik.html' },
+  // 30/09 : ADRAMELECH vit sous la constellation DRAGONS — son retour n'est plus
+  // `imladrik.html` nu mais l'écran isolé où il est une étoile, « ↞ DRAGONS ».
+  { id: 'adramelech', fichier: 'adramelech.html', ouvertes: ['registre.html', 'idees.html'], avenir: 1,
+    retour: 'imladrik.html#constellation-dragons', libelleRetour: '↞ DRAGONS' },
 ]) {
   console.log(`— ${NOEUDS[noeud.id].nom} en boussole (${noeud.fichier}) —`);
   const { page, erreurs, externes } = await nouvellePage({ configVide: true });
@@ -471,6 +484,14 @@ for (const noeud of [
   // Retour vers le macro-quadrant parent (pièce ① du patron, arbre 2026-08-01).
   verifier(`Retour vers ${noeud.retour}`,
     (await page.locator(`.console-retour a[href="${noeud.retour}"]`).count()) === 1);
+  if (noeud.libelleRetour) {
+    // Le libellé se lit avec son lien (le lien seul pourrait porter un mauvais mot) ;
+    // et l'ancien retour, `imladrik.html` NU, n'existe plus (éprouvé par l'absence,
+    // sous le verrou du nouveau retour ci-dessus).
+    verifier(`Retour libellé « ${noeud.libelleRetour} », et plus de retour vers imladrik.html nu`,
+      ((await page.locator(`.console-retour a[href="${noeud.retour}"]`).textContent()) || '').trim() === noeud.libelleRetour
+      && (await page.locator('.console-retour a[href="imladrik.html"]').count()) === 0);
+  }
 
   // Léo parle au survol du premier cap.
   // Le survol d'un cap fait parler Léo. « LE PREMIER » n'a plus de sens quand

@@ -91,11 +91,15 @@ IMLADRIK passe donc de 5 caps à 4 entrées : les deux constellations + ADRAMELE
 - Pas de nouvel outil à côté d'Ultima (directive JL).
 
 **À trancher par Paul avant la boucle C (registre des arbitrages)** :
-1. IFULVIN **remplace-t-il** l'idée ADR-005 « Le Cercle » ou en est-il le projet
-   d'exécution ? (Je n'en déduis rien.)
-2. Un membre entre-t-il dans un cercle **par parrainage du cercle visé**, ou
-   autrement ? (§4 du 21/09.)
-3. Le nom des cercles / des niveaux (les gravures de la carte savante).
+1. ✅ **Tranché le 30/09 : IFULVIN REMPLACE l'idée « Le Cercle »** (Paul : « oui
+   remplace »). Le Cercle ne vit plus comme idée séparée : son contenu
+   (`CADRAGE-RESEAU-CERCLES.md` §1–§4, modèle BNI, pre-mortem « exclusivité ET
+   contrainte ») devient le matériau d'IFULVIN. ⚠️ Le numéro « ADR-005 » que lui
+   donnait la capture du 21/09 est **en collision** avec ADR-005 CHAMBRE CLAIRE
+   (`adramelech/IDEES.md` l. 762) : il n'est pas à saisir.
+2. ⏭ Reporté (Paul, 30/09 : « on verra ») — un membre entre-t-il dans un cercle
+   **par parrainage du cercle visé**, ou autrement ? (§4 du 21/09.)
+3. ⏭ Reporté (Paul, 30/09 : « on verra ») — le nom des cercles / des niveaux.
 
 ## ⑥ Pre-mortem — « la boucle a échoué : pourquoi ? »
 
@@ -114,6 +118,8 @@ unique** : finir la boucle OMEGA (tests, commit), puis boucle A.
 ---
 
 ## ⑦ BOUCLE B — les nébuleuses (cadrage 6 points, 30/09, « go solo, enchaîne sur les nébuleuses »)
+
+> ✅ **Fait le 30/09** — fusionné avec la boucle C (#316, `4b8e2de`). Boucle A : #313. Harnais : `tests/smoke-nebuleuses.mjs` (5 sabotages mordent). Boucle C (dictée le même jour) : TAO supprimé, DRAGONS = MAEDRETHNIR, VRANESH, DRAUKHAIN, ADRAMELECH, RESHIRAM ⇄ ZEKROM, étoiles indépendantes sauf la passerelle.
 
 **① But.** Sur l'écran IMLADRIK, la constellation des ARMES et celle des DRAGONS
 se lisent comme **deux nébuleuses** : un voile coloré, propre à chacune,

@@ -4418,3 +4418,25 @@ grains) propagée aux huit dépôts ; la CI ne tourne plus deux fois par push
 (RenoAgenda, RenoPredict, RenoDevis, DATARENO) ; `main` de RenoBoost remis au
 vert (débordement à 320 px venu du calendrier, pas d'un commit) ; la collecte
 Finubar ne perd plus les boucles écrites en texte nu.
+
+**30/09 — Boucles B et C d'IFULVIN (#316).** Nébuleuses : ARMES en cinabre, DRAGONS
+en vert-de-gris (spéc. `graphisme`), peintes par la couche de fond. Puis, dicté par
+Paul : **TAO supprimé partout** (coquille sans donnée) ; RESHIRAM, ZEKROM et
+ADRAMELECH rejoignent les DRAGONS ; **étoiles indépendantes**, seule la passerelle
+RESHIRAM ⇄ ZEKROM les relie (`asterisme: false`). IMLADRIK = ARMES + DRAGONS.
+Défauts trouvés en chemin et corrigés : noms des menus sous 4,5:1 à 390 px
+(passés en crème) ; nom de la passerelle traversé par son trait (recul calculé sur
+la boîte du texte). ⚠️ Conséquence à arbitrer : RESHIRAM et ZEKROM ne sont plus
+« opposés » (souhait du 17/08).
+
+**30/09 (suite) — Arbitrages Paul.** ① Gémeaux RESHIRAM/ZEKROM non opposés :
+« pas grave », on garde. ③ **Un bandeau par constellation**, et une règle
+générale : *le bandeau est cohérent avec l'affichage et les données, et minimisé
+pour ne pas gêner la vue.* Mis en œuvre : sous isolement, le bandeau prend le
+surligne et le titre du foyer quand le registre les porte (sinon celui de la
+page), et se réduit (sceau 32 px, titre d'un cran). ② Les trois arbitrages
+IFULVIN (CADRAGE-IFULVIN.md §⑤) ont été redonnés à Paul : en attente.
+**30/09 (suite) — IFULVIN remplace « Le Cercle ».** Arbitrage ① rendu (« oui
+remplace ») ; ② entrée dans un cercle et ③ noms des niveaux : « on verra ». Le
+numéro ADR-005 de la capture du 21/09 collisionnait avec CHAMBRE CLAIRE : il
+n'est plus à saisir.

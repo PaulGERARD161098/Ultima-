@@ -9,8 +9,9 @@
 //
 // 2026-09-29 : NAGA et GRIMA sont SUPPRIMÉS (incident ci-dessus = historique).
 // Les mêmes gestes s'éprouvent sur les deux têtes d'OMEGA qui contiennent
-// quelque chose : IMLADRIK (ex-NAGA, qui porte désormais ADRAMELECH et TAO) et
-// NICOL BOLAS (ex-membre de GRIMA). RIVEN, feuille, ouvre sa page : hors sujet.
+// quelque chose : IMLADRIK (ex-NAGA, qui porte désormais deux constellations —
+// ARMES et DRAGONS ; TAO est supprimé depuis le 30/09) et NICOL BOLAS (ex-membre
+// de GRIMA). RIVEN, feuille, ouvre sa page : hors sujet.
 //
 // Ce harnais rejoue les GESTES RÉELS, pas un `dispatchEvent('click')` qui
 // atterrit toujours sur l'élément qu'on lui nomme : ici la souris se déplace
@@ -192,15 +193,24 @@ console.log('— Le doigt : tap, et tap glissé —');
 console.log('— Le témoin : l\'écran isolé, où le dépliage était déjà coupé —');
 {
   const { page, contexte } = await ouvrir({ fragment: '#imladrik' });
-  const avant = await centre(page, 'tao');
+  // TRANSPOSÉ (30/09) : le témoin était TAO, tête d'IMLADRIK qui contenait deux
+  // pôles ; TAO n'existe plus. La tête qui contient quelque chose sous IMLADRIK est
+  // désormais la constellation DRAGONS (six étoiles) : même geste, même verdict.
+  // Verrou : la cible existe au ciel (`centre` rend autre chose que null) — sans
+  // lui, `avant.x` lèverait, et un ciel vide ne se distinguerait pas d'un cap qui ne
+  // bouge pas.
+  const avant = await centre(page, 'constellation-dragons');
+  verifier('Témoin · verrou — DRAGONS est peinte sous #imladrik', avant !== null);
   await page.mouse.move(avant.x, avant.y);
   await page.waitForTimeout(400);
-  const apres = await centre(page, 'tao');
+  const apres = await centre(page, 'constellation-dragons');
   const d = Math.hypot(apres.x - avant.x, apres.y - avant.y);
-  verifier('Témoin · TAO ne bouge pas au survol sous #imladrik', d < 0.5, `${d.toFixed(1)} px`);
+  verifier('Témoin · DRAGONS ne bouge pas au survol sous #imladrik', d < 0.5, `${d.toFixed(1)} px`);
   await page.mouse.click(avant.x, avant.y);
   await page.waitForTimeout(900);
-  verifier('Témoin · clic sur TAO depuis #imladrik → #tao', isoleSur('tao', await etat(page)), JSON.stringify(await etat(page)));
+  verifier('Témoin · clic sur DRAGONS depuis #imladrik → #constellation-dragons',
+    isoleSur('constellation-dragons', await etat(page)) && (await etat(page)).ids.length === 6,
+    JSON.stringify(await etat(page)));
   await contexte.close();
 }
 

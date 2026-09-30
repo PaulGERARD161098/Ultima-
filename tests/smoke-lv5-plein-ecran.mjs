@@ -268,14 +268,17 @@ for (const [largeur, hauteur, nom] of [[390, 844, 'a390'], [1280, 860, 'a1280'],
 // ---------------------------------------------------------------------------
 // 2026-09-29 : GRIMA et NAGA sont supprimés ; le nombre de caps de chaque écran
 // est LU dans le registre, puis verrouillé ci-dessous par des valeurs explicites.
-// 2026-09-30 : IMLADRIK n'a plus QUE QUATRE entrées (deux constellations,
-// ADRAMELECH, TAO), et la famille GAGNE deux écrans : les constellations isolées
-// (`imladrik.html#constellation-dragons`, trois étoiles ; `#constellation-armes`,
-// UNE étoile). Un critère qui vaut pour une famille d'écrans s'éprouve sur toute
-// la famille — et la famille a grandi : DRAGONS et surtout ARMES (une seule
-// étoile, IFULVIN, inerte) ne doivent être ni recouvertes par le bandeau ni
-// éteintes.
-const NOEUD_DE = { 'omega.html': 'omega', 'tao.html': 'tao', 'imladrik.html': 'imladrik',
+// 2026-09-30 : IMLADRIK n'a plus QUE DEUX entrées (les constellations ARMES et
+// DRAGONS ; TAO est supprimé, ADRAMELECH est descendu sous DRAGONS), et la famille
+// GAGNE deux écrans : les constellations isolées (`imladrik.html#constellation-
+// dragons`, SIX étoiles depuis l'arrivée d'ADRAMELECH, RESHIRAM et ZEKROM ;
+// `#constellation-armes`, UNE étoile). Un critère qui vaut pour une famille
+// d'écrans s'éprouve sur toute la famille — et la famille a grandi : DRAGONS (le
+// plus chargé de toute la famille de navigation, six étoiles dont deux jumelles
+// reliées) et surtout ARMES (une seule étoile, IFULVIN, inerte) ne doivent être ni
+// recouvertes par le bandeau ni éteintes. `tao.html` sort de la famille : la page
+// n'existe plus (l'écran qu'elle occupait, deux étoiles, est repris par DRAGONS).
+const NOEUD_DE = { 'omega.html': 'omega', 'imladrik.html': 'imladrik',
   'adramelech.html': 'adramelech', 'bcp.html': 'nicol-bolas', 'index.html': 'racine',
   'imladrik.html#constellation-dragons': 'constellation-dragons',
   'imladrik.html#constellation-armes': 'constellation-armes' };
@@ -284,12 +287,13 @@ const COQUES_DE_NAVIGATION = Object.keys(NOEUD_DE)
 // Verrou : le registre ne dérive pas sans que ce harnais le voie, et la liste
 // est bien la famille attendue (jamais vide, jamais réduite en silence).
 verdicts.familleDesCoques = JSON.stringify(COQUES_DE_NAVIGATION) === JSON.stringify([
-  ['omega.html', 3], ['tao.html', 2], ['imladrik.html', 4],
+  ['omega.html', 3], ['imladrik.html', 2],
   ['adramelech.html', 3], ['bcp.html', 4],
   // LA RACINE (P4, 2026-08-19) : trois caps — ALPHA, OMEGA, ALTHEA.
   ['index.html', 3],
-  // LES CONSTELLATIONS ISOLÉES (30/09) : trois dragons ; IFULVIN seul.
-  ['imladrik.html#constellation-dragons', 3], ['imladrik.html#constellation-armes', 1]]);
+  // LES CONSTELLATIONS ISOLÉES (30/09) : six étoiles (trois dragons, ADRAMELECH,
+  // RESHIRAM, ZEKROM) ; IFULVIN seul.
+  ['imladrik.html#constellation-dragons', 6], ['imladrik.html#constellation-armes', 1]]);
 for (const [fichier, nbCaps] of COQUES_DE_NAVIGATION) {
   for (const [largeur, hauteur] of [[390, 844], [1280, 860]]) {
     const page = await browser.newPage({ viewport: { width: largeur, height: hauteur } });
@@ -391,8 +395,12 @@ for (const [fichier, nbCaps] of COQUES_DE_NAVIGATION) {
     // Une cinquième tentative (lever le plancher de distance) n'a rien changé et
     // a été RETIRÉE.
     //
-    // (30/09 : IMLADRIK à QUATRE entrées mesure 0,684 à 390 px et 0,689 au bureau ;
-    // DRAGONS isolée 0,632 et 0,706 — au-dessus du seuil, donc rien à relâcher.)
+    // (30/09, relevé à la transposition TAO → DRAGONS : IMLADRIK à DEUX entrées
+    // mesure 0,702 à 390 px et 0,739 au bureau — avec un écart horizontal de 25 px
+    // seulement à 390, contre le seuil de 20 de `navRemplitLaLargeur` : deux étoiles
+    // presque l'une sur l'autre ; DRAGONS isolée, SIX étoiles, 0,717 et 0,706. Les
+    // valeurs d'avant (IMLADRIK à quatre entrées 0,684 / 0,689 ; DRAGONS à trois
+    // étoiles 0,632 / 0,706) sont dépassées, au-dessus du seuil : rien à relâcher.)
     // Ce qui reste est le plancher mesuré ce jour : IMLADRIK 0,588 et NICOL BOLAS
     // 0,500 (quatre caps dont « REVENUS & CHARGES »). Le seuil de 0,45 n'est donc
     // pas une complaisance mais un DÉTECTEUR DE RÉGRESSION : il est sous les

@@ -117,10 +117,15 @@ dit('cheminExistePourTousLesEcransReels',
 // et des jumeaux reliés (RESHIRAM ⇄ ZEKROM) qui vivent DEUX étages plus bas.
 // 2026-09-29 : l'écran est OMEGA (ex-ULTIMA) et le foyer isolé de référence est
 // IMLADRIK (ex-NAGA : GRIMA et NAGA sont supprimés ; IMLADRIK porte désormais
-// QUATRE entrées — deux constellations, ADRAMELECH et TAO — depuis le 2026-09-30).
+// DEUX entrées — ARMES et DRAGONS, rien d'autre — depuis le 2026-09-30 : TAO est
+// SUPPRIMÉ, ADRAMELECH, RESHIRAM et ZEKROM sont descendus sous DRAGONS).
 const plieOmega = versCiel('omega', NOEUDS);
 const foyerImladrik = versCiel('omega', NOEUDS, { isole: 'imladrik' });
 const idsImladrik = foyerImladrik.noeuds.map((n) => n.id);
+// Les deux constellations isolées, prises ICI : c'est là que vivent désormais les
+// jumeaux RESHIRAM ⇄ ZEKROM (ex-TAO), donc le « deux étages plus bas » du § ④.
+const foyerDragons = versCiel('omega', NOEUDS, { isole: 'constellation-dragons' });
+const foyerArmes = versCiel('omega', NOEUDS, { isole: 'constellation-armes' });
 
 // ① On ne montre QUE les enfants directs du foyer.
 // REMPLACE `isoleMontreLesDeuxEtages` (2026-08-28), qui exigeait les têtes ET
@@ -129,21 +134,27 @@ const idsImladrik = foyerImladrik.noeuds.map((n) => n.id);
 // c'est son absence, ci-dessous, qui le remplace : un test qui exigeait une
 // présence doit devenir un test qui exige l'absence, sinon on ne mesure plus
 // rien du changement.
-// 2026-09-30 : IMLADRIK porte QUATRE entrées (deux constellations, ADRAMELECH,
-// TAO), plus cinq caps à plat — le compte est lu dans le registre ET verrouillé.
+// 2026-09-30 : IMLADRIK ne porte plus que DEUX entrées (les constellations
+// ARMES et DRAGONS) — le compte est lu dans le registre ET verrouillé. Avant : la
+// veille, quatre (ADRAMELECH et TAO à côté) ; TAO n'existe plus, ADRAMELECH vit
+// sous DRAGONS.
 dit('isoleNeMontreQueLesEnfantsDirects',
   idsImladrik.join(',') === NOEUDS.imladrik.enfants.join(',')
-  && idsImladrik.length === 4
-  && idsImladrik.join(',') === 'constellation-armes,constellation-dragons,adramelech,tao');
+  && idsImladrik.length === 2
+  && idsImladrik.join(',') === 'constellation-armes,constellation-dragons');
 // ①bis Et surtout : les PETITS-enfants ne sont pas peints. C'est ce verdict-là
 // qui garde la nouvelle règle ; sans lui, un retour au comportement d'avant
 // passerait vert (les enfants directs y étaient aussi).
-// 2026-09-30 : les trois dragons et IFULVIN sont désormais des PETITS-enfants
-// d'IMLADRIK (ils vivent sous leur constellation) : ils rejoignent la liste des
-// absents — c'est ce qui prouve qu'isoler IMLADRIK ne les remet pas à plat.
+// 2026-09-30 : les trois dragons, ADRAMELECH et IFULVIN sont désormais des
+// PETITS-enfants d'IMLADRIK (ils vivent sous leur constellation) : ils rejoignent
+// la liste des absents — c'est ce qui prouve qu'isoler IMLADRIK ne les remet pas à
+// plat. ADRAMELECH y entre par INVERSION : la veille, il était exigé au premier
+// niveau (`isoleNommeLAmasDApresLeFoyer…`) ; il est maintenant exigé ABSENT.
+// Verrou de non-vacuité : « absent » ne vaut que sur un ciel qui peint quelque chose.
 dit('isoleNeDescendPasAuDeuxiemeEtage',
-  ['reshiram', 'zekrom', 'registre', 'archipels', 'rapprochements',
-    'maedrethnir', 'vranesh', 'draukhain', 'ifulvin']
+  idsImladrik.length === 2
+  && ['reshiram', 'zekrom', 'registre', 'archipels', 'rapprochements',
+    'maedrethnir', 'vranesh', 'draukhain', 'adramelech', 'ifulvin']
     .every((id) => !idsImladrik.includes(id)));
 // ② Les frères ont disparu : RIVEN et NICOL BOLAS (frères d'IMLADRIK sous
 // OMEGA) ne sont plus là, ni rien de ce qu'ils portent.
@@ -161,9 +172,19 @@ dit('isoleNePeintPasLeFoyer', !idsImladrik.includes('imladrik'));
 const imladrik = foyerImladrik;
 dit('isoleDescendDUnCranQuelQueSoitLEtage',
   imladrik.noeuds.map((n) => n.id).join(',') === NOEUDS.imladrik.enfants.join(','));
-const tao = versCiel('omega', NOEUDS, { isole: 'tao' });
+// TRANSPOSÉ : la cible « deux étages plus bas » n'est plus TAO (supprimé) mais la
+// constellation DRAGONS, deux crans sous OMEGA — le geste est le même : isoler un
+// thème montre ses enfants directs, et eux seuls.
 dit('isoleSAppliquePareilDeuxEtagesPlusBas',
-  tao.noeuds.map((n) => n.id).join(',') === NOEUDS.tao.enfants.join(','));
+  foyerDragons.noeuds.length === NOEUDS['constellation-dragons'].enfants.length
+  && foyerDragons.noeuds.length === 6
+  && foyerDragons.noeuds.map((n) => n.id).join(',') === NOEUDS['constellation-dragons'].enfants.join(','));
+// TAO n'est isolable NULLE PART : il n'existe plus (ni comme foyer, ni comme
+// écran). `versCiel` d'un écran disparu rend null, jamais un ciel fantôme.
+dit('taoNEstPlusIsolable',
+  versCiel('omega', NOEUDS, { isole: 'tao' }).isole === null
+  && versCiel('tao', NOEUDS) === null
+  && versCiel('tao', NOEUDS, { isole: 'constellation-dragons' }) === null);
 
 // La règle de groupement : une seule constellation à l'écran, au nom du FOYER.
 // REMPLACE `isoleGroupeLesProjetsSousLeurTete` et `isoleRangeUneTeteVideSousLeFoyer`
@@ -172,33 +193,51 @@ dit('isoleSAppliquePareilDeuxEtagesPlusBas',
 const secteurDe = (jeu, id) => (jeu.noeuds.find((n) => n.id === id) || {}).secteur_activite;
 dit('isoleGroupeToutSousLeNomDuFoyer',
   foyerImladrik.noeuds.every((n) => n.secteur_activite === 'IMLADRIK'));
-// Têtes, toutes : les deux constellations (têtes pleines, sans page), ADRAMELECH
-// et TAO. Même amas, au nom du foyer.
+// Têtes, toutes : les deux constellations (têtes pleines, sans page). Même amas,
+// au nom du foyer.
 // 2026-09-30 : la « tête vide » de référence (MAEDRETHNIR, feuille) n'est plus un
 // enfant direct d'IMLADRIK — elle vit sous DRAGONS. Le cas « feuilles sous un
 // foyer » n'est PAS abandonné : il se prouve sur les constellations isolées
 // (ci-dessous), qui n'ont QUE des feuilles.
 dit('isoleNommeLAmasDApresLeFoyerMemeAvecUneTeteVide',
-  ['constellation-armes', 'constellation-dragons', 'adramelech', 'tao']
+  foyerImladrik.noeuds.length === 2
+  && ['constellation-armes', 'constellation-dragons']
     .every((id) => secteurDe(foyerImladrik, id) === 'IMLADRIK'));
 // ---- LES CONSTELLATIONS ISOLÉES (2026-09-30) ----
-// DRAGONS isolée : ses trois feuilles, au nom du foyer « DRAGONS ». C'est ici
-// que MAEDRETHNIR, VRANESH et DRAUKHAIN — plus enfants directs d'IMLADRIK —
-// sont exigés au premier niveau. ARMES isolée : IFULVIN seul, inerte.
-const foyerDragons = versCiel('omega', NOEUDS, { isole: 'constellation-dragons' });
-const foyerArmes = versCiel('omega', NOEUDS, { isole: 'constellation-armes' });
-dit('isoleDragonsMontreLesTroisDragons',
+// DRAGONS isolée (prise plus haut, avec ARMES) : SIX feuilles, au nom du foyer
+// « DRAGONS ». C'est ici que MAEDRETHNIR, VRANESH, DRAUKHAIN, ADRAMELECH,
+// RESHIRAM et ZEKROM — plus enfants directs d'IMLADRIK — sont exigés au premier
+// niveau. ARMES isolée : IFULVIN seul, inerte.
+// TRANSPOSÉ (30/09) : `isoleDragonsMontreLesTroisDragons` (3 étoiles) devient SIX
+// — le compte n'est pas relâché, il est REFIXÉ, et verrouillé des deux côtés
+// (ni cinq, ni sept).
+dit('isoleDragonsMontreLesSixEtoiles',
   foyerDragons.isole === 'constellation-dragons'
-  && foyerDragons.noeuds.map((n) => n.id).join(',') === 'maedrethnir,vranesh,draukhain'
-  && foyerDragons.noeuds.map((n) => n.nom).join(',') === 'MAEDRETHNIR,VRANESH,DRAUKHAIN');
+  && foyerDragons.noeuds.map((n) => n.id).join(',') === 'maedrethnir,vranesh,draukhain,adramelech,reshiram,zekrom'
+  && foyerDragons.noeuds.map((n) => n.nom).join(',') === 'MAEDRETHNIR,VRANESH,DRAUKHAIN,ADRAMELECH,RESHIRAM,ZEKROM');
 dit('isoleDragonsNommeSonAmasDRAGONS',
-  foyerDragons.noeuds.length === 3
+  foyerDragons.noeuds.length === 6
   && foyerDragons.noeuds.every((n) => n.secteur_activite === 'DRAGONS'));
+// TRANSPOSÉ (30/09) : l'ancien « toutes des feuilles, rang 0 » était vrai des
+// trois dragons ; ADRAMELECH, arrivé chez eux, n'est PAS une feuille — il porte
+// ses trois caps (LE REGISTRE, LES ARCHIPELS, LES RAPPROCHEMENTS) et sa propre
+// page. Il est donc une TÊTE À PAGE (rang 1, cible gardée), comme il l'était déjà
+// au premier niveau d'IMLADRIK. Le verdict ne se relâche pas : les cinq autres
+// restent des feuilles de rang 0, et ADRAMELECH est le SEUL de rang 1 — lu dans
+// le registre, pas supposé.
 dit('isoleDragonsGardeLesCiblesDesPages',
-  foyerDragons.noeuds.every((n) => n.cible === NOEUDS[n.id].cible && /\.html$/.test(n.cible))
-  && foyerDragons.noeuds.every((n) => n.poids === 0)); // des feuilles : rang 0
+  foyerDragons.noeuds.length === 6
+  && foyerDragons.noeuds.every((n) => n.cible === NOEUDS[n.id].cible && /\.html$/.test(n.cible))
+  && foyerDragons.noeuds.filter((n) => n.poids === 0).map((n) => n.id).join(',')
+    === 'maedrethnir,vranesh,draukhain,reshiram,zekrom'
+  && foyerDragons.noeuds.filter((n) => n.poids === 1).map((n) => n.id).join(',') === 'adramelech'
+  && Array.isArray(NOEUDS.adramelech.enfants) && NOEUDS.adramelech.enfants.length === 3);
+// INVERSÉ (30/09) : `adramelech` sortait de cette liste d'absents — il est
+// désormais l'une des six étoiles des DRAGONS, et il est exigé PRÉSENT ci-dessus.
+// `tao` y reste : il n'est plus nulle part.
 dit('isoleDragonsNePeintNiLeFoyerNiLesFreres',
-  ['constellation-dragons', 'constellation-armes', 'ifulvin', 'adramelech', 'tao', 'imladrik']
+  foyerDragons.noeuds.length === 6
+  && ['constellation-dragons', 'constellation-armes', 'ifulvin', 'tao', 'imladrik']
     .every((id) => !foyerDragons.noeuds.some((n) => n.id === id)));
 dit('isoleArmesMontreIfulvinSeul',
   foyerArmes.isole === 'constellation-armes'
@@ -216,9 +255,14 @@ dit('isoleUneConstellationAnnonceSesFeuilles',
   && foyerDragons.deplie === null && foyerArmes.deplie === null);
 // La garde tient aussi pour elles : on isole une constellation depuis l'écran
 // qui la porte, ou depuis un ancêtre (OMEGA) — jamais depuis un étranger.
+// TRANSPOSÉ (30/09) : l'écran étranger `tao` (qui n'existe plus : `versCiel` en
+// rend null) cède la place à des étrangers RÉELS, sous verrou de non-vacuité —
+// `alpha` et `nicol-bolas` rendent un ciel, et c'est CE ciel qui refuse.
 dit('isoleUneConstellationRefuseeHorsDeSonEcran',
-  versCiel('nicol-bolas', NOEUDS, { isole: 'constellation-dragons' }).isole === null
-  && versCiel('tao', NOEUDS, { isole: 'constellation-dragons' }).isole === null
+  versCiel('nicol-bolas', NOEUDS, { isole: 'constellation-dragons' }).noeuds.length > 0
+  && versCiel('nicol-bolas', NOEUDS, { isole: 'constellation-dragons' }).isole === null
+  && versCiel('constellation-armes', NOEUDS, { isole: 'constellation-dragons' }).isole === null
+  && versCiel('alpha', NOEUDS, { isole: 'constellation-dragons' }).noeuds.length > 0
   && versCiel('alpha', NOEUDS, { isole: 'constellation-dragons' }).isole === null
   && versCiel('imladrik', NOEUDS, { isole: 'constellation-dragons' }).isole === 'constellation-dragons'
   && versCiel('omega', NOEUDS, { isole: 'constellation-dragons' }).isole === 'constellation-dragons');
@@ -226,22 +270,24 @@ dit('isoleUneConstellationRefuseeHorsDeSonEcran',
 dit('gardeRefuseDIsolerIfulvin',
   versCiel('omega', NOEUDS, { isole: 'ifulvin' }).isole === null
   && versCiel('omega', NOEUDS, { isole: 'maedrethnir' }).isole === null);
-// Le ciel de l'écran IMLADRIK lui-même (sans isolement) : quatre entrées, dont
-// deux têtes sans page (rang 1) — c'est ce qui les fait plonger au clic.
+// Le ciel de l'écran IMLADRIK lui-même (sans isolement) : DEUX entrées, deux
+// têtes sans page (rang 1) — c'est ce qui les fait plonger au clic. TRANSPOSÉ
+// (30/09) : `…Rend4EntreesToutesDesTetes` → 2 ; « toutes des têtes » et « toutes
+// sans page » sont maintenant la même chose, et les deux sont exigées.
 const ecranImladrik = versCiel('imladrik', NOEUDS);
-dit('imladrikAplatiRend4EntreesToutesDesTetes',
-  ecranImladrik.noeuds.length === 4
+dit('imladrikAplatiRend2EntreesToutesDesTetes',
+  ecranImladrik.noeuds.length === 2
   && ecranImladrik.noeuds.map((n) => n.id).join(',') === NOEUDS.imladrik.enfants.join(',')
   && ecranImladrik.noeuds.every((n) => n.poids === 1)
-  && ecranImladrik.noeuds.filter((n) => n.cible === null).map((n) => n.id).join(',')
-    === 'constellation-armes,constellation-dragons');
+  && ecranImladrik.noeuds.every((n) => n.cible === null)
+  && ecranImladrik.noeuds.map((n) => n.id).join(',') === 'constellation-armes,constellation-dragons');
 // NICOL BOLAS isolé : son amas porte son nom, plus celui d'un macro-quadrant.
 const nicol = versCiel('omega', NOEUDS, { isole: 'nicol-bolas' });
 dit('isoleNicolBolasNommeSonAmas',
   nicol.noeuds.length > 0 && nicol.noeuds.every((n) => n.secteur_activite === 'NICOL BOLAS'));
 // Plus aucun secteur GRIMA / NAGA nulle part : ces amas n'existent plus.
 dit('aucunSecteurGrimaNagaDansLesIsolements',
-  ['omega', 'imladrik', 'tao', 'nicol-bolas', 'adramelech'].every((f) => {
+  ['omega', 'imladrik', 'constellation-dragons', 'nicol-bolas', 'adramelech'].every((f) => {
     const jeu = versCiel('omega', NOEUDS, { isole: f });
     return jeu.noeuds.every((n) => n.secteur_activite !== 'GRIMA' && n.secteur_activite !== 'NAGA');
   }));
@@ -257,15 +303,21 @@ dit('isoleNInventePlusDeRattachement',
   foyerImladrik.relations.filter((r) => r.type === 'apport_affaires').length === 0);
 // La passerelle des jumeaux survit à l'isolement, MAIS SEULEMENT quand les deux
 // bouts sont peints. Elle a changé d'étage avec la règle : RESHIRAM ⇄ ZEKROM
-// vivent sous TAO, donc elle apparaît en isolant TAO — et plus en isolant IMLADRIK,
-// où aucun des deux n'est peint. Éprouvée par la présence ET par l'absence.
+// vivent sous DRAGONS (30/09, ex-TAO), donc elle apparaît en isolant DRAGONS — et
+// plus en isolant IMLADRIK, où aucun des deux n'est peint. Éprouvée par la
+// présence ET par l'absence. Elle est aussi la SEULE arête de cet écran : les
+// DRAGONS n'ont aucun autre lien (`asterisme: false` retire les traits de figure
+// côté rendu ; côté données, aucune autre relation ne s'invente).
 const passerelle = (jeu) => jeu.relations.filter((r) => r.type === 'chantier_commun');
 dit('isoleGardeLaPasserelleDesJumeaux',
-  passerelle(tao).length === 1 && passerelle(tao)[0].source_id === 'reshiram'
-  && passerelle(tao)[0].target_id === 'zekrom'
-  && passerelle(tao)[0].libelle === NOEUDS.reshiram.lienLibelle);
+  passerelle(foyerDragons).length === 1 && passerelle(foyerDragons)[0].source_id === 'reshiram'
+  && passerelle(foyerDragons)[0].target_id === 'zekrom'
+  && passerelle(foyerDragons)[0].libelle === NOEUDS.reshiram.lienLibelle
+  && /rétroplanning/.test(passerelle(foyerDragons)[0].libelle)
+  && foyerDragons.relations.length === 1);
 dit('isoleNInventePasDArcVersLInvisible',
-  passerelle(foyerImladrik).length === 0 && passerelle(imladrik).length === 0);
+  passerelle(foyerImladrik).length === 0 && passerelle(imladrik).length === 0
+  && passerelle(foyerArmes).length === 0 && passerelle(ecranImladrik).length === 0);
 
 // Ce qui peut encore se déplier, ce sont les TÊTES, et elles seules.
 dit('isoleAnnonceSesTetes',
@@ -301,8 +353,22 @@ dit('isolementSansPersonne',
 
 // ---------- 6ter. `descendDe` ----------
 dit('descendDeVoitUnPetitEnfant', descendDe('omega', 'maedrethnir', NOEUDS) === true);
-dit('descendDeVoitUnEnfantDirect', descendDe('imladrik', 'tao', NOEUDS) === true);
+// TRANSPOSÉ (30/09) : l'« enfant direct » d'IMLADRIK n'est plus TAO mais une
+// constellation ; et TAO, lui, ne descend de RIEN — il n'existe plus.
+dit('descendDeVoitUnEnfantDirect',
+  descendDe('imladrik', 'constellation-dragons', NOEUDS) === true
+  && descendDe('imladrik', 'constellation-armes', NOEUDS) === true);
+dit('descendDeNeVoitPlusTao',
+  descendDe('imladrik', 'tao', NOEUDS) === false && descendDe('omega', 'tao', NOEUDS) === false);
 dit('descendDeVoitAdramelechSousImladrik', descendDe('imladrik', 'adramelech', NOEUDS) === true);
+// ADRAMELECH, RESHIRAM et ZEKROM descendent d'IMLADRIK ET d'OMEGA en passant par
+// DRAGONS — et de DRAGONS seule, pas des ARMES.
+dit('descendDeVoitLesTroisNouveauxDragonsParLesDragons',
+  ['adramelech', 'reshiram', 'zekrom'].every((id) =>
+    descendDe('constellation-dragons', id, NOEUDS) === true
+    && descendDe('imladrik', id, NOEUDS) === true
+    && descendDe('omega', id, NOEUDS) === true
+    && descendDe('constellation-armes', id, NOEUDS) === false));
 // 2026-09-30 : les dragons descendent d'IMLADRIK ET d'OMEGA en passant par leur
 // constellation ; les constellations ne sont pas des frères l'une de l'autre.
 dit('descendDeVoitUnDragonParSaConstellation',
