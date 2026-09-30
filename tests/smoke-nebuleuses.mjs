@@ -194,6 +194,12 @@ async function pireContraste(page) {
 
 const dist = (p, q) => Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]);
 
+// LE SEUIL DES NOMS EST 5,0 ET NON 4,5 — une MARGE, pas un durcissement de la
+// norme. Mesuré le 30/09 : la CI (polices plus fines) lit ~0,5 de moins que ce
+// conteneur (ZEKROM 4,83 ici, 4,23 là-bas). Un seuil à 4,5 laissait passer en
+// local ce qui rougissait en CI ; à 5,0, le vert local vaut vert partout.
+const SEUIL_NOMS = 5.0;
+
 // ---------------------------------------------------------------------------
 // ① ② IMLADRIK : deux nébuleuses, deux couleurs, et un témoin qui n'en a pas.
 // ---------------------------------------------------------------------------
@@ -234,7 +240,7 @@ const dist = (p, q) => Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]);
   detail.contrasteImladrik = c.tous;
   // TRANSPOSÉ : « au moins quatre noms » → EXACTEMENT deux (ARMES, DRAGONS), les
   // seules étoiles du premier niveau — le compte suit le registre, sans jeu.
-  verdicts.imladrikNomsLisibles = c.nb === 2 && c.pire.ratio >= 4.5;
+  verdicts.imladrikNomsLisibles = c.nb === 2 && c.pire.ratio >= SEUIL_NOMS;
   await page.close(); await temoinPage.close();
 }
 
@@ -251,7 +257,7 @@ for (const [foyer, attendus] of [['constellation-dragons', 6], ['constellation-a
     verdicts[`isole_${foyer}_${largeur}_uneNebuleuseSurTout`] = vues.length === 1 && vues[0].membres === attendus;
     const c = await pireContraste(page);
     detail[`contraste_${foyer}_${largeur}`] = c.tous;
-    verdicts[`isole_${foyer}_${largeur}_nomsLisibles`] = c.nb === attendus && c.pire.ratio >= 4.5;
+    verdicts[`isole_${foyer}_${largeur}_nomsLisibles`] = c.nb === attendus && c.pire.ratio >= SEUIL_NOMS;
     await page.close();
   }
 }
@@ -296,7 +302,7 @@ for (const [url, minNoms] of [['omega.html', 2], ['imladrik.html#constellation-d
   const page = await ouvrir(url, { largeur: 390, hauteur: 844 });
   const c = await pireContraste(page);
   detail['contraste390_' + url] = c.tous;
-  verdicts['nomsLisibles390_' + url] = c.nb >= minNoms && c.pire.ratio >= 4.5;
+  verdicts['nomsLisibles390_' + url] = c.nb >= minNoms && c.pire.ratio >= SEUIL_NOMS;
   await page.close();
 }
 

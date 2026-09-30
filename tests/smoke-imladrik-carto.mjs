@@ -399,7 +399,17 @@ const geometrieNom = (page) => page.evaluate(() => {
   };
   const r = t.getBoundingClientRect();
   const cx = (a.x + b.x) / 2; const cy = (a.y + b.y) / 2;
+  // LA POSITION DE LA BOÎTE RAPPORTÉE AU TRAIT (30/09) : le long du trait (le
+  // nom doit rester au MILIEU) et perpendiculairement (il s'écarte d'autant que
+  // sa boîte l'exige pour ne pas être traversée).
+  const L = Math.hypot(b.x - a.x, b.y - a.y) || 1;
+  const ux = (b.x - a.x) / L; const uy = (b.y - a.y) / L;
+  const bx = (r.left + r.right) / 2 - cx; const by = (r.top + r.bottom) / 2 - cy;
+  const leLong = Math.abs(bx * ux + by * uy);
+  const aCote = Math.abs(bx * uy - by * ux);
+  const requis = Math.abs(uy) * r.width / 2 + Math.abs(ux) * r.height / 2;
   return {
+    leLong, aCote, requis,
     ecartX: Math.abs(tx - (x1 + x2) / 2), ecartY: Math.abs(ty - (y1 + y2) / 2), perp,
     traverse: croise(r), largeurNom: r.width,
     temoinCroise: croise({ left: cx - 5, right: cx + 5, top: cy - 5, bottom: cy + 5 }),
@@ -449,9 +459,14 @@ for (const largeur of [1280, 390]) {
 
   // LE NOM DE LA PASSERELLE, mesuré.
   const g = await geometrieNom(page);
-  verifier(`${cle} : le nom est posé au milieu de la passerelle (mesuré)`,
-    !!g && g.ecartX <= 12 && g.ecartY <= 14,
-    g ? `écart ${g.ecartX.toFixed(1)} / ${g.ecartY.toFixed(1)}` : 'introuvable');
+  // TRANSPOSÉ LE 30/09. L'ancien contrôle (« ancre à ≤ 12 / 14 unités du
+  // milieu ») supposait un nom posé À 8 UNITÉS du trait ; c'est ce qui le
+  // faisait traverser dès que le trait est vertical. Le nom reste au MILIEU le
+  // long du trait (≤ 12 px) et s'en écarte de ce que sa boîte exige, sans
+  // s'envoler (≤ exigé + 14 px).
+  verifier(`${cle} : le nom est posé au milieu de la passerelle, et à côté d'elle (mesuré)`,
+    !!g && g.leLong <= 12 && g.aCote >= g.requis && g.aCote <= g.requis + 14,
+    g ? `le long ${g.leLong.toFixed(1)} px, à côté ${g.aCote.toFixed(1)} px (exigé ${g.requis.toFixed(1)})` : 'introuvable');
   verifier(`${cle} : le nom est LISIBLE (opacité utile ≥ 0,4)`, !!g && g.opacite >= 0.4,
     g ? String(g.opacite) : 'introuvable');
   // TRANSPOSÉ TEL QUEL de smoke-tao : « le nom n'est pas barré par le trait (≥ 4

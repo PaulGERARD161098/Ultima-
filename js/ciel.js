@@ -1809,10 +1809,23 @@
         var lg = Math.max(1, Math.hypot(dx, dy));
         var nx = -dy / lg, ny = dx / lg;
         if (ny > 0) { nx = -nx; ny = -ny; }
-        var recul = 8;
+        // LE RECUL SE MESURE SUR LE TEXTE, PAS SUR UNE CONSTANTE (30/09). « 8
+        // unités » ne valait que pour un trait presque horizontal : depuis que
+        // RESHIRAM et ZEKROM siègent chez les DRAGONS, empilés presque à la
+        // VERTICALE, le trait passait au milieu de « ⇄ rétroplanning » (70 px
+        // de large). Le centre de la boîte du nom s'écarte donc du trait de la
+        // demi-projection de la boîte sur la normale, plus une marge :
+        // |nx|·largeur/2 + |ny|·hauteur/2 + 4. `tests/smoke-imladrik-carto` A3.
+        var fsP = Math.max(7, Math.min(13, 9 * ech));
+        pn.el.setAttribute('font-size', fsP.toFixed(1));
+        var largeurNom = 0;
+        try { largeurNom = pn.el.getComputedTextLength(); } catch (e) { largeurNom = 0; }
+        if (!(largeurNom > 0)) { largeurNom = fsP * 0.6 * ((pn.el.textContent || '').length || 1); }
+        var hauteurNom = fsP;
+        var recul = Math.abs(nx) * largeurNom / 2 + Math.abs(ny) * hauteurNom / 2 + 4;
+        // `y` est la LIGNE DE BASE : le centre de la boîte est ~0,32 em au-dessus.
         pn.el.setAttribute('x', (mx + nx * recul).toFixed(1));
-        pn.el.setAttribute('y', (my + ny * recul).toFixed(1));
-        pn.el.setAttribute('font-size', Math.max(7, Math.min(13, 9 * ech)).toFixed(1));
+        pn.el.setAttribute('y', (my + ny * recul + 0.32 * fsP).toFixed(1));
         pn.el.setAttribute('opacity',
           (0.8 * opaciteProfondeur((a.profondeur + b.profondeur) / 2)).toFixed(3));
       });
