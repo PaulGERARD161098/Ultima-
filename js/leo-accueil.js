@@ -266,6 +266,18 @@
     return departager(inclus);
   }
 
+  // Écho d'issue renvoyé au MODÈLE : borné. Une page du journal intime va
+  // jusqu'à 20 000 caractères ; son écho entier dépassait MAX_MESSAGE_CHARS
+  // (4 000, api/_lib/leo.js) et faisait refuser le tour suivant (400) jusqu'au
+  // rechargement — sur la carte depuis L2b, et désormais sans clic (B1 ④).
+  // La bulle montre TOUT à Paul ; le modèle n'a besoin que de savoir ce qui a
+  // été fait. Relevé par la revue du 30/09. PUR.
+  var MAX_ECHO_ISSUE = 1000;
+  function echoBorne(message) {
+    var texte = String(message || '');
+    return texte.length <= MAX_ECHO_ISSUE ? texte : texte.slice(0, MAX_ECHO_ISSUE - 2) + '…]';
+  }
+
   // S1 (revue du 30/09) : sans carte, plus rien ne NOMME la cible résolue
   // avant l'acte. Une résolution par INCLUSION (« Marc » → « Jean-Marc
   // Petit ») exige donc l'œil de Paul : seule l'égalité exacte (modulo casse
@@ -889,7 +901,7 @@
       // Ferme la carte et consigne l'issue (bulle sous aria-live + historique).
       function clore(message) {
         carte.remove();
-        historique.push({ role: 'user', content: message });
+        historique.push({ role: 'user', content: echoBorne(message) });
         bulle('issue', message);
         rearmer();
       }
@@ -1031,7 +1043,7 @@
           if (reussie && typeof voix.notifier === 'function') {
             try { voix.notifier('Léo a agi sans demander.'); } catch (e) { /* fail-soft */ }
           }
-          historique.push({ role: 'user', content: message });
+          historique.push({ role: 'user', content: echoBorne(message) });
           bulle('issue', message);
           rearmer();
         }

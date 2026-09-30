@@ -818,6 +818,34 @@ verifier('S4 — le second enrichissement porte le premier (rien n’est effacé
   corpsPatch.length === 2 && corpsPatch[1]?.essence === 'E0\n\nA1\n\nA2',
   JSON.stringify(corpsPatch.map((c) => c.essence)));
 
+// C16. Écho d'issue BORNÉ : une page longue écrite sans clic ne bloque pas le
+// tour suivant (le serveur refuse tout message > 4 000 caractères).
+const LONGUE = 'Noter au journal de « M. Lambert » : « ' + 'x'.repeat(5000) + ' »';
+await stubberVert({ ouverture: ouvertureOk, acte: acteOk });
+await pageV.unroute('**/api/leo');
+await stubberLeoAvecProposition({ outil: 'proposer_journal',
+  args: { cible_ref: 'M. Lambert', texte: 'Appelé ce matin.' }, reformulation: LONGUE, anneau: 'vert' });
+await dicter('vert-long');
+await pageV.waitForSelector('.leo-bulle-issue', { timeout: 5000 });
+const bulleLongue = (await pageV.locator('.leo-bulle-issue').textContent()) || '';
+const tourSuivant = [];
+await pageV.unroute('**/api/leo');
+await pageV.route('**/api/leo', (route) => {
+  tourSuivant.push(route.request().postDataJSON());
+  return route.fulfill({ status: 200, contentType: 'application/json',
+    body: JSON.stringify({ ok: true, data: { reponse: 'Bien noté.' } }) });
+});
+await pageV.locator('.leo-voix-champ').fill('Merci.');
+await pageV.locator('.leo-voix-envoyer').click();
+for (let i = 0; i < 60 && tourSuivant.length === 0; i++) await pageV.waitForTimeout(50);
+const echos = (tourSuivant[0]?.messages || []).filter((m) => /^\[Fait sans demander/.test(m.content));
+verifier('Écho borné : Paul voit tout dans la bulle', bulleLongue.length > 5000, String(bulleLongue.length));
+// Verrou de non-vacuité : l'écho existe bien dans le tour suivant.
+verifier('Écho borné : le tour suivant porte l’écho, sous 4 000 caractères',
+  echos.length === 1 && echos[0].content.length <= 1000 && echos[0].content.endsWith('…]') &&
+  (tourSuivant[0]?.messages || []).every((m) => m.content.length <= 4000),
+  String(echos[0]?.content.length));
+
 verifier('Zéro erreur console (voix)', erreursVoix.length === 0, erreursVoix.slice(0, 3).join(' | '));
 await pageV.close();
 
