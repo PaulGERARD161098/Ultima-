@@ -111,13 +111,18 @@ const RETOURS_ATTENDUS = [
   ['riven', 'riven.html', 'omega.html'],
   ['nicol-bolas', 'bcp.html', 'omega.html'],
   ['imladrik', 'imladrik.html', 'omega.html'],
-  ['adramelech', 'adramelech.html', 'imladrik.html'],
-  ['tao', 'tao.html', 'imladrik.html'],
   ['idees', 'idees.html', 'omega.html'],
   ['abaque', 'abaque.html', 'omega.html'],
   ['finubar', 'finubar.html', 'omega.html'],
 ];
-verifier('Verrou : huit pages à retour explicite', RETOURS_ATTENDUS.length === 8);
+// 30/09 : SIX pages, plus huit. `tao.html` n'existe plus (page supprimée), et
+// `adramelech.html` — dont le retour était `imladrik.html` — vit désormais sous
+// DRAGONS : il rejoint les cinq autres dans la section ci-dessous, où l'on exige
+// le retour AVEC son fragment. Le compte est refixé, pas relâché ; et il est
+// verrouillé dans les deux sens (aucune des deux pages n'a gardé une ligne ici).
+verifier('Verrou : six pages à retour explicite (ni TAO, supprimé, ni ADRAMELECH, sous DRAGONS)',
+  RETOURS_ATTENDUS.length === 6
+  && !RETOURS_ATTENDUS.some((r) => r[1] === 'tao.html' || r[1] === 'adramelech.html'));
 for (const [id, fichier, parent] of RETOURS_ATTENDUS) {
   const liens = await sonder(id, fichier);
   const versLeParent = liens.filter((l) => l.vu && l.href === parent);
@@ -128,20 +133,30 @@ for (const [id, fichier, parent] of RETOURS_ATTENDUS) {
     liens.filter((l) => /^(grima|naga|ultima)\.html$/.test(l.href)).map((l) => l.href).join(','));
 }
 // ---------------------------------------------------------------------------
-// 2026-09-30 — LES TROIS DRAGONS REVIENNENT À LEUR CONSTELLATION.
-// MAEDRETHNIR, VRANESH et DRAUKHAIN ne sont plus des caps directs d'IMLADRIK : ils
-// vivent sous la constellation DRAGONS. Un retour vers `imladrik.html` NU les
-// ramènerait sur un ciel où le dragon qu'on vient de quitter n'est plus — il
-// faudrait replonger. Le retour porte donc le fragment de la constellation, et
-// ce qui se prouve ici est le PARCOURS ENTIER : le lien est écrit, il est
-// touchable, et le SUIVRE ouvre le ciel isolé sur DRAGONS (trois étoiles).
+// 2026-09-30 — LES SIX DRAGONS REVIENNENT À LEUR CONSTELLATION.
+// MAEDRETHNIR, VRANESH, DRAUKHAIN, puis (même jour) ADRAMELECH, RESHIRAM et ZEKROM
+// ne sont plus des caps directs d'IMLADRIK : ils vivent sous la constellation
+// DRAGONS. Un retour vers `imladrik.html` NU les ramènerait sur un ciel où le
+// dragon qu'on vient de quitter n'est plus — il faudrait replonger. Le retour
+// porte donc le fragment de la constellation, et ce qui se prouve ici est le
+// PARCOURS ENTIER : le lien est écrit, il est touchable, et le SUIVRE ouvre le
+// ciel isolé sur DRAGONS (six étoiles).
+// TRANSPOSÉ de `smoke-tao` (page supprimée) : « retour des pages RESHIRAM et
+// ZEKROM » — qui remontaient à `tao.html` — vit ici, avec le même geste (suivre le
+// lien) et un but qui existe : `imladrik.html#constellation-dragons`. Le libellé
+// est exigé pour les trois pages qui portent le court « ↞ DRAGONS » (ADRAMELECH,
+// RESHIRAM, ZEKROM) ; les trois autres portent la phrase longue, déjà là.
 const DRAGONS = [
   ['maedrethnir', 'maedrethnir.html'],
   ['vranesh', 'vranesh.html'],
   ['draukhain', 'draukhain.html'],
+  ['adramelech', 'adramelech.html'],
+  ['reshiram', 'reshiram.html'],
+  ['zekrom', 'zekrom.html'],
 ];
+const LIBELLE_COURT = ['adramelech', 'reshiram', 'zekrom'];
 const RETOUR_DRAGONS = 'imladrik.html#constellation-dragons';
-verifier('Verrou : les trois dragons sont bien les enfants de la constellation DRAGONS',
+verifier('Verrou : les six pages sont bien les enfants de la constellation DRAGONS',
   JSON.stringify(NOEUDS['constellation-dragons'].enfants) === JSON.stringify(DRAGONS.map((d) => d[0])));
 
 // Ce que le ciel montre à l'arrivée, mesuré dans un navigateur mobile.
@@ -177,6 +192,12 @@ for (const [id, fichier] of DRAGONS) {
   verifier(`${fichier} : retour visible vers ${RETOUR_DRAGONS} (fragment compris)`,
     versLaConstellation.length > 0,
     liens.filter((l) => l.vu).map((l) => `${l.texte} → ${l.brut}`).join(' · ').slice(0, 200));
+  if (LIBELLE_COURT.includes(id)) {
+    verifier(`${fichier} : le retour est libellé « ↞ DRAGONS » (et non plus « ↞ TAO » ni « ↞ IMLADRIK »)`,
+      liens.some((l) => l.vu && l.brut === RETOUR_DRAGONS && l.texte === '↞ DRAGONS')
+      && !liens.some((l) => /TAO/i.test(l.texte) || /tao\.html/i.test(l.brut)),
+      liens.filter((l) => l.vu).map((l) => l.texte).join(' · '));
+  }
   // L'ABSENCE de l'ancien retour, sous verrou (le nouveau est là, et la page a des liens) :
   // un `imladrik.html` nu laisserait l'utilisateur sur le ciel à plat.
   verifier(`${fichier} : plus de retour vers imladrik.html NU (il ferait quitter la constellation)`,
@@ -188,14 +209,15 @@ for (const [id, fichier] of DRAGONS) {
   verifier(`${fichier} : le suivre est possible (lien cliquable au doigt)`, r.suivi, r.raison);
   verifier(`${fichier} : le retour arrive sur ${RETOUR_DRAGONS}`,
     r.arrivee.endsWith('/' + RETOUR_DRAGONS), r.arrivee);
-  verifier(`${fichier} : le ciel y est isolé sur DRAGONS — MAEDRETHNIR, VRANESH, DRAUKHAIN (trois étoiles)`,
-    r.etoiles.length === 3
-    && JSON.stringify(r.etoiles.map((e) => e.nom).sort()) === JSON.stringify(['DRAUKHAIN', 'MAEDRETHNIR', 'VRANESH']),
+  verifier(`${fichier} : le ciel y est isolé sur DRAGONS — les six étoiles, dont ADRAMELECH, RESHIRAM et ZEKROM`,
+    r.etoiles.length === 6
+    && JSON.stringify(r.etoiles.map((e) => e.nom).sort())
+      === JSON.stringify(['ADRAMELECH', 'DRAUKHAIN', 'MAEDRETHNIR', 'RESHIRAM', 'VRANESH', 'ZEKROM']),
     JSON.stringify(r.etoiles.map((e) => e.nom)));
 }
 // LE TÉMOIN, pour que « trois étoiles » ne soit pas vert d'un instrument qui
 // répondrait toujours trois : l'adresse SANS fragment ouvre le ciel à plat —
-// quatre entrées, et aucun dragon.
+// DEUX entrées (ARMES, DRAGONS), et aucun des six.
 {
   const contexte = await navigateur.newContext({ viewport: { width: 390, height: 664 }, isMobile: true, hasTouch: true });
   const page = await contexte.newPage();
@@ -205,8 +227,9 @@ for (const [id, fichier] of DRAGONS) {
   const ids = await page.evaluate(() => [...document.querySelectorAll('g.ciel-etoile[data-noeud-id]')]
     .map((g) => g.getAttribute('data-noeud-id')));
   await contexte.close();
-  verifier('Témoin : imladrik.html SANS fragment ouvre le ciel à plat (4 entrées, aucun dragon)',
-    ids.length === 4 && !ids.some((i) => DRAGONS.map((d) => d[0]).includes(i)), ids.join(','));
+  verifier('Témoin : imladrik.html SANS fragment ouvre le ciel à plat (2 entrées, aucune des six étoiles)',
+    ids.length === 2 && ids.join() === 'constellation-armes,constellation-dragons'
+    && !ids.some((i) => DRAGONS.map((d) => d[0]).includes(i)), ids.join(','));
 }
 
 // Le parent attendu existe bel et bien (un retour vers une page absente serait
