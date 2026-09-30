@@ -218,9 +218,20 @@ dit('isoleDragonsMontreLesSixEtoiles',
 dit('isoleDragonsNommeSonAmasDRAGONS',
   foyerDragons.noeuds.length === 6
   && foyerDragons.noeuds.every((n) => n.secteur_activite === 'DRAGONS'));
+// TRANSPOSÉ (30/09) : l'ancien « toutes des feuilles, rang 0 » était vrai des
+// trois dragons ; ADRAMELECH, arrivé chez eux, n'est PAS une feuille — il porte
+// ses trois caps (LE REGISTRE, LES ARCHIPELS, LES RAPPROCHEMENTS) et sa propre
+// page. Il est donc une TÊTE À PAGE (rang 1, cible gardée), comme il l'était déjà
+// au premier niveau d'IMLADRIK. Le verdict ne se relâche pas : les cinq autres
+// restent des feuilles de rang 0, et ADRAMELECH est le SEUL de rang 1 — lu dans
+// le registre, pas supposé.
 dit('isoleDragonsGardeLesCiblesDesPages',
-  foyerDragons.noeuds.every((n) => n.cible === NOEUDS[n.id].cible && /\.html$/.test(n.cible))
-  && foyerDragons.noeuds.every((n) => n.poids === 0)); // des feuilles : rang 0
+  foyerDragons.noeuds.length === 6
+  && foyerDragons.noeuds.every((n) => n.cible === NOEUDS[n.id].cible && /\.html$/.test(n.cible))
+  && foyerDragons.noeuds.filter((n) => n.poids === 0).map((n) => n.id).join(',')
+    === 'maedrethnir,vranesh,draukhain,reshiram,zekrom'
+  && foyerDragons.noeuds.filter((n) => n.poids === 1).map((n) => n.id).join(',') === 'adramelech'
+  && Array.isArray(NOEUDS.adramelech.enfants) && NOEUDS.adramelech.enfants.length === 3);
 // INVERSÉ (30/09) : `adramelech` sortait de cette liste d'absents — il est
 // désormais l'une des six étoiles des DRAGONS, et il est exigé PRÉSENT ci-dessus.
 // `tao` y reste : il n'est plus nulle part.
