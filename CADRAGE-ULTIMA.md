@@ -15,7 +15,8 @@
   sur une grille face à la caméra, à l'aspect réel de l'écran ; aucun nom de contact
   à l'ensemble ; titres cliquables (clic, Entrée), la caméra s'approche et tourne
   autour de la nébuleuse, Échap revient. Relecture adverse : 10 constats corrigés,
-  18 verdicts validés rouges sur le code d'avant. `smoke-riven-nebuleuses` 114/114.
+  18 verdicts validés rouges sur le code d'avant ; relecture Codex : 4 constats corrigés.
+  `smoke-riven-nebuleuses` 119/119.
   Détail : `CADRAGE-RIVEN-NEBULEUSES.md` §8 bis.
 - 🌌 **SESSION 2026-09-30 (après-midi) — RIVEN EN NÉBULEUSES, À PLAT ET EN 3D (PR `claude/riven-nebuleuses`, fusion squash).**
   Déclencheur : 43 contacts entrés dans RIVEN (39 d'un cercle d'affaires, 4 cartes

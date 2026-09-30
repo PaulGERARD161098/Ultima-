@@ -368,9 +368,9 @@ export default {
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "00ad084",
-        "tete_le": "2026-09-30T18:58:56+00:00",
-        "commits_depuis": 6,
+        "tete": "6a85a56",
+        "tete_le": "2026-09-30T19:28:31+00:00",
+        "commits_depuis": 8,
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-30",

@@ -138,8 +138,8 @@
 #322 fusionnée (`ea93065`), production READY, CI de `main` verte. Sur la 3D en
 production, Paul : seuls les noms des nébuleuses, une nébuleuse cliquable, les
 étoiles en constellations dans leurs nébuleuses. Fait en #324 : grille de
-boules face à la caméra, titres-boutons, approche avec point visé, Échap. 114
-verdicts, dont 18 validés rouges sur le code d'avant la relecture. Fusion en
+boules face à la caméra, titres-boutons, approche avec point visé, Échap. 119
+verdicts, dont 25 validés rouges sur le code d'avant les relectures. Fusion en
 squash : le grain pointe `675e2b4` (tête de `main` après #326). Détail : **`CADRAGE-RIVEN-NEBULEUSES.md`
 §8 bis**. Le jalon B1 ④ reste la prochaine action.
 

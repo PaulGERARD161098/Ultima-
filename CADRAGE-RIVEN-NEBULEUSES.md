@@ -403,7 +403,7 @@ relecture et verts après.** Dans l'ordre :
 - la recherche garde la nébuleuse approchée ;
 - la dérive balance au lieu de tourner sans fin.
 
-**Mesuré** (`tests/smoke-riven-nebuleuses.mjs`, 114 verdicts, section 6) :
+**Mesuré** (`tests/smoke-riven-nebuleuses.mjs`, 119 verdicts, section 6) :
 - à 320, 390 et 1 280 px, sur la démo et sur 54 et 300 fiches fictives :
   0 nom de contact à l'ensemble, titres sans chevauchement, brumes qui ne se
   touchent pas, chaque étoile dans sa brume ;
@@ -411,6 +411,15 @@ relecture et verts après.** Dans l'ordre :
   croisent pas et ne couvrent aucune étoile ;
 - trois sabotages du moteur font virer l'instrument : noms permanents
   rallumés, grille resserrée, évitement coupé.
+
+**Relecture Codex sur la PR** : quatre constats, tous vérifiés sur le code puis
+corrigés, chacun avec son verdict rouge sur le moteur d'avant :
+- un titre effacé (rogné par le bord ou passé derrière la caméra) restait
+  cliquable et tabulable ;
+- les zones de clic des nébuleuses, peintes au-dessus des personnes rattachées,
+  volaient leur clic ;
+- pendant une approche, la recherche perdait son contraste chez les voisines
+  encore à l'écran (0,20 contre 0,05 désormais).
 
 **Ce qui a résisté à la relecture** :
 - les neuf autres pages du moteur : sans `regrouper`, le point visé reste à
