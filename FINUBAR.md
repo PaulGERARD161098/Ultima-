@@ -32,7 +32,7 @@
   },
   "dernier_arret": {
     "le": "2026-09-30",
-    "quoi": "B1 ④ livré : un vert s'exécute sans clic derrière une trace (ouvrir → acte → clore, plafond, fail-closed vers la carte). Revue adversariale : 1 bloquant (S1) + 5 corrigés ; journal durci en base (migration appliquée, éprouvée en rôle authenticated). ⑤ cadré (§14), pas codé. Même jour, séance parallèle : RIVEN en 9 nébuleuses (#322).",
+    "quoi": "B1 ④ livré : un vert s'exécute sans clic derrière une trace (ouvrir → acte → clore, plafond, fail-closed vers la carte). Revue adversariale : 1 bloquant (S1) + 5 corrigés ; journal durci en base (migration appliquée, éprouvée en rôle authenticated). ⑤ cadré (§14), pas codé. Même jour, séances parallèles : RIVEN en 9 nébuleuses (#322), leçons v54 + /leo (#323, #326).",
     "commit": "09c428f702200633aad53d2bb2d43405377b75da"
   },
   "prochaine_action": "⑤ — trancher les DEUX choix du cadrage §14.2 (enrichissement : repasser orange ? · bouton défaire : cartouche + écran), puis coder le défaire joué par type vert, refusé si la cible a des dépendances (§14.0).",
@@ -52,6 +52,14 @@
     },
     {
       "quoi": "smoke-accueil-finubar ④c (« le remettre remonte le ciel là où il était ») rougit par intermittence, toujours 577 → 581 px : ~1 passage sur 10, MESURÉ sur main pur (b01afed) le 30/09 — préexistant, indépendant de B1 ④. Deux états stables, pas une animation inachevée : cause à trouver dans le recadrage du ciel.",
+      "depuis": "2026-09-30"
+    },
+    {
+      "quoi": "ÉCARTÉ par Paul le 30/09 — DATARENO- : Vercel rouge en permanence (PYTHON_ENTRYPOINT_NOT_FOUND), sur main aussi. « Vraiment à part, on le laisse de côté. » Ne pas rouvrir.",
+      "depuis": "2026-09-30"
+    },
+    {
+      "quoi": "REPORTÉ par Paul le 30/09 — mon-dpe.fr : 62 vulnérabilités Dependabot sur main (4 critiques, 28 hautes). « On va corriger mon dpe plus tard. » Séance dédiée.",
       "depuis": "2026-09-30"
     },
     {
