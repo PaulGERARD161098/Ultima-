@@ -8,6 +8,15 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- ✴️ **SESSION 2026-09-30 (soir) — LOT 3 : LE VOLUME EN CONSTELLATIONS (PR #324, fusion squash).**
+  Paul, sur la 3D en production : « je ne veux que les noms des nébuleuses, pas les
+  étoiles ; je dois pouvoir cliquer sur une nébuleuse ; les étoiles en volume de
+  constellation dans les nébuleuses ». Sous `regrouper` seulement : amas en boules
+  sur une grille face à la caméra, à l'aspect réel de l'écran ; aucun nom de contact
+  à l'ensemble ; titres cliquables (clic, Entrée), la caméra s'approche et tourne
+  autour de la nébuleuse, Échap revient. Relecture adverse : 10 constats corrigés,
+  18 verdicts validés rouges sur le code d'avant. `smoke-riven-nebuleuses` 114/114.
+  Détail : `CADRAGE-RIVEN-NEBULEUSES.md` §8 bis.
 - 🌌 **SESSION 2026-09-30 (après-midi) — RIVEN EN NÉBULEUSES, À PLAT ET EN 3D (PR `claude/riven-nebuleuses`, fusion squash).**
   Déclencheur : 43 contacts entrés dans RIVEN (39 d'un cercle d'affaires, 4 cartes
   BATIMAT — base seule, rien dans le dépôt) ; Paul : « trop d'overlap ». Neuf

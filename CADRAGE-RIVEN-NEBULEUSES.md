@@ -364,3 +364,63 @@ nébuleuses, la base, les autres pages du moteur, un tracé de figures entre
   l'amas, pas sur une constante.
 - *La brume (couche de fond) se décale de l'amas* → son rayon vient du même
   monde ; verdict « chaque étoile dans sa brume ».
+
+### 8 bis. L'exécution du lot 3 — 30/09, soir
+
+**Le prototype d'abord** (capture sur la maquette fictive, puis preview sur les
+vraies fiches), avant tout harnais. Réponse de Paul : *« go, finis le lot 3 et
+fusionne »*.
+
+**Le critère des brumes, précisé à la mesure** : un lobe est un dégradé radial
+dont l'opacité tombe à 0,05 à mi-rayon et à 0,01 aux trois quarts. « Deux
+brumes ne se recouvrent pas » se juge donc sur leur partie VISIBLE : deux lobes
+de nébuleuses différentes restent à plus de la moitié de la somme de leurs
+rayons. Choix délibéré, pas un seuil réglé pour passer.
+
+**Ce que la mesure a corrigé en route** :
+- l'approche se cadre sur le rayon RÉEL de l'amas, avec un plancher
+  « rayon + 65 » : « + 90 » plafonnait une petite nébuleuse à 43 % de la vue ;
+- un lobe central de brume, posé au centre RÉEL de l'amas (le barycentre d'un
+  échantillon de douze étoiles s'en écartait d'un quart de rayon), avec une
+  marge de perspective : sans lui, à 300 fiches, 1 à 5 étoiles sortaient de
+  leur nébuleuse ;
+- la boîte d'un nom a la hauteur du texte peint, et un nom qui se tait
+  disparaît sans fondu (un fondu croisait son remplaçant) ;
+- la maquette montre son bouton avant que le moteur mesure la scène.
+
+**Relecture adverse indépendante** : dix constats sur le code, plus un sur le
+harnais. Tous sont corrigés, et chacun a son verdict. Validation de
+l'instrument : **les 18 nouveaux verdicts sont ROUGES sur le code d'avant la
+relecture et verts après.** Dans l'ordre :
+- les titres seuls se tabulent à l'ensemble (il fallait 301 Tab) ;
+- Entrée entre dans la nébuleuse, sans pivoter la grille ;
+- les titres effacés sortent de la tabulation ;
+- la taille CSS n'écrase plus celle des titres (chevauchement à 320 px) ;
+- la grille se recompose quand l'écran tourne ;
+- l'approche l'emporte sur le survol ;
+- les personnes suivent leur étoile ;
+- Échap marche depuis « + » ;
+- la recherche garde la nébuleuse approchée ;
+- la dérive balance au lieu de tourner sans fin.
+
+**Mesuré** (`tests/smoke-riven-nebuleuses.mjs`, 114 verdicts, section 6) :
+- à 320, 390 et 1 280 px, sur la démo et sur 54 et 300 fiches fictives :
+  0 nom de contact à l'ensemble, titres sans chevauchement, brumes qui ne se
+  touchent pas, chaque étoile dans sa brume ;
+- une nébuleuse approchée occupe de 52 à 85 % de la vue, et ses noms ne se
+  croisent pas et ne couvrent aucune étoile ;
+- trois sabotages du moteur font virer l'instrument : noms permanents
+  rallumés, grille resserrée, évitement coupé.
+
+**Ce qui a résisté à la relecture** :
+- les neuf autres pages du moteur : sans `regrouper`, le point visé reste à
+  l'origine, et opacité, zoom et distances sont inchangés ;
+- les titres sont des boutons nommés, sans texte lu deux fois ;
+- aucun titre invisible ne vole le clic d'une étoile ;
+- une image coûte de 9,5 à 13 ms à 300 fiches.
+
+**Limite assumée** : une fois une nébuleuse approchée, un nom qui n'a pas de
+place se tait ; il reste au survol et au focus. Mesuré au dernier passage, sur
+BTP : à 390 px, 7 noms sur 12 (54 fiches) et 4 sur 70 (300 fiches) ; à 1 280 px,
+11 sur 12 et 29 sur 70. Un très gros amas sur téléphone se lit donc étoile par
+étoile — le chiffre est donné pour qu'on le sache, pas réglé pour passer.
