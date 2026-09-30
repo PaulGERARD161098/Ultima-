@@ -154,8 +154,9 @@ gestes A sont les siens, les boucles B sont du code que Claude porte seul.
 | C1 | Le bilan ③ complet : reste à charge, feuille complète, format du rapport (Q6) | M5 | RenoDevis + mon-dpe.fr | ⬜ après B1 | un bilan remis à un vrai client, avec son reste à charge |
 | C2 | Notre Kelvin v1 : la fiche d'approche depuis l'adresse, zéro API payante | M2 + M3 | mon-dpe.fr (route) · RenoBoost et RenoDevis (écrans) | ⬜ ; la précision de Paul sur mon-dpe.fr et VITRUVE est attendue (Q12) | une adresse réelle donne sa fiche (DPE, bâtiment, travaux possibles) dans RenoBoost et dans le dossier RenoDevis |
 | C3 | Notre Kelvin v2-v3 : le relevé corrige l'estimation, puis la prescription des travaux | M3 | RenoDevis + mon-dpe.fr | ⬜ après C2 | une estimation corrigée au relevé, tracée « auto » ou « manuel » |
-| C4 | Ma tournée du jour, et la déchèterie pro la plus proche | M2 | Artidispo + RenoBoost | 🧊 déchèterie reportée par Paul le 30/09 | à fixer à l'ouverture |
-| C5 | ④ Commande et suivi | M7 | — | 🟣 **cadrage seul** : les 5 questions aux pros, Matthieu d'abord (cadrage §4) | se rouvre si un pro dit « oui » à la question 5 en citant un chantier retardé. ⚠️ S'il ne se rouvre pas, comment M7 compte pour Q-P1 : Q11 |
+| C4 | Ma tournée du jour | M2 | Artidispo + RenoBoost | ⬜ moteur partiel dans Artidispo (vue sans appelant) | à fixer à l'ouverture |
+| C5 | La déchèterie pro la plus proche du chantier | M2 | **à confirmer à la réouverture** (le cadrage ne nomme aucun dépôt ; faisabilité notée dans le grain RenoDevis : base ADEME SINOE, sans créneau) | 🧊 reportée par Paul le 30/09 | à fixer à la réouverture |
+| C6 | ④ Commande et suivi | M7 | — | 🟣 **cadrage seul** : les 5 questions aux pros, Matthieu d'abord (cadrage §4) | se rouvre si un pro dit « oui » à la question 5 en citant un chantier retardé. ⚠️ S'il ne se rouvre pas, comment M7 compte pour Q-P1 : Q11 |
 
 ### Famille N — les boucles hors des écrans ① à ④ (après C, avant D)
 
@@ -343,5 +344,5 @@ Paul s'inscrivent dans la liste ci-dessus, datées.
 | Q6 | Rapport client : 3 pages ou 10 sections | C1 | 3 pages remises, les 10 sections en annexe (cadrage §8) |
 | Q9 | Léo, Réno, Vitruve : qui parle à qui | B4 | Léo pour Paul dans Ultima, Réno dans les produits, Vitruve pour le particulier |
 | Q10 | L'identifiant de dossier commun, de M0 à M9 | B4 | à instruire à l'ouverture, sans faire voyager de donnée personnelle (cadrage §3.3) |
-| Q11 | Si ④ ne se rouvre pas, comment M7 compte pour le critère Q-P1 | C5 | à instruire avec la réponse des pros |
+| Q11 | Si ④ ne se rouvre pas, comment M7 compte pour le critère Q-P1 | C6 | à instruire avec la réponse des pros |
 | Q12 | La précision de Paul sur mon-dpe.fr et VITRUVE (attendue dans le grain d'Ultima) | C2 | la correspondance lue dans les fiches (cadrage §3.1), à confirmer |
