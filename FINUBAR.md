@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-30",
-    "quoi": "Bouclage 30/09 : #302 intégrée, LEÇONS v47 (v45+#314+horloge), collecte des boucles en texte nu. Avant : frontière des registres arbitrée (#314).",
-    "commit": "c905c869417ecbb98a78d0c2e54593c57bcedaa7"
+    "quoi": "LEÇONS **v48** propagées aux 9 dépôts avec leur LECTEUR (hook + enregistrement) : 3 portaient le fichier sans le hook. Avant : v47, bouclage 30/09, #314.",
+    "commit": "bb50a0fb344f8c6be7a2993a623dbf3704fa0067"
   },
   "prochaine_action": "④ — l'exécution : `ouvrirTrace()`, journal 'tentee' AVANT l'acte, plafond, issue après. Frontière arbitrée — cadrage §12.8 quater.",
   "bloque_par": [
