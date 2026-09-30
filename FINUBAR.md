@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-30",
-    "quoi": "LEÇONS **v48** propagées aux 9 dépôts avec leur LECTEUR (hook + enregistrement) : 3 portaient le fichier sans le hook. Avant : v47, bouclage 30/09, #314.",
-    "commit": "bb50a0fb344f8c6be7a2993a623dbf3704fa0067"
+    "quoi": "IMLADRIK = ARMES (IFULVIN) + DRAGONS (6 étoiles, nébuleuses), TAO supprimé (#313, #316). Avant : leçons v48 propagées (#317).",
+    "commit": "4b8e2de030a50308c54e50f3f30efd0a4ef950ed"
   },
   "prochaine_action": "④ — l'exécution : `ouvrirTrace()`, journal 'tentee' AVANT l'acte, plafond, issue après. Frontière arbitrée — cadrage §12.8 quater.",
   "bloque_par": [

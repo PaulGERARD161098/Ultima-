@@ -46,8 +46,8 @@ export default {
       },
       "recits": [],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "10b91ca",
         "tete_le": "2026-09-30T10:30:14+00:00",
@@ -140,8 +140,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "b9d13d8",
         "tete_le": "2026-09-30T10:30:14+00:00",
@@ -193,8 +193,8 @@ export default {
       },
       "recits": [],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "c106226",
         "tete_le": "2026-09-30T10:30:14+00:00",
@@ -279,8 +279,8 @@ export default {
       },
       "recits": [],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "45b2468",
         "tete_le": "2026-09-30T10:30:14+00:00",
@@ -290,92 +290,6 @@ export default {
       "mesure_le": "2026-09-30",
       "jours_depuis_maj": 0,
       "jours_en_attente": 44,
-      "rang": 0
-    },
-    {
-      "ok": true,
-      "motif": "",
-      "depot": "PaulGERARD161098/Ultima-",
-      "grain": {
-        "projet": "Ultima",
-        "depot": "PaulGERARD161098/Ultima-",
-        "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-        "rattache_a": "CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md",
-        "etat": "en_cours",
-        "jalon": {
-          "nom": "B1 — Léo AGIT dans l'anneau vert (cadrage §11)",
-          "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③ faits (table appliquée, journal + clé partagée) ; reste ④, l'exécution"
-        },
-        "dernier_arret": {
-          "le": "2026-09-30",
-          "quoi": "LEÇONS **v48** propagées aux 9 dépôts avec leur LECTEUR (hook + enregistrement) : 3 portaient le fichier sans le hook. Avant : v47, bouclage 30/09, #314.",
-          "commit": "bb50a0fb344f8c6be7a2993a623dbf3704fa0067"
-        },
-        "prochaine_action": "④ — l'exécution : `ouvrirTrace()`, journal 'tentee' AVANT l'acte, plafond, issue après. Frontière arbitrée — cadrage §12.8 quater.",
-        "bloque_par": [
-          "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
-          "La précision sur « mon dpe.fr » (VITRUVE)",
-          "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis",
-          "Vérifier que les inscriptions Supabase sont FERMÉES (« Allow new signups ») — un compte tiers pourrait remplir le quota par la route d'import"
-        ],
-        "en_attente_depuis": "2026-08-20",
-        "boucles_ouvertes": [
-          {
-            "quoi": "Étiquettes vocales des caps : chacune finit par « 0 lien » sur les menus, du bruit pour un lecteur d'écran. Préexistant, relevé au dry run du 27/09 (carte-celeste §28).",
-            "depuis": "2026-09-27"
-          },
-          {
-            "quoi": "MESURÉ le 13/09 et démenti : la note annonçait des copies divergentes du rappel Finubar. Les sept fichiers ont la même empreinte. Voir CADRAGE-FINUBAR.md.",
-            "depuis": "2026-09-13"
-          },
-          {
-            "quoi": "COLLECTE — `collecter.mjs` VIDE le grain d'un dépôt hors séance au lieu de garder sa dernière mesure. Cran de sûreté posé le 07/09 (refus d'écrire) ; la FUSION reste à faire.",
-            "depuis": "2026-09-07"
-          },
-          {
-            "quoi": "ripair (paggerard-boop) reste en LEÇONS v7 : hors de depots.json et fork partagé avec un tiers — exclu à dessein le 28/09. À trancher par Paul.",
-            "depuis": "2026-09-11"
-          },
-          {
-            "quoi": "Aucun contrôle croisé ne compare la copie des leçons d'un dépôt à sa source. Payé le 28/09 : RenoBoost portait 2 leçons absentes de la source, vues au diff avant écrasement.",
-            "depuis": "2026-09-11"
-          },
-          {
-            "quoi": "⚠️ Les Routines DR visent une session persistante AVEC ses dépôts, mais le tir d'essai du 06/09 ne l'a pas réveillée. À vérifier à 12 h ; sinon, GitHub Action par dépôt.",
-            "depuis": "2026-09-06"
-          },
-          {
-            "quoi": "Le mail du matin lit l'agrégat COMMITÉ : il vieillit les jours sans séance (il le dit). Le rendre frais tout seul = GitHub Action nocturne qui recollecte et commite",
-            "depuis": "2026-09-06"
-          },
-          {
-            "quoi": "Direction posée le 05/09, toujours valable : Ouvrir REPRISE-2026-09-05-apres-la-semaine.md §5 : la mesure d'abord (collecter.mjs + les 4 jalons en SQL), jamais la lecture du doc.",
-            "depuis": "2026-09-05"
-          },
-          {
-            "quoi": "238 fiches d'autres comptes dans kv_store : E1 rend le cas inoffensif mais ne l'explique pas. Origine à trouver — REPRISE-2026-09-05-apres-la-semaine.md §3",
-            "depuis": "2026-09-05"
-          },
-          {
-            "quoi": "VESTA (ADR-010) hors classement : nom à acter, rôle de Fahrenheit à confirmer, 3 questions à poser. Julien = Julien Laudy, celui de PROTÉE. Détail : adramelech/IDEES.md",
-            "depuis": "2026-09-05"
-          }
-        ],
-        "maj": "2026-09-30"
-      },
-      "recits": [],
-      "ciel": "racine",
-      "hors_seance": false,
-      "reprise": false,
-      "derive": {
-        "tete": "0167c88",
-        "tete_le": "2026-09-30T12:48:46+02:00",
-        "commits_depuis": 1,
-        "commit_inconnu": false
-      },
-      "mesure_le": "2026-09-30",
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 41,
       "rang": 0
     },
     {
@@ -453,8 +367,8 @@ export default {
       },
       "recits": [],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "6489310",
         "tete_le": "2026-09-30T10:30:15+00:00",
@@ -508,8 +422,8 @@ export default {
         "bloque_par[]"
       ],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "2cc75d4",
         "tete_le": "2026-09-30T10:30:15+00:00",
@@ -552,8 +466,8 @@ export default {
       },
       "recits": [],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "895c59e",
         "tete_le": "2026-09-30T10:30:15+00:00",
@@ -595,8 +509,8 @@ export default {
       },
       "recits": [],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "55c0685",
         "tete_le": "2026-09-30T10:30:15+00:00",
@@ -607,6 +521,92 @@ export default {
       "jours_depuis_maj": 0,
       "jours_en_attente": 7,
       "rang": 0
+    },
+    {
+      "ok": true,
+      "motif": "",
+      "depot": "PaulGERARD161098/Ultima-",
+      "grain": {
+        "projet": "Ultima",
+        "depot": "PaulGERARD161098/Ultima-",
+        "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
+        "rattache_a": "CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md",
+        "etat": "en_cours",
+        "jalon": {
+          "nom": "B1 — Léo AGIT dans l'anneau vert (cadrage §11)",
+          "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③ faits (table appliquée, journal + clé partagée) ; reste ④, l'exécution"
+        },
+        "dernier_arret": {
+          "le": "2026-09-30",
+          "quoi": "IMLADRIK = ARMES (IFULVIN) + DRAGONS (6 étoiles, nébuleuses), TAO supprimé (#313, #316). Avant : leçons v48 propagées (#317).",
+          "commit": "4b8e2de030a50308c54e50f3f30efd0a4ef950ed"
+        },
+        "prochaine_action": "④ — l'exécution : `ouvrirTrace()`, journal 'tentee' AVANT l'acte, plafond, issue après. Frontière arbitrée — cadrage §12.8 quater.",
+        "bloque_par": [
+          "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
+          "La précision sur « mon dpe.fr » (VITRUVE)",
+          "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis",
+          "Vérifier que les inscriptions Supabase sont FERMÉES (« Allow new signups ») — un compte tiers pourrait remplir le quota par la route d'import"
+        ],
+        "en_attente_depuis": "2026-08-20",
+        "boucles_ouvertes": [
+          {
+            "quoi": "Étiquettes vocales des caps : chacune finit par « 0 lien » sur les menus, du bruit pour un lecteur d'écran. Préexistant, relevé au dry run du 27/09 (carte-celeste §28).",
+            "depuis": "2026-09-27"
+          },
+          {
+            "quoi": "MESURÉ le 13/09 et démenti : la note annonçait des copies divergentes du rappel Finubar. Les sept fichiers ont la même empreinte. Voir CADRAGE-FINUBAR.md.",
+            "depuis": "2026-09-13"
+          },
+          {
+            "quoi": "COLLECTE — `collecter.mjs` VIDE le grain d'un dépôt hors séance au lieu de garder sa dernière mesure. Cran de sûreté posé le 07/09 (refus d'écrire) ; la FUSION reste à faire.",
+            "depuis": "2026-09-07"
+          },
+          {
+            "quoi": "ripair (paggerard-boop) reste en LEÇONS v7 : hors de depots.json et fork partagé avec un tiers — exclu à dessein le 28/09. À trancher par Paul.",
+            "depuis": "2026-09-11"
+          },
+          {
+            "quoi": "Aucun contrôle croisé ne compare la copie des leçons d'un dépôt à sa source. Payé le 28/09 : RenoBoost portait 2 leçons absentes de la source, vues au diff avant écrasement.",
+            "depuis": "2026-09-11"
+          },
+          {
+            "quoi": "⚠️ Les Routines DR visent une session persistante AVEC ses dépôts, mais le tir d'essai du 06/09 ne l'a pas réveillée. À vérifier à 12 h ; sinon, GitHub Action par dépôt.",
+            "depuis": "2026-09-06"
+          },
+          {
+            "quoi": "Le mail du matin lit l'agrégat COMMITÉ : il vieillit les jours sans séance (il le dit). Le rendre frais tout seul = GitHub Action nocturne qui recollecte et commite",
+            "depuis": "2026-09-06"
+          },
+          {
+            "quoi": "Direction posée le 05/09, toujours valable : Ouvrir REPRISE-2026-09-05-apres-la-semaine.md §5 : la mesure d'abord (collecter.mjs + les 4 jalons en SQL), jamais la lecture du doc.",
+            "depuis": "2026-09-05"
+          },
+          {
+            "quoi": "238 fiches d'autres comptes dans kv_store : E1 rend le cas inoffensif mais ne l'explique pas. Origine à trouver — REPRISE-2026-09-05-apres-la-semaine.md §3",
+            "depuis": "2026-09-05"
+          },
+          {
+            "quoi": "VESTA (ADR-010) hors classement : nom à acter, rôle de Fahrenheit à confirmer, 3 questions à poser. Julien = Julien Laudy, celui de PROTÉE. Détail : adramelech/IDEES.md",
+            "depuis": "2026-09-05"
+          }
+        ],
+        "maj": "2026-09-30"
+      },
+      "recits": [],
+      "ciel": "racine",
+      "hors_seance": false,
+      "reprise": false,
+      "derive": {
+        "tete": null,
+        "tete_le": null,
+        "commits_depuis": 0,
+        "commit_inconnu": false
+      },
+      "mesure_le": "2026-09-30",
+      "jours_depuis_maj": 0,
+      "jours_en_attente": 41,
+      "rang": 2
     },
     {
       "ok": true,
@@ -647,8 +647,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "1953b95",
         "tete_le": "2026-09-30T10:30:14+00:00",
@@ -666,11 +666,11 @@ export default {
     "lisibles": 10,
     "illisibles": 0,
     "hors_seance": 0,
-    "repris": 0,
+    "repris": 9,
     "en_cours": 8,
     "en_attente_de_paul": 2,
     "au_repos": 0,
-    "derives": 9,
+    "derives": 8,
     "commits_inconnus": 1,
     "boucles_ouvertes": 45,
     "gestes_de_paul": [
@@ -753,22 +753,6 @@ export default {
       {
         "projet": "RénoDevis",
         "geste": "Verdict de Paul sur la DENSITÉ : liste du cockpit (PR #160) et blocs d'un modèle retenu. Les tests prouvent la conformité, pas la lisibilité."
-      },
-      {
-        "projet": "Ultima",
-        "geste": "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "La précision sur « mon dpe.fr » (VITRUVE)"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "Vérifier que les inscriptions Supabase sont FERMÉES (« Allow new signups ») — un compte tiers pourrait remplir le quota par la route d'import"
       },
       {
         "projet": "artisan-builder",
@@ -855,6 +839,22 @@ export default {
         "geste": "⚠️ Deux PC : seul C:\\Users\\User envoie ; le PC « pagge » a un .env incomplet et n'envoie jamais"
       },
       {
+        "projet": "Ultima",
+        "geste": "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "La précision sur « mon dpe.fr » (VITRUVE)"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "Vérifier que les inscriptions Supabase sont FERMÉES (« Allow new signups ») — un compte tiers pourrait remplir le quota par la route d'import"
+      },
+      {
         "projet": "mon-dpe.fr",
         "geste": "Poser les secrets Vercel du pont audit-PAC, puis redéployer"
       },
@@ -930,13 +930,6 @@ export default {
         "signal": 1
       },
       {
-        "id": "PaulGERARD161098/Ultima-",
-        "libelle": "Ultima",
-        "constellation": "en_cours",
-        "ciel": "racine",
-        "signal": 1
-      },
-      {
         "id": "PaulGERARD161098/artisan-builder",
         "libelle": "artisan-builder",
         "constellation": "en_cours",
@@ -963,6 +956,13 @@ export default {
         "constellation": "en_attente_de_paul",
         "ciel": "alpha",
         "signal": 1
+      },
+      {
+        "id": "PaulGERARD161098/Ultima-",
+        "libelle": "Ultima",
+        "constellation": "en_cours",
+        "ciel": "racine",
+        "signal": 0
       },
       {
         "id": "PaulGERARD161098/mon-dpe.fr",
