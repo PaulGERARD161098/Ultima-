@@ -39,12 +39,16 @@
 3. **Une seule règle pour choisir quoi faire** :
    - **Léo présente à Paul, en un seul panneau, les gestes A qui l'attendent**
      (⬜), chacun avec sa « part de Claude » déjà faite (§2) ;
-   - **pendant qu'ils attendent Paul, Claude ouvre la première boucle B ⬜**
-     (décision Q-P4 du 30/09) ;
+   - **pendant qu'ils attendent Paul, Claude ouvre la première boucle B ⬜ qui
+     n'attend aucun geste A ouvert** (décision Q-P4 du 30/09). Au 30/09, c'est
+     **B2** : B1 se recette sur un devis émis (après A3), B3 attend A13 ;
    - la **fiche du §4 ne vaut que pour une boucle de code** : un geste de Paul se
      présente, il ne se cadre pas en six points.
-4. **En fermant une boucle**, mettre à jour sa ligne du §2 **dans le commit du
-   travail**, puis le grain `FINUBAR.md` du dépôt touché.
+4. **En fermant une boucle**, mettre à jour le grain `FINUBAR.md` du dépôt
+   touché dans le commit du travail, puis **sa ligne du §2 dans un commit
+   d'Ultima, dans la même séance**, juste après : elle cite le dépôt, la PR et
+   le commit. Quand la boucle vit dans Ultima, c'est le même commit. Ce commit
+   d'Ultima part avec la PR d'Ultima de la séance.
 
 ⚠️ **Deux noms qui se croisent.** « B1 » dans le grain Finubar d'Ultima est le
 jalon de Léo (« Léo AGIT »), sans rapport avec la boucle B1 d'ici. Et cette
@@ -55,7 +59,7 @@ Le message à donner à Léo pour reprendre. Il ne porte aucun chiffre, pour ne
 jamais périmer : les chiffres se lisent au §2 et se remesurent.
 
 ```
-Léo, on reprend la chaîne Rénoboost. La route est dans Ultima-/PLAN-2026-09-30-chaine-A-Z.md, sur main. Lis le §0 et le §2, remesure les preuves, dis-moi en trois phrases où on en est, présente-moi en un panneau les gestes A qui m'attendent, et ouvre en parallèle la première boucle B avec la fiche du §4.
+Léo, on reprend la chaîne Rénoboost. La route est dans Ultima-/PLAN-2026-09-30-chaine-A-Z.md, sur main. Lis le §0 et le §2, remesure les preuves, dis-moi en trois phrases où on en est, présente-moi en un panneau les gestes A qui m'attendent, et ouvre en parallèle la première boucle B qui n'attend aucun geste A (B2 au 30/09) avec la fiche du §4.
 Une boucle de code à la fois. Les gates de chaque dépôt s'appliquent, et rien ne se fusionne sans mon go.
 ```
 
@@ -112,7 +116,7 @@ bases : `mwaryfscxgrulauwwque` (partagée) sauf mention.
 |---|---|---|---|---|---|---|---|
 | A1 | Relire et fusionner la PR RenoDevis #214 (la dernière version d'un devis gagne) | M4 | Paul | fait | ✅ **fusionnée le 30/09 sur le go de Paul**, en mode « merge » : `f42aa5b` reste dans l'historique de `main` | PR fusionnée | l'état de la PR sur GitHub |
 | A2 | Déposer les 14 PDF SOLA dans le dossier Drive « SOLA devis a lire », trancher 235/201 | M4 | Paul | lire les 14 PDF, donner le total devisé définitif, les verser au corpus | ⬜ **le dossier n'existe pas** : seul un dossier « SOLA » (recherche Drive, 17:4x UTC) | les 14 PDF dans le dossier ; le total inscrit dans RenoBoost `ROADMAP-2026-09-29-fin-de-session.md` | le connecteur Drive : le dossier et ses fichiers |
-| A3 | Chiffrer, puis émettre un devis depuis l'application | M4 → M5, M6 | Paul | la requête ci-contre ; la liste des devis sans lignes, par identifiant, jamais par nom | ⬜ **2 devis portent des lignes, sur 15** (17:39 UTC) | plus de 2 | `select count(*) filter (where case when jsonb_typeof(lignes) = 'array' then jsonb_array_length(lignes) > 0 else false end) as chiffres, count(*) as devis from devis` |
+| A3 | Chiffrer, puis émettre un devis depuis l'application | M4 → M5, M6 | Paul | la requête ci-contre ; la liste des devis sans lignes, par identifiant, jamais par nom | ⬜ **2 devis chiffrés ET émis depuis l'application, sur 15** (18:25 UTC) | plus de 2 | `select count(*) filter (where case when jsonb_typeof(d.lignes) = 'array' then jsonb_array_length(d.lignes) > 0 else false end and coalesce(d.extra->>'source','') <> 'email' and exists (select 1 from devis_events e where e.devis_id = d.id and e.type = 'sent')) as chiffres_emis, count(*) as devis from devis d` — un devis à lignes mais importé ou resté brouillon ne compte pas |
 | A4 | Rejouer la TVA en production, ensemble | M4 | Paul + Claude | préparer la recette : le devis à créer, les conditions à cocher, ce qu'on lira en base | ⬜ | un devis créé avec ses conditions de TVA | la requête s'écrit avec la recette |
 | A5 | Pilote V3, étape 2 : test au téléphone avec Matthieu | M3 | Paul + Matthieu | préparer la fiche de test de la brique 2 | ⬜ | les critères de la brique 2 | RenoDevis `REPRISE-PILOTE-V3.md` |
 | A6a | Poser la clé Stripe live en production | M6 | Paul | rappeler où la poser, et ce qu'on vérifie après | ⬜ **clé de test** : battement du 30/09 à 06:30 UTC, `test: true` | `test = false` | `select valeur->>'test' from sentinelle_etat where cle = 'battement:rr-stripe-embarquement'` |
@@ -150,8 +154,9 @@ gestes A sont les siens, les boucles B sont du code que Claude porte seul.
 | C1 | Le bilan ③ complet : reste à charge, feuille complète, format du rapport (Q6) | M5 | RenoDevis + mon-dpe.fr | ⬜ après B1 | un bilan remis à un vrai client, avec son reste à charge |
 | C2 | Notre Kelvin v1 : la fiche d'approche depuis l'adresse, zéro API payante | M2 + M3 | mon-dpe.fr (route) · RenoBoost et RenoDevis (écrans) | ⬜ ; la précision de Paul sur mon-dpe.fr et VITRUVE est attendue (Q12) | une adresse réelle donne sa fiche (DPE, bâtiment, travaux possibles) dans RenoBoost et dans le dossier RenoDevis |
 | C3 | Notre Kelvin v2-v3 : le relevé corrige l'estimation, puis la prescription des travaux | M3 | RenoDevis + mon-dpe.fr | ⬜ après C2 | une estimation corrigée au relevé, tracée « auto » ou « manuel » |
-| C4 | Ma tournée du jour, et la déchèterie pro la plus proche | M2 | Artidispo + RenoBoost | 🧊 déchèterie reportée par Paul le 30/09 | à fixer à l'ouverture |
-| C5 | ④ Commande et suivi | M7 | — | 🟣 **cadrage seul** : les 5 questions aux pros, Matthieu d'abord (cadrage §4) | se rouvre si un pro dit « oui » à la question 5 en citant un chantier retardé. ⚠️ S'il ne se rouvre pas, comment M7 compte pour Q-P1 : Q11 |
+| C4 | Ma tournée du jour | M2 | Artidispo + RenoBoost | ⬜ moteur partiel dans Artidispo (vue sans appelant) | à fixer à l'ouverture |
+| C5 | La déchèterie pro la plus proche du chantier | M2 | **à confirmer à la réouverture** (le cadrage ne nomme aucun dépôt ; faisabilité notée dans le grain RenoDevis : base ADEME SINOE, sans créneau) | 🧊 reportée par Paul le 30/09 | à fixer à la réouverture |
+| C6 | ④ Commande et suivi | M7 | — | 🟣 **cadrage seul** : les 5 questions aux pros, Matthieu d'abord (cadrage §4) | se rouvre si un pro dit « oui » à la question 5 en citant un chantier retardé. ⚠️ S'il ne se rouvre pas, comment M7 compte pour Q-P1 : Q11 |
 
 ### Famille N — les boucles hors des écrans ① à ④ (après C, avant D)
 
@@ -160,23 +165,23 @@ l'inventaire, n'y avaient pas de place. ✅ **Placées par Paul le 30/09 (§9,
 Q-P2) : après C, avant D**, dans cet ordre, parce qu'elles prolongent des
 chaînes déjà en service — la 3D, plus incertaine, passe après.
 
-| # | Boucle | Maillon | État |
-|---|---|---|---|
-| N1 | Formulaire de demande en 3 étapes | M0 | ⬜ cadré le 05/09 |
-| N2 | Rappel une heure avant, au pro et au client | M1 | ⬜ |
-| N3 | Factures de sous-traitance (client d'origine Rénoboost) | M6 | ⬜ tenue comptable à préciser par Paul |
-| N4 | Contrats d'entretien Ripair, leur paiement, le contrat type | M8 | ⬜ arbitrages à rendre ; contrat type chez le juriste |
-| N5 | Numéro de série et garanties à la pose | M8 | ⬜ |
-| N6 | Avis : J+2 ou J+7 ; témoignages et logos partenaires | M9 | ⬜ témoignages : attendent un deuxième partenaire |
+| # | Boucle | Maillon | Dépôt | État |
+|---|---|---|---|---|
+| N1 | Formulaire de demande en 3 étapes | M0 | RenoBoost | ⬜ cadré le 05/09 |
+| N2 | Rappel une heure avant, au pro et au client | M1 | Artidispo | ⬜ |
+| N3 | Factures de sous-traitance (client d'origine Rénoboost) | M6 | RenoBoost + RenoDevis | ⬜ tenue comptable à préciser par Paul |
+| N4 | Contrats d'entretien Ripair, leur paiement, le contrat type | M8 | RenoPredict ; contrat type : RenoBoost | ⬜ arbitrages à rendre ; contrat type chez le juriste |
+| N5 | Numéro de série et garanties à la pose | M8 | RenoPredict, **à confirmer à l'ouverture** (le cadrage ne nomme aucun dépôt) | ⬜ |
+| N6 | Avis : J+2 ou J+7 ; témoignages et logos partenaires | M9 | RenoPredict (avis) ; RenoBoost (témoignages et logos) | ⬜ témoignages : attendent un deuxième partenaire |
 
 ### Famille D — la 3D
 
-| # | Boucle | Maillon | État | Preuve de sortie |
-|---|---|---|---|---|
-| D0 | Test sans code : une vraie pièce, deux applis gratuites (protocole au cadrage §3.2) | M3 | ⬜ **geste de Paul, hors de la règle 5** : il se fait à la première visite qui s'y prête, sans ouvrir de boucle (cadrage §3.2) | la pièce est reconnaissable et une cote tient à ±10 %, ou non |
-| D1 | Famille 1 : poser le produit dans la pièce, en réalité augmentée | M3 | ⬜ après D0 | à fixer à l'ouverture ; il faut un modèle 3D de chaque produit |
-| D2 | Famille 2 : reconstruire la pièce | M3 | ⬜ **seulement si D0 dit oui** | à fixer à l'ouverture |
-| D3 | Notre Kelvin v4 : la maison en 3D par pièce | M3 | ⬜ jamais avant C3 ; **rangée en D le 30/09** : c'est de la 3D, et VITRUVE la met en dernier. En C, elle aurait retenu la famille N derrière du code 3D | à fixer à l'ouverture |
+| # | Boucle | Maillon | Dépôt | État | Preuve de sortie |
+|---|---|---|---|---|---|
+| D0 | Test sans code : une vraie pièce, deux applis gratuites (protocole au cadrage §3.2) | M3 | aucun (geste de Paul) | ⬜ **geste de Paul, hors de la règle 5** : il se fait à la première visite qui s'y prête, sans ouvrir de boucle (cadrage §3.2) | la pièce est reconnaissable et une cote tient à ±10 %, ou non |
+| D1 | Famille 1 : poser le produit dans la pièce, en réalité augmentée | M3 | RenoDevis (relevé, catalogue), **à confirmer à l'ouverture** | ⬜ après D0 | à fixer à l'ouverture ; il faut un modèle 3D de chaque produit |
+| D2 | Famille 2 : reconstruire la pièce | M3 | RenoDevis (relevé), **à confirmer à l'ouverture** | ⬜ **seulement si D0 dit oui** | à fixer à l'ouverture |
+| D3 | Notre Kelvin v4 : la maison en 3D par pièce | M3 | mon-dpe.fr | ⬜ jamais avant C3 ; **rangée en D le 30/09** : c'est de la 3D, et VITRUVE la met en dernier. En C, elle aurait retenu la famille N derrière du code 3D | à fixer à l'ouverture |
 
 ### Famille E — les idées en réserve
 
@@ -237,8 +242,9 @@ fiche n'est pas remplie.
    non-vacuité, vérifier que les vérifications s'exécutent vraiment.
 3. **Commit et push** sur la branche de la séance ; une seule PR en fin de
    séance ; fusion sur go de Paul, selon les gates du dépôt.
-4. **Annoter** : la ligne du §2 (état, date, PR, commit de `main`), le grain
-   `FINUBAR.md` du dépôt touché, et `generer.py` si l'écran change.
+4. **Annoter** : le grain `FINUBAR.md` du dépôt touché et `generer.py` si
+   l'écran change, dans le commit du travail ; puis la ligne du §2 (état, date,
+   dépôt, PR, commit) dans un commit d'Ultima de la même séance (§0, étape 4).
 5. **Une leçon** dans `memoire/LECONS.md` si une erreur a coûté quelque chose.
 6. **Le rapport de Léo** : fait, avec la preuve · décisions attendues ·
    **prochaine action unique**.
@@ -338,5 +344,5 @@ Paul s'inscrivent dans la liste ci-dessus, datées.
 | Q6 | Rapport client : 3 pages ou 10 sections | C1 | 3 pages remises, les 10 sections en annexe (cadrage §8) |
 | Q9 | Léo, Réno, Vitruve : qui parle à qui | B4 | Léo pour Paul dans Ultima, Réno dans les produits, Vitruve pour le particulier |
 | Q10 | L'identifiant de dossier commun, de M0 à M9 | B4 | à instruire à l'ouverture, sans faire voyager de donnée personnelle (cadrage §3.3) |
-| Q11 | Si ④ ne se rouvre pas, comment M7 compte pour le critère Q-P1 | C5 | à instruire avec la réponse des pros |
+| Q11 | Si ④ ne se rouvre pas, comment M7 compte pour le critère Q-P1 | C6 | à instruire avec la réponse des pros |
 | Q12 | La précision de Paul sur mon-dpe.fr et VITRUVE (attendue dans le grain d'Ultima) | C2 | la correspondance lue dans les fiches (cadrage §3.1), à confirmer |

@@ -15,6 +15,7 @@
   bloquants trouvés, corrigés. ✅ Leçons **v55** = la v54 d'une autre séance
   (branche `claude/leo-project-management-expansion-5k6f30`, déjà fusionnée dans
   RenoBoost et RenoDevis) + deux leçons payées ; propagée à RenoBoost (#563).
+  Puis **v56** (un chemin corrigé, revue Codex) : RenoBoost reste en v55, RenoDevis en v54.
   ⚠️ Si la v54 bouge encore avant de fusionner, reposer les deux leçons sur la
   dernière version plutôt que de choisir un côté.
   Prochaine action : §0 du plan — gestes A présentés à Paul, boucle B2 ouverte.
