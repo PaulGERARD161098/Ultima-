@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Maquette — RIVEN en nébuleuses (vue à plat)</title>
+<!--
+  MAQUETTE DE TRAVAIL — aucune donnée réelle, aucun contact de Paul.
+  Les noms sont INVENTÉS ; les secteurs gardent le DÉBUT de ceux saisis en base
+  le 2026-09-30 (ce que la table lit), leur suite est neutralisée. La maquette validée par Paul sur
+  ses vraies fiches est restée hors du dépôt : la liste était confidentielle.
+
+  Le module est le VRAI : cette page charge `../js/nebuleuses-riven.js`,
+  `../js/ciel-nebuleuses.js` et `../css/ciel.css` du produit, et leur donne des
+  données fictives. Script en fichier séparé : la CSP d'Ultima interdit
+  'unsafe-inline' sur script-src.
+
+  `?n=300` : la même carte avec 300 fiches fictives, pour éprouver la règle
+  « un nom ne se superpose jamais — s'il n'a pas de place, il se cache ».
+  C'est aussi la page que tests/smoke-riven-nebuleuses.mjs ouvre pour les cas
+  denses et pour le sabotage.
+
+  CADRAGE-RIVEN-NEBULEUSES.md, lot 1, étape 1.
+-->
+<link rel="stylesheet" href="../css/ciel.css">
+<link rel="stylesheet" href="preview-riven-nebuleuses.css">
+</head>
+<body>
+<main class="espace-ciel apercu-neb">
+  <header class="apercu-neb-tete">
+    <h1>RIVEN en nébuleuses — maquette</h1>
+    <p id="apercu-neb-note">Données fictives.</p>
+  </header>
+  <div id="ciel-scene" class="ciel-scene"></div>
+  <p id="apercu-neb-ouvert" role="status" aria-live="polite"></p>
+</main>
+<script src="../js/nebuleuses-riven.js"></script>
+<script src="../js/ciel-nebuleuses.js"></script>
+<script src="preview-riven-nebuleuses.js"></script>
+</body>
+</html>

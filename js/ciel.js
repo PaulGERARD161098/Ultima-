@@ -147,14 +147,27 @@
 
   // ---- Regroupement par métier principal : mêmes règles que l'arbre (la
   //      première graphie fait l'étiquette, les sans-secteur vont ensemble). ----
-  function grouper(noeuds) {
+  // `regrouper` (option, RIVEN lot 2 du 2026-09-30) : une fonction noeud →
+  // { cle, label } qui remplace le regroupement par secteur — RIVEN y range ses
+  // fiches par NÉBULEUSE (js/nebuleuses-riven.js). ABSENTE, le chemin est celui
+  // d'hier à l'octet près : les autres pages qui chargent ce moteur ne la
+  // passent pas.
+  function grouper(noeuds, regrouper) {
     var index = Object.create(null);
     var ordre = [];
     (noeuds || []).forEach(function (n) {
-      var brut = (n.secteur_activite || '').trim();
-      var cle = brut ? normaliser(brut) : CLE_A_CLASSER;
+      var cle, label;
+      var choix = regrouper ? regrouper(n) : null;
+      if (choix && choix.cle) {
+        cle = choix.cle;
+        label = choix.label || LABEL_A_CLASSER;
+      } else {
+        var brut = (n.secteur_activite || '').trim();
+        cle = brut ? normaliser(brut) : CLE_A_CLASSER;
+        label = brut || LABEL_A_CLASSER;
+      }
       if (!index[cle]) {
-        index[cle] = { cle: cle, label: brut || LABEL_A_CLASSER, noeuds: [] };
+        index[cle] = { cle: cle, label: label, noeuds: [], parNebuleuse: !!(choix && choix.cle) };
         ordre.push(cle);
       }
       index[cle].noeuds.push(n);
@@ -178,8 +191,8 @@
 
   // ---- Construction du monde : PURE (aucun DOM), donc testable seule.
   //      Deux appels sur les mêmes données produisent les mêmes coordonnées. ----
-  function construireMonde(noeuds) {
-    var groupes = grouper(noeuds);
+  function construireMonde(noeuds, regrouper) {
+    var groupes = grouper(noeuds, regrouper);
     var etoiles = [];
     groupes.forEach(function (g, ig) {
       var dir = pointSphere(groupes.length, ig);
@@ -524,7 +537,7 @@
       contrasteProfondeur: 1
     } : null);
 
-    var monde = construireMonde(noeuds);
+    var monde = construireMonde(noeuds, typeof options.regrouper === 'function' ? options.regrouper : null);
     // LES GÉMEAUX, avant le recentrage : deux caps jumeaux se posent en
     // OPPOSITION plutôt qu'empilés. L'orientation d'ouverture est passée en
     // argument parce que le placement en dépend (voir `disposerEnOpposition`) —
@@ -862,6 +875,7 @@
     // Les ancres des nébuleuses, recalculées À CHAQUE IMAGE depuis les étoiles
     // du monde (au plus cinq : coût nul). Calculées une fois, elles se
     // périmeraient à la première couronne recomposée par une rotation d'écran.
+    var cacheEpsilon = null;
     function optionsDuFond() {
       var base = atmosphere || { eclat: 1 };
       if (!nebuleusesDemandees.length || !monde || !monde.etoiles) { return base; }
@@ -870,15 +884,30 @@
       // ε : distance monde au plus proche voisin, parmi TOUTES les étoiles de
       // l'écran. Une étoile seule (IFULVIN) prend 36 — trois fois le plancher
       // du rayon réel recentré.
-      var epsilon = Infinity;
-      for (var i = 0; i < monde.etoiles.length; i++) {
-        for (var j = i + 1; j < monde.etoiles.length; j++) {
-          var a = monde.etoiles[i]; var b = monde.etoiles[j];
-          var d = Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z));
-          if (d > 0 && d < epsilon) { epsilon = d; }
-        }
+      // Le calcul est en n² : il ne se refait que si les étoiles ont BOUGÉ
+      // (signature des positions, en n). Refait à chaque image, il coûtait
+      // cher dès que RIVEN passe ses centaines de fiches (relecture du 30/09) ;
+      // la valeur rendue est la même qu'avant, à l'identique.
+      var signature = monde.etoiles.length;
+      for (var s = 0; s < monde.etoiles.length; s++) {
+        var q = monde.etoiles[s];
+        signature += q.x * 1.31 + q.y * 1.73 + q.z * 2.17;
       }
-      if (!isFinite(epsilon)) { epsilon = 36; }
+      var epsilon;
+      if (cacheEpsilon && cacheEpsilon.signature === signature) {
+        epsilon = cacheEpsilon.valeur;
+      } else {
+        epsilon = Infinity;
+        for (var i = 0; i < monde.etoiles.length; i++) {
+          for (var j = i + 1; j < monde.etoiles.length; j++) {
+            var a = monde.etoiles[i]; var b = monde.etoiles[j];
+            var d = Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z));
+            if (d > 0 && d < epsilon) { epsilon = d; }
+          }
+        }
+        if (!isFinite(epsilon)) { epsilon = 36; }
+        cacheEpsilon = { signature: signature, valeur: epsilon };
+      }
       var liste = [];
       nebuleusesDemandees.forEach(function (neb) {
         var membres = (neb && neb.ids || []).map(function (id) { return parId[id]; })
@@ -933,7 +962,15 @@
       cam.cibleYaw = Math.atan2(-p.x, p.z);
       var cy = Math.cos(cam.cibleYaw), sy = Math.sin(cam.cibleYaw);
       var z1 = -p.x * sy + p.z * cy;
-      cam.ciblePitch = Math.atan2(p.y, z1 + cam.distance);
+      // L'étoile tombe au centre quand y2 = p.y·cos − z1·sin s'annule : le
+      // pitch est atan2(p.y, z1), comme le yaw annule x1. Il s'écrivait
+      // atan2(p.y, z1 + distance) — l'angle VU de la caméra, qui ne recentre pas
+      // un monde qui tourne autour de l'origine. Invisible tant que les amas
+      // restaient près de l'équateur ; les trois nébuleuses de la démo en posent
+      // une en hauteur, et l'étoile visée y restait à 127 unités du centre.
+      // Mesuré le 30/09 après correction : 46 — la borne du glissement (on ne
+      // passe jamais par-dessus le pôle) retient le reste ; sans elle, 2.
+      cam.ciblePitch = Math.max(-1.15, Math.min(1.15, Math.atan2(p.y, z1)));
     }
     // Écart d'angles ramené dans [-π, π] : sans quoi la caméra fait le tour du
     // monde par le mauvais côté au passage de ±π.
@@ -1152,7 +1189,8 @@
         'class': 'ciel-etoile', tabindex: '0', role: 'button',
         'data-noeud-id': noeud.id,
         'aria-label': nomComplet + ', ' + libelleType +
-          (e.groupe.cle === CLE_A_CLASSER ? ', sans secteur' : ', secteur ' + e.groupe.label) +
+          (e.groupe.parNebuleuse ? ', nébuleuse ' + e.groupe.label
+            : (e.groupe.cle === CLE_A_CLASSER ? ', sans secteur' : ', secteur ' + e.groupe.label)) +
           (libelleStatut ? ', ' + libelleStatut : '') +
           ', ' + mag + ' lien' + (mag > 1 ? 's' : '')
       });
