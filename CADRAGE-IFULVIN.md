@@ -115,6 +115,8 @@ unique** : finir la boucle OMEGA (tests, commit), puis boucle A.
 
 ## ⑦ BOUCLE B — les nébuleuses (cadrage 6 points, 30/09, « go solo, enchaîne sur les nébuleuses »)
 
+> ✅ **Fait le 30/09** — fusionné avec la boucle C (#316, `4b8e2de`). Boucle A : #313. Harnais : `tests/smoke-nebuleuses.mjs` (5 sabotages mordent). Boucle C (dictée le même jour) : TAO supprimé, DRAGONS = MAEDRETHNIR, VRANESH, DRAUKHAIN, ADRAMELECH, RESHIRAM ⇄ ZEKROM, étoiles indépendantes sauf la passerelle.
+
 **① But.** Sur l'écran IMLADRIK, la constellation des ARMES et celle des DRAGONS
 se lisent comme **deux nébuleuses** : un voile coloré, propre à chacune,
 enveloppe leur étoile. Quand on plonge dans l'une (`#constellation-armes`,
