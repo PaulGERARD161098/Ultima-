@@ -284,7 +284,7 @@ console.log('— A2. imladrik.html#constellation-dragons : MAEDRETHNIR, VRANESH,
   // que les dragons ne descendent d'un étage.
   const maedrethnir = page.locator('g.ciel-etoile[data-noeud-id="maedrethnir"]');
   await survoler(page, 'maedrethnir');
-  await page.waitForFunction(() => /MAEDRETHNIR/.test(document.getElementById('boussole-parole').textContent), null, { timeout: 5000 });
+  await page.waitForFunction(() => /MAEDRETHNIR/.test(document.getElementById('boussole-parole').textContent), null, { timeout: 5000 }).catch(() => {});
   const parole = (await page.locator('#boussole-parole').textContent()) || '';
   verifier('Survol MAEDRETHNIR : nom dans la parole', /MAEDRETHNIR/.test(parole));
   verifier('Survol MAEDRETHNIR : état « Ouvert »', /Ouvert/.test(parole));
@@ -331,6 +331,148 @@ console.log('— B. imladrik.html config vide : carto identique, zéro appel —
   verifier('Zéro requête externe (config vide)', externes.length === 0, externes.slice(0, 3).join(', '));
   verifier('Zéro erreur console (config vide)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
   await page.close();
+}
+
+// ===================== C. Les constellations : on plonge, jamais inertes =====================
+// LE DÉFAUT QUE CETTE SECTION FERME (30/09). Les constellations n'ont pas de cible
+// (elles ne portent pas de page) ; la règle « un cap sans cible est à venir »
+// posait donc `aria-disabled="true"` sur ARMES et DRAGONS — annoncées mortes au
+// lecteur d'écran, grisées, et Playwright refusait même de cliquer — alors que le
+// clic les isole. Le partage exact, le même qu'`entrer()` dans js/ciel-noeud.mjs :
+//   INERTE = pas de cible ET pas d'enfants. Ce qui CONTIENT plonge, page ou pas.
+//
+// ⛔ LE CLIC EST NORMAL, PAS FORCÉ. `dispatchEvent('click')` ignore l'actionnabilité
+// (visible, stable, ACTIVÉ) : il aurait cliqué une étoile `aria-disabled` sans
+// broncher et laissé le défaut vert. `locator.click()` attend « enabled » — et
+// c'est précisément ce contrôle, qu'aucun utilisateur ne peut contourner, qui
+// le rattrape. Le garde-fou s'éprouve du côté où il peut être contourné.
+console.log('— C. ARMES et DRAGONS plongent ; IFULVIN, seul cap « à venir », est inerte —');
+{
+  const inerteAttendu = (id) => !NOEUDS[id].cible && !(NOEUDS[id].enfants || []).length;
+  // La règle se lit sur CHAQUE étoile peinte : aria-disabled ⇔ inerte attendu.
+  const reglesTenues = (caps) => caps.length >= 1
+    && caps.every((c) => c.avenir === inerteAttendu(c.id));
+  const surLesTroisEcrans = {};
+
+  // ---- C1. Le premier niveau : les deux constellations ne sont pas inertes ----
+  {
+    const { page, erreurs, externes } = await nouvellePage();
+    await page.goto(`${BASE}/imladrik.html`, { waitUntil: 'load', timeout: 20000 });
+    await attendrePret(page);
+    await page.waitForTimeout(1500);
+    const etoile = (id) => page.locator(`g.ciel-etoile[data-noeud-id="${id}"]`);
+    const premier = await lireCaps(page);
+    surLesTroisEcrans.premier = premier;
+    for (const id of ['constellation-armes', 'constellation-dragons']) {
+      verifier(`${id} : peinte (verrou) et SANS aria-disabled`,
+        (await etoile(id).count()) === 1 && (await etoile(id).getAttribute('aria-disabled')) === null,
+        String(await etoile(id).getAttribute('aria-disabled')));
+    }
+    verifier('Premier niveau : aria-disabled ⇔ (pas de cible ET pas d\'enfants), sur chaque étoile',
+      reglesTenues(premier), JSON.stringify(premier.map((c) => [c.id, c.avenir])));
+
+    // CLIC NORMAL sur DRAGONS — pas de `force`, pas de `dispatchEvent`.
+    let clicNormal = true; let raison = '';
+    try {
+      await page.locator('g.ciel-etoile[data-noeud-id="constellation-dragons"] .ciel-zone').click({ timeout: 8000 });
+    } catch (e) { clicNormal = false; raison = String(e.message).split('\n')[0]; }
+    verifier('Clic NORMAL (non forcé) sur la zone de DRAGONS : Playwright clique', clicNormal, raison);
+    await page.waitForFunction(() => window.location.hash === '#constellation-dragons', null, { timeout: 5000 }).catch(() => {});
+    await page.waitForTimeout(900);
+    verifier('… et l\'adresse devient #constellation-dragons',
+      new URL(page.url()).hash === '#constellation-dragons', page.url());
+    const dragons = await lireCaps(page);
+    surLesTroisEcrans.dragons = dragons;
+    verifier('… et trois étoiles paraissent : MAEDRETHNIR, VRANESH, DRAUKHAIN',
+      dragons.length === 3
+      && JSON.stringify(dragons.map((c) => c.id).sort()) === JSON.stringify([...NOEUDS['constellation-dragons'].enfants].sort()),
+      dragons.map((c) => c.id).join(','));
+    verifier('DRAGONS : aria-disabled ⇔ inerte attendu (aucun dragon inerte)',
+      reglesTenues(dragons) && dragons.every((c) => !c.avenir));
+
+    // Le TÉMOIN de l'instrument de navigation : le même `naviguerVers`, au même
+    // délai, DOIT voir un dragon ouvrir sa page. Sans lui, « le clic sur IFULVIN
+    // ne change pas l'URL » serait vert d'un instrument qui ne voit rien bouger.
+    const atteinte = await naviguerVers(page, 'maedrethnir', 3000);
+    verifier('Témoin : un clic sur MAEDRETHNIR (isolée) ouvre maedrethnir.html',
+      !!atteinte && /\/maedrethnir\.html/.test(atteinte), String(atteinte));
+    verifier('Zéro requête externe (C1)', externes.length === 0, externes.slice(0, 3).join(', '));
+    verifier('Zéro erreur console (C1)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
+    await page.close();
+  }
+
+  // ---- C2. ARMES : IFULVIN, l'étoile d'attente — inerte, et son clic n'ouvre rien ----
+  {
+    const { page, erreurs, externes } = await nouvellePage();
+    await page.goto(`${BASE}/imladrik.html`, { waitUntil: 'load', timeout: 20000 });
+    await attendrePret(page);
+    await page.waitForTimeout(1500);
+    let clicNormal = true; let raison = '';
+    try {
+      await page.locator('g.ciel-etoile[data-noeud-id="constellation-armes"] .ciel-zone').click({ timeout: 8000 });
+    } catch (e) { clicNormal = false; raison = String(e.message).split('\n')[0]; }
+    verifier('Clic NORMAL (non forcé) sur la zone de ARMES : Playwright clique', clicNormal, raison);
+    await page.waitForFunction(() => window.location.hash === '#constellation-armes', null, { timeout: 5000 }).catch(() => {});
+    await page.waitForTimeout(900);
+    verifier('… et l\'adresse devient #constellation-armes',
+      new URL(page.url()).hash === '#constellation-armes', page.url());
+    const armes = await lireCaps(page);
+    surLesTroisEcrans.armes = armes;
+    verifier('… et UNE étoile paraît : IFULVIN, nom exact',
+      armes.length === 1 && armes[0].id === 'ifulvin' && armes[0].nom === 'IFULVIN',
+      JSON.stringify(armes));
+    const ifulvin = page.locator('g.ciel-etoile[data-noeud-id="ifulvin"]');
+    verifier('IFULVIN : aria-disabled="true" (étoile d\'attente)',
+      (await ifulvin.getAttribute('aria-disabled')) === 'true');
+    verifier('IFULVIN : aucun lien (ni ancre, ni href) dans son étoile',
+      (await ifulvin.locator('a[href], [href], [xlink\\:href]').count()) === 0);
+    verifier('ARMES : aria-disabled ⇔ inerte attendu', reglesTenues(armes));
+    // Sa parole dit ce qu'il est — et ne promet PAS d'y entrer.
+    await survoler(page, 'ifulvin');
+    await page.waitForFunction(() => /IFULVIN/.test(document.getElementById('boussole-parole').textContent), null, { timeout: 5000 }).catch(() => {});
+    const parole = (await page.locator('#boussole-parole').textContent()) || '';
+    verifier('Survol IFULVIN : nom, « À venir », et la phrase du registre mot pour mot',
+      /IFULVIN/.test(parole) && /À venir/.test(parole) && parole.includes(NOEUDS.ifulvin.resume), parole.slice(0, 200));
+    verifier('Survol IFULVIN : aucun appel à entrer (il n\'a pas de page)', !/entrer|ouvrir/i.test(parole), parole);
+    // LE CLIC NE CHANGE PAS L'URL — et le témoin (C1) a prouvé que l'instrument
+    // voit un changement quand il y en a un. Même délai (3000 ms).
+    const avant = page.url();
+    const apres = await naviguerVers(page, 'ifulvin', 3000);
+    verifier('Clic sur IFULVIN : l\'URL ne change pas (aucune page promise)',
+      apres === null && page.url() === avant, `${avant} → ${page.url()}`);
+    const encore = await lireCaps(page);
+    verifier('Clic sur IFULVIN : le ciel reste sur ARMES (une étoile, IFULVIN)',
+      encore.length === 1 && encore[0].id === 'ifulvin');
+    verifier('Zéro requête externe (C2)', externes.length === 0, externes.slice(0, 3).join(', '));
+    verifier('Zéro erreur console (C2)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
+    await page.close();
+  }
+
+  // ---- C3. « AUCUN CAP À VENIR RESTANT » devient « EXACTEMENT UN, IFULVIN » ----
+  // Périmètre dit sans ambiguïté : ce qu'on atteint depuis imladrik.html en
+  // descendant PAR LES CONSTELLATIONS (premier niveau, DRAGONS, ARMES). ⚠️ Plus
+  // profond, ADRAMELECH porte son propre « à venir » (RAPPROCHEMENTS) : c'est un
+  // autre écran, une autre page — l'unicité ne vaut pas pour tout l'arbre, et le
+  // prétendre serait vrai sur les trois écrans et faux du registre.
+  {
+    const vus = ['premier', 'dragons', 'armes'].flatMap((k) => surLesTroisEcrans[k] || []);
+    const avenirsVus = vus.filter((c) => c.avenir).map((c) => c.id);
+    // Verrou de non-vacuité : les trois écrans ont bien été lus (4 + 3 + 1 étoiles).
+    verifier('Verrou : les trois écrans ont été lus (4 + 3 + 1 étoiles)',
+      (surLesTroisEcrans.premier || []).length === 4 && (surLesTroisEcrans.dragons || []).length === 3
+      && (surLesTroisEcrans.armes || []).length === 1);
+    verifier('Exactement UN cap à venir sur les trois écrans, et c\'est IFULVIN',
+      avenirsVus.join() === 'ifulvin', avenirsVus.join(','));
+    // La même chose lue dans le REGISTRE, par la même descente (constellations seules).
+    const feuillesSansPage = [];
+    const descendre = (id) => (NOEUDS[id].enfants || []).forEach((e) => {
+      if (NOEUDS[e].constellation === true) { descendre(e); }
+      else if (!NOEUDS[e].cible && !(NOEUDS[e].enfants || []).length) { feuillesSansPage.push(e); }
+    });
+    descendre('imladrik');
+    verifier('Le registre dit la même chose : un seul cap sans page sous les constellations, IFULVIN',
+      feuillesSansPage.join() === 'ifulvin', feuillesSansPage.join(','));
+  }
 }
 
 await navigateur.close();
