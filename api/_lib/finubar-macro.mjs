@@ -308,8 +308,8 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-09-30",
-          "quoi": "RIVEN en 9 nébuleuses (à plat par défaut, 3D en 9 amas), visée clavier 3D corrigée, 43 contacts en base. Fusion squash : le seul commit après celui-ci, c'est elle.",
-          "commit": "548c439fde2c6a8c707da3bd16efb73daad22f08"
+          "quoi": "RIVEN lot 3 : en 3D, 9 constellations cliquables, seuls les noms des nébuleuses (#324). Avant : #322, à plat + 3D. Fusion squash : le seul commit après celui-ci, c'est elle.",
+          "commit": "ea93065a0488b04997e45d73691bec2dbc9d1ca8"
         },
         "prochaine_action": "④ — l'exécution : `ouvrirTrace()`, journal 'tentee' AVANT l'acte, plafond, issue après. Frontière arbitrée — cadrage §12.8 quater.",
         "bloque_par": [
@@ -368,9 +368,9 @@ export default {
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "d4341dd",
-        "tete_le": "2026-09-30T16:56:45+00:00",
-        "commits_depuis": 11,
+        "tete": "3da95a3",
+        "tete_le": "2026-09-30T18:31:12+00:00",
+        "commits_depuis": 4,
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-30",
