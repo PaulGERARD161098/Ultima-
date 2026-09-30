@@ -24,7 +24,7 @@
   "projet": "Ultima",
   "depot": "PaulGERARD161098/Ultima-",
   "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-  "rattache_a": "PLAN-2026-09-30-chaine-A-Z.md (la route de la chaîne Rénoboost et son état vivant — branche claude/renobus-supply-chain-d1ftbw, PR #321) · CADRAGE-RIVEN-NEBULEUSES.md · CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md",
+  "rattache_a": "PLAN-2026-09-30-chaine-A-Z.md (la route de la chaîne Rénoboost et son état vivant) · CADRAGE-RIVEN-NEBULEUSES.md · CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md",
   "etat": "en_cours",
   "jalon": {
     "nom": "B1 — Léo AGIT dans l'anneau vert (cadrage §11)",
@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-30",
-    "quoi": "RIVEN en 9 nébuleuses (à plat par défaut, 3D en 9 amas), visée clavier 3D corrigée, 43 contacts en base. Fusion squash : le seul commit après celui-ci, c'est elle.",
-    "commit": "548c439fde2c6a8c707da3bd16efb73daad22f08"
+    "quoi": "Chaîne Rénoboost : route posée (PLAN-2026-09-30-chaine-A-Z.md), relue par Léo, leçons v55 ; #321 fusionnée en mode merge.",
+    "commit": "e14f470df5c5ffde290347b10ec109e94f20b770"
   },
   "prochaine_action": "④ — l'exécution : `ouvrirTrace()`, journal 'tentee' AVANT l'acte, plafond, issue après. Frontière arbitrée — cadrage §12.8 quater.",
   "bloque_par": [
@@ -45,7 +45,7 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "Chaîne Rénoboost : route dans PLAN-2026-09-30-chaine-A-Z.md, sur la branche claude/renobus-supply-chain-d1ftbw (PR #321, #563, #214), hors main. Reprise : son §0.",
+      "quoi": "Chaîne Rénoboost : route et état vivant dans PLAN-2026-09-30-chaine-A-Z.md (fusionné le 30/09, #321). Reprise : son §0.",
       "depuis": "2026-09-30"
     },
     {

@@ -16,25 +16,23 @@
 >   (https://claude.ai/artifact/5hSYkMpgkCzvkj5Da66g3B) est l'inventaire illustré
 >   du 30/09 après-midi : il n'est plus tenu à jour.
 >
-> ⛔ **Où le lire.** Tant que les PR ne sont pas fusionnées, ce plan, le cadrage
-> et la maquette ne sont **pas sur `main`**. Ils vivent sur la branche
-> **`claude/renobus-supply-chain-d1ftbw`** de trois dépôts :
+> ✅ **Où le lire : sur `main`.** Les trois PR de la séance du 30/09 ont été
+> **fusionnées sur le go de Paul le 30/09 au soir**, en mode « merge » : les
+> commits de la branche `claude/renobus-supply-chain-d1ftbw` restent dans
+> l'historique de `main`.
 > - **Ultima #321** : ce plan ;
 > - **RenoBoost #563** : le cadrage et `maquettes/chaine-A-Z/` ;
-> - **RenoDevis #214** : la dernière version d'un devis gagne (c'est le geste A1).
+> - **RenoDevis #214** : la dernière version d'un devis gagne (geste A1, ✅).
 >
 > **Pilote** : Léo, une boucle à la fois. **Aucun code n'est écrit par ce
 > document** ; chaque boucle de code s'ouvre avec sa fiche (§4).
 
 ## 0. Reprendre en une minute
 
-1. **Partir de la branche de la chaîne, dans les trois dépôts** — pas de `main`,
-   qui ne porte ni le plan ni le cadrage tant que #321 et #563 ne sont pas
-   fusionnées :
-   `git fetch origin claude/renobus-supply-chain-d1ftbw` puis, si la consigne de
-   séance impose une autre branche, `git checkout -b <cette branche>
-   origin/claude/renobus-supply-chain-d1ftbw`. ⛔ Une séance partie de `main`
-   écrirait une deuxième version du §2, et on croirait la mauvaise.
+1. **Partir de `main`, à jour, dans chaque dépôt touché.** Le plan, le cadrage et
+   la maquette y sont depuis la fusion du 30/09. ⛔ Ne pas repartir de l'ancienne
+   branche `claude/renobus-supply-chain-d1ftbw` : elle est fusionnée, et toute
+   nouvelle boucle part d'`origin/main`.
 2. **Lire le tableau de bord (§2) et remesurer** avec la colonne « Comment le
    mesurer ». ⛔ La base gagne sur ce document : un état démenti par la mesure se
    corrige ici, il ne se croit pas.
@@ -57,8 +55,7 @@ Le message à donner à Léo pour reprendre. Il ne porte aucun chiffre, pour ne
 jamais périmer : les chiffres se lisent au §2 et se remesurent.
 
 ```
-Léo, on reprend la chaîne Rénoboost. Travaille depuis la branche claude/renobus-supply-chain-d1ftbw dans Ultima-, RenoBoost et RenoDevis (PR #321, #563, #214, non fusionnées) : main ne porte pas encore le plan.
-La route est dans Ultima-/PLAN-2026-09-30-chaine-A-Z.md. Lis le §0 et le §2, remesure les preuves, dis-moi en trois phrases où on en est, présente-moi en un panneau les gestes A qui m'attendent, et ouvre en parallèle la première boucle B avec la fiche du §4.
+Léo, on reprend la chaîne Rénoboost. La route est dans Ultima-/PLAN-2026-09-30-chaine-A-Z.md, sur main. Lis le §0 et le §2, remesure les preuves, dis-moi en trois phrases où on en est, présente-moi en un panneau les gestes A qui m'attendent, et ouvre en parallèle la première boucle B avec la fiche du §4.
 Une boucle de code à la fois. Les gates de chaque dépôt s'appliquent, et rien ne se fusionne sans mon go.
 ```
 
@@ -113,7 +110,7 @@ bases : `mwaryfscxgrulauwwque` (partagée) sauf mention.
 
 | # | Geste | Maillon | Qui | Part de Claude | État au 30/09 | Preuve de sortie | Comment le mesurer |
 |---|---|---|---|---|---|---|---|
-| A1 | Relire et fusionner la PR RenoDevis #214 (la dernière version d'un devis gagne) | M4 | Paul | résumer la PR en cinq lignes ; après la fusion, relire le SHA de `main` (fusion en squash) et recaler le grain RenoDevis | ⬜ en brouillon, CI verte sur `f42aa5b` | PR fusionnée | l'état de la PR sur GitHub |
+| A1 | Relire et fusionner la PR RenoDevis #214 (la dernière version d'un devis gagne) | M4 | Paul | fait | ✅ **fusionnée le 30/09 sur le go de Paul**, en mode « merge » : `f42aa5b` reste dans l'historique de `main` | PR fusionnée | l'état de la PR sur GitHub |
 | A2 | Déposer les 14 PDF SOLA dans le dossier Drive « SOLA devis a lire », trancher 235/201 | M4 | Paul | lire les 14 PDF, donner le total devisé définitif, les verser au corpus | ⬜ **le dossier n'existe pas** : seul un dossier « SOLA » (recherche Drive, 17:4x UTC) | les 14 PDF dans le dossier ; le total inscrit dans RenoBoost `ROADMAP-2026-09-29-fin-de-session.md` | le connecteur Drive : le dossier et ses fichiers |
 | A3 | Chiffrer, puis émettre un devis depuis l'application | M4 → M5, M6 | Paul | la requête ci-contre ; la liste des devis sans lignes, par identifiant, jamais par nom | ⬜ **2 devis portent des lignes, sur 15** (17:39 UTC) | plus de 2 | `select count(*) filter (where case when jsonb_typeof(lignes) = 'array' then jsonb_array_length(lignes) > 0 else false end) as chiffres, count(*) as devis from devis` |
 | A4 | Rejouer la TVA en production, ensemble | M4 | Paul + Claude | préparer la recette : le devis à créer, les conditions à cocher, ce qu'on lira en base | ⬜ | un devis créé avec ses conditions de TVA | la requête s'écrit avec la recette |
@@ -284,7 +281,7 @@ dossier commun, sans lequel le critère Q-P1 ne se mesure pas).
 | **Tiers** | vérification d'identité de SOLA · validation Google · relecture du juriste | A6b, A10, N4 |
 | **Payant** | distances routières (Google Routes) · un abonnement kelvin°, si on s'abonne au lieu de construire | C4, C2 |
 | **Envoi réel** | la campagne DATARENO | A11 |
-| **Fusion** | toute PR, dont **#321 (ce plan) et #563 (le cadrage et la maquette)** : **rien ne se fusionne sans le go de Paul** (30/09 : « On ne fusionne rien ») | toutes |
+| **Fusion** | toute PR : **rien ne se fusionne sans le go de Paul**. #321, #563 et #214 l'ont reçu le 30/09 au soir | toutes |
 
 ## 7. Pre-mortem du plan — « le 31/12, la chaîne n'est pas bouclée : pourquoi ? »
 
@@ -293,7 +290,7 @@ route.
 
 | Cause probable | Signal précoce | Parade |
 |---|---|---|
-| **Une séance repart de `main`** et ne voit pas le plan | une reprise qui ne cite ni la branche ni #321 | le §0, étape 1, et le message de reprise nomment la branche ; le grain Finubar d'Ultima aussi |
+| **Une séance repart de l'ancienne branche** au lieu de `main` | une boucle ouverte sur `claude/renobus-supply-chain-d1ftbw` après sa fusion | le §0, étape 1 : toute boucle part d'`origin/main` |
 | **Ce document a vieilli** : un ✅ que la base dément | une mesure du §2 qui ne tombe pas | la base gagne ; chaque boucle met à jour sa ligne dans son propre commit ; la reprise remesure toujours avant de croire (§0) |
 | **Trois vérités** : ce plan, le cadrage (§2, §4.1) et la maquette | un état différent entre eux | l'état ne vit qu'ici ; les deux autres sont des photographies du 30/09, et le disent |
 | **On ouvre une famille avant que la précédente soit soldée** | une boucle C, N ou D ouverte alors qu'un geste A ou une boucle B est encore ⬜ ou 🔵 | règle 5 du §3 ; Léo refuse |

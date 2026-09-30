@@ -8,7 +8,7 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
-- 🧭 **SESSION 2026-09-30 (soir) — LA CHAÎNE RÉNOBOOST, CADRÉE ET ROUTÉE (branche `claude/renobus-supply-chain-d1ftbw`, PR #321 · RenoBoost #563 · RenoDevis #214, aucune fusion).**
+- 🧭 **SESSION 2026-09-30 (soir) — LA CHAÎNE RÉNOBOOST, CADRÉE ET ROUTÉE (PR #321 · RenoBoost #563 · RenoDevis #214, fusionnées en mode merge sur le go de Paul en fin de séance).**
   ✅ Route posée : `PLAN-2026-09-30-chaine-A-Z.md` — dix maillons, familles
   A → B → C → N → D, E en réserve, l'état vivant au §2, la reprise au §0.
   Décisions Q-P1 à Q-P4 au journal. ✅ Relue par Léo en adversaire : cinq manques
