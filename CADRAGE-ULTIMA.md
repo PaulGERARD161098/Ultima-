@@ -8,6 +8,17 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🧭 **SESSION 2026-09-30 (soir) — LA CHAÎNE RÉNOBOOST, CADRÉE ET ROUTÉE (PR #321 · RenoBoost #563 · RenoDevis #214, fusionnées en mode merge sur le go de Paul en fin de séance).**
+  ✅ Route posée : `PLAN-2026-09-30-chaine-A-Z.md` — dix maillons, familles
+  A → B → C → N → D, E en réserve, l'état vivant au §2, la reprise au §0.
+  Décisions Q-P1 à Q-P4 au journal. ✅ Relue par Léo en adversaire : cinq manques
+  bloquants trouvés, corrigés. ✅ Leçons **v55** = la v54 d'une autre séance
+  (branche `claude/leo-project-management-expansion-5k6f30`, déjà fusionnée dans
+  RenoBoost et RenoDevis) + deux leçons payées ; propagée à RenoBoost (#563).
+  Puis **v56** (un chemin corrigé, revue Codex) : RenoBoost reste en v55, RenoDevis en v54.
+  ⚠️ Si la v54 bouge encore avant de fusionner, reposer les deux leçons sur la
+  dernière version plutôt que de choisir un côté.
+  Prochaine action : §0 du plan — gestes A présentés à Paul, boucle B2 ouverte.
 - 🌌 **SESSION 2026-09-30 (après-midi) — RIVEN EN NÉBULEUSES, À PLAT ET EN 3D (PR `claude/riven-nebuleuses`, fusion squash).**
   Déclencheur : 43 contacts entrés dans RIVEN (39 d'un cercle d'affaires, 4 cartes
   BATIMAT — base seule, rien dans le dépôt) ; Paul : « trop d'overlap ». Neuf
