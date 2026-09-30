@@ -504,6 +504,11 @@
     //                       posé par l'adaptateur), plus son nombre de liens.
     // (Une troisième, `disposition: 'figure'`, a été retirée après A8.)
     var avecAsterisme = !!options.asterisme;
+    // LES NÉBULEUSES (boucle B d'IFULVIN, 30/09) — OPT-IN : `[{ ids, teinte }]`.
+    // Le moteur ne fait que traduire des identifiants d'étoiles en points du
+    // monde ; la peinture est celle de la couche de fond. Sans l'option (ou
+    // sans fond), le rendu est strictement celui d'hier.
+    var nebuleusesDemandees = Array.isArray(options.nebuleuses) ? options.nebuleuses : [];
     var eclatParPoids = !!options.eclatParPoids;
     // ⛔ CES CONTRÔLES ATMOSPHÉRIQUES NE SONT PAS « PREVIEW ONLY », malgré ce
     // que disait ce commentaire jusqu'au 19/09 : `js/app.js` pose `stellarV2: true`
@@ -852,6 +857,43 @@
       // doit pas donner des zones de plusieurs centaines d'unités.
       cibleCourante = Math.min(PLAFOND_CIBLE, (cibleDoigtPx / 2) / ctm.a);
       return cibleCourante;
+    }
+
+    // Les ancres des nébuleuses, recalculées À CHAQUE IMAGE depuis les étoiles
+    // du monde (au plus cinq : coût nul). Calculées une fois, elles se
+    // périmeraient à la première couronne recomposée par une rotation d'écran.
+    function optionsDuFond() {
+      var base = atmosphere || { eclat: 1 };
+      if (!nebuleusesDemandees.length || !monde || !monde.etoiles) { return base; }
+      var parId = Object.create(null);
+      monde.etoiles.forEach(function (e) { parId[e.noeud.id] = e; });
+      // ε : distance monde au plus proche voisin, parmi TOUTES les étoiles de
+      // l'écran. Une étoile seule (IFULVIN) prend 36 — trois fois le plancher
+      // du rayon réel recentré.
+      var epsilon = Infinity;
+      for (var i = 0; i < monde.etoiles.length; i++) {
+        for (var j = i + 1; j < monde.etoiles.length; j++) {
+          var a = monde.etoiles[i]; var b = monde.etoiles[j];
+          var d = Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z));
+          if (d > 0 && d < epsilon) { epsilon = d; }
+        }
+      }
+      if (!isFinite(epsilon)) { epsilon = 36; }
+      var liste = [];
+      nebuleusesDemandees.forEach(function (neb) {
+        var membres = (neb && neb.ids || []).map(function (id) { return parId[id]; })
+          .filter(Boolean).map(function (e) { return { x: e.x, y: e.y, z: e.z }; });
+        if (!membres.length) { return; }
+        var bx = 0; var by = 0; var bz = 0;
+        membres.forEach(function (m) { bx += m.x; by += m.y; bz += m.z; });
+        liste.push({
+          teinte: neb.teinte,
+          membres: membres,
+          barycentre: { x: bx / membres.length, y: by / membres.length, z: bz / membres.length },
+          epsilon: epsilon
+        });
+      });
+      return Object.assign({}, base, { nebuleuses: liste });
     }
 
     function projeter(p) {
@@ -1395,7 +1437,7 @@
       // la fonction que les étoiles utilisent à la ligne suivante — pas une
       // copie, pas une caméra parallèle. Les deux couches ne peuvent pas se
       // déphaser parce qu'elles ne font qu'une seule projection.
-      if (fond) { fond.peindre(projeter, atmosphere || { eclat: 1 }); }
+      if (fond) { fond.peindre(projeter, optionsDuFond()); }
 
       poussiere.forEach(function (p) {
         var d = RAYON_MONDE * 3.1 * p.r;
@@ -1582,8 +1624,13 @@
           // La profondeur reste lisible : elle est portée par l'étoile
           // elle-même (taille et opacité), qui, elle, continue de s'estomper.
           // `attenue` (le filtre de recherche) garde tous ses droits.
+          // SUR UN MENU (`tousLesNoms`), le nom est à pleine opacité (30/09).
+          // Mesuré sous les lettres à 390 px : à 0,85, NICOL BOLAS lisait
+          // 3,86:1 et ZEKROM 3,72:1 AVANT toute nébuleuse — sous le seuil de
+          // 4,5. Un nom de menu est une commande : il se lit, point. RIVEN
+          // (réseau de personnes) garde 0,85. `tests/smoke-nebuleuses.mjs`.
           piece.nom.setAttribute('opacity',
-            attenue ? '0.25' : ((proche || tousLesNoms) ? '0.85' : '0.25'));
+            attenue ? '0.25' : (tousLesNoms ? '1' : (proche ? '0.85' : '0.25')));
         }
       });
 

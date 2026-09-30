@@ -281,6 +281,17 @@ export const BLASONS = {
 
 // ---------- Cœurs de boussole (médaillons) ----------
 
+// LES NÉBULEUSES — le pigment de chaque constellation (boucle B d'IFULVIN,
+// 30/09, spéc. `graphisme`). Deux pigments de carte savante, jamais néon :
+//   armes   — vermillon éteint, le cinabre de la lame et de la forge ;
+//   dragons — vert-de-gris, l'écaille.
+// L'identité reste portée par le NOM et la position : le voile est un décor
+// `aria-hidden`, la teinte ne dit rien qu'on ne lise ailleurs.
+export const NEBULEUSES = {
+  armes: 'rgb(176,72,60)',
+  dragons: 'rgb(64,138,106)',
+};
+
 export const COEURS = {
   // Racine : le monde-anneau rayonnant (sceau d'Ultima).
   anneau: medaillon('anneau',

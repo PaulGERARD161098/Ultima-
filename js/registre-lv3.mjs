@@ -272,6 +272,7 @@ export const NOEUDS = {
     blason: 'imladrik',
     cible: null,
     constellation: true,
+    nebuleuse: 'armes',
     resume: 'La constellation des ARMES : ce dont tu te sers pour te '
       + 'développer et développer tes projets. IFULVIN en est la première.',
     titre: 'La constellation des armes',
@@ -287,6 +288,7 @@ export const NOEUDS = {
     blason: 'flamme',
     cible: null,
     constellation: true,
+    nebuleuse: 'dragons',
     resume: 'La constellation des DRAGONS : le journal, les futurs et la '
       + 'volonté — MAEDRETHNIR, VRANESH et DRAUKHAIN.',
     titre: 'La constellation des dragons',
