@@ -38,6 +38,9 @@ const PAGES = [
   { fichier: 'omega.html', quadrant: 'ultima' },
   { fichier: 'imladrik.html', quadrant: 'imladrik' },
 ];
+verifier('Verrou : le cas du repli « ultima » reste éprouvé (omega.html) et tao.html n\'est plus listé',
+  PAGES.filter((p) => p.quadrant === 'ultima').map((p) => p.fichier).join() === 'omega.html'
+  && !PAGES.some((p) => p.fichier === 'tao.html'));
 
 // Le témoin de FINUBAR, partagé par §6 (ce qui part vers le modèle) et §7 (le
 // recouvrement) : une seule donnée d'essai, sinon les deux sections finissent
