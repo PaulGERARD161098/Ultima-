@@ -2,11 +2,11 @@
 // étape ④c de CADRAGE-LV4 : la dernière coque, sur un module éprouvé huit
 // fois). Prouve : bandeau « Ultima Lv3 / Bienvenue » + invite (la racine GARDE
 // son invite — les coques ordinaires l'ont retirée, l'accueil est l'écran qui
-// pose la question du jour), les caps du registre rendus en étoiles (ULTIMA,
+// pose la question du jour), les caps du registre rendus en étoiles (OMEGA,
 // ALPHA, ALTHEA), le filigrane et sa légende, le résumé de Léo qui n'apparaît
 // QU'au survol/focus, AUCUNE requête réseau externe (zéro CDN), zéro erreur
 // console, contraste AA sur les couleurs réellement rendues.
-// Puis navigation : clic ULTIMA → /ultima.html (le ciel de la supra-division).
+// Puis navigation : clic OMEGA → /omega.html (le ciel de la supra-division).
 // Enfin le verrou d'accueil (déconnecté = scène cachée et inerte) et le
 // COCKPIT (les agrégats derrière Bearer, jamais dans le HTML).
 // La MIGRATION BOUSSOLE → CIEL a repris chaque assertion UNE PAR UNE, classée
@@ -76,7 +76,7 @@ function stubSupabase(session) {
 }
 
 // Fixture d'agrégats du cockpit : que des COMPTES, aucun contenu/PII.
-// riven.relances_dues=2 + reshiram.a_etayer=1 → le cap ULTIMA cumule les deux ;
+// riven.relances_dues=2 + reshiram.a_etayer=1 → le cap OMEGA cumule les deux ;
 // zekrom.a_orienter=0 → ce terme-là ne doit PAS apparaître (test d'absence).
 const COCKPIT = { ok: true, data: {
   reshiram: { talents: 3, a_etayer: 1, offre: 2 },
@@ -164,15 +164,15 @@ verifier('Cartouche invisible et muet au repos',
 verifier('Aucun résumé de projet au repos',
   (await page.locator('#boussole-parole .parole-texte').count()) === 0);
 
-// Survol d'ULTIMA → résumé déposé. REMPLACÉE dans sa mécanique : `hover()`
+// Survol d'OMEGA → résumé déposé. REMPLACÉE dans sa mécanique : `hover()`
 // expire sur le ciel (la caméra glisse de façon asymptotique, rien n'est
 // jamais « stable » au sens de Playwright) — on envoie l'événement, comme
 // partout ailleurs dans le patrimoine.
-const etoileUltima = page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="ultima-perso"]');
-await etoileUltima.dispatchEvent('mouseenter');
+const etoileOmega = page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="omega"]');
+await etoileOmega.dispatchEvent('mouseenter');
 await page.waitForSelector('#boussole-parole.is-actif', { timeout: 5000 });
 const paroleNom = (await page.locator('#boussole-parole .parole-nom').textContent())?.trim();
-verifier('Résumé : nom du cap affiché', paroleNom === 'ULTIMA', `lu: ${paroleNom}`);
+verifier('Résumé : nom du cap affiché', paroleNom === 'OMEGA', `lu: ${paroleNom}`);
 const paroleTexte = (await page.locator('#boussole-parole .parole-texte').textContent())?.trim();
 verifier('Résumé : essentiel de Léo affiché', /supra-division personnelle/i.test(paroleTexte || ''), `lu: ${paroleTexte}`);
 verifier('Résumé : appel à l\'action', (await page.locator('#boussole-parole .parole-action').count()) === 1);
@@ -186,7 +186,7 @@ verifier('Résumé : appel à l\'action', (await page.locator('#boussole-parole 
 // La sortie se dit à l'ÉTOILE (mouseleave) : au ciel, c'est elle qui écoute —
 // survoler un autre élément ne la quitte pas pour Playwright, qui n'anime pas
 // de vrai curseur quand on dispatch des événements.
-await etoileUltima.dispatchEvent('mouseleave');
+await etoileOmega.dispatchEvent('mouseleave');
 await page.waitForSelector('#boussole-parole:not(.is-actif)', { state: 'attached', timeout: 5000 });
 verifier('Sortie du survol → cartouche effacé',
   (await page.locator('#boussole-parole .parole-texte').count()) === 0
@@ -264,7 +264,7 @@ verifier('Clic ALPHA : son contenu paraît SUR PLACE (isolement)',
 // disparu. Vérifier seulement que le contenu d'ALPHA est là ne dirait rien de
 // ce qui devait s'éteindre.
 verifier('Clic ALPHA : les frères ont disparu du ciel',
-  !dansAlpha.includes('ultima-perso') && !dansAlpha.includes('althea'),
+  !dansAlpha.includes('omega') && !dansAlpha.includes('althea'),
   JSON.stringify(dansAlpha));
 verifier('Clic ALPHA : on n’a PAS changé de page', /\/#alpha$/.test(page.url()), page.url());
 verifier('La porte alpha.html reste servie par le repli <noscript>',
@@ -275,32 +275,32 @@ verifier('La porte alpha.html reste servie par le repli <noscript>',
 await page.goto(`${BASE}/`, { waitUntil: 'load', timeout: 20000 });
 await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
 
-// ============ B. Navigation racine → ULTIMA (supra-division) ============
-console.log('— B. ULTIMA → /ultima.html (la supra-division) —');
+// ============ B. Navigation racine → OMEGA (supra-division) ============
+console.log('— B. OMEGA → /omega.html (la supra-division) —');
 // REMPLACÉE une première fois (le clic passe par l'étoile, le cap-ancre
 // n'existe plus), puis le 2026-08-28 : le clic ISOLE au lieu d'ouvrir la page.
-// Le geste est éprouvé pour ce qu'il fait maintenant — ULTIMA montre ses deux
-// cadrans sur place —, et la PORTE, elle, s'éprouve en l'ouvrant par son
+// Le geste est éprouvé pour ce qu'il fait maintenant — OMEGA montre ses trois
+// caps sur place —, et la PORTE, elle, s'éprouve en l'ouvrant par son
 // adresse : c'est celle que sert le repli <noscript> et que porte tout lien
 // direct. Les deux moitiés de l'ancienne assertion sont donc tenues, chacune
 // là où elle a désormais un sens.
-await page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="ultima-perso"]')
+await page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="omega"]')
   .dispatchEvent('click');
 await page.waitForTimeout(1400);
-const dansUltima = await page.$$eval('#ciel-noeud-scene .ciel-etoile[data-noeud-id]',
+const dansOmega = await page.$$eval('#ciel-noeud-scene .ciel-etoile[data-noeud-id]',
   (gs) => gs.map((g) => g.getAttribute('data-noeud-id')));
-verifier('Clic ULTIMA : ses deux cadrans paraissent sur place',
-  NOEUDS['ultima-perso'].enfants.every((id) => dansUltima.includes(id))
-  && !dansUltima.includes('alpha'), JSON.stringify(dansUltima));
-await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
-verifier('La porte ULTIMA s’ouvre (ultima.html)', /\/ultima\.html$/.test(page.url()), page.url());
-// ULTIMA EST PASSÉE AU CIEL le 2026-08-13 (étape ④a) : c'est la coque pilote.
+verifier('Clic OMEGA : ses trois caps paraissent sur place',
+  NOEUDS['omega'].enfants.every((id) => dansOmega.includes(id))
+  && !dansOmega.includes('alpha'), JSON.stringify(dansOmega));
+await page.goto(`${BASE}/omega.html`, { waitUntil: 'load', timeout: 20000 });
+verifier('La porte OMEGA s’ouvre (omega.html)', /\/omega\.html$/.test(page.url()), page.url());
+// OMEGA EST PASSÉE AU CIEL le 2026-08-13 (étape ④a) : c'est la coque pilote.
 // Les assertions de cette section ont été reprises UNE PAR UNE et classées.
-//   — « Clic ULTIMA → URL ultima.html » : PORTÉE (la racine est passée au ciel
+//   — « Clic OMEGA → URL omega.html » : PORTÉE (la racine est passée au ciel
 //     à son tour le 2026-08-19 — P4, la dernière coque).
 //   — L'attente du plateau : REMPLACÉE — on attend les étoiles au lieu de la
 //     rose. Même garantie : l'écran est prêt.
-//   — « les cadrans du registre » : REMPLACÉE, et l'ORDRE est abandonné avec sa
+//   — « les caps du registre » : REMPLACÉE, et l'ORDRE est abandonné avec sa
 //     raison. Une boussole range ses caps en liste ; une constellation les pose
 //     par géométrie, et l'ordre du DOM y suit la profondeur, pas le registre.
 //     On compare donc des ENSEMBLES. La garantie qui comptait — tous les caps
@@ -310,19 +310,25 @@ verifier('La porte ULTIMA s’ouvre (ultima.html)', /\/ultima\.html$/.test(page.
 //     l'ABSENCE.
 //   — « Retour vers la racine » : PORTÉE telle quelle.
 await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
-const capsUltima = (await page.locator('#ciel-noeud-scene text.ciel-nom').allTextContents())
+const capsOmega = (await page.locator('#ciel-noeud-scene text.ciel-nom').allTextContents())
   .map((n) => n.trim());
-const attendusUltima = NOEUDS['ultima-perso'].enfants.map((id) => NOEUDS[id].nom);
+const attendusOmega = NOEUDS['omega'].enfants.map((id) => NOEUDS[id].nom);
 // 2026-08-01 : deux macro-quadrants. 2026-08-06 : ALTHEA s'y ajoute.
-// 2026-08-07 : Paul le REMONTE à la racine, ULTIMA retrouve ses deux devises.
-verifier('Ciel ULTIMA : les cadrans du registre, tous et rien qu\'eux',
-  JSON.stringify(capsUltima.slice().sort()) === JSON.stringify(attendusUltima.slice().sort()),
-  JSON.stringify(capsUltima));
+// 2026-08-07 : Paul remonte ALTHEA à la racine. 2026-09-29 : GRIMA et NAGA
+// sont supprimés, OMEGA porte RIVEN, NICOL BOLAS et IMLADRIK.
+verifier('Ciel OMEGA : les caps du registre, tous et rien qu\'eux',
+  JSON.stringify(capsOmega.slice().sort()) === JSON.stringify(attendusOmega.slice().sort()),
+  JSON.stringify(capsOmega));
 // Éprouvé par l'ABSENCE : ALTHEA a quitté cet étage. Sans ce contrôle, un
 // doublon de nœud laisserait le cap ici sans qu'aucune assertion ne bronche.
-verifier('ALTHEA n’est PLUS un cap d’ULTIMA',
+verifier('ALTHEA n’est PLUS un cap d’OMEGA',
   (await page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="althea"]').count()) === 0
-    && !capsUltima.includes('ALTHEA'), JSON.stringify(capsUltima));
+    && !capsOmega.includes('ALTHEA'), JSON.stringify(capsOmega));
+// Les macro-quadrants supprimés (29/09) n'ont plus d'étoile : absence éprouvée.
+verifier('GRIMA et NAGA ne sont PLUS des caps d\'OMEGA',
+  (await page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="grima"], #ciel-noeud-scene .ciel-etoile[data-noeud-id="naga"]').count()) === 0
+    && capsOmega.length === 3 && !capsOmega.includes('GRIMA') && !capsOmega.includes('NAGA'),
+  JSON.stringify(capsOmega));
 verifier('Retour vers la racine présent',
   (await page.locator('.console-retour a[href="/"]').count()) === 1);
 
@@ -383,13 +389,13 @@ verifier('Connecté : boussole non inerte', await pageCo.evaluate(() => {
 await pageCo.waitForResponse('**/api/cockpit', { timeout: 10000 }).catch(() => {});
 verifier('Cockpit : Bearer transmis à /api/cockpit', bearerCockpit === 'Bearer jeton-factice', `lu: ${bearerCockpit}`);
 
-// Le cap ULTIMA cumule ce que ses quadrants ont à traiter : RIVEN (2 relances
+// Le cap OMEGA cumule ce que ses quadrants ont à traiter : RIVEN (2 relances
 // dues) + TAO (1 talent à étayer). a_orienter=0 → ce terme reste masqué.
-await pageCo.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="ultima-perso"]')
+await pageCo.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="omega"]')
   .dispatchEvent('mouseenter');
 await pageCo.waitForSelector('.parole-signal', { timeout: 5000 }).catch(() => {});
 const signalU = (await pageCo.locator('.parole-signal').textContent()) || '';
-verifier('Badge ULTIMA « À traiter — 2 relances dues · 1 talent à étayer »',
+verifier('Badge OMEGA « À traiter — 2 relances dues · 1 talent à étayer »',
   /À traiter/.test(signalU) && /2 relances dues/.test(signalU) && /1 talent à étayer/.test(signalU)
     && !/à orienter/.test(signalU), `lu: ${signalU}`);
 
@@ -407,16 +413,16 @@ verifier('Contraste badge signal ≥ 4,5:1', ratio(versHex(cSig.texte), cSig.fon
   `${ratio(versHex(cSig.texte), cSig.fond).toFixed(2)}:1`);
 
 // ALPHA n'a aucune donnée interne : ni ligne vivante, ni badge (texte figé seul).
-// ON QUITTE D'ABORD ULTIMA, ET CE N'EST PAS DE LA POLITESSE — c'est ce qui
+// ON QUITTE D'ABORD OMEGA, ET CE N'EST PAS DE LA POLITESSE — c'est ce qui
 // ANNULE SON MINUTEUR DE DÉPLIAGE. `mouseenter` arme `setTimeout(deplier)` :
 // sans `mouseleave`, ce minuteur se déclenche pendant qu'on regarde ALPHA, le
 // re-dessin détruit l'étoile focalisée, et `focusARendre` rend le focus à
-// ULTIMA — dont le badge réapparaît. Le verdict « aucun badge » tombait alors,
+// OMEGA — dont le badge réapparaît. Le verdict « aucun badge » tombait alors,
 // de façon INTERMITTENTE (la course dépend de la charge de la machine).
 // Trouvé par une contre-passe qui a rougi là où la passe précédente était
 // verte : *un test qui dépend d'un minuteur qu'il n'a pas désarmé ne teste pas
 // ce qu'il croit — il teste la vitesse du jour.*
-await pageCo.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="ultima-perso"]')
+await pageCo.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="omega"]')
   .dispatchEvent('mouseleave');
 await pageCo.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="alpha"]')
   .evaluate((el) => el.focus());
@@ -442,16 +448,21 @@ verifier('ligneVivante pure : ZEKROM', /3 idéaux · 0 à orienter · 2 talents 
 verifier('ligneVivante pure : cap sans data → null', pur.vide === null && pur.sansData === null);
 
 const sig = await pageCo.evaluate((d) => ({
-  supra: window.UltimaBoussole.signalDe('ultima-perso', d),
+  supra: window.UltimaBoussole.signalDe('omega', d),
   riven: window.UltimaBoussole.signalDe('riven', d),
+  imladrik: window.UltimaBoussole.signalDe('imladrik', d),
+  grima: window.UltimaBoussole.signalDe('grima', d),
   tao: window.UltimaBoussole.signalDe('tao', d),           // a_etayer=1, a_orienter=0
   taoDouble: window.UltimaBoussole.signalDe('tao', { reshiram: { a_etayer: 2 }, zekrom: { a_orienter: 3 } }),
   taoZero: window.UltimaBoussole.signalDe('tao', { reshiram: { a_etayer: 0 }, zekrom: { a_orienter: 0 } }),
   alpha: window.UltimaBoussole.signalDe('alpha', d),        // pas de signal défini
   sansData: window.UltimaBoussole.signalDe('tao', null),
 }), COCKPIT.data);
-verifier('signalDe pur : ULTIMA cumule RIVEN + TAO',
+verifier('signalDe pur : OMEGA cumule RIVEN + TAO',
   sig.supra === '2 relances dues · 1 talent à étayer', `lu: ${sig.supra}`);
+verifier('signalDe pur : IMLADRIK ne cumule que TAO (pas les relances de RIVEN)',
+  sig.imladrik === '1 talent à étayer', `lu: ${sig.imladrik}`);
+verifier('signalDe pur : GRIMA (supprimé) → null', sig.grima === null);
 verifier('signalDe pur : RIVEN seul → « 2 relances dues »', sig.riven === '2 relances dues', `lu: ${sig.riven}`);
 verifier('signalDe pur : TAO (1 à étayer, 0 à orienter) → « 1 talent à étayer »',
   sig.tao === '1 talent à étayer', `lu: ${sig.tao}`);

@@ -12,6 +12,12 @@
       "destination": "/riven",
       "permanent": true
     },
+    { "source": "/ultima", "destination": "/omega", "permanent": true },
+    { "source": "/ultima.html", "destination": "/omega", "permanent": true },
+    { "source": "/grima", "destination": "/omega", "permanent": true },
+    { "source": "/grima.html", "destination": "/omega", "permanent": true },
+    { "source": "/naga", "destination": "/imladrik", "permanent": true },
+    { "source": "/naga.html", "destination": "/imladrik", "permanent": true },
     {
       "source": "/minethnir",
       "destination": "/maedrethnir",

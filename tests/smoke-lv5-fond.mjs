@@ -31,6 +31,7 @@
 //      le document rend, jamais le fond.
 //   8. Zéro erreur console.
 import { chromium } from 'playwright';
+import { NOEUDS } from '../js/registre-lv3.mjs';
 
 const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
 const erreurs = [];
@@ -317,12 +318,12 @@ for (const [largeur, hauteur, nom] of [[390, 844, 'a390'], [1670, 900, 'a1670']]
 }
 
 // ---------------------------------------------------------------------------
-// ⑧ P1 — LE FOND SUR LA COQUE DE PRODUCTION (`ultima.html`).
+// ⑧ P1 — LE FOND SUR LA COQUE DE PRODUCTION (`omega.html`, ex-`ultima.html`).
 //
 // CE BLOC EXISTE À CAUSE D'UN OUBLI, et il est écrit pour qu'il ne se répète
 // pas. Le moteur ne monte le fond que si `window.UltimaCielFond` existe : ce
 // garde évite qu'une page sans le module se casse. Mais au premier essai de
-// P1, `ultima.html` n'avait pas la balise `<script>` — option activée, aucun
+// P1, `omega.html` (alors `ultima.html`) n'avait pas la balise `<script>` — option activée, aucun
 // canvas, ZÉRO erreur console, page parfaitement fonctionnelle. Un garde qui
 // protège d'une panne masque aussi un oubli.
 // Le harnais EXIGE donc le canvas ici, au lieu de s'en remettre au garde.
@@ -331,7 +332,7 @@ for (const [largeur, hauteur, nom] of [[390, 844, 'coque390'], [1280, 860, 'coqu
   const page = await browser.newPage({ viewport: { width: largeur, height: hauteur } });
   page.on('console', (m) => { if (m.type() === 'error') erreurs.push(m.text()); });
   page.on('pageerror', (e) => erreurs.push(String(e)));
-  await page.goto('http://127.0.0.1:8123/ultima.html', { waitUntil: 'load' });
+  await page.goto('http://127.0.0.1:8123/omega.html', { waitUntil: 'load' });
   await page.waitForTimeout(1800);
 
   const r = await page.evaluate(() => {
@@ -390,7 +391,8 @@ for (const [largeur, hauteur, nom] of [[390, 844, 'coque390'], [1280, 860, 'coqu
   verdicts['coqueLeFondAPeint_' + nom] = !!r.stats && r.stats.variance > 0.05;
   verdicts['coquePhaseTenue_' + nom] = r.phase !== null && r.phase <= 1;
   verdicts['coquePlusDePoussiereSvg_' + nom] = r.poussiereSvg === 0;
-  verdicts['coqueLesCapsSontLa_' + nom] = r.etoiles === 2; // ULTIMA n'a que GRIMA et NAGA
+  verdicts['coqueLesCapsSontLa_' + nom] = r.etoiles === NOEUDS.omega.enfants.length
+    && r.etoiles === 3; // OMEGA : RIVEN, NICOL BOLAS, IMLADRIK (GRIMA et NAGA supprimés)
   verdicts['coqueLeGesteVaALEtoile_' + nom] = r.gesteVaALEtoile === true;
   await page.close();
 }

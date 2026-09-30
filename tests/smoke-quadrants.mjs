@@ -107,15 +107,16 @@ async function nouvellePage(options = {}) {
   return { page, erreurs, externes };
 }
 
-// ============ A. ULTIMA → macro-quadrants : les 5 portes en deux cadrans ============
-// Depuis la dictée du 2026-08-01, ULTIMA n'ouvre que GRIMA et NAGA ; les cinq
-// portes historiques restent toutes atteignables, réparties sur les deux
-// boussoles des macro-quadrants.
-console.log('— A. ULTIMA : 2 cadrans, puis les 5 portes via GRIMA / NAGA —');
+// ============ A. OMEGA : ses 3 caps, puis les 5 portes historiques ============
+// 2026-09-29 : les macro-quadrants GRIMA et NAGA sont SUPPRIMÉS. OMEGA (ex-
+// ULTIMA) ouvre directement RIVEN, NICOL BOLAS et IMLADRIK ; IMLADRIK porte
+// ADRAMELECH et TAO. Les cinq portes historiques (riven, bcp, imladrik,
+// adramelech, tao) restent toutes atteignables, réparties sur DEUX boussoles.
+console.log('— A. OMEGA : 3 caps, puis les 5 portes via OMEGA / IMLADRIK —');
 {
   const { page, erreurs, externes } = await nouvellePage({ configVide: true });
-  await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
-  // ULTIMA EST PASSÉE AU CIEL (étape ④a, coque pilote). Les assertions de cette
+  await page.goto(`${BASE}/omega.html`, { waitUntil: 'load', timeout: 20000 });
+  // OMEGA (ex-ULTIMA) EST AU CIEL (étape ④a, coque pilote). Les assertions de cette
   // section sont PORTÉES, pas affaiblies : les étoiles du ciel portent de
   // VRAIES ancres, si bien qu'on continue de lire des `href`. Seul l'ORDRE est
   // abandonné, avec sa raison — une constellation range par géométrie, et
@@ -134,14 +135,17 @@ console.log('— A. ULTIMA : 2 cadrans, puis les 5 portes via GRIMA / NAGA —')
   // sens maintenant. Ce que le clic fait, lui, est éprouvé juste en dessous —
   // et en détail par `smoke-lv4-coque` §D.
   const hrefs = [];
-  for (const c of capsDe('ultima-perso')) {
+  for (const c of capsDe('omega')) {
     await page.goto(`${BASE}/${c.cible}`, { waitUntil: 'load', timeout: 20000 });
     if (page.url().endsWith(c.cible)) { hrefs.push(c.cible); }
   }
   // Et le geste, mesuré là où il se produit : chaque cadran montre sa
   // descendance sans quitter l'accueil de la supra-division.
-  for (const c of capsDe('ultima-perso')) {
-    await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
+  const tetesOmega = capsDe('omega').filter((c) => (c.enfants || []).length > 0);
+  verifier('OMEGA : NICOL BOLAS et IMLADRIK sont les deux têtes (RIVEN est une feuille)',
+    tetesOmega.map((c) => c.id).join(',') === 'nicol-bolas,imladrik');
+  for (const c of tetesOmega) {
+    await page.goto(`${BASE}/omega.html`, { waitUntil: 'load', timeout: 20000 });
     await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
     await page.locator(`#ciel-noeud-scene .ciel-etoile[data-noeud-id="${c.id}"]`)
       .dispatchEvent('click');
@@ -150,17 +154,23 @@ console.log('— A. ULTIMA : 2 cadrans, puis les 5 portes via GRIMA / NAGA —')
       (gs) => gs.map((g) => g.getAttribute('data-noeud-id')));
     verifier(`Clic ${c.nom} : isolement sur place, sans changer de page`,
       (NOEUDS[c.id].enfants || []).every((id) => peints.includes(id))
-      && !peints.includes(c.id) && page.url().endsWith(`ultima.html#${c.id}`),
+      && !peints.includes(c.id) && page.url().endsWith(`omega.html#${c.id}`),
       `${page.url()} — ${JSON.stringify(peints)}`);
   }
-  await page.goto(`${BASE}/ultima.html`, { waitUntil: 'load', timeout: 20000 });
+  // La FEUILLE (RIVEN) ne s'isole pas : son clic ouvre sa page.
+  await page.goto(`${BASE}/omega.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
+  await page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="riven"]').dispatchEvent('click');
+  await page.waitForURL('**/riven.html', { timeout: 8000 }).catch(() => {});
+  verifier('Clic RIVEN (feuille) : ouvre riven.html, sans isolement', page.url().endsWith('riven.html'), page.url());
+  await page.goto(`${BASE}/omega.html`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForSelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id]', { timeout: 20000 });
   // ALTHEA rejoint GRIMA et NAGA le 2026-08-06, puis REMONTE À LA RACINE le
   // 2026-08-07 (« je veux althea ici »). On compare au REGISTRE plutôt qu'à un
   // nombre écrit en dur : un test qui compte à la main se refait à chaque
   // dictée de Paul — et la boucle ci-dessous, elle, était encore écrite à la
   // main sous un commentaire qui disait le contraire. Elle est tombée.
-  const portesAttendues = capsDe('ultima-perso').map((c) => c.cible);
+  const portesAttendues = capsDe('omega').map((c) => c.cible);
   verifier('les portes du registre s’ouvrent toutes',
     JSON.stringify(hrefs.slice().sort()) === JSON.stringify(portesAttendues.slice().sort()),
     JSON.stringify(hrefs));
@@ -194,7 +204,7 @@ console.log('— A. ULTIMA : 2 cadrans, puis les 5 portes via GRIMA / NAGA —')
       && document.activeElement.hasAttribute('data-noeud-id')));
 
   const portes = {};
-  for (const cadran of ['grima.html', 'naga.html']) {
+  for (const cadran of ['omega.html', 'imladrik.html']) {
     await page.goto(`${BASE}/${cadran}`, { waitUntil: 'load', timeout: 20000 });
     await attendrePret(page);
     // LES PORTES SE LISENT DANS LE REPLI <noscript>, et c'est le seul endroit où
@@ -203,22 +213,28 @@ console.log('— A. ULTIMA : 2 cadrans, puis les 5 portes via GRIMA / NAGA —')
     // compte donc davantage qu'au temps de la boussole, pas moins : le jour où
     // le JavaScript manque, cette liste EST la navigation.
     portes[cadran] = await lireRepli(page);
-    verifier(`Retour « ↞ ULTIMA » depuis ${cadran}`,
-      (await page.locator('.console-retour a[href="ultima.html"]').count()) === 1);
+    if (cadran === 'imladrik.html') {
+      verifier('Retour « ↞ OMEGA » depuis imladrik.html',
+        (await page.locator('.console-retour a[href="omega.html"]').count()) === 1);
+    }
     await page.screenshot({ path: `${CAPTURES}/${cadran.replace('.html', '')}-portes.png`, fullPage: true });
   }
-  const toutes = [...portes['grima.html'], ...portes['naga.html']];
+  const toutes = [...portes['omega.html'], ...portes['imladrik.html']];
   for (const attendu of ['riven.html', 'bcp.html', 'adramelech.html', 'imladrik.html', 'tao.html']) {
-    verifier(`Porte ${attendu} (via son macro-quadrant)`, toutes.includes(attendu), JSON.stringify(toutes));
+    verifier(`Porte ${attendu} (via OMEGA ou IMLADRIK)`, toutes.includes(attendu), JSON.stringify(toutes));
   }
-  verifier('GRIMA porte l\'utile (RIVEN + NICOL BOLAS)',
-    JSON.stringify(portes['grima.html']) === JSON.stringify(['riven.html', 'bcp.html']),
-    JSON.stringify(portes['grima.html']));
-  verifier('NAGA porte la croissance (IMLADRIK + ADRAMELECH + TAO)',
-    JSON.stringify(portes['naga.html']) === JSON.stringify(['imladrik.html', 'adramelech.html', 'tao.html']),
-    JSON.stringify(portes['naga.html']));
-  verifier('Zéro requête externe (ULTIMA + cadrans)', externes.length === 0, externes.slice(0, 3).join(', '));
-  verifier('Zéro erreur console (ULTIMA + cadrans)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
+  verifier('OMEGA porte le personnel (RIVEN + NICOL BOLAS + IMLADRIK)',
+    JSON.stringify(portes['omega.html']) === JSON.stringify(['riven.html', 'bcp.html', 'imladrik.html']),
+    JSON.stringify(portes['omega.html']));
+  verifier('IMLADRIK porte ses cinq caps (dont ADRAMELECH + TAO)',
+    JSON.stringify(portes['imladrik.html']) === JSON.stringify(
+      ['maedrethnir.html', 'vranesh.html', 'draukhain.html', 'adramelech.html', 'tao.html']),
+    JSON.stringify(portes['imladrik.html']));
+  // Éprouvé par l'ABSENCE : aucun repli ne mène plus à une page supprimée.
+  verifier('Aucune porte vers grima.html / naga.html / ultima.html',
+    toutes.length > 0 && !toutes.some((h) => /^(grima|naga|ultima)\.html/.test(h)), JSON.stringify(toutes));
+  verifier('Zéro requête externe (OMEGA + IMLADRIK)', externes.length === 0, externes.slice(0, 3).join(', '));
+  verifier('Zéro erreur console (OMEGA + IMLADRIK)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
   await page.close();
 }
 
@@ -402,11 +418,11 @@ console.log('— D. registre.html fixture 200 → registre + cartouche Léo réf
 // des coques de boussole rendues par le noyau. Le cartouche Léo « majordome de
 // chantier » disparaît avec elles — Léo parle désormais cap par cap dans le
 // cartouche de la boussole. Vérifié pour chacune : bandeau conforme au REGISTRE,
-// caps dans l'ordre, portes ouvertes, cœur + légende, retour vers ULTIMA,
+// caps dans l'ordre, portes ouvertes, cœur + légende, retour vers leur parent,
 // parole au survol, zéro requête réseau, zéro erreur console.
 for (const noeud of [
-  { id: 'nicol-bolas', fichier: 'bcp.html', ouvertes: ['abaque.html'], avenir: 3, retour: 'grima.html' },
-  { id: 'adramelech', fichier: 'adramelech.html', ouvertes: ['registre.html', 'idees.html'], avenir: 1, retour: 'naga.html' },
+  { id: 'nicol-bolas', fichier: 'bcp.html', ouvertes: ['abaque.html'], avenir: 3, retour: 'omega.html' },
+  { id: 'adramelech', fichier: 'adramelech.html', ouvertes: ['registre.html', 'idees.html'], avenir: 1, retour: 'imladrik.html' },
 ]) {
   console.log(`— ${NOEUDS[noeud.id].nom} en boussole (${noeud.fichier}) —`);
   const { page, erreurs, externes } = await nouvellePage({ configVide: true });

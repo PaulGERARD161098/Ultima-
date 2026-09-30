@@ -159,7 +159,9 @@ console.log('— 1. Connecté : archipels, îles, ponts, badges —');
   verifier('État de chargement effacé une fois la carte levée', await page.locator('#carto-etat').isHidden());
   verifier('Carte réellement visible', await page.locator('#carto-figure svg').isVisible());
   verifier('Emblème ouroboros dans le cartouche', (await page.locator('header.cartouche .blason-svg').count()) === 1);
-  verifier('Lien retour « ← Ultima » présent', /Ultima/.test((await page.locator('.retour-ultima').textContent()) || ''));
+  verifier('Lien retour « ← Omega » présent, vers omega.html',
+    /Omega/.test((await page.locator('.retour-ultima').textContent()) || '')
+    && (await page.locator('.retour-ultima').getAttribute('href')) === 'omega.html');
   const boiteRetour = await page.locator('.retour-ultima').boundingBox();
   verifier('Tap target retour ≥ 44 px', Boolean(boiteRetour) && boiteRetour.height >= 44, `h: ${boiteRetour && boiteRetour.height}`);
 

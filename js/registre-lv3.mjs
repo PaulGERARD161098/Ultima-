@@ -29,9 +29,9 @@
 //
 // ÉTAT DU CÂBLAGE (L4, 2026-07-30 ; macro-quadrants 2026-08-01) : TOUS les
 // nœuds de l'arbre sont rendus par le noyau — `racine`, les deux
-// supra-divisions, les macro-quadrants `grima` / `naga` (dictés par Paul :
-// deux cadrans cliquables entre ULTIMA et ses quadrants), et les quadrants
-// `nicol-bolas`, `adramelech`, `imladrik`, `tao`. Lv3 est complet : ajouter
+// supra-divisions (`alpha`, `omega`), et les caps `riven`, `nicol-bolas`,
+// `imladrik` (macro-projet qui porte `adramelech` et `tao`). GRIMA et NAGA
+// ont été supprimés le 2026-09-29. Lv3 est complet : ajouter
 // un projet, un quadrant ou un cap n'est plus qu'une entrée ici (+ une coque
 // de 40 lignes si c'est un nouveau nœud).
 
@@ -50,58 +50,30 @@ export const NOEUDS = {
     // d'Ultima Lv3 » désignait bien cet écran — la racine — et non la
     // supra-division qui porte le même nom. Le doublon de nom entre les deux
     // étages est ce qui a induit le mauvais rangement.
-    enfants: ['ultima-perso', 'alpha', 'althea'],
+    enfants: ['alpha', 'omega', 'althea'],
   },
 
   // ================= NIVEAU 1 — les supra-divisions ==================
-  'ultima-perso': {
-    nom: 'ULTIMA',
+  // OMEGA — ex-« ULTIMA » (Paul, 2026-09-29 : « Ultima, c'est le nom du
+  // projet, pas de la subdivision »). Les deux macro-quadrants GRIMA / NAGA
+  // sont SUPPRIMÉS : une seule carte, rangée par thème (l'utile d'abord,
+  // puis IMLADRIK, macro-projet de développement et de gestion des projets
+  // personnels, qui porte désormais ADRAMELECH et TAO).
+  omega: {
+    nom: 'OMEGA',
     etat: 'Ouvert',
     blason: 'rose',
-    cible: 'ultima.html',
-    resume: 'La supra-division personnelle. Ton réseau, ton argent, tes idées, '
-      + 'ton développement et ta voie — cinq caps sous une seule rose.',
-    titre: 'ULTIMA',
-    surligne: 'Supra-division Ultima',
+    cible: 'omega.html',
+    resume: 'La supra-division personnelle. Ton réseau, ton argent, et '
+      + 'IMLADRIK — le macro-projet de développement et de gestion de tes '
+      + 'projets personnels.',
+    titre: 'OMEGA',
+    surligne: 'Supra-division Omega',
     invite: 'Léo te guide — survole un cap.',
     coeur: 'rose',
     legende: 'le personnel',
     cockpit: true,
-    enfants: ['grima', 'naga'],
-  },
-
-  // ======== NIVEAU 1,5 — les macro-quadrants d'ULTIMA (Paul, 2026-08-01) ====
-  // Deux cadrans cliquables entre la supra-division et ses quadrants : GRIMA
-  // rassemble l'utile, NAGA ce qui grandit. Leur devise tient lieu de badge.
-  grima: {
-    nom: 'GRIMA',
-    etat: 'Ce qui est utile',
-    blason: 'ancre',
-    cible: 'grima.html',
-    resume: 'Ce qui est utile : le réseau commercial (RIVEN) et le pilotage '
-      + 'financier (NICOL BOLAS). L’outillage qui te fait vivre.',
-    titre: 'GRIMA',
-    surligne: 'Ce qui est utile',
-    invite: 'Léo te guide — survole un cap.',
-    coeur: 'ancre',
-    legende: 'ce qui est utile',
-    cockpit: true,
-    enfants: ['riven', 'nicol-bolas'],
-  },
-  naga: {
-    nom: 'NAGA',
-    etat: 'Ce qui fait grandir',
-    blason: 'pousse',
-    cible: 'naga.html',
-    resume: 'Ce qui fait grandir : le développement personnel (IMLADRIK), la '
-      + 'bibliothèque d’idées (ADRAMELECH) et la voie (TAO).',
-    titre: 'NAGA',
-    surligne: 'Ce qui fait grandir',
-    invite: 'Léo te guide — survole un cap.',
-    coeur: 'pousse',
-    legende: 'ce qui fait grandir',
-    cockpit: true,
-    enfants: ['imladrik', 'adramelech', 'tao'],
+    enfants: ['riven', 'nicol-bolas', 'imladrik'],
   },
 
   alpha: {
@@ -195,7 +167,7 @@ export const NOEUDS = {
     resume: 'Le pilotage financier : revenus, charges, prévision d’impôts, '
       + 'échéancier. L’ABAQUE y est déjà ouvert.',
     titre: 'Le pilotage financier',
-    surligne: 'Ultima — quadrant Nicol Bolas',
+    surligne: 'Omega — Nicol Bolas',
     invite: 'Léo te guide — survole un cap.',
     coeur: 'balance',
     legende: 'la balance',
@@ -239,7 +211,7 @@ export const NOEUDS = {
     resume: 'La bibliothèque d’idées : capturer, classer, rapprocher, enrichir. '
       + 'Privée — derrière authentification.',
     titre: 'La bibliothèque d’idées',
-    surligne: 'Ultima — quadrant Adramelech',
+    surligne: 'Imladrik — Adramelech',
     invite: 'Léo te guide — survole un cap.',
     coeur: 'ouroboros',
     legende: 'le cycle',
@@ -275,8 +247,9 @@ export const NOEUDS = {
     etat: 'Accéder',
     blason: 'imladrik',
     cible: 'imladrik.html',
-    resume: 'Le développement personnel : le journal, les futurs potentiels et '
-      + 'la volonté. Trois caps autour de Kalamn-talaen.',
+    resume: 'Macro-projet de développement et de gestion des projets '
+      + 'personnels : le journal, les futurs, la volonté, la bibliothèque '
+      + 'd’idées et la voie. Cinq caps autour de Kalamn-talaen.',
     titre: 'La cartographie',
     surligne: 'IMLADRIK',
     invite: 'Léo te guide — survole un cap.',
@@ -284,7 +257,7 @@ export const NOEUDS = {
     legende: 'Kalamn-talaen',
     legendeClasse: 'kalamn-legende',
     expose: 'UltimaImladrikCarto',
-    enfants: ['maedrethnir', 'vranesh', 'draukhain'],
+    enfants: ['maedrethnir', 'vranesh', 'draukhain', 'adramelech', 'tao'],
   },
   maedrethnir: {
     nom: 'MAEDRETHNIR',
@@ -322,7 +295,7 @@ export const NOEUDS = {
       + 'et ZEKROM (tes idéaux) : deux pôles complémentaires, reliés par le '
       + 'rétroplanning.',
     titre: 'La voie',
-    surligne: 'Ultima — quadrant Tao',
+    surligne: 'Imladrik — Tao',
     invite: 'Léo te guide — survole un cap.',
     coeur: 'tao',
     legende: 'la voie',

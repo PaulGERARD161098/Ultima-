@@ -2,6 +2,8 @@
 
 ## ÉTAT (mise à jour du 2026-09-28 ; historique conservé)
 
+> **29/09 — ✅ OMEGA fait (commits sur `claude/omega-imladrik-macro`)** : Ultima→OMEGA, GRIMA/NAGA supprimés, IMLADRIK macro-projet (+ADRAMELECH +TAO). ⏭ **IFULVIN cadré, non codé** (`CADRAGE-IFULVIN.md`) : bloqué sur un choix produit (voir « Actions humaines » du rapport).
+
 > **Deux sessions ont tourné en parallèle le 2026-08-01** (fil affichage Lv3
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.

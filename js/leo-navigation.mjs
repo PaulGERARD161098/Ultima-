@@ -177,7 +177,7 @@ export function monterNavigationLeo({ bouton, ouvrirLeo, doc = document } = {}) 
     const projets = vue === 'projets';
     (projets ? tabProjets : tabRoutes).classList.add('is-actif');
     const trouves = filtrerDestinations(saisie.value, liste)
-      .filter((d) => !projets || !['racine', 'ultima-perso', 'alpha', 'grima', 'naga'].includes(d.id));
+      .filter((d) => !projets || !['racine', 'omega', 'alpha'].includes(d.id));
     if (!trouves.length) { resultats.appendChild(element(doc, 'p', 'leo-nav-vide', 'Aucune route connue. Demande autrement à Léo.')); }
     trouves.forEach((d) => {
       const b = element(doc, 'button', 'leo-nav-resultat'); b.type = 'button';
