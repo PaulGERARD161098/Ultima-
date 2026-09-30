@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-30",
-    "quoi": "Bouclage 30/09 : #302 intégrée, LEÇONS v45 (12 leçons rapatriées des grains), collecte des boucles en texte nu. Avant : #309 (leo_ecritures) et #313 (IMLADRIK).",
-    "commit": "8962e5240ba5d96142c679b9fe18c9f17fb9205e"
+    "quoi": "Bouclage 30/09 : #302 intégrée, LEÇONS v46 (13 leçons, copies des 7 dépôts en v45), collecte des boucles en texte nu. Avant : #309 et #313.",
+    "commit": "0e099a99bb52fc57d91753bbeeb40ea8d4d95156"
   },
   "prochaine_action": "④ — brancher l'exécution : entrée de journal AVANT l'acte, plafond consulté, issue après. ⚠️ Deux moteurs candidats, voir cadrage §12.8.",
   "bloque_par": [
