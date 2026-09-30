@@ -4,7 +4,7 @@
 // l'IMPORTER pour que Vercel l'embarque dans le paquet de la fonction, et
 // que `api/_lib/` est le seul motif d'import éprouvé en production ici.
 export default {
-  "le": "2026-09-29",
+  "le": "2026-09-30",
   "projets": [
     {
       "ok": true,
@@ -91,8 +91,8 @@ export default {
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 8,
-      "jours_en_attente": 43,
+      "jours_depuis_maj": 9,
+      "jours_en_attente": 44,
       "rang": 0
     },
     {
@@ -168,8 +168,8 @@ export default {
         "commit_inconnu": true
       },
       "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 22,
-      "jours_en_attente": 76,
+      "jours_depuis_maj": 23,
+      "jours_en_attente": 77,
       "rang": 1
     },
     {
@@ -223,8 +223,8 @@ export default {
         "commit_inconnu": true
       },
       "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 26,
-      "jours_en_attente": 56,
+      "jours_depuis_maj": 27,
+      "jours_en_attente": 57,
       "rang": 1
     },
     {
@@ -266,8 +266,8 @@ export default {
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 7,
-      "jours_en_attente": 10,
+      "jours_depuis_maj": 8,
+      "jours_en_attente": 11,
       "rang": 1
     },
     {
@@ -356,8 +356,8 @@ export default {
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 7,
-      "jours_en_attente": 56,
+      "jours_depuis_maj": 8,
+      "jours_en_attente": 57,
       "rang": 2
     },
     {
@@ -376,8 +376,8 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-09-29",
-          "quoi": "OMEGA : Ultima→Omega, Grima/Naga supprimés, Imladrik macro-projet (+Adramelech +Tao), PR #310 ; IFULVIN cadré sans code (CADRAGE-IFULVIN.md). Mesuré : 45/45 unit, 51/52 smokes…",
-          "commit": "bf432be"
+          "quoi": "OMEGA fusionné (#310) : Ultima→Omega, Grima/Naga supprimés, Imladrik macro-projet. IFULVIN cadré sans code — voir CADRAGE-IFULVIN.md.",
+          "commit": "0e60dbedd13347cc4faf088702ce4430f4129980"
         },
         "prochaine_action": "B1 étape ③ — le journal des écritures. ⛔ Il commence par le gate : créer la table `leo_ecritures`. On n'écrit pas le module avant la table.",
         "bloque_par": [
@@ -434,9 +434,7 @@ export default {
         ],
         "maj": "2026-09-29"
       },
-      "recits": [
-        "dernier_arret.quoi"
-      ],
+      "recits": [],
       "ciel": "racine",
       "hors_seance": false,
       "reprise": false,
@@ -446,9 +444,9 @@ export default {
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 40,
+      "mesure_le": "2026-09-30",
+      "jours_depuis_maj": 1,
+      "jours_en_attente": 41,
       "rang": 2
     },
     {
@@ -499,8 +497,8 @@ export default {
         "commit_inconnu": true
       },
       "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 39,
-      "jours_en_attente": 39,
+      "jours_depuis_maj": 40,
+      "jours_en_attente": 40,
       "rang": 2
     },
     {
@@ -546,8 +544,8 @@ export default {
         "commit_inconnu": true
       },
       "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 14,
-      "jours_en_attente": 39,
+      "jours_depuis_maj": 15,
+      "jours_en_attente": 40,
       "rang": 2
     },
     {
@@ -600,8 +598,8 @@ export default {
         "commit_inconnu": true
       },
       "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 7,
-      "jours_en_attente": 21,
+      "jours_depuis_maj": 8,
+      "jours_en_attente": 22,
       "rang": 2
     },
     {
@@ -644,8 +642,8 @@ export default {
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 7,
-      "jours_en_attente": 19,
+      "jours_depuis_maj": 8,
+      "jours_en_attente": 20,
       "rang": 2
     }
   ],
