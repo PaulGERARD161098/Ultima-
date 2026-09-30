@@ -49,9 +49,9 @@ export default {
       "hors_seance": true,
       "reprise": true,
       "derive": {
-        "tete": "10b91ca",
-        "tete_le": "2026-09-30T10:30:14+00:00",
-        "commits_depuis": 1,
+        "tete": "1d868e0",
+        "tete_le": "2026-09-30T17:57:49+00:00",
+        "commits_depuis": 4,
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-30",
@@ -143,9 +143,9 @@ export default {
       "hors_seance": true,
       "reprise": true,
       "derive": {
-        "tete": "b9d13d8",
-        "tete_le": "2026-09-30T10:30:14+00:00",
-        "commits_depuis": 1,
+        "tete": "d335247",
+        "tete_le": "2026-09-30T17:57:45+00:00",
+        "commits_depuis": 6,
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-30",
@@ -196,9 +196,9 @@ export default {
       "hors_seance": true,
       "reprise": true,
       "derive": {
-        "tete": "c106226",
-        "tete_le": "2026-09-30T10:30:14+00:00",
-        "commits_depuis": 1,
+        "tete": "749c647",
+        "tete_le": "2026-09-30T17:57:52+00:00",
+        "commits_depuis": 4,
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-30",
@@ -282,9 +282,9 @@ export default {
       "hors_seance": true,
       "reprise": true,
       "derive": {
-        "tete": "45b2468",
-        "tete_le": "2026-09-30T10:30:14+00:00",
-        "commits_depuis": 1,
+        "tete": "d20d2b6",
+        "tete_le": "2026-09-30T17:57:47+00:00",
+        "commits_depuis": 4,
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-30",
@@ -308,8 +308,8 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-09-30",
-          "quoi": "RIVEN lot 3 : en 3D, 9 constellations cliquables, seuls les noms des nébuleuses (#324). Avant : #322, à plat + 3D. Fusion squash : le seul commit après celui-ci, c'est elle.",
-          "commit": "ea93065a0488b04997e45d73691bec2dbc9d1ca8"
+          "quoi": "RIVEN lot 3 : en 3D, 9 constellations cliquables, seuls les noms des nébuleuses (#324). Avant : /leo, leçons à 200 Ko (#323). Squash : le seul commit après celui-ci, c'est elle.",
+          "commit": "675e2b4cb53143414589adf40a0ef5d455ff6b9b"
         },
         "prochaine_action": "④ — l'exécution : `ouvrirTrace()`, journal 'tentee' AVANT l'acte, plafond, issue après. Frontière arbitrée — cadrage §12.8 quater.",
         "bloque_par": [
@@ -320,6 +320,14 @@ export default {
         ],
         "en_attente_depuis": "2026-08-20",
         "boucles_ouvertes": [
+          {
+            "quoi": "ÉCARTÉ par Paul le 30/09 — DATARENO- : Vercel rouge en permanence (PYTHON_ENTRYPOINT_NOT_FOUND), sur main aussi. « Vraiment à part, on le laisse de côté. » Ne pas rouvrir.",
+            "depuis": "2026-09-30"
+          },
+          {
+            "quoi": "REPORTÉ par Paul le 30/09 — mon-dpe.fr : 62 vulnérabilités Dependabot sur main (4 critiques, 28 hautes). « On va corriger mon dpe plus tard. » Séance dédiée.",
+            "depuis": "2026-09-30"
+          },
           {
             "quoi": "RIVEN nébuleuses : à 390 px, 3 noms fictifs sur 54 cachés (restent au panneau). Plus bas = sous 12 px ou étoiles déplacées : non tranché. CADRAGE-RIVEN-NEBULEUSES.md §7",
             "depuis": "2026-09-30"
@@ -351,14 +359,6 @@ export default {
           {
             "quoi": "Le mail du matin lit l'agrégat COMMITÉ : il vieillit les jours sans séance (il le dit). Le rendre frais tout seul = GitHub Action nocturne qui recollecte et commite",
             "depuis": "2026-09-06"
-          },
-          {
-            "quoi": "Direction posée le 05/09, toujours valable : Ouvrir REPRISE-2026-09-05-apres-la-semaine.md §5 : la mesure d'abord (collecter.mjs + les 4 jalons en SQL), jamais la lecture du doc.",
-            "depuis": "2026-09-05"
-          },
-          {
-            "quoi": "238 fiches d'autres comptes dans kv_store : E1 rend le cas inoffensif mais ne l'explique pas. Origine à trouver — REPRISE-2026-09-05-apres-la-semaine.md §3",
-            "depuis": "2026-09-05"
           }
         ],
         "maj": "2026-09-30"
@@ -368,9 +368,9 @@ export default {
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "3da95a3",
-        "tete_le": "2026-09-30T18:31:12+00:00",
-        "commits_depuis": 4,
+        "tete": "00ad084",
+        "tete_le": "2026-09-30T18:58:56+00:00",
+        "commits_depuis": 6,
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-30",
@@ -456,9 +456,9 @@ export default {
       "hors_seance": true,
       "reprise": true,
       "derive": {
-        "tete": "6489310",
-        "tete_le": "2026-09-30T10:30:15+00:00",
-        "commits_depuis": 1,
+        "tete": "a33885f",
+        "tete_le": "2026-09-30T17:57:59+00:00",
+        "commits_depuis": 4,
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-30",
@@ -482,8 +482,8 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-09-30",
-          "quoi": "BOUCLE FX — LA FICHE D'EXEMPLE POUR HENRY (CADRAGE-2026-09-30-fiche-exemple.md, D1-D7 « reco partout » de Paul). /exemple : Ondrel Plomberie, artisan fictif (nom vérifié au…",
-          "commit": "650d3bc"
+          "quoi": "30/09, 13 h 15 — STRIPE LIVE RÉPARÉ ET PROUVÉ (voir bloque_par) : destination webhook « Comptes connectés » → « Votre compte », secret reposé par Paul, abonnement trialing en…",
+          "commit": "d91f959"
         },
         "prochaine_action": "VÉRIFIER EN PRODUCTION après la fusion de #104 : https://artidispo.com/exemple rend la fiche d'Ondrel Plomberie (bandeau « Fiche d'exemple · artisan fictif ») et une vraie fiche…",
         "bloque_par": [
@@ -493,7 +493,7 @@ export default {
           "⏳ PAUL — 3 PHOTOS LIBRES DE DROITS POUR /exemple : la fiche porte les 2 photos du dépôt (hero.jpg, chantier-artidispo.jpg) quand l'inscription en exige 3. Le proxy de…",
           "⚠️ DÉCOUVERT LE 30/09 (non corrigé, hors boucle) : anon garde le droit UPDATE de TABLE sur public.artisans (défaut Supabase, jamais révoqué) — la RLS le neutralise (0 ligne), la…",
           "⚠️ LA GARDE DE PRÉSENTATION (Edge + navigateur) refuse toujours « décennale » et « diplômé » dans le texte, même quand la fiche les déclare depuis la migration 32. Cohérent (les…",
-          "⚠️ 29/09 — MISE EN LIGNE AVANT VÉRIFICATION DE STRIPE LIVE, sur décision de Paul (« on verra le reste plus tard ») : la landing dit « Inscrivez-vous dès maintenant ! » et…",
+          "✅ FAIT ET MESURÉ LE 30/09 — NE PAS LE REJOUER : STRIPE LIVE FONCTIONNE DE BOUT EN BOUT. Paiement réel de Paul à 12 h 47 (cs_live_, facture 0,00 € : 14 jours d'essai, 1er…",
           "✅ FAIT ET MESURE LE 28/09 — NE PAS LE REJOUER : expediteur ARTIDISPO VALIDE par OVH ; SMS d'appel manque recu (sent + id OVH) ; migration 29 appliquee ; twilio-voice v13 deployee.…",
           "✅ FAIT LE 28/09 — les regles du SMS vivent EN BASE (claim_missed_call, migration 30) : numero de l'artisan, liste d'exclusion, deja client, 30 jours par appelant et par artisan…",
           "⏳ PAUL — LA FILE DE PURGE NE SE VIDE PAS ENCORE : purge-stockage (fonction Edge) est DEPLOYEE le 27/09 mais NON PLANIFIEE et sans CRON_SECRET (elle rend 503) ; il lui faut pg_net…"
@@ -511,9 +511,9 @@ export default {
       "hors_seance": true,
       "reprise": true,
       "derive": {
-        "tete": "2cc75d4",
-        "tete_le": "2026-09-30T10:30:15+00:00",
-        "commits_depuis": 2,
+        "tete": "128ac59",
+        "tete_le": "2026-09-30T17:58:01+00:00",
+        "commits_depuis": 3,
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-30",
@@ -555,9 +555,9 @@ export default {
       "hors_seance": true,
       "reprise": true,
       "derive": {
-        "tete": "895c59e",
-        "tete_le": "2026-09-30T10:30:15+00:00",
-        "commits_depuis": 3,
+        "tete": "6692451",
+        "tete_le": "2026-09-30T17:57:54+00:00",
+        "commits_depuis": 6,
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-30",
@@ -598,9 +598,9 @@ export default {
       "hors_seance": true,
       "reprise": true,
       "derive": {
-        "tete": "55c0685",
-        "tete_le": "2026-09-30T10:30:15+00:00",
-        "commits_depuis": 1,
+        "tete": "e09feba",
+        "tete_le": "2026-09-30T17:58:03+00:00",
+        "commits_depuis": 4,
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-30",
@@ -650,8 +650,8 @@ export default {
       "hors_seance": true,
       "reprise": true,
       "derive": {
-        "tete": "1953b95",
-        "tete_le": "2026-09-30T10:30:14+00:00",
+        "tete": "a7b4bee",
+        "tete_le": "2026-09-30T17:57:56+00:00",
         "commits_depuis": null,
         "commit_inconnu": true
       },
@@ -820,7 +820,7 @@ export default {
       },
       {
         "projet": "Artidispo",
-        "geste": "⚠️ 29/09 — MISE EN LIGNE AVANT VÉRIFICATION DE STRIPE LIVE, sur décision de Paul (« on verra le reste plus tard ») : la landing dit « Inscrivez-vous dès maintenant ! » et…"
+        "geste": "✅ FAIT ET MESURÉ LE 30/09 — NE PAS LE REJOUER : STRIPE LIVE FONCTIONNE DE BOUT EN BOUT. Paiement réel de Paul à 12 h 47 (cs_live_, facture 0,00 € : 14 jours d'essai, 1er…"
       },
       {
         "projet": "Artidispo",
@@ -876,17 +876,17 @@ export default {
     "signaux": [
       {
         "projet": "RénoAgenda",
-        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
+        "dit": "a avancé de 4 commit(s) depuis sa dernière note",
         "pourquoi": "derive"
       },
       {
         "projet": "RénoBoost",
-        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
+        "dit": "a avancé de 6 commit(s) depuis sa dernière note",
         "pourquoi": "derive"
       },
       {
         "projet": "RénoPredict",
-        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
+        "dit": "a avancé de 4 commit(s) depuis sa dernière note",
         "pourquoi": "derive"
       }
     ],

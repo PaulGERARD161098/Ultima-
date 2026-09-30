@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-30",
-    "quoi": "RIVEN lot 3 : en 3D, 9 constellations cliquables, seuls les noms des nébuleuses (#324). Avant : #322, à plat + 3D. Fusion squash : le seul commit après celui-ci, c'est elle.",
-    "commit": "ea93065a0488b04997e45d73691bec2dbc9d1ca8"
+    "quoi": "RIVEN lot 3 : en 3D, 9 constellations cliquables, seuls les noms des nébuleuses (#324). Avant : /leo, leçons à 200 Ko (#323). Squash : le seul commit après celui-ci, c'est elle.",
+    "commit": "675e2b4cb53143414589adf40a0ef5d455ff6b9b"
   },
   "prochaine_action": "④ — l'exécution : `ouvrirTrace()`, journal 'tentee' AVANT l'acte, plafond, issue après. Frontière arbitrée — cadrage §12.8 quater.",
   "bloque_par": [
@@ -44,6 +44,14 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "ÉCARTÉ par Paul le 30/09 — DATARENO- : Vercel rouge en permanence (PYTHON_ENTRYPOINT_NOT_FOUND), sur main aussi. « Vraiment à part, on le laisse de côté. » Ne pas rouvrir.",
+      "depuis": "2026-09-30"
+    },
+    {
+      "quoi": "REPORTÉ par Paul le 30/09 — mon-dpe.fr : 62 vulnérabilités Dependabot sur main (4 critiques, 28 hautes). « On va corriger mon dpe plus tard. » Séance dédiée.",
+      "depuis": "2026-09-30"
+    },
     {
       "quoi": "RIVEN nébuleuses : à 390 px, 3 noms fictifs sur 54 cachés (restent au panneau). Plus bas = sous 12 px ou étoiles déplacées : non tranché. CADRAGE-RIVEN-NEBULEUSES.md §7",
       "depuis": "2026-09-30"
@@ -132,7 +140,7 @@ production, Paul : seuls les noms des nébuleuses, une nébuleuse cliquable, les
 étoiles en constellations dans leurs nébuleuses. Fait en #324 : grille de
 boules face à la caméra, titres-boutons, approche avec point visé, Échap. 114
 verdicts, dont 18 validés rouges sur le code d'avant la relecture. Fusion en
-squash : le grain pointe `ea93065`. Détail : **`CADRAGE-RIVEN-NEBULEUSES.md`
+squash : le grain pointe `675e2b4` (tête de `main` après #326). Détail : **`CADRAGE-RIVEN-NEBULEUSES.md`
 §8 bis**. Le jalon B1 ④ reste la prochaine action.
 
 ### 2026-09-30 — RIVEN en nébuleuses, à plat et en 3D
