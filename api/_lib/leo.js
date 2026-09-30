@@ -107,10 +107,22 @@ const DATE_MOTIF = /^\d{4}-\d{2}-\d{2}$/;
 // tool-use Anthropic (OUTILS_PAR_QUADRANT) et la validation
 // (validerProposition) en dérivent tous deux — jamais de double vérité.
 //
-// ---- L'ANNEAU (B1 ①②, cadrage §11, 2026-09-29) -----------------------------
+// ---- L'ANNEAU (cadrage §12, arbitrage de Paul du 2026-09-29) ---------------
 // `anneau` dit ce que Léo a le droit de faire de cette proposition :
 //   'vert'   → elle pourra l'écrire SANS demander (l'exécution est l'étape ④) ;
 //   'orange' → elle la PROPOSE, Paul valide d'un clic. C'est l'existant.
+//
+// ⛔ LE CRITÈRE, ET IL EST DE PAUL : « toute action DESTRUCTRICE ou de
+// RÉGRESSION doit être approuvée par moi ». Ce n'est pas « est-ce que ça
+// écrit », c'est « qu'est-ce que ça casse si c'est faux ». Le périmètre par
+// défaut est donc ce que Paul peut faire lui-même — large — et l'exception est
+// nommée : détruire, écraser, envoyer, dépenser, fusionner, déployer, migrer.
+//
+// ⚠️ CE CRITÈRE A REMPLACÉ LE MIEN, le 29/09, et l'écart valait d'être dit :
+// j'avais taillé le vert sur « réversible ET visible, et qui ne sort pas de la
+// machine », soit TROIS outils sur dix. Je donnais des permissions une par
+// une ; Paul retire les gestes dangereux d'un périmètre complet. Sa version
+// tient mieux — elle ne se périme pas à chaque outil ajouté.
 //
 // ⛔ L'ANNEAU EST UN CHAMP DU CATALOGUE, JAMAIS UNE SECONDE LISTE. Poser
 // ailleurs un tableau « ce qui est vert » ferait deux vérités sur le même
@@ -118,22 +130,23 @@ const DATE_MOTIF = /^\d{4}-\d{2}-\d{2}$/;
 // l'anneau manque ou ne se reconnaît pas est ORANGE : un repli se choisit sur
 // ce qu'il coûte quand il SE TROMPE (RenoDevis A1, 13/09).
 //
-// ⛔ LE CRITÈRE DU VERT EST DOUBLE — réversible ET visible — et il exclut ce
-// qui sort de la machine :
-//   · réversible : Paul défait d'un clic, la valeur d'avant n'est pas perdue
-//     (un vert AJOUTE, il n'écrase jamais) ;
-//   · visible : l'erreur se VOIT. Un montant faux se défait d'un clic et ne se
-//     voit jamais — il se découvre au tiers provisionnel. C'est pour cela que
-//     NICOL BOLAS (`bcp`) n'a aucun outil, et n'en recevra pas de vert ;
-//   · qui ne sort pas de la machine : une écriture poussée dans un dépôt ne se
-//     DÉFAIT pas, elle se RATTRAPE par un second commit — ce n'est pas la même
-//     chose. Les grains restent écrits par la séance, sous PR.
+// ---- Pourquoi les DIX sont verts, et ce que ça ne dit PAS ------------------
+// Ce catalogue n'a, par principe fondateur, AUCUN outil de suppression — un
+// test l'interdit depuis la boucle L2b. Mesuré le 29/09 sur les dix plans
+// d'exécution de `js/leo-accueil.js` : neuf POST et un PATCH qui CONCATÈNE
+// (`existante + '\n\n' + ajout`, plafonné à 2000). Aucun DELETE, aucun PUT,
+// aucun appel sortant, aucun paiement. Sous le critère de Paul, il n'y a donc
+// rien à retenir : les dix sont verts.
 //
-// Trois verts, et ils ont été instruits un par un : proposer_idee (crée),
-// proposer_enrichissement_idee (AJOUTE à une idée existante — vérifié dans sa
-// description, il n'écrase pas), proposer_page_journal (crée une page). Tout
-// le reste est orange : RIVEN touche un client, DRAUKHAIN scelle un
-// engagement, VRANESH ouvre une exploration que Paul seul décide d'ouvrir.
+// ⚠️ L'ORANGE N'EST PAS MORT POUR AUTANT — il garde le ONZIÈME outil. C'est
+// `ANNEAU_PAR_DEFAUT` qui le tient : un outil ajouté demain sans anneau est
+// orange, et le restera tant que personne ne l'aura instruit.
+//
+// ⛔ ET CE QUI GARDE VRAIMENT, MAINTENANT QUE TOUT EST VERT, C'EST LE VOLUME.
+// L'anneau ne borne plus rien sur ces dix : dix mille idées versées dans
+// ADRAMELECH noient les vraies, sans qu'aucun droit particulier n'ait été
+// obtenu. Le plafond d'écritures par séance (§12, A5) cesse d'être une
+// précaution pour devenir la garde principale.
 const CATALOGUE = {
   proposer_idee: {
     quadrant: 'adramelech',
@@ -163,7 +176,10 @@ const CATALOGUE = {
   },
   proposer_besoin: {
     quadrant: 'riven',
-    anneau: 'orange',
+    // VERT (29/09) — MESURÉ, pas supposé : un besoin est une LIGNE DE LISTE.
+    // `api/intendant.js` ne porte ni commande, ni achat, ni fournisseur, ni
+    // envoi (cherché nommément le 29/09). Rien n'est acheté, rien ne part.
+    anneau: 'vert',
     description: "Proposer l'ajout d'une ligne de besoin (matériel, fourniture) " +
       "à l'intendance d'un chantier. Rien n'est créé avant confirmation de Paul.",
     args: {
@@ -175,7 +191,11 @@ const CATALOGUE = {
   },
   proposer_journal: {
     quadrant: 'riven',
-    anneau: 'orange',
+    // VERT (29/09) — POST sur `/api/reseau/journal` : une note s'AJOUTE au
+    // journal d'un contact, elle n'en remplace aucune. ⚠️ C'est de la PII
+    // (le réseau commercial EST de la PII) : ce n'est pas l'anneau qui la
+    // garde, c'est le plafond de VOLUME (§12, A5) et l'absence de logs.
+    anneau: 'vert',
     description: "Proposer une note au journal d'un contact ou chantier du " +
       "réseau. Rien n'est écrit avant confirmation de Paul.",
     args: {
@@ -200,7 +220,9 @@ const CATALOGUE = {
   },
   proposer_serment: {
     quadrant: 'imladrik',
-    anneau: 'orange',
+    // VERT (29/09) — POST sur `/api/serments` : un serment de plus. Rien
+    // n'est scellé au sens irréversible : le cap se relit et se retire.
+    anneau: 'vert',
     description: 'Proposer de sceller un serment (cap DRAUKHAIN) : le vœu que ' +
       "Paul tient. Rien n'est scellé avant sa confirmation.",
     args: {
@@ -211,7 +233,9 @@ const CATALOGUE = {
   },
   proposer_flamme: {
     quadrant: 'imladrik',
-    anneau: 'orange',
+    // VERT (29/09) — POST sur `/api/flammes` : une flamme s'AJOUTE à un
+    // serment existant, elle n'en modifie aucun champ.
+    anneau: 'vert',
     description: "Proposer de raviver un serment EXISTANT (cap DRAUKHAIN) d'une " +
       "flamme dictée par Paul : une citation, une victoire ou un rappel. " +
       "Rien n'est écrit avant sa confirmation.",
@@ -229,7 +253,9 @@ const CATALOGUE = {
   },
   proposer_situation: {
     quadrant: 'imladrik',
-    anneau: 'orange',
+    // VERT (29/09) — POST sur `/api/situations` : ouvrir une exploration
+    // n'engage rien. C'est Paul qui décidera quoi en faire.
+    anneau: 'vert',
     description: 'Proposer d’ouvrir une situation à explorer (cap VRANESH) : ' +
       "un cas donné dont Paul veut anticiper les futurs. Rien n'est ouvert " +
       'avant sa confirmation.',
@@ -240,7 +266,9 @@ const CATALOGUE = {
   },
   proposer_scenario: {
     quadrant: 'imladrik',
-    anneau: 'orange',
+    // VERT (29/09) — POST sur `/api/scenarios` : un futur possible de plus
+    // sur une situation existante.
+    anneau: 'vert',
     description: 'Proposer d’ajouter un futur possible à une situation EXISTANTE ' +
       "(cap VRANESH) : le déroulé dicté par Paul. Rien n'est écrit avant sa " +
       'confirmation.',
@@ -261,7 +289,15 @@ const CATALOGUE = {
 
   proposer_relance: {
     quadrant: 'riven',
-    anneau: 'orange',
+    // VERT (29/09) — ⛔ LE SEUL OUTIL DONT LE NOM FAISAIT PEUR, et la peur
+    // était infondée : « relance » ne relance PERSONNE. Le plan d'exécution
+    // POSTe sur `/api/reseau/journal` avec `relance_at`, et ce champ n'est lu
+    // QUE par `api/cockpit.js`, pour AFFICHER à Paul les relances échues
+    // (cherché le 29/09 dans tout `api/` et `js/` : aucun cron, aucun envoi).
+    // C'est un rappel sur l'écran de Paul, pas un message à un client.
+    // ⚠️ Le jour où un envoi s'y branche, cet outil repasse ORANGE — et ce
+    // commentaire est ce qui permettra de s'en souvenir.
+    anneau: 'vert',
     description: 'Proposer de programmer une relance datée sur un contact du ' +
       "réseau. Rien n'est programmé avant confirmation de Paul.",
     args: {
@@ -371,13 +407,26 @@ export function anneauDe(nomOutil) {
 // Elle refait le chemin complet (validerProposition) plutôt que de se fier à
 // un verdict qu'on lui tendrait : une garde qui croit son appelant ne garde
 // rien.
+// La décision d'anneau, SEULE et PURE. Extraite le 29/09 pour une raison qui
+// n'est pas cosmétique : depuis que les dix outils sont verts, il n'existe
+// plus aucun outil orange à passer à `autoriserEcriture`. Le contrôle « un
+// orange refuse » serait donc devenu VERT PAR VACUITÉ — la façon exacte dont
+// un garde-fou cesse de garder sans que personne ne le voie.
+// ⛔ Elle reste l'UNIQUE endroit où l'anneau décide : `autoriserEcriture` la
+// délègue, elle ne la redouble pas (sinon deux logiques divergent).
+export function decisionAnneau(valeurAnneau) {
+  const anneau = normaliserAnneau(valeurAnneau);
+  return anneau === 'vert'
+    ? { ok: true, anneau }
+    : { ok: false, motif: 'validation de Paul requise', anneau };
+}
+
 export function autoriserEcriture(nomOutil, args, quadrant) {
   const verdict = validerProposition(nomOutil, args, quadrant);
   if (!verdict.ok) return { ok: false, motif: 'proposition invalide' };
-  if (verdict.anneau !== 'vert') {
-    return { ok: false, motif: 'validation de Paul requise', anneau: verdict.anneau };
-  }
-  return { ok: true, anneau: 'vert', proposition: verdict.proposition };
+  const decision = decisionAnneau(verdict.anneau);
+  if (!decision.ok) return decision;
+  return { ok: true, anneau: decision.anneau, proposition: verdict.proposition };
 }
 
 export function validerProposition(nomOutil, args, quadrant) {

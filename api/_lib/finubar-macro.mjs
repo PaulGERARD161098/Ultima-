@@ -82,15 +82,15 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": true,
-      "reprise": true,
+      "hors_seance": false,
+      "reprise": false,
       "derive": {
         "tete": "806867f",
         "tete_le": "2026-09-22T09:16:37+02:00",
         "commits_depuis": 7,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-09-29",
+      "mesure_le": "2026-09-30",
       "jours_depuis_maj": 9,
       "jours_en_attente": 44,
       "rang": 0
@@ -159,15 +159,15 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": true,
-      "reprise": true,
+      "hors_seance": false,
+      "reprise": false,
       "derive": {
         "tete": "ec20a1f",
         "tete_le": "2026-09-22T10:36:52+00:00",
         "commits_depuis": null,
         "commit_inconnu": true
       },
-      "mesure_le": "2026-09-29",
+      "mesure_le": "2026-09-30",
       "jours_depuis_maj": 23,
       "jours_en_attente": 77,
       "rang": 1
@@ -214,15 +214,15 @@ export default {
         "bloque_par[]"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": true,
-      "reprise": true,
+      "hors_seance": false,
+      "reprise": false,
       "derive": {
         "tete": "ded8b3a",
         "tete_le": "2026-09-22T10:36:52+00:00",
         "commits_depuis": null,
         "commit_inconnu": true
       },
-      "mesure_le": "2026-09-29",
+      "mesure_le": "2026-09-30",
       "jours_depuis_maj": 27,
       "jours_en_attente": 57,
       "rang": 1
@@ -257,15 +257,15 @@ export default {
       },
       "recits": [],
       "ciel": "alpha",
-      "hors_seance": true,
-      "reprise": true,
+      "hors_seance": false,
+      "reprise": false,
       "derive": {
         "tete": null,
         "tete_le": null,
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-09-29",
+      "mesure_le": "2026-09-30",
       "jours_depuis_maj": 8,
       "jours_en_attente": 11,
       "rang": 1
@@ -347,15 +347,15 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": true,
-      "reprise": true,
+      "hors_seance": false,
+      "reprise": false,
       "derive": {
         "tete": null,
         "tete_le": null,
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-09-29",
+      "mesure_le": "2026-09-30",
       "jours_depuis_maj": 8,
       "jours_en_attente": 57,
       "rang": 2
@@ -375,14 +375,14 @@ export default {
           "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①② faits ; ③ ouvre sur un gate"
         },
         "dernier_arret": {
-          "le": "2026-09-29",
-          "quoi": "OMEGA fusionné (#310) : Ultima→Omega, Grima/Naga supprimés, Imladrik macro-projet. IFULVIN cadré sans code — voir CADRAGE-IFULVIN.md.",
-          "commit": "0e60dbedd13347cc4faf088702ce4430f4129980"
+          "le": "2026-09-30",
+          "quoi": "§12 scellé, 10 outils verts, `leo_ecritures` APPLIQUÉE et éprouvée (anon 42501) + faille RLS leo_operations corrigée. Avant : OMEGA fusionné (#310).",
+          "commit": "À RECALER APRÈS FUSION"
         },
-        "prochaine_action": "B1 étape ③ — le journal des écritures. ⛔ Il commence par le gate : créer la table `leo_ecritures`. On n'écrit pas le module avant la table.",
+        "prochaine_action": "④ — brancher l'exécution : entrée de journal AVANT l'acte, plafond consulté, issue après. ⚠️ Deux moteurs candidats, voir cadrage §12.8.",
         "bloque_par": [
           "Gestes Ycome en attente depuis le 28/09 : archiver le dépôt sur GitHub, supprimer le projet Vercel ycome",
-          "Créer la table `leo_ecritures` (journal des écritures de Léo) : migration SQL en production — gate, que le mode solo ne lève pas. Elle ouvre B1 ③",
+          "DÉCISION : deux journaux coexistent (leo_operations = moteur, leo_ecritures = lisible). Frontière proposée au cadrage §12.8, à trancher — choix produit.",
           "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
           "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
           "La précision sur « mon dpe.fr » (VITRUVE)",
@@ -439,10 +439,10 @@ export default {
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": null,
-        "tete_le": null,
-        "commits_depuis": 0,
-        "commit_inconnu": false
+        "tete": "8fc805f",
+        "tete_le": "2026-09-30T08:43:03+00:00",
+        "commits_depuis": null,
+        "commit_inconnu": true
       },
       "mesure_le": "2026-09-30",
       "jours_depuis_maj": 1,
@@ -488,15 +488,15 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "alpha",
-      "hors_seance": true,
-      "reprise": true,
+      "hors_seance": false,
+      "reprise": false,
       "derive": {
         "tete": "078de67",
         "tete_le": "2026-09-19T18:50:58+02:00",
         "commits_depuis": null,
         "commit_inconnu": true
       },
-      "mesure_le": "2026-09-29",
+      "mesure_le": "2026-09-30",
       "jours_depuis_maj": 40,
       "jours_en_attente": 40,
       "rang": 2
@@ -535,15 +535,15 @@ export default {
       },
       "recits": [],
       "ciel": "alpha",
-      "hors_seance": true,
-      "reprise": true,
+      "hors_seance": false,
+      "reprise": false,
       "derive": {
         "tete": "12af06d",
         "tete_le": "2026-09-19T18:49:35+02:00",
         "commits_depuis": null,
         "commit_inconnu": true
       },
-      "mesure_le": "2026-09-29",
+      "mesure_le": "2026-09-30",
       "jours_depuis_maj": 15,
       "jours_en_attente": 40,
       "rang": 2
@@ -589,15 +589,15 @@ export default {
         "bloque_par[]"
       ],
       "ciel": "alpha",
-      "hors_seance": true,
-      "reprise": true,
+      "hors_seance": false,
+      "reprise": false,
       "derive": {
         "tete": "ca445fb",
         "tete_le": "2026-09-22T10:26:49+02:00",
         "commits_depuis": null,
         "commit_inconnu": true
       },
-      "mesure_le": "2026-09-29",
+      "mesure_le": "2026-09-30",
       "jours_depuis_maj": 8,
       "jours_en_attente": 22,
       "rang": 2
@@ -633,15 +633,15 @@ export default {
       },
       "recits": [],
       "ciel": "renoboost-ia",
-      "hors_seance": true,
-      "reprise": true,
+      "hors_seance": false,
+      "reprise": false,
       "derive": {
         "tete": null,
         "tete_le": null,
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-09-29",
+      "mesure_le": "2026-09-30",
       "jours_depuis_maj": 8,
       "jours_en_attente": 20,
       "rang": 2
@@ -652,12 +652,12 @@ export default {
     "lisibles": 10,
     "illisibles": 0,
     "hors_seance": 0,
-    "repris": 9,
+    "repris": 0,
     "en_cours": 7,
     "en_attente_de_paul": 3,
     "au_repos": 0,
     "derives": 1,
-    "commits_inconnus": 5,
+    "commits_inconnus": 6,
     "boucles_ouvertes": 40,
     "gestes_de_paul": [
       {
@@ -730,7 +730,7 @@ export default {
       },
       {
         "projet": "Ultima",
-        "geste": "Créer la table `leo_ecritures` (journal des écritures de Léo) : migration SQL en production — gate, que le mode solo ne lève pas. Elle ouvre B1 ③"
+        "geste": "DÉCISION : deux journaux coexistent (leo_operations = moteur, leo_ecritures = lisible). Frontière proposée au cadrage §12.8, à trancher — choix produit."
       },
       {
         "projet": "Ultima",

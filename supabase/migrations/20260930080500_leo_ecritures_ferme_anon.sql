@@ -1,0 +1,27 @@
+-- DURCISSEMENT trouvé au dry run, juste après la création de leo_ecritures.
+-- ✅ APPLIQUÉ le 2026-09-30 sur le projet Ultima (leosfqyidgsaescjbfom).
+--
+-- Supabase accorde par défaut INSERT sur les tables de `public` au rôle
+-- `anon` : le `revoke update, delete, truncate` de la migration précédente ne
+-- le visait pas. Mesuré après création : has_table_privilege('anon', …,
+-- 'INSERT') = true.
+--
+-- ⚠️ CE N'ÉTAIT PAS UNE FAILLE, et le dire importe autant que le corriger :
+-- la RLS refusait déjà l'insert anonyme. ÉPROUVÉ sous le rôle `anon`, en
+-- transaction annulée :
+--   ERROR 42501: new row violates row-level security policy for table
+--   "leo_ecritures"
+-- (la policy exige `owner_id = auth.uid()`, qui vaut NULL sans jeton).
+--
+-- Ce revoke retire donc une SURFACE INUTILE, pas un trou. Personne d'anonyme
+-- n'a à écrire dans le journal de Léo, et un droit accordé sans usage est un
+-- droit qu'une policy mal réécrite un jour suffirait à rendre exploitable.
+-- Deux barrières, pas une.
+--
+-- ⛔ CE QUI NE BOUGE PAS, et qu'il ne faut pas « nettoyer » par symétrie :
+--   · `authenticated` garde INSERT et SELECT — c'est la voie de Paul connecté ;
+--   · `service_role` n'est pas visé — c'est la voie du serveur ;
+--   · `anon` garde SELECT, comme 39 des 41 tables de ce projet : la RLS le
+--     bloque, et le retirer ici seul créerait une divergence sans gain.
+-- Les retirer casserait le journal pour tout le monde.
+revoke insert on public.leo_ecritures from anon;
