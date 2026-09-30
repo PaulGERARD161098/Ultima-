@@ -3,23 +3,25 @@
   'use strict';
 
   // Les secteurs saisis en base le 2026-09-30, avec leur effectif : la carte
-  // fictive a la même forme que la vraie. Le vide compte quatre fiches.
+  // fictive a la même forme que la vraie. Débuts réels (ce que la table lit),
+  // suites neutralisées — le détail désignait parfois une entreprise. Le vide
+  // compte quatre fiches.
   var SECTEURS = [
-    ['Conseil', 4], ['Conseil - direction financière', 1], ['Conseil - stratégie et relations publiques', 2],
-    ['Audit - conseil', 1], ['Recouvrement de créances - gestion du poste client', 1],
-    ['Recrutement - service RH externalisé', 1], ['Services - finances - comptabilité', 1],
-    ['Banque - financement et investissement', 1], ['Banque privée', 1], ['Finance - capital-investissement', 1],
-    ['Médias', 1], ['Médias - presse', 2], ['Médias - presse professionnelle', 2], ['Édition', 1],
-    ['Aéronautique', 1], ['Aéronautique - défense', 1], ['Holding industrielle - équipement automobile', 1],
-    ['Ingénierie - services numériques', 1], ['Logiciel - téléphonie cloud', 1],
-    ['Technologie - étiquettes électroniques pour le commerce', 1],
-    ['BTP - fédération professionnelle', 1], ["BTP - tout corps d'état", 3], ['BTP - logiciel de vérification avant chantier', 1],
-    ['Tuyautiste', 1], ['Isolation - PAC - Climaticien', 1], ['Isolation - tuyautiste - climaticien', 1],
-    ['CVC - Relationnel', 1], ['Ventilation - association professionnelle', 1], ['Rénovation - IA', 2],
-    ['Énergie', 1], ['Énergie - électrotechnique', 1], ['Énergie - régulation', 1], ['Environnement - eau et déchets', 1],
-    ['Politique - institutions publiques', 2], ['Études - immigration et démographie', 1],
-    ['Associatif - collectivité locale', 1], ['Médico-social - handicap (associatif)', 1],
-    ['Retail', 1], ['Luxe - cristallerie', 1], ['Art - peinture', 1], ['', 4]
+    ['Conseil', 4], ['Conseil - secteur A', 1], ['Conseil - secteur B', 2],
+    ['Audit - conseil', 1], ['Recouvrement de créances - secteur A', 1],
+    ['Recrutement - secteur A', 1], ['Services - finances - secteur A', 1],
+    ['Banque - secteur A', 1], ['Banque privée', 1], ['Finance - secteur A', 1],
+    ['Médias', 1], ['Médias - presse', 2], ['Médias - secteur B', 2], ['Édition', 1],
+    ['Aéronautique', 1], ['Aéronautique - secteur A', 1], ['Holding industrielle - secteur A', 1],
+    ['Ingénierie - secteur A', 1], ['Logiciel - secteur A', 1],
+    ['Technologie - secteur A', 1],
+    ['BTP - secteur A', 1], ["BTP - tout corps d'état", 3], ['BTP - secteur B', 1],
+    ['Tuyautiste', 1], ['Isolation - secteur A', 1], ['Isolation - secteur B', 1],
+    ['CVC - Relationnel', 1], ['Ventilation - secteur A', 1], ['Rénovation - IA', 2],
+    ['Énergie', 1], ['Énergie - secteur A', 1], ['Énergie - secteur B', 1], ['Environnement - secteur A', 1],
+    ['Politique - secteur A', 2], ['Études - secteur A', 1],
+    ['Associatif - secteur A', 1], ['Médico-social - secteur A', 1],
+    ['Retail', 1], ['Luxe - secteur A', 1], ['Art - secteur A', 1], ['', 4]
   ];
   // Des noms inventés, de longueurs réelles (jusqu'à trente caractères).
   var PRENOMS = ['Aurèle', 'Bérénice', 'Clovis', 'Domitille', 'Éloi', 'Faustine', 'Gauthier', 'Hortense', 'Isaure',

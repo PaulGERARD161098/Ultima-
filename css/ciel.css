@@ -448,9 +448,16 @@
 .neb-svg { touch-action: manipulation; }
 .neb-nebuleuse { cursor: pointer; }
 .neb-nebuleuse:focus-visible { outline: none; }
-.neb-focus { stroke: var(--ciel-or-clair); stroke-width: 2; stroke-dasharray: 6 6; opacity: 0; }
-.neb-nebuleuse:focus-visible .neb-focus { opacity: .85; }
-.neb-etoile:focus-visible .ciel-zone { stroke: var(--ciel-or-clair); stroke-width: 1.5; }
+/* L'anneau de focus se mesure en PIXELS, pas en unités de carte : sans
+   `non-scaling-stroke`, il faisait 0,7 px sur un téléphone, à peine visible. */
+.neb-focus {
+  stroke: var(--ciel-or-clair); stroke-width: 2px; stroke-dasharray: 6px 4px;
+  vector-effect: non-scaling-stroke; opacity: 0;
+}
+.neb-nebuleuse:focus-visible .neb-focus { opacity: .9; }
+.neb-etoile:focus-visible .ciel-zone {
+  stroke: var(--ciel-or-clair); stroke-width: 2px; vector-effect: non-scaling-stroke;
+}
 .neb-titre {
   fill: var(--ciel-or-clair); letter-spacing: .07em;
   font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;

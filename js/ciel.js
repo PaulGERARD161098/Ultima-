@@ -875,6 +875,7 @@
     // Les ancres des nébuleuses, recalculées À CHAQUE IMAGE depuis les étoiles
     // du monde (au plus cinq : coût nul). Calculées une fois, elles se
     // périmeraient à la première couronne recomposée par une rotation d'écran.
+    var cacheEpsilon = null;
     function optionsDuFond() {
       var base = atmosphere || { eclat: 1 };
       if (!nebuleusesDemandees.length || !monde || !monde.etoiles) { return base; }
@@ -883,15 +884,30 @@
       // ε : distance monde au plus proche voisin, parmi TOUTES les étoiles de
       // l'écran. Une étoile seule (IFULVIN) prend 36 — trois fois le plancher
       // du rayon réel recentré.
-      var epsilon = Infinity;
-      for (var i = 0; i < monde.etoiles.length; i++) {
-        for (var j = i + 1; j < monde.etoiles.length; j++) {
-          var a = monde.etoiles[i]; var b = monde.etoiles[j];
-          var d = Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z));
-          if (d > 0 && d < epsilon) { epsilon = d; }
-        }
+      // Le calcul est en n² : il ne se refait que si les étoiles ont BOUGÉ
+      // (signature des positions, en n). Refait à chaque image, il coûtait
+      // cher dès que RIVEN passe ses centaines de fiches (relecture du 30/09) ;
+      // la valeur rendue est la même qu'avant, à l'identique.
+      var signature = monde.etoiles.length;
+      for (var s = 0; s < monde.etoiles.length; s++) {
+        var q = monde.etoiles[s];
+        signature += q.x * 1.31 + q.y * 1.73 + q.z * 2.17;
       }
-      if (!isFinite(epsilon)) { epsilon = 36; }
+      var epsilon;
+      if (cacheEpsilon && cacheEpsilon.signature === signature) {
+        epsilon = cacheEpsilon.valeur;
+      } else {
+        epsilon = Infinity;
+        for (var i = 0; i < monde.etoiles.length; i++) {
+          for (var j = i + 1; j < monde.etoiles.length; j++) {
+            var a = monde.etoiles[i]; var b = monde.etoiles[j];
+            var d = Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z));
+            if (d > 0 && d < epsilon) { epsilon = d; }
+          }
+        }
+        if (!isFinite(epsilon)) { epsilon = 36; }
+        cacheEpsilon = { signature: signature, valeur: epsilon };
+      }
       var liste = [];
       nebuleusesDemandees.forEach(function (neb) {
         var membres = (neb && neb.ids || []).map(function (id) { return parId[id]; })
@@ -1165,8 +1181,8 @@
         'class': 'ciel-etoile', tabindex: '0', role: 'button',
         'data-noeud-id': noeud.id,
         'aria-label': nomComplet + ', ' + libelleType +
-          (e.groupe.cle === CLE_A_CLASSER ? ', sans secteur'
-            : (e.groupe.parNebuleuse ? ', nébuleuse ' : ', secteur ') + e.groupe.label) +
+          (e.groupe.parNebuleuse ? ', nébuleuse ' + e.groupe.label
+            : (e.groupe.cle === CLE_A_CLASSER ? ', sans secteur' : ', secteur ' + e.groupe.label)) +
           (libelleStatut ? ', ' + libelleStatut : '') +
           ', ' + mag + ' lien' + (mag > 1 ? 's' : '')
       });

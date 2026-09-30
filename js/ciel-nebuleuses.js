@@ -40,10 +40,15 @@
   var TEINTE_ETOILE = { artisan: '#f5c894', partenaire: '#f2ead6', lead: '#d6efe2', chantier: '#e6dbf6' };
 
   var courant = null;
+  var numero = 0;  // préfixe des identifiants SVG, un par instance
   // La nébuleuse approchée survit à un nouveau rendu (une frappe dans la
   // recherche, une fiche enregistrée) : sans cette mémoire, chaque mise à jour
   // renverrait Paul à la vue d'ensemble au milieu de sa lecture.
-  var memoire = { active: null };
+  // TROIS états, et la différence compte : `undefined` = Paul n'a encore rien
+  // choisi ; `null` = il a demandé la vue d'ensemble ; une clé = il s'est
+  // approché d'une nébuleuse. Seul le premier laisse la fiche ouverte décider
+  // où regarder — sinon « Tout voir » serait annulé à la frappe suivante.
+  var memoire = { active: undefined };
 
   function el(nom, attrs, parent) {
     var e = document.createElementNS(NS, nom);
@@ -61,6 +66,10 @@
     return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   }
   function pluriel(n, mot) { return n + ' ' + mot + (n > 1 ? 's' : ''); }
+  // Tout ce qui s'affiche passe par ici : une valeur qui n'est pas une chaîne
+  // (null, un nombre) ne doit jamais casser le rendu de toute la carte.
+  function texte(x) { return x == null ? '' : String(x); }
+  function propre(objet, cle) { return Object.prototype.hasOwnProperty.call(objet, cle) ? objet[cle] : undefined; }
   // Une graine fixe : le même ciel à chaque ouverture.
   function hasard(graine) {
     var s = graine;
@@ -208,8 +217,9 @@
     panneau.setAttribute('aria-label', 'Détail des nébuleuses');
     panneau.setAttribute('aria-live', 'polite');
 
+    var prefixe = 'neb' + (++numero) + '-';
     var defs = el('defs', {}, svg);
-    var brume = el('filter', { id: 'neb-brume', x: '-40%', y: '-40%', width: '180%', height: '180%' }, defs);
+    var brume = el('filter', { id: prefixe + 'brume', x: '-40%', y: '-40%', width: '180%', height: '180%' }, defs);
     el('feTurbulence', { type: 'fractalNoise', baseFrequency: '0.011', numOctaves: '3', seed: '7', result: 'bruit' }, brume);
     el('feDisplacementMap', { 'in': 'SourceGraphic', in2: 'bruit', scale: '55' }, brume);
     el('feGaussianBlur', { stdDeviation: '6' }, brume);
@@ -231,43 +241,53 @@
 
     groupes.forEach(function (g) {
       var n = g.nebuleuse, k = g.noeuds.length;
-      var id = 'neb-g-' + n.cle;
+      var id = prefixe + 'g-' + n.cle;
       var degrade = el('radialGradient', { id: id }, defs);
       var rgb = n.rgb.join(',');
       el('stop', { offset: '0%', 'stop-color': 'rgb(' + rgb + ')', 'stop-opacity': '.55' }, degrade);
       el('stop', { offset: '55%', 'stop-color': 'rgb(' + rgb + ')', 'stop-opacity': '.2' }, degrade);
       el('stop', { offset: '100%', 'stop-color': 'rgb(' + rgb + ')', 'stop-opacity': '0' }, degrade);
 
+      g.libelle = n.nom + ', ' + pluriel(k, 'fiche') + '. Entrée pour s’approcher.';
       g.groupe = el('g', {
         'class': 'nebuleuse neb-nebuleuse', 'data-nebuleuse': n.cle, tabindex: '0', role: 'button',
-        'aria-label': n.nom + ', ' + pluriel(k, 'fiche') + '. Entrée pour s’approcher.'
+        'aria-label': g.libelle
       }, coucheNebuleuses);
-      el('circle', { cx: g.x, cy: g.y, r: (g.r * 1.18).toFixed(1), fill: 'url(#' + id + ')', filter: 'url(#neb-brume)', 'class': 'neb-brume' }, g.groupe);
+      el('circle', { cx: g.x, cy: g.y, r: (g.r * 1.18).toFixed(1), fill: 'url(#' + id + ')', filter: 'url(#' + prefixe + 'brume)', 'class': 'neb-brume' }, g.groupe);
       el('circle', { cx: g.x, cy: g.y, r: (g.r * 0.62).toFixed(1), fill: 'url(#' + id + ')', opacity: '.55' }, g.groupe);
       // L'anneau de focus clavier : visible seulement sous :focus-visible (css/ciel.css).
       el('circle', { cx: g.x, cy: g.y, r: (g.r * 1.02).toFixed(1), fill: 'none', 'class': 'neb-focus' }, g.groupe);
       g.titre = el('text', { x: g.x, 'text-anchor': 'middle', 'class': 'neb-titre' }, g.groupe);
       g.compte = el('text', { x: g.x, 'text-anchor': 'middle', 'class': 'neb-compte' }, g.groupe);
       g.compte.textContent = pluriel(k, 'fiche') + (g.domaines.length ? ' · ' + pluriel(g.domaines.length, 'domaine') : '');
-      g.noms = el('g', { 'class': 'neb-noms', 'aria-hidden': 'true', display: 'none' }, g.groupe);
+      // Le groupe des noms s'accroche APRÈS les étoiles (fin de boucle) : peints
+      // avant, ils passaient sous les cœurs.
+      g.noms = el('g', { 'class': 'neb-noms', 'aria-hidden': 'true', display: 'none' });
       g.etoiles = [];
 
       var decalage = n.cle.length * 0.7;
       g.noeuds.forEach(function (noeud, i) {
         var rayon = g.r * 0.6 * Math.sqrt((i + 0.5) / k), angle = i * ANGLE_OR + decalage;
         var e = { noeud: noeud, g: g, x: g.x + Math.cos(angle) * rayon, y: g.y + 14 + Math.sin(angle) * rayon * 0.9 };
-        var etiquette = (noeud.nom || '(sans nom)') + ', ' + (libellesType[noeud.type] || noeud.type || 'fiche') +
-          (noeud.secteur_activite ? ', ' + noeud.secteur_activite : '');
+        var nom = texte(noeud.nom) || '(sans nom)';
+        var secteur = texte(noeud.secteur_activite).trim();
+        var etiquette = nom + ', ' + (texte(propre(libellesType, noeud.type)) || texte(noeud.type) || 'fiche') +
+          (secteur ? ', ' + secteur : '');
+        // Hors de la nébuleuse approchée, une étoile n'est ni sur le chemin de
+        // Tab ni dans l'arbre d'accessibilité : elle vit dans le bouton de sa
+        // nébuleuse, et un bouton ne contient pas de bouton (basculerTab).
         e.el = el('g', {
-          'class': 'ciel-etoile neb-etoile', 'data-noeud-id': String(noeud.id), tabindex: '-1', role: 'button',
-          'aria-label': etiquette + '. Entrée pour ouvrir la fiche.'
+          'class': 'ciel-etoile neb-etoile', 'data-noeud-id': texte(noeud.id), tabindex: '-1', role: 'button',
+          'aria-hidden': 'true', 'aria-label': etiquette + '. Entrée pour ouvrir la fiche.'
         }, g.groupe);
         e.zone = el('circle', { 'class': 'ciel-zone', cx: e.x.toFixed(1), cy: e.y.toFixed(1), r: '12', fill: 'transparent' }, e.el);
-        el('circle', { cx: e.x.toFixed(1), cy: e.y.toFixed(1), r: '10', fill: '#f2ead6', opacity: '.1' }, e.el);
-        el('circle', { 'class': 'neb-coeur', cx: e.x.toFixed(1), cy: e.y.toFixed(1), r: '3.4',
-          fill: TEINTE_ETOILE[noeud.type] || TEINTE_ETOILE.partenaire }, e.el);
+        // Le halo et le cœur ont une taille À L'ÉCRAN, pas dans le viewBox : sans
+        // cela, ils grossissent avec l'approche et mangent les noms (poserTitres).
+        e.halo = el('circle', { cx: e.x.toFixed(1), cy: e.y.toFixed(1), r: '10', fill: '#f2ead6', opacity: '.1' }, e.el);
+        e.coeur = el('circle', { 'class': 'neb-coeur', cx: e.x.toFixed(1), cy: e.y.toFixed(1), r: '3.4',
+          fill: propre(TEINTE_ETOILE, noeud.type) || TEINTE_ETOILE.partenaire }, e.el);
         e.texte = el('text', { 'class': 'neb-nom' }, g.noms);
-        e.texte.textContent = noeud.nom || '(sans nom)';
+        e.texte.textContent = nom;
         if (!correspond(noeud)) { e.el.classList.add('neb-eteinte'); }
 
         e.el.addEventListener('click', function (evt) {
@@ -281,8 +301,9 @@
         e.el.addEventListener('pointerenter', function () { if (active !== g) { montrerBulle(e); } });
         e.el.addEventListener('pointerleave', cacherBulle);
         g.etoiles.push(e);
-        etoileParId[noeud.id] = e;
+        if (noeud.id != null) { etoileParId[noeud.id] = e; }
       });
+      g.groupe.appendChild(g.noms);
 
       g.groupe.addEventListener('click', function (evt) {
         evt.stopPropagation();
@@ -303,7 +324,7 @@
 
     function montrerBulle(e) {
       var t = unitesPour(svg, TAILLE_NOM_PX);
-      bulleTexte.textContent = e.noeud.nom || '(sans nom)';
+      bulleTexte.textContent = texte(e.noeud.nom) || '(sans nom)';
       bulleTexte.setAttribute('font-size', t.toFixed(2));
       bulleTexte.setAttribute('stroke-width', (t * 0.28).toFixed(2));
       bulleTexte.setAttribute('x', e.x.toFixed(2));
@@ -331,7 +352,13 @@
         g.compte.setAttribute('font-size', tc.toFixed(2));
         g.compte.setAttribute('y', (haut + tt * 1.05).toFixed(2));
         if (etroit && active !== g) { g.compte.setAttribute('display', 'none'); } else { g.compte.removeAttribute('display'); }
-        g.etoiles.forEach(function (e) { e.zone.setAttribute('r', Math.max(10, cible).toFixed(2)); });
+        var rCoeur = Math.min(3.4, unitesPour(svg, 4)).toFixed(2);
+        var rHalo = Math.min(10, unitesPour(svg, 11)).toFixed(2);
+        g.etoiles.forEach(function (e) {
+          e.zone.setAttribute('r', Math.max(10, cible).toFixed(2));
+          e.coeur.setAttribute('r', rCoeur);
+          e.halo.setAttribute('r', rHalo);
+        });
       });
     }
     // Le titre et le compte de la nébuleuse approchée sont des obstacles : un
@@ -390,15 +417,29 @@
     }
     function toutVoir() {
       cacherBulle();
-      if (active) { active.noms.setAttribute('display', 'none'); basculerTab(active, false); }
+      var quittee = active;
+      // Le focus était sur une étoile de la nébuleuse quittée : il revient sur
+      // la nébuleuse, pas sur une étoile qui sort du chemin de Tab.
+      var focusDedans = !!(quittee && quittee.groupe.contains(document.activeElement));
+      if (quittee) { quittee.noms.setAttribute('display', 'none'); basculerTab(quittee, false); }
       active = null; memoire.active = null;
       remplirPanneau();
+      if (focusDedans) { quittee.groupe.focus(); }
       viser([0, 0, COTE, COTE], poserTitres);
     }
     // Au clavier, seules les étoiles de la nébuleuse approchée sont sur le
     // chemin de Tab : cinquante arrêts de plus rendraient la carte impraticable.
+    // Et un bouton ne contient pas de bouton : approchée, la nébuleuse devient
+    // un simple groupe nommé, et ses étoiles entrent dans l'arbre
+    // d'accessibilité ; sinon elle est UN bouton, et ses étoiles n'y sont pas.
     function basculerTab(g, actif) {
-      g.etoiles.forEach(function (e) { e.el.setAttribute('tabindex', actif ? '0' : '-1'); });
+      g.groupe.setAttribute('role', actif ? 'group' : 'button');
+      g.groupe.setAttribute('tabindex', actif ? '-1' : '0');
+      g.groupe.setAttribute('aria-label', actif ? g.nebuleuse.nom : g.libelle);
+      g.etoiles.forEach(function (e) {
+        e.el.setAttribute('tabindex', actif ? '0' : '-1');
+        if (actif) { e.el.removeAttribute('aria-hidden'); } else { e.el.setAttribute('aria-hidden', 'true'); }
+      });
     }
 
     // ---- Le panneau ----
@@ -410,8 +451,13 @@
       return b;
     }
     function remplirPanneau() {
+      // Le bouton activé disparaît avec l'ancien contenu : si le focus était
+      // dans le panneau, il va au titre du nouveau, au lieu de tomber sur <body>.
+      var focusDedans = panneau.contains(document.activeElement);
       panneau.textContent = '';
       var titre = html('h3', 'neb-panneau-titre', panneau);
+      titre.tabIndex = -1;
+      if (focusDedans) { window.setTimeout(function () { titre.focus(); }, 0); }
       if (!active) {
         titre.textContent = pluriel(groupes.length, 'nébuleuse') + ', ' + pluriel(noeuds.length, 'fiche');
         var liste = html('ul', 'neb-liste', panneau);
@@ -430,7 +476,7 @@
       bouton('← Toutes les nébuleuses', toutVoir, panneau, 'neb-retour');
       var parDomaine = Object.create(null), ordre = [];
       active.etoiles.forEach(function (e) {
-        var d = (e.noeud.secteur_activite || '').trim() || 'Sans secteur';
+        var d = texte(e.noeud.secteur_activite).trim() || 'Sans secteur';
         if (!parDomaine[d]) { parDomaine[d] = []; ordre.push(d); }
         parDomaine[d].push(e);
       });
@@ -439,11 +485,11 @@
       ordre.forEach(function (d) {
         var li = html('li', '', ul);
         html('div', 'neb-domaines', li).textContent = d;
-        parDomaine[d].sort(function (a, b) { return (a.noeud.nom || '').localeCompare(b.noeud.nom || '', 'fr'); })
+        parDomaine[d].sort(function (a, b) { return texte(a.noeud.nom).localeCompare(texte(b.noeud.nom), 'fr'); })
           .forEach(function (e) {
-            bouton(e.noeud.nom || '(sans nom)', function () { surClicNoeud(e.noeud.id); }, li, 'neb-fiche');
+            bouton(texte(e.noeud.nom) || '(sans nom)', function () { surClicNoeud(e.noeud.id); }, li, 'neb-fiche');
             (rattacheesParFiche[e.noeud.id] || []).forEach(function (rp) {
-              bouton('↳ ' + (rp.personne.nom || '(sans nom)') + (rp.role ? ' — ' + rp.role : ''),
+              bouton('↳ ' + (texte(rp.personne.nom) || '(sans nom)') + (rp.role ? ' — ' + texte(rp.role) : ''),
                 function () { surClicPersonne(rp.personne.id); }, li, 'neb-personne');
             });
           });
@@ -456,7 +502,11 @@
 
     // ---- Les écouteurs de l'instance, libérés par arreter() ----
     function surFond() { if (active) { toutVoir(); } }
-    function surTouche(evt) { if (evt.key === 'Escape' && active) { evt.preventDefault(); toutVoir(); } }
+    // Échap traité ici ne remonte pas : sans cela, le gestionnaire global de la
+    // page fermerait AUSSI la fiche ouverte (même motif que js/app.js).
+    function surTouche(evt) {
+      if (evt.key === 'Escape' && active) { evt.preventDefault(); evt.stopPropagation(); toutVoir(); }
+    }
     svg.addEventListener('click', surFond);
     cadre.addEventListener('keydown', surTouche);
     var attente = null;
@@ -492,12 +542,15 @@
         var g = groupes.filter(function (x) { return x.nebuleuse.cle === cle; })[0];
         if (g) { approcher(g); }
       },
+      // La fiche ouverte s'allume toujours ; elle ne déplace la carte que si
+      // rien d'autre n'a décidé où regarder (ni une recherche, ni un choix de
+      // Paul — « Tout voir » compris).
       choisir: function (id) {
         var e = etoileParId[id];
         Object.keys(etoileParId).forEach(function (k) { etoileParId[k].el.classList.remove('ciel-etoile--choisie'); });
         if (!e) { return; }
         e.el.classList.add('ciel-etoile--choisie');
-        if (active !== e.g) { approcher(e.g, true); }
+        if (!vueDecidee && active !== e.g) { approcher(e.g, true); }
       },
       etat: function () {
         return {
@@ -523,6 +576,7 @@
     // nébuleuse, on s'en approche. Sinon, on reprend la nébuleuse où l'on était.
     var trouvees = noeuds.filter(correspond);
     var enRecherche = trouvees.length > 0 && trouvees.length < noeuds.length;
+    var vueDecidee = enRecherche || memoire.active !== undefined;
     var reprise = null;
     if (enRecherche) {
       var cles = trouvees.map(function (n) { return T.cleDe(n.secteur_activite); });
@@ -541,6 +595,6 @@
     arreter: arreter,
     courant: function () { return courant; },
     // Pour le harnais seulement : oublier la nébuleuse retenue entre deux pages.
-    oublier: function () { memoire.active = null; }
+    oublier: function () { memoire.active = undefined; }
   };
 })();

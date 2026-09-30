@@ -1,11 +1,14 @@
 // Unitaires de la table des nébuleuses (js/nebuleuses-riven.js) — critère C1 et
 // C9 de CADRAGE-RIVEN-NEBULEUSES.md. Node pur, zéro réseau.
 //
-// ⛔ Les 40 secteurs ci-dessous sont ceux RÉELLEMENT saisis en base le
-// 2026-09-30 (relevé en lecture seule, `select distinct secteur_activite`). Ce
-// sont des secteurs, pas des personnes : aucune donnée personnelle ici. Si la
-// base en gagne un que la table ne reconnaît pas, il tombera dans « À classer »
-// — visible et compté — et c'est ce test qu'on enrichit.
+// ⛔ Les 40 secteurs ci-dessous sont ceux saisis en base le 2026-09-30 (relevé
+// en lecture seule, `select distinct secteur_activite`), avec leur DÉBUT RÉEL —
+// c'est lui, et lui seul, que la table lit — et une SUITE NEUTRALISÉE
+// (« secteur A »). Plusieurs suites réelles désignaient presque une entreprise :
+// le réseau de Paul est une donnée à protéger, même dans un dépôt privé
+// (relecture du 30/09). Si la base gagne un début que la table ne reconnaît
+// pas, il tombera dans « À classer » — visible et compté — et c'est ce test
+// qu'on enrichit.
 import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 
@@ -15,21 +18,21 @@ vm.runInNewContext(code, bac);
 const T = bac.window.UltimaNebuleusesRiven;
 
 const ATTENDU = {
-  conseil: ['Conseil', 'Conseil - direction financière', 'Conseil - stratégie et relations publiques',
-    'Audit - conseil', 'Recouvrement de créances - gestion du poste client',
-    'Recrutement - service RH externalisé', 'Services - finances - comptabilité'],
-  finance: ['Banque - financement et investissement', 'Banque privée', 'Finance - capital-investissement'],
-  medias: ['Médias', 'Médias - presse', 'Médias - presse professionnelle', 'Édition'],
-  industrie: ['Aéronautique', 'Aéronautique - défense', 'Holding industrielle - équipement automobile',
-    'Ingénierie - services numériques', 'Logiciel - téléphonie cloud',
-    'Technologie - étiquettes électroniques pour le commerce'],
-  btp: ['BTP - fédération professionnelle', "BTP - tout corps d'état", 'BTP - logiciel de vérification avant chantier',
-    'Tuyautiste', 'Isolation - PAC - Climaticien', 'Isolation - tuyautiste - climaticien', 'CVC - Relationnel',
-    'Ventilation - association professionnelle', 'Rénovation - IA'],
-  energie: ['Énergie', 'Énergie - électrotechnique', 'Énergie - régulation', 'Environnement - eau et déchets'],
-  institutions: ['Politique - institutions publiques', 'Études - immigration et démographie',
-    'Associatif - collectivité locale', 'Médico-social - handicap (associatif)'],
-  commerce: ['Retail', 'Luxe - cristallerie', 'Art - peinture']
+  conseil: ['Conseil', 'Conseil - secteur A', 'Conseil - secteur B',
+    'Audit - conseil', 'Recouvrement de créances - secteur A',
+    'Recrutement - secteur A', 'Services - finances - secteur A'],
+  finance: ['Banque - secteur A', 'Banque privée', 'Finance - secteur A'],
+  medias: ['Médias', 'Médias - presse', 'Médias - secteur B', 'Édition'],
+  industrie: ['Aéronautique', 'Aéronautique - secteur A', 'Holding industrielle - secteur A',
+    'Ingénierie - secteur A', 'Logiciel - secteur A',
+    'Technologie - secteur A'],
+  btp: ['BTP - secteur A', "BTP - tout corps d'état", 'BTP - secteur B',
+    'Tuyautiste', 'Isolation - secteur A', 'Isolation - secteur B', 'CVC - Relationnel',
+    'Ventilation - secteur A', 'Rénovation - IA'],
+  energie: ['Énergie', 'Énergie - secteur A', 'Énergie - secteur B', 'Environnement - secteur A'],
+  institutions: ['Politique - secteur A', 'Études - secteur A',
+    'Associatif - secteur A', 'Médico-social - secteur A'],
+  commerce: ['Retail', 'Luxe - secteur A', 'Art - secteur A']
 };
 
 const verdicts = {};
@@ -52,7 +55,7 @@ verdicts.inconnuAClasser = T.cleDe('Astrologie') === 'aclasser';
 verdicts.casseEtEspaces = T.cleDe('  conseil - DIRECTION ') === 'conseil' && T.cleDe('RETAIL') === 'commerce';
 
 // « Art » exige son espace : « Artisanat » n'est pas un art, « Art - peinture » en est un.
-verdicts.artExigeSonEspace = T.cleDe('Artisanat') === 'aclasser' && T.cleDe('Art - peinture') === 'commerce';
+verdicts.artExigeSonEspace = T.cleDe('Artisanat') === 'aclasser' && T.cleDe('Art - secteur A') === 'commerce';
 
 // Les corps d'état des artisans (données de démonstration comprises) vont dans le BTP.
 verdicts.corpsDEtatDansLeBTP = ['Menuiserie', 'Plomberie', 'Électricité', 'Toiture', 'Chauffage', 'Maçonnerie']

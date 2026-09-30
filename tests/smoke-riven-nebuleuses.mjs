@@ -58,6 +58,24 @@ function mesurer(page, selecteur, racine) {
     return { visibles: boites.length, chevauchements, dehors };
   }, [selecteur, racine]);
 }
+// Les noms contre les cœurs d'étoile, SA propre étoile comprise (relecture du
+// 30/09 : peints avant, les cœurs rognaient les noms — et « nom contre nom »
+// ne le voyait pas).
+function nomsContreCoeurs(page, racine) {
+  return page.evaluate((rac) => {
+    const svg = document.querySelector(rac);
+    const noms = [...svg.querySelectorAll('.neb-nom')].filter((t) =>
+      !t.closest('[display="none"]') && t.getAttribute('display') !== 'none').map((t) => t.getBoundingClientRect())
+      .filter((r) => r.width > 0);
+    const coeurs = [...svg.querySelectorAll('.neb-coeur')].map((c) => c.getBoundingClientRect());
+    let n = 0;
+    noms.forEach((a) => coeurs.forEach((b) => {
+      if (Math.min(a.right, b.right) - Math.max(a.left, b.left) > 0.5 &&
+          Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 0.5) { n++; }
+    }));
+    return { noms: noms.length, contacts: n };
+  }, racine);
+}
 const cles = (page) => page.evaluate(() => window.UltimaNebuleuses.courant().etat().nebuleuses.map((n) => n.cle));
 async function approcherAuClavier(page, cle) {
   await page.locator(`.neb-nebuleuse[data-nebuleuse="${cle}"]`).focus();
@@ -96,34 +114,55 @@ for (const vp of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
   verdicts[`${L}_titresSansChevauchement`] = titres.visibles >= 3 && titres.chevauchements === 0 && titres.dehors === 0;
 
   // C3 + C5 — chaque nébuleuse, au clavier : noms visibles, jamais recouverts, jamais coupés.
-  const pire = { chevauchements: 0, dehors: 0 };
+  const pire = { chevauchements: 0, dehors: 0, coeurs: 0 };
   let vus = 0;
   for (const cle of await cles(page)) {
     await approcherAuClavier(page, cle);
     const m = await mesurer(page, '#ciel-scene .neb-nom', '#ciel-scene .neb-svg');
     vus += m.visibles; pire.chevauchements += m.chevauchements; pire.dehors += m.dehors;
+    pire.coeurs += (await nomsContreCoeurs(page, '#ciel-scene .neb-svg')).contacts;
     await page.keyboard.press('Escape');
     await page.waitForFunction(() => window.UltimaNebuleuses.courant().etat().active === null, null, { timeout: 3000 });
   }
-  verdicts[`${L}_nomsJamaisRecouverts`] = vus === 9 && pire.chevauchements === 0 && pire.dehors === 0;
+  verdicts[`${L}_nomsJamaisRecouverts`] = vus === 9 && pire.chevauchements === 0 && pire.dehors === 0 && pire.coeurs === 0;
   details[`${L}_noms`] = { vus, ...pire };
 
-  // C4 — toucher une étoile d'une nébuleuse approchée ouvre SA fiche.
+  // C4 — toucher une étoile d'une nébuleuse approchée ouvre SA fiche : le titre
+  // de la fiche ouverte est le nom que porte l'étoile touchée.
   await approcherAuClavier(page, 'btp');
-  const etoile = page.locator('.neb-nebuleuse[data-nebuleuse="btp"] g.ciel-etoile').first();
-  const nomAttendu = await page.evaluate(() => {
-    const id = document.querySelector('.neb-nebuleuse[data-nebuleuse="btp"] g.ciel-etoile').getAttribute('data-noeud-id');
-    return document.querySelector(`.neb-noms text`) && [...document.querySelectorAll('.neb-nebuleuse[data-nebuleuse="btp"] g.ciel-etoile')]
-      .map((g) => g.getAttribute('data-noeud-id')).includes(id) ? id : null;
-  });
+  const etoile = page.locator('.neb-nebuleuse[data-nebuleuse="btp"] g.ciel-etoile').nth(1);
+  const libelleEtoile = await etoile.getAttribute('aria-label');
   await etoile.click();
   await page.waitForTimeout(500);
-  const fiche = await page.evaluate(() => ({ titre: (document.getElementById('panneau-titre') || {}).textContent || '' }));
-  verdicts[`${L}_etoileOuvreSaFiche`] = !!nomAttendu && fiche.titre.length > 0 &&
-    await page.evaluate((id) => {
-      const n = document.querySelector(`.neb-svg g.ciel-etoile[data-noeud-id="${id}"]`);
-      return !!n && n.getAttribute('aria-label').startsWith(document.getElementById('panneau-titre').textContent);
-    }, nomAttendu);
+  const titreFiche = (await page.locator('#panneau-titre').textContent()) || '';
+  verdicts[`${L}_etoileOuvreSaFiche`] = titreFiche.length > 0 && !!libelleEtoile && libelleEtoile.startsWith(titreFiche + ',');
+
+  // S11 — Échap sur la carte ramène la vue d'ensemble SANS fermer la fiche ouverte.
+  await etoile.focus();
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(300);
+  verdicts[`${L}_echapNeFermePasLaFiche`] = await page.evaluate(() =>
+    window.UltimaNebuleuses.courant().etat().active === null && !document.getElementById('panneau').hidden);
+
+  // S1 — la fiche ouverte ne ramène plus la carte de force : « Tout voir » tient
+  // à la frappe suivante, et la recherche va où sont les fiches trouvées.
+  // Sur grand écran seulement : sur un téléphone, la fiche ouverte recouvre la
+  // barre d'outils, le cas n'existe pas.
+  if (L >= 1000) {
+  await approcherAuClavier(page, 'btp');
+  await page.locator('#ciel-tout-voir').click();
+  await page.waitForTimeout(500);
+  await page.locator('#ciel-recherche').fill('a');
+  await page.waitForTimeout(500);
+  const apresToutVoir = await page.evaluate(() => window.UltimaNebuleuses.courant().etat().active);
+  await page.locator('#ciel-recherche').fill('Agence Habitat Sud');
+  await page.waitForTimeout(500);
+  const apresRecherche = await page.evaluate(() => window.UltimaNebuleuses.courant().etat().active);
+  verdicts[`${L}_ficheOuverteNeForcePasLaVue`] = apresToutVoir === null && apresRecherche === 'conseil';
+  details[`${L}_S1`] = { apresToutVoir, apresRecherche };
+  await page.locator('#ciel-recherche').fill('');
+  await page.waitForTimeout(400);
+  }
   await page.evaluate(() => { const b = document.getElementById('bouton-fermer-panneau'); if (b) { b.click(); } });
   await page.waitForTimeout(300);
 
@@ -131,6 +170,62 @@ for (const vp of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
   const cibles = await page.evaluate(() => [...document.querySelectorAll('.neb-svg .ciel-zone')]
     .map((z) => z.getBoundingClientRect().width).filter((w) => w > 0));
   verdicts[`${L}_ciblesTactiles`] = cibles.length > 0 && Math.min(...cibles) >= 23.5;
+
+  // S3 — l'arbre d'accessibilité RÉEL (Chrome) : aucun bouton n'en contient un
+  // autre ; hors nébuleuse approchée, aucune étoile n'y est exposée.
+  const arbre = async () => {
+    const cdp = await page.context().newCDPSession(page);
+    await cdp.send('Accessibility.enable');
+    const { nodes } = await cdp.send('Accessibility.getFullAXTree');
+    await cdp.detach();
+    const parId = new Map(nodes.map((n) => [n.nodeId, n]));
+    const role = (n) => n && n.role && n.role.value;
+    const nom = (n) => (n && n.name && n.name.value) || '';
+    let imbriques = 0;
+    const etoiles = nodes.filter((n) => !n.ignored && role(n) === 'button' && nom(n).endsWith('Entrée pour ouvrir la fiche.'));
+    nodes.filter((n) => !n.ignored && role(n) === 'button').forEach((b) => {
+      const pile = [...(b.childIds || [])];
+      while (pile.length) {
+        const c = parId.get(pile.pop());
+        if (!c) { continue; }
+        if (!c.ignored && role(c) === 'button') { imbriques++; }
+        pile.push(...(c.childIds || []));
+      }
+    });
+    return { imbriques, etoiles: etoiles.length };
+  };
+  await page.locator('#ciel-tout-voir').click();
+  await page.waitForTimeout(500);
+  const axEnsemble = await arbre();
+  await approcherAuClavier(page, 'btp');
+  const axApproche = await arbre();
+  verdicts[`${L}_aucunBoutonDansUnBouton`] = axEnsemble.imbriques === 0 && axApproche.imbriques === 0;
+  verdicts[`${L}_etoilesExposeesSeulementApprochees`] = axEnsemble.etoiles === 0 && axApproche.etoiles === 4;
+  details[`${L}_ax`] = { axEnsemble, axApproche };
+
+  // S4 — le focus ne tombe jamais sur <body> : Échap depuis une étoile le rend à
+  // sa nébuleuse ; une entrée du panneau et le retour le gardent dans le panneau.
+  await page.locator('.neb-nebuleuse[data-nebuleuse="btp"] g.ciel-etoile').first().focus();
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(300);
+  const focusEchap = await page.evaluate(() => document.activeElement && document.activeElement.getAttribute('data-nebuleuse'));
+  await page.locator('.neb-panneau .neb-entree').first().focus();
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(600);
+  const focusEntree = await page.evaluate(() => !!document.activeElement.closest('.neb-panneau'));
+  await page.locator('.neb-panneau .neb-retour').focus();
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(600);
+  const focusRetour = await page.evaluate(() => !!document.activeElement.closest('.neb-panneau'));
+  verdicts[`${L}_focusNeSePerdPas`] = focusEchap === 'btp' && focusEntree && focusRetour;
+  details[`${L}_focus`] = { focusEchap, focusEntree, focusRetour };
+
+  // S5 — l'anneau de focus se mesure en pixels, pas en unités de carte.
+  verdicts[`${L}_anneauDeFocusEnPixels`] = await page.evaluate(() => {
+    const f = document.querySelector('.neb-focus');
+    const s = getComputedStyle(f);
+    return s.vectorEffect === 'non-scaling-stroke' && s.strokeWidth === '2px';
+  });
 
   // La recherche : « Lyon » ne trouve qu'une fiche (Plomberie) → la carte s'approche du BTP,
   // les autres étoiles s'éteignent.
@@ -152,11 +247,11 @@ for (const vp of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
   await page.waitForTimeout(1200);
   const volume = await page.evaluate(() => {
     const T = window.UltimaNebuleusesRiven;
-    const noms = Object.fromEntries(T.NEBULEUSES.map((n) => [n.nom.toLowerCase(), n.cle]));
     const amas = [...document.querySelectorAll('#ciel-scene .ciel-nom-amas')].map((t) => t.textContent.toLowerCase());
     const parEtoile = Object.fromEntries([...document.querySelectorAll('#ciel-scene g.ciel-etoile[data-noeud-id]')].map((g) => {
-      const m = /, nébuleuse ([^,]+)|, sans secteur/.exec(g.getAttribute('aria-label') || '');
-      return [g.getAttribute('data-noeud-id'), m ? (m[1] ? noms[m[1].toLowerCase()] : 'aclasser') : null];
+      const libelle = g.getAttribute('aria-label') || '';
+      const n = T.NEBULEUSES.find((x) => libelle.includes(', nébuleuse ' + x.nom + ','));
+      return [g.getAttribute('data-noeud-id'), n ? n.cle : null];
     }));
     return {
       carte: !!document.querySelector('#ciel-scene .neb-svg'),
@@ -215,11 +310,12 @@ for (const n of [54, 300]) {
     await page.goto(`${BASE}/design/preview-riven-nebuleuses.html?n=${n}`, { waitUntil: 'load', timeout: 20000 });
     await page.waitForTimeout(400);
     const titres = await mesurer(page, '.neb-titre', '.neb-svg');
-    let vus = 0, chev = 0, dehors = 0, caches = 0, cachesHorsPanneau = 0;
+    let vus = 0, chev = 0, dehors = 0, caches = 0, cachesHorsPanneau = 0, coeurs = 0;
     for (const cle of await cles(page)) {
       await approcherAuClavier(page, cle);
       const m = await mesurer(page, '.neb-nom', '.neb-svg');
       vus += m.visibles; chev += m.chevauchements; dehors += m.dehors;
+      coeurs += (await nomsContreCoeurs(page, '.neb-svg')).contacts;
       // Un nom caché sur la carte doit être dans le panneau : c'est la promesse
       // de la règle « s'il n'a pas de place, il se cache, et le panneau le donne ».
       cachesHorsPanneau += await page.evaluate((c) => {
@@ -233,7 +329,7 @@ for (const n of [54, 300]) {
     }
     caches = await page.evaluate(() => window.UltimaNebuleuses.courant().etat().nebuleuses.reduce((s, x) => s + x.caches, 0));
     const tag = `maquette${n}_${vp.width}`;
-    details[tag] = { titres: titres.visibles, nomsVus: vus, caches, chev, dehors, cachesHorsPanneau };
+    details[tag] = { titres: titres.visibles, nomsVus: vus, caches, chev, dehors, cachesHorsPanneau, coeurs };
     verdicts[`${tag}_titres`] = titres.visibles >= 9 && titres.chevauchements === 0 && titres.dehors === 0;
     // Jamais un nom recouvert ni coupé ; un nom sans place se cache ET se trouve
     // dans le panneau. 54 fiches sur un grand écran : toutes lisibles.
@@ -244,7 +340,7 @@ for (const n of [54, 300]) {
     // passer sous le plancher de 12 px (C5) ou de déplacer les étoiles à
     // l'approche. 300 fiches : la règle tient, c'est tout.
     const plancher = n === 54 ? (vp.width >= 1000 ? vus === 54 : caches <= 3) : vus > 60;
-    verdicts[`${tag}_noms`] = chev === 0 && dehors === 0 && plancher && vus + caches === n && cachesHorsPanneau === 0;
+    verdicts[`${tag}_noms`] = chev === 0 && dehors === 0 && coeurs === 0 && plancher && vus + caches === n && cachesHorsPanneau === 0;
     verdicts[`${tag}_zeroErreur`] = erreurs.length === 0;
     await page.close();
   }
@@ -260,6 +356,15 @@ for (const n of [54, 300]) {
   const m = await mesurer(page, '.neb-nom', '.neb-svg');
   verdicts.sabotage_lInstrumentVoitLesChevauchements = m.chevauchements > 0;
   details.sabotage = m;
+  // Second sabotage : les cœurs repassent à leur taille de carte (3,4 unités,
+  // ~14 px une fois approchés) — la mesure nom contre cœur doit le voir.
+  await page.evaluate(() => { window.UltimaNebuleuses.courant()._sansEvitement = false; });
+  await page.keyboard.press('Escape');
+  await approcherAuClavier(page, 'btp');
+  await page.evaluate(() => document.querySelectorAll('.neb-coeur').forEach((c) => c.setAttribute('r', '3.4')));
+  const c = await nomsContreCoeurs(page, '.neb-svg');
+  verdicts.sabotage_lInstrumentVoitLesCoeurs = c.noms > 0 && c.contacts > 0;
+  details.sabotageCoeurs = c;
   await page.close();
 }
 
@@ -276,8 +381,12 @@ for (const n of [54, 300]) {
   await page.locator('.neb-nebuleuse[data-nebuleuse="conseil"]').tap();
   await page.waitForTimeout(1200);
   const longues = await page.evaluate(() => window.__longues);
+  // Verrou de non-vacuité : « aucune tâche longue » ne vaut que si l'observateur
+  // existe ET si l'approche a bien eu lieu.
+  const observe = await page.evaluate(() => PerformanceObserver.supportedEntryTypes.includes('longtask') &&
+    window.UltimaNebuleuses.courant().etat().active === 'conseil');
   details.approcheTachesLongues = longues.map((d) => Math.round(d));
-  verdicts.approcheSansTacheDePlusDe50ms = longues.every((d) => d <= 50);
+  verdicts.approcheSansTacheDePlusDe50ms = observe && longues.every((d) => d <= 50);
   await page.close();
 }
 

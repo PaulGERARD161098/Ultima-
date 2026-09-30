@@ -885,7 +885,6 @@
       // caché, pour rien.
       if (window.UltimaCiel) { window.UltimaCiel.arreter(); }
       if (window.UltimaNebuleuses) { window.UltimaNebuleuses.arreter(); }
-      cielCourant = null;
     }
     if (nom === 'accueil') { rendreAccueil(); }
     if (nom === 'contacts') { rendreContacts(); }
@@ -1881,19 +1880,23 @@
   function mouvementReduit() {
     return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   }
-  // L'instance affichée, quelle que soit la vue : les commandes du ciel
-  // (approcher, reculer, tout voir, dérive) s'adressent à elle.
-  var cielCourant = null;
+  var aideEcouteur = null;
   // Les nébuleuses du volume (lot 2) : la même table que la carte à plat, pour
   // qu'une étoile soit dans la même nébuleuse dans les deux vues.
   function regrouperParNebuleuse(noeud) {
     var n = window.UltimaNebuleusesRiven.nebuleuseDe(noeud && noeud.secteur_activite);
     return { cle: n.cle === window.UltimaNebuleusesRiven.CLE_A_CLASSER ? window.UltimaCiel.CLE_A_CLASSER : 'neb-' + n.cle, label: n.nom };
   }
+  // Une brume n'a pas besoin de toutes ses étoiles pour se poser : la couche de
+  // fond peint environ trois lobes PAR ÉTOILE et PAR IMAGE. Au-delà de douze,
+  // un échantillon régulier suffit à la forme — mesuré à la relecture du 30/09 :
+  // à 300 fiches, l'image passait de 33 à 150 ms avec toutes les étoiles.
+  var BRUME_MAX_ETOILES = 12;
   function brumesDesNebuleuses(noeuds) {
     return window.UltimaNebuleusesRiven.repartir(noeuds).map(function (g) {
+      var pas = Math.max(1, Math.ceil(g.noeuds.length / BRUME_MAX_ETOILES));
       return {
-        ids: g.noeuds.map(function (n) { return n.id; }),
+        ids: g.noeuds.filter(function (n, i) { return i % pas === 0; }).map(function (n) { return n.id; }),
         teinte: window.UltimaNebuleusesRiven.teinte(g.nebuleuse)
       };
     });
@@ -1926,7 +1929,6 @@
     var message = $('#ciel-message');
     if (window.UltimaCiel) { window.UltimaCiel.arreter(); }
     if (window.UltimaNebuleuses) { window.UltimaNebuleuses.arreter(); }
-    cielCourant = null;
     scene.textContent = '';
     if (message) { message.textContent = ''; }
 
@@ -2003,7 +2005,6 @@
         plat: mouvementReduit()
       });
     }
-    cielCourant = instance;
 
     // L'aide de navigation revit à chaque rendu, et s'efface au premier geste.
     var aide = document.createElement('p');
@@ -2014,9 +2015,11 @@
       : 'Faites glisser pour tourner autour du réseau · ' +
         '+ et − pour approcher · Tab pour passer d’une étoile à l’autre';
     scene.appendChild(aide);
-    scene.addEventListener('pointerdown', function () {
-      aide.classList.add('est-effacee');
-    }, { once: true });
+    // Un seul écouteur à la fois : rendreCiel tourne à chaque frappe de la
+    // recherche, et chaque rendu en ajoutait un nouveau.
+    if (aideEcouteur) { scene.removeEventListener('pointerdown', aideEcouteur); }
+    aideEcouteur = function () { aide.classList.add('est-effacee'); };
+    scene.addEventListener('pointerdown', aideEcouteur, { once: true });
     // La dérive n'a d'objet qu'en volume.
     var etiquetteDerive = $('#ciel-derive') ? $('#ciel-derive').closest('label') : null;
     if (etiquetteDerive) { etiquetteDerive.hidden = aPlat; }
@@ -4467,26 +4470,43 @@
       }
       ouvrirFormNoeud(null); // panneau overlay : on reste sur le ciel
     });
-    $('#ciel-recherche').addEventListener('input', rendreCiel);
+    // La recherche redessine le ciel après 120 ms de calme, pas à chaque
+    // frappe : à 300 fiches, un rendu coûte près de 100 ms (relecture du 30/09).
+    var attenteRecherche = null;
+    $('#ciel-recherche').addEventListener('input', function () {
+      window.clearTimeout(attenteRecherche);
+      attenteRecherche = window.setTimeout(rendreCiel, 120);
+    });
     // Le zoom par boutons : la seule voie sur un téléphone, où il n'y a pas de
     // molette — et celle-ci fait défiler la page (elle ne zoome qu'avec Ctrl).
+    // L'instance VIVANTE : celle du moteur qui dessine en ce moment. Un rendu
+    // direct du moteur (harnais « pire cas ») remplace l'instance sans passer
+    // par rendreCiel — les boutons la suivent quand même (relecture du 30/09).
+    function vueDuCiel() {
+      return (window.UltimaNebuleuses && window.UltimaNebuleuses.courant()) ||
+        (window.UltimaCiel && window.UltimaCiel.courant()) || null;
+    }
     $('#ciel-approcher').addEventListener('click', function () {
-      if (cielCourant) { cielCourant.zoomer(-0.18); }
+      var vue = vueDuCiel();
+      if (vue) { vue.zoomer(-0.18); }
     });
     $('#ciel-reculer').addEventListener('click', function () {
-      if (cielCourant) { cielCourant.zoomer(0.18); }
+      var vue = vueDuCiel();
+      if (vue) { vue.zoomer(0.18); }
     });
     // « Tout voir » : la sortie de secours du volume. On peut s'être approché
     // d'une constellation et avoir perdu les autres de vue — un geste ramène au
     // cadrage MESURÉ, celui qui fait tenir tout le réseau dans l'écran.
     $('#ciel-tout-voir').addEventListener('click', function () {
-      if (cielCourant) { cielCourant.toutVoir(); }
+      var vue = vueDuCiel();
+      if (vue) { vue.toutVoir(); }
     });
     // À plat ⇄ en volume : deux modules, un seul bouton. Le choix se retient,
     // puis le ciel se redessine dans la vue choisie.
     $('#ciel-plat').addEventListener('click', function () {
-      if (!cielCourant) { return; }
-      var versPlat = !cielCourant.estPlat();
+      var vue = vueDuCiel();
+      if (!vue) { return; }
+      var versPlat = !vue.estPlat();
       // Le système impose le mode réduit : le clic ne bascule pas, et on ne
       // mémorise pas le contraire de ce qui s'affiche.
       if (!versPlat && mouvementReduit()) {
@@ -4498,7 +4518,8 @@
     });
 
     $('#ciel-derive').addEventListener('change', function (e) {
-      if (cielCourant) { cielCourant.derive(e.target.checked); }
+      var vue = vueDuCiel();
+      if (vue) { vue.derive(e.target.checked); }
     });
 
 

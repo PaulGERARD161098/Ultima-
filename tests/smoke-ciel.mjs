@@ -2,7 +2,8 @@
 // Flux front en mode démo. Ce que ce harnais prouve :
 //   1. Le ciel est l'écran d'arrivée — et depuis le 2026-08-13, la SEULE forme
 //      du réseau : l'arbre est supprimé, son onglet aussi.
-//   2. N contacts → N étoiles, groupées en constellations par métier principal.
+//   2. N contacts → N étoiles, groupées en constellations — par nébuleuse
+//      depuis le 2026-09-30 (CADRAGE-RIVEN-NEBULEUSES.md, lot 2).
 //   3. Une personne rattachée à DEUX fiches orbite les DEUX (notion du 10/08).
 //   4. Les relations sont tracées en BLANC, le motif portant le type.
 //   5. Tap sur une étoile → la bonne fiche, sans quitter le ciel.
@@ -38,6 +39,11 @@ const PNG_1PX = Buffer.from(
   'base64');
 await page.addInitScript(() => {
   try { window.sessionStorage.setItem('ultima-leo-accueil-vu', '1'); } catch (e) {}
+  // Ce harnais éprouve le moteur EN VOLUME (js/ciel.js). Depuis le 2026-09-30,
+  // RIVEN s'ouvre sur la carte des nébuleuses (tests/smoke-riven-nebuleuses.mjs) :
+  // on demande donc le volume — UNE fois, pour ne pas écraser le choix que la
+  // section 16 fait puis relit après rechargement.
+  try { if (!localStorage.getItem('ultima-ciel-vue')) { localStorage.setItem('ultima-ciel-vue', 'volume'); } } catch (e) {}
   Object.defineProperty(window, 'ULTIMA_CONFIG', {
     value: { SUPABASE_URL: '', SUPABASE_ANON_KEY: '' },
     writable: false,
@@ -68,7 +74,10 @@ const rendu = await page.evaluate(() => {
 verdicts.neufEtoiles = rendu.etoiles === 9;
 verdicts.sixLiens = rendu.liens === 6;
 verdicts.troisOrbites = rendu.orbites === 3;
-verdicts.constellationsNommees = rendu.constellations >= 5;
+// Depuis le 2026-09-30 (lot 2 des nébuleuses), les amas du volume sont les
+// NÉBULEUSES : la démo en remplit trois (BTP & rénovation, Conseil & services,
+// À classer) — elle en comptait six, un par métier.
+verdicts.constellationsNommees = rendu.constellations === 3;
 verdicts.ariaDitLeCompte = /9 contacts répartis en \d+ constellations/.test(rendu.aria);
 
 // ---------- 3. Une personne à DEUX rattachements orbite les DEUX ----------
@@ -459,10 +468,13 @@ const boiteToutVoir = await page.locator('#ciel-tout-voir').boundingBox();
 verdicts.cibleTactileToutVoir = !!boiteToutVoir &&
   boiteToutVoir.height >= 24 && boiteToutVoir.width >= 24;
 
-// ---------- 16. LA VUE À PLAT (2026-08-13) ----------
-// Le mode ne vaut que par ce qu'il ÉCONOMISE : on compte donc les images
-// d'animation réellement demandées, on ne se fie pas au nom du bouton. Et il ne
-// vaut que s'il ne perd RIEN : mêmes étoiles, mêmes libellés, mêmes liens.
+// ---------- 16. LA VUE À PLAT (2026-08-13, refondue le 2026-09-30) ----------
+// Depuis le 30/09, « à plat » est la CARTE DES NÉBULEUSES (js/ciel-nebuleuses.js,
+// son propre harnais : tests/smoke-riven-nebuleuses.mjs). Ce qui reste vérifié
+// ici, c'est la bascule depuis le volume : elle ÉCONOMISE (la boucle d'animation
+// s'arrête — on compte les images réellement demandées, pas le nom du bouton) et
+// elle ne PERD RIEN : mêmes étoiles, une nébuleuse par amas du volume, mêmes
+// relations.
 await page.locator('.barre-onglets .onglet[data-onglet="ciel"]').click();
 await page.waitForTimeout(700);
 
@@ -480,8 +492,8 @@ const avantPlat = await page.evaluate(() => {
   const svg = document.querySelector('#ciel-scene .ciel-svg');
   return {
     etoiles: svg.querySelectorAll('g.ciel-etoile[data-noeud-id]').length,
-    libelles: svg.querySelectorAll('.ciel-nom-amas').length,
-    liens: svg.querySelectorAll('line, path.ciel-lien').length,
+    amas: svg.querySelectorAll('.ciel-nom-amas').length,
+    relations: svg.querySelectorAll('.ciel-liens line').length,
   };
 });
 
@@ -494,20 +506,20 @@ verdicts.boutonPlatDitSonEtat =
 verdicts.platArreteLaBoucle = (await boucleEnVol()) === false;
 
 const apresPlat = await page.evaluate(() => {
-  const svg = document.querySelector('#ciel-scene .ciel-svg');
+  const svg = document.querySelector('#ciel-scene .neb-svg');
   return {
     etoiles: svg.querySelectorAll('g.ciel-etoile[data-noeud-id]').length,
-    libelles: svg.querySelectorAll('.ciel-nom-amas').length,
-    liens: svg.querySelectorAll('line, path.ciel-lien').length,
+    nebuleuses: svg.querySelectorAll('.neb-nebuleuse').length,
+    relations: svg.querySelectorAll('.neb-liens line').length,
   };
 });
 verdicts.platNePerdRien = apresPlat.etoiles === avantPlat.etoiles &&
-  apresPlat.libelles === avantPlat.libelles && apresPlat.liens === avantPlat.liens &&
-  apresPlat.etoiles > 0;
+  apresPlat.nebuleuses === avantPlat.amas && apresPlat.relations === avantPlat.relations &&
+  apresPlat.etoiles > 0 && apresPlat.relations > 0;
 
 // Toutes les étoiles restent DANS le cadre : à plat aussi, la géométrie se mesure.
 verdicts.platTientDansLeCadre = await page.evaluate(() => {
-  const svg = document.querySelector('#ciel-scene .ciel-svg');
+  const svg = document.querySelector('#ciel-scene .neb-svg');
   const vb = svg.getAttribute('viewBox').split(' ').map(Number);
   let dehors = 0;
   svg.querySelectorAll('g.ciel-etoile[data-noeud-id] .ciel-zone').forEach((z) => {
@@ -522,7 +534,8 @@ await page.reload({ waitUntil: 'load' });
 await page.waitForTimeout(1400);
 verdicts.platSurvitAuRechargement =
   (await page.locator('#ciel-plat').getAttribute('aria-pressed')) === 'true' &&
-  (await page.evaluate(() => window.UltimaCiel.courant().estPlat())) === true;
+  (await page.evaluate(() => !!document.querySelector('#ciel-scene .neb-svg') &&
+    window.UltimaNebuleuses.courant().estPlat())) === true;
 
 // Retour au volume, pour ne pas laisser le reste du harnais dans un mode figé.
 await page.locator('#ciel-plat').click();
@@ -597,7 +610,16 @@ await page.waitForTimeout(900);
 const apresReduit = await positionEtoile();
 verdicts.deriveCoupeeSousReduce = avantReduit !== null && apresReduit !== null &&
   Math.abs(apresReduit - avantReduit) < 0.01;
+// Depuis le 2026-09-30, sous `reduce` c'est la CARTE des nébuleuses qui
+// s'impose (aucun mouvement du tout), et la dérive n'y est pas proposée.
+verdicts.reduitImposeLaCarte = await page.evaluate(() =>
+  !!document.querySelector('#ciel-scene .neb-svg') && document.getElementById('ciel-derive').closest('label').hidden);
 await page.emulateMedia({ reducedMotion: 'no-preference' });
+// Retour au volume (le réglage retenu) : il faut redessiner le ciel.
+await page.locator('.barre-onglets .onglet[data-onglet="accueil"]').click();
+await page.waitForTimeout(200);
+await page.locator('.barre-onglets .onglet[data-onglet="ciel"]').click();
+await page.waitForTimeout(700);
 
 // ---------- 13. État vide : le message EXACT et le bouton ----------
 // Repris de smoke-arbre (`messageVideExact`, `boutonEtatVide`). En DERNIER :
