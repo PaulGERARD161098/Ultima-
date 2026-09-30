@@ -19,6 +19,10 @@ const PNG_1PX = Buffer.from(
   'base64');
 await page.addInitScript(() => {
   try { window.sessionStorage.setItem('ultima-leo-accueil-vu', '1'); } catch (e) {}
+  // La section 5 vérifie l'ORBITE des personnes, un trait du ciel EN VOLUME : depuis
+  // le 2026-09-30, RIVEN s'ouvre à plat (carte des nébuleuses), on demande donc
+  // le volume — une fois, sans écraser un choix fait pendant la traversée.
+  try { if (!localStorage.getItem('ultima-ciel-vue')) { localStorage.setItem('ultima-ciel-vue', 'volume'); } } catch (e) {}
   Object.defineProperty(window, 'ULTIMA_CONFIG', {
     value: { SUPABASE_URL: '', SUPABASE_ANON_KEY: '' },
     writable: false,

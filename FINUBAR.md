@@ -24,7 +24,7 @@
   "projet": "Ultima",
   "depot": "PaulGERARD161098/Ultima-",
   "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-  "rattache_a": "CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md",
+  "rattache_a": "CADRAGE-RIVEN-NEBULEUSES.md · CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md",
   "etat": "en_cours",
   "jalon": {
     "nom": "B1 — Léo AGIT dans l'anneau vert (cadrage §11)",
@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-30",
-    "quoi": "IMLADRIK = ARMES (IFULVIN) + DRAGONS (6 étoiles, nébuleuses), TAO supprimé (#313, #316). Avant : leçons v48 propagées (#317).",
-    "commit": "4b8e2de030a50308c54e50f3f30efd0a4ef950ed"
+    "quoi": "RIVEN en 9 nébuleuses (à plat par défaut, 3D en 9 amas), visée clavier 3D corrigée, 43 contacts en base. Fusion squash : le seul commit après celui-ci, c'est elle.",
+    "commit": "548c439fde2c6a8c707da3bd16efb73daad22f08"
   },
   "prochaine_action": "④ — l'exécution : `ouvrirTrace()`, journal 'tentee' AVANT l'acte, plafond, issue après. Frontière arbitrée — cadrage §12.8 quater.",
   "bloque_par": [
@@ -44,6 +44,10 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "RIVEN nébuleuses : à 390 px, 3 noms fictifs sur 54 cachés (restent au panneau). Plus bas = sous 12 px ou étoiles déplacées : non tranché. CADRAGE-RIVEN-NEBULEUSES.md §7",
+      "depuis": "2026-09-30"
+    },
     {
       "quoi": "Étiquettes vocales des caps : chacune finit par « 0 lien » sur les menus, du bruit pour un lecteur d'écran. Préexistant, relevé au dry run du 27/09 (carte-celeste §28).",
       "depuis": "2026-09-27"
@@ -120,6 +124,16 @@
 > Les séances, de la plus récente à la plus ancienne. Une entrée = une date, un
 > fait vérifié, une décision. La mémoire longue ; le bloc ci-dessus est la mémoire
 > courte, et c'est lui qui est lu automatiquement.
+
+### 2026-09-30 — RIVEN en nébuleuses, à plat et en 3D
+
+43 contacts entrés en base (39 d'un cercle d'affaires, 4 cartes BATIMAT) ; rien
+d'eux dans le dépôt. Le Ciel de RIVEN passe en neuf nébuleuses — une table,
+deux vues. Défaut ancien du moteur 3D corrigé en route (visée clavier
+verticale). Unitaires 48/48, harnais navigateur verts en local. Fusion en
+squash : le grain pointe `548c439`, la tête de `main` juste avant — la dérive
+d'un commit que le rappel annoncera, c'est cette fusion. Détail :
+**`CADRAGE-RIVEN-NEBULEUSES.md` §7**. Le jalon B1 ④ reste la prochaine action.
 
 ### 2026-09-14 — livraison de l’audit terminée
 
