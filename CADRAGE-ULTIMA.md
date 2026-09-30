@@ -8,6 +8,29 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- ⛔ **LES DEUX ENTRÉES CI-DESSOUS SONT DU MÊME SOIR, ET LEURS NUMÉROS DE LEÇONS SE CROISENT.**
+  Deux séances ont scellé en parallèle : **il existe DEUX `v55` différentes**, et le
+  numéro ne les distingue pas — seul le sha256 identifie (c'est la leçon « un
+  compteur local n'est pas un identifiant »). Ce qui est vrai après fusion :
+  · les **neuf autres dépôts** portent `sha256:17bfa3d85d25` (146 entrées), propagée
+    et vérifiée sur leur `origin/main` ce soir ;
+  · **Ultima** porte le résultat de la fusion des deux lignées — **148 entrées**, les
+    deux leçons de la séance chaîne ET l'extension de la leçon de l'identifiant.
+  ⚠️ **La phrase « RenoBoost reste en v55, RenoDevis en v54 » de l'entrée chaîne est
+  donc PÉRIMÉE** : les dix dépôts ont été alignés depuis. ⏭ Les neuf restent à
+  re-propager sur la version fusionnée.
+
+- 🧭 **SESSION 2026-09-30 (soir) — LA CHAÎNE RÉNOBOOST, CADRÉE ET ROUTÉE (PR #321 · RenoBoost #563 · RenoDevis #214, fusionnées en mode merge sur le go de Paul en fin de séance).**
+  ✅ Route posée : `PLAN-2026-09-30-chaine-A-Z.md` — dix maillons, familles
+  A → B → C → N → D, E en réserve, l'état vivant au §2, la reprise au §0.
+  Décisions Q-P1 à Q-P4 au journal. ✅ Relue par Léo en adversaire : cinq manques
+  bloquants trouvés, corrigés. ✅ Leçons **v55** = la v54 d'une autre séance
+  (branche `claude/leo-project-management-expansion-5k6f30`, déjà fusionnée dans
+  RenoBoost et RenoDevis) + deux leçons payées ; propagée à RenoBoost (#563).
+  Puis **v56** (un chemin corrigé, revue Codex) : RenoBoost reste en v55, RenoDevis en v54.
+  ⚠️ Si la v54 bouge encore avant de fusionner, reposer les deux leçons sur la
+  dernière version plutôt que de choisir un côté.
+  Prochaine action : §0 du plan — gestes A présentés à Paul, boucle B2 ouverte.
 - 📓 **SESSION 2026-09-30 (soir) — LE RAPPEL DES LEÇONS SERT ENFIN TOUT LE FICHIER ; `/leo` LIVRÉ (#323 · #326 fusionnées, `main` = `675e2b4`).**
   ✅ **La borne du rappel passe de 60 à 200 Ko, sur décision de Paul en panneaux.**
   Mesuré avant de la lui poser : à 60 Ko, **78 leçons sur 145 n'atteignaient AUCUNE

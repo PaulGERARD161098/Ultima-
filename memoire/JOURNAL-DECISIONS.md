@@ -4488,3 +4488,30 @@ IFULVIN (CADRAGE-IFULVIN.md §⑤) ont été redonnés à Paul : en attente.
 remplace ») ; ② entrée dans un cercle et ③ noms des niveaux : « on verra ». Le
 numéro ADR-005 de la capture du 21/09 collisionnait avec CHAMBRE CLAIRE : il
 n'est plus à saisir.
+
+## 2026-09-30 — La chaîne Rénoboost, de la demande au client fidèle : cadrée, validée, routée
+
+Séance ouverte sur « la chaîne totale » évoquée les jours précédents. **Aucun
+code produit, aucune fusion** (Paul : « On ne fusionne rien »).
+
+**Décisions de Paul, dans l'ordre :**
+1. Bibliothèque d'abord : `moissonner.py` garde la dernière version d'un devis
+   (RenoDevis #214, en relecture). Relevé : reprendre le pilote V3. Déchèterie :
+   la plus proche suffit, et reportée.
+2. Tri des boucles en familles **A → E**, validé. ④ Commande et suivi reste en
+   **cadrage seul**, à valider avec les pros. 3D : **test sans code d'abord**.
+3. « Kelvin » = l'outil de la maquette (kelvin°) ; notre version = **VITRUVE sur
+   les briques de mon-dpe.fr**.
+4. **La maquette des onze écrans validée sans modification.** Chaque écran porte
+   ses outils, réels ou imaginés, et **Réno suit toute la chaîne**.
+5. La route se tient **dans Ultima** : `PLAN-2026-09-30-chaine-A-Z.md` (PR #321).
+   **Q-P1** : la chaîne est bouclée quand un dossier réel va de M0 à M9 dans les
+   outils, sans ressaisie, suivi par Réno. **Q-P2** : les boucles hors écrans
+   forment la famille **N**, après C, avant D. **Q-P3** : chaque boucle livre le
+   connecteur Réno de son maillon. **Q-P4** : la famille **B** avance pendant que
+   les gestes A attendent Paul.
+
+**Où c'est écrit** : l'inventaire et le raisonnement dans RenoBoost
+`CADRAGE-2026-09-30-chaine-A-Z.md` (#563) ; la maquette dans RenoBoost
+`maquettes/chaine-A-Z/` ; la route et l'état vivant dans Ultima (#321).
+
