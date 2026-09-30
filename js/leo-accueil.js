@@ -266,6 +266,21 @@
     return departager(inclus);
   }
 
+  // S1 (revue du 30/09) : sans carte, plus rien ne NOMME la cible résolue
+  // avant l'acte. Une résolution par INCLUSION (« Marc » → « Jean-Marc
+  // Petit ») exige donc l'œil de Paul : seule l'égalité exacte (modulo casse
+  // et accents) s'exécute sans clic. Une proposition sans *_ref (création)
+  // n'a pas de cible à confondre. PUR.
+  function cibleExacte(proposition, plan) {
+    var args = (proposition && proposition.args) || {};
+    var refs = Object.keys(args).filter(function (cle) { return /_ref$/.test(cle); });
+    if (refs.length === 0) { return true; }
+    if (!plan || typeof plan.cible !== 'string' || !plan.cible) { return false; }
+    return refs.every(function (cle) {
+      return normaliserRef(args[cle]) === normaliserRef(plan.cible);
+    });
+  }
+
   // Garde-fou client : une proposition serveur doit porter outil (string),
   // reformulation (string non vide) et args (objet de strings). Toute forme
   // douteuse est IGNORÉE (fail-safe : jamais de carte douteuse).
@@ -913,6 +928,7 @@
             });
           }).then(function (resultat) {
             if (resultat.httpOk && resultat.corps && resultat.corps.ok === true) {
+              apresEcriture(proposition, plan);
               if (typeof voix.notifier === 'function') {
                 try { voix.notifier('Action de Léo exécutée.'); } catch (e) { /* fail-soft */ }
               }
@@ -932,6 +948,23 @@
       dialogue.appendChild(carte);
       dialogue.scrollTop = dialogue.scrollHeight;
       (plan.ok ? boutons.firstChild : annuler).focus();
+    }
+
+    // S4 (revue du 30/09) : les candidats sont une copie FIGÉE au chargement.
+    // Sans cette mise à jour, un second enrichissement repartirait de
+    // l'essence d'avant le premier — et l'effacerait sans bruit ; une seconde
+    // idée reprendrait le même numéro ADR (409). Appelée sur les deux chemins.
+    function apresEcriture(proposition, plan) {
+      var c = voix.candidats;
+      if (!c || typeof c !== 'object') { return; }
+      if (plan.methode === 'PATCH' && plan.corps && Array.isArray(c.idees)) {
+        c.idees.forEach(function (i) {
+          if (i && i.id === plan.corps.id) { i.essence = plan.corps.essence; }
+        });
+      }
+      if (proposition.outil === 'proposer_idee' && typeof c.prochainAdrNum === 'number') {
+        c.prochainAdrNum += 1;
+      }
     }
 
     // Appel JSON authentifié → { httpOk, statut, corps } ; rejette sur panne réseau.
@@ -960,8 +993,11 @@
     // résolue) retombe sur la carte : Paul décide, jamais une écriture sans
     // trace. L'acte n'existe que dans la suite d'un `ouvrir` réussi.
     function executerSansDemander(proposition) {
+      // S3 (revue du 30/09) : Paul a fermé le cartouche pendant que Léo
+      // réfléchissait — il ne verrait pas l'acte. Rien ne part.
+      if (!document.contains(formulaire)) { return; }
       var plan = construirePlanExecution(proposition, voix.candidats);
-      if (!plan.ok) { afficherCarte(proposition); return; }
+      if (!plan.ok || !cibleExacte(proposition, plan)) { afficherCarte(proposition); return; }
 
       appelJson('/api/leo/ecritures', 'POST', {
         etape: 'ouvrir',
@@ -974,6 +1010,9 @@
         var traceId = data && typeof data.traceId === 'string' && UUID_MOTIF.test(data.traceId)
           ? data.traceId : null;
         if (!traceId) { afficherCarte(proposition); return; }
+        // S3 : fermé entre-temps → pas d'acte. La 'tentee' reste seule, et
+        // c'est VRAI : l'écriture a été interrompue avant d'avoir lieu.
+        if (!document.contains(formulaire)) { return; }
 
         // Clôture : issue posée APRÈS l'acte. Son échec laisse la 'tentee'
         // seule — « issue inconnue », ce qui est VRAI du point de vue du
@@ -983,8 +1022,11 @@
           if (reussie && typeof cibleId === 'string' && UUID_MOTIF.test(cibleId)) { cloture.cibleId = cibleId; }
           if (!reussie) { cloture.motif = motif; }
           appelJson('/api/leo/ecritures', 'POST', cloture).then(null, function () { /* fail-soft */ });
+          if (reussie) { apresEcriture(proposition, plan); }
+          // La cible RÉSOLUE est nommée : c'est ce que la carte montrait.
           var message = reussie
-            ? '[Fait sans demander : ' + proposition.reformulation + ']'
+            ? '[Fait sans demander : ' + proposition.reformulation +
+              (plan.cible ? ' → Cible : « ' + plan.cible + ' »' : '') + ']'
             : '[Action échouée, à reprendre]';
           if (reussie && typeof voix.notifier === 'function') {
             try { voix.notifier('Léo a agi sans demander.'); } catch (e) { /* fail-soft */ }

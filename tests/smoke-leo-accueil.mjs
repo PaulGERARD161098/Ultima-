@@ -632,13 +632,15 @@ const TRACE = '3f2a1b4c-5d6e-4f70-8a91-b2c3d4e5f607';
 const CREE = 'bbbbbbbb-0000-4000-8000-000000000009';
 let sequence = [];
 let corpsEcritures = [];
-async function stubberVert({ ouverture, acte }) {
+// La cible est dictée EXACTEMENT (« M. Lambert ») : S1 réserve l'exécution
+// sans clic à l'égalité exacte — une inclusion retombe sur la carte (C13).
+async function stubberVert({ ouverture, acte, cibleRef = 'M. Lambert' }) {
   sequence = [];
   corpsEcritures = [];
   await pageV.unroute('**/api/leo');
   await stubberLeoAvecProposition({
     outil: 'proposer_journal',
-    args: { cible_ref: 'Lambert', texte: 'Appelé ce matin.' },
+    args: { cible_ref: cibleRef, texte: 'Appelé ce matin.' },
     reformulation: REFORMULATION,
     anneau: 'vert'
   });
@@ -679,15 +681,15 @@ verifier('B1-a — ordre : ouvrir → acte → clore', sequence.join(' → ') ==
 verifier("Ouvrir porte la proposition, JAMAIS l'anneau",
   JSON.stringify(corpsEcritures[0]) === JSON.stringify({
     etape: 'ouvrir', outil: 'proposer_journal',
-    args: { cible_ref: 'Lambert', texte: 'Appelé ce matin.' }, quadrant: 'riven'
+    args: { cible_ref: 'M. Lambert', texte: 'Appelé ce matin.' }, quadrant: 'riven'
   }), JSON.stringify(corpsEcritures[0]));
 verifier("Clore : la trace, l'issue, la CIBLE par identifiant — zéro contenu dicté",
   JSON.stringify(corpsEcritures[1]) === JSON.stringify({
     etape: 'clore', traceId: TRACE, issue: 'reussie', cibleId: CREE
   }), JSON.stringify(corpsEcritures[1]));
-verifier('Paul le voit : « Fait sans demander » dans le fil',
+verifier('Paul le voit : « Fait sans demander » + la cible RÉSOLUE, dans le fil',
   ((await pageV.locator('.leo-bulle-issue').textContent()) || '') ===
-  '[Fait sans demander : ' + REFORMULATION + ']');
+  '[Fait sans demander : ' + REFORMULATION + ' → Cible : « M. Lambert »]');
 verifier('Vert : la saisie se réarme', await pageV.locator('.leo-voix-champ').isEnabled());
 
 // C9. Fail-closed : le journal refuse (503) ou tombe (réseau) → la carte, ZÉRO acte.
@@ -753,6 +755,68 @@ verifier("Anneau 'VERT' → la carte, aucun appel au journal",
   carteCasse && sequence.length === 0 && await pageV.locator('.leo-carte-confirmer').count() === 1,
   sequence.join(' → '));
 if (carteCasse) await pageV.locator('.leo-carte-annuler').click();
+
+// C13. S1 — cible résolue par INCLUSION (« Lambert » → « M. Lambert ») :
+// la carte la NOMME, et rien ne part sans Paul.
+await stubberVert({ ouverture: ouvertureOk, acte: acteOk, cibleRef: 'Lambert' });
+await dicter('vert-inclusion');
+const carteInclusion = await carteApparait();
+verifier('S1 — inclusion : la carte, qui nomme la cible résolue',
+  carteInclusion && ((await pageV.locator('.leo-carte-cible').textContent()) || '').includes('M. Lambert'));
+verifier("S1 — inclusion : ZÉRO appel au journal ni à l'API d'écriture",
+  sequence.length === 0, sequence.join(' → '));
+if (carteInclusion) await pageV.locator('.leo-carte-annuler').click();
+
+// C14. S3 — Paul ferme le cartouche pendant que Léo réfléchit : RIEN ne part.
+await stubberVert({ ouverture: ouvertureOk, acte: acteOk });
+await pageV.unroute('**/api/leo');
+await pageV.route('**/api/leo', async (route) => {
+  await new Promise((r) => setTimeout(r, 600));
+  return route.fulfill({ status: 200, contentType: 'application/json',
+    body: JSON.stringify({ ok: true, data: { reponse: 'Je te propose ceci.', proposition: {
+      outil: 'proposer_journal', args: { cible_ref: 'M. Lambert', texte: 'Appelé ce matin.' },
+      reformulation: REFORMULATION, anneau: 'vert' } } }) }).catch(() => {});
+});
+await dicter('vert-ferme');
+await pageV.keyboard.press('Escape');
+await pageV.waitForTimeout(1500);
+verifier('S3 — cartouche fermé avant la réponse : zéro journal, zéro acte',
+  sequence.length === 0 && await pageV.locator('.leo-voile').count() === 0, sequence.join(' → '));
+
+// C15. S4 — deux enrichissements de suite : le second PORTE le premier.
+const IDEE_ID = 'cccccccc-0000-4000-8000-000000000001';
+const corpsPatch = [];
+await pageV.unroute('**/api/leo/ecritures');
+await pageV.route('**/api/leo/ecritures', (route) => route.fulfill({ status: 200,
+  contentType: 'application/json', body: JSON.stringify({ ok: true, data: { traceId: TRACE } }) }));
+await pageV.route('**/api/idees/items', (route) => {
+  corpsPatch.push(route.request().postDataJSON());
+  return route.fulfill({ status: 200, contentType: 'application/json',
+    body: JSON.stringify({ ok: true, data: { id: IDEE_ID } }) });
+});
+await pageV.evaluate((id) => {
+  document.querySelectorAll('.leo-voile').forEach((v) => v.remove());
+  window.UltimaLeo.accueillirQuadrant({
+    quadrant: 'enrichir', blason: 'boussole', salutation: 'Scénario enrichissement.',
+    sections: [{ titre: 'Où on en est', lignes: ['—'] }],
+    voix: { quadrant: 'adramelech', jeton: 'jeton-de-test',
+      candidats: { idees: [{ id, libelle: 'Atelier bois', essence: 'E0' }] } }
+  });
+}, IDEE_ID);
+for (const ajout of ['A1', 'A2']) {
+  await pageV.unroute('**/api/leo');
+  await stubberLeoAvecProposition({ outil: 'proposer_enrichissement_idee',
+    args: { idee_ref: 'Atelier bois', ajout },
+    reformulation: 'Enrichir l’idée « Atelier bois » avec : « ' + ajout + ' »', anneau: 'vert' });
+  const avant = corpsPatch.length;
+  await pageV.locator('.leo-voix-champ').fill('Enrichis Atelier bois : ' + ajout);
+  await pageV.locator('.leo-voix-envoyer').click();
+  for (let i = 0; i < 60 && corpsPatch.length === avant; i++) await pageV.waitForTimeout(50);
+  await pageV.waitForFunction(() => !document.querySelector('.leo-voix-champ')?.disabled, { timeout: 5000 });
+}
+verifier('S4 — le second enrichissement porte le premier (rien n’est effacé)',
+  corpsPatch.length === 2 && corpsPatch[1]?.essence === 'E0\n\nA1\n\nA2',
+  JSON.stringify(corpsPatch.map((c) => c.essence)));
 
 verifier('Zéro erreur console (voix)', erreursVoix.length === 0, erreursVoix.slice(0, 3).join(' | '));
 await pageV.close();
