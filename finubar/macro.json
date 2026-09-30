@@ -102,16 +102,15 @@
         "etat": "en_cours",
         "jalon": {
           "nom": "B1 — Léo AGIT dans l'anneau vert (cadrage §11)",
-          "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①② faits ; ③ ouvre sur un gate"
+          "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③ faits (table appliquée, journal + clé partagée) ; reste ④, l'exécution"
         },
         "dernier_arret": {
           "le": "2026-09-30",
-          "quoi": "§12 scellé, 10 outils verts, `leo_ecritures` APPLIQUÉE et éprouvée (anon 42501) + faille RLS leo_operations corrigée. Avant : OMEGA fusionné (#310).",
+          "quoi": "Frontière des deux registres ARBITRÉE (« garde les deux avec la clé ») : `ouvrirTrace()` pose la clé, +8 contrôles. Avant : §12 scellé, 10 outils verts, `leo_ecritures` appliquée.",
           "commit": "5a025b5c8567c155600bff40a265ed201f4b4497"
         },
-        "prochaine_action": "④ — brancher l'exécution : entrée de journal AVANT l'acte, plafond consulté, issue après. ⚠️ Deux moteurs candidats, voir cadrage §12.8.",
+        "prochaine_action": "④ — l'exécution : `ouvrirTrace()`, journal 'tentee' AVANT l'acte, plafond, issue après. Frontière arbitrée — cadrage §12.8 quater.",
         "bloque_par": [
-          "DÉCISION : deux journaux coexistent (leo_operations = moteur, leo_ecritures = lisible). Frontière proposée au cadrage §12.8, à trancher — choix produit.",
           "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
           "La précision sur « mon dpe.fr » (VITRUVE)",
           "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis",
@@ -167,9 +166,9 @@
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "4491eba",
-        "tete_le": "2026-09-30T09:07:20+00:00",
-        "commits_depuis": 1,
+        "tete": "5b290a3",
+        "tete_le": "2026-09-30T09:13:12+00:00",
+        "commits_depuis": 2,
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-30",
@@ -667,10 +666,6 @@
       },
       {
         "projet": "Ultima",
-        "geste": "DÉCISION : deux journaux coexistent (leo_operations = moteur, leo_ecritures = lisible). Frontière proposée au cadrage §12.8, à trancher — choix produit."
-      },
-      {
-        "projet": "Ultima",
         "geste": "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée"
       },
       {
@@ -840,7 +835,7 @@
       },
       {
         "projet": "Ultima",
-        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
+        "dit": "a avancé de 2 commit(s) depuis sa dernière note",
         "pourquoi": "derive"
       },
       {
