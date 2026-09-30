@@ -268,14 +268,17 @@ for (const [largeur, hauteur, nom] of [[390, 844, 'a390'], [1280, 860, 'a1280'],
 // ---------------------------------------------------------------------------
 // 2026-09-29 : GRIMA et NAGA sont supprimés ; le nombre de caps de chaque écran
 // est LU dans le registre, puis verrouillé ci-dessous par des valeurs explicites.
-// 2026-09-30 : IMLADRIK n'a plus QUE QUATRE entrées (deux constellations,
-// ADRAMELECH, TAO), et la famille GAGNE deux écrans : les constellations isolées
-// (`imladrik.html#constellation-dragons`, trois étoiles ; `#constellation-armes`,
-// UNE étoile). Un critère qui vaut pour une famille d'écrans s'éprouve sur toute
-// la famille — et la famille a grandi : DRAGONS et surtout ARMES (une seule
-// étoile, IFULVIN, inerte) ne doivent être ni recouvertes par le bandeau ni
-// éteintes.
-const NOEUD_DE = { 'omega.html': 'omega', 'tao.html': 'tao', 'imladrik.html': 'imladrik',
+// 2026-09-30 : IMLADRIK n'a plus QUE DEUX entrées (les constellations ARMES et
+// DRAGONS ; TAO est supprimé, ADRAMELECH est descendu sous DRAGONS), et la famille
+// GAGNE deux écrans : les constellations isolées (`imladrik.html#constellation-
+// dragons`, SIX étoiles depuis l'arrivée d'ADRAMELECH, RESHIRAM et ZEKROM ;
+// `#constellation-armes`, UNE étoile). Un critère qui vaut pour une famille
+// d'écrans s'éprouve sur toute la famille — et la famille a grandi : DRAGONS (le
+// plus chargé de toute la famille de navigation, six étoiles dont deux jumelles
+// reliées) et surtout ARMES (une seule étoile, IFULVIN, inerte) ne doivent être ni
+// recouvertes par le bandeau ni éteintes. `tao.html` sort de la famille : la page
+// n'existe plus (l'écran qu'elle occupait, deux étoiles, est repris par DRAGONS).
+const NOEUD_DE = { 'omega.html': 'omega', 'imladrik.html': 'imladrik',
   'adramelech.html': 'adramelech', 'bcp.html': 'nicol-bolas', 'index.html': 'racine',
   'imladrik.html#constellation-dragons': 'constellation-dragons',
   'imladrik.html#constellation-armes': 'constellation-armes' };
@@ -284,12 +287,13 @@ const COQUES_DE_NAVIGATION = Object.keys(NOEUD_DE)
 // Verrou : le registre ne dérive pas sans que ce harnais le voie, et la liste
 // est bien la famille attendue (jamais vide, jamais réduite en silence).
 verdicts.familleDesCoques = JSON.stringify(COQUES_DE_NAVIGATION) === JSON.stringify([
-  ['omega.html', 3], ['tao.html', 2], ['imladrik.html', 4],
+  ['omega.html', 3], ['imladrik.html', 2],
   ['adramelech.html', 3], ['bcp.html', 4],
   // LA RACINE (P4, 2026-08-19) : trois caps — ALPHA, OMEGA, ALTHEA.
   ['index.html', 3],
-  // LES CONSTELLATIONS ISOLÉES (30/09) : trois dragons ; IFULVIN seul.
-  ['imladrik.html#constellation-dragons', 3], ['imladrik.html#constellation-armes', 1]]);
+  // LES CONSTELLATIONS ISOLÉES (30/09) : six étoiles (trois dragons, ADRAMELECH,
+  // RESHIRAM, ZEKROM) ; IFULVIN seul.
+  ['imladrik.html#constellation-dragons', 6], ['imladrik.html#constellation-armes', 1]]);
 for (const [fichier, nbCaps] of COQUES_DE_NAVIGATION) {
   for (const [largeur, hauteur] of [[390, 844], [1280, 860]]) {
     const page = await browser.newPage({ viewport: { width: largeur, height: hauteur } });
