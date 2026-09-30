@@ -32,7 +32,7 @@
   },
   "dernier_arret": {
     "le": "2026-09-30",
-    "quoi": "Chaîne Rénoboost : route posée (PLAN-2026-09-30-chaine-A-Z.md), relue par Léo, leçons v55 ; #321 fusionnée en mode merge.",
+    "quoi": "Chaîne Rénoboost : route posée (PLAN-2026-09-30-chaine-A-Z.md), relue par Léo, leçons v56 ; #321 fusionnée en mode merge, après #326.",
     "commit": "e14f470df5c5ffde290347b10ec109e94f20b770"
   },
   "prochaine_action": "④ — l'exécution : `ouvrirTrace()`, journal 'tentee' AVANT l'acte, plafond, issue après. Frontière arbitrée — cadrage §12.8 quater.",
@@ -46,6 +46,14 @@
   "boucles_ouvertes": [
     {
       "quoi": "Chaîne Rénoboost : route et état vivant dans PLAN-2026-09-30-chaine-A-Z.md (fusionné le 30/09, #321). Reprise : son §0.",
+      "depuis": "2026-09-30"
+    },
+    {
+      "quoi": "ÉCARTÉ par Paul le 30/09 — DATARENO- : Vercel rouge en permanence (PYTHON_ENTRYPOINT_NOT_FOUND), sur main aussi. « Vraiment à part, on le laisse de côté. » Ne pas rouvrir.",
+      "depuis": "2026-09-30"
+    },
+    {
+      "quoi": "REPORTÉ par Paul le 30/09 — mon-dpe.fr : 62 vulnérabilités Dependabot sur main (4 critiques, 28 hautes). « On va corriger mon dpe plus tard. » Séance dédiée.",
       "depuis": "2026-09-30"
     },
     {
