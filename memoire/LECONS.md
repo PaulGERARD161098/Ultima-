@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v46 2026-09-30 sha256:a7f95c5809f7 -->
+<!-- lecons:empreinte v47 2026-09-30 sha256:9e6fe1b772e4 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -95,6 +95,32 @@ croire le résultat.** Si le bruit gêne, filtrer *après* avoir relu le code de
 sortie (`; echo "code=$?"`), jamais à la place. Et sur une fusion d'essai,
 vérifier d'abord qu'un ancêtre commun existe : `git merge-base A B`.
 
+**UN SHA NE SE COMPLÈTE PAS DE MÉMOIRE — MÊME QUAND ON VIENT DE LE LIRE EN
+COURT** *(2026-09-30)*. Pour fusionner la PR #309, il fallait le SHA complet de
+la tête. Je l'avais sous les yeux en abrégé (`a1dbd12`, affiché par
+`git log --oneline`) et j'ai écrit les trente-trois caractères suivants de
+mémoire : `a1dbd126e7a5fa3a7b1a1ba5b9b0c39f5c0d3a8e`. Le vrai était
+`a1dbd12e25c576fbdd26f872efa00fe8aaf51ff4` — **sept caractères justes, le reste
+inventé**. GitHub a refusé : `409 Head branch was modified`.
+
+⚠️ **Le message d'erreur désignait la mauvaise cause, et c'est ce qui rend cette
+leçon utile** : « la branche a été modifiée » invite à croire qu'une autre séance
+a poussé — hypothèse crédible ce jour-là, main ayant bougé deux fois dans
+l'heure. J'ai vérifié au lieu de le croire : `git rev-parse` des deux côtés, SHA
+identiques, la branche n'avait pas bougé d'un octet. **Sans cette vérification
+j'aurais cherché un conflit qui n'existait pas.**
+
+⛔ **Ce que ça enseigne, au-delà des SHA** : un identifiant abrégé n'est pas
+l'identifiant. Les sept premiers caractères d'un SHA suffisent à le *reconnaître*
+et jamais à le *reconstituer* — c'est vrai d'un SHA, d'un UUID, d'un identifiant
+Stripe, d'une référence de devis. La forme complète se lit à sa source
+(`git rev-parse HEAD`), toujours.
+
+✅ **Et le garde-fou a fait exactement son travail** : `expectedHeadSha` est un
+*lease*, et il a refusé une valeur fabriquée. Sans lui la fusion aurait réussi —
+par chance, sur un lot que personne n'aurait su non vérifié. ⇒ **Ne jamais
+omettre le lease pour « éviter un aller-retour »** : c'est lui qui transforme une
+invention en refus plutôt qu'en réussite muette.
 
 **UN COMMIT « HORS MAIN » N'EST PAS UN TRAVAIL HORS MAIN — ON COMPARE LES
 CONTENUS, PAS LES SHA** *(2026-09-18)*. Vu RenoBoost sur une branche à sept

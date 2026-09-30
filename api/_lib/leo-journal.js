@@ -33,6 +33,82 @@ export const MAX_MOTIF = 200;
 
 const UUID_MOTIF = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   LA CLÉ PARTAGÉE — arbitrage de Paul du 30/09 : « garde les deux avec la clé »
+   ───────────────────────────────────────────────────────────────────────────
+   Deux registres coexistent, et ils ne répondent pas à la même question :
+     · `leo_operations` RÉGULE — il empêche le doublon (PK mission+operation),
+       refuse sur état périmé, compte les quotas ;
+     · `leo_ecritures` REND COMPTE — il dit quoi, où, sous quel anneau, avec
+       quelle issue, et garantit zéro contenu dicté par la forme des colonnes.
+
+   ⛔ CE QUI LES EMPÊCHE DE DIVERGER N'EST PAS UNE BONNE INTENTION, C'EST CETTE
+   ÉGALITÉ : `leo_ecritures.trace_id` === `leo_operations.operation_id`. Alors
+   une ligne de l'un se retrouve dans l'autre, et deux sondes peuvent exiger
+   qu'aucune écriture n'existe d'un seul côté.
+
+   ⚠️ L'HYPOTHÈSE QUI PORTE L'ARBITRAGE A ÉTÉ MESURÉE AVANT, PAS SUPPOSÉE :
+   `operation_id` est un `text` borné par le motif ci-dessous, et un UUID le
+   satisfait — éprouvé en base le 30/09 (minuscule, MAJUSCULE, tout-zéros →
+   acceptés ; tiret initial et 129 caractères → refusés, donc le motif reste
+   discriminant). Puis éprouvé par un INSERT réel des deux côtés, jointure à 2,
+   et les deux sondes de divergence fabriquées exprès pour les faire crier : 1
+   et 1. Sans cette mesure, la décision de Paul reposait sur une affirmation.
+
+   ⛔ DOUBLE VÉRITÉ ASSUMÉE ET GARDÉE : ce motif est aussi la contrainte
+   `leo_operations_operation_id_check` en base — une contrainte SQL ne
+   s'importe pas. Un test lit le fichier de migration et exige que les deux
+   coïncident, exactement comme pour `PHASES`.
+   ⚠️ Ce fichier est un RELEVÉ (`…_leo_lv1_registre_transactionnel.RELEVE.sql`) :
+   la source de vérité reste la base, et le relevé a été vérifié contre elle.
+   ═══════════════════════════════════════════════════════════════════════════ */
+export const MOTIF_OPERATION_ID = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$/;
+
+/**
+ * Ouvre une trace : LA seule façon de fabriquer la paire d'identifiants.
+ * → { traceId, operationId } avec operationId === traceId.
+ *
+ * ⛔ UNE SEULE SOURCE, et c'est tout l'objet de cette fonction. Deux endroits
+ * qui fabriquent l'identifiant finissent par en fabriquer deux différents —
+ * et alors les deux registres ne se rejoignent plus, sans que rien ne le dise
+ * au moment où ça arrive. C'est le même principe que l'anneau, qui est un
+ * CHAMP du catalogue et jamais une seconde liste.
+ *
+ * ⚠️ AUCUN GÉNÉRATEUR N'EST INJECTABLE, et c'est pourquoi les contrôles
+ * passent par la voie à UN argument : une fonction qui tire au hasard ne
+ * s'éprouve pas sur un cas dont on connaît la réponse. `ouvrirTrace(uuid)`
+ * est cette voie — déterministe, donc éprouvable des deux côtés ; l'appel
+ * sans argument ne s'éprouve que sur ses invariants (paire égale, clé
+ * acceptée par les deux motifs, deux ouvertures distinctes).
+ */
+export function ouvrirTrace(...args) {
+  // ⛔ DEUX APPELS, DEUX SENS, ET ILS NE SE CONFONDENT PAS — corrigé le 30/09,
+  // le harnais ayant attrapé une CORRECTION SILENCIEUSE dans la première
+  // version : `ouvrirTrace('')`, `ouvrirTrace(null)` et `ouvrirTrace(42)`
+  // rendaient une trace VALIDE, en générant un UUID par-dessus l'argument
+  // absurde. Un appelant qui se trompe obtenait donc une clé au lieu d'un
+  // refus — et ce dépôt interdit la correction silencieuse partout ailleurs
+  // (les enums d'arguments, la casse des anneaux, le vocabulaire des postes).
+  //   · `ouvrirTrace()`   → on n'a pas d'identifiant, on en fabrique un ;
+  //   · `ouvrirTrace(x)`  → on en a un, il doit être valide, sinon REFUS.
+  // La distinction porte sur `args.length`, pas sur la valeur : c'est la seule
+  // façon de séparer « rien fourni » d'« undefined fourni ».
+  if (args.length === 0) {
+    const genere = typeof crypto !== 'undefined' && crypto.randomUUID
+      ? crypto.randomUUID() : '';
+    return genere
+      ? { ok: true, traceId: genere, operationId: genere }
+      : { ok: false, motif: 'aucun générateur d\u2019UUID disponible' };
+  }
+  const id = typeof args[0] === 'string' ? args[0].trim() : '';
+  // ⛔ Fail-closed : on ne rend JAMAIS une paire qu'un des deux registres
+  // refuserait. Un identifiant qui passe ici mais que la base rejette
+  // produirait une opération sans journal — la divergence même qu'on évite.
+  if (!UUID_MOTIF.test(id)) return { ok: false, motif: 'trace invalide' };
+  if (!MOTIF_OPERATION_ID.test(id)) return { ok: false, motif: 'trace refusée par leo_operations' };
+  return { ok: true, traceId: id, operationId: id };
+}
+
 /** Les seules clés qu'une entrée peut porter. ⛔ Liste FERMÉE : une clé
  *  surnuméraire fait refuser l'entrée entière, jamais une mise de côté
  *  silencieuse — même règle que `validerProposition` pour les arguments.

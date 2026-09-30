@@ -9,6 +9,8 @@ import { readFileSync } from 'node:fs';
 import {
   PHASES, MAX_MOTIF,
   construireEntreeJournal,
+  ouvrirTrace,
+  MOTIF_OPERATION_ID,
   creerPlafondEcritures,
   PLAFOND_PAR_DEFAUT
 } from '../api/_lib/leo-journal.js';
@@ -146,6 +148,65 @@ verdicts.configAbsurdeNeDesserrePas = [NaN, 0, -5, undefined, null, 'quarante']
   });
 verdicts.fenetreAbsurdeNeDesserrePas = [NaN, 0, -1, 'une heure']
   .every((v) => creerPlafondEcritures(3, v)([ilYa(5), ilYa(10), ilYa(20)], maintenant).ok === false);
+
+// ---------- 9. LA CLÉ PARTAGÉE (arbitrage de Paul, 30/09) ----------
+// ⛔ Ce qui empêche les deux registres de diverger n'est pas une bonne
+// intention, c'est l'égalité `leo_ecritures.trace_id === leo_operations
+// .operation_id`. Ces contrôles gardent l'égalité et sa source UNIQUE.
+const UUID_EPROUVE = '7c9e1f2a-3b4c-4d5e-8f60-a1b2c3d4e5f6';
+const t = ouvrirTrace(UUID_EPROUVE);
+verdicts.laCleEstLaMeme = t.ok === true &&
+  t.traceId === UUID_EPROUVE && t.operationId === t.traceId;
+
+// ⛔ DOUBLE VÉRITÉ GARDÉE : le motif d'`operation_id` vit AUSSI en contrainte
+// SQL — une contrainte ne s'importe pas. Sans ce contrôle, le code
+// fabriquerait un jour une clé que la base refuse, et l'opération serait
+// écrite sans journal : la divergence même qu'on évite.
+const releve = readFileSync(new URL(
+  '../supabase/migrations/20260929125105_leo_lv1_registre_transactionnel.RELEVE.sql',
+  import.meta.url), 'utf8');
+const motifSql = (releve.match(/operation_id ~ '([^']+)'/) || [, ''])[1];
+// Verrou de non-vacuité : sur une regex qui ne matche pas, « les deux
+// coïncident » serait vrai à vide.
+verdicts.motifSqlLu = motifSql.length > 20;
+verdicts.motifsCoincident = motifSql === MOTIF_OPERATION_ID.source;
+
+// ⛔ FAIL-CLOSED : on ne rend jamais une paire qu'un des deux registres
+// refuserait. Une clé acceptée ici mais rejetée par la base produirait une
+// opération orpheline.
+// ⚠️ Un argument FOURNI mais absurde doit être REFUSÉ, jamais rattrapé par une
+// génération. C'est ce contrôle qui a trouvé la correction silencieuse du
+// 30/09 : `''`, `null` et `42` rendaient une trace valide.
+verdicts.cleFailClosed = [
+  '', '   ', 'pas-un-uuid', 'ADR-12', undefined, null, 42, {},
+  '-7c9e1f2a-3b4c-4d5e-8f60-a1b2c3d4e5f6',   // tiret initial : refusé en base
+  'x'.repeat(129)
+].every((v) => ouvrirTrace(v).ok === false);
+
+// ⛔ ET LE MIROIR, sans lequel « fail-closed » voudrait dire « refuse tout » :
+// l'appel SANS argument est l'usage normal — on n'a pas d'identifiant, on en
+// fabrique un — et il doit rendre une paire utilisable.
+const sansArgument = ouvrirTrace();
+verdicts.sansArgumentGenere = sansArgument.ok === true &&
+  sansArgument.traceId === sansArgument.operationId &&
+  MOTIF_OPERATION_ID.test(sansArgument.traceId) &&
+  construireEntreeJournal({ ...base, traceId: sansArgument.traceId }).ok === true;
+// Deux ouvertures ne partagent pas leur clé : sinon deux écritures
+// différentes se confondraient dans les deux registres.
+verdicts.deuxTracesDifferent = ouvrirTrace().traceId !== ouvrirTrace().traceId;
+
+// ⚠️ ET LE MIROIR : un UUID valide DOIT passer les deux motifs. Sans lui,
+// « fail-closed » pourrait vouloir dire « refuse tout », et la clé ne
+// servirait jamais.
+verdicts.unUuidPasseLesDeuxMotifs =
+  MOTIF_OPERATION_ID.test(UUID_EPROUVE) &&
+  ouvrirTrace('00000000-0000-4000-8000-000000000000').ok === true &&
+  ouvrirTrace('3F2A1B4C-5D6E-4F70-8A91-B2C3D4E5F607').ok === true;
+
+// L'entrée de journal accepte bien la clé que `ouvrirTrace` fabrique : les
+// deux bouts du dispositif se parlent.
+verdicts.laCleEntreDansLeJournal =
+  construireEntreeJournal({ ...base, traceId: t.traceId }).entree.trace_id === t.operationId;
 
 // ---------- Bilan ----------
 console.log(JSON.stringify(verdicts, null, 2));
