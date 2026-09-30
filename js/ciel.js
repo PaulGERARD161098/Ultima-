@@ -296,6 +296,12 @@
     etoiles.forEach(function (e) {
       var d = Math.sqrt(e.x * e.x + e.y * e.y + e.z * e.z);
       if (d > rayon) { rayon = d; }
+      // Le rayon RÉEL de l'amas, mesuré sur ses étoiles : c'est sur lui que
+      // l'approche se cadre (le rayon théorique laissait une petite nébuleuse
+      // à 43 % de la vue, mesuré le 30/09).
+      var g = e.groupe;
+      var dg = Math.sqrt(Math.pow(e.x - g.centre.x, 2) + Math.pow(e.y - g.centre.y, 2) + Math.pow(e.z - g.centre.z, 2));
+      g.rayonReel = Math.max(g.rayonReel || 0, dg);
     });
     return {
       groupes: groupes, etoiles: etoiles, rayon: Math.max(80, rayon),
@@ -1010,6 +1016,9 @@
           // Lot 3 : le rayon RÉEL de l'amas borne la brume — sans lui, ses lobes
           // de 56 px au moins débordaient sur la nébuleuse voisine.
           rayonMonde: modeNebuleuses && premier && premier.groupe ? premier.groupe.rayonAmas : undefined,
+          // …et son centre RÉEL : le barycentre d'un échantillon de douze
+          // étoiles s'en écarte d'un quart de rayon (mesuré le 30/09).
+          centreMonde: modeNebuleuses && premier && premier.groupe ? premier.groupe.centre : undefined,
           membres: membres,
           barycentre: { x: bx / membres.length, y: by / membres.length, z: bz / membres.length },
           epsilon: epsilon
@@ -1523,13 +1532,17 @@
     var approchee = null;
     function distanceApproche(g) {
       var cote = Math.max(160, Math.min(vbW - mUtile.gauche - mUtile.droite, vbH - mUtile.haut - mUtile.bas));
-      return Math.max((g.rayonAmas * FOCALE) / (0.4 * cote), g.rayonAmas + 90);
+      var r = Math.max(g.rayonAmas * 0.5, g.rayonReel || 0);
+      // Plancher : l'étoile la plus proche reste au-delà des 60 unités sous
+      // lesquelles `projeter` la tait (mesuré : « + 90 » plafonnait une petite
+      // nébuleuse à 43 % de la vue).
+      return Math.max((r * FOCALE) / (0.42 * cote), r + 65);
     }
     // La consigne de distance, zoom compris. Approchée, la caméra ne traverse
     // jamais la nébuleuse, quel que soit le zoom.
     function consigneDistance() {
       if (!approchee) { return distanceIdeale() * zoom; }
-      return Math.max(distanceApproche(approchee) * zoom, approchee.rayonAmas + 70);
+      return Math.max(distanceApproche(approchee) * zoom, Math.max(approchee.rayonAmas * 0.5, approchee.rayonReel || 0) + 65);
     }
     function groupeDeCle(cle) {
       for (var i = 0; i < monde.groupes.length; i++) {
@@ -1638,7 +1651,9 @@
         var choisie = null;
         for (var i = 0; i < poses.length && choisie === null; i++) {
           var y = poses[i];
-          var b = { x0: pr.sx - w / 2 - 2, x1: pr.sx + w / 2 + 2, y0: y - fs * 0.85, y1: y + fs * 0.3 };
+          // La boîte du TEXTE PEINT : jambages et accents compris (mesuré — la
+          // boîte « 0,85 / 0,3 » laissait deux noms se toucher à 300 fiches).
+          var b = { x0: pr.sx - w / 2 - 3, x1: pr.sx + w / 2 + 3, y0: y - fs * 1.0, y1: y + fs * 0.35 };
           var libre = b.x0 >= 0 && b.x1 <= vbW
             && !boites.some(function (c) { return croiseBoite(b, c); })
             && !coeurs.some(function (c) { return c.id !== id && croiseCoeur(b, c); });

@@ -123,7 +123,9 @@
 /* Lot 3 des nébuleuses (30/09) : approchée, une nébuleuse écrit ses noms ;
    un nom qui en croiserait un autre se tait (il revient au survol, au focus). */
 .ciel-nom--approche { opacity: .92; }
-.ciel-nom--approche.ciel-nom--tu { opacity: 0; }
+/* Un nom qui se tait disparaît SANS fondu : en fondu, il croisait un instant
+   le nom qui prend sa place (mesuré en approche, 300 fiches, le 30/09). */
+.ciel-nom--approche.ciel-nom--tu { opacity: 0; transition: none; }
 .ciel--approche .ciel-etoile:not(.ciel-etoile--approchee) { opacity: .2; }
 .ciel--approche .ciel-liens { opacity: .35; }
 

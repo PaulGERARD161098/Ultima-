@@ -1,4 +1,5 @@
-// Harnais — RIVEN en nébuleuses (CADRAGE-RIVEN-NEBULEUSES.md, lots 1 et 2).
+// Harnais — RIVEN en nébuleuses (CADRAGE-RIVEN-NEBULEUSES.md, lots 1 à 3 ;
+// le lot 3, « le volume en constellations », est la section 6).
 //
 // Il mesure sur les boîtes RÉELLEMENT peintes (getBoundingClientRect), jamais
 // sur le calcul qui les a posées : un calcul juste peut être mal peint.
@@ -391,6 +392,246 @@ for (const n of [54, 300]) {
   details.approcheTachesLongues = longues.map((d) => Math.round(d));
   verdicts.approcheSansTacheDePlusDe50ms = observe && longues.every((d) => d <= 50);
   await page.close();
+}
+
+// ============ 6. Lot 3 — le volume en constellations (§8 du cadrage) ============
+// Ce qui se mesure, sur ce qui est RÉELLEMENT peint : les noms (opacité
+// calculée), les titres (boîtes), les brumes (disques relus dans la couche de
+// fond), les étoiles (cœurs). Chaque absence a son verrou de non-vacuité, et
+// trois sabotages du moteur (section 6 ter) prouvent que l'instrument voit.
+//
+// ⚠️ LE RECOUVREMENT DE DEUX BRUMES se juge sur leur partie VISIBLE : un lobe
+// est un dégradé radial dont l'opacité tombe à 0,05 à mi-rayon et à 0,01 aux
+// trois quarts (`spriteNebuleuse`). Deux brumes « se touchent » quand deux
+// lobes de nébuleuses différentes sont à moins de la moitié de la somme de
+// leurs rayons. Choix consigné au §8 du cadrage, pas un seuil réglé pour passer.
+async function etatVolume(page) {
+  return page.evaluate(() => {
+    const scene = document.querySelector('#ciel-scene');
+    const sr = scene.getBoundingClientRect();
+    const canvas = scene.querySelector('canvas.ciel-fond');
+    const cr = canvas ? canvas.getBoundingClientRect() : { left: 0, top: 0 };
+    const T = window.UltimaNebuleusesRiven;
+    const parTeinte = Object.fromEntries(T.NEBULEUSES.map((n) => [T.teinte(n), n.nom]));
+    const peintes = window.__fondEtat && typeof window.__fondEtat.nebuleusesPeintes === 'function'
+      ? window.__fondEtat.nebuleusesPeintes() : [];
+    const brumes = peintes.map((b) => ({
+      nom: parTeinte[b.teinte] || b.teinte,
+      disques: (b.disques || []).map((d) => ({ x: cr.left + d.px, y: cr.top + d.py, r: d.r }))
+    }));
+    let touches = 0;
+    for (let i = 0; i < brumes.length; i++) {
+      for (let j = i + 1; j < brumes.length; j++) {
+        brumes[i].disques.forEach((a) => brumes[j].disques.forEach((b) => {
+          if (Math.hypot(a.x - b.x, a.y - b.y) < (a.r + b.r) / 2) { touches++; }
+        }));
+      }
+    }
+    const etoiles = [...scene.querySelectorAll('g.ciel-etoile[data-noeud-id]')].map((g) => {
+      const c = g.querySelector('circle[fill="#ffffff"]').getBoundingClientRect();
+      const libelle = g.getAttribute('aria-label') || '';
+      const neb = T.NEBULEUSES.find((n) => libelle.includes(', nébuleuse ' + n.nom + ','));
+      return { x: c.left + c.width / 2, y: c.top + c.height / 2, nom: neb ? neb.nom : null };
+    });
+    const horsDeSaBrume = etoiles.filter((e) => {
+      const b = brumes.find((x) => x.nom === e.nom);
+      return !b || !b.disques.some((d) => Math.hypot(d.x - e.x, d.y - e.y) <= d.r);
+    }).length;
+    const nomsVisibles = [...scene.querySelectorAll('.ciel-nom')]
+      .filter((n) => parseFloat(getComputedStyle(n).opacity) > 0.05 && parseFloat(n.getAttribute('opacity') || '1') > 0.05).length;
+    const titres = [...scene.querySelectorAll('.ciel-titres-nebuleuses .ciel-nom-amas[role="button"]')];
+    return {
+      cote: Math.min(sr.width, sr.height), etoiles: etoiles.length, titres: titres.length,
+      titresTabulables: titres.filter((t) => t.getAttribute('tabindex') === '0' && /^Nébuleuse .+, \d+ contacts?$/.test(t.getAttribute('aria-label') || '')).length,
+      brumes: brumes.length, disques: brumes.reduce((n, b) => n + b.disques.length, 0),
+      touches, horsDeSaBrume, nomsVisibles,
+      approchee: window.UltimaCiel.courant() ? window.UltimaCiel.courant().approchee() : 'absent'
+    };
+  });
+}
+// La nébuleuse approchée : ses noms (visibles, sans chevauchement, sans cœur
+// sous eux) et l'étendue de ses étoiles rapportée à la scène.
+async function etatApproche(page) {
+  return page.evaluate(() => {
+    const scene = document.querySelector('#ciel-scene');
+    const sr = scene.getBoundingClientRect();
+    const noms = [...scene.querySelectorAll('.ciel-nom--approche')]
+      .filter((n) => parseFloat(getComputedStyle(n).opacity) > 0.05).map((n) => n.getBoundingClientRect());
+    const coeurs = [...scene.querySelectorAll('g.ciel-etoile--approchee > circle[fill="#ffffff"]')].map((c) => c.getBoundingClientRect());
+    let chevauchements = 0, surUnCoeur = 0, dehors = 0;
+    for (let i = 0; i < noms.length; i++) {
+      const a = noms[i];
+      if (a.left < sr.left - 1 || a.right > sr.right + 1) { dehors++; }
+      for (let j = i + 1; j < noms.length; j++) {
+        const b = noms[j];
+        if (Math.min(a.right, b.right) - Math.max(a.left, b.left) > 1 && Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 1) { chevauchements++; }
+      }
+      coeurs.forEach((c) => {
+        if (Math.min(a.right, c.right) - Math.max(a.left, c.left) > 0.5 && Math.min(a.bottom, c.bottom) - Math.max(a.top, c.top) > 0.5) { surUnCoeur++; }
+      });
+    }
+    const xs = coeurs.map((c) => c.left + c.width / 2), ys = coeurs.map((c) => c.top + c.height / 2);
+    const etendue = coeurs.length > 1 ? Math.max(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys)) : 0;
+    return {
+      noms: noms.length, chevauchements, surUnCoeur, dehors, etoiles: coeurs.length,
+      occupation: +(etendue / Math.min(sr.width, sr.height)).toFixed(2),
+      approchee: window.UltimaCiel.courant().approchee(),
+      focus: document.activeElement && document.activeElement.getAttribute('data-nebuleuse')
+    };
+  });
+}
+// La caméra glisse (≈ 11 % du chemin par image) : à 300 fiches, une durée fixe
+// mesurait parfois une image EN MOUVEMENT, où un nom qui s'efface croisait
+// encore son remplaçant. On attend donc qu'elle soit posée, pas qu'un délai passe.
+async function attendreImmobile(page) {
+  let avant = -1;
+  for (let i = 0; i < 40; i++) {
+    await page.waitForTimeout(150);
+    const d = await page.evaluate(() => window.UltimaCiel.courant().distance());
+    if (Math.abs(d - avant) < 0.05) { await page.waitForTimeout(200); return true; }
+    avant = d;
+  }
+  return false;
+}
+const vueEnsembleSaine = (e, n) => e.etoiles === n && e.titres > 0 && e.brumes === e.titres && e.disques > 0 &&
+  e.nomsVisibles === 0 && e.touches === 0 && e.horsDeSaBrume === 0 && e.titresTabulables === e.titres && e.approchee === null;
+const approcheSaine = (a, cle) => a.approchee === cle && a.noms > 0 && a.chevauchements === 0 && a.surUnCoeur === 0 &&
+  a.dehors === 0 && a.occupation >= 0.5;
+
+for (const vp of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
+  const L = vp.width;
+  // 6a. Le produit : RIVEN en démonstration, ouvert en volume.
+  {
+    const page = await browser.newPage({ viewport: vp });
+    const erreurs = [];
+    page.on('pageerror', (e) => erreurs.push(e.message));
+    await DEMO(page);
+    await page.addInitScript(() => { try { localStorage.setItem('ultima-ciel-vue', 'volume'); } catch (e) {} });
+    await page.goto(`${BASE}/riven.html`, { waitUntil: 'load', timeout: 20000 });
+    await page.waitForTimeout(1800);
+    const ens = await etatVolume(page);
+    details[`lot3_${L}_demo_ensemble`] = ens;
+    verdicts[`lot3_${L}_demo_seulsLesNomsDesNebuleuses`] = vueEnsembleSaine(ens, 9) && ens.titres === 3;
+    const t = await mesurer(page, '.ciel-titres-nebuleuses .ciel-nom-amas', '#ciel-scene');
+    details[`lot3_${L}_demo_titres`] = t;
+    verdicts[`lot3_${L}_demo_titresSansChevauchement`] = t.visibles === 3 && t.chevauchements === 0 && t.dehors === 0;
+    // L'arbre d'accessibilité : trois boutons nommés « Nébuleuse … ».
+    const cdp = await page.context().newCDPSession(page);
+    const { nodes } = await cdp.send('Accessibility.getFullAXTree');
+    const boutons = nodes.filter((n) => n.role && n.role.value === 'button' && n.name && /^Nébuleuse /.test(n.name.value || ''));
+    verdicts[`lot3_${L}_demo_titresSontDesBoutons`] = boutons.length === 3;
+    // La souris : un clic sur le titre s'approche.
+    await page.locator('.ciel-nom-amas[data-nebuleuse="neb-btp"]').click();
+    await page.waitForTimeout(300);
+    await attendreImmobile(page);
+    const app = await etatApproche(page);
+    details[`lot3_${L}_demo_approche`] = app;
+    verdicts[`lot3_${L}_demo_clicSApproche`] = approcheSaine(app, 'neb-btp');
+    // Échap : retour à l'ensemble, le focus revient au titre quitté.
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(300);
+    await attendreImmobile(page);
+    const retour = await etatVolume(page);
+    const focus = await page.evaluate(() => document.activeElement && document.activeElement.getAttribute('data-nebuleuse'));
+    verdicts[`lot3_${L}_demo_echapRevientALEnsemble`] = vueEnsembleSaine(retour, 9) && focus === 'neb-btp';
+    // Le clavier : Entrée sur un titre s'approche.
+    await page.locator('.ciel-nom-amas[data-nebuleuse="neb-conseil"]').focus();
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(1800);
+    verdicts[`lot3_${L}_demo_entreeSApproche`] = (await page.evaluate(() => window.UltimaCiel.courant().approchee())) === 'neb-conseil';
+    // « Tout voir » (le bouton de la page) ramène aussi à l'ensemble.
+    await page.locator('#ciel-tout-voir').click();
+    await page.waitForTimeout(300);
+    await attendreImmobile(page);
+    verdicts[`lot3_${L}_demo_toutVoirRevient`] = vueEnsembleSaine(await etatVolume(page), 9);
+    verdicts[`lot3_${L}_demo_zeroErreur`] = erreurs.length === 0;
+    await page.close();
+  }
+  // 6b. La maquette fictive, 54 puis 300 fiches : les cas denses.
+  for (const n of [54, 300]) {
+    const page = await browser.newPage({ viewport: vp });
+    const erreurs = [];
+    page.on('pageerror', (e) => erreurs.push(e.message));
+    await DEMO(page);
+    await page.goto(`${BASE}/design/preview-riven-nebuleuses.html?vue=volume&n=${n}`, { waitUntil: 'load', timeout: 20000 });
+    await page.waitForTimeout(2200);
+    const ens = await etatVolume(page);
+    details[`lot3_${L}_${n}_ensemble`] = ens;
+    const t = await mesurer(page, '.ciel-titres-nebuleuses .ciel-nom-amas', '#ciel-scene');
+    verdicts[`lot3_${L}_${n}_ensemble`] = vueEnsembleSaine(ens, n) && ens.titres === 9 &&
+      t.visibles === 9 && t.chevauchements === 0 && t.dehors === 0;
+    await page.locator('.ciel-nom-amas[data-nebuleuse="neb-btp"]').click();
+    await page.waitForTimeout(300);
+    await attendreImmobile(page);
+    const app = await etatApproche(page);
+    details[`lot3_${L}_${n}_approche`] = app;
+    verdicts[`lot3_${L}_${n}_approche`] = approcheSaine(app, 'neb-btp');
+    verdicts[`lot3_${L}_${n}_zeroErreur`] = erreurs.length === 0;
+    await page.close();
+  }
+}
+
+// 6 bis. Les cas limites : une seule fiche, donc une seule nébuleuse et une
+// seule étoile — le moteur ne doit ni se taire ni planter.
+{
+  const page = await browser.newPage({ viewport: { width: 320, height: 640 } });
+  const erreurs = [];
+  page.on('pageerror', (e) => erreurs.push(e.message));
+  await DEMO(page);
+  await page.goto(`${BASE}/design/preview-riven-nebuleuses.html?vue=volume&n=1`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForTimeout(1500);
+  const ens = await etatVolume(page);
+  await page.locator('.ciel-nom-amas[role="button"]').first().click();
+  await page.waitForTimeout(1500);
+  const app = await etatApproche(page);
+  details.lot3_uneFiche = { ens, app };
+  verdicts.lot3_uneFicheUneNebuleuse = vueEnsembleSaine(ens, 1) && ens.titres === 1 && app.approchee !== null && app.noms === 1 && erreurs.length === 0;
+  await page.close();
+}
+
+// 6 ter. Les sabotages : on casse le moteur, l'instrument doit le voir.
+// Le moteur servi à la maquette est réécrit à la volée — le code du dépôt,
+// lui, n'est pas touché.
+async function avecMoteurSabote(remplacer, faire) {
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await DEMO(page);
+  await page.route('**/js/ciel.js', async (route) => {
+    const r = await route.fetch();
+    const texte = await r.text();
+    const sabote = remplacer(texte);
+    await route.fulfill({ response: r, body: sabote, headers: { ...r.headers(), 'content-type': 'application/javascript' } });
+    page.__sabotageApplique = sabote !== texte;
+  });
+  await page.goto(`${BASE}/design/preview-riven-nebuleuses.html?vue=volume&n=54`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForTimeout(2200);
+  const res = await faire(page);
+  const applique = page.__sabotageApplique === true;
+  await page.close();
+  return { applique, ...res };
+}
+{
+  // ① Les noms permanents rallumés : la vue d'ensemble doit en voir.
+  const s1 = await avecMoteurSabote(
+    (t) => t.replace('    if (modeNebuleuses) {\n      // Lot 3 — « je ne veux que les noms des nébuleuses »', '    if (false) {\n      //'),
+    async (page) => ({ ens: await etatVolume(page) }));
+  details.lot3_sabotageNoms = s1;
+  verdicts.lot3_sabotage_lInstrumentVoitLesNomsPermanents = s1.applique && s1.ens.nomsVisibles > 0;
+  // ② Les amas resserrés sur la grille : brumes et titres doivent se toucher.
+  const s2 = await avecMoteurSabote(
+    (t) => t.replace('var pasY = rMax * PAS_NEBULEUSES;', 'var pasY = rMax * 0.9;'),
+    async (page) => ({ ens: await etatVolume(page), titres: await mesurer(page, '.ciel-titres-nebuleuses .ciel-nom-amas', '#ciel-scene') }));
+  details.lot3_sabotageGrille = s2;
+  verdicts.lot3_sabotage_lInstrumentVoitLesBrumesQuiSeTouchent = s2.applique && s2.ens.touches > 0;
+  // ③ L'évitement des noms de la nébuleuse approchée coupé : noms croisés.
+  const s3 = await avecMoteurSabote(
+    (t) => t.replace('if (approchee) { eviterNomsApproches(projetes); }', ''),
+    async (page) => {
+      await page.locator('.ciel-nom-amas[data-nebuleuse="neb-btp"]').click();
+      await page.waitForTimeout(2200);
+      return { app: await etatApproche(page) };
+    });
+  details.lot3_sabotageEvitement = s3;
+  verdicts.lot3_sabotage_lInstrumentVoitLesNomsCroises = s3.applique && (s3.app.chevauchements > 0 || s3.app.surUnCoeur > 0);
 }
 
 await browser.close();

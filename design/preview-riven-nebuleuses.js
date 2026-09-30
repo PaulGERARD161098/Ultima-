@@ -82,6 +82,10 @@
         teinte: T.teinte(g.nebuleuse)
       };
     });
+    // Le bouton paraît AVANT le rendu : paru après, il rétrécissait la scène
+    // sous un moteur déjà mesuré, et la brume glissait sous ses étoiles.
+    var bouton = document.getElementById('apercu-neb-tout-voir');
+    bouton.hidden = false;
     var vue = window.UltimaCiel.rendre(document.getElementById('ciel-scene'), donnees, {
       surClicNoeud: surClicNoeud,
       libellesType: libellesType,
@@ -93,8 +97,6 @@
       },
       nebuleuses: brumes
     });
-    var bouton = document.getElementById('apercu-neb-tout-voir');
-    bouton.hidden = false;
     bouton.addEventListener('click', function () { vue.toutVoir(); });
     return;
   }
