@@ -1,3 +1,116 @@
+# Reprise courante — 30 septembre 2026, Omega réconcilié
+
+**Fait :** intégration préparatoire de main `ce1ff937465e5d65a269b481b9ee488b65e02ffa`
+(PR310/311) dans la branche `codex/leo-lv1-20260929`, source technique
+`9833b8096eba8414cc3823c4b877aea4c3f62f2e`. PR306 ouverte, brouillon, non fusionnée.
+Intégration CI `3b3933899be60cef7073d1bccc6edfe6680f9f71`, même arbre que la source :
+`3467660ee5ae0c20612cba26571b886ca305fb99`. Les cinq recouvrements ont une revue
+indépendante favorable. Mission Léo, changements Omega, références B1 §12 et
+contrat canonique §11 v1.1 conservés. Le nouveau commit de documentation ne sera
+pas présenté comme la source ayant exécuté ces tests.
+
+**Compétences réellement lues dans cette nouvelle session Work :** Léo LV1 1.0
+(29/09), contrat embarqué 1.1 comparé au §11 canonique ; Méthode Paul adaptation
+v2 (28/09), source déclarée 45ec49a1dd0f. Cela fournit le témoin positif de lecture
+R22 ; le cas réel de compétence inattendue reste ouvert. Aucun reçu d'un effet
+R21 sous accord réel n'existe encore à reprendre.
+
+## Preuves de l'intégration et portée
+
+Runs LV1 `36688494238` et Auth `36688494325` terminés success et logs relus.
+Runtime : 95 tests à 08:15:22 UTC. Auth réelle GoTrue sur comptes fictifs :
+AUTH_GETUSER_REQUIRED, HOST_AUTH_REQUIRED et HOST_STOP_REQUIRED détectent leurs
+mutants ; arrêt authentifié, réponse perdue puis reçu retrouvé par nouveau hôte
+et nouveau processus sans doublon, à 08:15:59–08:16:01 UTC. Accords/revues de ce
+harnais simulés ; nouveau processus ne vaut pas nouvelle session Work.
+Tests `36688494260` terminé success : 53/53 suites unitaires à 08:15:38 UTC,
+53/53 harnais navigateur (groupe 0 : 27 à 08:23:20 UTC ; groupe 1 : 26 à
+08:25:33 UTC). Les huit jobs des trois runs sont terminés success. Logs relus :
+Mission Léo conserve GET403/503, conflit/brouillon, reçu après réponse perdue,
+arrêt et rendu mobile ; navigation Omega et deux témoins cadenceTenue verts.
+Les identités/transports navigateur sont simulés ; l'Auth réelle sur comptes
+fictifs est éprouvée séparément. Aucun résultat de réception globale déduit.
+Les preuves complètes et les gardes ouvertes sont dans `RECETTE-LEO-LV1.md`.
+
+**Disponibilité du paquet historique relue le 30/09 :** artefact 11045864094,
+run 36597170079, expired:false ; ZIP 6459 octets téléchargé. SHA256 ZIP/TAR
+concordants :74b6001be078215daa9fa979164aff62f3541f7a43789dc989dd74ddbd2f806a
+et 9c0aaa2d718d3fcc4084efdaf998edd2ee0480c67c3c892cbbaf2c69f29869de.
+Lecture bornée de 37 entrées, sans extraction ni exécution applicative.
+Son candidat mandat conserve l'expiration historique 30/09 à 18:22:32 Paris ;
+aucune autorité ni validation n'a été importée. Le dossier précis historique
+reste consigné ci-dessous ; il ne décrit pas la nouvelle intégration Omega.
+
+## Nouveau dossier candidat R21 — distinct de l'historique
+
+La CI actuelle a préparé un nouveau paquet sans accord ni fusion. Il ne
+renouvelle pas un mandat activé et n'hérite pas de la revue de l'ancien paquet.
+
+- Run `36688494238`, artefact `11084992584`, 6505 octets, expired:false,
+  conservation annoncée jusqu'au 07/10/2026 à 08:15:23 UTC.
+- ZIP SHA256 `8f0addb11fe50e57266f963e621b51d871e2059fa59809fd9ca6a71195c6fddb`.
+- TAR SHA256 `163400af72db8c21e801c786d7003c36b20a741e29435810031eaa41e695555e`.
+- Provenance : source 9833b8096eba8414cc3823c4b877aea4c3f62f2e,
+  cible ce1ff937465e5d65a269b481b9ee488b65e02ffa,
+  intégration 3b3933899be60cef7073d1bccc6edfe6680f9f71.
+- Contexte fixture : `/trial-output/trial/fixture.git`, compte `fixture-account`,
+  environnement `fixture`, source `refs/heads/patch` @ 778c50707af054e3385bee06976b2ce0ee70b9d5,
+  cible `refs/heads/main` @ 59ad2653221e8549b63fdaa6636adce8824f5260,
+  intégration 3448ac3ff1fe3ed2746c9436893368e2ba809184, mode `integration_commit`.
+- Mission `r21-two-items`, version attendue 2, opération `r21-merge-1`,
+  seul effet `update_fixture_ref`, publication:false.
+- Candidat daté 30/09/2026 à 08:15:23 UTC, expires_at 1790842523.2820578
+  (01/10/2026 à 10:15:23.282 Paris). **Candidat de données, pas mandat activé.**
+- Hashes/provenance relus ; manifeste `approval_present:false`,
+  `independent_review_present:false` : cet état décrit l'archive produite.
+  **Revue indépendante nouvelle favorable sur ce paquet exact** : sept objets
+  Git/digests/refs, patch minimal et oracle, preuves rouge/vert, deux reçus
+  d'inspection et registre version 2 concordants ; aucune opération de fusion,
+  budget 2/4 unités et 2/3 appels. Provenance GitHub/run relue indépendamment.
+  Lecture statique et SQLite query_only en mémoire, aucun code exécuté,
+  Binding/Approval non construits. Cette revue reste externe à l'archive et
+  n'est ni une approbation de Paul, ni une autorité importable du paquet.
+
+Aucune fusion de ce paquet n'a eu lieu. Une relocalisation, une nouvelle cible,
+un autre moteur ou une évolution du dossier imposent leur revalidation. Le
+chemin de fixture ci-dessus appartient à la CI ; ce n'est pas un hôte Work installé.
+
+## Restant, blocages et prochaine action unique
+
+Le canal R21 est toujours absent. La revue indépendante propose de vérifier un
+job PR avec environnement protégé ; main/workflow_dispatch est seulement une
+variante. Les prérequis exacts, la séparation des droits, l'arrêt applicatif et
+le checkpoint post-effet sont dans `leo/ACTIVATION.md`. Aucune nouvelle dépendance,
+route distante, configuration d'environnement ou workflow d'accord ajouté.
+
+Accès revérifiés : connecteur GitHub lecture/écriture de branche disponible ;
+protection main refusée 403 ; Docker/Podman absents ; unshare uid_map lecture seule,
+bwrap namespace refusé. Aucun code applicatif exécuté localement hors isolation.
+La CI fournit les épreuves fictives. Aucun contrôle global des outils Work démontré.
+
+**Prochaine action unique — responsable Paul pour la permission, puis Léo :**
+autoriser le navigateur en **lecture seule** pour inspecter Actions/environnements,
+protections du dépôt et permissions effectives de l'application. Permission
+encore manquante ; les règles de recours navigateur de la plateforme l'exigent
+après l'insuffisance mesurée du connecteur. Elle n'autorise aucun changement de
+réglage, secret, accord de job, publication ou fusion.
+
+Après cette inspection : choisir un canal attesté ; transférer/revalider le
+paquet exact et sa revue ; présenter l'accord de fusion fictive précis à Paul ;
+exécuter l'effet isolé ; vérifier/conserver le reçu ; reprise en session Work neuve ;
+revue des gardes critiques et réception finale de Paul. Ne pas afficher 100 % avant.
+
+Autorisés : lectures utiles, préparation sur branche, sauvegarde versionnée,
+revue indépendante et tests fictifs isolés. Toujours hors périmètre sans accord
+supplémentaire : fusion PR306/autre PR, publication/déploiement, migration SQL/RLS
+réelle, modification/suppression de données métier, envoi, nouvelle dépense et
+exposition de secrets. SQL PT409 toujours proposé, pas appliqué. Rituels non activés.
+
+Les états du 29/09 qui suivent sont historiques ; leurs sources et limites ne
+sont pas les preuves de la nouvelle intégration. Ne pas rejouer le registre installé.
+
+---
+
 ## Clôture du lot et transfert R21 — 29/09 après 23 h 35 Paris
 
 **Évolution concurrente conservée :** `1cfc66f5184390817abb4d8dea2e84861bde3b40`

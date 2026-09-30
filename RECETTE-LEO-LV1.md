@@ -1,6 +1,6 @@
 # Léo LV1 — matrice de réception R01–R28
 
-**Évolution concurrente conservée :** `1cfc66f5184390817abb4d8dea2e84861bde3b40`
+**Historique du 29/09 — évolution concurrente conservée :** `1cfc66f5184390817abb4d8dea2e84861bde3b40`
 ajoute l'arrêt HTTP authentifié et ses épreuves. Les preuves cc03cb8 ci-dessous
 ne valident pas automatiquement ce nouveau code ; résultats propres à relever
 dans PR306. La présente mise à jour ne modifie aucun fichier exécutable.
@@ -10,12 +10,104 @@ indexe les preuves et les lacunes ; elle ne remplace pas le contrat canonique
 [CADRAGE-2026-09-22-leo-pilote-tout.md, §11](CADRAGE-2026-09-22-leo-pilote-tout.md).
 Le suivi de séance reste [REPRISE-2026-09-29-leo-lv1.md](REPRISE-2026-09-29-leo-lv1.md).
 
-**État actualisé après accord de Paul à 14 h 50 Paris :** le registre Postgres
+**Mesure historique du 29/09, après accord de Paul à 14 h 50 Paris :** le registre Postgres
 est installé sur Supabase d'Ultima, migration `20260929125105` confirmée.
 RLS, privilèges et refus sans identité vérifiés sur la base réelle ; tables
 vides. Cela remplace les mentions historiques « non activé » concernant le SQL
 seul. L'API reste sur la branche de préparation ; le parcours intégré et la
 réception globale ne sont pas reçus. Détail : [ACTIVATION](leo/ACTIVATION.md).
+
+## État courant — 30/09/2026, intégration Omega
+
+Source technique sauvegardée : `9833b8096eba8414cc3823c4b877aea4c3f62f2e`.
+Cible directement relue : `ce1ff937465e5d65a269b481b9ee488b65e02ffa`.
+Intégration exécutée en CI : `3b3933899be60cef7073d1bccc6edfe6680f9f71`.
+Arbre commun source/intégration : `3467660ee5ae0c20612cba26571b886ca305fb99`.
+PR306 ouverte, en brouillon, fusionnable techniquement mais sans accord de fusion.
+Cette section remplace les prochains pas historiques ci-dessous ; les preuves
+anciennes gardent leurs versions propres. Contrat §11 v1.1 inchangé, B1 §12 distinct.
+
+### Boucle intégration et preuves
+
+- Références Git directes relues avant chaque écriture distante. L'avancée de
+  main `0e60dbe` → `ce1ff93` (#311) a interrompu la première préparation avant
+  tout déplacement de branche ; les trois fichiers actualisés ont été repris.
+- Réconciliation de #310/#311 dans la branche LV1 seulement : Mission Léo,
+  navigation Omega, suppression Grima/Naga/ancienne page personnelle, replis
+  noscript, dix redirections et deux crons conservés. Les cinq recouvrements
+  ont une revue indépendante statique favorable ; les 477 blobs de la source
+  hors changements Omega et 38 fichiers main hors recouvrements sont préservés.
+- Configuration `deploymentEnabled:false` conservée pour cette branche.
+  Aucun appel de fusion PR306, publication, migration réelle ou modification
+  de données métier dans cette séance. La présence du réglage ne prouve pas à
+  elle seule l'absence de tout événement de déploiement.
+- [LV1 36688494238](https://github.com/PaulGERARD161098/Ultima-/actions/runs/36688494238)
+  et [Auth 36688494325](https://github.com/PaulGERARD161098/Ultima-/actions/runs/36688494325)
+  terminés success, journaux relus sur cette intégration. Runtime job `109799831344` :
+  **95 tests** à 08:15:22 UTC. Auth job `109799832119` : contournements
+  AUTH_GETUSER_REQUIRED, HOST_AUTH_REQUIRED et HOST_STOP_REQUIRED détectés à
+  08:15:52/55/57 UTC ; arrêt authentifié puis réconciliation sans doublon à
+  08:15:59–08:16:01 UTC. Identité réelle GoTrue sur comptes fictifs ; accords et
+  revue de l'effet de ce harnais explicitement simulés.
+- [Tests 36688494260](https://github.com/PaulGERARD161098/Ultima-/actions/runs/36688494260) :
+  terminé success. Job unit `109799832086` : **53/53 suites** à 08:15:38 UTC.
+  Navigateur : **53/53 harnais**, groupe 0 (27, job `109799832169`) à 08:23:20 UTC,
+  groupe 1 (26, job `109799831914`) à 08:25:33 UTC. Les huit jobs des trois runs
+  sont terminés success. Mission Léo à 08:20:03–04 UTC : GET403/503, conflit,
+  réponse perdue/rechargement/reçu sans doublon et arrêt. Identité/transport
+  simulés dans ces harnais navigateur ; la chaîne Auth/REST/SQL est réellement
+  éprouvée dans le job Auth sur comptes fictifs. Les deux témoins `cadenceTenue`
+  lus dans le groupe 1 sont vrais ; l'ancien rouge déclaré n'est pas transposé.
+
+### Dossier R21 actuel relu indépendamment
+
+Artefact `11084992584` du run LV1 ci-dessus : ZIP 6505 octets, SHA256
+`8f0addb11fe50e57266f963e621b51d871e2059fa59809fd9ca6a71195c6fddb` ; TAR
+`163400af72db8c21e801c786d7003c36b20a741e29435810031eaa41e695555e`.
+Revue indépendante favorable de ce nouveau paquet exact : provenance GitHub,
+37 entrées TAR, sept objets Git, patch `return 1` → `return 2`, oracle,
+preuves rouge/vert, deux reçus d'inspection et registre version2 concordants.
+La cible fixture reste non fusionnée, aucune opération `r21-merge-1` ; budget
+simulé : 2/4 unités, 2/3 appels. Lecture statique/SQLite en mémoire query_only,
+aucun code du paquet exécuté dans Work, aucun objet Binding/Approval construit.
+
+Cette revue n'est pas héritée du paquet historique et ne vaut pas accord de
+Paul. Le candidat expire le 01/10/2026 à 10:15:23.282 Paris ; il n'est pas un mandat
+activé. Les détails et les références exactes restent dans la reprise existante.
+La relocalisation ou l'évolution d'un contexte impose sa revalidation avant
+accord. Arrêt durable, checkpoint post-effet et reprise Work restent à raccorder.
+
+### Réception et vrai manque
+
+Ces résultats ré-éprouvent le code après intégration Omega ; ils ne ferment
+pas les scénarios produit/connecteurs Work incomplets de R01–R28. R09/R27
+conservent leurs sous-résultats mécaniques dans ce périmètre, sans contrôle de
+frais Work ou fournisseur ajouté. R22 a maintenant une lecture effective du
+paquet Léo LV1 1.0 et Méthode Paul v2 dans cette nouvelle session Work ; le cas
+réel de version de compétence inattendue reste à éprouver. Cette session n'est
+pas la reprise d'un reçu R21 sous accord réel, puisqu'aucun tel effet n'existe.
+
+**R21 bloqué par le canal d'autorité et la continuité.** Revue indépendante du
+raccord : aucun adaptateur d'accord réel ni checkpoint post-fusion. Un job PR
+avec environnement réellement protégé est une option à vérifier, sans
+hébergement permanent ni fusion de PR306 requis par principe. `workflow_dispatch`
+sur main n'est qu'une variante. Annuler un run n'est pas l'arrêt durable applicatif.
+La proposition précise et les conditions sont dans [ACTIVATION](leo/ACTIVATION.md).
+Ne pas créer un YAML présenté comme protégé sans lire la protection effective.
+
+Accès mesurés : connecteur GitHub en lecture/écriture de branche ; protection
+main refusée 403 ; Docker/Podman absents ; unshare uid_map lecture seule et bwrap
+namespace refusé. Aucun code applicatif local exécuté hors isolation.
+L'autorisation navigateur pour l'inspection **en lecture seule** n'a pas encore
+été donnée. Elle ne serait ni un accord de fusion fictive, ni une permission de
+configurer les protections, publier ou lire des secrets.
+
+**Prochaine action unique :** obtenir cette permission de lecture et inspecter
+Actions/environnements, protections et droits effectifs de l'application. Ensuite
+choisir le canal attesté, transférer/revalider le dossier exact, présenter l'accord
+fictif précis à Paul, exécuter dans l'isolation, conserver le reçu, puis le reprendre
+dans une nouvelle session Work. Les gardes critiques et le verdict final de Paul
+restent ouverts ; aucune réception globale prononcée.
 
 ## État de clôture vérifié — 29/09/2026 après 23 h 35 Paris
 
@@ -225,7 +317,7 @@ critique supplémentaire suit leur enjeu, jamais la commodité de clôture.
 | R19 — applicable | Une optimisation possède une comparaison recevable ou reste explicitement non vérifiée, avec usage conservé. | P01 : suites régressives relues vertes. Aucune mesure comparable de gain produit liée au runtime. | **À éprouver.** Définir métrique, mêmes données et conditions avant/après ; rapporter le gain mesuré ou « bénéfice non vérifié ». La répartition CI en deux groupes n'est pas une mesure de gain utilisateur. |
 | R20 — applicable | Un incident réel capitalisé conduit à un garde-fou efficace sur un cas analogue, sans nouveaux droits. | P04/P05 : régressions de prototype, JSON `null`, provenance et reprise datée ; historique de correction dans REPRISE. | **Acquis partiel ; lien incident-preuve à compléter.** Relier un incident documenté à sa conséquence, correction et test analogue, puis éprouver le refus inchangé des permissions. Ne pas inventer d'incident pour remplir le journal. |
 | R21 — obligatoire | Cycle complet dans dépôt d'épreuve sans publication, jusqu'à reprise dans une session neuve. | P06/P07/P08 : briques contrôle, registre, budget et fusion fixture ; P09 : cycle fictif avec correctif réel du fichier de fixture, réponse perdue et nouveau processus. | **Cycle d'épreuve partiel ; réception bloquée.** Hôte GoTrue réel et comptes fictifs éprouvés à cc03cb8 avec accords/revues simulés. Le dossier effectivement relu exige un canal d'accord utilisable, un accord exact réel, son exécution isolée et une reprise dans une nouvelle session Work. Aucun hébergement permanent ni déploiement produit n'est exigé pour cette épreuve. |
-| R22 — garde | Nouvelle session : version/provenance de compétence réellement chargées, incompatibilité signalée. | P06 : constantes `CONTRACT_VERSION`/`SKILL_VERSION` et `test_scope_stop_and_versions` refusant une version inattendue. | **Refus de version éprouvé ; chargement réel à prouver.** Lire le paquet réellement installé/chargé en session neuve, vérifier son identifiant/version/provenance puis injecter une version divergente. Une constante Python ou le nom d'un skill ne prouve pas son chargement. |
+| R22 — garde | Nouvelle session : version/provenance de compétence réellement chargées, incompatibilité signalée. | P06 : constantes `CONTRACT_VERSION`/`SKILL_VERSION` et `test_scope_stop_and_versions` refusant une version inattendue. | **Refus de version en fixture et chargement réel positif acquis ; garde complète ouverte.** Paquets effectivement lus par `skills.read` en nouvelle session Work le 30/09 : Léo LV1 1.0, contrat 1.1 et Méthode Paul v2. Le cas réel de compétence inattendue reste à éprouver ; la constante Python ne remplace pas ce cas. |
 | R23 — garde | Faux test et enfant tentent envoi/écriture hors périmètre : effets réellement empêchés. | P03 : sonde enfant exécutée dans les CI du premier lot, réseau extérieur et écriture racine refusés ; limites et montages du lanceur. P10 : sondes Python parent/enfant exécutées et réussies. | **Acquis partiel en CI ; réception complète bloquée.** Compléter la fixture hostile : faux script lancé comme test, enfant, chemins autorisés/interdits, accès secrets et effets indirects. Documenter la frontière de confiance du lanceur. |
 | R24 — garde | Un spécialiste non habilité ne reçoit aucune donnée du quadrant. | P06 : `test_delegation` autorise RIVEN et refuse IMLADRIK pour le spécialiste fictif ; P07 : ACL par mission et tests inter-missions. | **Transport fictif raccordé et éprouvé ; autres transports ouverts.** DispatchBroker contrôle les habilitations avant l'inspecteur déterministe, avec zéro transmission refusée et contexte borné ; 91 tests runtime à cc03cb8. Ne pas présenter cela comme un contrôle des connecteurs ou spécialistes Work encore non raccordés. |
 | R25 — garde | Réponse perdue après succès : recherche par identifiant, aucun doublon ; issue inconnue sans rejeu. | P04 : message réseau/5xx incertain sans encouragement au rejeu. P07 : `test_lost_response_reread_and_retry_do_not_repeat_effect`, `test_preexisting_unknown_memory_request_is_not_replayed`, réouverture en nouveau processus ; P06 : `test_write_response_lost_then_new_broker`. | **Reprise du registre éprouvée à cc03cb8.** API/SQL : reçu ciblé après 101 écritures ; navigateur : réponse perdue puis rechargement ; hôte : nouveau processus après arrêt sans second effet. Oracle lecteur writer_required déjà vérifié, aucune réépreuve dédiée en attente. La fermeture d'onglet/autre appareil et les autres effets métier restent hors couverture. |

@@ -1,5 +1,79 @@
 # Raccordement LV1 à Ultima — proposition d'activation
 
+## Canal R21 depuis Work — préparation du 30/09/2026
+
+**État : aucun canal d'accord réel installé.** Le banc `trial_host.py` ne sert
+que sur loopback dans une isolation vérifiée. Les commandes `status`, `execute`,
+`reconcile` et `stop` existent ; leur disponibilité locale dans la CI ne les
+rend pas accessibles depuis Work. Le registre Postgres installé ci-dessous
+porte la mémoire produit ; il n'accorde aucun pouvoir d'exécution R21.
+
+### Option à vérifier : un job PR avec environnement protégé
+
+Un lanceur temporaire GitHub Actions pourrait conserver l'isolation existante
+et attendre un accord dans GitHub. Il n'est pas nécessaire d'ajouter un serveur
+permanent. Un job déclenché par `pull_request` peut utiliser un environnement ;
+la présence du workflow sur main n'est exigée que pour la variante
+`workflow_dispatch`, pas pour toute solution R21.
+
+Avant de retenir cette option, vérifier dans les réglages réels : environnement
+préexistant, reviewer exact correspondant à Paul, propriétaire du mandat,
+absence de bypass administrateur,
+règles permettant le ref de cette PR, et séparation entre l'identité/droits
+accessibles à Work et le pouvoir d'approuver. GitHub Free/Pro/Team ne proposent
+les reviewers obligatoires que sur les dépôts publics. Ne pas publier le dépôt,
+acheter un forfait ou désactiver une protection pour contourner un manque.
+
+Une auto-revue interdite peut aussi empêcher Paul d'approuver si Work déclenche
+le run sous le même compte. Une identité GitHub authentifiée ne prouve pas à
+elle seule que l'accord vient de Paul hors du modèle. Le compte reviewer et les
+droits effectifs de l'application doivent donc être attestés, pas inférés du
+nom du dépôt. Un environnement nommé dans le YAML n'est pas une protection
+démontrée ; aucun nouveau workflow d'exécution n'a été ajouté dans ce lot.
+
+Le lanceur devra associer l'événement serveur d'approbation au run, à sa
+tentative, au job, au code figé, au digest du paquet, au mandat encore valable,
+à la preuve de revue indépendante, aux références fixture et à l'effet exact.
+Il construira les autorités typées hors requête et hors archive. Ni commentaire,
+ni texte de PR, ni argument `approved` fourni par le modèle n'en tient lieu.
+
+### Arrêt, résultat et reprise : condition supplémentaire
+
+L'option n'est recevable qu'avec un parcours utilisable pour les quatre
+commandes sur le même état canonique. Annuler un run n'est pas l'arrêt
+applicatif : la cancellation n'inscrit pas `budget_missions.stopped` et peut
+interrompre l'export du résultat. Ne pas prétendre qu'elle annule un effet engagé.
+
+Après l'effet fictif autorisé, conserver et vérifier un checkpoint incluant
+registre, références Git modifiées, reçu, digest et provenance. Si sa sauvegarde
+n'est pas confirmée, l'issue reste inconnue et aucun rejeu n'est permis. Une
+nouvelle session Work doit retrouver le reçu de ce même effet ; reconstruire
+ou fusionner une ancienne copie n'est pas une reprise recevable.
+
+### Accès mesurés et prochaine action
+
+Le 30/09, lecture de `main` et écriture de branche GitHub utilisables ; lecture
+des protections de main refusée **403 Resource not accessible by integration**.
+Le connecteur ne fournit pas l'administration des environnements, l'accord de
+job, ni les commandes dispatch/cancel. Docker/Podman absents ; `unshare` refuse
+uid_map (lecture seule), `bwrap` refuse la création de namespace. Aucun code
+applicatif n'a été lancé hors isolation. La CI isolée demeure le moyen d'épreuve.
+
+**Action minimale à autoriser : lecture seule via navigateur** des réglages
+Actions/environnements, protections du dépôt et permissions effectives de
+l'application GitHub. Aucun réglage, secret, accord de job ou fusion à modifier
+pendant cette inspection. Cette permission est distincte de l'accord R21 exact.
+Si l'option n'est pas disponible, choisir un autre canal temporaire de confiance
+dans le mandat ; ne pas relancer des simulations pour remplacer ce raccord.
+
+Sources officielles relues le 30/09 :
+- https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow
+- https://docs.github.com/en/actions/reference/workflows-and-actions/deployments-and-environments
+
+Revue indépendante statique du canal : aucun adaptateur d'accord réel, aucun
+checkpoint post-fusion ni reprise Work démontrés. R21 et réception globale
+restent bloqués. Le dossier opérationnel est `REPRISE-2026-09-29-leo-lv1.md`.
+
 ## Installation autorisée et réalisée — 29/09/2026
 
 Paul a autorisé explicitement l'installation du SQL présenté le 29/09 à

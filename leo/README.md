@@ -1,5 +1,15 @@
 # Léo LV1 — contrôleur d'épreuve
 
+**30/09 — intégration Omega préparée et sauvegardée sur branche :**
+source `9833b8096eba8414cc3823c4b877aea4c3f62f2e`, main réconcilié
+`ce1ff937465e5d65a269b481b9ee488b65e02ffa` (PR310/311), arbre
+`3467660ee5ae0c20612cba26571b886ca305fb99`. Mission Léo et les limites LV1
+restent conservées. La réception dépend des preuves de cette intégration,
+consignées dans `RECETTE-LEO-LV1.md` ; aucun résultat historique n'y est transposé.
+Le canal R21 reste à raccorder : proposition concrète et accès à vérifier dans
+[ACTIVATION](ACTIVATION.md#canal-r21-depuis-work--préparation-du-30092026).
+Les états du 29/09 ci-dessous sont historiques, avec leurs propres versions.
+
 **Évolution concurrente conservée :** `1cfc66f5184390817abb4d8dea2e84861bde3b40`
 ajoute l'arrêt HTTP authentifié et ses épreuves. Les preuves cc03cb8 ci-dessous
 ne valident pas automatiquement ce nouveau code ; résultats propres à relever
