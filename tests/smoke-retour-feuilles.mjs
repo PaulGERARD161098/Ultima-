@@ -70,7 +70,11 @@ async function sonder(id, cible) {
       ? document.elementFromPoint(cx, cy) : null;
     const vu = r.width > 0 && r.height > 0 && cs.visibility !== 'hidden' && cs.display !== 'none'
       && !!dessus && (dessus === a || a.contains(dessus));
-    return { href: new URL(a.getAttribute('href'), location.href).pathname.replace(/^\//, ''), vu, h: Math.round(r.height), texte: a.textContent.trim().slice(0, 24) };
+    // `brut` : l'attribut tel qu'écrit. `href` (le chemin) PERD le fragment — or
+    // `imladrik.html#constellation-dragons` et `imladrik.html` mènent à deux
+    // ciels différents, et c'est toute la différence que la section « dragons »
+    // (plus bas) doit pouvoir voir.
+    return { href: new URL(a.getAttribute('href'), location.href).pathname.replace(/^\//, ''), brut: a.getAttribute('href'), vu, h: Math.round(r.height), texte: a.textContent.trim().slice(0, 24) };
   }));
   await contexte.close();
   return liens;
@@ -123,6 +127,88 @@ for (const [id, fichier, parent] of RETOURS_ATTENDUS) {
     liens.length > 0 && !liens.some((l) => /^(grima|naga|ultima)\.html$/.test(l.href)),
     liens.filter((l) => /^(grima|naga|ultima)\.html$/.test(l.href)).map((l) => l.href).join(','));
 }
+// ---------------------------------------------------------------------------
+// 2026-09-30 — LES TROIS DRAGONS REVIENNENT À LEUR CONSTELLATION.
+// MAEDRETHNIR, VRANESH et DRAUKHAIN ne sont plus des caps directs d'IMLADRIK : ils
+// vivent sous la constellation DRAGONS. Un retour vers `imladrik.html` NU les
+// ramènerait sur un ciel où le dragon qu'on vient de quitter n'est plus — il
+// faudrait replonger. Le retour porte donc le fragment de la constellation, et
+// ce qui se prouve ici est le PARCOURS ENTIER : le lien est écrit, il est
+// touchable, et le SUIVRE ouvre le ciel isolé sur DRAGONS (trois étoiles).
+const DRAGONS = [
+  ['maedrethnir', 'maedrethnir.html'],
+  ['vranesh', 'vranesh.html'],
+  ['draukhain', 'draukhain.html'],
+];
+const RETOUR_DRAGONS = 'imladrik.html#constellation-dragons';
+verifier('Verrou : les trois dragons sont bien les enfants de la constellation DRAGONS',
+  JSON.stringify(NOEUDS['constellation-dragons'].enfants) === JSON.stringify(DRAGONS.map((d) => d[0])));
+
+// Ce que le ciel montre à l'arrivée, mesuré dans un navigateur mobile.
+async function etoilesApresLeRetour(idDragon, fichier) {
+  const contexte = await navigateur.newContext({ viewport: { width: 390, height: 664 }, isMobile: true, hasTouch: true });
+  const page = await contexte.newPage();
+  page.on('pageerror', (e) => erreurs.push(`${idDragon} (retour) pageerror: ${e.message}`));
+  await page.route('**/api/**', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, data: [] }) }));
+  await page.goto(`${BASE}/${fichier}`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForTimeout(1200);
+  await page.evaluate(() => {
+    const el = document.getElementById('ecran-connexion');
+    if (el) { el.hidden = true; el.style.display = 'none'; }
+    document.querySelectorAll('[inert]').forEach((n) => n.removeAttribute('inert'));
+  });
+  await page.waitForTimeout(300);
+  // On SUIT le lien, comme le ferait le doigt — pas un `goto` de l'adresse attendue.
+  const lien = page.locator(`a[href="${RETOUR_DRAGONS}"]`).first();
+  let suivi = true; let raison = '';
+  try { await lien.click({ timeout: 6000 }); } catch (e) { suivi = false; raison = String(e.message).split('\n')[0]; }
+  await page.waitForSelector('.ciel-noeud-plateau.is-pret', { timeout: 20000 }).catch(() => {});
+  await page.waitForTimeout(1800);
+  const etoiles = await page.evaluate(() => [...document.querySelectorAll('g.ciel-etoile[data-noeud-id]')]
+    .map((g) => ({ id: g.getAttribute('data-noeud-id'), nom: (g.querySelector('text.ciel-nom')?.textContent || '').trim() })));
+  const arrivee = page.url();
+  await contexte.close();
+  return { suivi, raison, etoiles, arrivee };
+}
+
+for (const [id, fichier] of DRAGONS) {
+  const liens = await sonder(id, fichier);
+  const versLaConstellation = liens.filter((l) => l.vu && l.brut === RETOUR_DRAGONS);
+  verifier(`${fichier} : retour visible vers ${RETOUR_DRAGONS} (fragment compris)`,
+    versLaConstellation.length > 0,
+    liens.filter((l) => l.vu).map((l) => `${l.texte} → ${l.brut}`).join(' · ').slice(0, 200));
+  // L'ABSENCE de l'ancien retour, sous verrou (le nouveau est là, et la page a des liens) :
+  // un `imladrik.html` nu laisserait l'utilisateur sur le ciel à plat.
+  verifier(`${fichier} : plus de retour vers imladrik.html NU (il ferait quitter la constellation)`,
+    liens.length > 0 && versLaConstellation.length > 0
+    && !liens.some((l) => l.vu && l.brut === 'imladrik.html'),
+    liens.filter((l) => l.brut === 'imladrik.html').map((l) => l.texte).join(','));
+
+  const r = await etoilesApresLeRetour(id, fichier);
+  verifier(`${fichier} : le suivre est possible (lien cliquable au doigt)`, r.suivi, r.raison);
+  verifier(`${fichier} : le retour arrive sur ${RETOUR_DRAGONS}`,
+    r.arrivee.endsWith('/' + RETOUR_DRAGONS), r.arrivee);
+  verifier(`${fichier} : le ciel y est isolé sur DRAGONS — MAEDRETHNIR, VRANESH, DRAUKHAIN (trois étoiles)`,
+    r.etoiles.length === 3
+    && JSON.stringify(r.etoiles.map((e) => e.nom).sort()) === JSON.stringify(['DRAUKHAIN', 'MAEDRETHNIR', 'VRANESH']),
+    JSON.stringify(r.etoiles.map((e) => e.nom)));
+}
+// LE TÉMOIN, pour que « trois étoiles » ne soit pas vert d'un instrument qui
+// répondrait toujours trois : l'adresse SANS fragment ouvre le ciel à plat —
+// quatre entrées, et aucun dragon.
+{
+  const contexte = await navigateur.newContext({ viewport: { width: 390, height: 664 }, isMobile: true, hasTouch: true });
+  const page = await contexte.newPage();
+  await page.goto(`${BASE}/imladrik.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForSelector('.ciel-noeud-plateau.is-pret', { timeout: 20000 });
+  await page.waitForTimeout(1500);
+  const ids = await page.evaluate(() => [...document.querySelectorAll('g.ciel-etoile[data-noeud-id]')]
+    .map((g) => g.getAttribute('data-noeud-id')));
+  await contexte.close();
+  verifier('Témoin : imladrik.html SANS fragment ouvre le ciel à plat (4 entrées, aucun dragon)',
+    ids.length === 4 && !ids.some((i) => DRAGONS.map((d) => d[0]).includes(i)), ids.join(','));
+}
+
 // Le parent attendu existe bel et bien (un retour vers une page absente serait
 // vert sur le seul texte du lien).
 for (const parent of new Set(RETOURS_ATTENDUS.map((r) => r[2]))) {

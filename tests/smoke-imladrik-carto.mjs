@@ -390,14 +390,18 @@ console.log('— C. ARMES et DRAGONS plongent ; IFULVIN, seul cap « à venir »
     verifier('DRAGONS : aria-disabled ⇔ inerte attendu (aucun dragon inerte)',
       reglesTenues(dragons) && dragons.every((c) => !c.avenir));
 
+    // Zéro requête externe / zéro erreur : mesurés AVANT de quitter imladrik.html —
+    // la page de destination du témoin (ci-dessous) n'est pas le sujet de cette
+    // section, et ses propres chargements ne doivent pas se mêler au verdict.
+    verifier('Zéro requête externe (C1)', externes.length === 0, externes.slice(0, 3).join(', '));
+    verifier('Zéro erreur console (C1)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
+
     // Le TÉMOIN de l'instrument de navigation : le même `naviguerVers`, au même
     // délai, DOIT voir un dragon ouvrir sa page. Sans lui, « le clic sur IFULVIN
     // ne change pas l'URL » serait vert d'un instrument qui ne voit rien bouger.
     const atteinte = await naviguerVers(page, 'maedrethnir', 3000);
     verifier('Témoin : un clic sur MAEDRETHNIR (isolée) ouvre maedrethnir.html',
       !!atteinte && /\/maedrethnir\.html/.test(atteinte), String(atteinte));
-    verifier('Zéro requête externe (C1)', externes.length === 0, externes.slice(0, 3).join(', '));
-    verifier('Zéro erreur console (C1)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
     await page.close();
   }
 
