@@ -28,22 +28,31 @@
   "etat": "en_cours",
   "jalon": {
     "nom": "B1 — Léo AGIT dans l'anneau vert (cadrage §11)",
-    "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③ faits (table appliquée, journal + clé partagée) ; reste ④, l'exécution"
+    "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③④ faits (④ le 30/09 : exécution sans clic derrière une trace, revue adversariale soldée) ; reste ⑤, le défaire joué + « ce que Léo a fait » au matin"
   },
   "dernier_arret": {
     "le": "2026-09-30",
-    "quoi": "Un bandeau par constellation, minimisé sous isolement ; IFULVIN remplace « Le Cercle » (#320). Avant : IMLADRIK = ARMES + DRAGONS, TAO supprimé (#313, #316).",
-    "commit": "548c439fde2c6a8c707da3bd16efb73daad22f08"
+    "quoi": "B1 ④ livré : un vert s'exécute sans clic derrière une trace (ouvrir → acte → clore, plafond, fail-closed vers la carte). Revue adversariale : 1 bloquant (S1, cible par inclusion) + 5 corrigés ; journal durci en base (migration appliquée, éprouvée en rôle authenticated).",
+    "commit": "f376af64e57bd7c8aa5e4c2e3aad4e14ff50ed73"
   },
-  "prochaine_action": "④ — l'exécution : `ouvrirTrace()`, journal 'tentee' AVANT l'acte, plafond, issue après. Frontière arbitrée — cadrage §12.8 quater.",
+  "prochaine_action": "⑤ — le défaire JOUÉ par type vert (DELETE de la cible_id journalisée ; enrichissement : restaurer l'essence d'avant) + ligne 'defaite' ; puis « ce que Léo a fait » dans le grain du matin. Cadrage §13.3.",
   "bloque_par": [
     "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
     "La précision sur « mon dpe.fr » (VITRUVE)",
     "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis",
-    "Vérifier que les inscriptions Supabase sont FERMÉES (« Allow new signups ») — un compte tiers pourrait remplir le quota par la route d'import"
+    "Vérifier que les inscriptions Supabase sont FERMÉES (« Allow new signups ») — un compte tiers pourrait remplir le quota par la route d'import",
+    "leo_operations n'est pas inscriptible par le produit (SELECT seul, aucune création de mission — mesuré le 30/09) : la clé partagée §12.8 quater exige une RPC SECURITY DEFINER (migration, gate Paul). Cadrage §13.0"
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "LEÇON À CONSIGNER + PROPAGER (9 dépôts) : rechute de « un droit se vérifie du côté où il peut être contourné » — la prémisse de l'arbitrage §12.8 quater avait été mesurée en superutilisateur (MCP), pas sur le chemin du produit. Cadrage §13.0.",
+      "depuis": "2026-09-30"
+    },
+    {
+      "quoi": "Historique de Léo : un message d'issue > 4 000 caractères (page longue) fait refuser le tour suivant (400) jusqu'au rechargement — préexistant sur la carte, relevé par la revue du 30/09.",
+      "depuis": "2026-09-30"
+    },
     {
       "quoi": "Étiquettes vocales des caps : chacune finit par « 0 lien » sur les menus, du bruit pour un lecteur d'écran. Préexistant, relevé au dry run du 27/09 (carte-celeste §28).",
       "depuis": "2026-09-27"

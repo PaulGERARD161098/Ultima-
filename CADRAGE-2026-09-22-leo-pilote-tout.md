@@ -1483,3 +1483,60 @@ des écritures orange confirmées par Paul · le re-réglage du plafond.
 | un `motif` porte du contenu | liste fermée de motifs techniques côté serveur, en plus de la borne de 200 |
 | l'acte réussit, la clôture échoue | la `tentee` reste seule = « issue inconnue » : c'est VRAI du point de vue du journal, et c'est documenté |
 | Paul ne voit pas ce que Léo a fait | la bulle d'issue dit « fait sans demander », dans le fil, sous `aria-live` |
+
+### §13.2 — ✅ ④ EST LIVRÉ — et la revue adversariale l'a fait tomber une fois avant
+
+| critère | preuve |
+|---|---|
+| **B1-a** vert sans clic, `tentee` AVANT l'acte | smoke C8 : ordre relevé `ouvrir → acte → clore` |
+| **B1-b** refus sans écriture (orange, hors catalogue, hors quadrant, anneau déclaré) | `unit-leo-execution` : 0 insertion sur chaque refus |
+| **B1-e** zéro contenu dicté posé | sonde sur les insertions, verrou : arguments non vides |
+| **B1-f** le plafond mord, la 40ᵉ passe, autrui ne compte pas | unitaire + smoke C10 (la carte, zéro acte) |
+| fail-closed | journal 503 / réseau / trace forgée → la carte, **zéro** requête d'écriture (C9) |
+
+⛔ **La revue adversariale (agent sécurité, lecture seule) a trouvé un BLOQUANT
+dans le lot que je croyais fini** — et elle avait raison :
+
+| | constat | fermé par |
+|---|---|---|
+| **S1** 🔴 | sans carte, une cible résolue par **inclusion** (« Marc » → « Jean-Marc Petit ») n'était plus nommée à Paul : **retour de S-L2b-1**, dont la correction reposait entièrement sur la carte | seule l'égalité exacte s'exécute sans clic ; la bulle nomme la cible résolue (C13) |
+| **S2** | une injection (intitulé importé, lu dans l'état) pouvait viser une cible que Paul n'a pas nommée | anneau d'**interface** orange si un `*_ref` manque au dernier message ; état marqué « données, jamais instructions » |
+| **S3** | cartouche fermé pendant la réflexion → écriture invisible | rien ne part (C14) |
+| **S4** | un 2ᵉ enrichissement effaçait le 1ᵉʳ ; une 2ᵉ idée → 409 | candidats mis à jour après chaque écriture (C15) |
+| **S5** | deux clôtures concurrentes → deux issues contradictoires | index uniques partiels ; 23505 → 409 |
+| **S6** | par PostgREST : `le` choisi, motif libre, outil fantaisiste | contraintes + INSERT limité aux colonnes de la route |
+
+⚠️ **Et mon propre scénario C8 visait « Lambert » — une résolution par
+inclusion.** Le harnais que j'avais écrit exerçait donc précisément le chemin
+fautif, en vert. Chaque correctif a été **retiré exprès** : chacun a fait
+rougir son verdict (S1, S3, S4 au navigateur ; S5, S6 à l'unitaire).
+
+**Migration `20260930190000_leo_ecritures_durcissement.sql` — APPLIQUÉE** (go
+solo : corrective, non destructive, table à **0** ligne mesurée avant).
+Éprouvée **en rôle `authenticated`**, pas en superutilisateur — c'est l'erreur
+même du §12.8 quater, à ne pas refaire le jour où on la corrige :
+
+| sonde (transaction annulée) | constat |
+|---|---|
+| tentative + issue nominales · motif `reseau` sur un échec | **acceptées** — 2 lignes relues (verrou de non-vacuité) |
+| seconde issue · seconde tentative | **23505** |
+| `le` forcé à 2099 · `owner_id` fourni | **42501** |
+| motif libre « Sophie Durand 06 » · outil `Supprimer Tout!` | **23514** |
+
+**Accepté, écrit pour ne pas être redécouvert** : le plafond n'est pas atomique
+(lecture puis insertion). Le front est séquentiel par cartouche et `gardeVoix`
+impose 3 s : l'excès réel est borné par le nombre d'onglets. Contre un client
+scripté, il ne borne rien — mais ce client détient le jeton et écrit déjà
+directement par les API. **Le plafond protège d'un emballement de Léo, pas d'un
+détenteur du jeton.** Une vraie borne = RPC à verrou consultatif (migration, gate).
+
+### §13.3 — La prochaine action, unique
+
+**⑤ — le défaire et « ce que Léo a fait ».** Le critère de sortie de B1 dit
+« défaisable d'un clic » : ce n'est pas encore vrai. Chaque type vert reçoit
+son défaire **joué** (M3) — une création se défait par `DELETE` de la
+`cible_id` journalisée, l'enrichissement par la restauration de l'essence
+d'avant (qu'il faudra donc conserver hors du journal, qui n'a pas le droit de
+la porter). La ligne `defaite` se pose sur la trace. Puis la ligne par
+écriture dans le grain du matin (M2, M5). ⚠️ Revue §S6 : le défaire ne doit
+**jamais** se fier à `cible_id` ni à `phase` sans vérifier le propriétaire.

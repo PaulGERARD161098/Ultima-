@@ -8,6 +8,16 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🤖 **SESSION 2026-09-30 (soir, GO SOLO) — B1 ④ : LÉO AGIT DANS L'ANNEAU VERT.**
+  ✅ Un vert s'exécute sans clic derrière une trace (`POST /api/leo/ecritures` :
+  garde → plafond → `tentee` → acte → issue) ; tout refus du journal retombe sur
+  la carte. ✅ Revue adversariale : S1 bloquant (cible par inclusion non nommée)
+  + S2–S6 corrigés, chacun éprouvé en le retirant. ✅ Migration
+  `20260930190000_leo_ecritures_durcissement` APPLIQUÉE (corrective, 0 ligne) et
+  éprouvée en rôle `authenticated`. ❌ La prémisse de « garde les deux avec la
+  clé » est fausse côté produit : `leo_operations` n'est pas inscriptible
+  (SELECT seul, aucune création de mission). ⏳ Paul : RPC dédiée (gate).
+  ⏭ ⑤ le défaire joué. Détail : `CADRAGE-2026-09-22-leo-pilote-tout.md` §13.
 - 🧹 **SESSION 2026-09-28 — #299 · #300 · #301 FUSIONNÉES (`main` = `0922329`) ; YCOME RETIRÉ, LEÇONS v43 PARTOUT.**
   YCOME abandonné par Paul : nœud, lien d'ALPHA et phrase de Léo retirés — ALPHA compte
   trois caps ; les garanties d'étoile d'attente sont reciblées sur DOKLĚS (SYMPHO en
