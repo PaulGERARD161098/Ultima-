@@ -276,7 +276,7 @@ plus à attendre, et les deux lots ont été menés ensemble.
 - **Nouvelle clé de réglage `ultima-ciel-vue`** : l'ancienne
   (`ultima-ciel-plat`) enregistrait « figer le volume », un autre choix.
 
-**Mesuré** (`tests/smoke-riven-nebuleuses.mjs`, 43 verdicts) : 0 nom recouvert
+**Mesuré** (`tests/smoke-riven-nebuleuses.mjs`, 59 verdicts) : 0 nom recouvert
 ni coupé, dans chaque nébuleuse, à 390 et à 1 280 px ; les 54 noms fictifs
 lisibles sur grand écran. ⚠️ **Sur téléphone, 3 noms sur 54 se cachent** dans
 les deux nébuleuses les plus denses (11 et 12 fiches) : un nom de 26
