@@ -962,7 +962,15 @@
       cam.cibleYaw = Math.atan2(-p.x, p.z);
       var cy = Math.cos(cam.cibleYaw), sy = Math.sin(cam.cibleYaw);
       var z1 = -p.x * sy + p.z * cy;
-      cam.ciblePitch = Math.atan2(p.y, z1 + cam.distance);
+      // L'étoile tombe au centre quand y2 = p.y·cos − z1·sin s'annule : le
+      // pitch est atan2(p.y, z1), comme le yaw annule x1. Il s'écrivait
+      // atan2(p.y, z1 + distance) — l'angle VU de la caméra, qui ne recentre pas
+      // un monde qui tourne autour de l'origine. Invisible tant que les amas
+      // restaient près de l'équateur ; les trois nébuleuses de la démo en posent
+      // une en hauteur, et l'étoile visée y restait à 127 unités du centre.
+      // Mesuré le 30/09 après correction : 46 — la borne du glissement (on ne
+      // passe jamais par-dessus le pôle) retient le reste ; sans elle, 2.
+      cam.ciblePitch = Math.max(-1.15, Math.min(1.15, Math.atan2(p.y, z1)));
     }
     // Écart d'angles ramené dans [-π, π] : sans quoi la caméra fait le tour du
     // monde par le mauvais côté au passage de ±π.
