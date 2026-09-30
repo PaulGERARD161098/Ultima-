@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v57 2026-09-30 sha256:e863c868112c -->
+<!-- lecons:empreinte v58 2026-09-30 sha256:926b2b2d3a4e -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -64,7 +64,7 @@ sortie (`; echo "code=$?"`), jamais à la place. Et sur une fusion d'essai,
 vérifier d'abord qu'un ancêtre commun existe : `git merge-base A B`.
 
 **UN IDENTIFIANT ABRÉGÉ N'EST PAS L'IDENTIFIANT — ET IL NE SE COMPLÈTE JAMAIS
-DE MÉMOIRE** *(2026-09-11, 09-13 ×2, 09-30 ×2 — cinq fois payée)*. Les sept
+DE MÉMOIRE** *(2026-09-11, 09-13 ×2, 09-30 ×3 — six fois payée)*. Les sept
 premiers caractères d'un SHA suffisent à le *reconnaître*, jamais à le
 *reconstituer*. Vrai d'un SHA, d'un UUID, d'un identifiant de déploiement ou de
 ticket. **11/09** : douze caractères inventés derrière les sept lus, refus
@@ -91,6 +91,23 @@ Et le 30/09, **le message d'erreur désignait la mauvaise cause** : `409 Head
 branch was modified` invite à croire qu'une autre séance a poussé, hypothèse
 crédible ce jour-là. Vérifié au lieu d'être cru (`git rev-parse` des deux côtés,
 SHA identiques) : la branche n'avait pas bougé d'un octet.
+
+⊕ **SIXIÈME OCCURRENCE, LE 30/09 AU SOIR — ET C'EST LA PREMIÈRE FOIS QUE LE
+MÉCANISME MORD.** En écrivant l'ancre du grain Finubar : `b01afed9d4606b1a...`
+à la place de `b01afed9d4607926...` — **13 caractères justes sur 40**, 27
+inventés. Trois choses à en retenir, et la troisième est la seule nouvelle :
+**(1)** la faute est survenue dans le geste même qui consigne cette leçon, dans
+la séance qui venait de l'écrire deux fois ; **(2)** les 13 premiers caractères
+justes rendent la valeur **reconnaissable**, donc crédible à la relecture — c'est
+exactement ce qui la rend dangereuse ; **(3)** elle a été **attrapée**, pour la
+première fois, parce que les deux mécanismes étaient en place : la valeur a été
+reprise par **substitution de commande** (`VRAI=$(git rev-parse origin/main)`) et
+**comparée caractère par caractère avant d'écrire**, le contrôle nommant l'écart
+au lieu de le taire. ⛔ **Le compte des récidives n'est plus l'enseignement** :
+six fois suffisent à établir que la vigilance ne tient pas. Ce qui s'enseigne
+désormais, c'est qu'**un identifiant ne s'écrit que par une commande qui le lit,
+et qu'aucune valeur reconnaissable n'est réputée juste** — un préfixe correct
+est le déguisement de l'invention, pas sa preuve.
 
 
 **UN COMMIT « HORS MAIN » N'EST PAS UN TRAVAIL HORS MAIN — ON COMPARE LES
@@ -1780,6 +1797,12 @@ apports, pas sur le fait que le sceau a changé.*
 **UNE LEÇON ÉCRITE DANS UNE COPIE DONNE DEUX CORPS SOUS UN MÊME SCEAU** *(2026-09-13 et 2026-09-28, Ultima + RenoDevis + RenoBoost)*.
 Le 13/09, les copies d'Ultima et de RenoDevis annonçaient toutes deux `v8 85cca6330a86` ; le corps réel de RenoDevis valait 9814804030dd (474 lignes contre 439). Cause : les 3 leçons du 11/09 avaient été écrites DANS la copie au lieu de la source, sans re-sceller. Portées dans `Ultima-/memoire/LECONS.md` (diff de 35 ajouts, 0 suppression, vérifié avant recopie), re-scellées v9 puis v10 (`51f861db94a0`), propagées à RenoDevis à chaque fois. La propagation, elle, est restée partielle : six dépôts à deux révisions de retard (v8), dont trois non attachés à la séance. Le 28/09, même faute : RenoBoost portait 2 leçons absentes de la source, vues au diff avant écrasement. Aucun contrôle croisé ne compare une copie à sa source.
 ⇒ *Règle* : avant d'écraser une copie par la source, la comparer (`diff`) : un ajout présent dans la copie seule est une leçon à porter dans Ultima d'abord, pas à effacer. Et une propagation partielle se DIT, dépôts nommés : non dite, elle recrée la divergence qu'on vient de réparer.
+⊕ **Payé de nouveau le 2026-09-30 au soir**, entre deux séances : RenoDevis #216 a
+scellé une **v55** (`17bfa3d85d25`, la sixième occurrence de l'identifiant abrégé)
+pendant qu'Ultima et RenoBoost portaient une **autre v55** (`5116d2f65529`, deux
+leçons de la chaîne). Deux corps, un numéro — vu au conflit de fusion de la PR
+RenoDevis #217. Réconcilié en **v58** depuis Ultima, l'ajout de #216 intégré tel
+quel, puis recopié.
 
 ---
 

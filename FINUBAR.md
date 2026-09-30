@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-30",
-    "quoi": "Chaîne Rénoboost : route posée (PLAN-2026-09-30-chaine-A-Z.md), leçons v57 ; B2 (la double marge, RenoDevis) cadrée jusqu'à la première ligne, code non commencé. MESURÉ à 18:58 UTC : #563 et #214 fusionnées, #321 (le plan) OUVERTE — main ne porte pas encore le plan ; il vit sur la branche de la chaîne et sur claude/bold-ride-lz23qg.",
-    "commit": "675e2b4cb53143414589adf40a0ef5d455ff6b9b"
+    "quoi": "Chaîne Rénoboost : route posée (PLAN-2026-09-30-chaine-A-Z.md) — #321 FUSIONNÉE (mesuré 19:29 UTC, main e462298, le plan y est), #563 et #214 aussi. B2 (la double marge, RenoDevis) cadrée jusqu'à la première ligne, code non commencé (PR de séance #328 ici, #217 dans RenoDevis, brouillons). Leçons v58 sur les branches de séance.",
+    "commit": "e4622988800d406d9214f90a6db813c3e8afddd4"
   },
   "prochaine_action": "④ — l'exécution : `ouvrirTrace()`, journal 'tentee' AVANT l'acte, plafond, issue après. Frontière arbitrée — cadrage §12.8 quater.",
   "bloque_par": [
@@ -49,7 +49,7 @@
       "depuis": "2026-09-30"
     },
     {
-      "quoi": "Chaîne Rénoboost : route et état vivant dans PLAN-2026-09-30-chaine-A-Z.md — PR #321 OUVERTE à 18:58 UTC le 30/09 (main 675e2b4 sans le plan). Reprise : son §0, depuis la branche tant que #321 n'est pas fusionnée.",
+      "quoi": "Chaîne Rénoboost : route et état vivant dans PLAN-2026-09-30-chaine-A-Z.md — sur main depuis #321 (fusionnée le 30/09, mesuré 19:29 UTC, main e462298). Reprise : son §0, depuis main.",
       "depuis": "2026-09-30"
     },
     {

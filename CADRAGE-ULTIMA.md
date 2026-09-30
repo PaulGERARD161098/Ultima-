@@ -18,11 +18,11 @@
   navigateur (§13.16), neuf casses écrites d'avance (§13.17) ; E1 mesuré
   (`main` fusionné, 647/647, `tsc` 0). ⛔ Aucun code : Paul a arrêté une
   exécution partie avant les panneaux (« on ne brûle pas d'étape ») → leçon
-  **v57**, propagée à RenoDevis. ⚠️ Deux séances ont écrit sur la branche de la
+  **v57**, puis **v58** après le conflit de fusion de #217 (RenoDevis #216 avait scellé une autre v55 : deux corps, un numéro), propagée à RenoDevis. ⚠️ Deux séances ont écrit sur la branche de la
   chaîne en même temps ; le plan et les grains de l'autre séance annoncent des
   fusions avant l'API : à 18:58 UTC, #563 et #214 sont fusionnées, **#321
-  ouverte**. ⏭ Le §0 du plan n'est pas corrigé pendant que l'autre séance
-  fusionne — il se corrige sur mesure, après.
+  ouverte** — puis **fusionnée** (mesuré à 19:29 UTC : `main` = `e462298`, le plan
+  y est). ⏭ Le §0 du plan disait vrai d'avance ; il n'a pas été touché.
   Prochaine action : Paul lit le compteur « confirmés » (`/releve` › Biblio),
   puis E2 avec Opus 5.5 (fiche §13.15-18).
 - 🧭 **SESSION 2026-09-30 (soir) — LA CHAÎNE RÉNOBOOST, CADRÉE ET ROUTÉE (PR #321 · RenoBoost #563 · RenoDevis #214, fusionnées en mode merge sur le go de Paul en fin de séance).**
