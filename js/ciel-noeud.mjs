@@ -190,7 +190,26 @@ export function rendre(idNoeud, options = {}) {
     fil.style.top = Math.round(bas + 8) + 'px';
   }
 
+  // LE BANDEAU SUIT CE QU'ON REGARDE (Paul, 30/09 : « bandeau par
+  // constellation — cohérent avec l'affichage et les données »). Sous
+  // isolement, le surligne et le titre deviennent ceux du foyer quand le
+  // registre les porte ; au retour, ceux de la page. `textContent` : le texte
+  // vient du registre, le bandeau n'a aucune raison d'accepter du balisage.
+  const bandeauSurligne = doc.querySelector('body.ciel-noeud .console-entete .titre-surligne');
+  const bandeauTitre = doc.querySelector('body.ciel-noeud .console-entete .titre-principal');
+  const bandeauOrigine = {
+    surligne: bandeauSurligne ? bandeauSurligne.textContent : '',
+    titre: bandeauTitre ? bandeauTitre.textContent : '',
+  };
+  function majBandeau() {
+    const foyer = isole && registre[isole];
+    const avecSien = Boolean(foyer && foyer.titre);
+    if (bandeauSurligne) { bandeauSurligne.textContent = avecSien ? (foyer.surligne || foyer.nom || '') : bandeauOrigine.surligne; }
+    if (bandeauTitre) { bandeauTitre.textContent = avecSien ? foyer.titre : bandeauOrigine.titre; }
+  }
+
   function majFil() {
+    majBandeau();
     // SOUS ISOLEMENT, L'ACCUEIL SE REPLIE AU TÉLÉPHONE (27/09). « Bienvenue /
     // Sur quoi est-ce qu'on travaille aujourd'hui ? » est le propos de la
     // racine ; un cran plus bas, c'est le fil qui dit où l'on est, et l'accueil

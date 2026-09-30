@@ -511,9 +511,12 @@ console.log('— A4. DRAGONS : la parole, les portes, le bandeau, les contrastes
   // `Surligne/Titre = ceux du registre` qui reste vraie, et on l'exige telle quelle.
   const surligne = (await page.locator('h1.console-titre .titre-surligne').textContent())?.trim();
   const principal = (await page.locator('h1.console-titre .titre-principal').textContent())?.trim();
-  verifier('DRAGONS : surligne = celle du registre (IMLADRIK, le foyer de l\'écran)',
-    surligne === NOEUDS.imladrik.surligne, `lu: ${surligne}`);
-  verifier('DRAGONS : titre = celui du registre (IMLADRIK)', principal === NOEUDS.imladrik.titre, `lu: ${principal}`);
+  // TRANSPOSÉ LE 30/09 — « un bandeau par constellation » (Paul). Le bandeau
+  // porte désormais le FOYER isolé, lu au registre ; il portait IMLADRIK.
+  verifier('DRAGONS : surligne = celle du registre (la constellation isolée)',
+    surligne === NOEUDS['constellation-dragons'].surligne, `lu: ${surligne}`);
+  verifier('DRAGONS : titre = celui du registre (la constellation isolée)',
+    principal === NOEUDS['constellation-dragons'].titre, `lu: ${principal}`);
   verifier('DRAGONS : le fil nomme le foyer (IMLADRIK › DRAGONS)',
     ((await page.locator('.ciel-fil').innerText()) || '').replace(/\s+/g, ' ').trim() === 'IMLADRIK › DRAGONS');
   // Plus de message de Léo affiché au repos (Paul, 2026-08-01) — test d'ABSENCE, sous

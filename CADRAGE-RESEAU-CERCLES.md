@@ -56,6 +56,11 @@ inscrire au pre-mortem le jour où il s'écrira.
 
 ## 2. ⓐ LE CERCLE — ADRAMELECH, idée **ADR-005**
 
+> ⛔ **REMPLACÉ PAR IFULVIN le 30/09** (Paul : « oui remplace »). Cette idée n'est
+> plus à saisir en base : son contenu nourrit IFULVIN (`CADRAGE-IFULVIN.md`).
+> Le numéro ADR-005 ci-dessous est de toute façon **en collision** avec ADR-005
+> CHAMBRE CLAIRE (`adramelech/IDEES.md`). ADR-006 « Le rachat » n'est pas concerné.
+
 Mesuré avant d'attribuer le numéro (`select max(adr_num) from idees` → **4**,
 4 idées en base au 2026-09-21) : les deux idées de cette capture sont donc
 **ADR-005** et **ADR-006**. ⚠️ À remesurer avant saisie si d'autres idées sont
