@@ -25,8 +25,9 @@ function s(compte) { return compte > 1 ? 's' : ''; }
 // Le « vrai en cours » d'un cap. null s'il n'y a pas d'agrégat pour ce cap.
 export function ligneVivante(id, data) {
   if (!data) return null;
-  // TAO — cap agrégé (RESHIRAM + ZEKROM réunis) : le réel ET l'idéal en une ligne.
-  if (id === 'tao' && (data.reshiram || data.zekrom)) {
+  // LES DRAGONS — ils portent RESHIRAM et ZEKROM depuis la suppression de TAO
+  // (30/09) : le réel ET l'idéal en une ligne, comme TAO le faisait.
+  if (id === 'constellation-dragons' && (data.reshiram || data.zekrom)) {
     const rt = data.reshiram || {};
     const zt = data.zekrom || {};
     const tt = n(rt.talents);
@@ -67,11 +68,12 @@ export function signalDe(id, data) {
   }
 
   // La supra-division cumule ce que ses quadrants ont à traiter ; chaque
-  // macro-projet (IMLADRIK, qui porte TAO) ne cumule que les siens.
+  // macro-projet (IMLADRIK, dont les DRAGONS portent RESHIRAM et ZEKROM) ne
+  // cumule que les siens.
   if (id === 'omega') return morceaux(Boolean(data.riven), Boolean(data.reshiram || data.zekrom));
   if (id === 'imladrik') return morceaux(false, Boolean(data.reshiram || data.zekrom));
   if (id === 'riven') return morceaux(Boolean(data.riven), false);
-  if (id === 'tao') return morceaux(false, Boolean(data.reshiram || data.zekrom));
+  if (id === 'constellation-dragons') return morceaux(false, Boolean(data.reshiram || data.zekrom));
   if (id === 'reshiram') return aEtayer > 0 ? aEtayer + ' talent' + s(aEtayer) + ' à étayer' : null;
   if (id === 'zekrom') {
     return aOrienter > 0 ? aOrienter + ' ' + (aOrienter > 1 ? 'idéaux' : 'idéal') + ' à orienter' : null;

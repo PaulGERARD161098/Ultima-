@@ -413,7 +413,11 @@ export function rendre(idNoeud, options = {}) {
       // vif qu'un cap qui ouvre une page (`rang()`, `js/adaptateur-lv4.mjs`).
       // La couronne ne bouge pas. RIVEN n'active ni l'un ni l'autre.
       // `tests/smoke-carte-celeste.mjs`.
-      asterisme: true,
+      // EXCEPTION NOMMÉE (30/09) : un écran dont le registre dit
+      // `asterisme: false` n'a pas de traits de figure — ses étoiles sont
+      // indépendantes (les DRAGONS). Les passerelles du registre, elles,
+      // restent tracées : RESHIRAM ⇄ ZEKROM.
+      asterisme: (registre[isole || idNoeud] || {}).asterisme !== false,
       eclatParPoids: true,
       // 27/09 — AU DOIGT, UNE ÉTOILE SE TOUCHE À 44 PX, comme tout le reste du
       // socle. Au pointeur précis (souris), le plancher d'hier suffit et le

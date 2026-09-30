@@ -17,6 +17,8 @@
     { "source": "/grima", "destination": "/omega", "permanent": true },
     { "source": "/grima.html", "destination": "/omega", "permanent": true },
     { "source": "/naga", "destination": "/imladrik", "permanent": true },
+    { "source": "/tao", "destination": "/imladrik#constellation-dragons", "permanent": true },
+    { "source": "/tao.html", "destination": "/imladrik#constellation-dragons", "permanent": true },
     { "source": "/naga.html", "destination": "/imladrik", "permanent": true },
     {
       "source": "/minethnir",
