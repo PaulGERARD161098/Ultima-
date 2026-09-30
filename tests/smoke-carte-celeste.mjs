@@ -44,14 +44,24 @@ function verifier(nom, condition, detail = '') {
 // change vraiment ») — un écran qui n'a que des têtes, ou que des feuilles, n'a
 // pas de rang à montrer, et exiger qu'il s'y voie serait exiger l'impossible.
 // 2026-09-29 : GRIMA et NAGA sont supprimés. OMEGA porte RIVEN (feuille) +
-// NICOL BOLAS et IMLADRIK (têtes) ; IMLADRIK isolé porte MAEDRETHNIR, VRANESH,
-// DRAUKHAIN (feuilles) + ADRAMELECH, TAO (têtes) ; NICOL BOLAS isolé n'a que
-// des feuilles (ABAQUE + trois caps à venir). Le drapeau est DÉRIVÉ du
-// registre plus bas (verrou de cohérence), pas seulement déclaré ici.
+// NICOL BOLAS et IMLADRIK (têtes) ; NICOL BOLAS isolé n'a que des feuilles
+// (ABAQUE + trois caps à venir).
+// 2026-09-30 : IMLADRIK isolé N'A PLUS DEUX RANGS. Il porte quatre entrées, TOUTES
+// des têtes (ARMES et DRAGONS, deux constellations qui contiennent ; ADRAMELECH et
+// TAO, qui contiennent) et AUCUNE feuille : les trois dragons sont descendus sous
+// DRAGONS. Exiger « la tête plus vive que la feuille » sur un écran sans feuille
+// serait exiger l'impossible — l'assertion du rang n'est donc PAS relâchée, elle
+// reste portée par les écrans qui ont réellement deux rangs : la RACINE (ALPHA,
+// OMEGA + ALTHEA, feuille), OMEGA (RIVEN, feuille, + deux têtes) et ALPHA session.
+// IMLADRIK reçoit à la place un VERROU qui constate qu'il est à UN seul rang — le
+// jour où une feuille y reviendra, ce verrou virera et rendra le rang exigible.
+// La constellation DRAGONS isolée est un écran de plus : trois FEUILLES, un rang.
+// Le drapeau est DÉRIVÉ du registre plus bas (verrou de cohérence), pas seulement
+// déclaré ici.
 const ECRANS = [
   { nom: 'racine', page: 'index.html', porte: true, deuxRangs: true },
   { nom: 'OMEGA', fil: 'OMEGA', page: 'omega.html', deuxRangs: true },
-  { nom: 'IMLADRIK', fil: 'IMLADRIK', page: 'omega.html#imladrik', deuxRangs: true },
+  { nom: 'IMLADRIK', fil: 'IMLADRIK', page: 'omega.html#imladrik', deuxRangs: false },
   { nom: 'NICOL BOLAS', fil: 'NICOL BOLAS', page: 'omega.html#nicol-bolas', deuxRangs: false },
   // TAO : les Gémeaux, deux feuilles. C'est là que le premier jet du lot a
   // CÉDÉ — `smoke-tao` l'a vu, pas ce harnais (voir « la cible du doigt »).
@@ -59,6 +69,10 @@ const ECRANS = [
   // ⚠️ SANS SESSION, ALPHA n'a qu'UN rang : RENOBOOST IA ne contient ses dépôts
   // qu'après la greffe Finubar. Son rang se prouve plus bas, session ouverte.
   { nom: 'ALPHA', fil: 'ALPHA', page: 'alpha.html', deuxRangs: false },
+  // LA CONSTELLATION DES DRAGONS, isolée (30/09) : MAEDRETHNIR, VRANESH,
+  // DRAUKHAIN — trois feuilles. (ARMES, isolée, n'a qu'IFULVIN : une étoile ne
+  // porte ni figure ni rang, elle est mesurée par smoke-lv5-plein-ecran.)
+  { nom: 'DRAGONS', fil: 'DRAGONS', page: 'imladrik.html#constellation-dragons', deuxRangs: false },
 ];
 const TAILLES = [[390, 844], [1280, 800]];
 // VERROU DE COHÉRENCE : `deuxRangs` se lit dans le registre, il ne se croit pas.
@@ -66,13 +80,32 @@ const TAILLES = [[390, 844], [1280, 800]];
 // échouer à tort) l'assertion « le rang se voit ».
 {
   const { NOEUDS } = await import('../js/registre-lv3.mjs');
-  const FOYER = { OMEGA: 'omega', IMLADRIK: 'imladrik', 'NICOL BOLAS': 'nicol-bolas' };
+  const FOYER = { OMEGA: 'omega', IMLADRIK: 'imladrik', 'NICOL BOLAS': 'nicol-bolas',
+    DRAGONS: 'constellation-dragons' };
   for (const e of ECRANS.filter((x) => FOYER[x.nom])) {
     const caps = NOEUDS[FOYER[e.nom]].enfants;
     const tetes = caps.filter((id) => (NOEUDS[id].enfants || []).length > 0).length;
     verifier(`${e.nom} : deuxRangs déclaré = deux rangs dans le registre`,
       e.deuxRangs === (tetes >= 1 && caps.length - tetes >= 1), `${tetes} tête(s) sur ${caps.length}`);
   }
+  // IMLADRIK est à UN SEUL RANG — dit à voix haute, avec ses chiffres. C'est ce
+  // que l'ancienne déclaration `deuxRangs: true` aurait contredit en silence.
+  const capsImladrik = NOEUDS.imladrik.enfants;
+  const tetesImladrik = capsImladrik.filter((id) => (NOEUDS[id].enfants || []).length > 0);
+  verifier('IMLADRIK : un seul rang — quatre têtes, aucune feuille',
+    capsImladrik.length === 4 && tetesImladrik.length === 4,
+    `${tetesImladrik.length} tête(s) sur ${capsImladrik.length}`);
+  // DRAGONS : trois feuilles, aucune tête.
+  const capsDragons = NOEUDS['constellation-dragons'].enfants;
+  verifier('DRAGONS : un seul rang — trois feuilles, aucune tête',
+    capsDragons.length === 3 && capsDragons.every((id) => !(NOEUDS[id].enfants || []).length));
+  // NON-VACUITÉ DE CE QUI RESTE : l'assertion du rang n'a pas disparu, elle a
+  // changé d'écrans. Il en reste au moins deux (racine, OMEGA) qui l'exigent, et
+  // aucun d'eux n'est IMLADRIK.
+  const exigeantLeRang = ECRANS.filter((x) => x.deuxRangs).map((x) => x.nom);
+  verifier('Le rang reste exigé sur au moins deux écrans (racine, OMEGA), pas sur IMLADRIK',
+    exigeantLeRang.length >= 2 && exigeantLeRang.includes('racine') && exigeantLeRang.includes('OMEGA')
+    && !exigeantLeRang.includes('IMLADRIK'), exigeantLeRang.join(','));
 }
 
 async function ouvrir(ecran, [largeur, hauteur], options = {}) {
@@ -298,7 +331,9 @@ for (const ecran of ECRANS) {
 // ne pouvait pas échouer. Le seul mouvement que le lot ajoute est l'EXTINCTION
 // de la figure (0,22 s) ; on la lit donc sous les DEUX préférences, et le
 // témoin sans préférence doit voir la transition — sinon l'instrument est aveugle.
-for (const ecran of [ECRANS[2], ECRANS[5]]) {
+// (Choisis PAR NOM : l'index a glissé une fois quand un écran s'est inséré, et
+// la boucle aurait éprouvé un autre écran sans le dire.)
+for (const ecran of ['IMLADRIK', 'ALPHA'].map((n) => ECRANS.find((e) => e.nom === n))) {
   const lu = {};
   for (const rm of ['no-preference', 'reduce']) {
     const { page, contexte } = await ouvrir(ecran, [390, 844], { reducedMotion: rm });
