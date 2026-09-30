@@ -32,11 +32,12 @@
   },
   "dernier_arret": {
     "le": "2026-09-30",
-    "quoi": "B1 ④ livré : un vert s'exécute sans clic derrière une trace (ouvrir → acte → clore, plafond, fail-closed vers la carte). Revue adversariale : 1 bloquant (S1, cible par inclusion) + 5 corrigés ; journal durci en base (migration appliquée, éprouvée en rôle authenticated).",
-    "commit": "f376af64e57bd7c8aa5e4c2e3aad4e14ff50ed73"
+    "quoi": "B1 ④ livré : un vert s'exécute sans clic derrière une trace (ouvrir → acte → clore, plafond, fail-closed vers la carte). Revue adversariale : 1 bloquant (S1) + 5 corrigés ; journal durci en base (migration appliquée, éprouvée en rôle authenticated). ⑤ cadré (§14), pas codé.",
+    "commit": "7571b7473961e78b90a3fbd91a7dd3758088b119"
   },
-  "prochaine_action": "⑤ — le défaire JOUÉ par type vert (DELETE de la cible_id journalisée ; enrichissement : restaurer l'essence d'avant) + ligne 'defaite' ; puis « ce que Léo a fait » dans le grain du matin. Cadrage §13.3.",
+  "prochaine_action": "⑤ — trancher les DEUX choix du cadrage §14.2 (enrichissement : repasser orange ? · bouton défaire : cartouche + écran), puis coder le défaire joué par type vert, refusé si la cible a des dépendances (§14.0).",
   "bloque_par": [
+    "B1 ⑤ attend deux choix de Paul — cadrage §14.2 : ① l'enrichissement repasse-t-il orange faute de défaire (reco : oui) · ② où vit le bouton « défaire » (reco : cartouche + écran « ce que Léo a fait », jamais de lien dans le mail)",
     "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
     "La précision sur « mon dpe.fr » (VITRUVE)",
     "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis",
@@ -47,10 +48,6 @@
   "boucles_ouvertes": [
     {
       "quoi": "LEÇON À CONSIGNER + PROPAGER (9 dépôts) : rechute de « un droit se vérifie du côté où il peut être contourné » — la prémisse de l'arbitrage §12.8 quater avait été mesurée en superutilisateur (MCP), pas sur le chemin du produit. Cadrage §13.0.",
-      "depuis": "2026-09-30"
-    },
-    {
-      "quoi": "Historique de Léo : un message d'issue > 4 000 caractères (page longue) fait refuser le tour suivant (400) jusqu'au rechargement — préexistant sur la carte, relevé par la revue du 30/09.",
       "depuis": "2026-09-30"
     },
     {

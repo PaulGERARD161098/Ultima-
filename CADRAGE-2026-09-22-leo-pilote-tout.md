@@ -1530,6 +1530,12 @@ scripté, il ne borne rien — mais ce client détient le jeton et écrit déjà
 directement par les API. **Le plafond protège d'un emballement de Léo, pas d'un
 détenteur du jeton.** Une vraie borne = RPC à verrou consultatif (migration, gate).
 
+**Et un défaut préexistant, aggravé par ④, fermé dans le même passage** (relevé
+par la revue) : l'écho d'issue d'une page longue (jusqu'à 20 000 caractères)
+dépassait la borne de 4 000 et **bloquait le tour suivant** jusqu'au
+rechargement. L'écho renvoyé au modèle est borné à 1 000 ; la bulle montre tout
+à Paul (smoke C16, éprouvé en retirant la borne).
+
 ### §13.3 — La prochaine action, unique
 
 **⑤ — le défaire et « ce que Léo a fait ».** Le critère de sortie de B1 dit
