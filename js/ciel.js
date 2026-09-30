@@ -566,6 +566,10 @@
       window.removeEventListener('resize', courant.surRedimension);
       courant.surRedimension = null;
     }
+    if (courant && courant.surEchap) {
+      document.removeEventListener('keydown', courant.surEchap);
+      courant.surEchap = null;
+    }
     courant = null;
   }
 
@@ -1257,7 +1261,7 @@
       var autres = (comptePar[r.personne_id] || 1) - 1;
       var trait = svg('line', { stroke: '#f2ead6', 'stroke-width': '0.5', opacity: '0.3' });
       var g = svg('g', {
-        'class': 'ciel-etoile ciel-personne', tabindex: '0', role: 'button',
+        'class': 'ciel-etoile ciel-personne', tabindex: modeNebuleuses ? '-1' : '0', role: 'button',
         'data-personne-id': r.personne_id,
         'aria-label': nomPersonne + (role ? ', ' + role : '') + ', chez ' +
           (parId[r.node_id].noeud.nom || '(sans nom)') +
@@ -1290,7 +1294,10 @@
       var libelleType = libelles[noeud.type] || noeud.type || '';
       var libelleStatut = statuts[noeud.statut] || noeud.statut || '';
       var g = svg('g', {
-        'class': 'ciel-etoile', tabindex: '0', role: 'button',
+        // Lot 3 : à l'ensemble, on tabule de nébuleuse en nébuleuse — 300
+        // étoiles tabulables avant le premier titre, c'était 301 Tab (relecture
+        // du 30/09). Elles le redeviennent dans la nébuleuse approchée.
+        'class': 'ciel-etoile', tabindex: modeNebuleuses ? '-1' : '0', role: 'button',
         'data-noeud-id': noeud.id,
         'aria-label': nomComplet + ', ' + libelleType +
           (e.groupe.parNebuleuse ? ', nébuleuse ' + e.groupe.label
@@ -1429,7 +1436,13 @@
       // étoiles font déjà face au spectateur — et pivoter les couchait de
       // profil : mesuré, 877 px d'étendue → 0 sur NAGA, toutes les étoiles sur
       // une même verticale. La figure n'existait que pour la souris.
-      if (g && parId[g.getAttribute('data-noeud-id')] && !options.couronne
+      // ⛔ NI SUR LA GRILLE DES NÉBULEUSES (lot 3, relecture du 30/09) : viser
+      // y faisait pivoter une grille plane — au premier Tab, 39 étoiles sortaient
+      // du cadre. Le focus d'une étoile approche SA nébuleuse, sans rotation.
+      if (modeNebuleuses) {
+        var eF = g && parId[g.getAttribute('data-noeud-id')];
+        if (eF && eF.groupe !== approchee && (!g.matches || g.matches(':focus-visible'))) { approcher(eF.groupe); }
+      } else if (g && parId[g.getAttribute('data-noeud-id')] && !options.couronne
           && (!g.matches || g.matches(':focus-visible'))) {
         viser(parId[g.getAttribute('data-noeud-id')]);
       }
@@ -1463,6 +1476,20 @@
         return;
       }
       if (e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') { return; }
+      var titre = modeNebuleuses && e.target.closest ? e.target.closest('[data-nebuleuse][role="button"]') : null;
+      if (titre) {
+        // Au clavier, on ENTRE dans la nébuleuse : le focus passe à sa première
+        // étoile (les étoiles précèdent les titres dans le document — sans cela,
+        // Tab irait au titre suivant au lieu d'entrer).
+        e.preventDefault();
+        var gT = groupeDeCle(titre.getAttribute('data-nebuleuse'));
+        if (approcher(gT)) {
+          for (var i = 0; i < pieces.length; i++) {
+            if (pieces[i].etoile.groupe === gT) { pieces[i].g.focus({ preventScroll: true }); break; }
+          }
+        }
+        return;
+      }
       var g = e.target.closest ? e.target.closest('[data-noeud-id], [data-personne-id], [data-nebuleuse]') : null;
       if (g) { e.preventDefault(); declencher(e.target); }
     });
@@ -1580,7 +1607,8 @@
         }
       });
       if (!plusLong) { return null; }
-      var celluleEcran = monde.nebuleuses.pasX * (FOCALE / Math.max(1, cam.distance));
+      // Sur la distance VISÉE : mesurée en plein glissement, l'échelle mentait.
+      var celluleEcran = monde.nebuleuses.pasX * (FOCALE / Math.max(1, cam.cibleDistance || cam.distance));
       return Math.max(8 / 11, Math.min(1, (celluleEcran * 0.9) / plusLong));
     }
     function poserNebuleuses(projetes) {
@@ -1606,6 +1634,10 @@
           if (pr.sx - demiL < 0 || pr.sx + demiL > vbW || pr.sy < 16 || pr.sy > vbH) { op = 0; }
         }
         pa.el.setAttribute('opacity', op.toFixed(2));
+        // Un titre effacé n'est pas une étape de tabulation (relecture du 30/09 :
+        // 8 focus sur 8 hors écran pendant l'approche) — sauf s'il a le focus.
+        var tab = op > 0 || document.activeElement === pa.el ? '0' : '-1';
+        if (pa.el.getAttribute('tabindex') !== tab) { pa.el.setAttribute('tabindex', tab); }
         if (zone) {
           if (dedans) { zone.el.setAttribute('display', 'none'); return; }
           zone.el.removeAttribute('display');
@@ -1668,8 +1700,17 @@
       pieces.forEach(function (p) {
         var dedans = !!approchee && p.etoile.groupe === approchee;
         p.g.classList.toggle('ciel-etoile--approchee', dedans);
+        p.g.setAttribute('tabindex', dedans ? '0' : '-1');
         p.nom.classList.toggle('ciel-nom--approche', dedans);
         if (!dedans) { p.nom.classList.remove('ciel-nom--tu'); }
+      });
+      // Les personnes rattachées suivent leur étoile : elles ne pâlissent pas
+      // avec les autres nébuleuses.
+      piecesOrbite.forEach(function (po) {
+        var ancre = parId[po.ancre];
+        var dedans = !!approchee && !!ancre && ancre.groupe === approchee;
+        po.g.classList.toggle('ciel-etoile--approchee', dedans);
+        po.g.setAttribute('tabindex', dedans ? '0' : '-1');
       });
       piecesAmas.forEach(function (pa) {
         pa.el.classList.toggle('ciel-nom-amas--approchee', approchee === pa.groupe);
@@ -1770,8 +1811,16 @@
       // (une cible qui bouge est une cible qu'on rate) ni sous prefers-reduced-motion.
       if (etatDerive && !saisie && !survol && !moinsDAnimation) {
         derive += 0.0009;
-        cam.cibleYaw += 0.0009;
-        cam.yaw += 0.0009;
+        if (modeNebuleuses) {
+          // Lot 3 : la grille ne tourne pas sans fin — elle se serait mise de
+          // profil (titres de 668 à 478 px en 100 s, relecture du 30/09). Elle
+          // BALANCE autour de l'orientation d'ouverture : le relief se voit,
+          // l'ordre reste lisible.
+          cam.cibleYaw = YAW_OUVERTURE + 0.3 * Math.sin(derive * 4);
+        } else {
+          cam.cibleYaw += 0.0009;
+          cam.yaw += 0.0009;
+        }
       }
 
       var projetes = Object.create(null);
@@ -2334,9 +2383,30 @@
 
     var etatDerive = false;
 
+    // Lot 3 : la grille suit la forme de l'écran. Figée à l'aspect du montage,
+    // un téléphone passé en paysage laissait les amas sur 12 % de la largeur
+    // et quatre titres l'un sur l'autre (relecture du 30/09).
+    function redisposer() {
+      if (!modeNebuleuses || !(conteneur.clientWidth > 0 && conteneur.clientHeight > 120)) { return; }
+      monde.groupes.forEach(function (g) { g.rayonReel = 0; });
+      var neuf = disposerEnNebuleuses(monde.groupes, conteneur.clientWidth / conteneur.clientHeight);
+      var parIdNeuf = Object.create(null);
+      neuf.etoiles.forEach(function (e) { parIdNeuf[e.noeud.id] = e; });
+      monde.etoiles.forEach(function (e) {
+        var n = parIdNeuf[e.noeud.id];
+        if (n) { e.x = n.x; e.y = n.y; e.z = n.z; }
+      });
+      monde.nebuleuses = neuf.nebuleuses;
+      monde.rayon = neuf.rayon;
+      if (approchee) {
+        cam.cibleVise = { x: approchee.centre.x, y: approchee.centre.y, z: approchee.centre.z };
+        cam.vise = { x: approchee.centre.x, y: approchee.centre.y, z: approchee.centre.z };
+      }
+    }
     function surRedimension() {
       var avant = vbW, avantH = vbH;
       dimensionner();
+      redisposer();
       // La HAUTEUR aussi, et ce n'est pas de la prudence : elle change seule
       // dès qu'un panneau s'ouvre ou que la barre d'URL d'un téléphone se
       // rétracte. Tant que le ciel vivait dans un plateau à proportions fixes,
@@ -2356,10 +2426,27 @@
       relancer(); // à plat, la boucle dort : un cadre qui change la réveille
     }
     window.addEventListener('resize', surRedimension);
+    // Échap ressort AUSSI quand le focus est sur le mobilier du ciel (« + »,
+    // « Tout voir ») ou sur la page — jamais depuis un champ de saisie, où
+    // Échap appartient au champ (relecture du 30/09).
+    function surEchap(e) {
+      if (!approchee || (e.key !== 'Escape' && e.key !== 'Esc') || e.defaultPrevented) { return; }
+      var a = document.activeElement;
+      if (a && racine.contains(a)) { return; } // le SVG a son propre écouteur
+      if (a && (a.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))) { return; }
+      var zone = conteneur.parentElement || conteneur;
+      if (a && a !== document.body && !zone.contains(a)) { return; }
+      var quittee = approchee;
+      e.preventDefault();
+      toutVoir();
+      piecesAmas.forEach(function (pa) { if (pa.groupe === quittee) { pa.el.focus({ preventScroll: true }); } });
+    }
+    if (modeNebuleuses) { document.addEventListener('keydown', surEchap); }
 
     courant = {
       image: null,
       surRedimension: surRedimension,
+      surEchap: modeNebuleuses ? surEchap : null,
       racine: racine,
       // Le cadre suit la largeur réelle : sans cela, l'ouverture du panneau
       // rétrécit la scène sans toucher au viewBox et la cible tactile s'effondre.
@@ -2369,7 +2456,17 @@
       // Lot 3 : s'approcher d'une nébuleuse par sa clé (false si le ciel n'est
       // pas rangé en nébuleuses, ou si la clé est inconnue).
       modeNebuleuses: modeNebuleuses,
-      approcher: function (cle) { return approcher(groupeDeCle(cle)); },
+      approcher: function (cle, reglages) {
+        var ok = approcher(groupeDeCle(cle));
+        // `immediat` : sans glissement — un re-rendu (la recherche) retrouve la
+        // nébuleuse où elle était, au lieu d'y revoler à chaque frappe.
+        if (ok && reglages && reglages.immediat) {
+          cam.vise = { x: cam.cibleVise.x, y: cam.cibleVise.y, z: cam.cibleVise.z };
+          cam.distance = cam.cibleDistance;
+        }
+        return ok;
+      },
+      orientation: function () { return { yaw: cam.yaw, pitch: cam.pitch }; },
       approchee: function () { return approchee ? approchee.cle : null; },
       viser: function (idNoeud) { if (parId[idNoeud]) { viser(parId[idNoeud]); relancer(); } },
       // LV4 — APPROCHER un nœud : la caméra le met face à elle ET s'en

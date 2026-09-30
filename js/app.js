@@ -1929,6 +1929,10 @@
     var outils = $('#ciel-outils');
     var boutonAjouter = $('#ciel-ajouter');
     var message = $('#ciel-message');
+    // La nébuleuse approchée en volume survit au re-rendu (une frappe dans la
+    // recherche, une fiche enregistrée) : lue AVANT d'arrêter le moteur.
+    var volumeAvant = window.UltimaCiel && window.UltimaCiel.courant();
+    var nebuleuseAvant = volumeAvant && typeof volumeAvant.approchee === 'function' ? volumeAvant.approchee() : null;
     if (window.UltimaCiel) { window.UltimaCiel.arreter(); }
     if (window.UltimaNebuleuses) { window.UltimaNebuleuses.arreter(); }
     scene.textContent = '';
@@ -2006,6 +2010,9 @@
         // Repli seulement : sans la carte des nébuleuses, le volume se fige.
         plat: mouvementReduit()
       });
+      if (nebuleuseAvant && instance && typeof instance.approcher === 'function') {
+        instance.approcher(nebuleuseAvant, { immediat: true });
+      }
     }
 
     // L'aide de navigation revit à chaque rendu, et s'efface au premier geste.

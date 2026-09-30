@@ -228,12 +228,14 @@
 .ciel-nom-amas {
   fill: rgba(216, 189, 130, .62);
   font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
-  font-size: 10px;
   font-weight: 400;
-  letter-spacing: 4.2px;
   text-transform: uppercase;
   filter: drop-shadow(0 0 5px rgba(216, 189, 130, .10));
 }
+/* La taille des titres de NÉBULEUSE (lot 3) est portée par le moteur, qui les
+   fait tenir dans leur cellule : une taille CSS écrasait l'attribut (relecture
+   du 30/09 — deux titres l'un sur l'autre à 320 px). */
+.ciel-nom-amas:not([data-nebuleuse]) { font-size: 10px; letter-spacing: 4.2px; }
 .ciel-liens-noms { opacity: .78; }
 .ciel-nom-lien {
   fill: rgba(216, 189, 130, .66);
@@ -307,7 +309,7 @@
 @media (max-width: 640px) {
   .ciel-liens line { stroke-width: .62; }
   .ciel-nom { letter-spacing: .02em; stroke-width: 2.6px; }
-  .ciel-nom-amas { font-size: 9px; letter-spacing: 3px; }
+  .ciel-nom-amas:not([data-nebuleuse]) { font-size: 9px; letter-spacing: 3px; }
 }
 
 
@@ -522,3 +524,7 @@
 .ciel-titres-nebuleuses .ciel-nom-amas:focus { outline: none; }
 .ciel-titres-nebuleuses .ciel-nom-amas:focus-visible { text-decoration: underline; }
 .ciel-zone-nebuleuse { cursor: pointer; }
+/* L'approche l'emporte sur le survol et sur l'étoile choisie : les autres
+   nébuleuses restent pâles (relecture du 30/09 — un survol les remontait à
+   0,58). Plus spécifique que les règles de concentration et de choix. */
+.ciel-svg.ciel--approche .ciel-etoile:not(.ciel-etoile--approchee):not(:focus-visible) { opacity: .2; }

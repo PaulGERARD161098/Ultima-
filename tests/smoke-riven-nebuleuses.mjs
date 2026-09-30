@@ -527,6 +527,27 @@ for (const vp of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
     const app = await etatApproche(page);
     details[`lot3_${L}_demo_approche`] = app;
     verdicts[`lot3_${L}_demo_clicSApproche`] = approcheSaine(app, 'neb-btp');
+    // Relecture du 30/09 — pendant l'approche : ① les titres effacés sortent de
+    // la tabulation ; ② survoler une étoile ne rallume pas les autres
+    // nébuleuses ; ③ les personnes rattachées suivent leur étoile.
+    await page.locator('g.ciel-etoile--approchee[data-noeud-id]').first().hover();
+    await page.waitForTimeout(300);
+    const pendant = await page.evaluate(() => {
+      const sc = document.querySelector('#ciel-scene');
+      const titres = [...sc.querySelectorAll('.ciel-nom-amas[data-nebuleuse]')];
+      const autres = [...sc.querySelectorAll('g.ciel-etoile[data-noeud-id]:not(.ciel-etoile--approchee)')].map((g) => parseFloat(getComputedStyle(g).opacity));
+      const personnes = [...sc.querySelectorAll('g.ciel-personne.ciel-etoile--approchee')].map((g) => parseFloat(getComputedStyle(g).opacity));
+      return {
+        titresEffacesTabulables: titres.filter((t) => t.getAttribute('opacity') === '0.00' && t.getAttribute('tabindex') === '0' && t !== document.activeElement).length,
+        autresMax: autres.length ? Math.max(...autres) : null, autres: autres.length,
+        personnes: personnes.length, personnesMin: personnes.length ? Math.min(...personnes) : null
+      };
+    });
+    details[`lot3_${L}_demo_pendant`] = pendant;
+    verdicts[`lot3_${L}_demo_titresEffacesHorsTabulation`] = pendant.titresEffacesTabulables === 0;
+    verdicts[`lot3_${L}_demo_survolNeRallumePas`] = pendant.autres > 0 && pendant.autresMax <= 0.25;
+    verdicts[`lot3_${L}_demo_personnesSuiventLeurEtoile`] = pendant.personnes > 0 && pendant.personnesMin > 0.5;
+    await page.mouse.move(2, 2);
     // Échap : retour à l'ensemble, le focus revient au titre quitté.
     await page.keyboard.press('Escape');
     await page.waitForTimeout(300);
@@ -534,11 +555,42 @@ for (const vp of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
     const retour = await etatVolume(page);
     const focus = await page.evaluate(() => document.activeElement && document.activeElement.getAttribute('data-nebuleuse'));
     verdicts[`lot3_${L}_demo_echapRevientALEnsemble`] = vueEnsembleSaine(retour, 9) && focus === 'neb-btp';
-    // Le clavier : Entrée sur un titre s'approche.
+    // Le clavier. À l'ensemble, seuls les titres sont tabulables (relecture :
+    // il fallait 301 Tab pour atteindre le premier). Entrée sur un titre ENTRE
+    // dans la nébuleuse — focus sur sa première étoile — sans faire pivoter la
+    // grille (relecture : viser la couchait, 39 étoiles hors cadre).
+    const tabulables = await page.evaluate(() => [...document.querySelectorAll('#ciel-scene [tabindex="0"]')]
+      .every((el) => el.matches('.ciel-nom-amas[data-nebuleuse][role="button"]')));
     await page.locator('.ciel-nom-amas[data-nebuleuse="neb-conseil"]').focus();
     await page.keyboard.press('Enter');
-    await page.waitForTimeout(1800);
-    verdicts[`lot3_${L}_demo_entreeSApproche`] = (await page.evaluate(() => window.UltimaCiel.courant().approchee())) === 'neb-conseil';
+    await page.waitForTimeout(300);
+    await attendreImmobile(page);
+    const clavier = await page.evaluate(() => {
+      const a = document.activeElement;
+      const o = window.UltimaCiel.courant().orientation();
+      return { approchee: window.UltimaCiel.courant().approchee(), focusEtoile: !!(a && a.matches('g.ciel-etoile--approchee[data-noeud-id]')), yaw: o.yaw, pitch: o.pitch };
+    });
+    await page.keyboard.press('Tab');
+    await page.waitForTimeout(600);
+    const apresTab = await page.evaluate(() => window.UltimaCiel.courant().orientation());
+    details[`lot3_${L}_demo_clavier`] = { tabulables, clavier, apresTab };
+    verdicts[`lot3_${L}_demo_aLEnsembleSeulsLesTitresSeTabulent`] = tabulables;
+    verdicts[`lot3_${L}_demo_entreeEntreDansLaNebuleuse`] = clavier.approchee === 'neb-conseil' && clavier.focusEtoile &&
+      Math.abs(clavier.yaw - 0.6) < 0.01 && Math.abs(apresTab.yaw - 0.6) < 0.01 && Math.abs(apresTab.pitch + 0.28) < 0.01;
+    // Échap depuis le mobilier du ciel (« + ») ressort aussi.
+    await page.locator('#ciel-approcher').click();
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(300);
+    verdicts[`lot3_${L}_demo_echapDepuisLesBoutons`] = (await page.evaluate(() => window.UltimaCiel.courant().approchee())) === null;
+    // La recherche re-rend le ciel à chaque frappe : la nébuleuse approchée survit.
+    await page.locator('.ciel-nom-amas[data-nebuleuse="neb-conseil"]').focus();
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(300);
+    await page.locator('#ciel-recherche').fill('a');
+    await page.waitForTimeout(600);
+    verdicts[`lot3_${L}_demo_rechercheGardeLApproche`] = (await page.evaluate(() => window.UltimaCiel.courant().approchee())) === 'neb-conseil';
+    await page.locator('#ciel-recherche').fill('');
+    await page.waitForTimeout(600);
     // « Tout voir » (le bouton de la page) ramène aussi à l'ensemble.
     await page.locator('#ciel-tout-voir').click();
     await page.waitForTimeout(300);
@@ -587,6 +639,71 @@ for (const vp of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
   details.lot3_uneFiche = { ens, app };
   verdicts.lot3_uneFicheUneNebuleuse = vueEnsembleSaine(ens, 1) && ens.titres === 1 && app.approchee !== null && app.noms === 1 && erreurs.length === 0;
   await page.close();
+}
+
+// 6 quater. Relecture du 30/09 — l'écran étroit, la rotation, la dérive.
+{
+  // ① 320 px : les titres tiennent (la taille CSS écrasait celle du moteur),
+  // et le titre de la nébuleuse approchée est réellement peint à 13 px.
+  const page = await browser.newPage({ viewport: { width: 320, height: 568 } });
+  await DEMO(page);
+  await page.goto(`${BASE}/design/preview-riven-nebuleuses.html?vue=volume&n=54`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForTimeout(1500);
+  await attendreImmobile(page);
+  const t320 = await mesurer(page, '.ciel-titres-nebuleuses .ciel-nom-amas', '#ciel-scene');
+  const e320 = await etatVolume(page);
+  await page.locator('.ciel-nom-amas[data-nebuleuse="neb-btp"]').click();
+  await page.waitForTimeout(300);
+  await attendreImmobile(page);
+  const police = await page.evaluate(() => parseFloat(getComputedStyle(document.querySelector('.ciel-nom-amas[data-nebuleuse="neb-btp"]')).fontSize));
+  details.lot3_320 = { titres: t320, ensemble: e320, police };
+  verdicts.lot3_320_titresTiennent = t320.visibles === 9 && t320.chevauchements === 0 && t320.dehors === 0 && vueEnsembleSaine(e320, 54);
+  verdicts.lot3_320_titreApprochePeintA13 = Math.abs(police - 13) < 0.5;
+  await page.close();
+}
+{
+  // ② Le téléphone tourne : la grille se recompose (figée, elle laissait les
+  // amas sur 12 % de la largeur et quatre titres l'un sur l'autre).
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await DEMO(page);
+  await page.goto(`${BASE}/design/preview-riven-nebuleuses.html?vue=volume&n=54`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForTimeout(1500);
+  await page.setViewportSize({ width: 844, height: 390 });
+  await page.waitForTimeout(500);
+  await attendreImmobile(page);
+  const t = await mesurer(page, '.ciel-titres-nebuleuses .ciel-nom-amas', '#ciel-scene');
+  const e = await etatVolume(page);
+  const largeur = await page.evaluate(() => {
+    const sr = document.querySelector('#ciel-scene').getBoundingClientRect();
+    const xs = [...document.querySelectorAll('#ciel-scene g.ciel-etoile[data-noeud-id] > circle[fill="#ffffff"]')].map((c) => { const r = c.getBoundingClientRect(); return r.left + r.width / 2; });
+    return +((Math.max(...xs) - Math.min(...xs)) / sr.width).toFixed(2);
+  });
+  details.lot3_rotation = { titres: t, ensemble: e, largeur };
+  verdicts.lot3_rotationRecomposeLaGrille = t.visibles === 9 && t.chevauchements === 0 && t.dehors === 0 &&
+    e.touches === 0 && e.horsDeSaBrume === 0 && largeur >= 0.5;
+  await page.close();
+}
+{
+  // ③ La dérive balance, elle ne tourne pas sans fin : 100 s d'animation
+  // jouées sur une horloge simulée — une rotation continue y ferait plus
+  // d'un tour ; le balancement reste à ± 0,3 rad de l'ouverture.
+  const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  const page = await context.newPage();
+  await DEMO(page);
+  await page.addInitScript(() => { try { localStorage.setItem('ultima-ciel-vue', 'volume'); } catch (e) {} });
+  await page.clock.install();
+  await page.goto(`${BASE}/riven.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.clock.runFor(2000);
+  await page.locator('#ciel-derive').check();
+  const lacets = [];
+  for (let i = 0; i < 10; i++) {
+    await page.clock.runFor(10000);
+    lacets.push(await page.evaluate(() => window.UltimaCiel.courant().orientation().yaw));
+  }
+  details.lot3_derive = lacets.map((y) => +y.toFixed(3));
+  const bouge = Math.max(...lacets) - Math.min(...lacets) > 0.05; // verrou : la dérive tourne vraiment
+  verdicts.lot3_deriveBalanceSansFin = bouge && lacets.every((y) => Math.abs(y - 0.6) <= 0.32);
+  await context.close();
 }
 
 // 6 ter. Les sabotages : on casse le moteur, l'instrument doit le voir.
