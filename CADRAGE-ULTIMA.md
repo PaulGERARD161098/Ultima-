@@ -1,12 +1,43 @@
 # CADRAGE-ULTIMA — audit → patch → améliorations, adapté au réel du projet
 
-## ÉTAT (mise à jour du 2026-09-28 ; historique conservé)
+## ÉTAT (mise à jour du 2026-09-30 ; historique conservé)
 
 > **29/09 — ✅ OMEGA fait (commits sur `claude/omega-imladrik-macro`)** : Ultima→OMEGA, GRIMA/NAGA supprimés, IMLADRIK macro-projet (+ADRAMELECH +TAO). ⏭ **IFULVIN cadré, non codé** (`CADRAGE-IFULVIN.md`) : bloqué sur un choix produit (voir « Actions humaines » du rapport).
 
 > **Deux sessions ont tourné en parallèle le 2026-08-01** (fil affichage Lv3
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
+
+- 📓 **SESSION 2026-09-30 (soir) — LE RAPPEL DES LEÇONS SERT ENFIN TOUT LE FICHIER ; `/leo` LIVRÉ (#323 · #326 fusionnées, `main` = `675e2b4`).**
+  ✅ **La borne du rappel passe de 60 à 200 Ko, sur décision de Paul en panneaux.**
+  Mesuré avant de la lui poser : à 60 Ko, **78 leçons sur 145 n'atteignaient AUCUNE
+  séance**, sur aucun des dix dépôts (familles 3 à 6 muettes, famille 2 à 30/49) —
+  dont « le lien se pose en fin de message », qu'il a redemandée le 25/09 puis le
+  30/09. Après : **146/146 servies**, 134 451 octets.
+  ✅ **La passe d'archivage a été EXÉCUTÉE avant de toucher à la borne, et elle rend 0** :
+  73 entrées citent un mécanisme, 14 en NOMMENT un, 2 ont leur règle tenue par une
+  garde prouvée en la cassant, 0 sont archivables (ces 2 règles portent plus loin
+  que leur garde). ⛔ Le pied du rappel prescrivait l'inverse — corrigé, il porte
+  la mesure et dit de ne pas refaire le trajet.
+  ✅ **`/leo` et `/léo`** (`.claude/commands/`) : la commande POINTE la charte, ne la
+  recopie pas ; vit uniquement dans Ultima. Le harnais liste les DEUX, nom accentué
+  compris (constaté). ✅ **27 chemins de leçons préfixés par leur dépôt** — un chemin
+  nu était un renvoi mort dans neuf dépôts sur dix ; 4 restent nus à dessein.
+  ✅ Leçons **v51 → v54 `sha256:4768885087c4`**, 146 entrées, identiques à l'octet sur
+  les dix dépôts (vérifié sur `origin/main`, pas sur les clones).
+  ⛔ **Deux défauts trouvés dans mes propres correctifs, par la MUTATION et non par
+  relecture** : la ligne annonçant la levée interpolait la borne courante et affichait
+  « 60 000 → 40000 » sous borne abaissée ; et l'instrument d'état de PR ne lisait pas
+  les *commit statuses* (403 sur neuf dépôts) — il a affiché « VERT » sur un
+  déploiement `ERROR`. ⛔ **Et l'ancre du grain a d'abord été TAPÉE** : 13 caractères
+  justes sur 40. Sixième occurrence de cette faute ; première fois qu'un mécanisme
+  l'attrape (leçon étendue, `memoire/LECONS.md` famille 1).
+  ⏭ **DATARENO- écarté par Paul** (« vraiment à part ») : Vercel rouge en permanence,
+  `PYTHON_ENTRYPOINT_NOT_FOUND`, sur `main` aussi — pipeline CLI, rien à servir.
+  ⏭ **mon-dpe.fr reporté par Paul** : 62 vulnérabilités Dependabot (4 critiques).
+  ⏳ **Trois séances parallèles bloquées sur une approbation de Paul**, dont une qui
+  annonçait une propagation v52 — elle écraserait v54 sur dix dépôts. Injoignable
+  depuis ce conteneur.
 
 - 🌌 **SESSION 2026-09-30 (après-midi) — RIVEN EN NÉBULEUSES, À PLAT ET EN 3D (PR `claude/riven-nebuleuses`, fusion squash).**
   Déclencheur : 43 contacts entrés dans RIVEN (39 d'un cercle d'affaires, 4 cartes

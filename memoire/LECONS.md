@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v54 2026-09-30 sha256:4768885087c4 -->
+<!-- lecons:empreinte v55 2026-09-30 sha256:17bfa3d85d25 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -64,7 +64,7 @@ sortie (`; echo "code=$?"`), jamais à la place. Et sur une fusion d'essai,
 vérifier d'abord qu'un ancêtre commun existe : `git merge-base A B`.
 
 **UN IDENTIFIANT ABRÉGÉ N'EST PAS L'IDENTIFIANT — ET IL NE SE COMPLÈTE JAMAIS
-DE MÉMOIRE** *(2026-09-11, 09-13 ×2, 09-30 ×2 — cinq fois payée)*. Les sept
+DE MÉMOIRE** *(2026-09-11, 09-13 ×2, 09-30 ×3 — six fois payée)*. Les sept
 premiers caractères d'un SHA suffisent à le *reconnaître*, jamais à le
 *reconstituer*. Vrai d'un SHA, d'un UUID, d'un identifiant de déploiement ou de
 ticket. **11/09** : douze caractères inventés derrière les sept lus, refus
@@ -91,6 +91,23 @@ Et le 30/09, **le message d'erreur désignait la mauvaise cause** : `409 Head
 branch was modified` invite à croire qu'une autre séance a poussé, hypothèse
 crédible ce jour-là. Vérifié au lieu d'être cru (`git rev-parse` des deux côtés,
 SHA identiques) : la branche n'avait pas bougé d'un octet.
+
+⊕ **SIXIÈME OCCURRENCE, LE 30/09 AU SOIR — ET C'EST LA PREMIÈRE FOIS QUE LE
+MÉCANISME MORD.** En écrivant l'ancre du grain Finubar : `b01afed9d4606b1a...`
+à la place de `b01afed9d4607926...` — **13 caractères justes sur 40**, 27
+inventés. Trois choses à en retenir, et la troisième est la seule nouvelle :
+**(1)** la faute est survenue dans le geste même qui consigne cette leçon, dans
+la séance qui venait de l'écrire deux fois ; **(2)** les 13 premiers caractères
+justes rendent la valeur **reconnaissable**, donc crédible à la relecture — c'est
+exactement ce qui la rend dangereuse ; **(3)** elle a été **attrapée**, pour la
+première fois, parce que les deux mécanismes étaient en place : la valeur a été
+reprise par **substitution de commande** (`VRAI=$(git rev-parse origin/main)`) et
+**comparée caractère par caractère avant d'écrire**, le contrôle nommant l'écart
+au lieu de le taire. ⛔ **Le compte des récidives n'est plus l'enseignement** :
+six fois suffisent à établir que la vigilance ne tient pas. Ce qui s'enseigne
+désormais, c'est qu'**un identifiant ne s'écrit que par une commande qui le lit,
+et qu'aucune valeur reconnaissable n'est réputée juste** — un préfixe correct
+est le déguisement de l'invention, pas sa preuve.
 
 
 **UN COMMIT « HORS MAIN » N'EST PAS UN TRAVAIL HORS MAIN — ON COMPARE LES
