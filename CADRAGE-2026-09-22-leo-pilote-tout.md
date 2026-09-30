@@ -1293,10 +1293,108 @@ d'ailleurs. Elles viennent d'Ultima et portent le moteur de l'étape ④.
 | `leo_operations` | le **registre du moteur** | idempotence, quotas, verrou de version, `payload` libre |
 | `leo_ecritures` | le **journal lisible par Paul** | outil · quadrant · anneau · phase, **zéro contenu dicté** |
 
-⚠️ **Deux journaux restent deux vérités** — le risque que ce cadrage dénonce
-depuis le début. La frontière ci-dessus est ma proposition, pas un arbitrage :
-c'est un choix produit, donc il revient à Paul. ⛔ Les tables ne sont PAS
-touchées.
+### §12.8 ter — La frontière, expliquée (Paul, 30/09 : « explique »)
+
+⛔ **CE NE SONT PAS DEUX JOURNAUX CONCURRENTS — CE SONT DEUX FONCTIONS.** L'un
+**régule** (il empêche), l'autre **rend compte** (il montre). Le risque de
+« deux vérités » n'existe que si les deux prétendent répondre à la MÊME
+question ; il suffit donc de leur en assigner une chacune.
+
+| | ce qu'il sait faire | ce qu'il ne sait PAS faire |
+|---|---|---|
+| **`leo_operations`** | **empêcher un doublon** (PK `mission_id, operation_id`) · **refuser sur état périmé** (`base_version`) · **compter les quotas** et **couper** (`max_calls`, `stopped`, `expires_at`) | dire quel **outil**, quel **quadrant**, sous quel **anneau**. Il ne connaît que des missions et des `payload` |
+| **`leo_ecritures`** | dire **quoi**, **où**, **sous quel régime**, **avec quelle issue** · garantir **zéro contenu dicté** par la forme des colonnes · distinguer une écriture **interrompue en vol** d'une écriture aboutie | empêcher un doublon · verrouiller la concurrence · compter un quota. **Il raconte, il ne régule pas** |
+
+⚠️ **Et leur défaut respectif est exactement la force de l'autre.** Le `payload`
+de `leo_operations` est un jsonb libre de 16 Ko : c'est ce qui le rend générique,
+et c'est ce qui l'empêche de promettre l'absence de PII. Les colonnes de
+`leo_ecritures` sont fermées : c'est ce qui tient la promesse, et c'est ce qui
+l'empêche de servir de registre générique.
+
+**La règle, ARBITRÉE par Paul le 30/09** — un seul chemin, deux enregistrements :
+
+> Une écriture passe par **`leo_operations`** pour être **autorisée et
+> dédoublonnée**, et laisse sa trace lisible dans **`leo_ecritures`**.
+> · « cette opération a-t-elle déjà été faite ? » → `leo_operations`
+> · « qu'est-ce que Léo a fait hier ? » → `leo_ecritures`
+
+⛔ **ET LE GARDE-FOU QUI EMPÊCHE LA DIVERGENCE, qui est le vrai sujet :**
+`leo_ecritures.trace_id` **=** `leo_operations.operation_id`. Alors une ligne de
+l'un se retrouve dans l'autre, et un contrôle peut exiger qu'**aucune écriture
+n'existe d'un seul côté**. *Sans cette clé partagée, la frontière ne tient que
+par une bonne intention — et une bonne intention n'est pas un garde-fou.*
+⚠️ `operation_id` est un `text` borné par un motif, `trace_id` un `uuid` : la
+forme d'`operation_id` accepte un UUID, donc le lien se fait sans toucher au
+schéma de la séance parallèle.
+
+**L'alternative écartée — fusionner** : ajouter outil/quadrant/anneau/phase à
+`leo_operations` et supprimer `leo_ecritures`. Deux raisons de ne pas le faire :
+le `payload` resterait libre, donc la promesse « zéro contenu dicté » tomberait ;
+et il faudrait modifier la table d'un chantier mené ailleurs — c'est précisément
+ce qui a coûté la journée.
+
+✅ **ARBITRÉ — Paul, le 30/09 : « garde les deux avec la clé ».** Voir
+§12.8 quater pour ce que la décision a coûté en mesures avant d'être tenable.
+⛔ Les tables n'ont PAS été touchées — la clé se pose dans le CODE, pas dans le
+schéma, et c'est précisément ce qui rend l'arbitrage applicable sans rouvrir le
+chantier de la séance parallèle.
+
+### §12.8 quater — ✅ LA DÉCISION, ET CE QU'ELLE A COÛTÉ AVANT D'ÊTRE TENABLE
+
+**Paul, le 30/09 : « garde les deux avec la clé ».** Les deux registres vivent,
+et `leo_ecritures.trace_id` **===** `leo_operations.operation_id` est ce qui les
+empêche de diverger.
+
+⛔ **L'ARGUMENT QUI A PORTÉ SA DÉCISION ÉTAIT UNE AFFIRMATION NON VÉRIFIÉE — et
+je l'ai mesurée après coup, avant d'écrire une ligne de code.** §12.8 ter disait
+« la forme d'`operation_id` accepte un UUID, donc le lien se fait sans toucher au
+schéma ». Je ne l'avais pas lue en base : je l'avais déduite du motif. Si elle
+avait été fausse, l'arbitrage de Paul portait sur une frontière irréalisable, et
+il l'aurait appris en la mettant en œuvre. C'est la Directive EL : rien de ce
+qui est donné à Paul n'est déduit — **surtout pas la prémisse d'un choix qu'on
+lui demande de trancher.**
+
+| mesuré en base le 30/09 | constat |
+|---|---|
+| UUID minuscule / MAJUSCULE / tout-zéros comme `operation_id` | **acceptés** — la clé partagée est possible |
+| tiret initial · 129 caractères | **refusés** — le motif reste discriminant, il n'accepte pas n'importe quoi |
+| INSERT réel des deux côtés, transaction annulée — jointure sur la clé | **2** |
+| les deux sondes de divergence sur cet état sain | **0** et **0** |
+| verrou de non-vacuité (la jointure porte bien sur quelque chose) | **2** |
+| ⚠️ les mêmes sondes sur des orphelins **fabriqués exprès** | **1** et **1** |
+
+⚠️ **La dernière ligne est celle qui compte.** Deux sondes à zéro sur un état
+sain ne prouvent rien : « aucune écriture n'existe d'un seul côté » est vert sur
+deux tables vides. Il a fallu fabriquer un journal sans opération et une
+opération sans journal pour les voir crier.
+
+**Où vit la clé, et pourquoi là** : `ouvrirTrace()` dans `api/_lib/leo-journal.js`
+est **la** façon de fabriquer la paire, et la seule. Deux endroits qui
+fabriquent l'identifiant finissent par en fabriquer deux différents, et alors
+les registres ne se rejoignent plus — sans que rien ne le dise au moment où ça
+arrive. Même principe que l'anneau : un CHAMP du catalogue, jamais une seconde
+liste.
+
+⛔ **ET LE HARNAIS A ATTRAPÉ UNE CORRECTION SILENCIEUSE DANS MON PROPRE CODE.**
+La première version rendait une trace **valide** sur `ouvrirTrace('')`,
+`ouvrirTrace(null)` et `ouvrirTrace(42)` : elle générait un UUID par-dessus
+l'argument absurde. Un appelant qui se trompe obtenait donc une clé au lieu d'un
+refus — exactement ce que ce dépôt interdit partout ailleurs (les énumérations
+d'arguments, la casse des anneaux, le vocabulaire des postes du corpus). Corrigé
+en séparant les deux sens de l'appel sur `args.length`, pas sur la valeur :
+`ouvrirTrace()` fabrique, `ouvrirTrace(x)` vérifie ou refuse.
+⚠️ Et son miroir compte autant : sans `sansArgumentGenere`, « fail-closed »
+pourrait vouloir dire « refuse tout », et la clé ne servirait jamais.
+
+⛔ **DOUBLE VÉRITÉ ASSUMÉE, DONC GARDÉE** : le motif d'`operation_id` vit dans le
+code ET en contrainte SQL — une contrainte ne s'importe pas. Un contrôle lit le
+motif dans le fichier de migration et exige que les deux coïncident, avec son
+verrou de non-vacuité (sur une regex qui ne matche pas, « les deux coïncident »
+serait vrai à vide). Même dispositif que pour `PHASES`.
+
+⚠️ **Ce que ce lot NE fait pas** : aucune migration, aucune écriture réelle.
+`ouvrirTrace` n'a **aucun appelant**, comme `autoriserEcriture` — à dessein. Les
+deux se branchent à l'étape ④.
 
 ### §12.9 — La prochaine action, unique
 
@@ -1304,7 +1402,3 @@ touchées.
 appelant, à dessein) sur une écriture réelle : entrée de journal posée AVANT
 l'acte, plafond consulté, issue posée après. C'est là, et seulement là, que Léo
 écrira. **Plus aucun gate ne l'attend.**
-
-Puis **④ — l'exécution** : brancher `autoriserEcriture` (qui n'a toujours aucun
-appelant, à dessein) sur une écriture réelle, avec l'entrée de journal posée
-AVANT l'acte et le plafond consulté. C'est là, et seulement là, que Léo écrira.

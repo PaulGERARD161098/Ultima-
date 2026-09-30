@@ -28,19 +28,15 @@
   "etat": "en_cours",
   "jalon": {
     "nom": "B1 — Léo AGIT dans l'anneau vert (cadrage §11)",
-    "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①② faits ; ③ ouvre sur un gate"
+    "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③ faits (table appliquée, journal + clé partagée) ; reste ④, l'exécution"
   },
   "dernier_arret": {
     "le": "2026-09-30",
-    "commit": "À RECALER APRÈS FUSION",
-    "quoi": "§12 scellé, 10 outils verts, `leo_ecritures` APPLIQUÉE et éprouvée (anon 42501) + faille RLS leo_operations corrigée. Avant : OMEGA fusionné (#310)."
+    "commit": "5a025b5c8567c155600bff40a265ed201f4b4497",
+    "quoi": "Frontière des deux registres ARBITRÉE (« garde les deux avec la clé ») : `ouvrirTrace()` pose la clé, +8 contrôles. Avant : §12 scellé, 10 outils verts, `leo_ecritures` appliquée."
   },
-  "prochaine_action": "④ — brancher l'exécution : entrée de journal AVANT l'acte, plafond consulté, issue après. ⚠️ Deux moteurs candidats, voir cadrage §12.8.",
-  "bloque_par": [
-    "Gestes Ycome en attente depuis le 28/09 : archiver le dépôt sur GitHub, supprimer le projet Vercel ycome",
-    "DÉCISION : deux journaux coexistent (leo_operations = moteur, leo_ecritures = lisible). Frontière proposée au cadrage §12.8, à trancher — choix produit.",
-    "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
-    "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
+  "prochaine_action": "④ — l'exécution : `ouvrirTrace()`, journal 'tentee' AVANT l'acte, plafond, issue après. Frontière arbitrée — cadrage §12.8 quater.",
+  "bloque_par": [    "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
     "La précision sur « mon dpe.fr » (VITRUVE)",
     "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis",
     "Vérifier que les inscriptions Supabase sont FERMÉES (« Allow new signups ») — un compte tiers pourrait remplir le quota par la route d'import"
@@ -100,7 +96,7 @@
       "depuis": "2026-08-28"
     },
     {
-      "quoi": "Audit 14/09 : les parcours authentifiés simulés sont couverts, notamment capture et changements de compte. Le parcours avec un vrai compte sur le déploiement reste à éprouver après livraison ; voir AUDIT-2026-09-14.md.",
+      "quoi": "Audit 14/09 : parcours authentifiés SIMULÉS couverts (capture, changement de compte). Le parcours avec un VRAI compte, sur le déploiement, reste à éprouver — AUDIT-2026-09-14.md.",
       "depuis": "2026-08-20"
     },
     {
