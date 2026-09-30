@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v56 2026-09-30 sha256:9771ce523225 -->
+<!-- lecons:empreinte v57 2026-09-30 sha256:e863c868112c -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -495,6 +495,12 @@ coûte une seconde et sauve l'annonce.
 **UNE MESURE UNIQUE SUR UNE BASE PARTAGÉE NE MESURE QUE L'INSTANT** *(2026-09-14, RenoBoost)*.
 J'ai annoncé « 708 ms, 6,4 fois moins » sur UN `explain analyze` pris juste après un `ANALYZE`, tout en cache, et j'ai fait redescendre un délai sur cette foi. Réessais : 1 547 · 4 411 · 7 905 · 9 094 ms, même plan, mêmes tampons.
 ⇒ *Règle* : un seuil se décide sur la PIRE mesure, jamais sur la première.
+⊕ **Payé de nouveau le 2026-09-30** (RenoDevis, fiche B2) : « 0 devis ne porte
+d'`extra.releve` », mesuré le 15/09 dans un commentaire de test, recopié dans
+une fiche comme un fait du jour. Le dry run à +20 min a rendu **2**. La
+conclusion (zéro euro perdu) tenait, sur une autre mesure — 0 ligne, 0 envoi.
+Une mesure datée qu'on recopie se rejoue **avant** d'être écrite, pas au dry
+run d'après.
 
 
 **DOUZE CAS CONCORDANTS NE FONT PAS UNE LOI** *(2026-09-15, RenoDevis ; portée aussi dans RenoBoost, PR #464)*.
@@ -1359,6 +1365,27 @@ fait en croyant être à jour.
 **LE COMMENT AVANT LE TRAVAIL** *(directive EL)*. Étapes, moyens, critères de
 réussite explicités avant d'exécuter. En pratique : **la maquette avant le
 code**, éprouvée le 2026-08-01 sur VRANESH et DRAUKHAIN.
+
+**UN CHOIX PRODUIT DÉCOUVERT EN LISANT LE CODE ROUVRE LE GATE — IL SE POSE EN
+PANNEAU AVANT LA PREMIÈRE LIGNE, JAMAIS APRÈS** *(2026-09-30, RenoDevis, boucle
+B2)*. La fiche de B2 était validée et ses trois questions répondues. En lisant le
+composant pour coder, six choix que la fiche ne couvrait pas sont apparus : un
+champ `achat` stocké alors que la fiche disait « pas de colonne achat », la
+conversion des prix posés par chantier, un × 1,35 conservé dans `lignes.js` pour
+les entrées non marquées, le dessin d'un bouton, une ligne d'export retirée, un
+vocabulaire pour Réno. Sur « implante toutes les solutions du pre-mortem, puis
+prépare des panneaux », j'ai lancé la fusion de `main`, l'installation, la
+baseline, et j'allais coder avec ces six choix pris seule, pour les présenter
+une fois implantés. Paul a dû arrêter : « on ne brûle pas d'étape ».
+*Ce que ça a coûté* : une interruption, et vingt minutes à reconstituer ce qui
+manquait — le prompt de code en six points, la maquette, une mesure que seul
+Paul peut faire (combien de prix il a tapés dans sa bibliothèque), un
+consommateur oublié (`app/releve/ui.tsx:302`).
+⛔ **Le gate d'EL n'est pas franchi une fois pour toutes** : il se rouvre à
+chaque choix que la lecture révèle, et « puis des panneaux » se lit dans l'ordre
+d'EL — panneaux, puis code —, jamais dans l'ordre des mots. Décider après avoir
+codé, c'est coder deux fois. Et le modèle que Paul nomme pour coder est une
+consigne, pas un détail : on ne continue pas dessus sur une phrase.
 
 **UNE SEULE BOUCLE À LA FOIS, ET ON CAPITALISE** *(directive EB)*. Ne jamais
 passer à autre chose sans avoir bouclé : livrée, vérifiée, committée, annotée.

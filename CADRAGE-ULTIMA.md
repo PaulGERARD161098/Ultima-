@@ -8,6 +8,23 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🧭 **SESSION 2026-09-30 (nuit) — B2, LA DOUBLE MARGE, CADRÉE JUSQU'À LA PREMIÈRE LIGNE (branche `claude/bold-ride-lz23qg`, PR de séance en brouillon ; RenoDevis idem ; aucune fusion).**
+  ✅ Reprise à froid depuis la branche de la chaîne ; l'état du §2 remesuré à
+  18:07 puis 18:58 UTC, aucune ligne à corriger ; les gestes A présentés avec
+  leur part de Claude. ✅ B2 ouverte : fiche RenoDevis
+  `CADRAGE-2026-09-14-pilote-sola.md` §13 — existant lu ligne à ligne (un seul
+  site défectueux, `DevisLineBuilder` sain), onze décisions rendues en panneaux
+  (§13.13, §13.18), prompt de code en six points (§13.15), maquette éprouvée au
+  navigateur (§13.16), neuf casses écrites d'avance (§13.17) ; E1 mesuré
+  (`main` fusionné, 647/647, `tsc` 0). ⛔ Aucun code : Paul a arrêté une
+  exécution partie avant les panneaux (« on ne brûle pas d'étape ») → leçon
+  **v57**, propagée à RenoDevis. ⚠️ Deux séances ont écrit sur la branche de la
+  chaîne en même temps ; le plan et les grains de l'autre séance annoncent des
+  fusions avant l'API : à 18:58 UTC, #563 et #214 sont fusionnées, **#321
+  ouverte**. ⏭ Le §0 du plan n'est pas corrigé pendant que l'autre séance
+  fusionne — il se corrige sur mesure, après.
+  Prochaine action : Paul lit le compteur « confirmés » (`/releve` › Biblio),
+  puis E2 avec Opus 5.5 (fiche §13.15-18).
 - 🧭 **SESSION 2026-09-30 (soir) — LA CHAÎNE RÉNOBOOST, CADRÉE ET ROUTÉE (PR #321 · RenoBoost #563 · RenoDevis #214, fusionnées en mode merge sur le go de Paul en fin de séance).**
   ✅ Route posée : `PLAN-2026-09-30-chaine-A-Z.md` — dix maillons, familles
   A → B → C → N → D, E en réserve, l'état vivant au §2, la reprise au §0.

@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-30",
-    "quoi": "Chaîne Rénoboost : route posée (PLAN-2026-09-30-chaine-A-Z.md), relue par Léo, leçons v56 ; #321 fusionnée en mode merge, après #326.",
-    "commit": "e14f470df5c5ffde290347b10ec109e94f20b770"
+    "quoi": "Chaîne Rénoboost : route posée (PLAN-2026-09-30-chaine-A-Z.md), leçons v57 ; B2 (la double marge, RenoDevis) cadrée jusqu'à la première ligne, code non commencé. MESURÉ à 18:58 UTC : #563 et #214 fusionnées, #321 (le plan) OUVERTE — main ne porte pas encore le plan ; il vit sur la branche de la chaîne et sur claude/bold-ride-lz23qg.",
+    "commit": "675e2b4cb53143414589adf40a0ef5d455ff6b9b"
   },
   "prochaine_action": "④ — l'exécution : `ouvrirTrace()`, journal 'tentee' AVANT l'acte, plafond, issue après. Frontière arbitrée — cadrage §12.8 quater.",
   "bloque_par": [
@@ -45,7 +45,11 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "Chaîne Rénoboost : route et état vivant dans PLAN-2026-09-30-chaine-A-Z.md (fusionné le 30/09, #321). Reprise : son §0.",
+      "quoi": "Chaîne — B2 (la double marge, RenoDevis) cadrée le 30/09 : fiche §13 du cadrage pilote, onze décisions, prompt 6 points, maquette, neuf casses ; E1 mesuré ; aucun code. E2 avec Opus 5.5 après que Paul a lu le compteur « confirmés » de sa bibliothèque.",
+      "depuis": "2026-09-30"
+    },
+    {
+      "quoi": "Chaîne Rénoboost : route et état vivant dans PLAN-2026-09-30-chaine-A-Z.md — PR #321 OUVERTE à 18:58 UTC le 30/09 (main 675e2b4 sans le plan). Reprise : son §0, depuis la branche tant que #321 n'est pas fusionnée.",
       "depuis": "2026-09-30"
     },
     {
