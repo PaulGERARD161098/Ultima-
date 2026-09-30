@@ -17,7 +17,18 @@
   éprouvée en rôle `authenticated`. ❌ La prémisse de « garde les deux avec la
   clé » est fausse côté produit : `leo_operations` n'est pas inscriptible
   (SELECT seul, aucune création de mission). ⏳ Paul : RPC dédiée (gate).
-  ⏭ ⑤ le défaire joué. Détail : `CADRAGE-2026-09-22-leo-pilote-tout.md` §13.
+  ⏭ ⑤ le défaire : cadré (§14), bloqué sur deux choix de Paul (§14.2). Détail :
+  `CADRAGE-2026-09-22-leo-pilote-tout.md` §13-§14.
+- 🌌 **SESSION 2026-09-30 (après-midi) — RIVEN EN NÉBULEUSES, À PLAT ET EN 3D (PR `claude/riven-nebuleuses`, fusion squash).**
+  Déclencheur : 43 contacts entrés dans RIVEN (39 d'un cercle d'affaires, 4 cartes
+  BATIMAT — base seule, rien dans le dépôt) ; Paul : « trop d'overlap ». Neuf
+  nébuleuses par secteur (`js/nebuleuses-riven.js`, une seule table pour les deux
+  vues) ; vue à plat par défaut, noms jamais superposés (cachés s'ils n'ont pas de
+  place, jamais perdus : panneau) ; 3D en neuf amas au lieu de quarante et un.
+  Défaut ancien du moteur corrigé en route : la visée clavier sous-corrigeait à la
+  verticale (127 → 46 unités). Unitaires 48/48, navigateur 54/54 en local.
+  ⚠️ 3 noms fictifs sur 54 cachés à 390 px (plafond mesuré). Détail :
+  `CADRAGE-RIVEN-NEBULEUSES.md` §7.
 - 🧹 **SESSION 2026-09-28 — #299 · #300 · #301 FUSIONNÉES (`main` = `0922329`) ; YCOME RETIRÉ, LEÇONS v43 PARTOUT.**
   YCOME abandonné par Paul : nœud, lien d'ALPHA et phrase de Léo retirés — ALPHA compte
   trois caps ; les garanties d'étoile d'attente sont reciblées sur DOKLĚS (SYMPHO en

@@ -24,7 +24,7 @@
   "projet": "Ultima",
   "depot": "PaulGERARD161098/Ultima-",
   "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-  "rattache_a": "CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md",
+  "rattache_a": "CADRAGE-RIVEN-NEBULEUSES.md · CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md",
   "etat": "en_cours",
   "jalon": {
     "nom": "B1 — Léo AGIT dans l'anneau vert (cadrage §11)",
@@ -32,7 +32,7 @@
   },
   "dernier_arret": {
     "le": "2026-09-30",
-    "quoi": "B1 ④ livré : un vert s'exécute sans clic derrière une trace (ouvrir → acte → clore, plafond, fail-closed vers la carte). Revue adversariale : 1 bloquant (S1) + 5 corrigés ; journal durci en base (migration appliquée, éprouvée en rôle authenticated). ⑤ cadré (§14), pas codé.",
+    "quoi": "B1 ④ livré : un vert s'exécute sans clic derrière une trace (ouvrir → acte → clore, plafond, fail-closed vers la carte). Revue adversariale : 1 bloquant (S1) + 5 corrigés ; journal durci en base (migration appliquée, éprouvée en rôle authenticated). ⑤ cadré (§14), pas codé. Même jour, séance parallèle : RIVEN en 9 nébuleuses (#322).",
     "commit": "7571b7473961e78b90a3fbd91a7dd3758088b119"
   },
   "prochaine_action": "⑤ — trancher les DEUX choix du cadrage §14.2 (enrichissement : repasser orange ? · bouton défaire : cartouche + écran), puis coder le défaire joué par type vert, refusé si la cible a des dépendances (§14.0).",
@@ -48,6 +48,14 @@
   "boucles_ouvertes": [
     {
       "quoi": "LEÇON À CONSIGNER + PROPAGER (9 dépôts) : rechute de « un droit se vérifie du côté où il peut être contourné » — la prémisse de l'arbitrage §12.8 quater avait été mesurée en superutilisateur (MCP), pas sur le chemin du produit. Cadrage §13.0.",
+      "depuis": "2026-09-30"
+    },
+    {
+      "quoi": "smoke-accueil-finubar ④c (« le remettre remonte le ciel là où il était ») rougit par intermittence, toujours 577 → 581 px : ~1 passage sur 10, MESURÉ sur main pur (b01afed) le 30/09 — préexistant, indépendant de B1 ④. Deux états stables, pas une animation inachevée : cause à trouver dans le recadrage du ciel.",
+      "depuis": "2026-09-30"
+    },
+    {
+      "quoi": "RIVEN nébuleuses : à 390 px, 3 noms fictifs sur 54 cachés (restent au panneau). Plus bas = sous 12 px ou étoiles déplacées : non tranché. CADRAGE-RIVEN-NEBULEUSES.md §7",
       "depuis": "2026-09-30"
     },
     {
@@ -126,6 +134,27 @@
 > Les séances, de la plus récente à la plus ancienne. Une entrée = une date, un
 > fait vérifié, une décision. La mémoire longue ; le bloc ci-dessus est la mémoire
 > courte, et c'est lui qui est lu automatiquement.
+
+### 2026-09-30 (soir, go solo) — B1 ④ : Léo agit dans l'anneau vert
+
+Un vert s'exécute sans clic derrière une trace (`POST /api/leo/ecritures` :
+garde → plafond → `tentee` → acte → issue) ; tout refus du journal retombe sur la
+carte. Revue adversariale : un bloquant (S1, cible résolue par inclusion non
+nommée) et cinq défauts, tous fermés et éprouvés en retirant leur correctif.
+Migration de durcissement APPLIQUÉE et sondée en rôle `authenticated`.
+`leo_operations` n'est pas inscriptible par le produit : la clé partagée attend une
+RPC (gate). ⑤ cadré, bloqué sur deux choix de Paul. Détail :
+**`CADRAGE-2026-09-22-leo-pilote-tout.md` §13-§14**.
+
+### 2026-09-30 — RIVEN en nébuleuses, à plat et en 3D
+
+43 contacts entrés en base (39 d'un cercle d'affaires, 4 cartes BATIMAT) ; rien
+d'eux dans le dépôt. Le Ciel de RIVEN passe en neuf nébuleuses — une table,
+deux vues. Défaut ancien du moteur 3D corrigé en route (visée clavier
+verticale). Unitaires 48/48, harnais navigateur verts en local. Fusion en
+squash : le grain pointe `548c439`, la tête de `main` juste avant — la dérive
+d'un commit que le rappel annoncera, c'est cette fusion. Détail :
+**`CADRAGE-RIVEN-NEBULEUSES.md` §7**. Le jalon B1 ④ reste la prochaine action.
 
 ### 2026-09-14 — livraison de l’audit terminée
 

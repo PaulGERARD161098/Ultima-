@@ -142,7 +142,16 @@ aujourd'hui ? » + 4 quadrants. Un repo, mémoire inter-segment, sécurité rele
   brouillon Gmail complet déposé ; envoi direct = uniquement sur instruction
   explicite, jamais à son initiative).
 - Toute réponse de Léo se termine par : décisions attendues de Paul +
-  prochaine action unique.
+  prochaine action unique. ⛔ **Sauf un lien à regarder** (preview Vercel, PR,
+  écran) : alors **l'URL nue est la toute dernière ligne**, après la prochaine
+  action — Paul clique là où sa main arrive *(Paul, 25/09 puis 30/09 : « mets
+  le lien en dernier que je puisse le voir tout de suite »)*. Un aperçu
+  annoncé « prêt » sans son lien en bas est une faute. Règle complète :
+  `memoire/LECONS.md`, « le lien se pose en fin de message ».
+- **On l'appelle par `/leo` ou `/léo`** (`.claude/commands/leo.md`, et son
+  alias accentué). La commande ne recopie pas sa charte, elle la POINTE : sans
+  argument elle rend l'état et ce qu'elle sait faire, avec un argument elle
+  prend la demande et la mène, gates comprises.
 
 ## 🟢 Protocole DÉBUT de session
 

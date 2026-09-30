@@ -37,10 +37,31 @@ import { readFileSync, existsSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-// 60 Ko : large devant la taille actuelle (~11 Ko), assez bas pour qu'un
-// fichier parti en vrille ne noie pas l'ouverture. Si la borne se met à mordre,
-// c'est que le fichier a besoin d'être élagué — pas la borne relevée.
-const MAX_OCTETS = 60_000;
+// ⛔ LEVÉE DE 60 000 À 200 000 LE 30/09/2026, SUR DÉCISION DE PAUL — et le
+// commentaire qui tenait ici disait l'inverse : « si la borne se met à mordre,
+// c'est que le fichier a besoin d'être élagué — pas la borne relevée ». Cette
+// phrase a été ÉPROUVÉE ce jour-là, et elle envoyait chaque séance dans un
+// cul-de-sac. La passe d'élagage a mesuré, sur les 145 leçons du corpus :
+//   · 73 citent un mécanisme (harnais, sonde, contrainte, garde-fou) ;
+//   ·  14 en NOMMENT un — les 59 autres disent « corrigé par un harnais »
+//      sans dire lequel, donc rien n'y est vérifiable ;
+//   ·   2 ont leur règle tenue par une garde nommée ET prouvée en la cassant ;
+//   ·   0 sont archivables, parce que ces deux règles PORTENT PLUS LOIN que
+//       leur garde (l'une garde 15 feuilles d'un dépôt, l'autre 2 documents
+//       d'un autre) — les retirer perdrait une règle générale pour se protéger
+//       d'un défaut local.
+// ⇒ La route de l'élagage n'existe pas. Ce qui mordait, c'était la borne : à
+// 60 Ko, 78 leçons sur 145 n'atteignaient AUCUNE séance sur AUCUN des dix
+// dépôts — dont « le lien se pose en fin de message », que Paul a dû redemander
+// le 25/09 PUIS le 30/09. Il payait l'absence plus cher que les octets.
+//
+// ⚠️ ELLE RESTE UNE BORNE, et c'est voulu : un rappel sans plafond noie
+// l'ouverture le jour où un script verse en boucle dans le fichier. 200 Ko
+// laissent ~69 Ko de marge sur les 131 Ko mesurés, soit ~70 leçons. Le jour où
+// elle mord de nouveau, la machinerie de coupe ci-dessous nomme ce qu'elle
+// laisse dehors — et la mesure ci-dessus dit de ne PAS refaire la passe
+// d'archivage : elle a déjà été faite, et elle rend 0.
+const MAX_OCTETS = 200_000;
 
 // ⛔ LE MOTIF DU SCEAU EST RECOPIÉ ICI, et c'est délibéré. Sa source est
 // `finubar/lecons-empreinte.mjs`, mais ce script-ci est copié dans le `.claude/`
@@ -149,8 +170,12 @@ try {
       : []),
     ...dehors.map((t) => `   · ${t} — AUCUNE leçon servie`),
     '   Ce qui manque est dans memoire/LECONS.md, en entier : le lire avant de',
-    "   travailler sur ce que ces familles couvrent. ⚠️ Et c'est le FICHIER qui",
-    '   doit être élagué, jamais cette borne qui doit être levée.',
+    "   travailler sur ce que ces familles couvrent.",
+    "   ⛔ NE PAS REFAIRE LA PASSE D'ARCHIVAGE : elle a été faite le 30/09/2026 et",
+    "   elle rend 0 — sur 145 leçons, 2 seulement sont tenues par une garde nommée",
+    '   et prouvée, et ces 2 règles portent plus loin que leur garde. La route de',
+    "   l'élagage n'existe pas ; c'est la borne qui se relève, avec sa mesure.",
+    '   (Elle a déjà été relevée une fois, le 30/09/2026 : 60 000 → 200 000.)',
   ];
   const rappel = [
     '⛔ En fin de séance : si une erreur a coûté quelque chose, elle devient une',

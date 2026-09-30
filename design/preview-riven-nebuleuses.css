@@ -1,0 +1,8 @@
+/* Maquette RIVEN en nébuleuses : la page seule, sans la coque du produit. */
+html, body { margin: 0; height: 100%; background: #03070e; color: #f2ead6; }
+.apercu-neb {
+  display: flex; flex-direction: column; height: 100vh; box-sizing: border-box; padding: 10px 12px;
+  font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+}
+.apercu-neb-tete h1 { margin: 0; font-size: 1.05rem; font-weight: normal; letter-spacing: .06em; color: #d8bd82; }
+.apercu-neb-tete p, #apercu-neb-ouvert { margin: 2px 0 8px; font-size: .8rem; font-style: italic; color: #9aa3ad; }

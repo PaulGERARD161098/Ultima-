@@ -1536,6 +1536,15 @@ dépassait la borne de 4 000 et **bloquait le tour suivant** jusqu'au
 rechargement. L'écho renvoyé au modèle est borné à 1 000 ; la bulle montre tout
 à Paul (smoke C16, éprouvé en retirant la borne).
 
+⚠️ **Une explication que j'avais donnée était fausse, et elle est retirée.**
+`smoke-accueil-finubar` ④c a rougi pendant la batterie ; je l'avais attribué à
+une course (`macro.json` réécrit pendant le run). Il a rougi de nouveau sans
+qu'aucun fichier ne bouge. Mesuré ensuite : les données du bandeau sont
+**stubées** dans ce harnais, donc `macro.json` n'y joue aucun rôle ; A/B
+entrelacé main / branche : **1/10 et 0/10** ; et le même verdict, aux mêmes
+valeurs (577 → 581), rougit sur **`main` pur**. Intermittence préexistante,
+indépendante de ④ — inscrite en boucle ouverte, pas corrigée ici.
+
 ### §13.3 — La prochaine action, unique
 
 **⑤ — le défaire et « ce que Léo a fait ».** Le critère de sortie de B1 dit
