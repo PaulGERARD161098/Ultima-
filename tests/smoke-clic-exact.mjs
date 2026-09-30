@@ -7,6 +7,11 @@
 // le cadrage se recentrait, et l'étoile visée partait de 119 px sous le
 // curseur. Le clic tombait dans le vide — et rien ne le disait.
 //
+// 2026-09-29 : NAGA et GRIMA sont SUPPRIMÉS (incident ci-dessus = historique).
+// Les mêmes gestes s'éprouvent sur les deux têtes d'OMEGA qui contiennent
+// quelque chose : IMLADRIK (ex-NAGA, qui porte désormais ADRAMELECH et TAO) et
+// NICOL BOLAS (ex-membre de GRIMA). RIVEN, feuille, ouvre sa page : hors sujet.
+//
 // Ce harnais rejoue les GESTES RÉELS, pas un `dispatchEvent('click')` qui
 // atterrit toujours sur l'élément qu'on lui nomme : ici la souris se déplace
 // vraiment, et c'est le navigateur qui décide ce qu'il y a sous elle.
@@ -47,7 +52,7 @@ async function ouvrir(options = {}) {
   await page.route('**/api/cockpit', (route) => route.fulfill({
     status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, data: {} }),
   }));
-  await page.goto(`${BASE}/ultima.html${options.fragment || ''}`, { waitUntil: 'load', timeout: 20000 });
+  await page.goto(`${BASE}/omega.html${options.fragment || ''}`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForTimeout(1500);
   return { page, contexte };
 }
@@ -75,7 +80,7 @@ function isoleSur(id, e) {
 }
 
 // ===========================================================================
-for (const id of ['naga', 'grima']) {
+for (const id of ['imladrik', 'nicol-bolas']) {
   console.log(`— ${id.toUpperCase()} : les cinq gestes, depuis la racine —`);
 
   // ① Le clic instantané, au centre mesuré AVANT tout survol.
@@ -135,20 +140,20 @@ for (const id of ['naga', 'grima']) {
 }
 
 // ===========================================================================
-console.log('— Le déplacement image par image, sur NAGA —');
+console.log('— Le déplacement image par image, sur IMLADRIK —');
 {
   const { page, contexte } = await ouvrir();
-  const p0 = await centre(page, 'naga');
+  const p0 = await centre(page, 'imladrik');
   await page.mouse.move(p0.x, p0.y);
   const releves = {};
   let cumul = 0;
   for (const palier of [16, 100, 250, 500]) {
     await page.waitForTimeout(palier - cumul); cumul = palier;
-    const p = await centre(page, 'naga');
+    const p = await centre(page, 'imladrik');
     releves[palier + 'ms'] = p ? +Math.hypot(p.x - p0.x, p.y - p0.y).toFixed(1) : null;
   }
-  chiffres['naga.deplacementParPalier'] = releves;
-  verifier('NAGA ne bouge à aucun palier (16 · 100 · 250 · 500 ms)',
+  chiffres['imladrik.deplacementParPalier'] = releves;
+  verifier('IMLADRIK ne bouge à aucun palier (16 · 100 · 250 · 500 ms)',
     Object.values(releves).every((d) => d !== null && d < 0.5), JSON.stringify(releves));
   await contexte.close();
 }
@@ -157,10 +162,10 @@ console.log('— Le déplacement image par image, sur NAGA —');
 console.log('— Le doigt : tap, et tap glissé —');
 {
   const { page, contexte } = await ouvrir({ hasTouch: true, viewport: { width: 390, height: 844 }, isMobile: true });
-  const c = await centre(page, 'naga');
+  const c = await centre(page, 'imladrik');
   await page.touchscreen.tap(c.x, c.y);
   await page.waitForTimeout(900);
-  verifier('Tap sur NAGA → isolé', isoleSur('naga', await etat(page)), JSON.stringify(await etat(page)));
+  verifier('Tap sur IMLADRIK → isolé', isoleSur('imladrik', await etat(page)), JSON.stringify(await etat(page)));
   await contexte.close();
 }
 {
@@ -168,7 +173,7 @@ console.log('— Le doigt : tap, et tap glissé —');
   // Le seuil du moteur est de 4 px (`ciel.js`) : au-delà, c'est une rotation,
   // pas un clic. On MESURE ce qu'il se passe ; on n'invente pas de règle.
   const { page, contexte } = await ouvrir({ hasTouch: true, viewport: { width: 390, height: 844 }, isMobile: true });
-  const c = await centre(page, 'naga');
+  const c = await centre(page, 'imladrik');
   const glisse = await page.evaluate(({ x, y }) => new Promise((resoudre) => {
     const cible = document.elementFromPoint(x, y);
     const t = (type, px) => cible.dispatchEvent(new PointerEvent(type, {
@@ -186,41 +191,41 @@ console.log('— Le doigt : tap, et tap glissé —');
 // ===========================================================================
 console.log('— Le témoin : l\'écran isolé, où le dépliage était déjà coupé —');
 {
-  const { page, contexte } = await ouvrir({ fragment: '#naga' });
+  const { page, contexte } = await ouvrir({ fragment: '#imladrik' });
   const avant = await centre(page, 'tao');
   await page.mouse.move(avant.x, avant.y);
   await page.waitForTimeout(400);
   const apres = await centre(page, 'tao');
   const d = Math.hypot(apres.x - avant.x, apres.y - avant.y);
-  verifier('Témoin · TAO ne bouge pas au survol sous #naga', d < 0.5, `${d.toFixed(1)} px`);
+  verifier('Témoin · TAO ne bouge pas au survol sous #imladrik', d < 0.5, `${d.toFixed(1)} px`);
   await page.mouse.click(avant.x, avant.y);
   await page.waitForTimeout(900);
-  verifier('Témoin · clic sur TAO depuis #naga → #tao', isoleSur('tao', await etat(page)), JSON.stringify(await etat(page)));
+  verifier('Témoin · clic sur TAO depuis #imladrik → #tao', isoleSur('tao', await etat(page)), JSON.stringify(await etat(page)));
   await contexte.close();
 }
 
 // ===========================================================================
-console.log('— Le clavier : Tab jusqu\'à NAGA, Entrée —');
+console.log('— Le clavier : Tab jusqu\'à IMLADRIK, Entrée —');
 {
   const { page, contexte } = await ouvrir();
-  await page.focus('#ciel-noeud-scene .ciel-etoile[data-noeud-id="naga"]');
+  await page.focus('#ciel-noeud-scene .ciel-etoile[data-noeud-id="imladrik"]');
   await page.waitForTimeout(400);
   const bouge = await page.evaluate(() => {
-    const g = document.querySelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id="naga"]');
+    const g = document.querySelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id="imladrik"]');
     return { focusTenu: document.activeElement === g,
       etoiles: document.querySelectorAll('#ciel-noeud-scene .ciel-etoile[data-noeud-id]').length };
   });
-  verifier('Le focus clavier ne redessine pas le ciel (2 étoiles, focus tenu)',
-    bouge.focusTenu && bouge.etoiles === NOEUDS['ultima-perso'].enfants.length, JSON.stringify(bouge));
+  verifier('Le focus clavier ne redessine pas le ciel (les trois caps d\'OMEGA, focus tenu)',
+    bouge.focusTenu && bouge.etoiles === NOEUDS.omega.enfants.length, JSON.stringify(bouge));
   await page.keyboard.press('Enter');
   await page.waitForTimeout(900);
   const e = await etat(page);
   const focusApres = await page.evaluate(() => {
     const a = document.activeElement; return a && a.getAttribute ? a.getAttribute('data-noeud-id') : null;
   });
-  verifier('Entrée sur NAGA → isolé', isoleSur('naga', e), JSON.stringify(e));
-  verifier('Après la plongée, le focus est sur une étoile de NAGA',
-    NOEUDS.naga.enfants.includes(focusApres), String(focusApres));
+  verifier('Entrée sur IMLADRIK → isolé', isoleSur('imladrik', e), JSON.stringify(e));
+  verifier('Après la plongée, le focus est sur une étoile d\'IMLADRIK',
+    NOEUDS.imladrik.enfants.includes(focusApres), String(focusApres));
   await contexte.close();
 }
 
@@ -229,10 +234,10 @@ console.log('— Le clavier ne couche pas la constellation (critique impeccable,
 // Mesuré par la revue de design du lot 2 : une tabulation faisait VISER
 // l'étoile, la caméra pivotait, et sur une couronne toutes les étoiles
 // tombaient sur la même verticale (étendue 799 px → 0 sur RENOBOOST IA).
-// La figure n'existait que pour la souris. Ici : ULTIMA isolé sur NAGA, puis
+// La figure n'existait que pour la souris. Ici : OMEGA isolé sur IMLADRIK, puis
 // Tab jusqu'à une étoile — l'étendue horizontale ne doit pas s'effondrer.
 {
-  const { page, contexte } = await ouvrir({ fragment: '#naga' });
+  const { page, contexte } = await ouvrir({ fragment: '#imladrik' });
   const etendue = () => page.evaluate(() => {
     const xs = [...document.querySelectorAll('#ciel-noeud-scene .ciel-etoile[data-noeud-id] .ciel-zone')]
       .map((z) => { const r = z.getBoundingClientRect(); return r.x + r.width / 2; });

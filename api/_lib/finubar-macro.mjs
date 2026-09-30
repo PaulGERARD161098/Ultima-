@@ -4,7 +4,7 @@
 // l'IMPORTER pour que Vercel l'embarque dans le paquet de la fonction, et
 // que `api/_lib/` est le seul motif d'import éprouvé en production ici.
 export default {
-  "le": "2026-09-29",
+  "le": "2026-09-30",
   "projets": [
     {
       "ok": true,
@@ -82,8 +82,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "806867f",
         "tete_le": "2026-09-22T09:16:37+02:00",
@@ -91,8 +91,8 @@ export default {
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 8,
-      "jours_en_attente": 43,
+      "jours_depuis_maj": 9,
+      "jours_en_attente": 44,
       "rang": 0
     },
     {
@@ -159,8 +159,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "ec20a1f",
         "tete_le": "2026-09-22T10:36:52+00:00",
@@ -168,8 +168,8 @@ export default {
         "commit_inconnu": true
       },
       "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 22,
-      "jours_en_attente": 76,
+      "jours_depuis_maj": 23,
+      "jours_en_attente": 77,
       "rang": 1
     },
     {
@@ -214,8 +214,8 @@ export default {
         "bloque_par[]"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "ded8b3a",
         "tete_le": "2026-09-22T10:36:52+00:00",
@@ -223,8 +223,8 @@ export default {
         "commit_inconnu": true
       },
       "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 26,
-      "jours_en_attente": 56,
+      "jours_depuis_maj": 27,
+      "jours_en_attente": 57,
       "rang": 1
     },
     {
@@ -257,8 +257,8 @@ export default {
       },
       "recits": [],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": null,
         "tete_le": null,
@@ -266,8 +266,8 @@ export default {
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 7,
-      "jours_en_attente": 10,
+      "jours_depuis_maj": 8,
+      "jours_en_attente": 11,
       "rang": 1
     },
     {
@@ -347,8 +347,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": null,
         "tete_le": null,
@@ -356,8 +356,8 @@ export default {
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 7,
-      "jours_en_attente": 56,
+      "jours_depuis_maj": 8,
+      "jours_en_attente": 57,
       "rang": 2
     },
     {
@@ -376,8 +376,8 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-09-29",
-          "quoi": "Cadrage §12 (Léo agit, 2 POV creusés) + B1 ①② : l'anneau est un champ du catalogue, 3 verts, 19 contrôles éprouvés par 6 sabotages.",
-          "commit": "7e779e673e864a0293d955df9f4d1e4620e9a82b"
+          "quoi": "OMEGA fusionné (#310) : Ultima→Omega, Grima/Naga supprimés, Imladrik macro-projet. IFULVIN cadré sans code — voir CADRAGE-IFULVIN.md.",
+          "commit": "0e60dbedd13347cc4faf088702ce4430f4129980"
         },
         "prochaine_action": "B1 étape ③ — le journal des écritures. ⛔ Il commence par le gate : créer la table `leo_ecritures`. On n'écrit pas le module avant la table.",
         "bloque_par": [
@@ -444,9 +444,9 @@ export default {
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 40,
+      "mesure_le": "2026-09-30",
+      "jours_depuis_maj": 1,
+      "jours_en_attente": 41,
       "rang": 2
     },
     {
@@ -488,8 +488,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "078de67",
         "tete_le": "2026-09-19T18:50:58+02:00",
@@ -497,8 +497,8 @@ export default {
         "commit_inconnu": true
       },
       "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 39,
-      "jours_en_attente": 39,
+      "jours_depuis_maj": 40,
+      "jours_en_attente": 40,
       "rang": 2
     },
     {
@@ -535,8 +535,8 @@ export default {
       },
       "recits": [],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "12af06d",
         "tete_le": "2026-09-19T18:49:35+02:00",
@@ -544,8 +544,8 @@ export default {
         "commit_inconnu": true
       },
       "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 14,
-      "jours_en_attente": 39,
+      "jours_depuis_maj": 15,
+      "jours_en_attente": 40,
       "rang": 2
     },
     {
@@ -589,8 +589,8 @@ export default {
         "bloque_par[]"
       ],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "ca445fb",
         "tete_le": "2026-09-22T10:26:49+02:00",
@@ -598,8 +598,8 @@ export default {
         "commit_inconnu": true
       },
       "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 7,
-      "jours_en_attente": 21,
+      "jours_depuis_maj": 8,
+      "jours_en_attente": 22,
       "rang": 2
     },
     {
@@ -633,8 +633,8 @@ export default {
       },
       "recits": [],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": null,
         "tete_le": null,
@@ -642,8 +642,8 @@ export default {
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 7,
-      "jours_en_attente": 19,
+      "jours_depuis_maj": 8,
+      "jours_en_attente": 20,
       "rang": 2
     }
   ],
@@ -652,7 +652,7 @@ export default {
     "lisibles": 10,
     "illisibles": 0,
     "hors_seance": 0,
-    "repris": 0,
+    "repris": 9,
     "en_cours": 7,
     "en_attente_de_paul": 3,
     "au_repos": 0,

@@ -1,4 +1,4 @@
-// LV5 / P2 — LE PLEIN ÉCRAN SUR LA COQUE DE PRODUCTION (`ultima.html`).
+// LV5 / P2 — LE PLEIN ÉCRAN SUR LA COQUE DE PRODUCTION (`omega.html`, ex-`ultima.html`).
 //
 // Ce que ce harnais prouve, et pourquoi chaque point existe :
 //
@@ -30,13 +30,14 @@
 //   7. LE FOND NE VOLE AUCUN GESTE, le HUD non plus.
 //   8. Zéro erreur console.
 import { chromium } from 'playwright';
+import { NOEUDS } from '../js/registre-lv3.mjs';
 
 const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
 const erreurs = [];
 const verdicts = {};
 const chiffres = {};
 
-const HOTE = 'http://127.0.0.1:8123/ultima.html';
+const HOTE = 'http://127.0.0.1:8123/omega.html';
 const SELECTEURS_MOBILIER = ['.console-entete', '.console-retour', '#boussole-parole', '.ciel-legende'];
 
 async function ouvrir(largeur, hauteur) {
@@ -252,7 +253,7 @@ for (const [largeur, hauteur, nom] of [[390, 844, 'a390'], [1280, 860, 'a1280'],
 // ⑨ TOUS LES ÉCRANS DE NAVIGATION, PAS UN SEUL. Et ce bloc existe à cause d'un
 // trou de couverture qui a coûté cher.
 //
-// Ce harnais n'éprouvait que `ultima.html` — DEUX caps. Le 2026-08-17, la
+// Ce harnais n'éprouvait que `ultima.html` (aujourd'hui `omega.html`) — DEUX caps. Le 2026-08-17, la
 // couronne a réparti trois et quatre caps sur les autres écrans, dont un EN
 // HAUT : une étoile est passée sous le bandeau sur les QUATRE écrans à trois ou
 // quatre caps, et pas une assertion ne l'a dit. Le critère central de P2 était
@@ -265,13 +266,20 @@ for (const [largeur, hauteur, nom] of [[390, 844, 'a390'], [1280, 860, 'a1280'],
 // LEÇON APPLIQUÉE : un critère qui vaut pour une famille d'écrans s'éprouve sur
 // TOUTE la famille, et d'abord sur ses cas EXTRÊMES — ici le plus chargé.
 // ---------------------------------------------------------------------------
-const COQUES_DE_NAVIGATION = [
-  ['ultima.html', 2], ['grima.html', 2], ['tao.html', 2],
-  ['naga.html', 3], ['imladrik.html', 3], ['adramelech.html', 3],
-  ['bcp.html', 4],
-  // LA RACINE (P4, 2026-08-19) : trois caps — ULTIMA, ALPHA, ALTHEA.
-  ['index.html', 3]
-];
+// 2026-09-29 : GRIMA et NAGA sont supprimés ; le nombre de caps de chaque écran
+// est LU dans le registre (le pire cas — IMLADRIK, cinq caps — ne se fige plus
+// à la main), puis verrouillé ci-dessous par des valeurs explicites.
+const NOEUD_DE = { 'omega.html': 'omega', 'tao.html': 'tao', 'imladrik.html': 'imladrik',
+  'adramelech.html': 'adramelech', 'bcp.html': 'nicol-bolas', 'index.html': 'racine' };
+const COQUES_DE_NAVIGATION = Object.keys(NOEUD_DE)
+  .map((fichier) => [fichier, NOEUDS[NOEUD_DE[fichier]].enfants.length]);
+// Verrou : le registre ne dérive pas sans que ce harnais le voie, et la liste
+// est bien la famille attendue (jamais vide, jamais réduite en silence).
+verdicts.familleDesCoques = JSON.stringify(COQUES_DE_NAVIGATION) === JSON.stringify([
+  ['omega.html', 3], ['tao.html', 2], ['imladrik.html', 5],
+  ['adramelech.html', 3], ['bcp.html', 4],
+  // LA RACINE (P4, 2026-08-19) : trois caps — ALPHA, OMEGA, ALTHEA.
+  ['index.html', 3]]);
 for (const [fichier, nbCaps] of COQUES_DE_NAVIGATION) {
   for (const [largeur, hauteur] of [[390, 844], [1280, 860]]) {
     const page = await browser.newPage({ viewport: { width: largeur, height: hauteur } });
@@ -352,7 +360,7 @@ for (const [fichier, nbCaps] of COQUES_DE_NAVIGATION) {
     // été menées AVANT d'en venir à ce seuil, et chacune est mesurée :
     //   — la couronne devient une ELLIPSE (cercle → ellipse) ;
     //   — son aspect se calcule sur la place laissée aux étoiles, pas sur le
-    //     cadre brut : NAGA 0,20 → 0,696 ;
+    //     cadre brut : NAGA (supprimé le 29/09, mesure historique) 0,20 → 0,696 ;
     //   — l'axe de l'opposition suit la dimension longue : ULTIMA 0,548 → 0,718 ;
     //   — les noms longs sont appariés aux positions verticales, où ils ne coûtent
     //     qu'une ligne : ADRAMELECH 0,337 → 0,608.

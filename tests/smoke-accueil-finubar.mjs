@@ -133,8 +133,12 @@ const p = await ouvrir('ok');
   const par = Object.fromEntries(e.appels.map(([id, a]) => [id, a]));
   verifier('ALPHA appelle en or (un projet attend un geste sous lui)',
     par.alpha === 'appel', JSON.stringify(par));
-  verifier('ULTIMA reste éteinte — aucun projet ne s\'y accroche',
-    par['ultima-perso'] === null && par.althea === null, JSON.stringify(par));
+  verifier('OMEGA reste éteinte — aucun projet ne s\'y accroche',
+    par.omega === null && par.althea === null, JSON.stringify(par));
+  // L'ancien id n'est plus un cap de la racine : il ne peut plus être « éteint »
+  // (null) — il est absent (undefined). Éprouvé par l'absence.
+  verifier('l\'ancien id « ultima-perso » n\'existe plus parmi les caps',
+    !e.appels.some(([id]) => id === 'ultima-perso'), JSON.stringify(par));
 
   // ③ Le compte est DIT.
   const alpha = e.appels.find(([id]) => id === 'alpha');

@@ -115,9 +115,12 @@ dit('cheminExistePourTousLesEcransReels',
 // Le pire cas est ici le registre RÉEL : c'est lui qui porte les formes que la
 // règle doit distinguer — une tête pleine (NICOL BOLAS), une tête vide (RIVEN),
 // et des jumeaux reliés (RESHIRAM ⇄ ZEKROM) qui vivent DEUX étages plus bas.
-const plieUltima = versCiel('ultima-perso', NOEUDS);
-const naga = versCiel('ultima-perso', NOEUDS, { isole: 'naga' });
-const idsNaga = naga.noeuds.map((n) => n.id);
+// 2026-09-29 : l'écran est OMEGA (ex-ULTIMA) et le foyer isolé de référence est
+// IMLADRIK (ex-NAGA : GRIMA et NAGA sont supprimés, IMLADRIK porte désormais
+// ses cinq caps dont ADRAMELECH et TAO).
+const plieOmega = versCiel('omega', NOEUDS);
+const foyerImladrik = versCiel('omega', NOEUDS, { isole: 'imladrik' });
+const idsImladrik = foyerImladrik.noeuds.map((n) => n.id);
 
 // ① On ne montre QUE les enfants directs du foyer.
 // REMPLACE `isoleMontreLesDeuxEtages` (2026-08-28), qui exigeait les têtes ET
@@ -127,29 +130,31 @@ const idsNaga = naga.noeuds.map((n) => n.id);
 // présence doit devenir un test qui exige l'absence, sinon on ne mesure plus
 // rien du changement.
 dit('isoleNeMontreQueLesEnfantsDirects',
-  idsNaga.join(',') === NOEUDS.naga.enfants.join(','));
+  idsImladrik.join(',') === NOEUDS.imladrik.enfants.join(',')
+  && idsImladrik.length === 5);
 // ①bis Et surtout : les PETITS-enfants ne sont pas peints. C'est ce verdict-là
 // qui garde la nouvelle règle ; sans lui, un retour au comportement d'avant
 // passerait vert (les enfants directs y étaient aussi).
 dit('isoleNeDescendPasAuDeuxiemeEtage',
-  ['maedrethnir', 'vranesh', 'draukhain', 'reshiram', 'zekrom']
-    .every((id) => !idsNaga.includes(id)));
-// ② Les frères ont disparu : GRIMA n'est plus là, ni rien de ce qu'il porte.
+  ['reshiram', 'zekrom', 'registre', 'archipels', 'rapprochements']
+    .every((id) => !idsImladrik.includes(id)));
+// ② Les frères ont disparu : RIVEN et NICOL BOLAS (frères d'IMLADRIK sous
+// OMEGA) ne sont plus là, ni rien de ce qu'ils portent.
 dit('isoleFaitDisparaitreLesFreres',
-  !idsNaga.includes('grima') && !idsNaga.includes('riven')
-  && !idsNaga.includes('nicol-bolas'));
-// ③ Le foyer lui-même n'est pas peint (« ça n'affiche pas forcément encore NAGA »).
-dit('isoleNePeintPasLeFoyer', !idsNaga.includes('naga'));
+  !idsImladrik.includes('riven') && !idsImladrik.includes('nicol-bolas')
+  && !idsImladrik.includes('abaque'));
+// ③ Le foyer lui-même n'est pas peint (« ça n'affiche pas forcément encore le foyer »).
+dit('isoleNePeintPasLeFoyer', !idsImladrik.includes('imladrik'));
 
 // ④ LA RÉCURSION — le cœur de la demande du 31/08 : « ensuite, quand on clique
 // dessus, la suivante s'applique ». Le geste doit être IDENTIQUE à tous les
 // étages : isoler un thème montre ses enfants directs, et eux seuls. On
 // l'éprouve sur les deux étages du dessous plutôt que sur le seul cas du jour,
 // qui serait un échantillon favorable.
-const imladrik = versCiel('ultima-perso', NOEUDS, { isole: 'imladrik' });
+const imladrik = foyerImladrik;
 dit('isoleDescendDUnCranQuelQueSoitLEtage',
   imladrik.noeuds.map((n) => n.id).join(',') === NOEUDS.imladrik.enfants.join(','));
-const tao = versCiel('ultima-perso', NOEUDS, { isole: 'tao' });
+const tao = versCiel('omega', NOEUDS, { isole: 'tao' });
 dit('isoleSAppliquePareilDeuxEtagesPlusBas',
   tao.noeuds.map((n) => n.id).join(',') === NOEUDS.tao.enfants.join(','));
 
@@ -159,20 +164,35 @@ dit('isoleSAppliquePareilDeuxEtagesPlusBas',
 // d'UNE étoile que de têtes, chacun étiqueté du nom de l'étoile qu'il contient.
 const secteurDe = (jeu, id) => (jeu.noeuds.find((n) => n.id === id) || {}).secteur_activite;
 dit('isoleGroupeToutSousLeNomDuFoyer',
-  naga.noeuds.every((n) => n.secteur_activite === 'NAGA'));
-const grima = versCiel('ultima-perso', NOEUDS, { isole: 'grima' });
+  foyerImladrik.noeuds.every((n) => n.secteur_activite === 'IMLADRIK'));
+// Tête vide (MAEDRETHNIR, feuille) ET têtes pleines (ADRAMELECH, TAO) : même amas.
 dit('isoleNommeLAmasDApresLeFoyerMemeAvecUneTeteVide',
-  secteurDe(grima, 'riven') === 'GRIMA' && secteurDe(grima, 'nicol-bolas') === 'GRIMA');
+  secteurDe(foyerImladrik, 'maedrethnir') === 'IMLADRIK'
+  && secteurDe(foyerImladrik, 'adramelech') === 'IMLADRIK'
+  && secteurDe(foyerImladrik, 'tao') === 'IMLADRIK');
+// NICOL BOLAS isolé : son amas porte son nom, plus celui d'un macro-quadrant.
+const nicol = versCiel('omega', NOEUDS, { isole: 'nicol-bolas' });
+dit('isoleNicolBolasNommeSonAmas',
+  nicol.noeuds.length > 0 && nicol.noeuds.every((n) => n.secteur_activite === 'NICOL BOLAS'));
+// Plus aucun secteur GRIMA / NAGA nulle part : ces amas n'existent plus.
+dit('aucunSecteurGrimaNagaDansLesIsolements',
+  ['omega', 'imladrik', 'tao', 'nicol-bolas', 'adramelech'].every((f) => {
+    const jeu = versCiel('omega', NOEUDS, { isole: f });
+    return jeu.noeuds.every((n) => n.secteur_activite !== 'GRIMA' && n.secteur_activite !== 'NAGA');
+  }));
+dit('isolerGrimaOuNagaEstRefuse',
+  versCiel('omega', NOEUDS, { isole: 'grima' }).isole === null
+  && versCiel('omega', NOEUDS, { isole: 'naga' }).isole === null);
 
 // Les traits. REMPLACE `isoleRattacheChaqueProjetASaTete` (2026-08-28) : il
 // n'y a plus de projet à rattacher, donc plus un seul arc de rattachement —
 // et c'est cette ABSENCE qu'on mesure, un arc orphelin serait un trait vers
 // une étoile qui n'est pas là.
 dit('isoleNInventePlusDeRattachement',
-  naga.relations.filter((r) => r.type === 'apport_affaires').length === 0);
+  foyerImladrik.relations.filter((r) => r.type === 'apport_affaires').length === 0);
 // La passerelle des jumeaux survit à l'isolement, MAIS SEULEMENT quand les deux
 // bouts sont peints. Elle a changé d'étage avec la règle : RESHIRAM ⇄ ZEKROM
-// vivent sous TAO, donc elle apparaît en isolant TAO — et plus en isolant NAGA,
+// vivent sous TAO, donc elle apparaît en isolant TAO — et plus en isolant IMLADRIK,
 // où aucun des deux n'est peint. Éprouvée par la présence ET par l'absence.
 const passerelle = (jeu) => jeu.relations.filter((r) => r.type === 'chantier_commun');
 dit('isoleGardeLaPasserelleDesJumeaux',
@@ -180,46 +200,49 @@ dit('isoleGardeLaPasserelleDesJumeaux',
   && passerelle(tao)[0].target_id === 'zekrom'
   && passerelle(tao)[0].libelle === NOEUDS.reshiram.lienLibelle);
 dit('isoleNInventePasDArcVersLInvisible',
-  passerelle(naga).length === 0 && passerelle(imladrik).length === 0);
+  passerelle(foyerImladrik).length === 0 && passerelle(imladrik).length === 0);
 
 // Ce qui peut encore se déplier, ce sont les TÊTES, et elles seules.
 dit('isoleAnnonceSesTetes',
-  naga.idsDuNiveau.join(',') === NOEUDS.naga.enfants.join(',')
-  && naga.isole === 'naga' && naga.deplie === null);
-dit('nonIsoleLeDitAussi', plieUltima.isole === null);
+  foyerImladrik.idsDuNiveau.join(',') === NOEUDS.imladrik.enfants.join(',')
+  && foyerImladrik.isole === 'imladrik' && foyerImladrik.deplie === null);
+dit('nonIsoleLeDitAussi', plieOmega.isole === null);
 
 // ---------- 6bis. LES GARDES DE L'ISOLEMENT ----------
 // Quatre refus, quatre raisons distinctes. Un seul cas oublié suffirait à
 // rendre un écran vide ou menteur : on les éprouve tous les quatre.
 const memeQuePlie = (jeu) =>
-  jeu.noeuds.map((n) => n.id).join(',') === plieUltima.noeuds.map((n) => n.id).join(',')
+  jeu.noeuds.map((n) => n.id).join(',') === plieOmega.noeuds.map((n) => n.id).join(',')
   && jeu.isole === null;
 dit('gardeRefuseDIsolerLEcranLuiMeme',
-  memeQuePlie(versCiel('ultima-perso', NOEUDS, { isole: 'ultima-perso' })));
+  memeQuePlie(versCiel('omega', NOEUDS, { isole: 'omega' })));
 dit('gardeRefuseDIsolerUneFeuille',
-  memeQuePlie(versCiel('ultima-perso', NOEUDS, { isole: 'riven' })));
+  memeQuePlie(versCiel('omega', NOEUDS, { isole: 'riven' })));
 dit('gardeRefuseDIsolerLInconnu',
-  memeQuePlie(versCiel('ultima-perso', NOEUDS, { isole: 'jamais-vu' })));
-// Le cas qui vient de l'URL : `ultima.html#alpha`. ALPHA existe et a des
+  memeQuePlie(versCiel('omega', NOEUDS, { isole: 'jamais-vu' })));
+// Le cas qui vient de l'URL : `omega.html#alpha`. ALPHA existe et a des
 // enfants, mais il ne relève PAS de cet écran — l'isoler ferait afficher, sous
-// le bandeau d'ULTIMA, le contenu d'ALPHA.
+// le bandeau d'OMEGA, le contenu d'ALPHA.
 dit('gardeRefuseUnNoeudEtrangerALEcran',
-  memeQuePlie(versCiel('ultima-perso', NOEUDS, { isole: 'alpha' })));
+  memeQuePlie(versCiel('omega', NOEUDS, { isole: 'alpha' })));
 
 // Le registre reste LU, jamais écrit — y compris par le chemin de l'isolement.
 const avantIsolement = JSON.stringify(NOEUDS);
-versCiel('ultima-perso', NOEUDS, { isole: 'naga' });
+versCiel('omega', NOEUDS, { isole: 'imladrik' });
 dit('isolementNEcritPasDansLeRegistre', JSON.stringify(NOEUDS) === avantIsolement);
 // Aucune personne ne s'y glisse non plus (règle de l'ABSENCE, 2026-07-30).
 dit('isolementSansPersonne',
-  naga.personnes.length === 0 && naga.rattachements.length === 0);
+  foyerImladrik.personnes.length === 0 && foyerImladrik.rattachements.length === 0);
 
 // ---------- 6ter. `descendDe` ----------
-dit('descendDeVoitUnPetitEnfant', descendDe('ultima-perso', 'maedrethnir', NOEUDS) === true);
-dit('descendDeVoitUnEnfantDirect', descendDe('naga', 'tao', NOEUDS) === true);
-dit('descendDeRefuseUnEtranger', descendDe('grima', 'imladrik', NOEUDS) === false);
-dit('descendDeRefuseSoiMeme', descendDe('naga', 'naga', NOEUDS) === false);
-dit('descendDeRefuseLInconnu', descendDe('naga', 'jamais-vu', NOEUDS) === false);
+dit('descendDeVoitUnPetitEnfant', descendDe('omega', 'maedrethnir', NOEUDS) === true);
+dit('descendDeVoitUnEnfantDirect', descendDe('imladrik', 'tao', NOEUDS) === true);
+dit('descendDeVoitAdramelechSousImladrik', descendDe('imladrik', 'adramelech', NOEUDS) === true);
+dit('descendDeRefuseUnEtranger', descendDe('nicol-bolas', 'imladrik', NOEUDS) === false);
+dit('descendDeRefuseSoiMeme', descendDe('imladrik', 'imladrik', NOEUDS) === false);
+dit('descendDeRefuseLInconnu', descendDe('imladrik', 'jamais-vu', NOEUDS) === false);
+dit('descendDeRefuseLesMacroQuadrantsSupprimes',
+  descendDe('omega', 'grima', NOEUDS) === false && descendDe('omega', 'naga', NOEUDS) === false);
 // Un registre qui boucle ne doit pas faire tourner la page sans fin : la file
 // est bornée, et on l'éprouve au lieu de parier.
 dit('descendDeSurvitALaBoucle', descendDe('p', 'jamais-vu', BOUCLE) === false);

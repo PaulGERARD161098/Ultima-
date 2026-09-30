@@ -26,13 +26,15 @@ function verifier(nom, condition, detail = '') {
 const PAGES = [
   { fichier: 'zekrom.html', quadrant: 'riven' },
   { fichier: 'tao.html', quadrant: 'ultima' },
-  // Tranchées par Paul le 2026-09-03 : elles avaient DEUX liens retour chacune
-  // (riven et bcp pour grima, imladrik et adramelech pour naga) et étaient donc
-  // restées au repli. Elles sont ici pour la même raison que les autres — on
-  // vérifie le quadrant RÉELLEMENT ENVOYÉ, jamais la présence de l'attribut :
-  // sept attributs posés dans un commentaire ont déjà passé une relecture.
-  { fichier: 'naga.html', quadrant: 'riven' },
-  { fichier: 'grima.html', quadrant: 'riven' },
+  // Tranchées par Paul le 2026-09-03 : naga.html et grima.html avaient DEUX
+  // liens retour chacune et étaient restées au repli. Elles ont été SUPPRIMÉES
+  // le 2026-09-29 (OMEGA, IMLADRIK) ; leurs remplaçantes sont éprouvées pour la
+  // même raison — on vérifie le quadrant RÉELLEMENT ENVOYÉ, jamais la présence
+  // de l'attribut : sept attributs posés dans un commentaire ont déjà passé une
+  // relecture. omega.html ne déclare rien (repli « ultima ») ; imladrik.html
+  // déclare le sien.
+  { fichier: 'omega.html', quadrant: 'ultima' },
+  { fichier: 'imladrik.html', quadrant: 'imladrik' },
 ];
 
 // Le témoin de FINUBAR, partagé par §6 (ce qui part vers le modèle) et §7 (le

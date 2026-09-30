@@ -75,8 +75,8 @@ console.log('— 1. Chargement mobile (390×844) : rendu, en-tête, retour —')
 
   verifier('Titre ABAQUE (H1)', /Abaque/i.test((await page.locator('h1').textContent()) || ''));
   verifier('Blason balance dans le cartouche', (await page.locator('header.cartouche .blason-svg').count()) === 1);
-  verifier('Lien retour « ← Ultima » vers ultima.html',
-    (await page.locator('.retour-ultima').getAttribute('href')) === 'ultima.html');
+  verifier('Lien retour « ← Omega » vers omega.html (ultima.html n\'existe plus)',
+    (await page.locator('.retour-ultima').getAttribute('href')) === 'omega.html');
   const boiteRetour = await page.locator('.retour-ultima').boundingBox();
   verifier('Tap target retour ≥ 44 px', Boolean(boiteRetour) && boiteRetour.height >= 44, `h: ${boiteRetour && boiteRetour.height}`);
 

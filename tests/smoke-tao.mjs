@@ -221,10 +221,13 @@ verifier('Le nom de la passerelle n\'est pas barré par le trait (≥ 4 unités)
 verifier('Le nom de la passerelle est LISIBLE (opacité utile)',
   +(await page.locator('text.ciel-nom-lien').getAttribute('opacity') || '1') >= 0.4);
 
-// Retour vers ULTIMA (pièce ① du patron).
-const retour = page.locator('.console-retour a[href="naga.html"]');
-verifier('Retour « ↞ NAGA » vers naga.html (TAO vit sous le macro-quadrant)', (await retour.count()) === 1);
-verifier('Retour libellé « NAGA »', /NAGA/.test((await retour.textContent()) || ''));
+// Retour vers IMLADRIK (pièce ① du patron). 2026-09-29 : TAO ne vit plus sous
+// NAGA (supprimé) mais directement sous IMLADRIK.
+const retour = page.locator('.console-retour a[href="imladrik.html"]');
+verifier('Retour « ↞ IMLADRIK » vers imladrik.html (TAO vit sous le macro-projet IMLADRIK)', (await retour.count()) === 1);
+verifier('Retour libellé « IMLADRIK »', /IMLADRIK/.test((await retour.textContent()) || ''));
+verifier('Plus aucun retour vers naga.html (supprimé)',
+  (await page.locator('a[href="naga.html"], a[href="grima.html"], a[href="ultima.html"]').count()) === 0);
 
 // La parole de Léo dit le rétroplanning — l'arc est décor, la parole est annoncée.
 await survoler(page, 'reshiram');

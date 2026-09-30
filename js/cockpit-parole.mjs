@@ -67,10 +67,9 @@ export function signalDe(id, data) {
   }
 
   // La supra-division cumule ce que ses quadrants ont à traiter ; chaque
-  // macro-quadrant (GRIMA / NAGA) ne cumule que les siens.
-  if (id === 'ultima-perso') return morceaux(Boolean(data.riven), Boolean(data.reshiram || data.zekrom));
-  if (id === 'grima') return morceaux(Boolean(data.riven), false);
-  if (id === 'naga') return morceaux(false, Boolean(data.reshiram || data.zekrom));
+  // macro-projet (IMLADRIK, qui porte TAO) ne cumule que les siens.
+  if (id === 'omega') return morceaux(Boolean(data.riven), Boolean(data.reshiram || data.zekrom));
+  if (id === 'imladrik') return morceaux(false, Boolean(data.reshiram || data.zekrom));
   if (id === 'riven') return morceaux(Boolean(data.riven), false);
   if (id === 'tao') return morceaux(false, Boolean(data.reshiram || data.zekrom));
   if (id === 'reshiram') return aEtayer > 0 ? aEtayer + ' talent' + s(aEtayer) + ' à étayer' : null;

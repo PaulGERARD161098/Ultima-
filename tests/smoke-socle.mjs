@@ -182,9 +182,9 @@ for (const taille of TAILLES) {
 {
   const contexte = await navigateur.newContext({ viewport: { width: 1280, height: 800 } });
   const page = await contexte.newPage();
-  page.on('pageerror', (e) => erreurs.push(`naga pageerror: ${e.message}`));
+  page.on('pageerror', (e) => erreurs.push(`imladrik pageerror: ${e.message}`));
   await page.route('**/api/**', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, data: {} }) }));
-  await page.goto(`${BASE}/ultima.html#naga`, { waitUntil: 'load', timeout: 20000 });
+  await page.goto(`${BASE}/omega.html#imladrik`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForSelector('.ciel-noeud-plateau.is-pret', { timeout: 20000 });
   await page.evaluate(async () => {
     const m = await import('/js/leo-navigation.mjs');
@@ -201,7 +201,7 @@ for (const taille of TAILLES) {
     await page.setViewportSize({ width: largeur, height: hauteur });
     await page.waitForTimeout(1500);
     const m = await mesurer(page);
-    const cle = `NAGA sans bandeau, étape ${rang + 1} @${largeur}`;
+    const cle = `IMLADRIK sans bandeau, étape ${rang + 1} @${largeur}`;
     verifier(`${cle} : verrou — parole et dock présents, pas de bandeau`,
       m.pieces.includes('parole') && m.pieces.includes('dock') && !m.pieces.includes('bandeau') && m.etoiles >= 2,
       m.pieces.join(','));
