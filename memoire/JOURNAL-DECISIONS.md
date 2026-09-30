@@ -4373,3 +4373,12 @@ toute modification, cadence chronométrée propre au conteneur).
 **IFULVIN** dicté le même jour : constellation des ARMES (IFULVIN, réseau en
 cercles concentriques, « Magnum Opus ») + constellation des DRAGONS (les 3 caps).
 Cadré, non codé : `CADRAGE-IFULVIN.md`. Graphie **IFULVIN** — « Ifu » n'existe pas.
+
+**30/09 — IFULVIN, boucle A : la règle « ≥ 2 caps » assouplie pour les
+constellations (option 1, Paul).** Drapeau explicite `constellation: true` : une
+boussole dès UN cap, et seulement sur ce drapeau — un nœud ordinaire qui perd un
+enfant reste signalé. IMLADRIK = constellation des ARMES (IFULVIN, étoile
+d'attente) + constellation des DRAGONS (MAEDRETHNIR, VRANESH, DRAUKHAIN) +
+ADRAMELECH + TAO. Défaut trouvé en vérifiant au navigateur : un cap sans page mais
+avec des enfants était marqué `aria-disabled` (annoncé mort, alors qu'on y plonge)
+— corrigé, même partage qu'`entrer()`.

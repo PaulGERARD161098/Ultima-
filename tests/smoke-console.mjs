@@ -2,9 +2,11 @@
 // 2026-09-29 : ex-ULTIMA (ultima.html) → OMEGA (omega.html) ; les MACRO-
 // QUADRANTS GRIMA et NAGA sont SUPPRIMÉS (grima.html, naga.html n'existent
 // plus, vercel.json les redirige). OMEGA porte RIVEN, NICOL BOLAS et IMLADRIK ;
-// IMLADRIK porte MAEDRETHNIR, VRANESH, DRAUKHAIN, ADRAMELECH et TAO.
+// IMLADRIK porte QUATRE entrées depuis le 2026-09-30 : deux CONSTELLATIONS
+// (ARMES, DRAGONS) puis ADRAMELECH et TAO ; MAEDRETHNIR, VRANESH et DRAUKHAIN
+// vivent sous DRAGONS, IFULVIN (étoile d'attente) sous ARMES.
 // Prouve : bandeau conforme au REGISTRE, 3 caps, navigation OMEGA → RIVEN →
-// riven.html (Ciel intact, zéro Leaflet), coque IMLADRIK complète (cinq caps)
+// riven.html (Ciel intact, zéro Leaflet), coque IMLADRIK complète (quatre entrées)
 // avec retour vers OMEGA, ABSENCE de GRIMA/NAGA, AUCUNE requête réseau externe
 // (zéro CDN), zéro erreur console, contraste AA calculé sur les couleurs
 // réellement rendues.
@@ -383,8 +385,8 @@ verifier('Plus aucune Leaflet dans la page',
   await page.evaluate(() => typeof window.L === 'undefined'));
 verifier('Zéro erreur console (riven.html)', erreursRiven.length === 0, erreursRiven.slice(0, 3).join(' | '));
 
-// ============ C. La coque IMLADRIK (imladrik.html) — cinq caps ============
-console.log('— C. IMLADRIK → imladrik.html (cinq caps, dont ADRAMELECH et TAO) —');
+// ============ C. La coque IMLADRIK (imladrik.html) — quatre entrées ============
+console.log('— C. IMLADRIK → imladrik.html (quatre entrées : ARMES, DRAGONS, ADRAMELECH, TAO) —');
 const erreursImladrik = [];
 const pageImladrik = await contexte.newPage();
 pageImladrik.on('console', (msg) => { if (msg.type() === 'error') erreursImladrik.push(msg.text()); });
@@ -403,26 +405,32 @@ const capsImladrik = await lireCaps(pageImladrik);
 const nomsImladrik = capsImladrik.map((c) => c.nom);
 // ASSERTION SCINDÉE (LV5 / P3), et c'est plus juste que de l'abandonner en bloc :
 // elle portait DEUX garanties de natures différentes.
-//   ① Le REGISTRE déclare bien ces cinq caps, dans cet ordre. Cela ne dépend
+//   ① Le REGISTRE déclare bien ces quatre entrées, dans cet ordre. Cela ne dépend
 //      d'aucun support de rendu : la garantie reste entière et elle protège
 //      contre une modification involontaire du registre. **Conservée.**
 //   ② Le DOM les rend dans le même ordre. Au ciel, l'ordre est celui de la
 //      GÉOMÉTRIE, pas celui de la liste (abandon acté en LV4 ④a). **Abandonnée**,
 //      remplacée par « tous présents, aucun de plus ».
-verifier('IMLADRIK : le registre déclare MAEDRETHNIR + VRANESH + DRAUKHAIN + ADRAMELECH + TAO dans cet ordre',
-  JSON.stringify(attendusImladrik) === JSON.stringify(['MAEDRETHNIR', 'VRANESH', 'DRAUKHAIN', 'ADRAMELECH', 'TAO']),
+// 2026-09-30 : cinq caps à plat → QUATRE entrées (deux constellations sans page,
+// ADRAMELECH, TAO). Les trois dragons n'ont pas disparu : ils sont exigés plus bas,
+// sous la constellation DRAGONS.
+verifier('IMLADRIK : le registre déclare ARMES + DRAGONS + ADRAMELECH + TAO dans cet ordre',
+  JSON.stringify(attendusImladrik) === JSON.stringify(['ARMES', 'DRAGONS', 'ADRAMELECH', 'TAO']),
   `registre: ${JSON.stringify(attendusImladrik)}`);
-verifier('IMLADRIK : les cinq caps sont rendus (ordre abandonné : la géométrie range)',
-  JSON.stringify([...nomsImladrik].sort()) === JSON.stringify([...attendusImladrik].sort()),
+verifier('IMLADRIK : les quatre entrées sont rendues (ordre abandonné : la géométrie range)',
+  JSON.stringify([...nomsImladrik].sort()) === JSON.stringify([...attendusImladrik].sort())
+  && nomsImladrik.length === 4,
   `lu: ${JSON.stringify(nomsImladrik)}`);
 const hrefsImladrik = await lireRepli(pageImladrik);
+// Le repli sans JavaScript porte TOUJOURS les cinq pages : les trois dragons y
+// sont dans une sous-liste, mais ils y sont.
 for (const attendu of ['maedrethnir.html', 'vranesh.html', 'draukhain.html', 'adramelech.html', 'tao.html']) {
   verifier(`IMLADRIK : porte ouverte vers ${attendu}`, hrefsImladrik.includes(attendu), JSON.stringify(hrefsImladrik));
 }
 // « aiguilles » ABANDONNÉES — un ciel n'a pas de moyeu (même abandon qu'en LV4
-// ④a). Remplacées par ce qu'elles approchaient : une étoile par cap.
-verifier('IMLADRIK : 5 étoiles (ce que les aiguilles approchaient)',
-  (await pageImladrik.locator('g.ciel-etoile[data-noeud-id]').count()) === 5);
+// ④a). Remplacées par ce qu'elles approchaient : une étoile par entrée.
+verifier('IMLADRIK : 4 étoiles (ce que les aiguilles approchaient)',
+  (await pageImladrik.locator('g.ciel-etoile[data-noeud-id]').count()) === 4);
 const legendeImladrik = (await pageImladrik.locator('.ciel-legende').textContent())?.trim();
 verifier('IMLADRIK : légende gravée « Kalamn-talaen »', legendeImladrik === NOEUDS.imladrik.legende, `lu: ${legendeImladrik}`);
 verifier('IMLADRIK : retour « ↞ OMEGA » vers omega.html',
@@ -438,6 +446,20 @@ verifier('IMLADRIK : ADRAMELECH marqué « Privé »',
   // style — et le seul qui existe encore.
   /priv/i.test((await pageImladrik.locator('g.ciel-etoile[data-noeud-id="adramelech"]')
     .getAttribute('aria-label')) || ''));
+
+// LES TROIS DRAGONS, SOUS LEUR CONSTELLATION. Ils ne sont plus des enfants directs
+// d'IMLADRIK : on les exige là où ils vivent — `imladrik.html#constellation-dragons`,
+// l'adresse même que leurs pages reprennent en « retour ».
+await pageImladrik.goto(`${BASE}/imladrik.html#constellation-dragons`, { waitUntil: 'load', timeout: 20000 });
+await attendrePret(pageImladrik);
+await pageImladrik.waitForTimeout(1200);
+const capsDragons = await lireCaps(pageImladrik);
+verifier('IMLADRIK#constellation-dragons : MAEDRETHNIR, VRANESH, DRAUKHAIN paraissent (et eux seuls)',
+  JSON.stringify(capsDragons.map((c) => c.nom).sort()) === JSON.stringify(['DRAUKHAIN', 'MAEDRETHNIR', 'VRANESH'])
+  && capsDragons.length === NOEUDS['constellation-dragons'].enfants.length,
+  JSON.stringify(capsDragons.map((c) => c.nom)));
+verifier('IMLADRIK#constellation-dragons : 3 étoiles au ciel',
+  (await pageImladrik.locator('g.ciel-etoile[data-noeud-id]').count()) === 3);
 
 verifier('Zéro erreur console (IMLADRIK)', erreursImladrik.length === 0, erreursImladrik.slice(0, 3).join(' | '));
 

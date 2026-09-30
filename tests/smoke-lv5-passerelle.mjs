@@ -26,7 +26,7 @@
 //      l'étiquette d'aucune des deux étoiles.
 //   4. Il est POSÉ SUR L'ARC, entre les deux étoiles qu'il nomme — mesuré, pas
 //      supposé.
-//   5. LES SEPT COQUES ORDINAIRES sont au ciel : chacune monte son canvas, rend
+//   5. LES COQUES ORDINAIRES (six) sont au ciel : chacune monte son canvas, rend
 //      ses caps, et n'a plus une seule poussière SVG. **Chaque coque EXIGE son
 //      canvas** au lieu de s'en remettre au garde du moteur — c'est la leçon de
 //      P1, et sans elle sept coques pourraient passer avec une option morte.
@@ -162,9 +162,17 @@ for (const nom of COQUES) {
         const n = document.querySelector('#ciel-noeud-plateau noscript');
         return Array.from((n?.textContent || '').matchAll(/href="([^"]+)"/g)).map((m) => m[1]);
       })(),
-      ciblesDuRegistre: attendus
-        .map((a) => (NOEUDS[a] || {}).cible)
-        .filter((c) => c && !/^https?:/.test(c)),
+      // 2026-09-30 : LE REPLI SE PROLONGE SOUS LES CONSTELLATIONS. IMLADRIK n'a plus
+      // ses trois dragons pour enfants directs : ils vivent sous DRAGONS, qui n'a
+      // pas de page, et dont le repli est une SOUS-LISTE. Lire les seules cibles
+      // des enfants directs aurait rendu ce verdict vert en oubliant MAEDRETHNIR,
+      // VRANESH et DRAUKHAIN — un affaiblissement silencieux, pas une
+      // transposition. On descend donc, mais PAR LES CONSTELLATIONS seulement :
+      // TAO a des enfants sur sa propre page, pas dans le repli d'IMLADRIK.
+      ciblesDuRegistre: (function portees(parent) {
+        return ((NOEUDS[parent] && NOEUDS[parent].enfants) || []).flatMap((a) => (
+          (NOEUDS[a] || {}).constellation === true ? portees(a) : [(NOEUDS[a] || {}).cible]));
+      })(id).filter((c) => c && !/^https?:/.test(c)),
       plusDeBoussole: !document.querySelector('.boussole-plateau')
         && !document.body.classList.contains('boussole')
     };
@@ -194,7 +202,15 @@ for (const nom of COQUES) {
     verdicts['coqueNonVide_' + nom] = r.attendus >= 2;
   }
   if (nom === 'omega') { verdicts.omegaTroisCaps = r.attendus === 3; }
-  if (nom === 'imladrik') { verdicts.imladrikCinqCaps = r.attendus === 5; }
+  // IMLADRIK : QUATRE entrées (ARMES, DRAGONS, ADRAMELECH, TAO), plus cinq caps à
+  // plat — et le repli, lui, porte toujours CINQ pages (la descente est prouvée :
+  // sans elle, `ciblesDuRegistre` n'en compterait que deux).
+  if (nom === 'imladrik') {
+    verdicts.imladrikQuatreEntrees = r.attendus === 4;
+    verdicts.imladrikRepliAttenduProfond = r.ciblesDuRegistre.length === 5
+      && ['maedrethnir.html', 'vranesh.html', 'draukhain.html', 'adramelech.html', 'tao.html']
+        .every((c) => r.ciblesDuRegistre.includes(c) && r.cellesDuRepli.includes(c));
+  }
   verdicts['plusDeBoussole_' + nom] = r.plusDeBoussole === true;
   if (r.manquants.length) { chiffres['coque_' + nom].manquants = r.manquants; }
 

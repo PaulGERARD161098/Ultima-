@@ -172,8 +172,13 @@ console.log('— A. vranesh.html SANS session (fail-closed) —');
   verifier('Aucune situation dans le DOM', (await page.locator('.zekrom-ideal').count()) === 0);
   verifier('Chargement effacé (état auth seul visible)',
     await page.locator('#vranesh-chargement').evaluate((el) => el.hidden));
-  verifier('Retour vers la cartographie IMLADRIK',
-    (await page.locator('.retour a[href="imladrik.html"]').count()) === 1);
+  // 2026-09-30 : le retour ne mène plus à la cartographie IMLADRIK à plat mais à
+  // la CONSTELLATION DES DRAGONS (`imladrik.html#constellation-dragons`), où
+  // vivent désormais les trois dragons. Le lien d'AVANT (`imladrik.html` nu)
+  // ferait revenir sur un écran où le dragon n'est plus : son ABSENCE est exigée.
+  verifier('Retour vers la constellation DRAGONS (imladrik.html#constellation-dragons)',
+    (await page.locator('.retour a[href="imladrik.html#constellation-dragons"]').count()) === 1
+    && (await page.locator('.retour a[href="imladrik.html"]').count()) === 0);
 
   // Contrastes AA sur l'écran réellement rendu.
   const c = await page.evaluate(() => {

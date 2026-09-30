@@ -46,7 +46,10 @@ IMLADRIK passe donc de 5 caps à 4 entrées : les deux constellations + ADRAMELE
 
 ## ② Les étapes — dans l'ordre, une boucle chacune
 
-1. **Boucle A — la structure, sans contenu métier.** Deux nœuds-constellation
+1. **Boucle A — la structure, sans contenu métier.** *(30/09 — arbitrage
+   Paul : « option 1, assouplis la règle pour les constellations ». Un nœud
+   `constellation: true` est une boussole dès UN cap ; l'exception est un
+   drapeau explicite, vérifié par `verifierRegistre`, jamais une déduction.)* Deux nœuds-constellation
    dans le registre (`constellation-armes`, `constellation-dragons`) ; les 3
    dragons y sont rangés ; `ifulvin` y entre comme **étoile d'attente** (nom,
    état « À venir », une phrase, aucune cible — modèle DOKLĚS/SYMPHO, Principe 3
@@ -107,3 +110,57 @@ IMLADRIK passe donc de 5 caps à 4 entrées : les deux constellations + ADRAMELE
 
 **Décisions attendues de Paul** : les 3 arbitrages du §⑤. **Prochaine action
 unique** : finir la boucle OMEGA (tests, commit), puis boucle A.
+
+---
+
+## ⑦ BOUCLE B — les nébuleuses (cadrage 6 points, 30/09, « go solo, enchaîne sur les nébuleuses »)
+
+**① But.** Sur l'écran IMLADRIK, la constellation des ARMES et celle des DRAGONS
+se lisent comme **deux nébuleuses** : un voile coloré, propre à chacune,
+enveloppe leur étoile. Quand on plonge dans l'une (`#constellation-armes`,
+`#constellation-dragons`), sa nébuleuse enveloppe les étoiles qu'elle contient.
+Deux teintes distinctes, dans le registre antique et nocturne d'Ultima.
+
+**② Étapes.**
+1. Spécification visuelle (agent `graphisme`) : deux teintes, rayon, éclat
+   plafonné, comportement sous `prefers-reduced-motion` et à 390 px.
+2. Moteur : une option **opt-in** `nebuleuses` de `UltimaCiel.rendre` —
+   `[{ ids: [...], teinte }]` — peinte **par la couche de fond**
+   (`js/ciel-fond.js`), avec la projection du moteur (aucune caméra propre : la
+   règle de phase du LV5 tient). Sans l'option, rendu strictement identique.
+3. Registre : `nebuleuse: 'armes' | 'dragons'` sur les deux constellations ;
+   `js/ciel-noeud.mjs` en déduit les groupes (étoile de la constellation à
+   l'écran parent ; ses enfants quand elle est isolée).
+4. Harnais : mesure de pixels sous chaque nébuleuse (teinte présente, et
+   différente entre les deux) ; contraste des noms inchangé ; phase tenue ;
+   aucun autre écran touché.
+
+**③ Moyens.** `js/ciel.js` (option, transmission des positions projetées),
+`js/ciel-fond.js` (voile ancré), `js/registre-lv3.mjs`, `js/ciel-noeud.mjs`,
+`tests/`. Aucune donnée, aucun SQL, aucune dépendance.
+
+**④ Critères de réussite (vérifiables).**
+- Sur `imladrik.html` : la moyenne de couleur d'un disque autour de l'étoile
+  ARMES diffère mesurablement de celle autour de DRAGONS, et de la même zone
+  **sans** l'option (témoin).
+- La nébuleuse suit son étoile : écart de phase ≤ 1 px (même méthode que
+  `smoke-lv5-fond`).
+- Contraste des noms : `smoke-fond-contraste` et `smoke-noms-lisibles` verts,
+  étendus à `imladrik.html` et ses deux isolements.
+- Tous les autres écrans (accueil, ALPHA, OMEGA, TAO, BCP, ADRAMELECH, RIVEN) :
+  aucun pixel de nébuleuse (l'option n'y est pas passée).
+- Zéro erreur console ; coût de peinture sous le budget de `smoke-lv5-fond`.
+
+**⑤ Hors périmètre.** Aucune armoirie nouvelle (blasons provisoires gardés) ;
+aucune animation propre aux nébuleuses ; pas de contenu IFULVIN ; RIVEN
+intouché.
+
+**⑥ Pre-mortem.**
+
+| Mode de défaillance | Ce qui le prévient |
+|---|---|
+| La nébuleuse glisse sous l'étoile (deux repères) | peinte par le fond avec la projection du moteur ; test de phase |
+| Elle écrase les noms (contraste) | éclat plafonné, mesuré par `smoke-fond-contraste` |
+| Elle déborde sur les autres écrans | option opt-in, passée seulement si un nœud visible porte `nebuleuse` ; test négatif |
+| Test vert par le mauvais chemin (mesure sur fond déjà coloré) | témoin sans l'option, sabotage (teinte identique ⇒ rouge) |
+| Le rendu « embellit » au détriment du sérieux antique | teintes spécifiées par `graphisme`, capture relue avant commit |
