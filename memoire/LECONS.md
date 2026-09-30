@@ -1,7 +1,7 @@
-<!-- lecons:empreinte v47 2026-09-30 sha256:9e6fe1b772e4 -->
+<!-- lecons:empreinte v49 2026-09-30 sha256:9531be9f11db -->
 # Leçons à ne pas oublier
 
-> **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
+> **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
 > Paul le 2026-09-11 : *« compiler les grands points de nos sessions de travail
 > pour que tu les gardes en tête dans les repos ou dans Ultima, le repo macro »*.
 >
@@ -16,10 +16,10 @@
 > quand la facture est tombée.
 
 ⛔ **SA SOURCE UNIQUE EST `Ultima-/memoire/LECONS.md`.** Il est **copié à
-l'identique** dans les sept autres dépôts, parce qu'une séance ouverte sur
+l'identique** dans les neuf autres dépôts, parce qu'une séance ouverte sur
 RenoAgenda ou artisan-builder n'a pas Ultima sous la main. Toute évolution se
 fait **dans Ultima**, puis se re-copie : on ne corrige jamais une copie sur
-place, sinon les huit divergent et plus personne ne sait laquelle fait foi.
+place, sinon les dix divergent et plus personne ne sait laquelle fait foi.
 *(Même motif, même raison que `finubar/rappel.mjs`. Les chemins cités dans les
 leçons portent donc leur dépôt en préfixe : ils doivent se lire depuis n'importe
 lequel des huit.)*
@@ -42,7 +42,7 @@ d'œil, sans réseau : même sceau, mêmes leçons.
 2. **Re-sceller** : `node finubar/lecons-empreinte.mjs --sceller`. Le sceau ne
    bouge pas si le corps n'a pas changé, donc re-sceller sans raison ne
    fabrique pas de fausse divergence.
-3. **Propager la copie** dans les sept autres dépôts, octet pour octet. Un
+3. **Propager la copie** dans les neuf autres dépôts, octet pour octet. Un
    `diff` doit revenir vide : c'est le critère de réussite, pas « ça a l'air
    pareil ».
 4. **Le dire dans le commit du travail** qui a révélé la leçon — pas dans un
@@ -54,12 +54,54 @@ d'œil, sans réseau : même sceau, mêmes leçons.
 affirme une identité fausse, et deux copies réellement différentes affichent
 alors le même sceau.
 
-⚠️ **Ce qui n'est PAS automatique, et doit être su** : rien ne compare
-aujourd'hui la copie d'un dépôt à la source. Le sceau rend la divergence
-**visible** au lecteur, il ne la **détecte** pas tout seul — un contrôle
-croisé exigerait un jeton d'accès inter-dépôts, c'est-à-dire un secret, donc
-une décision de Paul. En attendant, c'est l'étape 3 qui tient, et elle est
-humaine.
+⚠️ **Ce qui n'est PAS automatique, et doit être su** : aucun contrôle **en
+CI** ne compare la copie d'un dépôt à la source. Le sceau rend la divergence
+**visible** au lecteur, il ne la **détecte** pas tout seul — un contrôle croisé
+automatisé exigerait un jeton d'accès inter-dépôts, c'est-à-dire un secret,
+donc une décision de Paul.
+
+⛔ **MAIS « PERSONNE NE PEUT COMPARER » EST FAUX, ET LA NUANCE COÛTE CHER**
+*(précisé le 2026-09-30)*. Le paragraphe ci-dessus disait « rien ne compare »
+sans dire « en CI », et se lisait donc comme « la comparaison est hors de
+portée tant que Paul n'a pas donné un secret ». C'est inexact : **une séance
+qui a les dépôts attachés les compare sans aucun secret nouveau**, d'un `diff`
+sur le disque. C'est ce `diff` qui autorise l'étape 3, et il se refait à chaque
+propagation : **on ne présume pas qu'une copie est pure, on le vérifie avant
+d'écraser.**
+
+⛔ **ET LE `diff` SE FAIT SUR `origin/main`, JAMAIS SUR LE CLONE LOCAL**
+*(payé le 2026-09-30)*. Ce jour-là, j'ai mesuré les dix copies **sur le
+disque** et conclu que trois dépôts n'avaient pas le fichier. Faux : deux
+l'avaient reçu quatre heures plus tôt, par une autre séance, et mes clones
+datant de l'ouverture ne le savaient pas. **Un clone est une photo, pas un
+état.** Toute mesure inter-dépôts se lit avec `git show origin/main:<fichier>`
+après un `fetch`.
+
+⛔ **ET DEUX SÉANCES QUI SCELLENT PRODUISENT DEUX RÉVISIONS DU MÊME NUMÉRO**
+*(payé le 2026-09-30, le même jour)*. Une autre séance a porté la source de
+v44 à v47 pendant que je travaillais ; j'ai re-scellé depuis v44 et fabriqué
+une **seconde v45**, `sha256:5949d1888628` là où la sienne portait
+`8fc13b32c497`. Le numéro de révision est un compteur local, pas un
+identifiant : **c'est le sha256 qui identifie, jamais le `v<n>`.** Avant de
+sceller, relire le sceau sur `origin/main` — et si une autre séance est en vol
+sur ce fichier, la propagation attend qu'elle ait atterri.
+
+En attendant le contrôle en CI, c'est l'étape 3 qui tient, et elle est humaine.
+
+⛔ **ET LA PROPAGATION N'EST PAS UN FICHIER, C'EST TROIS PIÈCES**
+*(mesuré le 2026-09-30)*. Un `memoire/LECONS.md` déposé seul dans un dépôt est
+un fichier que **personne n'ouvre** : ce qui le fait lire à l'ouverture de
+séance, c'est `.claude/lecons-rappel.mjs` **et** son enregistrement en
+`SessionStart` dans `.claude/settings.json`. Les trois vont ensemble. Ce
+jour-là, trois dépôts (`renoboost-console`, `Artidispo`, `DATARENO-`) portaient
+le fichier **sans** le hook — n'en poser qu'une pièce donne l'apparence d'une
+copie à jour sans qu'une seule leçon n'atteigne jamais une séance.
+
+⚠️ **Et la cible se LIT dans `finubar/depots.json`, elle ne se compte pas de
+mémoire.** Ce fichier a annoncé « les huit dépôts » et « les sept autres »
+jusqu'au 30/09, alors que la liste en portait **dix** : deux dépôts manquaient
+à sa propre consigne de propagation. `ripair` reste dehors, et pour une raison
+écrite — hors de `depots.json`, fork partagé avec un tiers.
 
 **Comment il vit.**
 - **Une leçon s'ajoute quand elle est payée**, en fin de séance, dans le commit
@@ -70,7 +112,7 @@ humaine.
   re-mesurer*, ci-dessous, qui s'applique d'abord à ce fichier.
 - **Son contenu ne se redit nulle part ailleurs.** Les `CLAUDE.md` des dépôts
   **pointent** ce fichier, ils n'en reprennent aucune ligne. *(À ne pas
-  confondre avec la copie du fichier entier dans les huit dépôts, ci-dessus :
+  confondre avec la copie du fichier entier dans les dix dépôts, ci-dessus :
   copier un fichier tel quel se vérifie d'un `diff` ; en redire le contenu
   ailleurs, non — et c'est cette seconde forme qui fabrique deux vérités.)*
 
@@ -121,6 +163,26 @@ Stripe, d'une référence de devis. La forme complète se lit à sa source
 par chance, sur un lot que personne n'aurait su non vérifié. ⇒ **Ne jamais
 omettre le lease pour « éviter un aller-retour »** : c'est lui qui transforme une
 invention en refus plutôt qu'en réussite muette.
+
+⛔ **ET LA LEÇON ÉCRITE N'A RIEN EMPÊCHÉ — RECHUTE LE MÊME JOUR, TROIS HEURES
+PLUS TARD** *(2026-09-30, second incident)*. En recalant ce grain sur la tête de
+`main`, j'ai tapé `bb50a0fb1a3cf2a22b1b13e4b0bd4b1c06a57f8e` : **huit
+caractères justes** (`bb50a0fb`, lus dans `git log --oneline`), les trente-deux
+suivants inventés. La leçon ci-dessus était dans ce fichier depuis le matin, et
+je venais de l'écrire moi-même.
+
+⚠️ **C'est ça qui compte, pas la faute** : une règle qui dépend de la vigilance
+de celui qui tape sera violée par celui qui l'a rédigée. Il faut un
+**mécanisme**, et il y en a deux, tous les deux gratuits :
+- **ne jamais TAPER un identifiant** — substitution de commande
+  (`VRAI=$(git rev-parse origin/main)`), variable, copie ; la main qui recopie
+  est le point de défaillance, on la retire du chemin ;
+- **laisser un garde-fou aval le dire** — ici `finubar/collecter.mjs` compare le
+  commit du grain à l'historique et annonce « grain non rattaché ». Le faux SHA
+  y serait apparu au passage suivant, mais **après** avoir été cru.
+
+⇒ Tout champ qui porte un identifiant complet se renseigne par substitution, et
+se relit par le contrôle qui sait le refuser.
 
 **UN COMMIT « HORS MAIN » N'EST PAS UN TRAVAIL HORS MAIN — ON COMPARE LES
 CONTENUS, PAS LES SHA** *(2026-09-18)*. Vu RenoBoost sur une branche à sept

@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 // LEÇONS — injection d'ouverture de séance (hook SessionStart).
 //
-// ⛔ CE FICHIER EST COPIÉ À L'IDENTIQUE dans le `.claude/` des 8 dépôts, avec
+// ⛔ CE FICHIER EST COPIÉ À L'IDENTIQUE dans le `.claude/` des 10 dépôts, avec
 //    `memoire/LECONS.md` à côté. SA SOURCE UNIQUE EST
 //    `Ultima-/finubar/lecons-rappel.mjs`. Toute évolution se fait ICI, puis se
-//    re-copie ; on ne corrige jamais une copie sur place, sinon les huit
+//    re-copie ; on ne corrige jamais une copie sur place, sinon les dix
 //    divergent et plus personne ne sait laquelle fait foi. Même motif, même
 //    raison que `rappel.mjs` : le script ne dépend de RIEN — ni paquet npm, ni
 //    module du dépôt — donc un dépôt sans dépendances installées lit quand même
@@ -20,8 +20,18 @@
 // la leçon « un garde-fou qui cesse de fonctionner doit le DIRE », appliquée au
 // garde-fou lui-même.
 //
-// Il ne doit JAMAIS faire échouer l'ouverture d'une séance : toute anomalie
-// sort en silence avec le code 0 (fichier absent, lecture impossible).
+// Il ne doit JAMAIS faire échouer l'ouverture d'une séance : il sort toujours
+// avec le code 0, quoi qu'il arrive.
+//
+// ⛔ MAIS « NE PAS FAIRE ÉCHOUER » N'EST PAS « SE TAIRE » — corrigé le 30/09.
+// Jusqu'à cette date, un `memoire/LECONS.md` ABSENT faisait sortir le script
+// sans un mot : zéro octet, code 0. La séance s'ouvrait donc SANS aucune leçon,
+// et rien ne le disait — exactement l'état que ce fichier dénonce trois
+// paragraphes plus haut à propos de la troncature et du sceau manquant.
+// Mesuré ce jour-là sur une racine vide : 0 octet émis.
+// ⚠️ L'annonce ne coûte RIEN au garde-fou d'origine : elle passe par le même
+// `additionalContext` et le même code 0. Ce qui devait être évité, c'est un
+// code de sortie non nul, jamais une phrase.
 
 import { readFileSync, existsSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -34,9 +44,9 @@ const MAX_OCTETS = 60_000;
 
 // ⛔ LE MOTIF DU SCEAU EST RECOPIÉ ICI, et c'est délibéré. Sa source est
 // `finubar/lecons-empreinte.mjs`, mais ce script-ci est copié dans le `.claude/`
-// de huit dépôts et ne doit dépendre de RIEN — un dépôt sans ses dépendances
+// de dix dépôts et ne doit dépendre de RIEN — un dépôt sans ses dépendances
 // installées doit quand même lire ses leçons. Un import vers `finubar/`, qui
-// n'existe que dans Ultima, casserait les sept autres.
+// n'existe que dans Ultima, casserait les neuf autres.
 // Si le format du sceau change, il change aux DEUX endroits : c'est le prix
 // assumé de l'indépendance, et il est nommé plutôt que tu.
 const MOTIF_SCEAU = /^<!-- lecons:empreinte (v\d+ \d{4}-\d{2}-\d{2} sha256:[0-9a-f]{12}) -->$/m;
@@ -49,7 +59,21 @@ try {
   const RACINE = process.env.CLAUDE_PROJECT_DIR || resolve(ICI, '..');
   const FICHIER = join(RACINE, 'memoire', 'LECONS.md');
 
-  if (!existsSync(FICHIER)) process.exit(0);
+  // ⛔ L'ABSENCE SE DIT. Voir l'en-tête : un rappel muet se lit comme un rappel
+  // qui n'avait rien à dire, et c'est le pire des deux états.
+  if (!existsSync(FICHIER)) {
+    process.stdout.write(JSON.stringify({
+      hookSpecificOutput: {
+        hookEventName: 'SessionStart',
+        additionalContext: [
+          '⚠️ LEÇONS — `memoire/LECONS.md` est ABSENT de ce dépôt.',
+          "La séance s'ouvre donc SANS la mémoire de méthode. Sa source unique est",
+          '`Ultima-/memoire/LECONS.md` : la recopier ici, octet pour octet.',
+        ].join('\n'),
+      },
+    }));
+    process.exit(0);
+  }
 
   const brut = readFileSync(FICHIER, 'utf8');
   const trop_long = Buffer.byteLength(brut, 'utf8') > MAX_OCTETS;
@@ -60,9 +84,9 @@ try {
   // se lit comme une bonne nouvelle.
   const sceau = brut.match(MOTIF_SCEAU)?.[1];
   const entete = [
-    '════ LEÇONS À NE PAS OUBLIER — mémoire de méthode des huit dépôts ════',
+    '════ LEÇONS À NE PAS OUBLIER — mémoire de méthode des dix dépôts ════',
     sceau
-      ? `Empreinte de cette copie : ${sceau} — elle doit être la même dans les huit dépôts.`
+      ? `Empreinte de cette copie : ${sceau} — elle doit être la même dans les dix dépôts.`
       : '⚠️ Cette copie n\'a PAS de sceau : impossible de dire si elle est à jour. La sceller dans Ultima.',
     'Chaque règle ci-dessous a été payée par une erreur réelle. Les relire ici',
     'coûte moins cher que de les repayer. Source : memoire/LECONS.md',
