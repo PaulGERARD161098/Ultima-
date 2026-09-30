@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-30",
-    "quoi": "RIVEN en 9 nébuleuses (à plat par défaut, 3D en 9 amas), visée clavier 3D corrigée, 43 contacts en base. Fusion squash : le seul commit après celui-ci, c'est elle.",
-    "commit": "548c439fde2c6a8c707da3bd16efb73daad22f08"
+    "quoi": "Rappel des leçons : borne 60 → 200 Ko, 146/146 servies (67/145 avant). Passe d'archivage faite : elle rend 0. /leo et /léo appellent Léo. Chemins des leçons préfixés par dépôt.",
+    "commit": "b01afed9d4607926113957645ccc761561af043a"
   },
   "prochaine_action": "④ — l'exécution : `ouvrirTrace()`, journal 'tentee' AVANT l'acte, plafond, issue après. Frontière arbitrée — cadrage §12.8 quater.",
   "bloque_par": [
@@ -44,6 +44,14 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "ÉCARTÉ par Paul le 30/09 — DATARENO- : Vercel rouge en permanence (PYTHON_ENTRYPOINT_NOT_FOUND), sur main aussi. « Vraiment à part, on le laisse de côté. » Ne pas rouvrir.",
+      "depuis": "2026-09-30"
+    },
+    {
+      "quoi": "REPORTÉ par Paul le 30/09 — mon-dpe.fr : 62 vulnérabilités Dependabot sur main (4 critiques, 28 hautes). « On va corriger mon dpe plus tard. » Séance dédiée.",
+      "depuis": "2026-09-30"
+    },
     {
       "quoi": "RIVEN nébuleuses : à 390 px, 3 noms fictifs sur 54 cachés (restent au panneau). Plus bas = sous 12 px ou étoiles déplacées : non tranché. CADRAGE-RIVEN-NEBULEUSES.md §7",
       "depuis": "2026-09-30"
