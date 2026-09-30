@@ -46,7 +46,10 @@ IMLADRIK passe donc de 5 caps à 4 entrées : les deux constellations + ADRAMELE
 
 ## ② Les étapes — dans l'ordre, une boucle chacune
 
-1. **Boucle A — la structure, sans contenu métier.** Deux nœuds-constellation
+1. **Boucle A — la structure, sans contenu métier.** *(30/09 — arbitrage
+   Paul : « option 1, assouplis la règle pour les constellations ». Un nœud
+   `constellation: true` est une boussole dès UN cap ; l'exception est un
+   drapeau explicite, vérifié par `verifierRegistre`, jamais une déduction.)* Deux nœuds-constellation
    dans le registre (`constellation-armes`, `constellation-dragons`) ; les 3
    dragons y sont rangés ; `ifulvin` y entre comme **étoile d'attente** (nom,
    état « À venir », une phrase, aucune cible — modèle DOKLĚS/SYMPHO, Principe 3

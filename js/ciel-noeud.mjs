@@ -444,7 +444,11 @@ export function rendre(idNoeud, options = {}) {
       // pose `role="button"` sur toutes les étoiles ; c'est ici qu'on dit
       // lesquelles n'emmènent nulle part. Sans cela, une promesse est faite à
       // qui n'y voit pas, et elle n'est pas tenue.
-      if (!cap.cible) { g.setAttribute('aria-disabled', 'true'); }
+      // ⛔ MÊME PARTAGE QU'`entrer()` : ce qui CONTIENT n'est jamais inerte, page
+      // ou pas. Les constellations d'IMLADRIK (30/09) n'ont pas de page et
+      // s'isolent au clic : les marquer `aria-disabled` les annonçait mortes au
+      // lecteur d'écran et les grisait, alors que le clic y plongeait.
+      if (!cap.cible && !(cap.enfants || []).length) { g.setAttribute('aria-disabled', 'true'); }
 
       // ⛔ L'APPEL EST POSÉ PAR UN ATTRIBUT, JAMAIS PAR UNE GÉOMÉTRIE À NOUS.
       // Le moteur repositionne les cercles de chaque étoile à chaque image :

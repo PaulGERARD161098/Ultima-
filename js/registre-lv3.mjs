@@ -272,8 +272,8 @@ export const NOEUDS = {
     blason: 'imladrik',
     cible: null,
     constellation: true,
-    resume: 'La constellation des ARMES : ce dont Paul se sert pour se '
-      + 'développer et développer ses projets. IFULVIN en est la première.',
+    resume: 'La constellation des ARMES : ce dont tu te sers pour te '
+      + 'développer et développer tes projets. IFULVIN en est la première.',
     titre: 'La constellation des armes',
     surligne: 'Imladrik — les armes',
     invite: 'Léo te guide — survole un cap.',
