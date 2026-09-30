@@ -42,7 +42,7 @@ Réno suit chaque dossier du premier contact à la recommandation. C'est la
 promesse de la vitrine : *« De votre lead à la signature du devis, Rénoboost
 accompagne tout votre suivi commercial. »*
 
-**Le critère de sortie** — ⚠️ **proposé, à valider par Paul (§9, Q-P1)** :
+**Le critère de sortie** — ✅ **validé par Paul le 30/09 (§9, Q-P1)** :
 
 | Critère | Au 30/09 | Comment le mesurer |
 |---|---|---|
@@ -130,12 +130,12 @@ GLANEUR, MYCÉLIUM, IFULVIN, VESTA/PROTÉE, HÉRAUT, Boussole des recherches.
 **Raffinage seulement**, dans ADRAMELECH : aucune ne s'ouvre en boucle de code
 sans décision de Paul.
 
-### Non classés — les boucles hors des écrans ① à ④
+### Famille N — les boucles hors des écrans ① à ④ (après C, avant D)
 
 Le tri du 30/09 range les écrans de la maquette ; ces boucles-ci, présentes dans
-l'inventaire, n'y ont **pas encore de place**. ⚠️ **Proposition, à valider
-(§9, Q-P2)** : les traiter **après C, avant D**, dans cet ordre, parce qu'elles
-prolongent des chaînes déjà en service.
+l'inventaire, n'y avaient pas de place. ✅ **Placées par Paul le 30/09 (§9,
+Q-P2) : après C, avant D**, dans cet ordre, parce qu'elles prolongent des
+chaînes déjà en service — la 3D, plus incertaine, passe après.
 
 | # | Boucle | Maillon | État |
 |---|---|---|---|
@@ -156,8 +156,8 @@ Pour les autres maillons, voir la règle du §5.
 
 ## 3. Pas à pas — l'ordre, et la règle qui le fixe
 
-1. **A, puis B, puis C, puis D.** E reste en réserve. Ordre validé par Paul le
-   30/09. Construire des écrans par-dessus des chaînes qui n'ont jamais tourné,
+1. **A, puis B, puis C, puis N, puis D.** E reste en réserve. Ordre A → E
+   validé par Paul le 30/09 ; N placée entre C et D le même soir (Q-P2). Construire des écrans par-dessus des chaînes qui n'ont jamais tourné,
    c'est travailler pour travailler (Directive EB).
 2. **Dans une famille, ce qui débloque le plus de maillons passe devant.** D'où
    A1 à A3 d'abord : ils ouvrent le chemin du premier euro ; A6 le franchit.
@@ -218,8 +218,9 @@ au cadrage §3.3 : Réno lit les fiches de Rénoboost, les devis et relances de
 RenoDevis, et les visites de RenoAgenda si la clé serveur est posée. Il ne lit
 ni Artidispo, ni la base de RenoPredict, ni mon-dpe.fr, ni INTENDANT.
 
-**La règle proposée** — ⚠️ **à valider (§9, Q-P3)** : **chaque boucle qui
-construit ou répare un maillon livre aussi le connecteur Réno de ce maillon.**
+**La règle** — ✅ **validée par Paul le 30/09 (§9, Q-P3)** : **chaque boucle
+qui construit ou répare un maillon livre aussi le connecteur Réno de ce
+maillon.**
 Réno ne devient pas un chantier à part, qui prendrait du retard sur le reste :
 il avance avec la chaîne, maillon par maillon, et son critère entre dans la
 preuve de sortie de chaque boucle. Seul R1 (Artidispo) est une boucle propre,
@@ -255,7 +256,7 @@ route.
 |---|---|---|
 | **Ce document a vieilli** : un ✅ que la base dément | une mesure du §2 qui ne tombe pas | la base gagne ; chaque boucle met à jour sa ligne dans son propre commit ; la reprise remesure toujours avant de croire (§0) |
 | **Deux vérités** : ce plan et le §4.1 du cadrage RenoBoost | un état différent aux deux endroits | le §4.1 est figé au 30/09 et le dit ; l'état vivant n'est qu'ici |
-| **On ouvre C avant que A soit soldé** | une boucle C ouverte alors qu'une boucle A ou B est encore ⬜ ou 🔵 | règle 5 du §3 ; Léo refuse |
+| **On ouvre une famille avant que la précédente soit soldée** | une boucle C, N ou D ouverte alors qu'une boucle d'une famille antérieure est encore ⬜ ou 🔵 | règle 5 du §3 ; Léo refuse |
 | **Réno devient un chantier à part** et prend du retard | une boucle de maillon fermée sans sa ligne Réno | règle du §5 : la ligne Réno fait partie de la preuve de sortie |
 | **La famille A ne bouge pas** : elle ne dépend que de Paul | trois reprises de suite sans geste A fermé | Léo le dit en tête de reprise, avec le geste le plus court à faire |
 | **Le fil se perd entre les dépôts** | une boucle fermée dont on ne retrouve ni la PR ni le commit | chaque ligne nomme son dépôt, sa PR et le commit de `main` |
@@ -280,16 +281,14 @@ route.
 - les onze écrans validés tels quels ;
 - chaque écran porte ses outils, réels ou imaginés, et Réno suit tout ;
 - la chaîne de la maquette validée sans modification, et ce document pour la
-  réaliser.
+  réaliser ;
+- **Q-P1** — le critère de sortie : un dossier réel de M0 à M9 dans les outils,
+  sans ressaisie, suivi par Réno sur les dix maillons ;
+- **Q-P2** — les boucles hors écrans (famille N) : après C, avant D ;
+- **Q-P3** — Réno : chaque boucle livre le connecteur de son maillon ; seul R1
+  est une boucle propre.
 
-**Ouvertes — les réponses de Paul s'inscrivent ici** :
-
-| # | Question | Recommandation |
-|---|---|---|
-| Q-P1 | Le critère de sortie de la chaîne (§1) | un dossier réel de M0 à M9 dans les outils, sans ressaisie, suivi par Réno sur les dix maillons |
-| Q-P2 | Où placer les boucles non classées (N1 à N6) | après C, avant D, dans l'ordre N1 → N6 |
-| Q-P3 | Réno : un chantier à part, ou chaque boucle livre son connecteur | chaque boucle livre son connecteur ; seul R1 est une boucle propre |
-
-Les questions du cadrage restent posées **à la boucle qui les touche** :
+**Ouvertes** — les nouvelles décisions de Paul s'inscrivent dans la liste
+ci-dessus, datées. Les questions du cadrage restent posées **à la boucle qui les touche** :
 Q4 (photos du relevé stockées ou non) avec A5 ou D0 · Q6 (rapport de 3 pages ou
 de 10 sections) avec C1 · Q9 (Léo, Réno, Vitruve) avec R1.
