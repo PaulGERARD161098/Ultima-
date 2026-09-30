@@ -38,7 +38,7 @@
   "prochaine_action": "④ — brancher l'exécution : entrée de journal AVANT l'acte, plafond consulté, issue après. Plus aucun gate ne l'attend.",
   "bloque_par": [
     "Gestes Ycome en attente depuis le 28/09 : archiver le dépôt sur GitHub, supprimer le projet Vercel ycome",
-    "DÉCISION (pas une action) : `leo_missions` et `leo_operations` sont orphelines en base — 0 ligne, 0 référence dans le dépôt. À adopter ou supprimer ? Cadrage §12.8",
+    "DÉCISION : deux journaux coexistent (leo_operations = moteur, leo_ecritures = lisible). Frontière proposée au §12.8, à trancher — choix produit.",
     "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
     "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
     "La précision sur « mon dpe.fr » (VITRUVE)",

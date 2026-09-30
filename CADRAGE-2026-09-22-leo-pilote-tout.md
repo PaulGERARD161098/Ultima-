@@ -1225,9 +1225,56 @@ verrou de concurrence), et un journal à `operation_id` / `base_version` /
 | référencées dans ce dépôt (`.js`, `.mjs`, `.ts`, `.sql`, `.md`) | **aucune** |
 | migration correspondante dans `supabase/migrations/` | **aucune** |
 
-⇒ Elles ont été posées **par autre chose que ce dépôt** — le vocabulaire
-(`contract_version`, `skill_version`, `readers`/`writers`) est celui d'un
-protocole d'agent, pas celui d'Ultima.
+⛔ **CETTE PHRASE ÉTAIT FAUSSE — corrigée le 30/09.** Elle disait : « elles
+ont été posées par autre chose que ce dépôt ». Le registre des migrations le
+démentait, et il suffisait de le lire :
+
+```sql
+select version, name from supabase_migrations.schema_migrations;
+-- → 20260929125105 · leo_lv1_registre_transactionnel
+```
+
+Appliquée le **29/09 à 12:51 UTC — pendant notre séance**. « LV1 » est le
+vocabulaire d'Ultima (LV2 à LV6 courent dans tous les cadrages). ⇒ Ce n'est
+pas « autre chose », c'est **un chantier Ultima mené dans une séance
+parallèle**, dont la migration n'a jamais été commitée.
+
+⚠️ **Et c'est le vrai problème, plus grave que deux tables inconnues : LE DÉPÔT
+NE DÉCRIT PLUS LA BASE.** Une séance qui lit `supabase/migrations/` pour savoir
+ce qui existe conclut que ces tables n'existent pas — c'est exactement l'erreur
+que j'ai commise le 29/09 en concevant `leo_ecritures` sans les voir. Relevé
+rapatrié dans `20260929125105_leo_lv1_registre_transactionnel.RELEVE.sql`
+(un CONSTAT, pas l'original — le suffixe le dit).
+
+### §12.8 bis — ⛔ ET LE RELEVÉ A TROUVÉ UNE FAILLE RÉELLE
+
+`leo_operations_read` ne vérifiait **que l'existence** de la mission, jamais son
+propriétaire :
+
+```sql
+EXISTS (SELECT 1 FROM leo_missions m WHERE m.id = leo_operations.mission_id)
+```
+
+Tout compte authentifié pouvait lire les `payload` et `result` (16 Ko de jsonb
+chacun) des opérations de **n'importe quelle** mission. Sa policy sœur,
+`leo_missions_read`, faisait le contrôle correctement — **l'écart entre les deux
+est ce qui l'a rendue visible** : une table cloisonnée, sa fille ouverte.
+
+⚠️ **Portée mesurée avant de corriger** : 1 seul compte, 0 ligne dans les deux
+tables. **Rien ne fuyait à cet instant.** Mais `readers`/`writers` existent par
+conception : c'était une bombe à retardement, pas un détail théorique.
+
+✅ **Corrigé et éprouvé des deux côtés sur un cas FABRIQUÉ** — les tables étant
+vides, « rien ne fuit » aurait été vrai par vacuité :
+
+| sonde | constat |
+|---|---|
+| verrou de non-vacuité (la ligne existe) | **1** |
+| intrus authentifié → opérations · missions | **0 · 0** |
+| propriétaire → opérations · missions | **1 · 1** |
+
+⛔ Le miroir compte autant que le refus : sans lui, un cloisonnement parfait et
+une table illisible rendraient le même zéro.
 
 ⛔ **POURQUOI `leo_ecritures` A QUAND MÊME ÉTÉ CRÉÉE**, et ce n'est pas un
 passage en force : `leo_operations.payload` est un **jsonb libre**. Il PEUT
@@ -1236,12 +1283,20 @@ construction. Il dépend en plus d'une `mission_id`, alors qu'on journalise une
 écriture, pas une mission ; et il n'a ni `owner_id`, ni outil, ni quadrant, ni
 anneau. Voisin conceptuellement, incompatible structurellement.
 
-⏳ **CE QUI RESTE À PAUL — une décision, pas une action** : ces deux tables
-sont-elles à adopter, ou à supprimer ? ⛔ Non touchées : supprimer une table
-posée par un autre outil sans savoir qui l'appelle est exactement l'incident du
-17/08. Ma recommandation : les **supprimer** si rien d'autre ne les alimente
-(elles sont vides et personne ne les lit) — mais ce constat demande de regarder
-hors d'Ultima, donc hors de ce que je peux vérifier seul.
+⏳ **CE QUI RESTE À PAUL — une décision, pas une action.** Ma recommandation a
+CHANGÉ avec la mesure : je disais « les supprimer », croyant qu'elles venaient
+d'ailleurs. Elles viennent d'Ultima et portent le moteur de l'étape ④.
+⇒ **Les GARDER**, et écrire la frontière entre les deux journaux :
+
+| | son rôle | ce qu'il porte |
+|---|---|---|
+| `leo_operations` | le **registre du moteur** | idempotence, quotas, verrou de version, `payload` libre |
+| `leo_ecritures` | le **journal lisible par Paul** | outil · quadrant · anneau · phase, **zéro contenu dicté** |
+
+⚠️ **Deux journaux restent deux vérités** — le risque que ce cadrage dénonce
+depuis le début. La frontière ci-dessus est ma proposition, pas un arbitrage :
+c'est un choix produit, donc il revient à Paul. ⛔ Les tables ne sont PAS
+touchées.
 
 ### §12.9 — La prochaine action, unique
 
