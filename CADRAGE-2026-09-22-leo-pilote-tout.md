@@ -1177,11 +1177,78 @@ L'ordre de grandeur se justifie (un seul outil par tour, et Paul dicte) ; le
 chiffre exact non. Il se re-règle sur une semaine de journal. ⛔ Ne pas le
 durcir avant : un seuil posé au jugé bloque du travail réel et finit désarmé.
 
-### §12.7 — La prochaine action, unique
+### §12.7 — ✅ LE GATE EST FRANCHI — la table existe (30/09, GO de Paul)
 
-⏳ **LE GATE, et il est le seul reste non franchissable seul** : appliquer
-`20260929220000_leo_ecritures.sql`. Rien d'autre ne l'attend — la migration est
-écrite, relisible, et ses garde-fous sont déjà éprouvés par le harnais.
+`20260929220000_leo_ecritures.sql` est **appliquée** sur le projet Ultima
+(`leosfqyidgsaescjbfom`, eu-west-3 — sa base PROPRE, pas la base partagée des
+quatre briques : vérifié avant, la leçon du 17/08 ne s'applique pas ici).
+
+**Éprouvée du côté où le garde-fou peut être contourné**, pas du côté qu'on
+emprunte :
+
+| sonde | constat |
+|---|---|
+| `anon` INSERT | **refusé** — `42501 violates row-level security policy` |
+| `authenticated` UPDATE / DELETE | privilège **absent** |
+| phase inventée | **refusée** — `23514 leo_ecritures_phase_check` |
+| **miroir** : la voie serveur écrit | **2 lignes**, un seul `trace_id` |
+| RLS · policies · index | active · **2** (aucune UPDATE/DELETE) · 3 |
+
+⚠️ **Le dry run a trouvé quelque chose** : `anon` gardait le privilège INSERT
+(défaut Supabase sur `public`). **Ce n'était pas une faille** — la RLS refusait
+déjà, et le dire importe autant que le corriger. Mais un droit accordé sans
+usage est un droit qu'une policy mal réécrite un jour suffirait à rendre
+exploitable : retiré par `20260930080500_leo_ecritures_ferme_anon.sql`. Deux
+barrières, pas une.
+
+⚠️ **Et un contrôle que j'avais écrit était CREUX** : « phase inventée refusée »
+passait par un `case when` qui rendait toujours « refusée ». Refait en tentant
+l'insert pour de vrai. *C'est le même défaut que celui trouvé la veille sur
+l'anneau, deux fois dans la même séance* — un contrôle qui ne peut pas échouer
+se lit exactement comme un contrôle qui a réussi.
+
+### §12.8 — ⛔ DEUX TABLES ORPHELINES, trouvées en appliquant
+
+En vérifiant l'état de la base avant d'écrire, deux tables sont apparues —
+**`leo_missions` (18 colonnes) et `leo_operations` (7)** — qui portent un
+dispositif très proche de celui qu'on vient de concevoir : `state` à
+`'proposed'`, `max_calls` / `max_units` / `used_units` / `calls` (un plafond),
+`stopped` (un coupe-circuit), `scope`, `readers` / `writers`, `version` (un
+verrou de concurrence), et un journal à `operation_id` / `base_version` /
+`status` / `result`.
+
+**Mesuré le 30/09 :**
+
+| | constat |
+|---|---|
+| lignes | **0** dans les deux |
+| référencées dans ce dépôt (`.js`, `.mjs`, `.ts`, `.sql`, `.md`) | **aucune** |
+| migration correspondante dans `supabase/migrations/` | **aucune** |
+
+⇒ Elles ont été posées **par autre chose que ce dépôt** — le vocabulaire
+(`contract_version`, `skill_version`, `readers`/`writers`) est celui d'un
+protocole d'agent, pas celui d'Ultima.
+
+⛔ **POURQUOI `leo_ecritures` A QUAND MÊME ÉTÉ CRÉÉE**, et ce n'est pas un
+passage en force : `leo_operations.payload` est un **jsonb libre**. Il PEUT
+donc porter du contenu dicté — précisément ce que `leo_ecritures` interdit par
+construction. Il dépend en plus d'une `mission_id`, alors qu'on journalise une
+écriture, pas une mission ; et il n'a ni `owner_id`, ni outil, ni quadrant, ni
+anneau. Voisin conceptuellement, incompatible structurellement.
+
+⏳ **CE QUI RESTE À PAUL — une décision, pas une action** : ces deux tables
+sont-elles à adopter, ou à supprimer ? ⛔ Non touchées : supprimer une table
+posée par un autre outil sans savoir qui l'appelle est exactement l'incident du
+17/08. Ma recommandation : les **supprimer** si rien d'autre ne les alimente
+(elles sont vides et personne ne les lit) — mais ce constat demande de regarder
+hors d'Ultima, donc hors de ce que je peux vérifier seul.
+
+### §12.9 — La prochaine action, unique
+
+**④ — l'exécution.** Brancher `autoriserEcriture` (qui n'a toujours aucun
+appelant, à dessein) sur une écriture réelle : entrée de journal posée AVANT
+l'acte, plafond consulté, issue posée après. C'est là, et seulement là, que Léo
+écrira. **Plus aucun gate ne l'attend.**
 
 Puis **④ — l'exécution** : brancher `autoriserEcriture` (qui n'a toujours aucun
 appelant, à dessein) sur une écriture réelle, avec l'entrée de journal posée

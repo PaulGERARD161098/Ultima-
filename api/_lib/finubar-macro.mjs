@@ -4,7 +4,7 @@
 // l'IMPORTER pour que Vercel l'embarque dans le paquet de la fonction, et
 // que `api/_lib/` est le seul motif d'import éprouvé en production ici.
 export default {
-  "le": "2026-09-29",
+  "le": "2026-09-30",
   "projets": [
     {
       "ok": true,
@@ -90,9 +90,9 @@ export default {
         "commits_depuis": 7,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 8,
-      "jours_en_attente": 43,
+      "mesure_le": "2026-09-30",
+      "jours_depuis_maj": 9,
+      "jours_en_attente": 44,
       "rang": 0
     },
     {
@@ -111,13 +111,13 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-09-29",
-          "quoi": "§12 : l'objectif final scellé par Paul (destructeur/régressif). Anneau retaillé — les 10 outils verts. B1 ③ : journal append-only + plafond, écrits.",
+          "quoi": "§12 scellé (destructeur/régressif), 10 outils verts, journal append-only. ✅ `leo_ecritures` APPLIQUÉE le 30/09 et éprouvée sous anon (42501).",
           "commit": "7e779e673e864a0293d955df9f4d1e4620e9a82b"
         },
-        "prochaine_action": "⏳ GATE : appliquer `20260929220000_leo_ecritures.sql`. Puis ④ — brancher l'exécution sur les écritures vertes, journal posé AVANT l'acte.",
+        "prochaine_action": "④ — brancher l'exécution : entrée de journal AVANT l'acte, plafond consulté, issue après. Plus aucun gate ne l'attend.",
         "bloque_par": [
           "Gestes Ycome en attente depuis le 28/09 : archiver le dépôt sur GitHub, supprimer le projet Vercel ycome",
-          "Appliquer `supabase/migrations/20260929220000_leo_ecritures.sql` : migration SQL en production — gate. Elle est ÉCRITE et éprouvée ; il ne manque que son application",
+          "DÉCISION (pas une action) : `leo_missions` et `leo_operations` sont orphelines en base — 0 ligne, 0 référence dans le dépôt. À adopter ou supprimer ? Cadrage §12.8",
           "Régénérer `CRON_SECRET` (projet Vercel `ultima`) : la valeur du 06/09 a circulé en clair dans une conversation",
           "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
           "La précision sur « mon dpe.fr » (VITRUVE)",
@@ -174,14 +174,14 @@ export default {
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "2549a9c",
-        "tete_le": "2026-09-29T21:58:05+00:00",
-        "commits_depuis": 4,
+        "tete": "26ae7b1",
+        "tete_le": "2026-09-29T21:59:03+00:00",
+        "commits_depuis": 5,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 40,
+      "mesure_le": "2026-09-30",
+      "jours_depuis_maj": 1,
+      "jours_en_attente": 41,
       "rang": 0
     },
     {
@@ -256,9 +256,9 @@ export default {
         "commits_depuis": null,
         "commit_inconnu": true
       },
-      "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 22,
-      "jours_en_attente": 76,
+      "mesure_le": "2026-09-30",
+      "jours_depuis_maj": 23,
+      "jours_en_attente": 77,
       "rang": 1
     },
     {
@@ -311,9 +311,9 @@ export default {
         "commits_depuis": null,
         "commit_inconnu": true
       },
-      "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 26,
-      "jours_en_attente": 56,
+      "mesure_le": "2026-09-30",
+      "jours_depuis_maj": 27,
+      "jours_en_attente": 57,
       "rang": 1
     },
     {
@@ -354,9 +354,9 @@ export default {
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 7,
-      "jours_en_attente": 10,
+      "mesure_le": "2026-09-30",
+      "jours_depuis_maj": 8,
+      "jours_en_attente": 11,
       "rang": 1
     },
     {
@@ -444,9 +444,9 @@ export default {
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 7,
-      "jours_en_attente": 56,
+      "mesure_le": "2026-09-30",
+      "jours_depuis_maj": 8,
+      "jours_en_attente": 57,
       "rang": 2
     },
     {
@@ -496,9 +496,9 @@ export default {
         "commits_depuis": null,
         "commit_inconnu": true
       },
-      "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 39,
-      "jours_en_attente": 39,
+      "mesure_le": "2026-09-30",
+      "jours_depuis_maj": 40,
+      "jours_en_attente": 40,
       "rang": 2
     },
     {
@@ -543,9 +543,9 @@ export default {
         "commits_depuis": null,
         "commit_inconnu": true
       },
-      "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 14,
-      "jours_en_attente": 39,
+      "mesure_le": "2026-09-30",
+      "jours_depuis_maj": 15,
+      "jours_en_attente": 40,
       "rang": 2
     },
     {
@@ -597,9 +597,9 @@ export default {
         "commits_depuis": null,
         "commit_inconnu": true
       },
-      "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 7,
-      "jours_en_attente": 21,
+      "mesure_le": "2026-09-30",
+      "jours_depuis_maj": 8,
+      "jours_en_attente": 22,
       "rang": 2
     },
     {
@@ -641,9 +641,9 @@ export default {
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-09-29",
-      "jours_depuis_maj": 7,
-      "jours_en_attente": 19,
+      "mesure_le": "2026-09-30",
+      "jours_depuis_maj": 8,
+      "jours_en_attente": 20,
       "rang": 2
     }
   ],
@@ -678,7 +678,7 @@ export default {
       },
       {
         "projet": "Ultima",
-        "geste": "Appliquer `supabase/migrations/20260929220000_leo_ecritures.sql` : migration SQL en production — gate. Elle est ÉCRITE et éprouvée ; il ne manque que son application"
+        "geste": "DÉCISION (pas une action) : `leo_missions` et `leo_operations` sont orphelines en base — 0 ligne, 0 référence dans le dépôt. À adopter ou supprimer ? Cadrage §12.8"
       },
       {
         "projet": "Ultima",
@@ -855,7 +855,7 @@ export default {
       },
       {
         "projet": "Ultima",
-        "dit": "a avancé de 4 commit(s) depuis sa dernière note",
+        "dit": "a avancé de 5 commit(s) depuis sa dernière note",
         "pourquoi": "derive"
       },
       {

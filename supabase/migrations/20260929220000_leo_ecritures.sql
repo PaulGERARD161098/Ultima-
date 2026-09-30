@@ -1,7 +1,15 @@
 -- LE JOURNAL DES ÉCRITURES DE LÉO — B1 étape ③ (cadrage §12.6, 29/09/2026).
 --
--- ⛔ PRÉPARÉE, NON APPLIQUÉE. Une migration ne s'applique jamais seule dans ce
--- dépôt : c'est un gate de Paul, et le mode solo ne le lève pas.
+-- ✅ APPLIQUÉE LE 2026-09-30 sur le projet Ultima (`leosfqyidgsaescjbfom`,
+-- eu-west-3), sur GO explicite de Paul (« Crée la table d'écriture / Applique »).
+-- Éprouvée après coup, du côté où le garde-fou peut être contourné :
+--   · `anon` INSERT → refusé, 42501 (violates row-level security policy) ;
+--   · `authenticated` UPDATE / DELETE → privilège absent ;
+--   · phase inventée → refusée, 23514 (leo_ecritures_phase_check) ;
+--   · miroir : la voie serveur écrit 2 lignes partageant leur `trace_id`.
+-- ⚠️ Le dry run a trouvé qu'`anon` gardait INSERT (défaut Supabase sur
+-- `public`) — sans effet, la RLS refusait déjà, mais retiré par la migration
+-- `20260930080500_leo_ecritures_ferme_anon.sql`.
 --
 -- ---- Pourquoi cette table existe, et pourquoi elle pèse plus lourd qu'avant
 -- Depuis l'arbitrage du 29/09, les dix outils du catalogue sont VERTS : Léo
