@@ -142,6 +142,21 @@ console.log('§2bis — un récit trop long est coupé au mot, et la coupe se di
   // encore savoir afficher (règle ⑤).
   const casse = lireGrain('{ pas du json', 'x/Y');
   verifier('un grain illisible expose quand même recits: []', Array.isArray(casse.recits));
+
+  // Cas payé le 30/09 : le grain d'artisan-builder portait 27 boucles écrites en
+  // TEXTE NU (`"…"` au lieu de `{ quoi, depuis }`). Le lecteur cherchait `b.quoi`,
+  // ne le trouvait pas, et les écartait TOUTES sans rien dire : la collecte
+  // affichait 0 boucle ouverte pour ce dépôt. Un filtre qui écarte en silence
+  // se lit comme « rien à signaler ». Une boucle en texte nu se lit comme son `quoi`.
+  const nu = lireGrain(JSON.stringify({
+    projet: 'P', boucles_ouvertes: ['boucle en texte nu', { quoi: 'boucle objet', depuis: '2026-09-01' }, 42, null],
+  }), 'x/P');
+  verifier('une boucle écrite en texte nu reste visible',
+    nu.grain.boucles_ouvertes.some((b) => b.quoi === 'boucle en texte nu' && b.depuis === ''),
+    JSON.stringify(nu.grain.boucles_ouvertes));
+  verifier('la forme objet est lue comme avant', nu.grain.boucles_ouvertes.some((b) => b.quoi === 'boucle objet' && b.depuis === '2026-09-01'));
+  verifier('ce qui n\'est ni texte ni objet reste écarté (42, null)', nu.grain.boucles_ouvertes.length === 2,
+    String(nu.grain.boucles_ouvertes.length));
 }
 
 // ---------------------------------------------------------------- §3 jours

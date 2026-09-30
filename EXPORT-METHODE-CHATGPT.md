@@ -377,8 +377,10 @@ version de sa source canonique. Une modification hors des quatre directives
 incrémente la version documentaire sans prétendre que leur empreinte a changé.
 
 ⚠️ **Le contrôle est éprouvé par le côté où il se contourne**
-(`tests/unit-export-chatgpt.mjs`, **11 contrôles — mesurés le 21/09**, pas
-déduits : c'est ce que sa dernière ligne imprime). Le plus important d'entre eux
+(`tests/unit-export-chatgpt.mjs`, **13 contrôles — mesurés le 28/09**, pas
+déduits : c'est ce que sa dernière ligne imprime ; ils étaient 11 jusqu'au
+2026-09-28, où le doc Gemini en a ajouté deux — l'accord du second export, et le
+verrou de non-vacuité de la liste des exports). Le plus important d'entre eux
 n'est pas celui qui vérifie l'accord : c'est le **verrou de non-vacuité**. Ce
 contrôle cherche une section par son titre ; le jour où le titre est reformulé,
 l'extraction rendrait une chaîne vide — et *le sha256 d'une chaîne vide est

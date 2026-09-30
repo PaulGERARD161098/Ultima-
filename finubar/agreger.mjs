@@ -144,6 +144,9 @@ export function lireGrain(json, source) {
     // se vérifie, « c'est prioritaire » ne se vérifie pas et vieillit mal.
     en_attente_depuis: texteBorne(brut.en_attente_depuis),
     boucles_ouvertes: listeBornee(brut.boucles_ouvertes, (b) => {
+      // Une boucle en TEXTE NU se lit comme son `quoi` (30/09 : les 27 boucles
+      // d'artisan-builder étaient écartées en silence, la collecte en voyait 0).
+      if (typeof b === 'string') b = { quoi: b, depuis: '' };
       const quoi = recit(b && b.quoi, 'boucles_ouvertes[].quoi');
       return quoi ? { quoi, depuis: texteBorne(b && b.depuis) } : null;
     }),

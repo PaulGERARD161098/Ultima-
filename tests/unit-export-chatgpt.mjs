@@ -22,7 +22,7 @@ import { tmpdir } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
-import { etat, sceller, sectionDirectives, empreinteReelle, CLAUDE_MD, EXPORT_MD } from '../finubar/export-chatgpt-empreinte.mjs';
+import { etat, sceller, sectionDirectives, empreinteReelle, CLAUDE_MD, EXPORT_MD, EXPORT_GEMINI_MD, TOUS_LES_EXPORTS } from '../finubar/export-chatgpt-empreinte.mjs';
 
 const ICI = dirname(fileURLToPath(import.meta.url));
 const OUTIL = resolve(ICI, '../finubar/export-chatgpt-empreinte.mjs');
@@ -124,6 +124,25 @@ verdicts.lEmpreinteIgnoreCeQuiSuitLaSection = empreinteReelle(fClaude) === avant
 const reel = etat(CLAUDE_MD, EXPORT_MD);
 verdicts.leDepotReelEstEnAccord = reel.accord;
 
+// ---- 11. LES DEUX EXPORTS, pas seulement celui de ChatGPT -------------------
+// ⛔ Posé le 2026-09-28 avec EXPORT-METHODE-GEMINI.md. Le contrôle 10 ne
+// regardait qu'un fichier : le doc Gemini aurait pu porter une empreinte périmée
+// pour toujours en ayant l'air réglé. C'est le mode de panne que son §6 décrit,
+// et il se serait produit dans le fichier qui le cite.
+const reelGemini = etat(CLAUDE_MD, EXPORT_GEMINI_MD);
+verdicts.leDocGeminiEstEnAccord = reelGemini.accord;
+
+// ---- 12. LE VERROU DE NON-VACUITÉ DE LA LISTE -------------------------------
+// ⛔ Le contrôle 11 est vert si TOUS_LES_EXPORTS se vide ou perd une entrée : une
+// boucle qui ne tourne pas ne trouve aucun désaccord. Un troisième export ajouté
+// sans être nommé dans la liste ne serait donc gardé par rien, en silence.
+// Cette ligne compte les fichiers réellement contrôlés, et exige que chacun
+// porte au moins une ligne PARAMETRAGE — sinon « aucune empreinte » passerait
+// pour « empreintes en accord ».
+verdicts.laListeDesExportsNEstPasVide =
+  TOUS_LES_EXPORTS.length >= 2 &&
+  TOUS_LES_EXPORTS.every((f) => etat(CLAUDE_MD, f).inscrites.length >= 1);
+
 rmSync(bac, { recursive: true, force: true });
 
 let echecs = 0;
@@ -131,6 +150,7 @@ for (const [nom, ok] of Object.entries(verdicts)) {
   console.log(`${ok ? '  OK  ' : '  ÉCHEC'} ${nom}`);
   if (!ok) echecs++;
 }
-if (!reel.accord) console.error(`  → ${reel.motif}`);
+if (!reel.accord) console.error(`  → ChatGPT : ${reel.motif}`);
+if (!reelGemini.accord) console.error(`  → Gemini : ${reelGemini.motif}`);
 console.log(`${Object.keys(verdicts).length - echecs}/${Object.keys(verdicts).length} contrôles`);
 process.exitCode = echecs ? 1 : 0;

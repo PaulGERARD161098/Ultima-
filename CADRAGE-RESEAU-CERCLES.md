@@ -125,6 +125,37 @@ d'entrée, ni la même unité de mesure, ni la même façon de scaler :
 s'écrire** — donc ni ② les étapes, ni ④ les critères, ni ⑥ le pre-mortem. C'est
 la raison exacte pour laquelle le gate EL reste fermé.
 
+### ✅ TRANCHÉ PAR PAUL LE 28/09 : **CONCENTRIQUE** — pour ⓐ Le Cercle seulement
+
+*Reporté ici le 30/09. Source : la description de la PR
+[Ultima-#302](https://github.com/PaulGERARD161098/Ultima-/pull/302), seul
+endroit où la décision était écrite — aucun fichier du dépôt ne la portait, ni
+sur la branche de #302 ni sur `main` (vérifié par `git log --all -S`).*
+
+⛔ **Le gate reste FERMÉ pour ⓑ Le Rachat** : le rôle de Julien vis-à-vis de
+Fahrenheit n'est pas établi.
+
+Trois règles découlent du choix, et aucune ne se déduisait du mot :
+
+| | Règle | Pourquoi elle est forcée |
+|---|---|---|
+| ① | l'exclusivité ne mord **qu'au centre** | un cercle extérieur est un cercle d'**observation** : l'y rendre exclusif obligerait à refuser le second plombier **avant** de savoir lequel des deux donne |
+| ② | la monnaie de promotion est ce qu'on **donne** | le passager clandestin ne monte jamais et reste dehors, où il ne coûte rien — **aucune exclusion à prononcer** |
+| ③ | contrainte et coût **ne décroissent jamais** vers le centre | l'inverse viderait le centre. Le nombre de cercles, la cadence et les montants restent à Paul |
+
+- **Pre-mortem, mode n°1** (le cercle extérieur est une salle d'attente qui se
+  vide) : il invalide tout le reste, donc **mesurer le vivier dans RIVEN passe
+  avant toute invitation**.
+- **Mode n°5, non prévenu** : si Paul capte de la valeur sur les affaires de ses
+  membres, il cesse d'être neutre. Le modèle de rémunération n'est pas tranché.
+- **Prochaine étape** (grain du 28/09) : nommer les cercles — nombre, cadence,
+  coût. Décision de Paul, zéro ligne de code ; la règle ③ n'est pas applicable
+  sans ces valeurs.
+
+⚠️ **Ce qui n'a PAS survécu** : la PR annonçait « les six points d'EL sont
+écrits pour ⓐ ». Ce texte n'est dans aucun commit. Il est à réécrire, pas à
+reconstituer de mémoire.
+
 ---
 
 ## 5. VRANESH — le futur à anticiper (quadrant IMLADRIK)

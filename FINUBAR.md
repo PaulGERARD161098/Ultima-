@@ -32,11 +32,12 @@
   },
   "dernier_arret": {
     "le": "2026-09-30",
-    "commit": "5a025b5c8567c155600bff40a265ed201f4b4497",
-    "quoi": "Frontière des deux registres ARBITRÉE (« garde les deux avec la clé ») : `ouvrirTrace()` pose la clé, +8 contrôles. Avant : §12 scellé, 10 outils verts, `leo_ecritures` appliquée."
+    "quoi": "Bouclage 30/09 : #302 intégrée, LEÇONS v47 (v45+#314+horloge), collecte des boucles en texte nu. Avant : frontière des registres arbitrée (#314).",
+    "commit": "c905c869417ecbb98a78d0c2e54593c57bcedaa7"
   },
   "prochaine_action": "④ — l'exécution : `ouvrirTrace()`, journal 'tentee' AVANT l'acte, plafond, issue après. Frontière arbitrée — cadrage §12.8 quater.",
-  "bloque_par": [    "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
+  "bloque_par": [
+    "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
     "La précision sur « mon dpe.fr » (VITRUVE)",
     "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis",
     "Vérifier que les inscriptions Supabase sont FERMÉES (« Allow new signups ») — un compte tiers pourrait remplir le quota par la route d'import"
@@ -108,7 +109,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-09-29"
+  "maj": "2026-09-30"
 }
 ```
 
