@@ -142,7 +142,7 @@ gestes A sont les siens, les boucles B sont du code que Claude porte seul.
 | # | Boucle | Maillon | Dépôt | État | Preuve de sortie |
 |---|---|---|---|---|---|
 | B1 | Du chiffrage au reste à charge : le coût TTC du devis alimente la rentabilité de l'audit | M4 → M5 | RenoDevis | ⬜ `rentabilite` vaut null (cadrage §2, M5) ; se recette sur un devis réel, donc après A3 | un audit avec son reste à charge et son temps de retour, sur un devis réel |
-| B2 | La double marge (`margeFournitures` à 35 % appliquée par-dessus la bibliothèque) | M4 | RenoDevis | ⬜ défaut qualifié, non corrigé ; **aucune dépendance à Paul** | un harnais qui rougit sur la double application, puis vert |
+| B2 | La double marge (`margeFournitures` à 35 % appliquée par-dessus la bibliothèque) | M4 | RenoDevis (+ RenoBoost pour la ligne Réno) | 🔵 **ouverte le 30/09 à 18:18 UTC** : fiche d'ouverture posée dans RenoDevis `CADRAGE-2026-09-14-pilote-sola.md` §13 (branche de séance `claude/bold-ride-lz23qg`) ; **aucun code** tant que Paul n'a pas répondu à Q-B2-1, Q-B2-2, Q-B2-3 (§13.9) ; un seul site défectueux, le relevé — `DevisLineBuilder` est sain | un harnais qui rougit sur la double application, puis vert · récap = devis sur une même fixture · `devis_relances` dit `chiffre` |
 | B3 | Les devis arrivés par e-mail entrent (RR-07), une fois A13 posé | M6 | RenoDevis | ⬜ dépend d'A13 | à fixer à l'ouverture, sur ce qu'A13 aura révélé |
 | B4 | Un seul agenda Rénoboost à la place de Calendly, sur le moteur d'Artidispo — **et Réno lit Artidispo** (R1, §5) | M0 + M1 | Artidispo + RenoBoost | ⬜ | le site, le salon et les campagnes pointent vers un seul agenda Rénoboost ; la bande Réno passe M0 et M1 à « le suit » |
 
