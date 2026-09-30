@@ -24,7 +24,7 @@
   "projet": "Ultima",
   "depot": "PaulGERARD161098/Ultima-",
   "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-  "rattache_a": "CADRAGE-RIVEN-NEBULEUSES.md · CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md",
+  "rattache_a": "PLAN-2026-09-30-chaine-A-Z.md (la route de la chaîne Rénoboost et son état vivant) · CADRAGE-RIVEN-NEBULEUSES.md · CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md",
   "etat": "en_cours",
   "jalon": {
     "nom": "B1 — Léo AGIT dans l'anneau vert (cadrage §11)",
@@ -32,7 +32,7 @@
   },
   "dernier_arret": {
     "le": "2026-09-30",
-    "quoi": "B1 ④ livré : un vert s'exécute sans clic derrière une trace (ouvrir → acte → clore, plafond, fail-closed vers la carte). Revue adversariale : 1 bloquant (S1) + 5 corrigés ; journal durci en base (migration appliquée, éprouvée en rôle authenticated). ⑤ cadré (§14), pas codé. Même jour, séances parallèles : RIVEN en 9 nébuleuses (#322), leçons v54 + /leo (#323, #326).",
+    "quoi": "B1 ④ livré : un vert s'exécute sans clic derrière une trace (ouvrir → acte → clore, plafond, fail-closed vers la carte). Revue adversariale : 1 bloquant (S1) + 5 corrigés ; journal durci en base (migration appliquée, éprouvée en rôle authenticated). ⑤ cadré (§14), pas codé. Même jour, séances parallèles : RIVEN en 9 nébuleuses (#322), leçons v54 + /leo (#323, #326), chaîne Rénoboost + leçons v56 (#321).",
     "commit": "a460fa8880100ca3567c84968015332c05bc0e27"
   },
   "prochaine_action": "⑤ — trancher les DEUX choix du cadrage §14.2 (enrichissement : repasser orange ? · bouton défaire : cartouche + écran), puis coder le défaire joué par type vert, refusé si la cible a des dépendances (§14.0).",
@@ -52,6 +52,10 @@
     },
     {
       "quoi": "smoke-accueil-finubar ④c (« le remettre remonte le ciel là où il était ») rougit par intermittence, toujours 577 → 581 px : ~1 passage sur 10, MESURÉ sur main pur (b01afed) le 30/09 — préexistant, indépendant de B1 ④. Deux états stables, pas une animation inachevée : cause à trouver dans le recadrage du ciel.",
+      "depuis": "2026-09-30"
+    },
+    {
+      "quoi": "Chaîne Rénoboost : route et état vivant dans PLAN-2026-09-30-chaine-A-Z.md (fusionné le 30/09, #321). Reprise : son §0.",
       "depuis": "2026-09-30"
     },
     {

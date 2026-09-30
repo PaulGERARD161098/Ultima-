@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v54 2026-09-30 sha256:4768885087c4 -->
+<!-- lecons:empreinte v56 2026-09-30 sha256:9771ce523225 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1206,6 +1206,20 @@ mon jeton n'avait pas de portée dessus. La roadmap avait raison depuis le débu
 et j'avais jeté le doute sur elle.* La formulation juste existe et ne coûte rien :
 « je ne peux pas le vérifier avec mes accès », avant la valeur.
 
+**CE QUE PAUL DÉSIGNE SE LIT EN ENTIER — IMAGES COMPRISES — AVANT D'INTERPRÉTER
+OU DE CONCLURE À UNE ABSENCE** *(2026-09-30, RenoBoost + RenoDevis)*. Quand Paul
+nomme une source (« la maquette », « les deux PDF de la présentation »), elle
+passe avant toute lecture de mémoire : un nom propre qu'il dicte se cherche
+d'abord **dedans**, et « ce n'est noté nulle part » ne se dit qu'après l'avoir
+lue page par page, captures d'écran comprises. ⛔ Une interprétation
+vraisemblable se lit exactement comme une lecture juste.
+*Incident, deux fois dans la même séance : « Kelvin » a été lu comme l'agenda
+(Calendly) alors que c'était kelvin°, l'outil montré dans la maquette — une
+adresse, une vue aérienne, la maison en 3D par pièce. Paul a dû corriger :
+« c'est déjà en stock, recherche bien ». Et la déchèterie la plus proche a été
+déclarée « jamais notée nulle part » alors qu'elle figurait sur l'écran 1 de la
+maquette : l'image n'avait pas été lue. Il a fallu corriger Notion et le cadrage.*
+
 **UN CHEMIN CRITIQUE SE MESURE, IL NE SE RAISONNE PAS** *(2026-09-13)*. Dire à
 Paul « fais X d'abord » est un livrable au même titre qu'une URL ou un chiffre :
 c'est une valeur qu'il va **croire et exécuter**, donc elle se lit à la source.
@@ -1786,6 +1800,24 @@ suppression de branche exposé. ⇒ Le ménage des branches est une action de Pa
 dans l'interface, ou le réglage du dépôt. Ne pas y passer du temps depuis la
 séance : ça ne marche pas, et l'échec est muet.
 
+**UN DOCUMENT DE REPRISE POSÉ SUR UNE BRANCHE NON FUSIONNÉE EST INVISIBLE À LA
+SÉANCE SUIVANTE** *(2026-09-30, Ultima + RenoBoost)*. Une séance neuve part de
+`main`. Tant que la PR attend, le plan, le cadrage et la maquette n'y sont pas —
+et aucun grain Finubar ne les pointe si on ne l'a pas écrit. ⛔ Un document de
+reprise se juge **depuis `main`, à froid** : nomme-t-il la branche et les PR,
+un grain y conduit-il, la première action est-elle univoque ? Sinon il n'est
+pas fini, quelle que soit sa qualité.
+*Incident : le plan de la chaîne a été déclaré prêt. La relecture adverse
+confiée à Léo a répondu « pas fini pour une reprise à froid » : ni branche ni PR
+nommées, aucun grain ne pointait le plan, deux règles se contredisaient sur le
+premier geste. Cinq manques bloquants, corrigés dans le même passage.*
+⊕ **Corollaire, payé le même soir** : dans ce conteneur, `RenoAgenda` et
+`DATARENO-` sont clonés en minuscules (`renoagenda`, `datareno-`). `node
+finubar/collecter.mjs` les dit alors « semés mais non déclarés » et sort en code
+4. La collecte se lance depuis un miroir de liens symboliques aux noms de
+`finubar/depots.json`, avec `node --preserve-symlinks --preserve-symlinks-main`.
+Ne pas « corriger » `depots.json` : ce sont les noms réels des dépôts.
+
 **UN DOCUMENT ÉCRIT POUR UN TIERS VIEILLIT PENDANT QU'ON L'ÉCRIT** *(2026-09-21)*.
 Un rapport d'état des specs, demandé par Paul pour être confronté à Codex, livré
 à 15 h. À 23 h le même jour, Codex avait refondu la page qu'il décrivait : sa
@@ -1865,7 +1897,7 @@ copie à jour sans qu'une seule leçon n'atteigne jamais une séance.
 *(2026-09-30)*. Ce fichier a annoncé « les huit dépôts » et « les sept autres »
 jusqu'au 30/09, alors que la liste en portait **dix** : deux dépôts manquaient
 à sa propre consigne de propagation. `ripair` reste dehors, et pour une raison
-écrite — hors de `Ultima-/depots.json`, fork partagé avec un tiers.
+écrite — hors de `Ultima-/finubar/depots.json`, fork partagé avec un tiers.
 
 ## 6. Économie
 
