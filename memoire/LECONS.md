@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v52 2026-09-30 sha256:b756757f986e -->
+<!-- lecons:empreinte v54 2026-09-30 sha256:4768885087c4 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -80,7 +80,7 @@ paragraphe de rapport ne s'exécute pas. Il faut un mécanisme, et il y en a deu
 gratuits : **ne jamais TAPER un identifiant** — substitution de commande
 (`VRAI=$(git rev-parse origin/main)`), la main qui recopie est le point de
 défaillance, on la retire du chemin ; et **un garde-fou aval qui sache refuser**
-— `finubar/collecter.mjs` annonce « grain non rattaché », `expectedHeadSha` est
+— `Ultima-/finubar/collecter.mjs` annonce « grain non rattaché », `expectedHeadSha` est
 un *lease* qui a refusé la valeur fabriquée. Sans lui la fusion réussissait, par
 chance, sur un lot que personne n'aurait su non vérifié.
 
@@ -447,7 +447,7 @@ comme RÉELLE. Un chiffre d'exemple porte sa mention à l'écran. »* Ce n'est p
 la donnée d'exemple qui est interdite, c'est la donnée d'exemple **muette**. Il
 ne fallait pas de vraies données : il fallait la vraie **interface**, et une
 mention lisible à côté. Et l'interface était atteignable depuis six jours — un
-harnais du dépôt ouvrait déjà `dashboard.html` dans Chromium et y mesurait 1491
+harnais du dépôt ouvrait déjà `RenoBoost/dashboard.html` dans Chromium et y mesurait 1491
 éléments. *Ce que ça a coûté* : deux patterns gelés sur deux séances, une
 question posée à Paul qui n'avait pas lieu d'être, et un arbitrage de la
 bibliothèque (`Ultima-/specs/ARBITRAGES.md` §A1) qui a recopié le motif faux et
@@ -476,7 +476,7 @@ dit alors exactement ce qu'il vaut : « éprouvé, et voici ce que ça a donné 
 deux fois dans la même journée)*. Le matin : `grep -c "padding-block:52px"` rend
 **0** sur un CSS qui portait `padding-block: 52px` — avec l'espace. J'ai failli
 conclure qu'un travail n'était pas dans `main`. Le soir, bien pire : le harnais
-`tests/specs-patterns.navigateur.mjs` passe de 414 à 61 lignes après une refonte,
+`RenoBoost/tests/specs-patterns.navigateur.mjs` passe de 414 à 61 lignes après une refonte,
 `grep PLAFOND` rend **0**, et j'ai commencé à écrire à Paul que **le plafond de
 hauteur avait disparu**. Il était là, ligne 30, écrit en dur :
 `ok(geometry.height<=12400, …)` — la valeur exacte abaissée et prouvée la veille.
@@ -523,7 +523,7 @@ un bug dès qu'il y en a deux ; le faire dériver de la cible
 manquant, sinon elle jette au lieu d'informer, ce qui est pire.
 
 **UN TEST QUI PINCE UNE ADRESSE NE DIT RIEN DE CE QU'ELLE SERT** *(2026-09-27, RenoBoost)*.
-`tests/accueil-v3.test.mjs` exigeait le lien Calendly exact du hero, et il est
+`RenoBoost/tests/accueil-v3.test.mjs` exigeait le lien Calendly exact du hero, et il est
 resté vert du 23 au 27/09 pendant que ce lien renvoyait « This Calendly URL is
 not valid » : le plan gratuit de Paul n'autorise qu'un événement actif, et en
 créer un nouveau avait désactivé celui du site. **Quatre jours sans aucun
@@ -534,7 +534,7 @@ RénoDevis), retrouvés au contrôle de fin de séance. ⛔ *Deux gestes, pas un
 (1) l'état d'un service externe se LIT à sa source (l'API Calendly, champ
 `active`), jamais se déduit de ce qu'on a écrit ; (2) une valeur dispersée
 dans le dépôt se tient par un test qui la cherche PARTOUT
-(`tests/calendly-lien.test.mjs`), pas par la liste des fichiers dont on se
+(`RenoBoost/tests/calendly-lien.test.mjs`), pas par la liste des fichiers dont on se
 souvient.*
 
 **UN FAUX SCHÉMA QUI NE PORTE PAS LES DÉCLENCHEURS DE LA PROD REND VERT CE QUE LA PROD REFUSE** *(2026-09-27, Artidispo)*.
@@ -555,14 +555,14 @@ stub ; puis **valider l'instrument sur la réponse connue** — l'ancien code do
 rougir dans le harnais corrigé *(il a rougi, exactement sur la purge RGPD)*.
 
 **UN OUTIL « COMME LA CI » DOIT LIRE LA CI, PAS LA RECOPIER** *(2026-09-27, Artidispo)*.
-`rejouer-local.mjs` lisait l'ordre des harnais dans `ci.yml` mais portait **en
-dur** sa liste de stubs — dont `01_cron_stub.sql`, que la CI ne chargeait pas. La
+`Artidispo/rejouer-local.mjs` lisait l'ordre des harnais dans `Artidispo/ci.yml` mais portait **en
+dur** sa liste de stubs — dont `Artidispo/01_cron_stub.sql`, que la CI ne chargeait pas. La
 migration 27 (qui planifie un cron) était **verte en local, rouge en CI** :
 « schema cron does not exist ». Un cycle de CI perdu, et une confiance fausse
 dans le rejeu local, qui se présentait comme fidèle.
 
 ⇒ **Chaque paramètre d'un outil qui prétend imiter la CI se lit dans la CI** — et
-se prouve en retirant l'étape de `ci.yml` : l'outil local doit alors rougir comme
+se prouve en retirant l'étape de `Artidispo/ci.yml` : l'outil local doit alors rougir comme
 elle *(il a rougi)*.
 
 **UN PLAFOND COMPTÉ DANS UNE POLICY NE TIENT PAS SOUS CONCURRENCE** *(2026-09-27, Artidispo)*.
@@ -629,7 +629,7 @@ boucle sur des tailles qui oublie la taille dans le libellé — et le second
 vaut mieux qu'un harnais qui ment.
 
 **UNE RÈGLE DE SÉCURITÉ ÉCRITE EN COMMENTAIRE PÉRIME AVEC LA DONNÉE** *(2026-09-26)*.
-`js/ciel-noeud.mjs` insérait le texte de la parole par `innerHTML`, sous un
+`Ultima-/js/ciel-noeud.mjs` insérait le texte de la parole par `innerHTML`, sous un
 commentaire « le registre est statique, écrit par nous ». Vrai jusqu'au 02/09 : la
 greffe Finubar y verse depuis des noms venus des grains des dépôts. La faille (S1)
 a vécu trois semaines derrière une phrase juste le jour où elle fut écrite.
@@ -704,7 +704,7 @@ ne **peut pas** vérifier de ce côté-là, on **retire l'hypothèse** au lieu d
 documenter. Une hypothèse documentée reste une hypothèse, et c'est le lecteur
 suivant qui la paie.
 
-*Rechute du 2026-09-13 (RenoBoost)* : les tests d'encre du 11/09 ne lisaient que `style.css` ; `dashboard.css` portait 64 textes sous 4,5:1, sept fois la dette de la landing, dans l'outil ouvert tous les jours. Étendus aux 6 feuilles, avec un verrou de couverture qui balaie le dépôt — une liste de fichiers écrite à la main est une couverture supposée. Les 64 ne sont pas soldés : ils sont bornés et ne peuvent que descendre.
+*Rechute du 2026-09-13 (RenoBoost)* : les tests d'encre du 11/09 ne lisaient que `RenoBoost/style.css` ; `RenoBoost/dashboard.css` portait 64 textes sous 4,5:1, sept fois la dette de la landing, dans l'outil ouvert tous les jours. Étendus aux 6 feuilles, avec un verrou de couverture qui balaie le dépôt — une liste de fichiers écrite à la main est une couverture supposée. Les 64 ne sont pas soldés : ils sont bornés et ne peuvent que descendre.
 
 
 **UN REVOKE SUR LES RÔLES NOMMÉS NE RÉVOQUE RIEN** *(2026-09-13, RenoBoost)*.
@@ -786,6 +786,19 @@ trouver. Vérifier seulement la présence du permis ne prouve rien.
 **jamais écrite** : le script qui devait la poser avait échoué après avoir
 construit son texte. Rien ne le signalait, et c'est Paul qui l'aurait découvert
 en cliquant. Corrigé par un harnais, `RenoAgenda/tests/unit/renvois-sections.test.mjs`.
+
+⊕ **ET UN CHEMIN SANS SON DÉPÔT EST UN RENVOI MORT DANS NEUF DÉPÔTS SUR DIX**
+*(2026-09-30)*. Ce fichier est copié à l'identique dans dix dépôts. Un
+`` `tests/lint.test.mjs` `` écrit nu s'y lit comme un fichier du dépôt COURANT :
+il n'existe que dans RenoBoost, donc neuf séances sur dix le cherchent en vain —
+et un chemin qu'on ne trouve pas se lit comme une garde qu'on a supprimée.
+Vingt-sept occurrences étaient dans ce cas ; toutes portent désormais leur
+préfixe. ⚠️ **L'attribution se MESURE** (`git ls-files` sur les dix dépôts) et,
+quand plusieurs dépôts portent le même nom de fichier, elle se lit dans le
+TEXTE de la leçon — son tag, ou le domaine qu'elle cite. Quatre chemins restent
+nus **à dessein** : `CLAUDE.md`, `FINUBAR.md`, `memoire/LECONS.md` et
+`memoire/JOURNAL-DECISIONS.md` existent dans les dix, et la leçon parle bien du
+dépôt courant. Les préfixer serait faux.
 
 **UN MÉCANISME DE CONTRÔLE POSÉ APRÈS LA PREMIÈRE COPIE LAISSE CETTE COPIE
 DEHORS** *(2026-09-11)*. Ce fichier a été déposé dans RenoAgenda le matin ; le
@@ -920,7 +933,7 @@ effaçant aussi ce qui renseigne le visiteur.
 
 **ÉLARGIR UN GARDE-FOU EST UN GESTE DANGEREUX EN SOI** *(2026-09-13, RenoBoost)*.
 La regex de `RenoBoost/tests/langage-encres.test.mjs` ne voyait pas `color: var(--primary-dark)` (sky-600, 4,10:1) : le suffixe lui échappait. Ma première correction, un `[-a-z]*` générique, a attrapé `--color-primary-solide-encre`, `--color-primary-contrast` et `--color-accent-solide-encre` — les tokens FAITS pour porter du texte — et aurait exigé de remonter TROIS plafonds pour passer, l'anti-pattern exact que ce test interdit.
-⇒ *Règle* : on ne liste que les cas qu'on veut attraper (`-dark`, `-light`), au lieu d'ouvrir la porte et de filtrer après. Et un garde-fou élargi se prouve en le cassant : défaut réintroduit, `style.css` passe de 9 à 10 (rouge) ; restauré, vert.
+⇒ *Règle* : on ne liste que les cas qu'on veut attraper (`-dark`, `-light`), au lieu d'ouvrir la porte et de filtrer après. Et un garde-fou élargi se prouve en le cassant : défaut réintroduit, `RenoBoost/style.css` passe de 9 à 10 (rouge) ; restauré, vert.
 
 
 **UN BLOCKLIST NE GARANTIT RIEN, IL NETTOIE** *(2026-09-15, RenoDevis)*.
@@ -944,24 +957,24 @@ le diff, ni dans une capture, ni dans un test qui normalise. La sonde qui
 corrige la classe entière : retirer le séparateur DOIT faire rougir — vérifié.
 
 **UN TEST QUI LIT UNE CONFIGURATION ATTESTE UNE INTENTION, JAMAIS UN EFFET**
-*(2026-09-15)*. `tests/preview-vitrine.test.mjs` s'appelait « la future vitrine
+*(2026-09-15)*. `RenoBoost/tests/preview-vitrine.test.mjs` s'appelait « la future vitrine
 devient la page racine » et vérifiait qu'un rewrite `/` → `/preview-vitrine.html`
-figurait bien dans `vercel.json`. Vert depuis la veille. Et pendant ce temps,
+figurait bien dans `RenoBoost/vercel.json`. Vert depuis la veille. Et pendant ce temps,
 `www.renoboostia.fr/` servait toujours l'ancienne page : **sur Vercel, un
-fichier statique est servi AVANT les rewrites**, et `index.html` occupe la
+fichier statique est servi AVANT les rewrites**, et `RenoBoost/index.html` occupe la
 racine — le rewrite n'était jamais atteint. Le défaut n'a été vu que parce que
 Paul a demandé « est-ce que ça a bien été mis à jour ? » et que la réponse est
 allée voir l'URL publique, pas le dépôt. ⛔ *Entre la ligne de configuration et
 le comportement, il y a un moteur qu'on n'a pas lu. Un garde-fou qui s'arrête à
 la configuration occupe la place de celui qui aurait vu le problème — et il
 rend le silence rassurant.* Le remplaçant mesure les deux : l'URL existe, ET
-personne ne peut re-tenter la bascule par un rewrite tant qu'`index.html` est
+personne ne peut re-tenter la bascule par un rewrite tant qu'`RenoBoost/index.html` est
 là.
 
 ---
 
 **UN HARNAIS QUI S'ARRÊTE AU PREMIER ROUGE REND AVEUGLE TOUT CE QUI SUIT**
-*(2026-09-18)*. `tests/lancer.sh` passe les unitaires, puis les smoke navigateur.
+*(2026-09-18)*. `Ultima-/tests/lancer.sh` passe les unitaires, puis les smoke navigateur.
 Le 15/09, `unit-lecons-empreinte` est passé au rouge — le sceau de ce fichier
 mentait, la PR #251 y ayant ajouté 47 lignes sans le recalculer. À partir de cette
 minute, le job `browser` **mourait avant d'ouvrir un seul navigateur**. Les
@@ -1233,9 +1246,9 @@ TROUVE UN LEURRE** *(2026-09-13)*. La garde de publication d'artisan-builder
 nommait `legal.assureur` et les deux champs de décennale ; le document de
 passation la désignait comme l'autorité (« demandez à la garde, pas à un
 document ») ; et aucun des deux ne disait dans quel fichier les poser. Une séance
-d'épreuve a ouvert `mentions-legales/page.tsx` — réflexe naturel — qui AFFICHE
+d'épreuve a ouvert `artisan-builder/mentions-legales/page.tsx` — réflexe naturel — qui AFFICHE
 les trois champs sans être l'endroit où on les écrit, puis a dû lancer un `grep`
-pour trouver `content.ts`. *Un diagnostic qui n'indique pas l'endroit n'est pas
+pour trouver `artisan-builder/content.ts`. *Un diagnostic qui n'indique pas l'endroit n'est pas
 terminé, et le premier endroit qu'on ouvre est souvent celui qui affiche, pas
 celui qui définit.*
 
@@ -1579,7 +1592,7 @@ déjà expliqué.
 2 s, `runner_id: 0`, `main` rouge aussi) — constat mesuré, commenté sur la PR,
 re-vérifié à 20 h : inchangé. Les runners sont revenus vers 20 h 25, et les
 exécutions suivantes ont duré quatre minutes : de vraies exécutions, de vrais
-échecs. C'était `tests/lint.test.mjs`, ajouté deux heures plus tôt : il appelle
+échecs. C'était `RenoBoost/tests/lint.test.mjs`, ajouté deux heures plus tôt : il appelle
 `npx eslint`, et le job `test` ne faisait pas `npm ci` — tous les tests
 antérieurs étaient sans dépendance, donc la lacune n'avait jamais mordu. J'ai
 rendu compte à Paul d'une CI à l'arrêt alors que `main` était rouge de mon
@@ -1596,12 +1609,12 @@ La règle « on vérifie que les vérifications s'exécutent » a un cas particu
 qui se paie cher : l'outil **existe**, il est **configuré**, il **dit vrai** —
 et rien ne l'appelle. Il est alors pire qu'absent, parce que sa présence dans le
 dépôt se lit comme une garantie.
-*Incident : `accueil.js` levait un `ReferenceError` sur `isRecent` — un `const`
+*Incident : `RenoBoost/accueil.js` levait un `ReferenceError` sur `isRecent` — un `const`
 lu depuis une fonction SŒUR — dans la branche qui se déclenche dès qu'un lead a
 moins de sept jours, donc exactement quand l'écran sert. ESLint le signalait en
 toutes lettres depuis une date que personne ne sait situer. La CI n'exécute que
 `test` et `navigateur`. Le correctif qui compte n'est pas la ligne corrigée,
-c'est `tests/lint.test.mjs` : le lint entre dans le harnais qui, lui, tourne à
+c'est `RenoBoost/tests/lint.test.mjs` : le lint entre dans le harnais qui, lui, tourne à
 chaque commit.*
 ⊕ Le geste généralisable : pour chaque outil de qualité présent dans un dépôt,
 demander **qui l'appelle**. S'il n'y a pas de réponse, il ne garde rien.
@@ -1750,7 +1763,7 @@ depuis `main` coûte moins cher que la réconcilier.
 410 lignes du travail d'un autre. Le 22/09 au matin, **la même faute s'est
 représentée** — `claude/specs-hopus-update-xp9z1l` existait encore sur Ultima,
 à `61babd4`, et poussée telle quelle elle effaçait **1 011 lignes** :
-`EXPORT-METHODE-CHATGPT.md`, `CADRAGE-RESEAU-CERCLES.md`, les leçons v31.
+`Ultima-/EXPORT-METHODE-CHATGPT.md`, `Ultima-/CADRAGE-RESEAU-CERCLES.md`, les leçons v31.
 
 ⛔ **Ce n'est pas la même leçon deux fois : c'est la leçon, puis sa CAUSE.**
 Se souvenir de vérifier ne suffit pas — la vérification est un geste humain, et
@@ -1800,7 +1813,7 @@ disant qu'elle est périmée et depuis quand — pas en disparaissant, sinon la
 séance suivante la réinvente.
 
 **UN DOC DE DESIGN ADAPTÉ D'UN AUTRE DÉPÔT PORTE LA DATE DE SA SOURCE, ET SE
-RELIT QUAND ELLE BOUGE** *(2026-09-25)*. `DESIGN-COCKPIT.md` (14/09) adaptait
+RELIT QUAND ELLE BOUGE** *(2026-09-25)*. `RenoDevis/DESIGN-COCKPIT.md` (14/09) adaptait
 les dix règles de `RenoBoost/DESIGN-LANGAGE.md` (11/09) — et interdisait les
 arrondis. La source a été **refondue le 20/09** (cadres arrondis, Hopus), la
 console l'a suivie le 22/09, les polices ont changé le 24/09 : trois jalons,
@@ -1852,7 +1865,7 @@ copie à jour sans qu'une seule leçon n'atteigne jamais une séance.
 *(2026-09-30)*. Ce fichier a annoncé « les huit dépôts » et « les sept autres »
 jusqu'au 30/09, alors que la liste en portait **dix** : deux dépôts manquaient
 à sa propre consigne de propagation. `ripair` reste dehors, et pour une raison
-écrite — hors de `depots.json`, fork partagé avec un tiers.
+écrite — hors de `Ultima-/depots.json`, fork partagé avec un tiers.
 
 ## 6. Économie
 
