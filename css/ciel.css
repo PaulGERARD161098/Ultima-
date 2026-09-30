@@ -120,6 +120,12 @@
 .ciel-nom--demande { opacity: 0; transition: opacity .12s; }
 .ciel-etoile:hover .ciel-nom--demande,
 .ciel-etoile:focus-visible .ciel-nom--demande { opacity: .95; }
+/* Lot 3 des nébuleuses (30/09) : approchée, une nébuleuse écrit ses noms ;
+   un nom qui en croiserait un autre se tait (il revient au survol, au focus). */
+.ciel-nom--approche { opacity: .92; }
+.ciel-nom--approche.ciel-nom--tu { opacity: 0; }
+.ciel--approche .ciel-etoile:not(.ciel-etoile--approchee) { opacity: .2; }
+.ciel--approche .ciel-liens { opacity: .35; }
 
 /* Tout ce qui est décor est TRANSPARENT AU POINTEUR : un nom de constellation
    dessiné par-dessus les étoiles intercepterait les clics destinés à une
@@ -505,3 +511,12 @@
   /* Sur un téléphone, l'aide se poserait sur le panneau, qui dit déjà quoi faire. */
   .neb-cadre ~ .ciel-aide { display: none; }
 }
+
+/* ---- Lot 3 : les titres des nébuleuses se cliquent (30/09) ---- */
+.ciel-titres-nebuleuses { pointer-events: auto; }
+.ciel-titres-nebuleuses .ciel-nom-amas { cursor: pointer; }
+.ciel-titres-nebuleuses .ciel-nom-amas:hover,
+.ciel-titres-nebuleuses .ciel-nom-amas:focus-visible { fill: #fff3d6; opacity: 1; }
+.ciel-titres-nebuleuses .ciel-nom-amas:focus { outline: none; }
+.ciel-titres-nebuleuses .ciel-nom-amas:focus-visible { text-decoration: underline; }
+.ciel-zone-nebuleuse { cursor: pointer; }

@@ -247,7 +247,10 @@ for (const vp of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
   await page.waitForTimeout(1200);
   const volume = await page.evaluate(() => {
     const T = window.UltimaNebuleusesRiven;
-    const amas = [...document.querySelectorAll('#ciel-scene .ciel-nom-amas')].map((t) => t.textContent.toLowerCase());
+    // Lot 3 : le titre écrit le nom COURT ; le nom entier est celui que lit le
+    // lecteur d'écran (« Nébuleuse X, N contacts »).
+    const amas = [...document.querySelectorAll('#ciel-scene .ciel-nom-amas[data-nebuleuse]')]
+      .map((t) => (t.getAttribute('aria-label') || '').replace(/^Nébuleuse /, '').replace(/, \d+ contacts?$/, '').toLowerCase());
     const parEtoile = Object.fromEntries([...document.querySelectorAll('#ciel-scene g.ciel-etoile[data-noeud-id]')].map((g) => {
       const libelle = g.getAttribute('aria-label') || '';
       const n = T.NEBULEUSES.find((x) => libelle.includes(', nébuleuse ' + x.nom + ','));

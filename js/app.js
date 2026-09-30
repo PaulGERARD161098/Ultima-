@@ -1885,7 +1885,9 @@
   // qu'une étoile soit dans la même nébuleuse dans les deux vues.
   function regrouperParNebuleuse(noeud) {
     var n = window.UltimaNebuleusesRiven.nebuleuseDe(noeud && noeud.secteur_activite);
-    return { cle: n.cle === window.UltimaNebuleusesRiven.CLE_A_CLASSER ? window.UltimaCiel.CLE_A_CLASSER : 'neb-' + n.cle, label: n.nom };
+    // `court` : le titre écrit dans le volume (lot 3) — le nom entier reste
+    // celui que lit le lecteur d'écran.
+    return { cle: n.cle === window.UltimaNebuleusesRiven.CLE_A_CLASSER ? window.UltimaCiel.CLE_A_CLASSER : 'neb-' + n.cle, label: n.nom, court: n.court };
   }
   // Une brume n'a pas besoin de toutes ses étoiles pour se poser : la couche de
   // fond peint environ trois lobes PAR ÉTOILE et PAR IMAGE. Au-delà de douze,

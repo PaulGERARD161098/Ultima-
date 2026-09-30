@@ -67,12 +67,40 @@
   document.getElementById('apercu-neb-note').textContent =
     noeuds.length + ' fiches fictives. Touchez une nébuleuse pour vous en approcher, une étoile pour « ouvrir » sa fiche.';
   var ouvert = document.getElementById('apercu-neb-ouvert');
+  var surClicNoeud = function (id) {
+    var n = noeuds.filter(function (x) { return x.id === id; })[0];
+    ouvert.textContent = 'Fiche ouverte : ' + (n ? n.nom : id);
+  };
+  var libellesType = { artisan: 'Artisan', partenaire: 'Partenaire', lead: 'Lead', chantier: 'Chantier' };
+  if (params.get('vue') === 'volume') {
+    // Le volume (lot 3) : les mêmes réglages que RIVEN dans js/app.js.
+    var T = window.UltimaNebuleusesRiven;
+    var brumes = T.repartir(noeuds).map(function (g) {
+      var pas = Math.max(1, Math.ceil(g.noeuds.length / 12));
+      return {
+        ids: g.noeuds.filter(function (n, i) { return i % pas === 0; }).map(function (n) { return n.id; }),
+        teinte: T.teinte(g.nebuleuse)
+      };
+    });
+    var vue = window.UltimaCiel.rendre(document.getElementById('ciel-scene'), donnees, {
+      surClicNoeud: surClicNoeud,
+      libellesType: libellesType,
+      fond: true,
+      stellarV2: true,
+      regrouper: function (noeud) {
+        var n = T.nebuleuseDe(noeud && noeud.secteur_activite);
+        return { cle: n.cle === T.CLE_A_CLASSER ? window.UltimaCiel.CLE_A_CLASSER : 'neb-' + n.cle, label: n.nom, court: n.court };
+      },
+      nebuleuses: brumes
+    });
+    var bouton = document.getElementById('apercu-neb-tout-voir');
+    bouton.hidden = false;
+    bouton.addEventListener('click', function () { vue.toutVoir(); });
+    return;
+  }
   window.UltimaNebuleuses.rendre(document.getElementById('ciel-scene'), donnees, {
-    surClicNoeud: function (id) {
-      var n = noeuds.filter(function (x) { return x.id === id; })[0];
-      ouvert.textContent = 'Fiche ouverte : ' + (n ? n.nom : id);
-    },
+    surClicNoeud: surClicNoeud,
     surClicPersonne: function (id) { ouvert.textContent = 'Personne ouverte : ' + id; },
-    libellesType: { artisan: 'Artisan', partenaire: 'Partenaire', lead: 'Lead', chantier: 'Chantier' }
+    libellesType: libellesType
   });
 })();

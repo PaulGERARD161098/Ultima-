@@ -406,6 +406,11 @@
         // voisin) : mesurée en pixels, deux étoiles alignées sur l'axe de vue
         // feraient s'effondrer le nuage.
         var rho = Math.min(0.30 * cote, Math.max(56, 0.62 * neb.epsilon * prB.echelle * etat.k));
+        // Lot 3 des nébuleuses de RIVEN (30/09) : quand le moteur donne le rayon
+        // RÉEL de l'amas, la brume s'y tient — ses lobes ne débordent plus sur
+        // la nébuleuse voisine. Sans ce rayon (IFULVIN, DRAGONS), rien ne change.
+        var borne = neb.rayonMonde > 0;
+        if (borne) { rho = Math.min(rho, Math.max(18, 0.8 * neb.rayonMonde * prB.echelle * etat.k)); }
         var lobes = [];
         var etoiles = [];
         neb.membres.forEach(function (m) {
@@ -435,7 +440,7 @@
         g.globalAlpha = ECLAT_COEUR;
         var coeurs = [];
         etoiles.forEach(function (e) {
-          var rc = Math.max(24, rho * 0.42);
+          var rc = borne ? Math.max(8, rho * 0.5) : Math.max(24, rho * 0.42);
           g.drawImage(sprite, e.px - rc, e.py - rc, rc * 2, rc * 2);
           coeurs.push({ px: e.px, py: e.py });
           peints++;

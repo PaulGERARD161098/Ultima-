@@ -16,6 +16,9 @@
   données fictives. Script en fichier séparé : la CSP d'Ultima interdit
   'unsafe-inline' sur script-src.
 
+  `?vue=volume` : la même donnée dans le moteur 3D, rangée en nébuleuses
+  (lot 3, §8 du cadrage) — Échap ou « Tout voir » ramène à l'ensemble.
+
   `?n=300` : la même carte avec 300 fiches fictives, pour éprouver la règle
   « un nom ne se superpose jamais — s'il n'a pas de place, il se cache ».
   C'est aussi la page que tests/smoke-riven-nebuleuses.mjs ouvre pour les cas
@@ -31,10 +34,13 @@
   <header class="apercu-neb-tete">
     <h1>RIVEN en nébuleuses — maquette</h1>
     <p id="apercu-neb-note">Données fictives.</p>
+    <button type="button" id="apercu-neb-tout-voir" hidden>Tout voir</button>
   </header>
   <div id="ciel-scene" class="ciel-scene"></div>
   <p id="apercu-neb-ouvert" role="status" aria-live="polite"></p>
 </main>
+<script src="../js/ciel-fond.js"></script>
+<script src="../js/ciel.js"></script>
 <script src="../js/nebuleuses-riven.js"></script>
 <script src="../js/ciel-nebuleuses.js"></script>
 <script src="preview-riven-nebuleuses.js"></script>
