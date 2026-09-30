@@ -8,8 +8,11 @@
 > étoiles). Sa réponse : *« A, go pour cadrer la boucle. J'aime ta maquette,
 > gardons ce format. »* Puis, le même jour : *« Je veux à plat et en 3D. »*
 >
-> ⛔ **Ce document CADRE. Il n'exécute rien.** La boucle de code s'ouvre au go
-> de Paul sur ce cadrage (EL, principe 3).
+> ✅ **Boucle ouverte le 30/09** : Paul a vu l'aperçu des deux vues, puis a
+> écrit *« Go. Fais toute la suite jusqu'à la fin de la modélisation des
+> nébuleuses, qu'elles soient en ligne. »* Les recommandations en attente sont
+> donc prises : la carte à plat s'ouvre par défaut, les neuf nébuleuses sont
+> celles du §1. L'exécution est consignée au §7.
 
 ---
 
@@ -252,10 +255,33 @@ tout de bout en bout.
 
 ---
 
-## ⏳ Ce qu'il faut à Paul pour ouvrir la boucle
+## 7. L'exécution — 30/09
 
-1. **La vue qui s'ouvre par défaut** — recommandation : **à plat**. C'est elle
-   qui règle le chevauchement ; le bouton garde ensuite le dernier choix.
-2. **Valider ou corriger les neuf nébuleuses** et leurs domaines (§1).
-3. **Le go du lot 1.** Le lot 2 s'ouvrira après la fusion de #315, par son
-   aperçu 3D.
+**#315 était déjà fusionnée** (par #316) à l'ouverture de la boucle : son
+option `nebuleuses` et ses brumes étaient dans `main`. Le lot 2 n'avait donc
+plus à attendre, et les deux lots ont été menés ensemble.
+
+**Étape 0, mesurée** : un seul harnais testait le mode à plat
+(`smoke-ciel.mjs`, section 14) ; treize ouvraient le Ciel de RIVEN.
+
+**Ce qui a changé en route, et pourquoi :**
+- **La table reconnaît les corps d'état** (Menuiserie, Plomberie, Électricité,
+  Toiture, Chauffage, Maçonnerie…) et « Courtage ». Les données de
+  démonstration tombaient toutes dans « À classer » ; ce sont les métiers des
+  artisans de Paul.
+- **Un nom tient compte des bords du cadre et du titre**, pas seulement des
+  autres noms : un nom coupé par le bord n'est pas plus lisible qu'un nom
+  recouvert (vu sur capture, 390 px).
+- **Le cadre d'approche épouse la forme de l'écran** au lieu de rester carré.
+- **Nouvelle clé de réglage `ultima-ciel-vue`** : l'ancienne
+  (`ultima-ciel-plat`) enregistrait « figer le volume », un autre choix.
+
+**Mesuré** (`tests/smoke-riven-nebuleuses.mjs`, 43 verdicts) : 0 nom recouvert
+ni coupé, dans chaque nébuleuse, à 390 et à 1 280 px ; les 54 noms fictifs
+lisibles sur grand écran. ⚠️ **Sur téléphone, 3 noms sur 54 se cachent** dans
+les deux nébuleuses les plus denses (11 et 12 fiches) : un nom de 26
+caractères en 12 px ne tient pas au bord d'un écran de 364 px. Ils sont dans le
+panneau, et le harnais le vérifie. Aller plus bas demanderait de passer sous
+les 12 px (C5) ou de déplacer les étoiles à l'approche : ni l'un ni l'autre
+n'a été fait. Les deux sabotages (évitement des noms, regroupement 3D) font
+virer le harnais au rouge.
