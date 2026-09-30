@@ -85,10 +85,20 @@ chiffres.passerelleAttendue = attendu;
     if (ligne) {
       const x1 = +ligne.getAttribute('x1'); const y1 = +ligne.getAttribute('y1');
       const x2 = +ligne.getAttribute('x2'); const y2 = +ligne.getAttribute('y2');
-      const x = +t.getAttribute('x'); const y = +t.getAttribute('y');
+      // En coordonnées d'ÉCRAN, sur la BOÎTE du texte (30/09) : le nom reste
+      // au milieu LE LONG du trait, et s'en écarte de ce que sa boîte exige.
+      const m = ligne.getScreenCTM(); const pt = ligne.ownerSVGElement.createSVGPoint();
+      const P = (px, py) => { pt.x = px; pt.y = py; return pt.matrixTransform(m); };
+      const a = P(x1, y1); const b = P(x2, y2);
+      const L = Math.hypot(b.x - a.x, b.y - a.y) || 1;
+      const ux = (b.x - a.x) / L; const uy = (b.y - a.y) / L;
+      const r = t.getBoundingClientRect();
+      const bx = (r.left + r.right) / 2 - (a.x + b.x) / 2;
+      const by = (r.top + r.bottom) / 2 - (a.y + b.y) / 2;
       surLArc = {
-        ecartX: Math.abs(x - (x1 + x2) / 2),
-        ecartY: Math.abs(y - (y1 + y2) / 2),
+        leLong: Math.abs(bx * ux + by * uy),
+        aCote: Math.abs(bx * uy - by * ux),
+        requis: Math.abs(uy) * r.width / 2 + Math.abs(ux) * r.height / 2,
         longueur: Math.hypot(x2 - x1, y2 - y1)
       };
     }
@@ -115,9 +125,14 @@ chiffres.passerelleAttendue = attendu;
     && m.couleur !== 'rgb(0, 0, 0)' && m.couleur !== '#000000';
   verdicts.leNomEstAnnonce = m.present && m.dansUnGroupeMuet === false;
   verdicts.leNomEstGrave = m.present && /Georgia|Times/.test(m.police || '');
-  // Sur l'arc : à moins de 12 unités du milieu en x, et au-dessus du trait en y.
+  // Sur l'arc, au milieu, et À CÔTÉ du trait. TRANSPOSÉ LE 30/09 : l'ancien
+  // contrôle (« ancre à ≤ 12 / 14 unités du milieu ») supposait un nom posé à 8
+  // unités du trait, ce qui le faisait traverser dès que le trait est vertical
+  // (les DRAGONS). Le nom reste au milieu le long du trait (≤ 12 px), et s'en
+  // écarte d'au moins ce que sa boîte exige, sans s'envoler (≤ exigé + 14 px).
   verdicts.leNomEstSurLArc = !!(m.surLArc
-    && m.surLArc.ecartX <= 12 && m.surLArc.ecartY <= 14
+    && m.surLArc.leLong <= 12
+    && m.surLArc.aCote >= m.surLArc.requis && m.surLArc.aCote <= m.surLArc.requis + 14
     && m.surLArc.longueur > 20);
 
   await page.close();
