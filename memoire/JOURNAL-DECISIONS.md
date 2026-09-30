@@ -4382,3 +4382,39 @@ d'attente) + constellation des DRAGONS (MAEDRETHNIR, VRANESH, DRAUKHAIN) +
 ADRAMELECH + TAO. Défaut trouvé en vérifiant au navigateur : un cap sans page mais
 avec des enfants était marqué `aria-disabled` (annoncé mort, alors qu'on y plonge)
 — corrigé, même partage qu'`entrer()`.
+
+## 2026-09-30 — Bouclage transverse des huit dépôts : six réponses de Paul
+
+**Décisions de Paul**, dictées en réponse au registre « ⏳ ce que toi seul peux
+faire » de la séance de bouclage (PR Ultima-#312) :
+
+1. **`renoadomicile.fr` expire le 16/10, et la page de désinscription de
+   DATARENO est à vérifier en ligne** — « ok » : pris en charge par Paul.
+2. **Stripe LIVE côté Artidispo** — « envoie le lien » : le contrôle se fait sur
+   `https://artidispo.com/#/espace`, connecté. Le bandeau « Paiement en mode
+   TEST » (`Artidispo/src/espace-artisan.js`, `bandeauMode()`) disparaît quand la
+   clé live est posée.
+3. **Régénérer le refresh token Google Ads (capture du 07/09) et le
+   `CRON_SECRET` d'Ultima (06/09)** — « abandonne ». Retirés des grains
+   (RenoBoost, Ultima). ⚠️ Le risque demeure tant que les valeurs ne changent
+   pas ; il n'est plus suivi, par décision.
+4. **Les Routines DR de 12 h et 18 h** (les v2, désactivées le 28/09 au profit
+   d'une Routine créée dans l'interface, invisible depuis une séance) —
+   « abandonne aussi ». Le rappel du 26/10 (passage à l'heure d'hiver), qui
+   visait des Routines inexistantes, est supprimé. ⚠️ Le texte de la Directive DR
+   du `CLAUDE.md` n'est PAS modifié : « abandonne » peut viser la vérification
+   comme la directive elle-même, et un texte de directive ne se change pas sur
+   deux mots dictés.
+5. **RénoDevis — rejouer le parcours TVA en production, trancher le jeu de démo
+   Batimat** — « il faut qu'on bosse dessus » : ce n'est plus un geste de Paul
+   seul, c'est une séance de travail commune (grain RénoDevis, prochaine action).
+6. **Le mail à Ezzedine (artisan-builder)** — « c'est déjà parti ». Boucle fermée ;
+   ses quatre réponses restent attendues.
+
+**Fait dans la même séance** : #302 intégrée (et la décision du Cercle, qui
+n'était écrite que dans sa description, reportée dans
+`CADRAGE-RESEAU-CERCLES.md` §4) ; `LECONS.md` v45 (12 leçons rapatriées des
+grains) propagée aux huit dépôts ; la CI ne tourne plus deux fois par push
+(RenoAgenda, RenoPredict, RenoDevis, DATARENO) ; `main` de RenoBoost remis au
+vert (débordement à 320 px venu du calendrier, pas d'un commit) ; la collecte
+Finubar ne perd plus les boucles écrites en texte nu.
