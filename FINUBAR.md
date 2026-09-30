@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-30",
-    "quoi": "Chaîne Rénoboost : route posée (PLAN-2026-09-30-chaine-A-Z.md), relue par Léo, leçons v56 ; #321 fusionnée en mode merge, après #326.",
-    "commit": "e14f470df5c5ffde290347b10ec109e94f20b770"
+    "quoi": "CI : job navigateur en 4 lots parallèles (54 harnais, 19 min d'affilée), passages dépassés annulés, plafond 30 min. #321 fusionnée (e462298).",
+    "commit": "0b59aec385b81cea62edb931038a4cd4207efd7f"
   },
   "prochaine_action": "④ — l'exécution : `ouvrirTrace()`, journal 'tentee' AVANT l'acte, plafond, issue après. Frontière arbitrée — cadrage §12.8 quater.",
   "bloque_par": [
