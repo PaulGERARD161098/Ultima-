@@ -305,3 +305,62 @@ lot 2) :
   harnais) la laissait pointer sur une instance arrêtée, et « approcher » ne
   faisait plus rien.
 - **Six constellations → trois** dans la démo : attendu, c'est le lot 2.
+
+## 8. Lot 3 — le volume en constellations (30/09, soir)
+
+> Après la fusion de #322, sur la vue 3D en production, Paul : *« je ne veux que
+> les noms des nébuleuses, pas les étoiles ; je dois pouvoir cliquer sur une
+> nébuleuse ; les étoiles doivent être en volume de constellation dans les
+> nébuleuses. »* Sa capture montrait, mesuré sur le code : les noms des
+> contacts les plus reliés écrits en permanence (`lourdes`), les titres des
+> nébuleuses posés en décor `aria-hidden` (ni cliquables ni atteignables au
+> clavier), des amas posés sur une sphère sans tenir compte de leurs voisins
+> — d'où des brumes qui se recouvrent et deux titres l'un sur l'autre.
+
+**① Le but** — en 3D, sur RIVEN seulement (option `regrouper`) :
+- **vue d'ensemble : seuls les noms des nébuleuses sont écrits.** Aucun nom de
+  contact en permanence ; celui d'une étoile ne paraît qu'au survol ou au
+  focus, pour savoir ce que l'on vise ;
+- **chaque nébuleuse est une constellation en volume** — un amas serré, posé
+  dans SA brume — et les nébuleuses ne se recouvrent plus, ni brumes ni titres ;
+- **une nébuleuse se clique** (titre ou brume ; Entrée au clavier) : la caméra
+  s'en approche jusqu'à ce qu'elle remplisse la vue, les noms de ses étoiles
+  apparaissent, les autres pâlissent ; « Tout voir » ou Échap ramène à
+  l'ensemble. C'est le geste de la carte à plat, transposé.
+
+**② Les étapes** : 1. prototype dans le moteur et capture sur la maquette
+fictive (`design/preview-riven-nebuleuses.html?vue=volume`), montrée à Paul ;
+2. harnais ; 3. suite complète ; 4. preview, puis PR, fusion sur go.
+
+**③ Les moyens** : `js/ciel.js` (disposition des amas, titres, approche),
+`js/app.js` (rayon des brumes), la maquette, `tests/smoke-riven-nebuleuses.mjs`.
+
+**④ Les critères** — mesurés à 390 et 1 280 px, sur la démo et sur 54 et 300
+fiches fictives :
+- 0 nom de contact visible en vue d'ensemble (verrou : les étoiles, elles,
+  sont toutes dessinées) ;
+- 0 chevauchement entre titres ; 0 recouvrement entre brumes projetées, à
+  l'orientation d'ouverture ;
+- chaque étoile dans la brume de sa nébuleuse ;
+- clic sur un titre → la nébuleuse occupe au moins la moitié de la vue, ses
+  noms s'écrivent sans se chevaucher ; Échap → retour à l'ensemble ;
+- Tab atteint chaque nébuleuse, Entrée s'en approche ;
+- les neuf autres pages du moteur : harnais inchangés et verts ;
+- sabotages : noms permanents rallumés → rouge ; ancienne disposition → rouge.
+
+**⑤ Ce qu'on ne fait pas** : la carte à plat (validée), la table des
+nébuleuses, la base, les autres pages du moteur, un tracé de figures entre
+étoiles (non demandé).
+
+**⑥ Pre-mortem** — « le lot 3 a échoué : pourquoi ? »
+- *Le moteur est partagé par dix pages* → tout passe sous `regrouper` ; la
+  suite complète le prouve.
+- *Neuf titres ne tiennent pas sur 390 px* → titres soumis au même évitement
+  que les noms à plat ; verdict mesuré, jamais un seuil réglé pour passer.
+- *Un titre cliquable reste inatteignable au clavier* → `role="button"`,
+  `tabindex`, `aria-label` « Nébuleuse X, N contacts » ; verdict sur l'arbre
+  d'accessibilité.
+- *L'approche coupe l'amas au bord* → cadrage calculé sur le rayon réel de
+  l'amas, pas sur une constante.
+- *La brume (couche de fond) se décale de l'amas* → son rayon vient du même
+  monde ; verdict « chaque étoile dans sa brume ».
