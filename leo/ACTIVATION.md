@@ -8,7 +8,103 @@ que sur loopback dans une isolation vérifiée. Les commandes `status`, `execute
 rend pas accessibles depuis Work. Le registre Postgres installé ci-dessous
 porte la mémoire produit ; il n'accorde aucun pouvoir d'exécution R21.
 
-### Option à vérifier : un job PR avec environnement protégé
+### Diagnostic clos — captures de Paul et accès réels du 30/09/2026
+
+- Captures fournies par Paul : dépôt privé ; environnements `copilot`,
+  `Preview`, `Production` ; Preview sur `No restriction` sans option
+  Required reviewers visible ; aucune protection classique ; offre
+  **GitHub Team**, un siège utilisé sur un. L'API rulesets renvoie `[]`.
+- L'application ChatGPT Codex Connector est installée pour tous les dépôts
+  de l'organisation. Permissions affichées : checks/statuts/métadonnées en
+  lecture ; Actions/code/issues/PR/workflows en lecture-écriture ; aucun
+  droit Administration affiché. L'accès aux dépôts ne supprime pas le 403
+  mesuré sur les protections.
+- `get_user_login` retourne `paggerard-boop`, ID `277032273` ;
+  rôle dépôt `admin`. PR306 et les runs issus de nos écritures portent ce
+  même utilisateur. L'outil `add_review_to_pr` permet APPROVE/COMMENT.
+  **Une identité native de revue de ce compte ne distingue donc pas à elle
+  seule une validation humaine d'une action de Work.** Aucune revue publiée.
+- Les approbations obligatoires d'environnement ne sont pas disponibles
+  sur un dépôt privé sous Team. La piste ci-dessous est écartée pour la
+  configuration actuelle. Les reviewers de PR et ceux d'environnement
+  sont deux contrôles distincts. Aucun abonnement ou réglage modifié.
+- La collecte manuelle par captures a remplacé l'inspection navigateur
+  proposée. Aucun navigateur initialisé ; ne pas redemander la même collecte.
+- Les trois workflows du commit documentaire `c462743` sont terminés
+  success : Tests `36690374581`, LV1 `36690374620`, Auth `36690374628`.
+  Aucun nouvel artefact de ce commit n'hérite de la revue R21 de
+  `11084992584`. Les preuves techniques détaillées restent celles de
+  `9833b80`.
+
+### Autre canal à préparer — contrôle privé hors accès de Work
+
+Proposition à éprouver, **aucun adaptateur ni dépôt de contrôle installé**.
+Un dépôt privé de contrôle, par exemple `leo-control-r21`, pourrait rester
+dans l'offre actuelle. Paul le créerait vide pour établir et vérifier son exclusion
+de tous les accès de l'agent ; il importerait le kit seulement après sa préparation
+et sa revue. L'application devrait
+passer de All repositories à Only select repositories en conservant les dépôts
+existants, avant création du dépôt de contrôle. Ce changement n'est pas fait.
+
+L'exclusion doit être mesurée, pas supposée : refus effectif en lecture par
+le connecteur, inventaire de tous les autres accès CLI/API/browser/instances,
+absence de chemin alternatif d'écriture, de dispatch ou d'accès aux secrets.
+Une simple règle « ne pas approuver » dans le prompt ne suffit pas.
+
+Paul importe le lanceur revu et figé dans ce dépôt hors Work. Il déclenche
+lui-même un `workflow_dispatch` de ce dépôt avec l'accord exact. Le hôte
+associe l'événement serveur à son identité, au SHA du lanceur, au mandat,
+aux expirations, au paquet exact, à sa revue et à la cible fixture avant de
+construire `Binding/Approval`. Aucun champ `approved` du paquet ou
+d'Ultima ne crée cette autorité. Le fait de partager le même nom de compte
+n'est acceptable que si le chemin d'approbation est réellement inaccessible
+aux identifiants et outils de Work.
+
+Le contrôleur temporaire peut lire des propositions `status/execute/reconcile/stop`
+dans Ultima depuis un accès séparé détenu uniquement côté contrôle. Le kit
+doit préciser l'API, le protocole, les privilèges minimaux, les délais et les
+bornes de coût ; aucun jeton ni configuration de secret n'est préparé ici.
+L'applicatif reste dans l'isolation Docker fermée déjà éprouvée. Les quatre
+commandes doivent agir sur un seul registre et un seul dépôt fixture.
+
+La voie retour doit empêcher Work de fabriquer un reçu recevable : checkpoint
+signé par une clé détenue uniquement côté contrôle, clé publique ancrée par Paul
+hors requête, ou conservation vérifiable dans le dépôt exclu avec un transfert
+humain attesté. Un simple fichier résultat écrit dans Ultima n'est pas suffisant.
+Pour le premier pilote, privilégier un téléchargement puis transfert par Paul
+du checkpoint signé, afin d'éviter un jeton d'écriture vers Ultima. Le hôte doit
+tenir une séquence monotone et lier chaque checkpoint au précédent ; une ancienne
+copie signée ne doit pas redevenir l'état courant. Les accès GitHub et clés de
+signature restent dans le lanceur de confiance, jamais dans le conteneur
+applicatif. Les propositions sont des données bornées, jamais des commandes shell.
+Le choix et son protocole sont encore à implémenter et à éprouver.
+
+La signature d'accord hors Work reste une autre option : clé privée uniquement
+chez Paul, clé publique/propriétaire et code d'admission figés hors écritures
+de l'agent. Une clé choisie par le paquet/proposition serait auto-approuvée.
+Elle ne résout pas à elle seule l'hôte, l'arrêt ni la reprise.
+
+**Prochaine action utile — fondation de confiance, Paul puis Léo :** après cette
+proposition relue, limiter l'installation ChatGPT Codex Connector aux douze
+dépôts existants en les conservant tous, puis créer un dépôt de contrôle privé
+qui reste exclu. Cette fondation n'installe aucun lanceur, n'exécute aucun effet
+et ne consomme pas de run. Les douze dépôts accessibles relus :
+RenoAgenda, RenoBoost, artisan-builder, mon-dpe.fr, Wingman-, DATARENO-, Ultima-,
+RenoPredict, RenoDevis, Renodevis-archive, renoboost-console, Artidispo.
+Léo mesure ensuite l'exclusion et les autres accès possibles avant de retenir
+ce canal et de construire le kit concret (admission, quatre commandes,
+état canonique, arrêt, checkpoint, reprise). L'installation du kit sera proposée
+après préparation et revue ; l'accord fictif exact viendra après revalidation
+du transfert et du nouveau contexte.
+Ni création du dépôt, exclusion d'application, secret, signature, dispatch,
+effet fictif ni contrôle global des outils Work réalisés.
+
+La capture de budget affiche Actions 25,33/30 USD, Stop usage:Yes ; c'est une
+mesure de la page, pas un coût imputable à ce lot ni un budget nouveau accordé.
+Aucun forfait ou plafond ne doit être relevé. Aucun nouveau run utile ne doit
+être lancé sans cadrer sa consommation réelle et réutiliser les preuves existantes.
+
+### Piste écartée pour la configuration actuelle : job PR avec environnement protégé
 
 Un lanceur temporaire GitHub Actions pourrait conserver l'isolation existante
 et attendre un accord dans GitHub. Il n'est pas nécessaire d'ajouter un serveur
@@ -50,7 +146,7 @@ n'est pas confirmée, l'issue reste inconnue et aucun rejeu n'est permis. Une
 nouvelle session Work doit retrouver le reçu de ce même effet ; reconstruire
 ou fusionner une ancienne copie n'est pas une reprise recevable.
 
-### Accès mesurés et prochaine action
+### Accès mesurés lors de la préparation initiale — avant les captures
 
 Le 30/09, lecture de `main` et écriture de branche GitHub utilisables ; lecture
 des protections de main refusée **403 Resource not accessible by integration**.
@@ -59,18 +155,19 @@ job, ni les commandes dispatch/cancel. Docker/Podman absents ; `unshare` refuse
 uid_map (lecture seule), `bwrap` refuse la création de namespace. Aucun code
 applicatif n'a été lancé hors isolation. La CI isolée demeure le moyen d'épreuve.
 
-**Action minimale à autoriser : lecture seule via navigateur** des réglages
-Actions/environnements, protections du dépôt et permissions effectives de
-l'application GitHub. Aucun réglage, secret, accord de job ou fusion à modifier
-pendant cette inspection. Cette permission est distincte de l'accord R21 exact.
-Si l'option n'est pas disponible, choisir un autre canal temporaire de confiance
-dans le mandat ; ne pas relancer des simulations pour remplacer ce raccord.
+**Collecte initialement proposée, désormais résolue par les captures de Paul :**
+lecture des réglages Actions/environnements, protections du dépôt et permissions
+visibles de l'application GitHub. Aucun navigateur initialisé ni réglage modifié.
+Ce diagnostic n'est pas un accord R21. L'option est indisponible sur ce dépôt privé
+Team ; la prochaine action actuelle est le kit de contrôle séparé décrit plus haut.
 
 Sources officielles relues le 30/09 :
 - https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow
 - https://docs.github.com/en/actions/reference/workflows-and-actions/deployments-and-environments
 
-Revue indépendante statique du canal : aucun adaptateur d'accord réel, aucun
+Revue indépendante de la variante contrôle privé : modèle recevable en principe,
+sous exclusion complète, admission figée, secrets séparés, continuité et coût
+bornés. Pas de bloqueur documentaire relevé. Aucun adaptateur d'accord réel, aucun
 checkpoint post-fusion ni reprise Work démontrés. R21 et réception globale
 restent bloqués. Le dossier opérationnel est `REPRISE-2026-09-29-leo-lv1.md`.
 

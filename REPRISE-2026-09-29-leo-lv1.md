@@ -1,4 +1,4 @@
-# Reprise courante — 30 septembre 2026, Omega réconcilié
+# Reprise courante — 30 septembre 2026, diagnostic GitHub Team clos
 
 **Fait :** intégration préparatoire de main `ce1ff937465e5d65a269b481b9ee488b65e02ffa`
 (PR310/311) dans la branche `codex/leo-lv1-20260929`, source technique
@@ -77,34 +77,56 @@ chemin de fixture ci-dessus appartient à la CI ; ce n'est pas un hôte Work ins
 
 ## Restant, blocages et prochaine action unique
 
-Le canal R21 est toujours absent. La revue indépendante propose de vérifier un
-job PR avec environnement protégé ; main/workflow_dispatch est seulement une
-variante. Les prérequis exacts, la séparation des droits, l'arrêt applicatif et
-le checkpoint post-effet sont dans `leo/ACTIVATION.md`. Aucune nouvelle dépendance,
-route distante, configuration d'environnement ou workflow d'accord ajouté.
+**Diagnostic réel clos par captures de Paul :** GitHub Team, dépôt privé ;
+environnements copilot/Preview/Production, Preview No restriction, aucune
+protection classique, API rulesets `[]`. L'application couvre tous les dépôts
+de l'organisation mais ne dispose pas d'Administration affichée. Connecteur
+authentifié `paggerard-boop` (ID277032273), permission admin ; même compte
+auteur de PR306 et des runs issus de nos écritures. L'outil de revue natif
+existe : une revue de cette seule identité ne prouve pas l'accord humain.
 
-Accès revérifiés : connecteur GitHub lecture/écriture de branche disponible ;
-protection main refusée 403 ; Docker/Podman absents ; unshare uid_map lecture seule,
-bwrap namespace refusé. Aucun code applicatif exécuté localement hors isolation.
-La CI fournit les épreuves fictives. Aucun contrôle global des outils Work démontré.
+La piste d'approbation d'environnement privé sous Team est donc écartée.
+Aucun abonnement ou réglage modifié, aucune revue/commentaire publié.
+Paul a fourni les captures utiles ; aucun navigateur ouvert. La demande
+d'inspection n'est plus la prochaine action.
 
-**Prochaine action unique — responsable Paul pour la permission, puis Léo :**
-autoriser le navigateur en **lecture seule** pour inspecter Actions/environnements,
-protections du dépôt et permissions effectives de l'application. Permission
-encore manquante ; les règles de recours navigateur de la plateforme l'exigent
-après l'insuffisance mesurée du connecteur. Elle n'autorise aucun changement de
-réglage, secret, accord de job, publication ou fusion.
+Les trois workflows de `c462743` sont tous success : Tests 36690374581,
+LV1 36690374620, Auth 36690374628. Les preuves détaillées 95/53/53 restent
+rattachées à la source technique 9833b80 ; aucun nouveau candidat R21
+n'hérite de la revue de l'artefact 11084992584.
 
-Après cette inspection : choisir un canal attesté ; transférer/revalider le
-paquet exact et sa revue ; présenter l'accord de fusion fictive précis à Paul ;
-exécuter l'effet isolé ; vérifier/conserver le reçu ; reprise en session Work neuve ;
-revue des gardes critiques et réception finale de Paul. Ne pas afficher 100 % avant.
+**Prochaine action unique — responsable Paul puis Léo :** établir la fondation
+de confiance proposée et relue : application limitée aux douze dépôts existants
+en les conservant tous, nouveau dépôt de contrôle privé exclu. Aucun lanceur
+ou effet n'est autorisé par cette fondation. Léo vérifie ensuite son exclusion
+réelle de tous les accès Work, avant de retenir le canal et de préparer le kit
+concret. Le plan et les douze noms sont dans `leo/ACTIVATION.md`.
+Dépôt de contrôle, ancrage, jeton, code d'admission, transport et checkpoint ne
+sont pas installés. L'installation du kit sera proposée après préparation/revue.
+La signature hors Work reste une autre option sous ancrage extérieur non
+remplaçable par l'agent.
+
+Après exclusion mesurée et kit préparé/relu : Paul importe le lanceur dans le
+contrôle séparé ; dossier R21 transféré et revalidé ; accord exact ; effet fictif
+isolé ; reçu conservé ;
+reprise en nouvelle session Work ; gardes critiques ; réception finale.
+Aucun accord R21, aucune réception globale ou maîtrise générale des outils
+Work déduits du diagnostic.
+
+**Évolution concurrente à préserver :** avant l'écriture documentaire, main
+est `a2e27d55ae8a0cf97ef53223993fb9ea74b3e913`, deux commits après ce1ff :
+PR309 (B1/journal/RLS et cadrage) puis PR313 (constellations IMLADRIK).
+Ces changements ne sont pas intégrés ici et les preuves de ce1ff ne les
+valident pas. Relevé ciblé effectué, aucune migration SQL/RLS appliquée.
+Le contrat LV1 et le lot B1 demeurent à confronter sans confondre leurs numéros
+de sections. Ne pas écraser le travail concurrent ni rejouer les migrations
+déclarées appliquées dans main.
 
 Autorisés : lectures utiles, préparation sur branche, sauvegarde versionnée,
-revue indépendante et tests fictifs isolés. Toujours hors périmètre sans accord
+revue indépendante et tests fictifs isolés. Restent hors périmètre sans accord
 supplémentaire : fusion PR306/autre PR, publication/déploiement, migration SQL/RLS
 réelle, modification/suppression de données métier, envoi, nouvelle dépense et
-exposition de secrets. SQL PT409 toujours proposé, pas appliqué. Rituels non activés.
+exposition de secrets. SQL PT409 toujours proposé, pas appliqué ici.
 
 Les états du 29/09 qui suivent sont historiques ; leurs sources et limites ne
 sont pas les preuves de la nouvelle intégration. Ne pas rejouer le registre installé.
