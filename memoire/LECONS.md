@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v50 2026-09-30 sha256:05473b44ce66 -->
+<!-- lecons:empreinte v51 2026-09-30 sha256:12b9b28c6af7 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -22,8 +22,12 @@ fait **dans Ultima**, puis se re-copie : on ne corrige jamais une copie sur
 place, sinon les dix divergent et plus personne ne sait laquelle fait foi.
 *(Les chemins cités portent leur dépôt en préfixe : ils doivent se lire depuis
 n'importe lequel des dix.)* ⇒ **Comment le sceller et le propager :
-`memoire/LECONS-PROCEDURE.md`** — sorti d'ici le 30/09 pour ne pas occuper, dans
-un fichier que dix dépôts injectent en entier, la place d'une leçon.
+`Ultima-/memoire/LECONS-PROCEDURE.md`** — sorti d'ici le 30/09 pour ne pas
+occuper, dans un fichier que dix dépôts injectent en entier, la place d'une
+leçon. ⚠️ Il vit **dans Ultima seulement**, et c'est délibéré : on ne propage
+jamais depuis une copie, donc une séance qui propage a Ultima sous la main. Le
+préfixe de dépôt n'est pas décoratif — sans lui, ce renvoi serait mort dans les
+neuf copies, et un renvoi mort se lit exactement comme un renvoi valide.
 
 **Comment il vit.**
 - **Une leçon s'ajoute quand elle est payée**, en fin de séance, dans le commit
