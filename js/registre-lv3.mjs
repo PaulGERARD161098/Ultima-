@@ -257,7 +257,56 @@ export const NOEUDS = {
     legende: 'Kalamn-talaen',
     legendeClasse: 'kalamn-legende',
     expose: 'UltimaImladrikCarto',
-    enfants: ['maedrethnir', 'vranesh', 'draukhain', 'adramelech', 'tao'],
+    // Quatre entrées : deux CONSTELLATIONS (dictées le 2026-09-29) et deux caps
+    // qui restent directement sous IMLADRIK (arbitrage Paul).
+    enfants: ['constellation-armes', 'constellation-dragons', 'adramelech', 'tao'],
+  },
+  // ---- Les deux CONSTELLATIONS d'IMLADRIK (Paul, 2026-09-29) --------------
+  // Des nœuds sans page : on y plonge (le moteur isole ce qui contient). Leur
+  // gravure et leur cœur sont PROVISOIRES (blason d'IMLADRIK / flamme, cœur
+  // Kalamn-talaen) : les nébuleuses et leurs armoiries sont la boucle B de
+  // CADRAGE-IFULVIN.md — on ne dessine rien ici.
+  'constellation-armes': {
+    nom: 'ARMES',
+    etat: 'Constellation',
+    blason: 'imladrik',
+    cible: null,
+    constellation: true,
+    resume: 'La constellation des ARMES : ce dont Paul se sert pour se '
+      + 'développer et développer ses projets. IFULVIN en est la première.',
+    titre: 'La constellation des armes',
+    surligne: 'Imladrik — les armes',
+    invite: 'Léo te guide — survole un cap.',
+    coeur: 'kalamn',
+    legende: 'les armes',
+    enfants: ['ifulvin'],
+  },
+  'constellation-dragons': {
+    nom: 'DRAGONS',
+    etat: 'Constellation',
+    blason: 'flamme',
+    cible: null,
+    constellation: true,
+    resume: 'La constellation des DRAGONS : le journal, les futurs et la '
+      + 'volonté — MAEDRETHNIR, VRANESH et DRAUKHAIN.',
+    titre: 'La constellation des dragons',
+    surligne: 'Imladrik — les dragons',
+    invite: 'Léo te guide — survole un cap.',
+    coeur: 'kalamn',
+    legende: 'les dragons',
+    enfants: ['maedrethnir', 'vranesh', 'draukhain'],
+  },
+  // IFULVIN — ÉTOILE D'ATTENTE (Paul, 2026-09-29). Nom, état, une phrase, AUCUNE
+  // cible : aucune page promise. ⛔ LE NOM S'ÉCRIT « IFULVIN » — jamais abrégé.
+  // Les mots de la phrase sont ceux de Paul ; rien d'autre n'est dit parce que
+  // rien d'autre n'est su (Principe 3 de PRODUCT.md, CADRAGE-IFULVIN.md §⑤).
+  ifulvin: {
+    nom: 'IFULVIN',
+    etat: 'À venir',
+    blason: 'portail',
+    cible: null,
+    resume: 'Ton arme principale, ton Magnum Opus : un réseau en cercles '
+      + 'concentriques, partout. Le cap est prêt : dis-moi ce qu’on y met.',
   },
   maedrethnir: {
     nom: 'MAEDRETHNIR',
@@ -354,9 +403,20 @@ export function chemin(id, noeuds = NOEUDS) {
 
 // Un nœud est une BOUSSOLE dès qu'il a au moins deux caps (règle §2.1) ;
 // sinon c'est une feuille — la page où l'on travaille.
+// EXCEPTION NOMMÉE (Paul, 2026-09-30, « assouplis la règle pour les
+// constellations ») : un nœud marqué `constellation: true` est une boussole dès
+// UN cap. La constellation des ARMES ne porte qu'IFULVIN aujourd'hui ; sans
+// cette exception elle serait une feuille sans page, donc une étoile morte.
+// Le drapeau est explicite et vérifié (voir verifierRegistre) : la règle ne se
+// relâche jamais « par accident » sur un nœud qui aurait perdu un enfant.
+export function estConstellation(id, noeuds = NOEUDS) {
+  const n = noeuds[id];
+  return Boolean(n && n.constellation === true);
+}
 export function estBoussole(id, noeuds = NOEUDS) {
   const n = noeuds[id];
-  return Boolean(n && Array.isArray(n.enfants) && n.enfants.length >= 2);
+  if (!n || !Array.isArray(n.enfants)) return false;
+  return n.enfants.length >= 2 || (n.constellation === true && n.enfants.length >= 1);
 }
 
 // Les caps d'un nœud, dans l'ordre du registre (premier plein Nord).
@@ -378,7 +438,7 @@ export function verifierRegistre(noeuds = NOEUDS, blasons = null, coeurs = null)
 
     const boussole = Array.isArray(n.enfants);
     if (boussole) {
-      if (n.enfants.length < 2) {
+      if (n.enfants.length < 2 && !(n.constellation === true && n.enfants.length === 1)) {
         anomalies.push(`${id} : boussole à moins de 2 caps (règle nœud/feuille)`);
       }
       for (const eid of n.enfants) {
@@ -406,6 +466,14 @@ export function verifierRegistre(noeuds = NOEUDS, blasons = null, coeurs = null)
       if (!Object.prototype.hasOwnProperty.call(n, 'cible')) {
         anomalies.push(`${id} : cible non déclarée (mettre null pour « à venir »)`);
       }
+    }
+
+    // Le drapeau d'exception ne s'accroche qu'à un nœud qui contient quelque chose.
+    if (n.constellation !== undefined && n.constellation !== true) {
+      anomalies.push(`${id} : « constellation » ne vaut que true (ou est absent)`);
+    }
+    if (n.constellation === true && !(Array.isArray(n.enfants) && n.enfants.length >= 1)) {
+      anomalies.push(`${id} : constellation sans aucun cap`);
     }
 
     if (n.lien && !noeuds[n.lien]) anomalies.push(`${id} : passerelle vers un cap inconnu « ${n.lien} »`);
