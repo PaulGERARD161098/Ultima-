@@ -277,9 +277,15 @@ export function rendre(idNoeud, options = {}) {
       + (vivante ? '<p class="parole-cockpit">En cours — ' + echapper(vivante) + '</p>' : '')
       + '<p class="parole-texte">' + echapper(cap.resume) + '</p>'
       + '<p class="parole-action">'
-      + (cap.cible
-        ? (cap.externe ? 'Clique pour ouvrir (nouvel onglet) ↗' : 'Clique pour entrer ↝')
-        : 'Cap en préparation')
+      // MÊME PARTAGE QU'`entrer()` ET QU'`aria-disabled` (30/09) : ce qui
+      // CONTIENT s'entre, page ou pas. Une constellation sans page disait « Cap
+      // en préparation » alors que le clic y plongeait — la parole contredisait
+      // le geste. Les mêmes mots qu'IMLADRIK sur OMEGA : même action.
+      + ((cap.enfants || []).length && !cap.externe
+        ? 'Clique pour entrer ↝'
+        : cap.cible
+          ? (cap.externe ? 'Clique pour ouvrir (nouvel onglet) ↗' : 'Clique pour entrer ↝')
+          : 'Cap en préparation')
       + '</p>';
   }
   function reinitResume() {

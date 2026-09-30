@@ -371,6 +371,19 @@ console.log('— C. ARMES et DRAGONS plongent ; IFULVIN, seul cap « à venir »
     verifier('Premier niveau : aria-disabled ⇔ (pas de cible ET pas d\'enfants), sur chaque étoile',
       reglesTenues(premier), JSON.stringify(premier.map((c) => [c.id, c.avenir])));
 
+    // LA PAROLE NE CONTREDIT PAS LE GESTE (30/09). Au survol, ARMES et DRAGONS
+    // disaient « Cap en préparation » alors que le clic y plonge : même partage
+    // que l'aria-disabled, oublié dans `afficherResume`. Verrou : la parole a
+    // bien été lue (le nom y est) avant de juger son action.
+    for (const [id, nom] of [['constellation-armes', 'ARMES'], ['constellation-dragons', 'DRAGONS']]) {
+      await survoler(page, id);
+      await page.waitForFunction((n) => document.getElementById('boussole-parole').textContent.includes(n), nom, { timeout: 5000 }).catch(() => {});
+      const action = (await page.locator('#boussole-parole .parole-action').textContent().catch(() => '')) || '';
+      const lue = ((await page.locator('#boussole-parole').textContent()) || '').includes(nom);
+      verifier(`Survol ${nom} : la parole invite à entrer, jamais « en préparation »`,
+        lue && action === 'Clique pour entrer ↝' && !/préparation/i.test(action), `lue=${lue} action=${action}`);
+    }
+
     // CLIC NORMAL sur DRAGONS — pas de `force`, pas de `dispatchEvent`.
     let clicNormal = true; let raison = '';
     try {
