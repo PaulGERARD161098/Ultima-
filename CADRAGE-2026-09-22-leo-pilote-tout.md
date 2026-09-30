@@ -1540,3 +1540,77 @@ d'avant (qu'il faudra donc conserver hors du journal, qui n'a pas le droit de
 la porter). La ligne `defaite` se pose sur la trace. Puis la ligne par
 écriture dans le grain du matin (M2, M5). ⚠️ Revue §S6 : le défaire ne doit
 **jamais** se fier à `cible_id` ni à `phase` sans vérifier le propriétaire.
+
+---
+
+## §14 — B1 ⑤ · LE DÉFAIRE, CADRÉ AVANT D'ÊTRE ÉCRIT (30/09, go solo)
+
+⛔ **Aucune ligne de code de ⑤ dans cette séance, et c'est la Directive EL qui
+le dit** : deux mesures ci-dessous montrent que le « comment » évident est
+faux, et chacune ouvre un choix produit — le mode solo les range au registre,
+il ne les tranche pas.
+
+### §14.0 — Ce que « défaire = supprimer la cible » détruirait (mesuré)
+
+Neuf outils verts sur dix **créent** ; leur défaire naturel est le `DELETE` de
+la `cible_id` journalisée. Les clés étrangères disent ce qu'il emporterait :
+
+| défaire de… | emporte en cascade (`on delete cascade`) | migration |
+|---|---|---|
+| un serment | ses **flammes**, ses **passerelles** | 0016 l.86 · 0018 l.49 |
+| une situation | ses **scénarios** | 0017 l.83 |
+| une idée | ses **liens** ADRAMELECH | 0007 l.79-80 · 20260914 |
+| une page du journal intime | ses **passerelles** | 0018 l.53 |
+
+⇒ Si Paul a ravivé le serment que Léo a scellé hier, **« défaire » effacerait
+ses flammes**. Le geste de réparation deviendrait le plus destructeur du
+système. ⛔ **Règle posée ici** : un défaire ne s'exécute que si la cible n'a
+**aucune dépendance** née après elle ; sinon il refuse et le dit. Ce n'est pas
+un choix, c'est la définition du §12.5 (« supprimer une valeur saisie à la
+main » est rouge).
+
+### §14.1 — L'enrichissement n'a pas de défaire possible en l'état
+
+`proposer_enrichissement_idee` **concatène** (`essence + '\n\n' + ajout`). Le
+défaire exige l'essence d'avant — du **contenu**, que `leo_ecritures` n'a pas
+le droit de porter (§12.6). Et M3 (§11.2) dit : *« un type d'écriture sans
+défaire éprouvé n'entre pas dans l'anneau vert »*.
+
+### §14.2 — ⏳ LES DEUX CHOIX DE PAUL
+
+| | options | ma recommandation |
+|---|---|---|
+| **① l'enrichissement** | (a) le repasser **orange** jusqu'à ce qu'il ait un défaire (la carte revient pour lui seul) · (b) conserver l'essence d'avant dans une table dédiée, RLS propriétaire, purgée à 7 jours (migration) | **(a)** — un outil, un anneau : c'est M3 appliqué, sans table de plus. (b) reste ouvert si le besoin revient |
+| **② où vit le bouton « défaire »** | (a) dans le cartouche de Léo, sur la bulle « Fait sans demander » · (b) un écran « ce que Léo a fait » dans la console, pointé par le mail du matin · (c) les deux | **(c)**, dans cet ordre : (a) couvre l'erreur vue sur le moment, (b) celle découverte le lendemain. ⛔ **Jamais un lien « défaire » dans le mail** : un scanner de messagerie qui précharge les liens défairait tout seul |
+
+### §14.3 — ⑤ en six points (sous réserve des deux choix)
+
+**① Le but.** Chaque écriture verte se défait d'un clic, **sauf** si elle a des
+dépendances nées après elle (refus explicite) ; la ligne `defaite` est posée
+sur la trace ; Paul voit au matin, une ligne par geste, ce que Léo a fait.
+
+**② Les étapes.** `etape: 'defaire'` sur `/api/leo/ecritures` (relit la trace
+**du propriétaire**, exige une `reussie` avec `cible_id` et aucune `defaite`,
+vérifie l'absence de dépendances, supprime par la route de l'outil, pose
+`defaite`) → le bouton (choix ②) → la section du grain du matin
+(`api/finubar-matin.mjs`, M2 — pas de second porteur).
+
+**③ Les moyens.** `api/_lib/leo-execution.js`, `js/leo-accueil.js`,
+`api/finubar-matin.mjs`. Index unique `defaite` par trace = migration (gate).
+
+**④ Les critères.** B1-d : **chaque** type vert a son défaire **joué** — un
+contrôle rougit si un outil vert n'a pas le sien · défaire refusé si une flamme
+est née sur le serment · une trace défaite ne se re-défait pas · la ligne du
+matin ne porte aucun contenu dicté (verbe + objet + heure).
+
+**⑤ Pas dans ⑤.** Le seuil de dérive (M4) · `leo_operations` (gate §13.0) ·
+un défaire des écritures confirmées à la carte.
+
+**⑥ Pre-mortem.**
+
+| cause | ce qui la prévient |
+|---|---|
+| le défaire efface le travail de Paul par cascade | refus si dépendance — éprouvé sur une flamme fabriquée |
+| le défaire se fie à `cible_id` lu en base (forgeable par PostgREST avant le 30/09) | la suppression passe par la route de l'outil, RLS propriétaire ; `cible_id` n'est qu'une adresse |
+| un lien dans le mail défait tout seul | aucun lien d'action dans le mail — il pointe l'écran |
+| un type vert sans défaire | le contrôle B1-d énumère le catalogue, pas une liste écrite à la main |
