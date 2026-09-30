@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v45 2026-09-30 sha256:8fc13b32c497 -->
+<!-- lecons:empreinte v46 2026-09-30 sha256:a7f95c5809f7 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les huit dépôts.** Demandé par
@@ -905,6 +905,11 @@ supposer — l'attente ne masque rien tant qu'elle expire, une image qui ne char
 jamais fait toujours rougir la recette. Vérifié ici par deux sondes : logo
 délibérément déformé et activité prioritaire retirée virent toutes deux au
 rouge, et la recette repasse au vert une fois l'état restauré.
+
+
+**UN HARNAIS QUI LIT L'HORLOGE ROUGIT SANS QU'UN COMMIT L'AIT CASSÉ** *(2026-09-30, RenoBoost)*.
+`navigation-palier3` était rouge sur `main` depuis la fusion de #556, qui ne touchait que la vitrine. On a d'abord soupçonné #556. Rejoué sur le commit vert de la veille (`a13b1b4`), le harnais rougissait aussi : la section « 🚩 Rendez-vous annoncés sans date » n'apparaît que selon les dates des fiches (`grouperClients` reçoit `Date.now()`), et son titre en `nowrap` élargissait la page à 325 px sur un écran de 320. `main` est resté rouge environ une heure et demie ; la PR de la séance a hérité du rouge.
+⇒ *Règle* : un rouge apparu sans changement de code se rejoue d'abord sur le **dernier commit vert** — s'il y rougit aussi, la cause est l'environnement (date, données), pas le diff. Et un harnais dont le verdict dépend du jour doit **figer l'horloge** : sinon il changera d'avis demain, et on corrigera le symptôme (ici le titre, `RenoBoost/dashboard.css`) sans avoir fermé la cause (`RenoBoost/tests/navigation-palier3.navigateur.mjs` lit toujours la vraie date).
 
 **UN GARDE-FOU ÉCRIT CONTRE DES MOTS REND ROUGE LA CORRECTION ELLE-MÊME**
 *(2026-09-14)*. Après avoir retiré du site SPC toutes les promesses d'astreinte,
