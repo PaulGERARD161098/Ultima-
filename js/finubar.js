@@ -82,6 +82,15 @@ function rendreProjet(p) {
   const appelle = p.rang <= 1;
   if (appelle) li.classList.add('appelle');
 
+  if (p.controle?.type === 'github') {
+    ligne(li, 'Lecture GitHub', `${p.controle.lecture_le || 'date inconnue'} — ${p.controle.statut}`);
+    if (p.source?.type === 'github') {
+      ligne(li, 'Note consultée', `${p.source.commit || 'version inconnue'} — mesure du ${p.source.mesure_le || 'date inconnue'}`);
+      ligne(li, 'Portée', 'Note déclarative ; état métier, dérive Git, PR, contrôles et permissions non vérifiés.');
+    }
+    if (p.reprise) ligne(li, 'Reprise', 'La note antérieure est conservée ; cette tentative ne rafraîchit pas sa mesure.');
+  }
+
   if (!p.ok) {
     // Un grain illisible s'affiche AVEC son motif. Le faire disparaître le
     // ferait lire comme « rien à signaler » — l'inverse de la vérité.
@@ -96,7 +105,9 @@ function rendreProjet(p) {
     tete.appendChild(el('h3', 'projet-nom', p.depot || 'dépôt inconnu'));
     tete.appendChild(el('span', 'projet-etat attente', p.hors_seance ? 'non collecté' : 'état illisible'));
     li.appendChild(tete);
-    li.appendChild(el('p', 'projet-cap', p.hors_seance
+    li.appendChild(el('p', 'projet-cap', p.controle?.type === 'github'
+      ? `Lecture GitHub : ${p.motif || p.controle.statut}. Aucun état métier ne peut en être déduit.`
+      : p.hors_seance
       ? 'Ce dépôt n’était pas attaché à la séance qui a produit cette collecte : son grain n’a pas été lu. Ce n’est pas un constat sur lui.'
       : `Finubar n’a pas pu lire ce dépôt : ${p.motif}.`));
     return li;

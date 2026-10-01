@@ -183,3 +183,14 @@ visuel + fonctionnement différés.
    choisir le modèle (défaut serveur : Opus — qualité Jarvis ; un modèle
    plus économe se règle sans toucher au code).
 3. ~~Périmètre du pilote L1~~ ✅ tranché (RIVEN) puis diffusé aux 4.
+
+
+## Mise à jour du 29/09/2026 — préparation LV1
+
+Le catalogue mesuré sur main contient dix propositions : RIVEN 3, ADRAMELECH 2,
+IMLADRIK 5 ; BCP aucune. Le contrat LV1 canonique vit au §11 du cadrage
+`CADRAGE-2026-09-22-leo-pilote-tout.md`. Le lot en préparation retire l'état client
+du rôle système, protège l'enrichissement contre un contenu concurrent différent
+et distingue une écriture refusée d'une issue inconnue. Aucun budget global ni
+agent autonome permanent n'est livré par cette modification. Preuves et limites :
+`REPRISE-2026-09-29-leo-lv1.md`.

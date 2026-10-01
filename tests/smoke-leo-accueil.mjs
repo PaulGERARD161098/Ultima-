@@ -380,12 +380,16 @@ console.log('— B-bis. Les yeux de Léo sur RIVEN (noms protégés) —');
 console.log('— C. Voix de Léo (L2, /api/leo stubée) —');
 const pageV = await navigateur.newPage({ viewport: { width: 1280, height: 800 } });
 const erreursVoix = [];
+// C11 provoque EXPRÈS un 500 sur l'API d'écriture : exempté PENDANT C11 seulement.
+let echecEcritureProvoque = false;
 pageV.on('console', (msg) => {
   if (msg.type() !== 'error') return;
   // Les scénarios C2/C3 provoquent EXPRÈS un 503 et une panne sur /api/leo :
   // le navigateur journalise ces échecs de ressource — attendus, pas des bugs.
   if (/Failed to load resource/.test(msg.text()) &&
       (msg.location()?.url || '').includes('/api/leo')) return;
+  if (echecEcritureProvoque && /Failed to load resource/.test(msg.text()) &&
+      (msg.location()?.url || '').includes('/api/reseau/journal')) return;
   erreursVoix.push(msg.text());
 });
 pageV.on('pageerror', (err) => erreursVoix.push(String(err)));
@@ -619,6 +623,260 @@ verifier('Proposition malformée : aucune carte, seule la bulle texte',
     .includes('Je te propose ceci.'));
 verifier('Proposition malformée : la saisie reste utilisable',
   await pageV.locator('.leo-voix-champ').isEnabled());
+
+// ===================== C8-C12. B1 ④ — l'anneau vert agit (cadrage §13) =====================
+// Une proposition VERTE s'exécute sans clic, mais seulement DERRIÈRE une trace
+// posée par le serveur : ouvrir → acte → clore, dans cet ordre. Tout refus du
+// journal retombe sur la carte, avec ZÉRO requête d'écriture.
+const TRACE = '3f2a1b4c-5d6e-4f70-8a91-b2c3d4e5f607';
+const CREE = 'bbbbbbbb-0000-4000-8000-000000000009';
+let sequence = [];
+let corpsEcritures = [];
+// La cible est dictée EXACTEMENT (« M. Lambert ») : S1 réserve l'exécution
+// sans clic à l'égalité exacte — une inclusion retombe sur la carte (C13).
+async function stubberVert({ ouverture, acte, cibleRef = 'M. Lambert' }) {
+  sequence = [];
+  corpsEcritures = [];
+  await pageV.unroute('**/api/leo');
+  await stubberLeoAvecProposition({
+    outil: 'proposer_journal',
+    args: { cible_ref: cibleRef, texte: 'Appelé ce matin.' },
+    reformulation: REFORMULATION,
+    anneau: 'vert'
+  });
+  await pageV.unroute('**/api/leo/ecritures');
+  await pageV.route('**/api/leo/ecritures', (route) => {
+    const corps = route.request().postDataJSON();
+    corpsEcritures.push(corps);
+    sequence.push(corps.etape);
+    if (corps.etape === 'ouvrir') return ouverture(route);
+    return route.fulfill({ status: 200, contentType: 'application/json',
+      body: JSON.stringify({ ok: true, data: { traceId: TRACE, issue: corps.issue } }) });
+  });
+  await pageV.unroute('**/api/reseau/journal');
+  await pageV.route('**/api/reseau/journal', (route) => { sequence.push('acte'); return acte(route); });
+}
+const ouvertureOk = (route) => route.fulfill({ status: 200, contentType: 'application/json',
+  body: JSON.stringify({ ok: true, data: { traceId: TRACE, restant: 39 } }) });
+const acteOk = (route) => route.fulfill({ status: 200, contentType: 'application/json',
+  body: JSON.stringify({ ok: true, data: { id: CREE } }) });
+// Attente NOMMÉE : un sabotage qui supprime la carte doit rougir sur un
+// verdict qui le dit, pas sur un TimeoutError anonyme.
+const carteApparait = () => pageV.waitForSelector('.leo-carte-action', { timeout: 5000 })
+  .then(() => true, () => false);
+async function dicter(cle) {
+  await ouvrirCartoucheVoix(cle, CANDIDATS_TEST);
+  await pageV.locator('.leo-voix-champ').fill('Note que j’ai appelé Lambert ce matin.');
+  await pageV.locator('.leo-voix-envoyer').click();
+}
+
+// C8. Vert nominal : aucun clic, ouvrir AVANT l'acte, clore APRÈS.
+await stubberVert({ ouverture: ouvertureOk, acte: acteOk });
+await dicter('vert-ok');
+await pageV.waitForSelector('.leo-bulle-issue', { timeout: 5000 });
+for (let i = 0; i < 50 && sequence.length < 3; i++) await pageV.waitForTimeout(50);
+verifier('B1-a — vert : AUCUNE carte, aucun clic', await pageV.locator('.leo-carte-action').count() === 0);
+verifier('B1-a — ordre : ouvrir → acte → clore', sequence.join(' → ') === 'ouvrir → acte → clore',
+  sequence.join(' → '));
+verifier("Ouvrir porte la proposition, JAMAIS l'anneau",
+  JSON.stringify(corpsEcritures[0]) === JSON.stringify({
+    etape: 'ouvrir', outil: 'proposer_journal',
+    args: { cible_ref: 'M. Lambert', texte: 'Appelé ce matin.' }, quadrant: 'riven'
+  }), JSON.stringify(corpsEcritures[0]));
+verifier("Clore : la trace, l'issue, la CIBLE par identifiant — zéro contenu dicté",
+  JSON.stringify(corpsEcritures[1]) === JSON.stringify({
+    etape: 'clore', traceId: TRACE, issue: 'reussie', cibleId: CREE
+  }), JSON.stringify(corpsEcritures[1]));
+verifier('Paul le voit : « Fait sans demander » + la cible RÉSOLUE, dans le fil',
+  ((await pageV.locator('.leo-bulle-issue').textContent()) || '') ===
+  '[Fait sans demander : ' + REFORMULATION + ' → Cible : « M. Lambert »]');
+verifier('Vert : la saisie se réarme', await pageV.locator('.leo-voix-champ').isEnabled());
+
+// C9. Fail-closed : le journal refuse (503) ou tombe (réseau) → la carte, ZÉRO acte.
+for (const [nom, ouverture] of [
+  ['503', (route) => route.fulfill({ status: 503, contentType: 'application/json',
+    body: JSON.stringify({ ok: false, error: 'Journal indisponible' }) })],
+  ['réseau', (route) => route.abort()],
+  // Une trace qui n'a pas la forme d'une trace n'en est pas une.
+  ['trace forgée', (route) => route.fulfill({ status: 200, contentType: 'application/json',
+    body: JSON.stringify({ ok: true, data: { traceId: 'pas-une-trace' } }) })]
+]) {
+  await stubberVert({ ouverture, acte: acteOk });
+  await dicter('vert-ko-' + nom);
+  const carte = await carteApparait();
+  verifier(`Journal ${nom} → la carte, et ZÉRO requête d'écriture`,
+    carte && !sequence.includes('acte') && await pageV.locator('.leo-carte-confirmer').count() === 1,
+    sequence.join(' → '));
+  if (carte) {
+    await pageV.locator('.leo-carte-annuler').click();
+    await pageV.waitForFunction(() => document.querySelector('.leo-carte-action') === null, { timeout: 5000 });
+  }
+}
+
+// C10. B1-f — plafond atteint (429) : Léo demande au lieu d'agir.
+await stubberVert({ ouverture: (route) => route.fulfill({ status: 429, contentType: 'application/json',
+  body: JSON.stringify({ ok: false, error: 'Plafond d’écritures atteint' }) }), acte: acteOk });
+await dicter('vert-plafond');
+const cartePlafond = await carteApparait();
+verifier('B1-f — plafond : la carte, zéro acte', cartePlafond && !sequence.includes('acte'),
+  sequence.join(' → '));
+if (cartePlafond) await pageV.locator('.leo-carte-confirmer').click();
+await pageV.waitForSelector('.leo-bulle-issue', { timeout: 5000 });
+verifier('Plafond : Paul confirme, et c’est LUI qui écrit (un seul acte)',
+  sequence.filter((s) => s === 'acte').length === 1);
+
+// C11. Un 500, une réponse illisible ou perdue peuvent suivre une écriture.
+echecEcritureProvoque = true;
+for (const [nom, acte] of [
+  ['500', (route) => route.fulfill({ status: 500, contentType: 'application/json', body: JSON.stringify({ ok: false }) })],
+  ['illisible', (route) => route.fulfill({ status: 200, contentType: 'text/plain', body: 'réponse tronquée' })],
+  ['perdue', (route) => route.abort('failed')]
+]) {
+  await stubberVert({ ouverture: ouvertureOk, acte });
+  await dicter('vert-inconnu-' + nom);
+  await pageV.waitForSelector('.leo-bulle-issue', { timeout: 5000 });
+  await pageV.waitForTimeout(150);
+  verifier('Issue inconnue ' + nom + ' : tentative seule, un acte et aucun renvoi',
+    corpsEcritures.length === 1 && sequence.filter((s) => s === 'acte').length === 1 &&
+    await pageV.locator('.leo-carte-action').count() === 0 &&
+    ((await pageV.locator('.leo-bulle-issue').textContent()) || '').includes('Résultat de l’action inconnu'),
+    sequence.join(' → '));
+}
+// Un refus explicite avant écriture autorise la clôture d'échec.
+await stubberVert({ ouverture: ouvertureOk, acte: (route) => route.fulfill({ status: 403,
+  contentType: 'application/json', body: JSON.stringify({ ok: false, error: 'Refus' }) }) });
+await dicter('vert-refuse');
+await pageV.waitForSelector('.leo-bulle-issue', { timeout: 5000 });
+for (let i = 0; i < 50 && sequence.length < 3; i++) await pageV.waitForTimeout(50);
+verifier('Refus explicite : clôture échouée et un seul acte',
+  corpsEcritures[1]?.issue === 'echouee' && corpsEcritures[1]?.motif === 'statut 403' &&
+  sequence.filter((s) => s === 'acte').length === 1);
+echecEcritureProvoque = false;
+
+// C12. Un anneau à la casse approximative n'est pas vert : la carte.
+sequence = [];
+await pageV.unroute('**/api/leo');
+await stubberLeoAvecProposition({
+  outil: 'proposer_journal', args: { cible_ref: 'Lambert', texte: 'Casse.' },
+  reformulation: 'Noter au journal de « M. Lambert » : « Casse. »', anneau: 'VERT'
+});
+await dicter('vert-casse');
+const carteCasse = await carteApparait();
+verifier("Anneau 'VERT' → la carte, aucun appel au journal",
+  carteCasse && sequence.length === 0 && await pageV.locator('.leo-carte-confirmer').count() === 1,
+  sequence.join(' → '));
+if (carteCasse) await pageV.locator('.leo-carte-annuler').click();
+
+// C13. S1 — cible résolue par INCLUSION (« Lambert » → « M. Lambert ») :
+// la carte la NOMME, et rien ne part sans Paul.
+await stubberVert({ ouverture: ouvertureOk, acte: acteOk, cibleRef: 'Lambert' });
+await dicter('vert-inclusion');
+const carteInclusion = await carteApparait();
+verifier('S1 — inclusion : la carte, qui nomme la cible résolue',
+  carteInclusion && ((await pageV.locator('.leo-carte-cible').textContent()) || '').includes('M. Lambert'));
+verifier("S1 — inclusion : ZÉRO appel au journal ni à l'API d'écriture",
+  sequence.length === 0, sequence.join(' → '));
+if (carteInclusion) await pageV.locator('.leo-carte-annuler').click();
+
+// C14. S3 — Paul ferme le cartouche pendant que Léo réfléchit : RIEN ne part.
+await stubberVert({ ouverture: ouvertureOk, acte: acteOk });
+await pageV.unroute('**/api/leo');
+await pageV.route('**/api/leo', async (route) => {
+  await new Promise((r) => setTimeout(r, 600));
+  return route.fulfill({ status: 200, contentType: 'application/json',
+    body: JSON.stringify({ ok: true, data: { reponse: 'Je te propose ceci.', proposition: {
+      outil: 'proposer_journal', args: { cible_ref: 'M. Lambert', texte: 'Appelé ce matin.' },
+      reformulation: REFORMULATION, anneau: 'vert' } } }) }).catch(() => {});
+});
+await dicter('vert-ferme');
+await pageV.keyboard.press('Escape');
+await pageV.waitForTimeout(1500);
+verifier('S3 — cartouche fermé avant la réponse : zéro journal, zéro acte',
+  sequence.length === 0 && await pageV.locator('.leo-voile').count() === 0, sequence.join(' → '));
+
+// C15. S4 — deux enrichissements de suite : le second PORTE le premier.
+const IDEE_ID = 'cccccccc-0000-4000-8000-000000000001';
+const corpsPatch = [];
+await pageV.unroute('**/api/leo/ecritures');
+await pageV.route('**/api/leo/ecritures', (route) => route.fulfill({ status: 200,
+  contentType: 'application/json', body: JSON.stringify({ ok: true, data: { traceId: TRACE } }) }));
+await pageV.route('**/api/idees/items', (route) => {
+  corpsPatch.push(route.request().postDataJSON());
+  return route.fulfill({ status: 200, contentType: 'application/json',
+    body: JSON.stringify({ ok: true, data: { id: IDEE_ID } }) });
+});
+await pageV.evaluate((id) => {
+  document.querySelectorAll('.leo-voile').forEach((v) => v.remove());
+  window.UltimaLeo.accueillirQuadrant({
+    quadrant: 'enrichir', blason: 'boussole', salutation: 'Scénario enrichissement.',
+    sections: [{ titre: 'Où on en est', lignes: ['—'] }],
+    voix: { quadrant: 'adramelech', jeton: 'jeton-de-test',
+      candidats: { idees: [{ id, libelle: 'Atelier bois', essence: 'E0' }] } }
+  });
+}, IDEE_ID);
+for (const ajout of ['A1', 'A2']) {
+  await pageV.unroute('**/api/leo');
+  await stubberLeoAvecProposition({ outil: 'proposer_enrichissement_idee',
+    args: { idee_ref: 'Atelier bois', ajout },
+    reformulation: 'Enrichir l’idée « Atelier bois » avec : « ' + ajout + ' »', anneau: 'vert' });
+  const avant = corpsPatch.length;
+  await pageV.locator('.leo-voix-champ').fill('Enrichis Atelier bois : ' + ajout);
+  await pageV.locator('.leo-voix-envoyer').click();
+  for (let i = 0; i < 60 && corpsPatch.length === avant; i++) await pageV.waitForTimeout(50);
+  await pageV.waitForFunction(() => !document.querySelector('.leo-voix-champ')?.disabled, { timeout: 5000 });
+}
+verifier('S4 — le second enrichissement porte le premier (rien n’est effacé)',
+  corpsPatch.length === 2 && corpsPatch[1]?.essence === 'E0\n\nA1\n\nA2',
+  JSON.stringify(corpsPatch.map((c) => c.essence)));
+
+// C15 bis. Une idée créée devient une cible sans rechargement.
+await pageV.evaluate(() => {
+  document.querySelectorAll('.leo-voile').forEach((v) => v.remove());
+  window.UltimaLeo.accueillirQuadrant({ quadrant: 'creation', blason: 'boussole', salutation: 'Création.',
+    sections: [{ titre: 'État', lignes: ['—'] }],
+    voix: { quadrant: 'adramelech', jeton: 'jeton-de-test', candidats: { idees: [], prochainAdrNum: 100 } } });
+});
+for (const proposition of [
+  { outil: 'proposer_idee', args: { titre: 'Atelier nouveau', resume: 'Base' }, reformulation: 'Créer Atelier nouveau', anneau: 'vert' },
+  { outil: 'proposer_enrichissement_idee', args: { idee_ref: 'Atelier nouveau', ajout: 'Suite' }, reformulation: 'Enrichir Atelier nouveau', anneau: 'vert' }
+]) {
+  await pageV.unroute('**/api/leo');
+  await stubberLeoAvecProposition(proposition);
+  const avant = corpsPatch.length;
+  await pageV.locator('.leo-voix-champ').fill('Action explicite');
+  await pageV.locator('.leo-voix-envoyer').click();
+  await pageV.waitForFunction(() => !document.querySelector('.leo-voix-champ')?.disabled, { timeout: 5000 });
+  verifier('Création puis enrichissement : un appel sans rechargement', corpsPatch.length === avant + 1);
+}
+verifier('Nouvelle idée : essence initiale conservée', corpsPatch.at(-1)?.essence === 'Base\n\nSuite');
+
+// C16. Écho d'issue BORNÉ : une page longue écrite sans clic ne bloque pas le
+// tour suivant (le serveur refuse tout message > 4 000 caractères).
+const LONGUE = 'Noter au journal de « M. Lambert » : « ' + 'x'.repeat(5000) + ' »';
+await stubberVert({ ouverture: ouvertureOk, acte: acteOk });
+await pageV.unroute('**/api/leo');
+await stubberLeoAvecProposition({ outil: 'proposer_journal',
+  args: { cible_ref: 'M. Lambert', texte: 'Appelé ce matin.' }, reformulation: LONGUE, anneau: 'vert' });
+await dicter('vert-long');
+await pageV.waitForSelector('.leo-bulle-issue', { timeout: 5000 });
+const bulleLongue = (await pageV.locator('.leo-bulle-issue').textContent()) || '';
+const tourSuivant = [];
+await pageV.unroute('**/api/leo');
+await pageV.route('**/api/leo', (route) => {
+  tourSuivant.push(route.request().postDataJSON());
+  return route.fulfill({ status: 200, contentType: 'application/json',
+    body: JSON.stringify({ ok: true, data: { reponse: 'Bien noté.' } }) });
+});
+await pageV.locator('.leo-voix-champ').fill('Merci.');
+await pageV.locator('.leo-voix-envoyer').click();
+for (let i = 0; i < 60 && tourSuivant.length === 0; i++) await pageV.waitForTimeout(50);
+const echos = (tourSuivant[0]?.messages || []).filter((m) => /^\[Fait sans demander/.test(m.content));
+verifier('Écho borné : Paul voit tout dans la bulle', bulleLongue.length > 5000, String(bulleLongue.length));
+// Verrou de non-vacuité : l'écho existe bien dans le tour suivant.
+verifier('Écho borné : le tour suivant porte l’écho, sous 4 000 caractères',
+  echos.length === 1 && echos[0].content.length <= 1000 && echos[0].content.endsWith('…]') &&
+  (tourSuivant[0]?.messages || []).every((m) => m.content.length <= 4000),
+  String(echos[0]?.content.length));
 
 verifier('Zéro erreur console (voix)', erreursVoix.length === 0, erreursVoix.slice(0, 3).join(' | '));
 await pageV.close();

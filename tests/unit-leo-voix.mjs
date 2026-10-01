@@ -173,17 +173,18 @@ verdicts.etatBornes =
   validerEtatQuadrant({ listes: { L: [{ libelle: 'x'.repeat(MAX_ETAT_LIBELLE) }] } }).ok === true &&
   validerEtatQuadrant({ listes: { L: [{ libelle: 'x'.repeat(MAX_ETAT_LIBELLE + 1) }] } }).ok === false;
 
-// Rendu déterministe + la consigne anti-invention qui l'accompagne.
+// Provenance déclarée et données structurées, sans date inventée.
 verdicts.etatDecrit = (() => {
   const texte = decrireEtat(validerEtatQuadrant(ETAT_OK).etat);
-  return /- serments scellés : 2/.test(texte) &&
-    /« AURORE » \(à raviver\) ; « ENCLUME »/.test(texte) &&
-    /Tu ne l'enrichis JAMAIS/.test(texte) &&
-    /ne fais jamais semblant de les avoir lus/.test(texte);
+  const contexte = JSON.parse(texte);
+  return contexte.provenance === 'navigateur_client' &&
+    contexte.date_mesure === null && contexte.version_source === null &&
+    contexte.donnees.compteurs['serments scellés'] === 2 &&
+    !/État RÉEL/.test(texte);
 })();
 
 // Le prompt système STABLE reste sans donnée personnelle (l'état est un bloc
-// séparé, hors cache) — la règle de minimisation ne bouge pas.
+// du message utilisateur) — la règle de minimisation ne bouge pas.
 verdicts.systemeSansEtat = !/AURORE|ENCLUME/.test(construireSysteme('imladrik', true));
 
 // ---------- Bilan ----------

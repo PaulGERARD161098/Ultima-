@@ -145,7 +145,8 @@
     var maxNum = 0;
     (Array.isArray(idees) ? idees : []).forEach(function (idee) {
       if (!idee || typeof idee.id !== 'string' || !idee.id) { return; }
-      var essence = typeof idee.essence === 'string' ? idee.essence : '';
+      // Version attendue exacte : null et chaîne vide ne sont pas équivalents.
+      var essence = idee.essence;
       if (idee.nom) { liste.push({ id: idee.id, libelle: idee.nom, essence: essence }); }
       if (typeof idee.adr_num === 'number' && isFinite(idee.adr_num)) {
         if (idee.adr_num > maxNum) { maxNum = idee.adr_num; }

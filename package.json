@@ -17,6 +17,7 @@
   },
   "scripts": {
     "test": "node tests/run-unit.mjs",
-    "test:browser": "bash tests/lancer.sh"
+    "test:browser": "bash tests/lancer.sh",
+    "test:lv1": "bash tests/lancer-lv1-isole.sh"
   }
 }

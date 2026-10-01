@@ -156,18 +156,19 @@
     var index = Object.create(null);
     var ordre = [];
     (noeuds || []).forEach(function (n) {
-      var cle, label;
+      var cle, label, court;
       var choix = regrouper ? regrouper(n) : null;
       if (choix && choix.cle) {
         cle = choix.cle;
         label = choix.label || LABEL_A_CLASSER;
+        court = choix.court || label;
       } else {
         var brut = (n.secteur_activite || '').trim();
         cle = brut ? normaliser(brut) : CLE_A_CLASSER;
         label = brut || LABEL_A_CLASSER;
       }
       if (!index[cle]) {
-        index[cle] = { cle: cle, label: label, noeuds: [], parNebuleuse: !!(choix && choix.cle) };
+        index[cle] = { cle: cle, label: label, court: court || label, noeuds: [], parNebuleuse: !!(choix && choix.cle) };
         ordre.push(cle);
       }
       index[cle].noeuds.push(n);
@@ -191,8 +192,9 @@
 
   // ---- Construction du monde : PURE (aucun DOM), donc testable seule.
   //      Deux appels sur les mêmes données produisent les mêmes coordonnées. ----
-  function construireMonde(noeuds, regrouper) {
+  function construireMonde(noeuds, regrouper, aspect) {
     var groupes = grouper(noeuds, regrouper);
+    if (regrouper && groupes.length) { return disposerEnNebuleuses(groupes, aspect); }
     var etoiles = [];
     groupes.forEach(function (g, ig) {
       var dir = pointSphere(groupes.length, ig);
@@ -232,6 +234,79 @@
       if (d > rayon) { rayon = d; }
     });
     return { groupes: groupes, etoiles: etoiles, rayon: Math.max(80, rayon) };
+  }
+
+  // ---- LOT 3 DES NÉBULEUSES (30/09, soir) : des constellations côte à côte ----
+  // Paul, sur la 3D en production : « les étoiles doivent être en volume de
+  // constellation dans les nébuleuses ». Posés sur une sphère, les amas se
+  // cachaient les uns derrière les autres et leurs brumes se mêlaient. Ici,
+  // chaque nébuleuse est une BOULE serrée — le volume —, et les boules sont
+  // rangées sur une grille face à la caméra d'ouverture — la lisibilité. Le
+  // nombre de colonnes est celui qui donne aux amas la plus grande taille à
+  // l'écran, à l'aspect RÉEL de la scène ; une cellule est plus large que
+  // haute, parce que le titre s'écrit en largeur. Sans `regrouper`, rien de
+  // ceci ne s'exécute : les neuf autres pages gardent leur sphère.
+  var LARGEUR_CELLULE = 1.35;
+  var PAS_NEBULEUSES = 2.9; // en rayons du plus gros amas
+  function disposerEnNebuleuses(groupes, aspect) {
+    var n = groupes.length;
+    var a = aspect > 0 && isFinite(aspect) ? aspect : 1.6;
+    var cols = 1, note = -1;
+    for (var c = 1; c <= n; c++) {
+      var candidate = Math.min(a / (c * LARGEUR_CELLULE), 1 / Math.ceil(n / c));
+      if (candidate > note + 1e-9) { note = candidate; cols = c; }
+    }
+    var rangs = Math.ceil(n / cols);
+    var rayons = groupes.map(function (g) { return 16 + Math.sqrt(g.noeuds.length) * 13; });
+    var rMax = Math.max.apply(null, rayons);
+    var pasY = rMax * PAS_NEBULEUSES;
+    var pasX = pasY * LARGEUR_CELLULE;
+    var cy = Math.cos(YAW_OUVERTURE), sy = Math.sin(YAW_OUVERTURE);
+    var cp = Math.cos(PITCH_OUVERTURE), sp = Math.sin(PITCH_OUVERTURE);
+    // Du plan de la caméra (X à droite, Y vers le bas, Z en profondeur) au
+    // monde : l'inverse exact de `projeter` à l'orientation d'ouverture.
+    function versMonde(X, Y, Z) {
+      var z1 = -Y * sp + Z * cp;
+      return { x: X * cy - z1 * sy, y: Y * cp + Z * sp, z: X * sy + z1 * cy };
+    }
+    var etoiles = [];
+    groupes.forEach(function (g, i) {
+      var rang = Math.floor(i / cols), col = i % cols;
+      var dansLeRang = Math.min(cols, n - rang * cols);
+      var X = (col - (dansLeRang - 1) / 2) * pasX;
+      var Y = (rang - (rangs - 1) / 2) * pasY;
+      // Un léger relief entre les amas : assez pour que tourner le montre,
+      // trop peu pour qu'un amas en cache un autre à l'ouverture.
+      var Z = ((((i * 37) % 7) - 3) / 3) * rMax * 0.3;
+      var R = rayons[i];
+      g.centre = versMonde(X, Y, Z);
+      g.rayonAmas = R;
+      var k = g.noeuds.length;
+      g.noeuds.forEach(function (noeud, j) {
+        var p = pointSphere(Math.max(k, 2), j);
+        // Rayon modulé : une constellation est un VOLUME, pas une coquille.
+        var rr = k === 1 ? 0 : R * (0.55 + 0.45 * ((j * 7 % 11) / 10));
+        etoiles.push({
+          noeud: noeud, groupe: g,
+          x: g.centre.x + p.x * rr, y: g.centre.y + p.y * rr, z: g.centre.z + p.z * rr
+        });
+      });
+    });
+    var rayon = 0;
+    etoiles.forEach(function (e) {
+      var d = Math.sqrt(e.x * e.x + e.y * e.y + e.z * e.z);
+      if (d > rayon) { rayon = d; }
+      // Le rayon RÉEL de l'amas, mesuré sur ses étoiles : c'est sur lui que
+      // l'approche se cadre (le rayon théorique laissait une petite nébuleuse
+      // à 43 % de la vue, mesuré le 30/09).
+      var g = e.groupe;
+      var dg = Math.sqrt(Math.pow(e.x - g.centre.x, 2) + Math.pow(e.y - g.centre.y, 2) + Math.pow(e.z - g.centre.z, 2));
+      g.rayonReel = Math.max(g.rayonReel || 0, dg);
+    });
+    return {
+      groupes: groupes, etoiles: etoiles, rayon: Math.max(80, rayon),
+      nebuleuses: { demiL: (cols * pasX) / 2, demiH: (rangs * pasY) / 2, rMax: rMax, cols: cols, rangs: rangs, pasX: pasX }
+    };
   }
 
   // ---- Recentrage sur les étoiles — option `cadrerSurLesEtoiles` (LV4) ----
@@ -491,6 +566,10 @@
       window.removeEventListener('resize', courant.surRedimension);
       courant.surRedimension = null;
     }
+    if (courant && courant.surEchap) {
+      document.removeEventListener('keydown', courant.surEchap);
+      courant.surEchap = null;
+    }
     courant = null;
   }
 
@@ -537,7 +616,11 @@
       contrasteProfondeur: 1
     } : null);
 
-    var monde = construireMonde(noeuds, typeof options.regrouper === 'function' ? options.regrouper : null);
+    var aspectScene = conteneur.clientWidth > 0 && conteneur.clientHeight > 120
+      ? conteneur.clientWidth / conteneur.clientHeight : 1.6;
+    var monde = construireMonde(noeuds, typeof options.regrouper === 'function' ? options.regrouper : null, aspectScene);
+    // Lot 3 : RIVEN rangé en nébuleuses (voir `disposerEnNebuleuses`).
+    var modeNebuleuses = !!monde.nebuleuses;
     // LES GÉMEAUX, avant le recentrage : deux caps jumeaux se posent en
     // OPPOSITION plutôt qu'empilés. L'orientation d'ouverture est passée en
     // argument parce que le placement en dépend (voir `disposerEnOpposition`) —
@@ -571,7 +654,11 @@
     // au lieu de casser : au-delà, on retombe sur les six plus lourdes.
     var tousLesNoms = !!options.tousLesNoms && noeuds.length <= SEUIL_TOUS_NOMS;
     var lourdes = Object.create(null);
-    if (tousLesNoms || noeuds.length <= MAX_NOMS_PERMANENTS) {
+    if (modeNebuleuses) {
+      // Lot 3 — « je ne veux que les noms des nébuleuses » (Paul, 30/09) : à
+      // l'ensemble, aucun nom de contact. Chacun se lit au survol, au focus, et
+      // tous ceux d'une nébuleuse quand on s'en approche.
+    } else if (tousLesNoms || noeuds.length <= MAX_NOMS_PERMANENTS) {
       noeuds.forEach(function (n) { lourdes[n.id] = true; });
     } else {
       noeuds.slice().sort(function (a, b) {
@@ -741,6 +828,13 @@
       var largeurUtile = vbW - mUtile.gauche - mUtile.droite;
       var hauteurUtile = vbH - mUtile.haut - mUtile.bas;
       var cadre = Math.max(160, Math.min(largeurUtile, hauteurUtile));
+      if (modeNebuleuses) {
+        // Lot 3 : la grille se cadre sur SA boîte, chaque axe sur le sien — un
+        // cercle circonscrit laissait perdue la moitié d'un écran étroit.
+        var b = monde.nebuleuses;
+        var demiX = Math.max(60, largeurUtile / 2 - 6), demiY = Math.max(60, hauteurUtile / 2 - 6);
+        return Math.max(b.demiL * FOCALE / demiX, b.demiH * FOCALE / demiY) * 1.02 + b.rMax * 0.3;
+      }
       if (!cadrageSerre) {
         return ((monde.rayon + DEBORD_LIBELLE) * FOCALE * 2) / cadre * 1.06;
       }
@@ -798,7 +892,12 @@
     // des Gémeaux en a besoin AVANT que `cam` existe.)
     var cam = {
       yaw: YAW_OUVERTURE, pitch: PITCH_OUVERTURE, distance: 0,
-      cibleYaw: YAW_OUVERTURE, ciblePitch: PITCH_OUVERTURE, cibleDistance: 0
+      cibleYaw: YAW_OUVERTURE, ciblePitch: PITCH_OUVERTURE, cibleDistance: 0,
+      // LE POINT VISÉ (lot 3, 30/09) : la caméra tourne autour de lui. Il reste
+      // à l'origine — le chemin d'hier — sauf quand on s'approche d'une
+      // nébuleuse : il glisse alors jusqu'à son centre, et c'est autour d'ELLE
+      // que l'on tourne.
+      vise: { x: 0, y: 0, z: 0 }, cibleVise: { x: 0, y: 0, z: 0 }
     };
     // Le zoom est gardé en FACTEUR, pas en distance absolue : il survit ainsi
     // à un changement de cadre (rotation du téléphone, ouverture du panneau).
@@ -820,7 +919,7 @@
     var plat = !!options.plat || moinsDAnimation;
     // Sans cadrage serré : aucun plafond, donc la ligne du nom se calcule
     // exactement comme hier (`Math.min(Infinity, …)` ne retire rien).
-    var plafondNom = cadrageSerre ? PLAFOND_NOM : Infinity;
+    var plafondNom = cadrageSerre ? PLAFOND_NOM : (modeNebuleuses ? 12 : Infinity);
     // LE PLANCHER DE LISIBILITÉ EST UNE TAILLE D'ÉCRAN — lot 2a (26/09).
     // `7.5` est en unités du viewBox : il ne vaut 7,5 px que tant que le
     // viewBox vaut l'écran. Mesuré en production : 7,5 px à 360 et 390 px de
@@ -915,8 +1014,15 @@
         if (!membres.length) { return; }
         var bx = 0; var by = 0; var bz = 0;
         membres.forEach(function (m) { bx += m.x; by += m.y; bz += m.z; });
+        var premier = (neb.ids || []).map(function (id) { return parId[id]; }).filter(Boolean)[0];
         liste.push({
           teinte: neb.teinte,
+          // Lot 3 : le rayon RÉEL de l'amas borne la brume — sans lui, ses lobes
+          // de 56 px au moins débordaient sur la nébuleuse voisine.
+          rayonMonde: modeNebuleuses && premier && premier.groupe ? premier.groupe.rayonAmas : undefined,
+          // …et son centre RÉEL : le barycentre d'un échantillon de douze
+          // étoiles s'en écarte d'un quart de rayon (mesuré le 30/09).
+          centreMonde: modeNebuleuses && premier && premier.groupe ? premier.groupe.centre : undefined,
           membres: membres,
           barycentre: { x: bx / membres.length, y: by / membres.length, z: bz / membres.length },
           epsilon: epsilon
@@ -928,6 +1034,7 @@
     function projeter(p) {
       // À plat : ni rotation ni perspective. Une échelle unique, les
       // coordonnées du monde telles quelles — la carte du ciel, pas le ciel.
+      p = { x: p.x - cam.vise.x, y: p.y - cam.vise.y, z: p.z - cam.vise.z };
       if (plat) {
         var echellePlate = FOCALE / cam.distance;
         return {
@@ -959,6 +1066,7 @@
     // toute interface en volume : sans cela, la tabulation enverrait le focus
     // sur une étoile située derrière le spectateur.
     function viser(p) {
+      p = { x: p.x - cam.cibleVise.x, y: p.y - cam.cibleVise.y, z: p.z - cam.cibleVise.z };
       cam.cibleYaw = Math.atan2(-p.x, p.z);
       var cy = Math.cos(cam.cibleYaw), sy = Math.sin(cam.cibleYaw);
       var z1 = -p.x * sy + p.z * cy;
@@ -1153,7 +1261,7 @@
       var autres = (comptePar[r.personne_id] || 1) - 1;
       var trait = svg('line', { stroke: '#f2ead6', 'stroke-width': '0.5', opacity: '0.3' });
       var g = svg('g', {
-        'class': 'ciel-etoile ciel-personne', tabindex: '0', role: 'button',
+        'class': 'ciel-etoile ciel-personne', tabindex: modeNebuleuses ? '-1' : '0', role: 'button',
         'data-personne-id': r.personne_id,
         'aria-label': nomPersonne + (role ? ', ' + role : '') + ', chez ' +
           (parId[r.node_id].noeud.nom || '(sans nom)') +
@@ -1186,7 +1294,10 @@
       var libelleType = libelles[noeud.type] || noeud.type || '';
       var libelleStatut = statuts[noeud.statut] || noeud.statut || '';
       var g = svg('g', {
-        'class': 'ciel-etoile', tabindex: '0', role: 'button',
+        // Lot 3 : à l'ensemble, on tabule de nébuleuse en nébuleuse — 300
+        // étoiles tabulables avant le premier titre, c'était 301 Tab (relecture
+        // du 30/09). Elles le redeviennent dans la nébuleuse approchée.
+        'class': 'ciel-etoile', tabindex: modeNebuleuses ? '-1' : '0', role: 'button',
         'data-noeud-id': noeud.id,
         'aria-label': nomComplet + ', ' + libelleType +
           (e.groupe.parNebuleuse ? ', nébuleuse ' + e.groupe.label
@@ -1239,6 +1350,22 @@
         branches: branches, corolle: corolle, coeur: coeur, nom: nom, zone: zone, mag: mag
       });
     });
+    // Lot 3 : la brume se clique. Une zone invisible par nébuleuse, posée SOUS
+    // les étoiles — une étoile touchée ouvre toujours sa fiche.
+    var piecesZonesNeb = [];
+    if (modeNebuleuses) {
+      var gZonesNeb = svg('g', { 'class': 'ciel-zones-nebuleuses', 'aria-hidden': 'true' });
+      monde.groupes.forEach(function (g) {
+        var z = svg('circle', {
+          'class': 'ciel-zone-nebuleuse', 'data-nebuleuse': g.cle, fill: '#000000', 'fill-opacity': '0'
+        });
+        gZonesNeb.appendChild(z);
+        piecesZonesNeb.push({ groupe: g, el: z });
+      });
+      // SOUS les personnes rattachées aussi, pas seulement sous les étoiles :
+      // posées après elles, les zones volaient leur clic (relecture Codex, 30/09).
+      racine.insertBefore(gZonesNeb, gOrbites);
+    }
     racine.appendChild(gEtoiles);
 
     // Noms de constellation : capitales espacées, or pâle — le vocabulaire des
@@ -1247,10 +1374,23 @@
       'class': 'ciel-decor', 'aria-hidden': 'true', 'text-anchor': 'middle',
       'font-family': 'Georgia, "Times New Roman", serif', fill: '#d8bd82'
     });
+    if (modeNebuleuses) {
+      // Lot 3 : les titres des nébuleuses sont des COMMANDES, plus un décor —
+      // « je dois pouvoir cliquer sur une nébuleuse » (Paul, 30/09).
+      gNomsAmas.removeAttribute('aria-hidden');
+      gNomsAmas.setAttribute('class', 'ciel-decor ciel-titres-nebuleuses');
+    }
     var piecesAmas = monde.groupes.map(function (g) {
       var t = texteSvg({
-        'class': 'ciel-nom-amas', 'font-size': '11', 'letter-spacing': '3'
-      }, g.label.toUpperCase());
+        'class': 'ciel-nom-amas', 'font-size': '11', 'letter-spacing': modeNebuleuses ? '2' : '3'
+      }, (modeNebuleuses ? g.court : g.label).toUpperCase());
+      if (modeNebuleuses) {
+        var nb = g.noeuds.length;
+        t.setAttribute('role', 'button');
+        t.setAttribute('tabindex', '0');
+        t.setAttribute('data-nebuleuse', g.cle);
+        t.setAttribute('aria-label', 'Nébuleuse ' + g.label + ', ' + nb + (nb > 1 ? ' contacts' : ' contact'));
+      }
       gNomsAmas.appendChild(t);
       return { groupe: g, el: t };
     });
@@ -1298,7 +1438,13 @@
       // étoiles font déjà face au spectateur — et pivoter les couchait de
       // profil : mesuré, 877 px d'étendue → 0 sur NAGA, toutes les étoiles sur
       // une même verticale. La figure n'existait que pour la souris.
-      if (g && parId[g.getAttribute('data-noeud-id')] && !options.couronne
+      // ⛔ NI SUR LA GRILLE DES NÉBULEUSES (lot 3, relecture du 30/09) : viser
+      // y faisait pivoter une grille plane — au premier Tab, 39 étoiles sortaient
+      // du cadre. Le focus d'une étoile approche SA nébuleuse, sans rotation.
+      if (modeNebuleuses) {
+        var eF = g && parId[g.getAttribute('data-noeud-id')];
+        if (eF && eF.groupe !== approchee && (!g.matches || g.matches(':focus-visible'))) { approcher(eF.groupe); }
+      } else if (g && parId[g.getAttribute('data-noeud-id')] && !options.couronne
           && (!g.matches || g.matches(':focus-visible'))) {
         viser(parId[g.getAttribute('data-noeud-id')]);
       }
@@ -1307,6 +1453,8 @@
 
     function declencher(cible) {
       if (aGlisse) { return; } // un glissement n'ouvre pas une fiche
+      var neb = modeNebuleuses && cible && cible.closest ? cible.closest('[data-nebuleuse]') : null;
+      if (neb) { approcher(groupeDeCle(neb.getAttribute('data-nebuleuse'))); return; }
       var g = cible && cible.closest ? cible.closest('[data-noeud-id]') : null;
       if (g && typeof options.surClicNoeud === 'function') {
         options.surClicNoeud(g.getAttribute('data-noeud-id'));
@@ -1319,8 +1467,32 @@
     }
     racine.addEventListener('click', function (e) { declencher(e.target); });
     racine.addEventListener('keydown', function (e) {
+      // Échap ressort de la nébuleuse et rend le focus à son titre : on
+      // retrouve sa place au lieu de repartir du début.
+      if ((e.key === 'Escape' || e.key === 'Esc') && approchee) {
+        var quittee = approchee;
+        e.preventDefault();
+        e.stopPropagation();
+        toutVoir();
+        piecesAmas.forEach(function (pa) { if (pa.groupe === quittee) { pa.el.focus(); } });
+        return;
+      }
       if (e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') { return; }
-      var g = e.target.closest ? e.target.closest('[data-noeud-id], [data-personne-id]') : null;
+      var titre = modeNebuleuses && e.target.closest ? e.target.closest('[data-nebuleuse][role="button"]') : null;
+      if (titre) {
+        // Au clavier, on ENTRE dans la nébuleuse : le focus passe à sa première
+        // étoile (les étoiles précèdent les titres dans le document — sans cela,
+        // Tab irait au titre suivant au lieu d'entrer).
+        e.preventDefault();
+        var gT = groupeDeCle(titre.getAttribute('data-nebuleuse'));
+        if (approcher(gT)) {
+          for (var i = 0; i < pieces.length; i++) {
+            if (pieces[i].etoile.groupe === gT) { pieces[i].g.focus({ preventScroll: true }); break; }
+          }
+        }
+        return;
+      }
+      var g = e.target.closest ? e.target.closest('[data-noeud-id], [data-personne-id], [data-nebuleuse]') : null;
       if (g) { e.preventDefault(); declencher(e.target); }
     });
 
@@ -1377,16 +1549,194 @@
 
     function zoomer(delta) {
       zoom = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, zoom + delta));
-      cam.cibleDistance = distanceIdeale() * zoom;
+      cam.cibleDistance = consigneDistance();
       relancer();
+    }
+
+    // ---- S'APPROCHER D'UNE NÉBULEUSE (lot 3) ----------------------------------
+    // Le geste de la carte à plat, transposé : le point visé glisse au centre
+    // de la nébuleuse, la caméra s'avance jusqu'à ce qu'elle remplisse la vue,
+    // ses noms s'écrivent, les autres pâlissent. L'orientation ne change pas :
+    // on arrive de face, puis on tourne autour d'elle.
+    var approchee = null;
+    function distanceApproche(g) {
+      var cote = Math.max(160, Math.min(vbW - mUtile.gauche - mUtile.droite, vbH - mUtile.haut - mUtile.bas));
+      var r = Math.max(g.rayonAmas * 0.5, g.rayonReel || 0);
+      // Plancher : l'étoile la plus proche reste au-delà des 60 unités sous
+      // lesquelles `projeter` la tait (mesuré : « + 90 » plafonnait une petite
+      // nébuleuse à 43 % de la vue).
+      return Math.max((r * FOCALE) / (0.42 * cote), r + 65);
+    }
+    // La consigne de distance, zoom compris. Approchée, la caméra ne traverse
+    // jamais la nébuleuse, quel que soit le zoom.
+    function consigneDistance() {
+      if (!approchee) { return distanceIdeale() * zoom; }
+      return Math.max(distanceApproche(approchee) * zoom, Math.max(approchee.rayonAmas * 0.5, approchee.rayonReel || 0) + 65);
+    }
+    function groupeDeCle(cle) {
+      for (var i = 0; i < monde.groupes.length; i++) {
+        if (monde.groupes[i].cle === cle) { return monde.groupes[i]; }
+      }
+      return null;
+    }
+    function approcher(g) {
+      if (!modeNebuleuses || !g) { return false; }
+      approchee = g;
+      zoom = 1;
+      cam.cibleVise = { x: g.centre.x, y: g.centre.y, z: g.centre.z };
+      cam.cibleDistance = consigneDistance();
+      appliquerApproche();
+      relancer();
+      return true;
     }
 
     // Retour au cadrage mesuré : tout le réseau dans l'écran. On rétablit AUSSI
     // l'orientation d'ouverture — s'être approché d'une constellation s'accompagne
     // presque toujours d'avoir tourné le monde, et un recul seul laisserait Paul
     // devant un ciel cadré mais désorienté.
+    // Les titres tiennent dans leur cellule : mesurés une fois sur le texte
+    // réel, ils rapetissent ensemble si le plus long déborde (jamais sous 8).
+    var echelleTitres = null;
+    function mesurerTitres() {
+      var plusLong = 0;
+      piecesAmas.forEach(function (pa) {
+        var l = 0;
+        try { l = pa.el.getComputedTextLength(); } catch (e) { l = 0; }
+        var fs = parseFloat(pa.el.getAttribute('font-size')) || 11;
+        if (l > 0) {
+          plusLong = Math.max(plusLong, (l * 11) / fs);
+          pa.el.setAttribute('data-demi-largeur', ((l * 11) / fs / 2).toFixed(1));
+        }
+      });
+      if (!plusLong) { return null; }
+      // Sur la distance VISÉE : mesurée en plein glissement, l'échelle mentait.
+      var celluleEcran = monde.nebuleuses.pasX * (FOCALE / Math.max(1, cam.cibleDistance || cam.distance));
+      return Math.max(8 / 11, Math.min(1, (celluleEcran * 0.9) / plusLong));
+    }
+    // Un titre effacé n'est ni une étape de tabulation (relecture du 30/09 :
+    // 8 focus sur 8 hors écran pendant l'approche) ni une cible : rogné par le
+    // bord, sa part encore dans l'écran volait le clic d'une étoile (relecture
+    // Codex). `visibility` fait les deux ; le titre qui a le focus reste.
+    function effacerTitre(pa, efface) {
+      var cache = efface && document.activeElement !== pa.el;
+      var tab = cache ? '-1' : '0';
+      if (pa.el.getAttribute('tabindex') !== tab) { pa.el.setAttribute('tabindex', tab); }
+      if (cache) {
+        if (pa.el.getAttribute('visibility') !== 'hidden') { pa.el.setAttribute('visibility', 'hidden'); }
+      } else if (pa.el.hasAttribute('visibility')) { pa.el.removeAttribute('visibility'); }
+    }
+    function poserNebuleuses(projetes) {
+      piecesAmas.forEach(function (pa, i) {
+        var pr = projeter(pa.groupe.centre);
+        var zone = piecesZonesNeb[i];
+        if (!pr) {
+          // Derrière la caméra (on a tourné autour d'une nébuleuse) : effacé,
+          // donc ni tabulable ni cliquable (relecture Codex, 30/09).
+          pa.el.setAttribute('opacity', '0');
+          effacerTitre(pa, true);
+          if (zone) { zone.el.setAttribute('display', 'none'); }
+          return;
+        }
+        var dedans = approchee === pa.groupe;
+        var rayonEcran = pa.groupe.rayonAmas * pr.echelle;
+        var taille = dedans ? 13 : 11 * (echelleTitres || 1);
+        pa.el.setAttribute('x', pr.sx.toFixed(1));
+        pa.el.setAttribute('y', (pr.sy - rayonEcran - 10).toFixed(1));
+        pa.el.setAttribute('font-size', taille.toFixed(1));
+        var op = approchee ? (dedans ? 1 : 0.3) : 0.92;
+        // Approchée, une voisine coupée par le bord de l'écran se tait : un
+        // titre tronqué n'aide pas à choisir où aller.
+        if (approchee && !dedans) {
+          var demiL = (parseFloat(pa.el.getAttribute('data-demi-largeur')) || 60) * (taille / 11);
+          if (pr.sx - demiL < 0 || pr.sx + demiL > vbW || pr.sy < 16 || pr.sy > vbH) { op = 0; }
+        }
+        pa.el.setAttribute('opacity', op.toFixed(2));
+        effacerTitre(pa, op === 0);
+        if (zone) {
+          if (dedans) { zone.el.setAttribute('display', 'none'); return; }
+          zone.el.removeAttribute('display');
+          zone.el.setAttribute('cx', pr.sx.toFixed(1));
+          zone.el.setAttribute('cy', pr.sy.toFixed(1));
+          zone.el.setAttribute('r', (rayonEcran + 14).toFixed(1));
+        }
+      });
+      if (echelleTitres === null && !approchee) { echelleTitres = mesurerTitres(); }
+      if (approchee) { eviterNomsApproches(projetes); }
+    }
+    // Approchée, une nébuleuse écrit les noms de ses étoiles — sans qu'aucun en
+    // recouvre un autre : le plus relié se pose d'abord, un nom qui croiserait
+    // un nom déjà posé se tait (il reste au survol et au focus).
+    var largeurNom = Object.create(null);
+    function eviterNomsApproches(projetes) {
+      var boites = [];
+      var membres = pieces.filter(function (p) { return p.etoile.groupe === approchee; });
+      // Les étoiles de la nébuleuse sont des obstacles : un nom posé sur une
+      // autre étoile se lit mal et fait croire qu'il la désigne.
+      var coeurs = membres.map(function (p) {
+        var pr = projetes[p.etoile.noeud.id];
+        return pr ? { id: p.etoile.noeud.id, x: pr.sx, y: pr.sy, r: (pr.rayon || 4) * 1.6 } : null;
+      }).filter(Boolean);
+      var croiseBoite = function (b, c) { return b.x0 < c.x1 && c.x0 < b.x1 && b.y0 < c.y1 && c.y0 < b.y1; };
+      var croiseCoeur = function (b, c) {
+        var dx = Math.max(b.x0 - c.x, 0, c.x - b.x1), dy = Math.max(b.y0 - c.y, 0, c.y - b.y1);
+        return dx * dx + dy * dy < c.r * c.r;
+      };
+      membres.sort(function (a, b) { return (b.mag || 0) - (a.mag || 0); }).forEach(function (p) {
+        var id = p.etoile.noeud.id;
+        var pr = projetes[id];
+        if (!pr) { p.nom.classList.add('ciel-nom--tu'); return; }
+        var fs = parseFloat(p.nom.getAttribute('font-size')) || 10;
+        if (largeurNom[id] === undefined) {
+          var l = 0;
+          try { l = p.nom.getComputedTextLength(); } catch (e) { l = 0; }
+          if (l > 0) { largeurNom[id] = l / fs; }
+        }
+        var w = (largeurNom[id] || 0.55 * (p.nom.textContent || '').length) * fs;
+        var r = pr.rayon || 4;
+        var poses = [pr.sy + r * 3.6 + 9, pr.sy - r * 2.2 - 4];
+        var choisie = null;
+        for (var i = 0; i < poses.length && choisie === null; i++) {
+          var y = poses[i];
+          // La boîte du TEXTE PEINT : jambages et accents compris (mesuré — la
+          // boîte « 0,85 / 0,3 » laissait deux noms se toucher à 300 fiches).
+          var b = { x0: pr.sx - w / 2 - 3, x1: pr.sx + w / 2 + 3, y0: y - fs * 1.0, y1: y + fs * 0.35 };
+          var libre = b.x0 >= 0 && b.x1 <= vbW
+            && !boites.some(function (c) { return croiseBoite(b, c); })
+            && !coeurs.some(function (c) { return c.id !== id && croiseCoeur(b, c); });
+          if (libre) { choisie = y; boites.push(b); }
+        }
+        if (choisie !== null) { p.nom.setAttribute('y', choisie.toFixed(1)); }
+        p.nom.classList.toggle('ciel-nom--tu', choisie === null);
+      });
+    }
+    function appliquerApproche() {
+      racine.classList.toggle('ciel--approche', !!approchee);
+      pieces.forEach(function (p) {
+        var dedans = !!approchee && p.etoile.groupe === approchee;
+        p.g.classList.toggle('ciel-etoile--approchee', dedans);
+        p.g.setAttribute('tabindex', dedans ? '0' : '-1');
+        p.nom.classList.toggle('ciel-nom--approche', dedans);
+        if (!dedans) { p.nom.classList.remove('ciel-nom--tu'); }
+      });
+      // Les personnes rattachées suivent leur étoile : elles ne pâlissent pas
+      // avec les autres nébuleuses.
+      piecesOrbite.forEach(function (po) {
+        var ancre = parId[po.ancre];
+        var dedans = !!approchee && !!ancre && ancre.groupe === approchee;
+        po.g.classList.toggle('ciel-etoile--approchee', dedans);
+        po.g.setAttribute('tabindex', dedans ? '0' : '-1');
+      });
+      piecesAmas.forEach(function (pa) {
+        pa.el.classList.toggle('ciel-nom-amas--approchee', approchee === pa.groupe);
+      });
+    }
+
     function toutVoir() {
       zoom = 1;
+      var quittee = approchee;
+      approchee = null;
+      cam.cibleVise = { x: 0, y: 0, z: 0 };
+      if (quittee) { appliquerApproche(); }
       cam.cibleDistance = distanceIdeale();
       cam.cibleYaw = YAW_OUVERTURE;
       cam.ciblePitch = PITCH_OUVERTURE;
@@ -1405,6 +1755,13 @@
     // l'éclat. RIVEN garde son plancher d'origine, à la valeur près.
     var PLANCHER_OPACITE = options.couronne ? 0.82 : 0.18;
     function opaciteProfondeur(profondeur) {
+      if (modeNebuleuses) {
+        // Lot 3 : la grille fait face à la caméra, toute la vue d'ensemble est
+        // à la même profondeur — l'estompage d'hier l'aurait éteinte à 0,6.
+        // Seul ce qui passe DERRIÈRE le point visé pâlit.
+        var tN = (profondeur - cam.distance) / (2 * Math.max(80, monde.rayon));
+        return Math.max(PLANCHER_OPACITE, Math.min(1, 1 - Math.max(0, tN) * 0.9));
+      }
       var t = (profondeur - (cam.distance - rayonRef)) / (2 * rayonRef);
       return Math.max(PLANCHER_OPACITE, Math.min(1, 1.06 - t * 0.9));
     }
@@ -1460,13 +1817,24 @@
       cam.yaw += ecartAngle(cam.cibleYaw, cam.yaw) * 0.11;
       cam.pitch += (cam.ciblePitch - cam.pitch) * 0.11;
       cam.distance += (cam.cibleDistance - cam.distance) * 0.11;
+      cam.vise.x += (cam.cibleVise.x - cam.vise.x) * 0.11;
+      cam.vise.y += (cam.cibleVise.y - cam.vise.y) * 0.11;
+      cam.vise.z += (cam.cibleVise.z - cam.vise.z) * 0.11;
 
       // Dérive : seulement si Paul l'a demandée, jamais quand la main approche
       // (une cible qui bouge est une cible qu'on rate) ni sous prefers-reduced-motion.
       if (etatDerive && !saisie && !survol && !moinsDAnimation) {
         derive += 0.0009;
-        cam.cibleYaw += 0.0009;
-        cam.yaw += 0.0009;
+        if (modeNebuleuses) {
+          // Lot 3 : la grille ne tourne pas sans fin — elle se serait mise de
+          // profil (titres de 668 à 478 px en 100 s, relecture du 30/09). Elle
+          // BALANCE autour de l'orientation d'ouverture : le relief se voit,
+          // l'ordre reste lisible.
+          cam.cibleYaw = YAW_OUVERTURE + 0.3 * Math.sin(derive * 4);
+        } else {
+          cam.cibleYaw += 0.0009;
+          cam.yaw += 0.0009;
+        }
       }
 
       var projetes = Object.create(null);
@@ -1599,6 +1967,9 @@
         var op = opaciteProfondeur(pr.profondeur);
         var attenue = correspond && !correspond(piece.etoile.noeud);
         piece.g.setAttribute('opacity', (attenue ? op * 0.14 : op).toFixed(3));
+        // Lot 3 : la pâleur des AUTRES nébuleuses est posée en CSS ; la recherche
+        // y garde son contraste par cette classe (relecture Codex, 30/09).
+        if (modeNebuleuses) { piece.g.classList.toggle('ciel-etoile--attenuee', !!attenue); }
 
         var x = pr.sx, y = pr.sy;
         piece.coeur.setAttribute('cx', x); piece.coeur.setAttribute('cy', y);
@@ -1910,8 +2281,10 @@
       // (RIVEN, lui, garde les siennes : ce sont des métiers, et elles sont la
       // seule chose qui les nomme.)
       var amasMuet = cadrageSerre;
+      if (modeNebuleuses) { poserNebuleuses(projetes); }
       piecesAmas.forEach(function (pa) {
         if (amasMuet) { pa.el.setAttribute('opacity', '0'); return; }
+        if (modeNebuleuses) { return; }
         var pr = projeter(pa.groupe.centre);
         // Seule la moitié AVANT parle : sinon un nom lointain vient se poser
         // sur une étoile proche et le ciel devient illisible.
@@ -2009,7 +2382,9 @@
       imagesMesurees++;
       coutImage = imagesMesurees === 1 ? passe : coutImage + (passe - coutImage) * 0.1;
 
-      var poseeSurSaCible = Math.abs(cam.distance - cam.cibleDistance) < 0.5;
+      var poseeSurSaCible = Math.abs(cam.distance - cam.cibleDistance) < 0.5
+        && Math.abs(cam.vise.x - cam.cibleVise.x) + Math.abs(cam.vise.y - cam.cibleVise.y)
+          + Math.abs(cam.vise.z - cam.cibleVise.z) < 0.5;
       if (courant && plat && poseeSurSaCible && !saisie) {
         courant.image = null;
         return;
@@ -2025,9 +2400,30 @@
 
     var etatDerive = false;
 
+    // Lot 3 : la grille suit la forme de l'écran. Figée à l'aspect du montage,
+    // un téléphone passé en paysage laissait les amas sur 12 % de la largeur
+    // et quatre titres l'un sur l'autre (relecture du 30/09).
+    function redisposer() {
+      if (!modeNebuleuses || !(conteneur.clientWidth > 0 && conteneur.clientHeight > 120)) { return; }
+      monde.groupes.forEach(function (g) { g.rayonReel = 0; });
+      var neuf = disposerEnNebuleuses(monde.groupes, conteneur.clientWidth / conteneur.clientHeight);
+      var parIdNeuf = Object.create(null);
+      neuf.etoiles.forEach(function (e) { parIdNeuf[e.noeud.id] = e; });
+      monde.etoiles.forEach(function (e) {
+        var n = parIdNeuf[e.noeud.id];
+        if (n) { e.x = n.x; e.y = n.y; e.z = n.z; }
+      });
+      monde.nebuleuses = neuf.nebuleuses;
+      monde.rayon = neuf.rayon;
+      if (approchee) {
+        cam.cibleVise = { x: approchee.centre.x, y: approchee.centre.y, z: approchee.centre.z };
+        cam.vise = { x: approchee.centre.x, y: approchee.centre.y, z: approchee.centre.z };
+      }
+    }
     function surRedimension() {
       var avant = vbW, avantH = vbH;
       dimensionner();
+      redisposer();
       // La HAUTEUR aussi, et ce n'est pas de la prudence : elle change seule
       // dès qu'un panneau s'ouvre ou que la barre d'URL d'un téléphone se
       // rétracte. Tant que le ciel vivait dans un plateau à proportions fixes,
@@ -2042,20 +2438,53 @@
       // `meet` dans une boîte qui a bougé) : le plancher se relit.
       plancherCourant = null;
       cibleCourante = null;
-      cam.cibleDistance = distanceIdeale() * zoom;
+      cam.cibleDistance = consigneDistance();
+      echelleTitres = null;
       relancer(); // à plat, la boucle dort : un cadre qui change la réveille
     }
     window.addEventListener('resize', surRedimension);
+    // Échap ressort AUSSI quand le focus est sur le mobilier du ciel (« + »,
+    // « Tout voir ») ou sur la page — jamais depuis un champ de saisie, où
+    // Échap appartient au champ (relecture du 30/09).
+    function surEchap(e) {
+      if (!approchee || (e.key !== 'Escape' && e.key !== 'Esc') || e.defaultPrevented) { return; }
+      var a = document.activeElement;
+      if (a && racine.contains(a)) { return; } // le SVG a son propre écouteur
+      if (a && (a.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))) { return; }
+      var zone = conteneur.parentElement || conteneur;
+      if (a && a !== document.body && !zone.contains(a)) { return; }
+      var quittee = approchee;
+      e.preventDefault();
+      toutVoir();
+      piecesAmas.forEach(function (pa) { if (pa.groupe === quittee) { pa.el.focus({ preventScroll: true }); } });
+    }
+    if (modeNebuleuses) { document.addEventListener('keydown', surEchap); }
 
     courant = {
       image: null,
       surRedimension: surRedimension,
+      surEchap: modeNebuleuses ? surEchap : null,
       racine: racine,
       // Le cadre suit la largeur réelle : sans cela, l'ouverture du panneau
       // rétrécit la scène sans toucher au viewBox et la cible tactile s'effondre.
       ajusterCadre: surRedimension,
       zoomer: zoomer,
       toutVoir: toutVoir,
+      // Lot 3 : s'approcher d'une nébuleuse par sa clé (false si le ciel n'est
+      // pas rangé en nébuleuses, ou si la clé est inconnue).
+      modeNebuleuses: modeNebuleuses,
+      approcher: function (cle, reglages) {
+        var ok = approcher(groupeDeCle(cle));
+        // `immediat` : sans glissement — un re-rendu (la recherche) retrouve la
+        // nébuleuse où elle était, au lieu d'y revoler à chaque frappe.
+        if (ok && reglages && reglages.immediat) {
+          cam.vise = { x: cam.cibleVise.x, y: cam.cibleVise.y, z: cam.cibleVise.z };
+          cam.distance = cam.cibleDistance;
+        }
+        return ok;
+      },
+      orientation: function () { return { yaw: cam.yaw, pitch: cam.pitch }; },
+      approchee: function () { return approchee ? approchee.cle : null; },
       viser: function (idNoeud) { if (parId[idNoeud]) { viser(parId[idNoeud]); relancer(); } },
       // LV4 — APPROCHER un nœud : la caméra le met face à elle ET s'en
       // rapproche. `viser` seul tournait le monde sans jamais réduire la

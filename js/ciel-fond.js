@@ -406,6 +406,11 @@
         // voisin) : mesurée en pixels, deux étoiles alignées sur l'axe de vue
         // feraient s'effondrer le nuage.
         var rho = Math.min(0.30 * cote, Math.max(56, 0.62 * neb.epsilon * prB.echelle * etat.k));
+        // Lot 3 des nébuleuses de RIVEN (30/09) : quand le moteur donne le rayon
+        // RÉEL de l'amas, la brume s'y tient — ses lobes ne débordent plus sur
+        // la nébuleuse voisine. Sans ce rayon (IFULVIN, DRAGONS), rien ne change.
+        var borne = neb.rayonMonde > 0;
+        if (borne) { rho = Math.min(rho, Math.max(18, 0.8 * neb.rayonMonde * prB.echelle * etat.k)); }
         var lobes = [];
         var etoiles = [];
         neb.membres.forEach(function (m) {
@@ -417,6 +422,18 @@
             lobes.push({ px: (e.px + eB.px) / 2, py: (e.py + eB.py) / 2, r: rho * 0.9 });
           }
         });
+        if (borne && neb.membres.length > 1) {
+          // Lot 3 : un lobe central couvre TOUT l'amas. La brume ne reçoit
+          // qu'un échantillon d'étoiles (douze au plus, js/app.js) ; sans lui,
+          // à 300 fiches, des étoiles tombaient entre deux lobes, hors de leur
+          // nébuleuse (mesuré : 3 à 5 étoiles, le 30/09). × 1,35 : la
+          // perspective — au premier plan, une étoile paraît plus loin du
+          // centre que son rayon à la profondeur du centre (5 px de trop à
+          // 300 fiches avec × 1,1).
+          var prC = neb.centreMonde ? projeter(neb.centreMonde) : prB;
+          var eC = versEcran(prC) || eB;
+          lobes.push({ px: eC.px, py: eC.py, r: neb.rayonMonde * (prC || prB).echelle * etat.k * 1.35 });
+        }
         if (neb.membres.length === 1) {
           // Trois satellites à angles fixes, décalés par la graine de la
           // teinte : même nébuleuse, même forme, à chaque ouverture.
@@ -435,12 +452,17 @@
         g.globalAlpha = ECLAT_COEUR;
         var coeurs = [];
         etoiles.forEach(function (e) {
-          var rc = Math.max(24, rho * 0.42);
+          var rc = borne ? Math.max(8, rho * 0.5) : Math.max(24, rho * 0.42);
           g.drawImage(sprite, e.px - rc, e.py - rc, rc * 2, rc * 2);
           coeurs.push({ px: e.px, py: e.py });
           peints++;
         });
-        peintes.push({ teinte: neb.teinte, coeurs: coeurs, lobes: lobes.length });
+        peintes.push({
+          teinte: neb.teinte, coeurs: coeurs, lobes: lobes.length,
+          // La géométrie peinte (px CSS du canvas), pour que le harnais mesure
+          // le recouvrement de deux brumes sur ce qui a été dessiné.
+          disques: lobes.map(function (l) { return { px: l.px, py: l.py, r: l.r }; })
+        });
       });
       etat.derniereNebuleuses = peintes;
 

@@ -305,3 +305,131 @@ lot 2) :
   harnais) la laissait pointer sur une instance arrêtée, et « approcher » ne
   faisait plus rien.
 - **Six constellations → trois** dans la démo : attendu, c'est le lot 2.
+
+## 8. Lot 3 — le volume en constellations (30/09, soir)
+
+> Après la fusion de #322, sur la vue 3D en production, Paul : *« je ne veux que
+> les noms des nébuleuses, pas les étoiles ; je dois pouvoir cliquer sur une
+> nébuleuse ; les étoiles doivent être en volume de constellation dans les
+> nébuleuses. »* Sa capture montrait, mesuré sur le code : les noms des
+> contacts les plus reliés écrits en permanence (`lourdes`), les titres des
+> nébuleuses posés en décor `aria-hidden` (ni cliquables ni atteignables au
+> clavier), des amas posés sur une sphère sans tenir compte de leurs voisins
+> — d'où des brumes qui se recouvrent et deux titres l'un sur l'autre.
+
+**① Le but** — en 3D, sur RIVEN seulement (option `regrouper`) :
+- **vue d'ensemble : seuls les noms des nébuleuses sont écrits.** Aucun nom de
+  contact en permanence ; celui d'une étoile ne paraît qu'au survol ou au
+  focus, pour savoir ce que l'on vise ;
+- **chaque nébuleuse est une constellation en volume** — un amas serré, posé
+  dans SA brume — et les nébuleuses ne se recouvrent plus, ni brumes ni titres ;
+- **une nébuleuse se clique** (titre ou brume ; Entrée au clavier) : la caméra
+  s'en approche jusqu'à ce qu'elle remplisse la vue, les noms de ses étoiles
+  apparaissent, les autres pâlissent ; « Tout voir » ou Échap ramène à
+  l'ensemble. C'est le geste de la carte à plat, transposé.
+
+**② Les étapes** : 1. prototype dans le moteur et capture sur la maquette
+fictive (`design/preview-riven-nebuleuses.html?vue=volume`), montrée à Paul ;
+2. harnais ; 3. suite complète ; 4. preview, puis PR, fusion sur go.
+
+**③ Les moyens** : `js/ciel.js` (disposition des amas, titres, approche),
+`js/app.js` (rayon des brumes), la maquette, `tests/smoke-riven-nebuleuses.mjs`.
+
+**④ Les critères** — mesurés à 390 et 1 280 px, sur la démo et sur 54 et 300
+fiches fictives :
+- 0 nom de contact visible en vue d'ensemble (verrou : les étoiles, elles,
+  sont toutes dessinées) ;
+- 0 chevauchement entre titres ; 0 recouvrement entre brumes projetées, à
+  l'orientation d'ouverture ;
+- chaque étoile dans la brume de sa nébuleuse ;
+- clic sur un titre → la nébuleuse occupe au moins la moitié de la vue, ses
+  noms s'écrivent sans se chevaucher ; Échap → retour à l'ensemble ;
+- Tab atteint chaque nébuleuse, Entrée s'en approche ;
+- les neuf autres pages du moteur : harnais inchangés et verts ;
+- sabotages : noms permanents rallumés → rouge ; ancienne disposition → rouge.
+
+**⑤ Ce qu'on ne fait pas** : la carte à plat (validée), la table des
+nébuleuses, la base, les autres pages du moteur, un tracé de figures entre
+étoiles (non demandé).
+
+**⑥ Pre-mortem** — « le lot 3 a échoué : pourquoi ? »
+- *Le moteur est partagé par dix pages* → tout passe sous `regrouper` ; la
+  suite complète le prouve.
+- *Neuf titres ne tiennent pas sur 390 px* → titres soumis au même évitement
+  que les noms à plat ; verdict mesuré, jamais un seuil réglé pour passer.
+- *Un titre cliquable reste inatteignable au clavier* → `role="button"`,
+  `tabindex`, `aria-label` « Nébuleuse X, N contacts » ; verdict sur l'arbre
+  d'accessibilité.
+- *L'approche coupe l'amas au bord* → cadrage calculé sur le rayon réel de
+  l'amas, pas sur une constante.
+- *La brume (couche de fond) se décale de l'amas* → son rayon vient du même
+  monde ; verdict « chaque étoile dans sa brume ».
+
+### 8 bis. L'exécution du lot 3 — 30/09, soir
+
+**Le prototype d'abord** (capture sur la maquette fictive, puis preview sur les
+vraies fiches), avant tout harnais. Réponse de Paul : *« go, finis le lot 3 et
+fusionne »*.
+
+**Le critère des brumes, précisé à la mesure** : un lobe est un dégradé radial
+dont l'opacité tombe à 0,05 à mi-rayon et à 0,01 aux trois quarts. « Deux
+brumes ne se recouvrent pas » se juge donc sur leur partie VISIBLE : deux lobes
+de nébuleuses différentes restent à plus de la moitié de la somme de leurs
+rayons. Choix délibéré, pas un seuil réglé pour passer.
+
+**Ce que la mesure a corrigé en route** :
+- l'approche se cadre sur le rayon RÉEL de l'amas, avec un plancher
+  « rayon + 65 » : « + 90 » plafonnait une petite nébuleuse à 43 % de la vue ;
+- un lobe central de brume, posé au centre RÉEL de l'amas (le barycentre d'un
+  échantillon de douze étoiles s'en écartait d'un quart de rayon), avec une
+  marge de perspective : sans lui, à 300 fiches, 1 à 5 étoiles sortaient de
+  leur nébuleuse ;
+- la boîte d'un nom a la hauteur du texte peint, et un nom qui se tait
+  disparaît sans fondu (un fondu croisait son remplaçant) ;
+- la maquette montre son bouton avant que le moteur mesure la scène.
+
+**Relecture adverse indépendante** : dix constats sur le code, plus un sur le
+harnais. Tous sont corrigés, et chacun a son verdict. Validation de
+l'instrument : **les 18 nouveaux verdicts sont ROUGES sur le code d'avant la
+relecture et verts après.** Dans l'ordre :
+- les titres seuls se tabulent à l'ensemble (il fallait 301 Tab) ;
+- Entrée entre dans la nébuleuse, sans pivoter la grille ;
+- les titres effacés sortent de la tabulation ;
+- la taille CSS n'écrase plus celle des titres (chevauchement à 320 px) ;
+- la grille se recompose quand l'écran tourne ;
+- l'approche l'emporte sur le survol ;
+- les personnes suivent leur étoile ;
+- Échap marche depuis « + » ;
+- la recherche garde la nébuleuse approchée ;
+- la dérive balance au lieu de tourner sans fin.
+
+**Mesuré** (`tests/smoke-riven-nebuleuses.mjs`, 119 verdicts, section 6) :
+- à 320, 390 et 1 280 px, sur la démo et sur 54 et 300 fiches fictives :
+  0 nom de contact à l'ensemble, titres sans chevauchement, brumes qui ne se
+  touchent pas, chaque étoile dans sa brume ;
+- une nébuleuse approchée occupe de 52 à 85 % de la vue, et ses noms ne se
+  croisent pas et ne couvrent aucune étoile ;
+- trois sabotages du moteur font virer l'instrument : noms permanents
+  rallumés, grille resserrée, évitement coupé.
+
+**Relecture Codex sur la PR** : quatre constats, tous vérifiés sur le code puis
+corrigés, chacun avec son verdict rouge sur le moteur d'avant :
+- un titre effacé (rogné par le bord ou passé derrière la caméra) restait
+  cliquable et tabulable ;
+- les zones de clic des nébuleuses, peintes au-dessus des personnes rattachées,
+  volaient leur clic ;
+- pendant une approche, la recherche perdait son contraste chez les voisines
+  encore à l'écran (0,20 contre 0,05 désormais).
+
+**Ce qui a résisté à la relecture** :
+- les neuf autres pages du moteur : sans `regrouper`, le point visé reste à
+  l'origine, et opacité, zoom et distances sont inchangés ;
+- les titres sont des boutons nommés, sans texte lu deux fois ;
+- aucun titre invisible ne vole le clic d'une étoile ;
+- une image coûte de 9,5 à 13 ms à 300 fiches.
+
+**Limite assumée** : une fois une nébuleuse approchée, un nom qui n'a pas de
+place se tait ; il reste au survol et au focus. Mesuré au dernier passage, sur
+BTP : à 390 px, 7 noms sur 12 (54 fiches) et 4 sur 70 (300 fiches) ; à 1 280 px,
+11 sur 12 et 29 sur 70. Un très gros amas sur téléphone se lit donc étoile par
+étoile — le chiffre est donné pour qu'on le sache, pas réglé pour passer.

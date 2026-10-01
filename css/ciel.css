@@ -120,6 +120,14 @@
 .ciel-nom--demande { opacity: 0; transition: opacity .12s; }
 .ciel-etoile:hover .ciel-nom--demande,
 .ciel-etoile:focus-visible .ciel-nom--demande { opacity: .95; }
+/* Lot 3 des nébuleuses (30/09) : approchée, une nébuleuse écrit ses noms ;
+   un nom qui en croiserait un autre se tait (il revient au survol, au focus). */
+.ciel-nom--approche { opacity: .92; }
+/* Un nom qui se tait disparaît SANS fondu : en fondu, il croisait un instant
+   le nom qui prend sa place (mesuré en approche, 300 fiches, le 30/09). */
+.ciel-nom--approche.ciel-nom--tu { opacity: 0; transition: none; }
+.ciel--approche .ciel-etoile:not(.ciel-etoile--approchee) { opacity: .2; }
+.ciel--approche .ciel-liens { opacity: .35; }
 
 /* Tout ce qui est décor est TRANSPARENT AU POINTEUR : un nom de constellation
    dessiné par-dessus les étoiles intercepterait les clics destinés à une
@@ -220,12 +228,14 @@
 .ciel-nom-amas {
   fill: rgba(216, 189, 130, .62);
   font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
-  font-size: 10px;
   font-weight: 400;
-  letter-spacing: 4.2px;
   text-transform: uppercase;
   filter: drop-shadow(0 0 5px rgba(216, 189, 130, .10));
 }
+/* La taille des titres de NÉBULEUSE (lot 3) est portée par le moteur, qui les
+   fait tenir dans leur cellule : une taille CSS écrasait l'attribut (relecture
+   du 30/09 — deux titres l'un sur l'autre à 320 px). */
+.ciel-nom-amas:not([data-nebuleuse]) { font-size: 10px; letter-spacing: 4.2px; }
 .ciel-liens-noms { opacity: .78; }
 .ciel-nom-lien {
   fill: rgba(216, 189, 130, .66);
@@ -299,7 +309,7 @@
 @media (max-width: 640px) {
   .ciel-liens line { stroke-width: .62; }
   .ciel-nom { letter-spacing: .02em; stroke-width: 2.6px; }
-  .ciel-nom-amas { font-size: 9px; letter-spacing: 3px; }
+  .ciel-nom-amas:not([data-nebuleuse]) { font-size: 9px; letter-spacing: 3px; }
 }
 
 
@@ -505,3 +515,19 @@
   /* Sur un téléphone, l'aide se poserait sur le panneau, qui dit déjà quoi faire. */
   .neb-cadre ~ .ciel-aide { display: none; }
 }
+
+/* ---- Lot 3 : les titres des nébuleuses se cliquent (30/09) ---- */
+.ciel-titres-nebuleuses { pointer-events: auto; }
+.ciel-titres-nebuleuses .ciel-nom-amas { cursor: pointer; }
+.ciel-titres-nebuleuses .ciel-nom-amas:hover,
+.ciel-titres-nebuleuses .ciel-nom-amas:focus-visible { fill: #fff3d6; opacity: 1; }
+.ciel-titres-nebuleuses .ciel-nom-amas:focus { outline: none; }
+.ciel-titres-nebuleuses .ciel-nom-amas:focus-visible { text-decoration: underline; }
+.ciel-zone-nebuleuse { cursor: pointer; }
+/* L'approche l'emporte sur le survol et sur l'étoile choisie : les autres
+   nébuleuses restent pâles (relecture du 30/09 — un survol les remontait à
+   0,58). Plus spécifique que les règles de concentration et de choix. */
+.ciel-svg.ciel--approche .ciel-etoile:not(.ciel-etoile--approchee):not(:focus-visible) { opacity: .2; }
+/* …et la recherche y garde son contraste : une étoile qui ne répond pas à la
+   recherche pâlit davantage qu'une qui y répond (relecture Codex, 30/09). */
+.ciel-svg.ciel--approche .ciel-etoile.ciel-etoile--attenuee:not(.ciel-etoile--approchee):not(:focus-visible) { opacity: .05; }

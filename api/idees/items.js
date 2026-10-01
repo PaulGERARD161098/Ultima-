@@ -61,18 +61,29 @@ export default async function handler(req, res) {
       const id = resolveId(req, body);
       if (!isUuid(id)) return fail(res, 400, 'Identifiant invalide');
 
-      const { id: _ignored, ...fields } = body;
+      const conditionnelle = Object.hasOwn(body, 'essence_attendue');
+      const { id: _ignored, essence_attendue, ...fields } = body;
+      if (conditionnelle && (!Object.hasOwn(fields, 'essence') ||
+          !(essence_attendue === null ||
+            (typeof essence_attendue === 'string' && essence_attendue.length <= 2000)))) {
+        return fail(res, 400, 'Essence attendue invalide');
+      }
       const { value, error } = validateIdee(fields, 'update');
       if (error) return fail(res, 400, error);
 
-      const { data, error: dbError } = await client
+      let mutation = client
         .from('idees')
         .update(value)
-        .eq('id', id)
-        .select()
-        .maybeSingle();
+        .eq('id', id);
+      // Comparaison et écriture dans la même requête ; aucune lecture puis écriture.
+      // Le client authentifié et les règles RLS restent applicables.
+      if (conditionnelle) mutation = essence_attendue === null
+        ? mutation.is('essence', null)
+        : mutation.eq('essence', essence_attendue);
+      const { data, error: dbError } = await mutation.select().maybeSingle();
       if (dbError) return dbFail(res, dbError, 'idees:patch');
-      if (!data) return fail(res, 404, 'Idée introuvable');
+      if (!data) return fail(res, conditionnelle ? 409 : 404,
+        conditionnelle ? 'Idée modifiée ou indisponible : rechargez avant de réessayer' : 'Idée introuvable');
       return ok(res, data);
     }
 

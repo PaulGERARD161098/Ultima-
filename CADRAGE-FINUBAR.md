@@ -226,3 +226,21 @@ en silence et pour toujours. On lit la partie `hour`, jamais du texte formaté.
 - **`ripair`** — le grain de ce dépôt pose une question à Paul plutôt qu'un
   état : dernier commit le 12/07/2026, le jour même de la décision « 2 logiciels,
   2 repos ». Archiver, ou nommer ce qu'il porte encore.
+
+
+## Mise à jour du 29/09/2026 — repli GitHub préparé
+
+Le périmètre courant est `finubar/depots.json` (dix entrées à cette date), et
+non le nombre historique du titre. La conservation d'un grain antérieur daté
+existait déjà ; elle est réutilisée. `node finubar/collecter.mjs --github` prépare
+un repli explicite lorsque le dépôt manque sur disque. GitHub n'est pas appelé
+sans cette option. Ne pas lancer cette commande dans le bac à sable des tests :
+la collecte réelle nécessite un accès réseau de lecture autorisé distinct.
+
+La note est lue à un commit épinglé ; le SHA du blob est recalculé. Au plus quatre
+GET par dépôt, deux tentatives par GET, cinq secondes par tentative par défaut.
+Le refus d'accès, l'absence vérifiée, l'erreur et l'illisibilité sont distincts.
+Les dates de la note et de la mesure sont conservées ; une reprise ne les rajeunit
+pas. Ce repli ne mesure ni la dérive Git, ni les PR, ni la CI, ni les permissions.
+Le jeton éventuel reste dans `FINUBAR_GITHUB_TOKEN`, jamais dans les agrégats.
+Activation réelle et réception non effectuées ; voir le document de reprise LV1.

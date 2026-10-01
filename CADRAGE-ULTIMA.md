@@ -8,6 +8,27 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🤖 **SESSION 2026-09-30 (soir, GO SOLO) — B1 ④ : LÉO AGIT DANS L'ANNEAU VERT.**
+  ✅ Un vert s'exécute sans clic derrière une trace (`POST /api/leo/ecritures` :
+  garde → plafond → `tentee` → acte → issue) ; tout refus du journal retombe sur
+  la carte. ✅ Revue adversariale : S1 bloquant (cible par inclusion non nommée)
+  + S2–S6 corrigés, chacun éprouvé en le retirant. ✅ Migration
+  `20260930190000_leo_ecritures_durcissement` APPLIQUÉE (corrective, 0 ligne) et
+  éprouvée en rôle `authenticated`. ❌ La prémisse de « garde les deux avec la
+  clé » est fausse côté produit : `leo_operations` n'est pas inscriptible
+  (SELECT seul, aucune création de mission). ⏳ Paul : RPC dédiée (gate).
+  ⏭ ⑤ le défaire : cadré (§14), bloqué sur deux choix de Paul (§14.2). Détail :
+  `CADRAGE-2026-09-22-leo-pilote-tout.md` §13-§14.
+- ✴️ **SESSION 2026-09-30 (soir) — LOT 3 : LE VOLUME EN CONSTELLATIONS (PR #324, fusion squash).**
+  Paul, sur la 3D en production : « je ne veux que les noms des nébuleuses, pas les
+  étoiles ; je dois pouvoir cliquer sur une nébuleuse ; les étoiles en volume de
+  constellation dans les nébuleuses ». Sous `regrouper` seulement : amas en boules
+  sur une grille face à la caméra, à l'aspect réel de l'écran ; aucun nom de contact
+  à l'ensemble ; titres cliquables (clic, Entrée), la caméra s'approche et tourne
+  autour de la nébuleuse, Échap revient. Relecture adverse : 10 constats corrigés,
+  18 verdicts validés rouges sur le code d'avant ; relecture Codex : 4 constats corrigés.
+  `smoke-riven-nebuleuses` 119/119.
+  Détail : `CADRAGE-RIVEN-NEBULEUSES.md` §8 bis.
 - 🧭 **SESSION 2026-09-30 (nuit) — B2, LA DOUBLE MARGE, CADRÉE JUSQU'À LA PREMIÈRE LIGNE (branche `claude/bold-ride-lz23qg`, PR de séance en brouillon ; RenoDevis idem ; aucune fusion).**
   ✅ Reprise à froid depuis la branche de la chaîne ; l'état du §2 remesuré à
   18:07 puis 18:58 UTC, aucune ligne à corriger ; les gestes A présentés avec
