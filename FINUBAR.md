@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-09-30",
-    "quoi": "Chaîne Rénoboost : route posée (PLAN-2026-09-30-chaine-A-Z.md), relue par Léo, leçons v56 ; #321 fusionnée en mode merge, après #326.",
-    "commit": "e14f470df5c5ffde290347b10ec109e94f20b770"
+    "quoi": "RIVEN lot 3 : en 3D, 9 constellations cliquables, seuls les noms des nébuleuses (#324). Avant : chaîne Rénoboost routée (#321). Squash : le seul commit après celui-ci, c'est elle.",
+    "commit": "e4622988800d406d9214f90a6db813c3e8afddd4"
   },
   "prochaine_action": "④ — l'exécution : `ouvrirTrace()`, journal 'tentee' AVANT l'acte, plafond, issue après. Frontière arbitrée — cadrage §12.8 quater.",
   "bloque_par": [
@@ -136,6 +136,16 @@
 > Les séances, de la plus récente à la plus ancienne. Une entrée = une date, un
 > fait vérifié, une décision. La mémoire longue ; le bloc ci-dessus est la mémoire
 > courte, et c'est lui qui est lu automatiquement.
+
+### 2026-09-30 (soir) — lot 3 : le volume en constellations
+
+#322 fusionnée (`ea93065`), production READY, CI de `main` verte. Sur la 3D en
+production, Paul : seuls les noms des nébuleuses, une nébuleuse cliquable, les
+étoiles en constellations dans leurs nébuleuses. Fait en #324 : grille de
+boules face à la caméra, titres-boutons, approche avec point visé, Échap. 119
+verdicts, dont 25 validés rouges sur le code d'avant les relectures. Fusion en
+squash : le grain pointe `e462298` (tête de `main` après #321). Détail : **`CADRAGE-RIVEN-NEBULEUSES.md`
+§8 bis**. Le jalon B1 ④ reste la prochaine action.
 
 ### 2026-09-30 — RIVEN en nébuleuses, à plat et en 3D
 

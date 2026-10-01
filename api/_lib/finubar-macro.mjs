@@ -46,8 +46,8 @@ export default {
       },
       "recits": [],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "2c51656",
         "tete_le": "2026-09-30T20:06:23+02:00",
@@ -132,8 +132,8 @@ export default {
       },
       "recits": [],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "bb1e25c",
         "tete_le": "2026-09-30T20:28:43+02:00",
@@ -161,8 +161,8 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-09-30",
-          "quoi": "Chaîne Rénoboost : route posée (PLAN-2026-09-30-chaine-A-Z.md), relue par Léo, leçons v56 ; #321 fusionnée en mode merge, après #326.",
-          "commit": "e14f470df5c5ffde290347b10ec109e94f20b770"
+          "quoi": "RIVEN lot 3 : en 3D, 9 constellations cliquables, seuls les noms des nébuleuses (#324). Avant : chaîne Rénoboost routée (#321). Squash : le seul commit après celui-ci, c'est elle.",
+          "commit": "e4622988800d406d9214f90a6db813c3e8afddd4"
         },
         "prochaine_action": "④ — l'exécution : `ouvrirTrace()`, journal 'tentee' AVANT l'acte, plafond, issue après. Frontière arbitrée — cadrage §12.8 quater.",
         "bloque_par": [
@@ -221,9 +221,9 @@ export default {
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "9e6fc1d",
-        "tete_le": "2026-09-30T18:32:13+00:00",
-        "commits_depuis": 5,
+        "tete": "39f58d4",
+        "tete_le": "2026-09-30T19:28:31+00:00",
+        "commits_depuis": 9,
         "commit_inconnu": false
       },
       "mesure_le": "2026-09-30",
@@ -273,8 +273,8 @@ export default {
         "bloque_par[]"
       ],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "bd99987",
         "tete_le": "2026-09-30T20:06:48+02:00",
@@ -316,8 +316,8 @@ export default {
       },
       "recits": [],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "e866777",
         "tete_le": "2026-09-30T20:06:55+02:00",
@@ -369,8 +369,8 @@ export default {
       },
       "recits": [],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "309859e",
         "tete_le": "2026-09-30T20:06:17+02:00",
@@ -463,8 +463,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": null,
         "tete_le": null,
@@ -515,8 +515,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "3bacd16",
         "tete_le": "2026-09-30T20:06:36+02:00",
@@ -603,8 +603,8 @@ export default {
       },
       "recits": [],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "c5f1f89",
         "tete_le": "2026-09-30T20:06:42+02:00",
@@ -666,7 +666,7 @@ export default {
     "lisibles": 10,
     "illisibles": 0,
     "hors_seance": 0,
-    "repris": 1,
+    "repris": 9,
     "en_cours": 8,
     "en_attente_de_paul": 2,
     "au_repos": 0,
@@ -886,7 +886,7 @@ export default {
       },
       {
         "projet": "Ultima",
-        "dit": "a avancé de 5 commit(s) depuis sa dernière note",
+        "dit": "a avancé de 9 commit(s) depuis sa dernière note",
         "pourquoi": "derive"
       }
     ],

@@ -8,6 +8,16 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- ✴️ **SESSION 2026-09-30 (soir) — LOT 3 : LE VOLUME EN CONSTELLATIONS (PR #324, fusion squash).**
+  Paul, sur la 3D en production : « je ne veux que les noms des nébuleuses, pas les
+  étoiles ; je dois pouvoir cliquer sur une nébuleuse ; les étoiles en volume de
+  constellation dans les nébuleuses ». Sous `regrouper` seulement : amas en boules
+  sur une grille face à la caméra, à l'aspect réel de l'écran ; aucun nom de contact
+  à l'ensemble ; titres cliquables (clic, Entrée), la caméra s'approche et tourne
+  autour de la nébuleuse, Échap revient. Relecture adverse : 10 constats corrigés,
+  18 verdicts validés rouges sur le code d'avant ; relecture Codex : 4 constats corrigés.
+  `smoke-riven-nebuleuses` 119/119.
+  Détail : `CADRAGE-RIVEN-NEBULEUSES.md` §8 bis.
 - 🧭 **SESSION 2026-09-30 (soir) — LA CHAÎNE RÉNOBOOST, CADRÉE ET ROUTÉE (PR #321 · RenoBoost #563 · RenoDevis #214, fusionnées en mode merge sur le go de Paul en fin de séance).**
   ✅ Route posée : `PLAN-2026-09-30-chaine-A-Z.md` — dix maillons, familles
   A → B → C → N → D, E en réserve, l'état vivant au §2, la reprise au §0.

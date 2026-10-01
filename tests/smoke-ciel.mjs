@@ -134,13 +134,23 @@ await page.locator('#bouton-fermer-panneau').click();
 await page.waitForTimeout(300);
 
 // ---------- 6. Clavier : focus, visée, et Entrée ----------
-verdicts.etoileFocusable = await page.evaluate(() => {
+// ⚠️ DEPUIS LE 2026-09-30 (lot 3 des nébuleuses), RIVEN range son volume en
+// nébuleuses : à l'ensemble on tabule de TITRE en titre, et le focus d'une
+// étoile APPROCHE sa nébuleuse sans faire pivoter la grille — viser la couchait
+// (payé à la relecture du lot 3 : 39 étoiles hors cadre au premier Tab).
+// Le contrat d'origine — le focus RAMÈNE l'étoile face à la caméra — reste
+// celui du moteur CLASSIQUE (les autres pages, RIVEN sans sa table) : il est
+// rejoué tel quel en 6 bis, sur ce moteur-là. C'est lui qui garde le correctif
+// vertical de la visée (#322) ; le supprimer ici l'aurait laissé sans témoin.
+const ouverture = await page.evaluate(() => {
   const e = document.querySelector('#ciel-scene g.ciel-etoile[data-noeud-id]');
-  return e.getAttribute('tabindex') === '0' && e.getAttribute('role') === 'button';
+  const t = document.querySelector('#ciel-scene .ciel-nom-amas[data-nebuleuse]');
+  return { etoile: e.getAttribute('tabindex'), titre: t && t.getAttribute('tabindex'), role: t && t.getAttribute('role') };
 });
+verdicts.aLEnsembleOnTabuleDeNebuleuseEnNebuleuse = ouverture.etoile === '-1' && ouverture.titre === '0' && ouverture.role === 'button';
 
 // L'étoile la PLUS excentrée : c'est elle qui prouve que le focus la ramène.
-const excentree = await page.evaluate(() => {
+const mesurerExcentree = () => page.evaluate(() => {
   const svg = document.querySelector('#ciel-scene .ciel-svg');
   const vb = svg.getAttribute('viewBox').split(' ').map(Number);
   const centre = { x: vb[2] / 2, y: vb[3] / 2 };
@@ -154,6 +164,18 @@ const excentree = await page.evaluate(() => {
   });
   return { id: pire.getAttribute('data-noeud-id'), avant: dist(pire) };
 });
+const mesurerApresVisee = (id) => page.evaluate((i) => {
+  const svg = document.querySelector('#ciel-scene .ciel-svg');
+  const vb = svg.getAttribute('viewBox').split(' ').map(Number);
+  const g = svg.querySelector(`g.ciel-etoile[data-noeud-id="${i}"]`);
+  const z = g.querySelector('.ciel-zone');
+  const x = +z.getAttribute('cx'), y = +z.getAttribute('cy');
+  return {
+    dist: Math.hypot(x - vb[2] / 2, y - vb[3] / 2), dansLeCadre: x >= 0 && x <= vb[2] && y >= 0 && y <= vb[3],
+    approchee: g.classList.contains('ciel-etoile--approchee'), tabindex: g.getAttribute('tabindex'), role: g.getAttribute('role')
+  };
+}, id);
+const excentree = await mesurerExcentree();
 // focus() de Playwright, et non element.focus() dans la page : sur un <g> SVG
 // le focus programmatique ne prend pas toujours.
 // ⚠️ ET LE FOCUS DOIT VENIR DU CLAVIER (2026-09-25) : le moteur ne vise plus
@@ -167,21 +189,126 @@ await page.locator(`g.ciel-etoile[data-noeud-id="${excentree.id}"]`).focus();
 verdicts.focusEffectif = await page.evaluate((id) =>
   document.activeElement && document.activeElement.getAttribute('data-noeud-id') === id,
 excentree.id);
-await page.waitForTimeout(1300);
-const apresVisee = await page.evaluate((id) => {
-  const svg = document.querySelector('#ciel-scene .ciel-svg');
-  const vb = svg.getAttribute('viewBox').split(' ').map(Number);
-  const z = svg.querySelector(`g.ciel-etoile[data-noeud-id="${id}"] .ciel-zone`);
-  return Math.hypot(+z.getAttribute('cx') - vb[2] / 2, +z.getAttribute('cy') - vb[3] / 2);
-}, excentree.id);
-// Ramenée à moins de 60 % de son écart d'origine : le monde a bien pivoté.
-verdicts.focusRameneLEtoileFaceALaCamera = apresVisee < excentree.avant * 0.6;
+await page.waitForTimeout(1500);
+const apresFocus = await mesurerApresVisee(excentree.id);
+// Le focus approche SA nébuleuse : l'étoile entre dans la vue, plus près du
+// centre, et devient tabulable avec ses voisines.
+verdicts.focusApprocheSaNebuleuse = apresFocus.approchee && apresFocus.dansLeCadre && apresFocus.dist < excentree.avant;
+verdicts.etoileFocusableDansSaNebuleuse = apresFocus.tabindex === '0' && apresFocus.role === 'button';
 
 await page.keyboard.press('Enter');
 await page.waitForTimeout(400);
 verdicts.entreeOuvreLaFiche = !(await page.locator('#panneau').isHidden());
 await page.locator('#bouton-fermer-panneau').click();
 await page.waitForTimeout(300);
+await page.locator('#ciel-tout-voir').click();
+await page.waitForTimeout(1200);
+
+// ---------- 6 bis. Le moteur CLASSIQUE : le contrat d'origine, intact ----------
+// RIVEN sans sa table des nébuleuses (script bloqué) : app.js ne passe ni
+// `regrouper` ni brumes, et le moteur retrouve sa sphère. On y rejoue les
+// quatre verdicts d'origine, mot pour mot.
+{
+  const classique = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  classique.on('pageerror', (e) => erreurs.push('classique pageerror: ' + e.message));
+  await classique.addInitScript(() => {
+    try { window.sessionStorage.setItem('ultima-leo-accueil-vu', '1'); } catch (e) {}
+    try { localStorage.setItem('ultima-ciel-vue', 'volume'); } catch (e) {}
+    Object.defineProperty(window, 'ULTIMA_CONFIG', { value: { SUPABASE_URL: '', SUPABASE_ANON_KEY: '' }, writable: false });
+  });
+  await classique.route('**/js/nebuleuses-riven.js', (r) => r.fulfill({ status: 200, contentType: 'application/javascript', body: '' }));
+  await classique.goto('http://127.0.0.1:8123/riven.html', { waitUntil: 'load', timeout: 20000 });
+  await classique.waitForTimeout(1200);
+  const sansTable = await classique.evaluate(() => !window.UltimaNebuleusesRiven && !!document.querySelector('#ciel-scene .ciel-svg')
+    && !document.querySelector('#ciel-scene .ciel-nom-amas[data-nebuleuse]'));
+  verdicts.classique_sphereSansTable = sansTable;
+  verdicts.etoileFocusable = await classique.evaluate(() => {
+    const e = document.querySelector('#ciel-scene g.ciel-etoile[data-noeud-id]');
+    return e.getAttribute('tabindex') === '0' && e.getAttribute('role') === 'button';
+  });
+  const exc = await classique.evaluate(() => {
+    const svg = document.querySelector('#ciel-scene .ciel-svg');
+    const vb = svg.getAttribute('viewBox').split(' ').map(Number);
+    const dist = (el) => { const z = el.querySelector('.ciel-zone'); return Math.hypot(+z.getAttribute('cx') - vb[2] / 2, +z.getAttribute('cy') - vb[3] / 2); };
+    let pire = null;
+    document.querySelectorAll('#ciel-scene g.ciel-etoile[data-noeud-id]').forEach((e) => { if (!pire || dist(e) > dist(pire)) { pire = e; } });
+    return { id: pire.getAttribute('data-noeud-id'), avant: dist(pire) };
+  });
+  await classique.keyboard.press('Shift');
+  await classique.locator(`g.ciel-etoile[data-noeud-id="${exc.id}"]`).focus();
+  verdicts.classique_focusEffectif = await classique.evaluate((id) =>
+    document.activeElement && document.activeElement.getAttribute('data-noeud-id') === id, exc.id);
+  await classique.waitForTimeout(1300);
+  const apres = await classique.evaluate((id) => {
+    const svg = document.querySelector('#ciel-scene .ciel-svg');
+    const vb = svg.getAttribute('viewBox').split(' ').map(Number);
+    const z = svg.querySelector(`g.ciel-etoile[data-noeud-id="${id}"] .ciel-zone`);
+    return Math.hypot(+z.getAttribute('cx') - vb[2] / 2, +z.getAttribute('cy') - vb[3] / 2);
+  }, exc.id);
+  // Ramenée à moins de 60 % de son écart d'origine : le monde a bien pivoté.
+  verdicts.focusRameneLEtoileFaceALaCamera = apres < exc.avant * 0.6;
+  await classique.keyboard.press('Enter');
+  await classique.waitForTimeout(400);
+  verdicts.classique_entreeOuvreLaFiche = !(await classique.locator('#panneau').isHidden());
+  await classique.close();
+}
+
+// ---------- 6 ter. Le témoin du correctif VERTICAL de la visée (#322) ----------
+// L'ancienne formule (`atan2(p.y, z1 + distance)`) ne sous-corrigeait QUE la
+// hauteur : une étoile excentrée à l'horizontale passait le verdict ci-dessus
+// avec ou sans correctif (mesuré le 30/09 : 146 → 6 avec l'ancienne). Le
+// témoin vise donc l'étoile la plus HAUTE ou la plus BASSE de l'écran, et le
+// même geste est rejoué sur un moteur saboté qui porte l'ancienne formule :
+// l'instrument doit voir la différence.
+async function viseeVerticale(saboter) {
+  const p = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await p.addInitScript(() => {
+    try { window.sessionStorage.setItem('ultima-leo-accueil-vu', '1'); } catch (e) {}
+    try { localStorage.setItem('ultima-ciel-vue', 'volume'); } catch (e) {}
+    Object.defineProperty(window, 'ULTIMA_CONFIG', { value: { SUPABASE_URL: '', SUPABASE_ANON_KEY: '' }, writable: false });
+  });
+  await p.route('**/js/nebuleuses-riven.js', (r) => r.fulfill({ status: 200, contentType: 'application/javascript', body: '' }));
+  let applique = !saboter;
+  if (saboter) {
+    await p.route('**/js/ciel.js', async (route) => {
+      const r = await route.fetch();
+      const t = await r.text();
+      const sabote = t.replace('Math.max(-1.15, Math.min(1.15, Math.atan2(p.y, z1)))', 'Math.atan2(p.y, z1 + cam.distance)');
+      applique = sabote !== t;
+      await route.fulfill({ response: r, body: sabote, headers: { ...r.headers(), 'content-type': 'application/javascript' } });
+    });
+  }
+  await p.goto('http://127.0.0.1:8123/riven.html', { waitUntil: 'load', timeout: 20000 });
+  await p.waitForTimeout(1200);
+  const cible = await p.evaluate(() => {
+    const svg = document.querySelector('#ciel-scene .ciel-svg');
+    const vb = svg.getAttribute('viewBox').split(' ').map(Number);
+    let pire = null, dy = -1;
+    document.querySelectorAll('#ciel-scene g.ciel-etoile[data-noeud-id]').forEach((e) => {
+      const d = Math.abs(+e.querySelector('.ciel-zone').getAttribute('cy') - vb[3] / 2);
+      if (d > dy) { dy = d; pire = e; }
+    });
+    return { id: pire.getAttribute('data-noeud-id'), dy };
+  });
+  await p.evaluate((id) => window.UltimaCiel.courant().viser(id), cible.id);
+  await p.waitForTimeout(1500);
+  const apres = await p.evaluate((id) => {
+    const svg = document.querySelector('#ciel-scene .ciel-svg');
+    const vb = svg.getAttribute('viewBox').split(' ').map(Number);
+    return Math.abs(+svg.querySelector(`g.ciel-etoile[data-noeud-id="${id}"] .ciel-zone`).getAttribute('cy') - vb[3] / 2);
+  }, cible.id);
+  await p.close();
+  return { applique, avant: +cible.dy.toFixed(1), apres: +apres.toFixed(1) };
+}
+const vv = await viseeVerticale(false);
+const vvSabote = await viseeVerticale(true);
+console.log('Visée verticale :', JSON.stringify({ corrige: vv, ancienneFormule: vvSabote }));
+// La frontière, posée entre deux mesures CONNUES et non réglée pour passer :
+// corrigée, l'étoile garde 34 % de son écart (la borne de 1,15 rad du
+// glissement retient le reste — 127 → 46 mesuré pour #322) ; avec l'ancienne
+// formule, 92 %. La moitié les sépare nettement.
+verdicts.classique_viseeRecentreAussiALaVerticale = vv.avant > 40 && vv.apres < vv.avant * 0.5;
+verdicts.sabotage_lInstrumentVoitLAncienneVisee = vvSabote.applique && vvSabote.apres >= vvSabote.avant * 0.5;
 
 // ---------- Recherche : mise en évidence, jamais réduction ----------
 await page.fill('#ciel-recherche', 'plomberie');

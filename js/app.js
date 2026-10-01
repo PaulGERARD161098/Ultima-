@@ -1885,7 +1885,9 @@
   // qu'une étoile soit dans la même nébuleuse dans les deux vues.
   function regrouperParNebuleuse(noeud) {
     var n = window.UltimaNebuleusesRiven.nebuleuseDe(noeud && noeud.secteur_activite);
-    return { cle: n.cle === window.UltimaNebuleusesRiven.CLE_A_CLASSER ? window.UltimaCiel.CLE_A_CLASSER : 'neb-' + n.cle, label: n.nom };
+    // `court` : le titre écrit dans le volume (lot 3) — le nom entier reste
+    // celui que lit le lecteur d'écran.
+    return { cle: n.cle === window.UltimaNebuleusesRiven.CLE_A_CLASSER ? window.UltimaCiel.CLE_A_CLASSER : 'neb-' + n.cle, label: n.nom, court: n.court };
   }
   // Une brume n'a pas besoin de toutes ses étoiles pour se poser : la couche de
   // fond peint environ trois lobes PAR ÉTOILE et PAR IMAGE. Au-delà de douze,
@@ -1927,6 +1929,10 @@
     var outils = $('#ciel-outils');
     var boutonAjouter = $('#ciel-ajouter');
     var message = $('#ciel-message');
+    // La nébuleuse approchée en volume survit au re-rendu (une frappe dans la
+    // recherche, une fiche enregistrée) : lue AVANT d'arrêter le moteur.
+    var volumeAvant = window.UltimaCiel && window.UltimaCiel.courant();
+    var nebuleuseAvant = volumeAvant && typeof volumeAvant.approchee === 'function' ? volumeAvant.approchee() : null;
     if (window.UltimaCiel) { window.UltimaCiel.arreter(); }
     if (window.UltimaNebuleuses) { window.UltimaNebuleuses.arreter(); }
     scene.textContent = '';
@@ -2004,6 +2010,9 @@
         // Repli seulement : sans la carte des nébuleuses, le volume se fige.
         plat: mouvementReduit()
       });
+      if (nebuleuseAvant && instance && typeof instance.approcher === 'function') {
+        instance.approcher(nebuleuseAvant, { immediat: true });
+      }
     }
 
     // L'aide de navigation revit à chaque rendu, et s'efface au premier geste.
