@@ -34,3 +34,4 @@ design/
 .claude/
 .github/
 .env.example
+/leo/

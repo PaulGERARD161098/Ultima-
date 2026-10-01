@@ -163,7 +163,7 @@ verdicts.laCleEstLaMeme = t.ok === true &&
 // fabriquerait un jour une clé que la base refuse, et l'opération serait
 // écrite sans journal : la divergence même qu'on évite.
 const releve = readFileSync(new URL(
-  '../supabase/migrations/20260929125105_leo_lv1_registre_transactionnel.RELEVE.sql',
+  '../supabase/releves/20260929125105_leo_lv1_registre_transactionnel.RELEVE.sql',
   import.meta.url), 'utf8');
 const motifSql = (releve.match(/operation_id ~ '([^']+)'/) || [, ''])[1];
 // Verrou de non-vacuité : sur une regex qui ne matche pas, « les deux

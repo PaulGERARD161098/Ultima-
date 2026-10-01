@@ -30,6 +30,9 @@
 
   var CLE_SESSION = 'ultima-leo-accueil-vu'; // RIVEN — clé historique, gardée
   var SVG_NS = 'http://www.w3.org/2000/svg';
+  // B1 ④ : forme d'une trace et d'une cible de journal (mêmes motifs que
+  // api/_lib/leo-journal.js — le serveur re-vérifie, ceci n'est qu'un tri).
+  var UUID_MOTIF = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
   // ---------- Fonctions PURES (testables via window.UltimaLeo) ----------
 
@@ -263,6 +266,33 @@
     return departager(inclus);
   }
 
+  // Écho d'issue renvoyé au MODÈLE : borné. Une page du journal intime va
+  // jusqu'à 20 000 caractères ; son écho entier dépassait MAX_MESSAGE_CHARS
+  // (4 000, api/_lib/leo.js) et faisait refuser le tour suivant (400) jusqu'au
+  // rechargement — sur la carte depuis L2b, et désormais sans clic (B1 ④).
+  // La bulle montre TOUT à Paul ; le modèle n'a besoin que de savoir ce qui a
+  // été fait. Relevé par la revue du 30/09. PUR.
+  var MAX_ECHO_ISSUE = 1000;
+  function echoBorne(message) {
+    var texte = String(message || '');
+    return texte.length <= MAX_ECHO_ISSUE ? texte : texte.slice(0, MAX_ECHO_ISSUE - 2) + '…]';
+  }
+
+  // S1 (revue du 30/09) : sans carte, plus rien ne NOMME la cible résolue
+  // avant l'acte. Une résolution par INCLUSION (« Marc » → « Jean-Marc
+  // Petit ») exige donc l'œil de Paul : seule l'égalité exacte (modulo casse
+  // et accents) s'exécute sans clic. Une proposition sans *_ref (création)
+  // n'a pas de cible à confondre. PUR.
+  function cibleExacte(proposition, plan) {
+    var args = (proposition && proposition.args) || {};
+    var refs = Object.keys(args).filter(function (cle) { return /_ref$/.test(cle); });
+    if (refs.length === 0) { return true; }
+    if (!plan || typeof plan.cible !== 'string' || !plan.cible) { return false; }
+    return refs.every(function (cle) {
+      return normaliserRef(args[cle]) === normaliserRef(plan.cible);
+    });
+  }
+
   // Garde-fou client : une proposition serveur doit porter outil (string),
   // reformulation (string non vide) et args (objet de strings). Toute forme
   // douteuse est IGNORÉE (fail-safe : jamais de carte douteuse).
@@ -274,6 +304,17 @@
     return Object.keys(p.args).every(function (cle) {
       return typeof p.args[cle] === 'string';
     });
+  }
+
+  function messageEchecEcriture(resultat) {
+    if (resultat && resultat.statut === 409) {
+      return '[Action en conflit avec les données existantes. Rechargez la cible et réconciliez les ajouts avant une nouvelle confirmation.]';
+    }
+    if (resultat && resultat.statut >= 400 && resultat.statut < 500 &&
+        resultat.corps && resultat.corps.ok === false) {
+      return '[Action refusée par le serveur. Vérifiez les données et les droits avant une nouvelle proposition.]';
+    }
+    return '[Résultat de l’action inconnu : elle a peut-être été enregistrée. Vérifiez la cible avant toute nouvelle tentative ; si le doute persiste, ne rejouez pas l’action.]';
   }
 
   // Gabarits d'exécution (L2b) : traduit une proposition confirmable en appel
@@ -312,12 +353,16 @@
       if (typeof args.ajout !== 'string' || !args.ajout) { return { ok: false, raison: 'invalide' }; }
       // ENRICHIR = ajouter à l'essence existante, jamais l'écraser (le
       // catalogue L2b n'a aucun outil destructeur, l'écrasement en serait un).
-      var existante = typeof idee.candidat.essence === 'string' ? idee.candidat.essence.trim() : '';
+      var attendue = idee.candidat.essence;
+      if (attendue !== null && typeof attendue !== 'string') {
+        return { ok: false, raison: 'invalide' };
+      }
+      var existante = attendue === null ? '' : attendue;
       var essence = existante ? existante + '\n\n' + args.ajout : args.ajout;
       if (essence.length > 2000) { return { ok: false, raison: 'invalide' }; }
       return {
         ok: true, url: '/api/idees/items', methode: 'PATCH',
-        corps: { id: idee.candidat.id, essence: essence },
+        corps: { id: idee.candidat.id, essence: essence, essence_attendue: attendue },
         cible: idee.candidat.libelle
       };
     }
@@ -871,7 +916,7 @@
       // Ferme la carte et consigne l'issue (bulle sous aria-live + historique).
       function clore(message) {
         carte.remove();
-        historique.push({ role: 'user', content: message });
+        historique.push({ role: 'user', content: echoBorne(message) });
         bulle('issue', message);
         rearmer();
       }
@@ -904,22 +949,23 @@
             body: JSON.stringify(plan.corps)
           }).then(function (reponse) {
             return reponse.json().then(function (corps) {
-              return { httpOk: reponse.ok, corps: corps };
+              return { httpOk: reponse.ok, statut: reponse.status, corps: corps };
             }, function () {
               return { httpOk: false, corps: null };
             });
           }).then(function (resultat) {
             if (resultat.httpOk && resultat.corps && resultat.corps.ok === true) {
+              apresEcriture(proposition, plan, resultat.corps.data);
               if (typeof voix.notifier === 'function') {
                 try { voix.notifier('Action de Léo exécutée.'); } catch (e) { /* fail-soft */ }
               }
               clore('[Action exécutée : ' + proposition.reformulation + ']');
             } else {
-              // Erreur générique : jamais de détail technique dans le fil.
-              clore('[Action échouée, à reprendre]');
+              // Un refus explicite se distingue d'une réponse perdue après écriture.
+              clore(messageEchecEcriture(resultat));
             }
           }, function () {
-            clore('[Action échouée, à reprendre]');
+            clore(messageEchecEcriture(null));
           });
         });
         boutons.appendChild(confirmer);
@@ -929,6 +975,129 @@
       dialogue.appendChild(carte);
       dialogue.scrollTop = dialogue.scrollHeight;
       (plan.ok ? boutons.firstChild : annuler).focus();
+    }
+
+    // S4 (revue du 30/09) : les candidats sont une copie FIGÉE au chargement.
+    // Sans cette mise à jour, un second enrichissement repartirait de
+    // l'essence d'avant le premier — et l'effacerait sans bruit ; une seconde
+    // idée reprendrait le même numéro ADR (409). Appelée sur les deux chemins.
+    function apresEcriture(proposition, plan, data) {
+      var c = voix.candidats;
+      if (!c || typeof c !== 'object') { return; }
+      if (plan.methode === 'PATCH' && plan.corps && Array.isArray(c.idees)) {
+        c.idees.forEach(function (i) {
+          if (i && i.id === plan.corps.id) { i.essence = plan.corps.essence; }
+        });
+      }
+      if (proposition.outil === 'proposer_idee' && typeof c.prochainAdrNum === 'number') {
+        c.prochainAdrNum += 1;
+      }
+      // La création confirmée peut servir de cible au tour suivant.
+      if (plan.methode !== 'POST' || !data || !UUID_MOTIF.test(data.id)) { return; }
+      var liste = { proposer_idee: 'idees', proposer_serment: 'serments', proposer_situation: 'situations' }[proposition.outil];
+      if (!liste) { return; }
+      if (!Array.isArray(c[liste])) { c[liste] = []; }
+      if (c[liste].some(function (item) { return item.id === data.id; })) { return; }
+      var item = { id: data.id, libelle: plan.corps.nom || plan.corps.intitule };
+      if (liste === 'idees') { item.essence = plan.corps.essence || null; }
+      c[liste].push(item);
+    }
+
+    // Appel JSON authentifié → { httpOk, statut, corps } ; rejette sur panne réseau.
+    function appelJson(url, methode, corps) {
+      return fetch(url, {
+        method: methode,
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Authorization: 'Bearer ' + voix.jeton
+        },
+        body: JSON.stringify(corps)
+      }).then(function (reponse) {
+        return reponse.json().then(function (c) {
+          return { httpOk: reponse.ok, statut: reponse.status, corps: c };
+        }, function () {
+          return { httpOk: false, statut: reponse.status, corps: null };
+        });
+      });
+    }
+
+    // B1 ④ (cadrage §13) : une proposition VERTE s'exécute sans clic — mais
+    // seulement DERRIÈRE une trace que le serveur a posée ('tentee') après
+    // avoir re-jugé l'outil et consulté le plafond. ⛔ Tout refus (outil
+    // re-jugé orange, plafond atteint, journal indisponible, cible non
+    // résolue) retombe sur la carte : Paul décide, jamais une écriture sans
+    // trace. L'acte n'existe que dans la suite d'un `ouvrir` réussi.
+    function executerSansDemander(proposition) {
+      // S3 (revue du 30/09) : Paul a fermé le cartouche pendant que Léo
+      // réfléchissait — il ne verrait pas l'acte. Rien ne part.
+      if (!document.contains(formulaire)) { return; }
+      var plan = construirePlanExecution(proposition, voix.candidats);
+      if (!plan.ok || !cibleExacte(proposition, plan)) { afficherCarte(proposition); return; }
+
+      appelJson('/api/leo/ecritures', 'POST', {
+        etape: 'ouvrir',
+        outil: proposition.outil,
+        args: proposition.args,
+        quadrant: voix.quadrant
+      }).then(function (ouverture) {
+        var data = ouverture.httpOk && ouverture.corps && ouverture.corps.ok === true
+          ? ouverture.corps.data : null;
+        var traceId = data && typeof data.traceId === 'string' && UUID_MOTIF.test(data.traceId)
+          ? data.traceId : null;
+        if (!traceId) { afficherCarte(proposition); return; }
+        // S3 : fermé entre-temps → pas d'acte. La 'tentee' reste seule, et
+        // c'est VRAI : l'écriture a été interrompue avant d'avoir lieu.
+        if (!document.contains(formulaire)) { return; }
+
+        // Clôture : issue posée APRÈS l'acte. Son échec laisse la 'tentee'
+        // seule — « issue inconnue », ce qui est VRAI du point de vue du
+        // journal. Jamais de seconde tentative d'acte.
+        function issue(reussie, cibleId, motif, data, resultat) {
+          var cloture = { etape: 'clore', traceId: traceId, issue: reussie ? 'reussie' : 'echouee' };
+          if (reussie && typeof cibleId === 'string' && UUID_MOTIF.test(cibleId)) { cloture.cibleId = cibleId; }
+          if (!reussie) { cloture.motif = motif; }
+          appelJson('/api/leo/ecritures', 'POST', cloture).then(null, function () { /* fail-soft */ });
+          if (reussie) { apresEcriture(proposition, plan, data); }
+          // La cible RÉSOLUE est nommée : c'est ce que la carte montrait.
+          var message = reussie
+            ? '[Fait sans demander : ' + proposition.reformulation +
+              (plan.cible ? ' → Cible : « ' + plan.cible + ' »' : '') + ']'
+            : messageEchecEcriture(resultat);
+          if (reussie && typeof voix.notifier === 'function') {
+            try { voix.notifier('Léo a agi sans demander.'); } catch (e) { /* fail-soft */ }
+          }
+          historique.push({ role: 'user', content: echoBorne(message) });
+          bulle('issue', message);
+          rearmer();
+        }
+
+        function inconnue(resultat) {
+          // Une réponse perdue ne prouve pas l'échec : conserver la tentative
+          // seule et demander une lecture, sans clôture ni nouvel envoi.
+          var message = messageEchecEcriture(resultat);
+          historique.push({ role: 'user', content: echoBorne(message) });
+          bulle('issue', message);
+          rearmer();
+        }
+
+        appelJson(plan.url, plan.methode, plan.corps).then(function (acte) {
+          var reussie = acte.httpOk && acte.corps && acte.corps.ok === true;
+          // La cible : l'objet modifié (PATCH) ou créé (POST). Un identifiant,
+          // jamais un libellé — le journal ne porte aucun contenu dicté.
+          var cible = plan.methode === 'PATCH'
+            ? plan.corps && plan.corps.id
+            : acte.corps && acte.corps.data && acte.corps.data.id;
+          if (reussie) { issue(true, cible, null, acte.corps.data); }
+          else if (acte.statut >= 400 && acte.statut < 500 && acte.corps && acte.corps.ok === false) {
+            issue(false, null, 'statut ' + acte.statut, null, acte);
+          } else { inconnue(acte); }
+        }, function () {
+          inconnue(null);
+        });
+      }, function () {
+        afficherCarte(proposition);
+      });
     }
 
     formulaire.addEventListener('submit', function (evenement) {
@@ -976,7 +1145,13 @@
         }
         if (proposition) {
           // La saisie reste coupée tant que la carte attend Paul (pas de rearmer).
-          afficherCarte(proposition);
+          // B1 ④ : un vert tente l'exécution directe, qui retombe elle-même
+          // sur la carte au moindre refus.
+          if (proposition.anneau === 'vert') {
+            executerSansDemander(proposition);
+          } else {
+            afficherCarte(proposition);
+          }
           return;
         }
         if (typeof texteLeo === 'string' && texteLeo) {
@@ -1076,6 +1251,7 @@
     // L2b (pures, testables) : résolution des références dictées + gabarits
     // d'exécution vers les API existantes.
     resoudreRef: resoudreRef,
-    construirePlanExecution: construirePlanExecution
+    construirePlanExecution: construirePlanExecution,
+    messageEchecEcriture: messageEchecEcriture
   };
 })();

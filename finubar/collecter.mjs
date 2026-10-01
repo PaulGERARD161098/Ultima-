@@ -12,16 +12,17 @@
 // depuis sa note remonte en tête de l'agrégat avec la mention de son écart.
 // C'est la directive IA appliquée au pilotage : l'auto propose, le manuel gagne.
 //
-// Aucune écriture ailleurs que dans `finubar/macro.json`. Aucun réseau.
+// Écrit seulement les deux agrégats. Réseau GitHub opt-in via --github.
 // `git` est appelé par execFileSync en tableau d'arguments (jamais de shell).
 
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { extraireBloc, lireGrain, agreger, cartoucheDuMatin, versConstellation, reprendreGrain, MAX_RECIT } from './agreger.mjs';
+import { extraireBloc, lireGrain, agreger, cartoucheDuMatin, versConstellation, MAX_RECIT } from './agreger.mjs';
 // La mesure de fraîcheur vit à part pour être ÉPROUVABLE — voir mesure-git.mjs.
 import { mesurerGit } from './mesure-git.mjs';
+import { lireGithub, reprendreApresGithub } from './github.mjs';
 
 const ICI = dirname(fileURLToPath(import.meta.url));
 const RACINE_ULTIMA = resolve(ICI, '..');
@@ -160,22 +161,23 @@ if (existsSync(SORTIE)) {
   }
 }
 
-const entrees = depots.map((d) => {
+const entrees = [];
+for (const d of depots) entrees.push(await collecterDepot(d));
+
+async function collecterDepot(d) {
   const ciel = accrocheDe(d);
   const chemin = resolve(RACINE_ULTIMA, '..', d.dossier);
   const fichier = join(chemin, 'FINUBAR.md');
   if (!existsSync(chemin)) {
-    const repris = reprendreGrain(precedent.get(d.depot), { depot: d.depot, ciel, precedentLe });
-    if (repris) return repris;
-    return {
-      ok: false, hors_seance: true, reprise: false, motif: 'dépôt non attaché à cette séance',
-      depot: d.depot, ciel, grain: null, derive: null, mesure_le: null,
-    };
+    const resultat = await lireGithub(d, { actif: process.argv.includes('--github') });
+    return reprendreApresGithub(resultat, precedent.get(d.depot), { depot: d.depot, ciel, precedentLe });
   }
   if (!existsSync(fichier)) {
     return {
       ok: false, hors_seance: false, motif: 'FINUBAR.md absent',
-      depot: d.depot, ciel, grain: null, derive: null,
+      depot: d.depot, ciel, grain: null, derive: null, mesure_le: null,
+      controle: { type: 'disque', statut: 'source_absente', lecture_le: new Date().toISOString(),
+        examines: ['presence_FINUBAR.md'], non_examines: ['derive_git', 'pr', 'controles', 'permissions', 'dependances'] },
     };
   }
   let entree;
@@ -185,8 +187,11 @@ const entrees = depots.map((d) => {
     entree = { ok: false, motif: 'fichier illisible', depot: d.depot, grain: null };
   }
   const derive = mesurerGit(chemin, entree.ok ? entree.grain.dernier_arret.commit : '');
-  return { ...entree, ciel, hors_seance: false, reprise: false, derive, mesure_le: aujourdhui };
-});
+  return { ...entree, ciel, hors_seance: false, reprise: false, derive, mesure_le: aujourdhui,
+    controle: { type: 'disque', statut: entree.ok ? 'lu' : 'illisible',
+      lecture_le: new Date().toISOString(), examines: ['FINUBAR.md', ...(derive ? ['derive_git'] : [])],
+      non_examines: [...(derive ? [] : ['derive_git']), 'pr', 'controles', 'permissions', 'dependances'] } };
+}
 
 // ⑤ LES HUIT COPIES DU RAPPEL DOIVENT ÊTRE IDENTIQUES À LEUR SOURCE.
 // Le mode d'emploi le dit — « toute évolution se fait dans Ultima, puis se
@@ -258,6 +263,14 @@ const entrees = depots.map((d) => {
 const agregat = agreger(entrees, aujourdhui);
 const sortie = {
   ...agregat,
+  couverture: {
+    attendus: depots.map((d) => d.depot),
+    controles: entrees.filter((e) => e.controle?.statut === 'lu').map((e) => e.depot),
+    inaccessibles: entrees.filter((e) => ['inaccessible', 'refuse', 'erreur'].includes(e.controle?.statut)).map((e) => e.depot),
+    non_examines: entrees.filter((e) => e.controle?.statut === 'non_examine').map((e) => e.depot),
+    anomalies: entrees.filter((e) => ['source_absente', 'illisible'].includes(e.controle?.statut)).map((e) => e.depot),
+    portee: 'Registre seulement. PR, contrôles, permissions et dépendances non examinés.',
+  },
   cartouche: cartoucheDuMatin(agregat),
   constellation: versConstellation(agregat),
 };
@@ -320,6 +333,9 @@ writeFileSync(SORTIE_MODULE,
   }
 }
 
+for (const e of entrees.filter((p) => p.controle?.type === 'github')) {
+  console.log(`Finubar GitHub — ${e.depot} : ${e.controle.statut}${e.reprise ? ' ; ancienne mesure conservée' : ''}`);
+}
 const m = sortie.macro;
 console.log(`Finubar — ${m.total} projets · ${m.en_cours} en cours · ${m.en_attente_de_paul} en attente de Paul · ${m.au_repos} au repos`);
 if (m.derives) console.log(`⚠️  ${m.derives} projet(s) ont avancé depuis leur dernière note.`);

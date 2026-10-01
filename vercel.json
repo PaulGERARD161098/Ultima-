@@ -40,5 +40,10 @@
       "path": "/api/finubar-matin",
       "schedule": "0 6 * * *"
     }
-  ]
+  ],
+  "git": {
+    "deploymentEnabled": {
+      "codex/leo-lv1-20260929": false
+    }
+  }
 }

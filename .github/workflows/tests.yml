@@ -8,22 +8,60 @@ permissions:
 jobs:
   unit:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
       - run: npm ci --ignore-scripts
-      - run: npm test
+      - name: Tests unitaires isolés
+        run: |
+          mkdir -p "$RUNNER_TEMP/lv1-memoire"
+          cp memoire/LECONS.md "$RUNNER_TEMP/lv1-memoire/LECONS.md"
+          docker pull node:22-bookworm
+          image=$(docker image inspect --format '{{.Id}}' node:22-bookworm)
+          echo "Image utilisée : $image"
+          docker run --rm --pull never --network none --read-only --cap-drop ALL \
+            --security-opt no-new-privileges --pids-limit 128 --memory 2g --cpus 2 \
+            --user 65534:65534 --tmpfs /tmp:rw,nosuid,size=512m \
+            --mount "type=bind,src=$GITHUB_WORKSPACE,dst=/travail,readonly" \
+            --tmpfs /travail/.git:ro,nosuid,size=1m \
+            --mount "type=bind,src=$RUNNER_TEMP/lv1-memoire,dst=/travail/memoire,readonly" \
+            --workdir /travail "$image" sh -c 'node tests/lv1-isolation.mjs && npm test'
   browser:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        groupe: [0, 1]
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
       - run: npm ci --ignore-scripts
-      - run: npx playwright install --with-deps chromium
-      - run: npm run test:browser
+      - name: Harnais navigateur isolé
+        run: |
+          mkdir -p tests/.cache "$RUNNER_TEMP/lv1-memoire"
+          cp memoire/LECONS.md "$RUNNER_TEMP/lv1-memoire/LECONS.md"
+          docker pull mcr.microsoft.com/playwright:v1.56.1-noble
+          image=$(docker image inspect --format '{{.Id}}' mcr.microsoft.com/playwright:v1.56.1-noble)
+          echo "Image utilisée : $image"
+          docker run --rm --pull never --network none --read-only --cap-drop ALL \
+            --security-opt no-new-privileges --pids-limit 256 --memory 3g --cpus 2 \
+            --user 65534:65534 --tmpfs /tmp:rw,nosuid,size=512m \
+            --tmpfs /travail/tests/.cache:rw,nosuid,noexec,size=256m,uid=65534,gid=65534,mode=0700 \
+            --env XDG_CONFIG_HOME=/tmp/lv1-config --env XDG_CACHE_HOME=/tmp/lv1-cache \
+            --env SMOKE_SHARD_INDEX=${{ matrix.groupe }} --env SMOKE_SHARD_COUNT=2 \
+            --mount "type=bind,src=$GITHUB_WORKSPACE,dst=/travail,readonly" \
+            --tmpfs /travail/.git:ro,nosuid,size=1m \
+            --mount "type=bind,src=$RUNNER_TEMP/lv1-memoire,dst=/travail/memoire,readonly" \
+            --workdir /travail "$image" sh -c 'mkdir -p /tmp/lv1-config /tmp/lv1-cache && node tests/lv1-isolation.mjs && npm run test:browser'

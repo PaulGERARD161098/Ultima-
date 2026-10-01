@@ -16,6 +16,10 @@ npm-debug.log*
 
 # Cache des harnais de test (fixtures npm, captures)
 tests/.cache/
+__pycache__/
+*.py[cod]
+# Registre technique privé de l'hôte Léo : jamais versionné.
+leo/state/
 
 # Métadonnées locales du CLI Supabase
 supabase/.temp/

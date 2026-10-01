@@ -8,6 +8,17 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🤖 **SESSION 2026-09-30 (soir, GO SOLO) — B1 ④ : LÉO AGIT DANS L'ANNEAU VERT.**
+  ✅ Un vert s'exécute sans clic derrière une trace (`POST /api/leo/ecritures` :
+  garde → plafond → `tentee` → acte → issue) ; tout refus du journal retombe sur
+  la carte. ✅ Revue adversariale : S1 bloquant (cible par inclusion non nommée)
+  + S2–S6 corrigés, chacun éprouvé en le retirant. ✅ Migration
+  `20260930190000_leo_ecritures_durcissement` APPLIQUÉE (corrective, 0 ligne) et
+  éprouvée en rôle `authenticated`. ❌ La prémisse de « garde les deux avec la
+  clé » est fausse côté produit : `leo_operations` n'est pas inscriptible
+  (SELECT seul, aucune création de mission). ⏳ Paul : RPC dédiée (gate).
+  ⏭ ⑤ le défaire : cadré (§14), bloqué sur deux choix de Paul (§14.2). Détail :
+  `CADRAGE-2026-09-22-leo-pilote-tout.md` §13-§14.
 - ✴️ **SESSION 2026-09-30 (soir) — LOT 3 : LE VOLUME EN CONSTELLATIONS (PR #324, fusion squash).**
   Paul, sur la 3D en production : « je ne veux que les noms des nébuleuses, pas les
   étoiles ; je dois pouvoir cliquer sur une nébuleuse ; les étoiles en volume de
