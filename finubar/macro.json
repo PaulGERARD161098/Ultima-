@@ -50,14 +50,14 @@
         "ref": "HEAD",
         "commit": "c29ab1b1850af1a6ed7d25c5f739c666ffae0aae",
         "blob": "04187b9db3fc6c7d2a0a69b190a3337a3ebe7d37",
-        "lecture_le": "2026-10-01T09:40:55.007Z",
-        "mesure_le": "2026-10-01T09:40:55.007Z",
+        "lecture_le": "2026-10-01T12:26:18.447Z",
+        "mesure_le": "2026-10-01T12:26:18.447Z",
         "qualification": "déclaré",
         "portee": "contenu de FINUBAR.md vérifié à ce commit ; état métier non vérifié"
       },
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-01T09:40:55.007Z",
+        "lecture_le": "2026-10-01T12:26:18.447Z",
         "statut": "lu",
         "examines": [
           "tete",
@@ -118,14 +118,14 @@
         "ref": "HEAD",
         "commit": "bb4feb2dee415ed0543d99bb297601f0a1a06de0",
         "blob": "660618b87b6d64fb0af46b8ddf5c52dbac96b48b",
-        "lecture_le": "2026-10-01T09:40:55.011Z",
-        "mesure_le": "2026-10-01T09:40:55.011Z",
+        "lecture_le": "2026-10-01T12:26:18.451Z",
+        "mesure_le": "2026-10-01T12:26:18.451Z",
         "qualification": "déclaré",
         "portee": "contenu de FINUBAR.md vérifié à ce commit ; état métier non vérifié"
       },
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-01T09:40:55.011Z",
+        "lecture_le": "2026-10-01T12:26:18.451Z",
         "statut": "lu",
         "examines": [
           "tete",
@@ -196,14 +196,14 @@
         "ref": "HEAD",
         "commit": "585e0f7107a6e6ccdf4cc48612f5d01d3d3009ca",
         "blob": "ef563ea5ec39e6d9a1120546e1dd26c2f42b0989",
-        "lecture_le": "2026-10-01T09:40:55.005Z",
-        "mesure_le": "2026-10-01T09:40:55.005Z",
+        "lecture_le": "2026-10-01T12:26:18.445Z",
+        "mesure_le": "2026-10-01T12:26:18.445Z",
         "qualification": "déclaré",
         "portee": "contenu de FINUBAR.md vérifié à ce commit ; état métier non vérifié"
       },
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-01T09:40:55.005Z",
+        "lecture_le": "2026-10-01T12:26:18.445Z",
         "statut": "lu",
         "examines": [
           "tete",
@@ -316,14 +316,14 @@
         "ref": "HEAD",
         "commit": "b818899ba453d3584e3aee3d7a71994786f3a0fa",
         "blob": "13b0ef3583da13460022cd2a84be253293b450f0",
-        "lecture_le": "2026-10-01T09:40:54.968Z",
-        "mesure_le": "2026-10-01T09:40:54.968Z",
+        "lecture_le": "2026-10-01T12:26:18.417Z",
+        "mesure_le": "2026-10-01T12:26:18.417Z",
         "qualification": "déclaré",
         "portee": "contenu de FINUBAR.md vérifié à ce commit ; état métier non vérifié"
       },
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-01T09:40:54.968Z",
+        "lecture_le": "2026-10-01T12:26:18.417Z",
         "statut": "lu",
         "examines": [
           "tete",
@@ -431,14 +431,14 @@
         "ref": "HEAD",
         "commit": "53ec91fd2b2c36c1aafddf3d3370a716ee39969b",
         "blob": "b856d65c2c83dac42be7f12c7b82a54ef712b53d",
-        "lecture_le": "2026-10-01T09:40:55.004Z",
-        "mesure_le": "2026-10-01T09:40:55.004Z",
+        "lecture_le": "2026-10-01T12:26:18.443Z",
+        "mesure_le": "2026-10-01T12:26:18.443Z",
         "qualification": "déclaré",
         "portee": "contenu de FINUBAR.md vérifié à ce commit ; état métier non vérifié"
       },
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-01T09:40:55.004Z",
+        "lecture_le": "2026-10-01T12:26:18.443Z",
         "statut": "lu",
         "examines": [
           "tete",
@@ -476,10 +476,10 @@
         },
         "dernier_arret": {
           "le": "2026-10-01",
-          "quoi": "Activation Léo/FINUBAR intégrée avec RIVEN #324. 57 suites unitaires, 55 parcours navigateur et concurrence PostgreSQL verts ; correctifs PT409 et plafond atomique appliqués.…",
-          "commit": "6ecc81ab7e62252669e4a1323976e6f61e3ce39a"
+          "quoi": "Léo/FINUBAR livrés en #330 ; dix grains relus, CI et auth/registre/quota validés. Contrôleur autonome Work et défaire restent à activer.",
+          "commit": "0ef3c8aaa77fd34d690dc4fb2dedc780d72f6022"
         },
-        "prochaine_action": "Vérifier le déploiement de cette activation puis reprendre le défaire B1, cadrage §15.",
+        "prochaine_action": "Reprendre le défaire B1, cadrage §15, après les deux choix de Paul.",
         "bloque_par": [
           "B1 ⑤ attend deux choix de Paul — cadrage §15.2 : ① l'enrichissement repasse-t-il orange faute de défaire (reco : oui) · ② où vit le bouton « défaire » (reco : cartouche + écran «…",
           "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
@@ -533,7 +533,6 @@
         "maj": "2026-10-01"
       },
       "recits": [
-        "dernier_arret.quoi",
         "bloque_par[]",
         "boucles_ouvertes[].quoi"
       ],
@@ -550,7 +549,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-01T09:40:54.967Z",
+        "lecture_le": "2026-10-01T12:26:18.416Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -614,14 +613,14 @@
         "ref": "HEAD",
         "commit": "429095400099fac23189f5c20f2627e65b5f25bb",
         "blob": "259bf949857ca11e4d2d5fb5bea23e80d50fb163",
-        "lecture_le": "2026-10-01T09:40:55.009Z",
-        "mesure_le": "2026-10-01T09:40:55.009Z",
+        "lecture_le": "2026-10-01T12:26:18.449Z",
+        "mesure_le": "2026-10-01T12:26:18.449Z",
         "qualification": "déclaré",
         "portee": "contenu de FINUBAR.md vérifié à ce commit ; état métier non vérifié"
       },
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-01T09:40:55.009Z",
+        "lecture_le": "2026-10-01T12:26:18.449Z",
         "statut": "lu",
         "examines": [
           "tete",
@@ -727,14 +726,14 @@
         "ref": "HEAD",
         "commit": "6f12a9106beae81573aefcb05eea9b1a9d740df3",
         "blob": "3cef0b93ff9db7d3dd0bea85128842154f00ab54",
-        "lecture_le": "2026-10-01T09:40:55.009Z",
-        "mesure_le": "2026-10-01T09:40:55.009Z",
+        "lecture_le": "2026-10-01T12:26:18.449Z",
+        "mesure_le": "2026-10-01T12:26:18.449Z",
         "qualification": "déclaré",
         "portee": "contenu de FINUBAR.md vérifié à ce commit ; état métier non vérifié"
       },
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-01T09:40:55.009Z",
+        "lecture_le": "2026-10-01T12:26:18.449Z",
         "statut": "lu",
         "examines": [
           "tete",
@@ -807,14 +806,14 @@
         "ref": "HEAD",
         "commit": "5e2d7203859baf9da8089ad0ecf2a6f7fc9fd5d5",
         "blob": "06e734bc832b4102b38252793c18071fa2d77a64",
-        "lecture_le": "2026-10-01T09:40:55.011Z",
-        "mesure_le": "2026-10-01T09:40:55.011Z",
+        "lecture_le": "2026-10-01T12:26:18.451Z",
+        "mesure_le": "2026-10-01T12:26:18.451Z",
         "qualification": "déclaré",
         "portee": "contenu de FINUBAR.md vérifié à ce commit ; état métier non vérifié"
       },
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-01T09:40:55.011Z",
+        "lecture_le": "2026-10-01T12:26:18.451Z",
         "statut": "lu",
         "examines": [
           "tete",
@@ -876,14 +875,14 @@
         "ref": "HEAD",
         "commit": "f242bba74235adab55606a5460c5bd6797f5b966",
         "blob": "1e51d89ca0d2318e8c929c176e9828c86c9868da",
-        "lecture_le": "2026-10-01T09:40:55.008Z",
-        "mesure_le": "2026-10-01T09:40:55.008Z",
+        "lecture_le": "2026-10-01T12:26:18.448Z",
+        "mesure_le": "2026-10-01T12:26:18.448Z",
         "qualification": "déclaré",
         "portee": "contenu de FINUBAR.md vérifié à ce commit ; état métier non vérifié"
       },
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-01T09:40:55.008Z",
+        "lecture_le": "2026-10-01T12:26:18.448Z",
         "statut": "lu",
         "examines": [
           "tete",

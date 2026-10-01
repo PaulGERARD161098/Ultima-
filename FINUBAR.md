@@ -32,10 +32,10 @@
   },
   "dernier_arret": {
     "le": "2026-10-01",
-    "quoi": "Activation Léo/FINUBAR intégrée avec RIVEN #324. 57 suites unitaires, 55 parcours navigateur et concurrence PostgreSQL verts ; correctifs PT409 et plafond atomique appliqués. Actions explicites, refus prudent en cas de réponse perdue ; commandes /leo et /finubar. Publication à vérifier.",
-    "commit": "6ecc81ab7e62252669e4a1323976e6f61e3ce39a"
+    "quoi": "Léo/FINUBAR livrés en #330 ; dix grains relus, CI et auth/registre/quota validés. Contrôleur autonome Work et défaire restent à activer.",
+    "commit": "0ef3c8aaa77fd34d690dc4fb2dedc780d72f6022"
   },
-  "prochaine_action": "Vérifier le déploiement de cette activation puis reprendre le défaire B1, cadrage §15.",
+  "prochaine_action": "Reprendre le défaire B1, cadrage §15, après les deux choix de Paul.",
   "bloque_par": [
     "B1 ⑤ attend deux choix de Paul — cadrage §15.2 : ① l'enrichissement repasse-t-il orange faute de défaire (reco : oui) · ② où vit le bouton « défaire » (reco : cartouche + écran « ce que Léo a fait », jamais de lien dans le mail)",
     "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",

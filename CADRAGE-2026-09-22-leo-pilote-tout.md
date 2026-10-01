@@ -1381,13 +1381,13 @@ du code qui a l'air de marcher. ③ commence quand le gate est levé.
 > elle prend tout en compte, elle cadre, elle joue le cadrage — comme ce qu'on
 > fait nous. Au moment de passer à l'action, on me demande. »*
 
-⛔ **CE §13 PRIME SUR LE §2 ET SUR LE §11.1.** Ils ne sont pas supprimés — ils
+⛔ **CE §13 PRIME SUR LE §2 ET SUR LE §12.1.** Ils ne sont pas supprimés — ils
 portent le raisonnement qui a mené ici — mais **le critère qui fait foi est
 celui-ci**, et les deux sections ci-dessus renvoient désormais à celle-là.
 
 ### §13.1 — Le critère, et ce qu'il déplace
 
-| | Ce que je proposais (§2, §11.1) | Ce que Paul tranche |
+| | Ce que je proposais (§2, §12.1) | Ce que Paul tranche |
 |---|---|---|
 | **la question** | « qu'est-ce que ça touche ? » (une idée, un montant, un client) | **« qu'est-ce que ça casse si c'est faux ? »** |
 | **le défaut** | rien n'est permis, on ouvre outil par outil | **tout ce que Paul peut faire lui-même** |
@@ -1939,7 +1939,7 @@ main » est rouge).
 
 `proposer_enrichissement_idee` **concatène** (`essence + '\n\n' + ajout`). Le
 défaire exige l'essence d'avant — du **contenu**, que `leo_ecritures` n'a pas
-le droit de porter (§13.6). Et M3 (§11.2) dit : *« un type d'écriture sans
+le droit de porter (§13.6). Et M3 (§12.2) dit : *« un type d'écriture sans
 défaire éprouvé n'entre pas dans l'anneau vert »*.
 
 ### §15.2 — ⏳ LES DEUX CHOIX DE PAUL
