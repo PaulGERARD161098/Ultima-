@@ -27,16 +27,17 @@
   "rattache_a": "PLAN-2026-09-30-chaine-A-Z.md (la route de la chaîne Rénoboost et son état vivant) · CADRAGE-RIVEN-NEBULEUSES.md · CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md",
   "etat": "en_cours",
   "jalon": {
-    "nom": "B1 — Léo AGIT dans l'anneau vert (cadrage §11)",
-    "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③ faits (table appliquée, journal + clé partagée) ; reste ④, l'exécution"
+    "nom": "Léo et FINUBAR — activation du site et des commandes",
+    "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③④ faits (④ le 30/09 : exécution sans clic derrière une trace, revue adversariale soldée) ; reste ⑤, le défaire joué + « ce que Léo a fait » au matin"
   },
   "dernier_arret": {
-    "le": "2026-09-30",
-    "quoi": "RIVEN lot 3 : en 3D, 9 constellations cliquables, seuls les noms des nébuleuses (#324). Avant : chaîne Rénoboost routée (#321). Squash : le seul commit après celui-ci, c'est elle.",
-    "commit": "e4622988800d406d9214f90a6db813c3e8afddd4"
+    "le": "2026-10-01",
+    "quoi": "Activation Léo/FINUBAR intégrée avec RIVEN #324. 57 suites unitaires, 55 parcours navigateur et concurrence PostgreSQL verts ; correctifs PT409 et plafond atomique appliqués. Actions explicites, refus prudent en cas de réponse perdue ; commandes /leo et /finubar. Publication à vérifier.",
+    "commit": "6ecc81ab7e62252669e4a1323976e6f61e3ce39a"
   },
-  "prochaine_action": "④ — l'exécution : `ouvrirTrace()`, journal 'tentee' AVANT l'acte, plafond, issue après. Frontière arbitrée — cadrage §12.8 quater.",
+  "prochaine_action": "Vérifier le déploiement de cette activation puis reprendre le défaire B1, cadrage §15.",
   "bloque_par": [
+    "B1 ⑤ attend deux choix de Paul — cadrage §15.2 : ① l'enrichissement repasse-t-il orange faute de défaire (reco : oui) · ② où vit le bouton « défaire » (reco : cartouche + écran « ce que Léo a fait », jamais de lien dans le mail)",
     "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
     "La précision sur « mon dpe.fr » (VITRUVE)",
     "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis",
@@ -44,6 +45,14 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "LEÇON À CONSIGNER + PROPAGER (9 dépôts) : rechute de « un droit se vérifie du côté où il peut être contourné » — la prémisse de l'arbitrage §12.8 quater avait été mesurée en superutilisateur (MCP), pas sur le chemin du produit. Cadrage §13.0.",
+      "depuis": "2026-09-30"
+    },
+    {
+      "quoi": "smoke-accueil-finubar ④c (« le remettre remonte le ciel là où il était ») rougit par intermittence, toujours 577 → 581 px : ~1 passage sur 10, MESURÉ sur main pur (b01afed) le 30/09 — préexistant, indépendant de B1 ④. Deux états stables, pas une animation inachevée : cause à trouver dans le recadrage du ciel.",
+      "depuis": "2026-09-30"
+    },
     {
       "quoi": "Chaîne Rénoboost : route et état vivant dans PLAN-2026-09-30-chaine-A-Z.md (fusionné le 30/09, #321). Reprise : son §0.",
       "depuis": "2026-09-30"
@@ -67,10 +76,6 @@
     {
       "quoi": "MESURÉ le 13/09 et démenti : la note annonçait des copies divergentes du rappel Finubar. Les sept fichiers ont la même empreinte. Voir CADRAGE-FINUBAR.md.",
       "depuis": "2026-09-13"
-    },
-    {
-      "quoi": "COLLECTE — `collecter.mjs` VIDE le grain d'un dépôt hors séance au lieu de garder sa dernière mesure. Cran de sûreté posé le 07/09 (refus d'écrire) ; la FUSION reste à faire.",
-      "depuis": "2026-09-07"
     },
     {
       "quoi": "ripair (paggerard-boop) reste en LEÇONS v7 : hors de depots.json et fork partagé avec un tiers — exclu à dessein le 28/09. À trancher par Paul.",
@@ -125,7 +130,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-09-30"
+  "maj": "2026-10-01"
 }
 ```
 
@@ -137,6 +142,16 @@
 > fait vérifié, une décision. La mémoire longue ; le bloc ci-dessus est la mémoire
 > courte, et c'est lui qui est lu automatiquement.
 
+### 2026-09-30 (soir, go solo) — B1 ④ : Léo agit dans l'anneau vert
+
+Un vert s'exécute sans clic derrière une trace (`POST /api/leo/ecritures` :
+garde → plafond → `tentee` → acte → issue) ; tout refus du journal retombe sur la
+carte. Revue adversariale : un bloquant (S1, cible résolue par inclusion non
+nommée) et cinq défauts, tous fermés et éprouvés en retirant leur correctif.
+Migration de durcissement APPLIQUÉE et sondée en rôle `authenticated`.
+`leo_operations` n'est pas inscriptible par le produit : la clé partagée attend une
+RPC (gate). ⑤ cadré, bloqué sur deux choix de Paul. Détail :
+**`CADRAGE-2026-09-22-leo-pilote-tout.md` §13-§14**.
 ### 2026-09-30 (soir) — lot 3 : le volume en constellations
 
 #322 fusionnée (`ea93065`), production READY, CI de `main` verte. Sur la 3D en

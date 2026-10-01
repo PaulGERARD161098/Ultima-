@@ -1,0 +1,172 @@
+name: Léo — authentification réelle isolée
+on:
+  pull_request:
+    paths:
+      - 'api/**'
+      - 'leo/**/*.py'
+      - 'leo/proposals/registre-postgres.sql'
+      - 'leo/proposals/registre-conflicts-pt409.sql'
+      - 'tests/leo-auth-*'
+      - 'tests/leo-registre-auth.mjs'
+      - 'tests/leo-host-auth.py'
+      - '.github/workflows/leo-auth.yml'
+      - 'package.json'
+      - 'package-lock.json'
+permissions:
+  contents: read
+jobs:
+  registre-auth:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Préparer les moteurs officiels hors du bac à sable
+        run: |
+          # Versions Auth/REST de la composition officielle Supabase lue le 29/09.
+          docker pull postgres:17-bookworm
+          docker pull supabase/gotrue:v2.196.0
+          docker pull postgrest/postgrest:v14.17
+          docker pull node:22-bookworm
+          docker pull python:3.12-bookworm
+          for image in postgres:17-bookworm supabase/gotrue:v2.196.0 postgrest/postgrest:v14.17 node:22-bookworm python:3.12-bookworm; do
+            docker image inspect --format '{{.RepoTags}} {{.Id}}' "$image"
+          done
+      - name: Éprouver HTTP, Auth et RLS dans un espace réseau sans interface extérieure
+        env:
+          LV1_SOURCE_SHA: ${{ github.event.pull_request.head.sha }}
+          LV1_TARGET_SHA: ${{ github.event.pull_request.base.sha }}
+          LV1_INTEGRATION_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          echo "Source $LV1_SOURCE_SHA ; cible $LV1_TARGET_SHA ; intégration $LV1_INTEGRATION_SHA"
+          LV1_PG="$(docker image inspect --format '{{.Id}}' postgres:17-bookworm)"
+          LV1_AUTH="$(docker image inspect --format '{{.Id}}' supabase/gotrue:v2.196.0)"
+          LV1_REST="$(docker image inspect --format '{{.Id}}' postgrest/postgrest:v14.17)"
+          LV1_NODE="$(docker image inspect --format '{{.Id}}' node:22-bookworm)"
+          LV1_PYTHON="$(docker image inspect --format '{{.Id}}' python:3.12-bookworm)"
+          # Noms fixes dans un runner jetable exclusif au job. Aucun port publié,
+          # socket Docker monté, volume métier, credential de runner ou secret CI.
+          cleanup() {
+            LV1_EXIT=$?
+            if [ "$LV1_EXIT" -ne 0 ]; then
+              # Uniquement les conteneurs fictifs de ce job ; sortie bornée.
+              for name in lv1-auth-gotrue lv1-auth-rest lv1-auth-db; do
+                docker logs --tail 60 "$name" 2>&1 || true
+              done
+              docker exec lv1-auth-db tail -60 /tmp/postgres.log 2>/dev/null || true
+            fi
+            docker rm -f lv1-auth-host lv1-auth-node lv1-auth-rest lv1-auth-gotrue lv1-auth-db >/dev/null 2>&1 || true
+            exit "$LV1_EXIT"
+          }
+          trap cleanup EXIT
+          docker run -d --name lv1-auth-db --pull never --network none --read-only \
+            --cap-drop ALL --security-opt no-new-privileges --user 999:999 \
+            --memory 512m --cpus 1 --pids-limit 128 \
+            --tmpfs /tmp:rw,nosuid,nodev,noexec,size=384m,mode=1777 \
+            --mount "type=bind,src=$GITHUB_WORKSPACE/tests,dst=/tests,readonly" \
+            --mount "type=bind,src=$GITHUB_WORKSPACE/leo/proposals,dst=/proposals,readonly" \
+            --env LV1_AUTH_ISOLATED=1 --entrypoint bash "$LV1_PG" /tests/leo-auth-db.sh
+          for attempt in {1..40}; do
+            docker exec lv1-auth-db test -f /tmp/leo-auth-ready && break
+            sleep 1
+          done
+          docker exec lv1-auth-db test -f /tmp/leo-auth-ready
+          # Tous les autres moteurs partagent UNIQUEMENT le loopback du conteneur
+          # --network none. Pas même un bridge interne donnant accès à l'hôte.
+          docker run -d --name lv1-auth-gotrue --pull never --network container:lv1-auth-db --read-only \
+            --cap-drop ALL --security-opt no-new-privileges --user 65534:65534 \
+            --memory 256m --cpus 1 --pids-limit 128 --tmpfs /tmp:rw,nosuid,nodev,noexec,size=32m \
+            --env GOTRUE_API_HOST=127.0.0.1 --env GOTRUE_API_PORT=9999 \
+            --env API_EXTERNAL_URL=http://127.0.0.1:8765/auth/v1 \
+            --env GOTRUE_SITE_URL=http://127.0.0.1:8766 \
+            --env GOTRUE_DB_DRIVER=postgres \
+            --env 'GOTRUE_DB_DATABASE_URL=postgres://supabase_auth_admin:fixture-auth-password@127.0.0.1:5432/postgres?sslmode=disable' \
+            --env GOTRUE_JWT_SECRET=fixture-jwt-secret-only-32-characters-minimum \
+            --env GOTRUE_JWT_AUD=authenticated --env GOTRUE_JWT_DEFAULT_GROUP_NAME=authenticated \
+            --env GOTRUE_JWT_EXP=3600 --env GOTRUE_EXTERNAL_EMAIL_ENABLED=true \
+            --env GOTRUE_MAILER_AUTOCONFIRM=true --env GOTRUE_DISABLE_SIGNUP=false \
+            --env GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED=true "$LV1_AUTH"
+          for attempt in {1..60}; do
+            docker exec lv1-auth-gotrue wget -q --spider http://127.0.0.1:9999/health && break
+            sleep 1
+          done
+          docker exec lv1-auth-gotrue wget -q --spider http://127.0.0.1:9999/health
+          run_node() {
+            docker run --rm --name lv1-auth-node --pull never --network container:lv1-auth-db --read-only \
+              --cap-drop ALL --security-opt no-new-privileges --user 65534:65534 \
+              --memory 512m --cpus 1 --pids-limit 128 --tmpfs /tmp:rw,nosuid,nodev,noexec,size=32m \
+              --mount "type=bind,src=$GITHUB_WORKSPACE/api,dst=/travail/api,readonly" \
+              --mount "type=bind,src=$GITHUB_WORKSPACE/tests,dst=/travail/tests,readonly" \
+              --mount "type=bind,src=$GITHUB_WORKSPACE/node_modules,dst=/travail/node_modules,readonly" \
+              --mount "type=bind,src=$GITHUB_WORKSPACE/package.json,dst=/travail/package.json,readonly" \
+              --workdir /travail --env LV1_AUTH_ISOLATED=1 \
+              --env SUPABASE_URL=http://127.0.0.1:8765 --env SUPABASE_ANON_KEY=fixture-publishable-key \
+              "$LV1_NODE" node tests/leo-registre-auth.mjs "$1"
+          }
+          run_node setup
+          # Reconstituer les anciens codes métier seulement dans la base fictive,
+          # puis éprouver la proposition de mise à jour distincte.
+          docker exec lv1-auth-db bash -c "sed 's/PT409/40001/g' /proposals/registre-postgres.sql > /tmp/registre-legacy.sql"
+          docker exec lv1-auth-db psql -h /tmp -U postgres -v ON_ERROR_STOP=1 -f /tmp/registre-legacy.sql
+          docker exec lv1-auth-db psql -h /tmp -U postgres -v ON_ERROR_STOP=1 -f /proposals/registre-conflicts-pt409.sql
+          docker exec lv1-auth-db psql -h /tmp -U postgres -v ON_ERROR_STOP=1 -f /tests/leo-auth-seed.sql
+          docker run -d --name lv1-auth-rest --pull never --network container:lv1-auth-db --read-only \
+            --cap-drop ALL --security-opt no-new-privileges --user 65534:65534 \
+            --memory 256m --cpus 1 --pids-limit 128 --tmpfs /tmp:rw,nosuid,nodev,noexec,size=32m \
+            --env PGRST_SERVER_HOST=127.0.0.1 --env PGRST_DB_SCHEMAS=public \
+            --env 'PGRST_DB_URI=postgres://authenticator:fixture-rest-password@127.0.0.1:5432/postgres?sslmode=disable' \
+            --env PGRST_DB_ANON_ROLE=anon \
+            --env PGRST_JWT_SECRET=fixture-jwt-secret-only-32-characters-minimum "$LV1_REST"
+          # Vérifier l'oracle avant le nominal : le contournement volontaire
+          # d'Auth doit échouer précisément, avant toute écriture de mission.
+          LV1_MUTANT_LOG="$(mktemp)"
+          if run_node test-mutant > "$LV1_MUTANT_LOG" 2>&1; then
+            echo 'ÉCHEC : le témoin Auth contourné est passé'
+            exit 1
+          fi
+          if ! grep -q 'AUTH_GETUSER_REQUIRED' "$LV1_MUTANT_LOG"; then
+            tail -60 "$LV1_MUTANT_LOG"
+            exit 1
+          fi
+          echo 'ROUGE attendu : contournement Auth détecté par AUTH_GETUSER_REQUIRED'
+          run_node test
+          # Le même GoTrue authentifie le client du contrôleur R21. Registre et
+          # dépôt sont fictifs dans /tmp, aucun paquet historique n'est fusionné.
+          run_host() {
+          docker run --rm --name lv1-auth-host --pull never --network container:lv1-auth-db --read-only \
+            --cap-drop ALL --security-opt no-new-privileges --user 65534:65534 \
+            --memory 512m --cpus 1 --pids-limit 128 --tmpfs /tmp:rw,nosuid,nodev,noexec,size=256m,mode=1777 \
+            --mount "type=bind,src=$GITHUB_WORKSPACE/leo,dst=/travail/leo,readonly" \
+            --mount "type=bind,src=$GITHUB_WORKSPACE/tests,dst=/travail/tests,readonly" \
+            --workdir /travail --env PYTHONPATH=/travail --env PYTHONDONTWRITEBYTECODE=1 \
+            --env LV1_ISOLATED=1 --env LV1_AUTH_ISOLATED=1 \
+            --env LV1_SOURCE_SHA --env LV1_TARGET_SHA --env LV1_INTEGRATION_SHA \
+            "$LV1_PYTHON" python tests/leo-host-auth.py "$@"
+          }
+          LV1_HOST_MUTANT_LOG="$(mktemp)"
+          if run_host --mutant > "$LV1_HOST_MUTANT_LOG" 2>&1; then
+            echo 'ÉCHEC : le témoin hôte sans Auth est passé'
+            exit 1
+          fi
+          if ! grep -q 'HOST_AUTH_REQUIRED' "$LV1_HOST_MUTANT_LOG"; then
+            tail -60 "$LV1_HOST_MUTANT_LOG"
+            exit 1
+          fi
+          echo 'ROUGE attendu : hôte sans Auth détecté par HOST_AUTH_REQUIRED'
+          if run_host --mutant-stop > "$LV1_HOST_MUTANT_LOG" 2>&1; then
+            echo 'ÉCHEC : le témoin faux arrêt est passé'
+            exit 1
+          fi
+          if ! grep -q 'HOST_STOP_REQUIRED' "$LV1_HOST_MUTANT_LOG"; then
+            tail -60 "$LV1_HOST_MUTANT_LOG"
+            exit 1
+          fi
+          echo 'ROUGE attendu : faux arrêt détecté par HOST_STOP_REQUIRED'
+          run_host

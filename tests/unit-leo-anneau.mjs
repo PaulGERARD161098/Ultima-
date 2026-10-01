@@ -1,11 +1,11 @@
-// L'ANNEAU de Léo (B1 ①②, cadrage §11 du 2026-09-29) — Node pur, zéro réseau.
+// L'ANNEAU de Léo (B1 ①②, cadrage §12 du 2026-09-29) — Node pur, zéro réseau.
 //
 // Ce que ce harnais PROUVE, et rien d'autre : le mécanisme SAIT REFUSER avant
 // de savoir agir. Il ne prouve pas que Léo écrit — l'exécution est l'étape ④
 // de B1, elle n'existe pas encore, et le dire ici évite qu'un vert soit lu
 // comme « c'est branché ».
 //
-// Critères de sortie du §11.3 couverts : B1-b (un orange refuse même appelé
+// Critères de sortie du §12.3 couverts : B1-b (un orange refuse même appelé
 // comme un vert) et B1-c (un outil sans anneau reconnu est orange).
 import { readFileSync, readdirSync } from 'node:fs';
 import {

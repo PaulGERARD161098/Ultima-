@@ -25,6 +25,7 @@
        d'appel (§⑨) et ne redéfinit rien. -->
   <link rel="stylesheet" href="css/finubar-bandeau.css">
   <link rel="stylesheet" href="css/leo.css">
+  <link rel="stylesheet" href="css/leo-registre.css">
 </head>
 <!-- LA RACINE — l'écran que Paul juge (LV5 / P4). Dernière page à passer de
      la boussole au ciel : la galaxie EST désormais l'accueil, le bandeau
@@ -119,6 +120,7 @@
       </h1>
       <p class="console-invite">Sur quoi est-ce qu'on travaille aujourd'hui&nbsp;?</p>
     </header>
+    <button type="button" id="leo-mission-ouvrir" class="leo-mission-entree" disabled>Mission Léo</button>
 
     <!-- ===== Le ciel d'accueil, rendu par js/ciel-noeud.mjs =====
          LA SCÈNE EST VIDÉE À CHAQUE DESSIN par le moteur du ciel
@@ -162,6 +164,35 @@
   <!-- LV5 — la couche de fond, AVANT le moteur : celui-ci la cherche en global
        au moment du rendu (le garde `window.UltimaCielFond` laisserait la page
        fonctionner sans fond, SANS RIEN DIRE — leçon de P1). -->
+
+  <dialog id="leo-mission-dialog" class="leo-mission-dialog" aria-labelledby="leo-mission-titre">
+    <header><h2 id="leo-mission-titre">Mission Léo</h2><button type="button" id="leo-mission-fermer">Fermer</button></header>
+    <p>Consulter l’avancement et tenir le mémo de la mission.</p>
+    <form id="leo-mission-chargement" autocomplete="off">
+      <label for="leo-mission-id">Identifiant de mission</label>
+      <input id="leo-mission-id" type="text" required maxlength="36" spellcheck="false" autocomplete="off" aria-describedby="leo-mission-aide">
+      <p id="leo-mission-aide">Utilise l’identifiant fourni lors de l’initialisation. Aucune mission n’est créée depuis cet écran.</p>
+      <button id="leo-mission-consulter" type="submit">Consulter</button>
+    </form>
+    <p id="leo-mission-message" role="status" aria-live="polite">Consulte une mission existante avec son identifiant.</p>
+    <section id="leo-mission-detail" hidden>
+      <h3>État enregistré</h3><p id="leo-mission-courant"></p>
+      <h3>Prochaine action enregistrée</h3><p id="leo-mission-prochaine"></p><p id="leo-mission-budget"></p>
+      <form id="leo-mission-edition-form" autocomplete="off">
+        <fieldset id="leo-mission-edition"><legend>Mettre à jour le mémo</legend>
+          <label for="leo-mission-etat">État déclaré</label>
+          <select id="leo-mission-etat"><option value="proposed">Proposée</option><option value="authorized">Autorisée</option><option value="in_progress">En cours</option><option value="ready_for_review">À relire</option><option value="approved_for_merge">Fusion approuvée</option><option value="merged">Fusionnée</option><option value="closed">Terminée</option><option value="blocked">Bloquée</option><option value="suspended">Suspendue</option><option value="abandoned">Abandonnée</option></select>
+          <label for="leo-mission-action">Prochaine action</label><textarea id="leo-mission-action" maxlength="4000" autocomplete="off"></textarea>
+          <p id="leo-mission-brouillon"></p>
+          <div class="leo-mission-actions"><button id="leo-mission-enregistrer" type="submit">Enregistrer le mémo</button></div>
+        </fieldset>
+      </form>
+    </section>
+    <div class="leo-mission-actions"><button id="leo-mission-relire" type="button">Relire le registre</button><button id="leo-mission-arreter" type="button">Arrêter la mission</button><button id="leo-mission-abandonner" type="button" disabled>Abandonner le brouillon</button></div>
+    <p>L’arrêt bloque les nouvelles écritures de cette mission. Les actions externes et délégations ne sont pas activées par cet écran.</p>
+    <p>La reprise d’une réponse perdue est suivie dans cet onglet. Avant de travailler ailleurs, confirme ici le résultat de la dernière demande.</p>
+  </dialog>
+
   <script src="js/ciel-fond.js"></script>
   <!-- Le champ d'étoiles de la porte d'entrée (02/09) : le peintre commun,
        puis le module qui le monte dans l'écran de connexion à sa première
@@ -176,6 +207,8 @@
        donc il existe déjà quand boussole-auth livre la session (le résumé
        vivant). Module et script defer s'exécutent dans l'ordre du document. -->
   <script type="module" src="js/ciel-noeud.mjs"></script>
+  <script src="js/leo-registre-client.js" defer></script>
+  <script src="js/leo-registre-ui.js" defer></script>
   <script src="js/boussole-auth.js" defer></script>
   <script src="js/leo-accueil.js"></script>
   <script src="js/leo-partout.js"></script>

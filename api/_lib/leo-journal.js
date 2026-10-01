@@ -2,9 +2,8 @@
 // B1 étape ③, cadrage §12.6 (29/09/2026).
 //
 // ⛔ CE MODULE N'ÉCRIT RIEN, ET NE LIT RIEN. Il fabrique l'entrée à poser et
-// décide du plafond ; l'insertion viendra avec l'étape ④. C'est écrit ici
-// plutôt que laissé à deviner : un module que personne n'appelle se lit comme
-// un module qui marche (leçon du 22/09).
+// décide du plafond ; la lecture et l'insertion vivent dans
+// `api/_lib/leo-execution.js` (B1 ④, 30/09), qui l'appelle.
 //
 // Pourquoi des fonctions pures et pas des requêtes : elles restent éprouvables
 // sans base — donc AVANT que la migration `20260929220000_leo_ecritures.sql`

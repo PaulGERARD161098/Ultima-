@@ -257,7 +257,7 @@ verdicts.planEnrichissementAjoute = (() => {
     { outil: 'proposer_enrichissement_idee', args: { idee_ref: 'ADR-3', ajout: 'Croiser avec PROTÉE.' } },
     { idees: [{ id: 'i-3', libelle: 'ADR-3', essence: 'Essence initiale.' }] });
   return p.ok === true && p.methode === 'PATCH' &&
-    p.corps.id === 'i-3' && p.corps.essence === 'Essence initiale.\n\nCroiser avec PROTÉE.';
+    p.corps.id === 'i-3' && p.corps.essence_attendue === 'Essence initiale.' && p.corps.essence === 'Essence initiale.\n\nCroiser avec PROTÉE.';
 })();
 verdicts.planRefIntrouvable = (() => {
   const p = construirePlanExecution(
