@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v58 2026-09-30 sha256:926b2b2d3a4e -->
+<!-- lecons:empreinte v59 2026-10-01 sha256:c7894ff1397b -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1960,6 +1960,14 @@ dont je ne lisais que la dernière ligne. Un lint qui ne prouve rien coûte plus
 cher qu'un lint absent : il rassure. ⛔ *Avant de citer le résultat d'un outil
 de projet, vérifier qu'on a lancé CELUI du projet — `npm install` d'abord, et
 lire la sortie entière, pas son `tail`.*
+⊕ **L'inverse est vrai aussi** *(2026-10-01)* : un `node_modules` qui EXISTE
+mais date d'avant une fusion qui a touché `package-lock.json` est un autre
+outil que celui du projet. Sur `main` de RenoDevis, que la CI venait de passer
+vert (680 tests), le premier passage local a rendu **673/680 et `tsc` rouge** —
+`pdf-lib` et `@pdf-lib/fontkit`, ajoutés par #219, manquaient en local. `npm ci`,
+puis 680/680 et `tsc` 0. Un rouge local après une fusion se remesure après
+`npm ci` **avant** d'être cru — sans quoi on rapporte une régression qui
+n'existe pas, et on la cherche.
 **ÉCONOMIE DE CONTEXTE.** Sous-agents pour les gros volumes de lecture,
 synthèses seulement dans le fil principal. Tiers de modèle économe par défaut ;
 escalade **signalée** uniquement sur les sujets à risque — droits d'accès en

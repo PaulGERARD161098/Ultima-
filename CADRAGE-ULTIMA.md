@@ -46,6 +46,14 @@
   y est). ⏭ Le §0 du plan disait vrai d'avance ; il n'a pas été touché.
   Prochaine action : Paul lit le compteur « confirmés » (`/releve` › Biblio),
   puis E2 avec Opus 5.5 (fiche §13.15-18).
+  ⛔ **PÉRIMÉ le 01/10 (mesuré 17:45 UTC)** : B2 a été corrigée le matin même par
+  RenoDevis #218 (+ RenoBoost #566) — `releve/prix.js` convertit une fois sous
+  `meta.prixVente`, `lignes.test.js` « aucune seconde marge », 680/680, `tsc` 0 sur
+  `main` `64211da` ; Réno expose `chiffre`. Le prompt de reprise rendu la veille (E2
+  avec Opus 5.5) ne se rejoue pas ; la fiche §13 reste comme cadrage historique.
+  ⚠️ Premier passage local : 673/680 et `tsc` rouge — `node_modules` périmé
+  (pdf-lib ajouté par #219), pas une régression ; `npm ci` avant de croire un rouge
+  sur une base qui a bougé.
 - 🧭 **SESSION 2026-09-30 (soir) — LA CHAÎNE RÉNOBOOST, CADRÉE ET ROUTÉE (PR #321 · RenoBoost #563 · RenoDevis #214, fusionnées en mode merge sur le go de Paul en fin de séance).**
   ✅ Route posée : `PLAN-2026-09-30-chaine-A-Z.md` — dix maillons, familles
   A → B → C → N → D, E en réserve, l'état vivant au §2, la reprise au §0.
