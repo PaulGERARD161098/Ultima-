@@ -119,7 +119,7 @@ qu'aucun en recouvre un autre.**
 | Conseil & services aux entreprises | 11 | Conseil, Conseil - …, Audit, Recouvrement, Recrutement, Services - finances |
 | BTP & rénovation | 12 | BTP - …, Tuyautiste, Isolation - …, CVC, Ventilation - …, Rénovation - IA |
 | Industrie & technologie | 6 | Aéronautique…, Holding industrielle, Ingénierie, Logiciel, Technologie |
-| Institutions & associatif | 5 | Politique, Études, Associatif, Médico-social |
+| Institutions & associatif | 5 | Politique, Études, Associatif, Médico-social, Défense (ajoutée le 02/10, décision de Paul) |
 | Médias & édition | 6 | Médias…, Édition |
 | Énergie & environnement | 4 | Énergie…, Environnement |
 | Finance & banque | 3 | Banque…, Finance - … |

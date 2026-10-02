@@ -57,7 +57,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T13:08:00.438Z",
+        "lecture_le": "2026-10-02T17:07:18.104Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -167,7 +167,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T13:08:00.438Z",
+        "lecture_le": "2026-10-02T17:07:18.104Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -272,7 +272,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T13:08:00.438Z",
+        "lecture_le": "2026-10-02T17:07:18.104Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -301,17 +301,16 @@ export default {
         "etat": "en_cours",
         "jalon": {
           "nom": "Léo et FINUBAR — activation du site et des commandes",
-          "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③④ faits ; ⑤ CODÉ (PR #336, brouillon, CI verte) — l'étape 0 a trouvé la panne : crédit Anthropic épuisé (« ia 400 crédit »), Léo ne répond plus ; à rejouer après recharge, puis fusion"
+          "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③④⑤ en production — ⑤ fusionné le 02/10 au soir (#336) sur ordre de Paul, SANS l'étape 0 : le crédit Anthropic est épuisé (« ia 400 crédit »), Léo ne répond plus ; la preuve en prod (une écriture, son défaire) reste à faire après la recharge"
         },
         "dernier_arret": {
           "le": "2026-10-02",
-          "quoi": "B1 ⑤ codé, PR #336 (brouillon) : enrichissement orange, « Défaire » dans la bulle et sur /leo, ligne du mail ; revue securite-auditeur soldée. Étape 0 jouée par Paul sur l'aperçu…",
-          "commit": "55efa9a0fbd01c8a0803d74eb329214d76487f3e"
+          "quoi": "B1 ⑤ codé en PR #336 (brouillon, CI verte) ; l'étape 0 jouée sur l'aperçu a trouvé la panne : « code 502 · ia 400 crédit », le crédit Anthropic est épuisé (cause des 0 écritures…",
+          "commit": "333f623ac1bff83a165dd28ae2a42dbab30e8639"
         },
-        "prochaine_action": "Paul recharge le crédit Anthropic (console Anthropic — geste payant), puis rejoue l'étape 0 sur l'aperçu de #336 : dicter « Capture l'idée Test B1 » sur /registre, mesurer 2…",
+        "prochaine_action": "Paul recharge le crédit Anthropic (console Anthropic — geste payant) ; puis étape 0 EN PRODUCTION sur /registre : dicter « Capture l'idée Test B1 », mesurer 2 lignes (tentee…",
         "bloque_par": [
           "Crédit Anthropic ÉPUISÉ (mesuré le 02/10 à 12:55 UTC, bulle « code 502 · ia 400 crédit ») : Léo ne peut plus répondre nulle part — recharge = geste payant de Paul",
-          "#336 (B1 ⑤) : après la recharge, l'étape 0 rejouée (une dictée verte réelle), puis l'accord de fusion de Paul (SHA, cible main, CI verte)",
           "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",
           "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
           "La précision sur « mon dpe.fr » (VITRUVE)",
@@ -372,16 +371,16 @@ export default {
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "15e834e",
-        "tete_le": "2026-10-02T12:50:14+00:00",
-        "commits_depuis": 13,
+        "tete": "2758ad8",
+        "tete_le": "2026-10-02T13:08:26+00:00",
+        "commits_depuis": 14,
         "commit_inconnu": false
       },
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T13:08:00.436Z",
+        "lecture_le": "2026-10-02T17:07:18.095Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -450,7 +449,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T13:08:00.438Z",
+        "lecture_le": "2026-10-02T17:07:18.104Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -509,7 +508,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T13:08:00.438Z",
+        "lecture_le": "2026-10-02T17:07:18.104Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -567,7 +566,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T13:08:00.438Z",
+        "lecture_le": "2026-10-02T17:07:18.104Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -635,7 +634,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T13:08:00.438Z",
+        "lecture_le": "2026-10-02T17:07:18.104Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -702,7 +701,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T13:08:00.438Z",
+        "lecture_le": "2026-10-02T17:07:18.104Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -805,7 +804,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T13:08:00.438Z",
+        "lecture_le": "2026-10-02T17:07:18.104Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -907,10 +906,6 @@ export default {
       {
         "projet": "Ultima",
         "geste": "Crédit Anthropic ÉPUISÉ (mesuré le 02/10 à 12:55 UTC, bulle « code 502 · ia 400 crédit ») : Léo ne peut plus répondre nulle part — recharge = geste payant de Paul"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "#336 (B1 ⑤) : après la recharge, l'étape 0 rejouée (une dictée verte réelle), puis l'accord de fusion de Paul (SHA, cible main, CI verte)"
       },
       {
         "projet": "Ultima",
