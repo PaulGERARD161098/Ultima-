@@ -466,10 +466,27 @@ await ouvrirCartoucheVoix('voix-panne');
 await pageV.locator('.leo-voix-champ').fill('Message qui échoue');
 await pageV.locator('.leo-voix-envoyer').click();
 await pageV.waitForSelector('.leo-bulle-erreur', { timeout: 5000 });
-verifier('Panne : bulle d’erreur générique', ((await pageV.locator('.leo-bulle-erreur').textContent()) || '').includes("n'a pas pu répondre"));
+verifier('Panne : bulle d’erreur générique, qui dit « réseau »',
+  ((await pageV.locator('.leo-bulle-erreur').textContent()) || '').includes("n'a pas pu répondre (réseau)"));
 verifier('Panne : le texte dicté est restitué dans le champ',
   (await pageV.locator('.leo-voix-champ').inputValue()) === 'Message qui échoue');
 verifier('Panne : le champ est réarmé (saisissable)', await pageV.locator('.leo-voix-champ').isEnabled());
+
+// C3 bis. Une réponse en échec dit son CODE (et rien d'autre du serveur) :
+// c'est ce qui permet de diagnostiquer sans les journaux Vercel.
+for (const [code, corps] of [[502, { ok: false, error: "Léo n'a pas pu répondre" }], [504, null]]) {
+  await pageV.unroute('**/api/leo');
+  await pageV.route('**/api/leo', (route) => route.fulfill({ status: code,
+    contentType: corps ? 'application/json' : 'text/html',
+    body: corps ? JSON.stringify(corps) : '<html>FUNCTION_INVOCATION_TIMEOUT</html>' }));
+  await ouvrirCartoucheVoix('voix-code-' + code);
+  await pageV.locator('.leo-voix-champ').fill('Message qui échoue');
+  await pageV.locator('.leo-voix-envoyer').click();
+  await pageV.waitForSelector('.leo-bulle-erreur', { timeout: 5000 });
+  const texteErreur = (await pageV.locator('.leo-bulle-erreur').textContent()) || '';
+  verifier('Échec ' + code + ' : la bulle dit son code, sans recopier le serveur',
+    texteErreur === "Léo n'a pas pu répondre (code " + code + ') — réessayez.', texteErreur);
+}
 
 // ===================== C4-C7. Les mains de Léo (L2b, API stubées) =====================
 // La carte de confirmation est un rendu DÉTERMINISTE de la reformulation

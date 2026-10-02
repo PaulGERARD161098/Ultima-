@@ -1269,14 +1269,19 @@
         } else {
           historique.pop();
           champ.value = texte;
-          bulle('erreur', "Léo n'a pas pu répondre — réessayez.");
+          // Le CODE est dit (02/10) : sans journaux Vercel lisibles, c'est la
+          // seule trace qui distingue une session expirée (401), la cadence
+          // (429), l'appel IA en échec (502) ou un délai dépassé (504). Un
+          // nombre, jamais le corps de la réponse.
+          bulle('erreur', "Léo n'a pas pu répondre (code " +
+            (Number.isInteger(resultat.statut) ? resultat.statut : '?') + ') — réessayez.');
         }
         rearmer();
       }, function () {
         attente.remove();
         historique.pop();
         champ.value = texte;
-        bulle('erreur', "Léo n'a pas pu répondre — réessayez.");
+        bulle('erreur', "Léo n'a pas pu répondre (réseau) — réessayez.");
         rearmer();
       });
     });
