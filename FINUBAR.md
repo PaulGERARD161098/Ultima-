@@ -33,7 +33,7 @@
   "dernier_arret": {
     "le": "2026-10-02",
     "quoi": "02/10 soir : B1 ⑤ fusionnée (#336, étape 0 non rejouée), RIVEN vérifié (#338). Chaîne : B4 réduite à R1, en production, non prouvée. Crédit Anthropic épuisé.",
-    "commit": "948ecc2ae3b4615bbf0b80e45f2369564459d45b"
+    "commit": "f4af7d23e4d8e250abb03b29e43bd32aa120cd37"
   },
   "prochaine_action": "Paul recharge le crédit Anthropic (console Anthropic — geste payant) ; puis étape 0 EN PRODUCTION sur /registre : dicter « Capture l'idée Test B1 », mesurer 2 lignes (tentee, reussie) dans leo_ecritures, cliquer « Défaire », mesurer la 3ᵉ (defaite) et la disparition de l'idée.",
   "bloque_par": [
