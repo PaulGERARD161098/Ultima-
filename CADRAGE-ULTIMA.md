@@ -84,6 +84,10 @@
   écrit ; le geste de Paul (une dictée verte réelle) précède la fusion.
   ⏳ Registre : accès du mail au journal (reco : fonction SQL + secret) ;
   `updated_at` sur `journal`/`scenarios`. Détail : cadrage pilote §15.5.
+  ⛔ **Étape 0 jouée à 12:55 UTC : « code 502 · ia 400 crédit »** — le crédit
+  Anthropic est épuisé, Léo ne peut plus répondre (d'où les 0 écritures). La
+  bulle dit désormais son code et sa cause en mots fermés (`d66c2a0`,
+  `15e834e`). Geste de Paul : recharger le crédit, puis rejouer l'étape 0.
 - 🧭 **SESSION 2026-10-02 (matin) — REPRISE CADRÉE SUR MESURE, #328 FUSIONNÉE, COLLISION AVEC LA SÉANCE CHAÎNE (branche `claude/bold-ride-lz23qg` ; PR de séance en brouillon).**
   ✅ État des lieux mesuré à 05:00 UTC (API GitHub, git, base : `paiements` = 0,
   13 lignes dans `devis`, aucune créée en septembre), reprise cadrée en six

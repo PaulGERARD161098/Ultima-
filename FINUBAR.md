@@ -28,16 +28,17 @@
   "etat": "en_cours",
   "jalon": {
     "nom": "Léo et FINUBAR — activation du site et des commandes",
-    "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③④ faits ; ⑤ CODÉ le 02/10 (PR #336, brouillon : « Défaire » dans la bulle et sur /leo, ligne du matin, revue adverse soldée) — reste l'étape 0 (④ jamais vu écrire en prod) et la fusion"
+    "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③④ faits ; ⑤ CODÉ (PR #336, brouillon, CI verte) — l'étape 0 a trouvé la panne : crédit Anthropic épuisé (« ia 400 crédit »), Léo ne répond plus ; à rejouer après recharge, puis fusion"
   },
   "dernier_arret": {
     "le": "2026-10-02",
-    "quoi": "B1 ⑤ codé sur claude/leo-defaire, PR #336 (brouillon) : enrichissement orange (neuf verts), etape 'defaire' + GET sur /api/leo/ecritures, bouton dans la bulle, écran leo.html, section du mail (lien de lecture seul) ; revue securite-auditeur 0 critique / 0 élevé, M1 F1–F5 I2 fermés et validés rouges sur sabotage. Contact MAITRISECO ajouté à RIVEN. ⛔ leo_ecritures = 0 ligne en prod (12:26 UTC) : étape 0 à faire avant fusion.",
+    "quoi": "B1 ⑤ codé, PR #336 (brouillon) : enrichissement orange, « Défaire » dans la bulle et sur /leo, ligne du mail ; revue securite-auditeur soldée. Étape 0 jouée par Paul sur l'aperçu : « code 502 · ia 400 crédit » → crédit Anthropic épuisé, cause des 0 écritures en prod ; la bulle de Léo dit désormais son code et sa cause (d66c2a0, 15e834e). Contact MAITRISECO ajouté à RIVEN.",
     "commit": "55efa9a0fbd01c8a0803d74eb329214d76487f3e"
   },
-  "prochaine_action": "Étape 0 de B1 ⑤ : Paul dicte une écriture verte réelle (« capture l'idée Test B1 », ADRAMELECH) sur l'aperçu de claude/leo-defaire ; mesurer en base 2 lignes sur un trace_id (tentee puis reussie avec cible_id), cliquer « Défaire », mesurer la 3ᵉ (defaite) — puis fusion de #336 sur son go.",
+  "prochaine_action": "Paul recharge le crédit Anthropic (console Anthropic — geste payant), puis rejoue l'étape 0 sur l'aperçu de #336 : dicter « Capture l'idée Test B1 » sur /registre, mesurer 2 lignes (tentee, reussie) dans leo_ecritures, cliquer « Défaire », mesurer la 3ᵉ (defaite) — puis fusion de #336 sur son go.",
   "bloque_par": [
-    "#336 (B1 ⑤) : l'étape 0 — une dictée verte réelle de Paul, puis son accord de fusion (SHA, cible main, CI verte)",
+    "Crédit Anthropic ÉPUISÉ (mesuré le 02/10 à 12:55 UTC, bulle « code 502 · ia 400 crédit ») : Léo ne peut plus répondre nulle part — recharge = geste payant de Paul",
+    "#336 (B1 ⑤) : après la recharge, l'étape 0 rejouée (une dictée verte réelle), puis l'accord de fusion de Paul (SHA, cible main, CI verte)",
     "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",
     "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
     "La précision sur « mon dpe.fr » (VITRUVE)",
@@ -46,6 +47,10 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "LEÇON À CONSIGNER + PROPAGER (9 dépôts) : une erreur générique cache sa cause — « Léo n'a pas pu répondre » a masqué pendant des jours un crédit Anthropic épuisé (0 écriture en prod, ④ crue cassée) ; un échec côté tiers se dit à l'écran par son code et une cause en mots fermés. Payée le 02/10.",
+      "depuis": "2026-10-02"
+    },
     {
       "quoi": "Chaîne — prochaine boucle B sans geste A : B4 (un seul agenda Rénoboost sur le moteur d'Artidispo, et Réno lit Artidispo), à ouvrir avec la fiche du §4 du plan — aucun code avant la fiche. B2 (la double marge) est fermée : cadrée le 30/09 (fiche §13 du cadrage pilote RenoDevis, onze décisions, maquette, aucun code), corrigée le 01/10 par RenoDevis #218 et RenoBoost #566 — mesuré à 17:45 UTC sur main de RenoDevis 64211da : releve/prix.js convertit une fois sous meta.prixVente, lignes.test.js « aucune seconde marge », 680/680, tsc 0 ; Réno expose chiffre / nb_lignes / origine_lignes. ⛔ La fiche §13 est historique : son prompt E2 ne se rejoue pas.",
       "depuis": "2026-10-01"

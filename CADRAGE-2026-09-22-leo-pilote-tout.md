@@ -2139,8 +2139,20 @@ le clic pose une 3ᵉ ligne `defaite` et l'idée disparaît. Si 0 ligne ou une
 `tentee` seule : diagnostiquer ④ d'abord (anneau d'interface orange si la
 cible n'est pas dans la dictée, route, déploiement).
 
+**Étape 0 jouée le 02/10 (12:40–12:55 UTC), et elle a trouvé la panne.** Paul
+a dicté « Capture l'idée Test B1 » sur l'aperçu de #336 : « Léo n'a pas pu
+répondre », trois fois. Les journaux Vercel n'étant pas lisibles d'ici (403),
+la bulle a appris à dire son code (`d66c2a0` : **502**), puis la cause côté
+IA en mots fermés (`15e834e`, `causeEchecIA`) : **`ia 400 crédit`** — le
+**crédit du compte Anthropic est épuisé**. Léo ne peut plus appeler l'IA, donc
+aucune proposition, donc aucune écriture : c'est ce qui explique les 0 lignes
+de `leo_ecritures`, et ce n'est ni ④ ni ⑤. Écarté en passant : le modèle
+(`claude-opus-4-8`, valide et actif), la forme de la requête (système + deux
+outils), la session (un 401 l'aurait dit).
+
 **⏳ Registre — ce qui revient à Paul** :
-0. Le geste de l'étape 0 ci-dessus (une dictée, deux minutes).
+0. **Recharger le crédit Anthropic** (console Anthropic, geste payant — gate
+   Paul), puis rejouer l'étape 0 : la dictée, 2 lignes, « Défaire », 3ᵉ ligne.
 1. Lire le journal depuis le mail : (a) une clé de service en variable Vercel,
    utilisée par le seul cron (reco : non — une clé qui ouvre toute la base
    pour lire trois colonnes) ; (b) une fonction SQL `security definer` qui ne

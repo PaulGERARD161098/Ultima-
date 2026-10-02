@@ -57,7 +57,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T12:28:31.838Z",
+        "lecture_le": "2026-10-02T13:08:00.438Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -167,7 +167,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T12:28:31.838Z",
+        "lecture_le": "2026-10-02T13:08:00.438Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -272,7 +272,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T12:28:31.838Z",
+        "lecture_le": "2026-10-02T13:08:00.438Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -301,16 +301,17 @@ export default {
         "etat": "en_cours",
         "jalon": {
           "nom": "Léo et FINUBAR — activation du site et des commandes",
-          "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③④ faits ; ⑤ CODÉ le 02/10 (PR #336, brouillon : « Défaire » dans la bulle et sur /leo, ligne du matin, revue adverse soldée) — reste l'étape 0 (④ jamais vu écrire en prod) et la fusion"
+          "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③④ faits ; ⑤ CODÉ (PR #336, brouillon, CI verte) — l'étape 0 a trouvé la panne : crédit Anthropic épuisé (« ia 400 crédit »), Léo ne répond plus ; à rejouer après recharge, puis fusion"
         },
         "dernier_arret": {
           "le": "2026-10-02",
-          "quoi": "B1 ⑤ codé sur claude/leo-defaire, PR #336 (brouillon) : enrichissement orange (neuf verts), etape 'defaire' + GET sur /api/leo/ecritures, bouton dans la bulle, écran leo.html…",
+          "quoi": "B1 ⑤ codé, PR #336 (brouillon) : enrichissement orange, « Défaire » dans la bulle et sur /leo, ligne du mail ; revue securite-auditeur soldée. Étape 0 jouée par Paul sur l'aperçu…",
           "commit": "55efa9a0fbd01c8a0803d74eb329214d76487f3e"
         },
-        "prochaine_action": "Étape 0 de B1 ⑤ : Paul dicte une écriture verte réelle (« capture l'idée Test B1 », ADRAMELECH) sur l'aperçu de claude/leo-defaire ; mesurer en base 2 lignes sur un trace_id…",
+        "prochaine_action": "Paul recharge le crédit Anthropic (console Anthropic — geste payant), puis rejoue l'étape 0 sur l'aperçu de #336 : dicter « Capture l'idée Test B1 » sur /registre, mesurer 2…",
         "bloque_par": [
-          "#336 (B1 ⑤) : l'étape 0 — une dictée verte réelle de Paul, puis son accord de fusion (SHA, cible main, CI verte)",
+          "Crédit Anthropic ÉPUISÉ (mesuré le 02/10 à 12:55 UTC, bulle « code 502 · ia 400 crédit ») : Léo ne peut plus répondre nulle part — recharge = geste payant de Paul",
+          "#336 (B1 ⑤) : après la recharge, l'étape 0 rejouée (une dictée verte réelle), puis l'accord de fusion de Paul (SHA, cible main, CI verte)",
           "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",
           "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
           "La précision sur « mon dpe.fr » (VITRUVE)",
@@ -319,6 +320,10 @@ export default {
         ],
         "en_attente_depuis": "2026-08-20",
         "boucles_ouvertes": [
+          {
+            "quoi": "LEÇON À CONSIGNER + PROPAGER (9 dépôts) : une erreur générique cache sa cause — « Léo n'a pas pu répondre » a masqué pendant des jours un crédit Anthropic épuisé (0 écriture en…",
+            "depuis": "2026-10-02"
+          },
           {
             "quoi": "Chaîne — prochaine boucle B sans geste A : B4 (un seul agenda Rénoboost sur le moteur d'Artidispo, et Réno lit Artidispo), à ouvrir avec la fiche du §4 du plan — aucun code avant…",
             "depuis": "2026-10-01"
@@ -354,10 +359,6 @@ export default {
           {
             "quoi": "MESURÉ le 13/09 et démenti : la note annonçait des copies divergentes du rappel Finubar. Les sept fichiers ont la même empreinte. Voir CADRAGE-FINUBAR.md.",
             "depuis": "2026-09-13"
-          },
-          {
-            "quoi": "ripair (paggerard-boop) reste en LEÇONS v7 : hors de depots.json et fork partagé avec un tiers — exclu à dessein le 28/09. À trancher par Paul.",
-            "depuis": "2026-09-11"
           }
         ],
         "maj": "2026-10-02"
@@ -371,16 +372,16 @@ export default {
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "9c4de8e",
-        "tete_le": "2026-10-02T12:27:50+00:00",
-        "commits_depuis": 11,
+        "tete": "15e834e",
+        "tete_le": "2026-10-02T12:50:14+00:00",
+        "commits_depuis": 13,
         "commit_inconnu": false
       },
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T12:28:31.837Z",
+        "lecture_le": "2026-10-02T13:08:00.436Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -449,7 +450,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T12:28:31.838Z",
+        "lecture_le": "2026-10-02T13:08:00.438Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -508,7 +509,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T12:28:31.838Z",
+        "lecture_le": "2026-10-02T13:08:00.438Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -566,7 +567,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T12:28:31.839Z",
+        "lecture_le": "2026-10-02T13:08:00.438Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -634,7 +635,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T12:28:31.838Z",
+        "lecture_le": "2026-10-02T13:08:00.438Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -701,7 +702,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T12:28:31.838Z",
+        "lecture_le": "2026-10-02T13:08:00.438Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -804,7 +805,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T12:28:31.838Z",
+        "lecture_le": "2026-10-02T13:08:00.438Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -905,7 +906,11 @@ export default {
       },
       {
         "projet": "Ultima",
-        "geste": "#336 (B1 ⑤) : l'étape 0 — une dictée verte réelle de Paul, puis son accord de fusion (SHA, cible main, CI verte)"
+        "geste": "Crédit Anthropic ÉPUISÉ (mesuré le 02/10 à 12:55 UTC, bulle « code 502 · ia 400 crédit ») : Léo ne peut plus répondre nulle part — recharge = geste payant de Paul"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "#336 (B1 ⑤) : après la recharge, l'étape 0 rejouée (une dictée verte réelle), puis l'accord de fusion de Paul (SHA, cible main, CI verte)"
       },
       {
         "projet": "Ultima",
