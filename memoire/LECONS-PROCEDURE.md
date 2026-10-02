@@ -36,6 +36,12 @@ d'œil, sans réseau : même sceau, mêmes leçons.
 3. **Propager la copie** dans les neuf autres dépôts, octet pour octet. Un
    `diff` doit revenir vide : c'est le critère de réussite, pas « ça a l'air
    pareil ».
+   ⛔ **Avant de propager, les chemins se mesurent** : `node
+   finubar/lecons-chemins.mjs <dossier des dix clones>` doit rendre 0. Un
+   chemin propre à un seul dépôt, cité sans son préfixe, se lit depuis les neuf
+   autres comme un fichier local — un renvoi mort qui a l'air valide. *Payé le
+   02/10 : sept chemins nus, trouvés un par un par la relecture Codex, ont coûté
+   deux tours de propagation (v59 → v60 → v61) sur les dix dépôts.*
 4. **Le dire dans le commit du travail** qui a révélé la leçon — pas dans un
    commit séparé « docs » qu'on écrit un autre jour, et qu'on n'écrit donc pas.
 

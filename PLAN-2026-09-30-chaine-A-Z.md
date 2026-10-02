@@ -130,6 +130,14 @@ bases : `mwaryfscxgrulauwwque` (partagée) sauf mention.
 | A12 | Agenda Google d'Artidispo : `CRON_SECRET`, pg_net, agenda de test | M1 | Paul | la liste des gestes est dans Artidispo `docs/SECRETS.md` | ⬜ **0 connexion** au 26/09 (Artidispo `FINUBAR.md`, **non remesuré** : sa base est hors de portée du connecteur de cette séance) | au moins 1 connexion en production | `select count(*) from google_calendar_connections` (base Artidispo) |
 | A13 | Synchro e-mail : poser les 3 variables Gmail | M6 | Paul | — | ⬜ **inactive** : battement du 30/09 à 04:45 UTC, `actif = false` | `actif = true` | `select valeur from sentinelle_etat where cle = 'battement:rr-sync-email'` |
 
+🔁 **Remesuré le 02/10 entre 06:37 et 06:38 UTC, avec les requêtes de la
+colonne « Comment le mesurer » : aucun geste A n'a bougé.** A2 : toujours un seul
+dossier « SOLA », pas de « SOLA devis a lire » · A3 : 2 chiffrés et émis, mais
+**sur 13 devis, contre 15 le 30/09** — deux lignes ont quitté `devis`, écart non
+expliqué, à éclaircir avant de croire le dénominateur · A6a : `test = true`
+(battement 06:30) · A6b : `ouverts = 0` · A7 : 19 sans sort sur 27 · A9 :
+0 sticker · A13 : `actif = false` (battement 04:45).
+
 ⚠️ **A11 — un piège déjà visible** : l'ancien lien Calendly
 (`rdv-expert-cvc-30-min`), désactivé le 22/09, figure encore dans
 `datareno-/deploy/EMAIL_SETUP.md` (ligne 52) et `datareno-/docs/PRELANCEMENT.md`
