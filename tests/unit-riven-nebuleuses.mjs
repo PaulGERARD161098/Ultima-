@@ -61,6 +61,10 @@ verdicts.artExigeSonEspace = T.cleDe('Artisanat') === 'aclasser' && T.cleDe('Art
 verdicts.corpsDEtatDansLeBTP = ['Menuiserie', 'Plomberie', 'Électricité', 'Toiture', 'Chauffage', 'Maçonnerie']
   .every((s) => T.cleDe(s) === 'btp');
 verdicts.courtageDansLeConseil = T.cleDe('Courtage') === 'conseil';
+// La défense (l'armée) va dans les institutions (Paul, 02/10) ; l'industrie
+// d'armement, qui commence par son métier, reste dans l'industrie.
+verdicts.defenseDansLesInstitutions = T.cleDe('Défense - armée') === 'institutions' &&
+  T.cleDe('defense') === 'institutions' && T.cleDe('Aéronautique - défense') === 'industrie';
 
 // La table : neuf nébuleuses, clés uniques, teintes acceptées par la couche de fond.
 const RGB_VALIDE = /^rgb\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*\)$/;
