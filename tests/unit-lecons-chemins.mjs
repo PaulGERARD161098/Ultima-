@@ -6,6 +6,8 @@
 // chemins cités portent leur dépôt en préfixe »), restée sans garde jusqu'au
 // 02/10 — quatre chemins nus y étaient entrés, trouvés par la relecture Codex
 // d'Artidispo #111.
+// L'outil complet, qui lit les dix dépôts, ne tourne pas en CI (un seul dépôt y
+// est cloné) : il se lance à la propagation, et sa logique est éprouvée ici.
 import { readFileSync } from 'node:fs';
 
 const verdicts = {};
@@ -21,6 +23,15 @@ verdicts.cheminsTrouves = chemins.length >= 5;
 // 1. Aucun chemin vers finubar/ sans le préfixe de son dépôt.
 verdicts.aucunCheminNu = nus.length === 0;
 if (nus.length) console.error('Chemins sans préfixe :', nus);
+
+// 2. L'outil de propagation (`finubar/lecons-chemins.mjs`), sur un cas dont la
+//    réponse est connue : il ne garde QUE le chemin nu propre à un seul dépôt.
+const { cheminsCites, cheminsNus } = await import('../finubar/lecons-chemins.mjs');
+const depot = (...f) => ({ fichiers: new Set(f), dossiers: new Set(f.flatMap((x) => x.split('/').slice(0, -1).map((_, i, a) => a.slice(0, i + 1).join('/')))) });
+const contenus = { A: depot('CLAUDE.md', 'x/y.md'), B: depot('CLAUDE.md', 'app/ui.tsx') };
+const extrait = 'Voir `app/ui.tsx:302`, `A/x/y.md`, `CLAUDE.md`, et l\'exemple `` `x/y.md` `` montré nu.';
+const nusSynth = cheminsNus(cheminsCites(extrait), contenus);
+verdicts.outilGardeLeSeulNu = nusSynth.length === 1 && nusSynth[0].chemin === 'app/ui.tsx' && nusSynth[0].depot === 'B';
 
 console.log(JSON.stringify({ ...verdicts, chemins: chemins.length }, null, 2));
 const ok = Object.values(verdicts).every((v) => v === true);

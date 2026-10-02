@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v60 2026-10-02 sha256:c91a4792768b -->
+<!-- lecons:empreinte v61 2026-10-02 sha256:2a1fa153cdde -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -6,7 +6,7 @@
 > pour que tu les gardes en tête dans les repos ou dans Ultima, le repo macro »*.
 >
 > ⛔ **Ce fichier n'est pas un journal.** Le journal des décisions vit dans
-> `memoire/JOURNAL-DECISIONS.md` et raconte ce que Paul a tranché ; celui-ci
+> `Ultima-/memoire/JOURNAL-DECISIONS.md` et raconte ce que Paul a tranché ; celui-ci
 > retient ce qu'une **erreur** a appris. Une entrée n'arrive ici que lorsqu'un
 > défaut est passé pour de vrai, et elle porte toujours **ce qu'il a coûté** :
 > une règle sans son incident se lit comme un conseil, et un conseil s'oublie.
@@ -818,10 +818,13 @@ et un chemin qu'on ne trouve pas se lit comme une garde qu'on a supprimée.
 Vingt-sept occurrences étaient dans ce cas ; toutes portent désormais leur
 préfixe. ⚠️ **L'attribution se MESURE** (`git ls-files` sur les dix dépôts) et,
 quand plusieurs dépôts portent le même nom de fichier, elle se lit dans le
-TEXTE de la leçon — son tag, ou le domaine qu'elle cite. Quatre chemins restent
-nus **à dessein** : `CLAUDE.md`, `FINUBAR.md`, `memoire/LECONS.md` et
-`memoire/JOURNAL-DECISIONS.md` existent dans les dix, et la leçon parle bien du
-dépôt courant. Les préfixer serait faux.
+TEXTE de la leçon — son tag, ou le domaine qu'elle cite. Trois chemins restent
+nus **à dessein** : `CLAUDE.md`, `FINUBAR.md` et `memoire/LECONS.md` existent
+dans les dix, et la leçon parle bien du dépôt courant. Les préfixer serait faux.
+⊕ *(02/10)* Ce paragraphe en comptait quatre : `Ultima-/memoire/JOURNAL-DECISIONS.md`
+n'existe en fait que dans Ultima (`git ls-tree` sur les dix `main`) — il porte
+son préfixe depuis la v61, avec trois autres chemins entrés nus après cette
+passe et relevés par la relecture Codex de la propagation.
 
 **UN MÉCANISME DE CONTRÔLE POSÉ APRÈS LA PREMIÈRE COPIE LAISSE CETTE COPIE
 DEHORS** *(2026-09-11)*. Ce fichier a été déposé dans RenoAgenda le matin ; le
@@ -1388,7 +1391,7 @@ PANNEAU AVANT LA PREMIÈRE LIGNE, JAMAIS APRÈS** *(2026-09-30, RenoDevis, boucl
 B2)*. La fiche de B2 était validée et ses trois questions répondues. En lisant le
 composant pour coder, six choix que la fiche ne couvrait pas sont apparus : un
 champ `achat` stocké alors que la fiche disait « pas de colonne achat », la
-conversion des prix posés par chantier, un × 1,35 conservé dans `lignes.js` pour
+conversion des prix posés par chantier, un × 1,35 conservé dans `RenoDevis/releve/lignes.js` pour
 les entrées non marquées, le dessin d'un bouton, une ligne d'export retirée, un
 vocabulaire pour Réno. Sur « implante toutes les solutions du pre-mortem, puis
 prépare des panneaux », j'ai lancé la fusion de `main`, l'installation, la
@@ -1397,7 +1400,7 @@ une fois implantés. Paul a dû arrêter : « on ne brûle pas d'étape ».
 *Ce que ça a coûté* : une interruption, et vingt minutes à reconstituer ce qui
 manquait — le prompt de code en six points, la maquette, une mesure que seul
 Paul peut faire (combien de prix il a tapés dans sa bibliothèque), un
-consommateur oublié (`app/releve/ui.tsx:302`).
+consommateur oublié (`RenoDevis/app/releve/ui.tsx:302`).
 ⛔ **Le gate d'EL n'est pas franchi une fois pour toutes** : il se rouvre à
 chaque choix que la lecture révèle, et « puis des panneaux » se lit dans l'ordre
 d'EL — panneaux, puis code —, jamais dans l'ordre des mots. Décider après avoir
@@ -1723,7 +1726,7 @@ elle, rendre un écart non nul.
 **UNE PR QUI DORT SE FAIT DOUBLER** *(2026-07-30)*. Quand un autre fil pousse
 sur `main` — constat : quatre avancées en une séance — rebaser puis fusionner
 **sans délai**, sinon le rebase est à refaire. Un conflit sur
-`memoire/JOURNAL-DECISIONS.md`, où deux séances écrivent le même jour en fin de
+`Ultima-/memoire/JOURNAL-DECISIONS.md`, où deux séances écrivent le même jour en fin de
 fichier, se résout **toujours par concaténation** : garder les DEUX entrées,
 jamais arbitrer entre elles.
 
@@ -1865,7 +1868,8 @@ premier geste. Cinq manques bloquants, corrigés dans le même passage.*
 `DATARENO-` sont clonés en minuscules (`renoagenda`, `datareno-`). `node
 Ultima-/finubar/collecter.mjs` les dit alors « semés mais non déclarés » et sort en code
 4. La collecte se lance depuis un miroir de liens symboliques aux noms de
-`Ultima-/finubar/depots.json`, avec `node --preserve-symlinks --preserve-symlinks-main`.
+`Ultima-/finubar/depots.json`, avec, depuis ce miroir, `node --preserve-symlinks
+--preserve-symlinks-main Ultima-/finubar/collecter.mjs`.
 Ne pas « corriger » `Ultima-/finubar/depots.json` : ce sont les noms réels des dépôts.
 
 **UN DOCUMENT ÉCRIT POUR UN TIERS VIEILLIT PENDANT QU'ON L'ÉCRIT** *(2026-09-21)*.
