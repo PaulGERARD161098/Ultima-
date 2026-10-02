@@ -474,7 +474,14 @@ verifier('Panne : le champ est réarmé (saisissable)', await pageV.locator('.le
 
 // C3 bis. Une réponse en échec dit son CODE (et rien d'autre du serveur) :
 // c'est ce qui permet de diagnostiquer sans les journaux Vercel.
-for (const [code, corps] of [[502, { ok: false, error: "Léo n'a pas pu répondre" }], [504, null]]) {
+for (const [code, corps, suffixe] of [
+  [502, { ok: false, error: "Léo n'a pas pu répondre" }, ''],
+  // La cause du serveur, si elle est dans la liste fermée, s'ajoute au code…
+  [502, { ok: false, error: "Léo n'a pas pu répondre", cause: 'ia 400 crédit' }, ' · ia 400 crédit'],
+  // … et jamais un texte quelconque.
+  [502, { ok: false, error: "Léo n'a pas pu répondre", cause: '<b>injecté</b>' }, ''],
+  [504, null, '']
+]) {
   await pageV.unroute('**/api/leo');
   await pageV.route('**/api/leo', (route) => route.fulfill({ status: code,
     contentType: corps ? 'application/json' : 'text/html',
@@ -484,8 +491,8 @@ for (const [code, corps] of [[502, { ok: false, error: "Léo n'a pas pu répondr
   await pageV.locator('.leo-voix-envoyer').click();
   await pageV.waitForSelector('.leo-bulle-erreur', { timeout: 5000 });
   const texteErreur = (await pageV.locator('.leo-bulle-erreur').textContent()) || '';
-  verifier('Échec ' + code + ' : la bulle dit son code, sans recopier le serveur',
-    texteErreur === "Léo n'a pas pu répondre (code " + code + ') — réessayez.', texteErreur);
+  verifier('Échec ' + code + (suffixe || '') + ' : la bulle dit son code, sans recopier le serveur',
+    texteErreur === "Léo n'a pas pu répondre (code " + code + suffixe + ') — réessayez.', texteErreur);
 }
 
 // ===================== C4-C7. Les mains de Léo (L2b, API stubées) =====================

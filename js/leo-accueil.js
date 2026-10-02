@@ -1273,8 +1273,13 @@
           // seule trace qui distingue une session expirée (401), la cadence
           // (429), l'appel IA en échec (502) ou un délai dépassé (504). Un
           // nombre, jamais le corps de la réponse.
+          // La cause d'un 502 n'est affichée que si elle est dans la liste
+          // fermée du serveur (MOTIF_CAUSE_IA) — jamais un texte quelconque.
+          var cause = resultat.corps && typeof resultat.corps.cause === 'string' &&
+            /^ia (\d{3}( crédit)?|délai|réseau|vide)$/.test(resultat.corps.cause)
+            ? ' · ' + resultat.corps.cause : '';
           bulle('erreur', "Léo n'a pas pu répondre (code " +
-            (Number.isInteger(resultat.statut) ? resultat.statut : '?') + ') — réessayez.');
+            (Number.isInteger(resultat.statut) ? resultat.statut : '?') + cause + ') — réessayez.');
         }
         rearmer();
       }, function () {
