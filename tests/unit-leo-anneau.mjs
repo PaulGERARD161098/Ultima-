@@ -44,8 +44,10 @@ verdicts.anneauReconnuPartout = tousLesOutils.every((n) => ANNEAUX.includes(anne
 // silence — et c'est précisément ce que le critère de Paul rend possible,
 // puisque le périmètre par défaut est large.
 const verts = tousLesOutils.filter((n) => anneauDe(n) === 'vert').sort();
-verdicts.lesDixVerts = verts.join(',') === [
-  'proposer_besoin', 'proposer_enrichissement_idee', 'proposer_flamme',
+// ⛔ NEUF depuis le 02/10 : l'enrichissement est repassé orange (choix ① de
+// Paul, cadrage §15.2) — il n'a pas de défaire sans contenu conservé.
+verdicts.lesNeufVerts = verts.join(',') === [
+  'proposer_besoin', 'proposer_flamme',
   'proposer_idee', 'proposer_journal', 'proposer_page_journal',
   'proposer_relance', 'proposer_scenario', 'proposer_serment',
   'proposer_situation'

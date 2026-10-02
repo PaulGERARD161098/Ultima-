@@ -139,6 +139,13 @@ const DATE_MOTIF = /^\d{4}-\d{2}-\d{2}$/;
 // aucun appel sortant, aucun paiement. Sous le critère de Paul, il n'y a donc
 // rien à retenir : les dix sont verts.
 //
+// ⛔ NEUF DEPUIS LE 02/10 — l'enrichissement repasse ORANGE (choix ① de Paul,
+// cadrage §15.2). M3 (§12.2) : « un type d'écriture sans défaire éprouvé
+// n'entre pas dans l'anneau vert ». Neuf créations se défont par la
+// suppression de leur cible ; le PATCH qui concatène, lui, ne se défait
+// qu'avec l'essence d'avant — du CONTENU, que le journal n'a pas le droit de
+// porter (§13.6). Il revient donc à la carte de confirmation, seul.
+//
 // ⚠️ L'ORANGE N'EST PAS MORT POUR AUTANT — il garde le ONZIÈME outil. C'est
 // `ANNEAU_PAR_DEFAUT` qui le tient : un outil ajouté demain sans anneau est
 // orange, et le restera tant que personne ne l'aura instruit.
@@ -164,7 +171,9 @@ const CATALOGUE = {
   },
   proposer_enrichissement_idee: {
     quadrant: 'adramelech',
-    anneau: 'vert',
+    // ORANGE depuis le 02/10 : pas de défaire possible sans conserver
+    // l'essence d'avant (cadrage §15.1, choix ① de Paul).
+    anneau: 'orange',
     description: "Proposer d'enrichir une idée EXISTANTE de l'archipel avec " +
       "un ajout dicté par Paul.",
     args: {
