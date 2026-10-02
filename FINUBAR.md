@@ -28,17 +28,17 @@
   "etat": "en_cours",
   "jalon": {
     "nom": "Léo et FINUBAR — activation du site et des commandes",
-    "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③④ faits (④ le 30/09 : exécution sans clic derrière une trace, revue adversariale soldée) ; reste ⑤, le défaire joué + « ce que Léo a fait » au matin"
+    "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③④ faits ; ⑤ CODÉ le 02/10 (PR #336, brouillon : « Défaire » dans la bulle et sur /leo, ligne du matin, revue adverse soldée) — reste l'étape 0 (④ jamais vu écrire en prod) et la fusion"
   },
   "dernier_arret": {
     "le": "2026-10-02",
-    "quoi": "#328 fusionnée sur le go de Paul (B2 ✅ au §2, §0 → B4, leçons v59), puis #331 de la séance chaîne fusionnée à 06:56 UTC (CI : passages dépassés annulés, garde des groupes ; leçons v62 dans les dix dépôts). Collision entre les deux séances sur #327/#329, fermées par la séance chaîne ; réconciliation de l'autre séance abandonnée. Trois PR de grain ouvertes, zéro code : RenoDevis #222, RenoBoost #568, Artidispo #112. Leçons v64 à la source (⊕ une PR qu'on réconcilie se fait fermer sous la main ; la v63 de la séance chaîne est reprise), copies en v63 à propager.",
-    "commit": "b4e7b1d3d07c6334dad648c8b1c4ac2a31bd3500"
+    "quoi": "B1 ⑤ codé sur claude/leo-defaire, PR #336 (brouillon) : enrichissement orange (neuf verts), etape 'defaire' + GET sur /api/leo/ecritures, bouton dans la bulle, écran leo.html, section du mail (lien de lecture seul) ; revue securite-auditeur 0 critique / 0 élevé, M1 F1–F5 I2 fermés et validés rouges sur sabotage. Contact MAITRISECO ajouté à RIVEN. ⛔ leo_ecritures = 0 ligne en prod (12:26 UTC) : étape 0 à faire avant fusion.",
+    "commit": "55efa9a0fbd01c8a0803d74eb329214d76487f3e"
   },
-  "prochaine_action": "Paul tranche qui ouvre B4 (deux séances actives le 02/10), puis : Ouvrir B4 par sa fiche (PLAN-2026-09-30-chaine-A-Z.md §4), aucun code avant ; présenter d'abord à Paul les gestes A en un panneau.",
+  "prochaine_action": "Étape 0 de B1 ⑤ : Paul dicte une écriture verte réelle (« capture l'idée Test B1 », ADRAMELECH) sur l'aperçu de claude/leo-defaire ; mesurer en base 2 lignes sur un trace_id (tentee puis reussie avec cible_id), cliquer « Défaire », mesurer la 3ᵉ (defaite) — puis fusion de #336 sur son go.",
   "bloque_par": [
-    "#331 (CI + leçons v62 à la source) attend l'accord de Paul : SHA, cible main, preuve d'intégration",
-    "B1 ⑤ attend deux choix de Paul — cadrage §15.2 : ① l'enrichissement repasse-t-il orange faute de défaire (reco : oui) · ② où vit le bouton « défaire » (reco : cartouche + écran « ce que Léo a fait », jamais de lien dans le mail)",
+    "#336 (B1 ⑤) : l'étape 0 — une dictée verte réelle de Paul, puis son accord de fusion (SHA, cible main, CI verte)",
+    "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",
     "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
     "La précision sur « mon dpe.fr » (VITRUVE)",
     "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis",
