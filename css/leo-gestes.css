@@ -1,0 +1,29 @@
+/* L'écran « Ce que Léo a fait » (leo.html) — B1 ⑤. La page est la feuille de
+   Finubar (css/finubar.css) ; le bouton « Défaire » vient de css/leo.css.
+   Ce qui est propre à l'écran vit ici. Maquette : design/preview-leo-defaire.html. */
+.leo-gestes-page .feuille { max-width: 860px; }
+.gestes-jour {
+  margin: 1.2rem 0 0.4rem; font-variant: small-caps; letter-spacing: 0.16em;
+  color: var(--encre-pale); font-size: 0.9rem; font-weight: normal;
+}
+.gestes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.geste {
+  display: grid; grid-template-columns: 3.4rem 1fr auto auto; align-items: center; gap: 0.4rem 0.8rem;
+  padding: 0.55rem 0; border-bottom: 1px solid var(--filet);
+}
+.geste-heure { font-variant-numeric: tabular-nums; color: var(--encre-pale); }
+.geste-cible { color: var(--encre-claire); font-style: italic; overflow-wrap: anywhere; }
+.geste-etat { font-size: 0.9rem; color: var(--encre-claire); }
+.geste-etat:focus { outline: 2px solid var(--accent-focus, #1f5f8b); outline-offset: 2px; }
+.geste[data-etat="defait"] .geste-quoi { text-decoration: line-through; text-decoration-color: var(--encre-pale); }
+.geste[data-etat="lie"] .geste-etat,
+.geste[data-etat="retouche"] .geste-etat,
+.geste[data-etat="echec"] .geste-etat,
+.geste[data-etat="interrompu"] .geste-etat,
+.geste[data-etat="refuse"] .geste-etat,
+.geste[data-etat="inconnu"] .geste-etat { font-style: italic; }
+@media (max-width: 640px) {
+  .geste { grid-template-columns: 3rem 1fr; }
+  .geste-etat, .geste .leo-defaire { grid-column: 2; justify-self: start; }
+}
+.gestes-annonce { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

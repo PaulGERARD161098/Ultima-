@@ -218,6 +218,30 @@
   padding: 0.1rem 0.2rem;
 }
 
+/* B1 ⑤ — la bulle « Fait sans demander » porte, À CÔTÉ du texte, son bouton
+   « Défaire ». Cible tactile ≥ 44 px, nommée. Le même bouton sert l'écran
+   « Ce que Léo a fait » (leo.html). Maquette : design/preview-leo-defaire.html. */
+.leo-bulle-defaisable { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.5rem; }
+.leo-bulle-issue[tabindex="-1"]:focus { outline: 2px solid var(--accent-focus, #1f5f8b); outline-offset: 2px; }
+.leo-bulle-leo[tabindex="-1"]:focus { outline: 2px solid var(--accent-focus, #1f5f8b); outline-offset: 2px; }
+.leo-defaire {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 0.9rem;
+  font: inherit;
+  font-style: normal;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  color: var(--encre-sepia, #3b2f1c);
+  background: linear-gradient(180deg, #fbf5e6, var(--parchemin, #f6eed9));
+  border: 1px solid var(--cerne-carte, #5a4118);
+  border-radius: 4px;
+  cursor: pointer;
+}
+.leo-defaire:hover { background: var(--parchemin-carte, #efe3c6); }
+.leo-defaire:focus-visible { outline: 3px solid var(--accent-focus, #1f5f8b); outline-offset: 2px; }
+.leo-defaire:disabled { cursor: progress; opacity: 0.7; }
+
 /* ---- Les mains de Léo (L2b) : carte de confirmation d'action. ----
    Cartouche de parchemin cerné d'or : la reformulation DÉTERMINISTE du
    serveur, puis Confirmer / Annuler (≥ 44 px, accessibles clavier). */

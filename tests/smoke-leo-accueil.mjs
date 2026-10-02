@@ -688,8 +688,16 @@ verifier("Clore : la trace, l'issue, la CIBLE par identifiant — zéro contenu 
     etape: 'clore', traceId: TRACE, issue: 'reussie', cibleId: CREE
   }), JSON.stringify(corpsEcritures[1]));
 verifier('Paul le voit : « Fait sans demander » + la cible RÉSOLUE, dans le fil',
-  ((await pageV.locator('.leo-bulle-issue').textContent()) || '') ===
+  ((await pageV.locator('.leo-bulle-issue .leo-bulle-texte').textContent()) || '') ===
   '[Fait sans demander : ' + REFORMULATION + ' → Cible : « M. Lambert »]');
+// B1 ⑤ : à côté du texte, le bouton « Défaire » — nommé, ≥ 44 px.
+verifier('B1 ⑤ — la bulle porte son bouton « Défaire » (nommé, ≥ 44 px)', await pageV.evaluate(() => {
+  const b = document.querySelector('.leo-bulle-issue .leo-defaire');
+  if (!b) return false;
+  const r = b.getBoundingClientRect();
+  return b.textContent === 'Défaire' && /^Défaire : /.test(b.getAttribute('aria-label') || '') &&
+    r.width >= 44 && r.height >= 44;
+}));
 verifier('Vert : la saisie se réarme', await pageV.locator('.leo-voix-champ').isEnabled());
 
 // C9. Fail-closed : le journal refuse (503) ou tombe (réseau) → la carte, ZÉRO acte.
@@ -816,12 +824,14 @@ await pageV.evaluate((id) => {
 }, IDEE_ID);
 for (const ajout of ['A1', 'A2']) {
   await pageV.unroute('**/api/leo');
+  // ORANGE depuis le 02/10 (choix ① de Paul) : la carte, puis Confirmer.
   await stubberLeoAvecProposition({ outil: 'proposer_enrichissement_idee',
     args: { idee_ref: 'Atelier bois', ajout },
-    reformulation: 'Enrichir l’idée « Atelier bois » avec : « ' + ajout + ' »', anneau: 'vert' });
+    reformulation: 'Enrichir l’idée « Atelier bois » avec : « ' + ajout + ' »', anneau: 'orange' });
   const avant = corpsPatch.length;
   await pageV.locator('.leo-voix-champ').fill('Enrichis Atelier bois : ' + ajout);
   await pageV.locator('.leo-voix-envoyer').click();
+  await pageV.locator('.leo-carte-confirmer').click({ timeout: 5000 });
   for (let i = 0; i < 60 && corpsPatch.length === avant; i++) await pageV.waitForTimeout(50);
   await pageV.waitForFunction(() => !document.querySelector('.leo-voix-champ')?.disabled, { timeout: 5000 });
 }
@@ -838,13 +848,14 @@ await pageV.evaluate(() => {
 });
 for (const proposition of [
   { outil: 'proposer_idee', args: { titre: 'Atelier nouveau', resume: 'Base' }, reformulation: 'Créer Atelier nouveau', anneau: 'vert' },
-  { outil: 'proposer_enrichissement_idee', args: { idee_ref: 'Atelier nouveau', ajout: 'Suite' }, reformulation: 'Enrichir Atelier nouveau', anneau: 'vert' }
+  { outil: 'proposer_enrichissement_idee', args: { idee_ref: 'Atelier nouveau', ajout: 'Suite' }, reformulation: 'Enrichir Atelier nouveau', anneau: 'orange' }
 ]) {
   await pageV.unroute('**/api/leo');
   await stubberLeoAvecProposition(proposition);
   const avant = corpsPatch.length;
   await pageV.locator('.leo-voix-champ').fill('Action explicite');
   await pageV.locator('.leo-voix-envoyer').click();
+  if (proposition.anneau === 'orange') await pageV.locator('.leo-carte-confirmer').click({ timeout: 5000 });
   await pageV.waitForFunction(() => !document.querySelector('.leo-voix-champ')?.disabled, { timeout: 5000 });
   verifier('Création puis enrichissement : un appel sans rechargement', corpsPatch.length === avant + 1);
 }
@@ -877,6 +888,149 @@ verifier('Écho borné : le tour suivant porte l’écho, sous 4 000 caractères
   echos.length === 1 && echos[0].content.length <= 1000 && echos[0].content.endsWith('…]') &&
   (tourSuivant[0]?.messages || []).every((m) => m.content.length <= 4000),
   String(echos[0]?.content.length));
+
+// ===================== C17. B1 ⑤ — le défaire, joué dans la bulle (cadrage §15) =====================
+// Le bouton vit sur la bulle « Fait sans demander », et nulle part ailleurs
+// dans le cartouche. Un clic, une requête `{ etape: 'defaire', traceId }` —
+// jamais une cible, jamais un outil : le serveur relit la trace.
+let cloreRepondu = 0;
+let defaireArrive = 0;
+async function routerEcritures({ defaire, cloreDelai = 0 }) {
+  await pageV.unroute('**/api/leo/ecritures');
+  await pageV.route('**/api/leo/ecritures', async (route) => {
+    const corps = route.request().postDataJSON();
+    corpsEcritures.push(corps);
+    sequence.push(corps.etape);
+    if (corps.etape === 'ouvrir') return ouvertureOk(route);
+    if (corps.etape === 'defaire') { defaireArrive = Date.now(); return defaire(route); }
+    if (cloreDelai) await new Promise((r) => setTimeout(r, cloreDelai));
+    cloreRepondu = Date.now();
+    return route.fulfill({ status: 200, contentType: 'application/json',
+      body: JSON.stringify({ ok: true, data: { traceId: TRACE, issue: corps.issue } }) }).catch(() => {});
+  });
+}
+const defaitOk = (route) => route.fulfill({ status: 200, contentType: 'application/json',
+  body: JSON.stringify({ ok: true, data: { traceId: TRACE, defaite: true, journalise: true } }) });
+const boutonDefaire = () => pageV.waitForSelector('.leo-bulle-issue .leo-defaire', { timeout: 5000 })
+  .then(() => true, () => false);
+
+// C17a. Nominal : un clic → la requête exacte, la bulle devient « Défait », le focus la suit.
+await stubberVert({ ouverture: ouvertureOk, acte: acteOk });
+await routerEcritures({ defaire: defaitOk });
+await dicter('defaire-ok');
+const aBouton = await boutonDefaire();
+for (let i = 0; i < 50 && !sequence.includes('clore'); i++) await pageV.waitForTimeout(50);
+if (aBouton) await pageV.locator('.leo-bulle-issue .leo-defaire').click();
+await pageV.waitForSelector('.leo-bulle-issue[data-etat="defait"]', { timeout: 5000 }).catch(() => {});
+verifier('B1 ⑤ — Défaire : UNE requête, exactement { etape, traceId }',
+  aBouton && JSON.stringify(corpsEcritures.at(-1)) === JSON.stringify({ etape: 'defaire', traceId: TRACE }) &&
+  sequence.filter((x) => x === 'defaire').length === 1, JSON.stringify(corpsEcritures.at(-1)));
+verifier('B1 ⑤ — Défaire ne rejoue aucun acte', sequence.filter((x) => x === 'acte').length === 1,
+  sequence.join(' → '));
+const apresDefaire = await pageV.evaluate(() => {
+  const b = document.querySelector('.leo-bulle-issue');
+  return { etat: b?.getAttribute('data-etat'), texte: b?.querySelector('.leo-bulle-texte')?.textContent || '',
+    bouton: !!b?.querySelector('.leo-defaire'), focus: document.activeElement === b };
+});
+verifier('B1 ⑤ — la bulle dit « Défait », sans bouton', apresDefaire.etat === 'defait' && !apresDefaire.bouton &&
+  apresDefaire.texte.startsWith('[Défait : ' + REFORMULATION), apresDefaire.texte);
+verifier('B1 ⑤ — le focus va à la bulle devenue « Défait » (pas à la page)', apresDefaire.focus);
+// Léo l'apprend au tour suivant.
+const tourApres = [];
+await pageV.unroute('**/api/leo');
+await pageV.route('**/api/leo', (route) => {
+  tourApres.push(route.request().postDataJSON());
+  return route.fulfill({ status: 200, contentType: 'application/json',
+    body: JSON.stringify({ ok: true, data: { reponse: 'Entendu.' } }) });
+});
+await pageV.locator('.leo-voix-champ').fill('Merci.');
+await pageV.locator('.leo-voix-envoyer').click();
+for (let i = 0; i < 60 && tourApres.length === 0; i++) await pageV.waitForTimeout(50);
+verifier('B1 ⑤ — Léo apprend le défaire au tour suivant',
+  (tourApres[0]?.messages || []).some((m) => m.content === '[Paul a défait : ' + REFORMULATION + ']'));
+
+// C17b. Un clic AVANT la fin de la clôture : le défaire l'attend (sinon « rien à défaire »).
+// ⛔ Les deux instants sont REMIS À ZÉRO, et on attend la clôture avant de
+// juger : un premier jet lisait les valeurs du cas précédent, et restait vert
+// sur un code qui n'attendait plus rien (sabotage du 02/10).
+await stubberVert({ ouverture: ouvertureOk, acte: acteOk });
+await routerEcritures({ defaire: defaitOk, cloreDelai: 700 });
+cloreRepondu = 0;
+defaireArrive = 0;
+await dicter('defaire-rapide');
+if (await boutonDefaire()) await pageV.locator('.leo-bulle-issue .leo-defaire').click();
+await pageV.waitForSelector('.leo-bulle-issue[data-etat="defait"]', { timeout: 5000 }).catch(() => {});
+for (let i = 0; i < 40 && cloreRepondu === 0; i++) await pageV.waitForTimeout(50);
+verifier('B1 ⑤ — le défaire part APRÈS la réponse de la clôture',
+  cloreRepondu > 0 && defaireArrive > 0 && defaireArrive >= cloreRepondu, `${defaireArrive - cloreRepondu} ms`);
+
+// C17c. Refus : une flamme est née dessus → Léo le dit, RIEN n'a été retiré.
+for (const [nom, defaire, attendu] of [
+  ['lié', (route) => route.fulfill({ status: 409, contentType: 'application/json',
+    body: JSON.stringify({ ok: false, error: 'Lié : flammes' }) }), 'une flamme y est née depuis'],
+  ['retouché', (route) => route.fulfill({ status: 409, contentType: 'application/json',
+    body: JSON.stringify({ ok: false, error: 'Retouchée depuis' }) }), 'tu l’as retouché depuis'],
+  ['perdu', (route) => route.abort('failed'), 'Je ne sais pas si c’est défait'],
+  // Un message serveur inconnu n'est JAMAIS recopié tel quel.
+  ['inconnu', (route) => route.fulfill({ status: 409, contentType: 'application/json',
+    body: JSON.stringify({ ok: false, error: '<b>injecté</b>' }) }), 'Je n’ai pas pu le défaire. Rien n’a été retiré.']
+]) {
+  await stubberVert({ ouverture: ouvertureOk, acte: acteOk });
+  await routerEcritures({ defaire });
+  await dicter('defaire-' + nom);
+  if (await boutonDefaire()) await pageV.locator('.leo-bulle-issue .leo-defaire').click();
+  await pageV.waitForSelector('.leo-bulle-issue:not([data-etat="fait"])', { timeout: 5000 }).catch(() => {});
+  const refus = await pageV.evaluate(() => {
+    const b = document.querySelector('.leo-bulle-issue');
+    const leo = [...document.querySelectorAll('.leo-bulle-leo')].at(-1);
+    return { etat: b?.getAttribute('data-etat'), texte: b?.querySelector('.leo-bulle-texte')?.textContent || '',
+      bouton: !!b?.querySelector('.leo-defaire'), leo: leo?.textContent || '', focus: document.activeElement === leo,
+      html: leo?.innerHTML || '' };
+  });
+  verifier('B1 ⑤ — refus ' + nom + ' : Léo le dit, la bulle garde « Fait sans demander », plus de bouton',
+    refus.etat !== 'fait' && refus.etat !== 'defait' && !refus.bouton &&
+    refus.texte.startsWith('[Fait sans demander') && refus.leo.includes(attendu) && refus.focus &&
+    !refus.html.includes('<b>'), JSON.stringify(refus));
+}
+
+// C17d. Une réussite sans cible lisible : pas de bouton (le serveur refuserait).
+await stubberVert({ ouverture: ouvertureOk, acte: (route) => route.fulfill({ status: 200,
+  contentType: 'application/json', body: JSON.stringify({ ok: true, data: {} }) }) });
+await routerEcritures({ defaire: defaitOk });
+await dicter('defaire-sans-cible');
+await pageV.waitForSelector('.leo-bulle-issue', { timeout: 5000 });
+await pageV.waitForTimeout(150);
+verifier('B1 ⑤ — sans cible lisible, aucun bouton « Défaire »',
+  /Fait sans demander/.test((await pageV.locator('.leo-bulle-issue').textContent()) || '') &&
+  await pageV.locator('.leo-bulle-issue .leo-defaire').count() === 0);
+
+// C17e. L'idée défaite quitte la mémoire de la page : le tour suivant ne la vise plus.
+const IDEE_DEFAITE = 'cccccccc-0000-4000-8000-0000000000de';
+await pageV.unroute('**/api/idees/items');
+await pageV.route('**/api/idees/items', (route) => route.fulfill({ status: 200, contentType: 'application/json',
+  body: JSON.stringify({ ok: true, data: { id: IDEE_DEFAITE } }) }));
+await pageV.evaluate(() => {
+  document.querySelectorAll('.leo-voile').forEach((v) => v.remove());
+  window.__candidatsDefaire = { idees: [], prochainAdrNum: 200 };
+  window.UltimaLeo.accueillirQuadrant({ quadrant: 'defaire-idee', blason: 'boussole', salutation: 'Défaire.',
+    sections: [{ titre: 'État', lignes: ['—'] }],
+    voix: { quadrant: 'adramelech', jeton: 'jeton-de-test', candidats: window.__candidatsDefaire } });
+});
+sequence = []; corpsEcritures = [];
+await routerEcritures({ defaire: defaitOk });
+await pageV.unroute('**/api/leo');
+await stubberLeoAvecProposition({ outil: 'proposer_idee', args: { titre: 'Idée à défaire' },
+  reformulation: 'Créer l’idée « Idée à défaire »', anneau: 'vert' });
+await pageV.locator('.leo-voix-champ').fill('Capture une idée Idée à défaire');
+await pageV.locator('.leo-voix-envoyer').click();
+await boutonDefaire();
+const avantDefaire = await pageV.evaluate((id) => window.__candidatsDefaire.idees.some((i) => i.id === id), IDEE_DEFAITE);
+await pageV.locator('.leo-bulle-issue .leo-defaire').click().catch(() => {});
+await pageV.waitForSelector('.leo-bulle-issue[data-etat="defait"]', { timeout: 5000 }).catch(() => {});
+const apresDefaireIdee = await pageV.evaluate((id) => window.__candidatsDefaire.idees.some((i) => i.id === id), IDEE_DEFAITE);
+// Non-vacuité : l'idée était bien devenue une cible AVANT le défaire.
+verifier('B1 ⑤ — l’idée créée était une cible, et le défaire l’en retire', avantDefaire && !apresDefaireIdee,
+  `${avantDefaire} → ${apresDefaireIdee}`);
 
 verifier('Zéro erreur console (voix)', erreursVoix.length === 0, erreursVoix.slice(0, 3).join(' | '));
 await pageV.close();
