@@ -40,8 +40,9 @@
    - **Léo présente à Paul, en un seul panneau, les gestes A qui l'attendent**
      (⬜), chacun avec sa « part de Claude » déjà faite (§2) ;
    - **pendant qu'ils attendent Paul, Claude ouvre la première boucle B ⬜ qui
-     n'attend aucun geste A ouvert** (décision Q-P4 du 30/09). Au 30/09, c'est
-     **B2** : B1 se recette sur un devis émis (après A3), B3 attend A13 ;
+     n'attend aucun geste A ouvert** (décision Q-P4 du 30/09). Au 30/09, c'était
+     **B2** — fermée le 01/10 (RenoDevis #218, mesuré au §2) ; au 01/10, c'est
+     **B4** : B1 se recette sur un devis émis (après A3), B3 attend A13 ;
    - la **fiche du §4 ne vaut que pour une boucle de code** : un geste de Paul se
      présente, il ne se cadre pas en six points.
 4. **En fermant une boucle**, mettre à jour le grain `FINUBAR.md` du dépôt
@@ -143,7 +144,7 @@ gestes A sont les siens, les boucles B sont du code que Claude porte seul.
 | # | Boucle | Maillon | Dépôt | État | Preuve de sortie |
 |---|---|---|---|---|---|
 | B1 | Du chiffrage au reste à charge : le coût TTC du devis alimente la rentabilité de l'audit | M4 → M5 | RenoDevis | ⬜ `rentabilite` vaut null (cadrage §2, M5) ; se recette sur un devis réel, donc après A3 | un audit avec son reste à charge et son temps de retour, sur un devis réel |
-| B2 | La double marge (`margeFournitures` à 35 % appliquée par-dessus la bibliothèque) | M4 | RenoDevis | ⬜ défaut qualifié, non corrigé ; **aucune dépendance à Paul** | un harnais qui rougit sur la double application, puis vert |
+| B2 | La double marge (`margeFournitures` à 35 % appliquée par-dessus la bibliothèque) | M4 | RenoDevis + RenoBoost (ligne Réno) | ✅ **corrigée le 01/10 par RenoDevis #218** (fusionnée 08:26 UTC) et RenoBoost (`main` `62fa3ef`, #566 d'après #218) — mesuré à 17:45 UTC sur `main` de RenoDevis (`64211da`) : `releve/prix.js` convertit la bibliothèque une fois sous `meta.prixVente` et marque `vente: true` ; `releve/lignes.js:51-56` lit un prix de vente, `coefVente` a disparu ; 680/680, `tsc` 0, CI 36899869045 verte. Réno : `reno-data.mjs:250` sélectionne `lignes`, `:266` étale `etatChiffrage` (`chiffre`, `nb_lignes`, `origine_lignes` ∈ relevé/manuel/mixte). La fiche §13 de #217 (cadrage de la nuit du 30/09 : onze décisions, maquette, aucun code) est **historique** — son prompt E2 ne se rejoue pas (grain RenoDevis `64211da`) | ✅ `releve/lignes.test.js:51` « aucune seconde marge » (712 reste 712 ; rougit sur l'ancien code à 961,20) · ✅ « le total du devis vaut le total du récap » (même fichier) · ✅ `devis_relances` dit `chiffre` (`api/_lib/devis-chiffre.mjs`) |
 | B3 | Les devis arrivés par e-mail entrent (RR-07), une fois A13 posé | M6 | RenoDevis | ⬜ dépend d'A13 | à fixer à l'ouverture, sur ce qu'A13 aura révélé |
 | B4 | Un seul agenda Rénoboost à la place de Calendly, sur le moteur d'Artidispo — **et Réno lit Artidispo** (R1, §5) | M0 + M1 | Artidispo + RenoBoost | ⬜ | le site, le salon et les campagnes pointent vers un seul agenda Rénoboost ; la bande Réno passe M0 et M1 à « le suit » |
 
