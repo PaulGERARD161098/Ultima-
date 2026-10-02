@@ -99,6 +99,16 @@
   18 verdicts validés rouges sur le code d'avant ; relecture Codex : 4 constats corrigés.
   `smoke-riven-nebuleuses` 119/119.
   Détail : `CADRAGE-RIVEN-NEBULEUSES.md` §8 bis.
+- 🧭 **SESSION 2026-10-02 (jour/soir) — B1 ⑤ CODÉ EN #336, CRÉDIT ANTHROPIC ÉPUISÉ, RIVEN VÉRIFIÉ ET CLASSÉ (#338 fusionnée).**
+  ✅ B1 ⑤ codé sur `claude/leo-defaire` (PR #336, brouillon, CI verte) — détail
+  dans son cadrage §15.5 et dans l'entrée de séance portée par #336. ⛔ L'étape 0,
+  jouée par Paul sur l'aperçu, a trouvé la panne : la bulle de Léo affiche
+  « code 502 · ia 400 crédit » — le crédit Anthropic est épuisé, d'où les
+  0 écritures en prod. ✅ RIVEN : 45 fiches des 72 h vérifiées en base (cocktail
+  complet, 4 cartes BATIMAT, la carte MAITRISECO) ; trois invités complétés sur
+  dictée de Paul ; « Défense » rangée dans Institutions & associatif (#338,
+  fusionnée sur son go, `main` `4a5cdec`). Une fiche reste « À classer »
+  (activité inconnue de Paul). ⏳ Geste de Paul : recharger le crédit Anthropic.
 - 🧭 **SESSION 2026-10-02 (matin) — REPRISE CADRÉE SUR MESURE, #328 FUSIONNÉE, COLLISION AVEC LA SÉANCE CHAÎNE (branche `claude/bold-ride-lz23qg` ; PR de séance en brouillon).**
   ✅ État des lieux mesuré à 05:00 UTC (API GitHub, git, base : `paiements` = 0,
   13 lignes dans `devis`, aucune créée en septembre), reprise cadrée en six

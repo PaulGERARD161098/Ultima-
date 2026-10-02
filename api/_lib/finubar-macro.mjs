@@ -58,7 +58,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T16:47:55.673Z",
+        "lecture_le": "2026-10-02T16:58:09.485Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -168,7 +168,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T16:47:55.636Z",
+        "lecture_le": "2026-10-02T16:58:09.399Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -273,7 +273,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T16:47:55.650Z",
+        "lecture_le": "2026-10-02T16:58:09.424Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -301,17 +301,19 @@ export default {
         "etat": "en_cours",
         "jalon": {
           "nom": "Léo et FINUBAR — activation du site et des commandes",
-          "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③④ faits (④ le 30/09 : exécution sans clic derrière une trace, revue adversariale soldée) ; reste ⑤, le défaire joué + « ce que Léo a fait » au matin"
+          "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③④ faits ; ⑤ CODÉ (PR #336, brouillon, CI verte) — l'étape 0 a trouvé la panne : crédit Anthropic épuisé (« ia 400 crédit »), Léo ne répond plus ; à rejouer après recharge, puis fusion"
         },
         "dernier_arret": {
           "le": "2026-10-02",
-          "quoi": "B4 réduite à R1 : Artidispo #114 et RenoBoost #571 fusionnées, en production. Preuve de bout en bout bloquée : Réno en 502 à 16:43 UTC, crédit API Anthropic épuisé.",
-          "commit": "4a5cdec49ea06cb799ba33dab6108cb6e3bde09c"
+          "quoi": "02/10 soir : B1 ⑤ codé (#336), RIVEN vérifié (#338). Chaîne : B4 réduite à R1, en production, non prouvée. Crédit Anthropic épuisé : Léo et Réno rendent 502.",
+          "commit": "333f623ac1bff83a165dd28ae2a42dbab30e8639"
         },
-        "prochaine_action": "Crédit Anthropic rechargé : demander à Réno « Où en est Artidispo ? », comparer aux totaux de la base, puis fermer R1 (maquette, grains, PLAN §2).",
+        "prochaine_action": "Paul recharge le crédit Anthropic (console Anthropic — geste payant), puis rejoue l'étape 0 sur l'aperçu de #336 : dicter « Capture l'idée Test B1 » sur /registre, mesurer 2…",
         "bloque_par": [
-          "Crédit API Anthropic épuisé (02/10, 16:43 UTC) : Réno rend 502 en production. Recharger = dépense, geste de Paul.",
-          "B1 ⑤ attend deux choix de Paul — cadrage §15.2 : ① l'enrichissement repasse-t-il orange faute de défaire (reco : oui) · ② où vit le bouton « défaire » (reco : cartouche + écran «…",
+          "Crédit Anthropic ÉPUISÉ (mesuré le 02/10 à 12:55 UTC, bulle « code 502 · ia 400 crédit ») : Léo ne peut plus répondre nulle part — recharge = geste payant de Paul",
+          "R1 (B4) en production, non prouvée : Réno a rendu 502 le 02/10 à 16:43 UTC. Après la recharge, lui demander « Où en est Artidispo ? » et comparer à la base (PLAN §2).",
+          "#336 (B1 ⑤) : après la recharge, l'étape 0 rejouée (une dictée verte réelle), puis l'accord de fusion de Paul (SHA, cible main, CI verte)",
+          "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",
           "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
           "La précision sur « mon dpe.fr » (VITRUVE)",
           "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis",
@@ -319,6 +321,10 @@ export default {
         ],
         "en_attente_depuis": "2026-08-20",
         "boucles_ouvertes": [
+          {
+            "quoi": "LEÇON À CONSIGNER + PROPAGER (9 dépôts) : une erreur générique cache sa cause — « Léo n'a pas pu répondre » a masqué pendant des jours un crédit Anthropic épuisé (0 écriture en…",
+            "depuis": "2026-10-02"
+          },
           {
             "quoi": "Chaîne — prochaine boucle B sans geste A : B4 (un seul agenda Rénoboost sur le moteur d'Artidispo, et Réno lit Artidispo), à ouvrir avec la fiche du §4 du plan — aucun code avant…",
             "depuis": "2026-10-01"
@@ -354,32 +360,28 @@ export default {
           {
             "quoi": "MESURÉ le 13/09 et démenti : la note annonçait des copies divergentes du rappel Finubar. Les sept fichiers ont la même empreinte. Voir CADRAGE-FINUBAR.md.",
             "depuis": "2026-09-13"
-          },
-          {
-            "quoi": "ripair (paggerard-boop) reste en LEÇONS v7 : hors de depots.json et fork partagé avec un tiers — exclu à dessein le 28/09. À trancher par Paul.",
-            "depuis": "2026-09-11"
           }
         ],
         "maj": "2026-10-02"
       },
       "recits": [
-        "bloque_par[]",
+        "prochaine_action",
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "racine",
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "7bd4546",
-        "tete_le": "2026-10-02T06:57:35+00:00",
-        "commits_depuis": 1,
+        "tete": "bcf1e69",
+        "tete_le": "2026-10-02T16:48:04+00:00",
+        "commits_depuis": 2,
         "commit_inconnu": false
       },
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T16:47:55.621Z",
+        "lecture_le": "2026-10-02T16:58:09.370Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -449,7 +451,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T16:47:55.718Z",
+        "lecture_le": "2026-10-02T16:58:09.553Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -508,7 +510,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T16:47:55.684Z",
+        "lecture_le": "2026-10-02T16:58:09.509Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -566,7 +568,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T16:47:55.730Z",
+        "lecture_le": "2026-10-02T16:58:09.569Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -634,7 +636,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T16:47:55.662Z",
+        "lecture_le": "2026-10-02T16:58:09.455Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -701,7 +703,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T16:47:55.695Z",
+        "lecture_le": "2026-10-02T16:58:09.521Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -804,7 +806,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T16:47:55.706Z",
+        "lecture_le": "2026-10-02T16:58:09.533Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -904,11 +906,19 @@ export default {
       },
       {
         "projet": "Ultima",
-        "geste": "Crédit API Anthropic épuisé (02/10, 16:43 UTC) : Réno rend 502 en production. Recharger = dépense, geste de Paul."
+        "geste": "Crédit Anthropic ÉPUISÉ (mesuré le 02/10 à 12:55 UTC, bulle « code 502 · ia 400 crédit ») : Léo ne peut plus répondre nulle part — recharge = geste payant de Paul"
       },
       {
         "projet": "Ultima",
-        "geste": "B1 ⑤ attend deux choix de Paul — cadrage §15.2 : ① l'enrichissement repasse-t-il orange faute de défaire (reco : oui) · ② où vit le bouton « défaire » (reco : cartouche + écran «…"
+        "geste": "R1 (B4) en production, non prouvée : Réno a rendu 502 le 02/10 à 16:43 UTC. Après la recharge, lui demander « Où en est Artidispo ? » et comparer à la base (PLAN §2)."
+      },
+      {
+        "projet": "Ultima",
+        "geste": "#336 (B1 ⑤) : après la recharge, l'étape 0 rejouée (une dictée verte réelle), puis l'accord de fusion de Paul (SHA, cible main, CI verte)"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)"
       },
       {
         "projet": "Ultima",
