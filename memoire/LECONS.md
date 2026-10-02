@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v65 2026-10-02 sha256:9f372586c800 -->
+<!-- lecons:empreinte v66 2026-10-02 sha256:0f5b7770b244 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -526,6 +526,24 @@ run d'après.
 ⇒ *Règle* : une régularité observée se note comme une observation datée AVEC SON EFFECTIF, jamais comme une règle.
 
 ## 2. Les garde-fous, et leur silence
+
+**UNE CLASSE SUPPOSÉE GÉNÉRÉE PEUT NE PAS L'ÊTRE — ET LE BOUTON DISPARAÎT** *(2026-10-02, RenoDevis)*.
+Le bouton « Créer » de la barre portait `bg-danger-ink text-surface`. Tailwind
+n'a jamais produit `bg-danger-ink` — mesuré dans la feuille compilée par
+`next build` : aucune règle. Fond transparent, texte blanc, sur un en-tête
+blanc : **le bouton d'entrée du produit était invisible en production**, pendant
+que `tsc`, les 779 tests, le build et la CI étaient verts. Aucune de ces portes
+ne charge une feuille de style. Paul l'a trouvé à l'œil : *« je sais qu'à gauche
+de "mes relances" il y a "créer" mais rien ne se voit »*.
+
+⛔ **Une couleur qui décide de la lisibilité se prouve sur la CSS COMPILÉE, dans
+un navigateur, contraste calculé** — jamais sur la présence d'une classe dans le
+source. `RenoDevis/tests/nav-boutons.mjs` le fait, et s'éprouve d'abord sur
+l'ancienne chaîne de classes, qu'il doit juger invisible (1,00:1). ⇒ Une couleur
+qui porte du texte se déclare en **paire de jetons explicite**
+(`--color-…-solide` / `-solide-encre`), comme le bouton principal ; le même soir,
+le garde-fou de style du dépôt a refusé deux couleurs écrites en dur, et il
+avait raison.
 
 **UN GARDE-FOU PEUT ATTRAPER LA BONNE PANNE ET LA NOMMER FAUX** *(2026-09-28, Ultima)*.
 Le contrôle d'empreinte des exports de méthode a été étendu au nouveau doc
