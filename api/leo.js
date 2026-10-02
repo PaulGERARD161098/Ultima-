@@ -32,6 +32,7 @@ import {
   reformulerProposition,
   validerEtatQuadrant,
   anneauInterface,
+  causeEchecIA,
   joindreEtatConversation
 } from './_lib/leo.js';
 
@@ -120,12 +121,13 @@ export default async function handler(req, res) {
     }
     if (!texte) {
       logError('leo.voix.vide', reponse.stop_reason || '');
-      return fail(res, 502, "Léo n'a pas pu répondre");
+      return fail(res, 502, "Léo n'a pas pu répondre", { cause: 'ia vide' });
     }
     return ok(res, { reponse: texte });
   } catch (erreur) {
     // Jamais le contenu ni le message brut : statut HTTP ou nom d'erreur.
     logError('leo.voix', erreur?.status || erreur?.name || 'erreur');
-    return fail(res, 502, "Léo n'a pas pu répondre");
+    // La cause, en mots fermés, pour que Paul la voie (diagnostic du 02/10).
+    return fail(res, 502, "Léo n'a pas pu répondre", { cause: causeEchecIA(erreur) });
   }
 }

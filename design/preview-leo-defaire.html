@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Maquette — Léo : défaire et « ce que Léo a fait »</title>
+<!--
+  MAQUETTE DE TRAVAIL — B1 ⑤ (CADRAGE-2026-09-22-leo-pilote-tout.md §15.2 à §15.4).
+  Données INVENTÉES : aucun geste réel de Léo, aucune fiche de Paul.
+  Les deux choix de Paul du 02/10 y sont appliqués : ① l'enrichissement repasse
+  orange (il n'apparaît donc pas ici : il passe par la carte de confirmation) ;
+  ② le bouton « Défaire » vit dans la bulle du cartouche ET sur l'écran
+  « Ce que Léo a fait », que le mail du matin pointe sans jamais porter d'action.
+  Les feuilles de style du produit sont chargées telles quelles (finubar.css pour
+  la page, leo.css pour le cartouche) ; ce qui est NEUF vit dans
+  preview-leo-defaire.css. Script en fichier séparé : la CSP d'Ultima interdit
+  'unsafe-inline' sur script-src. Aucun appel réseau.
+-->
+<link rel="stylesheet" href="../css/finubar.css">
+<link rel="stylesheet" href="../css/leo.css">
+<link rel="stylesheet" href="preview-leo-defaire.css">
+</head>
+<body class="finubar apercu-defaire">
+
+<div class="feuille">
+
+  <header class="cartouche entete-quadrant">
+    <p class="surtitre">Ultima · maquette B1 ⑤</p>
+    <h1>Défaire ce que Léo a fait</h1>
+    <p class="devise">Trois lieux, une même règle : chaque geste fait sans demander se défait d'un clic, sauf si quelque chose est né dessus depuis.</p>
+  </header>
+
+  <!-- ① Dans le cartouche : l'erreur vue sur le moment -->
+  <section class="apercu-volet" aria-labelledby="volet-1">
+    <h2 id="volet-1" class="apercu-volet-titre"><span class="apercu-num">①</span> Dans le cartouche de Léo, sur le moment</h2>
+    <div class="apercu-trois">
+      <figure class="apercu-cas">
+        <figcaption>Juste après le geste</figcaption>
+        <div class="leo-cartouche apercu-cartouche">
+          <div class="leo-dialogue apercu-dialogue">
+            <p class="leo-bulle leo-bulle-paul">Crée une idée : un atelier bois pour les apprentis</p>
+            <div class="leo-bulle leo-bulle-issue apercu-issue" data-etat="fait">
+              <span class="apercu-issue-texte">Fait sans demander : créer l'idée « Un atelier bois pour les apprentis ».</span>
+              <button type="button" class="leo-defaire" data-cas="idee">Défaire</button>
+            </div>
+          </div>
+        </div>
+      </figure>
+      <figure class="apercu-cas">
+        <figcaption>Après « Défaire »</figcaption>
+        <div class="leo-cartouche apercu-cartouche">
+          <div class="leo-dialogue apercu-dialogue">
+            <p class="leo-bulle leo-bulle-paul">Crée une idée : un atelier bois pour les apprentis</p>
+            <div class="leo-bulle leo-bulle-issue apercu-issue" data-etat="defait">
+              <span class="apercu-issue-texte">Défait : l'idée « Un atelier bois pour les apprentis » est retirée. Rien d'autre n'a bougé.</span>
+            </div>
+          </div>
+        </div>
+      </figure>
+      <figure class="apercu-cas">
+        <figcaption>Quand quelque chose est né dessus</figcaption>
+        <div class="leo-cartouche apercu-cartouche">
+          <div class="leo-dialogue apercu-dialogue">
+            <p class="leo-bulle leo-bulle-paul">Scelle un serment : courir le dimanche</p>
+            <div class="leo-bulle leo-bulle-issue apercu-issue" data-etat="refuse">
+              <span class="apercu-issue-texte">Fait sans demander : sceller le serment « Courir le dimanche ».</span>
+            </div>
+            <p class="leo-bulle leo-bulle-paul">Allume une flamme sur courir le dimanche</p>
+            <div class="leo-bulle leo-bulle-issue apercu-issue" data-etat="fait">
+              <span class="apercu-issue-texte">Fait sans demander : allumer une flamme sur « Courir le dimanche ».</span>
+            </div>
+            <p class="leo-bulle leo-bulle-leo apercu-refus">Tu as touché « Défaire » sur le serment : je ne peux pas, une flamme y est née depuis. Le défaire l'effacerait avec lui. Rien n'a été retiré.</p>
+          </div>
+        </div>
+      </figure>
+    </div>
+    <p class="apercu-note">Le bouton n'apparaît que sur la bulle « Fait sans demander ». Le défaire ne repart jamais en arrière-plan : il demande ce clic.</p>
+  </section>
+
+  <!-- ② L'écran : l'erreur découverte le lendemain -->
+  <section class="apercu-volet" aria-labelledby="volet-2">
+    <h2 id="volet-2" class="apercu-volet-titre"><span class="apercu-num">②</span> L'écran « Ce que Léo a fait », le lendemain</h2>
+    <div class="apercu-ecran">
+      <nav class="barre-retour" aria-label="Retour à la console">
+        <a class="retour-ultima" href="#volet-2">← Console</a>
+      </nav>
+      <header class="apercu-ecran-tete">
+        <p class="surtitre">Ultima · Léo</p>
+        <h3 class="apercu-ecran-titre">Ce que Léo a fait</h3>
+        <p class="devise">Ses gestes sans demander, du plus récent au plus ancien. Chacun se défait d'un clic tant que rien n'est né dessus.</p>
+      </header>
+
+      <h4 class="apercu-jour">Aujourd'hui</h4>
+      <ul class="apercu-gestes">
+        <li class="apercu-geste" data-etat="fait">
+          <span class="apercu-heure">09:12</span>
+          <span class="apercu-quoi">A créé une idée <span class="apercu-cible">« Un atelier bois pour les apprentis »</span></span>
+          <span class="apercu-etat">Fait</span>
+          <button type="button" class="leo-defaire" data-cas="idee-ecran">Défaire</button>
+        </li>
+        <li class="apercu-geste" data-etat="fait">
+          <span class="apercu-heure">08:47</span>
+          <span class="apercu-quoi">A programmé une relance <span class="apercu-cible">« M. Lambert »</span></span>
+          <span class="apercu-etat">Fait</span>
+          <button type="button" class="leo-defaire" data-cas="relance">Défaire</button>
+        </li>
+      </ul>
+
+      <h4 class="apercu-jour">Hier</h4>
+      <ul class="apercu-gestes">
+        <li class="apercu-geste" data-etat="lie">
+          <span class="apercu-heure">18:20</span>
+          <span class="apercu-quoi">A scellé un serment <span class="apercu-cible">« Courir le dimanche »</span></span>
+          <span class="apercu-etat">Ne se défait plus : une flamme y est née le 01/10</span>
+        </li>
+        <li class="apercu-geste" data-etat="defait">
+          <span class="apercu-heure">17:05</span>
+          <span class="apercu-quoi">A noté au journal</span>
+          <span class="apercu-etat">Défait par toi, le 01/10 à 17:30</span>
+        </li>
+        <li class="apercu-geste" data-etat="echec">
+          <span class="apercu-heure">16:02</span>
+          <span class="apercu-quoi">A tenté de créer un besoin</span>
+          <span class="apercu-etat">N'a pas abouti : rien n'a été écrit</span>
+        </li>
+      </ul>
+      <p class="apercu-note">Une cible n'est nommée que tant qu'elle existe : le journal de Léo ne garde aucun contenu, seulement le geste. Un geste défait ou qui n'a pas abouti se lit donc sans nom. Les enrichissements d'idée n'y figurent pas : depuis le choix ①, Léo te les fait confirmer.</p>
+    </div>
+  </section>
+
+  <!-- ③ Le mail du matin : il montre et il pointe, il n'agit jamais -->
+  <section class="apercu-volet" aria-labelledby="volet-3">
+    <h2 id="volet-3" class="apercu-volet-titre"><span class="apercu-num">③</span> Dans le mail du matin</h2>
+    <pre class="apercu-mail">CE QUE LÉO A FAIT DEPUIS HIER
+  · 09:12 — a créé une idée
+  · 08:47 — a programmé une relance
+  · hier 18:20 — a scellé un serment
+  · hier 17:05 — a noté au journal (défait par toi)
+
+Pour revoir ou défaire : « Ce que Léo a fait », dans Ultima.
+https://ultima-plum.vercel.app/leo.html</pre>
+    <p class="apercu-note">Aucun contenu dicté dans le mail : un verbe, un objet, une heure. Le seul lien ouvre l'écran ② ; il n'agit pas. Un scanner de messagerie qui l'ouvre à l'avance ne défait rien.</p>
+  </section>
+
+</div>
+<p id="apercu-annonce" class="apercu-annonce" role="status" aria-live="polite"></p>
+<script src="preview-leo-defaire.js"></script>
+</body>
+</html>

@@ -28,17 +28,16 @@
   "etat": "en_cours",
   "jalon": {
     "nom": "Léo et FINUBAR — activation du site et des commandes",
-    "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③④ faits ; ⑤ CODÉ (PR #336, brouillon, CI verte) — l'étape 0 a trouvé la panne : crédit Anthropic épuisé (« ia 400 crédit »), Léo ne répond plus ; à rejouer après recharge, puis fusion"
+    "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③④⑤ en production — ⑤ fusionné le 02/10 au soir (#336) sur ordre de Paul, SANS l'étape 0 : le crédit Anthropic est épuisé (« ia 400 crédit »), Léo ne répond plus ; la preuve en prod (une écriture, son défaire) reste à faire après la recharge"
   },
   "dernier_arret": {
     "le": "2026-10-02",
-    "quoi": "B1 ⑤ codé en PR #336 (brouillon, CI verte) ; l'étape 0 jouée sur l'aperçu a trouvé la panne : « code 502 · ia 400 crédit », le crédit Anthropic est épuisé (cause des 0 écritures en prod). RIVEN : 45 fiches des 72 h vérifiées (39 invités du cocktail + l'entreprise RénoBoost IA, 4 cartes BATIMAT, la carte MAITRISECO), trois invités complétés sur dictée de Paul ; #338 fusionnée (« Défense » → Institutions & associatif, main 4a5cdec). Reste dans « À classer » : une fiche (activité inconnue de Paul).",
-    "commit": "4a5cdec49ea06cb799ba33dab6108cb6e3bde09c"
+    "quoi": "B1 ⑤ codé en PR #336 (brouillon, CI verte) ; l'étape 0 jouée sur l'aperçu a trouvé la panne : « code 502 · ia 400 crédit », le crédit Anthropic est épuisé (cause des 0 écritures en prod). RIVEN : 45 fiches des 72 h vérifiées (39 invités du cocktail + l'entreprise RénoBoost IA, 4 cartes BATIMAT, la carte MAITRISECO), trois invités complétés sur dictée de Paul ; #338 fusionnée (« Défense » → Institutions & associatif, main 4a5cdec). Reste dans « À classer » : une fiche (activité inconnue de Paul). #336 (B1 ⑤) fusionnée ensuite sur ordre de Paul (« merge ce qu'il y a en cours »), main intégrée, CI verte — étape 0 non rejouée.",
+    "commit": "333f623ac1bff83a165dd28ae2a42dbab30e8639"
   },
-  "prochaine_action": "Paul recharge le crédit Anthropic (console Anthropic — geste payant), puis rejoue l'étape 0 sur l'aperçu de #336 : dicter « Capture l'idée Test B1 » sur /registre, mesurer 2 lignes (tentee, reussie) dans leo_ecritures, cliquer « Défaire », mesurer la 3ᵉ (defaite) — puis fusion de #336 sur son go.",
+  "prochaine_action": "Paul recharge le crédit Anthropic (console Anthropic — geste payant) ; puis étape 0 EN PRODUCTION sur /registre : dicter « Capture l'idée Test B1 », mesurer 2 lignes (tentee, reussie) dans leo_ecritures, cliquer « Défaire », mesurer la 3ᵉ (defaite) et la disparition de l'idée.",
   "bloque_par": [
     "Crédit Anthropic ÉPUISÉ (mesuré le 02/10 à 12:55 UTC, bulle « code 502 · ia 400 crédit ») : Léo ne peut plus répondre nulle part — recharge = geste payant de Paul",
-    "#336 (B1 ⑤) : après la recharge, l'étape 0 rejouée (une dictée verte réelle), puis l'accord de fusion de Paul (SHA, cible main, CI verte)",
     "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",
     "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
     "La précision sur « mon dpe.fr » (VITRUVE)",

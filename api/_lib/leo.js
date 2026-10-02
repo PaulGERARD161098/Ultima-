@@ -139,6 +139,13 @@ const DATE_MOTIF = /^\d{4}-\d{2}-\d{2}$/;
 // aucun appel sortant, aucun paiement. Sous le critère de Paul, il n'y a donc
 // rien à retenir : les dix sont verts.
 //
+// ⛔ NEUF DEPUIS LE 02/10 — l'enrichissement repasse ORANGE (choix ① de Paul,
+// cadrage §15.2). M3 (§12.2) : « un type d'écriture sans défaire éprouvé
+// n'entre pas dans l'anneau vert ». Neuf créations se défont par la
+// suppression de leur cible ; le PATCH qui concatène, lui, ne se défait
+// qu'avec l'essence d'avant — du CONTENU, que le journal n'a pas le droit de
+// porter (§13.6). Il revient donc à la carte de confirmation, seul.
+//
 // ⚠️ L'ORANGE N'EST PAS MORT POUR AUTANT — il garde le ONZIÈME outil. C'est
 // `ANNEAU_PAR_DEFAUT` qui le tient : un outil ajouté demain sans anneau est
 // orange, et le restera tant que personne ne l'aura instruit.
@@ -164,7 +171,9 @@ const CATALOGUE = {
   },
   proposer_enrichissement_idee: {
     quadrant: 'adramelech',
-    anneau: 'vert',
+    // ORANGE depuis le 02/10 : pas de défaire possible sans conserver
+    // l'essence d'avant (cadrage §15.1, choix ① de Paul).
+    anneau: 'orange',
     description: "Proposer d'enrichir une idée EXISTANTE de l'archipel avec " +
       "un ajout dicté par Paul.",
     args: {
@@ -779,6 +788,23 @@ export function creerGardeVoix(intervalleMs, maxEntrees = 1000) {
 }
 
 // Concatène les blocs texte d'une réponse de l'API ('' si aucun).
+// LA CAUSE D'UN 502 DE LÉO, dite au front en quelques mots FERMÉS (02/10).
+// Pourquoi : les journaux Vercel ne sont pas lisibles depuis les séances, et
+// « Léo n'a pas pu répondre » ne distingue pas une clé révoquée (401), un
+// crédit épuisé (400), une cadence (429), une surcharge (529) d'un délai.
+// ⛔ Jamais le message brut du fournisseur : un statut, ou un mot de la liste.
+// Le mot « crédit » est le seul tiré du message, et seulement comme étiquette.
+export const MOTIF_CAUSE_IA = /^ia (\d{3}( crédit)?|délai|réseau|vide)$/;
+export function causeEchecIA(erreur) {
+  if (!erreur || typeof erreur !== 'object') return 'ia réseau';
+  const statut = Number.isInteger(erreur.status) ? erreur.status : null;
+  if (statut && statut >= 100 && statut <= 599) {
+    const message = typeof erreur.message === 'string' ? erreur.message : '';
+    return 'ia ' + statut + (statut === 400 && /credit balance/i.test(message) ? ' crédit' : '');
+  }
+  return /timeout/i.test(String(erreur.name || '')) ? 'ia délai' : 'ia réseau';
+}
+
 export function extraireTexte(contenu) {
   if (!Array.isArray(contenu)) return '';
   return contenu

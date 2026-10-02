@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Ultima — Ce que Léo a fait</title>
+  <meta name="description" content="Les gestes que Léo a faits sans demander, du plus récent au plus ancien — chacun se défait d'un clic tant que rien n'est né dessus.">
+  <meta name="theme-color" content="#0e3a52">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%238a3324'/%3E%3Cpath d='M16 5 L19 16 L16 27 L13 16 Z' fill='%23ffffff'/%3E%3C/svg%3E">
+  <!-- B1 ⑤ (cadrage CADRAGE-2026-09-22-leo-pilote-tout.md §15.4) — choix ② de
+       Paul, 02/10 : l'erreur découverte le lendemain se défait ICI. Le mail du
+       matin pointe cette page par un lien de LECTURE ; il n'agit jamais.
+       Coque sans donnée : tout vient de GET /api/leo/ecritures, authentifié.
+       Maquette validée : design/preview-leo-defaire.html. -->
+  <link rel="stylesheet" href="css/finubar.css">
+  <link rel="stylesheet" href="css/leo.css">
+  <link rel="stylesheet" href="css/leo-gestes.css">
+</head>
+<body class="finubar leo-gestes-page">
+
+  <nav class="barre-retour" aria-label="Retour à la console">
+    <a class="retour-ultima" href="omega.html">← Console</a>
+  </nav>
+
+  <div class="feuille">
+    <header class="cartouche entete-quadrant">
+      <p class="surtitre">Ultima · Léo</p>
+      <h1>Ce que Léo a fait</h1>
+      <p class="devise">Ses gestes sans demander, du plus récent au plus ancien. Chacun se défait d'un clic tant que rien n'est né dessus.</p>
+    </header>
+
+    <section aria-labelledby="titre-gestes">
+      <h2 id="titre-gestes" class="colonne-titre">Les sept derniers jours</h2>
+      <div id="gestes">
+        <p class="etat-message" id="gestes-message">Lecture du journal…</p>
+      </div>
+    </section>
+
+    <p class="provenance">
+      Une cible n'est nommée que tant qu'elle existe : le journal de Léo ne garde
+      aucun contenu, seulement le geste. Un geste défait, ou qui n'a pas abouti,
+      se lit donc sans nom.
+    </p>
+  </div>
+
+  <p id="gestes-annonce" class="gestes-annonce" role="status" aria-live="polite"></p>
+
+  <script src="js/vendor/supabase-js-2.110.0.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/leo-accueil.js"></script>
+  <script type="module" src="js/leo-gestes.js"></script>
+</body>
+</html>

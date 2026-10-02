@@ -57,7 +57,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T16:48:56.100Z",
+        "lecture_le": "2026-10-02T17:07:18.104Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -167,7 +167,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T16:48:56.099Z",
+        "lecture_le": "2026-10-02T17:07:18.104Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -272,7 +272,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T16:48:56.100Z",
+        "lecture_le": "2026-10-02T17:07:18.104Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -287,6 +287,113 @@ export default {
       "motif_controle": "repli GitHub désactivé",
       "jours_depuis_maj": 1,
       "jours_en_attente": 46,
+      "rang": 0
+    },
+    {
+      "ok": true,
+      "motif": "",
+      "depot": "PaulGERARD161098/Ultima-",
+      "grain": {
+        "projet": "Ultima",
+        "depot": "PaulGERARD161098/Ultima-",
+        "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
+        "rattache_a": "PLAN-2026-09-30-chaine-A-Z.md (la route de la chaîne Rénoboost et son état vivant) · CADRAGE-RIVEN-NEBULEUSES.md · CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-",
+        "etat": "en_cours",
+        "jalon": {
+          "nom": "Léo et FINUBAR — activation du site et des commandes",
+          "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③④⑤ en production — ⑤ fusionné le 02/10 au soir (#336) sur ordre de Paul, SANS l'étape 0 : le crédit Anthropic est épuisé (« ia 400 crédit »), Léo ne répond plus ; la preuve en prod (une écriture, son défaire) reste à faire après la recharge"
+        },
+        "dernier_arret": {
+          "le": "2026-10-02",
+          "quoi": "B1 ⑤ codé en PR #336 (brouillon, CI verte) ; l'étape 0 jouée sur l'aperçu a trouvé la panne : « code 502 · ia 400 crédit », le crédit Anthropic est épuisé (cause des 0 écritures…",
+          "commit": "333f623ac1bff83a165dd28ae2a42dbab30e8639"
+        },
+        "prochaine_action": "Paul recharge le crédit Anthropic (console Anthropic — geste payant) ; puis étape 0 EN PRODUCTION sur /registre : dicter « Capture l'idée Test B1 », mesurer 2 lignes (tentee…",
+        "bloque_par": [
+          "Crédit Anthropic ÉPUISÉ (mesuré le 02/10 à 12:55 UTC, bulle « code 502 · ia 400 crédit ») : Léo ne peut plus répondre nulle part — recharge = geste payant de Paul",
+          "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",
+          "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
+          "La précision sur « mon dpe.fr » (VITRUVE)",
+          "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis",
+          "Vérifier que les inscriptions Supabase sont FERMÉES (« Allow new signups ») — un compte tiers pourrait remplir le quota par la route d'import"
+        ],
+        "en_attente_depuis": "2026-08-20",
+        "boucles_ouvertes": [
+          {
+            "quoi": "LEÇON À CONSIGNER + PROPAGER (9 dépôts) : une erreur générique cache sa cause — « Léo n'a pas pu répondre » a masqué pendant des jours un crédit Anthropic épuisé (0 écriture en…",
+            "depuis": "2026-10-02"
+          },
+          {
+            "quoi": "Chaîne — prochaine boucle B sans geste A : B4 (un seul agenda Rénoboost sur le moteur d'Artidispo, et Réno lit Artidispo), à ouvrir avec la fiche du §4 du plan — aucun code avant…",
+            "depuis": "2026-10-01"
+          },
+          {
+            "quoi": "LEÇON À CONSIGNER + PROPAGER (9 dépôts) : rechute de « un droit se vérifie du côté où il peut être contourné » — la prémisse de l'arbitrage §12.8 quater avait été mesurée en…",
+            "depuis": "2026-09-30"
+          },
+          {
+            "quoi": "smoke-accueil-finubar ④c (« le remettre remonte le ciel là où il était ») rougit par intermittence, toujours 577 → 581 px : ~1 passage sur 10, MESURÉ sur main pur (b01afed) le…",
+            "depuis": "2026-09-30"
+          },
+          {
+            "quoi": "Chaîne Rénoboost : route et état vivant dans PLAN-2026-09-30-chaine-A-Z.md — sur main depuis #321 (fusionnée le 30/09, mesuré 19:29 UTC, main e462298). Reprise : son §0, depuis…",
+            "depuis": "2026-09-30"
+          },
+          {
+            "quoi": "ÉCARTÉ par Paul le 30/09 — DATARENO- : Vercel rouge en permanence (PYTHON_ENTRYPOINT_NOT_FOUND), sur main aussi. « Vraiment à part, on le laisse de côté. » Ne pas rouvrir.",
+            "depuis": "2026-09-30"
+          },
+          {
+            "quoi": "REPORTÉ par Paul le 30/09 — mon-dpe.fr : 62 vulnérabilités Dependabot sur main (4 critiques, 28 hautes). « On va corriger mon dpe plus tard. » Séance dédiée.",
+            "depuis": "2026-09-30"
+          },
+          {
+            "quoi": "RIVEN nébuleuses : à 390 px, 3 noms fictifs sur 54 cachés (restent au panneau). Plus bas = sous 12 px ou étoiles déplacées : non tranché. CADRAGE-RIVEN-NEBULEUSES.md §7",
+            "depuis": "2026-09-30"
+          },
+          {
+            "quoi": "Étiquettes vocales des caps : chacune finit par « 0 lien » sur les menus, du bruit pour un lecteur d'écran. Préexistant, relevé au dry run du 27/09 (carte-celeste §28).",
+            "depuis": "2026-09-27"
+          },
+          {
+            "quoi": "MESURÉ le 13/09 et démenti : la note annonçait des copies divergentes du rappel Finubar. Les sept fichiers ont la même empreinte. Voir CADRAGE-FINUBAR.md.",
+            "depuis": "2026-09-13"
+          }
+        ],
+        "maj": "2026-10-02"
+      },
+      "recits": [
+        "dernier_arret.quoi",
+        "prochaine_action",
+        "boucles_ouvertes[].quoi"
+      ],
+      "ciel": "racine",
+      "hors_seance": false,
+      "reprise": false,
+      "derive": {
+        "tete": "2758ad8",
+        "tete_le": "2026-10-02T13:08:26+00:00",
+        "commits_depuis": 14,
+        "commit_inconnu": false
+      },
+      "mesure_le": "2026-10-02",
+      "controle": {
+        "type": "disque",
+        "statut": "lu",
+        "lecture_le": "2026-10-02T17:07:18.095Z",
+        "examines": [
+          "FINUBAR.md",
+          "derive_git"
+        ],
+        "non_examines": [
+          "pr",
+          "controles",
+          "permissions",
+          "dependances"
+        ]
+      },
+      "jours_depuis_maj": 0,
+      "jours_en_attente": 43,
       "rang": 0
     },
     {
@@ -342,7 +449,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T16:48:56.100Z",
+        "lecture_le": "2026-10-02T17:07:18.104Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -401,7 +508,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T16:48:56.100Z",
+        "lecture_le": "2026-10-02T17:07:18.104Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -459,7 +566,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T16:48:56.100Z",
+        "lecture_le": "2026-10-02T17:07:18.104Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -527,7 +634,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T16:48:56.100Z",
+        "lecture_le": "2026-10-02T17:07:18.104Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -542,114 +649,6 @@ export default {
       "motif_controle": "repli GitHub désactivé",
       "jours_depuis_maj": 2,
       "jours_en_attente": 79,
-      "rang": 2
-    },
-    {
-      "ok": true,
-      "motif": "",
-      "depot": "PaulGERARD161098/Ultima-",
-      "grain": {
-        "projet": "Ultima",
-        "depot": "PaulGERARD161098/Ultima-",
-        "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-        "rattache_a": "PLAN-2026-09-30-chaine-A-Z.md (la route de la chaîne Rénoboost et son état vivant) · CADRAGE-RIVEN-NEBULEUSES.md · CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-",
-        "etat": "en_cours",
-        "jalon": {
-          "nom": "Léo et FINUBAR — activation du site et des commandes",
-          "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③④ faits ; ⑤ CODÉ (PR #336, brouillon, CI verte) — l'étape 0 a trouvé la panne : crédit Anthropic épuisé (« ia 400 crédit »), Léo ne répond plus ; à rejouer après recharge, puis fusion"
-        },
-        "dernier_arret": {
-          "le": "2026-10-02",
-          "quoi": "B1 ⑤ codé en PR #336 (brouillon, CI verte) ; l'étape 0 jouée sur l'aperçu a trouvé la panne : « code 502 · ia 400 crédit », le crédit Anthropic est épuisé (cause des 0 écritures…",
-          "commit": "4a5cdec49ea06cb799ba33dab6108cb6e3bde09c"
-        },
-        "prochaine_action": "Paul recharge le crédit Anthropic (console Anthropic — geste payant), puis rejoue l'étape 0 sur l'aperçu de #336 : dicter « Capture l'idée Test B1 » sur /registre, mesurer 2…",
-        "bloque_par": [
-          "Crédit Anthropic ÉPUISÉ (mesuré le 02/10 à 12:55 UTC, bulle « code 502 · ia 400 crédit ») : Léo ne peut plus répondre nulle part — recharge = geste payant de Paul",
-          "#336 (B1 ⑤) : après la recharge, l'étape 0 rejouée (une dictée verte réelle), puis l'accord de fusion de Paul (SHA, cible main, CI verte)",
-          "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",
-          "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
-          "La précision sur « mon dpe.fr » (VITRUVE)",
-          "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis",
-          "Vérifier que les inscriptions Supabase sont FERMÉES (« Allow new signups ») — un compte tiers pourrait remplir le quota par la route d'import"
-        ],
-        "en_attente_depuis": "2026-08-20",
-        "boucles_ouvertes": [
-          {
-            "quoi": "LEÇON À CONSIGNER + PROPAGER (9 dépôts) : une erreur générique cache sa cause — « Léo n'a pas pu répondre » a masqué pendant des jours un crédit Anthropic épuisé (0 écriture en…",
-            "depuis": "2026-10-02"
-          },
-          {
-            "quoi": "Chaîne — prochaine boucle B sans geste A : B4 (un seul agenda Rénoboost sur le moteur d'Artidispo, et Réno lit Artidispo), à ouvrir avec la fiche du §4 du plan — aucun code avant…",
-            "depuis": "2026-10-01"
-          },
-          {
-            "quoi": "LEÇON À CONSIGNER + PROPAGER (9 dépôts) : rechute de « un droit se vérifie du côté où il peut être contourné » — la prémisse de l'arbitrage §12.8 quater avait été mesurée en…",
-            "depuis": "2026-09-30"
-          },
-          {
-            "quoi": "smoke-accueil-finubar ④c (« le remettre remonte le ciel là où il était ») rougit par intermittence, toujours 577 → 581 px : ~1 passage sur 10, MESURÉ sur main pur (b01afed) le…",
-            "depuis": "2026-09-30"
-          },
-          {
-            "quoi": "Chaîne Rénoboost : route et état vivant dans PLAN-2026-09-30-chaine-A-Z.md — sur main depuis #321 (fusionnée le 30/09, mesuré 19:29 UTC, main e462298). Reprise : son §0, depuis…",
-            "depuis": "2026-09-30"
-          },
-          {
-            "quoi": "ÉCARTÉ par Paul le 30/09 — DATARENO- : Vercel rouge en permanence (PYTHON_ENTRYPOINT_NOT_FOUND), sur main aussi. « Vraiment à part, on le laisse de côté. » Ne pas rouvrir.",
-            "depuis": "2026-09-30"
-          },
-          {
-            "quoi": "REPORTÉ par Paul le 30/09 — mon-dpe.fr : 62 vulnérabilités Dependabot sur main (4 critiques, 28 hautes). « On va corriger mon dpe plus tard. » Séance dédiée.",
-            "depuis": "2026-09-30"
-          },
-          {
-            "quoi": "RIVEN nébuleuses : à 390 px, 3 noms fictifs sur 54 cachés (restent au panneau). Plus bas = sous 12 px ou étoiles déplacées : non tranché. CADRAGE-RIVEN-NEBULEUSES.md §7",
-            "depuis": "2026-09-30"
-          },
-          {
-            "quoi": "Étiquettes vocales des caps : chacune finit par « 0 lien » sur les menus, du bruit pour un lecteur d'écran. Préexistant, relevé au dry run du 27/09 (carte-celeste §28).",
-            "depuis": "2026-09-27"
-          },
-          {
-            "quoi": "MESURÉ le 13/09 et démenti : la note annonçait des copies divergentes du rappel Finubar. Les sept fichiers ont la même empreinte. Voir CADRAGE-FINUBAR.md.",
-            "depuis": "2026-09-13"
-          }
-        ],
-        "maj": "2026-10-02"
-      },
-      "recits": [
-        "dernier_arret.quoi",
-        "prochaine_action",
-        "boucles_ouvertes[].quoi"
-      ],
-      "ciel": "racine",
-      "hors_seance": false,
-      "reprise": false,
-      "derive": {
-        "tete": null,
-        "tete_le": null,
-        "commits_depuis": 0,
-        "commit_inconnu": false
-      },
-      "mesure_le": "2026-10-02",
-      "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-10-02T16:48:56.094Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
-        "non_examines": [
-          "pr",
-          "controles",
-          "permissions",
-          "dependances"
-        ]
-      },
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 43,
       "rang": 2
     },
     {
@@ -702,7 +701,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T16:48:56.100Z",
+        "lecture_le": "2026-10-02T17:07:18.104Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -805,7 +804,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-02T16:48:56.100Z",
+        "lecture_le": "2026-10-02T17:07:18.104Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -832,7 +831,7 @@ export default {
     "en_cours": 8,
     "en_attente_de_paul": 2,
     "au_repos": 0,
-    "derives": 5,
+    "derives": 6,
     "commits_inconnus": 4,
     "boucles_ouvertes": 45,
     "gestes_de_paul": [
@@ -905,6 +904,30 @@ export default {
         "geste": "Verdict de Paul sur la DENSITÉ : liste du cockpit (PR #160) et blocs d'un modèle retenu. Les tests prouvent la conformité, pas la lisibilité."
       },
       {
+        "projet": "Ultima",
+        "geste": "Crédit Anthropic ÉPUISÉ (mesuré le 02/10 à 12:55 UTC, bulle « code 502 · ia 400 crédit ») : Léo ne peut plus répondre nulle part — recharge = geste payant de Paul"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "La précision sur « mon dpe.fr » (VITRUVE)"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis"
+      },
+      {
+        "projet": "Ultima",
+        "geste": "Vérifier que les inscriptions Supabase sont FERMÉES (« Allow new signups ») — un compte tiers pourrait remplir le quota par la route d'import"
+      },
+      {
         "projet": "Artidispo",
         "geste": "✅ 30/09 — ACCORD DE FUSION DONNÉ PAR PAUL (« go fusion », fiche « validée par Henry »). Règle qui reste : aucune PR ne se fusionne sans un mot de Paul qui nomme la fusion ; un…"
       },
@@ -975,34 +998,6 @@ export default {
       {
         "projet": "RénoAgenda",
         "geste": "Relecture juriste des CGU avant la première signature client"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "Crédit Anthropic ÉPUISÉ (mesuré le 02/10 à 12:55 UTC, bulle « code 502 · ia 400 crédit ») : Léo ne peut plus répondre nulle part — recharge = geste payant de Paul"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "#336 (B1 ⑤) : après la recharge, l'étape 0 rejouée (une dictée verte réelle), puis l'accord de fusion de Paul (SHA, cible main, CI verte)"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "La précision sur « mon dpe.fr » (VITRUVE)"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis"
-      },
-      {
-        "projet": "Ultima",
-        "geste": "Vérifier que les inscriptions Supabase sont FERMÉES (« Allow new signups ») — un compte tiers pourrait remplir le quota par la route d'import"
       },
       {
         "projet": "mon-dpe.fr",
@@ -1128,6 +1123,13 @@ export default {
         "signal": 1
       },
       {
+        "id": "PaulGERARD161098/Ultima-",
+        "libelle": "Ultima",
+        "constellation": "en_cours",
+        "ciel": "racine",
+        "signal": 1
+      },
+      {
         "id": "paggerard-boop/Artidispo",
         "libelle": "Artidispo",
         "constellation": "en_cours",
@@ -1153,13 +1155,6 @@ export default {
         "libelle": "RénoAgenda",
         "constellation": "en_cours",
         "ciel": "renoboost-ia",
-        "signal": 0
-      },
-      {
-        "id": "PaulGERARD161098/Ultima-",
-        "libelle": "Ultima",
-        "constellation": "en_cours",
-        "ciel": "racine",
         "signal": 0
       },
       {

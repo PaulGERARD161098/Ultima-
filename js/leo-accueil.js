@@ -317,6 +317,41 @@
     return '[Résultat de l’action inconnu : elle a peut-être été enregistrée. Vérifiez la cible avant toute nouvelle tentative ; si le doute persiste, ne rejouez pas l’action.]';
   }
 
+  // Les refus du serveur, dits à Paul. ⛔ Liste FERMÉE, alignée sur
+  // `REFUS_DEFAIRE` (api/_lib/leo-execution.js) : un message inconnu tombe
+  // sur la phrase prudente, jamais sur le texte brut du serveur.
+  var NE_SUR_LA_CIBLE = {
+    flammes: 'une flamme y est née depuis',
+    idees_liens: 'un lien a été tissé avec une autre idée',
+    serment_liens: 'une passerelle y a été posée',
+    scenario_liens: 'une passerelle y a été posée',
+    scenarios: 'un scénario y est né',
+    situations: 'il a été marqué « advenu »'
+  };
+  function messageRefusDefaire(resultat) {
+    var erreur = resultat && resultat.corps && typeof resultat.corps.error === 'string'
+      ? resultat.corps.error : '';
+    var propre = function (table, cle) { return Object.prototype.hasOwnProperty.call(table, cle); };
+    if (erreur.indexOf('Lié : ') === 0 && propre(NE_SUR_LA_CIBLE, erreur.slice(6))) {
+      return 'Je ne peux pas le défaire : ' + NE_SUR_LA_CIBLE[erreur.slice(6)] +
+        '. Le défaire l’effacerait avec. Rien n’a été retiré.';
+    }
+    var connus = {
+      'Retouchée depuis': 'Je ne peux pas le défaire : tu l’as retouché depuis, et le défaire effacerait ta retouche. Rien n’a été retiré.',
+      'Déjà défait': 'C’est déjà défait.',
+      'Cible introuvable': 'Il n’existe plus : rien à défaire.',
+      'Rien à défaire': 'Le journal ne l’a pas noté comme fait : je ne peux pas le défaire d’ici. Rien n’a été retiré.',
+      'Ce geste ne se défait pas': 'Ce geste ne se défait pas. Rien n’a été retiré.',
+      'Trop ancien': 'Ce geste a plus de sept jours : il ne se défait plus d’ici. Rien n’a été retiré.'
+    };
+    if (resultat && resultat.statut >= 400 && resultat.statut < 500 && propre(connus, erreur)) { return connus[erreur]; }
+    if (resultat && resultat.statut >= 400 && resultat.statut < 500) {
+      return 'Je n’ai pas pu le défaire. Rien n’a été retiré.';
+    }
+    // Une réponse perdue ne prouve rien : la suppression a pu avoir lieu.
+    return 'Je ne sais pas si c’est défait : la réponse s’est perdue. Regarde « Ce que Léo a fait » avant de recommencer.';
+  }
+
   // Gabarits d'exécution (L2b) : traduit une proposition confirmable en appel
   // EXACT vers l'API d'écriture existante (contrats /api/idees/items,
   // /api/intendant/besoins, /api/reseau/journal). PUR : aucun réseau ici.
@@ -1003,6 +1038,73 @@
       c[liste].push(item);
     }
 
+    // B1 ⑤ (cadrage §15) : le défaire d'un geste fait sans demander. Retire de
+    // la mémoire de la page ce que `apresEcriture` y avait ajouté — sans quoi
+    // le tour suivant viserait une cible qui n'existe plus.
+    function apresDefaire(proposition, cibleId) {
+      var c = voix.candidats;
+      if (!c || typeof c !== 'object') { return; }
+      var liste = { proposer_idee: 'idees', proposer_serment: 'serments', proposer_situation: 'situations' }[proposition.outil];
+      if (liste && Array.isArray(c[liste])) {
+        c[liste] = c[liste].filter(function (item) { return !item || item.id !== cibleId; });
+      }
+    }
+
+    // Le bouton « Défaire » sur la bulle « Fait sans demander » (choix ② de
+    // Paul). ⛔ Il n'existe que là : jamais sur une carte confirmée, jamais
+    // dans un mail. Un clic, une requête — le serveur relit la trace et décide.
+    function ajouterDefaire(bulleIssue, traceId, proposition, cibleId, cloture) {
+      var bouton = el('button', 'leo-defaire', 'Défaire');
+      bouton.type = 'button';
+      bouton.setAttribute('aria-label', 'Défaire : ' + proposition.reformulation);
+      // Le texte passe dans son propre élément : le bouton vit À CÔTÉ, et
+      // remplacer le texte au défaire ne doit pas emporter le bouton.
+      var texteBulle = el('span', 'leo-bulle-texte', bulleIssue.textContent);
+      bulleIssue.textContent = '';
+      bulleIssue.appendChild(texteBulle);
+      bulleIssue.className += ' leo-bulle-defaisable';
+      bulleIssue.setAttribute('data-etat', 'fait');
+      bulleIssue.appendChild(bouton);
+
+      function conclure(etat, texte, bulleLeo) {
+        if (bouton.parentNode) { bouton.parentNode.removeChild(bouton); }
+        bulleIssue.setAttribute('data-etat', etat);
+        var cibleFocus = bulleIssue;
+        if (texte) {
+          if (bulleLeo) { cibleFocus = bulle('leo', texte); }
+          else { texteBulle.textContent = texte; }
+        }
+        // ⛔ Le bouton disparaît : le focus ne doit pas tomber sur la page. Il
+        // va à ce que la bulle est devenue (critère du dry run du 02/10).
+        cibleFocus.setAttribute('tabindex', '-1');
+        cibleFocus.focus();
+      }
+
+      bouton.addEventListener('click', function () {
+        if (bouton.disabled) { return; }
+        bouton.disabled = true;
+        bouton.setAttribute('aria-busy', 'true');
+        // La clôture part sans attendre ; le défaire, lui, l'attend — sinon un
+        // clic rapide trouverait la trace sans issue (« rien à défaire »).
+        Promise.resolve(cloture).then(null, function () { /* fail-soft */ }).then(function () {
+          return appelJson('/api/leo/ecritures', 'POST', { etape: 'defaire', traceId: traceId });
+        }).then(function (r) {
+          if (r.httpOk && r.corps && r.corps.ok === true) {
+            apresDefaire(proposition, cibleId);
+            var note = r.corps.data && r.corps.data.journalise === false
+              ? ' (le journal n’a pas pu le noter)' : '';
+            var texte = '[Défait : ' + proposition.reformulation + ' — retiré, rien d’autre n’a bougé' + note + '.]';
+            historique.push({ role: 'user', content: echoBorne('[Paul a défait : ' + proposition.reformulation + ']') });
+            conclure('defait', texte, false);
+            return;
+          }
+          conclure('refuse', messageRefusDefaire(r), true);
+        }, function () {
+          conclure('inconnu', messageRefusDefaire(null), true);
+        });
+      });
+    }
+
     // Appel JSON authentifié → { httpOk, statut, corps } ; rejette sur panne réseau.
     function appelJson(url, methode, corps) {
       return fetch(url, {
@@ -1055,9 +1157,11 @@
         // journal. Jamais de seconde tentative d'acte.
         function issue(reussie, cibleId, motif, data, resultat) {
           var cloture = { etape: 'clore', traceId: traceId, issue: reussie ? 'reussie' : 'echouee' };
-          if (reussie && typeof cibleId === 'string' && UUID_MOTIF.test(cibleId)) { cloture.cibleId = cibleId; }
+          var cibleValide = reussie && typeof cibleId === 'string' && UUID_MOTIF.test(cibleId);
+          if (cibleValide) { cloture.cibleId = cibleId; }
           if (!reussie) { cloture.motif = motif; }
-          appelJson('/api/leo/ecritures', 'POST', cloture).then(null, function () { /* fail-soft */ });
+          var clotureEnVol = appelJson('/api/leo/ecritures', 'POST', cloture);
+          clotureEnVol.then(null, function () { /* fail-soft */ });
           if (reussie) { apresEcriture(proposition, plan, data); }
           // La cible RÉSOLUE est nommée : c'est ce que la carte montrait.
           var message = reussie
@@ -1068,7 +1172,10 @@
             try { voix.notifier('Léo a agi sans demander.'); } catch (e) { /* fail-soft */ }
           }
           historique.push({ role: 'user', content: echoBorne(message) });
-          bulle('issue', message);
+          var bulleIssue = bulle('issue', message);
+          // B1 ⑤ : ce qui a été fait sans demander se défait d'un clic. Sans
+          // cible lisible, pas de bouton — le serveur refuserait de toute façon.
+          if (cibleValide) { ajouterDefaire(bulleIssue, traceId, proposition, cibleId, clotureEnVol); }
           rearmer();
         }
 
@@ -1162,14 +1269,24 @@
         } else {
           historique.pop();
           champ.value = texte;
-          bulle('erreur', "Léo n'a pas pu répondre — réessayez.");
+          // Le CODE est dit (02/10) : sans journaux Vercel lisibles, c'est la
+          // seule trace qui distingue une session expirée (401), la cadence
+          // (429), l'appel IA en échec (502) ou un délai dépassé (504). Un
+          // nombre, jamais le corps de la réponse.
+          // La cause d'un 502 n'est affichée que si elle est dans la liste
+          // fermée du serveur (MOTIF_CAUSE_IA) — jamais un texte quelconque.
+          var cause = resultat.corps && typeof resultat.corps.cause === 'string' &&
+            /^ia (\d{3}( crédit)?|délai|réseau|vide)$/.test(resultat.corps.cause)
+            ? ' · ' + resultat.corps.cause : '';
+          bulle('erreur', "Léo n'a pas pu répondre (code " +
+            (Number.isInteger(resultat.statut) ? resultat.statut : '?') + cause + ') — réessayez.');
         }
         rearmer();
       }, function () {
         attente.remove();
         historique.pop();
         champ.value = texte;
-        bulle('erreur', "Léo n'a pas pu répondre — réessayez.");
+        bulle('erreur', "Léo n'a pas pu répondre (réseau) — réessayez.");
         rearmer();
       });
     });
@@ -1252,6 +1369,8 @@
     // d'exécution vers les API existantes.
     resoudreRef: resoudreRef,
     construirePlanExecution: construirePlanExecution,
-    messageEchecEcriture: messageEchecEcriture
+    messageEchecEcriture: messageEchecEcriture,
+    // B1 ⑤ : la même phrase de refus pour la bulle et l'écran leo.html.
+    messageRefusDefaire: messageRefusDefaire
   };
 })();
