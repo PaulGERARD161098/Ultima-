@@ -56,10 +56,57 @@ export function phraseDate(collecteLe, jours) {
   return `État collecté le ${collecteLe}, il y a ${jours} jours.`;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   « CE QUE LÉO A FAIT » — B1 ⑤, M2 + M5 (cadrage §12.2, §15.4).
+   Le journal se PRÉSENTE au matin, une ligne par geste : verbe + heure + état.
+   ⛔ AUCUN CONTENU DICTÉ, et AUCUN LIEN D'ACTION : un scanner de messagerie qui
+   précharge les liens défairait tout seul. Le seul lien ouvre l'écran
+   « Ce que Léo a fait », qui n'agit qu'au clic de Paul.
+   ⚠️ `gestes: null` = le mail ne PEUT PAS lire le journal (le cron n'a pas de
+   session de Paul, et le dépôt n'a aucune clé de service — choix de Paul à
+   venir, registre). Il le DIT, au lieu de se taire comme si Léo n'avait rien fait.
+   ═══════════════════════════════════════════════════════════════════════════ */
+export const GESTES_LEO_ENUMERES = 10;
+const FUSEAU_MAIL = 'Europe/Paris';
+const jourParis = (iso) => new Intl.DateTimeFormat('en-CA', {
+  timeZone: FUSEAU_MAIL, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(iso));
+const heureParis = (iso) => new Intl.DateTimeFormat('fr-FR', {
+  timeZone: FUSEAU_MAIL, hour: '2-digit', minute: '2-digit' }).format(new Date(iso));
+const SUFFIXES_ETAT = {
+  defait: ' (défait par toi)', echec: ' (n’a pas abouti)', interrompu: ' (issue inconnue)',
+  lie: '', retouche: '', disparu: ' (n’existe plus)', fait: ''
+};
+
+/** Les lignes de la section Léo (texte). PURE. → string[] */
+export function lignesLeo(leo, aujourdhui) {
+  const l = (leo && typeof leo === 'object') ? leo : {};
+  const lien = typeof l.lien === 'string' ? l.lien : '';
+  const out = ['CE QUE LÉO A FAIT DEPUIS HIER'];
+  if (!Array.isArray(l.gestes)) {
+    out.push('  Le mail ne lit pas encore le journal de Léo : ses gestes sont à l’écran.');
+  } else if (!l.gestes.length) {
+    out.push('  Rien fait sans demander.');
+  } else {
+    l.gestes.slice(0, GESTES_LEO_ENUMERES).forEach((g) => {
+      const le = g && typeof g.le === 'string' && Number.isFinite(Date.parse(g.le)) ? g.le : null;
+      const quand = !le ? '?' : (jourParis(le) === aujourdhui ? '' : 'hier ') + heureParis(le);
+      const quoi = g && typeof g.quoi === 'string' && g.quoi ? g.quoi : 'A agi';
+      const suffixe = g && Object.prototype.hasOwnProperty.call(SUFFIXES_ETAT, g.etat) ? SUFFIXES_ETAT[g.etat] : '';
+      out.push(`  · ${quand} — ${quoi.charAt(0).toLowerCase()}${quoi.slice(1)}${suffixe}`);
+    });
+    const reste = l.gestes.length - GESTES_LEO_ENUMERES;
+    if (reste > 0) out.push(`  … et ${reste} autre${reste > 1 ? 's' : ''}, à l’écran.`);
+  }
+  out.push('  Pour revoir ou défaire : « Ce que Léo a fait », dans Ultima.');
+  if (lien) out.push(`  ${lien}`);
+  return out;
+}
+
 /**
  * Compose le mail du matin à partir de l'agrégat Finubar.
  * @param {object} agregat  { le, macro, cartouche, projets }
- * @param {object} options  { aujourdhui: 'AAAA-MM-JJ', lien: 'https://…' }
+ * @param {object} options  { aujourdhui: 'AAAA-MM-JJ', lien: 'https://…',
+ *                            leo?: { lien: 'https://…/leo', gestes: [] | null } }
  * @returns {{ sujet: string, texte: string, html: string, jours: number|null }}
  */
 export function composerMatin(agregat, options = {}) {
@@ -137,6 +184,12 @@ export function composerMatin(agregat, options = {}) {
     lignes.push('');
   }
 
+  // B1 ⑤ : la section Léo n'apparaît que si l'appelant la demande — le
+  // composeur reste pur, et un agrégat seul rend le mail d'avant à l'octet.
+  const leo = options.leo && typeof options.leo === 'object' ? options.leo : null;
+  const sectionLeo = leo ? lignesLeo(leo, options.aujourdhui) : [];
+  if (sectionLeo.length) lignes.push(...sectionLeo, '');
+
   lignes.push(`${macro.total ?? '?'} dépôts · ${macro.en_cours ?? 0} en cours · `
     + `${enAttente} en attente d’un geste · ${macro.au_repos ?? 0} au repos · `
     + `${macro.boucles_ouvertes ?? 0} boucle(s) ouverte(s).`);
@@ -169,6 +222,12 @@ export function composerMatin(agregat, options = {}) {
   <ul style="margin:0 0 ${reste ? '6' : '20'}px;padding-left:18px">${li(gestes.slice(0, GESTES_ENUMERES).map((g) =>
     `<strong>${esc(g && g.projet)}</strong> — ${esc(g && g.geste)}`))}</ul>
   ${reste ? `<p style="margin:0 0 20px;font-size:13px;color:#6a5636">… et ${reste} autre${reste > 1 ? 's' : ''}, sur la table de marche.</p>` : ''}` : ''}
+  ${sectionLeo.length ? `
+  <h2 style="font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#6a5636;margin:0 0 8px">Ce que Léo a fait depuis hier</h2>
+  <ul style="margin:0 0 6px;padding-left:18px;list-style:none">${li(sectionLeo.slice(1)
+    .filter((t) => !leo.lien || t.trim() !== leo.lien)
+    .map((t) => esc(t.trim())))}</ul>
+  ${leo.lien ? `<p style="margin:0 0 20px"><a href="${esc(leo.lien)}" style="color:#8a3324">Ouvrir « Ce que Léo a fait »</a></p>` : '<p style="margin:0 0 20px"></p>'}` : ''}
   <p style="margin:0;padding-top:14px;border-top:1px solid #a9884a;font-size:12px;color:#6a5636">
     ${esc(String(macro.total ?? '?'))} dépôts · ${esc(String(macro.en_cours ?? 0))} en cours ·
     ${esc(String(enAttente))} en attente d’un geste · ${esc(String(macro.au_repos ?? 0))} au repos ·
