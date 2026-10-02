@@ -1,0 +1,62 @@
+/* Maquette B1 ⑤ — ce qui est NEUF seulement. Le reste vient du produit
+   (css/finubar.css pour la page, css/leo.css pour le cartouche). */
+.apercu-defaire { padding: 1.2rem clamp(0.75rem, 3vw, 2rem) 3rem; }
+.apercu-volet { display: flex; flex-direction: column; gap: 0.9rem; }
+.apercu-volet-titre {
+  margin: 0; font-variant: small-caps; letter-spacing: 0.1em; font-size: 1.15rem;
+  border-bottom: 1px solid var(--filet); padding-bottom: 0.4rem;
+}
+.apercu-num { color: var(--cire, #8a3324); margin-right: 0.35rem; }
+.apercu-note { margin: 0; font-style: italic; color: var(--encre-claire); font-size: 0.95rem; }
+
+/* ① trois cartouches côte à côte (empilés sur téléphone) */
+.apercu-trois { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+.apercu-cas { margin: 0; display: flex; flex-direction: column; gap: 0.4rem; }
+.apercu-cas figcaption { font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--encre-pale); }
+.apercu-cartouche { width: auto; max-height: none; }
+.apercu-dialogue { display: flex; flex-direction: column; gap: 0.5rem; max-height: none; overflow: visible; } /* le produit défile jusqu’à la dernière bulle ; la maquette montre tout le fil */
+
+/* La bulle d'issue garde son registre (mention d'encre sobre) et reçoit,
+   À CÔTÉ du texte, son bouton. Cible tactile ≥ 44 px, nommée. */
+.apercu-issue { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.5rem; }
+.leo-defaire {
+  min-height: 44px; min-width: 44px; padding: 0 0.9rem;
+  font: inherit; font-style: normal; font-size: 0.9rem; letter-spacing: 0.04em;
+  color: var(--encre-sepia, #3b2f1c);
+  background: linear-gradient(180deg, #fbf5e6, var(--parchemin, #f6eed9));
+  border: 1px solid var(--cerne-carte, #5a4118); border-radius: 4px; cursor: pointer;
+}
+.leo-defaire:hover { background: var(--parchemin-carte, #efe3c6); }
+.leo-defaire:focus-visible { outline: 3px solid var(--accent-focus, #1f5f8b); outline-offset: 2px; }
+.apercu-issue[data-etat="defait"] .apercu-issue-texte { text-decoration: none; }
+.apercu-refus { border-style: dashed; }
+
+/* ② l'écran : la feuille de Finubar, une ligne par geste */
+.apercu-ecran { border: 1px solid var(--encre-claire); outline: 1px solid var(--filet); outline-offset: 4px; padding: 1.2rem 1.4rem; background: var(--ile, transparent); }
+.apercu-ecran .barre-retour { margin: 0 0 0.8rem; }
+.apercu-ecran-tete { text-align: center; margin-bottom: 0.6rem; }
+.apercu-ecran-titre { margin: 0; font-size: 1.5rem; letter-spacing: 0.06em; }
+.apercu-jour { margin: 1rem 0 0.4rem; font-variant: small-caps; letter-spacing: 0.16em; color: var(--encre-pale); font-size: 0.85rem; }
+.apercu-gestes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.apercu-geste {
+  display: grid; grid-template-columns: 3.4rem 1fr auto auto; align-items: center; gap: 0.4rem 0.8rem;
+  padding: 0.55rem 0; border-bottom: 1px solid var(--filet);
+}
+.apercu-heure { font-variant-numeric: tabular-nums; color: var(--encre-pale); }
+.apercu-cible { color: var(--encre-claire); font-style: italic; }
+.apercu-etat { font-size: 0.9rem; color: var(--encre-claire); }
+.apercu-geste[data-etat="defait"] .apercu-quoi { text-decoration: line-through; text-decoration-color: var(--encre-pale); }
+.apercu-geste[data-etat="lie"] .apercu-etat,
+.apercu-geste[data-etat="echec"] .apercu-etat { font-style: italic; }
+@media (max-width: 640px) {
+  .apercu-geste { grid-template-columns: 3rem 1fr; }
+  .apercu-etat, .apercu-geste .leo-defaire { grid-column: 2; justify-self: start; }
+}
+
+/* ③ le mail : la version texte, celle qui compte */
+.apercu-mail {
+  margin: 0; padding: 1rem 1.2rem; white-space: pre-wrap; overflow-wrap: anywhere;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 0.9rem; line-height: 1.5;
+  border: 1px dashed var(--encre-claire); background: var(--parchemin, #f6eed9); color: var(--encre, #3b2f1c);
+}
+.apercu-annonce { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
