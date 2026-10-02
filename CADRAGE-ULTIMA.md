@@ -69,6 +69,27 @@
   18 verdicts validés rouges sur le code d'avant ; relecture Codex : 4 constats corrigés.
   `smoke-riven-nebuleuses` 119/119.
   Détail : `CADRAGE-RIVEN-NEBULEUSES.md` §8 bis.
+- 🧭 **SESSION 2026-10-02 (matin) — REPRISE CADRÉE SUR MESURE, #328 FUSIONNÉE, COLLISION AVEC LA SÉANCE CHAÎNE (branche `claude/bold-ride-lz23qg` ; PR de séance en brouillon).**
+  ✅ État des lieux mesuré à 05:00 UTC (API GitHub, git, base : `paiements` = 0,
+  13 lignes dans `devis`, aucune créée en septembre), reprise cadrée en six
+  points, trois phrases rendues. ✅ Sur le go de Paul (SHA `e973eae` sur `main`
+  `dc707e1`), #328 fusionnée en squash : `main` `ab99cab`, B2 ✅ au §2, §0 → B4,
+  leçons v59. ⚠️ Collision : pendant que cette séance réconciliait #327 et #329
+  sur le go de Paul, la séance chaîne les a fermées « sur décision de Paul »
+  (05:33 et 05:35 UTC), réécrit sa branche et ouvert #331 (CI : annulation des
+  passages dépassés, 2 groupes gardés ; leçons v60 → v62, propagées dans les
+  neuf dépôts par PR, toutes fusionnées 06:01–06:03) — #331 fusionnée à 06:56
+  (`main` `44fd938`). Ma réconciliation de #329 n'a jamais été poussée ; celle de
+  #327 (`f23fd55`) repose sur la branche d'une PR fermée, inerte ; un commentaire
+  est parti sur #327 après sa fermeture. ✅ Trois PR de grain, `[skip ci]`, zéro
+  code : RenoDevis #222, RenoBoost #568, Artidispo #112 — `dernier_arret` remis à
+  la tête réelle de chaque `main` (lu par `git rev-parse`), leurs leçons v59
+  retirées au profit de la v62 de `main`. ⏭ B4 : pas ouverte, attribution non
+  tranchée par Paul (deux séances actives) ; l'inventaire lancé en arrière-plan
+  s'est perdu au redémarrage du conteneur. ⛔ Leçon payée (une heure en double) :
+  ⊕ sous « une PR qui dort se fait doubler » — l'état d'une PR se relit à la
+  seconde où l'on agit dessus → **v64** à la source (la séance chaîne avait posé
+  la v63 entre-temps), copies en v63 à propager.
 - 🧭 **SESSION 2026-09-30 (nuit) — B2, LA DOUBLE MARGE, CADRÉE JUSQU'À LA PREMIÈRE LIGNE (branche `claude/bold-ride-lz23qg`, PR de séance en brouillon ; RenoDevis idem ; aucune fusion).**
   ✅ Reprise à froid depuis la branche de la chaîne ; l'état du §2 remesuré à
   18:07 puis 18:58 UTC, aucune ligne à corriger ; les gestes A présentés avec
