@@ -2102,7 +2102,22 @@ trace est une migration (gate Paul).
   le dépôt n'a, par principe, aucune clé de service. Le mail le DIT et pointe
   l'écran. Lire d'ici = un choix d'accès de Paul (registre ci-dessous).
 
+**⛔ ÉTAPE 0, TRANSMISE PAR LA SÉANCE B1 ④ (passation du 02/10) — et elle
+n'est pas faite.** Mesuré le 02/10 à 12:10 UTC : `public.leo_ecritures` =
+**0 ligne**. ④ est sur `main` depuis le 30/09 (`83a97a5`) mais n'a **jamais
+écrit en production** — pas même une `tentee`. Le défaire est donc bâti sur
+une écriture qu'on n'a jamais vue réussir. Les journaux Vercel ne sont pas
+lisibles d'ici (403) : la cause ne se mesure qu'en jouant le geste.
+⇒ **Avant la fusion de ⑤** : Paul dicte une écriture verte réelle (ADRAMELECH :
+« capture l'idée Test B1 »), puis on mesure en base **2 lignes sur un même
+`trace_id`** (`tentee`, puis `reussie` avec `cible_id`). Sur l'aperçu de la
+branche, le même geste éprouve ⑤ de bout en bout : la bulle porte « Défaire »,
+le clic pose une 3ᵉ ligne `defaite` et l'idée disparaît. Si 0 ligne ou une
+`tentee` seule : diagnostiquer ④ d'abord (anneau d'interface orange si la
+cible n'est pas dans la dictée, route, déploiement).
+
 **⏳ Registre — ce qui revient à Paul** :
+0. Le geste de l'étape 0 ci-dessus (une dictée, deux minutes).
 1. Lire le journal depuis le mail : (a) une clé de service en variable Vercel,
    utilisée par le seul cron (reco : non — une clé qui ouvre toute la base
    pour lire trois colonnes) ; (b) une fonction SQL `security definer` qui ne
