@@ -32,11 +32,12 @@
   },
   "dernier_arret": {
     "le": "2026-10-02",
-    "quoi": "#331 fusionnée : CI (annulation + garde des groupes) et leçons v62 ; les dix dépôts portent la même v62 sur main. Gestes A remesurés, écart 15→13 devis expliqué.",
-    "commit": "44fd938f3c76364a1444878e123c1b0e06591c55"
+    "quoi": "B4 réduite à R1 : Artidispo #114 et RenoBoost #571 fusionnées, en production. Preuve de bout en bout bloquée : Réno en 502 à 16:43 UTC, crédit API Anthropic épuisé.",
+    "commit": "4a5cdec49ea06cb799ba33dab6108cb6e3bde09c"
   },
-  "prochaine_action": "Ouvrir B4 par sa fiche (PLAN-2026-09-30-chaine-A-Z.md §4), aucun code avant ; présenter d'abord à Paul les gestes A en un panneau.",
+  "prochaine_action": "Crédit Anthropic rechargé : demander à Réno « Où en est Artidispo ? », comparer aux totaux de la base, puis fermer R1 (maquette, grains, PLAN §2).",
   "bloque_par": [
+    "Crédit API Anthropic épuisé (02/10, 16:43 UTC) : Réno rend 502 en production. Recharger = dépense, geste de Paul.",
     "B1 ⑤ attend deux choix de Paul — cadrage §15.2 : ① l'enrichissement repasse-t-il orange faute de défaire (reco : oui) · ② où vit le bouton « défaire » (reco : cartouche + écran « ce que Léo a fait », jamais de lien dans le mail)",
     "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
     "La précision sur « mon dpe.fr » (VITRUVE)",

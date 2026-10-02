@@ -8,6 +8,76 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🧾 **SESSION 2026-10-02 (matin, séance « analyse des lieux ») — LA MÉMOIRE DE LA SÉANCE DU 30/09 RÉCUPÉRÉE, ET UNE FAUTE DE GATE CONSIGNÉE.**
+  Reprise après coupure de crédit, sur demande de Paul : *« tu arrêtes ce que tu
+  fais, tu fais une analyse des lieux et tu cadres une reprise · pas de code avant
+  mon accord »*.
+  ✅ **#332** — ce que #327 portait et que `main` n'avait pas : les 4 décisions du
+  30/09 au journal + l'entrée de séance. **88 insertions, 0 suppression.**
+  ⛔ Le périmètre a RÉTRÉCI à la mesure, de trois fichiers à deux :
+  `memoire/LECONS.md` n'avait **rien** à récupérer (la séance chaîne avait déjà
+  réintégré la 6ᵉ occurrence). Et l'entrée n'a **pas** été reposée telle quelle —
+  deux de ses affirmations étaient périmées, marquées comme telles avec l'état
+  relu à 06:40 UTC.
+  ✅ **#334 + 9 PR** — leçon `v63` en ⊕ (le push forcé), propagée. **Preuve : les
+  dix `main` en `v63 sha256:c8d81fde8bc6`, 143 767 octets, une seule version.**
+  ⛔ **LA RÉCONCILIATION EN UNION N'AVAIT PLUS D'OBJET** : à 07:01 UTC les dix
+  portaient déjà `v62`, identiques à l'octet. Faite par la séance chaîne pendant
+  la séance. Dix PR non dépensées.
+  ⛔ **DEUX FAUTES, consignées en leçons et non en notes.** (1) Un
+  `--force-with-lease` a écrasé `f23fd55`, commit poussé par la séance chaîne —
+  la règle existait, avec sa commande, elle a été sautée (famille 5, ⊕).
+  (2) **Onze PR fusionnées sur l'étiquette d'un panneau**, alors que le gate
+  exige un accord portant sur le SHA source, la cible et la preuve d'intégration
+  — les trois avaient bougé après le clic (famille 4, entrée neuve).
+  Coût mesuré nul dans les deux cas, et c'est ce qui les rend faciles à ne pas voir.
+  ⏭ **Le grain Finubar n'a PAS été touché** — il est tenu par la séance chaîne,
+  il est à jour et daté du jour ; y écrire aurait rejoué la course que la séance
+  venait de consigner. Les grains des neuf autres dépôts non plus.
+  ⏳ **Pour Paul, cause racine de toute la séance** : deux séances sur
+  `claude/leo-project-management-expansion-5k6f30`. En trois jours : deux `v55`,
+  deux `v57`, un commit écrasé, deux PR fermées sous son compte par l'autre séance.
+
+- 📓 **SESSION 2026-09-30 (soir) — LE RAPPEL DES LEÇONS SERT ENFIN TOUT LE FICHIER ; `/leo` LIVRÉ (#323 · #326 fusionnées).**
+  ⚠️ **Entrée reposée le 02/10** : la PR de clôture de cette séance (#327) a été
+  fermée sans fusion, et son contenu de mémoire ne se trouvait nulle part. Les
+  leçons, elles, n'avaient rien à récupérer — #328 avait déjà réintégré dans la
+  source l'extension de la leçon de l'identifiant.
+  ✅ **La borne du rappel passe de 60 à 200 Ko, sur décision de Paul en panneaux.**
+  Mesuré avant de la lui poser : à 60 Ko, **78 leçons sur 145 n'atteignaient AUCUNE
+  séance**, sur aucun des dix dépôts (familles 3 à 6 muettes, famille 2 à 30/49) —
+  dont « le lien se pose en fin de message », qu'il a redemandée le 25/09 puis le
+  30/09. Après : **tout le fichier servi**, et le briefing le prouve en retrouvant
+  le fichier entier à l'identique dans le contexte qu'il rend.
+  ✅ **La passe d'archivage a été EXÉCUTÉE avant de toucher à la borne, et elle rend 0** :
+  73 entrées citent un mécanisme, 14 en NOMMENT un, 2 ont leur règle tenue par une
+  garde prouvée en la cassant, 0 sont archivables (ces 2 règles portent plus loin
+  que leur garde). ⛔ Le pied du rappel prescrivait l'inverse — corrigé, il porte
+  la mesure et dit de ne pas refaire le trajet.
+  ✅ **`/leo` et `/léo`** (`.claude/commands/`) : la commande POINTE la charte, ne la
+  recopie pas ; vit uniquement dans Ultima. Le harnais liste les DEUX, nom accentué
+  compris (constaté). ✅ **27 chemins de leçons préfixés par leur dépôt** — un chemin
+  nu était un renvoi mort dans neuf dépôts sur dix ; 4 restent nus à dessein.
+  ⛔ **Deux défauts trouvés dans mes propres correctifs, par la MUTATION et non par
+  relecture** : la ligne annonçant la levée interpolait la borne courante et affichait
+  « 60 000 → 40000 » sous borne abaissée ; et l'instrument d'état de PR ne lisait pas
+  les *commit statuses* (403 sur neuf dépôts) — il a affiché « VERT » sur un
+  déploiement `ERROR`. ⛔ **Et l'ancre du grain a d'abord été TAPÉE** : 13 caractères
+  justes sur 40. Sixième occurrence de cette faute ; première fois qu'un mécanisme
+  l'attrape (leçon étendue, `memoire/LECONS.md` famille 1).
+  ⏭ **DATARENO- écarté par Paul** (« vraiment à part ») : Vercel rouge en permanence,
+  `PYTHON_ENTRYPOINT_NOT_FOUND`, sur `main` aussi — pipeline CLI, rien à servir.
+  ⏭ **mon-dpe.fr reporté par Paul** : 62 vulnérabilités Dependabot (4 critiques).
+  ⛔ **DEUX CHIFFRES DE CETTE SÉANCE SONT PÉRIMÉS, ET C'EST LA LEÇON DU REPOS.**
+  (1) Les sceaux qu'elle citait — `v54`, puis `v55`, puis `v57` — ne désignent plus
+  rien d'utile : trois numéros ont été scellés en parallèle le même soir, et
+  l'entrée voisine du 30/09 (nuit) le raconte depuis le côté RenoDevis
+  (« deux corps, un numéro »). ⛔ **Ne pas en faire un second récit** : seul le
+  sha256 identifie. État relu le **02/10 à 06:40 UTC** : `main` d'Ultima en **v59
+  `sha256:c7894ff1397b`** (149 entrées), les **neuf autres dépôts tous identiques
+  en v62 `sha256:58a6b68100c8`** — donc la source est DERRIÈRE ses copies, et c'est
+  la boucle suivante. (2) L'alerte « une séance annonçait une propagation v52 »
+  n'a plus d'objet : relevé le 02/10, aucune branche ouverte ne porte v52.
 - 🤖 **SESSION 2026-09-30 (soir, GO SOLO) — B1 ④ : LÉO AGIT DANS L'ANNEAU VERT.**
   ✅ Un vert s'exécute sans clic derrière une trace (`POST /api/leo/ecritures` :
   garde → plafond → `tentee` → acte → issue) ; tout refus du journal retombe sur
@@ -29,6 +99,27 @@
   18 verdicts validés rouges sur le code d'avant ; relecture Codex : 4 constats corrigés.
   `smoke-riven-nebuleuses` 119/119.
   Détail : `CADRAGE-RIVEN-NEBULEUSES.md` §8 bis.
+- 🧭 **SESSION 2026-10-02 (matin) — REPRISE CADRÉE SUR MESURE, #328 FUSIONNÉE, COLLISION AVEC LA SÉANCE CHAÎNE (branche `claude/bold-ride-lz23qg` ; PR de séance en brouillon).**
+  ✅ État des lieux mesuré à 05:00 UTC (API GitHub, git, base : `paiements` = 0,
+  13 lignes dans `devis`, aucune créée en septembre), reprise cadrée en six
+  points, trois phrases rendues. ✅ Sur le go de Paul (SHA `e973eae` sur `main`
+  `dc707e1`), #328 fusionnée en squash : `main` `ab99cab`, B2 ✅ au §2, §0 → B4,
+  leçons v59. ⚠️ Collision : pendant que cette séance réconciliait #327 et #329
+  sur le go de Paul, la séance chaîne les a fermées « sur décision de Paul »
+  (05:33 et 05:35 UTC), réécrit sa branche et ouvert #331 (CI : annulation des
+  passages dépassés, 2 groupes gardés ; leçons v60 → v62, propagées dans les
+  neuf dépôts par PR, toutes fusionnées 06:01–06:03) — #331 fusionnée à 06:56
+  (`main` `44fd938`). Ma réconciliation de #329 n'a jamais été poussée ; celle de
+  #327 (`f23fd55`) repose sur la branche d'une PR fermée, inerte ; un commentaire
+  est parti sur #327 après sa fermeture. ✅ Trois PR de grain, `[skip ci]`, zéro
+  code : RenoDevis #222, RenoBoost #568, Artidispo #112 — `dernier_arret` remis à
+  la tête réelle de chaque `main` (lu par `git rev-parse`), leurs leçons v59
+  retirées au profit de la v62 de `main`. ⏭ B4 : pas ouverte, attribution non
+  tranchée par Paul (deux séances actives) ; l'inventaire lancé en arrière-plan
+  s'est perdu au redémarrage du conteneur. ⛔ Leçon payée (une heure en double) :
+  ⊕ sous « une PR qui dort se fait doubler » — l'état d'une PR se relit à la
+  seconde où l'on agit dessus → **v64** à la source (la séance chaîne avait posé
+  la v63 entre-temps), copies en v63 à propager.
 - 🧭 **SESSION 2026-09-30 (nuit) — B2, LA DOUBLE MARGE, CADRÉE JUSQU'À LA PREMIÈRE LIGNE (branche `claude/bold-ride-lz23qg`, PR de séance en brouillon ; RenoDevis idem ; aucune fusion).**
   ✅ Reprise à froid depuis la branche de la chaîne ; l'état du §2 remesuré à
   18:07 puis 18:58 UTC, aucune ligne à corriger ; les gestes A présentés avec

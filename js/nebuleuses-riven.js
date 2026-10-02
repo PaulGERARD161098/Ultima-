@@ -48,7 +48,9 @@
     [/^(aéronautique|aeronautique|holding industrielle|ingénierie|ingenierie|logiciel|technologie)/, 'industrie'],
     [/^(btp|tuyaut|isolation|cvc|ventilation|rénovation|renovation|menuiserie|plomberie|électricité|electricite|toiture|couverture|charpente|maçonnerie|maconnerie|chauffage|climatisation|carrelage|plâtrerie|platrerie|serrurerie|terrassement|étanchéité|etancheite)/, 'btp'],
     [/^(énergie|energie|environnement)/, 'energie'],
-    [/^(politique|études|etudes|associatif|médico-social|medico-social)/, 'institutions'],
+    // « Défense » (l'armée) rejoint les institutions — décision de Paul du 02/10.
+    // « Aéronautique - défense » reste dans l'industrie : la règle lit le DÉBUT.
+    [/^(politique|études|etudes|associatif|médico-social|medico-social|défense|defense)/, 'institutions'],
     [/^(retail|luxe|art )/, 'commerce']
   ];
 

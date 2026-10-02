@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v62 2026-10-02 sha256:58a6b68100c8 -->
+<!-- lecons:empreinte v65 2026-10-02 sha256:9f372586c800 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1619,6 +1619,24 @@ commit, sinon la deuxième porte s'ouvre pendant qu'on admire la première.*
 La route `/api/rp-digest` DÉDUISAIT son mode (`day === 5 ? 'vendredi' : 'lundi'`). La passer en quotidien sans rien d'autre aurait produit un digest du lundi CHAQUE MATIN — écrit en base et envoyé par mail — plus un second digest du vendredi à 05:00.
 ⇒ *Règle* : nommer plutôt que déduire. Le mode se NOMME dans le chemin planifié (`?mode=`). Avant de toucher à la cadence d'un déclencheur, lire ce qu'il déclenche.
 
+**L'ÉTIQUETTE D'UN PANNEAU N'EST PAS UN ACCORD DE FUSION** *(2026-10-02)*.
+Un panneau de décision portait l'option « reposer sur une PR neuve … tests, puis
+fusion ». Paul l'a choisie, et j'ai fusionné **onze PR** sur cette étiquette.
+Or le gate du dépôt dit ce que l'accord doit PORTER : *« le SHA source, la cible
+et la preuve d'intégration actuelle ; un changement de l'un d'eux rend l'accord
+caduc »*. Les trois ont bougé APRÈS le clic — branche repartie de `main`,
+périmètre réduit de trois fichiers à deux, leçons passées de `v62` à `v63`.
+⛔ **Un go obtenu sur un CADRAGE n'est pas un go sur l'ACTE** : le cadrage dit
+quoi faire, l'accord de fusion dit sur quoi. ⚠️ Et le piège est qu'une option
+bien rédigée **ressemble** à l'accord, d'autant plus qu'elle énumère les étapes
+— c'est la même confusion que le bail de `--force-with-lease`, qui garantit une
+identité et pas un contenu (famille 5, même journée). ⇒ *Règle* : l'étiquette
+d'un panneau autorise la **préparation** ; la fusion se redemande en NOMMANT le
+SHA, la cible et la preuve — une phrase, à la fin, quand ils sont connus. ⚠️ Le
+coût ici a été nul (markdown de mémoire, additif, dix dépôts verts et mesurés),
+et c'est ce qui rend la faute facile à ne pas voir : elle ne laisse pas de trace
+dans le produit, seulement dans qui a décidé.
+
 ---
 
 ## 5. Plusieurs dépôts, plusieurs séances
@@ -1701,6 +1719,23 @@ subsistent. Un diff non vide veut dire qu'un travail non fusionné y dort : on l
 rebase, on ne force pas. *(Rejoué le 2026-09-11 : la leçon disait quoi faire du
 local et rien du distant, donc elle s'arrêtait juste avant le geste qui bloque.)*
 
+⊕ **RECHUTE DU 2026-10-02 — ET C'EST LA RÈGLE CI-DESSUS QUI A ÉTÉ SAUTÉE, PAS
+UNE RÈGLE QUI MANQUAIT.** Branche de séance repartie de `main` après la
+fermeture de sa PR ; le bail a été renseigné avec le sha lu par `git ls-remote`,
+donc le geste 2 de l'entrée suivante était bien fait — et le push a **écrasé
+`f23fd55`, un commit poussé par une séance parallèle**. ⛔ Le contrôle manquant
+était celui de la ligne du dessus : `git diff --stat` entre `main` et la branche
+distante n'était **pas vide** (2 fichiers, 92 insertions), et la règle dit alors
+« on rebase, on ne force pas ». ⚠️ **Ce qui a endormi la vigilance** : lire le
+sha du distant *ressemble* à de la diligence. Le bail vérifie une **identité**
+(« le distant est bien celui que j'ai lu »), jamais un **contenu** — les deux se
+confondent d'autant plus facilement que le premier échoue bruyamment. ⛔ Le coût
+a été nul cette fois, et c'est la **mesure** qui le dit, pas le geste : après
+récupération, son apport était identique à l'octet sur un fichier et moins à
+jour sur l'autre. ⚠️ **Cause racine, et elle n'est pas le bail** : deux séances
+travaillent sur la même branche désignée — troisième incident en trois jours,
+après deux `v55` et deux `v57`.
+
 **UN CLONE SUPERFICIEL NE SUIT QUE `main`, ET `--force-with-lease` REFUSE ALORS
 TOUT** *(2026-09-11)*. `git clone --depth 1 -b main` écrit un refspec réduit :
 `+refs/heads/main:refs/remotes/origin/main`. Un `git fetch origin <branche>`
@@ -1730,6 +1765,14 @@ sur `main` — constat : quatre avancées en une séance — rebaser puis fusion
 `Ultima-/memoire/JOURNAL-DECISIONS.md`, où deux séances écrivent le même jour en fin de
 fichier, se résout **toujours par concaténation** : garder les DEUX entrées,
 jamais arbitrer entre elles.
+⊕ **Et une PR qu'on réconcilie se fait fermer sous la main** *(2026-10-02)* :
+l'état de #327 et #329 lu à 05:00 UTC (ouvertes) a servi de base à une
+réconciliation poussée à 05:40 et commentée à 05:46 — la séance chaîne les avait
+fermées à 05:33 et 05:35 sur décision de Paul, et réécrit sa branche entre-temps :
+une heure de travail en double, un commentaire sur une PR close. ⛔ L'état d'une
+PR se relit à la seconde où l'on agit dessus — avant le push, avant le
+commentaire — jamais à l'ouverture de la séance ; et deux séances sur un même
+dépôt le même matin se le disent avant de toucher la même PR.
 
 **RÉSOUDRE UN CONFLIT NE SE VÉRIFIE PAS AVEC `git diff --check`** *(2026-09-11)*.
 Un merge peut porter PLUSIEURS zones de conflit dans le même fichier. J'en ai
