@@ -24,6 +24,14 @@ verdicts.cheminsTrouves = chemins.length >= 5;
 verdicts.aucunCheminNu = nus.length === 0;
 if (nus.length) console.error('Chemins sans préfixe :', nus);
 
+// 1bis. Une COMMANDE qui cite un chemin préfixé dit d'où elle se lance : depuis la
+//    racine d'un dépôt, `node Ultima-/finubar/x.mjs` ne résout pas (Codex, 02/10,
+//    sur quatre copies). On exige « miroir » ou « dossier qui contient » juste avant.
+const commandes = [...texte.matchAll(/`node [^`]*Ultima-\/[^`]*`/g)];
+const nonSituees = commandes.filter((m) => !/miroir|dossier qui contient/.test(texte.slice(Math.max(0, m.index - 160), m.index)));
+verdicts.commandesSituees = nonSituees.length === 0;
+if (nonSituees.length) console.error('Commandes sans lieu de lancement :', nonSituees.map((m) => m[0]));
+
 // 2. L'outil de propagation (`finubar/lecons-chemins.mjs`), sur un cas dont la
 //    réponse est connue : il ne garde QUE le chemin nu propre à un seul dépôt.
 const { cheminsCites, cheminsNus } = await import('../finubar/lecons-chemins.mjs');

@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v61 2026-10-02 sha256:2a1fa153cdde -->
+<!-- lecons:empreinte v62 2026-10-02 sha256:58a6b68100c8 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -21,7 +21,8 @@ RenoAgenda ou artisan-builder n'a pas Ultima sous la main. Toute évolution se
 fait **dans Ultima**, puis se re-copie : on ne corrige jamais une copie sur
 place, sinon les dix divergent et plus personne ne sait laquelle fait foi.
 *(Les chemins cités portent leur dépôt en préfixe : ils doivent se lire depuis
-n'importe lequel des dix.)* ⇒ **Comment le sceller et le propager :
+n'importe lequel des dix — et toute commande qui en cite un se lance **depuis le
+dossier qui contient les dix clones**, jamais depuis la racine d'un dépôt.)* ⇒ **Comment le sceller et le propager :
 `Ultima-/memoire/LECONS-PROCEDURE.md`** — sorti d'ici le 30/09 pour ne pas
 occuper, dans un fichier que dix dépôts injectent en entier, la place d'une
 leçon. ⚠️ Il vit **dans Ultima seulement**, et c'est délibéré : on ne propage
@@ -1630,8 +1631,8 @@ geste qui produit une note juste ET fausse en même temps : elle se relit bien,
 elle ne mesure rien. La seule preuve est de **relancer l'instrument** et de lire
 ce qu'il répond — pas de relire son propre texte.
 *Incident : trois « recalages » du grain Finubar de RenoBoost dans la même
-séance, tous dans le récit en tête de `FINUBAR.md` ; `node Ultima-/finubar/collecter.mjs`
-lit le bloc JSON plus bas, jamais touché. La collecte l'a dit d'elle-même
+séance, tous dans le récit en tête de `FINUBAR.md` ; la collecte
+(`Ultima-/finubar/collecter.mjs`) lit le bloc JSON plus bas, jamais touché. La collecte l'a dit d'elle-même
 (« RénoBoost a avancé de 2 commits depuis sa dernière note ») — et Paul avait
 entre-temps reçu trois comptes rendus affirmant le grain recalé. La
 `prochaine_action` du JSON datait encore de la veille et demandait « valider en
@@ -1865,11 +1866,13 @@ confiée à Léo a répondu « pas fini pour une reprise à froid » : ni branch
 nommées, aucun grain ne pointait le plan, deux règles se contredisaient sur le
 premier geste. Cinq manques bloquants, corrigés dans le même passage.*
 ⊕ **Corollaire, payé le même soir** : dans ce conteneur, `RenoAgenda` et
-`DATARENO-` sont clonés en minuscules (`renoagenda`, `datareno-`). `node
-Ultima-/finubar/collecter.mjs` les dit alors « semés mais non déclarés » et sort en code
-4. La collecte se lance depuis un miroir de liens symboliques aux noms de
-`Ultima-/finubar/depots.json`, avec, depuis ce miroir, `node --preserve-symlinks
---preserve-symlinks-main Ultima-/finubar/collecter.mjs`.
+`DATARENO-` sont clonés en minuscules (`renoagenda`, `datareno-`). La collecte
+(`Ultima-/finubar/collecter.mjs`) les dit alors « semés mais non déclarés » et sort en
+code 4. Elle se lance depuis un miroir de liens symboliques aux noms de
+`Ultima-/finubar/depots.json` — le miroir est le dossier qui contient les dix
+liens, et c'est DE LUI qu'on lance `node --preserve-symlinks
+--preserve-symlinks-main Ultima-/finubar/collecter.mjs`, jamais depuis la racine
+d'un dépôt, où le chemin ne résout pas.
 Ne pas « corriger » `Ultima-/finubar/depots.json` : ce sont les noms réels des dépôts.
 
 **UN DOCUMENT ÉCRIT POUR UN TIERS VIEILLIT PENDANT QU'ON L'ÉCRIT** *(2026-09-21)*.
