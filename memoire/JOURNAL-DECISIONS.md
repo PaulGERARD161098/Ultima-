@@ -3,6 +3,54 @@
 > Une décision consignée n'est jamais redemandée ni re-litigée.
 > Format : date — décision — conséquence.
 
+- **2026-09-30 (les leçons — lever le plafond du rappel, en panneaux)** — Paul,
+  devant quatre options chiffrées : **« lever le plafond à tout le fichier »**.
+  **Contexte de la décision, mesuré avant de la lui poser** : à 60 000 octets,
+  **78 leçons sur 145 n'atteignaient AUCUNE séance**, sur aucun des dix dépôts —
+  familles 3 à 6 entièrement muettes, famille 2 servie à 30/49. Parmi les
+  muettes : « le lien se pose en fin de message », la règle qu'il a dû redemander
+  le 25/09 **puis** le 30/09. **Décisions** : ① `MAX_OCTETS` passe de 60 000 à
+  **200 000** — elle reste une borne (un rappel sans plafond noie l'ouverture le
+  jour où un script verse en boucle) ; ② le pied du rappel, qui prescrivait
+  l'inverse (« c'est le FICHIER qui doit être élagué, jamais cette borne »), est
+  corrigé et porte désormais la mesure. **Conséquence** : 146/146 leçons servies,
+  134 451 octets, +73 Ko par ouverture de séance sur dix dépôts — coût assumé et
+  chiffré. ⛔ **L'option écartée, et pourquoi on ne la rouvre pas** : la passe
+  d'archivage a été EXÉCUTÉE avant de toucher à la borne, et elle rend **0** — sur
+  145 entrées, 73 citent un mécanisme, 14 en NOMMENT un, 2 ont leur règle tenue
+  par une garde prouvée en la cassant, et ces 2 règles portent plus loin que leur
+  garde. La route n'existe pas ; le pied du rappel le dit maintenant.
+
+- **2026-09-30 (DATARENO- — on le laisse de côté)** — Paul : *« data reno est
+  vraiment à part donc on le laisse de côté »*. **Constat qui a déclenché la
+  question** : le déploiement Vercel du projet `datareno` est en `ERROR`
+  **en permanence**, `PYTHON_ENTRYPOINT_NOT_FOUND`, y compris sur `main` — le
+  dépôt est un pipeline en ligne de commande, il n'a aucune application web à
+  servir. **Décision : ne pas traiter, ne pas rouvrir.** Le remède (débrancher le
+  projet Vercel, ou déclarer un point d'entrée qui n'existe pas) est une action de
+  tableau de bord, pas un correctif de code. **Conséquence** : inscrit comme
+  ARBITRÉ dans le grain Finubar d'Ultima, pas comme une action en attente — une
+  action listée comme bloquante alors qu'elle est tranchée se rejoue. La cause
+  complète reste sur DATARENO-#45.
+
+- **2026-09-30 (mon-dpe.fr — les vulnérabilités attendent)** — Paul : *« on va
+  corriger mon dpe plus tard »*. **Constat** : 62 vulnérabilités Dependabot sur
+  `main` (4 critiques, 28 hautes), vues au push. **Décision : reporté, séance
+  dédiée.** **Conséquence** : inscrit comme ARBITRÉ dans le grain, pas en attente.
+
+- **2026-09-30 (Léo s'appelle par une commande)** — Paul : *« je veux pouvoir
+  appeler Léo et toutes ses capa avec "/léo" ou "/leo" »*. **Décisions** : ① la
+  commande **POINTE** la charte (`.claude/agents/leo.md`), elle ne la recopie ni
+  ne la résume — deux descriptions de Léo finiraient par diverger ; ② `léo.md`
+  est un alias mince, sans consigne propre, pour la même raison ; ③ elle vit
+  **uniquement dans Ultima** : la charte y est spécifique (les quatre quadrants,
+  ses sous-agents), et la copier dans les neuf autres dépôts produirait une Léo
+  qui parle de RIVEN en séance RenoBoost, plus une quatrième surface à
+  synchroniser. **Conséquence** : `/leo` nu rend l'état + les gates + ses
+  capacités en pointant les § de sa charte ; `/leo <demande>` prend la demande et
+  la mène en s'arrêtant net aux gates. Le harnais liste bien les DEUX commandes,
+  nom accentué compris — constaté, pas déduit.
+
 - **2026-09-22 (RIVEN — importer les contacts de l'iPhone, dictée)** — Paul :
   *« est-ce que je peux importer des contacts de mon iPhone dans Ultima pour
   Riven ? »*, puis *« oui, en boucle suivante, j'ai environ 500 contacts »*,

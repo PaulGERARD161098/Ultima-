@@ -8,6 +8,46 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 📓 **SESSION 2026-09-30 (soir) — LE RAPPEL DES LEÇONS SERT ENFIN TOUT LE FICHIER ; `/leo` LIVRÉ (#323 · #326 fusionnées).**
+  ⚠️ **Entrée reposée le 02/10** : la PR de clôture de cette séance (#327) a été
+  fermée sans fusion, et son contenu de mémoire ne se trouvait nulle part. Les
+  leçons, elles, n'avaient rien à récupérer — #328 avait déjà réintégré dans la
+  source l'extension de la leçon de l'identifiant.
+  ✅ **La borne du rappel passe de 60 à 200 Ko, sur décision de Paul en panneaux.**
+  Mesuré avant de la lui poser : à 60 Ko, **78 leçons sur 145 n'atteignaient AUCUNE
+  séance**, sur aucun des dix dépôts (familles 3 à 6 muettes, famille 2 à 30/49) —
+  dont « le lien se pose en fin de message », qu'il a redemandée le 25/09 puis le
+  30/09. Après : **tout le fichier servi**, et le briefing le prouve en retrouvant
+  le fichier entier à l'identique dans le contexte qu'il rend.
+  ✅ **La passe d'archivage a été EXÉCUTÉE avant de toucher à la borne, et elle rend 0** :
+  73 entrées citent un mécanisme, 14 en NOMMENT un, 2 ont leur règle tenue par une
+  garde prouvée en la cassant, 0 sont archivables (ces 2 règles portent plus loin
+  que leur garde). ⛔ Le pied du rappel prescrivait l'inverse — corrigé, il porte
+  la mesure et dit de ne pas refaire le trajet.
+  ✅ **`/leo` et `/léo`** (`.claude/commands/`) : la commande POINTE la charte, ne la
+  recopie pas ; vit uniquement dans Ultima. Le harnais liste les DEUX, nom accentué
+  compris (constaté). ✅ **27 chemins de leçons préfixés par leur dépôt** — un chemin
+  nu était un renvoi mort dans neuf dépôts sur dix ; 4 restent nus à dessein.
+  ⛔ **Deux défauts trouvés dans mes propres correctifs, par la MUTATION et non par
+  relecture** : la ligne annonçant la levée interpolait la borne courante et affichait
+  « 60 000 → 40000 » sous borne abaissée ; et l'instrument d'état de PR ne lisait pas
+  les *commit statuses* (403 sur neuf dépôts) — il a affiché « VERT » sur un
+  déploiement `ERROR`. ⛔ **Et l'ancre du grain a d'abord été TAPÉE** : 13 caractères
+  justes sur 40. Sixième occurrence de cette faute ; première fois qu'un mécanisme
+  l'attrape (leçon étendue, `memoire/LECONS.md` famille 1).
+  ⏭ **DATARENO- écarté par Paul** (« vraiment à part ») : Vercel rouge en permanence,
+  `PYTHON_ENTRYPOINT_NOT_FOUND`, sur `main` aussi — pipeline CLI, rien à servir.
+  ⏭ **mon-dpe.fr reporté par Paul** : 62 vulnérabilités Dependabot (4 critiques).
+  ⛔ **DEUX CHIFFRES DE CETTE SÉANCE SONT PÉRIMÉS, ET C'EST LA LEÇON DU REPOS.**
+  (1) Les sceaux qu'elle citait — `v54`, puis `v55`, puis `v57` — ne désignent plus
+  rien d'utile : trois numéros ont été scellés en parallèle le même soir, et
+  l'entrée voisine du 30/09 (nuit) le raconte depuis le côté RenoDevis
+  (« deux corps, un numéro »). ⛔ **Ne pas en faire un second récit** : seul le
+  sha256 identifie. État relu le **02/10 à 06:40 UTC** : `main` d'Ultima en **v59
+  `sha256:c7894ff1397b`** (149 entrées), les **neuf autres dépôts tous identiques
+  en v62 `sha256:58a6b68100c8`** — donc la source est DERRIÈRE ses copies, et c'est
+  la boucle suivante. (2) L'alerte « une séance annonçait une propagation v52 »
+  n'a plus d'objet : relevé le 02/10, aucune branche ouverte ne porte v52.
 - 🤖 **SESSION 2026-09-30 (soir, GO SOLO) — B1 ④ : LÉO AGIT DANS L'ANNEAU VERT.**
   ✅ Un vert s'exécute sans clic derrière une trace (`POST /api/leo/ecritures` :
   garde → plafond → `tentee` → acte → issue) ; tout refus du journal retombe sur
