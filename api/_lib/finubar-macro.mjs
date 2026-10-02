@@ -58,7 +58,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T06:03:09.630Z",
+        "lecture_le": "2026-10-02T06:57:04.876Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -159,16 +159,16 @@ export default {
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "ea195a9",
-        "tete_le": "2026-10-02T07:42:46+02:00",
-        "commits_depuis": 3,
+        "tete": "afbe1bd",
+        "tete_le": "2026-10-02T08:03:46+02:00",
+        "commits_depuis": 6,
         "commit_inconnu": false
       },
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T06:03:09.597Z",
+        "lecture_le": "2026-10-02T06:57:04.822Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -273,7 +273,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T06:03:09.609Z",
+        "lecture_le": "2026-10-02T06:57:04.837Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -343,7 +343,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T06:03:09.670Z",
+        "lecture_le": "2026-10-02T06:57:04.939Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -402,7 +402,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T06:03:09.640Z",
+        "lecture_le": "2026-10-02T06:57:04.895Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -460,7 +460,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T06:03:09.680Z",
+        "lecture_le": "2026-10-02T06:57:04.950Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -528,7 +528,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T06:03:09.619Z",
+        "lecture_le": "2026-10-02T06:57:04.856Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -560,12 +560,11 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-10-02",
-          "quoi": "CI : annulation des passages dépassés + garde des groupes. Leçons v62 à la source et dans les 9 dépôts (outil lecons-chemins). #331 attend l'accord de Paul.",
-          "commit": "0b9d299b14433fe593ae48824fd321f91d8b75e2"
+          "quoi": "#331 fusionnée : CI (annulation + garde des groupes) et leçons v62 ; les dix dépôts portent la même v62 sur main. Gestes A remesurés, écart 15→13 devis expliqué.",
+          "commit": "44fd938f3c76364a1444878e123c1b0e06591c55"
         },
         "prochaine_action": "Ouvrir B4 par sa fiche (PLAN-2026-09-30-chaine-A-Z.md §4), aucun code avant ; présenter d'abord à Paul les gestes A en un panneau.",
         "bloque_par": [
-          "#331 (CI + leçons v62 à la source) attend l'accord de Paul : SHA, cible main, preuve d'intégration",
           "B1 ⑤ attend deux choix de Paul — cadrage §15.2 : ① l'enrichissement repasse-t-il orange faute de défaire (reco : oui) · ② où vit le bouton « défaire » (reco : cartouche + écran «…",
           "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
           "La précision sur « mon dpe.fr » (VITRUVE)",
@@ -634,7 +633,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T06:03:09.586Z",
+        "lecture_le": "2026-10-02T06:57:04.801Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -701,7 +700,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T06:03:09.649Z",
+        "lecture_le": "2026-10-02T06:57:04.909Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -804,7 +803,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T06:03:09.659Z",
+        "lecture_le": "2026-10-02T06:57:04.923Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -976,10 +975,6 @@ export default {
       },
       {
         "projet": "Ultima",
-        "geste": "#331 (CI + leçons v62 à la source) attend l'accord de Paul : SHA, cible main, preuve d'intégration"
-      },
-      {
-        "projet": "Ultima",
         "geste": "B1 ⑤ attend deux choix de Paul — cadrage §15.2 : ① l'enrichissement repasse-t-il orange faute de défaire (reco : oui) · ② où vit le bouton « défaire » (reco : cartouche + écran «…"
       },
       {
@@ -1079,7 +1074,7 @@ export default {
       },
       {
         "projet": "RénoBoost",
-        "dit": "a avancé de 3 commit(s) depuis sa dernière note",
+        "dit": "a avancé de 6 commit(s) depuis sa dernière note",
         "pourquoi": "derive"
       },
       {

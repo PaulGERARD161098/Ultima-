@@ -133,8 +133,12 @@ bases : `mwaryfscxgrulauwwque` (partagée) sauf mention.
 🔁 **Remesuré le 02/10 entre 06:37 et 06:38 UTC, avec les requêtes de la
 colonne « Comment le mesurer » : aucun geste A n'a bougé.** A2 : toujours un seul
 dossier « SOLA », pas de « SOLA devis a lire » · A3 : 2 chiffrés et émis, mais
-**sur 13 devis, contre 15 le 30/09** — deux lignes ont quitté `devis`, écart non
-expliqué, à éclaircir avant de croire le dénominateur · A6a : `test = true`
+**sur 13 devis, contre 15 le 30/09**. ✅ **Écart expliqué, mesuré dans les journaux
+de l'API Supabase (`edge_logs`) du 01/10** : deux devis créés (08:37 et 15:39 UTC),
+puis quatre supprimés entre 17:13 et 17:14 UTC par l'action « supprimer » de
+l'accueil RenoDevis (`RenoDevis/app/actions.ts` : contrôle des paiements, puis
+`delete`), donc depuis une session administrateur ; 15 + 2 − 4 = 13. ⚠️ « 0 ligne
+orpheline » ne prouvait rien : les cinq clés vers `devis` sont en `CASCADE` · A6a : `test = true`
 (battement 06:30) · A6b : `ouverts = 0` · A7 : 19 sans sort sur 27 · A9 :
 0 sticker · A13 : `actif = false` (battement 04:45).
 

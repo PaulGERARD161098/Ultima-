@@ -32,12 +32,11 @@
   },
   "dernier_arret": {
     "le": "2026-10-02",
-    "quoi": "CI : annulation des passages dépassés + garde des groupes. Leçons v62 à la source et dans les 9 dépôts (outil lecons-chemins). #331 attend l'accord de Paul.",
-    "commit": "0b9d299b14433fe593ae48824fd321f91d8b75e2"
+    "quoi": "#331 fusionnée : CI (annulation + garde des groupes) et leçons v62 ; les dix dépôts portent la même v62 sur main. Gestes A remesurés, écart 15→13 devis expliqué.",
+    "commit": "44fd938f3c76364a1444878e123c1b0e06591c55"
   },
   "prochaine_action": "Ouvrir B4 par sa fiche (PLAN-2026-09-30-chaine-A-Z.md §4), aucun code avant ; présenter d'abord à Paul les gestes A en un panneau.",
   "bloque_par": [
-    "#331 (CI + leçons v62 à la source) attend l'accord de Paul : SHA, cible main, preuve d'intégration",
     "B1 ⑤ attend deux choix de Paul — cadrage §15.2 : ① l'enrichissement repasse-t-il orange faute de défaire (reco : oui) · ② où vit le bouton « défaire » (reco : cartouche + écran « ce que Léo a fait », jamais de lien dans le mail)",
     "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
     "La précision sur « mon dpe.fr » (VITRUVE)",
