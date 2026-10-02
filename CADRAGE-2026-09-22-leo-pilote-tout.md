@@ -2042,3 +2042,22 @@ données fictives. Elle montre les trois lieux :
 
 L'étape 3 touche aux données : escalade signalée. L'index unique `defaite` par
 trace est une migration (gate Paul).
+
+**Dry run du 02/10 — ce qui a cédé, et ce qui a résisté.**
+- ⛔ **Une dépendance n'est pas qu'une cascade.** Supprimer un scénario que
+  Paul a marqué « advenu » ne détruit rien en cascade : la base REMET À VIDE
+  son marqueur (`situations_advenu_scelle`, `on delete set null`, 0019 puis
+  20260914), et un déclencheur efface la date. C'est tout aussi destructeur.
+  ⇒ Le refus du défaire vaut pour **toute** clé étrangère qui pointe la cible,
+  quelle que soit sa règle (`cascade`, `set null`, `restrict`). Le relevé de
+  l'étape 1 les énumère toutes, pas seulement les cascades.
+- ⛔ **L'écran ne peut pas nommer une cible défaite** : le journal ne porte
+  aucun contenu (§13.6), et la cible n'existe plus pour être lue. Une ligne
+  défaite ou échouée se lit sans nom. La maquette est corrigée.
+- ⛔ **Le focus après « Défaire »** : le bouton disparaît, et le focus tombait
+  sur la page. Critère ajouté : il va à l'état que la ligne ou la bulle est
+  devenue. La maquette est corrigée.
+- ✅ **A résisté** : les huit routes suppriment pour de vrai (un `.delete()`
+  chacune, pas un commentaire) ; besoins, journal RIVEN et flammes n'ont
+  aucune référence entrante (aucun refus possible) ; la maquette n'appelle
+  aucun réseau et son mail ne porte qu'un lien de lecture.
