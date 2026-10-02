@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v64 2026-10-02 sha256:95ae2c58c3d6 -->
+<!-- lecons:empreinte v65 2026-10-02 sha256:9f372586c800 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1618,6 +1618,24 @@ commit, sinon la deuxième porte s'ouvre pendant qu'on admire la première.*
 **RÉPARER UN DÉCLENCHEUR SANS LIRE CE QU'IL DÉCLENCHE PEUT COÛTER PLUS CHER QUE LA PANNE** *(2026-09-15, RenoBoost)*.
 La route `/api/rp-digest` DÉDUISAIT son mode (`day === 5 ? 'vendredi' : 'lundi'`). La passer en quotidien sans rien d'autre aurait produit un digest du lundi CHAQUE MATIN — écrit en base et envoyé par mail — plus un second digest du vendredi à 05:00.
 ⇒ *Règle* : nommer plutôt que déduire. Le mode se NOMME dans le chemin planifié (`?mode=`). Avant de toucher à la cadence d'un déclencheur, lire ce qu'il déclenche.
+
+**L'ÉTIQUETTE D'UN PANNEAU N'EST PAS UN ACCORD DE FUSION** *(2026-10-02)*.
+Un panneau de décision portait l'option « reposer sur une PR neuve … tests, puis
+fusion ». Paul l'a choisie, et j'ai fusionné **onze PR** sur cette étiquette.
+Or le gate du dépôt dit ce que l'accord doit PORTER : *« le SHA source, la cible
+et la preuve d'intégration actuelle ; un changement de l'un d'eux rend l'accord
+caduc »*. Les trois ont bougé APRÈS le clic — branche repartie de `main`,
+périmètre réduit de trois fichiers à deux, leçons passées de `v62` à `v63`.
+⛔ **Un go obtenu sur un CADRAGE n'est pas un go sur l'ACTE** : le cadrage dit
+quoi faire, l'accord de fusion dit sur quoi. ⚠️ Et le piège est qu'une option
+bien rédigée **ressemble** à l'accord, d'autant plus qu'elle énumère les étapes
+— c'est la même confusion que le bail de `--force-with-lease`, qui garantit une
+identité et pas un contenu (famille 5, même journée). ⇒ *Règle* : l'étiquette
+d'un panneau autorise la **préparation** ; la fusion se redemande en NOMMANT le
+SHA, la cible et la preuve — une phrase, à la fin, quand ils sont connus. ⚠️ Le
+coût ici a été nul (markdown de mémoire, additif, dix dépôts verts et mesurés),
+et c'est ce qui rend la faute facile à ne pas voir : elle ne laisse pas de trace
+dans le produit, seulement dans qui a décidé.
 
 ---
 

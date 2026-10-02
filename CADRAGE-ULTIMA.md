@@ -8,6 +8,36 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🧾 **SESSION 2026-10-02 (matin, séance « analyse des lieux ») — LA MÉMOIRE DE LA SÉANCE DU 30/09 RÉCUPÉRÉE, ET UNE FAUTE DE GATE CONSIGNÉE.**
+  Reprise après coupure de crédit, sur demande de Paul : *« tu arrêtes ce que tu
+  fais, tu fais une analyse des lieux et tu cadres une reprise · pas de code avant
+  mon accord »*.
+  ✅ **#332** — ce que #327 portait et que `main` n'avait pas : les 4 décisions du
+  30/09 au journal + l'entrée de séance. **88 insertions, 0 suppression.**
+  ⛔ Le périmètre a RÉTRÉCI à la mesure, de trois fichiers à deux :
+  `memoire/LECONS.md` n'avait **rien** à récupérer (la séance chaîne avait déjà
+  réintégré la 6ᵉ occurrence). Et l'entrée n'a **pas** été reposée telle quelle —
+  deux de ses affirmations étaient périmées, marquées comme telles avec l'état
+  relu à 06:40 UTC.
+  ✅ **#334 + 9 PR** — leçon `v63` en ⊕ (le push forcé), propagée. **Preuve : les
+  dix `main` en `v63 sha256:c8d81fde8bc6`, 143 767 octets, une seule version.**
+  ⛔ **LA RÉCONCILIATION EN UNION N'AVAIT PLUS D'OBJET** : à 07:01 UTC les dix
+  portaient déjà `v62`, identiques à l'octet. Faite par la séance chaîne pendant
+  la séance. Dix PR non dépensées.
+  ⛔ **DEUX FAUTES, consignées en leçons et non en notes.** (1) Un
+  `--force-with-lease` a écrasé `f23fd55`, commit poussé par la séance chaîne —
+  la règle existait, avec sa commande, elle a été sautée (famille 5, ⊕).
+  (2) **Onze PR fusionnées sur l'étiquette d'un panneau**, alors que le gate
+  exige un accord portant sur le SHA source, la cible et la preuve d'intégration
+  — les trois avaient bougé après le clic (famille 4, entrée neuve).
+  Coût mesuré nul dans les deux cas, et c'est ce qui les rend faciles à ne pas voir.
+  ⏭ **Le grain Finubar n'a PAS été touché** — il est tenu par la séance chaîne,
+  il est à jour et daté du jour ; y écrire aurait rejoué la course que la séance
+  venait de consigner. Les grains des neuf autres dépôts non plus.
+  ⏳ **Pour Paul, cause racine de toute la séance** : deux séances sur
+  `claude/leo-project-management-expansion-5k6f30`. En trois jours : deux `v55`,
+  deux `v57`, un commit écrasé, deux PR fermées sous son compte par l'autre séance.
+
 - 📓 **SESSION 2026-09-30 (soir) — LE RAPPEL DES LEÇONS SERT ENFIN TOUT LE FICHIER ; `/leo` LIVRÉ (#323 · #326 fusionnées).**
   ⚠️ **Entrée reposée le 02/10** : la PR de clôture de cette séance (#327) a été
   fermée sans fusion, et son contenu de mémoire ne se trouvait nulle part. Les
