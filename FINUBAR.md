@@ -32,12 +32,13 @@
   },
   "dernier_arret": {
     "le": "2026-10-02",
-    "quoi": "B1 ⑤ codé en PR #336 (brouillon, CI verte) ; l'étape 0 jouée sur l'aperçu a trouvé la panne : « code 502 · ia 400 crédit », le crédit Anthropic est épuisé (cause des 0 écritures en prod). RIVEN : 45 fiches des 72 h vérifiées (39 invités du cocktail + l'entreprise RénoBoost IA, 4 cartes BATIMAT, la carte MAITRISECO), trois invités complétés sur dictée de Paul ; #338 fusionnée (« Défense » → Institutions & associatif, main 4a5cdec). Reste dans « À classer » : une fiche (activité inconnue de Paul). #336 (B1 ⑤) fusionnée ensuite sur ordre de Paul (« merge ce qu'il y a en cours »), main intégrée, CI verte — étape 0 non rejouée.",
-    "commit": "333f623ac1bff83a165dd28ae2a42dbab30e8639"
+    "quoi": "02/10 soir : B1 ⑤ fusionnée (#336, étape 0 non rejouée), RIVEN vérifié (#338). Chaîne : B4 réduite à R1, en production, non prouvée. Crédit Anthropic épuisé.",
+    "commit": "f4af7d23e4d8e250abb03b29e43bd32aa120cd37"
   },
   "prochaine_action": "Paul recharge le crédit Anthropic (console Anthropic — geste payant) ; puis étape 0 EN PRODUCTION sur /registre : dicter « Capture l'idée Test B1 », mesurer 2 lignes (tentee, reussie) dans leo_ecritures, cliquer « Défaire », mesurer la 3ᵉ (defaite) et la disparition de l'idée.",
   "bloque_par": [
     "Crédit Anthropic ÉPUISÉ (mesuré le 02/10 à 12:55 UTC, bulle « code 502 · ia 400 crédit ») : Léo ne peut plus répondre nulle part — recharge = geste payant de Paul",
+    "R1 (B4) en production, non prouvée : Réno a rendu 502 le 02/10 à 16:43 UTC. Après la recharge, lui demander « Où en est Artidispo ? » et comparer à la base (PLAN §2).",
     "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",
     "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
     "La précision sur « mon dpe.fr » (VITRUVE)",
@@ -51,8 +52,8 @@
       "depuis": "2026-10-02"
     },
     {
-      "quoi": "Chaîne — prochaine boucle B sans geste A : B4 (un seul agenda Rénoboost sur le moteur d'Artidispo, et Réno lit Artidispo), à ouvrir avec la fiche du §4 du plan — aucun code avant la fiche. B2 (la double marge) est fermée : cadrée le 30/09 (fiche §13 du cadrage pilote RenoDevis, onze décisions, maquette, aucun code), corrigée le 01/10 par RenoDevis #218 et RenoBoost #566 — mesuré à 17:45 UTC sur main de RenoDevis 64211da : releve/prix.js convertit une fois sous meta.prixVente, lignes.test.js « aucune seconde marge », 680/680, tsc 0 ; Réno expose chiffre / nb_lignes / origine_lignes. ⛔ La fiche §13 est historique : son prompt E2 ne se rejoue pas.",
-      "depuis": "2026-10-01"
+      "quoi": "Chaîne — B4 réduite à R1 (Paul, 02/10 : Calendly gardé, agenda unique écarté). R1 en production, non prouvée : critère au PLAN §2. B2 fermée (RenoDevis #218, RenoBoost #566).",
+      "depuis": "2026-10-02"
     },
     {
       "quoi": "LEÇON À CONSIGNER + PROPAGER (9 dépôts) : rechute de « un droit se vérifie du côté où il peut être contourné » — la prémisse de l'arbitrage §12.8 quater avait été mesurée en superutilisateur (MCP), pas sur le chemin du produit. Cadrage §13.0.",

@@ -133,8 +133,12 @@ bases : `mwaryfscxgrulauwwque` (partagée) sauf mention.
 🔁 **Remesuré le 02/10 entre 06:37 et 06:38 UTC, avec les requêtes de la
 colonne « Comment le mesurer » : aucun geste A n'a bougé.** A2 : toujours un seul
 dossier « SOLA », pas de « SOLA devis a lire » · A3 : 2 chiffrés et émis, mais
-**sur 13 devis, contre 15 le 30/09** — deux lignes ont quitté `devis`, écart non
-expliqué, à éclaircir avant de croire le dénominateur · A6a : `test = true`
+**sur 13 devis, contre 15 le 30/09**. ✅ **Écart expliqué, mesuré dans les journaux
+de l'API Supabase (`edge_logs`) du 01/10** : deux devis créés (08:37 et 15:39 UTC),
+puis quatre supprimés entre 17:13 et 17:14 UTC par l'action « supprimer » de
+l'accueil RenoDevis (`RenoDevis/app/actions.ts` : contrôle des paiements, puis
+`delete`), donc depuis une session administrateur ; 15 + 2 − 4 = 13. ⚠️ « 0 ligne
+orpheline » ne prouvait rien : les cinq clés vers `devis` sont en `CASCADE` · A6a : `test = true`
 (battement 06:30) · A6b : `ouverts = 0` · A7 : 19 sans sort sur 27 · A9 :
 0 sticker · A13 : `actif = false` (battement 04:45).
 
@@ -154,7 +158,7 @@ gestes A sont les siens, les boucles B sont du code que Claude porte seul.
 | B1 | Du chiffrage au reste à charge : le coût TTC du devis alimente la rentabilité de l'audit | M4 → M5 | RenoDevis | ⬜ `rentabilite` vaut null (cadrage §2, M5) ; se recette sur un devis réel, donc après A3 | un audit avec son reste à charge et son temps de retour, sur un devis réel |
 | B2 | La double marge (`margeFournitures` à 35 % appliquée par-dessus la bibliothèque) | M4 | RenoDevis + RenoBoost (ligne Réno) | ✅ **corrigée le 01/10 par RenoDevis #218** (fusionnée 08:26 UTC) et RenoBoost (`main` `62fa3ef`, #566 d'après #218) — mesuré à 17:45 UTC sur `main` de RenoDevis (`64211da`) : `releve/prix.js` convertit la bibliothèque une fois sous `meta.prixVente` et marque `vente: true` ; `releve/lignes.js:51-56` lit un prix de vente, `coefVente` a disparu ; 680/680, `tsc` 0, CI 36899869045 verte. Réno : `reno-data.mjs:250` sélectionne `lignes`, `:266` étale `etatChiffrage` (`chiffre`, `nb_lignes`, `origine_lignes` ∈ relevé/manuel/mixte). La fiche §13 de #217 (cadrage de la nuit du 30/09 : onze décisions, maquette, aucun code) est **historique** — son prompt E2 ne se rejoue pas (grain RenoDevis `64211da`) | ✅ `releve/lignes.test.js:51` « aucune seconde marge » (712 reste 712 ; rougit sur l'ancien code à 961,20) · ✅ « le total du devis vaut le total du récap » (même fichier) · ✅ `devis_relances` dit `chiffre` (`api/_lib/devis-chiffre.mjs`) |
 | B3 | Les devis arrivés par e-mail entrent (RR-07), une fois A13 posé | M6 | RenoDevis | ⬜ dépend d'A13 | à fixer à l'ouverture, sur ce qu'A13 aura révélé |
-| B4 | Un seul agenda Rénoboost à la place de Calendly, sur le moteur d'Artidispo — **et Réno lit Artidispo** (R1, §5) | M0 + M1 | Artidispo + RenoBoost | ⬜ | le site, le salon et les campagnes pointent vers un seul agenda Rénoboost ; la bande Réno passe M0 et M1 à « le suit » |
+| B4 | **Réno lit Artidispo** (R1, §5). ~~Un seul agenda Rénoboost à la place de Calendly~~ : écarté par Paul le 02/10, Calendly gardé (flux mesuré ≈ 0) | M0 + M1 | Artidispo + RenoBoost | 🟨 R1 seule (Calendly gardé, Paul 02/10) : fonction `reno-lecture` + outil `artidispo_activite`, Artidispo #114 (`8473dc3`) et RenoBoost #571 (`b59037b`) en production. ⛔ Pas prouvée de bout en bout : le premier appel de Réno (02/10, 16:43:28 UTC) a rendu 502, crédit API Anthropic épuisé ; aucun appel n'a atteint Artidispo. | Réno répond à « Où en est Artidispo ? » avec les huit totaux de la base, ET un GET 200 sur `reno-lecture` figure dans `function_edge_logs` du projet Artidispo ; la bande Réno de M0 et M1 dit « lit Artidispo » et reste « partiel » |
 
 ### Famille C — construire les maillons manquants de la maquette
 
