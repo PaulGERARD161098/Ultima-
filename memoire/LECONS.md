@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v62 2026-10-02 sha256:58a6b68100c8 -->
+<!-- lecons:empreinte v63 2026-10-02 sha256:c8d81fde8bc6 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1700,6 +1700,23 @@ de la branche distante est déjà dans `main`, seuls ses commits pré-squash
 subsistent. Un diff non vide veut dire qu'un travail non fusionné y dort : on le
 rebase, on ne force pas. *(Rejoué le 2026-09-11 : la leçon disait quoi faire du
 local et rien du distant, donc elle s'arrêtait juste avant le geste qui bloque.)*
+
+⊕ **RECHUTE DU 2026-10-02 — ET C'EST LA RÈGLE CI-DESSUS QUI A ÉTÉ SAUTÉE, PAS
+UNE RÈGLE QUI MANQUAIT.** Branche de séance repartie de `main` après la
+fermeture de sa PR ; le bail a été renseigné avec le sha lu par `git ls-remote`,
+donc le geste 2 de l'entrée suivante était bien fait — et le push a **écrasé
+`f23fd55`, un commit poussé par une séance parallèle**. ⛔ Le contrôle manquant
+était celui de la ligne du dessus : `git diff --stat` entre `main` et la branche
+distante n'était **pas vide** (2 fichiers, 92 insertions), et la règle dit alors
+« on rebase, on ne force pas ». ⚠️ **Ce qui a endormi la vigilance** : lire le
+sha du distant *ressemble* à de la diligence. Le bail vérifie une **identité**
+(« le distant est bien celui que j'ai lu »), jamais un **contenu** — les deux se
+confondent d'autant plus facilement que le premier échoue bruyamment. ⛔ Le coût
+a été nul cette fois, et c'est la **mesure** qui le dit, pas le geste : après
+récupération, son apport était identique à l'octet sur un fichier et moins à
+jour sur l'autre. ⚠️ **Cause racine, et elle n'est pas le bail** : deux séances
+travaillent sur la même branche désignée — troisième incident en trois jours,
+après deux `v55` et deux `v57`.
 
 **UN CLONE SUPERFICIEL NE SUIT QUE `main`, ET `--force-with-lease` REFUSE ALORS
 TOUT** *(2026-09-11)*. `git clone --depth 1 -b main` écrit un refspec réduit :
