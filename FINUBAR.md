@@ -31,12 +31,13 @@
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③④ faits (④ le 30/09 : exécution sans clic derrière une trace, revue adversariale soldée) ; reste ⑤, le défaire joué + « ce que Léo a fait » au matin"
   },
   "dernier_arret": {
-    "le": "2026-10-01",
-    "quoi": "Léo/FINUBAR livrés en #330 ; dix grains relus, CI et auth/registre/quota validés. Contrôleur autonome Work et défaire restent à activer.",
-    "commit": "0ef3c8aaa77fd34d690dc4fb2dedc780d72f6022"
+    "le": "2026-10-02",
+    "quoi": "CI : annulation des passages dépassés + garde des groupes. Leçons v62 à la source et dans les 9 dépôts (outil lecons-chemins). #331 attend l'accord de Paul.",
+    "commit": "0b9d299b14433fe593ae48824fd321f91d8b75e2"
   },
-  "prochaine_action": "Reprendre le défaire B1, cadrage §15, après les deux choix de Paul.",
+  "prochaine_action": "Ouvrir B4 par sa fiche (PLAN-2026-09-30-chaine-A-Z.md §4), aucun code avant ; présenter d'abord à Paul les gestes A en un panneau.",
   "bloque_par": [
+    "#331 (CI + leçons v62 à la source) attend l'accord de Paul : SHA, cible main, preuve d'intégration",
     "B1 ⑤ attend deux choix de Paul — cadrage §15.2 : ① l'enrichissement repasse-t-il orange faute de défaire (reco : oui) · ② où vit le bouton « défaire » (reco : cartouche + écran « ce que Léo a fait », jamais de lien dans le mail)",
     "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
     "La précision sur « mon dpe.fr » (VITRUVE)",
@@ -134,7 +135,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-10-01"
+  "maj": "2026-10-02"
 }
 ```
 
