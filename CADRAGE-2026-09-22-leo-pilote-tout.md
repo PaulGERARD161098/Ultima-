@@ -2061,3 +2061,52 @@ trace est une migration (gate Paul).
   chacune, pas un commentaire) ; besoins, journal RIVEN et flammes n'ont
   aucune référence entrante (aucun refus possible) ; la maquette n'appelle
   aucun réseau et son mail ne porte qu'un lien de lecture.
+
+### §15.5 — ⑤ codé le 02/10 (« Ok pour tout » de Paul sur la maquette)
+
+**Ce qui est vrai à la fin de la séance** (branche `claude/leo-defaire`) :
+
+| étape (§15.4) | livré | preuve |
+|---|---|---|
+| 1 · relevé des dépendances | `DEPENDANCES` (`api/_lib/leo-execution.js`) = relevé en base `supabase/releves/20261002_leo_defaire_dependances.RELEVE.sql` : **10 clés**, dont `scenario_liens.entree_id` (absente du §15.0) et l'« advenu » en `set null` | `unit-leo-defaire` relit TOUTES les migrations : une clé entrante absente du relevé rougit |
+| 2 · enrichissement orange | `anneau: 'orange'` au catalogue — **neuf verts** | `unit-leo-anneau` (`lesNeufVerts`), `unit-leo-defaire` |
+| 3 · `etape: 'defaire'` | relit la trace du propriétaire ; refuse si une clé pointe la cible, si elle a été retouchée (`updated_at > created_at`), si l'outil n'a pas de défaire (l'enrichissement d'avant le 02/10), si l'issue a changé d'outil ; supprime ; pose `defaite` | neuf défaires **joués** + 15 verdicts de refus, sabotages validés rouges |
+| 4 · bouton dans la bulle | « Défaire » sur « Fait sans demander » ; attend la clôture ; focus sur l'état ; refus dits sans recopier le serveur | `smoke-leo-accueil` C17, quatre sabotages rouges |
+| 5 · `leo.html` | l'écran, 7 jours, une ligne par geste, nom tant que la cible vit | `smoke-leo-gestes` (23 verdicts), quatre sabotages rouges |
+| 6 · le mail | section « Ce que Léo a fait depuis hier », **un lien de lecture** (`/leo`), zéro contenu | `unit-leo-defaire` §6 bis |
+
+**Trois choix faits en codant, et pourquoi** (Directive EL, principe 2) :
+- **La suppression vit dans le serveur, pas dans le front.** Les huit routes
+  suppriment toutes par `client.from(t).delete().eq('id', …)` sous la RLS de
+  Paul ; `defaireEcriture` fait exactement cela, avec le même client — aucun
+  droit de plus. Le gain : le contrôle des dépendances et la suppression
+  vivent dans la MÊME requête ; un front ne peut pas sauter le premier.
+- **L'index unique `defaite` (migration, gate) n'est plus nécessaire.** Seule
+  la requête dont le `DELETE` a RENDU la ligne pose la `defaite` : deux
+  défaires concurrents → un 200 et un 404, jamais deux lignes. Éprouvé
+  (`courseSansDoubleDefaite`). ⚠️ Reste possible : une `defaite` forgée à la
+  main par PostgREST par le détenteur du jeton — même classe que S6, sans
+  gain de droit.
+- **Le verbe vient du serveur** (`phraseGeste`) : une seule source pour
+  l'écran et le mail.
+
+**Les limites, nommées** :
+- ⚠️ `journal`, `scenarios` et `flammes` n'ont pas d'`updated_at` : une
+  relance que Paul a marquée faite, un scénario qu'il a retouché, se défont
+  quand même — la retouche part avec. Mesuré le 02/10. Correctif : une
+  colonne `updated_at` + déclencheur (migration, gate Paul).
+- ⚠️ Entre le contrôle des dépendances et le `DELETE`, quelques
+  millisecondes : une flamme née dans cet intervalle partirait en cascade.
+  Fermer ce trou exige une fonction SQL transactionnelle (migration, gate).
+- ⛔ **Le mail ne lit pas le journal.** Le cron n'a pas de session de Paul et
+  le dépôt n'a, par principe, aucune clé de service. Le mail le DIT et pointe
+  l'écran. Lire d'ici = un choix d'accès de Paul (registre ci-dessous).
+
+**⏳ Registre — ce qui revient à Paul** :
+1. Lire le journal depuis le mail : (a) une clé de service en variable Vercel,
+   utilisée par le seul cron (reco : non — une clé qui ouvre toute la base
+   pour lire trois colonnes) ; (b) une fonction SQL `security definer` qui ne
+   rend que `outil, phase, le` du propriétaire, appelée avec un secret dédié
+   (migration + secret, **reco**) ; (c) laisser le mail pointer l'écran.
+2. `updated_at` sur `journal` et `scenarios` (migration) — ferme la première
+   limite.
