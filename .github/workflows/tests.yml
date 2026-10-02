@@ -5,6 +5,13 @@ on:
     branches: [main]
 permissions:
   contents: read
+# Un nouveau push sur une PR annule le passage précédent de CETTE PR : il
+# testait une tête déjà dépassée (30/09 : 20 min perdues sur #321). Jamais sur
+# main, où chaque fusion est vérifiée jusqu'au bout (groupe = le commit).
+# `tests/unit-ci-groupes.mjs` vérifie que cette règle reste en place.
+concurrency:
+  group: tests-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
   unit:
     runs-on: ubuntu-latest
