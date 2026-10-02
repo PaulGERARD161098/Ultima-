@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v59 2026-10-01 sha256:c7894ff1397b -->
+<!-- lecons:empreinte v60 2026-10-02 sha256:c91a4792768b -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1627,7 +1627,7 @@ geste qui produit une note juste ET fausse en même temps : elle se relit bien,
 elle ne mesure rien. La seule preuve est de **relancer l'instrument** et de lire
 ce qu'il répond — pas de relire son propre texte.
 *Incident : trois « recalages » du grain Finubar de RenoBoost dans la même
-séance, tous dans le récit en tête de `FINUBAR.md` ; `node finubar/collecter.mjs`
+séance, tous dans le récit en tête de `FINUBAR.md` ; `node Ultima-/finubar/collecter.mjs`
 lit le bloc JSON plus bas, jamais touché. La collecte l'a dit d'elle-même
 (« RénoBoost a avancé de 2 commits depuis sa dernière note ») — et Paul avait
 entre-temps reçu trois comptes rendus affirmant le grain recalé. La
@@ -1863,10 +1863,10 @@ nommées, aucun grain ne pointait le plan, deux règles se contredisaient sur le
 premier geste. Cinq manques bloquants, corrigés dans le même passage.*
 ⊕ **Corollaire, payé le même soir** : dans ce conteneur, `RenoAgenda` et
 `DATARENO-` sont clonés en minuscules (`renoagenda`, `datareno-`). `node
-finubar/collecter.mjs` les dit alors « semés mais non déclarés » et sort en code
+Ultima-/finubar/collecter.mjs` les dit alors « semés mais non déclarés » et sort en code
 4. La collecte se lance depuis un miroir de liens symboliques aux noms de
-`finubar/depots.json`, avec `node --preserve-symlinks --preserve-symlinks-main`.
-Ne pas « corriger » `depots.json` : ce sont les noms réels des dépôts.
+`Ultima-/finubar/depots.json`, avec `node --preserve-symlinks --preserve-symlinks-main`.
+Ne pas « corriger » `Ultima-/finubar/depots.json` : ce sont les noms réels des dépôts.
 
 **UN DOCUMENT ÉCRIT POUR UN TIERS VIEILLIT PENDANT QU'ON L'ÉCRIT** *(2026-09-21)*.
 Un rapport d'état des specs, demandé par Paul pour être confronté à Codex, livré
