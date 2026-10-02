@@ -32,10 +32,10 @@
   },
   "dernier_arret": {
     "le": "2026-10-02",
-    "quoi": "CI : annulation des passages dépassés + garde des groupes. Leçons v62 à la source et dans les 9 dépôts (outil lecons-chemins). #331 attend l'accord de Paul.",
-    "commit": "0b9d299b14433fe593ae48824fd321f91d8b75e2"
+    "quoi": "#328 fusionnée sur le go de Paul (B2 ✅ au §2, §0 → B4, leçons v59), puis #331 de la séance chaîne fusionnée à 06:56 UTC (CI : passages dépassés annulés, garde des groupes ; leçons v62 dans les dix dépôts). Collision entre les deux séances sur #327/#329, fermées par la séance chaîne ; réconciliation de l'autre séance abandonnée. Trois PR de grain ouvertes, zéro code : RenoDevis #222, RenoBoost #568, Artidispo #112. Leçons v64 à la source (⊕ une PR qu'on réconcilie se fait fermer sous la main ; la v63 de la séance chaîne est reprise), copies en v63 à propager.",
+    "commit": "b4e7b1d3d07c6334dad648c8b1c4ac2a31bd3500"
   },
-  "prochaine_action": "Ouvrir B4 par sa fiche (PLAN-2026-09-30-chaine-A-Z.md §4), aucun code avant ; présenter d'abord à Paul les gestes A en un panneau.",
+  "prochaine_action": "Paul tranche qui ouvre B4 (deux séances actives le 02/10), puis : Ouvrir B4 par sa fiche (PLAN-2026-09-30-chaine-A-Z.md §4), aucun code avant ; présenter d'abord à Paul les gestes A en un panneau.",
   "bloque_par": [
     "#331 (CI + leçons v62 à la source) attend l'accord de Paul : SHA, cible main, preuve d'intégration",
     "B1 ⑤ attend deux choix de Paul — cadrage §15.2 : ① l'enrichissement repasse-t-il orange faute de défaire (reco : oui) · ② où vit le bouton « défaire » (reco : cartouche + écran « ce que Léo a fait », jamais de lien dans le mail)",

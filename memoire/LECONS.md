@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v63 2026-10-02 sha256:c8d81fde8bc6 -->
+<!-- lecons:empreinte v64 2026-10-02 sha256:95ae2c58c3d6 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1747,6 +1747,14 @@ sur `main` — constat : quatre avancées en une séance — rebaser puis fusion
 `Ultima-/memoire/JOURNAL-DECISIONS.md`, où deux séances écrivent le même jour en fin de
 fichier, se résout **toujours par concaténation** : garder les DEUX entrées,
 jamais arbitrer entre elles.
+⊕ **Et une PR qu'on réconcilie se fait fermer sous la main** *(2026-10-02)* :
+l'état de #327 et #329 lu à 05:00 UTC (ouvertes) a servi de base à une
+réconciliation poussée à 05:40 et commentée à 05:46 — la séance chaîne les avait
+fermées à 05:33 et 05:35 sur décision de Paul, et réécrit sa branche entre-temps :
+une heure de travail en double, un commentaire sur une PR close. ⛔ L'état d'une
+PR se relit à la seconde où l'on agit dessus — avant le push, avant le
+commentaire — jamais à l'ouverture de la séance ; et deux séances sur un même
+dépôt le même matin se le disent avant de toucher la même PR.
 
 **RÉSOUDRE UN CONFLIT NE SE VÉRIFIE PAS AVEC `git diff --check`** *(2026-09-11)*.
 Un merge peut porter PLUSIEURS zones de conflit dans le même fichier. J'en ai
