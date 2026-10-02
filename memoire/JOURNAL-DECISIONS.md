@@ -3,6 +3,29 @@
 > Une décision consignée n'est jamais redemandée ni re-litigée.
 > Format : date — décision — conséquence.
 
+- **2026-10-02 (B1 ⑤ — la maquette validée, le code lancé)** — Paul, devant la
+  maquette `design/preview-leo-defaire.html` et l'écran sur une page à part
+  (`leo.html`) : *« Ok pour tout »*. **Décisions** : la maquette vaut contrat —
+  la bulle porte « Défaire » à côté du texte, l'écran liste une ligne par geste
+  et ne nomme une cible que tant qu'elle existe, le mail POINTE l'écran par un
+  lien de lecture. Code livré le même jour (cadrage §15.5). **Reste à Paul** :
+  l'accès du mail au journal (aucune clé serveur aujourd'hui — reco : fonction
+  SQL dédiée + secret) et `updated_at` sur `journal`/`scenarios`.
+
+- **2026-10-02 (B1 ⑤ — le défaire : les deux choix du §15.2)** — Paul, devant
+  les deux choix et leurs recommandations : *« Ok pour tes recos. Go »*.
+  **Décisions** : ① **l'enrichissement d'une idée repasse orange** (la carte
+  revient pour lui seul) tant qu'il n'a pas de défaire. L'alternative, une
+  table qui garde l'essence d'avant 7 jours, est écartée pour l'instant et non
+  fermée : elle se rouvre si le besoin revient. ② **Le bouton « défaire » vit à
+  deux endroits** : dans la bulle « Fait sans demander » du cartouche de Léo
+  (l'erreur vue sur le moment), puis sur un écran « ce que Léo a fait » que le
+  mail du matin POINTE (l'erreur vue le lendemain). ⛔ **Jamais un lien
+  « défaire » dans le mail** : un scanner de messagerie qui précharge les liens
+  défairait tout seul. **Conséquence** : neuf types verts, chacun avec son
+  défaire joué (M3). Cadrage : `CADRAGE-2026-09-22-leo-pilote-tout.md` §15.2
+  et §15.3. Aucune ligne de code avant l'accord de Paul sur la maquette.
+
 - **2026-09-30 (les leçons — lever le plafond du rappel, en panneaux)** — Paul,
   devant quatre options chiffrées : **« lever le plafond à tout le fichier »**.
   **Contexte de la décision, mesuré avant de la lui poser** : à 60 000 octets,

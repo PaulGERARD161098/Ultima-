@@ -13,8 +13,10 @@ export function ok(res, data) {
 }
 
 // Erreur client : message générique en français, jamais de détail interne.
-export function fail(res, status, message) {
-  sendJson(res, status, { ok: false, error: message });
+// `extra` (optionnel) : des champs de DIAGNOSTIC sûrs, jamais un message brut
+// d'un tiers — ex. `{ cause: 'ia 401' }` sur un 502 de Léo.
+export function fail(res, status, message, extra) {
+  sendJson(res, status, { ...(extra && typeof extra === 'object' ? extra : {}), ok: false, error: message });
 }
 
 // Méthode non supportée → 405 + header Allow.

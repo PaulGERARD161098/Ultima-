@@ -1,0 +1,38 @@
+-- ⛔ CE FICHIER EST UN RELEVÉ, PAS UNE MIGRATION — il ne s'applique pas.
+--
+-- B1 ⑤ (cadrage CADRAGE-2026-09-22-leo-pilote-tout.md §15.4, étape 1) : toutes
+-- les clés étrangères qui pointent les huit tables qu'un défaire de Léo peut
+-- supprimer, QUELLE QUE SOIT LEUR RÈGLE (c = cascade, n = set null). Relevé en
+-- base le 2026-10-02 sur le projet Ultima (`leosfqyidgsaescjbfom`), par la
+-- requête ci-dessous. Les colonnes `owner_id` des clés « scellées » ne
+-- désignent pas la cible : seule la colonne appariée à `id` est retenue.
+--
+-- Source de vérité : la base. Ce relevé est recopié dans `DEPENDANCES`
+-- (`api/_lib/leo-execution.js`), et `tests/unit-leo-defaire.mjs` exige que les
+-- deux coïncident ET que chaque clé étrangère écrite dans les migrations y
+-- figure — une passerelle ajoutée demain fait rougir le harnais.
+--
+-- select c.confrelid::regclass cible, c.conrelid::regclass source,
+--        a.attname colonne, c.confdeltype regle, c.conname
+-- from pg_constraint c
+-- join pg_attribute a on a.attrelid = c.conrelid and a.attnum = any (c.conkey)
+-- where c.contype = 'f' and c.confrelid::regclass::text in
+--   ('idees','intendant_besoins','journal','imladrik_entrees',
+--    'serments','flammes','situations','scenarios');
+--
+-- cible             | source          | colonne            | règle
+-- idees             | idees_liens     | source_id          | c
+-- idees             | idees_liens     | target_id          | c
+-- imladrik_entrees  | serment_liens   | entree_id          | c
+-- imladrik_entrees  | scenario_liens  | entree_id          | c
+-- serments          | flammes         | serment_id         | c
+-- serments          | serment_liens   | serment_id         | c
+-- serments          | scenario_liens  | serment_id         | c
+-- situations        | scenarios       | situation_id       | c
+-- scenarios         | situations      | scenario_advenu_id | n
+-- scenarios         | scenario_liens  | scenario_id        | c
+--
+-- Aucune clé entrante : intendant_besoins, journal, flammes.
+-- Politiques SELECT propriétaire présentes sur les cinq tables sources (relevé
+-- pg_policies du même jour) : la lecture des dépendances voit tout ce qu'une
+-- suppression emporterait, puisque chaque clé est scellée par `owner_id`.

@@ -1942,14 +1942,20 @@ défaire exige l'essence d'avant — du **contenu**, que `leo_ecritures` n'a pas
 le droit de porter (§13.6). Et M3 (§12.2) dit : *« un type d'écriture sans
 défaire éprouvé n'entre pas dans l'anneau vert »*.
 
-### §15.2 — ⏳ LES DEUX CHOIX DE PAUL
+### §15.2 — ✅ LES DEUX CHOIX DE PAUL — TRANCHÉS LE 02/10
+
+> Paul, le 02/10 : *« Ok pour tes recos. Go »*. **① = (a)** : l'enrichissement
+> repasse orange. **② = (c)** : le bouton vit dans le cartouche puis sur l'écran
+> « ce que Léo a fait », que le mail du matin pointe sans jamais porter d'action.
+> Consigné au journal des décisions. Le tableau d'origine reste ci-dessous,
+> pour la trace du raisonnement.
 
 | | options | ma recommandation |
 |---|---|---|
 | **① l'enrichissement** | (a) le repasser **orange** jusqu'à ce qu'il ait un défaire (la carte revient pour lui seul) · (b) conserver l'essence d'avant dans une table dédiée, RLS propriétaire, purgée à 7 jours (migration) | **(a)** — un outil, un anneau : c'est M3 appliqué, sans table de plus. (b) reste ouvert si le besoin revient |
 | **② où vit le bouton « défaire »** | (a) dans le cartouche de Léo, sur la bulle « Fait sans demander » · (b) un écran « ce que Léo a fait » dans la console, pointé par le mail du matin · (c) les deux | **(c)**, dans cet ordre : (a) couvre l'erreur vue sur le moment, (b) celle découverte le lendemain. ⛔ **Jamais un lien « défaire » dans le mail** : un scanner de messagerie qui précharge les liens défairait tout seul |
 
-### §15.3 — ⑤ en six points (sous réserve des deux choix)
+### §15.3 — ⑤ en six points (les deux choix sont tranchés, voir §15.2)
 
 **① Le but.** Chaque écriture verte se défait d'un clic, **sauf** si elle a des
 dépendances nées après elle (refus explicite) ; la ligne `defaite` est posée
@@ -1980,3 +1986,177 @@ un défaire des écritures confirmées à la carte.
 | le défaire se fie à `cible_id` lu en base (forgeable par PostgREST avant le 30/09) | la suppression passe par la route de l'outil, RLS propriétaire ; `cible_id` n'est qu'une adresse |
 | un lien dans le mail défait tout seul | aucun lien d'action dans le mail — il pointe l'écran |
 | un type vert sans défaire | le contrôle B1-d énumère le catalogue, pas une liste écrite à la main |
+
+### §15.4 — Ce que les deux choix changent, et ce qui a été mesuré le 02/10
+
+**Neuf types verts, pas dix.** Avec ① (a), `proposer_enrichissement_idee`
+passe `anneau: 'orange'` au catalogue (`api/_lib/leo.js`, seule ligne du
+catalogue qui change). Le contrôle B1-d énumère le catalogue : neuf verts, neuf
+défaires joués, un rouge si l'un manque.
+
+**Les routes de suppression existent déjà toutes** (mesuré le 02/10 sur
+`b4e7b1d`) :
+
+| outil vert | route de l'acte | `DELETE` présent |
+|---|---|---|
+| `proposer_idee` | `/api/idees/items` | oui |
+| `proposer_besoin` | `/api/intendant/besoins` | oui |
+| `proposer_journal`, `proposer_relance` | `/api/reseau/journal` | oui |
+| `proposer_page_journal` | `/api/imladrik/entrees` | oui |
+| `proposer_serment` | `/api/serments` | oui |
+| `proposer_flamme` | `/api/flammes` | oui |
+| `proposer_situation` | `/api/situations` | oui |
+| `proposer_scenario` | `/api/scenarios` | oui |
+
+Le défaire passe par ces routes, sous la RLS propriétaire. Il n'y a ni route
+neuve ni `DELETE` direct en base. `cible_id` n'est qu'une adresse (revue S6).
+
+**Le tableau du §15.0 était incomplet.** Un **scénario** emporte aussi ses liens
+(`0018` l.98, `on delete cascade`). ⇒ La première étape du code est le relevé
+EXHAUSTIF des clés étrangères pointant vers les huit tables cibles, écrit dans
+un test. Le refus « dépendance née après » se fonde sur ce relevé, jamais sur
+une liste tapée à la main.
+
+**L'écran « ce que Léo a fait »** : une page de la console (`leo.html`), comme
+`finubar.html`. Elle montre une ligne par geste (verbe, objet, cible, heure,
+état) avec son bouton « Défaire ». Le mail du matin la POINTE par un lien de
+lecture. ⛔ Aucun lien d'action dans le mail. Proposé par la maquette, à
+valider avec elle.
+
+**La maquette d'abord (Directive EL)** : `design/preview-leo-defaire.html`, sur
+données fictives. Elle montre les trois lieux :
+- la bulle et ses trois issues (défait · refusé, une flamme est née depuis ·
+  déjà défait) ;
+- l'écran ;
+- le paragraphe du mail.
+
+**L'ordre du code, après l'accord de Paul sur la maquette** :
+1. relevé des dépendances (test) ;
+2. l'enrichissement orange (test) ;
+3. `etape: 'defaire'` sur `/api/leo/ecritures`, avec la relecture de la trace
+   du propriétaire, le refus si dépendance et la pose de `defaite` ;
+4. le bouton dans la bulle ;
+5. la page `leo.html` ;
+6. la section du mail ;
+7. le harnais B1-d, les sabotages et la revue adverse `securite-auditeur`.
+
+L'étape 3 touche aux données : escalade signalée. L'index unique `defaite` par
+trace est une migration (gate Paul).
+
+**Dry run du 02/10 — ce qui a cédé, et ce qui a résisté.**
+- ⛔ **Une dépendance n'est pas qu'une cascade.** Supprimer un scénario que
+  Paul a marqué « advenu » ne détruit rien en cascade : la base REMET À VIDE
+  son marqueur (`situations_advenu_scelle`, `on delete set null`, 0019 puis
+  20260914), et un déclencheur efface la date. C'est tout aussi destructeur.
+  ⇒ Le refus du défaire vaut pour **toute** clé étrangère qui pointe la cible,
+  quelle que soit sa règle (`cascade`, `set null`, `restrict`). Le relevé de
+  l'étape 1 les énumère toutes, pas seulement les cascades.
+- ⛔ **L'écran ne peut pas nommer une cible défaite** : le journal ne porte
+  aucun contenu (§13.6), et la cible n'existe plus pour être lue. Une ligne
+  défaite ou échouée se lit sans nom. La maquette est corrigée.
+- ⛔ **Le focus après « Défaire »** : le bouton disparaît, et le focus tombait
+  sur la page. Critère ajouté : il va à l'état que la ligne ou la bulle est
+  devenue. La maquette est corrigée.
+- ✅ **A résisté** : les huit routes suppriment pour de vrai (un `.delete()`
+  chacune, pas un commentaire) ; besoins, journal RIVEN et flammes n'ont
+  aucune référence entrante (aucun refus possible) ; la maquette n'appelle
+  aucun réseau et son mail ne porte qu'un lien de lecture.
+
+### §15.5 — ⑤ codé le 02/10 (« Ok pour tout » de Paul sur la maquette)
+
+**Ce qui est vrai à la fin de la séance** (branche `claude/leo-defaire`) :
+
+| étape (§15.4) | livré | preuve |
+|---|---|---|
+| 1 · relevé des dépendances | `DEPENDANCES` (`api/_lib/leo-execution.js`) = relevé en base `supabase/releves/20261002_leo_defaire_dependances.RELEVE.sql` : **10 clés**, dont `scenario_liens.entree_id` (absente du §15.0) et l'« advenu » en `set null` | `unit-leo-defaire` relit TOUTES les migrations : une clé entrante absente du relevé rougit |
+| 2 · enrichissement orange | `anneau: 'orange'` au catalogue — **neuf verts** | `unit-leo-anneau` (`lesNeufVerts`), `unit-leo-defaire` |
+| 3 · `etape: 'defaire'` | relit la trace du propriétaire ; refuse si une clé pointe la cible, si elle a été retouchée (`updated_at > created_at`), si l'outil n'a pas de défaire (l'enrichissement d'avant le 02/10), si l'issue a changé d'outil ; supprime ; pose `defaite` | neuf défaires **joués** + 15 verdicts de refus, sabotages validés rouges |
+| 4 · bouton dans la bulle | « Défaire » sur « Fait sans demander » ; attend la clôture ; focus sur l'état ; refus dits sans recopier le serveur | `smoke-leo-accueil` C17, quatre sabotages rouges |
+| 5 · `leo.html` | l'écran, 7 jours, une ligne par geste, nom tant que la cible vit | `smoke-leo-gestes` (23 verdicts), quatre sabotages rouges |
+| 6 · le mail | section « Ce que Léo a fait depuis hier », **un lien de lecture** (`/leo`), zéro contenu | `unit-leo-defaire` §6 bis |
+
+**Trois choix faits en codant, et pourquoi** (Directive EL, principe 2) :
+- **La suppression vit dans le serveur, pas dans le front.** Les huit routes
+  suppriment toutes par `client.from(t).delete().eq('id', …)` sous la RLS de
+  Paul ; `defaireEcriture` fait exactement cela, avec le même client — aucun
+  droit de plus. Le gain : le contrôle des dépendances et la suppression
+  vivent dans la MÊME requête ; un front ne peut pas sauter le premier.
+- **L'index unique `defaite` (migration, gate) n'est plus nécessaire.** Seule
+  la requête dont le `DELETE` a RENDU la ligne pose la `defaite` : deux
+  défaires concurrents → un 200 et un 404, jamais deux lignes. Éprouvé
+  (`courseSansDoubleDefaite`). ⚠️ Reste possible : une `defaite` forgée à la
+  main par PostgREST par le détenteur du jeton — même classe que S6, sans
+  gain de droit.
+- **Le verbe vient du serveur** (`phraseGeste`) : une seule source pour
+  l'écran et le mail.
+
+**Les limites, nommées** :
+- ⚠️ `journal`, `scenarios` et `flammes` n'ont pas d'`updated_at` : une note
+  de relance corrigée à la main, un scénario retouché, se défont quand même —
+  la retouche part avec. (Une relance **marquée faite**, elle, est refusée :
+  Léo ne pose jamais `relance_faite`.) Correctif : `updated_at` + déclencheur
+  (migration, gate Paul).
+- ⚠️ Entre le contrôle des dépendances et le `DELETE` : deux à cinq
+  allers-retours Vercel ↔ Supabase, **100 à 400 ms** (revue F2 — j'avais écrit
+  « quelques millisecondes », c'était faux). Une flamme née dans cet
+  intervalle — Léo elle-même, depuis un autre onglet — partirait en cascade.
+  La course sur la **retouche** est fermée (le `DELETE` exige l'`updated_at`
+  lu) ; celle sur la **cascade** exige une fonction SQL transactionnelle
+  (migration, gate).
+
+**Revue adverse `securite-auditeur` du 02/10 — 0 critique, 0 élevé :**
+
+| constat | gravité | suite |
+|---|---|---|
+| M1 · le défaire ne vérifiait pas que la cible était NÉE du geste : une clôture forgée (`cibleId` d'un serment écrit à la main) faisait proposer « Défaire » dessus | moyen | ✅ fermé : la cible doit avoir été créée entre la `tentee` et la `reussie` (même horloge, la base), au défaire ET à l'écran |
+| M2 · `journal`/`flammes`/`scenarios` se défont même retouchés | moyen | ✅ en partie : relance marquée faite → refus. Le reste attend `updated_at` (registre 2) |
+| F1 · aucune limite d'âge côté serveur | faible | ✅ 7 jours, comme l'écran |
+| F2 · course retouche/suppression | faible | ✅ `DELETE … eq(updated_at)` ; cascade → gate |
+| F3 · l'analyseur des migrations ratait `references t` sans colonnes et les noms entre guillemets | faible | ✅ sorti en fonction, éprouvé sur 4 cas à réponse connue |
+| F4 · le double clic n'était pas éprouvé | faible | ✅ un verdict par harnais, sabotage rouge |
+| F5 · deux verdicts verts par construction (RLS simulée) | faible | ✅ rejoués sans RLS : c'est le filtre du code qui écarte autrui |
+| I2 · les 503 du défaire ne se journalisaient pas | info | ✅ `logError('leo.defaire', code)`, sans PII |
+| I1 · une `defaite` forgée par PostgREST | info | classe S6, sans gain de droit — inchangé |
+| I3 · le mail ne liste aucun geste | info | registre 1 |
+
+Chaque correctif a son verdict, et chaque verdict a viré au rouge sur le code
+saboté avant d'être cru.
+- ⛔ **Le mail ne lit pas le journal.** Le cron n'a pas de session de Paul et
+  le dépôt n'a, par principe, aucune clé de service. Le mail le DIT et pointe
+  l'écran. Lire d'ici = un choix d'accès de Paul (registre ci-dessous).
+
+**⛔ ÉTAPE 0, TRANSMISE PAR LA SÉANCE B1 ④ (passation du 02/10) — et elle
+n'est pas faite.** Mesuré le 02/10 à 12:10 UTC : `public.leo_ecritures` =
+**0 ligne**. ④ est sur `main` depuis le 30/09 (`83a97a5`) mais n'a **jamais
+écrit en production** — pas même une `tentee`. Le défaire est donc bâti sur
+une écriture qu'on n'a jamais vue réussir. Les journaux Vercel ne sont pas
+lisibles d'ici (403) : la cause ne se mesure qu'en jouant le geste.
+⇒ **Avant la fusion de ⑤** : Paul dicte une écriture verte réelle (ADRAMELECH :
+« capture l'idée Test B1 »), puis on mesure en base **2 lignes sur un même
+`trace_id`** (`tentee`, puis `reussie` avec `cible_id`). Sur l'aperçu de la
+branche, le même geste éprouve ⑤ de bout en bout : la bulle porte « Défaire »,
+le clic pose une 3ᵉ ligne `defaite` et l'idée disparaît. Si 0 ligne ou une
+`tentee` seule : diagnostiquer ④ d'abord (anneau d'interface orange si la
+cible n'est pas dans la dictée, route, déploiement).
+
+**Étape 0 jouée le 02/10 (12:40–12:55 UTC), et elle a trouvé la panne.** Paul
+a dicté « Capture l'idée Test B1 » sur l'aperçu de #336 : « Léo n'a pas pu
+répondre », trois fois. Les journaux Vercel n'étant pas lisibles d'ici (403),
+la bulle a appris à dire son code (`d66c2a0` : **502**), puis la cause côté
+IA en mots fermés (`15e834e`, `causeEchecIA`) : **`ia 400 crédit`** — le
+**crédit du compte Anthropic est épuisé**. Léo ne peut plus appeler l'IA, donc
+aucune proposition, donc aucune écriture : c'est ce qui explique les 0 lignes
+de `leo_ecritures`, et ce n'est ni ④ ni ⑤. Écarté en passant : le modèle
+(`claude-opus-4-8`, valide et actif), la forme de la requête (système + deux
+outils), la session (un 401 l'aurait dit).
+
+**⏳ Registre — ce qui revient à Paul** :
+0. **Recharger le crédit Anthropic** (console Anthropic, geste payant — gate
+   Paul), puis rejouer l'étape 0 : la dictée, 2 lignes, « Défaire », 3ᵉ ligne.
+1. Lire le journal depuis le mail : (a) une clé de service en variable Vercel,
+   utilisée par le seul cron (reco : non — une clé qui ouvre toute la base
+   pour lire trois colonnes) ; (b) une fonction SQL `security definer` qui ne
+   rend que `outil, phase, le` du propriétaire, appelée avec un secret dédié
+   (migration + secret, **reco**) ; (c) laisser le mail pointer l'écran.
+2. `updated_at` sur `journal` et `scenarios` (migration) — ferme la première
+   limite.

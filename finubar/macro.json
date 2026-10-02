@@ -53,7 +53,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T16:58:09.485Z",
+        "lecture_le": "2026-10-02T17:44:40.427Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -163,7 +163,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T16:58:09.399Z",
+        "lecture_le": "2026-10-02T17:44:40.309Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -268,7 +268,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T16:58:09.424Z",
+        "lecture_le": "2026-10-02T17:44:40.348Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -296,18 +296,17 @@
         "etat": "en_cours",
         "jalon": {
           "nom": "Léo et FINUBAR — activation du site et des commandes",
-          "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③④ faits ; ⑤ CODÉ (PR #336, brouillon, CI verte) — l'étape 0 a trouvé la panne : crédit Anthropic épuisé (« ia 400 crédit »), Léo ne répond plus ; à rejouer après recharge, puis fusion"
+          "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③④⑤ en production — ⑤ fusionné le 02/10 au soir (#336) sur ordre de Paul, SANS l'étape 0 : le crédit Anthropic est épuisé (« ia 400 crédit »), Léo ne répond plus ; la preuve en prod (une écriture, son défaire) reste à faire après la recharge"
         },
         "dernier_arret": {
           "le": "2026-10-02",
-          "quoi": "02/10 soir : B1 ⑤ codé (#336), RIVEN vérifié (#338). Chaîne : B4 réduite à R1, en production, non prouvée. Crédit Anthropic épuisé : Léo et Réno rendent 502.",
-          "commit": "333f623ac1bff83a165dd28ae2a42dbab30e8639"
+          "quoi": "02/10 soir : B1 ⑤ fusionnée (#336, étape 0 non rejouée), RIVEN vérifié (#338). Chaîne : B4 réduite à R1, en production, non prouvée. Crédit Anthropic épuisé.",
+          "commit": "948ecc2ae3b4615bbf0b80e45f2369564459d45b"
         },
-        "prochaine_action": "Paul recharge le crédit Anthropic (console Anthropic — geste payant), puis rejoue l'étape 0 sur l'aperçu de #336 : dicter « Capture l'idée Test B1 » sur /registre, mesurer 2…",
+        "prochaine_action": "Paul recharge le crédit Anthropic (console Anthropic — geste payant) ; puis étape 0 EN PRODUCTION sur /registre : dicter « Capture l'idée Test B1 », mesurer 2 lignes (tentee…",
         "bloque_par": [
           "Crédit Anthropic ÉPUISÉ (mesuré le 02/10 à 12:55 UTC, bulle « code 502 · ia 400 crédit ») : Léo ne peut plus répondre nulle part — recharge = geste payant de Paul",
           "R1 (B4) en production, non prouvée : Réno a rendu 502 le 02/10 à 16:43 UTC. Après la recharge, lui demander « Où en est Artidispo ? » et comparer à la base (PLAN §2).",
-          "#336 (B1 ⑤) : après la recharge, l'étape 0 rejouée (une dictée verte réelle), puis l'accord de fusion de Paul (SHA, cible main, CI verte)",
           "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",
           "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
           "La précision sur « mon dpe.fr » (VITRUVE)",
@@ -367,16 +366,16 @@
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "bcf1e69",
-        "tete_le": "2026-10-02T16:48:04+00:00",
-        "commits_depuis": 2,
+        "tete": "e66fe0b",
+        "tete_le": "2026-10-02T16:58:44+00:00",
+        "commits_depuis": 3,
         "commit_inconnu": false
       },
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T16:58:09.370Z",
+        "lecture_le": "2026-10-02T17:44:40.187Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -446,7 +445,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T16:58:09.553Z",
+        "lecture_le": "2026-10-02T17:44:40.537Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -505,7 +504,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T16:58:09.509Z",
+        "lecture_le": "2026-10-02T17:44:40.466Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -563,7 +562,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T16:58:09.569Z",
+        "lecture_le": "2026-10-02T17:44:40.558Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -631,7 +630,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T16:58:09.455Z",
+        "lecture_le": "2026-10-02T17:44:40.380Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -698,7 +697,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T16:58:09.521Z",
+        "lecture_le": "2026-10-02T17:44:40.493Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -801,7 +800,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-02T16:58:09.533Z",
+        "lecture_le": "2026-10-02T17:44:40.509Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -906,10 +905,6 @@
       {
         "projet": "Ultima",
         "geste": "R1 (B4) en production, non prouvée : Réno a rendu 502 le 02/10 à 16:43 UTC. Après la recharge, lui demander « Où en est Artidispo ? » et comparer à la base (PLAN §2)."
-      },
-      {
-        "projet": "Ultima",
-        "geste": "#336 (B1 ⑤) : après la recharge, l'étape 0 rejouée (une dictée verte réelle), puis l'accord de fusion de Paul (SHA, cible main, CI verte)"
       },
       {
         "projet": "Ultima",

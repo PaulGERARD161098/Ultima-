@@ -124,7 +124,15 @@ export default async function handler(req, res) {
   const lien = hote ? (hote.startsWith('http') ? `${hote}/finubar` : `https://${hote}/finubar`) : '';
 
   const aujourdhui = dateA(FUSEAU);
-  const { sujet, texte, html, jours } = composerMatin(macro, { aujourdhui, lien });
+  // B1 ⑤ (M2) : « Ce que Léo a fait » se présente au matin. Le lien est de
+  // LECTURE (l'écran) — jamais un lien qui défait.
+  // ⚠️ `gestes: null` : le cron n'a pas de session de Paul, et le dépôt n'a
+  // aucune clé de service. Lire le journal d'ici est un choix d'accès qui
+  // revient à Paul (registre du cadrage §15.5) ; d'ici là, le mail le dit.
+  const lienLeo = lien ? lien.replace(/\/finubar$/, '/leo') : '';
+  const { sujet, texte, html, jours } = composerMatin(macro, {
+    aujourdhui, lien, leo: { lien: lienLeo, gestes: null },
+  });
 
   try {
     const r = await fetch('https://api.resend.com/emails', {
