@@ -152,6 +152,26 @@ for (const [nom, defaire, attendu] of [
   await page.close();
 }
 
+console.log('— B bis. Le double clic (revue F4) —');
+{
+  // Le serveur répond lentement : un second clic part pendant que le premier
+  // est en vol. Une seule requête doit sortir, et « Défait » ne doit pas être
+  // écrasé par la réponse d'un doublon (« Cible introuvable »).
+  let n = 0;
+  const { page, journal } = await ouvrir({ api: OK, defaire: async (r) => {
+    n += 1;
+    await new Promise((res) => setTimeout(res, 400));
+    return n === 1 ? defaitOk(r) : r.fulfill({ status: 404, contentType: 'application/json',
+      body: '{"ok":false,"error":"Cible introuvable"}' });
+  } });
+  await page.locator('.geste').first().locator('.leo-defaire').dblclick();
+  await page.waitForTimeout(1200);
+  const etat = await page.evaluate(() => document.querySelector('.geste .geste-etat').textContent);
+  verifier('Double clic : UNE requête, et la ligne reste « Défait »',
+    journal.posts.length === 1 && etat.startsWith('Défait par toi'), `${journal.posts.length} · ${etat}`);
+  await page.close();
+}
+
 console.log('— C. Les états sans liste —');
 for (const [nom, opts, attendu] of [
   ['déconnecté', { connecte: false, api: OK }, 'Session fermée'],

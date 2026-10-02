@@ -2091,13 +2091,36 @@ trace est une migration (gate Paul).
   l'écran et le mail.
 
 **Les limites, nommées** :
-- ⚠️ `journal`, `scenarios` et `flammes` n'ont pas d'`updated_at` : une
-  relance que Paul a marquée faite, un scénario qu'il a retouché, se défont
-  quand même — la retouche part avec. Mesuré le 02/10. Correctif : une
-  colonne `updated_at` + déclencheur (migration, gate Paul).
-- ⚠️ Entre le contrôle des dépendances et le `DELETE`, quelques
-  millisecondes : une flamme née dans cet intervalle partirait en cascade.
-  Fermer ce trou exige une fonction SQL transactionnelle (migration, gate).
+- ⚠️ `journal`, `scenarios` et `flammes` n'ont pas d'`updated_at` : une note
+  de relance corrigée à la main, un scénario retouché, se défont quand même —
+  la retouche part avec. (Une relance **marquée faite**, elle, est refusée :
+  Léo ne pose jamais `relance_faite`.) Correctif : `updated_at` + déclencheur
+  (migration, gate Paul).
+- ⚠️ Entre le contrôle des dépendances et le `DELETE` : deux à cinq
+  allers-retours Vercel ↔ Supabase, **100 à 400 ms** (revue F2 — j'avais écrit
+  « quelques millisecondes », c'était faux). Une flamme née dans cet
+  intervalle — Léo elle-même, depuis un autre onglet — partirait en cascade.
+  La course sur la **retouche** est fermée (le `DELETE` exige l'`updated_at`
+  lu) ; celle sur la **cascade** exige une fonction SQL transactionnelle
+  (migration, gate).
+
+**Revue adverse `securite-auditeur` du 02/10 — 0 critique, 0 élevé :**
+
+| constat | gravité | suite |
+|---|---|---|
+| M1 · le défaire ne vérifiait pas que la cible était NÉE du geste : une clôture forgée (`cibleId` d'un serment écrit à la main) faisait proposer « Défaire » dessus | moyen | ✅ fermé : la cible doit avoir été créée entre la `tentee` et la `reussie` (même horloge, la base), au défaire ET à l'écran |
+| M2 · `journal`/`flammes`/`scenarios` se défont même retouchés | moyen | ✅ en partie : relance marquée faite → refus. Le reste attend `updated_at` (registre 2) |
+| F1 · aucune limite d'âge côté serveur | faible | ✅ 7 jours, comme l'écran |
+| F2 · course retouche/suppression | faible | ✅ `DELETE … eq(updated_at)` ; cascade → gate |
+| F3 · l'analyseur des migrations ratait `references t` sans colonnes et les noms entre guillemets | faible | ✅ sorti en fonction, éprouvé sur 4 cas à réponse connue |
+| F4 · le double clic n'était pas éprouvé | faible | ✅ un verdict par harnais, sabotage rouge |
+| F5 · deux verdicts verts par construction (RLS simulée) | faible | ✅ rejoués sans RLS : c'est le filtre du code qui écarte autrui |
+| I2 · les 503 du défaire ne se journalisaient pas | info | ✅ `logError('leo.defaire', code)`, sans PII |
+| I1 · une `defaite` forgée par PostgREST | info | classe S6, sans gain de droit — inchangé |
+| I3 · le mail ne liste aucun geste | info | registre 1 |
+
+Chaque correctif a son verdict, et chaque verdict a viré au rouge sur le code
+saboté avant d'être cru.
 - ⛔ **Le mail ne lit pas le journal.** Le cron n'a pas de session de Paul et
   le dépôt n'a, par principe, aucune clé de service. Le mail le DIT et pointe
   l'écran. Lire d'ici = un choix d'accès de Paul (registre ci-dessous).

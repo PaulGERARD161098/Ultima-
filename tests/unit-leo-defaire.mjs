@@ -28,12 +28,15 @@ const id = (n) => `00000000-0000-4000-8000-${String(n).padStart(12, '0')}`;
 // `echecs` : tables dont la LECTURE échoue ; `echecSuppression` : la
 // suppression échoue ; `voleur` : une autre requête supprime la cible juste
 // avant la nôtre (la course).
-function baseFactice(tables, { echecs = [], echecSuppression = false, voleur = false } = {}) {
+// `rls: false` : la base rend TOUTES les lignes — c'est ce qui éprouve le
+// filtre `owner_id` du code lui-même, et pas seulement la RLS (revue F5).
+// `avantSuppression(t)` : ce qu'une autre main fait entre nos lectures et le DELETE.
+function baseFactice(tables, { echecs = [], echecSuppression = false, voleur = false, rls = true, avantSuppression = null } = {}) {
   const t = {};
   for (const [nom, lignes] of Object.entries(tables)) t[nom] = lignes.map((l) => ({ owner_id: PAUL, ...l }));
   const inserts = [];
   const suppressions = [];
-  function visibles(nom) { return (t[nom] || []).filter((l) => l.owner_id === PAUL); }
+  function visibles(nom) { return (t[nom] || []).filter((l) => !rls || l.owner_id === PAUL); }
   function requete(nom, mode) {
     const filtres = [];
     let limite = Infinity;
@@ -42,6 +45,7 @@ function baseFactice(tables, { echecs = [], echecSuppression = false, voleur = f
     const executer = () => {
       if (mode === 'select' && echecs.includes(nom)) return { data: null, error: { code: 'XX000' } };
       if (mode === 'delete' && echecSuppression) return { data: null, error: { code: 'XX000' } };
+      if (mode === 'delete' && avantSuppression) avantSuppression(t);
       let lignes = visibles(nom).filter((l) => filtres.every((f) => f(l)));
       if (ordre) lignes = lignes.slice().sort((a, b) => (ordre.asc ? 1 : -1) * String(a[ordre.col]).localeCompare(String(b[ordre.col])));
       lignes = lignes.slice(0, limite);
@@ -90,7 +94,7 @@ function trace(traceId, outil, cible, { owner = PAUL, phaseIssue = 'reussie', qu
   ];
 }
 const CREE = IL_Y_A(3600e3);
-const defaire = (base, traceId) => defaireEcriture(base, PAUL, { etape: 'defaire', traceId });
+const defaire = (base, traceId, opts = {}) => defaireEcriture(base, PAUL, { etape: 'defaire', traceId }, { maintenant: MAINTENANT, ...opts });
 
 // ---------- 1. LE CATALOGUE : chaque vert a son défaire, et rien d'autre ----------
 const tousLesOutils = [...new Set(Object.values(OUTILS_PAR_QUADRANT).flat().map((o) => o.name))];
@@ -142,27 +146,52 @@ verdicts.enrichissementSansDefaire = !('proposer_enrichissement_idee' in DEFAIRE
 }
 
 // ---------- 3. LE RELEVÉ EST EXHAUSTIF : chaque clé étrangère des migrations y est ----------
+// L'analyseur des clés étrangères. ⛔ Revue F3 du 02/10 : la première version
+// exigeait une liste de colonnes et des noms sans guillemets — une passerelle
+// écrite `references public.serments on delete cascade` (clé primaire
+// implicite) ou `references "serments" (id)` passait INAPERÇUE, le relevé
+// restant vert avec une cascade ouverte. Il est éprouvé ci-dessous sur des
+// cas dont on connaît la réponse, avant d'être cru sur les migrations.
+function clesEtrangeres(sqlBrut, cibles) {
+  const sql = sqlBrut.replace(/--[^\n]*/g, '');
+  const trouvees = [];
+  const nu = (x) => x.trim().replace(/"/g, '').toLowerCase();
+  const re = /references\s+(?:"?public"?\.)?"?([a-z_]+)"?\s*(?:\(([^)]*)\))?/gi;
+  let m;
+  while ((m = re.exec(sql))) {
+    const cible = m[1].toLowerCase();
+    if (!cibles.includes(cible)) continue;
+    const avant = sql.slice(0, m.index);
+    const ctx = [...avant.matchAll(/(?:create\s+table\s+(?:if\s+not\s+exists\s+)?|alter\s+table\s+(?:if\s+exists\s+)?(?:only\s+)?)(?:"?public"?\.)?"?([a-z_]+)"?/gi)].at(-1);
+    const source = ctx ? ctx[1].toLowerCase() : '?';
+    // Une référence sans colonnes vise la clé primaire : `id`.
+    const refs = m[2] ? m[2].split(',').map(nu) : ['id'];
+    const fk = avant.match(/foreign\s+key\s*\(([^)]*)\)\s*$/i);
+    const cols = fk ? fk[1].split(',').map(nu)
+      : [nu((avant.slice(avant.lastIndexOf('\n') + 1).match(/^\s*("?[a-z_]+"?)\s/i) || [, ''])[1])];
+    trouvees.push(`${cible}<-${source}.${cols[refs.indexOf('id')]}`);
+  }
+  return trouvees;
+}
+{
+  const C = ['serments', 'idees'];
+  const cas = [
+    ['create table public.x (\n  serment_id uuid references public.serments on delete cascade\n);', 'serments<-x.serment_id'],
+    ['create table x (\n  "serment_id" uuid references "serments" (id)\n);', 'serments<-x.serment_id'],
+    ['alter table public.y add constraint k foreign key (owner_id, idee_id)\n  references public.idees (owner_id, id) on delete cascade;', 'idees<-y.idee_id'],
+    ['create table z (\n  a uuid references public.autre (id)\n);', null]
+  ];
+  verdicts.analyseurCasConnus = cas.every(([sql, attendu]) => {
+    const r = clesEtrangeres(sql, C);
+    return attendu === null ? r.length === 0 : r.length === 1 && r[0] === attendu;
+  });
+}
 {
   const CIBLES = Object.keys(DEPENDANCES);
   const dossier = new URL('../supabase/migrations/', import.meta.url);
   const trouvees = new Set();
   for (const nom of readdirSync(dossier).filter((f) => f.endsWith('.sql')).sort()) {
-    const sql = readFileSync(new URL(nom, dossier), 'utf8').replace(/--[^\n]*/g, '');
-    const re = /references\s+(?:public\.)?([a-z_]+)\s*\(([^)]*)\)/gi;
-    let m;
-    while ((m = re.exec(sql))) {
-      const cible = m[1].toLowerCase();
-      if (!CIBLES.includes(cible)) continue;
-      const avant = sql.slice(0, m.index);
-      const ctx = [...avant.matchAll(/(?:create\s+table\s+(?:if\s+not\s+exists\s+)?|alter\s+table\s+(?:if\s+exists\s+)?(?:only\s+)?)(?:public\.)?([a-z_]+)/gi)].at(-1);
-      const source = ctx ? ctx[1].toLowerCase() : '?';
-      const refs = m[2].split(',').map((x) => x.trim().toLowerCase());
-      const fk = avant.match(/foreign\s+key\s*\(([^)]*)\)\s*$/i);
-      const cols = fk ? fk[1].split(',').map((x) => x.trim().toLowerCase())
-        : [(avant.slice(avant.lastIndexOf('\n') + 1).match(/^\s*([a-z_]+)\s/i) || [])[1]?.toLowerCase()];
-      const colonne = cols[refs.indexOf('id')];
-      trouvees.add(`${cible}<-${source}.${colonne}`);
-    }
+    for (const cle of clesEtrangeres(readFileSync(new URL(nom, dossier), 'utf8'), CIBLES)) trouvees.add(cle);
   }
   const releve = new Set(Object.entries(DEPENDANCES).flatMap(([c, deps]) => deps.map((d) => `${c}<-${d.table}.${d.colonne}`)));
   // Non-vacuité : un analyseur qui ne trouve rien serait « inclus » partout.
@@ -193,7 +222,7 @@ verdicts.enrichissementSansDefaire = !('proposer_enrichissement_idee' in DEFAIRE
     const table = TABLE_CIBLE[outil];
     const base = baseFactice({
       leo_ecritures: trace(traceId, outil, cible),
-      [table]: [{ id: cible, created_at: CREE, updated_at: CREE, node_id: id(901), serment_id: id(903), situation_id: id(904) }]
+      [table]: [{ id: cible, created_at: CREE, updated_at: CREE, relance_faite: false, node_id: id(901), serment_id: id(903), situation_id: id(904) }]
     });
     const r = await defaire(base, traceId);
     const defaite = base.inserts.find((i) => i.table === 'leo_ecritures');
@@ -232,7 +261,7 @@ const T = id(1); const S = id(2); const F = id(3);
   // Le scénario a été marqué « advenu » : `set null`, pas de cascade — refusé quand même.
   const advenu = await refuse({
     leo_ecritures: trace(T, 'proposer_scenario', S, { quadrant: 'imladrik' }),
-    scenarios: [{ id: S, situation_id: id(904) }],
+    scenarios: [{ id: S, situation_id: id(904), created_at: CREE }],
     situations: [{ id: id(904), scenario_advenu_id: S }]
   }, T, { status: 409, message: 'Lié : situations' });
   verdicts.advenuBloqueLeScenario = advenu.ok;
@@ -280,11 +309,52 @@ const T = id(1); const S = id(2); const F = id(3);
   verdicts.issueForgeeRefusee = forge.ok;
 
   // La trace d'AUTRUI : invisible sous la RLS — inconnue, rien ne bouge.
+  // ⛔ Sans RLS simulée (revue F5) : c'est le `.eq('owner_id', …)` du CODE qui
+  // doit écarter la trace d'autrui. Avec la RLS seule, ce verdict était vert
+  // par construction.
   const autrui = await refuse({
     leo_ecritures: trace(T, 'proposer_idee', S, { owner: AUTRUI }),
     idees: [{ id: S, owner_id: AUTRUI, created_at: CREE, updated_at: CREE }]
-  }, T, { status: 404 });
+  }, T, { status: 404 }, { rls: false });
   verdicts.traceDAutruiInconnue = autrui.ok;
+
+  // M1 — une cible qui n'est PAS née de ce geste (clôture forgée : un serment
+  // écrit à la main il y a 90 jours) : refusée, rien ne bouge.
+  const etrangere = await refuse({
+    leo_ecritures: trace(T, 'proposer_serment', S, { quadrant: 'imladrik' }),
+    serments: [{ id: S, created_at: IL_Y_A(90 * 864e5), updated_at: IL_Y_A(90 * 864e5) }]
+  }, T, { status: 409, message: REFUS_DEFAIRE.geste });
+  const etrangereFuture = await refuse({
+    leo_ecritures: trace(T, 'proposer_flamme', S, { quadrant: 'imladrik' }),
+    flammes: [{ id: S, serment_id: id(903), created_at: IL_Y_A(60e3) }]
+  }, T, { status: 409, message: REFUS_DEFAIRE.geste });
+  verdicts.cibleEtrangereRefusee = etrangere.ok && etrangereFuture.ok;
+
+  // F1 — une trace de plus de sept jours ne se défait plus.
+  const vieille = baseFactice({
+    leo_ecritures: trace(T, 'proposer_idee', S),
+    idees: [{ id: S, created_at: CREE, updated_at: CREE }]
+  });
+  const rv = await defaire(vieille, T, { maintenant: MAINTENANT + 8 * 864e5 });
+  verdicts.traceAncienneRefusee = rv.status === 409 && rv.message === REFUS_DEFAIRE.ancien &&
+    vieille.suppressions.length === 0 && vieille.inserts.length === 0;
+
+  // M2 — une relance que Paul a marquée faite : sa marque partirait avec.
+  const relanceFaite = await refuse({
+    leo_ecritures: trace(T, 'proposer_relance', S, { quadrant: 'riven' }),
+    journal: [{ id: S, node_id: id(901), created_at: CREE, relance_faite: true }]
+  }, T, { status: 409, message: REFUS_DEFAIRE.retouchee });
+  verdicts.relanceFaiteRefusee = relanceFaite.ok;
+
+  // F2 — Paul retouche l'idée PENDANT nos lectures : la suppression échoue au
+  // lieu d'emporter la retouche, et elle le dit.
+  const enVol = await refuse({
+    leo_ecritures: trace(T, 'proposer_idee', S),
+    idees: [{ id: S, created_at: CREE, updated_at: CREE }]
+  }, T, { status: 409, message: REFUS_DEFAIRE.retouchee }, {
+    avantSuppression: (t) => { t.idees[0].updated_at = IL_Y_A(1e3); }
+  });
+  verdicts.retoucheEnVolRefusee = enVol.ok;
 
   // Un échec, une tentative seule : rien à défaire.
   const echec = await refuse({ leo_ecritures: trace(T, 'proposer_idee', S, { phaseIssue: 'echouee' }) },
@@ -355,7 +425,7 @@ const T = id(1); const S = id(2); const F = id(3);
     ],
     serments: [{ id: id(402), intitule: 'Courir le dimanche', created_at: CREE, updated_at: CREE }],
     flammes: [{ id: id(500), serment_id: id(402) }],
-    journal: [{ id: id(407), node_id: id(901) }],
+    journal: [{ id: id(407), node_id: id(901), created_at: CREE, relance_faite: false }],
     network_nodes: [{ id: id(901), nom: 'M. Lambert' }]
   });
   const r = await listerEcritures(base, PAUL, { maintenant: MAINTENANT });
@@ -372,6 +442,21 @@ const T = id(1); const S = id(2); const F = id(3);
   verdicts.ecranRetouche = g[tr(8)]?.etat === 'retouche' && !g[tr(8)].defaisable;
   verdicts.ecranEnrichissementSansBouton = g[tr(9)]?.etat === 'fait' && !g[tr(9)].defaisable && !('cible' in g[tr(9)]);
   verdicts.ecranSansAutrui = !g[tr(10)];
+  // Le même écran SANS RLS simulée : le filtre du code écarte autrui seul.
+  const sansRls = baseFactice({
+    leo_ecritures: [...trace(tr(1), 'proposer_idee', id(401)), ...trace(tr(10), 'proposer_idee', id(410), { owner: AUTRUI })],
+    idees: [{ id: id(401), nom: 'Atelier bois', created_at: CREE, updated_at: CREE }]
+  }, { rls: false });
+  const rs = await listerEcritures(sansRls, PAUL, { maintenant: MAINTENANT });
+  verdicts.ecranFiltreAutruiLuiMeme = rs.status === 200 && rs.data.gestes.length === 1 && rs.data.gestes[0].traceId === tr(1);
+  // M1 côté écran : une cible née hors du geste n'est ni nommée ni défaisable.
+  const forge = baseFactice({
+    leo_ecritures: trace(tr(1), 'proposer_serment', id(402), { quadrant: 'imladrik' }),
+    serments: [{ id: id(402), intitule: 'Serment écrit à la main', created_at: IL_Y_A(90 * 864e5), updated_at: IL_Y_A(90 * 864e5) }]
+  });
+  const rf = await listerEcritures(forge, PAUL, { maintenant: MAINTENANT });
+  verdicts.ecranCibleEtrangere = rf.status === 200 && rf.data.gestes.length === 1 &&
+    rf.data.gestes[0].defaisable === false && !('cible' in rf.data.gestes[0]);
   // ⛔ L'écran ne rend jamais l'adresse de la cible : le bouton passe par la trace.
   verdicts.ecranSansCibleId = r.data.gestes.every((x) => !('cibleId' in x) && !('cible_id' in x));
   verdicts.ecranDuPlusRecent = r.data.gestes.every((x, i, a) => i === 0 || String(a[i - 1].le) >= String(x.le));

@@ -27,6 +27,7 @@ import {
   PLAFOND_PAR_DEFAUT,
   FENETRE_PAR_DEFAUT_MS
 } from './leo-journal.js';
+import { logError } from './http.js';
 
 // Les seules clés que chaque étape accepte. Liste FERMÉE, même règle que
 // `construireEntreeJournal` : un `outil` glissé dans le corps d'une clôture
@@ -226,9 +227,12 @@ export async function cloreEcriture(client, userId, corps, { maintenant = Date.n
 export const DEFAIRES = Object.freeze({
   proposer_idee: { table: 'idees', retouche: true, libelle: { colonne: 'nom' } },
   proposer_besoin: { table: 'intendant_besoins', retouche: true, libelle: { colonne: 'designation' } },
-  proposer_journal: { table: 'journal', retouche: false,
+  // `marque` : une colonne que Léo ne pose JAMAIS à la création — si elle est
+  // vraie, c'est que Paul est passé par là (revue M2 du 02/10 : une relance
+  // marquée faite se serait défaite avec sa marque).
+  proposer_journal: { table: 'journal', retouche: false, marque: 'relance_faite',
     libelle: { via: 'node_id', table: 'network_nodes', colonne: 'nom' } },
-  proposer_relance: { table: 'journal', retouche: false,
+  proposer_relance: { table: 'journal', retouche: false, marque: 'relance_faite',
     libelle: { via: 'node_id', table: 'network_nodes', colonne: 'nom' } },
   proposer_page_journal: { table: 'imladrik_entrees', retouche: true, libelle: { colonne: 'titre' } },
   proposer_serment: { table: 'serments', retouche: true, libelle: { colonne: 'intitule' } },
@@ -283,8 +287,14 @@ export const REFUS_DEFAIRE = Object.freeze({
   deja: 'Déjà défait',
   geste: 'Ce geste ne se défait pas',
   disparue: 'Cible introuvable',
-  retouchee: 'Retouchée depuis'
+  retouchee: 'Retouchée depuis',
+  ancien: 'Trop ancien'
 });
+
+// Le défaire vit sept jours — la fenêtre de l'écran. Au-delà, plus aucune
+// voie ne le propose, et le serveur le refuse aussi (revue F1 du 02/10 : une
+// requête fabriquée défaisait une flamme de six mois).
+export const DEFAIRE_MAX_MS = 7 * 24 * 3600 * 1000;
 const PREFIXE_LIE = 'Lié : ';
 
 /** Les lignes d'une trace, rangées. Pur. */
@@ -307,19 +317,36 @@ async function chercherDependance(client, table, cibleId) {
   return { ok: true, lie: null };
 }
 
-/** La cible existe-t-elle, et a-t-elle été retouchée depuis sa création ?
- *  → { ok: true, existe, retouchee } | { ok: false } */
-async function lireCible(client, defaire, cibleId) {
-  const colonnes = defaire.retouche ? 'id, created_at, updated_at' : 'id';
-  const r = await client.from(defaire.table).select(colonnes).eq('id', cibleId).maybeSingle();
-  if (r.error) return { ok: false };
-  if (!r.data) return { ok: true, existe: false, retouchee: false };
-  if (!defaire.retouche) return { ok: true, existe: true, retouchee: false };
-  const cree = Date.parse(r.data.created_at);
-  const touche = Date.parse(r.data.updated_at);
-  // ⛔ Un instant illisible compte comme RETOUCHÉ : le repli va vers le refus.
-  const retouchee = !Number.isFinite(cree) || !Number.isFinite(touche) || touche > cree;
-  return { ok: true, existe: true, retouchee };
+/** Les colonnes à lire sur une cible pour la juger. */
+function colonnesCible(defaire, extra = []) {
+  return ['id', 'created_at', ...(defaire.retouche ? ['updated_at'] : []),
+    ...(defaire.marque ? [defaire.marque] : []), ...extra].join(', ');
+}
+
+/**
+ * Le jugement d'une cible vivante, PUR — le même pour le défaire et l'écran.
+ * → 'ok' | 'etrangere' | 'retouchee'
+ *
+ * ⛔ 'etrangere' (revue M1 du 02/10) : la cible doit être NÉE DE CE GESTE, entre
+ * la tentative et sa réussite. Sans ce contrôle, une clôture forgée (un `cibleId`
+ * pris au hasard parmi les serments de Paul) faisait proposer « Défaire » sur un
+ * serment écrit à la main il y a trois mois. Les trois instants viennent de la
+ * même horloge, celle de la base : la tentative (déclencheur), la création
+ * (`now()` de son insertion) et la réussite (`now()` de la sienne) se suivent
+ * strictement, puisque chaque requête attend la réponse de la précédente.
+ * ⛔ Tout instant illisible juge vers le refus.
+ */
+export function jugerCible(defaire, ligne, tenteeLe, reussieLe) {
+  const cree = Date.parse(ligne && ligne.created_at);
+  const debut = Date.parse(tenteeLe);
+  const fin = Date.parse(reussieLe);
+  if (![cree, debut, fin].every(Number.isFinite) || cree < debut || cree > fin) return 'etrangere';
+  if (defaire.retouche) {
+    const touche = Date.parse(ligne.updated_at);
+    if (!Number.isFinite(touche) || touche > cree) return 'retouchee';
+  }
+  if (defaire.marque && ligne[defaire.marque] !== false && ligne[defaire.marque] !== null) return 'retouchee';
+  return 'ok';
 }
 
 /**
@@ -329,7 +356,7 @@ async function lireCible(client, defaire, cibleId) {
  *
  * ⛔ Chaque refus survient AVANT la suppression. L'ordre n'est pas cosmétique.
  */
-export async function defaireEcriture(client, userId, corps) {
+export async function defaireEcriture(client, userId, corps, { maintenant = Date.now() } = {}) {
   if (!corps || typeof corps !== 'object' || Array.isArray(corps) ||
       !clesFermees(corps, CLES_DEFAIRE)) {
     return refus(400, 'Demande invalide');
@@ -344,11 +371,16 @@ export async function defaireEcriture(client, userId, corps) {
     .eq('owner_id', userId)
     .eq('trace_id', trace.traceId);
   if (lecture.error || !Array.isArray(lecture.data)) {
+    logError('leo.defaire', lecture.error?.code || 'lecture');
     return refus(503, 'Journal indisponible');
   }
   const { tentees, issues, defaites } = resumerTrace(lecture.data);
   if (tentees.length !== 1) return refus(404, 'Trace inconnue');
   if (defaites.length > 0) return refus(409, REFUS_DEFAIRE.deja);
+  const ouverteLe = Date.parse(tentees[0].le);
+  if (!Number.isFinite(ouverteLe) || maintenant - ouverteLe > DEFAIRE_MAX_MS) {
+    return refus(409, REFUS_DEFAIRE.ancien);
+  }
   const reussie = issues.length === 1 && issues[0].phase === 'reussie' ? issues[0] : null;
   if (!reussie || typeof reussie.cible_id !== 'string') return refus(409, REFUS_DEFAIRE.rien);
 
@@ -360,22 +392,42 @@ export async function defaireEcriture(client, userId, corps) {
   if (!defaire || reussie.outil !== outil) return refus(409, REFUS_DEFAIRE.geste);
   const cibleId = reussie.cible_id;
 
-  const cible = await lireCible(client, defaire, cibleId);
-  if (!cible.ok) return refus(503, 'Données indisponibles');
-  if (!cible.existe) return refus(404, REFUS_DEFAIRE.disparue);
-  if (cible.retouchee) return refus(409, REFUS_DEFAIRE.retouchee);
+  const lue = await client.from(defaire.table).select(colonnesCible(defaire)).eq('id', cibleId).maybeSingle();
+  if (lue.error) {
+    logError('leo.defaire', lue.error.code || 'cible');
+    return refus(503, 'Données indisponibles');
+  }
+  if (!lue.data) return refus(404, REFUS_DEFAIRE.disparue);
+  const jugement = jugerCible(defaire, lue.data, tentees[0].le, reussie.le);
+  if (jugement === 'etrangere') return refus(409, REFUS_DEFAIRE.geste);
+  if (jugement === 'retouchee') return refus(409, REFUS_DEFAIRE.retouchee);
 
   const dependance = await chercherDependance(client, defaire.table, cibleId);
-  if (!dependance.ok) return refus(503, 'Données indisponibles');
+  if (!dependance.ok) {
+    logError('leo.defaire', 'dependances');
+    return refus(503, 'Données indisponibles');
+  }
   if (dependance.lie) return refus(409, PREFIXE_LIE + dependance.lie);
 
-  // LA SUPPRESSION — celle de la route de l'outil, au filtre près.
-  const suppression = await client.from(defaire.table).delete().eq('id', cibleId).select('id').maybeSingle();
-  if (suppression.error) return refus(503, 'Données indisponibles');
-  // Rien supprimé : une autre requête l'a fait entre-temps. ⛔ Seule la requête
-  // qui a RÉELLEMENT supprimé pose la 'defaite' — c'est ce qui garantit, sans
-  // index de plus, qu'une trace n'en porte jamais deux.
-  if (!suppression.data) return refus(404, REFUS_DEFAIRE.disparue);
+  // LA SUPPRESSION — celle de la route de l'outil, au filtre près. Sur une
+  // table qui porte `updated_at`, le filtre exige AUSSI l'instant lu : une
+  // retouche de Paul tombée pendant nos lectures fait échouer la suppression
+  // au lieu de l'emporter (revue F2 du 02/10). La course sur une dépendance
+  // née pendant ces lectures, elle, demande une fonction SQL (gate, §15.5).
+  let requete = client.from(defaire.table).delete().eq('id', cibleId);
+  if (defaire.retouche) requete = requete.eq('updated_at', lue.data.updated_at);
+  const suppression = await requete.select('id').maybeSingle();
+  if (suppression.error) {
+    logError('leo.defaire', suppression.error.code || 'suppression');
+    return refus(503, 'Données indisponibles');
+  }
+  // Rien supprimé : retouchée entre-temps, ou supprimée par une autre requête.
+  // ⛔ Seule la requête qui a RÉELLEMENT supprimé pose la 'defaite' — c'est ce
+  // qui garantit, sans index de plus, qu'une trace n'en porte jamais deux.
+  if (!suppression.data) {
+    const encore = await client.from(defaire.table).select('id').eq('id', cibleId).maybeSingle();
+    return encore.data ? refus(409, REFUS_DEFAIRE.retouchee) : refus(404, REFUS_DEFAIRE.disparue);
+  }
 
   const entree = construireEntreeJournal({
     traceId: trace.traceId,
@@ -481,7 +533,7 @@ export async function listerEcritures(client, userId, { maintenant = Date.now() 
     else if (issue.phase === 'echouee') geste.etat = 'echec';
     else {
       geste.etat = 'fait';
-      if (typeof issue.cible_id === 'string') geste.cibleId = issue.cible_id;
+      if (typeof issue.cible_id === 'string') { geste.cibleId = issue.cible_id; geste.reussieLe = issue.le; }
     }
     gestes.push(geste);
   }
@@ -508,8 +560,7 @@ export async function listerEcritures(client, userId, { maintenant = Date.now() 
     try {
       const ids = [...new Set(gs.map((g) => g.cibleId))];
       const lib = defaire.libelle;
-      const colonnes = ['id', lib.via || lib.colonne,
-        ...(defaire.retouche ? ['created_at', 'updated_at'] : [])].join(', ');
+      const colonnes = colonnesCible(defaire, [lib.via || lib.colonne]);
       const cibles = await lireParLots(client, defaire.table, colonnes, 'id', ids);
       const vivantes = new Map(cibles.map((x) => [x.id, x]));
       let noms = null;
@@ -529,15 +580,12 @@ export async function listerEcritures(client, userId, { maintenant = Date.now() 
       for (const g of gs) {
         const v = vivantes.get(g.cibleId);
         if (!v) { g.etat = 'disparu'; continue; }
+        const jugement = jugerCible(defaire, v, g.le, g.reussieLe);
+        // Une cible qui n'est pas née de ce geste n'est ni nommée ni défaisable :
+        // la trace qui la désigne ne dit pas la vérité (revue M1).
+        if (jugement === 'etrangere') continue;
         g.cible = libelleBorne(lib.via ? noms.get(v[lib.via]) : v[lib.colonne]);
-        if (defaire.retouche) {
-          const cree = Date.parse(v.created_at);
-          const touche = Date.parse(v.updated_at);
-          if (!Number.isFinite(cree) || !Number.isFinite(touche) || touche > cree) {
-            g.etat = 'retouche';
-            continue;
-          }
-        }
+        if (jugement === 'retouchee') { g.etat = 'retouche'; continue; }
         if (lies.has(g.cibleId)) { g.etat = 'lie'; g.lie = lies.get(g.cibleId); continue; }
         g.defaisable = true;
       }
@@ -546,6 +594,12 @@ export async function listerEcritures(client, userId, { maintenant = Date.now() 
       // ⛔ Jamais « Défaire » sur une ligne dont on n'a pas lu les dépendances.
     }
   }));
-  for (const g of gestes) { delete g.cibleId; g.quoi = phraseGeste(g.outil, g.etat); }
+  for (const g of gestes) {
+    delete g.cibleId;
+    delete g.reussieLe;
+    // La même fenêtre que le serveur : passé sept jours, plus de bouton.
+    if (g.defaisable && !(maintenant - Date.parse(g.le) <= DEFAIRE_MAX_MS)) g.defaisable = false;
+    g.quoi = phraseGeste(g.outil, g.etat);
+  }
   return { status: 200, data: { gestes } };
 }

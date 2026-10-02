@@ -993,6 +993,28 @@ for (const [nom, defaire, attendu] of [
     !refus.html.includes('<b>'), JSON.stringify(refus));
 }
 
+// C17c bis. Le double clic (revue F4) : une seule requête, et la bulle reste
+// « Défait » — pas de bulle de refus ajoutée par un doublon.
+{
+  let n = 0;
+  await stubberVert({ ouverture: ouvertureOk, acte: acteOk });
+  await routerEcritures({ defaire: async (route) => {
+    n += 1;
+    await new Promise((r) => setTimeout(r, 400));
+    return n === 1 ? defaitOk(route) : route.fulfill({ status: 404, contentType: 'application/json',
+      body: JSON.stringify({ ok: false, error: 'Cible introuvable' }) });
+  } });
+  await dicter('defaire-double');
+  const bullesLeoAvant = await pageV.locator('.leo-bulle-leo').count();
+  if (await boutonDefaire()) await pageV.locator('.leo-bulle-issue .leo-defaire').dblclick();
+  await pageV.waitForTimeout(1200);
+  const etatDouble = await pageV.evaluate(() => document.querySelector('.leo-bulle-issue')?.getAttribute('data-etat'));
+  verifier('B1 ⑤ — double clic : UNE requête, la bulle reste « Défait », aucun refus ajouté',
+    sequence.filter((x) => x === 'defaire').length === 1 && etatDouble === 'defait' &&
+    await pageV.locator('.leo-bulle-leo').count() === bullesLeoAvant,
+    `${sequence.join(' → ')} · ${etatDouble}`);
+}
+
 // C17d. Une réussite sans cible lisible : pas de bouton (le serveur refuserait).
 await stubberVert({ ouverture: ouvertureOk, acte: (route) => route.fulfill({ status: 200,
   contentType: 'application/json', body: JSON.stringify({ ok: true, data: {} }) }) });

@@ -341,7 +341,8 @@
       'Déjà défait': 'C’est déjà défait.',
       'Cible introuvable': 'Il n’existe plus : rien à défaire.',
       'Rien à défaire': 'Le journal ne l’a pas noté comme fait : je ne peux pas le défaire d’ici. Rien n’a été retiré.',
-      'Ce geste ne se défait pas': 'Ce geste ne se défait pas. Rien n’a été retiré.'
+      'Ce geste ne se défait pas': 'Ce geste ne se défait pas. Rien n’a été retiré.',
+      'Trop ancien': 'Ce geste a plus de sept jours : il ne se défait plus d’ici. Rien n’a été retiré.'
     };
     if (resultat && resultat.statut >= 400 && resultat.statut < 500 && propre(connus, erreur)) { return connus[erreur]; }
     if (resultat && resultat.statut >= 400 && resultat.statut < 500) {
