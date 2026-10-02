@@ -69,6 +69,21 @@
   18 verdicts validés rouges sur le code d'avant ; relecture Codex : 4 constats corrigés.
   `smoke-riven-nebuleuses` 119/119.
   Détail : `CADRAGE-RIVEN-NEBULEUSES.md` §8 bis.
+- 🧭 **SESSION 2026-10-02 (jour) — B1 ⑤ CODÉ : « DÉFAIRE » DANS LA BULLE ET SUR L'ÉCRAN `/leo`, REVUE ADVERSE SOLDÉE (branche `claude/leo-defaire` ; PR de séance en brouillon ; aucune fusion).**
+  ✅ Lot 3 de RIVEN fusionné (#324). ✅ Les deux choix du §15.2 tranchés par
+  Paul (« Ok pour tes recos »), maquette `design/preview-leo-defaire.html`
+  validée (« Ok pour tout »). ✅ Code dans l'ordre du §15.4 : relevé des
+  clés étrangères en base (10, dont l'« advenu » en `set null`), enrichissement
+  orange (neuf verts), `etape: 'defaire'` + `GET` sur `/api/leo/ecritures`,
+  bouton dans la bulle, écran `leo.html`, section du mail (lien de lecture
+  seul). ✅ Revue `securite-auditeur` : 0 critique, 0 élevé ; M1 (cible née
+  du geste), F1–F5, I2 fermés, chacun avec son verdict validé rouge sur code
+  saboté. ✅ Contact MAITRISECO ajouté à RIVEN (fiche `de7663a7`, nébuleuse
+  BTP). ⛔ **Étape 0 non faite** (passation de la séance ④) :
+  `leo_ecritures` = **0 ligne** en prod, mesuré à 12:26 UTC — ④ n'a jamais
+  écrit ; le geste de Paul (une dictée verte réelle) précède la fusion.
+  ⏳ Registre : accès du mail au journal (reco : fonction SQL + secret) ;
+  `updated_at` sur `journal`/`scenarios`. Détail : cadrage pilote §15.5.
 - 🧭 **SESSION 2026-10-02 (matin) — REPRISE CADRÉE SUR MESURE, #328 FUSIONNÉE, COLLISION AVEC LA SÉANCE CHAÎNE (branche `claude/bold-ride-lz23qg` ; PR de séance en brouillon).**
   ✅ État des lieux mesuré à 05:00 UTC (API GitHub, git, base : `paiements` = 0,
   13 lignes dans `devis`, aucune créée en septembre), reprise cadrée en six
