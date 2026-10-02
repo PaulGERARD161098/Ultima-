@@ -1942,14 +1942,20 @@ défaire exige l'essence d'avant — du **contenu**, que `leo_ecritures` n'a pas
 le droit de porter (§13.6). Et M3 (§12.2) dit : *« un type d'écriture sans
 défaire éprouvé n'entre pas dans l'anneau vert »*.
 
-### §15.2 — ⏳ LES DEUX CHOIX DE PAUL
+### §15.2 — ✅ LES DEUX CHOIX DE PAUL — TRANCHÉS LE 02/10
+
+> Paul, le 02/10 : *« Ok pour tes recos. Go »*. **① = (a)** : l'enrichissement
+> repasse orange. **② = (c)** : le bouton vit dans le cartouche puis sur l'écran
+> « ce que Léo a fait », que le mail du matin pointe sans jamais porter d'action.
+> Consigné au journal des décisions. Le tableau d'origine reste ci-dessous,
+> pour la trace du raisonnement.
 
 | | options | ma recommandation |
 |---|---|---|
 | **① l'enrichissement** | (a) le repasser **orange** jusqu'à ce qu'il ait un défaire (la carte revient pour lui seul) · (b) conserver l'essence d'avant dans une table dédiée, RLS propriétaire, purgée à 7 jours (migration) | **(a)** — un outil, un anneau : c'est M3 appliqué, sans table de plus. (b) reste ouvert si le besoin revient |
 | **② où vit le bouton « défaire »** | (a) dans le cartouche de Léo, sur la bulle « Fait sans demander » · (b) un écran « ce que Léo a fait » dans la console, pointé par le mail du matin · (c) les deux | **(c)**, dans cet ordre : (a) couvre l'erreur vue sur le moment, (b) celle découverte le lendemain. ⛔ **Jamais un lien « défaire » dans le mail** : un scanner de messagerie qui précharge les liens défairait tout seul |
 
-### §15.3 — ⑤ en six points (sous réserve des deux choix)
+### §15.3 — ⑤ en six points (les deux choix sont tranchés, voir §15.2)
 
 **① Le but.** Chaque écriture verte se défait d'un clic, **sauf** si elle a des
 dépendances nées après elle (refus explicite) ; la ligne `defaite` est posée
@@ -1980,3 +1986,59 @@ un défaire des écritures confirmées à la carte.
 | le défaire se fie à `cible_id` lu en base (forgeable par PostgREST avant le 30/09) | la suppression passe par la route de l'outil, RLS propriétaire ; `cible_id` n'est qu'une adresse |
 | un lien dans le mail défait tout seul | aucun lien d'action dans le mail — il pointe l'écran |
 | un type vert sans défaire | le contrôle B1-d énumère le catalogue, pas une liste écrite à la main |
+
+### §15.4 — Ce que les deux choix changent, et ce qui a été mesuré le 02/10
+
+**Neuf types verts, pas dix.** Avec ① (a), `proposer_enrichissement_idee`
+passe `anneau: 'orange'` au catalogue (`api/_lib/leo.js`, seule ligne du
+catalogue qui change). Le contrôle B1-d énumère le catalogue : neuf verts, neuf
+défaires joués, un rouge si l'un manque.
+
+**Les routes de suppression existent déjà toutes** (mesuré le 02/10 sur
+`b4e7b1d`) :
+
+| outil vert | route de l'acte | `DELETE` présent |
+|---|---|---|
+| `proposer_idee` | `/api/idees/items` | oui |
+| `proposer_besoin` | `/api/intendant/besoins` | oui |
+| `proposer_journal`, `proposer_relance` | `/api/reseau/journal` | oui |
+| `proposer_page_journal` | `/api/imladrik/entrees` | oui |
+| `proposer_serment` | `/api/serments` | oui |
+| `proposer_flamme` | `/api/flammes` | oui |
+| `proposer_situation` | `/api/situations` | oui |
+| `proposer_scenario` | `/api/scenarios` | oui |
+
+Le défaire passe par ces routes, sous la RLS propriétaire. Il n'y a ni route
+neuve ni `DELETE` direct en base. `cible_id` n'est qu'une adresse (revue S6).
+
+**Le tableau du §15.0 était incomplet.** Un **scénario** emporte aussi ses liens
+(`0018` l.98, `on delete cascade`). ⇒ La première étape du code est le relevé
+EXHAUSTIF des clés étrangères pointant vers les huit tables cibles, écrit dans
+un test. Le refus « dépendance née après » se fonde sur ce relevé, jamais sur
+une liste tapée à la main.
+
+**L'écran « ce que Léo a fait »** : une page de la console (`leo.html`), comme
+`finubar.html`. Elle montre une ligne par geste (verbe, objet, cible, heure,
+état) avec son bouton « Défaire ». Le mail du matin la POINTE par un lien de
+lecture. ⛔ Aucun lien d'action dans le mail. Proposé par la maquette, à
+valider avec elle.
+
+**La maquette d'abord (Directive EL)** : `design/preview-leo-defaire.html`, sur
+données fictives. Elle montre les trois lieux :
+- la bulle et ses trois issues (défait · refusé, une flamme est née depuis ·
+  déjà défait) ;
+- l'écran ;
+- le paragraphe du mail.
+
+**L'ordre du code, après l'accord de Paul sur la maquette** :
+1. relevé des dépendances (test) ;
+2. l'enrichissement orange (test) ;
+3. `etape: 'defaire'` sur `/api/leo/ecritures`, avec la relecture de la trace
+   du propriétaire, le refus si dépendance et la pose de `defaite` ;
+4. le bouton dans la bulle ;
+5. la page `leo.html` ;
+6. la section du mail ;
+7. le harnais B1-d, les sabotages et la revue adverse `securite-auditeur`.
+
+L'étape 3 touche aux données : escalade signalée. L'index unique `defaite` par
+trace est une migration (gate Paul).
