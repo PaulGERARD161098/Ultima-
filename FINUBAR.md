@@ -52,8 +52,8 @@
       "depuis": "2026-10-02"
     },
     {
-      "quoi": "Chaîne — prochaine boucle B sans geste A : B4 (un seul agenda Rénoboost sur le moteur d'Artidispo, et Réno lit Artidispo), à ouvrir avec la fiche du §4 du plan — aucun code avant la fiche. B2 (la double marge) est fermée : cadrée le 30/09 (fiche §13 du cadrage pilote RenoDevis, onze décisions, maquette, aucun code), corrigée le 01/10 par RenoDevis #218 et RenoBoost #566 — mesuré à 17:45 UTC sur main de RenoDevis 64211da : releve/prix.js convertit une fois sous meta.prixVente, lignes.test.js « aucune seconde marge », 680/680, tsc 0 ; Réno expose chiffre / nb_lignes / origine_lignes. ⛔ La fiche §13 est historique : son prompt E2 ne se rejoue pas.",
-      "depuis": "2026-10-01"
+      "quoi": "Chaîne — B4 réduite à R1 (Paul, 02/10 : Calendly gardé, agenda unique écarté). R1 en production, non prouvée : critère au PLAN §2. B2 fermée (RenoDevis #218, RenoBoost #566).",
+      "depuis": "2026-10-02"
     },
     {
       "quoi": "LEÇON À CONSIGNER + PROPAGER (9 dépôts) : rechute de « un droit se vérifie du côté où il peut être contourné » — la prémisse de l'arbitrage §12.8 quater avait été mesurée en superutilisateur (MCP), pas sur le chemin du produit. Cadrage §13.0.",
