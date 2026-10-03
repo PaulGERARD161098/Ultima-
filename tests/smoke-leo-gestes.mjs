@@ -16,7 +16,13 @@ function verifier(nom, ok, detail = '') {
 }
 
 const id = (n) => `00000000-0000-4000-8000-${String(n).padStart(12, '0')}`;
-const maintenant = Date.now();
+// ⛔ L'HORLOGE EST FIGÉE, et pas par confort. Les gestes « d'hier » ont 26 à 28 h :
+// avec l'heure réelle, ils tombaient AVANT-HIER entre minuit et 4 h à Paris, et ce
+// test rougissait la nuit sans qu'une ligne ait bougé (payé le 03/10 à 00:16 Paris,
+// CI d'Ultima #342). Midi à Paris laisse douze heures de marge de part et d'autre.
+// Le navigateur reçoit la même heure (`page.clock.setFixedTime` dans `ouvrir`) :
+// les fixtures et l'écran raisonnent sur le même « maintenant ».
+const maintenant = Date.parse('2026-10-03T10:00:00Z'); // 12:00 à Paris
 const ilYa = (min) => new Date(maintenant - min * 60e3).toISOString();
 const INJECTION = '<img src=x onerror="window.__pwn=1">';
 const GESTES = [
@@ -66,6 +72,7 @@ async function ouvrir({ connecte = true, api, defaire }, viewport = { width: 128
       onAuthStateChange: function () {}
     } }; } };`
   }));
+  await page.clock.setFixedTime(maintenant);
   await page.goto(`${BASE}/leo.html`, { waitUntil: 'load', timeout: 20000 });
   await page.waitForTimeout(400);
   return { page, journal };
