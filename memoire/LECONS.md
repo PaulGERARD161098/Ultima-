@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v66 2026-10-02 sha256:0f5b7770b244 -->
+<!-- lecons:empreinte v68 2026-10-03 sha256:83e6a97d1af2 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -109,6 +109,12 @@ six fois suffisent à établir que la vigilance ne tient pas. Ce qui s'enseigne
 désormais, c'est qu'**un identifiant ne s'écrit que par une commande qui le lit,
 et qu'aucune valeur reconnaissable n'est réputée juste** — un préfixe correct
 est le déguisement de l'invention, pas sa preuve.
+⊕ **SEPTIÈME, LE 03/10 (RenoDevis) — DANS UN SCRIPT, PAS AU CLAVIER.** Le
+grain Finubar a été réécrit par un script Python où l'ancre était un littéral :
+`86f45c99` à la place de `86f45c98…` — sept justes, le huitième inventé, et le
+reste absent. Attrapé avant le commit par `git merge-base --is-ancestor`. ⛔ Un
+script n'est pas une commande qui lit : un littéral tapé dedans est une saisie
+comme une autre. Le script prend le SHA de `git rev-parse`, ou il ne l'écrit pas.
 
 
 **UN COMMIT « HORS MAIN » N'EST PAS UN TRAVAIL HORS MAIN — ON COMPARE LES
@@ -524,6 +530,20 @@ run d'après.
 **DOUZE CAS CONCORDANTS NE FONT PAS UNE LOI** *(2026-09-15, RenoDevis ; portée aussi dans RenoBoost, PR #464)*.
 « L'acompte SOLA est TOUJOURS de 40 % » tenait sur 12 devis. À 27, DEV00000139 est à 50 % : un client professionnel, et le mail de l'artisan le dit mot pour mot. Aucun code n'était à toucher — le taux vit déjà sur la fiche du pro, aucun 40 en dur. Ce qui était faux, c'était le MOT.
 ⇒ *Règle* : une régularité observée se note comme une observation datée AVEC SON EFFECTIF, jamais comme une règle.
+
+**UN PRIX DONNÉ EN CONVERSATION N'A PAS DE NATURE TANT QU'ON NE L'A PAS
+DEMANDÉE** *(2026-10-03, RenoDevis, contre-épreuve d'un devis SOLA)*. Trois
+montants dictés pour des consommables ont été pris pour des prix d'ACHAT, passés
+au coefficient SOLA, et la contre-épreuve est entrée dans
+`RenoDevis/docs/SOLA-MATRICE-20261001.md` comme mesurée. Paul, ensuite : c'étaient
+des prix FACTURÉS au client HT, l'achat réel étant plus bas. Ce que ça a coûté :
+une contre-épreuve fausse écrite comme vraie, une doc à corriger, et un tour de
+questions de plus. ⛔ Dans un dépôt où **le même nombre peut être un achat, une
+vente, un HT ou un TTC**, un montant sans sa nature n'est pas une donnée.
+⇒ *Règle* : avant de calculer sur un prix dicté, sa nature (achat / vente,
+HT / TTC, unité) se fait confirmer dans la même question ; jusque-là, le
+résultat se dit « non mesuré ».
+
 
 ## 2. Les garde-fous, et leur silence
 
@@ -1174,6 +1194,19 @@ pour éprouver la coupe, elle affichait « 60 000 → 40000 », un **abaissement
 présenté comme une levée**. L'état courant se dérive ; une date et un chiffre
 passés s'écrivent. ⚠️ Le défaut n'était visible que du côté où la garde devait
 mordre — jamais dans le cas nominal.
+
+**UN PUSH NE SE FAIT PAS SUR UN RÉSULTAT DE TESTS QU'ON N'A PAS LU** *(2026-10-03,
+RenoDevis)*. `a992765` est parti avec un test rouge : le plafond d'ombres
+(`shadow-lg` au-dessus de la limite), dans une sortie de plusieurs centaines de
+lignes que j'ai fait défiler sans lire sa dernière. Corrigé dans `7856f6b`, au
+prix d'un aller-retour de CI. ⛔ Même famille que la sortie redirigée vers
+`/dev/null` (famille 1) : la mesure existait, personne ne l'a lue. ⇒ *Mécanisme,
+pas vigilance* : le push est conditionné au CODE DE SORTIE des tests, le
+journal gardé et sa fin relue — `npm test > /tmp/t.log 2>&1; c=$?; tail -5
+/tmp/t.log; [ $c -eq 0 ] && git push`. ⚠️ Pas de `grep` sur une ligne de bilan :
+chaque dépôt a son format (TAP `# fail 0` ici, « N/N suites réussies » dans
+Ultima), et un tube jette le code de sortie de `npm test`.
+
 
 ## 3. Ce qu'on donne à Paul
 
