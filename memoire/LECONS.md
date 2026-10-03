@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v68 2026-10-03 sha256:83e6a97d1af2 -->
+<!-- lecons:empreinte v69 2026-10-03 sha256:af6b2e45d9b1 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -188,6 +188,23 @@ un `querySelector('svg')` trop large ; une sonde de canvas qui répondait « bla
 pur » à toutes les options, y compris `eclat: 0`. Les trois se seraient
 effondrées en une ligne sous ce test. *« Ça a l'air cohérent » ne valide pas un
 instrument — seul un cas de référence le valide.*
+
+**UN 204 N'EST PAS UNE SUPPRESSION — UN CODE HTTP DIT QUE LA REQUÊTE EST PASSÉE,
+PAS CE QU'ELLE A FAIT** *(2026-10-03, RenoBoost + RenoDevis)*. Les journaux d'API
+montraient onze `DELETE … clients?legacy_id=eq.ghl_…` répondant `204` à chaque
+passage de la synchro GHL. J'en ai tiré « la synchro supprime et recrée onze fiches
+toutes les quinze minutes », je l'ai annoncé à Paul comme un risque de perte de
+clients, et une boucle a été ouverte sur ce constat. En base : les onze lignes
+n'existaient plus depuis longtemps — PostgREST rend `204` à un `DELETE` qui ne
+trouve rien —, et `pg_stat_user_tables` comptait **110 suppressions sur toute la
+vie de la table**, là où onze par quart d'heure en auraient fait des milliers. Coût :
+une fausse alerte donnée à Paul, et une boucle lancée pour corriger ce qui
+n'existait pas.
+
+⇒ **Une écriture se prouve en base, jamais par son code de retour** : la ligne
+existait-elle avant, existe-t-elle après, et que disent les compteurs
+(`n_tup_ins`, `n_tup_del`, `row_count`) ? Ce contrôle coûte une requête, il se fait
+**avant** de nommer le défaut à Paul — pas après avoir ouvert la boucle.
 
 **UNE GÉOMÉTRIE SE MESURE, ELLE NE SE VALIDE PAS À L'ŒIL** *(2026-08-01)*. Tout
 élément placé dans un cadre borné voit sa `getBBox()` comparée au `viewBox`, et
