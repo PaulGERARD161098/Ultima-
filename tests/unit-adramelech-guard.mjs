@@ -42,6 +42,14 @@ const privesAttendus = [
   '/finubar%2fmacro.json',          // %2F encodé
   '/Finubar/MACRO.JSON',            // casse mixte
   '/finubar%5cmacro.json',          // backslash encodé comme séparateur
+  // ZOH SHIA (2026-10-04) — la techno de RénoDevis : la carte du système.
+  '/zohshia',
+  '/zohshia/renodevis/inventaire.json',
+  '/zohshia/renodevis/collecter.mjs',
+  '/zohshia/renodevis/AJOUTER-UN-ARTISAN.md',
+  '/ZohShia/RenoDevis/INVENTAIRE.JSON', // casse mixte
+  '/zohshia%2frenodevis%2finventaire.json', // %2F encodé
+  '/js/..%2fzohshia%2frenodevis%2finventaire.json', // traversal encodé
 ];
 verdicts.privesRefuses = privesAttendus.every((p) => estCheminPrive(p) === true);
 

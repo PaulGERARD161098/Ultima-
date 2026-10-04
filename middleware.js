@@ -76,7 +76,11 @@ const CSP = [
 // Le lire par expression régulière depuis le test aurait fabriqué un instrument
 // qui se tait le jour où la ligne change de forme. Aucun effet sur le
 // comportement du garde.
-export const PREFIXES_PRIVES = ['/adramelech', '/memoire', '/finubar', '/api/_lib', '/supabase', '/design', '/tests'];
+// `/zohshia` (2026-10-04) : la techno de RénoDevis — la carte du système. Non
+// déployée (`.vercelignore`) ET refusée ici : si l'un des deux tombait, l'autre
+// tient. Aucune page publique ne vit sous ce chemin ; le jour où ZOH SHIA aura
+// sa coque, elle entrera dans `CHEMINS_ANTICHAMBRE`, comme `/finubar`.
+export const PREFIXES_PRIVES = ['/adramelech', '/memoire', '/finubar', '/api/_lib', '/supabase', '/design', '/tests', '/zohshia'];
 
 // Boussole publique du quadrant : la page RACINE adramelech.html est servie par
 // `cleanUrls` sur le chemin EXACT '/adramelech' (la visite de /adramelech.html y

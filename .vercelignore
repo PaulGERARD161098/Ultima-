@@ -27,6 +27,13 @@ adramelech/
 # exception, elle est nommée ici plutôt que tue.
 finubar/
 
+# ZOH SHIA (2026-10-04) — la techno de RénoDevis : inventaire mesuré (noms de
+# variables, routes, tables, tâches planifiées) et guide d'ajout d'un artisan.
+# Aucune valeur secrète, mais c'est la CARTE du système : elle vit dans le dépôt
+# privé et n'est jamais servie. Doublé par le préfixe privé `/zohshia` du
+# middleware (même défense en profondeur que `finubar/`).
+zohshia/
+
 # Divers non nécessaires au runtime public.
 tests/
 supabase/

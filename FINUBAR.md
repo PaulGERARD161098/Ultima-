@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-10-04",
-    "quoi": "04/10 : les DRAGONS portent leur épithète (« VRANESH — Dragon du futur »), ZOH SHIA ajouté (le dragon de la technologie, étoile d'attente) — branche claude/ilmadrik-dragon-stars-rename-pgel4h. Le 02/10 : B1 ⑤ fusionnée (#336), crédit Anthropic épuisé.",
-    "commit": "fec2a7e95e792b1edd1ef2f403d638786c4a2cda"
+    "quoi": "04/10 : DRAGONS à épithètes + ZOH SHIA fusionnés (#343) ; boucle 2 de ZOH SHIA — la techno de RénoDevis vit dans zohshia/ (inventaire mesuré, guide « ajouter un artisan », compétence /zohshia), sur branche claude/ilmadrik-dragon-stars-rename-pgel4h. Le 02/10 : crédit Anthropic épuisé.",
+    "commit": "c1baf6080175c25c0f5d3851cf53ba8777a60942"
   },
   "prochaine_action": "Paul recharge le crédit Anthropic (console Anthropic — geste payant) ; puis étape 0 EN PRODUCTION sur /registre : dicter « Capture l'idée Test B1 », mesurer 2 lignes (tentee, reussie) dans leo_ecritures, cliquer « Défaire », mesurer la 3ᵉ (defaite) et la disparition de l'idée.",
   "bloque_par": [

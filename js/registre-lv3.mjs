@@ -389,9 +389,11 @@ export const NOEUDS = {
     etat: 'À venir',
     blason: 'portail',
     cible: null,
-    resume: 'Ta technologie, regroupée. Premier élément : l’outil automatique '
-      + 'de création de devis et tout son fonctionnement, pour le cloner '
-      + 'rapidement chez un autre artisan.',
+    // La techno vit dans le dépôt (`zohshia/`), PAS à l'écran : elle est la carte
+    // du système, non déployée. On l'invoque par la compétence `/zohshia`.
+    resume: 'Ta technologie, regroupée. Premier élément : RénoDevis — de quoi '
+      + 'il est fait, et comment l’ajouter chez un autre artisan. Elle vit dans '
+      + 'le dépôt privé et s’invoque par /zohshia.',
   },
 };
 
