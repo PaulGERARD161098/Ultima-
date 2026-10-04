@@ -4701,3 +4701,21 @@ Paul : *« Ok merge / Dry run sur ce qu'on a fait puis synthèse et fin de sessi
   fichiers, aucun nom propre.
 - **Ouvert, nommément** : série à rafraîchir sur RénoDevis `f1f9fb3` (8 conflits)
   — prochaine boucle. Sondes en production impossibles (proxy et Vercel 403).
+
+## 2026-10-04 (soir, suite) — ZOH SHIA rafraîchi sur la tête de RénoDevis
+
+Paul : *« Oui on le met à jour maintenant. ZOH doit rester à jour de toute façon :
+Ultima en porte le code et Ultima travaille toujours avec les autres repos. Merge 348. »*
+
+- **#348 fusionnée** (squash `b44dbe2`, tête `a2fa567`, CI 9/9 verte).
+- **Décision** : ZOH SHIA suit la TÊTE de RénoDevis ; une série en retard est une
+  dette à solder, pas un état stable. Le refus de l'extracteur est le signal.
+- **Fait** : série rafraîchie sur `f1f9fb3` (#274–#281). 8 conflits résolus en
+  rejouant la neutralisation d'origine sur la version amont (chemin générique
+  gardé, branche propre à l'instance retirée) ; apports amont propres à
+  l'instance (sections du PDF, conditions de la facture miroir, doc de recette)
+  neutralisés. Inventaire recollecté (aucune variable, route ni table nouvelle).
+- **Prouvé** : 495 fichiers sans nom propre, typage sans erreur nouvelle, 979 tests
+  verts (931 avant), chaque test ajouté en amont présent dans le code extrait,
+  build vert.
+- **Prochaine boucle** : rendre la dérive visible à l'ouverture de séance.

@@ -32,12 +32,12 @@
   },
   "dernier_arret": {
     "le": "2026-10-04",
-    "quoi": "04/10 soir : #347 fusionnée (étape 0 de Léo prouvée en production). Dry run de la séance : 3 failles trouvées et corrigées sur la branche (recette privée `/outils` servie en local → refusée par le middleware ; extraction à un SHA nu impossible → rétablie ; leçon v71). Dérive mesurée : la série ZOH SHIA refuse sur RénoDevis f1f9fb3 (8 conflits), s'applique sur 7d21217. Commit = main AVANT la PR du dry run.",
-    "commit": "d426f97f49e350b572f0069ae2d5b86d2606b0ca"
+    "quoi": "04/10 soir : #348 fusionnée (dry run). Série ZOH SHIA rafraîchie sur RénoDevis f1f9fb3 : extraction prouvée sur la tête (495 fichiers sans nom propre, 979 tests, build vert). Paul : ZOH doit rester à jour de la tête. Commit = main AVANT la PR de rafraîchissement.",
+    "commit": "b44dbe2f38dfa7a67522346b9b918f87e81d24ec"
   },
-  "prochaine_action": "Rafraîchir la série ZOH SHIA sur RénoDevis f1f9fb3 : fusionner la tête dans le clone `neutre`, résoudre les 8 conflits (app/devis/[id]/modifier/actions.ts, lib/controleDevis.ts, lib/versionDocuments.ts, scripts/recette-devis-assiste.mjs, FINUBAR.md, et les 3 fichiers renommés par la neutralisation : pdf, test pdf, présentation), `serie.mjs`, puis `extraire.mjs --ref origin/main --verifier`. Critère : 0 nom propre, typage sans erreur nouvelle, tests et build verts.",
+  "prochaine_action": "Rendre la dérive de ZOH SHIA visible sans la chercher (Paul : « ZOH doit rester à jour ») : le rappel d'ouverture de séance d'Ultima et l'écran /finubar disent « série ZOH SHIA à <BASE>, RénoDevis à <tête> : N commits, rafraîchir » — mesuré depuis outils/zohshia/renodevis/neutre/BASE et l'origin/main de RénoDevis. Cadrer en 6 points avant.",
   "bloque_par": [
-    "Fusion de la PR du dry run (correctif /outils + extraction au SHA + leçon v71) : GO de Paul sur son SHA.",
+    "Fusion de la PR du rafraîchissement ZOH SHIA : GO de Paul sur son SHA.",
     "ULTIMA_PROPRIETAIRES absente en production (l'API Vercel refuse l'écriture des variables au connecteur) : ZOH SHIA et Finubar fermés jusqu'au geste de Paul.",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
     "R1 (B4) en production, non prouvée : Réno a rendu 502 le 02/10 à 16:43 UTC. Le crédit étant rechargé, lui demander « Où en est Artidispo ? » et comparer à la base (PLAN §2).",

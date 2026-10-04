@@ -57,7 +57,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-04T16:38:28.477Z",
+        "lecture_le": "2026-10-04T17:05:45.944Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -167,7 +167,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-04T16:38:28.462Z",
+        "lecture_le": "2026-10-04T17:05:45.928Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -271,7 +271,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-04T16:38:28.477Z",
+        "lecture_le": "2026-10-04T17:05:45.944Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -340,7 +340,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-04T16:38:28.477Z",
+        "lecture_le": "2026-10-04T17:05:45.945Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -399,7 +399,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-04T16:38:28.477Z",
+        "lecture_le": "2026-10-04T17:05:45.945Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -457,7 +457,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-04T16:38:28.477Z",
+        "lecture_le": "2026-10-04T17:05:45.945Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -525,7 +525,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-04T16:38:28.477Z",
+        "lecture_le": "2026-10-04T17:05:45.944Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -558,12 +558,12 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-10-04",
-          "quoi": "04/10 soir : #347 fusionnée (étape 0 de Léo prouvée en production). Dry run de la séance : 3 failles trouvées et corrigées sur la branche (recette privée `/outils` servie en local…",
-          "commit": "d426f97f49e350b572f0069ae2d5b86d2606b0ca"
+          "quoi": "04/10 soir : #348 fusionnée (dry run). Série ZOH SHIA rafraîchie sur RénoDevis f1f9fb3 : extraction prouvée sur la tête (495 fichiers sans nom propre, 979 tests, build vert). Paul…",
+          "commit": "b44dbe2f38dfa7a67522346b9b918f87e81d24ec"
         },
-        "prochaine_action": "Rafraîchir la série ZOH SHIA sur RénoDevis f1f9fb3 : fusionner la tête dans le clone `neutre`, résoudre les 8 conflits (app/devis/[id]/modifier/actions.ts, lib/controleDevis.ts…",
+        "prochaine_action": "Rendre la dérive de ZOH SHIA visible sans la chercher (Paul : « ZOH doit rester à jour ») : le rappel d'ouverture de séance d'Ultima et l'écran /finubar disent « série ZOH SHIA à…",
         "bloque_par": [
-          "Fusion de la PR du dry run (correctif /outils + extraction au SHA + leçon v71) : GO de Paul sur son SHA.",
+          "Fusion de la PR du rafraîchissement ZOH SHIA : GO de Paul sur son SHA.",
           "ULTIMA_PROPRIETAIRES absente en production (l'API Vercel refuse l'écriture des variables au connecteur) : ZOH SHIA et Finubar fermés jusqu'au geste de Paul.",
           "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le…",
           "R1 (B4) en production, non prouvée : Réno a rendu 502 le 02/10 à 16:43 UTC. Le crédit étant rechargé, lui demander « Où en est Artidispo ? » et comparer à la base (PLAN §2).",
@@ -636,7 +636,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-04T16:38:28.462Z",
+        "lecture_le": "2026-10-04T17:05:45.928Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -702,7 +702,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-04T16:38:28.477Z",
+        "lecture_le": "2026-10-04T17:05:45.945Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -805,7 +805,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-04T16:38:28.477Z",
+        "lecture_le": "2026-10-04T17:05:45.945Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -978,7 +978,7 @@ export default {
       },
       {
         "projet": "Ultima",
-        "geste": "Fusion de la PR du dry run (correctif /outils + extraction au SHA + leçon v71) : GO de Paul sur son SHA."
+        "geste": "Fusion de la PR du rafraîchissement ZOH SHIA : GO de Paul sur son SHA."
       },
       {
         "projet": "Ultima",
