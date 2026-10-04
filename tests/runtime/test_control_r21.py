@@ -5,6 +5,8 @@ import json
 import os
 from pathlib import Path
 import shutil
+import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -113,6 +115,46 @@ class ControlR21FoundationTests(unittest.TestCase):
                     expected_manifest_sha=self.manifest_sha,
                     expected_workflow_sha=self.workflow_sha,
                 )
+
+
+    def test_fifo_members_are_refused_without_waiting_for_a_writer(self):
+        probe = """
+import sys
+from leo.control_r21 import FoundationError, verify_foundation
+try:
+    verify_foundation(
+        sys.argv[1],
+        expected_manifest_sha=sys.argv[2],
+        expected_workflow_sha=sys.argv[3],
+    )
+except FoundationError as error:
+    print(error)
+else:
+    raise SystemExit("FIFO member was accepted")
+"""
+        for name in ("manifest.json", "control-r21.yml", "runner.py"):
+            with self.subTest(member=name), tempfile.TemporaryDirectory() as tmp:
+                candidate = Path(tmp) / "foundation"
+                shutil.copytree(FOUNDATION, candidate)
+                member = candidate / name
+                member.unlink()
+                os.mkfifo(member)
+                try:
+                    result = subprocess.run(
+                        [
+                            sys.executable, "-c", probe, str(candidate),
+                            self.manifest_sha, self.workflow_sha,
+                        ],
+                        cwd=ROOT,
+                        capture_output=True,
+                        text=True,
+                        timeout=5,
+                        check=False,
+                    )
+                except subprocess.TimeoutExpired:
+                    self.fail(f"FIFO member {name} waited for a writer")
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(result.stdout.strip(), "foundation_file_not_regular")
 
     def test_non_object_manifest_is_a_bounded_refusal(self):
         with tempfile.TemporaryDirectory() as tmp:

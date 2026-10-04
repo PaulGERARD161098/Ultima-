@@ -34,7 +34,9 @@ def _read_file(root_fd: int, name: str) -> bytes:
 
     if not hasattr(os, "O_NOFOLLOW"):
         raise FoundationError("nofollow_unavailable")
-    flags = os.O_RDONLY | os.O_NOFOLLOW | getattr(os, "O_CLOEXEC", 0)
+    if not hasattr(os, "O_NONBLOCK"):
+        raise FoundationError("nonblocking_unavailable")
+    flags = os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK | getattr(os, "O_CLOEXEC", 0)
     try:
         fd = os.open(name, flags, dir_fd=root_fd)
     except OSError as error:
