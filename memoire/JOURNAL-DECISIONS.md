@@ -4682,3 +4682,22 @@ et le contenu est dedans »*, et *« vas-y pour ce que tu peux faire »*.
 lecture seule (0 écart) ; extraction complète sur RénoDevis `7d21217` — 492
 fichiers sans nom propre, typage sans erreur nouvelle, 931 tests, build vert ;
 sabotages au rouge à chaque étage.
+
+## 2026-10-04 (soir) — dry run de la séance ZOH SHIA + Léo étape 0
+
+Paul : *« Ok merge / Dry run sur ce qu'on a fait puis synthèse et fin de session »*.
+
+- **#347 fusionnée** (squash `d426f97`, tête `a310f0e`, CI 9/9 verte).
+- **Geste orange joué en production par Paul** : « Supprime l'idée GLANEUR » →
+  Léo refuse, 0 ligne nouvelle, l'idée reste. « Rien au-delà » tient — par
+  absence d'outil, pas par mécanisme de demande (non prouvé, faute d'outil orange).
+- **Dry run — ce qui a cédé, corrigé dans le passage** : `/outils` (recette
+  privée) servi en local, refusé désormais par le middleware (harnais
+  `recetteNonServie`, éprouvé au rouge) ; `extraire.mjs --ref <sha>` impossible,
+  rétabli (SHA inconnu → refus, `origin/main` → refus sur conflits).
+- **Ce qui a résisté** : 63/63 suites unitaires ; smokes finubar, zohshia,
+  console ; CI exécute bien les nouveaux harnais ; base neuve inchangée par la
+  dérive (aucune migration nouvelle) ; extraction au commit de base : 492
+  fichiers, aucun nom propre.
+- **Ouvert, nommément** : série à rafraîchir sur RénoDevis `f1f9fb3` (8 conflits)
+  — prochaine boucle. Sondes en production impossibles (proxy et Vercel 403).

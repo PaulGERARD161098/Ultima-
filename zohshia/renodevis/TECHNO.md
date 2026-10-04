@@ -194,6 +194,14 @@ le reste du produit ne bouge pas.
 | `base/` + `base/rejouer.mjs` | La base neuve : plateforme simulée (local seulement), socle, migrations neutralisées dans l'ordre relevé, finition | Socle qui ne masque aucune migration ; chaque objet cité existe ; empreinte = étalon validé par la référence. Éprouvé en cassant : 6 sabotages sur 6 au rouge |
 | `extraire.mjs` | Le code : série de neutralisation appliquée **en 3 voies** (elle encaisse les évolutions du dépôt), migrations neutralisées, base ajoutée, export **sans historique** | Conflit réel = arrêt ; un nom propre = sortie effacée ; `--verifier` : typage, tests, build |
 
+⚠️ **État de la série au 04/10/2026 (mesuré)** : elle s'applique sur RénoDevis
+`7d21217` (sa `BASE`) et **refuse sur `f1f9fb3`** (tête du 04/10 au soir, six
+fusions plus loin) — 8 fichiers en conflit, dont trois supprimés ou renommés
+par la neutralisation et modifiés en amont. Aucune migration nouvelle : la base
+neuve n'est pas touchée. D'ici le rafraîchissement, l'extraction se fait **au
+commit de base** : `--ref 7d21217` (un SHA nu est accepté depuis le dry run du
+04/10 ; il échouait avant).
+
 ⛔ **Ce qui reste hors de ZOH SHIA, délibérément** : la recette et la série de
 neutralisation **nomment** ce qu'elles retirent ; elles vivent donc dans
 `outils/zohshia/renodevis/`, hors du dossier, comme la liste des noms propres.

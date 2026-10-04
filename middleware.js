@@ -80,7 +80,12 @@ const CSP = [
 // déployée (`.vercelignore`) ET refusée ici : si l'un des deux tombait, l'autre
 // tient. Aucune page publique ne vit sous ce chemin ; le jour où ZOH SHIA aura
 // sa coque, elle entrera dans `CHEMINS_ANTICHAMBRE`, comme `/finubar`.
-export const PREFIXES_PRIVES = ['/adramelech', '/memoire', '/finubar', '/api/_lib', '/supabase', '/design', '/tests', '/zohshia'];
+// `/outils` (2026-10-04, dry run) : la recette PRIVÉE de ZOH SHIA — la liste des
+// noms propres et la série de neutralisation. Elle n'était tenue QUE par
+// `.vercelignore` : éprouvé en local, `/outils/zohshia/noms-propres.json` était
+// servi. Une seule ceinture sur le fichier qui NOMME ce qu'on cache, c'est une
+// de moins que le dossier qu'il protège.
+export const PREFIXES_PRIVES = ['/adramelech', '/memoire', '/finubar', '/api/_lib', '/supabase', '/design', '/tests', '/zohshia', '/outils'];
 
 // Boussole publique du quadrant : la page RACINE adramelech.html est servie par
 // `cleanUrls` sur le chemin EXACT '/adramelech' (la visite de /adramelech.html y

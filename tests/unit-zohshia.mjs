@@ -146,6 +146,9 @@ dit('nonDeploye', /^zohshia\/$/m.test(lire('.vercelignore')) && /^outils\/$/m.te
 // et elle ne porte aucune donnée — le plan vient de /api/zohshia, propriétaire seul.
 dit('nonServi', ['/zohshia/renodevis/inventaire.json', '/zohshia/renodevis/AJOUTER-UN-ARTISAN.md', '/zohshia/publier.mjs']
   .every((p) => estCheminPrive(p) === true) && estCheminPrive('/zohshia') === false);
+// La recette privée NOMME ce qu'on cache : deux ceintures, pas une (dry run 04/10).
+dit('recetteNonServie', ['/outils/zohshia/noms-propres.json', '/outils/zohshia/renodevis/recette.json', '/outils/zohshia/renodevis/neutre/neutre.diff', '/outils']
+  .every((p) => estCheminPrive(p) === true));
 dit('coqueSansDonnee', (() => { const h = lire('zohshia.html'); return !/RenoDevis|RénoDevis|relance automatique|check-list/i.test(h) && /\/api\/zohshia|js\/zohshia\.js/.test(h); })());
 
 // ---- L'étoile dit où vit la techno -----------------------------------------

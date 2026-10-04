@@ -28,15 +28,16 @@
   "etat": "en_cours",
   "jalon": {
     "nom": "Léo et FINUBAR — activation du site et des commandes",
-    "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40, cible notée) → defaite (16:11:54, idée retirée, archipel revenu à 4). ⏳ Reste à prouver « rien au-delà » : un geste ORANGE doit faire demander Léo au lieu d'agir."
+    "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
     "le": "2026-10-04",
-    "quoi": "04/10 soir : #345 et #346 fusionnées ; étape 0 JOUÉE EN PRODUCTION — Léo écrit sans demander (anneau vert) et l'écriture se défait d'un clic, trois lignes sur une même trace.",
-    "commit": "97c3cd19ea300251da88617cd759e5ee6b549be3"
+    "quoi": "04/10 soir : #347 fusionnée (étape 0 de Léo prouvée en production). Dry run de la séance : 3 failles trouvées et corrigées sur la branche (recette privée `/outils` servie en local → refusée par le middleware ; extraction à un SHA nu impossible → rétablie ; leçon v71). Dérive mesurée : la série ZOH SHIA refuse sur RénoDevis f1f9fb3 (8 conflits), s'applique sur 7d21217. Commit = main AVANT la PR du dry run.",
+    "commit": "d426f97f49e350b572f0069ae2d5b86d2606b0ca"
   },
-  "prochaine_action": "Jouer un geste ORANGE en production (ex. « Supprime l'idée GLANEUR » ou une modification) : Léo doit DEMANDER, et leo_ecritures ne doit porter aucune nouvelle `reussie` sans votre clic. Puis, geste de Paul toujours ouvert : ULTIMA_PROPRIETAIRES dans Vercel (ZOH SHIA et Finubar fermés en production sans elle).",
+  "prochaine_action": "Rafraîchir la série ZOH SHIA sur RénoDevis f1f9fb3 : fusionner la tête dans le clone `neutre`, résoudre les 8 conflits (app/devis/[id]/modifier/actions.ts, lib/controleDevis.ts, lib/versionDocuments.ts, scripts/recette-devis-assiste.mjs, FINUBAR.md, et les 3 fichiers renommés par la neutralisation : pdf, test pdf, présentation), `serie.mjs`, puis `extraire.mjs --ref origin/main --verifier`. Critère : 0 nom propre, typage sans erreur nouvelle, tests et build verts.",
   "bloque_par": [
+    "Fusion de la PR du dry run (correctif /outils + extraction au SHA + leçon v71) : GO de Paul sur son SHA.",
     "ULTIMA_PROPRIETAIRES absente en production (l'API Vercel refuse l'écriture des variables au connecteur) : ZOH SHIA et Finubar fermés jusqu'au geste de Paul.",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
     "R1 (B4) en production, non prouvée : Réno a rendu 502 le 02/10 à 16:43 UTC. Le crédit étant rechargé, lui demander « Où en est Artidispo ? » et comparer à la base (PLAN §2).",

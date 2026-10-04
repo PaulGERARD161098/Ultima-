@@ -2129,6 +2129,63 @@ export default {
        "t": "p",
        "r": [
         [
+         "⚠️ ",
+         ""
+        ],
+        [
+         "État de la série au 04/10/2026 (mesuré)",
+         "b"
+        ],
+        [
+         " : elle s'applique sur RénoDevis ",
+         ""
+        ],
+        [
+         "7d21217",
+         "c"
+        ],
+        [
+         " (sa ",
+         ""
+        ],
+        [
+         "BASE",
+         "c"
+        ],
+        [
+         ") et ",
+         ""
+        ],
+        [
+         "refuse sur `f1f9fb3`",
+         "b"
+        ],
+        [
+         " (tête du 04/10 au soir, six fusions plus loin) — 8 fichiers en conflit, dont trois supprimés ou renommés par la neutralisation et modifiés en amont. Aucune migration nouvelle : la base neuve n'est pas touchée. D'ici le rafraîchissement, l'extraction se fait ",
+         ""
+        ],
+        [
+         "au commit de base",
+         "b"
+        ],
+        [
+         " : ",
+         ""
+        ],
+        [
+         "--ref 7d21217",
+         "c"
+        ],
+        [
+         " (un SHA nu est accepté depuis le dry run du 04/10 ; il échouait avant).",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
          "⛔ ",
          ""
         ],
@@ -5346,7 +5403,7 @@ export default {
  ],
  "sources": {
   "renodevis/badge.json": "cdf0f06c4c492ccc21be7bb97a3d5f2da690832d1e1728d2e0a12bd0482fb1ff",
-  "renodevis/TECHNO.md": "2ce8eca1658506aa51e857d7903157e72621e18183c8297b271d6eb59c0f4df5",
+  "renodevis/TECHNO.md": "64bdb2ae4bddf0e9cfd73e737cd19dc213c136416d4a78e115976c4498556aa2",
   "renodevis/AJOUTER-UN-ARTISAN.md": "7ebfc2b34bcc2a7766c1bb20d92f65217efe7d5b3cb579b9bdbd77eba4c9ec99"
  }
 };
