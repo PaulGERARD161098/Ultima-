@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v70 2026-10-04 sha256:a46f06636cc6 -->
+<!-- lecons:empreinte v71 2026-10-04 sha256:730791b85224 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -578,6 +578,25 @@ canonique, jamais après.
 
 
 ## 2. Les garde-fous, et leur silence
+
+**UNE VOIE DE REPLI JAMAIS EMPRUNTÉE N'EXISTE PAS** *(2026-10-04, Ultima — ZOH SHIA)*.
+L'extracteur de code neutre se disait capable d'extraire « au commit demandé »,
+et sa série porte le commit où elle s'applique à coup sûr (`BASE`). Il n'avait
+été éprouvé que sur `--ref origin/main`, le jour où `main` ÉTAIT ce commit. Le
+dry run du soir, après six fusions sur le dépôt de référence : la série
+refuse sur `main` (conflits, refus correct), et le repli — extraire au commit
+de base — échouait aussi (`couldn't find remote ref`), car un dépôt local ne
+sert pas un commit demandé par son seul identifiant. **Le jour où le repli
+servait pour la première fois, il n'existait pas** : le livrable « code prêt
+pour un nouvel artisan » était indisponible, avec un outil qui affirmait le
+contraire. Même soir, même famille : la recette privée (`outils/`, la liste
+des noms qu'on cache) n'était tenue que par `.vercelignore` — servie en local,
+alors que le dossier qu'elle protège avait deux ceintures.
+
+⛔ **Un repli se prouve en l'empruntant, pendant que le chemin principal
+marche encore** — jamais « il suffira de passer le SHA ». Et un garde se pose
+au même niveau que ce qu'il cache : le fichier qui NOMME les secrets mérite
+au moins les ceintures du dossier qu'il protège.
 
 **UNE CLASSE SUPPOSÉE GÉNÉRÉE PEUT NE PAS L'ÊTRE — ET LE BOUTON DISPARAÎT** *(2026-10-02, RenoDevis)*.
 Le bouton « Créer » de la barre portait `bg-danger-ink text-surface`. Tailwind

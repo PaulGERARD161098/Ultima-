@@ -66,8 +66,12 @@ process.on('exit', () => rmSync(travail, { recursive: true, force: true }));
 git(travail, ['init', '-q']);
 // La référence est récupérée par son NOM complet (un dépôt local ne sert pas un
 // commit demandé par son seul identifiant), puis on se place sur le commit lu.
-const nomComplet = git(DEPOT, ['rev-parse', '--symbolic-full-name', REF]).trim() || REF;
-git(travail, ['fetch', '-q', DEPOT, `+${nomComplet}:refs/source/ref`]);
+// ⚠️ Un SHA nu n'a pas de nom complet (dry run 04/10 : `--ref 7d21217` échouait,
+// donc le commit de BASE de la série — le seul où elle s'applique à coup sûr —
+// n'était pas extractible). On rapatrie alors toutes les références du dépôt,
+// et le checkout ci-dessous exige que le commit lu y soit.
+const nomComplet = git(DEPOT, ['rev-parse', '--symbolic-full-name', REF]).trim();
+git(travail, ['fetch', '-q', DEPOT, nomComplet ? `+${nomComplet}:refs/source/ref` : '+refs/*:refs/source/tout/*']);
 git(travail, ['checkout', '-q', '-b', 'neutre', sha]);
 ok(`dépôt de référence au commit ${sha.slice(0, 7)}`);
 
