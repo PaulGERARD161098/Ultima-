@@ -5085,6 +5085,122 @@ export default {
        ]
       },
       {
+       "t": "h3",
+       "r": [
+        [
+         "6 bis. Propres au code extrait (voie B)",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le code neutre retire tout défaut d'instance : ce qui avait une valeur écrite en dur se règle désormais, ou se refuse.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Variable",
+          ""
+         ]
+        ],
+        [
+         [
+          "Rôle",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "MATRICES_PRIVEES_COMPTES",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Comptes autorisés à lire les matrices privées — vide = personne",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "CORPUS_DOMAINE_ARTISAN",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Domaine d'envoi du pro, pour l'outil local de moisson du corpus (facultatif)",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "SYNC_EMAIL_EXPEDITEURS",
+           "c"
+          ],
+          [
+           " · ",
+           ""
+          ],
+          [
+           "SYNC_EMAIL_INTERNES",
+           "c"
+          ],
+          [
+           " · ",
+           ""
+          ],
+          [
+           "SYNC_EMAIL_OWNER_ID",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Obligatoires",
+           "b"
+          ],
+          [
+           " pour la synchronisation mail : sans elles, elle refuse de tourner (plus aucun défaut)",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "⚠️ Les tarifs, marges et coefficient du relevé portent des ",
+         ""
+        ],
+        [
+         "valeurs d'exemple",
+         "b"
+        ],
+        [
+         ", marquées comme telles dans le code : elles se remplacent par les règles du pro (§1.3) avant le premier devis.",
+         ""
+        ]
+       ]
+      },
+      {
        "t": "h2",
        "r": [
         [
@@ -5231,6 +5347,6 @@ export default {
  "sources": {
   "renodevis/badge.json": "cdf0f06c4c492ccc21be7bb97a3d5f2da690832d1e1728d2e0a12bd0482fb1ff",
   "renodevis/TECHNO.md": "2ce8eca1658506aa51e857d7903157e72621e18183c8297b271d6eb59c0f4df5",
-  "renodevis/AJOUTER-UN-ARTISAN.md": "b87faabecca854d38b963f53ae33be587e2a6645a4bebc562db9453bdcf30797"
+  "renodevis/AJOUTER-UN-ARTISAN.md": "7ebfc2b34bcc2a7766c1bb20d92f65217efe7d5b3cb579b9bdbd77eba4c9ec99"
  }
 };

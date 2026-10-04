@@ -194,6 +194,21 @@ le préfixe `NEXT_PUBLIC_` : elles seraient publiées dans le navigateur.
 | `HUB_DEVIS_URL` · `NEXT_PUBLIC_HUB_URL` | Page devis historique du hub |
 | `RENO_CREATION_SECRET` | Clé *serveur* qui signe les propositions de la création assistée |
 
+### 6 bis. Propres au code extrait (voie B)
+
+Le code neutre retire tout défaut d'instance : ce qui avait une valeur écrite en
+dur se règle désormais, ou se refuse.
+
+| Variable | Rôle |
+|---|---|
+| `MATRICES_PRIVEES_COMPTES` | Comptes autorisés à lire les matrices privées — vide = personne |
+| `CORPUS_DOMAINE_ARTISAN` | Domaine d'envoi du pro, pour l'outil local de moisson du corpus (facultatif) |
+| `SYNC_EMAIL_EXPEDITEURS` · `SYNC_EMAIL_INTERNES` · `SYNC_EMAIL_OWNER_ID` | **Obligatoires** pour la synchronisation mail : sans elles, elle refuse de tourner (plus aucun défaut) |
+
+⚠️ Les tarifs, marges et coefficient du relevé portent des **valeurs d'exemple**,
+marquées comme telles dans le code : elles se remplacent par les règles du pro
+(§1.3) avant le premier devis.
+
 ## 7. Les tâches planifiées (mesurées, heures UTC)
 
 | Tâche | Horaire | Ce qu'elle fait |

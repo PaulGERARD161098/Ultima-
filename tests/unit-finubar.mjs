@@ -438,7 +438,8 @@ console.log('§8 — les deux formes de l\'agrégat disent la même chose, et la
     /from '\.\/_lib\/finubar-macro\.mjs'/.test(route));
   verifier('la route n\'importe RIEN hors de l\'arbre api/',
     !/from '\.\.\/(?!_lib)/.test(route), (route.match(/from '[^']+'/g) || []).join(' '));
-  verifier('la route reste derrière requireUser', /requireUser/.test(route));
+  verifier('la route reste derrière le garde PROPRIÉTAIRE (l\'inscription est ouverte)',
+    /requireProprietaire/.test(route) && !/requireUser\(/.test(route) && /403/.test(route));
   verifier('la route n\'accepte que GET', /ALLOWED = \['GET'\]/.test(route));
 
   // Un fichier généré qui n'est jamais propre après un push finit par être

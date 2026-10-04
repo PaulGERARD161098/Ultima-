@@ -157,6 +157,8 @@ if (drapeau('verifier')) {
   ok('build : vert');
   rmSync(join(SORTIE, 'node_modules'));
   rmSync(join(SORTIE, '.next'), { recursive: true, force: true });
+  // Les produits de la vérification ne font pas partie du code livré.
+  for (const f of readdirSync(SORTIE).filter((x) => x.endsWith('.tsbuildinfo'))) rmSync(join(SORTIE, f));
 }
 
 writeFileSync(join(SORTIE, 'zohshia-extraction.json'), JSON.stringify({
