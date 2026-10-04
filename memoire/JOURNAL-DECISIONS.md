@@ -4648,3 +4648,37 @@ artisan existant ; la collecte qui neutralise les noms propres et refuse d'écri
 s'il en survit un ; la liste des noms bannis HORS de `zohshia/`
 (`outils/zohshia/noms-propres.json`, non déployé) ; le test qui la fait respecter
 partout, éprouvé par sept sabotages et un miroir.
+
+## 2026-10-04 (soir) — ZOH SHIA livre un code et une base prêts ; un badge par techno ; PR #345 fusionnée
+
+Paul : *« ZOH : j'intègre un nouvel artisan ; fournis-moi un code et une base
+prête, donne-moi la check-list des infos nécessaires pour mettre la techno
+RénoDevis à jour pour lui »* — puis *« dans ZOH je veux un badge par techno […]
+et le contenu est dedans »*, et *« vas-y pour ce que tu peux faire »*.
+
+**Décisions :**
+1. **ZOH SHIA ne STOCKE pas de code** : il porte le plan, la check-list, la base
+   neuve et l'outil qui EXTRAIT le code neutre d'un commit du dépôt de
+   référence, à la demande (validé par Paul : « ça me va »). Une techno n'y
+   entre que si elle existe déjà et tourne en vrai.
+2. **Deux voies** pour un nouveau pro : rejoindre la plateforme existante, ou
+   une instance à lui (son code, sa base). La check-list sert aux deux.
+3. **La recette de neutralisation vit hors de `zohshia/`** (`outils/`, non
+   déployé) : elle nomme ce qu'elle retire. Série = retraits par motifs + diff
+   appliqué en 3 voies.
+4. **Valeurs d'instance retirées du code neutre**, remplacées par des valeurs
+   d'EXEMPLE marquées comme telles (relevé) ; noms de l'équipe retirés aussi.
+   RénoBoost, `ria` et mon-dpe.fr gardés (validé).
+5. **L'écran ZOH SHIA** : un badge par techno, réservé au PROPRIÉTAIRE ; même
+   garde posé sur Finubar (l'inscription au projet d'authentification est
+   ouverte — mesuré).
+6. **Fusion de #345** sur ordre de Paul (« tu fusionnes la PR 345 »), squash
+   `97c3cd1`, tête vérifiée `367fd81`, CI verte — AVANT que
+   `ULTIMA_PROPRIETAIRES` soit posée : Paul met de côté la variable Vercel et la
+   fermeture des inscriptions. Conséquence assumée : ZOH SHIA et Finubar
+   répondent « accès réservé » en production tant que la variable manque.
+
+**Livré et prouvé** : base neuve rejouée et validée par la base de référence en
+lecture seule (0 écart) ; extraction complète sur RénoDevis `7d21217` — 492
+fichiers sans nom propre, typage sans erreur nouvelle, 931 tests, build vert ;
+sabotages au rouge à chaque étage.

@@ -8,6 +8,11 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🐉 **SESSION 2026-10-04 — ZOH SHIA : LA TECHNO DE RÉNODEVIS, PRÊTE À DÉPLOYER CHEZ UN AUTRE PRO.** PR **#345 fusionnée** (`97c3cd1`, sur ordre de Paul).
+  ✅ Plan pur (`zohshia/renodevis/TECHNO.md`) · check-list en 8 rubriques et deux voies (`AJOUTER-UN-ARTISAN.md`) · base neuve rejouée et **validée par la base de référence** (0 écart) · code neutre **extrait et prouvé** (RénoDevis `7d21217` : 492 fichiers, 931 tests, build vert) · écran ZOH SHIA (un badge par techno) · garde PROPRIÉTAIRE sur `/api/zohshia` et `/api/finubar`.
+  ⛔ **Fusionné AVANT `ULTIMA_PROPRIETAIRES`** (choix de Paul) : ZOH SHIA et Finubar répondent « accès réservé » en production jusqu'à ce qu'elle soit posée (Vercel, Production + Preview). L'API Vercel refuse l'écriture des variables au connecteur — geste de Paul.
+  ⛔ **Inscription Supabase OUVERTE** (mesuré le 04/10) — à fermer par Paul.
+  ⏭ Propager `memoire/LECONS.md` v70 (3 leçons du jour) aux neuf dépôts.
 - 🧾 **SESSION 2026-10-02 (matin, séance « analyse des lieux ») — LA MÉMOIRE DE LA SÉANCE DU 30/09 RÉCUPÉRÉE, ET UNE FAUTE DE GATE CONSIGNÉE.**
   Reprise après coupure de crédit, sur demande de Paul : *« tu arrêtes ce que tu
   fais, tu fais une analyse des lieux et tu cadres une reprise · pas de code avant

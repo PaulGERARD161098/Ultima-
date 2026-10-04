@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v69 2026-10-03 sha256:af6b2e45d9b1 -->
+<!-- lecons:empreinte v70 2026-10-04 sha256:a46f06636cc6 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -560,6 +560,21 @@ vente, un HT ou un TTC**, un montant sans sa nature n'est pas une donnée.
 ⇒ *Règle* : avant de calculer sur un prix dicté, sa nature (achat / vente,
 HT / TTC, unité) se fait confirmer dans la même question ; jusque-là, le
 résultat se dit « non mesuré ».
+
+
+**UNE ERREUR APPLIQUÉE DES DEUX CÔTÉS D'UNE COMPARAISON NE ROUGIT JAMAIS** *(2026-10-04, Ultima — ZOH SHIA)*.
+La base neuve de RénoDevis se prouve en comparant ses condensats à ceux de la
+base de référence, calculés par la MÊME requête. Un échappement perdu dans un
+gabarit JavaScript (`'\s+'` écrit tel quel dans un gabarit `` ` `` devient `'s+'`) normalisait les corps de fonctions
+en retirant… les lettres « s ». Des deux côtés, à l'identique : la comparaison
+aurait été verte sur deux bases différentes. Trouvé en RELISANT la requête
+générée, pas par un test. Le même jour, le défaut inverse : un renommage fait
+APRÈS sérialisation déplaçait une clé jsonb (rangées par longueur) — faux rouge
+sur deux bases identiques.
+⇒ *Règle* : un instrument de comparaison se valide sur un cas où les deux côtés
+DIFFÈRENT réellement (sabotage d'un seul côté), et sa requête générée se relit
+avant d'être crue ; toute transformation se fait avant la mise en forme
+canonique, jamais après.
 
 
 ## 2. Les garde-fous, et leur silence
@@ -1223,6 +1238,29 @@ journal gardé et sa fin relue — `npm test > /tmp/t.log 2>&1; c=$?; tail -5
 /tmp/t.log; [ $c -eq 0 ] && git push`. ⚠️ Pas de `grep` sur une ligne de bilan :
 chaque dépôt a son format (TAP `# fail 0` ici, « N/N suites réussies » dans
 Ultima), et un tube jette le code de sortie de `npm test`.
+
+
+**« CONNECTÉ » N'EST PAS « PROPRIÉTAIRE »** *(2026-10-04, Ultima — Finubar)*.
+`requireUser` vérifie qu'un jeton est valide, pas À QUI il appartient. Mesuré le
+04/10 : l'inscription au projet d'authentification d'Ultima est OUVERTE (e-mail
+et Google). `/api/finubar` servait donc la feuille de route de toute l'activité
+à n'importe quel compte créé en une minute. La vérification « inscriptions
+fermées ? » figurait dans le grain Finubar depuis le 20/08 — **notée, jamais
+mesurée** : six semaines d'exposition derrière une ligne de liste.
+⇒ *Règle* : une route qui sert une donnée du SEUL propriétaire passe par
+`requireProprietaire` (`Ultima-/api/_lib/proprietaire.js`, fermé par défaut), pas par
+`requireUser` ; une vérification de sécurité notée se MESURE dans la séance qui
+la note — une ligne « à vérifier » se lit comme un contrôle fait.
+
+**UN DÉTECTEUR NE VOIT QUE CE QU'ON LUI A DONNÉ À VOIR** *(2026-10-04, Ultima — ZOH SHIA)*.
+Le scanner de noms propres du code neutre rendait « 0 » sur un arbre qui portait
+encore `reglesSola` (une bosse de chameau échappe au mot entier) et **265**
+« Paul » dans le code et à l'écran (« Envoyer à Paul ») : les noms de l'équipe
+n'étaient pas dans sa liste. Un 0 juste sur sa liste, faux sur l'intention.
+⇒ *Règle* : un détecteur s'éprouve sur les FORMES que prend ce qu'il cherche
+(casse, bosse de chameau, préfixe, nom de fichier) ET sur la question « qu'est-ce
+qu'il ne cherche pas ? » — la relecture adverse du résultat compte autant que le
+résultat.
 
 
 ## 3. Ce qu'on donne à Paul

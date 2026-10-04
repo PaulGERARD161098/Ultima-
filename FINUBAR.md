@@ -32,20 +32,25 @@
   },
   "dernier_arret": {
     "le": "2026-10-04",
-    "quoi": "04/10 : DRAGONS à épithètes et ZOH SHIA fusionnés (#343, #344) ; ZOH SHIA réécrit en techno PURE — plan complet de RénoDevis sans aucun nom d'artisan ni valeur (décision de Paul) ; neutralisation du code de RénoDevis abandonnée (#272 fermée, L0 #271 conservé). Branche claude/ilmadrik-dragon-stars-rename-pgel4h.",
-    "commit": "19dd57b048a2b50f0a1bdf62d90cd29f6db14436"
+    "quoi": "04/10 soir : PR #345 fusionnée sur ordre de Paul — ZOH SHIA porte la techno de RénoDevis prête à déployer chez un autre pro : plan pur, check-list (8 rubriques, deux voies), base neuve validée par la base de référence (0 écart), code neutre extrait et prouvé (RénoDevis 7d21217 : 492 fichiers, 931 tests, build vert), écran « un badge par techno ». Garde PROPRIÉTAIRE posé sur /api/zohshia ET /api/finubar (inscription mesurée ouverte).",
+    "commit": "97c3cd19ea300251da88617cd759e5ee6b549be3"
   },
-  "prochaine_action": "Étape 0 EN PRODUCTION sur /registre (le crédit est rechargé) : dicter « Capture l'idée Test B1 », mesurer 2 lignes (tentee, reussie) dans leo_ecritures, cliquer « Défaire », mesurer la 3ᵉ (defaite) et la disparition de l'idée.",
+  "prochaine_action": "GESTE DE PAUL : poser ULTIMA_PROPRIETAIRES dans Vercel (projet ultima, Production + Preview ; valeur = l'identifiant de son compte, relu en base le 04/10) — sans elle, /finubar et /zohshia répondent « accès réservé » en production depuis la fusion de #345. Puis vérifier que les deux s'ouvrent.",
   "bloque_par": [
+    "ULTIMA_PROPRIETAIRES absente en production (l'API Vercel refuse l'écriture des variables au connecteur) : ZOH SHIA et Finubar fermés jusqu'au geste de Paul.",
+    "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
     "R1 (B4) en production, non prouvée : Réno a rendu 502 le 02/10 à 16:43 UTC. Le crédit étant rechargé, lui demander « Où en est Artidispo ? » et comparer à la base (PLAN §2).",
     "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",
     "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
     "La précision sur « mon dpe.fr » (VITRUVE)",
-    "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis",
-    "Vérifier que les inscriptions Supabase sont FERMÉES (« Allow new signups ») — un compte tiers pourrait remplir le quota par la route d'import"
+    "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis"
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "LEÇONS v70 (04/10 : comparaison symétrique, « connecté » ≠ « propriétaire », détecteur aveugle hors de sa liste) — à PROPAGER aux neuf dépôts (memoire/LECONS-PROCEDURE.md).",
+      "depuis": "2026-10-04"
+    },
     {
       "quoi": "LEÇON À CONSIGNER + PROPAGER (9 dépôts) : une erreur générique cache sa cause — « Léo n'a pas pu répondre » a masqué pendant des jours un crédit Anthropic épuisé (0 écriture en prod, ④ crue cassée) ; un échec côté tiers se dit à l'écran par son code et une cause en mots fermés. Payée le 02/10.",
       "depuis": "2026-10-02"
@@ -139,7 +144,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-10-02"
+  "maj": "2026-10-04"
 }
 ```
 
