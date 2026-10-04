@@ -1,11 +1,31 @@
 {
   "pourquoi": "La recette PRIVÉE de l'extraction neutre de RénoDevis (Paul, 04/10/2026 : « la technologie en pur, pas de nom d'artisan »). Elle nomme ce qu'il faut retirer — donc elle porte des noms propres, et vit HORS de zohshia/, comme noms-propres.json. Le moteur neutre (zohshia/renodevis/neutraliser.mjs) l'applique et REFUSE de produire quoi que ce soit si une retouche ne s'applique plus ou si un nom propre survit.",
-  "identifiants_instance": ["mwaryfscxgrulauwwque", "relance-renoboostia.com", "renoboostia"],
+  "identifiants_instance": [
+    "mwaryfscxgrulauwwque",
+    "relance-renoboostia.com",
+    "renoboostia"
+  ],
   "renommer": [
-    ["catalogue_icestream", "catalogue_fournisseur", "la table du catalogue porte le nom d'un fournisseur"],
-    ["ice_select_", "catalogue_select_", "préfixe de policy tiré du même nom"],
-    ["ice_write_", "catalogue_write_", "préfixe de policy tiré du même nom"],
-    ["'Icestream'", "'principal'", "valeur par défaut de la colonne fournisseur"]
+    [
+      "catalogue_icestream",
+      "catalogue_fournisseur",
+      "la table du catalogue porte le nom d'un fournisseur"
+    ],
+    [
+      "ice_select_",
+      "catalogue_select_",
+      "préfixe de policy tiré du même nom"
+    ],
+    [
+      "ice_write_",
+      "catalogue_write_",
+      "préfixe de policy tiré du même nom"
+    ],
+    [
+      "'Icestream'",
+      "'principal'",
+      "valeur par défaut de la colonne fournisseur"
+    ]
   ],
   "remplacer": {
     "supabase/migrations/20260729c_catalogue_prix_net.sql": {
@@ -21,5 +41,13 @@
       "apres": "devis@mail.exemple.fr",
       "pourquoi": "exemple d'adresse tiré d'un artisan réel"
     }
-  ]
+  ],
+  "noms_equipe": [
+    "paul",
+    "henry",
+    "huvey",
+    "gerard",
+    "godefroy"
+  ],
+  "noms_equipe_pourquoi": "Les noms de l'équipe de l'instance de référence. Ils ne s'appliquent QU'AU CODE EXTRAIT (scanner --equipe, extraire.mjs) : ZOH SHIA, dans Ultima, cite légitimement Paul. Trouvés à la relecture du 04/10/2026 : 265 occurrences, dont des libellés d'écran (« Envoyer à Paul »)."
 }

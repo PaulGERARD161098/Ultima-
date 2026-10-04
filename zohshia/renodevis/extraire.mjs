@@ -6,9 +6,10 @@
 // sans aucun nom propre ni valeur d'instance, accompagné de la base neuve :
 //
 //   1. clone jetable du dépôt de référence, au commit demandé ;
-//   2. application de la SÉRIE DE CORRECTIFS de neutralisation (privée, hors
-//      zohshia/ : `outils/zohshia/renodevis/neutre/*.patch`), en 3 VOIES — elle
-//      encaisse les évolutions du dépôt qui ne touchent pas les mêmes lignes ;
+//   2. application de la SÉRIE de neutralisation (privée, hors zohshia/ :
+//      `outils/zohshia/renodevis/neutre/` — retraits par motifs, puis un diff
+//      appliqué en 3 VOIES, qui encaisse les évolutions du dépôt ne touchant pas
+//      les mêmes lignes) ; tout chemin portant un nom propre part d'office ;
 //   3. neutralisation des migrations SQL par la recette (même moteur que la base) ;
 //   4. ajout de la base neuve : socle, finition, ordre d'application ;
 //   5. export SANS historique (l'historique porte l'instance) ;
@@ -46,6 +47,8 @@ const DEPOT = arg('depot');
 const REF = arg('ref', 'origin/main');
 const SORTIE = arg('sortie');
 const SERIE = join(RACINE, 'outils', 'zohshia', 'renodevis', 'neutre');
+// Identité des commits du clone jetable : ni nom, ni adresse de personne.
+const identite = { GIT_AUTHOR_NAME: 'zohshia', GIT_AUTHOR_EMAIL: 'zohshia', GIT_COMMITTER_NAME: 'zohshia', GIT_COMMITTER_EMAIL: 'zohshia' };
 
 const refus = (msg) => { console.error(`✗ ${msg}`); process.exit(1); };
 const ok = (msg) => console.log(`✓ ${msg}`);
@@ -53,7 +56,8 @@ const git = (cwd, args, env = {}) => execFileSync('git', ['-C', cwd, ...args], {
 
 if (!DEPOT || !SORTIE) refus('usage : extraire.mjs --depot <dépôt> --sortie <dossier neuf> [--ref origin/main] [--verifier --modules <node_modules>]');
 if (existsSync(SORTIE) && readdirSync(SORTIE).length) refus(`${SORTIE} n'est pas vide — l'extraction n'écrase rien`);
-const recette = chargerRecette();
+// Le code extrait ne porte pas non plus les noms de l'équipe de référence.
+const recette = chargerRecette(undefined, { equipe: true });
 
 // ── 1. Le clone jetable, au commit demandé ───────────────────────────────────
 const sha = git(DEPOT, ['rev-parse', REF]).trim();
@@ -67,16 +71,27 @@ git(travail, ['fetch', '-q', DEPOT, `+${nomComplet}:refs/source/ref`]);
 git(travail, ['checkout', '-q', '-b', 'neutre', sha]);
 ok(`dépôt de référence au commit ${sha.slice(0, 7)}`);
 
-// ── 2. La série de correctifs, en 3 voies ────────────────────────────────────
-const correctifs = existsSync(SERIE) ? readdirSync(SERIE).filter((f) => f.endsWith('.patch')).sort() : [];
-if (!correctifs.length) refus(`aucune série de correctifs dans ${SERIE} — l'extraction sans neutralisation du code est refusée`);
-const identite = { GIT_AUTHOR_NAME: 'zohshia', GIT_AUTHOR_EMAIL: 'zohshia', GIT_COMMITTER_NAME: 'zohshia', GIT_COMMITTER_EMAIL: 'zohshia' };
-const am = spawnSync('git', ['-C', travail, 'am', '-q', '-3', ...correctifs.map((c) => join(SERIE, c))], { encoding: 'utf8', env: { ...process.env, ...identite }, maxBuffer: 256 * 1024 * 1024 });
-if (am.status !== 0) {
+// ── 2. La série de neutralisation : retraits, puis diff en 3 voies ─────────
+const retirer = join(SERIE, 'retirer.txt');
+const diff = join(SERIE, 'neutre.diff');
+if (!existsSync(retirer) || !existsSync(diff)) refus(`série absente dans ${SERIE} — l'extraction sans neutralisation du code est refusée (ranger la série : zohshia/renodevis/serie.mjs)`);
+const motifs = readFileSync(retirer, 'utf8').split('\n').map((l) => l.trim()).filter((l) => l && !l.startsWith('#'));
+// Les fichiers que le diff modifie ne sont jamais retirés avant lui (un README
+// réécrit, par exemple) : retirer puis modifier ferait échouer l'application.
+const touches = new Set([...readFileSync(diff, 'utf8').matchAll(/^diff --git a\/(\S+) b\//gm)].map((m) => m[1]));
+const versRe = (m) => new RegExp('^' + m.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*\*\//g, '(?:.*/)?').replace(/\*\*/g, '.*').replace(/\*/g, '[^/]*') + '$');
+const motifsRe = motifs.map(versRe);
+const suivis = git(travail, ['ls-files']).split('\n').filter(Boolean);
+const aRetirer = suivis.filter((c) => !touches.has(c) && (motifsRe.some((re) => re.test(c)) || recette.motif.test(c)));
+for (let i = 0; i < aRetirer.length; i += 200) git(travail, ['rm', '-q', '--', ...aRetirer.slice(i, i + 200)]);
+const ap = spawnSync('git', ['-C', travail, 'apply', '--3way', '--binary', '--whitespace=nowarn', diff], { encoding: 'utf8', maxBuffer: 256 * 1024 * 1024 });
+if (ap.status !== 0) {
   const conflits = spawnSync('git', ['-C', travail, 'diff', '--name-only', '--diff-filter=U'], { encoding: 'utf8' }).stdout.trim();
-  refus(`la série ne s'applique plus en 3 voies — conflit réel à résoudre À LA MAIN dans la série :\n${conflits || am.stderr.trim().split('\n').slice(0, 8).join('\n')}`);
+  refus(`la série ne s'applique plus en 3 voies — conflit réel à résoudre DANS LA SÉRIE (jamais dans l'arbre extrait) :\n${conflits || ap.stderr.trim().split('\n').slice(0, 8).join('\n')}`);
 }
-ok(`série appliquée : ${correctifs.length} correctif(s)`);
+const correctifs = ['retirer.txt', 'neutre.diff'];
+const base = existsSync(join(SERIE, 'BASE')) ? readFileSync(join(SERIE, 'BASE'), 'utf8').trim() : '';
+ok(`série appliquée : ${aRetirer.length} fichier(s) retiré(s), diff en 3 voies${base && base !== sha ? ` (série faite sur ${base.slice(0, 7)}, appliquée sur ${sha.slice(0, 7)})` : ''}`);
 
 // ── 3. Les migrations, par la recette ────────────────────────────────────────
 const dossierMig = join(travail, 'supabase', 'migrations');

@@ -29,10 +29,14 @@ export const RACINE = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 const echapper = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-export function chargerRecette(racine = RACINE) {
+/**
+ * `equipe: true` ajoute les noms de l'équipe de l'instance de référence : ils ne
+ * valent que pour le CODE EXTRAIT (ZOH SHIA, dans Ultima, peut citer Paul).
+ */
+export function chargerRecette(racine = RACINE, { equipe = false } = {}) {
   const { jetons } = JSON.parse(readFileSync(join(racine, 'outils', 'zohshia', 'noms-propres.json'), 'utf8'));
   const recette = JSON.parse(readFileSync(join(racine, 'outils', 'zohshia', 'renodevis', 'recette.json'), 'utf8'));
-  const interdits = [...jetons, ...(recette.identifiants_instance || [])];
+  const interdits = [...jetons, ...(recette.identifiants_instance || []), ...(equipe ? recette.noms_equipe || [] : [])];
   if (!interdits.length) throw new Error('recette vide : aucun jeton interdit — refus (vert par vacuité)');
   // En mot entier, sans casse : « isolation » ne déclenche pas.
   const entier = new RegExp(`(^|[^a-z0-9à-ÿ])(${interdits.map(echapper).join('|')})([^a-z0-9à-ÿ]|$)`, 'i');

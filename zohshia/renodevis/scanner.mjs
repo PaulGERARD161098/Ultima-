@@ -3,7 +3,7 @@
 // nom propre ? Même détecteur que le moteur (neutraliser.mjs) : mot entier, bosse
 // de chameau, identifiants de l'instance de référence. Chemins ET contenus.
 //
-// Usage : node zohshia/renodevis/scanner.mjs <dossier> [--resume]
+// Usage : node zohshia/renodevis/scanner.mjs <dossier> [--resume] [--equipe]
 // Sortie : une ligne par occurrence (chemin:ligne · jeton · extrait) ; code 1 si
 // l'arbre n'est pas neutre, 0 sinon. ⛔ Un dossier vide n'est PAS neutre : il
 // est refusé (vert par vacuité).
@@ -50,7 +50,8 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   const racine = process.argv[2];
   if (!racine) { console.error('usage : scanner.mjs <dossier> [--resume]'); process.exit(2); }
   const resume = process.argv.includes('--resume');
-  const { lus, trouves } = scanner(racine);
+  // --equipe : ajoute les noms de l'équipe de l'instance de référence (code extrait).
+  const { lus, trouves } = scanner(racine, chargerRecette(undefined, { equipe: process.argv.includes('--equipe') }));
   if (lus === 0) { console.error('✗ aucun fichier lu — refus (vert par vacuité)'); process.exit(1); }
   if (resume) {
     const parFichier = new Map();
