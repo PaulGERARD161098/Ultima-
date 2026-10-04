@@ -111,16 +111,23 @@ if (fuites.length) { chiffres.fuites = fuites; }
 // ---- La techno pure : AUCUN nom propre ----------------------------------------
 const { jetons } = JSON.parse(lire('outils', 'zohshia', 'noms-propres.json'));
 dit('verrouNomsPropres', Array.isArray(jetons) && jetons.length >= 3);
-const echapper = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-const NOM_PROPRE = new RegExp(`(^|[^a-zà-ÿ])(${jetons.map(echapper).join('|')})([^a-zà-ÿ]|$)`, 'im');
-// Le contrôle doit savoir crier : éprouvé sur un cas dont on connaît la réponse
-// (et sur son miroir, « isolation » ne doit PAS déclencher).
-dit('gardeNomsPropresEprouve', NOM_PROPRE.test('la matrice ' + jetons[0].toUpperCase() + ' du pro')
-  && !NOM_PROPRE.test('isolation des combles'));
+// UN SEUL détecteur, celui du moteur d'extraction : mot entier ET bosse de
+// chameau (`reglesXyz`), jetons ET identifiants de l'instance de référence.
+// Deux détecteurs divergeraient, et on croirait le plus indulgent.
+const { chargerRecette } = await import('../zohshia/renodevis/neutraliser.mjs');
+const RECETTE = chargerRecette(RACINE);
+const NOM_PROPRE = { test: (t) => t.split('\n').some((l) => RECETTE.motif.test(l)), match: (t) => { for (const l of t.split('\n')) { const m = RECETTE.motif.match(l); if (m) return [m[2]]; } return null; } };
+// Le contrôle doit savoir crier : éprouvé sur des cas dont on connaît la réponse
+// (et sur leurs miroirs, « isolation », « Solaire », « console » ne déclenchent PAS).
+const J = jetons[0];
+dit('gardeNomsPropresEprouve', NOM_PROPRE.test('la matrice ' + J.toUpperCase() + ' du pro')
+  && NOM_PROPRE.test('regles' + J[0].toUpperCase() + J.slice(1))
+  && NOM_PROPRE.test('base ' + RECETTE.identifiants_instance[0])
+  && !NOM_PROPRE.test('isolation des combles') && !NOM_PROPRE.test('Solaire') && !NOM_PROPRE.test('console'));
 const { NOEUDS: N0 } = await import('../js/registre-lv3.mjs');
 const etoile = JSON.stringify(N0.zohshia || {});
 const nomsPropres = [...contenus.map((c) => ({ p: c.p, t: c.t })), { p: 'étoile zohshia', t: etoile }]
-  .filter((c) => NOM_PROPRE.test(c.t)).map((c) => `${c.p} : « ${(c.t.match(NOM_PROPRE) || [''])[0].trim()} »`);
+  .filter((c) => NOM_PROPRE.test(c.t)).map((c) => `${c.p} : « ${(NOM_PROPRE.match(c.t) || [''])[0]} »`);
 dit('aucunNomPropre', nomsPropres.length === 0);
 if (nomsPropres.length) { chiffres.nomsPropres = nomsPropres; }
 
