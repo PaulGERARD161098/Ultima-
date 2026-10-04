@@ -192,6 +192,7 @@ le reste du produit ne bouge pas.
 | `neutraliser.mjs` | Le moteur : applique la recette privée (renommages, remplacements épinglés par empreinte, retouches exactes) ; retire les lignes de commentaire porteuses d'un nom propre | Refus si une retouche a périmé, si un original a changé, si un nom propre survit hors commentaire |
 | `scanner.mjs` | Lit un arbre entier, chemins et contenus | Refus sur un arbre vide ; même détecteur que le test d'Ultima |
 | `base/` + `base/rejouer.mjs` | La base neuve : plateforme simulée (local seulement), socle, migrations neutralisées dans l'ordre relevé, finition | Socle qui ne masque aucune migration ; chaque objet cité existe ; empreinte = étalon validé par la référence. Éprouvé en cassant : 6 sabotages sur 6 au rouge |
+| `derive.mjs` | Dit de combien la tête du dépôt de référence a dépassé la série, et combien de ces commits touchent un fichier qu'elle retouche — à l'ouverture de chaque séance d'Ultima (hook) et sur l'écran Finubar (collecte) | Des comptes, jamais des chemins ; « non mesurable » dit avec sa raison ; date du dernier relevé du clone ; ne bloque jamais une séance. Éprouvé sur un faux dépôt et sur le cas réel connu (`7d21217` → `f1f9fb3` : 8 commits, 6 sur la série) |
 | `extraire.mjs` | Le code : série de neutralisation appliquée **en 3 voies** (elle encaisse les évolutions du dépôt), migrations neutralisées, base ajoutée, export **sans historique** | Conflit réel = arrêt ; un nom propre = sortie effacée ; `--verifier` : typage, tests, build |
 
 ⚠️ **État de la série au 04/10/2026, 19 h (mesuré)** : rafraîchie sur RénoDevis
@@ -207,7 +208,9 @@ jour de toute façon : Ultima en porte le code et travaille toujours avec les
 autres dépôts »)*. Quand RénoDevis avance sur des fichiers que la série
 retouche, l'extraction refuse : c'est le signal. La série se rafraîchit alors
 (fusion de la tête dans le clone neutre, apports neutralisés, `serie.mjs`,
-`extraire.mjs --verifier`) — jamais en corrigeant l'arbre extrait.
+`extraire.mjs --verifier`) — jamais en corrigeant l'arbre extrait. Le retard
+ne se cherche pas : `derive.mjs` le dit à l'ouverture de chaque séance d'Ultima
+et sur l'écran Finubar. Il INDIQUE quand rafraîchir ; seule l'extraction prouve.
 
 ⛔ **Ce qui reste hors de ZOH SHIA, délibérément** : la recette et la série de
 neutralisation **nomment** ce qu'elles retirent ; elles vivent donc dans

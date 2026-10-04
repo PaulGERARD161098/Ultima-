@@ -23,6 +23,7 @@ import { extraireBloc, lireGrain, agreger, cartoucheDuMatin, versConstellation, 
 // La mesure de fraîcheur vit à part pour être ÉPROUVABLE — voir mesure-git.mjs.
 import { mesurerGit } from './mesure-git.mjs';
 import { lireGithub, reprendreApresGithub } from './github.mjs';
+import { mesurerDerive, phraseDerive } from '../zohshia/renodevis/derive.mjs';
 
 const ICI = dirname(fileURLToPath(import.meta.url));
 const RACINE_ULTIMA = resolve(ICI, '..');
@@ -273,7 +274,26 @@ const sortie = {
   },
   cartouche: cartoucheDuMatin(agregat),
   constellation: versConstellation(agregat),
+  zohshia: deriveZohShia(),
 };
+
+// ZOH SHIA (04/10/2026) — Paul : « ZOH doit rester à jour de toute façon ». La
+// dérive de la série contre la tête de RénoDevis s'affiche sur l'écran, sans la
+// chercher. Une séance sans RénoDevis ne la mesure pas : elle REPREND alors la
+// dernière mesure en disant sa date, comme les grains — une mesure absente ne
+// remplace jamais une mesure datée.
+function deriveZohShia() {
+  const m = mesurerDerive();
+  if (!m.mesurable) {
+    try {
+      const avant = JSON.parse(readFileSync(SORTIE, 'utf8')).zohshia;
+      if (avant && avant.mesurable && avant.mesure_le) {
+        return { ...avant, reprise: true, phrase: `(mesure du ${avant.mesure_le}, reprise : ${m.raison}) ${phraseDerive(avant)}` };
+      }
+    } catch { /* pas de mesure précédente : on dit la nouvelle, non mesurable */ }
+  }
+  return { ...m, reprise: false, mesure_le: aujourdhui, alerte: !m.mesurable || m.touchent !== 0, phrase: phraseDerive(m) };
+}
 
 // ⛔ LA GARDE CONTRE L'AGRÉGAT AMPUTÉ — posée par le dry run DR du 07/09, qui
 // l'a déclenchée sur lui-même : une séance n'ayant qu'Ultima attaché a lancé
@@ -387,5 +407,6 @@ if (sansAccroche.length) {
   console.log(`ℹ️  ${sansAccroche.length} dépôt(s) sans accroche au ciel, rangé(s) sous ALPHA par défaut : ${sansAccroche.join(', ')}`);
   console.log('    L\'accroche se pose dans finubar/depots.json (champ « ciel » = un identifiant de js/registre-lv3.mjs).');
 }
+console.log(sortie.zohshia.phrase);
 sortie.cartouche.signaux.forEach((s) => console.log(`  • ${s.projet} — ${s.dit}`));
 if (sortie.cartouche.action) console.log(`  ▶ ${sortie.cartouche.action.projet} : ${sortie.cartouche.action.faire}`);

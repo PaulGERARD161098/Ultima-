@@ -32,12 +32,12 @@
   },
   "dernier_arret": {
     "le": "2026-10-04",
-    "quoi": "04/10 soir : #348 fusionnée (dry run). Série ZOH SHIA rafraîchie sur RénoDevis f1f9fb3 : extraction prouvée sur la tête (495 fichiers sans nom propre, 979 tests, build vert). Paul : ZOH doit rester à jour de la tête. Commit = main AVANT la PR de rafraîchissement.",
-    "commit": "b44dbe2f38dfa7a67522346b9b918f87e81d24ec"
+    "quoi": "04/10 soir : #349 fusionnée (série ZOH SHIA sur RénoDevis f1f9fb3). Dérive de ZOH SHIA rendue visible : rappel d'ouverture de séance d'Ultima + ligne sur l'écran Finubar (zohshia/renodevis/derive.mjs). Commit = main AVANT la PR de cette boucle.",
+    "commit": "fd361bb054bae2218df585bed465d2c943a708a5"
   },
-  "prochaine_action": "Rendre la dérive de ZOH SHIA visible sans la chercher (Paul : « ZOH doit rester à jour ») : le rappel d'ouverture de séance d'Ultima et l'écran /finubar disent « série ZOH SHIA à <BASE>, RénoDevis à <tête> : N commits, rafraîchir » — mesuré depuis outils/zohshia/renodevis/neutre/BASE et l'origin/main de RénoDevis. Cadrer en 6 points avant.",
+  "prochaine_action": "Propager les LEÇONS v70 et v71 aux neuf autres dépôts (memoire/LECONS-PROCEDURE.md) — la boucle ouverte la plus ancienne de la séance. ZOH SHIA : rafraîchir la série dès que le rappel dit « EN RETARD ».",
   "bloque_par": [
-    "Fusion de la PR du rafraîchissement ZOH SHIA : GO de Paul sur son SHA.",
+    "Fusion de la PR « dérive ZOH SHIA visible » : GO de Paul sur son SHA.",
     "ULTIMA_PROPRIETAIRES absente en production (l'API Vercel refuse l'écriture des variables au connecteur) : ZOH SHIA et Finubar fermés jusqu'au geste de Paul.",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
     "R1 (B4) en production, non prouvée : Réno a rendu 502 le 02/10 à 16:43 UTC. Le crédit étant rechargé, lui demander « Où en est Artidispo ? » et comparer à la base (PLAN §2).",
@@ -49,7 +49,7 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "LEÇONS v70 (04/10 : comparaison symétrique, « connecté » ≠ « propriétaire », détecteur aveugle hors de sa liste) — à PROPAGER aux neuf dépôts (memoire/LECONS-PROCEDURE.md).",
+      "quoi": "LEÇONS v70 + v71 (04/10 : comparaison symétrique, « connecté » ≠ « propriétaire », détecteur aveugle hors de sa liste) — à PROPAGER aux neuf dépôts (memoire/LECONS-PROCEDURE.md).",
       "depuis": "2026-10-04"
     },
     {

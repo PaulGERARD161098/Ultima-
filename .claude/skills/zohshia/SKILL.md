@@ -26,6 +26,10 @@ d'artisan, de client, de fournisseur ni de marque, et sans aucune valeur propre
 1. **Remesurer.** Le dépôt de référence attaché et récupéré
    (`git -C <dépôt> fetch origin main`), puis
    `node zohshia/renodevis/collecter.mjs --depot <dépôt>` : il dit la **dérive**.
+   Et `node zohshia/renodevis/derive.mjs` dit si la **série** de neutralisation
+   suit la tête (« à jour » / « EN RETARD » / « non mesurable ») — le même
+   message que le rappel d'ouverture de séance. En retard → rafraîchir la série
+   (TECHNO §8) AVANT d'extraire.
    ⛔ Sans le dépôt attaché, on ne remesure pas : on le DIT, avec la date de la
    dernière mesure, avant tout chiffre.
 2. **La base.** `node zohshia/renodevis/base/rejouer.mjs --depot <dépôt>` :
