@@ -235,10 +235,10 @@ console.log('— A. OMEGA : 3 caps, puis les portes via OMEGA / IMLADRIK —');
   verifier('OMEGA porte le personnel (RIVEN + NICOL BOLAS + IMLADRIK)',
     JSON.stringify(portes['omega.html']) === JSON.stringify(['riven.html', 'bcp.html', 'imladrik.html']),
     JSON.stringify(portes['omega.html']));
-  verifier('IMLADRIK porte ses six pages (les trois dragons, ADRAMELECH, RESHIRAM, ZEKROM ; plus TAO)',
+  verifier('IMLADRIK porte ses sept pages (les trois dragons, ADRAMELECH, RESHIRAM, ZEKROM, ZOH SHIA depuis le 04/10/2026)',
     JSON.stringify(portes['imladrik.html']) === JSON.stringify(
       ['maedrethnir.html', 'vranesh.html', 'draukhain.html', 'adramelech.html',
-        'reshiram.html', 'zekrom.html']),
+        'reshiram.html', 'zekrom.html', 'zohshia.html']),
     JSON.stringify(portes['imladrik.html']));
   // Éprouvé par l'ABSENCE : aucun repli ne mène plus à une page supprimée.
   verifier('Aucune porte vers grima.html / naga.html / ultima.html',

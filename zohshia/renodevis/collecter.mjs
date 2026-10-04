@@ -28,6 +28,16 @@ import { fileURLToPath } from 'node:url';
 
 const ICI = dirname(fileURLToPath(import.meta.url));
 const SORTIE = join(ICI, 'inventaire.json');
+// ⛔ LA TECHNO PURE (Paul, 04/10/2026) : aucun nom propre dans ZOH SHIA. La liste
+// des noms à retirer vit HORS de zohshia/ (`outils/zohshia/noms-propres.json`),
+// pour que ce dossier n'en porte aucun — ce script compris.
+const { jetons: JETONS } = JSON.parse(readFileSync(join(ICI, '..', '..', 'outils', 'zohshia', 'noms-propres.json'), 'utf8'));
+const echapper = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const NOM_PROPRE = new RegExp(`(^|[^a-z])(${JETONS.map(echapper).join('|')})([^a-z]|$)`, 'i');
+// Un segment de route ou un morceau de nom de table qui porte un nom propre
+// devient « [nom propre] » : la forme reste lisible, le nom disparaît.
+const neutreRoute = (r) => r.split('/').map((seg) => (NOM_PROPRE.test(seg) ? '[nom propre]' : seg)).join('/');
+const neutreNom = (n) => n.split('_').map((m) => (NOM_PROPRE.test(m) ? '[nom propre]' : m)).join('_');
 
 function option(nom, defaut) {
   const i = process.argv.indexOf('--' + nom);
@@ -87,7 +97,7 @@ const vercel = JSON.parse(git(['show', `${REF}:vercel.json`]));
 const crons = (vercel.crons || []).map((c) => ({ chemin: c.path, horaire: c.schedule }));
 const fichiers = git(['ls-tree', '-r', '--name-only', REF]).split('\n').filter(Boolean);
 const routes = fichiers.filter((f) => /^app\/api\/.+\/route\.ts$/.test(f))
-  .map((f) => '/' + f.replace(/^app\//, '').replace(/\/route\.ts$/, '')).sort();
+  .map((f) => neutreRoute('/' + f.replace(/^app\//, '').replace(/\/route\.ts$/, ''))).sort();
 const migrations = fichiers.filter((f) => /^supabase\/migrations\/.+\.sql$/.test(f))
   .map((f) => f.replace('supabase/migrations/', '')).sort();
 
@@ -100,26 +110,11 @@ const creees = unique(grep(['-ohiE', 'create (or replace )?(table|view)( if not 
 // dépôt ne sait pas créer vit dans la base PARTAGÉE (créée par RénoBoost ou le
 // hub). Tant que cette liste n'est pas vide, une instance neuve ne se
 // reconstruit pas depuis le seul dépôt RénoDevis.
-const tablesHorsDepot = lues.filter((t) => !creees.includes(t));
+const tablesHorsDepot = lues.filter((t) => !creees.includes(t)).map(neutreNom);
 
-// ---- Ce qui est CODÉ POUR SOLA ---------------------------------------------
-// Fichiers du code qui tournent (hors tests) et nomment SOLA, ou portent un
-// identifiant (UUID) écrit en dur. On rend des FICHIERS, jamais les valeurs.
-const UUID = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
-// Lignes de CODE seulement : un commentaire qui cite SOLA (« mesuré sur SOLA
-// le 15/09 ») n'est pas une dépendance. Sans ce tri, 52 fichiers sortaient, et
-// une liste que tout remplit ne désigne plus rien.
-const COMMENTAIRE = /^\s*(\/\/|\*|\/\*|\{\s*\/\*|#)/;
-const parMotif = (motif) => unique(grep(['-nE', motif, REF, '--', ...CHEMINS_CODE])
-  .split('\n').filter(Boolean).map(sansRef)
-  .filter((l) => { const [f, , ...reste] = l.split(':'); return PAS_UN_TEST(f) && !COMMENTAIRE.test(reste.join(':')); })
-  .map((l) => l.split(':')[0]));
-const nommentSola = parMotif('(SOLA|Sola)');
-const uuidEnDur = parMotif(UUID);
-const codePourSola = unique([...nommentSola, ...uuidEnDur]).map((f) => ({
-  fichier: f,
-  motifs: [nommentSola.includes(f) ? 'nomme SOLA' : null, uuidEnDur.includes(f) ? 'identifiant écrit en dur' : null].filter(Boolean),
-}));
+// (Le relevé du code écrit pour un artisan particulier a été RETIRÉ le 04/10 :
+// ZOH SHIA décrit la techno pure, pas une instance. Cette instance-là vit dans
+// son propre dépôt, et y reste telle quelle — décision de Paul.)
 
 // ---- Les services externes, déduits des NOMS de variables ------------------
 const SERVICES = [
@@ -139,9 +134,17 @@ const inventaire = {
   source: { depot: 'PaulGERARD161098/RenoDevis', ref: REF, commit, date_commit: dateCommit },
   variables: variables.map((nom) => ({ nom, lue_dans: lueDans[nom] })),
   crons, routes, migrations, services,
-  tables: { lues_par_le_code: lues, creees_par_le_depot: creees, hors_depot: tablesHorsDepot },
-  code_pour_sola: codePourSola,
+  tables: { lues_par_le_code: lues.map(neutreNom), creees_par_le_depot: creees.map(neutreNom), hors_depot: tablesHorsDepot },
 };
+// ⛔ LE DERNIER MOT : si un nom propre a survécu (une variable, un fichier lu,
+// une migration), on n'écrit RIEN. Un inventaire qui en porte un ne sort pas.
+const sortie = JSON.stringify(inventaire, null, 2) + '\n';
+const fuite = sortie.split('\n').find((l) => NOM_PROPRE.test(l));
+if (fuite) {
+  console.error('Un nom propre a survécu à la neutralisation — inventaire refusé :');
+  console.error('  ' + fuite.trim().slice(0, 160));
+  process.exit(1);
+}
 
 // La dérive : si l'inventaire existant vient d'un autre commit, on le dit.
 if (existsSync(SORTIE)) {
@@ -153,7 +156,7 @@ if (existsSync(SORTIE)) {
     }
   } catch { /* inventaire illisible ou commit inconnu : on réécrit */ }
 }
-writeFileSync(SORTIE, JSON.stringify(inventaire, null, 2) + '\n');
+writeFileSync(SORTIE, sortie);
 console.log(`Inventaire écrit — RénoDevis ${commit.slice(0, 7)} (${dateCommit}) : ${variables.length} variables, `
   + `${crons.length} tâches planifiées, ${routes.length} routes, ${migrations.length} migrations, `
-  + `${tablesHorsDepot.length} tables hors dépôt, ${codePourSola.length} fichiers codés pour SOLA.`);
+  + `${tablesHorsDepot.length} tables hors dépôt.`);

@@ -431,11 +431,11 @@ const hrefsImladrik = await lireRepli(pageImladrik);
 // les deux pôles de l'ex-TAO). TAO, lui, n'y est plus : son ABSENCE est exigée sous
 // le verrou de ces six lectures.
 for (const attendu of ['maedrethnir.html', 'vranesh.html', 'draukhain.html', 'adramelech.html',
-  'reshiram.html', 'zekrom.html']) {
+  'reshiram.html', 'zekrom.html', 'zohshia.html']) {
   verifier(`IMLADRIK : porte ouverte vers ${attendu}`, hrefsImladrik.includes(attendu), JSON.stringify(hrefsImladrik));
 }
-verifier('IMLADRIK : plus aucune porte vers tao.html (sous verrou : six portes lues)',
-  hrefsImladrik.length === 6 && !hrefsImladrik.some((h) => /tao/i.test(h)), JSON.stringify(hrefsImladrik));
+verifier('IMLADRIK : plus aucune porte vers tao.html (sous verrou : sept portes lues — ZOH SHIA depuis le 04/10/2026)',
+  hrefsImladrik.length === 7 && !hrefsImladrik.some((h) => /tao/i.test(h)), JSON.stringify(hrefsImladrik));
 // « aiguilles » ABANDONNÉES — un ciel n'a pas de moyeu (même abandon qu'en LV4
 // ④a). Remplacées par ce qu'elles approchaient : une étoile par entrée.
 verifier('IMLADRIK : 2 étoiles (ce que les aiguilles approchaient)',

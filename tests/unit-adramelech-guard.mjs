@@ -42,9 +42,11 @@ const privesAttendus = [
   '/finubar%2fmacro.json',          // %2F encodé
   '/Finubar/MACRO.JSON',            // casse mixte
   '/finubar%5cmacro.json',          // backslash encodé comme séparateur
-  // ZOH SHIA (2026-10-04) — la techno de RénoDevis : la carte du système.
-  '/zohshia',
+  // ZOH SHIA (2026-10-04) — les SOURCES de la techno restent privées ; seule la
+  // coque `/zohshia` (chemin exact, sans donnée) est servie.
   '/zohshia/renodevis/inventaire.json',
+  '/zohshia/publier.mjs',
+  '/zohshia/renodevis/base/01-socle.sql',
   '/zohshia/renodevis/collecter.mjs',
   '/zohshia/renodevis/AJOUTER-UN-ARTISAN.md',
   '/ZohShia/RenoDevis/INVENTAIRE.JSON', // casse mixte

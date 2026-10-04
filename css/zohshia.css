@@ -1,0 +1,54 @@
+/* Ultima — ZOH SHIA : un badge par techno, son contenu dedans.
+   Mêmes jetons que FINUBAR (css/finubar.css, chargé avant) — aucun jeton
+   nouveau, donc le contraste est celui déjà mesuré. Zéro style inline (CSP),
+   aucune animation. */
+
+.technos { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1.2rem; }
+
+.badge-techno {
+  display: flex; gap: 1rem; align-items: center; width: 100%; text-align: left;
+  min-height: 44px; padding: 1rem 1.3rem; cursor: pointer;
+  font: inherit; color: var(--encre); background: var(--ile);
+  border: 1px solid var(--encre-claire); outline: 1px solid var(--filet); outline-offset: 3px;
+}
+.badge-techno:hover { background: var(--parchemin); border-color: var(--encre); }
+.badge-techno:focus-visible { outline: 3px solid var(--accent-focus); outline-offset: 3px; }
+.badge-techno[aria-expanded="true"] { border-left: 5px solid var(--cire); }
+.badge-sceau {
+  flex: 0 0 auto; width: 2.6rem; height: 2.6rem; display: grid; place-items: center;
+  border: 1px solid var(--encre-claire); border-radius: 50%;
+  font-variant: small-caps; font-weight: 600; color: var(--bleu);
+}
+.badge-corps { display: flex; flex-direction: column; gap: 0.25rem; min-width: 0; }
+.badge-nom { font-variant: small-caps; letter-spacing: 0.1em; font-size: 1.2rem; font-weight: 600; overflow-wrap: anywhere; }
+.badge-meta { color: var(--encre-pale); font-size: 0.88rem; }
+
+.techno-ouverte { border: 1px solid var(--filet); border-top: 0; padding: 1rem 1.3rem 1.4rem; background: var(--parchemin); }
+
+.onglets { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 1.2rem; padding: 0 0 0.6rem; border-bottom: 1px solid var(--filet); }
+.onglet {
+  min-height: 44px; padding: 0 1rem; cursor: pointer; font: inherit;
+  font-variant: small-caps; letter-spacing: 0.1em; color: var(--encre-claire);
+  background: transparent; border: 1px solid var(--filet);
+}
+.onglet[aria-selected="true"] { color: var(--encre); border-color: var(--encre); background: var(--ile); font-weight: 600; }
+.onglet:focus-visible { outline: 3px solid var(--accent-focus); outline-offset: 2px; }
+
+.contenu { overflow-wrap: anywhere; }
+.contenu h3 { font-variant: small-caps; letter-spacing: 0.12em; font-size: 1.15rem; margin: 1.6rem 0 0.6rem; border-bottom: 1px solid var(--filet); padding-bottom: 0.25rem; }
+.contenu h4 { font-variant: small-caps; letter-spacing: 0.1em; font-size: 1.02rem; margin: 1.2rem 0 0.4rem; color: var(--encre-claire); }
+.contenu p { margin: 0 0 0.8rem; }
+.contenu ul, .contenu ol { margin: 0 0 0.9rem; padding-left: 1.3rem; }
+.contenu li { margin: 0 0 0.35rem; }
+.contenu code, .contenu pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.9em; }
+.contenu pre { white-space: pre-wrap; border: 1px dashed var(--filet); padding: 0.7rem 0.9rem; margin: 0 0 0.9rem; }
+.contenu .note { border-left: 3px solid var(--cire); padding: 0.2rem 0 0.2rem 0.9rem; margin: 0 0 1rem; color: var(--encre-claire); }
+.contenu .tableau { overflow-x: auto; margin: 0 0 1rem; }
+.contenu table { border-collapse: collapse; width: 100%; font-size: 0.93rem; }
+.contenu th, .contenu td { border: 1px solid var(--filet); padding: 0.4rem 0.55rem; text-align: left; vertical-align: top; }
+.contenu th { background: var(--ile); font-variant: small-caps; letter-spacing: 0.06em; }
+
+@media (max-width: 560px) {
+  .techno-ouverte { padding: 0.8rem 0.7rem 1.1rem; }
+  .contenu table { font-size: 0.86rem; }
+}

@@ -34,6 +34,10 @@ finubar/
 # middleware (même défense en profondeur que `finubar/`).
 zohshia/
 
+# Outillage interne (2026-10-04) — dont la liste des noms propres que ZOH SHIA
+# bannit : elle nomme des artisans et des fournisseurs, elle ne se sert pas.
+outils/
+
 # Divers non nécessaires au runtime public.
 tests/
 supabase/

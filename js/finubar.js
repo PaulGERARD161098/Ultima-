@@ -222,9 +222,9 @@ async function demarrer() {
       headers: { Authorization: 'Bearer ' + session.access_token },
     });
     if (!reponse.ok) {
-      message(reponse.status === 401
-        ? 'Session expirée. Reconnecte-toi depuis la boussole.'
-        : 'La table de marche est indisponible pour le moment.');
+      message(reponse.status === 401 ? 'Session expirée. Reconnecte-toi depuis la boussole.'
+        : reponse.status === 403 ? 'Accès réservé au propriétaire.'
+          : 'La table de marche est indisponible pour le moment.');
       return;
     }
     const charge = await reponse.json();

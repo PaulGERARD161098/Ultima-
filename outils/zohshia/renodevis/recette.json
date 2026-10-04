@@ -1,0 +1,58 @@
+{
+  "pourquoi": "La recette PRIVÉE de l'extraction neutre de RénoDevis (Paul, 04/10/2026 : « la technologie en pur, pas de nom d'artisan »). Elle nomme ce qu'il faut retirer — donc elle porte des noms propres, et vit HORS de zohshia/, comme noms-propres.json. Le moteur neutre (zohshia/renodevis/neutraliser.mjs) l'applique et REFUSE de produire quoi que ce soit si une retouche ne s'applique plus ou si un nom propre survit.",
+  "identifiants_instance": [
+    "mwaryfscxgrulauwwque",
+    "relance-renoboostia.com",
+    "renoboostia"
+  ],
+  "renommer": [
+    [
+      "catalogue_icestream",
+      "catalogue_fournisseur",
+      "la table du catalogue porte le nom d'un fournisseur"
+    ],
+    [
+      "ice_select_",
+      "catalogue_select_",
+      "préfixe de policy tiré du même nom"
+    ],
+    [
+      "ice_write_",
+      "catalogue_write_",
+      "préfixe de policy tiré du même nom"
+    ],
+    [
+      "'Icestream'",
+      "'principal'",
+      "valeur par défaut de la colonne fournisseur"
+    ],
+    [
+      "reponse_paul",
+      "reponse",
+      "colonne de la table des retours portant le prénom de l'exploitant ; le code neutre la lit sous ce nom"
+    ]
+  ],
+  "remplacer": {
+    "supabase/migrations/20260729c_catalogue_prix_net.sql": {
+      "sha256": "9a924b19ab76f68d0515cf06f7650c66a3d1a84f1809a9b72d474262ad2e4007",
+      "par": "zohshia/renodevis/base/retouches/20260729c_catalogue_prix_net.sql",
+      "pourquoi": "la migration d'origine verse le barème d'achat d'un fournisseur : une donnée propre, pas de la techno. La structure (la colonne du prix d'achat) est gardée."
+    }
+  },
+  "retouches": [
+    {
+      "fichier": "supabase/migrations/20260908_rd_expediteur_artisan.sql",
+      "avant": "devis@mail.sola-groupe.fr",
+      "apres": "devis@mail.exemple.fr",
+      "pourquoi": "exemple d'adresse tiré d'un artisan réel"
+    }
+  ],
+  "noms_equipe": [
+    "paul",
+    "henry",
+    "huvey",
+    "gerard",
+    "godefroy"
+  ],
+  "noms_equipe_pourquoi": "Les noms de l'équipe de l'instance de référence. Ils ne s'appliquent QU'AU CODE EXTRAIT (scanner --equipe, extraire.mjs) : ZOH SHIA, dans Ultima, cite légitimement Paul. Trouvés à la relecture du 04/10/2026 : 265 occurrences, dont des libellés d'écran (« Envoyer à Paul »)."
+}

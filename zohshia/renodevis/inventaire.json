@@ -2,8 +2,8 @@
   "source": {
     "depot": "PaulGERARD161098/RenoDevis",
     "ref": "origin/main",
-    "commit": "4400cd38b43460e9085d9a2837d7ae595f14e678",
-    "date_commit": "2026-10-04T13:04:03+02:00"
+    "commit": "d6eba9c19e931155148bf2328745c5290fb0bbdc",
+    "date_commit": "2026-10-04T14:48:14+02:00"
   },
   "variables": [
     {
@@ -270,8 +270,8 @@
   "routes": [
     "/api/bibliotheque/catalogues",
     "/api/bibliotheque/documents",
+    "/api/bibliotheque/matrices/[nom propre]",
     "/api/bibliotheque/matrices/neutre-court",
-    "/api/bibliotheque/matrices/sola-air",
     "/api/bibliotheque/reno",
     "/api/bibliotheque/reno/fiche",
     "/api/corpus/[id]/pdf",
@@ -406,7 +406,7 @@
     "lues_par_le_code": [
       "artisans",
       "banques_reno",
-      "catalogue_icestream",
+      "catalogue_[nom propre]",
       "catalogue_vente",
       "clients",
       "corpus_devis",
@@ -440,7 +440,7 @@
       "relance_liens"
     ],
     "hors_depot": [
-      "catalogue_icestream",
+      "catalogue_[nom propre]",
       "clients",
       "devis",
       "devis_events",
@@ -449,246 +449,5 @@
       "relance_queue",
       "sentinelle_etat"
     ]
-  },
-  "code_pour_sola": [
-    {
-      "fichier": "app/api/bibliotheque/matrices/sola-air/route.ts",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "app/api/devis/proposer/route.ts",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "app/bibliotheque/Accueil.tsx",
-      "motifs": [
-        "nomme SOLA",
-        "identifiant écrit en dur"
-      ]
-    },
-    {
-      "fichier": "app/bibliotheque/MatriceSola.tsx",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "app/bibliotheque/devis/page.tsx",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "app/bibliotheque/matrices/sola-air/page.tsx",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "app/bibliotheque/produits/page.tsx",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "app/bibliotheque/produits/ui.tsx",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "app/d/[token]/page.tsx",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "app/devis/[id]/envoi/actions.ts",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "app/devis/[id]/modifier/actions.ts",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "app/devis/[id]/modifier/page.tsx",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "app/devis/nouveau/actions.ts",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "app/devis/nouveau/controle.ts",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "components/ControleAvantDevis.tsx",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "components/DevisLineBuilder.tsx",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "components/PropositionIA.tsx",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "lib/config.ts",
-      "motifs": [
-        "identifiant écrit en dur"
-      ]
-    },
-    {
-      "fichier": "lib/controleDevis.ts",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "lib/controleRejeuSola.ts",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "lib/creationReno.ts",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "lib/creationRenoServeur.ts",
-      "motifs": [
-        "nomme SOLA",
-        "identifiant écrit en dur"
-      ]
-    },
-    {
-      "fichier": "lib/margeSola.ts",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "lib/margeSolaHistorique.ts",
-      "motifs": [
-        "nomme SOLA",
-        "identifiant écrit en dur"
-      ]
-    },
-    {
-      "fichier": "lib/matriceSola.ts",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "lib/matricesPrivees.ts",
-      "motifs": [
-        "identifiant écrit en dur"
-      ]
-    },
-    {
-      "fichier": "lib/modeles.ts",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "lib/pdfDevis.ts",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "lib/pdfSola.ts",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "lib/presentationSola.ts",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "lib/reglesSola.ts",
-      "motifs": [
-        "nomme SOLA",
-        "identifiant écrit en dur"
-      ]
-    },
-    {
-      "fichier": "lib/specimenSola.ts",
-      "motifs": [
-        "nomme SOLA",
-        "identifiant écrit en dur"
-      ]
-    },
-    {
-      "fichier": "lib/tarificationSola.ts",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "lib/tva.ts",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "lib/tvaSola.ts",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "lib/validationSola.ts",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "lib/versionDocuments.ts",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "releve/calcul/dictee.js",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    },
-    {
-      "fichier": "releve/ui/ReleveChantier_v2.jsx",
-      "motifs": [
-        "nomme SOLA"
-      ]
-    }
-  ]
+  }
 }

@@ -339,10 +339,10 @@ verdicts.noscriptImladrikEgaleLeRegistre = JSON.stringify(capsDuNoscript('imladr
   === JSON.stringify(attendusNoscriptImladrik)
   && JSON.stringify(attendusNoscriptImladrik) === JSON.stringify([
     'maedrethnir.html', 'vranesh.html', 'draukhain.html', 'adramelech.html',
-    'reshiram.html', 'zekrom.html']);
+    'reshiram.html', 'zekrom.html', 'zohshia.html']);
 // Le repli ne descend PAS plus bas que les constellations (les caps propres
 // d'ADRAMELECH n'y sont pas) et ne nomme plus TAO. Non-vacuité : le repli EST lu.
-verdicts.noscriptImladrikSansTaoNiSousPages = (capsDuNoscript('imladrik.html') || []).length === 6
+verdicts.noscriptImladrikSansTaoNiSousPages = (capsDuNoscript('imladrik.html') || []).length === 7
   && !(capsDuNoscript('imladrik.html') || []).some((c) => /tao/i.test(c))
   && !(capsDuNoscript('imladrik.html') || []).some((c) => ['registre.html', 'idees.html'].includes(c))
   && !/\btao\b/i.test(texteNoscript('imladrik.html') || '');
@@ -363,10 +363,9 @@ verdicts.noscriptImladrikDitIfulvin = /IFULVIN/.test(noscriptImladrik)
 const CIBLES_DRAGONS = NOEUDS['constellation-dragons'].enfants.map((id) => NOEUDS[id].cible);
 verdicts.noscriptImladrikRegroupeLesDragons = (noscriptImladrik.match(/<ul>((?:(?!<ul>)[\s\S])*?)<\/ul>/g) || [])
   .some((ul) => CIBLES_DRAGONS.length === 7
-    && CIBLES_DRAGONS.filter(Boolean).length === 6
-    && CIBLES_DRAGONS.filter(Boolean).every((c) => ul.includes(`href="${c}"`))
-    // ZOH SHIA, sans page : DIT dans la sous-liste, et sans lien.
-    && /ZOH SHIA/.test(ul) && !/<a [^>]*>[^<]*ZOH SHIA/.test(ul)
+    // ZOH SHIA a sa page depuis le 04/10/2026 : les sept, toutes liées.
+    && CIBLES_DRAGONS.filter(Boolean).length === 7
+    && CIBLES_DRAGONS.every((c) => ul.includes(`href="${c}"`))
     && !/IFULVIN/.test(ul))
   && /DRAGONS/.test(noscriptImladrik);
 const noscriptIndex = capsDuNoscript('index.html');
@@ -417,14 +416,14 @@ const parcourir = (id) => capsDe(id).forEach((c) => {
   if (c.constellation === true) { parcourir(c.id); } else { feuillesDImladrik.push(c); }
 });
 parcourir('imladrik');
-verdicts.imladrikSixCiblesOuvertes = feuillesDImladrik.filter((c) => c.cible).length === 6
+verdicts.imladrikSeptCiblesOuvertes = feuillesDImladrik.filter((c) => c.cible).length === 7
   && feuillesDImladrik.filter((c) => c.cible).every((c) => typeof c.cible === 'string' && c.cible.endsWith('.html'))
   && feuillesDImladrik.filter((c) => c.cible).map((c) => c.cible).join()
-    === 'maedrethnir.html,vranesh.html,draukhain.html,adramelech.html,reshiram.html,zekrom.html';
-// Deux étoiles d'attente depuis le 04/10/2026 : IFULVIN (ARMES) et ZOH SHIA
-// (DRAGONS). Toujours énumérées, jamais comptées seulement.
-verdicts.imladrikSeulsIfulvinEtZohShiaSansPage = feuillesDImladrik.filter((c) => !c.cible)
-  .map((c) => c.id).join() === 'ifulvin,zohshia';
+    === 'maedrethnir.html,vranesh.html,draukhain.html,adramelech.html,reshiram.html,zekrom.html,zohshia.html';
+// Une seule étoile d'attente depuis que ZOH SHIA a sa page (04/10/2026) :
+// IFULVIN (ARMES). Toujours énumérée, jamais comptée seulement.
+verdicts.imladrikSeulIfulvinSansPage = feuillesDImladrik.filter((c) => !c.cible)
+  .map((c) => c.id).join() === 'ifulvin';
 verdicts.imladrikLegendeGravee = NOEUDS.imladrik.legende === 'Kalamn-talaen'
   && NOEUDS.imladrik.legendeClasse === 'kalamn-legende';
 

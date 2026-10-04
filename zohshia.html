@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Ultima — ZOH SHIA, le dragon de la technologie</title>
+  <meta name="description" content="ZOH SHIA — les technos prêtes à déployer chez d'autres professionnels, un badge par techno.">
+  <meta name="theme-color" content="#0e3a52">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%230e3a52'/%3E%3Cpath d='M16 6 L24 11 L24 21 L16 26 L8 21 L8 11 Z' fill='none' stroke='%23ffffff' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/finubar.css">
+  <link rel="stylesheet" href="css/zohshia.css">
+  <!-- Instrument, comme FINUBAR : on y lit une techno pour la déployer, donc le
+       parchemin domine et la nuit n'est qu'une bordure. -->
+  <link rel="stylesheet" href="css/ciel.css">
+  <link rel="stylesheet" href="css/ciel-fond-page.css">
+</head>
+<body class="finubar zohshia ciel-noeud-coque" data-fond-etoile="instrument">
+
+  <nav class="barre-retour" aria-label="Retour à la constellation">
+    <a class="retour-ultima" href="imladrik.html#constellation-dragons">↞ DRAGONS</a>
+  </nav>
+
+  <div class="feuille">
+
+    <header class="cartouche entete-quadrant">
+      <!-- Blason gravé : un engrenage dans un hexagone. ZOH SHIA ne garde pas
+           des données — il garde des MÉCANISMES. -->
+      <svg class="blason-svg" viewBox="0 0 72 72" role="img"
+           aria-label="Blason gravé : un engrenage dans un hexagone" focusable="false">
+        <circle cx="36" cy="36" r="33" fill="#f9f1dc" stroke="#a9884a" stroke-width="2.4"/>
+        <path d="M36 9 L59 22.5 L59 49.5 L36 63 L13 49.5 L13 22.5 Z" fill="none" stroke="#5a4118" stroke-width="1.2"/>
+        <g stroke="#5a4118" stroke-width="1.3" fill="#0e3a52">
+          <circle cx="36" cy="36" r="11"/>
+          <path d="M34 20 h4 v6 h-4 Z M34 46 h4 v6 h-4 Z M20 34 v4 h6 v-4 Z M46 34 v4 h6 v-4 Z"/>
+        </g>
+        <circle cx="36" cy="36" r="4" fill="#f9f1dc" stroke="#5a4118" stroke-width="1"/>
+      </svg>
+      <p class="surtitre">Imladrik · Dragons · ZOH SHIA</p>
+      <h1>Le dragon de la technologie</h1>
+      <p class="devise">Les technos déjà en service, à l’état pur — prêtes à déployer chez d’autres pros et leurs clients.</p>
+    </header>
+
+    <section aria-labelledby="titre-technos">
+      <h2 id="titre-technos" class="colonne-titre">Les technos</h2>
+      <div id="technos">
+        <p class="etat-message" id="technos-message">Lecture des technos…</p>
+      </div>
+    </section>
+
+    <p class="provenance" id="provenance">
+      Cette page lit un état <strong>figé au dernier commit</strong>, réservé au
+      propriétaire. Pour le rafraîchir : <code>node zohshia/publier.mjs</code>, puis commiter.
+    </p>
+
+  </div>
+
+  <script src="js/ciel-fond.js"></script>
+  <script src="js/ciel-fond-page.js"></script>
+  <script src="js/vendor/supabase-js-2.110.0.min.js"></script>
+  <script src="js/config.js"></script>
+  <script type="module" src="js/zohshia.js"></script>
+</body>
+</html>

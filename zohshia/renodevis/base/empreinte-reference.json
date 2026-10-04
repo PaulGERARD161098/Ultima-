@@ -1,0 +1,367 @@
+{
+ "pourquoi": "Étalon de « la base neuve est prête » : l’empreinte (condensats md5 par table × catégorie et par fonction) de la base reconstruite, VALIDÉE contre la base de référence par une requête en lecture seule qui a calculé elle-même la différence. Ne porte ni nom propre ni donnée. Se renouvelle avec `rejouer.mjs --sql-reference`, puis `--reference-validee` une fois la validation passée.",
+ "validee_le": "2026-10-04",
+ "commit_techno": "7d21217",
+ "ecarts_constates": 0,
+ "empreinte": {
+  "vues": {
+   "catalogue_vente": {
+    "def": "b700fbca688053a36d74bd80a5f7e2ee",
+    "droits": "525461993d0db0d6ea5e23c73f7f244a"
+   },
+   "relance_agregat_client": {
+    "def": "b960f776914533b03499c31af4c04d03",
+    "droits": "92b5075d0be73e69f525a3c22bd38d5f"
+   },
+   "relance_etat_par_client": {
+    "def": "dc444f688624b92b9d09b0d07ba674cf",
+    "droits": "92b5075d0be73e69f525a3c22bd38d5f"
+   }
+  },
+  "tables": {
+   "devis": {
+    "rls": true,
+    "index": "dfdb1d6547bc39e70e62add4cfa56858",
+    "droits": "92b5075d0be73e69f525a3c22bd38d5f",
+    "colonnes": "29141208fa46f440c3fbf9778a3ebb18",
+    "policies": "e7647e280f58cd645a0834aaf30d883e",
+    "contraintes": "8aac8d3d9d52a5c332e9492a1b7b7278",
+    "nb_policies": 4,
+    "declencheurs": "1886f7a382a053062afc751ce7335d3c",
+    "droits_colonnes": "2cd10fa8f5854433f99311d22b7bfd74"
+   },
+   "stock": {
+    "rls": true,
+    "index": "98daf2d26528e6f061749c39de7f949b",
+    "droits": "92b5075d0be73e69f525a3c22bd38d5f",
+    "colonnes": "e758e484319bd10dbf5078e285dde149",
+    "policies": "b3035523a9b8c21e59a177d7b4a236c7",
+    "contraintes": "134592e8adde9b5767498d38b487bdda",
+    "nb_policies": 4,
+    "declencheurs": "d41d8cd98f00b204e9800998ecf8427e",
+    "droits_colonnes": "2cd10fa8f5854433f99311d22b7bfd74"
+   },
+   "clients": {
+    "rls": true,
+    "index": "5b3546129df4d9fed1b4bd80bb4750b1",
+    "droits": "92b5075d0be73e69f525a3c22bd38d5f",
+    "colonnes": "3c5dd9316494312997a78736e60cb7ef",
+    "policies": "9550069680947f85a0c9a9ae411c5905",
+    "contraintes": "a340ac32715f85a8bd9b0dc0165d820f",
+    "nb_policies": 4,
+    "declencheurs": "1f621dc338c5111e327e6ce2690b99fa",
+    "droits_colonnes": "2cd10fa8f5854433f99311d22b7bfd74"
+   },
+   "artisans": {
+    "rls": true,
+    "index": "f1718f320a00054bcefa916284958fbb",
+    "droits": "92b5075d0be73e69f525a3c22bd38d5f",
+    "colonnes": "5e0bf4ab988194a54375bdf044152dbd",
+    "policies": "fe9a7d24d7e552715f8f34b361c91470",
+    "contraintes": "98cdcbc763eb66c8537a65e2d8475a55",
+    "nb_policies": 4,
+    "declencheurs": "dd1368c67baeb109257059602d50c8ac",
+    "droits_colonnes": "2cd10fa8f5854433f99311d22b7bfd74"
+   },
+   "profiles": {
+    "rls": true,
+    "index": "9a55e09b28f95a75da5bca6176df1cad",
+    "droits": "a627d81f9bf0a35482229316f2e197e9",
+    "colonnes": "d6a8e6bbab1bf385a3b37cd1ec9b9410",
+    "policies": "7d939566da510340bd18e160af67259b",
+    "contraintes": "5841e628fa1be7245aed72c11813fec9",
+    "nb_policies": 3,
+    "declencheurs": "d41d8cd98f00b204e9800998ecf8427e",
+    "droits_colonnes": "fa57bc64cde2e0f862dddf2bcf671198"
+   },
+   "feedbacks": {
+    "rls": true,
+    "index": "a5b7ce1071db4e088e3cff97f8e7ce9f",
+    "droits": "92b5075d0be73e69f525a3c22bd38d5f",
+    "colonnes": "d41c82eae19f0e46fcc0e170a879d2d2",
+    "policies": "d41d8cd98f00b204e9800998ecf8427e",
+    "contraintes": "880e44d792f1cd165165210a22514e80",
+    "nb_policies": 0,
+    "declencheurs": "aa6b3007bd040e0d0697b708d1e623c9",
+    "droits_colonnes": "2cd10fa8f5854433f99311d22b7bfd74"
+   },
+   "paiements": {
+    "rls": true,
+    "index": "7e6c8a64ac659b48836bbd4cd46567f5",
+    "droits": "92b5075d0be73e69f525a3c22bd38d5f",
+    "colonnes": "7894fe916e982841382127f43ece2f6d",
+    "policies": "f42330557afa68ea943739ca134d3acd",
+    "contraintes": "d60ed837d92f7c117f0138b50b4aa43b",
+    "nb_policies": 1,
+    "declencheurs": "0a841a63c7d68a38e3d5a04785161565",
+    "droits_colonnes": "2cd10fa8f5854433f99311d22b7bfd74"
+   },
+   "banques_reno": {
+    "rls": true,
+    "index": "3519596f27852ad23aba6da743425f02",
+    "droits": "230b4f389d93d2cc214518fe129688da",
+    "colonnes": "a826f3b077746e45991aebcfe93f5d98",
+    "policies": "d41d8cd98f00b204e9800998ecf8427e",
+    "contraintes": "60bd98fb1292157c1aaba99c54888516",
+    "nb_policies": 0,
+    "declencheurs": "d41d8cd98f00b204e9800998ecf8427e",
+    "droits_colonnes": "2cd10fa8f5854433f99311d22b7bfd74"
+   },
+   "corpus_devis": {
+    "rls": true,
+    "index": "ee104950e1e30e2e719d81fb46e51f1a",
+    "droits": "92b5075d0be73e69f525a3c22bd38d5f",
+    "colonnes": "75ce3e2e2570ec0fb0a038037dedbef2",
+    "policies": "6e58d632ba2c60e22390d013c9ccd180",
+    "contraintes": "8d9a8f6e2ddd3a118cd9e5531649fab1",
+    "nb_policies": 2,
+    "declencheurs": "d41d8cd98f00b204e9800998ecf8427e",
+    "droits_colonnes": "2cd10fa8f5854433f99311d22b7bfd74"
+   },
+   "devis_events": {
+    "rls": true,
+    "index": "6012ea478dfb808dd4c16b3ae811a616",
+    "droits": "92b5075d0be73e69f525a3c22bd38d5f",
+    "colonnes": "913dea169f36471071149c143c55dde2",
+    "policies": "13a4a218cbf74b3878ec795ea3dca890",
+    "contraintes": "6c530377e9f9c789114e9ccfa9f65b9a",
+    "nb_policies": 2,
+    "declencheurs": "d41d8cd98f00b204e9800998ecf8427e",
+    "droits_colonnes": "2cd10fa8f5854433f99311d22b7bfd74"
+   },
+   "realisations": {
+    "rls": true,
+    "index": "e5f51d22d3c342dbda6354e19dc136c6",
+    "droits": "92b5075d0be73e69f525a3c22bd38d5f",
+    "colonnes": "410691a08a8580b075e44e286ea4744e",
+    "policies": "23bebd1e798e6a856e146c10bad19ae1",
+    "contraintes": "a8db22bfb970692ef74db189010ffe58",
+    "nb_policies": 4,
+    "declencheurs": "d41d8cd98f00b204e9800998ecf8427e",
+    "droits_colonnes": "2cd10fa8f5854433f99311d22b7bfd74"
+   },
+   "corpus_lignes": {
+    "rls": true,
+    "index": "b71a9c1ec4c9e3773d5ae46346535dea",
+    "droits": "92b5075d0be73e69f525a3c22bd38d5f",
+    "colonnes": "ccb4a04cd0eebc58d1c285791c7304bb",
+    "policies": "c7c8c76d10e7247a207ee4447cc4de6c",
+    "contraintes": "d4a10dc413055a4fb3912b1eb3fb24a9",
+    "nb_policies": 2,
+    "declencheurs": "d41d8cd98f00b204e9800998ecf8427e",
+    "droits_colonnes": "2cd10fa8f5854433f99311d22b7bfd74"
+   },
+   "relance_liens": {
+    "rls": true,
+    "index": "9022e06bf1387db9b54c1f8dbbe3b8d4",
+    "droits": "92b5075d0be73e69f525a3c22bd38d5f",
+    "colonnes": "16c031570a9b99d357a7591f1846421b",
+    "policies": "453e2ff62a9219f4c20a3b9691248dc6",
+    "contraintes": "6fb9054559c6ea97c708ac769b403aed",
+    "nb_policies": 3,
+    "declencheurs": "d41d8cd98f00b204e9800998ecf8427e",
+    "droits_colonnes": "2cd10fa8f5854433f99311d22b7bfd74"
+   },
+   "relance_queue": {
+    "rls": true,
+    "index": "25bcb31717cb6a08633d323cc2fbeeec",
+    "droits": "92b5075d0be73e69f525a3c22bd38d5f",
+    "colonnes": "1b13d8487d8493dcf03c74b855c72586",
+    "policies": "e9a1277850f6c0a29ae817501eee93c9",
+    "contraintes": "68477383c7d36a5635f0169541c7fc19",
+    "nb_policies": 2,
+    "declencheurs": "d41d8cd98f00b204e9800998ecf8427e",
+    "droits_colonnes": "2cd10fa8f5854433f99311d22b7bfd74"
+   },
+   "sentinelle_etat": {
+    "rls": true,
+    "index": "a1e08214f94f23f5b9cf52ce02ed1551",
+    "droits": "92b5075d0be73e69f525a3c22bd38d5f",
+    "colonnes": "5cc96c898af0d036907899b27ecd8ec9",
+    "policies": "d41d8cd98f00b204e9800998ecf8427e",
+    "contraintes": "1cdf5b5de1088bf295c5689bea90585e",
+    "nb_policies": 0,
+    "declencheurs": "d41d8cd98f00b204e9800998ecf8427e",
+    "droits_colonnes": "2cd10fa8f5854433f99311d22b7bfd74"
+   },
+   "messages_envoyes": {
+    "rls": true,
+    "index": "3082d2b9130454f85af9d88ff545451e",
+    "droits": "8a177f29865e0de4a2cb311eee604dd7",
+    "colonnes": "29d06117f44759954dac44ddbb722964",
+    "policies": "452287e0e695430efd3f7cd8a8758709",
+    "contraintes": "7000f2a214051614faa9f0caee1b5862",
+    "nb_policies": 1,
+    "declencheurs": "d41d8cd98f00b204e9800998ecf8427e",
+    "droits_colonnes": "2cd10fa8f5854433f99311d22b7bfd74"
+   },
+   "relance_gabarits": {
+    "rls": true,
+    "index": "212c38ab31eaf56cf35f0df5b6edb384",
+    "droits": "525461993d0db0d6ea5e23c73f7f244a",
+    "colonnes": "98849df14ecc6f0a5c303ed51899d7fe",
+    "policies": "6895b71e939f3692a79afca26d3a553c",
+    "contraintes": "27c224e59ee4858e0a95d8685328fd0d",
+    "nb_policies": 2,
+    "declencheurs": "d41d8cd98f00b204e9800998ecf8427e",
+    "droits_colonnes": "2cd10fa8f5854433f99311d22b7bfd74"
+   },
+   "relance_brouillons": {
+    "rls": true,
+    "index": "58fb28bdf955cd6b449540e1ce1cd185",
+    "droits": "92b5075d0be73e69f525a3c22bd38d5f",
+    "colonnes": "5cf23383e9256051afad997d2be35802",
+    "policies": "49dcdaa224d2a427081211cfc69ccaa5",
+    "contraintes": "0b99913f3563d1bea804c2002e35708c",
+    "nb_policies": 2,
+    "declencheurs": "d41d8cd98f00b204e9800998ecf8427e",
+    "droits_colonnes": "2cd10fa8f5854433f99311d22b7bfd74"
+   },
+   "catalogue_fournisseur": {
+    "rls": true,
+    "index": "f19bed11c1004d0e42c0b9d751e0e690",
+    "droits": "92b5075d0be73e69f525a3c22bd38d5f",
+    "colonnes": "ee03b5ef06cac8b4a454f4dfbd0dad30",
+    "policies": "a3785fd3859775f70ba89506aa8a05ee",
+    "contraintes": "27d50b2d477db9336ac50c11846404b4",
+    "nb_policies": 2,
+    "declencheurs": "d41d8cd98f00b204e9800998ecf8427e",
+    "droits_colonnes": "2cd10fa8f5854433f99311d22b7bfd74"
+   }
+  },
+  "stockage": {
+   "seaux": {
+    "devis-pdf": false,
+    "realisations": true,
+    "artisan-logos": true
+   },
+   "policies": "916d011e1186307e182c26fa85806eae"
+  },
+  "fonctions": {
+   "is_admin()": {
+    "def": "7cfe90bf95b95e93379876acce2938bf",
+    "execute": [
+     "authenticated",
+     "service_role"
+    ]
+   },
+   "artisans_touch()": {
+    "def": "a848840a52611b6246ddababb2507da8",
+    "execute": [
+     "anon",
+     "authenticated",
+     "service_role"
+    ]
+   },
+   "set_updated_at()": {
+    "def": "90032f80b3ecf93b19596b88e87e698a",
+    "execute": [
+     "anon",
+     "authenticated",
+     "service_role"
+    ]
+   },
+   "devis_on_signed()": {
+    "def": "b352d6cb6353368276dabdd4c7b3bb54",
+    "execute": [
+     "service_role"
+    ]
+   },
+   "paiements_touch()": {
+    "def": "95fe5575450aafcad016b1814e8ee571",
+    "execute": [
+     "anon",
+     "authenticated",
+     "service_role"
+    ]
+   },
+   "log_devis_open(uuid)": {
+    "def": "3b4cf60a355fc48e79210fcee2b8f7b8",
+    "execute": [
+     "service_role"
+    ]
+   },
+   "get_devis_public(uuid)": {
+    "def": "d3a3f07bf51892b88910f807c88463fd",
+    "execute": [
+     "service_role"
+    ]
+   },
+   "artisan_du_client(uuid)": {
+    "def": "0d18a63b7f8867205a58c3132b3093c6",
+    "execute": [
+     "authenticated",
+     "service_role"
+    ]
+   },
+   "clients_garde_vendeur()": {
+    "def": "a01afd736aa6707007615941e765da26",
+    "execute": [
+     "service_role"
+    ]
+   },
+   "devis_enroll_relances()": {
+    "def": "75922bf32b044792f087ecc8f3eac538",
+    "execute": [
+     "service_role"
+    ]
+   },
+   "devis_id_du_jeton(text)": {
+    "def": "5b1202ae1c3ba1c5512ec58c30c73944",
+    "execute": [
+     "service_role"
+    ]
+   },
+   "get_devis_par_jeton(text)": {
+    "def": "4bce4e251cf6cab01f0a58a12738d968",
+    "execute": [
+     "anon",
+     "authenticated",
+     "service_role"
+    ]
+   },
+   "devis_perimer_brouillons()": {
+    "def": "4a3526d29fc351476089a8ee6a79a818",
+    "execute": [
+     "service_role"
+    ]
+   },
+   "feedbacks_touch_traite_le()": {
+    "def": "d0e7b52f6e5959ce524abc68bb25722c",
+    "execute": [
+     "anon",
+     "authenticated",
+     "service_role"
+    ]
+   },
+   "sign_devis_public(uuid,text)": {
+    "def": "aa0673acfcdc1c38b528f4de714ddd52",
+    "execute": [
+     "service_role"
+    ]
+   },
+   "sign_devis_interne(uuid,text)": {
+    "def": "c8968190a317077a7f3cee033b17545b",
+    "execute": [
+     "service_role"
+    ]
+   },
+   "log_devis_open_par_jeton(text)": {
+    "def": "34fe505dc801225884428e77cfa1b674",
+    "execute": [
+     "anon",
+     "authenticated",
+     "service_role"
+    ]
+   },
+   "sign_devis_par_jeton(text,text)": {
+    "def": "d3f139924d7bd31af67369aa6f2697e8",
+    "execute": [
+     "anon",
+     "authenticated",
+     "service_role"
+    ]
+   }
+  }
+ }
+}

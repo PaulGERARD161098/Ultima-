@@ -4,7 +4,7 @@
 // mais c'est la feuille de route complète du business : les jalons, les
 // blocages, ce qui n'a jamais tourné. Ça ne se sert pas en public — et le
 // middleware ne peut pas authentifier un fichier statique (la session Supabase
-// vit en localStorage, invisible de l'edge). D'où : une route, `requireUser`,
+// vit en localStorage, invisible de l'edge). D'où : une route, `requireProprietaire`,
 // et AUCUN fichier de Finubar servi en statique.
 //
 // La donnée est FIGÉE AU COMMIT : elle vient de `api/_lib/finubar-macro.mjs`,
@@ -23,7 +23,7 @@
 // sur la seule pièce qu'aucun harnais local ne peut vérifier.
 
 import macro from './_lib/finubar-macro.mjs';
-import { requireUser } from './_lib/supabase.js';
+import { requireProprietaire } from './_lib/proprietaire.js';
 import { ok, fail, methodNotAllowed } from './_lib/http.js';
 
 const ALLOWED = ['GET'];
@@ -31,9 +31,15 @@ const ALLOWED = ['GET'];
 export default async function handler(req, res) {
   if (!ALLOWED.includes(req.method)) return methodNotAllowed(res, ALLOWED);
 
-  const result = await requireUser(req);
+  // ⛔ PROPRIÉTAIRE SEULEMENT depuis le 04/10/2026. Mesuré ce jour-là :
+  // l'inscription au projet d'authentification est OUVERTE (e-mail, Google).
+  // `requireUser` laissait donc n'importe quel compte fraîchement créé lire la
+  // feuille de route de toute l'activité. Fermé par défaut sans réglage.
+  const result = await requireProprietaire(req);
   if (result.status === 'unconfigured') return fail(res, 503, 'Service non configuré');
   if (result.status === 'unauthenticated') return fail(res, 401, 'Authentification requise');
+  if (result.status === 'reserve_non_regle') return fail(res, 503, 'Accès réservé non réglé');
+  if (result.status !== 'ok') return fail(res, 403, 'Accès réservé');
 
   return ok(res, macro);
 }

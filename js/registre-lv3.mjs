@@ -377,23 +377,19 @@ export const NOEUDS = {
     resume: 'La quête de l’idéal : tes idéaux et les directions qui y mènent. '
       + 'Relié à RESHIRAM par le rétroplanning — l’idéal ne reste jamais en l’air.',
   },
-  // ZOH SHIA — LE DRAGON DE LA TECHNOLOGIE (Paul, 04/10/2026). Toute sa
-  // technique, regroupée. Premier élément : l'outil automatique de création de
-  // devis (RénoDevis), décrit pour être CLONÉ chez un autre artisan. Étoile
-  // d'attente comme IFULVIN : aucune cible tant que la fiche n'existe pas
-  // (boucle 2, cadrée à part). ⛔ La fiche POINTERA les sources de RénoDevis,
-  // elle ne les recopiera pas — une copie diverge du code.
+  // ZOH SHIA — LE DRAGON DE LA TECHNOLOGIE (Paul, 04/10/2026). Les technos déjà
+  // en service, à l'état pur, prêtes à déployer chez d'autres pros : un badge par
+  // techno, son contenu dedans. La page est une coque ; le plan vient de
+  // /api/zohshia, réservée au PROPRIÉTAIRE (l'inscription est ouverte : « être
+  // connecté » ne suffit pas). Les sources et les outils restent dans le dépôt.
   zohshia: {
     nom: 'ZOH SHIA',
     epithete: 'Dragon de la technologie',
-    etat: 'À venir',
+    etat: 'Ouvert',
     blason: 'portail',
-    cible: null,
-    // La techno vit dans le dépôt (`zohshia/`), PAS à l'écran : elle est la carte
-    // du système, non déployée. On l'invoque par la compétence `/zohshia`.
-    resume: 'Ta technologie, regroupée. Premier élément : RénoDevis — de quoi '
-      + 'il est fait, et comment l’ajouter chez un autre artisan. Elle vit dans '
-      + 'le dépôt privé et s’invoque par /zohshia.',
+    cible: 'zohshia.html',
+    resume: 'Tes technos déjà en service, prêtes à déployer chez d’autres pros. '
+      + 'Un badge par techno : ce qu’elle fait, la check-list du pro, sa mise en service.',
   },
 };
 

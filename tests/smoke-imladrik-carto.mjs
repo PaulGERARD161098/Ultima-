@@ -144,12 +144,13 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
     ['adramelech', 'adramelech.html'],
     ['reshiram', 'reshiram.html'],
     ['zekrom', 'zekrom.html'],
+    ['zohshia', 'zohshia.html'],
   ]) {
     verifier(`${id} → ${cible} (dans le repli sans JavaScript)`, cibles.includes(cible),
       JSON.stringify(cibles));
   }
-  verifier('Le repli sans JavaScript ne mène plus à TAO (sous verrou : six liens lus)',
-    cibles.length === 6 && !cibles.some((c) => /tao/i.test(c)) && !/\btao\b/i.test(repli.texte),
+  verifier('Le repli sans JavaScript ne mène plus à TAO (sous verrou : sept liens lus)',
+    cibles.length === 7 && !cibles.some((c) => /tao/i.test(c)) && !/\btao\b/i.test(repli.texte),
     JSON.stringify(cibles));
   verifier('Le repli sans JavaScript dit IFULVIN, sans lien (étoile d\'attente)',
     /IFULVIN/.test(repli.texte) && !cibles.some((c) => /ifulvin/i.test(c)),
@@ -315,8 +316,8 @@ console.log('— A2. imladrik.html#constellation-dragons : les six étoiles —'
       capsD.length === 7
       && (await page.locator(`g.ciel-etoile[data-noeud-id="${id}"]`).count()) === 0);
   }
-  verifier('DRAGONS : une seule étoile inerte, ZOH SHIA (les six autres ont leur page)',
-    capsD.length === 7 && capsD.filter((c) => c.avenir).map((c) => c.id).join() === 'zohshia');
+  verifier('DRAGONS : aucune étoile inerte — les sept ont leur page (ZOH SHIA depuis le 04/10/2026)',
+    capsD.length === 7 && capsD.filter((c) => c.avenir).length === 0);
   verifier('DRAGONS : le fil nomme le foyer (IMLADRIK › DRAGONS)',
     ((await page.locator('.ciel-fil-ici').textContent()) || '').trim() === 'DRAGONS');
   verifier('DRAGONS : retour vers omega.html toujours présent',
@@ -782,9 +783,9 @@ console.log('— C. ARMES et DRAGONS plongent ; IFULVIN, seul cap « à venir »
       dragons.length === 7
       && JSON.stringify(dragons.map((c) => c.id).sort()) === JSON.stringify([...NOEUDS['constellation-dragons'].enfants].sort()),
       dragons.map((c) => c.id).join(','));
-    // ZOH SHIA (04/10/2026) est une étoile d'attente : la SEULE inerte des DRAGONS.
-    verifier('DRAGONS : aria-disabled ⇔ inerte attendu (seul ZOH SHIA est inerte)',
-      reglesTenues(dragons) && dragons.filter((c) => c.avenir).map((c) => c.id).join() === 'zohshia');
+    // ZOH SHIA a sa page depuis le 04/10/2026 : plus aucune étoile inerte sous DRAGONS.
+    verifier('DRAGONS : aria-disabled ⇔ inerte attendu (aucune inerte)',
+      reglesTenues(dragons) && dragons.filter((c) => c.avenir).length === 0);
 
     // Zéro requête externe / zéro erreur : mesurés AVANT de quitter imladrik.html —
     // la page de destination du témoin (ci-dessous) n'est pas le sujet de cette
@@ -863,9 +864,9 @@ console.log('— C. ARMES et DRAGONS plongent ; IFULVIN, seul cap « à venir »
     verifier('Verrou : les trois écrans ont été lus (2 + 7 + 1 étoiles)',
       (surLesTroisEcrans.premier || []).length === 2 && (surLesTroisEcrans.dragons || []).length === 7
       && (surLesTroisEcrans.armes || []).length === 1);
-    // DEUX depuis le 04/10/2026 : IFULVIN (ARMES) et ZOH SHIA (DRAGONS).
-    verifier('Exactement DEUX caps à venir sur les trois écrans : IFULVIN et ZOH SHIA',
-      [...avenirsVus].sort().join() === 'ifulvin,zohshia', avenirsVus.join(','));
+    // UN depuis que ZOH SHIA a sa page (04/10/2026) : IFULVIN (ARMES).
+    verifier('Exactement UN cap à venir sur les trois écrans : IFULVIN',
+      [...avenirsVus].sort().join() === 'ifulvin', avenirsVus.join(','));
     // La même chose lue dans le REGISTRE, par la même descente (constellations seules).
     const feuillesSansPage = [];
     const descendre = (id) => (NOEUDS[id].enfants || []).forEach((e) => {
@@ -873,8 +874,8 @@ console.log('— C. ARMES et DRAGONS plongent ; IFULVIN, seul cap « à venir »
       else if (!NOEUDS[e].cible && !(NOEUDS[e].enfants || []).length) { feuillesSansPage.push(e); }
     });
     descendre('imladrik');
-    verifier('Le registre dit la même chose : deux caps sans page sous les constellations, IFULVIN et ZOH SHIA',
-      feuillesSansPage.join() === 'ifulvin,zohshia', feuillesSansPage.join(','));
+    verifier('Le registre dit la même chose : un seul cap sans page sous les constellations, IFULVIN',
+      feuillesSansPage.join() === 'ifulvin', feuillesSansPage.join(','));
   }
 }
 

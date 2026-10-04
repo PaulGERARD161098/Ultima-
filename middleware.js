@@ -95,7 +95,10 @@ export const PREFIXES_PRIVES = ['/adramelech', '/memoire', '/finubar', '/api/_li
 // dans sa coque (elle ne porte AUCUNE donnée : tout vient de `/api/finubar`,
 // authentifiée, et sans session elle se tait). Seul ce chemin exact passe ; tout
 // ce qui vit SOUS `/finubar/` reste bloqué.
-const CHEMINS_ANTICHAMBRE = ['/adramelech', '/finubar'];
+// `/zohshia` (04/10/2026), même motif : `zohshia.html` est une coque sans donnée ;
+// le plan des technos vient de `/api/zohshia`, réservée au PROPRIÉTAIRE. Le
+// dossier `zohshia/` (sources, outils) reste non déployé et non servi.
+const CHEMINS_ANTICHAMBRE = ['/adramelech', '/finubar', '/zohshia'];
 
 export function estCheminPrive(pathname) {
   // Normalisation défensive : décodage répété (variantes %2F / double-encodage)
