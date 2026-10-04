@@ -493,7 +493,7 @@ verifier('⑦ Un second clic descend encore d’un cran',
 // L'étage qu'on quitte, ce sont les deux ENTRÉES d'IMLADRIK (avant : MAEDRETHNIR, tête
 // vide de ce niveau) — leur absence, sous le verrou des six étoiles peintes.
 verifier('⑦ …et l’étage qu’on vient de quitter a disparu',
-  recursion.peints.length === 6
+  recursion.peints.length === 7
   && !recursion.peints.includes('constellation-armes') && !recursion.peints.includes(DEUXIEME),
   JSON.stringify(recursion.peints));
 verifier('⑦ …le fil d’Ariane compte les trois crans',

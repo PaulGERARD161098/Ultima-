@@ -177,7 +177,7 @@ dit('isoleDescendDUnCranQuelQueSoitLEtage',
 // thème montre ses enfants directs, et eux seuls.
 dit('isoleSAppliquePareilDeuxEtagesPlusBas',
   foyerDragons.noeuds.length === NOEUDS['constellation-dragons'].enfants.length
-  && foyerDragons.noeuds.length === 6
+  && foyerDragons.noeuds.length === 7
   && foyerDragons.noeuds.map((n) => n.id).join(',') === NOEUDS['constellation-dragons'].enfants.join(','));
 // TAO n'est isolable NULLE PART : il n'existe plus (ni comme foyer, ni comme
 // écran). `versCiel` d'un écran disparu rend null, jamais un ciel fantôme.
@@ -211,12 +211,21 @@ dit('isoleNommeLAmasDApresLeFoyerMemeAvecUneTeteVide',
 // TRANSPOSÉ (30/09) : `isoleDragonsMontreLesTroisDragons` (3 étoiles) devient SIX
 // — le compte n'est pas relâché, il est REFIXÉ, et verrouillé des deux côtés
 // (ni cinq, ni sept).
-dit('isoleDragonsMontreLesSixEtoiles',
+// REFIXÉ À SEPT (04/10/2026) : ZOH SHIA, le dragon de la technologie, rejoint les
+// six. Le compte reste verrouillé des deux côtés (ni six, ni huit).
+dit('isoleDragonsMontreLesSeptEtoiles',
   foyerDragons.isole === 'constellation-dragons'
-  && foyerDragons.noeuds.map((n) => n.id).join(',') === 'maedrethnir,vranesh,draukhain,adramelech,reshiram,zekrom'
-  && foyerDragons.noeuds.map((n) => n.nom).join(',') === 'MAEDRETHNIR,VRANESH,DRAUKHAIN,ADRAMELECH,RESHIRAM,ZEKROM');
+  && foyerDragons.noeuds.map((n) => n.id).join(',') === 'maedrethnir,vranesh,draukhain,adramelech,reshiram,zekrom,zohshia'
+  && foyerDragons.noeuds.map((n) => n.nom).join(',') === 'MAEDRETHNIR,VRANESH,DRAUKHAIN,ADRAMELECH,RESHIRAM,ZEKROM,ZOH SHIA');
+// L'ÉPITHÈTE TRAVERSE L'ADAPTATEUR (04/10/2026). Sans ce passage, le registre la
+// porterait et le ciel ne la verrait jamais — un champ écrit et jamais lu.
+dit('isoleDragonsPorteLesEpithetes',
+  foyerDragons.noeuds.map((n) => n.epithete).join('|') === ['Dragon de la vérité', 'Dragon du futur',
+    'Dragon du serment', 'Dragon de l’imagination', 'Dragon de la réalité', 'Dragon de l’idéal',
+    'Dragon de la technologie'].join('|'));
+dit('isoleArmesSansEpithete', foyerArmes.noeuds.every((n) => n.epithete === ''));
 dit('isoleDragonsNommeSonAmasDRAGONS',
-  foyerDragons.noeuds.length === 6
+  foyerDragons.noeuds.length === 7
   && foyerDragons.noeuds.every((n) => n.secteur_activite === 'DRAGONS'));
 // TRANSPOSÉ (30/09) : l'ancien « toutes des feuilles, rang 0 » était vrai des
 // trois dragons ; ADRAMELECH, arrivé chez eux, n'est PAS une feuille — il porte
@@ -225,18 +234,21 @@ dit('isoleDragonsNommeSonAmasDRAGONS',
 // au premier niveau d'IMLADRIK. Le verdict ne se relâche pas : les cinq autres
 // restent des feuilles de rang 0, et ADRAMELECH est le SEUL de rang 1 — lu dans
 // le registre, pas supposé.
+// ZOH SHIA (04/10) est une étoile d'ATTENTE : sans page, comme IFULVIN — sa
+// cible est exigée NULLE, pas seulement tolérée.
 dit('isoleDragonsGardeLesCiblesDesPages',
-  foyerDragons.noeuds.length === 6
-  && foyerDragons.noeuds.every((n) => n.cible === NOEUDS[n.id].cible && /\.html$/.test(n.cible))
+  foyerDragons.noeuds.length === 7
+  && foyerDragons.noeuds.every((n) => n.cible === NOEUDS[n.id].cible
+    && (n.id === 'zohshia' ? n.cible === null : /\.html$/.test(n.cible)))
   && foyerDragons.noeuds.filter((n) => n.poids === 0).map((n) => n.id).join(',')
-    === 'maedrethnir,vranesh,draukhain,reshiram,zekrom'
+    === 'maedrethnir,vranesh,draukhain,reshiram,zekrom,zohshia'
   && foyerDragons.noeuds.filter((n) => n.poids === 1).map((n) => n.id).join(',') === 'adramelech'
   && Array.isArray(NOEUDS.adramelech.enfants) && NOEUDS.adramelech.enfants.length === 3);
 // INVERSÉ (30/09) : `adramelech` sortait de cette liste d'absents — il est
 // désormais l'une des six étoiles des DRAGONS, et il est exigé PRÉSENT ci-dessus.
 // `tao` y reste : il n'est plus nulle part.
 dit('isoleDragonsNePeintNiLeFoyerNiLesFreres',
-  foyerDragons.noeuds.length === 6
+  foyerDragons.noeuds.length === 7
   && ['constellation-dragons', 'constellation-armes', 'ifulvin', 'tao', 'imladrik']
     .every((id) => !foyerDragons.noeuds.some((n) => n.id === id)));
 dit('isoleArmesMontreIfulvinSeul',

@@ -264,7 +264,9 @@ body.a-leo-dock .ciel-noeud-plateau > .ciel-legende { display: none; }
   fill: var(--stellar-text-primary, #f2ead6);
 }
 .ciel-noeud-plateau .ciel-etoile:hover .ciel-nom,
-.ciel-noeud-plateau .ciel-etoile:focus-visible .ciel-nom { fill: #ffffff; }
+.ciel-noeud-plateau .ciel-etoile:focus-visible .ciel-nom,
+.ciel-noeud-plateau .ciel-etoile:hover .ciel-epithete,
+.ciel-noeud-plateau .ciel-etoile:focus-visible .ciel-epithete { fill: #ffffff; }
 
 /* ---- ③ La légende gravée, sous le ciel ---- */
 .ciel-legende {

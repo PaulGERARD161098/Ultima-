@@ -205,6 +205,7 @@ export const NOEUDS = {
 
   adramelech: {
     nom: 'ADRAMELECH',
+    epithete: 'Dragon de l’imagination',
     etat: 'Privé',
     blason: 'ouroboros',
     cible: 'adramelech.html',
@@ -292,8 +293,8 @@ export const NOEUDS = {
     cible: null,
     constellation: true,
     nebuleuse: 'dragons',
-    resume: 'La constellation des DRAGONS : le journal, les futurs, la '
-      + 'volonté, la bibliothèque d’idées, et le couple RESHIRAM ⇄ ZEKROM.',
+    resume: 'La constellation des DRAGONS : la vérité, le futur, le serment, '
+      + 'l’imagination, le couple RESHIRAM ⇄ ZEKROM — et la technologie.',
     titre: 'La constellation des dragons',
     surligne: 'Imladrik — les dragons',
     invite: 'Léo te guide — survole un cap.',
@@ -303,7 +304,11 @@ export const NOEUDS = {
     // étoiles entre elles, sauf RESHIRAM et ZEKROM »). Aucun trait de figure
     // sur cet écran ; seule la passerelle du registre relie les deux jumeaux.
     asterisme: false,
-    enfants: ['maedrethnir', 'vranesh', 'draukhain', 'adramelech', 'reshiram', 'zekrom'],
+    // L'ÉPITHÈTE (Paul, 04/10/2026) : chaque dragon s'affiche « NOM » puis, en
+    // seconde ligne, « Dragon de… ». Ce sont ses mots, recopiés tels quels ;
+    // l'état (« Ouvert », « Privé ») ne s'affiche plus pour ces étoiles.
+    enfants: ['maedrethnir', 'vranesh', 'draukhain', 'adramelech', 'reshiram', 'zekrom',
+      'zohshia'],
   },
   // IFULVIN — ÉTOILE D'ATTENTE (Paul, 2026-09-29). Nom, état, une phrase, AUCUNE
   // cible : aucune page promise. ⛔ LE NOM S'ÉCRIT « IFULVIN » — jamais abrégé.
@@ -319,6 +324,7 @@ export const NOEUDS = {
   },
   maedrethnir: {
     nom: 'MAEDRETHNIR',
+    epithete: 'Dragon de la vérité',
     etat: 'Ouvert',
     blason: 'plume',
     cible: 'maedrethnir.html',
@@ -327,6 +333,7 @@ export const NOEUDS = {
   },
   vranesh: {
     nom: 'VRANESH',
+    epithete: 'Dragon du futur',
     etat: 'Ouvert',
     blason: 'bifurcation',
     cible: 'vranesh.html',
@@ -336,6 +343,7 @@ export const NOEUDS = {
   },
   draukhain: {
     nom: 'DRAUKHAIN',
+    epithete: 'Dragon du serment',
     etat: 'Ouvert',
     blason: 'flamme',
     cible: 'draukhain.html',
@@ -350,6 +358,7 @@ export const NOEUDS = {
   // leur passerelle (« ⇄ rétroplanning »). `/tao` redirige vers les DRAGONS.
   reshiram: {
     nom: 'RESHIRAM',
+    epithete: 'Dragon de la réalité',
     etat: 'Ouvert',
     blason: 'aileBlanche',
     cible: 'reshiram.html',
@@ -361,11 +370,28 @@ export const NOEUDS = {
   },
   zekrom: {
     nom: 'ZEKROM',
+    epithete: 'Dragon de l’idéal',
     etat: 'Ouvert',
     blason: 'aileNoire',
     cible: 'zekrom.html',
     resume: 'La quête de l’idéal : tes idéaux et les directions qui y mènent. '
       + 'Relié à RESHIRAM par le rétroplanning — l’idéal ne reste jamais en l’air.',
+  },
+  // ZOH SHIA — LE DRAGON DE LA TECHNOLOGIE (Paul, 04/10/2026). Toute sa
+  // technique, regroupée. Premier élément : l'outil automatique de création de
+  // devis (RénoDevis), décrit pour être CLONÉ chez un autre artisan. Étoile
+  // d'attente comme IFULVIN : aucune cible tant que la fiche n'existe pas
+  // (boucle 2, cadrée à part). ⛔ La fiche POINTERA les sources de RénoDevis,
+  // elle ne les recopiera pas — une copie diverge du code.
+  zohshia: {
+    nom: 'ZOH SHIA',
+    epithete: 'Dragon de la technologie',
+    etat: 'À venir',
+    blason: 'portail',
+    cible: null,
+    resume: 'Ta technologie, regroupée. Premier élément : l’outil automatique '
+      + 'de création de devis et tout son fonctionnement, pour le cloner '
+      + 'rapidement chez un autre artisan.',
   },
 };
 

@@ -91,6 +91,14 @@
   // de 30 px. 20 px = échelle 2,0 ; RIVEN plafonne à 1,65 même zoom à fond
   // (ZOOM_MIN 0,55), donc ce plafond ne peut pas le toucher.
   var PLAFOND_NOM = 20;
+  // L'ÉPITHÈTE — la seconde ligne d'un nom (« Dragon du futur », Paul,
+  // 04/10/2026). Un `<text>` À PART, jamais un `<tspan>` : le texte de
+  // `.ciel-nom` reste le nom seul, que vingt harnais lisent et comparent.
+  // Ses deux mesures sont exprimées en tailles de police du NOM : la police de
+  // l'épithète, et l'écart entre les deux lignes de base. Tout ce qui borne la
+  // boîte d'un nom (croisements, retrait des traits, cadrage) en tient compte.
+  var RAPPORT_EPITHETE = 0.78;
+  var INTERLIGNE_EPITHETE = 1.15;
   // Plafond de la cible du doigt, en unités : 44 px sur une scène à l'échelle
   // 0,5 donnent 44 — au-delà, c'est une scène effondrée, pas un téléphone.
   var PLAFOND_CIBLE = 44;
@@ -1286,11 +1294,39 @@
     // Les étoiles : une fiche = une étoile.
     var gEtoiles = svg('g', { 'font-family': 'Georgia, "Times New Roman", serif' });
     var pieces = [];
+    var aEpithete = Object.create(null);
+    // L'épithète SUIT son nom : même x, ligne de base un cran plus bas, police
+    // proportionnelle (jamais sous le plancher de lisibilité), même opacité et
+    // mêmes états (tu, approché). Appelée après CHAQUE pose d'un nom — une
+    // seconde ligne qui garde l'ancienne place d'un nom déplacé croiserait le
+    // nom voisin, c'est-à-dire exactement ce que la pose venait d'éviter.
+    function suivreNom(p) {
+      if (!p.epi) { return; }
+      var fs = parseFloat(p.nom.getAttribute('font-size')) || 9.5;
+      var y = parseFloat(p.nom.getAttribute('y'));
+      p.epi.setAttribute('x', p.nom.getAttribute('x') || '0');
+      p.epi.setAttribute('text-anchor', p.nom.getAttribute('text-anchor') || 'middle');
+      if (Number.isFinite(y)) { p.epi.setAttribute('y', (y + fs * INTERLIGNE_EPITHETE).toFixed(1)); }
+      p.epi.setAttribute('font-size', Math.max(plancherNom(), fs * RAPPORT_EPITHETE).toFixed(1));
+      var op = p.nom.getAttribute('opacity');
+      if (op !== null) { p.epi.setAttribute('opacity', op); }
+      ['ciel-nom--tu', 'ciel-nom--approche'].forEach(function (c) {
+        p.epi.classList.toggle(c, p.nom.classList.contains(c));
+      });
+    }
+    // La largeur PEINTE d'un nom : la plus longue de ses deux lignes.
+    function largeurPeinte(p) {
+      var l = 0, le = 0;
+      try { l = p.nom.getComputedTextLength(); } catch (e) { l = 0; }
+      if (p.epi) { try { le = p.epi.getComputedTextLength(); } catch (e) { le = 0; } }
+      return Math.max(l, le);
+    }
     monde.etoiles.forEach(function (e) {
       var noeud = e.noeud;
       var mag = mags[noeud.id] || 0;
       var couleur = COULEURS_NUIT[noeud.type] || COULEUR_DEFAUT;
       var nomComplet = noeud.nom || '(sans nom)';
+      var epithete = typeof noeud.epithete === 'string' ? noeud.epithete.trim() : '';
       var libelleType = libelles[noeud.type] || noeud.type || '';
       var libelleStatut = statuts[noeud.statut] || noeud.statut || '';
       var g = svg('g', {
@@ -1299,14 +1335,14 @@
         // du 30/09). Elles le redeviennent dans la nébuleuse approchée.
         'class': 'ciel-etoile', tabindex: modeNebuleuses ? '-1' : '0', role: 'button',
         'data-noeud-id': noeud.id,
-        'aria-label': nomComplet + ', ' + libelleType +
+        'aria-label': nomComplet + (epithete ? ', ' + epithete : '') + ', ' + libelleType +
           (e.groupe.parNebuleuse ? ', nébuleuse ' + e.groupe.label
             : (e.groupe.cle === CLE_A_CLASSER ? ', sans secteur' : ', secteur ' + e.groupe.label)) +
           (libelleStatut ? ', ' + libelleStatut : '') +
           ', ' + mag + ' lien' + (mag > 1 ? 's' : '')
       });
       var titre = svg('title');
-      titre.textContent = nomComplet;
+      titre.textContent = epithete ? nomComplet + ' — ' + epithete : nomComplet;
       g.appendChild(titre);
       var haloChoix = svg('circle', { 'class': 'ciel-halo-choix', fill: 'none', stroke: '#d8bd82', 'stroke-width': '1.2' });
       var haloFocus = svg('circle', { 'class': 'ciel-halo-focus', fill: 'none', stroke: '#fffaf0', 'stroke-width': '1' });
@@ -1331,9 +1367,16 @@
         'text-anchor': 'middle', fill: '#e8dfc8', 'font-size': '9.5',
         opacity: permanent ? '0.85' : '0'
       }, tronquer(nomComplet, 20));
+      // `aria-hidden` : l'épithète est déjà dite par l'`aria-label` du groupe.
+      var epi = epithete ? texteSvg({
+        'class': 'ciel-epithete' + (permanent ? '' : ' ciel-nom--demande'),
+        'text-anchor': 'middle', fill: '#e8dfc8', 'aria-hidden': 'true',
+        'font-size': (9.5 * RAPPORT_EPITHETE).toFixed(1),
+        opacity: permanent ? '0.85' : '0'
+      }, tronquer(epithete, 32)) : null;
       var zone = svg('circle', { 'class': 'ciel-zone', fill: '#000000', 'fill-opacity': '0' });
-      [haloChoix, haloFocus, lueur, branches, corolle, coeur, nom, zone].forEach(function (el) {
-        g.appendChild(el);
+      [haloChoix, haloFocus, lueur, branches, corolle, coeur, nom, epi, zone].forEach(function (el) {
+        if (el) { g.appendChild(el); }
       });
       // ---- POURQUOI L'ÉTOILE N'EST PAS UNE ANCRE ----------------------------
       // La boussole faisait de chaque cap un `<a href>`. On a ESSAYÉ de porter
@@ -1347,8 +1390,9 @@
       gEtoiles.appendChild(g);
       pieces.push({
         etoile: e, g: g, haloChoix: haloChoix, haloFocus: haloFocus, lueur: lueur,
-        branches: branches, corolle: corolle, coeur: coeur, nom: nom, zone: zone, mag: mag
+        branches: branches, corolle: corolle, coeur: coeur, nom: nom, epi: epi, zone: zone, mag: mag
       });
+      if (epi) { aEpithete[noeud.id] = true; }
     });
     // Lot 3 : la brume se clique. Une zone invisible par nébuleuse, posée SOUS
     // les étoiles — une étoile touchée ouvre toujours sa fiche.
@@ -1688,18 +1732,19 @@
         var fs = parseFloat(p.nom.getAttribute('font-size')) || 10;
         if (largeurNom[id] === undefined) {
           var l = 0;
-          try { l = p.nom.getComputedTextLength(); } catch (e) { l = 0; }
+          l = largeurPeinte(p);
           if (l > 0) { largeurNom[id] = l / fs; }
         }
         var w = (largeurNom[id] || 0.55 * (p.nom.textContent || '').length) * fs;
         var r = pr.rayon || 4;
-        var poses = [pr.sy + r * 3.6 + 9, pr.sy - r * 2.2 - 4];
+        var bas = p.epi ? fs * INTERLIGNE_EPITHETE : 0;
+        var poses = [pr.sy + r * 3.6 + 9, pr.sy - r * 2.2 - 4 - bas];
         var choisie = null;
         for (var i = 0; i < poses.length && choisie === null; i++) {
           var y = poses[i];
           // La boîte du TEXTE PEINT : jambages et accents compris (mesuré — la
           // boîte « 0,85 / 0,3 » laissait deux noms se toucher à 300 fiches).
-          var b = { x0: pr.sx - w / 2 - 3, x1: pr.sx + w / 2 + 3, y0: y - fs * 1.0, y1: y + fs * 0.35 };
+          var b = { x0: pr.sx - w / 2 - 3, x1: pr.sx + w / 2 + 3, y0: y - fs * 1.0, y1: y + fs * 0.35 + bas };
           var libre = b.x0 >= 0 && b.x1 <= vbW
             && !boites.some(function (c) { return croiseBoite(b, c); })
             && !coeurs.some(function (c) { return c.id !== id && croiseCoeur(b, c); });
@@ -1707,6 +1752,7 @@
         }
         if (choisie !== null) { p.nom.setAttribute('y', choisie.toFixed(1)); }
         p.nom.classList.toggle('ciel-nom--tu', choisie === null);
+        suivreNom(p);
       });
     }
     function appliquerApproche() {
@@ -1717,6 +1763,7 @@
         p.g.setAttribute('tabindex', dedans ? '0' : '-1');
         p.nom.classList.toggle('ciel-nom--approche', dedans);
         if (!dedans) { p.nom.classList.remove('ciel-nom--tu'); }
+        suivreNom(p);
       });
       // Les personnes rattachées suivent leur étoile : elles ne pâlissent pas
       // avec les autres nébuleuses.
@@ -2021,6 +2068,9 @@
         var proche = pr.profondeur < cam.distance - rayonRef * 0.25;
         piece.nom.setAttribute('x', x);
         piece.nom.setAttribute('y', (y + rayon * 3.6 + 9).toFixed(1));
+        // Remis au centre à chaque image : seule la pose de côté (plus bas)
+        // l'ancre ailleurs, et elle se recalcule à chaque image elle aussi.
+        piece.nom.setAttribute('text-anchor', 'middle');
         piece.nom.setAttribute('font-size',
           Math.max(plancherNom(), Math.min(plafondNom, 10 * pr.echelle)).toFixed(1));
         if (!piece.nom.classList.contains('ciel-nom--demande')) {
@@ -2041,6 +2091,7 @@
           piece.nom.setAttribute('opacity',
             attenue ? '0.25' : (tousLesNoms ? '1' : (proche ? '0.85' : '0.25')));
         }
+        suivreNom(piece);
       });
 
       // LES NOMS DISENT AU CADRAGE LA PLACE QU'ILS PRENNENT — une fois, à la
@@ -2058,8 +2109,8 @@
         var plusLarge = 0;
         pieces.forEach(function (piece) {
           var police = parseFloat(piece.nom.getAttribute('font-size')) || 1;
-          var largeur = 0;
-          try { largeur = piece.nom.getComputedTextLength(); } catch (e) { largeur = 0; }
+          // Les deux lignes : l'épithète est parfois plus large que le nom.
+          var largeur = largeurPeinte(piece);
           // Largeur ramenée au plafond de police : la borne supérieure.
           var auPlafond = largeur > 0 ? largeur * (plafondNom / police) : 0;
           brut.push({ id: piece.etoile.noeud.id, largeur: auPlafond });
@@ -2101,6 +2152,9 @@
       // croisé vaut mieux qu'un nom poussé sous le mobilier.
       // Le retrait des traits de la figure suit (`retrait`, plus bas).
       var nomDessus = Object.create(null);
+      // Un nom posé À CÔTÉ de son étoile : sa boîte, relative à l'étoile, pour
+      // que le retrait des traits la connaisse comme il connaît `nomDessus`.
+      var nomCote = Object.create(null);
       if (cadrageSerre && tousLesNoms && pieces.length > 1) {
         var boitesNoms = [];
         pieces.forEach(function (piece) {
@@ -2108,31 +2162,80 @@
           if (!prN || piece.g.getAttribute('display') === 'none' || demiNoms[idN] === undefined) { return; }
           var fsN = parseFloat(piece.nom.getAttribute('font-size')) || 10;
           var rN = prN.rayon || R_ETOILE_MIN;
+          // `bas` : la hauteur que l'épithète ajoute SOUS la ligne de base du nom.
+          // Posé au-dessus de l'étoile, le nom monte d'autant — sans quoi sa
+          // seconde ligne tomberait sur l'étoile.
+          var basN = piece.epi ? fsN * INTERLIGNE_EPITHETE : 0;
           boitesNoms.push({
-            id: idN, nom: piece.nom, x: prN.sx, sy: prN.sy, fs: fsN,
+            id: idN, nom: piece.nom, piece: piece, bas: basN, x: prN.sx, sy: prN.sy, fs: fsN,
             // `demiNoms` est mesuré au PLAFOND de police : ramené ici à la
             // police réellement peinte.
             hw: demiNoms[idN] * (fsN / plafondNom),
-            yBas: prN.sy + rN * 3.6 + 9, yHaut: prN.sy - rN * 2.6 - 3
+            yBas: prN.sy + rN * 3.6 + 9, yHaut: prN.sy - rN * 2.6 - 3 - basN
           });
         });
-        boitesNoms.forEach(function (b) { b.y = b.yBas; });
-        var boiteNom = function (b, y) {
-          return { x0: b.x - b.hw, x1: b.x + b.hw, y0: y - b.fs * 0.8, y1: y + b.fs * 0.3 };
+        boitesNoms.forEach(function (b) { b.y = b.yBas; b.ancre = 'middle'; b.ax = b.x; });
+        // La boîte d'un nom selon sa pose : centré (dessous, dessus), ou ancré
+        // à gauche (`start`, posé à droite de l'étoile) ou à droite (`end`).
+        var boiteNom = function (b, y, ancre, ax) {
+          ancre = ancre || b.ancre; ax = ax === undefined ? b.ax : ax;
+          var x0 = ancre === 'start' ? ax : (ancre === 'end' ? ax - 2 * b.hw : ax - b.hw);
+          return { x0: x0, x1: x0 + 2 * b.hw, y0: y - b.fs * 0.8, y1: y + b.fs * 0.3 + b.bas };
         };
         var seCroisent = function (u, v) { return u.x0 < v.x1 && v.x0 < u.x1 && u.y0 < v.y1 && v.y0 < u.y1; };
+        // UN NOM À DEUX LIGNES DESCEND PLUS BAS : sa seconde ligne peut tomber
+        // sur le CŒUR de l'étoile du dessous (mesuré à 300 et 390 px sur les
+        // DRAGONS, `tests/smoke-dragons-epithetes.mjs`). Pour lui seul, les
+        // cœurs comptent comme des obstacles — les noms d'une ligne gardent la
+        // règle d'hier, à l'identique.
+        var coeursN = boitesNoms.map(function (b) {
+          var rC = (projetes[b.id].rayon || R_ETOILE_MIN) * 1.6;
+          return { id: b.id, x0: b.x - rC, x1: b.x + rC, y0: b.sy - rC, y1: b.sy + rC };
+        });
+        var heurteUnCoeur = function (a, boite) {
+          return a.bas > 0 && coeursN.some(function (c) { return c.id !== a.id && seCroisent(boite, c); });
+        };
         boitesNoms.sort(function (u, v) { return u.sy - v.sy; });
+        var estLibre = function (a, boite) {
+          return !heurteUnCoeur(a, boite)
+            && boitesNoms.every(function (b) { return b === a || !seCroisent(boite, boiteNom(b, b.y)); });
+        };
         boitesNoms.forEach(function (a) {
           var enBas = boiteNom(a, a.yBas);
-          var gene = boitesNoms.some(function (b) { return b !== a && seCroisent(enBas, boiteNom(b, b.y)); });
-          if (!gene) { return; }
+          if (estLibre(a, enBas)) { return; }
+          // Dessus d'abord — la règle d'hier, inchangée pour un nom d'une ligne.
           var enHaut = boiteNom(a, a.yHaut);
-          if (enHaut.y0 < mUtile.haut + 2) { return; }
-          var libre = boitesNoms.every(function (b) { return b === a || !seCroisent(enHaut, boiteNom(b, b.y)); });
-          if (!libre) { return; }
-          a.y = a.yHaut;
-          nomDessus[a.id] = true;
-          a.nom.setAttribute('y', a.yHaut.toFixed(1));
+          if (enHaut.y0 >= mUtile.haut + 2 && estLibre(a, enHaut)) {
+            a.y = a.yHaut;
+            nomDessus[a.id] = true;
+            a.nom.setAttribute('y', a.yHaut.toFixed(1));
+            suivreNom(a.piece);
+            return;
+          }
+          // À CÔTÉ — pour un nom À DEUX LIGNES seulement (04/10/2026). Mesuré
+          // sur les DRAGONS de 360 à 414 px : DRAUKHAIN, bloqué dessous par le
+          // cœur d'ADRAMELECH et dessus par l'épithète de VRANESH, n'avait
+          // aucune place, et sa seconde ligne mordait sur l'étoile voisine. Les
+          // cartes gravées posent alors le nom à côté de l'étoile, centré sur
+          // elle : à droite d'abord, sinon à gauche. Un nom d'une ligne n'y
+          // passe jamais — son comportement reste celui d'hier, au pixel.
+          if (!(a.bas > 0)) { return; }
+          var rA = (projetes[a.id].rayon || R_ETOILE_MIN);
+          var ecart = rA * 2.6 + 4;
+          var yCote = a.sy - (a.bas - 0.5 * a.fs) / 2;
+          var cotes = [['start', a.x + ecart], ['end', a.x - ecart]];
+          for (var ci = 0; ci < cotes.length; ci++) {
+            var bc = boiteNom(a, yCote, cotes[ci][0], cotes[ci][1]);
+            if (bc.x0 < 2 || bc.x1 > vbW - 2 || bc.y0 < mUtile.haut + 2) { continue; }
+            if (!estLibre(a, bc)) { continue; }
+            a.y = yCote; a.ancre = cotes[ci][0]; a.ax = cotes[ci][1];
+            nomCote[a.id] = { bx0: bc.x0 - a.x, bx1: bc.x1 - a.x, base: yCote - a.sy };
+            a.nom.setAttribute('x', a.ax.toFixed(1));
+            a.nom.setAttribute('y', yCote.toFixed(1));
+            a.nom.setAttribute('text-anchor', a.ancre);
+            suivreNom(a.piece);
+            return;
+          }
         });
       }
 
@@ -2167,9 +2270,13 @@
         var fs = Math.max(plancherNom(), Math.min(plafondNom, 10 * p.echelle));
         // Le nom est SOUS l'étoile, sauf s'il est passé au-dessus pour ne pas en
         // croiser un autre (plus haut) : le rectangle suit la pose réelle.
-        var base = nomDessus[id] ? -(r * 2.6 + 3) : r * 3.6 + 9;
+        var basE = aEpithete[id] ? fs * INTERLIGNE_EPITHETE : 0;
+        var base = nomDessus[id] ? -(r * 2.6 + 3 + basE) : r * 3.6 + 9;
         var hw = demiNoms[id] || 40;
-        var bx0 = -hw, bx1 = hw, by0 = base - fs * 0.8, by1 = base + fs * 0.3;
+        var bx0 = -hw, bx1 = hw;
+        // Posé à côté : la boîte retenue par la pose, telle quelle.
+        if (nomCote[id]) { bx0 = nomCote[id].bx0; bx1 = nomCote[id].bx1; base = nomCote[id].base; }
+        var by0 = base - fs * 0.8, by1 = base + fs * 0.3 + basE;
         var tmin = -Infinity, tmax = Infinity;
         if (Math.abs(ux) < 1e-9) { if (bx0 > 0 || bx1 < 0) { return halo; } }
         else { var a1 = bx0 / ux, a2 = bx1 / ux; tmin = Math.max(tmin, Math.min(a1, a2)); tmax = Math.min(tmax, Math.max(a1, a2)); }

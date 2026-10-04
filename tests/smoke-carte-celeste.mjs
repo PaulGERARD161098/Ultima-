@@ -110,8 +110,8 @@ const TAILLES = [[390, 844], [1280, 800]];
   // DRAGONS avec ses trois caps, est la tête, et le rang s'y exige désormais.
   const capsDragons = NOEUDS['constellation-dragons'].enfants;
   const tetesDragons = capsDragons.filter((id) => (NOEUDS[id].enfants || []).length > 0);
-  verifier('DRAGONS : deux rangs — cinq feuilles, une tête (ADRAMELECH)',
-    capsDragons.length === 6 && tetesDragons.join() === 'adramelech',
+  verifier('DRAGONS : deux rangs — six feuilles, une tête (ADRAMELECH)',
+    capsDragons.length === 7 && tetesDragons.join() === 'adramelech',
     `${tetesDragons.join()} sur ${capsDragons.length}`);
   // NON-VACUITÉ DE CE QUI RESTE : l'assertion du rang n'a pas disparu, elle a
   // changé d'écrans. Il en reste au moins deux (racine, OMEGA) qui l'exigent, et

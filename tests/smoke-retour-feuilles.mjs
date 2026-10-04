@@ -156,8 +156,12 @@ const DRAGONS = [
 ];
 const LIBELLE_COURT = ['adramelech', 'reshiram', 'zekrom'];
 const RETOUR_DRAGONS = 'imladrik.html#constellation-dragons';
-verifier('Verrou : les six pages sont bien les enfants de la constellation DRAGONS',
-  JSON.stringify(NOEUDS['constellation-dragons'].enfants) === JSON.stringify(DRAGONS.map((d) => d[0])));
+// ZOH SHIA (04/10/2026) est un enfant SANS page : il n'a pas de retour à
+// éprouver, et le verrou le dit au lieu de l'ignorer.
+verifier('Verrou : les six pages sont bien les enfants À PAGE de la constellation DRAGONS (ZOH SHIA, sans page, à part)',
+  JSON.stringify(NOEUDS['constellation-dragons'].enfants.filter((id) => NOEUDS[id].cible))
+    === JSON.stringify(DRAGONS.map((d) => d[0]))
+  && JSON.stringify(NOEUDS['constellation-dragons'].enfants.filter((id) => !NOEUDS[id].cible)) === '["zohshia"]');
 
 // Ce que le ciel montre à l'arrivée, mesuré dans un navigateur mobile.
 async function etoilesApresLeRetour(idDragon, fichier) {
@@ -209,10 +213,10 @@ for (const [id, fichier] of DRAGONS) {
   verifier(`${fichier} : le suivre est possible (lien cliquable au doigt)`, r.suivi, r.raison);
   verifier(`${fichier} : le retour arrive sur ${RETOUR_DRAGONS}`,
     r.arrivee.endsWith('/' + RETOUR_DRAGONS), r.arrivee);
-  verifier(`${fichier} : le ciel y est isolé sur DRAGONS — les six étoiles, dont ADRAMELECH, RESHIRAM et ZEKROM`,
-    r.etoiles.length === 6
+  verifier(`${fichier} : le ciel y est isolé sur DRAGONS — les sept étoiles, dont ADRAMELECH, RESHIRAM, ZEKROM et ZOH SHIA`,
+    r.etoiles.length === 7
     && JSON.stringify(r.etoiles.map((e) => e.nom).sort())
-      === JSON.stringify(['ADRAMELECH', 'DRAUKHAIN', 'MAEDRETHNIR', 'RESHIRAM', 'VRANESH', 'ZEKROM']),
+      === JSON.stringify(['ADRAMELECH', 'DRAUKHAIN', 'MAEDRETHNIR', 'RESHIRAM', 'VRANESH', 'ZEKROM', 'ZOH SHIA']),
     JSON.stringify(r.etoiles.map((e) => e.nom)));
 }
 // LE TÉMOIN, pour que « trois étoiles » ne soit pas vert d'un instrument qui

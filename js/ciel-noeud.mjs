@@ -291,7 +291,11 @@ export function rendre(idNoeud, options = {}) {
     parole.innerHTML =
       (blason ? '<span class="parole-blason">' + blason + '</span>' : '')
       + '<p class="parole-nom">' + echapper(cap.nom) + '</p>'
-      + '<p class="parole-etat">' + echapper(cap.etat) + '</p>'
+      // L'ÉPITHÈTE REMPLACE L'ÉTAT quand le cap en porte une (les DRAGONS,
+      // Paul, 04/10/2026 : « ne s'affiche comme titre que ça »).
+      + (cap.epithete
+        ? '<p class="parole-etat parole-epithete">' + echapper(cap.epithete) + '</p>'
+        : '<p class="parole-etat">' + echapper(cap.etat) + '</p>')
       + (signal ? '<p class="parole-signal">À traiter — ' + echapper(signal) + '</p>' : '')
       + (vivante ? '<p class="parole-cockpit">En cours — ' + echapper(vivante) + '</p>' : '')
       + '<p class="parole-texte">' + echapper(cap.resume) + '</p>'

@@ -223,9 +223,13 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
   // les futurs, la volonté, la bibliothèque d'idées) et nomme le COUPLE qui vient
   // d'y entrer. On exige donc ces cinq contenus, dans la parole lue (et non dans le
   // registre) — l'assertion n'est pas relâchée, elle suit la phrase.
-  verifier('Survol DRAGONS : la parole dit ce que la constellation contient (journal, futurs, volonté, bibliothèque d\'idées, RESHIRAM ⇄ ZEKROM)',
-    /journal/.test(parole) && /futurs/.test(parole) && /volonté/.test(parole)
-    && /bibliothèque d.idées/.test(parole) && /RESHIRAM/.test(parole) && /ZEKROM/.test(parole),
+  // REFORMULÉ LE 04/10/2026 : la phrase parle désormais la langue des
+  // épithètes (vérité, futur, serment, imagination) et nomme ZOH SHIA par la
+  // technologie. Même exigence : chaque contenu, lu dans la parole.
+  verifier('Survol DRAGONS : la parole dit ce que la constellation contient (vérité, futur, serment, imagination, RESHIRAM ⇄ ZEKROM, technologie)',
+    /vérité/.test(parole) && /futur/.test(parole) && /serment/.test(parole)
+    && /imagination/.test(parole) && /RESHIRAM/.test(parole) && /ZEKROM/.test(parole)
+    && /technologie/.test(parole),
     parole.slice(0, 220));
 
   // 6. Retour à la console + repli noscript présents.
@@ -293,13 +297,14 @@ console.log('— A2. imladrik.html#constellation-dragons : les six étoiles —'
 
   const dragonsAttendus = NOEUDS['constellation-dragons'].enfants;
   const capsD = await lireCaps(page);
-  verifier('DRAGONS (par l\'adresse) : six étoiles, celles du registre',
-    capsD.length === 6 && dragonsAttendus.length === 6
+  // SEPT depuis le 04/10/2026 (ZOH SHIA, le dragon de la technologie).
+  verifier('DRAGONS (par l\'adresse) : sept étoiles, celles du registre',
+    capsD.length === 7 && dragonsAttendus.length === 7
     && JSON.stringify(capsD.map((c) => c.id).sort()) === JSON.stringify([...dragonsAttendus].sort()),
     capsD.map((c) => c.id).join(','));
-  verifier('DRAGONS : MAEDRETHNIR, VRANESH, DRAUKHAIN, ADRAMELECH, RESHIRAM et ZEKROM sont là, par leur nom',
+  verifier('DRAGONS : MAEDRETHNIR, VRANESH, DRAUKHAIN, ADRAMELECH, RESHIRAM, ZEKROM et ZOH SHIA sont là, par leur nom',
     JSON.stringify(capsD.map((c) => c.nom).sort())
-      === JSON.stringify(['ADRAMELECH', 'DRAUKHAIN', 'MAEDRETHNIR', 'RESHIRAM', 'VRANESH', 'ZEKROM']),
+      === JSON.stringify(['ADRAMELECH', 'DRAUKHAIN', 'MAEDRETHNIR', 'RESHIRAM', 'VRANESH', 'ZEKROM', 'ZOH SHIA']),
     capsD.map((c) => c.nom).join(','));
   // L'ABSENCE, sous le verrou ci-dessus (six étoiles peintes) : ni les frères de la
   // constellation, ni ce qui vit ailleurs sous IMLADRIK, ni le foyer lui-même, ni
@@ -307,11 +312,11 @@ console.log('— A2. imladrik.html#constellation-dragons : les six étoiles —'
   // maintenant l'une des six étoiles, exigée PRÉSENTE ci-dessus et par son nom.
   for (const id of ['constellation-dragons', 'constellation-armes', 'ifulvin', 'tao']) {
     verifier(`DRAGONS isolée : ${id} n'est pas peint`,
-      capsD.length === 6
+      capsD.length === 7
       && (await page.locator(`g.ciel-etoile[data-noeud-id="${id}"]`).count()) === 0);
   }
-  verifier('DRAGONS : aucune étoile inerte (les six ont leur page)',
-    capsD.length === 6 && capsD.every((c) => !c.avenir));
+  verifier('DRAGONS : une seule étoile inerte, ZOH SHIA (les six autres ont leur page)',
+    capsD.length === 7 && capsD.filter((c) => c.avenir).map((c) => c.id).join() === 'zohshia');
   verifier('DRAGONS : le fil nomme le foyer (IMLADRIK › DRAGONS)',
     ((await page.locator('.ciel-fil-ici').textContent()) || '').trim() === 'DRAGONS');
   verifier('DRAGONS : retour vers omega.html toujours présent',
@@ -324,7 +329,9 @@ console.log('— A2. imladrik.html#constellation-dragons : les six étoiles —'
   await page.waitForFunction(() => /MAEDRETHNIR/.test(document.getElementById('boussole-parole').textContent), null, { timeout: 5000 }).catch(() => {});
   const parole = (await page.locator('#boussole-parole').textContent()) || '';
   verifier('Survol MAEDRETHNIR : nom dans la parole', /MAEDRETHNIR/.test(parole));
-  verifier('Survol MAEDRETHNIR : état « Ouvert »', /Ouvert/.test(parole));
+  // L'ÉPITHÈTE REMPLACE L'ÉTAT (Paul, 04/10/2026) — et l'état ne doit plus y être.
+  verifier('Survol MAEDRETHNIR : épithète « Dragon de la vérité », plus d\'état « Ouvert »',
+    /Dragon de la vérité/.test(parole) && !/Ouvert/.test(parole));
   verifier('Survol MAEDRETHNIR : appel à entrer', /entrer/i.test(parole));
   // (Mesuré AU FOCUS, pas au survol, et Tab d'abord : voir la note de la section A
   // d'origine — `:focus-visible` dépend de la façon dont le focus a été pris.)
@@ -426,13 +433,13 @@ for (const largeur of [1280, 390]) {
   const f = await lireFigure(page);
   const cle = `DRAGONS@${largeur}`;
 
-  verifier(`${cle} : six étoiles, celles du registre`,
-    f.etoiles.length === 6
+  verifier(`${cle} : sept étoiles, celles du registre`,
+    f.etoiles.length === 7
     && JSON.stringify([...f.etoiles].sort()) === JSON.stringify([...NOEUDS['constellation-dragons'].enfants].sort()),
     f.etoiles.join(','));
   // L'ABSENCE, sous le verrou des six étoiles peintes.
   verifier(`${cle} : ZÉRO .ciel-trait-figure, et pas même le groupe de la figure`,
-    f.etoiles.length === 6 && f.traitsFigure === 0 && f.groupeFigure === false,
+    f.etoiles.length === 7 && f.traitsFigure === 0 && f.groupeFigure === false,
     `${f.traitsFigure} trait(s), groupe ${f.groupeFigure}`);
   // La passerelle : UNE ligne, RESHIRAM → ZEKROM, en pointillés (le motif dit le type).
   verifier(`${cle} : exactement une ligne .ciel-liens line, data-a=reshiram data-b=zekrom`,
@@ -529,8 +536,8 @@ console.log('— A4. DRAGONS : la parole, les portes, le bandeau, les contrastes
   const legende = (await page.locator('.ciel-legende').textContent())?.trim();
   verifier('DRAGONS : légende gravée = celle du registre (Kalamn-talaen)',
     legende === NOEUDS.imladrik.legende, `lu: ${legende}`);
-  verifier('DRAGONS : une étoile par cap (ce que les aiguilles approchaient) — six',
-    (await page.locator('g.ciel-etoile[data-noeud-id]').count()) === 6);
+  verifier('DRAGONS : une étoile par cap (ce que les aiguilles approchaient) — sept',
+    (await page.locator('g.ciel-etoile[data-noeud-id]').count()) === 7);
   // Retour vers OMEGA, et plus AUCUN lien vers une page disparue (TAO, NAGA, GRIMA, ULTIMA).
   verifier('DRAGONS : retour « ↞ OMEGA » vers omega.html, aucun lien vers tao / naga / grima / ultima',
     (await page.locator('.console-retour a[href="omega.html"]').count()) === 1
@@ -575,8 +582,8 @@ console.log('— A4. DRAGONS : la parole, les portes, le bandeau, les contrastes
     };
   });
   const rNoms = styles.noms.map((c) => ratio(c, styles.nuit));
-  verifier('Contraste des six noms d\'étoile sur la nuit ≥ 4,5:1',
-    rNoms.length === 6 && Math.min(...rNoms) >= 4.5, `${Math.min(...rNoms).toFixed(2)}:1 (${rNoms.length} noms)`);
+  verifier('Contraste des sept noms d\'étoile sur la nuit ≥ 4,5:1',
+    rNoms.length === 7 && Math.min(...rNoms) >= 4.5, `${Math.min(...rNoms).toFixed(2)}:1 (${rNoms.length} noms)`);
   const rLien = ratio(versHex(styles.lien), styles.nuit);
   verifier('Contraste nom de passerelle sur la nuit ≥ 4,5:1', rLien >= 4.5, `${rLien.toFixed(2)}:1`);
   const rTitre = ratio(versHex(styles.titre), versHex(styles.voile));
@@ -771,12 +778,13 @@ console.log('— C. ARMES et DRAGONS plongent ; IFULVIN, seul cap « à venir »
       new URL(page.url()).hash === '#constellation-dragons', page.url());
     const dragons = await lireCaps(page);
     surLesTroisEcrans.dragons = dragons;
-    verifier('… et six étoiles paraissent : MAEDRETHNIR, VRANESH, DRAUKHAIN, ADRAMELECH, RESHIRAM, ZEKROM',
-      dragons.length === 6
+    verifier('… et sept étoiles paraissent : MAEDRETHNIR, VRANESH, DRAUKHAIN, ADRAMELECH, RESHIRAM, ZEKROM, ZOH SHIA',
+      dragons.length === 7
       && JSON.stringify(dragons.map((c) => c.id).sort()) === JSON.stringify([...NOEUDS['constellation-dragons'].enfants].sort()),
       dragons.map((c) => c.id).join(','));
-    verifier('DRAGONS : aria-disabled ⇔ inerte attendu (aucune étoile inerte)',
-      reglesTenues(dragons) && dragons.every((c) => !c.avenir));
+    // ZOH SHIA (04/10/2026) est une étoile d'attente : la SEULE inerte des DRAGONS.
+    verifier('DRAGONS : aria-disabled ⇔ inerte attendu (seul ZOH SHIA est inerte)',
+      reglesTenues(dragons) && dragons.filter((c) => c.avenir).map((c) => c.id).join() === 'zohshia');
 
     // Zéro requête externe / zéro erreur : mesurés AVANT de quitter imladrik.html —
     // la page de destination du témoin (ci-dessous) n'est pas le sujet de cette
@@ -851,12 +859,13 @@ console.log('— C. ARMES et DRAGONS plongent ; IFULVIN, seul cap « à venir »
   {
     const vus = ['premier', 'dragons', 'armes'].flatMap((k) => surLesTroisEcrans[k] || []);
     const avenirsVus = vus.filter((c) => c.avenir).map((c) => c.id);
-    // Verrou de non-vacuité : les trois écrans ont bien été lus (2 + 6 + 1 étoiles).
-    verifier('Verrou : les trois écrans ont été lus (2 + 6 + 1 étoiles)',
-      (surLesTroisEcrans.premier || []).length === 2 && (surLesTroisEcrans.dragons || []).length === 6
+    // Verrou de non-vacuité : les trois écrans ont bien été lus (2 + 7 + 1 étoiles).
+    verifier('Verrou : les trois écrans ont été lus (2 + 7 + 1 étoiles)',
+      (surLesTroisEcrans.premier || []).length === 2 && (surLesTroisEcrans.dragons || []).length === 7
       && (surLesTroisEcrans.armes || []).length === 1);
-    verifier('Exactement UN cap à venir sur les trois écrans, et c\'est IFULVIN',
-      avenirsVus.join() === 'ifulvin', avenirsVus.join(','));
+    // DEUX depuis le 04/10/2026 : IFULVIN (ARMES) et ZOH SHIA (DRAGONS).
+    verifier('Exactement DEUX caps à venir sur les trois écrans : IFULVIN et ZOH SHIA',
+      [...avenirsVus].sort().join() === 'ifulvin,zohshia', avenirsVus.join(','));
     // La même chose lue dans le REGISTRE, par la même descente (constellations seules).
     const feuillesSansPage = [];
     const descendre = (id) => (NOEUDS[id].enfants || []).forEach((e) => {
@@ -864,8 +873,8 @@ console.log('— C. ARMES et DRAGONS plongent ; IFULVIN, seul cap « à venir »
       else if (!NOEUDS[e].cible && !(NOEUDS[e].enfants || []).length) { feuillesSansPage.push(e); }
     });
     descendre('imladrik');
-    verifier('Le registre dit la même chose : un seul cap sans page sous les constellations, IFULVIN',
-      feuillesSansPage.join() === 'ifulvin', feuillesSansPage.join(','));
+    verifier('Le registre dit la même chose : deux caps sans page sous les constellations, IFULVIN et ZOH SHIA',
+      feuillesSansPage.join() === 'ifulvin,zohshia', feuillesSansPage.join(','));
   }
 }
 

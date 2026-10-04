@@ -362,8 +362,11 @@ verdicts.noscriptImladrikDitIfulvin = /IFULVIN/.test(noscriptImladrik)
 // une page ».
 const CIBLES_DRAGONS = NOEUDS['constellation-dragons'].enfants.map((id) => NOEUDS[id].cible);
 verdicts.noscriptImladrikRegroupeLesDragons = (noscriptImladrik.match(/<ul>((?:(?!<ul>)[\s\S])*?)<\/ul>/g) || [])
-  .some((ul) => CIBLES_DRAGONS.length === 6
-    && CIBLES_DRAGONS.every((c) => ul.includes(`href="${c}"`))
+  .some((ul) => CIBLES_DRAGONS.length === 7
+    && CIBLES_DRAGONS.filter(Boolean).length === 6
+    && CIBLES_DRAGONS.filter(Boolean).every((c) => ul.includes(`href="${c}"`))
+    // ZOH SHIA, sans page : DIT dans la sous-liste, et sans lien.
+    && /ZOH SHIA/.test(ul) && !/<a [^>]*>[^<]*ZOH SHIA/.test(ul)
     && !/IFULVIN/.test(ul))
   && /DRAGONS/.test(noscriptImladrik);
 const noscriptIndex = capsDuNoscript('index.html');
@@ -386,11 +389,25 @@ const capsImladrik = capsDe('imladrik');
 verdicts.imladrikDeuxConstellationsSeules = capsImladrik.length === 2
   && capsImladrik.map((c) => c.nom).join(',') === 'ARMES,DRAGONS'
   && capsImladrik.every((c) => c.constellation === true);
-verdicts.imladrikSixEtoilesSousLesDragons = capsDe('constellation-dragons')
-  .map((c) => c.nom).join(',') === 'MAEDRETHNIR,VRANESH,DRAUKHAIN,ADRAMELECH,RESHIRAM,ZEKROM'
-  && capsDe('constellation-dragons').length === 6
-  && !capsImladrik.some((c) => ['maedrethnir', 'vranesh', 'draukhain', 'adramelech', 'reshiram', 'zekrom']
-    .includes(c.id));
+// SEPT depuis le 04/10/2026 : ZOH SHIA, le dragon de la technologie.
+verdicts.imladrikSeptEtoilesSousLesDragons = capsDe('constellation-dragons')
+  .map((c) => c.nom).join(',') === 'MAEDRETHNIR,VRANESH,DRAUKHAIN,ADRAMELECH,RESHIRAM,ZEKROM,ZOH SHIA'
+  && capsDe('constellation-dragons').length === 7
+  && !capsImladrik.some((c) => ['maedrethnir', 'vranesh', 'draukhain', 'adramelech', 'reshiram', 'zekrom',
+    'zohshia'].includes(c.id));
+// LES ÉPITHÈTES (Paul, 04/10/2026) : les mots dictés, recopiés tels quels, une
+// par dragon — et aucune ailleurs dans le registre (le titre « NOM — Dragon
+// de… » est propre à cette constellation).
+const EPITHETES = {
+  maedrethnir: 'Dragon de la vérité', vranesh: 'Dragon du futur', adramelech: 'Dragon de l’imagination',
+  draukhain: 'Dragon du serment', zekrom: 'Dragon de l’idéal', reshiram: 'Dragon de la réalité',
+  zohshia: 'Dragon de la technologie'
+};
+verdicts.dragonsPortentLeursEpithetes = Object.keys(EPITHETES).length === 7
+  && Object.entries(EPITHETES).every(([id, e]) => NOEUDS[id] && NOEUDS[id].epithete === e);
+verdicts.epithetesSeulementChezLesDragons = Object.keys(NOEUDS)
+  .filter((id) => NOEUDS[id].epithete !== undefined).sort().join()
+  === Object.keys(EPITHETES).sort().join();
 // « Cinq cibles ouvertes » → SIX (30/09) : le compte est REFIXÉ, pas relâché ; il
 // se lit en profondeur — les six pages d'IMLADRIK (trois dragons, ADRAMELECH,
 // RESHIRAM, ZEKROM) sont atteignables, et la SEULE feuille sans page qu'il porte
@@ -404,7 +421,10 @@ verdicts.imladrikSixCiblesOuvertes = feuillesDImladrik.filter((c) => c.cible).le
   && feuillesDImladrik.filter((c) => c.cible).every((c) => typeof c.cible === 'string' && c.cible.endsWith('.html'))
   && feuillesDImladrik.filter((c) => c.cible).map((c) => c.cible).join()
     === 'maedrethnir.html,vranesh.html,draukhain.html,adramelech.html,reshiram.html,zekrom.html';
-verdicts.imladrikSeuleIfulvinSansPage = feuillesDImladrik.filter((c) => !c.cible).map((c) => c.id).join() === 'ifulvin';
+// Deux étoiles d'attente depuis le 04/10/2026 : IFULVIN (ARMES) et ZOH SHIA
+// (DRAGONS). Toujours énumérées, jamais comptées seulement.
+verdicts.imladrikSeulsIfulvinEtZohShiaSansPage = feuillesDImladrik.filter((c) => !c.cible)
+  .map((c) => c.id).join() === 'ifulvin,zohshia';
 verdicts.imladrikLegendeGravee = NOEUDS.imladrik.legende === 'Kalamn-talaen'
   && NOEUDS.imladrik.legendeClasse === 'kalamn-legende';
 
@@ -450,9 +470,9 @@ verdicts.armesPorteIfulvinSeul = JSON.stringify(NOEUDS['constellation-armes'].en
 // TRANSPOSÉ (30/09) : `dragonsPorteLesTroisDragons` → SIX enfants EXACTS, dans cet
 // ordre — le compte se verrouille des deux côtés (ni cinq, ni sept) et l'ordre
 // est celui du repli <noscript>, comparé plus haut.
-verdicts.dragonsPorteLesSixEtoiles = JSON.stringify(NOEUDS['constellation-dragons'].enfants)
-  === JSON.stringify(['maedrethnir', 'vranesh', 'draukhain', 'adramelech', 'reshiram', 'zekrom'])
-  && NOEUDS['constellation-dragons'].enfants.length === 6;
+verdicts.dragonsPorteLesSeptEtoiles = JSON.stringify(NOEUDS['constellation-dragons'].enfants)
+  === JSON.stringify(['maedrethnir', 'vranesh', 'draukhain', 'adramelech', 'reshiram', 'zekrom', 'zohshia'])
+  && NOEUDS['constellation-dragons'].enfants.length === 7;
 // AJOUT (30/09) : les DRAGONS n'ont AUCUN trait de figure — `asterisme: false`,
 // littéralement `false` (ni absent, ni « non »). ARMES, elle, garde le défaut
 // (un seul cap : rien à relier de toute façon, mais l'exception n'est pas
