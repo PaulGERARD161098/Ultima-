@@ -1,3 +1,71 @@
+# Reprise courante — 4 octobre 2026, cadrage d'autonomie et premier diagnostic
+
+**Boucle actuelle :** demande de Paul de cadrer précisément l'autonomie de Léo
+et FINUBAR, puis réaliser la première étape. Dossier opératoire et rétroplanning
+dans [leo/ACTIVATION.md](leo/ACTIVATION.md), section « Objectif d'autonomie — plan
+du 04/10/2026 ». Ce fichier reste l'index de reprise ; aucun second plan canonique.
+
+**Étape 1 réalisée :** lectures des règles actuelles, comparaison exacte du §11
+v1.1 source/main, mesure identité et deux installations GitHub, contrôle des
+versions et travaux concurrents, lecture des HEAD et grains des10 entrées
+FINUBAR, audit distinct des opérations R21, protocole fermé et essais préparés.
+Aucun test applicatif local, secret, import, dispatch, fusion ou publication publique.
+
+**État mesuré :** main initialement `ab60a658ec3a1b06ea07d3c39be69d6051aa879d`, puis
+`9a261c5fb1ac1a77bdf53e5b3f98444297b2599b` après fusion externe de PR352 ;
+PR351 ouverte, brouillon, source `8c3ff37bb81e19bbe3a08fa0e0c97fbceadb2448`.
+Sa préparation et les sept fichiers ne sont pas modifiés.
+Rapport de ses CI sain/rouge/restauré/corrigé et revue :
+https://github.com/PaulGERARD161098/Ultima-/pull/351
+Le nouveau lot documentaire est séparé ; il n'hérite pas d'une CI exécutée sur son SHA.
+
+**Fondation :** l'installation organisation160835885 est déjà
+`repository_selection=selected`, avec12 dépôts exposés ; l'installation
+personnelle163434661 est `all`, avec2 dépôts. GET métadonnées
+PaulGERARD161098/leo-control-r21 renvoie404. Cela ne prouve ni existence ni
+exclusion globale ; autres sessions/CLI/browser/App non attestés.
+Ne pas redemander le passage all→selected pour l'organisation comme s'il
+n'avait pas eu lieu. Ne pas créer/importer le contrôle par déduction.
+
+**Produit distinct :** main consigne une preuve B1 capture/défaire du04/10,
+puis un refus de suppression sans outil ; ce n'est pas une réception LV1.
+FINUBAR et le mail lisent l'agrégat commité ; garde propriétaire présent.
+La configuration de production reste à mesurer sans lecture de variable.
+Le crédit épuisé du02/10 n'est plus repris comme blocage actuel.
+
+**Cible proposée :** pilote continu borné le16/10, sous preuve de faisabilité
+d'un vrai hôte/réveil borné et du stockage privé au05–06/10, puis après les jalons détaillés
+d'ACTIVATION et leurs accords. Calendrier conditionnel, pas activation ni
+promesse de service permanent. LV1 initial exclut24/7 et activation des rituels.
+
+**Prochaine action unique :** préparer le schéma fermé des propositions et
+ses refus sur une branche distincte, réutiliser trial_host/broker et leur
+frontière fixture ; revue indépendante puis CI pull_request isolée.
+Aucune ouverture du serveur loopback sur Internet.
+
+**Interdits conservés :** aucune fusion, aucun import dans leo-control-r21,
+aucun secret, aucun lancement manuel de workflowR21, aucun test applicatif
+hors CI isolée prévue, aucun force-push, aucune publication publique.
+L'accord serveur, l'import/ancrage et l'activation continue restent des étapes
+réservées/à autoriser précisément une fois leur résultat concret et revu.
+
+**Travail concurrent préservé :** PR352, initialement brouillon pendant le
+diagnostic, est désormais fusionnée ailleurs dans main9a261c5. Le lot documentaire
+reprend cette base et conserve CADRAGE-ULTIMA, FINUBAR, les deux agrégats et
+JOURNAL-DECISIONS. AGENTS/CLAUDE/§11/ACTIVATION/reprise relus au nouveau SHA,
+blobs inchangés. La source PR351 reste identique ; ses preuves d'intégration
+ancienne ne sont pas promues preuves de la nouvelle cible.
+
+**Revue :** instance distincte, verdict final favorable du cadrage après
+précisions sur historique, demandeur/anti-rejeu et faisabilité hôte/réveil.
+Aucune installation, CI documentaire ou réception LV1 n'en est déduite.
+
+Les sections ci-dessous conservent les preuves et états historiques avec leurs
+dates/version. Les anciennes « prochaines actions » ne remplacent pas celle
+ci-dessus ; la revue PR351 ne vaut ni installation ni effet R21 sous accord réel.
+
+---
+
 # Reprise courante — 30 septembre 2026, diagnostic GitHub Team clos
 
 **Fait :** intégration préparatoire de main `ce1ff937465e5d65a269b481b9ee488b65e02ffa`
@@ -633,4 +701,3 @@ publication. Résultats à rattacher au commit effectivement exécuté dans PR30
 R21 n'est pas reçu par ce raccord : l'identité réelle de Paul et son accord
 exact restent à fournir par un canal de confiance. Le serveur fermé d'épreuve
 ne constitue pas un hébergement permanent ni un contrôle des outils Work.
-
