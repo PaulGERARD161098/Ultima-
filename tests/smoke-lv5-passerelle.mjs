@@ -243,10 +243,10 @@ for (const nom of COQUES) {
         .every((c) => r.ciblesDuRegistre.includes(c) && r.cellesDuRepli.includes(c))
       && !r.cellesDuRepli.some((c) => /tao/i.test(c));
   }
-  // LES DRAGONS, ISOLÉS : six étoiles, six pages dans le repli (le repli de la page
-  // porte les six, isolement ou non).
+  // LES DRAGONS, ISOLÉS : sept étoiles (ZOH SHIA, 04/10/2026, sans page), six
+  // pages dans le repli (le repli de la page porte les six, isolement ou non).
   if (nom === 'constellation-dragons') {
-    verdicts.dragonsSixEtoiles = r.attendus === 6 && r.manquants.length === 0;
+    verdicts.dragonsSeptEtoiles = r.attendus === 7 && r.manquants.length === 0;
     verdicts.dragonsRepliSixPages = r.ciblesDuRegistre.length === 6
       && r.ciblesDuRegistre.every((c) => r.cellesDuRepli.includes(c));
   }

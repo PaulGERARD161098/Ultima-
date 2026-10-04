@@ -31,9 +31,9 @@
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③④⑤ en production — ⑤ fusionné le 02/10 au soir (#336) sur ordre de Paul, SANS l'étape 0 : le crédit Anthropic est épuisé (« ia 400 crédit »), Léo ne répond plus ; la preuve en prod (une écriture, son défaire) reste à faire après la recharge"
   },
   "dernier_arret": {
-    "le": "2026-10-02",
-    "quoi": "02/10 soir : B1 ⑤ fusionnée (#336, étape 0 non rejouée), RIVEN vérifié (#338). Chaîne : B4 réduite à R1, en production, non prouvée. Crédit Anthropic épuisé.",
-    "commit": "f4af7d23e4d8e250abb03b29e43bd32aa120cd37"
+    "le": "2026-10-04",
+    "quoi": "04/10 : les DRAGONS portent leur épithète (« VRANESH — Dragon du futur »), ZOH SHIA ajouté (le dragon de la technologie, étoile d'attente) — branche claude/ilmadrik-dragon-stars-rename-pgel4h. Le 02/10 : B1 ⑤ fusionnée (#336), crédit Anthropic épuisé.",
+    "commit": "fec2a7e95e792b1edd1ef2f403d638786c4a2cda"
   },
   "prochaine_action": "Paul recharge le crédit Anthropic (console Anthropic — geste payant) ; puis étape 0 EN PRODUCTION sur /registre : dicter « Capture l'idée Test B1 », mesurer 2 lignes (tentee, reussie) dans leo_ecritures, cliquer « Défaire », mesurer la 3ᵉ (defaite) et la disparition de l'idée.",
   "bloque_par": [

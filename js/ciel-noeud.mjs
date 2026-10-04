@@ -120,6 +120,12 @@ export function rendre(idNoeud, options = {}) {
   // ressortir. Un écran isolé qui garderait l'invite de l'étage ne dirait ni
   // où l'on est, ni comment revenir.
   let paroleAuRepos = paroleDefaut;
+  // UNE CONSTELLATION SE TAIT AU REPOS (Paul, 04/10/2026, devant le cartouche
+  // des DRAGONS : « enlève cela, ça prend de la place »). Le fil d'Ariane dit
+  // déjà où l'on est, et le cartouche revient au survol d'une étoile. Sa place
+  // en bas reste RÉSERVÉE (`visibility`, pas `display`) : sans elle, le
+  // cartouche du survol recouvrirait les étoiles du bas.
+  let reposMuet = false;
   const cockpit = { data: null, actif: null };
   // FINUBAR — les signaux d'appel par nœud. Vide tant que la session n'a rien
   // livré : sans jeton, sur erreur réseau ou sur réponse illisible, le ciel est
@@ -291,7 +297,11 @@ export function rendre(idNoeud, options = {}) {
     parole.innerHTML =
       (blason ? '<span class="parole-blason">' + blason + '</span>' : '')
       + '<p class="parole-nom">' + echapper(cap.nom) + '</p>'
-      + '<p class="parole-etat">' + echapper(cap.etat) + '</p>'
+      // L'ÉPITHÈTE REMPLACE L'ÉTAT quand le cap en porte une (les DRAGONS,
+      // Paul, 04/10/2026 : « ne s'affiche comme titre que ça »).
+      + (cap.epithete
+        ? '<p class="parole-etat parole-epithete">' + echapper(cap.epithete) + '</p>'
+        : '<p class="parole-etat">' + echapper(cap.etat) + '</p>')
       + (signal ? '<p class="parole-signal">À traiter — ' + echapper(signal) + '</p>' : '')
       + (vivante ? '<p class="parole-cockpit">En cours — ' + echapper(vivante) + '</p>' : '')
       + '<p class="parole-texte">' + echapper(cap.resume) + '</p>'
@@ -312,15 +322,17 @@ export function rendre(idNoeud, options = {}) {
     // Sous isolement, le cartouche n'est jamais « au repos vide » : il porte le
     // foyer. Il garde donc son habillage plein, sinon il clignoterait d'un
     // registre à l'autre chaque fois que le curseur quitte une étoile.
-    parole.classList.toggle('is-actif', !!isole);
+    parole.classList.toggle('is-actif', !!isole && !reposMuet);
     parole.innerHTML = paroleAuRepos;
   }
 
   // Ce que Léo dit quand on ne survole rien — recalculé à chaque changement de
   // foyer, jamais deviné à l'affichage.
   function majParoleAuRepos() {
+    reposMuet = false;
     if (!isole) { paroleAuRepos = paroleDefaut; return; }
     const foyer = registre[isole] || {};
+    if (foyer.constellation === true) { reposMuet = true; paroleAuRepos = ''; return; }
     // Même règle d'insertion que `afficherResume` : tout texte est ÉCHAPPÉ —
     // le registre porte des astres greffés depuis Finubar, il n'est plus
     // statique. Le fragment d'adresse, lui, vient du dehors : il ne sert que

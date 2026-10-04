@@ -455,13 +455,14 @@ await pageImladrik.goto(`${BASE}/imladrik.html#constellation-dragons`, { waitUnt
 await attendrePret(pageImladrik);
 await pageImladrik.waitForTimeout(1200);
 const capsDragons = await lireCaps(pageImladrik);
-verifier('IMLADRIK#constellation-dragons : MAEDRETHNIR, VRANESH, DRAUKHAIN, ADRAMELECH, RESHIRAM, ZEKROM paraissent (et eux seuls)',
+// SEPT depuis le 04/10/2026 : ZOH SHIA, le dragon de la technologie.
+verifier('IMLADRIK#constellation-dragons : MAEDRETHNIR, VRANESH, DRAUKHAIN, ADRAMELECH, RESHIRAM, ZEKROM, ZOH SHIA paraissent (et eux seuls)',
   JSON.stringify(capsDragons.map((c) => c.nom).sort())
-    === JSON.stringify(['ADRAMELECH', 'DRAUKHAIN', 'MAEDRETHNIR', 'RESHIRAM', 'VRANESH', 'ZEKROM'])
+    === JSON.stringify(['ADRAMELECH', 'DRAUKHAIN', 'MAEDRETHNIR', 'RESHIRAM', 'VRANESH', 'ZEKROM', 'ZOH SHIA'])
   && capsDragons.length === NOEUDS['constellation-dragons'].enfants.length,
   JSON.stringify(capsDragons.map((c) => c.nom)));
-verifier('IMLADRIK#constellation-dragons : 6 étoiles au ciel',
-  (await pageImladrik.locator('g.ciel-etoile[data-noeud-id]').count()) === 6);
+verifier('IMLADRIK#constellation-dragons : 7 étoiles au ciel',
+  (await pageImladrik.locator('g.ciel-etoile[data-noeud-id]').count()) === 7);
 // ADRAMELECH garde son état « Privé » sur son nouveau cadran (déplacé du premier
 // niveau d'IMLADRIK, où il vivait, vers les DRAGONS — la garantie suit l'étoile).
 verifier('IMLADRIK#constellation-dragons : ADRAMELECH marqué « Privé »',

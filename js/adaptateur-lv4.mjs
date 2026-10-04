@@ -94,6 +94,7 @@ function isolement(idFoyer, registre) {
     return {
       id: idTete,
       nom: n.nom || idTete,
+      epithete: n.epithete || '',
       type: 'cap',
       statut: n.etat || '',
       secteur_activite: nomFoyer,
@@ -167,6 +168,7 @@ export function versCiel(idEcran, registre, options) {
     return {
       id: idCap,
       nom: cap.nom || idCap,
+      epithete: cap.epithete || '',
       type: 'cap',
       statut: cap.etat || '',
       secteur_activite: ecran.nom || idEcran,
@@ -222,6 +224,7 @@ export function versCiel(idEcran, registre, options) {
       noeuds.push({
         id: idEnfant,
         nom: e.nom || idEnfant,
+        epithete: e.epithete || '',
         type: 'cap',
         statut: e.etat || '',
         secteur_activite: nomParent,

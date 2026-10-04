@@ -209,7 +209,7 @@ console.log('— Le témoin : l\'écran isolé, où le dépliage était déjà c
   await page.mouse.click(avant.x, avant.y);
   await page.waitForTimeout(900);
   verifier('Témoin · clic sur DRAGONS depuis #imladrik → #constellation-dragons',
-    isoleSur('constellation-dragons', await etat(page)) && (await etat(page)).ids.length === 6,
+    isoleSur('constellation-dragons', await etat(page)) && (await etat(page)).ids.length === 7,
     JSON.stringify(await etat(page)));
   await contexte.close();
 }

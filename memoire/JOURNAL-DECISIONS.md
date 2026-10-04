@@ -4538,3 +4538,45 @@ code produit, aucune fusion** (Paul : « On ne fusionne rien »).
 `CADRAGE-2026-09-30-chaine-A-Z.md` (#563) ; la maquette dans RenoBoost
 `maquettes/chaine-A-Z/` ; la route et l'état vivant dans Ultima (#321).
 
+## 2026-10-04 — Les DRAGONS portent leur épithète ; ZOH SHIA, le dragon de la technologie
+
+Dicté par Paul : *« Je veux que ne s'affiche comme titre pour les étoiles que
+ça : VRANESH - Dragon du futur… Et un nouveau : ZOH SHIA - Dragon de la
+technologie »*.
+
+**Décisions de Paul :**
+1. **MAEDRETHNIR est gardé.** La liste dictée disait « MINETHNIR », l'ancien nom
+   renommé le 17/08 (171 occurrences) ; Paul confirme : on garde MAEDRETHNIR.
+   ⚠️ « Minethnir » dicté devant « Dragon de la vérité » = MAEDRETHNIR.
+2. **Deux lignes** : le NOM, puis « Dragon de… » dessous. L'état (« Ouvert »,
+   « Privé ») ne s'affiche plus pour ces étoiles, ni dans le ciel ni dans le
+   cartouche de Léo, où l'épithète prend sa place.
+3. **ZOH SHIA** regroupe toute la technique de Paul. Premier élément : l'outil
+   automatique de création de devis (RénoDevis) et tout son fonctionnement,
+   **pour le cloner chez un autre artisan** (nouvelle instance — pas
+   « massifier » sur la même plateforme).
+
+**Livré (boucle 1)** : le champ `epithete` du registre (sept dragons) ; la
+seconde ligne dans le moteur du ciel (`js/ciel.js`, un `<text>` à part — le
+texte de `.ciel-nom` reste le nom seul) ; ZOH SHIA en étoile d'attente (sans
+page, blason « portail » comme IFULVIN) ; repli sans JavaScript à jour ;
+harnais `tests/smoke-dragons-epithetes.mjs` (six largeurs).
+
+**Ce que la mesure a appris, et que la relecture n'aurait pas vu** : à 360–414
+px, DRAUKHAIN n'avait AUCUNE place — dessous, sa seconde ligne mordait le cœur
+d'ADRAMELECH ; dessus, l'épithète de VRANESH. D'où la pose À CÔTÉ de l'étoile
+(convention des cartes gravées), réservée aux noms à deux lignes : les noms
+d'une ligne gardent leur comportement au pixel. Et un halo plus épais faisait
+BAISSER le contraste mesuré (4,82 → 4,25) ; c'est la lettre blanche qui l'a
+relevé (pire 5,79).
+
+**Reste (boucle 2, à cadrer)** : le contenu de ZOH SHIA — la fiche « cloner
+RénoDevis chez un autre artisan ». ⛔ Elle POINTE les sources de RénoDevis
+(CLAUDE.md, migrations, `lib/`), elle ne les recopie pas.
+
+
+**Le même jour, devant le cartouche des DRAGONS au repos** : *« Enlève cela,
+ça prend de la place »*. Un écran de constellation (DRAGONS, ARMES) n'affiche
+plus de cartouche tant qu'on ne survole rien : le fil d'Ariane dit déjà où l'on
+est. Le cartouche revient au survol d'une étoile. Sa place en bas reste
+réservée — sans elle, le cartouche du survol recouvrirait les étoiles du bas.

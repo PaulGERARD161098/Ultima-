@@ -113,7 +113,7 @@
 .ciel-halo-focus { opacity: 0; transition: opacity .12s; pointer-events: none; }
 .ciel-etoile--choisie .ciel-halo-choix { opacity: 1; }
 .ciel-halo-choix { opacity: 0; pointer-events: none; }
-.ciel-nom { pointer-events: none; }
+.ciel-nom, .ciel-epithete { pointer-events: none; }
 /* Le nom d'une étoile non permanente est PRÉSENT dans le document — donc lu
    par un lecteur d'écran et trouvable — et se révèle au survol comme au
    focus clavier. Rien n'est caché à personne. */
@@ -225,6 +225,18 @@
   stroke-width: 2.2px;
   stroke-linejoin: round;
 }
+/* L'ÉPITHÈTE (« Dragon du futur », 04/10/2026) : la seconde ligne du nom,
+   en italique de gravure, à la même crème que les noms de menu. */
+.ciel-epithete {
+  fill: #ffffff;
+  font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  font-style: italic;
+  letter-spacing: .03em;
+  paint-order: stroke;
+  stroke: rgba(2, 5, 11, .72);
+  stroke-width: 2.2px;
+  stroke-linejoin: round;
+}
 .ciel-nom-amas {
   fill: rgba(216, 189, 130, .62);
   font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
@@ -271,6 +283,7 @@
   stroke: rgba(2, 5, 11, .88);
   stroke-width: 2.8px;
 }
+.ciel-etoile--choisie .ciel-epithete { opacity: 1 !important; }
 .ciel-etoile--choisie .ciel-halo-choix { opacity: .92; }
 .ciel--concentre .ciel-etoile:not(:hover):not(:focus-visible):not(.ciel-etoile--choisie) { opacity: .58; }
 .ciel-etoile:hover .ciel-nom,
@@ -284,7 +297,8 @@
 @media (prefers-reduced-motion: no-preference) {
   .ciel-etoile,
   .ciel-liens line,
-  .ciel-nom {
+  .ciel-nom,
+  .ciel-epithete {
     transition:
       opacity 180ms cubic-bezier(.16, .84, .32, 1),
       filter 180ms cubic-bezier(.16, .84, .32, 1),
@@ -294,13 +308,15 @@
 @media (prefers-reduced-motion: reduce) {
   .ciel-etoile,
   .ciel-liens line,
-  .ciel-nom {
+  .ciel-nom,
+  .ciel-epithete {
     transition: none !important;
     animation: none !important;
   }
 }
 @media (forced-colors: active) {
   .ciel-nom,
+  .ciel-epithete,
   .ciel-nom-amas,
   .ciel-nom-lien { fill: CanvasText; stroke: Canvas; }
   .ciel-halo-focus,

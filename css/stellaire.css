@@ -298,7 +298,8 @@ textarea:focus-visible { outline-color: var(--or-clair, #d8bd82); }
 .ciel-etoile[data-appel="appel"]   { --teinte: var(--appel); animation: appel-respire 4.5s ease-in-out infinite; }
 .ciel-etoile[data-appel="recaler"] { --teinte: var(--appel-recaler); }
 .ciel-etoile[data-appel="braise"]  { --teinte: var(--appel-braise); }
-.ciel-etoile[data-appel] .ciel-nom { fill: var(--teinte); }
+.ciel-etoile[data-appel] .ciel-nom,
+.ciel-etoile[data-appel] .ciel-epithete { fill: var(--teinte); }
 
 @keyframes appel-respire { 0%, 100% { opacity: .82; } 50% { opacity: 1; } }
 

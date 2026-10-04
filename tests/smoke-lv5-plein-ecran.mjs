@@ -292,8 +292,8 @@ verdicts.familleDesCoques = JSON.stringify(COQUES_DE_NAVIGATION) === JSON.string
   // LA RACINE (P4, 2026-08-19) : trois caps — ALPHA, OMEGA, ALTHEA.
   ['index.html', 3],
   // LES CONSTELLATIONS ISOLÉES (30/09) : six étoiles (trois dragons, ADRAMELECH,
-  // RESHIRAM, ZEKROM) ; IFULVIN seul.
-  ['imladrik.html#constellation-dragons', 6], ['imladrik.html#constellation-armes', 1]]);
+  // RESHIRAM, ZEKROM) — SEPT depuis le 04/10/2026 avec ZOH SHIA ; IFULVIN seul.
+  ['imladrik.html#constellation-dragons', 7], ['imladrik.html#constellation-armes', 1]]);
 for (const [fichier, nbCaps] of COQUES_DE_NAVIGATION) {
   for (const [largeur, hauteur] of [[390, 844], [1280, 860]]) {
     const page = await browser.newPage({ viewport: { width: largeur, height: hauteur } });

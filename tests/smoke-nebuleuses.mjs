@@ -250,7 +250,8 @@ const SEUIL_NOMS = 5.0;
 // TRANSPOSÉ (30/09) : DRAGONS enveloppe SIX étoiles (les trois dragons, ADRAMELECH,
 // RESHIRAM, ZEKROM), plus trois : la nébuleuse, elle, reste UNE, et TOUS les noms
 // se lisent dessus (`nb === attendus` : le compte des noms mesurés est verrouillé).
-for (const [foyer, attendus] of [['constellation-dragons', 6], ['constellation-armes', 1]]) {
+// SEPT depuis le 04/10/2026 : ZOH SHIA rejoint les DRAGONS.
+for (const [foyer, attendus] of [['constellation-dragons', 7], ['constellation-armes', 1]]) {
   for (const largeur of [390, 1280]) {
     const page = await ouvrir('imladrik.html#' + foyer, { largeur, hauteur: largeur === 390 ? 844 : 860 });
     const vues = await page.evaluate(() => window.__nebuleusesVues);
