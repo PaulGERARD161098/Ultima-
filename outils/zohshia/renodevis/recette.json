@@ -25,6 +25,11 @@
       "'Icestream'",
       "'principal'",
       "valeur par défaut de la colonne fournisseur"
+    ],
+    [
+      "reponse_paul",
+      "reponse",
+      "colonne de la table des retours portant le prénom de l'exploitant ; le code neutre la lit sous ce nom"
     ]
   ],
   "remplacer": {

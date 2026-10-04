@@ -199,7 +199,12 @@ const seaux = liste("select string_agg(id, ' ' order by id) from storage.buckets
 export function sqlEmpreinte({ tables, vues, fonctions, politiquesStockage, seaux }, R = (x) => x) {
   const tab = (a) => `array[${a.map((x) => `'${x}'`).join(',')}]::text[]`;
   const roles = "array['anon','authenticated','service_role']";
-  const h = (expr) => `md5(${R(`coalesce((${expr})::text, '')`)})`;
+  // ⚠️ Après renommage, le texte est REMIS en forme canonique (aller-retour par
+  // jsonb) : jsonb range ses clés par LONGUEUR, et un renommage qui change la
+  // longueur d'une clé (une colonne renommée) la déplacerait — deux bases
+  // identiques rendraient deux condensats différents. Côté base neuve, R est
+  // l'identité et l'aller-retour ne change rien.
+  const h = (expr) => `md5(coalesce((nullif(${R(`coalesce((${expr})::text, '')`)}, ''))::jsonb::text, ''))`;
   const corps = (expr) => `md5(${R(`trim(regexp_replace(regexp_replace(${expr}, '--[^\\n]*', '', 'g'), '\\s+', '', 'g'))`)})`;
   const droitsTable = (oid) => `(select jsonb_object_agg(r, (select coalesce(jsonb_agg(p order by p), '[]'::jsonb) from unnest(array['SELECT','INSERT','UPDATE','DELETE','TRUNCATE','REFERENCES','TRIGGER']) p where has_table_privilege(r, ${oid}, p))) from unnest(${roles}) r)`;
   return `select jsonb_build_object(

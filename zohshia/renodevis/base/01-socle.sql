@@ -150,7 +150,7 @@ create table public.feedbacks (
   user_agent text constraint feedbacks_user_agent_check check (char_length(user_agent) <= 300),
   statut text not null default 'nouveau'
     constraint feedbacks_statut_check check (statut in ('nouveau', 'en_cours', 'fait', 'refuse')),
-  reponse_paul text constraint feedbacks_reponse_paul_check check (char_length(reponse_paul) <= 4000),
+  reponse text constraint feedbacks_reponse_check check (char_length(reponse) <= 4000),
   traite_le timestamptz
 );
 create index feedbacks_auteur_idx on public.feedbacks (auteur, created_at desc);
