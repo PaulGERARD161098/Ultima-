@@ -12,7 +12,8 @@
   ✅ Plan pur (`zohshia/renodevis/TECHNO.md`) · check-list en 8 rubriques et deux voies (`AJOUTER-UN-ARTISAN.md`) · base neuve rejouée et **validée par la base de référence** (0 écart) · code neutre **extrait et prouvé** (RénoDevis `7d21217` : 492 fichiers, 931 tests, build vert) · écran ZOH SHIA (un badge par techno) · garde PROPRIÉTAIRE sur `/api/zohshia` et `/api/finubar`.
   ⛔ **Fusionné AVANT `ULTIMA_PROPRIETAIRES`** (choix de Paul) : ZOH SHIA et Finubar répondent « accès réservé » en production jusqu'à ce qu'elle soit posée (Vercel, Production + Preview). L'API Vercel refuse l'écriture des variables au connecteur — geste de Paul.
   ⛔ **Inscription Supabase OUVERTE** (mesuré le 04/10) — à fermer par Paul.
-  ⏭ Propager `memoire/LECONS.md` v70 (3 leçons du jour) aux neuf dépôts.
+  ✅ (soir) #346–#350 fusionnées : Léo étape 0 prouvée en production · dry run (`/outils` refusé par le middleware, extraction au SHA) · série ZOH SHIA rafraîchie sur RénoDevis `f1f9fb3` (979 tests, build vert) · dérive de ZOH SHIA affichée à l'ouverture de séance et sur `/finubar`.
+  ✅ LEÇONS v71 propagées : **10/10 dépôts identiques à la source** (RenoBoost #578 · RenoAgenda #115 · RenoPredict #91 · renoboost-console #21 · mon-dpe.fr #235 · artisan-builder #102 · Artidispo #117 · DATARENO- #52 · RenoDevis #282, branche à part — la branche de #272 n'a pas été écrasée).
 - 🧾 **SESSION 2026-10-02 (matin, séance « analyse des lieux ») — LA MÉMOIRE DE LA SÉANCE DU 30/09 RÉCUPÉRÉE, ET UNE FAUTE DE GATE CONSIGNÉE.**
   Reprise après coupure de crédit, sur demande de Paul : *« tu arrêtes ce que tu
   fais, tu fais une analyse des lieux et tu cadres une reprise · pas de code avant
