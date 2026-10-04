@@ -32,12 +32,11 @@
   },
   "dernier_arret": {
     "le": "2026-10-04",
-    "quoi": "04/10 soir : #349 fusionnée (série ZOH SHIA sur RénoDevis f1f9fb3). Dérive de ZOH SHIA rendue visible : rappel d'ouverture de séance d'Ultima + ligne sur l'écran Finubar (zohshia/renodevis/derive.mjs). Commit = main AVANT la PR de cette boucle.",
-    "commit": "fd361bb054bae2218df585bed465d2c943a708a5"
+    "quoi": "04/10 nuit : #350 fusionnée (dérive ZOH SHIA visible) ; LEÇONS v71 propagées et fusionnées dans les 10 dépôts (identiques à la source, mesuré). ZOH SHIA suit RénoDevis 2d14e60 (série faite sur f1f9fb3, s'applique : 495 fichiers sans nom propre).",
+    "commit": "ab60a658ec3a1b06ea07d3c39be69d6051aa879d"
   },
-  "prochaine_action": "Propager les LEÇONS v70 et v71 aux neuf autres dépôts (memoire/LECONS-PROCEDURE.md) — la boucle ouverte la plus ancienne de la séance. ZOH SHIA : rafraîchir la série dès que le rappel dit « EN RETARD ».",
+  "prochaine_action": "Geste de Paul, d'abord : poser ULTIMA_PROPRIETAIRES dans Vercel (Production + Preview) — sans elle, ZOH SHIA et Finubar restent « accès réservé » en production. Puis, côté code : le geste orange de Léo n'a pas d'outil pour le prouver (le « demander puis agir sur clic » reste à éprouver).",
   "bloque_par": [
-    "Fusion de la PR « dérive ZOH SHIA visible » : GO de Paul sur son SHA.",
     "ULTIMA_PROPRIETAIRES absente en production (l'API Vercel refuse l'écriture des variables au connecteur) : ZOH SHIA et Finubar fermés jusqu'au geste de Paul.",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
     "R1 (B4) en production, non prouvée : Réno a rendu 502 le 02/10 à 16:43 UTC. Le crédit étant rechargé, lui demander « Où en est Artidispo ? » et comparer à la base (PLAN §2).",
@@ -48,10 +47,6 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
-    {
-      "quoi": "LEÇONS v70 + v71 (04/10 : comparaison symétrique, « connecté » ≠ « propriétaire », détecteur aveugle hors de sa liste) — à PROPAGER aux neuf dépôts (memoire/LECONS-PROCEDURE.md).",
-      "depuis": "2026-10-04"
-    },
     {
       "quoi": "LEÇON À CONSIGNER + PROPAGER (9 dépôts) : une erreur générique cache sa cause — « Léo n'a pas pu répondre » a masqué pendant des jours un crédit Anthropic épuisé (0 écriture en prod, ④ crue cassée) ; un échec côté tiers se dit à l'écran par son code et une cause en mots fermés. Payée le 02/10.",
       "depuis": "2026-10-02"

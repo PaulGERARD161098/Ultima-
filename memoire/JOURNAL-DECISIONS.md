@@ -4736,3 +4736,21 @@ Paul : *« Merge 349 et go pour la boucle suivante »*.
   `7d21217` → `f1f9fb3` = 8 commits dont 6 sur la série ; écran : rendu, alerte,
   texte seul, contraste AA, sabotage au rouge ; reprise datée éprouvée en
   retirant RénoDevis du disque.
+
+## 2026-10-04 (nuit) — leçons propagées, fin de séance
+
+Paul : *« Merge 350 et propage les leçons »* · *« Merge les 8 et option b pour
+RenoDevis »* · *« Merge 282 et fin de session »*.
+
+- **#350 fusionnée** (squash `ab60a65`, tête `0c1abc1`, CI 9/9).
+- **LEÇONS v71 dans les 10 dépôts**, mesuré après fusion (`cmp` contre la source :
+  10/10). Neuf PR, chacune fusionnée à son SHA annoncé. Contrôle des chemins avant
+  propagation : 0.
+- **RenoDevis, option b** : la propagation est passée par `claude/lecons-v71`
+  (#282, `2d14e60`). La branche de travail portait encore le commit de #272
+  (fermée sans fusion) : il n'a pas été écrasé.
+- **DATARENO-** : preview Vercel en erreur, préexistante (#50, #51) — signalée sur
+  #52, logs illisibles (403).
+- **Premier signal réel du rappel ZOH SHIA** : RénoDevis `2d14e60` est un commit
+  au-delà de la série, sans toucher ses fichiers ; l'extraction le confirme
+  (495 fichiers, aucun nom propre).
