@@ -2150,6 +2150,15 @@ de `leo_ecritures`, et ce n'est ni ④ ni ⑤. Écarté en passant : le modèle
 (`claude-opus-4-8`, valide et actif), la forme de la requête (système + deux
 outils), la session (un 401 l'aurait dit).
 
+**✅ ÉTAPE 0 REJOUÉE EN PRODUCTION LE 04/10 (16:11 UTC) — ET PROUVÉE.** Paul a
+dicté « Capture idée test B1 » sur `/registre`, puis cliqué « Défaire ». Mesuré
+en base : `leo_ecritures` passe de **0** à **3 lignes sur une même trace** —
+`tentee` 16:11:39 (avant l'acte, sans cible), `reussie` 16:11:40 (cible notée),
+`defaite` 16:11:54 ; l'idée créée n'existe plus, l'archipel est revenu à **4
+idées**. Outil `proposer_idee`, quadrant ADRAMELECH, anneau vert. Le crédit IA
+est donc bien rechargé. ⏳ **Non prouvé, nommément** : « rien au-delà » — un geste
+ORANGE en production doit faire DEMANDER Léo.
+
 **⏳ Registre — ce qui revient à Paul** :
 0. **Recharger le crédit Anthropic** (console Anthropic, geste payant — gate
    Paul), puis rejouer l'étape 0 : la dictée, 2 lignes, « Défaire », 3ᵉ ligne.
