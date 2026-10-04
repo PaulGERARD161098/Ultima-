@@ -1,0 +1,26 @@
+name: R21 control — isolated fixture
+
+# Snapshot de préparation seulement. L'import et le déclenchement restent des
+# gestes humains distincts ; ce fichier dans Ultima ne crée aucune autorité.
+on:
+  workflow_dispatch:
+    inputs:
+      source_sha:
+        description: Exact Ultima source SHA
+        required: true
+      package_sha256:
+        description: Exact reviewed R21 package SHA-256
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  admission:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Refuse an uninstalled preparation
+        run: |
+          echo 'This snapshot must be imported and anchored by Paul before use.' >&2
+          exit 1

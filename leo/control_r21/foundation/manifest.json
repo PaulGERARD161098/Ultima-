@@ -1,0 +1,11 @@
+{
+  "authority": "none-preparation-only",
+  "contract_version": "1.1",
+  "destination_repository": "leo-control-r21",
+  "expected_workflow_sha": "5eb0a047388f5f2ec8967f51e487d7deea18f80c3cce66d11691abba4bf3b44f",
+  "files": {
+    "control-r21.yml": "5eb0a047388f5f2ec8967f51e487d7deea18f80c3cce66d11691abba4bf3b44f",
+    "runner.py": "ba06d8e662284b71d4c11ba7c73223cc8b8595c13fe2047adffa48c07de4f20e"
+  },
+  "status": "not-installed-not-authorized"
+}
