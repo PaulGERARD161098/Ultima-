@@ -4574,3 +4574,9 @@ relevé (pire 5,79).
 RénoDevis chez un autre artisan ». ⛔ Elle POINTE les sources de RénoDevis
 (CLAUDE.md, migrations, `lib/`), elle ne les recopie pas.
 
+
+**Le même jour, devant le cartouche des DRAGONS au repos** : *« Enlève cela,
+ça prend de la place »*. Un écran de constellation (DRAGONS, ARMES) n'affiche
+plus de cartouche tant qu'on ne survole rien : le fil d'Ariane dit déjà où l'on
+est. Le cartouche revient au survol d'une étoile. Sa place en bas reste
+réservée — sans elle, le cartouche du survol recouvrirait les étoiles du bas.

@@ -195,6 +195,24 @@ console.log('— Le cartouche —');
     await page.waitForTimeout(120);
     return r;
   };
+  // AU REPOS, LE CARTOUCHE SE TAIT (Paul, 04/10 : « enlève cela, ça prend de la
+  // place »). Lu sur le style calculé ET le contenu — un cartouche vide mais
+  // visible serait un cadre doré sans texte.
+  const repos = () => page.evaluate(() => {
+    const el = document.getElementById('boussole-parole');
+    return { visible: getComputedStyle(el).visibility === 'visible', texte: el.textContent.trim() };
+  });
+  const r0 = await repos();
+  verifier('Au repos, sur les DRAGONS, le cartouche est invisible et vide',
+    r0.visible === false && r0.texte === '', JSON.stringify(r0));
+  await page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="vranesh"]').dispatchEvent('mouseenter');
+  await page.waitForTimeout(200);
+  const r1 = await repos();
+  verifier('Miroir : au survol, il réapparaît', r1.visible === true && /VRANESH/.test(r1.texte), JSON.stringify(r1).slice(0, 120));
+  await page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="vranesh"]').dispatchEvent('mouseleave');
+  await page.waitForTimeout(150);
+  const r2 = await repos();
+  verifier('…et se tait de nouveau quand on s\'éloigne', r2.visible === false && r2.texte === '', JSON.stringify(r2));
   const vus = [];
   for (const id of DRAGONS) { vus.push({ id, ...(await lire(id)) }); }
   verifier('Verrou : Léo a parlé pour les sept dragons', vus.filter((v) => v.nom).length === 7);
@@ -209,6 +227,8 @@ console.log('— Le cartouche —');
   // MIROIR : un cap SANS épithète garde son état — sans ce contrôle, un cartouche
   // qui aurait perdu toute ligne d'état passerait pour un cartouche réussi.
   const { page, contexte } = await ouvrir('imladrik.html#constellation-armes', [1280, 860]);
+  const visibleAuRepos = await page.evaluate(() => getComputedStyle(document.getElementById('boussole-parole')).visibility === 'visible');
+  verifier('ARMES aussi : au repos, le cartouche se tait (même écran de constellation)', visibleAuRepos === false);
   await page.locator('#ciel-noeud-scene .ciel-etoile[data-noeud-id="ifulvin"]').dispatchEvent('mouseenter');
   await page.waitForTimeout(200);
   const etat = await page.evaluate(() => (document.querySelector('#boussole-parole .parole-etat') || {}).textContent || '');
