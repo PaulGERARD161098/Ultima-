@@ -1,0 +1,4 @@
+{
+  "pourquoi": "ZOH SHIA porte la techno PURE (Paul, 04/10/2026) : aucun nom d'artisan, de client, de fournisseur ni de marque. Cette liste vit HORS de zohshia/ pour que ZOH SHIA n'en contienne aucun. Le collecteur remplace tout nom technique qui en porte un par « [nom propre] » ; tests/unit-zohshia.mjs refuse qu'un seul apparaisse dans zohshia/, la compétence zohshia ou l'étoile ZOH SHIA. Comparaison sans casse, en mot entier (« isolation » ne déclenche pas).",
+  "jetons": ["sola", "icestream", "matthieu", "du crest", "midea", "mitsubishi"]
+}

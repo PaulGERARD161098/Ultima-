@@ -8,8 +8,10 @@
 //   · ELLE SERT DE CARTE À UN ATTAQUANT → aucune forme de secret, aucun
 //     identifiant (UUID), aucune adresse e-mail dans tout `zohshia/` ; le
 //     dossier n'est ni déployé (`.vercelignore`) ni servi (préfixe privé).
-//   · ELLE DÉCRIT SOLA, PAS UN ARTISAN QUELCONQUE → la liste du code écrit pour
-//     SOLA est exigée dans la fiche, fichier par fichier.
+//   · ELLE DÉCRIT UNE INSTANCE, PAS LA TECHNO → AUCUN nom propre (artisan,
+//     client, fournisseur, marque) dans tout `zohshia/`, la compétence et
+//     l'étoile ZOH SHIA (Paul, 04/10/2026 : « la technologie en pur »). La liste
+//     des noms vit HORS du dossier : `outils/zohshia/noms-propres.json`.
 //   · LE MANUEL SE CACHE → chaque étape porte son mode (Auto / Manuel).
 //   · LE VERT PAR VACUITÉ → verrous de non-vacuité AVANT toute recherche
 //     d'absence (un inventaire vide couvrirait tout, un dossier vide serait
@@ -35,23 +37,25 @@ const dit = (nom, ok) => { verdicts[nom] = ok === true; };
 let inv = null;
 try { inv = JSON.parse(lire('zohshia', 'renodevis', 'inventaire.json')); } catch { inv = null; }
 dit('inventaireLisible', !!inv);
-inv = inv || { source: {}, variables: [], crons: [], routes: [], migrations: [], tables: { hors_depot: [] }, code_pour_sola: [] };
+inv = inv || { source: {}, variables: [], crons: [], routes: [], migrations: [], tables: { hors_depot: [] } };
 dit('inventaireDitSaSource', /^[0-9a-f]{40}$/.test(inv.source.commit || '')
   && inv.source.depot === 'PaulGERARD161098/RenoDevis' && !Number.isNaN(Date.parse(inv.source.date_commit || '')));
-// Des planchers MESURÉS le 04/10 (39 · 4 · 19 · 41 · 8 · 39), pris un peu en
+// Des planchers MESURÉS le 04/10 (39 · 4 · 19 · 41 · 8), pris un peu en
 // dessous : ils attrapent une collecte vide ou tronquée, pas une évolution.
 dit('verrouVariables', inv.variables.length >= 30);
 dit('verrouCrons', inv.crons.length >= 4);
 dit('verrouRoutes', inv.routes.length >= 10);
 dit('verrouMigrations', inv.migrations.length >= 30);
-dit('verrouCodeSola', inv.code_pour_sola.length >= 10);
+// Le relevé du code propre à un artisan a été RETIRÉ (techno pure) : il ne doit
+// pas revenir par une collecte ancienne.
+dit('plusDeRelevePropreAUnArtisan', !Object.keys(inv).some((k) => /pour_|propre/i.test(k)));
 // Le cas qui a été payé : une variable lue par `listeEnv(` sur deux lignes
 // échappait à la collecte. On l'exige NOMMÉMENT.
 dit('collecteVoitLesLecturesMultilignes', inv.variables.some((v) => v.nom === 'SYNC_EMAIL_INTERNES'));
 chiffres.mesure = {
   commit: (inv.source.commit || '').slice(0, 7), variables: inv.variables.length, crons: inv.crons.length,
   routes: inv.routes.length, migrations: inv.migrations.length,
-  horsDepot: inv.tables.hors_depot.length, codeSola: inv.code_pour_sola.length,
+  horsDepot: inv.tables.hors_depot.length,
 };
 
 // ---- La couverture : la fiche nomme tout ce qui est mesuré -----------------
@@ -62,7 +66,6 @@ const manquants = {
   crons: inv.crons.map((c) => c.chemin).filter((c) => !fiche.includes('`' + c + '`')),
   routes: inv.routes.filter((r) => !techno.includes('`' + r + '`')),
   tablesHorsDepot: inv.tables.hors_depot.filter((t) => !techno.includes('`' + t + '`')),
-  codeSola: inv.code_pour_sola.map((c) => c.fichier).filter((f) => !fiche.includes('`' + f + '`')),
 };
 Object.entries(manquants).forEach(([k, v]) => dit('ficheCouvre_' + k, v.length === 0));
 const tousManquants = Object.fromEntries(Object.entries(manquants).filter(([, v]) => v.length));
@@ -105,8 +108,24 @@ const fuites = contenus.flatMap((c) => [
 dit('aucunSecretAucunIdentifiantAucuneAdresse', fuites.length === 0);
 if (fuites.length) { chiffres.fuites = fuites; }
 
+// ---- La techno pure : AUCUN nom propre ----------------------------------------
+const { jetons } = JSON.parse(lire('outils', 'zohshia', 'noms-propres.json'));
+dit('verrouNomsPropres', Array.isArray(jetons) && jetons.length >= 3);
+const echapper = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const NOM_PROPRE = new RegExp(`(^|[^a-zà-ÿ])(${jetons.map(echapper).join('|')})([^a-zà-ÿ]|$)`, 'im');
+// Le contrôle doit savoir crier : éprouvé sur un cas dont on connaît la réponse
+// (et sur son miroir, « isolation » ne doit PAS déclencher).
+dit('gardeNomsPropresEprouve', NOM_PROPRE.test('la matrice ' + jetons[0].toUpperCase() + ' du pro')
+  && !NOM_PROPRE.test('isolation des combles'));
+const { NOEUDS: N0 } = await import('../js/registre-lv3.mjs');
+const etoile = JSON.stringify(N0.zohshia || {});
+const nomsPropres = [...contenus.map((c) => ({ p: c.p, t: c.t })), { p: 'étoile zohshia', t: etoile }]
+  .filter((c) => NOM_PROPRE.test(c.t)).map((c) => `${c.p} : « ${(c.t.match(NOM_PROPRE) || [''])[0].trim()} »`);
+dit('aucunNomPropre', nomsPropres.length === 0);
+if (nomsPropres.length) { chiffres.nomsPropres = nomsPropres; }
+
 // ---- Ni déployé, ni servi ---------------------------------------------------
-dit('nonDeploye', /^zohshia\/$/m.test(lire('.vercelignore')));
+dit('nonDeploye', /^zohshia\/$/m.test(lire('.vercelignore')) && /^outils\/$/m.test(lire('.vercelignore')));
 dit('nonServi', ['/zohshia', '/zohshia/renodevis/inventaire.json', '/zohshia/renodevis/AJOUTER-UN-ARTISAN.md']
   .every((p) => estCheminPrive(p) === true));
 

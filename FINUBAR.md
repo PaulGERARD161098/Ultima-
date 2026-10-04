@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-10-04",
-    "quoi": "04/10 : DRAGONS à épithètes + ZOH SHIA fusionnés (#343) ; boucle 2 de ZOH SHIA — la techno de RénoDevis vit dans zohshia/ (inventaire mesuré, guide « ajouter un artisan », compétence /zohshia), sur branche claude/ilmadrik-dragon-stars-rename-pgel4h. Le 02/10 : crédit Anthropic épuisé.",
-    "commit": "c1baf6080175c25c0f5d3851cf53ba8777a60942"
+    "quoi": "04/10 : DRAGONS à épithètes et ZOH SHIA fusionnés (#343, #344) ; ZOH SHIA réécrit en techno PURE — plan complet de RénoDevis sans aucun nom d'artisan ni valeur (décision de Paul) ; neutralisation du code de RénoDevis abandonnée (#272 fermée, L0 #271 conservé). Branche claude/ilmadrik-dragon-stars-rename-pgel4h.",
+    "commit": "19dd57b048a2b50f0a1bdf62d90cd29f6db14436"
   },
   "prochaine_action": "Étape 0 EN PRODUCTION sur /registre (le crédit est rechargé) : dicter « Capture l'idée Test B1 », mesurer 2 lignes (tentee, reussie) dans leo_ecritures, cliquer « Défaire », mesurer la 3ᵉ (defaite) et la disparition de l'idée.",
   "bloque_par": [

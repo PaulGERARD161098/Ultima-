@@ -4622,3 +4622,29 @@ Direction donnée pour la suite : *« les règles écrites pour SOLA, certaines 
 sont propres : tarifs de son fournisseur, coût de sa main d'œuvre… ce sont des
 choses à rendre neutres, garder l'ossature pour rendre la techno aisément
 duplicable »*.
+
+## 2026-10-04 (après-midi) — ZOH SHIA devient la techno PURE ; RénoDevis reste tel quel
+
+Paul, dicté : *« dans ZOH SHIA on garde uniquement la technologie en pur — je ne
+veux pas de données techniques et je ne veux pas de nom d'artisan ; je veux la
+technologie elle-même, avec tout ce qu'elle fait, ce qu'elle comporte. Le cas de
+l'artisan avec qui je travaille déjà, je l'ai déjà dans RénoDevis. »* (« Zosia » =
+ZOH SHIA, « Zoom » = RénoDevis.)
+
+**Décisions :**
+1. **La neutralisation du code de RénoDevis est ABANDONNÉE** (L1 à L4). La PR
+   RénoDevis #272 (L1, profil de règles) est **fermée sans fusion**. RénoDevis
+   reste l'outil de l'artisan pilote, tel qu'il est. ⚠️ L0 (#271, fusionné) est
+   conservé : il empêche les devis modèles d'un artisan d'être proposés aux
+   autres comptes — utile quoi qu'il arrive.
+2. **ZOH SHIA = le plan de la techno, sans code** (option A), sans aucun nom
+   d'artisan, de client, de fournisseur ni de marque, sans aucune valeur propre à
+   un pro. Les noms techniques (tables, routes, variables) sont gardés.
+3. L'extraction du **code** neutre (option B) viendra après, sur ce plan.
+
+**Livré** : `TECHNO.md` réécrit en plan complet (parcours, mécanismes, données,
+routes, services, sécurité) ; le guide de mise en service sans référence à un
+artisan existant ; la collecte qui neutralise les noms propres et refuse d'écrire
+s'il en survit un ; la liste des noms bannis HORS de `zohshia/`
+(`outils/zohshia/noms-propres.json`, non déployé) ; le test qui la fait respecter
+partout, éprouvé par sept sabotages et un miroir.
