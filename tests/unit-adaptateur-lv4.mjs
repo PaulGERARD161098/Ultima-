@@ -234,12 +234,11 @@ dit('isoleDragonsNommeSonAmasDRAGONS',
 // au premier niveau d'IMLADRIK. Le verdict ne se relâche pas : les cinq autres
 // restent des feuilles de rang 0, et ADRAMELECH est le SEUL de rang 1 — lu dans
 // le registre, pas supposé.
-// ZOH SHIA (04/10) est une étoile d'ATTENTE : sans page, comme IFULVIN — sa
-// cible est exigée NULLE, pas seulement tolérée.
+// ZOH SHIA a sa page depuis le 04/10/2026 : les sept cibles sont des pages.
 dit('isoleDragonsGardeLesCiblesDesPages',
   foyerDragons.noeuds.length === 7
   && foyerDragons.noeuds.every((n) => n.cible === NOEUDS[n.id].cible
-    && (n.id === 'zohshia' ? n.cible === null : /\.html$/.test(n.cible)))
+    && /\.html$/.test(n.cible))
   && foyerDragons.noeuds.filter((n) => n.poids === 0).map((n) => n.id).join(',')
     === 'maedrethnir,vranesh,draukhain,reshiram,zekrom,zohshia'
   && foyerDragons.noeuds.filter((n) => n.poids === 1).map((n) => n.id).join(',') === 'adramelech'

@@ -142,13 +142,15 @@ dit('deuxVoiesEtGates', /## 0\. Deux voies/.test(guide) && /## 3\. Voie B/.test(
 
 // ---- Ni déployé, ni servi ---------------------------------------------------
 dit('nonDeploye', /^zohshia\/$/m.test(lire('.vercelignore')) && /^outils\/$/m.test(lire('.vercelignore')));
-dit('nonServi', ['/zohshia', '/zohshia/renodevis/inventaire.json', '/zohshia/renodevis/AJOUTER-UN-ARTISAN.md']
-  .every((p) => estCheminPrive(p) === true));
+// Les SOURCES ne sont jamais servies ; la coque `/zohshia` (chemin exact) l'est,
+// et elle ne porte aucune donnée — le plan vient de /api/zohshia, propriétaire seul.
+dit('nonServi', ['/zohshia/renodevis/inventaire.json', '/zohshia/renodevis/AJOUTER-UN-ARTISAN.md', '/zohshia/publier.mjs']
+  .every((p) => estCheminPrive(p) === true) && estCheminPrive('/zohshia') === false);
+dit('coqueSansDonnee', (() => { const h = lire('zohshia.html'); return !/RenoDevis|RénoDevis|relance automatique|check-list/i.test(h) && /\/api\/zohshia|js\/zohshia\.js/.test(h); })());
 
 // ---- L'étoile dit où vit la techno -----------------------------------------
 const { NOEUDS } = await import('../js/registre-lv3.mjs');
-dit('etoileZohShiaPointeLaTechno', /RénoDevis/.test(NOEUDS.zohshia?.resume || '')
-  && /\/zohshia/.test(NOEUDS.zohshia?.resume || ''));
+dit('etoileZohShiaOuvreSaPage', NOEUDS.zohshia?.cible === 'zohshia.html' && /badge/i.test(NOEUDS.zohshia?.resume || ''));
 
 const echecs = Object.entries(verdicts).filter(([, ok]) => !ok).map(([k]) => k);
 console.log(JSON.stringify(verdicts, null, 2));

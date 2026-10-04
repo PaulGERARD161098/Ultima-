@@ -231,23 +231,23 @@ for (const nom of COQUES) {
     verdicts['coqueNonVide_' + nom] = r.attendus >= 2;
   }
   if (nom === 'omega') { verdicts.omegaTroisCaps = r.attendus === 3; }
-  // IMLADRIK : DEUX entrées (ARMES, DRAGONS) — le repli, lui, porte SIX pages (la
+  // IMLADRIK : DEUX entrées (ARMES, DRAGONS) — le repli, lui, porte SEPT pages (la
   // descente est prouvée : sans elle, `ciblesDuRegistre` n'en compterait aucune,
   // les deux entrées étant sans page). TRANSPOSÉ (30/09) : quatre entrées + cinq
   // pages → deux + six ; TAO n'est plus nulle part.
   if (nom === 'imladrik') {
     verdicts.imladrikDeuxEntrees = r.attendus === 2;
-    verdicts.imladrikRepliAttenduProfond = r.ciblesDuRegistre.length === 6
+    verdicts.imladrikRepliAttenduProfond = r.ciblesDuRegistre.length === 7
       && ['maedrethnir.html', 'vranesh.html', 'draukhain.html', 'adramelech.html',
-        'reshiram.html', 'zekrom.html']
+        'reshiram.html', 'zekrom.html', 'zohshia.html']
         .every((c) => r.ciblesDuRegistre.includes(c) && r.cellesDuRepli.includes(c))
       && !r.cellesDuRepli.some((c) => /tao/i.test(c));
   }
-  // LES DRAGONS, ISOLÉS : sept étoiles (ZOH SHIA, 04/10/2026, sans page), six
-  // pages dans le repli (le repli de la page porte les six, isolement ou non).
+  // LES DRAGONS, ISOLÉS : sept étoiles, sept pages dans le repli (ZOH SHIA a sa
+  // page depuis le 04/10/2026).
   if (nom === 'constellation-dragons') {
     verdicts.dragonsSeptEtoiles = r.attendus === 7 && r.manquants.length === 0;
-    verdicts.dragonsRepliSixPages = r.ciblesDuRegistre.length === 6
+    verdicts.dragonsRepliSeptPages = r.ciblesDuRegistre.length === 7
       && r.ciblesDuRegistre.every((c) => r.cellesDuRepli.includes(c));
   }
   verdicts['plusDeBoussole_' + nom] = r.plusDeBoussole === true;

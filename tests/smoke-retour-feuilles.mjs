@@ -153,15 +153,17 @@ const DRAGONS = [
   ['adramelech', 'adramelech.html'],
   ['reshiram', 'reshiram.html'],
   ['zekrom', 'zekrom.html'],
+  // ZOH SHIA a sa page depuis le 04/10/2026 (un badge par techno) : il revient
+  // à sa constellation comme les six autres.
+  ['zohshia', 'zohshia.html'],
 ];
-const LIBELLE_COURT = ['adramelech', 'reshiram', 'zekrom'];
+const LIBELLE_COURT = ['adramelech', 'reshiram', 'zekrom', 'zohshia'];
 const RETOUR_DRAGONS = 'imladrik.html#constellation-dragons';
-// ZOH SHIA (04/10/2026) est un enfant SANS page : il n'a pas de retour à
-// éprouver, et le verrou le dit au lieu de l'ignorer.
-verifier('Verrou : les six pages sont bien les enfants À PAGE de la constellation DRAGONS (ZOH SHIA, sans page, à part)',
+// Depuis le 04/10/2026, les SEPT enfants de DRAGONS ont leur page (ZOH SHIA compris).
+verifier('Verrou : les sept pages sont exactement les enfants de la constellation DRAGONS, toutes à page',
   JSON.stringify(NOEUDS['constellation-dragons'].enfants.filter((id) => NOEUDS[id].cible))
     === JSON.stringify(DRAGONS.map((d) => d[0]))
-  && JSON.stringify(NOEUDS['constellation-dragons'].enfants.filter((id) => !NOEUDS[id].cible)) === '["zohshia"]');
+  && NOEUDS['constellation-dragons'].enfants.every((id) => NOEUDS[id].cible));
 
 // Ce que le ciel montre à l'arrivée, mesuré dans un navigateur mobile.
 async function etoilesApresLeRetour(idDragon, fichier) {

@@ -1,0 +1,11 @@
+{
+  "pourquoi": "Ce que l'écran ZOH SHIA montre de cette techno (Paul, 04/10/2026 : « un badge par techno, et le contenu est dedans »). Le badge pointe des sections des fichiers de la techno, il ne les recopie pas : `zohshia/publier.mjs` les transforme en données servies derrière le garde propriétaire.",
+  "ordre": 1,
+  "badge": "Outil de création de devis / relance automatique",
+  "etat": "En service",
+  "onglets": [
+    { "id": "techno", "titre": "Ce que fait la techno", "source": "TECHNO.md" },
+    { "id": "checklist", "titre": "Check-list du pro", "source": "AJOUTER-UN-ARTISAN.md", "sections": ["## 0.", "## 1."] },
+    { "id": "service", "titre": "Mise en service", "source": "AJOUTER-UN-ARTISAN.md", "sections": ["## 2.", "## 3.", "## 4.", "## 5.", "## 6.", "## 7."] }
+  ]
+}

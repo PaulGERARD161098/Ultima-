@@ -25,9 +25,17 @@ prouver la couverture, dérouler le guide, s'arrêter à chaque gate.
 | **Mesurer, ne pas recopier** — les listes viennent de `collecter.mjs`, avec le commit d'origine ; un nom technique qui porte un nom propre devient `[nom propre]` | Un plan écrit de mémoire, qui diverge du code sans que rien ne le dise |
 | **Le plan nomme tout ce qui est mesuré** — `tests/unit-zohshia.mjs` rougit sinon | Une pièce oubliée le jour de la mise en service |
 | **Des noms, jamais des valeurs** — ni secret, ni identifiant, ni adresse ; testé | Le plan devient la carte d'attaque du système |
-| **Ni déployé, ni servi** — `.vercelignore` + préfixe privé `/zohshia` du middleware | La carte publiée sur le site public |
+| **Les sources ni déployées ni servies ; l'écran au seul propriétaire** — `.vercelignore` exclut `zohshia/` et `outils/` ; la page `/zohshia` est une coque sans donnée ; le plan publié (`node zohshia/publier.mjs` → `api/_lib/zohshia-technos.mjs`) ne sort que par `/api/zohshia`, réservée au propriétaire (`ULTIMA_PROPRIETAIRES`, fermé par défaut) — l'inscription au projet d'authentification est ouverte, « connecté » ne suffit pas | La carte publiée sur le site public, ou lue par un compte créé par n'importe qui |
 
-⚠️ **Ce qui n'est pas là, nommément** : une page à l'écran pour ZOH SHIA (elle
-exigera une route authentifiée) ; et le code neutre lui-même, qui ne se STOCKE
-pas — il s'EXTRAIT à la demande d'un commit du dépôt de référence, pour être
-toujours à jour (`renodevis/extraire.mjs`).
+## À l'écran
+
+Un **badge par techno** (Paul, 04/10/2026), son contenu dedans : *Ce que fait
+la techno*, *Check-list du pro*, *Mise en service*. Chaque techno déclare son
+badge dans `zohshia/<techno>/badge.json` ; une techno nouvelle = un dossier de
+plus, la page ne change pas. Après toute modification d'un fichier pointé :
+`node zohshia/publier.mjs`, puis commiter — un test rougit sinon.
+
+⚠️ **Ce qui n'est pas là, nommément** : le code neutre lui-même, qui ne se
+STOCKE pas — il s'EXTRAIT à la demande d'un commit du dépôt de référence, pour
+être toujours à jour (`renodevis/extraire.mjs`) ; et aucun bouton n'agit depuis
+l'écran (pas d'« extraire » en ligne).
