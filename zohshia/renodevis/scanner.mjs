@@ -11,10 +11,6 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { chargerRecette } from './neutraliser.mjs';
 
-const racine = process.argv[2];
-if (!racine) { console.error('usage : scanner.mjs <dossier> [--resume]'); process.exit(2); }
-const resume = process.argv.includes('--resume');
-const recette = chargerRecette();
 import { pathToFileURL } from 'node:url';
 
 const IGNORES = new Set(['node_modules', '.git', '.next']);
@@ -46,7 +42,7 @@ export function scanner(racine, recette = chargerRecette()) {
   return { lus, trouves };
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const racine = process.argv[2];
   if (!racine) { console.error('usage : scanner.mjs <dossier> [--resume]'); process.exit(2); }
   const resume = process.argv.includes('--resume');
