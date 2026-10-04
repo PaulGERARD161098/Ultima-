@@ -49,22 +49,24 @@ Un dossier est **un devis**, qui naît brouillon et avance d'état en état.
 ### Les règles de prix — l'ossature commune, les détails au pro
 
 Ce qu'il faut savoir d'**un pro** pour calculer la marge d'un chantier — chaque
-pro y met **ses** valeurs, la techno n'en impose aucune :
+pro y met **ses** valeurs, la techno n'en impose aucune. Mesuré dans le schéma
+qui les valide (`banques_reno.regles`, 04/10/2026) :
 
-| Champ | Rôle |
-|---|---|
-| Formule de prix | Comment le prix de vente découle de l'achat (par défaut : achat × coefficient, arrondi **au centime supérieur**) |
-| Coefficient produits | Le multiplicateur de la formule par défaut |
-| Main-d'œuvre | Prix HT d'une unité de pose, et l'unité (jour, demi-journée…) |
-| Validité des prix d'achat | Âge maximal d'un prix d'achat retenu |
-| Validité du catalogue | Fraîcheur maximale d'une fiche technique |
-| TVA par défaut | Taux proposé d'office, ou **aucun** : la règle légale décide |
-| TVA confirmée par le pro | Le pro confirme le taux, au lieu qu'il soit déduit |
-| Remise | Autorisée ou non |
-| Version des règles | Tamponnée sur chaque devis : un changement de règles se voit, et invalide les devis en cours de préparation |
+| Champ | Rôle | Bornes |
+|---|---|---|
+| `coefficient_produits` | Prix de vente = achat × coefficient, arrondi **au centime supérieur** | 1 à 5 |
+| `demi_journee_ht` | Prix HT d'une demi-journée de main-d'œuvre | > 0 |
+| `validite_prix_jours` | Âge maximal d'un prix d'achat retenu | 1 à 366 jours |
+| `validite_catalogue_jours` | Fraîcheur maximale d'un catalogue | 1 à 366 jours |
 
-⛔ Une **formule propre** à un pro ne se choisit pas par un réglage d'écran : elle
-s'attache à lui dans le code, en un seul endroit, comme une décision.
+À côté, la **bibliothèque de prix** du pro (`banques_reno.banque`) : ses produits
+et leurs prix d'achat sourcés, ses catalogues, ses fiches techniques, ses prix
+fixes (kits, forfaits), ses prestations et leurs prix de vente historiques. Elle
+n'accepte aucune donnée personnelle (refus à l'import).
+
+⛔ Le dépôt de référence porte en plus une **formule propre à un pro** (son
+modèle de prix, sa présentation, ses contrôles). Ce n'est pas la techno : la
+**série de neutralisation** (§8) la retire, et le code extrait n'en contient rien.
 
 ### La TVA — la règle légale, datée, jamais recopiée
 
@@ -119,12 +121,18 @@ s'attache à lui dans le code, en un seul endroit, comme une décision.
 | `feedbacks` | Les retours des utilisateurs |
 | `sentinelle_etat` | Les battements des tâches planifiées |
 
-**Les tables que le dépôt de référence ne sait pas créer** — elles vivent dans une
-base partagée, créées ailleurs. Tant que cette liste n'est pas vide, une instance
-neuve ne se reconstruit pas depuis ce seul dépôt :
+**Les tables que le dépôt de référence ne sait pas créer** — nées dans une base
+partagée, ailleurs : `catalogue_[nom propre]` (le catalogue fournisseur, nommé
+`catalogue_fournisseur` dans la techno) · `clients` · `devis` · `devis_events` ·
+`feedbacks` · `profiles` · `relance_queue` · `sentinelle_etat` · `stock` (que la
+signature décrémente).
 
-`catalogue_[nom propre]` · `clients` · `devis` · `devis_events` · `feedbacks` ·
-`profiles` · `relance_queue` · `sentinelle_etat`
+✅ **Depuis le 04/10/2026, une base neuve se reconstruit quand même** : ZOH SHIA
+porte leur **socle** (leur état avant la première migration de la techno), et la
+**finition** que la référence porte après (droits par colonne, gardes de
+sécurité). `base/rejouer.mjs` reconstruit le tout sur un Postgres jetable et le
+compare à un **étalon validé par la base de référence elle-même**, en lecture
+seule — §8.
 
 ## 5. Les routes serveur (mesurées)
 
@@ -176,3 +184,16 @@ le reste du produit ne bouge pas.
   partis) : le silence des policies est la règle.
 - **Les données d'un pro ne servent qu'à lui** : sa bibliothèque, ses devis passés,
   ses prix ne sont jamais proposés à un autre.
+
+## 8. Le code et la base neutres — ce que ZOH SHIA fabrique
+
+| Pièce | Ce qu'elle fait | Ce qui la garde |
+|---|---|---|
+| `neutraliser.mjs` | Le moteur : applique la recette privée (renommages, remplacements épinglés par empreinte, retouches exactes) ; retire les lignes de commentaire porteuses d'un nom propre | Refus si une retouche a périmé, si un original a changé, si un nom propre survit hors commentaire |
+| `scanner.mjs` | Lit un arbre entier, chemins et contenus | Refus sur un arbre vide ; même détecteur que le test d'Ultima |
+| `base/` + `base/rejouer.mjs` | La base neuve : plateforme simulée (local seulement), socle, migrations neutralisées dans l'ordre relevé, finition | Socle qui ne masque aucune migration ; chaque objet cité existe ; empreinte = étalon validé par la référence. Éprouvé en cassant : 6 sabotages sur 6 au rouge |
+| `extraire.mjs` | Le code : série de neutralisation appliquée **en 3 voies** (elle encaisse les évolutions du dépôt), migrations neutralisées, base ajoutée, export **sans historique** | Conflit réel = arrêt ; un nom propre = sortie effacée ; `--verifier` : typage, tests, build |
+
+⛔ **Ce qui reste hors de ZOH SHIA, délibérément** : la recette et la série de
+neutralisation **nomment** ce qu'elles retirent ; elles vivent donc dans
+`outils/zohshia/renodevis/`, hors du dossier, comme la liste des noms propres.

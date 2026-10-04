@@ -10,7 +10,7 @@
 
 | Élément | Ce qu'on y trouve |
 |---|---|
-| `renodevis/` | Le plan de la techno RénoDevis (`TECHNO.md`), le guide pour la mettre en service chez un pro (`AJOUTER-UN-ARTISAN.md`), et l'inventaire mesuré qui les tient à jour (`inventaire.json`) |
+| `renodevis/` | Le plan de la techno RénoDevis (`TECHNO.md`), le guide et la check-list pour la mettre en service chez un pro (`AJOUTER-UN-ARTISAN.md`), l'inventaire mesuré (`inventaire.json`), l'extraction du code neutre (`extraire.mjs`) et la base neuve prouvée (`base/`) |
 
 ## Comment on l'invoque
 
@@ -28,6 +28,6 @@ prouver la couverture, dérouler le guide, s'arrêter à chaque gate.
 | **Ni déployé, ni servi** — `.vercelignore` + préfixe privé `/zohshia` du middleware | La carte publiée sur le site public |
 
 ⚠️ **Ce qui n'est pas là, nommément** : une page à l'écran pour ZOH SHIA (elle
-exigera une route authentifiée), et le code de la techno lui-même — le plan
-vient d'abord (choix de Paul, 04/10/2026), l'extraction du code neutre se cadrera
-ensuite.
+exigera une route authentifiée) ; et le code neutre lui-même, qui ne se STOCKE
+pas — il s'EXTRAIT à la demande d'un commit du dépôt de référence, pour être
+toujours à jour (`renodevis/extraire.mjs`).

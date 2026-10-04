@@ -1,22 +1,113 @@
-# ZOH SHIA · RénoDevis — mettre la techno en service pour un pro
+# ZOH SHIA · RénoDevis — mettre la techno en service pour un nouveau pro
 
-> **Ce qu'on invoque pour dupliquer la techno chez un autre artisan** (Paul,
-> 04/10/2026). Le pro rejoint la plateforme existante ; on ne clone pas
-> l'instance — `TECHNO.md` §4 dit pourquoi ce n'est pas possible aujourd'hui.
+> **L'invocation** (Paul, 04/10/2026) : *« ZOH : j'intègre un nouvel artisan ;
+> fournis-moi un code et une base prête, donne-moi la check-list des infos
+> nécessaires pour mettre la techno RénoDevis à jour pour lui. »*
 >
 > ⛔ **Techno pure** : ce guide ne porte ni nom d'artisan, ni valeur propre à un
 > pro, ni secret. Il dit QUOI renseigner, jamais AVEC QUOI.
 >
 > **S'invoque par** la compétence `zohshia`. Avant toute étape : relancer la
-> collecte, lire la dérive, faire passer `tests/unit-zohshia.mjs`. Un guide non
+> collecte, rejouer la base, faire passer `tests/unit-zohshia.mjs`. Un guide non
 > remesuré se lit comme un guide juste.
 >
 > ⛔ **Aucune étape ne s'exécute sur ce document seul.** Chaque geste qui écrit
-> en base réelle, envoie un mail réel ou touche un compte est un **effet métier
-> réel** : il demande le mandat précis de Paul (contrat LV1, `CLAUDE.md`
-> d'Ultima, §Gates). Ce guide dit QUOI faire ; il n'autorise rien.
+> en base réelle, crée un compte, un dépôt, un projet ou une dépense, envoie un
+> mail réel ou pose une variable de production est un **effet métier réel** : il
+> demande le mandat précis de Paul (contrat LV1, `CLAUDE.md` d'Ultima, §Gates).
+> Ce guide dit QUOI faire ; il n'autorise rien.
 
-## 1. Les étapes
+## 0. Deux voies — à choisir d'abord, avec Paul
+
+| Voie | Ce que le pro reçoit | Quand |
+|---|---|---|
+| **A — il rejoint la plateforme existante** | un compte sur l'instance en place, cloisonné par la RLS | le cas courant : rien à créer, tout à renseigner |
+| **B — une instance à lui** | **son code** (extrait neutre) et **sa base** (reconstruite et prouvée), sur ses propres comptes de service | il exige l'isolement de ses données, ou une marque à lui |
+
+La check-list du §1 sert **aux deux voies**. La voie B ajoute le §3.
+
+## 1. La check-list — ce qu'il faut obtenir du pro
+
+Chaque ligne dit **où l'information va** (table · colonne, ou variable) et si
+elle est **obligatoire** pour que la techno tourne. Rien n'est à inventer : une
+case vide reste vide, et l'écran le montre.
+
+### 1.1 Son identité — fiche du pro (`artisans`, et `profiles` pour son compte)
+
+| Information | Où | Obligatoire |
+|---|---|---|
+| Raison sociale | `entreprise` | ✅ |
+| Nom du contact, téléphone, e-mail | `contact_nom`, `tel`, `email` | ✅ |
+| SIRET (la TVA intracommunautaire s'en déduit) | `siret` → `tva_intra` | ✅ mention légale |
+| Adresse du siège | `adresse` | ✅ mention légale |
+| Qualification RGE (numéro) | `rge` | si travaux aidés |
+| Assurance décennale (assureur, numéro) | `decennale` | ✅ mention légale |
+| Logo | `logo_url` (stockage `artisan-logos`) | facultatif |
+| Site, page professionnelle, page d'avis | `site_url`, `linkedin_url`, `google_page_url` | facultatif |
+| Savoir-faire, produits mis en avant | `savoir_faire`, `produits` | facultatif |
+| Attestations (assurance, garanties, qualifications) et leur date de validité | `assurance_url`, `garanties_url`, `qualifications_url`, `attestations_valides_jusqu_au` | facultatif — le bloc disparaît seul à expiration |
+
+### 1.2 Ses comptes
+
+| Information | Où | Obligatoire |
+|---|---|---|
+| E-mail de chaque personne qui se connecte (le pro, ses collaborateurs) | utilisateurs de la base + `profiles` (rôle `pro`) + `artisans.profile_id` | ✅ |
+
+### 1.3 Ses règles de prix — SA marge, elle ne se devine pas (`banques_reno.regles`)
+
+| Information | Champ | Bornes contrôlées |
+|---|---|---|
+| Coefficient appliqué au prix d'achat | `coefficient_produits` | 1 à 5 |
+| Prix HT d'une demi-journée de main-d'œuvre | `demi_journee_ht` | > 0 |
+| Âge maximal d'un prix d'achat retenu (jours) | `validite_prix_jours` | 1 à 366 |
+| Fraîcheur maximale d'un catalogue (jours) | `validite_catalogue_jours` | 1 à 366 |
+
+La **TVA** n'est pas à fournir : elle se calcule par la règle légale datée
+(`TECHNO.md`), sur les conditions relevées au chantier.
+
+### 1.4 Ses produits et ses fournisseurs
+
+| Information | Où | Obligatoire |
+|---|---|---|
+| Ses fournisseurs, et pour chaque référence : désignation, catégorie, prix public HT, prix net HT, délai de commande, unité | `catalogue_fournisseur` (le prix net ne descend jamais dans le navigateur) | ✅ pour chiffrer |
+| Ses factures d'achat récentes (prix réellement payés) | `banques_reno.banque` · achats | recommandé |
+| Ses catalogues fournisseurs (PDF, date d'édition) et fiches techniques | `banques_reno.banque` · catalogues, fiches | recommandé |
+| Ses prix fixes (kits, forfaits sans prix d'achat) | `banques_reno.banque` · prix fixes | facultatif |
+| Ses prestations (main-d'œuvre, mise en service, déplacement, maintenance, dépose) et leurs prix de vente | `banques_reno.banque` · prestations | recommandé |
+| Ses devis passés (PDF) et leur issue (signé, en attente, refusé) | corpus (`corpus_devis`, `corpus_lignes`) — seul l'identifiant client traverse | facultatif — c'est ce qui rend le premier devis « déjà presque prêt » |
+
+### 1.5 Ses clients existants (facultatif)
+
+| Information | Où |
+|---|---|
+| Liste de ses clients à reprendre | `clients` rattachés à sa fiche (`artisan_id`) — un client créé ensuite par lui s'y rattache tout seul |
+
+### 1.6 Ses mails aux clients
+
+| Information | Où | Obligatoire |
+|---|---|---|
+| Le nom qui signe les mails | identité du pro (voie « au nom du pro », sans rien faire) | ✅ |
+| S'il veut envoyer depuis SON domaine : l'adresse d'expédition, et l'accès à sa zone DNS | `email_expediteur`, puis `domaine_verifie` **après** contrôle | facultatif — ⛔ le drapeau se pose après vérification, sinon tous ses mails sont refusés |
+| Ses textes de mails (envoi, relances par température, renvoi, communication douce) | `relance_gabarits` (clé · variante · sujet · corps) | facultatif — sinon la banque de textes livrée |
+| S'il envoie des devis hors de l'application : son adresse d'envoi | `SYNC_EMAIL_EXPEDITEURS` | si besoin |
+
+### 1.7 Ses relances
+
+| Information | Où |
+|---|---|
+| Le moteur propose et il valide, ou il envoie seul | `RELANCE_MODE` (`valide` / `auto`) — par instance |
+| SMS : oui ou non, à partir de quelle relance ; consentement de ses clients | `RELANCE_SMS_A_PARTIR_DE`, `clients.sms_consent_at` |
+
+### 1.8 Son paiement en ligne
+
+| Information | Où |
+|---|---|
+| Paiement en ligne : oui ou non | — |
+| Le vendeur de référence, client par client : lui, ou la plateforme | `clients.origine` (vide = lui) |
+| Son taux de commission (% du HT) | `artisans.commission_pct` — ⛔ sans valeur par défaut : un taux absent se voit |
+| Son compte de paiement connecté | créé par lui, sur invitation (`STRIPE_INVITE_ENABLED`) |
+
+## 2. Voie A — il rejoint la plateforme existante
 
 Chaque ligne dit **qui** agit et **comment** : *Auto* (le système le fait),
 *Auto partiel*, ou *Manuel*. Les lignes *Manuel* sont la liste de ce qu'il reste
@@ -33,29 +124,46 @@ Chaque ligne dit **qui** agit et **comment** : *Auto* (le système le fait),
 | 7 | **Paiement en ligne** : le compte connecté du pro est créé et relu chaque jour par une tâche planifiée ; l'invitation ne part QUE si `STRIPE_INVITE_ENABLED` est ouvert. | Système / pro | Auto partiel | ⛔ Envoi réel à un tiers : décision de Paul |
 | 8 | **Catalogue de ses fournisseurs** : ses références et leurs prix d'achat dans le catalogue fournisseur (`catalogue_[nom propre]`, multi-fournisseur), lues par le pro via la vue de vente, sans prix d'achat. | Paul | Manuel | Écriture en base réelle |
 | 9 | **Bibliothèque de ses devis passés** (facultatif) : moissonner, structurer, rattacher, verser. Seul l'identifiant traverse vers la base, aucune donnée personnelle. | Paul | Manuel | Écriture en base réelle |
-| 10 | **Ses règles de prix** : son profil (`TECHNO.md` §3) — formule, coefficient, main-d'œuvre et son unité, validités, TVA par défaut ou règle légale, confirmation de la TVA, remise. Ce sont SES valeurs : la techno n'en propose aucune. | Paul (décision) | Manuel | Décision commerciale, puis écriture en base réelle |
+| 10 | **Ses règles de prix et sa bibliothèque de prix** (§1.3, §1.4 ; `TECHNO.md` §3) : coefficient, demi-journée de main-d'œuvre, validités ; ses produits, achats, prestations. Ce sont SES valeurs : la techno n'en propose aucune. | Paul (décision) | Manuel | Décision commerciale, puis écriture en base réelle |
 | 11 | **Synchronisation des devis envoyés par mail** (s'il en envoie hors plateforme) : ajouter son adresse d'envoi à `SYNC_EMAIL_EXPEDITEURS`. Ne jamais compter sur la valeur par défaut du code : la poser explicitement. | Paul | Manuel (variable de production) | Variable de production |
 | 12 | **Preuve** : rejouer la requête d'empreinte de la base, puis un devis de bout en bout sur l'écran du pro. | Paul / Léo | Manuel | ⛔ Un essai réel est un effet métier : mandat |
 
-## 2. Ce qui se décide avec le pro, avant la première ligne
+## 3. Voie B — une instance à lui : son code, sa base
+
+| # | Étape | Qui | Mode | Gate |
+|---|---|---|---|---|
+| B1 | **Le code** : `node zohshia/renodevis/extraire.mjs --depot <dépôt de référence> --sortie <dossier neuf> --verifier --modules <node_modules>`. Il applique la série de neutralisation en 3 voies, neutralise les migrations, ajoute la base, exporte sans historique, refuse au premier nom propre, et prouve typage, tests et build. | Léo | Auto | Lecture seule — aucun effet |
+| B2 | **La base, prouvée avant d'être posée** : `node zohshia/renodevis/base/rejouer.mjs --depot <dépôt>` la reconstruit sur un Postgres jetable et la compare à l'étalon validé par la référence. | Léo | Auto | Lecture seule |
+| B3 | **Son dépôt de code** : y pousser l'arbre extrait. | Paul | Manuel | ⛔ Création d'un dépôt : mandat |
+| B4 | **Son projet de base** (région UE) : appliquer, dans l'ordre de `supabase/base/ordre.txt`, le socle, les migrations, la finition. **Pas** le fichier de plateforme simulée : le projet la fournit. | Paul | Manuel | ⛔ Nouveau projet et écriture en base : mandat, et dépense éventuelle |
+| B5 | **Son hébergement** : relier le dépôt, poser TOUTES les variables du §6 avec SES valeurs (clés de ses services), générer un `CRON_SECRET` neuf, vérifier les tâches du §7. | Paul | Manuel | ⛔ Variables de production et dépense : mandat |
+| B6 | **Ses services** : domaine d'envoi des mails vérifié, compte de paiement plateforme, SMS si voulu. | Paul / pro | Manuel | ⛔ Comptes tiers, dépense |
+| B7 | **Puis la voie A, étapes 1 à 12, sur SON instance** — avec la check-list du §1. | Paul / Léo | voir §2 | voir §2 |
+| B8 | **Preuve sur l'instance** : rejouer la requête d'empreinte de la base, puis un devis de bout en bout sur l'écran du pro. | Paul / Léo | Manuel | ⛔ Un essai réel est un effet métier : mandat |
+
+⚠️ **Le code et la base vont ensemble.** L'extraction note le commit source ; la
+base livrée est celle que B2 prouve conforme pour ce même état du dépôt. Une
+extraction d'un commit et une base d'un autre ne se mélangent pas.
+
+## 4. Ce qui se décide avec le pro, avant la première ligne
 
 - **Ses règles de prix** (étape 10) — c'est SA marge, elle ne se devine pas.
 - **Son vendeur de référence** : la plateforme ou lui, client par client.
 - **Son expéditeur** : son nom sur le domaine de la plateforme, ou son domaine.
 - **Son paiement en ligne** : oui ou non, et son taux de commission.
 
-## 3. Ce qui reste manuel — à automatiser
+## 5. Ce qui reste manuel — à automatiser
 
-Lu dans la colonne *Mode* du §1 : la fiche (1), la commission (2), le compte (3),
+Lu dans la colonne *Mode* du §2 : la fiche (1), la commission (2), le compte (3),
 l'expéditeur sur son domaine (6), le catalogue (8), la bibliothèque de devis (9),
 les règles de prix (10), la synchronisation mail (11). Le plus fréquent est le 3.
 Chacun, automatisé, fait gagner une étape à **tous** les pros suivants.
 
-## 4. Les variables d'environnement (mesurées)
+## 6. Les variables d'environnement (mesurées)
 
-Elles sont **par instance** : mettre la techno en service pour un pro n'en touche
-qu'une (`SYNC_EMAIL_EXPEDITEURS`, étape 11). Les autres sont listées pour
-qu'aucune ne soit oubliée le jour où l'on montera une seconde instance. Les noms
+Elles sont **par instance** : en voie A, le pro n'en touche qu'une
+(`SYNC_EMAIL_EXPEDITEURS`, étape 11) ; en voie B, **toutes** se posent pour son
+instance (§3, étape B5). Les noms
 seulement, jamais les valeurs. ⛔ Les clés marquées *serveur* ne portent **jamais**
 le préfixe `NEXT_PUBLIC_` : elles seraient publiées dans le navigateur.
 
@@ -86,7 +194,7 @@ le préfixe `NEXT_PUBLIC_` : elles seraient publiées dans le navigateur.
 | `HUB_DEVIS_URL` · `NEXT_PUBLIC_HUB_URL` | Page devis historique du hub |
 | `RENO_CREATION_SECRET` | Clé *serveur* qui signe les propositions de la création assistée |
 
-## 5. Les tâches planifiées (mesurées, heures UTC)
+## 7. Les tâches planifiées (mesurées, heures UTC)
 
 | Tâche | Horaire | Ce qu'elle fait |
 |---|---|---|

@@ -1,0 +1,4 @@
+{
+  "pourquoi": "Erreurs de typage PRÉEXISTANTES dans le dépôt de référence (mesurées le 04/10/2026 sur le commit 7d21217 : 4 erreurs, toutes dans ce fichier de test ; la CI de référence ne lance pas tsc). L'extraction les tolère — elle ne les crée pas — et refuse toute autre erreur. Le jour où le dépôt les corrige, retirer la ligne : une tolérance qui ne sert plus masque la suivante.",
+  "erreurs_typage_preexistantes": ["lib/garantiesDevis.test.ts"]
+}

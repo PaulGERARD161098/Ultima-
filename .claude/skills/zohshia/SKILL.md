@@ -1,6 +1,6 @@
 ---
 name: zohshia
-description: ZOH SHIA, le dragon de la technologie — la techno de Paul à l'état pur, à invoquer. Premier élément : RénoDevis — son plan complet (ce qu'elle fait, ses mécanismes, ses données, ses routes, ses services) et le guide pour la mettre en service chez un autre artisan. À charger quand Paul veut dupliquer la techno pour un pro, savoir de quoi elle est faite, ou de quoi un pro doit décider avant de s'en servir. Couvre la recollecte mesurée, la lecture de la dérive, le guide pas à pas et ses gates. Aucun nom d'artisan, aucune valeur.
+description: ZOH SHIA, le dragon de la technologie — la techno de Paul à l'état pur, à invoquer. Premier élément : RénoDevis. Sur « j'intègre un nouvel artisan », ZOH SHIA fournit le code neutre extrait et prouvé (typage, tests, build), la base neuve reconstruite et validée contre la référence, et la check-list des informations à obtenir du pro. À charger aussi quand Paul veut savoir de quoi la techno est faite. Couvre la recollecte mesurée, la dérive, l'extraction, le rejeu de la base, le guide et ses gates. Aucun nom d'artisan, aucune valeur.
 ---
 
 # ZOH SHIA — invoquer la techno
@@ -18,36 +18,43 @@ d'artisan, de client, de fournisseur ni de marque, et sans aucune valeur propre
 | `zohshia/renodevis/AJOUTER-UN-ARTISAN.md` | Mettre la techno en service pour un pro : qui agit, auto ou manuel, quel gate |
 | `zohshia/renodevis/inventaire.json` | Ce que la collecte a MESURÉ, avec le commit d'origine |
 | `zohshia/renodevis/collecter.mjs` | La collecte (des noms, jamais des valeurs ; les noms propres neutralisés) |
+| `zohshia/renodevis/extraire.mjs` | Le CODE neutre, extrait d'un commit du dépôt de référence et prouvé |
+| `zohshia/renodevis/base/rejouer.mjs` | La BASE neuve, reconstruite sur un Postgres jetable et comparée à l'étalon |
 
-## L'invocation — dans cet ordre, aucun pas n'est facultatif
+## L'invocation « j'intègre un nouvel artisan » — dans cet ordre
 
-1. **Remesurer.** Le dépôt de référence doit être attaché à la séance et
-   récupéré (`git -C <dépôt> fetch origin main`). Puis :
-   `node zohshia/renodevis/collecter.mjs --depot <chemin du dépôt>`.
-   Le script dit la **dérive**, et s'arrête en erreur s'il rencontre une lecture
-   de variable qu'il ne sait pas résoudre, ou un nom propre qu'il n'a pas pu
-   neutraliser.
-   ⛔ Sans le dépôt attaché, on ne remesure pas : on le DIT, et on donne la date
-   de la dernière mesure avant tout chiffre.
-2. **Prouver.** `node tests/unit-zohshia.mjs`. S'il rougit, une pièce mesurée
-   manque au plan, ou un nom propre y est entré : on corrige le plan **d'abord**,
-   en lisant la pièce dans le code, jamais en devinant son rôle.
-3. **Dérouler le guide** pour le pro nommé par Paul, étape par étape, en disant à
-   chaque fois qui agit et si c'est auto ou manuel. Les valeurs du pro (ses
-   règles de prix, sa commission) viennent de Paul et du pro, jamais du plan.
-4. **S'arrêter à chaque gate.** Toute écriture en base réelle, création de
-   compte, envoi réel ou variable de production est un **effet métier réel** :
-   elle attend le mandat précis de Paul (contrat LV1, `CLAUDE.md` d'Ultima).
-   Préparer est permis ; exécuter sans mandat, jamais.
-5. **Rendre compte** : étapes faites, étapes en attente de Paul, et ce que le pro
-   doit faire lui-même (son domaine, son compte de paiement).
+1. **Remesurer.** Le dépôt de référence attaché et récupéré
+   (`git -C <dépôt> fetch origin main`), puis
+   `node zohshia/renodevis/collecter.mjs --depot <dépôt>` : il dit la **dérive**.
+   ⛔ Sans le dépôt attaché, on ne remesure pas : on le DIT, avec la date de la
+   dernière mesure, avant tout chiffre.
+2. **La base.** `node zohshia/renodevis/base/rejouer.mjs --depot <dépôt>` :
+   « ✓ La base neuve est prête et prouvée », sinon on s'arrête sur le refus.
+   Si le dépôt a reçu des migrations depuis l'étalon : `--sql-reference`, passer
+   la requête rendue EN LECTURE SEULE sur la base de référence ; 0 ligne →
+   `--reference-validee --le <date>`.
+3. **Le code.** `node zohshia/renodevis/extraire.mjs --depot <dépôt> --sortie
+   <dossier neuf> --verifier --modules <node_modules>`. Un conflit de la série,
+   un nom propre ou une preuve rouge ARRÊTE tout : on corrige la série
+   (`outils/zohshia/renodevis/neutre/`), jamais l'arbre extrait à la main.
+4. **Prouver le plan.** `node tests/unit-zohshia.mjs`.
+5. **Rendre à Paul** : le code (dossier, commit source, preuves), la base (étalon,
+   date), la **check-list** de `AJOUTER-UN-ARTISAN.md` §1 à faire remplir au pro,
+   et la **voie** à choisir avec lui (§0 : il rejoint la plateforme, ou une
+   instance à lui).
+6. **S'arrêter à chaque gate.** Créer un dépôt, un projet de base, un
+   hébergement, un compte ; écrire en base réelle ; poser une variable de
+   production ; envoyer un mail réel : **effet métier réel**, mandat précis de
+   Paul (contrat LV1). Préparer est permis ; exécuter sans mandat, jamais.
 
 ## Ce qu'il ne faut pas faire
 
 - ⛔ **Écrire un nom propre ou une valeur dans `zohshia/`** : le test le refuse.
   Le nom d'un pro se dit à Paul, en séance ; il ne s'écrit pas dans la techno.
-- ⛔ **Cloner l'instance** à la place d'ajouter un pro : la base porte des tables
-  que le dépôt ne sait pas créer (`TECHNO.md` §4).
+- ⛔ **Copier l'instance de référence** (son dépôt, sa base) pour un nouveau pro :
+  ses données et sa formule propre partiraient avec. On EXTRAIT, on ne copie pas.
+- ⛔ **Corriger l'arbre extrait à la main** : la correction serait perdue à la
+  prochaine extraction. Elle va dans la série de neutralisation.
 - ⛔ **Croire le plan sans le remesurer** : un plan d'hier se lit exactement
   comme un plan juste.
 

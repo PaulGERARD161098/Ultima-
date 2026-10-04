@@ -131,6 +131,15 @@ const nomsPropres = [...contenus.map((c) => ({ p: c.p, t: c.t })), { p: 'étoile
 dit('aucunNomPropre', nomsPropres.length === 0);
 if (nomsPropres.length) { chiffres.nomsPropres = nomsPropres; }
 
+// ---- La check-list « j'intègre un nouvel artisan » ------------------------------
+// Elle nomme les quatre champs que le schéma des règles de prix VALIDE (mesurés
+// dans le code de référence le 04/10/2026), et ses huit rubriques. Un champ
+// ajouté au schéma doit la faire rougir à la prochaine mise à jour de cette liste.
+const guide = lire('zohshia', 'renodevis', 'AJOUTER-UN-ARTISAN.md');
+dit('checklistReglesDePrix', ['coefficient_produits', 'demi_journee_ht', 'validite_prix_jours', 'validite_catalogue_jours'].every((c) => guide.includes(c)));
+dit('checklistHuitRubriques', [1, 2, 3, 4, 5, 6, 7, 8].every((i) => guide.includes(`### 1.${i} `)));
+dit('deuxVoiesEtGates', /## 0\. Deux voies/.test(guide) && /## 3\. Voie B/.test(guide) && (guide.match(/⛔/g) || []).length >= 6);
+
 // ---- Ni déployé, ni servi ---------------------------------------------------
 dit('nonDeploye', /^zohshia\/$/m.test(lire('.vercelignore')) && /^outils\/$/m.test(lire('.vercelignore')));
 dit('nonServi', ['/zohshia', '/zohshia/renodevis/inventaire.json', '/zohshia/renodevis/AJOUTER-UN-ARTISAN.md']
