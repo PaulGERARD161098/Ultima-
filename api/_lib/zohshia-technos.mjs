@@ -9,7 +9,7 @@ export default {
    "badge": "Outil de création de devis / relance automatique",
    "etat": "En service",
    "mesure": {
-    "commit": "d6eba9c",
+    "commit": "f1f9fb3",
     "le": "2026-10-04"
    },
    "onglets": [
@@ -2133,11 +2133,35 @@ export default {
          ""
         ],
         [
-         "État de la série au 04/10/2026 (mesuré)",
+         "État de la série au 04/10/2026, 19 h (mesuré)",
          "b"
         ],
         [
-         " : elle s'applique sur RénoDevis ",
+         " : rafraîchie sur RénoDevis ",
+         ""
+        ],
+        [
+         "f1f9fb3",
+         "c"
+        ],
+        [
+         " (tête du jour, PR #274 à #281 comprises). Extraction prouvée sur ",
+         ""
+        ],
+        [
+         "--ref origin/main",
+         "c"
+        ],
+        [
+         " : 495 fichiers sans nom propre, typage sans erreur nouvelle, ",
+         ""
+        ],
+        [
+         "979 tests verts",
+         "b"
+        ],
+        [
+         " (931 sur ",
          ""
         ],
         [
@@ -2145,39 +2169,56 @@ export default {
          "c"
         ],
         [
-         " (sa ",
+         "), build vert. Les apports amont propres à l'instance de référence (regroupement des sections du PDF, conditions de paiement de la facture miroir) sont neutralisés comme le reste : seul le chemin générique demeure. Un SHA nu est accepté par ",
          ""
         ],
         [
-         "BASE",
+         "--ref",
          "c"
         ],
         [
-         ") et ",
+         " depuis le dry run du 04/10.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "⛔ ",
          ""
         ],
         [
-         "refuse sur `f1f9fb3`",
+         "ZOH SHIA SE TIENT À JOUR DE LA TÊTE",
          "b"
         ],
         [
-         " (tête du 04/10 au soir, six fusions plus loin) — 8 fichiers en conflit, dont trois supprimés ou renommés par la neutralisation et modifiés en amont. Aucune migration nouvelle : la base neuve n'est pas touchée. D'ici le rafraîchissement, l'extraction se fait ",
+         " ",
          ""
         ],
         [
-         "au commit de base",
-         "b"
+         "(Paul, 04/10 : « ZOH doit rester à jour de toute façon : Ultima en porte le code et travaille toujours avec les autres dépôts »)",
+         "i"
         ],
         [
-         " : ",
+         ". Quand RénoDevis avance sur des fichiers que la série retouche, l'extraction refuse : c'est le signal. La série se rafraîchit alors (fusion de la tête dans le clone neutre, apports neutralisés, ",
          ""
         ],
         [
-         "--ref 7d21217",
+         "serie.mjs",
          "c"
         ],
         [
-         " (un SHA nu est accepté depuis le dry run du 04/10 ; il échouait avant).",
+         ", ",
+         ""
+        ],
+        [
+         "extraire.mjs --verifier",
+         "c"
+        ],
+        [
+         ") — jamais en corrigeant l'arbre extrait.",
          ""
         ]
        ]
@@ -5403,7 +5444,7 @@ export default {
  ],
  "sources": {
   "renodevis/badge.json": "cdf0f06c4c492ccc21be7bb97a3d5f2da690832d1e1728d2e0a12bd0482fb1ff",
-  "renodevis/TECHNO.md": "64bdb2ae4bddf0e9cfd73e737cd19dc213c136416d4a78e115976c4498556aa2",
+  "renodevis/TECHNO.md": "f68b30be49c44ac62016f258df3cf046535d2136b957e8ae6de77973c6b58fe6",
   "renodevis/AJOUTER-UN-ARTISAN.md": "7ebfc2b34bcc2a7766c1bb20d92f65217efe7d5b3cb579b9bdbd77eba4c9ec99"
  }
 };

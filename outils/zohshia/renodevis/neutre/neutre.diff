@@ -891,10 +891,10 @@ index 0df0e7a..8388686 100644
    const peu = rendu();
    assert.equal((peu.match(/<details[^>]*\bopen=""/g) ?? []).length, 2, "deux clients, deux cartes ouvertes");
 diff --git a/app/brouillons/actions.ts b/app/brouillons/actions.ts
-index a58dbfe..145530e 100644
+index 8bbc096..24e5d2f 100644
 --- a/app/brouillons/actions.ts
 +++ b/app/brouillons/actions.ts
-@@ -356,7 +356,7 @@ export async function reporterBrouillon(
+@@ -360,7 +360,7 @@ export async function reporterBrouillon(
  /**
   * « J'ai rappelé » — le quatrième geste, et celui que la mesure réclamait.
   *
@@ -1030,10 +1030,10 @@ index fc482d2..bffe499 100644
  
  export async function GET(
 diff --git a/app/devis/[id]/actions.ts b/app/devis/[id]/actions.ts
-index b4b8e8f..9328ff1 100644
+index 1261f14..2bd3a66 100644
 --- a/app/devis/[id]/actions.ts
 +++ b/app/devis/[id]/actions.ts
-@@ -16,7 +16,7 @@ import { verifierChangementEtat } from "@/lib/etatDevis";
+@@ -18,7 +18,7 @@ import { verifierChangementEtat } from "@/lib/etatDevis";
     PRÉPARER LA FACTURE DE L'ARTISAN — pour SA comptabilité
  
     ⛔ N'ÉCRIT PAS dans la table `factures`. Elle est le miroir de Pennylane
@@ -1042,7 +1042,7 @@ index b4b8e8f..9328ff1 100644
     consolidé du réseau : y ajouter les factures des artisans compterait deux fois
     la même somme sur un chantier d'origine `ria`, sans que rien ne le signale.
     La facture de l'artisan vit donc dans `devis.extra.facture` — pattern F-A3.
-@@ -92,7 +92,7 @@ export async function preparerFacture(
+@@ -100,7 +100,7 @@ export async function preparerFacture(
  }
  
  /* ============================================================================
@@ -1051,7 +1051,7 @@ index b4b8e8f..9328ff1 100644
  
     « Si je fais une erreur de qualif, je veux pouvoir modifier le statut d'un devis
     aisément. » La règle vit dans `lib/etatDevis.ts` (pure, testée) ; ici, seulement la
-@@ -146,7 +146,7 @@ export async function changerEtatDevis(_prev: ChangementEtat, formData: FormData
+@@ -156,7 +156,7 @@ export async function changerEtatDevis(_prev: ChangementEtat, formData: FormData
      ? requete.eq("updated_at", devis.updated_at) : requete.is("updated_at", null)).select("id");
    if (error || ecrit?.length !== 1) return { erreur: "Le devis a changé entre-temps : rechargez la page." };
  
@@ -1074,7 +1074,7 @@ index 20381d6..e657e68 100644
  export default function RattacherClient({devisId, clients}: {devisId: string; clients: Option[]}) {
    const [etat, action, pending] = useActionState<RattacherEtat, FormData>(rattacherClient, {});
 diff --git a/app/devis/[id]/envoi/actions.ts b/app/devis/[id]/envoi/actions.ts
-index 3f55a4c..81bbf29 100644
+index 88a59b5..159eb0f 100644
 --- a/app/devis/[id]/envoi/actions.ts
 +++ b/app/devis/[id]/envoi/actions.ts
 @@ -6,9 +6,6 @@ import { erreurCoordonneesEnvoi, envoyerSmsAvecAccord } from '@/lib/gardesEnvoi'
@@ -1121,7 +1121,7 @@ index 3f55a4c..81bbf29 100644
      // interlocuteurs sur un même dossier. `identite` est résolue depuis
      // `artisans` (profil en repli), donc le compte connecté reste le repli
      // naturel quand le devis n'est rattaché à aucun artisan.
-@@ -311,7 +297,7 @@ export async function apercuEnvoi(_prev: ApercuEtat, formData: FormData): Promis
+@@ -313,7 +299,7 @@ export async function apercuEnvoi(_prev: ApercuEtat, formData: FormData): Promis
  
  export type RattacherEtat = { erreur?: string };
  
@@ -1156,6 +1156,35 @@ index 8a197c7..efc3f2f 100644
            pas juste le relire »). Le texte est pré-rempli depuis le modèle de
            « Mails types » ; ce qui est écrit ici ne vaut que pour CE devis. */}
        <label className="block text-sm font-semibold">
+diff --git a/app/devis/[id]/facture/page.tsx b/app/devis/[id]/facture/page.tsx
+index 30b1d7b..5a5ea74 100644
+--- a/app/devis/[id]/facture/page.tsx
++++ b/app/devis/[id]/facture/page.tsx
+@@ -1,6 +1,5 @@
+ import {DocumentIndisponible} from '@/lib/documentsDevis';
+ import {factureMiroirBrouillon,lignesFactureMiroir,conditionsPaiementMiroir} from '@/lib/factureBrouillon';
+-import {MATRICE_SOLA} from '@/lib/matriceSola';
+ import { notFound } from "next/navigation";
+ import { requireUser } from "@/lib/auth";
+ import { supabaseServer, type Client, type Devis } from "@/lib/supabase";
+@@ -68,7 +67,7 @@ export default async function FactureDevis({ params }: { params: Promise<{ id: s
+   const manquantes = mentionsManquantes(emetteur);
+   const alertes = avertissements(emetteur);
+ 
+-  const lignes = lignesFactureMiroir(devis,identite.artisan?.id===MATRICE_SOLA.artisan_id);
++  const lignes = lignesFactureMiroir(devis);
+   const lots = grouperParSection(lignes.map((l) => ({ ...l })));
+ 
+   return (
+@@ -187,7 +186,7 @@ export default async function FactureDevis({ params }: { params: Promise<{ id: s
+         </section>
+ 
+         <footer className="mt-10 space-y-1 border-t border-line pt-4 text-xs text-muted">
+-          {brouillon ? <p>{conditionsPaiementMiroir(devis,identite.artisan?.id===MATRICE_SOLA.artisan_id)}</p> : <><p>Paiement à {facture.delai_jours} jours — échéance le {facture.date_echeance}.</p>
++          {brouillon ? <p>{conditionsPaiementMiroir()}</p> : <><p>Paiement à {facture.delai_jours} jours — échéance le {facture.date_echeance}.</p>
+           <p>
+             En cas de retard : pénalités au taux d&apos;intérêt légal majoré, et indemnité
+             forfaitaire de recouvrement de 40 € (art. L441-10 du code de commerce).
 diff --git a/app/devis/[id]/messages/[message]/page.tsx b/app/devis/[id]/messages/[message]/page.tsx
 index 5068ab0..35dec1e 100644
 --- a/app/devis/[id]/messages/[message]/page.tsx
@@ -1170,11 +1199,12 @@ index 5068ab0..35dec1e 100644
  // Deux cas, et l'écran ne les confond jamais :
  //   • un message CONSERVÉ (`messages_envoyes`) — c'est le mail exact, en-têtes
 diff --git a/app/devis/[id]/modifier/actions.ts b/app/devis/[id]/modifier/actions.ts
-index 1deaae6..75509dc 100644
+index 3a4c15d..9e99909 100644
 --- a/app/devis/[id]/modifier/actions.ts
 +++ b/app/devis/[id]/modifier/actions.ts
-@@ -1,9 +1,5 @@
- "use server";
+@@ -2,10 +2,6 @@
+ 
+ import { erreurEnvoiEnCours } from "@/lib/envoiFiable";
  
 -import {chargerIdentite} from "@/lib/identite";
 -import {lireApportSola} from "@/lib/reglesSola";
@@ -1183,7 +1213,7 @@ index 1deaae6..75509dc 100644
  
  import { accuséBrouillon } from "@/lib/brouillonLocal";
  import { prixConfirmes, verifierSources } from "@/lib/validationChiffrage";
-@@ -73,13 +69,6 @@ export async function modifierDevis(
+@@ -85,13 +81,6 @@ export async function modifierDevis(
    const validiteJours = Math.min(365, Math.max(1, Number(formData.get("validite_jours")) || 30));
    const lignes = parseLignes(formData.get("lignes"));
    if (!prixConfirmes(formData, lignes.length)) return {erreur:"Confirmez les prix de vente, les quantités et la TVA du nouveau chantier."};
@@ -1197,7 +1227,7 @@ index 1deaae6..75509dc 100644
    let sources;
    try { sources = await verifierSources(formData, sb); }
    catch { return {erreur:"Les devis sources n’ont pas pu être vérifiés. Relancez la proposition ou reprenez les lignes manuellement."}; }
-@@ -89,8 +78,7 @@ export async function modifierDevis(
+@@ -101,8 +90,7 @@ export async function modifierDevis(
    let creationReno=extra.creation_reno;
    const nouvelleCreation=String(formData.get("creation_reno")??"");
    if(creationReno||nouvelleCreation){
@@ -1207,7 +1237,7 @@ index 1deaae6..75509dc 100644
      catch(e){return {erreur:e instanceof Error?e.message:"Contrôle Reno indisponible."};}
    }
    const aUnPdf = !!extra.pdf_path;
-@@ -109,7 +97,6 @@ export async function modifierDevis(
+@@ -121,7 +109,6 @@ export async function modifierDevis(
        extra: {
          ...extra,
          ...(creationReno?{creation_reno:creationReno}:{}),
@@ -1216,10 +1246,10 @@ index 1deaae6..75509dc 100644
          ...(formData.has("tva_conditions") ? {tva_conditions: lireConditions(formData.get("tva_conditions"))} : {}),
          type_equipement: formData.has("type_equipement") ? (estTypeTva(formData.get("type_equipement")) ? formData.get("type_equipement") : null) : (extra.type_equipement ?? null),
 diff --git a/app/devis/[id]/modifier/page.tsx b/app/devis/[id]/modifier/page.tsx
-index fb52007..47d9d9a 100644
+index bb35c12..8871893 100644
 --- a/app/devis/[id]/modifier/page.tsx
 +++ b/app/devis/[id]/modifier/page.tsx
-@@ -110,7 +110,6 @@ export default async function ModifierDevis({ params }: { params: Promise<{ id:
+@@ -111,7 +111,6 @@ export default async function ModifierDevis({ params }: { params: Promise<{ id:
            <DevisLineBuilder
              clientId={devis.client_id??undefined}
              assistance
@@ -1675,10 +1705,10 @@ index 92eb493..c2ee191 100644
      rendre(<BlocPaiement token="t" paiement={{ objet: "total", montant: "1 €", dejaPaye: null }} />),
    ];
 diff --git a/app/releve/actions.ts b/app/releve/actions.ts
-index 4358a19..83c9528 100644
+index 44586c1..343ed22 100644
 --- a/app/releve/actions.ts
 +++ b/app/releve/actions.ts
-@@ -124,7 +124,7 @@ export async function remonterReleve(
+@@ -128,7 +128,7 @@ export async function remonterReleve(
   * POURQUOI CE CODE EXISTE. « Nouveau dossier » promet à l'artisan qu'il n'a
   * besoin que du nom, « tout le reste se remplit en visite ». C'était faux : le
   * relevé ne demandait ni téléphone ni email, et rien ne les écrivait. Le
@@ -1880,7 +1910,7 @@ index 598b86c..db5a78f 100644
    // choix à l'écran et on dit quoi faire (tests/brouillon-bouton.mjs).
    const zone=useRef<HTMLElement|null>(null);
 diff --git a/components/ChecklistDevis.tsx b/components/ChecklistDevis.tsx
-index 31c1b63..8c7d986 100644
+index c1ffd66..b8f2064 100644
 --- a/components/ChecklistDevis.tsx
 +++ b/components/ChecklistDevis.tsx
 @@ -1,7 +1,7 @@
@@ -2865,7 +2895,7 @@ index 8f48bee..0c5bf59 100644
    fenetre: process.env.SYNC_EMAIL_FENETRE ?? "60d",
  };
 diff --git a/lib/controleDevis.test.ts b/lib/controleDevis.test.ts
-index 7671aa7..aa4be90 100644
+index 9931306..8b4cbe5 100644
 --- a/lib/controleDevis.test.ts
 +++ b/lib/controleDevis.test.ts
 @@ -12,7 +12,7 @@ test('facture préparée sans numéro officiel, recalculée après correction du
@@ -2878,7 +2908,7 @@ index 7671aa7..aa4be90 100644
   // Complet : vrai vert.
   assert.deepEqual(etat(form()),[true,false]);
 diff --git a/lib/controleDevis.ts b/lib/controleDevis.ts
-index 084c2b4..d7b85f8 100644
+index b9d6b5a..057d368 100644
 --- a/lib/controleDevis.ts
 +++ b/lib/controleDevis.ts
 @@ -1,13 +1,12 @@
@@ -2891,13 +2921,13 @@ index 084c2b4..d7b85f8 100644
  /** `neutre` : la case ne bloque pas, mais elle n'est pas faite — l'écran la montre en gris
 - *  (Paul, 03/10 : « Coordonnées plus tard », la checklist n'oppose pas de résistance). */
 + *  (03/10 : « Coordonnées plus tard », la checklist n'oppose pas de résistance). */
- export type Controle={cle:string;libelle:string;ok:boolean;detail:string;neutre?:boolean};
+ export type Controle={cle:string;libelle:string;ok:boolean;detail:string;neutre?:boolean;sansObjet?:boolean};
 -/** Paul (03/10, maquette v2) : le client se choisit, se crée sur place, ou s'ajoute PLUS TARD
 +/** Arbitrage du 03/10, maquette v2 : le client se choisit, se crée sur place, ou s'ajoute PLUS TARD
   *  (`coordonnees_plus_tard=oui`, devis sans client). Dans tous les cas, ce qui MANQUE aux
   *  coordonnées (email, téléphone, adresse) ne bloque pas : la case passe en gris « à compléter
   *  avant l'envoi ». Ce qui est FAUX (un email mal formé, un téléphone tronqué) bloque toujours. */
-@@ -39,18 +38,18 @@ export function lignesAvecGaranties(lignes:LigneRelance[],pieces:string,compress
+@@ -43,19 +42,19 @@ export function lignesAvecGaranties(lignes:LigneRelance[],pieces:string,compress
   return {...l,produit:texte};});
  }
  export function saisieControle(f:FormData){const t=(k:string)=>String(f.get(k)??'').trim();return {client:{nom:t('controle_nom'),email:t('controle_email'),tel:t('controle_tel'),localisation:t('controle_adresse')},paiement:{mode:t('controle_mode'),beneficiaire:t('controle_beneficiaire'),iban:t('controle_iban'),bic:t('controle_bic')},titre:t('controle_titre'),pieces:t('controle_pieces'),compresseur:t('controle_compresseur')};}
@@ -2907,15 +2937,16 @@ index 084c2b4..d7b85f8 100644
   const type=f.get('type_equipement'),v=estTypeTva(type)?tauxApplicable(type,date,lireConditions(f.get('tva_conditions'))??CONDITIONS_INCONNUES):null;
   const taux=Number(f.get('tva_rate'));
   const c=s.client;
-- const tv=sola?confirmationTvaSolaValide(lignes,taux,f.get('tva_sola_confirmee'),type,f.get('tva_conditions'),date):!!v&&v.tauxSiComplete===null&&lignes.length>0&&lignes.every(l=>(l.tva??taux)===v.taux);
-+ const tv=!!v&&v.tauxSiComplete===null&&lignes.length>0&&lignes.every(l=>(l.tva??taux)===v.taux);
-  const equipements=lignes.filter(ligneAvecGarantie);const garantiesCatalogue=equipements.every(l=>/garantie pièces\s*:[^\n]*\b\d+\s*(?:ans?|mois)\b/i.test(l.produit)&&!l.produit.split('\n').some(x=>/garantie/i.test(x)&&/à confirmer|inconnu/i.test(x)));
+- const tv=[0,5.5,10,20].includes(taux)&&(sola?confirmationTvaSolaValide(lignes,taux,f.get('tva_sola_confirmee'),type,f.get('tva_conditions'),date):!!v&&v.tauxSiComplete===null&&lignes.length>0&&lignes.every(l=>(l.tva??taux)===v.taux));
++ const tv=[0,5.5,10,20].includes(taux)&&(!!v&&v.tauxSiComplete===null&&lignes.length>0&&lignes.every(l=>(l.tva??taux)===v.taux));
+  const equipements=lignes.filter(ligneAvecGarantie);const garantiesCatalogue=equipements.length>0&&equipements.every(l=>garantieCatalogueValide(l,'pièces')&&(!compresseurRequis(l)||garantieCatalogueValide(l,'compresseur'))&&!l.produit.split('\n').some(x=>/garantie/i.test(x)&&/à confirmer|inconnu/i.test(x)));
   const banque=!!f.get('creation_reno'),declaration=confirmerGarantiesProfessionnelles(lignes,s.pieces,s.compresseur);
-  const garanties=garantiesCatalogue?!(banque&&(s.pieces||s.compresseur)&&!declaration):banque&&!!declaration;
+  const garantiesSansObjet=lignes.length>0&&equipements.length===0&&lignes.every(prestationSansGarantie)&&!s.pieces&&!s.compresseur;
+  const garanties=garantiesSansObjet||((!s.pieces||dureeGarantieValide(s.pieces))&&(!s.compresseur||dureeGarantieValide(s.compresseur))&&(garantiesCatalogue?!(banque&&(s.pieces||s.compresseur)&&!declaration):banque&&!!declaration));
   const p=s.paiement;const iban=p.iban.length<=42&&p.beneficiaire.length<=150&&ibanValide(p.iban)&&!!p.beneficiaire&&/^[A-Z0-9]{8}([A-Z0-9]{3})?$/.test(p.bic.toUpperCase())&&(!paiementAttendu||(p.iban.replace(/\s/g,'')===paiementAttendu.iban.replace(/\s/g,'')&&p.beneficiaire===paiementAttendu.beneficiaire&&p.bic===paiementAttendu.bic));
   const client=etatClient(c,coordonneesPlusTard(f));
-- return [{cle:'client',libelle:'Client',ok:client.ok,...(client.neutre?{neutre:true}:{}),detail:client.detail},{cle:'tva',libelle:'Taux de TVA',ok:tv,detail:tv?(sola?'Taux confirmés par le professionnel pour ce chantier.':`Taux des lignes conforme à la règle : ${v!.taux} %.`):'Précisez le chantier et ses conditions ; vérifiez la TVA de chaque ligne.'},{cle:'garanties',libelle:'Garanties des pièces',ok:garanties&&lignes.length>0,detail:garanties?(garantiesCatalogue?'Garanties renseignées ; à vérifier selon les produits.':'Garanties déclarées par le professionnel pour ce devis.'):'Une garantie manque, reste à confirmer ou contredit le catalogue.'},{cle:'iban',libelle:'IBAN de la société',ok:iban,detail:iban?'Clé IBAN et bénéficiaire renseignés ; relisez le RIB.':'Complétez le RIB de la société et son bénéficiaire.'},{cle:'reglement',libelle:'Mode de règlement',ok:p.mode==='Virement',detail:p.mode==='Virement'?'Virement.':'Choisissez le règlement par virement.'},{cle:'titre',libelle:'Titre du chantier',ok:s.titre.length>=5&&s.titre.length<=150&&!/à préciser|à renseigner/i.test(s.titre),detail:s.titre||'Renseignez le titre du chantier.'}];
-+ return [{cle:'client',libelle:'Client',ok:client.ok,...(client.neutre?{neutre:true}:{}),detail:client.detail},{cle:'tva',libelle:'Taux de TVA',ok:tv,detail:tv?`Taux des lignes conforme à la règle : ${v!.taux} %.`:'Précisez le chantier et ses conditions ; vérifiez la TVA de chaque ligne.'},{cle:'garanties',libelle:'Garanties des pièces',ok:garanties&&lignes.length>0,detail:garanties?(garantiesCatalogue?'Garanties renseignées ; à vérifier selon les produits.':'Garanties déclarées par le professionnel pour ce devis.'):'Une garantie manque, reste à confirmer ou contredit le catalogue.'},{cle:'iban',libelle:'IBAN de la société',ok:iban,detail:iban?'Clé IBAN et bénéficiaire renseignés ; relisez le RIB.':'Complétez le RIB de la société et son bénéficiaire.'},{cle:'reglement',libelle:'Mode de règlement',ok:p.mode==='Virement',detail:p.mode==='Virement'?'Virement.':'Choisissez le règlement par virement.'},{cle:'titre',libelle:'Titre du chantier',ok:s.titre.length>=5&&s.titre.length<=150&&!/à préciser|à renseigner/i.test(s.titre),detail:s.titre||'Renseignez le titre du chantier.'}];
+- return [{cle:'client',libelle:'Client',ok:client.ok,...(client.neutre?{neutre:true}:{}),detail:client.detail},{cle:'tva',libelle:'Taux de TVA',ok:tv,detail:tv?(sola?'Taux confirmés par le professionnel pour ce chantier.':`Taux des lignes conforme à la règle : ${v!.taux} %.`):'Précisez le chantier et ses conditions ; vérifiez la TVA de chaque ligne.'},{cle:'garanties',libelle:'Garanties des pièces',ok:garanties&&lignes.length>0,...(garantiesSansObjet?{neutre:true,sansObjet:true}:{}),detail:garantiesSansObjet?'Aucun équipement à garantir : prestations et fournitures seules.':garanties?(garantiesCatalogue?'Garanties renseignées ; à vérifier selon les produits.':'Garanties déclarées par le professionnel pour ce devis.'):'Une garantie manque, reste à confirmer ou contredit le catalogue.'},{cle:'iban',libelle:'IBAN de la société',ok:iban,detail:iban?'Clé IBAN et bénéficiaire renseignés ; relisez le RIB.':'Complétez le RIB de la société et son bénéficiaire.'},{cle:'reglement',libelle:'Mode de règlement',ok:p.mode==='Virement',detail:p.mode==='Virement'?'Virement.':'Choisissez le règlement par virement.'},{cle:'titre',libelle:'Titre du chantier',ok:s.titre.length>=5&&s.titre.length<=150&&!/à préciser|à renseigner/i.test(s.titre),detail:s.titre||'Renseignez le titre du chantier.'}];
++ return [{cle:'client',libelle:'Client',ok:client.ok,...(client.neutre?{neutre:true}:{}),detail:client.detail},{cle:'tva',libelle:'Taux de TVA',ok:tv,detail:tv?`Taux des lignes conforme à la règle : ${v!.taux} %.`:'Précisez le chantier et ses conditions ; vérifiez la TVA de chaque ligne.'},{cle:'garanties',libelle:'Garanties des pièces',ok:garanties&&lignes.length>0,...(garantiesSansObjet?{neutre:true,sansObjet:true}:{}),detail:garantiesSansObjet?'Aucun équipement à garantir : prestations et fournitures seules.':garanties?(garantiesCatalogue?'Garanties renseignées ; à vérifier selon les produits.':'Garanties déclarées par le professionnel pour ce devis.'):'Une garantie manque, reste à confirmer ou contredit le catalogue.'},{cle:'iban',libelle:'IBAN de la société',ok:iban,detail:iban?'Clé IBAN et bénéficiaire renseignés ; relisez le RIB.':'Complétez le RIB de la société et son bénéficiaire.'},{cle:'reglement',libelle:'Mode de règlement',ok:p.mode==='Virement',detail:p.mode==='Virement'?'Virement.':'Choisissez le règlement par virement.'},{cle:'titre',libelle:'Titre du chantier',ok:s.titre.length>=5&&s.titre.length<=150&&!/à préciser|à renseigner/i.test(s.titre),detail:s.titre||'Renseignez le titre du chantier.'}];
  }
  export function lireCorrectionControle(texte:string){
   const taux=/^tva\s+(0|5[,.]5|10|20)\s*(?:%|pour cent)?[.!]?$/i.exec(texte.trim());if(taux)return {champ:'tva',valeur:taux[1]};
@@ -4229,6 +4260,81 @@ index d8d9dd4..c45c2e7 100644
     `pnl_<id>` comme clé d'idempotence, et `pilotage-pros.js` en agrège LE CA
     CONSOLIDÉ du réseau, pro par pro.
  
+diff --git a/lib/factureBrouillon.test.ts b/lib/factureBrouillon.test.ts
+index ba878f7..73a25c4 100644
+--- a/lib/factureBrouillon.test.ts
++++ b/lib/factureBrouillon.test.ts
+@@ -33,30 +33,10 @@ test('miroir : quantité corrigée, remise et TVA mixte ; ancien montant refusé
+  assert.equal(JSON.stringify(d),avant);assert.match(corrige.numero,/RECETTE-VOCAL/);
+ });
+ 
+-test('SOLA : le miroir affiche les unités du PDF sans modifier les quantités ou historiques',()=>{
++test('miroir : lignes et conditions telles qu’enregistrées, aucune échéance inventée',()=>{
+  const d=devisFictif();d.lignes=[{produit:'Pose — demi-journée',qte:1.5,pu_vente:500,tva:5.5,unite:'demi-journée',source:'relance'},{produit:'Cuivre fictif',qte:2,pu_vente:100,tva:5.5,unite:'couronne',source:'relance'}];
+- d.extra!.regles_sola={version:'fictif'};const avant=JSON.stringify(d);
+- const lignes=lignesFactureMiroir(d,true);
+- assert.deepEqual(lignes.map(l=>[l.produit,l.qte,l.unite,l.pu_vente,l.tva]),[['Pose — demi-journée',1.5,'u',500,5.5],['Cuivre fictif (couronne)',2,'u',100,5.5]]);
+- assert.equal(JSON.stringify(d),avant);assert.deepEqual(lignesFactureMiroir(d,false),d.lignes,'les autres artisans ne changent pas');
+- delete d.extra!.regles_sola;assert.deepEqual(lignesFactureMiroir(d,true),d.lignes,'les historiques ne sont pas réécrits');
+-});
+-
+-test('brouillon : conditions SOLA et acompte recalculé, aucune échéance inventée',()=>{
+- const d=devisFictif();d.extra={...d.extra,regles_sola:{version:'fictif'},acompte_pct:30,totaux:{acompte:1}};
+- const avant=JSON.stringify(d);const texte=conditionsPaiementMiroir(d,true);
+- assert.equal(texte.replace(/[\u00a0\u202f]/g,' '),'acompte de 3 600,00 € à l’acceptation du devis ; solde à la fin des travaux.');
+- assert.equal(JSON.stringify(d),avant);
+- assert.match(conditionsPaiementMiroir(d,false),/L’échéance de la facture sera fixée lors de son émission/);
+- delete d.extra.regles_sola;assert.match(conditionsPaiementMiroir(d,true),/voir le devis source/);
+-});
+-
+-test('miroir SOLA : fournitures regroupées comme le PDF, autres dossiers dans leur ordre',()=>{
+- const d=devisFictif();d.extra!.regles_sola={version:'fictif'};
+- d.lignes=[{produit:'UE',section:'Fournitures',qte:1,pu_vente:100,tva:5.5,unite:'u',source:'relance'},{produit:'Pose',section:'Prestations',qte:1,pu_vente:50,tva:5.5,unite:'demi-journée',source:'relance'},{produit:'Cuivre',section:'Fournitures',qte:1,pu_vente:10,tva:5.5,unite:'couronne',source:'relance'}];
+  const avant=JSON.stringify(d);
+- assert.deepEqual(lignesFactureMiroir(d,true).map(l=>l.produit),['UE','Cuivre (couronne)','Pose']);
+- assert.deepEqual(lignesFactureMiroir(d,false),d.lignes);
+- delete d.extra!.regles_sola;assert.deepEqual(lignesFactureMiroir(d,true),d.lignes);
+- assert.equal(JSON.stringify(d.lignes),JSON.stringify(JSON.parse(avant).lignes));
++ assert.deepEqual(lignesFactureMiroir(d),d.lignes);
++ assert.match(conditionsPaiementMiroir(),/L’échéance de la facture sera fixée lors de son émission/);
++ assert.equal(JSON.stringify(d),avant);
+ });
+diff --git a/lib/factureBrouillon.ts b/lib/factureBrouillon.ts
+index 3097c0c..deb5636 100644
+--- a/lib/factureBrouillon.ts
++++ b/lib/factureBrouillon.ts
+@@ -2,8 +2,6 @@ import {chiffrageDocument} from './documentsDevis';
+ import type {Devis} from './supabase';
+ import type {Facture} from './facture';
+ import type {LigneRelance} from './devis';
+-import {euros} from './devis';
+-import {presentationLigneSola,regrouperSectionsSola} from './presentationSola';
+ /** Aucun numéro comptable ni événement de facturation : montants courants du devis. */
+ export function factureBrouillon(d:Devis):Facture|null{
+  if(d.extra?.facture_brouillon!==true)return null;
+@@ -16,16 +14,13 @@ export function factureMiroirBrouillon(d:Devis):Facture {
+  return factureBrouillon({...d,extra:{...d.extra,facture_brouillon:true}})!;
+ }
+ 
+-/** Même projection que le devis PDF SOLA ; le conditionnement d’achat reste stocké. */
+-export function lignesFactureMiroir(d:Devis,sola=false):LigneRelance[]{
++/** Les lignes du devis, telles qu'enregistrées : le miroir ne réécrit rien. */
++export function lignesFactureMiroir(d:Devis):LigneRelance[]{
+  // Le brouillon a été validé par chiffrageDocument ; les factures émises gardent la lecture historique.
+- const lignes=(Array.isArray(d.lignes)?d.lignes:[]) as LigneRelance[];
+- return regrouperSectionsSola(lignes,sola&&!!d.extra?.regles_sola).map(l=>({...l,...presentationLigneSola(l.produit,l.unite,sola&&!!d.extra?.regles_sola)}));
++ return (Array.isArray(d.lignes)?d.lignes:[]) as LigneRelance[];
+ }
+ 
+-/** Conditions du devis SOLA ; le brouillon ne rend aucune somme exigible aujourd’hui. */
+-export function conditionsPaiementMiroir(d:Devis,sola=false):string {
+- if(!sola||!d.extra?.regles_sola)return 'Conditions de paiement : voir le devis source. L’échéance de la facture sera fixée lors de son émission.';
+- const {totaux}=chiffrageDocument(d);
+- return `acompte de ${euros(totaux.acompte)} à l’acceptation du devis ; solde à la fin des travaux.`;
++/** Le brouillon ne rend aucune somme exigible aujourd’hui. */
++export function conditionsPaiementMiroir():string {
++ return 'Conditions de paiement : voir le devis source. L’échéance de la facture sera fixée lors de son émission.';
+ }
 diff --git a/lib/fichesTechniques.test.ts b/lib/fichesTechniques.test.ts
 index bcadf7b..096365b 100644
 --- a/lib/fichesTechniques.test.ts
@@ -6247,7 +6353,7 @@ index 06ea801..5abcf2d 100644
   *
   * Donc : l'artisan est vendeur, SAUF sur la clientèle apportée par RénoBoost
 diff --git a/lib/versionDocuments.ts b/lib/versionDocuments.ts
-index 8e94111..5fa4704 100644
+index 8007e9d..5fa4704 100644
 --- a/lib/versionDocuments.ts
 +++ b/lib/versionDocuments.ts
 @@ -1,12 +1,11 @@
@@ -6260,7 +6366,7 @@ index 8e94111..5fa4704 100644
  
  /** Contexte serveur commun à la fiche, au contrôle de version et aux deux PDF. */
  export function contexteVersionDocuments(identite: IdentiteArtisan, mentions: string, client: ClientDocument | null, artisanId: string | null = null) {
--  return {versionRenduPdf:'2026-10-04-recapitulatif',identite, mentions, client, artisanId, matrice: matricePourIdentite(identite, artisanId)};
+-  return {versionRenduPdf:'2026-10-04-sections-sola',identite, mentions, client, artisanId, matrice: matricePourIdentite(identite, artisanId)};
 +  return {versionRenduPdf:'2026-10-04-recapitulatif',identite, mentions, client, artisanId};
  }
  
@@ -7828,7 +7934,7 @@ index 08b127c..f120c82 100644
    console.log("1. Ouvrez cette URL :\n");
    console.log(consentUrl);
 diff --git a/scripts/recette-devis-assiste.mjs b/scripts/recette-devis-assiste.mjs
-index 35aa3d6..f3f0404 100644
+index 7086070..deef16c 100644
 --- a/scripts/recette-devis-assiste.mjs
 +++ b/scripts/recette-devis-assiste.mjs
 @@ -55,7 +55,7 @@ const proposal={lignes:[{produit:'Unité murale fictive',qte:2,pu_vente:3067,tva
@@ -7858,16 +7964,16 @@ index 35aa3d6..f3f0404 100644
    // Il pilote LA dictée des travaux, pas une copie : un seul micro, une seule recherche.
    const avantRaccourci=calls;
    await page.getByRole('button',{name:'Dicter (raccourci)',exact:true}).click();
-@@ -175,7 +175,7 @@ const proposal={lignes:[{produit:'Unité murale fictive',qte:2,pu_vente:3067,tva
-   assert.equal(await page.locator('section').filter({has:page.getByRole('heading',{name:'Checklist'})}).filter({visible:true}).count(),width<1024?0:1,'une seule checklist visible');
-   await (await checklist()).getByText('Titre du chantier',{exact:true}).waitFor();
-   assert.equal(await (await checklist()).getByText(/— à corriger$/).count(),0,'tout est vert avant validation');
+@@ -183,7 +183,7 @@ const proposal={lignes:[{produit:'Unité murale fictive',qte:2,pu_vente:3067,tva
+    await page.getByLabel(champ,{exact:true}).fill(retabli);
+    await page.waitForFunction(()=>!Array.from(document.querySelectorAll('button')).find(b=>b.textContent==='Je valide le devis → PDF et message d’envoi').disabled);
+   }
 -  // v2 (Paul, 03/10) : ce qui MANQUE au client ne bloque pas (gris), ce qui est FAUX bloque.
 +  // v2 (03/10) : ce qui MANQUE au client ne bloque pas (gris), ce qui est FAUX bloque.
    await page.getByLabel('Email du client',{exact:true}).fill('pas-un-email');
    await page.getByText('Client — à corriger',{exact:true}).filter({visible:true}).first().waitFor();
    assert.equal(await page.getByRole('button',{name:'Je valide le devis → PDF et message d’envoi',exact:true}).isDisabled(),true,'email faux : bloqué');
-@@ -188,7 +188,7 @@ const proposal={lignes:[{produit:'Unité murale fictive',qte:2,pu_vente:3067,tva
+@@ -197,7 +197,7 @@ const proposal={lignes:[{produit:'Unité murale fictive',qte:2,pu_vente:3067,tva
    await page.getByRole('button',{name:'Je valide le devis → PDF et message d’envoi',exact:true}).click();
    await page.getByText('Brouillon fictif enregistré',{exact:true}).waitFor();
    assert.equal((await page.evaluate(()=>window.__submitted)).controle_valide,'oui');
@@ -7876,7 +7982,7 @@ index 35aa3d6..f3f0404 100644
    await page.getByRole('radio',{name:'Nouveau client',exact:true}).click();
    assert.equal(await page.getByRole('radio',{name:'Nouveau client',exact:true}).getAttribute('aria-checked'),'true','le choix prend');
    assert.equal(await page.locator('#client_id').isVisible(),false,'la liste se range pendant la création');
-@@ -274,7 +274,7 @@ const proposal={lignes:[{produit:'Unité murale fictive',qte:2,pu_vente:3067,tva
+@@ -319,7 +319,7 @@ const proposal={lignes:[{produit:'Unité murale fictive',qte:2,pu_vente:3067,tva
    await page.getByRole('button',{name:'Ajouter les 1 lignes choisies'}).waitFor();
    assert.equal(calls,avantLimite+1,'une seule recherche, sur la dictée complète');
    await page.goto('https://fixture.test/?ecran=accueil');

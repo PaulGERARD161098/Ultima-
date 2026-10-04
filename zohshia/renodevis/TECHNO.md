@@ -194,13 +194,20 @@ le reste du produit ne bouge pas.
 | `base/` + `base/rejouer.mjs` | La base neuve : plateforme simulée (local seulement), socle, migrations neutralisées dans l'ordre relevé, finition | Socle qui ne masque aucune migration ; chaque objet cité existe ; empreinte = étalon validé par la référence. Éprouvé en cassant : 6 sabotages sur 6 au rouge |
 | `extraire.mjs` | Le code : série de neutralisation appliquée **en 3 voies** (elle encaisse les évolutions du dépôt), migrations neutralisées, base ajoutée, export **sans historique** | Conflit réel = arrêt ; un nom propre = sortie effacée ; `--verifier` : typage, tests, build |
 
-⚠️ **État de la série au 04/10/2026 (mesuré)** : elle s'applique sur RénoDevis
-`7d21217` (sa `BASE`) et **refuse sur `f1f9fb3`** (tête du 04/10 au soir, six
-fusions plus loin) — 8 fichiers en conflit, dont trois supprimés ou renommés
-par la neutralisation et modifiés en amont. Aucune migration nouvelle : la base
-neuve n'est pas touchée. D'ici le rafraîchissement, l'extraction se fait **au
-commit de base** : `--ref 7d21217` (un SHA nu est accepté depuis le dry run du
-04/10 ; il échouait avant).
+⚠️ **État de la série au 04/10/2026, 19 h (mesuré)** : rafraîchie sur RénoDevis
+`f1f9fb3` (tête du jour, PR #274 à #281 comprises). Extraction prouvée sur
+`--ref origin/main` : 495 fichiers sans nom propre, typage sans erreur nouvelle,
+**979 tests verts** (931 sur `7d21217`), build vert. Les apports amont propres à
+l'instance de référence (regroupement des sections du PDF, conditions de paiement
+de la facture miroir) sont neutralisés comme le reste : seul le chemin générique
+demeure. Un SHA nu est accepté par `--ref` depuis le dry run du 04/10.
+
+⛔ **ZOH SHIA SE TIENT À JOUR DE LA TÊTE** *(Paul, 04/10 : « ZOH doit rester à
+jour de toute façon : Ultima en porte le code et travaille toujours avec les
+autres dépôts »)*. Quand RénoDevis avance sur des fichiers que la série
+retouche, l'extraction refuse : c'est le signal. La série se rafraîchit alors
+(fusion de la tête dans le clone neutre, apports neutralisés, `serie.mjs`,
+`extraire.mjs --verifier`) — jamais en corrigeant l'arbre extrait.
 
 ⛔ **Ce qui reste hors de ZOH SHIA, délibérément** : la recette et la série de
 neutralisation **nomment** ce qu'elles retirent ; elles vivent donc dans
