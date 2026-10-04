@@ -1,0 +1,694 @@
+{
+  "source": {
+    "depot": "PaulGERARD161098/RenoDevis",
+    "ref": "origin/main",
+    "commit": "4400cd38b43460e9085d9a2837d7ae595f14e678",
+    "date_commit": "2026-10-04T13:04:03+02:00"
+  },
+  "variables": [
+    {
+      "nom": "ANTHROPIC_API_KEY",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "APP_URL",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "AUDIT_PAC_API_SECRET",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "AUDIT_PAC_BASE_URL",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "CHAUD_PALIERS_OUVERTURES",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "CHAUD_PAS_JOUR",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "CRON_SECRET",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "FEEDBACK_ADMINS",
+      "lue_dans": [
+        "app/api/reno/retour/route.ts"
+      ]
+    },
+    {
+      "nom": "FEEDBACK_NOTIFY_FROM",
+      "lue_dans": [
+        "app/api/reno/retour/route.ts"
+      ]
+    },
+    {
+      "nom": "FEEDBACK_NOTIFY_TO",
+      "lue_dans": [
+        "app/api/reno/retour/route.ts"
+      ]
+    },
+    {
+      "nom": "GMAIL_CLIENT_ID",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "GMAIL_CLIENT_SECRET",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "GMAIL_REFRESH_TOKEN",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "HUB_DEVIS_URL",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "NEXT_PUBLIC_HUB_URL",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      "lue_dans": [
+        "app/api/bibliotheque/catalogues/route.ts",
+        "lib/supabase.ts",
+        "middleware.ts"
+      ]
+    },
+    {
+      "nom": "NEXT_PUBLIC_SUPABASE_URL",
+      "lue_dans": [
+        "lib/supabase.ts",
+        "middleware.ts"
+      ]
+    },
+    {
+      "nom": "RELANCE_MODE",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "RELANCE_SMS_A_PARTIR_DE",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "RENOBOOST_API_URL",
+      "lue_dans": [
+        "lib/extraction.ts"
+      ]
+    },
+    {
+      "nom": "RENO_CREATION_SECRET",
+      "lue_dans": [
+        "lib/creationRenoServeur.ts"
+      ]
+    },
+    {
+      "nom": "RESEND_API_KEY",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "RR_FROM",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "SILENCE_HEURES",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "STRIPE_INVITE_ENABLED",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "STRIPE_SECRET_KEY",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "STRIPE_WEBHOOK_SECRET",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "SUPABASE_ANON_KEY",
+      "lue_dans": [
+        "app/api/bibliotheque/catalogues/route.ts",
+        "lib/supabase.ts",
+        "middleware.ts"
+      ]
+    },
+    {
+      "nom": "SUPABASE_SERVICE_KEY",
+      "lue_dans": [
+        "lib/creationRenoServeur.ts",
+        "lib/supabase.ts"
+      ]
+    },
+    {
+      "nom": "SUPABASE_SERVICE_ROLE_KEY",
+      "lue_dans": [
+        "lib/creationRenoServeur.ts",
+        "lib/supabase.ts"
+      ]
+    },
+    {
+      "nom": "SUPABASE_URL",
+      "lue_dans": [
+        "lib/supabase.ts",
+        "middleware.ts"
+      ]
+    },
+    {
+      "nom": "SYNC_EMAIL_EXPEDITEURS",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "SYNC_EMAIL_FENETRE",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "SYNC_EMAIL_INTERNES",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "SYNC_EMAIL_OWNER_ID",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "TRACK_DEDUPE_SECONDES",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "TWILIO_ACCOUNT_SID",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "TWILIO_AUTH_TOKEN",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "TWILIO_FROM",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    }
+  ],
+  "crons": [
+    {
+      "chemin": "/api/cron/sync-email",
+      "horaire": "45 4 * * *"
+    },
+    {
+      "chemin": "/api/cron/relances",
+      "horaire": "0 8 * * *"
+    },
+    {
+      "chemin": "/api/cron/stripe-embarquement",
+      "horaire": "30 6 * * *"
+    },
+    {
+      "chemin": "/api/cron/prevenance",
+      "horaire": "0 2 * * *"
+    }
+  ],
+  "routes": [
+    "/api/bibliotheque/catalogues",
+    "/api/bibliotheque/documents",
+    "/api/bibliotheque/matrices/neutre-court",
+    "/api/bibliotheque/matrices/sola-air",
+    "/api/bibliotheque/reno",
+    "/api/bibliotheque/reno/fiche",
+    "/api/corpus/[id]/pdf",
+    "/api/cron/prevenance",
+    "/api/cron/relances",
+    "/api/cron/stripe-embarquement",
+    "/api/cron/sync-email",
+    "/api/devis/[id]/documents",
+    "/api/devis/[id]/facture-fournisseur",
+    "/api/devis/extraire",
+    "/api/devis/proposer",
+    "/api/reno",
+    "/api/reno/retour",
+    "/api/sms/stop",
+    "/api/stripe/webhook"
+  ],
+  "migrations": [
+    "20260721_rr_enroll_on_sent.sql",
+    "20260726_rr_liens_traques.sql",
+    "20260726b_rr_policies_artisan.sql",
+    "20260729_rr_notif_signature.sql",
+    "20260729b_rr_notif_silence.sql",
+    "20260729c_catalogue_prix_net.sql",
+    "20260730_rr_compteurs_jour.sql",
+    "20260731_rr_devis_email.sql",
+    "20260803_rr_identite_artisan.sql",
+    "20260803b_rr_relance_cloture.sql",
+    "20260803c_rr_realisations.sql",
+    "20260803d_rr_buckets_pas_de_listing.sql",
+    "20260804_rr_artisans.sql",
+    "20260805_rr_indicateurs_pilotage.sql",
+    "20260805b_rr_devis_perdu.sql",
+    "20260805c_rr_segmentation_attestations.sql",
+    "20260805d_rr_com_douce.sql",
+    "20260805e_rr_consentement_sms.sql",
+    "20260805f_rr_renvoi_devis.sql",
+    "20260810_rr_stripe_artisan.sql",
+    "20260810b_rr_paiements.sql",
+    "20260810c_rr_origine_lead.sql",
+    "20260812_rr_paiements_rembourse.sql",
+    "20260814_rr_brouillon_caduc.sql",
+    "20260817_rr_rpc_publiques_fermees.sql",
+    "20260817b_rr_catalogue_achat_serveur.sql",
+    "20260817c_rr_rpc_publiques_retablies.sql",
+    "20260817d_rr_signature_respecte_revocation.sql",
+    "20260817e_rr_rpc_par_jeton.sql",
+    "20260831_rd_catalogue_fournisseur.sql",
+    "20260902_rd_identite_legale.sql",
+    "20260902_rr_stripe_invitation.sql",
+    "20260908_rd_expediteur_artisan.sql",
+    "20260911150000_s2_etape4_voie_uuid_fermee.sql",
+    "20260911_rd_brouillon_unique.sql",
+    "20260915_rd_artisan_voit_ses_dossiers.sql",
+    "20260915b_rd_corpus_devis.sql",
+    "20261002044348_banques_reno.sql",
+    "20261002_rd_relance_gabarits.sql",
+    "20261002b_rd_messages_envoyes.sql",
+    "20261003_rd_clients_garde_vendeur.sql"
+  ],
+  "services": [
+    {
+      "nom": "Supabase (base, authentification, stockage)",
+      "variables": [
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "SUPABASE_ANON_KEY",
+        "SUPABASE_SERVICE_KEY",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ]
+    },
+    {
+      "nom": "Stripe Connect (paiement en ligne)",
+      "variables": [
+        "STRIPE_INVITE_ENABLED",
+        "STRIPE_SECRET_KEY",
+        "STRIPE_WEBHOOK_SECRET"
+      ]
+    },
+    {
+      "nom": "Resend (envoi des mails)",
+      "variables": [
+        "FEEDBACK_NOTIFY_FROM",
+        "FEEDBACK_NOTIFY_TO",
+        "RESEND_API_KEY",
+        "RR_FROM"
+      ]
+    },
+    {
+      "nom": "Gmail (synchro des devis envoyés par mail)",
+      "variables": [
+        "GMAIL_CLIENT_ID",
+        "GMAIL_CLIENT_SECRET",
+        "GMAIL_REFRESH_TOKEN",
+        "SYNC_EMAIL_EXPEDITEURS",
+        "SYNC_EMAIL_FENETRE",
+        "SYNC_EMAIL_INTERNES",
+        "SYNC_EMAIL_OWNER_ID"
+      ]
+    },
+    {
+      "nom": "Twilio (SMS — canal muet)",
+      "variables": [
+        "TWILIO_ACCOUNT_SID",
+        "TWILIO_AUTH_TOKEN",
+        "TWILIO_FROM"
+      ]
+    },
+    {
+      "nom": "Anthropic (assistant Réno)",
+      "variables": [
+        "ANTHROPIC_API_KEY"
+      ]
+    },
+    {
+      "nom": "mon-dpe.fr (audit PAC)",
+      "variables": [
+        "AUDIT_PAC_API_SECRET",
+        "AUDIT_PAC_BASE_URL"
+      ]
+    },
+    {
+      "nom": "RénoBoost / hub (extraction PDF, page devis)",
+      "variables": [
+        "HUB_DEVIS_URL",
+        "NEXT_PUBLIC_HUB_URL",
+        "RENOBOOST_API_URL"
+      ]
+    }
+  ],
+  "tables": {
+    "lues_par_le_code": [
+      "artisans",
+      "banques_reno",
+      "catalogue_icestream",
+      "catalogue_vente",
+      "clients",
+      "corpus_devis",
+      "devis",
+      "devis_events",
+      "feedbacks",
+      "messages_envoyes",
+      "paiements",
+      "profiles",
+      "realisations",
+      "relance_brouillons",
+      "relance_etat_par_client",
+      "relance_gabarits",
+      "relance_liens",
+      "relance_queue",
+      "sentinelle_etat"
+    ],
+    "creees_par_le_depot": [
+      "artisans",
+      "banques_reno",
+      "catalogue_vente",
+      "corpus_devis",
+      "corpus_lignes",
+      "messages_envoyes",
+      "paiements",
+      "realisations",
+      "relance_agregat_client",
+      "relance_brouillons",
+      "relance_etat_par_client",
+      "relance_gabarits",
+      "relance_liens"
+    ],
+    "hors_depot": [
+      "catalogue_icestream",
+      "clients",
+      "devis",
+      "devis_events",
+      "feedbacks",
+      "profiles",
+      "relance_queue",
+      "sentinelle_etat"
+    ]
+  },
+  "code_pour_sola": [
+    {
+      "fichier": "app/api/bibliotheque/matrices/sola-air/route.ts",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "app/api/devis/proposer/route.ts",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "app/bibliotheque/Accueil.tsx",
+      "motifs": [
+        "nomme SOLA",
+        "identifiant écrit en dur"
+      ]
+    },
+    {
+      "fichier": "app/bibliotheque/MatriceSola.tsx",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "app/bibliotheque/devis/page.tsx",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "app/bibliotheque/matrices/sola-air/page.tsx",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "app/bibliotheque/produits/page.tsx",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "app/bibliotheque/produits/ui.tsx",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "app/d/[token]/page.tsx",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "app/devis/[id]/envoi/actions.ts",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "app/devis/[id]/modifier/actions.ts",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "app/devis/[id]/modifier/page.tsx",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "app/devis/nouveau/actions.ts",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "app/devis/nouveau/controle.ts",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "components/ControleAvantDevis.tsx",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "components/DevisLineBuilder.tsx",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "components/PropositionIA.tsx",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "lib/config.ts",
+      "motifs": [
+        "identifiant écrit en dur"
+      ]
+    },
+    {
+      "fichier": "lib/controleDevis.ts",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "lib/controleRejeuSola.ts",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "lib/creationReno.ts",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "lib/creationRenoServeur.ts",
+      "motifs": [
+        "nomme SOLA",
+        "identifiant écrit en dur"
+      ]
+    },
+    {
+      "fichier": "lib/margeSola.ts",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "lib/margeSolaHistorique.ts",
+      "motifs": [
+        "nomme SOLA",
+        "identifiant écrit en dur"
+      ]
+    },
+    {
+      "fichier": "lib/matriceSola.ts",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "lib/matricesPrivees.ts",
+      "motifs": [
+        "identifiant écrit en dur"
+      ]
+    },
+    {
+      "fichier": "lib/modeles.ts",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "lib/pdfDevis.ts",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "lib/pdfSola.ts",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "lib/presentationSola.ts",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "lib/reglesSola.ts",
+      "motifs": [
+        "nomme SOLA",
+        "identifiant écrit en dur"
+      ]
+    },
+    {
+      "fichier": "lib/specimenSola.ts",
+      "motifs": [
+        "nomme SOLA",
+        "identifiant écrit en dur"
+      ]
+    },
+    {
+      "fichier": "lib/tarificationSola.ts",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "lib/tva.ts",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "lib/tvaSola.ts",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "lib/validationSola.ts",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "lib/versionDocuments.ts",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "releve/calcul/dictee.js",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    },
+    {
+      "fichier": "releve/ui/ReleveChantier_v2.jsx",
+      "motifs": [
+        "nomme SOLA"
+      ]
+    }
+  ]
+}

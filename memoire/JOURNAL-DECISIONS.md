@@ -4553,8 +4553,9 @@ technologie »*.
    cartouche de Léo, où l'épithète prend sa place.
 3. **ZOH SHIA** regroupe toute la technique de Paul. Premier élément : l'outil
    automatique de création de devis (RénoDevis) et tout son fonctionnement,
-   **pour le cloner chez un autre artisan** (nouvelle instance — pas
-   « massifier » sur la même plateforme).
+   **pour un autre artisan**. ⚠️ J'avais écrit ici « cloner (nouvelle
+   instance) » : c'était mon interprétation. Précisé par Paul à la boucle 2 —
+   **option A, ajouter l'artisan à la plateforme existante** (entrée suivante).
 
 **Livré (boucle 1)** : le champ `epithete` du registre (sept dragons) ; la
 seconde ligne dans le moteur du ciel (`js/ciel.js`, un `<text>` à part — le
@@ -4580,3 +4581,44 @@ RénoDevis chez un autre artisan ». ⛔ Elle POINTE les sources de RénoDevis
 plus de cartouche tant qu'on ne survole rien : le fil d'Ariane dit déjà où l'on
 est. Le cartouche revient au survol d'une étoile. Sa place en bas reste
 réservée — sans elle, le cartouche du survol recouvrirait les étoiles du bas.
+
+## 2026-10-04 — ZOH SHIA, boucle 2 : la techno de RénoDevis vit dans Ultima
+
+**Décisions de Paul :**
+1. **Option A** : un nouvel artisan rejoint la plateforme existante, comme SOLA.
+   ⚠️ Correctif de l'entrée précédente : j'y avais écrit « cloner (nouvelle
+   instance) », ce qui était mon interprétation, pas sa décision.
+2. *« La techno, ce qui la compose, doit vivre dans ZOH — toute la techno
+   RenoDevis doit y vivre : le but est de pouvoir l'invoquer pour dupliquer
+   aisément pour un autre artisan. »*
+3. *« Implante réponses aux pré-mortems et aux dangers. »*
+
+**Livré** : `zohshia/` (README, `renodevis/TECHNO.md`, `renodevis/AJOUTER-UN-ARTISAN.md`,
+`renodevis/collecter.mjs`, `renodevis/inventaire.json`), la compétence
+`zohshia` (l'invocation), `tests/unit-zohshia.mjs`, l'exclusion du déploiement
+et le préfixe privé `/zohshia` du middleware.
+
+**Ce que la mesure a appris (RénoDevis `4400cd3`)** :
+- **8 tables** lues par le code ne sont créées par aucune migration du dépôt :
+  le clonage d'instance (option B) n'est pas possible aujourd'hui.
+- **39 fichiers de code** nomment SOLA ou portent un identifiant écrit en dur :
+  un deuxième artisan hériterait des règles de SOLA. Les généraliser est le
+  vrai chantier de la duplication — à cadrer à part.
+- **Aucune fonction ne crée de compte, aucun écran n'écrit `profile_id`** :
+  l'étape la plus fréquente est manuelle.
+- La collecte rendait d'abord 38 variables pour 39 : un appel `listeEnv(` coupé
+  sur deux lignes échappait à `git grep`. Trouvé en comparant à une liste
+  connue d'avance ; le test exige désormais cette variable nommément.
+
+**Reste** : une page à l'écran pour ZOH SHIA (route authentifiée nécessaire) ;
+la généralisation des règles SOLA ; l'automatisation des étapes manuelles.
+
+**Suite du 04/10, rapporté par Paul** : *« Le lien affiche une erreur »* —
+`/zohshia/renodevis/inventaire.json` sur la preview de #344 n'est pas servi
+(la session, bloquée par la protection Vercel, n'avait pas pu le constater).
+*« Le crédit est rechargé depuis hier soir »* — le blocage Anthropic du 02/10
+est levé ; FINUBAR et CADRAGE-ULTIMA mis à jour (non remesuré par la séance).
+Direction donnée pour la suite : *« les règles écrites pour SOLA, certaines lui
+sont propres : tarifs de son fournisseur, coût de sa main d'œuvre… ce sont des
+choses à rendre neutres, garder l'ossature pour rendre la techno aisément
+duplicable »*.
