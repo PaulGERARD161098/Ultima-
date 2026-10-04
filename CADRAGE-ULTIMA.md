@@ -99,6 +99,16 @@
   18 verdicts validés rouges sur le code d'avant ; relecture Codex : 4 constats corrigés.
   `smoke-riven-nebuleuses` 119/119.
   Détail : `CADRAGE-RIVEN-NEBULEUSES.md` §8 bis.
+- 🧭 **SESSION 2026-10-04 — DRAGONS À ÉPITHÈTES ET ZOH SHIA (#343 fusionnée), LA TECHNO DE RÉNODEVIS DANS ZOH SHIA (#344).**
+  ✅ Les sept dragons s'affichent « NOM » puis « Dragon de… » ; ZOH SHIA, dragon
+  de la technologie, rejoint la constellation ; le cartouche se tait au repos sur
+  les écrans de constellation (#343, `c1baf60`). ✅ `zohshia/` porte la techno de
+  RénoDevis — inventaire mesuré, guide « ajouter un artisan », compétence
+  `/zohshia` — non déployé, préfixe privé ; Paul a constaté l'erreur sur la
+  preview (#344). ⚠️ **Le crédit Anthropic est RECHARGÉ depuis le 03/10 au soir**
+  (rapporté par Paul le 04/10, non remesuré) : l'entrée du 02/10 ci-dessous ne
+  bloque plus. Prochaine boucle : neutraliser ce qui est propre à SOLA dans
+  RénoDevis, en gardant l'ossature. Détail : `memoire/JOURNAL-DECISIONS.md`.
 - 🧭 **SESSION 2026-10-02 (jour/soir) — B1 ⑤ CODÉ EN #336, CRÉDIT ANTHROPIC ÉPUISÉ, RIVEN VÉRIFIÉ ET CLASSÉ (#338 fusionnée).**
   ✅ B1 ⑤ codé sur `claude/leo-defaire` (PR #336, brouillon, CI verte) — détail
   dans son cadrage §15.5 et dans l'entrée de séance portée par #336. ⛔ L'étape 0,

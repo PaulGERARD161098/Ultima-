@@ -4612,3 +4612,13 @@ et le préfixe privé `/zohshia` du middleware.
 
 **Reste** : une page à l'écran pour ZOH SHIA (route authentifiée nécessaire) ;
 la généralisation des règles SOLA ; l'automatisation des étapes manuelles.
+
+**Suite du 04/10, rapporté par Paul** : *« Le lien affiche une erreur »* —
+`/zohshia/renodevis/inventaire.json` sur la preview de #344 n'est pas servi
+(la session, bloquée par la protection Vercel, n'avait pas pu le constater).
+*« Le crédit est rechargé depuis hier soir »* — le blocage Anthropic du 02/10
+est levé ; FINUBAR et CADRAGE-ULTIMA mis à jour (non remesuré par la séance).
+Direction donnée pour la suite : *« les règles écrites pour SOLA, certaines lui
+sont propres : tarifs de son fournisseur, coût de sa main d'œuvre… ce sont des
+choses à rendre neutres, garder l'ossature pour rendre la techno aisément
+duplicable »*.
