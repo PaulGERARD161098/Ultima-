@@ -4719,3 +4719,20 @@ Ultima en porte le code et Ultima travaille toujours avec les autres repos. Merg
   verts (931 avant), chaque test ajouté en amont présent dans le code extrait,
   build vert.
 - **Prochaine boucle** : rendre la dérive visible à l'ouverture de séance.
+
+## 2026-10-04 (soir, fin) — la dérive de ZOH SHIA se voit sans la chercher
+
+Paul : *« Merge 349 et go pour la boucle suivante »*.
+
+- **#349 fusionnée** (squash `fd361bb`, tête `750ccf3`, CI 9/9 verte).
+- **Fait** : `zohshia/renodevis/derive.mjs` mesure de combien RénoDevis a dépassé
+  la série, et combien de ces commits touchent un fichier qu'elle retouche. Dit à
+  l'ouverture de chaque séance d'Ultima (second hook SessionStart — le rappel
+  Finubar, copié dans les huit dépôts, n'est pas touché) et sur l'écran Finubar
+  (champ `zohshia` de la collecte ; reprise datée quand RénoDevis est absent).
+- **Choix** : un indicateur, pas une preuve — seule l'extraction prouve. Des
+  comptes, jamais des chemins (la liste vit dans `outils/` et peut nommer).
+- **Prouvé** : faux dépôt git (13 verdicts, 3 sabotages au rouge) ; cas réel connu
+  `7d21217` → `f1f9fb3` = 8 commits dont 6 sur la série ; écran : rendu, alerte,
+  texte seul, contraste AA, sabotage au rouge ; reprise datée éprouvée en
+  retirant RénoDevis du disque.

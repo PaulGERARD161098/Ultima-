@@ -119,6 +119,8 @@ h1 { font-variant: small-caps; font-weight: 600; font-size: clamp(1.9rem, 4.5vw,
 .matin-action-titre { font-variant: small-caps; letter-spacing: 0.16em; color: var(--encre-pale); font-size: 0.8rem; margin: 0 0 0.3rem; }
 .matin-action-faire { font-size: 1.12rem; margin: 0; }
 .matin-action-cap { font-style: italic; color: var(--encre-claire); margin: 0.5rem 0 0; font-size: 0.95rem; }
+.matin-zohshia { margin: 0 0 1rem; font-size: 0.95rem; color: var(--encre-claire); }
+.matin-zohshia-alerte { color: inherit; font-weight: 600; }
 .matin-vide { font-style: italic; color: var(--encre-claire); margin: 0; }
 
 /* ——— La table de marche ——— */

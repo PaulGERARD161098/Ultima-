@@ -2086,6 +2086,42 @@ export default {
         [
          [
           [
+           "derive.mjs",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Dit de combien la tête du dépôt de référence a dépassé la série, et combien de ces commits touchent un fichier qu'elle retouche — à l'ouverture de chaque séance d'Ultima (hook) et sur l'écran Finubar (collecte)",
+           ""
+          ]
+         ],
+         [
+          [
+           "Des comptes, jamais des chemins ; « non mesurable » dit avec sa raison ; date du dernier relevé du clone ; ne bloque jamais une séance. Éprouvé sur un faux dépôt et sur le cas réel connu (",
+           ""
+          ],
+          [
+           "7d21217",
+           "c"
+          ],
+          [
+           " → ",
+           ""
+          ],
+          [
+           "f1f9fb3",
+           "c"
+          ],
+          [
+           " : 8 commits, 6 sur la série)",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
            "extraire.mjs",
            "c"
           ]
@@ -2218,7 +2254,15 @@ export default {
          "c"
         ],
         [
-         ") — jamais en corrigeant l'arbre extrait.",
+         ") — jamais en corrigeant l'arbre extrait. Le retard ne se cherche pas : ",
+         ""
+        ],
+        [
+         "derive.mjs",
+         "c"
+        ],
+        [
+         " le dit à l'ouverture de chaque séance d'Ultima et sur l'écran Finubar. Il INDIQUE quand rafraîchir ; seule l'extraction prouve.",
          ""
         ]
        ]
@@ -5444,7 +5488,7 @@ export default {
  ],
  "sources": {
   "renodevis/badge.json": "cdf0f06c4c492ccc21be7bb97a3d5f2da690832d1e1728d2e0a12bd0482fb1ff",
-  "renodevis/TECHNO.md": "f68b30be49c44ac62016f258df3cf046535d2136b957e8ae6de77973c6b58fe6",
+  "renodevis/TECHNO.md": "e318f1765c2fe9177acf5d4ae51cadbf4fc1d71b62d353daa7f8b14a3bf1dbe4",
   "renodevis/AJOUTER-UN-ARTISAN.md": "7ebfc2b34bcc2a7766c1bb20d92f65217efe7d5b3cb579b9bdbd77eba4c9ec99"
  }
 };

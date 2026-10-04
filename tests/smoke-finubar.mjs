@@ -67,6 +67,9 @@ const DONNEES = {
     illisibles: 1,
   },
   constellation: { noeuds: [], relations: [] },
+  // ZOH SHIA (04/10) : la dérive de la série. La balise est HOSTILE à dessein :
+  // elle doit rester un texte.
+  zohshia: { mesurable: true, alerte: true, phrase: 'ZOH SHIA — ⚠️ EN RETARD de 8 commit(s) <b>balise</b>' },
 };
 
 const navigateur = await chromium.launch({
@@ -224,6 +227,9 @@ const { page, journal } = await ouvrir({ client: 'connecte', api: { status: 200,
   verifier('l\'action est celle du moteur', /Beta — le geste attendu/.test(matin), matin);
   verifier('un geste de Paul est annoncé comme tel', /geste de Paul/.test(matin));
   verifier('le POURQUOI accompagne l\'action', /le cap de Beta/.test(matin));
+  verifier('la dérive de ZOH SHIA est rendue', /ZOH SHIA — ⚠️ EN RETARD de 8 commit/.test(matin), matin);
+  verifier('la dérive en retard est marquée', (await page.locator('.matin-zohshia-alerte').count()) === 1);
+  verifier('la dérive reste un texte', /<b>balise<\/b>/.test(matin) && (await page.locator('#matin-corps b').count()) === 0);
 
   const prov = await page.textContent('#provenance');
   verifier('la page dit DE QUAND date ce qu\'elle affiche', /2026-08-21/.test(prov), prov);
@@ -235,6 +241,7 @@ console.log('§3 — contraste AA des textes DYNAMIQUES (session stubée)');
 {
   const cibles = [
     ['.signal-dit', 'texte d\'un signal du matin'],
+    ['.matin-zohshia', 'la dérive de ZOH SHIA'],
     ['.matin-action-faire', 'l\'action du matin'],
     ['.matin-action-cap', 'le pourquoi de l\'action'],
     ['.projet-nom', 'nom d\'un projet'],

@@ -48,6 +48,12 @@ function rendreMatin(donnees) {
   // si elle vient de nous : un `cartouche` présent mais sans `signaux` ferait
   // lever `.length` et emporterait toute la page — état blanc, sans message.
   // On vérifie donc la FORME, pas seulement la présence.
+  // ZOH SHIA (04/10) : la dérive de la série se lit ici, sans la chercher.
+  // Texte seul (textContent), et seulement si la forme est la bonne.
+  const z = donnees.zohshia;
+  if (z && typeof z.phrase === 'string') {
+    hote.appendChild(el('p', z.alerte ? 'matin-zohshia matin-zohshia-alerte' : 'matin-zohshia', z.phrase));
+  }
   const brut = donnees.cartouche;
   const c = (brut && Array.isArray(brut.signaux))
     ? { signaux: brut.signaux, action: brut.action || null }

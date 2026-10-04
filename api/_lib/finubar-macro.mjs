@@ -57,7 +57,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-04T17:05:45.944Z",
+        "lecture_le": "2026-10-04T19:19:15.250Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -167,7 +167,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-04T17:05:45.928Z",
+        "lecture_le": "2026-10-04T19:19:15.237Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -271,7 +271,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-04T17:05:45.944Z",
+        "lecture_le": "2026-10-04T19:19:15.250Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -340,7 +340,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-04T17:05:45.945Z",
+        "lecture_le": "2026-10-04T19:19:15.250Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -399,7 +399,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-04T17:05:45.945Z",
+        "lecture_le": "2026-10-04T19:19:15.250Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -457,7 +457,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-04T17:05:45.945Z",
+        "lecture_le": "2026-10-04T19:19:15.250Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -525,7 +525,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-04T17:05:45.944Z",
+        "lecture_le": "2026-10-04T19:19:15.250Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -558,12 +558,12 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-10-04",
-          "quoi": "04/10 soir : #348 fusionnée (dry run). Série ZOH SHIA rafraîchie sur RénoDevis f1f9fb3 : extraction prouvée sur la tête (495 fichiers sans nom propre, 979 tests, build vert). Paul…",
-          "commit": "b44dbe2f38dfa7a67522346b9b918f87e81d24ec"
+          "quoi": "04/10 soir : #349 fusionnée (série ZOH SHIA sur RénoDevis f1f9fb3). Dérive de ZOH SHIA rendue visible : rappel d'ouverture de séance d'Ultima + ligne sur l'écran Finubar…",
+          "commit": "fd361bb054bae2218df585bed465d2c943a708a5"
         },
-        "prochaine_action": "Rendre la dérive de ZOH SHIA visible sans la chercher (Paul : « ZOH doit rester à jour ») : le rappel d'ouverture de séance d'Ultima et l'écran /finubar disent « série ZOH SHIA à…",
+        "prochaine_action": "Propager les LEÇONS v70 et v71 aux neuf autres dépôts (memoire/LECONS-PROCEDURE.md) — la boucle ouverte la plus ancienne de la séance. ZOH SHIA : rafraîchir la série dès que le…",
         "bloque_par": [
-          "Fusion de la PR du rafraîchissement ZOH SHIA : GO de Paul sur son SHA.",
+          "Fusion de la PR « dérive ZOH SHIA visible » : GO de Paul sur son SHA.",
           "ULTIMA_PROPRIETAIRES absente en production (l'API Vercel refuse l'écriture des variables au connecteur) : ZOH SHIA et Finubar fermés jusqu'au geste de Paul.",
           "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le…",
           "R1 (B4) en production, non prouvée : Réno a rendu 502 le 02/10 à 16:43 UTC. Le crédit étant rechargé, lui demander « Où en est Artidispo ? » et comparer à la base (PLAN §2).",
@@ -575,7 +575,7 @@ export default {
         "en_attente_depuis": "2026-08-20",
         "boucles_ouvertes": [
           {
-            "quoi": "LEÇONS v70 (04/10 : comparaison symétrique, « connecté » ≠ « propriétaire », détecteur aveugle hors de sa liste) — à PROPAGER aux neuf dépôts (memoire/LECONS-PROCEDURE.md).",
+            "quoi": "LEÇONS v70 + v71 (04/10 : comparaison symétrique, « connecté » ≠ « propriétaire », détecteur aveugle hors de sa liste) — à PROPAGER aux neuf dépôts (memoire/LECONS-PROCEDURE.md).",
             "depuis": "2026-10-04"
           },
           {
@@ -636,7 +636,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-04T17:05:45.928Z",
+        "lecture_le": "2026-10-04T19:19:15.237Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -702,7 +702,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-04T17:05:45.945Z",
+        "lecture_le": "2026-10-04T19:19:15.250Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -805,7 +805,7 @@ export default {
       "mesure_le": "2026-10-02",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-04T17:05:45.945Z",
+        "lecture_le": "2026-10-04T19:19:15.250Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -978,7 +978,7 @@ export default {
       },
       {
         "projet": "Ultima",
-        "geste": "Fusion de la PR du rafraîchissement ZOH SHIA : GO de Paul sur son SHA."
+        "geste": "Fusion de la PR « dérive ZOH SHIA visible » : GO de Paul sur son SHA."
       },
       {
         "projet": "Ultima",
@@ -1182,5 +1182,18 @@ export default {
       }
     ],
     "relations": []
+  },
+  "zohshia": {
+    "mesurable": true,
+    "base": "f1f9fb3",
+    "tete": "f1f9fb3",
+    "commits": 0,
+    "touchent": 0,
+    "fichiers_touches": 0,
+    "releve_le": "2026-10-04T16:37:01.959Z",
+    "reprise": false,
+    "mesure_le": "2026-10-04",
+    "alerte": false,
+    "phrase": "ZOH SHIA — à jour : la série suit RénoDevis f1f9fb3 (clone relevé le 2026-10-04 16:37 UTC)."
   }
 };
