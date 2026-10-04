@@ -28,14 +28,14 @@
   "etat": "en_cours",
   "jalon": {
     "nom": "Léo et FINUBAR — activation du site et des commandes",
-    "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ⛔ ①②③④⑤ en production — ⑤ fusionné le 02/10 au soir (#336) sur ordre de Paul, SANS l'étape 0 ; le crédit Anthropic, épuisé le 02/10, est RECHARGÉ depuis le 03/10 au soir (rapporté par Paul le 04/10, non remesuré) ; la preuve en prod (une écriture, son défaire) reste à faire"
+    "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40, cible notée) → defaite (16:11:54, idée retirée, archipel revenu à 4). ⏳ Reste à prouver « rien au-delà » : un geste ORANGE doit faire demander Léo au lieu d'agir."
   },
   "dernier_arret": {
     "le": "2026-10-04",
-    "quoi": "04/10 soir : PR #345 fusionnée sur ordre de Paul — ZOH SHIA porte la techno de RénoDevis prête à déployer chez un autre pro : plan pur, check-list (8 rubriques, deux voies), base neuve validée par la base de référence (0 écart), code neutre extrait et prouvé (RénoDevis 7d21217 : 492 fichiers, 931 tests, build vert), écran « un badge par techno ». Garde PROPRIÉTAIRE posé sur /api/zohshia ET /api/finubar (inscription mesurée ouverte).",
+    "quoi": "04/10 soir : #345 et #346 fusionnées ; étape 0 JOUÉE EN PRODUCTION — Léo écrit sans demander (anneau vert) et l'écriture se défait d'un clic, trois lignes sur une même trace.",
     "commit": "97c3cd19ea300251da88617cd759e5ee6b549be3"
   },
-  "prochaine_action": "GESTE DE PAUL : poser ULTIMA_PROPRIETAIRES dans Vercel (projet ultima, Production + Preview ; valeur = l'identifiant de son compte, relu en base le 04/10) — sans elle, /finubar et /zohshia répondent « accès réservé » en production depuis la fusion de #345. Puis vérifier que les deux s'ouvrent.",
+  "prochaine_action": "Jouer un geste ORANGE en production (ex. « Supprime l'idée GLANEUR » ou une modification) : Léo doit DEMANDER, et leo_ecritures ne doit porter aucune nouvelle `reussie` sans votre clic. Puis, geste de Paul toujours ouvert : ULTIMA_PROPRIETAIRES dans Vercel (ZOH SHIA et Finubar fermés en production sans elle).",
   "bloque_par": [
     "ULTIMA_PROPRIETAIRES absente en production (l'API Vercel refuse l'écriture des variables au connecteur) : ZOH SHIA et Finubar fermés jusqu'au geste de Paul.",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
