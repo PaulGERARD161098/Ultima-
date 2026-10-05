@@ -1,5 +1,76 @@
 # Raccordement LV1 à Ultima — proposition d'activation
 
+## Révocation vérifiée le 05/10/2026 — correction de la fondation
+
+Paul confirme : « Accès à Léo contrôle révoqué — Continue ».
+Mesures effectuées après son intervention :
+- Page GitHub de l'installation organisation `160835885` : mise à jour
+  confirmée, sélection de 12 dépôts, `leo-control-r21` absent, bouton
+  Enregistrer désactivé. Les 12 dépôts habituels sont conservés.
+- Inventaire du connecteur pour cette installation : 12 dépôts, contrôle absent.
+- GET des métadonnées de `PaulGERARD161098/leo-control-r21` : refus 404 ;
+  lecture `AGENTS.md` d'Ultima toujours réussie.
+
+Avant la révocation, ce même contrôle était exposé parmi 13 dépôts et ses
+métadonnées étaient accessibles. Ce contraste, la page des réglages et le
+témoin positif Ultima prouvent la révocation **du connecteur mesuré** ;
+un 404 isolé n'aurait pas suffi. Aucun contenu ni secret du contrôle lu,
+aucun import, workflow ou effet exécuté dans ce contrôle.
+
+**Limite conservée :** la séance navigateur propriétaire ayant permis le
+réglage, les autres sessions, CLI et applications ne sont pas attestées
+exclues. Ne pas utiliser le navigateur comme contournement du connecteur.
+L'exclusion globale requise pour l'activation reste ouverte ; elle ne bloque
+pas la préparation dans Ultima. Les mesures historiques ci-dessous sont
+conservées comme historiques, pas comme état actuel du connecteur.
+
+### Prochain lot cadré : admission et reprise, encore à implémenter
+
+But : qu'une demande validée par le protocole ne provoque un effet fictif
+qu'après admission par l'hôte, et qu'une interruption ne permette ni doublon
+ni retour à un ancien état.
+
+Étapes et moyens : préparer l'adaptateur autour de
+`leo/control_r21/protocol.py`, `leo/trial_host.py`,
+`leo/trial_resume.py` et `leo/runtime/broker.py` ; conserver le registre
+existant et ses verrous. Le format réseau actuel de TrialHost contient
+seulement `command` : l'adaptateur doit contrôler explicitement les six
+champs du nouveau protocole, sans simplement les jeter avant cet appel.
+Identifier séparément le registre canonique de mission, le journal des
+requêtes de transport et la preuve de checkpoint ; aucun second registre
+d'autorité de mission.
+
+| Garde à préparer | Épreuve de sortie attendue en CI isolée |
+|---|---|
+| Identité et autorité obtenues hors proposition | Mauvais compte, autorité injectée et mandat inadéquat refusés avant effet |
+| Correspondance mission/opération/version | Identifiant changé et version périmée refusés ; cas nominal admis |
+| Journal durable request_id/empreinte | Même requête retrouve son résultat ; même ID et contenu différent refusés ; concurrence sans double effet |
+| Arrêt et admission sous verrou commun | Arrêt acquis avant admission interdit le départ ; opérations engagées restent réconciliables |
+| Résultat inconnu après interruption | Réconciliation par reçu avant tout rejeu ; aucun second effet après réponse perdue |
+| Checkpoint authentifié, lié au contexte et à une version courante hors paquet | Altération, mauvais contexte et rejeu d'un checkpoint ancien refusés ; signature seule insuffisante contre le rollback |
+
+La conception doit traiter la coupure entre admission, effet et conservation
+du reçu ; marquer une requête « reçue » ne prouve pas l'effet. L'ancrage du
+checkpoint courant et l'identité de confiance appartiennent au futur hôte
+exclu, jamais à une archive ou à la proposition Work. Préparer le code ne
+crée pas cet ancrage effectif.
+
+Réussite : nouveau SHA, revue par instance distincte, CI isolée liée à ce
+SHA et cas négatifs réellement refusés. Un défaut volontaire limité au banc
+doit rendre l'épreuve critique rouge. Aucun résultat annoncé avant mesure.
+
+Hors périmètre de ce lot : import/ancrage dans le contrôle exclu, activation,
+workflow R21 manuel, secret, merge, publication et dépense externe.
+Pré-mortem : parser confondu avec permission, champs ignorés par l'ancien
+hôte, journal transport devenu deuxième autorité, coupure causant un doublon,
+checkpoint signé mais ancien. Les épreuves ci-dessus portent sur ces mécanismes.
+
+FINUBAR conserve son rôle d'index des états et dérives de projets. Il ne
+devient ni l'autorité d'admission ni le contrôleur de Léo. Sa collecte autonome
+et son stockage/retour privé restent un lot distinct après fermeture du canal.
+
+---
+
 ## Reprise du 05/10/2026 — déblocage et livraison du protocole
 
 Demande courante de Paul : « on reprend alors il faut débloquer et mettre en ligne ».

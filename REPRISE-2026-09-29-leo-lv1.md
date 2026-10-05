@@ -1,3 +1,29 @@
+# Reprise courante — 5 octobre 2026, accès contrôle révoqué
+
+La révocation par Paul est vérifiée pour le connecteur organisation
+160835885 : 12 dépôts conservés, contrôle absent ; GET métadonnées du contrôle
+refusé (404), lecture Ultima réussie. Avant ce changement, ses métadonnées
+étaient accessibles parmi 13 dépôts. Aucun contenu ni secret du contrôle lu.
+
+La page de réglages confirme l'enregistrement. L'exclusion globale des autres
+voies (notamment séance navigateur propriétaire, CLI et applications)
+reste non attestée : aucun contournement, import ou activation autorisé par
+cette révocation.
+
+Boucle fermée : correction de l'accès du connecteur et preuve avant/après.
+Prochain lot cadré, non implémenté : admission, journal durable anti-doublon,
+réconciliation après résultat inconnu et checkpoint protégé contre le rollback,
+en réutilisant TrialHost/trial_resume/broker. Détail et critères de sortie
+dans leo/ACTIVATION.md, section « Révocation vérifiée le 05/10/2026 ».
+FINUBAR reste l'index d'état/dérive prévu dans le code.
+
+Aucun code applicatif modifié ou testé dans cette correction documentaire.
+Les preuves antérieures du protocole restent liées à leurs propres SHA.
+Aucune fusion, import dans le contrôle, activation, nouvelle dépense,
+publication, migration, workflow manuel ou émission externe.
+
+---
+
 # Reprise courante — 5 octobre 2026, protocole R21 préparatoire
 
 Demande : débloquer et mettre en ligne. Ultima est déjà déployé READY au main
