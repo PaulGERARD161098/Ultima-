@@ -1,5 +1,101 @@
 # Raccordement LV1 à Ultima — proposition d'activation
 
+## Reprise du 05/10/2026 — déblocage et livraison du protocole
+
+Demande courante de Paul : « on reprend alors il faut débloquer et mettre en ligne ».
+Cette section décrit les mesures et le lot préparatoire ; elle n'est ni un
+accord externe R21 ni une réception LV1.
+
+### Mesures actualisées et effet utile
+
+- `main` mesuré : `9a261c5fb1ac1a77bdf53e5b3f98444297b2599b`.
+  PR351 conserve sa tête `8c3ff37bb81e19bbe3a08fa0e0c97fbceadb2448`,
+  ouverte, brouillon, non fusionnée.
+- Le dossier du 04/10 existe déjà dans le commit
+  `974099098469c74504eef266b5e4a0b8ba6f41df`, parent du main mesuré.
+  Il est repris dans le nouveau lot ; aucun document canonique concurrent.
+- Vercel : projet `ultima` / `prj_M04pcNR3xJUAIuUXKEArOHiQtQzj`,
+  production `dpl_DmSDNjNFmXXYbspjFwKDBDpmrji8` READY, même SHA que main.
+  Audit distinct en lecture seule. L'alias `https://ultima-plum.vercel.app`
+  répond 200 anonymement en racine ; l'URL unique de production redirige
+  vers SSO. L'authentification des données n'a pas été testée dans cette séance.
+- `.vercelignore` exclut `/leo/` et `*.md`. Les modules Python et
+  le dossier opérateur restent dans le dépôt privé, hors du déploiement Vercel.
+  Un merge de préparation ne fournit pas l'hôte d'exécution R21.
+- `api/finubar.js` sert un agrégat commité, daté du 04/10.
+  `api/finubar-matin.mjs` ne collecte pas. Audit Vercel distinct :
+  quatre réponses 200 sur cette route en 48 heures, sans lecture des contenus
+  de logs. Ces passages ne prouvent ni fraîcheur ni réception de mail.
+- Le GET des seules métadonnées de `leo-control-r21` retourne encore 404.
+  Existence, propriétaire et exclusion globale restent non attestés.
+  Aucun contenu ni secret du contrôle n'a été lu.
+
+Recherche préalable avant nouvelle écriture : 445 références exposées,
+92 heads, aucun tag, 353 références PR (352 head et 1 merge) ; 379 pointes
+distinctes. Parcours des historiques et parents : 1 311 commits distincts,
+330 requêtes, zéro erreur, aucune pointe ou parent restant inconnu.
+Pour chacun de `e3817eb`, `c5fb397`, `0f7830e` : zéro occurrence dans ce
+graphe, recherche complémentaire GitHub de commits vide.
+Limites : objets orphelins, références supprimées/inaccessibles et absence
+de transaction globale. Ce constat ne prouve pas une absence globale.
+
+### Lot exécuté : protocole fermé, sans capacité d'exécution
+
+But : distinguer une proposition bien formée d'une autorité et préparer son
+format de transport borné. Fichiers nouveaux : `leo/control_r21/protocol.py` et
+`tests/runtime/test_control_r21_protocol.py`. Les sept fichiers PR351
+ne sont pas modifiés ni reconstruits. Aucun lanceur n'est activé.
+
+Le nom préparatoire `schema_version` du plan précédent devient
+`protocol_version`, fixé à 1 : il désigne la version du format de transport,
+distincte de `expected_version`, version attendue de la mission.
+Le format contient exactement cette version, `command`, `request_id`,
+`mission_id`, `operation_id` et `expected_version`. Les quatre commandes
+sont `status`, `execute`, `reconcile`, `stop`.
+
+Corps JSON limité à 16 Kio, UTF-8 strict, objet fermé, identifiants ASCII bornés,
+types exacts, doublons/champs inconnus/contenus d'autorité refusés. Empreinte
+canonique déterministe pour le contenu validé ; aucun accès réseau/disque,
+accord, identité, budget, arrêt ou effet dérivé de cette empreinte.
+L'anti-rejeu `request_id/digest`, l'habilitation et l'admission restent des
+gardes du futur hôte : elles ne sont pas installées par ce décodeur.
+
+Moyens d'épreuve : CI normale `pull_request`, workflow existant
+« Léo LV1 — fixtures isolées », puis revue par instance distincte.
+Un cas négatif remplace seulement une garde en mémoire dans le test isolé ;
+aucun mutant n'est poussé sur une branche ni utilisé dans un environnement réel.
+Aucun test applicatif local n'est exécuté. SHA/runs/logs du lot doivent être
+relevés dans la PR après exécution ; aucun succès n'est déduit du plan.
+
+### Blocages circonscrits et prochaine action
+
+L'installation du canal nécessite encore l'attestation du contrôle hors Work,
+puis un kit complet d'admission/checkpoint, sa revue et son ancrage autorisé.
+Le hôte temporaire GitHub Actions exclu reste la voie proposée, sans achat
+d'hébergement ni ouverture du serveur loopback. Le présent protocole ne
+constitue pas ce kit complet : aucun import ne doit être demandé maintenant.
+
+FINUBAR autonome nécessite un transport de collecte privé et un chemin
+de stockage/lecture durable. Le connecteur GitHub Work ne devient pas un
+credential disponible à Vercel. Une actualisation conduite en séance est
+possible avec cet accès ; elle ne prouve pas une collecte autonome.
+
+Pré-mortem du lot : parser assimilé à autorité, JSON ambigu, propositions
+trop grosses, preuve sur mauvais SHA, ou Python annoncé déployé alors qu'exclu.
+Prévention : format fermé et borné, aucune IO, revue distincte et logs CI liés
+aux versions, périmètres GitHub/Vercel explicitement séparés.
+Aucune mission autonome, dépense externe, fusion, publication nouvelle,
+migration, secret ou envoi n'est exécuté par ce lot.
+
+Prochaine action après cette épreuve : préparer l'admission et le checkpoint
+en réutilisant `trial_host`, `trial_resume`, le broker et leurs refus.
+L'attestation d'existence/exclusion du contrôle peut être fournie en parallèle
+par Paul sans transférer aucune valeur secrète.
+
+---
+
+
+
 ## Objectif d'autonomie — plan du 04/10/2026
 
 **Statut : cadrage et première étape réalisés en lecture/préparation ;

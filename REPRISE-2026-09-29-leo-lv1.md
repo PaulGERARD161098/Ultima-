@@ -1,3 +1,35 @@
+# Reprise courante — 5 octobre 2026, protocole R21 préparatoire
+
+Demande : débloquer et mettre en ligne. Ultima est déjà déployé READY au main
+`9a261c5fb1ac1a77bdf53e5b3f98444297b2599b` ; le dossier Python Léo est exclu de
+Vercel. Le nouveau lot est une livraison privée de préparation, sans activation.
+
+Le dossier du 04/10, commit `974099098469c74504eef266b5e4a0b8ba6f41df`, est
+réutilisé. Protocole fermé et tests proposés dans
+`leo/control_r21/protocol.py` et `tests/runtime/test_control_r21_protocol.py`.
+Aucun des sept fichiers PR351 modifié ; PR351 reste ouverte et non fusionnée.
+La version du format s'appelle désormais `protocol_version`, distincte de
+la version de mission ; divergence préparatoire expliquée dans ACTIVATION.
+
+AGENTS, CLAUDE et §11 LV1 v1.1 réellement relus. Aucun test applicatif local,
+secret, import dans le contrôle, workflow manuel, effet métier ou envoi.
+Revue indépendante et preuves CI du nouveau SHA à relever dans sa PR ;
+la préparation n'hérite pas des preuves de la PR351.
+
+Blocages : contrôle privé absent de l'accès mais existence/exclusion globale
+non attestées (404) ; admission/checkpoint non installés ; collecte FINUBAR
+autonome et transport privé non raccordés. L'agrégat servi date du 04/10.
+La configuration propriétaire est déclarée manquante dans FINUBAR ; elle n'a
+pas été remesurée par lecture de variables. Aucun secret n'est demandé.
+
+Prochaine action unique après CI/revue de ce lot : préparer l'admission et
+le checkpoint, en réutilisant le banc existant. Paul peut attester le contrôle
+hors Work en parallèle. Ne pas importer le seul protocole comme kit complet,
+ne pas annoncer d'autonomie ni de réception LV1.
+État et rétroplanning : `leo/ACTIVATION.md`, section du 05/10 puis plan du 04/10.
+
+---
+
 # Reprise courante — 4 octobre 2026, cadrage d'autonomie et premier diagnostic
 
 **Boucle actuelle :** demande de Paul de cadrer précisément l'autonomie de Léo
