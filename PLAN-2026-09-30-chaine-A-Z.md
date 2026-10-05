@@ -357,6 +357,10 @@ route.
 - **Q-P3** — Réno : chaque boucle livre le connecteur de son maillon ;
 - **Q-P4** — la famille B avance pendant que les gestes A attendent Paul ; C, N
   et D restent fermées.
+- **Q10** (05/10) — le fil d'un dossier prolonge `clients.id` de la base
+  partagée (`dossier_ref`), sans nouvelle table ; granularité **client + devis
+  signé** pour M7 à M9. Instruction et requête à blanc : cadrage RenoBoost
+  §3.3 bis. Les migrations qui en découlent restent des gates.
 
 **Ouvertes** — posées à la boucle qui les touche, pas avant. Les réponses de
 Paul s'inscrivent dans la liste ci-dessus, datées.
@@ -366,6 +370,5 @@ Paul s'inscrivent dans la liste ci-dessus, datées.
 | Q4 | Photos du relevé stockées ou non | A5 ou D0 | stockées dans le relevé, 9 Mo max, comme aujourd'hui (cadrage §8) |
 | Q6 | Rapport client : 3 pages ou 10 sections | C1 | 3 pages remises, les 10 sections en annexe (cadrage §8) |
 | Q9 | Léo, Réno, Vitruve : qui parle à qui | B4 | Léo pour Paul dans Ultima, Réno dans les produits, Vitruve pour le particulier |
-| Q10 | L'identifiant de dossier commun, de M0 à M9 | 🔵 **instruite le 05/10** (cadrage RenoBoost §3.3 bis) | prolonger `clients.id` de la base partagée en `dossier_ref`, sans nouvelle table ; **à trancher par Paul : la granularité** (client seul, ou client + devis signé pour M7-M9) |
 | Q11 | Si ④ ne se rouvre pas, comment M7 compte pour le critère Q-P1 | C6 | à instruire avec la réponse des pros |
 | Q12 | La précision de Paul sur mon-dpe.fr et VITRUVE (attendue dans le grain d'Ultima) | C2 | la correspondance lue dans les fiches (cadrage §3.1), à confirmer |
