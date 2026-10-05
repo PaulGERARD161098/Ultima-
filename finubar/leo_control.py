@@ -116,10 +116,10 @@ toute nouvelle admission. L'hôte doit tuer/borner ses processus indépendamment
                 raise Refusal('control_unavailable')
 
     @contextmanager
-    def _transaction(self):
+    def _transaction(self, *, timeout=10):
         if self.path.is_symlink() or not self.path.is_file():
             raise Refusal('control_unavailable')
-        db = sqlite3.connect(self.path.as_uri()+'?mode=rw', uri=True, timeout=10, isolation_level=None)
+        db = sqlite3.connect(self.path.as_uri()+'?mode=rw', uri=True, timeout=timeout, isolation_level=None)
         try:
             db.execute('PRAGMA trusted_schema=OFF')
             db.execute('PRAGMA synchronous=FULL')
@@ -132,10 +132,10 @@ toute nouvelle admission. L'hôte doit tuer/borner ses processus indépendamment
         finally:
             db.close()
 
-    def stopped(self):
+    def stopped(self, *, timeout=5):
         if self.path.is_symlink() or not self.path.is_file():
             raise Refusal('control_unavailable')
-        with sqlite3.connect(self.path.as_uri()+'?mode=ro', uri=True) as db:
+        with sqlite3.connect(self.path.as_uri()+'?mode=ro', uri=True, timeout=timeout) as db:
             db.execute('PRAGMA query_only=ON')
             row = db.execute('SELECT stopped FROM control WHERE id=1').fetchone()
             if row is None or row[0] not in (0, 1):
@@ -149,8 +149,8 @@ toute nouvelle admission. L'hôte doit tuer/borner ses processus indépendamment
             db.execute('UPDATE control SET stopped=1,reason=COALESCE(reason,?) WHERE id=1', (reason,))
 
     @contextmanager
-    def admission(self):
-        with self._transaction() as db:
+    def admission(self, *, timeout=10):
+        with self._transaction(timeout=timeout) as db:
             row = db.execute('SELECT stopped FROM control WHERE id=1').fetchone()
             if row is None or row[0] != 0:
                 raise Refusal('leo_agent_stopped')

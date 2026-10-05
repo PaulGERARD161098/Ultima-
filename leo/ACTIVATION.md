@@ -1,5 +1,17 @@
 # Raccordement LV1 à Ultima — proposition d'activation
 
+## Supervision des processus FINUBAR — préparation du 05/10/2026
+
+But : préparer l’arrêt d’un processus engagé après une tentative d’auto-contrôle. `finubar/leo_process.py` prépare un superviseur hôte à commande fixe : aucun argument fourni par Léo, environnement minimal sans variables héritées, stdin/sorties fermés, une utilisation sans rejeu implicite dans la même instance. La configuration appartient exclusivement à l’hôte de confiance. Aucun canal produit n’est activé ou raccordé automatiquement par ce module.
+
+Étapes et moyens : admission sous le verrou global, attente SQLite bornée et deadline revalidée avant Popen ; relâcher le verrou dès le départ pour que FINUBAR puisse inscrire l’arrêt pendant le processus ; surveiller le même verrou en lecture sans attente SQLite. Perte du contrôle ou délai atteint = interruption. TERM puis KILL du groupe POSIX, y compris si le parent est sorti. Le PID du parent n’est pas réapprêté avant le dernier signal pour éviter de viser un groupe étranger après recyclage. Le reçu décrit uniquement la fin du processus : tout effet métier demeure inconnu jusqu’à réconciliation par le journal canonique. La prévention durable des doublons reste celle du raccord/journal, pas le booléen d’une instance.
+
+Réussite à mesurer en CI : arrêt avant départ sans marqueur ; deadline expiré avant départ sans Popen ; parent et enfant ignorant TERM arrêtés ; perte du contrôle interrompant l’exécution ; délai borné ; parent sorti avec enfant restant nettoyé ; absence de variables secrètes héritées ; mauvais paramètres refusés ; superviseur installé readonly. Aucun test applicatif local. La préparation et sa revue ne valent pas exécution réussie : résultats du SHA courant à consigner dans la PR353.
+
+Hors périmètre : installation dans le contrôle exclu, identité réelle, activation, fusion, checkpoint signé et nouveau budget. Le groupe POSIX n’est PAS un sandbox : un enfant hostile peut changer de session ou viser le superviseur sous le même UID. Installation bloquée tant qu’un conteneur/cgroup contrôlé uniquement par FINUBAR et une séparation des identités n’empêchent pas ces contournements. Ce composant n’autorise aucun code non éprouvé sur un hôte avec accès réels. Il ne prouve pas un contrôle des outils Work, ni l’arrêt d’un processus noyau non interruptible.
+
+Pré-mortem : signal ignoré -> KILL ; parent sorti trop tôt -> nettoyage du groupe sans recyclage du PID ; contrôle indisponible -> arrêt fermé ; arrêt supprimant un résultat -> aucun effacement ni reçu métier fabriqué, réconciliation obligatoire ; fuite d’environnement -> environnement minimal. Une interruption n’annule pas un effet déjà engagé. Tous les canaux d’effet et l’arrêt noyau de l’hôte extérieur restent à éprouver.
+
 ## Raccord Ultima et arrêt FINUBAR — préparation du 05/10/2026
 
 Mandat courant de Paul : préparer le raccord, vérifier que l'environnement

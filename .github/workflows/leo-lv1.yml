@@ -106,6 +106,7 @@ jobs:
             --tmpfs /tmp:rw,nosuid,nodev,noexec,size=128m,mode=1777 \
             --mount type=bind,src="$GITHUB_WORKSPACE/leo",dst=/workspace/leo,readonly \
             --mount type=bind,src="$GITHUB_WORKSPACE/finubar/leo_control.py",dst=/workspace/finubar/leo_control.py,readonly \
+            --mount type=bind,src="$GITHUB_WORKSPACE/finubar/leo_process.py",dst=/workspace/finubar/leo_process.py,readonly \
             --mount type=bind,src="$GITHUB_WORKSPACE/tests/runtime",dst=/workspace/tests/runtime,readonly \
             --workdir /workspace \
             --env LV1_ISOLATED=1 --env PYTHONDONTWRITEBYTECODE=1 \
@@ -128,6 +129,7 @@ jobs:
             --tmpfs /tmp:rw,nosuid,nodev,noexec,size=128m,mode=1777 \
             --mount type=bind,src="$GITHUB_WORKSPACE/leo",dst=/workspace/leo,readonly \
             --mount type=bind,src="$GITHUB_WORKSPACE/finubar/leo_control.py",dst=/workspace/finubar/leo_control.py,readonly \
+            --mount type=bind,src="$GITHUB_WORKSPACE/finubar/leo_process.py",dst=/workspace/finubar/leo_process.py,readonly \
             --tmpfs /trial-output:rw,nosuid,nodev,noexec,size=128m,mode=1777 \
             --workdir /workspace \
             --env LV1_ISOLATED=1 --env PYTHONDONTWRITEBYTECODE=1 \
@@ -190,6 +192,7 @@ jobs:
             --tmpfs /trial-output:rw,nosuid,nodev,noexec,size=128m,mode=1777 \
             --mount type=bind,src="$GITHUB_WORKSPACE/leo",dst=/workspace/leo,readonly \
             --mount type=bind,src="$GITHUB_WORKSPACE/finubar/leo_control.py",dst=/workspace/finubar/leo_control.py,readonly \
+            --mount type=bind,src="$GITHUB_WORKSPACE/finubar/leo_process.py",dst=/workspace/finubar/leo_process.py,readonly \
             --mount type=bind,src="$RUNNER_TEMP/leo-r21-reviewed/trial.tar.gz",dst=/reviewed.tar.gz,readonly \
             --workdir /workspace \
             --env LV1_ISOLATED=1 --env PYTHONDONTWRITEBYTECODE=1 \
