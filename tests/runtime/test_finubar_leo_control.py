@@ -166,6 +166,21 @@ class FinubarLeoControlTests(unittest.TestCase):
         with self.assertRaisesRegex(Refusal, 'control_unavailable'): ControlLatch(path)
         self.assertFalse(path.exists())
 
+    def test_installed_guard_source_is_readonly_in_the_ci_environment(self):
+        import errno
+        import finubar.leo_control as module
+        path = Path(module.__file__)
+        self.assertTrue(path.is_file())
+        self.assertGreater(path.stat().st_size, 100)
+        # Ouverture seulement : aucun octet ni troncature, même si garde absente.
+        try:
+            descriptor = os.open(path, os.O_WRONLY)
+        except OSError as error:
+            self.assertIn(error.errno, (errno.EROFS, errno.EACCES, errno.EPERM))
+        else:
+            os.close(descriptor)
+            self.fail('installed FINUBAR guard can be opened for mutation')
+
     def test_mandate_expiry_is_rechecked_under_memory_admission_lock(self):
         now = [10]
         self.broker.clock = lambda: now[0]
