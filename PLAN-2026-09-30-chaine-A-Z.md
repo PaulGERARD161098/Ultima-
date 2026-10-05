@@ -142,6 +142,16 @@ orpheline » ne prouvait rien : les cinq clés vers `devis` sont en `CASCADE` ·
 (battement 06:30) · A6b : `ouverts = 0` · A7 : 19 sans sort sur 27 · A9 :
 0 sticker · A13 : `actif = false` (battement 04:45).
 
+🔁 **Remesuré le 05/10 à 19:11 UTC.** A6a : `test = true` (battement 06:30) ·
+A6b : `ouverts = 0` · A13 : `actif = false`, motif `gmail_non_configure` · J1 :
+0 paiement · A7 : **20** sans sort sur 27 (19 le 02/10).
+⛔ **A3 est tombé à 0 chiffré et émis, sur 14 devis** (2 sur 13 le 02/10). Les
+quatre devis envoyés depuis le 02/10 l'ont été **sans aucune ligne** : ils sont
+partis hors du chiffrage de l'application. B1 n'a donc toujours aucun devis réel
+où se recetter. A12 (Artidispo) : non mesurable d'ici ; le geste `CRON_SECRET`
+attend Paul dans la séance « Chaîne Rénoboost : demande à avis », arrêtée depuis
+le 02/10 (PowerShell, pas `openssl`).
+
 ⚠️ **A11 — un piège déjà visible** : l'ancien lien Calendly
 (`rdv-expert-cvc-30-min`), désactivé le 22/09, figure encore dans
 `datareno-/deploy/EMAIL_SETUP.md` (ligne 52) et `datareno-/docs/PRELANCEMENT.md`
@@ -356,6 +366,6 @@ Paul s'inscrivent dans la liste ci-dessus, datées.
 | Q4 | Photos du relevé stockées ou non | A5 ou D0 | stockées dans le relevé, 9 Mo max, comme aujourd'hui (cadrage §8) |
 | Q6 | Rapport client : 3 pages ou 10 sections | C1 | 3 pages remises, les 10 sections en annexe (cadrage §8) |
 | Q9 | Léo, Réno, Vitruve : qui parle à qui | B4 | Léo pour Paul dans Ultima, Réno dans les produits, Vitruve pour le particulier |
-| Q10 | L'identifiant de dossier commun, de M0 à M9 | B4 | à instruire à l'ouverture, sans faire voyager de donnée personnelle (cadrage §3.3) |
+| Q10 | L'identifiant de dossier commun, de M0 à M9 | 🔵 **instruite le 05/10** (cadrage RenoBoost §3.3 bis) | prolonger `clients.id` de la base partagée en `dossier_ref`, sans nouvelle table ; **à trancher par Paul : la granularité** (client seul, ou client + devis signé pour M7-M9) |
 | Q11 | Si ④ ne se rouvre pas, comment M7 compte pour le critère Q-P1 | C6 | à instruire avec la réponse des pros |
 | Q12 | La précision de Paul sur mon-dpe.fr et VITRUVE (attendue dans le grain d'Ultima) | C2 | la correspondance lue dans les fiches (cadrage §3.1), à confirmer |
