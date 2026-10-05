@@ -105,6 +105,7 @@ jobs:
             --user 65534:65534 --memory 512m --cpus 1 --pids-limit 128 \
             --tmpfs /tmp:rw,nosuid,nodev,noexec,size=128m,mode=1777 \
             --mount type=bind,src="$GITHUB_WORKSPACE/leo",dst=/workspace/leo,readonly \
+            --mount type=bind,src="$GITHUB_WORKSPACE/finubar/leo_control.py",dst=/workspace/finubar/leo_control.py,readonly \
             --mount type=bind,src="$GITHUB_WORKSPACE/tests/runtime",dst=/workspace/tests/runtime,readonly \
             --workdir /workspace \
             --env LV1_ISOLATED=1 --env PYTHONDONTWRITEBYTECODE=1 \
@@ -126,6 +127,7 @@ jobs:
             --user 65534:65534 --memory 512m --cpus 1 --pids-limit 128 \
             --tmpfs /tmp:rw,nosuid,nodev,noexec,size=128m,mode=1777 \
             --mount type=bind,src="$GITHUB_WORKSPACE/leo",dst=/workspace/leo,readonly \
+            --mount type=bind,src="$GITHUB_WORKSPACE/finubar/leo_control.py",dst=/workspace/finubar/leo_control.py,readonly \
             --tmpfs /trial-output:rw,nosuid,nodev,noexec,size=128m,mode=1777 \
             --workdir /workspace \
             --env LV1_ISOLATED=1 --env PYTHONDONTWRITEBYTECODE=1 \
@@ -187,6 +189,7 @@ jobs:
             --tmpfs /tmp:rw,nosuid,nodev,noexec,size=128m,mode=1777 \
             --tmpfs /trial-output:rw,nosuid,nodev,noexec,size=128m,mode=1777 \
             --mount type=bind,src="$GITHUB_WORKSPACE/leo",dst=/workspace/leo,readonly \
+            --mount type=bind,src="$GITHUB_WORKSPACE/finubar/leo_control.py",dst=/workspace/finubar/leo_control.py,readonly \
             --mount type=bind,src="$RUNNER_TEMP/leo-r21-reviewed/trial.tar.gz",dst=/reviewed.tar.gz,readonly \
             --workdir /workspace \
             --env LV1_ISOLATED=1 --env PYTHONDONTWRITEBYTECODE=1 \
@@ -198,3 +201,4 @@ jobs:
               --source-sha 220fb9515291c9e62c076d06e4fa3dc608166db7 \
               --target-sha fb7daac613a0828d4135333fbd27a47102323211 \
               --integration-sha 2c8b70638c73949eb8e5485b0f2280627f5526b3
+

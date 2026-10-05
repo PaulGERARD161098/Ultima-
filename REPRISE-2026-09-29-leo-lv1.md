@@ -1,3 +1,24 @@
+# Reprise courante — 5 octobre 2026, raccord et arrêt FINUBAR préparés
+
+Mandat : raccord Ultima, absence d'auto-contrôle, arrêt externe par FINUBAR.
+Code préparé : admission six champs, client, journal anti-rejeu ; garde
+FINUBAR et arrêt global partagé entre missions ; dernière admission mémoire
+sous verrou. Le détail et les critères sont dans leo/ACTIVATION.md,
+section « Raccord Ultima et arrêt FINUBAR ».
+
+Voies mesurées : connecteur exclut le contrôle ; navigateur Work propriétaire
+déconnecté, réglages désormais derrière connexion. Autres authentifications
+terminal non explorées ; hôte futur non installé. Impossibilité globale de
+modifier le contrôle NON CERTIFIÉE. Ne pas faire un test d'écriture par une
+voie contournant l'exclusion. Brouillon de garde dans Ultima ≠ contrôle installé.
+
+Revue distincte et CI du nouveau SHA à relever dans PR353. Aucun test
+applicatif local ; aucune preuve héritée des 104 tests historiques.
+Checkpoint signé/courant, installation hors Léo, arrêt des processus et
+réception LV1 restent ouverts. Pas de fusion/import/activation/secret/envoi.
+
+---
+
 # Reprise courante — 5 octobre 2026, accès contrôle révoqué
 
 La révocation par Paul est vérifiée pour le connecteur organisation

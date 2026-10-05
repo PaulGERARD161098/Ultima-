@@ -172,7 +172,8 @@ def verify(package, trusted_sha256, destination, provenance, expected_repository
             'effects': ['update_fixture_ref'], 'publication': False}
 
 
-def execute(root, *, mandate, context, evidence, approval, principal, reconcile=False, clock=time.time):
+def execute(root, *, mandate, context, evidence, approval, principal, reconcile=False, clock=time.time,
+            protected_control_paths=(), control_latch=None):
     """Trusted-host ONLY. No deserialization of authority and no automatic grant.
 
     Host has independently authenticated this archive and exclusively owns root.
@@ -205,7 +206,8 @@ def execute(root, *, mandate, context, evidence, approval, principal, reconcile=
             effects=FixtureGit.effects, atomic_adapter=FixtureGit.atomic)
     broker = Broker(root / 'canonical.sqlite', mandate, context.repository, clock=clock,
         fixture_adapter=FixtureGit(root, root / 'fixture.git'), context=context,
-        evidence=evidence, approval=approval)
+        evidence=evidence, approval=approval, protected_control_paths=protected_control_paths,
+        control_latch=control_latch)
     receipt = (broker.reconcile_fixture(principal, PROPOSAL['operation_id']) if reconcile
                else broker.execute(principal, dict(PROPOSAL)))
     if receipt['status'] == 'completed':

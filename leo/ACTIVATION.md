@@ -1,5 +1,89 @@
 # Raccordement LV1 à Ultima — proposition d'activation
 
+## Raccord Ultima et arrêt FINUBAR — préparation du 05/10/2026
+
+Mandat courant de Paul : préparer le raccord, vérifier que l'environnement
+ne peut pas modifier son contrôle, et ajouter à FINUBAR la détection/arrêt
+d'une tentative d'auto-contrôle. Cette demande étend la fonction historique
+d'index de FINUBAR ; elle n'autorise pas Léo à devenir son propre contrôleur.
+
+**Code préparé :** `AdmissionHost` raccorde les six champs du protocole à
+l'identité/ACL et aux opérations existantes de `TrialHost`. Mission et
+opération sont confrontées au binding hôte ; version attendue vérifiée.
+Le client six champs est distinct du client historique de fixture.
+Le journal durable transporte uniquement request_id/empreinte/résultat :
+même demande = reçu ; contenu différent = refus ; interruption = inconnu,
+réconciliation sans rejeu. Aucun nouveau registre de mission.
+
+**FINUBAR :** `finubar/leo_control.py` ajoute la garde hôte. Une tentative
+d'auto-approbation, de désactivation/réarmement ou de mutation de la cible de
+contrôle déclenche l'arrêt persistant de la mission ET le verrou global
+`ControlLatch`. Toutes les missions raccordées doivent partager le même
+verrou externe, y compris sur des registres de mission distincts.
+Le nouveau raccord refuse de démarrer sans ce verrou ; aucune commande de
+reset n'est offerte au modèle. Les chemins protégés désignent l'installation
+effective, pas les brouillons autorisés dans Ultima.
+
+Le verrou global est conservé pendant l'admission/l'effet borné : un arrêt
+attend les effets déjà engagés puis interdit les nouveaux départs. L'arrêt
+n'annule pas un effet engagé ; le lanceur doit borner/arrêter les processus
+qui échappent au canal. Le broker mémoire relit arrêt, budget et mandat sous
+le verrou de mutation, comme le merge fictif. Lecture et réconciliation
+restent possibles ; aucune reprise ne déduit un droit d'exécution.
+
+Le provisionnement initial du verrou/journal est une opération explicite
+de l'hôte. En ouverture runtime, fichier/table/ligne de contrôle manquants
+refusés, sans recréation ni réarmement automatique.
+**Non installé :** hôte exclu, ancrage signé et courant des checkpoints,
+identité/accord réel, accès provider et déclencheurs. Le journal local ne
+prouve pas une reprise depuis un checkpoint importé.
+
+### Vérification de cet environnement
+
+- Révocation du connecteur organisation précédemment mesurée : contrôle
+  absent des 12 dépôts autorisés ; lecture Ultima disponible.
+- Le navigateur Work restait connecté au compte propriétaire et exposait
+  les réglages d'installation. Cette voie a été fermée par déconnexion
+  du seul compte GitHub dans le navigateur Work ; retour aux réglages =
+  page « Sign in to GitHub ». Aucun réglage du dépôt de contrôle modifié,
+  aucun contenu ni secret lu, aucune réauthentification entreprise.
+- Terminal courant : git disponible ; gh, Docker et Podman non trouvés.
+  Aucune recherche de valeur secrète/credential effectuée. La présence de
+  git ne démontre pas à elle seule l'absence d'une autre authentification.
+- Le futur hôte d'exécution exclu n'est pas installé ni observable ici :
+  impossibilité globale de modifier son contrôle **non certifiée**.
+  Aucun test d'écriture dans le contrôle n'est tenté pour contourner la révocation.
+
+### Épreuve et réception de ce lot
+
+Moyens : workflow pull_request existant, Python/Git en Docker sans réseau,
+sources readonly, seul module FINUBAR de garde ajouté au montage Python ;
+pas de montage de l'agrégat métier. Aucun test applicatif local.
+Revue indépendante demandée ; observations corrigées : course arrêt/mémoire,
+arrêt limité à une mission, client ancien incompatible, réarmement implicite
+après perte du contrôle, expiration du mandat avant mutation mémoire.
+
+Cas de sortie : HTTP client→admission→hôte→broker sur fixture ; faux compte,
+mauvais contexte/version, doublon/concurrence, réponse perdue, coupure après
+effet, arrêt puis refus de départ ; arrêt global entre deux missions,
+fichier/ligne manquants refusés, témoin de garde retirée détecté.
+Résultats CI à mesurer sur le nouveau SHA, sans transposer les 104 tests
+historiques à cette tranche.
+
+**Avant/après :** ancien hôte à une commande et arrêt de mission ; raccord
+six champs, journal durable et arrêt global hôte préparés. Aucun contrôle
+des outils Work ou arrêt de processus permanent n'est reçu par ces fixtures.
+
+Activation bloquée tant que le contrôle/journal/lanceur ne sont pas figés
+hors des droits de Léo et que tous les chemins d'effet ne passent pas par
+eux. Il faut ensuite éprouver depuis l'identité réelle d'exécution un refus
+de mutation du contrôle et un arrêt global sur fixture. La déclaration de
+Léo ou un statut FINUBAR écrit par elle ne constitue pas cette preuve.
+Aucun import dans le contrôle, fusion, migration réelle, secret, dépense,
+workflow R21 manuel, émission ou activation n'est exécuté.
+
+---
+
 ## Révocation vérifiée le 05/10/2026 — correction de la fondation
 
 Paul confirme : « Accès à Léo contrôle révoqué — Continue ».

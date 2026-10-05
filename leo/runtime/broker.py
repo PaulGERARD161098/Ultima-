@@ -9,6 +9,7 @@ from dataclasses import asdict
 from .budget import BudgetLedger
 from .memoire import MissionStore, _patch, _version
 from .policy import Policy, Refusal
+from finubar.leo_control import LeoControl
 
 
 def mandate_record(mandate):
@@ -18,21 +19,45 @@ def mandate_record(mandate):
 
 class Broker:
     def __init__(self, db_path, mandate, repository, *, clock=time.time,
-                 fixture_adapter=None, context=None, evidence=(), approval=None):
+                 fixture_adapter=None, context=None, evidence=(), approval=None,
+                 protected_control_paths=(), control_latch=None):
         self.store = MissionStore(db_path)
         self.budget = BudgetLedger(db_path, clock=clock)
         self.mandate, self.repository, self.clock = mandate, repository, clock
         self.policy = Policy()
         self.adapter, self.context = fixture_adapter, context
         self.evidence, self.approval = tuple(evidence), approval
+        self.control = LeoControl(self.budget, mandate.mission,
+                                  protected_paths=protected_control_paths, latch=control_latch)
 
     def execute(self, principal, proposal):
+        if type(proposal) is not dict or not isinstance(proposal.get('action'), str):
+            raise Refusal('invalid_proposal')
+        canonical = self.store.read_mission(self.mandate.mission, principal)
+        if canonical['mandat'] != mandate_record(self.mandate):
+            raise Refusal('canonical_mandate_mismatch')
+        if principal not in self.mandate.actors:
+            raise Refusal('scope_denied')
+        if proposal['action'] != 'status' and principal not in {canonical['owner'], *canonical['writers']}:
+            raise Refusal('writer_required')
+        self.control.before_effect(proposal['action'], self.repository)
+        if proposal['action'] == 'status' or self.control.latch is None:
+            return self._execute(principal, proposal)
+        with self.control.latch.admission():
+            return self._execute(principal, proposal)
+
+    def _execute(self, principal, proposal):
         if type(proposal) is not dict or not isinstance(proposal.get('action'), str):
             raise Refusal('invalid_proposal')
         action = proposal['action']
         canonical = self.store.read_mission(self.mandate.mission, principal)
         if canonical['mandat'] != mandate_record(self.mandate):
             raise Refusal('canonical_mandate_mismatch')
+        # N'autorise pas une identité étrangère à arrêter une mission.
+        if principal not in self.mandate.actors:
+            raise Refusal('scope_denied')
+        if action != 'status' and principal not in {canonical['owner'], *canonical['writers']}:
+            raise Refusal('writer_required')
         if action == 'status':
             if set(proposal) - {'action', 'operation_id'}:
                 raise Refusal('unexpected_argument')
@@ -76,8 +101,17 @@ class Broker:
             return {'status': 'unknown', 'operation_id': operation_id,
                     'reason': 'reservation_exists_without_result; reconcile_before_retry'}
         if action == 'write_memory':
+            def admission(db, row):
+                state = self.budget._status(db, self.mandate.mission)
+                if state['stopped'] or state['expired']:
+                    raise Refusal('memory_stopped_or_expired')
+                current = self.store._mission(row)
+                if current['mandat'] != mandate_record(self.mandate) or current['source'].get('repository') != self.repository:
+                    raise Refusal('canonical_mandate_or_source_mismatch')
+                self.policy.authorize(self.mandate, principal, 'write_memory', self.repository, self.clock(),
+                                      effects=frozenset({'write_scoped_memory'}))
             result = self.store.apply_memory_operation(self.mandate.mission, principal, operation_id,
-                                                       version, proposal['patch'])
+                                                       version, proposal['patch'], admission=admission)
             self.budget.settle(self.mandate.mission, operation_id, units)
             return result
         operation = self.store.begin_operation(self.mandate.mission, principal, operation_id, payload, version)
