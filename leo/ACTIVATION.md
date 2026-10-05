@@ -12,7 +12,7 @@ accord externe R21 ni une réception LV1.
   PR351 conserve sa tête `8c3ff37bb81e19bbe3a08fa0e0c97fbceadb2448`,
   ouverte, brouillon, non fusionnée.
 - Le dossier du 04/10 existe déjà dans le commit
-  `974099098469c74504eef266b5e4a0b8ba6f41df`, parent du main mesuré.
+  `974099098469c74504eef266b5e4a0b8ba6f41df`, dont le parent est le main mesuré.
   Il est repris dans le nouveau lot ; aucun document canonique concurrent.
 - Vercel : projet `ultima` / `prj_M04pcNR3xJUAIuUXKEArOHiQtQzj`,
   production `dpl_DmSDNjNFmXXYbspjFwKDBDpmrji8` READY, même SHA que main.
