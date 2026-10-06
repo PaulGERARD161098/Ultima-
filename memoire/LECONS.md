@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v71 2026-10-04 sha256:730791b85224 -->
+<!-- lecons:empreinte v72 2026-10-06 sha256:adcae5cc7b7e -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -115,6 +115,11 @@ grain Finubar a été réécrit par un script Python où l'ancre était un litt�
 reste absent. Attrapé avant le commit par `git merge-base --is-ancestor`. ⛔ Un
 script n'est pas une commande qui lit : un littéral tapé dedans est une saisie
 comme une autre. Le script prend le SHA de `git rev-parse`, ou il ne l'écrit pas.
+⊕ **HUITIÈME, LE 06/10 (Ultima #356) — et le lease a encore mordu.** Un SHA
+complet écrit de mémoire passé en `expectedHeadSha` : `409`, fusion refusée. Repris
+par `git rev-parse`, la fusion est passée. Rien de nouveau dans la faute ; ce qui se
+confirme, c'est que **le seul rempart qui a tenu les huit fois est aval** — la
+vigilance n'a arrêté aucune des huit.
 
 
 **UN COMMIT « HORS MAIN » N'EST PAS UN TRAVAIL HORS MAIN — ON COMPARE LES
@@ -1281,6 +1286,26 @@ n'étaient pas dans sa liste. Un 0 juste sur sa liste, faux sur l'intention.
 qu'il ne cherche pas ? » — la relecture adverse du résultat compte autant que le
 résultat.
 
+
+**UNE CI VERTE N'EST PAS UNE REVUE FINIE — ON LIT LE VERDICT DE LA RELECTURE
+AUTOMATIQUE AVANT DE FUSIONNER** *(2026-10-06, Ultima #355 puis RenoBoost #585)*.
+La relecture Codex démarre quand la PR quitte le brouillon et rend son verdict
+quelques minutes APRÈS les tests unitaires. Le 06/10, Ultima #355 a été fusionnée
+CI verte, revue en cours : deux constats sont arrivés après coup, et il a fallu
+une PR de plus (#357) — qui en a reçu trois autres. Le même jour, sur RenoBoost
+#585, la CI était entièrement verte (unitaires + navigateur) et la revue a trouvé
+**deux défauts de cloisonnement réels** : une erreur 400 rejouée en « adresse
+seule », et un `_` joker de `ilike` qui pouvait évincer le lien manuel — chacun
+aurait pu livrer à un artisan les chantiers signés d'un autre. Aucun test ne les
+voyait : ils ne s'exerçaient que sur des données que les tests ne fabriquaient pas.
+*Ce que ça a coûté* : une PR de correction sur Ultima ; sur RenoBoost, rien —
+parce que, cette fois, on a attendu.
+⛔ **La règle** : sur un dépôt où la relecture automatique tourne, la preuve
+d'intégration d'une fusion = CI verte **ET** verdict de la revue lu sur le SHA
+exact (« 👍 » ou constats traités). Un constat corrigé change le SHA, donc
+**rend caduc l'accord de fusion** : on redemande, on ne fusionne pas sur l'ancien go.
+⚠️ Et un correctif poussé ne relance PAS la revue : seul « draft → ready » ou un
+`@codex review` la déclenche. La revue du nouveau SHA, si elle compte, se demande.
 
 ## 3. Ce qu'on donne à Paul
 
