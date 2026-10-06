@@ -342,6 +342,13 @@ try {
       p_operation: 'later-' + i, p_expected_version: i + 2, p_patch: { next_action: 'Courante ' + i } });
     assert.equal(result.error, null);
   }
+  // PGlite horodate à la milliseconde : le reçu peut partager l'instant de
+  // 'later-0' et, départagé par operation_id (UUID < 'later-'), rester dans les
+  // 100. On le place strictement avant pour éprouver l'éviction, pas l'horloge.
+  await db.exec('reset role');
+  await db.query(`update public.leo_operations set created_at = (select min(created_at)
+    from public.leo_operations where mission_id = $1) - interval '1 second'
+    where mission_id = $1 and operation_id = $2`, [archiveMission, archiveOp]);
   const archiveStatus = (await rpc(owner, 'leo_status', { p_mission: archiveMission })).data;
   assert.equal(archiveStatus.operations.length, 100); assert.equal(archiveStatus.operations_truncated, true);
   assert.equal(archiveStatus.operations.some(o => o.operation_id === archiveOp), false, 'reçu réellement évincé');
