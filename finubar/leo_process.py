@@ -5,18 +5,90 @@ PAS un sandbox : un enfant hostile peut changer de session. L'installation
 doit ajouter une enceinte noyau (conteneur/cgroup) contrôlée par FINUBAR,
 des identités distinctes et une commande fixe revue hors des droits de Léo.
 Les épreuves de ce module concernent seulement des processus de fixture.
+
+Durcissements Linux (audit du 05/10, C9 C10 C13), qui NE remplacent PAS
+l'enceinte noyau :
+- l'hôte se déclare subreaper : tout descendant orphelin, même passé dans une
+  autre session, lui revient ; à chaque fin de lancement, les descendants hors
+  de la session de l'hôte sont tués et récoltés (aucun ne survit au lancement) ;
+- l'enfant direct reçoit SIGKILL si le fil lanceur meurt (PDEATHSIG) ;
+- pas de fichier core, descripteurs bornés.
+Restent hors de portée de ce code : les petits-enfants quand l'hôte entier est
+tué, les processus noyau non interruptibles, une course de forks plus rapide
+que le balayage. Seul un cgroup tué en bloc par FINUBAR les couvre.
 """
 from dataclasses import dataclass
+import ctypes
 import math
 import os
 from pathlib import Path
+import resource
 import signal
 import subprocess
+import sys
 import threading
 import time
 
 from finubar.leo_control import ControlLatch
 from leo.runtime.policy import Refusal
+
+
+_PR_SET_PDEATHSIG = 1
+_PR_SET_CHILD_SUBREAPER = 36
+_LIBC = ctypes.CDLL(None, use_errno=True) if sys.platform.startswith('linux') else None
+# Enfants directs vivants de TOUS les superviseurs de ce processus hôte.
+_DIRECT = set()
+_DIRECT_LOCK = threading.Lock()
+
+
+def _process_table():
+    """{pid: (ppid, sid, état)} lu dans /proc ; un processus disparu est ignoré."""
+    table = {}
+    for entry in os.scandir('/proc'):
+        if not entry.name.isdigit():
+            continue
+        try:
+            with open(f'/proc/{entry.name}/stat', 'rb') as handle:
+                fields = handle.read().rsplit(b')', 1)[1].split()
+        except (OSError, IndexError):
+            continue
+        table[int(entry.name)] = (int(fields[1]), int(fields[3]), fields[0])
+    return table
+
+
+def _descendants(table, roots):
+    children = {}
+    for pid, (ppid, _sid, _state) in table.items():
+        children.setdefault(ppid, []).append(pid)
+    seen, stack = set(), list(roots)
+    while stack:
+        pid = stack.pop()
+        if pid in seen:
+            continue
+        seen.add(pid)
+        stack.extend(children.get(pid, ()))
+    return seen
+
+
+def _escaped(table):
+    # Orphans rattachés à l'hôte (subreaper) et sortis de sa session : ils ne
+    # peuvent venir que d'un lancement supervisé (start_new_session=True).
+    me, session = os.getpid(), os.getsid(0)
+    with _DIRECT_LOCK:
+        direct = set(_DIRECT)
+    roots = [pid for pid, (ppid, sid, _state) in table.items()
+             if ppid == me and sid != session and pid not in direct]
+    return roots, _descendants(table, roots)
+
+
+def _preexec(parent):
+    # Exécuté dans l'enfant entre fork et exec : appels système seulement.
+    if _LIBC.prctl(_PR_SET_PDEATHSIG, signal.SIGKILL, 0, 0, 0) != 0 or os.getppid() != parent:
+        os._exit(126)
+    resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+    soft, hard = resource.getrlimit(resource.RLIMIT_NOFILE)
+    bound = 256 if hard == resource.RLIM_INFINITY else min(256, hard)
+    resource.setrlimit(resource.RLIMIT_NOFILE, (min(soft, bound), bound))
 
 
 @dataclass(frozen=True)
@@ -64,15 +136,52 @@ FINUBAR doit pouvoir inscrire l'arrêt pendant l'exécution.
         # Toujours nettoyer le groupe, même si son premier processus est sorti.
         self._signal_group(process, signal.SIGTERM)
         time.sleep(self._grace)
+        # Descendants encore rattachés à l'enfant, quelle que soit leur session.
+        for pid in _descendants(_process_table(), [process.pid]) - {process.pid}:
+            self._kill(pid)
         self._signal_group(process, signal.SIGKILL)
         try:
             process.wait(timeout=1)
         except subprocess.TimeoutExpired:
             raise Refusal('finubar_process_stop_unconfirmed') from None
+        finally:
+            with _DIRECT_LOCK:
+                _DIRECT.discard(process.pid)
+        self._sweep()
+
+    @staticmethod
+    def _kill(pid):
+        try:
+            os.kill(pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+
+    def _sweep(self):
+        # C9 : un descendant passé dans une autre session revient à l'hôte
+        # (subreaper) à la mort de son parent ; il est tué et récolté ici.
+        deadline = time.monotonic() + 1
+        while True:
+            table = _process_table()
+            roots, targets = _escaped(table)
+            for pid in targets:
+                self._kill(pid)
+            for pid in roots:
+                try:
+                    os.waitpid(pid, os.WNOHANG)
+                except ChildProcessError:
+                    pass
+            if not any(table[pid][2] != b'Z' for pid in targets if pid in table):
+                if not roots:
+                    return
+            if time.monotonic() >= deadline:
+                raise Refusal('finubar_process_stop_unconfirmed')
+            time.sleep(0.01)
 
     def run(self):
-        if os.name != 'posix' or not hasattr(os, 'WNOWAIT'):
+        if os.name != 'posix' or not hasattr(os, 'WNOWAIT') or _LIBC is None:
             raise Refusal('finubar_posix_host_required')
+        if _LIBC.prctl(_PR_SET_CHILD_SUBREAPER, 1, 0, 0, 0) != 0:
+            raise Refusal('finubar_subreaper_required')
         with self._lock:
             if self._used:
                 raise Refusal('finubar_process_already_engaged')
@@ -86,7 +195,10 @@ FINUBAR doit pouvoir inscrire l'arrêt pendant l'exécution.
                 process = subprocess.Popen(self._argv, cwd=self._cwd,
                     env={'PATH': '/usr/bin:/bin', 'LANG': 'C.UTF-8'},
                     stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL, close_fds=True, start_new_session=True)
+                    stderr=subprocess.DEVNULL, close_fds=True, start_new_session=True,
+                    preexec_fn=lambda parent=os.getpid(): _preexec(parent))
+                with _DIRECT_LOCK:
+                    _DIRECT.add(process.pid)
             while True:
                 # Lecture avant poll : la sortie du processus ne masque pas un arrêt.
                 try:

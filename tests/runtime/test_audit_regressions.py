@@ -3,11 +3,12 @@ import os
 if os.environ.get('LV1_ISOLATED') != '1':
     raise RuntimeError('LV1_ISOLATED=1 required')
 
-import json, shutil, sqlite3, tempfile, threading, time, unittest
+import json, shutil, signal, sqlite3, subprocess, sys, tempfile, threading, time, unittest
 from pathlib import Path
 from unittest.mock import patch
 
 from finubar.leo_control import ControlLatch, LeoControl, control_violation
+from finubar.leo_process import ProcessSupervisor
 from leo import trial
 from leo.control_r21.admission import AdmissionHost, RequestJournal
 from leo.runtime.budget import BudgetLedger
@@ -119,6 +120,99 @@ class AuditRegressions(unittest.TestCase):
         with self.assertRaisesRegex(Refusal, 'leo_agent_stopped'):
             with latch.admission():
                 pass
+
+    # --- Superviseur : C9, C10, C13 -------------------------------------------
+    def _alive(self, pid):
+        path = Path('/proc') / str(pid) / 'stat'
+        try:
+            return path.read_text().split(')')[-1].split()[0] != 'Z'
+        except OSError:
+            return False
+
+    def _await(self, path):
+        for _ in range(300):
+            if path.exists() and path.read_text():
+                return path.read_text()
+            time.sleep(0.01)
+        self.fail('fixture did not start')
+
+    def _supervise(self, code, latch, seconds=5):
+        return ProcessSupervisor(latch, (sys.executable, '-c', code), cwd=self.d,
+                                 max_seconds=seconds, grace_seconds=0.05)
+
+    def _assert_gone(self, pid):
+        for _ in range(200):
+            if not self._alive(pid):
+                return
+            time.sleep(0.01)
+        os.kill(pid, signal.SIGKILL)
+        self.fail('descendant still alive')
+
+    def test_new_session_grandchild_dies_with_the_stop(self):
+        latch = ControlLatch(self.d / 'ctl.sqlite', initialize=True)
+        mark = self.d / 'grandchild'
+        code = ("import os,time\n"
+                "if os.fork()==0:\n os.setsid()\n open(%r,'w').write(str(os.getpid()))\n time.sleep(30)\n"
+                "time.sleep(30)\n") % str(mark)
+        errors = []
+        worker = threading.Thread(target=lambda: self._run(self._supervise(code, latch), errors))
+        worker.start()
+        grandchild = int(self._await(mark))
+        latch.trip('owner_stop')
+        worker.join(5)
+        self.assertEqual([str(e) for e in errors], ['leo_agent_stopped'])
+        self._assert_gone(grandchild)
+
+    def test_daemonized_orphan_never_outlives_a_normal_exit(self):
+        latch = ControlLatch(self.d / 'ctl.sqlite', initialize=True)
+        mark = self.d / 'daemon'
+        code = ("import os,time\n"
+                "if os.fork()==0:\n os.setsid()\n"
+                " if os.fork()==0:\n  open(%r,'w').write(str(os.getpid()))\n  time.sleep(30)\n"
+                " os._exit(0)\n"
+                "time.sleep(0.3)\n") % str(mark)
+        receipt = self._supervise(code, latch).run()
+        self.assertEqual((receipt.state, receipt.returncode), ('exited', 0))
+        self._assert_gone(int(self._await(mark)))
+
+    def test_host_processes_outside_supervision_are_spared(self):
+        latch = ControlLatch(self.d / 'ctl.sqlite', initialize=True)
+        bystander = subprocess.Popen([sys.executable, '-c', 'import time; time.sleep(30)'])
+        try:
+            self._supervise('pass', latch).run()
+            self.assertTrue(self._alive(bystander.pid))      # cas positif : pas de balayage aveugle
+        finally:
+            bystander.kill(); bystander.wait()
+
+    def test_direct_child_dies_if_the_supervisor_is_killed(self):
+        path = self.d / 'ctl.sqlite'; ControlLatch(path, initialize=True)
+        mark = self.d / 'child'
+        child = "import os,time; open(%r,'w').write(str(os.getpid())); time.sleep(30)" % str(mark)
+        runner = ("import sys; sys.path.insert(0, %r)\n"
+                  "from finubar.leo_control import ControlLatch\nfrom finubar.leo_process import ProcessSupervisor\n"
+                  "ProcessSupervisor(ControlLatch(%r), (sys.executable,'-c',%r), cwd=%r, max_seconds=60).run()\n"
+                  ) % (os.getcwd(), str(path), child, str(self.d))
+        host = subprocess.Popen([sys.executable, '-c', runner], env=dict(os.environ))
+        pid = int(self._await(mark))
+        host.kill(); host.wait()
+        self._assert_gone(pid)
+
+    def test_child_runs_without_core_dump_and_bounded_descriptors(self):
+        latch = ControlLatch(self.d / 'ctl.sqlite', initialize=True)
+        out = self.d / 'limits'
+        code = ("import resource; open(%r,'w').write(repr((resource.getrlimit(resource.RLIMIT_CORE),"
+                "resource.getrlimit(resource.RLIMIT_NOFILE)[1])))") % str(out)
+        self._supervise(code, latch).run()
+        core, files = eval(out.read_text())
+        self.assertEqual(core, (0, 0))
+        self.assertLessEqual(files, 256)
+
+    @staticmethod
+    def _run(supervisor, errors):
+        try:
+            supervisor.run()
+        except BaseException as error:
+            errors.append(error)
 
     def _trial(self):
         root = self.d / 'trial'
