@@ -130,9 +130,12 @@ class AdmissionHost:
             if error.code != 'request_journal_full' or proposal['command'] != 'stop':
                 raise
             # Un arrêt est une réduction de droits idempotente : jamais bloqué
-            # par la capacité du journal anti-rejeu.
-            result = self.host._call_authenticated(subject, {'command': 'stop'})
-            fresh, state = False, 'completed'
+            # par la capacité du journal anti-rejeu. Exécuté, non journalisé.
+            return {'request_id': proposal['request_id'], 'state': 'completed',
+                    'replayed': False,
+                    'result': self.host._call_authenticated(subject, {'command': 'stop'}),
+                    'environment': 'fixture', 'publication': False,
+                    'global_v1_accepted': False, 'agent_stopped': self.host.control_latch.stopped()}
         if fresh:
             result = self.host._call_authenticated(subject, {'command': proposal['command']},
                                                    expected_version=proposal['expected_version'])

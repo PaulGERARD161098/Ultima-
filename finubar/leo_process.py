@@ -73,11 +73,12 @@ def _descendants(table, roots):
 def _escaped(table):
     # Orphans rattachés à l'hôte (subreaper) et sortis de sa session : ils ne
     # peuvent venir que d'un lancement supervisé (start_new_session=True).
+    # Appelant : détient _DIRECT_LOCK, pour qu'aucun Popen ne soit entre son
+    # fork et son enregistrement (sinon un enfant direct voisin passerait
+    # pour un orphelin évadé).
     me, session = os.getpid(), os.getsid(0)
-    with _DIRECT_LOCK:
-        direct = set(_DIRECT)
     roots = [pid for pid, (ppid, sid, _state) in table.items()
-             if ppid == me and sid != session and pid not in direct]
+             if ppid == me and sid != session and pid not in _DIRECT]
     return roots, _descendants(table, roots)
 
 
@@ -161,15 +162,16 @@ FINUBAR doit pouvoir inscrire l'arrêt pendant l'exécution.
         # (subreaper) à la mort de son parent ; il est tué et récolté ici.
         deadline = time.monotonic() + 1
         while True:
-            table = _process_table()
-            roots, targets = _escaped(table)
-            for pid in targets:
-                self._kill(pid)
-            for pid in roots:
-                try:
-                    os.waitpid(pid, os.WNOHANG)
-                except ChildProcessError:
-                    pass
+            with _DIRECT_LOCK:
+                table = _process_table()
+                roots, targets = _escaped(table)
+                for pid in targets:
+                    self._kill(pid)
+                for pid in roots:
+                    try:
+                        os.waitpid(pid, os.WNOHANG)
+                    except ChildProcessError:
+                        pass
             if not any(table[pid][2] != b'Z' for pid in targets if pid in table):
                 if not roots:
                     return
@@ -192,12 +194,12 @@ FINUBAR doit pouvoir inscrire l'arrêt pendant l'exécution.
             with self._latch.admission(timeout=min(self._max, 0.1)):
                 if time.monotonic() >= deadline:
                     raise Refusal('finubar_process_timeout')
-                process = subprocess.Popen(self._argv, cwd=self._cwd,
-                    env={'PATH': '/usr/bin:/bin', 'LANG': 'C.UTF-8'},
-                    stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL, close_fds=True, start_new_session=True,
-                    preexec_fn=lambda parent=os.getpid(): _preexec(parent))
-                with _DIRECT_LOCK:
+                with _DIRECT_LOCK:  # fork et enregistrement indivisibles pour _sweep
+                    process = subprocess.Popen(self._argv, cwd=self._cwd,
+                        env={'PATH': '/usr/bin:/bin', 'LANG': 'C.UTF-8'},
+                        stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL, close_fds=True, start_new_session=True,
+                        preexec_fn=lambda parent=os.getpid(): _preexec(parent))
                     _DIRECT.add(process.pid)
             while True:
                 # Lecture avant poll : la sortie du processus ne masque pas un arrêt.

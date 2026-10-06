@@ -1,5 +1,25 @@
 # Raccordement LV1 à Ultima — proposition d'activation
 
+## Correctifs de l'audit indépendant — 06/10/2026
+
+But : que l'arrêt FINUBAR soit écrit à coup sûr, global, impossible à lever
+seul et à la main de Paul. Constats, preuves et restes : `AUDIT-2026-10-05-leo-finubar.md`
+(source unique ; ce paragraphe l'indexe, il ne la recopie pas).
+
+Fait sur cette branche, sans activation : cibles de contrôle canonicalisées ;
+arrêt tenté sur les deux registres et pierre tombale `<verrou>.stopped` posée
+avant SQLite (rollback du fichier sans effet) ; marqueur `.installed`
+interdisant toute réinitialisation ; UID et modes du verrou vérifiés ;
+`owner_stop` (Paul arrête mission + verrou global, sans pouvoir exécuter) ;
+stop jamais bloqué par le journal plein ; verrou global obligatoire pour tout
+effet du Broker et toute délégation ; états « approuvé/fusionné » réservés au
+propriétaire ; superviseur subreaper (aucun descendant ne survit au lancement),
+PDEATHSIG, core=0, descripteurs ≤ 256.
+
+Ne change pas : installation bloquée tant qu'un cgroup tué en bloc par FINUBAR,
+une identité distincte pour Léo, une ancre extérieure et un canal d'accord
+humain (A1) ne sont pas reçus. Le SQL C11 est une proposition non appliquée.
+
 ## Supervision des processus FINUBAR — préparation du 05/10/2026
 
 But : préparer l’arrêt d’un processus engagé après une tentative d’auto-contrôle. `finubar/leo_process.py` prépare un superviseur hôte à commande fixe : aucun argument fourni par Léo, environnement minimal sans variables héritées, stdin/sorties fermés, une utilisation sans rejeu implicite dans la même instance. La configuration appartient exclusivement à l’hôte de confiance. Aucun canal produit n’est activé ou raccordé automatiquement par ce module.

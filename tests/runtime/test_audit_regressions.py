@@ -184,6 +184,27 @@ class AuditRegressions(unittest.TestCase):
         finally:
             bystander.kill(); bystander.wait()
 
+    def test_neighbour_sweeps_never_kill_a_supervised_child(self):
+        # Cas positif de concurrence : dix lancements voisins balayent l'hôte
+        # pendant qu'un enfant supervisé attend d'être libéré ; il doit finir
+        # normalement (reçu exited 0 ; -9 s'il avait été tué par un balayage).
+        latch = ControlLatch(self.d / 'ctl.sqlite', initialize=True)
+        mark, release = self.d / 'long', self.d / 'release'
+        code = ("import os,time; from pathlib import Path; open(%r,'w').write(str(os.getpid()))\n"
+                "for _ in range(2000):\n"
+                "    if Path(%r).exists(): raise SystemExit(0)\n"
+                "    time.sleep(0.01)\n"
+                "raise SystemExit(3)\n") % (str(mark), str(release))
+        receipts = []
+        worker = threading.Thread(target=lambda: receipts.append(self._supervise(code, latch, 60).run()))
+        worker.start()
+        self._await(mark)
+        for _ in range(10):
+            self._supervise('pass', latch).run()
+        release.write_text('go')
+        worker.join(30)
+        self.assertEqual([(r.state, r.returncode) for r in receipts], [('exited', 0)])
+
     def test_direct_child_dies_if_the_supervisor_is_killed(self):
         path = self.d / 'ctl.sqlite'; ControlLatch(path, initialize=True)
         mark = self.d / 'child'
@@ -253,7 +274,9 @@ class AuditRegressions(unittest.TestCase):
                 host.call('Bearer x', body('s%d' % i))
             with self.assertRaisesRegex(Refusal, 'request_journal_full'):
                 host.call('Bearer x', body('one-more'))           # le plafond reste effectif
-            self.assertTrue(host.call('Bearer x', body('stop-now', 'stop'))['result']['stopped'])
+            stopped = host.call('Bearer x', body('stop-now', 'stop'))
+            self.assertTrue(stopped['result']['stopped'])
+            self.assertFalse(stopped['replayed'])                  # exécuté, pas rejoué
         self.assertTrue(BudgetLedger(root / 'canonical.sqlite').status(trial.MISSION)['stopped'])
 
 
