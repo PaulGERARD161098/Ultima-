@@ -83,6 +83,43 @@ class AuditRegressions(unittest.TestCase):
         self.d.chmod(0o700)
         self.assertFalse(ControlLatch(path).stopped())   # cas positif
 
+    def test_rollback_of_control_file_never_rearms(self):
+        # Audit C4 : restaurer une copie antérieure du verrou ne lève pas l'arrêt.
+        path = self.d / 'ctl.sqlite'
+        ControlLatch(path, initialize=True)
+        shutil.copy(path, self.d / 'before-stop.sqlite')
+        ControlLatch(path).trip('leo_self_control_attempt')
+        shutil.copy(self.d / 'before-stop.sqlite', path)
+        latch = ControlLatch(path)
+        self.assertTrue(latch.stopped())
+        with self.assertRaisesRegex(Refusal, 'leo_agent_stopped'):
+            with latch.admission():
+                pass
+
+    def test_tombstone_can_live_outside_the_control_folder(self):
+        control, anchor = self.d / 'control', self.d / 'anchor'
+        control.mkdir(mode=0o700); anchor.mkdir(mode=0o700)
+        latch = ControlLatch(control / 'ctl.sqlite', initialize=True, anchor_dir=anchor)
+        self.assertFalse(latch.stopped())                       # cas positif
+        latch.trip('owner_stop')
+        self.assertTrue((anchor / 'ctl.sqlite.stopped').exists())
+        shutil.rmtree(control); control.mkdir(mode=0o700)
+        with self.assertRaisesRegex(Refusal, 'control_unavailable'):
+            ControlLatch(control / 'ctl.sqlite', initialize=True, anchor_dir=anchor)
+
+    def test_stop_is_acquired_even_while_an_admission_holds_the_base(self):
+        path = self.d / 'ctl.sqlite'
+        latch = ControlLatch(path, initialize=True, trip_timeout=0.2)
+        holder = sqlite3.connect(str(path), isolation_level=None)
+        holder.execute('BEGIN IMMEDIATE')
+        with self.assertRaises(Exception):
+            latch.trip('leo_self_control_attempt')             # base occupée : écriture SQLite impossible
+        holder.rollback(); holder.close()
+        self.assertTrue(latch.stopped())                       # mais la pierre tombale fait foi
+        with self.assertRaisesRegex(Refusal, 'leo_agent_stopped'):
+            with latch.admission():
+                pass
+
     def _trial(self):
         root = self.d / 'trial'
         prepared = trial.prepare(root, dict(source='a'*40, target='b'*40, integration='c'*40))

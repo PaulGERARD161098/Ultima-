@@ -110,16 +110,25 @@ de reset, aucun endpoint modèle. Toute admission garde son verrou jusqu'à
 l'effet borné. Un arrêt attend les admissions déjà engagées puis interdit
 toute nouvelle admission. L'hôte doit tuer/borner ses processus indépendamment.
 """
-    def __init__(self, path, *, initialize=False, trip_timeout=330):
+    def __init__(self, path, *, initialize=False, trip_timeout=330, anchor_dir=None):
         self.path = Path(path).absolute()
         self.trip_timeout = trip_timeout
         if self.path.is_symlink() or not self.path.parent.is_dir():
             raise ValueError('trusted_control_path_required')
+        # C4 — pierre tombale : fichier distinct, créé une fois, jamais effacé par
+        # ce code. Restaurer une copie antérieure de la base ne réarme pas.
+        # anchor_dir permet de la poser hors du dossier du verrou (autre volume,
+        # stockage en ajout seul) ; seule une ancre extérieure couvre la
+        # restauration du dossier entier.
+        anchor = Path(anchor_dir).absolute() if anchor_dir is not None else self.path.parent
+        if anchor.is_symlink() or not anchor.is_dir():
+            raise ValueError('trusted_anchor_directory_required')
+        self._tombstone = anchor / (self.path.name + '.stopped')
         # Marque d'installation : une fois posée, l'absence du contrôle est une
         # panne, jamais une invitation à le recréer à neuf (pas de réarmement).
         self._installed = self.path.with_name(self.path.name + '.installed')
         created = False
-        if initialize is True and self._installed.exists():
+        if initialize is True and (self._installed.exists() or self._buried()):
             raise Refusal('control_unavailable')
         if initialize is True:
             try:
@@ -152,13 +161,36 @@ toute nouvelle admission. L'hôte doit tuer/borner ses processus indépendamment
             os.close(os.open(self._installed, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o400))
 
     def _assert_private(self):
-        # Fichier et dossier détenus par l'UID hôte, inaccessibles aux autres
+        # Fichier et dossiers détenus par l'UID hôte, inaccessibles aux autres
         # (donc à Léo, sous une identité distincte) : sinon reset possible.
         uid = os.geteuid()
-        info, parent = os.lstat(self.path), os.stat(self.path.parent)
-        if (not stat.S_ISREG(info.st_mode) or info.st_uid != uid or info.st_mode & 0o077
-                or parent.st_uid != uid or parent.st_mode & 0o022):
+        info = os.lstat(self.path)
+        if not stat.S_ISREG(info.st_mode) or info.st_uid != uid or info.st_mode & 0o077:
             raise Refusal('control_permissions_unsafe')
+        for folder in {self.path.parent, self._tombstone.parent}:
+            parent = os.stat(folder)
+            if parent.st_uid != uid or parent.st_mode & 0o022:
+                raise Refusal('control_permissions_unsafe')
+
+    def _buried(self):
+        # Toute présence (même illisible ou altérée) vaut arrêt : échec fermé.
+        return os.path.lexists(self._tombstone)
+
+    def _bury(self, reason):
+        try:
+            descriptor = os.open(self._tombstone, os.O_CREAT | os.O_EXCL | os.O_WRONLY | os.O_NOFOLLOW, 0o400)
+        except FileExistsError:
+            return
+        try:
+            os.write(descriptor, reason.encode('ascii') + b'\n')
+            os.fsync(descriptor)
+        finally:
+            os.close(descriptor)
+        folder = os.open(self._tombstone.parent, os.O_RDONLY)
+        try:
+            os.fsync(folder)
+        finally:
+            os.close(folder)
 
     @contextmanager
     def _transaction(self, *, timeout=10):
@@ -181,16 +213,29 @@ toute nouvelle admission. L'hôte doit tuer/borner ses processus indépendamment
     def stopped(self, *, timeout=5):
         if self.path.is_symlink() or not self.path.is_file():
             raise Refusal('control_unavailable')
-        with sqlite3.connect(self.path.as_uri()+'?mode=ro', uri=True, timeout=timeout) as db:
-            db.execute('PRAGMA query_only=ON')
-            row = db.execute('SELECT stopped FROM control WHERE id=1').fetchone()
-            if row is None or row[0] not in (0, 1):
-                raise Refusal('control_unavailable')
-            return bool(row[0])
+        self._assert_private()
+        if self._buried():
+            return True
+        try:
+            with sqlite3.connect(self.path.as_uri()+'?mode=ro', uri=True, timeout=timeout) as db:
+                db.execute('PRAGMA query_only=ON')
+                row = db.execute('SELECT stopped FROM control WHERE id=1').fetchone()
+        except sqlite3.OperationalError:
+            # Base tenue par un arrêt en cours d'écriture : la pierre tombale,
+            # posée avant, dit la vérité ; sinon l'erreur remonte (échec fermé).
+            if self._buried():
+                return True
+            raise
+        if row is None or row[0] not in (0, 1):
+            raise Refusal('control_unavailable')
+        return bool(row[0])
 
     def trip(self, reason):
         if reason not in STOP_REASONS:
             raise ValueError('invalid_stop_reason')
+        # La pierre tombale d'abord : elle ne dépend d'aucun verrou SQLite, donc
+        # l'arrêt est acquis même si une admission longue tient la base.
+        self._bury(reason)
         # Attendre au-delà de la plus longue admission bornée (superviseur ≤ 300 s).
         with self._transaction(timeout=self.trip_timeout) as db:
             db.execute('UPDATE control SET stopped=1,reason=COALESCE(reason,?) WHERE id=1', (reason,))
@@ -199,6 +244,6 @@ toute nouvelle admission. L'hôte doit tuer/borner ses processus indépendamment
     def admission(self, *, timeout=10):
         with self._transaction(timeout=timeout) as db:
             row = db.execute('SELECT stopped FROM control WHERE id=1').fetchone()
-            if row is None or row[0] != 0:
+            if row is None or row[0] != 0 or self._buried():
                 raise Refusal('leo_agent_stopped')
             yield
