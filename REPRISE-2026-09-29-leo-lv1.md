@@ -1,3 +1,150 @@
+# Reprise courante — 5 octobre 2026, raccord et arrêt FINUBAR préparés
+
+Mandat : raccord Ultima, absence d'auto-contrôle, arrêt externe par FINUBAR.
+Code préparé : admission six champs, client, journal anti-rejeu ; garde
+FINUBAR et arrêt global partagé entre missions ; dernière admission mémoire
+sous verrou. Le détail et les critères sont dans leo/ACTIVATION.md,
+section « Raccord Ultima et arrêt FINUBAR ».
+
+Voies mesurées : connecteur exclut le contrôle ; navigateur Work propriétaire
+déconnecté, réglages désormais derrière connexion. Autres authentifications
+terminal non explorées ; hôte futur non installé. Impossibilité globale de
+modifier le contrôle NON CERTIFIÉE. Ne pas faire un test d'écriture par une
+voie contournant l'exclusion. Brouillon de garde dans Ultima ≠ contrôle installé.
+
+Revue distincte et CI du nouveau SHA à relever dans PR353. Aucun test
+applicatif local ; aucune preuve héritée des 104 tests historiques.
+Checkpoint signé/courant, installation hors Léo, arrêt des processus et
+réception LV1 restent ouverts. Pas de fusion/import/activation/secret/envoi.
+
+---
+
+# Reprise courante — 5 octobre 2026, accès contrôle révoqué
+
+La révocation par Paul est vérifiée pour le connecteur organisation
+160835885 : 12 dépôts conservés, contrôle absent ; GET métadonnées du contrôle
+refusé (404), lecture Ultima réussie. Avant ce changement, ses métadonnées
+étaient accessibles parmi 13 dépôts. Aucun contenu ni secret du contrôle lu.
+
+La page de réglages confirme l'enregistrement. L'exclusion globale des autres
+voies (notamment séance navigateur propriétaire, CLI et applications)
+reste non attestée : aucun contournement, import ou activation autorisé par
+cette révocation.
+
+Boucle fermée : correction de l'accès du connecteur et preuve avant/après.
+Prochain lot cadré, non implémenté : admission, journal durable anti-doublon,
+réconciliation après résultat inconnu et checkpoint protégé contre le rollback,
+en réutilisant TrialHost/trial_resume/broker. Détail et critères de sortie
+dans leo/ACTIVATION.md, section « Révocation vérifiée le 05/10/2026 ».
+FINUBAR reste l'index d'état/dérive prévu dans le code.
+
+Aucun code applicatif modifié ou testé dans cette correction documentaire.
+Les preuves antérieures du protocole restent liées à leurs propres SHA.
+Aucune fusion, import dans le contrôle, activation, nouvelle dépense,
+publication, migration, workflow manuel ou émission externe.
+
+---
+
+# Reprise courante — 5 octobre 2026, protocole R21 préparatoire
+
+Demande : débloquer et mettre en ligne. Ultima est déjà déployé READY au main
+`9a261c5fb1ac1a77bdf53e5b3f98444297b2599b` ; le dossier Python Léo est exclu de
+Vercel. Le nouveau lot est une livraison privée de préparation, sans activation.
+
+Le dossier du 04/10, commit `974099098469c74504eef266b5e4a0b8ba6f41df`, est
+réutilisé. Protocole fermé et tests proposés dans
+`leo/control_r21/protocol.py` et `tests/runtime/test_control_r21_protocol.py`.
+Aucun des sept fichiers PR351 modifié ; PR351 reste ouverte et non fusionnée.
+La version du format s'appelle désormais `protocol_version`, distincte de
+la version de mission ; divergence préparatoire expliquée dans ACTIVATION.
+
+AGENTS, CLAUDE et §11 LV1 v1.1 réellement relus. Aucun test applicatif local,
+secret, import dans le contrôle, workflow manuel, effet métier ou envoi.
+Revue indépendante et preuves CI du nouveau SHA à relever dans sa PR ;
+la préparation n'hérite pas des preuves de la PR351.
+
+Blocages : contrôle privé absent de l'accès mais existence/exclusion globale
+non attestées (404) ; admission/checkpoint non installés ; collecte FINUBAR
+autonome et transport privé non raccordés. L'agrégat servi date du 04/10.
+La configuration propriétaire est déclarée manquante dans FINUBAR ; elle n'a
+pas été remesurée par lecture de variables. Aucun secret n'est demandé.
+
+Prochaine action unique après CI/revue de ce lot : préparer l'admission et
+le checkpoint, en réutilisant le banc existant. Paul peut attester le contrôle
+hors Work en parallèle. Ne pas importer le seul protocole comme kit complet,
+ne pas annoncer d'autonomie ni de réception LV1.
+État et rétroplanning : `leo/ACTIVATION.md`, section du 05/10 puis plan du 04/10.
+
+---
+
+# Reprise courante — 4 octobre 2026, cadrage d'autonomie et premier diagnostic
+
+**Boucle actuelle :** demande de Paul de cadrer précisément l'autonomie de Léo
+et FINUBAR, puis réaliser la première étape. Dossier opératoire et rétroplanning
+dans [leo/ACTIVATION.md](leo/ACTIVATION.md), section « Objectif d'autonomie — plan
+du 04/10/2026 ». Ce fichier reste l'index de reprise ; aucun second plan canonique.
+
+**Étape 1 réalisée :** lectures des règles actuelles, comparaison exacte du §11
+v1.1 source/main, mesure identité et deux installations GitHub, contrôle des
+versions et travaux concurrents, lecture des HEAD et grains des10 entrées
+FINUBAR, audit distinct des opérations R21, protocole fermé et essais préparés.
+Aucun test applicatif local, secret, import, dispatch, fusion ou publication publique.
+
+**État mesuré :** main initialement `ab60a658ec3a1b06ea07d3c39be69d6051aa879d`, puis
+`9a261c5fb1ac1a77bdf53e5b3f98444297b2599b` après fusion externe de PR352 ;
+PR351 ouverte, brouillon, source `8c3ff37bb81e19bbe3a08fa0e0c97fbceadb2448`.
+Sa préparation et les sept fichiers ne sont pas modifiés.
+Rapport de ses CI sain/rouge/restauré/corrigé et revue :
+https://github.com/PaulGERARD161098/Ultima-/pull/351
+Le nouveau lot documentaire est séparé ; il n'hérite pas d'une CI exécutée sur son SHA.
+
+**Fondation :** l'installation organisation160835885 est déjà
+`repository_selection=selected`, avec12 dépôts exposés ; l'installation
+personnelle163434661 est `all`, avec2 dépôts. GET métadonnées
+PaulGERARD161098/leo-control-r21 renvoie404. Cela ne prouve ni existence ni
+exclusion globale ; autres sessions/CLI/browser/App non attestés.
+Ne pas redemander le passage all→selected pour l'organisation comme s'il
+n'avait pas eu lieu. Ne pas créer/importer le contrôle par déduction.
+
+**Produit distinct :** main consigne une preuve B1 capture/défaire du04/10,
+puis un refus de suppression sans outil ; ce n'est pas une réception LV1.
+FINUBAR et le mail lisent l'agrégat commité ; garde propriétaire présent.
+La configuration de production reste à mesurer sans lecture de variable.
+Le crédit épuisé du02/10 n'est plus repris comme blocage actuel.
+
+**Cible proposée :** pilote continu borné le16/10, sous preuve de faisabilité
+d'un vrai hôte/réveil borné et du stockage privé au05–06/10, puis après les jalons détaillés
+d'ACTIVATION et leurs accords. Calendrier conditionnel, pas activation ni
+promesse de service permanent. LV1 initial exclut24/7 et activation des rituels.
+
+**Prochaine action unique :** préparer le schéma fermé des propositions et
+ses refus sur une branche distincte, réutiliser trial_host/broker et leur
+frontière fixture ; revue indépendante puis CI pull_request isolée.
+Aucune ouverture du serveur loopback sur Internet.
+
+**Interdits conservés :** aucune fusion, aucun import dans leo-control-r21,
+aucun secret, aucun lancement manuel de workflowR21, aucun test applicatif
+hors CI isolée prévue, aucun force-push, aucune publication publique.
+L'accord serveur, l'import/ancrage et l'activation continue restent des étapes
+réservées/à autoriser précisément une fois leur résultat concret et revu.
+
+**Travail concurrent préservé :** PR352, initialement brouillon pendant le
+diagnostic, est désormais fusionnée ailleurs dans main9a261c5. Le lot documentaire
+reprend cette base et conserve CADRAGE-ULTIMA, FINUBAR, les deux agrégats et
+JOURNAL-DECISIONS. AGENTS/CLAUDE/§11/ACTIVATION/reprise relus au nouveau SHA,
+blobs inchangés. La source PR351 reste identique ; ses preuves d'intégration
+ancienne ne sont pas promues preuves de la nouvelle cible.
+
+**Revue :** instance distincte, verdict final favorable du cadrage après
+précisions sur historique, demandeur/anti-rejeu et faisabilité hôte/réveil.
+Aucune installation, CI documentaire ou réception LV1 n'en est déduite.
+
+Les sections ci-dessous conservent les preuves et états historiques avec leurs
+dates/version. Les anciennes « prochaines actions » ne remplacent pas celle
+ci-dessus ; la revue PR351 ne vaut ni installation ni effet R21 sous accord réel.
+
+---
+
 # Reprise courante — 30 septembre 2026, diagnostic GitHub Team clos
 
 **Fait :** intégration préparatoire de main `ce1ff937465e5d65a269b481b9ee488b65e02ffa`
@@ -633,4 +780,3 @@ publication. Résultats à rattacher au commit effectivement exécuté dans PR30
 R21 n'est pas reçu par ce raccord : l'identité réelle de Paul et son accord
 exact restent à fournir par un canal de confiance. Le serveur fermé d'épreuve
 ne constitue pas un hébergement permanent ni un contrôle des outils Work.
-

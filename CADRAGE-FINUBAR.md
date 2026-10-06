@@ -244,3 +244,15 @@ Les dates de la note et de la mesure sont conservées ; une reprise ne les rajeu
 pas. Ce repli ne mesure ni la dérive Git, ni les PR, ni la CI, ni les permissions.
 Le jeton éventuel reste dans `FINUBAR_GITHUB_TOKEN`, jamais dans les agrégats.
 Activation réelle et réception non effectuées ; voir le document de reprise LV1.
+
+
+## Extension autorisée le 05/10/2026 — contrôle externe de Léo
+
+Paul demande que FINUBAR détecte une tentative de Léo de modifier/contourner
+son propre contrôle et impose l'arrêt. L'index de projets reste inchangé ;
+la nouvelle garde est préparée dans finubar/leo_control.py, raccordée au broker
+et au canal R21. Contrat opérationnel et état : leo/ACTIVATION.md, section
+« Raccord Ultima et arrêt FINUBAR ». Aucune seconde roadmap ou autorité de
+mission. Le contrôle installé, son verrou global et son lanceur doivent être
+hors des droits de Léo ; un code modifiable par elle ne constitue pas cette
+indépendance. Préparation sur branche seulement, activation non reçue.
