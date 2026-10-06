@@ -1265,7 +1265,11 @@
           // Réponse texte simple : comportement L2 inchangé (bulle déjà rendue).
         } else if (resultat.statut === 503) {
           historique.pop();
-          couperVoix("La voix de Léo n'est pas encore branchée (clé API en attente).");
+          // W2 : deux 503 de causes différentes, distinguées par un libellé
+          // serveur EXACT (liste fermée) — jamais un texte serveur recopié.
+          couperVoix(resultat.corps && resultat.corps.error === 'Accès réservé non réglé'
+            ? "Léo est réservé à son propriétaire, mais ULTIMA_PROPRIETAIRES n'est pas posée dans Vercel."
+            : "La voix de Léo n'est pas encore branchée (clé API en attente).");
         } else {
           historique.pop();
           champ.value = texte;

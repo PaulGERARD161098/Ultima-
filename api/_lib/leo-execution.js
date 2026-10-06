@@ -60,6 +60,18 @@ function clesFermees(corps, permises) {
 }
 
 /**
+ * W1 (audit du 05/10) — l'interrupteur serveur des écritures automatiques.
+ * `LEO_ECRITURES_AUTO` absente ou 'actives' : l'anneau vert agit sans demander.
+ * 'coupees' — ou TOUTE autre valeur, une faute de frappe comprise — : coupé,
+ * chaque proposition retombe sur la carte et Paul confirme (échec fermé).
+ * Basculer = changer la variable dans Vercel puis redéployer ; rien d'autre.
+ */
+export function ecrituresAutoCoupees(env = process.env) {
+  const valeur = env.LEO_ECRITURES_AUTO;
+  return valeur !== undefined && valeur !== '' && valeur !== 'actives';
+}
+
+/**
  * Ouvre une écriture de Léo : garde, plafond, ligne 'tentee'.
  * → { status: 200, data: { traceId, restant } } | { status, message }
  *
@@ -69,6 +81,7 @@ function clesFermees(corps, permises) {
 export async function ouvrirEcriture(client, userId, corps, {
   maintenant = Date.now(),
   plafond = plafondParDefaut,
+  env = process.env,
   // Injectable pour UN usage : éprouver le refus d'un orange alors que le
   // catalogue n'en compte plus aucun (§12.4 ①). La route n'en passe jamais —
   // un contrôle vérifie qu'elle appelle avec trois arguments seulement.
@@ -78,6 +91,9 @@ export async function ouvrirEcriture(client, userId, corps, {
       !clesFermees(corps, CLES_OUVRIR)) {
     return refus(400, 'Demande invalide');
   }
+  // W1 : interrupteur coupé → aucune trace, aucun acte automatique ; le front
+  // retombe sur la carte de confirmation (tout refus d'`ouvrir` y mène).
+  if (ecrituresAutoCoupees(env)) return refus(403, 'Écritures automatiques coupées');
   const quadrant = normaliserQuadrant(corps.quadrant);
 
   // LA GARDE — son premier appelant. Elle refait tout le chemin

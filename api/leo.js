@@ -5,7 +5,11 @@
 // Réponse : { ok: true, data: { reponse } }.
 //
 // Sécurité (CADRAGE-LEO-SITE §3) :
-//  - requireUser fail-closed : pas de session valide → 401, jamais de dégradé.
+//  - requireProprietaire fail-closed (W2, audit du 05/10) : route FACTURÉE,
+//    réservée aux comptes de ULTIMA_PROPRIETAIRES ; session absente → 401,
+//    réglage absent → 503, autre compte → 403, AVANT tout appel Anthropic.
+//  - W1 : interrupteur LEO_ECRITURES_AUTO coupé → toute proposition est servie
+//    en orange (carte de confirmation), jamais en exécution directe.
 //  - Clé API Claude en env Vercel UNIQUEMENT (ANTHROPIC_API_KEY) ; absente →
 //    503 explicite « voix non branchée » (la gate coût reste à Paul).
 //  - Minimisation : l'historique du cartouche et, si le front l'envoie, l'ÉTAT
@@ -17,7 +21,8 @@
 
 import Anthropic from '@anthropic-ai/sdk';
 import { ok, fail, methodNotAllowed, logError, readJsonBody, bodyFail } from './_lib/http.js';
-import { requireUser } from './_lib/supabase.js';
+import { requireProprietaire } from './_lib/proprietaire.js';
+import { ecrituresAutoCoupees } from './_lib/leo-execution.js';
 import {
   LEO_MODELE,
   MAX_TOKENS_REPONSE,
@@ -46,9 +51,11 @@ const gardeVoix = creerGardeVoix(3000);
 export default async function handler(req, res) {
   if (req.method !== 'POST') return methodNotAllowed(res, ['POST']);
 
-  const auth = await requireUser(req);
+  const auth = await requireProprietaire(req);
   if (auth.status === 'unconfigured') return fail(res, 503, 'Service non configuré');
-  if (auth.status !== 'ok') return fail(res, 401, 'Authentification requise');
+  if (auth.status === 'unauthenticated') return fail(res, 401, 'Authentification requise');
+  if (auth.status === 'reserve_non_regle') return fail(res, 503, 'Accès réservé non réglé');
+  if (auth.status !== 'ok') return fail(res, 403, 'Accès réservé');
 
   const cle = process.env.ANTHROPIC_API_KEY;
   if (!cle) return fail(res, 503, "La voix de Léo n'est pas encore branchée");
@@ -110,8 +117,9 @@ export default async function handler(req, res) {
             // jamais une autorité — /api/leo/ecritures re-décide depuis le
             // catalogue avant de rendre la moindre trace. Orange dès qu'une
             // cible n'a pas été nommée par Paul lui-même (S2).
-            anneau: anneauInterface(verdict.anneau, verdict.proposition,
-              conversation.messages[conversation.messages.length - 1].content)
+            anneau: ecrituresAutoCoupees() ? 'orange'
+              : anneauInterface(verdict.anneau, verdict.proposition,
+                conversation.messages[conversation.messages.length - 1].content)
           }
         });
       }
