@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-10-06",
-    "quoi": "06/10 : audit indépendant Léo/FINUBAR (AUDIT-2026-10-05-leo-finubar.md) ; #353 fusionnée avec les correctifs C1–C13 (arrêt FINUBAR persistant, non réarmable, ouvert à Paul ; verrou global obligatoire ; superviseur subreaper) — CI 9/9 sur cda7f3c, runtime 158 tests. W1 (interrupteur LEO_ECRITURES_AUTO) et W2 (/api/leo réservée au propriétaire) fusionnés par #354 (4519249). C11 SQL reportée jusqu'à E1 (Paul, 06/10). Puis plan chaîne : Q10 au tableau de bord, ⏳ tant que sa preuve n'est pas mesurée sur les deux bases (#356, #357) ; LEÇONS v72.",
-    "commit": "c7947914284d6ac6c66b298410b1cb43579a82fd"
+    "quoi": "06/10 : audit Léo/FINUBAR (AUDIT-2026-10-05-leo-finubar.md) ; #353 (C1–C13) puis #354 (W1 interrupteur LEO_ECRITURES_AUTO, W2 /api/leo réservée au propriétaire) fusionnées, 4519249. C11 SQL reportée jusqu'à E1 (Paul). Plan chaîne : Q10 ⏳ tant que sa preuve n'est pas mesurée sur les deux bases (#356, #357). LEÇONS v72.",
+    "commit": "a708d9bc1392a4f54c7d5a79bf048e48deae00e7"
   },
   "prochaine_action": "Vérifier en production que l'anneau de Léo reste vert après #354 (LEO_ECRITURES_AUTO=actives déclarée posée par Paul le 06/10 ; W1 fermé par défaut si elle manque).",
   "bloque_par": [
@@ -140,7 +140,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-10-04"
+  "maj": "2026-10-06"
 }
 ```
 
