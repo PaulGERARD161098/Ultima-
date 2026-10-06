@@ -32,12 +32,11 @@
   },
   "dernier_arret": {
     "le": "2026-10-06",
-    "quoi": "06/10 : audit indépendant Léo/FINUBAR (AUDIT-2026-10-05-leo-finubar.md) ; #353 fusionnée avec les correctifs C1–C13 (arrêt FINUBAR persistant, non réarmable, ouvert à Paul ; verrou global obligatoire ; superviseur subreaper) — CI 9/9 sur cda7f3c, runtime 158 tests. #354 fusionnée (4519249) : W1 (interrupteur LEO_ECRITURES_AUTO, fermé par défaut) et W2 (/api/leo réservée au propriétaire) + revues Codex, en production. C11 SQL reportée jusqu'à E1 (Paul, 06/10). Constaté en production : l'accueil n'a AUCUN outil d'écriture (quadrant de repli, conception antérieure) — ✅ ANNEAU VERT REPROUVÉ APRÈS W1 le 06/10 sur /registre : « Crée une idée Anneau. Résumé : test de l'anneau vert. » → « Fait sans demander », puis Défaire ; mesuré en base une trace proposer_idee/adramelech/vert : tentee 11:57:43 → reussie 11:57:47 → defaite 12:00:07 UTC (LEO_ECRITURES_AUTO=actives lue en production). Voix de Léo illisible sous le thème de nuit (champ 1,14:1, bulle 1,10:1) corrigée, mesure ajoutée à smoke-leo-accueil.",
-    "commit": "451924945fdb6738c7d3e3d87224dd32fd98a519"
+    "commit": "46693b344315f260a7c4c9dcbf93dd7b2a80d4d1",
+    "quoi": "06/10 : #353 (C1–C13) et #354 (W1 LEO_ECRITURES_AUTO, W2 /api/leo propriétaire) fusionnées ; anneau vert reprouvé en production après W1 (tentee → reussie → defaite, 11:57–12:00 UTC). #358 : voix de Léo lisible sous le thème de nuit. Plan chaîne : Q10 ⏳ tant que sa preuve n'est pas mesurée sur les deux bases (#356, #357). LEÇONS v72."
   },
-  "prochaine_action": "Fusionner la PR #358 (voix de Léo lisible sous le thème de nuit) sur accord exact de Paul (SHA, cible, CI). Ensuite : cadrer la boucle « Léo partout sans candidats » (création d'idée impossible hors /registre).",
+  "prochaine_action": "Cadrer la boucle « Léo partout sans candidats » : hors /registre, « Crée une idée … » finit en « Action impossible en l'état » (boucle ouverte du 06/10).",
   "bloque_par": [
-    "PR #358 (lisibilité de la voix de Léo, nuit) : accord de fusion de Paul sur le SHA exact.",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
     "R1 (B4) en production, non prouvée : Réno a rendu 502 le 02/10 à 16:43 UTC. Le crédit étant rechargé, lui demander « Où en est Artidispo ? » et comparer à la base (PLAN §2).",
     "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",
@@ -144,7 +143,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-10-04"
+  "maj": "2026-10-06"
 }
 ```
 
