@@ -180,6 +180,21 @@ console.log('§1 — sans session, la page se tait au lieu d\'inventer');
   verifier('500 → message générique', /indisponible/.test(msg), msg);
   await page.close();
 }
+{
+  // 06/10 : en production, ce 503 s'affichait « indisponible » — la cause
+  // (variable non vue par le déploiement) restait cachée à Paul.
+  const { page } = await ouvrir({ client: 'connecte', api: { status: 503, body: { ok: false, error: 'Accès réservé non réglé' } } });
+  const msg = await page.textContent('#matin-corps');
+  verifier('503 réservé non réglé → la cause est nommée', /ULTIMA_PROPRIETAIRES/.test(msg), msg);
+  verifier('503 réservé non réglé → jamais « indisponible »', !/indisponible/.test(msg), msg);
+  await page.close();
+}
+{
+  const { page } = await ouvrir({ client: 'connecte', api: { status: 503, body: { ok: false, error: 'Service non configuré' } } });
+  const msg = await page.textContent('#matin-corps');
+  verifier('autre 503 → message générique (liste fermée)', /indisponible/.test(msg), msg);
+  await page.close();
+}
 
 // ------------------------------------------------------- §2 rendu
 console.log('§2 — avec session, la page rend l\'agrégat TEL QUEL');

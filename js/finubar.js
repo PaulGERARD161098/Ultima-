@@ -228,9 +228,18 @@ async function demarrer() {
       headers: { Authorization: 'Bearer ' + session.access_token },
     });
     if (!reponse.ok) {
+      // Le 503 « réglage absent » se dit par sa cause (leçon du 02/10 : une
+      // erreur générique la cache). Libellé serveur EXACT, liste fermée —
+      // jamais un texte serveur recopié.
+      let erreur = null;
+      if (reponse.status === 503) {
+        try { erreur = (await reponse.json()).error; } catch { erreur = null; }
+      }
       message(reponse.status === 401 ? 'Session expirée. Reconnecte-toi depuis la boussole.'
         : reponse.status === 403 ? 'Accès réservé au propriétaire.'
-          : 'La table de marche est indisponible pour le moment.');
+          : erreur === 'Accès réservé non réglé'
+            ? 'Accès réservé : ce déploiement ne voit pas ULTIMA_PROPRIETAIRES (redéploiement, case Production ou format de la valeur à vérifier).'
+            : 'La table de marche est indisponible pour le moment.');
       return;
     }
     const charge = await reponse.json();
