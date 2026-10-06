@@ -10,6 +10,7 @@ from contextlib import contextmanager
 import os
 import re
 import sqlite3
+import stat
 
 from leo.runtime.policy import Refusal
 
@@ -18,6 +19,22 @@ SELF_CONTROL_ACTIONS = frozenset({'change_control', 'disable_control',
                                 'self_approve', 'self_review', 'resume_control'})
 READ_ACTIONS = frozenset({'status', 'read_source', 'read_memory', 'reconcile'})
 REPOSITORY = re.compile(r'[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+', re.ASCII)
+# Formes équivalentes d'un même dépôt GitHub : URL, suffixe .git, barre finale.
+_ALIAS = re.compile(r'(?:https://github\.com/)?([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+?)(?:\.git)?/?', re.ASCII)
+STOP_REASONS = frozenset({'leo_self_control_attempt', 'leo_control_write_attempt',
+                          'leo_control_target_unknown', 'owner_stop'})
+
+
+def _canonical_repository(value):
+    match = _ALIAS.fullmatch(value)
+    if match is None or {'.', '..'} & set(match.groups()):
+        return None
+    return '/'.join(match.groups()).casefold()
+
+
+def _touches(target, protected):
+    return any(target == p or target.is_relative_to(p) or p.is_relative_to(target)
+               for p in protected)
 
 
 def control_violation(action, repository, control_repository=CONTROL_REPOSITORY,
@@ -26,17 +43,21 @@ def control_violation(action, repository, control_repository=CONTROL_REPOSITORY,
         return 'leo_self_control_attempt'
     if action in READ_ACTIONS:
         return None
-    if type(repository) is not str or not repository:
+    if type(repository) is not str or not repository or '\x00' in repository:
         return 'leo_control_target_unknown'
-    if repository.casefold() == control_repository.casefold():
-        return 'leo_control_write_attempt'
+    protected = tuple(Path(p).resolve() for p in protected_paths)
     if Path(repository).is_absolute():
-        target = Path(repository).resolve()
-        if any(target == p or target.is_relative_to(p) or p.is_relative_to(target)
-               for p in (Path(p).resolve() for p in protected_paths)):
+        if _touches(Path(repository).resolve(), protected):
             return 'leo_control_write_attempt'
-    elif not REPOSITORY.fullmatch(repository):
+        return None
+    canonical = _canonical_repository(repository)
+    if canonical is None:
         return 'leo_control_target_unknown'
+    if canonical == _canonical_repository(control_repository):
+        return 'leo_control_write_attempt'
+    # Une cible relative qui existe localement est jugée sur son chemin réel.
+    if protected and Path(repository).exists() and _touches(Path(repository).resolve(), protected):
+        return 'leo_control_write_attempt'
     return None
 
 
@@ -67,12 +88,18 @@ L'arrêt et la dernière admission Broker utilisent le même verrou SQLite.
 
     def _trip(self, reason):
         # Écriture persistante AVANT le refus ; échec d'arrêt = aucun dispatch.
+        # Chaque registre est tenté même si l'autre échoue (verrou occupé, etc.).
+        confirmed = True
         if self.latch is not None:
-            self.latch.trip(reason)
-        state = self.ledger.stop(self.mission, reason, authority=True)
-        if state['stopped'] is not True:
-            raise Refusal('finubar_stop_unconfirmed')
-        raise Refusal(reason)
+            try:
+                self.latch.trip(reason)
+            except Exception:
+                confirmed = False
+        try:
+            confirmed = self.ledger.stop(self.mission, reason, authority=True)['stopped'] is True and confirmed
+        except Exception:
+            confirmed = False
+        raise Refusal(reason if confirmed else 'finubar_stop_unconfirmed')
 
 
 class ControlLatch:
@@ -83,11 +110,17 @@ de reset, aucun endpoint modèle. Toute admission garde son verrou jusqu'à
 l'effet borné. Un arrêt attend les admissions déjà engagées puis interdit
 toute nouvelle admission. L'hôte doit tuer/borner ses processus indépendamment.
 """
-    def __init__(self, path, *, initialize=False):
+    def __init__(self, path, *, initialize=False, trip_timeout=330):
         self.path = Path(path).absolute()
+        self.trip_timeout = trip_timeout
         if self.path.is_symlink() or not self.path.parent.is_dir():
             raise ValueError('trusted_control_path_required')
+        # Marque d'installation : une fois posée, l'absence du contrôle est une
+        # panne, jamais une invitation à le recréer à neuf (pas de réarmement).
+        self._installed = self.path.with_name(self.path.name + '.installed')
         created = False
+        if initialize is True and self._installed.exists():
+            raise Refusal('control_unavailable')
         if initialize is True:
             try:
                 descriptor = os.open(self.path, os.O_CREAT | os.O_EXCL | os.O_RDWR, 0o600)
@@ -98,6 +131,7 @@ toute nouvelle admission. L'hôte doit tuer/borner ses processus indépendamment
                 created = True
         if not self.path.is_file():
             raise Refusal('control_unavailable')
+        self._assert_private()
         with self._transaction() as db:
             objects = db.execute("SELECT type,name FROM sqlite_master WHERE name NOT LIKE 'sqlite_%'").fetchall()
             application = db.execute('PRAGMA application_id').fetchone()[0]
@@ -114,11 +148,23 @@ toute nouvelle admission. L'hôte doit tuer/borner ses processus indépendamment
             rows = db.execute('SELECT id,stopped,reason FROM control').fetchall()
             if len(rows) != 1 or rows[0][0] != 1 or rows[0][1] not in (0,1):
                 raise Refusal('control_unavailable')
+        if created:
+            os.close(os.open(self._installed, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o400))
+
+    def _assert_private(self):
+        # Fichier et dossier détenus par l'UID hôte, inaccessibles aux autres
+        # (donc à Léo, sous une identité distincte) : sinon reset possible.
+        uid = os.geteuid()
+        info, parent = os.lstat(self.path), os.stat(self.path.parent)
+        if (not stat.S_ISREG(info.st_mode) or info.st_uid != uid or info.st_mode & 0o077
+                or parent.st_uid != uid or parent.st_mode & 0o022):
+            raise Refusal('control_permissions_unsafe')
 
     @contextmanager
     def _transaction(self, *, timeout=10):
         if self.path.is_symlink() or not self.path.is_file():
             raise Refusal('control_unavailable')
+        self._assert_private()
         db = sqlite3.connect(self.path.as_uri()+'?mode=rw', uri=True, timeout=timeout, isolation_level=None)
         try:
             db.execute('PRAGMA trusted_schema=OFF')
@@ -143,9 +189,10 @@ toute nouvelle admission. L'hôte doit tuer/borner ses processus indépendamment
             return bool(row[0])
 
     def trip(self, reason):
-        if reason not in {'leo_self_control_attempt', 'leo_control_write_attempt', 'leo_control_target_unknown'}:
+        if reason not in STOP_REASONS:
             raise ValueError('invalid_stop_reason')
-        with self._transaction() as db:
+        # Attendre au-delà de la plus longue admission bornée (superviseur ≤ 300 s).
+        with self._transaction(timeout=self.trip_timeout) as db:
             db.execute('UPDATE control SET stopped=1,reason=COALESCE(reason,?) WHERE id=1', (reason,))
 
     @contextmanager

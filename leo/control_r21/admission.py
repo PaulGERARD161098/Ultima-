@@ -124,7 +124,15 @@ class AdmissionHost:
         if (proposal['mission_id'] != binding.mandate.mission or
                 proposal['operation_id'] != trial_resume.PROPOSAL['operation_id']):
             raise Refusal('request_context_mismatch')
-        fresh, state, result = self.journal.reserve(subject, proposal)
+        try:
+            fresh, state, result = self.journal.reserve(subject, proposal)
+        except Refusal as error:
+            if error.code != 'request_journal_full' or proposal['command'] != 'stop':
+                raise
+            # Un arrêt est une réduction de droits idempotente : jamais bloqué
+            # par la capacité du journal anti-rejeu.
+            result = self.host._call_authenticated(subject, {'command': 'stop'})
+            fresh, state = False, 'completed'
         if fresh:
             result = self.host._call_authenticated(subject, {'command': proposal['command']},
                                                    expected_version=proposal['expected_version'])

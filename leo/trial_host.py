@@ -105,6 +105,19 @@ class TrialHost:
                 or type(proposal['command']) is not str or proposal['command'] not in COMMANDS):
             raise Refusal('invalid_command')
         b = binding
+        if proposal['command'] == 'stop' and b.principal == b.mandate.owner:
+            # Paul (propriétaire canonique) arrête sans dépendre de Léo ni d'une
+            # inscription parmi les acteurs : arrêt de mission ET arrêt global.
+            canonical = trial_resume._canonical(b.root, b.mandate, b.context, initial=False)
+            if canonical['owner'] != b.principal or self.control_latch is None:
+                raise Refusal('access_denied')
+            self.control_latch.trip('owner_stop')
+            ledger = BudgetLedger(Path(b.root) / 'canonical.sqlite', clock=self.clock)
+            state = ledger.stop(b.mandate.mission, 'owner_stop', authority=True)
+            return {'mission_id': b.mandate.mission, 'stopped': True,
+                    'pending_operations': sorted(state['pending_operations']),
+                    'reserved_units': state['reserved_units'], 'environment': 'fixture',
+                    'publication': False, 'global_v1_accepted': False}
         Policy().authorize(b.mandate, b.principal, 'status', b.context.repository,
                            self.clock(), effects=frozenset({'read_scoped_memory'}))
         if expected_version is not None:
