@@ -32,12 +32,12 @@
   },
   "dernier_arret": {
     "le": "2026-10-06",
-    "quoi": "06/10 : audit Léo/FINUBAR (AUDIT-2026-10-05-leo-finubar.md) ; #353 (C1–C13) puis #354 (W1 interrupteur LEO_ECRITURES_AUTO, W2 /api/leo réservée au propriétaire) fusionnées, 4519249. C11 SQL reportée jusqu'à E1 (Paul). Plan chaîne : Q10 ⏳ tant que sa preuve n'est pas mesurée sur les deux bases (#356, #357). LEÇONS v72.",
-    "commit": "a708d9bc1392a4f54c7d5a79bf048e48deae00e7"
+    "quoi": "06/10 : audit indépendant Léo/FINUBAR (AUDIT-2026-10-05-leo-finubar.md) ; #353 fusionnée avec les correctifs C1–C13 (arrêt FINUBAR persistant, non réarmable, ouvert à Paul ; verrou global obligatoire ; superviseur subreaper) — CI 9/9 sur cda7f3c, runtime 158 tests. #354 fusionnée (4519249) : W1 (interrupteur LEO_ECRITURES_AUTO, fermé par défaut) et W2 (/api/leo réservée au propriétaire) + revues Codex, en production. C11 SQL reportée jusqu'à E1 (Paul, 06/10). Constaté en production : l'accueil n'a AUCUN outil d'écriture (quadrant de repli, conception antérieure) — ✅ ANNEAU VERT REPROUVÉ APRÈS W1 le 06/10 sur /registre : « Crée une idée Anneau. Résumé : test de l'anneau vert. » → « Fait sans demander », puis Défaire ; mesuré en base une trace proposer_idee/adramelech/vert : tentee 11:57:43 → reussie 11:57:47 → defaite 12:00:07 UTC (LEO_ECRITURES_AUTO=actives lue en production). Voix de Léo illisible sous le thème de nuit (champ 1,14:1, bulle 1,10:1) corrigée, mesure ajoutée à smoke-leo-accueil.",
+    "commit": "451924945fdb6738c7d3e3d87224dd32fd98a519"
   },
-  "prochaine_action": "Vérifier en production que l'anneau de Léo reste vert après #354 (LEO_ECRITURES_AUTO=actives déclarée posée par Paul le 06/10 ; W1 fermé par défaut si elle manque).",
+  "prochaine_action": "Fusionner la PR #358 (voix de Léo lisible sous le thème de nuit) sur accord exact de Paul (SHA, cible, CI). Ensuite : cadrer la boucle « Léo partout sans candidats » (création d'idée impossible hors /registre).",
   "bloque_par": [
-    "#354 (W1/W2) FUSIONNÉE (4519249) : ULTIMA_PROPRIETAIRES CONFIRMÉE en production le 06/10 (Paul : FINUBAR affiche les projets après redéploiement). LEO_ECRITURES_AUTO=actives posée et redéployée le 06/10 (déclaration de Paul, non lisible d'ici) : effet à constater en production.",
+    "PR #358 (lisibilité de la voix de Léo, nuit) : accord de fusion de Paul sur le SHA exact.",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
     "R1 (B4) en production, non prouvée : Réno a rendu 502 le 02/10 à 16:43 UTC. Le crédit étant rechargé, lui demander « Où en est Artidispo ? » et comparer à la base (PLAN §2).",
     "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",
@@ -47,6 +47,10 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "Léo partout (js/leo-partout.js) monte la voix SANS candidats : sur adramelech.html et toute page hors /registre, « Crée une idée … » finit en carte « Action impossible en l'état » (prochainAdrNum absent). Constaté par Paul en production le 06/10. Correctif à cadrer : fournir les candidats, ou ne pas offrir l'outil là où la page ne peut pas l'exécuter.",
+      "depuis": "2026-10-06"
+    },
     {
       "quoi": "LEÇON À CONSIGNER + PROPAGER (9 dépôts) : une erreur générique cache sa cause — « Léo n'a pas pu répondre » a masqué pendant des jours un crédit Anthropic épuisé (0 écriture en prod, ④ crue cassée) ; un échec côté tiers se dit à l'écran par son code et une cause en mots fermés. Payée le 02/10.",
       "depuis": "2026-10-02"
@@ -140,7 +144,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-10-06"
+  "maj": "2026-10-04"
 }
 ```
 

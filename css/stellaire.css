@@ -341,3 +341,29 @@ textarea:focus-visible { outline-color: var(--or-clair, #d8bd82); }
    un SVG dans le document. La boîte garde sa place et son silence ; sans
    JavaScript elle reste simplement vide — et la porte, elle, reste entière. */
 .ecran-decor { padding: 0; }
+
+/* ⑪ LA VOIX DE LÉO — le champ « Dictez ou écrivez à Léo », la bulle de Paul et
+      la carte de confirmation (2026-10-06, Paul : « attention aux polices, je vois mal »). Tous deux
+      portaient un CRÈME écrit en dur (#fdf9ec ; dégradé #fbf5e6 → parchemin)
+      sous `--encre-sepia`, que cette couche rend claire : texte saisi 1,14:1,
+      indication 1,66:1, bulle 1,10:1. Ni `smoke-stellaire` (nœuds de texte de
+      RIVEN, cartouche fermé) ni `smoke-leo-accueil` (contraste mesuré sur le
+      cartouche seul) ne les traversaient : la mesure vit désormais dans
+      `smoke-leo-accueil` (C1-bis), au pire arrêt de chaque fond.
+      `:root` en tête : `css/leo.css` est chargé APRÈS cette feuille sur toutes
+      les pages, à poids égal il l'emporterait. */
+:root .leo-voix-champ {
+  color: var(--encre-sepia);
+  background: var(--nuit-relief);
+  border-color: var(--or-antique);
+}
+:root .leo-voix-champ::placeholder { color: var(--encre-sepia-douce); opacity: 1; }
+:root .leo-bulle-paul {
+  color: var(--encre-sepia);
+  background: var(--nuit-relief);
+  border-color: var(--or-antique);
+}
+/* La carte de confirmation, même défaut (dégradé #fbf5e6 → parchemin) : son
+   texte, sa cible et son blocage à 1,10:1, vus par Paul le même jour. Le
+   liseré or et l'ombre intérieure de leo.css restent : seul le fond change. */
+:root .leo-carte-action { background: var(--nuit-relief); }
