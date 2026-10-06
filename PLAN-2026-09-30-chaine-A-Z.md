@@ -375,8 +375,8 @@ route.
   sur les deux projets Vercel, compte RenoPredict de Matthieu (même e-mail),
   stickers (A9, plus tard).** ✅ Fusionné le 06/10 (RenoBoost `ccde23c`,
   RenoPredict `4f3ad4d`) ; route en production (405 en lecture), secret non
-  vérifiable depuis la séance (proxy). Lien manuel de secours **préparé le 06/10,
-  migration NON appliquée** (`20261006170000_artisans_email_renopredict.sql`) ;
+  vérifiable depuis la séance (proxy). Lien manuel de secours ✅ **appliqué le 06/10** sur
+  le go de Paul (`20261006170000_artisans_email_renopredict.sql`, garde prouvée côté artisan) ;
   plomberie d'activation de Matthieu au cadrage RenoBoost §3.3 quater.
 
 **Ouvertes** — posées à la boucle qui les touche, pas avant. Les réponses de
