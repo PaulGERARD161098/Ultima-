@@ -32,12 +32,12 @@
   },
   "dernier_arret": {
     "le": "2026-10-06",
-    "quoi": "06/10 : audit indépendant Léo/FINUBAR (AUDIT-2026-10-05-leo-finubar.md) ; #353 fusionnée avec les correctifs C1–C13 (arrêt FINUBAR persistant, non réarmable, ouvert à Paul ; verrou global obligatoire ; superviseur subreaper) — CI 9/9 sur cda7f3c, runtime 158 tests. W1 (interrupteur LEO_ECRITURES_AUTO) et W2 (/api/leo réservée au propriétaire) poussés sur claude/relaxed-wright-y6zak5, PR non fusionnée. C11 SQL reportée jusqu'à E1 (Paul, 06/10).",
-    "commit": "560ad78b7906d5821810971419667cdafcb14ef2"
+    "quoi": "06/10 : audit indépendant Léo/FINUBAR (AUDIT-2026-10-05-leo-finubar.md) ; #353 fusionnée avec les correctifs C1–C13 (arrêt FINUBAR persistant, non réarmable, ouvert à Paul ; verrou global obligatoire ; superviseur subreaper) — CI 9/9 sur cda7f3c, runtime 158 tests. #354 fusionnée (4519249) : W1 (interrupteur LEO_ECRITURES_AUTO, fermé par défaut) et W2 (/api/leo réservée au propriétaire) + revues Codex, en production. C11 SQL reportée jusqu'à E1 (Paul, 06/10). Constaté en production : l'accueil n'a AUCUN outil d'écriture (quadrant de repli, conception antérieure) — l'anneau vert s'éprouve sur ADRAMELECH. Voix de Léo illisible sous le thème de nuit (champ 1,14:1, bulle 1,10:1) corrigée, mesure ajoutée à smoke-leo-accueil.",
+    "commit": "451924945fdb6738c7d3e3d87224dd32fd98a519"
   },
-  "prochaine_action": "Fusionner la PR #354 (W1/W2 + revues Codex) sur accord exact de Paul (SHA, cible, CI), puis vérifier en production que l'anneau de Léo reste vert (LEO_ECRITURES_AUTO=actives posée par Paul le 06/10 ; W1 fermé par défaut si elle manque).",
+  "prochaine_action": "Éprouver l'anneau vert en production sur ADRAMELECH (« note l'idée TEST-ANNEAU » → écrite sans carte, puis défaite) : prouve que LEO_ECRITURES_AUTO=actives est lue. Une carte de confirmation = variable non lue (valeur exacte, case Production, redéploiement).",
   "bloque_par": [
-    "PR #354 (W1/W2) : ULTIMA_PROPRIETAIRES CONFIRMÉE en production le 06/10 (Paul : FINUBAR affiche les projets après redéploiement). LEO_ECRITURES_AUTO=actives posée et redéployée le 06/10 (déclaration de Paul, non lisible d'ici) : effet à constater après fusion.",
+    "W1 en production (#354, 4519249) : LEO_ECRITURES_AUTO=actives posée et redéployée le 06/10 (déclaration de Paul, non lisible d'ici) — effet à constater sur ADRAMELECH. ULTIMA_PROPRIETAIRES confirmée le 06/10.",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
     "R1 (B4) en production, non prouvée : Réno a rendu 502 le 02/10 à 16:43 UTC. Le crédit étant rechargé, lui demander « Où en est Artidispo ? » et comparer à la base (PLAN §2).",
     "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",
