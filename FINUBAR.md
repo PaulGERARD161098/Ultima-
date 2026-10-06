@@ -35,9 +35,9 @@
     "quoi": "06/10 : audit indépendant Léo/FINUBAR (AUDIT-2026-10-05-leo-finubar.md) ; #353 fusionnée avec les correctifs C1–C13 (arrêt FINUBAR persistant, non réarmable, ouvert à Paul ; verrou global obligatoire ; superviseur subreaper) — CI 9/9 sur cda7f3c, runtime 158 tests. W1 (interrupteur LEO_ECRITURES_AUTO) et W2 (/api/leo réservée au propriétaire) poussés sur claude/relaxed-wright-y6zak5, PR non fusionnée. C11 SQL reportée jusqu'à E1 (Paul, 06/10).",
     "commit": "560ad78b7906d5821810971419667cdafcb14ef2"
   },
-  "prochaine_action": "Fusionner la PR #354 (W1/W2 + revues Codex) sur accord exact de Paul (SHA, cible, CI). LEO_ECRITURES_AUTO=actives est requise en Production pour que l'anneau vert reste actif après fusion (W1 fermé par défaut) — sinon chaque proposition passe par la carte de confirmation.",
+  "prochaine_action": "Fusionner la PR #354 (W1/W2 + revues Codex) sur accord exact de Paul (SHA, cible, CI), puis vérifier en production que l'anneau de Léo reste vert (LEO_ECRITURES_AUTO=actives posée par Paul le 06/10 ; W1 fermé par défaut si elle manque).",
   "bloque_par": [
-    "PR #354 (W1/W2) : ULTIMA_PROPRIETAIRES CONFIRMÉE en production le 06/10 (Paul : FINUBAR affiche les projets après redéploiement). Reste LEO_ECRITURES_AUTO=actives pour garder l'anneau vert après fusion.",
+    "PR #354 (W1/W2) : ULTIMA_PROPRIETAIRES CONFIRMÉE en production le 06/10 (Paul : FINUBAR affiche les projets après redéploiement). LEO_ECRITURES_AUTO=actives posée et redéployée le 06/10 (déclaration de Paul, non lisible d'ici) : effet à constater après fusion.",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
     "R1 (B4) en production, non prouvée : Réno a rendu 502 le 02/10 à 16:43 UTC. Le crédit étant rechargé, lui demander « Où en est Artidispo ? » et comparer à la base (PLAN §2).",
     "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",
