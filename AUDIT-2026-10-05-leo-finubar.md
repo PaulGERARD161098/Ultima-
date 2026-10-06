@@ -32,9 +32,16 @@ existant a vu une assertion resserrée (`leo_agent_stopped`, plus strict).
 
 **Restent ouverts, hors code :** E1 (identité GitHub distincte), E2 (hôte
 installé, cgroup, UID propre), A1 (canal d'accord humain), ancre extérieure
-(C4 dossier entier). **Restent ouverts, web, non traités ici :** W1 (interrupteur
-serveur de l'anneau vert), W2 (`requireProprietaire` sur la route facturée),
-W4, W5, W10, W3/W6/W8/W11.
+(C4 dossier entier). **Web, suite du 06/10 (branche `claude/relaxed-wright-y6zak5`) :**
+W1 ✅ commit c3cd2cd — interrupteur `LEO_ECRITURES_AUTO` (absente ou `actives` =
+comportement inchangé ; toute autre valeur coupe l'anneau vert, échec fermé ;
+bascule = variable Vercel + redéploiement — un drapeau en base sans redéploiement
+demanderait une migration, porte rouge). W2 ✅ même commit — `/api/leo` en
+`requireProprietaire` ; ⏭ fusion conditionnée à `ULTIMA_PROPRIETAIRES` posée en
+Production (sinon 503 voulu). Journal et registre restent `requireUser` + RLS
+(aucun coût). **C11 SQL ⏭ reportée jusqu'à E1** (Paul, 06/10 : sans identité
+distincte, la garde ne sépare pas Léo de Paul). Restent ouverts : W4, W5, W10,
+W3/W6/W8/W11.
 
 ---
 
