@@ -364,7 +364,11 @@ route.
   Étape 2 (rdv → `client_id`) ✅ **appliquée le 06/10 sur le go de Paul** :
   RenoBoost `supabase/migrations/20261006120000_rdv_client_id.sql`, éprouvée en
   local (`tests/rdv-client-id.pg.sh`) ; mesuré 29/29 rdv reliés, 0 au client
-  d'un autre propriétaire. Suivante : étape 3, RenoPredict `dossier_ref` à la pose.
+  d'un autre propriétaire. Étape 3 (la pose rattachée au dossier) **préparée le
+  06/10, non appliquée** : RenoPredict `supabase/migrations/20261006150000_dossier_ref.sql`,
+  flux au cadrage RenoBoost §3.3 ter. ⛔ Mesuré : le pivot e-mail ne relie aucun
+  artisan entre RenoPredict et la base partagée. ⬜ **Gestes de Paul : la
+  correspondance des artisans, le secret partagé, le go de migration.**
 
 **Ouvertes** — posées à la boucle qui les touche, pas avant. Les réponses de
 Paul s'inscrivent dans la liste ci-dessus, datées.
