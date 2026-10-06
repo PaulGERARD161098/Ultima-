@@ -204,7 +204,11 @@ FINUBAR doit pouvoir inscrire l'arrêt pendant l'exécution.
             while True:
                 # Lecture avant poll : la sortie du processus ne masque pas un arrêt.
                 try:
-                    stopped = self._latch.stopped(timeout=0)
+                    # Attente bornée à un intervalle de sondage : l'admission d'un
+                    # lancement voisin sur le même verrou ne vaut pas panne du
+                    # contrôle (faux arrêt d'un enfant sain, vu le 06/10) ; au-delà,
+                    # échec fermé inchangé.
+                    stopped = self._latch.stopped(timeout=self._poll)
                 except Exception:
                     raise Refusal('finubar_process_control_unavailable') from None
                 if stopped:

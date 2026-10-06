@@ -195,14 +195,20 @@ class AuditRegressions(unittest.TestCase):
                 "    if Path(%r).exists(): raise SystemExit(0)\n"
                 "    time.sleep(0.01)\n"
                 "raise SystemExit(3)\n") % (str(mark), str(release))
-        receipts = []
-        worker = threading.Thread(target=lambda: receipts.append(self._supervise(code, latch, 60).run()))
+        receipts, errors = [], []
+        def run():
+            try:
+                receipts.append(self._supervise(code, latch, 60).run())
+            except BaseException as error:
+                errors.append(error)
+        worker = threading.Thread(target=run)
         worker.start()
         self._await(mark)
         for _ in range(10):
             self._supervise('pass', latch).run()
         release.write_text('go')
         worker.join(30)
+        self.assertEqual([repr(e) for e in errors], [])
         self.assertEqual([(r.state, r.returncode) for r in receipts], [('exited', 0)])
 
     def test_direct_child_dies_if_the_supervisor_is_killed(self):
