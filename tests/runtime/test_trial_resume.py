@@ -110,9 +110,9 @@ class TrialResumeTests(unittest.TestCase):
 
     def test_concurrent_mission_edit_preserved_after_confirmed_receipt(self):
         original = MissionStore.update_mission
-        def concurrent(store, mission, principal, version, patch_value):
+        def concurrent(store, mission, principal, version, patch_value, **options):
             original(store, mission, principal, version, {'state': 'suspended', 'next_action': 'Concurrent owner decision'})
-            return original(store, mission, principal, version, patch_value)
+            return original(store, mission, principal, version, patch_value, **options)
         with patch.object(MissionStore, 'update_mission', concurrent):
             with self.assertRaisesRegex(Refusal, 'trial_bookkeeping_conflict_effect_completed'):
                 self.call()

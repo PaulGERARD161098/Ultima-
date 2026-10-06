@@ -55,10 +55,24 @@ def control_violation(action, repository, control_repository=CONTROL_REPOSITORY,
         return 'leo_control_target_unknown'
     if canonical == _canonical_repository(control_repository):
         return 'leo_control_write_attempt'
-    # Une cible relative qui existe localement est jugée sur son chemin réel.
-    if protected and Path(repository).exists() and _touches(Path(repository).resolve(), protected):
+    # Une cible relative est AUSSI jugée comme chemin local, qu'elle existe ou
+    # non (revue Codex du 06/10 : `control/nouveau` créerait sous le contrôle).
+    if protected and _touches(Path(repository).resolve(), protected):
         return 'leo_control_write_attempt'
     return None
+
+
+def assert_host_private(path, folders, code):
+    """Fichier et dossiers détenus par l'UID hôte, inaccessibles aux autres
+    (donc à Léo, sous une identité distincte) ; sinon reset ou rollback."""
+    uid = os.geteuid()
+    info = os.lstat(path)
+    if not stat.S_ISREG(info.st_mode) or info.st_uid != uid or info.st_mode & 0o077:
+        raise Refusal(code)
+    for folder in set(folders):
+        parent = os.stat(folder)
+        if parent.st_uid != uid or parent.st_mode & 0o022:
+            raise Refusal(code)
 
 
 class LeoControl:
@@ -138,6 +152,10 @@ toute nouvelle admission. L'hôte doit tuer/borner ses processus indépendamment
             else:
                 os.close(descriptor)
                 created = True
+                # Marqueur AVANT le schéma (revue Codex du 06/10) : une panne
+                # entre les deux laisse un contrôle invalide, refusé, jamais
+                # une base perdue que l'on reprendrait pour une installation.
+                os.close(os.open(self._installed, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o400))
         if not self.path.is_file():
             raise Refusal('control_unavailable')
         self._assert_private()
@@ -157,20 +175,10 @@ toute nouvelle admission. L'hôte doit tuer/borner ses processus indépendamment
             rows = db.execute('SELECT id,stopped,reason FROM control').fetchall()
             if len(rows) != 1 or rows[0][0] != 1 or rows[0][1] not in (0,1):
                 raise Refusal('control_unavailable')
-        if created:
-            os.close(os.open(self._installed, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o400))
 
     def _assert_private(self):
-        # Fichier et dossiers détenus par l'UID hôte, inaccessibles aux autres
-        # (donc à Léo, sous une identité distincte) : sinon reset possible.
-        uid = os.geteuid()
-        info = os.lstat(self.path)
-        if not stat.S_ISREG(info.st_mode) or info.st_uid != uid or info.st_mode & 0o077:
-            raise Refusal('control_permissions_unsafe')
-        for folder in {self.path.parent, self._tombstone.parent}:
-            parent = os.stat(folder)
-            if parent.st_uid != uid or parent.st_mode & 0o022:
-                raise Refusal('control_permissions_unsafe')
+        assert_host_private(self.path, (self.path.parent, self._tombstone.parent),
+                            'control_permissions_unsafe')
 
     def _buried(self):
         # Toute présence (même illisible ou altérée) vaut arrêt : échec fermé.
