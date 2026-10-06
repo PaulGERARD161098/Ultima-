@@ -22,6 +22,7 @@ import sqlite3
 import subprocess
 import sys
 import tarfile
+import tempfile
 import time
 
 from .runtime.broker import Broker, mandate_record
@@ -29,6 +30,7 @@ from .runtime.fixture_git import FixtureGit, SHA
 from .runtime.dispatch import DispatchBroker
 from .runtime.fixture_transport import FixtureInspector
 from .runtime.policy import Context, Mandate, Refusal
+from finubar.leo_control import ControlLatch
 
 BAD = 'def result():\n    return 1\n'
 GOOD = 'def result():\n    return 2\n'
@@ -131,8 +133,12 @@ def prepare(output, provenance):
     mandate = Mandate(MISSION, OWNER, 1, frozenset({ACTOR, 'inspector'}), frozenset({str(repo)}),
                       frozenset({'status', 'merge_fixture', 'read_source'}),
                       quadrants=frozenset({'code'}), expires_at=expires)
+    # Verrou d'épreuve hors du paquet : une archive transporte des données,
+    # jamais un contrôle. Il disparaît avec la préparation.
+    latch_dir = tempfile.TemporaryDirectory(prefix='.r21-control-')
+    latch = ControlLatch(Path(latch_dir.name) / 'control.sqlite', initialize=True)
     broker = Broker(root / 'canonical.sqlite', mandate, str(repo), fixture_adapter=adapter,
-                    context=context)
+                    context=context, control_latch=latch)
     broker.store.create_mission(MISSION, OWNER, 'fiction', mandate_record(mandate),
                                {'repository': str(repo), 'commit': integration}, [], [ACTOR], authority=True)
     broker.budget.create(MISSION, dict(max_units=4, max_calls=3, max_attempts=3,
@@ -147,7 +153,7 @@ def prepare(output, provenance):
                        'record_ids': [label], 'units': 1} for label in ('defect', 'patch')},
         records={'defect': {'quadrant': 'code', 'text': 'KNOWN_DEFECT oracle returncode=1 at ' + target},
                  'patch': {'quadrant': 'code', 'text': 'oracle returncode=0 at ' + source}},
-        grants={'inspector': ['code']}, transport=FixtureInspector(receipts))
+        grants={'inspector': ['code']}, transport=FixtureInspector(receipts), control_latch=latch)
     inspections = []
     for label, expected in (('defect', 'failed'), ('patch', 'passed')):
         receipt = dispatch.dispatch(ACTOR, {'action': 'delegate_fixture', 'task': label,
@@ -182,6 +188,7 @@ def prepare(output, provenance):
                            'Relocation changes repository context; host must revalidate before any approval.',
                            'Checksums detect accidental changes, not authentic origin. Verify CI artifact provenance.']}
     _json(root / 'manifest.json', manifest)
+    latch_dir.cleanup()
     # Le paquet est exporté entier, y compris la DB durable, sans credentials.
     archive = root.parent / (root.name + '.tar.gz')
     with archive.open('xb') as stream:

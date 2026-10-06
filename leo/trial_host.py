@@ -19,6 +19,7 @@ from urllib.request import Request, build_opener, ProxyHandler, HTTPRedirectHand
 from . import trial, trial_resume
 from .runtime.budget import BudgetError, BudgetLedger
 from .runtime.policy import Approval, Context, Evidence, Mandate, Policy, Refusal
+from finubar.leo_control import LeoControl, control_violation
 
 MAX_BODY = 256
 MAX_AUTH = 65536
@@ -79,7 +80,8 @@ class Binding:
 
 
 class TrialHost:
-    def __init__(self, identity, bindings, *, clock=time.time):
+    def __init__(self, identity, bindings, *, clock=time.time,
+                 protected_control_paths=(), control_latch=None):
         trial._isolated()
         if type(identity) is not GoTrueIdentity:
             raise TypeError('gotrue_identity_required')
@@ -88,9 +90,14 @@ class TrialHost:
         self.identity = identity
         self.bindings = MappingProxyType(dict(bindings))
         self.clock = clock
+        self.protected_control_paths = tuple(protected_control_paths)
+        self.control_latch = control_latch
 
     def call(self, authorization, proposal):
         subject = self.identity.authenticate(authorization)
+        return self._call_authenticated(subject, proposal)
+
+    def _call_authenticated(self, subject, proposal, *, expected_version=None):
         binding = self.bindings.get(subject)
         if binding is None:
             raise Refusal('access_denied')
@@ -98,8 +105,28 @@ class TrialHost:
                 or type(proposal['command']) is not str or proposal['command'] not in COMMANDS):
             raise Refusal('invalid_command')
         b = binding
+        if proposal['command'] == 'stop' and b.principal == b.mandate.owner:
+            # Paul (propriétaire canonique) arrête sans dépendre de Léo ni d'une
+            # inscription parmi les acteurs : arrêt de mission ET arrêt global.
+            canonical = trial_resume._canonical(b.root, b.mandate, b.context, initial=False)
+            if canonical['owner'] != b.principal or self.control_latch is None:
+                raise Refusal('access_denied')
+            self.control_latch.trip('owner_stop')
+            ledger = BudgetLedger(Path(b.root) / 'canonical.sqlite', clock=self.clock)
+            state = ledger.stop(b.mandate.mission, 'owner_stop', authority=True)
+            return {'mission_id': b.mandate.mission, 'stopped': True,
+                    'pending_operations': sorted(state['pending_operations']),
+                    'reserved_units': state['reserved_units'], 'environment': 'fixture',
+                    'publication': False, 'global_v1_accepted': False}
         Policy().authorize(b.mandate, b.principal, 'status', b.context.repository,
                            self.clock(), effects=frozenset({'read_scoped_memory'}))
+        if expected_version is not None:
+            canonical = trial_resume._canonical(b.root, b.mandate, b.context, initial=False)
+            if b.principal not in {canonical['owner'], *json.loads(canonical['readers']),
+                                   *json.loads(canonical['writers'])}:
+                raise Refusal('access_denied')
+            if canonical['version'] != expected_version:
+                raise Refusal('mission_version_conflict')
         if proposal['command'] == 'stop':
             # L'arrêt est une réduction de droits, encore possible après expiration.
             # Aucun constructeur writable avant cohérence et habilitation d'écriture.
@@ -115,6 +142,11 @@ class TrialHost:
                 # Le même verrou que l'admission empêche stop/exécution de se doubler.
                 # La lecture séparée voit l'état engagé avant ce verrou d'écriture.
                 authorized()
+                if expected_version is not None:
+                    version = db.execute('SELECT version FROM missions WHERE id=?',
+                                         (b.mandate.mission,)).fetchone()[0]
+                    if version != expected_version:
+                        raise Refusal('mission_version_conflict')
                 Policy().authorize(b.mandate, b.principal, 'status', b.context.repository,
                                    self.clock(), effects=frozenset({'read_scoped_memory'}))
                 db.execute('UPDATE budget_missions SET stopped=1, reason=COALESCE(reason,?) '
@@ -127,6 +159,8 @@ class TrialHost:
         if proposal['command'] == 'status':
             # Même contrôle de cohérence canonique que la reprise, en lecture seule.
             canonical = trial_resume._canonical(b.root, b.mandate, b.context, initial=False)
+            if expected_version is not None and canonical['version'] != expected_version:
+                raise Refusal('mission_version_conflict')
             if b.principal not in {canonical['owner'], *json.loads(canonical['readers']),
                                     *json.loads(canonical['writers'])}:
                 raise Refusal('access_denied')
@@ -140,9 +174,22 @@ class TrialHost:
             return {key: observed[key] for key in ('state', 'version', 'operations', 'global_v1_accepted')} | {
                 'budget': {'used_units': used, 'calls': count, 'stopped': bool(stopped)},
                 'environment': 'fixture', 'publication': False}
+        if proposal['command'] == 'execute':
+            canonical = trial_resume._canonical(b.root, b.mandate, b.context, initial=False)
+            if b.principal not in {canonical['owner'], *json.loads(canonical['writers'])}:
+                raise Refusal('access_denied')
+            if expected_version is not None and expected_version != trial_resume.PROPOSAL['expected_version']:
+                raise Refusal('mission_version_conflict')
+            if control_violation('merge_fixture', b.context.repository,
+                                 protected_paths=self.protected_control_paths):
+                LeoControl(BudgetLedger(Path(b.root) / 'canonical.sqlite', clock=self.clock),
+                           b.mandate.mission, protected_paths=self.protected_control_paths,
+                           latch=self.control_latch).before_effect(
+                               'merge_fixture', b.context.repository)
         return trial_resume.execute(b.root, mandate=b.mandate, context=b.context,
             evidence=b.evidence, approval=b.approval, principal=b.principal,
-            reconcile=proposal['command'] == 'reconcile', clock=self.clock)
+            reconcile=proposal['command'] == 'reconcile', clock=self.clock,
+            protected_control_paths=self.protected_control_paths, control_latch=self.control_latch)
 
 
 def server(host, port=0):
@@ -178,7 +225,8 @@ ni cookies, ni autorité importée. bind reste exclusivement sur loopback.
                 return self.reply(400, {'error': 'invalid_request'})
             try:
                 size = int(self.headers['Content-Length'])
-                if not 0 < size <= MAX_BODY:
+                limit = 16 * 1024 if getattr(host, 'wire_body_bytes', False) else MAX_BODY
+                if not 0 < size <= limit:
                     raise ValueError('body_size')
                 raw = self.rfile.read(size)
                 if len(raw) != size:
@@ -191,7 +239,7 @@ ni cookies, ni autorité importée. bind reste exclusivement sur loopback.
                             raise ValueError('duplicate_key')
                         result[key] = value
                     return result
-                proposal = json.loads(raw, object_pairs_hook=unique)
+                proposal = raw if getattr(host, 'wire_body_bytes', False) else json.loads(raw, object_pairs_hook=unique)
             except (ValueError, TimeoutError, OSError):
                 return self.reply(400, {'error': 'invalid_request'})
             try:

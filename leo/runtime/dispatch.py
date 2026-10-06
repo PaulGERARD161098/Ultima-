@@ -32,11 +32,16 @@ from .broker import mandate_record
 from .budget import BudgetLedger, _integer
 from .memoire import MissionStore, _identifier, _json, _now, _version
 from .policy import Policy, Refusal
+from finubar.leo_control import ControlLatch
 
 
 class DispatchBroker:
     def __init__(self, db_path, mandate, source, *, tasks, records, grants,
-                 transport, clock=time.time):
+                 transport, control_latch, clock=time.time):
+        # C12 : une délégation est un effet ; l'arrêt global FINUBAR la gouverne.
+        if type(control_latch) is not ControlLatch:
+            raise TypeError('global_control_latch_required')
+        self.latch = control_latch
         self.store = MissionStore(db_path)
         self.budget = BudgetLedger(db_path, clock=clock)
         if type(transport) is not FixtureInspector:
@@ -132,6 +137,9 @@ class DispatchBroker:
     def dispatch(self, principal, proposal):
         task, data, envelope, payload = self._request(proposal)
         mid, oid = self.mandate.mission, proposal['operation_id']
+        # Refus précoce, sans réservation orpheline ; l'admission ci-dessous fait foi.
+        if self.latch.stopped():
+            raise Refusal('leo_agent_stopped')
         mission = self.store.read_mission(mid, principal)
         self._gate(mission, principal, task, data)
         operation = self.store.begin_operation(mid, principal, oid, payload,
@@ -144,7 +152,7 @@ class DispatchBroker:
             return operation  # pending/unknown is NEVER a dispatch permission.
         # Reservation survived before this lock. Even process death in send
         # cannot erase the charge and enable another transmitter.
-        with self.store._transaction() as db:
+        with self.latch.admission(), self.store._transaction() as db:
             row = self.store._authorized(db, mid, principal, write=True)
             self._gate(self.store._mission(row), principal, task, data)
             self.store._assert_version(row, proposal['expected_version'])

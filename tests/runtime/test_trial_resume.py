@@ -14,6 +14,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
+from finubar.leo_control import ControlLatch
 from leo import trial
 from leo.trial_resume import verify, execute, _unpack, PROPOSAL, MAX_BYTES
 from leo.runtime.fixture_git import FixtureGit
@@ -26,6 +27,7 @@ class TrialResumeTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.base = Path(self.temp.name)
+        self.latch = ControlLatch(self.base / 'control.sqlite', initialize=True)
         self.root = self.base / 'trial'
         self.provenance = dict(source='a' * 40, target='b' * 40, integration='c' * 40)
         prepared = trial.prepare(self.root, self.provenance)
@@ -46,7 +48,7 @@ class TrialResumeTests(unittest.TestCase):
 
     def call(self, **kwargs):
         args = dict(mandate=self.mandate, context=self.context, evidence=self.evidence,
-                    approval=self.approval, principal=trial.ACTOR)
+                    approval=self.approval, principal=trial.ACTOR, control_latch=self.latch)
         args.update(kwargs)
         return execute(self.root, **args)
 

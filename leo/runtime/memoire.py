@@ -351,7 +351,7 @@ class MissionStore:
                        (reason, _now(), mission, operation_id))
             return self._operation(self._find_operation(db, mission, operation_id))
 
-    def apply_memory_operation(self, mission, principal, operation_id, expected_version, patch):
+    def apply_memory_operation(self, mission, principal, operation_id, expected_version, patch, *, admission=None):
         patch = _patch(patch)
         expected_version = _version(expected_version)
         payload = _json({"kind": "memory_patch", "expected_version": expected_version, "patch": patch})
@@ -361,6 +361,8 @@ class MissionStore:
             if existing is not None:
                 self._same_request(existing, payload)
                 return self._operation(existing)
+            if admission is not None:
+                admission(db, row)  # Capacité hôte, sous le verrou de mutation.
             updated = self._update(db, row, expected_version, patch)
             result = _json({"mission_version": updated["version"],
                             "state": updated["state"], "next_action": updated["next_action"]})
