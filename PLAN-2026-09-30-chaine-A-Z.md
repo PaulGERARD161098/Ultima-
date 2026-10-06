@@ -369,8 +369,12 @@ route.
   flux au cadrage RenoBoost §3.3 ter. ⛔ Mesuré : le pivot e-mail ne relie aucun
   artisan entre RenoPredict et la base partagée. ✅ Tranché par Paul le 06/10 :
   artisans reliés par **e-mail exact + lien manuel en secours** ; pilote **SOLA
-  (Matthieu)**. ⬜ **Gestes restants : compte RenoPredict de Matthieu, stickers
-  (A9), secret partagé RenoPredict ↔ RénoBoost, go de la migration.**
+  (Matthieu)**. ✅ Migration RenoPredict **appliquée le 06/10** ; ✅ **code écrit**
+  (RénoBoost `api/chaine-pose.mjs`, RenoPredict `api/pose-dossiers.mjs` + « Fin de
+  pose »), testé, inerte sans secret. ⬜ **Gestes restants : `CHAINE_POSE_SECRET`
+  sur les deux projets Vercel, compte RenoPredict de Matthieu (même e-mail),
+  stickers (A9, plus tard).** Le lien manuel en secours reste à coder (migration
+  sur la base partagée).
 
 **Ouvertes** — posées à la boucle qui les touche, pas avant. Les réponses de
 Paul s'inscrivent dans la liste ci-dessus, datées.
