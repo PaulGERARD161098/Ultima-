@@ -361,9 +361,10 @@ route.
   partagée (`dossier_ref`), sans nouvelle table ; granularité **client + devis
   signé** pour M7 à M9. Instruction et requête à blanc : cadrage RenoBoost
   §3.3 bis. Les migrations qui en découlent restent des gates.
-  Étape 2 (rdv → `client_id`) **préparée le 06/10, non appliquée** : RenoBoost
-  `supabase/migrations/20261006120000_rdv_client_id.sql`, éprouvée en local
-  (`tests/rdv-client-id.pg.sh`). ⬜ **Geste de Paul : le go d'application.**
+  Étape 2 (rdv → `client_id`) ✅ **appliquée le 06/10 sur le go de Paul** :
+  RenoBoost `supabase/migrations/20261006120000_rdv_client_id.sql`, éprouvée en
+  local (`tests/rdv-client-id.pg.sh`) ; mesuré 29/29 rdv reliés, 0 au client
+  d'un autre propriétaire. Suivante : étape 3, RenoPredict `dossier_ref` à la pose.
 
 **Ouvertes** — posées à la boucle qui les touche, pas avant. Les réponses de
 Paul s'inscrivent dans la liste ci-dessus, datées.
