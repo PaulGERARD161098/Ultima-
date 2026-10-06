@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v72 2026-10-06 sha256:adcae5cc7b7e -->
+<!-- lecons:empreinte v73 2026-10-06 sha256:832e555df96f -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -581,6 +581,20 @@ DIFFÈRENT réellement (sabotage d'un seul côté), et sa requête générée se
 avant d'être crue ; toute transformation se fait avant la mise en forme
 canonique, jamais après.
 
+
+**UN SERVEUR QUI N'A PAS PRIS SON PORT SERT UN AUTRE BUILD** *(2026-10-06)*.
+Le harnais de l'agenda d'Artidispo visait le port 5174 ; un aperçu resté vivant
+d'un essai précédent l'occupait. `vite preview` a pris 5175 **sans erreur**, et
+le harnais a mesuré l'ANCIEN serveur : cinq rouges sur un code vert. Il aurait
+aussi bien pu rendre vert sur un code cassé. Et le nettoyage a fait pire : un
+`pkill -f "vite preview"` a tué **mon propre shell**, deux fois — le motif était
+écrit dans la ligne de commande qui le lançait.
+*Ce que ça a coûté* : un diagnostic, et un rouge qui aurait pu être un vert.
+⛔ **La règle** : tout serveur lancé pour un harnais prend son port avec
+`--strictPort` — un port pris doit FAIRE ÉCHOUER le lancement, pas le déplacer.
+On arrête ces serveurs en ciblant les processus `node` qui les portent
+(`ps -eo pid=,args= | awk '$2 ~ /node$/ && /preview/'`), jamais par un motif
+`pkill -f` que sa propre commande contient.
 
 ## 2. Les garde-fous, et leur silence
 
@@ -1530,6 +1544,33 @@ tombe — pas la relecture d'après. Corollaire pratique : quand on ouvre un
 registre pour y chercher du travail, le premier geste est de vérifier que ce
 qu'il annonce est encore vrai ; sinon on travaille sur l'état d'avant, et on le
 fait en croyant être à jour.
+
+**CE QUI DÉPEND DU CONTEXTE SE LIT SUR L'OBJET, PAS SUR SON VOISIN**
+*(2026-10-06)*. Deux fois le même jour sur Artidispo. J'ai dit à Paul « ton offre
+Supabase est Pro, l'interrupteur est sans surcoût » en lisant la **première**
+organisation listée (« Paul GERARD », Pro) — le projet Artidispo vit dans
+l'organisation « Artidispo », en offre **gratuite**, où l'interrupteur n'existe
+pas. Et j'ai donné `openssl rand -hex 32` à un Paul sous **Windows/PowerShell** :
+« openssl n'est pas reconnu ».
+*Ce que ça a coûté* : une consigne fausse donnée à Paul, corrigée un message plus
+tard ; un aller-retour pour une commande.
+⛔ **La règle** : un attribut d'un projet (offre, région, propriétaire) se lit
+**depuis le projet** — `get_project` → `organization_id` → `get_organization` —,
+jamais depuis la première ligne d'une liste. Et une commande que Paul va taper
+se donne pour **son** poste : Windows, PowerShell.
+
+**UN SECRET SE GUIDE SANS PASSER PAR UN ÉCRAN QU'ON CAPTURE** *(2026-10-06)*.
+Le guide du `CRON_SECRET` disait « ne m'envoie pas la valeur ». Paul a envoyé une
+capture de l'éditeur SQL où il l'avait collée, en ayant « ôté un caractère pour
+ne pas te la donner » : 63 caractères hexadécimaux sur 64, soit **un millier
+d'essais** pour la retrouver. La valeur est dans la conversation.
+*Ce que ça a coûté* : un secret de production exposé ; la rotation reste à faire
+en fin de séance.
+⛔ **La règle** : quand un guide fait coller un secret dans un écran (éditeur SQL,
+formulaire), il dit **avant** : « ne capture pas cet écran ; si tu veux me
+montrer le résultat, cadre la seule zone Résultat ». Masquer un caractère n'est
+pas masquer — le dire avec le nombre d'essais qui reste. Et si la capture arrive
+quand même, **la rotation est la première action**, pas une note de fin.
 
 ## 4. Conduire une boucle
 
