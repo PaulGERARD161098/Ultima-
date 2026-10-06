@@ -431,6 +431,36 @@ await pageV.locator('.leo-voix-envoyer').click();
 await pageV.waitForSelector('.leo-bulle-leo:not(.leo-bulle-attente)', { timeout: 5000 });
 verifier('Bulle de Paul rendue', (await pageV.locator('.leo-bulle-paul').textContent())?.includes('Où en est le réseau ?'));
 verifier('Bulle de Léo rendue', (await pageV.locator('.leo-bulle-leo:not(.leo-bulle-attente)').textContent() || '').includes('Prochaine action'));
+// C1-bis. Lisibilité sous le thème de nuit (Paul, 06/10 : « je vois mal ») :
+// le champ et la bulle de Paul portaient un crème écrit en dur sous une encre
+// devenue claire. Pire cas de chaque fond (chaque arrêt d'un dégradé), texte
+// saisi ET indication du champ, mesurés sur les couleurs réellement rendues.
+await pageV.locator('.leo-voix-champ').fill('note l’idée TEST-ANNEAU');
+const couplesVoix = await pageV.evaluate(() => {
+  const fonds = (el) => {
+    for (let n = el; n && n.nodeType === 1; n = n.parentElement) {
+      const st = getComputedStyle(n);
+      const lues = (st.backgroundImage.match(/rgba?\([^)]+\)/g) || [])
+        .filter((c) => !/,\s*0(\.0+)?\)$/.test(c));
+      if (/^rgba?\(/.test(st.backgroundColor) && !/,\s*0\)$/.test(st.backgroundColor)) lues.push(st.backgroundColor);
+      if (lues.length) return lues;
+    }
+    return ['rgb(255, 255, 255)'];
+  };
+  const champ = document.querySelector('.leo-voix-champ');
+  const bulle = document.querySelector('.leo-bulle-paul');
+  return [
+    { nom: 'texte saisi', texte: getComputedStyle(champ).color, fonds: fonds(champ) },
+    { nom: 'indication du champ', texte: getComputedStyle(champ, '::placeholder').color, fonds: fonds(champ) },
+    { nom: 'bulle de Paul', texte: getComputedStyle(bulle).color, fonds: fonds(bulle) },
+  ];
+});
+for (const c of couplesVoix) {
+  const pire = Math.min(...c.fonds.map((f) => ratio(versHex(c.texte), versHex(f))));
+  verifier(`Contraste ${c.nom} (nuit, pire arrêt du fond) ≥ 4,5:1`, pire >= 4.5,
+    `${pire.toFixed(2)}:1 — ${c.texte} sur ${c.fonds.join(' / ')}`);
+}
+await pageV.locator('.leo-voix-champ').fill('');
 verifier('Bearer envoyé (jeton de session)', requetesLeo[0]?.autorisation === 'Bearer jeton-de-test');
 verifier('Corps : quadrant + historique user', requetesLeo[0]?.corps?.quadrant === 'riven' &&
   Array.isArray(requetesLeo[0]?.corps?.messages) && requetesLeo[0].corps.messages[0].role === 'user');
