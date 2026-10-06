@@ -43,6 +43,17 @@ Production (sinon 503 voulu). Journal et registre restent `requireUser` + RLS
 distincte, la garde ne sépare pas Léo de Paul). Restent ouverts : W4, W5, W10,
 W3/W6/W8/W11.
 
+**Revue Codex de #353 (06/10, après fusion) — 9 remarques, toutes vérifiées.**
+Huit fondées et corrigées sur la même branche, chacune avec une régression
+rouge sur `main` (560ad78) : arrêt de Paul par le canal six champs ; états
+« approuvée/fusionnée » gardés par `MissionStore` (l'hôte seul consigne un reçu
+vérifié) ; balayage limité aux lancements marqués ou observés (un enfant de
+l'hôte en autre session est épargné) ; lanceur à fil unique sans `preexec_fn` ;
+marqueur `.installed` posé avant le schéma ; cible relative jugée avant
+d'exister ; statut et réconciliation possibles journal plein ; journal de
+transport soumis aux mêmes permissions que le verrou. La neuvième (SQL C11 non
+éprouvé) suit le report de C11 : l'en-tête de la proposition le dit.
+
 ---
 
 # Audit indépendant de Léo LV1 et de FINUBAR, côté Claude
