@@ -367,8 +367,10 @@ route.
   d'un autre propriétaire. Étape 3 (la pose rattachée au dossier) **préparée le
   06/10, non appliquée** : RenoPredict `supabase/migrations/20261006150000_dossier_ref.sql`,
   flux au cadrage RenoBoost §3.3 ter. ⛔ Mesuré : le pivot e-mail ne relie aucun
-  artisan entre RenoPredict et la base partagée. ⬜ **Gestes de Paul : la
-  correspondance des artisans, le secret partagé, le go de migration.**
+  artisan entre RenoPredict et la base partagée. ✅ Tranché par Paul le 06/10 :
+  artisans reliés par **e-mail exact + lien manuel en secours** ; pilote **SOLA
+  (Matthieu)**. ⬜ **Gestes restants : compte RenoPredict de Matthieu, stickers
+  (A9), secret partagé RenoPredict ↔ RénoBoost, go de la migration.**
 
 **Ouvertes** — posées à la boucle qui les touche, pas avant. Les réponses de
 Paul s'inscrivent dans la liste ci-dessus, datées.
