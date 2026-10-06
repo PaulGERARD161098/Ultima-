@@ -20,6 +20,7 @@ from leo import trial
 from leo.trial_host import Binding, GoTrueIdentity, TrialHost, server
 from leo.trial_client import call
 from leo.runtime.policy import Approval, Context, Evidence, Mandate
+from finubar.leo_control import ControlLatch
 
 
 def session(email):
@@ -68,7 +69,11 @@ def main():
         identity = GoTrueIdentity('http://127.0.0.1:9999', 'unused-direct-auth-key', gateway=False)
         if '--mutant' in sys.argv:
             identity.authenticate = lambda authorization: subject
-        host = TrialHost(identity, {subject: binding})
+        # Verrou global FINUBAR obligatoire pour tout effet (audit C6) ; fictif,
+        # dans le dossier temporaire de l'hôte, jamais dans le paquet.
+        latch_path = Path(temporary) / 'agent-control.sqlite'
+        host = TrialHost(identity, {subject: binding},
+                         control_latch=ControlLatch(latch_path, initialize=True))
         if '--mutant-stop' in sys.argv:
             original_call = host.call
             def false_stop(authorization, proposal):
@@ -178,7 +183,7 @@ def main():
             worker.join(timeout=5)
 
         # Nouvel hôte sans accord : seule réconciliation, après arrêt canonique.
-        http = server(TrialHost(identity, {subject: binding}))
+        http = server(TrialHost(identity, {subject: binding}, control_latch=ControlLatch(latch_path)))
         worker = threading.Thread(target=http.serve_forever, daemon=True)
         worker.start()
         url = 'http://127.0.0.1:' + str(http.server_port)
