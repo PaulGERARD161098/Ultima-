@@ -12,6 +12,10 @@ from .policy import Policy, Refusal
 from finubar.leo_control import LeoControl
 
 
+# C11 : états qui se liraient comme un accord ; jamais posés par un acteur.
+OWNER_ONLY_STATES = frozenset({'approved_for_merge', 'merged'})
+
+
 def mandate_record(mandate):
     return {key: sorted(value) if isinstance(value, frozenset) else value
             for key, value in asdict(mandate).items()}
@@ -41,8 +45,11 @@ class Broker:
         if proposal['action'] != 'status' and principal not in {canonical['owner'], *canonical['writers']}:
             raise Refusal('writer_required')
         self.control.before_effect(proposal['action'], self.repository)
-        if proposal['action'] == 'status' or self.control.latch is None:
+        if proposal['action'] == 'status':
             return self._execute(principal, proposal)
+        # C6 : aucun effet sans arrêt global ; un hôte non câblé échoue fermé.
+        if self.control.latch is None:
+            raise Refusal('global_control_latch_required')
         with self.control.latch.admission():
             return self._execute(principal, proposal)
 
@@ -76,6 +83,10 @@ class Broker:
         mission = self.store.read_mission(self.mandate.mission, principal)
         if principal not in {mission['owner'], *mission['writers']}:
             raise Refusal('writer_required')
+        if (action == 'write_memory' and type(proposal['patch']) is dict
+                and proposal['patch'].get('state') in OWNER_ONLY_STATES
+                and principal != mission['owner']):
+            raise Refusal('owner_state_required')
         if mission['source'].get('repository') != self.repository:
             raise Refusal('canonical_source_mismatch')
         effects = frozenset({'write_scoped_memory'}) if action == 'write_memory' else \

@@ -11,7 +11,6 @@ from unittest.mock import patch
 
 from finubar.leo_control import LeoControl, ControlLatch, CONTROL_REPOSITORY, control_violation
 from leo.runtime.broker import Broker, mandate_record
-from leo.runtime.budget import BudgetError
 from leo.runtime.policy import Mandate, Refusal
 
 
@@ -19,10 +18,11 @@ class FinubarLeoControlTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.path = Path(self.tmp.name) / 'canonical.sqlite'
+        self.latch = ControlLatch(Path(self.tmp.name) / 'control.sqlite', initialize=True)
         self.mandate = Mandate('mission', 'paul', 1, frozenset({'leo', 'reader'}),
             frozenset({'fixture/repo', CONTROL_REPOSITORY}),
             frozenset({'status', 'write_memory'}), expires_at=1000)
-        self.broker = Broker(self.path, self.mandate, 'fixture/repo', clock=lambda: 10)
+        self.broker = Broker(self.path, self.mandate, 'fixture/repo', clock=lambda: 10, control_latch=self.latch)
         self.broker.store.create_mission('mission', 'paul', 'fiction', mandate_record(self.mandate),
             {'repository': 'fixture/repo'}, ['reader'], ['leo'], authority=True)
         self.broker.budget.create('mission', dict(max_units=20, max_calls=10,
@@ -40,10 +40,12 @@ class FinubarLeoControlTests(unittest.TestCase):
             with self.assertRaisesRegex(Refusal, '^leo_self_control_attempt$'):
                 self.broker.execute('leo', {'action': 'self_approve'})
             effect.assert_not_called()
-        fresh = Broker(self.path, self.mandate, 'fixture/repo', clock=lambda: 10)
+        fresh = Broker(self.path, self.mandate, 'fixture/repo', clock=lambda: 10, control_latch=self.latch)
         self.assertTrue(fresh.budget.status('mission')['stopped'])
         self.assertEqual(fresh.budget.status('mission')['reason'], 'leo_self_control_attempt')
-        with self.assertRaisesRegex(BudgetError, 'mission_stopped'):
+        # Verrou global désormais obligatoire (C6) : il refuse avant l'arrêt de
+        # mission, qui reste persisté (assertions ci-dessus).
+        with self.assertRaisesRegex(Refusal, '^leo_agent_stopped$'):
             fresh.execute('leo', self.request())
         self.assertEqual(fresh.store.read_mission('mission', 'leo')['version'], 1)
         self.assertEqual(fresh.budget.status('mission')['calls'], 0)
@@ -52,7 +54,7 @@ class FinubarLeoControlTests(unittest.TestCase):
         self.assertTrue(fresh.budget.status('mission')['stopped'])
 
     def test_protected_repository_overrides_even_a_broad_mandate(self):
-        dangerous = Broker(self.path, self.mandate, CONTROL_REPOSITORY.upper(), clock=lambda: 10)
+        dangerous = Broker(self.path, self.mandate, CONTROL_REPOSITORY.upper(), clock=lambda: 10, control_latch=self.latch)
         with self.assertRaisesRegex(Refusal, 'leo_control_write_attempt'):
             dangerous.execute('leo', self.request())
         self.assertTrue(self.broker.budget.status('mission')['stopped'])

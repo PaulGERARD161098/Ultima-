@@ -8,6 +8,7 @@ from pathlib import Path
 
 from leo.runtime.broker import mandate_record
 from leo.runtime.budget import BudgetError
+from finubar.leo_control import ControlLatch
 from leo.runtime.dispatch import DispatchBroker
 from leo.runtime.fixture_transport import FixtureInspector
 from leo.runtime.memoire import AccessDenied, Conflict
@@ -18,6 +19,7 @@ class DispatchTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.root = Path(self.tmp.name)
+        self.latch = ControlLatch(self.root / 'control.sqlite', initialize=True)
         self.db = self.root / 'register.sqlite'
         self.receipts = self.root / 'receipts'
         self.receipts.mkdir()
@@ -43,7 +45,7 @@ class DispatchTests(unittest.TestCase):
         return DispatchBroker(self.db, self.m, self.source, tasks=self.tasks,
                               records=self.records, grants=self.grants,
                               transport=FixtureInspector(self.receipts, lose_response=lose),
-                              clock=lambda: self.now, **kwargs)
+                              clock=lambda: self.now, **{'control_latch': self.latch, **kwargs})
 
     def tearDown(self):
         self.tmp.cleanup()
@@ -170,10 +172,24 @@ class DispatchTests(unittest.TestCase):
         self.assertEqual(self.count(), 1)
         self.assertEqual(self.b.budget.status('mission')['committed_units'], 10)
 
+    def test_global_stop_blocks_delegation_before_reservation(self):
+        # Audit C12 : l'arrêt global FINUBAR gouverne aussi les délégations.
+        self.latch.trip('owner_stop')
+        with self.assertRaisesRegex(Refusal, '^leo_agent_stopped$'):
+            self.b.dispatch('leo', self.req)
+        self.assertEqual(self.b.budget.status('mission')['calls'], 0)
+        self.assertEqual(self.count(), 0)
+
+    def test_delegation_requires_global_control(self):
+        with self.assertRaisesRegex(TypeError, 'global_control_latch_required'):
+            DispatchBroker(self.db, self.m, self.source, tasks=self.tasks, records=self.records,
+                           grants=self.grants, transport=FixtureInspector(self.receipts),
+                           control_latch=None)
+
     def test_arbitrary_transport_refused(self):
         with self.assertRaises(Refusal):
             DispatchBroker(self.db, self.m, self.source, tasks=self.tasks, records=self.records,
-                           grants=self.grants, transport=object())
+                           grants=self.grants, transport=object(), control_latch=self.latch)
 
 
 if __name__ == '__main__': unittest.main()

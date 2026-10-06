@@ -1,6 +1,7 @@
 import tempfile
 from pathlib import Path
 import unittest
+from finubar.leo_control import ControlLatch
 from leo.runtime.broker import Broker, mandate_record
 from leo.runtime.budget import BudgetLedger
 from leo.runtime.memoire import MissionStore
@@ -11,10 +12,11 @@ class BrokerTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.db = Path(self.tmp.name) / 'canonical.sqlite'
+        self.latch = ControlLatch(Path(self.tmp.name) / 'control.sqlite', initialize=True)
         self.m = Mandate('mission', 'paul-fixture', 1, frozenset({'leo', 'reader'}),
                          frozenset({'fixture/repo'}), frozenset({'write_memory', 'merge_fixture', 'status'}),
                          expires_at=1000)
-        self.b = Broker(self.db, self.m, 'fixture/repo', clock=lambda: 10)
+        self.b = Broker(self.db, self.m, 'fixture/repo', clock=lambda: 10, control_latch=self.latch)
         self.b.store.create_mission('mission', 'paul-fixture', 'project', mandate_record(self.m),
                                     {'repository': 'fixture/repo'}, ['reader'], ['leo'], authority=True)
         self.b.budget.create('mission', dict(max_units=100, max_calls=20, max_attempts=20,
@@ -22,11 +24,33 @@ class BrokerTests(unittest.TestCase):
 
     def tearDown(self): self.tmp.cleanup()
 
+    def test_effect_without_global_control_fails_closed(self):
+        # Audit C6 : sans verrou global, aucun effet ; le statut reste lisible.
+        bare = Broker(self.db, self.m, 'fixture/repo', clock=lambda: 10)
+        request = dict(action='write_memory', operation_id='no-latch', expected_version=1,
+                       patch={'state': 'in_progress'})
+        with self.assertRaisesRegex(Refusal, '^global_control_latch_required$'):
+            bare.execute('leo', request)
+        self.assertEqual(bare.execute('leo', {'action': 'status'})['mission']['version'], 1)
+        self.assertEqual(self.b.budget.status('mission')['calls'], 0)
+
+    def test_actor_cannot_write_approval_like_states(self):
+        # Audit C11 : « approuvée pour fusion » ou « fusionnée » n'est jamais
+        # écrit par l'acteur ; un état descriptif ordinaire reste admis.
+        for state in ('approved_for_merge', 'merged'):
+            with self.assertRaisesRegex(Refusal, '^owner_state_required$'):
+                self.b.execute('leo', dict(action='write_memory', operation_id='forge-' + state,
+                                           expected_version=1, patch={'state': state}))
+        self.assertEqual(self.b.budget.status('mission')['calls'], 0)
+        done = self.b.execute('leo', dict(action='write_memory', operation_id='ok', expected_version=1,
+                                          patch={'state': 'ready_for_review'}))
+        self.assertEqual(done['result']['state'], 'ready_for_review')
+
     def test_write_response_lost_then_new_broker(self):
         request = {'action': 'write_memory', 'operation_id': 'op-1', 'expected_version': 1,
                    'patch': {'state': 'in_progress', 'next_action': 'review'}}
         self.b.execute('leo', request)  # réponse délibérément jetée
-        reopened = Broker(self.db, self.m, 'fixture/repo', clock=lambda: 10)
+        reopened = Broker(self.db, self.m, 'fixture/repo', clock=lambda: 10, control_latch=self.latch)
         recovered = reopened.execute('leo', request)
         self.assertEqual(recovered['status'], 'completed')
         self.assertEqual(reopened.store.read_mission('mission', 'leo')['version'], 2)
@@ -38,7 +62,7 @@ class BrokerTests(unittest.TestCase):
         def crash(*args): raise RuntimeError('trusted failpoint')
         self.b.budget.settle = crash
         with self.assertRaises(RuntimeError): self.b.execute('leo', request)
-        reopened = Broker(self.db, self.m, 'fixture/repo', clock=lambda: 10)
+        reopened = Broker(self.db, self.m, 'fixture/repo', clock=lambda: 10, control_latch=self.latch)
         reopened.budget.stop('mission', 'stop-before-reconciliation', authority=True)
         self.assertEqual(reopened.reconcile_completed('leo', 'crash-stop')['status'], 'completed')
         self.assertEqual(reopened.budget.status('mission')['reserved_units'], 0)
@@ -60,7 +84,7 @@ class BrokerTests(unittest.TestCase):
         def crash(*args): raise RuntimeError('trusted failpoint')
         self.b.budget.settle = crash
         with self.assertRaises(RuntimeError): self.b.execute('leo', request)
-        reopened = Broker(self.db, self.m, 'fixture/repo', clock=lambda: 10)
+        reopened = Broker(self.db, self.m, 'fixture/repo', clock=lambda: 10, control_latch=self.latch)
         self.assertEqual(reopened.budget.status('mission')['reserved_units'], 1)
         with self.assertRaises(Refusal): reopened.reconcile_completed('reader', 'crash')
         with self.assertRaises(Refusal) as denied:

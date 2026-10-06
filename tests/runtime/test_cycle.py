@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 import unittest
 import test_fixture_git
+from finubar.leo_control import ControlLatch
 from leo.runtime.broker import Broker, mandate_record
 from leo.runtime.policy import Approval, Evidence, Mandate, Refusal
 
@@ -31,8 +32,9 @@ class CycleTests(unittest.TestCase):
                          for kind in ('tests', 'review'))
         approval = Approval(self.c, 'paul-fixture', 1, 900)
         db = self.root / 'canonical.sqlite'
+        latch = ControlLatch(self.root / 'control.sqlite', initialize=True)
         broker = Broker(db, mandate, str(self.repo), clock=lambda: 10,
-                        fixture_adapter=self.adapter, context=self.c, evidence=evidence, approval=approval)
+                        fixture_adapter=self.adapter, context=self.c, evidence=evidence, approval=approval, control_latch=latch)
         broker.store.create_mission('cycle', 'paul-fixture', 'fiction', mandate_record(mandate),
                                     {'repository': str(self.repo)}, [], ['leo'], authority=True)
         broker.budget.create('cycle', dict(max_units=4, max_calls=2, max_attempts=2,
@@ -48,7 +50,7 @@ class CycleTests(unittest.TestCase):
         from leo.runtime.fixture_git import FixtureGit
         reopened = Broker(db, mandate, str(self.repo), clock=lambda: 10,
                           fixture_adapter=FixtureGit(self.root, self.repo), context=self.c,
-                          evidence=evidence, approval=approval)
+                          evidence=evidence, approval=approval, control_latch=latch)
         receipt = reopened.reconcile_fixture('leo', 'merge-1')
         self.assertEqual(receipt['status'], 'completed')
         self.assertEqual(reopened.execute('leo', proposal), receipt)
