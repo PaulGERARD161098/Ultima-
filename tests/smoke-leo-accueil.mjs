@@ -431,6 +431,43 @@ await pageV.locator('.leo-voix-envoyer').click();
 await pageV.waitForSelector('.leo-bulle-leo:not(.leo-bulle-attente)', { timeout: 5000 });
 verifier('Bulle de Paul rendue', (await pageV.locator('.leo-bulle-paul').textContent())?.includes('Où en est le réseau ?'));
 verifier('Bulle de Léo rendue', (await pageV.locator('.leo-bulle-leo:not(.leo-bulle-attente)').textContent() || '').includes('Prochaine action'));
+// C1-bis. Lisibilité sous le thème de nuit (Paul, 06/10 : « je vois mal ») :
+// le champ et la bulle de Paul portaient un crème écrit en dur sous une encre
+// devenue claire. Pire cas de chaque fond (chaque arrêt d'un dégradé), texte
+// saisi ET indication du champ, mesurés sur les couleurs réellement rendues.
+// Mesure réutilisée par les cartes de confirmation plus bas (même défaut :
+// dégradé crème en dur sous l'encre de nuit, vu par Paul le 06/10).
+async function verifierLisibleNuit(selecteurs) {
+  const couples = await pageV.evaluate((liste) => {
+    const fonds = (el) => {
+      for (let n = el; n && n.nodeType === 1; n = n.parentElement) {
+        const st = getComputedStyle(n);
+        const lues = (st.backgroundImage.match(/rgba?\([^)]+\)/g) || [])
+          .filter((c) => !/,\s*0(\.0+)?\)$/.test(c));
+        if (/^rgba?\(/.test(st.backgroundColor) && !/,\s*0\)$/.test(st.backgroundColor)) lues.push(st.backgroundColor);
+        if (lues.length) return lues;
+      }
+      return ['rgb(255, 255, 255)'];
+    };
+    return liste.map(([nom, sel, pseudo]) => {
+      const el = document.querySelector(sel);
+      return el ? { nom, texte: getComputedStyle(el, pseudo || null).color, fonds: fonds(el) } : { nom, absent: sel };
+    });
+  }, selecteurs);
+  for (const c of couples) {
+    if (c.absent) { verifier(`Contraste ${c.nom} : élément présent`, false, c.absent); continue; }
+    const pire = Math.min(...c.fonds.map((f) => ratio(versHex(c.texte), versHex(f))));
+    verifier(`Contraste ${c.nom} (nuit, pire arrêt du fond) ≥ 4,5:1`, pire >= 4.5,
+      `${pire.toFixed(2)}:1 — ${c.texte} sur ${c.fonds.join(' / ')}`);
+  }
+}
+await pageV.locator('.leo-voix-champ').fill('note l’idée TEST-ANNEAU');
+await verifierLisibleNuit([
+  ['texte saisi', '.leo-voix-champ'],
+  ['indication du champ', '.leo-voix-champ', '::placeholder'],
+  ['bulle de Paul', '.leo-bulle-paul'],
+]);
+await pageV.locator('.leo-voix-champ').fill('');
 verifier('Bearer envoyé (jeton de session)', requetesLeo[0]?.autorisation === 'Bearer jeton-de-test');
 verifier('Corps : quadrant + historique user', requetesLeo[0]?.corps?.quadrant === 'riven' &&
   Array.isArray(requetesLeo[0]?.corps?.messages) && requetesLeo[0].corps.messages[0].role === 'user');
@@ -554,6 +591,11 @@ await pageV.locator('.leo-voix-champ').fill('Note que j’ai appelé Lambert ce 
 await pageV.locator('.leo-voix-envoyer').click();
 await pageV.waitForSelector('.leo-carte-action', { timeout: 5000 });
 verifier('Carte de confirmation affichée', await pageV.locator('.leo-carte-action').count() === 1);
+await verifierLisibleNuit([
+  ['texte de la carte', '.leo-carte-texte'],
+  ['cible de la carte', '.leo-carte-cible'],
+  ['« Annuler » de la carte', '.leo-carte-annuler'],
+]);
 verifier('La carte porte la reformulation SERVEUR (déterministe)',
   ((await pageV.locator('.leo-carte-texte').textContent()) || '').trim() === REFORMULATION);
 verifier('La carte nomme la cible RÉSOLUE avant tout POST [S-L2b-1]',
@@ -642,6 +684,7 @@ verifier('Ref ambiguë : aucune cible affichée [S-L2b-1]',
   await pageV.locator('.leo-carte-cible').count() === 0);
 verifier('Ref ambiguë : la carte le dit sobrement',
   ((await pageV.locator('.leo-carte-blocage').textContent()) || '').includes('ambiguë'));
+await verifierLisibleNuit([['blocage de la carte', '.leo-carte-blocage']]);
 await pageV.locator('.leo-carte-annuler').click();
 await pageV.waitForFunction(() => document.querySelector('.leo-carte-action') === null, { timeout: 5000 });
 
