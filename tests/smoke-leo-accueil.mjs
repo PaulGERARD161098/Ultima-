@@ -459,6 +459,21 @@ verifier('503 : note sincère « pas encore branchée »',
   ((await pageV.locator('.leo-section-voix .leo-vide').textContent()) || '').includes('pas encore branchée'));
 verifier('503 : le cartouche, lui, reste ouvert', await pageV.locator('#leo-cartouche').count() === 1);
 
+// C2-bis (W2, audit du 05/10). Route réservée au propriétaire, réglage absent :
+// la note nomme la VRAIE cause (la variable), pas « clé API en attente ».
+await pageV.unroute('**/api/leo');
+await pageV.route('**/api/leo', (route) => route.fulfill({
+  status: 503, contentType: 'application/json',
+  body: JSON.stringify({ ok: false, error: 'Accès réservé non réglé' })
+}));
+await ouvrirCartoucheVoix('voix-reserve');
+await pageV.locator('.leo-voix-champ').fill('Bonjour Léo.');
+await pageV.locator('.leo-voix-envoyer').click();
+await pageV.waitForFunction(() => document.querySelector('.leo-voix-formulaire') === null, { timeout: 5000 });
+const noteReserve = (await pageV.locator('.leo-section-voix .leo-vide').textContent()) || '';
+verifier('503 réservé : la note nomme ULTIMA_PROPRIETAIRES', noteReserve.includes('ULTIMA_PROPRIETAIRES'));
+verifier('503 réservé : jamais « clé API en attente »', !noteReserve.includes('clé API'));
+
 // C3. Panne réseau : bulle d'erreur générique, texte dicté restitué au champ.
 await pageV.unroute('**/api/leo');
 await pageV.route('**/api/leo', (route) => route.abort());

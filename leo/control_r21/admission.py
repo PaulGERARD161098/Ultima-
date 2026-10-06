@@ -15,7 +15,10 @@ from . import protocol
 from .. import trial_resume
 from ..trial_host import TrialHost
 from ..runtime.policy import Refusal
-from finubar.leo_control import ControlLatch
+from finubar.leo_control import ControlLatch, assert_host_private
+
+
+NO_NEW_EFFECT = frozenset({'stop', 'reconcile', 'status'})
 
 
 class RequestJournal:
@@ -35,6 +38,7 @@ class RequestJournal:
                 created = True
         if not self.path.is_file():
             raise Refusal('journal_unavailable')
+        self._assert_private()
         with self._transaction() as db:
             tables = db.execute("SELECT type,name FROM sqlite_master WHERE name NOT LIKE 'sqlite_%'").fetchall()
             application = db.execute('PRAGMA application_id').fetchone()[0]
@@ -51,10 +55,16 @@ class RequestJournal:
             elif tables != [('table', 'requests')] or application != 0x4C524A31 or version != 1:
                 raise Refusal('journal_unavailable')
 
+    def _assert_private(self):
+        # Revue Codex du 06/10 : un journal modifiable par un autre UID permet
+        # d'effacer une ligne et de faire réadmettre une opération déjà faite.
+        assert_host_private(self.path, (self.path.parent,), 'journal_permissions_unsafe')
+
     @contextmanager
     def _transaction(self):
         if self.path.is_symlink() or not self.path.is_file():
             raise Refusal('journal_unavailable')
+        self._assert_private()
         db = sqlite3.connect(self.path.as_uri()+'?mode=rw', uri=True, timeout=5, isolation_level=None)
         try:
             db.execute('PRAGMA trusted_schema=OFF')
@@ -120,20 +130,27 @@ class AdmissionHost:
             raise Refusal('invalid_command') from None
         # ACL vérifiée avant tout journal ou résultat conservé. Le statut lit
         # également mandat et contexte canonique ; pas d'identité dans le corps.
-        self.host._call_authenticated(subject, {'command': 'status'})
+        # Exception (revue Codex du 06/10) : l'arrêt du propriétaire, qui n'est
+        # pas un acteur ; sa branche vérifie elle-même le propriétaire canonique.
+        if not (proposal['command'] == 'stop' and binding.principal == binding.mandate.owner):
+            self.host._call_authenticated(subject, {'command': 'status'})
         if (proposal['mission_id'] != binding.mandate.mission or
                 proposal['operation_id'] != trial_resume.PROPOSAL['operation_id']):
             raise Refusal('request_context_mismatch')
         try:
             fresh, state, result = self.journal.reserve(subject, proposal)
         except Refusal as error:
-            if error.code != 'request_journal_full' or proposal['command'] != 'stop':
+            if error.code != 'request_journal_full' or proposal['command'] not in NO_NEW_EFFECT:
                 raise
-            # Un arrêt est une réduction de droits idempotente : jamais bloqué
-            # par la capacité du journal anti-rejeu. Exécuté, non journalisé.
+            # Arrêt, réconciliation et statut ne créent aucun effet : jamais
+            # bloqués par la capacité du journal anti-rejeu (revue Codex du
+            # 06/10 : sinon un « inconnu » devient irréconciliable). Exécutés,
+            # non journalisés ; seule `execute` reste plafonnée.
+            version = None if proposal['command'] == 'stop' else proposal['expected_version']
             return {'request_id': proposal['request_id'], 'state': 'completed',
                     'replayed': False,
-                    'result': self.host._call_authenticated(subject, {'command': 'stop'}),
+                    'result': self.host._call_authenticated(subject, {'command': proposal['command']},
+                                                            expected_version=version),
                     'environment': 'fixture', 'publication': False,
                     'global_v1_accepted': False, 'agent_stopped': self.host.control_latch.stopped()}
         if fresh:

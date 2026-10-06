@@ -63,6 +63,10 @@ STATES = frozenset({
     "proposed", "authorized", "in_progress", "ready_for_review",
     "approved_for_merge", "merged", "closed", "blocked", "suspended", "abandoned",
 })
+# Audit C11 (revue Codex du 06/10) : états qui se liraient comme un accord.
+# Posés seulement par le propriétaire, ou par l'hôte qui consigne un reçu
+# vérifié (host_bookkeeping=True, capacité hôte jamais transmise au modèle).
+OWNER_ONLY_STATES = frozenset({"approved_for_merge", "merged"})
 RETENTION = "Mission bookkeeping retained until separately authorized disposal; no automatic deletion."
 MAX_JSON_BYTES = 65536
 _APPLICATION_ID = 0x4C454F31  # LEO1
@@ -280,7 +284,10 @@ class MissionStore:
         with self._transaction(write=False) as db:
             return self._mission(self._authorized(db, id, principal))
 
-    def _update(self, db, row, expected_version, patch):
+    def _update(self, db, row, expected_version, patch, principal, host_bookkeeping=False):
+        if (patch.get("state") in OWNER_ONLY_STATES and principal != row["owner"]
+                and host_bookkeeping is not True):
+            raise AccessDenied("Owner-only mission state")
         self._assert_version(row, expected_version)
         cursor = db.execute("""UPDATE missions SET state=?, next_action=?,
             version=version+1, updated_at=? WHERE id=? AND version=?""",
@@ -291,11 +298,12 @@ class MissionStore:
             raise Conflict("Version changed; reconcile before writing")
         return db.execute("SELECT * FROM missions WHERE id=?", (row["id"],)).fetchone()
 
-    def update_mission(self, id, principal, expected_version, patch):
+    def update_mission(self, id, principal, expected_version, patch, *, host_bookkeeping=False):
         patch = _patch(patch)
         with self._transaction() as db:
             row = self._authorized(db, id, principal, write=True)
-            return self._mission(self._update(db, row, expected_version, patch))
+            return self._mission(self._update(db, row, expected_version, patch, principal,
+                                              host_bookkeeping))
 
     def begin_operation(self, mission, principal, operation_id, payload, expected_version=None):
         payload = _json(payload)
@@ -363,7 +371,7 @@ class MissionStore:
                 return self._operation(existing)
             if admission is not None:
                 admission(db, row)  # Capacité hôte, sous le verrou de mutation.
-            updated = self._update(db, row, expected_version, patch)
+            updated = self._update(db, row, expected_version, patch, principal)
             result = _json({"mission_version": updated["version"],
                             "state": updated["state"], "next_action": updated["next_action"]})
             self._insert_operation(db, mission, operation_id, payload, expected_version,

@@ -31,13 +31,13 @@
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-10-04",
-    "quoi": "04/10 nuit : #350 fusionnée (dérive ZOH SHIA visible) ; LEÇONS v71 propagées et fusionnées dans les 10 dépôts (identiques à la source, mesuré). ZOH SHIA suit RénoDevis 2d14e60 (série faite sur f1f9fb3, s'applique : 495 fichiers sans nom propre).",
-    "commit": "ab60a658ec3a1b06ea07d3c39be69d6051aa879d"
+    "le": "2026-10-06",
+    "quoi": "06/10 : audit indépendant Léo/FINUBAR (AUDIT-2026-10-05-leo-finubar.md) ; #353 fusionnée avec les correctifs C1–C13 (arrêt FINUBAR persistant, non réarmable, ouvert à Paul ; verrou global obligatoire ; superviseur subreaper) — CI 9/9 sur cda7f3c, runtime 158 tests. W1 (interrupteur LEO_ECRITURES_AUTO) et W2 (/api/leo réservée au propriétaire) poussés sur claude/relaxed-wright-y6zak5, PR non fusionnée. C11 SQL reportée jusqu'à E1 (Paul, 06/10).",
+    "commit": "560ad78b7906d5821810971419667cdafcb14ef2"
   },
-  "prochaine_action": "Geste de Paul, d'abord : poser ULTIMA_PROPRIETAIRES dans Vercel (Production + Preview) — sans elle, ZOH SHIA et Finubar restent « accès réservé » en production. Puis, côté code : le geste orange de Léo n'a pas d'outil pour le prouver (le « demander puis agir sur clic » reste à éprouver).",
+  "prochaine_action": "Fusionner la PR #354 (W1/W2 + revues Codex) sur accord exact de Paul (SHA, cible, CI), puis vérifier en production que l'anneau de Léo reste vert (LEO_ECRITURES_AUTO=actives posée par Paul le 06/10 ; W1 fermé par défaut si elle manque).",
   "bloque_par": [
-    "ULTIMA_PROPRIETAIRES absente en production (l'API Vercel refuse l'écriture des variables au connecteur) : ZOH SHIA et Finubar fermés jusqu'au geste de Paul.",
+    "PR #354 (W1/W2) : ULTIMA_PROPRIETAIRES CONFIRMÉE en production le 06/10 (Paul : FINUBAR affiche les projets après redéploiement). LEO_ECRITURES_AUTO=actives posée et redéployée le 06/10 (déclaration de Paul, non lisible d'ici) : effet à constater après fusion.",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
     "R1 (B4) en production, non prouvée : Réno a rendu 502 le 02/10 à 16:43 UTC. Le crédit étant rechargé, lui demander « Où en est Artidispo ? » et comparer à la base (PLAN §2).",
     "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",

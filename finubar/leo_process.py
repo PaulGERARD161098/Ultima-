@@ -9,9 +9,12 @@ Les épreuves de ce module concernent seulement des processus de fixture.
 Durcissements Linux (audit du 05/10, C9 C10 C13), qui NE remplacent PAS
 l'enceinte noyau :
 - l'hôte se déclare subreaper : tout descendant orphelin, même passé dans une
-  autre session, lui revient ; à chaque fin de lancement, les descendants hors
-  de la session de l'hôte sont tués et récoltés (aucun ne survit au lancement) ;
-- l'enfant direct reçoit SIGKILL si le fil lanceur meurt (PDEATHSIG) ;
+  autre session, lui revient ; à chaque fin de lancement, tout orphelin hors de
+  la session de l'hôte est tué et récolté, sauf les enfants hôte DÉCLARÉS au
+  lancement (lancer_enfant_hote) — le code hôte qui lance hors session DOIT
+  passer par elle ;
+- un lanceur à fil unique (pas de preexec_fn) pose PDEATHSIG — l'enfant direct
+  reçoit SIGKILL si le fil lanceur meurt — puis exécute la commande fixe ;
 - pas de fichier core, descripteurs bornés.
 Restent hors de portée de ce code : les petits-enfants quand l'hôte entier est
 tué, les processus noyau non interruptibles, une course de forks plus rapide
@@ -22,7 +25,6 @@ import ctypes
 import math
 import os
 from pathlib import Path
-import resource
 import signal
 import subprocess
 import sys
@@ -39,10 +41,28 @@ _LIBC = ctypes.CDLL(None, use_errno=True) if sys.platform.startswith('linux') el
 # Enfants directs vivants de TOUS les superviseurs de ce processus hôte.
 _DIRECT = set()
 _DIRECT_LOCK = threading.Lock()
+# Enfants légitimes de l'hôte lancés hors de sa session, DÉCLARÉS par
+# lancer_enfant_hote() : (pid, instant de démarrage), robuste au recyclage.
+# Tout autre orphelin hors session est réputé évadé d'un lancement supervisé
+# (revue Codex du 06/10 : une marque d'environnement s'efface, une déclaration
+# faite par l'hôte au lancement, non).
+_EPARGNES = set()
+# Lanceur à fil unique, exécuté AVANT la commande fixe (revue Codex du 06/10) :
+# pas de preexec_fn dans un hôte multi-fil (risque d'interblocage entre fork et
+# exec). PDEATHSIG et limites survivent à execv.
+_LANCEUR = (
+    "import ctypes,os,resource,signal,sys\n"
+    "if ctypes.CDLL(None,use_errno=True).prctl(1,signal.SIGKILL,0,0,0)!=0 "
+    "or os.getppid()!=int(sys.argv[1]): os._exit(126)\n"
+    "resource.setrlimit(resource.RLIMIT_CORE,(0,0))\n"
+    "s,h=resource.getrlimit(resource.RLIMIT_NOFILE)\n"
+    "b=256 if h==resource.RLIM_INFINITY else min(256,h)\n"
+    "resource.setrlimit(resource.RLIMIT_NOFILE,(min(s,b),b))\n"
+    "os.execv(sys.argv[2],sys.argv[2:])\n")
 
 
 def _process_table():
-    """{pid: (ppid, sid, état)} lu dans /proc ; un processus disparu est ignoré."""
+    """{pid: (ppid, sid, état, démarrage)} lu dans /proc ; un disparu est ignoré."""
     table = {}
     for entry in os.scandir('/proc'):
         if not entry.name.isdigit():
@@ -52,13 +72,23 @@ def _process_table():
                 fields = handle.read().rsplit(b')', 1)[1].split()
         except (OSError, IndexError):
             continue
-        table[int(entry.name)] = (int(fields[1]), int(fields[3]), fields[0])
+        table[int(entry.name)] = (int(fields[1]), int(fields[3]), fields[0], int(fields[19]))
     return table
+
+
+def lancer_enfant_hote(*args, **kwargs):
+    """Popen pour le code HÔTE qui lance un enfant hors de sa session : le
+    déclare, indivisiblement, comme épargné par le balayage du superviseur."""
+    with _DIRECT_LOCK:
+        process = subprocess.Popen(*args, **kwargs)
+        start = _process_table().get(process.pid, (None, None, None, None))[3]
+        _EPARGNES.add((process.pid, start))
+    return process
 
 
 def _descendants(table, roots):
     children = {}
-    for pid, (ppid, _sid, _state) in table.items():
+    for pid, (ppid, *_reste) in table.items():
         children.setdefault(ppid, []).append(pid)
     seen, stack = set(), list(roots)
     while stack:
@@ -71,25 +101,17 @@ def _descendants(table, roots):
 
 
 def _escaped(table):
-    # Orphans rattachés à l'hôte (subreaper) et sortis de sa session : ils ne
-    # peuvent venir que d'un lancement supervisé (start_new_session=True).
-    # Appelant : détient _DIRECT_LOCK, pour qu'aucun Popen ne soit entre son
-    # fork et son enregistrement (sinon un enfant direct voisin passerait
-    # pour un orphelin évadé).
+    # Orphelins rattachés à l'hôte (subreaper) et sortis de sa session, ni
+    # enfant direct d'un superviseur, ni enfant hôte déclaré. Appelant : détient
+    # _DIRECT_LOCK, pour qu'aucun Popen ne soit entre son fork et son
+    # enregistrement. Les déclarations de processus disparus sont purgées.
     me, session = os.getpid(), os.getsid(0)
-    roots = [pid for pid, (ppid, sid, _state) in table.items()
-             if ppid == me and sid != session and pid not in _DIRECT]
+    vivants = {(pid, entry[3]) for pid, entry in table.items()}
+    _EPARGNES.intersection_update(vivants)
+    roots = [pid for pid, (ppid, sid, _state, start) in table.items()
+             if ppid == me and sid != session and pid not in _DIRECT
+             and (pid, start) not in _EPARGNES]
     return roots, _descendants(table, roots)
-
-
-def _preexec(parent):
-    # Exécuté dans l'enfant entre fork et exec : appels système seulement.
-    if _LIBC.prctl(_PR_SET_PDEATHSIG, signal.SIGKILL, 0, 0, 0) != 0 or os.getppid() != parent:
-        os._exit(126)
-    resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
-    soft, hard = resource.getrlimit(resource.RLIMIT_NOFILE)
-    bound = 256 if hard == resource.RLIM_INFINITY else min(256, hard)
-    resource.setrlimit(resource.RLIMIT_NOFILE, (min(soft, bound), bound))
 
 
 @dataclass(frozen=True)
@@ -194,12 +216,16 @@ FINUBAR doit pouvoir inscrire l'arrêt pendant l'exécution.
             with self._latch.admission(timeout=min(self._max, 0.1)):
                 if time.monotonic() >= deadline:
                     raise Refusal('finubar_process_timeout')
+                # Échec de lancement fermé et visible, comme Popen l'était.
+                if not os.access(self._argv[0], os.X_OK):
+                    raise FileNotFoundError(self._argv[0])
                 with _DIRECT_LOCK:  # fork et enregistrement indivisibles pour _sweep
-                    process = subprocess.Popen(self._argv, cwd=self._cwd,
+                    process = subprocess.Popen(
+                        (sys.executable, '-I', '-S', '-c', _LANCEUR, str(os.getpid()), *self._argv),
+                        cwd=self._cwd,
                         env={'PATH': '/usr/bin:/bin', 'LANG': 'C.UTF-8'},
                         stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
-                        stderr=subprocess.DEVNULL, close_fds=True, start_new_session=True,
-                        preexec_fn=lambda parent=os.getpid(): _preexec(parent))
+                        stderr=subprocess.DEVNULL, close_fds=True, start_new_session=True)
                     _DIRECT.add(process.pid)
             while True:
                 # Lecture avant poll : la sortie du processus ne masque pas un arrêt.

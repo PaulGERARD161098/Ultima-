@@ -8,7 +8,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from finubar.leo_control import ControlLatch, LeoControl, control_violation
-from finubar.leo_process import ProcessSupervisor
+from finubar.leo_process import ProcessSupervisor, lancer_enfant_hote
 from leo import trial
 from leo.control_r21.admission import AdmissionHost, RequestJournal
 from leo.runtime.budget import BudgetLedger
@@ -241,6 +241,100 @@ class AuditRegressions(unittest.TestCase):
         except BaseException as error:
             errors.append(error)
 
+    # --- Revue Codex du 06/10 sur #353 -----------------------------------------
+    def _owner_trial(self):
+        root, ctx, mandate = self._trial()
+        latch = ControlLatch(self.d / 'ctl.sqlite', initialize=True)
+        ident = GoTrueIdentity('http://127.0.0.1:9999', 'fiction')
+        return root, mandate, latch, ident, ctx
+
+    def test_owner_stop_passes_through_the_six_field_channel(self):
+        root, mandate, latch, ident, ctx = self._owner_trial()
+        host = AdmissionHost(TrialHost(ident, {'paul': Binding(root, trial.OWNER, mandate, ctx, ())},
+                                       control_latch=latch),
+                             RequestJournal(self.d / 'req.sqlite', initialize=True))
+        def body(cmd):
+            return json.dumps(dict(protocol_version=1, request_id='r-' + cmd, mission_id=trial.MISSION,
+                operation_id='r21-merge-1', command=cmd, expected_version=2)).encode()
+        with patch.object(ident, 'authenticate', return_value='paul'):
+            with self.assertRaisesRegex(Refusal, 'scope_denied'):
+                host.call('Bearer x', body('status'))            # Paul n'est pas un acteur
+            self.assertTrue(host.call('Bearer x', body('stop'))['result']['stopped'])
+        self.assertTrue(latch.stopped())
+
+    def test_owner_only_states_are_enforced_by_the_store(self):
+        from leo.runtime.memoire import AccessDenied, MissionStore
+        store = MissionStore(self.d / 'm.sqlite')
+        store.create_mission('m', 'paul', 'p', {}, {}, [], ['leo'], authority=True)
+        with self.assertRaises(AccessDenied):
+            store.update_mission('m', 'leo', 1, {'state': 'merged'})
+        with self.assertRaises(AccessDenied):
+            store.apply_memory_operation('m', 'leo', 'op', 1, {'state': 'approved_for_merge'})
+        self.assertEqual(store.update_mission('m', 'leo', 1, {'state': 'merged'},
+                                              host_bookkeeping=True)['state'], 'merged')
+        self.assertEqual(store.update_mission('m', 'paul', 2, {'state': 'approved_for_merge'})['state'],
+                         'approved_for_merge')                   # cas positif : le propriétaire
+
+    def test_declared_new_session_host_child_is_spared(self):
+        # Cas positif : un enfant hôte hors session, DÉCLARÉ au lancement.
+        latch = ControlLatch(self.d / 'ctl.sqlite', initialize=True)
+        bystander = lancer_enfant_hote([sys.executable, '-c', 'import time; time.sleep(30)'],
+                                       start_new_session=True)
+        try:
+            self._supervise('pass', latch).run()
+            self.assertTrue(self._alive(bystander.pid))
+        finally:
+            bystander.kill(); bystander.wait()
+
+    def test_orphan_that_erases_its_environment_is_still_swept(self):
+        # Revue Codex du 06/10 sur #354 : fork + execve SANS environnement + setsid,
+        # parent sorti aussitôt — aucune marque ni observation ne le rattache.
+        latch = ControlLatch(self.d / 'ctl.sqlite', initialize=True)
+        mark = self.d / 'evade'
+        code = ("import os,sys\n"
+                "if os.fork()==0:\n os.setsid()\n"
+                " os.execve(sys.executable,[sys.executable,'-c',"
+                "\"import os,time; open(%r,'w').write(str(os.getpid())); time.sleep(30)\"],{})\n"
+                "os._exit(0)\n") % str(mark)
+        self._supervise(code, latch).run()
+        self._assert_gone(int(self._await(mark)))
+
+    def test_launch_uses_no_preexec_hook(self):
+        latch = ControlLatch(self.d / 'ctl.sqlite', initialize=True)
+        real, calls = subprocess.Popen, []
+        def spy(*args, **kwargs):
+            calls.append(kwargs)
+            return real(*args, **kwargs)
+        with patch('finubar.leo_process.subprocess.Popen', spy):
+            self._supervise('pass', latch).run()
+        self.assertEqual(len(calls), 1)
+        self.assertIsNone(calls[0].get('preexec_fn'))
+
+    def test_installation_marker_precedes_the_schema(self):
+        path = self.d / 'ctl.sqlite'
+        with patch.object(ControlLatch, '_transaction', side_effect=RuntimeError('panne')):
+            with self.assertRaises(RuntimeError):
+                ControlLatch(path, initialize=True)
+        self.assertTrue((self.d / 'ctl.sqlite.installed').exists())
+        with self.assertRaisesRegex(Refusal, 'control_unavailable'):
+            ControlLatch(path, initialize=True)                  # jamais une nouvelle installation
+
+    def test_relative_target_under_control_trips_before_it_exists(self):
+        prot = self.d / 'installed' / 'control'; prot.mkdir(parents=True)
+        old = os.getcwd(); os.chdir(self.d / 'installed'); self.addCleanup(os.chdir, old)
+        self.assertEqual(control_violation('prepare_patch', 'control/nouveau', protected_paths=(prot,)),
+                         'leo_control_write_attempt')
+        self.assertIsNone(control_violation('prepare_patch', 'autre/depot', protected_paths=(prot,)))
+
+    def test_request_journal_refuses_shared_permissions(self):
+        path = self.d / 'req.sqlite'
+        RequestJournal(path, initialize=True)
+        path.chmod(0o666)
+        with self.assertRaisesRegex(Refusal, 'journal_permissions_unsafe'):
+            RequestJournal(path)
+        path.chmod(0o600)
+        RequestJournal(path)                                     # cas positif
+
     def _trial(self):
         root = self.d / 'trial'
         prepared = trial.prepare(root, dict(source='a'*40, target='b'*40, integration='c'*40))
@@ -279,7 +373,14 @@ class AuditRegressions(unittest.TestCase):
             for i in range(256):
                 host.call('Bearer x', body('s%d' % i))
             with self.assertRaisesRegex(Refusal, 'request_journal_full'):
-                host.call('Bearer x', body('one-more'))           # le plafond reste effectif
+                host.call('Bearer x', body('one-more', 'execute'))  # le plafond reste effectif
+            # Revue Codex du 06/10 : statut et réconciliation, sans nouvel effet,
+            # restent possibles journal plein (sinon un « inconnu » est bloqué).
+            self.assertFalse(host.call('Bearer x', body('status-plein'))['replayed'])
+            # Aucune opération à réconcilier dans ce montage : le refus est MÉTIER,
+            # preuve que la demande a franchi le journal plein.
+            with self.assertRaisesRegex(Refusal, '^operation_unavailable$'):
+                host.call('Bearer x', body('reconcile-plein', 'reconcile'))
             stopped = host.call('Bearer x', body('stop-now', 'stop'))
             self.assertTrue(stopped['result']['stopped'])
             self.assertFalse(stopped['replayed'])                  # exécuté, pas rejoué

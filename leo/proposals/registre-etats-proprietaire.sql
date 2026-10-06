@@ -8,7 +8,11 @@
 -- Limite a dire : dans le site, Leo agit avec le jeton de Paul (meme
 -- auth.uid) ; cette garde separe le proprietaire des autres writers, elle ne
 -- separe pas Leo de Paul tant que les identites ne sont pas distinctes (E1).
--- Miroir runtime deja eprouve : leo/runtime/broker.py (owner_state_required).
+-- Miroir runtime deja eprouve : leo/runtime/memoire.py (OWNER_ONLY_STATES).
+-- NON EPROUVE PAR AUCUN BANC (revue Codex du 06/10) : ni registre-postgres ni
+-- registre-auth ne l'appliquent. Reportee jusqu'a E1 (Paul, 06/10). A la
+-- reprise : l'ajouter a la sequence du banc Auth et eprouver refus du writer
+-- (42501 owner_state_required) ET succes du proprietaire, avant tout accord.
 begin;
 -- Refuser une installation absente ; CREATE OR REPLACE conserve les grants.
 do $$ begin

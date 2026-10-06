@@ -32,9 +32,36 @@ existant a vu une assertion resserrée (`leo_agent_stopped`, plus strict).
 
 **Restent ouverts, hors code :** E1 (identité GitHub distincte), E2 (hôte
 installé, cgroup, UID propre), A1 (canal d'accord humain), ancre extérieure
-(C4 dossier entier). **Restent ouverts, web, non traités ici :** W1 (interrupteur
-serveur de l'anneau vert), W2 (`requireProprietaire` sur la route facturée),
-W4, W5, W10, W3/W6/W8/W11.
+(C4 dossier entier). **Web, suite du 06/10 (branche `claude/relaxed-wright-y6zak5`) :**
+W1 ✅ commit c3cd2cd — interrupteur `LEO_ECRITURES_AUTO` (absente ou `actives` =
+comportement inchangé ; toute autre valeur coupe l'anneau vert, échec fermé ;
+bascule = variable Vercel + redéploiement — un drapeau en base sans redéploiement
+demanderait une migration, porte rouge). W2 ✅ même commit — `/api/leo` en
+`requireProprietaire` ; ⏭ fusion conditionnée à `ULTIMA_PROPRIETAIRES` posée en
+Production (sinon 503 voulu). Journal et registre restent `requireUser` + RLS
+(aucun coût). **C11 SQL ⏭ reportée jusqu'à E1** (Paul, 06/10 : sans identité
+distincte, la garde ne sépare pas Léo de Paul). Restent ouverts : W4, W5, W10,
+W3/W6/W8/W11.
+
+**Revue Codex de #353 (06/10, après fusion) — 9 remarques, toutes vérifiées.**
+Huit fondées et corrigées sur la même branche, chacune avec une régression
+rouge sur `main` (560ad78) : arrêt de Paul par le canal six champs ; états
+« approuvée/fusionnée » gardés par `MissionStore` (l'hôte seul consigne un reçu
+vérifié) ; balayage limité aux lancements marqués ou observés (un enfant de
+l'hôte en autre session est épargné) ; lanceur à fil unique sans `preexec_fn` ;
+marqueur `.installed` posé avant le schéma ; cible relative jugée avant
+d'exister ; statut et réconciliation possibles journal plein ; journal de
+transport soumis aux mêmes permissions que le verrou. La neuvième (SQL C11 non
+éprouvé) suit le report de C11 : l'en-tête de la proposition le dit.
+
+**Revue Codex de #354 (06/10) — 3 remarques, toutes fondées et corrigées.**
+W1 désormais FERMÉ PAR DÉFAUT (critère de cet audit) : seule la valeur exacte
+`LEO_ECRITURES_AUTO=actives` laisse l'anneau vert agir — geste de Paul requis
+pour le garder actif après fusion. Balayage du superviseur : retour à la règle
+forte (tout orphelin hors session est tué) avec déclaration explicite des
+enfants légitimes de l'hôte (`lancer_enfant_hote`) — la marque d'environnement
+s'effaçait (évasion reproduite, régression rouge sur d51c06e) et l'ensemble des
+identités observées croissait sans borne ; les deux sont supprimés.
 
 ---
 

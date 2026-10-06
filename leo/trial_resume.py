@@ -222,7 +222,10 @@ def execute(root, *, mandate, context, evidence, approval, principal, reconcile=
             'state': 'merged',
             'next_action': 'Resume this verified fixture in a fresh Work session; global V1 acceptance remains open.'}
         try:
-            broker.store.update_mission(trial.MISSION, principal, PROPOSAL['expected_version'], summary)
+            # Consignation HÔTE d'un reçu vérifié ci-dessus, pas un état choisi
+            # par le modèle : seule voie non propriétaire vers « merged ».
+            broker.store.update_mission(trial.MISSION, principal, PROPOSAL['expected_version'], summary,
+                                        host_bookkeeping=True)
         except Conflict:
             current = broker.store.read_mission(trial.MISSION, principal)
             if any(current[key] != value for key, value in summary.items()):

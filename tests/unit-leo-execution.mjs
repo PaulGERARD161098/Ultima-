@@ -70,7 +70,8 @@ const IDEE = {
   args: { titre: TITRE, resume: RESUME },
   quadrant: 'adramelech'
 };
-const opts = { maintenant: MAINTENANT };
+// L'interrupteur W1 est fermé par défaut : ce banc éprouve le chemin OUVERT.
+const opts = { maintenant: MAINTENANT, env: { LEO_ECRITURES_AUTO: 'actives' } };
 const tentees = (n, ms, owner = PAUL) => Array.from({ length: n }, (_, i) => ({
   trace_id: `00000000-0000-4000-8000-${String(i).padStart(12, '0')}`,
   owner_id: owner, outil: 'proposer_idee', quadrant: 'adramelech',

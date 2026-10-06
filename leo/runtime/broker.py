@@ -7,13 +7,9 @@ directement ce constructeur ou les registres SQLite à un modèle ou une API web
 import time
 from dataclasses import asdict
 from .budget import BudgetLedger
-from .memoire import MissionStore, _patch, _version
+from .memoire import OWNER_ONLY_STATES, MissionStore, _patch, _version
 from .policy import Policy, Refusal
 from finubar.leo_control import LeoControl
-
-
-# C11 : états qui se liraient comme un accord ; jamais posés par un acteur.
-OWNER_ONLY_STATES = frozenset({'approved_for_merge', 'merged'})
 
 
 def mandate_record(mandate):
