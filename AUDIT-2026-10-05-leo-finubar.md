@@ -25,7 +25,9 @@
 | C13 aucune limite de ressources | ✅ core=0, descripteurs ≤ 256 ; ⏭ mémoire/CPU/réseau → enceinte | d9aa449 | 1 régression |
 
 Mesures locales en isolation : runtime 158/158 (137 d'origine + 21 nouveaux) ;
-unitaires JS 64/64 ; tests superviseur et régressions 36/36 sous charge parallèle. Un seul test
+unitaires JS 64/64 ; suite runtime complète 20/20 sous charge parallèle.
+C9-bis (défaut antérieur révélé ici) : un lancement voisin faisait tuer un
+enfant sain par lecture du verrou sans attente — corrigé. Un seul test
 existant a vu une assertion resserrée (`leo_agent_stopped`, plus strict).
 
 **Restent ouverts, hors code :** E1 (identité GitHub distincte), E2 (hôte
