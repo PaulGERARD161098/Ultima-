@@ -8,8 +8,9 @@
 //  - requireProprietaire fail-closed (W2, audit du 05/10) : route FACTURÉE,
 //    réservée aux comptes de ULTIMA_PROPRIETAIRES ; session absente → 401,
 //    réglage absent → 503, autre compte → 403, AVANT tout appel Anthropic.
-//  - W1 : interrupteur LEO_ECRITURES_AUTO coupé → toute proposition est servie
-//    en orange (carte de confirmation), jamais en exécution directe.
+//  - W1 : interrupteur LEO_ECRITURES_AUTO, fermé par défaut — sauf la valeur
+//    exacte 'actives', toute proposition est servie en orange (carte de
+//    confirmation), jamais en exécution directe.
 //  - Clé API Claude en env Vercel UNIQUEMENT (ANTHROPIC_API_KEY) ; absente →
 //    503 explicite « voix non branchée » (la gate coût reste à Paul).
 //  - Minimisation : l'historique du cartouche et, si le front l'envoie, l'ÉTAT

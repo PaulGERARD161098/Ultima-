@@ -9,10 +9,11 @@ const PAUL = '11111111-2222-4333-8444-555555555555';
 const IDEE = { etape: 'ouvrir', outil: 'proposer_idee', quadrant: 'adramelech',
   args: { titre: 'Racheter le local', resume: 'Un atelier partagé' } };
 
-// ---------- W1, l'interrupteur : absent ou 'actives' = actif ; tout le reste coupe ----------
-assert.equal(ecrituresAutoCoupees({}), false);
-assert.equal(ecrituresAutoCoupees({ LEO_ECRITURES_AUTO: '' }), false);
-assert.equal(ecrituresAutoCoupees({ LEO_ECRITURES_AUTO: 'actives' }), false);
+// ---------- W1, l'interrupteur : fermé par défaut, seule la valeur exacte 'actives' ouvre ----------
+assert.equal(ecrituresAutoCoupees({}), true);                                  // réglage absent : coupé
+assert.equal(ecrituresAutoCoupees({ LEO_ECRITURES_AUTO: '' }), true);
+assert.equal(ecrituresAutoCoupees({ LEO_ECRITURES_AUTO: 'Actives' }), true);
+assert.equal(ecrituresAutoCoupees({ LEO_ECRITURES_AUTO: 'actives' }), false);  // seule ouverture
 assert.equal(ecrituresAutoCoupees({ LEO_ECRITURES_AUTO: 'coupees' }), true);
 assert.equal(ecrituresAutoCoupees({ LEO_ECRITURES_AUTO: 'activse' }), true);   // faute de frappe : coupé
 
@@ -30,7 +31,11 @@ assert.equal(refuse.status, 403);
 assert.deepEqual(coupe.appels, []);
 // Cas positif (non-vacuité) : actif, le même corps pose bien sa 'tentee'.
 const actif = clientEspion();
-const admis = await ouvrirEcriture(actif, PAUL, IDEE, { env: {} });
+const admis = await ouvrirEcriture(actif, PAUL, IDEE, { env: { LEO_ECRITURES_AUTO: 'actives' } });
+// Réglage absent : coupé aussi, sans lecture ni insertion.
+const absent = clientEspion();
+assert.equal((await ouvrirEcriture(absent, PAUL, IDEE, { env: {} })).status, 403);
+assert.deepEqual(absent.appels, []);
 assert.equal(admis.status, 200);
 assert.ok(actif.appels.includes('insert'));
 

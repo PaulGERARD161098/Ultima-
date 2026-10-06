@@ -54,6 +54,15 @@ d'exister ; statut et réconciliation possibles journal plein ; journal de
 transport soumis aux mêmes permissions que le verrou. La neuvième (SQL C11 non
 éprouvé) suit le report de C11 : l'en-tête de la proposition le dit.
 
+**Revue Codex de #354 (06/10) — 3 remarques, toutes fondées et corrigées.**
+W1 désormais FERMÉ PAR DÉFAUT (critère de cet audit) : seule la valeur exacte
+`LEO_ECRITURES_AUTO=actives` laisse l'anneau vert agir — geste de Paul requis
+pour le garder actif après fusion. Balayage du superviseur : retour à la règle
+forte (tout orphelin hors session est tué) avec déclaration explicite des
+enfants légitimes de l'hôte (`lancer_enfant_hote`) — la marque d'environnement
+s'effaçait (évasion reproduite, régression rouge sur d51c06e) et l'ensemble des
+identités observées croissait sans borne ; les deux sont supprimés.
+
 ---
 
 # Audit indépendant de Léo LV1 et de FINUBAR, côté Claude

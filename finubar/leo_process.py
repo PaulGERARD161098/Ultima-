@@ -9,9 +9,10 @@ Les épreuves de ce module concernent seulement des processus de fixture.
 Durcissements Linux (audit du 05/10, C9 C10 C13), qui NE remplacent PAS
 l'enceinte noyau :
 - l'hôte se déclare subreaper : tout descendant orphelin, même passé dans une
-  autre session, lui revient ; à chaque fin de lancement, les orphelins issus
-  d'un lancement supervisé (marque d'environnement, ou vus dans la lignée) sont
-  tués et récoltés ; les autres enfants de l'hôte sont épargnés ;
+  autre session, lui revient ; à chaque fin de lancement, tout orphelin hors de
+  la session de l'hôte est tué et récolté, sauf les enfants hôte DÉCLARÉS au
+  lancement (lancer_enfant_hote) — le code hôte qui lance hors session DOIT
+  passer par elle ;
 - un lanceur à fil unique (pas de preexec_fn) pose PDEATHSIG — l'enfant direct
   reçoit SIGKILL si le fil lanceur meurt — puis exécute la commande fixe ;
 - pas de fichier core, descripteurs bornés.
@@ -24,7 +25,6 @@ import ctypes
 import math
 import os
 from pathlib import Path
-import secrets
 import signal
 import subprocess
 import sys
@@ -41,11 +41,12 @@ _LIBC = ctypes.CDLL(None, use_errno=True) if sys.platform.startswith('linux') el
 # Enfants directs vivants de TOUS les superviseurs de ce processus hôte.
 _DIRECT = set()
 _DIRECT_LOCK = threading.Lock()
-# Marque des lancements supervisés de cet hôte (revue Codex du 06/10) : seul ce
-# qui la porte, ou a été vu dans une lignée supervisée, peut être balayé ; un
-# enfant de l'hôte lancé ailleurs, même dans une autre session, est épargné.
-_MARQUE = b'LV1_SUPERVISION=' + secrets.token_hex(16).encode('ascii')
-_VUS = set()            # (pid, instant de démarrage) observés dans une lignée supervisée
+# Enfants légitimes de l'hôte lancés hors de sa session, DÉCLARÉS par
+# lancer_enfant_hote() : (pid, instant de démarrage), robuste au recyclage.
+# Tout autre orphelin hors session est réputé évadé d'un lancement supervisé
+# (revue Codex du 06/10 : une marque d'environnement s'efface, une déclaration
+# faite par l'hôte au lancement, non).
+_EPARGNES = set()
 # Lanceur à fil unique, exécuté AVANT la commande fixe (revue Codex du 06/10) :
 # pas de preexec_fn dans un hôte multi-fil (risque d'interblocage entre fork et
 # exec). PDEATHSIG et limites survivent à execv.
@@ -75,12 +76,14 @@ def _process_table():
     return table
 
 
-def _marque(pid):
-    try:
-        with open(f'/proc/{pid}/environ', 'rb') as handle:
-            return _MARQUE in handle.read().split(b'\0')
-    except OSError:
-        return False
+def lancer_enfant_hote(*args, **kwargs):
+    """Popen pour le code HÔTE qui lance un enfant hors de sa session : le
+    déclare, indivisiblement, comme épargné par le balayage du superviseur."""
+    with _DIRECT_LOCK:
+        process = subprocess.Popen(*args, **kwargs)
+        start = _process_table().get(process.pid, (None, None, None, None))[3]
+        _EPARGNES.add((process.pid, start))
+    return process
 
 
 def _descendants(table, roots):
@@ -98,24 +101,17 @@ def _descendants(table, roots):
 
 
 def _escaped(table):
-    # Orphelins rattachés à l'hôte (subreaper), hors de sa session, et issus
-    # d'un lancement supervisé : marque présente, ou vus dans une lignée.
-    # Appelant : détient _DIRECT_LOCK, pour qu'aucun Popen ne soit entre son
-    # fork et son enregistrement. Limite : un descendant hostile qui efface son
-    # environnement ET s'évade entre deux sondages échappe — enceinte noyau.
+    # Orphelins rattachés à l'hôte (subreaper) et sortis de sa session, ni
+    # enfant direct d'un superviseur, ni enfant hôte déclaré. Appelant : détient
+    # _DIRECT_LOCK, pour qu'aucun Popen ne soit entre son fork et son
+    # enregistrement. Les déclarations de processus disparus sont purgées.
     me, session = os.getpid(), os.getsid(0)
+    vivants = {(pid, entry[3]) for pid, entry in table.items()}
+    _EPARGNES.intersection_update(vivants)
     roots = [pid for pid, (ppid, sid, _state, start) in table.items()
              if ppid == me and sid != session and pid not in _DIRECT
-             and ((pid, start) in _VUS or _marque(pid))]
+             and (pid, start) not in _EPARGNES]
     return roots, _descendants(table, roots)
-
-
-def _observe(pid):
-    # Mémorise la lignée vivante d'un enfant supervisé (identité pid+démarrage,
-    # robuste au recyclage de PID) pour reconnaître ses orphelins plus tard.
-    table = _process_table()
-    with _DIRECT_LOCK:
-        _VUS.update((p, table[p][3]) for p in _descendants(table, [pid]) if p in table)
 
 
 @dataclass(frozen=True)
@@ -227,8 +223,7 @@ FINUBAR doit pouvoir inscrire l'arrêt pendant l'exécution.
                     process = subprocess.Popen(
                         (sys.executable, '-I', '-S', '-c', _LANCEUR, str(os.getpid()), *self._argv),
                         cwd=self._cwd,
-                        env={'PATH': '/usr/bin:/bin', 'LANG': 'C.UTF-8',
-                             _MARQUE.split(b'=')[0].decode(): _MARQUE.split(b'=')[1].decode()},
+                        env={'PATH': '/usr/bin:/bin', 'LANG': 'C.UTF-8'},
                         stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
                         stderr=subprocess.DEVNULL, close_fds=True, start_new_session=True)
                     _DIRECT.add(process.pid)
@@ -246,7 +241,6 @@ FINUBAR doit pouvoir inscrire l'arrêt pendant l'exécution.
                     raise Refusal('leo_agent_stopped')
                 if time.monotonic() >= deadline:
                     raise Refusal('finubar_process_timeout')
-                _observe(process.pid)
                 # Ne pas réapprêter le PID avant le dernier signal au groupe :
                 # un PID recyclé pourrait sinon désigner un processus étranger.
                 event = os.waitid(os.P_PID, process.pid,

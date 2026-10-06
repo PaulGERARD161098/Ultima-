@@ -8,7 +8,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from finubar.leo_control import ControlLatch, LeoControl, control_violation
-from finubar.leo_process import ProcessSupervisor
+from finubar.leo_process import ProcessSupervisor, lancer_enfant_hote
 from leo import trial
 from leo.control_r21.admission import AdmissionHost, RequestJournal
 from leo.runtime.budget import BudgetLedger
@@ -275,15 +275,29 @@ class AuditRegressions(unittest.TestCase):
         self.assertEqual(store.update_mission('m', 'paul', 2, {'state': 'approved_for_merge'})['state'],
                          'approved_for_merge')                   # cas positif : le propriétaire
 
-    def test_unrelated_new_session_host_child_is_spared(self):
+    def test_declared_new_session_host_child_is_spared(self):
+        # Cas positif : un enfant hôte hors session, DÉCLARÉ au lancement.
         latch = ControlLatch(self.d / 'ctl.sqlite', initialize=True)
-        bystander = subprocess.Popen([sys.executable, '-c', 'import time; time.sleep(30)'],
-                                     start_new_session=True)
+        bystander = lancer_enfant_hote([sys.executable, '-c', 'import time; time.sleep(30)'],
+                                       start_new_session=True)
         try:
             self._supervise('pass', latch).run()
             self.assertTrue(self._alive(bystander.pid))
         finally:
             bystander.kill(); bystander.wait()
+
+    def test_orphan_that_erases_its_environment_is_still_swept(self):
+        # Revue Codex du 06/10 sur #354 : fork + execve SANS environnement + setsid,
+        # parent sorti aussitôt — aucune marque ni observation ne le rattache.
+        latch = ControlLatch(self.d / 'ctl.sqlite', initialize=True)
+        mark = self.d / 'evade'
+        code = ("import os,sys\n"
+                "if os.fork()==0:\n os.setsid()\n"
+                " os.execve(sys.executable,[sys.executable,'-c',"
+                "\"import os,time; open(%r,'w').write(str(os.getpid())); time.sleep(30)\"],{})\n"
+                "os._exit(0)\n") % str(mark)
+        self._supervise(code, latch).run()
+        self._assert_gone(int(self._await(mark)))
 
     def test_launch_uses_no_preexec_hook(self):
         latch = ControlLatch(self.d / 'ctl.sqlite', initialize=True)

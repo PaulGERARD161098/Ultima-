@@ -61,14 +61,15 @@ function clesFermees(corps, permises) {
 
 /**
  * W1 (audit du 05/10) — l'interrupteur serveur des écritures automatiques.
- * `LEO_ECRITURES_AUTO` absente ou 'actives' : l'anneau vert agit sans demander.
- * 'coupees' — ou TOUTE autre valeur, une faute de frappe comprise — : coupé,
- * chaque proposition retombe sur la carte et Paul confirme (échec fermé).
+ * FERMÉ PAR DÉFAUT (revue Codex du 06/10, critère de l'audit) : seule la
+ * valeur exacte 'actives' de `LEO_ECRITURES_AUTO` laisse l'anneau vert agir
+ * sans demander. Absente, vide, 'coupees' ou mal tapée : coupé, chaque
+ * proposition retombe sur la carte et Paul confirme. Un garde qui s'ouvrirait
+ * faute de réglage serait le pire des deux états.
  * Basculer = changer la variable dans Vercel puis redéployer ; rien d'autre.
  */
 export function ecrituresAutoCoupees(env = process.env) {
-  const valeur = env.LEO_ECRITURES_AUTO;
-  return valeur !== undefined && valeur !== '' && valeur !== 'actives';
+  return env.LEO_ECRITURES_AUTO !== 'actives';
 }
 
 /**
