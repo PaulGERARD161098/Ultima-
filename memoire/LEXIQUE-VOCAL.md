@@ -68,6 +68,7 @@
 | Lyendra, le Lyendra | LIANDRA (déformations observées 2026-08-04) |
 | méga affichage | l'affichage majeur d'un élément choisi — il occupe la place au lieu de rester une ligne parmi d'autres (dicté 2026-08-04 pour le futur advenu de VRANESH) |
 | Julien Ramsé | Julien **Laudy** (mentor des affaires, pro DOKLĚS — corrigé par Paul le 2026-09-05, ADR-010 ; graphie **DOKLĚS**, e caron, donnée par Paul le 2026-09-27 — jamais « DOKLÈS » ni « DOKLES » dans un nom affiché) |
+| Matthieu de Sola | Matthieu **du Crest**, fondateur de **SOLA GROUPE** (dicté 2026-10-06 : « intégrer Matthieu de Sola sur la plateforme » = l'inscrire sur Artidispo ; interprétation reformulée en tête de réponse, non contestée par Paul) |
 
 Règle : en cas de doute sur un mot qui change le sens d'une instruction,
 reformuler et demander — jamais deviner avant une action irréversible.
