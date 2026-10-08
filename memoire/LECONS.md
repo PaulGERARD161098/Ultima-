@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v76 2026-10-08 sha256:0d65892d9fc7 -->
+<!-- lecons:empreinte v77 2026-10-08 sha256:99d47091c047 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -611,7 +611,9 @@ aussi bien pu rendre vert sur un code cassé. Et le nettoyage a fait pire : un
 `--strictPort` — un port pris doit FAIRE ÉCHOUER le lancement, pas le déplacer.
 On arrête ces serveurs en ciblant les processus `node` qui les portent
 (`ps -eo pid=,args= | awk '$2 ~ /node$/ && /preview/'`), jamais par un motif
-`pkill -f` que sa propre commande contient.
+`pkill -f` que sa propre commande contient. *Rechute le 08/10, deux fois :
+`pkill -f "next start -p 3999"` puis `pkill -f "http.server 8123"` ont tué le
+shell (sortie 144) — la règle était connue, pas appliquée.*
 
 ## 2. Les garde-fous, et leur silence
 
@@ -1352,6 +1354,20 @@ client bloqué un matin, une séance de diagnostic, et Paul : « ça sabote l'ou
 ne bloque que sur ce qui est propre au document (sa TVA confirmée, son émetteur).
 ⚠️ Et avant de dire « la donnée manque », chercher sous quel autre nom elle existe :
 « 0 achat sur la référence » n'est pas « 0 achat ».
+
+**UN SCHÉMA STRICT SUR LE FORMDATA ENTIER D'UNE ACTION REACT REFUSE TOUT**
+*(2026-10-08, RenoDevis #310)*. React 19 ajoute au FormData d'une action serveur
+ses propres champs — `$ACTION_REF_1`, `$ACTION_1:0`, `$ACTION_1:1`,
+`$ACTION_KEY`, mesurés au navigateur. `Decision.safeParse(Object.fromEntries(formData))`
+avec un schéma `.strict()` refusait donc CHAQUE envoi : sur « Prix d'achat à
+relier », « Relier » et « Écarter » répondaient « Demande invalide », pendant que
+tsc, les tests et le build restaient verts. *Ce que ça a coûté* : un écran
+inutilisable, trouvé par Paul sur capture. ⛔ **La règle** : une action serveur
+lit ses champs PAR NOM (`lireChamps(formData, CHAMPS)`,
+`RenoDevis/lib/formulaires.ts`) et le schéma strict ne juge que ce qu'elle a lu ;
+`RenoDevis/lib/formulaires.test.ts` interdit `Object.fromEntries(form…)` dans
+les fichiers `"use server"`. Même famille que « la valeur ne se porte jamais sur
+le bouton » : la sérialisation d'un formulaire ne s'éprouve qu'au navigateur.
 
 ## 3. Ce qu'on donne à Paul
 

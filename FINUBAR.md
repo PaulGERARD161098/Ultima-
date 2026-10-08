@@ -32,10 +32,10 @@
   },
   "dernier_arret": {
     "le": "2026-10-08",
-    "commit": "7c2ec4a784ebba211152f0dddd7513641c704b65",
-    "quoi": "08/10 : RIVEN en deux cartes — bascule « Tout · Individus · Entreprises » sur la Nature de la fiche (aucune migration ; unit + smoke-riven-cartes 13/13, prouvés rouges sur sabotage). Base, sur go de Paul : 45 fiches entreprise créées depuis les notes « Entreprise : » des individus (« A / B » éclaté), + SOLA GROUPE et API DIFFUSION ; 52 rattachements personne → entreprise. Branche claude/add-sola-groupe-partner-uc9iio, PR de séance en brouillon."
+    "commit": "6154c6b8380cd9be16a82d06a18b4209adca208e",
+    "quoi": "08/10 soir : #366 (RIVEN deux cartes), #361 (lexique), #367 (dictée qui suit les pauses) et #368 (Léo seul en bas, autre séance) fusionnées. Leçons v77."
   },
-  "prochaine_action": "Fusionner la PR de séance des deux cartes RIVEN sur go de Paul (SHA + preuve), après qu'il a vu l'aperçu connecté ; puis reprendre « Léo partout sans candidats ».",
+  "prochaine_action": "Reprendre « Léo partout sans candidats » (boucle du 06/10) : fournir les candidats, ou ne pas offrir l'outil là où la page ne peut pas l'exécuter.",
   "bloque_par": [
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
     "R1 (B4) en production, non prouvée : Réno a rendu 502 le 02/10 à 16:43 UTC. Le crédit étant rechargé, lui demander « Où en est Artidispo ? » et comparer à la base (PLAN §2).",
@@ -46,6 +46,14 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "Dictée qui suit les pauses (#367) : non prouvée sur téléphone (le harnais simule les coupures). Recette = une dictée réelle de Paul, avec des pauses.",
+      "depuis": "2026-10-08"
+    },
+    {
+      "quoi": "LEÇONS v77 propagées dans RenoDevis et Artidispo seulement : les sept autres dépôts sont en retard, et lecons-chemins n'a pas pu tourner (clones absents de la séance).",
+      "depuis": "2026-10-08"
+    },
     {
       "quoi": "RIVEN deux cartes — à trancher par Paul : la bascule s'ouvre sur « Tout » (choix de séance : rien ne disparaît, et 9 harnais comptent les 9 fiches de démo). Passer le défaut à « Individus » = 1 ligne (carteRetenue) + recaler les harnais. Une personne (« Indépendante ») n'a pas d'entreprise, à dessein ; un rattachement porte un rôle vide (fonction absente des notes).",
       "depuis": "2026-10-08"
