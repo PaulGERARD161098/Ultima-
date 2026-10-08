@@ -23,7 +23,6 @@
   <link rel="stylesheet" href="css/stellaire.css">
   <!-- P3 — le bandeau Finubar. Après `stellaire.css` : il lit ses jetons
        d'appel (§⑨) et ne redéfinit rien. -->
-  <link rel="stylesheet" href="css/finubar-bandeau.css">
   <link rel="stylesheet" href="css/leo.css">
   <link rel="stylesheet" href="css/leo-registre.css">
 </head>
@@ -142,20 +141,15 @@
       </noscript>
     </div>
 
-    <!-- Parole de Léo : l'essentiel du cap survolé (rempli par le noyau). -->
+    <!-- Parole de Léo : l'essentiel du cap survolé (rempli par le noyau).
+         Invisible depuis le 08/10/2026 (css/ciel-noeud.css), lue seulement
+         par les lecteurs d'écran : « les descriptions je m'en fiche ». -->
     <aside class="boussole-parole" id="boussole-parole" role="status" aria-live="polite">
     </aside>
 
-    <!-- FINUBAR — l'état des huit dépôts, en bas de l'accueil (P3, 02/09/2026).
-         VIDE au chargement, et il le reste tant que la session n'a rien livré :
-         `js/ciel-noeud.mjs` le remplit quand `/api/finubar` a répondu, et
-         `.fb-bandeau:empty` le fait disparaître d'ici là. Un cadre vide qui
-         attend de la donnée dit qu'il manque quelque chose ; l'absence, non.
-         ⛔ Il est DÉCLARÉ au moteur du ciel (`margesUtiles`) : sans cela, une
-         étoile tombée dans le tiers bas serait peinte mais plus cliquable — le
-         clic atterrirait sur un bouton du bandeau, et l'écran RÉPONDRAIT en se
-         trompant. Défaut mesuré sur la maquette le 02/09. -->
-    <div class="fb-bandeau" id="finubar-bandeau" aria-label="Finubar — l'état des projets"></div>
+    <!-- Le bandeau FINUBAR qui vivait ici est retiré le 08/10/2026 (Paul :
+         « tu gardes que le bandeau Léo, tout en bas »). L'état des projets
+         reste sur finubar.html et dans les propositions du dock de Léo. -->
 
   </div>
 

@@ -1,5 +1,11 @@
 // LE SOCLE — rien ne se recouvre au bas de l'accueil (26/09, capture de Paul).
 //
+// ⚠️ DEPUIS LE 08/10/2026 (« Léo seul en bas », CADRAGE-2026-10-08-leo-seul-
+// en-bas.md) : le bandeau Finubar est retiré et la parole n'est plus peinte.
+// Le socle n'a donc plus qu'UN étage, le dock. Les verrous exigent désormais
+// le dock ET l'absence des deux autres ; les sections du bandeau replié/déplié
+// (⑥, et le témoin ordinateur) tiennent la même absence au téléphone.
+//
 // Ce que Paul a vu, sur RENOBOOST IA isolé, session ouverte : le cartouche de
 // parole passait SOUS le dock de Léo, et une étoile passait SOUS le cartouche.
 // « Beaucoup de chevauchements, je ne suis pas fan. »
@@ -96,7 +102,9 @@ function mesurer(page) {
       const cs = getComputedStyle(el);
       if (cs.display === 'none' || cs.visibility === 'hidden' || +cs.opacity < 0.05) { return null; }
       const b = el.getBoundingClientRect();
-      return b.width > 0 && b.height > 0 ? { x: b.left, y: b.top, r: b.right, b: b.bottom } : null;
+      // ≤ 2 px : une zone `visuellement-cache` (la parole depuis le 08/10) n'est
+      // pas du mobilier — elle ne recouvre rien.
+      return b.width > 2 && b.height > 2 ? { x: b.left, y: b.top, r: b.right, b: b.bottom } : null;
     };
     const mobilier = {
       entete: boite(document.querySelector('body.ciel-noeud .console-entete')),
@@ -148,8 +156,10 @@ for (const taille of TAILLES) {
     const cle = `${ecran}@${taille[0]}`;
     const m = await mesurer(page);
     chiffres[cle] = { ciel: m.ciel, etoiles: m.etoiles, pieces: m.pieces.join(',') };
-    verifier(`${cle} : verrou — dock, bandeau et ≥ 2 étoiles présents`,
-      m.pieces.includes('dock') && m.pieces.includes('bandeau') && m.etoiles >= 2, `${m.pieces.join(',')} · ${m.etoiles} étoiles`);
+    verifier(`${cle} : verrou — dock et ≥ 2 étoiles présents`,
+      m.pieces.includes('dock') && m.etoiles >= 2, `${m.pieces.join(',')} · ${m.etoiles} étoiles`);
+    verifier(`${cle} : Léo seul en bas — ni bandeau Finubar, ni parole peinte`,
+      !m.pieces.includes('bandeau') && !m.pieces.includes('parole'), m.pieces.join(','));
     if (ecran === 'renoboost-ia') {
       verifier(`${cle} : verrou — l'écran de Paul (RENOBOOST IA isolé, ≥ 5 dépôts)`,
         m.hash === '#renoboost-ia' && m.etoiles >= 6, `${m.hash} · ${m.etoiles}`);
@@ -202,8 +212,8 @@ for (const taille of TAILLES) {
     await page.waitForTimeout(1500);
     const m = await mesurer(page);
     const cle = `IMLADRIK sans bandeau, étape ${rang + 1} @${largeur}`;
-    verifier(`${cle} : verrou — parole et dock présents, pas de bandeau`,
-      m.pieces.includes('parole') && m.pieces.includes('dock') && !m.pieces.includes('bandeau') && m.etoiles >= 2,
+    verifier(`${cle} : verrou — dock présent, ni bandeau ni parole peinte`,
+      m.pieces.includes('dock') && !m.pieces.includes('parole') && !m.pieces.includes('bandeau') && m.etoiles >= 2,
       m.pieces.join(','));
     verifier(`${cle} : rien ne se recouvre, aucune étoile sous le socle`,
       m.entre.length === 0 && m.sous.length === 0, [...m.entre, ...m.sous].join(' ') || '0');
@@ -213,65 +223,22 @@ for (const taille of TAILLES) {
 
 // ⑥ LE TÉLÉPHONE À LA HAUTEUR RÉELLE DE SAFARI (capture de Paul, 26/09, 16:19).
 // 844 px est la hauteur de l'ÉCRAN, pas de la page : barres de Safari
-// déduites, il en reste ~664 (667 sur un petit iPhone). À cette hauteur, le
-// bandeau Finubar déplié prenait 200 px et le ciel n'en gardait que ~180.
-// Au téléphone, le bandeau se REPLIE donc sur son en-tête (nom, date,
-// compte) : les signaux s'ouvrent d'un toucher, et le ciel reprend sa place.
-// Sur ordinateur, rien ne change — la liste reste ouverte, sans bouton.
+// déduites, il en reste ~664 (667 sur un petit iPhone). Le bandeau Finubar y
+// prenait jusqu'à 200 px replié/déplié ; il est retiré le 08/10 — le ciel doit
+// donc garder AU MOINS ce qu'il gardait avec le bandeau replié (260 px), et
+// rien ne doit se recouvrir.
 for (const taille of [[390, 664], [375, 667]]) {
   const { page, contexte } = await ouvrir(taille);
   const cle = `téléphone ${taille[0]}×${taille[1]}`;
-  const etat = () => page.evaluate(() => {
-    const b = document.querySelector('#finubar-bandeau .fb-deplier');
-    const l = document.querySelector('#finubar-bandeau .fb-signaux');
-    const vu = (el) => !!el && getComputedStyle(el).display !== 'none' && el.getBoundingClientRect().height > 0;
-    return {
-      bouton: vu(b), attendu: b ? b.getAttribute('aria-expanded') : null,
-      controle: b ? b.getAttribute('aria-controls') : null, idListe: l ? l.id : null,
-      cible: b ? Math.round(b.getBoundingClientRect().height) : 0,
-      liste: vu(l), bandeau: Math.round(document.getElementById('finubar-bandeau').getBoundingClientRect().height),
-    };
-  });
-  const replie = await etat();
   const m1 = await mesurer(page);
-  chiffres[cle] = { replie: replie.bandeau, ciel: m1.ciel };
-  verifier(`${cle} : verrou — bandeau, dock et ≥ 3 étoiles`, m1.pieces.includes('bandeau') && m1.pieces.includes('dock') && m1.etoiles >= 3,
+  chiffres[cle] = { ciel: m1.ciel };
+  verifier(`${cle} : verrou — dock et ≥ 3 étoiles`, m1.pieces.includes('dock') && m1.etoiles >= 3,
     `${m1.pieces.join(',')} · ${m1.etoiles}`);
-  verifier(`${cle} : le bandeau s'ouvre REPLIÉ (bouton visible, liste cachée)`,
-    replie.bouton && replie.attendu === 'false' && !replie.liste, JSON.stringify(replie));
-  verifier(`${cle} : le bouton dit ce qu'il ouvre (aria-controls = la liste)`,
-    !!replie.controle && replie.controle === replie.idListe, `${replie.controle} / ${replie.idListe}`);
-  verifier(`${cle} : cible tactile ≥ 40 px`, replie.cible >= 40, `${replie.cible}`);
+  verifier(`${cle} : Léo seul en bas — ni bandeau, ni parole peinte`,
+    !m1.pieces.includes('bandeau') && !m1.pieces.includes('parole'), m1.pieces.join(','));
   verifier(`${cle} : le ciel garde au moins 260 px`, m1.ciel >= 260, `${m1.ciel} px`);
-  verifier(`${cle} : replié, rien ne se recouvre`, m1.entre.length === 0 && m1.sous.length === 0, [...m1.entre, ...m1.sous].join(' ') || '0');
-  await page.locator('#finubar-bandeau .fb-deplier').tap();
-  await page.waitForTimeout(1200);
-  const deplie = await etat();
-  const m2 = await mesurer(page);
-  verifier(`${cle} : un toucher déplie les signaux`, deplie.attendu === 'true' && deplie.liste, JSON.stringify(deplie));
-  verifier(`${cle} : déplié, rien ne se recouvre`, m2.entre.length === 0 && m2.sous.length === 0, [...m2.entre, ...m2.sous].join(' ') || '0');
-  // Une chose à la fois : les signaux ouverts mettent le dock de côté — mesuré
-  // le 26/09, avec les deux, une étoile passait sous le dock (signaux à 44 px).
-  verifier(`${cle} : déplié, le dock se met de côté`, !m2.pieces.includes('dock'), m2.pieces.join(','));
-  await page.locator('#finubar-bandeau .fb-deplier').tap();
-  await page.waitForTimeout(800);
-  const rereplie = await etat();
-  verifier(`${cle} : un second toucher replie`, rereplie.attendu === 'false' && !rereplie.liste, JSON.stringify(rereplie));
-  const m3 = await mesurer(page);
-  verifier(`${cle} : replié, le dock revient et rien ne se recouvre`,
-    m3.pieces.includes('dock') && m3.entre.length === 0 && m3.sous.length === 0, `${m3.pieces.join(',')} ${[...m3.entre, ...m3.sous].join(' ')}`);
+  verifier(`${cle} : rien ne se recouvre`, m1.entre.length === 0 && m1.sous.length === 0, [...m1.entre, ...m1.sous].join(' ') || '0');
   await contexte.close();
-}
-// Et l'ordinateur, témoin : la liste ouverte, aucun bouton.
-{
-  const { page, contexte } = await ouvrir([1280, 800]);
-  const r = await page.evaluate(() => {
-    const b = document.querySelector('#finubar-bandeau .fb-deplier');
-    const l = document.querySelector('#finubar-bandeau .fb-signaux');
-    return { bouton: !!b && getComputedStyle(b).display !== 'none', liste: !!l && getComputedStyle(l).display !== 'none' };
-  });
-  await contexte.close();
-  verifier('ordinateur : la liste reste ouverte et le bouton n\'existe pas à l\'écran', r.liste && !r.bouton, JSON.stringify(r));
 }
 
 verifier('Zéro erreur console', erreurs.length === 0, JSON.stringify(erreurs.slice(0, 3)));

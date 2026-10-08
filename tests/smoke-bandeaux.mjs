@@ -69,17 +69,33 @@ for (const taille of [[1440, 900], [390, 664]]) {
   const { page, contexte, telephone } = await ouvrir(taille);
   const cle = telephone ? 'téléphone' : 'bureau';
 
-  // ---- Le bandeau Finubar : une date qui ne ment pas, une région nommée ----
-  const b = await page.evaluate(() => {
-    const el = document.getElementById('finubar-bandeau');
-    return { texte: el.textContent, role: el.getAttribute('role'), nom: el.getAttribute('aria-label'),
-      date: (el.querySelector('.fb-date') || {}).textContent || '' };
+  // ---- LÉO SEUL EN BAS (Paul, 08/10/2026) ----
+  // « Supprime le bandeau du bas et le bandeau sur Alpha — tu gardes que le
+  // bandeau Léo, tout en bas. » Le bandeau Finubar est retiré, la parole n'est
+  // plus peinte, et le dock est la pièce la plus basse de l'écran. Verrou : le
+  // dock est monté (sinon « rien en bas » serait vert sur une page vide).
+  const socle = await page.evaluate(() => {
+    const d = document.getElementById('leo-dock');
+    const rd = d ? d.getBoundingClientRect() : null;
+    const parole = document.getElementById('boussole-parole');
+    const rp = parole ? parole.getBoundingClientRect() : null;
+    // Toute autre pièce FIXE peinte sous le haut du dock lui ferait concurrence.
+    const concurrents = rd ? [...document.querySelectorAll('body *')].filter((el) => {
+      if (el === d || d.contains(el) || el.contains(d)) { return false; }
+      const cs = getComputedStyle(el);
+      if (cs.position !== 'fixed' || cs.display === 'none' || cs.visibility === 'hidden') { return false; }
+      const r = el.getBoundingClientRect();
+      return r.width > 40 && r.height > 12 && r.height < window.innerHeight * 0.5 && r.bottom > rd.top;
+    }).map((el) => el.id || el.className) : [];
+    return { dock: Boolean(d), bandeau: Boolean(document.getElementById('finubar-bandeau')),
+      ecartBas: rd ? Math.round(window.innerHeight - rd.bottom) : null,
+      parole: rp ? [Math.round(rp.width), Math.round(rp.height)] : null, concurrents };
   });
-  verifier(`${cle} : verrou — le bandeau est peint`, b.texte.length > 20, `${b.texte.length} car.`);
-  verifier(`${cle} : le bandeau ne dit plus « ce matin »`, !/ce matin/i.test(b.texte), b.texte.slice(0, 40));
-  verifier(`${cle} : la date garde sa valeur lue ET dit son âge`,
-    /collecté le 2026-09-02/.test(b.date) && /(aujourd’hui|hier|il y a \d+ jours)/.test(b.date), b.date);
-  verifier(`${cle} : le bandeau est une région nommée`, b.role === 'region' && !!b.nom, `${b.role} / ${b.nom}`);
+  verifier(`${cle} : verrou — le dock de Léo est monté`, socle.dock);
+  verifier(`${cle} : aucun bandeau Finubar dans la page`, socle.bandeau === false);
+  verifier(`${cle} : le dock est tout en bas (≤ 24 px du bord)`, socle.ecartBas !== null && socle.ecartBas >= 0 && socle.ecartBas <= 24, `${socle.ecartBas} px`);
+  verifier(`${cle} : la parole n'est plus peinte`, !!socle.parole && socle.parole[0] <= 1 && socle.parole[1] <= 1, JSON.stringify(socle.parole));
+  verifier(`${cle} : aucune autre pièce fixe ne partage le bas avec Léo`, socle.concurrents.length === 0, JSON.stringify(socle.concurrents));
 
   // ---- La recommandation de Léo se LANCE ----
   const dock = await page.evaluate(() => {
@@ -100,23 +116,12 @@ for (const taille of [[1440, 900], [390, 664]]) {
 
   // ---- Les cibles tactiles (au doigt) ----
   if (telephone) {
-    // Le dock AVANT de déplier : signaux ouverts, il se met de côté (§24).
     const boutonsDock = await cible(page, '#leo-dock button');
     verifier('téléphone : #leo-dock button ≥ 44 px', boutonsDock.length >= 2 && boutonsDock.every((x) => x.h >= 44), boutonsDock.map((x) => x.h).join(','));
-    await page.locator('#finubar-bandeau .fb-deplier').tap();
-    await page.waitForTimeout(700);
-    const mesures = {};
-    for (const sel of ['.fb-deplier', '.fb-bouton']) {
-      const l = await cible(page, sel);
-      mesures[sel] = l.map((x) => x.h);
-      verifier(`téléphone : ${sel} ≥ 44 px (${l.length})`, l.length > 0 && l.every((x) => x.h >= 44), mesures[sel].join(','));
-    }
-    await page.locator('#finubar-bandeau .fb-deplier').tap();
-    await page.waitForTimeout(500);
   }
 
   // ---- Le texte ne descend pas sous 12 px ----
-  const petits = await page.evaluate(() => ['.titre-surligne', '.fb-date', '.fb-compte', '.leo-dock-identite']
+  const petits = await page.evaluate(() => ['.titre-surligne', '.leo-dock-identite']
     .map((s) => { const el = document.querySelector(s); return el ? [s, parseFloat(getComputedStyle(el).fontSize)] : [s, null]; }));
   verifier(`${cle} : aucun texte du socle ni de l'en-tête sous 12 px`, petits.every(([, px]) => px === null || px >= 11.95), JSON.stringify(petits));
 
