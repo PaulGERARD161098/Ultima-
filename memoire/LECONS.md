@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v73 2026-10-06 sha256:832e555df96f -->
+<!-- lecons:empreinte v74 2026-10-08 sha256:e08d929f08a3 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -46,6 +46,22 @@ neuf copies, et un renvoi mort se lit exactement comme un renvoi valide.
 ---
 
 ## 1. Mesurer, et croire ce qu'on mesure
+
+**UNE SONDE SE LIT EN ENTIER, PAS SUR LE CHAMP QU'ON ATTENDAIT** *(2026-10-07, RenoDevis)*.
+État des lieux « outil opérationnel » donné à Paul : « Stripe configuré, 2 artisans reliés ».
+J'avais lu `actif:true` dans le battement `rr-stripe-embarquement` — et pas les autres clés
+du même objet, qui disaient `test:true`, `ouverts:0`. La production tournait en mode test et
+aucun compte ne pouvait encaisser : l'affirmation était fausse, et il a fallu la corriger le
+lendemain devant Paul. Le même jour, une requête « échéances à venir » comptait `sent_at null`
+et a montré 3 relances sur un devis signé : elles étaient `cancelled` / `skipped` — la colonne
+`status` portait la réponse.
+
+⛔ **Un champ qui dit « oui » n'épuise pas l'objet qui le porte.** Une sonde à plusieurs clés
+répond à plusieurs questions ; n'en lire qu'une, c'est choisir la réponse.
+
+⇒ **Afficher la valeur ENTIÈRE d'un battement ou d'un JSON d'état avant d'en tirer une phrase**,
+et lire le schéma d'une table (`information_schema.columns`) avant d'y compter un état par une
+colonne de date.
 
 **UNE SORTIE REDIRIGÉE VERS `/dev/null` EST UNE MESURE QU'ON NE FERA JAMAIS** *(2026-09-21, Ultima + RenoDevis)*.
 Payé **deux fois dans la même journée**, ce qui en fait un motif et pas un accident.
