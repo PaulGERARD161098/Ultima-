@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v77 2026-10-08 sha256:99d47091c047 -->
+<!-- lecons:empreinte v78 2026-10-08 sha256:d8fc43bf5139 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -137,6 +137,12 @@ complet écrit de mémoire passé en `expectedHeadSha` : `409`, fusion refusée.
 par `git rev-parse`, la fusion est passée. Rien de nouveau dans la faute ; ce qui se
 confirme, c'est que **le seul rempart qui a tenu les huit fois est aval** — la
 vigilance n'a arrêté aucune des huit.
+⊕ **NEUVIÈME, LE 08/10 (Ultima, grain Finubar).** `dernier_arret.commit` tapé
+dans un script Python : `6203fe48e75f…`, le vrai étant `6203fe407c74…` — quatre
+justes, le reste inventé. Vu en relisant la sortie de `git rev-parse` lancée juste
+après, avant tout commit. ⇒ L'ordre se retourne : **le `rev-parse` d'abord, sa
+sortie injectée dans l'écriture** (`V=$(git rev-parse …)`), jamais l'écriture puis
+la vérification.
 
 
 **UN COMMIT « HORS MAIN » N'EST PAS UN TRAVAIL HORS MAIN — ON COMPARE LES
@@ -1625,6 +1631,19 @@ quand même, **la rotation est la première action**, pas une note de fin.
 **LE COMMENT AVANT LE TRAVAIL** *(directive EL)*. Étapes, moyens, critères de
 réussite explicités avant d'exécuter. En pratique : **la maquette avant le
 code**, éprouvée le 2026-08-01 sur VRANESH et DRAUKHAIN.
+
+**UNE ÉTAPE QUI DÉPEND D'UN ÉTAT SE CADRE SUR SA MESURE, PAS SUR SON NOM**
+*(2026-10-08, ZOH SHIA · devis pro)*. Le cadrage du générateur de devis pro
+posait en étape 8 « la série de neutralisation couvre les nouveaux modules » —
+une ligne, comme un ajout. Personne n'avait lancé `derive.mjs`, qui l'aurait dit
+en deux secondes : la série avait **122 commits de retard**. L'étape a été
+annoncée à Paul, lancée sur son « go suite », un clone neutre reconstruit, la tête
+fusionnée — **46 conflits** — avant de comprendre qu'elle n'était pas la queue de
+la boucle mais un chantier entier. *Ce que ça a coûté* : une étape promise puis
+retirée, et le temps du clone et de la fusion d'essai. ⇒ **Toute étape qui
+s'appuie sur un état qu'un outil mesure (dérive, retard, couverture) porte sa
+mesure DANS le cadrage**, avec la commande qui la rend ; sans elle, l'étape n'est
+pas cadrée, elle est nommée.
 
 **UN CHOIX PRODUIT DÉCOUVERT EN LISANT LE CODE ROUVRE LE GATE — IL SE POSE EN
 PANNEAU AVANT LA PREMIÈRE LIGNE, JAMAIS APRÈS** *(2026-09-30, RenoDevis, boucle
