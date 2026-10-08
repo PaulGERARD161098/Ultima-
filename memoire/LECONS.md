@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v75 2026-10-08 sha256:cc8bd98ce1af -->
+<!-- lecons:empreinte v76 2026-10-08 sha256:0d65892d9fc7 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -59,7 +59,8 @@ et a montré 3 relances sur un devis signé : elles étaient `cancelled` / `skip
 ⛔ **Un champ qui dit « oui » n'épuise pas l'objet qui le porte.** Une sonde à plusieurs clés
 répond à plusieurs questions ; n'en lire qu'une, c'est choisir la réponse.
 
-⇒ **Afficher la valeur ENTIÈRE d'un battement ou d'un JSON d'état avant d'en tirer une phrase**,
+⇒ **Relire TOUTES les clés d'un battement ou d'un JSON d'état avant d'en tirer une phrase** —
+sans en recopier les valeurs sensibles (secret, donnée personnelle : on nomme la clé, on masque la valeur),
 et lire le schéma d'une table (`information_schema.columns`) avant d'y compter un état par une
 colonne de date.
 
