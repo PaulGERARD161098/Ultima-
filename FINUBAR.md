@@ -19,8 +19,7 @@
 >    et remonte ce projet en tête — c'est ce qui empêche cette note de mentir.
 
 <!-- finubar:debut -->
-```json
-{
+```json{
   "projet": "Ultima",
   "depot": "PaulGERARD161098/Ultima-",
   "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
@@ -31,9 +30,9 @@
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-10-06",
-    "commit": "46693b344315f260a7c4c9dcbf93dd7b2a80d4d1",
-    "quoi": "06/10 : #353 (C1–C13) et #354 (W1 LEO_ECRITURES_AUTO, W2 /api/leo propriétaire) fusionnées ; anneau vert reprouvé en production après W1 (tentee → reussie → defaite, 11:57–12:00 UTC). #358 : voix de Léo lisible sous le thème de nuit. Plan chaîne : Q10 ⏳ tant que sa preuve n'est pas mesurée sur les deux bases (#356, #357). LEÇONS v72."
+    "le": "2026-10-08",
+    "commit": "7d75b176d0b3c980eff0f6d78835dcd4311c7939",
+    "quoi": "08/10 : ZOH SHIA reçoit sa deuxième étoile, le générateur de devis (zohshia/devis/ : gabarit neutre dérivé du modèle de facture, generer.mjs en centimes entiers, test unitaire + smoke ciblé par badge). Premier devis produit avec : D-2026-10-01 (aide administrative DUERP), en validation chez Henry. Suite unitaire 66/66 (dont la nouvelle), smoke ZOH SHIA vert."
   },
   "prochaine_action": "Cadrer la boucle « Léo partout sans candidats » : hors /registre, « Crée une idée … » finit en « Action impossible en l'état » (boucle ouverte du 06/10).",
   "bloque_par": [
