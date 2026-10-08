@@ -1,7 +1,7 @@
 // GÉNÉRÉ par `node zohshia/publier.mjs` — ne pas modifier à la main.
 // La techno de ZOH SHIA, à l’état pur, servie au SEUL propriétaire par /api/zohshia.
 export default {
- "publie_le": "2026-10-04",
+ "publie_le": "2026-10-08",
  "technos": [
   {
    "id": "renodevis",
@@ -5484,9 +5484,522 @@ export default {
      ]
     }
    ]
+  },
+  {
+   "id": "devis",
+   "ordre": 2,
+   "badge": "Générateur de devis",
+   "etat": "En service",
+   "mesure": null,
+   "onglets": [
+    {
+     "id": "techno",
+     "titre": "Ce que fait la techno",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "1. Ce que fait la techno",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Un ",
+         ""
+        ],
+        [
+         "fichier de paramètres",
+         "b"
+        ],
+        [
+         " (JSON) et un ",
+         ""
+        ],
+        [
+         "gabarit",
+         "b"
+        ],
+        [
+         " (",
+         ""
+        ],
+        [
+         "gabarit.html",
+         "c"
+        ],
+        [
+         ") donnent un ",
+         ""
+        ],
+        [
+         "devis PDF d'une page",
+         "b"
+        ],
+        [
+         ", dans la mise en page des factures : logo, bloc émetteur et client, tableau des lignes, détails TVA, récapitulatif, encart de paiement, mentions de retard, pied de page légal.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Ce qui distingue le devis de la facture, et que le gabarit porte en dur :",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Facture",
+          ""
+         ]
+        ],
+        [
+         [
+          "Devis",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "« Facture »",
+           ""
+          ]
+         ],
+         [
+          [
+           "« Devis »",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Date d'échéance",
+           ""
+          ]
+         ],
+         [
+          [
+           "Date de validité",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Total TTC",
+           ""
+          ]
+         ],
+         [
+          [
+           "Total TTC, puis ",
+           ""
+          ],
+          [
+           "acompte à la signature",
+           "b"
+          ],
+          [
+           " et ",
+           ""
+          ],
+          [
+           "solde à la remise",
+           "b"
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Encart de paiement seul",
+           ""
+          ]
+         ],
+         [
+          [
+           "Encart de paiement ",
+           ""
+          ],
+          [
+           "et",
+           "b"
+          ],
+          [
+           " cadre « Bon pour accord »",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Mentions de retard",
+           ""
+          ]
+         ],
+         [
+          [
+           "Validité, conditions de règlement, conditions propres au devis, puis mentions de retard",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Fichier",
+          ""
+         ]
+        ],
+        [
+         [
+          "Rôle",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "gabarit.html",
+           "c"
+          ]
+         ],
+         [
+          [
+           "La mise en page, neutre : que des champs entre doubles accolades",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "generer.mjs",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Valide les paramètres, calcule, échappe, remplit, imprime en PDF (Chromium sans tête)",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "exemple.parametres.json",
+           "c"
+          ]
+         ],
+         [
+          [
+           "La forme des paramètres, sans aucune valeur réelle",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "tests/unit-zohshia-devis.mjs",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Les calculs, l'échappement, les refus — dans la suite unitaire",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "3. Les règles de calcul",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Tout en centimes entiers",
+          "b"
+         ],
+         [
+          ", jamais en flottant. Arrondi au demi-centime supérieur.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Ligne : HT = prix unitaire HT × quantité ; TTC de ligne = HT + TVA de la ligne.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Totaux : TVA = arrondi(total HT × taux) ; TTC = total HT + TVA.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Acompte = arrondi(TTC × pourcentage)",
+          "b"
+         ],
+         [
+          " ; ",
+          ""
+         ],
+         [
+          "solde = TTC − acompte",
+          "b"
+         ],
+         [
+          ". Le solde se déduit, il ne se recalcule pas : acompte + solde = TTC, toujours.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Un seul taux de TVA par devis — celui des factures de prestation.",
+          ""
+         ]
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "faire",
+     "titre": "Faire un devis",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "2. Faire un devis",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": true,
+       "items": [
+        [
+         [
+          "Copier ",
+          ""
+         ],
+         [
+          "exemple.parametres.json",
+          "c"
+         ],
+         [
+          " ",
+          ""
+         ],
+         [
+          "hors du dépôt",
+          "b"
+         ],
+         [
+          " et le remplir : numéro, dates, émetteur, client, lignes, taux de TVA, pourcentage d'acompte, conditions. Les chemins du logo et des polices sont relatifs à ce fichier.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Lancer ",
+          ""
+         ],
+         [
+          "node zohshia/devis/generer.mjs --parametres <devis.json> --sortie <dossier>",
+          "c"
+         ],
+         [
+          ". La ligne rendue donne HT, TVA, TTC, acompte et solde : ",
+          ""
+         ],
+         [
+          "les relire",
+          "b"
+         ],
+         [
+          " avant d'ouvrir le PDF.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Ouvrir le PDF et vérifier la page unique, le nom exact du client et le numéro.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Le ranger avec ses paramètres dans le dossier de facturation de Paul.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "--html-seulement",
+         "c"
+        ],
+        [
+         " s'arrête au HTML (aperçu sans navigateur). Le navigateur se choisit par la variable ",
+         ""
+        ],
+        [
+         "ZOH_CHROMIUM",
+         "c"
+        ],
+        [
+         ", sinon le Chromium de Playwright.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "4. Ce qui ne vit pas ici",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Aucune valeur",
+          "b"
+         ],
+         [
+          " : ni identité d'émetteur, ni IBAN, ni client, ni montant. Tout arrive par les paramètres, qui ne se versionnent pas.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Ni logo, ni police",
+          "b"
+         ],
+         [
+          " : ce sont des fichiers de l'émetteur, passés par chemin et embarqués dans le PDF au moment du rendu.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Pas de numérotation automatique",
+          "b"
+         ],
+         [
+          " : le numéro se donne. Un compteur sans registre des devis émis fabriquerait des doublons.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "5. Les gates",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Envoyer un devis",
+          "b"
+         ],
+         [
+          " à un client est un effet métier réel : mandat précis de Paul, jamais à l'initiative de l'agent. Préparer un brouillon est permis.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Une valeur client inconnue",
+          "b"
+         ],
+         [
+          " (raison sociale exacte, numéro de TVA) se demande ; elle ne se déduit pas. Un champ facultatif vide vaut mieux qu'un champ plausible.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Le générateur ",
+          ""
+         ],
+         [
+          "refuse",
+          "b"
+         ],
+         [
+          " plutôt que de produire un devis à trou : champ obligatoire vide, montant ou taux mal formé, IBAN hors format, champ du gabarit sans valeur.",
+          ""
+         ]
+        ]
+       ]
+      }
+     ]
+    }
+   ]
   }
  ],
  "sources": {
+  "devis/badge.json": "f273a27fea3dfd947567f427ce53cf638c70e6ef94cd5f7ad6c561549f2a9d86",
+  "devis/TECHNO.md": "eda7b156afc4e22ba7c117afe2536a7ad4c9d543b27aceb736e77def8b30d871",
   "renodevis/badge.json": "cdf0f06c4c492ccc21be7bb97a3d5f2da690832d1e1728d2e0a12bd0482fb1ff",
   "renodevis/TECHNO.md": "e318f1765c2fe9177acf5d4ae51cadbf4fc1d71b62d353daa7f8b14a3bf1dbe4",
   "renodevis/AJOUTER-UN-ARTISAN.md": "7ebfc2b34bcc2a7766c1bb20d92f65217efe7d5b3cb579b9bdbd77eba4c9ec99"

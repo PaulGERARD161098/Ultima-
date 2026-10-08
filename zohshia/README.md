@@ -11,6 +11,7 @@
 | Élément | Ce qu'on y trouve |
 |---|---|
 | `renodevis/` | Le plan de la techno RénoDevis (`TECHNO.md`), le guide et la check-list pour la mettre en service chez un pro (`AJOUTER-UN-ARTISAN.md`), l'inventaire mesuré (`inventaire.json`), l'extraction du code neutre (`extraire.mjs`) et la base neuve prouvée (`base/`) |
+| `devis/` | **Deuxième étoile (08/10/2026) — le générateur de devis** : un gabarit neutre dans la forme des factures (`gabarit.html`), le générateur qui valide, calcule au centime, échappe et imprime en PDF (`generer.mjs`), la forme des paramètres sans valeur (`exemple.parametres.json`) et le plan (`TECHNO.md`) |
 
 ## Comment on l'invoque
 

@@ -1,0 +1,33 @@
+{
+  "pourquoi": "Forme des paramètres du générateur de devis. Ce fichier ne porte AUCUNE valeur réelle : on le copie HORS du dépôt, on le remplit, on lance generer.mjs dessus. Les vrais paramètres (identité de l'émetteur, IBAN, client) ne se versionnent pas.",
+  "numero": "D-AAAA-MM-NN",
+  "date_emission": "jour mois année",
+  "date_validite": "jour mois année",
+  "type_vente": "Prestations de services",
+  "moyen_paiement": "Virement",
+  "taux_tva": "20",
+  "acompte_pct": "50",
+  "polices": "dossier/des/polices (facultatif : poppins-latin-400-normal.woff2, poppins-latin-500-normal.woff2)",
+  "emetteur": {
+    "nom": "Raison sociale de l'émetteur",
+    "adresse": "NUMÉRO ET VOIE",
+    "ville": "CODE POSTAL VILLE - France",
+    "mentions_legales": "Raison sociale | forme et capital | N° SIREN | N° de TVA",
+    "iban": "FR76 0000 0000 0000 0000 0000 000",
+    "bic": "XXXXXXXXXXX",
+    "logo": "chemin/vers/le/logo.png (facultatif)"
+  },
+  "client": {
+    "nom": "RAISON SOCIALE DU CLIENT",
+    "siren": "000000000",
+    "adresse": "NUMÉRO ET VOIE",
+    "ville": "CODE POSTAL VILLE - France",
+    "tva": "facultatif : la ligne n'apparaît que si elle est renseignée"
+  },
+  "lignes": [
+    { "libelle": "Intitulé de la prestation", "detail": "Précision facultative, en gris sous la ligne", "quantite": 1, "unite": "unité", "pu_ht": "0.00" }
+  ],
+  "conditions": [
+    "Titre de la condition : texte de la condition, une ligne par entrée"
+  ]
+}

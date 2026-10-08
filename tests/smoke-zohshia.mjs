@@ -94,6 +94,8 @@ console.log('§2 — ouvert au propriétaire : un badge par techno, son contenu 
 {
   const { page, journal } = await ouvrir({ client: 'connecte', api: PAUL });
   const badges = page.locator('.badge-techno');
+  // Une techno par badge : chaque vérification se cible sur SON badge (#techno-N).
+  const t0 = page.locator('#techno-0');
   verifier('autant de badges que de technos publiées (verrou : au moins une)',
     donnee.technos.length >= 1 && (await badges.count()) === donnee.technos.length);
   verifier('le libellé exact du premier badge', ((await page.locator('.badge-nom').first().textContent()) || '').trim()
@@ -102,17 +104,17 @@ console.log('§2 — ouvert au propriétaire : un badge par techno, son contenu 
     && await page.locator('.techno-ouverte').first().isHidden());
   await badges.first().click();
   verifier('ouvert au clic, premier onglet choisi', (await badges.first().getAttribute('aria-expanded')) === 'true'
-    && (await page.locator('.onglet[aria-selected="true"]').textContent()) === 'Ce que fait la techno');
-  verifier('les trois onglets', (await page.locator('.onglet').allTextContents()).join('|') === 'Ce que fait la techno|Check-list du pro|Mise en service');
-  const nPlan = await page.locator('.contenu > *').count();
-  verifier('le plan se rend (titres, tableaux)', nPlan > 20 && (await page.locator('.contenu table').count()) >= 3, String(nPlan));
-  await page.locator('.onglet', { hasText: 'Check-list du pro' }).click();
-  const check = (await page.locator('.contenu').textContent()) || '';
+    && (await t0.locator('.onglet[aria-selected="true"]').textContent()) === 'Ce que fait la techno');
+  verifier('les trois onglets', (await t0.locator('.onglet').allTextContents()).join('|') === 'Ce que fait la techno|Check-list du pro|Mise en service');
+  const nPlan = await t0.locator('.contenu > *').count();
+  verifier('le plan se rend (titres, tableaux)', nPlan > 20 && (await t0.locator('.contenu table').count()) >= 3, String(nPlan));
+  await t0.locator('.onglet', { hasText: 'Check-list du pro' }).click();
+  const check = (await t0.locator('.contenu').textContent()) || '';
   verifier('la check-list se rend, avec les règles de prix du schéma', /coefficient_produits/.test(check) && /demi_journee_ht/.test(check) && /Deux voies/.test(check));
-  await page.locator('.onglet[aria-selected="true"]').focus();
+  await t0.locator('.onglet[aria-selected="true"]').focus();
   await page.keyboard.press('ArrowRight');
-  verifier('le clavier passe à l’onglet suivant', (await page.locator('.onglet[aria-selected="true"]').textContent()) === 'Mise en service'
-    && /Voie B/.test((await page.locator('.contenu').textContent()) || ''));
+  verifier('le clavier passe à l’onglet suivant', (await t0.locator('.onglet[aria-selected="true"]').textContent()) === 'Mise en service'
+    && /Voie B/.test((await t0.locator('.contenu').textContent()) || ''));
   const cBadge = await contraste(page, '.badge-meta');
   const cTable = await contraste(page, '.contenu td');
   const cTexte = await contraste(page, '.contenu p');
@@ -120,6 +122,15 @@ console.log('§2 — ouvert au propriétaire : un badge par techno, son contenu 
     [cBadge, cTable, cTexte].every((c) => Number.isFinite(c) && c >= 4.5), [cBadge, cTable, cTexte].map((c) => c.toFixed(2)).join(' · '));
   verifier('aucune erreur, aucune requête externe', !journal.erreurs.length && !journal.externes.length,
     [...journal.erreurs, ...journal.externes].join(' | '));
+  const devis = donnee.technos.findIndex((t) => t.id === 'devis');
+  verifier('la deuxième étoile est publiée : le générateur de devis', devis >= 0);
+  if (devis >= 0) {
+    const tD = page.locator(`#techno-${devis}`);
+    await badges.nth(devis).click();
+    verifier('son badge porte le libellé exact', ((await badges.nth(devis).locator('.badge-nom').textContent()) || '').trim() === 'Générateur de devis');
+    verifier('ses deux onglets', (await tD.locator('.onglet').allTextContents()).join('|') === 'Ce que fait la techno|Faire un devis');
+    verifier('son plan se rend, règles de calcul comprises', /centimes entiers/.test((await tD.locator('.contenu').textContent()) || ''));
+  }
   verifier('le retour mène à la constellation des DRAGONS',
     (await page.locator('a.retour-ultima').getAttribute('href')) === 'imladrik.html#constellation-dragons');
   await page.close();
@@ -129,8 +140,9 @@ console.log('§3 — 390 px : lisible, sans défilement horizontal de la page');
 {
   const { page } = await ouvrir({ client: 'connecte', api: PAUL }, { width: 390, height: 800 });
   await page.locator('.badge-techno').first().click();
+  const t0 = page.locator('#techno-0');
   for (const titre of ['Ce que fait la techno', 'Check-list du pro', 'Mise en service']) {
-    await page.locator('.onglet', { hasText: titre }).click();
+    await t0.locator('.onglet', { hasText: titre }).click();
     const deborde = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     verifier(`${titre} : la page ne déborde pas (${deborde}px)`, deborde <= 1);
   }
