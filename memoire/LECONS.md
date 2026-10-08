@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v73 2026-10-06 sha256:832e555df96f -->
+<!-- lecons:empreinte v74 2026-10-08 sha256:b3f10f0434ec -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1320,6 +1320,21 @@ exact (« 👍 » ou constats traités). Un constat corrigé change le SHA, donc
 **rend caduc l'accord de fusion** : on redemande, on ne fusionne pas sur l'ancien go.
 ⚠️ Et un correctif poussé ne relance PAS la revue : seul « draft → ready » ou un
 `@codex review` la déclenche. La revue du nouveau SHA, si elle compte, se demande.
+
+**UN CONTRÔLE EN BOUT DE CHAÎNE NE RELIT PAS UNE SOURCE VIVANTE — IL ALERTE, IL NE
+BLOQUE PAS UN ACTE DÉJÀ VALIDÉ** *(2026-10-08, RenoDevis #304)*. L'envoi d'un devis
+relisait la bibliothèque de prix du JOUR pour revérifier la marge. Le 08/10,
+`RR-20261006-8926`, validé par l'artisan, a été refusé à l'envoi : « Marge SOLA non
+vérifiable ». Les prix d'achat existaient pourtant, mais rangés sous les codes du
+distributeur (`SUZM71VA`, `PEAD-M71JA3`) et non sous les références fabricant du
+devis (`SUZ-M71VA2-TH`, `PEAD-M71JA2`) : un rapprochement EXACT, voulu sans
+approximation, rendait invisible une donnée présente. *Ce que ça a coûté* : un devis
+client bloqué un matin, une séance de diagnostic, et Paul : « ça sabote l'outil ».
+⛔ **La règle** : un contrôle qui relit une source modifiable par ailleurs
+(bibliothèque, tarif, règle) se fait à la CRÉATION ; à l'acte final il ALERTE, il
+ne bloque que sur ce qui est propre au document (sa TVA confirmée, son émetteur).
+⚠️ Et avant de dire « la donnée manque », chercher sous quel autre nom elle existe :
+« 0 achat sur la référence » n'est pas « 0 achat ».
 
 ## 3. Ce qu'on donne à Paul
 
