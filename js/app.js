@@ -1876,6 +1876,23 @@
   function retenirCielPlat(actif) {
     try { window.localStorage.setItem(CLE_CIEL_VUE, actif ? 'plat' : 'volume'); } catch (e) { /* navigation privée */ }
   }
+  // La CARTE affichée (2026-10-08) : tout, les individus, ou les entreprises.
+  // Un réglage de l'appareil, comme la vue. Une valeur inconnue vaut « tout ».
+  var CLE_CIEL_CARTE = 'ultima-ciel-carte';
+  function carteRetenue() {
+    var v = null;
+    try { v = window.localStorage.getItem(CLE_CIEL_CARTE); } catch (e) { /* navigation privée */ }
+    var cartes = window.UltimaNebuleusesRiven ? window.UltimaNebuleusesRiven.CARTES : [];
+    return cartes.indexOf(v) !== -1 ? v : 'tout';
+  }
+  function retenirCarte(carte) {
+    try { window.localStorage.setItem(CLE_CIEL_CARTE, carte); } catch (e) { /* navigation privée */ }
+  }
+  function majBoutonsCarte(carte) {
+    document.querySelectorAll('.ciel-cartes [data-carte]').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.getAttribute('data-carte') === carte ? 'true' : 'false');
+    });
+  }
   // Sous `prefers-reduced-motion`, le volume ne s'ouvre pas : la carte s'impose.
   function mouvementReduit() {
     return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -1958,6 +1975,24 @@
     }
     if (outils) { outils.hidden = false; }
 
+    // La carte choisie ne garde que ses fiches. Les relations et les
+    // rattachements suivent : un trait ou une orbite vers une étoile absente
+    // n'a pas de place où se poser.
+    var carte = carteRetenue();
+    majBoutonsCarte(carte);
+    var noeudsCarte = window.UltimaNebuleusesRiven
+      ? window.UltimaNebuleusesRiven.filtrerCarte(etat.noeuds, carte)
+      : etat.noeuds.slice();
+    if (noeudsCarte.length === 0) {
+      // Les outils restent visibles : c'est par eux qu'on change de carte.
+      scene.appendChild(blocEtatCiel(
+        carte === 'entreprises' ? 'Aucune entreprise encore' : 'Aucun individu encore',
+        '— une fiche dont la Nature est « Entreprise » rejoint la carte des entreprises'));
+      return;
+    }
+    var idsCarte = Object.create(null);
+    noeudsCarte.forEach(function (n) { idsCarte[n.id] = true; });
+
     // Recherche : MISE EN ÉVIDENCE, pas réduction. Une étoile qui ne
     // correspond pas s'efface sans quitter sa place — sinon on perdrait
     // l'orientation dans le volume, qui est justement ce qu'on y gagne.
@@ -1969,10 +2004,12 @@
     };
 
     var donneesCiel = {
-      noeuds: etat.noeuds,
+      noeuds: noeudsCarte,
       personnes: etat.personnes,
-      rattachements: etat.rattachements,
-      relations: etat.relations
+      rattachements: carte === 'tout' ? etat.rattachements
+        : etat.rattachements.filter(function (r) { return idsCarte[r.node_id]; }),
+      relations: carte === 'tout' ? etat.relations
+        : etat.relations.filter(function (r) { return idsCarte[r.source_id] && idsCarte[r.target_id]; })
     };
     var tableNebuleuses = !!window.UltimaNebuleusesRiven;
     var aPlat = (cielPlatRetenu() || mouvementReduit()) && !!window.UltimaNebuleuses && tableNebuleuses;
@@ -2006,7 +2043,7 @@
         // Lot 2 (2026-09-30) : les amas du volume sont les NÉBULEUSES, pas les
         // secteurs — neuf amas au lieu de quarante et un, chacun dans sa brume.
         regrouper: tableNebuleuses ? regrouperParNebuleuse : undefined,
-        nebuleuses: tableNebuleuses ? brumesDesNebuleuses(etat.noeuds) : undefined,
+        nebuleuses: tableNebuleuses ? brumesDesNebuleuses(noeudsCarte) : undefined,
         // Repli seulement : sans la carte des nébuleuses, le volume se fige.
         plat: mouvementReduit()
       });
@@ -2043,7 +2080,7 @@
     }
 
     if (terme && message) {
-      var nb = etat.noeuds.filter(correspond).length;
+      var nb = noeudsCarte.filter(correspond).length;
       message.textContent = nb === 0
         ? 'Aucun contact ne correspond à “' + brut + '”.'
         : (nb + (nb > 1 ? ' contacts mis en évidence.' : ' contact mis en évidence.'));
@@ -3829,6 +3866,13 @@
           ? String(noeud[champ]) : '';
     });
     $('#noeud-detail').open = false;
+    // Créée depuis la carte des entreprises, une fiche EST une entreprise —
+    // sinon elle disparaîtrait de la carte d'où on l'a créée. La valeur est
+    // proposée À VUE (le pli s'ouvre), jamais posée en silence.
+    if (!noeud && carteRetenue() === 'entreprises') {
+      $('#noeud-nature').value = 'Entreprise';
+      $('#noeud-detail').open = true;
+    }
     // On n'enchaîne pas des MODIFICATIONS : le bouton n'a de sens qu'en
     // création. Et le compteur repart de zéro à chaque ouverture — sinon il
     // annoncerait une série qui n'a pas eu lieu (pre-mortem P7).
@@ -4524,6 +4568,13 @@
       }
       retenirCielPlat(versPlat);
       rendreCiel();
+    });
+    // Tout · Individus · Entreprises : le choix se retient, le ciel se redessine.
+    document.querySelectorAll('.ciel-cartes [data-carte]').forEach(function (bouton) {
+      bouton.addEventListener('click', function () {
+        retenirCarte(bouton.getAttribute('data-carte'));
+        rendreCiel();
+      });
     });
 
     $('#ciel-derive').addEventListener('change', function (e) {

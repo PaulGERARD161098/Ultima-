@@ -85,6 +85,27 @@ verdicts.repartirRienNePerdu = r.reduce((s, g) => s + g.noeuds.length, 0) === no
 // C9 — une seule vérité : nebuleuseDe et repartir disent la même chose, étoile par étoile.
 verdicts.memeVeriteDansLesDeuxSens = r.every((g) => g.noeuds.every((n) => T.nebuleuseDe(n.secteur_activite).cle === g.nebuleuse.cle));
 
+// Les deux cartes (2026-10-08) — entreprises et individus, sur la Nature.
+const E = (nature) => T.estEntreprise({ nature });
+verdicts.naturesDeStructureSontDesEntreprises = ['Entreprise', '  entreprise ', 'Fournisseur',
+  "Bureau d'études", 'Bureau d’études', 'Distributeur', 'Institution', 'Entreprise générale'].every(E);
+verdicts.leResteEstUnIndividu = [null, undefined, '', '  ', 'Artisan indépendant', 'Particulier',
+  "Apporteur d'affaires", 'Entrepreneur', 'Inconnue'].every((n) => !E(n)) &&
+  !T.estEntreprise(null) && !T.estEntreprise({});
+const flotte = [{ id: 'i1' }, { id: 'e1', nature: 'Entreprise' }, { id: 'i2', nature: 'Particulier' },
+  { id: 'e2', nature: 'Fournisseur' }];
+const ids = (l) => l.map((n) => n.id).join(',');
+verdicts.carteEntreprises = ids(T.filtrerCarte(flotte, 'entreprises')) === 'e1,e2';
+verdicts.carteIndividus = ids(T.filtrerCarte(flotte, 'individus')) === 'i1,i2';
+// Partition : aucune fiche perdue, aucune dans les deux cartes.
+verdicts.cartesPartitionnent = T.filtrerCarte(flotte, 'entreprises').length +
+  T.filtrerCarte(flotte, 'individus').length === flotte.length;
+// « tout », et toute valeur inconnue, rendent tout — un réglage corrompu ne vide jamais le ciel.
+verdicts.carteInconnueRendTout = ['tout', 'n-importe', undefined, null].every((c) =>
+  ids(T.filtrerCarte(flotte, c)) === ids(flotte));
+verdicts.filtrerNeMutePas = T.filtrerCarte(flotte, 'tout') !== flotte && T.filtrerCarte(null, 'tout').length === 0;
+verdicts.cartesDeclarees = T.CARTES.join(',') === 'tout,individus,entreprises';
+
 console.log(JSON.stringify(verdicts, null, 2));
 const ok = Object.values(verdicts).every((v) => v === true);
 console.log(ok ? 'UNIT-RIVEN-NEBULEUSES OK' : 'UNIT-RIVEN-NEBULEUSES ECHEC');
