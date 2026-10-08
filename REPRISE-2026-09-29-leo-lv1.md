@@ -14,22 +14,25 @@ Fait : #353 et #354 fusionnées le 06/10 ; actions web capture/défaire retrouv�
 dans le journal de production. Le runtime est exclu de Vercel. La fondation
 PR351 reste ouverte et volontairement inerte (`exit 1`, lanceur `SystemExit`).
 Le connecteur expose 12 dépôts organisation + 2 personnels, sans le contrôle.
-Cela ne prouve pas l'état d'une installation réalisée hors Work.
+Complément à 18 h 07 Paris : capture Code fournie par Paul, badge Private et
+écran Quick setup du dépôt vide. Le kit n'est pas installé dans ce dépôt cible ;
+aucune conclusion sur un éventuel autre hôte.
 
 Préparation fermée : dossier GitHub Actions temporaire, sans nouveau serveur,
 qui distingue lanceur/identités, état durable/ancre, accord humain et réception.
 Revue distincte de lecture favorable ; aucun code applicatif ni test exécuté.
-Le stockage courant, l'ancre et l'installation cible restent non vérifiés.
+Le stockage courant et l'ancre restent à concevoir ; l'absence du kit dans le
+dépôt cible est constatée sur la capture, pas par un accès direct de Work.
 Compétence Work 1.4 / runtime attendu 1.0 : divergence conservée, pas contournée.
 
-**Prochaine action unique :** Paul consulte hors Work la page Actions du contrôle
-et transmet le relevé minimal décrit dans ACTIVATION (workflow, SHA, date,
-conclusion ; ou aucun run). Ne pas copier de secret ni déclencher de workflow.
-Réconcilier ce relevé avant de préparer un kit qui doublerait une installation.
+**Prochaine action unique :** préparer dans Ultima le kit d'exécution bornée,
+en réutilisant l'admission, le journal et la garde ; choisir l'état durable et
+son ancre avant le code de reprise. Le relevé demandé à Paul est reçu : ne pas
+le redemander. Pas d'import ni de déclenchement du simple squelette PR351.
 
 Restent : raccord opérationnel, identité distincte, stockage/ancre et accord réel,
 recette sur hôte cible puis reprise neuve ; pilote continu et budget non activés.
-Le calendrier cible du 16/10 est à recaler après le relevé, pas garanti.
+Le calendrier cible du 16/10 est à recaler sur le raccord restant, pas garanti.
 Préserver PR351, PR361 et PR364 ; aucune collecte parallèle ni modification
 du grain FINUBAR dans ce lot. Ne pas rouvrir les fusions #353/#354 ni considérer
 leurs tests comme une réception d'autonomie. Aucun import dans le contrôle exclu,

@@ -7,8 +7,9 @@ Mandat de Paul : « ok go » après l'état des lieux du 08/10, pour vérifier
 l'environnement réel et préparer le raccord. Cette section est la reprise
 opérationnelle ; les sections datées qui suivent conservent leur valeur historique.
 Base relue : `8485ed5e0ccee72f94c28ba4c67bc62c5c36e8cd` (`main`, 08/10).
-Contrat : §11 LV1 v1.1. Une installation réalisée hors des accès de Work reste
-possible et **non vérifiée** ; ne pas la déclarer inexistante.
+Contrat : §11 LV1 v1.1. **Complément observé à 18 h 07 Paris : le dépôt de
+contrôle cible est vide**, d'après la capture fournie par Paul ; voir le relevé
+ci-dessous. Aucune conclusion n'est tirée sur un éventuel autre hôte.
 
 ### Boucle cadrée et critère de sortie
 
@@ -54,7 +55,7 @@ Le premier pilote reste une fixture sans accès aux dépôts métier ni API paya
 
 | Lot | Entrée et moyen réutilisé | Sortie nécessaire avant le suivant | Responsable |
 |---|---|---|---|
-| 0. Réconcilier l'installation extérieure | Relevé humain du dépôt de contrôle, sans contenu secret : branche/SHA, fichier de workflow, dernier run et sa conclusion, éventuel autre hôte déjà retenu. | Version exécutée et piste d'installation identifiées, OU absence de run connue ; installation non vérifiée tant que son code et son état ne sont pas attestés. | Paul hors Work |
+| 0. Réconcilier l'installation extérieure | Captures de Paul le 08/10 : page Actions de création, puis onglet Code affichant « Quick setup » d'un dépôt vide. | Fermé pour le dépôt cible : emplacement privé créé, aucun kit installé dans ce dépôt. État d'un autre hôte éventuel non établi. | Relevé Paul reçu, lu dans Work |
 | 1. Lanceur et identités | Source revue/figée ; `AdmissionHost`, `TrialHost`, `ProcessSupervisor` ; contrôleur détenu par l'opérateur, code Léo dans un conteneur distinct. | Commande fixe ; code/contrôle en lecture seule pour Léo ; UID, capacités, réseau, cgroup et limites vérifiés ; FINUBAR peut arrêter tous les descendants du conteneur/cgroup. | Préparation Léo ; installation opérateur |
 | 2. État durable et ancre | Registres existants (mission/budget, arrêt global, journal de transport) ; stockage privé à désigner avec son propriétaire et ses droits. | Conservation atomique et retour du reçu entre jobs ; état manquant refusé ; restauration d'une ancienne copie refusée par une ancre extérieure courante. | Choix opérateur puis préparation Léo |
 | 3. Accord exact | Événement humain authentifié hors Work, code figé qui résout l'autorité ; contexte source/cible/intégration, opération, expiration. | Accord lié aux versions, utilisable une seule fois ; mauvais acteur/contexte/accord expiré refusés. Aucun `approved: true` ni manifeste auto-approuvant. | Préparation Léo ; accord Paul |
@@ -71,33 +72,43 @@ du stockage courant et de son ancre précède le code de checkpoint. Il faut ég
 un arrêt accessible à Paul pendant le job ; une simple annulation GitHub ne prouve
 pas l'enregistrement durable de cet arrêt. Aucune clé n'est demandée dans le chat.
 
-### Relevé extérieur unique pour la prochaine boucle
+### Relevé extérieur reçu — 08/10/2026, 18 h 07 Paris
 
-Depuis le navigateur personnel de Paul, **hors Work**, ouvrir
-`https://github.com/PaulGERARD161098/leo-control-r21/actions`.
-Communiquer uniquement : nom du workflow, branche/SHA, date et conclusion du
-dernier run ; s'il n'y a aucun run, le dire. Si un autre serveur a déjà été retenu,
-son nom/hébergeur suffit à ce stade. Ne lancer aucun workflow, ne réouvrir aucun
-accès de Work, ne copier ni valeur secrète, ni variable, ni journal complet.
+Paul a fourni deux captures, lues visuellement dans cette session :
+- `image(20261008-160425).png`, à 18 h 04 : `actions/new`, « Get started
+  with GitHub Actions ». Cette page de création seule ne prouvait pas que le
+  dépôt était vide.
+- `image(20261008-160726).png`, à 18 h 07 : onglet **Code** du dépôt exact
+  `PaulGERARD161098/leo-control-r21`, badge **Private**, panneau **Quick setup**
+  et invitations à créer/téléverser le premier fichier. C'est l'écran de dépôt
+  vide, sans arborescence ni commit présentés.
 
-Un run réussi ne suffira pas à recevoir le contrôle : il permettra seulement
-d'identifier la version exécutée et d'orienter la vérification de l'installation.
-Si le workflow s'arrête sur le refus préparatoire, reprendre les lots 1 à 3
-ci-dessus dans Ultima, sous revue, avant tout import autorisé hors Work.
+**Conclusion sur cette cible :** le dépôt privé est créé ; le kit de contrôle
+n'y est pas installé. Le blocage « capture/relevé attendu de Paul » est levé.
+Aucune nouvelle capture ni réouverture d'accès Work n'est nécessaire pour ce
+diagnostic. Les captures restent hors du dépôt ; seuls leurs noms et constats
+minimaux sont consignés. L'existence d'un autre hôte extérieur n'est pas déduite.
+
+La suite est la préparation dans Ultima d'un kit exécutable revu, réutilisant
+les briques existantes et traitant les lots 1 à 3. Le simple squelette PR351
+ne doit pas être importé comme un kit complet. Le dépôt cible vide ne lève
+aucun interdit d'import, de déclenchement ou d'activation.
 
 ### Clôture et calendrier
 
 Revue indépendante de lecture réalisée par une instance distincte : favorable
 au dossier préparatoire ; elle confirme la séparation site/runtime et les trous
 d'admission réelle, de persistance et d'ancre. Aucun test applicatif exécuté dans
-cette boucle documentaire. Le relevé extérieur et la réception restent bloqués
-par la visibilité disponible, pas par une demande de nouveau budget.
+cette boucle documentaire. La revue précède les captures reçues à 18 h 04/18 h 07 ;
+leur interprétation a été ajoutée par le fil principal. Le relevé est désormais
+reçu ; la réception reste ouverte, sans nouvelle demande de budget.
 
 L'objectif historique du 16/10 **n'est plus confirmé** : ses prérequis du 05–08/10
-ne sont pas reçus. Recaler les dates après le lot 0, sans raccourcir la recette.
-Prochaine action unique : obtenir ce relevé minimal hors Work, puis réconcilier
-le dossier avec l'installation réellement présente. Ne pas relancer les anciennes
-recettes web déjà journalisées pour remplacer cette preuve manquante.
+ne sont pas reçus. Le lot 0 est maintenant fermé sur la cible ; recaler le planning
+sur le travail de raccord restant, sans raccourcir la recette.
+Prochaine action unique : préparer le kit d'exécution bornée dans Ultima, avec
+choix explicite de l'état durable et de l'ancre avant le code de reprise ; revue
+et preuves sur fixture avant toute installation autorisée hors Work.
 
 ---
 
