@@ -19,7 +19,8 @@
 >    et remonte ce projet en tête — c'est ce qui empêche cette note de mentir.
 
 <!-- finubar:debut -->
-```json{
+```json
+{
   "projet": "Ultima",
   "depot": "PaulGERARD161098/Ultima-",
   "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
