@@ -31,11 +31,11 @@
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-10-06",
-    "commit": "46693b344315f260a7c4c9dcbf93dd7b2a80d4d1",
-    "quoi": "06/10 : #353 (C1–C13) et #354 (W1 LEO_ECRITURES_AUTO, W2 /api/leo propriétaire) fusionnées ; anneau vert reprouvé en production après W1 (tentee → reussie → defaite, 11:57–12:00 UTC). #358 : voix de Léo lisible sous le thème de nuit. Plan chaîne : Q10 ⏳ tant que sa preuve n'est pas mesurée sur les deux bases (#356, #357). LEÇONS v72."
+    "le": "2026-10-08",
+    "commit": "7c2ec4a784ebba211152f0dddd7513641c704b65",
+    "quoi": "08/10 : RIVEN en deux cartes — bascule « Tout · Individus · Entreprises » sur la Nature de la fiche (aucune migration ; unit + smoke-riven-cartes 13/13, prouvés rouges sur sabotage). Base, sur go de Paul : 45 fiches entreprise créées depuis les notes « Entreprise : » des individus (« A / B » éclaté), + SOLA GROUPE et API DIFFUSION ; 52 rattachements personne → entreprise. Branche claude/add-sola-groupe-partner-uc9iio, PR de séance en brouillon."
   },
-  "prochaine_action": "Cadrer la boucle « Léo partout sans candidats » : hors /registre, « Crée une idée … » finit en « Action impossible en l'état » (boucle ouverte du 06/10).",
+  "prochaine_action": "Fusionner la PR de séance des deux cartes RIVEN sur go de Paul (SHA + preuve), après qu'il a vu l'aperçu connecté ; puis reprendre « Léo partout sans candidats ».",
   "bloque_par": [
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
     "R1 (B4) en production, non prouvée : Réno a rendu 502 le 02/10 à 16:43 UTC. Le crédit étant rechargé, lui demander « Où en est Artidispo ? » et comparer à la base (PLAN §2).",
@@ -46,6 +46,14 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "RIVEN deux cartes — à trancher par Paul : la bascule s'ouvre sur « Tout » (choix de séance : rien ne disparaît, et 9 harnais comptent les 9 fiches de démo). Passer le défaut à « Individus » = 1 ligne (carteRetenue) + recaler les harnais. Une personne (« Indépendante ») n'a pas d'entreprise, à dessein ; un rattachement porte un rôle vide (fonction absente des notes).",
+      "depuis": "2026-10-08"
+    },
+    {
+      "quoi": "smoke-riven-nebuleuses : verdict maquette300_390_noms ROUGE dans le Chromium du conteneur de séance, sur main pur (8485ed5) comme sur la branche — mais VERT en CI le 08/10 (browser (0) et (1), tête 070d81a). L'écart est donc d'environnement (polices, rendu), pas de code : suspecter l'instrument local avant de toucher la carte.",
+      "depuis": "2026-10-08"
+    },
     {
       "quoi": "Léo partout (js/leo-partout.js) monte la voix SANS candidats : sur adramelech.html et toute page hors /registre, « Crée une idée … » finit en carte « Action impossible en l'état » (prochainAdrNum absent). Constaté par Paul en production le 06/10. Correctif à cadrer : fournir les candidats, ou ne pas offrir l'outil là où la page ne peut pas l'exécuter.",
       "depuis": "2026-10-06"
@@ -143,7 +151,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-10-06"
+  "maj": "2026-10-08"
 }
 ```
 

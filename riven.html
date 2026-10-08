@@ -137,6 +137,18 @@
                   aria-pressed="false"
                   aria-label="Vue à plat : figer le ciel, sans relief ni mouvement">À plat</button>
         </span>
+        <!-- Les deux cartes (Paul, 2026-10-08) : les entreprises, les
+             individus — et « Tout », le ciel d'avant, qui reste le défaut pour
+             que rien ne semble disparaître. Le classement se lit sur la Nature
+             de la fiche (js/nebuleuses-riven.js, estEntreprise). -->
+        <span class="ciel-zoom ciel-cartes" role="group" aria-label="Carte affichée">
+          <button type="button" class="bouton bouton-secondaire ciel-tout-voir" data-carte="tout"
+                  aria-pressed="true">Tout</button>
+          <button type="button" class="bouton bouton-secondaire ciel-tout-voir" data-carte="individus"
+                  aria-pressed="false">Individus</button>
+          <button type="button" class="bouton bouton-secondaire ciel-tout-voir" data-carte="entreprises"
+                  aria-pressed="false">Entreprises</button>
+        </span>
         <label class="ciel-bascule">
           <input type="checkbox" id="ciel-derive"> Dérive lente
         </label>

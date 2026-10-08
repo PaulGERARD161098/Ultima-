@@ -86,12 +86,43 @@
     return groupes.filter(function (g) { return g.noeuds.length > 0; });
   }
 
+  // Les deux cartes de RIVEN (Paul, 2026-10-08 : « une carte d'entreprises et
+  // une carto d'individus »). Le partage se lit sur `nature` (0024), déjà
+  // saisie dans la fiche : aucune colonne neuve. Est une ENTREPRISE la fiche
+  // dont la nature commence par l'un de ces mots — les valeurs de structure du
+  // datalist de riven.html. Tout le reste est un INDIVIDU : nature vide (toutes
+  // les fiches d'avant le 08/10), « Artisan indépendant », « Particulier »,
+  // « Apporteur d'affaires », et toute nature inconnue. Le doute range du côté
+  // des individus, qui est la carte historique : rien ne disparaît de la vue
+  // par défaut parce qu'une nature a été mal tapée.
+  var NATURES_ENTREPRISE = ['entreprise', 'fournisseur', "bureau d'études", "bureau d'etudes",
+    'distributeur', 'institution'];
+  var CARTES = ['tout', 'individus', 'entreprises'];
+
+  function estEntreprise(noeud) {
+    var n = noeud && typeof noeud.nature === 'string' ? noeud.nature.trim().toLowerCase().replace(/’/g, "'") : '';
+    if (!n) { return false; }
+    return NATURES_ENTREPRISE.some(function (p) { return n.indexOf(p) === 0; });
+  }
+
+  // Les fiches d'une carte. Une carte inconnue vaut « tout » : un réglage
+  // corrompu ne doit jamais vider le ciel.
+  function filtrerCarte(noeuds, carte) {
+    var liste = noeuds || [];
+    if (carte === 'entreprises') { return liste.filter(estEntreprise); }
+    if (carte === 'individus') { return liste.filter(function (n) { return !estEntreprise(n); }); }
+    return liste.slice();
+  }
+
   racine.UltimaNebuleusesRiven = {
     NEBULEUSES: NEBULEUSES,
     CLE_A_CLASSER: CLE_A_CLASSER,
+    CARTES: CARTES,
     cleDe: cleDe,
     nebuleuseDe: nebuleuseDe,
     teinte: teinte,
-    repartir: repartir
+    repartir: repartir,
+    estEntreprise: estEntreprise,
+    filtrerCarte: filtrerCarte
   };
 })(typeof window !== 'undefined' ? window : this);

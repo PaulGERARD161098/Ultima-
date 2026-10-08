@@ -8,6 +8,11 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🌐 **SESSION 2026-10-08 — RIVEN EN DEUX CARTES : ENTREPRISES ET INDIVIDUS.** Branche `claude/add-sola-groupe-partner-uc9iio`, PR de séance en brouillon (fusion sur go).
+  ✅ Bascule « Tout · Individus · Entreprises » dans le Ciel, à plat et en volume, sur la `nature` de la fiche (0024) — **aucune migration**. Défaut « Tout ». Commit `7c2ec4a`.
+  ✅ Base (go de Paul) : SOLA GROUPE + API DIFFUSION, puis **45 fiches entreprise** tirées des notes « Entreprise : » des individus, « A / B » éclaté ; **52 rattachements** personne → entreprise. Relu en base : 48 entreprises, 55 individus, 0 doublon, 0 entreprise sans personne.
+  ✅ Harnais : `unit-riven-nebuleuses` enrichi, `smoke-riven-cartes` neuf (13/13) — chacun prouvé rouge sur sabotage.
+  ⏭ Le défaut « Tout » vs « Individus » : à trancher par Paul. ⚠️ `smoke-riven-nebuleuses` (maquette300_390_noms) rouge dans le conteneur de séance, sur main pur aussi — **vert en CI** sur la tête de la PR : écart d'environnement, pas de code.
 - 🐉 **SESSION 2026-10-04 — ZOH SHIA : LA TECHNO DE RÉNODEVIS, PRÊTE À DÉPLOYER CHEZ UN AUTRE PRO.** PR **#345 fusionnée** (`97c3cd1`, sur ordre de Paul).
   ✅ Plan pur (`zohshia/renodevis/TECHNO.md`) · check-list en 8 rubriques et deux voies (`AJOUTER-UN-ARTISAN.md`) · base neuve rejouée et **validée par la base de référence** (0 écart) · code neutre **extrait et prouvé** (RénoDevis `7d21217` : 492 fichiers, 931 tests, build vert) · écran ZOH SHIA (un badge par techno) · garde PROPRIÉTAIRE sur `/api/zohshia` et `/api/finubar`.
   ⛔ **Fusionné AVANT `ULTIMA_PROPRIETAIRES`** (choix de Paul) : ZOH SHIA et Finubar répondent « accès réservé » en production jusqu'à ce qu'elle soit posée (Vercel, Production + Preview). L'API Vercel refuse l'écriture des variables au connecteur — geste de Paul.
