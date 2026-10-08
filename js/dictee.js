@@ -45,7 +45,18 @@
 
   var Reco = window.SpeechRecognition || window.webkitSpeechRecognition;
   var dicteeCourante = null;     // une seule écoute globale, jamais de doublon
-  var DICTEE_TIMEOUT_MS = 30000; // filet : jamais d'écoute fantôme
+  var DICTEE_TIMEOUT_MS = 30000; // filet : 30 s sans un mot → arrêt, jamais d'écoute fantôme
+  // RELANCE (08/10/2026) : le navigateur coupe l'écoute après chaque phrase. Une
+  // coupure qui suit des mots est une PAUSE : l'écoute est rouverte aussitôt et la
+  // dictée continue à la suite. Une écoute qui n'a rien entendu est la vraie fin.
+  // Plafond : jamais de boucle si le navigateur rend la main aussitôt ouverte.
+  var RELANCES_MAX = 40;
+
+  // Concatène deux morceaux dictés : une espace entre eux, jamais deux.
+  function joindre(a, b) {
+    if (!a || !b) { return a + b; }
+    return /\s$/.test(a) || /^\s/.test(b) ? a + b : a + ' ' + b;
+  }
 
   function annoncerDictee(message) {
     var region = assurerRegion();
@@ -137,11 +148,6 @@
   }
 
   function demarrerDictee(champ, bouton, etatLigne) {
-    var reco = new Reco();
-    reco.lang = 'fr-FR';
-    reco.continuous = false;      // arrêt auto sur silence : le chemin nominal
-    reco.interimResults = true;   // les mots apparaissent pendant que Paul parle
-    reco.maxAlternatives = 1;
 
     var remplacer = champ.dataset.dicteeMode === 'remplacement';
     var base = champ.value;
@@ -155,8 +161,17 @@
       finalise: '',
       interim: '',
       plafondSignale: false,
-      minuteur: null
+      minuteur: null,
+      reco: null,          // l'écoute en cours ; une nouvelle à chaque relance
+      relances: 0,
+      finDemandee: false   // re-tap de Paul : la coupure qui suit ne relance pas
     };
+
+    // Le filet se réarme à chaque mot : il borne le silence, pas la longueur de la dictée.
+    function armerMinuteur() {
+      if (session.minuteur) { clearTimeout(session.minuteur); }
+      session.minuteur = setTimeout(function () { session.arreter(); }, DICTEE_TIMEOUT_MS);
+    }
 
     // Tronque au maxlength du champ (l'affectation programmatique l'ignore).
     function plafonner(valeur) {
@@ -175,7 +190,7 @@
     // Mode remplacement : le texte dicté remplace tout — mais tant que rien
     // n'est dicté (ou en cas d'erreur), la valeur d'origine reste intacte.
     function afficher() {
-      var texte = session.finalise + session.interim;
+      var texte = joindre(session.finalise, session.interim);
       if (remplacer) {
         champ.value = texte ? plafonner(texte) : base;
       } else {
@@ -214,14 +229,15 @@
 
     session.arreter = function () {
       if (session.terminee) { return; }
+      session.finDemandee = true;
       reposUi(); // repos immédiat : jamais deux écoutes affichées à la fois
-      try { reco.stop(); } catch (e) { finaliser(); }
+      try { session.reco.stop(); } catch (e) { finaliser(); }
     };
 
     session.annuler = function (garderValeur) {
       if (session.terminee) { return; }
       clore();
-      try { reco.abort(); } catch (e) { /* déjà arrêté */ }
+      try { session.reco.abort(); } catch (e) { /* déjà arrêté */ }
       if (!garderValeur) {
         session.interim = ''; // l'interim est retiré, le finalisé est conservé
         afficher();
@@ -230,39 +246,69 @@
       annoncerDictee('Dictée terminée.');
     };
 
-    reco.onstart = function () { session.demarree = true; };
+    function nouvelleEcoute() {
+      var reco = new Reco();
+      var entenduIci = false;
+      session.reco = reco;
+      reco.lang = 'fr-FR';
+      reco.continuous = false;      // le navigateur coupe sur silence ; la relance prend le relais
+      reco.interimResults = true;   // les mots apparaissent pendant que Paul parle
+      reco.maxAlternatives = 1;
 
-    reco.onresult = function (evenement) {
-      if (session.terminee) { return; }
-      var interim = '';
-      for (var i = evenement.resultIndex; i < evenement.results.length; i++) {
-        var resultat = evenement.results[i];
-        var transcription = (resultat[0] && resultat[0].transcript) || '';
-        if (resultat.isFinal) { session.finalise += transcription; } else { interim += transcription; }
-      }
-      session.interim = interim;
-      afficher();
-    };
+      reco.onstart = function () { session.demarree = true; };
 
-    reco.onerror = function (evenement) {
-      var code = (evenement && evenement.error) || '';
-      if (session.terminee || code === 'aborted') { return; }
-      clore();
-      session.interim = ''; // jamais d'interim fantôme
-      afficher();
-      curseurEnFin();
-      bouton.classList.add('erreur');
-      setTimeout(function () { bouton.classList.remove('erreur'); }, 1200);
-      if (code === 'no-speech') {
-        signaler("Je n'ai rien entendu. Touchez le micro et réessayez.", 'erreur');
-      } else if (code === 'not-allowed' || code === 'service-not-allowed') {
-        signaler('Micro refusé. Autorisez le micro dans les réglages du navigateur, ou tapez votre texte.', 'erreur');
-      } else {
-        signaler("La dictée n'a pas abouti. Réessayez, ou tapez votre texte.", 'erreur');
-      }
-    };
+      reco.onresult = function (evenement) {
+        if (session.terminee || reco !== session.reco) { return; }
+        var interim = '';
+        for (var i = evenement.resultIndex; i < evenement.results.length; i++) {
+          var resultat = evenement.results[i];
+          var transcription = (resultat[0] && resultat[0].transcript) || '';
+          if (transcription.trim()) { entenduIci = true; }
+          if (resultat.isFinal) { session.finalise = joindre(session.finalise, transcription); } else { interim += transcription; }
+        }
+        session.interim = interim;
+        armerMinuteur();
+        afficher();
+      };
 
-    reco.onend = function () { finaliser(); };
+      reco.onerror = function (evenement) {
+        var code = (evenement && evenement.error) || '';
+        if (session.terminee || code === 'aborted' || reco !== session.reco) { return; }
+        // Silence après une relance : ce n'est pas une erreur, c'est la fin de la dictée.
+        if (code === 'no-speech' && (session.finalise || session.interim)) { finaliser(); return; }
+        clore();
+        session.interim = ''; // jamais d'interim fantôme
+        afficher();
+        curseurEnFin();
+        bouton.classList.add('erreur');
+        setTimeout(function () { bouton.classList.remove('erreur'); }, 1200);
+        if (code === 'no-speech') {
+          signaler("Je n'ai rien entendu. Touchez le micro et réessayez.", 'erreur');
+        } else if (code === 'not-allowed' || code === 'service-not-allowed') {
+          signaler('Micro refusé. Autorisez le micro dans les réglages du navigateur, ou tapez votre texte.', 'erreur');
+        } else if (code === 'network') {
+          signaler('Pas de réseau : la dictée du navigateur en a besoin. Votre texte est gardé ; utilisez le micro du clavier.', 'erreur');
+        } else {
+          signaler("La dictée n'a pas abouti. Réessayez, ou tapez votre texte.", 'erreur');
+        }
+      };
+
+      reco.onend = function () {
+        if (session.terminee || reco !== session.reco) { return; }
+        if (!session.finDemandee && entenduIci && session.relances < RELANCES_MAX) {
+          session.relances += 1;
+          // L'interim non finalisé de l'écoute close est gardé : la suite s'écrit derrière.
+          if (session.interim) { session.finalise = joindre(session.finalise, session.interim); session.interim = ''; }
+          // Chaque morceau clos est posé ET annoncé au champ : le brouillon le garde
+          // déjà, rien de ce qui est dicté ne se perd si l'appli est tuée en pleine dictée.
+          afficher();
+          champ.dispatchEvent(new Event('input', { bubbles: true }));
+          try { nouvelleEcoute().start(); return; } catch (e) { /* le navigateur refuse : fin nominale */ }
+        }
+        finaliser();
+      };
+      return reco;
+    }
 
     dicteeCourante = session;
     bouton.setAttribute('aria-pressed', 'true');
@@ -270,9 +316,9 @@
     etatLigne.textContent = 'Je vous écoute…';
     etatLigne.hidden = false;
     annoncerDictee('Je vous écoute…');
-    session.minuteur = setTimeout(function () { session.arreter(); }, DICTEE_TIMEOUT_MS);
+    armerMinuteur();
     try {
-      reco.start(); // la demande d'autorisation micro n'arrive qu'ici, jamais au chargement
+      nouvelleEcoute().start(); // la demande d'autorisation micro n'arrive qu'ici, jamais au chargement
     } catch (e) {
       clore();
       signaler("La dictée n'a pas abouti. Réessayez, ou tapez votre texte.", 'erreur');
