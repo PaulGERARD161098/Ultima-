@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-10-08",
-    "commit": "8773ff605df3e5c6bf5a70eab91c6fb7144512cd",
-    "quoi": "08/10 soir : #366 (RIVEN deux cartes, autre séance), #361 (lexique « Matthieu de Sola ») et #367 (la dictée suit les pauses ; filet de 30 s sur le silence) fusionnées. Leçons v77."
+    "commit": "6154c6b8380cd9be16a82d06a18b4209adca208e",
+    "quoi": "08/10 soir : #366 (RIVEN deux cartes), #361 (lexique), #367 (dictée qui suit les pauses) et #368 (Léo seul en bas, autre séance) fusionnées. Leçons v77."
   },
   "prochaine_action": "Reprendre « Léo partout sans candidats » (boucle du 06/10) : fournir les candidats, ou ne pas offrir l'outil là où la page ne peut pas l'exécuter.",
   "bloque_par": [
