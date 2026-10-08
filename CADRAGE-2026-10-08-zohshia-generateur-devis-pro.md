@@ -91,6 +91,28 @@ prête pour n'importe quel émetteur.
    `extraire.mjs --verifier` rend l'arbre neutre prouvé ; `TECHNO.md` gagne le
    maillon « devis pro » ; `tests/unit-zohshia.mjs` vert.
 
+### État des étapes — mesuré le 08/10/2026 au soir
+
+| Étape | État | Preuve |
+|---|---|---|
+| 1 · 2 · 3 | ✅ | `lib/documentDevisPro.ts`, `lib/numeroDevis.ts`, `lib/mentionsB2B.ts` + tests |
+| 4 | ✅ | `lib/pdfDevisPro.ts` : 9 sections, pagination, blocs insécables ; spécimen fictif + `pdftotext` |
+| 5 | ✅ | aiguillage sur `extra.devis_pro` (posé si SIREN client saisi) ; aperçu aligné |
+| 6 | ✅ | ⚠️ **écart au cadrage, plus économe** : IBAN/BIC NON migrés — repris de `extra.reglement`, déjà saisi et contrôlé. Migration réduite à forme juridique + capital + index unique du numéro, **appliquée le 08/10 sur autorisation de Paul** et éprouvée (doublon refusé, miroirs acceptés) |
+| 7 | 🟡 | spécimen montré ; preview Vercel non lisible depuis la séance (403) |
+| 8 | ⏸ **arrêtée, à cadrer à part** | voir ci-dessous |
+
+⛔ **ÉTAPE 8 — LA SÉRIE A 122 COMMITS DE RETARD, CE N'EST PLUS UN AJOUT.**
+`derive.mjs` (08/10, 21:54 UTC) : série `f1f9fb3` → tête `2291842`, 122 commits,
+dont 63 sur 75 fichiers qu'elle retouche. Fusion d'essai de la tête dans un clone
+neutre reconstruit : **46 conflits** (14 fichiers propres à l'instance supprimés
+côté neutre et modifiés en amont ; 32 fichiers, ~60 blocs, où l'amont a tissé la
+logique propre à l'instance — matrice, règles, marge, artisan sans client — dans
+le chemin générique). Les cinq modules du devis pro, eux, ne portent aucun nom
+propre. ⇒ Le rafraîchissement de la série est une **boucle dédiée** (cadrage
+propre, pre-mortem), PAS la queue de celle-ci. Ne pas la reprendre en
+« finissant l'étape 8 » : on rejouerait 46 conflits sans plan.
+
 ## ③ Les moyens
 
 RenoDevis : `lib/documentDevisPro.ts`, `lib/numeroDevis.ts`,
