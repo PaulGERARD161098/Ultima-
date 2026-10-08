@@ -1,5 +1,58 @@
 # Raccordement LV1 à Ultima — proposition d'activation
 
+## Incident opérateur du 08/10/2026 — installation arrêtée, correctif en préparation
+
+Cette section remplace les prochaines actions d'installation historiques ci-dessous.
+Paul a autorisé puis réalisé l'import et les dispatchs dans son navigateur ;
+Work n'a ni lu ni modifié le dépôt de contrôle exclu. Les constats cible viennent
+des captures de Paul, pas d'appels GitHub de Work au contrôle.
+
+- Graine externe communiquée : `ba369884db05db6a4af321620e11790de61a2656`.
+- Installation : `aaac8d9f565a47748a7e271408a49f76`, source
+  `27664c7e9eb6d66be490cdf2fb8a6a064d51add2`, digest initial `b0d20c9de16f89db1d94f3d978ab72e2c99786f4a522e67030daa9b2221c2326`.
+- `status` réussi ; `prepare` run `37845684569` terminé, séquence 2.
+- `execute` run `37846177261` échoué : `R21 refused: ValueError`.
+- `reconcile` réussi (capture 23 h 31 Paris) : préparation completed,
+  exécution unknown, reçu null, phase unknown, séquence 4.
+- Arrêt réussi (capture 23 h 37) : séquence 5, `stopped: true`,
+  `stop_reason: owner_stop`, résultat unknown conservé. Cela prouve l'arrêt
+  inscrit après l'échec, pas un arrêt d'un worker en cours ni la réussite R21.
+
+Le code initial montait `/trial-output` en 1777 alors que le worker execute y
+crée `control.sqlite` et que `assert_host_private` refuse un parent accessible
+en écriture au groupe/autres ou détenu par un autre UID. Copilot a déclaré avoir
+reproduit `control_permissions_unsafe` puis réussi après correction. Sa PR reste
+ouverte selon Paul ; les captures du diff confirment le seul changement de
+montage en `0700,uid=65534,gid=65534`, accompagné d'empreintes recalculées.
+Le recalcul statique du kit fourni donne bien
+`b12fc47067ae47b806a41b013ae1c070494848c46927d62a68dd85e52ae640c0`.
+
+**Défaut de preuve identifié :** les tests worker utilisaient un parent créé par
+TemporaryDirectory (privé), tandis que les appels Docker du host étaient simulés.
+Le lanceur CI `tests/lancer-pilot-containers.py` compare désormais les argv
+complets avec la fabrique de production dans un helper isolé. Il lance ensuite
+prepare puis execute dans deux conteneurs neufs, exige le refus précis de
+l'ancien montage 1777, et inspecte le checkpoint final dans un autre conteneur.
+Le runner ne fait que stdlib/Docker/transport JSON borné ; imports applicatifs,
+consentement synthétique et extraction restent dans des conteneurs sans réseau.
+La CI doit encore établir le verdict du nouveau SHA avant toute réception.
+
+**Ne pas fusionner la PR Copilot ni appliquer son re-seed en l'état.** Elle garde
+l'identité et le source_sha anciens et remplace mécaniquement review.code_digest
+sans nouvelle revue. Une nouvelle empreinte n'actualise pas l'attestation de
+revue ni la preuve CI de la version précédente. Le fichier state.json sur main
+est la graine historique, pas le registre courant de r21-state.
+
+Le correctif source est préparé dans #365 ; aucune fusion ou installation.
+Le générateur existant produit déjà de nouvelles identité/graine et une revue
+vide : ne jamais remplacer ces champs par l'attestation de l'ancien kit.
+**Le registre unknown/stopped actuel reste figé.** Aucun reset, changement
+de R21_STATE_SEED ou nouvel execute n'est autorisé par ce correctif.
+La procédure de succession d'installations avec conservation de l'ancienne
+ancre et validation opérateur est encore à préparer et à revoir ; le runtime
+actuel ne comporte aucun réarmement. Un nouveau candidat inerte n'est pas
+une autorisation de l'installer dans un contrôle déjà utilisé.
+
 ## Kit candidat du 08/10/2026 — pilote déterministe, installation non autorisée
 
 Mandat complémentaire de Paul : « ok vasy », préparation exécutable et recette

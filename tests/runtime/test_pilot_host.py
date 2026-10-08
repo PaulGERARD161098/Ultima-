@@ -305,6 +305,7 @@ class PilotIsolationAndBuildTests(unittest.TestCase):
         self.assertIn('no-new-privileges', args)
         self.assertIn('timeout', args)
         self.assertIn('--kill-after=2s', args)
+        self.assertIn('/trial-output:rw,nosuid,nodev,noexec,size=128m,mode=0700,uid=65534,gid=65534', args)
         mounts = [args[i + 1] for i, arg in enumerate(args) if arg == '--mount']
         self.assertEqual(len(mounts), 2)
         self.assertTrue(all(mount.endswith(',readonly') for mount in mounts))
@@ -356,6 +357,13 @@ class PilotIsolationAndBuildTests(unittest.TestCase):
             self.assertIn('CANDIDATE ONLY', (output / 'INERT.txt').read_text())
             self.assertTrue((output / 'r21-state/state.json').is_file())
             self.assertFalse((output / '.git').exists())
+            second = Path(temporary) / 'second-candidate'
+            builder.build(source, second, SOURCE, IMAGE, TARGET, INTEGRATION)
+            fresh = json.loads((second / 'main/pilot-installation.json').read_text())
+            self.assertNotEqual(fresh['installation']['id'], config['installation']['id'])
+            self.assertNotEqual(fresh['installation']['seed'], config['installation']['seed'])
+            self.assertEqual([fresh['review'][k] for k in ('location', 'reviewer', 'measured_at')],
+                             ['', '', ''])
             with self.assertRaises(FileExistsError):
                 builder.build(source, output, SOURCE, IMAGE, TARGET, INTEGRATION)
 

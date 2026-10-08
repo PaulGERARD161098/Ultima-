@@ -114,6 +114,10 @@ jobs:
             --env GIT_CONFIG_GLOBAL=/dev/null --env GIT_CONFIG_NOSYSTEM=1 \
             "$LV1_PYTHON_IMAGE" \
             sh -eu -c 'git --version; python -m unittest discover -s tests/runtime -p "test_*.py" -v'
+      - name: Éprouver les montages réels du pilote dans des conteneurs neufs
+        run: |
+          LV1_PILOT_IMAGE="$(cat /tmp/lv1-python-image-digest)"
+          python3 -I tests/lancer-pilot-containers.py "$LV1_PILOT_IMAGE"
       - name: Construire le kit candidat inerte dans le bac à sable
         env:
           LV1_SOURCE_SHA: ${{ github.event.pull_request.head.sha }}

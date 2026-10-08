@@ -1,4 +1,37 @@
-# Reprise courante — 8 octobre 2026, kit candidat de pilote préparé
+# Reprise courante — 8 octobre 2026, essai cible échoué puis arrêté
+
+Paul a installé le candidat source27664c7 et exécuté lui-même status/prepare/
+execute/reconcile/stop dans le contrôle exclu. Aucune voie Work n'a accédé à ce
+dépôt. Capture 23h37Paris : stoppedtrue, owner_stop, phaseunknown, séquence5,
+exécution37846177261 sans reçu ; préparation37845684569 completed. L'arrêt est
+prouvé après l'échec, pas pendant une exécution. Aucune autonomie reçue.
+
+Cause structurelle confirmée dans le code : /trial-output1777 incompatible avec
+le verrou FINUBAR. Copilot a déclaré la reproduction ; ses captures montrent
+le correctif0700,uid65534,gid65534 mais conservent ancienne identité/source/revue.
+Sa PR est non fusionnée selon Paul. Ne pas suivre la proposition de re-seed.
+
+Correctif source et test avec les vrais montages préparés dans PR365, sur sa
+tête précédente27664c7, sans écraser main ni les travaux Claude. Main relu :
+6203fe407c742fce562de2ae1cc7e6629d9162ac. Montage seul corrigé, garde inchangée.
+CI à mesurer au nouveau SHA : argv complets comparés en helper isolé, témoin
+1777 refusé précisément, prepare/execute et inspection dans des conteneurs
+distincts. Aucun code applicatif exécuté dans Work ou sur le runner hors bac.
+
+Dossier et relevé détaillés : leo/ACTIVATION.md, première section. Les mentions
+« contrôle vide », « import à faire » et les anciens succès de tests ci-dessous
+sont historiques. La graine connue est ba369884db05db6a4af321620e11790de61a2656.
+Ne pas redemander l'installation ni rejouer execute ; garder r21-state et
+R21_STATE_SEED inchangés. La correction ne réarme pas l'installation arrêtée.
+
+Prochaine action : recevoir le correctif et ses preuves dans #365, puis préparer
+la succession explicite d'installation en préservant l'ancienne ancre. Ce plan
+reste ouvert ; aucun nouveau candidat ne peut être installé par simple reset.
+Pas de fusion, contrôle direct, secret, migration réelle, envoi ni achat.
+
+---
+
+# Historique — 8 octobre 2026, kit candidat de pilote préparé
 
 Cap : Léo conduit une mission bornée sous contrôle FINUBAR, avec arrêt durable
 et reprise sans doublon. Aucune réception d’autonomie acquise.

@@ -215,7 +215,7 @@ def container_command(root, image, name, command):
         '--read-only', '--network', 'none', '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges',
         '--user', '65534:65534', '--memory', '512m', '--cpus', '1', '--pids-limit', '128',
         '--tmpfs', '/tmp:rw,nosuid,nodev,noexec,size=128m,mode=1777',
-        '--tmpfs', '/trial-output:rw,nosuid,nodev,noexec,size=128m,mode=1777',
+        '--tmpfs', '/trial-output:rw,nosuid,nodev,noexec,size=128m,mode=0700,uid=65534,gid=65534',
         '--mount', 'type=bind,src=' + str(root / 'leo') + ',dst=/workspace/leo,readonly',
         '--mount', 'type=bind,src=' + str(root / 'finubar') + ',dst=/workspace/finubar,readonly',
         '--workdir', '/workspace', '--env', 'LV1_ISOLATED=1', '--env', 'PYTHONDONTWRITEBYTECODE=1',
