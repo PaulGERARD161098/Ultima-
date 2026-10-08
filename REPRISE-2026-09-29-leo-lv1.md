@@ -1,4 +1,43 @@
-# Reprise courante — 5 octobre 2026, raccord et arrêt FINUBAR préparés
+# Reprise courante — 8 octobre 2026, raccord réel localisé
+
+Cap : Léo conduit une mission bornée dans un hôte contrôlé par FINUBAR, avec
+arrêt durable et reprise sans doublon ; aucune réception d'autonomie acquise.
+Mandat actuel : vérifier l'hôte et préparer le raccord (« ok go » du 08/10).
+
+Source relue : `main` `8485ed5e0ccee72f94c28ba4c67bc62c5c36e8cd`.
+Le diagnostic, les preuves et le dossier opérateur vivent dans
+**`leo/ACTIVATION.md`, section « Raccord réel — diagnostic et dossier opérateur
+du 08/10/2026 »**. Cette reprise remplace les prochaines actions historiques
+ci-dessous, sans effacer leurs preuves datées.
+
+Fait : #353 et #354 fusionnées le 06/10 ; actions web capture/défaire retrouvées
+dans le journal de production. Le runtime est exclu de Vercel. La fondation
+PR351 reste ouverte et volontairement inerte (`exit 1`, lanceur `SystemExit`).
+Le connecteur expose 12 dépôts organisation + 2 personnels, sans le contrôle.
+Cela ne prouve pas l'état d'une installation réalisée hors Work.
+
+Préparation fermée : dossier GitHub Actions temporaire, sans nouveau serveur,
+qui distingue lanceur/identités, état durable/ancre, accord humain et réception.
+Revue distincte de lecture favorable ; aucun code applicatif ni test exécuté.
+Le stockage courant, l'ancre et l'installation cible restent non vérifiés.
+Compétence Work 1.4 / runtime attendu 1.0 : divergence conservée, pas contournée.
+
+**Prochaine action unique :** Paul consulte hors Work la page Actions du contrôle
+et transmet le relevé minimal décrit dans ACTIVATION (workflow, SHA, date,
+conclusion ; ou aucun run). Ne pas copier de secret ni déclencher de workflow.
+Réconcilier ce relevé avant de préparer un kit qui doublerait une installation.
+
+Restent : raccord opérationnel, identité distincte, stockage/ancre et accord réel,
+recette sur hôte cible puis reprise neuve ; pilote continu et budget non activés.
+Le calendrier cible du 16/10 est à recaler après le relevé, pas garanti.
+Préserver PR351, PR361 et PR364 ; aucune collecte parallèle ni modification
+du grain FINUBAR dans ce lot. Ne pas rouvrir les fusions #353/#354 ni considérer
+leurs tests comme une réception d'autonomie. Aucun import dans le contrôle exclu,
+fusion, migration réelle, secret, envoi ou workflow R21 manuel dans ce mandat.
+
+---
+
+# Historique — 5 octobre 2026, raccord et arrêt FINUBAR préparés
 
 Mandat : raccord Ultima, absence d'auto-contrôle, arrêt externe par FINUBAR.
 Code préparé : admission six champs, client, journal anti-rejeu ; garde
@@ -19,7 +58,7 @@ réception LV1 restent ouverts. Pas de fusion/import/activation/secret/envoi.
 
 ---
 
-# Reprise courante — 5 octobre 2026, accès contrôle révoqué
+# Historique — 5 octobre 2026, accès contrôle révoqué
 
 La révocation par Paul est vérifiée pour le connecteur organisation
 160835885 : 12 dépôts conservés, contrôle absent ; GET métadonnées du contrôle
@@ -45,7 +84,7 @@ publication, migration, workflow manuel ou émission externe.
 
 ---
 
-# Reprise courante — 5 octobre 2026, protocole R21 préparatoire
+# Historique — 5 octobre 2026, protocole R21 préparatoire
 
 Demande : débloquer et mettre en ligne. Ultima est déjà déployé READY au main
 `9a261c5fb1ac1a77bdf53e5b3f98444297b2599b` ; le dossier Python Léo est exclu de
@@ -77,7 +116,7 @@ ne pas annoncer d'autonomie ni de réception LV1.
 
 ---
 
-# Reprise courante — 4 octobre 2026, cadrage d'autonomie et premier diagnostic
+# Historique — 4 octobre 2026, cadrage d'autonomie et premier diagnostic
 
 **Boucle actuelle :** demande de Paul de cadrer précisément l'autonomie de Léo
 et FINUBAR, puis réaliser la première étape. Dossier opératoire et rétroplanning
@@ -145,7 +184,7 @@ ci-dessus ; la revue PR351 ne vaut ni installation ni effet R21 sous accord rée
 
 ---
 
-# Reprise courante — 30 septembre 2026, diagnostic GitHub Team clos
+# Historique — 30 septembre 2026, diagnostic GitHub Team clos
 
 **Fait :** intégration préparatoire de main `ce1ff937465e5d65a269b481b9ee488b65e02ffa`
 (PR310/311) dans la branche `codex/leo-lv1-20260929`, source technique

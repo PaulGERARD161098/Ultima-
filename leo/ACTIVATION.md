@@ -1,5 +1,106 @@
 # Raccordement LV1 à Ultima — proposition d'activation
 
+## Raccord réel — diagnostic et dossier opérateur du 08/10/2026
+
+**État : diagnostic fermé, raccord non installé dans le périmètre observable.**
+Mandat de Paul : « ok go » après l'état des lieux du 08/10, pour vérifier
+l'environnement réel et préparer le raccord. Cette section est la reprise
+opérationnelle ; les sections datées qui suivent conservent leur valeur historique.
+Base relue : `8485ed5e0ccee72f94c28ba4c67bc62c5c36e8cd` (`main`, 08/10).
+Contrat : §11 LV1 v1.1. Une installation réalisée hors des accès de Work reste
+possible et **non vérifiée** ; ne pas la déclarer inexistante.
+
+### Boucle cadrée et critère de sortie
+
+- **But :** identifier où le raccord s'arrête et préparer l'installation minimale
+  réutilisant l'admission, le journal et la garde existants.
+- **Étapes :** versions et travaux concurrents → lecture des voies d'exécution →
+  séparation mesuré/non vérifié → dossier opérateur → revue distincte.
+- **Moyens :** GitHub en lecture, sources à SHA fixé, métadonnées des installations,
+  vérifications système sans exécution de code du dépôt. Deux documents existants
+  seulement sont modifiés : celui-ci et `REPRISE-2026-09-29-leo-lv1.md`.
+- **Réussite de cette boucle :** chaque composant a un état, une preuve et une
+  sortie attendue ; l'unique information extérieure indispensable est nommée.
+  Une mission réelle, son arrêt et sa reprise restent des critères du raccord futur.
+- **Hors périmètre :** import/lecture du contrôle exclu, activation, workflow R21
+  manuel, fusion, secret, migration réelle, achat, envoi et changement de droits.
+- **Pré-mortem :** confondre site et runtime → chemins de déploiement relus ;
+  recopier une installation extérieure existante → relevé hors Work préalable ;
+  restaurer un ancien arrêt → ancre extérieure obligatoire ; écraser Claude →
+  branche distincte, agrégats et PR351/361/364 conservés.
+
+### Ce qui est effectivement raccordé
+
+| Pièce | Mesure au 08/10 | Conséquence |
+|---|---|---|
+| Produit web | Production Vercel `READY` sur `8485ed5`, déploiement `dpl_Db8rNRCoaA4nbaEHrfoy8yUQXReu`. Base Ultima : 2 traces ordonnées `tentee → reussie → defaite`, outil `proposer_idee`, dernière fin le 06/10 à 12:00:07 UTC ; 0 ligne dans `leo_missions` et `leo_operations`. Lecture SQL agrégée, pas nouvelle action réelle. | Journal de deux cycles web capture/défaire ; aucune preuve de missions LV1 continues. |
+| Code intégré | #353 fusionnée en `560ad78`, #354 en `4519249`. Trois workflows PR de la source #354 `84f5283` terminés avec succès : `37453552018`, `37453551697`, `37453551716`. | Ne pas rouvrir leur fusion. Ces tests ne prouvent pas une installation. |
+| Déploiement du runtime | `.vercelignore` exclut `/leo/` et `finubar/`. `vercel.json` ne déclare que les deux horaires du mail Finubar. | Le déploiement du site n'installe pas le contrôleur Python. Les crons existants sont préservés. |
+| Hôte préparé | `TrialHost` et son serveur restent sur loopback ; `AdmissionHost` restitue `environment: fixture`. L'intégrateur fournit les `Binding` et `Approval`. | Admission et anti-rejeu existent ; aucun service distant authentifié ni accord humain réel n'est installé par ces modules. |
+| Fondation PR351 | Toujours brouillon ouverte, source `8c3ff37bb81e19bbe3a08fa0e0c97fbceadb2448`. Son workflow propose `ubuntu-latest`, mais son unique étape finit en `exit 1` ; `runner.py` lève `SystemExit`. | Kit volontairement inerte, pas panne à contourner. Ces fichiers sont lus dans PR351, pas présentés comme déjà sur `main`. |
+| FINUBAR contrôle | `leo_control.py` et `leo_process.py` préparent verrou global et arrêt des processus. Aucun `leo/control_r21/checkpoint.py` dans l'arbre Git complet à la base relue (671 entrées, `truncated: false`). | L'enceinte noyau et l'ancre de reprise restent à installer/construire ; une simulation ne les reçoit pas. |
+| Identité et accès Work | Connecteur sous `paggerard-boop`. Installation organisation `160835885` : sélection de 12 dépôts ; personnelle `163434661` : 2 dépôts, mode `all`. Pagination suivante vide dans les deux cas ; contrôle absent des listes. | Exclusion de ce connecteur reconstatée. Ni identité GitHub propre à Léo, ni exclusion de toutes les autres voies ne sont prouvées. Aucun accès direct au contrôle tenté. |
+| Limites de visibilité | Endpoints Actions runners/workflows non pris en charge par le connecteur (400). Work : PID1 `supervisord`, cgroup non inscriptible, pas de runtime systemd ; Docker/Podman absents du PATH. Git HTTPS ne dispose pas d'authentification utilisable sur Ultima. | Pas de conclusion d'absence de runner distant. Ce terminal n'est pas désigné hôte de confiance et n'est pas utilisé pour exécuter le runtime. |
+| Versions | Compétence Work lue : 1.4 ; `leo/runtime/policy.py` attend 1.0 ; contrat 1.1. | Divergence connue D1, encore présente. Aucun mandat 1.4 soumis, aucune constante relevée pour obtenir un succès artificiel. |
+| Fraîcheur | Agrégat servi `api/_lib/finubar-macro.mjs` daté du 04/10 ; PR361 d'actualisation toujours ouverte. | Les travaux de Claude sont préservés ; cette boucle ne recollecte ni ne remplace les agrégats. |
+
+### Cible proposée et composants du raccord
+
+**Réutiliser la cible GitHub Actions temporaire déjà prévue par PR351**, dans le
+contrôle exclu. Aucun VPS ni abonnement nouveau n'est proposé. Ce choix reste
+conditionné à la preuve de faisabilité du stockage, de l'ancre et de l'arrêt ;
+une étiquette `ubuntu-latest` n'est pas une preuve de runner installé ou accessible.
+Le premier pilote reste une fixture sans accès aux dépôts métier ni API payante.
+
+| Lot | Entrée et moyen réutilisé | Sortie nécessaire avant le suivant | Responsable |
+|---|---|---|---|
+| 0. Réconcilier l'installation extérieure | Relevé humain du dépôt de contrôle, sans contenu secret : branche/SHA, fichier de workflow, dernier run et sa conclusion, éventuel autre hôte déjà retenu. | Version exécutée et piste d'installation identifiées, OU absence de run connue ; installation non vérifiée tant que son code et son état ne sont pas attestés. | Paul hors Work |
+| 1. Lanceur et identités | Source revue/figée ; `AdmissionHost`, `TrialHost`, `ProcessSupervisor` ; contrôleur détenu par l'opérateur, code Léo dans un conteneur distinct. | Commande fixe ; code/contrôle en lecture seule pour Léo ; UID, capacités, réseau, cgroup et limites vérifiés ; FINUBAR peut arrêter tous les descendants du conteneur/cgroup. | Préparation Léo ; installation opérateur |
+| 2. État durable et ancre | Registres existants (mission/budget, arrêt global, journal de transport) ; stockage privé à désigner avec son propriétaire et ses droits. | Conservation atomique et retour du reçu entre jobs ; état manquant refusé ; restauration d'une ancienne copie refusée par une ancre extérieure courante. | Choix opérateur puis préparation Léo |
+| 3. Accord exact | Événement humain authentifié hors Work, code figé qui résout l'autorité ; contexte source/cible/intégration, opération, expiration. | Accord lié aux versions, utilisable une seule fois ; mauvais acteur/contexte/accord expiré refusés. Aucun `approved: true` ni manifeste auto-approuvant. | Préparation Léo ; accord Paul |
+| 4. Réception sur hôte réel | Kit revu, mandat frais et données fictives ; transport privé choisi et sortie bornée. | Cycle complet, panne après effet sans doublon, arrêt durable après redémarrage, refus de modification du contrôle, puis reprise depuis une session neuve. | Léo + revue distincte + Paul |
+
+Les lots 1 à 3 restent un raccord à concevoir puis éprouver, **pas un kit livré**.
+Ne pas rendre le snapshot PR351 exécutable en retirant seulement son `exit 1`.
+Le contrôle système (UID/cgroup) est distinct de l'identité GitHub E1 : une fixture
+sans accès métier ne reçoit pas la future identité d'exécution sur les vrais dépôts.
+
+**Trou décisif entre deux jobs :** le workspace éphémère et un artefact restauré
+ne garantissent ni la persistance de l'arrêt ni l'absence de rollback. Le choix
+du stockage courant et de son ancre précède le code de checkpoint. Il faut également
+un arrêt accessible à Paul pendant le job ; une simple annulation GitHub ne prouve
+pas l'enregistrement durable de cet arrêt. Aucune clé n'est demandée dans le chat.
+
+### Relevé extérieur unique pour la prochaine boucle
+
+Depuis le navigateur personnel de Paul, **hors Work**, ouvrir
+`https://github.com/PaulGERARD161098/leo-control-r21/actions`.
+Communiquer uniquement : nom du workflow, branche/SHA, date et conclusion du
+dernier run ; s'il n'y a aucun run, le dire. Si un autre serveur a déjà été retenu,
+son nom/hébergeur suffit à ce stade. Ne lancer aucun workflow, ne réouvrir aucun
+accès de Work, ne copier ni valeur secrète, ni variable, ni journal complet.
+
+Un run réussi ne suffira pas à recevoir le contrôle : il permettra seulement
+d'identifier la version exécutée et d'orienter la vérification de l'installation.
+Si le workflow s'arrête sur le refus préparatoire, reprendre les lots 1 à 3
+ci-dessus dans Ultima, sous revue, avant tout import autorisé hors Work.
+
+### Clôture et calendrier
+
+Revue indépendante de lecture réalisée par une instance distincte : favorable
+au dossier préparatoire ; elle confirme la séparation site/runtime et les trous
+d'admission réelle, de persistance et d'ancre. Aucun test applicatif exécuté dans
+cette boucle documentaire. Le relevé extérieur et la réception restent bloqués
+par la visibilité disponible, pas par une demande de nouveau budget.
+
+L'objectif historique du 16/10 **n'est plus confirmé** : ses prérequis du 05–08/10
+ne sont pas reçus. Recaler les dates après le lot 0, sans raccourcir la recette.
+Prochaine action unique : obtenir ce relevé minimal hors Work, puis réconcilier
+le dossier avec l'installation réellement présente. Ne pas relancer les anciennes
+recettes web déjà journalisées pour remplacer cette preuve manquante.
+
+---
+
 ## Correctifs de l'audit indépendant — 06/10/2026
 
 But : que l'arrêt FINUBAR soit écrit à coup sûr, global, impossible à lever
