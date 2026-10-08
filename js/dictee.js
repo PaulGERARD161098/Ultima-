@@ -299,6 +299,10 @@
           session.relances += 1;
           // L'interim non finalisé de l'écoute close est gardé : la suite s'écrit derrière.
           if (session.interim) { session.finalise = joindre(session.finalise, session.interim); session.interim = ''; }
+          // Chaque morceau clos est posé ET annoncé au champ : le brouillon le garde
+          // déjà, rien de ce qui est dicté ne se perd si l'appli est tuée en pleine dictée.
+          afficher();
+          champ.dispatchEvent(new Event('input', { bubbles: true }));
           try { nouvelleEcoute().start(); return; } catch (e) { /* le navigateur refuse : fin nominale */ }
         }
         finaliser();
