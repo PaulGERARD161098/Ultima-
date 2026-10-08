@@ -1,4 +1,4 @@
-# Reprise courante — 8 octobre 2026, kit de pilote en préparation
+# Reprise courante — 8 octobre 2026, kit candidat de pilote préparé
 
 Cap : Léo conduit une mission bornée sous contrôle FINUBAR, avec arrêt durable
 et reprise sans doublon. Aucune réception d’autonomie acquise.
@@ -15,10 +15,13 @@ réserve avant effet, archive conservée, arrêt monotone, hôte Actions et cont
 sans réseau/secret, deadline interne. Une seule fixture déterministe, pas Léo
 modèle. Contrat1.1/runtime skill1.0 inchangés ; compatibilité Work1.4 non reçue.
 
-Vérification à relever sur le nouveau SHA de PR365 : revue indépendante du kit,
-recette CI isolée et archive candidate inerte. Aucun test applicatif local.
-La prochaine action unique est de terminer cette revue et cette recette, puis
-présenter le candidat concret avant toute demande d’installation extérieure.
+Preuve initiale : source fc7d343433badea03d0e8cee3a223d6f5afed7b0,
+run37811920873, 211 tests runtime verts dont45nouveaux et archive inerte générée.
+Le relevé final de la version candidate, revue, contrôles et empreintes figure
+dans PR365 ; toute version suivante exige ses propres contrôles. Aucun test local.
+Prochaine action après ces contrôles : installation opérateur hors Work du
+candidat exact, uniquement après accord distinct. Ne pas importer le squelette
+PR351 et ne pas rétablir l’accès Work au dépôt de contrôle.
 
 Le diagnostic du contrôle est clos : capture Paul du08/10 à18h07 Paris, dépôt
 privé vide (Quick setup). Ne pas redemander cette capture. Aucun accès direct

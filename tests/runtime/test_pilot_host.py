@@ -4,6 +4,7 @@ if os.environ.get('LV1_ISOLATED') != '1':
     raise RuntimeError('LV1_ISOLATED=1 required')
 
 from copy import deepcopy
+import hashlib
 import json
 from pathlib import Path
 import tempfile
@@ -12,7 +13,7 @@ import unittest
 from unittest.mock import patch
 
 from leo.control_r21 import pilot_host as host, pilot_build as builder
-from leo.control_r21.pilot_state import new_state, stop_state, encode_state, PilotError
+from leo.control_r21.pilot_state import new_state, stop_state, encode_state, PilotError, Coordinator
 
 
 SOURCE = 'a' * 40
@@ -67,6 +68,9 @@ class PilotAuthenticationTests(unittest.TestCase):
 
     def test_positive_control_then_environment_identity_mutations(self):
         self.assertEqual(self.authenticate(), ('prepare', '42'))
+        self.event['ref'] = 'refs/heads/main'
+        self.assertEqual(self.authenticate(), ('prepare', '42'))
+        self.event['ref'] = 'main'
         for key, value in [('GITHUB_EVENT_NAME', 'push'), ('GITHUB_REPOSITORY', 'foreign/repo'),
                            ('GITHUB_REF', 'refs/heads/foreign'), ('GITHUB_RUN_ATTEMPT', '2'),
                            ('GITHUB_ACTOR_ID', '1'), ('GITHUB_RUN_ID', '../42')]:
@@ -125,6 +129,7 @@ class ChainAPI:
         self.states, self.parents = {}, {}
         self.head = None
         self.calls = []
+        self.trees = {}
 
     def add(self, sha, state, parents):
         self.states[sha] = deepcopy(state)
@@ -141,8 +146,9 @@ class ChainAPI:
             return {'tree': {'sha': sha}, 'parents': [{'sha': p} for p in self.parents[sha]]}
         if path.startswith('/git/trees/'):
             sha = path.rsplit('/', 1)[-1]
-            return {'truncated': False, 'tree': [{'path': 'state.json', 'mode': '100644',
-                                                 'type': 'blob', 'sha': sha}]}
+            entries = self.trees.get(sha, [{'path': 'state.json', 'mode': '100644',
+                                          'type': 'blob', 'sha': sha}])
+            return {'truncated': False, 'tree': deepcopy(entries)}
         raise AssertionError('Unexpected synthetic chain request')
 
     def blob(self, sha):
@@ -207,6 +213,85 @@ class PilotRemoteStateTests(unittest.TestCase):
         self.assertEqual(calls[1][2]['parents'], [SOURCE])
         self.assertIs(calls[2][2]['force'], False)
         self.assertFalse(any('/git/refs' == path for _, path, _ in calls))
+
+    def completed_package_chain(self):
+        """Admitted fixture lifecycle; package bytes are not interpreted by these tests."""
+        api = ChainAPI(self.install)
+        api.add(SOURCE, self.seed, [])
+        install = self.install
+        class Store:
+            def read(self):
+                return api.head, deepcopy(api.states[api.head])
+            def cas(self, parent, state):
+                if parent != api.head:
+                    raise AssertionError('Unexpected synthetic CAS conflict')
+                sha = hashlib.sha1(encode_state(state, install)).hexdigest()
+                api.add(sha, state, [parent])
+                entries = [{'path': 'state.json', 'mode': '100644', 'type': 'blob', 'sha': sha}]
+                if state['package']:
+                    entries.append({'path': 'package.json', 'mode': '100644', 'type': 'blob',
+                                    'sha': state['package']['blob_sha']})
+                execute = state['operations']['execute']
+                if execute:
+                    entries.append({'path': 'approved-package.json', 'mode': '100644',
+                                    'type': 'blob', 'sha': execute['input_package']['blob_sha']})
+                api.trees[sha] = entries
+                return sha
+        coordinator = Coordinator(Store(), self.install)
+        approved = {'blob_sha': 'd' * 40, 'sha256': 'e' * 64,
+                    'context_digest': 'f' * 64, 'expires_at': 2000.5}
+        current = {**approved, 'blob_sha': '7' * 40, 'sha256': '8' * 64}
+        prepare = coordinator.prepare('prepare', '101', '1' * 64)
+        coordinator.finish(prepare.reservation, {'prepared': True}, approved)
+        execute = coordinator.execute('execute', '102', '2' * 64, approved['context_digest'], 1000)
+        completed = coordinator.finish(execute.reservation, {'status': 'completed'}, current)
+        return api, completed, approved, current
+
+    def test_cas_links_both_current_and_approved_packages_into_git_tree(self):
+        _, completed, approved, current = self.completed_package_chain()
+        calls = []
+        api = SimpleNamespace(put_blob=lambda raw: '9' * 40)
+        def call(method, path, data):
+            calls.append((method, path, deepcopy(data)))
+            if path == '/git/trees':
+                return {'sha': 'a' * 40}
+            if path == '/git/commits':
+                return {'sha': 'b' * 40}
+            if path == '/git/refs/' + host.STATE_REF:
+                return {'object': {'sha': 'b' * 40}}
+            raise AssertionError('Unexpected package checkpoint mutation')
+        api.call = call
+        host.GitState(api, self.install, SOURCE).cas(completed.state_sha, completed.state)
+        self.assertEqual({entry['path']: entry['sha'] for entry in calls[0][2]['tree']},
+                         {'state.json': '9' * 40, 'package.json': current['blob_sha'],
+                          'approved-package.json': approved['blob_sha']})
+        self.assertTrue(all(entry['mode'] == '100644' and entry['type'] == 'blob'
+                            for entry in calls[0][2]['tree']))
+        self.assertEqual(calls[1][2]['parents'], [completed.state_sha])
+        self.assertIs(calls[2][2]['force'], False)
+
+    def test_reader_rejects_missing_wrong_or_extra_package_links(self):
+        api, completed, _, _ = self.completed_package_chain()
+        self.assertEqual(host.GitState(api, self.install, SOURCE).read(),
+                         (completed.state_sha, completed.state))
+        correct = deepcopy(api.trees[completed.state_sha])
+        mutations = [
+            [entry for entry in correct if entry['path'] != 'package.json'],
+            [entry for entry in correct if entry['path'] != 'approved-package.json'],
+            [{**entry, 'sha': '0' * 40} if entry['path'] == 'package.json' else entry
+             for entry in correct],
+            [{**entry, 'sha': '0' * 40} if entry['path'] == 'approved-package.json' else entry
+             for entry in correct],
+            [{**entry, 'mode': '120000'} if entry['path'] == 'package.json' else entry
+             for entry in correct],
+            [{**entry, 'path': 'foreign.json'} if entry['path'] == 'package.json' else entry
+             for entry in correct],
+        ]
+        for index, entries in enumerate(mutations):
+            with self.subTest(mutation=index):
+                api.trees[completed.state_sha] = entries
+                with self.assertRaisesRegex(ValueError, 'package_links_invalid'):
+                    host.GitState(api, self.install, SOURCE).read()
 
 
 class PilotIsolationAndBuildTests(unittest.TestCase):

@@ -184,7 +184,7 @@ def authenticate(env, event, config, api):
     require(event['sender']['id'] == int(install['actor_id'])
             and event['repository']['full_name'] == REPOSITORY
             and event['repository']['private'] is True
-            and event['ref'] == 'main', 'dispatch_event_denied')
+            and event['ref'] in ('main', 'refs/heads/main'), 'dispatch_event_denied')
     run_id = env.get('GITHUB_RUN_ID', '')
     require(re.fullmatch('[1-9][0-9]{0,19}', run_id), 'run_id_invalid')
     run = api.call('GET', '/actions/runs/' + run_id)

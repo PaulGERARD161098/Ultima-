@@ -64,6 +64,8 @@ la preuve indépendante ancrée lors de l'installation.
    `R21_STATE_SEED` au SHA du commit initial de la branche d'état.
    Refuser suppression/force-push des branches ; droits Actions limités au
    contrôle. Aucun secret permanent supplémentaire n'est prévu.
+   Garder `main`, la configuration et cette variable figés pendant le pilote ;
+   aucun redéploiement concurrent du contrôle n'est reçu par cette recette.
 5. Après autorisation distincte de la recette cible : `status`, `prepare`, lecture
    du contexte affiché, puis `execute` avec le `context_digest` exact. Depuis un
    nouveau job, `reconcile` retourne le reçu conservé, sans nouveau worker.
@@ -84,9 +86,12 @@ de HMAC présenté à tort comme signature vérifiable par Work. La réception R
 complète, la compatibilité skill1.4, l'identité propre à Léo et son service
 permanent restent des travaux distincts.
 
-**Vérification à ce stade :** revue statique en cours et recette CI à relever
-sur le nouveau SHA de #365. Aucun test applicatif local, accès au dépôt de
-contrôle ou workflow manuel n'a été exécuté.
+**Preuve de livraison :** revue statique indépendante et tests dans le conteneur
+CI uniquement. Relever les contrôles et l’artefact attachés au SHA exact de #365 ;
+le relevé daté de réception du candidat est dans la reprise courante et la PR.
+Aucun test applicatif local, accès au contrôle ou workflow manuel exécuté.
+La première version fc7d343 a passé 211 tests runtime (45 nouveaux) dans le
+run37811920873 ; ce résultat ne vaut pas automatiquement pour une version suivante.
 
 ## Raccord réel — diagnostic et dossier opérateur du 08/10/2026
 
