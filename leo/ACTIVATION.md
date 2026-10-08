@@ -1,5 +1,93 @@
 # Raccordement LV1 à Ultima — proposition d'activation
 
+## Kit candidat du 08/10/2026 — pilote déterministe, installation non autorisée
+
+Mandat complémentaire de Paul : « ok vasy », préparation exécutable et recette
+isolée. Base de code reprise : `5848ea99668ec8a901e746e2bed1d628241fb22f`.
+PR361 a depuis été fusionnée ; ses changements et ceux de Claude sont préservés.
+Une seule PR de travail : #365, toujours brouillon, sans fusion.
+
+### Boucle et portée
+
+- But : livrer un kit exécutable de fixture avec réserve durable, reçu réutilisé,
+  arrêt prioritaire et refus de toute relance après résultat inconnu.
+- Étapes : architecture et revue distincte → code → recette CI isolée → archive
+  candidate → dossier opérateur ; aucune installation dans le contrôle exclu.
+- Moyens : modules `leo/control_r21/pilot_*.py`, deux modèles `.yml.in`, tests
+  `tests/runtime/test_pilot_*.py`, workflow CI LV1 existant. Réutilisation de
+  `trial`, `trial_resume`, `Broker`, budget, fixture Git et verrou FINUBAR.
+- Critère : arrêt conservé face à une finalisation concurrente ; un seul départ
+  après CAS ; retour du même reçu après réponse perdue ; résultat perdu avant
+  checkpoint = `unknown`, sans rejeu ; identité/contexte/anciennes copies refusés.
+- Limites : recette déterministe legacy contrat1.1/runtime-skill1.0, pas un
+  modèle Léo1.4. Pas de secrets, réseau ou données métier dans le worker.
+  Pas de nouvelle dépense autorisée, fusion, import, dispatch R21 ni activation.
+- Pré-mortem : arrêt coincé en file → workflow distinct sans groupe concurrency ;
+  double admission → nonce de mutation et lease distincts + CAS non forcé ;
+  copie d'ancien registre → ancre distante, parent/sequence et transitions
+  monotones ; host perdu → deadline PID1 dans le conteneur ; résultat non sauvé
+  → `unknown` bloquant, jamais succès inventé.
+
+### Ce que contient le candidat
+
+| Élément | Comportement |
+|---|---|
+| `pilot_state.py` | Une préparation et une exécution par installation. Réserve avant départ, reçus durables, résultat incertain non rejouable. Arrêt monotone sans réarmement. |
+| `pilot_host.py` | Hôte futur seul détenteur du jeton éphémère Actions. Vérifie événement, acteur numérique, dépôt privé, branche, première tentative, code et revue ancrés. Lit la ref courante `r21-state`, valide la chaîne depuis la graine opérateur et met à jour sans force. |
+| `pilot_worker.py` | Recette fixe en conteneur sans réseau/capacités/secrets, UID65534, racine/code en lecture seule, mémoire/CPU/PID et durée limités. Rejoue l'oracle connu rouge/vert avant le seul effet `update_fixture_ref`. |
+| `pilot_build.py` | Produit hors réseau l'archive `pilot.tar.gz` : arborescence future `main/`, graine future `r21-state/`, image figée par digest. Revue laissée vide : candidat inerte par défaut. |
+| Modèles Actions | Dispatch manuel uniquement. `status`, `prepare`, `execute`, `reconcile` d'un côté ; arrêt séparé. Aucun cron, agent permanent ou accès aux dépôts métier. |
+
+La nouvelle admission distante enveloppe la recette existante ; elle ne remplace
+pas le protocole HTTP de `AdmissionHost`, qui reste disponible pour un futur
+agent. Broker, registres et worker déterministe partagent ici le conteneur :
+**ce n'est pas une séparation de droits suffisante pour un agent non fiable**.
+
+Le consentement saisi par Paul porte sur l'empreinte complète du paquet, le
+contexte Git exact, l'opération, l'expiration, l'installation et la revue.
+`proofs.review=pending` et les inspections synthétiques restent inchangés ;
+seule une revue extérieure de la recette ET du lanceur exacts peut fournir
+la preuve indépendante ancrée lors de l'installation.
+
+### Installation future, préparée mais non exécutée
+
+1. Recevoir la recette CI de la version exacte et télécharger son artefact
+   privé `leo-pilot-candidate-<SHA>`. Vérifier l'empreinte du fichier au journal CI.
+2. Faire approuver le contenu exact et vérifier hors Work l'exclusion des voies
+   permettant à Léo de modifier le contrôle. Le seul numéro d'acteur GitHub
+   n'est pas une preuve qu'un humain était derrière l'événement.
+3. Dans le contrôle privé, importer les fichiers de `main/` sur `main`, et
+   **seulement** `r21-state/state.json` à la racine d'une branche `r21-state`.
+   Ne jamais remplacer une installation existante ni initialiser après perte.
+4. Ancrer la revue indépendante (`location`, `reviewer`, date réelle et digest
+   exact) dans `pilot-installation.json`. Fixer la variable Actions non secrète
+   `R21_STATE_SEED` au SHA du commit initial de la branche d'état.
+   Refuser suppression/force-push des branches ; droits Actions limités au
+   contrôle. Aucun secret permanent supplémentaire n'est prévu.
+5. Après autorisation distincte de la recette cible : `status`, `prepare`, lecture
+   du contexte affiché, puis `execute` avec le `context_digest` exact. Depuis un
+   nouveau job, `reconcile` retourne le reçu conservé, sans nouveau worker.
+6. Éprouver `R21 durable stop` pendant une exécution autorisée, constater arrêt
+   distant et terminaison du conteneur, puis refus d'un nouveau départ.
+
+Le stop distant peut attendre l'attribution d'un runner GitHub. Dès qu'il est
+inscrit, le host le sonde et tue le conteneur entier ; une deadline interne
+115s (+2s de kill) reste indépendante des lectures réseau. L'arrêt ne défait
+pas un effet déjà engagé. Une perte du runner avant checkpoint laisse
+`running/unknown` : ce pilote refuse la répétition et ne prétend pas retrouver
+un reçu disparu. `reconcile` est une relecture, pas une réparation aveugle.
+
+L'ancre est la ref GitHub courante d'un dépôt exclu et de confiance. Le pilote
+détecte une ancienne copie réintroduite dans un nouveau commit ; il ne peut pas
+prouver l'absence d'un rollback forcé par l'opérateur lui-même. Il n'utilise pas
+de HMAC présenté à tort comme signature vérifiable par Work. La réception R21
+complète, la compatibilité skill1.4, l'identité propre à Léo et son service
+permanent restent des travaux distincts.
+
+**Vérification à ce stade :** revue statique en cours et recette CI à relever
+sur le nouveau SHA de #365. Aucun test applicatif local, accès au dépôt de
+contrôle ou workflow manuel n'a été exécuté.
+
 ## Raccord réel — diagnostic et dossier opérateur du 08/10/2026
 
 **État : diagnostic fermé, raccord non installé dans le périmètre observable.**
@@ -1041,3 +1129,4 @@ Ne pas supprimer une table contenant des opérations ou relancer une mutation
 dont le résultat est inconnu. L'arrêt bloque les nouveaux effets sans effacer
 les résultats déjà engagés. Les sauvegardes et la rétention suivent l'hébergement
 existant et restent à vérifier avant réception opérationnelle.
+

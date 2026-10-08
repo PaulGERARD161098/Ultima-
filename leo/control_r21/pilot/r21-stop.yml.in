@@ -1,0 +1,28 @@
+name: R21 durable stop — operator only
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        type: choice
+        required: true
+        options: [stop]
+# Deliberately no shared concurrency group: stop may run during execute.
+permissions:
+  contents: read
+jobs:
+  stop:
+    if: github.repository == 'PaulGERARD161098/leo-control-r21' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Record stop outside the worker
+        env:
+          R21_HOST_TOKEN: ${{ github.token }}
+          R21_STATE_SEED: ${{ vars.R21_STATE_SEED }}
+        run: python3 -m leo.control_r21.pilot_host

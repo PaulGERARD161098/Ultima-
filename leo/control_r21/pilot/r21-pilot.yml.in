@@ -1,0 +1,36 @@
+name: R21 deterministic fixture — operator only
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        type: choice
+        required: true
+        options: [status, prepare, execute, reconcile]
+      approval_digest:
+        description: Exact prepared context_digest, only for execute
+        type: string
+        required: false
+permissions:
+  contents: read
+jobs:
+  pilot:
+    if: github.repository == 'PaulGERARD161098/leo-control-r21' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Authenticate, reserve, run bounded fixture, checkpoint
+        env:
+          R21_HOST_TOKEN: ${{ github.token }}
+          R21_STATE_SEED: ${{ vars.R21_STATE_SEED }}
+        run: python3 -m leo.control_r21.pilot_host
+      - name: Remove this run's whole container
+        if: always()
+        env:
+          R21_RUN_ID: ${{ github.run_id }}
+        run: docker rm -f "r21-$R21_RUN_ID" 2>/dev/null || true

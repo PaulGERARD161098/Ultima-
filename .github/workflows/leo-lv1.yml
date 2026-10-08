@@ -96,6 +96,7 @@ jobs:
         run: |
           docker pull python:3.12-bookworm
           docker image inspect --format '{{.Id}}' python:3.12-bookworm > /tmp/lv1-python-image-id
+          docker image inspect --format '{{index .RepoDigests 0}}' python:3.12-bookworm > /tmp/lv1-python-image-digest
       - name: Éprouver le runtime et ses processus enfants sans réseau ni secrets
         run: |
           LV1_PYTHON_IMAGE="$(cat /tmp/lv1-python-image-id)"
@@ -113,6 +114,39 @@ jobs:
             --env GIT_CONFIG_GLOBAL=/dev/null --env GIT_CONFIG_NOSYSTEM=1 \
             "$LV1_PYTHON_IMAGE" \
             sh -eu -c 'git --version; python -m unittest discover -s tests/runtime -p "test_*.py" -v'
+      - name: Construire le kit candidat inerte dans le bac à sable
+        env:
+          LV1_SOURCE_SHA: ${{ github.event.pull_request.head.sha }}
+          LV1_TARGET_SHA: ${{ github.event.pull_request.base.sha }}
+          LV1_INTEGRATION_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          export LV1_PINNED_IMAGE="$(cat /tmp/lv1-python-image-digest)"
+          LV1_PYTHON_IMAGE="$(cat /tmp/lv1-python-image-id)"
+          LV1_KIT_OUTPUT="$(mktemp -d "$RUNNER_TEMP/leo-kit.XXXXXX")"
+          echo "LV1_KIT_OUTPUT=$LV1_KIT_OUTPUT" >> "$GITHUB_ENV"
+          docker run --rm --read-only --network none \
+            --cap-drop ALL --security-opt no-new-privileges \
+            --user 65534:65534 --memory 512m --cpus 1 --pids-limit 128 \
+            --tmpfs /tmp:rw,nosuid,nodev,noexec,size=128m,mode=1777 \
+            --mount type=bind,src="$GITHUB_WORKSPACE/leo",dst=/workspace/leo,readonly \
+            --mount type=bind,src="$GITHUB_WORKSPACE/finubar/leo_control.py",dst=/workspace/finubar/leo_control.py,readonly \
+            --mount type=bind,src="$GITHUB_WORKSPACE/finubar/leo_process.py",dst=/workspace/finubar/leo_process.py,readonly \
+            --workdir /workspace --env PYTHONDONTWRITEBYTECODE=1 \
+            --env LV1_SOURCE_SHA --env LV1_TARGET_SHA --env LV1_INTEGRATION_SHA --env LV1_PINNED_IMAGE \
+            "$LV1_PYTHON_IMAGE" \
+            sh -eu -c 'python -m leo.control_r21.pilot_build --source /workspace --output /tmp/pilot --source-sha "$LV1_SOURCE_SHA" --target-sha "$LV1_TARGET_SHA" --integration-sha "$LV1_INTEGRATION_SHA" --image "$LV1_PINNED_IMAGE" >&2; tar -czf /tmp/pilot.tar.gz -C /tmp pilot; base64 -w0 /tmp/pilot.tar.gz' \
+            | head -c 2097153 > "$LV1_KIT_OUTPUT/encoded"
+          test "$(wc -c < "$LV1_KIT_OUTPUT/encoded")" -le 2097152
+          base64 --decode "$LV1_KIT_OUTPUT/encoded" > "$LV1_KIT_OUTPUT/pilot.tar.gz"
+          sha256sum "$LV1_KIT_OUTPUT/pilot.tar.gz"
+      - name: Conserver le kit sans l’installer
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: leo-pilot-candidate-${{ github.event.pull_request.head.sha }}
+          path: ${{ env.LV1_KIT_OUTPUT }}/pilot.tar.gz
+          if-no-files-found: error
+          retention-days: 14
       - name: Préparer le dossier R21 sans fusion ni accord simulé
         env:
           LV1_SOURCE_SHA: ${{ github.event.pull_request.head.sha }}
@@ -204,4 +238,5 @@ jobs:
               --source-sha 220fb9515291c9e62c076d06e4fa3dc608166db7 \
               --target-sha fb7daac613a0828d4135333fbd27a47102323211 \
               --integration-sha 2c8b70638c73949eb8e5485b0f2280627f5526b3
+
 

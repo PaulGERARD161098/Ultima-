@@ -1,42 +1,34 @@
-# Reprise courante — 8 octobre 2026, raccord réel localisé
+# Reprise courante — 8 octobre 2026, kit de pilote en préparation
 
-Cap : Léo conduit une mission bornée dans un hôte contrôlé par FINUBAR, avec
-arrêt durable et reprise sans doublon ; aucune réception d'autonomie acquise.
-Mandat actuel : vérifier l'hôte et préparer le raccord (« ok go » du 08/10).
+Cap : Léo conduit une mission bornée sous contrôle FINUBAR, avec arrêt durable
+et reprise sans doublon. Aucune réception d’autonomie acquise.
+Mandat de Paul « ok vasy » : construire et éprouver le kit dans Ultima ; pas
+installer/importer/activer ni accéder au dépôt de contrôle exclu.
 
-Source relue : `main` `8485ed5e0ccee72f94c28ba4c67bc62c5c36e8cd`.
-Le diagnostic, les preuves et le dossier opérateur vivent dans
-**`leo/ACTIVATION.md`, section « Raccord réel — diagnostic et dossier opérateur
-du 08/10/2026 »**. Cette reprise remplace les prochaines actions historiques
-ci-dessous, sans effacer leurs preuves datées.
+Base du code : main 5848ea99668ec8a901e746e2bed1d628241fb22f. PR365 brouillon,
+branche codex/leo-raccord-reel-20261008. PR361 fusionnée depuis le diagnostic ;
+préserver les travaux concurrents PR364/366 et la fondation inerte PR351.
 
-Fait : #353 et #354 fusionnées le 06/10 ; actions web capture/défaire retrouvées
-dans le journal de production. Le runtime est exclu de Vercel. La fondation
-PR351 reste ouverte et volontairement inerte (`exit 1`, lanceur `SystemExit`).
-Le connecteur expose 12 dépôts organisation + 2 personnels, sans le contrôle.
-Complément à 18 h 07 Paris : capture Code fournie par Paul, badge Private et
-écran Quick setup du dépôt vide. Le kit n'est pas installé dans ce dépôt cible ;
-aucune conclusion sur un éventuel autre hôte.
+Le dossier canonique est leo/ACTIVATION.md, section « Kit candidat du 08/10/2026 ».
+Code préparé : état distant à ref courante/seed opérateur, CAS non forcé et nonce,
+réserve avant effet, archive conservée, arrêt monotone, hôte Actions et conteneur
+sans réseau/secret, deadline interne. Une seule fixture déterministe, pas Léo
+modèle. Contrat1.1/runtime skill1.0 inchangés ; compatibilité Work1.4 non reçue.
 
-Préparation fermée : dossier GitHub Actions temporaire, sans nouveau serveur,
-qui distingue lanceur/identités, état durable/ancre, accord humain et réception.
-Revue distincte de lecture favorable ; aucun code applicatif ni test exécuté.
-Le stockage courant et l'ancre restent à concevoir ; l'absence du kit dans le
-dépôt cible est constatée sur la capture, pas par un accès direct de Work.
-Compétence Work 1.4 / runtime attendu 1.0 : divergence conservée, pas contournée.
+Vérification à relever sur le nouveau SHA de PR365 : revue indépendante du kit,
+recette CI isolée et archive candidate inerte. Aucun test applicatif local.
+La prochaine action unique est de terminer cette revue et cette recette, puis
+présenter le candidat concret avant toute demande d’installation extérieure.
 
-**Prochaine action unique :** préparer dans Ultima le kit d'exécution bornée,
-en réutilisant l'admission, le journal et la garde ; choisir l'état durable et
-son ancre avant le code de reprise. Le relevé demandé à Paul est reçu : ne pas
-le redemander. Pas d'import ni de déclenchement du simple squelette PR351.
+Le diagnostic du contrôle est clos : capture Paul du08/10 à18h07 Paris, dépôt
+privé vide (Quick setup). Ne pas redemander cette capture. Aucun accès direct
+Work au contrôle, import ou dispatch manuel. #353/#354 déjà fusionnées : ne pas
+rouvrir leur fusion ni confondre leurs tests avec installation des agents.
 
-Restent : raccord opérationnel, identité distincte, stockage/ancre et accord réel,
-recette sur hôte cible puis reprise neuve ; pilote continu et budget non activés.
-Le calendrier cible du 16/10 est à recaler sur le raccord restant, pas garanti.
-Préserver PR351, PR361 et PR364 ; aucune collecte parallèle ni modification
-du grain FINUBAR dans ce lot. Ne pas rouvrir les fusions #353/#354 ni considérer
-leurs tests comme une réception d'autonomie. Aucun import dans le contrôle exclu,
-fusion, migration réelle, secret, envoi ou workflow R21 manuel dans ce mandat.
+Restent hors réception : hôte cible et exclusion globale, accord réel exact,
+essai sur hôte cible et reprise neuve, identité propre/compatibilité Léo1.4,
+autonomie permanente. Budget/cron/suivi continus non activés. Le16/10 n’est pas
+une date garantie. Aucun secret, migration réelle, envoi, achat ou fusion.
 
 ---
 
@@ -822,3 +814,4 @@ publication. Résultats à rattacher au commit effectivement exécuté dans PR30
 R21 n'est pas reçu par ce raccord : l'identité réelle de Paul et son accord
 exact restent à fournir par un canal de confiance. Le serveur fermé d'épreuve
 ne constitue pas un hébergement permanent ni un contrôle des outils Work.
+
