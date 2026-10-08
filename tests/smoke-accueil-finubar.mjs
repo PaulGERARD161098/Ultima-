@@ -1,4 +1,7 @@
-// L'ACCUEIL PILOTÉ PAR FINUBAR — P2 (l'appel) + P3 (le bandeau).
+// L'ACCUEIL PILOTÉ PAR FINUBAR — P2 (l'appel). Le bandeau P3 est RETIRÉ le
+// 08/10/2026 (Paul : « tu gardes que le bandeau Léo, tout en bas ») : ce
+// harnais tient désormais son ABSENCE (④), celle de la parole peinte, et ce qui
+// reste du pilotage — l'appel des étoiles et le chemin « aller au projet ».
 // Cadrage : CADRAGE-ACCUEIL-FINUBAR.md.
 //
 // Ce que ce harnais prouve, et pourquoi chaque entrée existe :
@@ -98,8 +101,7 @@ async function masquerLaPorte(p) {
 const etat = (p) => p.evaluate(() => ({
   appels: [...document.querySelectorAll('#ciel-noeud-scene .ciel-etoile[data-noeud-id]')]
     .map((g) => [g.getAttribute('data-noeud-id'), g.getAttribute('data-appel'), g.getAttribute('aria-label')]),
-  bandeau: document.getElementById('finubar-bandeau').textContent.trim(),
-  visible: document.getElementById('finubar-bandeau').getBoundingClientRect().height > 0,
+  bandeauPresent: Boolean(document.getElementById('finubar-bandeau')),
 }));
 
 // ===========================================================================
@@ -109,15 +111,16 @@ console.log('— ① Fail-closed : sans session, puis sur erreur serveur —');
   const e = await etat(p);
   verifier('sans session : AUCUNE étoile ne porte d\'appel',
     e.appels.every(([, a]) => a === null), JSON.stringify(e.appels));
-  verifier('sans session : le bandeau est vide, donc invisible',
-    e.bandeau === '' && e.visible === false);
+  // Verrou de non-vacuité : l'absence d'appel ne vaut que si des étoiles sont là.
+  verifier('sans session : verrou — le ciel est peint (au moins trois étoiles)', e.appels.length >= 3, String(e.appels.length));
+  verifier('sans session : aucun bandeau Finubar dans la page', e.bandeauPresent === false);
   await p.close();
 
   const q = await ouvrir('erreur');
   const f = await etat(q);
   verifier('sur erreur serveur : aucun appel non plus',
     f.appels.every(([, a]) => a === null), JSON.stringify(f.appels));
-  verifier('sur erreur serveur : le bandeau reste vide', f.bandeau === '');
+  verifier('sur erreur serveur : aucun bandeau Finubar non plus', f.bandeauPresent === false);
   // Éprouvé par l'ABSENCE : le corps de l'erreur ne doit se trouver NULLE PART
   // (règle du 2026-07-30 — une règle de confidentialité se teste par l'absence).
   const fuite = await q.evaluate(() => document.body.innerHTML.includes('boom secret interne'));
@@ -147,130 +150,67 @@ const p = await ouvrir('ok');
 }
 
 // ===========================================================================
-console.log('— ⑥ Le bandeau : ce qu\'il montre, et de quand il date —');
+console.log('— ④ Léo seul en bas : ni bandeau Finubar, ni parole peinte —');
 {
-  const b = await p.evaluate(() => {
-    const el = document.getElementById('finubar-bandeau');
-    return {
-      texte: el.textContent,
-      date: (el.querySelector('.fb-date') || {}).textContent || '',
-      signaux: el.querySelectorAll('.fb-signal').length,
-      degre: (el.querySelector('.fb-signal') || {}).getAttribute
-        ? el.querySelector('.fb-signal').getAttribute('data-appel') : null,
-      action: (el.querySelector('.fb-quoi') || {}).textContent || '',
-      nature: (el.querySelector('.fb-nature') || {}).textContent || '',
-      cible: (el.querySelector('.fb-bouton') || {}).getBoundingClientRect
-        ? el.querySelector('.fb-bouton').getBoundingClientRect().height : 0,
-    };
-  });
-  verifier('⑥ la date de collecte est lue à l\'écran', /collecté le 2026-09-02/.test(b.date), b.date);
-  verifier('le dépôt hors de portée est DIT (jamais tu)', /hors de portée/.test(b.texte));
-  verifier('le signal porte le degré d\'appel de son ciel', b.degre === 'appel');
-  verifier('Léo propose UNE action, celle de l\'agrégat', /Projet Alpha/.test(b.action) && /premier jalon/.test(b.action));
-  verifier('l\'action suit la main qui l\'a : un geste ne devient pas du code',
-    /n’appartient qu’à toi/.test(b.nature), b.nature);
-  verifier('la cible du signal tient le plancher tactile (≥ 34 px)', b.cible >= 34, String(b.cible));
-}
-
-// ===========================================================================
-console.log('— ④ ⛔ Le bandeau est DÉCLARÉ au moteur, et rien n\'est peint dessous —');
-{
-  // ⚠️ CE QUE CETTE SECTION A APPRIS, ET QUI CORRIGE LA NOTE DE LA MAQUETTE.
-  // Le défaut « une étoile peinte sous le bandeau n'est plus cliquable » est
-  // réel : il a été mesuré le 02/09 sur `design/preview-accueil-finubar.html`.
-  // Mais il ne pouvait PAS se produire ici : la production déclare son mobilier
-  // au moteur (`margesUtiles`), là où la maquette réservait la place en
-  // rétrécissant son conteneur. Éprouvé : en retirant le bandeau des marges,
-  // l'étoile la plus basse d'un pire cas de 12 astres à 390 px passe de 604 à
-  // 643 px — et le bandeau commence à 656. Le symptôme ne se déclenche donc
-  // jamais, même sans la déclaration.
-  //
-  // ⛔ Un verdict qui ne peut pas devenir rouge ne mesure rien (règle du
-  // 2026-08-20). On garde donc l'invariant produit (④b), mais on mesure le
-  // MÉCANISME (④c) : sans la déclaration, retirer le bandeau ne changerait
-  // rien au cadrage — avec elle, les étoiles redescendent.
-  const geo = await p.evaluate(async () => {
-    const bas = () => Math.max(...[...document.querySelectorAll('#ciel-noeud-scene .ciel-etoile[data-noeud-id]')]
-      .map((g) => g.getBoundingClientRect().bottom));
-    const bandeau = document.getElementById('finubar-bandeau');
-    const avant = bas();
-    const hautDuBandeau = bandeau.getBoundingClientRect().top;
-    // Le point du bandeau appartient-il au bandeau ? (personne ne le recouvre)
-    const r = bandeau.querySelector('.fb-bouton').getBoundingClientRect();
-    const surLeBouton = document.elementFromPoint(r.x + 6, r.y + r.height / 2);
-    const auBouton = Boolean(surLeBouton && surLeBouton.closest && surLeBouton.closest('.fb-bouton'));
-    // Le mécanisme : on retire le bandeau — ET l'état qu'il pose sur le
-    // <body>, qui fait monter la parole de Léo au-dessus de lui. Retirer l'un
-    // sans l'autre laisserait la parole en l'air : c'est ELLE qui dominerait
-    // alors la marge basse, et la mesure répondrait « aucun écart » sur un
-    // dispositif pourtant sain. (Vu en direct le 02/09 : le verdict est passé
-    // au rouge à l'ajout du décalage de la parole, sans qu'aucun défaut
-    // n'existe. Une mesure se relit chaque fois que ce qu'elle mesure bouge.)
-    const garde = bandeau.parentNode;
-    garde.removeChild(bandeau);
-    document.body.classList.remove('a-finubar');
-    window.dispatchEvent(new Event('resize'));
-    await new Promise((r2) => setTimeout(r2, 500));
-    const sansBandeau = bas();
-    garde.appendChild(bandeau);
-    document.body.classList.add('a-finubar');
-    window.dispatchEvent(new Event('resize'));
-    await new Promise((r2) => setTimeout(r2, 500));
-    return { avant, hautDuBandeau, sansBandeau, auBouton, apres: bas() };
-  });
-
-  verifier('④a le bandeau reçoit bien le doigt sur ses propres boutons',
-    geo.auBouton === true);
-  verifier('④b aucune étoile n\'est peinte sous le bandeau',
-    geo.avant <= geo.hautDuBandeau,
-    `étoile la plus basse ${Math.round(geo.avant)} px, bandeau à ${Math.round(geo.hautDuBandeau)} px`);
-  verifier('④c le bandeau est DÉCLARÉ au moteur : le retirer fait redescendre le ciel',
-    geo.sansBandeau > geo.avant + 4,
-    `avec ${Math.round(geo.avant)} px, sans ${Math.round(geo.sansBandeau)} px — un écart nul voudrait dire que le moteur ne le connaît pas`);
-  verifier('④c le remettre remonte le ciel là où il était (le cadrage est relu, pas figé)',
-    Math.abs(geo.apres - geo.avant) <= 4, `${Math.round(geo.avant)} → ${Math.round(geo.apres)}`);
-}
-
-// ===========================================================================
-console.log('— ④bis La parole de Léo ne passe pas derrière le bandeau —');
-{
-  // Trouvé EN REGARDANT une capture, pas en relisant : les deux cartouches sont
-  // `fixed` au bas de l'écran et au même `z-index`, donc le dernier arrivé
-  // recouvrait l'autre. Un texte à moitié lisible ne lève aucune alerte — il se
-  // lit comme un texte.
-  const chevauche = await p.evaluate(async () => {
+  // Verrou : l'agrégat est BIEN livré (ALPHA appelle, section ②) — l'absence du
+  // bandeau ne vient donc pas d'une donnée manquante, mais du retrait voulu.
+  const e = await etat(p);
+  verifier('④ verrou — l\'agrégat est livré (une étoile appelle)',
+    e.appels.some(([, a]) => a === 'appel'), JSON.stringify(e.appels));
+  verifier('④a avec session et agrégat : aucun bandeau Finubar dans la page', e.bandeauPresent === false);
+  // La parole n'est plus PEINTE, mais elle PARLE encore : au survol d'une
+  // étoile, la zone `aria-live` reçoit son nom. Les deux se vérifient ensemble,
+  // sinon « invisible » serait vert sur une zone simplement vide.
+  const cible = await p.evaluate(() => {
     const g = document.querySelector('#ciel-noeud-scene .ciel-etoile[data-noeud-id="alpha"]');
-    g.dispatchEvent(new MouseEvent('mouseenter'));
-    await new Promise((r) => setTimeout(r, 300));
-    const parole = document.getElementById('boussole-parole').getBoundingClientRect();
-    const bandeau = document.getElementById('finubar-bandeau').getBoundingClientRect();
-    return {
-      parole: [Math.round(parole.top), Math.round(parole.bottom)],
-      bandeau: Math.round(bandeau.top),
-      recouvre: parole.bottom > bandeau.top && parole.height > 0,
-      classe: document.body.classList.contains('a-finubar'),
-    };
+    const r = g && g.getBoundingClientRect();
+    return r ? { x: r.left + r.width / 2, y: r.top + r.height / 2 } : null;
   });
-  verifier('④bis le bandeau se déclare sur le <body> (la parole sait qu\'elle doit monter)',
-    chevauche.classe === true);
-  verifier('④bis la parole de Léo reste entièrement au-dessus du bandeau',
-    chevauche.recouvre === false,
-    `parole ${chevauche.parole.join('→')}, bandeau à ${chevauche.bandeau}`);
+  verifier('④ verrou — l\'étoile ALPHA est à l\'écran', cible !== null);
+  if (cible) { await p.mouse.move(cible.x, cible.y); await p.waitForTimeout(300); }
+  const parole = await p.evaluate(() => {
+    const el = document.getElementById('boussole-parole');
+    const r = el.getBoundingClientRect();
+    return { l: Math.round(r.width), h: Math.round(r.height), texte: el.textContent.replace(/\s+/g, ' ').trim() };
+  });
+  verifier('④b la parole a bien reçu le nom au survol (elle parle encore)',
+    /ALPHA/i.test(parole.texte), parole.texte.slice(0, 60));
+  verifier('④c mais elle n\'est pas peinte (boîte ≤ 1 px)',
+    parole.l <= 1 && parole.h <= 1, `${parole.l}×${parole.h}`);
+  // ④d Rien ne recouvre l'étoile la plus basse : le point qu'on touche est
+  // bien celui de l'étoile, pas d'un cartouche posé dessus.
+  const bas = await p.evaluate(() => {
+    const gs = [...document.querySelectorAll('#ciel-noeud-scene .ciel-etoile[data-noeud-id]')];
+    let pire = null;
+    for (const g of gs) {
+      const r = g.getBoundingClientRect();
+      if (!pire || r.bottom > pire.r.bottom) { pire = { g, r }; }
+    }
+    if (!pire) { return null; }
+    const x = pire.r.left + pire.r.width / 2, y = pire.r.top + pire.r.height / 2;
+    const touche = document.elementFromPoint(x, y);
+    return { id: pire.g.getAttribute('data-noeud-id'), atteinte: Boolean(touche && touche.closest('.ciel-etoile') === pire.g) };
+  });
+  verifier('④d l\'étoile la plus basse se touche — rien n\'est peint dessus',
+    bas && bas.atteinte, JSON.stringify(bas));
 }
 
 // ===========================================================================
-console.log('— ⑤ Un signal mène quelque part —');
+console.log('— ⑤ Aller au projet : le chemin du « Y aller » de Léo —');
 {
-  const avant = await p.evaluate(() => document.getElementById('fil-ciel')
-    ? document.getElementById('fil-ciel').textContent
-    : [...document.querySelectorAll('#ciel-noeud-scene .ciel-etoile[data-noeud-id]')].map((g) => g.getAttribute('data-noeud-id')).join(','));
-  await p.click('#finubar-bandeau .fb-bouton');
+  // Le clic d'un signal du bandeau est parti avec lui ; il reste le chemin du
+  // dock de Léo, qui appelle `UltimaCielNoeud.allerAuProjet`. Le dock exige une
+  // vraie session (voir smoke-socle) : on éprouve donc le chemin lui-même.
+  const avant = await p.evaluate(() => [...document.querySelectorAll('#ciel-noeud-scene .ciel-etoile[data-noeud-id]')]
+    .map((g) => g.getAttribute('data-noeud-id')).join(','));
+  const bouge = await p.evaluate(() => window.UltimaCielNoeud && window.UltimaCielNoeud.allerAuProjet
+    ? window.UltimaCielNoeud.allerAuProjet('Projet Alpha') : 'absent');
   await p.waitForTimeout(900);
   const apres = await p.evaluate(() => [...document.querySelectorAll('#ciel-noeud-scene .ciel-etoile[data-noeud-id]')]
     .map((g) => g.getAttribute('data-noeud-id')));
-  verifier('⑤ cliquer le signal isole la branche du projet',
-    apres.some((id) => id.startsWith('depot:')) || apres.includes('renoboost-ia'),
-    `avant: ${avant} | après: ${apres.join(',')}`);
+  verifier('⑤ « aller au projet » isole la branche du projet',
+    bouge === true && (apres.some((id) => id.startsWith('depot:')) || apres.includes('renoboost-ia')),
+    `rendu: ${bouge} | avant: ${avant} | après: ${apres.join(',')}`);
 }
 await p.close();
 

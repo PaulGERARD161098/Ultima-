@@ -165,13 +165,17 @@ function mesurer(page) {
 const ETOILES_ALPHA = (greffer(NOEUDS, MACRO).alpha.enfants || []).length;
 verifier('④ verrou : le compte attendu couvre au moins les caps du registre',
   ETOILES_ALPHA >= NOEUDS.alpha.enfants.length && NOEUDS.alpha.enfants.length >= 3, `${ETOILES_ALPHA}`);
-for (const taille of [[390, 664], [375, 667], [360, 740], [390, 844], [1280, 800]]) {
+// ⚠️ 320 × 568 AJOUTÉ LE 08/10/2026 : la parole ne réserve plus de place au
+// bas du ciel (Léo seul en bas) et, à 390 × 664, plus aucun nom n'a besoin de
+// passer au-dessus de son étoile — le verrou ne pouvait plus rougir. Le cas
+// serré se cherche un cran plus bas ; il porte le verrou.
+for (const taille of [[390, 664], [375, 667], [360, 740], [390, 844], [320, 568], [1280, 800]]) {
   const cle = `${taille[0]}×${taille[1]}`;
   const { page, contexte } = await ouvrir(taille);
   const m = await mesurer(page);
   await contexte.close();
   chiffres[cle] = { etoiles: m.etoiles, croises: m.croises, nomsDessus: m.nomsDessus };
-  if (cle === '390×664') {
+  if (cle === '320×568') {
     // LE VERROU DU PASSAGE AU-DESSUS : c'est à 390 × 664 que le croisement a été
     // mesuré avant le lot. Si aucun nom n'y passe au-dessus, « aucun nom croisé »
     // serait vert par une autre voie que celle qu'on croit avoir construite.

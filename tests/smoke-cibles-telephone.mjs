@@ -147,7 +147,11 @@ function mesurer(page) {
 // s'exerce. Au-dessus, une cible de 44 px ne rencontre jamais sa voisine, et
 // « aucun recouvrement » serait vert que la borne existe ou non. Sur ces deux
 // tailles, on exige la plus grande cible qui ne recouvre rien : min(44, voisin).
-const TAILLES = [[375, 667], [390, 664], [360, 740], [390, 844], [320, 568], [300, 640], [1280, 800]];
+// ⚠️ 300 × 560 AJOUTÉ LE 08/10/2026 : la parole ne réserve plus de place au
+// bas du ciel (Léo seul en bas), le ciel a grandi, et à 300 × 640 les voisins
+// les plus proches passaient à 52 px — le verrou de la borne ne pouvait plus
+// rougir. Le cas dense se cherche donc un cran plus bas ; il porte le verrou.
+const TAILLES = [[375, 667], [390, 664], [360, 740], [390, 844], [320, 568], [300, 640], [300, 560], [1280, 800]];
 for (const taille of TAILLES) {
   const { page, contexte } = await ouvrir(taille);
   const telephone = taille[0] < 700;
@@ -157,7 +161,7 @@ for (const taille of TAILLES) {
     const m = await mesurer(page);
     chiffres[cle] = { ciel: m.ciel, etoiles: m.etoiles, cible: Math.round(m.cibleMin), dmin: Math.round(m.dmin), rec: m.recouvrements };
     verifier(`${cle} : verrou — dock monté et au moins deux étoiles`, m.dock && m.etoiles >= 2, `dock ${m.dock} · ${m.etoiles} étoiles`);
-    if (taille[0] === 300 && ecran === 'renoboost-ia') {
+    if (taille[0] === 300 && taille[1] === 560 && ecran === 'renoboost-ia') {
       // LE VERROU DE LA BORNE : elle ne s'éprouve que si deux voisins sont
       // sous 44 px. Sans ce cas, le contrôle de recouvrement ne peut pas rougir.
       verifier(`${cle} : verrou — des voisins sous 44 px (la borne s'exerce)`, m.dmin < 44, `${Math.round(m.dmin)} px`);

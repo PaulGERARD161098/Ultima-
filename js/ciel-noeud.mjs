@@ -78,7 +78,6 @@ function echapper(valeur) {
   })[c]);
 }
 import { greffer, signaux, libelleDegre } from './adaptateur-finubar.mjs';
-import { poser as poserFinubarBandeau } from './finubar-bandeau.mjs';
 
 // Le temps que dure l'approche avant que la page suivante s'ouvre. Paul l'a
 // dicté : « ça fait une sorte de zoom et ça affiche les projets » — on entre en
@@ -375,18 +374,21 @@ export function rendre(idNoeud, options = {}) {
       const r = el.getBoundingClientRect();
       if (r.height > 0) { haut.push(r.bottom); }
     }
-    // En bas : le cartouche de Léo, la légende gravée — et le bandeau Finubar
-    // (P3). Le bandeau est la pièce de mobilier la plus HAUTE de l'écran : l'y
-    // oublier ferait exactement le défaut mesuré sur la maquette le 02/09 —
-    // une étoile peinte sous lui, donc plus cliquable, et un clic qui atterrit
-    // sur un bouton du bandeau. L'écran répond, et se trompe.
+    // En bas : la légende gravée et le dock de Léo. Oublier une pièce du socle
+    // ferait le défaut mesuré sur la maquette le 02/09 — une étoile peinte
+    // sous elle, donc plus cliquable, et un clic qui atterrit sur un bouton.
     const legende = doc.querySelector('.ciel-noeud-plateau > .ciel-legende');
-    const bandeau = doc.getElementById('finubar-bandeau');
     // LE DOCK DE LÉO AUSSI (26/09). Il est arrivé après ce calcul, et le calcul
     // ne le connaissait pas : sur la capture de Paul, une étoile était peinte
     // sous le cartouche, lui-même posé sous le dock. Le socle se lit en entier.
     const dock = doc.getElementById('leo-dock');
-    for (const el of [parole, legende, bandeau, dock]) {
+    // ⛔ LÉO SEUL EN BAS (Paul, 08/10/2026 : « supprime le bandeau du bas et
+    // le bandeau sur Alpha, les descriptions je m'en fiche — tu gardes que le
+    // bandeau Léo, tout en bas »). Le bandeau Finubar est retiré ; la parole
+    // n'est plus PEINTE (css/ciel-noeud.css) mais reste une zone `aria-live`,
+    // donc elle ne réserve plus aucune place : la compter rendrait au ciel une
+    // marge fantôme sous un élément invisible.
+    for (const el of [legende, dock]) {
       if (!el) { continue; }
       const r = el.getBoundingClientRect();
       if (r.height > 0) { bas.push(window.innerHeight - r.top); }
@@ -739,44 +741,24 @@ export function rendre(idNoeud, options = {}) {
   const foyerInitial = idDeLAdresse();
   if (foyerInitial) { poserFoyer(foyerInitial, { sansHistorique: true }); }
 
-  // ---- LE BANDEAU DE L'ACCUEIL (P3) --------------------------------------
-  // Il n'existe que là où la coque en pose le conteneur — l'accueil aujourd'hui.
-  // Un clic sur un signal ISOLE la branche du projet : un signal qu'on ne peut
-  // pas suivre est une notification, et une notification ne fait rien avancer.
-  // ---- LE SOCLE BOUGE : on remesure, et le ciel recadre (26/09) ----
-  // Le bandeau change de hauteur APRÈS sa pose (le dock retire sa colonne
-  // « Léo » en double), et le dock arrive quand la session est là. Les deux
-  // sont des pièces du socle : quand l'une change de taille, la hauteur posée
-  // en variable doit suivre, et le ciel doit rendre la place.
-  // ⛔ LA PAROLE N'EST PAS OBSERVÉE, À DESSEIN. Son contenu change au survol ;
-  // recadrer à ce moment déplacerait l'étoile sous le curseur — exactement le
-  // clic raté du lot 1. Sa hauteur est FIXE (`css/leo.css`), sa place est donc
-  // réservée une fois pour toutes.
-  function mesurerBandeau() {
-    const conteneur = doc.getElementById('finubar-bandeau');
-    if (!conteneur) { return; }
-    doc.documentElement.style.setProperty('--fb-hauteur',
-      Math.round(conteneur.getBoundingClientRect().height) + 'px');
-  }
+  // ---- LE SOCLE BOUGE : le ciel recadre (26/09) ----
+  // Le dock de Léo arrive quand la session est là : quand le socle change de
+  // taille, le ciel doit rendre la place. Le bandeau Finubar qui partageait ce
+  // socle est retiré le 08/10/2026 (Léo seul en bas) — l'état des projets vit
+  // sur /finubar et dans les propositions du dock.
   let recadrageDemande = false;
   function socleABouge() {
     if (recadrageDemande) { return; }
     recadrageDemande = true;
     window.requestAnimationFrame(() => {
       recadrageDemande = false;
-      mesurerBandeau();
       if (vue && typeof vue.ajusterCadre === 'function') { vue.ajusterCadre(); }
     });
   }
   doc.addEventListener('ultima:mobilier', socleABouge);
-  const bandeauObserve = doc.getElementById('finubar-bandeau');
-  if (bandeauObserve && typeof ResizeObserver === 'function') {
-    new ResizeObserver(socleABouge).observe(bandeauObserve);
-  }
 
-  // ALLER AU PROJET — le clic d'un signal du bandeau ET le « Y aller » du dock
-  // de Léo passent par ici, et par ici seulement : deux chemins vers le même
-  // geste finiraient par diverger. Rend `true` si le ciel a bougé.
+  // ALLER AU PROJET — le « Y aller » du dock de Léo passe par ici (le bandeau
+  // Finubar, l'autre chemin, est retiré le 08/10). Rend `true` si le ciel a bougé.
   function allerAuProjet(projet) {
     const idAstre = Object.keys(registre).find((k) => registre[k].nom === projet);
     if (!idAstre) { return false; }
@@ -786,22 +768,6 @@ export function rendre(idNoeud, options = {}) {
     const parent = suite.length > 1 ? suite[suite.length - 2] : null;
     if (parent && parent !== idNoeud && descendDe(idNoeud, parent, registre)) { isoler(parent); return true; }
     return false;
-  }
-
-  function poserBandeau(agregat) {
-    const conteneur = doc.getElementById('finubar-bandeau');
-    if (!conteneur) { return; }
-    const peint = poserFinubarBandeau(conteneur, agregat, allerAuProjet);
-    // ⛔ LA PAROLE DE LÉO REMONTE AU-DESSUS DU BANDEAU. Les deux cartouches
-    // sont `position: fixed` au bas de l'écran, au même `z-index` : le dernier
-    // arrivé recouvre l'autre. Constaté en capture le 02/09 — le résumé du cap
-    // survolé passait DERRIÈRE le bandeau, à moitié lisible. La hauteur est
-    // MESURÉE et posée en variable : une constante serait fausse au premier
-    // signal long, et fausse deux fois entre le téléphone et l'écran large.
-    doc.body.classList.toggle('a-finubar', peint);
-    mesurerBandeau();
-    // Les marges utiles du ciel dépendent elles aussi de cette hauteur ; elles
-    // sont relues au prochain dessin, qui suit immédiatement (voir l'appelant).
   }
 
   // ---- ① LE COCKPIT ET FINUBAR — fail-closed, et c'est la règle qui compte -
@@ -827,7 +793,6 @@ export function rendre(idNoeud, options = {}) {
           // écran qui aurait la donnée sans la montrer serait le pire des deux.
           registre = greffer(registreBase, agregat);
           appels = signaux(registre, agregat, chemin);
-          poserBandeau(agregat);
           // Une seule donnée, deux lectures : Finubar peint le portefeuille et
           // le dock de Léo en reprend l'action sans la recalculer.
           window.UltimaFinubarAgregat = agregat;
