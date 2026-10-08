@@ -99,6 +99,14 @@ const emettreFin = () => page.evaluate(() => {
   const i = window.__stubReco.instances;
   i[i.length - 1].emettreFin();
 });
+// Depuis la relance (08/10), une coupure qui suit des mots ROUVRE l'écoute : la
+// dictée ne se termine que lorsqu'une écoute s'achève sans rien entendre.
+const finirParSilence = async () => {
+  await emettreFin();
+  await page.waitForTimeout(80);
+  await emettreFin(); // l'écoute relancée se termine sans un mot : fin de la dictée
+  await page.waitForTimeout(80);
+};
 const emettreErreur = (code) => page.evaluate((c) => {
   const i = window.__stubReco.instances;
   i[i.length - 1].emettreErreur(c);
@@ -178,7 +186,7 @@ const enEcoute = (await microJournalNote.getAttribute('aria-pressed')) === 'true
 const statutEcoute = (await page.locator('#statut-dictee').textContent()).includes('Je vous écoute…');
 await emettre(['devis envoyé ce matin', true]);
 const valeurFinale = (await champNote.inputValue()) === 'devis envoyé ce matin';
-await emettreFin();
+await finirParSilence();
 await page.waitForTimeout(80);
 verdicts.cycleNominal = enEcoute && statutEcoute && valeurFinale &&
   (await microJournalNote.getAttribute('aria-pressed')) === 'false' &&
@@ -189,7 +197,7 @@ await champNote.fill('Déjà noté.');
 await microJournalNote.click();
 await page.waitForTimeout(80);
 await emettre(['suite', true]);
-await emettreFin();
+await finirParSilence();
 await page.waitForTimeout(80);
 verdicts.ajoutJamaisRemplacement = (await champNote.inputValue()) === 'Déjà noté. suite';
 
@@ -201,7 +209,7 @@ await emettre(['devis en', false]);
 const interimAffiche = (await champNote.inputValue()).endsWith('devis en');
 await emettre(['devis envoyé', true]);
 const finalRemplace = (await champNote.inputValue()) === 'devis envoyé';
-await emettreFin();
+await finirParSilence();
 await page.waitForTimeout(80);
 verdicts.interimVisible = interimAffiche && finalRemplace;
 
@@ -309,7 +317,7 @@ await page.keyboard.press('Enter');
 await page.waitForTimeout(80);
 const ecouteClavier = (await microJournalNote.getAttribute('aria-pressed')) === 'true';
 await emettre(['au clavier', true]);
-await emettreFin();
+await finirParSilence();
 await page.waitForTimeout(80);
 verdicts.clavierEtAria = focusSurMicro && ecouteClavier &&
   (await champNote.inputValue()) === 'au clavier' &&
@@ -325,11 +333,83 @@ await emettre(['aaaaaaaaaaaaaaaaaaaa', true]); // 20 caractères dictés
 await page.waitForTimeout(50);
 const toastPlafond = (await page.locator('.toast-erreur').last().textContent()) ===
   'Limite de texte atteinte.';
-await emettreFin();
+await finirParSilence();
 await page.waitForTimeout(80);
 const valeurPlafonnee = await champEtape.inputValue();
 verdicts.plafondRespecte = toastPlafond && valeurPlafonnee.length === 500 &&
   valeurPlafonnee.startsWith(remplissage);
+
+// 18. relanceApresPause (08/10) — la coupure qui suit des mots rouvre l'écoute :
+// la suite s'écrit derrière, une espace entre les deux, et la dictée continue.
+await champNote.fill('');
+await microJournalNote.click();
+await page.waitForTimeout(80);
+const avantRelance = await nbInstances();
+await emettre(['premier', true]);
+await emettreFin();
+await page.waitForTimeout(80);
+const relancee = (await nbInstances()) === avantRelance + 1 && // avantRelance compte déjà l'écoute initiale
+  (await microJournalNote.getAttribute('aria-pressed')) === 'true';
+await emettre(['second', true]);
+const suiteEcrite = (await champNote.inputValue()) === 'premier second';
+await finirParSilence();
+verdicts.relanceApresPause = relancee && suiteEcrite &&
+  (await microJournalNote.getAttribute('aria-pressed')) === 'false' &&
+  (await champNote.inputValue()) === 'premier second' &&
+  (await page.locator('#statut-dictee').textContent()) === 'Dictée terminée.';
+
+// 19. silenceApresRelance — le « no-speech » d'une écoute relancée clôt la dictée
+// sans toast d'erreur : se taire n'est pas une faute.
+await champNote.fill('');
+const toastsAvantSilence = await page.locator('.toast-erreur').count();
+await microJournalNote.click();
+await page.waitForTimeout(80);
+await emettre(['garde', true]);
+await emettreFin();
+await page.waitForTimeout(80);
+await emettreErreur('no-speech');
+await page.waitForTimeout(80);
+verdicts.silenceApresRelance = (await page.locator('.toast-erreur').count()) <= toastsAvantSilence &&
+  (await champNote.inputValue()) === 'garde' &&
+  (await microJournalNote.getAttribute('aria-pressed')) === 'false';
+
+// 20. retapSansRelance — re-tap après des mots : arrêt, AUCUNE écoute rouverte.
+await champNote.fill('');
+await microJournalNote.click();
+await page.waitForTimeout(80);
+await emettre(['fin voulue', true]);
+const avantRetap = await nbInstances();
+await microJournalNote.click();
+await page.waitForTimeout(120);
+verdicts.retapSansRelance = (await nbInstances()) === avantRetap &&
+  (await microJournalNote.getAttribute('aria-pressed')) === 'false' &&
+  (await champNote.inputValue()) === 'fin voulue';
+
+// 21. plafondRelances — un navigateur qui couperait sans fin : 40 relances, puis arrêt.
+await champNote.fill('');
+await microJournalNote.click();
+await page.waitForTimeout(80);
+const debutBoucle = await nbInstances();
+for (let k = 0; k < 45; k += 1) {
+  if ((await microJournalNote.getAttribute('aria-pressed')) !== 'true') break;
+  await emettre(['m', true]);
+  await emettreFin();
+  await page.waitForTimeout(20);
+}
+verdicts.plafondRelances = (await nbInstances()) - debutBoucle === 40 && // 40 relances après l'écoute initiale
+  (await microJournalNote.getAttribute('aria-pressed')) === 'false';
+
+// 22. reseauHorsLigne — sans réseau : message exact, texte déjà dicté conservé.
+await champNote.fill('');
+await microJournalNote.click();
+await page.waitForTimeout(80);
+await emettre(['avant coupure', true]);
+await emettreErreur('network');
+await page.waitForTimeout(80);
+verdicts.reseauHorsLigne = (await page.locator('.toast-erreur').last().textContent()) ===
+  'Pas de réseau : la dictée du navigateur en a besoin. Votre texte est gardé ; utilisez le micro du clavier.' &&
+  (await champNote.inputValue()) === 'avant coupure' &&
+  (await microJournalNote.getAttribute('aria-pressed')) === 'false';
 
 // 16. U6-headerMicro — vérifié par lecture du fichier (le serveur statique du
 // harnais ne passe pas par le middleware Vercel).
