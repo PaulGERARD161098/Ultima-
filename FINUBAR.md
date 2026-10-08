@@ -51,7 +51,7 @@
       "depuis": "2026-10-08"
     },
     {
-      "quoi": "smoke-riven-nebuleuses : verdict maquette300_390_noms ROUGE, MESURÉ sur main pur (8485ed5) le 08/10 — préexistant, sans lien avec les deux cartes. Probablement la même cause que la boucle du 30/09 « à 390 px, noms cachés ».",
+      "quoi": "smoke-riven-nebuleuses : verdict maquette300_390_noms ROUGE dans le Chromium du conteneur de séance, sur main pur (8485ed5) comme sur la branche — mais VERT en CI le 08/10 (browser (0) et (1), tête 070d81a). L'écart est donc d'environnement (polices, rendu), pas de code : suspecter l'instrument local avant de toucher la carte.",
       "depuis": "2026-10-08"
     },
     {

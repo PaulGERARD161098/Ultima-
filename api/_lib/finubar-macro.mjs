@@ -101,7 +101,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-08T16:07:16.408Z",
+        "lecture_le": "2026-10-08T16:23:56.292Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -203,7 +203,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-08T16:07:16.409Z",
+        "lecture_le": "2026-10-08T16:23:56.292Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -255,7 +255,7 @@ export default {
             "depuis": "2026-10-08"
           },
           {
-            "quoi": "smoke-riven-nebuleuses : verdict maquette300_390_noms ROUGE, MESURÉ sur main pur (8485ed5) le 08/10 — préexistant, sans lien avec les deux cartes. Probablement la même cause que…",
+            "quoi": "smoke-riven-nebuleuses : verdict maquette300_390_noms ROUGE dans le Chromium du conteneur de séance, sur main pur (8485ed5) comme sur la branche — mais VERT en CI le 08/10…",
             "depuis": "2026-10-08"
           },
           {
@@ -302,16 +302,16 @@ export default {
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "5597b95",
-        "tete_le": "2026-10-08T16:06:27+00:00",
-        "commits_depuis": 1,
+        "tete": "070d81a",
+        "tete_le": "2026-10-08T16:08:08+00:00",
+        "commits_depuis": 4,
         "commit_inconnu": false
       },
       "mesure_le": "2026-10-08",
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-08T16:07:16.394Z",
+        "lecture_le": "2026-10-08T16:23:56.277Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -380,7 +380,7 @@ export default {
       "mesure_le": "2026-10-07",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-08T16:07:16.410Z",
+        "lecture_le": "2026-10-08T16:23:56.293Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -448,7 +448,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-08T16:07:16.410Z",
+        "lecture_le": "2026-10-08T16:23:56.293Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -506,7 +506,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-08T16:07:16.410Z",
+        "lecture_le": "2026-10-08T16:23:56.293Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -574,7 +574,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-08T16:07:16.410Z",
+        "lecture_le": "2026-10-08T16:23:56.293Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -641,7 +641,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-08T16:07:16.410Z",
+        "lecture_le": "2026-10-08T16:23:56.293Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -744,7 +744,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-08T16:07:16.410Z",
+        "lecture_le": "2026-10-08T16:23:56.293Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -803,7 +803,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-08T16:07:16.410Z",
+        "lecture_le": "2026-10-08T16:23:56.293Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -1085,7 +1085,7 @@ export default {
       },
       {
         "projet": "Ultima",
-        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
+        "dit": "a avancé de 4 commit(s) depuis sa dernière note",
         "pourquoi": "derive"
       }
     ],
