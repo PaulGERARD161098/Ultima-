@@ -189,3 +189,9 @@ reste **dans RenoDevis** (une seule version, extraite par ZOH) · ordre :
 **Mesuré le 09/10** : RénoBoost n'a **aucune identité légale en base** (4 profils
 admin : raison sociale, SIRET, adresse, TVA vides). SOLA : forme juridique `SAS`
 posée sur mandat de Paul, relue.
+
+**Livré le 09/10, mesuré** : #317 (`b08afb1`) verrou par liste ; #319 (`cf953db`) droits de colonne
+du profil (le profil ne s'enregistrait plus) ; #320 (`efb20c9`) ligne « Client professionnel »
+visible et capital avec devise. Identité RENOBOOST IA saisie par Paul, SIREN 990900557 posé par
+Paul dans `DEVIS_PRO_EMETTEURS` (Production + Preview) ; ligne vue en production par Paul.
+**0 devis pro en base** : le critère ④ « un devis RénoBoost sort au gabarit pro » reste à atteindre.

@@ -89,30 +89,30 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": true,
-      "reprise": true,
+      "hors_seance": false,
+      "reprise": false,
       "derive": {
         "tete": "380e7a2",
         "tete_le": "2026-10-08T12:36:49+00:00",
         "commits_depuis": 5,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-10-08",
+      "mesure_le": "2026-10-09",
       "controle": {
-        "type": "github",
-        "lecture_le": "2026-10-09T09:08:43.051Z",
-        "statut": "non_examine",
-        "examines": [],
+        "type": "disque",
+        "statut": "lu",
+        "lecture_le": "2026-10-09T09:43:30.042Z",
+        "examines": [
+          "FINUBAR.md",
+          "derive_git"
+        ],
         "non_examines": [
-          "derive_git",
-          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
-      "motif_controle": "repli GitHub désactivé",
       "jours_depuis_maj": 3,
       "jours_en_attente": 66,
       "rang": 0
@@ -132,9 +132,9 @@ export default {
           "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, "
         },
         "dernier_arret": {
-          "le": "2026-10-08",
-          "quoi": "08/10 : #366, #361, #367, #368 et #369 fusionnées (RIVEN, dictée, Léo seul en bas, leçons v77). Nuit : devis pro livré dans RenoDevis (#314).",
-          "commit": "6203fe407c742fce562de2ae1cc7e6629d9162ac"
+          "le": "2026-10-09",
+          "quoi": "09/10 : déclinaison RénoBoost du devis pro cadrée (#371) et livrée dans RenoDevis (#317 #319 #320) ; leçons v79 (droits de colonne).",
+          "commit": "93d930b6b22fdea33a90a6aa4607e7a46720d0fa"
         },
         "prochaine_action": "Reprendre « Léo partout sans candidats » (boucle du 06/10) : fournir les candidats, ou ne pas offrir l'outil là où la page ne peut pas l'exécuter.",
         "bloque_par": [
@@ -148,7 +148,7 @@ export default {
         "en_attente_depuis": "2026-08-20",
         "boucles_ouvertes": [
           {
-            "quoi": "ZOH · série neutre à rafraîchir (130 commits de retard, 46 conflits) : séance dédiée décidée le 08/10. Voir CADRAGE-2026-10-08-zohshia-generateur-devis-pro.md.",
+            "quoi": "ZOH · série neutre à rafraîchir (140 commits de retard, sans le générateur pro) : séance dédiée décidée le 08/10. Voir CADRAGE-2026-10-08-zohshia-generateur-devis-pro.md.",
             "depuis": "2026-10-08"
           },
           {
@@ -156,7 +156,7 @@ export default {
             "depuis": "2026-10-08"
           },
           {
-            "quoi": "LEÇONS v77 propagées dans RenoDevis et Artidispo seulement : les sept autres dépôts sont en retard, et lecons-chemins n'a pas pu tourner (clones absents de la séance).",
+            "quoi": "LEÇONS v79 (09/10) dans Ultima seulement : les neuf autres dépôts sont en retard, et lecons-chemins n'a pas pu tourner (clones absents de la séance).",
             "depuis": "2026-10-08"
           },
           {
@@ -188,7 +188,7 @@ export default {
             "depuis": "2026-09-30"
           }
         ],
-        "maj": "2026-10-08"
+        "maj": "2026-10-09"
       },
       "recits": [
         "bloque_par[]",
@@ -198,16 +198,16 @@ export default {
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "a119c68",
-        "tete_le": "2026-10-09T00:40:11+02:00",
-        "commits_depuis": 2,
+        "tete": "0328cfe",
+        "tete_le": "2026-10-09T09:42:49+00:00",
+        "commits_depuis": 1,
         "commit_inconnu": false
       },
       "mesure_le": "2026-10-09",
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-09T09:08:43.047Z",
+        "lecture_le": "2026-10-09T09:43:30.026Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -219,7 +219,7 @@ export default {
           "dependances"
         ]
       },
-      "jours_depuis_maj": 1,
+      "jours_depuis_maj": 0,
       "jours_en_attente": 50,
       "rang": 0
     },
@@ -274,7 +274,7 @@ export default {
       "mesure_le": "2026-10-08",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-09T09:08:43.068Z",
+        "lecture_le": "2026-10-09T09:43:30.060Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -342,7 +342,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-09T09:08:43.051Z",
+        "lecture_le": "2026-10-09T09:43:30.060Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -400,7 +400,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-09T09:08:43.068Z",
+        "lecture_le": "2026-10-09T09:43:30.060Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -468,7 +468,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-09T09:08:43.051Z",
+        "lecture_le": "2026-10-09T09:43:30.060Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -500,11 +500,11 @@ export default {
           "critere_de_sortie": "un `1` dans la table `paiements` (0 aujourd'hui)"
         },
         "dernier_arret": {
-          "le": "2026-10-08",
-          "quoi": "08/10 nuit : #314 fusionnée — devis entre pros au format du modèle (D-AAAA-MM-NNN, aiguillage sur SIREN client). Migration rd_devis_pro appliquée sur go de Paul.",
-          "commit": "541a1d5477a1ec49e6cdb055a3a26e2c85ff1086"
+          "le": "2026-10-09",
+          "quoi": "09/10 : générateur pro ouvert à RénoBoost seul (DEVIS_PRO_EMETTEURS) ; droits de colonne du profil réparés ; ligne Client professionnel ; capital avec devise (#317 #319 #320).",
+          "commit": "efb20c9be69cbfb21a1bcfef819dec27dbef99b0"
         },
-        "prochaine_action": "Recette du devis pro par Paul : forme juridique sur la fiche émetteur, puis un devis au SIREN d'un vrai client pro. Sortie : 1 devis avec extra.devis_pro en base.",
+        "prochaine_action": "Premier devis RénoBoost réel : client sans artisan, ligne Client professionnel, SIREN réel. Sortie : 1 devis avec extra.devis_pro en base (0 au 09/10).",
         "bloque_par": [
           "KYC Stripe de SOLA : 0 compte sur 2 peut encaisser (mesuré le 30/09). Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul.",
           "La clé sk_live_ en production : le battement d'embarquement dit toujours test:true, ouverts:0 — remesuré le 08/10 à 06:30 UTC.",
@@ -514,11 +514,11 @@ export default {
         "en_attente_depuis": "2026-08-17",
         "boucles_ouvertes": [
           {
-            "quoi": "Devis pro (#314) : logo non imprimé ; mentions B2B à faire relire par un comptable ; parcours connecté jamais joué (session sans connexion, preview 403).",
+            "quoi": "Devis pro : ligne vue en production par Paul le 09/10, aucun devis pro émis (0). Logo non imprimé ; mentions B2B à faire relire par un comptable.",
             "depuis": "2026-10-08"
           },
           {
-            "quoi": "Série ZOH à 130 commits de retard sur main (46 conflits à l'essai) : séance dédiée décidée par Paul le 08/10 (Ultima, CADRAGE-2026-10-08-zohshia-…, étape 8).",
+            "quoi": "Série ZOH à 140 commits de retard sur main, sans le générateur pro : séance dédiée décidée par Paul (Ultima, CADRAGE-2026-10-08-zohshia-…, étape 8).",
             "depuis": "2026-10-08"
           },
           {
@@ -554,37 +554,37 @@ export default {
             "depuis": "2026-10-03"
           }
         ],
-        "maj": "2026-10-08"
+        "maj": "2026-10-09"
       },
       "recits": [
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": true,
-      "reprise": true,
+      "hors_seance": false,
+      "reprise": false,
       "derive": {
         "tete": null,
         "tete_le": null,
         "commits_depuis": 0,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-10-08",
+      "mesure_le": "2026-10-09",
       "controle": {
-        "type": "github",
-        "lecture_le": "2026-10-09T09:08:43.051Z",
-        "statut": "non_examine",
-        "examines": [],
+        "type": "disque",
+        "statut": "lu",
+        "lecture_le": "2026-10-09T09:43:30.059Z",
+        "examines": [
+          "FINUBAR.md",
+          "derive_git"
+        ],
         "non_examines": [
-          "derive_git",
-          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
-      "motif_controle": "repli GitHub désactivé",
-      "jours_depuis_maj": 1,
+      "jours_depuis_maj": 0,
       "jours_en_attente": 53,
       "rang": 2
     },
@@ -638,7 +638,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-09T09:08:43.052Z",
+        "lecture_le": "2026-10-09T09:43:30.060Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -733,8 +733,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": null,
         "tete_le": null,
@@ -743,20 +743,20 @@ export default {
       },
       "mesure_le": "2026-10-09",
       "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-10-09T09:08:43.068Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
+        "type": "github",
+        "lecture_le": "2026-10-09T09:43:30.060Z",
+        "statut": "non_examine",
+        "examines": [],
         "non_examines": [
+          "derive_git",
+          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
+      "motif_controle": "repli GitHub désactivé",
       "jours_depuis_maj": 0,
       "jours_en_attente": 49,
       "rang": 2
@@ -803,7 +803,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-09T09:08:43.052Z",
+        "lecture_le": "2026-10-09T09:43:30.060Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -826,7 +826,7 @@ export default {
     "lisibles": 10,
     "illisibles": 0,
     "hors_seance": 0,
-    "repris": 8,
+    "repris": 7,
     "en_cours": 8,
     "en_attente_de_paul": 2,
     "au_repos": 0,
@@ -1055,16 +1055,16 @@ export default {
     ],
     "controles": [
       "PaulGERARD161098/Ultima-",
-      "PaulGERARD161098/artisan-builder"
+      "PaulGERARD161098/RenoBoost",
+      "PaulGERARD161098/RenoDevis"
     ],
     "inaccessibles": [],
     "non_examines": [
-      "PaulGERARD161098/RenoBoost",
-      "PaulGERARD161098/RenoDevis",
       "PaulGERARD161098/RenoAgenda",
       "PaulGERARD161098/RenoPredict",
       "PaulGERARD161098/renoboost-console",
       "PaulGERARD161098/mon-dpe.fr",
+      "PaulGERARD161098/artisan-builder",
       "paggerard-boop/Artidispo",
       "PaulGERARD161098/DATARENO-"
     ],
@@ -1080,7 +1080,7 @@ export default {
       },
       {
         "projet": "Ultima",
-        "dit": "a avancé de 2 commit(s) depuis sa dernière note",
+        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
         "pourquoi": "derive"
       },
       {
@@ -1176,14 +1176,14 @@ export default {
   "zohshia": {
     "mesurable": true,
     "base": "f1f9fb3",
-    "tete": "541a1d5",
-    "commits": 130,
-    "touchent": 67,
-    "fichiers_touches": 80,
-    "releve_le": "2026-10-08T22:09:55.238Z",
-    "reprise": true,
-    "mesure_le": "2026-10-08",
+    "tete": "efb20c9",
+    "commits": 140,
+    "touchent": 69,
+    "fichiers_touches": 81,
+    "releve_le": "2026-10-09T09:42:16.749Z",
+    "reprise": false,
+    "mesure_le": "2026-10-09",
     "alerte": true,
-    "phrase": "(mesure du 2026-10-08, reprise : dépôt de référence absent de cette séance) ZOH SHIA — ⚠️ EN RETARD : RénoDevis a avancé de 130 commit(s) depuis la série (f1f9fb3 → 541a1d5) (clone relevé le 2026-10-08 22:09 UTC), dont 67 sur des fichiers qu'elle retouche (80 fichier(s)) : l'extraction refusera probablement. Rafraîchir la série (TECHNO §8)."
+    "phrase": "ZOH SHIA — ⚠️ EN RETARD : RénoDevis a avancé de 140 commit(s) depuis la série (f1f9fb3 → efb20c9) (clone relevé le 2026-10-09 09:42 UTC), dont 69 sur des fichiers qu'elle retouche (81 fichier(s)) : l'extraction refusera probablement. Rafraîchir la série (TECHNO §8)."
   }
 };
