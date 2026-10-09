@@ -101,7 +101,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-09T09:43:30.042Z",
+        "lecture_le": "2026-10-09T10:00:29.822Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -133,8 +133,8 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-10-09",
-          "quoi": "09/10 : déclinaison RénoBoost du devis pro cadrée (#371) et livrée dans RenoDevis (#317 #319 #320) ; leçons v79 (droits de colonne).",
-          "commit": "93d930b6b22fdea33a90a6aa4607e7a46720d0fa"
+          "quoi": "09/10 : déclinaison RénoBoost du devis pro cadrée (#371) et livrée dans RenoDevis (#317 #319 #320) ; leçons v80 (droits de colonne).",
+          "commit": "5acc7ebececd5d1c3f6ed95c7d2a23bb103b4206"
         },
         "prochaine_action": "Reprendre « Léo partout sans candidats » (boucle du 06/10) : fournir les candidats, ou ne pas offrir l'outil là où la page ne peut pas l'exécuter.",
         "bloque_par": [
@@ -156,7 +156,7 @@ export default {
             "depuis": "2026-10-08"
           },
           {
-            "quoi": "LEÇONS v79 (09/10) dans Ultima seulement : les neuf autres dépôts sont en retard, et lecons-chemins n'a pas pu tourner (clones absents de la séance).",
+            "quoi": "LEÇONS v80 (09/10) dans Ultima seulement : les neuf autres dépôts sont en retard, et lecons-chemins n'a pas pu tourner (clones absents de la séance).",
             "depuis": "2026-10-08"
           },
           {
@@ -198,16 +198,16 @@ export default {
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "0328cfe",
-        "tete_le": "2026-10-09T09:42:49+00:00",
-        "commits_depuis": 1,
+        "tete": "b1e28a0",
+        "tete_le": "2026-10-09T09:43:57+00:00",
+        "commits_depuis": 2,
         "commit_inconnu": false
       },
       "mesure_le": "2026-10-09",
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-09T09:43:30.026Z",
+        "lecture_le": "2026-10-09T10:00:29.810Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -274,7 +274,7 @@ export default {
       "mesure_le": "2026-10-08",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-09T09:43:30.060Z",
+        "lecture_le": "2026-10-09T10:00:29.836Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -342,7 +342,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-09T09:43:30.060Z",
+        "lecture_le": "2026-10-09T10:00:29.836Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -400,7 +400,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-09T09:43:30.060Z",
+        "lecture_le": "2026-10-09T10:00:29.836Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -468,7 +468,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-09T09:43:30.060Z",
+        "lecture_le": "2026-10-09T10:00:29.836Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -572,7 +572,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-09T09:43:30.059Z",
+        "lecture_le": "2026-10-09T10:00:29.835Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -638,7 +638,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-09T09:43:30.060Z",
+        "lecture_le": "2026-10-09T10:00:29.836Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -744,7 +744,7 @@ export default {
       "mesure_le": "2026-10-09",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-09T09:43:30.060Z",
+        "lecture_le": "2026-10-09T10:00:29.836Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -803,7 +803,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-09T09:43:30.060Z",
+        "lecture_le": "2026-10-09T10:00:29.836Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -1080,7 +1080,7 @@ export default {
       },
       {
         "projet": "Ultima",
-        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
+        "dit": "a avancé de 2 commit(s) depuis sa dernière note",
         "pourquoi": "derive"
       },
       {
@@ -1176,14 +1176,14 @@ export default {
   "zohshia": {
     "mesurable": true,
     "base": "f1f9fb3",
-    "tete": "efb20c9",
-    "commits": 140,
+    "tete": "c3ab67d",
+    "commits": 143,
     "touchent": 69,
     "fichiers_touches": 81,
-    "releve_le": "2026-10-09T09:42:16.749Z",
+    "releve_le": "2026-10-09T09:59:54.797Z",
     "reprise": false,
     "mesure_le": "2026-10-09",
     "alerte": true,
-    "phrase": "ZOH SHIA — ⚠️ EN RETARD : RénoDevis a avancé de 140 commit(s) depuis la série (f1f9fb3 → efb20c9) (clone relevé le 2026-10-09 09:42 UTC), dont 69 sur des fichiers qu'elle retouche (81 fichier(s)) : l'extraction refusera probablement. Rafraîchir la série (TECHNO §8)."
+    "phrase": "ZOH SHIA — ⚠️ EN RETARD : RénoDevis a avancé de 143 commit(s) depuis la série (f1f9fb3 → c3ab67d) (clone relevé le 2026-10-09 09:59 UTC), dont 69 sur des fichiers qu'elle retouche (81 fichier(s)) : l'extraction refusera probablement. Rafraîchir la série (TECHNO §8)."
   }
 };

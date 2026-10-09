@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-10-09",
-    "commit": "93d930b6b22fdea33a90a6aa4607e7a46720d0fa",
-    "quoi": "09/10 : déclinaison RénoBoost du devis pro cadrée (#371) et livrée dans RenoDevis (#317 #319 #320) ; leçons v79 (droits de colonne)."
+    "commit": "5acc7ebececd5d1c3f6ed95c7d2a23bb103b4206",
+    "quoi": "09/10 : déclinaison RénoBoost du devis pro cadrée (#371) et livrée dans RenoDevis (#317 #319 #320) ; leçons v80 (droits de colonne)."
   },
   "prochaine_action": "Reprendre « Léo partout sans candidats » (boucle du 06/10) : fournir les candidats, ou ne pas offrir l'outil là où la page ne peut pas l'exécuter.",
   "bloque_par": [
@@ -55,7 +55,7 @@
       "depuis": "2026-10-08"
     },
     {
-      "quoi": "LEÇONS v79 (09/10) dans Ultima seulement : les neuf autres dépôts sont en retard, et lecons-chemins n'a pas pu tourner (clones absents de la séance).",
+      "quoi": "LEÇONS v80 (09/10) dans Ultima seulement : les neuf autres dépôts sont en retard, et lecons-chemins n'a pas pu tourner (clones absents de la séance).",
       "depuis": "2026-10-08"
     },
     {

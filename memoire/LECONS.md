@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v79 2026-10-09 sha256:26b1aa534904 -->
+<!-- lecons:empreinte v80 2026-10-09 sha256:b073f12f7279 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -619,7 +619,13 @@ On arrête ces serveurs en ciblant les processus `node` qui les portent
 (`ps -eo pid=,args= | awk '$2 ~ /node$/ && /preview/'`), jamais par un motif
 `pkill -f` que sa propre commande contient. *Rechute le 08/10, deux fois :
 `pkill -f "next start -p 3999"` puis `pkill -f "http.server 8123"` ont tué le
-shell (sortie 144) — la règle était connue, pas appliquée.*
+shell (sortie 144) — la règle était connue, pas appliquée.* *Troisième rechute
+le 09/10 (RenoBoost, H1 défilant), deux fois encore : `pkill -f lancer-navigateur.sh`
+puis `pkill -f "until grep -qE"` — la même ligne de commande portait le motif,
+une suite de tests de 6 min a été perdue et un commit a sauté. La cause n'est
+plus l'oubli : on n'avait aucun besoin de tuer quoi que ce soit — attendre la
+fin d'une commande lancée en arrière-plan passe par sa notification, pas par un
+`pkill` de nettoyage.*
 
 ## 2. Les garde-fous, et leur silence
 
@@ -1754,6 +1760,13 @@ non commité, une mutation pour le prouver, `git checkout --` pour restaurer :
 le fix est reparti avec la mutation, réécrit une minute plus tard. *Le
 correctif qui arrive APRÈS la passe de dry run est un nouveau cycle, avec son
 propre commit avant sa propre mutation — pas une queue du cycle précédent.*
+⚠️ **Cinquième fois, le 09/10** (RenoBoost, H1 défilant) : un sabotage par
+`sed` sur `preview-vitrine.css`, restauré par `git checkout -- preview-vitrine.css`,
+a emporté les huit lignes de CSS du défilement, non commitées. Rattrapé parce
+que le harnais suivant est passé au vert sans la fonctionnalité, et réécrit.
+La suite de la séance a tenu la variante sûre : **copie du fichier avant la
+mutation, recopie après** — elle restaure l'état réel, pas l'état du dernier
+commit.
 
 **UN CONTRÔLE QUI MESURE LA MAUVAISE GRANDEUR EST VERT SUR LE DÉFAUT QU'IL
 GARDE** *(2026-09-18)*. Un garde-fou sur des pastilles SVG a été écrit trois
