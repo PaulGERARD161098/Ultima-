@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v79 2026-10-09 sha256:38f2210219c6 -->
+<!-- lecons:empreinte v80 2026-10-09 sha256:b073f12f7279 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -628,6 +628,25 @@ fin d'une commande lancée en arrière-plan passe par sa notification, pas par u
 `pkill` de nettoyage.*
 
 ## 2. Les garde-fous, et leur silence
+
+**UNE COLONNE AJOUTÉE N'HÉRITE D'AUCUN DROIT DE COLONNE** *(2026-10-09, RenoDevis)*.
+La migration du devis pro a ajouté `forme_juridique` et `capital_social` à
+`profiles`. Cette table ne donne à `authenticated` aucun `UPDATE` de niveau
+table : ses droits sont posés colonne par colonne — c'est ce qui tient `role`
+hors d'atteinte. Les deux colonnes neuves n'en avaient donc aucun, et
+l'écran les envoyait avec tout le reste : **« Enregistrer mon entreprise » était
+refusé EN ENTIER** (42501), SIRET compris, pendant que l'écran disait
+« vérifiez la migration 20260803 ». Paul a saisi l'identité de RénoBoost pour
+rien, et l'a vu avant moi. La migration avait été « éprouvée en transaction
+annulée » — sous le rôle `postgres`, celui qui a tous les droits.
+
+⛔ **Une colonne qu'un écran écrit s'éprouve sous le rôle de cet écran**
+(`set local role authenticated` + `request.jwt.claims`), jamais sous le
+propriétaire. Et une table à droits par colonne demande, pour chaque colonne
+ajoutée, son `grant` — la sonde `PRO-D` de `RenoDevis/CLAUDE.md` le vérifie.
+*Même séance, même famille : deux assertions « aucun champ pro » étaient vraies
+par vacuité — l'une sur un émetteur sans SIRET, l'autre dans un harnais qui ne
+montait pas l'écran. Trouvées en cassant le code, pas en relisant le test.*
 
 **UNE VOIE DE REPLI JAMAIS EMPRUNTÉE N'EXISTE PAS** *(2026-10-04, Ultima — ZOH SHIA)*.
 L'extracteur de code neutre se disait capable d'extraire « au commit demandé »,

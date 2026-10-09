@@ -31,9 +31,9 @@
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-10-08",
-    "commit": "6203fe407c742fce562de2ae1cc7e6629d9162ac",
-    "quoi": "08/10 : #366, #361, #367, #368 et #369 fusionnées (RIVEN, dictée, Léo seul en bas, leçons v77). Nuit : devis pro livré dans RenoDevis (#314)."
+    "le": "2026-10-09",
+    "commit": "5acc7ebececd5d1c3f6ed95c7d2a23bb103b4206",
+    "quoi": "09/10 : déclinaison RénoBoost du devis pro cadrée (#371) et livrée dans RenoDevis (#317 #319 #320) ; leçons v80 (droits de colonne)."
   },
   "prochaine_action": "Reprendre « Léo partout sans candidats » (boucle du 06/10) : fournir les candidats, ou ne pas offrir l'outil là où la page ne peut pas l'exécuter.",
   "bloque_par": [
@@ -47,7 +47,7 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "ZOH · série neutre à rafraîchir (130 commits de retard, 46 conflits) : séance dédiée décidée le 08/10. Voir CADRAGE-2026-10-08-zohshia-generateur-devis-pro.md.",
+      "quoi": "ZOH · série neutre à rafraîchir (140 commits de retard, sans le générateur pro) : séance dédiée décidée le 08/10. Voir CADRAGE-2026-10-08-zohshia-generateur-devis-pro.md.",
       "depuis": "2026-10-08"
     },
     {
@@ -55,7 +55,7 @@
       "depuis": "2026-10-08"
     },
     {
-      "quoi": "LEÇONS v77 propagées dans RenoDevis et Artidispo seulement : les sept autres dépôts sont en retard, et lecons-chemins n'a pas pu tourner (clones absents de la séance).",
+      "quoi": "LEÇONS v80 (09/10) dans Ultima seulement : les neuf autres dépôts sont en retard, et lecons-chemins n'a pas pu tourner (clones absents de la séance).",
       "depuis": "2026-10-08"
     },
     {
@@ -163,7 +163,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-10-08"
+  "maj": "2026-10-09"
 }
 ```
 
