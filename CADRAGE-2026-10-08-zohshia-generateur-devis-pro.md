@@ -166,3 +166,26 @@ leurs `*.test.ts`, une migration rédigée (non appliquée). Ultima :
 - **Saisie des vraies coordonnées bancaires** : Paul, dans l'écran — jamais par
   une séance.
 - **Fusion** RenoDevis puis Ultima : go explicite (SHA, cible, CI).
+
+## Déclinaison RénoBoost — la seule active (09/10)
+
+Paul : *« une techno neutre que je peux vendre aisément et adapter aisément à
+n'importe quel pro, et la seule déclinaison active est pour moi »*.
+
+**Arbitrages (panneaux, 09/10)** : l'émetteur est **RénoBoost, vers ses clients
+pros** · le générateur est **fermé aux autres émetteurs, SOLA compris** · le code
+reste **dans RenoDevis** (une seule version, extraite par ZOH) · ordre :
+**déclinaison d'abord, puis la séance ZOH**.
+
+| | |
+|---|---|
+| ① But | Le gabarit pro ne s'ouvre qu'aux SIREN listés dans `DEVIS_PRO_EMETTEURS` ; liste vide = fermé pour tous. Vendre la techno à un pro = une ligne de configuration, aucun code. |
+| ② Étapes | verrou dans `projetDevisPro` (seul producteur de `devis_pro`) → contrôle et écran masquent les champs pro hors liste → l'aperçu suit → identité RénoBoost saisie par Paul dans `/profil` → variable posée sur Vercel |
+| ③ Moyens | `lib/devisPro.ts`, `lib/config.ts`, création, contrôle, aperçu, `ControleAvantDevis.tsx`, `.env.example` — RenoDevis#317 |
+| ④ Critères | 7 sabotages au rouge (fait, 09/10) ; après pose : un devis RénoBoost sort au gabarit pro, un devis SOLA avec un SIREN client sort au sien |
+| ⑤ Hors boucle | identité de RénoBoost (Paul) ; mentions propres à l'abonnement et à la commission (comptable) ; rafraîchissement de la série ZOH (séance dédiée) |
+| ⑥ Pre-mortem | liste ouverte par défaut → fermée par construction, sabotage S1 · champs pro masqués mais lus → `projetDevisPro` les ignore, S2 · test « fermé » vrai par vacuité → deux harnais trouvés vacants et corrigés le 09/10 |
+
+**Mesuré le 09/10** : RénoBoost n'a **aucune identité légale en base** (4 profils
+admin : raison sociale, SIRET, adresse, TVA vides). SOLA : forme juridique `SAS`
+posée sur mandat de Paul, relue.
