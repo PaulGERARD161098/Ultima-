@@ -4,7 +4,7 @@
 // l'IMPORTER pour que Vercel l'embarque dans le paquet de la fonction, et
 // que `api/_lib/` est le seul motif d'import éprouvé en production ici.
 export default {
-  "le": "2026-10-08",
+  "le": "2026-10-09",
   "projets": [
     {
       "ok": true,
@@ -89,8 +89,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "380e7a2",
         "tete_le": "2026-10-08T12:36:49+00:00",
@@ -99,22 +99,22 @@ export default {
       },
       "mesure_le": "2026-10-08",
       "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-10-08T22:12:05.004Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
+        "type": "github",
+        "lecture_le": "2026-10-09T09:08:43.051Z",
+        "statut": "non_examine",
+        "examines": [],
         "non_examines": [
+          "derive_git",
+          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
-      "jours_depuis_maj": 2,
-      "jours_en_attente": 65,
+      "motif_controle": "repli GitHub désactivé",
+      "jours_depuis_maj": 3,
+      "jours_en_attente": 66,
       "rang": 0
     },
     {
@@ -198,16 +198,16 @@ export default {
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "a1c3bc0",
-        "tete_le": "2026-10-08T22:02:45+00:00",
-        "commits_depuis": 1,
+        "tete": "a119c68",
+        "tete_le": "2026-10-09T00:40:11+02:00",
+        "commits_depuis": 2,
         "commit_inconnu": false
       },
-      "mesure_le": "2026-10-08",
+      "mesure_le": "2026-10-09",
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-08T22:12:04.994Z",
+        "lecture_le": "2026-10-09T09:08:43.047Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -219,8 +219,8 @@ export default {
           "dependances"
         ]
       },
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 49,
+      "jours_depuis_maj": 1,
+      "jours_en_attente": 50,
       "rang": 0
     },
     {
@@ -274,7 +274,7 @@ export default {
       "mesure_le": "2026-10-08",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-08T22:12:05.015Z",
+        "lecture_le": "2026-10-09T09:08:43.068Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -287,8 +287,8 @@ export default {
         ]
       },
       "motif_controle": "repli GitHub désactivé",
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 30,
+      "jours_depuis_maj": 1,
+      "jours_en_attente": 31,
       "rang": 0
     },
     {
@@ -342,7 +342,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-08T22:12:05.015Z",
+        "lecture_le": "2026-10-09T09:08:43.051Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -355,8 +355,8 @@ export default {
         ]
       },
       "motif_controle": "repli GitHub désactivé",
-      "jours_depuis_maj": 8,
-      "jours_en_attente": 65,
+      "jours_depuis_maj": 9,
+      "jours_en_attente": 66,
       "rang": 1
     },
     {
@@ -400,7 +400,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-08T22:12:05.015Z",
+        "lecture_le": "2026-10-09T09:08:43.068Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -413,8 +413,8 @@ export default {
         ]
       },
       "motif_controle": "repli GitHub désactivé",
-      "jours_depuis_maj": 8,
-      "jours_en_attente": 15,
+      "jours_depuis_maj": 9,
+      "jours_en_attente": 16,
       "rang": 1
     },
     {
@@ -468,7 +468,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-08T22:12:05.015Z",
+        "lecture_le": "2026-10-09T09:08:43.051Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -481,8 +481,8 @@ export default {
         ]
       },
       "motif_controle": "repli GitHub désactivé",
-      "jours_depuis_maj": 8,
-      "jours_en_attente": 85,
+      "jours_depuis_maj": 9,
+      "jours_en_attente": 86,
       "rang": 2
     },
     {
@@ -560,8 +560,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": null,
         "tete_le": null,
@@ -570,22 +570,22 @@ export default {
       },
       "mesure_le": "2026-10-08",
       "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-10-08T22:12:05.014Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
+        "type": "github",
+        "lecture_le": "2026-10-09T09:08:43.051Z",
+        "statut": "non_examine",
+        "examines": [],
         "non_examines": [
+          "derive_git",
+          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
-      "jours_depuis_maj": 0,
-      "jours_en_attente": 52,
+      "motif_controle": "repli GitHub désactivé",
+      "jours_depuis_maj": 1,
+      "jours_en_attente": 53,
       "rang": 2
     },
     {
@@ -638,7 +638,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-08T22:12:05.015Z",
+        "lecture_le": "2026-10-09T09:08:43.052Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -651,8 +651,8 @@ export default {
         ]
       },
       "motif_controle": "repli GitHub désactivé",
-      "jours_depuis_maj": 48,
-      "jours_en_attente": 48,
+      "jours_depuis_maj": 49,
+      "jours_en_attente": 49,
       "rang": 2
     },
     {
@@ -670,9 +670,9 @@ export default {
           "critere_de_sortie": "Les six lots AB0→AB5 fermés, chacun sur son critère écrit dans CADRAGE-AB-MULTIACTIVITE-2026-09-11.md. AB0 est fait. Le jalon « publication SPC » n'est pas abandonné : il reste bloqué par 7 informations qui n'appartiennent pas au dépôt, et aucune ligne de ce chantier n'en fait tomber une."
         },
         "dernier_arret": {
-          "le": "2026-09-30",
-          "quoi": "Bouclage transverse : LEÇONS v45 ; grain remis au format (27 boucles en texte nu que la collecte écartait), 5 retirées : fermées, périmées ou déjà dans LECONS.",
-          "commit": "ecef58995515575b6f9797cf4e41dbcdc3768170"
+          "le": "2026-10-09",
+          "quoi": "SPC : plus aucune mention de Le Raincy ni du 93 sur le site (PR 104), en-tête « Île-de-France » et ligne sous le H1 supprimée (PR 105) ; règle « captures plutôt que lien d'aperçu…",
+          "commit": "167dcef6aea00b3c8597acbc0b8c162aa85ce4b5"
         },
         "prochaine_action": "Ouvrir AB1 sur CADRAGE-AB-MULTIACTIVITE-2026-09-11.md (multi-activite dans le dossier artisan et la SiteSpec), au format 6 points avant toute ligne de code.",
         "bloque_par": [
@@ -685,6 +685,10 @@ export default {
         ],
         "en_attente_depuis": "2026-08-21",
         "boucles_ouvertes": [
+          {
+            "quoi": "DÉMO SPC — Paul a ajouté ARTISAN_DEPLOY_TARGET=spc en env Preview le 09/10. Sa PORTÉE n'est pas mesurée (lecture des env refusée en séance) : la preview de main sert SPC, donc…",
+            "depuis": "2026-10-09"
+          },
           {
             "quoi": "A RETIRER — la clé Studio. STUDIO_TOKEN SIGNE encore la session (lib/ownerSession.ts) : son retrait impose une clé de signature dédiée. Ne pas retirer l'un sans l'autre.",
             "depuis": "2026-09-15"
@@ -720,42 +724,41 @@ export default {
           {
             "quoi": "GARDE — `site.email` n'est pas signalé, et ce n'est pas un oubli : adresse plausible sous un domaine non acheté. À confirmer avec le domaine.",
             "depuis": "2026-09-13"
-          },
-          {
-            "quoi": "DÉPENDANCES — `npm ci` rapporte 8 vulnérabilités (1 critique, 5 hautes). Non traitées : `npm audit fix` peut changer une majeure.",
-            "depuis": "2026-09-13"
           }
         ],
-        "maj": "2026-09-30"
+        "maj": "2026-10-09"
       },
-      "recits": [],
+      "recits": [
+        "dernier_arret.quoi",
+        "boucles_ouvertes[].quoi"
+      ],
       "ciel": "alpha",
-      "hors_seance": true,
-      "reprise": true,
+      "hors_seance": false,
+      "reprise": false,
       "derive": {
-        "tete": "0c6a3d1",
-        "tete_le": "2026-10-04T19:22:44+00:00",
-        "commits_depuis": null,
-        "commit_inconnu": true
+        "tete": null,
+        "tete_le": null,
+        "commits_depuis": 0,
+        "commit_inconnu": false
       },
-      "mesure_le": "2026-10-04",
+      "mesure_le": "2026-10-09",
       "controle": {
-        "type": "github",
-        "lecture_le": "2026-10-08T22:12:05.015Z",
-        "statut": "non_examine",
-        "examines": [],
+        "type": "disque",
+        "statut": "lu",
+        "lecture_le": "2026-10-09T09:08:43.068Z",
+        "examines": [
+          "FINUBAR.md",
+          "derive_git"
+        ],
         "non_examines": [
-          "derive_git",
-          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
-      "motif_controle": "repli GitHub désactivé",
-      "jours_depuis_maj": 8,
-      "jours_en_attente": 48,
+      "jours_depuis_maj": 0,
+      "jours_en_attente": 49,
       "rang": 2
     },
     {
@@ -800,7 +803,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-08T22:12:05.015Z",
+        "lecture_le": "2026-10-09T09:08:43.052Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -813,8 +816,8 @@ export default {
         ]
       },
       "motif_controle": "repli GitHub désactivé",
-      "jours_depuis_maj": 8,
-      "jours_en_attente": 28,
+      "jours_depuis_maj": 9,
+      "jours_en_attente": 29,
       "rang": 2
     }
   ],
@@ -823,12 +826,12 @@ export default {
     "lisibles": 10,
     "illisibles": 0,
     "hors_seance": 0,
-    "repris": 7,
+    "repris": 8,
     "en_cours": 8,
     "en_attente_de_paul": 2,
     "au_repos": 0,
     "derives": 3,
-    "commits_inconnus": 6,
+    "commits_inconnus": 5,
     "boucles_ouvertes": 45,
     "gestes_de_paul": [
       {
@@ -1052,16 +1055,16 @@ export default {
     ],
     "controles": [
       "PaulGERARD161098/Ultima-",
-      "PaulGERARD161098/RenoBoost",
-      "PaulGERARD161098/RenoDevis"
+      "PaulGERARD161098/artisan-builder"
     ],
     "inaccessibles": [],
     "non_examines": [
+      "PaulGERARD161098/RenoBoost",
+      "PaulGERARD161098/RenoDevis",
       "PaulGERARD161098/RenoAgenda",
       "PaulGERARD161098/RenoPredict",
       "PaulGERARD161098/renoboost-console",
       "PaulGERARD161098/mon-dpe.fr",
-      "PaulGERARD161098/artisan-builder",
       "paggerard-boop/Artidispo",
       "PaulGERARD161098/DATARENO-"
     ],
@@ -1077,7 +1080,7 @@ export default {
       },
       {
         "projet": "Ultima",
-        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
+        "dit": "a avancé de 2 commit(s) depuis sa dernière note",
         "pourquoi": "derive"
       },
       {
@@ -1178,9 +1181,9 @@ export default {
     "touchent": 67,
     "fichiers_touches": 80,
     "releve_le": "2026-10-08T22:09:55.238Z",
-    "reprise": false,
+    "reprise": true,
     "mesure_le": "2026-10-08",
     "alerte": true,
-    "phrase": "ZOH SHIA — ⚠️ EN RETARD : RénoDevis a avancé de 130 commit(s) depuis la série (f1f9fb3 → 541a1d5) (clone relevé le 2026-10-08 22:09 UTC), dont 67 sur des fichiers qu'elle retouche (80 fichier(s)) : l'extraction refusera probablement. Rafraîchir la série (TECHNO §8)."
+    "phrase": "(mesure du 2026-10-08, reprise : dépôt de référence absent de cette séance) ZOH SHIA — ⚠️ EN RETARD : RénoDevis a avancé de 130 commit(s) depuis la série (f1f9fb3 → 541a1d5) (clone relevé le 2026-10-08 22:09 UTC), dont 67 sur des fichiers qu'elle retouche (80 fichier(s)) : l'extraction refusera probablement. Rafraîchir la série (TECHNO §8)."
   }
 };
