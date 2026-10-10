@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-10-10",
-    "commit": "febe4593092230f14a924879166d80f059a35663",
-    "quoi": "10/10 : devis SOLA 2 gainables M71 produit au gabarit RenoDevis (brouillon PDF v4, apport d'affaires, hors base) ; KNICKERBOCKER retrouvé ; leçons v82 (gabarit greffé sur la leçon v81 du chiffrage)."
+    "commit": "1f6024b6ba2f67be52afbd1120a9832b375c4f19",
+    "quoi": "10/10 : devis SOLA 2 gainables M71 au gabarit RenoDevis (brouillon v4, hors base) ; KNICKERBOCKER retrouvé ; leçons v83."
   },
   "prochaine_action": "Reprendre « Léo partout sans candidats » (boucle du 06/10) : fournir les candidats, ou ne pas offrir l'outil là où la page ne peut pas l'exécuter.",
   "bloque_par": [
@@ -55,7 +55,7 @@
       "depuis": "2026-10-08"
     },
     {
-      "quoi": "LEÇONS v82 (10/10) dans Ultima seulement : les neuf autres dépôts sont en retard, et lecons-chemins n'a pas pu tourner (clones absents de la séance).",
+      "quoi": "LEÇONS v83 (10/10) dans Ultima seulement : les neuf autres dépôts sont en retard, et lecons-chemins n'a pas pu tourner (clones absents de la séance).",
       "depuis": "2026-10-08"
     },
     {
@@ -163,7 +163,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-10-09"
+  "maj": "2026-10-10"
 }
 ```
 
