@@ -51,12 +51,14 @@ export const TOUS_LES_EXPORTS = [EXPORT_MD, EXPORT_GEMINI_MD];
 
 // Les bornes de la section gouvernée. Elles sont volontairement larges : c'est
 // le CORPS des directives qui compte, pas la ponctuation des titres.
-const DEBUT = /^##\s.*QUATRE DIRECTIVES/m;
+// Le nombre n'est pas dans le motif : la section a compté quatre directives,
+// puis cinq le 2026-10-10 (ZS). Un titre qui compte ne doit pas casser la mesure.
+const DEBUT = /^##\s.*DIRECTIVES MAÎTRESSES/m;
 const FIN = /^##\s.*Objectif final/m;
 
 // Ce que la section DOIT contenir pour qu'on accepte de la hacher.
 const MINIMUM_CARACTERES = 500;
-const SIGLES = ['EB', 'JL', 'EL', 'DR'];
+const SIGLES = ['EB', 'JL', 'EL', 'DR', 'ZS'];
 
 // L'empreinte telle qu'elle apparaît DANS les blocs à coller — donc lisible,
 // pas un commentaire HTML : Paul doit pouvoir la lire dans ChatGPT et la dire.

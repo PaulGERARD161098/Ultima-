@@ -45,6 +45,18 @@
       "avant": "devis@mail.sola-groupe.fr",
       "apres": "devis@mail.exemple.fr",
       "pourquoi": "exemple d'adresse tiré d'un artisan réel"
+    },
+    {
+      "fichier": "supabase/migrations/20261006_rd_clients_rattache_artisan.sql",
+      "avant": "and c.pro_id = 'matthieu-ducrest'",
+      "apres": "and c.pro_id = 'pro-exemple'",
+      "pourquoi": "rattrapage de données borné au pro de l'instance de référence ; une base neuve n'a aucune fiche à rattraper (10/10)"
+    },
+    {
+      "fichier": "supabase/migrations/20261006_rd_clients_rattache_artisan.sql",
+      "avant": "create or replace function public.clients_rattache_artisan()",
+      "apres": "-- Base neuve : la référence a reçu artisans.pro_id d'une brique voisine le 17/08,\n-- avant cette migration qui en dépend ; la base neuve la pose ici (ZOH SHIA, 10/10).\nalter table public.artisans add column if not exists pro_id text;\ncreate unique index if not exists artisans_pro_id_unique on public.artisans (pro_id) where (pro_id is not null);\n\ncreate or replace function public.clients_rattache_artisan()",
+      "pourquoi": "la migration lit artisans.pro_id, que la référence a reçu d'une brique voisine le 17/08 et que la base neuve ne posait qu'en finition (10/10)"
     }
   ],
   "noms_equipe": [

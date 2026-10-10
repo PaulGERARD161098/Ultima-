@@ -42,6 +42,8 @@ case vide reste vide, et l'écran le montre.
 | Adresse du siège | `adresse` | ✅ mention légale |
 | Qualification RGE (numéro) | `rge` | si travaux aidés |
 | Assurance décennale (assureur, numéro) | `decennale` | ✅ mention légale |
+| Forme juridique, capital social | `forme_juridique`, `capital_social` | ✅ forme juridique s'il émet des devis à des professionnels (le devis pro refuse de se générer sans elle) ; capital facultatif |
+| Coordonnées bancaires (bénéficiaire, IBAN, BIC) | saisies et contrôlées **à chaque devis pro** (`extra.reglement` du devis) | ✅ pour un devis pro |
 | Logo | `logo_url` (stockage `artisan-logos`) | facultatif |
 | Site, page professionnelle, page d'avis | `site_url`, `linkedin_url`, `google_page_url` | facultatif |
 | Savoir-faire, produits mis en avant | `savoir_faire`, `produits` | facultatif |
@@ -127,6 +129,7 @@ Chaque ligne dit **qui** agit et **comment** : *Auto* (le système le fait),
 | 10 | **Ses règles de prix et sa bibliothèque de prix** (§1.3, §1.4 ; `TECHNO.md` §3) : coefficient, demi-journée de main-d'œuvre, validités ; ses produits, achats, prestations. Ce sont SES valeurs : la techno n'en propose aucune. | Paul (décision) | Manuel | Décision commerciale, puis écriture en base réelle |
 | 11 | **Synchronisation des devis envoyés par mail** (s'il en envoie hors plateforme) : ajouter son adresse d'envoi à `SYNC_EMAIL_EXPEDITEURS`. Ne jamais compter sur la valeur par défaut du code : la poser explicitement. | Paul | Manuel (variable de production) | Variable de production |
 | 12 | **Preuve** : rejouer la requête d'empreinte de la base, puis un devis de bout en bout sur l'écran du pro. | Paul / Léo | Manuel | ⛔ Un essai réel est un effet métier : mandat |
+| 13 | **Devis entre professionnels** (s'il en émet) : ajouter son SIREN à `DEVIS_PRO_EMETTEURS` ; sa fiche porte sa forme juridique. Sans cela, ses devis gardent le chemin ordinaire. | Paul | Manuel (variable de production) | Variable de production |
 
 ## 3. Voie B — une instance à lui : son code, sa base
 
@@ -141,6 +144,11 @@ Chaque ligne dit **qui** agit et **comment** : *Auto* (le système le fait),
 | B7 | **Puis la voie A, étapes 1 à 12, sur SON instance** — avec la check-list du §1. | Paul / Léo | voir §2 | voir §2 |
 | B8 | **Preuve sur l'instance** : rejouer la requête d'empreinte de la base, puis un devis de bout en bout sur l'écran du pro. | Paul / Léo | Manuel | ⛔ Un essai réel est un effet métier : mandat |
 
+⛔ **Au 10/10/2026, B1 refuse, et c'est attendu.** La série de neutralisation
+se rafraîchit juste après le chantier qui fait de la formule de l'instance de
+référence des paramètres du pro (`TECHNO.md` §8). Aucune voie B ne s'ouvre
+avant ; la voie A reste ouverte.
+
 ⚠️ **Le code et la base vont ensemble.** L'extraction note le commit source ; la
 base livrée est celle que B2 prouve conforme pour ce même état du dépôt. Une
 extraction d'un commit et une base d'un autre ne se mélangent pas.
@@ -151,12 +159,14 @@ extraction d'un commit et une base d'un autre ne se mélangent pas.
 - **Son vendeur de référence** : la plateforme ou lui, client par client.
 - **Son expéditeur** : son nom sur le domaine de la plateforme, ou son domaine.
 - **Son paiement en ligne** : oui ou non, et son taux de commission.
+- **Ses devis entre professionnels** : en émet-il ? Si oui, étape 13.
 
 ## 5. Ce qui reste manuel — à automatiser
 
 Lu dans la colonne *Mode* du §2 : la fiche (1), la commission (2), le compte (3),
 l'expéditeur sur son domaine (6), le catalogue (8), la bibliothèque de devis (9),
-les règles de prix (10), la synchronisation mail (11). Le plus fréquent est le 3.
+les règles de prix (10), la synchronisation mail (11), l'ouverture du devis pro
+(13). Le plus fréquent est le 3.
 Chacun, automatisé, fait gagner une étape à **tous** les pros suivants.
 
 ## 6. Les variables d'environnement (mesurées)
@@ -189,6 +199,9 @@ le préfixe `NEXT_PUBLIC_` : elles seraient publiées dans le navigateur.
 | `TRACK_DEDUPE_SECONDES` · `CHAUD_PAS_JOUR` · `CHAUD_PALIERS_OUVERTURES` | Calibrage du suivi : doublons d'ouverture, alertes « devis chaud » |
 | `SILENCE_HEURES` | Devis jamais ouvert au bout de N heures : on prévient le pro que son mail n'est sans doute pas arrivé |
 | `ANTHROPIC_API_KEY` | Clé *serveur* de l'assistant |
+| `OPENAI_API_KEY` | Clé *serveur* de la dictée (session en temps réel, transcription des notes) — jamais importée par le code du navigateur |
+| `DEVIS_PRO_EMETTEURS` | SIREN des émetteurs ouverts au générateur de devis pro, séparés par des virgules — vide = fermé pour tous (étape 13). Un identifiant public, pas un secret |
+| `RECETTE_PDF` | **Tests seulement** : chemin local d'un PDF réel pour une recette de lecture des documents. Jamais posée en production ; le fichier ne se committe jamais |
 | `AUDIT_PAC_BASE_URL` · `AUDIT_PAC_API_SECRET` | Appel du moteur d'audit énergétique (le second est *serveur*) |
 | `RENOBOOST_API_URL` | Service d'extraction des PDF |
 | `HUB_DEVIS_URL` · `NEXT_PUBLIC_HUB_URL` | Page devis historique du hub |

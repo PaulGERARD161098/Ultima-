@@ -1,11 +1,12 @@
 # CLAUDE.md — Ultima (protocoles permanents de travail avec Paul)
 
-## 🧭 LES QUATRE DIRECTIVES MAÎTRESSES — on commence toujours par elles
+## 🧭 LES CINQ DIRECTIVES MAÎTRESSES — on commence toujours par elles
 
-Quatre directives gouvernent tout le travail. **Aucune ne prime sur les autres :
+Cinq directives gouvernent tout le travail. **Aucune ne prime sur les autres :
 EB fixe le cap, JL le sens et le plan, EL verrouille le chemin, DR exige la
-preuve après coup.** Toute boucle se lit à travers les quatre avant d'être
-ouverte — et DR la rouvre, elle, une fois refermée.
+preuve après coup, ZS vérifie que ce qu'on crée est de son temps.** Toute boucle
+se lit à travers les cinq avant d'être ouverte — et DR la rouvre, elle, une fois
+refermée.
 
 | | Nom | Ce qu'elle impose |
 |---|---|---|
@@ -13,6 +14,7 @@ ouverte — et DR la rouvre, elle, une fois refermée.
 | **JL** | la destination | **Vers quoi et selon quel plan** : Ultima, unique interface de travail ; rien d'autre ne sera créé. |
 | **EL** | Edouard Lebrun — le chemin | **Comment on y va** : le comment entièrement défini et assumé AVANT la première ligne de travail. |
 | **DR** | le dry run — la preuve | **Ce qui prouve qu'on y est** : ré-éprouver systématiquement ce qui a été livré, et patcher sur place ce que la ré-épreuve révèle. Trois fois par jour. |
+| **ZS** | l'époque | **Avec quoi on le fait** : avant de créer, la solution retenue est-elle moderne pour l'année en cours, la plus simple, la plus rapide à mettre en place et la plus économique, avec ce que Paul a déjà sous la main ? |
 
 ### 🔒 Directive EL (Edouard Lebrun) — dictée par Paul le 2026-08-01
 
@@ -80,6 +82,58 @@ les aurait attrapées — jamais une note « à voir plus tard ». Le rapport di
 qui a été sondé, ce qui a cédé, ce qui a été corrigé, **et ce qui a résisté** :
 sans cette dernière ligne, un dry run sans trouvaille ne se distingue pas d'un
 dry run non fait. Les gates et le protocole GO SOLO s'appliquent inchangés.
+
+### 🛰️ Directive ZS — dictée par Paul le 2026-10-10
+
+Aussi puissante qu'EB, JL, EL et DR. EB fixe le cap, JL la destination, EL le
+chemin, DR la preuve. **ZS juge l'époque** : ce qu'on crée doit être de son temps.
+
+> Paul, 10/10 : *« lorsqu'on crée quelque chose, notre objectif final doit se
+> conditionner à la question : est-ce que c'est moderne et adapté à l'ère du
+> temps, à l'année dans laquelle on se trouve, aux technologies qui sont à ma
+> disposition et facilement accessibles ? Est-ce que la technologie choisie est
+> la plus simple ? la plus rapide à mettre en place, la plus économique ? […]
+> Créer des sites, c'est bien, mais ça fait so 2010. »*
+
+**Les quatre questions, posées avant de créer quoi que ce soit** :
+1. **Moderne ?** Adaptée à l'année en cours, et aux technologies que Paul a
+   déjà sous la main et qui sont faciles d'accès.
+2. **La plus simple ?**
+3. **La plus rapide à mettre en place ?**
+4. **La plus économique ?**
+
+**Comment elle s'applique (Directive EL)** :
+- **Elle entre dans le format 6 points**, au ③ *les moyens*. Avant un écran, un
+  site, un formulaire ou un script, on nomme **l'alternative de l'année**, et on
+  dit pourquoi on la retient ou on l'écarte. Voici les bascules typiques :
+  - un **agent qui converse** (Léo, Réno sur WhatsApp) plutôt qu'un écran de
+    saisie ;
+  - une **capacité native d'un service déjà en place** (Supabase, Vercel,
+    l'API Claude, Google Workspace) plutôt qu'un développement maison ;
+  - une **API officielle** plutôt qu'un scraping ;
+  - un **automate qui propose** plutôt qu'un champ à remplir (Directive IA de
+    RénoBoost).
+- **Les quatre critères se pèsent ensemble, et « moderne » ne gagne jamais
+  seul.** Une technologie récente mais plus chère, plus lente à poser ou plus
+  complexe échoue au test, tout comme une technologie simple mais dépassée.
+- **« Facilement accessible » veut dire officielle, documentée et disponible
+  aujourd'hui** depuis les comptes de Paul. Une bibliothèque non officielle, une
+  bêta fermée ou un service qui exige un nouveau contrat ne sont pas
+  « accessibles ».
+- **Le moderne se vérifie, il ne se suppose pas.** L'état de l'art se relit au
+  moment du cadrage (documentation officielle, recherche datée), jamais de
+  mémoire. Une connaissance d'il y a deux ans présentée comme actuelle échoue
+  au test, comme une valeur déduite échoue à la Directive EL.
+- **La trace** : tout cadrage porte une ligne ZS, qui dit l'alternative la plus
+  moderne considérée et le verdict sur les quatre critères.
+
+⛔ **Ce que ZS n'autorise pas** :
+- **réécrire ce qui marche parce que c'est passé de mode.** ZS juge ce que l'on
+  CRÉE ; ce qui existe se capitalise (EB). Une refonte se justifie par un gain
+  mesuré sur les quatre critères, jamais par l'âge seul ;
+- **sortir d'Ultima.** La réponse moderne à un besoin reste une extension
+  d'Ultima (JL) ;
+- **sacrifier la sécurité, la RGPD ou un gate à la nouveauté.**
 
 ## 🎯 Objectif final — à ne JAMAIS oublier
 
@@ -155,7 +209,7 @@ aujourd'hui ? » + 4 quadrants. Un repo, mémoire inter-segment, sécurité rele
 
 ## 🟢 Protocole DÉBUT de session
 
-0. **Relire les trois directives maîtresses (EB, JL, EL) en tête de ce fichier.**
+0. **Relire les cinq directives maîtresses (EB, JL, EL, DR, ZS) en tête de ce fichier.**
    C'est le premier geste de toute session : elles conditionnent la lecture de
    tout le reste.
 1. Lire CADRAGE-ULTIMA.md (section ÉTAT) + roadmaps + `memoire/` (profil,

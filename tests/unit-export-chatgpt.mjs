@@ -42,6 +42,7 @@ const CLAUDE_TEMOIN = `# CLAUDE.md témoin
 **JL** la destination : Ultima est l'unique interface de travail.
 **EL** le chemin : le comment défini avant la première ligne.
 **DR** la preuve : ré-éprouver ce qui a été livré.
+**ZS** l'époque : ce qu'on crée est moderne, simple, rapide et économique.
 ${'Du corps de directive, écrit pour que la section dépasse le minimum exigé. '.repeat(10)}
 
 ## 🎯 Objectif final
