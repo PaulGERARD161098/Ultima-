@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-10-10",
-    "commit": "4a212bd07cbd14be03146945674b910a9fcb0a55",
-    "quoi": "10/10 : devis SOLA 2 monosplits chiffré par calculerPrixSola ; LEÇONS v85 dans les dix dépôts ; lecons-chemins voit les chemins partiels."
+    "commit": "a54d2a60dd60bf71596fd4b2740f1ab8de121da5",
+    "quoi": "10/10 : Directive ZS ; devis SOLA 2 gainables puis 2 monosplits ; leçons v86 (Ultima) ; lecons-chemins voit les chemins partiels."
   },
   "prochaine_action": "Reprendre « Léo partout sans candidats » (boucle du 06/10) : fournir les candidats, ou ne pas offrir l'outil là où la page ne peut pas l'exécuter.",
   "bloque_par": [
@@ -56,7 +56,7 @@
       "depuis": "2026-10-08"
     },
     {
-      "quoi": "LEÇONS : deux chemins nus que lecons-chemins signale depuis le 10/10 — l.663 `outils/` et l.2320 `package-lock.json` (présents dans une partie des dépôts seulement). À préfixer au prochain passage de propagation ; l'outil rend 1 tant qu'ils restent.",
+      "quoi": "LEÇONS v86 dans Ultima seulement (les neuf autres en v85). À la propagation, préfixer l.663 `outils/` et l.2330 `package-lock.json` : lecons-chemins les signale.",
       "depuis": "2026-10-10"
     },
     {
@@ -164,7 +164,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-10-09"
+  "maj": "2026-10-10"
 }
 ```
 
