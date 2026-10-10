@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v81 2026-10-10 sha256:4884cea131cf -->
+<!-- lecons:empreinte v82 2026-10-10 sha256:70e0cbed8249 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1402,6 +1402,28 @@ le bouton » : la sérialisation d'un formulaire ne s'éprouve qu'au navigateur.
 
 ## 3. Ce qu'on donne à Paul
 
+**UN CHIFFRAGE SE FAIT AVEC LA RÈGLE CODÉE, PAS AVEC LA PREMIÈRE RÈGLE TROUVÉE** *(2026-10-09, RenoBoost + RenoDevis)*.
+Devis SOLA de deux monosplits : rendu trois fois avec des prix différents. ① Prix LN35 « introuvables »
+alors que la banque produits (`banques_reno`) les portait — je n'avais fouillé que `corpus_devis`.
+② Prix de vente posés à l'écart « +200/+300 » observé sur un autre produit, puis à « achat × 1,35 »
+lu dans `outils/corpus/banque.py` — l'ancien plancher. La règle réelle (marge totale 50 %, presta
+à prix fixe) était codée dans `RenoDevis/lib/reglesSola.ts:calculerPrixSola` ; Paul a dû la
+rappeler, après qu'une première version était déjà partie chez l'artisan.
+
+⛔ **Un prix donné à Paul vient de la fonction qui le calcule en production, appelée sur les vraies
+données — jamais d'un plancher, d'une note ou d'une marge observée ailleurs.**
+
+⇒ **Avant tout chiffrage : chercher la fonction de prix du dépôt (`grep -rn "calculer\|tarif"
+lib/`), l'exécuter, et ne fouiller les données qu'ensuite, dans TOUTES les tables qui en portent.**
+⊕ **ET LE DOCUMENT SORT DU GABARIT DE L'ARTISAN** *(2026-10-10, RenoDevis — devis SOLA
+2 gainables)*. Un tableau HTML maison puis un PDF générique ont été livrés comme « devis » —
+*« Utilise le devis Sola, jamais un truc comme ça »* — avant le générateur réel
+`RenoDevis/lib/pdfSola.ts`. Puis trois refontes : pose à 800 €/j au lieu des 500 € HT la
+demi-journée de `RenoDevis/docs/SOLA-MATRICE-20261001.md`, apport d'affaires oublié (PU produits
+× 1,10, pose jamais majorée), et un prix Koolnova donné pour sûr alors que la note interne du devis
+repris (`extra.note_privee`) le disait ESTIMÉ. ⇒ **Gabarit + matrice + note interne lus avant le
+premier chiffre ; et « apport d'affaires : oui/non ? » demandé d'emblée si rien ne le dit.**
+
 **RIEN DE CE QUI EST DONNÉ À PAUL N'EST DÉDUIT** *(2026-09-02, directive EL)*.
 Toute valeur qu'il va cliquer, taper ou croire — URL, chemin, identifiant,
 chiffre, nom de fichier, état d'un service — est **lue à sa source**, et sa
@@ -1650,23 +1672,6 @@ formulaire), il dit **avant** : « ne capture pas cet écran ; si tu veux me
 montrer le résultat, cadre la seule zone Résultat ». Masquer un caractère n'est
 pas masquer — le dire avec le nombre d'essais qui reste. Et si la capture arrive
 quand même, **la rotation est la première action**, pas une note de fin.
-
-**UN DEVIS D'ARTISAN SORT DE SON GABARIT ET DE SES RÈGLES, JAMAIS D'UNE MISE EN
-PAGE IMPROVISÉE** *(2026-10-10, RenoDevis — devis SOLA)*. Quand Paul dit « devis
-pour X », le livrable est le document que X envoie à ses clients. Pour SOLA :
-le générateur `RenoDevis/lib/pdfSola.ts` (logo, fond, RGE, décennale, RIB),
-nourri des libellés d'un devis SOLA réel. Les prix se chiffrent AVEC les règles
-écrites, lues avant le premier chiffre : `RenoDevis/docs/SOLA-MATRICE-20261001.md`
-(pose 500 € HT la demi-journée ; apport d'affaires = PU produits × 1,10, pose
-jamais majorée). Et la note interne du devis repris (`extra.note_privee`) se lit :
-elle disait que le prix Koolnova était ESTIMÉ, pas constaté.
-*Ce que ça a coûté* : un tableau HTML maison puis un PDF générique livrés comme
-« devis » — *« Utilise le devis Sola, jamais un truc comme ça »* — puis trois
-refontes : pose à 800 €/j au lieu de 1 000, apport d'affaires oublié, plénum
-Koolnova donné pour sûr.
-⛔ **La règle** : avant de chiffrer pour un artisan, chercher dans son dépôt le
-gabarit ET la matrice de prix (`grep -ri "<artisan>" lib docs`) ; demander
-d'emblée « apport d'affaires : oui/non ? » si rien ne le dit.
 
 ## 4. Conduire une boucle
 
