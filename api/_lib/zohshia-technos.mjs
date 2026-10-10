@@ -1,7 +1,7 @@
 // GÉNÉRÉ par `node zohshia/publier.mjs` — ne pas modifier à la main.
 // La techno de ZOH SHIA, à l’état pur, servie au SEUL propriétaire par /api/zohshia.
 export default {
- "publie_le": "2026-10-04",
+ "publie_le": "2026-10-10",
  "technos": [
   {
    "id": "renodevis",
@@ -9,8 +9,8 @@ export default {
    "badge": "Outil de création de devis / relance automatique",
    "etat": "En service",
    "mesure": {
-    "commit": "f1f9fb3",
-    "le": "2026-10-04"
+    "commit": "92225cb",
+    "le": "2026-10-10"
    },
    "onglets": [
     {
@@ -294,7 +294,7 @@ export default {
            "b"
           ],
           [
-           ", ou ",
+           " (dictée en temps réel, ou note vocale transcrite), ou ",
            ""
           ],
           [
@@ -310,7 +310,53 @@ export default {
            "b"
           ],
           [
-           " : le taux de TVA.",
+           " : le taux de TVA. En création assistée, la techno propose la configuration, les références produit et les quantités ; le pro confirme ou corrige chaque proposition, contrôlée côté serveur. Un ",
+           ""
+          ],
+          [
+           "aperçu PDF",
+           "b"
+          ],
+          [
+           " s'affiche pendant la création, rendu par le même générateur que les vrais devis, sans rien écrire.",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Devis entre professionnels",
+           "b"
+          ]
+         ],
+         [
+          [
+           "Quand le client est une entreprise identifiée par son SIREN, le devis emprunte un ",
+           ""
+          ],
+          [
+           "gabarit dédié",
+           "b"
+          ],
+          [
+           " : numéro ",
+           ""
+          ],
+          [
+           "D-AAAA-MM-NNN",
+           "c"
+          ],
+          [
+           " (pour les devis futurs seulement, les références déjà émises ne se renomment jamais), tableau des lignes, détail de la TVA par taux, coordonnées bancaires saisies et contrôlées à chaque devis, mentions obligatoires entre professionnels tirées d'",
+           ""
+          ],
+          [
+           "une seule table sourcée et datée",
+           "b"
+          ],
+          [
+           ", forme juridique et capital de l'émetteur. Le générateur n'est ouvert qu'aux émetteurs listés ; une liste vide le ferme pour tous.",
            ""
           ]
          ]
@@ -384,7 +430,15 @@ export default {
            "b"
           ],
           [
-           ", une fois son DNS vérifié.",
+           ", une fois son DNS vérifié. Le mail ne part que sur ",
+           ""
+          ],
+          [
+           "la version affichée",
+           "b"
+          ],
+          [
+           " : si le devis a changé depuis l'aperçu, l'envoi est refusé et l'écran demande de relire. Un envoi en cours ne se rejoue pas (opération réservée, puis acceptée).",
            ""
           ]
          ]
@@ -1258,6 +1312,24 @@ export default {
            ""
           ]
          ]
+        ],
+        [
+         [
+          [
+           "canal_messages",
+           "c"
+          ]
+         ],
+         [
+          [
+           "En construction",
+           "b"
+          ],
+          [
+           " : le dédoublonnage des messages reçus par un canal de messagerie (identifiant du message, pro résolu, type, résultat). Aucun contenu, aucun numéro, aucun nom. Écrite par le serveur seul ; le pro lit ses lignes. Le canal lui-même n'est pas encore branché",
+           ""
+          ]
+         ]
         ]
        ]
       },
@@ -1558,6 +1630,76 @@ export default {
         [
          [
           [
+           "/api/devis/[id]/fiches",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Les fiches techniques de la bibliothèque du pro, listées et jointes au devis tant qu'il est modifiable ; lecture par lien signé de courte durée",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "/api/devis/apercu",
+           "c"
+          ]
+         ],
+         [
+          [
+           "L'aperçu PDF d'un devis en création : rien n'est écrit, l'émetteur est résolu côté serveur, jamais pris du navigateur",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "/api/devis/choisir-reference",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Création assistée : rechercher et confirmer les références produit et la configuration comprises, ajuster les quantités",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "/api/devis/confirmer-quantite",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Création assistée : confirmer une quantité corrigée, y compris avant le choix du client",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "/api/devis/depot-document",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Dépôt d'un document à importer, par envoi direct au stockage (URL signée) ; format réel et taille contrôlés, débit borné ; retrait limité aux dépôts du compte",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
            "/api/devis/extraire",
            "c"
           ]
@@ -1579,6 +1721,34 @@ export default {
          [
           [
            "Proposition assistée de lignes à partir d'une demande de travaux",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "/api/dictee/session",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Ouvre une session de dictée en temps réel auprès du service de transcription, par un secret éphémère ; la clé serveur ne quitte jamais le serveur",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "/api/dictee/transcrire",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Transcrit une note vocale enregistrée ; en cas d'échec, la note reste à l'écran pour réessayer",
            ""
           ]
          ]
@@ -1855,6 +2025,26 @@ export default {
          [
           [
            "Il répond « non configuré »",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "OpenAI",
+           ""
+          ]
+         ],
+         [
+          [
+           "La dictée : session en temps réel et transcription des notes vocales",
+           ""
+          ]
+         ],
+         [
+          [
+           "La dictée s'annonce indisponible ; la saisie au clavier reste",
            ""
           ]
          ]
@@ -2214,6 +2404,103 @@ export default {
         ],
         [
          " depuis le dry run du 04/10.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "⚠️ ",
+         ""
+        ],
+        [
+         "État au 10/10/2026 (mesuré) : le plan et la base suivent la tête, la série non, et c'est délibéré.",
+         "b"
+        ],
+        [
+         " Le plan et la base neuve sont remis à jour sur la tête du jour. Le rejeu applique les 45 migrations, et l'étalon est validé contre la référence le 10/10. Il reste ",
+         ""
+        ],
+        [
+         "4 écarts constatés",
+         "b"
+        ],
+        [
+         ", tous sur ",
+         ""
+        ],
+        [
+         "artisans",
+         "c"
+        ],
+        [
+         " (colonne, contrainte, index et déclencheur) : ils viennent d'une brique voisine, que cette techno ne lit pas, et la base neuve ne les porte donc pas. La validation a aussi trouvé un vrai défaut, corrigé dans la finition. Son ",
+         ""
+        ],
+        [
+         "revoke",
+         "c"
+        ],
+        [
+         " effaçait les droits par colonne posés par une migration du 09/10, ce qui reproduisait dans la base neuve le refus d'enregistrement du profil vu en production ce jour-là. La série, elle, reste sur ",
+         ""
+        ],
+        [
+         "f1f9fb3",
+         "c"
+        ],
+        [
+         ". Une extraction à blanc rend ",
+         ""
+        ],
+        [
+         "32 conflits réels",
+         "b"
+        ],
+        [
+         ", dont ",
+         ""
+        ],
+        [
+         "25",
+         "b"
+        ],
+        [
+         " dans des fichiers où l'amont a tissé la formule de l'instance de référence dans le chemin générique. Le prochain chantier de RénoDevis retire justement cette formule du code pour en faire des ",
+         ""
+        ],
+        [
+         "paramètres du pro",
+         "b"
+        ],
+        [
+         ", lus en base (jalon J4). Il traite donc la cause de ces conflits. La série se rafraîchit ",
+         ""
+        ],
+        [
+         "une fois, juste après J4",
+         "b"
+        ],
+        [
+         ", sur un code déjà démêlé : rafraîchie avant, elle l'aurait été deux fois sur les mêmes fichiers (arbitrage de Paul, 10/10). D'ici là, ",
+         ""
+        ],
+        [
+         "extraire.mjs",
+         "c"
+        ],
+        [
+         " refuse, et c'est le signal attendu : ",
+         ""
+        ],
+        [
+         "aucun pro ne s'intègre en voie B avant J4",
+         "b"
+        ],
+        [
+         ". La voie A, qui ne demande pas d'extraction, reste ouverte.",
          ""
         ]
        ]
@@ -2631,6 +2918,70 @@ export default {
          [
           [
            "✅ mention légale",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Forme juridique, capital social",
+           ""
+          ]
+         ],
+         [
+          [
+           "forme_juridique",
+           "c"
+          ],
+          [
+           ", ",
+           ""
+          ],
+          [
+           "capital_social",
+           "c"
+          ]
+         ],
+         [
+          [
+           "✅ forme juridique s'il émet des devis à des professionnels (le devis pro refuse de se générer sans elle) ; capital facultatif",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Coordonnées bancaires (bénéficiaire, IBAN, BIC)",
+           ""
+          ]
+         ],
+         [
+          [
+           "saisies et contrôlées ",
+           ""
+          ],
+          [
+           "à chaque devis pro",
+           "b"
+          ],
+          [
+           " (",
+           ""
+          ],
+          [
+           "extra.reglement",
+           "c"
+          ],
+          [
+           " du devis)",
+           ""
+          ]
+         ],
+         [
+          [
+           "✅ pour un devis pro",
            ""
           ]
          ]
@@ -4142,6 +4493,50 @@ export default {
            ""
           ]
          ]
+        ],
+        [
+         [
+          [
+           "13",
+           ""
+          ]
+         ],
+         [
+          [
+           "Devis entre professionnels",
+           "b"
+          ],
+          [
+           " (s'il en émet) : ajouter son SIREN à ",
+           ""
+          ],
+          [
+           "DEVIS_PRO_EMETTEURS",
+           "c"
+          ],
+          [
+           " ; sa fiche porte sa forme juridique. Sans cela, ses devis gardent le chemin ordinaire.",
+           ""
+          ]
+         ],
+         [
+          [
+           "Paul",
+           ""
+          ]
+         ],
+         [
+          [
+           "Manuel (variable de production)",
+           ""
+          ]
+         ],
+         [
+          [
+           "Variable de production",
+           ""
+          ]
+         ]
         ]
        ]
       },
@@ -4523,6 +4918,31 @@ export default {
        "t": "p",
        "r": [
         [
+         "⛔ ",
+         ""
+        ],
+        [
+         "Au 10/10/2026, B1 refuse, et c'est attendu.",
+         "b"
+        ],
+        [
+         " La série de neutralisation se rafraîchit juste après le chantier qui fait de la formule de l'instance de référence des paramètres du pro (",
+         ""
+        ],
+        [
+         "TECHNO.md",
+         "c"
+        ],
+        [
+         " §8). Aucune voie B ne s'ouvre avant ; la voie A reste ouverte.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
          "⚠️ ",
          ""
         ],
@@ -4588,6 +5008,16 @@ export default {
           " : oui ou non, et son taux de commission.",
           ""
          ]
+        ],
+        [
+         [
+          "Ses devis entre professionnels",
+          "b"
+         ],
+         [
+          " : en émet-il ? Si oui, étape 13.",
+          ""
+         ]
         ]
        ]
       },
@@ -4612,7 +5042,7 @@ export default {
          "i"
         ],
         [
-         " du §2 : la fiche (1), la commission (2), le compte (3), l'expéditeur sur son domaine (6), le catalogue (8), la bibliothèque de devis (9), les règles de prix (10), la synchronisation mail (11). Le plus fréquent est le 3. Chacun, automatisé, fait gagner une étape à ",
+         " du §2 : la fiche (1), la commission (2), le compte (3), l'expéditeur sur son domaine (6), le catalogue (8), la bibliothèque de devis (9), les règles de prix (10), la synchronisation mail (11), l'ouverture du devis pro (13). Le plus fréquent est le 3. Chacun, automatisé, fait gagner une étape à ",
          ""
         ],
         [
@@ -5139,6 +5569,60 @@ export default {
         [
          [
           [
+           "OPENAI_API_KEY",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Clé ",
+           ""
+          ],
+          [
+           "serveur",
+           "i"
+          ],
+          [
+           " de la dictée (session en temps réel, transcription des notes) — jamais importée par le code du navigateur",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "DEVIS_PRO_EMETTEURS",
+           "c"
+          ]
+         ],
+         [
+          [
+           "SIREN des émetteurs ouverts au générateur de devis pro, séparés par des virgules — vide = fermé pour tous (étape 13). Un identifiant public, pas un secret",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "RECETTE_PDF",
+           "c"
+          ]
+         ],
+         [
+          [
+           "Tests seulement",
+           "b"
+          ],
+          [
+           " : chemin local d'un PDF réel pour une recette de lecture des documents. Jamais posée en production ; le fichier ne se committe jamais",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
            "AUDIT_PAC_BASE_URL",
            "c"
           ],
@@ -5488,7 +5972,7 @@ export default {
  ],
  "sources": {
   "renodevis/badge.json": "cdf0f06c4c492ccc21be7bb97a3d5f2da690832d1e1728d2e0a12bd0482fb1ff",
-  "renodevis/TECHNO.md": "e318f1765c2fe9177acf5d4ae51cadbf4fc1d71b62d353daa7f8b14a3bf1dbe4",
-  "renodevis/AJOUTER-UN-ARTISAN.md": "7ebfc2b34bcc2a7766c1bb20d92f65217efe7d5b3cb579b9bdbd77eba4c9ec99"
+  "renodevis/TECHNO.md": "aeb32b5b9820a7a30ea450074ea838bb6a1f69bd5d12cdd472c60748832f2932",
+  "renodevis/AJOUTER-UN-ARTISAN.md": "8ec42d12a4be63eab0cf311a234251612c30e7998c2009e06c447cebe2b8358f"
  }
 };
