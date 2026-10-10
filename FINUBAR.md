@@ -32,11 +32,12 @@
   },
   "dernier_arret": {
     "le": "2026-10-10",
-    "commit": "b490ebbee64ffbbecaaac323068fbd96d9f5cf70",
-    "quoi": "10/10 : ZOH SHIA, plan et base RénoDevis remis à jour (étalon validé contre la référence, défaut de droits trouvé en finition) ; série reportée après J4, report déclaré."
+    "commit": "c1b0b031b91ba4f3c18b80d79b429e069daa10c7",
+    "quoi": "10/10 : Directive ZS posée (5ᵉ directive maîtresse, exports ChatGPT/Gemini rescellés) ; ZOH : plan et base RénoDevis à jour, série reportée après J4."
   },
   "prochaine_action": "Reprendre « Léo partout sans candidats » (boucle du 06/10) : fournir les candidats, ou ne pas offrir l'outil là où la page ne peut pas l'exécuter.",
   "bloque_par": [
+    "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
     "R1 (B4) en production, non prouvée : Réno a rendu 502 le 02/10 à 16:43 UTC. Le crédit étant rechargé, lui demander « Où en est Artidispo ? » et comparer à la base (PLAN §2).",
     "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",
