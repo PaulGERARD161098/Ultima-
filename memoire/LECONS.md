@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v86 2026-10-10 sha256:a060b04ea3ef -->
+<!-- lecons:empreinte v88 2026-10-10 sha256:53e54b8bf545 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -629,6 +629,24 @@ fin d'une commande lancée en arrière-plan passe par sa notification, pas par u
 `pkill` de nettoyage.*
 
 ## 2. Les garde-fous, et leur silence
+
+**UNE BOUCLE DE SABOTAGE NE SE RESTAURE PAS PAR `git checkout`** *(2026-10-10, RenoDevis)*.
+Pour prouver un correctif, on casse le code puis on restaure — et la boucle
+restaurait chaque fichier par `git checkout <fichier>`, qui ramène la version
+COMMITTÉE. Le correctif des comptes Stripe de test (`RenoDevis/lib/embarquement.ts`)
+n'était pas encore committé : le premier sabotage l'a effacé, et les six
+suivants ont « éprouvé » un fichier qui n'avait plus le correctif. Seuls les
+tests neufs, qui ont rougi à 7 contre 13, l'ont signalé ; réécrit à la main,
+dans la même séance.
+
+⛔ **Avant de saboter, le fichier se COPIE (ou se committe), et la boucle
+restaure depuis la copie** — puis un `cmp` final prouve que le fichier est
+revenu à l'identique. `git checkout` n'est une restauration que d'un fichier
+propre.
+*Même séance, même famille : deux sabotages sur six sont d'abord restés verts,
+parce que chaque condition du correctif masquait l'autre dans les cas de test.
+Un sabotage vert ne se « justifie » pas : il dit qu'il manque un cas, et on
+l'écrit.*
 
 **UNE COLONNE AJOUTÉE N'HÉRITE D'AUCUN DROIT DE COLONNE** *(2026-10-09, RenoDevis)*.
 La migration du devis pro a ajouté `forme_juridique` et `capital_social` à
