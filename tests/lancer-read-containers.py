@@ -31,7 +31,7 @@ def encode(value):
 
 
 def expected_create(image, worker, snapshot, name):
-    return ('create', '--name', name, '--log-driver', 'none', '--restart', 'no',
+    return ('create', '--name', name, '--label', 'leo.read.owner=' + hashlib.sha256(name.encode('ascii')).hexdigest(), '--log-driver', 'none', '--restart', 'no',
         '--memory-swap', '128m', '--ulimit', 'core=0', '--ulimit', 'nofile=64:64',
         '--pull', 'never', '--network', 'none', '--read-only', '--cap-drop', 'ALL',
         '--security-opt', 'no-new-privileges', '--user', '65534:65534',
@@ -99,6 +99,9 @@ def isolated(mode, image):
             out, err, rc, drained = self.request('poll')
             out, err = base64.b64decode(out, validate=True), base64.b64decode(err, validate=True)
             self.seen = (self.seen + out)[-128:]
+            if mode=='mission-guardian-kill' and b'child-ready' in self.seen:
+                import signal
+                os.kill(os.getpid(),signal.SIGKILL)
             if mode in ('mission-host-kill','mission-host-kill-mutant') and b'child-ready' in self.seen:
                 import signal
                 os.kill(os.getppid(), signal.SIGKILL)
@@ -110,9 +113,13 @@ def isolated(mode, image):
         def close(self):
             self.request('close')
 
-    with tempfile.TemporaryDirectory() as directory:
+    from contextlib import nullcontext
+    persistent = mode in ('mission-scope-kill','mission-scope-reap')
+    context = nullcontext('/state/private') if persistent else tempfile.TemporaryDirectory()
+    with context as directory:
         root = Path(directory)
-        latch = ControlLatch(root / 'control.sqlite', initialize=True)
+        if persistent and mode!='mission-scope-reap': root.mkdir(mode=0o700)
+        latch = ControlLatch(root / 'control.sqlite', initialize=mode!='mission-scope-reap')
         worker, snapshot = Path('/inputs/worker.py'), Path('/inputs/snapshot.json')
         plan = WorkerPlan(image, worker, snapshot)
         if mode.startswith('mission'):
@@ -121,7 +128,8 @@ def isolated(mode, image):
             from leo.runtime.broker import mandate_record
             from leo.runtime.budget import BudgetError
             from leo.runtime.policy import Mandate
-            claims=root/'claims'; claims.mkdir(mode=0o700)
+            claims=root/'claims'
+            if mode!='mission-scope-reap': claims.mkdir(mode=0o700)
             adapter=SnapshotAdapter(json.loads(snapshot.read_bytes()))
             config=ReadLaunchConfig(plan,hashlib.sha256(worker.read_bytes()).hexdigest(),claims,max_seconds=8)
             mandate=Mandate('read-ci','paul',1,frozenset({'root'}),frozenset({'PaulGERARD161098/Ultima-'}),
@@ -130,15 +138,39 @@ def isolated(mode, image):
                 return ReadBroker(root/'mission.sqlite',mandate,snapshot_adapter=adapter,
                     clock=lambda:100,control_latch=ControlLatch(latch.path),launch_config=config)
             broker=fresh()
-            broker.store.create_mission('read-ci','paul','ultima',mandate_record(mandate),
-                {'repository':'PaulGERARD161098/Ultima-'},[],['root'],authority=True)
-            broker.budget.create('read-ci',{'max_units':0 if mode=='mission-budget' else 2,
-                'max_calls':2,'max_attempts':2,'max_delegates':0,'expires_at':200},authority=True)
+            if mode!='mission-scope-reap':
+                broker.store.create_mission('read-ci','paul','ultima',mandate_record(mandate),
+                    {'repository':'PaulGERARD161098/Ultima-'},[],['root'],authority=True)
+                broker.budget.create('read-ci',{'max_units':0 if mode=='mission-budget' else 2,
+                    'max_calls':2,'max_attempts':2,'max_delegates':0,'expires_at':200},authority=True)
             proposal={'action':'read_source','operation_id':'read-ci-op','expected_version':1}
             # Exact application constructor and guards; only Docker transport
             # is mediated by the same fixed runner policy as offline tests.
             with patch('leo.control_r21.read_launcher.DockerTransport',side_effect=Relay):
-                if mode=='mission-budget':
+                if mode in ('mission-guardian-kill','mission-scope-reap'):
+                    from leo.control_r21.read_reaper import ReadReaper
+                    if mode=='mission-guardian-kill':
+                        try: broker.execute('root',proposal)
+                        except Refusal as error:
+                            require(str(error)=='read_container_stop_unconfirmed','guardian_loss_not_detected')
+                        else: raise RuntimeError('guardian_loss_completed')
+                    previous=fresh().store.get_operation('read-ci','root','read-ci-op')
+                    require(previous['status'] in {'pending','unknown'},'lost_scope_falsely_completed')
+                    outer=ReadReaper(claims,ControlLatch(latch.path),_transport=Relay())
+                    cleaned=outer.run()
+                    require(cleaned['container_cleanup_confirmed'] is True and cleaned['replayed'] is False,
+                            'outer_cleanup_not_confirmed')
+                    require(outer.run()==cleaned,'outer_cleanup_not_idempotent')
+                    resumed=fresh()
+                    result=resumed.reconcile_interrupted('root','read-ci-op')
+                    require(result['status']=='unknown' and result['result'] is None,
+                            'outer_recovery_fabricated_completion')
+                    require(resumed.budget.status('read-ci')['reserved_units']==1,
+                            'outer_recovery_released_budget')
+                    try: resumed.execute('root',proposal)
+                    except Refusal as error: require(str(error)=='leo_agent_stopped','outer_stop_lost')
+                    else: raise RuntimeError('outer_recovery_replayed')
+                elif mode=='mission-budget':
                     try: broker.execute('root',proposal)
                     except BudgetError as error: require(str(error)=='units_exhausted','wrong_budget_refusal')
                     else: raise RuntimeError('zero_budget_launched')
@@ -216,7 +248,7 @@ def isolated(mode, image):
                     require(fresh().execute('root',proposal)==result,'fresh_host_receipt_changed')
                     require(broker.budget.status('read-ci')['calls']==1 and broker.budget.status('read-ci')['used_units']==1,
                             'mission_dispatch_replayed_or_not_settled')
-            sys.stdout.buffer.write(encode({'done':mode})); sys.stdout.buffer.flush()
+            sys.stdout.buffer.write(encode({'done':'mission-scope-kill' if mode=='mission-scope-reap' else mode})); sys.stdout.buffer.flush()
             return
         # Validate runner relay's start/stream implementation against real
         # production DockerTransport in the runtime unit suite separately.
@@ -284,7 +316,8 @@ while True: time.sleep(.1)
                 'overflow': b"import os,time\nos.write(1,b'x'*65536)\ntime.sleep(30)\n",
                 'forged': b"print('{\"autonomous_agent\":true}')\n",
                 'mission':baseline,'mission-lost':baseline,'mission-stop':hostile,'mission-budget':baseline,
-                'mission-host-kill':hostile,'mission-host-kill-mutant':hostile}
+                'mission-host-kill':hostile,'mission-host-kill-mutant':hostile,
+                'mission-guardian-kill':hostile,'mission-scope-kill':hostile}
     for mode, code in fixtures.items():
         with tempfile.TemporaryDirectory(prefix='read-ci-') as directory:
             data = Path(directory)
@@ -304,6 +337,10 @@ while True: time.sleep(.1)
                 '--mount', f'type=bind,src={data},dst=/inputs,readonly',
                 '--env', 'LV1_ISOLATED=1', '--env', 'PYTHONDONTWRITEBYTECODE=1',
                 '--entrypoint', 'python', image, '-I', '-B', '/checks.py', '--inside', mode, image)
+            state_host=data/'state'; state_host.mkdir(mode=0o777); state_host.chmod(0o777)
+            if mode=='mission-scope-kill':
+                position=args.index('--env')
+                args=args[:position]+('--mount',f'type=bind,src={state_host},dst=/state')+args[position:]
             env = {**ENV, 'READ_CI_CANARY': 'synthetic-not-a-secret'}
             helper = subprocess.Popen(args, env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                       stderr=subprocess.PIPE, close_fds=True)
@@ -315,13 +352,15 @@ while True: time.sleep(.1)
             buffer, errors = bytearray(), bytearray()
             cid, reserved_name, stream, streams, completed = None, None, None, None, False
             bystander = None
-            if mode=='mission-host-kill':
+            if mode in ('mission-host-kill','mission-guardian-kill','mission-scope-kill'):
                 bystander='read-bystander-'+uuid.uuid4().hex
                 extra=command(('run','--detach','--name',bystander,'--pull','never','--network','none',
                     '--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--user','65534:65534',
                     '--memory','128m','--pids-limit','8','--entrypoint','python',image,'-I','-c',
                     'import time; time.sleep(120)'))
                 require(extra[0]==0,'bystander_not_created')
+            scope_replaced=False
+            worker_seen=b''
             deadline = time.monotonic() + 45
             try:
                 while not completed:
@@ -362,6 +401,8 @@ while True: time.sleep(.1)
                                 require(response[0]==0 and re.fullmatch('[a-f0-9]{64}',cid), 'real_create_failed')
                             else:
                                 allowed = {('inspect','--format','{{json .State}}',cid),
+                                    ('inspect','--format','{{.Id}}|{{.Name}}|{{index .Config.Labels "leo.read.owner"}}',cid),
+                                    ('container','ls','--all','--quiet','--no-trunc','--filter','id='+str(cid)),
                                     ('rm','--force',cid),('rm','--force',reserved_name),
                                     ('container','ls','--all','--quiet','--no-trunc','--filter','name=^/'+str(reserved_name)+'$')}
                                 require(cid is not None and value in allowed, 'relay_command_denied')
@@ -385,6 +426,28 @@ while True: time.sleep(.1)
                                 else: streams.unregister(key.fileobj)
                             response=[base64.b64encode(chunks['out']).decode(),base64.b64encode(chunks['err']).decode(),
                                       stream.poll(),not streams.get_map()]
+                            worker_seen=(worker_seen+chunks['out'])[-128:]
+                            if mode=='mission-scope-kill' and not scope_replaced and b'child-ready' in worker_seen:
+                                killed=command(('kill','--signal','KILL',name))
+                                require(killed[0]==0,'scope_kill_failed')
+                                require(helper.wait(timeout=5)!=0,'scope_not_destroyed')
+                                helper_absent=command(('container','ls','--all','--quiet','--no-trunc',
+                                                       '--filter','name=^/'+name+'$'))
+                                require(helper_absent[0]==0 and helper_absent[1]=='','killed_scope_still_exists')
+                                alive=command(('inspect','--format','{{json .State}}',cid))
+                                require(alive[0]==0 and json.loads(base64.b64decode(alive[1]))['Running'] is True,
+                                        'scope_loss_did_not_leave_real_worker_active')
+                                for pipe in (helper.stdin,helper.stdout,helper.stderr): pipe.close()
+                                selector.close()
+                                new_args=args[:-2]+('mission-scope-reap',image)
+                                helper=subprocess.Popen(new_args,env=env,stdin=subprocess.PIPE,
+                                    stdout=subprocess.PIPE,stderr=subprocess.PIPE,close_fds=True)
+                                selector=selectors.DefaultSelector()
+                                for key,pipe in (('protocol',helper.stdout),('errors',helper.stderr)):
+                                    os.set_blocking(pipe.fileno(),False); selector.register(pipe,selectors.EVENT_READ,key)
+                                buffer,errors=bytearray(),bytearray()
+                                scope_replaced=True
+                                continue  # no reply to the destroyed owner/guardian scope
                         elif op == 'close':
                             require(value is None, 'close_shape')
                             if stream is not None:
@@ -394,6 +457,7 @@ while True: time.sleep(.1)
                         else:
                             raise RuntimeError('relay_operation_denied')
                         helper.stdin.write(encode({'result':response})); helper.stdin.flush()
+                if mode=='mission-scope-kill': require(scope_replaced,'scope_kill_not_exercised')
                 require(helper.wait(timeout=5)==0, 'helper_exit_failed')
                 if cid is not None:
                     observed=command(('container','ls','--all','--quiet','--no-trunc','--filter','id='+cid))
@@ -433,6 +497,15 @@ while True: time.sleep(.1)
                 attempt(lambda: reap(helper))
                 for pipe in (helper.stdin,helper.stdout,helper.stderr): attempt(pipe.close)
                 attempt(selector.close)
+                if mode=='mission-scope-kill':
+                    # Fixed synthetic fixture cleanup by isolated stdlib only.
+                    def clear_state():
+                        erased=command(('run','--rm','--pull','never','--network','none','--read-only',
+                            '--cap-drop','ALL','--security-opt','no-new-privileges','--user','65534:65534',
+                            '--mount',f'type=bind,src={state_host},dst=/state','--entrypoint','python',image,
+                            '-I','-c','import pathlib,shutil; p=pathlib.Path("/state/private"); shutil.rmtree(p) if p.exists() else None'))
+                        require(erased[0]==0,'synthetic_state_cleanup_failed')
+                    attempt(clear_state)
                 require(not failures,'relay_cleanup_unconfirmed')
     print('Offline synthetic CI only: broker integration tested; no real operator, credentials or model.',flush=True)
 

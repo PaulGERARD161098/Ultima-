@@ -155,6 +155,39 @@ jobs:
           path: ${{ env.LV1_KIT_OUTPUT }}/pilot.tar.gz
           if-no-files-found: error
           retention-days: 14
+      - name: Construire le kit de service lecture inerte dans le bac à sable
+        env:
+          LV1_SOURCE_SHA: ${{ github.event.pull_request.head.sha }}
+          LV1_TARGET_SHA: ${{ github.event.pull_request.base.sha }}
+          LV1_INTEGRATION_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          export LV1_PINNED_IMAGE="$(cat /tmp/lv1-python-image-digest)"
+          LV1_PYTHON_IMAGE="$(cat /tmp/lv1-python-image-id)"
+          LV1_SERVICE_OUTPUT="$(mktemp -d "$RUNNER_TEMP/leo-read-service.XXXXXX")"
+          echo "LV1_SERVICE_OUTPUT=$LV1_SERVICE_OUTPUT" >> "$GITHUB_ENV"
+          docker run --rm --read-only --network none \
+            --cap-drop ALL --security-opt no-new-privileges \
+            --user 65534:65534 --memory 512m --cpus 1 --pids-limit 128 \
+            --tmpfs /tmp:rw,nosuid,nodev,noexec,size=128m,mode=1777 \
+            --mount type=bind,src="$GITHUB_WORKSPACE/leo",dst=/workspace/leo,readonly \
+            --mount type=bind,src="$GITHUB_WORKSPACE/finubar/leo_control.py",dst=/workspace/finubar/leo_control.py,readonly \
+            --mount type=bind,src="$GITHUB_WORKSPACE/finubar/leo_process.py",dst=/workspace/finubar/leo_process.py,readonly \
+            --workdir /workspace --env PYTHONDONTWRITEBYTECODE=1 \
+            --env LV1_SOURCE_SHA --env LV1_TARGET_SHA --env LV1_INTEGRATION_SHA --env LV1_PINNED_IMAGE \
+            "$LV1_PYTHON_IMAGE" \
+            sh -eu -c 'python -m leo.control_r21.pilot_build --read-service --source /workspace --output /tmp/read-service --source-sha "$LV1_SOURCE_SHA" --target-sha "$LV1_TARGET_SHA" --integration-sha "$LV1_INTEGRATION_SHA" --image "$LV1_PINNED_IMAGE" >&2; tar -czf /tmp/read-service.tar.gz -C /tmp read-service; base64 -w0 /tmp/read-service.tar.gz' \
+            | head -c 2097153 > "$LV1_SERVICE_OUTPUT/encoded"
+          test "$(wc -c < "$LV1_SERVICE_OUTPUT/encoded")" -le 2097152
+          base64 --decode "$LV1_SERVICE_OUTPUT/encoded" > "$LV1_SERVICE_OUTPUT/read-service.tar.gz"
+          sha256sum "$LV1_SERVICE_OUTPUT/read-service.tar.gz"
+      - name: Conserver le kit de service sans l'installer
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: leo-read-service-candidate-${{ github.event.pull_request.head.sha }}
+          path: ${{ env.LV1_SERVICE_OUTPUT }}/read-service.tar.gz
+          if-no-files-found: error
+          retention-days: 14
       - name: Préparer le dossier R21 sans fusion ni accord simulé
         env:
           LV1_SOURCE_SHA: ${{ github.event.pull_request.head.sha }}

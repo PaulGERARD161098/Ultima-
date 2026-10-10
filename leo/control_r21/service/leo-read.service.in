@@ -1,0 +1,32 @@
+[Unit]
+Description=Offline Leo read with outer FINUBAR cleanup (candidate)
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+User=leo-operator
+Group=leo-operator
+ExecStart=/usr/bin/python3 -I -B /opt/leo-read/@ID@/code/leo/control_r21/read_service_entry.py run --installation /etc/leo-read/@ID@/installation.json
+ExecStopPost=/usr/bin/python3 -I -B /opt/leo-read/@ID@/code/leo/control_r21/read_service_entry.py cleanup --installation /etc/leo-read/@ID@/installation.json
+Restart=no
+KillMode=control-group
+SendSIGKILL=yes
+TimeoutStartSec=180
+TimeoutStopSec=90
+UMask=0077
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/lib/leo-read/@ID@
+Environment=TMPDIR=/var/lib/leo-read/@ID@/staging
+RestrictAddressFamilies=AF_UNIX
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+StandardOutput=null
+StandardError=journal
+# No Install section: no enable/timer/automatic mission dispatch in this kit.
+# PrivateTmp must stay off: Docker daemon must see reviewed staging paths.
+# Operator must configure host Docker access explicitly; never grant it to worker.

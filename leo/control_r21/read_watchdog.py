@@ -39,6 +39,22 @@ def _bytes(value):
     return base64.b64encode(value).decode('ascii')
 
 
+def _write_record(path, value):
+    """Atomic, immutable host claim companion; no partial proof is visible."""
+    raw=_pack(value)+b'\n'
+    path=Path(path)
+    temporary=Path(str(path)+'.tmp-'+str(os.getpid()))
+    fd=os.open(temporary,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600)
+    try:
+        with os.fdopen(fd,'wb',closefd=False) as stream:
+            stream.write(raw); stream.flush(); os.fsync(fd)
+    finally: os.close(fd)
+    os.link(temporary,path,follow_symlinks=False); temporary.unlink()
+    directory=os.open(path.parent,os.O_RDONLY)
+    try: os.fsync(directory)
+    finally: os.close(directory)
+
+
 class GuardedTransport:
     """Private socket, one fixed plan/name, one create and one start.
 
@@ -171,21 +187,8 @@ def _serve(channel, owner, transport, expected, name, latch, claim, deadline):
         return not close_error and cid is not None and rc == 0 and rc2 == 0 and not out.strip()
 
     def evidence(confirmed):
-        # Companion of the permanent claim, not a second mission/budget ledger.
-        raw = _pack({'container': name, 'reason': reason, 'container_removed': confirmed}) + b'\n'
-        path = Path(str(claim) + '.watchdog')
-        temporary = Path(str(path) + '.tmp-' + str(os.getpid()))
-        fd = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
-        try:
-            with os.fdopen(fd, 'wb', closefd=False) as stream:
-                stream.write(raw); stream.flush(); os.fsync(fd)
-        finally:
-            os.close(fd)
-        os.link(temporary, path, follow_symlinks=False)
-        temporary.unlink()
-        directory = os.open(path.parent, os.O_RDONLY)
-        try: os.fsync(directory)
-        finally: os.close(directory)
+        _write_record(Path(str(claim)+'.watchdog'),
+            {'container':name,'reason':reason,'container_removed':confirmed})
 
     try:
         check()
@@ -208,6 +211,7 @@ def _serve(channel, owner, transport, expected, name, latch, claim, deadline):
                     rc, out, err = transport.call(args)
                     if rc == 0 and re.fullmatch(b'[a-f0-9]{64}\n?', out):
                         cid = out.strip().decode('ascii')
+                        _write_record(Path(str(claim)+'.container'), {'container':name,'cid':cid})
                     check()  # owner loss during create can never advance to start
                 elif cid is not None and args == ('inspect', '--format', '{{json .State}}', cid):
                     rc, out, err = transport.call(args)

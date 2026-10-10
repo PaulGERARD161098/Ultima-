@@ -75,6 +75,24 @@ class ReadBrokerLaunchTests(unittest.TestCase):
         self.assertEqual(self.broker.budget.status('read-launch')['reserved_units'],1)
         self.assertEqual(self.fake.starts,0)
 
+    def test_outer_cleanup_reconciliation_keeps_reserve_and_no_replay(self):
+        proof_path=self.interrupted_fixture(reason='outer_cleanup')
+        proof=json.loads(proof_path.read_bytes()); proof['cid']='c'*64
+        outer=Path(str(proof_path).replace('.watchdog','.reaper'))
+        outer.write_text(json.dumps(proof)); outer.chmod(0o600)
+        registration=Path(str(proof_path).replace('.watchdog','.container'))
+        registration.write_text(json.dumps({'container':proof['container'],'cid':proof['cid']}))
+        registration.chmod(0o600)
+        result=self.fresh().reconcile_interrupted('root','operation')
+        self.assertEqual(result['status'],'unknown')
+        self.assertEqual(self.broker.budget.status('read-launch')['reserved_units'],1)
+        self.assertEqual(self.fake.starts,0)
+
+    def test_outer_reason_in_guardian_proof_is_rejected(self):
+        self.interrupted_fixture(reason='outer_cleanup')
+        with self.assertRaisesRegex(Refusal,'interrupted_cleanup_proof_required'):
+            self.fresh().reconcile_interrupted('root','operation')
+
     def test_interrupted_reconciliation_rejects_other_container_proof(self):
         self.interrupted_fixture(name_matches=False)
         with self.assertRaisesRegex(Refusal,'interrupted_cleanup_proof_required'):

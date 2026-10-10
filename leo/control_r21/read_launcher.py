@@ -102,7 +102,7 @@ def _create_args(plan, name):
     argv[0] = 'create'
     argv.remove('--rm')
     # No disk logs containing input, output, or unbounded hostile output.
-    argv[1:1] = ['--name', name, '--log-driver', 'none', '--restart', 'no',
+    argv[1:1] = ['--name', name, '--label', 'leo.read.owner=' + hashlib.sha256(name.encode('ascii')).hexdigest(), '--log-driver', 'none', '--restart', 'no',
                  '--memory-swap', '128m', '--ulimit', 'core=0', '--ulimit', 'nofile=64:64']
     return tuple(argv)
 

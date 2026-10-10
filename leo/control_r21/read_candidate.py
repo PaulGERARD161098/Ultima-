@@ -285,14 +285,27 @@ The adapter is exact-type checked: this candidate cannot inject live callbacks.
             separators=(',', ':')).encode()).hexdigest()
         claim = self.launch_config.claim_directory / (claim_id + '.claim')
         assert_host_private(claim, (claim.parent,), 'private_read_claim_required')
-        proof_path = Path(str(claim) + '.watchdog')
+        outer = Path(str(claim) + '.reaper')
+        proof_path = outer if outer.exists() else Path(str(claim) + '.watchdog')
         assert_host_private(proof_path, (proof_path.parent,), 'private_read_claim_required')
         name = _read_fixed(claim, 64).decode('ascii').strip()
         proof = json.loads(_read_fixed(proof_path, 1024))
+        proof_keys={'container','reason','container_removed'}
+        if proof_path==outer:
+            registration=Path(str(claim)+'.container')
+            assert_host_private(registration,(claim.parent,),'private_read_claim_required')
+            registered=json.loads(_read_fixed(registration,1024))
+            if (type(registered) is not dict or set(registered)!={'container','cid'}
+                    or registered['container']!=name or type(registered['cid']) is not str
+                    or not re.fullmatch('[a-f0-9]{64}',registered['cid'])
+                    or type(proof) is not dict or proof.get('cid')!=registered['cid']):
+                raise Refusal('interrupted_cleanup_proof_required')
+            proof_keys.add('cid')
         if (not re.fullmatch(r'leo-read-[a-f0-9]{32}', name)
-                or type(proof) is not dict or set(proof) != {'container','reason','container_removed'}
+                or type(proof) is not dict or set(proof) != proof_keys
                 or proof['container'] != name or proof['container_removed'] is not True
-                or proof['reason'] not in {'owner_lost','owner_disconnected','owner_stopped','deadline'}):
+                or proof['reason'] not in {'owner_lost','owner_disconnected','owner_stopped','deadline','outer_cleanup'}
+                or (proof['reason']=='outer_cleanup') != (proof_path==outer)):
             raise Refusal('interrupted_cleanup_proof_required')
         if operation['status'] == 'unknown':
             return operation

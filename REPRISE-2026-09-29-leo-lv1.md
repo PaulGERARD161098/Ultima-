@@ -1,5 +1,69 @@
 # Reprise courante — 10 octobre 2026, test cible réussi, candidat lecture inerte
 
+## Kit de service FINUBAR préparé — 10/10/2026, accord à 17 h 25 Paris
+
+Reprise courante : préparer la supervision extérieure au guardian et un kit
+opérateur figé. Préparation sur PR365, aucun accès Work au contrôle exclu,
+aucune fusion, installation, dépense ou activation.
+
+Choix ZS : Linux/systemd comme référence accessible pour superviser un service
+ponctuel hors de ses processus ; modules, latch, claims et builder existants
+réutilisés, bibliothèque standard uniquement. Aucun hébergement actuel choisi
+ou compatible vérifié, aucun coût de serveur inventé. Cette référence ne vaut
+pas validation d'un hébergement permanent ni autonomie 24/7.
+
+- Le guardian inscrit atomiquement le nom et le CID dans claim.container avant
+  tout démarrage. Une création inconnue ne peut produire une preuve positive.
+  Le conteneur reçoit un label d'appartenance figé ; aucun label choisi par worker.
+- ReadReaper ne crée et ne démarre rien : tombstone STOP, CID enregistré,
+  vérification CID/nom/label avant rm, absence CID ET nom après suppression.
+  Conteneur renommé, label incorrect, erreur Docker et absence de registration
+  refusent la preuve. Un seul claim par installation, inventaire limité à 16
+  entrées ; commandes Docker bornées, aucun nettoyage général de la machine.
+- La preuve .reaper ne remplace pas une ancienne attestation .watchdog. Elle
+  ancre le CID enregistré ; reconcile_interrupted valide contexte/principal/
+  writer et conserve unknown et budget réservé, sans replay ni faux completed.
+- Builder existant : option --read-service, 24 fichiers figés dont modèle
+  systemd ; code_digest, image et source/cible/intégration enregistrés.
+  Configuration approved:false, revue et mission à fournir ; aucun registre
+  initial/reset, aucun secret et aucun timer. Le kit pilote R21 legacy et son
+  installation completed restent distincts et conservés.
+- Unité préparée : Type=oneshot, Restart=no, KillMode=control-group,
+  ExecStopPost=cleanup, TimeoutStopSec=90 ; code/configuration en lecture seule,
+  état privé en écriture. PrivateTmp désactivé pour que Docker voie le staging.
+  Hôte opérateur distinct de UID65534 worker ; accès Docker jamais au worker.
+  CLI run/cleanup/reconcile fixe ; aucune identité ou proposition libre du worker.
+- Seize tests runtime nouveaux préparés : dix reaper, quatre kit, deux
+  réconciliation extérieure. Deux scénarios Docker ajoutés au relais fermé :
+  SIGKILL du guardian ; puis destruction réelle de tout le helper contenant
+  propriétaire ET guardian, worker Running constaté, nouveau helper indépendant
+  lisant l'état privé conservé, suppression et reprise unknown sans doublon.
+  Conteneur voisin préservé dans les deux. Quatorze scénarios préparés au total,
+  dont le mutant connu de suppression ; résultats du nouveau SHA à mesurer.
+- CI prépare une archive read-service.tar.gz séparée du kit pilote existant,
+  après tests isolés, puis la conserve comme candidat uniquement.
+
+Revue indépendante statique : favorable après correction du cas de création
+inconnue et de la recherche par nom ; marqueur child-ready fragmenté traité
+par buffer borné. AST et YAML vérifiés statiquement ; systemd-analyze verify réussi sur unité rendue
+avec dépendance Docker factice (validation statique seulement). Aucun test
+applicatif local.
+Le gestionnaire systemd réel n'est pas éprouvé par le relais Docker : cette
+recette sur la machine cible reste obligatoire, avec perte guardian/scope,
+droits code/config/contrôle, reçu/reprise, Docker indisponible et arrêt borné.
+
+État antérieur vérifié : f88889d6ad79b49b5f565db859f9b1814a5a1f1c, les trois
+workflows LV138061650392/Auth38061650414/Tests38061650316 réussis ; 278 tests
+runtime et 12 scénarios Docker réussis. Ne pas transférer cette preuve au
+présent changement sans ses résultats.
+
+Prochaine action : éprouver et conserver ce kit exact en CI, puis vérifier
+l'hébergement opérateur et cadrer la recette cible avant toute installation.
+Restent hors boucle : modèle/appels facturés, acquisition GitHub réelle,
+identité opérateur authentifiée, compatibilité skill1.4 et réception LV1.
+Une VM ou Docker indisponible ne peut être nettoyée par un service inexécutable.
+
+
 ## FINUBAR externe préparé — 10/10/2026, accord à 16 h 44 Paris
 
 Cette section définit la reprise courante ; les jalons suivants sont historiques.
