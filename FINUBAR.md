@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-10-10",
-    "commit": "c1b0b031b91ba4f3c18b80d79b429e069daa10c7",
-    "quoi": "10/10 : Directive ZS posée (5ᵉ directive maîtresse, exports ChatGPT/Gemini rescellés) ; ZOH : plan et base RénoDevis à jour, série reportée après J4."
+    "commit": "708dd6c479af96f2fc0f19857bf69fe30a8fa76c",
+    "quoi": "10/10 : Directive ZS posée ; ZOH à jour (série après J4) ; devis SOLA 2 gainables au gabarit RenoDevis ; KNICKERBOCKER retrouvé ; leçons v86."
   },
   "prochaine_action": "Reprendre « Léo partout sans candidats » (boucle du 06/10) : fournir les candidats, ou ne pas offrir l'outil là où la page ne peut pas l'exécuter.",
   "bloque_par": [
@@ -56,7 +56,7 @@
       "depuis": "2026-10-08"
     },
     {
-      "quoi": "LEÇONS v80 (09/10) dans Ultima seulement : les neuf autres dépôts sont en retard, et lecons-chemins n'a pas pu tourner (clones absents de la séance).",
+      "quoi": "LEÇONS v86 (10/10) dans Ultima seulement : les neuf autres dépôts sont en retard, et lecons-chemins n'a pas pu tourner (clones absents de la séance).",
       "depuis": "2026-10-08"
     },
     {
@@ -164,7 +164,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-10-09"
+  "maj": "2026-10-10"
 }
 ```
 
