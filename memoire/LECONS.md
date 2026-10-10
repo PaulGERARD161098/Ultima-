@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v80 2026-10-09 sha256:b073f12f7279 -->
+<!-- lecons:empreinte v81 2026-10-10 sha256:62ce7aa59e38 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1401,6 +1401,20 @@ les fichiers `"use server"`. Même famille que « la valeur ne se porte jamais s
 le bouton » : la sérialisation d'un formulaire ne s'éprouve qu'au navigateur.
 
 ## 3. Ce qu'on donne à Paul
+
+**UN CHIFFRAGE SE FAIT AVEC LA RÈGLE CODÉE, PAS AVEC LA PREMIÈRE RÈGLE TROUVÉE** *(2026-10-09, RenoBoost + RenoDevis)*.
+Devis SOLA de deux monosplits : rendu trois fois avec des prix différents. ① Prix LN35 « introuvables »
+alors que la banque produits (`banques_reno`) les portait — je n'avais fouillé que `corpus_devis`.
+② Prix de vente posés à l'écart « +200/+300 » observé sur un autre produit, puis à « achat × 1,35 »
+lu dans `outils/corpus/banque.py` — l'ancien plancher. La règle réelle (marge totale 50 %, presta
+à prix fixe) était codée dans `RenoDevis/lib/reglesSola.ts:calculerPrixSola` ; Paul a dû la
+rappeler, après qu'une première version était déjà partie chez l'artisan.
+
+⛔ **Un prix donné à Paul vient de la fonction qui le calcule en production, appelée sur les vraies
+données — jamais d'un plancher, d'une note ou d'une marge observée ailleurs.**
+
+⇒ **Avant tout chiffrage : chercher la fonction de prix du dépôt (`grep -rn "calculer\|tarif"
+lib/`), l'exécuter, et ne fouiller les données qu'ensuite, dans TOUTES les tables qui en portent.**
 
 **RIEN DE CE QUI EST DONNÉ À PAUL N'EST DÉDUIT** *(2026-09-02, directive EL)*.
 Toute valeur qu'il va cliquer, taper ou croire — URL, chemin, identifiant,
