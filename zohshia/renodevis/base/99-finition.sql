@@ -13,13 +13,19 @@ revoke insert, update on public.profiles from anon, authenticated;
 grant insert (id, nom, entreprise, tel, email, secteur, zone, statut, mentions_legales,
               logo_url, site_url, linkedin_url, atouts, assurance_url, garanties_url,
               qualifications_url, attestations_valides_jusqu_au, siret, adresse,
-              tva_intra, rge, decennale)
+              tva_intra, rge, decennale, forme_juridique, capital_social)
   on public.profiles to authenticated;
 grant update (nom, entreprise, tel, email, secteur, zone, statut, mentions_legales,
               logo_url, site_url, linkedin_url, atouts, assurance_url, garanties_url,
               qualifications_url, attestations_valides_jusqu_au, siret, adresse,
-              tva_intra, rge, decennale)
+              tva_intra, rge, decennale, forme_juridique, capital_social)
   on public.profiles to authenticated;
+-- ⛔ CE `revoke` EFFACE AUSSI LES DROITS PAR COLONNE posés par les migrations
+-- (révoquer au niveau de la table révoque chaque colonne). Toute colonne de
+-- `profiles` accordée par une migration doit donc figurer dans ces deux listes.
+-- Constaté le 10/10 : sans `forme_juridique` et `capital_social`, la base neuve
+-- reproduisait l'incident du 09/10 en production (« Enregistrer mon entreprise »
+-- refusé, 42501) ; c'est la validation contre la référence qui l'a vu.
 
 -- ⛔ `is_admin()` NE S'APPELLE PAS SANS ÊTRE CONNECTÉ. Elle sert dans les
 -- policies, évaluées avec les droits de l'appelant connecté ; `anon` n'en a
@@ -78,7 +84,7 @@ $function$;
 -- Le lien d'un pro vers son identifiant dans la brique commerciale voisine, et
 -- la commission SANS valeur par défaut : un taux absent se voit, un 0 implicite
 -- se lirait comme une décision (le taux est propre à chaque pro).
-alter table public.artisans add column if not exists pro_id text;
-create unique index if not exists artisans_pro_id_unique on public.artisans (pro_id) where (pro_id is not null);
+-- (`pro_id` et son index unique sont posés avant la migration du 06/10 qui les lit :
+--  retouche de la recette, 10/10.)
 alter table public.artisans alter column commission_pct drop default;
 alter table public.artisans alter column commission_pct drop not null;

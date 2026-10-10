@@ -1,8 +1,8 @@
 {
  "pourquoi": "Étalon de « la base neuve est prête » : l’empreinte (condensats md5 par table × catégorie et par fonction) de la base reconstruite, VALIDÉE contre la base de référence par une requête en lecture seule qui a calculé elle-même la différence. Ne porte ni nom propre ni donnée. Se renouvelle avec `rejouer.mjs --sql-reference`, puis `--reference-validee` une fois la validation passée.",
- "validee_le": "2026-10-04",
- "commit_techno": "7d21217",
- "ecarts_constates": 0,
+ "validee_le": "2026-10-10",
+ "commit_techno": "92225cb",
+ "ecarts_constates": 4,
  "empreinte": {
   "vues": {
    "catalogue_vente": {
@@ -21,7 +21,7 @@
   "tables": {
    "devis": {
     "rls": true,
-    "index": "dfdb1d6547bc39e70e62add4cfa56858",
+    "index": "deabce069f4743afbdfabfdc0f50e805",
     "droits": "92b5075d0be73e69f525a3c22bd38d5f",
     "colonnes": "29141208fa46f440c3fbf9778a3ebb18",
     "policies": "e7647e280f58cd645a0834aaf30d883e",
@@ -49,14 +49,14 @@
     "policies": "9550069680947f85a0c9a9ae411c5905",
     "contraintes": "a340ac32715f85a8bd9b0dc0165d820f",
     "nb_policies": 4,
-    "declencheurs": "1f621dc338c5111e327e6ce2690b99fa",
+    "declencheurs": "2e1d1a756c1b7044ec2c9224fbab123f",
     "droits_colonnes": "2cd10fa8f5854433f99311d22b7bfd74"
    },
    "artisans": {
     "rls": true,
     "index": "f1718f320a00054bcefa916284958fbb",
     "droits": "92b5075d0be73e69f525a3c22bd38d5f",
-    "colonnes": "5e0bf4ab988194a54375bdf044152dbd",
+    "colonnes": "8301a35c39aa8fa35ccf0c033667b485",
     "policies": "fe9a7d24d7e552715f8f34b361c91470",
     "contraintes": "98cdcbc763eb66c8537a65e2d8475a55",
     "nb_policies": 4,
@@ -67,12 +67,12 @@
     "rls": true,
     "index": "9a55e09b28f95a75da5bca6176df1cad",
     "droits": "a627d81f9bf0a35482229316f2e197e9",
-    "colonnes": "d6a8e6bbab1bf385a3b37cd1ec9b9410",
+    "colonnes": "6782b4f337d7038837ca1b4cf432523e",
     "policies": "7d939566da510340bd18e160af67259b",
     "contraintes": "5841e628fa1be7245aed72c11813fec9",
     "nb_policies": 3,
     "declencheurs": "d41d8cd98f00b204e9800998ecf8427e",
-    "droits_colonnes": "fa57bc64cde2e0f862dddf2bcf671198"
+    "droits_colonnes": "381984b84344ab4639e2bf10a72bffe9"
    },
    "feedbacks": {
     "rls": true,
@@ -170,6 +170,17 @@
     "policies": "e9a1277850f6c0a29ae817501eee93c9",
     "contraintes": "68477383c7d36a5635f0169541c7fc19",
     "nb_policies": 2,
+    "declencheurs": "d41d8cd98f00b204e9800998ecf8427e",
+    "droits_colonnes": "2cd10fa8f5854433f99311d22b7bfd74"
+   },
+   "canal_messages": {
+    "rls": true,
+    "index": "6a1abce8f19a9fba12f41229731f1226",
+    "droits": "8a177f29865e0de4a2cb311eee604dd7",
+    "colonnes": "beaf06a46283c758dfd23ff85da45bca",
+    "policies": "7bcebb19ff08578dee56d7f74742bffe",
+    "contraintes": "3a90643240f459e1670b05c2fd1c6b2f",
+    "nb_policies": 1,
     "declencheurs": "d41d8cd98f00b204e9800998ecf8427e",
     "droits_colonnes": "2cd10fa8f5854433f99311d22b7bfd74"
    },
@@ -317,6 +328,12 @@
     "execute": [
      "anon",
      "authenticated",
+     "service_role"
+    ]
+   },
+   "clients_rattache_artisan()": {
+    "def": "64dfb43a5c542aa068e1466ddb77036c",
+    "execute": [
      "service_role"
     ]
    },
