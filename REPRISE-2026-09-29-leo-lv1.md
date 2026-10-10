@@ -1,5 +1,18 @@
 # Reprise courante — 10 octobre 2026, test cible réussi, candidat lecture inerte
 
+## Reprise courante — recette sur serveur existant, 10/10/2026 à 18 h 11 Paris
+
+Les trois workflows du SHA applicatif daba3ebf6a91522f02eab9fce3d93df5ebd137c6
+sont désormais réussis : LV138065281406, Auth38065281403 et Tests38065281402.
+294 tests runtime et 14 scénarios Docker réussis ; navigateurs réussis.
+Paul choisit un serveur existant, dont l'identité et l'accès restent à qualifier.
+Le protocole cible, le kit exact et la grille de recette sont centralisés dans
+leo/ACTIVATION.md, section « Recette cible cadrée ». Aucune commande cible
+exécutée, aucun bootstrap/reset de données, installation ou activation.
+Les mentions plus anciennes « tests à mesurer » sont historiques pour ce SHA.
+Prochaine action : identifier ce serveur et sa console pour préflight ciblé.
+
+
 ## Kit de service FINUBAR préparé — 10/10/2026, accord à 17 h 25 Paris
 
 Reprise courante : préparer la supervision extérieure au guardian et un kit

@@ -1,5 +1,158 @@
 # Raccordement LV1 à Ultima — proposition d'activation
 
+## Recette cible cadrée — 10/10/2026, reprise à 18 h 11 Paris
+
+Cette section est la reprise courante. Paul a choisi « serveur existant » ;
+nom, fournisseur, système et accès opérateur restent NON VÉRIFIÉS. Aucun
+serveur n'est connecté à Work pour cette recette ; ne pas confondre ce choix
+avec une compatibilité mesurée. Les sections suivantes sont historiques.
+
+But : établir la compatibilité de cet hôte, puis éprouver le kit figé comme
+service ponctuel de lecture hors réseau dans une instance de recette dédiée,
+avant toute installation métier. Moyens : kit CI existant, Docker/systemd de
+l'hôte, état fictif séparé et registre de preuves ci-dessous. Aucun nouveau
+service acheté, modèle facturé, mémoire concurrente ou dépendance applicative.
+L'étape actuelle prépare le protocole ; aucune commande cible n'a été exécutée.
+
+### Preuves désormais fermées
+
+Source applicative : daba3ebf6a91522f02eab9fce3d93df5ebd137c6.
+Les trois workflows sont réussis, relus à cette reprise :
+LV1 38065281406, Auth 38065281403, Tests 38065281402.
+294 tests runtime et 14 scénarios Docker réussis ; deux groupes navigateur
+désormais réussis. La mention « navigateurs encore en cours » est périmée.
+
+Kit exact :
+https://github.com/PaulGERARD161098/Ultima-/actions/runs/38065281406/artifacts/11674652639
+Expiration : 24/10/2026 15:52:50 UTC (17:52:50 Paris).
+SHA256 du ZIP : 8a12036f2d2b32688b2a796558ae329d6af4798e300335d81dd5b27541294c3f.
+SHA256 du read-service.tar.gz intérieur :
+a376bd49f0b9cf91477edc43481ac19c3b131a38b4b0763c39d65621ae423235.
+Installation figée : d52d53cd5d174544b6a2f73f39d34362.
+Empreinte code : 7e86fb65a6260d2b94273ebd20a539a1b6fe0143f8f2d2e395c9e34affc60873.
+approved=false, installed=false, autonomous_agent=false ; ces valeurs ne sont
+pas des paramètres à basculer automatiquement lors de la copie.
+
+### Étape 1 — identifier et observer l'hôte sans le modifier
+
+Obtenir le nom du serveur dans le panneau fournisseur, sa distribution et
+le mode d'accès opérateur déjà disponible. Aucune clé ou mot de passe en chat.
+Exécuter seulement sur le serveur identifié, dans son terminal opérateur :
+
+~~~sh
+uname -srm
+cat /proc/1/comm
+systemctl --version
+/usr/bin/python3 --version
+/usr/bin/python3 -I -c 'import os; print("pidfd_api", hasattr(os, "pidfd_open"))'
+~~~
+
+Ces lectures ne prouvent pas les droits effectifs, le sandbox ou la disponibilité
+de pidfd à l'exécution. Le transport utilise exactement PATH=/usr/bin:/bin, LANG=C.UTF-8 et HOME=/tmp,
+sans hériter de DOCKER_HOST/DOCKER_CONTEXT. Un nom de contexte affiché dans
+le shell habituel ne qualifie donc pas sa cible. Lire sa configuration locale
+avec ce même environnement ; ne pas afficher une éventuelle URI distante.
+Les requêtes suivantes ne sont permises que si l'endpoint effectif correspond
+au socket local attendu. Ce préflight exige que la configuration Docker locale
+reste stable entre qualification et lectures ; sinon suspendre.
+
+~~~sh
+if leo_docker_endpoint=$(/usr/bin/env -i PATH=/usr/bin:/bin LANG=C.UTF-8 HOME=/tmp /usr/bin/docker context inspect --format '{{.Endpoints.docker.Host}}' 2>/dev/null) && [ "$leo_docker_endpoint" = 'unix:///var/run/docker.sock' ]; then
+  /usr/bin/env -i PATH=/usr/bin:/bin LANG=C.UTF-8 HOME=/tmp /usr/bin/docker version --format '{{.Server.Version}}'
+  /usr/bin/env -i PATH=/usr/bin:/bin LANG=C.UTF-8 HOME=/tmp /usr/bin/docker info --format 'os={{.OSType}} arch={{.Architecture}} cgroup={{.CgroupVersion}}'
+  systemctl is-active docker.service
+else
+  printf '%s\n' 'Cible Docker non qualifiee : suspendre sans modifier le contexte.'
+fi
+~~~
+
+Une erreur de lecture ou un endpoint différent refuse ces requêtes : ni
+changement de contexte, ni affichage des overrides/secrets du shell.
+
+Critère : hôte Linux identifié, systemd réel en PID1, Python attendu disponible,
+API pidfd puis mécanisme effectif à éprouver, Docker local disponible, image
+épinglée compatible avec l'architecture. Absence ou erreur bloque uniquement
+l'installation concernée ; pas d'installation implicite de dépendances,
+changement de contexte, ajout au groupe Docker ou élévation silencieuse.
+
+### Étape 2 — recette isolée et préparation opérateur
+
+Préparer hors Work une VM/instance de recette dédiée utilisant les mêmes versions
+que l'hôte cible. Les scénarios d'arrêt forcé ne s'exécutent pas sur la machine
+métier ; aucun arrêt du daemon Docker partagé. Sans environnement réellement
+isolé, ces essais restent bloqués, comme prévu par AGENTS.md et le contrat LV1.
+
+Vérifier les deux empreintes avant extraction, inventorier les chemins de
+l'archive avant copie, puis faire contrôler le code_digest et le modèle d'unité
+par l'opérateur. Ne pas importer le dépôt privé depuis Work. Les 24 fichiers
+du kit n'autorisent ni migration ni remplacement de contrôle existant.
+Le bootstrap de l'état de recette doit être préparé et revu séparément :
+le kit ne fournit pas de seed métier. Pas d'initialisation improvisée via CLI.
+
+Chemins figés :
+- code : /opt/leo-read/d52d53cd5d174544b6a2f73f39d34362/code ;
+- configuration : /etc/leo-read/d52d53cd5d174544b6a2f73f39d34362/installation.json ;
+- état de recette : /var/lib/leo-read/d52d53cd5d174544b6a2f73f39d34362.
+
+Vérifier propriétaire et droits conformément aux validations du code :
+configuration privée 0600 et son répertoire privé 0700 pour l'identité opérateur
+attendue ; état privé existant, claims privés, staging visible par Docker.
+Code et configuration non modifiables par le worker ; protections systemd
+effectives à éprouver. UID opérateur distinct de 65534 ; accès Docker réservé
+à l'opérateur, jamais au worker. Pas de socket Docker, contrôle, credential ou
+montage supplémentaire dans le worker. Aucune approbation automatique.
+
+L'opérateur devra fournir un mandat de recette minimal et une seule opération
+figée, après revue de l'état fictif. Conserver Restart=no et l'absence de timer.
+Ne pas activer au démarrage du serveur ni remplacer le pilote R21 completed.
+
+### Étape 3 — grille de réception à remplir, pas déjà passée
+
+| Cas sur instance isolée | Preuve exigée |
+|---|---|
+| Kit non approuvé | Refus avant création/démarrage ; aucun effet métier |
+| Lecture nominale approuvée pour fixture | Un reçu completed, un effet fictif, aucun worker restant ; nouvelle tentative sans replay |
+| SIGKILL propriétaire puis gardien (essais distincts) | Arrêt durable, nettoyage attribué au bon propriétaire ; unknown et réserve conservée si reçu absent |
+| SIGKILL de tous les processus de l'unité de recette | ExecStopPost réellement exécuté par systemd ; worker absent par CID ET nom, voisin conservé, preuve .reaper cohérente |
+| Docker indisponible simulé dans la seule instance de recette | Refus de preuve positive, arrêt conservé ; délai et raison relevés, intervention requise |
+| Mauvais label, CID renommé ou configuration/code altéré | Refus sûr ; aucun conteneur tiers supprimé, aucune nouvelle opération |
+| Réconciliation depuis processus neuf | completed retrouvé ou unknown maintenu selon reçu ; jamais de relance ni libération fictive de réserve |
+
+Chaque scénario destructif sur fixture utilise une instance de recette neuve :
+un seul claim par installation, aucun reset pour faire repasser un essai.
+Le protocole d'initialisation et d'injection des fautes doit être préparé avant
+exécution ; cette grille seule n'est pas un harnais exécutable.
+
+Preuves conservées hors données métier : versions, date, SHA/empreintes,
+cas joué, état systemd, CID attendu, absence observée, transition du journal,
+réservation et témoin. Pas de snapshots, logs Docker bruts ou secrets en PR.
+TimeoutStopSec=90 est une borne configurée du chemin d'arrêt, pas une preuve
+mesurée d'arrêt global en 90 s : chronométrer chaque cas et qualifier les délais.
+Un oneshot sans RemainAfterExit n'est pas attendu « active » après succès :
+valider reçu, code de sortie et absence du worker plutôt qu'un voyant seul.
+
+Références officielles consultées le 10/10/2026 :
+https://github.com/systemd/systemd/blob/main/man/systemd.service.xml
+(modèle oneshot et ExecStopPost). Vérifier la documentation correspondant à
+la version réellement relevée sur l'hôte avant d'exécuter la recette.
+
+### Hors périmètre, risques et sortie
+
+Aucune fusion, installation privée, activation métier, dépense, migration,
+reset/effacement d'état existant ou accès Work au contrôle exclu.
+Risque principal : croire l'hôte compatible sans mesure, ou traiter les essais
+Docker CI comme une preuve systemd réelle ; préflight et recette dédiée exigés.
+Si VM ou daemon indisponibles, le nettoyage n'est pas garanti : arrêt inconnu
+et traitement opérateur, jamais completed fabriqué ni autonomie annoncée.
+
+Réception de ce jalon : identité cible confirmée + préflight mesuré + protocole
+fixture/injections revu + tous les cas requis mesurés sur instance dédiée.
+La réception LV1 entière, l'acquisition réelle, modèle/budget facturé et la
+compatibilité skill1.4 restent distincts et non livrés.
+Prochaine action unique : identifier le serveur existant et son accès console
+afin de préparer le préflight ciblé. Aucun secret à transmettre.
+
+
 ## Kit de service FINUBAR préparé — 10/10/2026, accord à 17 h 25 Paris
 
 Reprise courante : préparer la supervision extérieure au guardian et un kit
