@@ -48,6 +48,40 @@ d'ajouter un deuxième pro sans écrire de code. Jusque-là, personne n'utilise 
 couche C. Les couches A et B, en revanche, servent tout de suite : A est ce que
 Paul suit à l'écran, et B est la base que recevrait un nouveau pro.
 
+## ✅ Arbitrage rendu et exécution du 10/10
+
+**Arbitrages de Paul (panneaux, 10/10)** :
+- option 1, plan + base maintenant, série après J4 ;
+- point de vue à creuser : l'adversaire ;
+- exécution dans la séance même.
+
+| Couche | Résultat | Preuve |
+|---|---|---|
+| **Adversaire** | Tient. `/api/zohshia` est réservée au propriétaire et fermée par défaut. Les 7 routes décrites refusent toute requête sans session (401). La route des fiches lit le devis avec les droits de l'utilisateur, donc sous RLS, avant tout accès privilégié | garde propriétaire cassée : `compteNonProprietaire403` vire au rouge ; le test tourne en CI (`npm test` → `run-unit.mjs`) |
+| **A. Plan** | Les 3 variables et les 7 routes sont nommées, ainsi que les maillons livrés depuis le 04/10 : l'accord d'envoi, le devis pro, la dictée et le canal en construction. La check-list s'enrichit de la forme juridique, du capital, de l'IBAN au devis et de l'étape 13. Le plan est publié | `unit-zohshia` vert ; une route retirée → `ficheCouvre_routes` rouge ; un nom propre injecté → `aucunNomPropre` rouge |
+| **B. Base** | « ✓ La base neuve est prête et prouvée ». L'étalon est validé le 10/10 contre la référence, avec 4 écarts constatés, tous des objets d'une brique voisine sur `artisans` (colonne, contrainte, index et déclencheur, que RénoDevis ne lit pas) | requête de validation relue (lecture seule, une instruction) puis passée sur la référence ; finition sabotée → rejeu refusé |
+| **Le retard de C est dit** | `neutre/REPORT.json`, lié à la BASE de la série et lu par `derive.mjs`. La phrase garde « EN RETARD » et porte la décision ; un report périmé, illisible ou trop long est ignoré, et le message le dit | 6 nouveaux verdicts dans `unit-zohshia-derive` ; garde de BASE retirée → `reportPerimeIgnoreEtDit` rouge |
+
+**Ce que la boucle a trouvé et qu'aucun test ne voyait :**
+
+1. **La finition de la base neuve effaçait un droit posé par une migration.**
+   Son `revoke insert, update on profiles` révoque aussi les droits par colonne.
+   Le droit sur `forme_juridique` et `capital_social`, accordé le 09/10,
+   disparaissait donc. Une instance neuve aurait reproduit le refus
+   d'enregistrement du profil vu en production le 09/10. Les deux colonnes ont
+   été ajoutées aux listes de la finition, avec un avertissement pour les
+   migrations futures.
+2. **Le tri des migrations de RénoDevis ne suivait plus l'ordre réel.** La base
+   a reçu `rd_profiles_devis_pro_droits` avant `rd_canal_messages`, alors que les
+   noms se triaient à l'inverse. Le fichier a été renommé `20261009b_…`, selon
+   la convention déjà utilisée huit fois dans le dépôt. ⚠️ C'est la seule
+   retouche dans RénoDevis : un nom de fichier, contenu inchangé, et quatre
+   lignes de documentation.
+3. **La migration du 06/10 lisait `artisans.pro_id`, que la base neuve ne posait
+   qu'en finition.** La colonne est désormais posée juste avant cette migration,
+   par une retouche de la recette. Le rattrapage de données propre au pro de
+   référence a été neutralisé.
+
 ## ① Le but
 
 À la fin de la boucle, trois choses sont vraies :
