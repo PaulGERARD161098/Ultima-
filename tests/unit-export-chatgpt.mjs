@@ -43,6 +43,7 @@ const CLAUDE_TEMOIN = `# CLAUDE.md témoin
 **EL** le chemin : le comment défini avant la première ligne.
 **DR** la preuve : ré-éprouver ce qui a été livré.
 **ZS** l'époque : ce qu'on crée est moderne, simple, rapide et économique.
+**MS** la vente : ce qu'on fait rapproche du prochain client, du prochain contrat.
 ${'Du corps de directive, écrit pour que la section dépasse le minimum exigé. '.repeat(10)}
 
 ## 🎯 Objectif final

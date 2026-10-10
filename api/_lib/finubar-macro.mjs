@@ -22,11 +22,12 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-10-10",
-          "quoi": "10/10 : #326 fusionnée ; migration du canal renommée en 20261009b (tri = ordre reçu) ; ZOH plan et base à jour ; Directive ZS posée (renvoi Ultima).",
-          "commit": "71d4cb3c0bb58e44b7a25d1b30abbf8d04ce4a60"
+          "quoi": "10/10 : J4 étape 1 (oracle SOLA au centime) ; Directive MS ; point Stripe/Gmail — encaissement d'abord (Paul).",
+          "commit": "b3121cdd0696b551259e758fc79f58422babe58e"
         },
-        "prochaine_action": "J4 étape 1 : l'oracle au centime (CADRAGE-2026-10-09-J4). ZOH : plan et base à jour le 10/10, série juste après J4. W1 dès le compte Meta créé.",
+        "prochaine_action": "Encaissement d'abord (Paul, 10/10) : Gmail en Production ; correctif des comptes Stripe de test ; puis sk_live_. Détail : section du 10 octobre ci-dessous.",
         "bloque_par": [
+          "Les 2 comptes Stripe ont été créés en mode test : une clé sk_live_ ne les recrée pas (lib/embarquement.ts, lu le 10/10).",
           "KYC Stripe de SOLA : 0 compte sur 2 peut encaisser (mesuré le 30/09). Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul.",
           "La clé sk_live_ en production : le battement d'embarquement dit toujours test:true, ouverts:0 — remesuré le 08/10 à 06:30 UTC.",
           "Synchro e-mail : le cron tourne à vide, Gmail n'est pas configuré (battement actif=false, 01/10 04:45 UTC).",
@@ -84,16 +85,16 @@ export default {
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "b3121cd",
-        "tete_le": "2026-10-10T13:58:25+02:00",
-        "commits_depuis": 2,
+        "tete": "9c515ef",
+        "tete_le": "2026-10-10T13:31:49+00:00",
+        "commits_depuis": 1,
         "commit_inconnu": false
       },
       "mesure_le": "2026-10-10",
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-10T12:41:48.818Z",
+        "lecture_le": "2026-10-10T13:40:22.679Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -155,8 +156,8 @@ export default {
         "bloque_par[]"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "bba02c0",
         "tete_le": "2026-10-10T13:58:16+02:00",
@@ -165,20 +166,20 @@ export default {
       },
       "mesure_le": "2026-10-10",
       "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-10-10T12:41:48.847Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
+        "type": "github",
+        "lecture_le": "2026-10-10T13:40:22.680Z",
+        "statut": "non_examine",
+        "examines": [],
         "non_examines": [
+          "derive_git",
+          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
+      "motif_controle": "repli GitHub désactivé",
       "jours_depuis_maj": 4,
       "jours_en_attente": 67,
       "rang": 1
@@ -213,8 +214,8 @@ export default {
       },
       "recits": [],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "ff92a2b",
         "tete_le": "2026-10-10T13:58:10+02:00",
@@ -223,20 +224,20 @@ export default {
       },
       "mesure_le": "2026-10-10",
       "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-10-10T12:41:48.910Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
+        "type": "github",
+        "lecture_le": "2026-10-10T13:40:22.680Z",
+        "statut": "non_examine",
+        "examines": [],
         "non_examines": [
+          "derive_git",
+          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
+      "motif_controle": "repli GitHub désactivé",
       "jours_depuis_maj": 10,
       "jours_en_attente": 17,
       "rang": 1
@@ -281,8 +282,8 @@ export default {
       },
       "recits": [],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "645f736",
         "tete_le": "2026-10-10T13:58:13+02:00",
@@ -291,20 +292,20 @@ export default {
       },
       "mesure_le": "2026-10-10",
       "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-10-10T12:41:48.832Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
+        "type": "github",
+        "lecture_le": "2026-10-10T13:40:22.679Z",
+        "statut": "non_examine",
+        "examines": [],
         "non_examines": [
+          "derive_git",
+          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
+      "motif_controle": "repli GitHub désactivé",
       "jours_depuis_maj": 10,
       "jours_en_attente": 87,
       "rang": 2
@@ -325,8 +326,8 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-10-10",
-          "quoi": "#594 fusionnée : la Directive ZS (5ᵉ directive maîtresse, l'époque) posée au §0 du CLAUDE.md, en renvoi vers Ultima. Le reste de l'état est inchangé depuis le 09/10.",
-          "commit": "d7895d6d88cf4e33b4d2a610989f7f43adb9639b"
+          "quoi": "10/10 : renvoi vers la Directive MS (texte canonique : Ultima-/CLAUDE.md).",
+          "commit": "76e58a5c4729d8259a27a8300b721668af5f2a1f"
         },
         "prochaine_action": "Devis assisté : recette authentifiée avec RenoDevis, corpus et Gmail. Livraison #566/#218 faite. La chaîne A→Z conserve sa route dans Ultima-/PLAN-2026-09-30-chaine-A-Z.md.",
         "bloque_par": [
@@ -403,7 +404,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-10T12:41:48.799Z",
+        "lecture_le": "2026-10-10T13:40:22.657Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -435,8 +436,8 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-10-10",
-          "quoi": "10/10 : Directive ZS ; devis SOLA 2 gainables puis 2 monosplits ; leçons v86 (Ultima) ; lecons-chemins voit les chemins partiels.",
-          "commit": "2d6e8fd88fbc4552804e19a2f331d58c01a7be59"
+          "quoi": "10/10 : Directive MS posée (la vente : rapprocher du prochain client, du prochain contrat) ; renvois dans RenoDevis et RenoBoost.",
+          "commit": "6f640a3c476dbd0e693939afacfb47bef9132436"
         },
         "prochaine_action": "Reprendre « Léo partout sans candidats » (boucle du 06/10) : fournir les candidats, ou ne pas offrir l'outil là où la page ne peut pas l'exécuter.",
         "bloque_par": [
@@ -510,7 +511,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-10T12:41:48.785Z",
+        "lecture_le": "2026-10-10T13:40:22.638Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -565,8 +566,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "f3c2685",
         "tete_le": "2026-10-10T13:58:21+02:00",
@@ -575,20 +576,20 @@ export default {
       },
       "mesure_le": "2026-10-10",
       "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-10-10T12:41:48.871Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
+        "type": "github",
+        "lecture_le": "2026-10-10T13:40:22.680Z",
+        "statut": "non_examine",
+        "examines": [],
         "non_examines": [
+          "derive_git",
+          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
+      "motif_controle": "repli GitHub désactivé",
       "jours_depuis_maj": 50,
       "jours_en_attente": 50,
       "rang": 2
@@ -671,8 +672,8 @@ export default {
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "2f1a035",
         "tete_le": "2026-10-10T13:58:18+02:00",
@@ -681,20 +682,20 @@ export default {
       },
       "mesure_le": "2026-10-10",
       "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-10-10T12:41:48.882Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
+        "type": "github",
+        "lecture_le": "2026-10-10T13:40:22.680Z",
+        "statut": "non_examine",
+        "examines": [],
         "non_examines": [
+          "derive_git",
+          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
+      "motif_controle": "repli GitHub désactivé",
       "jours_depuis_maj": 1,
       "jours_en_attente": 50,
       "rang": 2
@@ -739,8 +740,8 @@ export default {
         "bloque_par[]"
       ],
       "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "a1a5fa1",
         "tete_le": "2026-10-10T13:58:08+02:00",
@@ -749,20 +750,20 @@ export default {
       },
       "mesure_le": "2026-10-10",
       "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-10-10T12:41:48.897Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
+        "type": "github",
+        "lecture_le": "2026-10-10T13:40:22.680Z",
+        "statut": "non_examine",
+        "examines": [],
         "non_examines": [
+          "derive_git",
+          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
+      "motif_controle": "repli GitHub désactivé",
       "jours_depuis_maj": 2,
       "jours_en_attente": 32,
       "rang": 2
@@ -798,8 +799,8 @@ export default {
       },
       "recits": [],
       "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
+      "hors_seance": true,
+      "reprise": true,
       "derive": {
         "tete": "65277a0",
         "tete_le": "2026-10-10T13:58:24+02:00",
@@ -808,20 +809,20 @@ export default {
       },
       "mesure_le": "2026-10-10",
       "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-10-10T12:41:48.860Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
+        "type": "github",
+        "lecture_le": "2026-10-10T13:40:22.680Z",
+        "statut": "non_examine",
+        "examines": [],
         "non_examines": [
+          "derive_git",
+          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
+      "motif_controle": "repli GitHub désactivé",
       "jours_depuis_maj": 10,
       "jours_en_attente": 30,
       "rang": 2
@@ -832,7 +833,7 @@ export default {
     "lisibles": 10,
     "illisibles": 0,
     "hors_seance": 0,
-    "repris": 0,
+    "repris": 7,
     "en_cours": 8,
     "en_attente_de_paul": 2,
     "au_repos": 0,
@@ -840,6 +841,10 @@ export default {
     "commits_inconnus": 7,
     "boucles_ouvertes": 45,
     "gestes_de_paul": [
+      {
+        "projet": "RénoDevis",
+        "geste": "Les 2 comptes Stripe ont été créés en mode test : une clé sk_live_ ne les recrée pas (lib/embarquement.ts, lu le 10/10)."
+      },
       {
         "projet": "RénoDevis",
         "geste": "KYC Stripe de SOLA : 0 compte sur 2 peut encaisser (mesuré le 30/09). Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul."
@@ -1074,7 +1079,10 @@ export default {
     "controles": [
       "PaulGERARD161098/Ultima-",
       "PaulGERARD161098/RenoBoost",
-      "PaulGERARD161098/RenoDevis",
+      "PaulGERARD161098/RenoDevis"
+    ],
+    "inaccessibles": [],
+    "non_examines": [
       "PaulGERARD161098/RenoAgenda",
       "PaulGERARD161098/RenoPredict",
       "PaulGERARD161098/renoboost-console",
@@ -1083,8 +1091,6 @@ export default {
       "paggerard-boop/Artidispo",
       "PaulGERARD161098/DATARENO-"
     ],
-    "inaccessibles": [],
-    "non_examines": [],
     "anomalies": [],
     "portee": "Registre seulement. PR, contrôles, permissions et dépendances non examinés."
   },
@@ -1092,7 +1098,7 @@ export default {
     "signaux": [
       {
         "projet": "RénoDevis",
-        "dit": "a avancé de 2 commit(s) depuis sa dernière note",
+        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
         "pourquoi": "derive"
       },
       {
@@ -1109,7 +1115,7 @@ export default {
     "action": {
       "projet": "RénoDevis",
       "nature": "code",
-      "faire": "J4 étape 1 : l'oracle au centime (CADRAGE-2026-10-09-J4). ZOH : plan et base à jour le 10/10, série juste après J4. W1 dès le compte Meta créé.",
+      "faire": "Encaissement d'abord (Paul, 10/10) : Gmail en Production ; correctif des comptes Stripe de test ; puis sk_live_. Détail : section du 10 octobre ci-dessous.",
       "cap": "Le devis part, se relance tout seul tant qu'il n'est pas signé, se signe et s'encaisse — sans que Paul y touche."
     },
     "illisibles": 0,
@@ -1193,20 +1199,20 @@ export default {
   "zohshia": {
     "mesurable": true,
     "base": "f1f9fb3",
-    "tete": "3597495",
-    "commits": 175,
-    "touchent": 80,
+    "tete": "b3121cd",
+    "commits": 181,
+    "touchent": 81,
     "fichiers_touches": 87,
-    "releve_le": "2026-10-10T11:12:11.528Z",
+    "releve_le": "2026-10-10T13:14:46.244Z",
     "report": {
       "valide": true,
       "le": "2026-10-10",
       "condition": "juste après J4 (la formule de l'instance de référence devenue paramètres du pro)",
       "pourquoi": "25 des 32 conflits sont dans les fichiers que J4 réécrit ; rafraîchie avant, la série le serait deux fois (arbitrage de Paul)"
     },
-    "reprise": true,
+    "reprise": false,
     "mesure_le": "2026-10-10",
     "alerte": true,
-    "phrase": "(mesure du 2026-10-10, reprise : commit de base inconnu du clone local (le récupérer : git fetch)) ZOH SHIA — ⚠️ EN RETARD : RénoDevis a avancé de 175 commit(s) depuis la série (f1f9fb3 → 3597495) (clone relevé le 2026-10-10 11:12 UTC), dont 80 sur des fichiers qu'elle retouche (87 fichier(s)) : l'extraction refusera probablement. Report décidé le 2026-10-10 : rafraîchir juste après J4 (la formule de l'instance de référence devenue paramètres du pro) — 25 des 32 conflits sont dans les fichiers que J4 réécrit ; rafraîchie avant, la série le serait deux fois (arbitrage de Paul) (TECHNO §8)."
+    "phrase": "ZOH SHIA — ⚠️ EN RETARD : RénoDevis a avancé de 181 commit(s) depuis la série (f1f9fb3 → b3121cd) (clone relevé le 2026-10-10 13:14 UTC), dont 81 sur des fichiers qu'elle retouche (87 fichier(s)) : l'extraction refusera probablement. Report décidé le 2026-10-10 : rafraîchir juste après J4 (la formule de l'instance de référence devenue paramètres du pro) — 25 des 32 conflits sont dans les fichiers que J4 réécrit ; rafraîchie avant, la série le serait deux fois (arbitrage de Paul) (TECHNO §8)."
   }
 };
