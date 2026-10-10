@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-10-10",
-    "commit": "6f640a3c476dbd0e693939afacfb47bef9132436",
-    "quoi": "10/10 : Directive MS posée (la vente : rapprocher du prochain client, du prochain contrat) ; renvois dans RenoDevis et RenoBoost."
+    "commit": "0fa74a7dc13125f5baf783cef31d86d747c2dad1",
+    "quoi": "10/10 : Directive MS fusionnée (#379), exports rescellés ; leçon v88 (boucle de sabotage)."
   },
   "prochaine_action": "Reprendre « Léo partout sans candidats » (boucle du 06/10) : fournir les candidats, ou ne pas offrir l'outil là où la page ne peut pas l'exécuter.",
   "bloque_par": [

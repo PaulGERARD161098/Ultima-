@@ -4,110 +4,6 @@
     {
       "ok": true,
       "motif": "",
-      "depot": "PaulGERARD161098/RenoDevis",
-      "grain": {
-        "projet": "RénoDevis",
-        "depot": "PaulGERARD161098/RenoDevis",
-        "cap": "Le devis part, se relance tout seul tant qu'il n'est pas signé, se signe et s'encaisse — sans que Paul y touche.",
-        "rattache_a": "CADRAGE-2026-09-15-corpus-rapprochement.md §9–13 (socle livré, voix/PDF, maquette reçue et implantation) · REPRISE-PILOTE-V3.md · LOT-PILOTE-2026-09-14.md · ROADMAP-2026-09-03-audit-pac.md (l'audit PAC, et la procédure de V0) · ROADMAP-RENORELANCE.md · RenoBoost/ROADMAP-MASTER.md (jalon 1, boucle A)",
-        "etat": "en_cours",
-        "jalon": {
-          "nom": "Jalon 1 boucle A — le premier euro encaissé",
-          "critere_de_sortie": "un `1` dans la table `paiements` (0 aujourd'hui)"
-        },
-        "dernier_arret": {
-          "le": "2026-10-10",
-          "quoi": "10/10 : J4 étape 1 (oracle SOLA au centime) ; Directive MS ; point Stripe/Gmail — encaissement d'abord (Paul).",
-          "commit": "b3121cdd0696b551259e758fc79f58422babe58e"
-        },
-        "prochaine_action": "Encaissement d'abord (Paul, 10/10) : Gmail en Production ; correctif des comptes Stripe de test ; puis sk_live_. Détail : section du 10 octobre ci-dessous.",
-        "bloque_par": [
-          "Les 2 comptes Stripe ont été créés en mode test : une clé sk_live_ ne les recrée pas (lib/embarquement.ts, lu le 10/10).",
-          "KYC Stripe de SOLA : 0 compte sur 2 peut encaisser (mesuré le 30/09). Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul.",
-          "La clé sk_live_ en production : le battement d'embarquement dit toujours test:true, ouverts:0 — remesuré le 08/10 à 06:30 UTC.",
-          "Synchro e-mail : le cron tourne à vide, Gmail n'est pas configuré (battement actif=false, 01/10 04:45 UTC).",
-          "Verdict de Paul sur la DENSITÉ : liste du cockpit (PR #160) et blocs d'un modèle retenu. Les tests prouvent la conformité, pas la lisibilité."
-        ],
-        "en_attente_depuis": "2026-08-17",
-        "boucles_ouvertes": [
-          {
-            "quoi": "WhatsApp (Réno) cadré au §9, table W0 appliquée. Numéro libéré le 09/10 (compte de l'appli supprimé par Paul). Reste le compte Meta, à créer par Paul.",
-            "depuis": "2026-10-09"
-          },
-          {
-            "quoi": "Ordre (Paul, 10/10) : ZOH plan et base faits le 10/10, puis J4, puis la série ZOH (report déclaré dans Ultima), puis l'étoile « Réno sur WhatsApp » après W1.",
-            "depuis": "2026-10-09"
-          },
-          {
-            "quoi": "Devis pro : ligne vue en production par Paul le 09/10, aucun devis pro émis (0). Logo non imprimé ; mentions B2B à faire relire par un comptable.",
-            "depuis": "2026-10-08"
-          },
-          {
-            "quoi": "Série ZOH : 32 conflits réels au 10/10, dont 25 dans les fichiers de J4. Rafraîchie juste après J4 (Ultima, CADRAGE-2026-10-10-zohshia-mise-a-jour.md).",
-            "depuis": "2026-10-08"
-          },
-          {
-            "quoi": "Dictée qui suit les pauses (#311) : non prouvée sur téléphone (le harnais simule les coupures). Recette = une dictée réelle de Paul ou Matthieu, avec des pauses.",
-            "depuis": "2026-10-08"
-          },
-          {
-            "quoi": "Dater les tarifs fournisseur : 112 prix d'achat SOLA sans date, donc inutilisables (CADRAGE-2026-10-08-equivalences-references.md §7). Prochaine action jusqu'au 08/10.",
-            "depuis": "2026-10-08"
-          },
-          {
-            "quoi": "Brancher la synchro Gmail (décidé par Paul le 08/10 comme prochaine boucle) : le cron tourne à vide (actif=false, gmail_non_configure) ; 9 des 16 devis viennent de la boîte mail…",
-            "depuis": "2026-10-08"
-          },
-          {
-            "quoi": "101 branches mortes à supprimer (65 non fusionnées + 36 fusionnées, liste avec SHA) : suppression refusée par le garde-fou de la séance ; Paul choisit entre une règle…",
-            "depuis": "2026-10-08"
-          },
-          {
-            "quoi": "Réponse-type dictée → devis (cadrage du 06/10, lots A/B/C) : cadrée, NON codée par cette séance ; #297 (création guidée, fusionnée le 08/10) en couvre peut-être une partie, à…",
-            "depuis": "2026-10-06"
-          },
-          {
-            "quoi": "Reportée telle quelle du 03/10, non revérifiée le 06/10 : Paul pose RELANCE_MODE=auto (Vercel, Production) et redépose les PDF des catalogues SOLA ; fusion d'Ultima #342 (leçon…",
-            "depuis": "2026-10-03"
-          }
-        ],
-        "maj": "2026-10-09"
-      },
-      "recits": [
-        "boucles_ouvertes[].quoi"
-      ],
-      "ciel": "renoboost-ia",
-      "hors_seance": false,
-      "reprise": false,
-      "derive": {
-        "tete": "9c515ef",
-        "tete_le": "2026-10-10T13:31:49+00:00",
-        "commits_depuis": 1,
-        "commit_inconnu": false
-      },
-      "mesure_le": "2026-10-10",
-      "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-10-10T13:40:22.679Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
-        "non_examines": [
-          "pr",
-          "controles",
-          "permissions",
-          "dependances"
-        ]
-      },
-      "jours_depuis_maj": 1,
-      "jours_en_attente": 54,
-      "rang": 0
-    },
-    {
-      "ok": true,
-      "motif": "",
       "depot": "PaulGERARD161098/RenoPredict",
       "grain": {
         "projet": "RénoPredict",
@@ -162,7 +58,7 @@
       "mesure_le": "2026-10-10",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-10T13:40:22.680Z",
+        "lecture_le": "2026-10-10T16:16:53.894Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -220,7 +116,7 @@
       "mesure_le": "2026-10-10",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-10T13:40:22.680Z",
+        "lecture_le": "2026-10-10T16:16:53.894Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -288,7 +184,7 @@
       "mesure_le": "2026-10-10",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-10T13:40:22.679Z",
+        "lecture_le": "2026-10-10T16:16:53.894Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -321,8 +217,8 @@
         },
         "dernier_arret": {
           "le": "2026-10-10",
-          "quoi": "10/10 : renvoi vers la Directive MS (texte canonique : Ultima-/CLAUDE.md).",
-          "commit": "76e58a5c4729d8259a27a8300b721668af5f2a1f"
+          "quoi": "10/10 : renvoi vers la Directive MS fusionné (#596).",
+          "commit": "6f9e4f73f12c1c8ec581938c88e84f791a9a5384"
         },
         "prochaine_action": "Devis assisté : recette authentifiée avec RenoDevis, corpus et Gmail. Livraison #566/#218 faite. La chaîne A→Z conserve sa route dans Ultima-/PLAN-2026-09-30-chaine-A-Z.md.",
         "bloque_par": [
@@ -399,7 +295,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-10T13:40:22.657Z",
+        "lecture_le": "2026-10-10T16:16:53.877Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -418,6 +314,108 @@
     {
       "ok": true,
       "motif": "",
+      "depot": "PaulGERARD161098/RenoDevis",
+      "grain": {
+        "projet": "RénoDevis",
+        "depot": "PaulGERARD161098/RenoDevis",
+        "cap": "Le devis part, se relance tout seul tant qu'il n'est pas signé, se signe et s'encaisse — sans que Paul y touche.",
+        "rattache_a": "CADRAGE-2026-09-15-corpus-rapprochement.md §9–13 (socle livré, voix/PDF, maquette reçue et implantation) · REPRISE-PILOTE-V3.md · LOT-PILOTE-2026-09-14.md · ROADMAP-2026-09-03-audit-pac.md (l'audit PAC, et la procédure de V0) · ROADMAP-RENORELANCE.md · RenoBoost/ROADMAP-MASTER.md (jalon 1, boucle A)",
+        "etat": "en_cours",
+        "jalon": {
+          "nom": "Jalon 1 boucle A — le premier euro encaissé",
+          "critere_de_sortie": "un `1` dans la table `paiements` (0 aujourd'hui)"
+        },
+        "dernier_arret": {
+          "le": "2026-10-10",
+          "quoi": "10/10 : fusionnés #329 (oracle SOLA, comptes Stripe de test) et #330 (suite revue Codex). Gmail branché (47 devis email).",
+          "commit": "3b85c08bff536f8df242792764653c074d5d6cd0"
+        },
+        "prochaine_action": "Encaissement : vérifier la prod sur 3b85c08, puis Paul pose les 2 webhooks live, sk_live_ et STRIPE_WEBHOOK_SECRET (2 whsec). Détail : section du 10 octobre.",
+        "bloque_par": [
+          "KYC Stripe de SOLA : 0 compte sur 2 peut encaisser (mesuré le 30/09). Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul.",
+          "La clé sk_live_ en production : le battement d'embarquement dit toujours test:true, ouverts:0 — remesuré le 08/10 à 06:30 UTC.",
+          "Verdict de Paul sur la DENSITÉ : liste du cockpit (PR #160) et blocs d'un modèle retenu. Les tests prouvent la conformité, pas la lisibilité."
+        ],
+        "en_attente_depuis": "2026-08-17",
+        "boucles_ouvertes": [
+          {
+            "quoi": "Synchro Gmail branchée le 10/10 (actif:true 15:31 UTC, 47 devis email, 0 doublon). 38 devis à compléter (sans montant), donc pas relançables : voir E7.",
+            "depuis": "2026-10-10"
+          },
+          {
+            "quoi": "WhatsApp (Réno) cadré au §9, table W0 appliquée. Numéro libéré le 09/10 (compte de l'appli supprimé par Paul). Reste le compte Meta, à créer par Paul.",
+            "depuis": "2026-10-09"
+          },
+          {
+            "quoi": "Ordre (Paul, 10/10) : ZOH plan et base faits le 10/10, puis J4, puis la série ZOH (report déclaré dans Ultima), puis l'étoile « Réno sur WhatsApp » après W1.",
+            "depuis": "2026-10-09"
+          },
+          {
+            "quoi": "Devis pro : ligne vue en production par Paul le 09/10, aucun devis pro émis (0). Logo non imprimé ; mentions B2B à faire relire par un comptable.",
+            "depuis": "2026-10-08"
+          },
+          {
+            "quoi": "Série ZOH : 32 conflits réels au 10/10, dont 25 dans les fichiers de J4. Rafraîchie juste après J4 (Ultima, CADRAGE-2026-10-10-zohshia-mise-a-jour.md).",
+            "depuis": "2026-10-08"
+          },
+          {
+            "quoi": "Dictée qui suit les pauses (#311) : non prouvée sur téléphone (le harnais simule les coupures). Recette = une dictée réelle de Paul ou Matthieu, avec des pauses.",
+            "depuis": "2026-10-08"
+          },
+          {
+            "quoi": "Dater les tarifs fournisseur : 112 prix d'achat SOLA sans date, donc inutilisables (CADRAGE-2026-10-08-equivalences-references.md §7). Prochaine action jusqu'au 08/10.",
+            "depuis": "2026-10-08"
+          },
+          {
+            "quoi": "101 branches mortes à supprimer (65 non fusionnées + 36 fusionnées, liste avec SHA) : suppression refusée par le garde-fou de la séance ; Paul choisit entre une règle…",
+            "depuis": "2026-10-08"
+          },
+          {
+            "quoi": "Réponse-type dictée → devis (cadrage du 06/10, lots A/B/C) : cadrée, NON codée par cette séance ; #297 (création guidée, fusionnée le 08/10) en couvre peut-être une partie, à…",
+            "depuis": "2026-10-06"
+          },
+          {
+            "quoi": "Reportée telle quelle du 03/10, non revérifiée le 06/10 : Paul pose RELANCE_MODE=auto (Vercel, Production) et redépose les PDF des catalogues SOLA ; fusion d'Ultima #342 (leçon…",
+            "depuis": "2026-10-03"
+          }
+        ],
+        "maj": "2026-10-09"
+      },
+      "recits": [
+        "boucles_ouvertes[].quoi"
+      ],
+      "ciel": "renoboost-ia",
+      "hors_seance": false,
+      "reprise": false,
+      "derive": {
+        "tete": null,
+        "tete_le": null,
+        "commits_depuis": 0,
+        "commit_inconnu": false
+      },
+      "mesure_le": "2026-10-10",
+      "controle": {
+        "type": "disque",
+        "statut": "lu",
+        "lecture_le": "2026-10-10T16:16:53.893Z",
+        "examines": [
+          "FINUBAR.md",
+          "derive_git"
+        ],
+        "non_examines": [
+          "pr",
+          "controles",
+          "permissions",
+          "dependances"
+        ]
+      },
+      "jours_depuis_maj": 1,
+      "jours_en_attente": 54,
+      "rang": 2
+    },
+    {
+      "ok": true,
+      "motif": "",
       "depot": "PaulGERARD161098/Ultima-",
       "grain": {
         "projet": "Ultima",
@@ -431,8 +429,8 @@
         },
         "dernier_arret": {
           "le": "2026-10-10",
-          "quoi": "10/10 : Directive MS posée (la vente : rapprocher du prochain client, du prochain contrat) ; renvois dans RenoDevis et RenoBoost.",
-          "commit": "6f640a3c476dbd0e693939afacfb47bef9132436"
+          "quoi": "10/10 : Directive MS fusionnée (#379), exports rescellés ; leçon v88 (boucle de sabotage).",
+          "commit": "0fa74a7dc13125f5baf783cef31d86d747c2dad1"
         },
         "prochaine_action": "Reprendre « Léo partout sans candidats » (boucle du 06/10) : fournir les candidats, ou ne pas offrir l'outil là où la page ne peut pas l'exécuter.",
         "bloque_par": [
@@ -506,7 +504,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-10T13:40:22.638Z",
+        "lecture_le": "2026-10-10T16:16:53.854Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -572,7 +570,7 @@
       "mesure_le": "2026-10-10",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-10T13:40:22.680Z",
+        "lecture_le": "2026-10-10T16:16:53.894Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -678,7 +676,7 @@
       "mesure_le": "2026-10-10",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-10T13:40:22.680Z",
+        "lecture_le": "2026-10-10T16:16:53.894Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -746,7 +744,7 @@
       "mesure_le": "2026-10-10",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-10T13:40:22.680Z",
+        "lecture_le": "2026-10-10T16:16:53.894Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -805,7 +803,7 @@
       "mesure_le": "2026-10-10",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-10T13:40:22.680Z",
+        "lecture_le": "2026-10-10T16:16:53.894Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -832,30 +830,10 @@
     "en_cours": 8,
     "en_attente_de_paul": 2,
     "au_repos": 0,
-    "derives": 1,
+    "derives": 0,
     "commits_inconnus": 7,
     "boucles_ouvertes": 45,
     "gestes_de_paul": [
-      {
-        "projet": "RénoDevis",
-        "geste": "Les 2 comptes Stripe ont été créés en mode test : une clé sk_live_ ne les recrée pas (lib/embarquement.ts, lu le 10/10)."
-      },
-      {
-        "projet": "RénoDevis",
-        "geste": "KYC Stripe de SOLA : 0 compte sur 2 peut encaisser (mesuré le 30/09). Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul."
-      },
-      {
-        "projet": "RénoDevis",
-        "geste": "La clé sk_live_ en production : le battement d'embarquement dit toujours test:true, ouverts:0 — remesuré le 08/10 à 06:30 UTC."
-      },
-      {
-        "projet": "RénoDevis",
-        "geste": "Synchro e-mail : le cron tourne à vide, Gmail n'est pas configuré (battement actif=false, 01/10 04:45 UTC)."
-      },
-      {
-        "projet": "RénoDevis",
-        "geste": "Verdict de Paul sur la DENSITÉ : liste du cockpit (PR #160) et blocs d'un modèle retenu. Les tests prouvent la conformité, pas la lisibilité."
-      },
       {
         "projet": "RénoPredict",
         "geste": "Inscription RenoPredict de Matthieu (Login → Onboarding) — sans elle, « Fin de pose » n'a aucun chantier à proposer."
@@ -935,6 +913,18 @@
       {
         "projet": "RénoBoost",
         "geste": "Rendre le ruleset de main ACTIF : il ne mord pas (ACTIONS-PAUL.md) — 11/09"
+      },
+      {
+        "projet": "RénoDevis",
+        "geste": "KYC Stripe de SOLA : 0 compte sur 2 peut encaisser (mesuré le 30/09). Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul."
+      },
+      {
+        "projet": "RénoDevis",
+        "geste": "La clé sk_live_ en production : le battement d'embarquement dit toujours test:true, ouverts:0 — remesuré le 08/10 à 06:30 UTC."
+      },
+      {
+        "projet": "RénoDevis",
+        "geste": "Verdict de Paul sur la DENSITÉ : liste du cockpit (PR #160) et blocs d'un modèle retenu. Les tests prouvent la conformité, pas la lisibilité."
       },
       {
         "projet": "Ultima",
@@ -1092,11 +1082,6 @@
   "cartouche": {
     "signaux": [
       {
-        "projet": "RénoDevis",
-        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
-        "pourquoi": "derive"
-      },
-      {
         "projet": "RénoPredict",
         "dit": "n'est rattaché à aucun commit atteignable — sa fraîcheur n'est plus mesurable, à recaler",
         "pourquoi": "commit_inconnu"
@@ -1105,26 +1090,24 @@
         "projet": "DATA RÉNO",
         "dit": "n'est rattaché à aucun commit atteignable — sa fraîcheur n'est plus mesurable, à recaler",
         "pourquoi": "commit_inconnu"
+      },
+      {
+        "projet": "RénoAgenda",
+        "dit": "n'est rattaché à aucun commit atteignable — sa fraîcheur n'est plus mesurable, à recaler",
+        "pourquoi": "commit_inconnu"
       }
     ],
     "action": {
-      "projet": "RénoDevis",
-      "nature": "code",
-      "faire": "Encaissement d'abord (Paul, 10/10) : Gmail en Production ; correctif des comptes Stripe de test ; puis sk_live_. Détail : section du 10 octobre ci-dessous.",
-      "cap": "Le devis part, se relance tout seul tant qu'il n'est pas signé, se signe et s'encaisse — sans que Paul y touche."
+      "projet": "RénoPredict",
+      "nature": "geste",
+      "faire": "Inscription RenoPredict de Matthieu (Login → Onboarding) — sans elle, « Fin de pose » n'a aucun chantier à proposer.",
+      "cap": "Le fonds de commerce se remplit tout seul : sticker collé, flashé en partant, la date de pose existe, Foresight s'allume — zéro saisie."
     },
     "illisibles": 0,
     "hors_seance": 0
   },
   "constellation": {
     "noeuds": [
-      {
-        "id": "PaulGERARD161098/RenoDevis",
-        "libelle": "RénoDevis",
-        "constellation": "en_cours",
-        "ciel": "renoboost-ia",
-        "signal": 1
-      },
       {
         "id": "PaulGERARD161098/RenoPredict",
         "libelle": "RénoPredict",
@@ -1149,6 +1132,13 @@
       {
         "id": "PaulGERARD161098/RenoBoost",
         "libelle": "RénoBoost",
+        "constellation": "en_cours",
+        "ciel": "renoboost-ia",
+        "signal": 0
+      },
+      {
+        "id": "PaulGERARD161098/RenoDevis",
+        "libelle": "RénoDevis",
         "constellation": "en_cours",
         "ciel": "renoboost-ia",
         "signal": 0
@@ -1194,11 +1184,11 @@
   "zohshia": {
     "mesurable": true,
     "base": "f1f9fb3",
-    "tete": "b3121cd",
-    "commits": 181,
-    "touchent": 81,
-    "fichiers_touches": 87,
-    "releve_le": "2026-10-10T13:14:46.244Z",
+    "tete": "3b85c08",
+    "commits": 189,
+    "touchent": 85,
+    "fichiers_touches": 90,
+    "releve_le": "2026-10-10T16:16:47.004Z",
     "report": {
       "valide": true,
       "le": "2026-10-10",
@@ -1208,6 +1198,6 @@
     "reprise": false,
     "mesure_le": "2026-10-10",
     "alerte": true,
-    "phrase": "ZOH SHIA — ⚠️ EN RETARD : RénoDevis a avancé de 181 commit(s) depuis la série (f1f9fb3 → b3121cd) (clone relevé le 2026-10-10 13:14 UTC), dont 81 sur des fichiers qu'elle retouche (87 fichier(s)) : l'extraction refusera probablement. Report décidé le 2026-10-10 : rafraîchir juste après J4 (la formule de l'instance de référence devenue paramètres du pro) — 25 des 32 conflits sont dans les fichiers que J4 réécrit ; rafraîchie avant, la série le serait deux fois (arbitrage de Paul) (TECHNO §8)."
+    "phrase": "ZOH SHIA — ⚠️ EN RETARD : RénoDevis a avancé de 189 commit(s) depuis la série (f1f9fb3 → 3b85c08) (clone relevé le 2026-10-10 16:16 UTC), dont 85 sur des fichiers qu'elle retouche (90 fichier(s)) : l'extraction refusera probablement. Report décidé le 2026-10-10 : rafraîchir juste après J4 (la formule de l'instance de référence devenue paramètres du pro) — 25 des 32 conflits sont dans les fichiers que J4 réécrit ; rafraîchie avant, la série le serait deux fois (arbitrage de Paul) (TECHNO §8)."
   }
 }
