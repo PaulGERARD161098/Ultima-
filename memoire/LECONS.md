@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v81 2026-10-10 sha256:62ce7aa59e38 -->
+<!-- lecons:empreinte v85 2026-10-10 sha256:2f353e6cef59 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -138,7 +138,7 @@ par `git rev-parse`, la fusion est passée. Rien de nouveau dans la faute ; ce q
 confirme, c'est que **le seul rempart qui a tenu les huit fois est aval** — la
 vigilance n'a arrêté aucune des huit.
 ⊕ **NEUVIÈME, LE 08/10 (Ultima, grain Finubar).** `dernier_arret.commit` tapé
-dans un script Python : `6203fe48e75f…`, le vrai étant `6203fe407c74…` — quatre
+dans un script Python : `6203fe48e75f…`, le vrai étant `6203fe407c74…` — sept
 justes, le reste inventé. Vu en relisant la sortie de `git rev-parse` lancée juste
 après, avant tout commit. ⇒ L'ordre se retourne : **le `rev-parse` d'abord, sa
 sortie injectée dans l'écriture** (`V=$(git rev-parse …)`), jamais l'écriture puis
@@ -613,11 +613,12 @@ aussi bien pu rendre vert sur un code cassé. Et le nettoyage a fait pire : un
 `pkill -f "vite preview"` a tué **mon propre shell**, deux fois — le motif était
 écrit dans la ligne de commande qui le lançait.
 *Ce que ça a coûté* : un diagnostic, et un rouge qui aurait pu être un vert.
-⛔ **La règle** : tout serveur lancé pour un harnais prend son port avec
-`--strictPort` — un port pris doit FAIRE ÉCHOUER le lancement, pas le déplacer.
-On arrête ces serveurs en ciblant les processus `node` qui les portent
-(`ps -eo pid=,args= | awk '$2 ~ /node$/ && /preview/'`), jamais par un motif
-`pkill -f` que sa propre commande contient. *Rechute le 08/10, deux fois :
+⛔ **La règle** : un port pris doit FAIRE ÉCHOUER le lancement d'un serveur de
+harnais, pas le déplacer — `--strictPort` pour Vite (seul à déplacer en silence ;
+`next start` et `python -m http.server` échouent d'eux-mêmes et ne connaissent
+pas ce drapeau). On arrête un serveur par le PID capturé à son lancement
+(`cmd & PID=$!` puis `kill $PID`), jamais par un motif `pkill -f` que sa propre
+commande contient. *Rechute le 08/10, deux fois :
 `pkill -f "next start -p 3999"` puis `pkill -f "http.server 8123"` ont tué le
 shell (sortie 144) — la règle était connue, pas appliquée.* *Troisième rechute
 le 09/10 (RenoBoost, H1 défilant), deux fois encore : `pkill -f lancer-navigateur.sh`
@@ -643,7 +644,8 @@ annulée » — sous le rôle `postgres`, celui qui a tous les droits.
 ⛔ **Une colonne qu'un écran écrit s'éprouve sous le rôle de cet écran**
 (`set local role authenticated` + `request.jwt.claims`), jamais sous le
 propriétaire. Et une table à droits par colonne demande, pour chaque colonne
-ajoutée, son `grant` — la sonde `PRO-D` de `RenoDevis/CLAUDE.md` le vérifie.
+ajoutée QU'UN ÉCRAN DOIT ÉCRIRE, son `grant` — jamais pour une colonne
+privilégiée comme `role`, qui doit rester hors d'atteinte — la sonde `PRO-D` de `RenoDevis/CLAUDE.md` le vérifie.
 *Même séance, même famille : deux assertions « aucun champ pro » étaient vraies
 par vacuité — l'une sur un émetteur sans SIRET, l'autre dans un harnais qui ne
 montait pas l'écran. Trouvées en cassant le code, pas en relisant le test.*
@@ -1406,7 +1408,7 @@ le bouton » : la sérialisation d'un formulaire ne s'éprouve qu'au navigateur.
 Devis SOLA de deux monosplits : rendu trois fois avec des prix différents. ① Prix LN35 « introuvables »
 alors que la banque produits (`banques_reno`) les portait — je n'avais fouillé que `corpus_devis`.
 ② Prix de vente posés à l'écart « +200/+300 » observé sur un autre produit, puis à « achat × 1,35 »
-lu dans `outils/corpus/banque.py` — l'ancien plancher. La règle réelle (marge totale 50 %, presta
+lu dans `RenoDevis/outils/corpus/banque.py` — l'ancien plancher. La règle réelle (marge totale 50 %, presta
 à prix fixe) était codée dans `RenoDevis/lib/reglesSola.ts:calculerPrixSola` ; Paul a dû la
 rappeler, après qu'une première version était déjà partie chez l'artisan.
 
@@ -1414,7 +1416,7 @@ rappeler, après qu'une première version était déjà partie chez l'artisan.
 données — jamais d'un plancher, d'une note ou d'une marge observée ailleurs.**
 
 ⇒ **Avant tout chiffrage : chercher la fonction de prix du dépôt (`grep -rn "calculer\|tarif"
-lib/`), l'exécuter, et ne fouiller les données qu'ensuite, dans TOUTES les tables qui en portent.**
+RenoDevis/lib/`), l'exécuter, et ne fouiller les données qu'ensuite, dans TOUTES les tables qui en portent.**
 
 **RIEN DE CE QUI EST DONNÉ À PAUL N'EST DÉDUIT** *(2026-09-02, directive EL)*.
 Toute valeur qu'il va cliquer, taper ou croire — URL, chemin, identifiant,
@@ -1775,7 +1777,7 @@ le fix est reparti avec la mutation, réécrit une minute plus tard. *Le
 correctif qui arrive APRÈS la passe de dry run est un nouveau cycle, avec son
 propre commit avant sa propre mutation — pas une queue du cycle précédent.*
 ⚠️ **Cinquième fois, le 09/10** (RenoBoost, H1 défilant) : un sabotage par
-`sed` sur `preview-vitrine.css`, restauré par `git checkout -- preview-vitrine.css`,
+`sed` sur `RenoBoost/preview-vitrine.css`, restauré par un `git checkout --` sur ce même fichier,
 a emporté les huit lignes de CSS du défilement, non commitées. Rattrapé parce
 que le harnais suivant est passé au vert sans la fonctionnalité, et réécrit.
 La suite de la séance a tenu la variante sûre : **copie du fichier avant la
