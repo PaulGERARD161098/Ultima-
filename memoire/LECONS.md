@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v82 2026-10-10 sha256:70e0cbed8249 -->
+<!-- lecons:empreinte v83 2026-10-10 sha256:78a8cd1e71ba -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1419,10 +1419,12 @@ lib/`), l'exécuter, et ne fouiller les données qu'ensuite, dans TOUTES les tab
 2 gainables)*. Un tableau HTML maison puis un PDF générique ont été livrés comme « devis » —
 *« Utilise le devis Sola, jamais un truc comme ça »* — avant le générateur réel
 `RenoDevis/lib/pdfSola.ts`. Puis trois refontes : pose à 800 €/j au lieu des 500 € HT la
-demi-journée de `RenoDevis/docs/SOLA-MATRICE-20261001.md`, apport d'affaires oublié (PU produits
-× 1,10, pose jamais majorée), et un prix Koolnova donné pour sûr alors que la note interne du devis
-repris (`extra.note_privee`) le disait ESTIMÉ. ⇒ **Gabarit + matrice + note interne lus avant le
-premier chiffre ; et « apport d'affaires : oui/non ? » demandé d'emblée si rien ne le dit.**
+demi-journée, apport d'affaires oublié (PU produits × 1,10, pose jamais majorée), et un prix
+Koolnova donné pour sûr alors que la note interne du devis repris (`extra.note_privee`) le disait
+ESTIMÉ. ⇒ **Le prix vient de la règle exécutable (`RenoDevis/lib/tarificationSola.ts` →
+`tariferLignesSola`, qui appelle `calculerPrixSola`) ; `RenoDevis/docs/SOLA-MATRICE-20261001.md` en
+donne le contexte métier, il ne la remplace pas. Gabarit + règle + note interne lus avant le premier
+chiffre, et « apport d'affaires : oui/non ? » demandé d'emblée si rien ne le dit.**
 
 **RIEN DE CE QUI EST DONNÉ À PAUL N'EST DÉDUIT** *(2026-09-02, directive EL)*.
 Toute valeur qu'il va cliquer, taper ou croire — URL, chemin, identifiant,
