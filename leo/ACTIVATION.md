@@ -1,5 +1,55 @@
 # Raccordement LV1 à Ultima — proposition d'activation
 
+## Candidat de lecture inerte — 10/10/2026
+
+Préparation autorisée par Paul à 15 h 05 Paris. Aucun accès au contrôle exclu,
+aucun appel réseau/modèle, aucune installation ni fusion.
+
+### Portée du candidat
+- `read_candidate.py` étend Broker avec read_source sur un instantané fourni
+  par l'hôte : Ultima seul, 1 à 20 PR sélectionnées, métadonnées explicites,
+  32 Kio maximum. Aucun URL, chemin, secret ou autorité proposé par le worker.
+- Réutilisation de MissionStore, BudgetLedger, Policy et ControlLatch :
+  réserve avant dispatch, admission finale sous transaction, reçu durable,
+  pas de rejeu pending/unknown, récupération d'un reçu completed après stop.
+  Les unités sont fictives et NE représentent PAS un prix fournisseur.
+- `read_worker.py` est un témoin déterministe hors réseau, pas un modèle Léo :
+  instantané en lecture seule, sortie JSON bornée, texte PR traité comme données.
+  `autonomous_agent:false`, `publication:false`, `environment:fixture`.
+- WorkerPlan prépare une commande Docker figée : image par digest, réseau none,
+  UID65534, root read-only, capacités retirées, deux fichiers RO seulement.
+  Il ne lance RIEN. L'opérateur doit fournir des fichiers revus, immuables
+  pendant le lancement et sans secrets ; chemins validés ne garantissent pas
+  seuls leur contenu ni l'absence de remplacement concurrent.
+
+### Preuves et limites
+Revue statique indépendante /root/read_candidate_review : deux blocages trouvés
+et corrigés (admission finale atomique, réconciliation après arrêt) ; verdict
+favorable au candidat INERTE uniquement. Syntaxe AST vérifiée sans exécution.
+15 scénarios de tests préparés dans la découverte runtime de la CI isolée
+existante : reçu depuis hôte neuf, perte du checkpoint, stop, budget, identité,
+versions, changement de snapshot, injection comme données, scope, bornes,
+immutabilité et contrat de montages. Leur résultat doit être lu sur le SHA
+publié ; cette section n'annonce aucun succès CI avant sa mesure.
+
+Absents volontairement : lanceur réel de cette commande avec timeout mural,
+collecte stdout bornée et kill du conteneur ; transport authentifié ; acquisition
+GitHub réelle ; médiateur modèle ; accord/coût fournisseur ; compatibilité1.4.
+Le candidat conserve le contrat1.1/skill1.0 et refuse une divergence : ne pas
+changer seulement la constante pour annoncer compatibilité.
+Pas de service permanent, aucune réception LV1 globale.
+Les tests d'argv ne prouvent pas la séparation noyau ni un arrêt Docker actif.
+
+### Prochaine boucle
+Construire et éprouver le lanceur de confiance (deadline indépendante, sortie
+bornée, kill du conteneur entier, perte du résultat et relecture durable), puis
+les médiateurs GitHub/modèle avec credentials détenus hors worker et budget
+opérateur chiffré. Les appels facturés restent bloqués jusqu'à accord précis.
+Conserver l'installation fixture completed ; ne pas la réinitialiser.
+La boucle status/prepare/execute du 10/10 est reçue par captures dans PR365 ;
+reconcile cible et stop actif ne sont pas encore reçus.
+
+
 ## Incident opérateur du 08/10/2026 — installation arrêtée, correctif en préparation
 
 Cette section remplace les prochaines actions d'installation historiques ci-dessous.
