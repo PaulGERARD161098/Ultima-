@@ -41,6 +41,13 @@ const extrait = 'Voir `app/ui.tsx:302`, `A/x/y.md`, `CLAUDE.md`, et l\'exemple `
 const nusSynth = cheminsNus(cheminsCites(extrait), contenus);
 verdicts.outilGardeLeSeulNu = nusSynth.length === 1 && nusSynth[0].chemin === 'app/ui.tsx' && nusSynth[0].depot === 'B';
 
+// 3. Le chemin présent dans PLUSIEURS dépôts mais pas dans tous est nu aussi
+//    (10/10 : `lib/` visait RenoDevis/lib/ et l'outil rendait 0). Celui qui est
+//    dans TOUS les dépôts reste légitime.
+const trois = { A: depot('CLAUDE.md', 'lib/a.ts'), B: depot('CLAUDE.md', 'lib/b.ts'), C: depot('CLAUDE.md', 'src/c.ts') };
+const nusTrois = cheminsNus(cheminsCites('Chercher dans `lib/`, puis lire `CLAUDE.md`.'), trois);
+verdicts.outilVoitLeCheminPartiel = nusTrois.length === 1 && nusTrois[0].chemin === 'lib/' && nusTrois[0].depot === 'A | B';
+
 console.log(JSON.stringify({ ...verdicts, chemins: chemins.length }, null, 2));
 const ok = Object.values(verdicts).every((v) => v === true);
 console.log(ok ? 'UNIT-LECONS-CHEMINS OK' : 'UNIT-LECONS-CHEMINS ECHEC');

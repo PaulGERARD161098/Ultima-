@@ -13,8 +13,14 @@
 //
 // <dossier des clones> contient un dossier par dépôt, aux noms de `dossier` de
 // `finubar/depots.json` (un miroir de liens symboliques convient).
-// Code de sortie : 0 aucun chemin nu propre à un dépôt · 1 il y en a ·
+// Code de sortie : 0 aucun chemin nu · 1 il y en a ·
 // 2 un clone manque — on ne conclut pas sur une partie des dépôts.
+// ⛔ ET LE CHEMIN PRÉSENT DANS PLUSIEURS DÉPÔTS, MAIS PAS DANS TOUS, est nu lui
+// aussi : il désigne un dossier différent selon la copie qu'on lit, ou aucun.
+// Payé le 10/10 : `lib/` (dans 4 dépôts sur 10) visait RenoDevis/lib/ ; l'outil
+// rendait 0 parce qu'il ne cherchait que les chemins propres à UN dépôt, et
+// la relecture Codex l'a trouvé sur dix PR. Un chemin présent dans les dix
+// (`CLAUDE.md`, `FINUBAR.md`) reste légitime : il se lit pareil partout.
 // ⚠️ Ce qu'il ne voit pas : un NOM DE FICHIER SEUL (`lignes.js`, sans dossier)
 // ne s'attribue pas à un dépôt — trop de noms se répètent. Le préfixer reste à
 // la relecture (v61 : `RenoDevis/releve/lignes.js`).
@@ -51,7 +57,7 @@ export function cheminsNus(cites, contenus) {
     const ou = Object.entries(contenus)
       .filter(([, { fichiers, dossiers }]) => fichiers.has(p) || dossiers.has(p.replace(/\/$/, '')))
       .map(([d]) => d);
-    if (ou.length === 1) nus.push({ chemin: p, depot: ou[0], ligne });
+    if (ou.length >= 1 && ou.length < prefixes.length) nus.push({ chemin: p, depot: ou.join(' | '), ligne });
   }
   return nus;
 }
@@ -76,7 +82,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const contenus = Object.fromEntries(depots.map((d) => [d, contenuDe(join(resolve(racine), d))]));
   const cites = cheminsCites(readFileSync(lecons, 'utf8'));
   const nus = cheminsNus(cites, contenus);
-  console.log(`${cites.size} chemins cités · ${depots.length} dépôts lus · ${nus.length} chemin(s) nu(s) propre(s) à un seul dépôt`);
-  for (const n of nus) console.log(`  l.${n.ligne}  ${n.chemin}  → ${n.depot}/${n.chemin}`);
+  console.log(`${cites.size} chemins cités · ${depots.length} dépôts lus · ${nus.length} chemin(s) nu(s) — absents d'au moins un dépôt`);
+  for (const n of nus) console.log(`  l.${n.ligne}  ${n.chemin}  → présent dans : ${n.depot}`);
   process.exit(nus.length ? 1 : 0);
 }
