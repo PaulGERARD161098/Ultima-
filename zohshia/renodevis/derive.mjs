@@ -19,6 +19,13 @@
 // commit de base inconnu du clone local : chaque cas rend `mesurable: false`
 // avec sa raison. Un silence se lirait « à jour » — le pire des deux états.
 //
+// ⛔ UN REPORT SE DÉCLARE, IL NE SE TAIT PAS. Quand Paul décide de laisser la
+// série en retard (10/10 : « série après J4 »), `neutre/REPORT.json` le dit :
+// date, condition, raison, et la BASE à laquelle il s'applique. La phrase garde
+// « EN RETARD » et remplace la consigne « rafraîchir » par la décision. Un
+// report lié à une autre base (la série a bougé) ou illisible est IGNORÉ et
+// dit ; un report qui subsiste quand la série est à jour se signale.
+//
 // Aucun réseau, aucune écriture. `git` est appelé en tableau d'arguments, avec
 // un délai borné : ce module tourne à l'ouverture de chaque séance.
 //
@@ -43,6 +50,21 @@ export function cheminsDeLaSerie(racine = RACINE) {
     if (c && !c.startsWith('#') && !c.includes('*')) chemins.add(c);
   }
   return chemins;
+}
+
+const BORNE_REPORT = 200;
+/** Le report déclaré de la série, ou null s'il n'y en a pas. Jamais d'exception. */
+export function lireReport(racine, base) {
+  const fichier = join(SERIE(racine), 'REPORT.json');
+  if (!existsSync(fichier)) return null;
+  let r;
+  try { r = JSON.parse(readFileSync(fichier, 'utf8')); } catch { return { valide: false, raison: 'REPORT.json illisible' }; }
+  const texte = (v) => typeof v === 'string' && v.trim().length > 0 && v.length <= BORNE_REPORT;
+  if (!r || !/^\d{4}-\d{2}-\d{2}$/.test(String(r.le)) || !texte(r.condition) || !texte(r.pourquoi) || !/^[0-9a-f]{40}$/.test(String(r.base))) {
+    return { valide: false, raison: 'REPORT.json mal formé (le, condition, pourquoi, base)' };
+  }
+  if (r.base !== base) return { valide: false, raison: 'report périmé : la série a bougé depuis' };
+  return { valide: true, le: r.le, condition: r.condition.trim(), pourquoi: r.pourquoi.trim() };
 }
 
 /**
@@ -92,7 +114,7 @@ export function mesurerDerive({ racine = RACINE, depot, ref = 'origin/main' } = 
   // « à jour d'un clone d'il y a trois semaines ».
   let releve = null;
   try { releve = statSync(join(dossierDepot, '.git', 'FETCH_HEAD')).mtime.toISOString(); } catch { releve = null; }
-  return { mesurable: true, base: base.slice(0, 7), tete: tete.slice(0, 7), commits, touchent, fichiers_touches: touches.length, releve_le: releve };
+  return { mesurable: true, base: base.slice(0, 7), tete: tete.slice(0, 7), commits, touchent, fichiers_touches: touches.length, releve_le: releve, report: lireReport(racine, base) };
 }
 
 /** La phrase, la même pour le rappel, la collecte et l'écran. */
@@ -101,14 +123,20 @@ export function phraseDerive(m) {
     return `ZOH SHIA — dérive NON MESURABLE : ${m?.raison || 'mesure absente'}. Ne pas lire « à jour » : rien n'a été mesuré.`;
   }
   const releve = m.releve_le ? ` (clone relevé le ${m.releve_le.slice(0, 16).replace('T', ' ')} UTC)` : ' (date de relevé du clone inconnue)';
-  if (m.commits === 0) return `ZOH SHIA — à jour : la série suit RénoDevis ${m.tete}${releve}.`;
+  if (m.commits === 0) {
+    return `ZOH SHIA — à jour : la série suit RénoDevis ${m.tete}${releve}.`
+      + (m.report ? ' ⚠️ Un REPORT.json subsiste alors que la série est à jour : le retirer.' : '');
+  }
   if (m.touchent === 0) {
     return `ZOH SHIA — RénoDevis a avancé de ${m.commits} commit(s) depuis la série (${m.base} → ${m.tete})${releve}, `
       + 'aucun sur un fichier qu\'elle retouche : extraction attendue verte, à confirmer par extraire.mjs --verifier.';
   }
   const n = m.touchent < 0 ? 'certains' : `${m.touchent}`;
   return `ZOH SHIA — ⚠️ EN RETARD : RénoDevis a avancé de ${m.commits} commit(s) depuis la série (${m.base} → ${m.tete})${releve}, `
-    + `dont ${n} sur des fichiers qu'elle retouche (${m.fichiers_touches} fichier(s)) : l'extraction refusera probablement. Rafraîchir la série (TECHNO §8).`;
+    + `dont ${n} sur des fichiers qu'elle retouche (${m.fichiers_touches} fichier(s)) : l'extraction refusera probablement. `
+    + (m.report?.valide
+      ? `Report décidé le ${m.report.le} : rafraîchir ${m.report.condition} — ${m.report.pourquoi} (TECHNO §8).`
+      : `Rafraîchir la série (TECHNO §8).${m.report ? ` ⚠️ Report ignoré : ${m.report.raison}.` : ''}`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

@@ -62,6 +62,24 @@ dit('enRetardSurLaSerie', m2.mesurable && m2.commits === 3 && m2.touchent === 2 
   && /EN RETARD/.test(p2) && /dont 2/.test(p2));
 dit('aucunCheminDansLaPhrase', ![p2, phraseDerive(m1), phraseDerive(m0)].some((p) => /lib\/|\.ts\b/.test(p)));
 
+// ---- Un report se déclare, il ne se tait pas (10/10) ------------------------
+const report = (contenu) => writeFileSync(join(serie, 'REPORT.json'), contenu);
+const decision = { le: '2026-10-10', condition: 'après le chantier X', pourquoi: 'il réécrit les mêmes fichiers', base };
+report(JSON.stringify(decision));
+const pr = phraseDerive(mesure());
+dit('reportValideDit', /EN RETARD/.test(pr) && /Report décidé le 2026-10-10 : rafraîchir après le chantier X/.test(pr)
+  && !/Rafraîchir la série/.test(pr));
+report(JSON.stringify({ ...decision, base: 'e'.repeat(40) }));
+const pp = phraseDerive(mesure());
+dit('reportPerimeIgnoreEtDit', /Rafraîchir la série/.test(pp) && /Report ignoré : report périmé/.test(pp) && !/Report décidé/.test(pp));
+report('{ pas du json');
+dit('reportIllisibleIgnoreEtDit', /Report ignoré : REPORT\.json illisible/.test(phraseDerive(mesure())));
+report(JSON.stringify({ ...decision, pourquoi: 'x'.repeat(201) }));
+dit('reportTropLongRefuse', /mal formé/.test(phraseDerive(mesure())));
+dit('reportSansObjetSignale', /le retirer/.test(phraseDerive({ ...m0, report: { valide: true } })));
+rmSync(join(serie, 'REPORT.json'));
+dit('sansReportInchange', phraseDerive(mesure()) === p2);
+
 // ---- Non mesurable, et DIT -------------------------------------------------
 const absent = mesurerDerive({ racine, depot: join(tmp, 'nulle-part'), ref: 'main' });
 dit('depotAbsentDit', absent.mesurable === false && /absent/.test(absent.raison) && /NON MESURABLE/.test(phraseDerive(absent)));
