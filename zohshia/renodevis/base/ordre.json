@@ -1,5 +1,5 @@
 {
-  "pourquoi": "L’ORDRE D’APPLICATION des migrations, tel que la base de référence les a reçues (relevé le 04/10/2026 dans son registre des migrations). Il coïncide avec le tri binaire des noms — le rejeu le vérifie. Une migration absente de cette liste fait refuser le rejeu : on ne devine pas sa place, on la relève.",
+  "pourquoi": "L’ORDRE D’APPLICATION des migrations, tel que la base de référence les a reçues (relevé le 04/10/2026 dans son registre des migrations, complété le 10/10/2026 pour les quatre migrations du 06 au 09/10). Il coïncide avec le tri binaire des noms — le rejeu le vérifie. Une migration absente de cette liste fait refuser le rejeu : on ne devine pas sa place, on la relève.",
   "migrations": [
     "20260721_rr_enroll_on_sent.sql",
     "20260726_rr_liens_traques.sql",
@@ -41,6 +41,10 @@
     "20261002044348_banques_reno.sql",
     "20261002_rd_relance_gabarits.sql",
     "20261002b_rd_messages_envoyes.sql",
-    "20261003_rd_clients_garde_vendeur.sql"
+    "20261003_rd_clients_garde_vendeur.sql",
+    "20261006_rd_clients_rattache_artisan.sql",
+    "20261008_rd_devis_pro.sql",
+    "20261009_rd_profiles_devis_pro_droits.sql",
+    "20261009b_rd_canal_messages.sql"
   ]
 }

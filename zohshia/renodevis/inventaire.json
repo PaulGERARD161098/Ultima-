@@ -1,9 +1,9 @@
 {
   "source": {
     "depot": "PaulGERARD161098/RenoDevis",
-    "ref": "origin/main",
-    "commit": "f1f9fb30fc03709106aa754d46524c0c3d778ef0",
-    "date_commit": "2026-10-04T18:19:53+02:00"
+    "ref": "92225cbde07584a148cdc392fac756c1ffa35165",
+    "commit": "92225cbde07584a148cdc392fac756c1ffa35165",
+    "date_commit": "2026-10-10T11:21:38+00:00"
   },
   "variables": [
     {
@@ -44,6 +44,12 @@
     },
     {
       "nom": "CRON_SECRET",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "DEVIS_PRO_EMETTEURS",
       "lue_dans": [
         "lib/config.ts"
       ]
@@ -99,7 +105,7 @@
     {
       "nom": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
       "lue_dans": [
-        "app/api/bibliotheque/catalogues/route.ts",
+        "app/api/devis/depot-document/route.ts",
         "lib/supabase.ts",
         "middleware.ts"
       ]
@@ -107,9 +113,21 @@
     {
       "nom": "NEXT_PUBLIC_SUPABASE_URL",
       "lue_dans": [
+        "app/api/bibliotheque/catalogues/route.ts",
+        "app/api/devis/depot-document/route.ts",
         "lib/supabase.ts",
         "middleware.ts"
       ]
+    },
+    {
+      "nom": "OPENAI_API_KEY",
+      "lue_dans": [
+        "lib/config.ts"
+      ]
+    },
+    {
+      "nom": "RECETTE_PDF",
+      "lue_dans": []
     },
     {
       "nom": "RELANCE_MODE",
@@ -174,7 +192,7 @@
     {
       "nom": "SUPABASE_ANON_KEY",
       "lue_dans": [
-        "app/api/bibliotheque/catalogues/route.ts",
+        "app/api/devis/depot-document/route.ts",
         "lib/supabase.ts",
         "middleware.ts"
       ]
@@ -196,6 +214,7 @@
     {
       "nom": "SUPABASE_URL",
       "lue_dans": [
+        "app/api/devis/depot-document/route.ts",
         "lib/supabase.ts",
         "middleware.ts"
       ]
@@ -281,8 +300,15 @@
     "/api/cron/sync-email",
     "/api/devis/[id]/documents",
     "/api/devis/[id]/facture-fournisseur",
+    "/api/devis/[id]/fiches",
+    "/api/devis/apercu",
+    "/api/devis/choisir-reference",
+    "/api/devis/confirmer-quantite",
+    "/api/devis/depot-document",
     "/api/devis/extraire",
     "/api/devis/proposer",
+    "/api/dictee/session",
+    "/api/dictee/transcrire",
     "/api/reno",
     "/api/reno/retour",
     "/api/sms/stop",
@@ -329,7 +355,11 @@
     "20261002044348_banques_reno.sql",
     "20261002_rd_relance_gabarits.sql",
     "20261002b_rd_messages_envoyes.sql",
-    "20261003_rd_clients_garde_vendeur.sql"
+    "20261003_rd_clients_garde_vendeur.sql",
+    "20261006_rd_clients_rattache_artisan.sql",
+    "20261008_rd_devis_pro.sql",
+    "20261009_rd_profiles_devis_pro_droits.sql",
+    "20261009b_rd_canal_messages.sql"
   ],
   "services": [
     {
@@ -427,6 +457,7 @@
     "creees_par_le_depot": [
       "artisans",
       "banques_reno",
+      "canal_messages",
       "catalogue_vente",
       "corpus_devis",
       "corpus_lignes",

@@ -41,9 +41,9 @@ d'équivalent de cette couche oblige à recoller les règles à chaque conversat
 
 ---
 
-## 2. Les quatre directives maîtresses
+## 2. Les cinq directives maîtresses
 
-Aucune ne prime sur les autres. Toute boucle se lit à travers les quatre avant
+Aucune ne prime sur les autres. Toute boucle se lit à travers les cinq avant
 d'être ouverte, et DR la rouvre une fois refermée.
 
 | | Nom | Ce qu'elle impose | La question qu'elle pose |
@@ -52,6 +52,7 @@ d'être ouverte, et DR la rouvre une fois refermée.
 | **JL** | la destination | **Vers quoi** : Ultima est l'unique interface de travail de Paul. Rien d'autre ne sera créé — tout nouveau besoin devient une extension. | *Est-ce que ce que je fabrique me rapproche de l'objectif final, ou est-ce un outil de plus à côté ?* |
 | **EL** | le chemin | **Comment on y va** : le comment entièrement défini AVANT la première ligne. Gate d'entrée **bloquant** : cadrage insuffisant = on ne commence pas. Rien au hasard, y compris dans l'expression. | *Est-ce que je peux dire pourquoi j'ai choisi ceci plutôt que cela ?* |
 | **DR** | la preuve | **Ce qui prouve qu'on y est** : ré-éprouver ce qui a été livré, patcher sur place ce que la ré-épreuve révèle. | *Qu'est-ce qui marche par accident dans ce que je viens d'écrire ?* |
+| **ZS** | l'époque | **Avec quoi on le fait** : avant de créer, la solution est-elle moderne pour l'année en cours, la plus simple, la plus rapide à poser et la plus économique, avec ce que Paul a déjà sous la main ? « Moderne » ne gagne jamais seul ; ZS juge ce qu'on crée, pas ce qui marche déjà. | *Si je le créais aujourd'hui, avec ce que j'ai, est-ce comme ça que je le ferais ?* |
 
 ### EL en pratique — le format 6 points
 
@@ -95,7 +96,7 @@ sans trouvaille ne se distingue pas d'un dry run non fait.
 ## 3. Les protocoles de séance
 
 ### 🟢 Ouverture
-1. Relire les quatre directives. **Premier geste, toujours.**
+1. Relire les cinq directives. **Premier geste, toujours.**
 2. Lire l'état existant (cadrage, roadmaps, mémoire, grain Finubar). **Pas de
    re-scan** du dépôt : ce qui est consigné ne se redécouvre pas.
 3. Vérifier branche et PR en cours.
@@ -282,7 +283,7 @@ une mesure accessible dans la session est, par construction, un souvenir.**
 > ⚠️ **La ligne `PARAMETRAGE` n'est pas décorative** — voir §10.
 
 ```
-PARAMETRAGE 2026-09-21 · directives:45ec49a1dd0f
+PARAMETRAGE 2026-10-10 · directives:c21c4333b612
 
 Concis, zéro blabla. Exemples concrets > abstractions.
 
@@ -300,7 +301,7 @@ AVIS. Si je demande ton avis, attaque le cas en adversaire. Pas d'accord poli.
 ## 8. Le bloc à coller — *Custom instructions*, champ ② « comment répondre »
 
 ```
-PARAMETRAGE 2026-09-21 · directives:45ec49a1dd0f
+PARAMETRAGE 2026-10-10 · directives:c21c4333b612
 
 MANDAT. Si ma consigne contient déjà ma règle de décision ("si X alors Y"), je délègue la vérification, pas l'arbitrage : vérifie, applique ma règle, agis, rends compte. Jamais de choix multiple sur ce que je viens de trancher.
 
@@ -321,15 +322,16 @@ FIN DE RÉPONSE : décisions attendues de moi + prochaine action unique.
 > Compléter la ligne `PROJET`. C'est la couche ③ reconstituée.
 
 ```
-PARAMETRAGE 2026-09-21 · directives:45ec49a1dd0f
+PARAMETRAGE 2026-10-10 · directives:c21c4333b612
 
 PROJET : [nom]. Objectif final : [une phrase]. Critère de sortie chiffré : [x au jj/mm].
 
-LES QUATRE DIRECTIVES — aucune ne prime, toute tâche se lit à travers les quatre.
+LES CINQ DIRECTIVES — aucune ne prime, toute tâche se lit à travers les cinq.
 EB, la route : une boucle à la fois, bouclée avant la suivante. Capitaliser sur l'existant : jamais un document parallèle à un document qui existe. Si je m'éparpille, dis-le.
 JL, la destination : tout nouveau besoin devient une extension de l'existant, jamais un outil de plus à côté.
 EL, le chemin : le comment défini AVANT la première ligne. Gate bloquant — si le cadrage est insuffisant, tu ne commences pas, tu cadres. Rien au hasard, y compris dans la formulation : si tu ne peux pas dire pourquoi tu as choisi ceci plutôt que cela, le choix n'est pas fait.
 DR, la preuve : ré-éprouver ce qui vient d'être livré.
+ZS, l'époque : avant de créer, vérifie que la solution est moderne pour l'année en cours, la plus simple, la plus rapide à poser et la plus économique, avec ce que j'ai déjà sous la main. Nomme l'alternative de l'année et dis pourquoi tu la retiens ou l'écartes ; l'état de l'art se vérifie, il ne se suppose pas. ZS juge ce qu'on crée, jamais ce qui marche déjà.
 
 FORMAT 6 POINTS, avant d'ouvrir une boucle : (1) le but, ce qui sera vrai à la fin (2) les étapes (3) les moyens, fichiers et outils touchés (4) les critères de réussite, vérifiables (5) ce qu'on ne fait PAS dans cette boucle (6) le pre-mortem : "la boucle a échoué, pourquoi ?".
 
@@ -351,7 +353,7 @@ FIN DE SÉANCE, quand je dis "fin de session" ou "récap" : (1) ce qui est ferm�
 ## 10. L'empreinte — savoir que le paramétrage n'est pas périmé
 
 ⛔ **Le problème, et il est silencieux.** Une fois collés dans ChatGPT, les trois
-blocs vivent **hors du dépôt**. Le jour où EB, JL, EL ou DR bougent dans
+blocs vivent **hors du dépôt**. Le jour où EB, JL, EL, DR ou ZS bougent dans
 `CLAUDE.md`, ils deviennent faux — et rien ne le dit. On continue de travailler
 avec un outil réglé sur une version morte, en croyant l'inverse.
 
@@ -361,7 +363,7 @@ D'où la ligne en tête de chaque bloc :
 PARAMETRAGE <date> · directives:<sha256 court>
 ```
 
-Elle porte le **sha256 de la section des quatre directives** telle qu'elle était
+Elle porte le **sha256 de la section des directives maîtresses** telle qu'elle était
 au moment de l'écrire. Deux gestes, et le doute est levé :
 
 | Pour | Faire |
@@ -373,7 +375,7 @@ au moment de l'écrire. Deux gestes, et le doute est levé :
 Cette empreinte ne versionne pas le document entier. La ligne **VERSION
 DOCUMENT** en tête de fichier identifie la révision de l'export ; la ligne
 **EMPREINTE DIRECTIVES** et les lignes `PARAMETRAGE` identifient séparément la
-version de sa source canonique. Une modification hors des quatre directives
+version de sa source canonique. Une modification hors des directives maîtresses
 incrémente la version documentaire sans prétendre que leur empreinte a changé.
 
 ⚠️ **Le contrôle est éprouvé par le côté où il se contourne**
@@ -386,7 +388,7 @@ contrôle cherche une section par son titre ; le jour où le titre est reformul�
 l'extraction rendrait une chaîne vide — et *le sha256 d'une chaîne vide est
 parfaitement stable*. Le contrôle passerait au vert en ne mesurant plus rien,
 pour toujours. Il refuse donc de rendre un verdict si la section fait moins de
-500 caractères ou ne nomme pas les quatre sigles.
+500 caractères ou ne nomme pas les cinq sigles.
 
 ⚠️ **Et l'empreinte ignore ce qui suit la section** des directives. Sinon elle
 crierait « périmé » à chaque commit touchant le reste de `CLAUDE.md`, et on
@@ -412,7 +414,7 @@ plus que ChatGPT **applique** ce qu'on lui a collé : ça, seul Paul le constate
   transposent pas, et les documenter ici créerait la deuxième vérité qu'EB
   interdit. Ils vivent dans `.claude/`.
 - Il n'est **pas auto-maintenu** — mais il n'est plus muet sur sa péremption :
-  l'empreinte du §10 la rend mesurable. ⛔ **Après toute modification des quatre
+  l'empreinte du §10 la rend mesurable. ⛔ **Après toute modification des cinq
   directives : relire ce document, puis `--sceller`.** Le sceller sans le relire
   fabriquerait une fausse fraîcheur, ce qui est pire que le laisser périmé.
 - Il ne prouve pas que ChatGPT **obéit**. Aucune des règles collées n'est
