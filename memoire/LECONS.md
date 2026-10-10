@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v81 2026-10-10 sha256:62ce7aa59e38 -->
+<!-- lecons:empreinte v84 2026-10-10 sha256:3597bbad51c1 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1406,7 +1406,7 @@ le bouton » : la sérialisation d'un formulaire ne s'éprouve qu'au navigateur.
 Devis SOLA de deux monosplits : rendu trois fois avec des prix différents. ① Prix LN35 « introuvables »
 alors que la banque produits (`banques_reno`) les portait — je n'avais fouillé que `corpus_devis`.
 ② Prix de vente posés à l'écart « +200/+300 » observé sur un autre produit, puis à « achat × 1,35 »
-lu dans `outils/corpus/banque.py` — l'ancien plancher. La règle réelle (marge totale 50 %, presta
+lu dans `RenoDevis/outils/corpus/banque.py` — l'ancien plancher. La règle réelle (marge totale 50 %, presta
 à prix fixe) était codée dans `RenoDevis/lib/reglesSola.ts:calculerPrixSola` ; Paul a dû la
 rappeler, après qu'une première version était déjà partie chez l'artisan.
 
@@ -1775,7 +1775,7 @@ le fix est reparti avec la mutation, réécrit une minute plus tard. *Le
 correctif qui arrive APRÈS la passe de dry run est un nouveau cycle, avec son
 propre commit avant sa propre mutation — pas une queue du cycle précédent.*
 ⚠️ **Cinquième fois, le 09/10** (RenoBoost, H1 défilant) : un sabotage par
-`sed` sur `preview-vitrine.css`, restauré par `git checkout -- preview-vitrine.css`,
+`sed` sur `RenoBoost/preview-vitrine.css`, restauré par un `git checkout --` sur ce même fichier,
 a emporté les huit lignes de CSS du défilement, non commitées. Rattrapé parce
 que le harnais suivant est passé au vert sans la fonctionnalité, et réécrit.
 La suite de la séance a tenu la variante sûre : **copie du fichier avant la
