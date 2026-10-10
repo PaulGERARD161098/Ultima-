@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-10-10",
-    "commit": "c1b0b031b91ba4f3c18b80d79b429e069daa10c7",
-    "quoi": "10/10 : Directive ZS posée (5ᵉ directive maîtresse, exports ChatGPT/Gemini rescellés) ; ZOH : plan et base RénoDevis à jour, série reportée après J4."
+    "commit": "4a212bd07cbd14be03146945674b910a9fcb0a55",
+    "quoi": "10/10 : devis SOLA 2 monosplits chiffré par calculerPrixSola ; LEÇONS v85 dans les dix dépôts ; lecons-chemins voit les chemins partiels."
   },
   "prochaine_action": "Reprendre « Léo partout sans candidats » (boucle du 06/10) : fournir les candidats, ou ne pas offrir l'outil là où la page ne peut pas l'exécuter.",
   "bloque_par": [
@@ -56,8 +56,8 @@
       "depuis": "2026-10-08"
     },
     {
-      "quoi": "LEÇONS v80 (09/10) dans Ultima seulement : les neuf autres dépôts sont en retard, et lecons-chemins n'a pas pu tourner (clones absents de la séance).",
-      "depuis": "2026-10-08"
+      "quoi": "LEÇONS : deux chemins nus que lecons-chemins signale depuis le 10/10 — l.663 `outils/` et l.2320 `package-lock.json` (présents dans une partie des dépôts seulement). À préfixer au prochain passage de propagation ; l'outil rend 1 tant qu'ils restent.",
+      "depuis": "2026-10-10"
     },
     {
       "quoi": "RIVEN deux cartes — à trancher par Paul : la bascule s'ouvre sur « Tout » (choix de séance : rien ne disparaît, et 9 harnais comptent les 9 fiches de démo). Passer le défaut à « Individus » = 1 ligne (carteRetenue) + recaler les harnais. Une personne (« Indépendante ») n'a pas d'entreprise, à dessein ; un rattachement porte un rôle vide (fonction absente des notes).",
