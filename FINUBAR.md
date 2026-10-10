@@ -32,7 +32,7 @@
   },
   "dernier_arret": {
     "le": "2026-10-10",
-    "commit": "a54d2a60dd60bf71596fd4b2740f1ab8de121da5",
+    "commit": "2d6e8fd88fbc4552804e19a2f331d58c01a7be59",
     "quoi": "10/10 : Directive ZS ; devis SOLA 2 gainables puis 2 monosplits ; leçons v86 (Ultima) ; lecons-chemins voit les chemins partiels."
   },
   "prochaine_action": "Reprendre « Léo partout sans candidats » (boucle du 06/10) : fournir les candidats, ou ne pas offrir l'outil là où la page ne peut pas l'exécuter.",
