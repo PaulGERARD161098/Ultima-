@@ -2,7 +2,8 @@
 
 The trusted operator owns the latch and claim directory, outside worker rights.
 This launches an offline witness, NOT the durable broker or a real model agent.
-An external FINUBAR watchdog is still required if the entire host is SIGKILLed.
+A separate FINUBAR guardian owns Docker and survives owner-process SIGKILL.
+External service supervision is still required for loss of the guardian itself.
 """
 import hashlib
 from contextlib import contextmanager
@@ -148,7 +149,7 @@ this application code can itself execute inside an isolated helper container.
         self.plan, self.latch, self.claim = plan, latch, claim
         self.hashes = worker_sha256, snapshot_sha256
         self.maximum = max_seconds
-        self.transport = DockerTransport() if _transport is None else _transport
+        self.transport = _transport
         # Host-owned broker callbacks only; never part of a worker proposal.
         self._host_admission, self._host_check = _host_admission, _host_check
         self.lock = threading.Lock()
@@ -172,6 +173,13 @@ this application code can itself execute inside an isolated helper container.
                     yield
 
     def _cleanup(self, name, cid, creation_unknown=False):
+        if self.transport is None:
+            return
+        cleanup_owned = getattr(self.transport, 'cleanup_owned', None)
+        if cleanup_owned is not None:
+            if cleanup_owned() is not True or creation_unknown:
+                raise Refusal('read_container_stop_unconfirmed')
+            return
         client_error = None
         try:
             self.transport.close()
@@ -184,6 +192,9 @@ this application code can itself execute inside an isolated helper container.
                                           '--filter', 'name=^/' + name + '$'))
         if creation_unknown or client_error is not None or rc2 != 0 or out.strip() or (cid is not None and rc != 0):
             raise Refusal('read_container_stop_unconfirmed')
+        finish = getattr(self.transport, 'finish', None)
+        if finish is not None:
+            finish()
 
     def run(self):
         with self.lock:
@@ -225,6 +236,9 @@ this application code can itself execute inside an isolated helper container.
                     path.write_bytes(raw); path.chmod(0o444)
                 staged = WorkerPlan(self.plan.image, worker, snapshot)
                 self._check(deadline)
+                if self.transport is None:
+                    from leo.control_r21.read_watchdog import GuardedTransport
+                    self.transport = GuardedTransport(staged, name, self.latch, self.claim, deadline)
                 with self._admission():
                     creation_started = True
                     rc, out, _ = self.transport.call(_create_args(staged, name))

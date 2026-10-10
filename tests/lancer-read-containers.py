@@ -99,6 +99,10 @@ def isolated(mode, image):
             out, err, rc, drained = self.request('poll')
             out, err = base64.b64decode(out, validate=True), base64.b64decode(err, validate=True)
             self.seen = (self.seen + out)[-128:]
+            if mode in ('mission-host-kill','mission-host-kill-mutant') and b'child-ready' in self.seen:
+                import signal
+                os.kill(os.getppid(), signal.SIGKILL)
+                self.seen = b''
             if mode in ('stop','mission-stop') and b'child-ready' in self.seen:
                 latch.trip('owner_stop')
             return out, err, rc, drained
@@ -140,6 +144,47 @@ def isolated(mode, image):
                     else: raise RuntimeError('zero_budget_launched')
                     require(broker.budget.status('read-ci')['calls']==0 and not list(claims.iterdir()),
                             'zero_budget_reserved_or_claimed')
+                elif mode in ('mission-host-kill','mission-host-kill-mutant'):
+                    import signal
+                    host = os.fork()
+                    if host == 0:
+                        try: broker.execute('root',proposal)
+                        finally: os._exit(2)
+                    _, status = os.waitpid(host,0)
+                    require(os.WIFSIGNALED(status) and os.WTERMSIG(status)==signal.SIGKILL,
+                            'owner_not_killed')
+                    cleanup_began=time.monotonic()
+                    until=cleanup_began+10
+                    while not list(claims.glob('*.watchdog')) and time.monotonic()<until:
+                        time.sleep(.02)
+                    proof=json.loads(next(claims.glob('*.watchdog')).read_bytes())
+                    require(proof['container_removed'] is (mode=='mission-host-kill') and proof['reason'] in {'owner_lost','owner_disconnected'},
+                            'guardian_did_not_remove_after_sigkill')
+                    elapsed=time.monotonic()-cleanup_began
+                    require(elapsed<5,'guardian_cleanup_too_slow_after_owner_exit')
+                    sys.stderr.write('owner-exit-to-cleanup-attestation-seconds=%.3f\n' % elapsed)
+                    sys.stderr.flush()
+                    resumed=fresh()
+                    pending=resumed.store.get_operation('read-ci','root','read-ci-op')
+                    require(pending['status']=='pending','killed_owner_falsely_completed')
+                    if mode=='mission-host-kill-mutant':
+                        try: resumed.reconcile_interrupted('root','read-ci-op')
+                        except Refusal as error:
+                            require(str(error)=='interrupted_cleanup_proof_required','wrong_mutant_refusal')
+                        else: raise RuntimeError('missing_cleanup_accepted')
+                        require(resumed.store.get_operation('read-ci','root','read-ci-op')['status']=='pending',
+                                'mutant_created_false_reconciliation')
+                    else:
+                        reconciled=resumed.reconcile_interrupted('root','read-ci-op')
+                        require(reconciled['status']=='unknown' and reconciled['result'] is None,
+                                'interrupted_reconciliation_fabricated_completion')
+                        require(resumed.reconcile_interrupted('root','read-ci-op')==reconciled,
+                                'interrupted_reconciliation_not_idempotent')
+                    require(resumed.budget.status('read-ci')['reserved_units']==1,
+                            'interrupted_budget_was_released')
+                    try: resumed.execute('root',proposal)
+                    except Refusal as error: require(str(error)=='leo_agent_stopped','restart_stop_missing')
+                    else: raise RuntimeError('killed_owner_replayed')
                 elif mode=='mission-stop':
                     try: broker.execute('root',proposal)
                     except Refusal as error: require(str(error)=='leo_agent_stopped','wrong_mission_stop_refusal')
@@ -238,7 +283,8 @@ while True: time.sleep(.1)
                 'stop': hostile, 'timeout': hostile,
                 'overflow': b"import os,time\nos.write(1,b'x'*65536)\ntime.sleep(30)\n",
                 'forged': b"print('{\"autonomous_agent\":true}')\n",
-                'mission':baseline,'mission-lost':baseline,'mission-stop':hostile,'mission-budget':baseline}
+                'mission':baseline,'mission-lost':baseline,'mission-stop':hostile,'mission-budget':baseline,
+                'mission-host-kill':hostile,'mission-host-kill-mutant':hostile}
     for mode, code in fixtures.items():
         with tempfile.TemporaryDirectory(prefix='read-ci-') as directory:
             data = Path(directory)
@@ -268,6 +314,14 @@ while True: time.sleep(.1)
             selector.register(helper.stderr, selectors.EVENT_READ, 'errors')
             buffer, errors = bytearray(), bytearray()
             cid, reserved_name, stream, streams, completed = None, None, None, None, False
+            bystander = None
+            if mode=='mission-host-kill':
+                bystander='read-bystander-'+uuid.uuid4().hex
+                extra=command(('run','--detach','--name',bystander,'--pull','never','--network','none',
+                    '--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--user','65534:65534',
+                    '--memory','128m','--pids-limit','8','--entrypoint','python',image,'-I','-c',
+                    'import time; time.sleep(120)'))
+                require(extra[0]==0,'bystander_not_created')
             deadline = time.monotonic() + 45
             try:
                 while not completed:
@@ -308,10 +362,12 @@ while True: time.sleep(.1)
                                 require(response[0]==0 and re.fullmatch('[a-f0-9]{64}',cid), 'real_create_failed')
                             else:
                                 allowed = {('inspect','--format','{{json .State}}',cid),
-                                    ('rm','--force',cid),
+                                    ('rm','--force',cid),('rm','--force',reserved_name),
                                     ('container','ls','--all','--quiet','--no-trunc','--filter','name=^/'+str(reserved_name)+'$')}
                                 require(cid is not None and value in allowed, 'relay_command_denied')
-                                response = command(value)
+                                # Known mutation only in this fixed negative CI fixture:
+                                # pretend rm succeeded while leaving the actual container.
+                                response = [0,'',''] if mode=='mission-host-kill-mutant' and value[0]=='rm' else command(value)
                         elif op == 'start':
                             require(cid is not None and value==cid and stream is None, 'one_owned_start_only')
                             stream = subprocess.Popen(('/usr/bin/docker','start','--attach',cid),env=ENV,
@@ -341,10 +397,23 @@ while True: time.sleep(.1)
                 require(helper.wait(timeout=5)==0, 'helper_exit_failed')
                 if cid is not None:
                     observed=command(('container','ls','--all','--quiet','--no-trunc','--filter','id='+cid))
-                    require(observed[0]==0 and observed[1]=='','owned_container_survived')
+                    if mode=='mission-host-kill-mutant':
+                        require(observed[0]==0 and observed[1]!='','negative_mutation_not_exercised')
+                        actual=command(('inspect','--format','{{json .State}}',cid))
+                        require(actual[0]==0 and json.loads(base64.b64decode(actual[1]))['Running'] is True,
+                                'mutant_survivor_not_running')
+                    else:
+                        require(observed[0]==0 and observed[1]=='','owned_container_survived')
+                    if bystander is not None:
+                        actual=command(('inspect','--format','{{json .State}}',bystander))
+                        require(actual[0]==0 and json.loads(base64.b64decode(actual[1]))['Running'] is True,
+                                'unrelated_container_removed')
                 else:
                     require(mode=='mission-budget' and reserved_name is None,'missing_expected_worker_creation')
-                print('PASS read launcher:',mode,'; scoped assertions verified; no owned container remains',flush=True)
+                detail = 'known missing-removal mutant detected; survivor removed by runner finally' if mode=='mission-host-kill-mutant' else 'scoped assertions verified; no owned container remains'
+                print('PASS read launcher:',mode,';',detail,flush=True)
+                if mode in ('mission-host-kill','mission-host-kill-mutant'):
+                    print(errors.decode('ascii').strip(),flush=True)
             finally:
                 failures=[]
                 def attempt(action):
@@ -358,6 +427,7 @@ while True: time.sleep(.1)
                     attempt(stream.stdout.close); attempt(stream.stderr.close)
                 if streams is not None: attempt(streams.close)
                 if cid is not None: attempt(lambda: command(('rm','--force',cid)))
+                if bystander is not None: attempt(lambda: command(('rm','--force',bystander)))
                 if reserved_name is not None: attempt(lambda: command(('rm','--force',reserved_name)))
                 attempt(lambda: command(('rm','--force',name)))
                 attempt(lambda: reap(helper))

@@ -256,6 +256,49 @@ The adapter is exact-type checked: this candidate cannot inject live callbacks.
         self.budget.settle(self.mandate.mission, proposal['operation_id'], 1)
         return finished
 
+    def reconcile_interrupted(self, principal, operation_id):
+        """Persist UNKNOWN after guardian-attested removal; never dispatch/settle.
+
+        An absent mission receipt remains uncertain even when cleanup succeeded.
+        Companion claim evidence is host-owned, not an agent completion receipt.
+        """
+        assert_host_private(self.store.path, (self.store.path.parent,), 'read_register_permissions_unsafe')
+        canonical = self.store.read_mission(self.mandate.mission, principal)
+        if (canonical['mandat'] != mandate_record(self.mandate)
+                or canonical['source'].get('repository') != REPOSITORY):
+            raise Refusal('canonical_mandate_or_source_mismatch')
+        if principal not in self.mandate.actors or principal not in {canonical['owner'], *canonical['writers']}:
+            raise Refusal('scope_denied')
+        if self.launch_config is None or self.control.latch is None or not self.control.latch.stopped(timeout=.1):
+            raise Refusal('stopped_read_launch_required')
+        operation = self.store.get_operation(self.mandate.mission, principal, operation_id)
+        if operation is None or operation['status'] not in {'pending','unknown'}:
+            raise Refusal('interrupted_operation_required')
+        payload = operation['payload']
+        if (set(payload) != {'action','operation_id','expected_version','snapshot_sha256','execution'}
+                or payload['action'] != 'read_source' or payload['operation_id'] != operation_id
+                or payload != self._launch_payload({key: payload[key]
+                    for key in ('action','operation_id','expected_version')})):
+            raise Refusal('operation_context_mismatch')
+        from leo.control_r21.read_launcher import _read_fixed
+        claim_id = hashlib.sha256(json.dumps([self.mandate.mission, operation_id],
+            separators=(',', ':')).encode()).hexdigest()
+        claim = self.launch_config.claim_directory / (claim_id + '.claim')
+        assert_host_private(claim, (claim.parent,), 'private_read_claim_required')
+        proof_path = Path(str(claim) + '.watchdog')
+        assert_host_private(proof_path, (proof_path.parent,), 'private_read_claim_required')
+        name = _read_fixed(claim, 64).decode('ascii').strip()
+        proof = json.loads(_read_fixed(proof_path, 1024))
+        if (not re.fullmatch(r'leo-read-[a-f0-9]{32}', name)
+                or type(proof) is not dict or set(proof) != {'container','reason','container_removed'}
+                or proof['container'] != name or proof['container_removed'] is not True
+                or proof['reason'] not in {'owner_lost','owner_disconnected','owner_stopped','deadline'}):
+            raise Refusal('interrupted_cleanup_proof_required')
+        if operation['status'] == 'unknown':
+            return operation
+        return self.store.mark_unknown(self.mandate.mission, principal, operation_id,
+            'read_owner_interrupted', expected_operation_version=operation['version'])
+
     def reconcile_completed(self, principal, operation_id):
         """Retrieve and settle a completed receipt after stop; no dispatch."""
         assert_host_private(self.store.path, (self.store.path.parent,), 'read_register_permissions_unsafe')

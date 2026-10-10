@@ -49,8 +49,48 @@ class ReadBrokerLaunchTests(unittest.TestCase):
             'max_delegates':0,'expires_at':200},authority=True)
         self.proposal = {'action':'read_source','operation_id':'operation','expected_version':1}
         self.fake = FakeDocker(report(self.snapshot.read_bytes())+b'\n')
-        self.patcher = patch('leo.control_r21.read_launcher.DockerTransport',return_value=self.fake)
+        self.patcher = patch('leo.control_r21.read_watchdog.GuardedTransport',return_value=self.fake)
         self.patcher.start(); self.addCleanup(self.patcher.stop)
+
+    def interrupted_fixture(self, reason='owner_lost', name_matches=True):
+        payload=self.broker._launch_payload(self.proposal)
+        self.broker.budget.reserve('read-launch','operation','root',1)
+        self.broker.store.begin_operation('read-launch','root','operation',payload,1)
+        claim_id=hashlib.sha256(json.dumps(['read-launch','operation'],separators=(',',':')).encode()).hexdigest()
+        claim=self.claims/(claim_id+'.claim')
+        name='leo-read-'+'a'*32
+        claim.write_text(name+'\n'); claim.chmod(0o600)
+        proof=Path(str(claim)+'.watchdog')
+        proof.write_text(json.dumps({'container':name if name_matches else 'leo-read-'+'b'*32,
+            'reason':reason,'container_removed':True})); proof.chmod(0o600)
+        self.latch.trip('owner_stop')
+        return proof
+
+    def test_interrupted_reconciliation_keeps_budget_and_never_launches(self):
+        self.interrupted_fixture()
+        result=self.fresh().reconcile_interrupted('root','operation')
+        self.assertEqual(result['status'],'unknown')
+        self.assertIsNone(result['result'])
+        self.assertEqual(self.fresh().reconcile_interrupted('root','operation'),result)
+        self.assertEqual(self.broker.budget.status('read-launch')['reserved_units'],1)
+        self.assertEqual(self.fake.starts,0)
+
+    def test_interrupted_reconciliation_rejects_other_container_proof(self):
+        self.interrupted_fixture(name_matches=False)
+        with self.assertRaisesRegex(Refusal,'interrupted_cleanup_proof_required'):
+            self.fresh().reconcile_interrupted('root','operation')
+        self.assertEqual(self.operation()['status'],'pending')
+
+    def test_interrupted_reconciliation_rejects_normal_cleanup_as_completion(self):
+        self.interrupted_fixture(reason='normal_cleanup')
+        with self.assertRaisesRegex(Refusal,'interrupted_cleanup_proof_required'):
+            self.fresh().reconcile_interrupted('root','operation')
+
+    def test_interrupted_reconciliation_requires_habilitated_writer(self):
+        self.interrupted_fixture()
+        with self.assertRaises(AccessDenied):
+            self.fresh().reconcile_interrupted('untrusted','operation')
+        self.assertEqual(self.operation()['status'],'pending')
 
     def fresh(self, **changes):
         return ReadBroker(self.db,changes.get('mandate',self.mandate),snapshot_adapter=changes.get('adapter',self.adapter),

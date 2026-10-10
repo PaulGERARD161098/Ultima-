@@ -1,5 +1,53 @@
 # Reprise courante — 10 octobre 2026, test cible réussi, candidat lecture inerte
 
+## FINUBAR externe préparé — 10/10/2026, accord à 16 h 44 Paris
+
+Cette section définit la reprise courante ; les jalons suivants sont historiques.
+But : supprimer le worker hors réseau après SIGKILL du processus propriétaire,
+puis reprendre le registre sans rejouer la mission. Préparation dans PR365
+seulement ; dépôt privé de contrôle exclu, aucune installation ni activation.
+
+- Le lanceur normal crée un guardian FINUBAR distinct, détaché par setsid.
+  Identité du propriétaire épinglée par pidfd Linux, accusé prêt avant create.
+  Seul le guardian détient DockerTransport : plan exact, une création et un
+  démarrage, requêtes privées bornées ; aucun démarrage tardif par le propriétaire
+  après sa mort. Pendant une commande Docker, la détection attend sa borne
+  existante (15 s) ; les suppressions/observations ont aussi des bornes.
+- Perte du propriétaire, échéance ou arrêt : pierre tombale durable existante
+  avant nettoyage, sans attendre un verrou SQL. Fermeture du client, suppression
+  et observation d'absence sont tentées indépendamment ; une erreur produit une
+  preuve négative. Le fichier host-only claim.watchdog est une attestation de
+  nettoyage atomique, PAS un reçu de mission ou un second registre.
+- reconcile_interrupted recontrôle mandat, source, writer, contexte et preuve
+  exacte : pending devient unknown ; unknown reste idempotent. Aucun résultat
+  completed inventé et aucune réservation libérée. Reprise refusée après arrêt.
+- Huit tests runtime du guardian et quatre de réconciliation ajoutés. Le relais
+  Docker éprouve SIGKILL d'un propriétaire distinct du PID 1 du helper pendant
+  qu'un enfant détaché tourne ; suppression réelle et conteneur voisin préservé.
+  Cas négatif connu : neutraliser rm seulement dans la fixture doit laisser le
+  worker réel vivant, produire une preuve false et empêcher la réconciliation.
+  Le runner supprimera ensuite ce survivant fictif. Douze scénarios Docker
+  préparés au total ; résultats du présent SHA encore à mesurer en CI isolée.
+- ZS : réutilisation des modules, claims, latch et registres ; bibliothèque
+  standard Python, primitives Linux et Docker existant, aucune dépendance
+  additionnelle ni service acheté. Simplicité d'exploitation permanente encore
+  à éprouver sur l'hébergement choisi.
+
+Limites : Linux avec pidfd et hôte propriétaire mono-thread ; la perte du
+guardian lui-même ou de toute sa cgroup/VM n'est pas couverte par cette boucle.
+Un service externe et sa recette d'installation restent nécessaires pour cela.
+Aucun modèle, accès GitHub vivant du worker, secret, identité opérateur réelle,
+appel payant ou réception LV1. Le kit pilote existant n'inclut pas ce candidat.
+Le contrat reste v1.1 et le runtime refuse toujours la compétence incompatible.
+
+État antérieur mesuré : tête a4b28b0d28e1af1b135d77711322c9bf0775fc99,
+CI LV138057628222, Tests38057628213 et Auth38057628230 réussies ;
+266 tests runtime et dix scénarios Docker réussis. Ces preuves ne sont pas
+automatiquement transférables au nouveau changement.
+Prochaine action : mesurer le présent candidat en CI, puis préparer la
+supervision du guardian et l'installation figée hors droits de Léo.
+
+
 ## Raccord Broker–lanceur préparé — 10/10/2026, accord à 15 h 46 Paris
 
 Cette section définit la reprise courante ; les jalons ci-dessous restent
