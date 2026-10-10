@@ -1,5 +1,49 @@
 # Reprise courante — 10 octobre 2026, test cible réussi, candidat lecture inerte
 
+## Lanceur de lecture préparé — 10/10/2026, suite autorisée à 15 h 28 Paris
+
+Cette section est l'état courant ; le candidat et les jalons précédents restent
+historiques. Réutilisation de Docker, ControlLatch et de la CI existante, sans
+nouveau service ni dépendance : ce choix réduit l'installation et l'exploitation.
+
+- `read_launcher.py` ajoute une capacité hôte offline à usage unique : claim
+  privé durable avant création, empreintes SHA256 revues obligatoires, copies
+  figées dans un staging privé, commande create fermée, puis start du CID acquis.
+- Deux montages RO uniquement côté worker ; réseau none, UID65534, root RO,
+  caps retirées, no-new-privileges, PID/mémoire/CPU bornés et aucun log Docker.
+- Délai worker <=120s (30s par défaut), collecte stdout <=49153 octets et stderr
+  <=4096 octets ; appels de gestion Docker <=15s chacun, métadonnées <=8192
+  octets par flux. Nettoyage a ses propres bornes ; le délai worker ne prétend
+  pas borner toute la durée hôte à lui seul.
+- Sortie comparée octet pour octet au rapport déterministe attendu et état
+  Docker exited/code0 sans OOM contrôlé. Client arrêté puis conteneur supprimé
+  et absence contrôlée avant succès. Un défaut de nettoyage inscrit l'arrêt.
+- Une création sans CID certain refuse le succès et inscrit l'arrêt : aucun
+  start ultérieur. Son nom reste dans le claim ; une création différée peut
+  laisser un conteneur INERTE à réconcilier par l'opérateur, jamais rejoué.
+- 17 scénarios runtime ajoutés (transport réel par pipes dans le bac isolé,
+  anti-rejeu depuis hôte neuf, arrêt, timeout, limite, sortie forgée, erreurs de
+  nettoyage et empreintes). Six scénarios Docker réels préparés : nominal,
+  isolation, arrêt avec descendant passé en nouvelle session, timeout, sortie
+  excessive et faux rapport. Le harnais CI fermé exécute l'application dans un
+  helper isolé, sans socket ; le runner stdlib ne relaie qu'une commande exacte
+  et un CID réservé. Aucun secret ou accès de production dans ces fixtures.
+
+Preuves avant publication : syntaxe AST vérifiée ; revue indépendante favorable sur ce candidat offline et son harnais, après corrections.
+Les tests n'ont PAS été exécutés localement (Docker absent). Lire le verdict CI
+sur le SHA final dans la PR365 avant de déclarer cette boucle éprouvée.
+
+Limites : lanceur offline autonome du Broker, pas encore un pipeline de mission
+ni une admission métier ; claim != reçu métier. Pas de GitHub live, modèle,
+credential runtime, facture ni compatibilité skill1.4. Arrêt après SIGKILL de
+l'hôte entier nécessite un watchdog FINUBAR externe, non livré ici. Pas de kit
+installable pour le nouveau lanceur, pas de modification du contrôle exclu,
+pas de merge, installation ou activation ; ne pas réinitialiser le pilote completed.
+
+Prochaine action après CI/revue : relier ce lanceur aux admissions/réservations
+et reçus durables existants, puis définir la compatibilité1.4 avant raccord réel.
+
+
 ## Candidat de lecture inerte — 10/10/2026
 
 Préparation autorisée par Paul à 15 h 05 Paris. Aucun accès au contrôle exclu,

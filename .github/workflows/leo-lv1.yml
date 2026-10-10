@@ -118,6 +118,10 @@ jobs:
         run: |
           LV1_PILOT_IMAGE="$(cat /tmp/lv1-python-image-digest)"
           python3 -I tests/lancer-pilot-containers.py "$LV1_PILOT_IMAGE"
+      - name: Éprouver le lanceur de lecture via un relais Docker fermé
+        run: |
+          LV1_READ_IMAGE="$(cat /tmp/lv1-python-image-digest)"
+          python3 -I tests/lancer-read-containers.py "$LV1_READ_IMAGE"
       - name: Construire le kit candidat inerte dans le bac à sable
         env:
           LV1_SOURCE_SHA: ${{ github.event.pull_request.head.sha }}
@@ -242,5 +246,6 @@ jobs:
               --source-sha 220fb9515291c9e62c076d06e4fa3dc608166db7 \
               --target-sha fb7daac613a0828d4135333fbd27a47102323211 \
               --integration-sha 2c8b70638c73949eb8e5485b0f2280627f5526b3
+
 
 
