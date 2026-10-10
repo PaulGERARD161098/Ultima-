@@ -101,7 +101,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-10T12:00:29.590Z",
+        "lecture_le": "2026-10-10T12:15:14.121Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -168,7 +168,7 @@ export default {
       "mesure_le": "2026-10-08",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-10T12:00:29.606Z",
+        "lecture_le": "2026-10-10T12:15:14.138Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -236,7 +236,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-10T12:00:29.605Z",
+        "lecture_le": "2026-10-10T12:15:14.137Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -294,7 +294,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-10T12:00:29.606Z",
+        "lecture_le": "2026-10-10T12:15:14.138Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -362,7 +362,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-10T12:00:29.605Z",
+        "lecture_le": "2026-10-10T12:15:14.137Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -466,7 +466,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-10T12:00:29.605Z",
+        "lecture_le": "2026-10-10T12:15:14.136Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -498,8 +498,8 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-10-10",
-          "quoi": "10/10 : Directive ZS posée ; ZOH à jour (série après J4) ; devis SOLA 2 gainables au gabarit RenoDevis ; KNICKERBOCKER retrouvé ; leçons v83.",
-          "commit": "84be2a991d6027a5d2852595bc275fd15f0b2c9a"
+          "quoi": "10/10 : Directive ZS posée ; ZOH à jour (série après J4) ; devis SOLA 2 gainables au gabarit RenoDevis ; KNICKERBOCKER retrouvé ; leçons v86.",
+          "commit": "708dd6c479af96f2fc0f19857bf69fe30a8fa76c"
         },
         "prochaine_action": "Reprendre « Léo partout sans candidats » (boucle du 06/10) : fournir les candidats, ou ne pas offrir l'outil là où la page ne peut pas l'exécuter.",
         "bloque_par": [
@@ -522,7 +522,7 @@ export default {
             "depuis": "2026-10-08"
           },
           {
-            "quoi": "LEÇONS v83 (10/10) dans Ultima seulement : les neuf autres dépôts sont en retard, et lecons-chemins n'a pas pu tourner (clones absents de la séance).",
+            "quoi": "LEÇONS v86 (10/10) dans Ultima seulement : les neuf autres dépôts sont en retard, et lecons-chemins n'a pas pu tourner (clones absents de la séance).",
             "depuis": "2026-10-08"
           },
           {
@@ -573,7 +573,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-10T12:00:29.567Z",
+        "lecture_le": "2026-10-10T12:15:14.100Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -639,7 +639,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-10T12:00:29.606Z",
+        "lecture_le": "2026-10-10T12:15:14.138Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -745,7 +745,7 @@ export default {
       "mesure_le": "2026-10-09",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-10T12:00:29.606Z",
+        "lecture_le": "2026-10-10T12:15:14.138Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -804,7 +804,7 @@ export default {
       "mesure_le": "2026-10-04",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-10T12:00:29.606Z",
+        "lecture_le": "2026-10-10T12:15:14.138Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [

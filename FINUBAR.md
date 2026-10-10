@@ -32,7 +32,7 @@
   },
   "dernier_arret": {
     "le": "2026-10-10",
-    "commit": "84be2a991d6027a5d2852595bc275fd15f0b2c9a",
+    "commit": "708dd6c479af96f2fc0f19857bf69fe30a8fa76c",
     "quoi": "10/10 : Directive ZS posée ; ZOH à jour (série après J4) ; devis SOLA 2 gainables au gabarit RenoDevis ; KNICKERBOCKER retrouvé ; leçons v86."
   },
   "prochaine_action": "Reprendre « Léo partout sans candidats » (boucle du 06/10) : fournir les candidats, ou ne pas offrir l'outil là où la page ne peut pas l'exécuter.",
