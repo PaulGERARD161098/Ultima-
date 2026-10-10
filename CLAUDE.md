@@ -1,12 +1,12 @@
 # CLAUDE.md — Ultima (protocoles permanents de travail avec Paul)
 
-## 🧭 LES CINQ DIRECTIVES MAÎTRESSES — on commence toujours par elles
+## 🧭 LES SIX DIRECTIVES MAÎTRESSES — on commence toujours par elles
 
-Cinq directives gouvernent tout le travail. **Aucune ne prime sur les autres :
+Six directives gouvernent tout le travail. **Aucune ne prime sur les autres :
 EB fixe le cap, JL le sens et le plan, EL verrouille le chemin, DR exige la
-preuve après coup, ZS vérifie que ce qu'on crée est de son temps.** Toute boucle
-se lit à travers les cinq avant d'être ouverte — et DR la rouvre, elle, une fois
-refermée.
+preuve après coup, ZS vérifie que ce qu'on crée est de son temps, MS que ce
+qu'on fait rapproche d'une vente.** Toute boucle se lit à travers les six avant
+d'être ouverte — et DR la rouvre, elle, une fois refermée.
 
 | | Nom | Ce qu'elle impose |
 |---|---|---|
@@ -15,6 +15,7 @@ refermée.
 | **EL** | Edouard Lebrun — le chemin | **Comment on y va** : le comment entièrement défini et assumé AVANT la première ligne de travail. |
 | **DR** | le dry run — la preuve | **Ce qui prouve qu'on y est** : ré-éprouver systématiquement ce qui a été livré, et patcher sur place ce que la ré-épreuve révèle. Trois fois par jour. |
 | **ZS** | l'époque | **Avec quoi on le fait** : avant de créer, la solution retenue est-elle moderne pour l'année en cours, la plus simple, la plus rapide à mettre en place et la plus économique, avec ce que Paul a déjà sous la main ? |
+| **MS** | la vente | **Pour qui on le fait** : est-ce que cette action rapproche du prochain client, du prochain contrat ? Toujours un axe de vente en tête. |
 
 ### 🔒 Directive EL (Edouard Lebrun) — dictée par Paul le 2026-08-01
 
@@ -135,6 +136,41 @@ chemin, DR la preuve. **ZS juge l'époque** : ce qu'on crée doit être de son t
   d'Ultima (JL) ;
 - **sacrifier la sécurité, la RGPD ou un gate à la nouveauté.**
 
+### 💼 Directive MS — dictée par Paul le 2026-10-10
+
+Aussi puissante qu'EB, JL, EL, DR et ZS. ZS juge l'époque de ce qu'on crée ;
+**MS juge à qui ça sert commercialement.**
+
+> Paul, 10/10 : *« est-ce que mes actions me rapprochent du prochain client, du
+> prochain contrat ? Toujours avoir un axe de vente en tête. »*
+
+**La question, posée avant d'ouvrir une boucle et relue en la fermant** :
+*quel client, quel contrat cette action rapproche-t-elle — et de combien ?*
+
+**Comment elle s'applique (Directive EL)** :
+- **Elle entre dans le format 6 points, au ① *le but*** : le but d'une boucle
+  nomme le client ou le contrat qu'elle rapproche (un artisan à signer, un devis
+  à encaisser, un pro à embarquer), ou dit franchement qu'elle n'en rapproche
+  aucun et pourquoi on la fait quand même.
+- **Elle ordonne les priorités** : entre deux boucles prêtes, celle qui
+  rapproche d'un encaissement ou d'une signature passe devant. *Premier arbitrage
+  rendu sous MS, le 10/10 : « l'encaissement d'abord » — Stripe et Gmail avant
+  la suite de J4, parce que J4 prépare le deuxième pro et pas le premier euro.*
+- **Elle se mesure, elle ne se déclare pas** : « rapproche d'une vente » se dit
+  avec un chiffre lu à sa source (devis signés, paiements, pros actifs, rendez-vous
+  tenus), jamais avec une impression.
+- **La trace** : tout cadrage porte une ligne MS — le client ou le contrat visé,
+  et l'indicateur qui dira si on s'en est rapproché.
+
+⛔ **Ce que MS n'autorise pas** :
+- **promettre ce qu'on ne tient pas** pour signer plus vite (RenoBoost §12.2 :
+  le rendez-vous tenu se promet, la signature non) ;
+- **contacter un client ou un prospect sans mandat** : les envois réels restent
+  derrière leur gate ;
+- **sacrifier la sécurité, la RGPD, un gate ou la preuve (DR)** à une vente ;
+- **abandonner une boucle en cours** parce qu'une autre paraît plus vendeuse :
+  on la boucle ou on la reporte nommément (EB).
+
 ## 🎯 Objectif final — à ne JAMAIS oublier
 
 **Directive JL (Paul, 2026-07-18 — l'horizon ; tout travail doit y être
@@ -209,7 +245,7 @@ aujourd'hui ? » + 4 quadrants. Un repo, mémoire inter-segment, sécurité rele
 
 ## 🟢 Protocole DÉBUT de session
 
-0. **Relire les cinq directives maîtresses (EB, JL, EL, DR, ZS) en tête de ce fichier.**
+0. **Relire les six directives maîtresses (EB, JL, EL, DR, ZS, MS) en tête de ce fichier.**
    C'est le premier geste de toute session : elles conditionnent la lecture de
    tout le reste.
 1. Lire CADRAGE-ULTIMA.md (section ÉTAT) + roadmaps + `memoire/` (profil,

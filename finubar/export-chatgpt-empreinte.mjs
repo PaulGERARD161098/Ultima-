@@ -58,7 +58,7 @@ const FIN = /^##\s.*Objectif final/m;
 
 // Ce que la section DOIT contenir pour qu'on accepte de la hacher.
 const MINIMUM_CARACTERES = 500;
-const SIGLES = ['EB', 'JL', 'EL', 'DR', 'ZS'];
+const SIGLES = ['EB', 'JL', 'EL', 'DR', 'ZS', 'MS'];
 
 // L'empreinte telle qu'elle apparaît DANS les blocs à coller — donc lisible,
 // pas un commentaire HTML : Paul doit pouvoir la lire dans ChatGPT et la dire.

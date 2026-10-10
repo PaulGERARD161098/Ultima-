@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-10-10",
-    "commit": "2d6e8fd88fbc4552804e19a2f331d58c01a7be59",
-    "quoi": "10/10 : Directive ZS ; devis SOLA 2 gainables puis 2 monosplits ; leçons v86 (Ultima) ; lecons-chemins voit les chemins partiels."
+    "commit": "6f640a3c476dbd0e693939afacfb47bef9132436",
+    "quoi": "10/10 : Directive MS posée (la vente : rapprocher du prochain client, du prochain contrat) ; renvois dans RenoDevis et RenoBoost."
   },
   "prochaine_action": "Reprendre « Léo partout sans candidats » (boucle du 06/10) : fournir les candidats, ou ne pas offrir l'outil là où la page ne peut pas l'exécuter.",
   "bloque_par": [
