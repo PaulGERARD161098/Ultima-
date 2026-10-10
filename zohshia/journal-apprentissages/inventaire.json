@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "mesure_le": "2026-10-10T23:21:36.337Z",
+  "perimetre": "Arbre local ; empreintes de fichiers, aucune preuve d’exécution des raccordements.",
+  "automatique": "non_recu",
+  "sources": [
+    {
+      "chemin": "zohshia/journal-apprentissages/badge.json",
+      "etat": "lu",
+      "octets": 406,
+      "sha256": "9d21421cd16f60f22d0d6129961293fc14c7c53fbdb3f26b861beb7346608cc2"
+    },
+    {
+      "chemin": "zohshia/journal-apprentissages/TECHNO.md",
+      "etat": "lu",
+      "octets": 3967,
+      "sha256": "f53d53a11915aa1c507f447a2ae3b4603a82f29244d5d19636f6b5a6d55f451a"
+    },
+    {
+      "chemin": "zohshia/journal-apprentissages/UTILISER.md",
+      "etat": "lu",
+      "octets": 3177,
+      "sha256": "730465b1b8534e866f9f5480f04b0245e391e2d4520b2b2fdd616b35fba15462"
+    },
+    {
+      "chemin": "zohshia/journal-apprentissages/MISE-EN-SERVICE.md",
+      "etat": "lu",
+      "octets": 3297,
+      "sha256": "bedadbd8aa8b94b572aff4fa37825dd9a0216dc5ea4b50795881f4c1a0bb0aaa"
+    },
+    {
+      "chemin": "memoire/LECONS.md",
+      "etat": "lu",
+      "octets": 169768,
+      "sha256": "8e33a27b8cf10467997802f45014421d6d685df8403ce794383753cbe85a9ba4"
+    },
+    {
+      "chemin": "memoire/JOURNAL-APPRENTISSAGES.json",
+      "etat": "lu",
+      "octets": 7286,
+      "sha256": "95d1ffdf7514b931fd15aa1c79af517f5b4e1c8c5c3e28598d3fce25f082a89e"
+    },
+    {
+      "chemin": "memoire/LECONS-PROCEDURE.md",
+      "etat": "lu",
+      "octets": 3503,
+      "sha256": "707bb9fa56c629ed09612189063d652c51a7811f3086fdb45cc9f6d4ce59d0e2"
+    },
+    {
+      "chemin": "finubar/lecons-rappel.mjs",
+      "etat": "lu",
+      "octets": 10594,
+      "sha256": "d168cea046d151956887cd7ef8d2514f93e9034f4cc70261ad30e4bbdac596b1"
+    },
+    {
+      "chemin": "outils/journal-apprentissages/consulter.mjs",
+      "etat": "lu",
+      "octets": 4773,
+      "sha256": "0fdcfcb6dccba7155a05cdd4a21788f0a66a1ee978f22e3d8c7412a04b1eed68"
+    }
+  ],
+  "complet": true
+}

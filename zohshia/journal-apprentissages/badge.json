@@ -1,0 +1,10 @@
+{
+  "ordre": 3,
+  "badge": "Journal d’apprentissages",
+  "etat": "Préparé — raccordement automatique non activé",
+  "onglets": [
+    { "id": "techno", "titre": "Ce que fait la techno", "source": "TECHNO.md" },
+    { "id": "usage", "titre": "Début, travail et clôture", "source": "UTILISER.md" },
+    { "id": "service", "titre": "Mise en service et preuves", "source": "MISE-EN-SERVICE.md" }
+  ]
+}

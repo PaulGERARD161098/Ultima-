@@ -11,6 +11,7 @@
 | Élément | Ce qu'on y trouve |
 |---|---|
 | `renodevis/` | Le plan de la techno RénoDevis (`TECHNO.md`), le guide et la check-list pour la mettre en service chez un pro (`AJOUTER-UN-ARTISAN.md`), l'inventaire mesuré (`inventaire.json`), l'extraction du code neutre (`extraire.mjs`) et la base neuve prouvée (`base/`) |
+| `journal-apprentissages/` | Le journal d’apprentissages : plan neutre, consultation locale, collecte des pièces et recette ouverture / travail / clôture. Préparé ; raccordement automatique non activé |
 
 ## Comment on l'invoque
 
@@ -39,3 +40,4 @@ plus, la page ne change pas. Après toute modification d'un fichier pointé :
 STOCKE pas — il s'EXTRAIT à la demande d'un commit du dépôt de référence, pour
 être toujours à jour (`renodevis/extraire.mjs`) ; et aucun bouton n'agit depuis
 l'écran (pas d'« extraire » en ligne).
+
