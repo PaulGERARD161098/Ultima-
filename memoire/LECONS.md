@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v80 2026-10-09 sha256:b073f12f7279 -->
+<!-- lecons:empreinte v81 2026-10-10 sha256:4884cea131cf -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1650,6 +1650,23 @@ formulaire), il dit **avant** : « ne capture pas cet écran ; si tu veux me
 montrer le résultat, cadre la seule zone Résultat ». Masquer un caractère n'est
 pas masquer — le dire avec le nombre d'essais qui reste. Et si la capture arrive
 quand même, **la rotation est la première action**, pas une note de fin.
+
+**UN DEVIS D'ARTISAN SORT DE SON GABARIT ET DE SES RÈGLES, JAMAIS D'UNE MISE EN
+PAGE IMPROVISÉE** *(2026-10-10, RenoDevis — devis SOLA)*. Quand Paul dit « devis
+pour X », le livrable est le document que X envoie à ses clients. Pour SOLA :
+le générateur `RenoDevis/lib/pdfSola.ts` (logo, fond, RGE, décennale, RIB),
+nourri des libellés d'un devis SOLA réel. Les prix se chiffrent AVEC les règles
+écrites, lues avant le premier chiffre : `RenoDevis/docs/SOLA-MATRICE-20261001.md`
+(pose 500 € HT la demi-journée ; apport d'affaires = PU produits × 1,10, pose
+jamais majorée). Et la note interne du devis repris (`extra.note_privee`) se lit :
+elle disait que le prix Koolnova était ESTIMÉ, pas constaté.
+*Ce que ça a coûté* : un tableau HTML maison puis un PDF générique livrés comme
+« devis » — *« Utilise le devis Sola, jamais un truc comme ça »* — puis trois
+refontes : pose à 800 €/j au lieu de 1 000, apport d'affaires oublié, plénum
+Koolnova donné pour sûr.
+⛔ **La règle** : avant de chiffrer pour un artisan, chercher dans son dépôt le
+gabarit ET la matrice de prix (`grep -ri "<artisan>" lib docs`) ; demander
+d'emblée « apport d'affaires : oui/non ? » si rien ne le dit.
 
 ## 4. Conduire une boucle
 
