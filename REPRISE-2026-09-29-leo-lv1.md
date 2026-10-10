@@ -1,5 +1,57 @@
 # Reprise courante — 10 octobre 2026, test cible réussi, candidat lecture inerte
 
+## Raccord Broker–lanceur préparé — 10/10/2026, accord à 15 h 46 Paris
+
+Cette section définit la reprise courante ; les jalons ci-dessous restent
+historiques. But : une mission de lecture hors réseau traverse les autorisations,
+réservations et reçus existants avant de lancer le worker. Aucun nouveau moteur
+ni registre : ReadBroker, MissionStore, BudgetLedger, ControlLatch et le lanceur
+précédent sont réutilisés. Pas de service ou dépendance supplémentaire.
+
+- ReadBroker reçoit une ReadLaunchConfig exacte fournie par l'hôte uniquement.
+  Le worker ne choisit toujours que action/operation_id/expected_version ; pas
+  de chemin, image, identité, empreinte, configuration ou autorité libre.
+- Réserve avant begin_operation ; payload ancré à l'instantané, image, SHA256
+  worker, limite temporelle et namespace de claims. Les claims host-only sont
+  dérivés de mission/opération et restent une garde anti-rejeu, PAS un reçu.
+- Admissions courtes sous ControlLatch puis transaction du registre commun
+  avant create et start : mandat, version, identité/writer, source, opération
+  pending et réservation exacte recontrôlés. Aucun verrou maintenu durant tout
+  le worker ; le poll recontrôle stop global/mission, expiration et version.
+- Résultat exact et suppression confirmée du conteneur avant complete_operation,
+  puis settle. Si une réponse est perdue APRÈS commit du reçu, un nouvel hôte
+  peut le retrouver et solder après stop, sans nouveau lancement. Si la preuve
+  n'a pas été committée, pending/unknown garde la réserve et ne repart jamais.
+  Ni le claim ni le rapport attendu ne fabriquent un completed manquant.
+- 21 scénarios runtime préparés et quatre épreuves Docker de mission ajoutées
+  au relais existant : nominal + reprise sans replay, réponse perdue après commit
+  puis réconciliation après arrêt, arrêt d'une mission avec enfant réellement
+  détaché (marqueur APRÈS setsid), budget nul sans create/start/claim/réservation.
+  Dix scénarios Docker au total avec les six précédents. Une reprise d'un second
+  hôte pendant poll doit voir pending, sans second départ ni consommation.
+
+État mesuré du jalon précédent, SHA38b6d5747d57dacacceec49055dc89fa3cc92695 :
+les trois workflows ont terminé avec succès ; runtime245tests et six scénarios
+Docker réussis. Ne PAS transférer ces succès au nouveau SHA sans lecture CI.
+
+Preuve actuelle avant publication : syntaxe AST valide, revue indépendante
+statique favorable ; tests du raccord préparés, pas exécutés localement (Docker
+absent). Le verdict mesuré sur le SHA final sera consigné dans la PR365.
+
+Limites : fixture offline uniquement, pas d'identité externe réellement résolue,
+GitHub live, modèle, appel facturé ou compatibilité skill1.4. Les lectures SQLite
+peuvent attendre10s, create Docker15s ; le poll et l'échéance ne garantissent pas
+un arrêt instantané entre appels bloquants. SIGKILL de l'hôte entier exige encore
+un watchdog FINUBAR externe, non livré. Création incertaine : arrêt persistant et
+réconciliation opérateur du nom réservé, jamais relance. Pas de kit installable
+pour ce raccord, merge, installation/activation ni accès au contrôle exclu.
+Ne pas réinitialiser le pilote completed ni toucher les archives.
+
+Prochaine action après ces preuves : préparer le watchdog externe de l'instance
+et sa réconciliation après disparition de l'hôte ; ensuite traiter explicitement
+la compatibilité1.4 et les médiateurs GitHub/modèle avant toute mission réelle.
+
+
 ## Lanceur de lecture préparé — 10/10/2026, suite autorisée à 15 h 28 Paris
 
 Cette section est l'état courant ; le candidat et les jalons précédents restent

@@ -99,7 +99,7 @@ def isolated(mode, image):
             out, err, rc, drained = self.request('poll')
             out, err = base64.b64decode(out, validate=True), base64.b64decode(err, validate=True)
             self.seen = (self.seen + out)[-128:]
-            if mode == 'stop' and b'child-ready' in self.seen:
+            if mode in ('stop','mission-stop') and b'child-ready' in self.seen:
                 latch.trip('owner_stop')
             return out, err, rc, drained
 
@@ -111,6 +111,68 @@ def isolated(mode, image):
         latch = ControlLatch(root / 'control.sqlite', initialize=True)
         worker, snapshot = Path('/inputs/worker.py'), Path('/inputs/snapshot.json')
         plan = WorkerPlan(image, worker, snapshot)
+        if mode.startswith('mission'):
+            from unittest.mock import patch
+            from leo.control_r21.read_candidate import ReadBroker, ReadLaunchConfig, SnapshotAdapter
+            from leo.runtime.broker import mandate_record
+            from leo.runtime.budget import BudgetError
+            from leo.runtime.policy import Mandate
+            claims=root/'claims'; claims.mkdir(mode=0o700)
+            adapter=SnapshotAdapter(json.loads(snapshot.read_bytes()))
+            config=ReadLaunchConfig(plan,hashlib.sha256(worker.read_bytes()).hexdigest(),claims,max_seconds=8)
+            mandate=Mandate('read-ci','paul',1,frozenset({'root'}),frozenset({'PaulGERARD161098/Ultima-'}),
+                frozenset({'read_source','status'}),expires_at=200)
+            def fresh():
+                return ReadBroker(root/'mission.sqlite',mandate,snapshot_adapter=adapter,
+                    clock=lambda:100,control_latch=ControlLatch(latch.path),launch_config=config)
+            broker=fresh()
+            broker.store.create_mission('read-ci','paul','ultima',mandate_record(mandate),
+                {'repository':'PaulGERARD161098/Ultima-'},[],['root'],authority=True)
+            broker.budget.create('read-ci',{'max_units':0 if mode=='mission-budget' else 2,
+                'max_calls':2,'max_attempts':2,'max_delegates':0,'expires_at':200},authority=True)
+            proposal={'action':'read_source','operation_id':'read-ci-op','expected_version':1}
+            # Exact application constructor and guards; only Docker transport
+            # is mediated by the same fixed runner policy as offline tests.
+            with patch('leo.control_r21.read_launcher.DockerTransport',side_effect=Relay):
+                if mode=='mission-budget':
+                    try: broker.execute('root',proposal)
+                    except BudgetError as error: require(str(error)=='units_exhausted','wrong_budget_refusal')
+                    else: raise RuntimeError('zero_budget_launched')
+                    require(broker.budget.status('read-ci')['calls']==0 and not list(claims.iterdir()),
+                            'zero_budget_reserved_or_claimed')
+                elif mode=='mission-stop':
+                    try: broker.execute('root',proposal)
+                    except Refusal as error: require(str(error)=='leo_agent_stopped','wrong_mission_stop_refusal')
+                    else: raise RuntimeError('stopped_mission_completed')
+                    op=fresh().store.get_operation('read-ci','root','read-ci-op')
+                    require(op['status']=='unknown' and broker.budget.status('read-ci')['reserved_units']==1,
+                            'stopped_operation_did_not_preserve_uncertainty')
+                    try: fresh().execute('root',proposal)
+                    except Refusal as error: require(str(error)=='leo_agent_stopped','fresh_stop_lost')
+                    else: raise RuntimeError('stopped_mission_replayed')
+                elif mode=='mission-lost':
+                    original=broker.store.complete_operation
+                    def commit_then_lose(*args,**kwargs):
+                        original(*args,**kwargs)
+                        raise OSError('synthetic_response_lost')
+                    with patch.object(broker.store,'complete_operation',side_effect=commit_then_lose):
+                        try: broker.execute('root',proposal)
+                        except OSError: pass
+                        else: raise RuntimeError('lost_response_not_exercised')
+                    require(broker.budget.status('read-ci')['reserved_units']==1,'lost_response_reservation_missing')
+                    latch.trip('owner_stop')
+                    recovered=fresh().reconcile_completed('root','read-ci-op')
+                    require(recovered['status']=='completed' and recovered['result']['container_removed'] is True
+                            and broker.budget.status('read-ci')['used_units']==1,'completed_receipt_not_recovered')
+                else:
+                    result=broker.execute('root',proposal)
+                    require(result['status']=='completed' and result['result']['container_removed'] is True,
+                            'mission_result_not_completed')
+                    require(fresh().execute('root',proposal)==result,'fresh_host_receipt_changed')
+                    require(broker.budget.status('read-ci')['calls']==1 and broker.budget.status('read-ci')['used_units']==1,
+                            'mission_dispatch_replayed_or_not_settled')
+            sys.stdout.buffer.write(encode({'done':mode})); sys.stdout.buffer.flush()
+            return
         # Validate runner relay's start/stream implementation against real
         # production DockerTransport in the runtime unit suite separately.
         launcher = ReadLauncher(plan, latch, root / 'operation.claim',
@@ -168,14 +230,15 @@ s.close()
 pid=os.fork()
 if pid==0:
     os.setsid()
+    print('child-ready',flush=True)
     while True: time.sleep(.1)
-print('child-ready',flush=True)
 while True: time.sleep(.1)
 '''
     fixtures = {'nominal': baseline, 'isolation': isolation + baseline,
                 'stop': hostile, 'timeout': hostile,
                 'overflow': b"import os,time\nos.write(1,b'x'*65536)\ntime.sleep(30)\n",
-                'forged': b"print('{\"autonomous_agent\":true}')\n"}
+                'forged': b"print('{\"autonomous_agent\":true}')\n",
+                'mission':baseline,'mission-lost':baseline,'mission-stop':hostile,'mission-budget':baseline}
     for mode, code in fixtures.items():
         with tempfile.TemporaryDirectory(prefix='read-ci-') as directory:
             data = Path(directory)
@@ -276,9 +339,12 @@ while True: time.sleep(.1)
                             raise RuntimeError('relay_operation_denied')
                         helper.stdin.write(encode({'result':response})); helper.stdin.flush()
                 require(helper.wait(timeout=5)==0, 'helper_exit_failed')
-                require(command(('container','ls','--all','--quiet','--no-trunc','--filter','id='+cid))[1]=='',
-                        'owned_container_survived')
-                print('PASS read launcher:',mode,'; fresh claim refuses replay; owned container absent',flush=True)
+                if cid is not None:
+                    observed=command(('container','ls','--all','--quiet','--no-trunc','--filter','id='+cid))
+                    require(observed[0]==0 and observed[1]=='','owned_container_survived')
+                else:
+                    require(mode=='mission-budget' and reserved_name is None,'missing_expected_worker_creation')
+                print('PASS read launcher:',mode,'; scoped assertions verified; no owned container remains',flush=True)
             finally:
                 failures=[]
                 def attempt(action):
@@ -298,7 +364,7 @@ while True: time.sleep(.1)
                 for pipe in (helper.stdin,helper.stdout,helper.stderr): attempt(pipe.close)
                 attempt(selector.close)
                 require(not failures,'relay_cleanup_unconfirmed')
-    print('Offline synthetic CI only: no real operator, credentials, broker integration or model.',flush=True)
+    print('Offline synthetic CI only: broker integration tested; no real operator, credentials or model.',flush=True)
 
 
 if __name__=='__main__':

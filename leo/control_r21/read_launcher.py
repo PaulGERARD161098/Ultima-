@@ -5,6 +5,7 @@ This launches an offline witness, NOT the durable broker or a real model agent.
 An external FINUBAR watchdog is still required if the entire host is SIGKILLed.
 """
 import hashlib
+from contextlib import contextmanager
 import json
 import math
 import os
@@ -129,7 +130,7 @@ The normal operator uses DockerTransport; CI uses a closed runner relay so
 this application code can itself execute inside an isolated helper container.
 """
     def __init__(self, plan, latch, claim, *, worker_sha256, snapshot_sha256,
-                 max_seconds=30, _transport=None):
+                 max_seconds=30, _transport=None, _host_admission=None, _host_check=None):
         import re
         if type(plan) is not WorkerPlan or type(latch) is not ControlLatch:
             raise TypeError('trusted_read_host_required')
@@ -148,14 +149,27 @@ this application code can itself execute inside an isolated helper container.
         self.hashes = worker_sha256, snapshot_sha256
         self.maximum = max_seconds
         self.transport = DockerTransport() if _transport is None else _transport
+        # Host-owned broker callbacks only; never part of a worker proposal.
+        self._host_admission, self._host_check = _host_admission, _host_check
         self.lock = threading.Lock()
         self.used = False
 
-    def _check(self, deadline):
+    def _check(self, deadline, *, host=True):
         if self.latch.stopped(timeout=0.1):
             raise Refusal('leo_agent_stopped')
         if time.monotonic() >= deadline:
             raise Refusal('read_worker_timeout')
+        if host and self._host_check is not None:
+            self._host_check()
+
+    @contextmanager
+    def _admission(self):
+        with self.latch.admission(timeout=0.1):
+            if self._host_admission is None:
+                yield
+            else:
+                with self._host_admission():
+                    yield
 
     def _cleanup(self, name, cid, creation_unknown=False):
         client_error = None
@@ -211,7 +225,7 @@ this application code can itself execute inside an isolated helper container.
                     path.write_bytes(raw); path.chmod(0o444)
                 staged = WorkerPlan(self.plan.image, worker, snapshot)
                 self._check(deadline)
-                with self.latch.admission(timeout=0.1):
+                with self._admission():
                     creation_started = True
                     rc, out, _ = self.transport.call(_create_args(staged, name))
                 import re
@@ -219,8 +233,8 @@ this application code can itself execute inside an isolated helper container.
                     raise Refusal('read_container_create_unknown')
                 cid = out.strip().decode('ascii')
                 self._check(deadline)
-                with self.latch.admission(timeout=0.1):
-                    self._check(deadline)
+                with self._admission():
+                    self._check(deadline, host=False)
                     self.transport.start(cid)
                 output, errors = bytearray(), bytearray()
                 while True:
