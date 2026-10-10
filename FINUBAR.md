@@ -31,9 +31,9 @@
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-10-09",
-    "commit": "5acc7ebececd5d1c3f6ed95c7d2a23bb103b4206",
-    "quoi": "09/10 : déclinaison RénoBoost du devis pro cadrée (#371) et livrée dans RenoDevis (#317 #319 #320) ; leçons v80 (droits de colonne)."
+    "le": "2026-10-10",
+    "commit": "febe4593092230f14a924879166d80f059a35663",
+    "quoi": "10/10 : devis SOLA 2 gainables M71 produit au gabarit RenoDevis (brouillon PDF v4, apport d'affaires, hors base) ; KNICKERBOCKER retrouvé ; leçons v81 (gabarit et règles de l'artisan)."
   },
   "prochaine_action": "Reprendre « Léo partout sans candidats » (boucle du 06/10) : fournir les candidats, ou ne pas offrir l'outil là où la page ne peut pas l'exécuter.",
   "bloque_par": [
@@ -55,7 +55,7 @@
       "depuis": "2026-10-08"
     },
     {
-      "quoi": "LEÇONS v80 (09/10) dans Ultima seulement : les neuf autres dépôts sont en retard, et lecons-chemins n'a pas pu tourner (clones absents de la séance).",
+      "quoi": "LEÇONS v81 (10/10) dans Ultima seulement : les neuf autres dépôts sont en retard, et lecons-chemins n'a pas pu tourner (clones absents de la séance).",
       "depuis": "2026-10-08"
     },
     {
