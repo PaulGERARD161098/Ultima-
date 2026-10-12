@@ -187,8 +187,28 @@ verdicts.etatDecrit = (() => {
 // du message utilisateur) — la règle de minimisation ne bouge pas.
 verdicts.systemeSansEtat = !/AURORE|ENCLUME/.test(construireSysteme('imladrik', true));
 
+// Les directives doivent atteindre tous les quadrants et les deux modes,
+// sans ouvrir d’outil de recherche ou supprimer les confirmations existantes.
+{
+  const systemes = ['riven', 'bcp', 'adramelech', 'imladrik', 'finubar', 'ultima']
+    .flatMap((quadrant) => [false, true].map((outils) => construireSysteme(quadrant, outils)));
+  verdicts.sixDirectivesTousQuadrants = systemes.every((s) =>
+    ['EB', 'JL', 'EL', 'DR', 'ZS', 'MS'].every((sigle) => s.includes('- ' + sigle + ' :')));
+  verdicts.zsComparaisonComplete = systemes.every((s) =>
+    /simplicité, rapidité de mise en place, coût total et pertinence réelle du format/.test(s) &&
+    /nouveauté pour elle-même/.test(s) && /sources officielles datées/.test(s));
+  verdicts.zsSansRechercheInventee = systemes.every((s) =>
+    /pas d’outil de recherche/.test(s) && /choix conditionnel/.test(s) && /simuler une recherche/.test(s));
+  verdicts.msRespectePerso = systemes.every((s) =>
+    /indicateur observable/.test(s) && /personnelle.*sans imposer une vente/.test(s));
+  verdicts.supervisionSansNouveauxDroits = systemes.every((s) =>
+    /aucun outil, droit, budget, envoi, délégation ou routine/.test(s) &&
+    /propre contrôle/.test(s) && /vérifier l’état avant tout rejeu/.test(s));
+}
+
 // ---------- Bilan ----------
 console.log(JSON.stringify(verdicts, null, 2));
 const ok = Object.values(verdicts).every((v) => v === true);
 console.log(ok ? 'UNIT-LEO-VOIX OK' : 'UNIT-LEO-VOIX ECHEC');
 process.exit(ok ? 0 : 1);
+
