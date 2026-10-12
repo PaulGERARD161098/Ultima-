@@ -17,6 +17,22 @@ d'être ouverte — et DR la rouvre, elle, une fois refermée.
 | **ZS** | l'époque | **Avec quoi on le fait** : avant de créer, la solution retenue est-elle moderne pour l'année en cours, la plus simple, la plus rapide à mettre en place et la plus économique, avec ce que Paul a déjà sous la main ? |
 | **MS** | la vente | **Pour qui on le fait** : est-ce que cette action rapproche du prochain client, du prochain contrat ? Toujours un axe de vente en tête. |
 
+### Complément d'application — 12/10/2026
+
+Appliquer les six directives et les consignes de supervision au §11.2 de
+`CADRAGE-2026-09-22-leo-pilote-tout.md` et dans `.claude/agents/leo.md`.
+Ce complément précise les formulations historiques ci-dessous : JL désigne
+Ultima comme lieu de pilotage sans interdire les produits distincts de Paul ;
+MS vise les missions professionnelles et préserve l'objectif propre du perso.
+ZS compare simplicité, rapidité, coût total et pertinence du format, avec
+sources officielles actuelles et gain concret plutôt que nouveauté seule.
+Les horaires DR sont des exigences historiques, pas une preuve de routine
+active : ne pas annoncer de permanence sans mécanisme autorisé et vérifié.
+Une préparation réversible autorisée continue sans confirmations répétitives ;
+les contrôles effectifs, droits, budget, anneaux et gates restent applicables.
+Ne pas modifier son propre contrôle par apprentissage, ni ouvrir le contrôle
+privé R21 depuis Work. Toute activation produit reste à prouver séparément.
+
 ### 🔒 Directive EL (Edouard Lebrun) — dictée par Paul le 2026-08-01
 
 Aussi puissante qu'EB et JL. Quatre principes :
@@ -115,8 +131,10 @@ chemin, DR la preuve. **ZS juge l'époque** : ce qu'on crée doit être de son t
   - un **automate qui propose** plutôt qu'un champ à remplir (Directive IA de
     RénoBoost).
 - **Les quatre critères se pèsent ensemble, et « moderne » ne gagne jamais
-  seul.** Une technologie récente mais plus chère, plus lente à poser ou plus
-  complexe échoue au test, tout comme une technologie simple mais dépassée.
+  seul.** Une technologie récente ne gagne pas par son âge : retenir le meilleur
+  compromis pour le besoin, avec les quatre critères et les contraintes impératives.
+  Une solution éprouvée et maintenue peut rester la plus pertinente ; ne pas
+  déclarer une technologie dépassée sans vérifier son adéquation réelle.
 - **« Facilement accessible » veut dire officielle, documentée et disponible
   aujourd'hui** depuis les comptes de Paul. Une bibliothèque non officielle, une
   bêta fermée ou un service qui exige un nouveau contrat ne sont pas
@@ -125,8 +143,11 @@ chemin, DR la preuve. **ZS juge l'époque** : ce qu'on crée doit être de son t
   moment du cadrage (documentation officielle, recherche datée), jamais de
   mémoire. Une connaissance d'il y a deux ans présentée comme actuelle échoue
   au test, comme une valeur déduite échoue à la Directive EL.
-- **La trace** : tout cadrage porte une ligne ZS, qui dit l'alternative la plus
-  moderne considérée et le verdict sur les quatre critères.
+- **La trace** : tout cadrage substantiel porte une ligne ZS : simplicité,
+  rapidité de mise en place, coût total et pertinence réelle du format ;
+  alternative actuelle plausible, verdict, sources datées et gain vérifiable.
+  Avant tout choix produit ou technique, charger `directive-zs` si disponible.
+  Comparer seulement les options utiles et appliquer un contrôle court aux choix mineurs.
 
 ⛔ **Ce que ZS n'autorise pas** :
 - **réécrire ce qui marche parce que c'est passé de mode.** ZS juge ce que l'on
