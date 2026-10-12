@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v88 2026-10-10 sha256:53e54b8bf545 -->
+<!-- lecons:empreinte v90 2026-10-12 sha256:25cd516e5b91 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -46,6 +46,17 @@ neuf copies, et un renvoi mort se lit exactement comme un renvoi valide.
 ---
 
 ## 1. Mesurer, et croire ce qu'on mesure
+
+**UN OBJET DE TUILE N'EST PAS UN BÂTIMENT** *(2026-10-12, mon-dpe.fr)*.
+Pour surligner le logement d'un client sur la carte 3D, on prenait l'objet
+renvoyé par la tuile vectorielle au point d'adresse. Or OpenFreeMap regroupe
+parfois plusieurs bâtiments voisins dans UN seul MultiPolygon : tout le pâté de
+maisons s'est allumé en rouge, en production de preview. Paul : *« c'est
+atroce »*. Corrigé en ne gardant que la PARTIE de géométrie qui contient le
+point (`mon-dpe.fr/lib/batiment-central.ts`, test « ATROCE »).
+⛔ **Une donnée géographique se mesure dans sa forme réelle, pas dans celle
+qu'on imagine** : avant de surligner « un bâtiment », vérifier ce qu'est un
+objet de la source — un bâtiment, une partie, ou un regroupement.
 
 **UNE SONDE SE LIT EN ENTIER, PAS SUR LE CHAMP QU'ON ATTENDAIT** *(2026-10-07, RenoDevis)*.
 État des lieux « outil opérationnel » donné à Paul : « Stripe configuré, 2 artisans reliés ».
@@ -629,6 +640,21 @@ fin d'une commande lancée en arrière-plan passe par sa notification, pas par u
 `pkill` de nettoyage.*
 
 ## 2. Les garde-fous, et leur silence
+
+**QUAND L'OUTIL NE PEUT PAS VOIR, ON FABRIQUE LE BANC — TOUT DE SUITE** *(2026-10-12, mon-dpe.fr)*.
+Le proxy de la séance bloquait les tuiles IGN et OpenFreeMap : la carte 3D
+était codée à l'aveugle, et c'est Paul qui découvrait le rendu sur la preview —
+deux allers-retours, dont un « c'est atroce ». Le banc local (Chromium, tuiles
+vectorielles FACTICES fabriquées avec `geojson-vt` + `vt-pbf` déjà présents dans
+`node_modules`, injectées par `page.route`) a été monté au troisième tour ; en
+une heure il a attrapé trois défauts qu'aucun test ne voyait : le pâté de
+maisons regroupé, des sommets dédoublonnés en degrés au lieu de mètres, et un
+sol NOIR quand React Three Fiber remplaçait le matériau.
+⛔ **« Je ne peux pas le voir d'ici » n'est pas un constat de fin, c'est le
+signal de construire l'instrument** — avant la première preview, pas après la
+deuxième. Et le banc se valide lui-même : ses images factices doivent porter
+les mêmes en-têtes (CORS) que la vraie source, sinon il invente ses propres
+défauts.
 
 **UNE BOUCLE DE SABOTAGE NE SE RESTAURE PAS PAR `git checkout`** *(2026-10-10, RenoDevis)*.
 Pour prouver un correctif, on casse le code puis on restaure — et la boucle
@@ -2335,6 +2361,13 @@ jusqu'au 30/09, alors que la liste en portait **dix** : deux dépôts manquaient
 
 ## 6. Économie
 
+**`pkill -f` AVEC UN MOTIF QUE SA PROPRE COMMANDE CONTIENT TUE LE SHELL** *(2026-10-12)*.
+`pkill -f "next start -p 3123"` puis `pkill -f "http.server 8765"` : le motif
+figurait dans la ligne de commande du shell qui l'exécutait — le shell s'est tué
+lui-même (code 144), deux fois dans la séance, et une restauration de fichier
+sabotage en dépendait. ⛔ Arrêter un processus par son **PID** (relu par `ps`,
+avec un motif `[n]ext-server` qui ne se reconnaît pas lui-même), jamais par un
+`pkill -f` sur une chaîne qu'on vient de taper.
 
 **UN OUTIL LANCÉ PAR `npx` SANS INSTALLATION N'EST PAS L'OUTIL DU PROJET**
 *(2026-09-15)*. `npx eslint .` a rendu « rien à signaler » deux fois avant que
