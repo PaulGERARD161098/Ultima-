@@ -793,12 +793,17 @@ L’implémentation est séquentielle, mais la réception porte sur cette boucle
 
 #### 2. Directives et gouvernance
 
-Les quatre directives s’appliquent ensemble :
+Les six directives s’appliquent ensemble (complément de méthode demandé par Paul le 12/10/2026 ; droits et réception LV1 inchangés) :
 
 - **EB :** une boucle à la fois ; terminer et capitaliser ; réutiliser l’existant.
 - **JL :** relier le travail à sa destination et à son résultat utile pour Paul.
 - **EL :** définir le comment avant l’exécution : but, étapes, moyens, critères vérifiables, hors-périmètre et pré-mortem. Un « go » ne comble pas une information indispensable manquante.
 - **DR :** ré-éprouver l’usage et attaquer les garde-fous. Les régressions utiles restent permises ; relancer uniquement des tests verts ne constitue pas une réception.
+
+- **ZS :** avant tout choix produit ou technique, vérifier l'année en cours et les technologies réellement accessibles ; comparer simplicité, rapidité de mise en place, coût total et pertinence réelle du format. Rechercher l'alternative actuelle utile sans nouveauté pour elle-même, vérifier les données évolutives auprès de sources officielles datées et éprouver le gain promis. Charger `directive-zs` si disponible.
+- **MS :** relier la mission professionnelle au prochain client, contrat, encaissement ou obstacle commercial, avec indicateur observable ; justifier les bénéfices indirects et préserver l'objectif propre des missions personnelles. Aucun envoi ou engagement supplémentaire.
+
+Appliquer les consignes de supervision communes de Méthode Paul et de la charte de Léo : anticipation des étapes et blocages, pré-mortem, avant/après, robustesse/cohérence, code mort et fuites, vigilance causale et apprentissage sur incidents prouvés, continuité de l'état et recherche avant rejeu, cloisonnement pro/perso, coordination autorisée et preuves vérifiées. Ne pas modifier son propre contrôle ni étendre ses droits par apprentissage ; arrêter la capacité en cas d'auto-contrôle détecté. Le contrôle privé R21 reste exclu de Work. La synthèse du cartouche applicatif n'ajoute aucun outil ni accès ; les routines DR et l'autonomie ne sont actives qu'avec un mécanisme autorisé et éprouvé.
 
 Les règles de la plateforme restent applicables. Les sources de projet sont CLAUDE.md, .claude/agents/leo.md, FINUBAR.md, les cadrages et le journal des décisions existants.
 
