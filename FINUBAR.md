@@ -31,15 +31,15 @@
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-10-10",
-    "commit": "0fa74a7dc13125f5baf783cef31d86d747c2dad1",
-    "quoi": "10/10 : Directive MS fusionnée (#379), exports rescellés ; leçon v88 (boucle de sabotage)."
+    "le": "2026-10-12",
+    "commit": "371ef34f7f14807ad3acd34dda636b177ce39d6f",
+    "quoi": "12/10 : chaîne remesurée ; B3 codée (RenoDevis #348, go fusion de Paul) ; plan recalé (#383)."
   },
-  "prochaine_action": "Reprendre « Léo partout sans candidats » (boucle du 06/10) : fournir les candidats, ou ne pas offrir l'outil là où la page ne peut pas l'exécuter.",
+  "prochaine_action": "Chaîne A→Z : Paul valide les devis e-mail sur /devis/email (B3, après fusion de RenoDevis #348), puis pose la clé Stripe live (A6a).",
   "bloque_par": [
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
-    "R1 (B4) en production, non prouvée : Réno a rendu 502 le 02/10 à 16:43 UTC. Le crédit étant rechargé, lui demander « Où en est Artidispo ? » et comparer à la base (PLAN §2).",
+    "B4 (Réno lit Artidispo) : code vert (9/9), preuve impossible depuis la séance — Paul demande « Où en est Artidispo ? » à Réno (dashboard) ; la trace Artidispo est dans un projet Supabase hors de ce compte.",
     "B1 ⑤ — choix d'accès : le mail du matin lit-il le journal de Léo ? reco : fonction SQL dédiée + secret (migration) · `updated_at` sur journal/scenarios (migration)",
     "LV6 ne démarre que quand tout est propre (Paul, 28/09) : cadrage déposé, exécution gelée",
     "La précision sur « mon dpe.fr » (VITRUVE)",
@@ -76,8 +76,8 @@
       "depuis": "2026-10-02"
     },
     {
-      "quoi": "Chaîne — B4 réduite à R1 (Paul, 02/10 : Calendly gardé, agenda unique écarté). R1 en production, non prouvée : critère au PLAN §2. B2 fermée (RenoDevis #218, RenoBoost #566).",
-      "depuis": "2026-10-02"
+      "quoi": "Chaîne — B3 codée le 12/10 (RenoDevis #348). B1 : code déjà en place, recette sur un devis réel issu d'un relevé. B4 : attend le geste de Paul. Détail : PLAN §2.",
+      "depuis": "2026-10-12"
     },
     {
       "quoi": "LEÇON À CONSIGNER + PROPAGER (9 dépôts) : rechute de « un droit se vérifie du côté où il peut être contourné » — la prémisse de l'arbitrage §12.8 quater avait été mesurée en superutilisateur (MCP), pas sur le chemin du produit. Cadrage §13.0.",
