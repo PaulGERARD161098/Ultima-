@@ -128,7 +128,7 @@ bases : `mwaryfscxgrulauwwque` (partagée) sauf mention.
 | A10 | Demander la validation de la fiche Google Business | M9 | Paul, puis Google | — | ⬜ non mesurable par Claude | fiche visible publiquement | Paul, depuis Google |
 | A11 | DATARENO : preflight puis test à blanc | M0 | Paul | corriger l'ancien lien Calendly dans les deux documents (piège ci-dessous) | ⬜ | test à blanc passé | `datareno-/REPRISE.md` |
 | A12 | Agenda Google d'Artidispo : `CRON_SECRET`, pg_net, agenda de test | M1 | Paul | la liste des gestes est dans Artidispo `docs/SECRETS.md` | ⬜ **0 connexion** au 26/09 (Artidispo `FINUBAR.md`, **non remesuré** : sa base est hors de portée du connecteur de cette séance) | au moins 1 connexion en production | `select count(*) from google_calendar_connections` (base Artidispo) |
-| A13 | Synchro e-mail : poser les 3 variables Gmail | M6 | Paul | — | ⬜ **inactive** : battement du 30/09 à 04:45 UTC, `actif = false` | `actif = true` | `select valeur from sentinelle_etat where cle = 'battement:rr-sync-email'` |
+| A13 | Synchro e-mail : poser les 3 variables Gmail | M6 | Paul | — | ✅ **active** (mesuré le 12/10 : battement 04:45 UTC, `actif = true`, 1 boîte) ; premiers devis e-mail créés le 10/10 | `actif = true` | `select valeur from sentinelle_etat where cle = 'battement:rr-sync-email'` |
 
 🔁 **Remesuré le 02/10 entre 06:37 et 06:38 UTC, avec les requêtes de la
 colonne « Comment le mesurer » : aucun geste A n'a bougé.** A2 : toujours un seul
@@ -152,6 +152,24 @@ où se recetter. A12 (Artidispo) : non mesurable d'ici ; le geste `CRON_SECRET`
 attend Paul dans la séance « Chaîne Rénoboost : demande à avis », arrêtée depuis
 le 02/10 (PowerShell, pas `openssl`).
 
+🔁 **Remesuré le 12/10, avant 10:00 UTC**, mêmes requêtes. A3 : **1**
+chiffré et émis, **sur 53 devis** (0 sur 14 le 05/10) — la hausse du total vient
+de la synchro e-mail : 47 devis `source = email` (35 `Envoyé` créés du 10 au
+12/10, 6 `Signé`, 6 `Perdu`), 6 devis de l'application · A6a : `test = true`
+(battement 06:30) · A6b : `ouverts = 0` sur `artisans = 2` · A7 : 20 sans sort,
+**sur 28** · A9 : 0 sticker · **A13 : `actif = true`** — fermé, voir sa ligne ·
+Q10 : 0 pose rattachée · J1 : 0 paiement. Non mesurés d'ici : A2 (Drive), A10,
+A12. B4 non remesuré.
+
+⚠️ **La consigne de paiement a changé le 11/10** (RenoDevis `CLAUDE.md`,
+« Paiement en ligne », source canonique : `docs/STRIPE-CONNECT.md`) : Checkout
+sur le compte Stripe connecté de l'artisan (direct charge), commission
+RenoBoost prélevée en `application_fee_amount` — SOLA et DOKLES : 10 % du HT net
+de remises, TVA 20 % en plus. Ce que ça change ici : **J1 exige toujours A6a puis
+un compte artisan ouvert (A6b)**, et le premier paiement encaissera la
+commission en même temps. Aucune ligne du tableau n'est à réécrire pour autant ;
+le live reste interdit sans mandat (contrat LV1).
+
 ⚠️ **A11 — un piège déjà visible** : l'ancien lien Calendly
 (`rdv-expert-cvc-30-min`), désactivé le 22/09, figure encore dans
 `datareno-/deploy/EMAIL_SETUP.md` (ligne 52) et `datareno-/docs/PRELANCEMENT.md`
@@ -165,10 +183,10 @@ gestes A sont les siens, les boucles B sont du code que Claude porte seul.
 
 | # | Boucle | Maillon | Dépôt | État | Preuve de sortie |
 |---|---|---|---|---|---|
-| B1 | Du chiffrage au reste à charge : le coût TTC du devis alimente la rentabilité de l'audit | M4 → M5 | RenoDevis | ⬜ `rentabilite` vaut null (cadrage §2, M5) ; se recette sur un devis réel, donc après A3 | un audit avec son reste à charge et son temps de retour, sur un devis réel |
+| B1 | Du chiffrage au reste à charge : le coût TTC du devis alimente la rentabilité de l'audit | M4 → M5 | RenoDevis | 🔵 **code en place, recette à faire** (constaté le 12/10) : `app/releve/audit/page.tsx:113` préremplit le coût par `coutDepuisDevis(montant, totaux.ttc)`. Le seul devis chiffré et émis (`RR-20261006-8926`) n'a ni relevé ni étude : la recette attend un devis réel fait de bout en bout dans l'application (A3/A4) | un audit avec son reste à charge et son temps de retour, sur un devis réel |
 | B2 | La double marge (`margeFournitures` à 35 % appliquée par-dessus la bibliothèque) | M4 | RenoDevis + RenoBoost (ligne Réno) | ✅ **corrigée le 01/10 par RenoDevis #218** (fusionnée 08:26 UTC) et RenoBoost (`main` `62fa3ef`, #566 d'après #218) — mesuré à 17:45 UTC sur `main` de RenoDevis (`64211da`) : `releve/prix.js` convertit la bibliothèque une fois sous `meta.prixVente` et marque `vente: true` ; `releve/lignes.js:51-56` lit un prix de vente, `coefVente` a disparu ; 680/680, `tsc` 0, CI 36899869045 verte. Réno : `reno-data.mjs:250` sélectionne `lignes`, `:266` étale `etatChiffrage` (`chiffre`, `nb_lignes`, `origine_lignes` ∈ relevé/manuel/mixte). La fiche §13 de #217 (cadrage de la nuit du 30/09 : onze décisions, maquette, aucun code) est **historique** — son prompt E2 ne se rejoue pas (grain RenoDevis `64211da`) | ✅ `releve/lignes.test.js:51` « aucune seconde marge » (712 reste 712 ; rougit sur l'ancien code à 961,20) · ✅ « le total du devis vaut le total du récap » (même fichier) · ✅ `devis_relances` dit `chiffre` (`api/_lib/devis-chiffre.mjs`) |
-| B3 | Les devis arrivés par e-mail entrent (RR-07), une fois A13 posé | M6 | RenoDevis | ⬜ dépend d'A13 | à fixer à l'ouverture, sur ce qu'A13 aura révélé |
-| B4 | **Réno lit Artidispo** (R1, §5). ~~Un seul agenda Rénoboost à la place de Calendly~~ : écarté par Paul le 02/10, Calendly gardé (flux mesuré ≈ 0) | M0 + M1 | Artidispo + RenoBoost | 🟨 R1 seule (Calendly gardé, Paul 02/10) : fonction `reno-lecture` + outil `artidispo_activite`, Artidispo #114 (`8473dc3`) et RenoBoost #571 (`b59037b`) en production. ⛔ Pas prouvée de bout en bout : le premier appel de Réno (02/10, 16:43:28 UTC) a rendu 502, crédit API Anthropic épuisé ; aucun appel n'a atteint Artidispo. | Réno répond à « Où en est Artidispo ? » avec les huit totaux de la base, ET un GET 200 sur `reno-lecture` figure dans `function_edge_logs` du projet Artidispo ; la bande Réno de M0 et M1 dit « lit Artidispo » et reste « partiel » |
+| B3 | Les devis arrivés par e-mail entrent (RR-07), une fois A13 posé | M6 | RenoDevis | 🔵 **codée le 12/10, non fusionnée** — RenoDevis branche `claude/happy-mccarthy-b213bq`, `323e96c` (cadrage `CADRAGE-2026-10-12-B3-devis-email.md`, décisions D1–D4 de Paul au §13). Écran `/devis/email` : montant lu dans le PDF et proposé, état choisi, validation par client ; une seule relance à J+2 par devis e-mail ; aucune première relance avant J+2 ; un mail par client. 1 562 tests / 0 échec, build, 9 sabotages rouges. Mesuré avant : 35 `Envoyé`, 0 montant, 0 en file ; moteur en `auto` | 0 devis e-mail `Envoyé` avec PDF hors de `relance_queue` (requête au §8 du cadrage), après fusion et validation par Paul |
+| B4 | **Réno lit Artidispo** (R1, §5). ~~Un seul agenda Rénoboost à la place de Calendly~~ : écarté par Paul le 02/10, Calendly gardé (flux mesuré ≈ 0) | M0 + M1 | Artidispo + RenoBoost | 🟨 R1 seule (Calendly gardé, Paul 02/10) : fonction `reno-lecture` + outil `artidispo_activite`, Artidispo #114 (`8473dc3`) et RenoBoost #571 (`b59037b`) en production. ⛔ Pas prouvée de bout en bout : le premier appel de Réno (02/10, 16:43:28 UTC) a rendu 502, crédit API Anthropic épuisé ; aucun appel n'a atteint Artidispo. · **12/10** : `tests/reno-artidispo.test.mjs` 9/9 ; la preuve ne peut pas venir de la séance — la question est réservée au compte de Paul (`reno-data.mjs:367`) et le projet Supabase d'Artidispo n'est pas dans ce compte. Geste de Paul : demander « Où en est Artidispo ? » à Réno depuis le dashboard | Réno répond à « Où en est Artidispo ? » avec les huit totaux de la base, ET un GET 200 sur `reno-lecture` figure dans `function_edge_logs` du projet Artidispo ; la bande Réno de M0 et M1 dit « lit Artidispo » et reste « partiel » |
 | Q10 | **Le fil d'un dossier** : un identifiant commun de M0 à M9 (décision du §9) | M0 → M9 | RenoBoost + RenoPredict | ⏳ **code et schéma en production le 06/10, preuve de sortie NON atteinte** (0 pose rattachée : aucun sticker, Matthieu non inscrit). Base partagée `mwaryfscxgrulauwwque` : migrations `rdv_client_id` (29/29 rdv reliés) et `artisans_email_renopredict` (lien manuel, garde prouvée côté artisan) ; base RenoPredict `bzblvmmunflxtzamusol` : migration `dossier_ref`. Code : RenoBoost #584 (`ccde23c`) + #585 (`c14e30f`), RenoPredict #92 (`4f3ad4d`) + #93 (`cd83dc1`). **Attend un tiers** : l'inscription RenoPredict de Matthieu et un sticker (A9) ; secret `CHAINE_POSE_SECRET` posé par Paul, non vérifiable depuis la séance (proxy). Activation : cadrage RenoBoost §3.3 quater | une pose rattachée **vérifiée sur les deux bases** — aucune clé étrangère ne tient ce lien d'une base à l'autre, un `devis_ref` simplement non nul ne prouve rien. ① base RenoPredict : `select i.devis_ref, c.dossier_ref from interventions i join clients c on c.id = i.client_id where i.type = 'installation' and i.devis_ref is not null` → au moins une ligne ; ② base partagée, pour chaque couple lu : `select count(*) from devis d join clients c on c.id = d.client_id where d.id = '<devis_ref>' and c.id = '<dossier_ref>' and d.statut = 'Signé'` → 1. La suite du même dossier jusqu'à M9 est le critère du §1, pas celui de Q10 |
 
 ### Famille C — construire les maillons manquants de la maquette
