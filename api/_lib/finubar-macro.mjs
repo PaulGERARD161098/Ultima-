@@ -100,7 +100,7 @@ export default {
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-12T14:27:28.652Z",
+        "lecture_le": "2026-10-12T22:05:15.898Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -131,11 +131,11 @@ export default {
           "critere_de_sortie": "un `1` dans la table `paiements` (0 aujourd'hui)"
         },
         "dernier_arret": {
-          "le": "2026-10-10",
-          "quoi": "10/10 : #329 et #330 (Stripe), Gmail branché (47 devis email) ; soir : #332 pilote WhatsApp fusionné, canal inerte.",
-          "commit": "6a9ed7b80a148a5db5fa6c8f7a9781bc9f348462"
+          "le": "2026-10-12",
+          "quoi": "12/10 : B3 fusionnée (#348 → 3078a28) ; bouton « Logement en 3D et zone » sur la fiche dossier (#351 → 41cd179), qui ouvre la zone pro de mon-dpe.fr.",
+          "commit": "41cd17969c8e0fdddd1550f54bf00d75ad5b7e8a"
         },
-        "prochaine_action": "Encaissement : vérifier la prod sur 3b85c08, puis Paul pose les 2 webhooks live, sk_live_ et STRIPE_WEBHOOK_SECRET (2 whsec). Détail : section du 10 octobre.",
+        "prochaine_action": "Paul valide les devis e-mail sur /devis/email, puis pose la clé Stripe live.",
         "bloque_par": [
           "KYC Stripe de SOLA : 0 compte sur 2 peut encaisser (mesuré le 30/09). Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul.",
           "La clé sk_live_ en production : le battement d'embarquement dit toujours test:true, ouverts:0 — remesuré le 08/10 à 06:30 UTC.",
@@ -184,7 +184,7 @@ export default {
             "depuis": "2026-10-06"
           }
         ],
-        "maj": "2026-10-09"
+        "maj": "2026-10-12"
       },
       "recits": [
         "boucles_ouvertes[].quoi"
@@ -193,16 +193,16 @@ export default {
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "323e96c",
-        "tete_le": "2026-10-12T10:27:50+00:00",
-        "commits_depuis": 60,
+        "tete": "84cb624",
+        "tete_le": "2026-10-12T22:19:03+02:00",
+        "commits_depuis": 1,
         "commit_inconnu": false
       },
       "mesure_le": "2026-10-12",
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-12T14:27:29.190Z",
+        "lecture_le": "2026-10-12T22:05:15.912Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -214,7 +214,7 @@ export default {
           "dependances"
         ]
       },
-      "jours_depuis_maj": 3,
+      "jours_depuis_maj": 0,
       "jours_en_attente": 56,
       "rang": 0
     },
@@ -234,10 +234,10 @@ export default {
         },
         "dernier_arret": {
           "le": "2026-10-12",
-          "quoi": "12/10 : chaîne remesurée ; B3 codée (RenoDevis #348, go fusion de Paul) ; plan recalé (#383).",
-          "commit": "371ef34f7f14807ad3acd34dda636b177ce39d6f"
+          "quoi": "12/10 : B3 fusionnée ; C2 v1 « zone pro » fusionnée (mon-dpe #237, #238 ; RenoDevis #351) ; plan recalé (#384).",
+          "commit": "412291ba03b18935858f165df7d114735dfc2c9f"
         },
-        "prochaine_action": "Chaîne A→Z : Paul valide les devis e-mail sur /devis/email (B3, après fusion de RenoDevis #348), puis pose la clé Stripe live (A6a).",
+        "prochaine_action": "Chaîne A→Z : Paul valide les devis e-mail sur /devis/email (B3), puis pose la clé Stripe live (A6a). Côté C2 : coder la boucle 6 « jumeaux du chantier » (mon-dpe, gate levé).",
         "bloque_par": [
           "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte…",
           "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le…",
@@ -249,6 +249,10 @@ export default {
         ],
         "en_attente_depuis": "2026-08-20",
         "boucles_ouvertes": [
+          {
+            "quoi": "LEÇONS v90 (12/10, trois leçons) dans Ultima seulement : propager aux neuf dépôts (procédure LECONS-PROCEDURE.md, lecons-chemins à 0 d'abord).",
+            "depuis": "2026-10-12"
+          },
           {
             "quoi": "ZOH · plan et base à jour le 10/10 (CADRAGE-2026-10-10-zohshia-mise-a-jour.md). Série : 32 conflits, dont 25 dans les fichiers de J4 ; à rafraîchir juste après J4 de RenoDevis…",
             "depuis": "2026-10-08"
@@ -284,13 +288,9 @@ export default {
           {
             "quoi": "LEÇON À CONSIGNER + PROPAGER (9 dépôts) : rechute de « un droit se vérifie du côté où il peut être contourné » — la prémisse de l'arbitrage §12.8 quater avait été mesurée en…",
             "depuis": "2026-09-30"
-          },
-          {
-            "quoi": "smoke-accueil-finubar ④c (« le remettre remonte le ciel là où il était ») rougit par intermittence, toujours 577 → 581 px : ~1 passage sur 10, MESURÉ sur main pur (b01afed) le…",
-            "depuis": "2026-09-30"
           }
         ],
-        "maj": "2026-10-10"
+        "maj": "2026-10-12"
       },
       "recits": [
         "bloque_par[]",
@@ -300,16 +300,16 @@ export default {
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "6c63cdb",
-        "tete_le": "2026-10-12T10:28:15+00:00",
-        "commits_depuis": 2,
+        "tete": "09b37fd",
+        "tete_le": "2026-10-12T22:02:03+00:00",
+        "commits_depuis": 1,
         "commit_inconnu": false
       },
       "mesure_le": "2026-10-12",
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-12T14:27:28.538Z",
+        "lecture_le": "2026-10-12T22:05:15.885Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -321,8 +321,75 @@ export default {
           "dependances"
         ]
       },
-      "jours_depuis_maj": 2,
+      "jours_depuis_maj": 0,
       "jours_en_attente": 53,
+      "rang": 0
+    },
+    {
+      "ok": true,
+      "motif": "",
+      "depot": "PaulGERARD161098/mon-dpe.fr",
+      "grain": {
+        "projet": "mon-dpe.fr",
+        "depot": "PaulGERARD161098/mon-dpe.fr",
+        "cap": "Outil DPE gratuit et grand public → génération de leads rénovation. Porte aussi le MOTEUR d'audit énergétique PAC, qu'aucune autre brique ne doit recopier.",
+        "rattache_a": "CADRAGE-2026-10-12-zone-pro.md · CADRAGE-2026-08-21-audit-pac.md · lib/audit-pac/PONT-RENODEVIS.md · RenoBoost/ROADMAP-2026-08-21-audit-et-acquisition.md",
+        "etat": "en_cours",
+        "jalon": {
+          "nom": "Un audit énergétique vendu et calculé chez un vrai client",
+          "critere_de_sortie": "un audit calculé en réel, chez un client, depuis le relevé RénoDevis"
+        },
+        "dernier_arret": {
+          "le": "2026-10-12",
+          "quoi": "12/10 : zone pro /pro/zone (#237, #238) — logements E/F/G du rayon, vue aérienne + cadastre IGN, maquette 3D three.js du logement (étages, intérieur indicatif).",
+          "commit": "73ced35e438099eb7e2b022b847c63555be43514"
+        },
+        "prochaine_action": "Boucle 6 : coder le score « jumeaux du chantier » (cadrage zone pro, décisions J1–J3).",
+        "bloque_par": [
+          "Poser les secrets Vercel du pont audit-PAC, puis redéployer",
+          "`MAGIC_LINK_SECRET` + `RESEND_API_KEY` + domaine Resend (magic link cross-device)",
+          "`lib/site.ts` : passer `legalForm` d'EURL à SAS une fois publié au greffe",
+          "Vérifier le statut du sitemap dans la Search Console (13 URLs)"
+        ],
+        "en_attente_depuis": "2026-08-21",
+        "boucles_ouvertes": [
+          {
+            "quoi": "10 PR ouvertes — 6 dependabot (react, next, @types/node, SDK, actions) et 4 brouillons dormants : #183 (12/07), #170 (02/07), #164 et #163 (06/06). À trier : ce qui dort depuis…",
+            "depuis": "2026-06-06"
+          }
+        ],
+        "maj": "2026-10-12"
+      },
+      "recits": [
+        "boucles_ouvertes[].quoi"
+      ],
+      "ciel": "alpha",
+      "hors_seance": false,
+      "reprise": false,
+      "derive": {
+        "tete": "059e4ef",
+        "tete_le": "2026-10-12T22:01:42+00:00",
+        "commits_depuis": 1,
+        "commit_inconnu": false
+      },
+      "mesure_le": "2026-10-12",
+      "controle": {
+        "type": "disque",
+        "statut": "lu",
+        "lecture_le": "2026-10-12T22:05:15.926Z",
+        "examines": [
+          "FINUBAR.md",
+          "derive_git"
+        ],
+        "non_examines": [
+          "pr",
+          "controles",
+          "permissions",
+          "dependances"
+        ]
+      },
+      "jours_depuis_maj": 0,
+      "jours_en_attente": 52,
       "rang": 0
     },
     {
@@ -382,7 +449,7 @@ export default {
       "mesure_le": "2026-10-10",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-12T14:27:29.191Z",
+        "lecture_le": "2026-10-12T22:05:15.913Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -440,7 +507,7 @@ export default {
       "mesure_le": "2026-10-10",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-12T14:27:29.191Z",
+        "lecture_le": "2026-10-12T22:05:15.926Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -508,7 +575,7 @@ export default {
       "mesure_le": "2026-10-10",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-12T14:27:29.191Z",
+        "lecture_le": "2026-10-12T22:05:15.913Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -523,73 +590,6 @@ export default {
       "motif_controle": "repli GitHub désactivé",
       "jours_depuis_maj": 12,
       "jours_en_attente": 89,
-      "rang": 2
-    },
-    {
-      "ok": true,
-      "motif": "",
-      "depot": "PaulGERARD161098/mon-dpe.fr",
-      "grain": {
-        "projet": "mon-dpe.fr",
-        "depot": "PaulGERARD161098/mon-dpe.fr",
-        "cap": "Outil DPE gratuit et grand public → génération de leads rénovation. Porte aussi le MOTEUR d'audit énergétique PAC, qu'aucune autre brique ne doit recopier.",
-        "rattache_a": "CADRAGE-2026-08-21-audit-pac.md · lib/audit-pac/PONT-RENODEVIS.md · RenoBoost/ROADMAP-2026-08-21-audit-et-acquisition.md",
-        "etat": "en_cours",
-        "jalon": {
-          "nom": "Un audit énergétique vendu et calculé chez un vrai client",
-          "critere_de_sortie": "un audit calculé en réel, chez un client, depuis le relevé RénoDevis"
-        },
-        "dernier_arret": {
-          "le": "2026-08-21",
-          "quoi": "Moteur d'audit énergétique PAC + pont serveur-à-serveur `POST /api/audit-pac` (PR #193), puis Finubar posé (grain + rappel d'ouverture de séance)",
-          "commit": "b5c0a72"
-        },
-        "prochaine_action": "Poser les secrets (`AUDIT_PAC_API_SECRET` des DEUX côtés) et redéployer : le pont est écrit et testé, il n'est branché nulle part.",
-        "bloque_par": [
-          "Poser les secrets Vercel du pont audit-PAC, puis redéployer",
-          "`MAGIC_LINK_SECRET` + `RESEND_API_KEY` + domaine Resend (magic link cross-device)",
-          "`lib/site.ts` : passer `legalForm` d'EURL à SAS une fois publié au greffe",
-          "Vérifier le statut du sitemap dans la Search Console (13 URLs)"
-        ],
-        "en_attente_depuis": "2026-08-21",
-        "boucles_ouvertes": [
-          {
-            "quoi": "10 PR ouvertes — 6 dependabot (react, next, @types/node, SDK, actions) et 4 brouillons dormants : #183 (12/07), #170 (02/07), #164 et #163 (06/06). À trier : ce qui dort depuis…",
-            "depuis": "2026-06-06"
-          }
-        ],
-        "maj": "2026-08-21"
-      },
-      "recits": [
-        "boucles_ouvertes[].quoi"
-      ],
-      "ciel": "alpha",
-      "hors_seance": true,
-      "reprise": true,
-      "derive": {
-        "tete": "f3c2685",
-        "tete_le": "2026-10-10T13:58:21+02:00",
-        "commits_depuis": null,
-        "commit_inconnu": true
-      },
-      "mesure_le": "2026-10-10",
-      "controle": {
-        "type": "github",
-        "lecture_le": "2026-10-12T14:27:29.191Z",
-        "statut": "non_examine",
-        "examines": [],
-        "non_examines": [
-          "derive_git",
-          "rappel",
-          "pr",
-          "controles",
-          "permissions",
-          "dependances"
-        ]
-      },
-      "motif_controle": "repli GitHub désactivé",
-      "jours_depuis_maj": 52,
-      "jours_en_attente": 52,
       "rang": 2
     },
     {
@@ -681,7 +681,7 @@ export default {
       "mesure_le": "2026-10-10",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-12T14:27:29.191Z",
+        "lecture_le": "2026-10-12T22:05:15.926Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -749,7 +749,7 @@ export default {
       "mesure_le": "2026-10-10",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-12T14:27:29.191Z",
+        "lecture_le": "2026-10-12T22:05:15.926Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -808,7 +808,7 @@ export default {
       "mesure_le": "2026-10-10",
       "controle": {
         "type": "github",
-        "lecture_le": "2026-10-12T14:27:29.191Z",
+        "lecture_le": "2026-10-12T22:05:15.913Z",
         "statut": "non_examine",
         "examines": [],
         "non_examines": [
@@ -831,12 +831,12 @@ export default {
     "lisibles": 10,
     "illisibles": 0,
     "hors_seance": 0,
-    "repris": 7,
+    "repris": 6,
     "en_cours": 8,
     "en_attente_de_paul": 2,
     "au_repos": 0,
-    "derives": 3,
-    "commits_inconnus": 7,
+    "derives": 4,
+    "commits_inconnus": 6,
     "boucles_ouvertes": 45,
     "gestes_de_paul": [
       {
@@ -920,6 +920,22 @@ export default {
         "geste": "Région Vercel `cdg1` pour les fonctions — MESURÉ le 28/09 : production en `iad1` (Washington), base Ultima en `eu-west-3` (Paris) ; gate déploiement, CADRAGE-RIVEN-IMPORT.md §7 bis"
       },
       {
+        "projet": "mon-dpe.fr",
+        "geste": "Poser les secrets Vercel du pont audit-PAC, puis redéployer"
+      },
+      {
+        "projet": "mon-dpe.fr",
+        "geste": "`MAGIC_LINK_SECRET` + `RESEND_API_KEY` + domaine Resend (magic link cross-device)"
+      },
+      {
+        "projet": "mon-dpe.fr",
+        "geste": "`lib/site.ts` : passer `legalForm` d'EURL à SAS une fois publié au greffe"
+      },
+      {
+        "projet": "mon-dpe.fr",
+        "geste": "Vérifier le statut du sitemap dans la Search Console (13 URLs)"
+      },
+      {
         "projet": "RénoPredict",
         "geste": "Inscription RenoPredict de Matthieu (Login → Onboarding) — sans elle, « Fin de pose » n'a aucun chantier à proposer."
       },
@@ -958,22 +974,6 @@ export default {
       {
         "projet": "RénoAgenda",
         "geste": "Relecture juriste des CGU avant la première signature client"
-      },
-      {
-        "projet": "mon-dpe.fr",
-        "geste": "Poser les secrets Vercel du pont audit-PAC, puis redéployer"
-      },
-      {
-        "projet": "mon-dpe.fr",
-        "geste": "`MAGIC_LINK_SECRET` + `RESEND_API_KEY` + domaine Resend (magic link cross-device)"
-      },
-      {
-        "projet": "mon-dpe.fr",
-        "geste": "`lib/site.ts` : passer `legalForm` d'EURL à SAS une fois publié au greffe"
-      },
-      {
-        "projet": "mon-dpe.fr",
-        "geste": "Vérifier le statut du sitemap dans la Search Console (13 URLs)"
       },
       {
         "projet": "artisan-builder",
@@ -1069,14 +1069,14 @@ export default {
     "controles": [
       "PaulGERARD161098/Ultima-",
       "PaulGERARD161098/RenoBoost",
-      "PaulGERARD161098/RenoDevis"
+      "PaulGERARD161098/RenoDevis",
+      "PaulGERARD161098/mon-dpe.fr"
     ],
     "inaccessibles": [],
     "non_examines": [
       "PaulGERARD161098/RenoAgenda",
       "PaulGERARD161098/RenoPredict",
       "PaulGERARD161098/renoboost-console",
-      "PaulGERARD161098/mon-dpe.fr",
       "PaulGERARD161098/artisan-builder",
       "paggerard-boop/Artidispo",
       "PaulGERARD161098/DATARENO-"
@@ -1093,12 +1093,12 @@ export default {
       },
       {
         "projet": "RénoDevis",
-        "dit": "a avancé de 60 commit(s) depuis sa dernière note",
+        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
         "pourquoi": "derive"
       },
       {
         "projet": "Ultima",
-        "dit": "a avancé de 2 commit(s) depuis sa dernière note",
+        "dit": "a avancé de 1 commit(s) depuis sa dernière note",
         "pourquoi": "derive"
       }
     ],
@@ -1135,6 +1135,13 @@ export default {
         "signal": 1
       },
       {
+        "id": "PaulGERARD161098/mon-dpe.fr",
+        "libelle": "mon-dpe.fr",
+        "constellation": "en_cours",
+        "ciel": "alpha",
+        "signal": 1
+      },
+      {
         "id": "PaulGERARD161098/RenoPredict",
         "libelle": "RénoPredict",
         "constellation": "en_attente_de_paul",
@@ -1153,13 +1160,6 @@ export default {
         "libelle": "RénoAgenda",
         "constellation": "en_cours",
         "ciel": "renoboost-ia",
-        "signal": 0
-      },
-      {
-        "id": "PaulGERARD161098/mon-dpe.fr",
-        "libelle": "mon-dpe.fr",
-        "constellation": "en_cours",
-        "ciel": "alpha",
         "signal": 0
       },
       {

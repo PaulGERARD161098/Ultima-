@@ -32,10 +32,10 @@
   },
   "dernier_arret": {
     "le": "2026-10-12",
-    "commit": "371ef34f7f14807ad3acd34dda636b177ce39d6f",
-    "quoi": "12/10 : chaîne remesurée ; B3 codée (RenoDevis #348, go fusion de Paul) ; plan recalé (#383)."
+    "commit": "412291ba03b18935858f165df7d114735dfc2c9f",
+    "quoi": "12/10 : B3 fusionnée ; C2 v1 « zone pro » fusionnée (mon-dpe #237, #238 ; RenoDevis #351) ; plan recalé (#384)."
   },
-  "prochaine_action": "Chaîne A→Z : Paul valide les devis e-mail sur /devis/email (B3, après fusion de RenoDevis #348), puis pose la clé Stripe live (A6a).",
+  "prochaine_action": "Chaîne A→Z : Paul valide les devis e-mail sur /devis/email (B3), puis pose la clé Stripe live (A6a). Côté C2 : coder la boucle 6 « jumeaux du chantier » (mon-dpe, gate levé).",
   "bloque_par": [
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
@@ -47,6 +47,10 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "LEÇONS v90 (12/10, trois leçons) dans Ultima seulement : propager aux neuf dépôts (procédure LECONS-PROCEDURE.md, lecons-chemins à 0 d'abord).",
+      "depuis": "2026-10-12"
+    },
     {
       "quoi": "ZOH · plan et base à jour le 10/10 (CADRAGE-2026-10-10-zohshia-mise-a-jour.md). Série : 32 conflits, dont 25 dans les fichiers de J4 ; à rafraîchir juste après J4 de RenoDevis (REPORT.json).",
       "depuis": "2026-10-08"
@@ -164,7 +168,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-10-10"
+  "maj": "2026-10-12"
 }
 ```
 
