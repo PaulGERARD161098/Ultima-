@@ -10,12 +10,17 @@ Le contrôle précède l'exécution. On peut préparer le pilotage avant d'avoir
 
 Avant une action réelle, une autonomie, une mise en ligne ou une extension, vérifier le jalon de pilotage correspondant. La mise en ligne inclut un hébergement privé utilisant des données réelles ou produisant des effets externes. Le projet ne doit pas atteindre un stade coûteux à corriger ou difficile à arrêter avant d'avoir son contrôle ; les jalons concrets sont décrits dans le guide.
 
-Le back-office est une fonction distincte du parcours utilisateur. Il peut vivre dans le même produit, un cockpit privé partagé, une file de décisions ou une console existante. Choisir la forme la plus simple, rapide, économique et pertinente. Un nouveau tableau de bord ou un second moteur ne sont pas obligatoires.
+Le back-office est une fonction distincte du parcours utilisateur. Chaque outil de données possède son propre cockpit miroir dans son interface d’administration, accessible uniquement à ses responsables autorisés. Ce cockpit vit dans l’outil qu’il supervise ; une console centrale ne l’héberge pas et ne le remplace pas. Réutiliser le pilotage administratif existant dans cet outil lorsqu’il couvre le besoin.
+
+« Miroir » désigne une vue de contrôle des sources et fonctions existantes : état, activité, consommations, coûts, budgets, alertes, journal et commandes autorisées. Il ne crée ni copie concurrente des données métier, ni second moteur de calcul, ni nouvelles permissions. Toute observation précise sa source et sa fraîcheur. Les données absentes sont signalées ; elles ne deviennent pas des zéros.
+
+Cette règle de localisation complète, sans les remplacer, les jalons de contrôle définis ci-dessus. La coque peut précéder le moteur métier, mais une maquette ne vaut jamais preuve de raccordement réel.
 
 ## 2. Couverture minimale
 
 | Contrôle | Ce qui doit être visible ou possible |
 |---|---|
+| cockpit_local | Cockpit propre à l’outil, dans son interface d’administration ; aucune copie concurrente des données ou du moteur |
 | acces_prive | Identité et droits du responsable ; refus effectif des accès non autorisés |
 | etat_reel | Une observation datée par fonction ; déclaré, mesuré, inféré et non vérifié distincts |
 | fraicheur | Source, version et date ; un échec conserve un état périmé explicitement signalé |
@@ -49,4 +54,5 @@ Une capacité nouvelle ne passe pas avant son pilotage. Si le jalon manque, gard
 Secrets au serveur, accès privés et cloisonnement des comptes. Aucune copie des données métier, des calculs ou des permissions dans un moteur concurrent. Aucune action réelle ne découle de l'ajout de cette règle au registre. Un système ne peut pas modifier son propre contrôle par ce dispositif.
 
 Les alertes et lectures répétées sont bornées ; elles respectent la visibilité de la page et le budget. Une supervision permanente requiert un mécanisme autorisé et une preuve séparée.
+
 

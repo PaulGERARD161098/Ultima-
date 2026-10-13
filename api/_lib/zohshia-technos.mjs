@@ -6031,7 +6031,25 @@ export default {
        "t": "p",
        "r": [
         [
-         "Le back-office est une fonction distincte du parcours utilisateur. Il peut vivre dans le même produit, un cockpit privé partagé, une file de décisions ou une console existante. Choisir la forme la plus simple, rapide, économique et pertinente. Un nouveau tableau de bord ou un second moteur ne sont pas obligatoires.",
+         "Le back-office est une fonction distincte du parcours utilisateur. Chaque outil de données possède son propre cockpit miroir dans son interface d’administration, accessible uniquement à ses responsables autorisés. Ce cockpit vit dans l’outil qu’il supervise ; une console centrale ne l’héberge pas et ne le remplace pas. Réutiliser le pilotage administratif existant dans cet outil lorsqu’il couvre le besoin.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "« Miroir » désigne une vue de contrôle des sources et fonctions existantes : état, activité, consommations, coûts, budgets, alertes, journal et commandes autorisées. Il ne crée ni copie concurrente des données métier, ni second moteur de calcul, ni nouvelles permissions. Toute observation précise sa source et sa fraîcheur. Les données absentes sont signalées ; elles ne deviennent pas des zéros.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Cette règle de localisation complète, sans les remplacer, les jalons de contrôle définis ci-dessus. La coque peut précéder le moteur métier, mais une maquette ne vaut jamais preuve de raccordement réel.",
          ""
         ]
        ]
@@ -6062,6 +6080,20 @@ export default {
         ]
        ],
        "lignes": [
+        [
+         [
+          [
+           "cockpit_local",
+           ""
+          ]
+         ],
+         [
+          [
+           "Cockpit propre à l’outil, dans son interface d’administration ; aucune copie concurrente des données ou du moteur",
+           ""
+          ]
+         ]
+        ],
         [
          [
           [
@@ -6369,7 +6401,13 @@ export default {
         ],
         [
          [
-          "Réutiliser le cockpit ou la console existante lorsque sa couverture suffit.",
+          "Localiser le cockpit miroir dans l’interface d’administration de l’outil supervisé ; une console centrale ne l’héberge pas.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Réutiliser son cockpit existant lorsque sa couverture suffit, sans dupliquer les sources ni le moteur métier.",
           ""
          ]
         ],
@@ -6478,7 +6516,7 @@ export default {
          ],
          [
           [
-           "Responsable, fonctions, format de pilotage, permissions, risques et arrêt prévus",
+           "Responsable, fonctions, localisation dans l’administration de l’outil, permissions, risques et arrêt prévus",
            ""
           ]
          ]
@@ -6498,7 +6536,7 @@ export default {
          ],
          [
           [
-           "Pilotage privé accessible ; fonctions prévues et blocages visibles ; simulations identifiées",
+           "Onglet privé de l’outil accessible ; fonctions prévues et blocages visibles ; simulations identifiées",
            ""
           ]
          ]
@@ -6671,8 +6709,8 @@ export default {
  ],
  "sources": {
   "pilotage-back-office/badge.json": "9e50e6b7c62eb14f971d074560bec3bcfeac9867806e887df7ca0c21e019cb1b",
-  "pilotage-back-office/TECHNO.md": "3f848a88f86b7b3ed79b84c28b746c4e2b1f1eb29db2f33801bda19a89e88af8",
-  "pilotage-back-office/MISE-EN-SERVICE.md": "ef618cf028d863d16c4ff46cc8c17b11dd0015a2a23d0124721aab052c4eac3b",
+  "pilotage-back-office/TECHNO.md": "a6a3c2ec7645ab99bb9a472de5f721adab65627a094b81e153e23e3ce7f7f589",
+  "pilotage-back-office/MISE-EN-SERVICE.md": "da99219e5142485ac53b49a5563d4ff0d406e966b5775a932ca7a72382c8be53",
   "renodevis/badge.json": "cdf0f06c4c492ccc21be7bb97a3d5f2da690832d1e1728d2e0a12bd0482fb1ff",
   "renodevis/TECHNO.md": "aeb32b5b9820a7a30ea450074ea838bb6a1f69bd5d12cdd472c60748832f2932",
   "renodevis/AJOUTER-UN-ARTISAN.md": "8ec42d12a4be63eab0cf311a234251612c30e7998c2009e06c447cebe2b8358f"

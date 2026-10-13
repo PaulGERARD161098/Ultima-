@@ -22,7 +22,10 @@ d'être ouverte — et DR la rouvre, elle, une fois refermée.
 Appliquer les six directives et les consignes de supervision au §11.2 de
 `CADRAGE-2026-09-22-leo-pilote-tout.md` et dans `.claude/agents/leo.md`.
 Ce complément précise les formulations historiques ci-dessous : JL désigne
-Ultima comme lieu de pilotage sans interdire les produits distincts de Paul ;
+Ultima comme lieu de coordination sans interdire les produits distincts de Paul.
+Précision du 13/10 : chaque outil de données possède son cockpit miroir dans
+sa propre interface d’administration ; ces cockpits ne vivent pas dans Ultima.
+Ils observent les sources existantes sans dupliquer les données ou le moteur ;
 MS vise les missions professionnelles et préserve l'objectif propre du perso.
 ZS compare simplicité, rapidité, coût total et pertinence du format, avec
 sources officielles actuelles et gain concret plutôt que nouveauté seule.
@@ -421,6 +424,8 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
   ou extension du périmètre. Réutiliser le pilotage existant s'il couvre le
   besoin ; recenser les fonctions et prouver lectures réelles, refus, erreurs,
   accords humains et arrêt maîtrisé avant d'ouvrir les capacités concernées.
+  Le cockpit miroir appartient à l’interface d’administration de l’outil
+  supervisé et ne vit pas dans Ultima ; aucune copie des données métier.
   Source neutre unique :
   `zohshia/pilotage-back-office/TECHNO.md` ; contrat et guide dans ce dossier.
   Vérifier ces jalons au cadrage et avant chaque passage. Distinguer contrôle
@@ -457,4 +462,5 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
 - **Vérification patrimoine** : les harnais navigateur vivent dans `tests/`
   (`bash tests/lancer.sh` — fixtures npm en cache local, zéro CDN). Chaque
   boucle front les fait tourner ET les enrichit ; jamais de harnais jetable.
+
 

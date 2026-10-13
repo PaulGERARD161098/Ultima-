@@ -1,6 +1,7 @@
 {
-  "version": 1,
+  "version": 2,
   "controles": [
+    "cockpit_local",
     "acces_prive",
     "etat_reel",
     "fraicheur",
@@ -13,7 +14,6 @@
     "arret_maitrise",
     "droits_serveur"
   ],
-  "regle": "Prévoir le contrôle dès le cadrage, même avant le système métier. Rendre une première coque de pilotage utilisable dès les premiers incréments, avant un avancement important. Chaque fonction possède une supervision éprouvée avant action réelle, autonomie, mise en ligne ou extension ; le pilotage existant est réutilisé quand il couvre le besoin.",
+  "regle": "Chaque outil de données possède son propre cockpit miroir dans son interface d’administration. Le cockpit vit dans l’outil supervisé, pas dans une console centrale. Il observe les sources existantes sans dupliquer les données métier, le moteur ou les permissions. Prévoir ce contrôle dès le cadrage et l’éprouver avant toute action réelle, autonomie, mise en ligne ou extension.",
   "preuve": "Le contrôle de structure vérifie des attestations fournies, jamais l'état réel à distance."
 }
-
