@@ -1,5 +1,21 @@
 # Raccordement LV1 à Ultima — proposition d'activation
 
+## Point courant — 13/10/2026
+
+La reprise opérationnelle et la roadmap complète sont dans
+REPRISE-2026-09-29-leo-lv1.md, section « Reprise du 13/10/2026 ».
+Le préflight Hostinger a été reçu via les sorties opérateur de Paul :
+Linux/systemd/Python/Docker local/cgroup2 disponibles ; fonctionnement pidfd,
+isolation et recette systemd non éprouvés. n8n et Traefik présents à préserver.
+Windows affiche un hyperviseur actif ; rôle Hyper-V et RAM pour VM à qualifier.
+La phrase historique « nom, fournisseur, système [...] NON VÉRIFIÉS » ci-dessous
+est remplacée par ces observations, sans prétendre à un accès direct Work.
+Aucun bootstrap, installation, modèle payé, mission réelle, timer ou autonomie
+activé. La grille de recette suivante reste obligatoire et à rendre exécutable.
+Les empreintes et le pilote completed sont conservés ; ne pas réinitialiser.
+
+---
+
 ## Recette cible cadrée — 10/10/2026, reprise à 18 h 11 Paris
 
 Cette section est la reprise courante. Paul a choisi « serveur existant » ;
