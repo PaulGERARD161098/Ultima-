@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-10-13",
-    "commit": "9446668fdabca19095800d3229f87c1de2a6700e",
-    "quoi": "13/10 : pilotage systématique en back-office préparé dans ZOH, badge généré, règle au cadrage et à la recette, 11 assertions nouvelles et deux suites existantes vertes en isolation éprouvée ; branche non fusionnée. Le jalon métier et les travaux C2 précédents sont préservés."
+    "commit": "da348c2576c46fda1c3372b21614ca5d4db22b0d",
+    "quoi": "13/10 : technologie ZOH « Pilotage systématique en back-office » intégrée par PR388 ; badge et règle au cadrage/recette, 11 contrôles et couverture par fonction. Trois CI verts sur le code testé, desktop/mobile ZOH éprouvés ; main v92 préservé. Déploiement de production READY sur le commit de fusion, protection Vercel conservée. Le cockpit privé RenoDevis lit 2 comptes, 53 devis et 9 échéances pending ; production RenoDevis inchangée."
   },
   "prochaine_action": "Chaîne A→Z : Paul valide les devis e-mail sur /devis/email (B3), puis pose la clé Stripe live (A6a). Côté C2 : premier boîtage SOLA sur les rues « jumeaux », source tracée.",
   "bloque_par": [
@@ -48,7 +48,7 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "Pilotage systématique ZOH : code préparé et tests isolés verts, fusion explicitement liée au SHA et à la cible à autoriser ; publication/activation des agents non annoncées. Source : zohshia/pilotage-back-office/TECHNO.md.",
+      "quoi": "Pilotage ZOH : accès HTTP avec une vraie session propriétaire encore non éprouvé depuis Work (protection Vercel après redirection ; CLI absent). Source et tests sont livrés. Chaque système doit encore prouver son propre raccordement et ses contrôles ; aucun agent permanent activé par cette règle.",
       "depuis": "2026-10-13"
     },
     {
@@ -180,7 +180,7 @@
 
 ## Journal de reprise
 
-### 2026-10-13 — règle de pilotage systématique, préparée
+### 2026-10-13 — règle de pilotage systématique, livrée
 
 Mandat explicite : implanter dans ZOH une technologie de pilotage en back-office
 pour toute création de système. Dossier neutre `zohshia/pilotage-back-office/` :
@@ -195,8 +195,15 @@ lectures/écritures limitées au snapshot, processus enfants refusés, environne
 sans secret ; trois refus effectivement éprouvés. Authentification du registre
 simulée en test, aucune recette propriétaire en ligne annoncée. SDK de recette
 préinstallé en version 2.110.5, sans changement de dépendance dans le dépôt.
-État : branche à relire et fusion liée au SHA à autoriser ; aucune mise en
-production ni preuve d'activation de cette règle dans les agents existants.
+État livré : PR388 fusionnée au commit da348c2576c46fda1c3372b21614ca5d4db22b0d. Le candidat
+1174c629b218bcb24f65b118144288db346cb3d3 a trois workflows CI verts, dont
+la recette navigateur du nouveau badge à 1280/390 px. La fusion intermédiaire
+préserve la seule correction de chemins des LEÇONS v92 ; tous les fichiers
+applicatifs et harnais ZOH restent ceux du candidat testé. Déploiement
+`dpl_3KqAR3tNn5wwNBD94ZeG8MfqodB7` READY en production sur le commit de
+fusion ; protection Vercel SSO conservée. L’accès propriétaire en ligne reste
+non éprouvé après l’échec du connecteur d’accès protégé ; aucun CLI disponible.
+Aucune activation d’agent permanent, dépense, migration ou envoi réel.
 
 > Les séances, de la plus récente à la plus ancienne. Une entrée = une date, un
 > fait vérifié, une décision. La mémoire longue ; le bloc ci-dessus est la mémoire
