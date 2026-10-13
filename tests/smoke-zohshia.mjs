@@ -102,20 +102,20 @@ console.log('§2 — ouvert au propriétaire : un badge par techno, son contenu 
     && await page.locator('.techno-ouverte').first().isHidden());
   await badges.first().click();
   verifier('ouvert au clic, premier onglet choisi', (await badges.first().getAttribute('aria-expanded')) === 'true'
-    && (await page.locator('.onglet[aria-selected="true"]').textContent()) === 'Ce que fait la techno');
-  verifier('les trois onglets', (await page.locator('.onglet').allTextContents()).join('|') === 'Ce que fait la techno|Check-list du pro|Mise en service');
-  const nPlan = await page.locator('.contenu > *').count();
-  verifier('le plan se rend (titres, tableaux)', nPlan > 20 && (await page.locator('.contenu table').count()) >= 3, String(nPlan));
-  await page.locator('.onglet', { hasText: 'Check-list du pro' }).click();
-  const check = (await page.locator('.contenu').textContent()) || '';
+    && (await page.locator('#techno-0 .onglet[aria-selected="true"]').textContent()) === 'Ce que fait la techno');
+  verifier('les trois onglets', (await page.locator('#techno-0 .onglet').allTextContents()).join('|') === 'Ce que fait la techno|Check-list du pro|Mise en service');
+  const nPlan = await page.locator('#techno-0 .contenu > *').count();
+  verifier('le plan se rend (titres, tableaux)', nPlan > 20 && (await page.locator('#techno-0 .contenu table').count()) >= 3, String(nPlan));
+  await page.locator('#techno-0 .onglet', { hasText: 'Check-list du pro' }).click();
+  const check = (await page.locator('#techno-0 .contenu').textContent()) || '';
   verifier('la check-list se rend, avec les règles de prix du schéma', /coefficient_produits/.test(check) && /demi_journee_ht/.test(check) && /Deux voies/.test(check));
-  await page.locator('.onglet[aria-selected="true"]').focus();
+  await page.locator('#techno-0 .onglet[aria-selected="true"]').focus();
   await page.keyboard.press('ArrowRight');
-  verifier('le clavier passe à l’onglet suivant', (await page.locator('.onglet[aria-selected="true"]').textContent()) === 'Mise en service'
-    && /Voie B/.test((await page.locator('.contenu').textContent()) || ''));
+  verifier('le clavier passe à l’onglet suivant', (await page.locator('#techno-0 .onglet[aria-selected="true"]').textContent()) === 'Mise en service'
+    && /Voie B/.test((await page.locator('#techno-0 .contenu').textContent()) || ''));
   const cBadge = await contraste(page, '.badge-meta');
-  const cTable = await contraste(page, '.contenu td');
-  const cTexte = await contraste(page, '.contenu p');
+  const cTable = await contraste(page, '#techno-0 .contenu td');
+  const cTexte = await contraste(page, '#techno-0 .contenu p');
   verifier('contraste AA mesuré (méta du badge, cellule, paragraphe)',
     [cBadge, cTable, cTexte].every((c) => Number.isFinite(c) && c >= 4.5), [cBadge, cTable, cTexte].map((c) => c.toFixed(2)).join(' · '));
   verifier('aucune erreur, aucune requête externe', !journal.erreurs.length && !journal.externes.length,
@@ -125,12 +125,40 @@ console.log('§2 — ouvert au propriétaire : un badge par techno, son contenu 
   await page.close();
 }
 
+
+console.log('§2bis — pilotage : le second badge fonctionne indépendamment, desktop et mobile');
+for (const width of [1280, 390]) {
+  const { page, journal } = await ouvrir({ client: 'connecte', api: PAUL }, { width, height: 900 });
+  const index = donnee.technos.findIndex(t => t.id === 'pilotage-back-office');
+  verifier('la technologie de pilotage est publiée', index >= 0);
+  if (index < 0) { await page.close(); continue; }
+  const badge = page.locator('.badge-techno').nth(index);
+  const panneau = page.locator('#techno-' + index);
+  await badge.click();
+  verifier(width + ' : le pilotage s’ouvre seul', (await badge.getAttribute('aria-expanded')) === 'true' && await panneau.isVisible()
+    && (await page.locator('.badge-techno').first().getAttribute('aria-expanded')) === 'false');
+  verifier(width + ' : ses trois onglets sont propres à la techno', (await panneau.locator('.onglet').allTextContents()).join('|') === 'Ce que fait la techno|Avant livraison|Mise en service');
+  verifier(width + ' : la couverture et les droits serveur sont visibles', /droits_serveur/.test((await panneau.textContent()) || ''));
+  await panneau.locator('.onglet', { hasText: 'Avant livraison' }).click();
+  verifier(width + ' : la checklist se rend', /Recenser toutes les fonctions/.test((await panneau.locator('.contenu').textContent()) || ''));
+  await panneau.locator('.onglet[aria-selected="true"]').focus();
+  await page.keyboard.press('ArrowRight');
+  verifier(width + ' : le clavier ouvre la mise en service', (await panneau.locator('.onglet[aria-selected="true"]').textContent()) === 'Mise en service'
+    && /attestations/.test((await panneau.locator('.contenu').textContent()) || ''));
+  const deborde = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  verifier(width + ' : aucune largeur hors écran', deborde <= 1);
+  await badge.click();
+  verifier(width + ' : le badge se referme', await panneau.isHidden());
+  verifier(width + ' : aucune erreur ni requête externe', !journal.erreurs.length && !journal.externes.length);
+  await page.close();
+}
+
 console.log('§3 — 390 px : lisible, sans défilement horizontal de la page');
 {
   const { page } = await ouvrir({ client: 'connecte', api: PAUL }, { width: 390, height: 800 });
   await page.locator('.badge-techno').first().click();
   for (const titre of ['Ce que fait la techno', 'Check-list du pro', 'Mise en service']) {
-    await page.locator('.onglet', { hasText: titre }).click();
+    await page.locator('#techno-0 .onglet', { hasText: titre }).click();
     const deborde = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     verifier(`${titre} : la page ne déborde pas (${deborde}px)`, deborde <= 1);
   }
@@ -147,8 +175,8 @@ console.log('§4 — une balise dans la donnée reste du texte');
   await page.locator('.badge-techno').first().click();
   await page.waitForTimeout(200);
   verifier('aucune image injectée, aucun script exécuté',
-    (await page.locator('.contenu img').count()) === 0 && (await page.evaluate(() => window.__pwn)) === undefined
-    && /onerror/.test((await page.locator('.contenu p').first().textContent()) || ''));
+    (await page.locator('#techno-0 .contenu img').count()) === 0 && (await page.evaluate(() => window.__pwn)) === undefined
+    && /onerror/.test((await page.locator('#techno-0 .contenu p').first().textContent()) || ''));
   await page.close();
 }
 
