@@ -1,3 +1,134 @@
+# Reprise courante — mise en ligne Léo / FINUBAR
+
+## Reprise du 13/10/2026 — mise en ligne complète, preuves opérateur et roadmap
+
+Cette section remplace les prochaines actions du 10/10. Mandat de Paul :
+« tu compiles bien la data pour qu'on apprenne des échecs [...] fais roadmap
+pour obj final puis go ». Préparation et capitalisation autorisées ; pas de
+nouvelle dépense, accès Work au contrôle privé, envoi réel ni fusion déduits.
+
+### But, périmètre et moyens
+
+But final : Léo conduit des missions autorisées depuis Ultima, avec FINUBAR
+indépendant qui contrôle droits, budget, arrêt et reprise ; fonctionnement
+permanent seulement après réception des mécanismes réels. Premier jalon utile :
+une lecture réelle des PR d'Ultima, rapport privé sourcé et reçu retrouvé
+depuis une session neuve, sans doublon. Bénéfice commercial indirect : réduire
+le travail de vérification demandé à Paul ; aucun gain de temps chiffré mesuré.
+
+Moyens : PR365 et kit figé existants, protocole leo/ACTIVATION.md, serveur
+Hostinger existant, VM de recette indépendante à qualifier. Pas de second
+moteur ni migration métier. Préserver n8n, Traefik et le pilote R21 completed.
+Ne pas confondre le service de lecture déterministe offline et un agent
+raisonnant avec un modèle : acquisition réelle et modèle restent à raccorder.
+
+Réussite globale : preuves de recette cible, premier rapport réel, arrêt
+effectif, reprise sans replay, séparation contrôle/worker, budget exécutoire,
+pilotage Ultima et surveillance de disponibilité réellement actifs ; dossier
+R01–R28 examiné et réception par Paul. Aucun pourcentage global inventé.
+
+### État relu et observations opérateur
+
+- GitHub relu le 13/10 : PR365 ouverte en brouillon, tête d717243c9d0cf8c7564a3dbaff04b2376c7c56e9.
+  PR381 Journal d'apprentissages reste une préparation distincte ; aucun hook
+  ou apprentissage automatique n'est déduit de sa présence.
+- Preuves CI historiques relues le 11/10 dans cette conversation :
+  SHA applicatif daba3eb, 294 tests runtime et 14 scénarios Docker réussis ;
+  trois workflows réussis aussi sur la tête documentaire d717243.
+  Ces résultats ne constituent ni recette systemd réelle ni intégration au
+  main courant. Relire les checks si code/base changent.
+- Sorties terminal transmises par Paul les 11–12/10, sans accès direct de Work :
+  srv2051208.hstgr.cloud, offre Hostinger KVM2, Ubuntu déclaré 24.04.5 LTS,
+  Linux6.8.0-139 x86_64, PID1 systemd255, Python3.12.3, pidfd_api True.
+  Disponibilité de l'API seulement : pidfd effectif non éprouvé.
+- Docker29.8.1 : endpoint qualifié unix:///var/run/docker.sock avec
+  PATH=/usr/bin:/bin, HOME=/tmp ; linux/x86_64, cgroup2, docker.service active.
+- Capture de ressources du 12/10 : 7,8Gio RAM et environ6,9Gio disponibles,
+  93Go disque disponibles, aucune unité systemd en échec.
+  Deux conteneurs n8n et Traefik présents ; statut Docker exact/health à
+  reconfirmer en sortie non traduite avant action. La traduction de la capture
+  ne prouve pas la santé applicative.
+- /dev/kvm absent : accélération KVM imbriquée indisponible à ce contrôle.
+  Le fournisseur d'hyperviseur KVM affiché ne prouve pas /dev/kvm disponible.
+  Cela n'est pas une preuve d'impossibilité de toute émulation logicielle ;
+  aucune émulation lente sur le serveur partagé n'est retenue sans essai borné.
+- Windows11 Professionnel64bits : 7,8Go RAM, 1,5–1,6Go libres, 365,3Go disque.
+  CIM virtualization/SLAT False, puis systeminfo : hyperviseur détecté,
+  intégrité du code appliquée par hyperviseur en cours d'exécution.
+  Incompatibilité matérielle NON démontrée. Rôle/outils Hyper-V et droits de
+  création VM encore non qualifiés. Ne désactiver ni HVCI ni App Control.
+- Message Ubuntu « System restart required » observé ; pas de redémarrage.
+  Inventorier services et fenêtre opérateur avant reboot ; préserver l'existant.
+- Aucun accès direct de Work au PC ou serveur, aucune installation cible ni
+  mission réelle Léo/FINUBAR prouvée dans cette séance.
+
+### Roadmap dans l'ordre utile
+
+| Jalon | Travail et dépendance | Critère vérifiable | Responsable / état |
+|---|---|---|---|
+| 1. Figer le dossier | Reprendre versions, kit, préflight et incidents existants | SHA, empreintes, preuves et inconnues séparées | Work : documentation actualisée ; pas de nouveau test applicatif |
+| 2. Qualifier la VM de recette | Lire rôle/outils Hyper-V, droits et RAM disponible du PC ; ne pas contourner sécurité Windows | VM Ubuntu indépendante, Docker local/systemd réels ; versions compatibles documentées, aucun partage de secrets ou données du PC | Paul fournit lectures ; VM non créée |
+| 3. Préparer la recette exécutable | Revoir seed fictif et injections séparément, empreintes archive avant extraction, cas/état distincts et bornes ; aucune commande improvisée sur VPS métier | Grille ACTIVATION transformée en étapes reproductibles ; chaque essai a entrée, oracle, preuve et nettoyage borné | Work prépare ; revue distincte requise pour préparation sensible |
+| 4. Recevoir le contrôle cible | Exécuter nominal, refus, perte propriétaire/gardien/scope, Docker indisponible et reprise sur VM isolée | systemd/ExecStopPost effectifs, worker absent par CID et nom, témoin conservé, unknown si reçu absent, zéro replay | Opérateur exécute ; bloqué par2–3 |
+| 5. Livrer la première mission réelle | Résoudre compatibilité skill1.4, identité GitHub lecture seule Ultima, médiateur réseau/modèle hors worker et plafond de coût ; rééprouver code exact et intégration avant installation | Rapport privé lié aux PR/SHA/date ; reçu durable ; arrêt et plafond réellement respectés ; aucune autorité libre du worker | Work prépare ; accès opérateur et budget facturé à qualifier |
+| 6. Raccorder Ultima et l'exploitation | Installer version exacte reçue hors droits Léo ; statut/date/dernier reçu/budget/arrêt dans le pilotage existant ; sauvegarde et retour arrière | Contrôle non modifiable par Léo ; statut du runtime distinct de la preview web ; perte d'accès/sauvegarde/restauration éprouvées | Opérateur + Work ; dépend de4–5 |
+| 7. Activer la permanence puis recevoir LV1 | Déclencheurs bornés, surveillance externe, alertes privées, reprise après reboot et non-chevauchement ; revue dossier R01–R28 | Mécanisme réel actif, arrêt coupe tout nouvel engagement, panne visible ; exigences critiques reçues par preuves applicables et verdict Paul | Non activé ; dépend de6 |
+
+Pas de délai promis : accès, compatibilité et travail restant ne sont pas
+encore mesurés. Les jalons de permanence ne sont pas livrés par le oneshot
+Restart=no sans timer existant.
+
+### Choix ZS et prévention
+
+Réutiliser le kit et Hostinger pour la cible conserve le travail reçu sans
+acheter de moteur. VM Windows temporaire : coût fournisseur additionnel nul
+si moyens locaux suffisants, mais RAM et rôle Hyper-V à qualifier ; meilleure
+séparation des essais que le Docker partagé. VPS dédié de recette :
+alternative si PC inadéquat, coût et durée à vérifier avant achat ; aucune
+offre/prix choisis. Aucun benchmark de rapidité ni économie promis.
+Sources officielles Microsoft consultées pour diagnostic :
+https://learn.microsoft.com/windows-server/virtualization/hyper-v/host-hardware-requirements
+https://learn.microsoft.com/en-us/powershell/module/dism/get-windowsoptionalfeature
+
+Risques : VM insuffisante -> lecture RAM avant création ; sécurité Windows
+abaissée -> aucune désactivation HVCI/App Control ; faux succès de fixture ->
+recette cible et mission réelle distinctes ; worker accède au contrôle ->
+identités et montages séparés ; dérive code/base -> preuves invalidées et
+intégration revue ; service partagé interrompu -> essais sur VM seule ;
+apprentissage change permissions -> écriture proposée/versionnée, jamais
+élévation automatique.
+
+### Capitalisation des frictions réellement rencontrées
+
+Ces observations appartiennent à cette reprise ; les règles générales restent
+dans memoire/LECONS.md. Ne pas les présenter comme apprentissage automatique.
+
+| Incident / conséquence constatée | Correction utile | Contrôle à réutiliser |
+|---|---|---|
+| Premier récap du11/10 repris d'un bilan intermédiaire : 278/12 au lieu du dossier294/14, supervision présentée encore à préparer | Lire la tête PR et la première section de reprise avant résumé | Versions et preuves actuelles avant prochaine action |
+| Deux captures annoncées illisibles à partir d'une erreur locale, sans tentative effective ; une capture ultérieure était lisible avec view_image | Essayer réellement l'accès au fichier avant demander à Paul de recopier | Distinguer erreur affichée et résultat de lecture ; si accès absent, texte minimal demandé |
+| Diagnostic Windows CIM False risquait de conclure à tort à absence de virtualisation | systeminfo a révélé hyperviseur actif/HVCI | Qualifier hyperviseur et rôle Hyper-V séparément avant BIOS |
+| Choix VM imbriquée proposé avant vérification /dev/kvm ; chemin indisponible | Préflight matériel avant installation | Distinguer hyperviseur fournisseur et capacité VM invitée |
+| Succession de diagnostics humains sans dossier unique actualisé | Préflight reçu et roadmap conservés ici | Ne refaire que lectures périmées ou nécessaires à l'action |
+
+Aucun coût de friction, temps économisé ni erreur matérielle Windows inventé.
+À clôture de chaque jalon : résultat observé, version, anomalie, correction,
+preuve, reste et prochaine action dans ce fichier ; nouvelle règle générale
+seulement si incident réel et procédure canonique de leçons suivie.
+
+### Prochaine action unique
+
+Lire dans PowerShell administrateur Get-WindowsOptionalFeature -Online
+-FeatureName '*Hyper-V*', Get-Service vmms -ErrorAction SilentlyContinue et
+RAM disponible. Lecture seule ; ne pas activer/désactiver de fonctionnalité.
+Hyperviseur détecté ne signifie pas rôle Hyper-V installé. Si rôle/RAM
+adéquats, préparer VM indépendante ; sinon qualifier alternative sans achat.
+
+
+---
+
+## Dossier historique du 10 octobre — versions et preuves conservées
+
 # Reprise courante — 10 octobre 2026, test cible réussi, candidat lecture inerte
 
 ## Reprise courante — recette sur serveur existant, 10/10/2026 à 18 h 11 Paris
