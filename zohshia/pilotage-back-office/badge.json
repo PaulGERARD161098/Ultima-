@@ -1,0 +1,30 @@
+{
+  "ordre": 2,
+  "badge": "Pilotage systématique en back-office",
+  "etat": "Règle adoptée · chaque instance reste à éprouver",
+  "onglets": [
+    {
+      "id": "techno",
+      "titre": "Ce que fait la techno",
+      "source": "TECHNO.md"
+    },
+    {
+      "id": "checklist",
+      "titre": "Avant livraison",
+      "source": "MISE-EN-SERVICE.md",
+      "sections": [
+        "## 1."
+      ]
+    },
+    {
+      "id": "service",
+      "titre": "Mise en service",
+      "source": "MISE-EN-SERVICE.md",
+      "sections": [
+        "## 2.",
+        "## 3."
+      ]
+    }
+  ]
+}
+

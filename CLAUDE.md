@@ -413,6 +413,15 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
 
 ## ⚙️ Règles permanentes
 
+- **Pilotage systématique en back-office** (13/10/2026) : toute création de
+  système comprend un cockpit ou un moyen de pilotage utilisable. Avant de
+  livrer, recenser ses fonctions, réutiliser le pilotage existant s'il couvre le
+  besoin, puis prouver les lectures réelles, refus, erreurs, accords humains et
+  arrêt maîtrisé. Source neutre unique :
+  `zohshia/pilotage-back-office/TECHNO.md` ; contrat et guide dans ce dossier.
+  Ce point est vérifié au cadrage et à la recette. Une règle adoptée ou un écran
+  visible ne prouve pas un raccordement actif ; aucun droit n'est élargi.
+
 - **UNE PR PAR SÉANCE, EN FIN DE SÉANCE — pas une par boucle** *(Paul,
   2026-09-24 : « on fait PR après PR, ce n'est ni rentable ni économe »)*. On
   committe et on pousse la branche de travail à chaque boucle : Vercel en tire
@@ -443,3 +452,4 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
 - **Vérification patrimoine** : les harnais navigateur vivent dans `tests/`
   (`bash tests/lancer.sh` — fixtures npm en cache local, zéro CDN). Chaque
   boucle front les fait tourner ET les enrichit ; jamais de harnais jetable.
+

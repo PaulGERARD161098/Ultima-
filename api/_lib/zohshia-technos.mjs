@@ -1,7 +1,7 @@
 // GÉNÉRÉ par `node zohshia/publier.mjs` — ne pas modifier à la main.
 // La techno de ZOH SHIA, à l’état pur, servie au SEUL propriétaire par /api/zohshia.
 export default {
- "publie_le": "2026-10-10",
+ "publie_le": "2026-10-13",
  "technos": [
   {
    "id": "renodevis",
@@ -5968,9 +5968,666 @@ export default {
      ]
     }
    ]
+  },
+  {
+   "id": "pilotage-back-office",
+   "ordre": 2,
+   "badge": "Pilotage systématique en back-office",
+   "etat": "Règle adoptée · chaque instance reste à éprouver",
+   "mesure": null,
+   "onglets": [
+    {
+     "id": "techno",
+     "titre": "Ce que fait la techno",
+     "blocs": [
+      {
+       "t": "note",
+       "paras": [
+        [
+         [
+          "Règle adoptée le 13/10/2026 : quand on crée un système, s'assurer qu'il possède un cockpit ou un système de pilotage réellement utilisable.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "1. Ce que fait la techno",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Toute création comprend le service rendu et son moyen de supervision. Le système peut exécuter ses fonctions dans les permissions accordées ; son responsable doit pouvoir comprendre son état, ses branchements, ses blocages et les décisions attendues, puis intervenir avec les mêmes contrôles serveur.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le back-office est une fonction distincte du parcours utilisateur. Il peut vivre dans le même produit, un cockpit privé partagé, une file de décisions ou une console existante. Choisir la forme la plus simple, rapide, économique et pertinente. Un nouveau tableau de bord ou un second moteur ne sont pas obligatoires.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "2. Couverture minimale",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Contrôle",
+          ""
+         ]
+        ],
+        [
+         [
+          "Ce qui doit être visible ou possible",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "acces_prive",
+           ""
+          ]
+         ],
+         [
+          [
+           "Identité et droits du responsable ; refus effectif des accès non autorisés",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "etat_reel",
+           ""
+          ]
+         ],
+         [
+          [
+           "Une observation datée par fonction ; déclaré, mesuré, inféré et non vérifié distincts",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "fraicheur",
+           ""
+          ]
+         ],
+         [
+          [
+           "Source, version et date ; un échec conserve un état périmé explicitement signalé",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "connecteurs",
+           ""
+          ]
+         ],
+         [
+          [
+           "Branché, absent, expiré, indisponible ; raison et prochaine correction",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "informations_manquantes",
+           ""
+          ]
+         ],
+         [
+          [
+           "Ce qui manque pour avancer, responsable et parcours de correction",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "travaux_en_cours",
+           ""
+          ]
+         ],
+         [
+          [
+           "Dossiers, tâches, propositions et étapes en préparation",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "validations_humaines",
+           ""
+          ]
+         ],
+         [
+          [
+           "Décision attendue sur la version courante ; toute modification invalide l'accord concerné",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "alertes_avant_action",
+           ""
+          ]
+         ],
+         [
+          [
+           "Échéances et réserves visibles avant l'action, avec nouvelle vérification côté serveur",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "journal",
+           ""
+          ]
+         ],
+         [
+          [
+           "Tentative, résultat et provenance ; aucune donnée sensible inutile",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "arret_maitrise",
+           ""
+          ]
+         ],
+         [
+          [
+           "Moyen existant de suspendre ou arrêter, limité au périmètre autorisé et éprouvé",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "droits_serveur",
+           ""
+          ]
+         ],
+         [
+          [
+           "Autorisations contrôlées là où l'action est exécutée ; le navigateur ne les crée pas",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Toutes les fonctions métier doivent avoir une observation de pilotage. Certaines fonctions se supervisent par un lien vers un écran existant. Les actions de contrôle respectent le moteur, les validations et les limites du produit.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "3. Structure réutilisable",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le contrat neutre est dans ",
+         ""
+        ],
+        [
+         "CONTRAT.json",
+         "c"
+        ],
+        [
+         ". ",
+         ""
+        ],
+        [
+         "collecter.mjs",
+         "c"
+        ],
+        [
+         " contrôle un dossier d'attestations privé, conservé dans le projet concerné : liste des fonctions, preuves de couverture, preuves des contrôles. Le rapport ne rend que les comptes et les manques, sans URL ni valeur des preuves.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le contrôleur mesure la complétude du dossier, pas la réalité du fonctionnement. Une attestation ne remplace pas une recette depuis le parcours réel. Il n'active rien, n'écrit dans aucune base et ne change aucun droit.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "4. Ce qui prouve une livraison",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Une lecture normale aboutit de bout en bout ; une lecture refusée reste refusée ; un connecteur coupé produit une erreur utile ; un état périmé reste visible ; une décision sensible attend son accord ; l'arrêt prévu fonctionne dans son périmètre.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Un écran visible avec une source en erreur est un pilotage préparé, pas une lecture fonctionnelle. Une démonstration, une preview et la production portent des états distincts. La disponibilité du cockpit ne prouve aucune autonomie permanente.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "5. Sécurité et limites",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Secrets au serveur, accès privés et cloisonnement des comptes. Aucune copie des données métier, des calculs ou des permissions dans un moteur concurrent. Aucune action réelle ne découle de l'ajout de cette règle au registre. Un système ne peut pas modifier son propre contrôle par ce dispositif.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Les alertes et lectures répétées sont bornées ; elles respectent la visibilité de la page et le budget. Une supervision permanente requiert un mécanisme autorisé et une preuve séparée.",
+         ""
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "checklist",
+     "titre": "Avant livraison",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "1. Avant livraison",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Cette recette accompagne chaque création. Les cases se remplissent à partir du travail mesuré ; une fonction bloquée reste visible avec sa prochaine action.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Recenser toutes les fonctions et leurs effets ; choisir le responsable du pilotage.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Réutiliser le cockpit ou la console existante lorsque sa couverture suffit.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Mapper chaque fonction à une observation réelle, datée, et au parcours autorisé de contrôle.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Couvrir tous les contrôles de ",
+          ""
+         ],
+         [
+          "CONTRAT.json",
+          "c"
+         ],
+         [
+          ", avec preuves datées et version de l'environnement.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Vérifier lecture normale, refus d'accès, perte de source, état périmé, décisions sensibles et arrêt.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Consigner ce qui est préparé, testé, déployé, actif ou bloqué.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Garder le dossier d'attestations privé dans le projet concerné.",
+          ""
+         ]
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "id": "service",
+     "titre": "Mise en service",
+     "blocs": [
+      {
+       "t": "h2",
+       "r": [
+        [
+         "2. Déroulement",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "table",
+       "entetes": [
+        [
+         [
+          "Étape",
+          ""
+         ]
+        ],
+        [
+         [
+          "Mode",
+          ""
+         ]
+        ],
+        [
+         [
+          "Résultat attendu",
+          ""
+         ]
+        ]
+       ],
+       "lignes": [
+        [
+         [
+          [
+           "Cadrer",
+           ""
+          ]
+         ],
+         [
+          [
+           "Assisté",
+           ""
+          ]
+         ],
+         [
+          [
+           "Fonctions, moyens de pilotage, responsables, permissions, risques",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Raccorder",
+           ""
+          ]
+         ],
+         [
+          [
+           "Dans le mandat",
+           ""
+          ]
+         ],
+         [
+          [
+           "Sources communes, lectures minimales, liens aux écrans existants",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Éprouver",
+           ""
+          ]
+         ],
+         [
+          [
+           "Automatisé et humain",
+           ""
+          ]
+         ],
+         [
+          [
+           "Preuves du parcours réel et de ses refus, sous isolation adaptée",
+           ""
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Contrôler le dossier",
+           ""
+          ]
+         ],
+         [
+          [
+           "Automatisé local",
+           ""
+          ]
+         ],
+         [
+          [
+           "node zohshia/pilotage-back-office/collecter.mjs --dossier <fichier-prive>",
+           "c"
+          ]
+         ]
+        ],
+        [
+         [
+          [
+           "Recevoir",
+           ""
+          ]
+         ],
+         [
+          [
+           "Humain",
+           ""
+          ]
+         ],
+         [
+          [
+           "Limites connues ; couverture de chaque fonction attestée et recette relue",
+           ""
+          ]
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le dossier JSON contient ",
+         ""
+        ],
+        [
+         "fonctions",
+         "c"
+        ],
+        [
+         " (noms techniques), ",
+         ""
+        ],
+        [
+         "couverture",
+         "c"
+        ],
+        [
+         " (preuves par fonction) et ",
+         ""
+        ],
+        [
+         "controles",
+         "c"
+        ],
+        [
+         " (preuves par contrôle). Chaque preuve porte ",
+         ""
+        ],
+        [
+         "etat: \"mesure\"",
+         "c"
+        ],
+        [
+         ", une ",
+         ""
+        ],
+        [
+         "reference",
+         "c"
+        ],
+        [
+         " privée et ",
+         ""
+        ],
+        [
+         "le",
+         "c"
+        ],
+        [
+         " (date ISO). Le rapport de structure ne publie jamais ces références.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "3. Gates et entretien",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Un contrôle manquant ou seulement déclaré empêche de dire la supervision complète. Un dossier vide est refusé. Une fonction nouvelle demande une nouvelle preuve de couverture.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "La recette de fonctionnement précède l'annonce de livraison. Un résultat structurel favorable est explicitement une vérification d'attestations, pas une sonde distante. Mettre à jour les preuves après changement de version, de branchement ou de droits.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Respecter les autorisations effectives : déploiement public, dépense, migration, suppression ou envoi réel exigent le mandat correspondant. Le pilotage n'élargit jamais ces autorisations. L'activation d'un automate reste distincte de sa présence dans le code.",
+         ""
+        ]
+       ]
+      }
+     ]
+    }
+   ]
   }
  ],
  "sources": {
+  "pilotage-back-office/badge.json": "9e50e6b7c62eb14f971d074560bec3bcfeac9867806e887df7ca0c21e019cb1b",
+  "pilotage-back-office/TECHNO.md": "ff897c5b5de11607f706429e5b10f5df9b1f37982d5366fa964561b462c3e224",
+  "pilotage-back-office/MISE-EN-SERVICE.md": "7ff7fa32a2d74a77086395e1d91cf8985ddcbf3566b3781cd13f38c438de5a5e",
   "renodevis/badge.json": "cdf0f06c4c492ccc21be7bb97a3d5f2da690832d1e1728d2e0a12bd0482fb1ff",
   "renodevis/TECHNO.md": "aeb32b5b9820a7a30ea450074ea838bb6a1f69bd5d12cdd472c60748832f2932",
   "renodevis/AJOUTER-UN-ARTISAN.md": "8ec42d12a4be63eab0cf311a234251612c30e7998c2009e06c447cebe2b8358f"
