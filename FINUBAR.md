@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-10-13",
-    "commit": "29ba6b9f64b976d01857c3c8e95d0f364f38367b",
-    "quoi": "13/10 : précision de Paul sur ZOH : prévoir le contrôle avant le système métier et disposer du pilotage avant un avancement important. Quatre jalons : cadrage, première coque, ouverture du réel, extension. Source 29ba6b9 ; règle permanente, contrat neutre, guide et données du badge actualisés. Tests ciblés isolés verts : 11 assertions pilotage, 28 verdicts ZOH, 16 verdicts écran ; publication à jour. Auth, droits et code métier inchangés. La lecture du cockpit privé reste celle éprouvée à la livraison V1 ; production RenoDevis inchangée."
+    "commit": "5f29398c123592cae6acf7506ef5ea880f2ea289",
+    "quoi": "13/10 : #389, #392 — plan A→Z : gel C/N/D dans la reprise, levée par la règle 5, preuve de D3 ; lexique vocal RR = air/air, RO = air/eau."
   },
   "prochaine_action": "Chaîne A→Z : Paul valide les devis e-mail sur /devis/email (B3), puis pose la clé Stripe live (A6a). Côté C2 : premier boîtage SOLA sur les rues « jumeaux », source tracée.",
   "bloque_par": [

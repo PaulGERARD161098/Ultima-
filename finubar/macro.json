@@ -86,16 +86,16 @@
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "1773b3a",
-        "tete_le": "2026-10-12T09:02:18+02:00",
-        "commits_depuis": 4,
+        "tete": "eb9dd14",
+        "tete_le": "2026-10-13T09:54:57+00:00",
+        "commits_depuis": 2,
         "commit_inconnu": false
       },
       "mesure_le": "2026-10-13",
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-13T09:32:01.146Z",
+        "lecture_le": "2026-10-13T22:27:20.805Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -157,30 +157,30 @@
         "bloque_par[]"
       ],
       "ciel": "renoboost-ia",
-      "hors_seance": true,
-      "reprise": true,
+      "hors_seance": false,
+      "reprise": false,
       "derive": {
-        "tete": "bba02c0",
-        "tete_le": "2026-10-10T13:58:16+02:00",
+        "tete": "9d60d65",
+        "tete_le": "2026-10-13T09:55:00+00:00",
         "commits_depuis": null,
         "commit_inconnu": true
       },
-      "mesure_le": "2026-10-10",
+      "mesure_le": "2026-10-13",
       "controle": {
-        "type": "github",
-        "lecture_le": "2026-10-13T09:32:01.160Z",
-        "statut": "non_examine",
-        "examines": [],
+        "type": "disque",
+        "statut": "lu",
+        "lecture_le": "2026-10-13T22:27:20.842Z",
+        "examines": [
+          "FINUBAR.md",
+          "derive_git"
+        ],
         "non_examines": [
-          "derive_git",
-          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
-      "motif_controle": "repli GitHub désactivé",
       "jours_depuis_maj": 7,
       "jours_en_attente": 70,
       "rang": 1
@@ -215,30 +215,30 @@
       },
       "recits": [],
       "ciel": "alpha",
-      "hors_seance": true,
-      "reprise": true,
+      "hors_seance": false,
+      "reprise": false,
       "derive": {
-        "tete": "ff92a2b",
-        "tete_le": "2026-10-10T13:58:10+02:00",
+        "tete": "2582190",
+        "tete_le": "2026-10-13T09:55:05+00:00",
         "commits_depuis": null,
         "commit_inconnu": true
       },
-      "mesure_le": "2026-10-10",
+      "mesure_le": "2026-10-13",
       "controle": {
-        "type": "github",
-        "lecture_le": "2026-10-13T09:32:01.171Z",
-        "statut": "non_examine",
-        "examines": [],
+        "type": "disque",
+        "statut": "lu",
+        "lecture_le": "2026-10-13T22:27:20.902Z",
+        "examines": [
+          "FINUBAR.md",
+          "derive_git"
+        ],
         "non_examines": [
-          "derive_git",
-          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
-      "motif_controle": "repli GitHub désactivé",
       "jours_depuis_maj": 13,
       "jours_en_attente": 20,
       "rang": 1
@@ -283,30 +283,30 @@
       },
       "recits": [],
       "ciel": "renoboost-ia",
-      "hors_seance": true,
-      "reprise": true,
+      "hors_seance": false,
+      "reprise": false,
       "derive": {
-        "tete": "645f736",
-        "tete_le": "2026-10-10T13:58:13+02:00",
+        "tete": "1d211b3",
+        "tete_le": "2026-10-13T09:54:59+00:00",
         "commits_depuis": null,
         "commit_inconnu": true
       },
-      "mesure_le": "2026-10-10",
+      "mesure_le": "2026-10-13",
       "controle": {
-        "type": "github",
-        "lecture_le": "2026-10-13T09:32:01.160Z",
-        "statut": "non_examine",
-        "examines": [],
+        "type": "disque",
+        "statut": "lu",
+        "lecture_le": "2026-10-13T22:27:20.830Z",
+        "examines": [
+          "FINUBAR.md",
+          "derive_git"
+        ],
         "non_examines": [
-          "derive_git",
-          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
-      "motif_controle": "repli GitHub désactivé",
       "jours_depuis_maj": 13,
       "jours_en_attente": 90,
       "rang": 2
@@ -327,17 +327,22 @@
         },
         "dernier_arret": {
           "le": "2026-10-13",
-          "quoi": "13/10 : bouton « Jumeaux du chantier » sur la fiche dossier (#355 → 91cbc74), qui ouvre l'onglet jumeaux de la zone pro mon-dpe.fr.",
-          "commit": "91cbc74c036abb373fc1f24cb84b5e340286e271"
+          "quoi": "13/10 : étude d’économies ouverte à l’air/air (#359, #363) ; #365 : dictée RR/RO, champ « Part chauffage », mode d’emploi SOLA.",
+          "commit": "d58730a4fe4712acff9449e52f70f8d966a25376"
         },
-        "prochaine_action": "Paul valide les devis e-mail sur /devis/email, puis pose la clé Stripe live.",
+        "prochaine_action": "Paul chiffre un devis RR et un devis RO sur RECETTE F6 et télécharge les deux études PDF ; relecture des chiffres avant le rendez-vous SOLA.",
         "bloque_par": [
+          "Paul valide les devis e-mail sur /devis/email (B3) avant la clé Stripe live (A6a).",
           "KYC Stripe de SOLA : 0 compte sur 2 peut encaisser (mesuré le 30/09). Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul.",
           "La clé sk_live_ en production : le battement d'embarquement dit toujours test:true, ouverts:0 — remesuré le 08/10 à 06:30 UTC.",
           "Verdict de Paul sur la DENSITÉ : liste du cockpit (PR #160) et blocs d'un modèle retenu. Les tests prouvent la conformité, pas la lisibilité."
         ],
         "en_attente_depuis": "2026-08-17",
         "boucles_ouvertes": [
+          {
+            "quoi": "Étude d’économies : 0 devis chiffré dans l’app au 13/10, donc aucun PDF réel ; 0 audit tracé (devis.extra.audit_pac).",
+            "depuis": "2026-10-13"
+          },
           {
             "quoi": "Pilote WhatsApp (Réno) : #332 fusionné (canal inerte) ; corrections de revue + recette isolée 15/15 sur #333 (non fusionnée). Reste : GO migration reprise, compte Meta + variables…",
             "depuis": "2026-10-10"
@@ -373,10 +378,6 @@
           {
             "quoi": "101 branches mortes à supprimer (65 non fusionnées + 36 fusionnées, liste avec SHA) : suppression refusée par le garde-fou de la séance ; Paul choisit entre une règle…",
             "depuis": "2026-10-08"
-          },
-          {
-            "quoi": "Réponse-type dictée → devis (cadrage du 06/10, lots A/B/C) : cadrée, NON codée par cette séance ; #297 (création guidée, fusionnée le 08/10) en couvre peut-être une partie, à…",
-            "depuis": "2026-10-06"
           }
         ],
         "maj": "2026-10-13"
@@ -397,7 +398,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-13T09:32:01.160Z",
+        "lecture_le": "2026-10-13T22:27:20.817Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -429,8 +430,8 @@
         },
         "dernier_arret": {
           "le": "2026-10-13",
-          "quoi": "13/10 : C2 boucle 6 « jumeaux du chantier » fusionnée (mon-dpe #242 b5ec3fa, RenoDevis #355 91cbc74), essai sur les 5 chantiers SOLA ; leçons v91.",
-          "commit": "f4322c43938b1abd34274c4a6ba1219881227122"
+          "quoi": "13/10 : #389, #392 — plan A→Z : gel C/N/D dans la reprise, levée par la règle 5, preuve de D3 ; lexique vocal RR = air/air, RO = air/eau.",
+          "commit": "5f29398c123592cae6acf7506ef5ea880f2ea289"
         },
         "prochaine_action": "Chaîne A→Z : Paul valide les devis e-mail sur /devis/email (B3), puis pose la clé Stripe live (A6a). Côté C2 : premier boîtage SOLA sur les rues « jumeaux », source tracée.",
         "bloque_par": [
@@ -444,6 +445,10 @@
         ],
         "en_attente_depuis": "2026-08-20",
         "boucles_ouvertes": [
+          {
+            "quoi": "Pilotage ZOH : accès HTTP avec une vraie session propriétaire encore non éprouvé depuis Work (protection Vercel après redirection ; CLI absent). Source et tests sont livrés.…",
+            "depuis": "2026-10-13"
+          },
           {
             "quoi": "LEÇONS v91 (12–13/10, quatre leçons) dans Ultima seulement : propager aux neuf dépôts (procédure LECONS-PROCEDURE.md, lecons-chemins à 0 d'abord).",
             "depuis": "2026-10-12"
@@ -479,10 +484,6 @@
           {
             "quoi": "Chaîne — B3 codée le 12/10 (RenoDevis #348). B1 : code déjà en place, recette sur un devis réel issu d'un relevé. B4 : attend le geste de Paul. Détail : PLAN §2.",
             "depuis": "2026-10-12"
-          },
-          {
-            "quoi": "LEÇON À CONSIGNER + PROPAGER (9 dépôts) : rechute de « un droit se vérifie du côté où il peut être contourné » — la prémisse de l'arbitrage §12.8 quater avait été mesurée en…",
-            "depuis": "2026-09-30"
           }
         ],
         "maj": "2026-10-13"
@@ -504,7 +505,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-13T09:32:01.134Z",
+        "lecture_le": "2026-10-13T22:27:20.796Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -598,30 +599,30 @@
         "boucles_ouvertes[].quoi"
       ],
       "ciel": "alpha",
-      "hors_seance": true,
-      "reprise": true,
+      "hors_seance": false,
+      "reprise": false,
       "derive": {
-        "tete": "2f1a035",
-        "tete_le": "2026-10-10T13:58:18+02:00",
+        "tete": "643a004",
+        "tete_le": "2026-10-13T09:55:03+00:00",
         "commits_depuis": null,
         "commit_inconnu": true
       },
-      "mesure_le": "2026-10-10",
+      "mesure_le": "2026-10-13",
       "controle": {
-        "type": "github",
-        "lecture_le": "2026-10-13T09:32:01.171Z",
-        "statut": "non_examine",
-        "examines": [],
+        "type": "disque",
+        "statut": "lu",
+        "lecture_le": "2026-10-13T22:27:20.877Z",
+        "examines": [
+          "FINUBAR.md",
+          "derive_git"
+        ],
         "non_examines": [
-          "derive_git",
-          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
-      "motif_controle": "repli GitHub désactivé",
       "jours_depuis_maj": 4,
       "jours_en_attente": 53,
       "rang": 2
@@ -642,11 +643,12 @@
         },
         "dernier_arret": {
           "le": "2026-10-13",
-          "quoi": "13/10 : #242 — jumeaux du chantier sur /pro/zone (fiche DPE à 8 m, 300 m élargi, rues à taper) + 6 remarques Codex ; essai sur 5 chantiers SOLA.",
-          "commit": "b5ec3fa6a026077543e19968dc3c29974d91f50b"
+          "quoi": "13/10 : audit PAC verrouillé RR/RO (#248) : appoint air/air, TVA du devis, part chauffage élec, prix oct. 2026, CEE estimés, MPR 0 si appoint fossile.",
+          "commit": "f1288b285b005384003a3dca6205beb3d2d2cedd"
         },
-        "prochaine_action": "Premier boîtage SOLA sur les rues « jumeaux » d'un chantier signé, source tracée dans RénoBoost.",
+        "prochaine_action": "Relire à la main les deux études PDF (RR et RO) que Paul chiffre sur RECETTE F6, avant le rendez-vous SOLA de fin de semaine.",
         "bloque_par": [
+          "Paul ouvre les 4 sources lues en extrait (Tarif Bleu, prix repère gaz CRE, ELECDOM, eau chaude 800 kWh/occupant) : CADRAGE-2026-10-13-audit-pac-verrou.md §②",
           "Poser les secrets Vercel du pont audit-PAC, puis redéployer",
           "`MAGIC_LINK_SECRET` + `RESEND_API_KEY` + domaine Resend (magic link cross-device)",
           "`lib/site.ts` : passer `legalForm` d'EURL à SAS une fois publié au greffe",
@@ -654,6 +656,10 @@
         ],
         "en_attente_depuis": "2026-08-21",
         "boucles_ouvertes": [
+          {
+            "quoi": "Prix repère gaz mensuel (0,1576 €/kWh annoncé au 01/11) : references.ts périme seul. Site grand public : CEE encore en montants fixes.",
+            "depuis": "2026-10-13"
+          },
           {
             "quoi": "10 PR ouvertes — 6 dependabot (react, next, @types/node, SDK, actions) et 4 brouillons dormants : #183 (12/07), #170 (02/07), #164 et #163 (06/06). À trier : ce qui dort depuis…",
             "depuis": "2026-06-06"
@@ -677,7 +683,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-13T09:32:01.171Z",
+        "lecture_le": "2026-10-13T22:27:20.864Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -733,30 +739,30 @@
         "bloque_par[]"
       ],
       "ciel": "alpha",
-      "hors_seance": true,
-      "reprise": true,
+      "hors_seance": false,
+      "reprise": false,
       "derive": {
-        "tete": "a1a5fa1",
-        "tete_le": "2026-10-10T13:58:08+02:00",
+        "tete": "956a0f7",
+        "tete_le": "2026-10-13T09:55:04+00:00",
         "commits_depuis": null,
         "commit_inconnu": true
       },
-      "mesure_le": "2026-10-10",
+      "mesure_le": "2026-10-13",
       "controle": {
-        "type": "github",
-        "lecture_le": "2026-10-13T09:32:01.171Z",
-        "statut": "non_examine",
-        "examines": [],
+        "type": "disque",
+        "statut": "lu",
+        "lecture_le": "2026-10-13T22:27:20.890Z",
+        "examines": [
+          "FINUBAR.md",
+          "derive_git"
+        ],
         "non_examines": [
-          "derive_git",
-          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
-      "motif_controle": "repli GitHub désactivé",
       "jours_depuis_maj": 5,
       "jours_en_attente": 35,
       "rang": 2
@@ -792,30 +798,30 @@
       },
       "recits": [],
       "ciel": "renoboost-ia",
-      "hors_seance": true,
-      "reprise": true,
+      "hors_seance": false,
+      "reprise": false,
       "derive": {
-        "tete": "65277a0",
-        "tete_le": "2026-10-10T13:58:24+02:00",
+        "tete": "ecbad6a",
+        "tete_le": "2026-10-13T09:55:01+00:00",
         "commits_depuis": null,
         "commit_inconnu": true
       },
-      "mesure_le": "2026-10-10",
+      "mesure_le": "2026-10-13",
       "controle": {
-        "type": "github",
-        "lecture_le": "2026-10-13T09:32:01.160Z",
-        "statut": "non_examine",
-        "examines": [],
+        "type": "disque",
+        "statut": "lu",
+        "lecture_le": "2026-10-13T22:27:20.853Z",
+        "examines": [
+          "FINUBAR.md",
+          "derive_git"
+        ],
         "non_examines": [
-          "derive_git",
-          "rappel",
           "pr",
           "controles",
           "permissions",
           "dependances"
         ]
       },
-      "motif_controle": "repli GitHub désactivé",
       "jours_depuis_maj": 13,
       "jours_en_attente": 33,
       "rang": 2
@@ -826,13 +832,13 @@
     "lisibles": 10,
     "illisibles": 0,
     "hors_seance": 0,
-    "repris": 6,
+    "repris": 0,
     "en_cours": 8,
     "en_attente_de_paul": 2,
     "au_repos": 0,
     "derives": 1,
     "commits_inconnus": 6,
-    "boucles_ouvertes": 45,
+    "boucles_ouvertes": 46,
     "gestes_de_paul": [
       {
         "projet": "RénoBoost",
@@ -916,6 +922,10 @@
       },
       {
         "projet": "RénoDevis",
+        "geste": "Paul valide les devis e-mail sur /devis/email (B3) avant la clé Stripe live (A6a)."
+      },
+      {
+        "projet": "RénoDevis",
         "geste": "KYC Stripe de SOLA : 0 compte sur 2 peut encaisser (mesuré le 30/09). Le KYC réel en Live reste à l'artisan (LCB-FT), pas à Paul."
       },
       {
@@ -977,6 +987,10 @@
       {
         "projet": "artisan-builder",
         "geste": "RÉSERVE, pas un blocage : l'adresse du siège est une DOMICILIATION (SOFRADOM). Voir le README du site, §Ce qui bloque."
+      },
+      {
+        "projet": "mon-dpe.fr",
+        "geste": "Paul ouvre les 4 sources lues en extrait (Tarif Bleu, prix repère gaz CRE, ELECDOM, eau chaude 800 kWh/occupant) : CADRAGE-2026-10-13-audit-pac-verrou.md §②"
       },
       {
         "projet": "mon-dpe.fr",
@@ -1065,17 +1079,16 @@
       "PaulGERARD161098/Ultima-",
       "PaulGERARD161098/RenoBoost",
       "PaulGERARD161098/RenoDevis",
-      "PaulGERARD161098/mon-dpe.fr"
-    ],
-    "inaccessibles": [],
-    "non_examines": [
       "PaulGERARD161098/RenoAgenda",
       "PaulGERARD161098/RenoPredict",
       "PaulGERARD161098/renoboost-console",
+      "PaulGERARD161098/mon-dpe.fr",
       "PaulGERARD161098/artisan-builder",
       "paggerard-boop/Artidispo",
       "PaulGERARD161098/DATARENO-"
     ],
+    "inaccessibles": [],
+    "non_examines": [],
     "anomalies": [],
     "portee": "Registre seulement. PR, contrôles, permissions et dépendances non examinés."
   },
@@ -1083,7 +1096,7 @@
     "signaux": [
       {
         "projet": "RénoBoost",
-        "dit": "a avancé de 4 commit(s) depuis sa dernière note",
+        "dit": "a avancé de 2 commit(s) depuis sa dernière note",
         "pourquoi": "derive"
       },
       {
