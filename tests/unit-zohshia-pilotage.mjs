@@ -23,5 +23,10 @@ const donnee = construire(); const badge = donnee.technos.find(t => t.id === 'pi
 assert.ok(badge && badge.onglets.length === 3 && badge.onglets.every(o => o.blocs.length >= 3));
 const plan = readFileSync(new URL('../zohshia/pilotage-back-office/TECHNO.md', import.meta.url), 'utf8');
 assert.ok(contrat.controles.every(c => plan.includes(c)));
-console.log('Pilotage : 11 assertions et badge généré conformes ; aucune sonde de production.');
+const sansCockpitLocal = fixture(); delete sansCockpitLocal.controles.cockpit_local;
+assert.equal(collecter(sansCockpitLocal).attestationsCompletes, false);
+assert.ok(collecter(sansCockpitLocal).controlesSansPreuve.includes('cockpit_local'));
+assert.ok(JSON.stringify(badge).includes('interface d’administration'));
+console.log('Pilotage : 14 assertions et badge généré conformes ; aucune sonde de production.');
+
 
