@@ -1,10 +1,14 @@
 # Pilotage systématique en back-office
 
-> Règle adoptée le 13/10/2026 : quand on crée un système, s'assurer qu'il possède un cockpit ou un système de pilotage réellement utilisable.
+> Règle adoptée et précisée le 13/10/2026 : prévoir le contrôle dès le cadrage, même avant l'existence du système métier ; disposer d'un pilotage utilisable avant tout avancement important ou mise en ligne.
 
 ## 1. Ce que fait la techno
 
 Toute création comprend le service rendu et son moyen de supervision. Le système peut exécuter ses fonctions dans les permissions accordées ; son responsable doit pouvoir comprendre son état, ses branchements, ses blocages et les décisions attendues, puis intervenir avec les mêmes contrôles serveur.
+
+Le contrôle précède l'exécution. On peut préparer le pilotage avant d'avoir le système à piloter : responsable, périmètre, fonctions prévues, droits, décisions et moyen d'arrêt sont définis au cadrage. Une première coque privée est utilisable dès les premiers incréments. Les capacités restent fermées ou en simulation tant que leurs contrôles réels ne sont pas éprouvés.
+
+Avant une action réelle, une autonomie, une mise en ligne ou une extension, vérifier le jalon de pilotage correspondant. La mise en ligne inclut un hébergement privé utilisant des données réelles ou produisant des effets externes. Le projet ne doit pas atteindre un stade coûteux à corriger ou difficile à arrêter avant d'avoir son contrôle ; les jalons concrets sont décrits dans le guide.
 
 Le back-office est une fonction distincte du parcours utilisateur. Il peut vivre dans le même produit, un cockpit privé partagé, une file de décisions ou une console existante. Choisir la forme la plus simple, rapide, économique et pertinente. Un nouveau tableau de bord ou un second moteur ne sont pas obligatoires.
 
@@ -32,11 +36,13 @@ Le contrat neutre est dans `CONTRAT.json`. `collecter.mjs` contrôle un dossier 
 
 Le contrôleur mesure la complétude du dossier, pas la réalité du fonctionnement. Une attestation ne remplace pas une recette depuis le parcours réel. Il n'active rien, n'écrit dans aucune base et ne change aucun droit.
 
-## 4. Ce qui prouve une livraison
+## 4. Ce qui autorise un passage
 
 Une lecture normale aboutit de bout en bout ; une lecture refusée reste refusée ; un connecteur coupé produit une erreur utile ; un état périmé reste visible ; une décision sensible attend son accord ; l'arrêt prévu fonctionne dans son périmètre.
 
-Un écran visible avec une source en erreur est un pilotage préparé, pas une lecture fonctionnelle. Une démonstration, une preview et la production portent des états distincts. La disponibilité du cockpit ne prouve aucune autonomie permanente.
+Distinguer contrôle prévu (plan), utilisable (parcours accessible) et éprouvé (preuves sur la version et le périmètre concernés). Un écran visible avec une source en erreur est un pilotage préparé, pas une lecture fonctionnelle. Une démonstration, une preview et la production portent des états distincts. La disponibilité du cockpit ne prouve aucune autonomie permanente.
+
+Une capacité nouvelle ne passe pas avant son pilotage. Si le jalon manque, garder cette capacité fermée et poursuivre la préparation de son contrôle dans l'environnement isolé. Cette règle organise les passages du projet ; un verrou automatique exige une implémentation et une preuve propres au projet.
 
 ## 5. Sécurité et limites
 

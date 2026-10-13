@@ -13,7 +13,7 @@
     "arret_maitrise",
     "droits_serveur"
   ],
-  "regle": "Chaque fonction du système possède un moyen de supervision ; le pilotage existant est réutilisé quand il couvre le besoin.",
+  "regle": "Prévoir le contrôle dès le cadrage, même avant le système métier. Rendre une première coque de pilotage utilisable dès les premiers incréments, avant un avancement important. Chaque fonction possède une supervision éprouvée avant action réelle, autonomie, mise en ligne ou extension ; le pilotage existant est réutilisé quand il couvre le besoin.",
   "preuve": "Le contrôle de structure vérifie des attestations fournies, jamais l'état réel à distance."
 }
 

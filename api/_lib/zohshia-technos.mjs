@@ -5985,7 +5985,7 @@ export default {
        "paras": [
         [
          [
-          "Règle adoptée le 13/10/2026 : quand on crée un système, s'assurer qu'il possède un cockpit ou un système de pilotage réellement utilisable.",
+          "Règle adoptée et précisée le 13/10/2026 : prévoir le contrôle dès le cadrage, même avant l'existence du système métier ; disposer d'un pilotage utilisable avant tout avancement important ou mise en ligne.",
           ""
          ]
         ]
@@ -6005,6 +6005,24 @@ export default {
        "r": [
         [
          "Toute création comprend le service rendu et son moyen de supervision. Le système peut exécuter ses fonctions dans les permissions accordées ; son responsable doit pouvoir comprendre son état, ses branchements, ses blocages et les décisions attendues, puis intervenir avec les mêmes contrôles serveur.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Le contrôle précède l'exécution. On peut préparer le pilotage avant d'avoir le système à piloter : responsable, périmètre, fonctions prévues, droits, décisions et moyen d'arrêt sont définis au cadrage. Une première coque privée est utilisable dès les premiers incréments. Les capacités restent fermées ou en simulation tant que leurs contrôles réels ne sont pas éprouvés.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Avant une action réelle, une autonomie, une mise en ligne ou une extension, vérifier le jalon de pilotage correspondant. La mise en ligne inclut un hébergement privé utilisant des données réelles ou produisant des effets externes. Le projet ne doit pas atteindre un stade coûteux à corriger ou difficile à arrêter avant d'avoir son contrôle ; les jalons concrets sont décrits dans le guide.",
          ""
         ]
        ]
@@ -6256,7 +6274,7 @@ export default {
        "t": "h2",
        "r": [
         [
-         "4. Ce qui prouve une livraison",
+         "4. Ce qui autorise un passage",
          ""
         ]
        ]
@@ -6274,7 +6292,16 @@ export default {
        "t": "p",
        "r": [
         [
-         "Un écran visible avec une source en erreur est un pilotage préparé, pas une lecture fonctionnelle. Une démonstration, une preview et la production portent des états distincts. La disponibilité du cockpit ne prouve aucune autonomie permanente.",
+         "Distinguer contrôle prévu (plan), utilisable (parcours accessible) et éprouvé (preuves sur la version et le périmètre concernés). Un écran visible avec une source en erreur est un pilotage préparé, pas une lecture fonctionnelle. Une démonstration, une preview et la production portent des états distincts. La disponibilité du cockpit ne prouve aucune autonomie permanente.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Une capacité nouvelle ne passe pas avant son pilotage. Si le jalon manque, garder cette capacité fermée et poursuivre la préparation de son contrôle dans l'environnement isolé. Cette règle organise les passages du projet ; un verrou automatique exige une implémentation et une preuve propres au projet.",
          ""
         ]
        ]
@@ -6325,7 +6352,7 @@ export default {
        "t": "p",
        "r": [
         [
-         "Cette recette accompagne chaque création. Les cases se remplissent à partir du travail mesuré ; une fonction bloquée reste visible avec sa prochaine action.",
+         "Cette recette commence au cadrage, avant de construire le système métier. Le pilotage est prévu avant le projet et rendu utilisable dès ses premiers incréments ; il n'est pas ajouté en fin de construction. Les cases se remplissent à partir du travail mesuré ; une fonction bloquée reste visible avec sa prochaine action.",
          ""
         ]
        ]
@@ -6343,6 +6370,12 @@ export default {
         [
          [
           "Réutiliser le cockpit ou la console existante lorsque sa couverture suffit.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Préparer une première coque privée avec accès du responsable, fonctions prévues, décisions et moyen d'arrêt, même sans moteur métier.",
           ""
          ]
         ],
@@ -6369,6 +6402,12 @@ export default {
         [
          [
           "Vérifier lecture normale, refus d'accès, perte de source, état périmé, décisions sensibles et arrêt.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Éprouver les contrôles avant toute action réelle, autonomie, mise en ligne ou extension du périmètre.",
           ""
          ]
         ],
@@ -6406,19 +6445,19 @@ export default {
        "entetes": [
         [
          [
-          "Étape",
+          "Jalon",
           ""
          ]
         ],
         [
          [
-          "Mode",
+          "Avant quoi",
           ""
          ]
         ],
         [
          [
-          "Résultat attendu",
+          "Condition de passage",
           ""
          ]
         ]
@@ -6427,19 +6466,19 @@ export default {
         [
          [
           [
-           "Cadrer",
+           "Cadrage",
            ""
           ]
          ],
          [
           [
-           "Assisté",
+           "Construction métier",
            ""
           ]
          ],
          [
           [
-           "Fonctions, moyens de pilotage, responsables, permissions, risques",
+           "Responsable, fonctions, format de pilotage, permissions, risques et arrêt prévus",
            ""
           ]
          ]
@@ -6447,19 +6486,19 @@ export default {
         [
          [
           [
-           "Raccorder",
+           "Première coque",
            ""
           ]
          ],
          [
           [
-           "Dans le mandat",
+           "Prototype métier avancé ou intégration difficile à défaire",
            ""
           ]
          ],
          [
           [
-           "Sources communes, lectures minimales, liens aux écrans existants",
+           "Pilotage privé accessible ; fonctions prévues et blocages visibles ; simulations identifiées",
            ""
           ]
          ]
@@ -6467,19 +6506,19 @@ export default {
         [
          [
           [
-           "Éprouver",
+           "Ouverture du réel",
            ""
           ]
          ],
          [
           [
-           "Automatisé et humain",
+           "Action réelle, autonomie ou mise en ligne, même privée",
            ""
           ]
          ],
          [
           [
-           "Preuves du parcours réel et de ses refus, sous isolation adaptée",
+           "Sources raccordées ; contrôles et arrêt éprouvés de bout en bout sur la version concernée ; mandat effectif",
            ""
           ]
          ]
@@ -6487,42 +6526,48 @@ export default {
         [
          [
           [
-           "Contrôler le dossier",
+           "Extension",
            ""
           ]
          ],
          [
           [
-           "Automatisé local",
+           "Nouvelle fonction, nouveau branchement, nouveaux droits ou hausse d'autonomie",
            ""
           ]
          ],
          [
           [
-           "node zohshia/pilotage-back-office/collecter.mjs --dossier <fichier-prive>",
-           "c"
+           "Couverture actualisée et contrôles affectés ré-éprouvés avant ouverture de la nouvelle capacité",
+           ""
           ]
          ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Raccorder les sources communes et les parcours de contrôle, éprouver les succès et les refus sous isolation adaptée, puis relire les preuves avec le responsable. Une preview strictement isolée, sans données sensibles ni effets externes, peut servir à construire le pilotage ; elle ne valide pas l'ouverture du réel.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Contrôle local du dossier : ",
+         ""
         ],
         [
-         [
-          [
-           "Recevoir",
-           ""
-          ]
-         ],
-         [
-          [
-           "Humain",
-           ""
-          ]
-         ],
-         [
-          [
-           "Limites connues ; couverture de chaque fonction attestée et recette relue",
-           ""
-          ]
-         ]
+         "node zohshia/pilotage-back-office/collecter.mjs --dossier <fichier-prive>",
+         "c"
+        ],
+        [
+         ".",
+         ""
         ]
        ]
       },
@@ -6596,7 +6641,7 @@ export default {
        "t": "p",
        "r": [
         [
-         "Un contrôle manquant ou seulement déclaré empêche de dire la supervision complète. Un dossier vide est refusé. Une fonction nouvelle demande une nouvelle preuve de couverture.",
+         "Un jalon manquant bloque le passage concerné ; la capacité reste fermée ou en simulation. Un contrôle manquant ou seulement déclaré empêche de dire la supervision complète. Un dossier vide est refusé. Une fonction nouvelle demande une nouvelle preuve de couverture.",
          ""
         ]
        ]
@@ -6605,7 +6650,7 @@ export default {
        "t": "p",
        "r": [
         [
-         "La recette de fonctionnement précède l'annonce de livraison. Un résultat structurel favorable est explicitement une vérification d'attestations, pas une sonde distante. Mettre à jour les preuves après changement de version, de branchement ou de droits.",
+         "La recette de fonctionnement précède l'ouverture de la capacité et l'annonce de livraison. Un résultat structurel favorable est explicitement une vérification d'attestations, pas une sonde distante. Le collecteur ne bloque techniquement ni un déploiement ni une action : chaque projet doit implémenter et éprouver ses propres verrous. Mettre à jour les preuves après changement de version, de branchement ou de droits.",
          ""
         ]
        ]
@@ -6626,8 +6671,8 @@ export default {
  ],
  "sources": {
   "pilotage-back-office/badge.json": "9e50e6b7c62eb14f971d074560bec3bcfeac9867806e887df7ca0c21e019cb1b",
-  "pilotage-back-office/TECHNO.md": "ff897c5b5de11607f706429e5b10f5df9b1f37982d5366fa964561b462c3e224",
-  "pilotage-back-office/MISE-EN-SERVICE.md": "7ff7fa32a2d74a77086395e1d91cf8985ddcbf3566b3781cd13f38c438de5a5e",
+  "pilotage-back-office/TECHNO.md": "3f848a88f86b7b3ed79b84c28b746c4e2b1f1eb29db2f33801bda19a89e88af8",
+  "pilotage-back-office/MISE-EN-SERVICE.md": "ef618cf028d863d16c4ff46cc8c17b11dd0015a2a23d0124721aab052c4eac3b",
   "renodevis/badge.json": "cdf0f06c4c492ccc21be7bb97a3d5f2da690832d1e1728d2e0a12bd0482fb1ff",
   "renodevis/TECHNO.md": "aeb32b5b9820a7a30ea450074ea838bb6a1f69bd5d12cdd472c60748832f2932",
   "renodevis/AJOUTER-UN-ARTISAN.md": "8ec42d12a4be63eab0cf311a234251612c30e7998c2009e06c447cebe2b8358f"
