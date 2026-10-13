@@ -24,7 +24,7 @@
   "projet": "Ultima",
   "depot": "PaulGERARD161098/Ultima-",
   "cap": "Ultima est l'unique interface de travail de Paul (Directive JL) : elle absorbe toute sa data, la dispatche, la navigue — avec Léo pour seule interlocutrice. Rien d'autre ne sera créé : tout nouveau besoin est une extension d'Ultima.",
-  "rattache_a": "PLAN-2026-09-30-chaine-A-Z.md (la route de la chaîne Rénoboost et son état vivant) · CADRAGE-RIVEN-NEBULEUSES.md · CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md",
+  "rattache_a": "PLAN-2026-09-30-chaine-A-Z.md (la route de la chaîne Rénoboost et son état vivant) · CADRAGE-RIVEN-NEBULEUSES.md · CADRAGE-2026-09-25-carte-celeste.md · specs/README.md · specs/ARBITRAGES.md · specs/INDEX.md (généré) · AUDIT-2026-09-14.md · REPRISE-2026-09-06-leo-partout-mail-matin.md · REPRISE-2026-09-02-accueil-finubar.md · CADRAGE-ACCUEIL-FINUBAR.md · CADRAGE-ULTIMA.md (section ÉTAT) · CADRAGE-FINUBAR.md · CADRAGE-RIVEN-IMPORT.md · zohshia/pilotage-back-office/TECHNO.md",
   "etat": "en_cours",
   "jalon": {
     "nom": "Léo et FINUBAR — activation du site et des commandes",
@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-10-13",
-    "commit": "f4322c43938b1abd34274c4a6ba1219881227122",
-    "quoi": "13/10 : C2 boucle 6 « jumeaux du chantier » fusionnée (mon-dpe #242 b5ec3fa, RenoDevis #355 91cbc74), essai sur les 5 chantiers SOLA ; leçons v91."
+    "commit": "9446668fdabca19095800d3229f87c1de2a6700e",
+    "quoi": "13/10 : pilotage systématique en back-office préparé dans ZOH, badge généré, règle au cadrage et à la recette, 11 assertions nouvelles et deux suites existantes vertes en isolation éprouvée ; branche non fusionnée. Le jalon métier et les travaux C2 précédents sont préservés."
   },
   "prochaine_action": "Chaîne A→Z : Paul valide les devis e-mail sur /devis/email (B3), puis pose la clé Stripe live (A6a). Côté C2 : premier boîtage SOLA sur les rues « jumeaux », source tracée.",
   "bloque_par": [
@@ -47,6 +47,10 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "Pilotage systématique ZOH : code préparé et tests isolés verts, fusion explicitement liée au SHA et à la cible à autoriser ; publication/activation des agents non annoncées. Source : zohshia/pilotage-back-office/TECHNO.md.",
+      "depuis": "2026-10-13"
+    },
     {
       "quoi": "LEÇONS v91 (12–13/10, quatre leçons) dans Ultima seulement : propager aux neuf dépôts (procédure LECONS-PROCEDURE.md, lecons-chemins à 0 d'abord).",
       "depuis": "2026-10-12"
@@ -175,6 +179,24 @@
 <!-- finubar:fin -->
 
 ## Journal de reprise
+
+### 2026-10-13 — règle de pilotage systématique, préparée
+
+Mandat explicite : implanter dans ZOH une technologie de pilotage en back-office
+pour toute création de système. Dossier neutre `zohshia/pilotage-back-office/` :
+plan, badge, guide, contrat et contrôleur local de complétude des attestations.
+La règle est référencée au cadrage et à la recette dans `CLAUDE.md`.
+Code poussé au commit 9446668fdabca19095800d3229f87c1de2a6700e. La préparation ne change aucun droit, automate, contrôle privé ou donnée métier.
+Le contrôleur ne sonde aucune production. Publication de l'écran par le
+générateur existant ; l'accès reste réservé au propriétaire.
+Validation : 11 assertions nouvelles et deux suites ZOH existantes réussies ;
+publication locale du badge fraîche. Réseau refusé par filtre système,
+lectures/écritures limitées au snapshot, processus enfants refusés, environnement
+sans secret ; trois refus effectivement éprouvés. Authentification du registre
+simulée en test, aucune recette propriétaire en ligne annoncée. SDK de recette
+préinstallé en version 2.110.5, sans changement de dépendance dans le dépôt.
+État : branche à relire et fusion liée au SHA à autoriser ; aucune mise en
+production ni preuve d'activation de cette règle dans les agents existants.
 
 > Les séances, de la plus récente à la plus ancienne. Une entrée = une date, un
 > fait vérifié, une décision. La mémoire longue ; le bloc ci-dessus est la mémoire
@@ -605,3 +627,4 @@ au déploiement — et par un verrou vérifiable **hors ligne**.
 squash, `dernier_arret.commit` pointait déjà dans le vide (`639c2d6` a disparu
 de `main`). C'est exactement ce que la vérification ① doit corriger sur les
 7 autres dépôts — encore ouverte, l'attachement de ces dépôts ayant été refusé.
+

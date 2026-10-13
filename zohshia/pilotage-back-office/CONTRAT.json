@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "controles": [
+    "acces_prive",
+    "etat_reel",
+    "fraicheur",
+    "connecteurs",
+    "informations_manquantes",
+    "travaux_en_cours",
+    "validations_humaines",
+    "alertes_avant_action",
+    "journal",
+    "arret_maitrise",
+    "droits_serveur"
+  ],
+  "regle": "Chaque fonction du système possède un moyen de supervision ; le pilotage existant est réutilisé quand il couvre le besoin.",
+  "preuve": "Le contrôle de structure vérifie des attestations fournies, jamais l'état réel à distance."
+}
+

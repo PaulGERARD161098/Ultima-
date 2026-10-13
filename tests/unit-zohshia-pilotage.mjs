@@ -1,0 +1,27 @@
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { collecter } from '../zohshia/pilotage-back-office/collecter.mjs';
+import { construire } from '../zohshia/publier.mjs';
+const contrat = JSON.parse(readFileSync(new URL('../zohshia/pilotage-back-office/CONTRAT.json', import.meta.url), 'utf8'));
+const p = () => ({ etat: 'mesure', reference: 'preuve-privee', le: '2026-10-13' });
+const fixture = () => ({ fonctions: ['preparer', 'valider'], couverture: { preparer: p(), valider: p() }, controles: Object.fromEntries(contrat.controles.map(c => [c, p()])) });
+assert.throws(() => collecter({ fonctions: [] }));
+assert.throws(() => collecter({ fonctions: ['preparer', 'preparer'], couverture: {}, controles: {} }));
+assert.equal(collecter(fixture()).attestationsCompletes, true);
+const nonMesure = fixture(); nonMesure.couverture.valider.etat = 'declare';
+assert.deepEqual(collecter(nonMesure).fonctionsSansPreuve, ['valider']);
+const manquant = fixture(); delete manquant.controles.arret_maitrise;
+assert.equal(collecter(manquant).attestationsCompletes, false);
+const nouvelle = fixture(); nouvelle.fonctions.push('envoyer');
+assert.deepEqual(collecter(nouvelle).fonctionsSansPreuve, ['envoyer']);
+const date = fixture(); date.controles.acces_prive.le = 'inconnue';
+assert.ok(collecter(date).controlesSansPreuve.includes('acces_prive'));
+const rapport = collecter(fixture());
+assert.equal(rapport.fonctionnementReelSonde, false);
+assert.ok(!JSON.stringify(rapport).includes('preuve-privee'));
+const donnee = construire(); const badge = donnee.technos.find(t => t.id === 'pilotage-back-office');
+assert.ok(badge && badge.onglets.length === 3 && badge.onglets.every(o => o.blocs.length >= 3));
+const plan = readFileSync(new URL('../zohshia/pilotage-back-office/TECHNO.md', import.meta.url), 'utf8');
+assert.ok(contrat.controles.every(c => plan.includes(c)));
+console.log('Pilotage : 11 assertions et badge généré conformes ; aucune sonde de production.');
+
