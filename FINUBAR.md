@@ -651,3 +651,17 @@ squash, `dernier_arret.commit` pointait déjà dans le vide (`639c2d6` a disparu
 de `main`). C'est exactement ce que la vérification ① doit corriger sur les
 7 autres dépôts — encore ouverte, l'attachement de ces dépôts ayant été refusé.
 
+
+
+### 2026-10-13 — cockpit miroir propre à chaque outil, préparé
+
+Mandat de Paul : chaque outil de données possède son cockpit dans son interface
+d’administration ; ces cockpits ne vivent pas dans Ultima. Source de la règle :
+`zohshia/pilotage-back-office/TECHNO.md`, contrat v2 (`cockpit_local`) et guide.
+Code préparé : `07e191f0efb9c15a1fe2a31092ed6f769ff109ed`. Publication du badge régénérée.
+[MESURÉ LOCAL] 14 assertions du harnais de pilotage et contrôle de fraîcheur
+passent, dans une copie dédiée, sans variables d’authentification. La techno
+RenoDevis conserve ses condensats de sources. Aucun accès au contrôle privé R21.
+[RESTANT] Fusion de cette version avec accord explicite ; la règle n’est pas
+annoncée publiée sur main avant cette fusion. Côté ArtiDispo : inventaire et
+maquette de l’onglet administrateur, puis parcours allégé du compte Matthieu.
