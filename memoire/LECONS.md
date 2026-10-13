@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v91 2026-10-13 sha256:b1b11189c412 -->
+<!-- lecons:empreinte v92 2026-10-13 sha256:b8f66c00d649 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -718,7 +718,7 @@ de base — échouait aussi (`couldn't find remote ref`), car un dépôt local n
 sert pas un commit demandé par son seul identifiant. **Le jour où le repli
 servait pour la première fois, il n'existait pas** : le livrable « code prêt
 pour un nouvel artisan » était indisponible, avec un outil qui affirmait le
-contraire. Même soir, même famille : la recette privée (`outils/`, la liste
+contraire. Même soir, même famille : la recette privée (`Ultima-/outils/`, la liste
 des noms qu'on cache) n'était tenue que par `.vercelignore` — servie en local,
 alors que le dossier qu'elle protège avait deux ceintures.
 
@@ -2392,7 +2392,7 @@ cher qu'un lint absent : il rassure. ⛔ *Avant de citer le résultat d'un outil
 de projet, vérifier qu'on a lancé CELUI du projet — `npm install` d'abord, et
 lire la sortie entière, pas son `tail`.*
 ⊕ **L'inverse est vrai aussi** *(2026-10-01)* : un `node_modules` qui EXISTE
-mais date d'avant une fusion qui a touché `package-lock.json` est un autre
+mais date d'avant une fusion qui a touché `RenoDevis/package-lock.json` est un autre
 outil que celui du projet. Sur `main` de RenoDevis, que la CI venait de passer
 vert (680 tests), le premier passage local a rendu **673/680 et `tsc` rouge** —
 `pdf-lib` et `@pdf-lib/fontkit`, ajoutés par #219, manquaient en local. `npm ci`,
