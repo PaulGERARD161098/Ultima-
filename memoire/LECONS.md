@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v90 2026-10-12 sha256:25cd516e5b91 -->
+<!-- lecons:empreinte v91 2026-10-13 sha256:b1b11189c412 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -638,6 +638,20 @@ une suite de tests de 6 min a été perdue et un commit a sauté. La cause n'est
 plus l'oubli : on n'avait aucun besoin de tuer quoi que ce soit — attendre la
 fin d'une commande lancée en arrière-plan passe par sa notification, pas par un
 `pkill` de nettoyage.*
+
+**LE PROFIL SUPPOSÉ N'EST PAS LE CLIENT** *(2026-10-13, mon-dpe.fr — jumeaux du chantier)*.
+Toute la boucle 6 a été cadrée, codée, testée et éprouvée au banc sur un profil
+type : « maison 1948-1974, électricité, 100 m², F ». Tests verts, sabotages rouges,
+essais réels à Écully concluants. L'essai sur les 5 VRAIS chantiers SOLA signés a
+dit autre chose : 0 maison, 3 appartements en immeuble, 2 adresses sans DPE — et,
+sur les 3 immeubles, la fiche recopiait la surface et l'étiquette d'un AUTRE
+appartement (42 m² B, 95 m² D), avec une provenance « DPE » qui la rendait crédible.
+*Ce que ça a coûté* : un défaut de données prêt à partir en production, et une
+boucle entière calibrée sur un client qui n'existe pas dans le portefeuille.
+⛔ **La règle** : avant de déclarer une boucle finie, elle passe sur les vrais cas
+du client visé (lus en base, sans PII) — pas sur un profil qui « ressemble ».
+Le profil type sert à construire ; seuls les vrais cas disent si c'est le bon.
+
 
 ## 2. Les garde-fous, et leur silence
 
