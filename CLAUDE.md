@@ -414,13 +414,18 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
 ## ⚙️ Règles permanentes
 
 - **Pilotage systématique en back-office** (13/10/2026) : toute création de
-  système comprend un cockpit ou un moyen de pilotage utilisable. Avant de
-  livrer, recenser ses fonctions, réutiliser le pilotage existant s'il couvre le
-  besoin, puis prouver les lectures réelles, refus, erreurs, accords humains et
-  arrêt maîtrisé. Source neutre unique :
+  système prévoit son contrôle dès le cadrage, même si le système métier
+  n'existe pas encore. Le cockpit ou moyen de pilotage doit être utilisable
+  avant que le projet soit trop avancé : première coque privée dès les premiers
+  incréments ; contrôles éprouvés avant action réelle, autonomie, mise en ligne
+  ou extension du périmètre. Réutiliser le pilotage existant s'il couvre le
+  besoin ; recenser les fonctions et prouver lectures réelles, refus, erreurs,
+  accords humains et arrêt maîtrisé avant d'ouvrir les capacités concernées.
+  Source neutre unique :
   `zohshia/pilotage-back-office/TECHNO.md` ; contrat et guide dans ce dossier.
-  Ce point est vérifié au cadrage et à la recette. Une règle adoptée ou un écran
-  visible ne prouve pas un raccordement actif ; aucun droit n'est élargi.
+  Vérifier ces jalons au cadrage et avant chaque passage. Distinguer contrôle
+  prévu, utilisable et éprouvé : une maquette ne suffit pas à ouvrir le réel.
+  Une règle adoptée ne crée aucun verrou technique ni droit supplémentaire.
 
 - **UNE PR PAR SÉANCE, EN FIN DE SÉANCE — pas une par boucle** *(Paul,
   2026-09-24 : « on fait PR après PR, ce n'est ni rentable ni économe »)*. On

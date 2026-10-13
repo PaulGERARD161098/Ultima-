@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-10-13",
-    "commit": "da348c2576c46fda1c3372b21614ca5d4db22b0d",
-    "quoi": "13/10 : technologie ZOH « Pilotage systématique en back-office » intégrée par PR388 ; badge et règle au cadrage/recette, 11 contrôles et couverture par fonction. Trois CI verts sur le code testé, desktop/mobile ZOH éprouvés ; main v92 préservé. Déploiement de production READY sur le commit de fusion, protection Vercel conservée. Le cockpit privé RenoDevis lit 2 comptes, 53 devis et 9 échéances pending ; production RenoDevis inchangée."
+    "commit": "29ba6b9f64b976d01857c3c8e95d0f364f38367b",
+    "quoi": "13/10 : précision de Paul sur ZOH : prévoir le contrôle avant le système métier et disposer du pilotage avant un avancement important. Quatre jalons : cadrage, première coque, ouverture du réel, extension. Source 29ba6b9 ; règle permanente, contrat neutre, guide et données du badge actualisés. Tests ciblés isolés verts : 11 assertions pilotage, 28 verdicts ZOH, 16 verdicts écran ; publication à jour. Auth, droits et code métier inchangés. La lecture du cockpit privé reste celle éprouvée à la livraison V1 ; production RenoDevis inchangée."
   },
   "prochaine_action": "Chaîne A→Z : Paul valide les devis e-mail sur /devis/email (B3), puis pose la clé Stripe live (A6a). Côté C2 : premier boîtage SOLA sur les rues « jumeaux », source tracée.",
   "bloque_par": [
@@ -179,6 +179,22 @@
 <!-- finubar:fin -->
 
 ## Journal de reprise
+
+### 2026-10-13 — prévoir le contrôle avant le système métier
+
+Paul précise le but : « prévoir la laisse du chien, sans encore avoir de chien ».
+La règle existante est renforcée, sans nouveau badge : pilotage défini au
+cadrage, première coque privée utilisable dès les premiers incréments,
+contrôles éprouvés avant action réelle, autonomie, mise en ligne ou extension.
+Les états prévu, utilisable et éprouvé sont distincts. Un contrôle manquant
+bloque le passage concerné ; sa préparation peut continuer en simulation.
+
+Source du complément : `29ba6b9f64b976d01857c3c8e95d0f364f38367b`. Les trois harnais ciblés
+passent sous isolation réseau, fichiers et processus ; donnée générée à jour.
+Cette règle de projet ne crée pas un verrou technique automatique : chaque
+instance doit implémenter et prouver son contrôle. La recette HTTP avec une
+vraie session propriétaire reste ouverte ; aucune activation d'agent ni
+modification de la production RenoDevis ne découle de ce complément.
 
 ### 2026-10-13 — règle de pilotage systématique, livrée
 
