@@ -1,5 +1,63 @@
 # Reprise courante — mise en ligne Léo / FINUBAR
 
+## Reprise du 14/10/2026 — Hyper-V déjà qualifié, mémoire à actualiser
+
+Cette section remplace la prochaine action du 13/10. Paul demande de terminer
+Léo et FINUBAR. Réutiliser le kit et la roadmap existants ; cette reprise
+n'autorise ni accès au contrôle privé, ni dépense, ni fusion par déduction.
+
+### Fait et preuves
+
+- Lecture GitHub du 14/10 : PR365 ouverte, brouillon, non fusionnée,
+  tête 351ae0ad19ad89c8f3b1079627988951b8f548ea ; base
+  5848ea99668ec8a901e746e2bed1d628241fb22f ; mergeable=false.
+  La non-fusionnabilité devra être qualifiée et résolue avant livraison ;
+  aucun résultat de CI de branche ne prouve l'intégration au main actuel.
+- Trois workflows de cette tête relus completed/success :
+  Tests 38412109821, Auth 38412111341, LV1 38412109638.
+  Aucun test applicatif ou workflow manuel relancé dans cette séance.
+- Artefact read-service 11674652639 relu : expired=false,
+  63314 octets, expiration 24/10/2026 15:52:50 UTC ; digest API
+  8a12036f2d2b32688b2a796558ae329d6af4798e300335d81dd5b27541294c3f,
+  conforme au dossier. Archive non retéléchargée dans cette séance.
+- Dernier retour opérateur de Paul, présent dans le contexte de reprise :
+  toutes les fonctionnalités Hyper-V affichées Enabled ; service vmms Running ;
+  RAM_libre_Go 1,8. Observation historique transmise par Paul, pas mesure
+  actuelle du PC ni accès direct depuis Work. La demande de requalifier
+  l'installation du rôle Hyper-V est périmée.
+- Compétence Work réellement lue : leo-lv1 1.5 (12/10), contrat 1.1.
+  La roadmap historique cite encore la compatibilité skill1.4 : le raccord
+  devra qualifier la version effectivement invoquée, sans relever une
+  constante pour faire passer le contrôle.
+
+### Restant et limite d'accès
+
+1. Actualiser uniquement la RAM disponible et vérifier si une VM a été créée
+   depuis l'arrêt ; conserver les fonctionnalités Windows et protections.
+2. Préparer le seed fictif et le harnais de recette systemd exécutable :
+   la grille seule ne suffit pas ; cette préparation peut avancer séparément
+   de la disponibilité de la VM, avec revue distincte avant exécution.
+3. Éprouver le kit sur une VM dédiée : nominal, refus, arrêt externe,
+   disparition propriétaire/gardien/scope, panne Docker et reprise sans replay.
+4. Raccorder acquisition GitHub limitée à Ultima, modèle et budget borné,
+   puis installation opérateur, cockpit et permanence selon la roadmap.
+
+Aucune VM créée ni recette cible exécutée pendant cette séance. Aucun accès
+direct au PC Windows ou au terminal Hostinger disponible dans les outils
+exposés ; lecture GitHub réussie. Ne pas installer les essais de panne sur
+le Docker partagé de n8n/Traefik. Préserver le pilote R21 completed.
+
+### Prochaine action opérateur
+
+Après enregistrement du travail et fermeture des applications inutilisées,
+Paul relève la mémoire disponible avec Get-CimInstance Win32_OperatingSystem
+et communique la sortie ainsi que les VM existantes si nécessaire.
+Ne pas lui redemander l'activation Hyper-V ou le diagnostic complet déjà reçu.
+Ce relevé sert à dimensionner la VM de recette, pas à annoncer une permanence
+sur le PC ni la réception de Léo/FINUBAR.
+
+---
+
 ## Reprise du 13/10/2026 — mise en ligne complète, preuves opérateur et roadmap
 
 Cette section remplace les prochaines actions du 10/10. Mandat de Paul :
