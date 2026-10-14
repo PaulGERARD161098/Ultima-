@@ -655,6 +655,26 @@ Le profil type sert à construire ; seuls les vrais cas disent si c'est le bon.
 
 ## 2. Les garde-fous, et leur silence
 
+**UN GARDE-FOU SE MESURE SUR DES DONNÉES DE TAILLE ET DE FORME RÉELLES** *(2026-10-14, RenoDevis + mon-dpe.fr)*.
+Trois garde-fous livrés le même jour passaient leurs tests sans tenir. Une relecture
+adverse indépendante les a trouvés le soir même, sur les PR déjà vertes :
+- le test « le PDF tient en 3 pages, même chargé » utilisait des avertissements de
+  110 caractères ; ceux du moteur en font 150 à 300, et à 17 le PDF passait à 4 pages ;
+- la garde qui protège les références « RR-2026… » de la correction de dictée ne
+  couvrait que le tiret ASCII ; un tiret insécable (iPhone), un tiret long ou une
+  référence dictée avec des espaces étaient réécrits « PAC air/air… » ;
+- le test « les deux PAC ne s'additionnent jamais » restait vert sans la règle
+  d'incompatibilité : une autre règle refusait avant elle.
+
+⛔ **La donnée d'un test se copie sur la donnée réelle** : sa longueur, ses
+séparateurs, ses caractères, mesurés à la source (le moteur, la base, le
+clavier du téléphone). Et un test qui garde une règle se sabote **en retirant
+cette règle-là**, pas en cassant le code autour.
+*Rechute de la règle « UNE BOUCLE DE SABOTAGE NE SE RESTAURE PAS PAR
+`git checkout` », le même jour : un `git checkout -- data/prestations.json` a
+effacé le catalogue air/air non committé. Rattrapé parce que les tests sont
+passés de 91 à 90.*
+
 **QUAND L'OUTIL NE PEUT PAS VOIR, ON FABRIQUE LE BANC — TOUT DE SUITE** *(2026-10-12, mon-dpe.fr)*.
 Le proxy de la séance bloquait les tuiles IGN et OpenFreeMap : la carte 3D
 était codée à l'aveugle, et c'est Paul qui découvrait le rendu sur la preview —
