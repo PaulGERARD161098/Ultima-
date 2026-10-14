@@ -196,7 +196,7 @@ gestes A sont les siens, les boucles B sont du code que Claude porte seul.
 
 | # | Boucle | Maillon | Dépôt | État | Preuve de sortie |
 |---|---|---|---|---|---|
-| C1 | Le bilan ③ complet : reste à charge, feuille complète, format du rapport (Q6) | M5 | RenoDevis + mon-dpe.fr | ⬜ après B1 | un bilan remis à un vrai client, avec son reste à charge |
+| C1 | Le bilan ③ complet : reste à charge, feuille complète, format du rapport (Q6) | M5 | RenoDevis + mon-dpe.fr | 🔵 **ouverte le 14/10 par exception au gel** (§3, règle 5) : code d'abord, recette unique de Paul à la fin, avec B1 | un bilan remis à un vrai client, avec son reste à charge |
 | C2 | Notre Kelvin v1 : la fiche d'approche depuis l'adresse, zéro API payante | M2 + M3 | mon-dpe.fr (route) · RenoBoost et RenoDevis (écrans) | ✅ **v1 « zone pro » fusionnée le 12/10** (décisions Z1–Z4, cadrage `mon-dpe.fr/CADRAGE-2026-10-12-zone-pro.md`) : mon-dpe.fr `/pro/zone` (#237 `c81183d`, #238 `73ced35`) — adresses E/F/G du rayon (une ligne par adresse, DPE le plus récent), vue aérienne + cadastre IGN, logement en maquette, **maquette 3D three.js** (étages, fenêtres, toit estimés ; intérieur pièce par pièce **indicatif** ; choix de l'étage) ; RenoDevis : bouton « Logement en 3D et zone » (#351 `41cd179`). Rendu 3D jugé « pas fou » par Paul (12/10) : plafond d'une maquette procédurale ; le photoréaliste (Google 3D Tiles) est payant. **Boucle 6 « les jumeaux du chantier » fusionnée le 13/10** : mon-dpe.fr #242 `b5ec3fa` (fiche du chantier depuis le DPE à 8 m, recherche 300 m élargie à 500 m puis 1 km si moins de 5 jumeaux — J2 révisé par Paul le 13/10 —, rues à taper, onglet `mode=jumeaux`) ; RenoDevis #355 `91cbc74` (bouton « Jumeaux du chantier »). Essai sur les 5 chantiers SOLA signés : 3 en immeuble (32 à 51 jumeaux à 300 m), 2 sans DPE (saisie sur place) ; test 6 de bout en bout validé par Paul. Reste : le premier boîtage réel, source tracée | une adresse réelle donne sa fiche (DPE, bâtiment, travaux possibles) dans RenoBoost et dans le dossier RenoDevis |
 | C3 | Notre Kelvin v2-v3 : le relevé corrige l'estimation, puis la prescription des travaux | M3 | RenoDevis + mon-dpe.fr | 🔵 **v2 fusionnée le 13/10** (cadrage `RenoDevis/CADRAGE-2026-10-13-C3-releve-corrige.md`) : mon-dpe.fr #244 `358121a` (DPE trouvé depuis le point du dossier, provenance juste, `ecarts`, noms ADEME v3 corrigés) ; RenoDevis #358 `5f05e92` (estimé et retenu côte à côte, choix du DPE, immeuble jamais cliquable), suite de revue Codex en RenoDevis #359 (fusionnée le 13/10, `c16af14`). **Preuve réelle NON atteinte : 0 devis avec relevé, 0 audit tracé** (13/10, 11:40 UTC) — elle attend la prochaine visite SOLA. **v3 (prescription) fusionnée le 13/10** : mon-dpe.fr #245 `59003ee` ; 5 constats Codex d'après fusion corrigés sur `claude/happy-mccarthy-b213bq` (dont P1 : jamais de prescription sur une adresse à plusieurs logements) | une estimation corrigée au relevé, tracée « auto » ou « manuel » |
 | C4 | Ma tournée du jour | M2 | Artidispo + RenoBoost | ⬜ moteur partiel dans Artidispo (vue sans appelant) | à fixer à l'ouverture |
@@ -267,6 +267,15 @@ sans décision de Paul.
    pas la levée). On reprend dans l'ordre de la Directive MS : A6a
    (Stripe live) et B3 (35 devis e-mail) d'abord, parce qu'ils rapprochent
    d'un encaissement.
+
+   ✅ **EXCEPTION DÉCIDÉE PAR PAUL LE 14/10/2026** (panneau : « chemin audit
+   RR/RO » · « lever pour ce chemin seul »). Paul : *« on termine le chemin en
+   code d'abord, je testerai tout d'un coup à la fin »*. Le gel est levé pour
+   **C1 seul** (le bilan ③ complet du chemin relevé → devis chiffré → étude →
+   reste à charge), sans recette intermédiaire : Paul recette le parcours
+   entier en une fois. **Tout le reste de C, N et D reste gelé**, et A6a puis
+   B3 restent prioritaires sous MS. La recette unique de Paul ferme B1 et C1
+   ensemble.
 6. **Ce qui se voit se montre avant d'être codé** : la maquette d'abord, l'URL
    de prévisualisation avant et après.
 
