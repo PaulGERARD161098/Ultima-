@@ -276,6 +276,13 @@ sans décision de Paul.
    entier en une fois. **Tout le reste de C, N et D reste gelé**, et A6a puis
    B3 restent prioritaires sous MS. La recette unique de Paul ferme B1 et C1
    ensemble.
+
+   ✅ **SECONDE EXCEPTION, PAUL LE 14/10/2026** (panneaux « Corriger la 3D pour le
+   RR » · « celle du devis » · « −50 %, affiché indicatif ») : la 3D (D3) propose
+   la PAC du devis — air/air pour un RR, air/eau pour un RO — au lieu d'une
+   « PAC air/eau qui remplace la chaudière » sur une maison à convecteurs.
+   mon-dpe.fr `1b570ee` · RenoDevis `8651f98` (branche de séance). Rien d'autre
+   ne se dégèle.
 6. **Ce qui se voit se montre avant d'être codé** : la maquette d'abord, l'URL
    de prévisualisation avant et après.
 
