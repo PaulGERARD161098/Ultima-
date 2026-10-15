@@ -1,0 +1,25 @@
+{
+  "mesure_le": "2026-10-16",
+  "source": {
+    "depot": "PaulGERARD161098/RenoDevis",
+    "ref": "dd806dcefa2efde895b0a900a9f0dc4f125a00c2",
+    "commit": "dd806dcefa2efde895b0a900a9f0dc4f125a00c2",
+    "date_commit": "2026-10-16T01:08:28+02:00"
+  },
+  "plan": "inventaire et contrat actualisés ; publication régénérée",
+  "base": {
+    "etat": "à rééprouver sur la source actuelle",
+    "empreinte_date": "2026-10-10",
+    "migrations_source": 47,
+    "certification_actuelle": false
+  },
+  "code_neutre": {
+    "base": "f1f9fb30fc03709106aa754d46524c0c3d778ef0",
+    "commits_avance": 361,
+    "fichiers_changes": 565,
+    "fichiers_changes_dans_serie": 111,
+    "methode": "comparaison API des arbres complets non tronqués ; avance des commits par comparaison API ; aucun contenu métier exporté",
+    "commits_touchant_serie": null,
+    "extraction_verifiee": false
+  }
+}

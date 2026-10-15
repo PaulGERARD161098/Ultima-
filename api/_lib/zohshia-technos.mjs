@@ -1,7 +1,7 @@
 // GÉNÉRÉ par `node zohshia/publier.mjs` — ne pas modifier à la main.
 // La techno de ZOH SHIA, à l’état pur, servie au SEUL propriétaire par /api/zohshia.
 export default {
- "publie_le": "2026-10-13",
+ "publie_le": "2026-10-15",
  "technos": [
   {
    "id": "renodevis",
@@ -9,8 +9,8 @@ export default {
    "badge": "Outil de création de devis / relance automatique",
    "etat": "En service",
    "mesure": {
-    "commit": "92225cb",
-    "le": "2026-10-10"
+    "commit": "dd806dc",
+    "le": "2026-10-16"
    },
    "onglets": [
     {
@@ -121,6 +121,221 @@ export default {
           " rougit si ce plan oublie une pièce mesurée, ou si un nom propre y entre.",
           ""
          ]
+        ]
+       ]
+      },
+      {
+       "t": "h2",
+       "r": [
+        [
+         "État remesuré et contrat de reprise — 16/10/2026",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Source exacte : ",
+         ""
+        ],
+        [
+         "dd806dcefa2efde895b0a900a9f0dc4f125a00c2",
+         "c"
+        ],
+        [
+         ". L'inventaire et cet état sont publiés dans le badge existant ; ",
+         ""
+        ],
+        [
+         "ETAT-REPRISE.json",
+         "c"
+        ],
+        [
+         " porte la mesure, sans donnée d'instance.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "Entrée principale : accueil de reprise et dictée conversationnelle ; le compte professionnel fournit les règles et les sources. Les accès import et création web restent secondaires. Les métadonnées du canal se chargent sans bloquer les dossiers ; accès application/web de secours si le lien direct manque.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Consultation transversale : compte administrateur vérifié côté serveur, choix d'un professionnel par son entreprise ou contact enregistré, clarification des homonymes, sources bornées à ce seul professionnel. Une consultation ne change ni le canal rattaché ni le brouillon actif.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Nature commerciale : alternatives exclusives = montants par choix et un montant de référence sur la carte, sans somme des choix ; blocs d'une même rénovation = récapitulatif et total cumulé. Un ou plusieurs PDF n'imposent pas ce mode. Une référence affichée ne vaut pas choix du client.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Import original : conserver pièce, origine et preuves historiques ; toute rectification des données actives est ciblée et réattestée, sans rechiffrer l'original comme une génération assistée.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Preuves : accepté par le transport, livré, ouvert, signé et payé sont des états distincts. La recette inclut le parcours réel jusqu'au PDF reçu ; tests et aperçu ne le remplacent pas.",
+          ""
+         ]
+        ],
+        [
+         [
+          "Conversation : une réponse abrégée doit être rapprochée du contexte, puis reformulée pour confirmation avant recalcul ; exclusions et références dictées restent protégées. Cette amélioration est encore en préparation au relevé : le parcours complet en trois messages est un objectif de recette, pas une capacité certifiée.",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Plan actualisé ; base et code neutre non certifiés sur cette source.",
+         "b"
+        ],
+        [
+         " La base compte deux migrations de plus que l'inventaire précédent ; son ordre d'application et son empreinte restent à confronter en lecture seule avant rejeu isolé. La série neutre a 361 commits de retard, avec 111 fichiers modifiés qui croisent la série sur 565 chemins modifiés au total. Le nombre de commits touchant la série n'a pas été mesuré ; aucun zéro n'est supposé. Le report historique après paramétrage ne certifie pas l'état présent : rafraîchir la série, puis exécuter l'extraction avec typage, tests et construction, sans corriger l'arbre extrait à la main. Aucun nom, formule ni donnée d'un professionnel n'entre dans cet extrait.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "h3",
+       "r": [
+        [
+         "Nouvelles pièces mesurées depuis le précédent inventaire",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Routes du commit mesuré :",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "/api/bibliotheque/reno/qualification-pac",
+          "c"
+         ]
+        ],
+        [
+         [
+          "/api/cron/prevenance-veille",
+          "c"
+         ]
+        ],
+        [
+         [
+          "/api/cron/whatsapp-reprise",
+          "c"
+         ]
+        ],
+        [
+         [
+          "/api/devis/[id]/lire-montant",
+          "c"
+         ]
+        ],
+        [
+         [
+          "/api/reno/anomalies",
+          "c"
+         ]
+        ],
+        [
+         [
+          "/api/reno/lecons",
+          "c"
+         ]
+        ],
+        [
+         [
+          "/api/reno/lecons/communes",
+          "c"
+         ]
+        ],
+        [
+         [
+          "/api/reno/lecons/installations",
+          "c"
+         ]
+        ],
+        [
+         [
+          "/api/reno/reprise",
+          "c"
+         ]
+        ],
+        [
+         [
+          "/api/whatsapp/webhook",
+          "c"
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Tables lues sans création trouvée dans les migrations du seul dépôt :",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "fictif",
+          "c"
+         ]
+        ],
+        [
+         [
+          "original",
+          "c"
+         ]
+        ],
+        [
+         [
+          "remplace",
+          "c"
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "h3",
+       "r": [
+        [
+         "Tâches ajoutées au relevé",
+         ""
         ]
        ]
       },
@@ -2693,6 +2908,295 @@ export default {
         [
          ". La voie B ajoute le §3.",
          ""
+        ]
+       ]
+      },
+      {
+       "t": "h3",
+       "r": [
+        [
+         "Contrôles ajoutés au relevé du 16/10/2026",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Manuel, avant mise en service",
+         "b"
+        ],
+        [
+         " : décider du mode alternatives ou blocs et vérifier le récapitulatif ; rapprocher tout import de sa pièce originale ; contrôler le périmètre du compte et la résolution des homonymes. ",
+         ""
+        ],
+        [
+         "Auto puis manuel",
+         "b"
+        ],
+        [
+         " : éprouver arrivée après connexion, accès au canal avec et sans métadonnées, confirmation d'une reformulation, puis PDF réellement reçu. Une demande de consultation ne change pas le rattachement du canal. Aucun objectif de rapidité ne remplace une clarification indispensable.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Voie B suspendue à ses preuves actuelles",
+         "b"
+        ],
+        [
+         " : remesurer, relever l'ordre des nouvelles migrations, rejouer en base jetable et comparer l'empreinte en lecture seule ; rafraîchir la série neutre sur le commit choisi puis extraire avec vérification complète. Le plan actualisé ne certifie ni une base ni un export. Ne pas lancer une instance neuve à partir du seul état historique.",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Variables supplémentaires à configurer seulement pour les fonctions choisies ; valeurs exclusivement dans l'environnement de l'instance, jamais ici :",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "COMPTEUR_FICTIF",
+          "c"
+         ],
+         [
+          " — configuration serveur ; voir les fichiers lecteurs dans ",
+          ""
+         ],
+         [
+          "inventaire.json",
+          "c"
+         ],
+         [
+          ".",
+          ""
+         ]
+        ],
+        [
+         [
+          "PATH",
+          "c"
+         ],
+         [
+          " — configuration serveur ; voir les fichiers lecteurs dans ",
+          ""
+         ],
+         [
+          "inventaire.json",
+          "c"
+         ],
+         [
+          ".",
+          ""
+         ]
+        ],
+        [
+         [
+          "WHATSAPP_ACCESS_TOKEN",
+          "c"
+         ],
+         [
+          " — configuration serveur ; voir les fichiers lecteurs dans ",
+          ""
+         ],
+         [
+          "inventaire.json",
+          "c"
+         ],
+         [
+          ".",
+          ""
+         ]
+        ],
+        [
+         [
+          "WHATSAPP_APP_SECRET",
+          "c"
+         ],
+         [
+          " — configuration serveur ; voir les fichiers lecteurs dans ",
+          ""
+         ],
+         [
+          "inventaire.json",
+          "c"
+         ],
+         [
+          ".",
+          ""
+         ]
+        ],
+        [
+         [
+          "WHATSAPP_CANAL_ACTIF",
+          "c"
+         ],
+         [
+          " — configuration serveur ; voir les fichiers lecteurs dans ",
+          ""
+         ],
+         [
+          "inventaire.json",
+          "c"
+         ],
+         [
+          ".",
+          ""
+         ]
+        ],
+        [
+         [
+          "WHATSAPP_GRAPH_VERSION",
+          "c"
+         ],
+         [
+          " — configuration serveur ; voir les fichiers lecteurs dans ",
+          ""
+         ],
+         [
+          "inventaire.json",
+          "c"
+         ],
+         [
+          ".",
+          ""
+         ]
+        ],
+        [
+         [
+          "WHATSAPP_PHONE_NUMBER_ID",
+          "c"
+         ],
+         [
+          " — configuration serveur ; voir les fichiers lecteurs dans ",
+          ""
+         ],
+         [
+          "inventaire.json",
+          "c"
+         ],
+         [
+          ".",
+          ""
+         ]
+        ],
+        [
+         [
+          "WHATSAPP_PURGE_SOURCES_AUTORISEE",
+          "c"
+         ],
+         [
+          " — configuration serveur ; voir les fichiers lecteurs dans ",
+          ""
+         ],
+         [
+          "inventaire.json",
+          "c"
+         ],
+         [
+          ".",
+          ""
+         ]
+        ],
+        [
+         [
+          "WHATSAPP_RATTACHEMENTS",
+          "c"
+         ],
+         [
+          " — configuration serveur ; voir les fichiers lecteurs dans ",
+          ""
+         ],
+         [
+          "inventaire.json",
+          "c"
+         ],
+         [
+          ".",
+          ""
+         ]
+        ],
+        [
+         [
+          "WHATSAPP_VERIFY_TOKEN",
+          "c"
+         ],
+         [
+          " — configuration serveur ; voir les fichiers lecteurs dans ",
+          ""
+         ],
+         [
+          "inventaire.json",
+          "c"
+         ],
+         [
+          ".",
+          ""
+         ]
+        ]
+       ]
+      },
+      {
+       "t": "p",
+       "r": [
+        [
+         "Tâches supplémentaires :",
+         ""
+        ]
+       ]
+      },
+      {
+       "t": "liste",
+       "ordonnee": false,
+       "items": [
+        [
+         [
+          "/api/cron/prevenance-veille",
+          "c"
+         ],
+         [
+          " — horaire ",
+          ""
+         ],
+         [
+          "0 20 * * *",
+          "c"
+         ],
+         [
+          " ; Auto après activation autorisée, Manuel pour vérifier les effets.",
+          ""
+         ]
+        ],
+        [
+         [
+          "/api/cron/whatsapp-reprise",
+          "c"
+         ],
+         [
+          " — horaire ",
+          ""
+         ],
+         [
+          "20 3 * * *",
+          "c"
+         ],
+         [
+          " ; Auto après activation autorisée, Manuel pour vérifier les effets.",
+          ""
+         ]
         ]
        ]
       },
@@ -6712,7 +7216,7 @@ export default {
   "pilotage-back-office/TECHNO.md": "a6a3c2ec7645ab99bb9a472de5f721adab65627a094b81e153e23e3ce7f7f589",
   "pilotage-back-office/MISE-EN-SERVICE.md": "da99219e5142485ac53b49a5563d4ff0d406e966b5775a932ca7a72382c8be53",
   "renodevis/badge.json": "cdf0f06c4c492ccc21be7bb97a3d5f2da690832d1e1728d2e0a12bd0482fb1ff",
-  "renodevis/TECHNO.md": "aeb32b5b9820a7a30ea450074ea838bb6a1f69bd5d12cdd472c60748832f2932",
-  "renodevis/AJOUTER-UN-ARTISAN.md": "8ec42d12a4be63eab0cf311a234251612c30e7998c2009e06c447cebe2b8358f"
+  "renodevis/TECHNO.md": "cfae04e64294093d2556c8875499c11caaf43545c62d72ea4a727c10f6bafef2",
+  "renodevis/AJOUTER-UN-ARTISAN.md": "d0a7ca582f7e2bf3b89ef33e7e839d7ace3fdf4af454f740ba8c7c0256e44284"
  }
 };

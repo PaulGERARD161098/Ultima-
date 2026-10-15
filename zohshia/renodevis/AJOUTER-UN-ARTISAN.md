@@ -26,6 +26,29 @@
 
 La check-list du §1 sert **aux deux voies**. La voie B ajoute le §3.
 
+### Contrôles ajoutés au relevé du 16/10/2026
+
+**Manuel, avant mise en service** : décider du mode alternatives ou blocs et vérifier le récapitulatif ; rapprocher tout import de sa pièce originale ; contrôler le périmètre du compte et la résolution des homonymes. **Auto puis manuel** : éprouver arrivée après connexion, accès au canal avec et sans métadonnées, confirmation d'une reformulation, puis PDF réellement reçu. Une demande de consultation ne change pas le rattachement du canal. Aucun objectif de rapidité ne remplace une clarification indispensable.
+
+**Voie B suspendue à ses preuves actuelles** : remesurer, relever l'ordre des nouvelles migrations, rejouer en base jetable et comparer l'empreinte en lecture seule ; rafraîchir la série neutre sur le commit choisi puis extraire avec vérification complète. Le plan actualisé ne certifie ni une base ni un export. Ne pas lancer une instance neuve à partir du seul état historique.
+
+Variables supplémentaires à configurer seulement pour les fonctions choisies ; valeurs exclusivement dans l'environnement de l'instance, jamais ici :
+- `COMPTEUR_FICTIF` — configuration serveur ; voir les fichiers lecteurs dans `inventaire.json`.
+- `PATH` — configuration serveur ; voir les fichiers lecteurs dans `inventaire.json`.
+- `WHATSAPP_ACCESS_TOKEN` — configuration serveur ; voir les fichiers lecteurs dans `inventaire.json`.
+- `WHATSAPP_APP_SECRET` — configuration serveur ; voir les fichiers lecteurs dans `inventaire.json`.
+- `WHATSAPP_CANAL_ACTIF` — configuration serveur ; voir les fichiers lecteurs dans `inventaire.json`.
+- `WHATSAPP_GRAPH_VERSION` — configuration serveur ; voir les fichiers lecteurs dans `inventaire.json`.
+- `WHATSAPP_PHONE_NUMBER_ID` — configuration serveur ; voir les fichiers lecteurs dans `inventaire.json`.
+- `WHATSAPP_PURGE_SOURCES_AUTORISEE` — configuration serveur ; voir les fichiers lecteurs dans `inventaire.json`.
+- `WHATSAPP_RATTACHEMENTS` — configuration serveur ; voir les fichiers lecteurs dans `inventaire.json`.
+- `WHATSAPP_VERIFY_TOKEN` — configuration serveur ; voir les fichiers lecteurs dans `inventaire.json`.
+
+Tâches supplémentaires :
+
+- `/api/cron/prevenance-veille` — horaire `0 20 * * *` ; Auto après activation autorisée, Manuel pour vérifier les effets.
+- `/api/cron/whatsapp-reprise` — horaire `20 3 * * *` ; Auto après activation autorisée, Manuel pour vérifier les effets.
+
 ## 1. La check-list — ce qu'il faut obtenir du pro
 
 Chaque ligne dit **où l'information va** (table · colonne, ou variable) et si

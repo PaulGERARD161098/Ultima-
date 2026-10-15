@@ -17,6 +17,42 @@
 > propre y est remplacé par `[nom propre]`. `tests/unit-zohshia.mjs` rougit si ce
 > plan oublie une pièce mesurée, ou si un nom propre y entre.
 
+## État remesuré et contrat de reprise — 16/10/2026
+
+Source exacte : `dd806dcefa2efde895b0a900a9f0dc4f125a00c2`. L'inventaire et cet état sont publiés dans le badge existant ; `ETAT-REPRISE.json` porte la mesure, sans donnée d'instance.
+
+- Entrée principale : accueil de reprise et dictée conversationnelle ; le compte professionnel fournit les règles et les sources. Les accès import et création web restent secondaires. Les métadonnées du canal se chargent sans bloquer les dossiers ; accès application/web de secours si le lien direct manque.
+- Consultation transversale : compte administrateur vérifié côté serveur, choix d'un professionnel par son entreprise ou contact enregistré, clarification des homonymes, sources bornées à ce seul professionnel. Une consultation ne change ni le canal rattaché ni le brouillon actif.
+- Nature commerciale : alternatives exclusives = montants par choix et un montant de référence sur la carte, sans somme des choix ; blocs d'une même rénovation = récapitulatif et total cumulé. Un ou plusieurs PDF n'imposent pas ce mode. Une référence affichée ne vaut pas choix du client.
+- Import original : conserver pièce, origine et preuves historiques ; toute rectification des données actives est ciblée et réattestée, sans rechiffrer l'original comme une génération assistée.
+- Preuves : accepté par le transport, livré, ouvert, signé et payé sont des états distincts. La recette inclut le parcours réel jusqu'au PDF reçu ; tests et aperçu ne le remplacent pas.
+- Conversation : une réponse abrégée doit être rapprochée du contexte, puis reformulée pour confirmation avant recalcul ; exclusions et références dictées restent protégées. Cette amélioration est encore en préparation au relevé : le parcours complet en trois messages est un objectif de recette, pas une capacité certifiée.
+
+**Plan actualisé ; base et code neutre non certifiés sur cette source.** La base compte deux migrations de plus que l'inventaire précédent ; son ordre d'application et son empreinte restent à confronter en lecture seule avant rejeu isolé. La série neutre a 361 commits de retard, avec 111 fichiers modifiés qui croisent la série sur 565 chemins modifiés au total. Le nombre de commits touchant la série n'a pas été mesuré ; aucun zéro n'est supposé. Le report historique après paramétrage ne certifie pas l'état présent : rafraîchir la série, puis exécuter l'extraction avec typage, tests et construction, sans corriger l'arbre extrait à la main. Aucun nom, formule ni donnée d'un professionnel n'entre dans cet extrait.
+
+### Nouvelles pièces mesurées depuis le précédent inventaire
+
+Routes du commit mesuré :
+- `/api/bibliotheque/reno/qualification-pac`
+- `/api/cron/prevenance-veille`
+- `/api/cron/whatsapp-reprise`
+- `/api/devis/[id]/lire-montant`
+- `/api/reno/anomalies`
+- `/api/reno/lecons`
+- `/api/reno/lecons/communes`
+- `/api/reno/lecons/installations`
+- `/api/reno/reprise`
+- `/api/whatsapp/webhook`
+
+Tables lues sans création trouvée dans les migrations du seul dépôt :
+- `fictif`
+- `original`
+- `remplace`
+
+### Tâches ajoutées au relevé
+
+
+
 ## 1. Ce que fait la techno, en une phrase
 
 Un pro du bâtiment passe d'une **visite de chantier** à un **devis signé et payé**,

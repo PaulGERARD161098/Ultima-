@@ -1,9 +1,9 @@
 {
   "source": {
     "depot": "PaulGERARD161098/RenoDevis",
-    "ref": "92225cbde07584a148cdc392fac756c1ffa35165",
-    "commit": "92225cbde07584a148cdc392fac756c1ffa35165",
-    "date_commit": "2026-10-10T11:21:38+00:00"
+    "ref": "dd806dcefa2efde895b0a900a9f0dc4f125a00c2",
+    "commit": "dd806dcefa2efde895b0a900a9f0dc4f125a00c2",
+    "date_commit": "2026-10-16T01:08:28+02:00"
   },
   "variables": [
     {
@@ -41,6 +41,10 @@
       "lue_dans": [
         "lib/config.ts"
       ]
+    },
+    {
+      "nom": "COMPTEUR_FICTIF",
+      "lue_dans": []
     },
     {
       "nom": "CRON_SECRET",
@@ -126,6 +130,10 @@
       ]
     },
     {
+      "nom": "PATH",
+      "lue_dans": []
+    },
+    {
       "nom": "RECETTE_PDF",
       "lue_dans": []
     },
@@ -150,7 +158,14 @@
     {
       "nom": "RENO_CREATION_SECRET",
       "lue_dans": [
-        "lib/creationRenoServeur.ts"
+        "app/api/reno/reprise/route.ts",
+        "app/devis/[id]/envoi/actions.ts",
+        "lib/creationRenoServeur.ts",
+        "lib/fichesInstallation.ts",
+        "lib/originalDevis.ts",
+        "lib/piecesMail.ts",
+        "lib/serviceEnvoiDevis.ts",
+        "lib/whatsappCanal.ts"
       ]
     },
     {
@@ -201,6 +216,8 @@
       "nom": "SUPABASE_SERVICE_KEY",
       "lue_dans": [
         "lib/creationRenoServeur.ts",
+        "lib/originalDevis.ts",
+        "lib/piecesMail.ts",
         "lib/supabase.ts"
       ]
     },
@@ -208,6 +225,8 @@
       "nom": "SUPABASE_SERVICE_ROLE_KEY",
       "lue_dans": [
         "lib/creationRenoServeur.ts",
+        "lib/originalDevis.ts",
+        "lib/piecesMail.ts",
         "lib/supabase.ts"
       ]
     },
@@ -266,6 +285,62 @@
       "lue_dans": [
         "lib/config.ts"
       ]
+    },
+    {
+      "nom": "WHATSAPP_ACCESS_TOKEN",
+      "lue_dans": [
+        "lib/accueilWhatsApp.ts",
+        "lib/whatsappCanal.ts"
+      ]
+    },
+    {
+      "nom": "WHATSAPP_APP_SECRET",
+      "lue_dans": [
+        "app/api/whatsapp/webhook/route.ts",
+        "lib/whatsappCanal.ts"
+      ]
+    },
+    {
+      "nom": "WHATSAPP_CANAL_ACTIF",
+      "lue_dans": [
+        "lib/whatsappCanal.ts",
+        "lib/whatsappDepot.ts"
+      ]
+    },
+    {
+      "nom": "WHATSAPP_GRAPH_VERSION",
+      "lue_dans": [
+        "lib/accueilWhatsApp.ts",
+        "lib/whatsappCanal.ts"
+      ]
+    },
+    {
+      "nom": "WHATSAPP_PHONE_NUMBER_ID",
+      "lue_dans": [
+        "app/api/whatsapp/webhook/route.ts",
+        "lib/accueilWhatsApp.ts",
+        "lib/whatsappCanal.ts"
+      ]
+    },
+    {
+      "nom": "WHATSAPP_PURGE_SOURCES_AUTORISEE",
+      "lue_dans": [
+        "app/api/cron/whatsapp-reprise/route.ts"
+      ]
+    },
+    {
+      "nom": "WHATSAPP_RATTACHEMENTS",
+      "lue_dans": [
+        "lib/accueilWhatsApp.ts",
+        "lib/whatsappCanal.ts"
+      ]
+    },
+    {
+      "nom": "WHATSAPP_VERIFY_TOKEN",
+      "lue_dans": [
+        "app/api/whatsapp/webhook/route.ts",
+        "lib/whatsappCanal.ts"
+      ]
     }
   ],
   "crons": [
@@ -284,6 +359,14 @@
     {
       "chemin": "/api/cron/prevenance",
       "horaire": "0 2 * * *"
+    },
+    {
+      "chemin": "/api/cron/prevenance-veille",
+      "horaire": "0 20 * * *"
+    },
+    {
+      "chemin": "/api/cron/whatsapp-reprise",
+      "horaire": "20 3 * * *"
     }
   ],
   "routes": [
@@ -293,14 +376,18 @@
     "/api/bibliotheque/matrices/neutre-court",
     "/api/bibliotheque/reno",
     "/api/bibliotheque/reno/fiche",
+    "/api/bibliotheque/reno/qualification-pac",
     "/api/corpus/[id]/pdf",
     "/api/cron/prevenance",
+    "/api/cron/prevenance-veille",
     "/api/cron/relances",
     "/api/cron/stripe-embarquement",
     "/api/cron/sync-email",
+    "/api/cron/whatsapp-reprise",
     "/api/devis/[id]/documents",
     "/api/devis/[id]/facture-fournisseur",
     "/api/devis/[id]/fiches",
+    "/api/devis/[id]/lire-montant",
     "/api/devis/apercu",
     "/api/devis/choisir-reference",
     "/api/devis/confirmer-quantite",
@@ -310,9 +397,15 @@
     "/api/dictee/session",
     "/api/dictee/transcrire",
     "/api/reno",
+    "/api/reno/anomalies",
+    "/api/reno/lecons",
+    "/api/reno/lecons/communes",
+    "/api/reno/lecons/installations",
+    "/api/reno/reprise",
     "/api/reno/retour",
     "/api/sms/stop",
-    "/api/stripe/webhook"
+    "/api/stripe/webhook",
+    "/api/whatsapp/webhook"
   ],
   "migrations": [
     "20260721_rr_enroll_on_sent.sql",
@@ -359,7 +452,9 @@
     "20261006_rd_clients_rattache_artisan.sql",
     "20261008_rd_devis_pro.sql",
     "20261009_rd_profiles_devis_pro_droits.sql",
-    "20261009b_rd_canal_messages.sql"
+    "20261009b_rd_canal_messages.sql",
+    "20261010_rd_catalogue_vente_lecture_seule.sql",
+    "20261011_rd_canal_messages_reprise.sql"
   ],
   "services": [
     {
@@ -417,6 +512,25 @@
       ]
     },
     {
+      "nom": "WhatsApp (conversation et réception des messages)",
+      "variables": [
+        "WHATSAPP_ACCESS_TOKEN",
+        "WHATSAPP_APP_SECRET",
+        "WHATSAPP_CANAL_ACTIF",
+        "WHATSAPP_GRAPH_VERSION",
+        "WHATSAPP_PHONE_NUMBER_ID",
+        "WHATSAPP_PURGE_SOURCES_AUTORISEE",
+        "WHATSAPP_RATTACHEMENTS",
+        "WHATSAPP_VERIFY_TOKEN"
+      ]
+    },
+    {
+      "nom": "OpenAI (transcription vocale)",
+      "variables": [
+        "OPENAI_API_KEY"
+      ]
+    },
+    {
       "nom": "mon-dpe.fr (audit PAC)",
       "variables": [
         "AUDIT_PAC_API_SECRET",
@@ -436,6 +550,7 @@
     "lues_par_le_code": [
       "artisans",
       "banques_reno",
+      "canal_messages",
       "catalogue_[nom propre]",
       "catalogue_vente",
       "clients",
@@ -443,7 +558,9 @@
       "devis",
       "devis_events",
       "feedbacks",
+      "fictif",
       "messages_envoyes",
+      "original",
       "paiements",
       "profiles",
       "realisations",
@@ -452,6 +569,7 @@
       "relance_gabarits",
       "relance_liens",
       "relance_queue",
+      "remplace",
       "sentinelle_etat"
     ],
     "creees_par_le_depot": [
@@ -476,8 +594,11 @@
       "devis",
       "devis_events",
       "feedbacks",
+      "fictif",
+      "original",
       "profiles",
       "relance_queue",
+      "remplace",
       "sentinelle_etat"
     ]
   }

@@ -124,6 +124,8 @@ const SERVICES = [
   ['Gmail (synchro des devis envoyés par mail)', /^(GMAIL_|SYNC_EMAIL_)/],
   ['Twilio (SMS — canal muet)', /^TWILIO_/],
   ['Anthropic (assistant Réno)', /^ANTHROPIC_/],
+  ['WhatsApp (conversation et réception des messages)', /^WHATSAPP_/],
+  ['OpenAI (transcription vocale)', /^OPENAI_/],
   ['mon-dpe.fr (audit PAC)', /^AUDIT_PAC_/],
   ['RénoBoost / hub (extraction PDF, page devis)', /^(RENOBOOST_|HUB_|NEXT_PUBLIC_HUB_)/],
 ];

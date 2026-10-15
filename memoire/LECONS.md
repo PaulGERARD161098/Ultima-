@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v92 2026-10-13 sha256:b8f66c00d649 -->
+<!-- lecons:empreinte v94 2026-10-15 sha256:e31c327a6e66 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -46,6 +46,18 @@ neuf copies, et un renvoi mort se lit exactement comme un renvoi valide.
 ---
 
 ## 1. Mesurer, et croire ce qu'on mesure
+
+
+### Un import original ne devient pas un devis recalculé (15/10/2026, RenoDevis)
+
+Incident : des montants et des variantes importés ont été lus comme un chiffrage généré ; le total cumulait des choix incompatibles. Coût : total commercial trompeur et réparation ciblée des dossiers. Avant correction : vérifier propriétaire, origine, PDF original et mode commercial. Des alternatives exposent le montant de chaque choix, avec un seul montant de référence sur la carte et aucun cumul ; des blocs d'une rénovation peuvent avoir un récapitulatif global. Le nombre de pièces jointes ne décide jamais du mode. Une référence n'est pas une acceptation. La correction des vues actives préserve la source historique et les preuves d'envoi. Contre-exemple : additionner trois offres concurrentes reste faux même dans un PDF unique. Preuve : modes alternatives/cumul corrigés et contrôlés en base sans modifier les pièces originales ; le HT structuré encore vide d'un autre dossier reste un reliquat distinct, pas une réparation réputée faite.
+
+**Précision tarifaire datée, propre au compte concerné** : la règle SOLA contrôlée le 15/10 est achats HT / 0,60 + main-d’œuvre, sans apport automatique de 10 %. Le récit historique du 10/10 ci-dessous décrit son incident et ne fixe pas le contrat courant. Toujours relire la règle exécutable et les paramètres du compte ; ne pas transposer cette formule aux autres professionnels.
+
+### Chaque preuve dit exactement quelle étape elle atteste (15/10/2026, RenoDevis)
+
+Incident : un envoi accepté, une ouverture et une recette technique risquaient de servir de preuve de réception ou de clôture complète. Coût : Paul a dû demander pourquoi les boucles restaient ouvertes malgré les livraisons annoncées. Lier chaque état à sa preuve : accepté par le transport, livré, ouvert, signé et payé sont distincts. Une CI verte et un aperçu ne prouvent ni le PDF reçu sur téléphone ni la compréhension d'un vocal réel. Rapporter le lot livré et les reliquats de l'audit séparément, avec prochain geste et critère de sortie. Contre-exemple : une page d'accueil reçue en production ne clôt pas une migration non exécutée. Preuves : accueil et recherche reçus sur la version déployée ; recette vocale complète et migration restent explicitement ouvertes.
+
 
 **UN OBJET DE TUILE N'EST PAS UN BÂTIMENT** *(2026-10-12, mon-dpe.fr)*.
 Pour surligner le logement d'un client sur la carte 3D, on prenait l'objet
@@ -654,6 +666,12 @@ Le profil type sert à construire ; seuls les vrais cas disent si c'est le bon.
 
 
 ## 2. Les garde-fous, et leur silence
+
+
+### L'accès principal survit aux métadonnées indisponibles (15/10/2026, RenoDevis)
+
+Incident : le bouton du canal principal disparaissait faute de numéro public résolu par le fournisseur. Coût : accueil simplifié mais passage vers la conversation habituelle empêché. Charger ces métadonnées sans bloquer les dossiers ; fournir un accès application/web utilisable quand le lien direct manque. Vérifier arrivée directe, après connexion et anciens liens, puis les états vide et erreur. Un nom de professionnel sélectionne une source, jamais une autorisation : rôle relu, homonymes clarifiés et consultation sans changement du rattachement conversationnel. Contre-exemple : un canal ouvert en base ne prouve pas qu'un lien direct ouvre la bonne conversation sur le téléphone. Preuve : secours application/web et recherche bornée reçus en production ; diagnostic du lien direct et lancement natif restent non attestés.
+
 
 **QUAND L'OUTIL NE PEUT PAS VOIR, ON FABRIQUE LE BANC — TOUT DE SUITE** *(2026-10-12, mon-dpe.fr)*.
 Le proxy de la séance bloquait les tuiles IGN et OpenFreeMap : la carte 3D
@@ -1736,6 +1754,12 @@ pas masquer — le dire avec le nombre d'essais qui reste. Et si la capture arri
 quand même, **la rotation est la première action**, pas une note de fin.
 
 ## 4. Conduire une boucle
+
+
+### Capitaliser le réel sans transformer un objectif en capacité acquise (15/10/2026, RenoDevis et ZOH)
+
+Incident : une réponse abrégée à des puissances a provoqué une question répétée et conservé une référence contradictoire ; l'extraction neutre de ZOH était restée liée à une ancienne base. Coût : échanges supplémentaires et code réutilisable en retard sur le produit. Réutiliser le contexte et proposer une reformulation complète à confirmer, en conservant exclusions et références dictées ; ne pas inventer un code produit. L'objectif de trois messages se prouve sur un parcours réel et ne dispense pas de clarification matérielle. Pour ZOH, mesurer séparément plan, base et code neutre sur un commit exact ; ne jamais avancer BASE pour effacer un retard. Contre-exemple : actualiser un inventaire ou fusionner une correction de compréhension ne prouve pas une extraction compilée ni un devis réel confirmé. Preuve : inventaire remesuré au commit dd806dc ; 361 commits d'avance depuis la base neutre ; correction conversationnelle encore en PR concurrente au relevé, à relire avant reprise. L'apprentissage n'élargit ni droits, ni budget, ni autorisations d'envoi.
+
 
 **LE COMMENT AVANT LE TRAVAIL** *(directive EL)*. Étapes, moyens, critères de
 réussite explicités avant d'exécuter. En pratique : **la maquette avant le
