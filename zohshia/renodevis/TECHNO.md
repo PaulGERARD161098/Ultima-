@@ -69,6 +69,34 @@ n'accepte aucune donnée personnelle (refus à l'import).
 modèle de prix, sa présentation, ses contrôles). Ce n'est pas la techno : la
 **série de neutralisation** (§8) la retire, et le code extrait n'en contient rien.
 
+### Contrat de chiffrage versionné — apprentissage du matin
+
+Exigences à conserver lors de la neutralisation et à éprouver dans chaque instance :
+
+- Rattacher la règle au professionnel, à sa source, à sa date d’effet et à sa version.
+  Une correction de formule invalide les propositions de cette ancienne version,
+  sans recalculer les documents envoyés ou acceptés.
+- Distinguer **achat fournisseur vérifié**, **vente historique** et **prix final dicté**.
+  Seul l’achat confirmé reçoit le coefficient de calcul. Une observation de vente
+  ou une correspondance incertaine ne constitue jamais un achat actuel.
+- Séparer prix des produits et structure facturée ; le mode de répartition est un
+  paramètre du professionnel. Une structure facturée n’est pas un coût réel mesuré.
+- Un lot accepté repris sur mandat conserve son périmètre, ses libellés, ses
+  quantités et ses prix. Tracer sa source et vérifier le mandat côté serveur ; un
+  drapeau fourni par le navigateur ne doit pas créer une exemption de contrôle.
+- Conserver les forfaits explicitement finaux, contrôler unités et durée, comparer
+  cible agrégée et somme des lignes arrondies. L’écart d’arrondi reste visible.
+- Une acceptation hors plateforme se distingue d’une signature électronique et
+  d’un encaissement. Tracer qui la déclare et sur quelle version ; arrêter les
+  relances, sans fabriquer de preuve de signature ni de paiement.
+- Conserver les anciennes alternatives comme historique identifiable, sans les
+  compter comme nouvelles ventes. Un import répété ne crée pas une nouvelle vente.
+
+Ce contrat décrit les exigences issues de la reprise ; il ne prouve ni une
+nouvelle extraction ni l’activation de ces comportements. La formule et les valeurs
+propres à l’instance restent hors du code neutre. La collecte et le rejeu suivent
+le protocole existant ; aucun résultat de recette nouveau n’est déduit de ce texte.
+
 ### La TVA — la règle légale, datée, jamais recopiée
 
 - Une **table datée et sourcée** des règles, et une fonction pure qui rend le taux
@@ -245,3 +273,4 @@ et sur l'écran Finubar. Il INDIQUE quand rafraîchir ; seule l'extraction prouv
 ⛔ **Ce qui reste hors de ZOH SHIA, délibérément** : la recette et la série de
 neutralisation **nomment** ce qu'elles retirent ; elles vivent donc dans
 `outils/zohshia/renodevis/`, hors du dossier, comme la liste des noms propres.
+

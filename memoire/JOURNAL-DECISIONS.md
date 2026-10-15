@@ -1,5 +1,19 @@
 # Mémoire Léo — Journal des décisions de Paul
 
+
+- **2026-10-15 — SOLA, entretien du matin.** Nouvelle référence pour les nouveaux
+  chiffrages : achats KLIMA nets HT ×1,40 par produit, puis structure facturée à
+  500 € HT par demi-journée. Abandon du total global ×2 et de `(2A−M)/A`.
+  +40 % sur achat correspond à 28,57 % du prix de vente produit, sans mesure de
+  marge nette. MO déjà margée ; forfaits finaux et lots acceptés repris à l’identique
+  ne sont pas remargés. Source métier canonique :
+  `RenoDevis/memoire/APPRENTISSAGES-SOLA.md`, section du 15/10.
+  Les valeurs de l’instance restent hors de ZOH ; son contrat neutre distingue
+  nature des prix, versions, sources et acceptation privée. Une note de décision
+  ne prouve pas le déploiement du nouveau moteur.
+  Business plan de l’entreprise artisanale à traiter en dernier : coûts réels,
+  jours facturables et prestations avant un calcul de rentabilité.
+
 > Une décision consignée n'est jamais redemandée ni re-litigée.
 > Format : date — décision — conséquence.
 

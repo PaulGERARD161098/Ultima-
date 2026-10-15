@@ -1,5 +1,12 @@
 # ZOH SHIA · RénoDevis — mettre la techno en service pour un nouveau pro
 
+> Complément de la check-list métier : faire préciser la formule de chiffrage et
+> sa version, la nature de chaque prix, le tarif de structure, le traitement des
+> forfaits finaux et des lots acceptés repris. Distinguer acceptation déclarée,
+> signature et paiement ; conserver les versions et les sources. Ces paramètres
+> appartiennent au professionnel et ne doivent pas entrer dans le code neutre.
+
+
 > **L'invocation** (Paul, 04/10/2026) : *« ZOH : j'intègre un nouvel artisan ;
 > fournis-moi un code et une base prête, donne-moi la check-list des infos
 > nécessaires pour mettre la techno RénoDevis à jour pour lui. »*
@@ -233,3 +240,4 @@ marquées comme telles dans le code : elles se remplacent par les règles du pro
 
 Chacune pose un **battement** dans `sentinelle_etat` : la requête d'empreinte dit
 si elle tourne, et si elle tourne à vide.
+
