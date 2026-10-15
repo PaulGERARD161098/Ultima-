@@ -97,6 +97,36 @@ nouvelle extraction ni l’activation de ces comportements. La formule et les va
 propres à l’instance restent hors du code neutre. La collecte et le rejeu suivent
 le protocole existant ; aucun résultat de recette nouveau n’est déduit de ce texte.
 
+### Clarifier le contrat économique avec le professionnel avant calcul
+
+- Demander le résultat attendu sur un exemple achat/vente lorsqu’un pourcentage
+  est ambigu. Nommer sa base : achat, vente, coût de revient ou chiffre d’affaires.
+  Une majoration sur coût n’est pas un taux de marge rapporté à la vente.
+- Identifier chaque montant comme achat vérifié, vente historique, prestation
+  facturée ou forfait final. Les compléments achetés entrent dans la base de coût ;
+  une vente acceptée ne reçoit pas une deuxième marge.
+- Séparer prix facturé de structure et coût réel supporté ; aucune marge nette
+  n’est déduite de la seule marge commerciale des produits.
+- Conserver la réponse datée, son auteur et sa version dans le compte concerné.
+  Réutiliser les choix confirmés ; ne pas redemander les clarifications résolues.
+  Une donnée portée par un autre compte ne devient pas un défaut global.
+- Distinguer seuil minimum de marge et tolérance de comparaison de prix.
+  Une tolérance n’autorise pas à violer un minimum convenu et ne change pas
+  silencieusement de dénominateur ; préciser le repère et le périmètre.
+- Vérifier indépendamment depuis les sources avant édition, puis comparer le
+  fichier final et la version effectivement jointe. Une modification rend les
+  confirmations concernées périmées.
+- Si un contrôle ne résout pas l’écart, revoir définition, version, assiette,
+  nature des données, périmètre, unités, quantités et chaîne de production.
+  Répéter le même calcul n’établit pas que l’hypothèse est bonne.
+- Ne pas annoncer une règle active dans un agent sur une simple note : vérifier
+  que son moteur consomme la version, que les paramètres sont cohérents et que
+  le parcours réel a été reçu. Une mémoire non consommée n’est pas une activation.
+
+Ce complément décrit une exigence de la technologie, pas une nouvelle extraction
+éprouvée. Les valeurs, formules particulières et exemples d’un professionnel
+restent hors du code neutre.
+
 ### La TVA — la règle légale, datée, jamais recopiée
 
 - Une **table datée et sourcée** des règles, et une fonction pure qui rend le taux

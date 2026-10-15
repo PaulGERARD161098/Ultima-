@@ -24,6 +24,23 @@
 > demande le mandat précis de Paul (contrat LV1, `CLAUDE.md` d'Ultima, §Gates).
 > Ce guide dit QUOI faire ; il n'autorise rien.
 
+## Clarification métier à faire avant tout paramétrage
+
+Faire expliquer un exemple chiffré au professionnel : coût retenu, prix de vente
+attendu, dénominateur du pourcentage, achats complémentaires, prestations et
+forfaits déjà finaux. Écrire la formule à partir de sa réponse, versionner sa
+validation et la rattacher à son compte. Ne pas recopier la règle d’un autre compte.
+
+Distinguer contrôle de marge, comparaison de prix et rentabilité nette. Une
+fourchette de prix ne devient pas une tolérance sur un minimum de marge. Faire
+préciser le repère lorsqu’il manque. Réutiliser les réponses déjà confirmées.
+
+Avant mise en service, contrôler le même exemple depuis le moteur, la
+bibliothèque, l’agent, le PDF et le fichier réellement joint. Conserver les
+sources et les versions. Détecter les divergences entre note, paramètre et code ;
+ne pas certifier l’activation tant que le parcours réel n’est pas éprouvé.
+Voir `TECHNO.md`, « Clarifier le contrat économique avec le professionnel ».
+
 ## 0. Deux voies — à choisir d'abord, avec Paul
 
 | Voie | Ce que le pro reçoit | Quand |

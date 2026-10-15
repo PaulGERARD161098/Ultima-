@@ -1,3 +1,22 @@
+## 15 octobre 2026 — clarification économique et contrôle du document final
+
+Décision de Paul : avant de traduire un objectif commercial en calcul, faire
+préciser au professionnel le dénominateur du pourcentage, l’assiette et la nature
+achat/vente/forfait de chaque montant. Conserver le choix par compte et version ;
+ne pas redemander les réponses déjà confirmées. La tolérance sur les prix ne
+remplace pas le respect d’un minimum de marge.
+
+Incident : des recalculs répétés ont prolongé un désaccord dont la cause était
+une définition différente du pourcentage. Leçon transversale : si le contrôle
+ne résout pas l’écart, revoir les hypothèses et la chaîne complète, pas seulement
+l’arithmétique. Vérifier le document exporté et ses pièces jointes après calcul.
+
+Le contrat neutre et le guide d’intégration portent cette clarification ; aucun
+barème professionnel n’y est introduit. Compétence personnelle de comptabilité
+créée et enregistrée séparément ; elle n’active pas un contrôle logiciel.
+Mise à jour documentaire seulement : aucun merge, nouvelle extraction ou
+déploiement n’est attesté.
+
 # Mémoire Léo — Journal des décisions de Paul
 
 

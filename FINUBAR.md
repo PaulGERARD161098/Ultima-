@@ -1,3 +1,14 @@
+## 15 octobre 2026 — consignes de calcul et clarification mises à jour
+
+État de cette boucle : décisions métier et vocabulaire clarifiés ; contrôle
+indépendant du document final requis ; mémoire générique de comptabilité validée.
+Mise à jour documentaire sur la préparation existante ; aucune activation runtime
+ni aucun déploiement déduit de ces notes. Source technique relue :
+05966403442d76d18095cf5d009c51c901044153.
+Le contrat neutre et le guide imposent une clarification économique par professionnel.
+
+Prochaine action : vérifier cette exigence dans la prochaine recette d’une instance, sans y importer de barème professionnel.
+
 # FINUBAR — Ultima
 
 > **Finubar** est l'index de pilotage de tous les projets de Paul : *où on en est,
