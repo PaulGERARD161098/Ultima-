@@ -4754,3 +4754,14 @@ RenoDevis »* · *« Merge 282 et fin de session »*.
 - **Premier signal réel du rappel ZOH SHIA** : RénoDevis `2d14e60` est un commit
   au-delà de la série, sans toucher ses fichiers ; l'extraction le confirme
   (495 fichiers, aucun nom propre).
+
+## 2026-10-15 — « Notre Kelvin » s'appelle VITRUVE, sur Mon DPE Facile
+
+Paul, en préparant son rendez-vous avec kelvin° : *« mon Kelvin c'est VITRUVE,
+renomme partout et fais aussi ressortir Mon DPE Facile »*.
+- Renommé dans les documents vivants : `PLAN-2026-09-30-chaine-A-Z.md` (C2, C3,
+  D3) et la maquette RenoBoost `maquettes/chaine-A-Z/` (libellés `mon-dpe.fr`
+  → « Mon DPE Facile »). kelvin° garde son nom : c'est la société d'en face.
+- ⛔ Non réécrits, délibérément : les cadrages datés, ce journal et les leçons.
+  Ce sont des archives ; on ne falsifie pas le compte rendu d'une séance.
+- Fiche du rendez-vous : doc « RDV kelvin° — fiche d'une page » (claude.ai).
