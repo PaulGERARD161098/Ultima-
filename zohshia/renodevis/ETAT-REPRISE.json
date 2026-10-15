@@ -8,10 +8,13 @@
   },
   "plan": "inventaire et contrat actualisés ; publication régénérée",
   "base": {
-    "etat": "à rééprouver sur la source actuelle",
+    "etat": "ordre des deux nouvelles migrations relevé en lecture seule, garde corrigée ; rejeu Postgres et comparaison non exécutés",
     "empreinte_date": "2026-10-10",
     "migrations_source": 47,
-    "certification_actuelle": false
+    "certification_actuelle": false,
+    "ordre_releve_le": "2026-10-16",
+    "ordre_non_alphabetique": true,
+    "limite_locale": "runtime Postgres absent"
   },
   "code_neutre": {
     "base": "f1f9fb30fc03709106aa754d46524c0c3d778ef0",

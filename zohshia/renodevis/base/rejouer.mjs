@@ -43,6 +43,7 @@ import { join, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
+import { erreursOrdre } from './ordre.mjs';
 import {
   chargerRecette, neutraliserFichier, nomPropreDans, lireAuCommit, listerAuCommit, commitDe, RACINE,
 } from '../neutraliser.mjs';
@@ -64,14 +65,8 @@ const recette = chargerRecette();
 // ── 1. L'ordre ───────────────────────────────────────────────────────────────
 const ordre = JSON.parse(readFileSync(join(ICI, 'ordre.json'), 'utf8')).migrations;
 const presentes = listerAuCommit(DEPOT, REF, DOSSIER_MIG).filter((c) => c.endsWith('.sql')).map((c) => basename(c));
-const triees = [...presentes].sort((a, b) => (Buffer.from(a) < Buffer.from(b) ? -1 : 1));
-const absentes = presentes.filter((m) => !ordre.includes(m));
-const disparues = ordre.filter((m) => !presentes.includes(m));
-if (!presentes.length) echoue('aucune migration lue au commit — dépôt non récupéré ?');
-if (absentes.length) echoue(`migrations sans place relevée : ${absentes.join(', ')} — relever leur ordre dans la base de référence`);
-if (disparues.length) echoue(`migrations relevées mais absentes du commit : ${disparues.join(', ')}`);
-if (JSON.stringify(triees) !== JSON.stringify(ordre.filter((m) => presentes.includes(m)))) echoue('l’ordre relevé ne coïncide plus avec le tri des noms');
-if (!echecs.length) ok(`ordre : ${ordre.length} migrations, relevé = tri binaire (commit ${commitDe(DEPOT, REF)})`);
+for (const erreur of erreursOrdre(presentes, ordre)) echoue(erreur);
+if (!echecs.length) ok(`ordre : ${ordre.length} migrations, ordre explicite relevé (commit ${commitDe(DEPOT, REF)})`);
 
 // ── 2. La neutralisation ─────────────────────────────────────────────────────
 const neutres = [];

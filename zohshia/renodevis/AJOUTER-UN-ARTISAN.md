@@ -30,7 +30,7 @@ La check-list du §1 sert **aux deux voies**. La voie B ajoute le §3.
 
 **Manuel, avant mise en service** : décider du mode alternatives ou blocs et vérifier le récapitulatif ; rapprocher tout import de sa pièce originale ; contrôler le périmètre du compte et la résolution des homonymes. **Auto puis manuel** : éprouver arrivée après connexion, accès au canal avec et sans métadonnées, confirmation d'une reformulation, puis PDF réellement reçu. Une demande de consultation ne change pas le rattachement du canal. Aucun objectif de rapidité ne remplace une clarification indispensable.
 
-**Voie B suspendue à ses preuves actuelles** : remesurer, relever l'ordre des nouvelles migrations, rejouer en base jetable et comparer l'empreinte en lecture seule ; rafraîchir la série neutre sur le commit choisi puis extraire avec vérification complète. Le plan actualisé ne certifie ni une base ni un export. Ne pas lancer une instance neuve à partir du seul état historique.
+**Voie B suspendue à ses preuves actuelles** : remesurer, vérifier l'ordre explicite relevé (qui peut différer des noms de fichiers), rejouer en base jetable et comparer l'empreinte en lecture seule ; rafraîchir la série neutre sur le commit choisi puis extraire avec vérification complète. Le plan actualisé ne certifie ni une base ni un export. Ne pas lancer une instance neuve à partir du seul état historique.
 
 Variables supplémentaires à configurer seulement pour les fonctions choisies ; valeurs exclusivement dans l'environnement de l'instance, jamais ici :
 - `COMPTEUR_FICTIF` — configuration serveur ; voir les fichiers lecteurs dans `inventaire.json`.

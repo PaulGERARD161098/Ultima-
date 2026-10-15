@@ -208,7 +208,7 @@ export default {
          "b"
         ],
         [
-         " La base compte deux migrations de plus que l'inventaire précédent ; son ordre d'application et son empreinte restent à confronter en lecture seule avant rejeu isolé. La série neutre a 361 commits de retard, avec 111 fichiers modifiés qui croisent la série sur 565 chemins modifiés au total. Le nombre de commits touchant la série n'a pas été mesuré ; aucun zéro n'est supposé. Le report historique après paramétrage ne certifie pas l'état présent : rafraîchir la série, puis exécuter l'extraction avec typage, tests et construction, sans corriger l'arbre extrait à la main. Aucun nom, formule ni donnée d'un professionnel n'entre dans cet extrait.",
+         " La base compte deux migrations de plus que l'inventaire précédent ; l'ordre des deux nouvelles migrations a été relevé en lecture seule et ne suit pas le tri des noms. Le reconstructeur utilise cet ordre explicite et refuse une liste incomplète ou dupliquée. Le rejeu isolé et la comparaison d'empreinte restent à réaliser ; le runtime de base n'est pas disponible dans cette séance. La série neutre a 361 commits de retard, avec 111 fichiers modifiés qui croisent la série sur 565 chemins modifiés au total. Le nombre de commits touchant la série n'a pas été mesuré ; aucun zéro n'est supposé. Le report historique après paramétrage ne certifie pas l'état présent : rafraîchir la série, puis exécuter l'extraction avec typage, tests et construction, sans corriger l'arbre extrait à la main. Aucun nom, formule ni donnée d'un professionnel n'entre dans cet extrait.",
          ""
         ]
        ]
@@ -2949,7 +2949,7 @@ export default {
          "b"
         ],
         [
-         " : remesurer, relever l'ordre des nouvelles migrations, rejouer en base jetable et comparer l'empreinte en lecture seule ; rafraîchir la série neutre sur le commit choisi puis extraire avec vérification complète. Le plan actualisé ne certifie ni une base ni un export. Ne pas lancer une instance neuve à partir du seul état historique.",
+         " : remesurer, vérifier l'ordre explicite relevé (qui peut différer des noms de fichiers), rejouer en base jetable et comparer l'empreinte en lecture seule ; rafraîchir la série neutre sur le commit choisi puis extraire avec vérification complète. Le plan actualisé ne certifie ni une base ni un export. Ne pas lancer une instance neuve à partir du seul état historique.",
          ""
         ]
        ]
@@ -7216,7 +7216,7 @@ export default {
   "pilotage-back-office/TECHNO.md": "a6a3c2ec7645ab99bb9a472de5f721adab65627a094b81e153e23e3ce7f7f589",
   "pilotage-back-office/MISE-EN-SERVICE.md": "da99219e5142485ac53b49a5563d4ff0d406e966b5775a932ca7a72382c8be53",
   "renodevis/badge.json": "cdf0f06c4c492ccc21be7bb97a3d5f2da690832d1e1728d2e0a12bd0482fb1ff",
-  "renodevis/TECHNO.md": "cfae04e64294093d2556c8875499c11caaf43545c62d72ea4a727c10f6bafef2",
-  "renodevis/AJOUTER-UN-ARTISAN.md": "d0a7ca582f7e2bf3b89ef33e7e839d7ace3fdf4af454f740ba8c7c0256e44284"
+  "renodevis/TECHNO.md": "454dc48e0ed0486c0539fd1cbd50d6bb8186ec16090b80fda2ab33c853f1a0bc",
+  "renodevis/AJOUTER-UN-ARTISAN.md": "2cf1781acc8af5670cad8483f5abed491454d2d516e49e3a7eccbf5eb653e51d"
  }
 };

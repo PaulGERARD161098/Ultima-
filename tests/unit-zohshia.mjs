@@ -1,3 +1,4 @@
+import { erreursOrdre } from '../zohshia/renodevis/base/ordre.mjs';
 // ZOH SHIA — ce qui empêche la techno de RénoDevis de mentir (2026-10-04).
 //
 // Les réponses au pre-mortem de la boucle 2, une par verdict :
@@ -32,6 +33,14 @@ const lire = (...p) => readFileSync(join(RACINE, ...p), 'utf8');
 const verdicts = {};
 const chiffres = {};
 const dit = (nom, ok) => { verdicts[nom] = ok === true; };
+
+// Incident du 16/10 : deux migrations appliquées dans l'ordre inverse des noms.
+const migrationsOrdre = ['20261010_vue.sql', '20261011_messages.sql'];
+dit('ordreReleveNonAlphabetiqueAccepte', erreursOrdre(migrationsOrdre, [...migrationsOrdre].reverse()).length === 0);
+dit('ordreIncompletRefuse', erreursOrdre(migrationsOrdre, migrationsOrdre.slice(0, 1)).length > 0);
+dit('ordreDoublonneRefuse', erreursOrdre(migrationsOrdre, [...migrationsOrdre, migrationsOrdre[0]]).length > 0);
+dit('ordreDisparuRefuse', erreursOrdre(migrationsOrdre.slice(0, 1), migrationsOrdre).length > 0);
+dit('ordreVideRefuse', erreursOrdre([], []).length > 0);
 
 // ---- L'inventaire, et ses verrous de non-vacuité ---------------------------
 let inv = null;
