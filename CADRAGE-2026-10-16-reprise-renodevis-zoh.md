@@ -10,9 +10,9 @@ Fermer l'audit du 15/10 sur des résultats reçus, et conserver une technologie 
 |---|---|---|
 | 1 | Relire la PR concurrente RenoDevis #385 avant toute intervention. Au relevé : brouillon ouvert, tête 49c5a43cb023534d13e5bd227674ffa142b81359 ; poursuivre dans cette branche ou après sa livraison, sans dupliquer. | Description vocale réelle, reformulation complète confirmée, exclusions et références conservées, calcul selon le compte, PDF effectivement reçu et relu sur téléphone. Objectif trois messages entrants ; une ambiguïté matérielle reste bloquante. Tests simulés seuls insuffisants. |
 | 1 bis | Diagnostiquer le lien direct WhatsApp ; conserver le secours application/web déjà livré. | Bonne conversation ouverte sur téléphone, avec et sans métadonnées disponibles ; les dossiers restent accessibles. |
-| 2 | Reprendre la PR SQL #374 : relire son diff et mesurer le schéma réel avant préparation de migration et retour arrière. | Rejeu isolé, tests d'idempotence et concurrence, puis exécution autorisée et preuve des journaux d'envoi/relance. Les tables rd_relance_operations et rd_envoi_archives restent absentes au relevé en lecture seule du 16/10. |
+| 2 | Reprendre #374 : rapprocher son diff ancien de la tête actuelle et mesurer le schéma avant préparation de migration et retour arrière ; recevoir aussi les offres/pièces explicitement choisies, leur réservation atomique et leur politique de relance. | Rejeu isolé, tests d'idempotence et concurrence, puis exécution autorisée et preuve des journaux d'envoi/relance. Les tables rd_relance_operations et rd_envoi_archives restent absentes au relevé en lecture seule du 16/10. |
 | 3 | Préparer le complément HT structuré ROMEAS depuis le PDF original. | Proposition exacte HT 17 633,95 / TTC 18 603,82, identité/propriétaire et pièce recontrôlés ; correction ciblée autorisée, réattestée, sans modifier le PDF original ou l'historique d'envoi. Ne pas refaire la correction alternatives/cumul déjà reçue. |
-| ZOH | Reprendre base et extraction après sélection d'un commit stable de RenoDevis. | Ordre des migrations relevé en lecture seule ; base jetable comparée à la référence ; série neutre rafraîchie puis extraction avec typage, tests et build. Une modification de BASE seule ne constitue pas une correction. |
+| ZOH | Vérifier le report déclaré après J4, puis reprendre base et extraction sur un commit stable de RenoDevis. | Ordre des migrations relevé en lecture seule ; base jetable comparée à la référence ; série neutre rafraîchie puis extraction avec typage, tests et build. Une modification de BASE seule ne constitue pas une correction. |
 
 ## 3. Sources et moyens
 
@@ -37,7 +37,7 @@ ZS : conserver inventaire, badge, moteur, banque et contrôle existants ; aucun 
 
 ## 6. Pré-mortem
 
-- Faux cumul commercial : mode explicite ; choix exclusifs séparés ; récapitulatif global réservé aux blocs cumulables. Kerrien choisit la variante et le format une/trois pièces, sans somme artificielle.
+- Faux cumul commercial : mode explicite ; choix exclusifs séparés ; récapitulatif global réservé aux blocs cumulables. Kerrien choisit une des trois propositions ; celles-ci peuvent être présentées en trois pièces ou dans une synthèse unique, sans somme artificielle.
 - Rechiffrage d'un original : identifier l'import et préserver la pièce ; correction active ciblée seulement.
 - Fausse clôture : une preuve par étape et des reliquats nommés, sans confondre lot livré et audit terminé.
 - Écrasement d'un chantier concurrent : relire #385 et les têtes avant changement ; ne pas fusionner sur une ancienne autorisation.
