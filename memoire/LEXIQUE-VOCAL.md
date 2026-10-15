@@ -38,7 +38,8 @@
 | Renault Boost, Renoboost, **Remo Boost** (2026-08-20) | Renoboost IA (socle rémunérateur = chantiers + installations à domicile ; ligne de base du benchmark ADRAMELECH ; macro-projet boussole LV2 → console https://www.renoboostia.fr) |
 | Réno Conception, Rénos conception | **VITRUVE** (ADR-009) — libellé métier de Paul pour le bureau d'études embarqué ; nom de registre = **VITRUVE, acté par Paul le 2026-08-20**, module solaire = GNOMON |
 | « les premiers pavillons ou panneaux solaires » | entendu 2026-08-20 — compris **« les pavillons, et les panneaux solaires »** (premier terrain visé de VITRUVE). ⚠️ « premiers » possiblement parasite : à confirmer par Paul |
-| « avec mon dpe.fr » | entendu 2026-08-20 — **non interprété**, consigné mot pour mot (élément à verser au cadrage VITRUVE ; probablement un service ou un domaine que Paul a en main). ⏳ précision attendue |
+| « avec mon dpe.fr » | entendu 2026-08-20 — consigné mot pour mot (élément à verser au cadrage VITRUVE ; probablement un service ou un domaine que Paul a en main). ✅ **Précisé le 2026-10-15 : Mon DPE Facile** (mondpe-facile.fr, dépôt `mon-dpe.fr`), la plateforme sur laquelle tourne VITRUVE |
+| « mon Kelvin », « notre Kelvin » | **VITRUVE** (Paul, 2026-10-15 : « mon Kelvin c'est VITRUVE »). kelvin° (go-kelvin.com) reste le nom de la société concurrente ; notre outil s'appelle VITRUVE, sur Mon DPE Facile |
 | Ikom, Ycom | YCOME — ⛔ **abandonné le 28/09** (Paul ne travaille plus pour lui) ; retiré du ciel d'ALPHA. Une dictée qui le nomme parle d'un projet clos |
 | Richardam, Reshiram | RESHIRAM (cap boussole LV2 : « le travail de la réalité » — talents & capacités concrets, data, lien RIVEN) |
 | Zekrom, Chrome | ZEKROM (cap boussole LV2 : « la quête de l'idéal » — volontés/idéaux, cap directionnel) — « Chrome » = déformation vocale observée 2026-07-23 |
