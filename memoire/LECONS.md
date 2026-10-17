@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v92 2026-10-13 sha256:b8f66c00d649 -->
+<!-- lecons:empreinte v93 2026-10-17 sha256:69399ff8e1ec -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
