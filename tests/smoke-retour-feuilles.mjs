@@ -220,10 +220,11 @@ for (const [id, fichier] of DRAGONS) {
   verifier(`${fichier} : le suivre est possible (lien cliquable au doigt)`, r.suivi, r.raison);
   verifier(`${fichier} : le retour arrive sur ${RETOUR_DRAGONS}`,
     r.arrivee.endsWith('/' + RETOUR_DRAGONS), r.arrivee);
-  verifier(`${fichier} : le ciel y est isolé sur DRAGONS — les sept étoiles, dont ADRAMELECH, RESHIRAM, ZEKROM et ZOH SHIA`,
-    r.etoiles.length === 7
+  // HUIT depuis le 18/10/2026 : AMATSU, étoile d'attente, paraît au retour comme les autres.
+  verifier(`${fichier} : le ciel y est isolé sur DRAGONS — les huit étoiles, dont ADRAMELECH, RESHIRAM, ZEKROM, ZOH SHIA et AMATSU`,
+    r.etoiles.length === 8
     && JSON.stringify(r.etoiles.map((e) => e.nom).sort())
-      === JSON.stringify(['ADRAMELECH', 'DRAUKHAIN', 'MAEDRETHNIR', 'RESHIRAM', 'VRANESH', 'ZEKROM', 'ZOH SHIA']),
+      === JSON.stringify(['ADRAMELECH', 'AMATSU', 'DRAUKHAIN', 'MAEDRETHNIR', 'RESHIRAM', 'VRANESH', 'ZEKROM', 'ZOH SHIA']),
     JSON.stringify(r.etoiles.map((e) => e.nom)));
 }
 // LE TÉMOIN, pour que « trois étoiles » ne soit pas vert d'un instrument qui
