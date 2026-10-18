@@ -570,6 +570,57 @@ posé en boucle 1.
 
 *(Les questions telles qu'elles ont été posées, pour mémoire :)*
 
+### 12.5 Boucle 2a — le souffle par la voix de Léo (cadrée et bâtie le 2026-10-18)
+
+① **But.** Depuis n'importe quelle page où Léo est montée (RIVEN, ADRAMELECH,
+IMLADRIK), Paul dicte « Amatsu, … » et soumet une décision, un projet, une
+idée ; Léo pose les trois vents, puis propose d'enregistrer la **lecture** —
+l'objet soumis et les trois réponses de Paul, dans ses mots, datées par le
+serveur. Elle s'écrit sous l'anneau vert (journalisée, défaisable d'un clic).
+*Ligne MS* : aucun client, aucun contrat — c'est le perso ; dit tel quel.
+② **Étapes.** a) la migration, écrite et **NON appliquée** ; b) le validateur
+miroir et la route ; c) la main de Léo (catalogue, prompt, reformulation) ;
+d) le défaire ; e) le gabarit front ; f) le blason ; g) les harnais ; h) la
+preuve réelle — **après** le go de Paul sur la migration.
+③ **Moyens — ligne ZS.** Aucune technologie nouvelle : le tool-use de l'API
+Claude déjà en service, une table, une route, zéro écran. Ce qui est posé :
+- `supabase/migrations/20261018160000_amatsu_lectures.sql` — `amatsu_lectures`
+  (objet 200 · bise 500 · souffle 500 · ouragan 500 · created_at), RLS par
+  owner, **aucune policy UPDATE** (une lecture se relit, ne se corrige pas),
+  anon sans droit, paire (owner_id, id) unique pour les passerelles de la 2b.
+  ⛔ **Gate** : migration + §5 intime → ne s'applique que sur ton go.
+- `api/_lib/validate.js` (`validateLectureAmatsu`, bornes lues dans le SQL par
+  le harnais) · `api/amatsu-lectures.js` (GET / POST / DELETE, miroir de
+  `flammes`).
+- `api/_lib/leo.js` : `proposer_lecture_amatsu`, **premier outil transversal**
+  du catalogue (`quadrant` en liste : riven, adramelech, imladrik — NICOL
+  BOLAS reste sans main), **vert**, quatre arguments **requis** ; la règle du
+  prompt : poser les trois vents avant d'appeler, jamais une note ni un
+  verdict de sa main ; la reformulation déterministe nomme les trois vents.
+- `api/_lib/leo-execution.js` : `DEFAIRES` (table `amatsu_lectures`, sans
+  retouche) et `DEPENDANCES` (rien ne naît dessus en 2a).
+- `js/leo-accueil.js` : le gabarit (POST, corps exact, aucune `_ref`).
+- `js/blasons.mjs` : le blason **amatsu** — les trois vents de la carte gravée,
+  deux souffles qui s'enroulent, le troisième qui file et se prolonge d'or.
+④ **Critères de réussite.** Unitaires verts avec les verrous **refixés** (onze
+outils, dix verts, treize mains servies, chaque vert son défaire) ;
+`unit-amatsu-validate` prouve le miroir API ↔ SQL et les invariants de la
+migration ; `smoke-draukhain` §G prouve la chaîne : proposition → carte au
+texte serveur → **rien d'écrit avant le clic** → un POST au corps exact, avec
+le Bearer. **Preuve réelle** : une lecture dictée par Paul, visible via GET
+après auth — elle attend l'application de la migration.
+⑤ **Pas dans la 2a.** Pas de page, pas de registre de relecture (2b) ; pas de
+passerelle vers l'objet jugé (2b) ; pas de NICOL BOLAS ; pas de « yeux » (état
+transmis à Léo) ; pas de score.
+⑥ **Pre-mortem.** (a) *Léo appelle l'outil avant d'avoir posé les vents* ⇒ les
+quatre arguments sont requis côté schéma ET validation, et le prompt le dit ;
+(b) *le vert « sans demander » enregistre des réponses inventées* ⇒ la règle
+commune exige chaque valeur mot pour mot dans le dernier message de Paul :
+trois réponses sur trois tours retombent sur la carte, c'est voulu ; (c) *la
+table n'existe pas en prod* ⇒ POST → 500 générique, la carte dit l'échec, rien
+n'est perdu ni inventé — et c'est le gate qui le veut ; (d) *un onzième vert
+entre en silence* ⇒ `unit-leo-anneau` le nomme à la main, et il l'a fait.
+
 1. **Le mot coupé** : la dictée s'arrête sur « Agence à… » — que suivait-il ?
 2. **Le nom et l'épithète** : AMATSU / « Dragon de l’air » — figés au lexique dès
    validation.

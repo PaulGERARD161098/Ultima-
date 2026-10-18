@@ -397,12 +397,13 @@ export const NOEUDS = {
   // idée me rendra-t-elle plus libre ? » ; la liberté, c'est aussi la cohérence
   // avec soi-même, ses choix et sa paix ; l'air est volatil — vigilance à ne pas se
   // laisser emporter par le vent. Le contenu se cadre à sa boucle 2
-  // (CADRAGE-IMLADRIK.md §12) ; le blason « portail » est provisoire.
+  // (CADRAGE-IMLADRIK.md §12). Blason propre « amatsu » (les trois vents),
+  // dessiné sur décision de Paul le 18/10 ; la page reste à venir.
   amatsu: {
     nom: 'AMATSU',
     epithete: 'Dragon de l’air',
     etat: 'À venir',
-    blason: 'portail',
+    blason: 'amatsu',
     cible: null,
     resume: 'Le dragon de l’air : liberté, force indomptée, fraîcheur de la bise et '
       + 'terreur de l’ouragan. Sa question : cette décision, ce projet, cette idée '

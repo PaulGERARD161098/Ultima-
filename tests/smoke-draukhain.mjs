@@ -887,6 +887,70 @@ console.log('— D. draukhain.html : cartouche de Léo + mains sur IMLADRIK —'
   await page.close();
 }
 
+// ============ G. AMATSU — la lecture du dragon de l'air, par la voix de Léo (2a) ============
+// Prouve, sur la même page et la même fausse session que D : une proposition
+// `proposer_lecture_amatsu` servie par /api/leo ouvre la carte avec le texte
+// DÉTERMINISTE du serveur (les trois vents nommés), n'écrit RIEN avant le clic,
+// puis POSTe sur /api/amatsu-lectures le corps EXACT (objet + trois vents, rien
+// de plus : pas de note, pas de date), avec le Bearer.
+console.log('— G. draukhain.html : AMATSU, la lecture par la voix de Léo —');
+{
+  const { page, erreurs } = await nouvellePage();
+  await page.addInitScript(`try {
+    window.localStorage.setItem('sb-${REF_SUPABASE}-auth-token', JSON.stringify({
+      access_token: 'jeton-de-test', token_type: 'bearer', expires_in: 3600,
+      expires_at: Math.floor(Date.now() / 1000) + 3600, refresh_token: 'r',
+      user: { id: '00000000-0000-4000-8000-000000000000', aud: 'authenticated', role: 'authenticated' }
+    }));
+  } catch (e) {}`);
+  await page.route(`**://${REF_SUPABASE}.supabase.co/**`, (route) =>
+    route.fulfill({ status: 503, contentType: 'application/json', body: '{}' }));
+  await page.route('**/api/serments**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE),
+  }));
+  await page.route('**/api/ideaux**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_IDEAUX),
+  }));
+  await page.route('**/api/imladrik**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(FIXTURE_PAGES),
+  }));
+  const LECTURE = { objet: 'Reprendre la boutique', bise: 'oui, moins de patron', souffle: 'oui, c’est moi', ouragan: 'un peu' };
+  const REFORMULATION = 'Amatsu lit « Reprendre la boutique » — plus libre ? « oui, moins de patron » · cohérent ? « oui, c’est moi » · emporté ? « un peu »';
+  await page.route('**/api/leo**', (route) => route.fulfill({
+    status: 200, contentType: 'application/json; charset=utf-8',
+    body: JSON.stringify({ ok: true, data: { reponse: 'Voici la lecture d’Amatsu.',
+      proposition: { outil: 'proposer_lecture_amatsu', args: LECTURE, reformulation: REFORMULATION } } }),
+  }));
+  const lectures = [];
+  await page.route('**/api/amatsu-lectures**', (route) => {
+    lectures.push({ methode: route.request().method(), headers: route.request().headers(), corps: route.request().postData() });
+    return route.fulfill({ status: 200, contentType: 'application/json; charset=utf-8',
+      body: JSON.stringify({ ok: true, data: { id: '00000000-0000-4000-8000-00000000a0a0', ...LECTURE } }) });
+  });
+
+  await page.goto(`${BASE}/draukhain.html`, { waitUntil: 'load', timeout: 20000 });
+  await page.waitForSelector('#leo-cartouche', { timeout: 20000 });
+  await page.locator('.leo-voix-champ').fill('Amatsu, reprendre la boutique : oui moins de patron, oui c’est moi, un peu');
+  await page.locator('.leo-voix-envoyer').click();
+  await page.waitForSelector('.leo-carte-action', { timeout: 20000 });
+  const carte = (await page.locator('.leo-carte-action').textContent()) || '';
+  verifier('AMATSU : la carte porte la reformulation serveur, les trois vents nommés',
+    carte.includes(REFORMULATION), carte.slice(0, 200));
+  verifier('AMATSU : aucune écriture avant confirmation (verrou : la carte est là)',
+    carte.length > 0 && lectures.length === 0);
+  await page.locator('.leo-carte-confirmer').click();
+  await page.waitForTimeout(300);
+  verifier('AMATSU : une écriture, POST /api/amatsu-lectures',
+    lectures.length === 1 && lectures[0].methode === 'POST', JSON.stringify(lectures.map((l) => l.methode)));
+  verifier('AMATSU : le corps EXACT — objet + trois vents, rien de plus',
+    JSON.stringify(JSON.parse((lectures[0] || {}).corps || '{}')) === JSON.stringify(LECTURE),
+    (lectures[0] || {}).corps);
+  verifier('AMATSU : Bearer transmis à l’écriture',
+    ((lectures[0] || {}).headers || {}).authorization === 'Bearer jeton-de-test');
+  verifier('Zéro erreur console (AMATSU)', erreurs.length === 0, erreurs.slice(0, 3).join(' | '));
+  await page.close();
+}
+
 // ====== LE RETOUR DE LA PASSERELLE : les futurs VRANESH sur un serment ======
 // Jusqu'au 2026-08-04 le pont était à SENS UNIQUE : VRANESH savait quel
 // objectif un futur menace ou sert, DRAUKHAIN n'en savait rien. Prouve :
