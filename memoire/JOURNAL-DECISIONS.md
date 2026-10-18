@@ -4825,6 +4825,12 @@ Sur les décisions de 15 h 20 (forme C), la 2a est posée sur la branche de #399
   validate` ; `smoke-draukhain` §G. **Éprouvé en le cassant** (copie jetable) :
   borne API décalée → rouge ; AMATSU retiré d'un quadrant → rouge ; policy UPDATE
   glissée dans la migration → rouge ; champ en trop dans le corps → §G rouge.
+- **Patrimoine navigateur sur l'arbre 2a** : vert, hormis le rouge RIVEN connu.
+  Un verdict de cadence du fond (`smoke-lv5-fond`, 1670 px, seuil 34 ms) a cédé
+  deux fois à 36,6 puis 37,9 ms ; rejoué un navigateur à la fois, `main` pur,
+  l'arbre de la boucle 1 et l'arbre 2a mesurent 32,8 · 30,1 · 31,1 ms, tous
+  verts : le conteneur, pas le code. La marge sous ce seuil est de 1 à 4 ms sur
+  cette machine — à savoir avant de croire un rouge isolé de ce harnais.
 - **Reste** : le go de Paul pour appliquer la migration, puis la **preuve réelle**
   (une lecture dictée, lue via GET après auth) ; la 2b (page et registre de
   relecture, passerelle vers l'objet jugé).
