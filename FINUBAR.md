@@ -32,12 +32,13 @@
   },
   "dernier_arret": {
     "le": "2026-10-18",
-    "commit": "e975d8ba99cc40d9b6844bd13b6d4a7b1499cf90",
-    "quoi": "18/10 : AMATSU, le dragon de l'air, huitième étoile des DRAGONS (étoile d'attente, mots de Paul, verrous refixés à huit) ; le dry run a cédé à 300–320 px → poses en diagonale dans le moteur du ciel. Boucle 2 cadrée (CADRAGE-IMLADRIK.md §12), non codée."
+    "commit": "6d6ee6b",
+    "quoi": "18/10 : AMATSU — l'étoile (boucle 1), puis la 2a : la lecture par la voix de Léo (main transversale, route, défaire, blason, harnais), migration `amatsu_lectures` ÉCRITE NON APPLIQUÉE. Tout sur la branche de #399, fusion unique en fin de séance."
   },
-  "prochaine_action": "AMATSU boucle 2a (décisions prises le 18/10 : forme C = la voix de Léo d'abord, trois vents, blason à dessiner) : cadrer au format 6 points puis bâtir la main de Léo et sa preuve — sur la branche de #399, fusion unique en fin de séance.",
+  "prochaine_action": "Go de Paul pour appliquer `20261018160000_amatsu_lectures.sql` (gate §5 intime), puis la preuve réelle : une lecture dictée à Léo (« Amatsu, … »), relue via GET /api/amatsu-lectures. Ensuite la 2b (page et registre de relecture, passerelle vers l'objet jugé).",
   "bloque_par": [
     "CI GitHub Actions MORTE depuis le 18/10 09:39 UTC : tous les jobs concluent « failure » en 2 s, sans runner ni journal — sur main (push de fusion de #398) comme sur #399. Relance refusée (403). Geste de Paul : Settings › Billing › Actions (minutes incluses / limite de dépense), puis relancer les jobs de #399. Le patrimoine est vert en local (65 unitaires, 59 harnais).",
+    "AMATSU 2a : application de la migration `20261018160000_amatsu_lectures.sql` — gate migration + §5 intime, go explicite de Paul.",
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
     "B4 (Réno lit Artidispo) : code vert (9/9), preuve impossible depuis la séance — Paul demande « Où en est Artidispo ? » à Réno (dashboard) ; la trace Artidispo est dans un projet Supabase hors de ce compte.",
@@ -49,7 +50,7 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "AMATSU (18/10) : l'étoile est posée ; les quatre décisions de la boucle 2 sont prises (CADRAGE-IMLADRIK.md §12.4 : forme C — A puis B, trois vents, blason à dessiner, « Agence à » = rien). 2a = le souffle par la voix de Léo ; 2b = la page et son registre.",
+      "quoi": "AMATSU (18/10) : étoile posée (1), lecture par la voix de Léo bâtie et prouvée au harnais (2a) ; migration écrite, non appliquée — preuve réelle après le go ; 2b à cadrer (page, relecture, passerelle). CADRAGE-IMLADRIK.md §12.",
       "depuis": "2026-10-18"
     },
     {

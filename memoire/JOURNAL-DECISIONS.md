@@ -4807,3 +4807,24 @@ Paul, à 15 h 20 UTC, sur quatre panneaux de choix :
 
 Et, le même après-midi : *« on ne fusionnera que tout à la fin »* — #399 est la
 PR de séance ; tout le travail s'y empile, fusion unique sur son go final.
+
+## 2026-10-18 — AMATSU boucle 2a : la lecture par la voix de Léo est bâtie, la migration attend le go
+
+Sur les décisions de 15 h 20 (forme C), la 2a est posée sur la branche de #399 :
+- **`proposer_lecture_amatsu`**, premier outil **transversal** du catalogue (riven,
+  adramelech, imladrik ; NICOL BOLAS sans main), vert, quatre arguments requis ;
+  Léo pose les trois vents avant d'appeler, jamais une note ni un verdict de sa
+  main ; reformulation qui nomme les trois vents ; « Amatsu, … » reconnu.
+- **Migration `20261018160000_amatsu_lectures.sql` ÉCRITE, NON APPLIQUÉE** (gate
+  migration + §5 intime) : objet 200 · trois vents 500 · created_at ; RLS par
+  owner, aucune policy UPDATE, anon dehors. Route `/api/amatsu-lectures`,
+  validateur miroir, défaire (DEFAIRES/DEPENDANCES), gabarit front, blason
+  « amatsu » dessiné (les trois vents de la carte gravée).
+- **Prouvé** : unitaires 66/66, verrous refixés à la main (onze outils, dix verts
+  nommés, treize mains servies, chaque vert son défaire joué) ; `unit-amatsu-
+  validate` ; `smoke-draukhain` §G. **Éprouvé en le cassant** (copie jetable) :
+  borne API décalée → rouge ; AMATSU retiré d'un quadrant → rouge ; policy UPDATE
+  glissée dans la migration → rouge ; champ en trop dans le corps → §G rouge.
+- **Reste** : le go de Paul pour appliquer la migration, puis la **preuve réelle**
+  (une lecture dictée, lue via GET après auth) ; la 2b (page et registre de
+  relecture, passerelle vers l'objet jugé).
