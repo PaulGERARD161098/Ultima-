@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v92 2026-10-13 sha256:b8f66c00d649 -->
+<!-- lecons:empreinte v93 2026-10-17 sha256:69399ff8e1ec -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1461,6 +1461,19 @@ les fichiers `"use server"`. Même famille que « la valeur ne se porte jamais s
 le bouton » : la sérialisation d'un formulaire ne s'éprouve qu'au navigateur.
 
 ## 3. Ce qu'on donne à Paul
+
+**UNE PAGE REFONDUE L'EST AUSSI DANS SON APERÇU DE PARTAGE** *(2026-10-17, RenoBoost)*.
+L'accueil a été réécrit et fusionné (#608) sans relire ses balises `og:*` ni son `og-image.jpg`.
+Paul a envoyé le lien à un contact sur WhatsApp : l'aperçu affichait « Des chantiers signés, pas
+des promesses. » — la promesse interdite depuis le 11/09 (§12.2) — et « Régie commerciale ».
+Les tests gardaient le texte RENDU de la page ; rien ne lisait ce qu'elle dit quand on la partage.
+
+⛔ **Une refonte de page publique relit, dans la même boucle, `<title>`, `description`, `og:*`,
+`twitter:*`, JSON-LD et l'IMAGE de partage — tout ce qu'un lien affiche sans que la page soit ouverte.**
+
+⇒ **Garde posé : `RenoBoost/tests/partage.test.mjs` (interdits + image versionnée `?v=`) et
+`scripts/generer-og-image.mjs` (image régénérée, refuse une promesse interdite). L'aperçu déjà
+envoyé ne se rattrape pas : WhatsApp le fige à l'envoi.**
 
 **UN CHIFFRAGE SE FAIT AVEC LA RÈGLE CODÉE, PAS AVEC LA PREMIÈRE RÈGLE TROUVÉE** *(2026-10-09, RenoBoost + RenoDevis)*.
 Devis SOLA de deux monosplits : rendu trois fois avec des prix différents. ① Prix LN35 « introuvables »
