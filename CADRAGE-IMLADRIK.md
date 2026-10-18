@@ -558,7 +558,17 @@ juge la bise* — une lecture rendue un jour de vent ⇒ chaque lecture est dat�
 se **relit** (le vent retombe) ; (e) *la dictée déforme le nom* ⇒ lexique vocal
 posé en boucle 1.
 
-### 12.4 Décisions attendues de Paul
+### 12.4 Décisions de Paul — ✅ TRANCHÉES le 2026-10-18 (panneaux, 15 h 20 UTC)
+
+1. **Le mot coupé « Agence à… »** : *rien, la phrase était finie* — résidu de dictée, ignoré.
+2. **Le nom et l'épithète** : **AMATSU — Dragon de l’air**, figés au lexique. **Le blason
+   se dessine en boucle 2** (la bise, une spirale de vent) ; le « portail » reste provisoire.
+3. **La forme** : **C — A puis B.** D'abord le souffle transversal par la voix de Léo
+   (2a), prouvé en réel ; la page et son registre de lectures ensuite (2b).
+4. **La grille** : **les trois vents** — plus libre ? · cohérent avec moi-même, mes
+   choix, ma paix ? · emporté par le vent ? Trois questions, jamais une note.
+
+*(Les questions telles qu'elles ont été posées, pour mémoire :)*
 
 1. **Le mot coupé** : la dictée s'arrête sur « Agence à… » — que suivait-il ?
 2. **Le nom et l'épithète** : AMATSU / « Dragon de l’air » — figés au lexique dès

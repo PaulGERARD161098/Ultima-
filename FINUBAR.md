@@ -35,7 +35,7 @@
     "commit": "e975d8ba99cc40d9b6844bd13b6d4a7b1499cf90",
     "quoi": "18/10 : AMATSU, le dragon de l'air, huitième étoile des DRAGONS (étoile d'attente, mots de Paul, verrous refixés à huit) ; le dry run a cédé à 300–320 px → poses en diagonale dans le moteur du ciel. Boucle 2 cadrée (CADRAGE-IMLADRIK.md §12), non codée."
   },
-  "prochaine_action": "AMATSU boucle 2 dès les cinq décisions de Paul (CADRAGE-IMLADRIK.md §12.4 — le mot coupé « Agence à… », le nom, la forme A/B/C, la grille des trois vents, le blason) ; en attendant : après le RDV kelvin°, reporter ses réponses dans la fiche et trancher construire ou s'abonner (VITRUVE).",
+  "prochaine_action": "AMATSU boucle 2a (décisions prises le 18/10 : forme C = la voix de Léo d'abord, trois vents, blason à dessiner) : cadrer au format 6 points puis bâtir la main de Léo et sa preuve — sur la branche de #399, fusion unique en fin de séance.",
   "bloque_par": [
     "CI GitHub Actions MORTE depuis le 18/10 09:39 UTC : tous les jobs concluent « failure » en 2 s, sans runner ni journal — sur main (push de fusion de #398) comme sur #399. Relance refusée (403). Geste de Paul : Settings › Billing › Actions (minutes incluses / limite de dépense), puis relancer les jobs de #399. Le patrimoine est vert en local (65 unitaires, 59 harnais).",
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
@@ -49,7 +49,7 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "AMATSU (18/10) : l'étoile est posée, la boucle 2 (le souffle qui juge une décision, un projet, une idée sur l'axe liberté) attend les décisions de Paul — reco : la voix de Léo, lecture en passerelle sur l'objet jugé, zéro table d'abord (CADRAGE-IMLADRIK.md §12.3–12.4).",
+      "quoi": "AMATSU (18/10) : l'étoile est posée ; les quatre décisions de la boucle 2 sont prises (CADRAGE-IMLADRIK.md §12.4 : forme C — A puis B, trois vents, blason à dessiner, « Agence à » = rien). 2a = le souffle par la voix de Léo ; 2b = la page et son registre.",
       "depuis": "2026-10-18"
     },
     {

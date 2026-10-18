@@ -4794,3 +4794,16 @@ ceux des autres caps** — trois vents : plus libre ? cohérent ? emporté ?
 **Reste** : la boucle 2 (forme et modèle), sur les cinq décisions de
 `CADRAGE-IMLADRIK.md` §12.4 ; reco : le souffle transversal par la voix de Léo
 (ZS), lecture en passerelle sur l'objet jugé, zéro table d'abord.
+
+## 2026-10-18 — AMATSU : les quatre décisions de la boucle 2 (panneaux)
+
+Paul, à 15 h 20 UTC, sur quatre panneaux de choix :
+1. **« Agence à… »** : rien, la phrase était finie — résidu de dictée.
+2. **AMATSU — Dragon de l’air** figés ; **un blason propre à dessiner** en boucle 2
+   (la bise, une spirale de vent), « portail » provisoire d'ici là.
+3. **Forme C : A puis B** — la voix de Léo d'abord (2a), la page et son registre
+   de lectures ensuite (2b).
+4. **La grille : les trois vents** — plus libre ? cohérent ? emporté ?
+
+Et, le même après-midi : *« on ne fusionnera que tout à la fin »* — #399 est la
+PR de séance ; tout le travail s'y empile, fusion unique sur son go final.
