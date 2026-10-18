@@ -37,6 +37,7 @@
   },
   "prochaine_action": "AMATSU boucle 2 dès les cinq décisions de Paul (CADRAGE-IMLADRIK.md §12.4 — le mot coupé « Agence à… », le nom, la forme A/B/C, la grille des trois vents, le blason) ; en attendant : après le RDV kelvin°, reporter ses réponses dans la fiche et trancher construire ou s'abonner (VITRUVE).",
   "bloque_par": [
+    "CI GitHub Actions MORTE depuis le 18/10 09:39 UTC : tous les jobs concluent « failure » en 2 s, sans runner ni journal — sur main (push de fusion de #398) comme sur #399. Relance refusée (403). Geste de Paul : Settings › Billing › Actions (minutes incluses / limite de dépense), puis relancer les jobs de #399. Le patrimoine est vert en local (65 unitaires, 59 harnais).",
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
     "B4 (Réno lit Artidispo) : code vert (9/9), preuve impossible depuis la séance — Paul demande « Où en est Artidispo ? » à Réno (dashboard) ; la trace Artidispo est dans un projet Supabase hors de ce compte.",
