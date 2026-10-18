@@ -53,7 +53,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-18T09:20:18.956Z",
+        "lecture_le": "2026-10-18T09:24:09.636Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -127,7 +127,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-18T09:20:18.966Z",
+        "lecture_le": "2026-10-18T09:24:09.651Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -231,7 +231,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-18T09:20:18.945Z",
+        "lecture_le": "2026-10-18T09:24:09.623Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -329,8 +329,8 @@
       "hors_seance": false,
       "reprise": false,
       "derive": {
-        "tete": "59a9698",
-        "tete_le": "2026-10-18T10:46:03+02:00",
+        "tete": "4c13879",
+        "tete_le": "2026-10-18T09:20:19+00:00",
         "commits_depuis": 3,
         "commit_inconnu": false
       },
@@ -338,7 +338,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-18T09:20:18.922Z",
+        "lecture_le": "2026-10-18T09:24:09.588Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -444,7 +444,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-18T09:20:18.997Z",
+        "lecture_le": "2026-10-18T09:24:09.693Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -516,7 +516,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-18T09:20:18.987Z",
+        "lecture_le": "2026-10-18T09:24:09.679Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -530,6 +530,74 @@
       },
       "jours_depuis_maj": 5,
       "jours_en_attente": 58,
+      "rang": 0
+    },
+    {
+      "ok": true,
+      "motif": "",
+      "depot": "paggerard-boop/Artidispo",
+      "grain": {
+        "projet": "Artidispo",
+        "depot": "paggerard-boop/Artidispo",
+        "cap": "Une plateforme d'abonnement pour artisans tous corps d'etat qui tourne en PASSIF : l'appel manque devient un RDV sans intervention humaine. Cible : 20 abonnements actifs au 30/11/2026, puis moins de 2 h par semaine de Paul a partir du 01/12/2026.",
+        "rattache_a": "ROADMAPARTIDISPO.md (dates, gestes G1-G17, decisions ; §0quater : l'etat MESURE du code) · CADRAGE-2026-09-15-tunnel-artisan.md (le chantier du revenu, T0-T5) · CADRAGE-2026-09-22-six-semaines-pro.md (le cadre 22/09→03/11 : ce que « cote pro fini » veut dire) · CADRAGE-2026-09-14-annuaire-particulier.md (le chantier annuaire, B1-B9) · docs/SECRETS.md (les variables ET les trois purges) · docs/SPEC",
+        "etat": "en_cours",
+        "jalon": {
+          "nom": "J1 — socle de l’inscription artisan autonome (sprint produit en cinq jours).",
+          "critere_de_sortie": "ROADMAPARTIDISPO.md, Sprint inscription autonome : correctifs testés, contrat du parcours, accès et dépendances mesurés, puis preuves externes de docs/PREREQUIS_PRODUCTION.md. J1 reste ouvert tant que ces dernières manquent."
+        },
+        "dernier_arret": {
+          "le": "2026-10-18",
+          "quoi": "18/10 : voie A fusionnée (#137 → 42a8e82, CI verte) — inscription en 5 écrans guidés, le SIRET remplit tout. Détail : roadmap, entrée du 18/10.",
+          "commit": "42a8e82b9d6b15678f9264cca27afbc942297364"
+        },
+        "prochaine_action": "Lundi 19/10 : Paul et Henry jouent la recette chrono de la voie A, montre en main, sur téléphone (#/artisan, ≤ 10 min) ; consigner temps et hésitations.",
+        "bloque_par": [
+          "⛔ PÉRIMÉ 18/10 : « #137 attend sa fusion », « déployer numero-artisan », « fusion #134 » — faits [MESURÉ]. Secrets Twilio non relus [NON VÉRIFIÉ].",
+          "⛔ 17/10 — MANDAT MIGRATIONS DU 25/09 SUSPENDU (CLAUDE.md, Gates) : projet Supabase dans une nouvelle organisation, compte du connecteur LECTEUR (choix de Paul : pas de surcoût).…",
+          "[MESURÉ 17/10 09:46 UTC, lecture seule, ids uniquement] 0 abonnement actif sur 20 visés : 2 artisans (505c5c4e… numéro technique posé ; db2c5f06… sans numéro), 0 publié, 0…",
+          "[DÉCIDÉ par Paul — rapporté par B vers 12:40 UTC, CONFIRMÉ à la coordination vers 13:20 UTC] J2-bis « création déléguée par un admin » PAR LE BROUILLON DE J2 : fonction…",
+          "[RAPPORTÉ par la séance A, 17/10 12:35 UTC, d’après les journaux d’auth] Le compte 488aca67… (créé le 13/10, sans fiche) est celui de Matthieu (SOLA), pas un compte de test…",
+          "[MESURÉ 17/10 13:14 UTC] Base : migrations B (20261017140000) et C (20261017150000) NON appliquées, dernière migration 20261017095845 ; 2 artisans, 0 fiche publiée, 0 abonnement…",
+          "[MESURÉ 17/10 12:06 UTC] Advisors Supabase (angle mort des revues) : aucun bloquant. Sécurité — 12 tables RLS sans policy (voulu : accès service_role seul) ; 14 fonctions definer…",
+          "⏳ PAUL — LISTE UNIQUE ORDONNÉE DES GESTES (tenue par la séance coordination, complétée au fil des séances ; COMMENT les faire : docs/DEPLOIEMENT.md §4 — migration collable depuis…",
+          "✅ 17/10 — conflit #126 sans objet : D a fusionné main (e0a2b78) dans sa branche (3805b46) avant la fusion ; FINUBAR.md et ROADMAPARTIDISPO.md se sont fusionnés sans conflit. #127…",
+          "✅ FAIT ET MESURÉ LE 17/10 — NE PAS LE REJOUER : historique des migrations réaligné (39 entrées, 37 fichiers couverts ; administrateur_paul et verification_pilotage_paul restent…"
+        ],
+        "en_attente_depuis": "2026-09-08",
+        "boucles_ouvertes": [],
+        "maj": "2026-10-08"
+      },
+      "recits": [
+        "bloque_par[]"
+      ],
+      "ciel": "alpha",
+      "hors_seance": false,
+      "reprise": false,
+      "derive": {
+        "tete": "fdec13f",
+        "tete_le": "2026-10-18T09:24:07+00:00",
+        "commits_depuis": 1,
+        "commit_inconnu": false
+      },
+      "mesure_le": "2026-10-18",
+      "controle": {
+        "type": "disque",
+        "statut": "lu",
+        "lecture_le": "2026-10-18T09:24:09.708Z",
+        "examines": [
+          "FINUBAR.md",
+          "derive_git"
+        ],
+        "non_examines": [
+          "pr",
+          "controles",
+          "permissions",
+          "dependances"
+        ]
+      },
+      "jours_depuis_maj": 10,
+      "jours_en_attente": 40,
       "rang": 0
     },
     {
@@ -575,7 +643,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-18T09:20:18.977Z",
+        "lecture_le": "2026-10-18T09:24:09.663Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -633,7 +701,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-18T09:20:19.020Z",
+        "lecture_le": "2026-10-18T09:24:09.723Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -743,7 +811,7 @@
       "controle": {
         "type": "disque",
         "statut": "lu",
-        "lecture_le": "2026-10-18T09:20:18.933Z",
+        "lecture_le": "2026-10-18T09:24:09.603Z",
         "examines": [
           "FINUBAR.md",
           "derive_git"
@@ -758,74 +826,6 @@
       "jours_depuis_maj": 12,
       "jours_en_attente": 75,
       "rang": 2
-    },
-    {
-      "ok": true,
-      "motif": "",
-      "depot": "paggerard-boop/Artidispo",
-      "grain": {
-        "projet": "Artidispo",
-        "depot": "paggerard-boop/Artidispo",
-        "cap": "Une plateforme d'abonnement pour artisans tous corps d'etat qui tourne en PASSIF : l'appel manque devient un RDV sans intervention humaine. Cible : 20 abonnements actifs au 30/11/2026, puis moins de 2 h par semaine de Paul a partir du 01/12/2026.",
-        "rattache_a": "ROADMAPARTIDISPO.md (dates, gestes G1-G17, decisions ; §0quater : l'etat MESURE du code) · CADRAGE-2026-09-15-tunnel-artisan.md (le chantier du revenu, T0-T5) · CADRAGE-2026-09-22-six-semaines-pro.md (le cadre 22/09→03/11 : ce que « cote pro fini » veut dire) · CADRAGE-2026-09-14-annuaire-particulier.md (le chantier annuaire, B1-B9) · docs/SECRETS.md (les variables ET les trois purges) · docs/SPEC",
-        "etat": "en_cours",
-        "jalon": {
-          "nom": "J1 — socle de l’inscription artisan autonome (sprint produit en cinq jours).",
-          "critere_de_sortie": "ROADMAPARTIDISPO.md, Sprint inscription autonome : correctifs testés, contrat du parcours, accès et dépendances mesurés, puis preuves externes de docs/PREREQUIS_PRODUCTION.md. J1 reste ouvert tant que ces dernières manquent."
-        },
-        "dernier_arret": {
-          "le": "2026-10-18",
-          "quoi": "18/10 : voie A fusionnée (#137 → 42a8e82, CI verte) — inscription en 5 écrans guidés, le SIRET remplit tout. Détail : roadmap, entrée du 18/10.",
-          "commit": "42a8e82b9d6b15678f9264cca27afbc942297364"
-        },
-        "prochaine_action": "Paul : recette chrono de la voie A par un tiers sur téléphone, ≤ 10 min (docs/RECETTE-15-MINUTES.md, #/artisan).",
-        "bloque_par": [
-          "⛔ PÉRIMÉ 18/10 : « #137 attend sa fusion », « déployer numero-artisan », « fusion #134 » — faits [MESURÉ]. Secrets Twilio non relus [NON VÉRIFIÉ].",
-          "⛔ 17/10 — MANDAT MIGRATIONS DU 25/09 SUSPENDU (CLAUDE.md, Gates) : projet Supabase dans une nouvelle organisation, compte du connecteur LECTEUR (choix de Paul : pas de surcoût).…",
-          "[MESURÉ 17/10 09:46 UTC, lecture seule, ids uniquement] 0 abonnement actif sur 20 visés : 2 artisans (505c5c4e… numéro technique posé ; db2c5f06… sans numéro), 0 publié, 0…",
-          "[DÉCIDÉ par Paul — rapporté par B vers 12:40 UTC, CONFIRMÉ à la coordination vers 13:20 UTC] J2-bis « création déléguée par un admin » PAR LE BROUILLON DE J2 : fonction…",
-          "[RAPPORTÉ par la séance A, 17/10 12:35 UTC, d’après les journaux d’auth] Le compte 488aca67… (créé le 13/10, sans fiche) est celui de Matthieu (SOLA), pas un compte de test…",
-          "[MESURÉ 17/10 13:14 UTC] Base : migrations B (20261017140000) et C (20261017150000) NON appliquées, dernière migration 20261017095845 ; 2 artisans, 0 fiche publiée, 0 abonnement…",
-          "[MESURÉ 17/10 12:06 UTC] Advisors Supabase (angle mort des revues) : aucun bloquant. Sécurité — 12 tables RLS sans policy (voulu : accès service_role seul) ; 14 fonctions definer…",
-          "⏳ PAUL — LISTE UNIQUE ORDONNÉE DES GESTES (tenue par la séance coordination, complétée au fil des séances ; COMMENT les faire : docs/DEPLOIEMENT.md §4 — migration collable depuis…",
-          "✅ 17/10 — conflit #126 sans objet : D a fusionné main (e0a2b78) dans sa branche (3805b46) avant la fusion ; FINUBAR.md et ROADMAPARTIDISPO.md se sont fusionnés sans conflit. #127…",
-          "✅ FAIT ET MESURÉ LE 17/10 — NE PAS LE REJOUER : historique des migrations réaligné (39 entrées, 37 fichiers couverts ; administrateur_paul et verification_pilotage_paul restent…"
-        ],
-        "en_attente_depuis": "2026-09-08",
-        "boucles_ouvertes": [],
-        "maj": "2026-10-08"
-      },
-      "recits": [
-        "bloque_par[]"
-      ],
-      "ciel": "alpha",
-      "hors_seance": false,
-      "reprise": false,
-      "derive": {
-        "tete": null,
-        "tete_le": null,
-        "commits_depuis": 0,
-        "commit_inconnu": false
-      },
-      "mesure_le": "2026-10-18",
-      "controle": {
-        "type": "disque",
-        "statut": "lu",
-        "lecture_le": "2026-10-18T09:20:19.009Z",
-        "examines": [
-          "FINUBAR.md",
-          "derive_git"
-        ],
-        "non_examines": [
-          "pr",
-          "controles",
-          "permissions",
-          "dependances"
-        ]
-      },
-      "jours_depuis_maj": 10,
-      "jours_en_attente": 40,
-      "rang": 2
     }
   ],
   "macro": {
@@ -837,7 +837,7 @@
     "en_cours": 8,
     "en_attente_de_paul": 2,
     "au_repos": 0,
-    "derives": 8,
+    "derives": 9,
     "commits_inconnus": 0,
     "boucles_ouvertes": 46,
     "gestes_de_paul": [
@@ -962,6 +962,46 @@
         "geste": "Vérifier le statut du sitemap dans la Search Console (13 URLs)"
       },
       {
+        "projet": "Artidispo",
+        "geste": "⛔ PÉRIMÉ 18/10 : « #137 attend sa fusion », « déployer numero-artisan », « fusion #134 » — faits [MESURÉ]. Secrets Twilio non relus [NON VÉRIFIÉ]."
+      },
+      {
+        "projet": "Artidispo",
+        "geste": "⛔ 17/10 — MANDAT MIGRATIONS DU 25/09 SUSPENDU (CLAUDE.md, Gates) : projet Supabase dans une nouvelle organisation, compte du connecteur LECTEUR (choix de Paul : pas de surcoût).…"
+      },
+      {
+        "projet": "Artidispo",
+        "geste": "[MESURÉ 17/10 09:46 UTC, lecture seule, ids uniquement] 0 abonnement actif sur 20 visés : 2 artisans (505c5c4e… numéro technique posé ; db2c5f06… sans numéro), 0 publié, 0…"
+      },
+      {
+        "projet": "Artidispo",
+        "geste": "[DÉCIDÉ par Paul — rapporté par B vers 12:40 UTC, CONFIRMÉ à la coordination vers 13:20 UTC] J2-bis « création déléguée par un admin » PAR LE BROUILLON DE J2 : fonction…"
+      },
+      {
+        "projet": "Artidispo",
+        "geste": "[RAPPORTÉ par la séance A, 17/10 12:35 UTC, d’après les journaux d’auth] Le compte 488aca67… (créé le 13/10, sans fiche) est celui de Matthieu (SOLA), pas un compte de test…"
+      },
+      {
+        "projet": "Artidispo",
+        "geste": "[MESURÉ 17/10 13:14 UTC] Base : migrations B (20261017140000) et C (20261017150000) NON appliquées, dernière migration 20261017095845 ; 2 artisans, 0 fiche publiée, 0 abonnement…"
+      },
+      {
+        "projet": "Artidispo",
+        "geste": "[MESURÉ 17/10 12:06 UTC] Advisors Supabase (angle mort des revues) : aucun bloquant. Sécurité — 12 tables RLS sans policy (voulu : accès service_role seul) ; 14 fonctions definer…"
+      },
+      {
+        "projet": "Artidispo",
+        "geste": "⏳ PAUL — LISTE UNIQUE ORDONNÉE DES GESTES (tenue par la séance coordination, complétée au fil des séances ; COMMENT les faire : docs/DEPLOIEMENT.md §4 — migration collable depuis…"
+      },
+      {
+        "projet": "Artidispo",
+        "geste": "✅ 17/10 — conflit #126 sans objet : D a fusionné main (e0a2b78) dans sa branche (3805b46) avant la fusion ; FINUBAR.md et ROADMAPARTIDISPO.md se sont fusionnés sans conflit. #127…"
+      },
+      {
+        "projet": "Artidispo",
+        "geste": "✅ FAIT ET MESURÉ LE 17/10 — NE PAS LE REJOUER : historique des migrations réaligné (39 entrées, 37 fichiers couverts ; administrateur_paul et verification_pilotage_paul restent…"
+      },
+      {
         "projet": "RénoBoost Console",
         "geste": "⚠️ Le modèle officiel est FIGÉ : betagouv/reno arrêté au 18/12/2025, repris par l'ANAH. github.com/anahgouv pas encore ouvert — à surveiller."
       },
@@ -1020,46 +1060,6 @@
       {
         "projet": "RénoBoost",
         "geste": "Rendre le ruleset de main ACTIF : il ne mord pas (ACTIONS-PAUL.md) — 11/09"
-      },
-      {
-        "projet": "Artidispo",
-        "geste": "⛔ PÉRIMÉ 18/10 : « #137 attend sa fusion », « déployer numero-artisan », « fusion #134 » — faits [MESURÉ]. Secrets Twilio non relus [NON VÉRIFIÉ]."
-      },
-      {
-        "projet": "Artidispo",
-        "geste": "⛔ 17/10 — MANDAT MIGRATIONS DU 25/09 SUSPENDU (CLAUDE.md, Gates) : projet Supabase dans une nouvelle organisation, compte du connecteur LECTEUR (choix de Paul : pas de surcoût).…"
-      },
-      {
-        "projet": "Artidispo",
-        "geste": "[MESURÉ 17/10 09:46 UTC, lecture seule, ids uniquement] 0 abonnement actif sur 20 visés : 2 artisans (505c5c4e… numéro technique posé ; db2c5f06… sans numéro), 0 publié, 0…"
-      },
-      {
-        "projet": "Artidispo",
-        "geste": "[DÉCIDÉ par Paul — rapporté par B vers 12:40 UTC, CONFIRMÉ à la coordination vers 13:20 UTC] J2-bis « création déléguée par un admin » PAR LE BROUILLON DE J2 : fonction…"
-      },
-      {
-        "projet": "Artidispo",
-        "geste": "[RAPPORTÉ par la séance A, 17/10 12:35 UTC, d’après les journaux d’auth] Le compte 488aca67… (créé le 13/10, sans fiche) est celui de Matthieu (SOLA), pas un compte de test…"
-      },
-      {
-        "projet": "Artidispo",
-        "geste": "[MESURÉ 17/10 13:14 UTC] Base : migrations B (20261017140000) et C (20261017150000) NON appliquées, dernière migration 20261017095845 ; 2 artisans, 0 fiche publiée, 0 abonnement…"
-      },
-      {
-        "projet": "Artidispo",
-        "geste": "[MESURÉ 17/10 12:06 UTC] Advisors Supabase (angle mort des revues) : aucun bloquant. Sécurité — 12 tables RLS sans policy (voulu : accès service_role seul) ; 14 fonctions definer…"
-      },
-      {
-        "projet": "Artidispo",
-        "geste": "⏳ PAUL — LISTE UNIQUE ORDONNÉE DES GESTES (tenue par la séance coordination, complétée au fil des séances ; COMMENT les faire : docs/DEPLOIEMENT.md §4 — migration collable depuis…"
-      },
-      {
-        "projet": "Artidispo",
-        "geste": "✅ 17/10 — conflit #126 sans objet : D a fusionné main (e0a2b78) dans sa branche (3805b46) avant la fusion ; FINUBAR.md et ROADMAPARTIDISPO.md se sont fusionnés sans conflit. #127…"
-      },
-      {
-        "projet": "Artidispo",
-        "geste": "✅ FAIT ET MESURÉ LE 17/10 — NE PAS LE REJOUER : historique des migrations réaligné (39 entrées, 37 fichiers couverts ; administrateur_paul et verification_pilotage_paul restent…"
       }
     ]
   },
@@ -1165,6 +1165,13 @@
         "signal": 1
       },
       {
+        "id": "paggerard-boop/Artidispo",
+        "libelle": "Artidispo",
+        "constellation": "en_cours",
+        "ciel": "alpha",
+        "signal": 1
+      },
+      {
         "id": "PaulGERARD161098/renoboost-console",
         "libelle": "RénoBoost Console",
         "constellation": "en_cours",
@@ -1183,13 +1190,6 @@
         "libelle": "RénoBoost",
         "constellation": "en_cours",
         "ciel": "renoboost-ia",
-        "signal": 0
-      },
-      {
-        "id": "paggerard-boop/Artidispo",
-        "libelle": "Artidispo",
-        "constellation": "en_cours",
-        "ciel": "alpha",
         "signal": 0
       }
     ],
