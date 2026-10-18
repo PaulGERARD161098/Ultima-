@@ -294,7 +294,7 @@ export const NOEUDS = {
     constellation: true,
     nebuleuse: 'dragons',
     resume: 'La constellation des DRAGONS : la vérité, le futur, le serment, '
-      + 'l’imagination, le couple RESHIRAM ⇄ ZEKROM — et la technologie.',
+      + 'l’imagination, le couple RESHIRAM ⇄ ZEKROM, la technologie — et l’air.',
     titre: 'La constellation des dragons',
     surligne: 'Imladrik — les dragons',
     invite: 'Léo te guide — survole un cap.',
@@ -308,7 +308,7 @@ export const NOEUDS = {
     // seconde ligne, « Dragon de… ». Ce sont ses mots, recopiés tels quels ;
     // l'état (« Ouvert », « Privé ») ne s'affiche plus pour ces étoiles.
     enfants: ['maedrethnir', 'vranesh', 'draukhain', 'adramelech', 'reshiram', 'zekrom',
-      'zohshia'],
+      'zohshia', 'amatsu'],
   },
   // IFULVIN — ÉTOILE D'ATTENTE (Paul, 2026-09-29). Nom, état, une phrase, AUCUNE
   // cible : aucune page promise. ⛔ LE NOM S'ÉCRIT « IFULVIN » — jamais abrégé.
@@ -390,6 +390,23 @@ export const NOEUDS = {
     cible: 'zohshia.html',
     resume: 'Tes technos déjà en service, prêtes à déployer chez d’autres pros. '
       + 'Un badge par techno : ce qu’elle fait, la check-list du pro, sa mise en service.',
+  },
+  // AMATSU — LE DRAGON DE L'AIR (Paul, 18/10/2026). Étoile d'attente, le même geste
+  // que ZOH SHIA le 04/10 et qu'IFULVIN : nom, épithète, les mots de Paul — AUCUNE
+  // cible, aucune page promise. Son rôle, dicté : « une décision, un projet, une
+  // idée me rendra-t-elle plus libre ? » ; la liberté, c'est aussi la cohérence
+  // avec soi-même, ses choix et sa paix ; l'air est volatil — vigilance à ne pas se
+  // laisser emporter par le vent. Le contenu se cadre à sa boucle 2
+  // (CADRAGE-IMLADRIK.md §12) ; le blason « portail » est provisoire.
+  amatsu: {
+    nom: 'AMATSU',
+    epithete: 'Dragon de l’air',
+    etat: 'À venir',
+    blason: 'portail',
+    cible: null,
+    resume: 'Le dragon de l’air : liberté, force indomptée, fraîcheur de la bise et '
+      + 'terreur de l’ouragan. Sa question : cette décision, ce projet, cette idée '
+      + 'te rend-elle plus libre ? L’étoile est posée ; sa forme reste à décider.',
   },
 };
 

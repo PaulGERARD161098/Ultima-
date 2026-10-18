@@ -491,9 +491,10 @@ verifier('⑦ Un second clic descend encore d’un cran',
   && recursion.peints.length === (NOEUDS[DEUXIEME].enfants || []).length,
   JSON.stringify(recursion.peints));
 // L'étage qu'on quitte, ce sont les deux ENTRÉES d'IMLADRIK (avant : MAEDRETHNIR, tête
-// vide de ce niveau) — leur absence, sous le verrou des six étoiles peintes.
+// vide de ce niveau) — leur absence, sous le verrou des huit étoiles peintes
+// (sept, puis AMATSU le 18/10/2026).
 verifier('⑦ …et l’étage qu’on vient de quitter a disparu',
-  recursion.peints.length === 7
+  recursion.peints.length === 8
   && !recursion.peints.includes('constellation-armes') && !recursion.peints.includes(DEUXIEME),
   JSON.stringify(recursion.peints));
 verifier('⑦ …le fil d’Ariane compte les trois crans',

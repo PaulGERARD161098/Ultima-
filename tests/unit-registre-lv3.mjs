@@ -362,10 +362,13 @@ verdicts.noscriptImladrikDitIfulvin = /IFULVIN/.test(noscriptImladrik)
 // une page ».
 const CIBLES_DRAGONS = NOEUDS['constellation-dragons'].enfants.map((id) => NOEUDS[id].cible);
 verdicts.noscriptImladrikRegroupeLesDragons = (noscriptImladrik.match(/<ul>((?:(?!<ul>)[\s\S])*?)<\/ul>/g) || [])
-  .some((ul) => CIBLES_DRAGONS.length === 7
-    // ZOH SHIA a sa page depuis le 04/10/2026 : les sept, toutes liées.
+  .some((ul) => CIBLES_DRAGONS.length === 8
+    // ZOH SHIA a sa page depuis le 04/10/2026 : sept liées. AMATSU (18/10/2026),
+    // étoile d'attente, est DITE dans la même sous-liste — sans lien, comme IFULVIN
+    // chez les ARMES : une page qui n'existe pas ne se promet pas.
     && CIBLES_DRAGONS.filter(Boolean).length === 7
-    && CIBLES_DRAGONS.every((c) => ul.includes(`href="${c}"`))
+    && CIBLES_DRAGONS.filter(Boolean).every((c) => ul.includes(`href="${c}"`))
+    && /AMATSU/.test(ul) && !/<a [^>]*>[^<]*AMATSU/.test(ul)
     && !/IFULVIN/.test(ul))
   && /DRAGONS/.test(noscriptImladrik);
 const noscriptIndex = capsDuNoscript('index.html');
@@ -388,21 +391,22 @@ const capsImladrik = capsDe('imladrik');
 verdicts.imladrikDeuxConstellationsSeules = capsImladrik.length === 2
   && capsImladrik.map((c) => c.nom).join(',') === 'ARMES,DRAGONS'
   && capsImladrik.every((c) => c.constellation === true);
-// SEPT depuis le 04/10/2026 : ZOH SHIA, le dragon de la technologie.
-verdicts.imladrikSeptEtoilesSousLesDragons = capsDe('constellation-dragons')
-  .map((c) => c.nom).join(',') === 'MAEDRETHNIR,VRANESH,DRAUKHAIN,ADRAMELECH,RESHIRAM,ZEKROM,ZOH SHIA'
-  && capsDe('constellation-dragons').length === 7
+// SEPT depuis le 04/10/2026 : ZOH SHIA, le dragon de la technologie. HUIT depuis le
+// 18/10/2026 : AMATSU, le dragon de l'air (étoile d'attente, sans page).
+verdicts.imladrikHuitEtoilesSousLesDragons = capsDe('constellation-dragons')
+  .map((c) => c.nom).join(',') === 'MAEDRETHNIR,VRANESH,DRAUKHAIN,ADRAMELECH,RESHIRAM,ZEKROM,ZOH SHIA,AMATSU'
+  && capsDe('constellation-dragons').length === 8
   && !capsImladrik.some((c) => ['maedrethnir', 'vranesh', 'draukhain', 'adramelech', 'reshiram', 'zekrom',
-    'zohshia'].includes(c.id));
+    'zohshia', 'amatsu'].includes(c.id));
 // LES ÉPITHÈTES (Paul, 04/10/2026) : les mots dictés, recopiés tels quels, une
 // par dragon — et aucune ailleurs dans le registre (le titre « NOM — Dragon
 // de… » est propre à cette constellation).
 const EPITHETES = {
   maedrethnir: 'Dragon de la vérité', vranesh: 'Dragon du futur', adramelech: 'Dragon de l’imagination',
   draukhain: 'Dragon du serment', zekrom: 'Dragon de l’idéal', reshiram: 'Dragon de la réalité',
-  zohshia: 'Dragon de la technologie'
+  zohshia: 'Dragon de la technologie', amatsu: 'Dragon de l’air'
 };
-verdicts.dragonsPortentLeursEpithetes = Object.keys(EPITHETES).length === 7
+verdicts.dragonsPortentLeursEpithetes = Object.keys(EPITHETES).length === 8
   && Object.entries(EPITHETES).every(([id, e]) => NOEUDS[id] && NOEUDS[id].epithete === e);
 verdicts.epithetesSeulementChezLesDragons = Object.keys(NOEUDS)
   .filter((id) => NOEUDS[id].epithete !== undefined).sort().join()
@@ -421,9 +425,10 @@ verdicts.imladrikSeptCiblesOuvertes = feuillesDImladrik.filter((c) => c.cible).l
   && feuillesDImladrik.filter((c) => c.cible).map((c) => c.cible).join()
     === 'maedrethnir.html,vranesh.html,draukhain.html,adramelech.html,reshiram.html,zekrom.html,zohshia.html';
 // Une seule étoile d'attente depuis que ZOH SHIA a sa page (04/10/2026) :
-// IFULVIN (ARMES). Toujours énumérée, jamais comptée seulement.
-verdicts.imladrikSeulIfulvinSansPage = feuillesDImladrik.filter((c) => !c.cible)
-  .map((c) => c.id).join() === 'ifulvin';
+// IFULVIN (ARMES). DEUX depuis le 18/10/2026 : AMATSU (DRAGONS) attend la sienne.
+// Toujours énumérées, jamais comptées seulement.
+verdicts.imladrikAmatsuEtIfulvinSansPage = feuillesDImladrik.filter((c) => !c.cible)
+  .map((c) => c.id).sort().join() === 'amatsu,ifulvin';
 verdicts.imladrikLegendeGravee = NOEUDS.imladrik.legende === 'Kalamn-talaen'
   && NOEUDS.imladrik.legendeClasse === 'kalamn-legende';
 
@@ -469,9 +474,10 @@ verdicts.armesPorteIfulvinSeul = JSON.stringify(NOEUDS['constellation-armes'].en
 // TRANSPOSÉ (30/09) : `dragonsPorteLesTroisDragons` → SIX enfants EXACTS, dans cet
 // ordre — le compte se verrouille des deux côtés (ni cinq, ni sept) et l'ordre
 // est celui du repli <noscript>, comparé plus haut.
-verdicts.dragonsPorteLesSeptEtoiles = JSON.stringify(NOEUDS['constellation-dragons'].enfants)
-  === JSON.stringify(['maedrethnir', 'vranesh', 'draukhain', 'adramelech', 'reshiram', 'zekrom', 'zohshia'])
-  && NOEUDS['constellation-dragons'].enfants.length === 7;
+// REFIXÉ À HUIT (18/10/2026) : AMATSU ferme la liste (ni sept, ni neuf).
+verdicts.dragonsPorteLesHuitEtoiles = JSON.stringify(NOEUDS['constellation-dragons'].enfants)
+  === JSON.stringify(['maedrethnir', 'vranesh', 'draukhain', 'adramelech', 'reshiram', 'zekrom', 'zohshia', 'amatsu'])
+  && NOEUDS['constellation-dragons'].enfants.length === 8;
 // AJOUT (30/09) : les DRAGONS n'ont AUCUN trait de figure — `asterisme: false`,
 // littéralement `false` (ni absent, ni « non »). ARMES, elle, garde le défaut
 // (un seul cap : rien à relier de toute façon, mais l'exception n'est pas

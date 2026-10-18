@@ -159,11 +159,16 @@ const DRAGONS = [
 ];
 const LIBELLE_COURT = ['adramelech', 'reshiram', 'zekrom', 'zohshia'];
 const RETOUR_DRAGONS = 'imladrik.html#constellation-dragons';
-// Depuis le 04/10/2026, les SEPT enfants de DRAGONS ont leur page (ZOH SHIA compris).
-verifier('Verrou : les sept pages sont exactement les enfants de la constellation DRAGONS, toutes à page',
+// Depuis le 04/10/2026, SEPT enfants de DRAGONS ont leur page (ZOH SHIA compris).
+// TRANSPOSÉ (18/10/2026) : AMATSU, le dragon de l'air, est une étoile d'attente —
+// sans page, donc sans retour à prouver. Le verrou ne se relâche pas : les pages
+// sont EXACTEMENT les enfants à cible, et le seul enfant sans cible est AMATSU,
+// nommé, à l'état « À venir » — un autre dragon sans page ferait rougir cette ligne.
+verifier('Verrou : les sept pages sont exactement les enfants à page de DRAGONS ; AMATSU seul attend',
   JSON.stringify(NOEUDS['constellation-dragons'].enfants.filter((id) => NOEUDS[id].cible))
     === JSON.stringify(DRAGONS.map((d) => d[0]))
-  && NOEUDS['constellation-dragons'].enfants.every((id) => NOEUDS[id].cible));
+  && NOEUDS['constellation-dragons'].enfants.filter((id) => !NOEUDS[id].cible).join() === 'amatsu'
+  && NOEUDS.amatsu.etat === 'À venir');
 
 // Ce que le ciel montre à l'arrivée, mesuré dans un navigateur mobile.
 async function etoilesApresLeRetour(idDragon, fichier) {
