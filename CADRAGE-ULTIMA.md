@@ -8,6 +8,9 @@
 > et fil IMLADRIK). Les deux clôtures sont conservées telles quelles : on
 > concatène, on n'arbitre pas — même règle que pour le journal.
 
+- 🐉 **SESSION 2026-10-18 — AMATSU, LE DRAGON DE L'AIR : HUITIÈME ÉTOILE DES DRAGONS.** Branche `claude/amatsu-dragon-air`, PR de séance en brouillon (fusion sur go).
+  ✅ Étoile d'attente (registre, repli sans JS, lexique), même geste que ZOH SHIA le 04/10 ; verrous « sept dragons » refixés à huit (douze harnais), « tous à page » → « AMATSU seul attend ». Unitaires 65/65 ; navigateur : rouge au premier passage à 300 et 320 px (épithète de RESHIRAM × cœur de ZOH SHIA, huit étoiles en colonne) → poses en diagonale pour les noms à deux lignes dans `js/ciel.js`, vert aux six largeurs ; patrimoine complet : 59 harnais navigateur + 65 unitaires verts sur l'arbre final (deux verrous à sept de plus trouvés par la mesure : plein écran, retour des feuilles) ; `smoke-riven-nebuleuses` `maquette300_390_noms` rouge ici **comme sur `main` pur** (témoin rejoué) — l'écart d'environnement du 08/10, pas cette boucle.
+  ⏭ Boucle 2 (le contenu) cadrée, non codée : `CADRAGE-IMLADRIK.md` §12 — cinq décisions attendues (§12.4), dont le mot coupé « Agence à… ».
 - 🌐 **SESSION 2026-10-08 — RIVEN EN DEUX CARTES : ENTREPRISES ET INDIVIDUS.** Branche `claude/add-sola-groupe-partner-uc9iio`, PR de séance en brouillon (fusion sur go).
   ✅ Bascule « Tout · Individus · Entreprises » dans le Ciel, à plat et en volume, sur la `nature` de la fiche (0024) — **aucune migration**. Défaut « Tout ». Commit `7c2ec4a`.
   ✅ Base (go de Paul) : SOLA GROUPE + API DIFFUSION, puis **45 fiches entreprise** tirées des notes « Entreprise : » des individus, « A / B » éclaté ; **52 rattachements** personne → entreprise. Relu en base : 48 entreprises, 55 individus, 0 doublon, 0 entreprise sans personne.

@@ -4765,3 +4765,32 @@ renomme partout et fais aussi ressortir Mon DPE Facile »*.
 - ⛔ Non réécrits, délibérément : les cadrages datés, ce journal et les leçons.
   Ce sont des archives ; on ne falsifie pas le compte rendu d'une séance.
 - Fiche du rendez-vous : doc « RDV kelvin° — fiche d'une page » (claude.ai).
+
+## 2026-10-18 — AMATSU, le dragon de l'air, huitième étoile des DRAGONS
+
+Dicté par Paul : *« Sur Imladrik créons un nouveau dragon : Amatsu, le dragon de
+l'air. Symbole de la liberté, de la colère, de la force de la nature […] Une
+décision, un projet, une idée me rendra-t-elle plus libre ? C'est ça le rôle
+d'Amatsu. La liberté c'est aussi ma cohérence avec moi-même, mes choix et ma
+paix. L'air c'est aussi la volatilité, donc vigilance à ne pas me laisser emporter
+par le vent. »* (mots complets : `CADRAGE-IMLADRIK.md` §12).
+
+**Décision de Paul** : un huitième dragon, **AMATSU — Dragon de l’air**. Son
+rôle : la question de la liberté posée à toute décision, projet ou idée ; la
+liberté entendue aussi comme cohérence avec soi, ses choix et sa paix ; vigilance
+sur la volatilité.
+⚠️ La dictée se termine sur « Agence à » : mot coupé, **non interprété** —
+question posée.
+
+**Livré (boucle 1)** : l'étoile d'attente — même geste que ZOH SHIA le 04/10 :
+registre (`amatsu`, épithète, mots de Paul, aucune cible), repli sans JavaScript
+(dit, sans lien), lexique vocal ; les verrous « sept dragons » refixés à huit dans
+douze harnais (deux trouvés par la mesure seulement : plein écran, retour des feuilles), « tous à page » transposé en « AMATSU seul attend, nommé ». **Le dry run a
+cédé** à 300 et 320 px (huit étoiles en colonne : l'épithète de RESHIRAM mordait le
+cœur de ZOH SHIA) — corrigé dans le moteur du ciel : quatre poses en diagonale pour
+les noms à deux lignes (`js/ciel.js`), rouge avant, vert après. Lecture
+proposée dans le cadrage : **Amatsu ne porte pas d'objet, il pose une question à
+ceux des autres caps** — trois vents : plus libre ? cohérent ? emporté ?
+**Reste** : la boucle 2 (forme et modèle), sur les cinq décisions de
+`CADRAGE-IMLADRIK.md` §12.4 ; reco : le souffle transversal par la voix de Léo
+(ZS), lecture en passerelle sur l'objet jugé, zéro table d'abord.

@@ -31,11 +31,11 @@
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-10-15",
-    "commit": "5f3bc13c852f8c29ea13a2d324db050616b0c51a",
-    "quoi": "15/10 : « notre Kelvin » devient VITRUVE (sur Mon DPE Facile) ; fiche RDV kelvin° prête."
+    "le": "2026-10-18",
+    "commit": "e975d8ba99cc40d9b6844bd13b6d4a7b1499cf90",
+    "quoi": "18/10 : AMATSU, le dragon de l'air, huitième étoile des DRAGONS (étoile d'attente, mots de Paul, verrous refixés à huit) ; le dry run a cédé à 300–320 px → poses en diagonale dans le moteur du ciel. Boucle 2 cadrée (CADRAGE-IMLADRIK.md §12), non codée."
   },
-  "prochaine_action": "Après le RDV kelvin° : reporter ses réponses dans la fiche et trancher construire ou s'abonner (VITRUVE).",
+  "prochaine_action": "AMATSU boucle 2 dès les cinq décisions de Paul (CADRAGE-IMLADRIK.md §12.4 — le mot coupé « Agence à… », le nom, la forme A/B/C, la grille des trois vents, le blason) ; en attendant : après le RDV kelvin°, reporter ses réponses dans la fiche et trancher construire ou s'abonner (VITRUVE).",
   "bloque_par": [
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
@@ -47,6 +47,10 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "AMATSU (18/10) : l'étoile est posée, la boucle 2 (le souffle qui juge une décision, un projet, une idée sur l'axe liberté) attend les décisions de Paul — reco : la voix de Léo, lecture en passerelle sur l'objet jugé, zéro table d'abord (CADRAGE-IMLADRIK.md §12.3–12.4).",
+      "depuis": "2026-10-18"
+    },
     {
       "quoi": "Pilotage ZOH : accès HTTP avec une vraie session propriétaire encore non éprouvé depuis Work (protection Vercel après redirection ; CLI absent). Source et tests sont livrés. Chaque système doit encore prouver son propre raccordement et ses contrôles ; aucun agent permanent activé par cette règle.",
       "depuis": "2026-10-13"
