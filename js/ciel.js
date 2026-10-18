@@ -2223,15 +2223,33 @@
           var rA = (projetes[a.id].rayon || R_ETOILE_MIN);
           var ecart = rA * 2.6 + 4;
           var yCote = a.sy - (a.bas - 0.5 * a.fs) / 2;
-          var cotes = [['start', a.x + ecart], ['end', a.x - ecart]];
+          // EN DIAGONALE — toujours pour un nom à deux lignes seulement (18/10/2026,
+          // AMATSU, huitième dragon). Mesuré sur les DRAGONS à 300 et 320 px : la
+          // couronne n'y est plus qu'une colonne de 70 px de large, et RESHIRAM
+          // n'avait de place ni dessous (le cœur de ZOH SHIA), ni dessus
+          // (l'épithète d'ADRAMELECH), ni à côté à hauteur d'étoile (les deux à la
+          // fois) — pendant que les deux tiers de la largeur restaient vides. La
+          // carte gravée connaît quatre autres poses : à côté ET décalé, sous la
+          // hauteur de l'étoile d'abord (le nom reste « dessous », l'habitude de
+          // lecture), à droite puis à gauche, puis au-dessus. Le bloc des deux
+          // lignes s'écarte du cœur d'autant que le nom posé dessous (`rA × 1,6 + 1`).
+          // Un nom d'une ligne n'y passe jamais : mêmes gardes, même ordre.
+          var yDiagBas = a.sy + rA * 1.6 + 1 + 0.8 * a.fs;
+          var yDiagHaut = a.sy - rA * 1.6 - 1 - (0.3 * a.fs + a.bas);
+          var cotes = [
+            ['start', a.x + ecart, yCote], ['end', a.x - ecart, yCote],
+            ['start', a.x + ecart, yDiagBas], ['end', a.x - ecart, yDiagBas],
+            ['start', a.x + ecart, yDiagHaut], ['end', a.x - ecart, yDiagHaut]
+          ];
           for (var ci = 0; ci < cotes.length; ci++) {
-            var bc = boiteNom(a, yCote, cotes[ci][0], cotes[ci][1]);
+            var yPose = cotes[ci][2];
+            var bc = boiteNom(a, yPose, cotes[ci][0], cotes[ci][1]);
             if (bc.x0 < 2 || bc.x1 > vbW - 2 || bc.y0 < mUtile.haut + 2) { continue; }
             if (!estLibre(a, bc)) { continue; }
-            a.y = yCote; a.ancre = cotes[ci][0]; a.ax = cotes[ci][1];
-            nomCote[a.id] = { bx0: bc.x0 - a.x, bx1: bc.x1 - a.x, base: yCote - a.sy };
+            a.y = yPose; a.ancre = cotes[ci][0]; a.ax = cotes[ci][1];
+            nomCote[a.id] = { bx0: bc.x0 - a.x, bx1: bc.x1 - a.x, base: yPose - a.sy };
             a.nom.setAttribute('x', a.ax.toFixed(1));
-            a.nom.setAttribute('y', yCote.toFixed(1));
+            a.nom.setAttribute('y', yPose.toFixed(1));
             a.nom.setAttribute('text-anchor', a.ancre);
             suivreNom(a.piece);
             return;
