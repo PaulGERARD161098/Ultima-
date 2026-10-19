@@ -4853,3 +4853,19 @@ Sur les décisions de 15 h 20 (forme C), la 2a est posée sur la branche de #399
   est la 2b). Sa parole disait encore « sa forme reste à décider » — réécrite pour
   dire où aller : « dis « Amatsu, … » à Léo ».
 - **Reste** : la preuve réelle (une lecture dictée, comptée en base).
+
+## 2026-10-19 — #400 puis #399 fusionnées ; AMATSU écrit en production
+
+- **#400 fusionnée** (`d67998a`), sur le go de Paul portant sur `3077897` (« fusionne
+  d'abord », lu comme « #400 d'abord » et confirmé sur panneau). **`main` ramené dans
+  #399** : seul conflit `FINUBAR.md`, les deux boucles gardées ; unitaires 69/69,
+  59 harnais (seul le rouge RIVEN connu du conteneur), CI 9/9 sur `dac150d`.
+- **#399 fusionnée** (`abe073b`), sur le go de Paul portant sur `dac150d`.
+- **Preuve réelle d'AMATSU, en production** : deux vents dictés → Léo n'écrit rien et
+  demande le troisième ; au troisième, carte confirmée, lecture en base à 19:42:09 UTC
+  (compte : 1). `leo_ecritures` vide sur la période : chemin de la carte, gardes tenues.
+- **La preview n'a pas permis la preuve** : `ULTIMA_PROPRIETAIRES` invisible malgré
+  « Production and Preview » et deux redéploiements — boucle ouverte, sans urgence.
+- **Leçons v99** : deux rechutes (les droits par défaut de Supabase sur une table ;
+  `pkill -f` qui tue son shell) et un ajout (reconnecter un connecteur en cours de
+  séance le retire). À propager aux neuf autres dépôts avec la v98 de #400.
