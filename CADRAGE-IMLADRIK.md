@@ -720,5 +720,8 @@ chantiers RIVEN exclus par défaut.
 - **le ciel des vents** — les lectures comme étoiles dans le moteur du ciel déjà en
   place ; capitalise le plus, mais un ciel d'intimes risque la densité.
 
-**Décisions attendues de Paul** : le découpage (α → β, puis γ et 2c) ; le regard
-d'après (dans la 2b, plus tard, ou jamais) ; les formes à maquetter.
+**Décisions de Paul (19/10, sur panneaux)** : le découpage est retenu, α puis β ;
+le regard d'après vient **plus tard, en γ** ; **une seule forme à maquetter, la rose
+des vents**. Maquette : `design/preview-amatsu-rose.html` (données fictives, mesure
+de soi exposée dans `window.__mesureAmatsu`, repli en liste sous 52 rem). La 2b-β
+ne se code qu'après le go de Paul sur la maquette.
