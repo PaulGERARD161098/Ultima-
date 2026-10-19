@@ -468,3 +468,180 @@ du §10 : Léo savait **écrire** dans IMLADRIK, pas le **lire**.
   §D (+6 : état transmis, comptes réels, intitulés marqués, **aucun texte de
   flamme**, **aucun identifiant**, ni pourquoi ni horizon). Patrimoine COMPLET
   vert (**866**).
+
+## 12. AMATSU — le dragon de l'air (dicté par Paul le 2026-10-18)
+
+**Les mots de Paul** (dictée vocale recopiée ; seule la ponctuation est posée) :
+> Sur IMLADRIK, créons un nouveau dragon : **Amatsu, le dragon de l'air**.
+> Symbole de la liberté, de la colère, de la force de la nature ; celui qui
+> apporte la fraîcheur de la bise et la terreur de l'ouragan. L'air est un élément
+> indispensable à ma vie, tant par ce qu'il représente — liberté, force indomptée,
+> force qui se donne à tous sans juger — que par ce qu'il est : un pilier du monde,
+> de la nature, des saisons. Si je suis l'air et les vents, je ne peux pas me
+> tromper. Une décision, un projet, une idée me rendra-t-elle plus libre ? C'est
+> ça, le rôle d'Amatsu. La liberté, c'est aussi ma cohérence avec moi-même, mes
+> choix et ma paix. L'air, c'est aussi la volatilité : vigilance, donc, à ne pas me
+> laisser emporter par le vent.
+
+⚠️ La dictée se termine sur « Agence à » — un mot coupé. Il n'est **pas
+interprété** : question posée à Paul (§12.4 ①).
+
+### 12.1 Ce qu'Amatsu est — lu dans ces mots, rien d'ajouté
+
+Les sept dragons en place **portent chacun un objet** : des pages (MAEDRETHNIR),
+des futurs (VRANESH), des serments (DRAUKHAIN), des idées (ADRAMELECH), des
+talents (RESHIRAM), des idéaux (ZEKROM), des technos (ZOH SHIA). **Amatsu ne
+porte pas d'objet : il pose une question à ceux des autres.** « Une décision, un
+projet, une idée me rendra-t-elle plus libre ? » — la décision, le projet, l'idée
+existent déjà ailleurs (une idée ADRAMELECH, un serment DRAUKHAIN, une situation
+VRANESH, un chantier RIVEN, un choix du jour). Amatsu est **le souffle qui les
+traverse** et rend une lecture sur un seul axe, la liberté, que Paul décline
+lui-même en trois vents :
+1. **la bise** — *plus libre ?* (la liberté gagnée ou perdue) ;
+2. **le souffle égal** — *cohérent avec moi-même, mes choix, ma paix ?* ;
+3. **l'ouragan** — *emporté par le vent ?* (la volatilité : l'élan du moment qui
+   se prend pour une décision).
+
+Ce qu'il n'est pas : ni un juge (« des rappels, pas du jugement », console §3.4),
+ni une note ; ni un doublon de ZEKROM (l'idéal dit où Paul veut aller ; Amatsu
+dit si *ce pas-ci* le rend plus libre), ni de DRAUKHAIN (la volonté tient le cap ;
+Amatsu vérifie que le cap ne devient pas une cage).
+
+### 12.2 ✅ Boucle 1 — l'étoile (livrée le 2026-10-18)
+
+Même geste que ZOH SHIA le 04/10 et qu'IFULVIN : **une étoile d'attente**. AMATSU
+paraît dans la constellation des DRAGONS, « AMATSU » puis « Dragon de l’air » ;
+au survol, Léo dit les mots de Paul et que la forme reste à décider. Aucune page,
+aucune cible, aucune table, aucune API : rien n'est promis que ce qui existe.
+- Registre `js/registre-lv3.mjs` (huitième enfant de `constellation-dragons`,
+  blason « portail » provisoire) ; repli sans JavaScript d'`imladrik.html` (dit,
+  sans lien) ; lexique vocal.
+- **Les verrous des harnais sont REFIXÉS, pas relâchés** : « sept dragons »
+  devient « huit » (ni sept, ni neuf) dans douze harnais ; « tous à page » devient
+  « sept à page, AMATSU seul attend, nommé » — un neuvième dragon sans page ferait
+  rougir ces lignes.
+- Mesuré au navigateur (`smoke-dragons-epithetes`, à 300 · 320 · 360 · 390 · 414 · 1280 px) : huit étoiles, seize lignes, aucun croisement, rien hors du ciel, épithètes ≥ 11 px et contraste ≥ 5,0. **Le premier passage a cédé à 300 et 320 px** — le mode de défaillance (a) du pre-mortem : la couronne des huit n'y est plus qu'une colonne de 70 px de large, et l'épithète de RESHIRAM mordait le cœur de ZOH SHIA, sans place dessous, dessus ni à côté à hauteur d'étoile. **Corrigé dans le même passage, dans le moteur** (`js/ciel.js`) : les quatre poses en **diagonale** de la carte gravée, réservées aux noms à deux lignes — à côté et décalé, sous la hauteur de l'étoile d'abord (le nom reste « dessous »), à droite puis à gauche, puis au-dessus. Rouge avant, vert après, sur le même cas ; à 360 px et au-delà, pas un pixel n'a bougé (mesuré). Patrimoine complet : 59 harnais navigateur et 65 suites unitaires verts sur l'arbre final, en trois passages — le premier arrêté par les épithètes (ci-dessus), le second par un verrou à sept oublié dans le harnais plein écran, le troisième par un verrou à sept noms dans le retour des feuilles : deux verrous **trouvés par la mesure, pas par la recherche** (le motif `, 7]` et une liste de noms échappaient au grep). Une seule ligne reste rouge, `maquette300_390_noms` de `smoke-riven-nebuleuses`, **identique sur `origin/main` pur dans ce conteneur** (témoin rejoué dans un worktree) : l'écart d'environnement déjà consigné le 08/10, vert en CI, étranger à cette boucle.
+
+### 12.3 Boucle 2 — le contenu (À CADRER, format 6 points — rien n'est codé)
+
+① **But** : Paul soumet une décision, un projet ou une idée à Amatsu et obtient,
+datée, sa lecture aux trois vents — puis peut la relire quand le vent est retombé.
+*Ligne MS* : aucun client, aucun contrat — c'est le perso d'IMLADRIK, dont
+l'objectif propre est préservé (complément du 12/10). On le fait quand même parce
+que c'est le filtre des choix de Paul, choix pros compris : un contrat qui
+enferme n'est pas un bon contrat.
+② **Étapes pressenties** : a) la grille des trois vents, figée avec Paul ; b) la
+voie d'entrée ; c) la lecture (où elle se dépose et se relit) ; d) harnais et
+preuve par l'ABSENCE (§5).
+③ **Moyens — ligne ZS** : l'alternative de l'année n'est pas un écran de saisie,
+c'est **l'agent qui converse** : Paul dicte « Amatsu, ce projet… » à Léo depuis
+n'importe quel quadrant, Léo pose les trois vents et dépose la lecture — une
+**main** de plus dans `OUTILS_PAR_QUADRANT` (§10), confirmation avant écriture,
+zéro contenu en logs. Côté données, deux options : **(a) zéro table** — la
+lecture est une **passerelle** posée sur l'objet jugé (idée, serment, situation,
+chantier), à cible XOR comme `serment_liens`/`scenario_liens` (0018) ; **(b) une
+table `amatsu_lectures`** (owner_id, cible XOR ou texte libre, trois vents, date)
+pour ce qui n'a d'objet nulle part (une décision du jour). Reco : (a) d'abord,
+(b) si Paul veut juger ce qui n'a pas d'objet.
+④ **Critères** : une lecture réelle dictée par Paul, visible après auth seulement,
+aucune ligne de contenu dans le HTML servi ni dans les logs ; fail-closed ; le
+harnais prouve l'ABSENCE (rien au simple survol).
+⑤ **Pas dans la boucle** : aucun score, aucune note chiffrée de la liberté ;
+aucun automate qui juge seul (Léo propose, Paul tranche) ; aucune page avant que
+la voie vocale soit prouvée (leçon MAEDRETHNIR §4 bis : la distance tue le cap).
+⑥ **Pre-mortem** : (a) *Amatsu devient un formulaire de plus* → mort par distance
+⇒ la voix d'abord, jamais d'écran en premier ; (b) *il doublonne ZEKROM ou
+DRAUKHAIN* ⇒ Amatsu ne stocke aucun objet nouveau, il lit ceux qui existent ;
+(c) *la lecture devient un verdict qui culpabilise* ⇒ trois questions, jamais une
+note, formulées en invitation (règle cardinale positive des caps) ; (d) *l'ouragan
+juge la bise* — une lecture rendue un jour de vent ⇒ chaque lecture est datée et
+se **relit** (le vent retombe) ; (e) *la dictée déforme le nom* ⇒ lexique vocal
+posé en boucle 1.
+
+### 12.4 Décisions de Paul — ✅ TRANCHÉES le 2026-10-18 (panneaux, 15 h 20 UTC)
+
+1. **Le mot coupé « Agence à… »** : *rien, la phrase était finie* — résidu de dictée, ignoré.
+2. **Le nom et l'épithète** : **AMATSU — Dragon de l’air**, figés au lexique. **Le blason
+   se dessine en boucle 2** (la bise, une spirale de vent) ; le « portail » reste provisoire.
+3. **La forme** : **C — A puis B.** D'abord le souffle transversal par la voix de Léo
+   (2a), prouvé en réel ; la page et son registre de lectures ensuite (2b).
+4. **La grille** : **les trois vents** — plus libre ? · cohérent avec moi-même, mes
+   choix, ma paix ? · emporté par le vent ? Trois questions, jamais une note.
+
+*(Les questions telles qu'elles ont été posées, pour mémoire :)*
+
+### 12.5 Boucle 2a — le souffle par la voix de Léo (cadrée et bâtie le 2026-10-18)
+
+① **But.** Depuis n'importe quelle page où Léo est montée (RIVEN, ADRAMELECH,
+IMLADRIK), Paul dicte « Amatsu, … » et soumet une décision, un projet, une
+idée ; Léo pose les trois vents, puis propose d'enregistrer la **lecture** —
+l'objet soumis et les trois réponses de Paul, dans ses mots, datées par le
+serveur. Elle s'écrit sous l'anneau vert (journalisée, défaisable d'un clic).
+*Ligne MS* : aucun client, aucun contrat — c'est le perso ; dit tel quel.
+② **Étapes.** a) la migration, écrite et **NON appliquée** ; b) le validateur
+miroir et la route ; c) la main de Léo (catalogue, prompt, reformulation) ;
+d) le défaire ; e) le gabarit front ; f) le blason ; g) les harnais ; h) la
+preuve réelle — **après** le go de Paul sur la migration.
+③ **Moyens — ligne ZS.** Aucune technologie nouvelle : le tool-use de l'API
+Claude déjà en service, une table, une route, zéro écran. Ce qui est posé :
+- `supabase/migrations/20261018160000_amatsu_lectures.sql` — `amatsu_lectures`
+  (objet 200 · bise 500 · souffle 500 · ouragan 500 · created_at), RLS par
+  owner, **aucune policy UPDATE** (une lecture se relit, ne se corrige pas),
+  anon sans droit, paire (owner_id, id) unique pour les passerelles de la 2b.
+  ✅ **Appliquée le 2026-10-19 par Paul** (éditeur SQL), après une relecture qui a
+  trouvé et fermé une faille : le revoke ne visait qu'anon, et Supabase laissait
+  UPDATE et TRUNCATE au rôle connecté — TRUNCATE passe sous la RLS (prouvé en
+  l'exécutant, `unit-amatsu-validate` §9). Contrôle relu après application :
+  rls true · policies DELETE,INSERT,SELECT · connecté sans update ni truncate ·
+  anon sans lecture · 0 ligne.
+- `api/_lib/validate.js` (`validateLectureAmatsu`, bornes lues dans le SQL par
+  le harnais) · `api/amatsu-lectures.js` (GET / POST / DELETE, miroir de
+  `flammes`).
+- `api/_lib/leo.js` : `proposer_lecture_amatsu`, **premier outil transversal**
+  du catalogue (`quadrant` en liste : riven, adramelech, imladrik — NICOL
+  BOLAS reste sans main), **vert**, quatre arguments **requis** ; la règle du
+  prompt : poser les trois vents avant d'appeler, jamais une note ni un
+  verdict de sa main ; la reformulation déterministe nomme les trois vents.
+- `api/_lib/leo-execution.js` : `DEFAIRES` (table `amatsu_lectures`, sans
+  retouche) et `DEPENDANCES` (rien ne naît dessus en 2a).
+- `js/leo-accueil.js` : le gabarit (POST, corps exact, aucune `_ref`).
+- `js/blasons.mjs` : le blason **amatsu** — les trois vents de la carte gravée,
+  deux souffles qui s'enroulent, le troisième qui file et se prolonge d'or.
+④ **Critères de réussite.** Unitaires verts avec les verrous **refixés** (onze
+outils, dix verts, treize mains servies, chaque vert son défaire) ;
+`unit-amatsu-validate` prouve le miroir API ↔ SQL et les invariants de la
+migration ; `smoke-draukhain` §G prouve la chaîne : proposition → carte au
+texte serveur → **rien d'écrit avant le clic** → un POST au corps exact, avec
+le Bearer. **Preuve réelle** : une lecture dictée par Paul, visible via GET
+après auth. ✅ **FAITE en production le 2026-10-19** (après la fusion de #399,
+`abe073b`) : Paul a d'abord dicté deux vents sur trois — Léo n'a RIEN écrit et a
+demandé le troisième (pre-mortem (a) tenu en réel) ; au troisième, la carte, la
+confirmation, et la lecture en base à 19:42:09 UTC (compte relu par Paul : 1),
+quatre secondes après l'appel de Léo (`leo_appels` : tentee 19:42:00 → reussie
+19:42:05). Aucune ligne dans `leo_ecritures` sur la période : la lecture est
+passée par la carte confirmée, pas par une écriture faite seule. ⚠️ La preview
+n'a pas permis la preuve : elle ne voyait pas `ULTIMA_PROPRIETAIRES` malgré
+« Production and Preview » coché et deux redéploiements (piste non vérifiée :
+« Separate Production Secret Values »).
+⑤ **Pas dans la 2a.** Pas de page, pas de registre de relecture (2b) ; pas de
+passerelle vers l'objet jugé (2b) ; pas de NICOL BOLAS ; pas de « yeux » (état
+transmis à Léo) ; pas de score.
+⑥ **Pre-mortem.** (a) *Léo appelle l'outil avant d'avoir posé les vents* ⇒ les
+quatre arguments sont requis côté schéma ET validation, et le prompt le dit ;
+(b) *le vert « sans demander » enregistre des réponses inventées* ⇒ la règle
+commune exige chaque valeur mot pour mot dans le dernier message de Paul :
+trois réponses sur trois tours retombent sur la carte, c'est voulu ; (c) *la
+table n'existe pas en prod* ⇒ POST → 500 générique, la carte dit l'échec, rien
+n'est perdu ni inventé — et c'est le gate qui le veut ; (d) *un onzième vert
+entre en silence* ⇒ `unit-leo-anneau` le nomme à la main, et il l'a fait.
+
+1. **Le mot coupé** : la dictée s'arrête sur « Agence à… » — que suivait-il ?
+2. **Le nom et l'épithète** : AMATSU / « Dragon de l’air » — figés au lexique dès
+   validation.
+3. **La forme de la boucle 2** : (A) le souffle transversal — Léo, à la voix,
+   depuis n'importe quel cap, lecture déposée en passerelle sur l'objet jugé
+   (**reco**) ; (B) un cap à page avec son registre de lectures ; (C) A puis B.
+4. **La grille** : les trois vents — *plus libre ? · cohérent (moi-même, mes
+   choix, ma paix) ? · emporté (volatilité) ?* — ou une autre.
+5. **Le blason** : « portail » provisoire ; un blason propre (la bise, une
+   spirale de vent) à dessiner en boucle 2 ?

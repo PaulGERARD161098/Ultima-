@@ -293,7 +293,8 @@ verdicts.familleDesCoques = JSON.stringify(COQUES_DE_NAVIGATION) === JSON.string
   ['index.html', 3],
   // LES CONSTELLATIONS ISOLÉES (30/09) : six étoiles (trois dragons, ADRAMELECH,
   // RESHIRAM, ZEKROM) — SEPT depuis le 04/10/2026 avec ZOH SHIA ; IFULVIN seul.
-  ['imladrik.html#constellation-dragons', 7], ['imladrik.html#constellation-armes', 1]]);
+  // HUIT depuis le 18/10/2026 : AMATSU, le dragon de l'air (étoile d'attente).
+  ['imladrik.html#constellation-dragons', 8], ['imladrik.html#constellation-armes', 1]]);
 for (const [fichier, nbCaps] of COQUES_DE_NAVIGATION) {
   for (const [largeur, hauteur] of [[390, 844], [1280, 860]]) {
     const page = await browser.newPage({ viewport: { width: largeur, height: hauteur } });

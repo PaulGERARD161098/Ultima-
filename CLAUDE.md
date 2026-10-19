@@ -470,8 +470,8 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
   navigateur. Il **saute ses étapes** (pas son job) quand le diff NET de la PR, ou
   du commit fusionné, ne touche que des `.md` ; le job `unit` tourne toujours.
   Gardé par `tests/unit-ci-md-seuls.mjs`, qui exécute le script de l'étape tel
-  quel. ⚠️ Actions débloquées le 19/10 ; le saut n'est pas encore éprouvé sur une PR
-  de `.md` seuls : la première (documentation de clôture du 19/10) le dira.
+  quel. ✅ Éprouvé sur GitHub le 19/10 (Ultima-#401, `.md` seuls) : `browser (0)` et
+  `(1)` en 6 s, journal « Harnais navigateur sauté », contre ≈ 12,5 min chacun sur #400.
   Leviers et incidents de RenoBoost (crons, `ignoreCommand` ≤ 256 caractères,
   `.md` retirés du déploiement) : `RenoBoost/CLAUDE.md` « BUDGET FIXE » et
   `RenoBoost/ROADMAP-2026-10-19-fin-de-session.md` §8. Pistes ouvertes : RenoDevis

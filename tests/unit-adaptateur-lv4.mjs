@@ -177,7 +177,7 @@ dit('isoleDescendDUnCranQuelQueSoitLEtage',
 // thème montre ses enfants directs, et eux seuls.
 dit('isoleSAppliquePareilDeuxEtagesPlusBas',
   foyerDragons.noeuds.length === NOEUDS['constellation-dragons'].enfants.length
-  && foyerDragons.noeuds.length === 7
+  && foyerDragons.noeuds.length === 8 // huit depuis AMATSU (18/10/2026)
   && foyerDragons.noeuds.map((n) => n.id).join(',') === NOEUDS['constellation-dragons'].enfants.join(','));
 // TAO n'est isolable NULLE PART : il n'existe plus (ni comme foyer, ni comme
 // écran). `versCiel` d'un écran disparu rend null, jamais un ciel fantôme.
@@ -212,20 +212,28 @@ dit('isoleNommeLAmasDApresLeFoyerMemeAvecUneTeteVide',
 // — le compte n'est pas relâché, il est REFIXÉ, et verrouillé des deux côtés
 // (ni cinq, ni sept).
 // REFIXÉ À SEPT (04/10/2026) : ZOH SHIA, le dragon de la technologie, rejoint les
-// six. Le compte reste verrouillé des deux côtés (ni six, ni huit).
-dit('isoleDragonsMontreLesSeptEtoiles',
+// six. REFIXÉ À HUIT (18/10/2026) : AMATSU, le dragon de l'air — étoile d'attente,
+// sans page. Le compte reste verrouillé des deux côtés (ni sept, ni neuf).
+dit('isoleDragonsMontreLesHuitEtoiles',
   foyerDragons.isole === 'constellation-dragons'
-  && foyerDragons.noeuds.map((n) => n.id).join(',') === 'maedrethnir,vranesh,draukhain,adramelech,reshiram,zekrom,zohshia'
-  && foyerDragons.noeuds.map((n) => n.nom).join(',') === 'MAEDRETHNIR,VRANESH,DRAUKHAIN,ADRAMELECH,RESHIRAM,ZEKROM,ZOH SHIA');
+  && foyerDragons.noeuds.map((n) => n.id).join(',') === 'maedrethnir,vranesh,draukhain,adramelech,reshiram,zekrom,zohshia,amatsu'
+  && foyerDragons.noeuds.map((n) => n.nom).join(',') === 'MAEDRETHNIR,VRANESH,DRAUKHAIN,ADRAMELECH,RESHIRAM,ZEKROM,ZOH SHIA,AMATSU');
 // L'ÉPITHÈTE TRAVERSE L'ADAPTATEUR (04/10/2026). Sans ce passage, le registre la
 // porterait et le ciel ne la verrait jamais — un champ écrit et jamais lu.
 dit('isoleDragonsPorteLesEpithetes',
   foyerDragons.noeuds.map((n) => n.epithete).join('|') === ['Dragon de la vérité', 'Dragon du futur',
     'Dragon du serment', 'Dragon de l’imagination', 'Dragon de la réalité', 'Dragon de l’idéal',
-    'Dragon de la technologie'].join('|'));
+    'Dragon de la technologie', 'Dragon de l’air'].join('|'));
 dit('isoleArmesSansEpithete', foyerArmes.noeuds.every((n) => n.epithete === ''));
+// AMATSU TRAVERSE L'ADAPTATEUR EN ÉTOILE D'ATTENTE (18/10/2026) : cible nulle,
+// statut « À venir », et pourtant son épithète — c'est elle que le ciel affiche.
+dit('isoleDragonsAmatsuAttendAvecSonEpithete',
+  foyerDragons.noeuds.filter((n) => n.id === 'amatsu').length === 1
+  && foyerDragons.noeuds.find((n) => n.id === 'amatsu').cible === null
+  && foyerDragons.noeuds.find((n) => n.id === 'amatsu').statut === 'À venir'
+  && foyerDragons.noeuds.find((n) => n.id === 'amatsu').epithete === 'Dragon de l’air');
 dit('isoleDragonsNommeSonAmasDRAGONS',
-  foyerDragons.noeuds.length === 7
+  foyerDragons.noeuds.length === 8
   && foyerDragons.noeuds.every((n) => n.secteur_activite === 'DRAGONS'));
 // TRANSPOSÉ (30/09) : l'ancien « toutes des feuilles, rang 0 » était vrai des
 // trois dragons ; ADRAMELECH, arrivé chez eux, n'est PAS une feuille — il porte
@@ -234,20 +242,22 @@ dit('isoleDragonsNommeSonAmasDRAGONS',
 // au premier niveau d'IMLADRIK. Le verdict ne se relâche pas : les cinq autres
 // restent des feuilles de rang 0, et ADRAMELECH est le SEUL de rang 1 — lu dans
 // le registre, pas supposé.
-// ZOH SHIA a sa page depuis le 04/10/2026 : les sept cibles sont des pages.
+// ZOH SHIA a sa page depuis le 04/10/2026 : sept cibles sont des pages. AMATSU
+// (18/10/2026) n'en a pas : sa cible est null, et c'est le SEUL — lu nommément,
+// jamais « toute cible non-page tolérée ».
 dit('isoleDragonsGardeLesCiblesDesPages',
-  foyerDragons.noeuds.length === 7
+  foyerDragons.noeuds.length === 8
   && foyerDragons.noeuds.every((n) => n.cible === NOEUDS[n.id].cible
-    && /\.html$/.test(n.cible))
+    && (n.id === 'amatsu' ? n.cible === null : /\.html$/.test(n.cible)))
   && foyerDragons.noeuds.filter((n) => n.poids === 0).map((n) => n.id).join(',')
-    === 'maedrethnir,vranesh,draukhain,reshiram,zekrom,zohshia'
+    === 'maedrethnir,vranesh,draukhain,reshiram,zekrom,zohshia,amatsu'
   && foyerDragons.noeuds.filter((n) => n.poids === 1).map((n) => n.id).join(',') === 'adramelech'
   && Array.isArray(NOEUDS.adramelech.enfants) && NOEUDS.adramelech.enfants.length === 3);
 // INVERSÉ (30/09) : `adramelech` sortait de cette liste d'absents — il est
 // désormais l'une des six étoiles des DRAGONS, et il est exigé PRÉSENT ci-dessus.
 // `tao` y reste : il n'est plus nulle part.
 dit('isoleDragonsNePeintNiLeFoyerNiLesFreres',
-  foyerDragons.noeuds.length === 7
+  foyerDragons.noeuds.length === 8
   && ['constellation-dragons', 'constellation-armes', 'ifulvin', 'tao', 'imladrik']
     .every((id) => !foyerDragons.noeuds.some((n) => n.id === id)));
 dit('isoleArmesMontreIfulvinSeul',

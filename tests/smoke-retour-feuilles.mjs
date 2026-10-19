@@ -159,11 +159,16 @@ const DRAGONS = [
 ];
 const LIBELLE_COURT = ['adramelech', 'reshiram', 'zekrom', 'zohshia'];
 const RETOUR_DRAGONS = 'imladrik.html#constellation-dragons';
-// Depuis le 04/10/2026, les SEPT enfants de DRAGONS ont leur page (ZOH SHIA compris).
-verifier('Verrou : les sept pages sont exactement les enfants de la constellation DRAGONS, toutes à page',
+// Depuis le 04/10/2026, SEPT enfants de DRAGONS ont leur page (ZOH SHIA compris).
+// TRANSPOSÉ (18/10/2026) : AMATSU, le dragon de l'air, est une étoile d'attente —
+// sans page, donc sans retour à prouver. Le verrou ne se relâche pas : les pages
+// sont EXACTEMENT les enfants à cible, et le seul enfant sans cible est AMATSU,
+// nommé, à l'état « À venir » — un autre dragon sans page ferait rougir cette ligne.
+verifier('Verrou : les sept pages sont exactement les enfants à page de DRAGONS ; AMATSU seul attend',
   JSON.stringify(NOEUDS['constellation-dragons'].enfants.filter((id) => NOEUDS[id].cible))
     === JSON.stringify(DRAGONS.map((d) => d[0]))
-  && NOEUDS['constellation-dragons'].enfants.every((id) => NOEUDS[id].cible));
+  && NOEUDS['constellation-dragons'].enfants.filter((id) => !NOEUDS[id].cible).join() === 'amatsu'
+  && NOEUDS.amatsu.etat === 'À venir');
 
 // Ce que le ciel montre à l'arrivée, mesuré dans un navigateur mobile.
 async function etoilesApresLeRetour(idDragon, fichier) {
@@ -215,10 +220,11 @@ for (const [id, fichier] of DRAGONS) {
   verifier(`${fichier} : le suivre est possible (lien cliquable au doigt)`, r.suivi, r.raison);
   verifier(`${fichier} : le retour arrive sur ${RETOUR_DRAGONS}`,
     r.arrivee.endsWith('/' + RETOUR_DRAGONS), r.arrivee);
-  verifier(`${fichier} : le ciel y est isolé sur DRAGONS — les sept étoiles, dont ADRAMELECH, RESHIRAM, ZEKROM et ZOH SHIA`,
-    r.etoiles.length === 7
+  // HUIT depuis le 18/10/2026 : AMATSU, étoile d'attente, paraît au retour comme les autres.
+  verifier(`${fichier} : le ciel y est isolé sur DRAGONS — les huit étoiles, dont ADRAMELECH, RESHIRAM, ZEKROM, ZOH SHIA et AMATSU`,
+    r.etoiles.length === 8
     && JSON.stringify(r.etoiles.map((e) => e.nom).sort())
-      === JSON.stringify(['ADRAMELECH', 'DRAUKHAIN', 'MAEDRETHNIR', 'RESHIRAM', 'VRANESH', 'ZEKROM', 'ZOH SHIA']),
+      === JSON.stringify(['ADRAMELECH', 'AMATSU', 'DRAUKHAIN', 'MAEDRETHNIR', 'RESHIRAM', 'VRANESH', 'ZEKROM', 'ZOH SHIA']),
     JSON.stringify(r.etoiles.map((e) => e.nom)));
 }
 // LE TÉMOIN, pour que « trois étoiles » ne soit pas vert d'un instrument qui

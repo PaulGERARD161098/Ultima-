@@ -243,10 +243,11 @@ for (const nom of COQUES) {
         .every((c) => r.ciblesDuRegistre.includes(c) && r.cellesDuRepli.includes(c))
       && !r.cellesDuRepli.some((c) => /tao/i.test(c));
   }
-  // LES DRAGONS, ISOLÉS : sept étoiles, sept pages dans le repli (ZOH SHIA a sa
-  // page depuis le 04/10/2026).
+  // LES DRAGONS, ISOLÉS : huit étoiles (AMATSU depuis le 18/10/2026), sept pages
+  // dans le repli (ZOH SHIA a sa page depuis le 04/10/2026 ; AMATSU, étoile
+  // d'attente, n'en a pas — le repli le dit sans lien).
   if (nom === 'constellation-dragons') {
-    verdicts.dragonsSeptEtoiles = r.attendus === 7 && r.manquants.length === 0;
+    verdicts.dragonsHuitEtoiles = r.attendus === 8 && r.manquants.length === 0;
     verdicts.dragonsRepliSeptPages = r.ciblesDuRegistre.length === 7
       && r.ciblesDuRegistre.every((c) => r.cellesDuRepli.includes(c));
   }

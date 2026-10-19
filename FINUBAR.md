@@ -32,10 +32,10 @@
   },
   "dernier_arret": {
     "le": "2026-10-19",
-    "commit": "d67998a",
-    "quoi": "19/10 : Ultima-#400 fusionnée (d67998a) — CI qui saute le harnais navigateur pour les .md seuls ; plafond d'appels de Léo (100/24 h) : migration leo_appels appliquée par Paul AVANT la fusion et vérifiée (16/16 vrais, PLAFOND_OK) ; leçons v98."
+    "commit": "abe073b3f9d207e469db4af51c2705dd0311a35f",
+    "quoi": "19/10 : #400 puis #399 fusionnées (d67998a, abe073b) sur les go de Paul portant sur leurs SHA. AMATSU écrit en production : lecture dictée, carte confirmée, en base à 19:42:09 UTC (compte : 1). Leçons v99 (deux rechutes, un ajout)."
   },
-  "prochaine_action": "Après le RDV kelvin° : reporter ses réponses dans la fiche et trancher construire ou s'abonner (VITRUVE).",
+  "prochaine_action": "Cadrer la boucle 2b d'AMATSU au format 6 points (CADRAGE-IMLADRIK.md §12) : la page et le registre de relecture des lectures, la passerelle vers l'objet jugé (idée, serment, situation, chantier). Rien n'est codé avant le go sur le cadrage.",
   "bloque_par": [
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
@@ -48,7 +48,11 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "Coûts (19/10) : Ultima- ≈ 54 % du brut Actions ; côté Vercel, `ultima` = 5,81 $ dont 5,79 $ de Build CPU. Ultima-#400 fusionnée (d67998a) : saut du harnais navigateur pour les .md seuls (à éprouver sur la première PR de documentation seule) + plafond d'appels de Léo, migration appliquée et vérifiée le 19/10 (RUNBOOK-GATES.md gate ⑦). Restent : inscription au registre supabase_migrations et advisors (connecteur qui voie ultima) ; limite de dépense Anthropic (Paul) ; LECONS v98 à propager aux 9 autres dépôts ; RenoDevis et ignoreCommand Vercel d'Ultima non traités. Détail : CLAUDE.md « BUDGET FIXE ».",
+      "quoi": "AMATSU : boucles 1 (l'étoile) et 2a (la voix de Léo) FERMÉES — fusionnées (abe073b), lecture réelle en base le 19/10. Restent : la 2b à cadrer (page, relecture, passerelle) ; la preview ne voit pas ULTIMA_PROPRIETAIRES malgré « Production and Preview » coché et deux redéploiements (piste non vérifiée : « Separate Production Secret Values » — le connecteur Vercel ne lit pas les variables). CADRAGE-IMLADRIK.md §12.",
+      "depuis": "2026-10-18"
+    },
+    {
+      "quoi": "Coûts (19/10) : PR #400 FUSIONNÉE le 19/10 (d67998a), sur le go de Paul portant sur 3077897. Plafond d'appels de Léo : migration 20261019160000_leo_appels.sql APPLIQUÉE et vérifiée par Paul vers 18:45 UTC (16/16 contrôles vrais ; PLAFOND_OK, la 101ᵉ tentative refusée — RUNBOOK-GATES.md gate ⑦). Saut du harnais navigateur pour les .md seuls ÉPROUVÉ sur GitHub le 19/10 (PR #401 : browser (0) et (1) en 6 s, journal « Harnais navigateur sauté », contre ≈ 12,5 min chacun sur #400). Restent : migration hors registre supabase_migrations, advisors non relus (connecteur qui voie ultima) ; limite de dépense Anthropic (Paul) ; LECONS v99 à propager aux 9 autres dépôts ; RenoDevis et ignoreCommand Vercel d'Ultima non traités. Détail : CLAUDE.md « BUDGET FIXE ».",
       "depuis": "2026-10-19"
     },
     {

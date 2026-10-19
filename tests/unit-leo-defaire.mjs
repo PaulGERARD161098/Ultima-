@@ -99,8 +99,9 @@ const defaire = (base, traceId, opts = {}) => defaireEcriture(base, PAUL, { etap
 // ---------- 1. LE CATALOGUE : chaque vert a son défaire, et rien d'autre ----------
 const tousLesOutils = [...new Set(Object.values(OUTILS_PAR_QUADRANT).flat().map((o) => o.name))];
 const verts = tousLesOutils.filter((n) => anneauDe(n) === 'vert').sort();
-// Non-vacuité : le catalogue n'est pas vide, et il compte bien neuf verts.
-verdicts.nonVacuiteCatalogue = tousLesOutils.length === 10 && verts.length === 9;
+// Non-vacuité : le catalogue n'est pas vide, et il compte bien dix verts
+// (onze outils : neuf + l'enrichissement orange + AMATSU, 18/10/2026).
+verdicts.nonVacuiteCatalogue = tousLesOutils.length === 11 && verts.length === 10;
 verdicts.chaqueVertASonDefaire = verts.join(',') === Object.keys(DEFAIRES).sort().join(',');
 verdicts.enrichissementSansDefaire = !('proposer_enrichissement_idee' in DEFAIRES) &&
   anneauDe('proposer_enrichissement_idee') === 'orange';
@@ -129,7 +130,8 @@ verdicts.enrichissementSansDefaire = !('proposer_enrichissement_idee' in DEFAIRE
     proposer_serment: { intitule: 'x' },
     proposer_flamme: { serment_ref: 'Courir', texte: 'x' },
     proposer_situation: { intitule: 'x' },
-    proposer_scenario: { situation_ref: 'Rachat', deroule: 'x' }
+    proposer_scenario: { situation_ref: 'Rachat', deroule: 'x' },
+    proposer_lecture_amatsu: { objet: 'x', bise: 'y', souffle: 'z', ouragan: 'w' }
   };
   const ecarts = [];
   for (const outil of verts) {
@@ -237,7 +239,8 @@ function clesEtrangeres(sqlBrut, cibles) {
     const re = await defaire(base, traceId);
     if (!(re.status === 409 && re.message === REFUS_DEFAIRE.deja && base.inserts.length === avant)) echecs.push(outil + ':re');
   }
-  verdicts.neufDefairesJoues = n === 9 && echecs.length === 0;
+  // DIX depuis le 18/10/2026 : la lecture d'AMATSU se défait comme les autres.
+  verdicts.dixDefairesJoues = n === 10 && echecs.length === 0;
   if (echecs.length) console.error('défaires en échec :', echecs);
 }
 

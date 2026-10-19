@@ -26,8 +26,10 @@ const source = readFileSync(new URL('../api/_lib/leo.js', import.meta.url), 'utf
 // Tout ce qui suit parcourt le catalogue. Sur un catalogue vide, « aucun outil
 // vert hors des trois » et « tous portent un anneau » sont vrais par vacuité :
 // un dispositif parfait et un dispositif absent rendraient le même vert.
-const tousLesOutils = Object.values(OUTILS_PAR_QUADRANT).flat().map((o) => o.name);
-verdicts.nonVacuite = tousLesOutils.length === 10 &&
+// Dédoublonné : AMATSU (18/10/2026) est servi à TROIS quadrants, c'est UN outil.
+const tousLesOutils = [...new Set(Object.values(OUTILS_PAR_QUADRANT).flat().map((o) => o.name))];
+// ONZE depuis le 18/10 : dix + AMATSU, le dragon de l'air.
+verdicts.nonVacuite = tousLesOutils.length === 11 &&
   Object.keys(OUTILS_PAR_QUADRANT).length === 4;
 
 // ---------- 1. Chaque outil porte un anneau EXPLICITE et reconnu ----------
@@ -46,11 +48,14 @@ verdicts.anneauReconnuPartout = tousLesOutils.every((n) => ANNEAUX.includes(anne
 const verts = tousLesOutils.filter((n) => anneauDe(n) === 'vert').sort();
 // ⛔ NEUF depuis le 02/10 : l'enrichissement est repassé orange (choix ① de
 // Paul, cadrage §15.2) — il n'a pas de défaire sans contenu conservé.
-verdicts.lesNeufVerts = verts.join(',') === [
+// ⛔ DIX depuis le 18/10 : AMATSU, le dragon de l'air — une lecture s'ajoute et
+// se défait par sa suppression (CADRAGE-IMLADRIK.md §12 ; décision de Paul :
+// forme C, la voix de Léo d'abord). C'est ici, nom par nom, qu'elle entre.
+verdicts.lesDixVerts = verts.join(',') === [
   'proposer_besoin', 'proposer_flamme',
-  'proposer_idee', 'proposer_journal', 'proposer_page_journal',
-  'proposer_relance', 'proposer_scenario', 'proposer_serment',
-  'proposer_situation'
+  'proposer_idee', 'proposer_journal', 'proposer_lecture_amatsu',
+  'proposer_page_journal', 'proposer_relance', 'proposer_scenario',
+  'proposer_serment', 'proposer_situation'
 ].join(',');
 
 // NICOL BOLAS reste sans outil — non par interdit d'anneau, mais parce
