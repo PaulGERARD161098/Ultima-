@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v98 2026-10-19 sha256:53242086f871 -->
+<!-- lecons:empreinte v99 2026-10-19 sha256:4424eb62b175 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1766,6 +1766,19 @@ quand même, **la rotation est la première action**, pas une note de fin.
 
 ## 4. Conduire une boucle
 
+**UNE SESSION LANCÉE SE RELIT À SON PREMIER ÉVÉNEMENT, PAS À SON ANNONCE** *(2026-10-19)*.
+J'ai lancé (`create_session`, 19:09:57) une session « migration `leo_appels` » avec pour source la
+branche `claude/ci-couts-md-seuls` — que Paul avait fusionnée (#400) et dont la branche avait été
+supprimée à 19:06:43. Erreur d'initialisation `ref_not_found` à 19:10:00, coût zéro. J'ai écrit
+« j'attends le résultat de la session migration » dans six messages pendant ≈ 45 minutes ; Paul a
+répondu « ok on attend la migration ». Un seul `get_session` (statut, `last_init_error`) l'a
+montré — fait à 19:50, quand le message n'arrivait pas. En plus, mon plan « pousser le lot sur
+#400 » était caduc depuis 19:06 : Paul avait fusionné entre deux de mes messages.
+⛔ **Après `create_session`, lire `get_session` et le premier événement de l'assistant AVANT
+d'annoncer une attente** : une annonce n'est pas une preuve. ⛔ **Avant de viser une branche,
+`git ls-remote` et l'état de la PR** (Paul fusionne sans prévenir). ⚠️ Un plan écrit « après la
+PR X » se relit à l'état de X avant chaque message qui l'invoque.
+
 **UN GO SE DEMANDE POUR UN GESTE DONT L'ACCÈS EST PROUVÉ** *(2026-10-19, Ultima-)*. J'ai
 demandé à Paul son go pour appliquer `leo_appels` sur la base d'Ultima, en m'appuyant sur le
 RUNBOOK du 11/07 (« vérifié en base » par le connecteur). Son go est arrivé ; `list_migrations`
@@ -2415,6 +2428,27 @@ jusqu'au 30/09, alors que la liste en portait **dix** : deux dépôts manquaient
 écrite — hors de `Ultima-/finubar/depots.json`, fork partagé avec un tiers.
 
 ## 6. Économie
+
+**UNE ROUTINE DONT L'ARRÊT DÉPEND D'UN OUTIL ABSENT NE S'ARRÊTE JAMAIS — ELLE COÛTE** *(2026-10-19)*.
+La routine horaire « Réponse d'Henry » (créée le 28/09, session persistante) devait, si Henry
+répondait, prévenir Paul puis se supprimer (`delete_trigger`) ; et, à partir du 02/10 sans réponse,
+prévenir puis se supprimer. Dans une session DÉCLENCHÉE, ni Gmail ni `delete_trigger` n'existent :
+elle répondait chaque heure « Rien de nouveau : les outils Gmail et `delete_trigger` restent
+indisponibles », en relisant un contexte de 570 k tokens. Mesuré le 19/10 par `get_session`
+(`external_metadata.usage.cost_usd`) : **268,5 $ au tarif catalogue**, 346,9 M tokens de cache lus.
+Même schéma pour « Veille BTP » (quotidienne depuis le 13/08, Supabase absent, « Toujours
+identique ») : **40,5 $**, un cache de ≈ 258 k tokens réécrit chaque jour. Aucune des deux n'était
+visible de Finubar, qui indexe les DÉPÔTS, pas les routines ni les sessions : c'est Paul, en
+demandant « regarde ce qui se passe sur les autres sessions », qui a fait lire les chiffres.
+⛔ **Une routine reçoit une fin DURE à sa création** : un déclenchement unique (`run_once_at`), ou
+une périodicité dont le prompt teste une chose qui existe dans toute session déclenchée (la date)
+et s'arrête par un geste qu'elle sait faire — jamais une règle d'arrêt qui repose sur un outil
+optionnel (`delete_trigger`, Gmail, Supabase) que la session déclenchée peut ne pas avoir.
+⛔ **À chaque fin de séance : `list_triggers` (enabled) et le coût `get_session` des sessions
+persistantes de ces routines** — une dérive de coût se lit en une ligne, elle ne se devine pas.
+⚠️ Une session persistante relit TOUT son contexte à chaque réveil : un contrôle qui n'a pas besoin
+de mémoire se lance en session neuve à chaque déclenchement (`create_new_session_on_fire`).
+⚠️ `cost_usd` est un tarif catalogue, pas la facture : le forfait ou la console de Paul tranchent.
 
 **UN `startup_failure` PARTOUT, `main` COMPRIS, C'EST LE COMPTE — PAS LE CODE** *(2026-10-19)*.
 Depuis le 18/10 16:22 UTC, tous les workflows GitHub Actions tombaient en
