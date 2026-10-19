@@ -32,10 +32,10 @@
   },
   "dernier_arret": {
     "le": "2026-10-19",
-    "commit": "abe073b3f9d207e469db4af51c2705dd0311a35f",
-    "quoi": "19/10 : #400 puis #399 fusionnées (d67998a, abe073b) sur les go de Paul portant sur leurs SHA. AMATSU écrit en production : lecture dictée, carte confirmée, en base à 19:42:09 UTC (compte : 1). Leçons v99 (deux rechutes, un ajout)."
+    "commit": "633728773d2f53d43a6c4d5ac474cafc0deef68e",
+    "quoi": "19/10 : AMATSU 2b cadrée puis bâtie sur la branche claude/amatsu-2b-cadrage (PR #403, brouillon) — maquette de la rose des vents choisie par Paul, puis la page amatsu.html (au repos la date et l'objet, au clic les trois vents, livre des lectures), étoile ouverte, smoke-amatsu ; 18 verdicts refixés dans 7 fichiers. Fusion sur go."
   },
-  "prochaine_action": "Cadrer la boucle 2b d'AMATSU au format 6 points (CADRAGE-IMLADRIK.md §12) : la page et le registre de relecture des lectures, la passerelle vers l'objet jugé (idée, serment, situation, chantier). Rien n'est codé avant le go sur le cadrage.",
+  "prochaine_action": "Paul relit la page AMATSU sur la preview de #403 (connecté) : la rose s'ouvre, sa lecture réelle y souffle au nord, les trois vents au clic. Puis go de fusion portant sur le SHA de tête. Ensuite seulement : γ (le regard d'après) sur décision, puis 2c (la passerelle).",
   "bloque_par": [
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
@@ -48,7 +48,7 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "AMATSU : boucles 1 (l'étoile) et 2a (la voix de Léo) FERMÉES — fusionnées (abe073b), lecture réelle en base le 19/10. Restent : la 2b à cadrer (page, relecture, passerelle) ; la preview ne voit pas ULTIMA_PROPRIETAIRES malgré « Production and Preview » coché et deux redéploiements (piste non vérifiée : « Separate Production Secret Values » — le connecteur Vercel ne lit pas les variables). CADRAGE-IMLADRIK.md §12.",
+      "quoi": "AMATSU : boucles 1 (l'étoile) et 2a (la voix de Léo) FERMÉES — fusionnées (abe073b). 2b-α (maquette) et 2b-β (la page de la rose des vents) bâties le 19/10 sur #403, en attente de la relecture de Paul et de son go de fusion. Restent : γ (le regard d'après, plus tard), 2c (la passerelle vers l'objet jugé) ; la preview ne voit pas ULTIMA_PROPRIETAIRES malgré « Production and Preview » coché (piste non vérifiée : « Separate Production Secret Values »). CADRAGE-IMLADRIK.md §12.6.",
       "depuis": "2026-10-18"
     },
     {
