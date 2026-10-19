@@ -339,10 +339,10 @@ verdicts.noscriptImladrikEgaleLeRegistre = JSON.stringify(capsDuNoscript('imladr
   === JSON.stringify(attendusNoscriptImladrik)
   && JSON.stringify(attendusNoscriptImladrik) === JSON.stringify([
     'maedrethnir.html', 'vranesh.html', 'draukhain.html', 'adramelech.html',
-    'reshiram.html', 'zekrom.html', 'zohshia.html']);
+    'reshiram.html', 'zekrom.html', 'zohshia.html', 'amatsu.html']);
 // Le repli ne descend PAS plus bas que les constellations (les caps propres
 // d'ADRAMELECH n'y sont pas) et ne nomme plus TAO. Non-vacuité : le repli EST lu.
-verdicts.noscriptImladrikSansTaoNiSousPages = (capsDuNoscript('imladrik.html') || []).length === 7
+verdicts.noscriptImladrikSansTaoNiSousPages = (capsDuNoscript('imladrik.html') || []).length === 8
   && !(capsDuNoscript('imladrik.html') || []).some((c) => /tao/i.test(c))
   && !(capsDuNoscript('imladrik.html') || []).some((c) => ['registre.html', 'idees.html'].includes(c))
   && !/\btao\b/i.test(texteNoscript('imladrik.html') || '');
@@ -363,12 +363,11 @@ verdicts.noscriptImladrikDitIfulvin = /IFULVIN/.test(noscriptImladrik)
 const CIBLES_DRAGONS = NOEUDS['constellation-dragons'].enfants.map((id) => NOEUDS[id].cible);
 verdicts.noscriptImladrikRegroupeLesDragons = (noscriptImladrik.match(/<ul>((?:(?!<ul>)[\s\S])*?)<\/ul>/g) || [])
   .some((ul) => CIBLES_DRAGONS.length === 8
-    // ZOH SHIA a sa page depuis le 04/10/2026 : sept liées. AMATSU (18/10/2026),
-    // étoile d'attente, est DITE dans la même sous-liste — sans lien, comme IFULVIN
-    // chez les ARMES : une page qui n'existe pas ne se promet pas.
-    && CIBLES_DRAGONS.filter(Boolean).length === 7
+    // ZOH SHIA a sa page depuis le 04/10/2026, AMATSU depuis le 19/10/2026 (2b-β) :
+    // les HUIT sont liées, AMATSU par son lien et non plus dit sans lien.
+    && CIBLES_DRAGONS.filter(Boolean).length === 8
     && CIBLES_DRAGONS.filter(Boolean).every((c) => ul.includes(`href="${c}"`))
-    && /AMATSU/.test(ul) && !/<a [^>]*>[^<]*AMATSU/.test(ul)
+    && /<a href="amatsu\.html">AMATSU/.test(ul)
     && !/IFULVIN/.test(ul))
   && /DRAGONS/.test(noscriptImladrik);
 const noscriptIndex = capsDuNoscript('index.html');
@@ -420,15 +419,16 @@ const parcourir = (id) => capsDe(id).forEach((c) => {
   if (c.constellation === true) { parcourir(c.id); } else { feuillesDImladrik.push(c); }
 });
 parcourir('imladrik');
-verdicts.imladrikSeptCiblesOuvertes = feuillesDImladrik.filter((c) => c.cible).length === 7
+// REFIXÉ À HUIT (19/10/2026) : AMATSU a sa page, la rose des vents (2b-β).
+verdicts.imladrikHuitCiblesOuvertes = feuillesDImladrik.filter((c) => c.cible).length === 8
   && feuillesDImladrik.filter((c) => c.cible).every((c) => typeof c.cible === 'string' && c.cible.endsWith('.html'))
   && feuillesDImladrik.filter((c) => c.cible).map((c) => c.cible).join()
-    === 'maedrethnir.html,vranesh.html,draukhain.html,adramelech.html,reshiram.html,zekrom.html,zohshia.html';
+    === 'maedrethnir.html,vranesh.html,draukhain.html,adramelech.html,reshiram.html,zekrom.html,zohshia.html,amatsu.html';
 // Une seule étoile d'attente depuis que ZOH SHIA a sa page (04/10/2026) :
-// IFULVIN (ARMES). DEUX depuis le 18/10/2026 : AMATSU (DRAGONS) attend la sienne.
-// Toujours énumérées, jamais comptées seulement.
-verdicts.imladrikAmatsuEtIfulvinSansPage = feuillesDImladrik.filter((c) => !c.cible)
-  .map((c) => c.id).sort().join() === 'amatsu,ifulvin';
+// IFULVIN (ARMES). Deux du 18 au 19/10/2026 (AMATSU attendait la sienne), de
+// nouveau UNE depuis la 2b-β. Toujours énumérée, jamais comptée seulement.
+verdicts.imladrikIfulvinSeulSansPage = feuillesDImladrik.filter((c) => !c.cible)
+  .map((c) => c.id).sort().join() === 'ifulvin';
 verdicts.imladrikLegendeGravee = NOEUDS.imladrik.legende === 'Kalamn-talaen'
   && NOEUDS.imladrik.legendeClasse === 'kalamn-legende';
 

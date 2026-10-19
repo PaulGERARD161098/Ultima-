@@ -237,18 +237,20 @@ for (const nom of COQUES) {
   // pages → deux + six ; TAO n'est plus nulle part.
   if (nom === 'imladrik') {
     verdicts.imladrikDeuxEntrees = r.attendus === 2;
-    verdicts.imladrikRepliAttenduProfond = r.ciblesDuRegistre.length === 7
+    // HUIT pages depuis le 19/10/2026 : AMATSU a la sienne (2b-β).
+    verdicts.imladrikRepliAttenduProfond = r.ciblesDuRegistre.length === 8
       && ['maedrethnir.html', 'vranesh.html', 'draukhain.html', 'adramelech.html',
-        'reshiram.html', 'zekrom.html', 'zohshia.html']
+        'reshiram.html', 'zekrom.html', 'zohshia.html', 'amatsu.html']
         .every((c) => r.ciblesDuRegistre.includes(c) && r.cellesDuRepli.includes(c))
       && !r.cellesDuRepli.some((c) => /tao/i.test(c));
   }
-  // LES DRAGONS, ISOLÉS : huit étoiles (AMATSU depuis le 18/10/2026), sept pages
-  // dans le repli (ZOH SHIA a sa page depuis le 04/10/2026 ; AMATSU, étoile
-  // d'attente, n'en a pas — le repli le dit sans lien).
+  // LES DRAGONS, ISOLÉS : huit étoiles (AMATSU depuis le 18/10/2026), HUIT pages
+  // dans le repli depuis le 19/10/2026 (AMATSU, étoile d'attente du 18 au 19/10,
+  // a désormais la sienne : la rose des vents des lectures).
   if (nom === 'constellation-dragons') {
     verdicts.dragonsHuitEtoiles = r.attendus === 8 && r.manquants.length === 0;
-    verdicts.dragonsRepliSeptPages = r.ciblesDuRegistre.length === 7
+    verdicts.dragonsRepliHuitPages = r.ciblesDuRegistre.length === 8
+      && r.ciblesDuRegistre.includes('amatsu.html')
       && r.ciblesDuRegistre.every((c) => r.cellesDuRepli.includes(c));
   }
   verdicts['plusDeBoussole_' + nom] = r.plusDeBoussole === true;

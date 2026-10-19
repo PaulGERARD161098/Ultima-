@@ -225,12 +225,13 @@ dit('isoleDragonsPorteLesEpithetes',
     'Dragon du serment', 'Dragon de l’imagination', 'Dragon de la réalité', 'Dragon de l’idéal',
     'Dragon de la technologie', 'Dragon de l’air'].join('|'));
 dit('isoleArmesSansEpithete', foyerArmes.noeuds.every((n) => n.epithete === ''));
-// AMATSU TRAVERSE L'ADAPTATEUR EN ÉTOILE D'ATTENTE (18/10/2026) : cible nulle,
-// statut « À venir », et pourtant son épithète — c'est elle que le ciel affiche.
-dit('isoleDragonsAmatsuAttendAvecSonEpithete',
+// AMATSU TRAVERSAIT L'ADAPTATEUR EN ÉTOILE D'ATTENTE (18/10/2026) ; OUVERTE le
+// 19/10/2026 (2b-β) : sa cible est sa page, son statut « Ouvert », son épithète
+// reste celle que le ciel affiche.
+dit('isoleDragonsAmatsuOuverteAvecSonEpithete',
   foyerDragons.noeuds.filter((n) => n.id === 'amatsu').length === 1
-  && foyerDragons.noeuds.find((n) => n.id === 'amatsu').cible === null
-  && foyerDragons.noeuds.find((n) => n.id === 'amatsu').statut === 'À venir'
+  && foyerDragons.noeuds.find((n) => n.id === 'amatsu').cible === 'amatsu.html'
+  && foyerDragons.noeuds.find((n) => n.id === 'amatsu').statut === 'Ouvert'
   && foyerDragons.noeuds.find((n) => n.id === 'amatsu').epithete === 'Dragon de l’air');
 dit('isoleDragonsNommeSonAmasDRAGONS',
   foyerDragons.noeuds.length === 8
@@ -242,13 +243,11 @@ dit('isoleDragonsNommeSonAmasDRAGONS',
 // au premier niveau d'IMLADRIK. Le verdict ne se relâche pas : les cinq autres
 // restent des feuilles de rang 0, et ADRAMELECH est le SEUL de rang 1 — lu dans
 // le registre, pas supposé.
-// ZOH SHIA a sa page depuis le 04/10/2026 : sept cibles sont des pages. AMATSU
-// (18/10/2026) n'en a pas : sa cible est null, et c'est le SEUL — lu nommément,
-// jamais « toute cible non-page tolérée ».
+// ZOH SHIA a sa page depuis le 04/10/2026, AMATSU depuis le 19/10/2026 : les
+// HUIT cibles sont des pages — plus aucune exception nommée.
 dit('isoleDragonsGardeLesCiblesDesPages',
   foyerDragons.noeuds.length === 8
-  && foyerDragons.noeuds.every((n) => n.cible === NOEUDS[n.id].cible
-    && (n.id === 'amatsu' ? n.cible === null : /\.html$/.test(n.cible)))
+  && foyerDragons.noeuds.every((n) => n.cible === NOEUDS[n.id].cible && /\.html$/.test(n.cible))
   && foyerDragons.noeuds.filter((n) => n.poids === 0).map((n) => n.id).join(',')
     === 'maedrethnir,vranesh,draukhain,reshiram,zekrom,zohshia,amatsu'
   && foyerDragons.noeuds.filter((n) => n.poids === 1).map((n) => n.id).join(',') === 'adramelech'
