@@ -497,9 +497,11 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
   `reno-devis-final` **104 h 04 (52,7 %)**, `ultima` 30 h 52 (15,6 %), `artidispo` 17 h 52
   (9,1 %), `renoboost-ia` 16 h 56 (8,6 %), `mon-dpe-fr` 11 h 36 (5,9 %), six autres
   15 h 24 (8,1 %). Au taux d'`ultima` (5,79 $ pour 30 h 52) : ≈ 37 $ — **estimation**, taux
-  supposé commun à tous les projets. Un build de branche de RenoDevis a pris ≈ 33 s
-  (RenoDevis#395) : le NOMBRE de builds pèse plus que leur durée — **hypothèse**, la liste des
-  déploiements est refusée (403) à la session, donc non comptée.
+  supposé commun à tous les projets. ⚠️ Entre « Building » et « Ready », les aperçus affichent
+  ≈ 33 s (RenoDevis#395) et ≈ 6 s (Ultima-#404) : ces durées n'expliquent PAS 104 h ni 30 h de
+  Build CPU — **l'unité reste à comprendre** (la liste des déploiements est refusée, 403, à la
+  session : rien n'est compté). Ne pas promettre de gain proportionnel avant la capture du
+  cycle suivant.
   **`ignoreCommand` — un commit dont TOUS les fichiers sont hors déploiement n'ouvre pas de
   build.** RenoDevis : **#395 fusionnée le 19/10, prouvée sur Vercel** (code « Ready »,
   commits de documentation « Ignored » ×2 ; règle par motifs, `lib/vercelIgnore.test.ts`).
