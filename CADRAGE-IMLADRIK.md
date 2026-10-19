@@ -645,3 +645,80 @@ entre en silence* ⇒ `unit-leo-anneau` le nomme à la main, et il l'a fait.
    choix, ma paix) ? · emporté (volatilité) ?* — ou une autre.
 5. **Le blason** : « portail » provisoire ; un blason propre (la bise, une
    spirale de vent) à dessiner en boucle 2 ?
+
+### 12.6 Boucle 2b — relire les lectures (cadrage du 2026-10-19, RIEN DE CODÉ)
+
+**Point de départ mesuré** : la 2a est fusionnée (`abe073b`) ; une lecture réelle en
+base ; `GET /api/amatsu-lectures` existe déjà (bornée à 200, plus récentes d'abord) ;
+l'étoile AMATSU est inerte par décision ; aucune policy UPDATE sur `amatsu_lectures`.
+
+**Découpage proposé (EB : une boucle à la fois)** :
+- **2b-α — la maquette** : deux ou trois formes en page statique, données fictives,
+  zéro code produit (patron de `design/preview-draukhain-carto.html`). Paul choisit.
+- **2b-β — la page de relecture** dans la forme choisie, et l'étoile qui s'ouvre.
+- **2b-γ — le regard d'après** *(sur décision)* : relire, c'est pouvoir ajouter un
+  regard daté sous une lecture, sans jamais toucher l'originale.
+- **2c — la passerelle** vers l'objet jugé : boucle suivante, pas la 2b.
+
+① **But.** Paul ouvre l'étoile AMATSU et relit ses lectures quand le vent est
+retombé : d'abord l'objet et la date, les trois vents au clic. *Ligne MS* : aucun
+client, aucun contrat — c'est le perso d'IMLADRIK ; dit tel quel.
+
+② **Étapes de la 2b-β.**
+a) une coque `amatsu.html` sur le patron des pages intimes d'IMLADRIK
+(`draukhain.html` : coque du ciel, `data-leo-quadrant="imladrik"`, cartouche de Léo
+monté) ; b) `js/amatsu.js` : rendu **après session** depuis la route existante,
+`createElement`/`textContent` seulement ; c) le registre : `cible: 'amatsu.html'`,
+état ouvert, parole réécrite, repli sans JavaScript avec lien ; d) un harnais
+`smoke-amatsu` ; e) **refixer les verrous** : 13 verdicts dans 9 harnais exigent
+aujourd'hui « AMATSU seul attend » (`smoke-draukhain`, `smoke-imladrik-carto`,
+`smoke-retour-feuilles`, `unit-adaptateur-lv4`, `unit-amatsu-validate`,
+`unit-leo-anneau`, `unit-leo-defaire`, `unit-leo-mains`, `unit-registre-lv3`) ;
+IFULVIN redevient la seule étoile inerte, nommée.
+
+③ **Moyens — ligne ZS.** Aucune technologie nouvelle, aucun coût nouveau : une page
+statique, une route déjà en production, le vocabulaire de `css/boussole.css` et de
+la voûte. *Alternative de l'année* : la relecture **à la voix**, « Amatsu,
+relis-moi mes lectures », par les yeux de Léo — zéro écran. *Verdict* : complément
+utile, pas un remplacement. Paul a choisi la forme C (la page après la voix), et
+relire demande une vue calme d'ensemble que la voix rend mal au-delà de trois
+lectures. Aucune capacité évolutive ni tarif en jeu : pas de source datée requise.
+
+④ **Critères de réussite, vérifiables.**
+- L'étoile s'ouvre sur `amatsu.html` ; après connexion, la page compte autant de
+  lectures que la base (compte relu par Paul).
+- Au repos : objet et date seulement. Au clic : les trois vents.
+- Sans session (401) : rien ne s'affiche. Le HTML servi ne porte aucune lecture.
+- Le harnais le prouve **par l'absence** (aucun vent au simple survol, aucun
+  contenu dans la page servie), chaque verdict éprouvé en le cassant.
+- Patrimoine vert, CI verte, les 13 verrous refixés nommément.
+
+⑤ **Pas dans la 2b.** La passerelle (2c) ; écrire depuis la page — la voix reste
+l'entrée (leçon MAEDRETHNIR §4 bis : un formulaire de plus meurt de distance) ;
+aucun score, aucune tendance ni courbe de la liberté (« jamais une note ») ;
+aucune suppression depuis la page.
+
+⑥ **Pre-mortem.**
+(a) *Un mur de texte* — VRANESH v1 a été rejeté pour ça ⇒ affichage à la demande :
+objet et date d'abord, les vents au clic ;
+(b) *l'intime fuit* dans le HTML, les logs ou une erreur ⇒ rendu après session,
+`textContent`, page muette, absence prouvée ;
+(c) *la page n'est jamais ouverte* ⇒ l'étoile y mène, et la carte de Léo peut
+proposer « relire dans AMATSU » après une lecture ;
+(d) *relire devient corriger* — le vent du jour réécrit par celui d'après ⇒
+l'originale reste immuable (aucune policy UPDATE, déjà en base) ; un regard
+d'après, s'il vient, est un ajout séparé et daté ;
+(e) *un verrou oublié* ⇒ les 13 verdicts sont listés ci-dessus et refixés un à un ;
+(f) *pro et perso se mêlent* par la passerelle ⇒ passerelle reportée en 2c, et les
+chantiers RIVEN exclus par défaut.
+
+**Formes à maquetter (2b-α)** :
+- **la rose des vents** — les lectures disposées autour d'une rose de carte savante,
+  une par aire de vent ; le registre le plus juste, à éprouver en volume ;
+- **le livre de bord** — une ligne par lecture : la date, l'objet, trois petits
+  signes de vent ; le plus lisible quand les lectures s'accumulent ;
+- **le ciel des vents** — les lectures comme étoiles dans le moteur du ciel déjà en
+  place ; capitalise le plus, mais un ciel d'intimes risque la densité.
+
+**Décisions attendues de Paul** : le découpage (α → β, puis γ et 2c) ; le regard
+d'après (dans la 2b, plus tard, ou jamais) ; les formes à maquetter.
