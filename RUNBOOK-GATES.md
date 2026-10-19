@@ -96,13 +96,19 @@ navigateur, une fois en ligne.
 
 ---
 
-## ⏳ Gate ⑦ — Migration `leo_appels` (plafond d'appels de Léo) — go de Paul le 19/10
+## ✅ Gate ⑦ — Migration `leo_appels` (plafond d'appels de Léo) — CLOSE le 19/10
 
-**Où en est-on** : Paul a donné son go le 19/10/2026. **Non appliquée à ce jour** : le
-connecteur Supabase de la séance ne voit pas le projet `ultima` (lecture refusée ;
-il liste seulement Artidispo et RenoDevis, qui sont d'AUTRES bases — jamais ici). Il reste
-donc ton geste dashboard, **avant la fusion d'Ultima-#400** (sinon Léo tourne sur son repli
-local, 25 appels par instance).
+**Où en est-on** : ✅ **appliquée par Paul le 19/10/2026 (≈ 18:45 UTC)**, SQL Editor du
+dashboard, projet `ultima`, fichier identique à la tête `3077897` d'Ultima-#400. Vérifiée :
+- étape 2 (`leo_appels-1-etat.sql`) : **16 lignes, toutes `ok = true`** (rapporté par Paul) ;
+- étape 3 (`leo_appels-2-plafond-annule.sql`) : `ERROR: P0001: PLAFOND_OK : 100 tentatives
+  acceptées, la suivante refusée (leo_calls_quota_exhausted) — transaction annulée, aucune
+  ligne ne reste` (capture de Paul).
+Ultima-#400 fusionnée ensuite par Paul (`d67998a`, sur `3077897`) : la migration est bien
+passée AVANT le code. **Reste ouvert** : l'inscription au registre `supabase_migrations` (voir
+« À savoir ») et la relecture des advisors sécurité/performance — les deux attendent un
+connecteur qui voie `ultima`. La procédure ci-dessous reste la référence pour rejouer ou
+vérifier.
 
 **Quoi** : `supabase/migrations/20261019160000_leo_appels.sql` — une table de journal
 (quadrant, modèle, phase, tokens : aucun contenu), RLS, écriture limitée à 6 colonnes,

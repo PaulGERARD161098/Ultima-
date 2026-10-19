@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-10-19",
-    "commit": "49edef90ba7e9971600531c0cf05e255333123a4",
-    "quoi": "19/10 : CI d'Ultima- — le harnais navigateur saute quand seuls des .md changent (PR brouillon) ; règle BUDGET FIXE canonique ici ; compteur et plafond d'appels de Léo (migration préparée, NON appliquée) revu par un auditeur indépendant et corrigé ; leçons v98."
+    "commit": "d67998a",
+    "quoi": "19/10 : Ultima-#400 fusionnée (d67998a) — CI qui saute le harnais navigateur pour les .md seuls ; plafond d'appels de Léo (100/24 h) : migration leo_appels appliquée par Paul AVANT la fusion et vérifiée (16/16 vrais, PLAFOND_OK) ; leçons v98."
   },
   "prochaine_action": "Après le RDV kelvin° : reporter ses réponses dans la fiche et trancher construire ou s'abonner (VITRUVE).",
   "bloque_par": [
@@ -48,7 +48,7 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "Coûts (19/10) : Ultima- ≈ 54 % du brut Actions ; côté Vercel, `ultima` = 5,81 $ dont 5,79 $ de Build CPU (capture de Paul). Correctif CI sur claude/ci-couts-md-seuls, PR brouillon, non éprouvé sur GitHub (Actions bloquées : budget à 100 % + paiement refusé, gestes de Paul). Plafond d'appels de Léo livré dans la même PR (100/24 h, valeur confirmée) : migration 20261019160000_leo_appels.sql — go de Paul le 19/10, NON appliquée à ce jour (le connecteur Supabase de la séance ne voit pas le projet ultima) ; son geste dashboard puis vérification : RUNBOOK-GATES.md gate ⑦, supabase/verifs/. Reste aussi la limite de dépense Anthropic (Paul). Fusion sur accord du SHA ; LECONS v98 à propager aux 9 autres dépôts. Détail : CLAUDE.md « BUDGET FIXE ».",
+      "quoi": "Coûts (19/10) : Ultima- ≈ 54 % du brut Actions ; côté Vercel, `ultima` = 5,81 $ dont 5,79 $ de Build CPU. Ultima-#400 fusionnée (d67998a) : saut du harnais navigateur pour les .md seuls (à éprouver sur la première PR de documentation seule) + plafond d'appels de Léo, migration appliquée et vérifiée le 19/10 (RUNBOOK-GATES.md gate ⑦). Restent : inscription au registre supabase_migrations et advisors (connecteur qui voie ultima) ; limite de dépense Anthropic (Paul) ; LECONS v98 à propager aux 9 autres dépôts ; RenoDevis et ignoreCommand Vercel d'Ultima non traités. Détail : CLAUDE.md « BUDGET FIXE ».",
       "depuis": "2026-10-19"
     },
     {
@@ -213,6 +213,17 @@ au hasard ; verdict d'absence vert avant la réponse) — leçons v98. Arbitrage
 confirmé à 100 / 24 h ; migration NON appliquée pour l'instant (il relit le SQL puis donne un
 go explicite). Reste à Paul : la limite de dépense de la console Anthropic, le go de migration,
 la fusion sur SHA.
+
+### 2026-10-19 (fin) — migration appliquée, #400 fusionnée
+
+Le connecteur Supabase de la séance de reprise n'était pas branché du tout : arrêt sans
+écriture, puis Paul applique lui-même les trois scripts du gate ⑦ (SQL Editor, projet
+`ultima`). Étape 2 : 16/16 vrais. Étape 3 : `PLAFOND_OK`, la 101ᵉ tentative refusée,
+rien ne reste — Paul l'a d'abord lu comme un échec parce que le succès s'affiche en rouge.
+CI verte 9/9 sur `3077897`, puis fusion par Paul (`d67998a`) : la migration est passée
+avant le code, le repli local ne joue plus qu'en panne. Restent ouverts : registre
+`supabase_migrations` et advisors (connecteur), limite de dépense Anthropic, propagation
+de LECONS v98.
 
 ### 2026-10-13 — prévoir le contrôle avant le système métier
 
