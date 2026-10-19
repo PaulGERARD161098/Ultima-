@@ -31,9 +31,9 @@
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-10-15",
-    "commit": "5f3bc13c852f8c29ea13a2d324db050616b0c51a",
-    "quoi": "15/10 : « notre Kelvin » devient VITRUVE (sur Mon DPE Facile) ; fiche RDV kelvin° prête."
+    "le": "2026-10-19",
+    "commit": "49edef90ba7e9971600531c0cf05e255333123a4",
+    "quoi": "19/10 : CI d'Ultima- — le harnais navigateur saute quand seuls des .md changent (PR brouillon) ; règle BUDGET FIXE canonique ici ; compteur et plafond d'appels de Léo (migration préparée, NON appliquée) revu par un auditeur indépendant et corrigé ; leçons v98."
   },
   "prochaine_action": "Après le RDV kelvin° : reporter ses réponses dans la fiche et trancher construire ou s'abonner (VITRUVE).",
   "bloque_par": [
@@ -47,6 +47,10 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "Coûts (19/10) : Ultima- ≈ 54 % du brut Actions ; côté Vercel, `ultima` = 5,81 $ dont 5,79 $ de Build CPU (capture de Paul). Correctif CI sur claude/ci-couts-md-seuls, PR brouillon, non éprouvé sur GitHub (Actions bloquées : budget à 100 % + paiement refusé, gestes de Paul). Plafond d'appels de Léo livré dans la même PR (100/24 h, valeur confirmée) : migration 20261019160000_leo_appels.sql — go de Paul le 19/10, NON appliquée à ce jour (le connecteur Supabase de la séance ne voit pas le projet ultima) ; son geste dashboard puis vérification : RUNBOOK-GATES.md gate ⑦, supabase/verifs/. Reste aussi la limite de dépense Anthropic (Paul). Fusion sur accord du SHA ; LECONS v98 à propager aux 9 autres dépôts. Détail : CLAUDE.md « BUDGET FIXE ».",
+      "depuis": "2026-10-19"
+    },
     {
       "quoi": "Pilotage ZOH : accès HTTP avec une vraie session propriétaire encore non éprouvé depuis Work (protection Vercel après redirection ; CLI absent). Source et tests sont livrés. Chaque système doit encore prouver son propre raccordement et ses contrôles ; aucun agent permanent activé par cette règle.",
       "depuis": "2026-10-13"
@@ -179,6 +183,36 @@
 <!-- finubar:fin -->
 
 ## Journal de reprise
+
+### 2026-10-19 — la CI bloquée vient de la facture ; Ultima- en est le premier poste
+
+Paul lit Billing : budget Actions de l'organisation à 100 %, autorisation de paiement
+refusée — c'est la cause des `startup_failure` du 18/10, pas le code. Usage par dépôt
+(brut, 1ᵉʳ–19/10) : Ultima- ≈ 37,3 $ sur 68,54 $, RenoDevis ≈ 22,7 $, RenoBoost ≈ 5,5 $.
+Dans Ultima-, `tests.yml` facture ≈ 29 min par exécution (27 pour le harnais navigateur),
+≈ 220 exécutions du 01 au 18/10 pour 71 PR ouvertes ; la moitié des commits mais un tiers des PR (diff net) sont des `.md` seuls : gain attendu d'un quart à un tiers d'Ultima-.
+Paul : « go, prépare le correctif ; Ultima doit rester le coordinateur ». Fait sur la
+branche `claude/ci-couts-md-seuls` (commit `0760404`) : le job navigateur saute ses étapes
+lourdes quand le diff net ne touche que des `.md` ; `tests/unit-ci-md-seuls.mjs` exécute le
+script tel quel (18 verdicts, 8 sabotages rouges). La règle de coûts devient canonique dans
+`CLAUDE.md` ; les trois leçons de la boucle sont écrites ICI (LECONS v94) puis à propager.
+Non éprouvé sur GitHub : première exécution réelle après déblocage.
+
+### 2026-10-19 (suite) — le plafond d'appels de Léo, revu puis corrigé
+
+Question de Paul : garder la tour de contrôle sans facture énorme. Lu à la source : le
+coût d'Ultima côté Vercel est du build (5,79 $ de 5,81 $), celui de Léo est chez Anthropic,
+sans compteur ni plafond avant cette boucle. Livré sur la même branche : journal
+`leo_appels` (tentative posée AVANT le coût, issue et tokens après, zéro contenu),
+plafond atomique 100/24 h par propriétaire, repli local 25/instance dit à l'écran. Revue
+indépendante : pas de critique ; huit constats (S1–S8) vérifiés et corrigés — repli plus
+bas que la base, aucune relance du SDK facturée hors plafond, écriture limitée aux colonnes
+du code, une trace = une tentative et une issue, preuves SQL rejouées en CI (PGlite).
+Deux défauts d'instrument trouvés par le sabotage et corrigés (course PostgreSQL laissée
+au hasard ; verdict d'absence vert avant la réponse) — leçons v98. Arbitrages de Paul (19/10) : plafond
+confirmé à 100 / 24 h ; migration NON appliquée pour l'instant (il relit le SQL puis donne un
+go explicite). Reste à Paul : la limite de dépense de la console Anthropic, le go de migration,
+la fusion sur SHA.
 
 ### 2026-10-13 — prévoir le contrôle avant le système métier
 

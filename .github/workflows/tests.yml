@@ -47,15 +47,45 @@ jobs:
       matrix:
         groupe: [0, 1]
     steps:
+      # fetch-depth 2 : le commit testé et ses parents, de quoi lire le diff net (la
+      # fusion d'une PR a deux parents ; HEAD^1 est sa base).
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+          fetch-depth: 2
+      # Facture GitHub du 19/10/2026 : Ultima- ≈ 54 % des minutes Actions de
+      # l'organisation, et ce harnais = 27 min des 29 facturées par exécution.
+      # Aucun harnais navigateur ne lit de `.md` (mesuré : 59 fichiers, 3 données
+      # factices, 19 commentaires) : quand seuls des `.md` changent, il ne peut rien
+      # apprendre. Le job `unit` tourne TOUJOURS (il garde LECONS.md et le sceau).
+      # On saute des ÉTAPES, pas le job : le contrôle reste présent et vert, il
+      # n'y a donc jamais de contrôle « en attente ». Toute erreur, tout doute,
+      # tout fichier non `.md` → le harnais s'exécute. Gardé par
+      # `tests/unit-ci-md-seuls.mjs`, qui exécute CE script tel quel.
+      - name: Portée du changement
+        id: portee
+        run: |
+          seuls_md=false
+          if fichiers=$(git diff --name-only HEAD^1 HEAD) && [ -n "$fichiers" ]; then
+            rc=0
+            printf '%s\n' "$fichiers" | grep -qvE '\.md$' || rc=$?
+            if [ "$rc" -eq 1 ]; then seuls_md=true; fi
+          fi
+          if [ "$seuls_md" = true ]; then
+            echo "Harnais navigateur sauté : seuls des .md changent."
+          else
+            echo "Harnais navigateur exécuté."
+          fi
+          echo "seuls_md=$seuls_md" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-node@v4
+        if: steps.portee.outputs.seuls_md != 'true'
         with:
           node-version: 22
           cache: npm
       - run: npm ci --ignore-scripts
+        if: steps.portee.outputs.seuls_md != 'true'
       - name: Harnais navigateur isolé
+        if: steps.portee.outputs.seuls_md != 'true'
         run: |
           mkdir -p tests/.cache "$RUNNER_TEMP/lv1-memoire"
           cp memoire/LECONS.md "$RUNNER_TEMP/lv1-memoire/LECONS.md"

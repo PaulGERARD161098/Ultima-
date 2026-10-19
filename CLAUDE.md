@@ -448,6 +448,48 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
   + `pull_request` + lancement manuel). À répliquer dans les autres dépôts qui
   portent le même déclencheur.
 
+- **BUDGET FIXE — VERCEL ET GITHUB (règle canonique, tous les dépôts)** *(Paul,
+  2026-10-19 : « on paie trop » ; puis « il faut qu'Ultima reste le coordinateur »
+  — la règle vit ICI, les dépôts la résument)*. Les minutes GitHub Actions et le
+  compte Vercel sont **partagés par tous les dépôts** : avant d'ajouter un cron,
+  un workflow planifié, un déclencheur ou une étape de build **dans n'importe
+  lequel**, nommer ce que ça coûte (minutes par exécution × exécutions par jour ;
+  appels par jour ; déploiements) et le justifier.
+  **Relevé du 19/10 (captures de Paul — les factures ne se lisent pas depuis une
+  session)** : GitHub, organisation = 3 000 min incluses consommées, **facturable
+  50 $** (68,54 $ bruts − 18,54 $), budget Actions à 100 % et autorisation de
+  paiement refusée → **toutes les Actions en `startup_failure` depuis le 18/10
+  16:22 UTC**, `main` compris. Brut par dépôt, 1ᵉʳ–19/10 : **Ultima- ≈ 37,3 $**,
+  RenoDevis ≈ 22,7 $, RenoBoost ≈ 5,5 $, autres ≈ 3,5 $. Vercel Pro = 20 $ de
+  crédit consommés + 21,50 $ à la demande (cycle 25/09–25/10).
+  ⛔ **Un `startup_failure` sur TOUS les workflows d'un compte se lit d'abord dans
+  Billing, pas dans le code.**
+  ⛔ Ne pas couper un cron de surveillance (sentinelle, ghl-sync) pour économiser
+  sans l'avis de Paul.
+  ⚠️ Ultima- : `tests.yml` facture ≈ 29 min par exécution, dont 27 pour le harnais
+  navigateur. Il **saute ses étapes** (pas son job) quand le diff NET de la PR, ou
+  du commit fusionné, ne touche que des `.md` ; le job `unit` tourne toujours.
+  Gardé par `tests/unit-ci-md-seuls.mjs`, qui exécute le script de l'étape tel
+  quel. ⚠️ Non éprouvé sur GitHub tant que les Actions sont bloquées.
+  Leviers et incidents de RenoBoost (crons, `ignoreCommand` ≤ 256 caractères,
+  `.md` retirés du déploiement) : `RenoBoost/CLAUDE.md` « BUDGET FIXE » et
+  `RenoBoost/ROADMAP-2026-10-19-fin-de-session.md` §8. Pistes ouvertes : RenoDevis
+  (2ᵉ consommateur, non lu), la suite unitaire jouée trois fois par exécution.
+  **Vercel, projet `ultima`** (capture Usage de Paul, cycle 25/09–25/10, lue le 19/10) :
+  **5,81 $**, dont **5,79 $ de Build CPU (30 h)** ; fonctions 3,07 K invocations et 3 min
+  de CPU = 0,01 $. Le coût d'Ultima côté Vercel est donc du BUILD, pas de l'exécution
+  (`vercel.json` n'a pas d'`ignoreCommand` : un build par push). ⚠️ Le coût d'un appel de
+  Léo ne passe pas par Vercel : il est facturé par Anthropic.
+  **Le plafond d'appels de Léo** (19/10) : `api/_lib/leo-appels.js` + migration
+  `supabase/migrations/20261019160000_leo_appels.sql` (100 appels / 24 h / propriétaire,
+  atomique côté base ; valeur confirmée par Paul le 19/10). ⛔ **Migration non
+  appliquée à ce jour. Go de Paul le 19/10 ; le connecteur Supabase de la séance ne voit pas
+  le projet `ultima` (lecture refusée) : application par son geste dashboard, procédure et
+  scripts de vérification dans `RUNBOOK-GATES.md` gate ⑦ et `supabase/verifs/`.** Avant son application, Léo tourne en repli local
+  (25 par instance, dit en log et dans la réponse, `journal: 'local'`) — plus bas que la
+  base, et PAS un plafond global : le plafond dur reste la limite de dépense de la
+  console Anthropic (geste de Paul). Le journal sert aussi de mesure d'usage de Léo.
+
 > Les **leçons** (garde-fous, mesures, ce qu'on donne à Paul) ont leur fichier :
 > `memoire/LECONS.md`. Ne restent ici que les règles opérationnelles du dépôt.
 
