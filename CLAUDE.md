@@ -478,7 +478,8 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
   **Vercel, projet `ultima`** (capture Usage de Paul, cycle 25/09–25/10, lue le 19/10) :
   **5,81 $**, dont **5,79 $ de Build CPU (30 h)** ; fonctions 3,07 K invocations et 3 min
   de CPU = 0,01 $. Le coût d'Ultima côté Vercel est donc du BUILD, pas de l'exécution
-  (`vercel.json` n'a pas d'`ignoreCommand` : un build par push). ⚠️ Le coût d'un appel de
+  (`vercel.json` n'avait pas d'`ignoreCommand` : un build par push, documentation comprise —
+  posé le 19/10, voir « Où part le reste » ci-dessous). ⚠️ Le coût d'un appel de
   Léo ne passe pas par Vercel : il est facturé par Anthropic.
   **Le plafond d'appels de Léo** (19/10) : `api/_lib/leo-appels.js` + migration
   `supabase/migrations/20261019160000_leo_appels.sql` (100 appels / 24 h / propriétaire,
@@ -489,6 +490,36 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
   (25 par instance, dit en log et dans la réponse, `journal: 'local'`) — plus bas que la
   base, et PAS un plafond global : le plafond dur reste la limite de dépense de la
   console Anthropic (geste de Paul). Le journal sert aussi de mesure d'usage de Léo.
+
+- **OÙ PART LE RESTE — relevé du 19/10, lu aux sources, pas déduit** *(Paul : « regarde ce
+  qu'il se passe sur les autres sessions, il faut réduire les coûts dès maintenant »)*.
+  **Vercel, Build CPU du cycle 25/09–25/10** (capture de Paul) : 197 h 24 au total ;
+  `reno-devis-final` **104 h 04 (52,7 %)**, `ultima` 30 h 52 (15,6 %), `artidispo` 17 h 52
+  (9,1 %), `renoboost-ia` 16 h 56 (8,6 %), `mon-dpe-fr` 11 h 36 (5,9 %), six autres
+  15 h 24 (8,1 %). Au taux d'`ultima` (5,79 $ pour 30 h 52) : ≈ 37 $ — **estimation**, taux
+  supposé commun à tous les projets. ⚠️ Entre « Building » et « Ready », les aperçus affichent
+  ≈ 33 s (RenoDevis#395) et ≈ 6 s (Ultima-#404) : ces durées n'expliquent PAS 104 h ni 30 h de
+  Build CPU — **l'unité reste à comprendre** (la liste des déploiements est refusée, 403, à la
+  session : rien n'est compté). Ne pas promettre de gain proportionnel avant la capture du
+  cycle suivant.
+  **`ignoreCommand` — un commit dont TOUS les fichiers sont hors déploiement n'ouvre pas de
+  build.** RenoDevis : **#395 fusionnée le 19/10, prouvée sur Vercel** (code « Ready »,
+  commits de documentation « Ignored » ×2 ; règle par motifs, `lib/vercelIgnore.test.ts`).
+  RenoBoost : #611 (brouillon), la liste est `.vercelignore`. **Ultima : même chaîne que
+  RenoBoost, `.vercelignore` pour liste unique** (un fait, un seul endroit) ; rejouée sur
+  `main` depuis le 25/09 : 93 commits sur 176 (fusions comprises) sautés, 0 écart avec un
+  classement indépendant ; `tests/unit-vercel-ignore.mjs` (26 verdicts, 7 sabotages tous
+  rouges). ⚠️ Elle juge le dernier commit d'un push : **le dernier commit d'un push porte du
+  code** (ou est mixte). Le gain en dollars se lira sur la capture Usage du cycle suivant.
+  **Anthropic — les sessions et les routines** : `get_session` donne
+  `external_metadata.usage.cost_usd` (**tarif catalogue, pas la facture** : le forfait ou la
+  console de Paul tranchent) et `context_usage.used_tokens`. Les 40 dernières sessions
+  interactives ≈ 1 547 $ ; la routine horaire « Réponse d'Henry » ≈ **268,5 $** pour répondre
+  « rien de nouveau » ; « Veille BTP » ≈ 40,5 $. Les deux sont **désactivées** (19/10,
+  réversible) ; cause et règle : `memoire/LECONS.md`, « UNE ROUTINE DONT L'ARRÊT DÉPEND D'UN
+  OUTIL ABSENT… ». ⚠️ Une session coûte surtout par son contexte relu à chaque tour : au-delà
+  de ≈ 400 k tokens, repartir d'une session neuve avec un prompt de reprise. Limite de dépense
+  Anthropic : « 30 dollars » annoncés par Paul le 19/10, **non relus** dans la console.
 
 > Les **leçons** (garde-fous, mesures, ce qu'on donne à Paul) ont leur fichier :
 > `memoire/LECONS.md`. Ne restent ici que les règles opérationnelles du dépôt.
