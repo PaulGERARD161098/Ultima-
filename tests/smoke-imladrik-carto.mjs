@@ -145,20 +145,21 @@ console.log('— A. imladrik.html : la cartographie Kalamn-talaen —');
     ['reshiram', 'reshiram.html'],
     ['zekrom', 'zekrom.html'],
     ['zohshia', 'zohshia.html'],
+    ['amatsu', 'amatsu.html'],
   ]) {
     verifier(`${id} → ${cible} (dans le repli sans JavaScript)`, cibles.includes(cible),
       JSON.stringify(cibles));
   }
-  verifier('Le repli sans JavaScript ne mène plus à TAO (sous verrou : sept liens lus)',
-    cibles.length === 7 && !cibles.some((c) => /tao/i.test(c)) && !/\btao\b/i.test(repli.texte),
+  verifier('Le repli sans JavaScript ne mène plus à TAO (sous verrou : huit liens lus)',
+    cibles.length === 8 && !cibles.some((c) => /tao/i.test(c)) && !/\btao\b/i.test(repli.texte),
     JSON.stringify(cibles));
   verifier('Le repli sans JavaScript dit IFULVIN, sans lien (étoile d\'attente)',
     /IFULVIN/.test(repli.texte) && !cibles.some((c) => /ifulvin/i.test(c)),
     JSON.stringify(cibles));
-  // AMATSU (18/10/2026), même règle qu'IFULVIN : dit, sans lien — une page qui
-  // n'existe pas ne se promet pas.
-  verifier('Le repli sans JavaScript dit AMATSU, sans lien (étoile d\'attente, 18/10/2026)',
-    /AMATSU/.test(repli.texte) && !cibles.some((c) => /amatsu/i.test(c)),
+  // AMATSU fut dit sans lien du 18 au 19/10/2026 (étoile d'attente) ; sa page
+  // ouverte (2b-β), le repli le nomme ET y mène.
+  verifier('Le repli sans JavaScript nomme AMATSU et mène à sa page (19/10/2026)',
+    /AMATSU/.test(repli.texte) && cibles.includes('amatsu.html'),
     JSON.stringify(cibles));
   // « Aucun cap à venir restant » N'EST PLUS VRAI DE L'ARBRE : il reste UN cap à
   // venir, IFULVIN, sous ARMES. Au premier niveau il n'y en a toujours aucun (les
@@ -321,11 +322,12 @@ console.log('— A2. imladrik.html#constellation-dragons : les six étoiles —'
       capsD.length === 8
       && (await page.locator(`g.ciel-etoile[data-noeud-id="${id}"]`).count()) === 0);
   }
-  // TRANSPOSÉ (18/10/2026) : AMATSU, le dragon de l'air, est une étoile d'attente —
-  // la seule inerte sous DRAGONS, NOMMÉE : « aucune » ne reviendrait vrai que si
-  // l'on retirait l'étoile, et une deuxième inerte ferait rougir la ligne.
-  verifier('DRAGONS : une seule étoile inerte, AMATSU (18/10/2026) — les sept autres ont leur page',
-    capsD.length === 8 && capsD.filter((c) => c.avenir).map((c) => c.id).join() === 'amatsu');
+  // RETRANSPOSÉ (19/10/2026) : AMATSU, inerte du 18 au 19/10, a sa page. « Aucune
+  // inerte » ne vaut que sous verrou : huit étoiles lues, AMATSU présente ET active
+  // — retirer l'étoile ferait rougir la ligne au lieu de la verdir.
+  verifier('DRAGONS : aucune étoile inerte — les huit ont leur page, AMATSU comprise (19/10/2026)',
+    capsD.length === 8 && capsD.filter((c) => c.avenir).length === 0
+    && capsD.some((c) => c.id === 'amatsu' && !c.avenir));
   verifier('DRAGONS : le fil nomme le foyer (IMLADRIK › DRAGONS)',
     ((await page.locator('.ciel-fil-ici').textContent()) || '').trim() === 'DRAGONS');
   verifier('DRAGONS : retour vers omega.html toujours présent',
@@ -791,10 +793,11 @@ console.log('— C. ARMES et DRAGONS plongent ; IFULVIN, seul cap « à venir »
       dragons.length === 8
       && JSON.stringify(dragons.map((c) => c.id).sort()) === JSON.stringify([...NOEUDS['constellation-dragons'].enfants].sort()),
       dragons.map((c) => c.id).join(','));
-    // ZOH SHIA a sa page depuis le 04/10/2026 ; AMATSU (18/10/2026) attend la sienne :
-    // UNE inerte sous DRAGONS, nommée.
-    verifier('DRAGONS : aria-disabled ⇔ inerte attendu (une seule : AMATSU)',
-      reglesTenues(dragons) && dragons.filter((c) => c.avenir).map((c) => c.id).join() === 'amatsu');
+    // ZOH SHIA a sa page depuis le 04/10/2026, AMATSU depuis le 19/10/2026 :
+    // AUCUNE inerte sous DRAGONS, sous verrou d'AMATSU lue et active.
+    verifier('DRAGONS : aria-disabled ⇔ inerte attendu (aucune, AMATSU active)',
+      reglesTenues(dragons) && dragons.filter((c) => c.avenir).length === 0
+      && dragons.some((c) => c.id === 'amatsu' && !c.avenir));
 
     // Zéro requête externe / zéro erreur : mesurés AVANT de quitter imladrik.html —
     // la page de destination du témoin (ci-dessous) n'est pas le sujet de cette
@@ -873,10 +876,10 @@ console.log('— C. ARMES et DRAGONS plongent ; IFULVIN, seul cap « à venir »
     verifier('Verrou : les trois écrans ont été lus (2 + 8 + 1 étoiles)',
       (surLesTroisEcrans.premier || []).length === 2 && (surLesTroisEcrans.dragons || []).length === 8
       && (surLesTroisEcrans.armes || []).length === 1);
-    // UN depuis que ZOH SHIA a sa page (04/10/2026) : IFULVIN (ARMES). DEUX depuis le
-    // 18/10/2026 : AMATSU (DRAGONS) attend la sienne.
-    verifier('Exactement DEUX caps à venir sur les trois écrans : AMATSU et IFULVIN',
-      [...avenirsVus].sort().join() === 'amatsu,ifulvin', avenirsVus.join(','));
+    // UN depuis que ZOH SHIA a sa page (04/10/2026) : IFULVIN (ARMES). Deux du 18 au
+    // 19/10/2026 (AMATSU attendait la sienne), de nouveau UN depuis la 2b-β.
+    verifier('Exactement UN cap à venir sur les trois écrans : IFULVIN',
+      [...avenirsVus].sort().join() === 'ifulvin', avenirsVus.join(','));
     // La même chose lue dans le REGISTRE, par la même descente (constellations seules).
     const feuillesSansPage = [];
     const descendre = (id) => (NOEUDS[id].enfants || []).forEach((e) => {
@@ -884,8 +887,8 @@ console.log('— C. ARMES et DRAGONS plongent ; IFULVIN, seul cap « à venir »
       else if (!NOEUDS[e].cible && !(NOEUDS[e].enfants || []).length) { feuillesSansPage.push(e); }
     });
     descendre('imladrik');
-    verifier('Le registre dit la même chose : deux caps sans page sous les constellations, AMATSU et IFULVIN',
-      [...feuillesSansPage].sort().join() === 'amatsu,ifulvin', feuillesSansPage.join(','));
+    verifier('Le registre dit la même chose : un seul cap sans page sous les constellations, IFULVIN',
+      [...feuillesSansPage].sort().join() === 'ifulvin', feuillesSansPage.join(','));
   }
 }
 

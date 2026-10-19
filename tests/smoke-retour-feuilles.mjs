@@ -156,19 +156,22 @@ const DRAGONS = [
   // ZOH SHIA a sa page depuis le 04/10/2026 (un badge par techno) : il revient
   // à sa constellation comme les six autres.
   ['zohshia', 'zohshia.html'],
+  // AMATSU a sa page depuis le 19/10/2026 (la rose des vents des lectures) : il
+  // revient à sa constellation comme les sept autres.
+  ['amatsu', 'amatsu.html'],
 ];
 const LIBELLE_COURT = ['adramelech', 'reshiram', 'zekrom', 'zohshia'];
 const RETOUR_DRAGONS = 'imladrik.html#constellation-dragons';
 // Depuis le 04/10/2026, SEPT enfants de DRAGONS ont leur page (ZOH SHIA compris).
-// TRANSPOSÉ (18/10/2026) : AMATSU, le dragon de l'air, est une étoile d'attente —
-// sans page, donc sans retour à prouver. Le verrou ne se relâche pas : les pages
-// sont EXACTEMENT les enfants à cible, et le seul enfant sans cible est AMATSU,
-// nommé, à l'état « À venir » — un autre dragon sans page ferait rougir cette ligne.
-verifier('Verrou : les sept pages sont exactement les enfants à page de DRAGONS ; AMATSU seul attend',
+// AMATSU, étoile d'attente du 18 au 19/10/2026, a la sienne depuis la 2b-β : les
+// HUIT enfants ont leur page, et la liste éprouvée ici est EXACTEMENT la leur —
+// un dragon ajouté sans page, ou une page oubliée ici, ferait rougir cette ligne.
+verifier('Verrou : les huit pages sont exactement les enfants de DRAGONS, aucun n’attend',
   JSON.stringify(NOEUDS['constellation-dragons'].enfants.filter((id) => NOEUDS[id].cible))
     === JSON.stringify(DRAGONS.map((d) => d[0]))
-  && NOEUDS['constellation-dragons'].enfants.filter((id) => !NOEUDS[id].cible).join() === 'amatsu'
-  && NOEUDS.amatsu.etat === 'À venir');
+  && NOEUDS['constellation-dragons'].enfants.filter((id) => !NOEUDS[id].cible).length === 0
+  && NOEUDS['constellation-dragons'].enfants.length === 8
+  && NOEUDS.amatsu.etat === 'Ouvert');
 
 // Ce que le ciel montre à l'arrivée, mesuré dans un navigateur mobile.
 async function etoilesApresLeRetour(idDragon, fichier) {
