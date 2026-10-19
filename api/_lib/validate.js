@@ -1445,3 +1445,32 @@ export function validateAltheaReleve(body, mode, aujourdhui) {
   }
   return { value: out };
 }
+
+// ---------------------------------------------------------------------------
+// AMATSU, le dragon de l'air — une LECTURE (boucle 2a, 2026-10-18).
+// Miroir EXACT des CHECK de `20261018160000_amatsu_lectures.sql` : quatre
+// textes requis, détourés, bornés (jamais tronqués : ce que la carte de Léo
+// montre est ce qui sera stocké). Aucun champ de plus — pas d'owner_id, pas
+// de date (le serveur date), pas de note : trois questions, jamais une note.
+// ---------------------------------------------------------------------------
+export const LECTURE_AMATSU_BORNES = Object.freeze({ objet: 200, bise: 500, souffle: 500, ouragan: 500 });
+const LECTURE_AMATSU_FIELDS = Object.keys(LECTURE_AMATSU_BORNES);
+
+export function validateLectureAmatsu(body) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Corps de requête invalide' };
+  }
+  const unknown = rejectUnknown(body, LECTURE_AMATSU_FIELDS);
+  if (unknown) return { error: unknown };
+
+  const out = {};
+  for (const champ of LECTURE_AMATSU_FIELDS) {
+    const brut = body[champ];
+    // Message générique : jamais le contenu dicté dans une erreur (§5 intime).
+    if (typeof brut !== 'string') return { error: 'Lecture invalide' };
+    const net = brut.trim();
+    if (net.length < 1 || net.length > LECTURE_AMATSU_BORNES[champ]) return { error: 'Lecture invalide' };
+    out[champ] = net;
+  }
+  return { value: out };
+}

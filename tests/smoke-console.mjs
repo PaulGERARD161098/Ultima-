@@ -434,7 +434,9 @@ for (const attendu of ['maedrethnir.html', 'vranesh.html', 'draukhain.html', 'ad
   'reshiram.html', 'zekrom.html', 'zohshia.html']) {
   verifier(`IMLADRIK : porte ouverte vers ${attendu}`, hrefsImladrik.includes(attendu), JSON.stringify(hrefsImladrik));
 }
-verifier('IMLADRIK : plus aucune porte vers tao.html (sous verrou : sept portes lues — ZOH SHIA depuis le 04/10/2026)',
+// AMATSU (18/10/2026) est une étoile d'attente : dite dans le repli, SANS porte —
+// le compte des portes reste sept (smoke-imladrik-carto prouve la mention sans lien).
+verifier('IMLADRIK : plus aucune porte vers tao.html (sous verrou : sept portes lues — ZOH SHIA depuis le 04/10/2026, AMATSU sans porte)',
   hrefsImladrik.length === 7 && !hrefsImladrik.some((h) => /tao/i.test(h)), JSON.stringify(hrefsImladrik));
 // « aiguilles » ABANDONNÉES — un ciel n'a pas de moyeu (même abandon qu'en LV4
 // ④a). Remplacées par ce qu'elles approchaient : une étoile par entrée.
@@ -455,14 +457,14 @@ await pageImladrik.goto(`${BASE}/imladrik.html#constellation-dragons`, { waitUnt
 await attendrePret(pageImladrik);
 await pageImladrik.waitForTimeout(1200);
 const capsDragons = await lireCaps(pageImladrik);
-// SEPT depuis le 04/10/2026 : ZOH SHIA, le dragon de la technologie.
-verifier('IMLADRIK#constellation-dragons : MAEDRETHNIR, VRANESH, DRAUKHAIN, ADRAMELECH, RESHIRAM, ZEKROM, ZOH SHIA paraissent (et eux seuls)',
+// SEPT depuis le 04/10/2026 (ZOH SHIA), HUIT depuis le 18/10/2026 (AMATSU, le dragon de l'air).
+verifier('IMLADRIK#constellation-dragons : MAEDRETHNIR, VRANESH, DRAUKHAIN, ADRAMELECH, RESHIRAM, ZEKROM, ZOH SHIA, AMATSU paraissent (et eux seuls)',
   JSON.stringify(capsDragons.map((c) => c.nom).sort())
-    === JSON.stringify(['ADRAMELECH', 'DRAUKHAIN', 'MAEDRETHNIR', 'RESHIRAM', 'VRANESH', 'ZEKROM', 'ZOH SHIA'])
+    === JSON.stringify(['ADRAMELECH', 'AMATSU', 'DRAUKHAIN', 'MAEDRETHNIR', 'RESHIRAM', 'VRANESH', 'ZEKROM', 'ZOH SHIA'])
   && capsDragons.length === NOEUDS['constellation-dragons'].enfants.length,
   JSON.stringify(capsDragons.map((c) => c.nom)));
-verifier('IMLADRIK#constellation-dragons : 7 étoiles au ciel',
-  (await pageImladrik.locator('g.ciel-etoile[data-noeud-id]').count()) === 7);
+verifier('IMLADRIK#constellation-dragons : 8 étoiles au ciel',
+  (await pageImladrik.locator('g.ciel-etoile[data-noeud-id]').count()) === 8);
 // ADRAMELECH garde son état « Privé » sur son nouveau cadran (déplacé du premier
 // niveau d'IMLADRIK, où il vivait, vers les DRAGONS — la garantie suit l'étoile).
 verifier('IMLADRIK#constellation-dragons : ADRAMELECH marqué « Privé »',

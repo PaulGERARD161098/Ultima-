@@ -462,6 +462,26 @@
     // ci-dessus — bornes alignées sur les validateurs serveur (jamais de
     // troncature silencieuse : ce que la carte affiche est ce qui sera
     // stocké), résolution des *_ref côté front, aucun outil destructeur.
+    // ---- AMATSU (boucle 2a, 2026-10-18) : la lecture du dragon de l'air.
+    // Transversal : le même gabarit sert RIVEN, ADRAMELECH et IMLADRIK. Aucune
+    // *_ref : l'objet jugé est du texte dicté (la passerelle vers un objet
+    // existant est la boucle 2b). Bornes = validateLectureAmatsu (200/500/500/
+    // 500) — refus plutôt que troncature, comme partout ici.
+    if (outil === 'proposer_lecture_amatsu') {
+      var bornesLecture = { objet: 200, bise: 500, souffle: 500, ouragan: 500 };
+      var clesLecture = Object.keys(bornesLecture);
+      var corpsLecture = {};
+      for (var li = 0; li < clesLecture.length; li++) {
+        var cleLecture = clesLecture[li];
+        var valeurLecture = args[cleLecture];
+        if (typeof valeurLecture !== 'string' || !valeurLecture || valeurLecture.length > bornesLecture[cleLecture]) {
+          return { ok: false, raison: 'invalide' };
+        }
+        corpsLecture[cleLecture] = valeurLecture;
+      }
+      return { ok: true, url: '/api/amatsu-lectures', methode: 'POST', corps: corpsLecture };
+    }
+
     if (outil === 'proposer_page_journal') {
       if (typeof args.contenu !== 'string' || !args.contenu || args.contenu.length > 20000) {
         return { ok: false, raison: 'invalide' };

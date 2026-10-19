@@ -32,10 +32,10 @@
   },
   "dernier_arret": {
     "le": "2026-10-19",
-    "commit": "49edef90ba7e9971600531c0cf05e255333123a4",
-    "quoi": "19/10 : CI d'Ultima- — le harnais navigateur saute quand seuls des .md changent (PR brouillon) ; règle BUDGET FIXE canonique ici ; compteur et plafond d'appels de Léo (migration préparée, NON appliquée) revu par un auditeur indépendant et corrigé ; leçons v98."
+    "commit": "c8bd44ee8aff387e281149020926a7bcf221fe7c",
+    "quoi": "19/10 : #400 fusionnée (d67998a, go de Paul sur 3077897 : coûts de CI + plafond d'appels de Léo). AMATSU : étoile (1) et voix de Léo (2a) prouvées, CI de #399 verte 9/9 ; migration amatsu_lectures appliquée par Paul après une faille de droits fermée ; main ramené dans #399."
   },
-  "prochaine_action": "Après le RDV kelvin° : reporter ses réponses dans la fiche et trancher construire ou s'abonner (VITRUVE).",
+  "prochaine_action": "Go de Paul sur le SHA final de #399 (main d67998a ramené, patrimoine rejoué), fusion, puis la preuve réelle d'AMATSU en production : « Amatsu, … » dicté à Léo, puis `select count(*), max(created_at) from public.amatsu_lectures` (le compte seul). Ensuite cadrer la 2b (page et registre de relecture, passerelle vers l'objet jugé).",
   "bloque_par": [
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
@@ -48,7 +48,11 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "Coûts (19/10) : Ultima- ≈ 54 % du brut Actions ; côté Vercel, `ultima` = 5,81 $ dont 5,79 $ de Build CPU (capture de Paul). Correctif CI sur claude/ci-couts-md-seuls, PR brouillon, non éprouvé sur GitHub (Actions bloquées : budget à 100 % + paiement refusé, gestes de Paul). Plafond d'appels de Léo livré dans la même PR (100/24 h, valeur confirmée) : migration 20261019160000_leo_appels.sql — go de Paul le 19/10, NON appliquée à ce jour (le connecteur Supabase de la séance ne voit pas le projet ultima) ; son geste dashboard puis vérification : RUNBOOK-GATES.md gate ⑦, supabase/verifs/. Reste aussi la limite de dépense Anthropic (Paul). Fusion sur accord du SHA ; LECONS v98 à propager aux 9 autres dépôts. Détail : CLAUDE.md « BUDGET FIXE ».",
+      "quoi": "AMATSU : étoile (1) et voix de Léo (2a) bâties, prouvées, CI verte ; migration appliquée par Paul le 19/10 et contrôlée. Reste la preuve réelle, après la fusion de #399 : la preview ne voit pas ULTIMA_PROPRIETAIRES malgré « Production and Preview » coché et un redéploiement (piste : « Separate Production Secret Values », valeur vide côté Preview — non vérifié, le connecteur Vercel ne lit pas les variables). 2b à cadrer. CADRAGE-IMLADRIK.md §12.",
+      "depuis": "2026-10-18"
+    },
+    {
+      "quoi": "Coûts (19/10) : PR #400 FUSIONNÉE le 19/10 (d67998a), sur le go de Paul portant sur 3077897. Plafond d'appels de Léo : migration 20261019160000_leo_appels.sql APPLIQUÉE et vérifiée par Paul vers 18:45 UTC (16 contrôles ok ; la 101ᵉ tentative refusée — rapporté dans #400). Actions débloquées (CI 9/9 sur #400 et #399). Restent : le saut du harnais pour les .md seuls, non éprouvé sur GitHub (la première PR de documentation seule le dira) ; migration hors registre supabase_migrations, advisors non relus ; RUNBOOK-GATES.md gate ⑦ et CLAUDE.md disent encore « non appliquée » (PR de documentation prévue par la séance de #400) ; limite de dépense Anthropic (Paul) ; LECONS v98 à propager aux 9 autres dépôts. Détail : CLAUDE.md « BUDGET FIXE ».",
       "depuis": "2026-10-19"
     },
     {
