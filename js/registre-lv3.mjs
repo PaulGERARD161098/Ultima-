@@ -398,16 +398,20 @@ export const NOEUDS = {
   // avec soi-même, ses choix et sa paix ; l'air est volatil — vigilance à ne pas se
   // laisser emporter par le vent. Le contenu se cadre à sa boucle 2
   // (CADRAGE-IMLADRIK.md §12). Blason propre « amatsu » (les trois vents),
-  // dessiné sur décision de Paul le 18/10 ; la page reste à venir.
+  // dessiné sur décision de Paul le 18/10 ; la page est la boucle 2b — d'ici
+  // là, l'étoile reste inerte et Amatsu souffle par la voix de Léo (2a).
   amatsu: {
     nom: 'AMATSU',
     epithete: 'Dragon de l’air',
     etat: 'À venir',
     blason: 'amatsu',
     cible: null,
-    resume: 'Le dragon de l’air : liberté, force indomptée, fraîcheur de la bise et '
-      + 'terreur de l’ouragan. Sa question : cette décision, ce projet, cette idée '
-      + 'te rend-elle plus libre ? L’étoile est posée ; sa forme reste à décider.',
+    // Réécrit le 19/10 : « sa forme reste à décider » était devenu faux (forme C
+    // décidée, la voix de Léo bâtie). Paul a cherché à cliquer l'étoile : la
+    // parole dit maintenant où aller, puisqu'il n'y a pas de page à ouvrir.
+    resume: 'Le dragon de l’air. Sa question à une décision, un projet, une idée : '
+      + 'te rendra-t-elle plus libre ? Pas de page : dis « Amatsu, … » à Léo, '
+      + 'elle te pose les trois vents.',
   },
 };
 
