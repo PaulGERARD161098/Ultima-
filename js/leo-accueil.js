@@ -1280,10 +1280,14 @@
           // La cause d'un 502 n'est affichée que si elle est dans la liste
           // fermée du serveur (MOTIF_CAUSE_IA) — jamais un texte quelconque.
           var cause = resultat.corps && typeof resultat.corps.cause === 'string' &&
-            /^ia (\d{3}( crédit)?|délai|réseau|vide)$/.test(resultat.corps.cause)
+            /^ia (\d{3}( crédit)?|délai|réseau|vide|plafond)$/.test(resultat.corps.cause)
             ? ' · ' + resultat.corps.cause : '';
-          bulle('erreur', "Léo n'a pas pu répondre (code " +
-            (Number.isInteger(resultat.statut) ? resultat.statut : '?') + cause + ') — réessayez.');
+          // 19/10 : le plafond d'appels sur 24 h n'est pas un incident à retenter —
+          // il se lève tout seul quand la fenêtre glisse, et le dire évite l'insistance.
+          bulle('erreur', resultat.corps && resultat.corps.cause === 'ia plafond'
+            ? "Léo a atteint son plafond d'appels sur 24 h (code 429 · ia plafond) — il reprendra seul quand la fenêtre glisse."
+            : "Léo n'a pas pu répondre (code " +
+              (Number.isInteger(resultat.statut) ? resultat.statut : '?') + cause + ') — réessayez.');
         }
         rearmer();
       }, function () {

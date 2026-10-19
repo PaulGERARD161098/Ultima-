@@ -24,6 +24,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { ok, fail, methodNotAllowed, logError, readJsonBody, bodyFail } from './_lib/http.js';
 import { requireProprietaire } from './_lib/proprietaire.js';
 import { ecrituresAutoCoupees } from './_lib/leo-execution.js';
+import { ouvrirAppel, cloreAppel } from './_lib/leo-appels.js';
 import {
   LEO_MODELE,
   MAX_TOKENS_REPONSE,
@@ -86,10 +87,19 @@ export default async function handler(req, res) {
   if (!verdictEtat.ok) return fail(res, 400, 'État de quadrant invalide');
   const messages = joindreEtatConversation(conversation.messages, verdictEtat.etat);
 
+  // LE PLAFOND D'APPELS (19/10) : la ligne 'tentee' est posée AVANT le coût, et
+  // c'est elle qui compte (cf. `leo-appels.js`, migration `leo_appels`).
+  // ⛔ Après TOUTES les validations : une requête invalide ne consomme pas le
+  // plafond. Seul le refus du plafond arrête Léo (429) ; toute autre panne du
+  // journal dégrade vers un plafond local, dit en log.
+  const modele = process.env.LEO_MODELE || LEO_MODELE;
+  const appel = await ouvrirAppel(auth.client, { quadrant, modele });
+  if (!appel.ok) return fail(res, appel.status, appel.message, { cause: appel.cause });
+
   const client = new Anthropic({ apiKey: cle, timeout: TIMEOUT_MS, maxRetries: 1 });
   try {
     const reponse = await client.messages.create({
-      model: process.env.LEO_MODELE || LEO_MODELE,
+      model: modele,
       max_tokens: MAX_TOKENS_REPONSE,
       // Seules les règles écrites côté serveur ont autorité système.
       system: [
@@ -98,6 +108,11 @@ export default async function handler(req, res) {
       // Spread conditionnel : pas de champ tools quand le catalogue est vide.
       ...(outils ? { tools: outils } : {}),
       messages
+    });
+    // L'appel est payé : son issue et ses tokens sont posés, best-effort (un
+    // échec du journal ne change rien pour Paul). Les tokens, jamais le contenu.
+    await cloreAppel(auth.client, appel.traceId, {
+      phase: 'reussie', usage: reponse.usage, quadrant, modele
     });
     const texte = extraireTexte(reponse.content);
     // L2b : un tool_use devient une PROPOSITION validée + reformulée côté
@@ -134,6 +149,7 @@ export default async function handler(req, res) {
     }
     return ok(res, { reponse: texte });
   } catch (erreur) {
+    await cloreAppel(auth.client, appel.traceId, { phase: 'echouee', quadrant, modele });
     // Jamais le contenu ni le message brut : statut HTTP ou nom d'erreur.
     logError('leo.voix', erreur?.status || erreur?.name || 'erreur');
     // La cause, en mots fermés, pour que Paul la voie (diagnostic du 02/10).

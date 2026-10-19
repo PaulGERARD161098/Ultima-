@@ -61,6 +61,8 @@ function route({ auth = 'ok', coupees = false } = {}) {
       ? { status: 'ok', user: { id: PAUL } } : { status: auth },
     ecrituresAutoCoupees: () => coupees,
     readJsonBody: async (req) => req.body,
+    // Le plafond d'appels (19/10) a ses propres harnais ; ici il laisse passer.
+    ouvrirAppel: async () => ({ ok: true, traceId: null, mode: 'local' }), cloreAppel: async () => ({ ok: false }),
     ok: (_res, data) => ({ status: 200, data }),
     fail: (_res, status) => ({ status }),
     methodNotAllowed: () => ({ status: 405 }),
