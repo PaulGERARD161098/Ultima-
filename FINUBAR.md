@@ -33,7 +33,7 @@
   "dernier_arret": {
     "le": "2026-10-19",
     "commit": "49edef90ba7e9971600531c0cf05e255333123a4",
-    "quoi": "19/10 : CI d'Ultima- — le harnais navigateur saute quand seuls des .md changent (PR brouillon) ; règle BUDGET FIXE canonique ici ; compteur et plafond d'appels de Léo (migration préparée, NON appliquée) revu par un auditeur indépendant et corrigé ; leçons v95."
+    "quoi": "19/10 : CI d'Ultima- — le harnais navigateur saute quand seuls des .md changent (PR brouillon) ; règle BUDGET FIXE canonique ici ; compteur et plafond d'appels de Léo (migration préparée, NON appliquée) revu par un auditeur indépendant et corrigé ; leçons v96."
   },
   "prochaine_action": "Après le RDV kelvin° : reporter ses réponses dans la fiche et trancher construire ou s'abonner (VITRUVE).",
   "bloque_par": [
@@ -209,7 +209,7 @@ indépendante : pas de critique ; huit constats (S1–S8) vérifiés et corrigé
 bas que la base, aucune relance du SDK facturée hors plafond, écriture limitée aux colonnes
 du code, une trace = une tentative et une issue, preuves SQL rejouées en CI (PGlite).
 Deux défauts d'instrument trouvés par le sabotage et corrigés (course PostgreSQL laissée
-au hasard ; verdict d'absence vert avant la réponse) — leçons v95. Arbitrages de Paul (19/10) : plafond
+au hasard ; verdict d'absence vert avant la réponse) — leçons v96. Arbitrages de Paul (19/10) : plafond
 confirmé à 100 / 24 h ; migration NON appliquée pour l'instant (il relit le SQL puis donne un
 go explicite). Reste à Paul : la limite de dépense de la console Anthropic, le go de migration,
 la fusion sur SHA.

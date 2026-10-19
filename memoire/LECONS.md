@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v95 2026-10-19 sha256:7055ba5f2fa9 -->
+<!-- lecons:empreinte v96 2026-10-19 sha256:07425923ccec -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -2431,6 +2431,17 @@ découvre (`RenoBoost/tests/vercel-ignore-build.test.mjs`, `MAX_IGNORE_COMMAND`)
 commande lancée par une plateforme ne dépend d'aucun fichier qu'elle peut retirer, et
 ramène TOUT code inattendu à « construire ».
 
+*Rechute du 2026-10-19 (Ultima-, premier passage réel de la CI)* : `tests/unit-ci-md-seuls.mjs`
+simulait un `grep` en panne en déposant un faux binaire dans `os.tmpdir()`. Vert en local ; rouge
+sur GitHub, car le harnais tourne sous `docker --tmpfs /tmp` — monté `noexec` par défaut : le faux
+binaire n'était jamais exécuté, le VRAI grep répondait, et le verdict « exécute » tombait à
+`false`. Les deux jobs navigateur ont échoué en ≈ 1 min (la suite unitaire précède la phase
+navigateur : les 27 min facturées n'ont pas été consommées). ⛔ Un test qui dépose un exécutable
+dans un dossier temporaire dépend du montage de ce dossier : le faux grep devient une FONCTION
+injectée par `BASH_ENV` (elle se lit, elle ne s'exécute pas), avec un verrou de non-vacuité (« le
+faux grep MORD ici », code 2). ⚠️ Reproduire l'environnement de la CI en local avant de pousser :
+`mount -t tmpfs -o noexec tmpfs <dossier>` puis `TMPDIR=<dossier> node tests/run-unit.mjs` a
+reproduit l'échec à l'identique, et prouvé le correctif.
 **UN COÛT SE LIT À SA SOURCE, ET CE QUE LE DÉPLOIEMENT SERT SE VÉRIFIE** *(2026-10-19)*.
 Paul : « on paie trop ». Mesuré avant de proposer : 39 % des commits de `main` de
 RenoBoost = un refresh planifié DEUX fois par jour (un déploiement de production
