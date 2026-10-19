@@ -11,7 +11,10 @@
 --
 -- ⛔ GATE : cette migration n'est PAS appliquée par la séance qui l'écrit
 -- (SQL/RLS = décision de Paul). Le code (`api/_lib/leo-appels.js`) fonctionne
--- AVANT son application, en mode dégradé (plafond local par instance, dit en log).
+-- AVANT son application, en mode dégradé : plafond local par instance, PLUS BAS
+-- que celui-ci (25 contre 100), dit en log et dans la réponse (`journal: 'local'`).
+-- Pas un plafond global — d'où l'ordre conseillé : appliquer cette migration
+-- avant de fusionner le code, ou accepter ce plafond provisoire.
 --
 -- ⛔ ZÉRO CONTENU : ni message, ni réponse, ni intitulé — le quadrant, le nom du
 -- modèle et deux compteurs de tokens. Une ligne ne peut pas contenir de PII par
@@ -57,8 +60,20 @@ create table public.leo_appels (
 create index leo_appels_owner_le_idx on public.leo_appels (owner_id, le desc);
 create index leo_appels_owner_trace_idx on public.leo_appels (owner_id, trace_id);
 
+-- Une trace = UNE tentative et UNE issue, jamais plus : rejouer une trace_id ne
+-- fabrique ni une tentative gratuite ni une issue contradictoire.
+create unique index leo_appels_une_tentee on public.leo_appels (owner_id, trace_id)
+  where phase = 'tentee';
+create unique index leo_appels_une_issue on public.leo_appels (owner_id, trace_id)
+  where phase in ('reussie', 'echouee');
+
 alter table public.leo_appels enable row level security;
 
+-- ⛔ LE PLAFOND COMPTE À TRAVERS CETTE POLICY : le trigger est `security invoker`,
+-- il lit les lignes du propriétaire avec les droits de l'appelant. Restreindre
+-- ce SELECT (ou retirer le droit SELECT) rendrait le compte faux — donc le
+-- plafond muet. `tests/unit-leo-appels.mjs` échoue si une migration ultérieure
+-- touche la policy ou le droit SELECT de cette table sans passer ici.
 create policy leo_appels_select on public.leo_appels
   for select using (owner_id = (select auth.uid()));
 
@@ -68,6 +83,12 @@ create policy leo_appels_insert on public.leo_appels
 -- Un journal ne se corrige pas, ne se vide pas, et n'a aucun accès anonyme.
 revoke all on public.leo_appels from anon;
 revoke update, delete, truncate on public.leo_appels from authenticated;
+
+-- L'écriture est limitée aux colonnes que le code pose : ni `id`, ni `owner_id`
+-- (défaut auth.uid()), ni `le` (horloge de la base) ne se choisissent côté client.
+revoke insert on public.leo_appels from authenticated;
+grant insert (trace_id, quadrant, modele, phase, tokens_entree, tokens_sortie)
+  on public.leo_appels to authenticated;
 
 -- LE PLAFOND, ATOMIQUE — même forme que `leo_private.ecritures_plafond()` :
 -- verrou consultatif par propriétaire, lecture du compte, refus PT429. Posé en

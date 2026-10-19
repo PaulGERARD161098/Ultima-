@@ -39,17 +39,38 @@ export const DELAI_CLOTURE_MS = 2000;
 export const CAUSE_PLAFOND = 'ia plafond';
 
 // ── Repli local ─────────────────────────────────────────────────────────────
-// ⚠️ MODE DÉGRADÉ, DIT EN LOG : si le journal est injoignable (migration pas
-// encore appliquée, panne, délai), Léo ne s'arrête pas — il retombe sur un
-// plafond tenu en MÉMOIRE D'INSTANCE, avec les mêmes valeurs. Ce n'est pas un
-// plafond global (chaque instance a le sien), c'est un plancher : mieux que
-// l'absence de garde d'avant ce module, et jamais plus permissif que la base.
-const plafondLocal = creerPlafondEcritures(PLAFOND_APPELS, FENETRE_APPELS_MS);
+// ⚠️ MODE DÉGRADÉ, DIT EN LOG ET DANS LA RÉPONSE (`journal: 'local'`) : si le
+// journal est injoignable (migration pas encore appliquée, panne, délai), Léo ne
+// s'arrête pas — il retombe sur un plafond tenu en MÉMOIRE D'INSTANCE.
+// ⛔ Ce n'est PAS le plafond de la base : chaque instance serverless a le sien et
+// l'oublie à son recyclage, donc le total réel peut dépasser `PLAFOND_APPELS`
+// (jusqu'à PLAFOND_LOCAL × nombre d'instances). D'où une valeur locale PLUS BASSE
+// que celle de la base — le repli penche vers le refus, pas vers le laisser-passer.
+// Le vrai plafond dur reste la limite de dépense de la console Anthropic.
+export const PLAFOND_LOCAL = 25;
+const plafondLocal = creerPlafondEcritures(PLAFOND_LOCAL, FENETRE_APPELS_MS);
 export const ETAT_LOCAL = { horodatages: [] };
+
+// Un état par propriétaire : un compte ne consomme pas le repli d'un autre.
+// Table bornée — au-delà, on repart de zéro plutôt que de grossir sans fin.
+const ETATS_LOCAUX = new Map();
+const MAX_ETATS_LOCAUX = 50;
+
+/** Taille de la table des états locaux — pour les harnais, jamais pour le métier. */
+export const nombreEtatsLocaux = () => ETATS_LOCAUX.size;
+
+function etatLocalDe(proprietaire) {
+  if (typeof proprietaire !== 'string' || !proprietaire) return ETAT_LOCAL;
+  if (!ETATS_LOCAUX.has(proprietaire)) {
+    if (ETATS_LOCAUX.size >= MAX_ETATS_LOCAUX) ETATS_LOCAUX.clear();
+    ETATS_LOCAUX.set(proprietaire, { horodatages: [] });
+  }
+  return ETATS_LOCAUX.get(proprietaire);
+}
 
 function elaguer(etat, maintenant) {
   const depuis = maintenant - FENETRE_APPELS_MS;
-  etat.horodatages = etat.horodatages.filter((t) => t >= depuis).slice(-(PLAFOND_APPELS + 1));
+  etat.horodatages = etat.horodatages.filter((t) => t >= depuis).slice(-(PLAFOND_LOCAL + 1));
 }
 
 /** Rejette après `ms` : la valeur `{ delai: true }` plutôt qu'une exception. */
@@ -91,20 +112,22 @@ function refusPlafond() {
  * → { ok: true, traceId, mode: 'base' | 'local' } | { ok: false, status: 429, message, cause }
  *
  * ⛔ Seul le refus du plafond (PT429) arrête Léo. Toute autre panne du journal
- * dégrade vers le plafond LOCAL (dit en log, par code seul) : le journal est un
+ * dégrade vers le plafond LOCAL, plus bas que celui de la base (dit en log par
+ * code seul, et `mode: 'local'` remonte à la route) : le journal est un
  * garde-fou de coût, pas une condition de service.
  */
 export async function ouvrirAppel(client, {
-  quadrant, modele, maintenant = Date.now(), local = ETAT_LOCAL, delaiMs = DELAI_OUVERTURE_MS
+  quadrant, modele, proprietaire, maintenant = Date.now(), local, delaiMs = DELAI_OUVERTURE_MS
 } = {}) {
   const q = typeof quadrant === 'string' ? quadrant.slice(0, MAX_QUADRANT) : '';
   const m = modeleSur(modele);
+  const etat = local || etatLocalDe(proprietaire);
 
   const degrader = (raison) => {
     logError('leo.appels.degrade', raison);
-    elaguer(local, maintenant);
-    if (!plafondLocal(local.horodatages, maintenant).ok) return refusPlafond();
-    local.horodatages.push(maintenant);
+    elaguer(etat, maintenant);
+    if (!plafondLocal(etat.horodatages, maintenant).ok) return refusPlafond();
+    etat.horodatages.push(maintenant);
     return { ok: true, traceId: null, mode: 'local' };
   };
 
@@ -123,7 +146,9 @@ export async function ouvrirAppel(client, {
   }
   if (insertion && insertion.delai) return degrader('delai');
   if (insertion && insertion.error) {
-    if (insertion.error.code === 'PT429') {
+    // Le refus du plafond arrive en PT429 ; un 429 HTTP d'où qu'il vienne se lit
+    // de la même façon — pour un garde-fou de coût, le doute penche vers le refus.
+    if (insertion.error.code === 'PT429' || insertion.status === 429) {
       logError('leo.appels.plafond', 'PT429');
       return refusPlafond();
     }

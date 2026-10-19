@@ -124,8 +124,11 @@ insert into public.leo_appels(trace_id,quadrant,modele,phase,le)
 values (gen_random_uuid(),'riven','test','tentee', now() - interval '3 days');
 SQL
 )"
+ok "un client ne peut pas choisir « le » (droit d'écriture par colonnes)" "$([[ "$sortie" == *'permission denied'* && "$(lignes $C)" == 0 ]] && echo 1 || echo 0)"
+# Même un chemin PRIVILÉGIÉ (superutilisateur, qui contourne les droits de colonnes) est ré-horodaté par le trigger.
+admin -c "insert into public.leo_appels(owner_id,trace_id,quadrant,modele,phase,le) values ('$C', gen_random_uuid(),'riven','test','tentee', now() - interval '3 days')" >/dev/null
 age="$(admin -At -c "select extract(epoch from (clock_timestamp() - le))::int from public.leo_appels where owner_id='$C'")"
-ok 'une ligne antidatée est ré-horodatée par la base (âge < 60 s)' "$([[ -z "$sortie" && "$age" -lt 60 ]] && echo 1 || echo 0)"
+ok 'une ligne antidatée par un chemin privilégié est ré-horodatée par le trigger (âge < 60 s)' "$([[ "$age" -lt 60 ]] && echo 1 || echo 0)"
 
 echo '— la fenêtre glisse'
 admin -c "update public.leo_appels set le = now() - interval '25 hours' where owner_id='$A'" >/dev/null
@@ -156,7 +159,39 @@ sortie="$(session $A authenticated <<SQL
 insert into public.leo_appels(owner_id,trace_id,quadrant,modele,phase)
 values ('$B', gen_random_uuid(),'riven','test','tentee');
 SQL
-)"; ok "écrire au nom d'un autre propriétaire est refusé par la RLS" "$([[ "$sortie" == *'row-level security'* ]] && echo 1 || echo 0)"
+)"; ok "écrire au nom d'un autre propriétaire est refusé (droit de colonne « owner_id » retiré)" "$([[ "$sortie" == *'permission denied'* ]] && echo 1 || echo 0)"
+sortie="$(session $A authenticated <<'SQL'
+insert into public.leo_appels(id,trace_id,quadrant,modele,phase)
+values (gen_random_uuid(), gen_random_uuid(),'riven','test','tentee');
+SQL
+)"; ok "choisir « id » est refusé (droit de colonne)" "$([[ "$sortie" == *'permission denied'* ]] && echo 1 || echo 0)"
+# La RLS d'INSERT tient SEULE, indépendamment des droits de colonnes : on rouvre temporairement le droit sur owner_id.
+admin -c "grant insert (owner_id) on public.leo_appels to authenticated" >/dev/null
+sortie="$(session $A authenticated <<SQL
+insert into public.leo_appels(owner_id,trace_id,quadrant,modele,phase)
+values ('$B', gen_random_uuid(),'riven','test','tentee');
+SQL
+)"; ok "défense en profondeur : la RLS refuse seule l'écriture au nom d'autrui" "$([[ "$sortie" == *'row-level security'* ]] && echo 1 || echo 0)"
+admin -c "revoke insert (owner_id) on public.leo_appels from authenticated" >/dev/null
+
+echo '— une trace = une tentative et une issue, jamais plus'
+TRACE=aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa
+sortie="$(session $C authenticated <<SQL
+insert into public.leo_appels(trace_id,quadrant,modele,phase) values ('$TRACE','riven','test','tentee');
+SQL
+)"; ok 'première tentative sur une trace : passe' "$([[ -z "$sortie" ]] && echo 1 || echo 0)"
+sortie="$(session $C authenticated <<SQL
+insert into public.leo_appels(trace_id,quadrant,modele,phase) values ('$TRACE','riven','test','tentee');
+SQL
+)"; ok 'rejouer la même tentative est refusé (leo_appels_une_tentee)' "$([[ "$sortie" == *'leo_appels_une_tentee'* ]] && echo 1 || echo 0)"
+sortie="$(session $C authenticated <<SQL
+insert into public.leo_appels(trace_id,quadrant,modele,phase,tokens_entree,tokens_sortie) values ('$TRACE','riven','test','reussie',10,5);
+SQL
+)"; ok "l'issue de cette trace passe" "$([[ -z "$sortie" ]] && echo 1 || echo 0)"
+sortie="$(session $C authenticated <<SQL
+insert into public.leo_appels(trace_id,quadrant,modele,phase) values ('$TRACE','riven','test','echouee');
+SQL
+)"; ok "une seconde issue (même contradictoire) est refusée (leo_appels_une_issue)" "$([[ "$sortie" == *'leo_appels_une_issue'* ]] && echo 1 || echo 0)"
 sortie="$(session $A authenticated <<SQL
 select count(*) filter (where owner_id <> '$A') from public.leo_appels;
 SQL
@@ -172,13 +207,16 @@ ok 'colonnes exactes (aucun message, aucune réponse, aucun intitulé)' \
   "$([[ "$colonnes" == 'id,owner_id,trace_id,quadrant,modele,phase,tokens_entree,tokens_sortie,le' ]] && echo 1 || echo 0)"
 
 echo '— DEUX APPELS SIMULTANÉS ne passent pas tous deux sous le seuil (verrou consultatif)'
+# ⚠️ Chaque client garde sa transaction OUVERTE 0,5 s après l'insertion : sans verrou, les 30 lisent
+# « 90 » avant qu'aucun ne valide et passent tous (120 lignes). Une version sans cette attente laissait
+# le calendrier décider — et le sabotage « verrou retiré » est passé au vert le 19/10 (DR).
 session $D authenticated <<SQL >/dev/null
 do \$\$ begin
   for i in 1..90 loop insert into public.leo_appels(trace_id,quadrant,modele,phase) values $VALEUR; end loop;
 end \$\$;
 SQL
 rafale="$(seq 1 30 | xargs -P 30 -I{} "$pg_bin/psql" -X -q -h "$socket_dir" -p 54329 -U postgres -d postgres -At \
-  -c "set role authenticated; select set_config('request.jwt.claim.sub','$D',false); insert into public.leo_appels(trace_id,quadrant,modele,phase) values $VALEUR;" 2>&1 || true)"
+  -c "set role authenticated; select set_config('request.jwt.claim.sub','$D',false); begin; insert into public.leo_appels(trace_id,quadrant,modele,phase) values $VALEUR; select pg_sleep(0.5); commit;" 2>&1 || true)"
 refuses="$(grep -c 'leo_calls_quota_exhausted' <<<"$rafale" || true)"
 ok "30 appels simultanés à 90/100 : exactement 100 lignes au total (10 passent, 20 refusés)" \
   "$([[ "$(lignes $D)" == 100 && "$refuses" == 20 ]] && echo 1 || echo 0)"

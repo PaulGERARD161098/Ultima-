@@ -9,9 +9,9 @@
 // ⛔ Le danger est d'UN côté : un plafond qui ne mord pas, ou qui s'ouvre sur une
 // panne sans le dire. Les cas « refuse » et « ne fuit rien » pèsent plus lourd
 // que les cas « laisse passer ».
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import {
-  PHASES_APPEL, PLAFOND_APPELS, PLAFOND_LIGNES, FENETRE_APPELS_MS,
+  PHASES_APPEL, PLAFOND_APPELS, PLAFOND_LIGNES, PLAFOND_LOCAL, FENETRE_APPELS_MS, nombreEtatsLocaux,
   MAX_QUADRANT, MAX_MODELE, MAX_TOKENS_COMPTES, CAUSE_PLAFOND,
   jetonsDe, ouvrirAppel, cloreAppel
 } from '../api/_lib/leo-appels.js';
@@ -29,6 +29,8 @@ const sansCommentaires = sql.split('\n').filter((l) => !/^\s*--/.test(l)).join('
 verdicts.migrationLue = sansCommentaires.length > 1500 && /create table public\.leo_appels/.test(sansCommentaires);
 verdicts.routeLue = route.includes('ouvrirAppel') && route.includes('new Anthropic(');
 verdicts.valeursLues = PLAFOND_APPELS > 0 && PLAFOND_LIGNES > PLAFOND_APPELS && FENETRE_APPELS_MS === 86400000;
+// Le repli penche vers le refus : il ne peut jamais valoir autant que la base (S1).
+verdicts.plafondLocalSousLaBase = Number.isInteger(PLAFOND_LOCAL) && PLAFOND_LOCAL > 0 && PLAFOND_LOCAL < PLAFOND_APPELS;
 
 // ── 1. Les doubles vérités avec la migration ─────────────────────────────────
 {
@@ -63,6 +65,25 @@ verdicts.plafondAtomique = /pg_advisory_xact_lock/.test(sansCommentaires) &&
   /security invoker set search_path = ''/.test(sansCommentaires) &&
   /revoke all on function leo_private\.appels_plafond\(\) from public, anon, authenticated/.test(sansCommentaires);
 verdicts.horlogeDeLaBase = /new\.le := pg_catalog\.clock_timestamp\(\)/.test(sansCommentaires);
+// S4 : une trace = une tentative + une issue ; l'écriture se limite aux colonnes posées par le code.
+verdicts.uneTenteeUneIssue =
+  /create unique index leo_appels_une_tentee on public\.leo_appels \(owner_id, trace_id\)\s+where phase = 'tentee'/.test(sansCommentaires) &&
+  /create unique index leo_appels_une_issue on public\.leo_appels \(owner_id, trace_id\)\s+where phase in \('reussie', 'echouee'\)/.test(sansCommentaires);
+verdicts.ecritureParColonnes = /revoke insert on public\.leo_appels from authenticated/.test(sansCommentaires) &&
+  /grant insert \(trace_id, quadrant, modele, phase, tokens_entree, tokens_sortie\)\s+on public\.leo_appels to authenticated/.test(sansCommentaires) &&
+  !/grant insert \([^)]*\b(id|owner_id|le)\b[^)]*\)/.test(sansCommentaires);
+// S3 : le plafond COMPTE à travers la policy SELECT — aucune migration ultérieure ne la touche
+// sans repasser ici (le trigger est `security invoker`, un SELECT restreint rendrait le compte faux).
+{
+  const dossier = new URL('../supabase/migrations/', import.meta.url);
+  const posterieures = readdirSync(dossier).filter((f) => f.endsWith('.sql') && f > '20261019160000_leo_appels.sql');
+  const touche = posterieures.filter((f) => {
+    const t = readFileSync(new URL(f, dossier), 'utf8').split('\n').filter((l) => !/^\s*--/.test(l)).join('\n');
+    return /(policy\s+\S+\s+on\s+public\.leo_appels|alter\s+policy\s+\S+\s+on\s+public\.leo_appels|revoke\s+(all|select)[^;]*public\.leo_appels|drop\s+policy[^;]*leo_appels|alter\s+table\s+public\.leo_appels[^;]*(no\s+force|disable))/i.test(t);
+  });
+  verdicts.aucuneMigrationNeTouchePolicySelect = touche.length === 0;
+  verdicts.commentaireSelectPresent = /LE PLAFOND COMPTE À TRAVERS CETTE POLICY/.test(sql);
+}
 // Zéro contenu par la FORME des colonnes : aucune colonne ne peut porter un texte libre.
 {
   const bloc = /create table public\.leo_appels \(([\s\S]*?)\n\);/.exec(sansCommentaires)?.[1] || '';
@@ -89,7 +110,7 @@ verdicts.jetonsBornes = jetonsDe({ input_tokens: 9e15, output_tokens: 9e15 }).en
   jetonsDe({ output_tokens: 9e15 }).sortie === MAX_TOKENS_COMPTES;
 
 // ── 4. ouvrirAppel — un client factice qui enregistre ────────────────────────
-function clientFactice({ code = null, lance = false, pendu = false } = {}) {
+function clientFactice({ code = null, status, lance = false, pendu = false } = {}) {
   const inserts = [];
   return {
     inserts,
@@ -99,7 +120,10 @@ function clientFactice({ code = null, lance = false, pendu = false } = {}) {
         insert(row) {
           inserts.push({ table, row });
           if (pendu) return new Promise(() => {});
-          return Promise.resolve({ error: code ? { code, message: 'paul@exemple.fr : détail brut' } : null });
+          return Promise.resolve({
+            error: code ? { code, message: 'paul@exemple.fr : détail brut' } : null,
+            ...(status ? { status } : {})
+          });
         }
       };
     }
@@ -133,17 +157,51 @@ async function espionne(fn) {
   verdicts.refusSansContenu = !/@|paul/i.test(JSON.stringify(r));
 }
 {
+  // 4b-bis. Un 429 HTTP, même sans le code PT429, se lit comme un refus — le doute penche vers le refus.
+  const local = localVide();
+  const r = await espionne(() => ouvrirAppel(clientFactice({ code: 'XX', status: 429 }), { quadrant: 'riven', modele: 'm', maintenant: T0, local }));
+  verdicts.status429SeLitCommeUnRefus = r.ok === false && r.status === 429 && r.cause === CAUSE_PLAFOND && local.horodatages.length === 0;
+  // Un autre statut d'erreur (503, 500…) ne refuse pas : il dégrade.
+  const autre = await espionne(() => ouvrirAppel(clientFactice({ code: 'XX', status: 503 }), { quadrant: 'riven', modele: 'm', maintenant: T0, local: localVide() }));
+  verdicts.status503Degrade = autre.ok === true && autre.mode === 'local';
+}
+{
+  // 4b-ter. Le repli est tenu PAR PROPRIÉTAIRE : épuiser le repli de A ne touche pas B ; A reste refusé.
+  let refusA = null; let acceptesB = 0;
+  await espionne(async () => {
+    for (let i = 0; i < PLAFOND_LOCAL + 2; i += 1) {
+      const a = await ouvrirAppel(clientFactice({ code: '42P01' }), { quadrant: 'riven', modele: 'm', proprietaire: 'proprio-a', maintenant: T0 + i });
+      if (!a.ok) refusA = a;
+    }
+    for (let i = 0; i < 3; i += 1) {
+      const b = await ouvrirAppel(clientFactice({ code: '42P01' }), { quadrant: 'riven', modele: 'm', proprietaire: 'proprio-b', maintenant: T0 + i });
+      if (b.ok) acceptesB += 1;
+    }
+  });
+  verdicts.replisIndependantsParProprietaire = Boolean(refusA) && refusA.status === 429 && acceptesB === 3;
+  // La table des états est bornée : 200 propriétaires distincts ne la font pas grossir sans fin
+  // (l'ancien état est oublié, jamais un état partagé qui desserre ou qui plante).
+  let toutOk = true;
+  await espionne(async () => {
+    for (let i = 0; i < 200; i += 1) {
+      const r = await ouvrirAppel(clientFactice({ code: '42P01' }), { quadrant: 'riven', modele: 'm', proprietaire: `p-${i}`, maintenant: T0 });
+      if (!r.ok || r.mode !== 'local') toutOk = false;
+    }
+  });
+  verdicts.tableDesEtatsBornee = toutOk && nombreEtatsLocaux() > 0 && nombreEtatsLocaux() <= 50;
+}
+{
   // 4c. Une AUTRE panne du journal dégrade vers le plafond local — et le dit, par code seul.
   journaux.length = 0;
   const local = localVide();
   let acceptes = 0; let refus = null;
   await espionne(async () => {
-    for (let i = 0; i < PLAFOND_APPELS + 5; i += 1) {
+    for (let i = 0; i < PLAFOND_LOCAL + 5; i += 1) {
       const r = await ouvrirAppel(clientFactice({ code: '42P01' }), { quadrant: 'riven', modele: 'm', maintenant: T0 + i, local });
       if (r.ok) { acceptes += 1; if (r.mode !== 'local' || r.traceId !== null) acceptes = -1e9; } else if (!refus) refus = r;
     }
   });
-  verdicts.degradeAccepteExactementLePlafond = acceptes === PLAFOND_APPELS;
+  verdicts.degradeAccepteExactementLePlafondLocal = acceptes === PLAFOND_LOCAL;
   verdicts.degradeRefuseAuDela = Boolean(refus) && refus.status === 429 && refus.cause === CAUSE_PLAFOND;
   verdicts.degradeEstDit = journaux.some((l) => /leo\.appels\.degrade 42P01$/.test(l));
   verdicts.journauxSansContenu = journaux.length > 0 && journaux.every((l) => !/@|paul|détail|brut/i.test(l));
@@ -226,6 +284,12 @@ async function espionne(fn) {
   verdicts.clotureReussieApresLAppel = idx.clo1 > idx.create && idx.clo1 < idx.texte;
   verdicts.clotureEchoueeDansLeCatch = idx.clo2 > idx.catchBloc;
   verdicts.refusRendu429AvecCause = /if \(!appel\.ok\) return fail\(res, appel\.status, appel\.message, \{ cause: appel\.cause \}\);/.test(route);
+  // S2 : aucune relance automatique du SDK — chacune serait une requête facturée hors plafond.
+  verdicts.aucuneRelanceFacturee = /new Anthropic\(\{[^}]*maxRetries: 0\s*\}\)/.test(route) && !/maxRetries:\s*[1-9]/.test(route);
+  // S1 : le repli local est DIT dans la réponse (les deux sorties de succès) et par propriétaire.
+  verdicts.repliLocalDitDansLaReponse = /appel\.mode === 'local' \? \{ journal: 'local' \} : \{\}/.test(route) &&
+    (route.match(/\.\.\.journal/g) || []).length === 2;
+  verdicts.repliParProprietaire = /ouvrirAppel\(auth\.client, \{ quadrant, modele, proprietaire: auth\.user\.id \}\)/.test(route);
   verdicts.memeModeleQueLAppel = /const modele = process\.env\.LEO_MODELE \|\| LEO_MODELE;/.test(route) && /model: modele,/.test(route);
   // Les tokens, jamais le contenu : la clôture ne reçoit ni les messages, ni la réponse.
   const bloc = /await cloreAppel\(auth\.client, appel\.traceId, \{[\s\S]*?\}\);/.exec(route)?.[0] || '';
@@ -236,6 +300,9 @@ async function espionne(fn) {
 verdicts.causeDansLaListeFermee = MOTIF_CAUSE_IA.test(CAUSE_PLAFOND) && CAUSE_PLAFOND === 'ia plafond';
 verdicts.frontDitLePlafond = front.includes("cause === 'ia plafond'") && /plafond d'appels sur 24 h/.test(front) &&
   front.includes('|plafond)$/');
+// S8 : Léo est une femme (accords au féminin) ; S1 : le repli local se dit à l'écran.
+verdicts.frontAuFeminin = /elle reprendra seule/.test(front) && !/il reprendra seul/.test(front);
+verdicts.frontDitLeRepliLocal = /data\.journal === 'local'/.test(front) && /journal des appels de Léo est injoignable/.test(front);
 verdicts.autresCausesInchangees = ['ia 401', 'ia 429', 'ia 400 crédit', 'ia délai', 'ia réseau', 'ia vide'].every((c) => MOTIF_CAUSE_IA.test(c)) &&
   !MOTIF_CAUSE_IA.test('ia plafond de verre') && !MOTIF_CAUSE_IA.test('plafond');
 
