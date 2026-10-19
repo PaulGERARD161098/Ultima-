@@ -613,7 +613,16 @@ outils, dix verts, treize mains servies, chaque vert son défaire) ;
 migration ; `smoke-draukhain` §G prouve la chaîne : proposition → carte au
 texte serveur → **rien d'écrit avant le clic** → un POST au corps exact, avec
 le Bearer. **Preuve réelle** : une lecture dictée par Paul, visible via GET
-après auth — elle attend l'application de la migration.
+après auth. ✅ **FAITE en production le 2026-10-19** (après la fusion de #399,
+`abe073b`) : Paul a d'abord dicté deux vents sur trois — Léo n'a RIEN écrit et a
+demandé le troisième (pre-mortem (a) tenu en réel) ; au troisième, la carte, la
+confirmation, et la lecture en base à 19:42:09 UTC (compte relu par Paul : 1),
+quatre secondes après l'appel de Léo (`leo_appels` : tentee 19:42:00 → reussie
+19:42:05). Aucune ligne dans `leo_ecritures` sur la période : la lecture est
+passée par la carte confirmée, pas par une écriture faite seule. ⚠️ La preview
+n'a pas permis la preuve : elle ne voyait pas `ULTIMA_PROPRIETAIRES` malgré
+« Production and Preview » coché et deux redéploiements (piste non vérifiée :
+« Separate Production Secret Values »).
 ⑤ **Pas dans la 2a.** Pas de page, pas de registre de relecture (2b) ; pas de
 passerelle vers l'objet jugé (2b) ; pas de NICOL BOLAS ; pas de « yeux » (état
 transmis à Léo) ; pas de score.

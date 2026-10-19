@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v98 2026-10-19 sha256:53242086f871 -->
+<!-- lecons:empreinte v99 2026-10-19 sha256:19d673c34b9f -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -952,6 +952,7 @@ suivant qui la paie.
 **UN REVOKE SUR LES RÔLES NOMMÉS NE RÉVOQUE RIEN** *(2026-09-13, RenoBoost)*.
 `revoke all on function ... from anon, authenticated` a rendu `success:true` et n'a rien fait : `create function` accorde EXECUTE à PUBLIC, dont anon hérite. Mesuré : `has_function_privilege('anon', ...)` = true APRÈS le revoke. Corrigé par `from public` d'abord.
 ⇒ *Règle* : un droit se vérifie du côté où il peut être contourné (`has_function_privilege`, pas le retour de la migration), et `success:true` n'est pas une mesure.
+*Rechute du 2026-10-19 (Ultima-, AMATSU), sur une TABLE* : `revoke all on public.amatsu_lectures from anon` puis `grant select, insert, delete … to authenticated`. Mais Supabase accorde par défaut TOUS les droits sur une table neuve de `public` à anon ET à authenticated : le rôle connecté gardait UPDATE (bloqué par la RLS, faute de policy) et **TRUNCATE, que la RLS ne voit pas**. Trouvé à la relecture d'avant application, pas par un test : le harnais lisait le TEXTE de la migration. ⛔ Tout retirer d'abord (`from public, anon, authenticated`), puis donner la liste fermée ; et le prouver en EXÉCUTANT la migration dans un Postgres jetable qui reproduit les droits par défaut (`alter default privileges … grant all on tables to anon, authenticated`), puis `has_table_privilege` et un vrai `truncate` — l'ancien revoke y laissait passer le vidage (`tests/unit-amatsu-validate.mjs` §9).
 
 
 **LA CLÉ SERVICE PASSE OUTRE LA RLS : LE PÉRIMÈTRE SE POSE À LA MAIN** *(2026-09-15, RenoBoost)*.
@@ -1777,6 +1778,12 @@ demander un go (SQL, déploiement, envoi), prouver l'accès à la CIBLE par une 
 jamais « un autre projet qui répond » : Artidispo et RenoDevis répondaient — ce n'étaient pas la
 base d'Ultima. Quand l'accès manque, le geste de Paul se prépare au dernier cran (procédure,
 script de vérification éprouvé sur une base jetable) au lieu de s'annoncer comme le mien.
+*Ajout du 2026-10-19 (Ultima-, AMATSU)* : **reconnecter un connecteur en cours de séance le
+RETIRE de la séance, il ne le rebranche pas** — les connecteurs se lisent à l'ouverture. Paul a
+reconnecté Supabase pour que j'applique `amatsu_lectures` ; tous les outils Supabase ont disparu.
+Coût : un aller-retour, puis Paul a appliqué lui-même. ⇒ Quand l'accès manque, proposer d'emblée
+les deux voies chiffrées : le geste de Paul tout de suite (SQL prêt à coller + requête de contrôle),
+ou une NOUVELLE séance après reconnexion — jamais « reconnecte et je le fais » dans la même séance.
 
 **LE COMMENT AVANT LE TRAVAIL** *(directive EL)*. Étapes, moyens, critères de
 réussite explicités avant d'exécuter. En pratique : **la maquette avant le
@@ -2471,6 +2478,11 @@ lui-même (code 144), deux fois dans la séance, et une restauration de fichier
 sabotage en dépendait. ⛔ Arrêter un processus par son **PID** (relu par `ps`,
 avec un motif `[n]ext-server` qui ne se reconnaît pas lui-même), jamais par un
 `pkill -f` sur une chaîne qu'on vient de taper.
+*Rechute du 2026-10-19 (Ultima-, AMATSU)* : `pkill -f "http.server 8123"` en tête
+de la commande qui devait committer et pousser — le shell s'est tué (code 144),
+rien n'a été committé, l'étape a été rejouée. La leçon était injectée à
+l'ouverture ; elle ne l'a pas empêché parce que le geste était un nettoyage
+« en passant », pas une étape pensée.
 
 **UN OUTIL LANCÉ PAR `npx` SANS INSTALLATION N'EST PAS L'OUTIL DU PROJET**
 *(2026-09-15)*. `npx eslint .` a rendu « rien à signaler » deux fois avant que
