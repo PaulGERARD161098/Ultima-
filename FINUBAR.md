@@ -209,8 +209,10 @@ indépendante : pas de critique ; huit constats (S1–S8) vérifiés et corrigé
 bas que la base, aucune relance du SDK facturée hors plafond, écriture limitée aux colonnes
 du code, une trace = une tentative et une issue, preuves SQL rejouées en CI (PGlite).
 Deux défauts d'instrument trouvés par le sabotage et corrigés (course PostgreSQL laissée
-au hasard ; verdict d'absence vert avant la réponse) — leçons v95. Reste à Paul : la
-valeur du plafond, la limite de dépense de la console Anthropic, le go de migration.
+au hasard ; verdict d'absence vert avant la réponse) — leçons v95. Arbitrages de Paul (19/10) : plafond
+confirmé à 100 / 24 h ; migration NON appliquée pour l'instant (il relit le SQL puis donne un
+go explicite). Reste à Paul : la limite de dépense de la console Anthropic, le go de migration,
+la fusion sur SHA.
 
 ### 2026-10-13 — prévoir le contrôle avant le système métier
 

@@ -482,8 +482,8 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
   Léo ne passe pas par Vercel : il est facturé par Anthropic.
   **Le plafond d'appels de Léo** (19/10) : `api/_lib/leo-appels.js` + migration
   `supabase/migrations/20261019160000_leo_appels.sql` (100 appels / 24 h / propriétaire,
-  atomique côté base ; hypothèse de départ, Paul fixe la valeur). ⛔ **Migration non
-  appliquée : SQL/RLS = gate de Paul.** Avant son application, Léo tourne en repli local
+  atomique côté base ; valeur confirmée par Paul le 19/10). ⛔ **Migration non
+  appliquée : SQL/RLS = gate de Paul — il a choisi d'attendre (19/10).** Avant son application, Léo tourne en repli local
   (25 par instance, dit en log et dans la réponse, `journal: 'local'`) — plus bas que la
   base, et PAS un plafond global : le plafond dur reste la limite de dépense de la
   console Anthropic (geste de Paul). Le journal sert aussi de mesure d'usage de Léo.
