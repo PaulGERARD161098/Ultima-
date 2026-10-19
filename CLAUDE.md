@@ -470,7 +470,8 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
   navigateur. Il **saute ses étapes** (pas son job) quand le diff NET de la PR, ou
   du commit fusionné, ne touche que des `.md` ; le job `unit` tourne toujours.
   Gardé par `tests/unit-ci-md-seuls.mjs`, qui exécute le script de l'étape tel
-  quel. ⚠️ Non éprouvé sur GitHub tant que les Actions sont bloquées.
+  quel. ✅ Éprouvé sur GitHub le 19/10 (Ultima-#401, `.md` seuls) : `browser (0)` et
+  `(1)` en 6 s, journal « Harnais navigateur sauté », contre ≈ 12,5 min chacun sur #400.
   Leviers et incidents de RenoBoost (crons, `ignoreCommand` ≤ 256 caractères,
   `.md` retirés du déploiement) : `RenoBoost/CLAUDE.md` « BUDGET FIXE » et
   `RenoBoost/ROADMAP-2026-10-19-fin-de-session.md` §8. Pistes ouvertes : RenoDevis
@@ -483,12 +484,13 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
   Léo ne passe pas par Vercel : il est facturé par Anthropic.
   **Le plafond d'appels de Léo** (19/10) : `api/_lib/leo-appels.js` + migration
   `supabase/migrations/20261019160000_leo_appels.sql` (100 appels / 24 h / propriétaire,
-  atomique côté base ; valeur confirmée par Paul le 19/10). ⛔ **Migration non
-  appliquée à ce jour. Go de Paul le 19/10 ; le connecteur Supabase de la séance ne voit pas
-  le projet `ultima` (lecture refusée) : application par son geste dashboard, procédure et
-  scripts de vérification dans `RUNBOOK-GATES.md` gate ⑦ et `supabase/verifs/`.** Avant son application, Léo tourne en repli local
-  (25 par instance, dit en log et dans la réponse, `journal: 'local'`) — plus bas que la
-  base, et PAS un plafond global : le plafond dur reste la limite de dépense de la
+  atomique côté base ; valeur confirmée par Paul le 19/10). ✅ **Migration appliquée
+  par Paul le 19/10 (SQL Editor) et vérifiée : 16/16 contrôles vrais, `PLAFOND_OK` — la
+  101ᵉ tentative est refusée** (`RUNBOOK-GATES.md` gate ⑦). Code fusionné ensuite
+  (Ultima-#400, `d67998a`). ⚠️ Non inscrite au registre `supabase_migrations` (l'éditeur
+  SQL ne le fait pas) ; advisors non relus. Si le journal est injoignable, Léo tombe sur
+  son repli local (25 par instance, dit en log et dans la réponse, `journal: 'local'`) —
+  plus bas que la base, et PAS un plafond global : le plafond dur reste la limite de dépense de la
   console Anthropic (geste de Paul). Le journal sert aussi de mesure d'usage de Léo.
 
 - **OÙ PART LE RESTE — relevé du 19/10, lu aux sources, pas déduit** *(Paul : « regarde ce

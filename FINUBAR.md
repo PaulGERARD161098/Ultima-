@@ -52,7 +52,7 @@
       "depuis": "2026-10-18"
     },
     {
-      "quoi": "Coûts (19/10) : PR #400 FUSIONNÉE le 19/10 (d67998a), sur le go de Paul portant sur 3077897. Plafond d'appels de Léo : migration 20261019160000_leo_appels.sql APPLIQUÉE et vérifiée par Paul vers 18:45 UTC (16 contrôles ok ; la 101ᵉ tentative refusée — rapporté dans #400). Actions débloquées (CI 9/9 sur #400 et #399). Restent : le saut du harnais pour les .md seuls, non éprouvé sur GitHub (la première PR de documentation seule le dira) ; migration hors registre supabase_migrations, advisors non relus ; RUNBOOK-GATES.md gate ⑦ et CLAUDE.md disent encore « non appliquée » (PR de documentation prévue par la séance de #400) ; limite de dépense Anthropic (Paul) ; LECONS v99 (v98 de #400 + les trois entrées AMATSU du 19/10) à propager aux 9 autres dépôts. Détail : CLAUDE.md « BUDGET FIXE ».",
+      "quoi": "Coûts (19/10) : PR #400 FUSIONNÉE le 19/10 (d67998a), sur le go de Paul portant sur 3077897. Plafond d'appels de Léo : migration 20261019160000_leo_appels.sql APPLIQUÉE et vérifiée par Paul vers 18:45 UTC (16/16 contrôles vrais ; PLAFOND_OK, la 101ᵉ tentative refusée — RUNBOOK-GATES.md gate ⑦). Saut du harnais navigateur pour les .md seuls ÉPROUVÉ sur GitHub le 19/10 (PR #401 : browser (0) et (1) en 6 s, journal « Harnais navigateur sauté », contre ≈ 12,5 min chacun sur #400). Restent : migration hors registre supabase_migrations, advisors non relus (connecteur qui voie ultima) ; limite de dépense Anthropic (Paul) ; LECONS v100 à propager aux 9 autres dépôts. ignoreCommand Vercel d'Ultima : Ultima-#404 FUSIONNÉE (2b708df). Rapporté par la séance coûts du 19/10, non relu ici (dépôt hors séance) : RenoDevis#395 fusionnée (documentation Ignored sur Vercel) ; restent le ci.yml de RenoDevis (~5 min) sur les commits de documentation seule et l'unité du Build CPU Vercel, inexpliquée. Détail : CLAUDE.md « BUDGET FIXE ».",
       "depuis": "2026-10-19"
     },
     {
@@ -217,6 +217,17 @@ au hasard ; verdict d'absence vert avant la réponse) — leçons v98. Arbitrage
 confirmé à 100 / 24 h ; migration NON appliquée pour l'instant (il relit le SQL puis donne un
 go explicite). Reste à Paul : la limite de dépense de la console Anthropic, le go de migration,
 la fusion sur SHA.
+
+### 2026-10-19 (fin) — migration appliquée, #400 fusionnée
+
+Le connecteur Supabase de la séance de reprise n'était pas branché du tout : arrêt sans
+écriture, puis Paul applique lui-même les trois scripts du gate ⑦ (SQL Editor, projet
+`ultima`). Étape 2 : 16/16 vrais. Étape 3 : `PLAFOND_OK`, la 101ᵉ tentative refusée,
+rien ne reste — Paul l'a d'abord lu comme un échec parce que le succès s'affiche en rouge.
+CI verte 9/9 sur `3077897`, puis fusion par Paul (`d67998a`) : la migration est passée
+avant le code, le repli local ne joue plus qu'en panne. Restent ouverts : registre
+`supabase_migrations` et advisors (connecteur), limite de dépense Anthropic, propagation
+de LECONS v98.
 
 ### 2026-10-13 — prévoir le contrôle avant le système métier
 
