@@ -31,9 +31,9 @@
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-10-15",
-    "commit": "5f3bc13c852f8c29ea13a2d324db050616b0c51a",
-    "quoi": "15/10 : « notre Kelvin » devient VITRUVE (sur Mon DPE Facile) ; fiche RDV kelvin° prête."
+    "le": "2026-10-19",
+    "commit": "0760404c206733aa7dc8afb38df75d795f8abc9e",
+    "quoi": "19/10 : CI d'Ultima- — le harnais navigateur saute quand seuls des .md changent (PR brouillon) ; règle BUDGET FIXE canonique ici ; leçons v94."
   },
   "prochaine_action": "Après le RDV kelvin° : reporter ses réponses dans la fiche et trancher construire ou s'abonner (VITRUVE).",
   "bloque_par": [
@@ -47,6 +47,10 @@
   ],
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
+    {
+      "quoi": "Coûts GitHub (19/10) : Ultima- ≈ 54 % du brut Actions. Correctif CI sur claude/ci-couts-md-seuls, PR brouillon, non éprouvé sur GitHub (Actions bloquées : budget à 100 % + paiement refusé, gestes de Paul). Fusion sur accord du SHA ; LECONS v94 à propager aux 9 autres dépôts. Détail : CLAUDE.md « BUDGET FIXE ».",
+      "depuis": "2026-10-19"
+    },
     {
       "quoi": "Pilotage ZOH : accès HTTP avec une vraie session propriétaire encore non éprouvé depuis Work (protection Vercel après redirection ; CLI absent). Source et tests sont livrés. Chaque système doit encore prouver son propre raccordement et ses contrôles ; aucun agent permanent activé par cette règle.",
       "depuis": "2026-10-13"
@@ -179,6 +183,20 @@
 <!-- finubar:fin -->
 
 ## Journal de reprise
+
+### 2026-10-19 — la CI bloquée vient de la facture ; Ultima- en est le premier poste
+
+Paul lit Billing : budget Actions de l'organisation à 100 %, autorisation de paiement
+refusée — c'est la cause des `startup_failure` du 18/10, pas le code. Usage par dépôt
+(brut, 1ᵉʳ–19/10) : Ultima- ≈ 37,3 $ sur 68,54 $, RenoDevis ≈ 22,7 $, RenoBoost ≈ 5,5 $.
+Dans Ultima-, `tests.yml` facture ≈ 29 min par exécution (27 pour le harnais navigateur),
+≈ 220 exécutions du 01 au 18/10, et la moitié des commits sont des `.md` seuls.
+Paul : « go, prépare le correctif ; Ultima doit rester le coordinateur ». Fait sur la
+branche `claude/ci-couts-md-seuls` (commit `0760404`) : le job navigateur saute ses étapes
+lourdes quand le diff net ne touche que des `.md` ; `tests/unit-ci-md-seuls.mjs` exécute le
+script tel quel (18 verdicts, 8 sabotages rouges). La règle de coûts devient canonique dans
+`CLAUDE.md` ; les trois leçons de la boucle sont écrites ICI (LECONS v94) puis à propager.
+Non éprouvé sur GitHub : première exécution réelle après déblocage.
 
 ### 2026-10-13 — prévoir le contrôle avant le système métier
 

@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v93 2026-10-17 sha256:69399ff8e1ec -->
+<!-- lecons:empreinte v94 2026-10-19 sha256:4f26349472ec -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -2387,6 +2387,44 @@ jusqu'au 30/09, alors que la liste en portait **dix** : deux dépôts manquaient
 écrite — hors de `Ultima-/finubar/depots.json`, fork partagé avec un tiers.
 
 ## 6. Économie
+
+**UN `startup_failure` PARTOUT, `main` COMPRIS, C'EST LE COMPTE — PAS LE CODE** *(2026-10-19)*.
+Depuis le 18/10 16:22 UTC, tous les workflows GitHub Actions tombaient en
+`startup_failure`, `main` compris. J'ai cherché dans les fichiers de workflow (un
+« workflow fantôme » supprimé) et noté « cause non établie ». La réponse était sur une
+page que je ne peux pas ouvrir : Billing de l'organisation — budget Actions à 100 %
+(« l'usage supplémentaire sera arrêté ») et autorisation de paiement refusée. Coût : la
+CI absente en fin de séance, une PR sans contrôle GitHub, une piste fausse entretenue des
+heures. ⛔ Une panne qui touche TOUS les workflows d'un compte à la fois : demander
+d'abord à Paul les pages Billing (une capture suffit), pas fouiller le code. ⚠️ Le budget
+s'arrête sans prévenir le dépôt : une alerte à 75 % se pose dans « Budgets and alerts »
+(geste de Paul). Puis l'onglet Usage **groupé par dépôt** a tranché en une capture :
+`Ultima-/.github/workflows/tests.yml` facturait ≈ 29 min par exécution (27 pour le
+harnais navigateur), jouée même pour un commit de `.md`.
+
+**UNE COMMANDE QUE LA PLATEFORME EXÉCUTE SE VÉRIFIE SUR LA PLATEFORME** *(2026-10-19)*.
+J'ai écrit l'`ignoreCommand` de Vercel de RenoBoost comme un script, éprouvé en local
+(tests verts, sabotages au rouge). Premier déploiement réel : `ERROR`, code 127 — Vercel
+SUPPRIME les fichiers de `RenoBoost/.vercelignore` (dont `RenoBoost/scripts/`) AVANT d'exécuter la
+commande, et tout code de sortie autre que 0 ou 1 casse le déploiement. Mise en ligne dans
+`RenoBoost/vercel.json` : 365 caractères pour un plafond de schéma de 256 → second `ERROR`.
+Deux aperçus perdus, rattrapés avant toute fusion. ⛔ Un test local prouve la logique, pas
+l'environnement : relire le journal du PREMIER déploiement réel, lire la doc du champ
+AVANT d'écrire sa valeur, et mettre en test toute limite de plateforme dès qu'on la
+découvre (`RenoBoost/tests/vercel-ignore-build.test.mjs`, `MAX_IGNORE_COMMAND`). Une
+commande lancée par une plateforme ne dépend d'aucun fichier qu'elle peut retirer, et
+ramène TOUT code inattendu à « construire ».
+
+**UN COÛT SE LIT À SA SOURCE, ET CE QUE LE DÉPLOIEMENT SERT SE VÉRIFIE** *(2026-10-19)*.
+Paul : « on paie trop ». Mesuré avant de proposer : 39 % des commits de `main` de
+RenoBoost = un refresh planifié DEUX fois par jour (un déploiement de production
+chacun), 29 % = documentation seule. En cherchant ce qu'un build sauté ne changerait pas :
+`outputDirectory: "."` servait les 141 `.md` du dépôt (HTTP 200), dont 10 numéros de
+téléphone en clair. ⛔ Avant d'économiser un build, demander ce que le déploiement SERT :
+une optimisation de coût est aussi une lecture de ce qui est exposé. Un second
+déclencheur « pour l'autre saison » est un doublon, pas une précaution. ⚠️ Une règle
+écrite se perd : elle est portée par `RenoBoost/tests/budget-couts.test.mjs`, qui échoue
+au premier cron ajouté sans raison.
 
 **`pkill -f` AVEC UN MOTIF QUE SA PROPRE COMMANDE CONTIENT TUE LE SHELL** *(2026-10-12)*.
 `pkill -f "next start -p 3123"` puis `pkill -f "http.server 8765"` : le motif
