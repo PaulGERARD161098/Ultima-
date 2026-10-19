@@ -190,7 +190,7 @@ Paul lit Billing : budget Actions de l'organisation à 100 %, autorisation de pa
 refusée — c'est la cause des `startup_failure` du 18/10, pas le code. Usage par dépôt
 (brut, 1ᵉʳ–19/10) : Ultima- ≈ 37,3 $ sur 68,54 $, RenoDevis ≈ 22,7 $, RenoBoost ≈ 5,5 $.
 Dans Ultima-, `tests.yml` facture ≈ 29 min par exécution (27 pour le harnais navigateur),
-≈ 220 exécutions du 01 au 18/10, et la moitié des commits sont des `.md` seuls.
+≈ 220 exécutions du 01 au 18/10 pour 71 PR ouvertes ; la moitié des commits mais un tiers des PR (diff net) sont des `.md` seuls : gain attendu d'un quart à un tiers d'Ultima-.
 Paul : « go, prépare le correctif ; Ultima doit rester le coordinateur ». Fait sur la
 branche `claude/ci-couts-md-seuls` (commit `0760404`) : le job navigateur saute ses étapes
 lourdes quand le diff net ne touche que des `.md` ; `tests/unit-ci-md-seuls.mjs` exécute le

@@ -4,7 +4,8 @@
 //
 // ⛔ Pourquoi ce garde existe. Facture GitHub du 19/10/2026 : Ultima- ≈ 54 % des
 // minutes Actions de l'organisation, et le harnais navigateur = 27 des 29 minutes
-// facturées par exécution. La moitié des commits sont des `.md` seuls. Le danger
+// facturées par exécution. La moitié des commits, mais un tiers des PR (11 sur 33
+// fusionnées, diff NET — ce que la règle lit), sont des `.md` seuls. Le danger
 // est d'UN seul côté : sauter un harnais qui aurait dû tourner — une PR de code
 // verte sans avoir été testée. Les cas « on exécute » pèsent donc plus lourd que
 // les cas « on saute », et chacun est construit sur une réponse connue d'avance.
