@@ -860,7 +860,7 @@ export function creerGardeVoix(intervalleMs, maxEntrees = 1000) {
 // crédit épuisé (400), une cadence (429), une surcharge (529) d'un délai.
 // ⛔ Jamais le message brut du fournisseur : un statut, ou un mot de la liste.
 // Le mot « crédit » est le seul tiré du message, et seulement comme étiquette.
-export const MOTIF_CAUSE_IA = /^ia (\d{3}( crédit)?|délai|réseau|vide)$/;
+export const MOTIF_CAUSE_IA = /^ia (\d{3}( crédit)?|délai|réseau|vide|plafond)$/;
 export function causeEchecIA(erreur) {
   if (!erreur || typeof erreur !== 'object') return 'ia réseau';
   const statut = Number.isInteger(erreur.status) ? erreur.status : null;

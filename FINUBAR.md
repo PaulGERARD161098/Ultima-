@@ -31,11 +31,11 @@
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-10-18",
-    "commit": "6d6ee6b",
-    "quoi": "18/10 : AMATSU — l'étoile (boucle 1), puis la 2a : la lecture par la voix de Léo (main transversale, route, défaire, blason, harnais), migration `amatsu_lectures` ÉCRITE NON APPLIQUÉE. Tout sur la branche de #399, fusion unique en fin de séance."
+    "le": "2026-10-19",
+    "commit": "c8bd44ee8aff387e281149020926a7bcf221fe7c",
+    "quoi": "19/10 : #400 fusionnée (d67998a, go de Paul sur 3077897 : coûts de CI + plafond d'appels de Léo). AMATSU : étoile (1) et voix de Léo (2a) prouvées, CI de #399 verte 9/9 ; migration amatsu_lectures appliquée par Paul après une faille de droits fermée ; main ramené dans #399."
   },
-  "prochaine_action": "AMATSU — la preuve réelle : Paul dicte « Amatsu, … » à Léo (preview de #399 ou après fusion), puis `select count(*), max(created_at) from public.amatsu_lectures` (le compte seul, jamais le contenu). Ensuite cadrer la 2b (page et registre de relecture, passerelle vers l'objet jugé). Fusion de #399 en fin de séance, après #400.",
+  "prochaine_action": "Go de Paul sur le SHA final de #399 (main d67998a ramené, patrimoine rejoué), fusion, puis la preuve réelle d'AMATSU en production : « Amatsu, … » dicté à Léo, puis `select count(*), max(created_at) from public.amatsu_lectures` (le compte seul). Ensuite cadrer la 2b (page et registre de relecture, passerelle vers l'objet jugé).",
   "bloque_par": [
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
@@ -48,8 +48,12 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "AMATSU : étoile (1) et voix de Léo (2a) bâties, prouvées, CI verte ; migration appliquée par Paul le 19/10 et contrôlée. Reste la preuve réelle (une lecture dictée, comptée) ; 2b à cadrer. CADRAGE-IMLADRIK.md §12.",
+      "quoi": "AMATSU : étoile (1) et voix de Léo (2a) bâties, prouvées, CI verte ; migration appliquée par Paul le 19/10 et contrôlée. Reste la preuve réelle, après la fusion de #399 : la preview ne voit pas ULTIMA_PROPRIETAIRES malgré « Production and Preview » coché et un redéploiement (piste : « Separate Production Secret Values », valeur vide côté Preview — non vérifié, le connecteur Vercel ne lit pas les variables). 2b à cadrer. CADRAGE-IMLADRIK.md §12.",
       "depuis": "2026-10-18"
+    },
+    {
+      "quoi": "Coûts (19/10) : PR #400 FUSIONNÉE le 19/10 (d67998a), sur le go de Paul portant sur 3077897. Plafond d'appels de Léo : migration 20261019160000_leo_appels.sql APPLIQUÉE et vérifiée par Paul vers 18:45 UTC (16 contrôles ok ; la 101ᵉ tentative refusée — rapporté dans #400). Actions débloquées (CI 9/9 sur #400 et #399). Restent : le saut du harnais pour les .md seuls, non éprouvé sur GitHub (la première PR de documentation seule le dira) ; migration hors registre supabase_migrations, advisors non relus ; RUNBOOK-GATES.md gate ⑦ et CLAUDE.md disent encore « non appliquée » (PR de documentation prévue par la séance de #400) ; limite de dépense Anthropic (Paul) ; LECONS v98 à propager aux 9 autres dépôts. Détail : CLAUDE.md « BUDGET FIXE ».",
+      "depuis": "2026-10-19"
     },
     {
       "quoi": "Pilotage ZOH : accès HTTP avec une vraie session propriétaire encore non éprouvé depuis Work (protection Vercel après redirection ; CLI absent). Source et tests sont livrés. Chaque système doit encore prouver son propre raccordement et ses contrôles ; aucun agent permanent activé par cette règle.",
@@ -183,6 +187,36 @@
 <!-- finubar:fin -->
 
 ## Journal de reprise
+
+### 2026-10-19 — la CI bloquée vient de la facture ; Ultima- en est le premier poste
+
+Paul lit Billing : budget Actions de l'organisation à 100 %, autorisation de paiement
+refusée — c'est la cause des `startup_failure` du 18/10, pas le code. Usage par dépôt
+(brut, 1ᵉʳ–19/10) : Ultima- ≈ 37,3 $ sur 68,54 $, RenoDevis ≈ 22,7 $, RenoBoost ≈ 5,5 $.
+Dans Ultima-, `tests.yml` facture ≈ 29 min par exécution (27 pour le harnais navigateur),
+≈ 220 exécutions du 01 au 18/10 pour 71 PR ouvertes ; la moitié des commits mais un tiers des PR (diff net) sont des `.md` seuls : gain attendu d'un quart à un tiers d'Ultima-.
+Paul : « go, prépare le correctif ; Ultima doit rester le coordinateur ». Fait sur la
+branche `claude/ci-couts-md-seuls` (commit `0760404`) : le job navigateur saute ses étapes
+lourdes quand le diff net ne touche que des `.md` ; `tests/unit-ci-md-seuls.mjs` exécute le
+script tel quel (18 verdicts, 8 sabotages rouges). La règle de coûts devient canonique dans
+`CLAUDE.md` ; les trois leçons de la boucle sont écrites ICI (LECONS v94) puis à propager.
+Non éprouvé sur GitHub : première exécution réelle après déblocage.
+
+### 2026-10-19 (suite) — le plafond d'appels de Léo, revu puis corrigé
+
+Question de Paul : garder la tour de contrôle sans facture énorme. Lu à la source : le
+coût d'Ultima côté Vercel est du build (5,79 $ de 5,81 $), celui de Léo est chez Anthropic,
+sans compteur ni plafond avant cette boucle. Livré sur la même branche : journal
+`leo_appels` (tentative posée AVANT le coût, issue et tokens après, zéro contenu),
+plafond atomique 100/24 h par propriétaire, repli local 25/instance dit à l'écran. Revue
+indépendante : pas de critique ; huit constats (S1–S8) vérifiés et corrigés — repli plus
+bas que la base, aucune relance du SDK facturée hors plafond, écriture limitée aux colonnes
+du code, une trace = une tentative et une issue, preuves SQL rejouées en CI (PGlite).
+Deux défauts d'instrument trouvés par le sabotage et corrigés (course PostgreSQL laissée
+au hasard ; verdict d'absence vert avant la réponse) — leçons v98. Arbitrages de Paul (19/10) : plafond
+confirmé à 100 / 24 h ; migration NON appliquée pour l'instant (il relit le SQL puis donne un
+go explicite). Reste à Paul : la limite de dépense de la console Anthropic, le go de migration,
+la fusion sur SHA.
 
 ### 2026-10-13 — prévoir le contrôle avant le système métier
 

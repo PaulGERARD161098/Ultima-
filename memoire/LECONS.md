@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v93 2026-10-17 sha256:69399ff8e1ec -->
+<!-- lecons:empreinte v98 2026-10-19 sha256:53242086f871 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1023,6 +1023,22 @@ trouver. Vérifier seulement la présence du permis ne prouve rien.
 
 *Rechute du 2026-09-13 (RenoBoost)* : un harnais ouvrait les pages produit en `file://` alors qu'elles référencent leurs feuilles en racine-relatif (`href="/produit.css"`) — rien ne chargeait, 9 verdicts verts sur des pages NUES. Une page sans CSS n'a effectivement pas d'ombre : le harnais avait raison sur le fond, et c'est ce qui rend l'erreur dangereuse. Corrigé par un serveur HTTP et un verrou de non-vacuité (`.pp-btn` fait au moins 44px), 18/18 verts ensuite (`RenoBoost/tests/pages-produit.navigateur.mjs`). Trois autres sondes ont menti le même jour : un token hex comparé à un style calculé en rgb (0 défaut sur 1669 éléments), un fond translucide lu comme opaque, une sonde qui ne cherchait plus les bons tokens après conversion.
 
+*Rechute du 2026-10-19 (Ultima-)* : un verdict « aucune mention de repli » attendait `.leo-bulle-leo`, un sélecteur déjà présent avant la réponse (l'accueil de Léo) — l'absence était constatée avant que la réponse n'arrive. Le cas jumeau (« la mention est là ») a échoué au premier passage et réussi au deuxième : c'est ce passage au vert « au hasard » qui a trahi le défaut. ⛔ On attend le TEXTE exact de la réponse, jamais un sélecteur qui peut préexister ; et un harnais qui change de verdict d'un passage à l'autre ne garde rien : on le relance trois fois avant de le croire.
+
+**UN TEST DE COURSE QUI LAISSE LE CALENDRIER DÉCIDER NE GARDE RIEN** *(2026-10-19, Ultima-)*.
+Le plafond d'appels de Léo (verrou consultatif PostgreSQL) était éprouvé par 30 insertions
+simultanées à 90/100. Le sabotage « verrou retiré » est passé au vert au deuxième essai :
+les insertions étaient si brèves que chacune finissait avant que la suivante ne démarre —
+sans verrou, la course n'avait simplement pas lieu. Le verrou avait été prouvé la première
+fois, par chance. Corrigé : chaque client garde sa transaction ouverte 0,5 s après
+l'insertion, ce qui rend la course inévitable sans verrou ; sabotage rouge trois fois de
+suite (`Ultima-/tests/leo-appels-postgres.sh`). ⛔ Pour prouver un verrou, ne pas compter sur
+la concurrence « naturelle » : tenir la fenêtre ouverte, puis casser le verrou et exiger le
+rouge PLUSIEURS fois — un sabotage qui ne vire pas au rouge à tous les coups mesure le hasard.
+⚠️ Corollaire : un test qui ne tourne pas dans `run-unit.mjs` ne tourne pas dans la CI ;
+la partie du harnais que PGlite peut prouver (refus du 101ᵉ, droits, unicité) vit donc aussi
+dans `Ultima-/tests/unit-leo-appels-sql.mjs`, le reste (la course) restant au harnais réel.
+
 **UN RENVOI MORT SE LIT EXACTEMENT COMME UN RENVOI VALIDE** *(2026-09-07)*. Un
 « §11.8 » était cité cinq fois dans les documents d'Artidispo pour une section
 **jamais écrite** : le script qui devait la poser avait échoué après avoir
@@ -1750,6 +1766,18 @@ quand même, **la rotation est la première action**, pas une note de fin.
 
 ## 4. Conduire une boucle
 
+**UN GO SE DEMANDE POUR UN GESTE DONT L'ACCÈS EST PROUVÉ** *(2026-10-19, Ultima-)*. J'ai
+demandé à Paul son go pour appliquer `leo_appels` sur la base d'Ultima, en m'appuyant sur le
+RUNBOOK du 11/07 (« vérifié en base » par le connecteur). Son go est arrivé ; `list_migrations`
+sur `leosfqyidgsaescjbfom` a répondu « permission denied » — le connecteur de la séance ne liste
+que Artidispo et RenoDevis. Coût : un aller-retour de Paul pour un go que je ne pouvais pas
+exécuter, après avoir écrit « j'attends ton go » comme si le geste m'appartenait. ⛔ Avant de
+demander un go (SQL, déploiement, envoi), prouver l'accès à la CIBLE par une lecture inoffensive
+(`list_migrations`, `select 1`) : un accès constaté il y a trois mois n'est pas un accès. ⚠️ Et
+jamais « un autre projet qui répond » : Artidispo et RenoDevis répondaient — ce n'étaient pas la
+base d'Ultima. Quand l'accès manque, le geste de Paul se prépare au dernier cran (procédure,
+script de vérification éprouvé sur une base jetable) au lieu de s'annoncer comme le mien.
+
 **LE COMMENT AVANT LE TRAVAIL** *(directive EL)*. Étapes, moyens, critères de
 réussite explicités avant d'exécuter. En pratique : **la maquette avant le
 code**, éprouvée le 2026-08-01 sur VRANESH et DRAUKHAIN.
@@ -2387,6 +2415,54 @@ jusqu'au 30/09, alors que la liste en portait **dix** : deux dépôts manquaient
 écrite — hors de `Ultima-/finubar/depots.json`, fork partagé avec un tiers.
 
 ## 6. Économie
+
+**UN `startup_failure` PARTOUT, `main` COMPRIS, C'EST LE COMPTE — PAS LE CODE** *(2026-10-19)*.
+Depuis le 18/10 16:22 UTC, tous les workflows GitHub Actions tombaient en
+`startup_failure`, `main` compris. J'ai cherché dans les fichiers de workflow (un
+« workflow fantôme » supprimé) et noté « cause non établie ». La réponse était sur une
+page que je ne peux pas ouvrir : Billing de l'organisation — budget Actions à 100 %
+(« l'usage supplémentaire sera arrêté ») et autorisation de paiement refusée. Coût : la
+CI absente en fin de séance, une PR sans contrôle GitHub, une piste fausse entretenue des
+heures. ⛔ Une panne qui touche TOUS les workflows d'un compte à la fois : demander
+d'abord à Paul les pages Billing (une capture suffit), pas fouiller le code. ⚠️ Le budget
+s'arrête sans prévenir le dépôt : une alerte à 75 % se pose dans « Budgets and alerts »
+(geste de Paul). Puis l'onglet Usage **groupé par dépôt** a tranché en une capture :
+`Ultima-/.github/workflows/tests.yml` facturait ≈ 29 min par exécution (27 pour le
+harnais navigateur), jouée même pour un commit de `.md`.
+
+**UNE COMMANDE QUE LA PLATEFORME EXÉCUTE SE VÉRIFIE SUR LA PLATEFORME** *(2026-10-19)*.
+J'ai écrit l'`ignoreCommand` de Vercel de RenoBoost comme un script, éprouvé en local
+(tests verts, sabotages au rouge). Premier déploiement réel : `ERROR`, code 127 — Vercel
+SUPPRIME les fichiers de `RenoBoost/.vercelignore` (dont `RenoBoost/scripts/`) AVANT d'exécuter la
+commande, et tout code de sortie autre que 0 ou 1 casse le déploiement. Mise en ligne dans
+`RenoBoost/vercel.json` : 365 caractères pour un plafond de schéma de 256 → second `ERROR`.
+Deux aperçus perdus, rattrapés avant toute fusion. ⛔ Un test local prouve la logique, pas
+l'environnement : relire le journal du PREMIER déploiement réel, lire la doc du champ
+AVANT d'écrire sa valeur, et mettre en test toute limite de plateforme dès qu'on la
+découvre (`RenoBoost/tests/vercel-ignore-build.test.mjs`, `MAX_IGNORE_COMMAND`). Une
+commande lancée par une plateforme ne dépend d'aucun fichier qu'elle peut retirer, et
+ramène TOUT code inattendu à « construire ».
+
+*Rechute du 2026-10-19 (Ultima-, premier passage réel de la CI) — TROIS tentatives pour une seule fausse panne* :
+`tests/unit-ci-md-seuls.mjs` simulait un `grep` en panne. ① Un faux binaire dans `os.tmpdir()` : vert en
+local, rouge sur GitHub — le harnais tourne sous `docker --tmpfs /tmp`, monté `noexec` par défaut, le
+faux binaire n'était jamais exécuté et le VRAI grep répondait. ② Une fonction injectée par `BASH_ENV`,
+vérifiée sous un `/tmp` `noexec` en root : verte chez moi, rouge sur GitHub — dans l'environnement
+minimal du conteneur elle ne prenait pas effet (observé avec bash 5.2.21 : sans `SHLVL` dans
+l'environnement, la fonction n'agit pas ; cause non établie, le fichier est pourtant bien lu).
+③ Un LIEN SYMBOLIQUE vers `node` (qui refuse les options de grep et sort en erreur) : indépendant du
+montage de `/tmp` et de l'environnement ; vert dans le banc ci-dessous. Coût : trois passages de CI,
+dont deux rouges sur un test que je croyais éprouvé « comme la CI ». ⛔ Un banc qui reproduit UN facteur
+de l'environnement n'est pas l'environnement : mon `noexec` en root, avec l'environnement complet de la
+session, passait là où la CI échouait. Le banc qui reproduit : utilisateur `nobody`, `env -i` (PATH et
+HOME seulement), `TMPDIR` sur un tmpfs `noexec` (`mount -t tmpfs -o noexec,nosuid,mode=1777 tmpfs <dir>`,
+dossier lisible par `nobody` — pas sous `/tmp/claude-0`, remis en 700 par la séance). Il a reproduit
+l'échec de la CI à l'identique avec la version ②, et prouvé le correctif ③ (suite complète 68/68).
+⛔ Et le verrou de non-vacuité (« le faux grep MORD ici ») est ce qui a désigné la cause dès le premier
+passage réel : sans lui, le verdict aurait seulement dit `false`. ⚠️ Un sabotage se vérifie sur le BON
+verdict : mes trois « rouge ✔ » d'une passe étaient rouges pour `EACCES` (un dossier devenu illisible
+pour `nobody`), pas pour le sabotage — le script impose désormais la référence verte AVANT et nomme le
+verdict qui tombe.
 
 **`pkill -f` AVEC UN MOTIF QUE SA PROPRE COMMANDE CONTIENT TUE LE SHELL** *(2026-10-12)*.
 `pkill -f "next start -p 3123"` puis `pkill -f "http.server 8765"` : le motif
