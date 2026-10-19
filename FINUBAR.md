@@ -33,7 +33,7 @@
   "dernier_arret": {
     "le": "2026-10-19",
     "commit": "49edef90ba7e9971600531c0cf05e255333123a4",
-    "quoi": "19/10 : CI d'Ultima- — le harnais navigateur saute quand seuls des .md changent (PR brouillon) ; règle BUDGET FIXE canonique ici ; compteur et plafond d'appels de Léo (migration préparée, NON appliquée) revu par un auditeur indépendant et corrigé ; leçons v96."
+    "quoi": "19/10 : CI d'Ultima- — le harnais navigateur saute quand seuls des .md changent (PR brouillon) ; règle BUDGET FIXE canonique ici ; compteur et plafond d'appels de Léo (migration préparée, NON appliquée) revu par un auditeur indépendant et corrigé ; leçons v97."
   },
   "prochaine_action": "Après le RDV kelvin° : reporter ses réponses dans la fiche et trancher construire ou s'abonner (VITRUVE).",
   "bloque_par": [
@@ -48,7 +48,7 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "Coûts (19/10) : Ultima- ≈ 54 % du brut Actions ; côté Vercel, `ultima` = 5,81 $ dont 5,79 $ de Build CPU (capture de Paul). Correctif CI sur claude/ci-couts-md-seuls, PR brouillon, non éprouvé sur GitHub (Actions bloquées : budget à 100 % + paiement refusé, gestes de Paul). Plafond d'appels de Léo livré dans la même PR : migration 20261019160000_leo_appels.sql NON appliquée (gate SQL/RLS de Paul) ; Paul fixe la valeur (défaut 100/24 h) et la limite de dépense Anthropic. Fusion sur accord du SHA ; LECONS v95 à propager aux 9 autres dépôts. Détail : CLAUDE.md « BUDGET FIXE ».",
+      "quoi": "Coûts (19/10) : Ultima- ≈ 54 % du brut Actions ; côté Vercel, `ultima` = 5,81 $ dont 5,79 $ de Build CPU (capture de Paul). Correctif CI sur claude/ci-couts-md-seuls, PR brouillon, non éprouvé sur GitHub (Actions bloquées : budget à 100 % + paiement refusé, gestes de Paul). Plafond d'appels de Léo livré dans la même PR : migration 20261019160000_leo_appels.sql NON appliquée (gate SQL/RLS de Paul) ; Paul fixe la valeur (défaut 100/24 h) et la limite de dépense Anthropic. Fusion sur accord du SHA ; LECONS v97 à propager aux 9 autres dépôts. Détail : CLAUDE.md « BUDGET FIXE ».",
       "depuis": "2026-10-19"
     },
     {
@@ -209,7 +209,7 @@ indépendante : pas de critique ; huit constats (S1–S8) vérifiés et corrigé
 bas que la base, aucune relance du SDK facturée hors plafond, écriture limitée aux colonnes
 du code, une trace = une tentative et une issue, preuves SQL rejouées en CI (PGlite).
 Deux défauts d'instrument trouvés par le sabotage et corrigés (course PostgreSQL laissée
-au hasard ; verdict d'absence vert avant la réponse) — leçons v96. Arbitrages de Paul (19/10) : plafond
+au hasard ; verdict d'absence vert avant la réponse) — leçons v97. Arbitrages de Paul (19/10) : plafond
 confirmé à 100 / 24 h ; migration NON appliquée pour l'instant (il relit le SQL puis donne un
 go explicite). Reste à Paul : la limite de dépense de la console Anthropic, le go de migration,
 la fusion sur SHA.

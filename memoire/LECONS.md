@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v96 2026-10-19 sha256:07425923ccec -->
+<!-- lecons:empreinte v97 2026-10-19 sha256:d629028ca8a0 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -2431,27 +2431,26 @@ découvre (`RenoBoost/tests/vercel-ignore-build.test.mjs`, `MAX_IGNORE_COMMAND`)
 commande lancée par une plateforme ne dépend d'aucun fichier qu'elle peut retirer, et
 ramène TOUT code inattendu à « construire ».
 
-*Rechute du 2026-10-19 (Ultima-, premier passage réel de la CI)* : `tests/unit-ci-md-seuls.mjs`
-simulait un `grep` en panne en déposant un faux binaire dans `os.tmpdir()`. Vert en local ; rouge
-sur GitHub, car le harnais tourne sous `docker --tmpfs /tmp` — monté `noexec` par défaut : le faux
-binaire n'était jamais exécuté, le VRAI grep répondait, et le verdict « exécute » tombait à
-`false`. Les deux jobs navigateur ont échoué en ≈ 1 min (la suite unitaire précède la phase
-navigateur : les 27 min facturées n'ont pas été consommées). ⛔ Un test qui dépose un exécutable
-dans un dossier temporaire dépend du montage de ce dossier : le faux grep devient une FONCTION
-injectée par `BASH_ENV` (elle se lit, elle ne s'exécute pas), avec un verrou de non-vacuité (« le
-faux grep MORD ici », code 2). ⚠️ Reproduire l'environnement de la CI en local avant de pousser :
-`mount -t tmpfs -o noexec tmpfs <dossier>` puis `TMPDIR=<dossier> node tests/run-unit.mjs` a
-reproduit l'échec à l'identique, et prouvé le correctif.
-**UN COÛT SE LIT À SA SOURCE, ET CE QUE LE DÉPLOIEMENT SERT SE VÉRIFIE** *(2026-10-19)*.
-Paul : « on paie trop ». Mesuré avant de proposer : 39 % des commits de `main` de
-RenoBoost = un refresh planifié DEUX fois par jour (un déploiement de production
-chacun), 29 % = documentation seule. En cherchant ce qu'un build sauté ne changerait pas :
-`outputDirectory: "."` servait les 141 `.md` du dépôt (HTTP 200), dont 10 numéros de
-téléphone en clair. ⛔ Avant d'économiser un build, demander ce que le déploiement SERT :
-une optimisation de coût est aussi une lecture de ce qui est exposé. Un second
-déclencheur « pour l'autre saison » est un doublon, pas une précaution. ⚠️ Une règle
-écrite se perd : elle est portée par `RenoBoost/tests/budget-couts.test.mjs`, qui échoue
-au premier cron ajouté sans raison.
+*Rechute du 2026-10-19 (Ultima-, premier passage réel de la CI) — TROIS tentatives pour une seule fausse panne* :
+`tests/unit-ci-md-seuls.mjs` simulait un `grep` en panne. ① Un faux binaire dans `os.tmpdir()` : vert en
+local, rouge sur GitHub — le harnais tourne sous `docker --tmpfs /tmp`, monté `noexec` par défaut, le
+faux binaire n'était jamais exécuté et le VRAI grep répondait. ② Une fonction injectée par `BASH_ENV`,
+vérifiée sous un `/tmp` `noexec` en root : verte chez moi, rouge sur GitHub — dans l'environnement
+minimal du conteneur elle ne prenait pas effet (observé avec bash 5.2.21 : sans `SHLVL` dans
+l'environnement, la fonction n'agit pas ; cause non établie, le fichier est pourtant bien lu).
+③ Un LIEN SYMBOLIQUE vers `node` (qui refuse les options de grep et sort en erreur) : indépendant du
+montage de `/tmp` et de l'environnement ; vert dans le banc ci-dessous. Coût : trois passages de CI,
+dont deux rouges sur un test que je croyais éprouvé « comme la CI ». ⛔ Un banc qui reproduit UN facteur
+de l'environnement n'est pas l'environnement : mon `noexec` en root, avec l'environnement complet de la
+session, passait là où la CI échouait. Le banc qui reproduit : utilisateur `nobody`, `env -i` (PATH et
+HOME seulement), `TMPDIR` sur un tmpfs `noexec` (`mount -t tmpfs -o noexec,nosuid,mode=1777 tmpfs <dir>`,
+dossier lisible par `nobody` — pas sous `/tmp/claude-0`, remis en 700 par la séance). Il a reproduit
+l'échec de la CI à l'identique avec la version ②, et prouvé le correctif ③ (suite complète 68/68).
+⛔ Et le verrou de non-vacuité (« le faux grep MORD ici ») est ce qui a désigné la cause dès le premier
+passage réel : sans lui, le verdict aurait seulement dit `false`. ⚠️ Un sabotage se vérifie sur le BON
+verdict : mes trois « rouge ✔ » d'une passe étaient rouges pour `EACCES` (un dossier devenu illisible
+pour `nobody`), pas pour le sabotage — le script impose désormais la référence verte AVANT et nomme le
+verdict qui tombe.
 
 **`pkill -f` AVEC UN MOTIF QUE SA PROPRE COMMANDE CONTIENT TUE LE SHELL** *(2026-10-12)*.
 `pkill -f "next start -p 3123"` puis `pkill -f "http.server 8765"` : le motif

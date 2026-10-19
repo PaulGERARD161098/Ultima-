@@ -14,7 +14,7 @@
 // une PR porte du code (commit 1), puis une note (commit 2). Le passage du commit 1
 // est annulé par le suivant (`cancel-in-progress`). Si le commit 2 ne regardait que
 // lui-même, il sauterait le harnais — et le code ne serait testé nulle part.
-import { readFileSync, mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { readFileSync, mkdtempSync, mkdirSync, writeFileSync, symlinkSync, rmSync } from 'node:fs';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
@@ -126,19 +126,21 @@ try {
 
     // 4. Les erreurs ne valent JAMAIS « tout est .md ».
     //    grep en erreur (code 2) : `! grep` ou `[ $? -ne 0 ]` l'aurait lu comme « rien d'autre qu'un .md ».
-    //    ⛔ Le faux `grep` est une FONCTION injectée par BASH_ENV, pas un binaire déposé dans un
-    //    dossier du PATH : en CI, `docker --tmpfs /tmp` est monté `noexec`, le faux binaire n'était
-    //    jamais exécuté, c'est le VRAI grep qui répondait — et le verdict vire à `false` (19/10, premier
-    //    passage sur GitHub, alors que tout était vert en local). Une fonction se LIT, elle ne s'exécute pas.
-    const ombre = join(racine, 'ombre.sh');
-    writeFileSync(ombre, 'grep() { return 2; }\n');
-    //    Verrou de non-vacuité : le faux grep MORD dans CET environnement (code 2). Sans lui, le verdict
-    //    ci-dessous mesurerait le vrai grep, et « exécute » ne prouverait plus rien.
-    const sonde = spawnSync('/bin/bash', ['-c', 'grep x </dev/null; echo $?'],
-      { encoding: 'utf8', env: { ...process.env, BASH_ENV: ombre } });
-    verdicts.fauxGrepMordIci = sonde.stdout.trim() === '2';
+    //    ⛔ Le faux `grep` est un LIEN SYMBOLIQUE vers `node` (déjà là, puisqu'il exécute ce test) :
+    //    appelé avec les options de grep, node les refuse (« bad option ») et sort en erreur, code 9.
+    //    Deux versions précédentes ont échoué sur GitHub alors qu'elles passaient en local (19/10) :
+    //    ① un faux binaire déposé dans os.tmpdir() — `docker --tmpfs /tmp` est monté `noexec`, il n'était
+    //    jamais exécuté ; ② une fonction injectée par BASH_ENV — dans un environnement minimal (celui du
+    //    conteneur) elle ne prenait pas effet. Un lien vers un binaire d'un dossier exécutable ne dépend
+    //    ni du montage de /tmp ni de l'environnement.
+    const ombre = join(racine, 'ombre'); mkdirSync(ombre);
+    symlinkSync(process.execPath, join(ombre, 'grep'));
+    //    Verrou de non-vacuité : le faux grep MORD dans CET environnement (sortie en erreur, ni 0 ni 1 :
+    //    1 = « aucune ligne » chez le vrai grep). Sans lui, le verdict ci-dessous mesurerait le vrai grep.
+    const sonde = spawnSync(join(ombre, 'grep'), ['-qvE', '\\.md$'], { encoding: 'utf8' });
+    verdicts.fauxGrepMordIci = sonde.status !== null && sonde.status !== 0 && sonde.status !== 1;
     verdicts.executeGrepEnErreur = verdicts.fauxGrepMordIci &&
-      execute(joue(fusion(depot(), [['NOTES.md']]), { BASH_ENV: ombre }));
+      execute(joue(fusion(depot(), [['NOTES.md']]), { PATH: `${ombre}:${process.env.PATH}` }));
     //    git introuvable.
     verdicts.executeGitAbsent = execute(joue(fusion(depot(), [['NOTES.md']]), { PATH: '/nonexistent' }));
 
