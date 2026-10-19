@@ -475,6 +475,18 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
   `.md` retirés du déploiement) : `RenoBoost/CLAUDE.md` « BUDGET FIXE » et
   `RenoBoost/ROADMAP-2026-10-19-fin-de-session.md` §8. Pistes ouvertes : RenoDevis
   (2ᵉ consommateur, non lu), la suite unitaire jouée trois fois par exécution.
+  **Vercel, projet `ultima`** (capture Usage de Paul, cycle 25/09–25/10, lue le 19/10) :
+  **5,81 $**, dont **5,79 $ de Build CPU (30 h)** ; fonctions 3,07 K invocations et 3 min
+  de CPU = 0,01 $. Le coût d'Ultima côté Vercel est donc du BUILD, pas de l'exécution
+  (`vercel.json` n'a pas d'`ignoreCommand` : un build par push). ⚠️ Le coût d'un appel de
+  Léo ne passe pas par Vercel : il est facturé par Anthropic.
+  **Le plafond d'appels de Léo** (19/10) : `api/_lib/leo-appels.js` + migration
+  `supabase/migrations/20261019160000_leo_appels.sql` (100 appels / 24 h / propriétaire,
+  atomique côté base ; hypothèse de départ, Paul fixe la valeur). ⛔ **Migration non
+  appliquée : SQL/RLS = gate de Paul.** Avant son application, Léo tourne en repli local
+  (25 par instance, dit en log et dans la réponse, `journal: 'local'`) — plus bas que la
+  base, et PAS un plafond global : le plafond dur reste la limite de dépense de la
+  console Anthropic (geste de Paul). Le journal sert aussi de mesure d'usage de Léo.
 
 > Les **leçons** (garde-fous, mesures, ce qu'on donne à Paul) ont leur fichier :
 > `memoire/LECONS.md`. Ne restent ici que les règles opérationnelles du dépôt.

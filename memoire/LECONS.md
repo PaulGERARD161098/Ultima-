@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v94 2026-10-19 sha256:4f26349472ec -->
+<!-- lecons:empreinte v95 2026-10-19 sha256:7055ba5f2fa9 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1022,6 +1022,22 @@ ainsi : chercher le contenu interdit dans ce qui part, et exiger de ne pas l'y
 trouver. Vérifier seulement la présence du permis ne prouve rien.
 
 *Rechute du 2026-09-13 (RenoBoost)* : un harnais ouvrait les pages produit en `file://` alors qu'elles référencent leurs feuilles en racine-relatif (`href="/produit.css"`) — rien ne chargeait, 9 verdicts verts sur des pages NUES. Une page sans CSS n'a effectivement pas d'ombre : le harnais avait raison sur le fond, et c'est ce qui rend l'erreur dangereuse. Corrigé par un serveur HTTP et un verrou de non-vacuité (`.pp-btn` fait au moins 44px), 18/18 verts ensuite (`RenoBoost/tests/pages-produit.navigateur.mjs`). Trois autres sondes ont menti le même jour : un token hex comparé à un style calculé en rgb (0 défaut sur 1669 éléments), un fond translucide lu comme opaque, une sonde qui ne cherchait plus les bons tokens après conversion.
+
+*Rechute du 2026-10-19 (Ultima-)* : un verdict « aucune mention de repli » attendait `.leo-bulle-leo`, un sélecteur déjà présent avant la réponse (l'accueil de Léo) — l'absence était constatée avant que la réponse n'arrive. Le cas jumeau (« la mention est là ») a échoué au premier passage et réussi au deuxième : c'est ce passage au vert « au hasard » qui a trahi le défaut. ⛔ On attend le TEXTE exact de la réponse, jamais un sélecteur qui peut préexister ; et un harnais qui change de verdict d'un passage à l'autre ne garde rien : on le relance trois fois avant de le croire.
+
+**UN TEST DE COURSE QUI LAISSE LE CALENDRIER DÉCIDER NE GARDE RIEN** *(2026-10-19, Ultima-)*.
+Le plafond d'appels de Léo (verrou consultatif PostgreSQL) était éprouvé par 30 insertions
+simultanées à 90/100. Le sabotage « verrou retiré » est passé au vert au deuxième essai :
+les insertions étaient si brèves que chacune finissait avant que la suivante ne démarre —
+sans verrou, la course n'avait simplement pas lieu. Le verrou avait été prouvé la première
+fois, par chance. Corrigé : chaque client garde sa transaction ouverte 0,5 s après
+l'insertion, ce qui rend la course inévitable sans verrou ; sabotage rouge trois fois de
+suite (`Ultima-/tests/leo-appels-postgres.sh`). ⛔ Pour prouver un verrou, ne pas compter sur
+la concurrence « naturelle » : tenir la fenêtre ouverte, puis casser le verrou et exiger le
+rouge PLUSIEURS fois — un sabotage qui ne vire pas au rouge à tous les coups mesure le hasard.
+⚠️ Corollaire : un test qui ne tourne pas dans `run-unit.mjs` ne tourne pas dans la CI ;
+la partie du harnais que PGlite peut prouver (refus du 101ᵉ, droits, unicité) vit donc aussi
+dans `Ultima-/tests/unit-leo-appels-sql.mjs`, le reste (la course) restant au harnais réel.
 
 **UN RENVOI MORT SE LIT EXACTEMENT COMME UN RENVOI VALIDE** *(2026-09-07)*. Un
 « §11.8 » était cité cinq fois dans les documents d'Artidispo pour une section

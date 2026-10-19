@@ -32,8 +32,8 @@
   },
   "dernier_arret": {
     "le": "2026-10-19",
-    "commit": "0760404c206733aa7dc8afb38df75d795f8abc9e",
-    "quoi": "19/10 : CI d'Ultima- — le harnais navigateur saute quand seuls des .md changent (PR brouillon) ; règle BUDGET FIXE canonique ici ; leçons v94."
+    "commit": "49edef90ba7e9971600531c0cf05e255333123a4",
+    "quoi": "19/10 : CI d'Ultima- — le harnais navigateur saute quand seuls des .md changent (PR brouillon) ; règle BUDGET FIXE canonique ici ; compteur et plafond d'appels de Léo (migration préparée, NON appliquée) revu par un auditeur indépendant et corrigé ; leçons v95."
   },
   "prochaine_action": "Après le RDV kelvin° : reporter ses réponses dans la fiche et trancher construire ou s'abonner (VITRUVE).",
   "bloque_par": [
@@ -48,7 +48,7 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "Coûts GitHub (19/10) : Ultima- ≈ 54 % du brut Actions. Correctif CI sur claude/ci-couts-md-seuls, PR brouillon, non éprouvé sur GitHub (Actions bloquées : budget à 100 % + paiement refusé, gestes de Paul). Fusion sur accord du SHA ; LECONS v94 à propager aux 9 autres dépôts. Détail : CLAUDE.md « BUDGET FIXE ».",
+      "quoi": "Coûts (19/10) : Ultima- ≈ 54 % du brut Actions ; côté Vercel, `ultima` = 5,81 $ dont 5,79 $ de Build CPU (capture de Paul). Correctif CI sur claude/ci-couts-md-seuls, PR brouillon, non éprouvé sur GitHub (Actions bloquées : budget à 100 % + paiement refusé, gestes de Paul). Plafond d'appels de Léo livré dans la même PR : migration 20261019160000_leo_appels.sql NON appliquée (gate SQL/RLS de Paul) ; Paul fixe la valeur (défaut 100/24 h) et la limite de dépense Anthropic. Fusion sur accord du SHA ; LECONS v95 à propager aux 9 autres dépôts. Détail : CLAUDE.md « BUDGET FIXE ».",
       "depuis": "2026-10-19"
     },
     {
@@ -197,6 +197,20 @@ lourdes quand le diff net ne touche que des `.md` ; `tests/unit-ci-md-seuls.mjs`
 script tel quel (18 verdicts, 8 sabotages rouges). La règle de coûts devient canonique dans
 `CLAUDE.md` ; les trois leçons de la boucle sont écrites ICI (LECONS v94) puis à propager.
 Non éprouvé sur GitHub : première exécution réelle après déblocage.
+
+### 2026-10-19 (suite) — le plafond d'appels de Léo, revu puis corrigé
+
+Question de Paul : garder la tour de contrôle sans facture énorme. Lu à la source : le
+coût d'Ultima côté Vercel est du build (5,79 $ de 5,81 $), celui de Léo est chez Anthropic,
+sans compteur ni plafond avant cette boucle. Livré sur la même branche : journal
+`leo_appels` (tentative posée AVANT le coût, issue et tokens après, zéro contenu),
+plafond atomique 100/24 h par propriétaire, repli local 25/instance dit à l'écran. Revue
+indépendante : pas de critique ; huit constats (S1–S8) vérifiés et corrigés — repli plus
+bas que la base, aucune relance du SDK facturée hors plafond, écriture limitée aux colonnes
+du code, une trace = une tentative et une issue, preuves SQL rejouées en CI (PGlite).
+Deux défauts d'instrument trouvés par le sabotage et corrigés (course PostgreSQL laissée
+au hasard ; verdict d'absence vert avant la réponse) — leçons v95. Reste à Paul : la
+valeur du plafond, la limite de dépense de la console Anthropic, le go de migration.
 
 ### 2026-10-13 — prévoir le contrôle avant le système métier
 
