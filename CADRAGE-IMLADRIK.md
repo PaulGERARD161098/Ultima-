@@ -725,3 +725,19 @@ le regard d'après vient **plus tard, en γ** ; **une seule forme à maquetter, 
 des vents**. Maquette : `design/preview-amatsu-rose.html` (données fictives, mesure
 de soi exposée dans `window.__mesureAmatsu`, repli en liste sous 52 rem). La 2b-β
 ne se code qu'après le go de Paul sur la maquette.
+
+**2b-β — BÂTIE le 19/10, sur le go de Paul (« go, la rose des vents »)** :
+`amatsu.html` (coque des pages intimes, `data-leo-quadrant="imladrik"`),
+`css/amatsu-rose.css`, `js/amatsu.js` (rendu après session depuis
+`GET /api/amatsu-lectures`, `createElement`/`textContent`, lectures mal formées
+écartées) ; l'étoile s'ouvre (`cible: 'amatsu.html'`, « Ouvert », parole réécrite),
+le repli sans JavaScript y mène. Au-delà de douze, onze souffles puis « N plus
+anciennes » qui mène au livre. Harnais `tests/smoke-amatsu.mjs`.
+- *Ce que la mesure a corrigé en route* : dans la colonne des quadrants (880 px), la
+  rose tombait à 450 px et ses étiquettes à 7 px, « zéro croisement » restant vert ⇒
+  page AMATSU élargie à 1160 px, parole sous la rose entre 52 et 72 rem, et un verdict
+  de taille RENDUE (objet ≥ 12 px à 1280 et 1000 px), éprouvé en le cassant.
+- *Les verrous refixés* : la liste de 13 verdicts ci-dessus était trop large — les
+  mentions d'AMATSU dans `smoke-draukhain` et les unitaires de Léo portent sur la
+  voix (2a), pas sur l'étoile inerte, et sont restées vertes sans retouche. Refixés
+  nommément : voir le journal du 19/10.

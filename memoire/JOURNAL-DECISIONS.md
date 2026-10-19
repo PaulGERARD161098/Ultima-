@@ -4869,3 +4869,24 @@ Sur les décisions de 15 h 20 (forme C), la 2a est posée sur la branche de #399
 - **Leçons v99** : deux rechutes (les droits par défaut de Supabase sur une table ;
   `pkill -f` qui tue son shell) et un ajout (reconnecter un connecteur en cours de
   séance le retire). À propager aux neuf autres dépôts avec la v98 de #400.
+
+## 2026-10-19 — AMATSU 2b : la rose des vents choisie, puis bâtie
+
+- **Cadrage de la 2b** (§12.6 de `CADRAGE-IMLADRIK.md`), décisions de Paul sur
+  panneaux : α (maquette) puis β (page) ; le regard d'après **plus tard, en γ** ; une
+  seule forme à maquetter, **la rose des vents**.
+- **2b-α** : maquette `design/preview-amatsu-rose.html`, publiée en page claude.ai
+  privée ; données inventées. La mesure a trouvé l'étiquette du sud sur la légende,
+  qu'elle ne voyait pas : instrument étendu (rouge puis vert), légende au coin.
+- **Go de Paul : « go, la rose des vents »** → **2b-β bâtie** : `amatsu.html`,
+  `css/amatsu-rose.css`, `js/amatsu.js`, étoile ouverte, repli sans JavaScript lié,
+  harnais `smoke-amatsu`. La page relit et n'écrit pas : une lecture se dicte à Léo.
+- **Corrigé en route** : dans la colonne des quadrants, la rose tombait à 450 px
+  (étiquettes à 7 px) avec « zéro croisement » vert ⇒ page élargie, verdict de taille
+  rendue ajouté et éprouvé en le cassant.
+- **Verrous** : la liste « 13 verdicts dans 9 harnais » du cadrage était trop large ;
+  18 verdicts réellement refixés dans 7 fichiers (`unit-registre-lv3`,
+  `unit-adaptateur-lv4`, `smoke-console`, `smoke-imladrik-carto`,
+  `smoke-lv5-passerelle`, `smoke-quadrants`, `smoke-retour-feuilles`). IFULVIN
+  redevient la seule étoile inerte d'IMLADRIK, nommée.
+
