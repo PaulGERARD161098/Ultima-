@@ -61,6 +61,20 @@ VALEUR="(gen_random_uuid(),'riven','test','tentee')"
 # Verrou de non-vacuité : la table existe, vide, et l'amorce a posé ses quatre comptes.
 ok 'non-vacuité : table vide, 4 comptes' "$([[ "$(lignes $A)" == 0 && "$(admin -At -c 'select count(*) from auth.users')" == 4 ]] && echo 1 || echo 0)"
 
+echo '— les scripts de vérification que Paul colle dans le SQL Editor de Supabase (supabase/verifs/)'
+# Lecture seule : 16 lignes, toutes vraies. Chaque ligne fausse est rapportée sous son nom.
+resultats="$(admin -At -F'|' -f "$repo_root/supabase/verifs/leo_appels-1-etat.sql")"
+ok 'verif 1 : les 16 lignes sont lues (verrou de non-vacuité)' "$([[ "$(grep -c '|[tf]$' <<<"$resultats")" == 16 ]] && echo 1 || echo 0)"
+while IFS='|' read -r numero nom valeur; do
+  [[ "$valeur" == f ]] && ok "verif 1 · ligne $numero : $nom" 0
+done <<<"$resultats"
+ok 'verif 1 : aucune ligne fausse' "$([[ "$(grep -c '|f$' <<<"$resultats" || true)" == 0 ]] && echo 1 || echo 0)"
+# Le plafond sur la vraie base, annulé : le signal de réussite est une ERREUR dont le message dit PLAFOND_OK.
+sortie="$("${psql_base[@]}" -At -f "$repo_root/supabase/verifs/leo_appels-2-plafond-annule.sql" 2>&1 || true)"
+ok 'verif 2 : « PLAFOND_OK » (100 acceptées, la 101ᵉ refusée)' "$([[ "$sortie" == *'PLAFOND_OK : 100 tentatives'* ]] && echo 1 || echo 0)"
+[[ "$sortie" != *'PLAFOND_OK'* ]] && echo "$sortie" | head -3
+ok 'verif 2 : tout est annulé, aucune ligne ne reste' "$([[ "$(admin -At -c 'select count(*) from public.leo_appels')" == 0 ]] && echo 1 || echo 0)"
+
 echo '— le plafond d'"'"'appels (100 tentatives / 24 h / propriétaire)'
 sortie="$(session $A authenticated <<SQL
 do \$\$

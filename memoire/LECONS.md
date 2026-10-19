@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v97 2026-10-19 sha256:d629028ca8a0 -->
+<!-- lecons:empreinte v98 2026-10-19 sha256:53242086f871 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -1765,6 +1765,18 @@ pas masquer — le dire avec le nombre d'essais qui reste. Et si la capture arri
 quand même, **la rotation est la première action**, pas une note de fin.
 
 ## 4. Conduire une boucle
+
+**UN GO SE DEMANDE POUR UN GESTE DONT L'ACCÈS EST PROUVÉ** *(2026-10-19, Ultima-)*. J'ai
+demandé à Paul son go pour appliquer `leo_appels` sur la base d'Ultima, en m'appuyant sur le
+RUNBOOK du 11/07 (« vérifié en base » par le connecteur). Son go est arrivé ; `list_migrations`
+sur `leosfqyidgsaescjbfom` a répondu « permission denied » — le connecteur de la séance ne liste
+que Artidispo et RenoDevis. Coût : un aller-retour de Paul pour un go que je ne pouvais pas
+exécuter, après avoir écrit « j'attends ton go » comme si le geste m'appartenait. ⛔ Avant de
+demander un go (SQL, déploiement, envoi), prouver l'accès à la CIBLE par une lecture inoffensive
+(`list_migrations`, `select 1`) : un accès constaté il y a trois mois n'est pas un accès. ⚠️ Et
+jamais « un autre projet qui répond » : Artidispo et RenoDevis répondaient — ce n'étaient pas la
+base d'Ultima. Quand l'accès manque, le geste de Paul se prépare au dernier cran (procédure,
+script de vérification éprouvé sur une base jetable) au lieu de s'annoncer comme le mien.
 
 **LE COMMENT AVANT LE TRAVAIL** *(directive EL)*. Étapes, moyens, critères de
 réussite explicités avant d'exécuter. En pratique : **la maquette avant le
