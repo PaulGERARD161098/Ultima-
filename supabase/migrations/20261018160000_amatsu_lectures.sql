@@ -57,8 +57,14 @@ create policy amatsu_lectures_insert on public.amatsu_lectures
 create policy amatsu_lectures_delete on public.amatsu_lectures
   for delete using (owner_id = (select auth.uid()));
 
--- anon n'a rien à y faire (défaut Supabase retiré, comme sur leo_ecritures).
-revoke all on public.amatsu_lectures from anon;
+-- ⛔ TOUT RETIRER, PUIS DONNER LE STRICT NÉCESSAIRE. Supabase accorde par
+-- défaut TOUS les droits sur une table neuve de `public` à anon ET à
+-- authenticated. Ne retirer que ceux d'anon (première écriture, relue le 19/10
+-- avant application) laissait au rôle connecté UPDATE — que la RLS bloque, faute
+-- de policy — et TRUNCATE, que la RLS NE VOIT PAS. Même geste que leo_ecritures
+-- (`revoke update, delete, truncate … from authenticated, anon`), en plus net :
+-- une liste fermée de ce qui est permis, plutôt qu'une liste de ce qui ne l'est pas.
+revoke all on public.amatsu_lectures from public, anon, authenticated;
 grant select, insert, delete on public.amatsu_lectures to authenticated;
 
 commit;

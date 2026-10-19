@@ -60,8 +60,15 @@ verdicts.erreursSansContenu = !/boutique/.test(validateLectureAmatsu({ ...BON, b
   verdicts.aucuneRetouche = !policies.includes('update') && !/updated_at/.test(CODE);
   verdicts.ownerScelle = /owner_id\s+uuid not null default auth\.uid\(\)/.test(CODE) &&
     /unique \(owner_id, id\)/.test(CODE);
-  verdicts.anonDehors = /revoke all on public\.amatsu_lectures from anon/.test(CODE) &&
-    /grant select, insert, delete on public\.amatsu_lectures to authenticated/.test(CODE);
+  // Tout retirer à public, anon ET authenticated (défauts Supabase), puis ne
+  // donner que select, insert, delete. Le défaut laissait UPDATE et TRUNCATE au
+  // rôle connecté — TRUNCATE passe sous la RLS (relu le 19/10, avant application).
+  verdicts.toutRetireAvantDeDonner =
+    /revoke all on public\.amatsu_lectures from public, anon, authenticated;/.test(CODE) &&
+    CODE.indexOf('revoke all on public.amatsu_lectures') < CODE.indexOf('grant select, insert, delete on public.amatsu_lectures to authenticated;');
+  verdicts.grantFerme = (CODE.match(/grant [^;]+ on public\.amatsu_lectures/g) || []).join('|') ===
+    'grant select, insert, delete on public.amatsu_lectures';
+  verdicts.ni_update_ni_truncate = !/grant[^;]*\b(update|truncate|all)\b[^;]*amatsu_lectures/i.test(CODE);
   verdicts.initplan = (CODE.match(/\(select auth\.uid\(\)\)/g) || []).length === 3;
   verdicts.nonAppliquee = /NON APPLIQUÉE/.test(SQL);
 }
@@ -83,6 +90,55 @@ verdicts.releveConnu = Array.isArray(DEPENDANCES.amatsu_lectures) && DEPENDANCES
   verdicts.schemaQuatreRequis = schema && schema.input_schema.required.sort().join() === 'bise,objet,ouragan,souffle' &&
     schema.input_schema.additionalProperties === false &&
     Object.entries(schema.input_schema.properties).every(([k, p]) => p.maxLength === LECTURE_AMATSU_BORNES[k]);
+}
+
+// ---------- 9. LA MIGRATION EXÉCUTÉE, du côté où elle peut céder ----------
+// Un Postgres jetable (PGlite, en mémoire) qui reproduit ce que Supabase fait
+// d'une table neuve : TOUS les droits par défaut à anon et authenticated. La
+// migration y est jouée telle quelle, puis attaquée : un autre compte, anon, une
+// modification, un vidage. Rien ne touche la base réelle.
+{
+  const { PGlite } = await import('@electric-sql/pglite');
+  const db = new PGlite();
+  const A = '00000000-0000-4000-8000-0000000000a1';
+  const B = '00000000-0000-4000-8000-0000000000b2';
+  const tente = async (sql) => { try { return { ok: true, r: await db.query(sql) }; } catch (e) { return { ok: false, e: String(e.message || e) }; } };
+  await db.exec(`create role anon; create role authenticated;
+    create schema auth; create table auth.users(id uuid primary key);
+    create function auth.uid() returns uuid language sql stable as $$
+      select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid $$;
+    grant usage on schema auth to anon, authenticated;
+    grant execute on function auth.uid() to anon, authenticated;
+    grant usage on schema public to anon, authenticated;
+    alter default privileges in schema public grant all on tables to anon, authenticated;
+    insert into auth.users values ('${A}'), ('${B}');`);
+  await db.exec(SQL.replace(/^begin;$/m, '').replace(/^commit;$/m, ''));
+  const droit = async (role, quoi) => (await db.query(
+    `select has_table_privilege('${role}', 'public.amatsu_lectures', '${quoi}') as d`)).rows[0].d;
+  verdicts.pg_authentifieSansUpdate = (await droit('authenticated', 'update')) === false;
+  verdicts.pg_authentifieSansTruncate = (await droit('authenticated', 'truncate')) === false;
+  verdicts.pg_authentifieLitEcritSupprime = (await droit('authenticated', 'select')) === true &&
+    (await droit('authenticated', 'insert')) === true && (await droit('authenticated', 'delete')) === true;
+  verdicts.pg_anonSansRien = (await Promise.all(['select', 'insert', 'update', 'delete', 'truncate']
+    .map((q) => droit('anon', q)))).every((d) => d === false);
+  // Paul (A) écrit une lecture ; B ne la voit pas ; A ne peut pas la modifier.
+  await db.exec(`set role authenticated; set request.jwt.claim.sub = '${A}';
+    insert into public.amatsu_lectures (objet, bise, souffle, ouragan) values ('x', 'b', 's', 'o');`);
+  const vueParA = (await db.query('select count(*)::int as n from public.amatsu_lectures')).rows[0].n;
+  const modif = await tente(`update public.amatsu_lectures set objet = 'retouche'`);
+  const vidage = await tente('truncate public.amatsu_lectures');
+  await db.exec(`set request.jwt.claim.sub = '${B}';`);
+  const vueParB = (await db.query('select count(*)::int as n from public.amatsu_lectures')).rows[0].n;
+  const usurpation = await tente(`insert into public.amatsu_lectures (owner_id, objet, bise, souffle, ouragan) values ('${A}', 'y', 'b', 's', 'o')`);
+  await db.exec('reset role;');
+  const intacte = (await db.query(`select count(*)::int as n from public.amatsu_lectures where objet = 'x'`)).rows[0].n;
+  // Verrou de non-vacuité : la lecture existe bien, sinon « B ne voit rien » ne prouve rien.
+  verdicts.pg_verrouUneLecture = vueParA === 1 && intacte === 1;
+  verdicts.pg_cloisonnement = vueParB === 0;
+  verdicts.pg_pasDeModification = modif.ok === false && /permission denied/i.test(modif.e);
+  verdicts.pg_pasDeVidage = vidage.ok === false && /permission denied/i.test(vidage.e);
+  verdicts.pg_pasDUsurpation = usurpation.ok === false && /row-level security/i.test(usurpation.e);
+  await db.close();
 }
 
 let echecs = 0;
