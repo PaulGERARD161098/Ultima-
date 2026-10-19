@@ -70,7 +70,8 @@ verdicts.erreursSansContenu = !/boutique/.test(validateLectureAmatsu({ ...BON, b
     'grant select, insert, delete on public.amatsu_lectures';
   verdicts.ni_update_ni_truncate = !/grant[^;]*\b(update|truncate|all)\b[^;]*amatsu_lectures/i.test(CODE);
   verdicts.initplan = (CODE.match(/\(select auth\.uid\(\)\)/g) || []).length === 3;
-  verdicts.nonAppliquee = /NON APPLIQUÉE/.test(SQL);
+  // Appliquée par Paul le 19/10 (éditeur SQL) : l'en-tête le dit, et ne dit plus le contraire.
+  verdicts.enteteDitAppliquee = /✅ APPLIQUÉE LE 2026-10-19/.test(SQL) && !/NON APPLIQUÉE/.test(SQL);
 }
 
 // ---------- 7. Le défaire et le relevé ----------

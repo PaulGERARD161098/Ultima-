@@ -1,8 +1,14 @@
 -- AMATSU, LE DRAGON DE L'AIR — boucle 2a (CADRAGE-IMLADRIK.md §12, 18/10/2026).
 --
--- ⛔ NON APPLIQUÉE. Ne JAMAIS appliquer sans le go explicite de Paul : gate
--- migrations ET §5 IMLADRIK (données intimes : ce que Paul soumet à Amatsu est
--- de sa vie). Additive : une table neuve, aucune table existante touchée.
+-- ✅ APPLIQUÉE LE 2026-10-19 par Paul lui-même, dans l'éditeur SQL du projet Ultima
+-- (`leosfqyidgsaescjbfom`) — la séance n'avait pas d'accès Supabase à ce projet.
+-- Gate migrations ET §5 IMLADRIK (données intimes) : c'est son geste, sur sa décision.
+-- Vérifiée aussitôt par une requête de contrôle, ligne relue sur sa capture :
+--   rls = true · policies = DELETE,INSERT,SELECT · authenticated UPDATE = false ·
+--   authenticated TRUNCATE = false · anon SELECT = false · lignes = 0.
+-- ⚠️ Appliquée hors outil de migration : elle n'est PAS inscrite dans l'historique
+-- `supabase_migrations` du projet. Ce fichier en est la seule trace.
+-- Additive : une table neuve, aucune table existante touchée.
 --
 -- ---- Ce que la table porte, et pourquoi si peu
 -- Amatsu ne porte pas d'objet : il pose sa question à ceux des autres caps.

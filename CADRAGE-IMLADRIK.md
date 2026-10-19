@@ -588,7 +588,12 @@ Claude déjà en service, une table, une route, zéro écran. Ce qui est posé :
   (objet 200 · bise 500 · souffle 500 · ouragan 500 · created_at), RLS par
   owner, **aucune policy UPDATE** (une lecture se relit, ne se corrige pas),
   anon sans droit, paire (owner_id, id) unique pour les passerelles de la 2b.
-  ⛔ **Gate** : migration + §5 intime → ne s'applique que sur ton go.
+  ✅ **Appliquée le 2026-10-19 par Paul** (éditeur SQL), après une relecture qui a
+  trouvé et fermé une faille : le revoke ne visait qu'anon, et Supabase laissait
+  UPDATE et TRUNCATE au rôle connecté — TRUNCATE passe sous la RLS (prouvé en
+  l'exécutant, `unit-amatsu-validate` §9). Contrôle relu après application :
+  rls true · policies DELETE,INSERT,SELECT · connecté sans update ni truncate ·
+  anon sans lecture · 0 ligne.
 - `api/_lib/validate.js` (`validateLectureAmatsu`, bornes lues dans le SQL par
   le harnais) · `api/amatsu-lectures.js` (GET / POST / DELETE, miroir de
   `flammes`).

@@ -4834,3 +4834,22 @@ Sur les décisions de 15 h 20 (forme C), la 2a est posée sur la branche de #399
 - **Reste** : le go de Paul pour appliquer la migration, puis la **preuve réelle**
   (une lecture dictée, lue via GET après auth) ; la 2b (page et registre de
   relecture, passerelle vers l'objet jugé).
+
+## 2026-10-19 — AMATSU : la migration appliquée par Paul, après une faille fermée
+
+- **La relecture d'avant application a trouvé une faille** : Supabase donne par
+  défaut tous les droits sur une table neuve à `authenticated` ; la migration ne
+  les retirait qu'à anon. Le rôle connecté gardait UPDATE (bloqué par la RLS) et
+  **TRUNCATE, que la RLS ne voit pas**. Corrigé (`a8baa9e`) et prouvé en
+  l'exécutant dans un Postgres jetable aux droits de Supabase : l'ancienne version
+  laisse passer le vidage, la nouvelle le refuse.
+- **Paul a appliqué la migration lui-même** (« je vais l'appliquer ») : le
+  connecteur Supabase de la séance ne voyait pas le projet Ultima, et sa
+  reconnexion en cours de séance l'a retiré au lieu de le rebrancher (les
+  connecteurs se lisent à l'ouverture). Contrôle relu : six valeurs attendues.
+- **CI de #399 verte pour la première fois** (9/9 sur `a8baa9e`), après deux jours
+  de jobs morts : un workflow fantôme côté GitHub empêchait tout démarrage.
+- Paul a cherché à **cliquer l'étoile** : elle est inerte par décision (la page
+  est la 2b). Sa parole disait encore « sa forme reste à décider » — réécrite pour
+  dire où aller : « dis « Amatsu, … » à Léo ».
+- **Reste** : la preuve réelle (une lecture dictée, comptée en base).
