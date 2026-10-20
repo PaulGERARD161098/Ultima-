@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v100 2026-10-19 sha256:5d7b52eecf22 -->
+<!-- lecons:empreinte v101 2026-10-20 sha256:d30b9e2abd58 -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -2075,6 +2075,26 @@ dans le produit, seulement dans qui a décidé.
 ---
 
 ## 5. Plusieurs dépôts, plusieurs séances
+
+**« VIDE » SE MESURE CHEZ CEUX QUI LISENT, PAS SEULEMENT DANS LA LIGNE**
+*(2026-10-20)*. Une ligne d'une base partagée n'est pas vide parce que ses
+colonnes de montant le sont : elle peut être LUE par une autre brique, et porter
+du travail fait à la main dans un champ libre. ⛔ Avant de qualifier une ligne de
+« coquille », « factice » ou « sans valeur » — mot sur lequel Paul tranchera une
+suppression —, deux mesures : **qui la lit** (grep des autres dépôts sur la table
+et le filtre) et **ce qu'elle porte de manuel** (clés d'`extra` posées par un
+humain). Sans elles, la description est une déduction présentée comme un fait.
+*Incident : inventaire des dossiers e-mail de RénoDevis. J'ai présenté six devis
+« Signé » sans montant comme des « coquilles vides » ; Paul a répondu « retire
+aussi les 6 signés ». En cadrant la suite, `RenoBoost/pilotage-pros.js`,
+`RenoBoost/api/chaine-pose.mjs` et `RenoBoost/api/rp-sync-poses.mjs` lisent
+justement les devis `Signé` (pilotage, chaîne de pose, RénoPredict), et ces six
+dossiers portaient `signature_manuelle` et le texte du projet. Décision
+reposée à Paul, inversée (« les garder ») — rattrapé AVANT tout effet, mais une
+décision a été prise sur un fait faux.*
+⊕ Le corollaire : quand une vérification invalide une description déjà donnée à
+Paul, le dire en tête de la réponse suivante, avec ce qui change, avant toute
+autre chose.
 
 **METTRE À JOUR UN ÉTAT, C'EST METTRE À JOUR CE QUE L'INSTRUMENT LIT**
 *(2026-09-22)*. Un fichier d'état qui porte À LA FOIS de la prose pour l'humain
