@@ -7,7 +7,8 @@ permissions:
   contents: read
 # Un nouveau push sur une PR annule le passage précédent de CETTE PR : il
 # testait une tête déjà dépassée (30/09 : 20 min perdues sur #321). Jamais sur
-# main, où chaque fusion est vérifiée jusqu'au bout (groupe = le commit).
+# main, où chaque fusion va jusqu'au bout (groupe = le commit) ; le harnais
+# navigateur n'y est sauté que dans les cas de l'étape « Portée du changement ».
 # `tests/unit-ci-groupes.mjs` vérifie que cette règle reste en place.
 concurrency:
   group: tests-${{ github.event.pull_request.number || github.sha }}
@@ -64,30 +65,42 @@ jobs:
       # n'y a donc jamais de contrôle « en attente ». Toute erreur, tout doute,
       # tout fichier non `.md` → le harnais s'exécute. Gardé par
       # `tests/unit-ci-md-seuls.mjs`, qui exécute CE script tel quel.
+      # Second cas (21/10, accord de Paul) : sur `main`, la fusion d'une PR à jour a
+      # EXACTEMENT le contenu de sa tête (HEAD^2), déjà testée verte avant fusion (gate
+      # de fusion) ; le rejouer coûtait ≈ 29 min facturées par PR de code (#406). Seul
+      # un `push` avec deux parents et un contenu identique saute : PR en retard sur
+      # `main`, push direct, `pull_request`, erreur → le harnais s'exécute.
       - name: Portée du changement
         id: portee
         run: |
-          seuls_md=false
+          sauter=false
           if fichiers=$(git diff --name-only HEAD^1 HEAD) && [ -n "$fichiers" ]; then
             rc=0
             printf '%s\n' "$fichiers" | grep -qvE '\.md$' || rc=$?
-            if [ "$rc" -eq 1 ]; then seuls_md=true; fi
+            if [ "$rc" -eq 1 ]; then
+              sauter=true
+              echo "Harnais navigateur sauté : seuls des .md changent."
+            fi
           fi
-          if [ "$seuls_md" = true ]; then
-            echo "Harnais navigateur sauté : seuls des .md changent."
-          else
-            echo "Harnais navigateur exécuté."
+          if [ "$sauter" != true ] && [ "${GITHUB_EVENT_NAME:-}" = push ] && git rev-parse -q --verify 'HEAD^2' >/dev/null; then
+            rc=0
+            git diff --quiet 'HEAD^2' HEAD || rc=$?
+            if [ "$rc" -eq 0 ]; then
+              sauter=true
+              echo "Harnais navigateur sauté : la fusion reprend à l'identique la tête de PR testée."
+            fi
           fi
-          echo "seuls_md=$seuls_md" >> "$GITHUB_OUTPUT"
+          if [ "$sauter" != true ]; then echo "Harnais navigateur exécuté."; fi
+          echo "sauter=$sauter" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-node@v4
-        if: steps.portee.outputs.seuls_md != 'true'
+        if: steps.portee.outputs.sauter != 'true'
         with:
           node-version: 22
           cache: npm
       - run: npm ci --ignore-scripts
-        if: steps.portee.outputs.seuls_md != 'true'
+        if: steps.portee.outputs.sauter != 'true'
       - name: Harnais navigateur isolé
-        if: steps.portee.outputs.seuls_md != 'true'
+        if: steps.portee.outputs.sauter != 'true'
         run: |
           mkdir -p tests/.cache "$RUNNER_TEMP/lv1-memoire"
           cp memoire/LECONS.md "$RUNNER_TEMP/lv1-memoire/LECONS.md"
