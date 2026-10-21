@@ -52,7 +52,7 @@
       "depuis": "2026-10-18"
     },
     {
-      "quoi": "Coûts (19/10 → 21/10) : leviers posés et fusionnés le 21/10 dans tous les dépôts où ils sont rentables — RenoBoost#611 (L3 + .md hors déploiement), RenoDevis#407 (L2 + .md exclus de Tailwind), Artidispo#160 et mon-dpe.fr#253 (L3), Ultima-#406 (limite navigateur 20 min). Tableau par dépôt : CLAUDE.md, « LES LEVIERS, DÉPÔT PAR DÉPÔT ». Restent : capture Usage Vercel du cycle 25/10 → 25/11 contre 197 h 24 de Build CPU (aucun gain promis avant) ; limite de dépense Anthropic (« 30 $ », non relue) ; migration leo_appels hors registre et advisors non relus (connecteur Supabase à autoriser par Paul) ; LECONS v101 à propager ; artisan-builder L2 (gain modeste, non fait).",
+      "quoi": "Coûts (19/10 → 21/10) : leviers posés et fusionnés le 21/10 dans tous les dépôts où ils sont rentables — RenoBoost#611 (L3 + .md hors déploiement), RenoDevis#407 (L2 + .md exclus de Tailwind), Artidispo#160 et mon-dpe.fr#253 (L3), Ultima-#406 (limite navigateur 20 min). Tableau par dépôt : CLAUDE.md, « LES LEVIERS, DÉPÔT PAR DÉPÔT ». Restent : capture Usage Vercel du cycle 25/10 → 25/11 contre 197 h 24 de Build CPU (aucun gain promis avant) ; limite de dépense Anthropic (« 30 $ », non relue) ; migration leo_appels hors registre et advisors non relus (connecteur Supabase à autoriser par Paul) ; LECONS v103 à propager (2 leçons du 21/10 : déploiement absent ≠ ignoré ; 10ᵉ SHA complété de mémoire) ; artisan-builder L2 (gain modeste, non fait).",
       "depuis": "2026-10-19"
     },
     {

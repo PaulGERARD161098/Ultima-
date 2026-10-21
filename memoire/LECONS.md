@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v101 2026-10-20 sha256:d30b9e2abd58 -->
+<!-- lecons:empreinte v103 2026-10-21 sha256:99992c1c028b -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -46,6 +46,22 @@ neuf copies, et un renvoi mort se lit exactement comme un renvoi valide.
 ---
 
 ## 1. Mesurer, et croire ce qu'on mesure
+
+**UN DÉPLOIEMENT ABSENT N'EST PAS UN DÉPLOIEMENT IGNORÉ** *(2026-10-21)*. Un
+`ignoreCommand` qui saute un build laisse une trace : le déploiement existe, à l'état
+« Ignored ». Un commit sans AUCUN déploiement ne prouve rien sur la règle — ni qu'elle
+a sauté, ni qu'elle a laissé construire : la plateforme n'a peut-être jamais été
+prévenue. ⛔ Avant de conclure, deux lectures : **chercher par SHA** ET **lister le
+projet** autour de l'heure du commit. Rien dans les deux → « non déclenché », dit comme
+tel, jamais rangé dans « ignoré ». ⛔ La preuve qu'une règle de saut laisse passer le
+code est un déploiement **READY sur un commit de code**, lu à la source ; tant qu'il
+n'existe pas, elle n'est pas prouvée.
+*Incident : boucle coûts, 21/10. Trois fusions entre 15:30:47 et 15:30:59 UTC (Artidispo
+`c7fd2fd`, RenoDevis `09f6b5a`, mon-dpe.fr `a69d619`) n'ont produit aucun déploiement
+Vercel — ni ignoré, ni en erreur — alors que les commits d'avant et d'après ont déployé.
+Cause probable : notifications GitHub → Vercel non reçues (non prouvée). Paul : ne rien
+relancer. La preuve « le code construit encore » d'Artidispo et de mon-dpe.fr reste
+donc à lire au prochain commit de code.*
 
 **UN OBJET DE TUILE N'EST PAS UN BÂTIMENT** *(2026-10-12, mon-dpe.fr)*.
 Pour surligner le logement d'un client sur la carte 3D, on prenait l'objet
@@ -154,6 +170,12 @@ justes, le reste inventé. Vu en relisant la sortie de `git rev-parse` lancée j
 après, avant tout commit. ⇒ L'ordre se retourne : **le `rev-parse` d'abord, sa
 sortie injectée dans l'écriture** (`V=$(git rev-parse …)`), jamais l'écriture puis
 la vérification.
+⊕ **DIXIÈME, LE 21/10 (Ultima, grain Finubar) — et c'est encore l'aval qui a mordu.**
+Un SHA complet complété de mémoire à partir d'un préfixe juste, écrit dans le grain
+FINUBAR d'Ultima ; attrapé par `Ultima-/finubar/collecter.mjs` (« commit inatteignable »),
+pas par la relecture. Rien de nouveau dans la faute : la règle du 08/10 n'avait pas été
+appliquée. ⛔ Le préfixe vu dans un rapport, un journal ou une PR n'est pas une source :
+la seule source est `git rev-parse`, injectée telle quelle.
 
 
 **UN COMMIT « HORS MAIN » N'EST PAS UN TRAVAIL HORS MAIN — ON COMPARE LES
