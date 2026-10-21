@@ -523,6 +523,32 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
   de ≈ 400 k tokens, repartir d'une session neuve avec un prompt de reprise. Limite de dépense
   Anthropic : « 30 dollars » annoncés par Paul le 19/10, **non relus** dans la console.
 
+- **LES LEVIERS, DÉPÔT PAR DÉPÔT — fil rouge tenu ICI** *(Paul, 21/10 : « Ultima, dépôt fil
+  rouge de tous les autres, et réduction des coûts fixes pour tous »)*. L1 = CI sur `main` +
+  PR seulement ; L2 = CI lourde sautée quand le diff NET ne porte que des `.md` ; L3 =
+  `ignoreCommand` Vercel (commit 100 % documentation → pas de build ; toute erreur construit) ;
+  L4 = crons. Inventaire lu sur `main` de chaque dépôt le 21/10 ; durée = dernière PR fusionnée.
+
+  | Dépôt | CI / exécution | L1 | L2 | L3 | Note |
+  |---|---|---|---|---|---|
+  | Ultima- | ≈ 29 min | ✅ | ✅ #401 | ✅ #404 | limite navigateur 15 → 20 min (#406 : groupe 0 à 15 min 46 s) |
+  | RenoBoost | ≈ 6 min | ✅ | ❌ | ✅ #611 | `.md` retirés du déploiement, lus en 404 en production le 21/10 |
+  | RenoDevis | 7,6 min | ✅ | ✅ #407 | ✅ #395 | `.md` exclus de Tailwind (#407 : −224 octets, 2 classes mortes) |
+  | Artidispo | 4,3 min | ✅ | ❌ | ✅ #160 | aperçu « Ignored » constaté |
+  | mon-dpe.fr | 2,1 min | ✅ | ❌ | ✅ #253 | aperçu « Ignored » constaté ; dépôt en squash seulement |
+  | artisan-builder | 4,8 min | ✅ | ❌ | — | pas de `vercel.json` ; L2 possible, gain modeste |
+  | renoboost-console | 1,6 min | ✅ | — | ❌ | non rentable |
+  | RenoPredict | 0,9 min | ✅ | — | ❌ | non rentable ; cron sauvegarde Supabase quotidien, à garder |
+  | RenoAgenda | 0,2 min | ✅ | — | ❌ | non rentable |
+
+  ⛔ **Avant de poser un levier ailleurs, mesurer ce que la PR coûte** : une exécution de CI
+  pour la poser contre ce qu'elle épargne. ⚠️ **Tailwind v4 lit les `.md`** (et les
+  commentaires de `.yml`) : dans un dépôt Tailwind, sauter le build sur un diff `.md` exige
+  `@source not "../**/*.md"` (RenoDevis), sinon le CSS compilé diverge. Sur Vercel, sauter un
+  commit de doc n'a pas d'effet visible : les classes ajoutées ne servent à aucun composant.
+  ⚠️ **Premier push d'une branche** : `VERCEL_GIT_PREVIOUS_SHA` est vide, seul le dernier
+  commit est jugé — le dernier commit d'un push porte du code si l'on veut un aperçu.
+
 > Les **leçons** (garde-fous, mesures, ce qu'on donne à Paul) ont leur fichier :
 > `memoire/LECONS.md`. Ne restent ici que les règles opérationnelles du dépôt.
 
