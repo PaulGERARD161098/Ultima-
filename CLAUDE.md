@@ -531,7 +531,7 @@ mesurable) ; Finubar **indexe, il ne recopie pas**.
 
   | Dépôt | CI / exécution | L1 | L2 | L3 | Note |
   |---|---|---|---|---|---|
-  | Ultima- | ≈ 29 min | ✅ | ✅ #401 | ✅ #404 | limite navigateur 15 → 20 min (#406 : groupe 0 à 15 min 46 s) |
+  | Ultima- | ≈ 29 min | ✅ | ✅ #401 | ✅ #404 | limite navigateur 15 → 20 min (#406 : groupe 0 à 15 min 46 s) ; sur `main`, navigateur sauté si la fusion = tête de PR testée (21/10, ≈ 29 min par PR de code ; suite unitaire jouée 3× mesurée : 25,6 s, gain ≤ 1 min, non traitée) |
   | RenoBoost | ≈ 6 min | ✅ | ❌ | ✅ #611 | `.md` retirés du déploiement, lus en 404 en production le 21/10 |
   | RenoDevis | 7,6 min | ✅ | ✅ #407 | ✅ #395 | `.md` exclus de Tailwind (#407 : −224 octets, 2 classes mortes) |
   | Artidispo | 4,3 min | ✅ | ❌ | ✅ #160 | aperçu « Ignored » constaté |
