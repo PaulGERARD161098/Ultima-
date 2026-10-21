@@ -52,7 +52,7 @@
       "depuis": "2026-10-18"
     },
     {
-      "quoi": "Coûts (19/10 → 21/10) : Ultima-#400 (plafond d'appels de Léo, migration appliquée par Paul, PLAFOND_OK — RUNBOOK-GATES.md gate ⑦), #401 (saut du harnais navigateur pour les .md seuls, éprouvé) et #404 (ignoreCommand Vercel, 2b708df) FUSIONNÉES. RenoDevis#395 fusionnée (a6f8cfa, lu le 19/10). RenoBoost#611 FUSIONNÉE le 21/10 (2015249) : refresh à 1 déclencheur, ignoreCommand, .md retirés du déploiement — /CLAUDE.md et /FINUBAR.md lus en 404 en production le 21/10. Restent : capture Usage Vercel du cycle 25/10 → 25/11 à comparer à 197 h 24 de Build CPU (unité encore inexpliquée, aucun gain promis avant) ; migration leo_appels hors registre supabase_migrations et advisors non relus (connecteur Supabase à autoriser par Paul) ; limite de dépense Anthropic (« 30 $ » annoncés, non relus) ; LECONS v101 à propager aux 9 autres dépôts ; ci.yml de RenoDevis (~5 min) sur la documentation seule. Détail : CLAUDE.md « BUDGET FIXE » et « OÙ PART LE RESTE ».",
+      "quoi": "Coûts (19/10 → 21/10) : leviers posés et fusionnés le 21/10 dans tous les dépôts où ils sont rentables — RenoBoost#611 (L3 + .md hors déploiement), RenoDevis#407 (L2 + .md exclus de Tailwind), Artidispo#160 et mon-dpe.fr#253 (L3), Ultima-#406 (limite navigateur 20 min). Tableau par dépôt : CLAUDE.md, « LES LEVIERS, DÉPÔT PAR DÉPÔT ». Restent : capture Usage Vercel du cycle 25/10 → 25/11 contre 197 h 24 de Build CPU (aucun gain promis avant) ; limite de dépense Anthropic (« 30 $ », non relue) ; migration leo_appels hors registre et advisors non relus (connecteur Supabase à autoriser par Paul) ; LECONS v101 à propager ; artisan-builder L2 (gain modeste, non fait).",
       "depuis": "2026-10-19"
     },
     {
