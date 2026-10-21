@@ -31,11 +31,11 @@
     "critere_de_sortie": "Léo écrit sans demander dans l'anneau vert et rien au-delà ; chaque écriture journalisée avant l'acte et défaisable d'un clic. ✅ PROUVÉ EN PRODUCTION le 04/10 à 16:11 UTC pour l'anneau vert : une trace, tentee (16:11:39, avant l'acte) → reussie (16:11:40) → defaite (16:11:54). ✅ « Rien au-delà » constaté le même jour : « Supprime l'idée GLANEUR » → Léo refuse, 0 ligne nouvelle dans leo_ecritures, l'idée est toujours là. ⚠️ Prouvé par ABSENCE d'outil (Léo n'a aucun outil de suppression) — le mécanisme « demander puis agir sur clic » n'a pas d'outil orange à éprouver, il n'est donc PAS prouvé."
   },
   "dernier_arret": {
-    "le": "2026-10-19",
-    "commit": "633728773d2f53d43a6c4d5ac474cafc0deef68e",
-    "quoi": "19/10 : AMATSU 2b cadrée puis bâtie sur la branche claude/amatsu-2b-cadrage (PR #403, brouillon) — maquette de la rose des vents choisie par Paul, puis la page amatsu.html (au repos la date et l'objet, au clic les trois vents, livre des lectures), étoile ouverte, smoke-amatsu ; 18 verdicts refixés dans 7 fichiers. Fusion sur go."
+    "le": "2026-10-21",
+    "commit": "37e439212c4cbfdf2a69961f4fb4f7c8691def9b",
+    "quoi": "21/10 : grain remis à l'heure — AMATSU 2b fusionnée le 19/10 (#403, d4ff809) ; boucle coûts : RenoBoost#611 fusionnée le 21/10 (2015249, conflit FINUBAR résolu par fusion de main, CI verte sur daa5c84), production lue : /CLAUDE.md et /FINUBAR.md en 404, accueil en 200."
   },
-  "prochaine_action": "Paul relit la page AMATSU sur la preview de #403 (connecté) : la rose s'ouvre, sa lecture réelle y souffle au nord, les trois vents au clic. Puis go de fusion portant sur le SHA de tête. Ensuite seulement : γ (le regard d'après) sur décision, puis 2c (la passerelle).",
+  "prochaine_action": "Paul tranche la suite d'AMATSU : γ (le regard d'après) ou 2c (la passerelle vers l'objet jugé) — puis cadrage EL de la boucle retenue (CADRAGE-IMLADRIK.md §12).",
   "bloque_par": [
     "Paramétrage ChatGPT et Gemini PÉRIMÉ depuis le 10/10 (Directive ZS) : Paul recolle les blocs §7–9 d'EXPORT-METHODE-CHATGPT.md et §2–4 d'EXPORT-METHODE-GEMINI.md (empreinte c21c4333b612).",
     "Inscription Supabase d'Ultima MESURÉE OUVERTE le 04/10 (e-mail + Google) — geste de Paul : Authentication › Sign In / Providers › désactiver « Allow new users to sign up ». Le garde propriétaire couvre ZOH SHIA et Finubar ; les autres routes s'appuient sur la RLS par compte.",
@@ -48,11 +48,11 @@
   "en_attente_depuis": "2026-08-20",
   "boucles_ouvertes": [
     {
-      "quoi": "AMATSU : boucles 1 (l'étoile) et 2a (la voix de Léo) FERMÉES — fusionnées (abe073b). 2b-α (maquette) et 2b-β (la page de la rose des vents) bâties le 19/10 sur #403, en attente de la relecture de Paul et de son go de fusion. Restent : γ (le regard d'après, plus tard), 2c (la passerelle vers l'objet jugé) ; la preview ne voit pas ULTIMA_PROPRIETAIRES malgré « Production and Preview » coché (piste non vérifiée : « Separate Production Secret Values »). CADRAGE-IMLADRIK.md §12.6.",
+      "quoi": "AMATSU : boucles 1 (l'étoile), 2a (la voix de Léo), 2b-α (maquette) et 2b-β (la page de la rose des vents) FERMÉES — 2b fusionnée le 19/10 (#403, d4ff809 ; amatsu.html en production). Restent : γ (le regard d'après) et 2c (la passerelle vers l'objet jugé), à trancher par Paul ; la preview ne voit pas ULTIMA_PROPRIETAIRES malgré « Production and Preview » coché (piste non vérifiée : « Separate Production Secret Values »). Leçon payée à écrire dans memoire/LECONS.md : une mesure en unités viewBox ne dit rien de la lisibilité, mesurer la taille rendue. CADRAGE-IMLADRIK.md §12.6.",
       "depuis": "2026-10-18"
     },
     {
-      "quoi": "Coûts (19/10) : PR #400 FUSIONNÉE le 19/10 (d67998a), sur le go de Paul portant sur 3077897. Plafond d'appels de Léo : migration 20261019160000_leo_appels.sql APPLIQUÉE et vérifiée par Paul vers 18:45 UTC (16/16 contrôles vrais ; PLAFOND_OK, la 101ᵉ tentative refusée — RUNBOOK-GATES.md gate ⑦). Saut du harnais navigateur pour les .md seuls ÉPROUVÉ sur GitHub le 19/10 (PR #401 : browser (0) et (1) en 6 s, journal « Harnais navigateur sauté », contre ≈ 12,5 min chacun sur #400). Restent : migration hors registre supabase_migrations, advisors non relus (connecteur qui voie ultima) ; limite de dépense Anthropic (Paul) ; LECONS v100 à propager aux 9 autres dépôts. ignoreCommand Vercel d'Ultima : Ultima-#404 FUSIONNÉE (2b708df). Rapporté par la séance coûts du 19/10, non relu ici (dépôt hors séance) : RenoDevis#395 fusionnée (documentation Ignored sur Vercel) ; restent le ci.yml de RenoDevis (~5 min) sur les commits de documentation seule et l'unité du Build CPU Vercel, inexpliquée. Détail : CLAUDE.md « BUDGET FIXE ».",
+      "quoi": "Coûts (19/10 → 21/10) : Ultima-#400 (plafond d'appels de Léo, migration appliquée par Paul, PLAFOND_OK — RUNBOOK-GATES.md gate ⑦), #401 (saut du harnais navigateur pour les .md seuls, éprouvé) et #404 (ignoreCommand Vercel, 2b708df) FUSIONNÉES. RenoDevis#395 fusionnée (a6f8cfa, lu le 19/10). RenoBoost#611 FUSIONNÉE le 21/10 (2015249) : refresh à 1 déclencheur, ignoreCommand, .md retirés du déploiement — /CLAUDE.md et /FINUBAR.md lus en 404 en production le 21/10. Restent : capture Usage Vercel du cycle 25/10 → 25/11 à comparer à 197 h 24 de Build CPU (unité encore inexpliquée, aucun gain promis avant) ; migration leo_appels hors registre supabase_migrations et advisors non relus (connecteur Supabase à autoriser par Paul) ; limite de dépense Anthropic (« 30 $ » annoncés, non relus) ; LECONS v101 à propager aux 9 autres dépôts ; ci.yml de RenoDevis (~5 min) sur la documentation seule. Détail : CLAUDE.md « BUDGET FIXE » et « OÙ PART LE RESTE ».",
       "depuis": "2026-10-19"
     },
     {
@@ -180,7 +180,7 @@
       "depuis": "2026-08-20"
     }
   ],
-  "maj": "2026-10-13"
+  "maj": "2026-10-21"
 }
 ```
 
