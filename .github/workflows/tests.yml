@@ -41,7 +41,9 @@ jobs:
             --workdir /travail "$image" sh -c 'node tests/lv1-isolation.mjs && npm test'
   browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # 15 min était atteint : le 21/10 (#406) le groupe 0 a fini vert à 14:57 et a été
+    # annulé pendant le nettoyage. La limite ne facture rien, une relance si.
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
