@@ -28,8 +28,8 @@
 | Humladric, Imladric, Imladrik, Emadryx, Yamaladric | IMLADRIK (quadrant dév. perso) |
 | Adram Erech, Adram Alège, un drame à neige, Adram Elech | ADRAMELECH (variantes supplémentaires) |
 | jaris de Ironman, Jaris | Jarvis (l'assistant d'Iron Man — modèle d'état d'esprit de Léo-au-site) |
-| RR, pack RR, « R R » | **PAC air/air** (pack SOLA — confirmé par Paul le 2026-10-13) |
-| RO, pack RO, « R O », pack air O | **PAC air/eau** (pack SOLA — confirmé par Paul le 2026-10-13) |
+| RR, pack RR, « R R », R-R, pompe à chaleur RR | **PAC air/air** (pack SOLA — confirmé par Paul le 2026-10-13 ; le 14/10 : « dès que tu entends, tu corriges » — sans demander, et jamais dans une référence de devis « RR-… ») |
+| RO, pack RO, « R O », R-O, pack air O, pompe à chaleur RO | **PAC air/eau** (pack SOLA — confirmé par Paul le 2026-10-13 ; corrigé d'office depuis le 14/10) |
 | l'agence (contexte agent) | l'agent (Léo) |
 | Traveller, Traveler | RIVEN (quadrant réseau — un seul L, rappel Paul 2026-07-16) |
 | directive EB, macro-directive | discipline : boucler avant d'avancer + capitaliser sur l'existant |
