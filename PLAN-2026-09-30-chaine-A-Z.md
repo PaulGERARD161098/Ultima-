@@ -176,10 +176,11 @@ dossiers e-mail factices ont été supprimés les 20–21/10, RenoDevis #400 ; r
 0 `extra.audit_pac` (B1, C3 sans preuve réelle) · relances automatiques **bloquées**
 depuis le 21/10 (battement `bloque: true`, 16 échéances en attente à partir du 23/10,
 0 échue). Non mesurés d'ici : A2 (Drive), A9 et les contrats (base RenoPredict),
-A10, A12. ⛔ **Ce tableau est en retard sur une décision** : la levée du gel pour C1
-(exception de Paul, 14/10) et les fiches A4/A5/A6a vivent dans Ultima #394 et
-RenoDevis #372, **non fusionnées** — tant qu'elles ne le sont pas, la ligne C1
-ci-dessous (⬜) est fausse. ⚠️ **B3 a changé de forme le 20/10** (RenoDevis
+A10, A12. ✅ **Ultima #394 fusionnée le 22/10 au soir** (`fc24de7`, go de Paul sur `36a1a62`) :
+la ligne C1 ci-dessous et les fiches A4/A5/A6a sont à jour. **RenoDevis #372 (le code
+de C1) fusionnée le même soir** (`c139e64`, go de Paul sur `59c7e99`, CI verte
+39844807685) ; mon-dpe.fr #250 (le `pac=` du lien 3D) reste à fusionner par Paul,
+dépôt non attaché. ⚠️ **B3 a changé de forme le 20/10** (RenoDevis
 `CADRAGE-2026-10-20-sync-email-vers-rb.md`) : un mail-devis devient une ligne de
 journal sur la fiche RB, plus un dossier ; l'écran `/devis/email` est retiré. Sa
 ligne est à réécrire (fermée par changement de forme), pas à recetter.
@@ -216,7 +217,7 @@ gestes A sont les siens, les boucles B sont du code que Claude porte seul.
 
 | # | Boucle | Maillon | Dépôt | État | Preuve de sortie |
 |---|---|---|---|---|---|
-| C1 | Le bilan ③ complet : reste à charge, feuille complète, format du rapport (Q6) | M5 | RenoDevis + mon-dpe.fr | 🔵 **ouverte le 14/10 par exception au gel** (§3, règle 5). **Code fini le 14/10**, relecture adverse faite et corrigée ; RenoDevis#372 (`063d710`) et mon-dpe.fr#250 (`3dff8dd`) vertes, non fusionnées. Attend la recette unique de Paul (avec B1), puis son accord de fusion. PDF : 3 pages, une 4e seulement si le moteur signale beaucoup d'avertissements (arbitrage de Paul : aucun avertissement retiré) | un bilan remis à un vrai client, avec son reste à charge |
+| C1 | Le bilan ③ complet : reste à charge, feuille complète, format du rapport (Q6) | M5 | RenoDevis + mon-dpe.fr | 🔵 **ouverte le 14/10 par exception au gel** (§3, règle 5). **Code fini le 14/10**, relecture adverse faite et corrigée ; RenoDevis#372 **fusionnée le 22/10** (`c139e64`, après fusion de `main` : 2 021 tests, 0 échec) ; mon-dpe.fr#250 (`3dff8dd`) verte, **non fusionnée** (dépôt non attaché). Attend la recette unique de Paul (avec B1). PDF : 3 pages, une 4e seulement si le moteur signale beaucoup d'avertissements (arbitrage de Paul : aucun avertissement retiré) | un bilan remis à un vrai client, avec son reste à charge |
 | C2 | VITRUVE v1 (sur Mon DPE Facile) : la fiche d'approche depuis l'adresse, zéro API payante | M2 + M3 | mon-dpe.fr (route) · RenoBoost et RenoDevis (écrans) | ✅ **v1 « zone pro » fusionnée le 12/10** (décisions Z1–Z4, cadrage `mon-dpe.fr/CADRAGE-2026-10-12-zone-pro.md`) : mon-dpe.fr `/pro/zone` (#237 `c81183d`, #238 `73ced35`) — adresses E/F/G du rayon (une ligne par adresse, DPE le plus récent), vue aérienne + cadastre IGN, logement en maquette, **maquette 3D three.js** (étages, fenêtres, toit estimés ; intérieur pièce par pièce **indicatif** ; choix de l'étage) ; RenoDevis : bouton « Logement en 3D et zone » (#351 `41cd179`). Rendu 3D jugé « pas fou » par Paul (12/10) : plafond d'une maquette procédurale ; le photoréaliste (Google 3D Tiles) est payant. **Boucle 6 « les jumeaux du chantier » fusionnée le 13/10** : mon-dpe.fr #242 `b5ec3fa` (fiche du chantier depuis le DPE à 8 m, recherche 300 m élargie à 500 m puis 1 km si moins de 5 jumeaux — J2 révisé par Paul le 13/10 —, rues à taper, onglet `mode=jumeaux`) ; RenoDevis #355 `91cbc74` (bouton « Jumeaux du chantier »). Essai sur les 5 chantiers SOLA signés : 3 en immeuble (32 à 51 jumeaux à 300 m), 2 sans DPE (saisie sur place) ; test 6 de bout en bout validé par Paul. Reste : le premier boîtage réel, source tracée | une adresse réelle donne sa fiche (DPE, bâtiment, travaux possibles) dans RenoBoost et dans le dossier RenoDevis |
 | C3 | VITRUVE v2-v3 : le relevé corrige l'estimation, puis la prescription des travaux | M3 | RenoDevis + mon-dpe.fr | 🔵 **v2 fusionnée le 13/10** (cadrage `RenoDevis/CADRAGE-2026-10-13-C3-releve-corrige.md`) : mon-dpe.fr #244 `358121a` (DPE trouvé depuis le point du dossier, provenance juste, `ecarts`, noms ADEME v3 corrigés) ; RenoDevis #358 `5f05e92` (estimé et retenu côte à côte, choix du DPE, immeuble jamais cliquable), suite de revue Codex en RenoDevis #359 (fusionnée le 13/10, `c16af14`). **Preuve réelle NON atteinte : 0 devis avec relevé, 0 audit tracé** (13/10, 11:40 UTC) — elle attend la prochaine visite SOLA. **v3 (prescription) fusionnée le 13/10** : mon-dpe.fr #245 `59003ee` ; 5 constats Codex d'après fusion corrigés sur `claude/happy-mccarthy-b213bq` (dont P1 : jamais de prescription sur une adresse à plusieurs logements) | une estimation corrigée au relevé, tracée « auto » ou « manuel » |
 | C4 | Ma tournée du jour | M2 | Artidispo + RenoBoost | ⬜ moteur partiel dans Artidispo (vue sans appelant) | à fixer à l'ouverture |
@@ -450,6 +451,17 @@ route.
   vérifiable depuis la séance (proxy). Lien manuel de secours ✅ **appliqué le 06/10** sur
   le go de Paul (`20261006170000_artisans_email_renopredict.sql`, garde prouvée côté artisan) ;
   plomberie d'activation de Matthieu au cadrage RenoBoost §3.3 quater.
+
+**Rendues par Paul le 22/10** (audit `AUDIT-2026-10-22-chaine-RB.md` §10, panneaux) :
+
+- fusionner **maintenant** Ultima #394 et RenoDevis #372 : faites le soir même
+  (`fc24de7`, `c139e64`), chacune sur un go portant le SHA de sa tête ;
+- la **V2 RenoDevis** (#413 → #419, Codex, 21–22/10) est **gelée** : aucune ligne au
+  §2, aucune revue, tant que J1 n'est pas atteint (règle 5 du §3) ;
+- les **relances automatiques restent fermées jusqu'à A3** (premier devis chiffré
+  dans l'application), puis relecture de la file avec Paul avant réouverture ;
+- les **PR périmées sont fermées** : RenoDevis #390 et #387, RenoBoost #606 et #602,
+  Ultima #396.
 
 **Ouvertes** — posées à la boucle qui les touche, pas avant. Les réponses de
 Paul s'inscrivent dans la liste ci-dessus, datées.

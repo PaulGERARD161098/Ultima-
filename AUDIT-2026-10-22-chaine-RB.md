@@ -259,7 +259,7 @@ sera celui de l'étape 4.
 
 | Où | Ce qui est écrit | Ce qui est vrai le 22/10 |
 |---|---|---|
-| Ultima `PLAN-2026-09-30-chaine-A-Z.md` §2 (sur `main`) | C1 ⬜ « après B1 » ; A4/A5/A6a sans fiche | C1 🔵 code fini, exception de Paul du 14/10 ; fiches prêtes — tout dans #394, non fusionnée |
+| Ultima `PLAN-2026-09-30-chaine-A-Z.md` §2 (sur `main`, jusqu'au 22/10 au soir) | C1 ⬜ « après B1 » ; A4/A5/A6a sans fiche | C1 🔵 code fini, exception de Paul du 14/10 ; fiches prêtes — **soldé le 22/10 au soir** : #394 fusionnée (`fc24de7`), #372 fusionnée (`c139e64`) |
 | Ultima `CLAUDE.md` « BUDGET FIXE » | « toutes les Actions en `startup_failure` depuis le 18/10 » | CI verte sur `main` des 3 dépôts les 21 et 22/10 |
 | RenoDevis `FINUBAR.md` `prochaine_action` | « fusionner la PR de l'interrupteur des relances avant le 23/10 08:00 » | fait : le battement du 22/10 08:00 porte `bloque: true` |
 | RenoDevis `FINUBAR.md` boucles | « corpus : 19 devis sur 27 au sort inconnu (30/09) » | 20 sur 31 |
@@ -322,7 +322,7 @@ sera celui de l'étape 4.
 
 | # | Question | Décision de Paul | Effet |
 |---|---|---|---|
-| 1 | Fusionner Ultima #394 et RenoDevis #372 | **maintenant** | `main` fusionné dans les deux branches (Ultima : conflits PLAN et sceau LECONS résolus, re-scellé v104, 70/70 ; RenoDevis : fusion propre, 2 021 tests, 0 échec). **La fusion elle-même attend le go de Paul sur les nouveaux SHA**, avec la CI verte sur ces têtes (gate fusion, contrat LV1). mon-dpe.fr #250 (le `pac=` du lien 3D) n'est pas attaché : à fusionner par Paul |
+| 1 | Fusionner Ultima #394 et RenoDevis #372 | **maintenant** | `main` fusionné dans les deux branches (Ultima : conflits PLAN et sceau LECONS résolus, re-scellé v104, 70/70 ; RenoDevis : fusion propre, 2 021 tests, 0 échec). **Fusionnées le soir même** : Ultima #394 `fc24de7` (go sur `36a1a62`, re-fusion après #411, LECONS v105) ; RenoDevis #372 `c139e64` (go sur `59c7e99`, CI 39844807685 verte). mon-dpe.fr #250 (le `pac=` du lien 3D) n'est pas attaché : à fusionner par Paul |
 | 2 | La V2 RenoDevis (#413 → #419) | **gelée** | les cinq PR restent en brouillon, aucune revue ; elles se rouvrent avec une ligne au §2 du plan, après J1 |
 | 3 | Relances automatiques | **fermées jusqu'à A3** | réouverture après le premier devis chiffré dans l'application et une relecture de la file avec Paul |
 | 4 | PR périmées | **fermées** | RenoDevis #390 et #387, RenoBoost #606 et #602, Ultima #396 : fermées le 22/10 avec un commentaire d'une ligne ; les branches restent |
