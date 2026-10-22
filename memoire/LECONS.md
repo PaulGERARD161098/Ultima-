@@ -1,4 +1,4 @@
-<!-- lecons:empreinte v103 2026-10-21 sha256:99992c1c028b -->
+<!-- lecons:empreinte v105 2026-10-22 sha256:404964a3df7f -->
 # Leçons à ne pas oublier
 
 > **Source unique des leçons de méthode, pour les dix dépôts.** Demandé par
@@ -676,6 +676,26 @@ Le profil type sert à construire ; seuls les vrais cas disent si c'est le bon.
 
 
 ## 2. Les garde-fous, et leur silence
+
+**UN GARDE-FOU SE MESURE SUR DES DONNÉES DE TAILLE ET DE FORME RÉELLES** *(2026-10-14, RenoDevis + mon-dpe.fr)*.
+Trois garde-fous livrés le même jour passaient leurs tests sans tenir. Une relecture
+adverse indépendante les a trouvés le soir même, sur les PR déjà vertes :
+- le test « le PDF tient en 3 pages, même chargé » utilisait des avertissements de
+  110 caractères ; ceux du moteur en font 150 à 300, et à 17 le PDF passait à 4 pages ;
+- la garde qui protège les références « RR-2026… » de la correction de dictée ne
+  couvrait que le tiret ASCII ; un tiret insécable (iPhone), un tiret long ou une
+  référence dictée avec des espaces étaient réécrits « PAC air/air… » ;
+- le test « les deux PAC ne s'additionnent jamais » restait vert sans la règle
+  d'incompatibilité : une autre règle refusait avant elle.
+
+⛔ **La donnée d'un test se copie sur la donnée réelle** : sa longueur, ses
+séparateurs, ses caractères, mesurés à la source (le moteur, la base, le
+clavier du téléphone). Et un test qui garde une règle se sabote **en retirant
+cette règle-là**, pas en cassant le code autour.
+*Rechute de la règle « UNE BOUCLE DE SABOTAGE NE SE RESTAURE PAS PAR
+`git checkout` », le même jour : un `git checkout -- data/prestations.json` a
+effacé le catalogue air/air non committé. Rattrapé parce que les tests sont
+passés de 91 à 90.*
 
 **QUAND L'OUTIL NE PEUT PAS VOIR, ON FABRIQUE LE BANC — TOUT DE SUITE** *(2026-10-12, mon-dpe.fr)*.
 Le proxy de la séance bloquait les tuiles IGN et OpenFreeMap : la carte 3D
@@ -1500,6 +1520,37 @@ les fichiers `"use server"`. Même famille que « la valeur ne se porte jamais s
 le bouton » : la sérialisation d'un formulaire ne s'éprouve qu'au navigateur.
 
 ## 3. Ce qu'on donne à Paul
+
+**UNE LIVRAISON TECHNIQUE NE SOLDE PAS LES DEMANDES UTILISATEUR**
+*(2026-10-22, Artidispo ; retour d’Henry transmis par Paul)*.
+Après la PR Artidispo #161 (production `1dff4af9984abeede98055734f28338e5e473884`),
+995 tests réussis et des parcours navigateur vérifiés, « toute la refonte validée
+est en production » a donné à Paul une impression de clôture trop large.
+Le retour a rouvert les points 1 (métiers), 9 (lieux) et 10 (cohérence visuelle).
+Coût constaté : une relecture supplémentaire demandée à Henry puis une reprise
+de cadrage par Paul ; aucune perte financière chiffrée ou rendez-vous perdu prouvé.
+
+Cause : absence de rapprochement explicite entre les demandes numérotées et les
+preuves. Le nominal « climatisation + 69130 » et la lisibilité ont été vérifiés,
+mais pas toutes les formulations métier, la ville libre, `69000`, ni la continuité
+avec l’accueil artisans. Les tests étaient verts sur leur périmètre réel.
+Contre-épreuve publique : SOLA trouvé pour « climatisation + 69001 », absent pour
+« panneau photovoltaïque », « pompe à chaleur » et « PV » ; `69000` refusé.
+« Photovoltaïque + 69001 » a rendu 503 sur un essai : cause non établie,
+à distinguer d’un résultat vide.
+
+⇒ **Avant de conclure, relier chaque demande originale à son identifiant,
+au comportement attendu, à la version, à la preuve et à l’état : réussi,
+échoué, bloqué, reporté explicitement ou non applicable justifié.**
+Un nombre de tests ne mesure pas cette couverture. Un point bloquant ouvert
+interdit « tout est terminé » ; les limites se disent à côté des succès.
+Rejouer les mots et les enchaînements réellement utilisés par le testeur,
+et comparer les écrans successifs, pas seulement chaque page isolée.
+
+Limites : une nouvelle demande après la validation ne devient pas
+rétroactivement une régression ; dater sa réception et vérifier son périmètre.
+Une panne de service n’est ni une absence d’artisan ni la preuve d’un défaut de
+synonymes. L’apprentissage n’étend aucun droit et n’active aucun automatisme.
 
 **UNE PAGE REFONDUE L'EST AUSSI DANS SON APERÇU DE PARTAGE** *(2026-10-17, RenoBoost)*.
 L'accueil a été réécrit et fusionné (#608) sans relire ses balises `og:*` ni son `og-image.jpg`.
